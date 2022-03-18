@@ -24,11 +24,11 @@ namespace castor3d
 		virtual ~MeshImporter() = default;
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	engine		The core engine
+		 *\brief		Constructor.
+		 *\param[in]	engine	The engine.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	engine		Le moteur
+		 *\brief		Constructeur.
+		 *\param[in]	engine	Le moteur.
 		 */
 		C3D_API explicit MeshImporter( Engine & engine );
 		/**
@@ -54,17 +54,19 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Scene import Function.
-		 *\param[out]	scene		Receives the imported data.
-		 *\param[in]	pathFile	The location of the file to import.
-		 *\param[in]	parameters	Import configuration parameters.
-		 *\param[in]	initialise	Tells if the imported mesh must be initialised.
+		 *\param[out]	scene			Receives the imported data.
+		 *\param[in]	pathFile		The location of the file to import.
+		 *\param[in]	parameters		Import configuration parameters.
+		 *\param[in]	textureRemaps	The imported textures remapping parameters.
+		 *\param[in]	initialise		Tells if the imported meshes must be initialised.
 		 *\return		\p false if any problem occured.
 		 *\~french
 		 *\brief		Fonction d'import de Scene.
-		 *\param[out]	scene		Reçoit les données importées.
-		 *\param[in]	pathFile	Le chemin vers le fichier à importer.
-		 *\param[in]	parameters	Paramètres de configuration de l'import.
-		 *\param[in]	initialise	Dit si le mesh importé doit être initialisé.
+		 *\param[out]	scene			Reçoit les données importées.
+		 *\param[in]	pathFile		Le chemin vers le fichier à importer.
+		 *\param[in]	parameters		Paramètres de configuration de l'import.
+		 *\param[in]	textureRemaps	Les paramètres de reaffectation des textures importées.
+		 *\param[in]	initialise		Dit si les meshes importés doit être initialisé.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
 		C3D_API bool import( Scene & scene
@@ -74,14 +76,14 @@ namespace castor3d
 			, bool initialise );
 		/**
 		 *\~english
-		 *\brief		Loads an image from a file.
-		 *\param[in]	folder		The image folder.
-		 *\param[in]	relative	The image path relative to folder.
+		 *\brief		Loads an image.
+		 *\param[in]	name	The image name.
+		 *\param[in]	params	The image creation parameters.
 		 *\return		The image.
 		 *\~french
-		 *\brief		Charge une image depuis un fichier.
-		 *\param[in]	folder		Le dossier de l'image.
-		 *\param[in]	relative	Le chemin vers l'image depuis le dossier.
+		 *\brief		Charge une image.
+		 *\param[in]	name	Le nom de l'image.
+		 *\param[in]	params	Les paramètres de création de l'image.
 		 *\return		L'image.
 		 */
 		C3D_API castor::ImageSPtr loadImage( castor::String const & name
@@ -117,11 +119,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Loads a texture.
+		 *\param[in]	sampler	The sampler used by the texture.
 		 *\param[in]	path	The image file path (can be relative or absolute).
 		 *\param[in]	config	The texture unit configuration.
 		 *\return		The texture unit.
 		 *\~french
 		 *\brief		Charge une texture.
+		 *\param[in]	sampler	Le sampler utilisé par la texture.
 		 *\param[in]	path	Le chemin vers l'image (peut être relatif ou absolu).
 		 *\param[in]	config	La configuration de la texture.
 		 *\return		L'unité de texture.
@@ -132,12 +136,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Loads a texture.
+		 *\param[in]	sampler	The sampler used by the texture.
+		 *\param[in]	name	The image name.
 		 *\param[in]	type	The image data type.
 		 *\param[in]	data	The image data.
 		 *\param[in]	config	The texture unit configuration.
 		 *\return		The texture unit.
 		 *\~french
 		 *\brief		Charge une texture.
+		 *\param[in]	sampler	Le sampler utilisé par la texture.
+		 *\param[in]	name	Le nom de l'image.
 		 *\param[in]	type	Le type des données de l'image.
 		 *\param[in]	data	Les données de l'image.
 		 *\param[in]	config	La configuration de la texture.
@@ -151,12 +159,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Loads a texture and adds it to the given pass.
+		 *\param[in]	sampler	The sampler used by the texture.
 		 *\param[in]	path	The image file path (can be relative or absolute).
 		 *\param[in]	config	The texture unit configuration.
 		 *\param[in]	pass	The pass.
 		 *\return		\p false if any error occured.
 		 *\~french
 		 *\brief		Charge une texture et l'ajoute à la passe donnée.
+		 *\param[in]	sampler	Le sampler utilisé par la texture.
 		 *\param[in]	path	Le chemin vers l'image (peut être relatif ou absolu).
 		 *\param[in]	config	La configuration de la texture.
 		 *\param[in]	pass	La passe.
@@ -169,6 +179,8 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Loads a texture and adds it to the given pass.
+		 *\param[in]	sampler	The sampler used by the texture.
+		 *\param[in]	name	The image name.
 		 *\param[in]	type	The image data type.
 		 *\param[in]	data	The image data.
 		 *\param[in]	config	The texture unit configuration.
@@ -176,6 +188,8 @@ namespace castor3d
 		 *\return		\p false if any error occured.
 		 *\~french
 		 *\brief		Charge une texture et l'ajoute à la passe donnée.
+		 *\param[in]	sampler	Le sampler utilisé par la texture.
+		 *\param[in]	name	Le nom de l'image.
 		 *\param[in]	type	Le type des données de l'image.
 		 *\param[in]	data	Les données de l'image.
 		 *\param[in]	config	La configuration de la texture.

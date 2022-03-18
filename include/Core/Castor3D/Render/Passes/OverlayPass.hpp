@@ -16,6 +16,26 @@ namespace castor3d
 		: public crg::RunnablePass
 	{
 	public:
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	pass	The parent frame pass.
+		 *\param[in]	context	The rendering context.
+		 *\param[in]	graph	The runnable graph.
+		 *\param[in]	device	The GPU device.
+		 *\param[in]	scene	The scene.
+		 *\param[in]	size	The render area dimensions.
+		 *\param[in]	output	The result texture.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	pass	La frame pass parente.
+		 *\param[in]	context	Le contexte de rendu.
+		 *\param[in]	graph	Le runnable graph.
+		 *\param[in]	device	Le device GPU.
+		 *\param[in]	scene	La scène.
+		 *\param[in]	size	Les dimensions de la zone de rendu.
+		 *\param[in]	output	La texture résultat.
+		 */
 		C3D_API OverlayPass( crg::FramePass const & pass
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph

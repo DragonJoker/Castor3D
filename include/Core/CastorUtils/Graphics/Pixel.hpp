@@ -182,7 +182,6 @@ namespace castor
 		 *\~french
 		 *\brief		Convertit les données et les copie dans les composantes de ce pixel
 		 *\param[in]	components	Les données à convertir
-		 *\return
 		 */
 		template< PixelFormat FU >
 		void set( std::array< uint8_t, PixelDefinitionsT< FU >::Size > const & components );
@@ -193,7 +192,6 @@ namespace castor
 		 *\~french
 		 *\brief		Convertit les données et les copie dans les composantes de ce pixel
 		 *\param[in]	components	Les données à convertir
-		 *\return
 		 */
 		template< PixelFormat FU >
 		void set( uint8_t const * components );
@@ -204,7 +202,6 @@ namespace castor
 		 *\~french
 		 *\brief		Convertit le pixel et le copie dans les composantes de ce pixel
 		 *\param[in]	px	Le pixel à convertir
-		 *\return
 		 */
 		template< PixelFormat FU >
 		void set( Pixel< FU > const & px );

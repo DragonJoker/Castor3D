@@ -206,12 +206,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	renderSystem		The render system.
-		 *\param[in]	info				The image informations.
+		 *\param[in]	renderSystem	The render system.
+		 *\param[in]	image			The image.
+		 *\param[in]	imageView		The image view.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	renderSystem		Le render system.
-		 *\param[in]	info				Les informations de l'image.
+		 *\param[in]	renderSystem	Le render system.
+		 *\param[in]	image			L'image.
+		 *\param[in]	imageView		La vue sur l'image.
 		 */
 		C3D_API TextureLayout( RenderSystem & renderSystem
 			, VkImage image
@@ -219,12 +221,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	renderSystem		The render system.
-		 *\param[in]	info				The image informations.
+		 *\param[in]	renderSystem	The render system.
+		 *\param[in]	image			The image.
+		 *\param[in]	createInfo		The image informations.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	renderSystem		Le render system.
-		 *\param[in]	info				Les informations de l'image.
+		 *\param[in]	renderSystem	Le render system.
+		 *\param[in]	image			L'image.
+		 *\param[in]	createInfo		Les informations de l'image.
 		 */
 		C3D_API TextureLayout( RenderSystem & renderSystem
 			, ashes::ImagePtr image
@@ -239,11 +243,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the texture and all its views.
-		 *\param[in]	device	The GPU device.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	queueData	The queue receiving the GPU commands.
 		 *\return		\p true if OK.
 		 *\~french
 		 *\brief		Initialise la texture et toutes ses vues.
-		 *\param[in]	device	Le device GPU.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	queueData	La queue recevant les commandes GPU.
 		 *\return		\p true si tout s'est bien passé.
 		 */
 		C3D_API bool initialise( RenderDevice const & device
@@ -267,10 +273,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Generate texture mipmaps
-		 *\param[in]	device	The GPU device.
+		 *\param[in]	queueData	The queue receiving the GPU commands.
 		 *\~french
 		 *\brief		Génère les mipmaps de la texture
-		 *\param[in]	device	Le device GPU.
+		 *\param[in]	queueData	La queue recevant les commandes GPU.
 		 */
 		C3D_API void generateMipmaps( QueueData const & queueData )const;
 		/**

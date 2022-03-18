@@ -63,9 +63,11 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the overlays texts.
+		 *\param[in]	first	Tells if this is the first pass.
 		 *\return		The elapsed time for this frame.
 		 *\~french
 		 *\brief		Met à jour les textes des incrustations de débogage.
+		 *\param[in]	first	Dit s'il s'agit du rendu de la première frame
 		 *\return		Le temps écoulé pour cette frame.
 		 */
 		castor::Microseconds endFrame( bool first );
@@ -95,11 +97,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Registers a render pass timer.
-		 *\param[in]	timer	The timer to register.
+		 *\param[in]	category	The timer category name.
+		 *\param[in]	timer		The timer to register.
 		 *\return		The query ID.
 		 *\~french
 		 *\brief		Enregistre un timer de passe de rendu.
-		 *\param[in]	timer	Le timer à enregistrer.
+		 *\param[in]	category	Le nom de la catégorie du timer.
+		 *\param[in]	timer		Le timer à enregistrer.
 		 *\return		L'ID de la requête.
 		 */
 		uint32_t registerTimer( castor::String const & category
@@ -107,18 +111,22 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Unregisters a render pass timer.
-		 *\param[in]	timer	The timer to unregister.
+		 *\param[in]	category	The timer category name.
+		 *\param[in]	timer		The timer to unregister.
 		 *\~french
 		 *\brief		Désenregistre un timer de passe de rendu.
-		 *\param[in]	timer	Le timer à désenregistrer.
+		 *\param[in]	category	Le nom de la catégorie du timer.
+		 *\param[in]	timer		Le timer à désenregistrer.
 		 */
 		void unregisterTimer( castor::String const & category
 			, FramePassTimer & timer );
 		/**
 		 *\~english
-		 *\return		Fills the parameters with all passes times, in nanoseconds.
+		 *\brief			Fills the parameters with all passes times, in nanoseconds.
+		 *\param[in,out]	params	Receives the times.
 		 *\~french
-		 *\return		Remplit les paramètres avec les temps de toutes les passes, en nanosecondes.
+		 *\brief			Remplit les paramètres avec les temps de toutes les passes, en nanosecondes.
+		 *\param[in,out]	params	Reçoit les temps.
 		 */
 		void dumpFrameTimes( Parameters & params );
 		/**

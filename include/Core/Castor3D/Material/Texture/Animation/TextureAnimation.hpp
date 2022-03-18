@@ -35,11 +35,11 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	texture	The parent texture.
+		 *\param[in]	engine	The engine.
 		 *\param[in]	name	The name of the animation.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	texture	La texture parente.
+		 *\param[in]	engine	Le moteur.
 		 *\param[in]	name	Le nom de l'animation.
 		 */
 		C3D_API explicit TextureAnimation( Engine & engine

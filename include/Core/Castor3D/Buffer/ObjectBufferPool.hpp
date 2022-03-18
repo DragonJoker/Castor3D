@@ -19,7 +19,7 @@ namespace castor3d
 	public:
 		struct ModelBuffers
 		{
-			ModelBuffers( GpuPackedBuffer vtx )
+			explicit ModelBuffers( GpuPackedBuffer vtx )
 				: vertex{ std::move( vtx ) }
 			{
 			}
@@ -32,12 +32,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	renderSystem	The RenderSystem.
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	debugName		The debug name.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	renderSystem	Le RenderSystem.
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	debugName		Le nom debug.
 		 */
@@ -113,12 +111,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	renderSystem	The RenderSystem.
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	debugName		The debug name.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	renderSystem	Le RenderSystem.
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	debugName		Le nom debug.
 		 */
@@ -200,12 +196,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	renderSystem	The RenderSystem.
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	debugName		The debug name.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	renderSystem	Le RenderSystem.
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	debugName		Le nom debug.
 		 */

@@ -292,7 +292,6 @@ namespace castor
 	private:
 		T * m_coords;
 	};
-	/**@}*/
 	/**
 	 *\~english
 	 *name Comparison operators.

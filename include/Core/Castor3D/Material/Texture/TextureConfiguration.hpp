@@ -106,7 +106,6 @@ namespace castor3d
 		static uint32_t constexpr RgbMask = RgMask | BlueMask;
 		static uint32_t constexpr RgbaMask = RgbMask | AlphaMask;
 		/**@}*/
-		/**@}*/
 		/**
 		*\~english
 		*name

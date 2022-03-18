@@ -24,16 +24,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	engine	The engine
-		 *\param[in]	type	The overlay type
-		 *\param[in]	scene	The scene holding the overlay
-		 *\param[in]	parent	The parent overlay (if any)
+		 *\param[in]	name	The overlay name.
+		 *\param[in]	engine	The engine.
+		 *\param[in]	type	The overlay type.
+		 *\param[in]	scene	The scene holding the overlay.
+		 *\param[in]	parent	The parent overlay (if any).
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	engine	Le moteur
-		 *\param[in]	type	Le type de l'incrustation
-		 *\param[in]	scene	La scène parent
-		 *\param[in]	parent	L'incrustation parente
+		 *\param[in]	name	Le nom de l'incrustation.
+		 *\param[in]	engine	Le moteur.
+		 *\param[in]	type	Le type de l'incrustation.
+		 *\param[in]	scene	La scène parent.
+		 *\param[in]	parent	L'incrustation parente.
 		 */
 		C3D_API Overlay( castor::String const & name
 			, Engine & engine
@@ -72,20 +74,11 @@ namespace castor3d
 			, OverlayType type );
 		/**
 		 *\~english
-		 *\brief		Destructor
+		 *\brief		adds a child to the overlay.
+		 *\param[in]	overlay	The overlay to add.
 		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~Overlay() = default;
-		/**
-		 *\~english
-		 *\brief		adds a child to the overlay
-		 *\param[in]	overlay	The overlay to add
-		 *\return		\p true if successful, false if not
-		 *\~french
-		 *\brief		Ajoute un enfant à l'incrustation
-		 *\param[in]	overlay	L'incrustation enfant
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Ajoute un enfant à l'incrustation.
+		 *\param[in]	overlay	L'incrustation enfant.
 		 */
 		C3D_API void addChild( OverlayRPtr overlay );
 		/**

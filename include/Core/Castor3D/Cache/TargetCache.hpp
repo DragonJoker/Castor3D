@@ -41,12 +41,16 @@ namespace castor3d
 		C3D_API ~RenderTargetCache();
 		/**
 		 *\~english
-		 *\brief		Creates a render target of given type
-		 *\param[in]	type	The render target type
+		 *\brief		Creates a render target of given type.
+		 *\param[in]	type		The render target type.
+		 *\param[in]	size		The render target dimensions.
+		 *\param[in]	pixelFormat	The render target pixels format.
 		 *\return		The render target
 		 *\~french
-		 *\brief		Crée une cible de rendu du type voulu
-		 *\param[in]	type	Le type de cible de rendu
+		 *\brief		Crée une cible de rendu du type voulu.
+		 *\param[in]	type		Le type de cible de rendu.
+		 *\param[in]	size		Les dimensions de la cible de rendu.
+		 *\param[in]	pixelFormat	Le format des pixels de la cible de rendu.
 		 *\return		La cible de rendu
 		 */
 		C3D_API RenderTargetSPtr add( TargetType type
@@ -91,12 +95,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Renders into the render targets.
-		 *\param[in]		device	The GPU device.
-		 *\param[in,out]	info	Receives the render informations.
+		 *\param[in]		device			The GPU device.
+		 *\param[in,out]	info			Receives the render informations.
+		 *\param[in]		queue			The queue to which the render commands will be submitted to.
+		 *\param[in]		signalsToWait	The semaphores and stages to wait for.
+		 *\return			The semaphores and stages that will be signaled.
 		 *\~french
 		 *\brief			Dessine dans les cibles de rendu.
-		 *\param[in]		device	Le device GPU.
-		 *\param[in,out]	info	Reçoit les informations de rendu.
+		 *\param[in]		device			Le device GPU.
+		 *\param[in,out]	info			Reçoit les informations de rendu.
+		 *\param[in]		queue			La queue à laquelle les commandes de rendu seront soumises.
+		 *\param[in]		signalsToWait	Les sémaphores et stages à attendre.
+		 *\return			Les sémaphores et stages qui seront signalés.
 		 */
 		C3D_API crg::SemaphoreWaitArray render( RenderDevice const & device
 			, RenderInfo & info
@@ -104,9 +114,11 @@ namespace castor3d
 			, crg::SemaphoreWaitArray signalsToWait );
 		/**
 		 *\~english
-		 *\brief		cleans up the collection.
+		 *\brief		Cleans up the collection.
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Nettoie la collection.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void cleanup( RenderDevice const & device );
 		/**

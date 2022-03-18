@@ -62,7 +62,7 @@ namespace castor3d
 		 *\~english
 		 *\brief		Sets the event to be skipped.
 		 *\~french
-		 *\return		Définit que l'évènement doit être ignoré.
+		 *\brief		Définit que l'évènement doit être ignoré.
 		 */
 		void skip()
 		{

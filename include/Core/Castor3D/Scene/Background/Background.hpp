@@ -80,8 +80,6 @@ namespace castor3d
 		*	Initialisation function.
 		*\param[in] device
 		*	The current device.
-		*\param[in] hdrConfigUbo
-		*	The HDR configuration UBO.
 		*\return
 		*	\p true if ok.
 		*\~french
@@ -89,8 +87,6 @@ namespace castor3d
 		*	Fonction d'initialisation.
 		*\param[in] device
 		*	Le device actuel.
-		*\param[in] hdrConfigUbo
-		*	L'UBO de configuration HDR.
 		*\return
 		*	\p true if ok.
 		*/
@@ -136,7 +132,7 @@ namespace castor3d
 		C3D_API void update( GpuUpdater & updater )const;
 		/**
 		*\~english
-		*\return
+		*\brief
 		*	Notifies a change to apply on GPU for the background.
 		*\~french
 		*\brief

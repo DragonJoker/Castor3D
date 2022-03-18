@@ -20,6 +20,26 @@ namespace castor3d
 		: public crg::RenderPass
 	{
 	public:
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	pass		The parent frame pass.
+		 *\param[in]	context		The rendering context.
+		 *\param[in]	graph		The runnable graph.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	background	The scene background.
+		 *\param[in]	size		The render area dimensions.
+		 *\param[in]	usesDepth	\p true to account for depth buffer.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	pass		La frame pass parente.
+		 *\param[in]	context		Le contexte de rendu.
+		 *\param[in]	graph		Le runnable graph.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	background	Le fond de la scène.
+		 *\param[in]	size		Les dimensions de la zone de rendu.
+		 *\param[in]	usesDepth	\p true pour prendre en compte le depth buffer.
+		 */
 		C3D_API BackgroundPass( crg::FramePass const & pass
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph

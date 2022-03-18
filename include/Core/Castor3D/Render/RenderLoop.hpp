@@ -85,11 +85,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Registers a render pass timer.
-		 *\param[in]	timer	The timer to register.
+		 *\param[in]	category	The timer category name.
+		 *\param[in]	timer		The timer to register.
 		 *\return		The query ID.
 		 *\~french
 		 *\brief		Enregistre un timer de passe de rendu.
-		 *\param[in]	timer	Le timer à enregistrer.
+		 *\param[in]	category	Le nom de la catégorie du timer.
+		 *\param[in]	timer		Le timer à enregistrer.
 		 *\return		L'ID de la requête.
 		 */
 		C3D_API uint32_t registerTimer( castor::String const & category
@@ -97,25 +99,31 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Unregisters a render pass timer.
-		 *\param[in]	timer	The timer to unregister.
+		 *\param[in]	category	The timer category name.
+		 *\param[in]	timer		The timer to unregister.
 		 *\~french
 		 *\brief		Désenregistre un timer de passe de rendu.
-		 *\param[in]	timer	Le timer à désenregistrer.
+		 *\param[in]	category	Le nom de la catégorie du timer.
+		 *\param[in]	timer		Le timer à désenregistrer.
 		 */
 		C3D_API void unregisterTimer( castor::String const & category
 			, FramePassTimer & timer );
 		/**
 		 *\~english
 		 *\brief		Registers a ShaderBuffer.
+		 *\param[in]	buffer	The ShaderBuffer.
 		 *\~french
 		 *\brief		Enregistre un ShaderBuffer.
+		 *\param[in]	buffer	Le ShaderBuffer.
 		 */
 		C3D_API void registerBuffer( ShaderBuffer const & buffer );
 		/**
 		 *\~english
 		 *\brief		Unregisters a ShaderBuffer.
+		 *\param[in]	buffer	The ShaderBuffer.
 		 *\~french
 		 *\brief		Désenregistre un ShaderBuffer.
+		 *\param[in]	buffer	Le ShaderBuffer.
 		 */
 		C3D_API void unregisterBuffer( ShaderBuffer const & buffer );
 		/**
@@ -127,9 +135,9 @@ namespace castor3d
 		C3D_API bool hasDebugOverlays()const;
 		/**
 		 *\~english
-		 *\return		The average frame time, in nanoseconds.
+		 *\brief		The average frame time, in nanoseconds.
 		 *\~french
-		 *\return		Le temps moyen pour une frame, en nanosecondes.
+		 *\brief		Le temps moyen pour une frame, en nanosecondes.
 		 */
 		C3D_API void dumpFrameTimes( Parameters & params )const;
 		/**

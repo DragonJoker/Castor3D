@@ -25,22 +25,28 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	device		The GPU device.
-		 *\param[in]	gpInfoUbo	The geometry pass UBO.
-		 *\param[in]	sceneUbo	The scene UBO.
-		 *\param[in]	textureSize	The render area dimensions.
-		 *\param[in]	gpResult	The geometry pass result.
-		 *\param[in]	lpResult	The light pass result.
+		 *\param[in]	graph			The frame graph.
+		 *\param[in]	previousPass	The previous frame pass.
+		 *\param[in]	device			The GPU device.
+		 *\param[in]	progress		The optional progress bar.
+		 *\param[in]	scene			The scene.
+		 *\param[in]	gpInfoUbo		The geometry pass UBO.
+		 *\param[in]	sceneUbo		The scene UBO.
+		 *\param[in]	textureSize		The render area dimensions.
+		 *\param[in]	gpResult		The geometry pass result.
+		 *\param[in]	lpResult		The light pass result.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	device		Le device GPU.
-		 *\param[in]	gpInfoUbo	L'UBO de la passe géométrique.
-		 *\param[in]	sceneUbo	L'UBO de la scène.
-		 *\param[in]	textureSize	Les dimensions de la zone de rendu.
-		 *\param[in]	gpResult	Le résultat de la geometry pass.
-		 *\param[in]	lpResult	Le résultat de la light pass.
+		 *\param[in]	graph			Le frame graph.
+		 *\param[in]	previousPass	La frame pass précédente.
+		 *\param[in]	device			Le device GPU.
+		 *\param[in]	progress		La barre de progression optionnelle.
+		 *\param[in]	scene			La scène.
+		 *\param[in]	gpInfoUbo		L'UBO de la passe géométrique.
+		 *\param[in]	sceneUbo		L'UBO de la scène.
+		 *\param[in]	textureSize		Les dimensions de la zone de rendu.
+		 *\param[in]	gpResult		Le résultat de la geometry pass.
+		 *\param[in]	lpResult		Le résultat de la light pass.
 		 */
 		C3D_API SubsurfaceScatteringPass( crg::FramePassGroup & graph
 			, crg::FramePass const *& previousPass

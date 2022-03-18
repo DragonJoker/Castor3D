@@ -188,11 +188,15 @@ namespace castor3d
 		*	Creates the entries for one pass.
 		*\param[in] writes
 		*	The pass descriptor writes.
+		*\param[in] invertY
+		*	\p true to Y invert the sampled image.
 		*\~french
 		*\brief
 		*	Crée les entrées pour une passe.
 		*\param[in] writes
 		*	Les descriptor writes de la passe.
+		*\param[in] invertY
+		*	\p true pour inverser le Y de l'image échantillonnée.
 		*/
 		C3D_API void registerPassInputs( ashes::WriteDescriptorSetArray const & writes
 			, bool invertY = false );
@@ -551,7 +555,6 @@ namespace castor3d
 		{
 			return *m_sampler.lock();
 		}
-		/**@}*/
 
 	private:
 		C3D_API virtual void doRegisterPass( ashes::CommandBuffer & commandBuffer )const;

@@ -128,7 +128,7 @@ namespace castor3d
 			//@{
 
 			/**
-			 *copydoc		castor3d::UserInputListener::Initialise
+			 *copydoc		castor3d::UserInputListener::doInitialise
 			 */
 			bool doInitialise()override
 			{
@@ -136,7 +136,7 @@ namespace castor3d
 				return true;
 			}
 			/**
-			 *copydoc		castor3d::UserInputListener::Cleanup
+			 *copydoc		castor3d::UserInputListener::doCleanup
 			 */
 			void doCleanup()override
 			{
@@ -216,11 +216,15 @@ namespace castor3d
 		C3D_API void upload( ashes::CommandBuffer const & cb );
 		/**
 		 *\~english
-		 *\brief		Renders one frame.
-		 *\param[in]	signalOnly	\p true to only signal the semaphores.
+		 *\brief			Renders one frame.
+		 *\param[in,out]	info		Receives the render infos.
+		 *\param[in]		signalOnly	\p true to only signal the semaphores.
+		 *\param[in]		toWait		The semaphores to wait.
 		 *\~french
-		 *\brief		Renders one frame.
-		 *\param[in]	signalOnly	\p true pour ne faire que signaler les semaphores.
+		 *\brief			Renders one frame.
+		 *\param[in,out]	info		Reçoit les infos de rendu.
+		 *\param[in]		signalOnly	\p true pour ne faire que signaler les semaphores.
+		 *\param[in]		toWait		Les sémaphores à attendre.
 		 */
 		C3D_API void render( RenderInfo & info
 			, bool signalOnly

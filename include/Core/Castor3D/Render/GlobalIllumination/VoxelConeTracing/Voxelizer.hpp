@@ -21,7 +21,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
+		 *\param[in]	handler			The render graph resources handler.
 		 *\param[in]	device			The GPU device.
+		 *\param[in]	progress		The optional progress bar.
+		 *\param[in]	prefix			The pass name prefix.
 		 *\param[in]	scene			The rendered scene.
 		 *\param[in]	camera			The camera viewing the scene.
 		 *\param[in]	matrixUbo		The scene matrices UBO.
@@ -29,7 +32,10 @@ namespace castor3d
 		 *\param[in]	voxelConfig		The voxelizer configuration.
 		 *\~french
 		 *\brief		Constructeur.
+		 *\param[in]	handler			Le gestionnaire de ressources du render graph.
 		 *\param[in]	device			Le device GPU.
+		 *\param[in]	progress		La barre de progression optionnelle.
+		 *\param[in]	prefix			Le préfixe du nom de la passe.
 		 *\param[in]	scene			La scène rendue.
 		 *\param[in]	camera			La caméra regardant la scène.
 		 *\param[in]	matrixUbo		L'UBO de matrices de la scène.
@@ -68,9 +74,29 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
-		C3D_API crg::SemaphoreWaitArray render( crg::SemaphoreWaitArray const & semaphore
+		/**
+		 *\~english
+		 *\brief		Renders the voxels.
+		 *\param[in]	toWait	The semaphores to wait.
+		 *\param[in]	queue	The queue receiving the render commands.
+		 *\return		The semaphores signaled by this render.
+		 *\~french
+		 *\brief		Dessine les voxels.
+		 *\param[in]	toWait	Les sémaphores à attendre.
+		 *\param[in]	queue	The queue recevant les commandes de dessin.
+		 *\return		Les sémaphores signalés par ce dessin.
+		 */
+		C3D_API crg::SemaphoreWaitArray render( crg::SemaphoreWaitArray const & toWait
 			, ashes::Queue const & queue );
-
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		Texture const & getFirstBounce()const
 		{
 			return m_firstBounce;
@@ -96,6 +122,7 @@ namespace castor3d
 			result += 2;// m_voxelSecondaryMipGen;
 			return result;
 		}
+		/**@}*/
 
 	private:
 		crg::FramePass & doCreateVoxelizePass( ProgressBar * progress );

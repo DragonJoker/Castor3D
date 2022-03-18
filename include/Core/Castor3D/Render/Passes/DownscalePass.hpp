@@ -23,18 +23,20 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	device		The GPU device.
-		 *\param[in]	category	The debug category name.
-		 *\param[in]	srcViews	The source views (must be of same dimensions).
-		 *\param[in]	dstSize		The wanted size.
+		 *\param[in]	graph			The parent graph.
+		 *\param[in]	previousPass	The previous frame pass.
+		 *\param[in]	device			The GPU device.
+		 *\param[in]	category		The debug category name.
+		 *\param[in]	srcViews		The source views (must be of same dimensions).
+		 *\param[in]	dstSize			The wanted size.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	device		Le device GPU.
-		 *\param[in]	category	Le nom de la catégorie de debug.
-		 *\param[in]	srcViews	Les vues source (devant avoir le mêmes dimensions).
-		 *\param[in]	dstSize		La taille voulue.
+		 *\param[in]	graph			Le graphe parent.
+		 *\param[in]	previousPass	La frame pass précédente.
+		 *\param[in]	device			Le device GPU.
+		 *\param[in]	category		Le nom de la catégorie de debug.
+		 *\param[in]	srcViews		Les vues source (devant avoir le mêmes dimensions).
+		 *\param[in]	dstSize			La taille voulue.
 		 */
 		C3D_API DownscalePass( crg::FrameGraph & graph
 			, crg::FramePass const *& previousPass

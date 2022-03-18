@@ -24,10 +24,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	scene	The scene.
+		 *\param[in]	handler		The render graph resources handler.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	scene		The scene.
+		 *\param[in]	progress	The optional progress bar.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	scene	La scène.
+		 *\param[in]	handler		Le gestionnaire de ressources du render graph.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	scene		La scène.
+		 *\param[in]	progress	La barre de progression optionnelle.
 		 */
 		C3D_API explicit ShadowMapPoint( crg::ResourceHandler & handler
 			, RenderDevice const & device

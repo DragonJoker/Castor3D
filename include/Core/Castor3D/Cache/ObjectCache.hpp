@@ -30,12 +30,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine			The engine.
 		 *\param[in]	scene			The scene.
 		 *\param[in]	rootNode		The root node.
 		 *\param[in]	rootCameraNode	The cameras root node.
 		 *\param[in]	rootObjectNode	The objects root node.
-		 *\param[in]	produce			The element producer.
 		 *\param[in]	initialise		The element initialiser.
 		 *\param[in]	clean			The element cleaner.
 		 *\param[in]	merge			The element collection merger.
@@ -43,12 +41,10 @@ namespace castor3d
 		 *\param[in]	detach			The element detacher (from a scene node).
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine			Le moteur.
 		 *\param[in]	scene			La scène.
 		 *\param[in]	rootNode		Le noeud racine.
 		 *\param[in]	rootCameraNode	Le noeud racine des caméras.
 		 *\param[in]	rootObjectNode	Le noeud racine des objets.
-		 *\param[in]	produce			Le créateur d'objet.
 		 *\param[in]	initialise		L'initialiseur d'objet.
 		 *\param[in]	clean			Le nettoyeur d'objet.
 		 *\param[in]	merge			Le fusionneur de collection d'objets.

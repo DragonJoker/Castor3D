@@ -42,19 +42,19 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Adds a configuration to the buffer.
-		 *\param[in]	unit	The texture.
+		 *\param[in]	texture	The texture.
 		 *\~french
 		 *\brief		Ajoute une configuration au tampon.
-		 *\param[in]	unit	La texture.
+		 *\param[in]	texture	La texture.
 		 */
 		C3D_API void addTextureAnimation( AnimatedTexture const & texture );
 		/**
 		 *\~english
 		 *\brief		Removes a configuration from the buffer.
-		 *\param[in]	unit	The texture.
+		 *\param[in]	texture	The texture.
 		 *\~french
 		 *\brief		Supprime une configuration du tampon.
-		 *\param[in]	unit	La texture.
+		 *\param[in]	texture	La texture.
 		 */
 		C3D_API void removeTextureAnimation( AnimatedTexture const & texture );
 		/**

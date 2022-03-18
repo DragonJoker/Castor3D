@@ -122,13 +122,11 @@ namespace castor3d
 		 *\param[in]	engine	The engine.
 		 *\param[in]	device	The GPU device.
 		 *\param[in]	count	The max passes count.
-		 *\param[in]	size	The size of a pass.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 *\param[in]	device	Le device GPU.
 		 *\param[in]	count	Le nombre maximal de passes.
-		 *\param[in]	size	La taille d'une passe.
 		 */
 		C3D_API LightBuffer( Engine & engine
 			, RenderDevice const & device
@@ -153,16 +151,20 @@ namespace castor3d
 		C3D_API void removeLight( Light & light );
 		/**
 		 *\~english
-		 *\brief		Updates the buffer.
+		 *\brief			Updates the buffer CPU wise.
+		 *\param[in,out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour le tampon.
+		 *\brief			Met à jour le tampon au niveau CPU.
+		 *\param[in,out]	updater	Les données de mise à jour.
 		 */
 		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief		Updates the buffer.
+		 *\brief		Uploads the buffer to VRAM.
+		 *\param[in]	commandBuffer	Receives the upload commands.
 		 *\~french
-		 *\brief		Met à jour le tampon.
+		 *\brief		Uploade le tampon en VRAM.
+		 *\param[in]	commandBuffer	Reçoit les commandes d'upload.
 		 */
 		C3D_API void upload( ashes::CommandBuffer const & commandBuffer );
 		/**

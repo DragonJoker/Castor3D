@@ -32,16 +32,22 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	reflectionMap	The parent reflection map.
-		 *\param[in]	node			The node from which the camera is created.
-		 *\param[in]	objectNode		The node to which the object is attached.
+		 *\param[in]	graph			The parent graph.
+		 *\param[in]	device			The GPU device.
+		 *\param[in]	environmentMap	The parent reflection map.
+		 *\param[in]	faceNode		The node from which the camera is created.
+		 *\param[in]	index			The cube index this pass renders to.
 		 *\param[in]	face			The cube face this pass renders to.
+		 *\param[in]	background		The scene background.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	reflectionMap	Le reflection map parente.
-		 *\param[in]	node			Le noeud depuis lequel on crée la caméra.
-		 *\param[in]	objectNode		Le noeud auquel l'objet est attaché.
-		 *\param[in]	face			La face de cube que cette passe dessine.
+		 *\param[in]	graph			The parent graph.
+		 *\param[in]	device			Le device GPU.
+		 *\param[in]	environmentMap	Le reflection map parente.
+		 *\param[in]	faceNode		Le noeud depuis lequel on crée la caméra.
+		 *\param[in]	index			L'index du cube que cette passe dessine.
+		 *\param[in]	face			La face du cube que cette passe dessine.
+		 *\param[in]	background		Le fond de la scène.
 		 */
 		C3D_API EnvironmentMapPass( crg::FrameGraph & graph
 			, RenderDevice const & device
@@ -69,12 +75,31 @@ namespace castor3d
 		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( GpuUpdater & updater );
+		/**
+		 *\~english
+		 *\brief		Attaches this pass to given node.
+		 *\remarks		Set the ignored node for the internal render passes.
+		 *\param[in]	node	The node.
+		 *\~french
+		 *\brief		Attache cette passe au noeud donné.
+		 *\remarks		Définit le noeud ignoré pour les render passes internes.
+		 *\param[in]	node	Le noeud.
+		 */
 		C3D_API void attachTo( SceneNode & node );
-
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		crg::FramePass const & getLastPass()const
 		{
 			return *m_transparentPassDesc;
 		}
+		/**@}*/
 
 	private:
 		crg::FramePass & doCreateOpaquePass( crg::FramePass const * previousPass );

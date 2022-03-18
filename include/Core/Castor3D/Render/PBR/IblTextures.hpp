@@ -40,17 +40,23 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the environment maps.
+		 *\param[in]	queueData	The queue receiving the GPU commands.
 		 *\~french
 		 *\brief		Met à jour les textures d'environnement.
+		 *\param[in]	queueData	La queue recevant les commandes GPU.
 		 */
 		C3D_API void update( QueueData const & queueData );
 		/**
 		 *\~english
 		 *\brief		Updates the environment maps.
-		 *\param[in]	toWait	The semaphore from the previous render pass.
+		 *\param[in]	queueData	The queue receiving the GPU commands.
+		 *\param[in]	toWait		The semaphore from the previous render pass.
+		 *\return		The semaphores signaled by this pass.
 		 *\~french
 		 *\brief		Met à jour les textures d'environnement.
-		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
+		 *\param[in]	queueData	La queue recevant les commandes GPU.
+		 *\param[in]	toWait		Le sémaphore de la passe de rendu précédente.
+		 *\return		Les sémaphores signalés par cette passe.
 		 */
 		C3D_API ashes::Semaphore const & update( QueueData const & queueData
 			, ashes::Semaphore const & toWait );

@@ -27,12 +27,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
+		 *\param[in]	handler		The graph resources handler.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	queueData	The queue receiving the GPU commands.
+		 *\param[in]	size		The render area dimensions.
 		 *\param[in]	matrixUbo	The scene matrices UBO.
 		 *\param[in]	culler		The culler for this pass.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
+		 *\param[in]	handler		Le gestionnaire de ressources du graphe.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	queueData	La queue recevant les commandes GPU.
+		 *\param[in]	size		Les dimensions de la zone de rendu
 		 *\param[in]	matrixUbo	L'UBO de matrices de la scène.
 		 *\param[in]	culler		Le culler pour cette passe.
 		 */

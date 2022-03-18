@@ -142,15 +142,25 @@ namespace castor3d
 	protected:
 		/**
 		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	device				The render device.
+		 *\brief		Constructor
+		 *\param[in]	parent				The parent technique.
+		 *\param[in]	pass				The parent frame pass.
+		 *\param[in]	context				The rendering context.
+		 *\param[in]	graph				The runnable graph.
+		 *\param[in]	device				The GPU device.
+		 *\param[in]	typeName			The pass type name.
 		 *\param[in]	category			The pass category.
 		 *\param[in]	name				The pass name.
 		 *\param[in]	renderPassDesc		The scene render pass construction data.
 		 *\param[in]	techniquePassDesc	The technique render pass construction data.
 		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	device				Le render device.
+		 *\brief		Constructeur
+		 *\param[in]	parent				La technique parente.
+		 *\param[in]	pass				La frame pass parente.
+		 *\param[in]	context				Le contexte de rendu.
+		 *\param[in]	graph				Le runnable graph.
+		 *\param[in]	device				Le device GPU.
+		 *\param[in]	typeName			Le nom du type de la passe.
 		 *\param[in]	category			La catégorie de la passe.
 		 *\param[in]	name				Le nom de la passe.
 		 *\param[in]	renderPassDesc		Les données de construction de passe de rendu de scène.

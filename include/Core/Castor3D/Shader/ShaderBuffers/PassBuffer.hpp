@@ -103,13 +103,11 @@ namespace castor3d
 		 *\param[in]	engine	The engine.
 		 *\param[in]	device	The GPU device.
 		 *\param[in]	count	The max passes count.
-		 *\param[in]	size	The size of a pass.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 *\param[in]	device	Le device GPU.
 		 *\param[in]	count	Le nombre maximal de passes.
-		 *\param[in]	size	La taille d'une passe.
 		 */
 		C3D_API PassBuffer( Engine & engine
 			, RenderDevice const & device
@@ -135,8 +133,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the passes buffer.
+		 *\param[in]	commandBuffer	Receives the update commands.
 		 *\~french
 		 *\brief		Met à jour le tampon de passes.
+		 *\param[in]	commandBuffer	Reçoit les commandes de mise à jour.
 		 */
 		C3D_API void update( ashes::CommandBuffer const & commandBuffer );
 		/**

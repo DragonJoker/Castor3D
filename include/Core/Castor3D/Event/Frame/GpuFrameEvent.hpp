@@ -39,12 +39,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Applies the event.
-		 *\remarks		Must be implemented by children classes.
-		 *\param[in]	device	The GPU device.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	queueData	The queue receiving the GPU commands.
 		 *\~french
 		 *\brief		Traite l'évènement.
-		 *\remarks		doit être implémentée dans les classes filles.
-		 *\param[in]	device	Le device GPU.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	queueData	La queue recevant les commandes GPU.
 		 */
 		void apply( RenderDevice const & device
 			, QueueData const & queueData )
@@ -70,7 +70,7 @@ namespace castor3d
 		 *\~english
 		 *\brief		Sets the event to be skipped.
 		 *\~french
-		 *\return		Définit que l'évènement doit être ignoré.
+		 *\brief		Définit que l'évènement doit être ignoré.
 		 */
 		void skip()
 		{

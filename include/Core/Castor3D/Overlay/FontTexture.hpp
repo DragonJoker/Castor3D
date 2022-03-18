@@ -47,8 +47,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the texture.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	queueData	The queue receiving the GPU commands.
 		 *\~french
 		 *\brief		Initialise la texture.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	queueData	La queue recevant les commandes GPU.
 		 */
 		C3D_API void initialise( RenderDevice const & device
 			, QueueData const & queueData );

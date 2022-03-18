@@ -58,10 +58,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves the required version for the plug-in to work correctly
-		 *\return		The version
+		 *\param[out]	version	Receives the version.
 		 *\~french
 		 *\brief		Récupère la version nécessaire au bon fonctionnement du plug-in
-		 *\return		La version
+		 *\param[out]	version	Reçoit la version.
 		 */
 		C3D_API void getRequiredVersion( Version & version )const;
 		/**

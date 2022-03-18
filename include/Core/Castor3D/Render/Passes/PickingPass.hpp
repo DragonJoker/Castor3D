@@ -24,12 +24,20 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
+		 *\param[in]	pass		The parent frame pass.
+		 *\param[in]	context		The rendering context.
+		 *\param[in]	graph		The runnable graph.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	size		The render area dimensions.
 		 *\param[in]	matrixUbo	The scene matrices UBO.
 		 *\param[in]	culler		The culler for this pass.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
+		 *\param[in]	pass		La frame pass parente.
+		 *\param[in]	context		Le contexte de rendu.
+		 *\param[in]	graph		Le runnable graph.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	size		Les dimensions de la zone de rendu.
 		 *\param[in]	matrixUbo	L'UBO de matrices de la scène.
 		 *\param[in]	culler		Le culler pour cette passe.
 		 */
@@ -54,17 +62,11 @@ namespace castor3d
 			, Camera & camera );
 		/**
 		 *\~english
-		 *\brief		Picks a geometry at given mouse position.
-		 *\param[in]	device		The GPU device.
-		 *\param[in]	position	The position in the pass.
-		 *\param[in]	camera		The viewing camera.
-		 *\return		PickingPass::PickNodeType::eNone if nothing was picked.
+		 *\brief		Updates the final render area.
+		 *\param[in]	scissor		The scissor reducing the render area.
 		 *\~french
-		 *\brief		Sélectionne la géométrie à la position de souris donnée.
-		 *\param[in]	device		Le device GPU.
-		 *\param[in]	position	La position dans la passe.
-		 *\param[in]	camera		La caméra regardant la scène.
-		 *\return		PickingPass::PickNodeType si rien n'a été pické.
+		 *\brief		Met ç jour la zone de rendu finale.
+		 *\param[in]	scissor		Le scissor réduisant la zone de rendu.
 		 */
 		C3D_API void updateArea( VkRect2D const & scissor );
 		/**

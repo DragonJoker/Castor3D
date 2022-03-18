@@ -158,19 +158,19 @@ namespace castor3d
 		C3D_API bool hasShadows( LightType lightType )const;
 		/**
 		 *\~english
-		 *\return		Creates a reflection map for given node.
+		 *\brief		Creates a reflection map for given node.
 		 *\param[in]	node	The scene node from which the reflection map is generated.
 		 *\~french
-		 *\return		Crée une reflection map pour le noeud donné.
+		 *\brief		Crée une reflection map pour le noeud donné.
 		 *\param[in]	node	Le noeud de scène depuis lequel la reflection map est générée.
 		 */
 		C3D_API void addEnvironmentMap( SceneNode & node );
 		/**
 		 *\~english
-		 *\return		Creates a reflection map for given node.
+		 *\brief		Creates a reflection map for given node.
 		 *\param[in]	node	The scene node from which the reflection map is generated.
 		 *\~french
-		 *\return		Crée une reflection map pour le noeud donné.
+		 *\brief		Crée une reflection map pour le noeud donné.
 		 *\param[in]	node	Le noeud de scène depuis lequel la reflection map est générée.
 		 */
 		C3D_API void removeEnvironmentMap( SceneNode & node );

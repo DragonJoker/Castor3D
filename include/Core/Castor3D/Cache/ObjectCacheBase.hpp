@@ -41,7 +41,6 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine			The engine.
 		 *\param[in]	scene			The scene.
 		 *\param[in]	rootNode		The root node.
 		 *\param[in]	rootCameraNode	The cameras root node.
@@ -53,7 +52,6 @@ namespace castor3d
 		 *\param[in]	detach			The element detacher (from a scene node).
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine			Le moteur.
 		 *\param[in]	scene			La scène.
 		 *\param[in]	rootNode		Le noeud racine.
 		 *\param[in]	rootCameraNode	Le noeud racine des caméras.
@@ -122,10 +120,10 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
-		 *\return		Merges this cache's elements to the one given.
+		 *\brief		Merges this cache's elements to the one given.
 		 *\param[out]	destination		The destination cache.
 		 *\~french
-		 *\return		Met les éléments de ce cache dans ceux de celui donné.
+		 *\brief		Met les éléments de ce cache dans ceux de celui donné.
 		 *\param[out]	destination		Le cache de destination.
 		 */
 		inline void mergeInto( ElementObjectCacheT & destination )
@@ -160,9 +158,9 @@ namespace castor3d
 		}
 		/**
 		*\~english
-		*\return		The Engine.
+		*\return		The objects type name.
 		*\~french
-		*\return		L'Engine.
+		*\return		Le nom du type des objets.
 		*/
 		inline castor::String const & getObjectTypeName()const
 		{

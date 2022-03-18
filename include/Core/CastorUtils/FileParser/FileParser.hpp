@@ -189,15 +189,13 @@ namespace castor
 		CU_API virtual ~FileParser();
 		/**
 		 *\~english
-		 *\brief		Registers additional parsers for SceneFileParser.
+		 *\brief		Registers additional parsers.
 		 *\param[in]	name		The registering name.
 		 *\param[in]	parsers		The parsers.
-		 *\param[in]	sections	The sections.
 		 *\~french
-		 *\brief		Enregistre des analyseurs supplémentaires pour SceneFileParser.
+		 *\brief		Enregistre des analyseurs supplémentaires.
 		 *\param[in]	name		Le nom d'enregistrement.
 		 *\param[in]	parsers		Les analyseurs.
-		 *\param[in]	sections	Les sections.
 		 */
 		CU_API void registerParsers( castor::String const & name
 			, AdditionalParsers const & parsers );
@@ -205,11 +203,11 @@ namespace castor
 		 *\~english
 		 *\brief		Parsing function.
 		 *\param[in]	path	The file access path.
-		 *\return		\p true if OK.
+		 *\return		The preprocessed file.
 		 *\~french
 		 *\brief		Fonction de traitement.
 		 *\param[in]	path	Le chemin d'accès au fichier.
-		 *\return		\p true si tout s'est bien passé.
+		 *\return		Le fichier pré-traité.
 		 */
 		CU_API PreprocessedFile processFile( Path const & path );
 		/**
@@ -217,38 +215,38 @@ namespace castor
 		 *\brief		Parsing function.
 		 *\param[in]	path	The file access path.
 		 *\param[in]	content	The file content.
-		 *\return		\p true if OK.
+		 *\return		The preprocessed file.
 		 *\~french
 		 *\brief		Fonction de traitement.
 		 *\param[in]	path	Le chemin d'accès au fichier.
 		 *\param[in]	content	Le contenu du fichier.
-		 *\return		\p true si tout s'est bien passé.
+		 *\return		Le fichier pré-traité.
 		 */
 		CU_API PreprocessedFile processFile( Path const & path
 			, String const & content );
 		/**
 		 *\~english
 		 *\brief		Parsing function.
-		 *\param[in]	path	The file access path.
-		 *\return		\p true if OK.
+		 *\param[in]	path			The file access path.
+		 *\param[in]	preprocessed	The preprocessed file.
 		 *\~french
 		 *\brief		Fonction de traitement.
-		 *\param[in]	path	Le chemin d'accès au fichier.
-		 *\return		\p true si tout s'est bien passé.
+		 *\param[in]	path			Le chemin d'accès au fichier.
+		 *\param[in]	preprocessed	Le fichier pré-traité.
 		 */
 		CU_API void processFile( Path const & path
 			, PreprocessedFile & preprocessed );
 		/**
 		 *\~english
 		 *\brief		Parsing function.
-		 *\param[in]	path	The file access path.
-		 *\param[in]	content	The file content.
-		 *\return		\p true if OK.
+		 *\param[in]	path			The file access path.
+		 *\param[in]	content			The file content.
+		 *\param[in]	preprocessed	The preprocessed file.
 		 *\~french
 		 *\brief		Fonction de traitement.
-		 *\param[in]	path	Le chemin d'accès au fichier.
-		 *\param[in]	content	Le contenu du fichier.
-		 *\return		\p true si tout s'est bien passé.
+		 *\param[in]	path			Le chemin d'accès au fichier.
+		 *\param[in]	content			Le contenu du fichier.
+		 *\param[in]	preprocessed	Le fichier pré-traité.
 		 */
 		CU_API void processFile( Path const & path
 			, String const & content
@@ -281,9 +279,13 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Logs an error in the log file.
-		 *\param[in]	error	The error text.
+		 *\param[in]	functionName	The error function.
+		 *\param[in]	lineIndex		The error line.
+		 *\param[in]	error			The error text.
 		 *\~french
 		 *\brief		Log une erreur dans le fichier de log.
+		 *\param[in]	functionName	La fonction de l'erreur.
+		 *\param[in]	lineIndex		La ligne de l'erreur.
 		 *\param[in]	error	Le texte de l'erreur.
 		 */
 		CU_API void parseError( String const & functionName
@@ -292,10 +294,14 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Logs a warning in the log file.
-		 *\param[in]	warning	The warning text.
+		 *\param[in]	functionName	The warning function.
+		 *\param[in]	lineIndex		The warning line.
+		 *\param[in]	warning			The warning text.
 		 *\~french
 		 *\brief		Log un avertissement dans le fichier de log.
-		 *\param[in]	warning	Le texte de l'avertissement.
+		 *\param[in]	functionName	La fonction de l'avertissement.
+		 *\param[in]	lineIndex		La ligne de l'avertissement.
+		 *\param[in]	warning			Le texte de l'avertissement.
 		 */
 		CU_API void parseWarning( String const & functionName
 			, uint64_t lineIndex
@@ -395,11 +401,13 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Function called when no parser is found for the line.
-		 *\param[in]	error	The error text.
+		 *\param[in]	preprocessed	The preprocessed file.
+		 *\param[in]	line			The line.
 		 *\return		false if the line must be ignored.
 		 *\~french
 		 *\brief		Fonction appelée si aucun analyseur n'est trouvé pour traiter la ligne.
-		 *\param[in]	error	Le texte de l'erreur.
+		 *\param[in]	preprocessed	Le fichier pré-traité.
+		 *\param[in]	line			La ligne.
 		 *\return		false si la ligne doit être ignorée.
 		 */
 		CU_API virtual bool doDiscardParser( PreprocessedFile & preprocessed

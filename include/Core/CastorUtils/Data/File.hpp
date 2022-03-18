@@ -359,15 +359,17 @@ namespace castor
 		CU_API static bool deleteFile( Path const & filePath );
 		/**
 		 *\~english
-		 *\brief		Copy a file into a folder
-		 *\param[in]	filePath	File name and path
-		 *\param[in]	folderPath	The destination folder
-		 *\return		\p true if file has been correctly copied
+		 *\brief		Copy a file into a folder.
+		 *\param[in]	filePath		File name and path.
+		 *\param[in]	folderPath		The destination folder.
+		 *\param[in]	allowReplace	\p true to allow existing file replacing.
+		 *\return		\p true if file has been correctly copied.
 		 *\~french
-		 *\brief		Copie un fichier dans un dossier
-		 *\param[in]	filePath	Le chemin du fichier
-		 *\param[in]	folderPath	Le dossier de destination
-		 *\return		\p true si le fichier a été copié correctement
+		 *\brief		Copie un fichier dans un dossier.
+		 *\param[in]	filePath		Le chemin du fichier.
+		 *\param[in]	folderPath		Le dossier de destination.
+		 *\param[in]	allowReplace	\p true pour autroiser le remplacement de fichiers existants.
+		 *\return		\p true si le fichier a été copié correctement.
 		 */
 		CU_API static bool copyFile( Path const & filePath
 			, Path const & folderPath

@@ -49,10 +49,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Puts the light into the given texture.
-		 *\param[out]	buffer	The buffer that receives the light's data.
+		 *\param[out]	data	Receives the light's data.
 		 *\~french
 		 *\brief		Met la lumière dans la texture donnée.
-		 *\param[out]	buffer	Le tampon recevant les données de la source lumineuse.
+		 *\param[out]	data	Reçoit les données de la source lumineuse.
 		 */
 		C3D_API void fillBuffer( LightBuffer::LightData & data )const;
 		/**
@@ -165,11 +165,11 @@ namespace castor3d
 	private:
 		/**
 		 *\~english
-		 *\brief		Puts the light source's type specific data into the given texture.
-		 *\param[out]	buffer	The buffer that receives the light's data.
+		 *\brief		Puts the light into the given texture.
+		 *\param[out]	data	Receives the light's data.
 		 *\~french
-		 *\brief		Met les informations spécifiques au type de source lumineuse dans la texture donnée.
-		 *\param[out]	buffer	Le tampopn recevant les données de la source lumineuse.
+		 *\brief		Met la lumière dans la texture donnée.
+		 *\param[out]	data	Reçoit les données de la source lumineuse.
 		 */
 		C3D_API virtual void doFillBuffer( LightBuffer::LightData & data )const = 0;
 

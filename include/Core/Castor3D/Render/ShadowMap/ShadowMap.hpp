@@ -57,17 +57,23 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
+		 *\param[in]	handler		The render graph resources handler.
+		 *\param[in]	device		The GPU device.
 		 *\param[in]	scene		The scene.
 		 *\param[in]	lightType	The light source type.
-		 *\param[in]	result		The shadow map pass result.
-		 *\param[in]	passes		The passes used to render map.
+		 *\param[in]	createFlags	The result image create flags.
+		 *\param[in]	size		The result image dimensions.
+		 *\param[in]	layerCount	The result image layers count.
 		 *\param[in]	count		The passes count.
 		 *\~french
 		 *\brief		Constructeur.
+		 *\param[in]	handler		Le gestionnaire de ressources du render graph.
+		 *\param[in]	device		Le device GPU.
 		 *\param[in]	scene		La scène.
 		 *\param[in]	lightType	Le type de source lumineuse.
-		 *\param[in]	result		Le résultat de la passe de shadow map.
-		 *\param[in]	passes		Les passes utilisées pour rendre cette texture.
+		 *\param[in]	createFlags	Les flags de créqation de l'image résultat.
+		 *\param[in]	size		Les dimensions de l'image résultat.
+		 *\param[in]	layerCount	Le nombres de layers de l'image résultat.
 		 *\param[in]	count		Le nombre de passes.
 		 */
 		C3D_API ShadowMap( crg::ResourceHandler & handler
@@ -116,6 +122,20 @@ namespace castor3d
 		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API virtual void update( GpuUpdater & updater ) = 0;
+		/**
+		 *\~english
+		 *\brief		Renders the shadow map.
+		 *\param[in]	toWait	The semaphores to wait.
+		 *\param[in]	queue	The queue receiving the render commands.
+		 *\param[in]	index	The index of the layer to update.
+		 *\return		The semaphores signaled by this render.
+		 *\~french
+		 *\brief		Dessine la texture d'ombres.
+		 *\param[in]	toWait	Les sémaphores à attendre.
+		 *\param[in]	queue	The queue recevant les commandes de dessin.
+		 *\param[in]	index	L'index de la layer à dessiner.
+		 *\return		Les sémaphores signalés par ce dessin.
+		 */
 		C3D_API crg::SemaphoreWaitArray render( crg::SemaphoreWaitArray const & toWait
 			, ashes::Queue const & queue
 			, uint32_t index );

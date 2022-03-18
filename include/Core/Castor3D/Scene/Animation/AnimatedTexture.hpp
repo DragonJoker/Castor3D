@@ -32,11 +32,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	texture		The texture.
+		 *\param[in]	sourceInfo	The texture source informations.
+		 *\param[in]	config		The texture configuration.
 		 *\param[in]	pass		The pass using the texture.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	texture		La texture.
+		 *\param[in]	sourceInfo	Les informations de source de la texture.
+		 *\param[in]	config		La configuration de texture
 		 *\param[in]	pass		La passe utilisant la texture.
 		 */
 		C3D_API AnimatedTexture( TextureSourceInfo const & sourceInfo

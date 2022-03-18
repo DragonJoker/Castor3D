@@ -27,18 +27,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine			The engine.
-		 *\param[in]	prefix			The pass name's prefix.
-		 *\param[in]	depthView		The depth buffer view.
-		 *\param[in]	matrixUbo		The matrix UBO.
-		 *\param[in]	modelMatrixUbo	The model matrix UBO.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	prefix		The pass name's prefix.
+		 *\param[in]	depthView	The depth buffer view.
+		 *\param[in]	matrixUbo	The matrix UBO.
+		 *\param[in]	modelUbo	The model matrix UBO.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine			Le moteur.
-		 *\param[in]	prefix			Le préfixe du nom de la passe.
-		 *\param[in]	depthView		L'attache du tampon de profondeur.
-		 *\param[in]	matrixUbo		L'UBO des matrices.
-		 *\param[in]	modelMatrixUbo	L'UBO des matrices modèle.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	prefix		Le préfixe du nom de la passe.
+		 *\param[in]	depthView	L'attache du tampon de profondeur.
+		 *\param[in]	matrixUbo	L'UBO des matrices.
+		 *\param[in]	modelUbo	L'UBO des matrices modèle.
 		 */
 		StencilPass( Engine const & engine
 			, castor::String const & prefix
@@ -70,12 +70,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders the stencil pass.
-		 *\param[in]	device	The GPU device.
-		 *\param[in]	toWait	The semaphore to wait.
+		 *\param[in]	queueData	The queue receiving the GPU commands.
+		 *\param[in]	toWait		The semaphore to wait.
+		 *\return		The semaphores signaled by this render.
 		 *\~french
 		 *\brief		Dessine la passe de stencil.
-		 *\param[in]	device	Le device GPU.
-		 *\param[in]	toWait	Le sémaphore à attendre.
+		 *\param[in]	queueData	La queue recevant les commandes GPU.
+		 *\param[in]	toWait		Le sémaphore à attendre.
+		 *\return		Les sémaphores signalés par ce dessin.
 		 */
 		ashes::Semaphore const & render( QueueData const & queueData
 			, ashes::Semaphore const & toWait );

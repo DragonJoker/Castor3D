@@ -23,14 +23,14 @@ namespace castor
 		 *\param[in]	data		The image data.
 		 *\param[in]	size		The image data size.
 		 *\param[out]	buffer		Receives the buffer data.
-		 *\return		The pixel buffer containing the image data.
+		 *\return		The image layout.
 		 *\~french
 		 *\brief		Charge les données d'un fichier image.
 		 *\param[in]	imageFormat	Le format de l'image, niveau loader.
 		 *\param[in]	data		Les données de l'image.
 		 *\param[in]	size		La taille des données de l'image.
 		 *\param[out]	buffer		Reçoit le buffer.
-		 *\return		Le tampon de pixels contenant les données de l'image.
+		 *\return		Le layout de l'image.
 		 */
 		CU_API virtual ImageLayout load( String const & imageFormat
 			, uint8_t const * data
@@ -44,7 +44,7 @@ namespace castor
 		 *\param[in]	imageFormat	The image format, loader wise.
 		 *\param[in]	data		The image data.
 		 *\param[in]	size		The image data size.
-		 *\return		The pixel buffer containing the image data.
+		 *\return		The image.
 		 *\~french
 		 *\brief		Charge les données d'un fichier image.
 		 *\param[in]	name		Le nom de l'image.
@@ -52,7 +52,7 @@ namespace castor
 		 *\param[in]	imageFormat	Le format de l'image, niveau loader.
 		 *\param[in]	data		Les données de l'image.
 		 *\param[in]	size		La taille des données de l'image.
-		 *\return		Le tampon de pixels contenant les données de l'image.
+		 *\return		L'image.
 		 */
 		CU_API Image load( String const & name
 			, Path const & imagePath
@@ -66,14 +66,14 @@ namespace castor
 		 *\param[in]	imageFormat	The image format, loader wise.
 		 *\param[in]	data		The image data.
 		 *\param[in]	size		The image data size.
-		 *\return		The pixel buffer containing the image data.
+		 *\return		The image.
 		 *\~french
 		 *\brief		Charge les données d'un fichier image.
 		 *\param[in]	name		Le nom de l'image.
 		 *\param[in]	imageFormat	Le format de l'image, niveau loader.
 		 *\param[in]	data		Les données de l'image.
 		 *\param[in]	size		La taille des données de l'image.
-		 *\return		Le tampon de pixels contenant les données de l'image.
+		 *\return		L'image.
 		 */
 		CU_API Image load( String const & name
 			, String const & imageFormat
@@ -86,14 +86,14 @@ namespace castor
 		 *\param[in]	imagePath	Path to the image file.
 		 *\param[in]	data		The image data.
 		 *\param[in]	size		The image data size.
-		 *\return		The pixel buffer containing the image data.
+		 *\return		The image.
 		 *\~french
 		 *\brief		Charge les données d'un fichier image.
 		 *\param[in]	name		Le nom de l'image.
 		 *\param[in]	imagePath	Cheminvers le fichier de l'image.
 		 *\param[in]	data		Les données de l'image.
 		 *\param[in]	size		La taille des données de l'image.
-		 *\return		Le tampon de pixels contenant les données de l'image.
+		 *\return		L'image.
 		 */
 		CU_API Image load( String const & name
 			, Path const & imagePath
@@ -149,14 +149,16 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Loads an image file data.
-		 *\param[in]	name		The image name.
-		 *\param[in]	path		The image file path.
-		 *\return		The pixel buffer containing the image data.
+		 *\param[in]	name	The image name.
+		 *\param[in]	path	The image file path.
+		 *\param[in]	config	The loader configuration.
+		 *\return		The image.
 		 *\~french
 		 *\brief		Charge les données d'un fichier image.
-		 *\param[in]	name		Le nom de l'image.
-		 *\param[in]	path		Le chemin d'accès au fichier image.
-		 *\return		Le tampon de pixels contenant les données de l'image.
+		 *\param[in]	name	Le nom de l'image.
+		 *\param[in]	path	Le chemin d'accès au fichier image.
+		 *\param[in]	config	La configuration du loader.
+		 *\return		L'image.
 		 */
 		CU_API Image load( String const & name
 			, Path const & path
@@ -168,14 +170,16 @@ namespace castor
 		 *\param[in]	imagePath	Path to the image file.
 		 *\param[in]	data		The image data.
 		 *\param[in]	size		The image data size.
-		 *\return		The pixel buffer containing the image data.
+		 *\param[in]	config		The loader configuration.
+		 *\return		The image.
 		 *\~french
 		 *\brief		Charge les données d'un fichier image.
 		 *\param[in]	name		Le nom de l'image.
 		 *\param[in]	imagePath	Chemin d'accès au fichier.
 		 *\param[in]	data		Les données de l'image.
 		 *\param[in]	size		La taille des données de l'image.
-		 *\return		Le tampon de pixels contenant les données de l'image.
+		 *\param[in]	config		La configuration du loader.
+		 *\return		L'image.
 		 */
 		CU_API Image load( String const & name
 			, Path const & imagePath
@@ -189,14 +193,16 @@ namespace castor
 		 *\param[in]	imageFormat	The image format, loader wise.
 		 *\param[in]	data		The image data.
 		 *\param[in]	size		The image data size.
-		 *\return		The pixel buffer containing the image data.
+		 *\param[in]	config		The loader configuration.
+		 *\return		The image.
 		 *\~french
 		 *\brief		Charge les données d'un fichier image.
 		 *\param[in]	name		Le nom de l'image.
 		 *\param[in]	imageFormat	Le format de l'image, niveau loader.
 		 *\param[in]	data		Les données de l'image.
 		 *\param[in]	size		La taille des données de l'image.
-		 *\return		Le tampon de pixels contenant les données de l'image.
+		 *\param[in]	config		La configuration du loader.
+		 *\return		L'image.
 		 */
 		CU_API Image load( String const & name
 			, String const & imageFormat

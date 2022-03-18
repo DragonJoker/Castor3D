@@ -161,6 +161,7 @@ namespace castor
 		case FIT_RGBAF:
 			sourceFmt = PixelFormat::eR32G32B32A32_SFLOAT;
 			needsComponentSwap = true;
+			break;
 		default:
 			sourceFmt = convertTo32Bits( fiImage );
 			needsComponentSwap = true;

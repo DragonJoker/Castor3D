@@ -61,10 +61,10 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
-		 *\param[in]	line	The Line3D object to copy
+		 *\param[in]	rhs	The Line3D object to copy
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	line	L'objet Line3D à copier
+		 *\param[in]	rhs	L'objet Line3D à copier
 		 */
 		Line3D( Line3D const & rhs )
 			: m_slope{ rhs.m_slope }
@@ -74,10 +74,10 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Move Constructor
-		 *\param[in]	line	The Line3D object to move
+		 *\param[in]	rhs	The Line3D object to move
 		 *\~french
 		 *\brief		Constructeur par déplacement
-		 *\param[in]	line	L'objet Line3D à déplacer
+		 *\param[in]	rhs	L'objet Line3D à déplacer
 		 */
 		Line3D( Line3D && rhs )
 			: m_slope{ std::move( rhs.m_slope ) }
@@ -87,37 +87,37 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
-		 *\param[in]	line	The Line3D object to copy
+		 *\param[in]	rhs	The Line3D object to copy
 		 *\return		A reference to this Line3D object
 		 *\~french
 		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	line	L'objet Line3D à copier
+		 *\param[in]	rhs	L'objet Line3D à copier
 		 *\return		Une référence sur cet objet Line3D
 		 */
-		Line3D & operator=( Line3D const & line )
+		Line3D & operator=( Line3D const & rhs )
 		{
-			m_slope = line.m_slope;
-			m_origin = line.m_origin;
+			m_slope = rhs.m_slope;
+			m_origin = rhs.m_origin;
 			return * this;
 		}
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
-		 *\param[in]	line	The Line3D object to move
+		 *\param[in]	rhs	The Line3D object to move
 		 *\return		A reference to this Line3D object
 		 *\~french
 		 *\brief		Opérateur d'affectation  par déplacement
-		 *\param[in]	line	L'objet Line3D à déplacer
+		 *\param[in]	rhs	L'objet Line3D à déplacer
 		 *\return		Une référence sur cet objet Line3D
 		 */
-		Line3D & operator=( Line3D && line )
+		Line3D & operator=( Line3D && rhs )
 		{
-			if ( this != &line )
+			if ( this != &rhs )
 			{
-				m_slope = std::move( line.m_slope );
-				m_origin = std::move( line.m_origin );
-				line.m_origin	= Point< T, 3 >();
-				line.m_slope	= Point< T, 3 >();
+				m_slope = std::move( rhs.m_slope );
+				m_origin = std::move( rhs.m_origin );
+				rhs.m_origin	= Point< T, 3 >();
+				rhs.m_slope	= Point< T, 3 >();
 			}
 
 			return * this;

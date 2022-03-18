@@ -38,12 +38,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Specified constructor.
-		 *\param[in]	engine	The engine.
-		 *\param[in]	type	The render target type.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	type		The render target type.
+		 *\param[in]	size		The render target dimensions.
+		 *\param[in]	pixelFormat	The target's pixels format.
 		 *\~french
 		 *\brief		Constructeur spécifié.
-		 *\param[in]	engine	Le moteur.
-		 *\param[in]	type	Le type de render target.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	type		Le type de render target.
+		 *\param[in]	size		Les dimensions de la render target.
+		 *\param[in]	pixelFormat	Le format des pixels de la render target.
 		 */
 		C3D_API RenderTarget( Engine & engine
 			, TargetType type
@@ -88,15 +92,21 @@ namespace castor3d
 		 *\brief		Renders one frame.
 		 *\param[in]	device	The GPU device.
 		 *\param[out]	info	Receives the render informations.
+		 *\param[in]	queue	The queue receiving the render commands.
+		 *\param[in]	toWait	The semaphores to wait.
+		 *\return		The semaphores signaled by this render.
 		 *\~french
 		 *\brief		Dessine une frame.
 		 *\param[in]	device	Le device GPU.
 		 *\param[out]	info	Reçoit les informations de rendu.
+		 *\param[in]	queue	The queue recevant les commandes de dessin.
+		 *\param[in]	toWait	Les sémaphores à attendre.
+		 *\return		Les sémaphores signalés par ce dessin.
 		 */
 		C3D_API crg::SemaphoreWaitArray render( RenderDevice const & device
 			, RenderInfo & info
 			, ashes::Queue const & queue
-			, crg::SemaphoreWaitArray const & signalsToWait = {} );
+			, crg::SemaphoreWaitArray const & toWait = {} );
 		/**
 		 *\~english
 		 *\return		The number of steps needed for initialisation, to show progression.
@@ -107,10 +117,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
-		 *\param[in]	device	The GPU device.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	queueData	The queue receiving the GPU commands.
+		 *\param[in]	progress	The optional progress bar.
 		 *\~french
 		 *\brief		Fonction d'initialisation.
-		 *\param[in]	device	Le device GPU.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	queueData	La queue recevant les commandes GPU.
+		 *\param[in]	progress	La barre de progression optionnelle.
 		 */
 		C3D_API void initialise( RenderDevice const & device
 			, QueueData const & queueData
@@ -184,10 +198,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		adds a post effect to the list.
-		 *\param[in]	effect	The effect.
+		 *\param[in]	name	The effect name.
 		 *\~french
 		 *\brief		Ajoute un effet post rendu à la liste.
-		 *\param[in]	effect	L'effet.
+		 *\param[in]	name	Le nom de l'effet.
 		 */
 		C3D_API PostEffectSPtr getPostEffect( castor::String const & name )const;
 		/**

@@ -42,15 +42,23 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		Copy assignment operator
-		 *\param[in]	rhs	The component
-		 *\return		Reference to this object
+		 *\brief		Copy assignment operator.
+		 *\param[in]	rhs	The component.
 		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	rhs	La composante
-		 *\return		Référence sur cet objet
+		 *\brief		Opérateur d'affectation par copie.
+		 *\param[in]	rhs	La composante.
 		 */
 		ColourComponent( ColourComponent const & rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Copy assignment operator.
+		 *\param[in]	rhs	The component.
+		 *\return		Reference to this object.
+		 *\~french
+		 *\brief		Opérateur d'affectation par copie.
+		 *\param[in]	rhs	La composante.
+		 *\return		Référence sur cet objet.
+		 */
 		ColourComponent & operator=( ColourComponent const & rhs )
 		{
 			*m_component = *rhs.m_component;
