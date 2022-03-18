@@ -69,13 +69,13 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	device	The GPU device.
-		 *\param[in]	uboPool	The UBO pool.
-		 *\param[in]	target	The target texture view.
+		 *\param[in]	target	The target texture.
+		 *\param[in]	level	The command buffer level.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	device	Le device GPU.
-		 *\param[in]	uboPool	Le pool d'UBO.
-		 *\param[in]	target	La vue de texture cible.
+		 *\param[in]	target	La texture cible.
+		 *\param[in]	level	Le niveau du command buffer.
 		 */
 		C3D_API OverlayRenderer( RenderDevice const & device
 			, Texture const & target
@@ -100,11 +100,9 @@ namespace castor3d
 		 *\~english
 		 *\brief		Begins the overlays preparation.
 		 *\param[in]	timer	The render pass timer.
-		 *\param[in]	toWait	The semaphore from the previous render pass.
 		 *\~french
 		 *\brief		Commence la préparation des incrustations.
 		 *\param[in]	timer	Le timer de la passe de rendu.
-		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
 		C3D_API void beginPrepare( FramePassTimer const & timer );
 		/**
@@ -119,22 +117,20 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Begins the overlays preparation.
-		 *\param[in]	timer	The render pass timer.
-		 *\param[in]	toWait	The semaphore from the previous render pass.
+		 *\param[in]	renderPass	The render pass.
+		 *\param[in]	framebuffer	The framebuffer receiving the result.
 		 *\~french
 		 *\brief		Commence la préparation des incrustations.
-		 *\param[in]	timer	Le timer de la passe de rendu.
-		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
+		 *\param[in]	renderPass	La passe de rendu.
+		 *\param[in]	framebuffer	Le framebuffer recevant le résultat.
 		 */
 		C3D_API void beginPrepare( VkRenderPass renderPass
 			, VkFramebuffer framebuffer );
 		/**
 		 *\~english
 		 *\brief		Ends the overlays preparation.
-		 *\param[in]	timer	The render pass timer.
 		 *\~french
 		 *\brief		Termine la préparation des incrustations.
-		 *\param[in]	timer	Le timer de la passe de rendu.
 		 */
 		C3D_API void endPrepare();
 		/**
@@ -149,12 +145,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Ends the overlays preparation.
-		 *\param[in]	device	The GPU device.
 		 *\param[in]	timer	The render pass timer.
+		 *\param[in]	queue	The queue receiving the render commands.
+		 *\param[in]	toWait	The semaphore from the previous render pass.
+		 *\return		The semaphores signaled by this render.
 		 *\~french
 		 *\brief		Termine la préparation des incrustations.
-		 *\param[in]	device	Le device GPU.
 		 *\param[in]	timer	Le timer de la passe de rendu.
+		 *\param[in]	queue	La queue recevant les commandes d'initialisation.
+		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
+		 *\return		Les sémaphores signalés par ce dessin.
 		 */
 		C3D_API crg::SemaphoreWaitArray render( FramePassTimer & timer
 			, ashes::Queue const & queue

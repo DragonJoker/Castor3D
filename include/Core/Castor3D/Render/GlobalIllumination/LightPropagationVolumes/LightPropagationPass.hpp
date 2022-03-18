@@ -57,17 +57,19 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
+		 *\param[in]	pass		The parent frame pass.
+		 *\param[in]	context		The rendering context.
+		 *\param[in]	graph		The runnable graph.
 		 *\param[in]	device		The GPU device.
-		 *\param[in]	prefix		The pass name's prefix.
-		 *\param[in]	suffix		The pass name's suffix.
 		 *\param[in]	occlusion	Enable occlusion or not.
 		 *\param[in]	gridSize	The grid dimensions.
 		 *\param[in]	blendMode	The blend mode.
 		 *\~french
 		 *\brief		Constructeur.
+		 *\param[in]	pass		La frame pass parente.
+		 *\param[in]	context		Le contexte de rendu.
+		 *\param[in]	graph		Le runnable graph.
 		 *\param[in]	device		Le device GPU.
-		 *\param[in]	prefix		Le préfixe du nom de la passe.
-		 *\param[in]	suffix		Le suffixe du nom de la passe.
 		 *\param[in]	occlusion	Active l'occlusion ou pas.
 		 *\param[in]	gridSize	Les dimensions de la grille.
 		 *\param[in]	blendMode	Le mode de mélange.

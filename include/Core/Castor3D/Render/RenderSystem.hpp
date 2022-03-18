@@ -44,12 +44,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\param[in]	desc	The Ashes plugin description.
+		 *\param[in]	engine				The engine.
+		 *\param[in]	desc				The Ashes plugin description.
+		 *\param[in]	instanceExtensions	The instance extensions.
+		 *\param[in]	deviceExtensions	The device extensions.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 *\param[in]	desc	The Ashes plugin description.
+		 *\param[in]	instanceExtensions	Les extensions d'instance.
+		 *\param[in]	deviceExtensions	Les extensions de device.
 		 */
 		C3D_API RenderSystem( Engine & engine
 			, AshPluginDescription desc
@@ -58,12 +62,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\param[in]	desc	The Ashes plugin description.
+		 *\param[in]	engine				The engine.
+		 *\param[in]	renderer			The selected renderer.
+		 *\param[in]	deviceExtensions	The device extensions.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 *\param[in]	desc	The Ashes plugin description.
+		 *\param[in]	engine				Le moteur.
+		 *\param[in]	renderer			Le renderer sélectionné.
+		 *\param[in]	deviceExtensions	Les extensions de device.
 		 */
 		C3D_API RenderSystem( Engine & engine
 			, Renderer renderer
@@ -76,13 +82,17 @@ namespace castor3d
 		*	The engine.
 		*\param[in] desc
 		*	The Ashes plugin description.
+		*\param[in] instanceExtensions
+		*	The instance extensions.
 		*\~french
 		*\brief
 		*	Crée une instance Vulkan compatible avec Castor3D.
 		*\param[in] engine
 		*	Le moteur.
 		*\param[in] desc
-		*	The Ashes plugin description.
+		*	La description du plugin Ashes.
+		*\param[in] instanceExtensions
+		*	Les extensions d'instance.
 		*/
 		C3D_API static ashes::InstancePtr createInstance( Engine & engine
 			, AshPluginDescription const & desc
@@ -91,11 +101,19 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Adds the instance layers names to the given names.
+		*\param[in] engine
+		*	The engine.
+		*\param[in] layers
+		*	The available layers.
 		*\param[in,out] names
 		*	The liste to fill.
 		*\~french
 		*\brief
 		*	Ajoute les couches de l'instance aux noms déjà présents dans la liste donnée.
+		*\param[in] engine
+		*	Le moteur.
+		*\param[in,out] layers
+		*	Les couches présentes.
 		*\param[in,out] names
 		*	La liste à compléter.
 		*/
@@ -128,11 +146,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Compiles a shader module to the necessary shader language.
-		 *\param[in]	module	The shader to compile.
+		 *\param[in]	stage	The shader stage.
+		 *\param[in]	name	The shader name.
+		 *\param[in]	shader	The shader to compile.
 		 *\return		The compiled shader.
 		 *\~french
 		 *\brief		Compile un shader dans le langage shader nécessaire.
-		 *\param[in]	module	Le shader à compiler.
+		 *\param[in]	stage	Le stage du shader.
+		 *\param[in]	name	Le nom du shader.
+		 *\param[in]	shader	Le shader à compiler.
 		 *\return		Le shader compilé.
 		 */
 		C3D_API SpirVShader compileShader( VkShaderStageFlagBits stage
@@ -141,11 +163,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Compiles a shader module to the necessary shader language.
-		 *\param[in]	module	The shader to compile.
+		 *\param[in]	stage	The shader stage.
+		 *\param[in]	name	The shader name.
+		 *\param[in]	glsl	The shader to compile.
 		 *\return		The compiled shader.
 		 *\~french
 		 *\brief		Compile un shader dans le langage shader nécessaire.
-		 *\param[in]	module	Le shader à compiler.
+		 *\param[in]	stage	Le stage du shader.
+		 *\param[in]	name	Le nom du shader.
+		 *\param[in]	glsl	Le shader à compiler.
 		 *\return		Le shader compilé.
 		 */
 		C3D_API SpirVShader compileShader( VkShaderStageFlagBits stage

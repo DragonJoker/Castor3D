@@ -20,12 +20,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	submesh	The parent submesh.
-		 *\param[in]	type	The component type.
+		 *\param[in]	submesh				The parent submesh.
+		 *\param[in]	type				The component type.
+		 *\param[in]	bufferUsageFlags	The buffer usage flags.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	submesh	Le sous-maillage parent.
-		 *\param[in]	type	Le type de composant.
+		 *\param[in]	submesh				Le sous-maillage parent.
+		 *\param[in]	type				Le type de composant.
+		 *\param[in]	bufferUsageFlags	Les flags d'utilisation du buffer.
 		 */
 		C3D_API IndexMapping( Submesh & submesh
 			, castor::String const & type
@@ -82,7 +84,9 @@ namespace castor3d
 		{
 			return ProgramFlags{};
 		}
-
+		/**
+		 *\copydoc		castor3d::SubmeshComponent::getUsageFlags
+		 */
 		VkBufferUsageFlags getUsageFlags()const override
 		{
 			return m_bufferUsageFlags;

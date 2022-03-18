@@ -35,9 +35,6 @@ namespace castor
 
 	public:
 		/**
-		\author		Sylvain DOREMUS
-		\version	0.6.1.0
-		\date		19/10/2011
 		\~english
 		\brief		Typedef over the best way to put type in parameter : 'value' or 'const reference'
 		\~french
@@ -47,9 +44,6 @@ namespace castor
 		using ParamType = typename CallTraitsHelper < T, ( sizeof( T ) > sizeof( void * ) ) >::ParamType;
 	};
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		17/09/2015
 	\~english
 	\brief		Used to have the minimum value of two, at compile time.
 	\remarks	MinValue specialisation for A <= B.
@@ -63,9 +57,6 @@ namespace castor
 		static const uint32_t value = A;
 	};
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		17/09/2015
 	\~english
 	\brief		Used to have the minimum value of two, at compile time.
 	\remarks	MinValue specialisation for B < A.
@@ -79,9 +70,6 @@ namespace castor
 		static const uint32_t value = B;
 	};
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		17/09/2015
 	\~english
 	\brief		Used to have the maximum value of two, at compile time.
 	\remarks	MaxValue specialisation for A >= B.
@@ -95,9 +83,6 @@ namespace castor
 		static const uint32_t value = A;
 	};
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		17/09/2015
 	\~english
 	\brief		Used to have the maximum value of two, at compile time.
 	\remarks	MaxValue specialisation for B > A.

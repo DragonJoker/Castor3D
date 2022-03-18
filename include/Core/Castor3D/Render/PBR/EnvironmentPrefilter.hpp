@@ -79,17 +79,23 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Generates the mipmap levels.
+		 *\param[in]	queueData	The queue receiving the GPU commands.
 		 *\~french
 		 *\brief		Génère les niveaux de mipmap.
+		 *\param[in]	queueData	La queue recevant les commandes GPU.
 		 */
 		C3D_API void render( QueueData const & queueData );
 		/**
 		 *\~english
 		 *\brief		Generates the mipmap levels.
-		 *\param[in]	toWait	The semaphore from the previous render pass.
+		 *\param[in]	queueData	The queue receiving the render commands.
+		 *\param[in]	toWait		The semaphore from the previous render pass.
+		 *\return		The semaphores signaled by this render.
 		 *\~french
 		 *\brief		Génère les niveaux de mipmap.
-		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
+		 *\param[in]	queueData	La queue recevant les commandes d'initialisation.
+		 *\param[in]	toWait		Le sémaphore de la passe de rendu précédente.
+		 *\return		Les sémaphores signalés par ce dessin.
 		 */
 		C3D_API ashes::Semaphore const & render( QueueData const & queueData
 			, ashes::Semaphore const & toWait );
@@ -102,12 +108,12 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline Texture const & getResult()const
+		Texture const & getResult()const
 		{
 			return m_result;
 		}
 
-		inline ashes::Sampler const & getSampler()const
+		ashes::Sampler const & getSampler()const
 		{
 			return m_sampler.lock()->getSampler();
 		}

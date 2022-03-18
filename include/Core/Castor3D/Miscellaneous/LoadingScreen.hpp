@@ -56,11 +56,42 @@ namespace castor3d
 		 *\param[in]	cb	Le command buffer sur lequel les commandes de transfert sont enregistrées.
 		 */
 		C3D_API void upload( ashes::CommandBuffer const & cb );
+		/**
+		 *\~english
+		 *\brief		Renders the loading screen.
+		 *\param[in]	queue		The queue receiving the render commands.
+		 *\param[in]	framebuffer	The framebuffer receiving the render.
+		 *\param[in]	toWait		The semaphores from the previous render pass.
+		 *\param[in]	fence		The fence to wait, \p nullptr to prevent waiting.
+		 *\return		The semaphores signaled by this render.
+		 *\~french
+		 *\brief		Dessine l'écran de chargement.
+		 *\param[in]	queue		La queue recevant les commandes d'initialisation.
+		 *\param[in]	framebuffer	Le framebuffer recevant le rendu.
+		 *\param[in]	toWait		Les sémaphores de la passe de rendu précédente.
+		 *\param[in]	fence		La fence à attendre, \p nullptr pour ne pas attendre.
+		 *\return		Les sémaphores signalés par ce dessin.
+		 */
 		C3D_API crg::SemaphoreWaitArray render( ashes::Queue const & queue
 			, ashes::FrameBuffer const & framebuffer
 			, crg::SemaphoreWaitArray const & toWait
 			, crg::Fence *& fence );
-
+		/**
+		 *\~english
+		 *\brief		Renders the loading screen.
+		 *\param[in]	queue		The queue receiving the render commands.
+		 *\param[in]	framebuffer	The framebuffer receiving the render.
+		 *\param[in]	toWait		The semaphore from the previous render pass.
+		 *\param[in]	fence		The fence to wait, \p nullptr to prevent waiting.
+		 *\return		The semaphores signaled by this render.
+		 *\~french
+		 *\brief		Dessine l'écran de chargement.
+		 *\param[in]	queue		La queue recevant les commandes d'initialisation.
+		 *\param[in]	framebuffer	Le framebuffer recevant le rendu.
+		 *\param[in]	toWait		Le sémaphore de la passe de rendu précédente.
+		 *\param[in]	fence		La fence à attendre, \p nullptr pour ne pas attendre.
+		 *\return		Les sémaphores signalés par ce dessin.
+		 */
 		crg::SemaphoreWaitArray render( ashes::Queue const & queue
 			, ashes::FrameBuffer const & framebuffer
 			, crg::SemaphoreWait const & toWait
@@ -71,7 +102,15 @@ namespace castor3d
 				, crg::SemaphoreWaitArray{ toWait }
 				, fence );
 		}
-
+		/**
+		*\~english
+		*name
+		*	Mutators.
+		*\~french
+		*name
+		*	Mutateurs.
+		*/
+		/**@{*/
 		void step( castor::String const & label )
 		{
 			m_progressBar.step( label );
@@ -86,7 +125,16 @@ namespace castor3d
 		{
 			m_progressBar.incRange( mod );
 		}
-
+		/**@}*/
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		uint32_t getIndex()const
 		{
 			return m_progressBar.getIndex();
@@ -101,6 +149,7 @@ namespace castor3d
 		{
 			return m_progressBar;
 		}
+		/**@}*/
 
 	private:
 		crg::FramePass & doCreateOpaquePass( crg::FramePass const * previousPass );

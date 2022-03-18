@@ -31,7 +31,7 @@ The project itself is compilable on supported platforms using CMake (\ref build)
 - Shaders are generated automatically from pipeline configuration.
 - Shaders are writable directly from C++ code.
 - Scenes are described using a text format easily comprehensible and extensible.
-- Asynchronous (timers) or synchronour (thread) rendering.
+- Asynchronous (user defined) or synchronous (thread) rendering.
 
 ## Implemented Plug-ins
 

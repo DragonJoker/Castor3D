@@ -37,8 +37,6 @@ namespace castor3d
 	sdw::Mat4 SkinningUbo::computeTransform( shader::SkinningData const & data
 		, sdw::Mat4 transform
 		, sdw::ShaderWriter & writer
-		, ProgramFlags const & flags
-		, sdw::Mat4 const & curMtxModel
 		, sdw::UInt const & skinningId
 		, sdw::UVec4 const & boneIds0
 		, sdw::UVec4 const & boneIds1

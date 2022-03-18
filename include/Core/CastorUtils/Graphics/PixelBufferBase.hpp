@@ -43,6 +43,7 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Creates a buffer from a source buffer, uninitialised data if no source is given.
+		 *\param[in]	options			The convertion options.
 		 *\param[in]	size			Buffer dimensions.
 		 *\param[in]	pixelFormat		Pixels format.
 		 *\param[in]	layers			The number of layers stored in the buffer.
@@ -51,7 +52,8 @@ namespace castor
 		 *\param[in]	bufferFormat	The pixels format of the source buffer.
 		 *\param[in]	bufferAlign		The alignment of the source buffer.
 		 *\~french
-		 *\brief		Crée un buffer depuis une source, données initialisées si aucune source n'est donnée. 
+		 *\brief		Crée un buffer depuis une source, données initialisées si aucune source n'est donnée.
+		 *\param[in]	options			Les options de conversion.
 		 *\param[in]	size			Dimensions du buffer.
 		 *\param[in]	pixelFormat		Format des pixels du buffer.
 		 *\param[in]	layers			Le nombre de layers du buffer.
@@ -130,14 +132,16 @@ namespace castor
 		CU_API void clear();
 		/**
 		 *\~english
-		 *\brief		Initialises the data buffer to the given one
-		 *\remarks		Conversions are made if needed
+		 *\brief		Initialises the data buffer to the given one.
+		 *\remarks		Conversions are made if needed.
+		 *\param[in]	options			The convertion options.
 		 *\param[in]	buffer			Data buffer.
 		 *\param[in]	bufferFormat	Data buffer's pixels format.
 		 *\param[in]	bufferAlign		Buffer data's alignment.
 		 *\~french
-		 *\brief		Initialise le buffer de données à celui donné
-		 *\remarks		Des conversions sont faites si besoin est
+		 *\brief		Initialise le buffer de données à celui donné.
+		 *\remarks		Des conversions sont faites si besoin est.
+		 *\param[in]	options			Les options de conversion.
 		 *\param[in]	buffer			Buffer de données.
 		 *\param[in]	bufferFormat	Format des pixels du buffer de données.
 		 *\param[in]	bufferAlign		Alignement des données du buffer.
@@ -344,6 +348,7 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Creates a buffer with the given data.
+		 *\param[in]	options			The convertion options.
 		 *\param[in]	size			Buffer dimensions.
 		 *\param[in]	layers			Buffer layers (or slices).
 		 *\param[in]	levels			Buffer mip levels.
@@ -354,6 +359,7 @@ namespace castor
 		 *\return		The created buffer.
 		 *\~french
 		 *\brief		Crée un buffer avec les données voulues.
+		 *\param[in]	options			Les options de conversion.
 		 *\param[in]	size			Dimensions du buffer.
 		 *\param[in]	layers			Couches du buffer (layers ou slices).
 		 *\param[in]	levels			Niveaux de mip du buffer.
@@ -413,6 +419,7 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Creates a buffer with the given data.
+		 *\param[in]	options			The convertion options.
 		 *\param[in]	size			Buffer dimensions.
 		 *\param[in]	wantedFormat	Pixels format.
 		 *\param[in]	buffer			Data buffer.
@@ -421,6 +428,7 @@ namespace castor
 		 *\return		The created buffer.
 		 *\~french
 		 *\brief		Crée un buffer avec les données voulues.
+		 *\param[in]	options			Les options de conversion.
 		 *\param[in]	size			Dimensions du buffer.
 		 *\param[in]	wantedFormat	Format des pixels du buffer.
 		 *\param[in]	buffer			Buffer de données.
@@ -480,6 +488,7 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Creates a buffer with the given data.
+		 *\param[in]	options			The convertion options.
 		 *\param[in]	size			Buffer dimensions.
 		 *\param[in]	layers			Buffer layers (or slices).
 		 *\param[in]	levels			Buffer mip levels.
@@ -490,6 +499,7 @@ namespace castor
 		 *\return		The created buffer.
 		 *\~french
 		 *\brief		Crée un buffer avec les données voulues.
+		 *\param[in]	options			Les options de conversion.
 		 *\param[in]	size			Dimensions du buffer.
 		 *\param[in]	layers			Couches du buffer (layers ou slices).
 		 *\param[in]	levels			Niveaux de mip du buffer.
@@ -549,6 +559,7 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Creates a buffer with the given data.
+		 *\param[in]	options			The convertion options.
 		 *\param[in]	size			Buffer dimensions.
 		 *\param[in]	wantedFormat	Pixels format.
 		 *\param[in]	buffer			Data buffer.
@@ -557,6 +568,7 @@ namespace castor
 		 *\return		The created buffer.
 		 *\~french
 		 *\brief		Crée un buffer avec les données voulues.
+		 *\param[in]	options			Les options de conversion.
 		 *\param[in]	size			Dimensions du buffer.
 		 *\param[in]	wantedFormat	Format des pixels du buffer.
 		 *\param[in]	buffer			Buffer de données.

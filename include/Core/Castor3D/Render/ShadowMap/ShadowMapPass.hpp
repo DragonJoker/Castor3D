@@ -25,18 +25,26 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	name			The pass name.
-		 *\param[in]	engine			The engine.
-		 *\param[in]	matrixUbo		The scene matrices UBO.
-		 *\param[in]	culler			The culler for this pass.
-		 *\param[in]	shadowMap		The parent shadow map.
+		 *\param[in]	pass		The parent frame pass.
+		 *\param[in]	context		The rendering context.
+		 *\param[in]	graph		The runnable graph.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	typeName	The shadow map pass type name.
+		 *\param[in]	name		The pass name.
+		 *\param[in]	matrixUbo	The scene matrices UBO.
+		 *\param[in]	culler		The culler for this pass.
+		 *\param[in]	shadowMap	The parent shadow map.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	name			Le nom de la passe.
-		 *\param[in]	engine			Le moteur.
-		 *\param[in]	matrixUbo		L'UBO de matrices de la scène.
-		 *\param[in]	culler			Le culler pour cette passe.
-		 *\param[in]	shadowMap		La shadow map parente.
+		 *\param[in]	pass		La frame pass parente.
+		 *\param[in]	context		Le contexte de rendu.
+		 *\param[in]	graph		Le runnable graph.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	typeName	Le nom du type de passe de shadow map.
+		 *\param[in]	name		Le nom de la passe.
+		 *\param[in]	matrixUbo	L'UBO de matrices de la scène.
+		 *\param[in]	culler		Le culler pour cette passe.
+		 *\param[in]	shadowMap	La shadow map parente.
 		 */
 		C3D_API ShadowMapPass( crg::FramePass const & pass
 			, crg::GraphContext & context
@@ -47,27 +55,45 @@ namespace castor3d
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, ShadowMap const & shadowMap );
-
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		bool isUpToDate()const
 		{
 			return !m_outOfDate;
 		}
 
-		void setUpToDate()
-		{
-			m_outOfDate = false;
-		}
-
-		C3D_API TextureFlags getTexturesMask()const override
+		TextureFlags getTexturesMask()const override
 		{
 			return ShadowMap::textureFlags;
 		}
 
-		C3D_API ShaderFlags getShaderFlags()const override
+		ShaderFlags getShaderFlags()const override
 		{
 			return ShaderFlag::eWorldSpace
 				| ShaderFlag::eTangentSpace;
 		}
+		/**@}*/
+		/**
+		*\~english
+		*name
+		*	Mutators.
+		*\~french
+		*name
+		*	Mutateurs.
+		*/
+		/**@{*/
+		void setUpToDate()
+		{
+			m_outOfDate = false;
+		}
+		/**@}*/
 
 	protected:
 		/**

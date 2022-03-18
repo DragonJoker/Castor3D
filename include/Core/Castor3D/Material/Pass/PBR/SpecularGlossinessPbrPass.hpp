@@ -19,24 +19,26 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\remarks		Used by Material, don't use it.
-		 *\param[in]	parent	The parent material.
+		 *\param[in]	parent			The parent material.
+		 *\param[in]	initialFlags	The pass initial flags.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\remarks		A ne pas utiliser autrement que via la classe Material.
-		 *\param[in]	parent	Le matériau parent.
+		 *\param[in]	parent			Le matériau parent.
+		 *\param[in]	initialFlags	Les flags initiaux de la passe.
 		 */
 		C3D_API explicit SpecularGlossinessPbrPass( Material & parent
 			, PassFlags initialFlags = PassFlag::eNone );
 		/**
 		 *\~english
-		 *\brief		Constructor.
-		 *\remarks		Used by Material, don't use it.
-		 *\param[in]	parent	The parent material.
+		 *\brief		Constructor, from derived classes.
+		 *\param[in]	parent			The parent material.
+		 *\param[in]	typeID			The pass real type ID.
+		 *\param[in]	initialFlags	The pass initial flags.
 		 *\~french
-		 *\brief		Constructeur.
-		 *\remarks		A ne pas utiliser autrement que via la classe Material.
-		 *\param[in]	parent	Le matériau parent.
+		 *\brief		Constructeur, depuis les classes dérivées.
+		 *\param[in]	parent			Le matériau parent.
+		 *\param[in]	typeID			L'ID du type réel de la passe.
+		 *\param[in]	initialFlags	Les flags initiaux de la passe.
 		 */
 		C3D_API SpecularGlossinessPbrPass( Material & parent
 			, PassTypeID typeID
@@ -51,7 +53,7 @@ namespace castor3d
 			, uint32_t remapChannelSectionID );
 		C3D_API static castor::StrUInt32Map createSections();
 		/**
-		 *\copydoc		castor3d::Pass::accept
+		 *\copydoc		castor3d::Pass::fillBuffer
 		 */
 		C3D_API void fillBuffer( PassBuffer & buffer )const override;
 		/**

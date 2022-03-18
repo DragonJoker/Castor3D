@@ -20,20 +20,26 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	matrixUbo		The scene matrices UBO.
-		 *\param[in]	culler			The culler for this pass.
-		 *\param[in]	ssaoConfig		The SSAO configuration.
-		 *\param[in]	lpvConfigUbo	The LPV configuration UBO.
-		 *\param[in]	llpvConfigUbo	The Layered LPV configuration UBO.
-		 *\param[in]	vctConfigUbo	The VCT configuration UBO.
+		 *\param[in]	parent				The parent technique.
+		 *\param[in]	pass				The parent frame pass.
+		 *\param[in]	context				The rendering context.
+		 *\param[in]	graph				The runnable graph.
+		 *\param[in]	device				The GPU device.
+		 *\param[in]	category			The pass category.
+		 *\param[in]	name				The pass name.
+		 *\param[in]	renderPassDesc		The scene render pass construction data.
+		 *\param[in]	techniquePassDesc	The technique render pass construction data.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	matrixUbo		L'UBO de matrices de la scène.
-		 *\param[in]	culler			Le culler pour cette passe.
-		 *\param[in]	ssaoConfig		La configuration du SSAO.
-		 *\param[in]	lpvConfigUbo	L'UBO de configuration des LPV.
-		 *\param[in]	llpvConfigUbo	L'UBO de configuration des Layered LPV.
-		 *\param[in]	vctConfigUbo	L'UBO de configuration du VCT.
+		 *\param[in]	parent				La technique parente.
+		 *\param[in]	pass				La frame pass parente.
+		 *\param[in]	context				Le contexte de rendu.
+		 *\param[in]	graph				Le runnable graph.
+		 *\param[in]	device				Le device GPU.
+		 *\param[in]	category			La catégorie de la passe.
+		 *\param[in]	name				Le nom de la passe.
+		 *\param[in]	renderPassDesc		Les données de construction de passe de rendu de scène.
+		 *\param[in]	techniquePassDesc	Les données de construction de passe de rendu de technique.
 		 */
 		C3D_API TransparentPass( RenderTechnique * parent
 			, crg::FramePass const & pass
@@ -48,7 +54,9 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
-
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::getTexturesMask
+		 */
 		C3D_API TextureFlags getTexturesMask()const override;
 		/**
 		*\~english

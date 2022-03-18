@@ -43,18 +43,10 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	produce		The element producer.
-		 *\param[in]	initialise	The element initialiser.
-		 *\param[in]	clean		The element cleaner.
-		 *\param[in]	merge		The element collection merger.
+		 *\param[in]	engine	The engine.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	produce		Le créateur d'objet.
-		 *\param[in]	initialise	L'initialiseur d'objet.
-		 *\param[in]	clean		Le nettoyeur d'objet.
-		 *\param[in]	merge		Le fusionneur de collection d'objets.
+		 *\param[in]	engine	Le moteur.
 		 */
 		C3D_API explicit ResourceCacheT( castor3d::Engine & engine );
 		/**
@@ -67,12 +59,12 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Intialises the default material.
-		 *\param[in]	device	The GPU device.
-		 *\param[in]	type	The materials type.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	passType	The materials type.
 		 *\~french
 		 *\brief		Initialise le matériau par défaut.
-		 *\param[in]	device	Le device GPU.
-		 *\param[in]	type	Le type des matériaux.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	passType	Le type des matériaux.
 		 */
 		C3D_API void initialise( castor3d::RenderDevice const & device
 			, castor3d::PassTypeID passType );

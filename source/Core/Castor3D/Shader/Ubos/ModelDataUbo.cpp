@@ -100,8 +100,6 @@ namespace castor3d::shader
 			return SkinningUbo::computeTransform( skinning
 				, transform
 				, *getWriter()
-				, programFlags
-				, m_curMtxModel
 				, skinningId
 				, boneIds0
 				, boneIds1
@@ -130,8 +128,6 @@ namespace castor3d::shader
 			return SkinningUbo::computeTransform( skinning
 				, m_curMtxModel
 				, *getWriter()
-				, programFlags
-				, m_curMtxModel
 				, skinningId
 				, boneIds0
 				, boneIds1

@@ -16,10 +16,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	submesh	The parent submesh.
+		 *\param[in]	submesh				The parent submesh.
+		 *\param[in]	bufferUsageFlags	The buffer usage flags.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	submesh	Le sous-maillage parent.
+		 *\param[in]	submesh				Le sous-maillage parent.
+		 *\param[in]	bufferUsageFlags	Les flags d'utilisation du buffer.
 		 */
 		C3D_API explicit LinesMapping( Submesh & submesh
 			, VkBufferUsageFlags bufferUsageFlags = {} );

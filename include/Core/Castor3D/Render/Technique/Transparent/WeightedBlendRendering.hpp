@@ -18,6 +18,7 @@ namespace castor3d
 		 *\brief		Initialises deferred rendering related stuff.
 		 *\param[in]	graph					The frame graph.
 		 *\param[in]	device					The GPU device.
+		 *\param[in]	progress				The progress bar.
 		 *\param[in]	transparentPassDesc		The transparent nodes render pass.
 		 *\param[in]	transparentPassResult	The Weighted Blended OIT result.
 		 *\param[in]	targetColourView		The target colour buffer.
@@ -29,6 +30,7 @@ namespace castor3d
 		 *\brief		Initialise les données liées au deferred rendering.
 		 *\param[in]	graph					Le frame graph.
 		 *\param[in]	device					Le device GPU.
+		 *\param[in]	progress				La barre de progression.
 		 *\param[in]	transparentPassDesc		La passe de rendu des noeuds transparents.
 		 *\param[in]	transparentPassResult	Le résultat du Weighted Blended OIT.
 		 *\param[in]	targetColourView		Le tampon de couleurs cible.
@@ -51,7 +53,15 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		void accept( RenderTechniqueVisitor & visitor );
-
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		crg::FramePass const & getLastPass()const
 		{
 			return m_finalCombinePassDesc;
@@ -63,11 +73,21 @@ namespace castor3d
 			result += 2;// m_finalCombinePassDesc;
 			return result;
 		}
-
+		/**@}*/
+		/**
+		*\~english
+		*name
+		*	Mutators.
+		*\~french
+		*name
+		*	Mutateurs.
+		*/
+		/**@{*/
 		void enable( bool value )
 		{
 			m_enabled = value;
 		}
+		/**@}*/
 
 	private:
 		crg::FramePass & doCreateFinalCombine( crg::FramePassGroup & graph

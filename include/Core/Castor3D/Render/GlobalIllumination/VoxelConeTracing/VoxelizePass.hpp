@@ -19,6 +19,9 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
+		 *\param[in]	pass			The parent frame pass.
+		 *\param[in]	context			The rendering context.
+		 *\param[in]	graph			The runnable graph.
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	matrixUbo		The scene matrices UBO.
 		 *\param[in]	culler			The culler for this pass.
@@ -27,6 +30,9 @@ namespace castor3d
 		 *\param[in]	voxelConfig		The voxelizer configuration.
 		 *\~french
 		 *\brief		Constructeur.
+		 *\param[in]	pass			La frame pass parente.
+		 *\param[in]	context			Le contexte de rendu.
+		 *\param[in]	graph			Le runnable graph.
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	matrixUbo		L'UBO de matrices de la scène.
 		 *\param[in]	culler			Le culler pour cette passe.

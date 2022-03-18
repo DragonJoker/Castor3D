@@ -50,30 +50,22 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine				The engine.
-		 *\param[in]	device				The GPU device.
-		 *\param[in]	prefix				The pass name's prefix.
-		 *\param[in]	lightCache			The lights cache.
-		 *\param[in]	lightType			The light source type.
-		 *\param[in]	smResult			The shadow map.
-		 *\param[in]	lpvGridConfigUbo	The LPV grid configuration UBO.
-		 *\param[in]	lpvLightConfigUbo	The LPV light configuration UBO.
-		 *\param[in]	result				The result.
-		 *\param[in]	gridSize			The grid dimensions.
-		 *\param[in]	layerIndex			The layer index.
+		 *\param[in]	pass		The parent frame pass.
+		 *\param[in]	context		The rendering context.
+		 *\param[in]	graph		The runnable graph.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	lightType	The light source type.
+		 *\param[in]	gridSize	The grid dimensions.
+		 *\param[in]	rsmSize		The reflective shadow map dimensions.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine				Le moteur.
-		 *\param[in]	device				Le device GPU.
-		 *\param[in]	prefix				Le préfixe du nom de la passe.
-		 *\param[in]	lightCache			Le cache de sources lumineuses.
-		 *\param[in]	lightType			Le type de source lumineuse.
-		 *\param[in]	smResult			La shadow map.
-		 *\param[in]	lpvGridConfigUbo	L'UBO de configuration de la grille de LPV.
-		 *\param[in]	lpvLightConfigUbo	L'UBO de configuration de la source lumineuse LPV.
-		 *\param[in]	result				Le résultat.
-		 *\param[in]	gridSize			Les dimensions de la grille.
-		 *\param[in]	layerIndex			L'indice de la layer.
+		 *\param[in]	pass		La frame pass parente.
+		 *\param[in]	context		Le contexte de rendu.
+		 *\param[in]	graph		Le runnable graph.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	lightType	Le type de source lumineuse.
+		 *\param[in]	gridSize	Les dimensions de la grille.
+		 *\param[in]	rsmSize		Les dimensions de la reflective shadow map.
 		 */
 		C3D_API GeometryInjectionPass( crg::FramePass const & pass
 			, crg::GraphContext & context
@@ -84,31 +76,23 @@ namespace castor3d
 			, uint32_t rsmSize );
 		/**
 		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	engine				The engine.
-		 *\param[in]	device				The GPU device.
-		 *\param[in]	prefix				The pass name's prefix.
-		 *\param[in]	lightCache			The lights cache.
-		 *\param[in]	lightType			The light source type.
-		 *\param[in]	smResult			The shadow map.
-		 *\param[in]	lpvGridConfigUbo	The LPV grid configuration UBO.
-		 *\param[in]	lpvLightConfigUbo	The LPV light configuration UBO.
-		 *\param[in]	result				The result.
-		 *\param[in]	gridSize			The grid dimensions.
-		 *\param[in]	layerIndex			The layer index.
+		 *\brief		Constructor for point lights.
+		 *\param[in]	pass		The parent frame pass.
+		 *\param[in]	context		The rendering context.
+		 *\param[in]	graph		The runnable graph.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	face		The cube shadow map face.
+		 *\param[in]	gridSize	The grid dimensions.
+		 *\param[in]	rsmSize		The reflective shadow map dimensions.
 		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	engine				Le moteur.
-		 *\param[in]	device				Le device GPU.
-		 *\param[in]	prefix				Le préfixe du nom de la passe.
-		 *\param[in]	lightCache			Le cache de sources lumineuses.
-		 *\param[in]	lightType			Le type de source lumineuse.
-		 *\param[in]	smResult			La shadow map.
-		 *\param[in]	lpvGridConfigUbo	L'UBO de configuration de la grille de LPV.
-		 *\param[in]	lpvLightConfigUbo	L'UBO de configuration de la source lumineuse LPV.
-		 *\param[in]	result				Le résultat.
-		 *\param[in]	gridSize			Les dimensions de la grille.
-		 *\param[in]	layerIndex			L'indice de la layer.
+		 *\brief		Constructeur pour les sources omnidirectionnelles.
+		 *\param[in]	pass		La frame pass parente.
+		 *\param[in]	context		Le contexte de rendu.
+		 *\param[in]	graph		Le runnable graph.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	face		La face de la cube shadow map.
+		 *\param[in]	gridSize	Les dimensions de la grille.
+		 *\param[in]	rsmSize		Les dimensions de la reflective shadow map.
 		 */
 		C3D_API GeometryInjectionPass( crg::FramePass const & pass
 			, crg::GraphContext & context
@@ -121,7 +105,22 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( PipelineVisitorBase & visitor );
-
+		/**
+		 *\~english
+		 *\brief		Creates the geometry injection pass result.
+		 *\param[in]	handler		The render graph resources handler.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	prefix		The pass name's prefix.
+		 *\param[in]	index		The layer index.
+		 *\param[in]	gridSize	The grid dimensions.
+		 *\~french
+		 *\brief		Crée le résultat de la passe d'injection de géométries.
+		 *\param[in]	handler		Le gestionnaire de ressources du render graph.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	prefix		Le préfixe du nom de la passe.
+		 *\param[in]	index		L'indice de la layer.
+		 *\param[in]	gridSize	Les dimensions de la grille.
+		 */
 		static TexturePtr createResult( crg::ResourceHandler & handler
 			, RenderDevice const & device
 			, castor::String const & prefix

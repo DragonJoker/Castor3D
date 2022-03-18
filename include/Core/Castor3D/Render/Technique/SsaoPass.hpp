@@ -25,19 +25,25 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine			The engine.
+		 *\param[in]	graph			The render graph.
+		 *\param[in]	device			The GPU device.
+		 *\param[in]	progress		The progress bar.
+		 *\param[in]	previousPass	The previous frame pass.
 		 *\param[in]	size			The render area dimensions.
 		 *\param[in]	ssaoConfig		The SSAO configuration.
-		 *\param[in]	linearisedDepth	The linearised depth buffer.
-		 *\param[in]	gpResult		The geometry pass result.
+		 *\param[in]	depth			The depth buffer.
+		 *\param[in]	normal			The normals buffer.
 		 *\param[in]	gpInfoUbo		The GBuffer configuration UBO.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine			Le moteur.
+		 *\param[in]	graph			Le render graph.
+		 *\param[in]	device			Le device GPU.
+		 *\param[in]	progress		La barre de progression
+		 *\param[in]	previousPass	La frame pass précédente.
 		 *\param[in]	size			Les dimensions de la zone de rendu.
 		 *\param[in]	ssaoConfig		La configuration du SSAO.
-		 *\param[in]	linearisedDepth	Le depth buffer linéarisé.
-		 *\param[in]	gpResult		Le résultat de la geometry pass.
+		 *\param[in]	depth			Le depth buffer.
+		 *\param[in]	normal			Le buffer de normales.
 		 *\param[in]	gpInfoUbo		L'UBO de configuration du GBuffer
 		 */
 		C3D_API SsaoPass( crg::FrameGraph & graph
@@ -63,18 +69,15 @@ namespace castor3d
 		 */
 		C3D_API void accept( PipelineVisitorBase & visitor );
 		/**
-		 *\~english
-		 *\return		The SSAO pass result.
-		 *\~french
-		 *\return		Le résultat de la passe SSAO.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		C3D_API Texture const & getResult()const;
-		/**
-		 *\~english
-		 *\return		The bent normals.
-		 *\~french
-		 *\return		Les bent normals.
-		 */
 		C3D_API Texture const & getBentNormals()const;
 
 		SsaoConfig const & getConfig()const
@@ -96,6 +99,7 @@ namespace castor3d
 			result += 2;// m_verticalBlur;
 			return result;
 		}
+		/**@}*/
 
 	private:
 		RenderDevice const & m_device;

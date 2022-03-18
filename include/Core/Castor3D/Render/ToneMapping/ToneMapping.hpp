@@ -26,14 +26,26 @@ namespace castor3d
 		 *\brief		Specified constructor.
 		 *\param[in]	engine			The engine.
 		 *\param[in]	device			The GPU device.
+		 *\param[in]	size			The render area dimensions.
+		 *\param[in]	graph			The render graph.
+		 *\param[in]	source			L'image source.
+		 *\param[in]	target			L'image cible.
+		 *\param[in]	previousPass	The previous frame pass.
 		 *\param[in]	hdrConfigUbo	The configuration data.
 		 *\param[in]	parameters		The implementation specific parameters.
+		 *\param[in]	progress		The progress bar.
 		 *\~french
 		 *\brief		Constructeur spécifié.
 		 *\param[in]	engine			Le moteur.
 		 *\param[in]	device			Le device GPU.
+		 *\param[in]	size			Les dimensions de la zone de rendu.
+		 *\param[in]	graph			Le render graph.
+		 *\param[in]	source			The source image.
+		 *\param[in]	target			The target image.
+		 *\param[in]	previousPass	La frame pass précédente.
 		 *\param[in]	hdrConfigUbo	Les données de confiuration.
 		 *\param[in]	parameters		Les paramètres spécifiques à l'implémentation.
+		 *\param[in]	progress		La barre de progression.
 		 */
 		C3D_API ToneMapping( Engine & engine
 			, RenderDevice const & device
@@ -56,22 +68,18 @@ namespace castor3d
 		 *\~english
 		 *\brief		Initialises tone mapping shader and pipeline.
 		 *\param[in]	name		The tone mapping name.
-		 *\param[in]	fullName	The tone mapping full (fancy) name.
 		 *\~french
 		 *\brief		Initialise le shader et le pipeline de mappage de tons.
 		 *\param[in]	name		Le nom du mappage de tons.
-		 *\param[in]	fullName	Le nom complet (et joli) du mappage de tons.
 		 */
 		C3D_API void initialise( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Initialises tone mapping shader and pipeline.
 		 *\param[in]	name		The tone mapping name.
-		 *\param[in]	fullName	The tone mapping full (fancy) name.
 		 *\~french
 		 *\brief		Initialise le shader et le pipeline de mappage de tons.
 		 *\param[in]	name		Le nom du mappage de tons.
-		 *\param[in]	fullName	Le nom complet (et joli) du mappage de tons.
 		 */
 		C3D_API void updatePipeline( castor::String const & name );
 		/**

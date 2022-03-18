@@ -38,8 +38,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Computes the convoluted BRDF.
+		 *\param[in]	queueData	The queue receiving the GPU commands.
 		 *\~french
 		 *\brief		Calcule le BRDF circonvolu.
+		 *\param[in]	queueData	La queue recevant les commandes GPU.
 		 */
 		C3D_API void render( QueueData const & queueData );
 

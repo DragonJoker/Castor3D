@@ -93,8 +93,15 @@ namespace castor3d
 		 */
 		C3D_API void update( ShadowMapLightTypeArray & shadowMaps
 			, VkRect2D const & scissor );
+		/**
+		 *\~english
+		 *\brief		Sets the node to be ignored in rendering.
+		 *remarks		All objects attached to this node will be ignored
+		 *\~french
+		 *\brief		Définit le noeud qui sera ignoré lors du rendu.
+		 *remarks		Tous les objets attachés à ce noeud seront ignorés.
+		 */
 		C3D_API void setIgnoredNode( SceneNode const & node );
-		/**@}*/
 		/**
 		*\~english
 		*name

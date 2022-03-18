@@ -16,21 +16,23 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor for opaque nodes.
-		 *\param[in]	prefix		This pass name's prefix.
-		 *\param		device		The GPU device.
-		 *\param[in]	matrixUbo	The scene matrix UBO.
-		 *\param[in]	culler		The render pass culler.
-		 *\param[in]	ssaoConfig	The SSAO configuration.
-		 *\param[in]	depthBuffer	The target depth buffer.
+		 *\brief		Constructor.
+		 *\param[in]	parent			The parent technique
+		 *\param[in]	pass			The parent frame pass.
+		 *\param[in]	context			The rendering context.
+		 *\param[in]	graph			The runnable graph.
+		 *\param		device			The GPU device.
+		 *\param[in]	ssaoConfig		The SSAO configuration.
+		 *\param[in]	renderPassDesc	The render pass description.
 		 *\~french
-		 *\brief		Constructeur pour les noeuds opaques.
-		 *\param[in]	prefix		Le préfixe du nom de cette passe.
-		 *\param[in]	device		Le device GPU.
-		 *\param[in]	matrixUbo	L'UBO de matrices de la scène.
-		 *\param[in]	culler		Le culler pour cette passe.
-		 *\param[in]	ssaoConfig	La configuration du SSAO.
-		 *\param[in]	depthBuffer	Le tampon de profondeur cible.
+		 *\brief		Constructeur.
+		 *\param[in]	parent			La technique parente.
+		 *\param[in]	pass			La frame pass parente.
+		 *\param[in]	context			Le contexte de rendu.
+		 *\param[in]	graph			Le runnable graph.
+		 *\param[in]	device			Le device GPU.
+		 *\param[in]	ssaoConfig		La configuration du SSAO.
+		 *\param[in]	renderPassDesc	La description de la passe de rendu.
 		 */
 		C3D_API DepthPass( RenderTechnique * parent
 			, crg::FramePass const & pass
@@ -39,9 +41,13 @@ namespace castor3d
 			, RenderDevice const & device
 			, SsaoConfig const & ssaoConfig
 			, RenderNodesPassDesc const & renderPassDesc );
-
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::getTexturesMask
+		 */
 		C3D_API TextureFlags getTexturesMask()const override;
-
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::getShaderFlags
+		 */
 		C3D_API ShaderFlags getShaderFlags()const override
 		{
 			return ShaderFlag::eWorldSpace

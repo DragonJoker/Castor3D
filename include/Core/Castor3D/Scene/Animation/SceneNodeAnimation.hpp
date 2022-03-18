@@ -31,12 +31,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	animable	The parent animable object.
-		 *\param[in]	name		The name of the animation.
+		 *\param[in]	node	The parent animable object.
+		 *\param[in]	name	The name of the animation.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	animable	L'objet animable parent.
-		 *\param[in]	name		Le nom de l'animation.
+		 *\param[in]	node	L'objet animable parent.
+		 *\param[in]	name	Le nom de l'animation.
 		 */
 		C3D_API explicit SceneNodeAnimation( SceneNode & node
 			, castor::String const & name = castor::cuEmptyString );

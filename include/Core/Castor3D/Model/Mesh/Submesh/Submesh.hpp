@@ -214,13 +214,11 @@ namespace castor3d
 		 *\param[in]	oldMaterial	The old material.
 		 *\param[in]	newMaterial	The new material.
 		 *\param[in]	update		Tells if the buffers must be updated.
-		 *\return		\p true si le matériau a changé.
 		 *\~french
 		 *\brief		Définit le materiau.
 		 *\param[in]	oldMaterial	Le matériau précédent.
 		 *\param[in]	newMaterial	Le nouveau matériau.
 		 *\param[in]	update		Dit si les tampons doivent être mis à jour.
-		 *\return		\p true if the material is changed.
 		 */
 		C3D_API void setMaterial( MaterialRPtr oldMaterial
 			, MaterialRPtr newMaterial
@@ -228,8 +226,18 @@ namespace castor3d
 		/**
 		*\~english
 		*\return		The geometry buffers for given material.
+		 *\param[in]	shaderFlags		The shader flags.
+		 *\param[in]	programFlags	The program flags.
+		 *\param[in]	material		The material.
+		 *\param[in]	mask			The textures mask.
+		 *\param[in]	forceTexcoords	\p true to force texture coordinates in the vertex layout.
 		*\~french
 		*\return		Les tampons de géométrie associés au materiau donné.
+		 *\param[in]	shaderFlags		Les shader flags.
+		 *\param[in]	programFlags	Les program flags.
+		 *\param[in]	material		Les matériau.
+		 *\param[in]	mask			Le masque de textures.
+		 *\param[in]	forceTexcoords	\p true pour forcer les coordonnées de texture dans le vertex layout.
 		*/
 		C3D_API GeometryBuffers const & getGeometryBuffers( ShaderFlags const & shaderFlags
 			, ProgramFlags const & programFlags

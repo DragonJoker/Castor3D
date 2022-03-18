@@ -18,10 +18,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	submesh	The parent submesh.
+		 *\param[in]	submesh				The parent submesh.
+		 *\param[in]	bufferUsageFlags	The buffer usage flags.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	submesh	Le sous-maillage parent.
+		 *\param[in]	submesh				Le sous-maillage parent.
+		 *\param[in]	bufferUsageFlags	Les flags d'utilisation du buffer.
 		 */
 		C3D_API explicit TriFaceMapping( Submesh & submesh
 			, VkBufferUsageFlags bufferUsageFlags = {} );
@@ -68,7 +70,6 @@ namespace castor3d
 		 *\param[in]	d		The fourth face's vertex index.
 		 *\param[in]	minUV	The UV of the bottom left corner.
 		 *\param[in]	maxUV	The UV of the top right corner.
-		 *\return		The created face.
 		 *\~french
 		 *\brief		Crée et ajoute une face à 4 côtés au sous-maillage.
 		 *\param[in]	a		L'index du premier vertex.
@@ -77,7 +78,6 @@ namespace castor3d
 		 *\param[in]	d		L'index du quatrième vertex.
 		 *\param[in]	minUV	L'UV du coin bas gauche.
 		 *\param[in]	maxUV	L'UV du coin haut droit.
-		 *\return		La face créée.
 		 */
 		C3D_API void addQuadFace( uint32_t a, uint32_t b, uint32_t c, uint32_t d
 			, castor::Point3f const & minUV = castor::Point3f()
@@ -92,7 +92,14 @@ namespace castor3d
 		 */
 		C3D_API void computeFacesFromPolygonVertex();
 		/**
-		 *\copydoc		castor3d::IndexMapping::computeNormals
+		 *\~english
+		 *\brief			Computes normal and tangent for each vertex of the given face.
+		 *\param[in,out]	points	The points.
+		 *\param[in]		reverted	\p true to invert normals.
+		 *\~french
+		 *\brief			Calcule la normale et la tangente pour chaque vertex de la face donnée.
+		 *\param[in,out]	points		Les points.
+		 *\param[in]		reverted	\p true pour inverser les normales.
 		 */
 		C3D_API void computeNormals( InterleavedVertexArray & points
 			, bool reverted = false )const;
@@ -107,11 +114,13 @@ namespace castor3d
 		C3D_API void computeNormals( Face const & face );
 		/**
 		 *\~english
-		 *\brief		Computes normal and tangent for each vertex of the given face.
-		 *\param[in]	face	The face.
+		 *\brief			Computes normal and tangent for each vertex of the given face.
+		 *\param[in,out]	points	The points.
+		 *\param[in]		face	The face.
 		 *\~french
-		 *\brief		Calcule la normale et la tangente pour chaque vertex de la face donnée.
-		 *\param[in]	face	La face.
+		 *\brief			Calcule la normale et la tangente pour chaque vertex de la face donnée.
+		 *\param[in,out]	points	Les points.
+		 *\param[in]		face	La face.
 		 */
 		C3D_API void computeNormals( InterleavedVertexArray & points
 			, Face const & face )const;
@@ -126,11 +135,13 @@ namespace castor3d
 		C3D_API void computeTangents( Face const & face );
 		/**
 		 *\~english
-		 *\brief		Computes tangent for each vertex of the given face.
-		 *\param[in]	face	The face.
+		 *\brief			Computes tangent for each vertex of the given face.
+		 *\param[in,out]	points	The points.
+		 *\param[in]		face	The face.
 		 *\~french
-		 *\brief		Calcule la tangente pour chaque vertex de la face donnée.
-		 *\param[in]	face	La face.
+		 *\brief			Calcule la tangente pour chaque vertex de la face donnée.
+		 *\param[in,out]	points	Les points.
+		 *\param[in]		face	La face.
 		 */
 		C3D_API void computeTangents( InterleavedVertexArray & points
 			, Face const & face )const;
@@ -145,11 +156,13 @@ namespace castor3d
 		C3D_API void computeTangentsFromNormals();
 		/**
 		 *\~english
-		 *\brief		Computes tangent for each vertex of the submesh.
-		 *\remarks		This function supposes the normals are defined.
+		 *\brief			Computes tangent for each vertex of the submesh.
+		 *\remarks			This function supposes the normals are defined.
+		 *\param[in,out]	points	The points.
 		 *\~french
-		 *\brief		Calcule la tangente pour chaque vertex du sous-maillage.
-		 *\remarks		Cette fonction suppose que les normales sont définies.
+		 *\brief			Calcule la tangente pour chaque vertex du sous-maillage.
+		 *\remarks			Cette fonction suppose que les normales sont définies.
+		 *\param[in,out]	points	Les points.
 		 */
 		C3D_API void computeTangentsFromNormals( InterleavedVertexArray & points )const;
 		/**

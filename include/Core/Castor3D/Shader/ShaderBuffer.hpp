@@ -40,19 +40,21 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the buffer.
+		 *\param[in]	commandBuffer	The command buffer receiving upload commands.
 		 *\~french
 		 *\brief		Met à jour le tampon.
+		 *\param[in]	commandBuffer	Le command buffer recevant les commandes d'upload.
 		 */
 		C3D_API void upload( ashes::CommandBuffer const & commandBuffer )const;
 		/**
 		 *\~english
 		 *\brief		Updates the buffer on GPU.
-		 *\param[in]	offset	The starting offset.
-		 *\param[in]	size	The update range.
+		 *\param[in]	commandBuffer	The command buffer receiving upload commands.
+		 *\param[in]	offset, size	The updated range.
 		 *\~french
 		 *\brief		Met à jour le tampon sur le GPU.
-		 *\param[in]	offset	L'offset de départ.
-		 *\param[in]	size	L'intervalle à mettre à jour.
+		 *\param[in]	commandBuffer	Le command buffer recevant les commandes d'upload.
+		 *\param[in]	offset, size	L'intervalle à mettre à jour.
 		 */
 		C3D_API void upload( ashes::CommandBuffer const & commandBuffer
 			, VkDeviceSize offset
@@ -78,10 +80,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor write for this buffer.
-		 *\param[in]	binding	The descriptor set layout binding.
+		 *\param[in]	binding			The descriptor set layout binding.
+		 *\param[in]	offset, size	The updated range.
 		 *\~french
 		 *\brief		Crée le descriptor write pour ce tampon.
-		 *\param[in]	binding	L'attache de layout de set de descripteurs.
+		 *\param[in]	binding			L'attache de layout de set de descripteurs.
+		 *\param[in]	offset, size	L'intervalle à mettre à jour.
 		 */
 		C3D_API ashes::WriteDescriptorSet getBinding( uint32_t binding
 			, VkDeviceSize offset
@@ -108,31 +112,24 @@ namespace castor3d
 		C3D_API void createBinding( ashes::DescriptorSet & descriptorSet
 			, VkDescriptorSetLayoutBinding const & binding )const;
 		/**
-		 *\~english
-		 *\return		The pointer to the buffer.
-		 *\~french
-		 *\brief		Le pointeur sur le tampon.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		uint8_t * getPtr()
 		{
 			return m_data;
 		}
-		/**
-		 *\~english
-		 *\return		The buffer size.
-		 *\~french
-		 *\brief		La taille du tampon.
-		 */
+
 		VkDeviceSize getSize()
 		{
 			return m_size;
 		}
-		/**
-		 *\~english
-		 *\return		The buffer descriptor type.
-		 *\~french
-		 *\brief		Le type de descripteur du tampon.
-		 */
+
 		VkDescriptorType getType()const
 		{
 			return m_type;
@@ -142,6 +139,7 @@ namespace castor3d
 		{
 			return m_device;
 		}
+		/**@}*/
 
 	private:
 		void doUpload( ashes::CommandBuffer const & commandBuffer

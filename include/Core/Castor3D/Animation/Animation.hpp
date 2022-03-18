@@ -34,11 +34,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
+		 *\param[in]	handler		The parent handler.
 		 *\param[in]	type		The type of the animation.
 		 *\param[in]	animable	The parent animable object.
 		 *\param[in]	name		The name of the animation.
 		 *\~french
 		 *\brief		Constructeur.
+		 *\param[in]	handler		Le handler parent.
 		 *\param[in]	type		Le type d'animation.
 		 *\param[in]	animable	L'objet animable parent.
 		 *\param[in]	name		Le nom de l'animation.
@@ -50,13 +52,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
+		 *\param[in]	handler		The parent handler.
 		 *\param[in]	type		The type of the animation.
-		 *\param[in]	animable	The parent animable object.
 		 *\param[in]	name		The name of the animation.
 		 *\~french
 		 *\brief		Constructeur.
+		 *\param[in]	handler		Le handler parent.
 		 *\param[in]	type		Le type d'animation.
-		 *\param[in]	animable	L'objet animable parent.
 		 *\param[in]	name		Le nom de l'animation.
 		 */
 		inline AnimationT( AnimableHandlerT & handler
