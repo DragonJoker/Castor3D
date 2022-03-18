@@ -22,8 +22,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine			The engine.
+		 *\param[in]	graph			The render graph.
 		 *\param[in]	device			The GPU device.
+		 *\param[in]	progress		The progress bar.
+		 *\param[in]	previousPass	The previous frame pass.
 		 *\param[in]	prefix			The pass name's prefix.
 		 *\param[in]	size			The render area dimensions.
 		 *\param[in]	config			The SSAO configuration.
@@ -35,8 +37,10 @@ namespace castor3d
 		 *\param[in]	normals			The normals buffer.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine			Le moteur.
+		 *\param[in]	graph			Le render graph.
 		 *\param[in]	device			Le device GPU.
+		 *\param[in]	progress		La barre de progression.
+		 *\param[in]	previousPass	La frame pass précédente.
 		 *\param[in]	prefix			Le préfixe du nom de la passe.
 		 *\param[in]	size			Les dimensions de la zone de rendu.
 		 *\param[in]	config			La configuration du SSAO.

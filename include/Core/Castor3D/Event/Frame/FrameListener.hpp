@@ -59,13 +59,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Applies all events of a given type, then discards them.
-		 *\param[in]	type	The type of events to fire.
-		 *\param[in]	device	The GPU device.
+		 *\param[in]	type		The type of events to fire.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	queueData	The queue receiving the GPU commands.
 		 *\return		\p true si tous les évènements se sont exécutés sans erreur.
 		 *\~french
 		 *\brief		Traite tous les évènements d'un type donné.
-		 *\param[in]	type	Le type des évènements à traiter.
-		 *\param[in]	device	Le device GPU.
+		 *\param[in]	type		Le type des évènements à traiter.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	queueData	La queue recevant les commandes GPU.
 		 *\return		\p true if all events were processed successfully.
 		 */
 		C3D_API bool fireEvents( EventType type

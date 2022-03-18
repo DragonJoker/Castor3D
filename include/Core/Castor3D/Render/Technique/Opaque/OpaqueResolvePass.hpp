@@ -36,11 +36,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine					The engine.
+		 *\param[in]	graph					The render graph.
 		 *\param[in]	device					The GPU device.
+		 *\param[in]	progress				The progress bar.
+		 *\param[in]	previousPass			The previous frame pass.
 		 *\param[in]	scene					The rendered scene.
 		 *\param[in]	gp						The geometry pass result.
-		 *\param[in]	ssao					The SSAO image.
+		 *\param[in]	ssao					The SSAO configuration.
+		 *\param[in]	ssaoResult				The SSAO image.
 		 *\param[in]	subsurfaceScattering	The subsurface scattering result.
 		 *\param[in]	lightDiffuse			The diffuse result of the lighting pass.
 		 *\param[in]	lightSpecular			The specular result of the lighting pass.
@@ -52,11 +55,14 @@ namespace castor3d
 		 *\param[in]	hdrConfigUbo			The HDR UBO.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine					Le moteur.
+		 *\param[in]	graph					Le render graph.
 		 *\param[in]	device					Le device GPU.
+		 *\param[in]	progress				La barre de progression.
+		 *\param[in]	previousPass			La frame pass précédente.
 		 *\param[in]	scene					La scène rendue.
 		 *\param[in]	gp						Le résultat de la passe géométrique.
-		 *\param[in]	ssao					L'image SSAO.
+		 *\param[in]	ssao					La configuration du SSAO.
+		 *\param[in]	ssaoResult				L'image SSAO.
 		 *\param[in]	subsurfaceScattering	Le résultat du subsurface scattering.
 		 *\param[in]	lightDiffuse			Le résultat diffus de la passe d'éclairage.
 		 *\param[in]	lightSpecular			Le résultat spéculaire de la passe d'éclairage.

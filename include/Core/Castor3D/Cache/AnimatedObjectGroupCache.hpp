@@ -56,18 +56,10 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine			The engine.
-		 *\param[in]	produce			The element producer.
-		 *\param[in]	initialise		The element initialiser.
-		 *\param[in]	clean			The element cleaner.
-		 *\param[in]	merge			The element collection merger.
+		 *\param[in]	scene	The parent scene.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine			Le moteur.
-		 *\param[in]	produce			Le créateur d'objet.
-		 *\param[in]	initialise		L'initialiseur d'objet.
-		 *\param[in]	clean			Le nettoyeur d'objet.
-		 *\param[in]	merge			Le fusionneur de collection d'objets.
+		 *\param[in]	scene	La scène parent.
 		 */
 		C3D_API explicit ResourceCacheT( castor3d::Scene & scene );
 		/**

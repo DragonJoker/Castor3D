@@ -37,8 +37,8 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Initialises 2D or 2D array g-buffer textures.
-		*\param[in] engine
-		*	The engine.
+		*\param[in] handler
+		*	The render graph resource handler.
 		*\param[in] inputs
 		*	The already existing images.
 		*\param[in] prefix
@@ -52,8 +52,8 @@ namespace castor3d
 		*\~french
 		*\brief
 		*	Initialise les textures du g-buffer 2D ou 2D array.
-		*\param[in] engine
-		*	Le moteur.
+		*\param[in] handler
+		*	Le gestionnaire de ressources du graphe.
 		*\param[in] inputs
 		*	Les images déjà existantes.
 		*\param[in] prefix
@@ -102,8 +102,8 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Initialises 3D g-buffer textures.
-		*\param[in] engine
-		*	The engine.
+		*\param[in] handler
+		*	The render graph resource handler.
 		*\param[in] inputs
 		*	The already existing images.
 		*\param[in] prefix
@@ -115,8 +115,8 @@ namespace castor3d
 		*\~french
 		*\brief
 		*	Initialise les textures du g-buffer 3D.
-		*\param[in] engine
-		*	Le moteur.
+		*\param[in] handler
+		*	Le gestionnaire de ressources du graphe.
 		*\param[in] inputs
 		*	Les images déjà existantes.
 		*\param[in] prefix
@@ -176,8 +176,10 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Initialises 2D or 2D-Array g-buffer related stuff.
-		*\param[in] engine
-		*	The engine.
+		*\param[in] handler
+		*	The render graph resource handler.
+		*\param[in] device
+		*	The GPU device.
 		*\param[in] name
 		*	The buffer name.
 		*\param[in] inputs
@@ -191,8 +193,10 @@ namespace castor3d
 		*\~french
 		*\brief
 		*	Initialise les données liées au g-buffer 2D ou 2D-Array.
-		*\param[in] engine
-		*	Le moteur.
+		*\param[in] handler
+		*	Le gestionnaire de ressources du graphe.
+		*\param[in] device
+		*	Le device GPU.
 		*\param[in] name
 		*	Le nom du buffer.
 		*\param[in] inputs
@@ -224,8 +228,10 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Initialises 3D g-buffer related stuff.
-		*\param[in] engine
-		*	The engine.
+		*\param[in] handler
+		*	The render graph resource handler.
+		*\param[in] device
+		*	The GPU device.
 		*\param[in] name
 		*	The buffer name.
 		*\param[in] inputs
@@ -237,8 +243,10 @@ namespace castor3d
 		*\~french
 		*\brief
 		*	Initialise les données liées au g-buffer 3D.
-		*\param[in] engine
-		*	Le moteur.
+		*\param[in] handler
+		*	Le gestionnaire de ressources du graphe.
+		*\param[in] device
+		*	Le device GPU.
 		*\param[in] name
 		*	Le nom du buffer.
 		*\param[in] inputs

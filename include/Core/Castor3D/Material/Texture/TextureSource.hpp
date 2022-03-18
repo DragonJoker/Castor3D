@@ -19,12 +19,12 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
-		 *\return		The texture buffer.
+		 *\brief		The texture buffer.
 		 *\param[in]	image	The CPU image.
 		 *\param[in]	name	The source name.
 		 *\param[in]	layout	The CPU image layout.
 		 *\~french
-		 *\return		Le tampon de la texture.
+		 *\brief		Le tampon de la texture.
 		 *\param[in]	image	L'image CPU.
 		 *\param[in]	name	Le nom de la source.
 		 *\param[in]	layout	Le layout CPU de l'image.

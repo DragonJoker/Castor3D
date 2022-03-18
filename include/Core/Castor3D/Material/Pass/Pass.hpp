@@ -67,10 +67,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the pass and all it's dependencies.
-		 *\param[in]	device	The GPU device.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	queueData	Receives the GPU commands.
 		 *\~french
 		 *\brief		Initialise la passe et toutes ses dépendances.
-		 *\param[in]	device	Le device GPU.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	queueData	Reçoit les commandes GPU.
 		 */
 		C3D_API void initialise( RenderDevice const & device
 			, QueueData const & queueData );
@@ -211,12 +213,12 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	PassVisitor acceptance function.
-		*\param visitor
+		*\param vis
 		*	The ... visitor.
 		*\~french
 		*\brief
 		*	Fonction d'acceptation de PassVisitor.
-		*\param visitor
+		*\param vis
 		*	Le ... visiteur.
 		*/
 		C3D_API virtual void accept( PassVisitorBase & vis );
@@ -244,14 +246,14 @@ namespace castor3d
 		*	PassVisitor acceptance function, for a specific texture configuration.
 		*\param config
 		*	The texture configuration.
-		*\param visitor
+		*\param vis
 		*	The ... visitor.
 		*\~french
 		*\brief
 		*	Fonction d'acceptation de PassVisitor, pour une configuration de texture.
 		*\param config
 		*	La configuration de texture.
-		*\param visitor
+		*\param vis
 		*	Le ... visiteur.
 		*/
 		C3D_API virtual void fillConfig( TextureConfiguration & config

@@ -77,10 +77,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param		engine	The engine.
+		 *\param		engine		The engine.
+		 *\param		sourceInfo	The source informations.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param		engine	Le moteur.
+		 *\param		engine		Le moteur.
+		 *\param		sourceInfo	Les informations de la source.
 		 */
 		C3D_API explicit TextureUnit( Engine & engine
 			, TextureSourceInfo const & sourceInfo );
@@ -94,10 +96,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the texture, id est : fills the image buffer, creates the texture in the render system.
-		 *\param[in]	device	The GPU device.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	queueData	The queue receiving the GPU commands.
 		 *\~french
 		 *\brief		Initialise la texture, id est : remplit le buffer d'image, cree la texture au niveau du renderer.
-		 *\param[in]	device	Le device GPU.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	queueData	La queue recevant les commandes GPU.
 		 */
 		C3D_API bool initialise( RenderDevice const & device
 			, QueueData const & queueData );

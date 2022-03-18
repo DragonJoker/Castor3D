@@ -87,12 +87,14 @@ namespace castor3d
 			, castor::String const & name );
 		/**
 		 *\~english
-		 *\brief		Creates an AnimatedObject from the given TextureUnit, adds it to the list.
-		 *\param[in]	texture		The TextureUnit from which AnimatedObject is created.
+		 *\brief		Creates an AnimatedObject for a texture, adds it to the list.
+		 *\param[in]	sourceInfo	The texture source informations.
+		 *\param[in]	config		The texture configuration.
 		 *\param[in]	pass		The pass instanciating the texture.
 		 *\~french
-		 *\brief		Crée un AnimatedObject à partir de la TextureUnit donnée, l'ajoute à la liste.
-		 *\param[in]	texture		La TextureUnit à partir duquel l'AnimatedObject est créé.
+		 *\brief		Crée un AnimatedObject pour une texture, l'ajoute à la liste.
+		 *\param[in]	sourceInfo	Les informations de source de la texture.
+		 *\param[in]	config		La configuration de texture
 		 *\param[in]	pass		La passe instanciant la texture.
 		 */
 		C3D_API AnimatedObjectSPtr addObject( TextureSourceInfo const & sourceInfo

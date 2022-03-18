@@ -35,12 +35,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\param[in]	node	The scene node.
+		 *\param[in]	handler		The render graph resources handler.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	queueData	The queue receiving the initialisation commands.
+		 *\param[in]	scene		The scene.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 *\param[in]	node	Le noeud de scène.
+		 *\param[in]	handler		Le gestionnaire de ressources du render graph.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	queueData	La queue recevant les commandes d'initialisation.
+		 *\param[in]	scene		La scène.
 		 */
 		C3D_API EnvironmentMap( crg::ResourceHandler & handler
 			, RenderDevice const & device
@@ -74,30 +78,32 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders the environment map.
-		 *\param[in]	device	The GPU device.
-		 *\param[in]	toWait	The semaphore to wait.
+		 *\param[in]	toWait	The semaphores to wait.
+		 *\param[in]	queue	The queue receiving the render commands.
+		 *\return		The semaphores signaled by this render.
 		 *\~french
 		 *\brief		Dessine la texture d'environnement.
-		 *\param[in]	device	Le device GPU.
-		 *\param[in]	toWait	Le sémaphore à attendre.
+		 *\param[in]	toWait	Les sémaphores à attendre.
+		 *\param[in]	queue	The queue recevant les commandes de dessin.
+		 *\return		Les sémaphores signalés par ce dessin.
 		 */
 		C3D_API crg::SemaphoreWaitArray render( crg::SemaphoreWaitArray const & toWait
 			, ashes::Queue const & queue );
 		/**
 		 *\~english
-		 *\return		Creates a reflection map for given node.
+		 *\brief		Creates a reflection map for given node.
 		 *\param[in]	node	The scene node from which the reflection map is generated.
 		 *\~french
-		 *\return		Crée une reflection map pour le noeud donné.
+		 *\brief		Crée une reflection map pour le noeud donné.
 		 *\param[in]	node	Le noeud de scène depuis lequel la reflection map est générée.
 		 */
 		C3D_API void addNode( SceneNode & node );
 		/**
 		 *\~english
-		 *\return		Creates a reflection map for given node.
+		 *\brief		Creates a reflection map for given node.
 		 *\param[in]	node	The scene node from which the reflection map is generated.
 		 *\~french
-		 *\return		Crée une reflection map pour le noeud donné.
+		 *\brief		Crée une reflection map pour le noeud donné.
 		 *\param[in]	node	Le noeud de scène depuis lequel la reflection map est générée.
 		 */
 		C3D_API void removeNode( SceneNode & node );

@@ -351,14 +351,10 @@ namespace castor
 		 *\~english
 		 *\brief		Puts a value into a String
 		 *\param[in]	value	The value
-		 *\param[in]	base	The numeric base
-		 *\param[in]	locale	The locale used in the conversion
 		 *\return		The String containing the value
 		 *\~french
 		 *\brief		Met une valeur dans un String
 		 *\param[in]	value	La valeur
-		 *\param[in]	base	La base numérique
-		 *\param[in]	locale	La locale utilisée dans la conversion
 		 *\return		Le String contenant la valeur
 		 */
 		CU_API String toString( char32_t value );
@@ -479,7 +475,6 @@ namespace castor
 		 *\param[in]	str		Le String contenant normalement la valeur
 		 *\param[in]	locale	La locale utilisée dans la conversion
 		 *\param[out]	value	Reçoit la valeur récupérée
-		 *\return
 		 */
 		template< typename T >
 		inline void parse( String const & str, T & value, std::locale const & locale = std::locale( "C" ) );
@@ -495,7 +490,6 @@ namespace castor
 		 *\param[in]	str		Le String contenant normalement la valeur
 		 *\param[out]	value	Reçoit la valeur récupérée
 		 *\param[in]	locale	La locale utilisée dans la conversion
-		 *\return
 		 */
 		template< typename T >
 		inline void extract( String & str, T & value, std::locale const & locale = std::locale( "C" ) );

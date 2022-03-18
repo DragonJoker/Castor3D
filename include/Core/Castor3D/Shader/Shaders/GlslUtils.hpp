@@ -78,11 +78,13 @@ namespace castor3d::shader
 		 *\param		alphaFunc	The alpha function.
 		 *\param[in]	alpha		The alpha TypeEnum.
 		 *\param[in]	alphaRef	The alpha comparison reference TypeEnum.
+		 *\param[in]	opaque		\p true for opaque nodes, \p false for transparent ones.
 		 *\~french
 		 *\brief		Ecrit la fonction d'opacité en GLSL.
 		 *\param		alphaFunc	La fonction d'opacité.
 		 *\param[in]	alpha		La valeur d'opacité.
 		 *\param[in]	alphaRef	La valeur de référence pour la comparaison alpha.
+		 *\param[in]	opaque		\p true pour les noeuds opaques, \p false pour les transparents.
 		 */
 		C3D_API void applyAlphaFunc( VkCompareOp alphaFunc
 			, sdw::Float & alpha

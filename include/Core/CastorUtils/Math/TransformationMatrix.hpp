@@ -575,11 +575,11 @@ namespace castor
 		 *\~english
 		 *\brief		Scale function. Scales matrix from the three values in parameter.
 		 *\param[out]	matrix	The matrix that will be scaled
-		 *\param[in]	x, y, z	The scale values
+		 *\param[in]	x, y	The scale values
 		 *\~french
 		 *\brief		Fonction de mise a l'échelle.
 		 *\param[out]	matrix	La matrice qui contiendra le résultat
-		 *\param[in]	x, y, z	Les valeurs d'échelle sur les 3 axes
+		 *\param[in]	x, y	Les valeurs d'échelle sur les 3 axes
 		 */
 		template< typename T, typename U >
 		static Matrix3x3< T > & scale( Matrix3x3< T > & matrix
@@ -602,11 +602,11 @@ namespace castor
 		 *\~english
 		 *\brief		Scale function. Scales matrix from the three values in parameter.
 		 *\param[out]	matrix	The matrix that will be scaled
-		 *\param[in]	x, y, z	The scale values
+		 *\param[in]	x, y	The scale values
 		 *\~french
 		 *\brief		Fonction de mise a l'échelle.
 		 *\param[out]	matrix	La matrice qui contiendra le résultat
-		 *\param[in]	x, y, z	Les valeurs d'échelle sur les 3 axes
+		 *\param[in]	x, y	Les valeurs d'échelle sur les 3 axes
 		 */
 		template< typename T, typename U >
 		static Matrix3x3< T > & setScale( Matrix3x3< T > & matrix
@@ -629,11 +629,11 @@ namespace castor
 		 *\~english
 		 *\brief		Translate function. Translates a matrix from the three values in parameter.
 		 *\param[out]	matrix			The matrix that will be translated
-		 *\param[in]	x, y, z	The translate values
+		 *\param[in]	x, y	The translate values
 		 *\~french
 		 *\brief		Fonction de construction de matrice de translation.
 		 *\param[out]	matrix			La matrice qui contiendra le résultat
-		 *\param[in]	x, y, z	Les valeurs de translation sur les 3 axes
+		 *\param[in]	x, y	Les valeurs de translation sur les 3 axes
 		 */
 		template< typename T, typename U >
 		static Matrix3x3< T > & translate( Matrix3x3< T > & matrix
@@ -656,11 +656,11 @@ namespace castor
 		 *\~english
 		 *\brief		Translate function. Translates a matrix from the three values in parameter.
 		 *\param[out]	matrix	The matrix that will be translated
-		 *\param[in]	x, y, z	The translate values
+		 *\param[in]	x, y	The translate values
 		 *\~french
 		 *\brief		Fonction de construction de matrice de translation.
 		 *\param[out]	matrix	La matrice qui contiendra le résultat
-		 *\param[in]	x, y, z	Les valeurs de translation sur les 3 axes
+		 *\param[in]	x, y	Les valeurs de translation sur les 3 axes
 		 */
 		template< typename T, typename U >
 		static Matrix3x3< T > & setTranslate( Matrix3x3< T > & matrix

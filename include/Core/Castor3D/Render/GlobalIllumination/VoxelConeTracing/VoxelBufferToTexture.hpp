@@ -31,15 +31,17 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
+		 *\param[in]	pass		The parent frame pass.
+		 *\param[in]	context		The rendering context.
+		 *\param[in]	graph		The runnable graph.
 		 *\param[in]	device		The GPU device.
 		 *\param[in]	vctConfig	The voxelizer configuration.
-		 *\param[in]	voxels		The voxels buffer.
-		 *\param[in]	result		The resulting texture.
 		 *\~french
+		 *\param[in]	pass		La frame pass parente.
+		 *\param[in]	context		Le contexte de rendu.
+		 *\param[in]	graph		Le runnable graph.
 		 *\param[in]	device		Le device GPU.
 		 *\param[in]	vctConfig	La configuration du voxelizer.
-		 *\param[in]	voxels		Le tampon de voxels.
-		 *\param[in]	result		La texture résultante.
 		 */
 		C3D_API VoxelBufferToTexture( crg::FramePass const & pass
 			, crg::GraphContext & context

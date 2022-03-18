@@ -195,12 +195,14 @@ namespace castor
 		 *\param[in]	name		The element name.
 		 *\param[in]	initialise	\p true to initialise the added element (no effect on duplicates).
 		 *\param[out]	created		The created element.
+		 *\param[in]	parameters	The other constructor parameters.
 		 *\return		The real element (added or duplicate original ).
 		 *\~french
 		 *\brief		Ajoute un élément, construict sur place.
 		 *\param[in]	name		Le nom d'élément.
 		 *\param[in]	initialise	\p true pour initialiser l'élément ajouté (aucun effect sur les doublons).
 		 *\param[out]	created		L'élément créé.
+		 *\param[in]	parameters	Les autres paramètres de construction.
 		 *\return		L'élément réel (ajouté, ou original du doublon).
 		 */
 		template< typename ... ParametersT >
@@ -221,12 +223,14 @@ namespace castor
 		 *\param[in]	name		The element name.
 		 *\param[in]	initialise	\p true to initialise the added element (no effect on duplicates).
 		 *\param[out]	created		The created element.
+		 *\param[in]	parameters	The other constructor parameters.
 		 *\return		The real element (added or duplicate original ).
 		 *\~french
 		 *\brief		Ajoute un élément, construict sur place.
 		 *\param[in]	name		Le nom d'élément.
 		 *\param[in]	initialise	\p true pour initialiser l'élément ajouté (aucun effect sur les doublons).
 		 *\param[out]	created		L'élément créé.
+		 *\param[in]	parameters	Les autres paramètres de construction.
 		 *\return		L'élément réel (ajouté, ou original du doublon).
 		 */
 		template< typename ... ParametersT >
@@ -283,9 +287,11 @@ namespace castor
 		 *\~english
 		 *\brief		Removes an element, given a name.
 		 *\param[in]	name	The element name.
+		 *\param[in]	cleanup	\p true if the element needs to be cleaned up.
 		 *\~french
 		 *\brief		Retire un élément à partir d'un nom.
 		 *\param[in]	name	Le nom d'élément.
+		 *\param[in]	cleanup	\p true si l'évènement doit être nettoyé.
 		 */
 		ElementPtrT tryRemove( ElementKeyT const & name
 			, bool cleanup = false )
@@ -297,9 +303,11 @@ namespace castor
 		 *\~english
 		 *\brief		Removes an element, given a name.
 		 *\param[in]	name	The element name.
+		 *\param[in]	cleanup	\p true if the element needs to be cleaned up.
 		 *\~french
 		 *\brief		Retire un élément à partir d'un nom.
 		 *\param[in]	name	Le nom d'élément.
+		 *\param[in]	cleanup	\p true si l'évènement doit être nettoyé.
 		 */
 		ElementPtrT tryRemoveNoLock( ElementKeyT const & name
 			, bool cleanup = false )
@@ -310,9 +318,11 @@ namespace castor
 		 *\~english
 		 *\brief		Logging version of tryRemove.
 		 *\param[in]	name	The element name.
+		 *\param[in]	cleanup	\p true if the element needs to be cleaned up.
 		 *\~french
 		 *\brief		Version journalisante de tryAdd.
 		 *\param[in]	name	Le nom d'élément.
+		 *\param[in]	cleanup	\p true si l'évènement doit être nettoyé.
 		 */
 		void remove( ElementKeyT const & name
 			, bool cleanup = false )
@@ -329,9 +339,11 @@ namespace castor
 		 *\~english
 		 *\brief		Logging version of tryRemove.
 		 *\param[in]	name	The element name.
+		 *\param[in]	cleanup	\p true if the element needs to be cleaned up.
 		 *\~french
 		 *\brief		Version journalisante de tryAdd.
 		 *\param[in]	name	Le nom d'élément.
+		 *\param[in]	cleanup	\p true si l'évènement doit être nettoyé.
 		 */
 		void removeNoLock( ElementKeyT const & name
 			, bool cleanup = false )
@@ -417,10 +429,10 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\return		Merges this cache's elements to the one given.
+		 *\brief		Merges this cache's elements to the one given.
 		 *\param[out]	destination		The destination cache.
 		 *\~french
-		 *\return		Met les éléments de ce cache dans ceux de celui donné.
+		 *\brief		Met les éléments de ce cache dans ceux de celui donné.
 		 *\param[out]	destination		Le cache de destination.
 		 */
 		void mergeInto( ElementCacheBaseT & destination )
@@ -465,7 +477,6 @@ namespace castor
 				func( *element.second );
 			}
 		}
-		/**@}*/
 		/**
 		 *\~english
 		 *\name Getters.

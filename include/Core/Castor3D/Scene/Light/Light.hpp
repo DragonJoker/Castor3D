@@ -60,10 +60,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Records the light data into given buffer.
-		 *\param[out]	buffer	The buffer.
+		 *\param[in]	index	The light index in the buffer.
+		 *\param[out]	data	Receives the informations.
 		 *\~french
-		 *\brief		Enregistre les données de l'image dans le tampon donné.
-		 *\param[out]	buffer	Le tampon.
+		 *\brief		Enregistre les données de la source lumineuse dans le tampon donné.
+		 *\param[in]	index	L'index de la source lumineuse dans le buffer.
+		 *\param[out]	data	Reçoit les informations.
 		 */
 		C3D_API void fillBuffer( uint32_t index
 			, LightBuffer::LightData & data );

@@ -22,10 +22,12 @@ namespace castor3d
 		 *\brief		Constructor.
 		 *\param[in]	submesh	The parent submesh.
 		 *\param[in]	type	The component type.
+		 *\param[in]	id		The component ID.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	submesh	Le sous-maillage parent.
 		 *\param[in]	type	Le type de composant.
+		 *\param[in]	id		L'ID composant.
 		 */
 		C3D_API SubmeshComponent( Submesh & submesh
 			, castor::String const & type
@@ -62,9 +64,25 @@ namespace castor3d
 		C3D_API void upload();
 		/**
 		 *\~english
-		 *\brief		Gathers buffers that need to go in a VAO.
+		 *\brief			Gathers buffers that need to go in a vertex layout.
+		 *\param[in]		shaderFlags		The shader flags.
+		 *\param[in]		programFlags	The program flags.
+		 *\param[in]		material		The material.
+		 *\param[in,out]	buffers			Receives the buffers.
+		 *\param[in,out]	offsets			Receives the buffers offsets.
+		 *\param[in,out]	layouts			Receives the vertex layouts.
+		 *\param[in]		mask			The textures mask.
+		 *\param[in,out]	currentLocation	The current attribute location.
 		 *\~french
-		 *\brief		Récupère les tampons qui doivent aller dans un VAO.
+		 *\brief		Récupère les tampons qui doivent aller dans un vertex layout.
+		 *\param[in]		shaderFlags		Les shader flags.
+		 *\param[in]		programFlags	Les program flags.
+		 *\param[in]		material		Les matériau.
+		 *\param[in,out]	buffers			Reçoit les buffers.
+		 *\param[in,out]	offsets			Reçoit les offsets dans les buffers.
+		 *\param[in,out]	layouts			Reçoit les vertex layouts.
+		 *\param[in]		mask			Le masque de textures.
+		 *\param[in,out]	currentLocation	La position actuelle des attributs.
 		 */
 		C3D_API virtual void gather( ShaderFlags const & shaderFlags
 			, ProgramFlags const & programFlags
@@ -77,8 +95,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\return		The shader program flags.
+		 *\param[in]	material	The material.
 		 *\~french
 		 *\return		Les indicateurs de shader.
+		 *\param[in]	material	Les matériau.
 		 */
 		C3D_API virtual ProgramFlags getProgramFlags( MaterialRPtr material )const = 0;
 		/**
@@ -93,9 +113,11 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\return		Clones this component.
+		 *\return			Clones this component into given submesh.
+		 *\param[in,out]	submesh	Receives the cloned component.
 		 *\~french
-		 *\return		Clone ce composant.
+		 *\return			Clone ce composant dans le submesh donné.
+		 *\param[in,out]	submesh	Reçoit le composant cloné.
 		 */
 		C3D_API virtual SubmeshComponentSPtr clone( Submesh & submesh )const = 0;
 		/**
@@ -112,7 +134,7 @@ namespace castor3d
 		 *\~english
 		 *\brief		Sets the component to be updated.
 		 *\~french
-		 *\return		Dit que le composant doit être mis à jour.
+		 *\brief		Dit que le composant doit être mis à jour.
 		 */
 		void needsUpdate()
 		{
@@ -120,7 +142,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		The component binding ID.
+		 *\return		The component binding ID.
 		 *\~french
 		 *\return		L'ID de binding du composant.
 		 */

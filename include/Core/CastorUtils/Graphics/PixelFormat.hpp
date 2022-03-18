@@ -209,25 +209,25 @@ namespace castor
 		, uint8_t *& dst );
 	/**
 	 *\~english
-	 *\brief		Function to perform convertion without templates
-	 *\param[in]	srcDimensions	The source dimensions
-	 *\param[in]	dstDimensions	The destination dimensions (used only when block compressing)
-	 *\param[in]	srcFormat		The source format
-	 *\param[in]	srcBuffer		The source buffer
-	 *\param[in]	srcSize			The source size
-	 *\param[in]	dstFormat		The destination format
-	 *\param[in]	dstBuffer		The destination buffer
-	 *\param[in]	dstSize			The destination size
+	 *\brief		Function to perform convertion without templates.
+	 *\param[in]	srcDimensions	The source dimensions.
+	 *\param[in]	dstDimensions	The destination dimensions (used only when block compressing).
+	 *\param[in]	srcFormat		The source format.
+	 *\param[in]	srcBuffer		The source buffer.
+	 *\param[in]	srcSize			The source size.
+	 *\param[in]	dstFormat		The destination format.
+	 *\param[in]	dstBuffer		The destination buffer.
+	 *\param[in]	dstSize			The destination size.
 	 *\~french
-	 *\brief		Fonction de conversion sans templates
-	 *\param[in]	srcDimensions	Les dimensions de la source
-	 *\param[in]	dstDimensions	Les dimensions de la destination (utilisé uniquement lors d'une compression par blocs)
-	 *\param[in]	srcFormat		Le format de la source
-	 *\param[in]	srcBuffer		Le buffer source
-	 *\param[in]	srcSize			La taille de la source
-	 *\param[in]	dstFormat		Le format de la destination
-	 *\param[in]	dstBuffer		Le buffer destination
-	 *\param[in]	dstSize			La taille de la destination
+	 *\brief		Fonction de conversion sans templates.
+	 *\param[in]	srcDimensions	Les dimensions de la source.
+	 *\param[in]	dstDimensions	Les dimensions de la destination (utilisé uniquement lors d'une compression par blocs).
+	 *\param[in]	srcFormat		Le format de la source.
+	 *\param[in]	srcBuffer		Le buffer source.
+	 *\param[in]	srcSize			La taille de la source.
+	 *\param[in]	dstFormat		Le format de la destination.
+	 *\param[in]	dstBuffer		Le buffer destination.
+	 *\param[in]	dstSize			La taille de la destination.
 	 */
 	CU_API void convertBuffer( Size const & srcDimensions
 		, Size const & dstDimensions
@@ -239,21 +239,23 @@ namespace castor
 		, uint32_t dstSize );
 	/**
 	 *\~english
-	 *\brief		Function to perform convertion without templates
-	 *\param[in]	srcFormat	The source format
-	 *\param[in]	srcBuffer	The source buffer
-	 *\param[in]	srcSize		The source size
-	 *\param[in]	dstFormat	The destination format
-	 *\param[in]	dstBuffer	The destination buffer
-	 *\param[in]	dstSize		The destination size
+	 *\brief		Function to perform convertion without templates.
+	 *\param[in]	dimensions	The source dimensions.
+	 *\param[in]	srcFormat	The source format.
+	 *\param[in]	srcBuffer	The source buffer.
+	 *\param[in]	srcSize		The source size.
+	 *\param[in]	dstFormat	The destination format.
+	 *\param[in]	dstBuffer	The destination buffer.
+	 *\param[in]	dstSize		The destination size.
 	 *\~french
-	 *\brief		Fonction de conversion sans templates
-	 *\param[in]	srcFormat	Le format de la source
-	 *\param[in]	srcBuffer	Le buffer source
-	 *\param[in]	srcSize		La taille de la source
-	 *\param[in]	dstFormat	Le format de la destination
-	 *\param[in]	dstBuffer	Le buffer destination
-	 *\param[in]	dstSize		La taille de la destination
+	 *\brief		Fonction de conversion sans templates.
+	 *\param[in]	dimensions	Les dimensions de la source.
+	 *\param[in]	srcFormat	Le format de la source.
+	 *\param[in]	srcBuffer	Le buffer source.
+	 *\param[in]	srcSize		La taille de la source.
+	 *\param[in]	dstFormat	Le format de la destination.
+	 *\param[in]	dstBuffer	Le buffer destination.
+	 *\param[in]	dstSize		La taille de la destination.
 	 */
 	static inline void convertBuffer( Size const & dimensions
 		, PixelFormat srcFormat
@@ -274,25 +276,27 @@ namespace castor
 	}
 	/**
 	 *\~english
-	 *\brief		Function to perform convertion without templates
-	 *\param[in]	srcDimensions	The source dimensions
-	 *\param[in]	dstDimensions	The destination dimensions (used only when block compressing)
-	 *\param[in]	srcFormat		The source format
-	 *\param[in]	srcBuffer		The source buffer
-	 *\param[in]	srcSize			The source size
-	 *\param[in]	dstFormat		The destination format
-	 *\param[in]	dstBuffer		The destination buffer
-	 *\param[in]	dstSize			The destination size
+	 *\brief		Function to perform convertion without templates.
+	 *\param[in]	options			The convertion options.
+	 *\param[in]	srcDimensions	The source dimensions.
+	 *\param[in]	dstDimensions	The destination dimensions (used only when block compressing).
+	 *\param[in]	srcFormat		The source format.
+	 *\param[in]	srcBuffer		The source buffer.
+	 *\param[in]	srcSize			The source size.
+	 *\param[in]	dstFormat		The destination format.
+	 *\param[in]	dstBuffer		The destination buffer.
+	 *\param[in]	dstSize			The destination size.
 	 *\~french
 	 *\brief		Fonction de conversion sans templates
-	 *\param[in]	srcDimensions	Les dimensions de la source
-	 *\param[in]	dstDimensions	Les dimensions de la destination (utilisé uniquement lors d'une compression par blocs)
-	 *\param[in]	srcFormat		Le format de la source
-	 *\param[in]	srcBuffer		Le buffer source
-	 *\param[in]	srcSize			La taille de la source
-	 *\param[in]	dstFormat		Le format de la destination
-	 *\param[in]	dstBuffer		Le buffer destination
-	 *\param[in]	dstSize			La taille de la destination
+	 *\param[in]	options			Les options de conversion.
+	 *\param[in]	srcDimensions	Les dimensions de la source.
+	 *\param[in]	dstDimensions	Les dimensions de la destination (utilisé uniquement lors d'une compression par blocs).
+	 *\param[in]	srcFormat		Le format de la source.
+	 *\param[in]	srcBuffer		Le buffer source.
+	 *\param[in]	srcSize			La taille de la source.
+	 *\param[in]	dstFormat		Le format de la destination.
+	 *\param[in]	dstBuffer		Le buffer destination.
+	 *\param[in]	dstSize			La taille de la destination.
 	 */
 	CU_API void compressBuffer( PxBufferConvertOptions const * options
 		, Size const & srcDimensions

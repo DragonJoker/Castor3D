@@ -82,13 +82,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
-		 *\param[in]	device	The GPU device.
-		 *\param[in]	texture	The target texture.
+		 *\param[in]	device			The GPU device.
+		 *\param[in]	texture			The target texture.
+		 *\param[in]	previousPass	The previous frame pass.
 		 *\return		\p true if ok.
 		 *\~french
 		 *\brief		Fonction d'initialisation.
-		 *\param[in]	device	Le device GPU.
-		 *\param[in]	texture	La texture cible.
+		 *\param[in]	device			Le device GPU.
+		 *\param[in]	texture			La texture cible.
+		 *\param[in]	previousPass	La frame pass précédente.
 		 *\return		\p true if ok.
 		 */
 		C3D_API bool initialise( castor3d::RenderDevice const & device
@@ -187,14 +189,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
-		 *\param[in]	device	The GPU device.
-		 *\param[in]	timer	The render pass timer.
-		 *\return		\p true if ok.
+		 *\param[in]	device			The GPU device.
+		 *\param[in]	previousPass	The previous frame pass.
+		 *\return		The resulting image view.
 		 *\~french
 		 *\brief		Fonction d'initialisation.
-		 *\param[in]	device	Le device GPU.
-		 *\param[in]	timer	Le timer de la passe de rendu.
-		 *\return		\p true if ok.
+		 *\param[in]	device			Le device GPU.
+		 *\param[in]	previousPass	La frame pass précédente.
+		 *\return		L'image view resultat.
 		 */
 		C3D_API virtual crg::ImageViewId const * doInitialise( castor3d::RenderDevice const & device
 			, crg::FramePass const & previousPass ) = 0;

@@ -80,15 +80,19 @@ namespace castor3d
 			, ParametersT && ... params );
 		/**
 		 *\~english
-		 *\brief		Creates an element with the given informations.
-		 *\param[in]	name	The element name.
-		 *\param[in]	params	The parameters forwarded to the viewed cache.
-		 *\return		The created element.
+		 *\brief		Creates or retrieves an element with the given informations.
+		 *\param[in]	name		The element name.
+		 *\param[in]	initialise	Tells if the element is to be initialised after creation.
+		 *\param[out]	created		Receives the created element if ti was created.
+		 *\param[in]	params		The parameters forwarded to the viewed cache.
+		 *\return		The created or existing element.
 		 *\~french.=
-		 *\brief		Crée un élément avec les informations données.
-		 *\param[in]	name	Le nom de l'élément.
-		 *\param[in]	params	Les paramètres transmis au cache vu.
-		 *\return		L'élément créé.
+		 *\brief		Crée ou récupère un élément avec les informations données.
+		 *\param[in]	name		Le nom de l'élément.
+		 *\param[out]	created		Reçoit l'élement créé s'il l'a été.
+		 *\param[in]	initialise	Dit si l'élément doit être initialisé après sa création.
+		 *\param[in]	params		Les paramètres transmis au cache vu.
+		 *\return		L'élément créé ou existant.
 		 */
 		template< typename ... ParametersT >
 		inline ElementObsT tryAdd( ElementKeyT const & name
@@ -98,12 +102,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		adds an already created an element.
-		 *\param[in]	name	The element name.
-		 *\param[in]	element	The element.
+		 *\param[in]	name		The element name.
+		 *\param[in]	element		The element.
+		 *\param[in]	initialise	Tells if the element is to be initialised after creation.
 		 *\~french
 		 *\brief		Ajoute un élément déjà créé.
-		 *\param[in]	name	Le nom d'élément.
-		 *\param[in]	element	L'élément.
+		 *\param[in]	name		Le nom d'élément.
+		 *\param[in]	element		L'élément.
+		 *\param[in]	initialise	Dit si l'élément doit être initialisé après sa création.
 		 */
 		inline bool tryAdd( ElementKeyT const & name
 			, ElementPtrT & element
@@ -111,12 +117,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		adds an already created an element.
-		 *\param[in]	name	The element name.
-		 *\param[in]	element	The element.
+		 *\param[in]	name		The element name.
+		 *\param[in]	element		The element.
+		 *\param[in]	initialise	Tells if the element is to be initialised after creation.
 		 *\~french
 		 *\brief		Ajoute un élément déjà créé.
-		 *\param[in]	name	Le nom d'élément.
-		 *\param[in]	element	L'élément.
+		 *\param[in]	name		Le nom d'élément.
+		 *\param[in]	element		L'élément.
+		 *\param[in]	initialise	Dit si l'élément doit être initialisé après sa création.
 		 */
 		inline ElementObsT add( ElementKeyT const & name
 			, ElementPtrT & element

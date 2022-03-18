@@ -23,11 +23,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises deferred rendering related stuff.
-		 *\param[in]	engine				The engine.
-		 *\param[in]	device				The GPU device.
+		 *\param[in]	graph				The graph passes group.
 		 *\param[in]	opaquePass			The opaque nodes render pass.
-		 *\param[in]	depthTexture		The render target depth texture.
-		 *\param[in]	velocityTexture		The render target velocity texture.
+		 *\param[in]	device				The GPU device.
+		 *\param[in]	progress			The progress status.
+		 *\param[in]	depth				The render target depth texture.
+		 *\param[in]	opaquePassResult	The geometry pass buffers.
 		 *\param[in]	resultTexture		The render technique texture.
 		 *\param[in]	smDirectionalResult	The directional lights shadow map.
 		 *\param[in]	smPointResult		The point lights shadow map.
@@ -36,8 +37,10 @@ namespace castor3d
 		 *\param[in]	llpvResult			The Layered LPV result.
 		 *\param[in]	vctFirstBounce		The VCT first bounce result.
 		 *\param[in]	vctSecondaryBounce	The VCT secondary bounce result.
+		 *\param[in]	ssao				The SSAO result.
 		 *\param[in]	size				The render dimensions.
 		 *\param[in]	scene				The rendered scene.
+		 *\param[in]	sceneUbo			The scene configuration UBO.
 		 *\param[in]	hdrConfigUbo		The HDR configuration UBO.
 		 *\param[in]	gpInfoUbo			The GBuffer configuration UBO.
 		 *\param[in]	lpvConfigUbo		The LPV configuration UBO.
@@ -46,11 +49,12 @@ namespace castor3d
 		 *\param[in]	ssaoConfig			The SSAO configuration.
 		 *\~french
 		 *\brief		Initialise les données liées au deferred rendering.
-		 *\param[in]	engine				Le moteur.
-		 *\param[in]	device				Le device GPU.
+		 *\param[in]	graph				Le groupe de passes du graphe.
 		 *\param[in]	opaquePass			La passe de rendu des noeuds opaques.
-		 *\param[in]	depthTexture		La texture de profondeur de la cible de rendu.
-		 *\param[in]	velocityTexture		La texture de vélocité de la cible de rendu.
+		 *\param[in]	device				Le device GPU.
+		 *\param[in]	progress			Le statut de progression.
+		 *\param[in]	depth				La texture de profondeur de la cible de rendu.
+		 *\param[in]	opaquePassResult	Le résultat de la geometry pass.
 		 *\param[in]	resultTexture		La texture de la technique de rendu.
 		 *\param[in]	smDirectionalResult	La shadow map des source lumineuses directionnelles.
 		 *\param[in]	smPointResult		La shadow map des source lumineuses omnidirectionnelles.
@@ -59,8 +63,10 @@ namespace castor3d
 		 *\param[in]	llpvResult			Le résultat du Layered LPV.
 		 *\param[in]	vctFirstBounce		Le résultat du premier rebond de VCT.
 		 *\param[in]	vctSecondaryBounce	Le résultat du second rebond de VCT.
+		 *\param[in]	ssao				Le résultat du SSAO.
 		 *\param[in]	size				Les dimensions du rendu.
 		 *\param[in]	scene				La scène rendue.
+		 *\param[in]	sceneUbo			L'UBO de configuration de la scène
 		 *\param[in]	hdrConfigUbo		L'UBO de configuration HDR.
 		 *\param[in]	gpInfoUbo			L'UBO de configuration du GBuffer.
 		 *\param[in]	lpvConfigUbo		L'UBO de configuration des LPV.

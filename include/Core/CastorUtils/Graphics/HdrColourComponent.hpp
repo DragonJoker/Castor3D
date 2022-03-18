@@ -39,6 +39,15 @@ namespace castor
 		}
 		/**
 		 *\~english
+		 *\brief		Copy assignment operator.
+		 *\param[in]	rhs	The component.
+		 *\~french
+		 *\brief		Opérateur d'affectation par copie.
+		 *\param[in]	rhs	La composante.
+		 */
+		HdrColourComponent( HdrColourComponent const & rhs ) = default;
+		/**
+		 *\~english
 		 *\brief		Copy assignment operator
 		 *\param[in]	rhs	The component
 		 *\return		Reference to this object
@@ -47,7 +56,6 @@ namespace castor
 		 *\param[in]	rhs	La composante
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponent( HdrColourComponent const & rhs ) = default;
 		HdrColourComponent & operator=( HdrColourComponent const & rhs )
 		{
 			*m_component = *rhs.m_component;

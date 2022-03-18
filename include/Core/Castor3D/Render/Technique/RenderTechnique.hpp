@@ -47,15 +47,19 @@ namespace castor3d
 		 *\param[in]	name			The technique name.
 		 *\param[in]	renderTarget	The render target for this technique.
 		 *\param[in]	device			The GPU device.
+		 *\param[in]	queueData		The queue receiving the GPU commands.
 		 *\param[in]	parameters		The technique parameters.
 		 *\param[in]	ssaoConfig		The SSAO configuration.
+		 *\param[in]	progress		The optional progress bar.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	name			Le nom de la technique.
 		 *\param[in]	renderTarget	La render target pour cette technique.
 		 *\param[in]	device			Le device GPU.
+		 *\param[in]	queueData		La queue recevant les commandes GPU.
 		 *\param[in]	parameters		Les paramètres de la technique.
 		 *\param[in]	ssaoConfig		La configuration du SSAO.
+		 *\param[in]	progress		La barre de progression optionnelle.
 		 */
 		C3D_API RenderTechnique( castor::String const & name
 			, RenderTarget & renderTarget
@@ -107,11 +111,15 @@ namespace castor3d
 		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief			Renders environment maps.
-		 *\param[in, out]	updater	The update data.
+		 *\brief		Renders maps needed for the actual rendering.
+		 *\param[in]	toWait	The semaphores to wait.
+		 *\param[in]	queue	The queue receiving the render commands.
+		 *\return		The semaphores signaled by this render.
 		 *\~french
-		 *\brief			Dessine les environment maps.
-		 *\param[in, out]	updater	Les données d'update.
+		 *\brief		Dessine les textures nécessaires au rendu.
+		 *\param[in]	toWait	Les sémaphores à attendre.
+		 *\param[in]	queue	The queue recevant les commandes de dessin.
+		 *\return		Les sémaphores signalés par ce dessin.
 		 */
 		C3D_API crg::SemaphoreWaitArray preRender( crg::SemaphoreWaitArray const & toWait
 			, ashes::Queue const & queue );

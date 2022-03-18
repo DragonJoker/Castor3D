@@ -55,12 +55,6 @@ namespace castor3d
 		: public castor::Unique< Engine >
 	{
 	private:
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\~french
-		 *\brief		Constructeur
-		 */
 		Engine( castor::String const & appName
 			, Version const & appVersion
 			, bool enableValidation
@@ -71,8 +65,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
+		 *\param[in]	appName				The user application name.
+		 *\param[in]	appVersion			The user application version.
+		 *\param[in]	enableValidation	\p true to enable rendering API validation.
 		 *\~french
 		 *\brief		Constructeur
+		 *\param[in]	appName				Le nom de l'application.
+		 *\param[in]	appVersion			La version de l'application.
+		 *\param[in]	enableValidation	\p true pour activer la validation via l'API de rendu.
 		 */
 		C3D_API Engine( castor::String const & appName
 			, Version const & appVersion
@@ -80,8 +80,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
+		 *\param[in]	appName				The user application name.
+		 *\param[in]	appVersion			The user application version.
+		 *\param[in]	enableValidation	\p true to enable rendering API validation.
+		 *\param[in]	logger				The logger instance.
 		 *\~french
 		 *\brief		Constructeur
+		 *\param[in]	appName				Le nom de l'application.
+		 *\param[in]	appVersion			La version de l'application.
+		 *\param[in]	enableValidation	\p true pour activer la validation via l'API de rendu.
+		 *\param[in]	logger				L'instance de logger.
 		 */
 		C3D_API Engine( castor::String const & appName
 			, Version const & appVersion
@@ -117,23 +125,21 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Loads a renderer plug-in, given the renderer type
-		 *\param[in]	type	The renderer type
+		 *\param[in]	type	The renderer type.
 		 *\return		\p true if ok
 		 *\~french
 		 *\brief		Charge un plug-in de rendu, selon le type de rendu
-		 *\param[in]	type	Le type de rendu
+		 *\param[in]	type	Le type de renderer.
 		 *\return		\p true si tout s'est bien passé
 		 */
 		C3D_API bool loadRenderer( castor::String const & type );
 		/**
 		 *\~english
 		 *\brief		Loads a renderer plug-in, given the renderer type
-		 *\param[in]	type	The renderer type
-		 *\return		\p true if ok
+		 *\param[in]	renderer	The renderer.
 		 *\~french
 		 *\brief		Charge un plug-in de rendu, selon le type de rendu
-		 *\param[in]	type	Le type de rendu
-		 *\return		\p true si tout s'est bien passé
+		 *\param[in]	renderer	Le rendere.
 		 */
 		C3D_API void loadRenderer( Renderer renderer );
 		/**
@@ -195,8 +201,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the buffers.
+		 *\param[in]	commandBuffer	Receives the upload commands.
 		 *\~french
 		 *\brief		Met à jour les buffers.
+		 *\param[in]	commandBuffer	Reçoit les commandes d'upload.
 		 */
 		C3D_API void upload( ashes::CommandBuffer const & commandBuffer );
 		/**
@@ -222,15 +230,19 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Enqueues the given CPU job.
+		 *\param[in]	job	The job to execute.
 		 *\~french
 		 *\brief		Met dans la file la tâche CPU donnée.
+		 *\param[in]	job	Le job à exécuter.
 		 */
 		C3D_API void pushCpuJob( castor::AsyncJobQueue::Job job );
 		/**
 		 *\~english
 		 *\brief		Enqueues the given GPU job.
+		 *\param[in]	job	The job to execute.
 		 *\~french
 		 *\brief		Met dans la file la tâche GPU donnée.
+		 *\param[in]	job	Le job à exécuter.
 		 */
 		C3D_API void pushGpuJob( std::function< void( RenderDevice const &, QueueData const & ) > job );
 		/**
@@ -243,28 +255,34 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Registers a RenderWindow.
+		 *\param[in]	window	The RenderWindow.
 		 *\~french
 		 *\brief		Enregistre une RenderWindow.
+		 *\param[in]	window	La RenderWindow.
 		 */
 		C3D_API void registerWindow( RenderWindow & window );
 		/**
 		 *\~english
 		 *\brief		Unregisters a RenderWindow.
+		 *\param[in]	window	The RenderWindow.
 		 *\~french
 		 *\brief		Désenregistre une RenderWindow.
+		 *\param[in]	window	La RenderWindow.
 		 */
 		C3D_API void unregisterWindow( RenderWindow const & window );
 		/**
 		 *\~english
 		 *\brief		Registers additional parsers for SceneFileParser.
-		 *\param[in]	name		The registering name.
-		 *\param[in]	parsers		The parsers.
-		 *\param[in]	sections	The sections.
+		 *\param[in]	name			The registering name.
+		 *\param[in]	parsers			The parsers.
+		 *\param[in]	sections		The sections.
+		 *\param[in]	contextCreator	The user parser context creation function.
 		 *\~french
 		 *\brief		Enregistre des analyseurs supplémentaires pour SceneFileParser.
-		 *\param[in]	name		Le nom d'enregistrement.
-		 *\param[in]	parsers		Les analyseurs.
-		 *\param[in]	sections	Les sections.
+		 *\param[in]	name			Le nom d'enregistrement.
+		 *\param[in]	parsers			Les analyseurs.
+		 *\param[in]	sections		Les sections.
+		 *\param[in]	contextCreator	La fonction de création de contexte de parser.
 		 */
 		C3D_API void registerParsers( castor::String const & name
 			, castor::AttributeParsers const & parsers
@@ -282,11 +300,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Registers a render pass timer.
-		 *\param[in]	timer	The timer to register.
+		 *\param[in]	category	The timer category name.
+		 *\param[in]	timer		The timer to register.
 		 *\return		The query ID.
 		 *\~french
 		 *\brief		Enregistre un timer de passe de rendu.
-		 *\param[in]	timer	Le timer à enregistrer.
+		 *\param[in]	category	Le nom de la catégorie du timer.
+		 *\param[in]	timer		Le timer à enregistrer.
 		 *\return		L'ID de la requête.
 		 */
 		C3D_API uint32_t registerTimer( castor::String const & category
@@ -294,94 +314,144 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Unregisters a render pass timer.
-		 *\param[in]	timer	The timer to unregister.
+		 *\param[in]	category	The timer category name.
+		 *\param[in]	timer		The timer to unregister.
 		 *\~french
 		 *\brief		Désenregistre un timer de passe de rendu.
-		 *\param[in]	timer	Le timer à désenregistrer.
+		 *\param[in]	category	Le nom de la catégorie du timer.
+		 *\param[in]	timer		Le timer à désenregistrer.
 		 */
 		C3D_API void unregisterTimer( castor::String const & category
 			, FramePassTimer & timer );
 		/**
 		 *\~english
-		 *\brief		Registers a RenderWindow.
+		 *\brief		Registers a Lighting Model.
+		 *\param[in]	name	The lighting model name.
+		 *\param[in]	creator	The model creation function.
 		 *\~french
-		 *\brief		Enregistre une RenderWindow.
+		 *\brief		Enregistre un Lighting Model.
+		 *\param[in]	name	Le nom du lighing model.
+		 *\param[in]	creator	La fonction dde création du lighting model.
 		 */
 		C3D_API void registerLightingModel( castor::String const & name
 			, shader::LightingModelCreator creator );
 		/**
 		 *\~english
-		 *\brief		Unregisters a RenderWindow.
+		 *\brief		Unregisters a Lighting Model.
+		 *\param[in]	name	The lighting model name.
 		 *\~french
-		 *\brief		Désenregistre une RenderWindow.
+		 *\brief		Désenregistre un Lighting Model.
+		 *\param[in]	name	Le nom du lighing model.
 		 */
 		C3D_API void unregisterLightingModel( castor::String const & name );
 		/**
 		 *\~english
-		 *\brief		Registers a RenderWindow.
+		 *\brief		Registers a ShaderBuffer.
+		 *\param[in]	buffer	The ShaderBuffer.
 		 *\~french
-		 *\brief		Enregistre une RenderWindow.
+		 *\brief		Enregistre un ShaderBuffer.
+		 *\param[in]	buffer	Le ShaderBuffer.
 		 */
 		C3D_API void registerBuffer( ShaderBuffer const & buffer );
 		/**
 		 *\~english
-		 *\brief		Unregisters a RenderWindow.
+		 *\brief		Unregisters a ShaderBuffer.
+		 *\param[in]	buffer	The ShaderBuffer.
 		 *\~french
-		 *\brief		Désenregistre une RenderWindow.
+		 *\brief		Désenregistre un ShaderBuffer.
+		 *\param[in]	buffer	Le ShaderBuffer.
 		 */
 		C3D_API void unregisterBuffer( ShaderBuffer const & buffer );
 		/**
 		 *\~english
 		 *\brief		Registers a material pass type.
+		 *\param[in]	type	The pass type name.
+		 *\param[in]	info	The pass creation informations.
 		 *\~french
 		 *\brief		Enregistre un type de passe de matériau.
+		 *\param[in]	type	Le nom du type de la passe.
+		 *\param[in]	info	Les informations de création de la passe.
 		 */
 		C3D_API void registerPassType( castor::String const & type
 			, PassRegisterInfo info );
 		/**
 		 *\~english
 		 *\brief		Unregisters a material pass type.
+		 *\param[in]	type	The pass type name.
 		 *\~french
 		 *\brief		Désenregistre un type de passe de matériau.
+		 *\param[in]	type	Le nom du type de la passe.
 		 */
 		C3D_API void unregisterPassType( castor::String const & type );
 		/**
 		 *\~english
 		 *\brief		Registers a scene render pass type, used to render given material pass type.
+		 *\param[in]	renderPassType	The pass type name.
+		 *\param[in]	info			The pass creation informations.
 		 *\~french
 		 *\brief		Enregistre un type de passe de rendu de scène, pour le type de passe de matériau donné.
+		 *\param[in]	renderPassType	Le nom du type de la passe.
+		 *\param[in]	info			Les informations de création de la passe.
 		 */
 		C3D_API void registerRenderPassType( castor::String const & renderPassType
 			, castor::UniquePtr< RenderPassRegisterInfo > info );
+		/**
+		 *\~english
+		 *\brief		Registers a scene render pass type's configuration parameters.
+		 *\param[in]	renderPassType	The pass type name.
+		 *\param[in]	parameters		The pass configuration parameters.
+		 *\~french
+		 *\brief		Enregistre les paramètres de configuration d'un type de passe de rendu de scène.
+		 *\param[in]	renderPassType	Le nom du type de la passe.
+		 *\param[in]	parameters		Les paramètres de configuration de la passe.
+		 */
 		C3D_API void setRenderPassTypeConfiguration( castor::String const & renderPassType
 			, Parameters parameters );
+		/**
+		 *\~english
+		 *\brief		Retrieve a scene render pass type's configuration parameters.
+		 *\param[in]	renderPassType	The pass type name.
+		 *\return		The pass configuration parameters.
+		 *\~french
+		 *\brief		Récupère les paramètres de configuration d'un type de passe de rendu de scène.
+		 *\param[in]	renderPassType	Le nom du type de la passe.
+		 *\return		Les paramètres de configuration de la passe.
+		 */
 		C3D_API Parameters getRenderPassTypeConfiguration( castor::String const & renderPassType )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the ID for given scene render pass type name.
+		 *\param[in]	renderPassType	The pass type name.
 		 *\~french
 		 *\brief		Récupère l'ID correspondant au nom de type de passe de rendu de scène donné.
+		 *\param[in]	renderPassType	Le nom du type de la passe.
 		 */
 		C3D_API RenderPassTypeID getRenderPassTypeID( castor::String const & renderPassType )const;
 		/**
 		 *\~english
-		 *\brief		Retrieves a scene render pass type, used to render given material pass type.
+		 *\brief		Retrieves a scene render pass type's creation informations.
+		 *\param[in]	renderPassType	The pass type name.
 		 *\~french
-		 *\brief		Récupère un type de passe de rendu de scène, pour le type de passe de matériau donné.
+		 *\brief		Récupère les informations de création d'un type de passe de rendu de scène.
+		 *\param[in]	renderPassType	Le nom du type de la passe.
 		 */
 		C3D_API RenderPassRegisterInfo * getRenderPassInfo( castor::String const & renderPassType )const;
 		/**
 		 *\~english
-		 *\brief		Retrieves a scene render pass type, used to render given material pass type.
+		 *\brief		Retrieves the scene render passes type creation informations.
+		 *\param[in]	event	The event type for wanted passes.
 		 *\~french
-		 *\brief		Récupère un type de passe de rendu de scène, pour le type de passe de matériau donné.
+		 *\brief		Récupère les informations de création des types de passes de rendu de scène.
+		 *\param[in]	event	Le type d'évènement des passes considérées.
 		 */
 		C3D_API std::vector< RenderPassRegisterInfo * > getRenderPassInfos( TechniquePassEvent event )const;
 		/**
 		 *\~english
 		 *\brief		Unregisters a scene render pass type.
+		 *\param[in]	renderPassType	The pass type name.
 		 *\~french
 		 *\brief		Désenregistre un type de passe de rendu de scène.
+		 *\param[in]	renderPassType	Le nom du type de la passe.
 		 */
 		C3D_API void unregisterRenderPassType( castor::String const & renderPassType );
 		/**

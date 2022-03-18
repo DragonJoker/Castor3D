@@ -91,9 +91,11 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
+		 *\param[in]	logger	The logger instance.
 		 *\param[in]	parser	The parser.
 		 *\~french
 		 *\brief		Constructeur.
+		 *\param[in]	logger	L'instance du logger.
 		 *\param[in]	parser	L'analyseur.
 		 */
 		C3D_API SceneFileContext( castor::LoggerInstance & logger
