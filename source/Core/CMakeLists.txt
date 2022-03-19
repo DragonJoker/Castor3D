@@ -58,6 +58,7 @@ function( CoreSetup )
 		set( CMAKE_INSTALL_DEBUG_LIBRARIES TRUE )
 		set( CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION bin/$<$<CONFIG:Debug>:Debug/> )
 		include( InstallRequiredSystemLibraries )
+		set( CMAKE_GET_RUNTIME_DEPENDENCIES_COMMAND "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.30.30705/bin/Hostx64/x64/dumpbin.exe" )
 		file( GET_RUNTIME_DEPENDENCIES
 			LIBRARIES ${ADDITIONAL_DEPS_REL}
 			RESOLVED_DEPENDENCIES_VAR r_deps
@@ -164,6 +165,21 @@ function( CoreSetup )
 			INSTALL_TYPES Developer Full
 		)
 
+		cpack_add_component( RenderGraph
+			DISPLAY_NAME "RenderGraph"
+			DESCRIPTION "RenderGraph libraries."
+			REQUIRED
+			GROUP Core
+			INSTALL_TYPES Minimal Developer Full
+		)
+		cpack_add_component( RenderGraph_dev
+			DISPLAY_NAME "RenderGraph SDK"
+			DESCRIPTION "Development files for RenderGraph."
+			GROUP Development
+			DEPENDS RenderGraph
+			INSTALL_TYPES Developer Full
+		)
+
 		cpack_add_component( Ashes
 			DISPLAY_NAME "Ashes"
 			DESCRIPTION "Ashes libraries."
@@ -178,7 +194,7 @@ function( CoreSetup )
 			GROUP Core
 			INSTALL_TYPES Minimal Developer Full
 		)
-		cpack_add_component( ashes_common_dev
+		cpack_add_component( ashesCommon_dev
 			DISPLAY_NAME "AshesCommon SDK"
 			DESCRIPTION "Development files for AshesCommon."
 			GROUP Development
@@ -189,7 +205,7 @@ function( CoreSetup )
 			DISPLAY_NAME "Ashes SDK"
 			DESCRIPTION "Development files for Ashes."
 			GROUP Development
-			DEPENDS ashes_common_dev
+			DEPENDS ashesCommon_dev
 			INSTALL_TYPES Developer Full
 		)
 		cpack_add_component( ashespp_dev
