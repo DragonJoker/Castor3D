@@ -240,11 +240,11 @@ namespace castor3d
 			} );
 
 		auto node = m_rootNode;
-		m_sceneNodeCache->add( RootNode, node );
+		m_sceneNodeCache->add( RootNode, node, false );
+		node = m_rootObjectNode;
+		m_sceneNodeCache->add( ObjectRootNode, node, false );
 		node = m_rootCameraNode;
-		m_sceneNodeCache->add( ObjectRootNode, node );
-		node = m_rootCameraNode;
-		m_sceneNodeCache->add( CameraRootNode, node );
+		m_sceneNodeCache->add( CameraRootNode, node, false );
 		auto setThisChanged = [this]()
 		{
 			setChanged();
