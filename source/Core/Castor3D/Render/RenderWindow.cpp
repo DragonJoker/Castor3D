@@ -521,18 +521,17 @@ namespace castor3d
 		else if ( auto target = getRenderTarget() )
 		{
 			target->update( updater );
-#if C3D_DebugQuads
 
 			if ( m_initialised )
 			{
-#	if C3D_DebugPicking || C3D_DebugBackgroundPicking
+#if ( !C3D_DebugQuads ) || C3D_DebugPicking || C3D_DebugBackgroundPicking
 				updater.combineIndex = 0u;
 				updater.cellSize = 0.0f;
 				updater.gridCenter = {};
 				auto & config = m_configUbo.getData();
 				config.multiply = castor::Point4f{ 1.0f, 1.0f, 1.0f, 1.0f };
 				config.add = castor::Point4f{};
-#	else
+#else
 				updater.combineIndex = m_debugConfig.debugIndex;
 				auto & intermediate = m_intermediates[m_debugConfig.debugIndex];
 
@@ -551,10 +550,8 @@ namespace castor3d
 				auto & config = m_configUbo.getData();
 				config.multiply = castor::Point4f{ intermediate.factors.multiply };
 				config.add = castor::Point4f{ intermediate.factors.add };
-#	endif
-			}
-
 #endif
+			}
 		}
 	}
 
