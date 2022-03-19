@@ -781,13 +781,22 @@ namespace castor3d
 		instanceExtensions.addExtension( VK_NN_VI_SURFACE_EXTENSION_NAME );
 #endif
 #if defined( VK_USE_PLATFORM_XCB_KHR )
-		instanceExtensions.addExtension( VK_KHR_XCB_SURFACE_EXTENSION_NAME );
+		if ( isExtensionAvailable( globalLayerExtensions, VK_KHR_XCB_SURFACE_EXTENSION_NAME ) )
+		{
+			instanceExtensions.addExtension( VK_KHR_XCB_SURFACE_EXTENSION_NAME );
+		}
 #endif
 #if defined( VK_USE_PLATFORM_XLIB_KHR )
-		instanceExtensions.addExtension( VK_KHR_XLIB_SURFACE_EXTENSION_NAME );
+		if ( isExtensionAvailable( globalLayerExtensions, VK_KHR_XLIB_SURFACE_EXTENSION_NAME ) )
+		{
+			instanceExtensions.addExtension( VK_KHR_XLIB_SURFACE_EXTENSION_NAME );
+		}
 #endif
 #if defined( VK_USE_PLATFORM_WAYLAND_KHR )
-		instanceExtensions.addExtension( VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME );
+		if ( isExtensionAvailable( globalLayerExtensions, VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME ) )
+		{
+			instanceExtensions.addExtension( VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME );
+		}
 #endif
 #if defined( VK_USE_PLATFORM_WIN32_KHR )
 		instanceExtensions.addExtension( VK_KHR_WIN32_SURFACE_EXTENSION_NAME );
