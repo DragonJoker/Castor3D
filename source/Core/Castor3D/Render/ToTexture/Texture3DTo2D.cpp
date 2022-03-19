@@ -52,7 +52,7 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace t3dto2d
 	{
 		enum IDs : uint32_t
 		{
@@ -61,7 +61,7 @@ namespace castor3d
 			eSource,
 		};
 
-		Texture createDepthBuffer( RenderDevice const & device
+		static Texture createDepthBuffer( RenderDevice const & device
 			, Texture const & colourView )
 		{
 			Texture result{ device
@@ -78,7 +78,7 @@ namespace castor3d
 			return result;
 		}
 
-		Texture createTarget( RenderDevice const & device
+		static Texture createTarget( RenderDevice const & device
 			, VkExtent2D const & size )
 		{
 			Texture result{ device
@@ -97,7 +97,7 @@ namespace castor3d
 			return result;
 		}
 
-		ashes::RenderPassPtr createRenderPass( RenderDevice const & device
+		static ashes::RenderPassPtr createRenderPass( RenderDevice const & device
 			, castor::String const & name
 			, Texture const & color
 			, Texture const & depth )
@@ -153,7 +153,7 @@ namespace castor3d
 				, std::move( createInfo ) );
 		}
 
-		ashes::FrameBufferPtr createFramebuffer( ashes::RenderPass const & renderPass
+		static ashes::FrameBufferPtr createFramebuffer( ashes::RenderPass const & renderPass
 			, castor::String const & name
 			, Texture const & colour
 			, Texture const & depth )
@@ -171,7 +171,7 @@ namespace castor3d
 					, 1u ) );
 		}
 
-		ashes::DescriptorSetLayoutPtr createDescriptorLayout( RenderDevice const & device )
+		static ashes::DescriptorSetLayoutPtr createDescriptorLayout( RenderDevice const & device )
 		{
 			ashes::VkDescriptorSetLayoutBindingArray bindings{ makeDescriptorSetLayoutBinding( eGridUbo
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
@@ -186,7 +186,7 @@ namespace castor3d
 				, std::move( bindings ) );
 		}
 
-		ashes::DescriptorSetPtr createDescriptorSet( RenderDevice const & device
+		static ashes::DescriptorSetPtr createDescriptorSet( RenderDevice const & device
 			, ashes::DescriptorSetPool const & pool
 			, UniformBufferOffsetT< Texture3DTo2DData > const & uniformBuffer
 			, MatrixUbo const & matrixUbo
@@ -204,14 +204,14 @@ namespace castor3d
 			return descriptorSet;
 		}
 
-		ashes::PipelineLayoutPtr createPipelineLayout( RenderDevice const & device
+		static ashes::PipelineLayoutPtr createPipelineLayout( RenderDevice const & device
 			, ashes::DescriptorSetLayout const & dslayout )
 		{
 			return device->createPipelineLayout( "Texture3DTo2D"
 				, ashes::DescriptorSetLayoutCRefArray{ std::ref( dslayout ) } );
 		}
 
-		ashes::GraphicsPipelinePtr createPipeline( RenderDevice const & device
+		static ashes::GraphicsPipelinePtr createPipeline( RenderDevice const & device
 			, ashes::PipelineLayout const & layout
 			, ashes::RenderPass const & renderPass
 			, ShaderModule const & vertexShader
@@ -242,7 +242,7 @@ namespace castor3d
 					, static_cast< VkRenderPass const & >( renderPass ) ) );
 		}
 
-		CommandsSemaphore createCommandBuffer( RenderDevice const & device
+		static CommandsSemaphore createCommandBuffer( RenderDevice const & device
 			, QueueData const & queueData
 			, ashes::RenderPass const & renderPass
 			, ashes::FrameBuffer const & frameBuffer
@@ -318,7 +318,7 @@ namespace castor3d
 				auto result = cache.getIOStruct( sdw::type::MemoryLayout::eStd430
 					, ( FlagT == sdw::var::Flag::eShaderOutput
 						? std::string{ "Output" }
-						: std::string{ "Input" } ) + "Surface"
+						: std::string{ "Input" } ) + "T3DTo3DSurface"
 					, FlagT );
 
 				if ( result->empty() )
@@ -336,7 +336,7 @@ namespace castor3d
 			sdw::Vec4 voxelColour;
 		};
 
-		ShaderPtr getVertexProgram( RenderSystem const & renderSystem )
+		static ShaderPtr getVertexProgram( RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -362,7 +362,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderPtr getGeometryProgram()
+		static ShaderPtr getGeometryProgram()
 		{
 			using namespace sdw;
 			GeometryWriter writer;
@@ -421,7 +421,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderPtr getPixelProgram()
+		static ShaderPtr getPixelProgram()
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -458,8 +458,8 @@ namespace castor3d
 		, ashes::FrameBuffer const & frameBuffer
 		, ashes::PipelineLayout const & pipelineLayout
 		, ashes::GraphicsPipeline const & pipeline )
-		: descriptorSet{ createDescriptorSet( device, descriptorSetPool, uniformBuffer, matrixUbo, texture3D ) }
-		, commands{ createCommandBuffer( device, queueData, renderPass, frameBuffer, pipelineLayout, pipeline, *descriptorSet, texture3D ) }
+		: descriptorSet{ t3dto2d::createDescriptorSet( device, descriptorSetPool, uniformBuffer, matrixUbo, texture3D ) }
+		, commands{ t3dto2d::createCommandBuffer( device, queueData, renderPass, frameBuffer, pipelineLayout, pipeline, *descriptorSet, texture3D ) }
 	{
 	}
 
@@ -474,17 +474,17 @@ namespace castor3d
 		, MatrixUbo const & matrixUbo )
 		: m_device{ device }
 		, m_matrixUbo{ matrixUbo }
-		, m_target{ createTarget( device, size ) }
-		, m_depthBuffer{ createDepthBuffer( device, m_target ) }
+		, m_target{ t3dto2d::createTarget( device, size ) }
+		, m_depthBuffer{ t3dto2d::createDepthBuffer( device, m_target ) }
 		, m_uniformBuffer{ device.uboPool->getBuffer< Texture3DTo2DData >( 0u ) }
-		, m_descriptorSetLayout{ createDescriptorLayout( device ) }
-		, m_pipelineLayout{ createPipelineLayout( device, *m_descriptorSetLayout ) }
-		, m_renderPass{ createRenderPass( device, "Texture3DTo2D", m_target, m_depthBuffer ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "Texture3DTo2D", getVertexProgram( device.renderSystem ) }
-		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, "Texture3DTo2D", getGeometryProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "Texture3DTo2D", getPixelProgram() }
-		, m_pipeline{ createPipeline( device, *m_pipelineLayout, *m_renderPass, m_vertexShader, m_geometryShader, m_pixelShader, m_target ) }
-		, m_frameBuffer{ createFramebuffer( *m_renderPass, "Texture3DTo2D", m_target, m_depthBuffer ) }
+		, m_descriptorSetLayout{ t3dto2d::createDescriptorLayout( device ) }
+		, m_pipelineLayout{ t3dto2d::createPipelineLayout( device, *m_descriptorSetLayout ) }
+		, m_renderPass{ t3dto2d::createRenderPass( device, "Texture3DTo2D", m_target, m_depthBuffer ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "Texture3DTo2D", t3dto2d::getVertexProgram( device.renderSystem ) }
+		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, "Texture3DTo2D", t3dto2d::getGeometryProgram() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "Texture3DTo2D", t3dto2d::getPixelProgram() }
+		, m_pipeline{ t3dto2d::createPipeline( device, *m_pipelineLayout, *m_renderPass, m_vertexShader, m_geometryShader, m_pixelShader, m_target ) }
+		, m_frameBuffer{ t3dto2d::createFramebuffer( *m_renderPass, "Texture3DTo2D", m_target, m_depthBuffer ) }
 	{
 	}
 
