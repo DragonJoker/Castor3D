@@ -23,6 +23,8 @@ See LICENSE file in root folder
 #include <RenderGraph/RunnablePass.hpp>
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
+#include <ashespp/AshesPPPrerequisites.hpp>
+
 #pragma warning( push )
 #pragma warning( disable:4365 )
 #include <atomic>
@@ -174,7 +176,7 @@ namespace castor3d
 
 			void setRenderPass( VkRenderPass renderPass
 				, VkExtent2D const & renderSize );
-			void setTarget( VkFramebuffer framebuffer
+			void setTarget( ashes::FrameBuffer const & framebuffer
 				, std::vector< VkClearValue > clearValues );
 
 			crg::Fence & getFence()

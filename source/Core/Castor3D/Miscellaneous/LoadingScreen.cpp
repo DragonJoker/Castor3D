@@ -215,19 +215,16 @@ namespace castor3d
 		}
 	}
 
-	void LoadingScreen::WindowPass::setTarget( VkFramebuffer framebuffer
+	void LoadingScreen::WindowPass::setTarget( ashes::FrameBuffer const & framebuffer
 		, std::vector< VkClearValue > clearValues )
 	{
 		m_framebuffer = framebuffer;
+		m_renderSize = framebuffer.getDimensions();
 		m_clearValues = std::move( clearValues );
 	}
 
 	void LoadingScreen::WindowPass::doInitialise()
 	{
-		m_renderQuad.initialise( *this
-			, m_renderSize
-			, m_renderPass
-			, RenderNodesPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u ) );
 	}
 
 	void LoadingScreen::WindowPass::doRecordInto( crg::RecordContext & context
@@ -236,6 +233,14 @@ namespace castor3d
 	{
 		if ( m_renderPass && m_framebuffer )
 		{
+			if ( !m_renderQuad.isInitialised() )
+			{
+				m_renderQuad.initialise( *this
+					, m_renderSize
+					, m_renderPass
+					, RenderNodesPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u ) );
+			}
+
 			auto beginInfo = makeVkStruct< VkRenderPassBeginInfo >( m_renderPass
 				, m_framebuffer
 				, VkRect2D{ {}, m_renderSize }
