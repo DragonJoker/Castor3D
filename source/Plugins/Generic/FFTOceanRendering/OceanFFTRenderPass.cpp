@@ -518,7 +518,6 @@ namespace ocean_fft
 
 	void OceanRenderPass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
-		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
 		bindings.emplace_back( getCuller().getScene().getLightCache().createLayoutBinding( OceanFFTIdx::eLightBuffer ) );
 		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( OceanFFTIdx::eOceanUbo
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
@@ -596,7 +595,6 @@ namespace ocean_fft
 	void OceanRenderPass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, castor3d::ShadowMapLightTypeArray const & shadowMaps )
 	{
-		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
 		descriptorWrites.push_back( m_scene.getLightCache().getBinding( OceanFFTIdx::eLightBuffer ) );
 		descriptorWrites.push_back( m_ubo->getDescriptorWrite( OceanFFTIdx::eOceanUbo ) );
 		auto index = uint32_t( OceanFFTIdx::eHeightDisplacement );
