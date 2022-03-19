@@ -46,7 +46,7 @@ using namespace castor;
 
 namespace castor3d
 {
-	namespace
+	namespace lpvgeom
 	{
 		template< sdw::var::Flag FlagT >
 		struct SurfaceT
@@ -71,7 +71,7 @@ namespace castor3d
 				auto result = cache.getIOStruct( sdw::type::MemoryLayout::eStd430
 					, ( FlagT == sdw::var::Flag::eShaderOutput
 						? std::string{ "Output" }
-						: std::string{ "Input" } ) + "Surface"
+						: std::string{ "Input" } ) + "GeomInjSurface"
 					, FlagT );
 
 				if ( result->empty() )
@@ -109,7 +109,7 @@ namespace castor3d
 			sdw::Vec3 lightPosition;
 		};
 
-		std::unique_ptr< ast::Shader > getDirectionalVertexProgram( uint32_t rsmTexSize
+		static std::unique_ptr< ast::Shader > getDirectionalVertexProgram( uint32_t rsmTexSize
 			, RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
@@ -149,8 +149,8 @@ namespace castor3d
 					}
 					, InVec3{ writer, "viewPos" } );
 
-				writer.implementMainT< VoidT, SurfaceT >( [&]( VertexIn in
-					, VertexOutT< SurfaceT > out )
+				writer.implementMainT< VoidT, lpvgeom::SurfaceT >( [&]( VertexIn in
+					, VertexOutT< lpvgeom::SurfaceT > out )
 					{
 						auto light = writer.declLocale( "light"
 							, lightingModel->getDirectionalLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
@@ -210,8 +210,8 @@ namespace castor3d
 					}
 					, InVec3{ writer, "viewPos" } );
 
-				writer.implementMainT< VoidT, SurfaceT >( [&]( VertexIn in
-					, VertexOutT< SurfaceT > out )
+				writer.implementMainT< VoidT, lpvgeom::SurfaceT >( [&]( VertexIn in
+					, VertexOutT< lpvgeom::SurfaceT > out )
 					{
 						auto light = writer.declLocale( "light"
 							, lightingModel->getDirectionalLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
@@ -238,7 +238,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > getSpotVertexProgram( uint32_t rsmTexSize
+		static std::unique_ptr< ast::Shader > getSpotVertexProgram( uint32_t rsmTexSize
 			, RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
@@ -276,8 +276,8 @@ namespace castor3d
 				}
 				, InVec3{ writer, "viewPos" } );
 
-			writer.implementMainT< VoidT, SurfaceT >( [&]( VertexIn in
-				, VertexOutT< SurfaceT > out )
+			writer.implementMainT< VoidT, lpvgeom::SurfaceT >( [&]( VertexIn in
+				, VertexOutT< lpvgeom::SurfaceT > out )
 				{
 					auto light = writer.declLocale( "light"
 						, lightingModel->getSpotLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
@@ -303,7 +303,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > getPointVertexProgram( CubeMapFace face
+		static std::unique_ptr< ast::Shader > getPointVertexProgram( CubeMapFace face
 			, uint32_t rsmTexSize
 			, RenderSystem const & renderSystem )
 		{
@@ -342,8 +342,8 @@ namespace castor3d
 				}
 				, InVec3{ writer, "viewPos" } );
 
-			writer.implementMainT< VoidT, SurfaceT >( [&]( VertexIn in
-				, VertexOutT< SurfaceT > out )
+			writer.implementMainT< VoidT, lpvgeom::SurfaceT >( [&]( VertexIn in
+				, VertexOutT< lpvgeom::SurfaceT > out )
 				{
 					auto light = writer.declLocale( "light"
 						, lightingModel->getPointLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
@@ -369,7 +369,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderPtr getVertexProgram( LightType lightType
+		static ShaderPtr getVertexProgram( LightType lightType
 			, uint32_t rsmTexSize
 			, RenderSystem const & renderSystem )
 		{
@@ -385,14 +385,14 @@ namespace castor3d
 			}
 		}
 
-		std::unique_ptr< ast::Shader > getGeometryProgram()
+		static std::unique_ptr< ast::Shader > getGeometryProgram()
 		{
 			using namespace sdw;
 			GeometryWriter writer;
 
-			writer.implementMainT< 1u, PointListT< SurfaceT >, PointStreamT< SurfaceT > >( [&]( GeometryIn in
-				, PointListT< SurfaceT > list
-				, PointStreamT< SurfaceT > out )
+			writer.implementMainT< 1u, PointListT< lpvgeom::SurfaceT >, PointStreamT< lpvgeom::SurfaceT > >( [&]( GeometryIn in
+				, PointListT< lpvgeom::SurfaceT > list
+				, PointStreamT< lpvgeom::SurfaceT > out )
 				{
 					out.vtx.position = list[0].vtx.position;
 					out.layer = list[0].volumeCellIndex.z();
@@ -411,7 +411,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderPtr getPixelProgram()
+		static ShaderPtr getPixelProgram()
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -455,7 +455,7 @@ namespace castor3d
 				, InVec3{ writer, "normal" }
 				, InFloat{ writer, "surfelArea" } );
 
-			writer.implementMainT< SurfaceT, VoidT >( [&]( FragmentInT< SurfaceT > in
+			writer.implementMainT< lpvgeom::SurfaceT, VoidT >( [&]( FragmentInT< lpvgeom::SurfaceT > in
 				, FragmentOut out )
 				{
 					//Discard pixels with really small normal
@@ -479,7 +479,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		GpuBufferOffsetT< NonTexturedQuad::Vertex > createVertexBuffer( castor::String const & name
+		static GpuBufferOffsetT< NonTexturedQuad::Vertex > createVertexBuffer( castor::String const & name
 			, RenderDevice const & device
 			, uint32_t rsmSize )
 		{
@@ -628,10 +628,10 @@ namespace castor3d
 			, { gridSize, gridSize } }
 		, m_device{ device }
 		, m_rsmSize{ rsmSize }
-		, m_vertexBuffer{ createVertexBuffer( getName(), m_device, m_rsmSize ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram( lightType, m_rsmSize, device.renderSystem ) }
-		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), getGeometryProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram() }
+		, m_vertexBuffer{ lpvgeom::createVertexBuffer( getName(), m_device, m_rsmSize ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), lpvgeom::getVertexProgram( lightType, m_rsmSize, device.renderSystem ) }
+		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), lpvgeom::getGeometryProgram() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), lpvgeom::getPixelProgram() }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_geometryShader )
 			, makeShaderState( device, m_pixelShader ) }
@@ -660,10 +660,10 @@ namespace castor3d
 			, { gridSize, gridSize } }
 		, m_device{ device }
 		, m_rsmSize{ rsmSize }
-		, m_vertexBuffer{ createVertexBuffer( getName(), m_device, m_rsmSize ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getPointVertexProgram( face, m_rsmSize, device.renderSystem ) }
-		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), getGeometryProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram() }
+		, m_vertexBuffer{ lpvgeom::createVertexBuffer( getName(), m_device, m_rsmSize ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), lpvgeom::getPointVertexProgram( face, m_rsmSize, device.renderSystem ) }
+		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), lpvgeom::getGeometryProgram() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), lpvgeom::getPixelProgram() }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_geometryShader )
 			, makeShaderState( device, m_pixelShader ) }

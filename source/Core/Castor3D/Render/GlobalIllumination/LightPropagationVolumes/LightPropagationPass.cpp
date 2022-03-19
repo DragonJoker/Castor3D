@@ -40,7 +40,7 @@ using namespace castor;
 
 namespace castor3d
 {
-	namespace
+	namespace lpvprop
 	{
 		template< sdw::var::Flag FlagT >
 		struct SurfaceT
@@ -61,7 +61,7 @@ namespace castor3d
 				auto result = cache.getIOStruct( sdw::type::MemoryLayout::eStd430
 					, ( FlagT == sdw::var::Flag::eShaderOutput
 						? std::string{ "Output" }
-						: std::string{ "Input" } ) + "Surface"
+						: std::string{ "Input" } ) + "LgtPropSurface"
 					, FlagT );
 
 				if ( result->empty() )
@@ -79,7 +79,7 @@ namespace castor3d
 			sdw::IVec3 cellIndex;
 		};
 
-		std::unique_ptr< ast::Shader > getVertexProgram()
+		static std::unique_ptr< ast::Shader > getVertexProgram()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -88,8 +88,8 @@ namespace castor3d
 
 			C3D_LpvGridConfig( writer, LightPropagationPass::LpvGridUboIdx, 0u, true );
 
-			writer.implementMainT< VoidT, SurfaceT >( [&]( VertexIn in
-				, VertexOutT< SurfaceT > out )
+			writer.implementMainT< VoidT, lpvprop::SurfaceT >( [&]( VertexIn in
+				, VertexOutT< lpvprop::SurfaceT > out )
 				{
 					out.cellIndex = ivec3( inPosition );
 					auto screenPos = writer.declLocale( "screenPos"
@@ -99,14 +99,14 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > getGeometryProgram()
+		static std::unique_ptr< ast::Shader > getGeometryProgram()
 		{
 			using namespace sdw;
 			GeometryWriter writer;
 
-			writer.implementMainT< 1u, PointListT< SurfaceT >, PointStreamT< SurfaceT > >( [&]( GeometryIn in
-				, PointListT< SurfaceT > list
-				, PointStreamT< SurfaceT > out )
+			writer.implementMainT< 1u, PointListT< lpvprop::SurfaceT >, PointStreamT< lpvprop::SurfaceT > >( [&]( GeometryIn in
+				, PointListT< lpvprop::SurfaceT > list
+				, PointStreamT< lpvprop::SurfaceT > out )
 				{
 					out.vtx.position = list[0].vtx.position;
 					out.vtx.pointSize = 1.0f;
@@ -121,7 +121,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderPtr getPixelProgram( bool occlusion )
+		static ShaderPtr getPixelProgram( bool occlusion )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -324,7 +324,7 @@ namespace castor3d
 				, OutVec4{ writer, "shG" }
 				, OutVec4{ writer, "shB" } );
 
-			writer.implementMainT< SurfaceT, VoidT >( [&]( FragmentInT< SurfaceT > in
+			writer.implementMainT< lpvprop::SurfaceT, VoidT >( [&]( FragmentInT< lpvprop::SurfaceT > in
 				, FragmentOut out )
 				{
 					auto shR = writer.declLocale( "shR"
@@ -348,7 +348,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		GpuBufferOffsetT< castor::Point3f > createVertexBuffer( RenderDevice const & device
+		static GpuBufferOffsetT< castor::Point3f > createVertexBuffer( RenderDevice const & device
 			, castor::String const & name
 			, uint32_t gridSize )
 		{
@@ -502,16 +502,16 @@ namespace castor3d
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( context, cb, i ); } }
 			, { gridSize, gridSize } }
 		, m_gridSize{ gridSize }
-		, m_vertexBuffer{ createVertexBuffer( device, getName(), m_gridSize ) }
+		, m_vertexBuffer{ lpvprop::createVertexBuffer( device, getName(), m_gridSize ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
 			, getName()
-			, getVertexProgram() }
+			, lpvprop::getVertexProgram() }
 		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT
 			, getName()
-			, getGeometryProgram() }
+			, lpvprop::getGeometryProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT
 			, getName()
-			, getPixelProgram( occlusion ) }
+			, lpvprop::getPixelProgram( occlusion ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_geometryShader )
 			, makeShaderState( device, m_pixelShader ) }
