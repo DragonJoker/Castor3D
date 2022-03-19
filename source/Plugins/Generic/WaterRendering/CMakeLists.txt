@@ -31,7 +31,7 @@ source_group( "Source Files" FILES ${${PROJECT_NAME}_SRC_FILES} )
 
 add_target_min(
 	${PROJECT_NAME}
-	api_plugin
+	plugin
 	""
 	""
 )
@@ -58,7 +58,7 @@ set_target_properties( ${PROJECT_NAME}
 )
 install_target_ex( ${PROJECT_NAME}
 	Plugins
-	api_plugin
+	plugin
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}
 )
 set( CASTOR_INSTEXP_LIST

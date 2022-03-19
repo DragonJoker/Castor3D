@@ -160,7 +160,7 @@ function( GenericSetup )
 		endif()
 		if( ${CASTOR_BUILD_GENERIC_FFTOCEANRENDERING} )
 			cpack_add_component( FFTOceanRendering
-				DISPLAY_NAME "OceanRendering"
+				DISPLAY_NAME "FFTOceanRendering"
 				DESCRIPTION "Allows FFT ocean rendering in Castor3D."
 				GROUP Plugins
 				DEPENDS Castor3D

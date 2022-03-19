@@ -96,7 +96,7 @@ if ( CASTOR_USE_GLSLANG AND EXISTS ${VkFFT_DIR} )
 	)
 	install_target_ex( ${PROJECT_NAME}
 		Plugins
-		api_plugin
+		plugin
 		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}
 	)
 	set( CASTOR_INSTEXP_LIST
