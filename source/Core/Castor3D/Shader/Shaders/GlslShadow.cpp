@@ -392,9 +392,9 @@ namespace castor3d
 					auto scale = m_writer.declLocale( "scale"
 						, 1.0_f );
 					auto dx = m_writer.declLocale( "dx"
-						, scale * invTexDim );
+						, scale * invTexDim.x() );
 					auto dy = m_writer.declLocale( "dy"
-						, scale * invTexDim );
+						, scale * invTexDim.y() );
 					auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
 						, 0.0_f );
 					auto shadowFactor = m_writer.declLocale( "shadowFactor"
