@@ -97,7 +97,7 @@ namespace ocean_fft
 	ast::type::BaseStructPtr OceanData::makeType( ast::type::TypesCache & cache )
 	{
 		auto result = cache.getStruct( sdw::type::MemoryLayout::eStd430
-			, "OceanData" );
+			, "FFTOceanData" );
 
 		if ( result->empty() )
 		{
