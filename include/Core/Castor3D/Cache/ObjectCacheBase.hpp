@@ -113,7 +113,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		inline ~ObjectCacheBaseT()
+		inline ~ObjectCacheBaseT()override
 		{
 		}
 

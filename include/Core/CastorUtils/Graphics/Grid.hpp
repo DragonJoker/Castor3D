@@ -15,6 +15,10 @@ namespace castor
 	{
 	public:
 		CU_API Grid() = default;
+		CU_API Grid( Grid const & ) = default;
+		CU_API Grid( Grid && ) = default;
+		CU_API Grid & operator=( Grid const & ) = default;
+		CU_API Grid & operator=( Grid && ) = default;
 		CU_API Grid( uint32_t gridSize
 			, float cellSize
 			, Point3f max
