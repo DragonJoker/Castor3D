@@ -66,6 +66,19 @@ namespace castor
 		doInitialiseBuffer( m_skinningTransformsData );
 	}
 
+	ResourceCacheT< AnimatedObjectGroup, castor::String, AnimatedObjectGroupCacheTraits >::~ResourceCacheT()
+	{
+		if ( m_skinningTransformsData )
+		{
+			m_device.bufferPool->putBuffer( m_skinningTransformsData );
+		}
+
+		if ( m_morphingData )
+		{
+			m_device.bufferPool->putBuffer( m_morphingData );
+		}
+	}
+
 	void ResourceCacheT< AnimatedObjectGroup, castor::String, AnimatedObjectGroupCacheTraits >::initialise( RenderDevice const & device )
 	{
 		if ( !m_morphingData )
@@ -83,8 +96,16 @@ namespace castor
 	void ResourceCacheT< AnimatedObjectGroup, castor::String, AnimatedObjectGroupCacheTraits >::cleanup()
 	{
 		ResourceCacheBaseT< AnimatedObjectGroup, castor::String, AnimatedObjectGroupCacheTraits >::cleanup();
-		m_device.bufferPool->putBuffer( m_skinningTransformsData );
-		m_device.bufferPool->putBuffer( m_morphingData );
+
+		if ( m_skinningTransformsData )
+		{
+			m_device.bufferPool->putBuffer( m_skinningTransformsData );
+		}
+
+		if ( m_morphingData )
+		{
+			m_device.bufferPool->putBuffer( m_morphingData );
+		}
 	}
 
 	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::update( CpuUpdater & updater )

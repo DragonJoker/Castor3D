@@ -53,7 +53,7 @@ namespace castor
 		{
 		}
 
-		~ResourceCacheBaseT() = default;
+		virtual ~ResourceCacheBaseT() = default;
 		/**@}*/
 
 	public:

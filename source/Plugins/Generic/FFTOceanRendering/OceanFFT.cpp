@@ -195,7 +195,8 @@ namespace ocean_fft
 			, crg::FramePassArray previousPasses
 			, OceanUbo const & ubo
 			, std::shared_ptr< IsRenderPassEnabled > isEnabled )
-		: m_group{ graph }
+		: m_device{ device }
+		, m_group{ graph }
 		, m_config{ ocean_fft::getConfig( *device.renderSystem.getEngine() ) }
 		, m_engine{ createRandomEngine( m_config.disableRandomSeed ) }
 		, m_heightMapSamples{ m_config.heightMapSamples, m_config.heightMapSamples }
@@ -422,8 +423,9 @@ namespace ocean_fft
 			, "OceanFFTDistributionSeedsStaging"
 			, VkBufferUsageFlags{}
 			, distribution.size() * sizeof( cfloat ) };
-		staging.uploadBufferData( *m_fftConfig.queueData.queue
-			, *m_fftConfig.queueData.commandPool
+		auto queueData = m_device.graphicsData();
+		staging.uploadBufferData( *queueData->queue
+			, *queueData->commandPool
 			, distribution
 			, distribBuffer );
 	}

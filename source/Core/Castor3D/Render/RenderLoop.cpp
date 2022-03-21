@@ -52,12 +52,18 @@ namespace castor3d
 
 	void RenderLoop::cleanup()
 	{
-		if ( m_queueData )
+		if ( m_uploadTimer )
 		{
 			auto & device = m_renderSystem.getRenderDevice();
-			auto data = m_queueData;
+			auto data = m_reservedQueue;
+
+			if ( !data )
+			{
+				data = device.graphicsData().release();
+			}
+
 			m_uploadTimer = nullptr;
-			m_queueData = nullptr;
+			m_reservedQueue = nullptr;
 			getEngine()->getFrameListenerCache().forEach( [&device, data]( FrameListener & listener )
 				{
 					listener.fireEvents( EventType::ePreRender, device, *data );
@@ -68,6 +74,7 @@ namespace castor3d
 					listener.fireEvents( EventType::eQueueRender, device, *data );
 					listener.fireEvents( EventType::eQueueRender );
 				} );
+
 			for ( auto & uploadResources : m_uploadResources )
 			{
 				uploadResources.fence->wait( ashes::MaxTimeout );
@@ -159,8 +166,11 @@ namespace castor3d
 		{
 			bool first = m_first;
 			RenderInfo & info = m_debugOverlays->beginFrame();
+			doProcessEvents( EventType::ePreRender );
 			doGpuStep( info );
+			doProcessEvents( EventType::eQueueRender );
 			doCpuStep( tslf );
+			doProcessEvents( EventType::ePostRender );
 			m_lastFrameTime = m_debugOverlays->endFrame( first );
 
 			if ( first )
@@ -193,17 +203,29 @@ namespace castor3d
 		auto & windows = getEngine()->getRenderWindows();
 		crg::SemaphoreWaitArray toWait;
 		auto & device = m_renderSystem.getRenderDevice();
+		auto data = m_reservedQueue;
 
-		if ( !m_queueData )
+		if ( !m_uploadTimer )
 		{
 			// Run this initialisation here, to make sure we are in the render loop thread.
-			m_queueData = device.reserveGraphicsData();
+			m_reservedQueue = device.graphicsQueueSize() > 1
+				? device.reserveGraphicsData()
+				: nullptr;
+
+			if ( !m_reservedQueue )
+			{
+				data = device.graphicsData().release();
+			}
+			else
+			{
+				data = m_reservedQueue;
+			}
 
 			for ( auto & resources : m_uploadResources )
 			{
 				resources.commands =
 				{
-					m_queueData->commandPool->createCommandBuffer( "RenderLoopUboUpload" ),
+					data->commandPool->createCommandBuffer( "RenderLoopUboUpload" ),
 					device->createSemaphore( "RenderLoopUboUpload" ),
 				};
 				resources.fence = device->createFence( VK_FENCE_CREATE_SIGNALED_BIT );
@@ -212,12 +234,15 @@ namespace castor3d
 			m_uploadTimer = std::make_unique< crg::FramePassTimer >( device.makeContext(), "Upload" );
 			getEngine()->registerTimer( "Buffers", *m_uploadTimer );
 		}
+		else if ( !data )
+		{
+			data = device.graphicsData().release();
+		}
 
 		auto & uploadResources = m_uploadResources[m_currentUpdate];
 
 		// Usually GPU initialisation
-		doProcessEvents( EventType::ePreRender, device, *m_queueData );
-		doProcessEvents( EventType::ePreRender );
+		doProcessEvents( EventType::ePreRender, device, *data );
 
 		// GPU Update
 		GpuUpdater updater{ device, info };
@@ -255,7 +280,7 @@ namespace castor3d
 		uploadResources.commands.commandBuffer->endDebugBlock();
 		uploadResources.commands.commandBuffer->end();
 		m_uploadTimer->notifyPassRender();
-		m_queueData->queue->submit( *uploadResources.commands.commandBuffer
+		data->queue->submit( *uploadResources.commands.commandBuffer
 			, ( uploadResources.used
 				? VkSemaphore{ VK_NULL_HANDLE }
 				: *uploadResources.commands.semaphore )
@@ -270,7 +295,7 @@ namespace castor3d
 		// Render
 		toWait = getEngine()->getRenderTargetCache().render( device
 			, info
-			, *m_queueData->queue
+			, *data->queue
 			, { { *uploadResources.commands.semaphore
 			, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT } } );
 
@@ -285,15 +310,18 @@ namespace castor3d
 		uploadResources.used = toWait.empty();
 
 		// Usually GPU cleanup
-		doProcessEvents( EventType::eQueueRender, device, *m_queueData );
-		doProcessEvents( EventType::eQueueRender );
+		doProcessEvents( EventType::eQueueRender, device, *data );
 
 		m_debugOverlays->endGpuTask();
+
+		if ( !m_reservedQueue )
+		{
+			device.putGraphicsData( data );
+		}
 	}
 
 	void RenderLoop::doCpuStep( castor::Milliseconds tslf )
 	{
-		doProcessEvents( EventType::ePostRender );
 		CpuUpdater updater;
 		updater.tslf = tslf;
 		getEngine()->update( updater );

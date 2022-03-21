@@ -319,7 +319,7 @@ namespace castor3d
 			return m_device != nullptr;
 		}
 
-		RenderDevice const & getRenderDevice()const
+		RenderDevice & getRenderDevice()const
 		{
 			CU_Require( hasDevice() );
 			return *m_device;

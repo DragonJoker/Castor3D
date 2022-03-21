@@ -67,15 +67,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the pass and all it's dependencies.
-		 *\param[in]	device		The GPU device.
-		 *\param[in]	queueData	Receives the GPU commands.
 		 *\~french
 		 *\brief		Initialise la passe et toutes ses dépendances.
-		 *\param[in]	device		Le device GPU.
-		 *\param[in]	queueData	Reçoit les commandes GPU.
 		 */
-		C3D_API void initialise( RenderDevice const & device
-			, QueueData const & queueData );
+		C3D_API void initialise();
 		/**
 		 *\~english
 		 *\brief		Cleans up the pass and all it's dependencies.

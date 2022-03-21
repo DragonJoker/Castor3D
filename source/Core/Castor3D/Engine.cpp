@@ -82,7 +82,6 @@ namespace castor3d
 		, m_enableValidation{ enableValidation }
 		, m_enableApiTrace{ C3D_EnableAPITrace }
 		, m_cpuJobs{ std::max( 8u, std::min( 4u, castor::CpuInformations{}.getCoreCount() / 2u ) ) }
-		, m_gpuJobs{ std::max( 4u, std::min( 2u, castor::CpuInformations{}.getCoreCount() / 2u ) ) }
 	{
 		m_passFactory = castor::makeUnique< PassFactory >( *this );
 		m_passesType = m_passFactory->listRegisteredTypes().begin()->second;
@@ -258,7 +257,6 @@ namespace castor3d
 		{
 			setCleaned();
 			m_cpuJobs.finish();
-			m_gpuJobs.finish();
 
 			if ( m_threaded
 				&& !static_cast< RenderLoopAsync const & >( *m_renderLoop ).isPaused() )
@@ -752,16 +750,6 @@ namespace castor3d
 	void Engine::pushCpuJob( castor::AsyncJobQueue::Job job )
 	{
 		m_cpuJobs.pushJob( job );
-	}
-
-	void Engine::pushGpuJob( std::function< void( RenderDevice const &, QueueData const & ) > job )
-	{
-		m_gpuJobs.pushJob( [this, job]()
-			{
-				auto & device = m_renderSystem->getRenderDevice();
-				auto data = device.graphicsData();
-				job( device, *data );
-			} );
 	}
 
 	void Engine::setLoadingScene( SceneUPtr scene )

@@ -218,6 +218,7 @@ namespace ocean_fft
 		}
 
 		VkFFTApplication createApp( FFTConfig const & config
+			, castor3d::RenderDevice const & device
 			, VkExtent2D const & extent
 			, VkDeviceSize & inBufferSize
 			, VkBuffer & vkInput
@@ -226,13 +227,14 @@ namespace ocean_fft
 		{
 			static std::mutex mutex;
 			auto lock( castor::makeUniqueLock( mutex ) );
-
+			VkQueue vkQueue = *device.computeQueue;
+			VkCommandPool vkCommandPool = *device.computeCommandPool;
 			VkFFTConfiguration fftConfig{};
 
 			fftConfig.physicalDevice = &config.vkPhysicalDevice;
 			fftConfig.device = &config.vkDevice;
-			fftConfig.queue = &config.vkQueue;
-			fftConfig.commandPool = &config.vkCommandPool;
+			fftConfig.queue = &vkQueue;
+			fftConfig.commandPool = &vkCommandPool;
 			fftConfig.fence = &config.vkFence;
 			fftConfig.isCompilerInitialized = 0;
 
@@ -282,12 +284,9 @@ namespace ocean_fft
 	FFTConfig::FFTConfig( castor3d::RenderDevice const & device
 			, VkExtent2D const & dimensions )
 		: device{ device }
-		, queueData{ *device.reserveGraphicsData() }
 		, fence{ device->createFence( "OceanFFT" ) }
 		, vkPhysicalDevice{ device->getPhysicalDevice() }
 		, vkDevice{ *device }
-		, vkQueue{ *queueData.queue }
-		, vkCommandPool{ *queueData.commandPool }
 		, vkFence{ *fence }
 	{
 	}
@@ -322,6 +321,7 @@ namespace ocean_fft
 		, m_outBufferSize{ output[0]->getSize() }
 		, m_vkOutput{ *output[0], *output[1] }
 		, m_app{ createApp( config
+			, device
 			, m_extent
 			, m_inBufferSize
 			, m_vkInput

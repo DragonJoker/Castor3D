@@ -44,12 +44,9 @@ namespace ocean_fft
 			, VkExtent2D const & dimensions );
 
 		castor3d::RenderDevice const & device;
-		castor3d::QueueData const & queueData;
 		ashes::FencePtr fence;
 		mutable VkPhysicalDevice vkPhysicalDevice{};
 		mutable VkDevice vkDevice{};
-		mutable VkQueue vkQueue{};
-		mutable VkCommandPool vkCommandPool{};
 		mutable VkFence vkFence{};
 		uint32_t bufferSize{};
 		VkFFTApplication application{};
