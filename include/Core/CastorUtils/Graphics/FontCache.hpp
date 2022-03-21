@@ -69,7 +69,7 @@ namespace castor
 
 	public:
 		CU_API explicit ResourceCacheT( LoggerInstance & logger );
-		CU_API ~ResourceCacheT() = default;
+		CU_API ~ResourceCacheT()override = default;
 
 		CU_API Path getRealPath( Path path )const;
 

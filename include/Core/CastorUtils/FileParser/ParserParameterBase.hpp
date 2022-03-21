@@ -23,6 +23,10 @@ namespace castor
 		 *\brief		Constructor.
 		 */
 		CU_API ParserParameterBase() = default;
+		CU_API ParserParameterBase( ParserParameterBase const & ) = default;
+		CU_API ParserParameterBase( ParserParameterBase && ) = default;
+		CU_API ParserParameterBase & operator=( ParserParameterBase const & ) = default;
+		CU_API ParserParameterBase & operator=( ParserParameterBase && ) = default;
 		CU_API virtual ~ParserParameterBase() = default;
 		/**
 		 *\~english

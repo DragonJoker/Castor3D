@@ -63,7 +63,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~ObjectCacheT() = default;
+		C3D_API ~ObjectCacheT()override = default;
 	};
 }
 

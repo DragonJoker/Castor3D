@@ -19,6 +19,11 @@ namespace castor3d
 		friend class BinaryParserBase;
 
 	public:
+		BinaryParserBase() = default;
+		BinaryParserBase( BinaryParserBase const & ) = default;
+		BinaryParserBase( BinaryParserBase && ) = default;
+		BinaryParserBase & operator=( BinaryParserBase const & ) = default;
+		BinaryParserBase & operator=( BinaryParserBase && ) = default;
 		virtual ~BinaryParserBase() = default;
 		/**
 		 *\~english

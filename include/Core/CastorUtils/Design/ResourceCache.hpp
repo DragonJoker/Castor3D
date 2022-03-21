@@ -42,7 +42,7 @@ namespace castor
 		{
 		}
 
-		~ResourceCacheT() = default;
+		~ResourceCacheT()override = default;
 		/**@}*/
 	};
 	/**

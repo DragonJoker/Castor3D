@@ -9,9 +9,6 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	/**
-	*\author	Sylvain DOREMUS
-	*\date		17/04/2016
-	*\version	0.9.0
 	*\~english
 	*\brief		Description of a user input event.
 	*\remarks	You may use this one, but prefer using MouseEvent or KeyboardEvent.
@@ -22,6 +19,10 @@ namespace castor3d
 	class UserInputEvent
 	{
 	public:
+		C3D_API UserInputEvent( UserInputEvent && ) = default;
+		C3D_API UserInputEvent( UserInputEvent const & ) = default;
+		C3D_API UserInputEvent & operator=( UserInputEvent && ) = default;
+		C3D_API UserInputEvent & operator=( UserInputEvent const & ) = default;
 		/**
 		 *\~english
 		 *\~brief		Constructor.
@@ -40,7 +41,7 @@ namespace castor3d
 		 *\~french
 		 *\~brief		Destructeur.
 		 */
-		virtual ~UserInputEvent() = default;
+		C3D_API virtual ~UserInputEvent() = default;
 		/**
 		 *\~english
 		 *\return		The user input event type.
