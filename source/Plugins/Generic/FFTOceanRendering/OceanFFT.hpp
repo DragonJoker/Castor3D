@@ -188,6 +188,7 @@ namespace ocean_fft
 		void generateDistributionSeeds( ashes::Buffer< cfloat > & distribBuffer );
 
 	private:
+		castor3d::RenderDevice const & m_device;
 		crg::FramePassGroup & m_group;
 		Config m_config;
 		std::default_random_engine m_engine;

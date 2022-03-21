@@ -189,10 +189,19 @@ namespace castor3d
 		QueueDataWrapper( QueueDataWrapper const & ) = delete;
 		QueueDataWrapper & operator=( QueueDataWrapper const & ) = delete;
 
+		C3D_API QueueDataWrapper();
 		C3D_API QueueDataWrapper( QueueDataWrapper && rhs );
 		C3D_API QueueDataWrapper & operator=( QueueDataWrapper && rhs );
 		C3D_API QueueDataWrapper( QueuesData * parent );
 		C3D_API ~QueueDataWrapper();
+
+		QueueData const * release()
+		{
+			auto result = data;
+			data = nullptr;
+			parent = nullptr;
+			return result;
+		}
 
 		QueueData const * operator->()
 		{
@@ -254,6 +263,9 @@ namespace castor3d
 		{
 			QueueData const * data;
 			uint32_t count;
+#ifndef NDEBUG
+			std::string callstack;
+#endif
 		};
 
 		std::vector< QueueDataPtr > m_allQueuesData;
@@ -278,7 +290,9 @@ namespace castor3d
 		C3D_API VkFormat selectSuitableFormat( std::vector< VkFormat > const & formats
 			, VkFormatFeatureFlags requiredFeatures )const;
 		C3D_API QueueDataWrapper graphicsData()const;
+		C3D_API size_t graphicsQueueSize()const;
 		C3D_API QueueData const * reserveGraphicsData()const;
+		C3D_API void putGraphicsData( QueueData const * queueData )const;
 		C3D_API crg::GraphContext & makeContext()const;
 		C3D_API bool hasExtension( std::string_view const & name )const;
 		C3D_API bool hasTerminateInvocation()const;

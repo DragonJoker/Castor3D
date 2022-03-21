@@ -1,6 +1,7 @@
 #include "Castor3D/Cache/TextureCache.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/TextureSourceInfo.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -710,19 +711,20 @@ namespace castor3d
 
 		if ( sourceInfo.isRenderTarget() )
 		{
-			getEngine()->pushGpuJob( [this, &data]( RenderDevice const & device
-				, QueueData const & queueData )
-				{
-					data.unit->setSampler( data.sourceInfo.sampler() );
-					data.unit->setRenderTarget( data.sourceInfo.renderTarget() );
-					auto config = data.config.config;
-					config.tileSet->z = data.tiles;
-					config.tileSet->w = 1u;
-					data.unit->setConfiguration( std::move( config ) );
-					data.unit->initialise( device, queueData );
-					doUpdateWrite( *data.unit );
-					doDestroyThreadData( data );
-				} );
+			getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [this, &data]( RenderDevice const & device
+					, QueueData const & queueData )
+					{
+						data.unit->setSampler( data.sourceInfo.sampler() );
+						data.unit->setRenderTarget( data.sourceInfo.renderTarget() );
+						auto config = data.config.config;
+						config.tileSet->z = data.tiles;
+						config.tileSet->w = 1u;
+						data.unit->setConfiguration( std::move( config ) );
+						data.unit->initialise( device, queueData );
+						doUpdateWrite( *data.unit );
+						doDestroyThreadData( data );
+					} ) );
 		}
 		else if ( sourceInfo.isBufferImage() )
 		{
@@ -822,29 +824,30 @@ namespace castor3d
 
 	void TextureUnitCache::doUpload( ThreadData & data )
 	{
-		getEngine()->pushGpuJob( [this, &data]( RenderDevice const & device
-			, QueueData const & queueData )
-			{
-				data.unit->setSampler( data.sourceInfo.sampler() );
-				data.unit->setTexture( data.layout );
-				auto config = data.config.config;
-				auto tiles = data.layout->getImage().getPixels()->getTiles();
-
-				if ( config.tileSet->z <= 1 && tiles->x >= 1 )
+		getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+			, [this, &data]( RenderDevice const & device
+				, QueueData const & queueData )
 				{
-					config.tileSet->z = tiles->x;
-				}
+					data.unit->setSampler( data.sourceInfo.sampler() );
+					data.unit->setTexture( data.layout );
+					auto config = data.config.config;
+					auto tiles = data.layout->getImage().getPixels()->getTiles();
 
-				if ( config.tileSet->w <= 1 && tiles->y >= 1 )
-				{
-					config.tileSet->w = tiles->y;
-				}
+					if ( config.tileSet->z <= 1 && tiles->x >= 1 )
+					{
+						config.tileSet->z = tiles->x;
+					}
 
-				data.unit->setConfiguration( std::move( config ) );
-				data.unit->initialise( device, queueData );
-				doUpdateWrite( *data.unit );
-				doDestroyThreadData( data );
-			} );
+					if ( config.tileSet->w <= 1 && tiles->y >= 1 )
+					{
+						config.tileSet->w = tiles->y;
+					}
+
+					data.unit->setConfiguration( std::move( config ) );
+					data.unit->initialise( device, queueData );
+					doUpdateWrite( *data.unit );
+					doDestroyThreadData( data );
+				} ) );
 	}
 
 	void TextureUnitCache::doUpdateWrite( TextureUnit & unit )

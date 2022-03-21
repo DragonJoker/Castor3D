@@ -4,6 +4,7 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/ShaderCache.hpp>
+#include <Castor3D/Event/Frame/GpuFunctorEvent.hpp>
 #include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Render/RenderPipeline.hpp>
 #include <Castor3D/Render/RenderQueue.hpp>
@@ -118,8 +119,9 @@ namespace water
 					, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, image.getLevels(), 0u, 1u } } );
 				auto buffer = image.getPixels();
 
-				engine.pushGpuJob( [format, dim, buffer, &graph, &img, &view, &result]( castor3d::RenderDevice const & device
-					, castor3d::QueueData const & queue )
+				engine.postEvent( castor3d::makeGpuFunctorEvent( castor3d::EventType::ePreRender
+					, [format, dim, buffer, &graph, &img, &view, &result]( castor3d::RenderDevice const & device
+						, castor3d::QueueData const & queue )
 					{
 						auto & context = device.makeContext();
 						auto staging = device->createStagingTexture( VkFormat( format )
@@ -137,7 +139,7 @@ namespace water
 							, VkFormat( format )
 							, buffer->getConstPtr()
 							, result );
-					} );
+					} ) );
 			}
 		}
 	}

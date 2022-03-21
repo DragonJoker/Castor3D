@@ -487,10 +487,11 @@ namespace castor3d
 		void doDestroyRenderPass();
 		void doCreateProgram();
 		void doDestroyProgram();
-		void doCreateSwapchain();
+		void doCreateSwapchain( QueueData const & queueData );
 		void doDestroySwapchain();
-		void doCreateRenderingResources();
+		void doCreateRenderingResources( QueueData const & queueData );
 		void doDestroyRenderingResources();
+		ashes::ImageViewCRefArray doPrepareAttaches( size_t index );
 		void doCreateFrameBuffers();
 		void doDestroyFrameBuffers();
 		void doCreateLoadingScreen();
@@ -505,36 +506,43 @@ namespace castor3d
 		void doDestroyIntermediateViews();
 		void doCreateSaveData( QueueData const & queueData );
 		void doDestroySaveData();
-		void doResetSwapChain();
+		void doResetSwapChain( QueueData const & queueData );
+		void doResetSwapChainAndCommands();
 		RenderingResources * doGetResources();
-		crg::SemaphoreWaitArray doSubmitLoadingFrame( RenderingResources & resources
+		crg::SemaphoreWaitArray doSubmitLoadingFrame( QueueData const & queueData
+			, RenderingResources & resources
 			, LoadingScreen & loadingScreen
 			, crg::Fence *& fence
 			, crg::SemaphoreWaitArray toWait );
-		void doPresentLoadingFrame( crg::Fence * fence
+		void doPresentLoadingFrame( QueueData const & queueData
+			, crg::Fence * fence
 			, RenderingResources & resources
 			, crg::SemaphoreWaitArray toWait );
-		void doWaitFrame( crg::SemaphoreWaitArray toWait );
-		void doSubmitFrame( RenderingResources * resources
+		void doWaitFrame( QueueData const & queueData
 			, crg::SemaphoreWaitArray toWait );
-		void doPresentFrame( RenderingResources * resources );
+		void doSubmitFrame( QueueData const & queueData
+			, RenderingResources * resources
+			, crg::SemaphoreWaitArray toWait );
+		void doPresentFrame( QueueData const & queueData
+			, RenderingResources * resources );
 		bool doCheckNeedReset( VkResult errCode
 			, bool acquisition
 			, char const * const action );
-		void doInitialiseTransferCommands( CommandsSemaphore & commands
+		void doInitialiseTransferCommands( QueueData const & queueData
+			, CommandsSemaphore & commands
 			, uint32_t index );
 
 	private:
 		static uint32_t s_nbRenderWindows;
 		std::shared_ptr< EvtHandler > m_evtHandler;
 		uint32_t m_index{};
-		RenderDevice const & m_device;
+		RenderDevice & m_device;
 		ashes::SurfacePtr m_surface;
-		QueuesData const * m_queues{};
-		QueueData const * m_queue{};
+		QueuesData * m_queues{};
+		QueueData const * m_reservedQueue{};
 		ashes::SwapChainPtr m_swapChain;
 		ashes::ImageArray m_swapChainImages;
-		ashes::ImageViewArray m_swapchainViews;
+		std::vector< ashes::ImageViewArray > m_swapchainViews;
 		RenderingResourcesArray m_renderingResources;
 		size_t m_resourceIndex{ 0u };
 		ashes::RenderPassPtr m_renderPass;

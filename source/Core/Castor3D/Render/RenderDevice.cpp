@@ -208,7 +208,31 @@ namespace castor3d
 	QueueData const * QueuesData::getQueue()
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
-		CU_Require( !m_remainingQueuesData.empty() );
+
+		if ( m_allQueuesData.size() > 1 )
+		{
+			CU_Require( !m_remainingQueuesData.empty() );
+		}
+		else
+		{
+			auto it = m_busyQueues.find( std::this_thread::get_id() );
+
+			if ( it != m_busyQueues.end() )
+			{
+				if ( it->second.data )
+				{
+					++it->second.count;
+					return it->second.data;
+				}
+			}
+
+			while ( m_remainingQueuesData.empty() )
+			{
+				m_mutex.unlock();
+				std::this_thread::sleep_for( 1_ms );
+				m_mutex.lock();
+			}
+		}
 
 		auto ires = m_busyQueues.emplace( std::this_thread::get_id()
 			, QueueThreadData{} );
@@ -219,6 +243,12 @@ namespace castor3d
 			result.data = m_remainingQueuesData.back();
 			m_remainingQueuesData.pop_back();
 		}
+
+#ifndef NDEBUG
+		std::stringstream stream;
+		stream << castor::Debug::Backtrace{};
+		result.callstack = stream.str();
+#endif
 
 		++result.count;
 		return result.data;
@@ -243,6 +273,12 @@ namespace castor3d
 	}
 
 	//*********************************************************************************************
+
+	QueueDataWrapper::QueueDataWrapper()
+		: parent{ nullptr }
+		, data{ nullptr }
+	{
+	}
 
 	QueueDataWrapper::QueueDataWrapper( QueueDataWrapper && rhs )
 		: parent{ rhs.parent }
@@ -526,9 +562,19 @@ namespace castor3d
 		return QueueDataWrapper{ m_preferredGraphicsQueue };
 	}
 
+	size_t RenderDevice::graphicsQueueSize()const
+	{
+		return m_preferredGraphicsQueue->getQueueSize();
+	}
+
 	QueueData const * RenderDevice::reserveGraphicsData()const
 	{
 		return m_preferredGraphicsQueue->reserveQueue();
+	}
+
+	void RenderDevice::putGraphicsData( QueueData const * queueData )const
+	{
+		m_preferredGraphicsQueue->putQueue( queueData );
 	}
 
 	crg::GraphContext & RenderDevice::makeContext()const
