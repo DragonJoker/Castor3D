@@ -87,11 +87,11 @@ You can reach me on the Discord server dedicated to my projects: [DragonJoker's 
 
 ## Screenshots
 
-![Sponza](http://dragonjoker.github.io/Castor3D/img/Sponza-PBR-Bloom-Small.png)
-![Sponza, VCT](http://dragonjoker.github.io/Castor3D/img/Sponza-PBR-VCT-Small.png)
-![Cerberus](http://dragonjoker.github.io/Castor3D/img/Cerberus-PBR-Small.png)
-![Park, Legacy](http://dragonjoker.github.io/Castor3D/img/Park-Legacy-Small.png)
-![Park, PBR](http://dragonjoker.github.io/Castor3D/img/Park-PBR-Small.png)
-![Nyra, PBR](http://dragonjoker.github.io/Castor3D/img/Nyra-PBR-MR-Small.png)
-![SanMiguel, PBR](http://dragonjoker.github.io/Castor3D/img/SanMiguel-PBR-SG-Small.png)
-![SanMiguel, PBR, LPV](http://dragonjoker.github.io/Castor3D/img/SanMiguel-PBR-SG-LPV-Small.png)
+[![Sponza](http://dragonjoker.github.io/Castor3D/v0.11.0/img/Sponza-PBR-Bloom-Small.png)](http://dragonjoker.github.io/Castor3D/v0.11.0/img/Sponza-PBR-Bloom.png)
+[![Sponza, VCT](http://dragonjoker.github.io/Castor3D/img/Sponza-PBR-VCT-Small.png)](http://dragonjoker.github.io/Castor3D/img/Sponza-PBR-VCT.png)
+[![Cerberus](http://dragonjoker.github.io/Castor3D/img/Cerberus-PBR-Small.png)](http://dragonjoker.github.io/Castor3D/img/Cerberus-PBR.png)
+[![Park](http://dragonjoker.github.io/Castor3D/img/Park-Small.png)](http://dragonjoker.github.io/Castor3D/img/Park.png)
+[![Nyra, PBR](http://dragonjoker.github.io/Castor3D/img/Nyra-PBR-MR-Small.png)](http://dragonjoker.github.io/Castor3D/img/Nyra-PBR-MR.png)
+[![SanMiguel, PBR](http://dragonjoker.github.io/Castor3D/img/SanMiguel-PBR-SG-Small.png)](http://dragonjoker.github.io/Castor3D/img/SanMiguel-PBR-SG.png)
+[![SanMiguel, PBR, LPV](http://dragonjoker.github.io/Castor3D/img/SanMiguel-PBR-SG-LPV-Small.png)](http://dragonjoker.github.io/Castor3D/img/SanMiguel-PBR-SG-LPV.png)
+[![Bistro, PBR, VCT](http://dragonjoker.github.io/Castor3D/img/Bistro-PBR-VCT-Small.png)](http://dragonjoker.github.io/Castor3D/img/Bistro-PBR-VCT.png)
