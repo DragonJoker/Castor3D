@@ -8,7 +8,7 @@ endif ()
 set( MAIN_PROJECT_NAME "Castor3D" )
 
 set( VERSION_MAJOR 0 )
-set( VERSION_MINOR 12 )
+set( VERSION_MINOR 13 )
 set( VERSION_BUILD 0 )
 set( VERSION_YEAR 2022 )
 

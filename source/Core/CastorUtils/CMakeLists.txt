@@ -75,6 +75,13 @@ project( CastorUtils )
 include( Doxygen )
 include( AndroidNdkModules )
 
+set( ${PROJECT_NAME}_DESCRIPTION "${MAIN_PROJECT_NAME} Utils" )
+set( ${PROJECT_NAME}_BRIEF "Multiplatform utilities library" )
+set( ${PROJECT_NAME}_ICON "${CMAKE_SOURCE_DIR}/data/Images/castor-dark-small.png" )
+set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
+set( ${PROJECT_NAME}_VERSION_MINOR 13 )
+set( ${PROJECT_NAME}_VERSION_BUILD 0 )
+
 if ( CASTOR_USE_SYSTEM_LIBS OR APPLE )
 	if ( VCPKG_TOOLCHAIN )
 		if ( APPLE )
@@ -198,13 +205,6 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${PROJECT_NAME}
 		PARENT_SCOPE
 	)
-
-	set( ${PROJECT_NAME}_DESCRIPTION "${MAIN_PROJECT_NAME} Utils" )
-	set( ${PROJECT_NAME}_BRIEF "Multiplatform utilities library" )
-	set( ${PROJECT_NAME}_ICON "${CMAKE_SOURCE_DIR}/data/Images/castor-dark-small.png" )
-	set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
-	set( ${PROJECT_NAME}_VERSION_MINOR 12 )
-	set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 	if( PROJECTS_USE_PRECOMPILED_HEADERS )
 		set( CASTOR_USE_PCH 1 )
