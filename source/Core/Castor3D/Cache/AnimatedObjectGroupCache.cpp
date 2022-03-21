@@ -100,11 +100,13 @@ namespace castor
 		if ( m_skinningTransformsData )
 		{
 			m_device.bufferPool->putBuffer( m_skinningTransformsData );
+			m_skinningTransformsData = {};
 		}
 
 		if ( m_morphingData )
 		{
 			m_device.bufferPool->putBuffer( m_morphingData );
+			m_morphingData = {};
 		}
 	}
 

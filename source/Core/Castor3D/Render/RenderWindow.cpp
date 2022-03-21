@@ -1479,11 +1479,11 @@ namespace castor3d
 						if ( m_loading )
 						{
 							getListener()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-								, [this]( RenderDevice const & device
-									, QueueData const & queueData )
+								, [this]( RenderDevice const & pdevice
+									, QueueData const & pqueueData )
 								{
 									doDestroyCommandBuffers();
-									doCreateCommandBuffers( queueData );
+									doCreateCommandBuffers( pqueueData );
 								} ) );
 						}
 					}

@@ -48,7 +48,7 @@ namespace castor
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~ResourceCacheT() = default;
+		C3D_API ~ResourceCacheT()override = default;
 		/**
 		 *\~english
 		 *\brief		Flushes the collection.

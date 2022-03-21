@@ -120,7 +120,7 @@ namespace castor
 	public:
 		CU_API explicit ResourceCacheT( LoggerInstance & logger
 			, ImageLoader const & loader );
-		CU_API ~ResourceCacheT() = default;
+		CU_API ~ResourceCacheT()override = default;
 
 		ImageLoader const & getLoader()const
 		{
