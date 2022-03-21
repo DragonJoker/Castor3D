@@ -90,7 +90,8 @@ namespace castor3d
 		void doCleanup()override;
 		void doCpuUpdate( CpuUpdater & updater )const override;
 		void doGpuUpdate( GpuUpdater & updater )const override;
-		void doUpdateColour( RenderDevice const & device )const;
+		void doUpdateColour( QueueData const & queueData
+			, RenderDevice const & device )const;
 
 	private:
 		mutable castor::ChangeTracked< castor::HdrRgbColour > m_colour;

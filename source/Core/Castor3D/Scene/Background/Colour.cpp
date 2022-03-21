@@ -87,7 +87,7 @@ namespace castor3d
 			m_cmdCopy->end();
 		}
 
-		doUpdateColour( device );
+		doUpdateColour( *data, device );
 		return result;
 	}
 
@@ -119,11 +119,13 @@ namespace castor3d
 	{
 		if ( m_colour.isDirty() )
 		{
-			doUpdateColour( updater.device );
+			auto data = updater.device.graphicsData();
+			doUpdateColour( *data, updater.device );
 		}
 	}
 
-	void ColourBackground::doUpdateColour( RenderDevice const & device )const
+	void ColourBackground::doUpdateColour( QueueData const & queueData
+		, RenderDevice const & device )const
 	{
 		VkDeviceSize lockSize = Dim * Dim * sizeof( Point4f );
 
@@ -140,9 +142,8 @@ namespace castor3d
 			m_stagingTexture->flush( 0u, lockSize );
 			m_stagingTexture->unlock();
 
-			auto data = device.graphicsData();
-			data->queue->submit( *m_cmdCopy, nullptr );
-			data->queue->waitIdle();
+			queueData.queue->submit( *m_cmdCopy, nullptr );
+			queueData.queue->waitIdle();
 
 			m_colour.reset();
 		}

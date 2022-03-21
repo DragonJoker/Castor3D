@@ -55,8 +55,8 @@ namespace castor3d
 {
 	namespace
 	{
-		QueuesData const * getQueueFamily( ashes::Surface const & surface
-			, QueueFamilies const & queues )
+		QueuesData * getQueueFamily( ashes::Surface const & surface
+			, QueueFamilies & queues )
 		{
 			auto it = std::find_if( queues.begin()
 				, queues.end()
@@ -359,7 +359,7 @@ namespace castor3d
 		, m_surface{ m_device.renderSystem.getInstance().createSurface( m_device.renderSystem.getPhysicalDevice()
 			, std::move( handle ) ) }
 		, m_queues{ getQueueFamily( *m_surface, m_device.queueFamilies ) }
-		, m_queue{ m_queues->reserveQueue() }
+		, m_reservedQueue{ m_queues->getQueueSize() > 1 ? m_queues->reserveQueue() : nullptr }
 		, m_listener{ getEngine()->getFrameListenerCache().add( getName() + castor::string::toString( m_index ) ) }
 		, m_size{ size }
 		, m_loading{ engine.isThreaded() }
@@ -375,7 +375,14 @@ namespace castor3d
 		getEngine()->getMaterialCache().initialise( m_device
 			, getEngine()->getPassesType() );
 		doCreateProgram();
-		doCreateSwapchain();
+		auto queueData = m_reservedQueue;
+
+		if ( !queueData )
+		{
+			queueData = m_queues->getQueue();
+		}
+
+		doCreateSwapchain( *queueData );
 
 		if ( engine.isThreaded() )
 		{
@@ -383,6 +390,11 @@ namespace castor3d
 			doCreateLoadingScreen();
 #endif
 			getEngine()->registerWindow( *this );
+		}
+
+		if ( !m_reservedQueue )
+		{
+			m_queues->putQueue( queueData );
 		}
 
 		log::debug << "Created render window " << m_index << std::endl;
@@ -403,6 +415,7 @@ namespace castor3d
 #endif
 
 		doDestroySwapchain();
+		doDestroyRenderPass();
 		doDestroyProgram();
 		m_device.uboPool->putBuffer( m_configUbo );
 	}
@@ -425,7 +438,8 @@ namespace castor3d
 
 			auto progress = m_progressBar.get();
 			incProgressBarRange( progress, 6u + target->countInitialisationSteps() );
-			getEngine()->pushGpuJob( [this]( RenderDevice const & device, QueueData const & queueData )
+			getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [this]( RenderDevice const & device, QueueData const & queueData )
 				{
 					auto target = m_renderTarget.lock();
 
@@ -458,7 +472,7 @@ namespace castor3d
 							m_loading = false;
 							m_initialised = true;
 						} ) );
-				} );
+				} ) );
 		}
 		else
 		{
@@ -485,8 +499,14 @@ namespace castor3d
 	{
 		auto & engine = *getEngine();
 		engine.unregisterWindow( *this );
+		auto queueData = m_reservedQueue;
 
-		doWaitFrame( {} );
+		if ( !queueData )
+		{
+			queueData = m_queues->getQueue();
+		}
+
+		doWaitFrame( *queueData, {} );
 		getDevice()->waitIdle();
 
 		doDestroySaveData();
@@ -505,6 +525,12 @@ namespace castor3d
 		{
 			target->cleanup( m_device );
 		}
+
+		if ( !m_reservedQueue )
+		{
+			m_queues->putQueue( queueData );
+		}
+
 	}
 
 	void RenderWindow::update( CpuUpdater & updater )
@@ -598,16 +624,25 @@ namespace castor3d
 			return;
 		}
 
+		auto queueData = m_reservedQueue;
+
+		if ( !queueData )
+		{
+			queueData = m_queues->getQueue();
+		}
+
 		if ( m_loadingScreen && m_loadingScreen->isEnabled() )
 		{
 			if ( auto resources = doGetResources() )
 			{
 				crg::Fence * fence{};
-				auto toWait = doSubmitLoadingFrame( *resources
+				auto toWait = doSubmitLoadingFrame( *queueData 
+					, *resources
 					, *m_loadingScreen
 					, fence
 					, std::move( baseToWait ) );
-				doPresentLoadingFrame( fence
+				doPresentLoadingFrame( *queueData
+					, fence
 					, *resources
 					, std::move( toWait ) );
 			}
@@ -615,12 +650,11 @@ namespace castor3d
 		else if ( m_initialised )
 		{
 			RenderTargetSPtr target = getRenderTarget();
-
 			if ( target && target->isInitialised() )
 			{
 				auto toWait = target->render( m_device
 					, info
-					, *m_queue->queue
+					, *queueData->queue
 					, baseToWait );
 				baseToWait.clear();
 
@@ -634,14 +668,14 @@ namespace castor3d
 
 				if ( waitOnly )
 				{
-					doWaitFrame( toWait );
+					doWaitFrame( *queueData, toWait );
 				}
 				else if ( auto resources = doGetResources() )
 				{
 					try
 					{
-						doSubmitFrame( resources, toWait );
-						doPresentFrame( resources );
+						doSubmitFrame( *queueData, resources, toWait );
+						doPresentFrame( *queueData, resources );
 					}
 					catch ( ashes::Exception & exc )
 					{
@@ -661,6 +695,11 @@ namespace castor3d
 				}
 			}
 		}
+
+		if ( !m_reservedQueue )
+		{
+			m_queues->putQueue( queueData );
+		}
 	}
 
 	void RenderWindow::resize( uint32_t x, uint32_t y )
@@ -671,18 +710,8 @@ namespace castor3d
 	void RenderWindow::resize( castor::Size const & size )
 	{
 		m_size = size;
-
-		if ( !m_skip.exchange( true ) )
-		{
-			log::debug << "Resizing RenderWindow to " << size << std::endl;
-			getListener()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [this]( RenderDevice const & device
-					, QueueData const & queueData )
-				{
-					doResetSwapChain();
-					m_skip = false;
-				} ) );
-		}
+		log::debug << "Resizing RenderWindow to " << size << std::endl;
+		doResetSwapChainAndCommands();
 	}
 
 	void RenderWindow::setCamera( CameraSPtr camera )
@@ -944,7 +973,7 @@ namespace castor3d
 			, std::move( attaches )
 			, std::move( subpasses )
 			, std::move( dependencies ) };
-		m_renderPass = getDevice()->createRenderPass( "RenderPass"
+		m_renderPass = getDevice()->createRenderPass( getName()
 			, std::move( createInfo ) );
 	}
 
@@ -1021,13 +1050,18 @@ namespace castor3d
 		m_program.clear();
 	}
 
-	void RenderWindow::doCreateSwapchain()
+	void RenderWindow::doCreateSwapchain( QueueData const & queueData )
 	{
 		m_swapChain = getDevice()->createSwapChain( getSwapChainCreateInfo( *m_surface
 			, { m_size.getWidth(), m_size.getHeight() } ) );
 		m_swapChainImages = m_swapChain->getImages();
-		doCreateRenderPass();
-		doCreateRenderingResources();
+
+		if ( !m_renderPass )
+		{
+			doCreateRenderPass();
+		}
+
+		doCreateRenderingResources( queueData );
 		doCreateFrameBuffers();
 
 #if !C3D_PersistLoadingScreen
@@ -1049,19 +1083,18 @@ namespace castor3d
 
 		doDestroyFrameBuffers();
 		doDestroyRenderingResources();
-		doDestroyRenderPass();
 		m_swapChainImages.clear();
 		m_swapChain.reset();
 	}
 
-	void RenderWindow::doCreateRenderingResources()
+	void RenderWindow::doCreateRenderingResources( QueueData const & queueData )
 	{
 		for ( uint32_t i = 0u; i < uint32_t( m_swapChainImages.size() ); ++i )
 		{
 			m_renderingResources.emplace_back( std::make_unique< RenderingResources >( getDevice()->createSemaphore( getName() + castor::string::toString( i ) + "ImageAvailable" )
 				, getDevice()->createSemaphore( getName() + castor::string::toString( i ) + "FinishedRendering" )
 				, getDevice()->createFence( getName() + castor::string::toString( i ), VkFenceCreateFlags{ 0u } )
-				, m_queue->commandPool->createCommandBuffer( getName() + castor::string::toString( i ) )
+				, queueData.commandPool->createCommandBuffer( getName() + castor::string::toString( i ) )
 				, 0u ) );
 		}
 	}
@@ -1071,38 +1104,39 @@ namespace castor3d
 		m_renderingResources.clear();
 	}
 
+	ashes::ImageViewCRefArray RenderWindow::doPrepareAttaches( size_t index )
+	{
+		ashes::ImageViewCRefArray attaches;
+		auto & image = m_swapChainImages[index];
+
+		for ( size_t i = 0u; i < m_renderPass->getAttachments().size(); ++i )
+		{
+			m_swapchainViews[index].push_back( image.createView( makeVkStruct< VkImageViewCreateInfo >( 0u
+				, image
+				, VK_IMAGE_VIEW_TYPE_2D
+				, m_swapChain->getFormat()
+				, VkComponentMapping{}
+				, VkImageSubresourceRange
+				{ ashes::getAspectMask( m_swapChain->getFormat() )
+				, 0u
+				, 1u
+				, 0u
+				, 1u } ) ) );
+			attaches.emplace_back( m_swapchainViews[index].back() );
+		}
+
+		return attaches;
+	}
+
 	void RenderWindow::doCreateFrameBuffers()
 	{
-		auto prepareAttaches = [this]( uint32_t backBuffer )
-		{
-			ashes::ImageViewCRefArray attaches;
-			m_swapchainViews.clear();
-
-			for ( size_t i = 0u; i < m_renderPass->getAttachments().size(); ++i )
-			{
-				m_swapchainViews.push_back( m_swapChainImages[backBuffer].createView( makeVkStruct< VkImageViewCreateInfo >( 0u
-					, m_swapChainImages[backBuffer]
-					, VK_IMAGE_VIEW_TYPE_2D
-					, m_swapChain->getFormat()
-					, VkComponentMapping{}
-					, VkImageSubresourceRange
-					{  ashes::getAspectMask( m_swapChain->getFormat() )
-						, 0u
-						, 1u
-						, 0u
-						, 1u } ) ) );
-				attaches.emplace_back( m_swapchainViews.back() );
-			}
-
-			return attaches;
-		};
-
+		m_swapchainViews.resize( m_swapChainImages.size() );
 		m_frameBuffers.resize( m_swapChainImages.size() );
 
 		for ( size_t i = 0u; i < m_frameBuffers.size(); ++i )
 		{
-			auto attaches = prepareAttaches( uint32_t( i ) );
-			m_frameBuffers[i] = m_renderPass->createFrameBuffer( "RenderPass"
+			auto attaches = doPrepareAttaches( uint32_t( i ) );
+			m_frameBuffers[i] = m_renderPass->createFrameBuffer( getName() + std::to_string( i )
 				, m_swapChain->getDimensions()
 				, std::move( attaches ) );
 		}
@@ -1408,55 +1442,64 @@ namespace castor3d
 		m_saveBuffer.reset();
 	}
 
-	void RenderWindow::doResetSwapChain()
+	void RenderWindow::doResetSwapChain( QueueData const & queueData )
 	{
-		doWaitFrame( {} );
-		getDevice()->waitIdle();
-
-		if ( m_initialised )
-		{
-			doDestroyCommandBuffers();
-			doDestroyRenderQuad();
-			doDestroyIntermediateViews();
-
 #if C3D_PersistLoadingScreen
-			if ( m_progressBar && m_loadingScreen )
-			{
-				m_progressBar->lock();
-				doDestroySwapchain();
-				doCreateSwapchain();
-				m_loadingScreen->setRenderPass( *m_renderPass, m_size );
-				m_progressBar->unlock();
-			}
-			else
-#endif
-			{
-				doDestroySwapchain();
-				doCreateSwapchain();
-			}
-
-			doCreateIntermediateViews( *m_queue );
-			doCreateRenderQuad( *m_queue );
-			doCreateCommandBuffers( *m_queue );
+		if ( m_progressBar && m_loadingScreen )
+		{
+			m_progressBar->lock();
+			doDestroySwapchain();
+			doCreateSwapchain( queueData );
+			m_loadingScreen->setRenderPass( *m_renderPass, m_size );
+			m_progressBar->unlock();
 		}
 		else
-		{
-#if C3D_PersistLoadingScreen
-			if ( m_progressBar && m_loadingScreen )
-			{
-				m_progressBar->lock();
-				doDestroySwapchain();
-				doCreateSwapchain();
-				m_loadingScreen->setRenderPass( *m_renderPass, m_size );
-				m_progressBar->unlock();
-			}
-			else
 #endif
-			{
-				doDestroySwapchain();
-				doCreateSwapchain();
-			}
+		{
+			doDestroySwapchain();
+			doCreateSwapchain( queueData );
+		}
+	}
 
+	void RenderWindow::doResetSwapChainAndCommands()
+	{
+		if ( !m_skip.exchange( true ) )
+		{
+			getListener()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [this]( RenderDevice const & device
+					, QueueData const & queueData )
+				{
+					doWaitFrame( queueData, {} );
+					getDevice()->waitIdle();
+
+					if ( !m_initialised )
+					{
+						doResetSwapChain( queueData );
+
+						if ( m_loading )
+						{
+							getListener()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+								, [this]( RenderDevice const & device
+									, QueueData const & queueData )
+								{
+									doDestroyCommandBuffers();
+									doCreateCommandBuffers( queueData );
+								} ) );
+						}
+					}
+					else
+					{
+						doDestroyCommandBuffers();
+						doDestroyRenderQuad();
+						doDestroyIntermediateViews();
+						doResetSwapChain( queueData );
+						doCreateIntermediateViews( queueData );
+						doCreateRenderQuad( queueData );
+						doCreateCommandBuffers( queueData );
+					}
+
+					m_skip = false;
+				} ) );
 		}
 	}
 
@@ -1480,20 +1523,22 @@ namespace castor3d
 		return nullptr;
 	}
 
-	crg::SemaphoreWaitArray RenderWindow::doSubmitLoadingFrame( RenderingResources & resources
+	crg::SemaphoreWaitArray RenderWindow::doSubmitLoadingFrame( QueueData const & queue
+		, RenderingResources & resources
 		, LoadingScreen & loadingScreen
 		, crg::Fence *& fence
 		, crg::SemaphoreWaitArray toWait )
 	{
 		toWait.push_back( { *resources.imageAvailableSemaphore
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT } );
-		return loadingScreen.render( *m_queue->queue
+		return loadingScreen.render( *queue.queue
 			, *m_frameBuffers[resources.imageIndex]
 			, toWait
 			, fence );
 	}
 
-	void RenderWindow::doPresentLoadingFrame( crg::Fence * fence
+	void RenderWindow::doPresentLoadingFrame( QueueData const & queueData
+		, crg::Fence * fence
 		, RenderingResources & resources
 		, crg::SemaphoreWaitArray toWait )
 	{
@@ -1508,7 +1553,7 @@ namespace castor3d
 				ashes::checkError( res, "Wait between swapchain images presentation." );
 			}
 
-			m_queue->queue->present( { *m_swapChain }
+			queueData.queue->present( { *m_swapChain }
 				, { resources.imageIndex }
 				, semaphores );
 
@@ -1528,8 +1573,9 @@ namespace castor3d
 		resources.imageIndex = ~0u;
 	}
 
-	void RenderWindow::doInitialiseTransferCommands( CommandsSemaphore & transferCommands
-			, uint32_t index )
+	void RenderWindow::doInitialiseTransferCommands( QueueData const & queueData
+		, CommandsSemaphore & transferCommands
+		, uint32_t index )
 	{
 		if ( transferCommands.commandBuffer )
 		{
@@ -1540,7 +1586,7 @@ namespace castor3d
 		auto & context = m_device.makeContext();
 		auto targetExtent = makeExtent2D( m_saveBuffer->getDimensions() );
 
-		transferCommands = { getDevice(), *m_queue, "Snapshot" };
+		transferCommands = { getDevice(), queueData, "Snapshot" };
 #if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
 		auto & intermediate = m_intermediates[index];
 		auto & intermediateBarrierView = m_intermediateBarrierViews[index];
@@ -1653,7 +1699,8 @@ namespace castor3d
 		commands.end();
 	}
 
-	void RenderWindow::doWaitFrame( crg::SemaphoreWaitArray toWait )
+	void RenderWindow::doWaitFrame( QueueData const & queueData
+		, crg::SemaphoreWaitArray toWait )
 	{
 		auto target = getRenderTarget();
 
@@ -1671,8 +1718,8 @@ namespace castor3d
 				m_savedFormat = m_intermediates[m_debugConfig.debugIndex].viewId.data->info.format;
 #endif
 				auto & transferCommands = m_transferCommands[m_debugConfig.debugIndex];
-				doInitialiseTransferCommands( transferCommands, m_debugConfig.debugIndex );
-				m_queue->queue->submit( ashes::VkCommandBufferArray{ *transferCommands.commandBuffer }
+				doInitialiseTransferCommands( queueData, transferCommands, m_debugConfig.debugIndex );
+				queueData.queue->submit( ashes::VkCommandBufferArray{ *transferCommands.commandBuffer }
 					, semaphores
 					, stages
 					, ashes::VkSemaphoreArray{ *transferCommands.semaphore } );
@@ -1680,14 +1727,15 @@ namespace castor3d
 				stages = { VK_PIPELINE_STAGE_TRANSFER_BIT };
 			}
 
-			m_queue->queue->submit( ashes::VkCommandBufferArray{}
+			queueData.queue->submit( ashes::VkCommandBufferArray{}
 				, semaphores
 				, stages
 				, ashes::VkSemaphoreArray{} );
 		}
 	}
 
-	void RenderWindow::doSubmitFrame( RenderingResources * resources
+	void RenderWindow::doSubmitFrame( QueueData const & queueData
+		, RenderingResources * resources
 		, crg::SemaphoreWaitArray toWait )
 	{
 		ashes::VkSemaphoreArray semaphores;
@@ -1696,7 +1744,7 @@ namespace castor3d
 
 #if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
 #	if C3D_DebugQuads
-		m_texture3Dto2D->render( *m_queue->queue
+		m_texture3Dto2D->render( *queueData.queue
 			, semaphores
 			, stages );
 #	endif
@@ -1709,8 +1757,8 @@ namespace castor3d
 			m_savedFormat = m_intermediates[m_debugConfig.debugIndex].viewId.data->info.format;
 #endif
 			auto & transferCommands = m_transferCommands[m_debugConfig.debugIndex];
-			doInitialiseTransferCommands( transferCommands, m_debugConfig.debugIndex );
-			m_queue->queue->submit( ashes::VkCommandBufferArray{ *transferCommands.commandBuffer }
+			doInitialiseTransferCommands( queueData, transferCommands, m_debugConfig.debugIndex );
+			queueData.queue->submit( ashes::VkCommandBufferArray{ *transferCommands.commandBuffer }
 				, semaphores
 				, stages
 				, ashes::VkSemaphoreArray{ *transferCommands.semaphore } );
@@ -1720,20 +1768,21 @@ namespace castor3d
 
 		semaphores.push_back( *resources->imageAvailableSemaphore );
 		stages.push_back( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT );
-		m_queue->queue->submit( ashes::VkCommandBufferArray{ *m_commandBuffers[m_debugConfig.debugIndex][resources->imageIndex] }
+		queueData.queue->submit( ashes::VkCommandBufferArray{ *m_commandBuffers[m_debugConfig.debugIndex][resources->imageIndex] }
 			, semaphores
 			, stages
 			, ashes::VkSemaphoreArray{}
 			, *resources->fence );
 	}
 
-	void RenderWindow::doPresentFrame( RenderingResources * resources )
+	void RenderWindow::doPresentFrame( QueueData const & queueData
+		, RenderingResources * resources )
 	{
 		try
 		{
 			resources->fence->wait( ashes::MaxTimeout );
 			resources->fence->reset();
-			m_queue->queue->present( *m_swapChain
+			queueData.queue->present( *m_swapChain
 				, resources->imageIndex );
 
 			if ( m_toSave )
@@ -1782,7 +1831,7 @@ namespace castor3d
 		case VK_ERROR_OUT_OF_DATE_KHR:
 			if ( !acquisition )
 			{
-				doResetSwapChain();
+				doResetSwapChainAndCommands();
 			}
 			else
 			{
@@ -1791,7 +1840,7 @@ namespace castor3d
 			break;
 
 		case VK_SUBOPTIMAL_KHR:
-			doResetSwapChain();
+			doResetSwapChainAndCommands();
 			break;
 
 		default:

@@ -272,7 +272,7 @@ namespace castor3d
 
 	private:
 		bool m_first = true;
-		QueueData const * m_queueData{};
+		QueueData const * m_reservedQueue{};
 		std::unordered_set< ShaderBuffer const * > m_shaderBuffers;
 		std::mutex m_shaderBuffersMtx;
 		std::unique_ptr< crg::FramePassTimer > m_uploadTimer;

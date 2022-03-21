@@ -238,15 +238,6 @@ namespace castor3d
 		C3D_API void pushCpuJob( castor::AsyncJobQueue::Job job );
 		/**
 		 *\~english
-		 *\brief		Enqueues the given GPU job.
-		 *\param[in]	job	The job to execute.
-		 *\~french
-		 *\brief		Met dans la file la tâche GPU donnée.
-		 *\param[in]	job	Le job à exécuter.
-		 */
-		C3D_API void pushGpuJob( std::function< void( RenderDevice const &, QueueData const & ) > job );
-		/**
-		 *\~english
 		 *\brief		Retrieves a colour issued from a rainbow colours iterator.
 		 *\~french
 		 *\brief		Récupère une couleur issue d'un itérateur de couleurs d'arc-en-ciel.
@@ -769,7 +760,6 @@ namespace castor3d
 		uint32_t m_lpvGridSize{ 32u };
 		uint32_t m_maxImageSize{ 0xFFFFFFFF };
 		castor::AsyncJobQueue m_cpuJobs;
-		castor::AsyncJobQueue m_gpuJobs;
 		crg::ResourceHandler m_resourceHandler;
 		shader::LightingModelFactory m_lightingModelFactory;
 		SceneUPtr m_loadingScene;

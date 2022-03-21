@@ -169,8 +169,7 @@ namespace castor3d
 		CU_Assert( getId() == 0u, "Did you forget to call Pass::cleanup ?" );
 	}
 
-	void Pass::initialise( RenderDevice const & device
-		, QueueData const & queueData )
+	void Pass::initialise()
 	{
 		for ( auto & unit : m_textureUnits )
 		{
