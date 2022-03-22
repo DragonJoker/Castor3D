@@ -33,16 +33,20 @@ namespace castor3d
 		return Values[size_t( texture )];
 	}
 
-	VkFormat getFormat( LpTexture texture )
+	VkFormat getFormat( RenderDevice const & device, LpTexture texture )
 	{
 		static std::array< VkFormat, size_t( LpTexture::eCount ) > Values
 		{
 			{
 				VK_FORMAT_D32_SFLOAT_S8_UINT,
-				VK_FORMAT_B10G11R11_UFLOAT_PACK32,
-				VK_FORMAT_B10G11R11_UFLOAT_PACK32,
-				VK_FORMAT_B10G11R11_UFLOAT_PACK32,
-				VK_FORMAT_B10G11R11_UFLOAT_PACK32,
+				device.selectSmallestFormatRGBUFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
+					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT ),
+				device.selectSmallestFormatRGBUFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
+					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT ),
+				device.selectSmallestFormatRGBUFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
+					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT ),
+				device.selectSmallestFormatRGBUFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
+					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT ),
 			}
 		};
 		return Values[size_t( texture )];

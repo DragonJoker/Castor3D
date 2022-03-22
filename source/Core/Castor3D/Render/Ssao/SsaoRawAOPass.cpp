@@ -586,12 +586,14 @@ namespace castor3d
 		, m_result{ doCreateTexture( m_graph.getHandler()
 			, m_device
 			, m_graph.getName() + "SsaoRawAOResult"
-			, VK_FORMAT_R32_SFLOAT
+			, device.selectSmallestFormatRSFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
+				| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT )
 			, m_size ) }
 		, m_bentNormals{ doCreateTexture( m_graph.getHandler()
 			, m_device
 			, m_graph.getName() + "BentNormals"
-			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, device.selectSmallestFormatRGBSFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
+				| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT )
 			, m_size ) }
 		, m_programs{ Program{ device, false, m_graph.getName() }
 			, Program{ device, true, m_graph.getName() } }

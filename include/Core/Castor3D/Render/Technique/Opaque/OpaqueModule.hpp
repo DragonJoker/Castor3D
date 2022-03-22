@@ -38,11 +38,13 @@ namespace castor3d
 	};
 	C3D_API castor::String getTextureName( DsTexture texture );
 	C3D_API castor::String getName( DsTexture texture );
-	C3D_API VkFormat getFormat( DsTexture texture );
+	C3D_API VkFormat getFormat( RenderDevice const & device, DsTexture texture );
 	C3D_API VkClearValue getClearValue( DsTexture texture );
 	C3D_API VkImageUsageFlags getUsageFlags( DsTexture texture );
 	C3D_API VkBorderColor getBorderColor( DsTexture texture );
-	inline uint32_t getMipLevels( DsTexture texture, castor::Size const & size )
+	inline uint32_t getMipLevels( RenderDevice const & device
+		, DsTexture texture
+		, castor::Size const & size )
 	{
 		return 1u;
 	}

@@ -538,6 +538,41 @@ namespace castor3d
 		return selectSuitableFormat( depthFormats, requiredFeatures );
 	}
 
+	VkFormat RenderDevice::selectSmallestFormatRSFloatFormat( VkFormatFeatureFlags requiredFeatures )const
+	{
+		std::vector< VkFormat > formats
+		{
+			VK_FORMAT_R16_SFLOAT,
+			VK_FORMAT_R32_SFLOAT,
+		};
+		return selectSuitableFormat( formats, requiredFeatures );
+	}
+
+	VkFormat RenderDevice::selectSmallestFormatRGBUFloatFormat( VkFormatFeatureFlags requiredFeatures )const
+	{
+		std::vector< VkFormat > formats
+		{
+			VK_FORMAT_B10G11R11_UFLOAT_PACK32,
+			VK_FORMAT_R16G16B16_SFLOAT,
+			VK_FORMAT_R32G32B32_SFLOAT,
+			VK_FORMAT_R16G16B16A16_SFLOAT,
+			VK_FORMAT_R32G32B32A32_SFLOAT,
+		};
+		return selectSuitableFormat( formats, requiredFeatures );
+	}
+
+	VkFormat RenderDevice::selectSmallestFormatRGBSFloatFormat( VkFormatFeatureFlags requiredFeatures )const
+	{
+		std::vector< VkFormat > formats
+		{
+			VK_FORMAT_R16G16B16_SFLOAT,
+			VK_FORMAT_R32G32B32_SFLOAT,
+			VK_FORMAT_R16G16B16A16_SFLOAT,
+			VK_FORMAT_R32G32B32A32_SFLOAT,
+		};
+		return selectSuitableFormat( formats, requiredFeatures );
+	}
+
 	VkFormat RenderDevice::selectSuitableFormat( std::vector< VkFormat > const & formats
 		, VkFormatFeatureFlags requiredFeatures )const
 	{

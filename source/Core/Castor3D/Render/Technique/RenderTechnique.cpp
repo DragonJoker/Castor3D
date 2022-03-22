@@ -362,7 +362,7 @@ namespace castor3d
 			, m_colour.getExtent()
 			, 1u
 			, 1u
-			, getFormat( DsTexture::eData0 )
+			, getFormat( m_device, DsTexture::eData0 )
 			, getUsageFlags( DsTexture::eData0 )
 			, getBorderColor( DsTexture::eData0 ) ) }
 		, m_normal{ std::make_shared< Texture >( m_device
@@ -372,7 +372,7 @@ namespace castor3d
 			, m_colour.getExtent()
 			, 1u
 			, 1u
-			, getFormat( DsTexture::eData1 )
+			, getFormat( m_device, DsTexture::eData1 )
 			, getUsageFlags( DsTexture::eData1 )
 			, getBorderColor( DsTexture::eData1 ) ) }
 		, m_matrixUbo{ m_device }
