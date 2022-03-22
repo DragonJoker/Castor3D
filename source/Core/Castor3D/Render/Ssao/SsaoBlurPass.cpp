@@ -465,7 +465,7 @@ namespace castor3d
 		, m_bentInput{ bentInput }
 		, m_config{ config }
 		, m_size{ size }
-		, m_result{ doCreateTexture( m_device, m_graph.getHandler(), m_graph.getName() + "SsaoBlur" + prefix, SsaoBlurPass::ResultFormat, m_size, axis->y != 0 ) }
+		, m_result{ doCreateTexture( m_device, m_graph.getHandler(), m_graph.getName() + "SsaoBlur" + prefix, input.getFormat(), m_size, axis->y != 0 ) }
 		, m_bentResult{ doCreateTexture( m_device, m_graph.getHandler(), m_graph.getName() + "SsaoBentNormals" + prefix, m_bentInput.getFormat(), m_size, axis->y != 0 ) }
 		, m_configurationUbo{ m_device.uboPool->getBuffer< Configuration >( 0u ) }
 		, m_programs{ Program{ device, false, m_graph.getName() }, Program{ device, true, m_graph.getName() } }

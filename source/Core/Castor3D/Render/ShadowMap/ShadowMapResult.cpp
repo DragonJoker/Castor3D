@@ -40,11 +40,11 @@ namespace castor3d
 		static std::array< VkFormat, size_t( SmTexture::eCount ) > Values
 		{
 			{
-				VK_FORMAT_D16_UNORM,			// Depth
-				VK_FORMAT_R32G32B32A32_SFLOAT,	// NormalLinear
-				VK_FORMAT_R32G32_SFLOAT,		// Variance
-				VK_FORMAT_R16G16B16A16_SFLOAT,	// Position
-				VK_FORMAT_R16G16B16A16_SFLOAT,	// Flux
+				VK_FORMAT_D16_UNORM,				// Depth
+				VK_FORMAT_R16G16B16A16_SFLOAT,		// NormalLinear
+				VK_FORMAT_R32G32_SFLOAT,			// Variance
+				VK_FORMAT_R16G16B16A16_SFLOAT,		// Position
+				VK_FORMAT_B10G11R11_UFLOAT_PACK32,	// Flux
 			}
 		};
 		return Values[size_t( texture )];

@@ -50,10 +50,6 @@ namespace castor3d
 			return 1u;
 		}
 
-	public:
-		static VkFormat constexpr VarianceFormat = VK_FORMAT_R32G32_SFLOAT;
-		static VkFormat constexpr LinearDepthFormat = VK_FORMAT_R32_SFLOAT;
-
 	private:
 		CameraSPtr m_camera;
 		crg::ImageId m_blurIntermediate;

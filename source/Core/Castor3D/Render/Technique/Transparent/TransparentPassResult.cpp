@@ -35,7 +35,7 @@ namespace castor3d
 		static std::array< VkFormat, size_t( WbTexture::eCount ) > Values
 		{
 			{
-				VK_FORMAT_D32_SFLOAT,
+				VK_FORMAT_D16_UNORM,
 				VK_FORMAT_R16G16B16A16_SFLOAT,
 				VK_FORMAT_R16_SFLOAT,
 				VK_FORMAT_R16G16B16A16_SFLOAT,
