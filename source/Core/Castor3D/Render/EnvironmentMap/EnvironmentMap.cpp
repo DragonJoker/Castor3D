@@ -48,7 +48,7 @@ namespace castor3d
 				, makeExtent3D( size )
 				, 6u * EnvironmentMap::Count
 				, uint32_t( castor::getBitSize( MapSize[0] ) )
-				, VK_FORMAT_R16G16B16A16_SFLOAT
+				, VK_FORMAT_B10G11R11_UFLOAT_PACK32
 				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 					| VK_IMAGE_USAGE_SAMPLED_BIT
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT

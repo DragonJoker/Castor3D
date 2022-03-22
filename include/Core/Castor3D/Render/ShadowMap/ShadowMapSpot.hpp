@@ -48,10 +48,6 @@ namespace castor3d
 		void doUpdate( CpuUpdater & updater )override;
 		uint32_t doGetMaxCount()const override;
 
-	public:
-		static VkFormat constexpr VarianceFormat = VK_FORMAT_R32G32_SFLOAT;
-		static VkFormat constexpr LinearDepthFormat = VK_FORMAT_R32_SFLOAT;
-
 	private:
 		crg::ImageId m_blurIntermediate;
 		crg::ImageViewId m_blurIntermediateView;
