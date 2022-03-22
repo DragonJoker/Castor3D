@@ -229,11 +229,6 @@ namespace castor3d
 			return m_buffer.getPtr();
 		}
 
-		VkDescriptorType getType()const
-		{
-			return m_buffer.getType();
-		}
-
 		LightsArray getLights( LightType type )const
 		{
 			return m_typeSortedLights[size_t( type )];

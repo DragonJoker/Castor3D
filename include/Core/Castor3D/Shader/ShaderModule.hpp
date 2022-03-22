@@ -171,14 +171,10 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Wrapper class to select between SSBO or TBO.
-	*\remarks
-	*	Allows to user either one or the other in the same way.
+	*	Helper class for SSBO.
 	*\~french
 	*\brief
-	*	Classe permettant de choisir entre SSBO et TBO.
-	*\remarks
-	*	Permet d'utiliser l'un comme l'autre de la même manière.
+	*	Classe d'aide pour un SSBO.
 	*/
 	class ShaderBuffer;
 	/**

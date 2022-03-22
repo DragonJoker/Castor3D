@@ -189,16 +189,6 @@ namespace castor3d
 		{
 			return m_buffer.getPtr();
 		}
-		/**
-		 *\~english
-		 *\return		The buffer descriptor type.
-		 *\~french
-		 *\brief		Le type de descripteur du tampon.
-		 */
-		VkDescriptorType getType()const
-		{
-			return m_buffer.getType();
-		}
 
 	private:
 		ShaderBuffer m_buffer;
