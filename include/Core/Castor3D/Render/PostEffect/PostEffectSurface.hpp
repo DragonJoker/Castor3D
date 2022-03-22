@@ -50,7 +50,7 @@ namespace castor3d
 			, QueueData const & queueData
 			, ashes::RenderPass const & renderPass
 			, castor::Size const & size
-			, VkFormat format = VK_FORMAT_R32G32B32A32_SFLOAT
+			, VkFormat format
 			, uint32_t mipLevels = 1u );
 		/**
 		 *\~english

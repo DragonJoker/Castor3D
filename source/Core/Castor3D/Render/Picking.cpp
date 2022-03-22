@@ -87,7 +87,7 @@ namespace castor3d
 			{
 				for ( int j = 0; j < int( Picking::PickingWidth ); ++j )
 				{
-					result.push_back( { BufferOffset * ashes::getMinimalSize( VK_FORMAT_R32G32B32A32_SFLOAT )
+					result.push_back( { BufferOffset * ashes::getMinimalSize( VK_FORMAT_R32G32B32A32_UINT )
 						, 0u
 						, 0u
 						, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 0u, 1u }

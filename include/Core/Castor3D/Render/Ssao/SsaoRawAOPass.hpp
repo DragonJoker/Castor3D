@@ -96,9 +96,6 @@ namespace castor3d
 		}
 		/**@}*/
 
-	public:
-		static VkFormat constexpr ResultFormat = VK_FORMAT_R32G32B32A32_SFLOAT;
-
 	private:
 		struct RenderQuad
 			: crg::RenderQuad
