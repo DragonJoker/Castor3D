@@ -85,8 +85,8 @@ namespace castor3d
 						, createFlags
 						, { size.getWidth(), size.getHeight(), 1u }
 						, layerCount
-						, getMipLevels( texture, size )
-						, getFormat( texture )
+						, getMipLevels( m_device, texture, size )
+						, getFormat( m_device, texture )
 						, getUsageFlags( texture )
 						, getBorderColor( texture ) ) );
 				}
@@ -145,8 +145,8 @@ namespace castor3d
 						, createFlags
 						, size
 						, 1u
-						, getMipLevels( texture, size )
-						, getFormat( texture )
+						, getMipLevels( m_device, texture, size )
+						, getFormat( m_device, texture )
 						, getUsageFlags( texture )
 						, getBorderColor( texture ) ) );
 				}

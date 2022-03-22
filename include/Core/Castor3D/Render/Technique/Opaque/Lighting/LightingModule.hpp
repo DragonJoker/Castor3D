@@ -82,19 +82,22 @@ namespace castor3d
 	};
 	castor::String getTextureName( LpTexture texture );
 	castor::String getName( LpTexture texture );
-	VkFormat getFormat( LpTexture texture );
+	VkFormat getFormat( RenderDevice const & device, LpTexture texture );
 	VkClearValue getClearValue( LpTexture texture );
 	VkImageUsageFlags getUsageFlags( LpTexture texture );
 	VkBorderColor getBorderColor( LpTexture texture );
-	inline uint32_t getMipLevels( LpTexture texture
+	inline uint32_t getMipLevels( RenderDevice const & device
+		, LpTexture texture
 		, castor::Size const & size )
 	{
 		return 1u;
 	}
-	inline uint32_t getMipLevels( LpTexture texture
+	inline uint32_t getMipLevels( RenderDevice const & device
+		, LpTexture texture
 		, VkExtent3D const & size )
 	{
-		return getMipLevels( texture
+		return getMipLevels( device
+			, texture
 			, castor::Size{ size.width, size.height } );
 	}
 	/**

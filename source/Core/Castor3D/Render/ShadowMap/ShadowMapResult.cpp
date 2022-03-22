@@ -35,16 +35,17 @@ namespace castor3d
 		return Values[size_t( texture )];
 	}
 
-	VkFormat getFormat( SmTexture texture )
+	VkFormat getFormat( RenderDevice const & device, SmTexture texture )
 	{
 		static std::array< VkFormat, size_t( SmTexture::eCount ) > Values
 		{
 			{
-				VK_FORMAT_D16_UNORM,				// Depth
-				VK_FORMAT_R16G16B16A16_SFLOAT,		// NormalLinear
-				VK_FORMAT_R32G32_SFLOAT,			// Variance
-				VK_FORMAT_R16G16B16A16_SFLOAT,		// Position
-				VK_FORMAT_B10G11R11_UFLOAT_PACK32,	// Flux
+				VK_FORMAT_D16_UNORM,							// Depth
+				VK_FORMAT_R16G16B16A16_SFLOAT,					// NormalLinear
+				VK_FORMAT_R32G32_SFLOAT,						// Variance
+				VK_FORMAT_R16G16B16A16_SFLOAT,					// Position
+				device.selectSmallestFormatRGBUFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
+					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT ),	// Flux
 			}
 		};
 		return Values[size_t( texture )];
@@ -97,10 +98,13 @@ namespace castor3d
 		return Values[size_t( texture )];
 	}
 
-	uint32_t getMipLevels( SmTexture texture, castor::Size const & size )
+	uint32_t getMipLevels( RenderDevice const & device
+		, SmTexture texture
+		, castor::Size const & size )
 	{
 		return texture == SmTexture::eVariance
-			? getMipLevels( VkExtent3D{ size.getWidth(), size.getHeight(), 1u }, getFormat( texture ) )
+			? getMipLevels( VkExtent3D{ size.getWidth(), size.getHeight(), 1u }
+				, getFormat( device, texture ) )
 			: 1u;
 	}
 
