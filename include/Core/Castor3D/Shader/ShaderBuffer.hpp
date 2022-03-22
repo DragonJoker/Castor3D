@@ -23,20 +23,17 @@ namespace castor3d
 		 *\param[in]	device		The GPU device.
 		 *\param[in]	size		The buffer size.
 		 *\param[in]	name		The shader buffer name.
-		 *\param[in]	tboFormat	The format wanted for the TBO.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
 		 *\param[in]	device		Le device GPU.
 		 *\param[in]	size		La taille du tampon.
 		 *\param[in]	name		Le nom du tampon shader.
-		 *\param[in]	tboFormat	Le format voulu pour le TBO.
 		 */
 		C3D_API ShaderBuffer( Engine & engine
 			, RenderDevice const & device
 			, uint32_t size
-			, castor::String name
-			, VkFormat tboFormat = VK_FORMAT_R32G32B32A32_SFLOAT );
+			, castor::String name );
 		/**
 		 *\~english
 		 *\brief		Updates the buffer.
@@ -130,11 +127,6 @@ namespace castor3d
 			return m_size;
 		}
 
-		VkDescriptorType getType()const
-		{
-			return m_type;
-		}
-
 		RenderDevice const & getDevice()const
 		{
 			return m_device;
@@ -150,11 +142,8 @@ namespace castor3d
 		RenderDevice const & m_device;
 		VkDeviceSize m_size;
 		ashes::BufferBasePtr m_buffer;
-		ashes::BufferViewPtr m_bufferView;
 		ashes::StagingBufferPtr m_staging;
-		VkDescriptorType m_type;
 		uint8_t * m_data;
-		VkAccessFlags m_targetAccess;
 	};
 }
 
