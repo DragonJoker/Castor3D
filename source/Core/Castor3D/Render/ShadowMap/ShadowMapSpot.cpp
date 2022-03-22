@@ -122,7 +122,7 @@ namespace castor3d
 		, m_blurIntermediate{ handler.createImageId( crg::ImageData{ "SpotGB"
 			, 0u
 			, VK_IMAGE_TYPE_2D
-			, getFormat( SmTexture::eVariance )
+			, getFormat( device, SmTexture::eVariance )
 			, ( *m_result.begin() )->getExtent()
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT

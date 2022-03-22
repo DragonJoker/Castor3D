@@ -41,15 +41,19 @@ namespace castor3d
 	C3D_API castor::String getTextureName( LightType light
 		, SmTexture texture );
 	C3D_API castor::String getName( SmTexture texture );
-	C3D_API VkFormat getFormat( SmTexture texture );
+	C3D_API VkFormat getFormat( RenderDevice const & device, SmTexture texture );
 	C3D_API VkClearValue getClearValue( SmTexture texture );
 	C3D_API VkImageUsageFlags getUsageFlags( SmTexture texture );
 	C3D_API VkBorderColor getBorderColor( SmTexture texture );
-	C3D_API uint32_t getMipLevels( SmTexture texture, castor::Size const & size );
-	inline uint32_t getMipLevels( SmTexture texture
+	C3D_API uint32_t getMipLevels( RenderDevice const & device
+		, SmTexture texture
+		, castor::Size const & size );
+	inline uint32_t getMipLevels( RenderDevice const & device
+		, SmTexture texture
 		, VkExtent3D const & size )
 	{
-		return getMipLevels( texture
+		return getMipLevels( device
+			, texture
 			, castor::Size{ size.width, size.height } );
 	}
 	/**
