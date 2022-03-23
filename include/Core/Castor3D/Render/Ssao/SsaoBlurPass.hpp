@@ -63,7 +63,8 @@ namespace castor3d
 			, castor::Point2i const & axis
 			, Texture const & input
 			, Texture const & bentInput
-			, Texture const & normals );
+			, Texture const & normals
+			, uint32_t const & passIndex );
 		C3D_API ~SsaoBlurPass();
 		/**
 		 *\~english

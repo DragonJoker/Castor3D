@@ -134,6 +134,8 @@ namespace GuiCommon
 					, m_aabbMesh.lock()->getName()
 					, *m_scene.getObjectRootNode()
 					, m_object->getBoundingBox() );
+				m_aabbNode->setScale( { 1.0f, 1.0f, 1.0f } );
+				m_aabbNode->setPosition( {} );
 				m_obbNode = doAddBB( m_obbMesh
 					, m_obbMesh.lock()->getName()
 					, *object.getParent()
@@ -260,7 +262,7 @@ namespace GuiCommon
 
 	void CubeBoxManager::onSceneUpdate( castor3d::Scene const & scene )
 	{
-		if ( m_aabbNode->isVisible() && m_aabbNode->isDisplayable() )
+		if ( m_aabbNode )
 		{
 			auto & obb = m_object->getBoundingBox();
 
@@ -294,31 +296,27 @@ namespace GuiCommon
 				}
 			}
 
-			if ( m_aabbNode )
-			{
-				m_aabbNode->setScale( { 1.0f, 1.0f, 1.0f } );
-				auto aabb = obb.getAxisAligned( m_object->getParent()->getDerivedTransformationMatrix() );
-				auto aabbMin = aabb.getMin();
-				auto aabbMax = aabb.getMax();
-				auto aabbSubmesh = m_aabbMesh.lock()->getSubmesh( 0u );
-				aabbSubmesh->getPoint( 0u ).pos = Point3f( aabbMin[0], aabbMin[1], aabbMin[2] );
-				aabbSubmesh->getPoint( 1u ).pos = Point3f( aabbMin[0], aabbMax[1], aabbMin[2] );
-				aabbSubmesh->getPoint( 2u ).pos = Point3f( aabbMax[0], aabbMax[1], aabbMin[2] );
-				aabbSubmesh->getPoint( 3u ).pos = Point3f( aabbMax[0], aabbMin[1], aabbMin[2] );
-				aabbSubmesh->getPoint( 4u ).pos = Point3f( aabbMin[0], aabbMin[1], aabbMax[2] );
-				aabbSubmesh->getPoint( 5u ).pos = Point3f( aabbMin[0], aabbMax[1], aabbMax[2] );
-				aabbSubmesh->getPoint( 6u ).pos = Point3f( aabbMax[0], aabbMax[1], aabbMax[2] );
-				aabbSubmesh->getPoint( 7u ).pos = Point3f( aabbMax[0], aabbMin[1], aabbMax[2] );
-				aabbSubmesh->needsUpdate();
+			auto aabb = obb.getAxisAligned( m_object->getParent()->getDerivedTransformationMatrix() );
+			auto aabbMin = aabb.getMin();
+			auto aabbMax = aabb.getMax();
+			auto aabbSubmesh = m_aabbMesh.lock()->getSubmesh( 0u );
+			aabbSubmesh->getPoint( 0u ).pos = Point3f( aabbMin->x, aabbMin->y, aabbMin->z );
+			aabbSubmesh->getPoint( 1u ).pos = Point3f( aabbMin->x, aabbMax->y, aabbMin->z );
+			aabbSubmesh->getPoint( 2u ).pos = Point3f( aabbMax->x, aabbMax->y, aabbMin->z );
+			aabbSubmesh->getPoint( 3u ).pos = Point3f( aabbMax->x, aabbMin->y, aabbMin->z );
+			aabbSubmesh->getPoint( 4u ).pos = Point3f( aabbMin->x, aabbMin->y, aabbMax->z );
+			aabbSubmesh->getPoint( 5u ).pos = Point3f( aabbMin->x, aabbMax->y, aabbMax->z );
+			aabbSubmesh->getPoint( 6u ).pos = Point3f( aabbMax->x, aabbMax->y, aabbMax->z );
+			aabbSubmesh->getPoint( 7u ).pos = Point3f( aabbMax->x, aabbMin->y, aabbMax->z );
+			aabbSubmesh->needsUpdate();
 
-				Engine * engine = m_scene.getEngine();
-				engine->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-					, [aabbSubmesh]( RenderDevice const & device
-						, QueueData const & queueData )
-					{
-						aabbSubmesh->update();
-					} ) );
-			}
+			Engine * engine = m_scene.getEngine();
+			engine->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [aabbSubmesh]( RenderDevice const & device
+					, QueueData const & queueData )
+				{
+					aabbSubmesh->update();
+				} ) );
 		}
 	}
 }

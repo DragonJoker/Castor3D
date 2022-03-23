@@ -53,7 +53,8 @@ namespace castor3d
 			, m_ssaoConfigUbo
 			, m_gpInfoUbo
 			, m_linearisePass->getResult()
-			, normal ) }
+			, normal
+			, m_passIndex ) }
 #if !C3D_DebugRawPass
 		, m_horizontalBlur{ castor::makeUnique< SsaoBlurPass >( m_group
 			, m_device
@@ -67,7 +68,8 @@ namespace castor3d
 			, castor::Point2i{ 1, 0 }
 			, m_rawAoPass->getResult()
 			, m_rawAoPass->getBentResult()
-			, normal ) }
+			, normal
+			, m_passIndex ) }
 		, m_verticalBlur{ castor::makeUnique< SsaoBlurPass >( m_group
 			, m_device
 			, progress
@@ -80,7 +82,8 @@ namespace castor3d
 			, castor::Point2i{ 0, 1 }
 			, m_horizontalBlur->getResult()
 			, m_horizontalBlur->getBentResult()
-			, normal ) }
+			, normal
+			, m_passIndex ) }
 		, m_lastPass{ &m_verticalBlur->getLastPass() }
 #else
 		, m_lastPass{ &m_rawAoPass->getLastPass() }
@@ -91,6 +94,7 @@ namespace castor3d
 	void SsaoPass::update( CpuUpdater & updater )
 	{
 		m_linearisePass->update( updater );
+		m_passIndex = m_ssaoConfig.useNormalsBuffer ? 1u : 0u;
 		m_ssaoConfigUbo.cpuUpdate( m_ssaoConfig, *updater.camera );
 #if !C3D_DebugRawPass
 		m_horizontalBlur->update( updater );

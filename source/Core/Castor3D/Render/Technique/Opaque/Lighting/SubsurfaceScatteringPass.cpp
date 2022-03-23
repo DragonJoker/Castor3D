@@ -338,7 +338,7 @@ namespace castor3d
 			crg::rq::Config result;
 			result.texcoordConfig( crg::Texcoord{} );
 			result.renderSize( makeExtent2D( size ) );
-			result.programs( { crg::makeVkArray< VkPipelineShaderStageCreateInfo >( shaderStages ) } );
+			result.program( crg::makeVkArray< VkPipelineShaderStageCreateInfo >( shaderStages ) );
 			result.enabled( enabled );
 			return result;
 		}

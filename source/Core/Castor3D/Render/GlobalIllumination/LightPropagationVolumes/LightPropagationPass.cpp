@@ -519,7 +519,7 @@ namespace castor3d
 			, context
 			, graph
 			, crg::pp::Config{}
-				.programs( { crg::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) } )
+				.program( crg::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 			, gridSize
 			, blendMode }
 	{

@@ -760,7 +760,7 @@ namespace castor3d
 			ashes::DescriptorSetLayoutPtr layout;
 			ashes::DescriptorSetPtr set;
 		};
-		std::array< PassDescriptors, size_t( RenderNodeType::eCount ) > m_additionalDescriptors;
+		std::map< size_t, PassDescriptors > m_additionalDescriptors;
 
 	private:
 		std::vector< RenderPipelineUPtr > m_frontPipelines;
