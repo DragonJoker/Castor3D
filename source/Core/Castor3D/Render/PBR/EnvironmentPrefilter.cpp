@@ -20,17 +20,15 @@
 
 #include <RenderGraph/ResourceHandler.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace envpref
 	{
-		Texture doCreatePrefilteredTexture( RenderDevice const & device
+		static Texture doCreatePrefilteredTexture( RenderDevice const & device
 			, crg::ResourceHandler & handler
-			, Size const & size )
+			, castor::Size const & size )
 		{
 			Texture result{ device
 				, handler
@@ -45,12 +43,12 @@ namespace castor3d
 			return result;
 		}
 
-		SamplerResPtr doCreateSampler( Engine & engine
+		static SamplerResPtr doCreateSampler( Engine & engine
 			, RenderDevice const & device
 			, uint32_t maxLod )
 		{
 			SamplerResPtr result;
-			StringStream stream = makeStringStream();
+			auto stream = castor::makeStringStream();
 			stream << cuT( "IblTexturesPrefiltered_" ) << maxLod;
 			auto name = stream.str();
 
@@ -76,7 +74,7 @@ namespace castor3d
 			return result;
 		}
 
-		ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device
+		static ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device
 			, VkExtent2D const & size
 			, uint32_t mipLevel )
 		{
@@ -135,7 +133,7 @@ namespace castor3d
 							, a2 );
 						auto denom = writer.declLocale( "denom"
 							, fma( NdotH2, a2 - 1.0_f, 1.0_f ) );
-						denom = denom * denom * Float{ Pi< float > };
+						denom = denom * denom * Float{ castor::Pi< float > };
 
 						writer.returnStmt( nom / denom );
 					}
@@ -180,7 +178,7 @@ namespace castor3d
 							, a * a );
 
 						auto phi = writer.declLocale( "phi"
-							, Float{ PiMult2< float > } * xi.x() );
+							, Float{ castor::PiMult2< float > } * xi.x() );
 						auto cosTheta = writer.declLocale( "cosTheta"
 							, sqrt( ( 1.0_f - xi.y() ) / ( 1.0_f + ( a2 - 1.0_f ) * xi.y() ) ) );
 						auto sinTheta = writer.declLocale( "sinTheta"
@@ -254,7 +252,7 @@ namespace castor3d
 								auto resolution = writer.declLocale( "resolution"
 									, Float( float( size.width ) ) ); // resolution of source cubemap (per face)
 								auto saTexel = writer.declLocale( "saTexel"
-									, Float{ 4.0f * Pi< float > } / ( 6.0_f * resolution * resolution ) );
+									, Float{ 4.0f * castor::Pi< float > } / ( 6.0_f * resolution * resolution ) );
 								auto saSample = writer.declLocale( "saSample"
 									, 1.0_f / ( writer.cast< Float >( sampleCount ) * pdf + 0.0001_f ) );
 								auto mipLevel = writer.declLocale( "mipLevel"
@@ -283,7 +281,7 @@ namespace castor3d
 			};
 		}
 
-		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
+		static ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
 			, VkFormat format )
 		{
 			ashes::VkAttachmentDescriptionArray attaches
@@ -356,7 +354,7 @@ namespace castor3d
 	{
 		for ( auto face = 0u; face < 6u; ++face )
 		{
-			auto name = "EnvironmentPrefilterL" + string::toString( face ) + "M" + string::toString( mipLevel );
+			auto name = "EnvironmentPrefilterL" + castor::string::toString( face ) + "M" + castor::string::toString( mipLevel );
 			auto & facePass = m_frameBuffers[face];
 			// Create the views.
 			auto data = *dstTexture.wholeViewId.data;
@@ -381,8 +379,8 @@ namespace castor3d
 		}
 
 		createPipelines( size
-			, Position{}
-			, doCreateProgram( m_device, originalSize, mipLevel )
+			, castor::Position{}
+			, envpref::doCreateProgram( m_device, originalSize, mipLevel )
 			, srcView
 			, renderPass
 			, {} );
@@ -432,9 +430,9 @@ namespace castor3d
 		, m_srcView{ srcTexture }
 		, m_srcImage{ std::make_unique< ashes::Image >( *device, m_srcView.image, m_srcView.imageId.data->info ) }
 		, m_srcImageView{ m_srcImage->createView( "EnvironmentPrefilterSrc", VK_IMAGE_VIEW_TYPE_CUBE, srcTexture.getFormat(), 0u, m_srcView.getMipLevels(), 0u, 6u ) }
-		, m_result{ doCreatePrefilteredTexture( m_device, engine.getGraphResourceHandler(), size ) }
-		, m_sampler{ doCreateSampler( engine, m_device, m_result.getMipLevels() - 1u ) }
-		, m_renderPass{ doCreateRenderPass( m_device, m_result.getFormat() ) }
+		, m_result{ envpref::doCreatePrefilteredTexture( m_device, engine.getGraphResourceHandler(), size ) }
+		, m_sampler{ envpref::doCreateSampler( engine, m_device, m_result.getMipLevels() - 1u ) }
+		, m_renderPass{ envpref::doCreateRenderPass( m_device, m_result.getFormat() ) }
 	{
 		VkExtent2D originalSize{ size.getWidth(), size.getHeight() };
 		auto data = m_device.graphicsData();

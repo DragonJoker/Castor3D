@@ -7,8 +7,6 @@
 
 #include <ShaderWriter/Source.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
 	LightCategory::LightCategory( LightType lightType, Light & light )

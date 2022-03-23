@@ -16,11 +16,9 @@
 
 #include <numeric>
 
-using namespace castor;
-
 namespace light_streaks
 {
-	namespace
+	namespace combine
 	{
 		enum Idx
 		{
@@ -28,7 +26,7 @@ namespace light_streaks
 			KawaseMapIdx,
 		};
 
-		std::unique_ptr< ast::Shader > getVertexProgram()
+		static std::unique_ptr< ast::Shader > getVertexProgram()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -49,7 +47,7 @@ namespace light_streaks
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > getPixelProgram()
+		static std::unique_ptr< ast::Shader > getPixelProgram()
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -75,8 +73,8 @@ namespace light_streaks
 
 	//*********************************************************************************************
 
-	String const CombinePass::CombineMapScene = cuT( "c3d_mapScene" );
-	String const CombinePass::CombineMapKawase = cuT( "c3d_mapKawase" );
+	castor::String const CombinePass::CombineMapScene = cuT( "c3d_mapScene" );
+	castor::String const CombinePass::CombineMapKawase = cuT( "c3d_mapKawase" );
 
 	CombinePass::CombinePass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
@@ -85,8 +83,8 @@ namespace light_streaks
 		, crg::ImageViewIdArray const & kawaseViews
 		, VkExtent2D const & size
 		, bool const * enabled )
-		: m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LightStreaksCombine", getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LightStreaksCombine", getPixelProgram() }
+		: m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LightStreaksCombine", combine::getVertexProgram() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LightStreaksCombine", combine::getPixelProgram() }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_resultImg{ graph.createImage( crg::ImageData{ "LSComb"
@@ -136,11 +134,11 @@ namespace light_streaks
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
 		m_pass.addDependency( previousPass );
 		m_pass.addSampledView( sceneView
-			, SceneMapIdx
+			, combine::SceneMapIdx
 			, {}
 			, linearSampler );
 		m_pass.addSampledView( m_pass.mergeViews( kawaseViews )
-			, KawaseMapIdx
+			, combine::KawaseMapIdx
 			, {}
 			, linearSampler );
 		m_pass.addOutputColourView( m_resultView );

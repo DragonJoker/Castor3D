@@ -40,7 +40,7 @@ namespace castor3d
 	};
 	C3D_API castor::String getTextureName( LightType light
 		, SmTexture texture );
-	C3D_API castor::String getName( SmTexture texture );
+	C3D_API castor::String getTexName( SmTexture texture );
 	C3D_API VkFormat getFormat( RenderDevice const & device, SmTexture texture );
 	C3D_API VkClearValue getClearValue( SmTexture texture );
 	C3D_API VkImageUsageFlags getUsageFlags( SmTexture texture );

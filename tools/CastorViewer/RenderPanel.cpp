@@ -22,24 +22,21 @@
 
 #include <wx/display.h>
 
-using namespace castor3d;
-using namespace castor;
-
 CU_ImplementCUSmartPtr( CastorViewer, MouseNodeEvent )
 CU_ImplementCUSmartPtr( CastorViewer, TranslateNodeEvent )
 
 namespace CastorViewer
 {
-	namespace
+	namespace panel
 	{
 		static const float MAX_CAM_SPEED = 10.0f;
 		static const float DEF_CAM_SPEED = 0.5f;
 		static const float MIN_CAM_SPEED = 0.05f;
 		static const float CAM_SPEED_INC = 0.9f;
 
-		KeyboardKey doConvertKeyCode( int code )
+		static castor3d::KeyboardKey doConvertKeyCode( int code )
 		{
-			KeyboardKey result = KeyboardKey::eNone;
+			castor3d::KeyboardKey result = castor3d::KeyboardKey::eNone;
 
 			if ( code < 0x20 )
 			{
@@ -49,28 +46,28 @@ namespace CastorViewer
 				case WXK_TAB:
 				case WXK_RETURN:
 				case WXK_ESCAPE:
-					result = KeyboardKey( code );
+					result = castor3d::KeyboardKey( code );
 					break;
 				}
 			}
 			else if ( code == 0x7F )
 			{
-				result = KeyboardKey::eDelete;
+				result = castor3d::KeyboardKey::eDelete;
 			}
 			else if ( code > 0xFF )
 			{
-				result = KeyboardKey( code + int( KeyboardKey::eStart ) - WXK_START );
+				result = castor3d::KeyboardKey( code + int( castor3d::KeyboardKey::eStart ) - WXK_START );
 			}
 			else
 			{
 				// ASCII or extended ASCII character
-				result = KeyboardKey( code );
+				result = castor3d::KeyboardKey( code );
 			}
 
 			return result;
 		}
 
-		std::array< wxTimer *, eTIMER_ID_COUNT > createTimers( wxWindow * window )
+		static std::array< wxTimer *, eTIMER_ID_COUNT > createTimers( wxWindow * window )
 		{
 			std::array< wxTimer *, eTIMER_ID_COUNT > result;
 			result[0] = nullptr;
@@ -90,11 +87,11 @@ namespace CastorViewer
 		, wxSize const & size
 		, long style )
 		: wxPanel( parent, id, pos, size, style )
-		, m_timers{ createTimers( this ) }
+		, m_timers{ panel::createTimers( this ) }
 		, m_cursorArrow{ new wxCursor( wxCURSOR_ARROW ) }
 		, m_cursorHand{ new wxCursor( wxCURSOR_HAND ) }
 		, m_cursorNone{ new wxCursor( wxCURSOR_BLANK ) }
-		, m_camSpeed( DEF_CAM_SPEED, Range< float >{ MIN_CAM_SPEED, MAX_CAM_SPEED } )
+		, m_camSpeed( panel::DEF_CAM_SPEED, castor::Range< float >{ panel::MIN_CAM_SPEED, panel::MAX_CAM_SPEED } )
 	{
 		m_renderWindow = std::make_unique< castor3d::RenderWindow >( cuT( "RenderPanel" )
 			, *wxGetApp().getCastor()
@@ -177,7 +174,7 @@ namespace CastorViewer
 	void RenderPanel::doResetTimers()
 	{
 		doStopTimer( eTIMER_ID_COUNT );
-		m_camSpeed = DEF_CAM_SPEED;
+		m_camSpeed = panel::DEF_CAM_SPEED;
 		m_x = 0.0f;
 		m_y = 0.0f;
 		m_oldX = 0.0f;
@@ -228,7 +225,7 @@ namespace CastorViewer
 
 		if ( m_currentState )
 		{
-			m_currentState->reset( DEF_CAM_SPEED );
+			m_currentState->reset( panel::DEF_CAM_SPEED );
 		}
 	}
 
@@ -250,11 +247,11 @@ namespace CastorViewer
 		if ( camera )
 		{
 			auto cameraNode = camera->getParent();
-			camera->getScene()->getListener().postEvent( makeCpuFunctorEvent( EventType::ePostRender
+			camera->getScene()->getListener().postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
 				, [cameraNode]()
 				{
-					Quaternion orientation{ cameraNode->getOrientation() };
-					orientation *= Quaternion::fromAxisAngle( castor::Point3f{ 1.0f, 0.0f, 0.0f }, 90.0_degrees );
+					castor::Quaternion orientation{ cameraNode->getOrientation() };
+					orientation *= castor::Quaternion::fromAxisAngle( castor::Point3f{ 1.0f, 0.0f, 0.0f }, 90.0_degrees );
 					cameraNode->setOrientation( orientation );
 				} ) );
 		}
@@ -341,7 +338,7 @@ namespace CastorViewer
 		auto oldSubmesh = m_selectedSubmesh;
 		auto oldGeometry = m_selectedGeometry;
 		bool changed = false;
-		SceneRPtr scene = geometry ? geometry->getScene() : nullptr;
+		castor3d::SceneRPtr scene = geometry ? geometry->getScene() : nullptr;
 
 		if ( oldGeometry != geometry )
 		{
@@ -375,7 +372,7 @@ namespace CastorViewer
 
 		if ( changed )
 		{
-			scene->getListener().postEvent( makeCpuFunctorEvent( EventType::ePostRender
+			scene->getListener().postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
 				, [scene]()
 				{
 					scene->setChanged();
@@ -394,7 +391,7 @@ namespace CastorViewer
 		m_currentState = &doAddNodeState( m_currentNode, false );
 	}
 
-	GuiCommon::NodeState & RenderPanel::doAddNodeState( SceneNodeRPtr node
+	GuiCommon::NodeState & RenderPanel::doAddNodeState( castor3d::SceneNodeRPtr node
 		, bool camera )
 	{
 		auto it = m_nodesStates.find( node->getName() );
@@ -570,7 +567,7 @@ namespace CastorViewer
 	{
 		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
-		if ( !inputListener || !inputListener->fireKeydown( doConvertKeyCode( p_event.GetKeyCode() ), p_event.ControlDown(), p_event.AltDown(), p_event.ShiftDown() ) )
+		if ( !inputListener || !inputListener->fireKeydown( panel::doConvertKeyCode( p_event.GetKeyCode() ), p_event.ControlDown(), p_event.AltDown(), p_event.ShiftDown() ) )
 		{
 			switch ( p_event.GetKeyCode() )
 			{
@@ -623,7 +620,7 @@ namespace CastorViewer
 	{
 		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
-		if ( !inputListener || !inputListener->fireKeyUp( doConvertKeyCode( p_event.GetKeyCode() ), p_event.ControlDown(), p_event.AltDown(), p_event.ShiftDown() ) )
+		if ( !inputListener || !inputListener->fireKeyUp( panel::doConvertKeyCode( p_event.GetKeyCode() ), p_event.ControlDown(), p_event.AltDown(), p_event.ShiftDown() ) )
 		{
 			switch ( p_event.GetKeyCode() )
 			{
@@ -709,7 +706,7 @@ namespace CastorViewer
 			wxChar key = p_event.GetUnicodeKey();
 			wxString tmp;
 			tmp << key;
-			inputListener->fireChar( doConvertKeyCode( p_event.GetKeyCode() ), String( tmp.mb_str( wxConvUTF8 ) ) );
+			inputListener->fireChar( panel::doConvertKeyCode( p_event.GetKeyCode() ), castor::String( tmp.mb_str( wxConvUTF8 ) ) );
 		}
 
 		p_event.Skip();
@@ -748,7 +745,7 @@ namespace CastorViewer
 
 		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
-		if ( !inputListener || !inputListener->fireMouseButtonPushed( MouseButton::eLeft ) )
+		if ( !inputListener || !inputListener->fireMouseButtonPushed( castor3d::MouseButton::eLeft ) )
 		{
 			if ( m_currentState )
 			{
@@ -769,7 +766,7 @@ namespace CastorViewer
 
 		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
-		if ( !inputListener || !inputListener->fireMouseButtonReleased( MouseButton::eLeft ) )
+		if ( !inputListener || !inputListener->fireMouseButtonReleased( castor3d::MouseButton::eLeft ) )
 		{
 			doStopTimer( eTIMER_ID_MOUSE );
 		}
@@ -787,17 +784,17 @@ namespace CastorViewer
 
 		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
-		if ( !inputListener || !inputListener->fireMouseButtonPushed( MouseButton::eMiddle ) )
+		if ( !inputListener || !inputListener->fireMouseButtonPushed( castor3d::MouseButton::eMiddle ) )
 		{
 			auto x = m_oldX;
 			auto y = m_oldY;
-			m_listener->postEvent( makeCpuFunctorEvent( EventType::ePreRender
+			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePreRender
 				, [this, x, y]()
 				{
-					auto type = m_renderWindow->pick( Position{ int( x ), int( y ) } );
+					auto type = m_renderWindow->pick( castor::Position{ int( x ), int( y ) } );
 
-					if ( type != PickNodeType::eNone
-						&& type != PickNodeType::eBillboard )
+					if ( type != castor3d::PickNodeType::eNone
+						&& type != castor3d::PickNodeType::eBillboard )
 					{
 						doUpdateSelectedGeometry( m_renderWindow->getPickedGeometry(), m_renderWindow->getPickedSubmesh() );
 					}
@@ -823,7 +820,7 @@ namespace CastorViewer
 
 		if ( inputListener  )
 		{
-			inputListener->fireMouseButtonReleased( MouseButton::eMiddle );
+			inputListener->fireMouseButtonReleased( castor3d::MouseButton::eMiddle );
 		}
 
 		p_event.Skip();
@@ -841,7 +838,7 @@ namespace CastorViewer
 
 		if ( inputListener  )
 		{
-			inputListener->fireMouseButtonPushed( MouseButton::eRight );
+			inputListener->fireMouseButtonPushed( castor3d::MouseButton::eRight );
 		}
 
 		p_event.Skip();
@@ -859,7 +856,7 @@ namespace CastorViewer
 
 		if ( inputListener  )
 		{
-			inputListener->fireMouseButtonReleased( MouseButton::eRight );
+			inputListener->fireMouseButtonReleased( castor3d::MouseButton::eRight );
 		}
 
 		p_event.Skip();
@@ -870,7 +867,7 @@ namespace CastorViewer
 		m_x = doTransformX( p_event.GetX() );
 		m_y = doTransformY( p_event.GetY() );
 
-		if ( !wxGetApp().getCastor()->fireMouseMove( Position{ int32_t( m_x ), int32_t( m_y ) } ) )
+		if ( !wxGetApp().getCastor()->fireMouseMove( castor::Position{ int32_t( m_x ), int32_t( m_y ) } ) )
 		{
 			if ( m_currentState )
 			{
@@ -909,15 +906,15 @@ namespace CastorViewer
 
 		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
-		if ( !inputListener || !inputListener->fireMouseWheel( Position( 0, wheelRotation ) ) )
+		if ( !inputListener || !inputListener->fireMouseWheel( castor::Position( 0, wheelRotation ) ) )
 		{
 			if ( wheelRotation < 0 )
 			{
-				m_camSpeed *= CAM_SPEED_INC;
+				m_camSpeed *= panel::CAM_SPEED_INC;
 			}
 			else
 			{
-				m_camSpeed /= CAM_SPEED_INC;
+				m_camSpeed /= panel::CAM_SPEED_INC;
 			}
 
 			if ( m_currentState )

@@ -12,12 +12,9 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
-using namespace castor;
-using namespace castor3d;
-
 namespace CastorGui
 {
-	ComboBoxCtrl::ComboBoxCtrl( String const & name
+	ComboBoxCtrl::ComboBoxCtrl( castor::String const & name
 		, ComboBoxStyle * style
 		, ControlRPtr parent
 		, uint32_t id )
@@ -34,7 +31,7 @@ namespace CastorGui
 	{
 	}
 
-	ComboBoxCtrl::ComboBoxCtrl( String const & name
+	ComboBoxCtrl::ComboBoxCtrl( castor::String const & name
 		, ComboBoxStyle * style
 		, ControlRPtr parent
 		, uint32_t id
@@ -88,11 +85,11 @@ namespace CastorGui
 
 		auto text = getEngine().getOverlayCache().add( cuT( "T_CtrlCombo_" ) + castor::string::toString( getId() )
 			, getEngine()
-			, OverlayType::eText
+			, castor3d::OverlayType::eText
 			, nullptr
 			, &getBackground()->getOverlay() ).lock()->getTextOverlay();
-		text->setPixelSize( Size( getSize().getWidth() - getSize().getHeight(), getSize().getHeight() ) );
-		text->setVAlign( VAlign::eCenter );
+		text->setPixelSize( castor::Size( getSize().getWidth() - getSize().getHeight(), getSize().getHeight() ) );
+		text->setVAlign( castor3d::VAlign::eCenter );
 		m_text = text;
 
 		doUpdateStyle();
@@ -211,7 +208,7 @@ namespace CastorGui
 
 	void ComboBoxCtrl::doSetPosition( castor::Position const & p_value )
 	{
-		TextOverlaySPtr text = m_text.lock();
+		castor3d::TextOverlaySPtr text = m_text.lock();
 
 		if ( text )
 		{
@@ -219,13 +216,13 @@ namespace CastorGui
 			text.reset();
 		}
 
-		m_expand->setPosition( Position( int32_t( getSize().getWidth() - getSize().getHeight() ), 0 ) );
-		m_choices->setPosition( Position( 0, int32_t( getSize().getHeight() ) ) );
+		m_expand->setPosition( castor::Position( int32_t( getSize().getWidth() - getSize().getHeight() ), 0 ) );
+		m_choices->setPosition( castor::Position( 0, int32_t( getSize().getHeight() ) ) );
 	}
 
 	void ComboBoxCtrl::doSetSize( castor::Size const & p_value )
 	{
-		TextOverlaySPtr text = m_text.lock();
+		castor3d::TextOverlaySPtr text = m_text.lock();
 
 		if ( text )
 		{
@@ -233,10 +230,10 @@ namespace CastorGui
 			text.reset();
 		}
 
-		m_expand->setSize( Size( p_value.getHeight(), p_value.getHeight() ) );
-		m_choices->setSize( Size( p_value.getWidth() - p_value.getHeight(), ~( 0u ) ) );
-		m_expand->setPosition( Position( int32_t( p_value.getWidth() - p_value.getHeight() ), 0 ) );
-		m_choices->setPosition( Position( 0, int32_t( p_value.getHeight() ) ) );
+		m_expand->setSize( castor::Size( p_value.getHeight(), p_value.getHeight() ) );
+		m_choices->setSize( castor::Size( p_value.getWidth() - p_value.getHeight(), ~( 0u ) ) );
+		m_expand->setPosition( castor::Position( int32_t( p_value.getWidth() - p_value.getHeight() ), 0 ) );
+		m_choices->setPosition( castor::Position( 0, int32_t( p_value.getHeight() ) ) );
 	}
 
 	bool ComboBoxCtrl::doCatchesMouseEvents()const
@@ -244,19 +241,19 @@ namespace CastorGui
 		return false;
 	}
 
-	void ComboBoxCtrl::onKeyDown( KeyboardEvent const & p_event )
+	void ComboBoxCtrl::onKeyDown( castor3d::KeyboardEvent const & p_event )
 	{
 		if ( getSelected() != -1 )
 		{
 			bool changed = false;
 			int index = getSelected();
 
-			if ( p_event.getKey() == KeyboardKey::eUp )
+			if ( p_event.getKey() == castor3d::KeyboardKey::eUp )
 			{
 				index--;
 				changed = true;
 			}
-			else if ( p_event.getKey() == KeyboardKey::edown )
+			else if ( p_event.getKey() == castor3d::KeyboardKey::edown )
 			{
 				index++;
 				changed = true;
@@ -271,7 +268,7 @@ namespace CastorGui
 		}
 	}
 
-	void ComboBoxCtrl::onNcKeyDown( ControlSPtr p_control, KeyboardEvent const & p_event )
+	void ComboBoxCtrl::onNcKeyDown( ControlSPtr p_control, castor3d::KeyboardEvent const & p_event )
 	{
 		onKeyDown( p_event );
 	}
@@ -292,7 +289,7 @@ namespace CastorGui
 		if ( p_selected >= 0 )
 		{
 			doSwitchExpand();
-			TextOverlaySPtr text = m_text.lock();
+			castor3d::TextOverlaySPtr text = m_text.lock();
 
 			if ( text )
 			{

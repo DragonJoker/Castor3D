@@ -41,13 +41,11 @@ CU_ImplementCUSmartPtr( castor3d, OverlayRenderer )
 
 #pragma GCC diagnostic ignored "-Wclass-memaccess"
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace ovrlrend
 	{
 		static uint32_t constexpr MaxPanelsPerBuffer = 100u;
 
@@ -63,7 +61,7 @@ namespace castor3d
 		};
 
 		template< typename VertexT, uint32_t CountT >
-		uint32_t doFillBuffers( typename std::vector< VertexT >::const_iterator begin
+		static uint32_t doFillBuffers( typename std::vector< VertexT >::const_iterator begin
 			, uint32_t count
 			, OverlayRenderer::VertexBufferIndexT< VertexT, CountT > & bufferIndex )
 		{
@@ -76,22 +74,22 @@ namespace castor3d
 		}
 
 		template< typename T >
-		void doUpdateUbo( UniformBufferOffsetT< T > & overlayUbo
+		static void doUpdateUbo( UniformBufferOffsetT< T > & overlayUbo
 			, OverlayCategory const & overlay
 			, Pass const & pass
-			, Size const & size )
+			, castor::Size const & size )
 		{
 			auto & data = overlayUbo.getData();
 			auto position = overlay.getAbsolutePosition();
 			auto ratio = overlay.getRenderRatio( size );
-			data.positionRatio = Point4f
+			data.positionRatio = castor::Point4f
 			{
 				position[0],
 				position[1],
 				ratio[0],
 				ratio[1],
 			};
-			data.renderSizeIndex = Point4i
+			data.renderSizeIndex = castor::Point4i
 			{
 				size.getWidth(),
 				size.getHeight(),
@@ -143,7 +141,7 @@ namespace castor3d
 			eOpacity = 0x04,
 		};
 
-		uint32_t makeKey( FilteredTextureFlags const & textures
+		static uint32_t makeKey( FilteredTextureFlags const & textures
 			, bool text )
 		{
 			auto tex{ uint32_t( text ? OverlayTexture::eText : OverlayTexture::eNone ) };
@@ -252,7 +250,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	namespace
+	namespace ovrlrend
 	{
 		template< typename VertexT, uint32_t CountT >
 		OverlayRenderer::VertexBufferIndexT< VertexT, CountT > & getVertexBuffer( std::vector< std::unique_ptr< OverlayRenderer::VertexBufferPoolT< VertexT, CountT > > > & pools
@@ -316,7 +314,7 @@ namespace castor3d
 	{
 		if ( !vertices.empty() )
 		{
-			auto & bufferIndex = getVertexBuffer< VertexT, CountT >( vertexBuffers
+			auto & bufferIndex = ovrlrend::getVertexBuffer< VertexT, CountT >( vertexBuffers
 				, overlays
 				, overlay.getOverlay()
 				, pass
@@ -327,12 +325,12 @@ namespace castor3d
 				, device
 				, ( fontTexture ? m_renderer.m_noTexTextDeclaration : m_renderer.m_noTexDeclaration )
 				, ( fontTexture ? m_renderer.m_texTextDeclaration : m_renderer.m_texDeclaration )
-				, MaxPanelsPerBuffer );
-			doUpdateUbo( bufferIndex.overlayUbo
+				, ovrlrend::MaxPanelsPerBuffer );
+			ovrlrend::doUpdateUbo( bufferIndex.overlayUbo
 				, overlay
 				, pass
 				, m_renderer.m_size );
-			doFillBuffers( vertices.begin()
+			ovrlrend::doFillBuffers( vertices.begin()
 				, uint32_t( vertices.size() )
 				, bufferIndex );
 
@@ -362,7 +360,7 @@ namespace castor3d
 				}
 			}
 
-			auto borderSize = BorderSizeGetter< OverlayT, QuadT >{}( overlay, m_renderer.m_size );
+			auto borderSize = ovrlrend::BorderSizeGetter< OverlayT, QuadT >{}( overlay, m_renderer.m_size );
 			auto borderOffset = castor::Size{ uint32_t( borderSize.left() ), uint32_t( borderSize.top() ) };
 			auto borderExtent = borderOffset + castor::Size{ uint32_t( borderSize.right() ), uint32_t( borderSize.bottom() ) };
 			auto position = overlay.getAbsolutePosition( m_renderer.m_size ) - borderOffset;
@@ -510,7 +508,7 @@ namespace castor3d
 			, device
 			, m_noTexDeclaration
 			, m_texDeclaration
-			, MaxPanelsPerBuffer ) );
+			, ovrlrend::MaxPanelsPerBuffer ) );
 
 		// Create one border overlays buffer pool
 		m_borderVertexBuffers.emplace_back( std::make_unique< BorderPanelVertexBufferPool >( *getRenderSystem()->getEngine()
@@ -519,7 +517,7 @@ namespace castor3d
 			, device
 			, m_noTexDeclaration
 			, m_texDeclaration
-			, MaxPanelsPerBuffer ) );
+			, ovrlrend::MaxPanelsPerBuffer ) );
 
 		// create one text overlays buffer
 		m_textVertexBuffers.emplace_back( std::make_unique< TextVertexBufferPool >( *getRenderSystem()->getEngine()
@@ -528,7 +526,7 @@ namespace castor3d
 			, device
 			, m_noTexTextDeclaration
 			, m_texTextDeclaration
-			, MaxPanelsPerBuffer ) );
+			, ovrlrend::MaxPanelsPerBuffer ) );
 
 		m_matrixUbo.cpuUpdate( getRenderSystem()->getOrtho( 0.0f
 			, float( m_size.getWidth() )
@@ -692,22 +690,22 @@ namespace castor3d
 		, bool update )
 	{
 		remFlag( textures, TextureFlag::eAllButColourAndOpacity );
-		auto result = pipeline.descriptorPool->createDescriptorSet( "OverlayRenderer" + string::toString( index ) );
+		auto result = pipeline.descriptorPool->createDescriptorSet( "OverlayRenderer" + castor::string::toString( index ) );
 
 		// Pass buffer
 		getRenderSystem()->getEngine()->getMaterialCache().getPassBuffer().createBinding( *result
-			, pipeline.descriptorLayout->getBinding( uint32_t( OverlayBindingId::eMaterials ) ) );
+			, pipeline.descriptorLayout->getBinding( uint32_t( ovrlrend::OverlayBindingId::eMaterials ) ) );
 		// Textures buffers
 		getRenderSystem()->getEngine()->getMaterialCache().getTexConfigBuffer().createBinding( *result
-			, pipeline.descriptorLayout->getBinding( uint32_t( OverlayBindingId::eTexConfigs ) ) );
+			, pipeline.descriptorLayout->getBinding( uint32_t( ovrlrend::OverlayBindingId::eTexConfigs ) ) );
 		getRenderSystem()->getEngine()->getMaterialCache().getTexAnimBuffer().createBinding( *result
-			, pipeline.descriptorLayout->getBinding( uint32_t( OverlayBindingId::eTexAnims ) ) );
+			, pipeline.descriptorLayout->getBinding( uint32_t( ovrlrend::OverlayBindingId::eTexAnims ) ) );
 		// Matrix UBO
 		m_matrixUbo.createSizedBinding( *result
-			, pipeline.descriptorLayout->getBinding( uint32_t( OverlayBindingId::eMatrix ) ) );
+			, pipeline.descriptorLayout->getBinding( uint32_t( ovrlrend::OverlayBindingId::eMatrix ) ) );
 		// Overlay UBO
 		overlayUbo.createSizedBinding( *result
-			, pipeline.descriptorLayout->getBinding( uint32_t( OverlayBindingId::eOverlay ) ) );
+			, pipeline.descriptorLayout->getBinding( uint32_t( ovrlrend::OverlayBindingId::eOverlay ) ) );
 		uint32_t texIndex = 0u;
 
 		for ( auto & unit : pass.getTextureUnits( textures ) )
@@ -718,7 +716,7 @@ namespace castor3d
 				&& ( config.colourMask[0]
 				|| config.opacityMask[0] ) )
 			{
-				result->createBinding( pipeline.descriptorLayout->getBinding( uint32_t( OverlayBindingId::eMaps ) )
+				result->createBinding( pipeline.descriptorLayout->getBinding( uint32_t( ovrlrend::OverlayBindingId::eMaps ) )
 					, unit->getTexture()->getDefaultView().getSampledView()
 					, unit->getSampler().lock()->getSampler()
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
@@ -748,7 +746,7 @@ namespace castor3d
 			, overlayUbo
 			, index
 			, false );
-		result->createBinding( pipeline.descriptorLayout->getBinding( uint32_t( OverlayBindingId::eTextMap ) )
+		result->createBinding( pipeline.descriptorLayout->getBinding( uint32_t( ovrlrend::OverlayBindingId::eTextMap ) )
 			, texture.getDefaultView().getSampledView()
 			, sampler.getSampler() );
 		result->update();
@@ -829,13 +827,13 @@ namespace castor3d
 		auto & materials = getRenderSystem()->getEngine()->getMaterialCache();
 		ashes::VkDescriptorSetLayoutBindingArray bindings;
 
-		bindings.emplace_back( materials.getPassBuffer().createLayoutBinding( uint32_t( OverlayBindingId::eMaterials ) ) );
-		bindings.emplace_back( materials.getTexConfigBuffer().createLayoutBinding( uint32_t( OverlayBindingId::eTexConfigs ) ) );
-		bindings.emplace_back( materials.getTexAnimBuffer().createLayoutBinding( uint32_t( OverlayBindingId::eTexAnims ) ) );
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eMatrix )
+		bindings.emplace_back( materials.getPassBuffer().createLayoutBinding( uint32_t( ovrlrend::OverlayBindingId::eMaterials ) ) );
+		bindings.emplace_back( materials.getTexConfigBuffer().createLayoutBinding( uint32_t( ovrlrend::OverlayBindingId::eTexConfigs ) ) );
+		bindings.emplace_back( materials.getTexAnimBuffer().createLayoutBinding( uint32_t( ovrlrend::OverlayBindingId::eTexAnims ) ) );
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( ovrlrend::OverlayBindingId::eMatrix )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_VERTEX_BIT ) );
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eOverlay )
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( ovrlrend::OverlayBindingId::eOverlay )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
@@ -848,14 +846,14 @@ namespace castor3d
 			vertexLayout = ( texturesFlags.empty()
 				? &m_noTexTextDeclaration
 				: &m_texTextDeclaration );
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eTextMap )
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( ovrlrend::OverlayBindingId::eTextMap )
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		}
 
 		if ( !texturesFlags.empty() )
 		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eMaps )
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( ovrlrend::OverlayBindingId::eMaps )
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT
 				, uint32_t( texturesFlags.size() ) ) );
@@ -890,7 +888,7 @@ namespace castor3d
 	{
 		// Remove unwanted flags
 		auto textures = filterTexturesFlags( pass.getTexturesMask(), TextureFlag::eColour | TextureFlag::eOpacity );
-		auto key = makeKey( textures, text );
+		auto key = ovrlrend::makeKey( textures, text );
 		auto it = pipelines.find( key );
 
 		if ( it == pipelines.end() )
@@ -964,10 +962,10 @@ namespace castor3d
 			VertexWriter writer;
 
 			C3D_Matrix( writer
-				, OverlayBindingId::eMatrix
+				, ovrlrend::OverlayBindingId::eMatrix
 				, 0u );
 			C3D_Overlay( writer
-				, OverlayBindingId::eOverlay
+				, ovrlrend::OverlayBindingId::eOverlay
 				, 0u );
 
 			writer.implementMainT< OverlaySurfaceT, OverlaySurfaceT >( VertexInT< OverlaySurfaceT >{ writer, true, textOverlay, hasTexture }
@@ -994,27 +992,27 @@ namespace castor3d
 			FragmentWriter writer;
 
 			auto materials = std::make_unique< shader::Materials >( writer
-				, uint32_t( OverlayBindingId::eMaterials )
+				, uint32_t( ovrlrend::OverlayBindingId::eMaterials )
 				, 0u );
 			shader::TextureConfigurations textureConfigs{ writer
-				, uint32_t( OverlayBindingId::eTexConfigs )
+				, uint32_t( ovrlrend::OverlayBindingId::eTexConfigs )
 				, 0u
 				, hasTexture };
 			shader::TextureAnimations textureAnims{ writer
-				, uint32_t( OverlayBindingId::eTexAnims )
+				, uint32_t( ovrlrend::OverlayBindingId::eTexAnims )
 				, 0u
 				, hasTexture };
 
 			C3D_Overlay( writer
-				, OverlayBindingId::eOverlay
+				, ovrlrend::OverlayBindingId::eOverlay
 				, 0u );
 
 			auto c3d_mapText = writer.declCombinedImg< FImg2DR32 >( "c3d_mapText"
-				, uint32_t( OverlayBindingId::eTextMap )
+				, uint32_t( ovrlrend::OverlayBindingId::eTextMap )
 				, 0u
 				, textOverlay );
 			auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
-				, uint32_t( OverlayBindingId::eMaps )
+				, uint32_t( ovrlrend::OverlayBindingId::eMaps )
 				, 0u
 				, std::max( 1u, texturesCount )
 				, hasTexture ) );

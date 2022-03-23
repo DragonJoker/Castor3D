@@ -16,11 +16,9 @@
 
 #include <numeric>
 
-using namespace castor;
-
 namespace light_streaks
 {
-	namespace
+	namespace hipass
 	{
 		template< typename T >
 		inline constexpr T getSubresourceDimension( T const & extent
@@ -44,7 +42,7 @@ namespace light_streaks
 					, graph
 					, crg::ru::Config{}
 					, crg::rq::Config{}
-						.baseConfig( { std::vector< crg::VkPipelineShaderStageCreateInfoArray >{ std::move( program ) }, {} } )
+						.baseConfig( { std::vector< crg::VkPipelineShaderStageCreateInfoArray >{ std::move( program ) }, {}, {} } )
 						.texcoordConfig( crg::Texcoord{} )
 						.enabled( enabled )
 						.end( [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t i ){ doRecordInto( recContext, cb, i ); } )
@@ -146,7 +144,7 @@ namespace light_streaks
 			crg::ImageViewIdArray m_copyDestinations;
 		};
 
-		std::unique_ptr< ast::Shader > getVertexProgram()
+		static std::unique_ptr< ast::Shader > getVertexProgram()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -167,7 +165,7 @@ namespace light_streaks
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > getPixelProgram()
+		static std::unique_ptr< ast::Shader > getPixelProgram()
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -210,8 +208,8 @@ namespace light_streaks
 		, crg::ImageViewIdArray const & resultViews
 		, VkExtent2D size
 		, bool const * enabled )
-		: m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LightStreaksHiPass", getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LightStreaksHiPass", getPixelProgram() }
+		: m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LightStreaksHiPass", hipass::getVertexProgram() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LightStreaksHiPass", hipass::getPixelProgram() }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_lastPass{ &previousPass }
@@ -221,7 +219,7 @@ namespace light_streaks
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< HiPassQuad >( framePass
+				auto result = std::make_unique< hipass::HiPassQuad >( framePass
 					, context
 					, graph
 					, ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages )

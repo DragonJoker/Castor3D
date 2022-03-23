@@ -1,7 +1,5 @@
 #include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
-using namespace castor;
-
 namespace castor
 {
 	namespace string

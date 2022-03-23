@@ -38,9 +38,9 @@
 
 namespace castor3d
 {
-	namespace
+	namespace shdmappoint
 	{
-		std::vector< ShadowMap::PassDataPtr > createPass( crg::ResourceHandler & handler
+		static std::vector< ShadowMap::PassDataPtr > createPass( crg::ResourceHandler & handler
 			, std::vector< std::unique_ptr< crg::FrameGraph > > & graphs
 			, std::vector< std::unique_ptr< GaussianBlur > > & blurs
 			, crg::ImageViewId intermediate
@@ -171,7 +171,7 @@ namespace castor3d
 
 	std::vector< ShadowMap::PassDataPtr > ShadowMapPoint::doCreatePass( uint32_t index )
 	{
-		return createPass( m_handler
+		return shdmappoint::createPass( m_handler
 			, m_graphs
 			, m_blurs
 			, m_blurIntermediateView

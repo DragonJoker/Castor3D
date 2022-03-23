@@ -12,9 +12,6 @@
 
 #include <wx/propgrid/advprops.h>
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
 	namespace
@@ -30,7 +27,7 @@ namespace GuiCommon
 			}
 
 		public:
-			static ShaderSources submit( PostEffect & postEffect )
+			static ShaderSources submit( castor3d::PostEffect & postEffect )
 			{
 				ShaderSources result;
 				PostEffectShaderGatherer vis{ result };
@@ -330,7 +327,7 @@ namespace GuiCommon
 		public:
 			static void submit( wxPropertyGrid * grid
 				, TreeItemProperty & prop
-				, PostEffect & postEffect )
+				, castor3d::PostEffect & postEffect )
 			{
 				PostEffectConfigurationBuilder vis{ grid, prop };
 				postEffect.accept( vis );
@@ -460,7 +457,7 @@ namespace GuiCommon
 	}
 
 	PostEffectTreeItemProperty::PostEffectTreeItemProperty( bool editable
-		, PostEffect & effect
+		, castor3d::PostEffect & effect
 		, wxWindow * parent )
 		: TreeItemProperty{ effect.getRenderSystem()->getEngine(), editable }
 		, m_effect{ effect }
@@ -478,7 +475,7 @@ namespace GuiCommon
 		static wxString PROPERTY_POST_EFFECT_EDIT_SHADER = _( "View Shaders..." );
 
 		addProperty( grid, PROPERTY_CATEGORY_POST_EFFECT + m_effect.getName() );
-		addPropertyT( grid, PROPERTY_POST_EFFECT_ENABLED, m_effect.isEnabled(), &m_effect, &PostEffect::enable );
+		addPropertyT( grid, PROPERTY_POST_EFFECT_ENABLED, m_effect.isEnabled(), &m_effect, &castor3d::PostEffect::enable );
 		addProperty( grid, PROPERTY_POST_EFFECT_SHADER, editor
 			, [this]( wxVariant const & var )
 			{

@@ -22,12 +22,9 @@
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
-using namespace castor;
-using namespace castor3d;
-
 namespace castortd
 {
-	namespace
+	namespace panel
 	{
 		enum class MenuID
 		{
@@ -87,7 +84,7 @@ namespace castortd
 			sizeWnd = GuiCommon::makeSize( GetParent()->GetClientSize() );
 			GetParent()->SetPosition( wxPoint( std::abs( int( sizeScreen.getWidth() ) - int( sizeWnd.getWidth() ) ) / 2
 				, std::abs( int( sizeScreen.getHeight() ) - int( sizeWnd.getHeight() ) ) / 2 ) );
-			SceneRPtr scene = target->getScene();
+			castor3d::SceneRPtr scene = target->getScene();
 
 			if ( scene )
 			{
@@ -96,7 +93,7 @@ namespace castortd
 
 				m_listener = m_renderWindow->getListener();
 
-				using LockType = std::unique_lock< CameraCache >;
+				using LockType = std::unique_lock< castor3d::CameraCache >;
 				LockType lock{ castor::makeUniqueLock( scene->getCameraCache() ) };
 				auto camera = scene->getCameraCache().begin()->second;
 				m_renderWindow->addPickingScene( *scene );
@@ -154,7 +151,7 @@ namespace castortd
 			{
 				Cell cell{ 0u, 0u, Cell::State::Invalid };
 
-				if ( p_geometry->getName().find( cuT( "Tower" ) ) == String::npos )
+				if ( p_geometry->getName().find( cuT( "Tower" ) ) == castor::String::npos )
 				{
 					cell = m_game.getCell( p_geometry->getParent()->getPosition() );
 				}
@@ -169,7 +166,7 @@ namespace castortd
 					{
 					case Cell::State::Empty:
 						freeCell = true;
-						m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+						m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
 							, [this, p_geometry]()
 							{
 								castor::Point3f position = p_geometry->getParent()->getPosition();
@@ -194,9 +191,9 @@ namespace castortd
 				}
 			}
 
-			m_listener->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [this, freeCell]( RenderDevice const & device
-					, QueueData const & queueData )
+			m_listener->postEvent( castor3d::makeGpuFunctorEvent( castor3d::EventType::ePreRender
+				, [this, freeCell]( castor3d::RenderDevice const & device
+					, castor3d::QueueData const & queueData )
 				{
 					m_marker->setVisible( freeCell );
 				} ) );
@@ -207,7 +204,7 @@ namespace castortd
 	{
 		if ( m_game.IsRunning() && m_selectedTower && m_selectedTower->CanUpgradeDamage() && m_game.CanAfford( m_selectedTower->getDamageUpgradeCost() ) )
 		{
-			m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
 				, [this]()
 				{
 					m_game.UpgradeTowerDamage( *m_selectedTower );
@@ -219,7 +216,7 @@ namespace castortd
 	{
 		if ( m_game.IsRunning() && m_selectedTower && m_selectedTower->CanUpgradeSpeed() && m_game.CanAfford( m_selectedTower->getSpeedUpgradeCost() ) )
 		{
-			m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
 				, [this]()
 				{
 					m_game.UpgradeTowerSpeed( *m_selectedTower );
@@ -231,7 +228,7 @@ namespace castortd
 	{
 		if ( m_game.IsRunning() && m_selectedTower && m_selectedTower->CanUpgradeRange() && m_game.CanAfford( m_selectedTower->getRangeUpgradeCost() ) )
 		{
-			m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
 				, [this]()
 				{
 					m_game.UpgradeTowerRange( *m_selectedTower );
@@ -277,11 +274,11 @@ namespace castortd
 		EVT_TIMER( int( TimerID::eLeft ), RenderPanel::OnTimerLeft )
 		EVT_TIMER( int( TimerID::eRight ), RenderPanel::OnTimerRight )
 		EVT_TIMER( int( TimerID::eMouse ), RenderPanel::OnMouseTimer )
-		EVT_MENU( int( MenuID::eNewLRTower ), RenderPanel::OnNewLongRangeTower )
-		EVT_MENU( int( MenuID::eNewSRTower ), RenderPanel::OnNewShortRangeTower )
-		EVT_MENU( int( MenuID::eUpgradeSpeed ), RenderPanel::OnUpgradeTowerSpeed )
-		EVT_MENU( int( MenuID::eUpgradeRange ), RenderPanel::OnUpgradeTowerRange )
-		EVT_MENU( int( MenuID::eUpgradeDamage ), RenderPanel::OnUpgradeTowerDamage )
+		EVT_MENU( int( panel::MenuID::eNewLRTower ), RenderPanel::OnNewLongRangeTower )
+		EVT_MENU( int( panel::MenuID::eNewSRTower ), RenderPanel::OnNewShortRangeTower )
+		EVT_MENU( int( panel::MenuID::eUpgradeSpeed ), RenderPanel::OnUpgradeTowerSpeed )
+		EVT_MENU( int( panel::MenuID::eUpgradeRange ), RenderPanel::OnUpgradeTowerRange )
+		EVT_MENU( int( panel::MenuID::eUpgradeDamage ), RenderPanel::OnUpgradeTowerDamage )
 	END_EVENT_TABLE()
 #pragma GCC diagnostic pop
 
@@ -361,7 +358,7 @@ namespace castortd
 			break;
 
 		case WXK_F1:
-			m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
 				, [this]()
 				{
 					if ( m_game.IsRunning() )
@@ -373,7 +370,7 @@ namespace castortd
 
 		case WXK_RETURN:
 		case WXK_NUMPAD_ENTER:
-			m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
 				, [this]()
 				{
 					if ( m_game.isEnded() )
@@ -389,7 +386,7 @@ namespace castortd
 			break;
 
 		case WXK_SPACE:
-			m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
 				, [this]()
 				{
 					if ( m_game.IsStarted() )
@@ -453,16 +450,16 @@ namespace castortd
 			m_y = doTransformY( p_event.GetY() );
 			m_oldX = m_x;
 			m_oldY = m_y;
-			m_listener->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [this]( RenderDevice const & device
-					, QueueData const & queueData )
+			m_listener->postEvent( castor3d::makeGpuFunctorEvent( castor3d::EventType::ePreRender
+				, [this]( castor3d::RenderDevice const & device
+					, castor3d::QueueData const & queueData )
 				{
-					Camera & camera = *m_renderWindow->getCamera();
+					castor3d::Camera & camera = *m_renderWindow->getCamera();
 					camera.update();
-					auto type = m_renderWindow->pick( Position{ int( m_x ), int( m_y ) } );
+					auto type = m_renderWindow->pick( castor::Position{ int( m_x ), int( m_y ) } );
 
-					if ( type != PickNodeType::eNone
-						&& type != PickNodeType::eBillboard )
+					if ( type != castor3d::PickNodeType::eNone
+						&& type != castor3d::PickNodeType::eBillboard )
 					{
 						doUpdateSelectedGeometry( m_renderWindow->getPickedGeometry() );
 					}
@@ -484,35 +481,35 @@ namespace castortd
 
 			if ( m_selectedTower->CanUpgradeSpeed() )
 			{
-				menu.Append( int( MenuID::eUpgradeSpeed ), wxString{ wxT( "Augmenter vitesse (" ) } << m_selectedTower->getSpeedUpgradeCost() << wxT( ")" ) );
-				menu.Enable( int( MenuID::eUpgradeSpeed ), m_game.CanAfford( m_selectedTower->getSpeedUpgradeCost() ) );
+				menu.Append( int( panel::MenuID::eUpgradeSpeed ), wxString{ wxT( "Augmenter vitesse (" ) } << m_selectedTower->getSpeedUpgradeCost() << wxT( ")" ) );
+				menu.Enable( int( panel::MenuID::eUpgradeSpeed ), m_game.CanAfford( m_selectedTower->getSpeedUpgradeCost() ) );
 			}
 			else
 			{
-				menu.Append( int( MenuID::eUpgradeSpeed ), wxString{ wxT( "Augmenter vitesse (Max)" ) } );
-				menu.Enable( int( MenuID::eUpgradeSpeed ), false );
+				menu.Append( int( panel::MenuID::eUpgradeSpeed ), wxString{ wxT( "Augmenter vitesse (Max)" ) } );
+				menu.Enable( int( panel::MenuID::eUpgradeSpeed ), false );
 			}
 
 			if ( m_selectedTower->CanUpgradeRange() )
 			{
-				menu.Append( int( MenuID::eUpgradeRange ), wxString{ wxT( "Augmenter portee (" ) } << m_selectedTower->getRangeUpgradeCost() << wxT( ")" ) );
-				menu.Enable( int( MenuID::eUpgradeRange ), m_game.CanAfford( m_selectedTower->getRangeUpgradeCost() ) );
+				menu.Append( int( panel::MenuID::eUpgradeRange ), wxString{ wxT( "Augmenter portee (" ) } << m_selectedTower->getRangeUpgradeCost() << wxT( ")" ) );
+				menu.Enable( int( panel::MenuID::eUpgradeRange ), m_game.CanAfford( m_selectedTower->getRangeUpgradeCost() ) );
 			}
 			else
 			{
-				menu.Append( int( MenuID::eUpgradeRange ), wxString{ wxT( "Augmenter portee (Max)" ) } );
-				menu.Enable( int( MenuID::eUpgradeRange ), false );
+				menu.Append( int( panel::MenuID::eUpgradeRange ), wxString{ wxT( "Augmenter portee (Max)" ) } );
+				menu.Enable( int( panel::MenuID::eUpgradeRange ), false );
 			}
 
 			if ( m_selectedTower->CanUpgradeDamage() )
 			{
-				menu.Append( int( MenuID::eUpgradeDamage ), wxString{ wxT( "Augmenter degats (" ) } << m_selectedTower->getDamageUpgradeCost() << wxT( ")" ) );
-				menu.Enable( int( MenuID::eUpgradeDamage ), m_game.CanAfford( m_selectedTower->getDamageUpgradeCost() ) );
+				menu.Append( int( panel::MenuID::eUpgradeDamage ), wxString{ wxT( "Augmenter degats (" ) } << m_selectedTower->getDamageUpgradeCost() << wxT( ")" ) );
+				menu.Enable( int( panel::MenuID::eUpgradeDamage ), m_game.CanAfford( m_selectedTower->getDamageUpgradeCost() ) );
 			}
 			else
 			{
-				menu.Append( int( MenuID::eUpgradeDamage ), wxString{ wxT( "Augmenter degats (Max)" ) } );
-				menu.Enable( int( MenuID::eUpgradeDamage ), false );
+				menu.Append( int( panel::MenuID::eUpgradeDamage ), wxString{ wxT( "Augmenter degats (Max)" ) } );
+				menu.Enable( int( panel::MenuID::eUpgradeDamage ), false );
 			}
 
 			PopupMenu( &menu, p_event.GetPosition() );
@@ -520,10 +517,10 @@ namespace castortd
 		else if ( !m_selectedGeometry.expired() )
 		{
 			wxMenu menu;
-			menu.Append( int( MenuID::eNewLRTower ), wxString( "Nouvelle Tour Longue Distance (" ) << m_longRange.getTowerCost() << wxT( ")" ) );
-			menu.Append( int( MenuID::eNewSRTower ), wxString( "Nouvelle Tour Courte Distance (" ) << m_shortRange.getTowerCost() << wxT( ")" ) );
-			menu.Enable( int( MenuID::eNewLRTower ), m_game.CanAfford( m_longRange.getTowerCost() ) );
-			menu.Enable( int( MenuID::eNewSRTower ), m_game.CanAfford( m_shortRange.getTowerCost() ) );
+			menu.Append( int( panel::MenuID::eNewLRTower ), wxString( "Nouvelle Tour Longue Distance (" ) << m_longRange.getTowerCost() << wxT( ")" ) );
+			menu.Append( int( panel::MenuID::eNewSRTower ), wxString( "Nouvelle Tour Courte Distance (" ) << m_shortRange.getTowerCost() << wxT( ")" ) );
+			menu.Enable( int( panel::MenuID::eNewLRTower ), m_game.CanAfford( m_longRange.getTowerCost() ) );
+			menu.Enable( int( panel::MenuID::eNewSRTower ), m_game.CanAfford( m_shortRange.getTowerCost() ) );
 			PopupMenu( &menu, p_event.GetPosition() );
 		}
 
@@ -558,15 +555,15 @@ namespace castortd
 
 		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
-		if ( !inputListener || !inputListener->fireMouseWheel( Position( 0, wheelRotation ) ) )
+		if ( !inputListener || !inputListener->fireMouseWheel( castor::Position( 0, wheelRotation ) ) )
 		{
 			if ( wheelRotation < 0 )
 			{
-				m_cameraState->addScalarVelocity( castor::Point3f{ 0.0f, 0.0f, -g_camSpeed } );
+				m_cameraState->addScalarVelocity( castor::Point3f{ 0.0f, 0.0f, -panel::g_camSpeed } );
 			}
 			else
 			{
-				m_cameraState->addScalarVelocity( castor::Point3f{ 0.0f, 0.0f, g_camSpeed } );
+				m_cameraState->addScalarVelocity( castor::Point3f{ 0.0f, 0.0f, panel::g_camSpeed } );
 			}
 		}
 
@@ -585,25 +582,25 @@ namespace castortd
 
 	void RenderPanel::OnTimerUp( wxTimerEvent & p_event )
 	{
-		m_cameraState->addScalarVelocity( castor::Point3f{ 0.0f, g_camSpeed, 0.0f } );
+		m_cameraState->addScalarVelocity( castor::Point3f{ 0.0f, panel::g_camSpeed, 0.0f } );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerDown( wxTimerEvent & p_event )
 	{
-		m_cameraState->addScalarVelocity( castor::Point3f{ 0.0f, -g_camSpeed, 0.0f } );
+		m_cameraState->addScalarVelocity( castor::Point3f{ 0.0f, -panel::g_camSpeed, 0.0f } );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerLeft( wxTimerEvent & p_event )
 	{
-		m_cameraState->addScalarVelocity( castor::Point3f{ g_camSpeed, 0.0f, 0.0f } );
+		m_cameraState->addScalarVelocity( castor::Point3f{ panel::g_camSpeed, 0.0f, 0.0f } );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerRight( wxTimerEvent & p_event )
 	{
-		m_cameraState->addScalarVelocity( castor::Point3f{ -g_camSpeed, 0.0f, 0.0f } );
+		m_cameraState->addScalarVelocity( castor::Point3f{ -panel::g_camSpeed, 0.0f, 0.0f } );
 		p_event.Skip();
 	}
 
@@ -611,7 +608,7 @@ namespace castortd
 	{
 		if ( m_game.IsRunning() )
 		{
-			m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
 				, [this]()
 				{
 					if ( m_game.BuildTower( m_marker->getPosition(), std::make_unique< LongRangeTower >( m_longRange ) ) )
@@ -626,7 +623,7 @@ namespace castortd
 	{
 		if ( m_game.IsRunning() )
 		{
-			m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
 				, [this]()
 				{
 					if ( m_game.BuildTower( m_marker->getPosition(), std::make_unique< ShortRangeTower >( m_shortRange ) ) )

@@ -52,17 +52,15 @@
 
 CU_ImplementCUSmartPtr( castor3d, LineariseDepthPass )
 
-using namespace castor;
-
 namespace castor3d
 {
-	namespace
+	namespace passlindpth
 	{
 		static uint32_t constexpr DepthImgIdx = 0u;
 		static uint32_t constexpr ClipInfoUboIdx = 1u;
 		static uint32_t constexpr PrevLvlUboIdx = 1u;
 
-		ShaderPtr getVertexProgram()
+		static ShaderPtr getVertexProgram()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -78,7 +76,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 		
-		ShaderPtr getLinearisePixelProgram()
+		static ShaderPtr getLinearisePixelProgram()
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -110,7 +108,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 		
-		ShaderPtr getMinifyPixelProgram()
+		static ShaderPtr getMinifyPixelProgram()
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -139,7 +137,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		Texture doCreateTexture( RenderDevice const & device
+		static Texture doCreateTexture( RenderDevice const & device
 			, crg::ResourceHandler & handler
 			, VkExtent2D const & size
 			, castor::String const & prefix )
@@ -165,7 +163,7 @@ namespace castor3d
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
 		, ProgressBar * progress
-		, String const & prefix
+		, castor::String const & prefix
 		, SsaoConfig const & ssaoConfig
 		, VkExtent2D const & size
 		, crg::ImageViewId const & depthBuffer )
@@ -176,16 +174,16 @@ namespace castor3d
 		, m_srcDepthBuffer{ depthBuffer }
 		, m_prefix{ graph.getName() + prefix }
 		, m_size{ size }
-		, m_result{ doCreateTexture( m_device, m_graph.getHandler(), m_size, m_prefix ) }
-		, m_clipInfo{ m_device.uboPool->getBuffer< Point3f >( 0u ) }
+		, m_result{ passlindpth::doCreateTexture( m_device, m_graph.getHandler(), m_size, m_prefix ) }
+		, m_clipInfo{ m_device.uboPool->getBuffer< castor::Point3f >( 0u ) }
 		, m_lastPass{ &previousPass }
-		, m_lineariseVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + "LineariseDepth", getVertexProgram() }
-		, m_linearisePixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + "LineariseDepth", getLinearisePixelProgram() }
+		, m_lineariseVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + "LineariseDepth", passlindpth::getVertexProgram() }
+		, m_linearisePixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + "LineariseDepth", passlindpth::getLinearisePixelProgram() }
 		, m_lineariseStages{ makeShaderState( m_device, m_lineariseVertexShader )
 			, makeShaderState( m_device, m_linearisePixelShader ) }
 		, m_linearisePass{ doInitialiseLinearisePass( progress ) }
-		, m_minifyVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + "MinifyDepth", getVertexProgram() }
-		, m_minifyPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + "MinifyDepth", getMinifyPixelProgram() }
+		, m_minifyVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + "MinifyDepth", passlindpth::getVertexProgram() }
+		, m_minifyPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + "MinifyDepth", passlindpth::getMinifyPixelProgram() }
 		, m_minifyStages{ makeShaderState( m_device, m_minifyVertexShader )
 			, makeShaderState( m_device, m_minifyPixelShader ) }
 	{
@@ -213,8 +211,8 @@ namespace castor3d
 		auto z_f = viewport.getFar();
 		auto z_n = viewport.getNear();
 		auto clipInfo = std::isinf( z_f )
-			? Point3f{ z_n, -1.0f, 1.0f }
-			: Point3f{ z_n * z_f, z_n - z_f, z_f };
+			? castor::Point3f{ z_n, -1.0f, 1.0f }
+			: castor::Point3f{ z_n * z_f, z_n - z_f, z_f };
 		// result = clipInfo[0] / ( clipInfo[1] * depth + clipInfo[2] );
 		// depth = 0 => result = z_n
 		// depth = 1 => result = z_f
@@ -233,7 +231,7 @@ namespace castor3d
 
 		for ( auto & layer : getResult().subViewsId )
 		{
-			visitor.visit( "Linearised Depth " + string::toString( index++ )
+			visitor.visit( "Linearised Depth " + castor::string::toString( index++ )
 				, layer
 				, m_graph.getFinalLayoutState( layer ).layout
 				, TextureFactors{}.invert( true ) );
@@ -265,8 +263,8 @@ namespace castor3d
 				return result;
 			} );
 		pass.addDependency( *m_lastPass );
-		pass.addSampledView( m_srcDepthBuffer, DepthImgIdx );
-		m_clipInfo.createPassBinding( pass, "ClipInfoCfg", ClipInfoUboIdx );
+		pass.addSampledView( m_srcDepthBuffer, passlindpth::DepthImgIdx );
+		m_clipInfo.createPassBinding( pass, "ClipInfoCfg", passlindpth::ClipInfoUboIdx );
 		pass.addOutputColourView( m_result.targetViewId );
 		m_result.create();
 		m_lastPass = &pass;
@@ -283,7 +281,7 @@ namespace castor3d
 			m_previousLevel.push_back( m_device.uboPool->getBuffer< castor::Point2i >( 0u ) );
 			auto & previousLevel = m_previousLevel.back();
 			auto & data = previousLevel.getData();
-			data = Point2i{ size.width, size.height };
+			data = castor::Point2i{ size.width, size.height };
 			size.width >>= 1;
 			size.height >>= 1;
 			auto source = m_graph.createView( crg::ImageViewData{ m_result.imageId.data->name + std::to_string( index )
@@ -314,8 +312,8 @@ namespace castor3d
 					return result;
 				} );
 			pass.addDependency( *m_lastPass );
-			pass.addSampledView( source, DepthImgIdx );
-			previousLevel.createPassBinding( pass, "PreviousLvlCfg", PrevLvlUboIdx );
+			pass.addSampledView( source, passlindpth::DepthImgIdx );
+			previousLevel.createPassBinding( pass, "PreviousLvlCfg", passlindpth::PrevLvlUboIdx );
 			pass.addOutputColourView( destination );
 			m_lastPass = &pass;
 		}

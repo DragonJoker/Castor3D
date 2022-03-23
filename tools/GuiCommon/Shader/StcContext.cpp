@@ -3,9 +3,6 @@
 #include "GuiCommon/Shader/LanguageFileParser.hpp"
 #include "GuiCommon/Shader/LanguageInfo.hpp"
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
 	StcContext::StcContext()

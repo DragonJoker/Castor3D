@@ -5,14 +5,12 @@
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp"
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceNode.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	SkeletonAnimationInstanceObject::SkeletonAnimationInstanceObject( SkeletonAnimationInstance & animationInstance
 		, SkeletonAnimationObject & animationObject
 		, SkeletonAnimationInstanceObjectPtrArray & allObjects )
-		: OwnedBy< SkeletonAnimationInstance >{ animationInstance }
+		: castor::OwnedBy< SkeletonAnimationInstance >{ animationInstance }
 		, m_animationObject{ animationObject }
 	{
 		for ( auto moving : animationObject.m_children )

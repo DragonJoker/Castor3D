@@ -18,30 +18,28 @@
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*************************************************************************************************
 
-	namespace
+	namespace lgtdirectional
 	{
-		std::vector< DirectionalLight::Cascade > doComputeCascades( Camera const & camera
+		static std::vector< DirectionalLight::Cascade > doComputeCascades( Camera const & camera
 			, DirectionalLight const & light
 			, uint32_t cascades )
 		{
 			auto & scene = *light.getLight().getScene();
 			auto & renderSystem = *scene.getEngine()->getRenderSystem();
 			std::vector< DirectionalLight::Cascade > result( cascades );
-			Point3f lightDirection = light.getDirection();
+			castor::Point3f lightDirection = light.getDirection();
 
-			Point3f up{ 0.0f, 1.0f, 0.0f };
-			Point3f right( point::getNormalised( point::cross( up, lightDirection ) ) );
-			up = point::getNormalised( point::cross( lightDirection, right ) );
+			castor::Point3f up{ 0.0f, 1.0f, 0.0f };
+			castor::Point3f right( castor::point::getNormalised( castor::point::cross( up, lightDirection ) ) );
+			up = castor::point::getNormalised( castor::point::cross( lightDirection, right ) );
 			auto cameraVP = camera.getProjection( false ) * camera.getView();
 			auto invCameraVP = cameraVP.getInverse();
 
-			auto lightViewMatrix = matrix::lookAt( castor::Point3f{}, lightDirection, up );
+			auto lightViewMatrix = castor::matrix::lookAt( castor::Point3f{}, lightDirection, up );
 			auto nearClip = camera.getNear();
 			auto farClip = camera.getFar();
 
@@ -65,23 +63,23 @@ namespace castor3d
 				cascadeSplits[i] = ( d - nearClip ) / clipRange;
 			}
 
-			std::array< Point3f, 8u > frustumCorners
+			std::array< castor::Point3f, 8u > frustumCorners
 			{
-				Point3f( -1.0f, +1.0f, -1.0f ),
-				Point3f( +1.0f, +1.0f, -1.0f ),
-				Point3f( +1.0f, -1.0f, -1.0f ),
-				Point3f( -1.0f, -1.0f, -1.0f ),
-				Point3f( -1.0f, +1.0f, +1.0f ),
-				Point3f( +1.0f, +1.0f, +1.0f ),
-				Point3f( +1.0f, -1.0f, +1.0f ),
-				Point3f( -1.0f, -1.0f, +1.0f ),
+				castor::Point3f( -1.0f, +1.0f, -1.0f ),
+				castor::Point3f( +1.0f, +1.0f, -1.0f ),
+				castor::Point3f( +1.0f, -1.0f, -1.0f ),
+				castor::Point3f( -1.0f, -1.0f, -1.0f ),
+				castor::Point3f( -1.0f, +1.0f, +1.0f ),
+				castor::Point3f( +1.0f, +1.0f, +1.0f ),
+				castor::Point3f( +1.0f, -1.0f, +1.0f ),
+				castor::Point3f( -1.0f, -1.0f, +1.0f ),
 			};
 
 			// Project main frustum corners into world space
 			for ( auto & frustumCorner : frustumCorners )
 			{
-				auto invCorner = invCameraVP * Point4f{ frustumCorner->x, frustumCorner->y, frustumCorner->z, 1.0f };
-				frustumCorner = Point3f{ invCorner / invCorner->w };
+				auto invCorner = invCameraVP * castor::Point4f{ frustumCorner->x, frustumCorner->y, frustumCorner->z, 1.0f };
+				frustumCorner = castor::Point3f{ invCorner / invCorner->w };
 			}
 
 			float prevSplitDist = 0.0;
@@ -102,7 +100,7 @@ namespace castor3d
 				}
 
 				// Get cascade bounding sphere center
-				Point3f frustumCenter{ 0, 0, 0 };
+				castor::Point3f frustumCenter{ 0, 0, 0 };
 				for ( auto frustumCorner : cascadeFrustum )
 				{
 					frustumCenter += frustumCorner;
@@ -113,15 +111,15 @@ namespace castor3d
 				float radius = 0.0f;
 				for ( auto frustumCorner : cascadeFrustum )
 				{
-					float distance = float( point::length( frustumCorner - frustumCenter ) );
+					float distance = float( castor::point::length( frustumCorner - frustumCenter ) );
 					radius = std::max( radius, distance );
 				}
 				radius = std::ceil( radius * 16.0f ) / 16.0f;
 
 				// Compute AABB
-				Point3f frustumRadius{ radius, radius, radius };
-				Point3f maxExtents = frustumCenter + frustumRadius;
-				Point3f minExtents = frustumCenter - frustumRadius;
+				castor::Point3f frustumRadius{ radius, radius, radius };
+				castor::Point3f maxExtents = frustumCenter + frustumRadius;
+				castor::Point3f minExtents = frustumCenter - frustumRadius;
 
 				// Snap cascade to texel grid:
 				auto extent = maxExtents - minExtents;
@@ -182,7 +180,7 @@ namespace castor3d
 
 	bool DirectionalLight::updateShadow( Camera const & viewCamera )
 	{
-		m_cascades = doComputeCascades( viewCamera
+		m_cascades = lgtdirectional::doComputeCascades( viewCamera
 			, *this
 			, uint32_t( m_cascades.size() ) );
 		bool result = m_cascades != m_prvCascades;
@@ -197,9 +195,9 @@ namespace castor3d
 
 	void DirectionalLight::updateNode( SceneNode const & node )
 	{
-		m_direction = Point3f{ 0, 0, 1 };
+		m_direction = castor::Point3f{ 0, 0, 1 };
 		node.getDerivedOrientation().transform( m_direction, m_direction );
-		point::normalise( m_direction );
+		castor::point::normalise( m_direction );
 	}
 
 	void DirectionalLight::doFillBuffer( LightBuffer::LightData & data )const
@@ -207,8 +205,8 @@ namespace castor3d
 		auto & directional = data.specific.directional;
 		directional.directionCount = m_direction;
 		directional.directionCount.w = float( m_cascades.size() );
-		Point4f splitDepths;
-		Point4f splitScales;
+		castor::Point4f splitDepths;
+		castor::Point4f splitScales;
 
 		for ( uint32_t i = 0u; i < m_cascades.size(); ++i )
 		{
@@ -226,7 +224,7 @@ namespace castor3d
 
 		for ( auto i = uint32_t( m_cascades.size() ); i < shader::DirectionalMaxCascadesCount; ++i )
 		{
-			directional.transforms[i] = Matrix4x4f{ .0f };
+			directional.transforms[i] = castor::Matrix4x4f{ 0.0f };
 		}
 	}
 }

@@ -6,9 +6,9 @@
 
 namespace castor
 {
-	namespace
+	namespace xpml
 	{
-		StringArray const & listExtensions()
+		static StringArray const & listExtensions()
 		{
 			static StringArray const list
 			{
@@ -22,13 +22,13 @@ namespace castor
 
 	void XpmImageLoader::registerLoader( ImageLoader & reg )
 	{
-		reg.registerLoader( listExtensions()
+		reg.registerLoader( xpml::listExtensions()
 			, std::make_unique< XpmImageLoader >() );
 	}
 
 	void XpmImageLoader::unregisterLoader( ImageLoader & reg )
 	{
-		reg.unregisterLoader( listExtensions() );
+		reg.unregisterLoader( xpml::listExtensions() );
 	}
 
 	ImageLayout XpmImageLoader::load( String const & CU_UnusedParam( imageFormat )
@@ -58,7 +58,7 @@ namespace castor
 		}
 
 		// Parse colours
-		std::map< std::string, R8G8B8Pixel > colours;
+		std::map< std::string, xpml::R8G8B8Pixel > colours;
 		std::for_each( &data[1], &data[1 + coloursCount]
 			, [&colours, &charCount]( char const * line )
 			{
@@ -76,7 +76,7 @@ namespace castor
 				}
 
 				std::string value( it + 2, &line[std::strlen( line )] );
-				R8G8B8Pixel pixel{ true };
+				xpml::R8G8B8Pixel pixel{ true };
 
 				if ( value.find( '#' ) != std::string::npos )
 				{

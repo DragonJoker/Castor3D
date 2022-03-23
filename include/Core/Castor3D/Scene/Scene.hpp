@@ -47,6 +47,9 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	C3D_API std::string print( castor::Point3f const & obj );
+	C3D_API std::string print( castor::BoundingBox const & obj );
+
 	class Scene
 		: public std::enable_shared_from_this< Scene >
 		, public castor::OwnedBy< Engine >

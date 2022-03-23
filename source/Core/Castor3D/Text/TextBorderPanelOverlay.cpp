@@ -7,10 +7,10 @@
 
 #include <CastorUtils/Data/Text/TextPoint.hpp>
 
-using namespace castor3d;
-
 namespace castor
 {
+	using namespace castor3d;
+
 	TextWriter< BorderPanelOverlay >::TextWriter( String const & tabs )
 		: TextWriterT< BorderPanelOverlay >{ tabs }
 	{

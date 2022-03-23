@@ -26,8 +26,6 @@
 
 #include <numeric>
 
-using namespace castor;
-
 #define C3D_DebugEdgeDetection 0
 #define C3D_DebugBlendingWeightCalculation 0
 #define C3D_DebugNeighbourhoodBlending 0
@@ -180,8 +178,8 @@ namespace smaa
 
 	//*********************************************************************************************
 
-	String PostEffect::Type = cuT( "smaa" );
-	String PostEffect::Name = cuT( "SMAA PostEffect" );
+	castor::String PostEffect::Type = cuT( "smaa" );
+	castor::String PostEffect::Name = cuT( "SMAA PostEffect" );
 
 	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
 		, castor3d::RenderSystem & renderSystem
@@ -441,7 +439,7 @@ namespace smaa
 		}
 	}
 
-	bool PostEffect::doWriteInto( StringStream & p_file, String const & tabs )
+	bool PostEffect::doWriteInto( castor::StringStream & p_file, castor::String const & tabs )
 	{
 		static SmaaConfig::Data const ref;
 		p_file << ( cuT( "\n" ) + tabs + Type + cuT( "\n" ) );
@@ -451,10 +449,10 @@ namespace smaa
 
 		if ( m_config.data.preset == Preset::eCustom )
 		{
-			p_file << ( tabs + cuT( "\tthreshold" ) + string::toString( m_config.data.threshold, std::locale{ "C" } ) + cuT( "\n" ) );
-			p_file << ( tabs + cuT( "\tmaxSearchSteps " ) + string::toString( m_config.data.maxSearchSteps, std::locale{ "C" } ) + cuT( "\n" ) );
-			p_file << ( tabs + cuT( "\tmaxSearchStepsDiag " ) + string::toString( m_config.data.maxSearchStepsDiag, std::locale{ "C" } ) + cuT( "\n" ) );
-			p_file << ( tabs + cuT( "\tcornerRounding " ) + string::toString( m_config.data.cornerRounding, std::locale{ "C" } ) + cuT( "\n" ) );
+			p_file << ( tabs + cuT( "\tthreshold" ) + castor::string::toString( m_config.data.threshold, std::locale{ "C" } ) + cuT( "\n" ) );
+			p_file << ( tabs + cuT( "\tmaxSearchSteps " ) + castor::string::toString( m_config.data.maxSearchSteps, std::locale{ "C" } ) + cuT( "\n" ) );
+			p_file << ( tabs + cuT( "\tmaxSearchStepsDiag " ) + castor::string::toString( m_config.data.maxSearchStepsDiag, std::locale{ "C" } ) + cuT( "\n" ) );
+			p_file << ( tabs + cuT( "\tcornerRounding " ) + castor::string::toString( m_config.data.cornerRounding, std::locale{ "C" } ) + cuT( "\n" ) );
 		}
 
 		p_file << ( tabs + cuT( "\tedgeDetection " ) + smaa::getName( m_config.data.edgeDetection ) + cuT( "\n" ) );
@@ -475,17 +473,17 @@ namespace smaa
 
 			if ( m_config.data.predicationScale != ref.predicationScale )
 			{
-				p_file << ( tabs + cuT( "\tpredicationScale " ) + string::toString( m_config.data.predicationScale, std::locale{ "C" } ) + cuT( "\n" ) );
+				p_file << ( tabs + cuT( "\tpredicationScale " ) + castor::string::toString( m_config.data.predicationScale, std::locale{ "C" } ) + cuT( "\n" ) );
 			}
 
 			if ( m_config.data.predicationStrength != ref.predicationStrength )
 			{
-				p_file << ( tabs + cuT( "\tpredicationStrength " ) + string::toString( m_config.data.predicationStrength, std::locale{ "C" } ) + cuT( "\n" ) );
+				p_file << ( tabs + cuT( "\tpredicationStrength " ) + castor::string::toString( m_config.data.predicationStrength, std::locale{ "C" } ) + cuT( "\n" ) );
 			}
 
 			if ( m_config.data.predicationThreshold != ref.predicationThreshold )
 			{
-				p_file << ( tabs + cuT( "\tpredicationThreshold " ) + string::toString( m_config.data.predicationThreshold, std::locale{ "C" } ) + cuT( "\n" ) );
+				p_file << ( tabs + cuT( "\tpredicationThreshold " ) + castor::string::toString( m_config.data.predicationThreshold, std::locale{ "C" } ) + cuT( "\n" ) );
 			}
 		}
 
@@ -495,13 +493,13 @@ namespace smaa
 
 			if ( m_config.data.reprojectionWeightScale != ref.reprojectionWeightScale )
 			{
-				p_file << ( tabs + cuT( "\treprojectionWeightScale " ) + string::toString( m_config.data.reprojectionWeightScale, std::locale{ "C" } ) + cuT( "\n" ) );
+				p_file << ( tabs + cuT( "\treprojectionWeightScale " ) + castor::string::toString( m_config.data.reprojectionWeightScale, std::locale{ "C" } ) + cuT( "\n" ) );
 			}
 		}
 
 		if ( m_config.data.localContrastAdaptationFactor != ref.localContrastAdaptationFactor )
 		{
-			p_file << ( tabs + cuT( "\tlocalContrastAdaptationFactor " ) + string::toString( m_config.data.localContrastAdaptationFactor, std::locale{ "C" } ) + cuT( "\n" ) );
+			p_file << ( tabs + cuT( "\tlocalContrastAdaptationFactor " ) + castor::string::toString( m_config.data.localContrastAdaptationFactor, std::locale{ "C" } ) + cuT( "\n" ) );
 		}
 
 		p_file << ( tabs + cuT( "}\n" ) );

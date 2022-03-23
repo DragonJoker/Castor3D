@@ -16,13 +16,11 @@
 
 #include <numeric>
 
-using namespace castor;
-
 namespace Bloom
 {
-	namespace
+	namespace combine
 	{
-		std::unique_ptr< ast::Shader > getVertexProgram()
+		static std::unique_ptr< ast::Shader > getVertexProgram()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -42,7 +40,7 @@ namespace Bloom
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > getPixelProgram( uint32_t blurPassesCount )
+		static std::unique_ptr< ast::Shader > getPixelProgram( uint32_t blurPassesCount )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -71,8 +69,8 @@ namespace Bloom
 
 	//*********************************************************************************************
 
-	String const CombinePass::CombineMapPasses = cuT( "c3d_mapPasses" );
-	String const CombinePass::CombineMapScene = cuT( "c3d_mapScene" );
+	castor::String const CombinePass::CombineMapPasses = cuT( "c3d_mapPasses" );
+	castor::String const CombinePass::CombineMapScene = cuT( "c3d_mapScene" );
 
 	CombinePass::CombinePass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
@@ -82,8 +80,8 @@ namespace Bloom
 		, VkExtent2D const & size
 		, uint32_t blurPassesCount
 		, bool const * enabled )
-		: m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "BloomCombine", getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "BloomCombine", getPixelProgram( blurPassesCount ) }
+		: m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "BloomCombine", combine::getVertexProgram() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "BloomCombine", combine::getPixelProgram( blurPassesCount ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_resultImg{ graph.createImage( crg::ImageData{ "BLComb"

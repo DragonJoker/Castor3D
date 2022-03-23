@@ -58,6 +58,7 @@ set_target_properties( ${PROJECT_NAME}
 		CXX_EXTENSIONS OFF
 		PREFIX ${C3D_LIB_PREFIX}
 		FOLDER "Plugins/ToneMappings"
+		UNITY_BUILD "${CASTOR_UNITY_BUILD}"
 )
 install_target_ex( ${PROJECT_NAME}
 	Plugins

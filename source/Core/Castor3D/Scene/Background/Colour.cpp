@@ -16,17 +16,11 @@
 #include <ashespp/Image/StagingTexture.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 
-#include <ShaderWriter/Source.hpp>
-#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-
-using namespace castor;
-using namespace sdw;
-
 namespace castor3d
 {
 	//************************************************************************************************
 
-	namespace
+	namespace bgcolour
 	{
 		static uint32_t constexpr Dim = 16u;
 	}
@@ -43,7 +37,7 @@ namespace castor3d
 			, engine.getGraphResourceHandler()
 			, cuT( "ColourBackground_Colour" )
 			, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
-			, { Dim, Dim, 1u }
+			, { bgcolour::Dim, bgcolour::Dim, 1u }
 			, 6u
 			, 1u
 			, VK_FORMAT_R32G32B32A32_SFLOAT
@@ -64,10 +58,10 @@ namespace castor3d
 		m_textureId.create();
 		auto data = device.graphicsData();
 		auto & value = m_scene.getBackgroundColour();
-		m_colour = HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
+		m_colour = castor::HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
 		m_stagingTexture = device->createStagingTexture( "ColourBackgroundStaging"
 			, VK_FORMAT_R32G32B32A32_SFLOAT
-			, VkExtent2D{ Dim, Dim } );
+			, VkExtent2D{ bgcolour::Dim, bgcolour::Dim } );
 		auto result = m_texture->initialise( device, *data );
 		m_colour.reset();
 
@@ -101,7 +95,7 @@ namespace castor3d
 	void ColourBackground::doCpuUpdate( CpuUpdater & updater )const
 	{
 		auto & value = m_scene.getBackgroundColour();
-		m_colour = HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
+		m_colour = castor::HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
 		auto & viewport = *updater.viewport;
 		viewport.resize( updater.camera->getSize() );
 		viewport.setPerspective( updater.camera->getViewport().getFovY()
@@ -127,13 +121,13 @@ namespace castor3d
 	void ColourBackground::doUpdateColour( QueueData const & queueData
 		, RenderDevice const & device )const
 	{
-		VkDeviceSize lockSize = Dim * Dim * sizeof( Point4f );
+		VkDeviceSize lockSize = bgcolour::Dim * bgcolour::Dim * sizeof( castor::Point4f );
 
-		if ( auto * buffer = reinterpret_cast< Point4f * >( m_stagingTexture->lock( 0u, lockSize, 0u ) ) )
+		if ( auto * buffer = reinterpret_cast< castor::Point4f * >( m_stagingTexture->lock( 0u, lockSize, 0u ) ) )
 		{
-			Point4f colour{ m_colour->red().value(), m_colour->green().value(), m_colour->blue().value(), 1.0f };
+			castor::Point4f colour{ m_colour->red().value(), m_colour->green().value(), m_colour->blue().value(), 1.0f };
 
-			for ( auto i = 0u; i < Dim * Dim; ++i )
+			for ( auto i = 0u; i < bgcolour::Dim * bgcolour::Dim; ++i )
 			{
 				*buffer = colour;
 				++buffer;

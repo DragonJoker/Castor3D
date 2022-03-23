@@ -47,7 +47,7 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace vx
+	namespace vxlpass
 	{
 		template< sdw::var::Flag FlagT >
 		struct SurfaceT
@@ -335,15 +335,15 @@ namespace castor3d
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 
-		writer.implementMainT< shader::VertexSurfaceT, vx::SurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
+		writer.implementMainT< shader::VertexSurfaceT, vxlpass::SurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
 				, flags.programFlags
 				, getShaderFlags()
 				, textureFlags
 				, flags.passFlags
 				, hasTextures }
-			, sdw::VertexOutT< vx::SurfaceT >{ writer }
+			, sdw::VertexOutT< vxlpass::SurfaceT >{ writer }
 			, [&]( VertexInT< shader::VertexSurfaceT > in
-				, VertexOutT< vx::SurfaceT > out )
+				, VertexOutT< vxlpass::SurfaceT > out )
 			{
 				auto ids = shader::getIds( c3d_objectIdsData
 					, in
@@ -420,8 +420,8 @@ namespace castor3d
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 
-		writer.implementMainT< VoidT, vx::SurfaceT >( [&]( VertexIn in
-			, VertexOutT< vx::SurfaceT > out )
+		writer.implementMainT< VoidT, vxlpass::SurfaceT >( [&]( VertexIn in
+			, VertexOutT< vxlpass::SurfaceT > out )
 			{
 				auto nodeId = writer.declLocale( "nodeId"
 					, shader::getNodeId( c3d_objectIdsData
@@ -490,9 +490,9 @@ namespace castor3d
 			, RenderPipeline::eBuffers
 			, true );
 
-		writer.implementMainT< 3u, TriangleListT< vx::SurfaceT >, TriangleStreamT< vx::SurfaceT > >( [&]( GeometryIn in
-			, TriangleListT< vx::SurfaceT > list
-			, TriangleStreamT< vx::SurfaceT > out )
+		writer.implementMainT< 3u, TriangleListT< vxlpass::SurfaceT >, TriangleStreamT< vxlpass::SurfaceT > >( [&]( GeometryIn in
+			, TriangleListT< vxlpass::SurfaceT > list
+			, TriangleStreamT< vxlpass::SurfaceT > out )
 			{
 				auto facenormal = writer.declLocale( "facenormal"
 					, abs( list[0].normal + list[1].normal + list[2].normal ) );
@@ -606,7 +606,7 @@ namespace castor3d
 			, RenderPipeline::eTextures
 			, hasTextures ) );
 
-		writer.implementMainT< vx::SurfaceT, VoidT >( [&]( FragmentInT< vx::SurfaceT > in
+		writer.implementMainT< vxlpass::SurfaceT, VoidT >( [&]( FragmentInT< vxlpass::SurfaceT > in
 			, FragmentOut out )
 			{
 				auto diff = writer.declLocale( "diff"

@@ -15,15 +15,13 @@
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace smshcompskin
 	{
-		ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout( ShaderFlags shaderFlags
+		static ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout( ShaderFlags shaderFlags
 			, uint32_t & currentLocation )
 		{
 			ashes::VkVertexInputBindingDescriptionArray bindings{ { BonesComponent::BindingPoint
@@ -53,7 +51,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	String const BonesComponent::Name = cuT( "bones" );
+	castor::String const BonesComponent::Name = cuT( "bones" );
 
 	BonesComponent::BonesComponent( Submesh & submesh )
 		: SubmeshComponent{ submesh, Name, BindingPoint }
@@ -90,7 +88,7 @@ namespace castor3d
 			if ( layoutIt == m_bonesLayouts.end() )
 			{
 				layoutIt = m_bonesLayouts.emplace( hash
-					, doCreateVertexLayout( shaderFlags, currentLocation ) ).first;
+					, smshcompskin::doCreateVertexLayout( shaderFlags, currentLocation ) ).first;
 			}
 
 			buffers.emplace_back( getOwner()->getBufferOffsets().getBonesBuffer() );

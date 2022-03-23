@@ -30,9 +30,9 @@ CU_ImplementCUSmartPtr( castor3d, IndirectLightingPass )
 
 namespace castor3d
 {
-	namespace
+	namespace drindirlgtpass
 	{
-		ShaderPtr getVertexShaderSource()
+		static ShaderPtr getVertexShaderSource()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -48,7 +48,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderPtr getPixelShaderSource( PassTypeID passType
+		static ShaderPtr getPixelShaderSource( PassTypeID passType
 			, RenderSystem const & renderSystem
 			, IndirectLightingPass::Config const & config )
 		{
@@ -162,7 +162,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		uint32_t getIndex( SceneFlags sceneFlags )
+		static uint32_t getIndex( SceneFlags sceneFlags )
 		{
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
@@ -190,7 +190,7 @@ namespace castor3d
 			return 0u;
 		}
 
-		SceneFlags adjustSceneFlags( SceneFlags sceneFlags )
+		static SceneFlags adjustSceneFlags( SceneFlags sceneFlags )
 		{
 			remFlag( sceneFlags, SceneFlag::eFogLinear );
 			remFlag( sceneFlags, SceneFlag::eFogExponential );
@@ -203,11 +203,11 @@ namespace castor3d
 	//*********************************************************************************************
 
 	IndirectLightingPass::Config::Config( SceneFlags const & sceneFlags )
-		: sceneFlags{ adjustSceneFlags( sceneFlags ) }
+		: sceneFlags{ drindirlgtpass::adjustSceneFlags( sceneFlags ) }
 		, voxels{ checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) }
 		, lpv{ checkFlag( sceneFlags, SceneFlag::eLpvGI ) }
 		, llpv{ checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) }
-		, index{ getIndex( sceneFlags ) }
+		, index{ drindirlgtpass::getIndex( sceneFlags ) }
 	{
 	}
 
@@ -241,10 +241,10 @@ namespace castor3d
 		, Config const & config )
 		: vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
 			, "IndirectLightingPass"
-			, getVertexShaderSource() }
+			, drindirlgtpass::getVertexShaderSource() }
 		, pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT
 			, "IndirectLightingPass"
-			, getPixelShaderSource( scene.getPassesType()
+			, drindirlgtpass::getPixelShaderSource( scene.getPassesType()
 				, device.renderSystem
 				, config ) }
 		, stages{ makeShaderState( device, vertexShader )

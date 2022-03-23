@@ -1,12 +1,13 @@
 #include "CastorUtils/FileParser/FileParser.hpp"
 
 #include "CastorUtils/FileParser/ParserParameter.hpp"
+#include "CastorUtils/Data/ZipArchive.hpp"
 
 namespace castor
 {
-	namespace
+	namespace fileprs
 	{
-		String doStripComments( String const & p_line )
+		static String doStripComments( String const & p_line )
 		{
 			String result = p_line;
 			auto index = result.find( "//" );
@@ -279,11 +280,61 @@ namespace castor
 	{
 	}
 
-	void FileParser::processFile( Path const & path
+	void FileParser::processFile( Path path
 		, PreprocessedFile & preprocessed )
 	{
 		m_ignoreLevel = 0;
 		m_ignored = false;
+
+		if ( path.getExtension() == cuT( "zip" ) )
+		{
+			auto pathFile = path;
+			ZipArchive archive{ path, File::OpenMode::eRead };
+			path = castor::File::getUserDirectory() / cuT( ".Castor" ) / pathFile.getFileName();
+			bool carryOn = true;
+
+			if ( !File::directoryExists( path ) )
+			{
+				carryOn = archive.inflate( path );
+			}
+
+			if ( carryOn )
+			{
+				PathArray files;
+
+				if ( File::listDirectoryFiles( path, files, true ) )
+				{
+					auto it = std::find_if( files.begin()
+						, files.end()
+						, [pathFile]( Path const & lookup )
+						{
+							auto fileName = lookup.getFileName( true );
+							return fileName == cuT( "main.cscn" )
+								|| fileName == cuT( "scene.cscn" )
+								|| fileName == pathFile.getFileName() + cuT( ".cscn" );
+						} );
+
+					if ( it != files.end() )
+					{
+						path = *it;
+					}
+					else
+					{
+						auto fileIt = std::find_if( files.begin()
+							, files.end()
+							, []( Path const & lookup )
+							{
+								return lookup.getExtension() == cuT( "cscn" );
+							} );
+
+						if ( fileIt != files.end() )
+						{
+							path = *fileIt;
+						}
+					}
+				}
+			}
+		}
 
 		if ( TextFile file{ path, File::OpenMode::eRead } )
 		{
@@ -540,7 +591,7 @@ namespace castor
 		bool carryOn = true;
 		bool result = false;
 		std::size_t blockEndIndex = line.find( cuT( "}" ) );
-		line = doStripComments( line );
+		line = fileprs::doStripComments( line );
 
 		if ( blockEndIndex != String::npos )
 		{

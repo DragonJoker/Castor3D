@@ -12,9 +12,9 @@ CU_ImplementCUSmartPtr( castor3d, Frustum )
 
 namespace castor3d
 {
-	namespace
+	namespace rendfrust
 	{
-		void updatePoints( std::array< castor::Point3f, 8u > const & corners
+		static void updatePoints( std::array< castor::Point3f, 8u > const & corners
 			, std::array< InterleavedVertex, 24u > & points )
 		{
 			uint32_t index = 0u;
@@ -161,7 +161,7 @@ namespace castor3d
 			corner = invViewProj * corner;
 		}
 
-		updatePoints( corners, m_points );
+		rendfrust::updatePoints( corners, m_points );
 #endif
 
 		return m_planes;
@@ -231,7 +231,7 @@ namespace castor3d
 			, corners[size_t( FrustumCorner::eNearLeftTop )]
 			, corners[size_t( FrustumCorner::eFarLeftTop )] );
 
-		updatePoints( corners, m_points );
+		rendfrust::updatePoints( corners, m_points );
 #endif
 
 		return m_planes;

@@ -3,15 +3,15 @@
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>
 
-using namespace castor;
-
-WX_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( Size )
+GC_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( castor, Size )
 
 namespace GuiCommon
 {
-	WX_PG_IMPLEMENT_PROPERTY_CLASS( SizeProperty, wxPGProperty, Size, const Size &, TextCtrl )
+	WX_PG_IMPLEMENT_PROPERTY_CLASS( SizeProperty, wxPGProperty, castor::Size, const castor::Size &, TextCtrl )
 
-	SizeProperty::SizeProperty( wxString const & label, wxString const & name, Size const & value )
+	SizeProperty::SizeProperty( wxString const & label
+		, wxString const & name
+		, castor::Size const & value )
 		: wxPGProperty( label, name )
 	{
 		setValueI( value );
@@ -23,7 +23,7 @@ namespace GuiCommon
 	{
 		if ( GetChildCount() )
 		{
-			const Size & size = SizeRefFromVariant( m_value );
+			const castor::Size & size = SizeRefFromVariant( m_value );
 			Item( 0 )->SetValue( long( size.getWidth() ) );
 			Item( 1 )->SetValue( long( size.getHeight() ) );
 		}
@@ -31,7 +31,7 @@ namespace GuiCommon
 
 	wxVariant SizeProperty::ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue )const
 	{
-		Size & size = SizeRefFromVariant( thisValue );
+		castor::Size & size = SizeRefFromVariant( thisValue );
 		auto val = int( childValue.GetLong() );
 
 		switch ( childIndex )

@@ -7,9 +7,6 @@
 
 #include <wx/propgrid/advprops.h>
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
 	CameraTreeItemProperty::CameraTreeItemProperty( bool p_editable, castor3d::Camera & p_camera )

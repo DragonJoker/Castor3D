@@ -1,6 +1,5 @@
 #include "GuiCommon/GuiCommonPrerequisites.hpp"
 
-
 #if defined( CU_PlatformWindows ) && !defined( NDEBUG ) && !defined( VLD_AVAILABLE )
 #	define _CRTDBG_MAP_ALLOC
 #	include <cstdlib>
@@ -40,8 +39,6 @@ using Bool = int;
 
 #include <wx/window.h>
 #include <wx/rawbmp.h>
-
-using namespace castor3d;
 
 namespace GuiCommon
 {
@@ -202,7 +199,7 @@ namespace GuiCommon
 		createBitmapFromBuffer( buffer->getConstPtr(), buffer->getWidth(), buffer->getHeight(), flip, bitmap );
 	}
 
-	void createBitmapFromBuffer( TextureUnitSPtr unit, bool flip, wxBitmap & bitmap )
+	void createBitmapFromBuffer( castor3d::TextureUnitSPtr unit, bool flip, wxBitmap & bitmap )
 	{
 		if ( unit->getTexture()->getDefaultView().hasBuffer() )
 		{
@@ -237,11 +234,11 @@ namespace GuiCommon
 		}
 	}
 
-	RenderTargetSPtr loadScene( Engine & engine
+	castor3d::RenderTargetSPtr loadScene( castor3d::Engine & engine
 		, castor::Path const & fileName
 		, castor3d::ProgressBar * progress )
 	{
-		RenderTargetSPtr result;
+		castor3d::RenderTargetSPtr result;
 
 		if ( castor::File::fileExists( fileName ) )
 		{
@@ -251,7 +248,7 @@ namespace GuiCommon
 			{
 				try
 				{
-					SceneFileParser parser( engine );
+					castor3d::SceneFileParser parser( engine );
 					auto preprocessed = parser.processFile( fileName );
 
 					if ( progress )
@@ -289,7 +286,7 @@ namespace GuiCommon
 		return result;
 	}
 
-	void loadScene( Engine & engine
+	void loadScene( castor3d::Engine & engine
 		, castor::Path const & fileName
 		, castor3d::ProgressBar * progress
 		, wxWindow * window
@@ -315,7 +312,7 @@ namespace GuiCommon
 
 	void loadPlugins( castor3d::Engine & engine )
 	{
-		castor::PathArray arrayKept = listPluginsFiles( Engine::getPluginsDirectory() );
+		castor::PathArray arrayKept = listPluginsFiles( castor3d::Engine::getPluginsDirectory() );
 
 #if !defined( NDEBUG )
 

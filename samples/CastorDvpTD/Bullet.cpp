@@ -2,12 +2,9 @@
 
 #include "Game.hpp"
 
-using namespace castor;
-using namespace castor3d;
-
 namespace castortd
 {
-	Bullet::Bullet( float p_speed, uint32_t p_damage, SceneNode & p_node, Enemy & p_enemy )
+	Bullet::Bullet( float p_speed, uint32_t p_damage, castor3d::SceneNode & p_node, Enemy & p_enemy )
 		: m_node{ p_node }
 		, m_target{ p_enemy }
 		, m_speed{ p_speed }
@@ -33,7 +30,7 @@ namespace castortd
 			castor::Point3f result = m_target.get().getNode().getPosition();
 			castor::Point3f position{ m_node.get().getPosition() };
 			castor::Point3f direction{ result - position };
-			auto distanceToDst = point::length( direction );
+			auto distanceToDst = castor::point::length( direction );
 			direction[0] *= float( speed / distanceToDst );
 			direction[2] *= float( speed / distanceToDst );
 			reachDst = distanceToDst <= speed;

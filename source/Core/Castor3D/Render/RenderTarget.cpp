@@ -40,7 +40,7 @@ CU_ImplementCUSmartPtr( castor3d, RenderTarget )
 
 namespace castor3d
 {
-	namespace
+	namespace rendtgt
 	{
 		enum CombineIdx
 		{
@@ -762,17 +762,17 @@ namespace castor3d
 
 		for ( auto & postEffect : m_hdrPostEffects )
 		{
-			IntermediatesLister::submit( *getScene(), *postEffect, result );
+			rendtgt::IntermediatesLister::submit( *getScene(), *postEffect, result );
 		}
 
 		for ( auto & postEffect : m_srgbPostEffects )
 		{
-			IntermediatesLister::submit( *getScene(), *postEffect, result );
+			rendtgt::IntermediatesLister::submit( *getScene(), *postEffect, result );
 		}
 
 		if ( m_renderTechnique )
 		{
-			IntermediatesLister::submit( *m_renderTechnique, result );
+			rendtgt::IntermediatesLister::submit( *m_renderTechnique, result );
 		}
 	}
 
@@ -801,9 +801,9 @@ namespace castor3d
 				return result;
 			} );
 		result.addSampledView( m_objects.sampledViewId
-			, CombineLhsIdx );
+			, rendtgt::CombineLhsIdx );
 		result.addSampledView( m_overlays.sampledViewId
-			, CombineRhsIdx
+			, rendtgt::CombineRhsIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		result.addOutputColourView( m_combined.targetViewId );
 		return result;
@@ -891,8 +891,8 @@ namespace castor3d
 			auto uv = writer.declInput< Vec2 >( "uv", 1u );
 
 			// Shader outputs
-			auto vtx_textureLhs = writer.declOutput< Vec2 >( "vtx_textureLhs", CombineLhsIdx );
-			auto vtx_textureRhs = writer.declOutput< Vec2 >( "vtx_textureRhs", CombineRhsIdx );
+			auto vtx_textureLhs = writer.declOutput< Vec2 >( "vtx_textureLhs", rendtgt::CombineLhsIdx );
+			auto vtx_textureRhs = writer.declOutput< Vec2 >( "vtx_textureRhs", rendtgt::CombineRhsIdx );
 
 			shader::Utils utils{ writer, *getEngine() };
 
@@ -924,11 +924,11 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			auto c3d_mapLhs = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLhs", CombineLhsIdx, 0u );
-			auto c3d_mapRhs = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapRhs", CombineRhsIdx, 0u );
+			auto c3d_mapLhs = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLhs", rendtgt::CombineLhsIdx, 0u );
+			auto c3d_mapRhs = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapRhs", rendtgt::CombineRhsIdx, 0u );
 
-			auto vtx_textureLhs = writer.declInput< Vec2 >( "vtx_textureLhs", CombineLhsIdx );
-			auto vtx_textureRhs = writer.declInput< Vec2 >( "vtx_textureRhs", CombineRhsIdx );
+			auto vtx_textureLhs = writer.declInput< Vec2 >( "vtx_textureLhs", rendtgt::CombineLhsIdx );
+			auto vtx_textureRhs = writer.declInput< Vec2 >( "vtx_textureRhs", rendtgt::CombineRhsIdx );
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );

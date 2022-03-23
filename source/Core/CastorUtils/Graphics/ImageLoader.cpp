@@ -9,9 +9,9 @@ namespace castor
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace imgl
 	{
-		Image postProcess( PxBufferConvertOptions const & options
+		static Image postProcess( PxBufferConvertOptions const & options
 			, Image image
 			, ImageLoaderConfig const & config )
 		{
@@ -195,7 +195,7 @@ namespace castor
 	{
 		checkData( data, size );
 		auto loader = findLoader( imageFormat );
-		return postProcess( m_options
+		return imgl::postProcess( m_options
 			, loader->load( name
 				, imageFormat
 				, data
@@ -211,7 +211,7 @@ namespace castor
 	{
 		checkData( data, size );
 		auto loader = findLoader( imagePath );
-		return postProcess( m_options
+		return imgl::postProcess( m_options
 			, loader->load( name
 				, imagePath
 				, data

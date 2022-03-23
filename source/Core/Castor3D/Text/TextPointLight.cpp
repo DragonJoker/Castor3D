@@ -8,10 +8,10 @@
 #include <CastorUtils/Data/Text/TextPoint.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
-using namespace castor3d;
-
 namespace castor
 {
+	using namespace castor3d;
+
 	TextWriter< PointLight >::TextWriter( String const & tabs )
 		: TextWriterT< PointLight >{ tabs }
 	{

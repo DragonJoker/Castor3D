@@ -5,10 +5,10 @@
 #include "Castor3D/Text/TextHdrConfig.hpp"
 #include "Castor3D/Text/TextViewport.hpp"
 
-using namespace castor3d;
-
 namespace castor
 {
+	using namespace castor3d;
+
 	TextWriter< Camera >::TextWriter( String const & tabs )
 		: TextWriterT< Camera >{ tabs }
 	{

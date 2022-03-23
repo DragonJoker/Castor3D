@@ -36,8 +36,6 @@
 
 CU_ImplementCUSmartPtr( castor3d, LightPropagationPass )
 
-using namespace castor;
-
 namespace castor3d
 {
 	namespace lpvprop

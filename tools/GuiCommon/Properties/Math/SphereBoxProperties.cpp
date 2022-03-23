@@ -5,17 +5,15 @@
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>
 
-using namespace castor;
-
-WX_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( BoundingSphere )
+GC_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( castor, BoundingSphere )
 
 namespace GuiCommon
 {
-	WX_PG_IMPLEMENT_PROPERTY_CLASS( BoundingSphereProperty, wxPGProperty, BoundingSphere, BoundingSphere const &, TextCtrl )
+	WX_PG_IMPLEMENT_PROPERTY_CLASS( BoundingSphereProperty, wxPGProperty, castor::BoundingSphere, castor::BoundingSphere const &, TextCtrl )
 
 		BoundingSphereProperty::BoundingSphereProperty( wxString const & label
 			, wxString const & name
-			, BoundingSphere const & value )
+			, castor::BoundingSphere const & value )
 		: wxPGProperty{ label, name }
 	{
 		setValueI( value );

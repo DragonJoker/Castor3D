@@ -6,8 +6,6 @@
 #include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/CompositeTypes/ArraySsbo.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
 	namespace shader

@@ -7,8 +7,6 @@
 #include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*************************************************************************************************

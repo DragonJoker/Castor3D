@@ -14,13 +14,11 @@
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
-	namespace
+	namespace smshcompmorph
 	{
-		ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout( ShaderFlags const & flags
+		static ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout( ShaderFlags const & flags
 			, bool hasTextures
 			, uint32_t & currentLocation )
 		{
@@ -59,7 +57,7 @@ namespace castor3d
 		}
 	}
 
-	String const MorphComponent::Name = cuT( "morph" );
+	castor::String const MorphComponent::Name = cuT( "morph" );
 
 	MorphComponent::MorphComponent( Submesh & submesh )
 		: SubmeshComponent{ submesh, Name, BindingPoint }
@@ -85,7 +83,7 @@ namespace castor3d
 			if ( layoutIt == m_animLayouts.end() )
 			{
 				layoutIt = m_animLayouts.emplace( hash
-					, doCreateVertexLayout( shaderFlags, !mask.empty(), currentLocation ) ).first;
+					, smshcompmorph::doCreateVertexLayout( shaderFlags, !mask.empty(), currentLocation ) ).first;
 			}
 
 			buffers.emplace_back( m_animBuffer.getBuffer().getBuffer() );

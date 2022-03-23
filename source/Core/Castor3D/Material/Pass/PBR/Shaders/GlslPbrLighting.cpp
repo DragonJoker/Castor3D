@@ -18,9 +18,9 @@
 
 namespace castor3d::shader
 {
-	namespace
+	namespace pbrlgt
 	{
-		void modifyMaterial( sdw::ShaderWriter & writer
+		static void modifyMaterial( sdw::ShaderWriter & writer
 			, castor::String const & configName
 			, PassFlags const & passFlags
 			, TextureFlags const & textureFlags
@@ -47,7 +47,7 @@ namespace castor3d::shader
 			config.applyRoughness( textureFlags, sampled, pbrLightMat.roughness );
 		}
 
-		void updateMaterial( sdw::ShaderWriter & writer
+		static void updateMaterial( sdw::ShaderWriter & writer
 			, PassFlags const & passFlags
 			, TextureFlags const & textureFlags
 			, PbrLightMaterial & pbrLightMat
@@ -218,7 +218,7 @@ namespace castor3d::shader
 					, bitangent
 					, tangentSpaceViewPosition
 					, tangentSpaceFragPosition );
-				modifyMaterial( m_writer
+				pbrlgt::modifyMaterial( m_writer
 					, name
 					, passFlags
 					, textureFlags
@@ -229,7 +229,7 @@ namespace castor3d::shader
 			FI;
 		}
 
-		updateMaterial( m_writer
+		pbrlgt::updateMaterial( m_writer
 			, passFlags
 			, textureFlags
 			, pbrLightMat
@@ -312,7 +312,7 @@ namespace castor3d::shader
 					, emissive
 					, opacity
 					, occlusion );
-				modifyMaterial( m_writer
+				pbrlgt::modifyMaterial( m_writer
 					, name
 					, passFlags
 					, textureFlags
@@ -323,7 +323,7 @@ namespace castor3d::shader
 			FI;
 		}
 
-		updateMaterial( m_writer
+		pbrlgt::updateMaterial( m_writer
 			, passFlags
 			, textureFlags
 			, pbrLightMat

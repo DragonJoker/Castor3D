@@ -14,18 +14,24 @@
 
 namespace castor3d
 {
-	namespace
+	namespace smshcompline
 	{
 		struct LineDistance
 		{
 			uint32_t m_index[2];
 			double m_distance;
 		};
-		bool operator<( LineDistance const & lhs, LineDistance const & rhs )
-		{
-			return lhs.m_distance < rhs.m_distance;
-		}
+
 		CU_DeclareVector( LineDistance, LineDist );
+
+		struct Compare
+		{
+			bool operator()( LineDistance const & lhs
+				, LineDistance const & rhs )
+			{
+				return lhs.m_distance < rhs.m_distance;
+			}
+		};
 	}
 
 	castor::String const LinesMapping::Name = "lines_mapping";
@@ -112,7 +118,7 @@ namespace castor3d
 						, offsets.idxChunk.size
 						, 0u ) ) )
 					{
-						LineDistArray arraySorted;
+						smshcompline::LineDistArray arraySorted;
 						arraySorted.reserve( indexSize / 2 );
 
 						if ( auto * vertex = reinterpret_cast< InterleavedVertex const * >( vertices.lock( offsets.getVertexOffset()
@@ -126,10 +132,10 @@ namespace castor3d
 								dDistance += castor::point::lengthSquared( vtx1 - cameraPosition );
 								auto & vtx2 = vertex[it[1]].pos;
 								dDistance += castor::point::lengthSquared( vtx2 - cameraPosition );
-								arraySorted.push_back( LineDistance{ { it[0], it[1] }, dDistance } );
+								arraySorted.push_back( smshcompline::LineDistance{ { it[0], it[1] }, dDistance } );
 							}
 
-							std::sort( arraySorted.begin(), arraySorted.end() );
+							std::sort( arraySorted.begin(), arraySorted.end(), smshcompline::Compare{} );
 
 							for ( auto & line : arraySorted )
 							{

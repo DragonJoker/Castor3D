@@ -7,11 +7,9 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
-	Geometry::Geometry( String const & name
+	Geometry::Geometry( castor::String const & name
 		, Scene & scene
 		, SceneNode & node
 		, MeshResPtr mesh )
@@ -22,7 +20,7 @@ namespace castor3d
 		doUpdateMesh();
 	}
 	
-	Geometry::Geometry( String const & name
+	Geometry::Geometry( castor::String const & name
 		, Scene & scene
 		, MeshResPtr mesh )
 		: MovableObject{ name, scene, MovableType::eGeometry }
@@ -147,21 +145,21 @@ namespace castor3d
 		if ( !boxes.empty() )
 		{
 			m_submeshesBoxes.emplace( boxes[0].first, boxes[0].second );
-			m_submeshesSpheres.emplace( boxes[0].first, BoundingSphere{ boxes[0].second } );
+			m_submeshesSpheres.emplace( boxes[0].first, castor::BoundingSphere{ boxes[0].second } );
 
 			for ( auto i = 1u; i < boxes.size(); ++i )
 			{
 				m_submeshesBoxes.emplace( boxes[i].first, boxes[i].second );
-				m_submeshesSpheres.emplace( boxes[i].first, BoundingSphere{ boxes[i].second } );
+				m_submeshesSpheres.emplace( boxes[i].first, castor::BoundingSphere{ boxes[i].second } );
 			}
 
 			doUpdateContainers();
 		}
 	}
 
-	BoundingBox const & Geometry::getBoundingBox( Submesh const & submesh )const
+	castor::BoundingBox const & Geometry::getBoundingBox( Submesh const & submesh )const
 	{
-		static BoundingBox const dummy;
+		static castor::BoundingBox const dummy;
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 		auto it = m_submeshesBoxes.find( &submesh );
 
@@ -173,9 +171,9 @@ namespace castor3d
 		return dummy;
 	}
 
-	BoundingSphere const & Geometry::getBoundingSphere( Submesh const & submesh )const
+	castor::BoundingSphere const & Geometry::getBoundingSphere( Submesh const & submesh )const
 	{
-		static BoundingSphere const dummy;
+		static castor::BoundingSphere const dummy;
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 		auto it = m_submeshesSpheres.find( &submesh );
 
@@ -188,11 +186,11 @@ namespace castor3d
 	}
 
 	void Geometry::setBoundingBox( Submesh const & submesh
-		, BoundingBox const & box )
+		, castor::BoundingBox const & box )
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 		m_submeshesBoxes[&submesh] = box;
-		m_submeshesSpheres[&submesh] = BoundingSphere{ box };
+		m_submeshesSpheres[&submesh] = castor::BoundingSphere{ box };
 		doUpdateContainers();
 	}
 
@@ -238,7 +236,7 @@ namespace castor3d
 		}
 		else
 		{
-			m_meshName = cuEmptyString;
+			m_meshName = castor::cuEmptyString;
 		}
 	}
 

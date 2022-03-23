@@ -3,8 +3,6 @@
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	void SsaoConfig::accept( castor::String const & name

@@ -81,7 +81,7 @@ namespace castor3d
 		CU_ScopedEnumBounds( eDepth ),
 	};
 	castor::String getTextureName( LpTexture texture );
-	castor::String getName( LpTexture texture );
+	castor::String getTexName( LpTexture texture );
 	VkFormat getFormat( RenderDevice const & device, LpTexture texture );
 	VkClearValue getClearValue( LpTexture texture );
 	VkImageUsageFlags getUsageFlags( LpTexture texture );

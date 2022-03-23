@@ -9,20 +9,18 @@
 #include <CastorUtils/Data/ZipArchive.hpp>
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
-	namespace
+	namespace scnps
 	{
-		void parseError( castor::String const & error )
+		static void parseError( castor::String const & error )
 		{
 			castor::StringStream stream{ castor::makeStringStream() };
 			stream << cuT( "Error, : " ) << error;
 			castor::Logger::logError( stream.str() );
 		}
 
-		void addParser( castor::AttributeParsers & parsers
+		static void addParser( castor::AttributeParsers & parsers
 			, uint32_t section
 			, castor::String const & name
 			, castor::ParserFunction function
@@ -41,9 +39,10 @@ namespace castor3d
 			}
 		}
 
-		castor::AttributeParsers registerParsers()
+		static castor::AttributeParsers registerParsers()
 		{
-			castor::AttributeParsers result;
+			using namespace castor;
+			AttributeParsers result;
 
 			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "scene" ), parserRootScene, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "loading_screen" ), parserRootLoadingScreen, {} );
@@ -386,9 +385,9 @@ namespace castor3d
 			return result;
 		}
 
-		castor::StrUInt32Map registerSections()
+		static castor::StrUInt32Map registerSections()
 		{
-			return { { uint32_t( CSCNSection::eRoot ), String{} }
+			return { { uint32_t( CSCNSection::eRoot ), castor::String{} }
 				, { uint32_t( CSCNSection::eScene ), cuT( "scene" ) }
 				, { uint32_t( CSCNSection::eWindow ), cuT( "window" ) }
 				, { uint32_t( CSCNSection::eSampler ), cuT( "sampler" ) }
@@ -434,14 +433,14 @@ namespace castor3d
 				, { uint32_t( CSCNSection::eVoxelConeTracing ), cuT( "voxel_cone_tracing" ) } };
 		}
 
-		void * createContext( castor::FileParserContext & context )
+		static void * createContext( castor::FileParserContext & context )
 		{
 			SceneFileContext * userContext = new SceneFileContext{ *context.logger
 				, static_cast< SceneFileParser * >( context.parser ) };
 			return userContext;
 		}
 
-		castor::AdditionalParsers createParsers()
+		static castor::AdditionalParsers createParsers()
 		{
 			return { registerParsers()
 				, registerSections() 
@@ -451,7 +450,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	SceneFileContext::SceneFileContext( LoggerInstance & plogger
+	SceneFileContext::SceneFileContext( castor::LoggerInstance & plogger
 		, SceneFileParser * pparser )
 		: logger{ &plogger }
 		, parser{ pparser }
@@ -559,7 +558,7 @@ namespace castor3d
 			registerParsers( it.first, it.second );
 		}
 
-		registerParsers( "c3d.scene", createParsers() );
+		registerParsers( "c3d.scene", scnps::createParsers() );
 	}
 
 	RenderWindowDesc SceneFileParser::getRenderWindow()
@@ -567,31 +566,31 @@ namespace castor3d
 		return m_renderWindow;
 	}
 
-	bool SceneFileParser::parseFile( Path const & pathFile )
+	bool SceneFileParser::parseFile( castor::Path const & pathFile )
 	{
-		Path path = pathFile;
+		castor::Path path = pathFile;
 
 		if ( path.getExtension() == cuT( "zip" ) )
 		{
-			castor::ZipArchive archive( path, File::OpenMode::eRead );
+			castor::ZipArchive archive( path, castor::File::OpenMode::eRead );
 			path = Engine::getEngineDirectory() / pathFile.getFileName();
 
 			bool ok = true;
 
-			if ( !File::directoryExists( path ) )
+			if ( !castor::File::directoryExists( path ) )
 			{
 				ok = archive.inflate( path );
 			}
 
 			if ( ok )
 			{
-				PathArray files;
+				castor::PathArray files;
 
-				if ( File::listDirectoryFiles( path, files, true ) )
+				if ( castor::File::listDirectoryFiles( path, files, true ) )
 				{
 					auto it = std::find_if( files.begin()
 						, files.end()
-						, [pathFile]( Path const & lookup )
+						, [pathFile]( castor::Path const & lookup )
 						{
 							auto fileName = lookup.getFileName( true );
 							return fileName == cuT( "main.cscn" )
@@ -607,7 +606,7 @@ namespace castor3d
 					{
 						auto fileIt = std::find_if( files.begin()
 							, files.end()
-							, []( Path const & p_path )
+							, []( castor::Path const & p_path )
 							{
 								return p_path.getExtension() == cuT( "cscn" );
 							} );
@@ -624,7 +623,7 @@ namespace castor3d
 		return FileParser::parseFile( path );
 	}
 
-	void SceneFileParser::doCleanupParser( PreprocessedFile & preprocessed )
+	void SceneFileParser::doCleanupParser( castor::PreprocessedFile & preprocessed )
 	{
 		auto & context = getParserContext( preprocessed.getContext() );
 
@@ -640,11 +639,11 @@ namespace castor3d
 	{
 	}
 
-	String SceneFileParser::doGetSectionName( castor::SectionId section )const
+	castor::String SceneFileParser::doGetSectionName( castor::SectionId section )const
 	{
-		String result;
-		static const std::map< CSCNSection, String > baseSections
-		{ { CSCNSection::eRoot, String{} }
+		castor::String result;
+		static const std::map< CSCNSection, castor::String > baseSections
+		{ { CSCNSection::eRoot, castor::String{} }
 			, { CSCNSection::eScene, cuT( "scene" ) }
 			, { CSCNSection::eWindow, cuT( "window" ) }
 			, { CSCNSection::eSampler, cuT( "sampler" ) }
@@ -710,7 +709,7 @@ namespace castor3d
 		return cuT( "unknown" );
 	}
 
-	std::unique_ptr< FileParser > SceneFileParser::doCreateParser()const
+	std::unique_ptr< castor::FileParser > SceneFileParser::doCreateParser()const
 	{
 		return std::make_unique< SceneFileParser >( *getEngine() );
 	}

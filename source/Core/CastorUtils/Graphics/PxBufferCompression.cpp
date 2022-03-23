@@ -12,7 +12,7 @@ namespace castor
 
 	//*****************************************************************************************
 
-	namespace
+	namespace pxcomp
 	{
 		template< typename TypeT >
 		struct BlockTyperT;
@@ -39,7 +39,7 @@ namespace castor
 		using BlockTypeT = typename BlockTyperT< TypeT >::Type;
 
 		template< typename TypeT >
-		void getLinePixels( BlockTypeT< TypeT > & block
+		static void getLinePixels( BlockTypeT< TypeT > & block
 			, uint32_t x
 			, uint32_t w
 			, uint32_t srcPixelSize
@@ -74,7 +74,7 @@ namespace castor
 		}
 
 		template< typename TypeT >
-		std::vector< BlockTypeT< TypeT > > extractBlocks( Size const & srcDimensions
+		static std::vector< BlockTypeT< TypeT > > extractBlocks( Size const & srcDimensions
 			, uint32_t srcPixelSize
 			, uint8_t const * srcBuffer
 			, uint32_t srcSize
@@ -130,17 +130,17 @@ namespace castor
 			return result;
 		}
 
-		void * allocETC2( void * CU_UnusedParam( context ), size_t size )
+		static void * allocETC2( void * CU_UnusedParam( context ), size_t size )
 		{
 			return alignedAlloc( 16u, size );
 		}
 
-		void freeETC2( void * CU_UnusedParam( context ), void * ptr, size_t CU_UnusedParam( size ) )
+		static void freeETC2( void * CU_UnusedParam( context ), void * ptr, size_t CU_UnusedParam( size ) )
 		{
 			alignedFree( ptr );
 		}
 
-		cvtt::Options initialiseOptions()
+		static cvtt::Options initialiseOptions()
 		{
 			cvtt::Options result;
 			uint32_t flags = cvtt::Flags::Fastest;
@@ -153,15 +153,15 @@ namespace castor
 	//*****************************************************************************************
 
 	CVTTOptions::CVTTOptions()
-		: options{ initialiseOptions() }
-		, etc2CompressionData{ cvtt::Kernels::AllocETC2Data( allocETC2, this, options ) }
+		: options{ pxcomp::initialiseOptions() }
+		, etc2CompressionData{ cvtt::Kernels::AllocETC2Data( pxcomp::allocETC2, this, options ) }
 	{
 		cvtt::Kernels::ConfigureBC7EncodingPlanFromQuality( encodingPlan, 70 );
 	}
 
 	CVTTOptions::~CVTTOptions()
 	{
-		cvtt::Kernels::ReleaseETC2Data( etc2CompressionData, freeETC2 );
+		cvtt::Kernels::ReleaseETC2Data( etc2CompressionData, pxcomp::freeETC2 );
 	}
 
 	//*****************************************************************************************
@@ -175,7 +175,7 @@ namespace castor
 		, X8UGetter getB
 		, X8UGetter getA )
 	{
-		return extractBlocks( srcDimensions
+		return pxcomp::extractBlocks( srcDimensions
 			, srcPixelSize
 			, srcBuffer
 			, srcSize
@@ -194,7 +194,7 @@ namespace castor
 		, X8SGetter getB
 		, X8SGetter getA )
 	{
-		return extractBlocks( srcDimensions
+		return pxcomp::extractBlocks( srcDimensions
 			, srcPixelSize
 			, srcBuffer
 			, srcSize
@@ -213,7 +213,7 @@ namespace castor
 		, X16FGetter getB
 		, X16FGetter getA )
 	{
-		return extractBlocks( srcDimensions
+		return pxcomp::extractBlocks( srcDimensions
 			, srcPixelSize
 			, srcBuffer
 			, srcSize

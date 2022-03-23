@@ -15,9 +15,9 @@
 
 namespace castor3d
 {
-	namespace
+	namespace smsh
 	{
-		size_t hash( MaterialRPtr material
+		static size_t hash( MaterialRPtr material
 			, ShaderFlags const & shaderFlags
 			, ProgramFlags const & programFlags
 			, TextureFlagsArray const & mask
@@ -37,7 +37,7 @@ namespace castor3d
 			return result;
 		}
 
-		bool fix( castor::Point3f & value
+		static bool fix( castor::Point3f & value
 			, castor::Point3f const & defaultValue )
 		{
 			bool result = false;
@@ -63,7 +63,7 @@ namespace castor3d
 			return result;
 		}
 
-		bool fixNml( castor::Point3f & value )
+		static bool fixNml( castor::Point3f & value )
 		{
 			static castor::Point3f const defaultValue{ 0.0f, 1.0f, 0.0f };
 			auto result = fix( value, defaultValue );
@@ -77,19 +77,19 @@ namespace castor3d
 			return result;
 		}
 
-		bool fixPos( castor::Point3f & value )
+		static bool fixPos( castor::Point3f & value )
 		{
 			static castor::Point3f const defaultValue{ 0.0f, 0.0f, 0.0f };
 			return fix( value, defaultValue );
 		}
 
-		bool fixTex( castor::Point3f & value )
+		static bool fixTex( castor::Point3f & value )
 		{
 			static castor::Point3f const defaultValue{ 0.0f, 0.0f, 0.0f };
 			return fix( value, defaultValue );
 		}
 
-		ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout( ShaderFlags const & flags
+		static ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout( ShaderFlags const & flags
 			, bool hasTextures
 			, uint32_t & currentLocation )
 		{
@@ -361,9 +361,9 @@ namespace castor3d
 	void Submesh::addPoint( InterleavedVertex const & vertex )
 	{
 		auto point = vertex;
-		m_needsNormalsCompute = fixNml( point.nml );
-		m_needsNormalsCompute = fixPos( point.pos ) || m_needsNormalsCompute;
-		m_needsNormalsCompute = fixTex( point.tex ) || m_needsNormalsCompute;
+		m_needsNormalsCompute = smsh::fixNml( point.nml );
+		m_needsNormalsCompute = smsh::fixPos( point.pos ) || m_needsNormalsCompute;
+		m_needsNormalsCompute = smsh::fixTex( point.tex ) || m_needsNormalsCompute;
 		m_points.push_back( point );
 	}
 
@@ -432,7 +432,7 @@ namespace castor3d
 		, TextureFlagsArray const & mask
 		, bool forceTexcoords )const
 	{
-		auto key = hash( material, shaderFlags, programFlags, mask, forceTexcoords );
+		auto key = smsh::hash( material, shaderFlags, programFlags, mask, forceTexcoords );
 		auto it = m_geometryBuffers.find( key );
 		bool hasTextures = forceTexcoords || ( !mask.empty() );
 
@@ -450,7 +450,7 @@ namespace castor3d
 			if ( layoutIt == m_vertexLayouts.end() )
 			{
 				layoutIt = m_vertexLayouts.emplace( hash
-					, doCreateVertexLayout( shaderFlags, hasTextures, currentLocation ) ).first;
+					, smsh::doCreateVertexLayout( shaderFlags, hasTextures, currentLocation ) ).first;
 			}
 			else
 			{

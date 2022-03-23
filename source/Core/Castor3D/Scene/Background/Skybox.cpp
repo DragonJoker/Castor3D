@@ -22,15 +22,13 @@
 #include <ashespp/Shader/ShaderModule.hpp>
 #include <ashespp/Sync/Fence.hpp>
 
-#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-
 namespace castor3d
 {
 	//************************************************************************************************
 
-	namespace
+	namespace skybox
 	{
-		ashes::ImageCreateInfo doGetImageCreate( VkFormat format
+		static ashes::ImageCreateInfo doGetImageCreate( VkFormat format
 			, castor::Size const & dimensions
 			, bool attachment
 			, uint32_t mipLevel = 1u )
@@ -59,7 +57,7 @@ namespace castor3d
 		: SceneBackground{ engine, scene, name + cuT( "Skybox" ), BackgroundType::eSkybox }
 	{
 		m_texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
-			, doGetImageCreate( VK_FORMAT_R8G8B8A8_UNORM, { 16u, 16u }, false )
+			, skybox::doGetImageCreate( VK_FORMAT_R8G8B8A8_UNORM, { 16u, 16u }, false )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SkyboxBackground_Colour" )
 			, true /* isStatic */ );

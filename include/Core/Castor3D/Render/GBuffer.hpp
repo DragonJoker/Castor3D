@@ -81,7 +81,7 @@ namespace castor3d
 				{
 					auto texture = TextureEnumT( i );
 					result.emplace_back( doCreateTexture( handler
-						, prefix + castor3d::getName( texture )
+						, prefix + getTexName( texture )
 						, createFlags
 						, { size.getWidth(), size.getHeight(), 1u }
 						, layerCount
@@ -141,7 +141,7 @@ namespace castor3d
 				{
 					auto texture = TextureEnumT( i );
 					result.emplace_back( doCreateTexture( handler
-						, prefix + castor3d::getName( texture )
+						, prefix + getTexName( texture )
 						, createFlags
 						, size
 						, 1u

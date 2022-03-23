@@ -24,11 +24,9 @@
 
 #include <numeric>
 
-using namespace castor;
-
 namespace draw_edges
 {
-	namespace
+	namespace oied
 	{
 		enum Idx : uint32_t
 		{
@@ -37,7 +35,7 @@ namespace draw_edges
 			eData0,
 		};
 
-		std::unique_ptr< ast::Shader > getVertexShader( VkExtent3D const & size )
+		static std::unique_ptr< ast::Shader > getVertexShader( VkExtent3D const & size )
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -58,7 +56,7 @@ namespace draw_edges
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > getPixelShader( VkExtent3D const & extent
+		static std::unique_ptr< ast::Shader > getPixelShader( VkExtent3D const & extent
 			, int contourMethod )
 		{
 			using namespace sdw;
@@ -183,8 +181,8 @@ namespace draw_edges
 		: m_device{ device }
 		, m_graph{ graph }
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DEObjDetection", getVertexShader( m_extent ) }
-	, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DEObjDetection", getPixelShader( m_extent, 1 ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DEObjDetection", oied::getVertexShader( m_extent ) }
+	, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DEObjDetection", oied::getPixelShader( m_extent, 1 ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_result{ m_device
@@ -218,12 +216,12 @@ namespace draw_edges
 	{
 		auto & modelBuffer = renderTarget.getScene()->getModelBuffer().getBuffer();
 		m_pass.addDependency( previousPass );
-		passBuffer.createPassBinding( m_pass, eMaterials );
+		passBuffer.createPassBinding( m_pass, oied::eMaterials );
 		m_pass.addInputStorageBuffer( { modelBuffer, "Models" }
-			, uint32_t( eModels )
+			, uint32_t( oied::eModels )
 			, 0u
 			, uint32_t( modelBuffer.getSize() ) );
-		m_pass.addSampledView( data0, eData0 );
+		m_pass.addSampledView( data0, oied::eData0 );
 		m_pass.addOutputColourView( m_result.targetViewId
 			, castor3d::transparentBlackClearColor );
 	}

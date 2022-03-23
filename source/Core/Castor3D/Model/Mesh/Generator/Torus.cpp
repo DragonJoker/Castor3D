@@ -6,8 +6,6 @@
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"
 
-using namespace castor;
-
 namespace castor3d
 {
 	Torus::Torus()
@@ -26,26 +24,26 @@ namespace castor3d
 
 	void Torus::doGenerate( Mesh & mesh, Parameters const & parameters )
 	{
-		String param;
+		castor::String param;
 
 		if ( parameters.get( cuT( "inner_size" ), param ) )
 		{
-			m_internalRadius = string::toFloat( param );
+			m_internalRadius = castor::string::toFloat( param );
 		}
 
 		if ( parameters.get( cuT( "outer_size" ), param ) )
 		{
-			m_externalRadius = string::toFloat( param );
+			m_externalRadius = castor::string::toFloat( param );
 		}
 
 		if ( parameters.get( cuT( "inner_count" ), param ) )
 		{
-			m_internalNbFaces = string::toUInt( param );
+			m_internalNbFaces = castor::string::toUInt( param );
 		}
 
 		if ( parameters.get( cuT( "outer_count" ), param ) )
 		{
-			m_externalNbFaces = string::toUInt( param );
+			m_externalNbFaces = castor::string::toUInt( param );
 		}
 
 		mesh.cleanup();
@@ -63,20 +61,20 @@ namespace castor3d
 			uint32_t uiIntMax = m_internalNbFaces;
 
 			// Build the internal circle that will be rotated to build the torus
-			float step = PiMult2< float > / float( m_internalNbFaces );
+			float step = castor::PiMult2< float > / float( m_internalNbFaces );
 
 			for ( uint32_t j = 0; j <= uiIntMax; j++ )
 			{
 				submesh.addPoint( InterleavedVertex{}
 					.position( castor::Point3f{ m_internalRadius * cos( rAngleIn ) + m_externalRadius, m_internalRadius * sin( rAngleIn ), 0.0 } )
-					.normal( point::getNormalised( castor::Point3f{ float( cos( rAngleIn ) ), float( sin( rAngleIn ) ), 0.0f } ) )
-					.texcoord( Point2f{ 0.0f, float( j ) / float( m_internalNbFaces ) } ) );
+					.normal( castor::point::getNormalised( castor::Point3f{ float( cos( rAngleIn ) ), float( sin( rAngleIn ) ), 0.0f } ) )
+					.texcoord( castor::Point2f{ 0.0f, float( j ) / float( m_internalNbFaces ) } ) );
 				uiCur++;
 				rAngleIn += step;
 			}
 
 			// Build the torus
-			step = PiMult2< float > / float( m_externalNbFaces );
+			step = castor::PiMult2< float > / float( m_externalNbFaces );
 			auto indexMapping = std::make_shared< TriFaceMapping >( submesh );
 
 			for ( uint32_t i = 1; i <= uiExtMax; i++ )
@@ -90,7 +88,7 @@ namespace castor3d
 					auto vertex = submesh[j];
 					vertex.pos = castor::Point3f{ vertex.pos[0] * cos( rAngleEx ), vertex.pos[1], vertex.pos[0] * sin( rAngleEx ) };
 					vertex.tex = castor::Point3f{ float( i ) / float( m_externalNbFaces ), float( j ) / float( m_internalNbFaces ) };
-					vertex.nml = point::getNormalised( castor::Point3f( float( vertex.nml[0] * cos( rAngleEx ) ), vertex.nml[1], float( vertex.nml[0] * sin( rAngleEx ) ) ) );
+					vertex.nml = castor::point::getNormalised( castor::Point3f( float( vertex.nml[0] * cos( rAngleEx ) ), vertex.nml[1], float( vertex.nml[0] * sin( rAngleEx ) ) ) );
 					submesh.addPoint( vertex );
 				}
 

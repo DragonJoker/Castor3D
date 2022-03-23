@@ -18,9 +18,9 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace passdownscl
 	{
-		TexturePtr doCreateImage( RenderDevice const & device
+		static TexturePtr doCreateImage( RenderDevice const & device
 			, crg::FrameGraph & graph
 			, castor::String const & name
 			, VkFormat format
@@ -38,7 +38,7 @@ namespace castor3d
 					| VK_IMAGE_USAGE_SAMPLED_BIT ) );
 		}
 
-		TextureArray doCreateImages( RenderDevice const & device
+		static TextureArray doCreateImages( RenderDevice const & device
 			, crg::FrameGraph & graph
 			, castor::String const & name
 			, TextureArray const & views
@@ -68,7 +68,7 @@ namespace castor3d
 		, TextureArray const & srcViews
 		, VkExtent2D const & dstSize )
 		: m_device{ device }
-		, m_result{ doCreateImages( m_device, graph, "Downscaled", srcViews, dstSize ) }
+		, m_result{ passdownscl::doCreateImages( m_device, graph, "Downscaled", srcViews, dstSize ) }
 	{
 		// TODO CRG
 		//m_commandBuffer->begin();

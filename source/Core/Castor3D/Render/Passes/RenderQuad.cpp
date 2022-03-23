@@ -36,13 +36,11 @@
 
 CU_ImplementCUSmartPtr( castor3d, RenderQuad )
 
-using namespace castor;
-
 namespace castor3d
 {
-	namespace
+	namespace passrquad
 	{
-		uint32_t doGetColourAttachmentCount( ashes::RenderPass const & pass )
+		static uint32_t doGetColourAttachmentCount( ashes::RenderPass const & pass )
 		{
 			return uint32_t( std::count_if( pass.getAttachments().begin()
 				, pass.getAttachments().end()
@@ -52,7 +50,7 @@ namespace castor3d
 				} ) );
 		}
 
-		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( ashes::RenderPass const & pass
+		static ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( ashes::RenderPass const & pass
 			, BlendMode blendMode )
 		{
 			return RenderNodesPass::createBlendState( blendMode
@@ -62,7 +60,7 @@ namespace castor3d
 
 #if !defined( NDEBUG )
 
-		bool checkWrites( ashes::WriteDescriptorSetArray const & writes
+		static bool checkWrites( ashes::WriteDescriptorSetArray const & writes
 			, rq::BindingDescriptionArray const & bindings )
 		{
 			if ( writes.size() != bindings.size() )
@@ -83,7 +81,7 @@ namespace castor3d
 
 #endif
 
-		ashes::VkDescriptorSetLayoutBindingArray createBindings( rq::BindingDescriptionArray const & bindings )
+		static ashes::VkDescriptorSetLayoutBindingArray createBindings( rq::BindingDescriptionArray const & bindings )
 		{
 			ashes::VkDescriptorSetLayoutBindingArray result;
 			uint32_t index = 0u;
@@ -167,7 +165,7 @@ namespace castor3d
 		template< typename TypeT >
 		static inline TypeT const & defaultV = DefaultValueGetterT< TypeT >::get();
 
-		ashes::WriteDescriptorSet clone( ashes::WriteDescriptorSet const & src )
+		static ashes::WriteDescriptorSet clone( ashes::WriteDescriptorSet const & src )
 		{
 			ashes::WriteDescriptorSet result{ src->dstBinding
 				, src->dstArrayElement
@@ -191,11 +189,11 @@ namespace castor3d
 			, getName()
 			, samplerFilter
 			, ( config.range ? &config.range.value() : nullptr ) ) }
-		, m_config{ ( config.bindings ? *config.bindings : defaultV< rq::BindingDescriptionArray > )
-			, ( config.range ? *config.range : defaultV< VkImageSubresourceRange > )
-			, ( config.texcoordConfig ? *config.texcoordConfig : defaultV< rq::Texcoord > )
-			, ( config.blendMode ? *config.blendMode : defaultV< BlendMode > )
-			, ( config.tex3DResult ? *config.tex3DResult : defaultV< IntermediateView > ) }
+		, m_config{ ( config.bindings ? *config.bindings : passrquad::defaultV< rq::BindingDescriptionArray > )
+			, ( config.range ? *config.range : passrquad::defaultV< VkImageSubresourceRange > )
+			, ( config.texcoordConfig ? *config.texcoordConfig : passrquad::defaultV< rq::Texcoord > )
+			, ( config.blendMode ? *config.blendMode : passrquad::defaultV< BlendMode > )
+			, ( config.tex3DResult ? *config.tex3DResult : passrquad::defaultV< IntermediateView > ) }
 		, m_useTexCoord{ config.texcoordConfig }
 	{
 	}
@@ -230,7 +228,7 @@ namespace castor3d
 		{
 			for ( auto & write : pass )
 			{
-				write = clone( write );
+				write = passrquad::clone( write );
 			}
 		}
 
@@ -262,21 +260,22 @@ namespace castor3d
 		{
 			std::array< TexturedQuad::Vertex, 4u > vertexData
 			{
-				TexturedQuad::Vertex{ Point2f{ -1.0, -1.0 }
+				TexturedQuad::Vertex{ castor::Point2f{ -1.0, -1.0 }
 					, ( m_useTexCoord
-						? Point2f{ ( m_config.texcoordConfig.invertU ? 1.0 : 0.0 ), ( m_config.texcoordConfig.invertV ? 1.0 : 0.0 ) }
-						: Point2f{} ) },
-				TexturedQuad::Vertex{ Point2f{ -1.0, +1.0 }
-					, ( m_useTexCoord ? Point2f{ ( m_config.texcoordConfig.invertU ? 1.0 : 0.0 ), ( m_config.texcoordConfig.invertV ? 0.0 : 1.0 ) }
-						: Point2f{} ) },
-				TexturedQuad::Vertex{ Point2f{ +1.0, -1.0 }
+						? castor::Point2f{ ( m_config.texcoordConfig.invertU ? 1.0 : 0.0 ), ( m_config.texcoordConfig.invertV ? 1.0 : 0.0 ) }
+						: castor::Point2f{} ) },
+				TexturedQuad::Vertex{ castor::Point2f{ -1.0, +1.0 }
 					, ( m_useTexCoord
-						? Point2f{ ( m_config.texcoordConfig.invertU ? 0.0 : 1.0 ), ( m_config.texcoordConfig.invertV ? 1.0 : 0.0 ) }
-						: Point2f{} ) },
-				TexturedQuad::Vertex{ Point2f{ +1.0, +1.0 }
+						? castor::Point2f{ ( m_config.texcoordConfig.invertU ? 1.0 : 0.0 ), ( m_config.texcoordConfig.invertV ? 0.0 : 1.0 ) }
+						: castor::Point2f{} ) },
+				TexturedQuad::Vertex{ castor::Point2f{ +1.0, -1.0 }
 					, ( m_useTexCoord
-						? Point2f{ ( m_config.texcoordConfig.invertU ? 0.0 : 1.0 ), ( m_config.texcoordConfig.invertV ? 0.0 : 1.0 ) }
-						: Point2f{} ) },
+						? castor::Point2f{ ( m_config.texcoordConfig.invertU ? 0.0 : 1.0 ), ( m_config.texcoordConfig.invertV ? 1.0 : 0.0 ) }
+						: castor::Point2f{} ) },
+				TexturedQuad::Vertex{ castor::Point2f{ +1.0, +1.0 }
+					, ( m_useTexCoord
+						? castor::Point2f{ ( m_config.texcoordConfig.invertU ? 0.0 : 1.0 ), ( m_config.texcoordConfig.invertV ? 0.0 : 1.0 ) }
+						: castor::Point2f{} ) },
 			};
 			std::copy( vertexData.begin(), vertexData.end(), buffer );
 			m_vertexBuffer->flush( 0u, 4u );
@@ -294,21 +293,22 @@ namespace castor3d
 		{
 			std::array< TexturedQuad::Vertex, 4u > vertexData
 			{
-				TexturedQuad::Vertex{ Point2f{ -1.0, -1.0 }
+				TexturedQuad::Vertex{ castor::Point2f{ -1.0, -1.0 }
 					, ( m_useTexCoord
-						? Point2f{ ( m_config.texcoordConfig.invertU ? 1.0 : 0.0 ), ( m_config.texcoordConfig.invertV ? 0.0 : 1.0 ) }
-						: Point2f{} ) },
-				TexturedQuad::Vertex{ Point2f{ -1.0, +1.0 }
-					, ( m_useTexCoord ? Point2f{ ( m_config.texcoordConfig.invertU ? 1.0 : 0.0 ), ( m_config.texcoordConfig.invertV ? 1.0 : 0.0 ) }
-						: Point2f{} ) },
-				TexturedQuad::Vertex{ Point2f{ +1.0, -1.0 }
+						? castor::Point2f{ ( m_config.texcoordConfig.invertU ? 1.0 : 0.0 ), ( m_config.texcoordConfig.invertV ? 0.0 : 1.0 ) }
+						: castor::Point2f{} ) },
+				TexturedQuad::Vertex{ castor::Point2f{ -1.0, +1.0 }
 					, ( m_useTexCoord
-						? Point2f{ ( m_config.texcoordConfig.invertU ? 0.0 : 1.0 ), ( m_config.texcoordConfig.invertV ? 0.0 : 1.0 ) }
-						: Point2f{} ) },
-				TexturedQuad::Vertex{ Point2f{ +1.0, +1.0 }
+						? castor::Point2f{ ( m_config.texcoordConfig.invertU ? 1.0 : 0.0 ), ( m_config.texcoordConfig.invertV ? 1.0 : 0.0 ) }
+						: castor::Point2f{} ) },
+				TexturedQuad::Vertex{ castor::Point2f{ +1.0, -1.0 }
 					, ( m_useTexCoord
-						? Point2f{ ( m_config.texcoordConfig.invertU ? 0.0 : 1.0 ), ( m_config.texcoordConfig.invertV ? 1.0 : 0.0 ) }
-						: Point2f{} ) },
+						? castor::Point2f{ ( m_config.texcoordConfig.invertU ? 0.0 : 1.0 ), ( m_config.texcoordConfig.invertV ? 0.0 : 1.0 ) }
+						: castor::Point2f{} ) },
+				TexturedQuad::Vertex{ castor::Point2f{ +1.0, +1.0 }
+					, ( m_useTexCoord
+						? castor::Point2f{ ( m_config.texcoordConfig.invertU ? 0.0 : 1.0 ), ( m_config.texcoordConfig.invertV ? 1.0 : 0.0 ) }
+						: castor::Point2f{} ) },
 			};
 			std::copy( vertexData.begin(), vertexData.end(), buffer );
 			m_uvInvVertexBuffer->flush( 0u, 4u );
@@ -336,7 +336,7 @@ namespace castor3d
 			std::move( attributes ),
 		};
 
-		auto bindings = createBindings( m_config.bindings );
+		auto bindings = passrquad::createBindings( m_config.bindings );
 		CU_Require( bindings.capacity() < 1000u );
 		m_descriptorSetLayout = m_device->createDescriptorSetLayout( getName()
 			, std::move( bindings ) );
@@ -366,7 +366,7 @@ namespace castor3d
 				ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE },
 				ashes::PipelineMultisampleStateCreateInfo{},
 				ashes::Optional< ashes::PipelineDepthStencilStateCreateInfo >( std::move( dsState ) ),
-				doCreateBlendState( renderPass, m_config.blendMode ),
+				passrquad::doCreateBlendState( renderPass, m_config.blendMode ),
 				ashes::nullopt,
 				*m_pipelineLayout,
 				static_cast< VkRenderPass const & >( renderPass )
@@ -376,7 +376,7 @@ namespace castor3d
 	void RenderQuad::registerPassInputs( ashes::WriteDescriptorSetArray const & writes
 		, bool invertY )
 	{
-		CU_Require( checkWrites( writes, m_config.bindings ) );
+		CU_Require( passrquad::checkWrites( writes, m_config.bindings ) );
 
 		m_passes.emplace_back( writes );
 		m_invertY.emplace_back( invertY );
@@ -395,7 +395,7 @@ namespace castor3d
 
 		for ( auto & pass : m_passes )
 		{
-			auto descriptorSet = m_descriptorSetPool->createDescriptorSet( prefix + string::toString( index ) );
+			auto descriptorSet = m_descriptorSetPool->createDescriptorSet( prefix + castor::string::toString( index ) );
 			descriptorSet->setBindings( pass );
 			descriptorSet->update();
 			m_descriptorSets.emplace_back( std::move( descriptorSet ) );
@@ -411,7 +411,7 @@ namespace castor3d
 		, ashes::VkPushConstantRangeArray const & pushRanges
 		, ashes::PipelineDepthStencilStateCreateInfo dsState )
 	{
-		CU_Require( checkWrites( writes, m_config.bindings ) );
+		CU_Require( passrquad::checkWrites( writes, m_config.bindings ) );
 		createPipeline( size
 			, position
 			, program

@@ -62,9 +62,6 @@ namespace libffmpeg
 
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>
 
-using namespace castor;
-using namespace castor3d;
-
 namespace GuiCommon
 {
 	namespace
@@ -88,7 +85,7 @@ namespace GuiCommon
 			bool UpdateTime()override
 			{
 				auto now = clock::now();
-				uint64_t timeDiff = std::chrono::duration_cast< Milliseconds >( now - m_saved ).count();
+				uint64_t timeDiff = std::chrono::duration_cast< castor::Milliseconds >( now - m_saved ).count();
 
 				if ( m_recordedCount )
 				{
@@ -98,7 +95,7 @@ namespace GuiCommon
 				return doUpdateTime( timeDiff );
 			}
 
-			bool StartRecord( Size const & p_size, int p_wantedFPS )override
+			bool StartRecord( castor::Size const & p_size, int p_wantedFPS )override
 			{
 				bool result = false;
 				m_wantedFPS = p_wantedFPS;
@@ -128,14 +125,14 @@ namespace GuiCommon
 						strMsg += wxT( ":\n" );
 						strMsg += wxString( exc.what(), wxMBConvLibc() );
 						strMsg += wxT( ")" );
-						throw std::runtime_error( string::stringCast< char >( make_String( strMsg ) ) );
+						throw std::runtime_error( castor::string::stringCast< char >( make_String( strMsg ) ) );
 					}
 				}
 
 				return result;
 			}
 
-			bool RecordFrame( PxBufferBaseSPtr p_buffer )override
+			bool RecordFrame( castor::PxBufferBaseSPtr p_buffer )override
 			{
 				doRecordFrame( p_buffer );
 				m_saved = clock::now();
@@ -144,9 +141,9 @@ namespace GuiCommon
 			}
 
 		protected:
-			virtual bool doStartRecord( Size const & p_size, wxString const & p_name ) = 0;
+			virtual bool doStartRecord( castor::Size const & p_size, wxString const & p_name ) = 0;
 			virtual bool doUpdateTime( uint64_t p_uiTimeDiff ) = 0;
-			virtual void doRecordFrame( PxBufferBaseSPtr p_buffer ) = 0;
+			virtual void doRecordFrame( castor::PxBufferBaseSPtr p_buffer ) = 0;
 
 		protected:
 			time_point m_saved;
@@ -369,7 +366,7 @@ namespace GuiCommon
 				return ptimeDiff >= 1000 / m_wantedFPS;
 			}
 
-			bool doStartRecord( Size const & p_size, wxString const & p_name )override
+			bool doStartRecord( castor::Size const & p_size, wxString const & p_name )override
 			{
 				wxSize size( p_size.getWidth(), p_size.getHeight() );
 				getFormat( p_name );
@@ -426,7 +423,7 @@ namespace GuiCommon
 				return true;
 			}
 
-			void doRecordFrame( PxBufferBaseSPtr p_buffer )override
+			void doRecordFrame( castor::PxBufferBaseSPtr p_buffer )override
 			{
 				if ( IsRecording() )
 				{
@@ -479,7 +476,7 @@ namespace GuiCommon
 			: public Recorder::IRecorderImpl
 		{
 		public:
-			bool StartRecord( Size const & p_size, int p_wantedFPS )override
+			bool StartRecord( castor::Size const & p_size, int p_wantedFPS )override
 			{
 				return true;
 			}
@@ -494,7 +491,7 @@ namespace GuiCommon
 				return false;
 			}
 
-			bool RecordFrame( PxBufferBaseSPtr )override
+			bool RecordFrame( castor::PxBufferBaseSPtr )override
 			{
 				return true;
 			}

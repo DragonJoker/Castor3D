@@ -49,36 +49,34 @@
 
 #include <RenderGraph/GraphContext.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace rendndpass
 	{
-		uint32_t getPrimitiveCount( Submesh const & submesh )
+		static uint32_t getPrimitiveCount( Submesh const & submesh )
 		{
 			return submesh.getFaceCount();
 		}
 
-		uint32_t getPrimitiveCount( BillboardBase const & instance )
+		static uint32_t getPrimitiveCount( BillboardBase const & instance )
 		{
 			return instance.getCount() * 2u;
 		}
 
-		uint32_t getVertexCount( Submesh const & submesh )
+		static uint32_t getVertexCount( Submesh const & submesh )
 		{
 			return submesh.getPointsCount();
 		}
 
-		uint32_t getVertexCount( BillboardBase const & instance )
+		static uint32_t getVertexCount( BillboardBase const & instance )
 		{
 			return instance.getCount();
 		}
 
 		template< typename PipelineContT >
-		auto findPipeline( PipelineFlags const & flags
+		static auto findPipeline( PipelineFlags const & flags
 			, PipelineContT & pipelines )
 		{
 			return std::find_if( pipelines.begin()
@@ -89,7 +87,7 @@ namespace castor3d
 				} );
 		}
 
-		size_t makeHash( ProgramFlags const & programFlags
+		static size_t makeHash( ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )
 		{
 			auto nodeType = getRenderNodeType( programFlags );
@@ -103,12 +101,12 @@ namespace castor3d
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
-		, String const & typeName
-		, String const & category
-		, String const & name
+		, castor::String const & typeName
+		, castor::String const & category
+		, castor::String const & name
 		, RenderNodesPassDesc const & desc )
-		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
-		, Named{ name }
+		: castor::OwnedBy< Engine >{ *device.renderSystem.getEngine() }
+		, castor::Named{ name }
 		, crg::RenderPass{ pass
 			, context
 			, graph
@@ -432,7 +430,7 @@ namespace castor3d
 		auto programFlags = pipeline.getFlags().programFlags;
 		programFlags = doAdjustProgramFlags( programFlags );
 		auto sceneFlags = doAdjustSceneFlags( pipeline.getFlags().sceneFlags );
-		auto descLayoutIt = m_additionalDescriptors.emplace( makeHash( programFlags, sceneFlags )
+		auto descLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( programFlags, sceneFlags )
 			, PassDescriptors{} ).first;
 		auto & descriptors = descLayoutIt->second;
 
@@ -555,7 +553,7 @@ namespace castor3d
 		}
 	}
 
-	namespace
+	namespace rendndpass
 	{
 		template< typename NodeT >
 		inline void doUpdateInfos( NodePtrByPipelineMapT< NodeT > & nodes
@@ -585,7 +583,7 @@ namespace castor3d
 		, RenderInfo & info )
 	{
 		doUpdate( nodes );
-		doUpdateInfos( nodes, info );
+		rendndpass::doUpdateInfos( nodes, info );
 	}
 
 	void RenderNodesPass::doUpdate( BillboardRenderNodePtrByPipelineMap & nodes )
@@ -596,7 +594,7 @@ namespace castor3d
 		, RenderInfo & info )
 	{
 		doUpdate( nodes );
-		doUpdateInfos( nodes, info );
+		rendndpass::doUpdateInfos( nodes, info );
 	}
 
 	void RenderNodesPass::doUpdate( RenderQueueArray & queues )
@@ -751,7 +749,7 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = renderSystem.getRenderDevice();
 		RenderPipeline * result{};
-		auto descLayoutIt = m_additionalDescriptors.emplace( makeHash( flags.programFlags, flags.sceneFlags )
+		auto descLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( flags.programFlags, flags.sceneFlags )
 			, PassDescriptors{} ).first;
 		auto & descriptors = descLayoutIt->second;
 
@@ -769,10 +767,10 @@ namespace castor3d
 			&& ( !checkFlag( flags.programFlags, ProgramFlag::eBillboards )
 				|| !isShadowMapProgram( flags.programFlags ) ) )
 		{
-			auto & pipelines = checkFlag( cullMode, VK_CULL_MODE_FRONT_BIT )
+			auto & pipelines = castor::checkFlag( cullMode, VK_CULL_MODE_FRONT_BIT )
 				? doGetFrontPipelines()
 				: doGetBackPipelines();
-			auto it = findPipeline( flags, pipelines );
+			auto it = rendndpass::findPipeline( flags, pipelines );
 
 			if ( it == pipelines.end() )
 			{

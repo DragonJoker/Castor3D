@@ -32,17 +32,15 @@
 
 CU_ImplementCUSmartPtr( castor3d, Voxelizer )
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace vxlsr
 	{
-		Texture createTexture( RenderDevice const & device
+		static Texture createTexture( RenderDevice const & device
 			, crg::ResourceHandler & handler
-			, String const & name
+			, castor::String const & name
 			, VkExtent3D const & size )
 		{
 			return Texture{ device
@@ -61,9 +59,9 @@ namespace castor3d
 				, false };
 		}
 
-		ashes::BufferPtr< Voxel > createSsbo( Engine & engine
+		static ashes::BufferPtr< Voxel > createSsbo( Engine & engine
 			, RenderDevice const & device
-			, String const & name
+			, castor::String const & name
 			, uint32_t voxelGridSize )
 		{
 			return castor3d::makeBuffer< Voxel >( device
@@ -92,9 +90,9 @@ namespace castor3d
 		, m_graph{ handler, "Voxelizer" }
 		, m_culler{ scene, &camera }
 		, m_matrixUbo{ device }
-		, m_firstBounce{ createTexture( device, handler, "VoxelizedSceneFirstBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
-		, m_secondaryBounce{ createTexture( device, handler, "VoxelizedSceneSecondaryBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
-		, m_voxels{ createSsbo( m_engine, device, "VoxelizedSceneBuffer", m_voxelConfig.gridSize.value() ) }
+		, m_firstBounce{ vxlsr::createTexture( device, handler, "VoxelizedSceneFirstBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
+		, m_secondaryBounce{ vxlsr::createTexture( device, handler, "VoxelizedSceneSecondaryBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
+		, m_voxels{ vxlsr::createSsbo( m_engine, device, "VoxelizedSceneBuffer", m_voxelConfig.gridSize.value() ) }
 		, m_voxelizerUbo{ voxelizerUbo }
 		, m_voxelizePassDesc{ doCreateVoxelizePass( progress ) }
 		, m_voxelToTextureDesc{ doCreateVoxelToTexture( m_voxelizePassDesc, progress ) }

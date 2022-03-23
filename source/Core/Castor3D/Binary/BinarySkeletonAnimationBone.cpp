@@ -5,8 +5,6 @@
 #include "Castor3D/Binary/BinarySkeletonAnimationObject.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*************************************************************************************************
@@ -31,7 +29,7 @@ namespace castor3d
 	bool BinaryParser< SkeletonAnimationBone >::doParse( SkeletonAnimationBone & obj )
 	{
 		bool result = true;
-		String name;
+		castor::String name;
 		BinaryChunk chunk;
 
 		while ( result && doGetSubChunk( chunk ) )

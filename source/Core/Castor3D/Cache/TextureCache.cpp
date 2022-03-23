@@ -19,15 +19,15 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	namespace
+	namespace cachetex
 	{
-		void mergeMasks( uint32_t lhs
+		static void mergeMasks( uint32_t lhs
 			, uint32_t & rhs )
 		{
 			rhs |= lhs;
 		}
 
-		void mergeFactors( float lhs
+		static void mergeFactors( float lhs
 			, float & rhs
 			, float ref )
 		{
@@ -39,7 +39,7 @@ namespace castor3d
 			}
 		}
 
-		void mergeConfigsBase( TextureConfiguration const & lhs
+		static void mergeConfigsBase( TextureConfiguration const & lhs
 			, TextureConfiguration & rhs )
 		{
 			mergeMasks( lhs.needsYInversion, rhs.needsYInversion );
@@ -48,7 +48,7 @@ namespace castor3d
 			mergeFactors( lhs.normalGMultiplier, rhs.normalGMultiplier, 1.0f );
 		}
 
-		castor::PxBufferBaseUPtr mergeBuffers( castor::PxBufferBaseUPtr lhsBuffer
+		static castor::PxBufferBaseUPtr mergeBuffers( castor::PxBufferBaseUPtr lhsBuffer
 			, uint32_t const & lhsSrcMask
 			, uint32_t const & lhsDstMask
 			, castor::PxBufferBaseUPtr rhsBuffer
@@ -120,7 +120,7 @@ namespace castor3d
 			return result;
 		}
 
-		castor::PxBufferBaseUPtr adaptBuffer( castor::PxBufferBaseUPtr buffer )
+		static castor::PxBufferBaseUPtr adaptBuffer( castor::PxBufferBaseUPtr buffer )
 		{
 			auto dstFormat = buffer->getFormat();
 
@@ -170,14 +170,14 @@ namespace castor3d
 			return buffer;
 		}
 
-		bool allowSRGB( TextureConfiguration const & config )
+		static bool allowSRGB( TextureConfiguration const & config )
 		{
 			auto flags = getFlags( config );
 			return ( checkFlag( flags, TextureFlag::eColour )
 					|| checkFlag( flags, TextureFlag::eEmissive ) );
 		}
 
-		castor::PxBufferBaseUPtr getImageBuffer( castor::Image const & image
+		static castor::PxBufferBaseUPtr getImageBuffer( castor::Image const & image
 			, TextureConfiguration const & config )
 		{
 			auto format = ( ( isSRGBFormat( image.getPixels()->getFormat() ) && allowSRGB( config ) )
@@ -205,7 +205,7 @@ namespace castor3d
 			return buffer;
 		}
 
-		castor::PxBufferBaseUPtr getBufferImage( Engine & engine
+		static castor::PxBufferBaseUPtr getBufferImage( Engine & engine
 			, castor::String const & name
 			, castor::String const & type
 			, castor::ByteArray const & data
@@ -231,7 +231,7 @@ namespace castor3d
 			return getImageBuffer( *img, config );
 		}
 
-		castor::PxBufferBaseUPtr getFileImage( Engine & engine
+		static castor::PxBufferBaseUPtr getFileImage( Engine & engine
 			, castor::String const & name
 			, castor::Path const & folder
 			, castor::Path const & relative
@@ -272,7 +272,7 @@ namespace castor3d
 			return getImageBuffer( *img, config );
 		}
 
-		TextureLayoutSPtr getTextureLayout( Engine & engine
+		static TextureLayoutSPtr getTextureLayout( Engine & engine
 			, castor::PxBufferBaseUPtr buffer
 			, castor::String const & name
 			, bool allowCompression
@@ -312,7 +312,7 @@ namespace castor3d
 				, true );
 		}
 
-		size_t makeHash( TextureSourceInfo const & sourceInfo
+		static size_t makeHash( TextureSourceInfo const & sourceInfo
 			, PassTextureConfig const & config )
 		{
 			auto result = TextureSourceInfoHasher{}( sourceInfo );
@@ -321,7 +321,7 @@ namespace castor3d
 			return result;
 		}
 
-		bool findUnit( Engine & engine
+		static bool findUnit( Engine & engine
 			, castor::CheckedMutex & loadMtx
 			, std::unordered_map< size_t, TextureUnitSPtr > & loaded
 			, TextureSourceInfo const & sourceInfo
@@ -364,7 +364,7 @@ namespace castor3d
 			return !ires.second;
 		}
 
-		bool hasElems( castor::CheckedMutex & loadMtx
+		static bool hasElems( castor::CheckedMutex & loadMtx
 			, std::vector< std::unique_ptr< TextureUnitCache::ThreadData > > & loading )
 		{
 			auto lock( castor::makeUniqueLock( loadMtx ) );
@@ -377,18 +377,18 @@ namespace castor3d
 	void mergeConfigs( TextureConfiguration const & lhs
 		, TextureConfiguration & rhs )
 	{
-		mergeMasks( lhs.colourMask[0], rhs.colourMask[0] );
-		mergeMasks( lhs.specularMask[0], rhs.specularMask[0] );
-		mergeMasks( lhs.metalnessMask[0], rhs.metalnessMask[0] );
-		mergeMasks( lhs.glossinessMask[0], rhs.glossinessMask[0] );
-		mergeMasks( lhs.roughnessMask[0], rhs.roughnessMask[0] );
-		mergeMasks( lhs.opacityMask[0], rhs.opacityMask[0] );
-		mergeMasks( lhs.emissiveMask[0], rhs.emissiveMask[0] );
-		mergeMasks( lhs.normalMask[0], rhs.normalMask[0] );
-		mergeMasks( lhs.heightMask[0], rhs.heightMask[0] );
-		mergeMasks( lhs.occlusionMask[0], rhs.occlusionMask[0] );
-		mergeMasks( lhs.transmittanceMask[0], rhs.transmittanceMask[0] );
-		mergeConfigsBase( lhs, rhs );
+		cachetex::mergeMasks( lhs.colourMask[0], rhs.colourMask[0] );
+		cachetex::mergeMasks( lhs.specularMask[0], rhs.specularMask[0] );
+		cachetex::mergeMasks( lhs.metalnessMask[0], rhs.metalnessMask[0] );
+		cachetex::mergeMasks( lhs.glossinessMask[0], rhs.glossinessMask[0] );
+		cachetex::mergeMasks( lhs.roughnessMask[0], rhs.roughnessMask[0] );
+		cachetex::mergeMasks( lhs.opacityMask[0], rhs.opacityMask[0] );
+		cachetex::mergeMasks( lhs.emissiveMask[0], rhs.emissiveMask[0] );
+		cachetex::mergeMasks( lhs.normalMask[0], rhs.normalMask[0] );
+		cachetex::mergeMasks( lhs.heightMask[0], rhs.heightMask[0] );
+		cachetex::mergeMasks( lhs.occlusionMask[0], rhs.occlusionMask[0] );
+		cachetex::mergeMasks( lhs.transmittanceMask[0], rhs.transmittanceMask[0] );
+		cachetex::mergeConfigsBase( lhs, rhs );
 	}
 
 	castor::PixelFormat getSRGBFormat( castor::PixelFormat format )
@@ -623,7 +623,7 @@ namespace castor3d
 
 	void TextureUnitCache::clear()
 	{
-		while ( hasElems( m_loadMtx, m_loading ) )
+		while ( cachetex::hasElems( m_loadMtx, m_loading ) )
 		{
 			std::this_thread::sleep_for( 1_ms );
 		}
@@ -646,7 +646,7 @@ namespace castor3d
 	{
 		TextureUnitSPtr result{};
 
-		if ( !findUnit( *getEngine(), m_loadMtx, m_loaded, sourceInfo, config, result ) )
+		if ( !cachetex::findUnit( *getEngine(), m_loadMtx, m_loaded, sourceInfo, config, result ) )
 		{
 			doLoadSource( sourceInfo, config, *result );
 		}
@@ -667,13 +667,13 @@ namespace castor3d
 		, TextureConfiguration resultConfig )
 	{
 		// Prepare the resulting texture configuration.
-		mergeConfigsBase( lhsConfig, resultConfig );
-		mergeConfigsBase( rhsConfig, resultConfig );
+		cachetex::mergeConfigsBase( lhsConfig, resultConfig );
+		cachetex::mergeConfigsBase( rhsConfig, resultConfig );
 
 		PassTextureConfig passConfig{ { {} }, resultConfig };
 		TextureUnitSPtr result{};
 
-		if ( !findUnit( *getEngine(), m_loadMtx, m_loaded, resultSourceInfo, passConfig, result ) )
+		if ( !cachetex::findUnit( *getEngine(), m_loadMtx, m_loaded, resultSourceInfo, passConfig, result ) )
 		{
 			doMergeSources( lhsSourceInfo
 				, lhsConfig
@@ -695,7 +695,7 @@ namespace castor3d
 	void TextureUnitCache::doCreateLayout( ThreadData & data
 		, castor::String const & name )
 	{
-		data.layout = getTextureLayout( *getEngine()
+		data.layout = cachetex::getTextureLayout( *getEngine()
 			, std::move( data.buffer )
 			, name
 			, data.sourceInfo.allowCompression() && ( data.config.config.normalMask[0] == 0 )
@@ -731,7 +731,7 @@ namespace castor3d
 			getEngine()->pushCpuJob( [this, &data]()
 				{
 					// Load CPU buffer on CPU thread
-					data.buffer = getBufferImage( *getEngine()
+					data.buffer = cachetex::getBufferImage( *getEngine()
 						, data.sourceInfo.name()
 						, data.sourceInfo.type()
 						, data.sourceInfo.buffer()
@@ -746,7 +746,7 @@ namespace castor3d
 			getEngine()->pushCpuJob( [this, &data]()
 				{
 					// Load CPU buffer on CPU thread
-					data.buffer = getFileImage( *getEngine()
+					data.buffer = cachetex::getFileImage( *getEngine()
 						, data.sourceInfo.relative()
 						, data.sourceInfo.folder()
 						, data.sourceInfo.relative()
@@ -775,17 +775,17 @@ namespace castor3d
 		getEngine()->pushCpuJob( [this, &data, name, lhsConfig, lhsSrcMask, lhsDstMask, lhsSourceInfo, rhsConfig, rhsSrcMask, rhsDstMask, rhsSourceInfo]()
 			{
 				// Merge CPU buffers on CPU thread.
-				auto lhsImage = getFileImage( *getEngine()
+				auto lhsImage = cachetex::getFileImage( *getEngine()
 					, lhsSourceInfo.relative()
 					, lhsSourceInfo.folder()
 					, lhsSourceInfo.relative()
 					, lhsConfig );
-				auto rhsImage = getFileImage( *getEngine()
+				auto rhsImage = cachetex::getFileImage( *getEngine()
 					, rhsSourceInfo.relative()
 					, rhsSourceInfo.folder()
 					, rhsSourceInfo.relative()
 					, rhsConfig );
-				data.buffer = mergeBuffers( std::move( lhsImage )
+				data.buffer = cachetex::mergeBuffers( std::move( lhsImage )
 					, lhsSrcMask
 					, lhsDstMask
 					, std::move( rhsImage )

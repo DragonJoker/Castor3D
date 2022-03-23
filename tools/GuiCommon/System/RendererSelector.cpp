@@ -8,7 +8,7 @@
 
 namespace GuiCommon
 {
-	namespace
+	namespace rendsel
 	{
 		enum IDs
 		{
@@ -25,7 +25,7 @@ namespace GuiCommon
 	RendererSelector::RendererSelector( castor3d::Engine & engine
 		, wxWindow * parent
 		, wxString const & title )
-		: wxDialog{ parent, wxID_ANY, title + _( " - Select renderer" ), wxDefaultPosition, wxSize( 500, 400 + ( ListHeight * 2 ) ), wxDEFAULT_DIALOG_STYLE }
+		: wxDialog{ parent, wxID_ANY, title + _( " - Select renderer" ), wxDefaultPosition, wxSize( 500, 400 + ( rendsel::ListHeight * 2 ) ), wxDEFAULT_DIALOG_STYLE }
 		, m_castorImg{ ImagesLoader::getBitmap( CV_IMG_CASTOR ) }
 		, m_engine{ engine }
 	{
@@ -94,9 +94,9 @@ namespace GuiCommon
 	wxListBox * RendererSelector::doFillRenderers()
 	{
 		auto result = new wxListBox{ this
-			, ID_RENDERERS
+			, rendsel::ID_RENDERERS
 			, wxDefaultPosition
-			, wxSize{ ListWidth, ListHeight } };
+			, wxSize{ rendsel::ListWidth, rendsel::ListHeight } };
 		result->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		result->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		result->Bind( wxEVT_LISTBOX
@@ -121,9 +121,9 @@ namespace GuiCommon
 	wxListBox * RendererSelector::doInitialiseDevices()
 	{
 		auto result = new wxListBox{ this
-			, ID_DEVICES
-			, wxPoint{ 0, ListHeight }
-			, wxSize{ ListWidth, ListHeight } };
+			, rendsel::ID_DEVICES
+			, wxPoint{ 0, rendsel::ListHeight }
+			, wxSize{ rendsel::ListWidth, rendsel::ListHeight } };
 		result->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		result->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		result->Bind( wxEVT_LISTBOX
@@ -220,8 +220,8 @@ namespace GuiCommon
 		EVT_PAINT(	RendererSelector::onPaint )
 		EVT_BUTTON(	wxID_OK, RendererSelector::onButtonOk )
 		EVT_BUTTON(	wxID_CANCEL, RendererSelector::onButtonCancel )
-		EVT_LISTBOX_DCLICK( ID_RENDERERS, RendererSelector::onSelectRenderer )
-		EVT_LISTBOX_DCLICK( ID_DEVICES, RendererSelector::onButtonOk )
+		EVT_LISTBOX_DCLICK( rendsel::ID_RENDERERS, RendererSelector::onSelectRenderer )
+		EVT_LISTBOX_DCLICK( rendsel::ID_DEVICES, RendererSelector::onButtonOk )
 	END_EVENT_TABLE()
 #pragma GCC diagnostic pop
 

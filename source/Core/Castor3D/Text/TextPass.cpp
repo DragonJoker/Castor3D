@@ -6,10 +6,10 @@
 #include <CastorUtils/Data/Text/TextPoint.hpp>
 #include <CastorUtils/Data/Text/TextRgbaColour.hpp>
 
-using namespace castor3d;
-
 namespace castor
 {
+	using namespace castor3d;
+
 	TextWriter< Pass >::TextWriter( String const & tabs
 		, Path const & folder
 		, String const & subfolder )

@@ -4,14 +4,12 @@
 #include "Castor3D/Event/Frame/GpuFrameEvent.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
-	namespace
+	namespace frmevtlstr
 	{
 		template< typename EventT, typename ... ParamsT >
-		bool doFireEvents( std::vector< castor::UniquePtr< EventT > > & arrayEvents
+		static bool doFireEvents( std::vector< castor::UniquePtr< EventT > > & arrayEvents
 			, ParamsT & ... params )
 		{
 			bool result = true;
@@ -23,14 +21,14 @@ namespace castor3d
 					event->apply( params... );
 				}
 			}
-			catch ( Exception & exc )
+			catch ( castor::Exception & exc )
 			{
-				log::error << cuT( "Encountered exception while processing events: " ) << string::stringCast< xchar >( exc.getFullDescription() ) << std::endl;
+				log::error << cuT( "Encountered exception while processing events: " ) << castor::string::stringCast< xchar >( exc.getFullDescription() ) << std::endl;
 				result = false;
 			}
 			catch ( std::exception & exc )
 			{
-				log::error << cuT( "Encountered exception while processing events: " ) << string::stringCast< xchar >( exc.what() ) << std::endl;
+				log::error << cuT( "Encountered exception while processing events: " ) << castor::string::stringCast< xchar >( exc.what() ) << std::endl;
 				result = false;
 			}
 			catch ( ... )
@@ -43,8 +41,8 @@ namespace castor3d
 		}
 	}
 
-	FrameListener::FrameListener( String const & name )
-		: Named( name )
+	FrameListener::FrameListener( castor::String const & name )
+		: castor::Named( name )
 	{
 	}
 
@@ -95,7 +93,7 @@ namespace castor3d
 			auto lock( castor::makeUniqueLock( m_mutex ) );
 			std::swap( arrayEvents, m_cpuEvents[size_t( type )] );
 		}
-		return doFireEvents( arrayEvents );
+		return frmevtlstr::doFireEvents( arrayEvents );
 	}
 
 	bool FrameListener::fireEvents( EventType type
@@ -107,7 +105,7 @@ namespace castor3d
 			auto lock( castor::makeUniqueLock( m_mutex ) );
 			std::swap( arrayEvents, m_gpuEvents[size_t( type )] );
 		}
-		return doFireEvents( arrayEvents, device, queueData );
+		return frmevtlstr::doFireEvents( arrayEvents, device, queueData );
 	}
 
 	void FrameListener::flushEvents( EventType type )

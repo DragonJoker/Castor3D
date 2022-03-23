@@ -24,33 +24,30 @@
 
 #include <ShaderWriter/Source.hpp>
 
-using namespace castor;
-using namespace sdw;
-
 namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace equitocube
 	{
-		ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device
+		static ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device
 			, VkFormat format )
 		{
 			ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "EquirectangularToCube" };
 			{
-				VertexWriter writer;
+				sdw::VertexWriter writer;
 
 				// Inputs
-				auto position = writer.declInput< Vec4 >( "position", 0u );
+				auto position = writer.declInput< sdw::Vec4 >( "position", 0u );
 				auto matrixUbo = sdw::Ubo{ writer, "Matrix", 0u, 0u };
-				auto mtxViewProjection = matrixUbo.declMember< Mat4 >( "mtxViewProjection" );
+				auto mtxViewProjection = matrixUbo.declMember< sdw::Mat4 >( "mtxViewProjection" );
 				matrixUbo.end();
 
 				// Outputs
-				auto vtx_position = writer.declOutput< Vec3 >( "vtx_position", 0u );
+				auto vtx_position = writer.declOutput< sdw::Vec3 >( "vtx_position", 0u );
 
-				writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-					, VertexOut out )
+				writer.implementMainT< sdw::VoidT, sdw::VoidT >( [&]( sdw::VertexIn in
+					, sdw::VertexOut out )
 					{
 						vtx_position = position.xyz();
 						out.vtx.position = mtxViewProjection * position;
@@ -60,19 +57,19 @@ namespace castor3d
 
 			ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "EquirectangularToCube" };
 			{
-				FragmentWriter writer;
+				sdw::FragmentWriter writer;
 
 				// Inputs
 				auto mapColour = writer.declCombinedImg< FImg2DRgba32 >( "mapColour", 1u, 0u );
-				auto vtx_position = writer.declInput< Vec3 >( "vtx_position", 0u );
+				auto vtx_position = writer.declInput< sdw::Vec3 >( "vtx_position", 0u );
 
 				// Outputs
-				auto pxl_colour = writer.declOutput< Vec4 >( "pxl_colour", 0u );
+				auto pxl_colour = writer.declOutput< sdw::Vec4 >( "pxl_colour", 0u );
 
 				shader::Utils utils{ writer, *device.renderSystem.getEngine() };
 				
-				auto sampleSphericalMap = writer.implementFunction< Vec2 >( "sampleSphericalMap"
-					, [&]( Vec3 const & v )
+				auto sampleSphericalMap = writer.implementFunction< sdw::Vec2 >( "sampleSphericalMap"
+					, [&]( sdw::Vec3 const & v )
 					{
 						auto uv = writer.declLocale( "uv"
 							, vec2( atan2( v.z(), v.x() ), asin( v.y() ) ) );
@@ -80,10 +77,10 @@ namespace castor3d
 						uv += 0.5_f;
 						writer.returnStmt( uv );
 					}
-					, InVec3{ writer, "v" } );
+					, sdw::InVec3{ writer, "v" } );
 
-				writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-					, FragmentOut out )
+				writer.implementMainT< sdw::VoidT, sdw::VoidT >( [&]( sdw::FragmentIn in
+					, sdw::FragmentOut out )
 					{
 						auto uv = writer.declLocale( "uv"
 							, sampleSphericalMap( normalize( vtx_position ) ) );
@@ -99,7 +96,7 @@ namespace castor3d
 			};
 		}
 
-		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
+		static ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
 			, VkFormat format )
 		{
 			ashes::VkAttachmentDescriptionArray attaches
@@ -169,16 +166,16 @@ namespace castor3d
 		, m_device{ device }
 		, m_commandBuffer{ device.graphicsData()->commandPool->createCommandBuffer( "EquirectangularToCube" ) }
 		, m_view{ equiRectangular.getDefaultView().getSampledView() }
-		, m_renderPass{ doCreateRenderPass( m_device, target.getPixelFormat() ) }
+		, m_renderPass{ equitocube::doCreateRenderPass( m_device, target.getPixelFormat() ) }
 	{
 		auto size = VkExtent2D{ target.getWidth(), target.getHeight() };
-		auto program = doCreateProgram( device, equiRectangular.getPixelFormat() );
+		auto program = equitocube::doCreateProgram( device, equiRectangular.getPixelFormat() );
 		uint32_t face = 0u;
 
 		for ( auto & facePipeline : m_frameBuffers )
 		{
 			ashes::ImageViewCRefArray attaches;
-			facePipeline.view = target.getTexture().createView( "EquirectangularToCube" + string::toString( face )
+			facePipeline.view = target.getTexture().createView( "EquirectangularToCube" + castor::string::toString( face )
 				, VK_IMAGE_VIEW_TYPE_2D
 				, target.getPixelFormat()
 				, 0u
@@ -193,7 +190,7 @@ namespace castor3d
 		}
 
 		createPipelines( size
-			, Position{}
+			, castor::Position{}
 			, program
 			, m_view
 			, *m_renderPass

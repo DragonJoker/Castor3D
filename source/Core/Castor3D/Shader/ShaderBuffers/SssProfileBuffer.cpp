@@ -10,9 +10,9 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace sssbuf
 	{
-		SssProfileBuffer::SssProfilesData doBindData( uint8_t * buffer
+		static SssProfileBuffer::SssProfilesData doBindData( uint8_t * buffer
 			, uint32_t count )
 		{
 			return castor::makeArrayView( reinterpret_cast< SssProfileBuffer::SssProfileData * >( buffer )
@@ -26,7 +26,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, uint32_t count )
 		: m_buffer{ engine, device, count * DataSize, cuT( "SssProfileBuffer" ) }
-		, m_data{ doBindData( m_buffer.getPtr(), count ) }
+		, m_data{ sssbuf::doBindData( m_buffer.getPtr(), count ) }
 	{
 	}
 

@@ -2,8 +2,6 @@
 
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	ParticleSystemImpl::ParticleSystemImpl( Type p_type, ParticleSystem & p_parent )

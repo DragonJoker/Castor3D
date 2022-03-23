@@ -42,11 +42,11 @@
 
 namespace castor3d
 {
-	namespace
+	namespace shdmapdir
 	{
 #if C3D_DebugCascadeFrustum
 
-		MeshResPtr doCreateFrustumMesh( castor::String const name
+		static MeshResPtr doCreateFrustumMesh( castor::String const name
 			, Scene & scene
 			, castor::RgbColour const & colour
 			, castor::String const & colourName )
@@ -116,7 +116,7 @@ namespace castor3d
 
 #endif
 
-		std::vector< ShadowMap::PassDataPtr > createPasses( crg::ResourceHandler & handler
+		static std::vector< ShadowMap::PassDataPtr > createPasses( crg::ResourceHandler & handler
 			, std::vector< std::unique_ptr< crg::FrameGraph > > & graphs
 			, std::vector< crg::RunnableGraphPtr > & runnables
 			, std::vector< std::unique_ptr< GaussianBlur > > & blurs
@@ -265,7 +265,7 @@ namespace castor3d
 		for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
 		{
 			auto name = "CascadeFrustum" + std::to_string( cascade );
-			auto mesh = doCreateFrustumMesh( name, scene, colours[cascade], colourNames[cascade] );
+			auto mesh = shdmapdir::doCreateFrustumMesh( name, scene, colours[cascade], colourNames[cascade] );
 			m_frustumMeshes.push_back( mesh );
 
 			if ( !scene.getGeometryCache().has( name ) )
@@ -349,7 +349,7 @@ namespace castor3d
 
 	std::vector< ShadowMap::PassDataPtr > ShadowMapDirectional::doCreatePass( uint32_t index )
 	{
-		return createPasses( m_handler
+		return shdmapdir::createPasses( m_handler
 			, m_graphs
 			, m_runnables
 			, m_blurs

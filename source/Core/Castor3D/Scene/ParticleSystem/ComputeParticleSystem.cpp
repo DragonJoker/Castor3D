@@ -24,11 +24,9 @@
 
 CU_ImplementCUSmartPtr( castor3d, ComputeParticleSystem )
 
-using namespace castor;
-
 namespace castor3d
 {
-	namespace
+	namespace compptcl
 	{
 		static uint32_t constexpr IndexBufferBinding = 0u;
 		static uint32_t constexpr RandomBufferBinding = 1u;
@@ -36,11 +34,12 @@ namespace castor3d
 		static uint32_t constexpr OutParticlesBufferBinding = 3u;
 		static uint32_t constexpr ParticleSystemBufferBinding = 4u;
 
-		Point3ui doDispatch( uint32_t count, Point3i const & sizes )
+		static castor::Point3ui doDispatch( uint32_t count
+			, castor::Point3i const & sizes )
 		{
 			auto blockSize = uint32_t( sizes[0] * sizes[1] * sizes[2] );
 			auto numBlocks = ( count + blockSize - 1 ) / blockSize;
-			return Point3ui{ numBlocks, sizes[1] > 1 ? numBlocks : 1, sizes[2] > 1 ? numBlocks : 1 };
+			return castor::Point3ui{ numBlocks, sizes[1] > 1 ? numBlocks : 1, sizes[2] > 1 ? numBlocks : 1 };
 		}
 	}
 
@@ -157,7 +156,7 @@ namespace castor3d
 		m_commandBuffer->bindDescriptorSet( *m_descriptorSets[m_in]
 			, *m_pipelineLayout
 			, VK_PIPELINE_BIND_POINT_COMPUTE );
-		auto dispatch = doDispatch( particlesCount, m_worgGroupSizes );
+		auto dispatch = compptcl::doDispatch( particlesCount, m_worgGroupSizes );
 		m_commandBuffer->dispatch( dispatch[0], dispatch[1], dispatch[2] );
 		// Put counts buffer to host visible state
 		flags = m_generatedCountBuffer->getBuffer().getCompatibleStageFlags();
@@ -310,19 +309,19 @@ namespace castor3d
 	{
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
-			makeDescriptorSetLayoutBinding( IndexBufferBinding
+			makeDescriptorSetLayoutBinding( compptcl::IndexBufferBinding
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_COMPUTE_BIT ),
-			makeDescriptorSetLayoutBinding( RandomBufferBinding
+			makeDescriptorSetLayoutBinding( compptcl::RandomBufferBinding
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_COMPUTE_BIT ),
-			makeDescriptorSetLayoutBinding( InParticlesBufferBinding
+			makeDescriptorSetLayoutBinding( compptcl::InParticlesBufferBinding
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_COMPUTE_BIT ),
-			makeDescriptorSetLayoutBinding( OutParticlesBufferBinding
+			makeDescriptorSetLayoutBinding( compptcl::OutParticlesBufferBinding
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_COMPUTE_BIT ),
-			makeDescriptorSetLayoutBinding( ParticleSystemBufferBinding
+			makeDescriptorSetLayoutBinding( compptcl::ParticleSystemBufferBinding
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_COMPUTE_BIT ),
 		};
@@ -343,24 +342,24 @@ namespace castor3d
 			, uint32_t inIndex
 			, uint32_t outIndex )
 		{
-			descriptorSet.createBinding( m_descriptorLayout->getBinding( IndexBufferBinding )
+			descriptorSet.createBinding( m_descriptorLayout->getBinding( compptcl::IndexBufferBinding )
 				, *m_generatedCountBuffer
 				, 0u
 				, uint32_t( m_generatedCountBuffer->getCount() ) );
-			descriptorSet.createBinding( m_descriptorLayout->getBinding( RandomBufferBinding )
+			descriptorSet.createBinding( m_descriptorLayout->getBinding( compptcl::RandomBufferBinding )
 				, *m_randomStorage
 				, 0u
 				, uint32_t( m_randomStorage->getCount() ) );
-			descriptorSet.createBinding( m_descriptorLayout->getBinding( InParticlesBufferBinding )
+			descriptorSet.createBinding( m_descriptorLayout->getBinding( compptcl::InParticlesBufferBinding )
 				, *m_particlesStorages[inIndex]
 				, 0u
 				, uint32_t( m_particlesStorages[inIndex]->getCount() ) );
-			descriptorSet.createBinding( m_descriptorLayout->getBinding( OutParticlesBufferBinding )
+			descriptorSet.createBinding( m_descriptorLayout->getBinding( compptcl::OutParticlesBufferBinding )
 				, *m_particlesStorages[outIndex]
 				, 0u
 				, uint32_t( m_particlesStorages[outIndex]->getCount() ) );
 			m_ubo.createSizedBinding( descriptorSet
-				, m_descriptorLayout->getBinding( ParticleSystemBufferBinding ) );
+				, m_descriptorLayout->getBinding( compptcl::ParticleSystemBufferBinding ) );
 			descriptorSet.update();
 		};
 

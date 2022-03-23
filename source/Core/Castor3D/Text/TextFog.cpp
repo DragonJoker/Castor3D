@@ -2,10 +2,10 @@
 
 #include "Castor3D/Miscellaneous/Logger.hpp"
 
-using namespace castor3d;
-
 namespace castor
 {
+	using namespace castor3d;
+
 	TextWriter< Fog >::TextWriter( castor::String const & tabs )
 		: castor::TextWriterT< Fog >{ tabs }
 	{

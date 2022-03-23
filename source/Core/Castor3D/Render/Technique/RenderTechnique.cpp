@@ -48,7 +48,7 @@ namespace castor3d
 {
 	//*************************************************************************************************
 
-	namespace
+	namespace rendtech
 	{
 #if C3D_UseWeightedBlendedRendering
 		using TransparentPassType = TransparentPass;
@@ -61,7 +61,7 @@ namespace castor3d
 		using OpaquePassType = ForwardRenderTechniquePass;
 #endif
 
-		std::map< double, LightRPtr > doSortLights( LightCache const & cache
+		static std::map< double, LightRPtr > doSortLights( LightCache const & cache
 			, LightType type
 			, Camera const & camera )
 		{
@@ -86,7 +86,7 @@ namespace castor3d
 			return lights;
 		}
 
-		void doPrepareShadowMap( LightCache const & cache
+		static void doPrepareShadowMap( LightCache const & cache
 			, LightType type
 			, ShadowMap & shadowMap
 			, ShadowMapLightArray & activeShadowMaps
@@ -153,7 +153,7 @@ namespace castor3d
 			}
 		}
 
-		TextureLayoutSPtr doCreateTexture( Engine & engine
+		static TextureLayoutSPtr doCreateTexture( Engine & engine
 			, RenderDevice const & device
 			, VkExtent3D const & size
 			, VkFormat format
@@ -176,7 +176,7 @@ namespace castor3d
 			return result;
 		}
 
-		TextureUnitUPtr doCreateTextureUnit( RenderDevice const & device
+		static TextureUnitUPtr doCreateTextureUnit( RenderDevice const & device
 			, QueueData const & queueData
 			, crg::ImageId const & image )
 		{
@@ -200,7 +200,7 @@ namespace castor3d
 			return result;
 		}
 
-		LightVolumePassResultArray doCreateLLPVResult( crg::ResourceHandler & handler
+		static LightVolumePassResultArray doCreateLLPVResult( crg::ResourceHandler & handler
 			, RenderDevice const & device
 			, castor::String const & prefix )
 		{
@@ -218,7 +218,7 @@ namespace castor3d
 			return result;
 		}
 
-		crg::FrameGraph doCreateClearLpvCommands( crg::ResourceHandler & handler
+		static crg::FrameGraph doCreateClearLpvCommands( crg::ResourceHandler & handler
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, castor::String const & name
@@ -293,7 +293,7 @@ namespace castor3d
 		}
 
 		template< typename ActionT >
-		void applyAction( TechniquePassVector const & renderPasses
+		static void applyAction( TechniquePassVector const & renderPasses
 			, ActionT action )
 		{
 			for ( auto & renderPass : renderPasses )
@@ -334,7 +334,7 @@ namespace castor3d
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
-		, m_colourTexture{ doCreateTextureUnit( m_device
+		, m_colourTexture{ rendtech::doCreateTextureUnit( m_device
 			, queueData
 			, m_colour.imageId ) }
 		, m_depth{ std::make_shared< Texture >( m_device
@@ -352,7 +352,7 @@ namespace castor3d
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK ) }
-		, m_depthBuffer{ doCreateTextureUnit( m_device
+		, m_depthBuffer{ rendtech::doCreateTextureUnit( m_device
 			, queueData
 			, m_depth->imageId ) }
 		, m_depthObj{ std::make_shared< Texture >( m_device
@@ -414,7 +414,7 @@ namespace castor3d
 			, m_device
 			, getName()
 			, getEngine()->getLpvGridSize() ) }
-		, m_llpvResult{ doCreateLLPVResult( getOwner()->getGraphResourceHandler()
+		, m_llpvResult{ rendtech::doCreateLLPVResult( getOwner()->getGraphResourceHandler()
 			, m_device
 			, getName() ) }
 		, m_backgroundRenderer{ doCreateBackgroundPass( progress ) }
@@ -486,7 +486,7 @@ namespace castor3d
 		, m_transparentPassDesc{ &doCreateTransparentPass( progress ) }
 #endif
 		, m_signalFinished{ m_device->createSemaphore( "RenderTechnique" ) }
-		, m_clearLpvGraph{ doCreateClearLpvCommands( getOwner()->getGraphResourceHandler(), device, progress, getName(), *m_lpvResult, m_llpvResult ) }
+		, m_clearLpvGraph{ rendtech::doCreateClearLpvCommands( getOwner()->getGraphResourceHandler(), device, progress, getName(), *m_lpvResult, m_llpvResult ) }
 		, m_clearLpvRunnable{ m_clearLpvGraph.compile( m_device.makeContext() ) }
 		, m_particleTimer{ castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Particles" ) ) }
 	{
@@ -607,13 +607,13 @@ namespace castor3d
 			scene.getEnvironmentMap().update( updater );
 		}
 
-		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeDepth )]
+		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeDepth )]
 			, [&updater]( RenderTechniquePass & renderPass )
 			{
 				renderPass.update( updater );
 			} );
 		m_depthPass->update( updater );
-		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeBackground )]
+		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeBackground )]
 			, [&updater]( RenderTechniquePass & renderPass )
 			{
 				renderPass.update( updater );
@@ -625,7 +625,7 @@ namespace castor3d
 			m_voxelizer->update( updater );
 		}
 
-		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeOpaque )]
+		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeOpaque )]
 			, [&updater]( RenderTechniquePass & renderPass )
 			{
 				renderPass.update( updater );
@@ -633,10 +633,10 @@ namespace castor3d
 
 		if ( m_opaquePass )
 		{
-			static_cast< OpaquePassType & >( *m_opaquePass ).update( updater );
+			static_cast< rendtech::OpaquePassType & >( *m_opaquePass ).update( updater );
 		}
 
-		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeTransparent )]
+		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeTransparent )]
 			, [&updater]( RenderTechniquePass & renderPass )
 			{
 				renderPass.update( updater );
@@ -644,10 +644,10 @@ namespace castor3d
 
 		if ( m_transparentPass )
 		{
-			static_cast< TransparentPassType & >( *m_transparentPass ).update( updater );
+			static_cast< rendtech::TransparentPassType & >( *m_transparentPass ).update( updater );
 		}
 
-		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforePostEffects )]
+		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforePostEffects )]
 			, [&updater]( RenderTechniquePass & renderPass )
 			{
 				renderPass.update( updater );
@@ -700,13 +700,13 @@ namespace castor3d
 			scene.getEnvironmentMap().update( updater );
 		}
 
-		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeDepth )]
+		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeDepth )]
 			, [&updater]( RenderTechniquePass & renderPass )
 			{
 				renderPass.update( updater );
 			} );
 		m_depthPass->update( updater );
-		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeBackground )]
+		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeBackground )]
 			, [&updater]( RenderTechniquePass & renderPass )
 			{
 				renderPass.update( updater );
@@ -718,7 +718,7 @@ namespace castor3d
 			m_voxelizer->update( updater );
 		}
 
-		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeOpaque )]
+		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeOpaque )]
 			, [&updater]( RenderTechniquePass & renderPass )
 			{
 				renderPass.update( updater );
@@ -726,10 +726,10 @@ namespace castor3d
 
 		if ( m_opaquePass )
 		{
-			static_cast< OpaquePassType & >( *m_opaquePass ).update( updater );
+			static_cast< rendtech::OpaquePassType & >( *m_opaquePass ).update( updater );
 		}
 
-		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeTransparent )]
+		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeTransparent )]
 			, [&updater]( RenderTechniquePass & renderPass )
 			{
 				renderPass.update( updater );
@@ -737,10 +737,10 @@ namespace castor3d
 
 		if ( m_transparentPass )
 		{
-			static_cast< TransparentPassType & >( *m_transparentPass ).update( updater );
+			static_cast< rendtech::TransparentPassType & >( *m_transparentPass ).update( updater );
 		}
 
-		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforePostEffects )]
+		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforePostEffects )]
 			, [&updater]( RenderTechniquePass & renderPass )
 			{
 				renderPass.update( updater );
@@ -777,7 +777,7 @@ namespace castor3d
 			, m_renderTarget.getGraph().getFinalLayoutState( m_depth->sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );
 
-		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeDepth )]
+		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeDepth )]
 			, [&visitor]( RenderTechniquePass & renderPass )
 			{
 				renderPass.accept( visitor );
@@ -786,12 +786,12 @@ namespace castor3d
 		m_voxelizer->accept( visitor );
 		m_ssao->accept( visitor );
 
-		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeBackground )]
+		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeBackground )]
 			, [&visitor]( RenderTechniquePass & renderPass )
 			{
 				renderPass.accept( visitor );
 			} );
-		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeOpaque )]
+		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeOpaque )]
 			, [&visitor]( RenderTechniquePass & renderPass )
 			{
 				renderPass.accept( visitor );
@@ -812,7 +812,7 @@ namespace castor3d
 #endif
 		}
 
-		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeTransparent )]
+		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeTransparent )]
 			, [&visitor]( RenderTechniquePass & renderPass )
 			{
 				renderPass.accept( visitor );
@@ -833,7 +833,7 @@ namespace castor3d
 #endif
 		}
 
-		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforePostEffects )]
+		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforePostEffects )]
 			, [&visitor]( RenderTechniquePass & renderPass )
 			{
 				renderPass.accept( visitor );
@@ -1108,7 +1108,7 @@ namespace castor3d
 				auto data4It = std::next( data3It );
 				auto data5It = std::next( data4It );
 #endif
-				auto res = std::make_unique< OpaquePassType >( this
+				auto res = std::make_unique< rendtech::OpaquePassType >( this
 					, framePass
 					, context
 					, runnableGraph
@@ -1185,7 +1185,7 @@ namespace castor3d
 				static constexpr bool isOit = false;
 				static constexpr bool hasVelocity = false;
 #endif
-				auto res = std::make_unique< TransparentPassType >( this
+				auto res = std::make_unique< rendtech::TransparentPassType >( this
 					, framePass
 					, context
 					, runnableGraph
@@ -1322,7 +1322,7 @@ namespace castor3d
 			}
 
 			auto & cache = scene.getLightCache();
-			doPrepareShadowMap( cache
+			rendtech::doPrepareShadowMap( cache
 				, LightType::eDirectional
 				, *m_directionalShadowMap
 				, m_activeShadowMaps
@@ -1331,7 +1331,7 @@ namespace castor3d
 				, m_layeredLightPropagationVolumes
 				, m_layeredLightPropagationVolumesG
 				, updater );
-			doPrepareShadowMap( cache
+			rendtech::doPrepareShadowMap( cache
 				, LightType::ePoint
 				, *m_pointShadowMap
 				, m_activeShadowMaps
@@ -1340,7 +1340,7 @@ namespace castor3d
 				, m_layeredLightPropagationVolumes
 				, m_layeredLightPropagationVolumesG
 				, updater );
-			doPrepareShadowMap( cache
+			rendtech::doPrepareShadowMap( cache
 				, LightType::eSpot
 				, *m_spotShadowMap
 				, m_activeShadowMaps

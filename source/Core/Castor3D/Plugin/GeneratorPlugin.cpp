@@ -2,11 +2,9 @@
 
 #include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
-	GeneratorPlugin::GeneratorPlugin( DynamicLibrarySPtr library, Engine * engine )
+	GeneratorPlugin::GeneratorPlugin( castor::DynamicLibrarySPtr library, Engine * engine )
 		: Plugin( PluginType::eGenerator, library, *engine )
 	{
 		load();

@@ -1,7 +1,5 @@
 #include "LoopDivider/LoopVertex.hpp"
 
-using namespace castor;
-
 namespace Loop
 {
 	Vertex::Vertex( castor3d::SubmeshVertex vertex )
@@ -9,15 +7,15 @@ namespace Loop
 	{
 	}
 
-	bool Vertex::hasEdge( uint32_t p_index )
+	bool Vertex::hasEdge( uint32_t index )
 	{
-		return m_edges.find( p_index ) != m_edges.end();
+		return m_edges.find( index ) != m_edges.end();
 	}
 
-	EdgeSPtr Vertex::getEdge( uint32_t p_index )
+	EdgeSPtr Vertex::getEdge( uint32_t index )
 	{
 		EdgeSPtr result;
-		auto it = m_edges.find( p_index );
+		auto it = m_edges.find( index );
 
 		if ( it != m_edges.end() )
 		{
@@ -27,19 +25,19 @@ namespace Loop
 		return result;
 	}
 
-	void Vertex::addEdge( EdgeSPtr p_pEdge, uint32_t p_index )
+	void Vertex::addEdge( EdgeSPtr edge, uint32_t index )
 	{
-		auto it = m_edges.find( p_index );
+		auto it = m_edges.find( index );
 
 		if ( it == m_edges.end() )
 		{
-			m_edges.insert( std::make_pair( p_index, p_pEdge ) );
+			m_edges.insert( std::make_pair( index, edge ) );
 		}
 	}
 
-	void Vertex::removeEdge( uint32_t p_index )
+	void Vertex::removeEdge( uint32_t index )
 	{
-		auto it = m_edges.find( p_index );
+		auto it = m_edges.find( index );
 
 		if ( it != m_edges.end() )
 		{

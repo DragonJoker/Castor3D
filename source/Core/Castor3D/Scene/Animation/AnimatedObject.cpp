@@ -3,23 +3,21 @@
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	AnimatedObject::AnimatedObject( AnimationType kind
-		, String const & name )
-		: Named{ name }
+		, castor::String const & name )
+		: castor::Named{ name }
 		, m_kind{ kind }
 	{
 	}
 
-	void AnimatedObject::addAnimation( String const & name )
+	void AnimatedObject::addAnimation( castor::String const & name )
 	{
 		doAddAnimation( name );
 	}
 
-	void AnimatedObject::startAnimation( String const & name )
+	void AnimatedObject::startAnimation( castor::String const & name )
 	{
 		auto it = m_animations.find( name );
 
@@ -42,7 +40,7 @@ namespace castor3d
 		}
 	}
 
-	void AnimatedObject::stopAnimation( String const & name )
+	void AnimatedObject::stopAnimation( castor::String const & name )
 	{
 		auto it = m_animations.find( name );
 
@@ -58,7 +56,7 @@ namespace castor3d
 		}
 	}
 
-	void AnimatedObject::pauseAnimation( String const & name )
+	void AnimatedObject::pauseAnimation( castor::String const & name )
 	{
 		auto it = m_animations.find( name );
 

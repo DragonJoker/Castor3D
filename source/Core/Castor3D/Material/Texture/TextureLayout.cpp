@@ -24,9 +24,9 @@ namespace castor3d
 {
 	//************************************************************************************************
 
-	namespace
+	namespace texlayt
 	{
-		VkImageViewType getSubviewType( VkImageType type
+		static VkImageViewType getSubviewType( VkImageType type
 			, VkImageCreateFlags flags
 			, uint32_t arrayLayers )
 		{
@@ -66,7 +66,7 @@ namespace castor3d
 			}
 		}
 
-		ashes::ImageViewCreateInfo getSubviewCreateInfos( ashes::ImageCreateInfo const & info
+		static ashes::ImageViewCreateInfo getSubviewCreateInfos( ashes::ImageCreateInfo const & info
 			, VkImage image
 			, uint32_t baseMipLevel
 			, uint32_t levelCount
@@ -91,7 +91,7 @@ namespace castor3d
 			return view;
 		}
 
-		TextureViewUPtr createSubview( TextureLayout & layout
+		static TextureViewUPtr createSubview( TextureLayout & layout
 			, castor::String debugName
 			, ashes::ImageCreateInfo const & info
 			, uint32_t baseMipLevel
@@ -110,14 +110,14 @@ namespace castor3d
 				, std::move( debugName ) );
 		}
 
-		uint32_t getMinMipLevels( uint32_t mipLevels
+		static uint32_t getMinMipLevels( uint32_t mipLevels
 			, VkExtent3D const & extent
 			, VkFormat format )
 		{
 			return std::min( getMipLevels( extent, format ), mipLevels );
 		}
 
-		uint32_t adjustMipLevels( uint32_t mipLevels
+		static uint32_t adjustMipLevels( uint32_t mipLevels
 			, VkFormat format )
 		{
 			if ( format == VK_FORMAT_UNDEFINED )
@@ -130,7 +130,7 @@ namespace castor3d
 			return mipLevels / bitSize;
 		}
 
-		bool eraseViews( uint32_t mipLevels
+		static bool eraseViews( uint32_t mipLevels
 			, MipView & views )
 		{
 			auto itLevel = views.levels.begin();
@@ -152,7 +152,7 @@ namespace castor3d
 			return views.levels.empty();
 		}
 		
-		bool eraseViews( uint32_t mipLevels
+		static bool eraseViews( uint32_t mipLevels
 			, CubeView & views )
 		{
 			auto itFace = views.faces.begin();
@@ -175,7 +175,7 @@ namespace castor3d
 		}
 
 		template< typename ViewT >
-		void eraseViews( uint32_t mipLevels
+		static void eraseViews( uint32_t mipLevels
 			, ArrayView< ViewT > & views )
 		{
 			auto itLayer = views.layers.begin();
@@ -196,7 +196,7 @@ namespace castor3d
 		}
 
 		template< typename ViewT >
-		void eraseViews( uint32_t mipLevels
+		static void eraseViews( uint32_t mipLevels
 			, SliceView< ViewT > & views )
 		{
 			auto itSlice = views.slices.begin();
@@ -216,7 +216,7 @@ namespace castor3d
 			}
 		}
 
-		void createViews( ashes::ImageCreateInfo const & info
+		static void createViews( ashes::ImageCreateInfo const & info
 			, castor::String debugName
 			, TextureLayout & layout
 			, MipView & view
@@ -249,7 +249,7 @@ namespace castor3d
 			}
 		}
 
-		void createViews( ashes::ImageCreateInfo const & info
+		static void createViews( ashes::ImageCreateInfo const & info
 			, castor::String debugName
 			, TextureLayout & layout
 			, MipView & view
@@ -263,7 +263,7 @@ namespace castor3d
 				, 1u );
 		}
 
-		void createViews( ashes::ImageCreateInfo const & info
+		static void createViews( ashes::ImageCreateInfo const & info
 			, castor::String debugName
 			, TextureLayout & layout
 			, CubeView & view
@@ -288,7 +288,7 @@ namespace castor3d
 		}
 
 		template< typename ViewT >
-		void createViews( ashes::ImageCreateInfo const & info
+		static void createViews( ashes::ImageCreateInfo const & info
 			, TextureLayout & layout
 			, castor::String debugName
 			, ArrayView< ViewT > & view )
@@ -306,7 +306,7 @@ namespace castor3d
 		}
 
 		template< typename ViewT >
-		void createViews( ashes::ImageCreateInfo const & info
+		static void createViews( ashes::ImageCreateInfo const & info
 			, TextureLayout & layout
 			, castor::String debugName
 			, SliceView< ViewT > & view )
@@ -323,7 +323,7 @@ namespace castor3d
 			}
 		}
 
-		MipView createViews( ashes::ImageCreateInfo const & info
+		static MipView createViews( ashes::ImageCreateInfo const & info
 			, TextureLayout & layout
 			, castor::String debugName )
 		{
@@ -337,7 +337,7 @@ namespace castor3d
 			return result;
 		}
 
-		void update( MipView & view
+		static void update( MipView & view
 			, VkImage image
 			, uint32_t baseArrayLayer
 			, uint32_t layerCount
@@ -360,7 +360,7 @@ namespace castor3d
 			}
 		}
 
-		void update( MipView & view
+		static void update( MipView & view
 			, VkImage image
 			, uint32_t & baseArrayLayer
 			, uint32_t baseMipLevel
@@ -374,7 +374,7 @@ namespace castor3d
 				, levelCount );
 		}
 
-		void update( CubeView & view
+		static void update( CubeView & view
 			, VkImage image
 			, uint32_t & baseArrayLayer
 			, uint32_t baseMipLevel
@@ -398,7 +398,7 @@ namespace castor3d
 		}
 
 		template< typename ViewT >
-		void update( ArrayView< ViewT > & view
+		static void update( ArrayView< ViewT > & view
 			, VkImage image
 			, uint32_t levelCount )
 		{
@@ -415,7 +415,7 @@ namespace castor3d
 		}
 
 		template< typename ViewT >
-		void update( SliceView< ViewT > & view
+		static void update( SliceView< ViewT > & view
 			, VkImage image
 			, uint32_t levelCount )
 		{
@@ -431,7 +431,7 @@ namespace castor3d
 			}
 		}
 
-		void update( MipView & view
+		static void update( MipView & view
 			, VkExtent3D const & extent
 			, VkFormat format
 			, uint32_t mipLevels
@@ -451,7 +451,7 @@ namespace castor3d
 			}
 		}
 
-		void update( MipView & view
+		static void update( MipView & view
 			, VkExtent3D const & extent
 			, VkFormat format
 			, uint32_t mipLevels )
@@ -463,7 +463,7 @@ namespace castor3d
 				, mipLevels );
 		}
 
-		void update( CubeView & view
+		static void update( CubeView & view
 			, VkExtent3D const & extent
 			, VkFormat format
 			, uint32_t mipLevels )
@@ -484,7 +484,7 @@ namespace castor3d
 		}
 
 		template< typename ViewT >
-		void update( ArrayView< ViewT > & view
+		static void update( ArrayView< ViewT > & view
 			, VkExtent3D const & extent
 			, VkFormat format
 			, uint32_t mipLevels )
@@ -499,7 +499,7 @@ namespace castor3d
 		}
 
 		template< typename ViewT >
-		void update( SliceView< ViewT > & view
+		static void update( SliceView< ViewT > & view
 			, VkExtent3D const & extent
 			, VkFormat format
 			, uint32_t mipLevels )
@@ -513,7 +513,7 @@ namespace castor3d
 			}
 		}
 
-		castor::String getBufferName( castor::PxBufferBase const & value )
+		static castor::String getBufferName( castor::PxBufferBase const & value )
 		{
 			auto stream = castor::makeStringStream();
 			stream << value.getWidth()
@@ -523,7 +523,7 @@ namespace castor3d
 			return stream.str();
 		}
 
-		castor::PxBufferBaseSPtr adaptBuffer( castor::PxBufferBaseSPtr buffer
+		static castor::PxBufferBaseSPtr adaptBuffer( castor::PxBufferBaseSPtr buffer
 			, uint32_t mipLevels )
 		{
 			auto dstFormat = buffer->getFormat();
@@ -575,7 +575,7 @@ namespace castor3d
 			return buffer;
 		}
 
-		castor::Image getFileImage( Engine & engine
+		static castor::Image getFileImage( Engine & engine
 			, castor::String const & name
 			, castor::Path const & folder
 			, castor::Path const & relative
@@ -614,7 +614,7 @@ namespace castor3d
 				, std::move( buffer ) };
 		}
 
-		void processLevels( RenderDevice const & device
+		static void processLevels( RenderDevice const & device
 			, QueueData const & queueData
 			, castor::Image const & image
 			, ashes::Image const & texture
@@ -696,7 +696,7 @@ namespace castor3d
 			fence->wait( ashes::MaxTimeout );
 		}
 
-		auto updateMipLevels( bool genNeeded
+		static auto updateMipLevels( bool genNeeded
 			, uint32_t mipLevels
 			, uint32_t imgMipLevels
 			, MipView & mipView )
@@ -715,7 +715,7 @@ namespace castor3d
 			}
 		}
 
-		auto updateMipLevels( bool genNeeded
+		static auto updateMipLevels( bool genNeeded
 			, uint32_t mipLevels
 			, MipView & mipView )
 		{
@@ -725,7 +725,7 @@ namespace castor3d
 				, mipView );
 		}
 
-		castor::ImageLayout::Type convert( VkImageCreateFlags flags
+		static castor::ImageLayout::Type convert( VkImageCreateFlags flags
 			, VkImageType imageType
 			, VkExtent3D const & extent
 			, uint32_t arrayLayers )
@@ -766,7 +766,7 @@ namespace castor3d
 			return castor::ImageLayout::e1D;
 		}
 
-		castor::ImageLayout convert( ashes::ImageCreateInfo const & value )
+		static castor::ImageLayout convert( ashes::ImageCreateInfo const & value )
 		{
 			return castor::ImageLayout
 			{
@@ -780,7 +780,7 @@ namespace castor3d
 			};
 		}
 
-		VkImageType convert( castor::ImageLayout::Type type )
+		static VkImageType convert( castor::ImageLayout::Type type )
 		{
 			switch ( type )
 			{
@@ -874,8 +874,8 @@ namespace castor3d
 		, m_static{ isStatic }
 		, m_info{ std::move( info ) }
 		, m_properties{ memoryProperties }
-		, m_image{ debugName, castor::Path{}, convert( m_info ) }
-		, m_defaultView{ createViews( m_info, *this, m_image.getName() ) }
+		, m_image{ debugName, castor::Path{}, texlayt::convert( m_info ) }
+		, m_defaultView{ texlayt::createViews( m_info, *this, m_image.getName() ) }
 		, m_arrayView{ &m_defaultView }
 		, m_cubeView{ &m_defaultView }
 		, m_sliceView{ &m_defaultView }
@@ -889,18 +889,18 @@ namespace castor3d
 				&& castor::checkFlag( m_info->flags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT ) )
 			{
 				m_cubeView.layers.resize( m_info->arrayLayers / 6u );
-				createViews( m_info, *this, m_image.getName(), m_cubeView );
+				texlayt::createViews( m_info, *this, m_image.getName(), m_cubeView );
 			}
 			else
 			{
 				m_arrayView.layers.resize( m_info->arrayLayers );
-				createViews( m_info, *this, m_image.getName(), m_arrayView );
+				texlayt::createViews( m_info, *this, m_image.getName(), m_arrayView );
 			}
 		}
 		else if ( m_info->extent.depth > 1u )
 		{
 			m_sliceView.slices.resize( m_info->extent.depth );
-			createViews( m_info, *this, m_image.getName(), m_sliceView );
+			texlayt::createViews( m_info, *this, m_image.getName(), m_sliceView );
 		}
 	}
 
@@ -926,7 +926,7 @@ namespace castor3d
 			, castor::Path{ castor::cuEmptyString }
 			, makeSize( m_info->extent )
 			, castor::PixelFormat( m_info->format ) }
-		, m_defaultView{ createViews( m_info, *this, m_image.getName() ) }
+		, m_defaultView{ texlayt::createViews( m_info, *this, m_image.getName() ) }
 		, m_arrayView{ &m_defaultView }
 		, m_cubeView{ &m_defaultView }
 		, m_sliceView{ &m_defaultView }
@@ -942,18 +942,18 @@ namespace castor3d
 				&& castor::checkFlag( m_info->flags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT ) )
 			{
 				m_cubeView.layers.resize( m_info->arrayLayers / 6u );
-				createViews( m_info, *this, m_image.getName(), m_cubeView );
+				texlayt::createViews( m_info, *this, m_image.getName(), m_cubeView );
 			}
 			else
 			{
 				m_arrayView.layers.resize( m_info->arrayLayers );
-				createViews( m_info, *this, m_image.getName(), m_arrayView );
+				texlayt::createViews( m_info, *this, m_image.getName(), m_arrayView );
 			}
 		}
 		else if ( m_info->extent.depth > 1u )
 		{
 			m_sliceView.slices.resize( m_info->extent.depth );
-			createViews( m_info, *this, m_image.getName(), m_sliceView );
+			texlayt::createViews( m_info, *this, m_image.getName(), m_sliceView );
 		}
 
 		m_defaultView.forEachView( []( TextureViewUPtr const & view )
@@ -1077,7 +1077,7 @@ namespace castor3d
 					? 1u
 					: m_image.getLayout().levels;
 				viewInfo->subresourceRange.levelCount = mipLevels;
-				processLevels( device, queueData, m_image, *m_texture, viewInfo );
+				texlayt::processLevels( device, queueData, m_image, *m_texture, viewInfo );
 			}
 
 			m_defaultView.forEachView( []( TextureViewUPtr const & view )
@@ -1168,7 +1168,7 @@ namespace castor3d
 		, castor::ImageLoaderConfig config )
 	{
 		uint32_t srcMips = 1u;
-		m_image = getFileImage( *getRenderSystem()->getEngine()
+		m_image = texlayt::getFileImage( *getRenderSystem()->getEngine()
 			, m_image.getName()
 			, folder
 			, relative
@@ -1194,7 +1194,7 @@ namespace castor3d
 		, uint32_t bufferOrigLevels
 		, bool isStatic )
 	{
-		buffer = adaptBuffer( buffer, buffer->getLevels() );
+		buffer = texlayt::adaptBuffer( buffer, buffer->getLevels() );
 		m_image = { m_image.getName(), castor::ImageLayout{ *buffer }, buffer };
 		doUpdateCreateInfo( m_image.getLayout() );
 		doUpdateMips( false, bufferOrigLevels );
@@ -1213,8 +1213,8 @@ namespace castor3d
 		, castor::PxBufferBaseSPtr buffer
 		, uint32_t bufferOrigLevels )
 	{
-		buffer = adaptBuffer( buffer, buffer->getLevels() );
-		castor::Image srcImage{ getBufferName( *buffer ), castor::ImageLayout{ *buffer }, buffer };
+		buffer = texlayt::adaptBuffer( buffer, buffer->getLevels() );
+		castor::Image srcImage{ texlayt::getBufferName( *buffer ), castor::ImageLayout{ *buffer }, buffer };
 		auto & srcLayout = srcImage.getLayout();
 		doUpdateFromFirstImage( 0u, srcLayout );
 		auto & dstLayout = m_image.getLayout();
@@ -1241,7 +1241,7 @@ namespace castor3d
 		, castor::ImageLoaderConfig config )
 	{
 		uint32_t srcMips = 1u;
-		auto image = getFileImage( *getRenderSystem()->getEngine()
+		auto image = texlayt::getFileImage( *getRenderSystem()->getEngine()
 			, m_image.getName() + castor::string::toString( index )
 			, folder
 			, relative
@@ -1269,8 +1269,8 @@ namespace castor3d
 		, uint32_t level
 		, castor::PxBufferBaseSPtr buffer )
 	{
-		buffer = adaptBuffer( buffer, 1u );
-		castor::Image srcImage{ getBufferName( *buffer ), castor::ImageLayout{ *buffer }, buffer };
+		buffer = texlayt::adaptBuffer( buffer, 1u );
+		castor::Image srcImage{ texlayt::getBufferName( *buffer ), castor::ImageLayout{ *buffer }, buffer };
 		auto & srcLayout = srcImage.getLayout();
 		auto & dstLayout = m_image.getLayout();
 		doUpdateFromFirstImage( level, srcLayout );
@@ -1290,7 +1290,7 @@ namespace castor3d
 		, castor::ImageLoaderConfig config )
 	{
 		uint32_t srcMips = 1u;
-		auto image = getFileImage( *getRenderSystem()->getEngine()
+		auto image = texlayt::getFileImage( *getRenderSystem()->getEngine()
 			, m_image.getName() + castor::string::toString( index ) + "_" + castor::string::toString( level )
 			, folder
 			, relative
@@ -1409,24 +1409,24 @@ namespace castor3d
 
 		if ( mipLevels > 1u )
 		{
-			m_info->mipLevels = getMinMipLevels( mipLevels, m_info->extent, m_info->format );
+			m_info->mipLevels = texlayt::getMinMipLevels( mipLevels, m_info->extent, m_info->format );
 		}
 
-		eraseViews( m_info->mipLevels, m_defaultView );
+		texlayt::eraseViews( m_info->mipLevels, m_defaultView );
 		m_info->mipLevels = std::min( m_info->mipLevels
 			, ( getDefaultView().getLevelCount() > 1u
 				? getDefaultView().getLevelCount()
 				: m_info->mipLevels ) );
-		eraseViews( m_info->mipLevels, m_arrayView );
-		eraseViews( m_info->mipLevels, m_cubeView );
-		eraseViews( m_info->mipLevels, m_sliceView );
+		texlayt::eraseViews( m_info->mipLevels, m_arrayView );
+		texlayt::eraseViews( m_info->mipLevels, m_cubeView );
+		texlayt::eraseViews( m_info->mipLevels, m_sliceView );
 		m_image.getLayout().levels = m_info->mipLevels;
 		return mipLevels;
 	}
 
 	void TextureLayout::doUpdateCreateInfo( castor::ImageLayout const & layout )
 	{
-		m_info->imageType = convert( layout.type );
+		m_info->imageType = texlayt::convert( layout.type );
 		m_info->extent.width = layout.extent->x;
 		m_info->extent.height = layout.extent->y;
 		m_info->extent.depth = layout.extent->z;
@@ -1434,20 +1434,20 @@ namespace castor3d
 		m_info->mipLevels = layout.levels;
 		m_info->format = VkFormat( layout.format );
 
-		update( m_defaultView
+		texlayt::update( m_defaultView
 			, m_info->extent
 			, m_info->format
 			, m_info->mipLevels
 			, m_info->arrayLayers );
-		update( m_arrayView
+		texlayt::update( m_arrayView
 			, m_info->extent
 			, m_info->format
 			, m_info->mipLevels );
-		update( m_cubeView
+		texlayt::update( m_cubeView
 			, m_info->extent
 			, m_info->format
 			, m_info->mipLevels );
-		update( m_sliceView
+		texlayt::update( m_sliceView
 			, m_info->extent
 			, m_info->format
 			, m_info->mipLevels );
@@ -1483,20 +1483,20 @@ namespace castor3d
 			m_info->format = VkFormat( layout.format );
 			doUpdateViews();
 
-			update( m_defaultView
+			texlayt::update( m_defaultView
 				, texture
 				, 0u
 				, m_info->arrayLayers
 				, 0u
 				, m_info->mipLevels );
 
-			update( m_arrayView
+			texlayt::update( m_arrayView
 				, texture
 				, m_info->mipLevels );
-			update( m_cubeView
+			texlayt::update( m_cubeView
 				, texture
 				, m_info->mipLevels );
-			update( m_sliceView
+			texlayt::update( m_sliceView
 				, texture
 				, m_info->mipLevels );
 		}
@@ -1506,7 +1506,7 @@ namespace castor3d
 	{
 		if ( getDepth() <= 1u && getLayersCount() <= 1u )
 		{
-			updateMipLevels( genNeeded, mipLevels, m_info->mipLevels, m_defaultView );
+			texlayt::updateMipLevels( genNeeded, mipLevels, m_info->mipLevels, m_defaultView );
 		}
 	}
 
@@ -1530,19 +1530,19 @@ namespace castor3d
 	{
 		if ( isCube() )
 		{
-			updateMipLevels( genNeeded
+			texlayt::updateMipLevels( genNeeded
 				, mipLevels
 				, getLayerCube( layer / 6u ).faces[layer % 6u] );
 		}
 		else if ( getDepth() > 1u )
 		{
-			updateMipLevels( genNeeded
+			texlayt::updateMipLevels( genNeeded
 				, mipLevels
 				, getSlice( layer ) );
 		}
 		else
 		{
-			updateMipLevels( genNeeded
+			texlayt::updateMipLevels( genNeeded
 				, mipLevels
 				, getLayer2D( layer ) );
 		}

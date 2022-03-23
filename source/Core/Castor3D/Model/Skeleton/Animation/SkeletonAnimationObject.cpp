@@ -1,12 +1,10 @@
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationObject.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	SkeletonAnimationObject::SkeletonAnimationObject( SkeletonAnimation & animation
 		, SkeletonAnimationObjectType type )
-		: OwnedBy< SkeletonAnimation >{ animation }
+		:castor::OwnedBy< SkeletonAnimation >{ animation }
 		, m_type{ type }
 	{
 	}

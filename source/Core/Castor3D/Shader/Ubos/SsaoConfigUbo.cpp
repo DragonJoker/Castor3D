@@ -11,8 +11,6 @@
 
 #include <ShaderWriter/Source.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*********************************************************************************************
@@ -93,8 +91,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	String const SsaoConfigUbo::BufferSsaoConfig = cuT( "SsaoConfig" );
-	String const SsaoConfigUbo::SsaoConfigData = cuT( "c3d_ssaoConfigData" );
+	castor::String const SsaoConfigUbo::BufferSsaoConfig = cuT( "SsaoConfig" );
+	castor::String const SsaoConfigUbo::SsaoConfigData = cuT( "c3d_ssaoConfigData" );
 
 	SsaoConfigUbo::SsaoConfigUbo( RenderDevice const & device )
 		: m_device{ device }

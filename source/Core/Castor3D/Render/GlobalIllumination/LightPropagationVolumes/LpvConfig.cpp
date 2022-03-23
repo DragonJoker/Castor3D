@@ -2,8 +2,6 @@
 
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	void LpvConfig::accept( castor::String const & name

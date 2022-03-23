@@ -8,10 +8,10 @@
 
 namespace castor3d
 {
-	namespace
+	namespace sklanmkf
 	{
 		template< typename T, typename U >
-		castor::SquareMatrix< T, 4 > & doRotate( castor::SquareMatrix< T, 4 > & matrix
+		static castor::SquareMatrix< T, 4 > & rotate( castor::SquareMatrix< T, 4 > & matrix
 			, castor::QuaternionT< U > const & orientation )
 		{
 			castor::SquareMatrix< T, 4 > rotate;
@@ -47,13 +47,6 @@ namespace castor3d
 
 			return matrix *= rotate;
 		}
-
-		template< typename T, typename U >
-		void doConvert( castor::SquareMatrix< T, 4 > const & in
-			, castor::SquareMatrix< U, 4 > & out )
-		{
-			out = in;
-		}
 	}
 
 	//*************************************************************************************************
@@ -72,7 +65,7 @@ namespace castor3d
 	{
 		castor::Matrix4x4f transform{ 1.0f };
 		castor::matrix::translate( transform, translate );
-		doRotate( transform, rotate );
+		sklanmkf::rotate( transform, rotate );
 		castor::matrix::scale( transform, scale );
 		addAnimationObject( object, transform );
 	}

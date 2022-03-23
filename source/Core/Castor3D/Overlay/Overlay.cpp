@@ -8,8 +8,6 @@
 
 CU_ImplementCUSmartPtr( castor3d, Overlay )
 
-using namespace castor;
-
 namespace castor3d
 {
 	Overlay::Overlay( castor::String const & name
@@ -31,7 +29,7 @@ namespace castor3d
 		, OverlayType type
 		, SceneRPtr scene
 		, OverlayRPtr parent )
-		: Overlay{ String{}
+		: Overlay{ castor::String{}
 			, engine
 			, type
 			, scene

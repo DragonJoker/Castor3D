@@ -2,8 +2,6 @@
 
 #include "Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*************************************************************************************************
@@ -32,7 +30,7 @@ namespace castor3d
 	bool BinaryParser< BonesComponent >::doParse( BonesComponent & obj )
 	{
 		bool result = true;
-		String name;
+		castor::String name;
 		std::vector< VertexBoneData > bones;
 		uint32_t count{ 0u };
 		uint32_t boneCount{ 0u };

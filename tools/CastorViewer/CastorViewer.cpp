@@ -16,8 +16,6 @@
 #include <GuiCommon/xpms/properties.xpm>
 #include <GuiCommon/xpms/scene_blanc.xpm>
 
-using namespace GuiCommon;
-
 wxIMPLEMENT_APP( CastorViewer::CastorViewerApp );
 
 namespace CastorViewer
@@ -56,12 +54,12 @@ namespace CastorViewer
 
 	void CastorViewerApp::doLoadAppImages()
 	{
-		ImagesLoader::addBitmap( eBMP_SCENES, scene_blanc_xpm );
-		ImagesLoader::addBitmap( eBMP_MATERIALS, mat_blanc_xpm );
-		ImagesLoader::addBitmap( eBMP_EXPORT, export_xpm );
-		ImagesLoader::addBitmap( eBMP_LOGS, log_xpm );
-		ImagesLoader::addBitmap( eBMP_PROPERTIES, properties_xpm );
-		ImagesLoader::addBitmap( eBMP_PRINTSCREEN, print_screen_xpm );
+		GuiCommon::ImagesLoader::addBitmap( eBMP_SCENES, scene_blanc_xpm );
+		GuiCommon::ImagesLoader::addBitmap( eBMP_MATERIALS, mat_blanc_xpm );
+		GuiCommon::ImagesLoader::addBitmap( eBMP_EXPORT, export_xpm );
+		GuiCommon::ImagesLoader::addBitmap( eBMP_LOGS, log_xpm );
+		GuiCommon::ImagesLoader::addBitmap( eBMP_PROPERTIES, properties_xpm );
+		GuiCommon::ImagesLoader::addBitmap( eBMP_PRINTSCREEN, print_screen_xpm );
 	}
 
 	wxWindow * CastorViewerApp::doInitialiseMainFrame( GuiCommon::SplashScreen & splashScreen )
@@ -76,7 +74,7 @@ namespace CastorViewer
 
 #endif
 
-		m_mainFrame = new MainFrame{ make_wxString( m_displayName ) };
+		m_mainFrame = new MainFrame{ GuiCommon::make_wxString( m_displayName ) };
 		bool result = m_mainFrame->initialise( splashScreen );
 
 		if ( result )

@@ -15,10 +15,10 @@
 
 namespace castor3d
 {
-	namespace
+	namespace anmobjgrp
 	{
 		template< typename FuncT, typename ParamT >
-		bool applyAnimationFunc( GroupAnimationMap & animations
+		static bool applyAnimationFunc( GroupAnimationMap & animations
 			, AnimatedObjectPtrStrMap & objects
 			, castor::String const & name
 			, FuncT func
@@ -187,7 +187,7 @@ namespace castor3d
 	void AnimatedObjectGroup::setAnimationLooped( castor::String const & name
 		, bool looped )
 	{
-		applyAnimationFunc( m_animations
+		anmobjgrp::applyAnimationFunc( m_animations
 			, m_objects
 			, name
 			, &AnimationInstance::setLooped
@@ -198,7 +198,7 @@ namespace castor3d
 	void AnimatedObjectGroup::setAnimationScale( castor::String const & name
 		, float scale )
 	{
-		applyAnimationFunc( m_animations
+		anmobjgrp::applyAnimationFunc( m_animations
 			, m_objects
 			, name
 			, &AnimationInstance::setScale
@@ -209,7 +209,7 @@ namespace castor3d
 	void AnimatedObjectGroup::setAnimationStartingPoint( castor::String const & name
 		, castor::Milliseconds value )
 	{
-		applyAnimationFunc( m_animations
+		anmobjgrp::applyAnimationFunc( m_animations
 			, m_objects
 			, name
 			, &AnimationInstance::setStartingPoint
@@ -220,7 +220,7 @@ namespace castor3d
 	void AnimatedObjectGroup::setAnimationStoppingPoint( castor::String const & name
 		, castor::Milliseconds value )
 	{
-		applyAnimationFunc( m_animations
+		anmobjgrp::applyAnimationFunc( m_animations
 			, m_objects
 			, name
 			, &AnimationInstance::setStoppingPoint

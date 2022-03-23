@@ -20,9 +20,9 @@ namespace castor3d::shader
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace phglgt
 	{
-		void modifyMaterial( sdw::ShaderWriter & writer
+		static void modifyMaterial( sdw::ShaderWriter & writer
 			, castor::String const & configName
 			, PassFlags const & passFlags
 			, TextureFlags const & textureFlags
@@ -35,7 +35,7 @@ namespace castor3d::shader
 			config.applyShininess( textureFlags, sampled, phongLightMat.shininess );
 		}
 
-		void updateMaterial( sdw::ShaderWriter & writer
+		static void updateMaterial( sdw::ShaderWriter & writer
 			, PassFlags const & passFlags
 			, TextureFlags const & textureFlags
 			, PhongLightMaterial & phongLightMat
@@ -215,7 +215,7 @@ namespace castor3d::shader
 					, bitangent
 					, tangentSpaceViewPosition
 					, tangentSpaceFragPosition );
-				modifyMaterial( m_writer
+				phglgt::modifyMaterial( m_writer
 					, name
 					, passFlags
 					, textureFlags
@@ -226,7 +226,7 @@ namespace castor3d::shader
 			FI;
 		}
 
-		updateMaterial( m_writer
+		phglgt::updateMaterial( m_writer
 			, passFlags
 			, textureFlags
 			, phongLightMat
@@ -309,7 +309,7 @@ namespace castor3d::shader
 					, emissive
 					, opacity
 					, occlusion );
-				modifyMaterial( m_writer
+				phglgt::modifyMaterial( m_writer
 					, name
 					, passFlags
 					, textureFlags
@@ -320,7 +320,7 @@ namespace castor3d::shader
 			FI;
 		}
 
-		updateMaterial( m_writer
+		phglgt::updateMaterial( m_writer
 			, passFlags
 			, textureFlags
 			, phongLightMat

@@ -25,7 +25,10 @@ namespace castor
 {
 	using namespace castor3d;
 
-	static const String getTypeFunctionABIName = cuT( "getType" );
+	namespace cacheplgn
+	{
+		static const String getTypeFunctionABIName = cuT( "getType" );
+	}
 
 	ResourceCacheT< Plugin, String, PluginCacheTraits >::ResourceCacheT( Engine & engine )
 		: ElementCacheT{ engine.getLogger() }
@@ -169,7 +172,7 @@ namespace castor
 			DynamicLibrarySPtr library{ std::make_shared< DynamicLibrary >( pathFile ) };
 			Plugin::PGetTypeFunction pfnGetType;
 
-			if ( !library->getFunction( pfnGetType, getTypeFunctionABIName ) )
+			if ( !library->getFunction( pfnGetType, cacheplgn::getTypeFunctionABIName ) )
 			{
 				String strError = cuT( "Error encountered while loading file [" ) + pathFile.getFileName( true ) + cuT( "] getType plug-in function => Not a Castor3D plug-in" );
 				CASTOR_PLUGIN_EXCEPTION( string::stringCast< char >( strError ), true );

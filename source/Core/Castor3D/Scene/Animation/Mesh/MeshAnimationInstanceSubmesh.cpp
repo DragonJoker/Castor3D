@@ -14,19 +14,17 @@
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*************************************************************************************************
 
-	namespace
+	namespace mshanminstsm
 	{
-		inline BoundingBox doInterpolateBB( BoundingBox const & prv
-			, BoundingBox const & cur
+		static castor::BoundingBox doInterpolateBB( castor::BoundingBox const & prv
+			, castor::BoundingBox const & cur
 			, float const factor )
 		{
-			return BoundingBox
+			return castor::BoundingBox
 			{
 				castor::Point3f{ prv.getMin() * float( 1.0 - factor ) + cur.getMin() * factor },
 				castor::Point3f{ prv.getMax() * float( 1.0 - factor ) + cur.getMax() * factor }
@@ -68,7 +66,7 @@ namespace castor3d
 		}
 
 		getOwner()->getAnimatedMesh().getGeometry().setBoundingBox( m_animationObject.getSubmesh()
-			, doInterpolateBB( prv.boundingBox
+			, mshanminstsm::doInterpolateBB( prv.boundingBox
 				, cur.boundingBox
 				, factor ) );
 		m_cur = &cur;

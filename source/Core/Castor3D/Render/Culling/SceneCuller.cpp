@@ -27,28 +27,28 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace cullscn
 	{
 		static constexpr VkDeviceSize MaxPipelineNodes = 1000ull;
 		static constexpr VkDeviceSize MaxSubmeshIdxDrawIndirectCommand = 1000ull;
 		static constexpr VkDeviceSize MaxSubmeshNIdxDrawIndirectCommand = 1000ull;
 		static constexpr VkDeviceSize MaxBillboardDrawIndirectCommand = 1000ull;
 
-		uint64_t getPipelineHash( RenderNodesPass const & renderPass
+		static uint64_t getPipelineHash( RenderNodesPass const & renderPass
 			, SubmeshRenderNode const & culled
 			, bool isFrontCulled )
 		{
 			return getPipelineBaseHash( renderPass, culled.data, culled.pass, isFrontCulled );
 		}
 
-		uint64_t getPipelineHash( RenderNodesPass const & renderPass
+		static uint64_t getPipelineHash( RenderNodesPass const & renderPass
 			, BillboardRenderNode const & culled
 			, bool isFrontCulled )
 		{
 			return getPipelineBaseHash( renderPass, culled.data, culled.pass, isFrontCulled );
 		}
 
-		void registerPipelineNodes( size_t hash
+		static void registerPipelineNodes( size_t hash
 			, ashes::BufferBase const & buffer
 			, std::vector< PipelineBuffer > & cont )
 		{
@@ -67,7 +67,7 @@ namespace castor3d
 		}
 
 		template< typename NodeT >
-		void addRenderNode( NodeT const & node
+		static void addRenderNode( NodeT const & node
 			, RenderNodesPass const & renderPass
 			, bool isFrontCulled
 			, SceneCuller::SidedNodePipelineMapT< NodeT > & sortedNodes
@@ -82,7 +82,7 @@ namespace castor3d
 		}
 
 		template< typename NodeT >
-		void addRenderNode( NodeT const & node
+		static void addRenderNode( NodeT const & node
 			, RenderNodesPass const & renderPass
 			, bool isFrontCulled
 			, SceneCuller::SidedObjectNodePipelineMapT< NodeT > & sortedInstancedSubmeshes
@@ -100,7 +100,7 @@ namespace castor3d
 
 		//*****************************************************************************************
 
-		uint32_t getPipelineNodeIndex( uint64_t hash
+		static uint32_t getPipelineNodeIndex( uint64_t hash
 			, ashes::BufferBase const & buffer
 			, std::vector< PipelineBuffer > const & cont )
 		{
@@ -115,7 +115,7 @@ namespace castor3d
 			return uint32_t( std::distance( cont.begin(), it ) );
 		}
 
-		PipelineNodes & getPipelineNodes( uint64_t hash
+		static PipelineNodes & getPipelineNodes( uint64_t hash
 			, ashes::BufferBase const & buffer
 			, std::vector< PipelineBuffer > const & cont
 			, PipelineNodes * nodes )
@@ -126,18 +126,18 @@ namespace castor3d
 
 		//*****************************************************************************************
 
-		uint32_t getInstanceCount( SubmeshRenderNode const & culled )
+		static uint32_t getInstanceCount( SubmeshRenderNode const & culled )
 		{
 			auto & instantiation = culled.data.getInstantiation();
 			return instantiation.getRefCount( culled.pass.getOwner() );
 		}
 
-		uint32_t getInstanceCount( BillboardRenderNode const & culled )
+		static uint32_t getInstanceCount( BillboardRenderNode const & culled )
 		{
 			return culled.data.getCount();
 		}
 
-		void fillIndirectCommand( SubmeshRenderNode const & culled
+		static void fillIndirectCommand( SubmeshRenderNode const & culled
 			, VkDrawIndexedIndirectCommand *& indirectIndexedCommands )
 		{
 			auto & bufferOffsets = culled.data.getBufferOffsets();
@@ -149,7 +149,7 @@ namespace castor3d
 			++indirectIndexedCommands;
 		}
 
-		void fillIndirectCommand( SubmeshRenderNode const & culled
+		static void fillIndirectCommand( SubmeshRenderNode const & culled
 			, VkDrawIndirectCommand *& indirectCommands )
 		{
 			auto & bufferOffsets = culled.data.getBufferOffsets();
@@ -160,7 +160,7 @@ namespace castor3d
 			++indirectCommands;
 		}
 
-		void fillIndirectCommand( BillboardRenderNode const & culled
+		static void fillIndirectCommand( BillboardRenderNode const & culled
 			, VkDrawIndirectCommand *& indirectCommands )
 		{
 			auto & bufferOffsets = culled.data.getGeometryBuffers().bufferOffset;
@@ -171,7 +171,7 @@ namespace castor3d
 			++indirectCommands;
 		}
 
-		void fillNodeCommands( SubmeshRenderNode const & node
+		static void fillNodeCommands( SubmeshRenderNode const & node
 			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
 			, VkDrawIndirectCommand *& indirectNIdxBuffer )
 		{
@@ -185,7 +185,7 @@ namespace castor3d
 			}
 		}
 
-		void fillNodeCommands( SubmeshRenderNode const & node
+		static void fillNodeCommands( SubmeshRenderNode const & node
 			, Scene const & scene
 			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
 			, VkDrawIndirectCommand *& indirectNIdxBuffer
@@ -440,7 +440,7 @@ namespace castor3d
 	{
 		auto it = m_renderPasses.find( &renderPass );
 		CU_Require( it != m_renderPasses.end() );
-		return getPipelineNodeIndex( getPipelineBaseHash( renderPass, submesh, pass, isFrontCulled )
+		return cullscn::getPipelineNodeIndex( getPipelineBaseHash( renderPass, submesh, pass, isFrontCulled )
 			, buffer
 			, it->second.nodesIds );
 	}
@@ -453,7 +453,7 @@ namespace castor3d
 	{
 		auto it = m_renderPasses.find( &renderPass );
 		CU_Require( it != m_renderPasses.end() );
-		return getPipelineNodeIndex( getPipelineBaseHash( renderPass, billboard, pass, isFrontCulled )
+		return cullscn::getPipelineNodeIndex( getPipelineBaseHash( renderPass, billboard, pass, isFrontCulled )
 			, buffer
 			, it->second.nodesIds );
 	}
@@ -560,7 +560,7 @@ namespace castor3d
 
 					if ( instantiation.isInstanced( culled->instance.getMaterial( culled->data ) ) )
 					{
-						addRenderNode( *culled
+						cullscn::addRenderNode( *culled
 							, renderPass
 							, false
 							, sortedInstancedSubmeshes
@@ -568,7 +568,7 @@ namespace castor3d
 
 						if ( needsFront )
 						{
-							addRenderNode( *culled
+							cullscn::addRenderNode( *culled
 								, renderPass
 								, true
 								, sortedInstancedSubmeshes
@@ -577,7 +577,7 @@ namespace castor3d
 					}
 					else
 					{
-						addRenderNode( *culled
+						cullscn::addRenderNode( *culled
 							, renderPass
 							, false
 							, sortedSubmeshes
@@ -585,7 +585,7 @@ namespace castor3d
 
 						if ( needsFront )
 						{
-							addRenderNode( *culled
+							cullscn::addRenderNode( *culled
 								, renderPass
 								, true
 								, sortedSubmeshes
@@ -605,7 +605,7 @@ namespace castor3d
 					&& renderPass.isValidRenderable( culled->instance )
 					&& culled->instance.getNode() != renderPass.getIgnoredNode() )
 				{
-					addRenderNode( *culled
+					cullscn::addRenderNode( *culled
 						, renderPass
 						, false
 						, sortedBillboards
@@ -624,7 +624,7 @@ namespace castor3d
 					|| !renderPassIt.second.sortedInstancedSubmeshes.empty() ) )
 			{
 				renderPassIt.second.pipelinesNodes = makeBuffer< PipelineNodes >( device
-					, MaxPipelineNodes
+					, cullscn::MaxPipelineNodes
 					, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 					, renderPassIt.first->getTypeName() + "/NodesIDs" );
@@ -635,12 +635,12 @@ namespace castor3d
 					|| !renderPassIt.second.sortedInstancedSubmeshes.empty() ) )
 			{
 				renderPassIt.second.submeshIdxIndirectCommands = makeBuffer< VkDrawIndexedIndirectCommand >( device
-					, MaxSubmeshIdxDrawIndirectCommand
+					, cullscn::MaxSubmeshIdxDrawIndirectCommand
 					, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 					, renderPassIt.first->getTypeName() + "/SubmeshIndexedIndirectBuffer" );
 				renderPassIt.second.submeshNIdxIndirectCommands = makeBuffer< VkDrawIndirectCommand >( device
-					, MaxSubmeshNIdxDrawIndirectCommand
+					, cullscn::MaxSubmeshNIdxDrawIndirectCommand
 					, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 					, renderPassIt.first->getTypeName() + "/SubmeshIndirectBuffer" );
@@ -650,7 +650,7 @@ namespace castor3d
 				&& !renderPassIt.second.sortedBillboards.empty() )
 			{
 				renderPassIt.second.billboardIndirectCommands = makeBuffer< VkDrawIndirectCommand >( device
-					, MaxBillboardDrawIndirectCommand
+					, cullscn::MaxBillboardDrawIndirectCommand
 					, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 					, renderPassIt.first->getTypeName() + "/BillboardIndirectBuffer" );
@@ -683,7 +683,7 @@ namespace castor3d
 					{
 						for ( auto & bufferIt : pipelineIt.second )
 						{
-							auto & pipelineNodes = getPipelineNodes( pipelineIt.first
+							auto & pipelineNodes = cullscn::getPipelineNodes( pipelineIt.first
 								, *bufferIt.first
 								, pipelinesNodes
 								, nodesIdsBuffer );
@@ -691,7 +691,7 @@ namespace castor3d
 
 							for ( auto & sidedCulled : bufferIt.second )
 							{
-								fillNodeCommands( *sidedCulled.first
+								cullscn::fillNodeCommands( *sidedCulled.first
 									, m_scene
 									, indirectIdxBuffer
 									, indirectNIdxBuffer
@@ -708,7 +708,7 @@ namespace castor3d
 							{
 								for ( auto & submeshIt : passIt.second )
 								{
-									fillNodeCommands( *submeshIt.second.front().first
+									cullscn::fillNodeCommands( *submeshIt.second.front().first
 										, indirectIdxBuffer
 										, indirectNIdxBuffer );
 								}
@@ -733,7 +733,7 @@ namespace castor3d
 					{
 						for ( auto & perBuffer : perPipeline.second )
 						{
-							auto & pipelineNodes = getPipelineNodes( perPipeline.first
+							auto & pipelineNodes = cullscn::getPipelineNodes( perPipeline.first
 								, *perBuffer.first
 								, pipelinesNodes
 								, nodesIdsBuffer );
@@ -742,7 +742,7 @@ namespace castor3d
 							for ( auto & sidedCulled : perBuffer.second )
 							{
 								auto culled = sidedCulled.first;
-								fillIndirectCommand( *culled, indirectBuffer );
+								cullscn::fillIndirectCommand( *culled, indirectBuffer );
 								( *pipelinesBuffer )->x = culled->instance.getId( culled->pass );
 								++pipelinesBuffer;
 							}

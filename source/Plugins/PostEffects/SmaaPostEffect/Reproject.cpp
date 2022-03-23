@@ -25,11 +25,9 @@
 
 #include <numeric>
 
-using namespace castor;
-
 namespace smaa
 {
-	namespace
+	namespace reproj
 	{
 		enum Idx : uint32_t
 		{
@@ -38,7 +36,7 @@ namespace smaa
 			VelocityTexIdx,
 		};
 
-		std::unique_ptr< ast::Shader > doGetReprojectVP()
+		static std::unique_ptr< ast::Shader > doGetReprojectVP()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -59,7 +57,7 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > doGetReprojectFP( bool reprojection )
+		static std::unique_ptr< ast::Shader > doGetReprojectFP( bool reprojection )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -145,8 +143,8 @@ namespace smaa
 		, m_previousColourViews{ previousColourViews }
 		, m_velocityView{ velocityView }
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaReproject", doGetReprojectVP() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaReproject", doGetReprojectFP( velocityView != nullptr ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaReproject", reproj::doGetReprojectVP() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaReproject", reproj::doGetReprojectFP( velocityView != nullptr ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_result{ m_device
@@ -218,11 +216,11 @@ namespace smaa
 		ubo.createPassBinding( m_pass
 			, SmaaUboIdx );
 		m_pass.addSampledView( m_currentColourViews
-			, CurColTexIdx
+			, reproj::CurColTexIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, pointSampler );
 		m_pass.addSampledView( m_previousColourViews
-			, PrvColTexIdx
+			, reproj::PrvColTexIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, pointSampler );
 		m_result.create();
@@ -230,7 +228,7 @@ namespace smaa
 		if ( m_velocityView )
 		{
 			m_pass.addSampledView( *m_velocityView
-				, VelocityTexIdx
+				, reproj::VelocityTexIdx
 				, {}
 				, pointSampler );
 		}

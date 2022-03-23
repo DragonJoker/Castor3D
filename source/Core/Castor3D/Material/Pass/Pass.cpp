@@ -28,9 +28,9 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace matpass
 	{
-		TextureSourceMap getSources( TextureSourceMap const & sources
+		static TextureSourceMap getSources( TextureSourceMap const & sources
 			, TextureFlags mask )
 		{
 			TextureSourceMap result;
@@ -58,7 +58,7 @@ namespace castor3d
 			return result;
 		}
 
-		TextureUnitPtrArray getTextureUnits( TextureUnitPtrArray const & units
+		static TextureUnitPtrArray getTextureUnits( TextureUnitPtrArray const & units
 			, TextureFlags mask )
 		{
 			TextureUnitPtrArray result;
@@ -86,14 +86,14 @@ namespace castor3d
 			return result;
 		}
 
-		bool isPreparable( TextureSourceInfo const & source
+		static bool isPreparable( TextureSourceInfo const & source
 			, PassTextureConfig const & config )
 		{
 			return ( !source.isRenderTarget() )
 				&& !ashes::isCompressedFormat( config.imageInfo->format );
 		}
 
-		bool isMergeable( TextureSourceInfo const & source
+		static bool isMergeable( TextureSourceInfo const & source
 			, PassTextureConfig const & config
 			, AnimationUPtr const & animation )
 		{
@@ -101,7 +101,7 @@ namespace castor3d
 				&& !animation;
 		}
 
-		bool areFormatsCompatible( VkFormat lhs, VkFormat rhs )
+		static bool areFormatsCompatible( VkFormat lhs, VkFormat rhs )
 		{
 			if ( isSRGBFormat( convert( rhs ) ) )
 			{
@@ -116,13 +116,13 @@ namespace castor3d
 				&& !ashes::isCompressedFormat( rhs );
 		}
 
-		uint32_t & getMask( TextureConfiguration & config
+		static uint32_t & getMask( TextureConfiguration & config
 			, uint32_t offset )
 		{
 			return ( *reinterpret_cast< castor::Point2ui * >( reinterpret_cast< uint8_t * >( &config ) + offset ) )[0];
 		}
 
-		TextureSourceInfo mergeSourceInfos( TextureSourceInfo const & lhs
+		static TextureSourceInfo mergeSourceInfos( TextureSourceInfo const & lhs
 			, TextureSourceInfo const & rhs )
 		{
 			return TextureSourceInfo{ lhs.sampler()
@@ -467,7 +467,7 @@ namespace castor3d
 
 	TextureUnitPtrArray Pass::getTextureUnits( TextureFlags mask )const
 	{
-		return castor3d::getTextureUnits( m_textureUnits, mask );
+		return matpass::getTextureUnits( m_textureUnits, mask );
 	}
 
 	TextureFlagsArray Pass::getTexturesMask( TextureFlags mask )const
@@ -490,7 +490,7 @@ namespace castor3d
 
 	uint32_t Pass::getTextureUnitsCount( TextureFlags mask )const
 	{
-		return uint32_t( castor3d::getTextureUnits( m_textureUnits, mask ).size() );
+		return uint32_t( matpass::getTextureUnits( m_textureUnits, mask ).size() );
 	}
 
 	void Pass::doFillData( PassBuffer::PassDataPtr & data )const
@@ -529,8 +529,8 @@ namespace castor3d
 		, TextureUnitPtrArray & result )
 	{
 		auto & textureCache = getOwner()->getEngine()->getTextureUnitCache();
-		auto sourcesLhs = castor3d::getSources( m_sources, lhsFlag );
-		auto sourcesRhs = castor3d::getSources( m_sources, rhsFlag );
+		auto sourcesLhs = matpass::getSources( m_sources, lhsFlag );
+		auto sourcesRhs = matpass::getSources( m_sources, rhsFlag );
 
 		if ( !sourcesLhs.empty()
 			&& !sourcesRhs.empty() )
@@ -581,12 +581,12 @@ namespace castor3d
 
 				if ( lhsFlags.size() == 1u
 					&& rhsFlags.size() == 1u
-					&& isMergeable( lhsIt.first, lhsIt.second, lhsAnim )
-					&& isMergeable( rhsIt.first, rhsIt.second, rhsAnim )
-					&& areFormatsCompatible( lhsIt.second.imageInfo->format, rhsIt.second.imageInfo->format ) )
+					&& matpass::isMergeable( lhsIt.first, lhsIt.second, lhsAnim )
+					&& matpass::isMergeable( rhsIt.first, rhsIt.second, rhsAnim )
+					&& matpass::areFormatsCompatible( lhsIt.second.imageInfo->format, rhsIt.second.imageInfo->format ) )
 				{
 					log::debug << getOwner()->getName() << name << cuT( " - Merging textures." ) << std::endl;
-					auto resultSourceInfo = mergeSourceInfos( lhsIt.first, rhsIt.first );
+					auto resultSourceInfo = matpass::mergeSourceInfos( lhsIt.first, rhsIt.first );
 					TextureConfiguration resultConfig;
 					resultConfig.heightMask[0] = ( lhsIt.second.config.heightMask[0]
 						| rhsIt.second.config.heightMask[0] );
@@ -594,15 +594,15 @@ namespace castor3d
 						| rhsIt.second.config.heightMask[1] );
 					resultConfig.heightFactor = std::min( lhsIt.second.config.heightFactor
 						, rhsIt.second.config.heightFactor );
-					getMask( resultConfig, lhsMaskOffset ) = lhsDstMask;
-					getMask( resultConfig, rhsMaskOffset ) = rhsDstMask;
+					matpass::getMask( resultConfig, lhsMaskOffset ) = lhsDstMask;
+					matpass::getMask( resultConfig, rhsMaskOffset ) = rhsDstMask;
 					auto img = textureCache.mergeImages( lhsIt.first
 						, lhsIt.second.config
-						, getMask( lhsIt.second.config, lhsMaskOffset )
+						, matpass::getMask( lhsIt.second.config, lhsMaskOffset )
 						, lhsDstMask
 						, rhsIt.first
 						, rhsIt.second.config
-						, getMask( rhsIt.second.config, rhsMaskOffset )
+						, matpass::getMask( rhsIt.second.config, rhsMaskOffset )
 						, rhsDstMask
 						, getOwner()->getName() + name
 						, resultSourceInfo

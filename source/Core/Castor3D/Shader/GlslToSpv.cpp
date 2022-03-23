@@ -24,7 +24,7 @@ See LICENSE file in root folder.
 
 namespace castor3d
 {
-	namespace
+	namespace glspv
 	{
 		struct BlockLocale
 		{
@@ -49,7 +49,7 @@ namespace castor3d
 			std::locale m_prvLoc;
 		};
 
-		void doInitResources( ashes::Device const & device
+		static void doInitResources( ashes::Device const & device
 			, TBuiltInResource & resources )
 		{
 			auto limits = device.getPhysicalDevice().getProperties().limits;
@@ -148,7 +148,7 @@ namespace castor3d
 			resources.minProgramTexelOffset = -8;
 		}
 
-		EShLanguage doGetLanguage( VkShaderStageFlagBits stage )
+		static EShLanguage doGetLanguage( VkShaderStageFlagBits stage )
 		{
 			switch ( stage )
 			{
@@ -191,13 +191,13 @@ namespace castor3d
 		, VkShaderStageFlagBits stage
 		, std::string const & shader )
 	{
-		BlockLocale guard;
+		glspv::BlockLocale guard;
 		TBuiltInResource resources;
-		doInitResources( *device.device, resources );
+		glspv::doInitResources( *device.device, resources );
 
 		// Enable SPIR-V and Vulkan rules when parsing GLSL
 		auto messages = ( EShMessages )( EShMsgSpvRules | EShMsgVulkanRules );
-		auto glstage = doGetLanguage( stage );
+		auto glstage = glspv::doGetLanguage( stage );
 
 		std::string source = shader;
 		glslang::TShader glshader{ glstage };

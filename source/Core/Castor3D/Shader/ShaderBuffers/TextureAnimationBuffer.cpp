@@ -16,9 +16,9 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace texanmbuf
 	{
-		TextureAnimationBuffer::TextureAnimationsData doBindData( uint8_t * buffer
+		static TextureAnimationBuffer::TextureAnimationsData doBindData( uint8_t * buffer
 			, VkDeviceSize size
 			, uint32_t count )
 		{
@@ -34,7 +34,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, uint32_t count )
 		: m_buffer{ engine, device, count * DataSize, cuT( "TextureAnimationBuffer" ) }
-		, m_data{ doBindData( m_buffer.getPtr(), m_buffer.getSize(), count ) }
+		, m_data{ texanmbuf::doBindData( m_buffer.getPtr(), m_buffer.getSize(), count ) }
 		, m_animations{ count + 1u, nullptr }
 	{
 	}

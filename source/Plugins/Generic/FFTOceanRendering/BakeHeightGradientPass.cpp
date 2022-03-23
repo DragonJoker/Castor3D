@@ -26,9 +26,9 @@ namespace ocean_fft
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace bakehg
 	{
-		ashes::DescriptorSetLayoutPtr createDescriptorLayout( castor3d::RenderDevice const & device )
+		static ashes::DescriptorSetLayoutPtr createDescriptorLayout( castor3d::RenderDevice const & device )
 		{
 			ashes::VkDescriptorSetLayoutBindingArray bindings{ castor3d::makeDescriptorSetLayoutBinding( BakeHeightGradientPass::eConfig
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
@@ -49,7 +49,7 @@ namespace ocean_fft
 				, std::move( bindings ) );
 		}
 
-		ashes::DescriptorSetPtr createDescriptorSet( crg::RunnableGraph & graph
+		static ashes::DescriptorSetPtr createDescriptorSet( crg::RunnableGraph & graph
 			, ashes::DescriptorSetPool const & pool
 			, crg::FramePass const & pass )
 		{
@@ -98,7 +98,7 @@ namespace ocean_fft
 			return descriptorSet;
 		}
 
-		ashes::PipelineLayoutPtr createPipelineLayout( castor3d::RenderDevice const & device
+		static ashes::PipelineLayoutPtr createPipelineLayout( castor3d::RenderDevice const & device
 			, ashes::DescriptorSetLayout const & dslayout )
 		{
 			return device->createPipelineLayout( BakeHeightGradientPass::Name
@@ -106,7 +106,7 @@ namespace ocean_fft
 				, ashes::VkPushConstantRangeArray{ { VK_SHADER_STAGE_COMPUTE_BIT, 0u, uint32_t( sizeof( BakeHeightGradientPass::Data ) ) } } );
 		}
 
-		ashes::ComputePipelinePtr createPipeline( castor3d::RenderDevice const & device
+		static ashes::ComputePipelinePtr createPipeline( castor3d::RenderDevice const & device
 			, ashes::PipelineLayout const & pipelineLayout
 			, castor3d::ShaderModule const & computeShader )
 		{
@@ -117,7 +117,7 @@ namespace ocean_fft
 					, pipelineLayout ) );
 		}
 
-		castor3d::ShaderPtr createShader()
+		static castor3d::ShaderPtr createShader()
 		{
 			sdw::ComputeWriter writer;
 
@@ -250,12 +250,12 @@ namespace ocean_fft
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
 			, { 1u } }
 		, m_device{ device }
-		, m_descriptorSetLayout{ createDescriptorLayout( m_device ) }
-		, m_pipelineLayout{ createPipelineLayout( m_device, *m_descriptorSetLayout ) }
-		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, Name, createShader() }
-		, m_pipeline{ createPipeline( device, *m_pipelineLayout, m_shader ) }
+		, m_descriptorSetLayout{ bakehg::createDescriptorLayout( m_device ) }
+		, m_pipelineLayout{ bakehg::createPipelineLayout( m_device, *m_descriptorSetLayout ) }
+		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, Name, bakehg::createShader() }
+		, m_pipeline{ bakehg::createPipeline( device, *m_pipelineLayout, m_shader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
-		, m_descriptorSet{ createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }
+		, m_descriptorSet{ bakehg::createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }
 		, m_extent{ extent }
 		, m_heightMapSize{ heightMapSize }
 		, m_displacementDownsample{ displacementDownsample }

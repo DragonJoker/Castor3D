@@ -13,8 +13,6 @@
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"
 
-using namespace sdw;
-
 namespace castor3d
 {
 	namespace shader
@@ -166,31 +164,31 @@ namespace castor3d
 
 			/*Spherical harmonics coefficients - precomputed*/
 			auto SH_C0 = m_writer.declConstant( "SH_C0"
-				, Float{ 1.0f / float( 2.0f * sqrt( castor::Pi< float > ) ) } );
+				, sdw::Float{ 1.0f / float( 2.0f * sqrt( castor::Pi< float > ) ) } );
 			auto SH_C1 = m_writer.declConstant( "SH_C1"
-				, Float{ float( sqrt( 3.0f / castor::Pi< float > ) / 2.0f ) } );
+				, sdw::Float{ float( sqrt( 3.0f / castor::Pi< float > ) / 2.0f ) } );
 
 			// no normalization
-			m_evalSH = m_writer.implementFunction< Vec4 >( "evalSH"
-				, [this]( Vec3 direction )
+			m_evalSH = m_writer.implementFunction< sdw::Vec4 >( "evalSH"
+				, [this]( sdw::Vec3 direction )
 				{
-					auto SH_C0 = m_writer.getVariable< Float >( "SH_C0" );
-					auto SH_C1 = m_writer.getVariable< Float >( "SH_C1" );
+					auto SH_C0 = m_writer.getVariable< sdw::Float >( "SH_C0" );
+					auto SH_C1 = m_writer.getVariable< sdw::Float >( "SH_C1" );
 
 					m_writer.returnStmt( vec4( SH_C0
 						, -SH_C1 * direction.y()
 						, SH_C1 * direction.z()
 						, -SH_C1 * direction.x() ) );
 				}
-				, InVec3{ m_writer, "direction" } );
+				, sdw::InVec3{ m_writer, "direction" } );
 
 			m_computeLPVRadiance = m_writer.implementFunction< sdw::Vec4 >( "computeLPVRadiance"
 				, [this]( Surface surface
 					, LpvGridData lpvGridData )
 				{
-					auto c3d_lpvAccumulatorR = m_writer.getVariable< CombinedImage3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator" ) );
-					auto c3d_lpvAccumulatorG = m_writer.getVariable< CombinedImage3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator" ) );
-					auto c3d_lpvAccumulatorB = m_writer.getVariable< CombinedImage3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator" ) );
+					auto c3d_lpvAccumulatorR = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator" ) );
+					auto c3d_lpvAccumulatorG = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator" ) );
+					auto c3d_lpvAccumulatorB = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator" ) );
 
 					auto SHintensity = m_writer.declLocale( "SHintensity"
 						, m_evalSH( -surface.worldNormal ) );
@@ -320,8 +318,8 @@ namespace castor3d
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
 				auto voxelData = m_writer.getVariable< VoxelData >( "c3d_voxelData" );
-				auto mapVoxelsFirstBounce = m_writer.getVariable< CombinedImage3DRgba32 >( "c3d_mapVoxelsFirstBounce" );
-				auto mapVoxelsSecondaryBounce = m_writer.getVariable< CombinedImage3DRgba32 >( "c3d_mapVoxelsSecondaryBounce" );
+				auto mapVoxelsFirstBounce = m_writer.getVariable< sdw::CombinedImage3DRgba32 >( "c3d_mapVoxelsFirstBounce" );
+				auto mapVoxelsSecondaryBounce = m_writer.getVariable< sdw::CombinedImage3DRgba32 >( "c3d_mapVoxelsSecondaryBounce" );
 
 				IF( m_writer, voxelData.enableOcclusion )
 				{
@@ -409,8 +407,8 @@ namespace castor3d
 			, VoxelData const & voxelData
 			, sdw::Float const & indirectOcclusion )const
 		{
-			auto mapVoxelsFirstBounce = m_writer.getVariable< CombinedImage3DRgba32 >( "c3d_mapVoxelsFirstBounce" );
-			auto mapVoxelsSecondaryBounce = m_writer.getVariable< CombinedImage3DRgba32 >( "c3d_mapVoxelsSecondaryBounce" );
+			auto mapVoxelsFirstBounce = m_writer.getVariable< sdw::CombinedImage3DRgba32 >( "c3d_mapVoxelsFirstBounce" );
+			auto mapVoxelsSecondaryBounce = m_writer.getVariable< sdw::CombinedImage3DRgba32 >( "c3d_mapVoxelsSecondaryBounce" );
 
 			auto vxlRadiance( m_writer.declLocale< sdw::Vec4 >( "vxlRadiance" ) );
 
@@ -446,8 +444,8 @@ namespace castor3d
 			, sdw::Float const & indirectBlend
 			, VoxelData const & voxelData )const
 		{
-			auto mapVoxelsFirstBounce = m_writer.getVariable< CombinedImage3DRgba32 >( "c3d_mapVoxelsFirstBounce" );
-			auto mapVoxelsSecondaryBounce = m_writer.getVariable< CombinedImage3DRgba32 >( "c3d_mapVoxelsSecondaryBounce" );
+			auto mapVoxelsFirstBounce = m_writer.getVariable< sdw::CombinedImage3DRgba32 >( "c3d_mapVoxelsFirstBounce" );
+			auto mapVoxelsSecondaryBounce = m_writer.getVariable< sdw::CombinedImage3DRgba32 >( "c3d_mapVoxelsSecondaryBounce" );
 			auto vxlReflection( m_writer.declLocale< sdw::Vec4 >( "vxlReflection" ) );
 
 			IF( m_writer, voxelData.enableSecondaryBounce )
@@ -490,13 +488,13 @@ namespace castor3d
 				if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 				{
 					auto llpvGridData = m_writer.getVariable< LayeredLpvGridData >( "c3d_llpvGridData" );
-					indirectDiffuse += ( computeLLPVRadiance( surface, llpvGridData ) * llpvGridData.indirectAttenuation ) / Float{ castor::Pi< float > };
+					indirectDiffuse += ( computeLLPVRadiance( surface, llpvGridData ) * llpvGridData.indirectAttenuation ) / sdw::Float{ castor::Pi< float > };
 				}
 
 				if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 				{
 					auto lpvGridData = m_writer.getVariable< LpvGridData >( "c3d_lpvGridData" );
-					indirectDiffuse += ( computeLPVRadiance( surface, lpvGridData ) * lpvGridData.indirectAttenuation() ) / Float{ castor::Pi< float > };
+					indirectDiffuse += ( computeLPVRadiance( surface, lpvGridData ) * lpvGridData.indirectAttenuation() ) / sdw::Float{ castor::Pi< float > };
 				}
 			}
 

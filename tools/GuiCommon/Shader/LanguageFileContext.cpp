@@ -4,8 +4,6 @@
 #include "GuiCommon/Shader/StyleInfo.hpp"
 #include "GuiCommon/Shader/LanguageInfo.hpp"
 
-using namespace castor;
-
 namespace GuiCommon
 {
 	LanguageFileContext::LanguageFileContext()

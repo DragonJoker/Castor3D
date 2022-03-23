@@ -9,17 +9,18 @@
 #include <wx/propgrid/advprops.h>
 #pragma warning( pop )
 
-using namespace castor;
-
-WX_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( BoundingBox )
+GC_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( castor, BoundingBox )
 
 namespace GuiCommon
 {
-	WX_PG_IMPLEMENT_PROPERTY_CLASS( BoundingBoxProperty, wxPGProperty, BoundingBox, BoundingBox const &, TextCtrl )
+	WX_PG_IMPLEMENT_PROPERTY_CLASS( BoundingBoxProperty, wxPGProperty
+		, castor::BoundingBox
+		, castor::BoundingBox const &
+		, TextCtrl )
 
 		BoundingBoxProperty::BoundingBoxProperty( wxString const & label
 		, wxString const & name
-		, BoundingBox const & value )
+		, castor::BoundingBox const & value )
 		: wxPGProperty{ label, name }
 	{
 		setValueI( value );

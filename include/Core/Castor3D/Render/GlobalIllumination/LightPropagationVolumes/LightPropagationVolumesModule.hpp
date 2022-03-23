@@ -37,7 +37,7 @@ namespace castor3d
 	};
 	C3D_API castor::String getTextureName( LpvTexture texture
 		, std::string const & infix );
-	C3D_API castor::String getName( LpvTexture texture );
+	C3D_API castor::String getTexName( LpvTexture texture );
 	C3D_API VkFormat getFormat( RenderDevice const & device, LpvTexture texture );
 	C3D_API VkClearValue getClearValue( LpvTexture texture );
 	C3D_API VkImageUsageFlags getUsageFlags( LpvTexture texture );

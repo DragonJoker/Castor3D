@@ -6,22 +6,20 @@
 #include <CastorUtils/Math/Point.hpp>
 #include <CastorUtils/Math/Angle.hpp>
 
-using namespace castor;
-
 namespace Loop
 {
 	namespace
 	{
 		double getAlpha( uint32_t n )
 		{
-			double tmp = 3.0 + 2.0 * cos( 2.0 * Pi< float > / n );
+			double tmp = 3.0 + 2.0 * cos( 2.0 * castor::Pi< float > / n );
 			double beta = 1.25 - ( tmp * tmp ) / 32.0;
 			return n * ( 1 - beta ) / beta;
 		}
 	}
 
-	String const Subdivider::Name = cuT( "Loop Divider" );
-	String const Subdivider::Type = cuT( "loop" );
+	castor::String const Subdivider::Name = cuT( "Loop Divider" );
+	castor::String const Subdivider::Type = cuT( "loop" );
 
 	Subdivider::Subdivider()
 		: castor3d::MeshSubdivider()

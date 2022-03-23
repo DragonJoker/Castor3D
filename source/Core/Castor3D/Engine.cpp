@@ -44,7 +44,7 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace eng
 	{
 		static constexpr bool C3D_EnableAPITrace = false;
 		static const char * C3D_NO_RENDERSYSTEM = "No RenderSystem loaded, call castor3d::Engine::loadRenderer before castor3d::Engine::Initialise";
@@ -52,7 +52,7 @@ namespace castor3d
 		static castor::String const defaultName = cuT( "C3D_Default" );
 		static castor::String const samplerName = cuT( "C3D_Lights" );
 
-		castor::LoggerInstancePtr createLogger( castor::LogType type
+		static castor::LoggerInstancePtr createLogger( castor::LogType type
 			, castor::Path const & filePath )
 		{
 			auto result = castor::Logger::createInstance( type );
@@ -80,7 +80,7 @@ namespace castor3d
 		, m_importerFactory{ castor::makeUnique< MeshImporterFactory >() }
 		, m_particleFactory{ castor::makeUnique< ParticleFactory >() }
 		, m_enableValidation{ enableValidation }
-		, m_enableApiTrace{ C3D_EnableAPITrace }
+		, m_enableApiTrace{ eng::C3D_EnableAPITrace }
 		, m_cpuJobs{ std::max( 8u, std::min( 4u, castor::CpuInformations{}.getCoreCount() / 2u ) ) }
 	{
 		m_passFactory = castor::makeUnique< PassFactory >( *this );
@@ -103,7 +103,7 @@ namespace castor3d
 		m_listenerCache = castor::makeCache< FrameListener, castor::String, FrameListenerCacheTraits >( getLogger()
 			, castor::DummyFunctorT< FrameListenerCache >{}
 			, listenerClean );
-		m_defaultListener = m_listenerCache->add( defaultName );
+		m_defaultListener = m_listenerCache->add( eng::defaultName );
 
 		m_shaderCache = makeCache( *this );
 		m_samplerCache = castor::makeCache< Sampler, castor::String, SamplerCacheTraits >( getLogger()
@@ -133,7 +133,7 @@ namespace castor3d
 		: Engine{ appName
 			, appVersion
 			, enableValidation
-			, createLogger( castor::Logger::getLevel(), getEngineDirectory() / cuT( "Castor3D.log" ) )
+			, eng::createLogger( castor::Logger::getLevel(), getEngineDirectory() / cuT( "Castor3D.log" ) )
 			, nullptr }
 	{
 	}
@@ -204,7 +204,7 @@ namespace castor3d
 				m_defaultSampler = m_samplerCache->add( created->getName(), created, true );
 			}
 
-			if ( auto created = m_samplerCache->create( samplerName, *this ) )
+			if ( auto created = m_samplerCache->create( eng::samplerName, *this ) )
 			{
 				created->setMinFilter( VK_FILTER_NEAREST );
 				created->setMagFilter( VK_FILTER_NEAREST );
@@ -224,7 +224,7 @@ namespace castor3d
 
 		if ( !m_renderSystem )
 		{
-			CU_Exception( C3D_NO_RENDERSYSTEM );
+			CU_Exception( eng::C3D_NO_RENDERSYSTEM );
 		}
 
 		m_textureCache->initialise( m_renderSystem->getRenderDevice() );

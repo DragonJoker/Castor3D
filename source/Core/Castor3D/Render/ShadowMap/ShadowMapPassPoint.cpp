@@ -42,15 +42,13 @@
 
 #include <ShaderWriter/Source.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
-	namespace
+	namespace shdpasspoint
 	{
-		castor::String getPassName( uint32_t index )
+		static castor::String getPassName( uint32_t index )
 		{
-			return cuT( "PointSML" ) + string::toString( index / 6u ) + "F" + string::toString( index % 6u );
+			return cuT( "PointSML" ) + castor::string::toString( index / 6u ) + "F" + castor::string::toString( index % 6u );
 		}
 	}
 
@@ -70,7 +68,7 @@ namespace castor3d
 			, graph
 			, device
 			, Type
-			, getPassName( index )
+			, shdpasspoint::getPassName( index )
 			, matrixUbo
 			, culler
 			, shadowMap }

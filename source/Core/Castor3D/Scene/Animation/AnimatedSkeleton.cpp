@@ -7,11 +7,9 @@
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp"
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceObject.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
-	AnimatedSkeleton::AnimatedSkeleton( String const & name
+	AnimatedSkeleton::AnimatedSkeleton( castor::String const & name
 		, Skeleton & skeleton
 		, Mesh & mesh
 		, Geometry & geometry )
@@ -22,7 +20,7 @@ namespace castor3d
 	{
 	}
 
-	void AnimatedSkeleton::update( Milliseconds const & elapsed )
+	void AnimatedSkeleton::update( castor::Milliseconds const & elapsed )
 	{
 		for ( auto & animation : m_playingAnimations )
 		{
@@ -100,7 +98,7 @@ namespace castor3d
 		}
 	}
 
-	void AnimatedSkeleton::doAddAnimation( String const & name )
+	void AnimatedSkeleton::doAddAnimation( castor::String const & name )
 	{
 		auto it = m_animations.find( name );
 

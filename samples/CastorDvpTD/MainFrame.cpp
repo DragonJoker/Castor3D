@@ -11,12 +11,9 @@
 
 #include <wx/sizer.h>
 
-using namespace castor;
-using namespace castor3d;
-
 namespace castortd
 {
-	namespace
+	namespace main
 	{
 		static const wxSize MainFrameSize{ 1024, 768 };
 
@@ -25,14 +22,14 @@ namespace castortd
 			eID_RENDER_TIMER,
 		}	eID;
 
-		void doUpdate( Game & p_game )
+		static void doUpdate( Game & p_game )
 		{
 			auto & engine = *wxGetApp().getCastor();
 
 			if ( !engine.isCleaned() )
 			{
 				p_game.update();
-				engine.postEvent( makeCpuFunctorEvent( EventType::ePostRender, [&p_game]()
+				engine.postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender, [&p_game]()
 				{
 					doUpdate( p_game );
 				} ) );
@@ -41,9 +38,9 @@ namespace castortd
 	}
 
 	MainFrame::MainFrame()
-		: wxFrame{ nullptr, wxID_ANY, ApplicationName, wxDefaultPosition, MainFrameSize, wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN | wxRESIZE_BORDER | wxMAXIMIZE_BOX }
+		: wxFrame{ nullptr, wxID_ANY, ApplicationName, wxDefaultPosition, main::MainFrameSize, wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN | wxRESIZE_BORDER | wxMAXIMIZE_BOX }
 	{
-		SetClientSize( MainFrameSize );
+		SetClientSize( main::MainFrameSize );
 		Show( true );
 
 		try
@@ -64,13 +61,13 @@ namespace castortd
 	{
 		auto & engine = *wxGetApp().getCastor();
 		auto target = GuiCommon::loadScene( engine
-			, File::getExecutableDirectory().getPath() / cuT( "share" ) / cuT( "CastorDvpTD" ) / cuT( "Data.zip" )
+			, castor::File::getExecutableDirectory().getPath() / cuT( "share" ) / cuT( "CastorDvpTD" ) / cuT( "Data.zip" )
 			, nullptr );
 
 		if ( target )
 		{
 			m_game = std::make_unique< Game >( *target->getScene() );
-			m_panel = wxMakeWindowPtr< RenderPanel >( this, MainFrameSize, *m_game );
+			m_panel = wxMakeWindowPtr< RenderPanel >( this, main::MainFrameSize, *m_game );
 			m_panel->setRenderTarget( target );
 			auto & window = m_panel->getRenderWindow();
 
@@ -92,7 +89,7 @@ namespace castortd
 				Maximize();
 			}
 
-			Logger::logInfo( cuT( "Scene file read" ) );
+			castor::Logger::logInfo( cuT( "Scene file read" ) );
 
 #if wxCHECK_VERSION( 2, 9, 0 )
 
@@ -104,15 +101,15 @@ namespace castortd
 			if ( engine.isThreaded() )
 			{
 				engine.getRenderLoop().beginRendering();
-				engine.postEvent( makeCpuFunctorEvent( EventType::ePostRender
+				engine.postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
 					, [this]()
 					{
-						doUpdate( *m_game );
+						main::doUpdate( *m_game );
 					} ) );
 			}
 			else
 			{
-				m_timer = new wxTimer( this, eID_RENDER_TIMER );
+				m_timer = new wxTimer( this, main::eID_RENDER_TIMER );
 				m_timer->Start( 1000 / int( engine.getRenderLoop().getWantedFps() ), true );
 			}
 		}
@@ -124,7 +121,7 @@ namespace castortd
 		EVT_PAINT( MainFrame::OnPaint )
 		EVT_CLOSE( MainFrame::OnClose )
 		EVT_ERASE_BACKGROUND( MainFrame::OnEraseBackground )
-		EVT_TIMER( eID_RENDER_TIMER, MainFrame::OnRenderTimer )
+		EVT_TIMER( main::eID_RENDER_TIMER, MainFrame::OnRenderTimer )
 	END_EVENT_TABLE()
 #pragma GCC diagnostic pop
 

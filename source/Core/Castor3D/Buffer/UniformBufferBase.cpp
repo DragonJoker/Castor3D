@@ -15,7 +15,7 @@ CU_ImplementCUSmartPtr( castor3d, UniformBufferBase )
 
 namespace castor3d
 {
-	namespace
+	namespace bufferunf
 	{
 		inline void doCopyBuffer( ashes::BufferBase const & src
 			, ashes::BufferBase const & dst
@@ -234,7 +234,7 @@ namespace castor3d
 			stagingBuffer.unlock();
 		}
 
-		copyBuffer( stagingBuffer
+		bufferunf::copyBuffer( stagingBuffer
 			, getBuffer().getBuffer()
 			, &getBuffer().getBuffer()
 			, commandBuffer
@@ -302,7 +302,7 @@ namespace castor3d
 			stagingBuffer.unlock();
 		}
 
-		copyBuffer( stagingBuffer
+		bufferunf::copyBuffer( stagingBuffer
 			, getBuffer().getBuffer()
 			, &getBuffer().getBuffer()
 			, commandBuffer
@@ -329,7 +329,7 @@ namespace castor3d
 		auto elemAlignedSize = getBuffer().getAlignedSize( m_elemSize );
 		auto commandBuffer = commandPool.createCommandBuffer( "UniformBufferDownload"
 			, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
-		copyBuffer( getBuffer().getBuffer()
+		bufferunf::copyBuffer( getBuffer().getBuffer()
 			, stagingBuffer
 			, &getBuffer().getBuffer()
 			, *commandBuffer

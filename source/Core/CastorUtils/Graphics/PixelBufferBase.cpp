@@ -24,9 +24,9 @@ namespace castor
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace pxbb
 	{
-		VkDeviceSize getDataAt( VkFormat format
+		static VkDeviceSize getDataAt( VkFormat format
 			, uint32_t x
 			, uint32_t y
 			, uint32_t index
@@ -41,7 +41,7 @@ namespace castor
 		}
 
 		template< PixelFormat PFT, template< PixelFormat > typename FilterT >
-		ByteArray generateMipmapsT( VkExtent3D const & extent
+		static ByteArray generateMipmapsT( VkExtent3D const & extent
 			, uint8_t const * buffer
 			, uint32_t align
 			, uint32_t dstLevels )
@@ -98,7 +98,7 @@ namespace castor
 			return result;
 		}
 
-		ByteArray resample( VkExtent3D const & srcDimensions
+		static ByteArray resample( VkExtent3D const & srcDimensions
 			, VkExtent3D const & dstDimensions
 			, PixelFormat format
 			, uint8_t const * src )
@@ -135,7 +135,7 @@ namespace castor
 			return result;
 		}
 
-		ByteArray generateMipmaps( VkExtent3D const & extent
+		static ByteArray generateMipmaps( VkExtent3D const & extent
 			, uint8_t const * buffer
 			, PixelFormat format
 			, uint32_t align
@@ -158,7 +158,7 @@ namespace castor
 			}
 		}
 
-		ByteArray prepareForCompression( VkExtent3D & extent
+		static ByteArray prepareForCompression( VkExtent3D & extent
 			, uint8_t const * buffer
 			, PixelFormat bufferFormat
 			, uint32_t bufferAlign
@@ -201,7 +201,7 @@ namespace castor
 			return result;
 		}
 
-		void copyBuffer( PxBufferConvertOptions const * CU_UnusedParam( options )
+		static void copyBuffer( PxBufferConvertOptions const * CU_UnusedParam( options )
 			, Size const & dimensions
 			, uint8_t const * srcBuffer
 			, PixelFormat srcFormat
@@ -271,7 +271,7 @@ namespace castor
 			}
 		}
 
-		void compressBuffer( PxBufferConvertOptions const * options
+		static void compressBuffer( PxBufferConvertOptions const * options
 			, Size const & dimensions
 			, uint8_t const * srcBuffer
 			, PixelFormat srcFormat
@@ -342,12 +342,12 @@ namespace castor
 			}
 		}
 
-		uint32_t getMipLevels( VkExtent3D const & extent )
+		static uint32_t getMipLevels( VkExtent3D const & extent )
 		{
 			return ashes::getMaxMipCount( extent );
 		}
 
-		uint32_t getMinMipLevels( uint32_t mipLevels
+		static uint32_t getMinMipLevels( uint32_t mipLevels
 			, VkExtent3D const & extent )
 		{
 			return std::min( getMipLevels( extent ), mipLevels );
@@ -520,7 +520,7 @@ namespace castor
 			&& buffer )
 		{
 			ByteArray mips;
-			mips = prepareForCompression( extent
+			mips = pxbb::prepareForCompression( extent
 				, buffer
 				, bufferFormat
 				, bufferAlign
@@ -538,7 +538,7 @@ namespace castor
 					, m_levels
 					, m_align );
 			m_buffer.resize( newSize );
-			compressBuffer( options
+			pxbb::compressBuffer( options
 				, m_size
 				, buffer
 				, bufferFormat
@@ -570,7 +570,7 @@ namespace castor
 			}
 			else
 			{
-				copyBuffer( options
+				pxbb::copyBuffer( options
 					, m_size
 					, buffer
 					, bufferFormat
@@ -606,9 +606,9 @@ namespace castor
 
 	void PxBufferBase::generateMips()
 	{
-		auto levels = getMipLevels( { m_size.getWidth(), m_size.getHeight(), 1u } );
+		auto levels = pxbb::getMipLevels( { m_size.getWidth(), m_size.getHeight(), 1u } );
 		m_levels = levels;
-		auto buffer = generateMipmaps( { m_size.getWidth(), m_size.getHeight(), m_layers }
+		auto buffer = pxbb::generateMipmaps( { m_size.getWidth(), m_size.getHeight(), m_layers }
 			, m_buffer.data()
 			, m_format
 			, m_align
@@ -695,7 +695,7 @@ namespace castor
 		auto extent = VkExtent3D{ m_size.getWidth(), m_size.getHeight(), 1u };
 		levels = ashes::isCompressedFormat( VkFormat( m_format ) )
 			? m_levels
-			: getMinMipLevels( levels, extent );
+			: pxbb::getMinMipLevels( levels, extent );
 
 		if ( layers != m_layers
 			|| levels != m_levels )
@@ -747,7 +747,7 @@ namespace castor
 	{
 		CU_Require( x < getWidth() && y < getHeight() );
 		return m_buffer.begin()
-			+ ptrdiff_t( getDataAt( VkFormat( m_format ), x, y, index, level, m_levels, m_align, *this ) );
+			+ ptrdiff_t( pxbb::getDataAt( VkFormat( m_format ), x, y, index, level, m_levels, m_align, *this ) );
 	}
 
 	PxBufferBase::ConstPixelData PxBufferBase::getAt( uint32_t x
@@ -757,7 +757,7 @@ namespace castor
 	{
 		CU_Require( x < getWidth() && y < getHeight() );
 		return m_buffer.begin()
-			+ ptrdiff_t( getDataAt( VkFormat( m_format ), x, y, index, level, m_levels, m_align, *this ) );
+			+ ptrdiff_t( pxbb::getDataAt( VkFormat( m_format ), x, y, index, level, m_levels, m_align, *this ) );
 	}
 
 	PxBufferBaseSPtr PxBufferBase::create( PxBufferConvertOptions const * options

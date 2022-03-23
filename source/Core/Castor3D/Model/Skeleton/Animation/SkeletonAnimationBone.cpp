@@ -2,8 +2,6 @@
 
 #include "Castor3D/Model/Skeleton/Bone.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	SkeletonAnimationBone::SkeletonAnimationBone( SkeletonAnimation & animation )
@@ -11,7 +9,7 @@ namespace castor3d
 	{
 	}
 
-	String const & SkeletonAnimationBone::getName()const
+	castor::String const & SkeletonAnimationBone::getName()const
 	{
 		return getBone()->getName();
 	}

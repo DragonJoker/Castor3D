@@ -24,13 +24,11 @@
 
 #include <numeric>
 
-using namespace castor;
-
 namespace fxaa
 {
-	namespace
+	namespace postfx
 	{
-		static String const PosPos = cuT( "vtx_posPos" );
+		static castor::String const PosPos = cuT( "vtx_posPos" );
 
 		enum Idx : uint32_t
 		{
@@ -38,7 +36,7 @@ namespace fxaa
 			ColorTexIdx,
 		};
 
-		std::unique_ptr< ast::Shader > getVertexProgram()
+		static std::unique_ptr< ast::Shader > getVertexProgram()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -63,7 +61,7 @@ namespace fxaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > getFragmentProgram()
+		static std::unique_ptr< ast::Shader > getFragmentProgram()
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -154,8 +152,8 @@ namespace fxaa
 
 	//*********************************************************************************************
 
-	String PostEffect::Type = cuT( "fxaa" );
-	String PostEffect::Name = cuT( "FXAA PostEffect" );
+	castor::String PostEffect::Type = cuT( "fxaa" );
+	castor::String PostEffect::Name = cuT( "FXAA PostEffect" );
 
 	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
 		, castor3d::RenderSystem & renderSystem
@@ -167,8 +165,8 @@ namespace fxaa
 			, renderSystem
 			, parameters
 			, 1u }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "Fxaa", getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "Fxaa", getFragmentProgram() }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "Fxaa", postfx::getVertexProgram() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "Fxaa", postfx::getFragmentProgram() }
 		, m_stages{ makeShaderState( renderSystem.getRenderDevice(), m_vertexShader )
 			, makeShaderState( renderSystem.getRenderDevice(), m_pixelShader ) }
 		, m_fxaaUbo{ renderSystem.getRenderDevice(), m_renderTarget.getSize() }
@@ -203,21 +201,21 @@ namespace fxaa
 
 	void PostEffect::setParameters( castor3d::Parameters parameters )
 	{
-		String param;
+		castor::String param;
 
 		if ( parameters.get( cuT( "SubpixShift" ), param ) )
 		{
-			m_subpixShift = string::toFloat( param );
+			m_subpixShift = castor::string::toFloat( param );
 		}
 
 		if ( parameters.get( cuT( "MaxSpan" ), param ) )
 		{
-			m_spanMax = string::toFloat( param );
+			m_spanMax = castor::string::toFloat( param );
 		}
 
 		if ( parameters.get( cuT( "ReduceMul" ), param ) )
 		{
-			m_reduceMul = string::toFloat( param );
+			m_reduceMul = castor::string::toFloat( param );
 		}
 	}
 
@@ -265,9 +263,9 @@ namespace fxaa
 			} );
 		m_pass->addDependency( previousPass );
 		m_fxaaUbo.createPassBinding( *m_pass
-			, FxaaCfgUboIdx );
+			, postfx::FxaaCfgUboIdx );
 		m_pass->addSampledView( *m_target
-			, ColorTexIdx );
+			, postfx::ColorTexIdx );
 		m_pass->addOutputColourView( m_resultView );
 		return &m_resultView;
 	}
@@ -291,7 +289,8 @@ namespace fxaa
 		}
 	}
 
-	bool PostEffect::doWriteInto( StringStream & file, String const & tabs )
+	bool PostEffect::doWriteInto( castor::StringStream & file
+		, castor::String const & tabs )
 	{
 		file << ( tabs + cuT( "postfx \"" ) + Type + cuT( "\"" ) );
 		return true;

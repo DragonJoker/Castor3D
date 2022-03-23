@@ -9,25 +9,22 @@
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 #include <CastorUtils/Log/Logger.hpp>
 
-using namespace castor3d;
-using namespace castor;
-
 namespace CastorGui
 {
 	namespace
 	{
-		void parseError( String const & p_error )
+		void parseError( castor::String const & p_error )
 		{
-			StringStream strError{ makeStringStream() };
+			castor::StringStream strError{ castor::makeStringStream() };
 			strError << cuT( "Error, : " ) << p_error;
-			log::error << strError.str() << std::endl;
+			castor3d::log::error << strError.str() << std::endl;
 		}
 
-		void addParser( AttributeParsers & parsers
+		void addParser( castor::AttributeParsers & parsers
 			, uint32_t section
-			, String const & name
-			, ParserFunction function
-			, ParserParameterArray && array = ParserParameterArray() )
+			, castor::String const & name
+			, castor::ParserFunction function
+			, castor::ParserParameterArray && array = castor::ParserParameterArray() )
 		{
 			auto nameIt = parsers.find( name );
 
@@ -42,10 +39,11 @@ namespace CastorGui
 			}
 		}
 
-		void createDefaultParsers( AttributeParsers & parsers
+		void createDefaultParsers( castor::AttributeParsers & parsers
 			, uint32_t section
-			, ParserFunction endFunction )
+			, castor::ParserFunction endFunction )
 		{
+			using namespace castor;
 			addParser( parsers, section, cuT( "pixel_position" ), &parserControlPixelPosition, { makeParameter< ParameterType::ePosition >() } );
 			addParser( parsers, section, cuT( "pixel_size" ), &parserControlPixelSize, { makeParameter< ParameterType::eSize >() } );
 			addParser( parsers, section, cuT( "pixel_border_size" ), &parserControlPixelBorderSize, { makeParameter< ParameterType::eRectangle >() } );
@@ -62,33 +60,35 @@ namespace CastorGui
 			addParser( parsers, section, cuT( "}" ), endFunction );
 		}
 
-		void createDefaultStyleParsers( AttributeParsers & parsers
+		void createDefaultStyleParsers( castor::AttributeParsers & parsers
 			, uint32_t section
-			, ParserFunction endFunction )
+			, castor::ParserFunction endFunction )
 		{
+			using namespace castor;
 			addParser( parsers, section, cuT( "background_material" ), &parserStyleBackgroundMaterial, { makeParameter< ParameterType::eName >() } );
 			addParser( parsers, section, cuT( "foreground_material" ), &parserStyleForegroundMaterial, { makeParameter< ParameterType::eName >() } );
 			addParser( parsers, section, cuT( "border_material" ), &parserStyleBorderMaterial, { makeParameter< ParameterType::eName >() } );
 		}
 
-		AttributeParsers CreateParsers( castor3d::Engine * engine )
+		castor::AttributeParsers CreateParsers( castor3d::Engine * engine )
 		{
+			using namespace castor;
 			static UInt32StrMap mapHAligns
 			{
-				{ "left", uint32_t( HAlign::eLeft ) },
-				{ "center", uint32_t( HAlign::eCenter ) },
-				{ "right", uint32_t( HAlign::eRight ) }
+				{ "left", uint32_t( castor3d::HAlign::eLeft ) },
+				{ "center", uint32_t( castor3d::HAlign::eCenter ) },
+				{ "right", uint32_t( castor3d::HAlign::eRight ) }
 			};
 			static UInt32StrMap mapVAligns
 			{
-				{ "top", uint32_t( VAlign::eTop ) },
-				{ "center", uint32_t( VAlign::eCenter ) },
-				{ "bottom", uint32_t( VAlign::eBottom ) }
+				{ "top", uint32_t( castor3d::VAlign::eTop ) },
+				{ "center", uint32_t( castor3d::VAlign::eCenter ) },
+				{ "bottom", uint32_t( castor3d::VAlign::eBottom ) }
 			};
 			AttributeParsers result;
 
-			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "gui" ), &parserGui );
-			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "gui" ), &parserGui );
+			addParser( result, uint32_t( castor3d::CSCNSection::eRoot ), cuT( "gui" ), &parserGui );
+			addParser( result, uint32_t( castor3d::CSCNSection::eScene ), cuT( "gui" ), &parserGui );
 
 			addParser( result, uint32_t( GUISection::eGUI ), cuT( "button" ), &parserButton, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( GUISection::eGUI ), cuT( "static" ), &parserStatic, { makeParameter< ParameterType::eName >() } );
@@ -170,7 +170,7 @@ namespace CastorGui
 			return result;
 		}
 
-		StrUInt32Map CreateSections()
+		castor::StrUInt32Map CreateSections()
 		{
 			return
 			{
@@ -220,7 +220,7 @@ extern "C"
 
 	C3D_CGui_API void getName( char const ** p_name )
 	{
-		static String const Name = cuT( "Castor GUI" );
+		static castor::String const Name = cuT( "Castor GUI" );
 		*p_name = Name.c_str();
 	}
 

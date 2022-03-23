@@ -10,8 +10,6 @@
 
 CU_ImplementCUSmartPtr( castor3d, CpuParticleSystem )
 
-using namespace castor;
-
 namespace castor3d
 {
 	CpuParticleSystem::CpuParticleSystem( ParticleSystem & parent )

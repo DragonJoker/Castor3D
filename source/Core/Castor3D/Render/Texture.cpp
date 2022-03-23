@@ -14,9 +14,9 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace texture
 	{
-		VkFormat getDepthFormat( RenderDevice const & device
+		static VkFormat getDepthFormat( RenderDevice const & device
 			, VkFormat format )
 		{
 			std::vector< VkFormat > depthFormats
@@ -29,7 +29,7 @@ namespace castor3d
 				, VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT );
 		}
 
-		VkFormat retrieveFormat( RenderDevice const & device
+		static VkFormat retrieveFormat( RenderDevice const & device
 			, VkFormat format )
 		{
 			return ashes::isDepthOrStencilFormat( format )
@@ -160,7 +160,7 @@ namespace castor3d
 			, ( size.depth > 1u
 				? VK_IMAGE_TYPE_3D
 				: VK_IMAGE_TYPE_2D )
-			, retrieveFormat( device, format )
+			, texture::retrieveFormat( device, format )
 			, size
 			, ( usageFlags
 				| ( mipLevels > 1u

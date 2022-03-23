@@ -19,16 +19,16 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace smshcompinst
 	{
-		VkDeviceSize getNextCount( uint32_t count )
+		static VkDeviceSize getNextCount( uint32_t count )
 		{
 			static constexpr uint32_t CountAlign = 64u;
 
 			return ashes::getAlignedSize( count, CountAlign );
 		}
 
-		GpuBufferOffsetT< InstantiationData > updateBuffer( RenderDevice const & device
+		static GpuBufferOffsetT< InstantiationData > updateBuffer( RenderDevice const & device
 			, castor::String const & name
 			, uint32_t count
 			, GpuBufferOffsetT< InstantiationData > buffer )
@@ -52,7 +52,7 @@ namespace castor3d
 			return buffer;
 		}
 
-		ashes::PipelineVertexInputStateCreateInfo getInstantiationLayout( ProgramFlags programFlags
+		static ashes::PipelineVertexInputStateCreateInfo getInstantiationLayout( ProgramFlags programFlags
 			, uint32_t & currentLocation )
 		{
 			ashes::VkVertexInputBindingDescriptionArray bindings{ { InstantiationComponent::BindingPoint
@@ -91,7 +91,7 @@ namespace castor3d
 		if ( doCheckInstanced( data.count ) )
 		{
 			data.data.resize( data.count );
-			data.buffer = updateBuffer( material->getEngine()->getRenderSystem()->getRenderDevice()
+			data.buffer = smshcompinst::updateBuffer( material->getEngine()->getRenderSystem()->getRenderDevice()
 				, getOwner()->getParent().getName() + "_" + it->first->getName()
 				, data.count
 				, std::move( data.buffer ) );
@@ -187,7 +187,7 @@ namespace castor3d
 				if ( layoutIt == m_mtxLayouts.end() )
 				{
 					layoutIt = m_mtxLayouts.emplace( hash
-						, getInstantiationLayout( programFlags, currentLocation ) ).first;
+						, smshcompinst::getInstantiationLayout( programFlags, currentLocation ) ).first;
 				}
 
 				buffers.emplace_back( it->second.buffer.getBuffer().getBuffer() );
@@ -221,7 +221,7 @@ namespace castor3d
 			{
 				if ( doCheckInstanced( data.second.count ) )
 				{
-					data.second.buffer = updateBuffer( device
+					data.second.buffer = smshcompinst::updateBuffer( device
 						, getOwner()->getParent().getName() + "_" + data.first->getName()
 						, data.second.count
 						, std::move( data.second.buffer ) );

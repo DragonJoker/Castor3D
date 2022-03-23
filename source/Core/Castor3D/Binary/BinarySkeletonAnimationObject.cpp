@@ -13,7 +13,7 @@ namespace castor3d
 {
 	//*************************************************************************************************
 
-	namespace
+	namespace binsklanmobj
 	{
 		template< typename T >
 		struct KeyFrameT
@@ -25,7 +25,7 @@ namespace castor3d
 		using KeyFrame = KeyFrameT< float >;
 		using KeyFramed = std::array< double, 17 >;
 
-		void doConvert( std::vector< KeyFramed > const & in
+		static void doConvert( std::vector< KeyFramed > const & in
 			, std::vector< KeyFrame > & out )
 		{
 			out.resize( in.size() );
@@ -77,8 +77,8 @@ namespace castor3d
 	{
 		bool result = true;
 		castor::Matrix4x4f transform;
-		std::vector< KeyFrame > keyframes;
-		std::vector< KeyFramed > keyframesd;
+		std::vector< binsklanmobj::KeyFrame > keyframes;
+		std::vector< binsklanmobj::KeyFramed > keyframesd;
 		SkeletonAnimationNodeSPtr node;
 		SkeletonAnimationObjectSPtr object;
 		SkeletonAnimationBoneSPtr bone;
@@ -131,8 +131,8 @@ namespace castor3d
 	{
 		bool result = true;
 		castor::Matrix4x4f transform;
-		std::vector< KeyFrame > keyframes;
-		std::vector< KeyFramed > keyframesd;
+		std::vector< binsklanmobj::KeyFrame > keyframes;
+		std::vector< binsklanmobj::KeyFramed > keyframesd;
 		SkeletonAnimationNodeSPtr node;
 		SkeletonAnimationObjectSPtr object;
 		SkeletonAnimationBoneSPtr bone;
