@@ -198,37 +198,6 @@ namespace castor3d
 			remFlag( sceneFlags, SceneFlag::eShadowAny );
 			return sceneFlags;
 		}
-
-		std::vector< IndirectLightingPass::Program > createPrograms( RenderDevice const & device
-			, Scene const & scene )
-		{
-			std::vector< IndirectLightingPass::Program > result;
-
-			for ( uint32_t i = 0u; i < uint32_t( IndirectLightingPass::ProgramType::eCount ); ++i )
-			{
-				IndirectLightingPass::Config config{ i };
-
-				if ( !config.llpv
-					|| device.renderSystem.hasLLPV() )
-				{
-					result.emplace_back( device, scene, config );
-				}
-			}
-
-			return result;
-		}
-
-		std::vector< crg::VkPipelineShaderStageCreateInfoArray > convertPrograms( std::vector< IndirectLightingPass::Program > const & programs )
-		{
-			std::vector< crg::VkPipelineShaderStageCreateInfoArray > result;
-
-			for ( auto & program : programs )
-			{
-				result.push_back( crg::makeVkArray< VkPipelineShaderStageCreateInfo >( program.stages ) );
-			}
-
-			return result;
-		}
 	}
 
 	//*********************************************************************************************
@@ -302,6 +271,7 @@ namespace castor3d
 		, LayeredLpvGridConfigUbo const & llpvConfigUbo
 		, VoxelizerUbo const & vctConfigUbo )
 		: m_device{ device }
+		, m_scene{ scene }
 		, m_gpResult{ gpResult }
 		, m_lpResult{ lpResult }
 		, m_lpvResult{ lpvResult }
@@ -314,8 +284,8 @@ namespace castor3d
 		, m_llpvConfigUbo{ llpvConfigUbo }
 		, m_vctConfigUbo{ vctConfigUbo }
 		, m_group{ graph.createPassGroup( "IndirectLighting" ) }
-		, m_programs{ createPrograms( device, scene ) }
 	{
+		m_programs.resize( size_t( IndirectLightingPass::ProgramType::eCount ) );
 		previousPass = &doCreateLightingPass( m_group, scene, *previousPass, progress );
 	}
 
@@ -353,7 +323,12 @@ namespace castor3d
 				stepProgressBar( progress, "Initialising indirect light pass" );
 				auto result = crg::RenderQuadBuilder{}
 					.renderSize( makeExtent2D( ( *m_lpResult.begin() )->getExtent() ) )
-					.programs( convertPrograms( m_programs ) )
+					.programCreator( { uint32_t( IndirectLightingPass::ProgramType::eCount )
+						, [this]( uint32_t programIndex )
+						{
+							auto & program = doCreateProgram( programIndex );
+							return crg::makeVkArray< VkPipelineShaderStageCreateInfo >( program.stages );
+						} } )
 					.passIndex( &m_programIndex )
 					.enabled( &m_enabled )
 					.build( framePass
@@ -467,6 +442,26 @@ namespace castor3d
 		pass.addOutputColourView( m_lpResult[LpTexture::eIndirectSpecular].targetViewId );
 
 		return pass;
+	}
+
+	IndirectLightingPass::Program & IndirectLightingPass::doCreateProgram( uint32_t programIndex )
+	{
+		CU_Require( programIndex < uint32_t( IndirectLightingPass::ProgramType::eCount ) );
+
+		if ( !m_programs[programIndex] )
+		{
+			IndirectLightingPass::Config config{ programIndex };
+
+			if ( !config.llpv
+				|| m_device.renderSystem.hasLLPV() )
+			{
+				m_programs[programIndex] = std::make_unique< Program >( m_device, m_scene, config );
+				m_programs[programIndex]->stages = { makeShaderState( m_device, m_programs[programIndex]->vertexShader )
+					, makeShaderState( m_device, m_programs[programIndex]->pixelShader ) };
+			}
+		}
+
+		return *m_programs[programIndex];
 	}
 
 	//*********************************************************************************************

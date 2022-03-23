@@ -84,6 +84,8 @@ namespace castor3d
 			ashes::PipelineShaderStageCreateInfoArray stages;
 		};
 
+		using ProgramPtr = std::unique_ptr< Program >;
+
 	public:
 		IndirectLightingPass( RenderDevice const & device
 			, ProgressBar * progress
@@ -120,9 +122,11 @@ namespace castor3d
 			, Scene const & scene
 			, crg::FramePass const & previousPass
 			, ProgressBar * progress );
+		Program & doCreateProgram( uint32_t index );
 
 	private:
 		RenderDevice const & m_device;
+		Scene const & m_scene;
 		OpaquePassResult const & m_gpResult;
 		LightPassResult const & m_lpResult;
 		LightVolumePassResult const & m_lpvResult;
@@ -135,7 +139,7 @@ namespace castor3d
 		LayeredLpvGridConfigUbo const & m_llpvConfigUbo;
 		VoxelizerUbo const & m_vctConfigUbo;
 		crg::FramePassGroup & m_group;
-		std::vector< Program > m_programs;
+		std::vector< ProgramPtr > m_programs;
 		uint32_t m_programIndex{};
 		bool m_enabled{};
 	};

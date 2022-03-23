@@ -57,7 +57,8 @@ namespace castor3d
 			, SsaoConfigUbo & ssaoConfigUbo
 			, GpInfoUbo const & gpInfoUbo
 			, Texture const & linearisedDepthBuffer
-			, Texture const & normals );
+			, Texture const & normals
+			, uint32_t const & passIndex );
 		C3D_API ~SsaoRawAOPass();
 		/**
 		 *\~english

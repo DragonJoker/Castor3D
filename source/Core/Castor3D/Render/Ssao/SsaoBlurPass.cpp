@@ -376,12 +376,14 @@ namespace castor3d
 
 		crg::rq::Config getConfig( VkExtent2D const & renderSize
 			, SsaoConfig const & ssaoConfig
+			, uint32_t const & passIndex
 			, ashes::PipelineShaderStageCreateInfoArray const & stages0
 			, ashes::PipelineShaderStageCreateInfoArray const & stages1 )
 		{
 			crg::rq::Config result;
 			result.renderSize( renderSize );
 			result.enabled( &ssaoConfig.enabled );
+			result.passIndex( &passIndex );
 			result.programs( { crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages0 )
 				, crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages1 ) } );
 			return result;
@@ -457,7 +459,8 @@ namespace castor3d
 		, Point2i const & axis
 		, Texture const & input
 		, Texture const & bentInput
-		, Texture const & normals )
+		, Texture const & normals
+		, uint32_t const & passIndex )
 		: m_device{ device }
 		, m_graph{ graph }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
@@ -474,7 +477,7 @@ namespace castor3d
 		auto & configuration = m_configurationUbo.getData();
 		configuration.axis = axis;
 		auto & pass = m_graph.createPass( "Blur" + prefix
-			, [this, progress, prefix, config, axis]( crg::FramePass const & pass
+			, [this, &passIndex, progress, prefix, config, axis]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -486,6 +489,7 @@ namespace castor3d
 					, graph
 					, getConfig( m_size
 						, config
+						, passIndex
 						, m_programs[0].stages
 						, m_programs[1].stages )
 					, makeConfig( axis->y != 0

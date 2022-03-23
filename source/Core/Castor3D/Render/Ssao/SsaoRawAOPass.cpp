@@ -516,12 +516,14 @@ namespace castor3d
 
 		crg::rq::Config getConfig( VkExtent2D const & renderSize
 			, SsaoConfig const & ssaoConfig
+			, uint32_t const & passIndex
 			, ashes::PipelineShaderStageCreateInfoArray const & stages0
 			, ashes::PipelineShaderStageCreateInfoArray const & stages1 )
 		{
 			crg::rq::Config result;
 			result.enabled( &ssaoConfig.enabled );
 			result.renderSize( renderSize );
+			result.passIndex( &passIndex );
 			result.programs( { crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages0 )
 				, crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages1 ) } );
 			return result;
@@ -576,7 +578,8 @@ namespace castor3d
 		, SsaoConfigUbo & ssaoConfigUbo
 		, GpInfoUbo const & gpInfoUbo
 		, Texture const & linearisedDepthBuffer
-		, Texture const & normals )
+		, Texture const & normals
+		, uint32_t const & passIndex )
 		: m_device{ device }
 		, m_graph{ graph }
 		, m_ssaoConfig{ config }
@@ -600,7 +603,7 @@ namespace castor3d
 	{
 		stepProgressBar( progress, "Creating SSAO raw AO pass" );
 		auto & pass = m_graph.createPass( "RawAO"
-			, [this, progress]( crg::FramePass const & pass
+			, [this, &passIndex, progress]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -610,6 +613,7 @@ namespace castor3d
 					, graph
 					, getConfig( m_size
 						, m_ssaoConfig
+						, passIndex
 						, m_programs[0].stages
 						, m_programs[1].stages )
 					, m_ssaoConfig );

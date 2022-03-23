@@ -52,6 +52,7 @@ namespace castor3d
 	VertexBufferPool::BufferArray::iterator VertexBufferPool::doFindBuffer( VkDeviceSize size
 		, VertexBufferPool::BufferArray & array )
 	{
+		CU_Require( size <= 65536u );
 		auto it = array.begin();
 
 		while ( it != array.end()
