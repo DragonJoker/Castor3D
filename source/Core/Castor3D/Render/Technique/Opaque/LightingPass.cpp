@@ -49,9 +49,9 @@ CU_ImplementCUSmartPtr( castor3d, LightingPass )
 
 namespace castor3d
 {
-	namespace
+	namespace drlgtpass
 	{
-		castor::Point2f doCalcSpotLightBCone( const castor3d::SpotLight & light
+		static castor::Point2f doCalcSpotLightBCone( const castor3d::SpotLight & light
 			, float max )
 		{
 			float length{ getMaxDistance( light
@@ -61,7 +61,7 @@ namespace castor3d
 			return castor::Point2f{ length * width, length };
 		}
 
-		float doCalcPointLightBSphere( const castor3d::PointLight & light
+		static float doCalcPointLightBSphere( const castor3d::PointLight & light
 			, float max )
 		{
 			return getMaxDistance( light
@@ -567,7 +567,7 @@ namespace castor3d
 
 		if ( m_config.lightType == LightType::ePoint )
 		{
-			auto scale = doCalcPointLightBSphere( *light.getPointLight()
+			auto scale = drlgtpass::doCalcPointLightBSphere( *light.getPointLight()
 				, float( farZ - castor::point::distance( lightPos, camPos ) - ( farZ / 50.0f ) ) );
 			model = castor::matrix::setTransform( model
 				, lightPos
@@ -576,7 +576,7 @@ namespace castor3d
 		}
 		else
 		{
-			auto scale = doCalcSpotLightBCone( *light.getSpotLight()
+			auto scale = drlgtpass::doCalcSpotLightBCone( *light.getSpotLight()
 				, float( farZ - castor::point::distance( lightPos, camPos ) - ( farZ / 50.0f ) ) );
 			model = castor::matrix::setTransform( model
 				, lightPos

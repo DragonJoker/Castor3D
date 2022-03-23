@@ -4,8 +4,6 @@
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	LightFactory::LightFactory()

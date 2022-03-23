@@ -13,9 +13,9 @@
 
 namespace castor
 {
-	namespace
+	namespace file
 	{
-		void printErrnoName( String const & type
+		static void printErrnoName( String const & type
 			, Path const & path )
 		{
 			switch ( errno )
@@ -81,7 +81,7 @@ namespace castor
 
 		if ( ( dir = opendir( string::stringCast< char >( folderPath ).c_str() ) ) == nullptr )
 		{
-			printErrnoName( cuT( "folder" ), folderPath );
+			file::printErrnoName( cuT( "folder" ), folderPath );
 			result = false;
 		}
 		else

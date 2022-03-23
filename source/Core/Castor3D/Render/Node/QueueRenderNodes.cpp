@@ -33,12 +33,12 @@ using ashes::operator!=;
 
 namespace castor3d
 {
-	namespace
+	namespace queuerndnd
 	{
 		template< typename NodeT
 			, typename OnSubmeshFuncT >
-			void doTraverseNodes( ObjectNodesPtrByPipelineMapT< NodeT > & nodes
-				, OnSubmeshFuncT onSubmesh )
+		static void doTraverseNodes( ObjectNodesPtrByPipelineMapT< NodeT > & nodes
+			, OnSubmeshFuncT onSubmesh )
 		{
 			for ( auto & itPipelines : nodes )
 			{
@@ -60,21 +60,22 @@ namespace castor3d
 			}
 		}
 
-		VkDeviceSize compareOffsets( ObjectBufferOffset const & lhs
+		static VkDeviceSize compareOffsets( ObjectBufferOffset const & lhs
 			, ObjectBufferOffset const & rhs )
 		{
 			auto result = lhs.getVertexOffset() >= rhs.getVertexOffset();
 			return result;
 		}
+
 		template< typename NodeT >
-		VkDeviceSize compareOffsets( NodeT const & lhs
+		static VkDeviceSize compareOffsets( NodeT const & lhs
 			, NodeT const & rhs )
 		{
 			return compareOffsets( lhs.data.getBufferOffsets(), rhs.data.getBufferOffsets() );
 		}
 
 		template< typename NodeT >
-		void doAddRenderNode( RenderPipeline & pipeline
+		static void doAddRenderNode( RenderPipeline & pipeline
 			, NodeT const & node
 			, NodePtrByPipelineMapT< NodeT > & nodes )
 		{
@@ -99,7 +100,7 @@ namespace castor3d
 		}
 
 		template< typename NodeT >
-		void doAddRenderNode( RenderPipeline & pipeline
+		static void doAddRenderNode( RenderPipeline & pipeline
 			, NodeT const & node
 			, ObjectNodesPtrByPipelineMapT< NodeT > & nodes )
 		{
@@ -128,7 +129,7 @@ namespace castor3d
 		//*****************************************************************************************
 
 		template< typename NodeT >
-		void doBindPipeline( ashes::CommandBuffer const & commandBuffer
+		static void doBindPipeline( ashes::CommandBuffer const & commandBuffer
 			, RenderNodesPass const & nodesPass
 			, SceneCuller const & culler
 			, RenderPipeline const & pipeline
@@ -173,7 +174,7 @@ namespace castor3d
 		}
 
 		template< typename NodeT >
-		void doAddGeometryNodeCommands( RenderPipeline const & pipeline
+		static void doAddGeometryNodeCommands( RenderPipeline const & pipeline
 			, NodeT const & node
 			, ashes::CommandBuffer const & commandBuffer
 			, RenderNodesPass const & nodesPass
@@ -221,7 +222,7 @@ namespace castor3d
 		}
 
 		template< typename NodeT >
-		void doParseRenderNodesCommands( NodePtrByPipelineMapT< NodeT > & inputNodes
+		static void doParseRenderNodesCommands( NodePtrByPipelineMapT< NodeT > & inputNodes
 			, ashes::CommandBuffer const & commandBuffer
 			, RenderNodesPass const & nodesPass
 			, SceneCuller const & culler
@@ -260,7 +261,7 @@ namespace castor3d
 		}
 
 		template< typename NodeT >
-		void doParseRenderNodesCommands( ObjectNodesPtrByPipelineMapT< NodeT > & inputNodes
+		static void doParseRenderNodesCommands( ObjectNodesPtrByPipelineMapT< NodeT > & inputNodes
 			, ashes::CommandBuffer const & commandBuffer
 			, RenderNodesPass const & nodesPass
 			, SceneCuller const & culler
@@ -352,7 +353,7 @@ namespace castor3d
 							, vertexLayouts )
 						: renderPass.prepareBackPipeline( pipelineFlags
 							, vertexLayouts );
-					doAddRenderNode( pipeline
+					queuerndnd::doAddRenderNode( pipeline
 						, *culledNode
 						, submeshNodes );
 					renderPass.initialiseAdditionalDescriptor( pipeline
@@ -394,7 +395,7 @@ namespace castor3d
 									, vertexLayouts )
 								: renderPass.prepareBackPipeline( pipelineFlags
 									, vertexLayouts );
-							doAddRenderNode( pipeline
+							queuerndnd::doAddRenderNode( pipeline
 								, *culledNode
 								, instancedSubmeshNodes );
 							renderPass.initialiseAdditionalDescriptor( pipeline
@@ -425,7 +426,7 @@ namespace castor3d
 						, sidedCulled.second );
 					auto & pipeline = renderPass.prepareBackPipeline( pipelineFlags
 						, billboard.getGeometryBuffers().layouts );
-					doAddRenderNode( pipeline
+					queuerndnd::doAddRenderNode( pipeline
 						, *culledNode
 						, billboardNodes );
 					renderPass.initialiseAdditionalDescriptor( pipeline
@@ -455,7 +456,7 @@ namespace castor3d
 				, 0u ) );
 		uint32_t idxIndex{};
 		uint32_t nidxIndex{};
-		doParseRenderNodesCommands( submeshNodes
+		queuerndnd::doParseRenderNodesCommands( submeshNodes
 			, cb
 			, rp
 			, culler
@@ -465,7 +466,7 @@ namespace castor3d
 			, submeshNIdxCommands
 			, idxIndex
 			, nidxIndex );
-		doParseRenderNodesCommands( instancedSubmeshNodes
+		queuerndnd::doParseRenderNodesCommands( instancedSubmeshNodes
 			, cb
 			, rp
 			, culler
@@ -478,7 +479,7 @@ namespace castor3d
 
 		idxIndex = 0u;
 		nidxIndex = 0u;
-		doParseRenderNodesCommands( billboardNodes
+		queuerndnd::doParseRenderNodesCommands( billboardNodes
 			, cb
 			, rp
 			, culler

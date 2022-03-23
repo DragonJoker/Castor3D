@@ -20,8 +20,6 @@
 
 CU_ImplementCUSmartPtr( castor3d, ShadowMapPass )
 
-using namespace castor;
-
 namespace castor3d
 {
 	ShadowMapPass::ShadowMapPass( crg::FramePass const & pass

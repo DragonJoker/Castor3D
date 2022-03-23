@@ -24,9 +24,9 @@ namespace castor
 {
 	using namespace castor3d;
 
-	namespace
+	namespace cacheanmgrp
 	{
-		void doInitialiseBuffer( GpuBufferOffsetT< castor3d::SkinningTransformsConfiguration > & transforms )
+		static void doInitialiseBuffer( GpuBufferOffsetT< castor3d::SkinningTransformsConfiguration > & transforms )
 		{
 			auto buffer = transforms.getData();
 
@@ -63,7 +63,7 @@ namespace castor
 			, 1'000ull
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 	{
-		doInitialiseBuffer( m_skinningTransformsData );
+		cacheanmgrp::doInitialiseBuffer( m_skinningTransformsData );
 	}
 
 	ResourceCacheT< AnimatedObjectGroup, castor::String, AnimatedObjectGroupCacheTraits >::~ResourceCacheT()
@@ -89,7 +89,7 @@ namespace castor
 			m_skinningTransformsData = m_device.bufferPool->getBuffer< SkinningTransformsConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 				, 1'000ull
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
-			doInitialiseBuffer( m_skinningTransformsData );
+			cacheanmgrp::doInitialiseBuffer( m_skinningTransformsData );
 		}
 	}
 

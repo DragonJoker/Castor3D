@@ -12,10 +12,10 @@ namespace castor3d
 
 	castor::String getTextureName( WbTexture texture )
 	{
-		return cuT( "c3d_map" ) + getName( texture );
+		return cuT( "c3d_map" ) + getTexName( texture );
 	}
 
-	castor::String getName( WbTexture texture )
+	castor::String getTexName( WbTexture texture )
 	{
 		static std::array< castor::String, size_t( WbTexture::eCount ) > Values
 		{

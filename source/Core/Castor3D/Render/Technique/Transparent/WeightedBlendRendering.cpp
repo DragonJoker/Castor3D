@@ -20,13 +20,11 @@
 
 CU_ImplementCUSmartPtr( castor3d, WeightedBlendRendering )
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace wboit
 	{
 		enum TransparentResolveIdx
 		{
@@ -38,7 +36,7 @@ namespace castor3d
 			RevealTexIndex,
 		};
 
-		ShaderPtr getVertexProgram()
+		static ShaderPtr getVertexProgram()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -55,7 +53,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderPtr getPixelProgram( RenderSystem const & renderSystem )
+		static ShaderPtr getPixelProgram( RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -147,8 +145,8 @@ namespace castor3d
 		, m_transparentPassResult{ transparentPassResult }
 		, m_depthOnlyView{ m_transparentPassResult[WbTexture::eDepth].sampledViewId }
 		, m_size{ size }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "TransparentCombine", getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "TransparentCombine", getPixelProgram( device.renderSystem ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "TransparentCombine", wboit::getVertexProgram() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "TransparentCombine", wboit::getPixelProgram( device.renderSystem ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_finalCombinePassDesc{ doCreateFinalCombine( graph
@@ -202,18 +200,18 @@ namespace castor3d
 			} );
 		result.addDependency( transparentPassDesc );
 		sceneUbo.createPassBinding( result
-			, uint32_t( SceneUboIndex ) );
+			, uint32_t( wboit::SceneUboIndex ) );
 		gpInfoUbo.createPassBinding( result
-			, uint32_t( GpuInfoUboIndex ) );
+			, uint32_t( wboit::GpuInfoUboIndex ) );
 		hdrConfigUbo.createPassBinding( result
-			, uint32_t( HdrUboIndex ) );
+			, uint32_t( wboit::HdrUboIndex ) );
 		result.addSampledView( m_depthOnlyView
-			, uint32_t( DepthTexIndex ) );
+			, uint32_t( wboit::DepthTexIndex ) );
 		result.addSampledView( m_transparentPassResult[WbTexture::eAccumulation].sampledViewId
-			, uint32_t( AccumTexIndex )
+			, uint32_t( wboit::AccumTexIndex )
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		result.addSampledView( m_transparentPassResult[WbTexture::eRevealage].sampledViewId
-			, uint32_t( RevealTexIndex )
+			, uint32_t( wboit::RevealTexIndex )
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 
 		result.addInOutColourView( targetColourView

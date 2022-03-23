@@ -6,13 +6,10 @@
 
 #include <wx/propgrid/advprops.h>
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
 	RenderWindowTreeItemProperty::RenderWindowTreeItemProperty( bool editable
-		, RenderWindow & window )
+		, castor3d::RenderWindow & window )
 		: TreeItemProperty( window.getEngine(), editable )
 		, m_window( window )
 	{

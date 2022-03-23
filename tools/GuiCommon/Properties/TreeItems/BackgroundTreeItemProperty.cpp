@@ -13,9 +13,6 @@
 
 #include <wx/propgrid/advprops.h>
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
 	namespace
@@ -24,7 +21,7 @@ namespace GuiCommon
 			: public castor3d::BackgroundVisitor
 		{
 		public:
-			static void submit( SceneBackground & background
+			static void submit( castor3d::SceneBackground & background
 				, TreeItemProperty & property
 				, wxPropertyGrid & grid )
 			{
@@ -40,15 +37,15 @@ namespace GuiCommon
 			{
 			}
 
-			void visit( ColourBackground & background )override
+			void visit( castor3d::ColourBackground & background )override
 			{
 				static wxString PROPERTY_BACKGROUND_COLOUR_COLOUR = _( "Colour" );
 
 				m_properties.addPropertyT( &m_grid, PROPERTY_BACKGROUND_COLOUR_COLOUR, background.getScene().getBackgroundColour()
-					, &background.getScene(), &Scene::setBackgroundColour );
+					, &background.getScene(), &castor3d::Scene::setBackgroundColour );
 			}
 
-			void visit( SkyboxBackground & background )override
+			void visit( castor3d::SkyboxBackground & background )override
 			{
 				if ( !background.getEquiTexturePath().empty() )
 				{
@@ -56,15 +53,15 @@ namespace GuiCommon
 					static wxString PROPERTY_BACKGROUND_SKYBOX_EQUIRECTANGULAR_DIMENSIONS = _( "Equirectangular Dimensions" );
 
 					m_properties.addPropertyT( &m_grid, PROPERTY_BACKGROUND_SKYBOX_EQUIRECTANGULAR_DIMENSIONS, background.getEquiSize().getWidth()
-						, &background, &SkyboxBackground::setEquiSize );
+						, &background, &castor3d::SkyboxBackground::setEquiSize );
 					m_properties.addProperty( &m_grid, PROPERTY_BACKGROUND_SKYBOX_EQUIRECTANGULAR_IMAGE, background.getEquiTexturePath()
 						, [&background]( wxVariant const & var )
 						{
-							auto path = variantCast< Path >( var );
+							auto path = variantCast< castor::Path >( var );
 
-							if ( File::fileExists( path ) )
+							if ( castor::File::fileExists( path ) )
 							{
-								background.loadEquiTexture( Path{}, path, background.getEquiSize().getWidth() );
+								background.loadEquiTexture( castor::Path{}, path, background.getEquiSize().getWidth() );
 							}
 						} );
 				}
@@ -75,11 +72,11 @@ namespace GuiCommon
 					m_properties.addProperty( &m_grid, PROPERTY_BACKGROUND_SKYBOX_CROSS_IMAGE, background.getCrossTexturePath()
 						, [&background]( wxVariant const & var )
 						{
-							auto path = variantCast< Path >( var );
+							auto path = variantCast< castor::Path >( var );
 
-							if ( File::fileExists( path ) )
+							if ( castor::File::fileExists( path ) )
 							{
-								background.loadCrossTexture( Path{}, path );
+								background.loadCrossTexture( castor::Path{}, path );
 							}
 						} );
 				}
@@ -120,7 +117,7 @@ namespace GuiCommon
 
 			}
 
-			void visit( ImageBackground & background )override
+			void visit( castor3d::ImageBackground & background )override
 			{
 				static wxString PROPERTY_BACKGROUND_IMAGE_IMAGE = _( "Image" );
 
@@ -129,7 +126,7 @@ namespace GuiCommon
 					, background.getTexture() );
 			}
 
-			void doCreateTextureImageProperty( ImageBackground & background
+			void doCreateTextureImageProperty( castor3d::ImageBackground & background
 				, wxString const & name
 				, castor3d::TextureLayout const & texture )
 			{
@@ -138,16 +135,16 @@ namespace GuiCommon
 				m_properties.addProperty( &m_grid, name, source
 					, [&background]( wxVariant const & var )
 					{
-						auto path = variantCast< Path >( var );
+						auto path = variantCast< castor::Path >( var );
 
-						if ( File::fileExists( path ) )
+						if ( castor::File::fileExists( path ) )
 						{
-							background.loadImage( Path{}, path );
+							background.loadImage( castor::Path{}, path );
 						}
 					} );
 			}
 
-			void doCreateTextureImageProperty( SkyboxBackground & background
+			void doCreateTextureImageProperty( castor3d::SkyboxBackground & background
 				, wxString const & name
 				, castor3d::TextureLayout const & texture
 				, castor3d::CubeMapFace face )
@@ -157,11 +154,11 @@ namespace GuiCommon
 				m_properties.addProperty( &m_grid, name, source
 					, [&background, face]( wxVariant const & var )
 					{
-						auto path = variantCast< Path >( var );
+						auto path = variantCast< castor::Path >( var );
 
-						if ( File::fileExists( path ) )
+						if ( castor::File::fileExists( path ) )
 						{
-							background.loadFaceImage( Path{}, path, face );
+							background.loadFaceImage( castor::Path{}, path, face );
 						}
 					} );
 			}
@@ -174,7 +171,7 @@ namespace GuiCommon
 
 	BackgroundTreeItemProperty::BackgroundTreeItemProperty( wxWindow * parent
 		, bool editable
-		, SceneBackground & background )
+		, castor3d::SceneBackground & background )
 		: TreeItemProperty{ background.getScene().getEngine(), editable }
 		, m_background{ background }
 		, m_parent{ parent }
@@ -197,15 +194,15 @@ namespace GuiCommon
 
 		switch ( m_background.getType() )
 		{
-		case BackgroundType::eColour:
+		case castor3d::BackgroundType::eColour:
 			selected = PROPERTY_BACKGROUND_COLOUR;
 			break;
 
-		case BackgroundType::eImage:
+		case castor3d::BackgroundType::eImage:
 			selected = PROPERTY_BACKGROUND_IMAGE;
 			break;
 
-		case BackgroundType::eSkybox:
+		case castor3d::BackgroundType::eSkybox:
 			selected = PROPERTY_BACKGROUND_SKYBOX;
 			break;
 

@@ -9,11 +9,9 @@
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
-	MeshGenerator::MeshGenerator( String const & meshType )
+	MeshGenerator::MeshGenerator( castor::String const & meshType )
 		: m_meshType{ meshType }
 	{
 	}

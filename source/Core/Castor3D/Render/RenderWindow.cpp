@@ -53,9 +53,9 @@ CU_ImplementCUSmartPtr( castor3d, RenderWindow )
 
 namespace castor3d
 {
-	namespace
+	namespace rendwndw
 	{
-		QueuesData * getQueueFamily( ashes::Surface const & surface
+		static QueuesData * getQueueFamily( ashes::Surface const & surface
 			, QueueFamilies & queues )
 		{
 			auto it = std::find_if( queues.begin()
@@ -74,7 +74,7 @@ namespace castor3d
 			return &( *it );
 		}
 
-		uint32_t getImageCount( ashes::Surface const & surface )
+		static uint32_t getImageCount( ashes::Surface const & surface )
 		{
 			auto surfaceCaps = surface.getCapabilities();
 			uint32_t desiredNumberOfSwapChainImages{ surfaceCaps.minImageCount + 1 };
@@ -88,7 +88,7 @@ namespace castor3d
 			return desiredNumberOfSwapChainImages;
 		}
 
-		VkSurfaceFormatKHR selectFormat( ashes::Surface const & surface )
+		static VkSurfaceFormatKHR selectFormat( ashes::Surface const & surface )
 		{
 			VkSurfaceFormatKHR result;
 			auto formats = surface.getFormats();
@@ -121,7 +121,7 @@ namespace castor3d
 			return result;
 		}
 
-		VkPresentModeKHR selectPresentMode( ashes::Surface const & surface )
+		static VkPresentModeKHR selectPresentMode( ashes::Surface const & surface )
 		{
 			auto presentModes = surface.getPresentModes();
 			VkPresentModeKHR result{ VK_PRESENT_MODE_FIFO_KHR };
@@ -144,7 +144,7 @@ namespace castor3d
 			return result;
 		}
 
-		ashes::SwapChainCreateInfo getSwapChainCreateInfo( ashes::Surface const & surface
+		static ashes::SwapChainCreateInfo getSwapChainCreateInfo( ashes::Surface const & surface
 			, VkExtent2D const & size )
 		{
 			VkExtent2D swapChainExtent{};
@@ -194,7 +194,7 @@ namespace castor3d
 
 #if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
 
-		IntermediateView doCreateBarrierView( RenderDevice const & device
+		static IntermediateView doCreateBarrierView( RenderDevice const & device
 			, IntermediateView const & view )
 		{
 			auto & handler = device.renderSystem.getEngine()->getGraphResourceHandler();
@@ -222,7 +222,7 @@ namespace castor3d
 				, view.factors };
 		}
 
-		IntermediateViewArray doCreateBarrierViews( RenderDevice const & device
+		static IntermediateViewArray doCreateBarrierViews( RenderDevice const & device
 			, IntermediateView const & tex3DResult
 			, IntermediateViewArray const & views )
 		{
@@ -251,7 +251,7 @@ namespace castor3d
 			return result;
 		}
 
-		IntermediateView doCreateSampledView( RenderDevice const & device
+		static IntermediateView doCreateSampledView( RenderDevice const & device
 			, IntermediateView const & view )
 		{
 			auto & handler = device.renderSystem.getEngine()->getGraphResourceHandler();
@@ -279,7 +279,7 @@ namespace castor3d
 				, view.factors };
 		}
 
-		IntermediateViewArray doCreateSampledViews( RenderDevice const & device
+		static IntermediateViewArray doCreateSampledViews( RenderDevice const & device
 			, IntermediateView const & tex3DResult
 			, IntermediateViewArray const & views )
 		{
@@ -310,12 +310,12 @@ namespace castor3d
 
 #endif
 
-		OverlayResPtr getOverlay( Scene const & scene, castor::String const & name )
+		static OverlayResPtr getOverlay( Scene const & scene, castor::String const & name )
 		{
 			return scene.getOverlayView().tryFind( name );
 		}
 
-		TextOverlaySPtr getTextOverlay( Scene const & scene, castor::String const & name )
+		static TextOverlaySPtr getTextOverlay( Scene const & scene, castor::String const & name )
 		{
 			TextOverlaySPtr result;
 			auto o = getOverlay( scene, name ).lock();
@@ -328,7 +328,7 @@ namespace castor3d
 			return result;
 		}
 
-		castor::Size getScreenSize()
+		static castor::Size getScreenSize()
 		{
 			castor::Size result;
 			castor::System::getScreenSize( 0u, result );
@@ -358,7 +358,7 @@ namespace castor3d
 		, m_device{ engine.getRenderSystem()->getRenderDevice() }
 		, m_surface{ m_device.renderSystem.getInstance().createSurface( m_device.renderSystem.getPhysicalDevice()
 			, std::move( handle ) ) }
-		, m_queues{ getQueueFamily( *m_surface, m_device.queueFamilies ) }
+		, m_queues{ rendwndw::getQueueFamily( *m_surface, m_device.queueFamilies ) }
 		, m_reservedQueue{ m_queues->getQueueSize() > 1 ? m_queues->reserveQueue() : nullptr }
 		, m_listener{ getEngine()->getFrameListenerCache().add( getName() + castor::string::toString( m_index ) ) }
 		, m_size{ size }
@@ -1052,7 +1052,7 @@ namespace castor3d
 
 	void RenderWindow::doCreateSwapchain( QueueData const & queueData )
 	{
-		m_swapChain = getDevice()->createSwapChain( getSwapChainCreateInfo( *m_surface
+		m_swapChain = getDevice()->createSwapChain( rendwndw::getSwapChainCreateInfo( *m_surface
 			, { m_size.getWidth(), m_size.getHeight() } ) );
 		m_swapChainImages = m_swapChain->getImages();
 
@@ -1160,10 +1160,10 @@ namespace castor3d
 		if ( !m_progressBar )
 		{
 			m_progressBar = castor::makeUnique< ProgressBar >( *getEngine()
-				, getOverlay( *scene, cuT( "Progress" ) )
-				, getOverlay( *scene, cuT( "ProgressBar" ) )
-				, getTextOverlay( *scene, cuT( "ProgressTitle" ) )
-				, getTextOverlay( *scene, cuT( "ProgressLabel" ) )
+				, rendwndw::getOverlay( *scene, cuT( "Progress" ) )
+				, rendwndw::getOverlay( *scene, cuT( "ProgressBar" ) )
+				, rendwndw::getTextOverlay( *scene, cuT( "ProgressTitle" ) )
+				, rendwndw::getTextOverlay( *scene, cuT( "ProgressLabel" ) )
 				, 1u );
 			m_progressBar->setTitle( "Initialising..." );
 			m_progressBar->setLabel( "" );
@@ -1175,7 +1175,7 @@ namespace castor3d
 			, scene
 			, *m_renderPass
 #if C3D_PersistLoadingScreen
-			, getScreenSize() );
+			, rendwndw::getScreenSize() );
 #else
 			, m_size );
 #endif
@@ -1388,10 +1388,10 @@ namespace castor3d
 #endif
 		m_texture3Dto2D->createPasses( queueData, intermediates );
 
-		m_intermediateBarrierViews = doCreateBarrierViews( m_device
+		m_intermediateBarrierViews = rendwndw::doCreateBarrierViews( m_device
 			, m_tex3DTo2DIntermediate
 			, m_intermediates );
-		m_intermediateSampledViews = doCreateSampledViews( m_device
+		m_intermediateSampledViews = rendwndw::doCreateSampledViews( m_device
 			, m_tex3DTo2DIntermediate
 			, m_intermediates );
 #endif

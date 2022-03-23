@@ -16,18 +16,23 @@
 
 namespace castor3d
 {
-	namespace
+	namespace smshcomptri
 	{
 		struct FaceDistance
 		{
 			uint32_t m_index[3];
 			double m_distance;
 		};
-		bool operator<( FaceDistance const & lhs, FaceDistance const & rhs )
-		{
-			return lhs.m_distance < rhs.m_distance;
-		}
+
 		CU_DeclareVector( FaceDistance, FaceDist );
+
+		struct Compare
+		{
+			bool operator()( FaceDistance const & lhs, FaceDistance const & rhs )const
+			{
+				return lhs.m_distance < rhs.m_distance;
+			}
+		};
 	}
 
 	castor::String const TriFaceMapping::Name = "triface_mapping";
@@ -166,7 +171,7 @@ namespace castor3d
 						, offsets.idxChunk.size
 						, 0u ) ) )
 					{
-						FaceDistArray arraySorted;
+						smshcomptri::FaceDistArray arraySorted;
 						arraySorted.reserve( indexSize / 3 );
 
 						if ( auto * vertex = reinterpret_cast< InterleavedVertex const * >( vertices.lock( offsets.getVertexOffset()
@@ -182,10 +187,10 @@ namespace castor3d
 								dDistance += castor::point::lengthSquared( vtx2 - cameraPosition );
 								auto & vtx3 = vertex[it[2]].pos;
 								dDistance += castor::point::lengthSquared( vtx3 - cameraPosition );
-								arraySorted.push_back( FaceDistance{ { it[0], it[1], it[2] }, dDistance } );
+								arraySorted.push_back( smshcomptri::FaceDistance{ { it[0], it[1], it[2] }, dDistance } );
 							}
 
-							std::sort( arraySorted.begin(), arraySorted.end() );
+							std::sort( arraySorted.begin(), arraySorted.end(), smshcomptri::Compare{} );
 
 							for ( auto & face : arraySorted )
 							{

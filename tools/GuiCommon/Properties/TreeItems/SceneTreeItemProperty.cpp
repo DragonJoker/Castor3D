@@ -10,14 +10,11 @@
 
 #include <wx/propgrid/advprops.h>
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
 	SceneTreeItemProperty::SceneTreeItemProperty( wxWindow * parent
 		, bool editable
-		, Scene & scene )
+		, castor3d::Scene & scene )
 		: TreeItemProperty{ scene.getEngine(), editable }
 		, m_scene( scene )
 	{
@@ -32,9 +29,9 @@ namespace GuiCommon
 		static wxString PROPERTY_SHADOW_LPV_INDIRECT_ATT = _( "Indirect Attenuation" );
 
 		addProperty( grid, PROPERTY_CATEGORY_SCENE + m_scene.getName() );
-		addPropertyT( grid, PROPERTY_SCENE_DEBUG_OVERLAYS, m_scene.getEngine()->getRenderLoop().hasDebugOverlays(), &m_scene.getEngine()->getRenderLoop(), &RenderLoop::showDebugOverlays );
-		addPropertyT( grid, PROPERTY_SCENE_AMBIENT_LIGHT, m_scene.getAmbientLight(), &m_scene, &Scene::setAmbientLight );
-		addPropertyT( grid, PROPERTY_SHADOW_LPV_INDIRECT_ATT, m_scene.getLpvIndirectAttenuation(), &m_scene, &Scene::setLpvIndirectAttenuation );
+		addPropertyT( grid, PROPERTY_SCENE_DEBUG_OVERLAYS, m_scene.getEngine()->getRenderLoop().hasDebugOverlays(), &m_scene.getEngine()->getRenderLoop(), &castor3d::RenderLoop::showDebugOverlays );
+		addPropertyT( grid, PROPERTY_SCENE_AMBIENT_LIGHT, m_scene.getAmbientLight(), &m_scene, &castor3d::Scene::setAmbientLight );
+		addPropertyT( grid, PROPERTY_SHADOW_LPV_INDIRECT_ATT, m_scene.getLpvIndirectAttenuation(), &m_scene, &castor3d::Scene::setLpvIndirectAttenuation );
 
 		doCreateVctProperties( editor, grid );
 	}
@@ -48,7 +45,7 @@ namespace GuiCommon
 	{
 		wxColour colour;
 		colour << var;
-		m_scene.setAmbientLight( RgbColour::fromBGR( colour.GetRGB() ) );
+		m_scene.setAmbientLight( castor::RgbColour::fromBGR( colour.GetRGB() ) );
 	}
 
 	void SceneTreeItemProperty::doCreateVctProperties( wxPGEditor * editor

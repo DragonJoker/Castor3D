@@ -33,7 +33,7 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace vxlscnd
 	{
 		enum IDs : uint32_t
 		{
@@ -43,7 +43,7 @@ namespace castor3d
 			eResult,
 		};
 
-		ashes::DescriptorSetLayoutPtr createDescriptorLayout( RenderDevice const & device
+		static ashes::DescriptorSetLayoutPtr createDescriptorLayout( RenderDevice const & device
 			, uint32_t voxelGridSize )
 		{
 			ashes::VkDescriptorSetLayoutBindingArray bindings{ makeDescriptorSetLayoutBinding( eVoxelBuffer
@@ -63,7 +63,7 @@ namespace castor3d
 				, std::move( bindings ) );
 		}
 
-		ashes::DescriptorSetPtr createDescriptorSet( crg::RunnableGraph & graph
+		static ashes::DescriptorSetPtr createDescriptorSet( crg::RunnableGraph & graph
 			, ashes::DescriptorSetPool const & pool
 			, crg::FramePass const & pass
 			, uint32_t voxelGridSize )
@@ -104,14 +104,14 @@ namespace castor3d
 			return descriptorSet;
 		}
 
-		ashes::PipelineLayoutPtr createPipelineLayout( RenderDevice const & device
+		static ashes::PipelineLayoutPtr createPipelineLayout( RenderDevice const & device
 			, ashes::DescriptorSetLayout const & dslayout )
 		{
 			return device->createPipelineLayout( "VoxelSecondaryBounce"
 				, ashes::DescriptorSetLayoutCRefArray{ std::ref( dslayout ) } );
 		}
 
-		ashes::ComputePipelinePtr createPipeline( RenderDevice const & device
+		static ashes::ComputePipelinePtr createPipeline( RenderDevice const & device
 			, ashes::PipelineLayout const & layout
 			, ShaderModule const & computeShader )
 		{
@@ -122,7 +122,7 @@ namespace castor3d
 					, layout ) );
 		}
 
-		ShaderPtr createShader( uint32_t voxelGridSize
+		static ShaderPtr createShader( uint32_t voxelGridSize
 			, RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
@@ -210,12 +210,12 @@ namespace castor3d
 			, crg::ru::Config{ 2u, false }.implicitAction( pass.images.back().view()
 				, crg::RecordContext::clearAttachment( pass.images.back().view(), transparentBlackClearColor ) ) }
 		, m_vctConfig{ vctConfig }
-		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, "VoxelSecondaryBounce", createShader( m_vctConfig.gridSize.value(), device.renderSystem ) }
-		, m_descriptorSetLayout{ createDescriptorLayout( device, m_vctConfig.gridSize.value() ) }
-		, m_pipelineLayout{ createPipelineLayout( device, *m_descriptorSetLayout ) }
-		, m_pipeline{ createPipeline( device, *m_pipelineLayout, m_shader ) }
+		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, "VoxelSecondaryBounce", vxlscnd::createShader( m_vctConfig.gridSize.value(), device.renderSystem ) }
+		, m_descriptorSetLayout{ vxlscnd::createDescriptorLayout( device, m_vctConfig.gridSize.value() ) }
+		, m_pipelineLayout{ vxlscnd::createPipelineLayout( device, *m_descriptorSetLayout ) }
+		, m_pipeline{ vxlscnd::createPipeline( device, *m_pipelineLayout, m_shader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
-		, m_descriptorSet{ createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass, m_vctConfig.gridSize.value() ) }
+		, m_descriptorSet{ vxlscnd::createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass, m_vctConfig.gridSize.value() ) }
 	{
 	}
 

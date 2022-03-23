@@ -28,9 +28,9 @@ namespace castor
 {
 	//************************************************************************************************
 
-	namespace
+	namespace gliw
 	{
-		gli::target getTarget( Size const & dimensions, uint32_t layers )
+		static gli::target getTarget( Size const & dimensions, uint32_t layers )
 		{
 			if ( dimensions.getHeight() == 1u )
 			{
@@ -44,19 +44,19 @@ namespace castor
 				: gli::TARGET_2D;
 		}
 
-		gli::format getFormat( PixelFormat format )
+		static gli::format getFormat( PixelFormat format )
 		{
 			return gli::format( format );
 		}
 
-		gli::extent3d getExtent( Size const & dimensions )
+		static gli::extent3d getExtent( Size const & dimensions )
 		{
 			return { int32_t( dimensions.getWidth() )
 				, int32_t( dimensions.getHeight() )
 				, 1 };
 		}
 
-		StringArray const & listExtensions()
+		static StringArray const & listExtensions()
 		{
 			static StringArray const list
 			{
@@ -67,7 +67,7 @@ namespace castor
 			return list;
 		}
 
-		gli::texture convert( PxBufferBase const & buffer )
+		static gli::texture convert( PxBufferBase const & buffer )
 		{
 			gli::texture result{ getTarget( buffer.getDimensions(), buffer.getLayers() )
 				, getFormat( buffer.getFormat() )
@@ -119,13 +119,13 @@ namespace castor
 
 	void GliImageWriter::registerWriter( ImageWriter & reg )
 	{
-		reg.registerWriter( listExtensions()
+		reg.registerWriter( gliw::listExtensions()
 			, std::make_unique< GliImageWriter >() );
 	}
 
 	void GliImageWriter::unregisterWriter( ImageWriter & reg )
 	{
-		reg.unregisterWriter( listExtensions() );
+		reg.unregisterWriter( gliw::listExtensions() );
 	}
 
 	bool GliImageWriter::write( Path const & path
@@ -133,7 +133,7 @@ namespace castor
 	{
 		auto imageFormat = string::lowerCase( path.getExtension() );
 		bool result = false;
-		auto texture = convert( buffer );
+		auto texture = gliw::convert( buffer );
 
 		if ( imageFormat.find( cuT( "dds" ) ) != String::npos )
 		{

@@ -2,11 +2,9 @@
 
 #include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
-	ParticlePlugin::ParticlePlugin( DynamicLibrarySPtr library, Engine * engine )
+	ParticlePlugin::ParticlePlugin( castor::DynamicLibrarySPtr library, Engine * engine )
 		: Plugin( PluginType::eParticle, library, *engine )
 	{
 		load();

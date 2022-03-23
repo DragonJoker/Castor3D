@@ -26,6 +26,13 @@ namespace castor3d
 	public:
 		struct Program
 		{
+			Program( ShaderModule vtxShader
+				, ShaderModule pxlShader )
+				: vertexShader{ std::move( vtxShader ) }
+				, pixelShader{ std::move( pxlShader ) }
+			{
+			}
+
 			ShaderModule vertexShader;
 			ShaderModule pixelShader;
 			ashes::PipelineShaderStageCreateInfoArray stages;

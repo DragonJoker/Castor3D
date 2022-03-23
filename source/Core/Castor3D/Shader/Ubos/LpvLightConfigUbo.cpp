@@ -20,9 +20,9 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace lpvlubo
 	{
-		castor::Matrix4x4f snapMatrix( float lpvCellSize
+		static castor::Matrix4x4f snapMatrix( float lpvCellSize
 			, castor::Matrix4x4f mtx )
 		{
 			mtx[0][3] = float( mtx[0][3] - fmod( mtx[0][3], lpvCellSize ) );
@@ -102,7 +102,7 @@ namespace castor3d
 		{
 		case LightType::eDirectional:
 			CU_Require( faceIndex == 0u );
-			configuration.lightView = snapMatrix( lpvCellSize
+			configuration.lightView = lpvlubo::snapMatrix( lpvCellSize
 				, light.getDirectionalLight()->getViewMatrix( shader::DirectionalMaxCascadesCount - 1u ) );
 			configuration.tanFovXHalf = 1.0f;
 			configuration.tanFovYHalf = 1.0f;
@@ -113,7 +113,7 @@ namespace castor3d
 				CU_Require( faceIndex < 6u );
 				auto lightFov = 90.0_degrees;
 				auto & pointLight = *light.getPointLight();
-				configuration.lightView = snapMatrix( lpvCellSize
+				configuration.lightView = lpvlubo::snapMatrix( lpvCellSize
 					, pointLight.getViewMatrix( CubeMapFace( faceIndex ) ) );
 				configuration.tanFovXHalf = ( lightFov * 0.5 ).tan();
 				configuration.tanFovYHalf = ( lightFov * 0.5 ).tan();
@@ -124,7 +124,7 @@ namespace castor3d
 			{
 				CU_Require( faceIndex == 0u );
 				auto & spotLight = *light.getSpotLight();
-				configuration.lightView = snapMatrix( lpvCellSize
+				configuration.lightView = lpvlubo::snapMatrix( lpvCellSize
 					, spotLight.getViewMatrix() );
 				auto lightFov = spotLight.getCutOff();
 				configuration.tanFovXHalf = ( lightFov * 0.5 ).tan();
@@ -145,7 +145,7 @@ namespace castor3d
 		auto & lpvConfig = light.getLight().getLpvConfig();
 		auto & configuration = m_ubo.getData();
 
-		configuration.lightView = snapMatrix( lpvCellSize
+		configuration.lightView = lpvlubo::snapMatrix( lpvCellSize
 			, light.getViewMatrix( cascadeIndex ) );
 		configuration.texelAreaModifier = lpvConfig.texelAreaModifier;
 		configuration.tanFovXHalf = 1.0f;

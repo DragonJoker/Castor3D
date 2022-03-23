@@ -14,11 +14,9 @@
 
 #include <numeric>
 
-using namespace castor;
-
 namespace Bloom
 {
-	namespace
+	namespace blur
 	{
 		enum Idx
 		{
@@ -26,7 +24,7 @@ namespace Bloom
 			DifImgIdx,
 		};
 
-		std::unique_ptr< ast::Shader > getVertexProgram()
+		static std::unique_ptr< ast::Shader > getVertexProgram()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -46,7 +44,7 @@ namespace Bloom
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > getPixelProgram()
+		static std::unique_ptr< ast::Shader > getPixelProgram()
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -82,7 +80,7 @@ namespace Bloom
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::vector< float > getHalfPascal( uint32_t height )
+		static std::vector< float > getHalfPascal( uint32_t height )
 		{
 			std::vector< float > result;
 			result.resize( height );
@@ -120,7 +118,7 @@ namespace Bloom
 			return result;
 		}
 
-		std::array< castor::Point4f, 15u > doCreateKernel( uint32_t count )
+		static std::array< castor::Point4f, 15u > doCreateKernel( uint32_t count )
 		{
 			std::array< castor::Point4f, 15u > result;
 			auto kernel = getHalfPascal( count );
@@ -130,7 +128,7 @@ namespace Bloom
 			return result;
 		}
 
-		UboOffsetArray doCreateUbo( castor3d::RenderDevice const & device
+		static UboOffsetArray doCreateUbo( castor3d::RenderDevice const & device
 			, VkExtent2D dimensions
 			, uint32_t blurKernelSize
 			, uint32_t blurPassesCount
@@ -157,7 +155,7 @@ namespace Bloom
 			return result;
 		}
 
-		std::vector< BlurPass::Subpass > doCreateSubpasses( crg::FramePassGroup & graph
+		static std::vector< BlurPass::Subpass > doCreateSubpasses( crg::FramePassGroup & graph
 			, crg::FramePassArray & previousPasses
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewIdArray const & srcImages
@@ -224,9 +222,9 @@ namespace Bloom
 			} ) }
 	{
 		pass.addDependency( previousPass );
-		blurUbo.createPassBinding( pass, std::string{ "BlurCfg" } + ( isVertical ? "Y" : "X" ), GaussCfgUboIdx );
+		blurUbo.createPassBinding( pass, std::string{ "BlurCfg" } + ( isVertical ? "Y" : "X" ), blur::GaussCfgUboIdx );
 		pass.addSampledView( srcView
-			, DifImgIdx
+			, blur::DifImgIdx
 			, {}
 			, crg::SamplerDesc{ VK_FILTER_NEAREST
 				, VK_FILTER_NEAREST
@@ -254,13 +252,13 @@ namespace Bloom
 		, bool const * enabled )
 		: m_device{ device }
 		, m_blurPassesCount{ blurPassesCount }
-		, m_blurUbo{ doCreateUbo( m_device, dimensions, blurKernelSize, m_blurPassesCount, isVertical ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "BloomBlurPass", getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "BloomBlurPass", getPixelProgram() }
+		, m_blurUbo{ blur::doCreateUbo( m_device, dimensions, blurKernelSize, m_blurPassesCount, isVertical ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "BloomBlurPass", blur::getVertexProgram() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "BloomBlurPass", blur::getPixelProgram() }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_passes{ previousPasses }
-		, m_subpasses{ doCreateSubpasses( graph
+		, m_subpasses{ blur::doCreateSubpasses( graph
 			, m_passes
 			, m_device
 			, srcImages
@@ -299,7 +297,7 @@ namespace Bloom
 
 	void BlurPass::update( uint32_t kernelSize )
 	{
-		auto kernel = doCreateKernel( kernelSize );
+		auto kernel = blur::doCreateKernel( kernelSize );
 
 		for ( auto & ubo : m_blurUbo )
 		{

@@ -1,8 +1,5 @@
 #include "EnemyCategory.hpp"
 
-using namespace castor;
-using namespace castor3d;
-
 namespace castortd
 {
 	BaseEnemy::BaseEnemy()

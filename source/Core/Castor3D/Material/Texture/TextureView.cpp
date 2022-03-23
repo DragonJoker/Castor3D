@@ -18,9 +18,9 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace texview
 	{
-		castor::String getName( ashes::ImageViewCreateInfo const & value )
+		static castor::String getName( ashes::ImageViewCreateInfo const & value )
 		{
 			auto stream = castor::makeStringStream();
 			stream << cuT( "_fmt_" ) << ashes::getName( value->format )
@@ -31,7 +31,7 @@ namespace castor3d
 			return stream.str();
 		}
 
-		castor::ImageLayout getLayout( ashes::ImageViewCreateInfo const & value
+		static castor::ImageLayout getLayout( ashes::ImageViewCreateInfo const & value
 			, castor::Point3ui const & extent )
 		{
 			return castor::ImageLayout{ castor::ImageLayout::Type( value->viewType )
@@ -55,8 +55,8 @@ namespace castor3d
 		, m_info{ std::move( info ) }
 		, m_debugName{ std::move( debugName ) }
 		, m_source{ getOwner()->getImage()
-			, debugName + getName( m_info )
-			, getLayout( m_info, layout.getImage().getLayout().extent ) }
+			, debugName + texview::getName( m_info )
+			, texview::getLayout( m_info, layout.getImage().getLayout().extent ) }
 	{
 	}
 
@@ -206,8 +206,8 @@ namespace castor3d
 	{
 		m_info = std::move( info );
 		m_source = TextureSource{ getOwner()->getImage()
-			, m_debugName + getName( m_info )
-			, getLayout( m_info, getOwner()->getImage().getLayout().extent ) };
+			, m_debugName + texview::getName( m_info )
+			, texview::getLayout( m_info, getOwner()->getImage().getLayout().extent ) };
 
 		if ( m_sampledView )
 		{

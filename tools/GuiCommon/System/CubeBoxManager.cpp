@@ -23,54 +23,51 @@
 
 #include <cstddef>
 
-using namespace castor;
-using namespace castor3d;
-
 namespace GuiCommon
 {
 	namespace
 	{
-		MeshResPtr doCreateCubeMesh( String const name
-			, Scene & scene
-			, RgbColour const & colour
-			, String const & colourName )
+		castor3d::MeshResPtr doCreateCubeMesh( castor::String const name
+			, castor3d::Scene & scene
+			, castor::RgbColour const & colour
+			, castor::String const & colourName )
 		{
 			auto result = scene.getMeshCache().add( name, scene );
 			result.lock()->setSerialisable( false );
 			auto submesh = result.lock()->createSubmesh();
-			static InterleavedVertexArray const vertex
+			static castor3d::InterleavedVertexArray const vertex
 			{
-				InterleavedVertex{}.position( Point3f{ -1, -1, -1 } ),
-				InterleavedVertex{}.position( Point3f{ -1, +1, -1 } ),
-				InterleavedVertex{}.position( Point3f{ +1, +1, -1 } ),
-				InterleavedVertex{}.position( Point3f{ +1, -1, -1 } ),
-				InterleavedVertex{}.position( Point3f{ -1, -1, +1 } ),
-				InterleavedVertex{}.position( Point3f{ -1, +1, +1 } ),
-				InterleavedVertex{}.position( Point3f{ +1, +1, +1 } ),
-				InterleavedVertex{}.position( Point3f{ +1, -1, +1 } ),
+				castor3d::InterleavedVertex{}.position( castor::Point3f{ -1, -1, -1 } ),
+				castor3d::InterleavedVertex{}.position( castor::Point3f{ -1, +1, -1 } ),
+				castor3d::InterleavedVertex{}.position( castor::Point3f{ +1, +1, -1 } ),
+				castor3d::InterleavedVertex{}.position( castor::Point3f{ +1, -1, -1 } ),
+				castor3d::InterleavedVertex{}.position( castor::Point3f{ -1, -1, +1 } ),
+				castor3d::InterleavedVertex{}.position( castor::Point3f{ -1, +1, +1 } ),
+				castor3d::InterleavedVertex{}.position( castor::Point3f{ +1, +1, +1 } ),
+				castor3d::InterleavedVertex{}.position( castor::Point3f{ +1, -1, +1 } ),
 			};
 			submesh->setTopology( VK_PRIMITIVE_TOPOLOGY_LINE_LIST );
 			submesh->addPoints( vertex );
-			auto mapping = std::make_shared< LinesMapping >( *submesh );
-			LineIndices lines[]
+			auto mapping = std::make_shared< castor3d::LinesMapping >( *submesh );
+			castor3d::LineIndices lines[]
 			{
-				LineIndices{ { 0u, 1u } },
-				LineIndices{ { 1u, 2u } },
-				LineIndices{ { 2u, 3u } },
-				LineIndices{ { 3u, 0u } },
-				LineIndices{ { 4u, 5u } },
-				LineIndices{ { 5u, 6u } },
-				LineIndices{ { 6u, 7u } },
-				LineIndices{ { 7u, 4u } },
-				LineIndices{ { 0u, 4u } },
-				LineIndices{ { 1u, 5u } },
-				LineIndices{ { 2u, 6u } },
-				LineIndices{ { 3u, 7u } },
+				castor3d::LineIndices{ { 0u, 1u } },
+				castor3d::LineIndices{ { 1u, 2u } },
+				castor3d::LineIndices{ { 2u, 3u } },
+				castor3d::LineIndices{ { 3u, 0u } },
+				castor3d::LineIndices{ { 4u, 5u } },
+				castor3d::LineIndices{ { 5u, 6u } },
+				castor3d::LineIndices{ { 6u, 7u } },
+				castor3d::LineIndices{ { 7u, 4u } },
+				castor3d::LineIndices{ { 0u, 4u } },
+				castor3d::LineIndices{ { 1u, 5u } },
+				castor3d::LineIndices{ { 2u, 6u } },
+				castor3d::LineIndices{ { 3u, 7u } },
 			};
 			mapping->addLineGroup( lines );
 			submesh->setIndexMapping( mapping );
-			MaterialResPtr material;
-			String matName = cuT( "BBox_" ) + colourName;
+			castor3d::MaterialResPtr material;
+			castor::String matName = cuT( "BBox_" ) + colourName;
 
 			if ( !scene.getEngine()->getMaterialCache().has( matName ) )
 			{
@@ -94,13 +91,13 @@ namespace GuiCommon
 		}
 	}
 
-	CubeBoxManager::CubeBoxManager( Scene & scene )
+	CubeBoxManager::CubeBoxManager( castor3d::Scene & scene )
 		: m_scene{ scene }
-		, m_obbMesh{ doCreateCubeMesh( cuT( "CubeBox_OBB" ), scene, RgbColour::fromPredefined( PredefinedRgbColour::eRed ), cuT( "Red" ) ) }
-		, m_obbSubmesh{ doCreateCubeMesh( cuT( "CubeBox_OBB_Submesh" ), scene, RgbColour::fromPredefined( PredefinedRgbColour::eBlue ), cuT( "Blue" ) ) }
-		, m_obbSelectedSubmesh{ doCreateCubeMesh( cuT( "CubeBox_OBB_SelectedSubmesh" ), scene, RgbColour::fromComponents( 1.0f, 1.0f, 0.0f ), cuT( "Yellow" ) ) }
-		, m_obbBone{ doCreateCubeMesh( cuT( "CubeBox_OBB_Bone" ), scene, RgbColour::fromPredefined( PredefinedRgbColour::eDarkBlue ), cuT( "DarkBlue" ) ) }
-		, m_aabbMesh{ doCreateCubeMesh( cuT( "CubeBox_AABB" ), scene, RgbColour::fromPredefined( PredefinedRgbColour::eGreen ), cuT( "Green" ) ) }
+		, m_obbMesh{ doCreateCubeMesh( cuT( "CubeBox_OBB" ), scene, castor::RgbColour::fromPredefined( castor::PredefinedRgbColour::eRed ), cuT( "Red" ) ) }
+		, m_obbSubmesh{ doCreateCubeMesh( cuT( "CubeBox_OBB_Submesh" ), scene, castor::RgbColour::fromPredefined( castor::PredefinedRgbColour::eBlue ), cuT( "Blue" ) ) }
+		, m_obbSelectedSubmesh{ doCreateCubeMesh( cuT( "CubeBox_OBB_SelectedSubmesh" ), scene, castor::RgbColour::fromComponents( 1.0f, 1.0f, 0.0f ), cuT( "Yellow" ) ) }
+		, m_obbBone{ doCreateCubeMesh( cuT( "CubeBox_OBB_Bone" ), scene, castor::RgbColour::fromPredefined( castor::PredefinedRgbColour::eDarkBlue ), cuT( "DarkBlue" ) ) }
+		, m_aabbMesh{ doCreateCubeMesh( cuT( "CubeBox_AABB" ), scene, castor::RgbColour::fromPredefined( castor::PredefinedRgbColour::eGreen ), cuT( "Green" ) ) }
 	{
 	}
 
@@ -121,11 +118,11 @@ namespace GuiCommon
 		m_obbNode.reset();
 	}
 
-	void CubeBoxManager::displayObject( Geometry const & object
+	void CubeBoxManager::displayObject( castor3d::Geometry const & object
 		, castor3d::Submesh const & submesh )
 	{
-		Engine * engine = m_scene.getEngine();
-		engine->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+		castor3d::Engine * engine = m_scene.getEngine();
+		engine->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
 			, [this, &object, &submesh]()
 			{
 				m_object = &object;
@@ -141,7 +138,7 @@ namespace GuiCommon
 					, *object.getParent()
 					, m_object->getBoundingBox() );
 				m_obbSelectedSubmeshNode = doAddBB( m_obbSelectedSubmesh
-					, m_obbMesh.lock()->getName() + string::toString( submesh.getId() )
+					, m_obbMesh.lock()->getName() + castor::string::toString( submesh.getId() )
 					, *object.getParent()
 					, m_object->getBoundingBox( submesh ) );
 
@@ -150,24 +147,24 @@ namespace GuiCommon
 					if ( psubmesh.get() != m_submesh )
 					{
 						m_obbSubmeshNodes.push_back( doAddBB( m_obbSubmesh
-							, m_obbMesh.lock()->getName() + string::toString( psubmesh->getId() )
+							, m_obbMesh.lock()->getName() + castor::string::toString( psubmesh->getId() )
 							, *object.getParent()
 							, m_object->getBoundingBox( *psubmesh ) ) );
 					}
 				}
 
-				m_sceneConnection = m_scene.onUpdate.connect( [this]( Scene const & scene )
+				m_sceneConnection = m_scene.onUpdate.connect( [this]( castor3d::Scene const & scene )
 					{
 						onSceneUpdate( scene );
 					} );
 			} ) );
 	}
 
-	void CubeBoxManager::hideObject( Geometry const & object )
+	void CubeBoxManager::hideObject( castor3d::Geometry const & object )
 	{
 		CU_Require( object.getName() == m_object->getName() );
-		Engine * engine = m_scene.getEngine();
-		engine->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+		castor3d::Engine * engine = m_scene.getEngine();
+		engine->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
 			, [this]()
 			{
 				m_sceneConnection.disconnect();
@@ -180,7 +177,7 @@ namespace GuiCommon
 				{
 					if ( submesh.get() != m_submesh )
 					{
-						doRemoveBB( m_obbMesh.lock()->getName() + string::toString( submesh->getId() )
+						doRemoveBB( m_obbMesh.lock()->getName() + castor::string::toString( submesh->getId() )
 							, m_obbSubmeshNodes[i] );
 						i++;
 					}
@@ -190,7 +187,7 @@ namespace GuiCommon
 
 				for ( auto & node : m_obbBoneNodes )
 				{
-					doRemoveBB( m_obbMesh.lock()->getName() + cuT( "_Bone_" ) + string::toString( i++ )
+					doRemoveBB( m_obbMesh.lock()->getName() + cuT( "_Bone_" ) + castor::string::toString( i++ )
 						, node );
 				}
 
@@ -204,12 +201,12 @@ namespace GuiCommon
 			} ) );
 	}
 
-	SceneNodeSPtr CubeBoxManager::doAddBB( MeshResPtr bbMesh
-		, String const & nameSpec
-		, SceneNode & parent
-		, BoundingBox const & bb )
+	castor3d::SceneNodeSPtr CubeBoxManager::doAddBB( castor3d::MeshResPtr bbMesh
+		, castor::String const & nameSpec
+		, castor3d::SceneNode & parent
+		, castor::BoundingBox const & bb )
 	{
-		SceneNodeSPtr result;
+		castor3d::SceneNodeSPtr result;
 		auto name = m_object->getName() + cuT( "-" ) + nameSpec;
 
 		if ( !m_scene.getSceneNodeCache().has( name ) )
@@ -221,12 +218,12 @@ namespace GuiCommon
 			result = m_scene.getSceneNodeCache().find( name ).lock();
 		}
 
-		GeometrySPtr ownGeometry;
-		GeometrySPtr geometry;
+		castor3d::GeometrySPtr ownGeometry;
+		castor3d::GeometrySPtr geometry;
 
 		if ( !m_scene.getGeometryCache().has( name ) )
 		{
-			ownGeometry = std::make_shared< Geometry >( name, m_scene, *result, bbMesh );
+			ownGeometry = std::make_shared< castor3d::Geometry >( name, m_scene, *result, bbMesh );
 			geometry = ownGeometry;
 		}
 		else
@@ -254,8 +251,8 @@ namespace GuiCommon
 		return result;
 	}
 
-	void CubeBoxManager::doRemoveBB( String const & nameSpec
-		, SceneNodeSPtr bbNode )
+	void CubeBoxManager::doRemoveBB( castor::String const & nameSpec
+		, castor3d::SceneNodeSPtr bbNode )
 	{
 		bbNode->setVisible( false );
 	}
@@ -300,20 +297,20 @@ namespace GuiCommon
 			auto aabbMin = aabb.getMin();
 			auto aabbMax = aabb.getMax();
 			auto aabbSubmesh = m_aabbMesh.lock()->getSubmesh( 0u );
-			aabbSubmesh->getPoint( 0u ).pos = Point3f( aabbMin->x, aabbMin->y, aabbMin->z );
-			aabbSubmesh->getPoint( 1u ).pos = Point3f( aabbMin->x, aabbMax->y, aabbMin->z );
-			aabbSubmesh->getPoint( 2u ).pos = Point3f( aabbMax->x, aabbMax->y, aabbMin->z );
-			aabbSubmesh->getPoint( 3u ).pos = Point3f( aabbMax->x, aabbMin->y, aabbMin->z );
-			aabbSubmesh->getPoint( 4u ).pos = Point3f( aabbMin->x, aabbMin->y, aabbMax->z );
-			aabbSubmesh->getPoint( 5u ).pos = Point3f( aabbMin->x, aabbMax->y, aabbMax->z );
-			aabbSubmesh->getPoint( 6u ).pos = Point3f( aabbMax->x, aabbMax->y, aabbMax->z );
-			aabbSubmesh->getPoint( 7u ).pos = Point3f( aabbMax->x, aabbMin->y, aabbMax->z );
+			aabbSubmesh->getPoint( 0u ).pos = castor::Point3f( aabbMin->x, aabbMin->y, aabbMin->z );
+			aabbSubmesh->getPoint( 1u ).pos = castor::Point3f( aabbMin->x, aabbMax->y, aabbMin->z );
+			aabbSubmesh->getPoint( 2u ).pos = castor::Point3f( aabbMax->x, aabbMax->y, aabbMin->z );
+			aabbSubmesh->getPoint( 3u ).pos = castor::Point3f( aabbMax->x, aabbMin->y, aabbMin->z );
+			aabbSubmesh->getPoint( 4u ).pos = castor::Point3f( aabbMin->x, aabbMin->y, aabbMax->z );
+			aabbSubmesh->getPoint( 5u ).pos = castor::Point3f( aabbMin->x, aabbMax->y, aabbMax->z );
+			aabbSubmesh->getPoint( 6u ).pos = castor::Point3f( aabbMax->x, aabbMax->y, aabbMax->z );
+			aabbSubmesh->getPoint( 7u ).pos = castor::Point3f( aabbMax->x, aabbMin->y, aabbMax->z );
 			aabbSubmesh->needsUpdate();
 
-			Engine * engine = m_scene.getEngine();
-			engine->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [aabbSubmesh]( RenderDevice const & device
-					, QueueData const & queueData )
+			castor3d::Engine * engine = m_scene.getEngine();
+			engine->postEvent( castor3d::makeGpuFunctorEvent( castor3d::EventType::ePreRender
+				, [aabbSubmesh]( castor3d::RenderDevice const & device
+					, castor3d::QueueData const & queueData )
 				{
 					aabbSubmesh->update();
 				} ) );

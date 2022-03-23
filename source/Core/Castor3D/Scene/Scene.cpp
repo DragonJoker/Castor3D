@@ -42,47 +42,20 @@ namespace castor3d
 {
 	//*************************************************************************************************
 
-	namespace
+	std::string print( castor::Point3f const & obj )
 	{
-		template< typename ObjType, typename ViewType >
-		bool writeView( ViewType const & view
-			, castor::String const & elemsName
-			, castor::String const & tabs
-			, castor::TextFile & file )
-		{
-			bool result = true;
+		std::stringstream stream;
+		stream << std::setprecision( 4 ) << obj->x
+			<< ", " << std::setprecision( 4 ) << obj->y
+			<< ", " << std::setprecision( 4 ) << obj->z;
+		return stream.str();
+	}
 
-			if ( !view.isEmpty() )
-			{
-				result = file.writeText( cuT( "\n" ) + tabs + cuT( "\t// " ) + elemsName + cuT( "\n" ) ) > 0;
-				log::info << cuT( "Scene::write - " ) << elemsName << std::endl;
-
-				for ( auto const & name : view )
-				{
-					if ( result )
-					{
-						auto elem = view.find( name );
-						result = typename ObjType::TextWriter{ tabs + cuT( "\t" ) }( *elem, file );
-					}
-				}
-			}
-
-			return result;
-		}
-
-		std::ostream & operator<<( std::ostream & stream, castor::Point3f const & obj )
-		{
-			stream << std::setprecision( 4 ) << obj->x
-				<< ", " << std::setprecision( 4 ) << obj->y
-				<< ", " << std::setprecision( 4 ) << obj->z;
-			return stream;
-		}
-
-		std::ostream & operator<<( std::ostream & stream, castor::BoundingBox const & obj )
-		{
-			stream << "min: " << obj.getMin() << ", max: " << obj.getMax();
-			return stream;
-		}
+	std::string print( castor::BoundingBox const & obj )
+	{
+		std::stringstream stream;
+		stream << "min: " << print( obj.getMin() ) << ", max: " << print( obj.getMax() );
+		return stream.str();
 	}
 
 	//*************************************************************************************************
@@ -319,7 +292,7 @@ namespace castor3d
 		m_background->initialise( device );
 		doUpdateLightsDependent();
 		doUpdateBoundingBox();
-		log::info << "Initialised scene [" << getName() << "], AABB: " << m_boundingBox << std::endl;
+		log::info << "Initialised scene [" << getName() << "], AABB: " << print( m_boundingBox ) << std::endl;
 		m_initialised = true;
 	}
 

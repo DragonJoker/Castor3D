@@ -14,10 +14,10 @@
 
 namespace castor3d
 {
-	namespace
+	namespace cullfrust
 	{
 		template< typename NodeT >
-		void cullNodes( Frustum const & frustum
+		static void cullNodes( Frustum const & frustum
 			, SceneRenderNodes::DescriptorNodesPoolsT< NodeT > const & all
 			, SceneCuller::NodeArrayT< NodeT > & culled )
 		{
@@ -65,13 +65,13 @@ namespace castor3d
 	{
 		if ( m_camera )
 		{
-			cullNodes( getCamera().getFrustum()
+			cullfrust::cullNodes( getCamera().getFrustum()
 				, getScene().getRenderNodes().getSubmeshNodes()
 				, m_culledSubmeshes );
 		}
 		else
 		{
-			cullNodes( *m_frustum
+			cullfrust::cullNodes( *m_frustum
 				, getScene().getRenderNodes().getSubmeshNodes()
 				, m_culledSubmeshes );
 		}
@@ -81,13 +81,13 @@ namespace castor3d
 	{
 		if ( m_camera )
 		{
-			cullNodes( getCamera().getFrustum()
+			cullfrust::cullNodes( getCamera().getFrustum()
 				, getScene().getRenderNodes().getBillboardNodes()
 				, m_culledBillboards );
 		}
 		else
 		{
-			cullNodes( *m_frustum
+			cullfrust::cullNodes( *m_frustum
 				, getScene().getRenderNodes().getBillboardNodes()
 				, m_culledBillboards );
 		}

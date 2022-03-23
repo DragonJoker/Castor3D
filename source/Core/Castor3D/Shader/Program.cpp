@@ -6,28 +6,26 @@
 
 CU_ImplementCUSmartPtr( castor3d, ShaderProgram )
 
-using namespace castor;
-
 namespace castor3d
 {
-	namespace
+	namespace shdprog
 	{
 		template< typename CharType, typename PrefixType >
 		inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & stream
-			, format::BasePrefixer< CharType, PrefixType > const & prefix )
+			, castor::format::BasePrefixer< CharType, PrefixType > const & prefix )
 		{
-			auto * sbuf = dynamic_cast< format::BasicPrefixBuffer< format::BasePrefixer< CharType, PrefixType >, CharType > * >( stream.rdbuf() );
+			auto * sbuf = dynamic_cast< castor::format::BasicPrefixBuffer< castor::format::BasePrefixer< CharType, PrefixType >, CharType > * >( stream.rdbuf() );
 
 			if ( !sbuf )
 			{
-				format::installPrefixBuffer< PrefixType >( stream );
-				stream.register_callback( format::callback< PrefixType, CharType >, 0 );
+				castor::format::installPrefixBuffer< PrefixType >( stream );
+				stream.register_callback( castor::format::callback< PrefixType, CharType >, 0 );
 			}
 
 			return stream;
 		}
 
-		bool doAddModule( VkShaderStageFlagBits stage
+		static bool doAddModule( VkShaderStageFlagBits stage
 			, std::string const & name
 			, std::map< VkShaderStageFlagBits, ShaderModule > & modules )
 		{
@@ -42,7 +40,7 @@ namespace castor3d
 			return added;
 		}
 
-		ashes::PipelineShaderStageCreateInfo loadShader( RenderDevice const & device
+		static ashes::PipelineShaderStageCreateInfo loadShader( RenderDevice const & device
 			, ShaderProgram::CompiledShader const & compiled
 			, VkShaderStageFlagBits stage )
 		{
@@ -57,7 +55,7 @@ namespace castor3d
 
 	ShaderProgram::ShaderProgram( castor::String const & name
 		, RenderSystem & renderSystem )
-		: Named( name )
+		: castor::Named( name )
 		, OwnedBy< RenderSystem >( renderSystem )
 	{
 	}
@@ -66,13 +64,13 @@ namespace castor3d
 	{
 	}
 
-	void ShaderProgram::setFile( VkShaderStageFlagBits target, Path const & pathFile )
+	void ShaderProgram::setFile( VkShaderStageFlagBits target, castor::Path const & pathFile )
 	{
 		m_files[target] = pathFile;
-		TextFile file{ pathFile, File::OpenMode::eRead };
+		castor::TextFile file{ pathFile, castor::File::OpenMode::eRead };
 		castor::String source;
 		file.copyToString( source );
-		auto added = doAddModule( target, getName(), m_modules );
+		auto added = shdprog::doAddModule( target, getName(), m_modules );
 
 		if ( added )
 		{
@@ -82,13 +80,13 @@ namespace castor3d
 			m_compiled.emplace( target
 				, CompiledShader{ getName()
 				, renderSystem.compileShader( it->second ) } );
-			m_states.push_back( loadShader( renderSystem.getRenderDevice()
+			m_states.push_back( shdprog::loadShader( renderSystem.getRenderDevice()
 				, m_compiled[target]
 				, target ) );
 		}
 	}
 
-	Path ShaderProgram::getFile( VkShaderStageFlagBits target )const
+	castor::Path ShaderProgram::getFile( VkShaderStageFlagBits target )const
 	{
 		auto it = m_files.find( target );
 		CU_Require( it != m_files.end() );
@@ -102,10 +100,10 @@ namespace castor3d
 			&& !it->second.empty();
 	}
 
-	void ShaderProgram::setSource( VkShaderStageFlagBits target, String const & source )
+	void ShaderProgram::setSource( VkShaderStageFlagBits target, castor::String const & source )
 	{
 		m_files[target].clear();
-		auto added = doAddModule( target, getName(), m_modules );
+		auto added = shdprog::doAddModule( target, getName(), m_modules );
 
 		if ( added )
 		{
@@ -115,7 +113,7 @@ namespace castor3d
 			m_compiled.emplace( target
 				, CompiledShader{ getName()
 					, renderSystem.compileShader( it->second ) } );
-			m_states.push_back( loadShader( renderSystem.getRenderDevice()
+			m_states.push_back( shdprog::loadShader( renderSystem.getRenderDevice()
 				, m_compiled[target]
 				, target ) );
 		}
@@ -124,7 +122,7 @@ namespace castor3d
 	void ShaderProgram::setSource( VkShaderStageFlagBits target, ShaderPtr shader )
 	{
 		m_files[target].clear();
-		auto added = doAddModule( target, getName(), m_modules );
+		auto added = shdprog::doAddModule( target, getName(), m_modules );
 
 		if ( added )
 		{
@@ -134,7 +132,7 @@ namespace castor3d
 			m_compiled.emplace( target
 				, CompiledShader{ getName()
 					, renderSystem.compileShader( target, getName(), *it->second.shader ) } );
-			m_states.push_back( loadShader( renderSystem.getRenderDevice()
+			m_states.push_back( shdprog::loadShader( renderSystem.getRenderDevice()
 				, m_compiled[target]
 				, target ) );
 		}

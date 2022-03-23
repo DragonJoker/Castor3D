@@ -5,8 +5,6 @@
 
 #include <ShaderWriter/Source.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
 	ShaderPtr MeshLightPass::getVertexShaderSource()

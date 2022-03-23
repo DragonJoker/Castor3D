@@ -8,12 +8,10 @@
 
 #include <wx/propgrid/advprops.h>
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
-	SkeletonAnimationTreeItemProperty::SkeletonAnimationTreeItemProperty( bool editable, SkeletonAnimation & animation )
+	SkeletonAnimationTreeItemProperty::SkeletonAnimationTreeItemProperty( bool editable
+		, castor3d::SkeletonAnimation & animation )
 		: TreeItemProperty( animation.getEngine(), editable )
 		, m_animation( animation )
 	{

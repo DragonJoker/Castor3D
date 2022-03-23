@@ -26,9 +26,9 @@ namespace ocean_fft
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace procfft
 	{
-		castor::String getName( VkFFTResult result )
+		static castor::String getName( VkFFTResult result )
 		{
 			switch ( result )
 			{
@@ -209,7 +209,7 @@ namespace ocean_fft
 			}
 		}
 
-		castor::String getErrorText( castor::xchar const * action
+		static castor::String getErrorText( castor::xchar const * action
 			, VkFFTResult result )
 		{
 			auto stream = castor::makeStringStream();
@@ -217,7 +217,7 @@ namespace ocean_fft
 			return stream.str();
 		}
 
-		VkFFTApplication createApp( FFTConfig const & config
+		static VkFFTApplication createApp( FFTConfig const & config
 			, castor3d::RenderDevice const & device
 			, VkExtent2D const & extent
 			, VkDeviceSize & inBufferSize
@@ -266,7 +266,7 @@ namespace ocean_fft
 			return true;
 		}
 
-		castor3d::log::error << getErrorText( action, result ) << std::endl;
+		castor3d::log::error << procfft::getErrorText( action, result ) << std::endl;
 		return false;
 	}
 
@@ -275,7 +275,7 @@ namespace ocean_fft
 	{
 		if ( !checkFFTResult( action, result ) )
 		{
-			CU_Exception( getErrorText( action, result ) );
+			CU_Exception( procfft::getErrorText( action, result ) );
 		}
 	}
 
@@ -320,7 +320,7 @@ namespace ocean_fft
 		, m_vkInput{ input }
 		, m_outBufferSize{ output[0]->getSize() }
 		, m_vkOutput{ *output[0], *output[1] }
-		, m_app{ createApp( config
+		, m_app{ procfft::createApp( config
 			, device
 			, m_extent
 			, m_inBufferSize

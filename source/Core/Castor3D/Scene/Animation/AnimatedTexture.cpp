@@ -10,27 +10,25 @@
 #include "Castor3D/Scene/Animation/Texture/TextureAnimationInstance.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
-	namespace
+	namespace anmtex
 	{
-		castor::String writeMask( String const & name, uint32_t mask )
+		static castor::String writeMask( castor::String const & name, uint32_t mask )
 		{
 			auto stream = castor::makeStringStream();
 			stream << name << cuT( "0x" ) << std::hex << std::setw( 8u ) << std::setfill( cuT( '0' ) ) << mask;
 			return stream.str();
 		}
 
-		castor::String write( String const & name, float v )
+		static castor::String write( castor::String const & name, float v )
 		{
 			auto stream = castor::makeStringStream();
 			stream << name << std::setprecision( 2 ) << std::fixed << v;
 			return stream.str();
 		}
 
-		castor::String getTexName( TextureSourceInfo const & sourceInfo
+		static castor::String getTexName( TextureSourceInfo const & sourceInfo
 			, TextureConfiguration const & configuration )
 		{
 			castor::String result{ sourceInfo.relative() };
@@ -59,12 +57,12 @@ namespace castor3d
 		: AnimatedObject{ AnimationType::eTexture
 			, pass.getOwner()->getName()
 				+ cuT( "_" ) + castor::string::toString( pass.getId() )
-				+ cuT( "_" ) + getTexName( sourceInfo, config ) }
+				+ cuT( "_" ) + anmtex::getTexName( sourceInfo, config ) }
 		, m_pass{ pass }
 	{
 	}
 
-	void AnimatedTexture::update( Milliseconds const & elpased )
+	void AnimatedTexture::update( castor::Milliseconds const & elpased )
 	{
 		if ( m_playingAnimation )
 		{
@@ -100,7 +98,7 @@ namespace castor3d
 		}
 	}
 
-	void AnimatedTexture::doAddAnimation( String const & name )
+	void AnimatedTexture::doAddAnimation( castor::String const & name )
 	{
 		auto it = m_animations.find( name );
 

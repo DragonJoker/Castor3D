@@ -6,8 +6,6 @@
 
 #include <numeric>
 
-using namespace castor;
-
 namespace castor3d
 {
 	BinaryChunk::BinaryChunk()
@@ -27,7 +25,7 @@ namespace castor3d
 		uint32_t size = std::accumulate( m_addedData.begin()
 			, m_addedData.end()
 			, uint32_t{}
-			, [&]( uint32_t p_value, ByteArray const & p_array )
+			, [&]( uint32_t p_value, castor::ByteArray const & p_array )
 			{
 				return p_value + uint32_t( p_array.size() );
 			} );
@@ -43,7 +41,7 @@ namespace castor3d
 
 	void BinaryChunk::add( uint8_t * p_data, uint32_t p_size )
 	{
-		ByteArray buffer( p_data, p_data + p_size );
+		castor::ByteArray buffer( p_data, p_data + p_size );
 		m_addedData.push_back( buffer );
 	}
 
@@ -96,14 +94,14 @@ namespace castor3d
 	bool BinaryChunk::addSubChunk( BinaryChunk const & p_subchunk )
 	{
 		uint32_t size = uint32_t( p_subchunk.m_data.size() );
-		ByteArray buffer;
+		castor::ByteArray buffer;
 		buffer.reserve( sizeof( uint32_t ) + sizeof( ChunkType ) + size );
 		// write subchunk type
-		auto type = systemEndianToBigEndian( p_subchunk.m_type );
+		auto type = castor::systemEndianToBigEndian( p_subchunk.m_type );
 		auto data = reinterpret_cast< uint8_t const * >( &type );
 		buffer.insert( buffer.end(), data, data + sizeof( ChunkType ) );
 		// The its size
-		systemEndianToBigEndian( size );
+		castor::systemEndianToBigEndian( size );
 		data = reinterpret_cast< uint8_t * >( &size );
 		buffer.insert( buffer.end(), data, data + sizeof( uint32_t ) );
 		// And eventually its data
@@ -115,13 +113,13 @@ namespace castor3d
 
 	bool BinaryChunk::write( castor::BinaryFile & p_file )
 	{
-		auto type = systemEndianToBigEndian( getChunkType() );
+		auto type = castor::systemEndianToBigEndian( getChunkType() );
 		auto result = p_file.write( type ) == sizeof( ChunkType );
 
 		if ( result )
 		{
 			finalise();
-			auto size = systemEndianToBigEndian( getDataSize() );
+			auto size = castor::systemEndianToBigEndian( getDataSize() );
 			result = p_file.write( size ) == sizeof( uint32_t );
 		}
 
@@ -137,12 +135,12 @@ namespace castor3d
 	{
 		uint32_t size = 0;
 		bool result = p_file.read( m_type ) == sizeof( ChunkType );
-		bigEndianToSystemEndian( m_type );
+		castor::bigEndianToSystemEndian( m_type );
 
 		if ( result )
 		{
 			result = p_file.read( size ) == sizeof( uint32_t );
-			bigEndianToSystemEndian( size );
+			castor::bigEndianToSystemEndian( size );
 		}
 
 		if ( result )

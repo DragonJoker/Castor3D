@@ -32,7 +32,7 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace lpvpropvol
 	{
 		class LpvClear
 			: public crg::RunnablePass
@@ -72,7 +72,7 @@ namespace castor3d
 			}
 		};
 
-		crg::ImageViewId createArrayView( crg::FrameGraph & graph
+		static crg::ImageViewId createArrayView( crg::FrameGraph & graph
 			, crg::ImageViewId cubeArrayView )
 		{
 			auto data = *cubeArrayView.data;
@@ -80,7 +80,7 @@ namespace castor3d
 			return graph.createView( data );
 		}
 
-		std::vector< LpvLightConfigUbo > createUbos( RenderDevice const & device
+		static std::vector< LpvLightConfigUbo > createUbos( RenderDevice const & device
 			, LightType lightType )
 		{
 			std::vector< LpvLightConfigUbo > result;
@@ -113,7 +113,7 @@ namespace castor3d
 		, LpvGridConfigUbo const & lpvGridConfigUbo
 		, LightVolumePassResult const & injection
 		, Texture * geometry )
-		: lpvLightConfigUbos{ createUbos( device, lightType ) }
+		: lpvLightConfigUbos{ lpvpropvol::createUbos( device, lightType ) }
 		, lastPass{ &previousPass }
 		, lightInjectionPassDescs{ doCreateInjectionPasses( graph
 			, device
@@ -285,9 +285,9 @@ namespace castor3d
 		else
 		{
 			std::vector< crg::ImageViewId > arrayViews;
-			arrayViews.push_back( createArrayView( graph, smResult[SmTexture::eNormalLinear].sampledViewId ) );
-			arrayViews.push_back( createArrayView( graph, smResult[SmTexture::ePosition].sampledViewId ) );
-			arrayViews.push_back( createArrayView( graph, smResult[SmTexture::eFlux].sampledViewId ) );
+			arrayViews.push_back( lpvpropvol::createArrayView( graph, smResult[SmTexture::eNormalLinear].sampledViewId ) );
+			arrayViews.push_back( lpvpropvol::createArrayView( graph, smResult[SmTexture::ePosition].sampledViewId ) );
+			arrayViews.push_back( lpvpropvol::createArrayView( graph, smResult[SmTexture::eFlux].sampledViewId ) );
 
 			for ( uint32_t faceIndex = 0u; faceIndex < 6u; ++faceIndex )
 			{
@@ -426,8 +426,8 @@ namespace castor3d
 		else
 		{
 			std::vector< crg::ImageViewId > arrayViews;
-			arrayViews.push_back( createArrayView( graph, smResult[SmTexture::eNormalLinear].sampledViewId ) );
-			arrayViews.push_back( createArrayView( graph, smResult[SmTexture::ePosition].sampledViewId ) );
+			arrayViews.push_back( lpvpropvol::createArrayView( graph, smResult[SmTexture::eNormalLinear].sampledViewId ) );
+			arrayViews.push_back( lpvpropvol::createArrayView( graph, smResult[SmTexture::ePosition].sampledViewId ) );
 
 			for ( uint32_t faceIndex = 0u; faceIndex < 6u; ++faceIndex )
 			{
@@ -661,7 +661,7 @@ namespace castor3d
 			for ( auto i = 0u; i < uint32_t( LpvTexture::eCount ); ++i )
 			{
 				auto tex = LpvTexture( i );
-				visitor.visit( "LPV Injection " + castor3d::getName( tex )
+				visitor.visit( "LPV Injection " + getTexName( tex )
 					, m_injection[tex]
 					, m_graph.getFinalLayoutState( m_injection[tex].wholeViewId ).layout
 					, TextureFactors::tex3D( &m_gridsSize ) );
@@ -682,7 +682,7 @@ namespace castor3d
 				for ( auto i = 0u; i < uint32_t( LpvTexture::eCount ); ++i )
 				{
 					auto tex = LpvTexture( i );
-					visitor.visit( "Layered LPV Propagation" + std::to_string( level ) + " " + castor3d::getName( tex )
+					visitor.visit( "Layered LPV Propagation" + std::to_string( level ) + " " + getTexName( tex )
 						, propagate[tex]
 						, m_graph.getFinalLayoutState( propagate[tex].wholeViewId ).layout
 						, TextureFactors::tex3D( &m_gridsSize ) );
@@ -700,7 +700,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				return std::make_unique< LpvClear >( pass
+				return std::make_unique< lpvpropvol::LpvClear >( pass
 					, context
 					, graph );
 			} );

@@ -17,15 +17,12 @@
 
 #include <wx/propgrid/advprops.h>
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
 	void appendRenderTarget( wxTreeCtrlBase * list
 		, bool editable
 		, wxTreeItemId id
-		, RenderTarget & target )
+		, castor3d::RenderTarget & target )
 	{
 		auto targetId = list->AppendItem( id
 			, make_wxString( target.getName() )
@@ -67,7 +64,7 @@ namespace GuiCommon
 	}
 
 	RenderTargetTreeItemProperty::RenderTargetTreeItemProperty( bool editable
-		, RenderTarget & target )
+		, castor3d::RenderTarget & target )
 		: TreeItemProperty( target.getEngine(), editable )
 		, m_target( target )
 	{

@@ -4,10 +4,10 @@
 #include "Castor3D/Render/Technique/TechniqueModule.hpp"
 #include "Castor3D/Text/TextPass.hpp"
 
-using namespace castor3d;
-
 namespace castor
 {
+	using namespace castor3d;
+
 	TextWriter< Material >::TextWriter( String const & tabs
 		, Path const & folder
 		, String const & subfolder )

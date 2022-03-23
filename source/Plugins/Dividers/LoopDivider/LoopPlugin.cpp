@@ -3,9 +3,6 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Model/Mesh/MeshFactory.hpp>
 
-using namespace castor;
-using namespace Loop;
-
 #ifndef CU_PlatformWindows
 #	define C3D_Loop_API
 #else
@@ -18,34 +15,35 @@ using namespace Loop;
 
 extern "C"
 {
-	C3D_Loop_API void getRequiredVersion( castor3d::Version * p_version );
-	C3D_Loop_API void getType( castor3d::PluginType * p_type );
-	C3D_Loop_API void getName( char const ** p_name );
-	C3D_Loop_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin );
+	C3D_Loop_API void getRequiredVersion( castor3d::Version * version );
+	C3D_Loop_API void getType( castor3d::PluginType * type );
+	C3D_Loop_API void getName( char const ** name );
+	C3D_Loop_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin );
 	C3D_Loop_API void OnUnload( castor3d::Engine * engine );
 
-	C3D_Loop_API void getRequiredVersion( castor3d::Version * p_version )
+	C3D_Loop_API void getRequiredVersion( castor3d::Version * version )
 	{
-		*p_version = castor3d::Version();
+		*version = castor3d::Version();
 	}
 
-	C3D_Loop_API void getType( castor3d::PluginType * p_type )
+	C3D_Loop_API void getType( castor3d::PluginType * type )
 	{
-		*p_type = castor3d::PluginType::eDivider;
+		*type = castor3d::PluginType::eDivider;
 	}
 
-	C3D_Loop_API void getName( char const ** p_name )
+	C3D_Loop_API void getName( char const ** name )
 	{
-		*p_name = Subdivider::Name.c_str();
+		*name = Loop::Subdivider::Name.c_str();
 	}
 
-	C3D_Loop_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
+	C3D_Loop_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
 	{
-		engine->getSubdividerFactory().registerType( Subdivider::Type, &Subdivider::create );
+		engine->getSubdividerFactory().registerType( Loop::Subdivider::Type
+			, &Loop::Subdivider::create );
 	}
 
 	C3D_Loop_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->getSubdividerFactory().unregisterType( Subdivider::Type );
+		engine->getSubdividerFactory().unregisterType( Loop::Subdivider::Type );
 	}
 }

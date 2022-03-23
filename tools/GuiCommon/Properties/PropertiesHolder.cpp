@@ -2,9 +2,6 @@
 
 #include "GuiCommon/Aui/AuiDockArt.hpp"
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
 	PropertiesHolder::PropertiesHolder( wxWindow * parent

@@ -26,13 +26,18 @@
 
 #include <numeric>
 
-using namespace castor;
-
 namespace smaa
 {
-	namespace
+	namespace bwcalc
 	{
-		std::unique_ptr< ast::Shader > doBlendingWeightCalculationVP()
+		enum Idx : uint32_t
+		{
+			AreaTexIdx = SmaaUboIdx + 1,
+			SearchTexIdx,
+			EdgesTexIdx,
+		};
+
+		static std::unique_ptr< ast::Shader > doBlendingWeightCalculationVP()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -83,14 +88,7 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		enum Idx : uint32_t
-		{
-			AreaTexIdx = SmaaUboIdx + 1,
-			SearchTexIdx,
-			EdgesTexIdx,
-		};
-
-		std::unique_ptr< ast::Shader > doBlendingWeightCalculationFP()
+		static std::unique_ptr< ast::Shader > doBlendingWeightCalculationFP()
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -808,7 +806,7 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		crg::ImageViewId createImage( crg::FramePassGroup & graph
+		static crg::ImageViewId createImage( crg::FramePassGroup & graph
 			, castor3d::RenderDevice const & device
 			, std::string const & name
 			, VkFormat format
@@ -867,13 +865,13 @@ namespace smaa
 		: m_device{ device }
 		, m_graph{ graph }
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
-		, m_areaView{ createImage( m_graph
+		, m_areaView{ bwcalc::createImage( m_graph
 			, m_device
 			, "SMBWArea"
 			, VK_FORMAT_R8G8_UNORM
 			, { AREATEX_WIDTH, AREATEX_HEIGHT, 1u }
 			, castor::makeArrayView( std::begin( areaTexBytes ), std::end( areaTexBytes ) ) ) }
-		, m_searchView{ createImage( m_graph
+		, m_searchView{ bwcalc::createImage( m_graph
 			, m_device
 			, "SMBWSearch"
 			, VK_FORMAT_R8_UNORM
@@ -890,8 +888,8 @@ namespace smaa
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaBlendingWeight", doBlendingWeightCalculationVP() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaBlendingWeight", doBlendingWeightCalculationFP() }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaBlendingWeight", bwcalc::doBlendingWeightCalculationVP() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaBlendingWeight", bwcalc::doBlendingWeightCalculationFP() }
 		, m_stages{ makeShaderState( m_device, m_vertexShader )
 			, makeShaderState( m_device, m_pixelShader ) }
 		, m_pass{ renderTarget.getGraph().createPass( "BlendingWeight"
@@ -927,14 +925,14 @@ namespace smaa
 		ubo.createPassBinding( m_pass
 			, SmaaUboIdx );
 		m_pass.addSampledView( m_areaView
-			, AreaTexIdx
+			, bwcalc::AreaTexIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, linearSampler );
 		m_pass.addSampledView( m_searchView
-			, SearchTexIdx
+			, bwcalc::SearchTexIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		m_pass.addSampledView( edgeDetectionView
-			, EdgesTexIdx
+			, bwcalc::EdgesTexIdx
 			, {}
 			, linearSampler );
 		m_pass.addInputStencilView( stencilView );

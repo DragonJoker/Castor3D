@@ -4,15 +4,15 @@
 #include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
 
-using namespace castor;
-using namespace castor3d;
-
 namespace GuiCommon
 {
-	typedef enum
+	namespace tiprop
 	{
-		eID_DELETE = 1
-	}	eID;
+		typedef enum
+		{
+			eID_DELETE = 1
+		}	eID;
+	}
 	
 	TreeItemProperty::PropertyChangeHandler const TreeItemProperty::EmptyHandler = []( wxVariant const & ){};
 
@@ -55,7 +55,7 @@ namespace GuiCommon
 
 			if ( m_engine )
 			{
-				m_engine->postEvent( makeCpuFunctorEvent( EventType::ePreRender
+				m_engine->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePreRender
 					, [value, handler]()
 					{
 						handler( value );
@@ -75,7 +75,7 @@ namespace GuiCommon
 		if ( m_engine )
 		{
 			auto & cache = m_engine->getMaterialCache();
-			using LockType = std::unique_lock< MaterialCache >;
+			using LockType = std::unique_lock< castor3d::MaterialCache >;
 			LockType lock{ castor::makeUniqueLock( cache ) };
 
 			for ( auto & pair : cache )
@@ -92,7 +92,7 @@ namespace GuiCommon
 		if ( m_editable )
 		{
 			m_menu = new wxMenu();
-			m_menu->Append( eID_DELETE, _( "Delete" ) + wxT( "\tDEL" ) );
+			m_menu->Append( tiprop::eID_DELETE, _( "Delete" ) + wxT( "\tDEL" ) );
 			doCreateTreeItemMenu();
 		}
 	}

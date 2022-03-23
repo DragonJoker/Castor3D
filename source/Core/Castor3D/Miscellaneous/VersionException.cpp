@@ -2,11 +2,13 @@
 
 #include "Castor3D/Miscellaneous/Logger.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
-	VersionException::VersionException( Version const & given, Version const & expected, char const * strFile, char const * strFunction, uint32_t uiLine )
+	VersionException::VersionException( Version const & given
+		, Version const & expected
+		, char const * strFile
+		, char const * strFunction
+		, uint32_t uiLine )
 		:	Exception( "", strFile, strFunction, uiLine )
 	{
 		std::stringstream stream;

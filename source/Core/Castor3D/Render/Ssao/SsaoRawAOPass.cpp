@@ -49,7 +49,7 @@ CU_ImplementCUSmartPtr( castor3d, SsaoRawAOPass )
 
 namespace castor3d
 {
-	namespace
+	namespace ssaoraw
 	{
 		enum Idx
 		{
@@ -59,7 +59,7 @@ namespace castor3d
 			NormalMapIdx,
 		};
 
-		ShaderPtr getVertexProgram()
+		static ShaderPtr getVertexProgram()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -75,7 +75,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderPtr getPixelProgram( bool useNormalsBuffer )
+		static ShaderPtr getPixelProgram( bool useNormalsBuffer )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -495,7 +495,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		Texture doCreateTexture( crg::ResourceHandler & handler
+		static Texture doCreateTexture( crg::ResourceHandler & handler
 			, RenderDevice const & device
 			, castor::String const & name
 			, VkFormat format
@@ -514,7 +514,7 @@ namespace castor3d
 					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) };
 		}
 
-		crg::rq::Config getConfig( VkExtent2D const & renderSize
+		static crg::rq::Config getConfig( VkExtent2D const & renderSize
 			, SsaoConfig const & ssaoConfig
 			, uint32_t const & passIndex
 			, ashes::PipelineShaderStageCreateInfoArray const & stages0
@@ -558,10 +558,10 @@ namespace castor3d
 		, castor::String const & prefix )
 		: vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
 			, prefix + "SsaoRawAO" + ( useNormalsBuffer ? std::string{ "Normals" } : std::string{} )
-			, getVertexProgram() }
+			, ssaoraw::getVertexProgram() }
 		, pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT
 			, prefix + "SsaoRawAO" + ( useNormalsBuffer ? std::string{ "Normals" } : std::string{} )
-			, getPixelProgram( useNormalsBuffer ) }
+			, ssaoraw::getPixelProgram( useNormalsBuffer ) }
 		, stages{ makeShaderState( device, vertexShader )
 			, makeShaderState( device, pixelShader ) }
 	{
@@ -586,13 +586,13 @@ namespace castor3d
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_size{ size }
-		, m_result{ doCreateTexture( m_graph.getHandler()
+		, m_result{ ssaoraw::doCreateTexture( m_graph.getHandler()
 			, m_device
 			, m_graph.getName() + "SsaoRawAOResult"
 			, device.selectSmallestFormatRSFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
 				| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT )
 			, m_size ) }
-		, m_bentNormals{ doCreateTexture( m_graph.getHandler()
+		, m_bentNormals{ ssaoraw::doCreateTexture( m_graph.getHandler()
 			, m_device
 			, m_graph.getName() + "BentNormals"
 			, device.selectSmallestFormatRGBSFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
@@ -611,7 +611,7 @@ namespace castor3d
 				auto result = std::make_unique< RenderQuad >( pass
 					, context
 					, graph
-					, getConfig( m_size
+					, ssaoraw::getConfig( m_size
 						, m_ssaoConfig
 						, passIndex
 						, m_programs[0].stages
@@ -623,10 +623,10 @@ namespace castor3d
 			} );
 		m_lastPass = &pass;
 		pass.addDependency( previousPass );
-		m_ssaoConfigUbo.createPassBinding( pass, SsaoCfgUboIdx );
-		m_gpInfoUbo.createPassBinding( pass, GpInfoUboIdx );
-		pass.addSampledView( linearisedDepthBuffer.sampledViewId, DepthMapIdx );
-		pass.addSampledView( normals.sampledViewId, NormalMapIdx );
+		m_ssaoConfigUbo.createPassBinding( pass, ssaoraw::SsaoCfgUboIdx );
+		m_gpInfoUbo.createPassBinding( pass, ssaoraw::GpInfoUboIdx );
+		pass.addSampledView( linearisedDepthBuffer.sampledViewId, ssaoraw::DepthMapIdx );
+		pass.addSampledView( normals.sampledViewId, ssaoraw::NormalMapIdx );
 		pass.addOutputColourView( m_result.targetViewId, opaqueWhiteClearColor );
 		pass.addOutputColourView( m_bentNormals.targetViewId, transparentBlackClearColor );
 		m_result.create();

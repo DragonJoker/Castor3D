@@ -57,9 +57,6 @@
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
 	SceneObjectsList::SceneObjectsList( PropertiesContainer * propertiesHolder
@@ -147,7 +144,7 @@ namespace GuiCommon
 		AssignImageList( imageList );
 	}
 
-	void SceneObjectsList::loadScene( Engine * engine
+	void SceneObjectsList::loadScene( castor3d::Engine * engine
 		, castor3d::RenderWindow & window
 		, castor3d::SceneRPtr scene )
 	{
@@ -177,7 +174,7 @@ namespace GuiCommon
 				, _( "Render Targets" )
 				, eBMP_RENDER_TARGET
 				, eBMP_RENDER_TARGET_SEL );
-			scene->getEngine()->getRenderTargetCache().forEach( [this, catId]( RenderTarget & elem )
+			scene->getEngine()->getRenderTargetCache().forEach( [this, catId]( castor3d::RenderTarget & elem )
 				{
 					appendRenderTarget( this
 						, m_propertiesHolder->isEditable()
@@ -189,7 +186,7 @@ namespace GuiCommon
 				, _( "Cameras" )
 				, eBMP_CAMERA
 				, eBMP_CAMERA_SEL );
-			scene->getCameraCache().forEach( [this, catId]( Camera & elem )
+			scene->getCameraCache().forEach( [this, catId]( castor3d::Camera & elem )
 				{
 					doAddCamera( catId, elem );
 				} );
@@ -198,7 +195,7 @@ namespace GuiCommon
 				, _( "Light Sources" )
 				, eBMP_DIRECTIONAL_LIGHT
 				, eBMP_DIRECTIONAL_LIGHT_SEL );
-			scene->getLightCache().forEach( [this, catId]( Light & elem )
+			scene->getLightCache().forEach( [this, catId]( castor3d::Light & elem )
 				{
 					doAddLight( catId, elem );
 				} );
@@ -207,7 +204,7 @@ namespace GuiCommon
 				, _( "Scene Nodes" )
 				, eBMP_NODE
 				, eBMP_NODE_SEL );
-			SceneNodeSPtr rootNode = scene->getRootNode();
+			castor3d::SceneNodeSPtr rootNode = scene->getRootNode();
 			if ( rootNode )
 			{
 				doAddNode( catId, rootNode );
@@ -231,7 +228,7 @@ namespace GuiCommon
 				, _( "Animated Object Groups" )
 				, eBMP_ANIMATED_OBJECTGROUP
 				, eBMP_ANIMATED_OBJECTGROUP_SEL );
-			scene->getAnimatedObjectGroupCache().forEach( [this, catId]( AnimatedObjectGroup & elem )
+			scene->getAnimatedObjectGroupCache().forEach( [this, catId]( castor3d::AnimatedObjectGroup & elem )
 				{
 					doAddAnimatedObjectGroup( AppendItem( catId
 							, elem.getName()
@@ -254,7 +251,7 @@ namespace GuiCommon
 				{
 					switch ( overlay->getType() )
 					{
-					case OverlayType::ePanel:
+					case castor3d::OverlayType::ePanel:
 						doAddOverlay( AppendItem( catId
 								, overlay->getOverlayName()
 								, eBMP_PANEL_OVERLAY
@@ -262,7 +259,7 @@ namespace GuiCommon
 								, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay ) )
 							, *overlay );
 						break;
-					case OverlayType::eBorderPanel:
+					case castor3d::OverlayType::eBorderPanel:
 						doAddOverlay( AppendItem( catId
 								, overlay->getOverlayName()
 								, eBMP_BORDER_PANEL_OVERLAY
@@ -270,7 +267,7 @@ namespace GuiCommon
 								, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay ) )
 							, *overlay );
 						break;
-					case OverlayType::eText:
+					case castor3d::OverlayType::eText:
 						doAddOverlay( AppendItem( catId
 								, overlay->getOverlayName()
 								, eBMP_TEXT_OVERLAY
@@ -313,8 +310,8 @@ namespace GuiCommon
 		}
 	}
 
-	void SceneObjectsList::doAddSubmesh( GeometrySPtr geometry
-		, SubmeshSPtr submesh
+	void SceneObjectsList::doAddSubmesh( castor3d::GeometrySPtr geometry
+		, castor3d::SubmeshSPtr submesh
 		, wxTreeItemId id )
 	{
 		auto itg = m_ids.insert( { geometry, SubmeshIdMap{} } ).first;
@@ -322,7 +319,7 @@ namespace GuiCommon
 	}
 
 	void SceneObjectsList::doAddGeometry( wxTreeItemId id
-		, Geometry & geometry )
+		, castor3d::Geometry & geometry )
 	{
 		wxTreeItemId geometryId = AppendItem( id
 			, geometry.getName()
@@ -344,7 +341,7 @@ namespace GuiCommon
 					, eBMP_SUBMESH
 					, eBMP_SUBMESH_SEL
 					, new SubmeshTreeItemProperty( m_propertiesHolder->isEditable(), geometry, *submesh ) );
-				doAddSubmesh( std::static_pointer_cast< Geometry >( geometry.shared_from_this() )
+				doAddSubmesh( std::static_pointer_cast< castor3d::Geometry >( geometry.shared_from_this() )
 					, submesh
 					, idSubmesh );
 			}
@@ -382,12 +379,12 @@ namespace GuiCommon
 				, eBMP_ANIMATION
 				, eBMP_ANIMATION_SEL
 				, new SkeletonAnimationTreeItemProperty( m_propertiesHolder->isEditable()
-					, static_cast< SkeletonAnimation & >( *anim.second ) ) );
+					, static_cast< castor3d::SkeletonAnimation & >( *anim.second ) ) );
 		}
 	}
 
 	void SceneObjectsList::doAddCamera( wxTreeItemId id
-		, Camera & camera )
+		, castor3d::Camera & camera )
 	{
 		wxTreeItemId cameraId = AppendItem( id
 			, camera.getName()
@@ -404,7 +401,7 @@ namespace GuiCommon
 	}
 
 	void SceneObjectsList::doAddBillboard( wxTreeItemId id
-		, BillboardList & billboard )
+		, castor3d::BillboardList & billboard )
 	{
 		AppendItem( id
 			, billboard.getName()
@@ -414,11 +411,11 @@ namespace GuiCommon
 	}
 
 	void SceneObjectsList::doAddLight( wxTreeItemId id
-		, Light & light )
+		, castor3d::Light & light )
 	{
 		switch ( light.getLightType() )
 		{
-		case LightType::eDirectional:
+		case castor3d::LightType::eDirectional:
 			AppendItem( id
 				, light.getName()
 				, eBMP_DIRECTIONAL_LIGHT
@@ -426,7 +423,7 @@ namespace GuiCommon
 				, new LightTreeItemProperty( m_propertiesHolder->isEditable(), light ) );
 			break;
 
-		case LightType::ePoint:
+		case castor3d::LightType::ePoint:
 			AppendItem( id
 				, light.getName()
 				, eBMP_POINT_LIGHT
@@ -434,7 +431,7 @@ namespace GuiCommon
 				, new LightTreeItemProperty( m_propertiesHolder->isEditable(), light ) );
 			break;
 
-		case LightType::eSpot:
+		case castor3d::LightType::eSpot:
 			AppendItem( id
 				, light.getName()
 				, eBMP_SPOT_LIGHT
@@ -448,25 +445,25 @@ namespace GuiCommon
 	}
 
 	void SceneObjectsList::doAddNode( wxTreeItemId id
-		, SceneNodeSPtr node )
+		, castor3d::SceneNodeSPtr node )
 	{
 		for ( auto & object : node->getObjects() )
 		{
 			switch ( object.get().getType() )
 			{
-			case MovableType::eGeometry:
-				doAddGeometry( id, static_cast< Geometry & >( object.get() ) );
+			case castor3d::MovableType::eGeometry:
+				doAddGeometry( id, static_cast< castor3d::Geometry & >( object.get() ) );
 				break;
-			case MovableType::eCamera:
-				doAddCamera( id, static_cast< Camera & >( object.get() ) );
+			case castor3d::MovableType::eCamera:
+				doAddCamera( id, static_cast< castor3d::Camera & >( object.get() ) );
 				break;
-			case MovableType::eLight:
-				doAddLight( id, static_cast< Light & >( object.get() ) );
+			case castor3d::MovableType::eLight:
+				doAddLight( id, static_cast< castor3d::Light & >( object.get() ) );
 				break;
-			case MovableType::eBillboard:
-				doAddBillboard( id, static_cast< BillboardList & >( object.get() ) );
+			case castor3d::MovableType::eBillboard:
+				doAddBillboard( id, static_cast< castor3d::BillboardList & >( object.get() ) );
 				break;
-			case MovableType::eParticleEmitter:
+			case castor3d::MovableType::eParticleEmitter:
 				break;
 			default:
 				CU_Failure( "Unsupported MovableType" );
@@ -512,7 +509,7 @@ namespace GuiCommon
 		{
 			switch ( overlay->getType() )
 			{
-			case OverlayType::ePanel:
+			case castor3d::OverlayType::ePanel:
 				doAddOverlay( AppendItem( id
 						, overlay->getName()
 						, eBMP_PANEL_OVERLAY
@@ -520,7 +517,7 @@ namespace GuiCommon
 						, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay->getCategory() ) )
 					, *overlay->getCategory() );
 				break;
-			case OverlayType::eBorderPanel:
+			case castor3d::OverlayType::eBorderPanel:
 				doAddOverlay( AppendItem( id
 						, overlay->getName()
 						, eBMP_BORDER_PANEL_OVERLAY
@@ -528,7 +525,7 @@ namespace GuiCommon
 						, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay->getCategory() ) )
 					, *overlay->getCategory() );
 				break;
-			case OverlayType::eText:
+			case castor3d::OverlayType::eText:
 				doAddOverlay( AppendItem( id
 						, overlay->getName()
 						, eBMP_TEXT_OVERLAY

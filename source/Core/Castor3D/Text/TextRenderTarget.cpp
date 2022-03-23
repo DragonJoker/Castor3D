@@ -10,10 +10,10 @@
 #include <CastorUtils/Graphics/PixelFormat.hpp>
 #include <CastorUtils/Data/Text/TextSize.hpp>
 
-using namespace castor3d;
-
 namespace castor
 {
+	using namespace castor3d;
+
 	//*************************************************************************************************
 
 	TextWriter< RenderTarget >::TextWriter( String const & tabs )

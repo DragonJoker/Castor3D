@@ -18,12 +18,9 @@
 
 #include <ShaderWriter/Source.hpp>
 
-using namespace castor;
-using namespace sdw;
-
 namespace castor3d
 {
-	namespace
+	namespace rendtonmap
 	{
 		static uint32_t constexpr HdrCfgUboIdx = 0u;
 		static uint32_t constexpr HdrMapIdx = 1u;
@@ -104,9 +101,9 @@ namespace castor3d
 			} );
 		result.addDependency( previousPass );
 		m_hdrConfigUbo.createPassBinding( result
-			, HdrCfgUboIdx );
+			, rendtonmap::HdrCfgUboIdx );
 		result.addSampledView( source
-			, HdrMapIdx );
+			, rendtonmap::HdrMapIdx );
 		result.addOutputColourView( target );
 		return result;
 	}
@@ -115,17 +112,17 @@ namespace castor3d
 	{
 		m_name = name;
 		{
-			VertexWriter writer;
+			sdw::VertexWriter writer;
 
 			// Shader inputs
-			auto position = writer.declInput< Vec2 >( "position", 0u );
-			auto uv = writer.declInput< Vec2 >( "uv", 1u );
+			auto position = writer.declInput< sdw::Vec2 >( "position", 0u );
+			auto uv = writer.declInput< sdw::Vec2 >( "uv", 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
+			auto vtx_texture = writer.declOutput< sdw::Vec2 >( "vtx_texture", 0u );
 
-			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-				, VertexOut out )
+			writer.implementMainT< sdw::VoidT, sdw::VoidT >( [&]( sdw::VertexIn in
+				, sdw::VertexOut out )
 				{
 					vtx_texture = uv;
 					out.vtx.position = vec4( position.x(), position.y(), 0.0_f, 1.0_f );

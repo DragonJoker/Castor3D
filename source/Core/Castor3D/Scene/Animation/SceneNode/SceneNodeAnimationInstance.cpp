@@ -6,8 +6,6 @@
 #include "Castor3D/Scene/Animation/SceneNodeAnimation.hpp"
 #include "Castor3D/Scene/Animation/SceneNodeAnimationKeyFrame.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	SceneNodeAnimationInstance::SceneNodeAnimationInstance( AnimatedSceneNode & object

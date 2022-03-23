@@ -7,20 +7,18 @@
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*********************************************************************************************
 
 	castor::String getTextureName( LpTexture texture )
 	{
-		return cuT( "c3d_mapLight" ) + getName( texture );
+		return cuT( "c3d_mapLight" ) + getTexName( texture );
 	}
 
-	castor::String getName( LpTexture texture )
+	castor::String getTexName( LpTexture texture )
 	{
-		static std::array< String, size_t( LpTexture::eCount ) > Values
+		static std::array< castor::String, size_t( LpTexture::eCount ) > Values
 		{
 			{
 				cuT( "Depth" ),

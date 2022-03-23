@@ -24,9 +24,6 @@
 #endif
 #include <CompilerSpirV/compileSpirV.hpp>
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
 	namespace
@@ -104,7 +101,7 @@ namespace GuiCommon
 #endif
 	}
 
-	ShaderEditor::ShaderEditor( Engine * engine
+	ShaderEditor::ShaderEditor( castor3d::Engine * engine
 		, bool canEdit
 		, StcContext & stcContext
 		, castor3d::ShaderModule const & module
@@ -131,7 +128,7 @@ namespace GuiCommon
 		m_auiManager.UnInit();
 	}
 
-	void ShaderEditor::doInitialiseLayout( Engine * engine )
+	void ShaderEditor::doInitialiseLayout( castor3d::Engine * engine )
 	{
 		static int constexpr ListWidth = 200;
 		wxSize size = GetClientSize();

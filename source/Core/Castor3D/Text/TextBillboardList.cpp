@@ -6,10 +6,10 @@
 
 #include <CastorUtils/Data/Text/TextPoint.hpp>
 
-using namespace castor3d;
-
 namespace castor
 {
+	using namespace castor3d;
+
 	TextWriter< BillboardList >::TextWriter( String const & tabs )
 		: TextWriterT< BillboardList >{ tabs }
 	{

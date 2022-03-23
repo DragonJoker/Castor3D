@@ -13,13 +13,11 @@
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
-	namespace
+	namespace smshcompsecuv
 	{
-		ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout( uint32_t & currentLocation )
+		static ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout( uint32_t & currentLocation )
 		{
 			ashes::VkVertexInputBindingDescriptionArray bindings{ { SecondaryUVComponent::BindingPoint
 				, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } };
@@ -31,7 +29,7 @@ namespace castor3d
 		}
 	}
 
-	String const SecondaryUVComponent::Name = cuT( "secondary_uv" );
+	castor::String const SecondaryUVComponent::Name = cuT( "secondary_uv" );
 
 	SecondaryUVComponent::SecondaryUVComponent( Submesh & submesh )
 		: SubmeshComponent{ submesh, Name, BindingPoint }
@@ -54,7 +52,7 @@ namespace castor3d
 			if ( layoutIt == m_layouts.end() )
 			{
 				layoutIt = m_layouts.emplace( currentLocation
-					, doCreateVertexLayout( currentLocation ) ).first;
+					, smshcompsecuv::doCreateVertexLayout( currentLocation ) ).first;
 			}
 
 			buffers.emplace_back( m_buffer.getBuffer().getBuffer() );

@@ -23,23 +23,19 @@
 #include <ashespp/Pipeline/PipelineViewportStateCreateInfo.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
 
-#include <ShaderWriter/Source.hpp>
-
-using namespace castor;
-
 namespace castor3d
 {
-	namespace
+	namespace rendcube
 	{
 		static uint32_t constexpr MtxUboIdx = 0u;
 		static uint32_t constexpr InputImgIdx = 1u;
 
-		SamplerResPtr doCreateSampler( RenderSystem & renderSystem
+		static SamplerResPtr doCreateSampler( RenderSystem & renderSystem
 			, bool nearest )
 		{
-			String const name = nearest
-				? String{ cuT( "RenderCube_Nearest" ) }
-			: String{ cuT( "RenderCube_Linear" ) };
+			castor::String const name = nearest
+				? castor::String{ cuT( "RenderCube_Nearest" ) }
+				: castor::String{ cuT( "RenderCube_Linear" ) };
 			VkFilter const filter = nearest
 				? VK_FILTER_NEAREST
 				: VK_FILTER_LINEAR;
@@ -63,7 +59,7 @@ namespace castor3d
 			return sampler;
 		}
 
-		UniformBufferUPtrT< castor::Matrix4x4f > doCreateMatrixUbo( RenderDevice const & device
+		static UniformBufferUPtrT< castor::Matrix4x4f > doCreateMatrixUbo( RenderDevice const & device
 			, ashes::Queue const & queue
 			, ashes::CommandPool const & pool
 			, bool srcIsCube )
@@ -74,12 +70,12 @@ namespace castor3d
 			{
 				std::array< castor::Matrix4x4f, 6u > result
 				{
-					matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +1.0f, +0.0f, +0.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ),
-					matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ -1.0f, +0.0f, +0.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ),
-					matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +1.0f, +0.0f }, Point3f{ 0.0f, +0.0f, +1.0f } ),
-					matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, -1.0f, +0.0f }, Point3f{ 0.0f, +0.0f, -1.0f } ),
-					matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +0.0f, +1.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ),
-					matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +0.0f, -1.0f }, Point3f{ 0.0f, -1.0f, +0.0f } )
+					castor::matrix::lookAt( castor::Point3f{ 0.0f, 0.0f, 0.0f }, castor::Point3f{ +1.0f, +0.0f, +0.0f }, castor::Point3f{ 0.0f, -1.0f, +0.0f } ),
+					castor::matrix::lookAt( castor::Point3f{ 0.0f, 0.0f, 0.0f }, castor::Point3f{ -1.0f, +0.0f, +0.0f }, castor::Point3f{ 0.0f, -1.0f, +0.0f } ),
+					castor::matrix::lookAt( castor::Point3f{ 0.0f, 0.0f, 0.0f }, castor::Point3f{ +0.0f, +1.0f, +0.0f }, castor::Point3f{ 0.0f, +0.0f, +1.0f } ),
+					castor::matrix::lookAt( castor::Point3f{ 0.0f, 0.0f, 0.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f }, castor::Point3f{ 0.0f, +0.0f, -1.0f } ),
+					castor::matrix::lookAt( castor::Point3f{ 0.0f, 0.0f, 0.0f }, castor::Point3f{ +0.0f, +0.0f, +1.0f }, castor::Point3f{ 0.0f, -1.0f, +0.0f } ),
+					castor::matrix::lookAt( castor::Point3f{ 0.0f, 0.0f, 0.0f }, castor::Point3f{ +0.0f, +0.0f, -1.0f }, castor::Point3f{ 0.0f, -1.0f, +0.0f } )
 				};
 				return result;
 			}();
@@ -100,7 +96,7 @@ namespace castor3d
 			return result;
 		}
 
-		ashes::VertexBufferPtr< castor::Point4f > doCreateVertexBuffer( RenderDevice const & device
+		static ashes::VertexBufferPtr< castor::Point4f > doCreateVertexBuffer( RenderDevice const & device
 			, ashes::Queue const & queue
 			, ashes::CommandPool const & pool )
 		{
@@ -129,7 +125,7 @@ namespace castor3d
 			return result;
 		}
 
-		ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout()
+		static ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout()
 		{
 			return ashes::PipelineVertexInputStateCreateInfo
 			{
@@ -148,7 +144,9 @@ namespace castor3d
 		, bool nearest
 		, SamplerResPtr sampler )
 		: m_device{ device }
-		, m_sampler{ sampler.lock() ? std::move( sampler ) : doCreateSampler( m_device.renderSystem, nearest ) }
+		, m_sampler{ ( sampler.lock()
+			? std::move( sampler )
+			: rendcube::doCreateSampler( m_device.renderSystem, nearest ) ) }
 	{
 	}
 
@@ -183,22 +181,22 @@ namespace castor3d
 	{
 		auto queueData = m_device.graphicsData();
 		m_sampler.lock()->initialise( m_device );
-		m_matrixUbo = doCreateMatrixUbo( m_device
+		m_matrixUbo = rendcube::doCreateMatrixUbo( m_device
 			, *queueData->queue
 			, *queueData->commandPool
 			, view->viewType == VK_IMAGE_VIEW_TYPE_CUBE );
-		m_vertexBuffer = doCreateVertexBuffer( m_device
+		m_vertexBuffer = rendcube::doCreateVertexBuffer( m_device
 			, *queueData->queue
 			, *queueData->commandPool );
-		auto vertexLayout = doCreateVertexLayout();
+		auto vertexLayout = rendcube::doCreateVertexLayout();
 
 		// Initialise the descriptor set.
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
-			makeDescriptorSetLayoutBinding( MtxUboIdx
+			makeDescriptorSetLayoutBinding( rendcube::MtxUboIdx
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_VERTEX_BIT ),
-			makeDescriptorSetLayoutBinding( InputImgIdx
+			makeDescriptorSetLayoutBinding( rendcube::InputImgIdx
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 		};

@@ -7,12 +7,10 @@
 
 #include <wx/propgrid/advprops.h>
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
-	SkeletonTreeItemProperty::SkeletonTreeItemProperty( bool editable, Skeleton & skeleton )
+	SkeletonTreeItemProperty::SkeletonTreeItemProperty( bool editable
+		, castor3d::Skeleton & skeleton )
 		: TreeItemProperty( skeleton.getScene()->getEngine(), editable )
 	{
 		CreateTreeItemMenu();

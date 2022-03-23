@@ -19,12 +19,9 @@
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
-using namespace castor;
-using namespace castor3d;
-
 namespace castortd
 {
-	namespace
+	namespace game
 	{
 #if defined( NDEBUG )
 		constexpr uint32_t InitialLives = 50000u;
@@ -34,7 +31,7 @@ namespace castortd
 		constexpr uint32_t InitialOre = 75000u;
 #endif
 
-		void doPrepareGridLine( PathNode const & p_prv, PathNode const & p_cur, Grid & p_grid )
+		static void doPrepareGridLine( PathNode const & p_prv, PathNode const & p_cur, Grid & p_grid )
 		{
 			if ( p_prv.m_x != p_cur.m_x )
 			{
@@ -58,7 +55,7 @@ namespace castortd
 			}
 		}
 
-		void doPrepareTarget( PathNode const & p_cur, Scene & p_scene, Grid & p_grid )
+		static void doPrepareTarget( PathNode const & p_cur, castor3d::Scene & p_scene, Grid & p_grid )
 		{
 			for ( uint32_t x = p_cur.m_x - 2; x <= p_cur.m_x + 2; ++x )
 			{
@@ -71,9 +68,9 @@ namespace castortd
 			p_grid( p_cur.m_y, p_cur.m_x ).m_state = Cell::State::Target;
 		}
 
-		void doUpdateMaterials( Geometry & p_geometry
+		static void doUpdateMaterials( castor3d::Geometry & p_geometry
 			, Tower::Category::Kind p_kind
-			, CacheViewT< MaterialCache, EventType::ePreRender > const & p_materials )
+			, castor3d::CacheViewT< castor3d::MaterialCache, castor3d::EventType::ePreRender > const & p_materials )
 		{
 			auto & mesh = *p_geometry.getMesh().lock();
 
@@ -94,7 +91,7 @@ namespace castortd
 		}
 	}
 
-	Game::Game( Scene & p_scene )
+	Game::Game( castor3d::Scene & p_scene )
 		: m_scene{ p_scene }
 		, m_hud{ *this, p_scene }
 		, m_path
@@ -139,8 +136,8 @@ namespace castortd
 		std::swap( m_grid, grid );
 
 		m_totalBullets = 0ull;
-		m_lives = InitialLives;
-		m_ore = InitialOre;
+		m_lives = game::InitialLives;
+		m_ore = game::InitialOre;
 		m_kills = 0u;
 		m_selectedTower.reset();
 		m_paused = false;
@@ -217,9 +214,9 @@ namespace castortd
 		if ( m_started && !m_paused )
 		{
 #if !defined( NDEBUG )
-			m_elapsed = Milliseconds{ 40 };
+			m_elapsed = castor::Milliseconds{ 40 };
 #else
-			m_elapsed += std::chrono::duration_cast< Milliseconds >( Clock::now() - m_saved );
+			m_elapsed += std::chrono::duration_cast< castor::Milliseconds >( Clock::now() - m_saved );
 #endif
 			doUpdateBullets();
 			doUpdateTowers();
@@ -308,9 +305,9 @@ namespace castortd
 			, ( float( p_position[1] ) - float( m_grid.getHeight() ) / 2 ) * m_cellDimensions[2] );
 	}
 
-	Point2i Game::convert( castor::Point3f const & p_position )const
+	castor::Point2i Game::convert( castor::Point3f const & p_position )const
 	{
-		return Point2i( int( p_position[0] / m_cellDimensions[0] + float( m_grid.getWidth() / 2 ) )
+		return castor::Point2i( int( p_position[0] / m_cellDimensions[0] + float( m_grid.getWidth() / 2 ) )
 			, int( p_position[2] / m_cellDimensions[2] + float( m_grid.getHeight() / 2 ) ) );
 	}
 
@@ -318,7 +315,7 @@ namespace castortd
 	{
 		if ( m_bulletsCache.empty() )
 		{
-			String name = cuT( "Bullet_" ) + std::to_string( ++m_totalBullets );
+			castor::String name = cuT( "Bullet_" ) + castor::string::toString( ++m_totalBullets );
 			auto node = m_scene.getSceneNodeCache().add( name
 				, m_scene ).lock();
 			auto geometry = m_scene.getGeometryCache().add( name
@@ -458,7 +455,7 @@ namespace castortd
 			m_enemies.push_back( m_spawner.Spawn( *this, m_path ) );
 		}
 
-		Angle const angle{ Angle::fromDegrees( float( -m_elapsed.count() ) * 120 / 1000.0f ) };
+		castor::Angle const angle{ castor::Angle::fromDegrees( float( -m_elapsed.count() ) * 120 / 1000.0f ) };
 		auto it = m_enemies.begin();
 
 		while ( it != m_enemies.end() )
@@ -532,7 +529,7 @@ namespace castortd
 
 			while ( cur != m_path.end() )
 			{
-				doPrepareGridLine( *prv, *cur, m_grid );
+				game::doPrepareGridLine( *prv, *cur, m_grid );
 
 				if ( prv == m_path.begin() )
 				{
@@ -543,19 +540,19 @@ namespace castortd
 				++cur;
 			}
 
-			doPrepareTarget( *prv, m_scene, m_grid );
+			game::doPrepareTarget( *prv, m_scene, m_grid );
 		}
 	}
 
 	void Game::doAddMapCube( Cell & p_cell )
 	{
-		String name = cuT( "MapCube_" ) + std::to_string( p_cell.m_x ) + cuT( "x" ) + std::to_string( p_cell.m_y );
+		castor::String name = cuT( "MapCube_" ) + std::to_string( p_cell.m_x ) + cuT( "x" ) + std::to_string( p_cell.m_y );
 		auto node = m_scene.getSceneNodeCache().add( name
 			, m_scene ).lock();
 		auto geometry = m_scene.getGeometryCache().add( name
 			, m_scene
 			, *node, m_mapCubeMesh ).lock();
-		node->setPosition( convert( Point2i{ p_cell.m_x, p_cell.m_y } ) + castor::Point3f{ 0, m_cellDimensions[1] / 2, 0 } );
+		node->setPosition( convert( castor::Point2i{ p_cell.m_x, p_cell.m_y } ) + castor::Point3f{ 0, m_cellDimensions[1] / 2, 0 } );
 		node->attachTo( *m_mapNode );
 
 		for ( auto submesh : *geometry->getMesh().lock() )
@@ -569,13 +566,13 @@ namespace castortd
 
 	void Game::doAddTarget( Cell & p_cell )
 	{
-		m_targetNode->setPosition( convert( Point2i{ p_cell.m_x, p_cell.m_y + 1 } ) );
+		m_targetNode->setPosition( convert( castor::Point2i{ p_cell.m_x, p_cell.m_y + 1 } ) );
 		p_cell.m_state = Cell::State::Target;
 	}
 
-	MeshResPtr Game::doSelectMesh( Tower::Category & p_category )
+	castor3d::MeshResPtr Game::doSelectMesh( Tower::Category & p_category )
 	{
-		MeshResPtr result;
+		castor3d::MeshResPtr result;
 
 		switch ( p_category.getKind() )
 		{
@@ -593,10 +590,10 @@ namespace castortd
 
 	void Game::doAddTower( Cell & p_cell, Tower::CategoryPtr && p_category )
 	{
-		String name = cuT( "Tower_" ) + std::to_string( p_cell.m_x ) + cuT( "x" ) + std::to_string( p_cell.m_y );
+		castor::String name = cuT( "Tower_" ) + std::to_string( p_cell.m_x ) + cuT( "x" ) + std::to_string( p_cell.m_y );
 		auto node = m_scene.getSceneNodeCache().add( name
 			, m_scene ).lock();
-		node->setPosition( convert( Point2i{ p_cell.m_x, p_cell.m_y } ) + castor::Point3f{ 0, m_cellDimensions[1], 0 } );
+		node->setPosition( convert( castor::Point2i{ p_cell.m_x, p_cell.m_y } ) + castor::Point3f{ 0, m_cellDimensions[1], 0 } );
 		node->attachTo( *m_mapNode );
 		auto mesh = doSelectMesh( *p_category );
 		auto tower = m_scene.getGeometryCache().add( name
@@ -605,7 +602,7 @@ namespace castortd
 			, mesh ).lock();
 		auto animGroup = m_scene.getAnimatedObjectGroupCache().add( name
 			, m_scene ).lock();
-		Milliseconds time{ 0 };
+		castor::Milliseconds time{ 0 };
 
 		if ( node->hasAnimation() )
 		{
@@ -638,7 +635,7 @@ namespace castortd
 
 		animGroup->addAnimation( p_category->getAttackAnimationName() );
 		animGroup->setAnimationLooped( p_category->getAttackAnimationName(), false );
-		doUpdateMaterials( *tower
+		game::doUpdateMaterials( *tower
 			, p_category->getKind()
 			, m_scene.getMaterialView() );
 		p_cell.m_state = Cell::State::Tower;

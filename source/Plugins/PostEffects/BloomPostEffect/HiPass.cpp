@@ -15,11 +15,9 @@
 
 #include <numeric>
 
-using namespace castor;
-
 namespace Bloom
 {
-	namespace
+	namespace hi
 	{
 		template< typename T >
 		inline constexpr T getSubresourceDimension( T const & extent
@@ -43,7 +41,7 @@ namespace Bloom
 					, graph
 					, crg::ru::Config{}
 					, crg::rq::Config{}
-						.baseConfig( { std::vector< crg::VkPipelineShaderStageCreateInfoArray >{ std::move( program ) }, {} } )
+						.baseConfig( { std::vector< crg::VkPipelineShaderStageCreateInfoArray >{ std::move( program ) }, {}, {} } )
 						.texcoordConfig( crg::Texcoord{} )
 						.enabled( enabled )
 						.end( [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t i ){ doRecordInto( recContext, cb, i ); } )
@@ -185,7 +183,7 @@ namespace Bloom
 #endif
 		};
 
-		std::unique_ptr< ast::Shader > getVertexProgram()
+		static std::unique_ptr< ast::Shader > getVertexProgram()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -206,7 +204,7 @@ namespace Bloom
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > getPixelProgram()
+		static std::unique_ptr< ast::Shader > getPixelProgram()
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -247,8 +245,8 @@ namespace Bloom
 		, bool const * enabled )
 		: m_graph{ graph }
 		, m_sceneView{ sceneView }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "BloomHiPass", getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "BloomHiPass", getPixelProgram() }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "BloomHiPass", hi::getVertexProgram() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "BloomHiPass", hi::getPixelProgram() }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 #if !Bloom_DebugHiPass
@@ -277,7 +275,7 @@ namespace Bloom
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< HiPassQuad >( framePass
+				auto result = std::make_unique< hi::HiPassQuad >( framePass
 					, context
 					, graph
 					, ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages )

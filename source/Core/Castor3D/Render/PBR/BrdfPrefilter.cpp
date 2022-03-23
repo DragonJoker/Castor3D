@@ -22,8 +22,6 @@
 
 #include <ShaderWriter/Source.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
 	BrdfPrefilter::BrdfPrefilter( Engine & engine
@@ -37,12 +35,12 @@ namespace castor3d
 		// Initialise the vertex buffer.
 		auto queueData = m_device.graphicsData();
 		m_vertexBuffer = device.vertexPools->getBuffer< TexturedQuad >( 1u );
-		m_vertexBuffer.getVertexData< TexturedQuad >().front() = { { { Point2f{ -1.0, -1.0 }, Point2f{ 0.0, 0.0 } }
-			, { Point2f{ -1.0, +1.0 }, Point2f{ 0.0, 1.0 } }
-			, { Point2f{ +1.0, -1.0 }, Point2f{ 1.0, 0.0 } }
-			, { Point2f{ +1.0, -1.0 }, Point2f{ 1.0, 0.0 } }
-			, { Point2f{ -1.0, +1.0 }, Point2f{ 0.0, 1.0 } }
-			, { Point2f{ +1.0, +1.0 }, Point2f{ 1.0, 1.0 } } } };
+		m_vertexBuffer.getVertexData< TexturedQuad >().front() = { { { castor::Point2f{ -1.0, -1.0 }, castor::Point2f{ 0.0, 0.0 } }
+			, { castor::Point2f{ -1.0, +1.0 }, castor::Point2f{ 0.0, 1.0 } }
+			, { castor::Point2f{ +1.0, -1.0 }, castor::Point2f{ 1.0, 0.0 } }
+			, { castor::Point2f{ +1.0, -1.0 }, castor::Point2f{ 1.0, 0.0 } }
+			, { castor::Point2f{ -1.0, +1.0 }, castor::Point2f{ 0.0, 1.0 } }
+			, { castor::Point2f{ +1.0, +1.0 }, castor::Point2f{ 1.0, 1.0 } } } };
 		m_vertexBuffer.vtxBuffer->uploadDirect( *queueData->queue
 			, *queueData->commandPool
 			, m_vertexBuffer.getVertexOffset()
@@ -234,7 +232,7 @@ namespace castor3d
 						, roughness * roughness );
 
 					auto phi = writer.declLocale( "phi"
-						, PiMult2< float > * xi.x() );
+						, castor::PiMult2< float > * xi.x() );
 					auto cosTheta = writer.declLocale( "cosTheta"
 						, sqrt( ( 1.0_f - xi.y() ) / ( 1.0_f + ( a * a - 1.0_f ) * xi.y() ) ) );
 					auto sinTheta = writer.declLocale( "sinTheta"

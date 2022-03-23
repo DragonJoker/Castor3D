@@ -6,8 +6,6 @@
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*************************************************************************************************
@@ -49,7 +47,7 @@ namespace castor3d
 	bool BinaryParser< Animation >::doParse( Animation & obj )
 	{
 		bool result = true;
-		String name;
+		castor::String name;
 		BinaryChunk chunk;
 		float length{ 0.0f };
 
@@ -71,7 +69,7 @@ namespace castor3d
 			case ChunkType::eAnimLength:
 				result = doParseChunk( length, chunk );
 				checkError( result, "Couldn't parse length." );
-				obj.m_length = Milliseconds( uint64_t( length ) * 1000u );
+				obj.m_length = castor::Milliseconds( uint64_t( length ) * 1000u );
 				break;
 
 			case ChunkType::eSkeletonAnimation:

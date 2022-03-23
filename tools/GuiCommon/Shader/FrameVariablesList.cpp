@@ -11,30 +11,33 @@
 
 #include <wx/imaglist.h>
 
+namespace fbvx
+{
 #include "GuiCommon/xpms/frame_variable.xpm"
 #include "GuiCommon/xpms/frame_variable_sel.xpm"
 #include "GuiCommon/xpms/frame_variable_buffer.xpm"
 #include "GuiCommon/xpms/frame_variable_buffer_sel.xpm"
+}
 
 #ifdef LoadImage
 #	undef LoadImage
 #	define LoadImage wxBitmap::LoadImage
 #endif
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
-	typedef enum eID
+	namespace fbv
 	{
-		eID_FRAME_VARIABLE,
-		eID_FRAME_VARIABLE_SEL,
-		eID_FRAME_VARIABLE_BUFFER,
-		eID_FRAME_VARIABLE_BUFFER_SEL,
-	}	eID;
+		typedef enum eID
+		{
+			eID_FRAME_VARIABLE,
+			eID_FRAME_VARIABLE_SEL,
+			eID_FRAME_VARIABLE_BUFFER,
+			eID_FRAME_VARIABLE_BUFFER_SEL,
+		}	eID;
+	}
 
-	FrameVariablesList::FrameVariablesList( Engine * engine
+	FrameVariablesList::FrameVariablesList( castor3d::Engine * engine
 		, PropertiesContainer * propertiesHolder
 		, wxWindow * parent
 		, wxPoint const & ptPos
@@ -44,10 +47,10 @@ namespace GuiCommon
 		, m_propertiesHolder( propertiesHolder )
 	{
 		wxBusyCursor wait;
-		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE, frame_variable_xpm );
-		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_SEL, frame_variable_sel_xpm );
-		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_BUFFER, frame_variable_buffer_xpm );
-		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_BUFFER_SEL, frame_variable_buffer_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE, fbvx::frame_variable_xpm );
+		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_SEL, fbvx::frame_variable_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_BUFFER, fbvx::frame_variable_buffer_xpm );
+		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_BUFFER_SEL, fbvx::frame_variable_buffer_sel_xpm );
 		ImagesLoader::waitAsyncLoads();
 
 		wxImage * icons[] =
@@ -87,7 +90,7 @@ namespace GuiCommon
 
 		for ( auto & ubo : ubos )
 		{
-			if ( checkFlag( ubo.stages, stage ) )
+			if ( castor::checkFlag( ubo.stages, stage ) )
 			{
 				doAddBuffer( root, ubo );
 			}
@@ -103,8 +106,8 @@ namespace GuiCommon
 		, UniformBufferValues & buffer )
 	{
 		wxTreeItemId bufferId = AppendItem( id, buffer.name
-			, eID_FRAME_VARIABLE_BUFFER
-			, eID_FRAME_VARIABLE_BUFFER_SEL
+			, fbv::eID_FRAME_VARIABLE_BUFFER
+			, fbv::eID_FRAME_VARIABLE_BUFFER_SEL
 			, new FrameVariableBufferTreeItemProperty( m_engine
 				, m_propertiesHolder->isEditable()
 				, buffer ) );
@@ -120,8 +123,8 @@ namespace GuiCommon
 	{
 		AppendItem( id
 			, uniform.getName()
-			, eID_FRAME_VARIABLE
-			, eID_FRAME_VARIABLE_SEL
+			, fbv::eID_FRAME_VARIABLE
+			, fbv::eID_FRAME_VARIABLE_SEL
 			, new FrameVariableTreeItemProperty( m_engine
 				, m_propertiesHolder->isEditable()
 				, uniform ) );

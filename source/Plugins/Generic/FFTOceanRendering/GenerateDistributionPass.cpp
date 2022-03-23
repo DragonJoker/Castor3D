@@ -24,9 +24,9 @@ namespace ocean_fft
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace gendstr
 	{
-		ashes::DescriptorSetLayoutPtr createDescriptorLayout( castor3d::RenderDevice const & device )
+		static ashes::DescriptorSetLayoutPtr createDescriptorLayout( castor3d::RenderDevice const & device )
 		{
 			ashes::VkDescriptorSetLayoutBindingArray bindings{ castor3d::makeDescriptorSetLayoutBinding( GenerateDistributionPass::eConfig
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
@@ -41,7 +41,7 @@ namespace ocean_fft
 				, std::move( bindings ) );
 		}
 
-		ashes::DescriptorSetPtr createDescriptorSet( crg::RunnableGraph & graph
+		static ashes::DescriptorSetPtr createDescriptorSet( crg::RunnableGraph & graph
 			, ashes::DescriptorSetPool const & pool
 			, crg::FramePass const & pass )
 		{
@@ -74,14 +74,14 @@ namespace ocean_fft
 			return descriptorSet;
 		}
 
-		ashes::PipelineLayoutPtr createPipelineLayout( castor3d::RenderDevice const & device
+		static ashes::PipelineLayoutPtr createPipelineLayout( castor3d::RenderDevice const & device
 			, ashes::DescriptorSetLayout const & dslayout )
 		{
 			return device->createPipelineLayout( GenerateDistributionPass::Name
 				, ashes::DescriptorSetLayoutCRefArray{ std::ref( dslayout ) } );
 		}
 
-		ashes::ComputePipelinePtr createPipeline( castor3d::RenderDevice const & device
+		static ashes::ComputePipelinePtr createPipeline( castor3d::RenderDevice const & device
 			, ashes::PipelineLayout const & pipelineLayout
 			, castor3d::ShaderModule const & computeShader )
 		{
@@ -92,7 +92,7 @@ namespace ocean_fft
 					, pipelineLayout ) );
 		}
 
-		castor3d::ShaderPtr createShader( bool normals )
+		static castor3d::ShaderPtr createShader( bool normals )
 		{
 			sdw::ComputeWriter writer;
 			auto const G = writer.declConstant( "G", 9.81_f );
@@ -199,12 +199,12 @@ namespace ocean_fft
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
 			, { 1u } }
 		, m_device{ device }
-		, m_descriptorSetLayout{ createDescriptorLayout( m_device ) }
-		, m_pipelineLayout{ createPipelineLayout( m_device, *m_descriptorSetLayout ) }
-		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, Name, createShader( normals ) }
-		, m_pipeline{ createPipeline( device, *m_pipelineLayout, m_shader ) }
+		, m_descriptorSetLayout{ gendstr::createDescriptorLayout( m_device ) }
+		, m_pipelineLayout{ gendstr::createPipelineLayout( m_device, *m_descriptorSetLayout ) }
+		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, Name, gendstr::createShader( normals ) }
+		, m_pipeline{ gendstr::createPipeline( device, *m_pipelineLayout, m_shader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
-		, m_descriptorSet{ createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }
+		, m_descriptorSet{ gendstr::createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }
 		, m_extent{ extent }
 	{
 	}

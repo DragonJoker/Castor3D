@@ -11,12 +11,10 @@
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
-	UserInputListener::UserInputListener( Engine & engine, String const & name )
-		: OwnedBy< Engine >{ engine }
+	UserInputListener::UserInputListener( Engine & engine, castor::String const & name )
+		: castor::OwnedBy< Engine >{ engine }
 		, m_frameListener{ engine.getFrameListenerCache().add( name ) }
 	{
 		m_mouse.buttons[size_t( MouseButton::eLeft )] = false;
@@ -97,7 +95,7 @@ namespace castor3d
 		}
 	}
 
-	void UserInputListener::registerClickAction( String const & handler
+	void UserInputListener::registerClickAction( castor::String const & handler
 		, OnClickActionFunction function )
 	{
 		auto it = m_onClickActions.find( handler );
@@ -108,7 +106,7 @@ namespace castor3d
 		}
 	}
 
-	void UserInputListener::registerSelectAction( String const & handler
+	void UserInputListener::registerSelectAction( castor::String const & handler
 		, OnSelectActionFunction function )
 	{
 		auto it = m_onSelectActions.find( handler );
@@ -119,7 +117,7 @@ namespace castor3d
 		}
 	}
 
-	void UserInputListener::registerTextAction( String const & handler
+	void UserInputListener::registerTextAction( castor::String const & handler
 		, OnTextActionFunction function )
 	{
 		auto it = m_onTextActions.find( handler );
@@ -130,7 +128,7 @@ namespace castor3d
 		}
 	}
 
-	void UserInputListener::unregisterMouseMoveAction( String const & handler )
+	void UserInputListener::unregisterMouseMoveAction( castor::String const & handler )
 	{
 		auto it = m_onMouseMoveActions.find( handler );
 
@@ -140,7 +138,7 @@ namespace castor3d
 		}
 	}
 
-	void UserInputListener::unregisterClickAction( String const & handler )
+	void UserInputListener::unregisterClickAction( castor::String const & handler )
 	{
 		auto it = m_onClickActions.find( handler );
 
@@ -150,7 +148,7 @@ namespace castor3d
 		}
 	}
 
-	void UserInputListener::unregisterSelectAction( String const & handler )
+	void UserInputListener::unregisterSelectAction( castor::String const & handler )
 	{
 		auto it = m_onSelectActions.find( handler );
 
@@ -160,7 +158,7 @@ namespace castor3d
 		}
 	}
 
-	void UserInputListener::unregisterTextAction( String const & handler )
+	void UserInputListener::unregisterTextAction( castor::String const & handler )
 	{
 		auto it = m_onTextActions.find( handler );
 
@@ -170,7 +168,7 @@ namespace castor3d
 		}
 	}
 
-	void UserInputListener::onMouseMoveAction( String const & handler )
+	void UserInputListener::onMouseMoveAction( castor::String const & handler )
 	{
 		auto it = m_onMouseMoveActions.find( handler );
 
@@ -180,7 +178,7 @@ namespace castor3d
 		}
 	}
 
-	void UserInputListener::onClickAction( String const & handler )
+	void UserInputListener::onClickAction( castor::String const & handler )
 	{
 		auto it = m_onClickActions.find( handler );
 
@@ -190,7 +188,7 @@ namespace castor3d
 		}
 	}
 
-	void UserInputListener::onSelectAction( String const & handler, int index )
+	void UserInputListener::onSelectAction( castor::String const & handler, int index )
 	{
 		auto it = m_onSelectActions.find( handler );
 
@@ -200,7 +198,7 @@ namespace castor3d
 		}
 	}
 
-	void UserInputListener::onTextAction( String const & handler, castor::String const & text )
+	void UserInputListener::onTextAction( castor::String const & handler, castor::String const & text )
 	{
 		auto it = m_onTextActions.find( handler );
 
@@ -210,7 +208,7 @@ namespace castor3d
 		}
 	}
 
-	bool UserInputListener::fireMouseMove( Position const & position )
+	bool UserInputListener::fireMouseMove( castor::Position const & position )
 	{
 		bool result = false;
 
@@ -312,7 +310,7 @@ namespace castor3d
 		return result;
 	}
 
-	bool UserInputListener::fireMouseWheel( Position const & offsets )
+	bool UserInputListener::fireMouseWheel( castor::Position const & offsets )
 	{
 		bool result = false;
 
@@ -397,7 +395,7 @@ namespace castor3d
 		return result;
 	}
 
-	bool UserInputListener::fireChar( KeyboardKey key, String const & value )
+	bool UserInputListener::fireChar( KeyboardKey key, castor::String const & value )
 	{
 		bool result = false;
 

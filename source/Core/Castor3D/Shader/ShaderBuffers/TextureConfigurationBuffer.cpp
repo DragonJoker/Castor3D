@@ -16,11 +16,11 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace texcfgbuf
 	{
 #if C3D_TextureConfigStructOfArrays
 
-		TextureConfigurationBuffer::TextureConfigurationsData doBindData( uint8_t * buffer
+		static TextureConfigurationBuffer::TextureConfigurationsData doBindData( uint8_t * buffer
 			, uint32_t count )
 		{
 			auto colOpa = castor::makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
@@ -73,7 +73,7 @@ namespace castor3d
 
 #else
 
-		TextureConfigurationBuffer::TextureConfigurationsData doBindData( uint8_t * buffer
+		static TextureConfigurationBuffer::TextureConfigurationsData doBindData( uint8_t * buffer
 			, VkDeviceSize size
 			, uint32_t count )
 		{
@@ -84,7 +84,7 @@ namespace castor3d
 
 #endif
 
-		castor::Point4f writeFlags( castor::Point2ui const & a
+		static castor::Point4f writeFlags( castor::Point2ui const & a
 			, castor::Point2ui const & b )
 		{
 			return castor::Point4f
@@ -96,7 +96,7 @@ namespace castor3d
 			};
 		}
 
-		castor::Point4f writeFlags( castor::Point2ui const & a
+		static castor::Point4f writeFlags( castor::Point2ui const & a
 			, float b
 			, float c = 0.0f )
 		{
@@ -109,7 +109,7 @@ namespace castor3d
 			};
 		}
 
-		castor::Point4f writeFlags( float a
+		static castor::Point4f writeFlags( float a
 			, float b
 			, float c = 0.0f
 			, float d = 0.0f )
@@ -123,7 +123,7 @@ namespace castor3d
 			};
 		}
 
-		float writeBool( bool v )
+		static float writeBool( bool v )
 		{
 			return v ? 1.0f : 0.0f;
 		}
@@ -135,7 +135,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, uint32_t count )
 		: m_buffer{ engine, device, count * DataSize, cuT( "TextureConfigurationBuffer" ) }
-		, m_data{ doBindData( m_buffer.getPtr(), m_buffer.getSize(), count ) }
+		, m_data{ texcfgbuf::doBindData( m_buffer.getPtr(), m_buffer.getSize(), count ) }
 	{
 	}
 
@@ -228,14 +228,14 @@ namespace castor3d
 #else
 
 					auto & data = m_data[index];
-					data.colOpa = writeFlags( config.colourMask, config.opacityMask );
-					data.spcShn = writeFlags( config.specularMask, config.glossinessMask );
-					data.metRgh = writeFlags( config.metalnessMask, config.roughnessMask );
-					data.emsOcc = writeFlags( config.emissiveMask, config.occlusionMask );
-					data.trsDum = writeFlags( config.transmittanceMask, {} );
-					data.nmlFcr = writeFlags( config.normalMask, config.normalFactor, config.normalGMultiplier );
-					data.hgtFcr = writeFlags( config.heightMask, config.heightFactor );
-					data.mscVls = writeFlags( float( config.needsYInversion ), writeBool( unit->isTransformAnimated() ), writeBool( unit->isTileAnimated() ) );
+					data.colOpa = texcfgbuf::writeFlags( config.colourMask, config.opacityMask );
+					data.spcShn = texcfgbuf::writeFlags( config.specularMask, config.glossinessMask );
+					data.metRgh = texcfgbuf::writeFlags( config.metalnessMask, config.roughnessMask );
+					data.emsOcc = texcfgbuf::writeFlags( config.emissiveMask, config.occlusionMask );
+					data.trsDum = texcfgbuf::writeFlags( config.transmittanceMask, {} );
+					data.nmlFcr = texcfgbuf::writeFlags( config.normalMask, config.normalFactor, config.normalGMultiplier );
+					data.hgtFcr = texcfgbuf::writeFlags( config.heightMask, config.heightFactor );
+					data.mscVls = texcfgbuf::writeFlags( float( config.needsYInversion ), texcfgbuf::writeBool( unit->isTransformAnimated() ), texcfgbuf::writeBool( unit->isTileAnimated() ) );
 					data.translate = config.transform.translate;
 					data.rotate = { config.transform.rotate.cos(), config.transform.rotate.sin(), 0.0f, 0.0f };
 					data.scale = config.transform.scale;

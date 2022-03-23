@@ -47,8 +47,6 @@
 
 CU_ImplementCUSmartPtr( castor3d, PickingPass )
 
-using namespace castor;
-
 namespace castor3d
 {
 	uint32_t const PickingPass::UboBindingPoint = 7u;

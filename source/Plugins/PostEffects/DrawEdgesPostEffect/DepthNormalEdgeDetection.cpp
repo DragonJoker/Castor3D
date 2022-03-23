@@ -19,13 +19,11 @@
 
 #include <numeric>
 
-using namespace castor;
-
 namespace draw_edges
 {
-	namespace
+	namespace dned
 	{
-		std::unique_ptr< ast::Shader > getVertexShader( VkExtent3D const & size )
+		static std::unique_ptr< ast::Shader > getVertexShader( VkExtent3D const & size )
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -46,7 +44,7 @@ namespace draw_edges
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > getFragmentProgram( VkExtent3D const & extent )
+		static std::unique_ptr< ast::Shader > getFragmentProgram( VkExtent3D const & extent )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -215,8 +213,8 @@ namespace draw_edges
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DNEdgesDetection", getVertexShader( m_extent ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DNEdgesDetection", getFragmentProgram( m_extent ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DNEdgesDetection", dned::getVertexShader( m_extent ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DNEdgesDetection", dned::getFragmentProgram( m_extent ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_pass{ m_graph.createPass( "EdgesDetection"

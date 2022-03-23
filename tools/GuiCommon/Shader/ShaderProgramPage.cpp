@@ -5,15 +5,15 @@
 #include "GuiCommon/Aui/AuiToolBarArt.hpp"
 #include "GuiCommon/Shader/ShaderEditor.hpp"
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
-	typedef enum eID
+	namespace shader
 	{
-		eID_PAGES,
-	}	eID;
+		typedef enum eID
+		{
+			eID_PAGES,
+		}	eID;
+	}
 
 	ShaderProgramPage::ShaderProgramPage( castor3d::Engine * engine
 		, bool canEdit
@@ -48,11 +48,11 @@ namespace GuiCommon
 		}
 	}
 
-	void ShaderProgramPage::doInitialiseLayout( Engine * engine )
+	void ShaderProgramPage::doInitialiseLayout( castor3d::Engine * engine )
 	{
 		wxSize size = GetClientSize();
 		m_editors = new wxAuiNotebook( this
-			, eID_PAGES
+			, shader::eID_PAGES
 			, wxDefaultPosition
 			, wxDefaultSize
 			, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH | wxAUI_NB_SCROLL_BUTTONS );

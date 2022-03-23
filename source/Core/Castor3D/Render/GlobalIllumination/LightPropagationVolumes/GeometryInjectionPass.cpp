@@ -42,8 +42,6 @@
 
 CU_ImplementCUSmartPtr( castor3d, GeometryInjectionPass )
 
-using namespace castor;
-
 namespace castor3d
 {
 	namespace lpvgeom
@@ -619,7 +617,7 @@ namespace castor3d
 		, LightType lightType
 		, uint32_t gridSize
 		, uint32_t rsmSize )
-		: Named{ pass.getName() }
+		: castor::Named{ pass.getName() }
 		, crg::RenderPass{ pass
 			, context
 			, graph
@@ -651,7 +649,7 @@ namespace castor3d
 		, CubeMapFace face
 		, uint32_t gridSize
 		, uint32_t rsmSize )
-		: Named{ pass.getName() }
+		: castor::Named{ pass.getName() }
 		, crg::RenderPass{ pass
 			, context
 			, graph
@@ -708,7 +706,7 @@ namespace castor3d
 	{
 		return std::make_shared< Texture >( device
 			, handler
-			, prefix + cuT( "GeometryInjection" ) + string::toString( index )
+			, prefix + cuT( "GeometryInjection" ) + castor::string::toString( index )
 			, VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT
 			, VkExtent3D{ gridSize, gridSize, gridSize }
 			, 1u

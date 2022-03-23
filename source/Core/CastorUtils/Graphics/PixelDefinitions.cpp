@@ -8,7 +8,7 @@ namespace castor
 {
 	//*****************************************************************************************
 
-	namespace
+	namespace pxdef
 	{
 		inline int8_t doSignInt32( int v )
 		{
@@ -527,7 +527,7 @@ namespace castor
 			return int8_t( doDivide0To1279By5( uint32_t( abs( value ) ) ) * doSignInt32( value ) );
 		}
 
-		uint32_t doPack32( uint32_t r, uint32_t g, uint32_t b, uint32_t a )
+		inline uint32_t doPack32( uint32_t r, uint32_t g, uint32_t b, uint32_t a )
 		{
 			return uint32_t( uint8_t( r ) << 0 )
 				| uint32_t( uint8_t( g ) << 8 )
@@ -625,12 +625,12 @@ namespace castor
 
 		if ( ( colors & 0xFFFF ) > ( ( colors & 0xFFFF0000 ) >> 16 ) )
 		{
-			color_r[2] = doDivide0To767By3( uint32_t( 2 * color_r[0] + color_r[1] ) );
-			color_g[2] = doDivide0To767By3( uint32_t( 2 * color_g[0] + color_g[1] ) );
-			color_b[2] = doDivide0To767By3( uint32_t( 2 * color_b[0] + color_b[1] ) );
-			color_r[3] = doDivide0To767By3( uint32_t( color_r[0] + 2 * color_r[1] ) );
-			color_g[3] = doDivide0To767By3( uint32_t( color_g[0] + 2 * color_g[1] ) );
-			color_b[3] = doDivide0To767By3( uint32_t( color_b[0] + 2 * color_b[1] ) );
+			color_r[2] = pxdef::doDivide0To767By3( uint32_t( 2 * color_r[0] + color_r[1] ) );
+			color_g[2] = pxdef::doDivide0To767By3( uint32_t( 2 * color_g[0] + color_g[1] ) );
+			color_b[2] = pxdef::doDivide0To767By3( uint32_t( 2 * color_b[0] + color_b[1] ) );
+			color_r[3] = pxdef::doDivide0To767By3( uint32_t( color_r[0] + 2 * color_r[1] ) );
+			color_g[3] = pxdef::doDivide0To767By3( uint32_t( color_g[0] + 2 * color_g[1] ) );
+			color_b[3] = pxdef::doDivide0To767By3( uint32_t( color_b[0] + 2 * color_b[1] ) );
 		}
 		else
 		{
@@ -645,7 +645,7 @@ namespace castor
 		for ( int i = 0; i < 16; i++ )
 		{
 			auto pixel = int( ( pixels >> ( i * 2 ) ) & 0x3 );
-			*reinterpret_cast< uint32_t * >( pixelBuffer + i * 4u ) = doPack32( uint32_t( color_r[pixel] )
+			*reinterpret_cast< uint32_t * >( pixelBuffer + i * 4u ) = pxdef::doPack32( uint32_t( color_r[pixel] )
 				, uint32_t( color_g[pixel] )
 				, uint32_t( color_b[pixel] )
 				, 0x000000FFu );
@@ -669,12 +669,12 @@ namespace castor
 		color_b[1] = int( ( colors & 0x001F0000 ) >> ( 16 - 3 ) );
 		color_g[1] = int( ( colors & 0x07E00000 ) >> ( 21 - 2 ) );
 		color_r[1] = int( ( colors & 0xF8000000 ) >> ( 27 - 3 ) );
-		color_r[2] = int( doDivide0To767By3( uint32_t( 2 * color_r[0] + color_r[1] ) ) );
-		color_g[2] = int( doDivide0To767By3( uint32_t( 2 * color_g[0] + color_g[1] ) ) );
-		color_b[2] = int( doDivide0To767By3( uint32_t( 2 * color_b[0] + color_b[1] ) ) );
-		color_r[3] = int( doDivide0To767By3( uint32_t( color_r[0] + 2 * color_r[1] ) ) );
-		color_g[3] = int( doDivide0To767By3( uint32_t( color_g[0] + 2 * color_g[1] ) ) );
-		color_b[3] = int( doDivide0To767By3( uint32_t( color_b[0] + 2 * color_b[1] ) ) );
+		color_r[2] = int( pxdef::doDivide0To767By3( uint32_t( 2 * color_r[0] + color_r[1] ) ) );
+		color_g[2] = int( pxdef::doDivide0To767By3( uint32_t( 2 * color_g[0] + color_g[1] ) ) );
+		color_b[2] = int( pxdef::doDivide0To767By3( uint32_t( 2 * color_b[0] + color_b[1] ) ) );
+		color_r[3] = int( pxdef::doDivide0To767By3( uint32_t( color_r[0] + 2 * color_r[1] ) ) );
+		color_g[3] = int( pxdef::doDivide0To767By3( uint32_t( color_g[0] + 2 * color_g[1] ) ) );
+		color_b[3] = int( pxdef::doDivide0To767By3( uint32_t( color_b[0] + 2 * color_b[1] ) ) );
 		uint32_t pixels = *reinterpret_cast< uint32_t const * >( &bitstring[12] );
 		uint64_t alpha_bits = uint32_t( bitstring[2] )
 			| ( uint32_t( bitstring[3] ) << 8 )
@@ -691,12 +691,12 @@ namespace castor
 				{
 				case 0: alpha = alpha0; break;
 				case 1: alpha = alpha1; break;
-				case 2: alpha = int( doDivide0To1791By7( uint32_t( 6 * alpha0 + 1 * alpha1 ) ) ); break;
-				case 3: alpha = int( doDivide0To1791By7( uint32_t( 5 * alpha0 + 2 * alpha1 ) ) ); break;
-				case 4: alpha = int( doDivide0To1791By7( uint32_t( 4 * alpha0 + 3 * alpha1 ) ) ); break;
-				case 5: alpha = int( doDivide0To1791By7( uint32_t( 3 * alpha0 + 4 * alpha1 ) ) ); break;
-				case 6: alpha = int( doDivide0To1791By7( uint32_t( 2 * alpha0 + 5 * alpha1 ) ) ); break;
-				case 7: alpha = int( doDivide0To1791By7( uint32_t( 1 * alpha0 + 6 * alpha1 ) ) ); break;
+				case 2: alpha = int( pxdef::doDivide0To1791By7( uint32_t( 6 * alpha0 + 1 * alpha1 ) ) ); break;
+				case 3: alpha = int( pxdef::doDivide0To1791By7( uint32_t( 5 * alpha0 + 2 * alpha1 ) ) ); break;
+				case 4: alpha = int( pxdef::doDivide0To1791By7( uint32_t( 4 * alpha0 + 3 * alpha1 ) ) ); break;
+				case 5: alpha = int( pxdef::doDivide0To1791By7( uint32_t( 3 * alpha0 + 4 * alpha1 ) ) ); break;
+				case 6: alpha = int( pxdef::doDivide0To1791By7( uint32_t( 2 * alpha0 + 5 * alpha1 ) ) ); break;
+				case 7: alpha = int( pxdef::doDivide0To1791By7( uint32_t( 1 * alpha0 + 6 * alpha1 ) ) ); break;
 				}
 			}
 			else
@@ -705,16 +705,16 @@ namespace castor
 				{
 				case 0: alpha = alpha0; break;
 				case 1: alpha = alpha1; break;
-				case 2: alpha = int( doDivide0To1279By5( uint32_t( 4 * alpha0 + 1 * alpha1 ) ) ); break;
-				case 3: alpha = int( doDivide0To1279By5( uint32_t( 3 * alpha0 + 2 * alpha1 ) ) ); break;
-				case 4: alpha = int( doDivide0To1279By5( uint32_t( 2 * alpha0 + 3 * alpha1 ) ) ); break;
-				case 5: alpha = int( doDivide0To1279By5( uint32_t( 1 * alpha0 + 4 * alpha1 ) ) ); break;
+				case 2: alpha = int( pxdef::doDivide0To1279By5( uint32_t( 4 * alpha0 + 1 * alpha1 ) ) ); break;
+				case 3: alpha = int( pxdef::doDivide0To1279By5( uint32_t( 3 * alpha0 + 2 * alpha1 ) ) ); break;
+				case 4: alpha = int( pxdef::doDivide0To1279By5( uint32_t( 2 * alpha0 + 3 * alpha1 ) ) ); break;
+				case 5: alpha = int( pxdef::doDivide0To1279By5( uint32_t( 1 * alpha0 + 4 * alpha1 ) ) ); break;
 				case 6: alpha = 0; break;
 				case 7: alpha = 0xFF; break;
 				}
 			}
 
-			*reinterpret_cast< uint32_t * >( pixelBuffer + i * 4 ) = doPack32( uint32_t( color_r[pixel] )
+			*reinterpret_cast< uint32_t * >( pixelBuffer + i * 4 ) = pxdef::doPack32( uint32_t( color_r[pixel] )
 				, uint32_t( color_g[pixel] )
 				, uint32_t( color_b[pixel] )
 				, uint32_t( alpha ) );
@@ -726,11 +726,11 @@ namespace castor
 	bool decompressBC5Block( uint8_t const * bitstring
 		, uint8_t * pixelBuffer )
 	{
-		bool result = doDecodeBC5Block( bitstring, 1, 0, pixelBuffer );
+		bool result = pxdef::doDecodeBC5Block( bitstring, 1, 0, pixelBuffer );
 
 		if ( result )
 		{
-			result = doDecodeBC5Block( &bitstring[8], 1, 1, pixelBuffer );
+			result = pxdef::doDecodeBC5Block( &bitstring[8], 1, 1, pixelBuffer );
 		}
 
 		return result;

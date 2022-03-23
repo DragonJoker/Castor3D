@@ -5,8 +5,6 @@
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>
 
-using namespace castor;
-
 GC_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( castor, Rectangle )
 
 namespace GuiCommon

@@ -22,18 +22,16 @@
 
 #include <numeric>
 
-using namespace castor;
-
 namespace smaa
 {
-	namespace
+	namespace dpthed
 	{
 		enum Idx : uint32_t
 		{
 			DepthTexIdx = SmaaUboIdx + 1,
 		};
 
-		std::unique_ptr< ast::Shader > doGetEdgeDetectionFP( castor3d::Engine const & engine )
+		static std::unique_ptr< ast::Shader > doGetEdgeDetectionFP( castor3d::Engine const & engine )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -98,7 +96,7 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		crg::ImageViewData doCreateDepthView( crg::ImageViewId const & depthView )
+		static crg::ImageViewData doCreateDepthView( crg::ImageViewId const & depthView )
 		{
 			return crg::ImageViewData{ "SMDEDTgt"
 				, depthView.data->image
@@ -125,9 +123,9 @@ namespace smaa
 			, device
 			, ubo
 			, config
-			, doGetEdgeDetectionFP( *renderTarget.getEngine() )
+			, dpthed::doGetEdgeDetectionFP( *renderTarget.getEngine() )
 			, enabled }
-		, m_depthView{ m_graph.createView( doCreateDepthView( depthView ) ) }
+		, m_depthView{ m_graph.createView( dpthed::doCreateDepthView( depthView ) ) }
 	{
 		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
 			, VK_FILTER_LINEAR
@@ -136,7 +134,7 @@ namespace smaa
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
 		m_pass.addSampledView( m_pass.mergeViews( { m_depthView, depthView } )
-			, DepthTexIdx
+			, dpthed::DepthTexIdx
 			, {}
 			, linearSampler );
 	}

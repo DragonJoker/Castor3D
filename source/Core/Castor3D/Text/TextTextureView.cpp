@@ -2,10 +2,10 @@
 
 #include "Castor3D/Miscellaneous/Logger.hpp"
 
-using namespace castor3d;
-
 namespace castor
 {
+	using namespace castor3d;
+
 	TextWriter< TextureView >::TextWriter( String const & tabs )
 		: TextWriterT< TextureView >{ tabs }
 	{

@@ -353,6 +353,7 @@ set_target_properties( ${PROJECT_NAME}
 		CXX_STANDARD 20
 		CXX_EXTENSIONS OFF
 		FOLDER "Tools"
+		UNITY_BUILD "${CASTOR_UNITY_BUILD}"
 )
 
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )

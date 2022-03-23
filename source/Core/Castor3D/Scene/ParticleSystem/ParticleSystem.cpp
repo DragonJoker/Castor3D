@@ -18,13 +18,11 @@
 
 CU_ImplementCUSmartPtr( castor3d, ParticleSystem )
 
-using namespace castor;
-
 namespace castor3d
 {
-	namespace
+	namespace ptclsys
 	{
-		size_t getVkCount( ParticleFormat format )
+		static size_t getVkCount( ParticleFormat format )
 		{
 			switch ( format )
 			{
@@ -39,7 +37,7 @@ namespace castor3d
 			}
 		}
 
-		ParticleFormat getComponent( ParticleFormat format )
+		static ParticleFormat getComponent( ParticleFormat format )
 		{
 			switch ( format )
 			{
@@ -66,7 +64,7 @@ namespace castor3d
 			}
 		}
 
-		VkFormat getVkFormat( ParticleFormat format )
+		static VkFormat getVkFormat( ParticleFormat format )
 		{
 			switch ( format )
 			{
@@ -103,7 +101,7 @@ namespace castor3d
 			}
 		}
 
-		VkDeviceSize getComponentSize( ParticleFormat format )
+		static VkDeviceSize getComponentSize( ParticleFormat format )
 		{
 			return getSize( getComponent( format ) );
 		}
@@ -111,7 +109,7 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	ParticleSystem::ParticleSystem( String const & name
+	ParticleSystem::ParticleSystem( castor::String const & name
 		, Scene & scene
 		, SceneNode & node
 		, uint32_t count )
@@ -133,11 +131,11 @@ namespace castor3d
 
 		for ( auto & attribute : m_inputs )
 		{
-			auto fmt = getVkFormat( attribute.m_dataType );
-			auto compSize = uint32_t( getComponentSize( attribute.m_dataType ) );
+			auto fmt = ptclsys::getVkFormat( attribute.m_dataType );
+			auto compSize = uint32_t( ptclsys::getComponentSize( attribute.m_dataType ) );
 			uint32_t offset = 0u;
 
-			for ( size_t i = 0u; i < getVkCount( attribute.m_dataType ); ++i )
+			for ( size_t i = 0u; i < ptclsys::getVkCount( attribute.m_dataType ); ++i )
 			{
 				attributes.push_back( { index++, 1u, fmt, attribute.m_offset + offset } );
 				offset += compSize;
@@ -197,7 +195,7 @@ namespace castor3d
 	void ParticleSystem::update( CpuUpdater & updater )
 	{
 		CU_Require( m_impl );
-		auto time = std::chrono::duration_cast< Milliseconds >( m_timer.getElapsed() );
+		auto time = std::chrono::duration_cast< castor::Milliseconds >( m_timer.getElapsed() );
 
 		if ( m_firstUpdate )
 		{
@@ -240,7 +238,7 @@ namespace castor3d
 		}
 	}
 
-	void ParticleSystem::setDimensions( Point2f const & dimensions )
+	void ParticleSystem::setDimensions( castor::Point2f const & dimensions )
 	{
 		m_dimensions = dimensions;
 
@@ -270,14 +268,14 @@ namespace castor3d
 		return m_material;
 	}
 
-	Point2f const & ParticleSystem::getDimensions()const
+	castor::Point2f const & ParticleSystem::getDimensions()const
 	{
 		return m_dimensions;
 	}
 
-	void ParticleSystem::addParticleVariable( String const & name
+	void ParticleSystem::addParticleVariable( castor::String const & name
 		, ParticleFormat type
-		, String const & defaultValue )
+		, castor::String const & defaultValue )
 	{
 		m_csImpl->addParticleVariable( name, type, defaultValue );
 		m_cpuImpl->addParticleVariable( name, type, defaultValue );

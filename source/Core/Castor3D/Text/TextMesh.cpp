@@ -4,10 +4,10 @@
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 
-using namespace castor3d;
-
 namespace castor
 {
+	using namespace castor3d;
+
 	TextWriter< Mesh >::TextWriter( String const & tabs
 		, String const & subfolder )
 		: TextWriterT< Mesh >{ tabs }

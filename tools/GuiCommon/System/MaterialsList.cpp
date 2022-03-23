@@ -19,20 +19,20 @@
 
 #include <wx/imaglist.h>
 
+namespace mats
+{
 #include "GuiCommon/xpms/material.xpm"
 #include "GuiCommon/xpms/material_sel.xpm"
 #include "GuiCommon/xpms/pass.xpm"
 #include "GuiCommon/xpms/pass_sel.xpm"
 #include "GuiCommon/xpms/texture.xpm"
 #include "GuiCommon/xpms/texture_sel.xpm"
+}
 
 #ifdef LoadImage
 #	undef LoadImage
 #	define LoadImage wxBitmap::LoadImage
 #endif
-
-using namespace castor3d;
-using namespace castor;
 
 namespace GuiCommon
 {
@@ -44,12 +44,12 @@ namespace GuiCommon
 		, m_propertiesHolder( propertiesHolder )
 	{
 		wxBusyCursor wait;
-		ImagesLoader::addBitmap( eBMP_MATERIAL, material_xpm );
-		ImagesLoader::addBitmap( eBMP_MATERIAL_SEL, material_sel_xpm );
-		ImagesLoader::addBitmap( eBMP_PASS, pass_xpm );
-		ImagesLoader::addBitmap( eBMP_PASS_SEL, pass_sel_xpm );
-		ImagesLoader::addBitmap( eBMP_TEXTURE, texture_xpm );
-		ImagesLoader::addBitmap( eBMP_TEXTURE_SEL, texture_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_MATERIAL, mats::material_xpm );
+		ImagesLoader::addBitmap( eBMP_MATERIAL_SEL, mats::material_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_PASS, mats::pass_xpm );
+		ImagesLoader::addBitmap( eBMP_PASS_SEL, mats::pass_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_TEXTURE, mats::texture_xpm );
+		ImagesLoader::addBitmap( eBMP_TEXTURE_SEL, mats::texture_sel_xpm );
 		ImagesLoader::waitAsyncLoads();
 
 		wxImage * icons[] =
@@ -84,8 +84,8 @@ namespace GuiCommon
 		DeleteAllItems();
 	}
 
-	void MaterialsList::loadMaterials( Engine * engine
-		, Scene & scene )
+	void MaterialsList::loadMaterials( castor3d::Engine * engine
+		, castor3d::Scene & scene )
 	{
 		m_engine = engine;
 		m_scene = &scene;
@@ -180,7 +180,7 @@ namespace GuiCommon
 			, new TextureTreeItemProperty{ editable
 				, pass
 				, texture } );
-		RenderTargetSPtr target = texture->getRenderTarget();
+		castor3d::RenderTargetSPtr target = texture->getRenderTarget();
 
 		if ( target )
 		{

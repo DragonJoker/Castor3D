@@ -12,7 +12,7 @@ namespace castor
 {
 	namespace System
 	{
-		namespace
+		namespace util
 		{
 			struct stSCREEN
 			{
@@ -49,8 +49,8 @@ namespace castor
 
 		bool getScreenSize( uint32_t index, Size & size )
 		{
-			stSCREEN screen{ index, 0, size };
-			BOOL bRet = ::EnumDisplayMonitors( nullptr, nullptr, MonitorEnum, LPARAM( &screen ) );
+			util::stSCREEN screen{ index, 0, size };
+			BOOL bRet = ::EnumDisplayMonitors( nullptr, nullptr, util::MonitorEnum, LPARAM( &screen ) );
 			return bRet != FALSE;
 		}
 

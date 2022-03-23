@@ -4,10 +4,10 @@
 #include "Castor3D/Text/TextPointLight.hpp"
 #include "Castor3D/Text/TextSpotLight.hpp"
 
-using namespace castor3d;
-
 namespace castor
 {
+	using namespace castor3d;
+
 	TextWriter< Light >::TextWriter( String const & tabs )
 		: TextWriterT< Light >{ tabs }
 	{

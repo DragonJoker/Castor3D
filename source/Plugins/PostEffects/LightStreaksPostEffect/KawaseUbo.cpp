@@ -5,9 +5,6 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Buffer/UniformBufferPool.hpp>
 
-using namespace castor;
-using namespace castor3d;
-
 namespace light_streaks
 {
 	//*********************************************************************************************
@@ -43,8 +40,8 @@ namespace light_streaks
 
 	//*********************************************************************************************
 
-	String const KawaseUbo::Buffer = cuT( "Kawase" );
-	String const KawaseUbo::Data = cuT( "c3d_kawaseData" );
+	castor::String const KawaseUbo::Buffer = cuT( "Kawase" );
+	castor::String const KawaseUbo::Data = cuT( "c3d_kawaseData" );
 
 	KawaseUbo::KawaseUbo( castor3d::RenderDevice const & device )
 		: m_device{ device }
@@ -68,7 +65,7 @@ namespace light_streaks
 		, castor::Point2f const & direction
 		, uint32_t pass )
 	{
-		Point2f pixelSize{ 1.0f / float( size.width )
+		castor::Point2f pixelSize{ 1.0f / float( size.width )
 			, 1.0f / float( size.height ) };
 		auto & data = m_ubo[index].getData();
 		data.pixelSize = pixelSize;

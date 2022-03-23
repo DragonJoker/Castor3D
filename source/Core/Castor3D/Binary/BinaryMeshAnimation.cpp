@@ -4,8 +4,6 @@
 #include "Castor3D/Model/Mesh/Animation/MeshAnimationKeyFrame.hpp"
 #include "Castor3D/Binary/BinaryMeshAnimationKeyFrame.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*************************************************************************************************
@@ -31,7 +29,7 @@ namespace castor3d
 	{
 		bool result = true;
 		MeshAnimationKeyFrameUPtr keyFrame;
-		String name;
+		castor::String name;
 		BinaryChunk chunk;
 
 		while ( result && doGetSubChunk( chunk ) )

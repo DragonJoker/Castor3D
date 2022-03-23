@@ -2,8 +2,6 @@
 
 #include <ashes/ashes.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
 	Version::Version( int major, int minor, int build )
@@ -77,7 +75,7 @@ namespace castor3d
 
 	castor::String & operator<<( castor::String & p_stream, castor3d::Version const & p_version )
 	{
-		StringStream stream( makeStringStream() );
+		castor::StringStream stream( castor::makeStringStream() );
 		stream << p_version;
 		return p_stream += stream.str();
 	}

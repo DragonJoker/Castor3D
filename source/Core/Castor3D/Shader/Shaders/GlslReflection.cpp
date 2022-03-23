@@ -3,8 +3,6 @@
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
-using namespace castor;
-
 namespace castor3d::shader
 {
 	ReflectionModel::ReflectionModel( sdw::ShaderWriter & writer

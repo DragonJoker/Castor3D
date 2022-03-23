@@ -5,7 +5,7 @@
 
 namespace castor
 {
-	namespace
+	namespace pfext
 	{
 		template< PixelFormat PfT >
 		struct MaxValueT
@@ -17,7 +17,7 @@ namespace castor
 		template< PixelFormat PfSrcT
 			, PixelComponent PcSrcT
 			, PixelComponent PcDstT >
-		void copyComponentT( uint8_t const * srcBuffer
+		static void copyComponentT( uint8_t const * srcBuffer
 			, uint32_t srcPixelSize
 			, uint8_t * dstBuffer
 			, uint32_t dstPixelSize
@@ -60,7 +60,7 @@ namespace castor
 
 		template< PixelFormat PfSrcT
 			, PixelComponent PcSrcT >
-		void copyComponentSrcT( uint8_t const * srcBuffer
+			static void copyComponentSrcT( uint8_t const * srcBuffer
 			, uint32_t srcPixelSize
 			, uint8_t * dstBuffer
 			, uint32_t dstPixelSize
@@ -114,7 +114,7 @@ namespace castor
 		}
 
 		template< PixelFormat PfSrcT >
-		void copyComponentFmtT( uint8_t const * srcBuffer
+		static void copyComponentFmtT( uint8_t const * srcBuffer
 			, uint32_t srcPixelSize
 			, PixelComponent srcComponent
 			, uint8_t * dstBuffer
@@ -172,7 +172,7 @@ namespace castor
 			}
 		}
 
-		void copyComponent( PxBufferBase const & src
+		static void copyComponent( PxBufferBase const & src
 			, PixelComponent srcComponent
 			, PxBufferBase & dst
 			, PixelComponent dstComponent )
@@ -204,7 +204,7 @@ namespace castor
 		src = decompressBuffer( src );
 		auto result = PxBufferBase::create( src->getDimensions()
 			, getSingleComponent( src->getFormat() ) );
-		copyComponent( *src
+		pfext::copyComponent( *src
 			, component
 			, *result
 			, PixelComponent::eRed );
@@ -221,7 +221,7 @@ namespace castor
 
 		for ( auto component : components )
 		{
-			copyComponent( *src
+			pfext::copyComponent( *src
 				, component
 				, *result
 				, getIndexComponent( dstIndex, result->getFormat() ) );
@@ -242,7 +242,7 @@ namespace castor
 		while ( srcComponentIt != srcComponents.end()
 			&& dstComponentIt != dstComponents.end() )
 		{
-			copyComponent( srcBuffer
+			pfext::copyComponent( srcBuffer
 				, *srcComponentIt
 				, dstBuffer
 				, *dstComponentIt );

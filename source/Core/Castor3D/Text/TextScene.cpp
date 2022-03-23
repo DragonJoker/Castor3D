@@ -30,16 +30,16 @@
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 #include <CastorUtils/Design/ResourceCache.hpp>
 
-using namespace castor3d;
-
 namespace castor
 {
+	using namespace castor3d;
+
 	//*************************************************************************************************
 
-	namespace
+	namespace txtscn
 	{
 		template< typename ObjectT >
-		bool writable( ObjectT const & object )
+		static bool writable( ObjectT const & object )
 		{
 			return true;
 		}
@@ -84,7 +84,7 @@ namespace castor
 		}
 
 		template< typename CacheTypeT, typename FilterT >
-		bool writeCache( StringStream & file
+		static bool writeCache( StringStream & file
 			, CacheTypeT const & cache
 			, String const & elemsName
 			, TextWriterBase const & writer
@@ -117,7 +117,7 @@ namespace castor
 		}
 
 		template< typename CacheTypeT, typename FilterT >
-		bool writeKeyedContainer( StringStream & file
+		static bool writeKeyedContainer( StringStream & file
 			, CacheTypeT const & cache
 			, String const & elemsName
 			, TextWriterBase const & writer
@@ -143,7 +143,7 @@ namespace castor
 		}
 
 		template< typename CacheTypeT, typename FilterT >
-		bool writeIncludedCache( StringStream & file
+		static bool writeIncludedCache( StringStream & file
 			, CacheTypeT const & cache
 			, String const & elemsName
 			, Path const & includePath
@@ -159,7 +159,7 @@ namespace castor
 		}
 
 		template< typename CacheTypeT, typename FilterT >
-		bool writeCache( StringStream & file
+		static bool writeCache( StringStream & file
 			, CacheTypeT const & cache
 			, String const & elemsName
 			, String const & subfolder
@@ -198,7 +198,7 @@ namespace castor
 		}
 
 		template< typename CacheTypeT, typename FilterT >
-		bool writeIncludedCache( StringStream & file
+		static bool writeIncludedCache( StringStream & file
 			, CacheTypeT const & cache
 			, String const & elemsName
 			, Path const & includePath
@@ -215,7 +215,7 @@ namespace castor
 		}
 
 		template< typename ViewTypeT, typename FilterT >
-		bool writeView( StringStream & file
+		static bool writeView( StringStream & file
 			, ViewTypeT const & view
 			, String const & elemsName
 			, TextWriterBase const & writer
@@ -249,7 +249,7 @@ namespace castor
 		}
 
 		template< typename ViewTypeT >
-		bool writeView( StringStream & file
+		static bool writeView( StringStream & file
 			, ViewTypeT const & view
 			, String const & elemsName
 			, TextWriterBase const & writer )
@@ -262,7 +262,7 @@ namespace castor
 		}
 
 		template< typename ViewTypeT, typename FilterT >
-		bool writeView( StringStream & file
+		static bool writeView( StringStream & file
 			, ViewTypeT const & view
 			, String const & elemsName
 			, Path const & folder
@@ -297,7 +297,7 @@ namespace castor
 		}
 
 		template< typename ViewTypeT >
-		bool writeView( StringStream & file
+		static bool writeView( StringStream & file
 			, ViewTypeT const & view
 			, String const & elemsName
 			, Path const & folder
@@ -311,7 +311,7 @@ namespace castor
 		}
 
 		template< typename ViewTypeT >
-		bool writeIncludedView( StringStream & file
+		static bool writeIncludedView( StringStream & file
 			, ViewTypeT const & view
 			, String const & elemsName
 			, Path const & includePath
@@ -326,7 +326,7 @@ namespace castor
 		}
 
 		template< typename ViewTypeT, typename FilterT >
-		bool writeView( StringStream & file
+		static bool writeView( StringStream & file
 			, ViewTypeT const & view
 			, String const & elemsName
 			, Path const & folder
@@ -362,7 +362,7 @@ namespace castor
 		}
 
 		template< typename ViewTypeT >
-		bool writeView( StringStream & file
+		static bool writeView( StringStream & file
 			, ViewTypeT const & view
 			, String const & elemsName
 			, Path const & folder
@@ -377,7 +377,7 @@ namespace castor
 		}
 
 		template< typename ViewTypeT >
-		bool writeIncludedView( StringStream & file
+		static bool writeIncludedView( StringStream & file
 			, ViewTypeT const & view
 			, String const & elemsName
 			, Path const & includePath
@@ -393,7 +393,7 @@ namespace castor
 			return writeView( file, view, elemsName, folder, subfolder, writer );
 		}
 
-		bool writeInclude( StringStream & file
+		static bool writeInclude( StringStream & file
 			, Path const & path
 			, TextWriterBase const & writer )
 		{
@@ -405,7 +405,7 @@ namespace castor
 			return true;
 		}
 
-		bool writeNodes( StringStream & file
+		static bool writeNodes( StringStream & file
 			, SceneNode::SceneNodeMap const & nodes
 			, String const & elemsName
 			, float scale
@@ -432,7 +432,7 @@ namespace castor
 			return result;
 		}
 
-		bool writeIncludedNodes( StringStream & file
+		static bool writeIncludedNodes( StringStream & file
 			, SceneNode::SceneNodeMap const & nodes
 			, String const & elemsName
 			, Path const & includePath
@@ -480,26 +480,26 @@ namespace castor
 					result = writeNamedSub( file, cuT( "ambient_light" ), scene.getAmbientLight() )
 						&& writeNamedSub( file, cuT( "background_colour" ), scene.getBackgroundColour() )
 						&& write( file, cuT( "lpv_indirect_attenuation" ), scene.getLpvIndirectAttenuation() )
-						&& writeInclude( file, m_options.materialsFile, *this )
-						&& writeInclude( file, m_options.meshesFile, *this )
-						&& writeInclude( file, m_options.nodesFile, *this )
-						&& writeInclude( file, m_options.objectsFile, *this )
-						&& writeInclude( file, m_options.lightsFile, *this )
+						&& txtscn::writeInclude( file, m_options.materialsFile, *this )
+						&& txtscn::writeInclude( file, m_options.meshesFile, *this )
+						&& txtscn::writeInclude( file, m_options.nodesFile, *this )
+						&& txtscn::writeInclude( file, m_options.objectsFile, *this )
+						&& txtscn::writeInclude( file, m_options.lightsFile, *this )
 						&& writeSub( file, *scene.getBackground(), m_options.rootFolder )
 						&& writeSub( file, scene.getFog() )
 						&& writeSub( file, scene.getVoxelConeTracingConfig() )
-						&& writeView( file, scene.getFontView(), cuT( "Fonts" ), m_options.rootFolder, *this )
-						&& writeIncludedView( file, scene.getSamplerView(), cuT( "Samplers" ), m_options.materialsFile, *this )
-						&& writeIncludedView( file, scene.getMaterialView(), cuT( "Materials" ), m_options.rootFolder, m_options.materialsFile, m_options.subfolder, *this )
-						&& writeView( file, scene.getOverlayView(), cuT( "Overlays" ), *this, writable< Overlay > )
-						&& writeIncludedCache( file, scene.getMeshCache(), cuT( "Meshes" ), m_options.meshesFile, m_options.subfolder, *this, writable< Mesh > )
-						&& writeNodes( file, scene.getCameraRootNode()->getChildren(), cuT( "Cameras nodes" ), m_options.scale, *this )
-						&& writeCache( file, scene.getCameraCache(), cuT( "Cameras" ), *this, writable< Camera > )
-						&& writeIncludedNodes( file, scene.getObjectRootNode()->getChildren(), cuT( "Objects nodes" ), m_options.nodesFile, m_options.scale, *this )
-						&& writeIncludedCache( file, scene.getLightCache(), cuT( "Lights" ), m_options.lightsFile, *this, writable< Light > )
-						&& writeIncludedCache( file, scene.getGeometryCache(), cuT( "Geometries" ), m_options.objectsFile, *this, writable< Geometry > )
-						&& writeCache( file, scene.getParticleSystemCache(), cuT( "Particle systems" ), *this, writable< ParticleSystem > )
-						&& writeCache( file, scene.getAnimatedObjectGroupCache(), cuT( "Animated object groups" ), *this, writable< AnimatedObjectGroup > );
+						&& txtscn::writeView( file, scene.getFontView(), cuT( "Fonts" ), m_options.rootFolder, *this )
+						&& txtscn::writeIncludedView( file, scene.getSamplerView(), cuT( "Samplers" ), m_options.materialsFile, *this )
+						&& txtscn::writeIncludedView( file, scene.getMaterialView(), cuT( "Materials" ), m_options.rootFolder, m_options.materialsFile, m_options.subfolder, *this )
+						&& txtscn::writeView( file, scene.getOverlayView(), cuT( "Overlays" ), *this, txtscn::writable< Overlay > )
+						&& txtscn::writeIncludedCache( file, scene.getMeshCache(), cuT( "Meshes" ), m_options.meshesFile, m_options.subfolder, *this, txtscn::writable< Mesh > )
+						&& txtscn::writeNodes( file, scene.getCameraRootNode()->getChildren(), cuT( "Cameras nodes" ), m_options.scale, *this )
+						&& txtscn::writeCache( file, scene.getCameraCache(), cuT( "Cameras" ), *this, txtscn::writable< Camera > )
+						&& txtscn::writeIncludedNodes( file, scene.getObjectRootNode()->getChildren(), cuT( "Objects nodes" ), m_options.nodesFile, m_options.scale, *this )
+						&& txtscn::writeIncludedCache( file, scene.getLightCache(), cuT( "Lights" ), m_options.lightsFile, *this, txtscn::writable< Light > )
+						&& txtscn::writeIncludedCache( file, scene.getGeometryCache(), cuT( "Geometries" ), m_options.objectsFile, *this, txtscn::writable< Geometry > )
+						&& txtscn::writeCache( file, scene.getParticleSystemCache(), cuT( "Particle systems" ), *this, txtscn::writable< ParticleSystem > )
+						&& txtscn::writeCache( file, scene.getAnimatedObjectGroupCache(), cuT( "Animated object groups" ), *this, txtscn::writable< AnimatedObjectGroup > );
 				}
 			}
 
@@ -533,7 +533,7 @@ namespace castor
 					}
 				};
 
-				result = writeKeyedContainer( file, scene.getEngine()->getRenderWindows(), cuT( "Windows" ), *this, IsWritable{ scene } );
+				result = txtscn::writeKeyedContainer( file, scene.getEngine()->getRenderWindows(), cuT( "Windows" ), *this, IsWritable{ scene } );
 			}
 		}
 

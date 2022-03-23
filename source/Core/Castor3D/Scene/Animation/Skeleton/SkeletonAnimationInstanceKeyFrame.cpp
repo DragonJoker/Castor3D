@@ -15,13 +15,11 @@
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp"
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceObject.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
-	namespace
+	namespace sklanminstkf
 	{
-		BoundingBox doComputeBoundingBox( Skeleton const & skeleton
+		static castor::BoundingBox doComputeBoundingBox( Skeleton const & skeleton
 			, Submesh const & submesh
 			, SkeletonAnimationKeyFrame const & keyFrame )
 		{
@@ -91,13 +89,13 @@ namespace castor3d
 				}
 			}
 
-			CU_Ensure( !isNan( min[0] ) && !isNan( min[1] ) && !isNan( min[2] ) );
-			CU_Ensure( !isNan( max[0] ) && !isNan( max[1] ) && !isNan( max[2] ) );
-			CU_Ensure( !isInf( min[0] ) && !isInf( min[1] ) && !isInf( min[2] ) );
-			CU_Ensure( !isInf( max[0] ) && !isInf( max[1] ) && !isInf( max[2] ) );
-			CU_Ensure( min != Point3f( rmax, rmax, rmax ) );
-			CU_Ensure( max != Point3f( rmin, rmin, rmin ) );
-			return BoundingBox{ min, max };
+			CU_Ensure( !castor::isNan( min[0] ) && !castor::isNan( min[1] ) && !castor::isNan( min[2] ) );
+			CU_Ensure( !castor::isNan( max[0] ) && !castor::isNan( max[1] ) && !castor::isNan( max[2] ) );
+			CU_Ensure( !castor::isInf( min[0] ) && !castor::isInf( min[1] ) && !castor::isInf( min[2] ) );
+			CU_Ensure( !castor::isInf( max[0] ) && !castor::isInf( max[1] ) && !castor::isInf( max[2] ) );
+			CU_Ensure( min != castor::Point3f( rmax, rmax, rmax ) );
+			CU_Ensure( max != castor::Point3f( rmin, rmin, rmin ) );
+			return castor::BoundingBox{ min, max };
 		}
 	}
 
@@ -114,13 +112,13 @@ namespace castor3d
 			m_objects.emplace_back( object.get()
 				, ( it != keyFrame.end()
 					? it->second
-					: Matrix4x4f{ Matrix4x4f::getIdentity() } ) );
+					: castor::Matrix4x4f{ castor::Matrix4x4f::getIdentity() } ) );
 		}
 
 		for ( auto & submesh : skeleton.getMesh() )
 		{
 			m_boxes.emplace_back( submesh.get()
-				, doComputeBoundingBox( skeleton.getSkeleton()
+				, sklanminstkf::doComputeBoundingBox( skeleton.getSkeleton()
 					, *submesh
 					, keyFrame ) );
 		}

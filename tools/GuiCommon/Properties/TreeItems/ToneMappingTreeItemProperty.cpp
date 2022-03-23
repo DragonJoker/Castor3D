@@ -14,9 +14,6 @@
 
 #include <wx/propgrid/advprops.h>
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
 	namespace
@@ -32,7 +29,7 @@ namespace GuiCommon
 			}
 
 		public:
-			static ShaderSources submit( ToneMapping & toneMapping )
+			static ShaderSources submit( castor3d::ToneMapping & toneMapping )
 			{
 				ShaderSources result;
 				ToneMappingShaderGatherer vis{ result };
@@ -47,7 +44,7 @@ namespace GuiCommon
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
-				, HdrConfig & value )override
+				, castor3d::HdrConfig & value )override
 			{
 				auto & source = doGetSource( name );
 				UniformBufferValues ubo{ make_String( wxT( "HdrConfig" ) ), VK_SHADER_STAGE_FRAGMENT_BIT };
@@ -129,7 +126,7 @@ namespace GuiCommon
 			prop->SetValue( m_choices[m_nameToChoice[m_target.getToneMapping()->getName()]] );
 		}
 
-		HdrConfig & hdrConfig = m_target.getHdrConfig();
+		castor3d::HdrConfig & hdrConfig = m_target.getHdrConfig();
 		addPropertyT( grid, PROPERTY_TONE_MAPPING_EXPOSURE, &hdrConfig.exposure );
 		addPropertyT( grid, PROPERTY_TONE_MAPPING_GAMMA, &hdrConfig.gamma );
 		addProperty( grid, PROPERTY_TONE_MAPPING_SHADER, editor

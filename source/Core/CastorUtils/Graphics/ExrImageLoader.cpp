@@ -22,9 +22,9 @@ namespace castor
 {
 	//************************************************************************************************
 
-	namespace
+	namespace exrl
 	{
-		PxBufferBaseSPtr doLoad32BitsPerChannel( uint8_t const * input
+		static PxBufferBaseSPtr doLoad32BitsPerChannel( uint8_t const * input
 			, uint32_t size )
 		{
 			const char * error{ nullptr };
@@ -58,7 +58,7 @@ namespace castor
 			return result;
 		}
 
-		StringArray const & listExtensions()
+		static StringArray const & listExtensions()
 		{
 			static StringArray const list
 			{
@@ -72,13 +72,13 @@ namespace castor
 
 	void ExrImageLoader::registerLoader( ImageLoader & reg )
 	{
-		reg.registerLoader( listExtensions()
+		reg.registerLoader( exrl::listExtensions()
 			, std::make_unique< ExrImageLoader >() );
 	}
 
 	void ExrImageLoader::unregisterLoader( ImageLoader & reg )
 	{
-		reg.unregisterLoader( listExtensions() );
+		reg.unregisterLoader( exrl::listExtensions() );
 	}
 
 	ImageLayout ExrImageLoader::load( String const & imageFormat
@@ -88,7 +88,7 @@ namespace castor
 	{
 		if ( string::upperCase( imageFormat ).find( cuT( "EXR" ) ) != String::npos )
 		{
-			buffer = doLoad32BitsPerChannel( data, size );
+			buffer = exrl::doLoad32BitsPerChannel( data, size );
 		}
 
 		return ImageLayout{ ImageLayout::e2D, *buffer };

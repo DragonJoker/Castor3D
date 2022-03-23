@@ -6,8 +6,6 @@
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	Ray::Ray( castor::Position const & point
@@ -73,16 +71,16 @@ namespace castor3d
 
 			if ( u >= 0.0 && u <= 1.0 )
 			{
-				castor::Point3f q{ point::cross( s, e1 ) };
-				float v = f * point::dot( m_direction, q );
+				castor::Point3f q{ castor::point::cross( s, e1 ) };
+				float v = f * castor::point::dot( m_direction, q );
 
 				if ( v >= 0.0 && u + v <= 1.0 )
 				{
-					distance = f * point::dot( e2, q );
+					distance = f * castor::point::dot( e2, q );
 
 					if ( distance > 0.00001f )
 					{
-						result = Intersection::eIn;
+						result = castor::Intersection::eIn;
 					}
 				}
 			}
@@ -91,7 +89,7 @@ namespace castor3d
 		return result;
 	}
 
-	Intersection Ray::intersects( Face const & face
+	castor::Intersection Ray::intersects( Face const & face
 		, castor::Matrix4x4f const & transform
 		, Submesh const & submesh
 		, float & distance )const
@@ -102,26 +100,26 @@ namespace castor3d
 		//	, transform * Vertex::getPosition( &submesh.getVertexBuffer().getData()[face[1] * stride], pt2 )
 		//	, transform * Vertex::getPosition( &submesh.getVertexBuffer().getData()[face[2] * stride], pt3 )
 		//	, distance );
-		return Intersection::eOut;
+		return castor::Intersection::eOut;
 	}
 
-	Intersection Ray::intersects( castor::Point3f const & vertex
+	castor::Intersection Ray::intersects( castor::Point3f const & vertex
 		, float & distance )const
 	{
-		Intersection result = Intersection::eOut;
+		castor::Intersection result = castor::Intersection::eOut;
 		castor::Point3f u( m_origin - vertex );
 		castor::Point3f puv;
 
-		if ( projectVertex( u, puv ) && point::lengthSquared( puv ) < 0.000001 )
+		if ( projectVertex( u, puv ) && castor::point::lengthSquared( puv ) < 0.000001 )
 		{
-			distance = float( point::length( u ) );
-			result = Intersection::eIn;
+			distance = float( castor::point::length( u ) );
+			result = castor::Intersection::eIn;
 		}
 
 		return result;
 	}
 
-	Intersection Ray::intersects( BoundingBox const & box
+	castor::Intersection Ray::intersects( castor::BoundingBox const & box
 		, float & distance )const
 	{
 		castor::Point3f v1( box.getMin().constPtr() );
@@ -132,83 +130,83 @@ namespace castor3d
 		castor::Point3f v5( v8[0], v1[1], v8[2] );
 		castor::Point3f v6( v1[0], v8[1], v8[2] );
 		castor::Point3f v7( v8[0], v8[1], v8[2] );
-		auto result = Intersection::eOut;
+		auto result = castor::Intersection::eOut;
 		float dist = 0.0f;
 		float min = std::numeric_limits< float >::max();
 
-		if ( ( intersects( v1, v2, v3, dist ) ) != Intersection::eOut )
+		if ( ( intersects( v1, v2, v3, dist ) ) != castor::Intersection::eOut )
 		{
-			result = Intersection::eIn;
+			result = castor::Intersection::eIn;
 			min = std::min( min, dist );
 		}
 
-		if ( ( intersects( v2, v4, v3, dist ) ) != Intersection::eOut )
+		if ( ( intersects( v2, v4, v3, dist ) ) != castor::Intersection::eOut )
 		{
-			result = Intersection::eIn;
+			result = castor::Intersection::eIn;
 			min = std::min( min, dist );
 		}
 
-		if ( ( intersects( v2, v6, v4, dist ) ) != Intersection::eOut )
+		if ( ( intersects( v2, v6, v4, dist ) ) != castor::Intersection::eOut )
 		{
-			result = Intersection::eIn;
+			result = castor::Intersection::eIn;
 			min = std::min( min, dist );
 		}
 
-		if ( ( intersects( v6, v8, v4, dist ) ) != Intersection::eOut )
+		if ( ( intersects( v6, v8, v4, dist ) ) != castor::Intersection::eOut )
 		{
-			result = Intersection::eIn;
+			result = castor::Intersection::eIn;
 			min = std::min( min, dist );
 		}
 
-		if ( ( intersects( v6, v5, v8, dist ) ) != Intersection::eOut )
+		if ( ( intersects( v6, v5, v8, dist ) ) != castor::Intersection::eOut )
 		{
-			result = Intersection::eIn;
+			result = castor::Intersection::eIn;
 			min = std::min( min, dist );
 		}
 
-		if ( ( intersects( v5, v7, v8, dist ) ) != Intersection::eOut )
+		if ( ( intersects( v5, v7, v8, dist ) ) != castor::Intersection::eOut )
 		{
-			result = Intersection::eIn;
+			result = castor::Intersection::eIn;
 			min = std::min( min, dist );
 		}
 
-		if ( ( intersects( v1, v7, v5, dist ) ) != Intersection::eOut )
+		if ( ( intersects( v1, v7, v5, dist ) ) != castor::Intersection::eOut )
 		{
-			result = Intersection::eIn;
+			result = castor::Intersection::eIn;
 			min = std::min( min, dist );
 		}
 
-		if ( ( intersects( v1, v3, v7, dist ) ) != Intersection::eOut )
+		if ( ( intersects( v1, v3, v7, dist ) ) != castor::Intersection::eOut )
 		{
-			result = Intersection::eIn;
+			result = castor::Intersection::eIn;
 			min = std::min( min, dist );
 		}
 
-		if ( ( intersects( v2, v1, v5, dist ) ) != Intersection::eOut )
+		if ( ( intersects( v2, v1, v5, dist ) ) != castor::Intersection::eOut )
 		{
-			result = Intersection::eIn;
+			result = castor::Intersection::eIn;
 			min = std::min( min, dist );
 		}
 
-		if ( ( intersects( v2, v5, v6, dist ) ) != Intersection::eOut )
+		if ( ( intersects( v2, v5, v6, dist ) ) != castor::Intersection::eOut )
 		{
-			result = Intersection::eIn;
+			result = castor::Intersection::eIn;
 			min = std::min( min, dist );
 		}
 
-		if ( ( intersects( v3, v4, v7, dist ) ) != Intersection::eOut )
+		if ( ( intersects( v3, v4, v7, dist ) ) != castor::Intersection::eOut )
 		{
-			result = Intersection::eIn;
+			result = castor::Intersection::eIn;
 			min = std::min( min, dist );
 		}
 
-		if ( ( intersects( v4, v7, v8, dist ) ) != Intersection::eOut )
+		if ( ( intersects( v4, v7, v8, dist ) ) != castor::Intersection::eOut )
 		{
-			result = Intersection::eIn;
+			result = castor::Intersection::eIn;
 			min = std::min( min, dist );
 		}
 
-		if ( result != Intersection::eOut )
+		if ( result != castor::Intersection::eOut )
 		{
 			distance = min;
 		}
@@ -216,56 +214,56 @@ namespace castor3d
 		return result;
 	}
 
-	Intersection Ray::intersects( BoundingSphere const & sphere
+	castor::Intersection Ray::intersects( castor::BoundingSphere const & sphere
 		, float & distance )const
 	{
 		// see http://www.lighthouse3d.com/tutorials/maths/ray-sphere-intersection/
-		auto result = Intersection::eOut;
+		auto result = castor::Intersection::eOut;
 		castor::Point3f v( sphere.getCenter() - m_origin );
 		castor::Point3f puv;
 
 		if ( projectVertex( v, puv ) )
 		{
 			// Sphere's center projects on the ray.
-			distance = float( point::length( puv - v ) );
+			distance = float( castor::point::length( puv - v ) );
 
 			if ( distance == sphere.getRadius() )
 			{
 				// Single intersection point.
-				result = Intersection::eIntersect;
+				result = castor::Intersection::eIntersect;
 			}
 			else if ( distance < sphere.getRadius() )
 			{
 				// Two intersection points, we look for the nearest one.
-				result = Intersection::eIn;
+				result = castor::Intersection::eIn;
 
-				if ( point::length( v ) < sphere.getRadius() )
+				if ( castor::point::length( v ) < sphere.getRadius() )
 				{
 					// The ray origin is inside the sphere.
-					distance = float( point::length( puv ) + sqrt( sphere.getRadius() * sphere.getRadius() - distance * distance ) );
+					distance = float( castor::point::length( puv ) + sqrt( sphere.getRadius() * sphere.getRadius() - distance * distance ) );
 				}
 				else
 				{
 					// The ray origin is outside the sphere
-					distance = float( point::length( puv ) - sqrt( sphere.getRadius() * sphere.getRadius() - distance * distance ) );
+					distance = float( castor::point::length( puv ) - sqrt( sphere.getRadius() * sphere.getRadius() - distance * distance ) );
 				}
 			}
 		}
 		else
 		{
-			distance = float( point::length( v ) );
+			distance = float( castor::point::length( v ) );
 
 			if ( distance == sphere.getRadius() )
 			{
 				// Single intersection point.
-				result = Intersection::eIntersect;
+				result = castor::Intersection::eIntersect;
 			}
-			else if ( point::length( v ) < sphere.getRadius() )
+			else if ( castor::point::length( v ) < sphere.getRadius() )
 			{
 				// The sphere's center is behind the ray, and the rays origin is inside the sphere.
-				distance = float( point::length( puv - v ) );
-				distance = float( sqrt( sphere.getRadius() * sphere.getRadius() - distance * distance ) - point::length( puv ) );
-				result = Intersection::eIn;
+				distance = float( castor::point::length( puv - v ) );
+				distance = float( sqrt( sphere.getRadius() * sphere.getRadius() - distance * distance ) - castor::point::length( puv ) );
+				result = castor::Intersection::eIn;
 			}
 			else
 			{
@@ -276,26 +274,26 @@ namespace castor3d
 		return result;
 	}
 
-	Intersection Ray::intersects( GeometrySPtr geometry
+	castor::Intersection Ray::intersects( GeometrySPtr geometry
 		, Face & nearestFace
 		, SubmeshSPtr & nearestSubmesh
 		, float & distance )const
 	{
 		auto mesh = geometry->getMesh().lock();
 		castor::Point3f center{ geometry->getParent()->getDerivedPosition() };
-		BoundingSphere sphere{ center, mesh->getBoundingSphere().getRadius() };
+		castor::BoundingSphere sphere{ center, mesh->getBoundingSphere().getRadius() };
 		//castor::Matrix4x4f const & transform{ geometry->getParent()->getDerivedTransformationMatrix() };
-		auto result = Intersection::eOut;
+		auto result = castor::Intersection::eOut;
 
-		if ( intersects( sphere, distance ) != Intersection::eOut )
+		if ( intersects( sphere, distance ) != castor::Intersection::eOut )
 		{
 			for ( auto submesh : *mesh )
 			{
 				sphere.load( center, submesh->getBoundingSphere().getRadius() );
 
-				if ( intersects( sphere, distance ) != Intersection::eOut )
+				if ( intersects( sphere, distance ) != castor::Intersection::eOut )
 				{
-					result = Intersection::eIn;
+					result = castor::Intersection::eIn;
 
 					//if ( auto indices = submesh->getIndexBuffer().lock() )
 					//{
@@ -333,9 +331,9 @@ namespace castor3d
 	bool Ray::projectVertex( castor::Point3f const & point, castor::Point3f & result )const
 	{
 		bool isProjected = false;
-		result = ( m_direction * point::dot( m_direction, point ) );
+		result = ( m_direction * castor::point::dot( m_direction, point ) );
 
-		if ( point::dot( m_direction, point ) >= 0.0 )
+		if ( castor::point::dot( m_direction, point ) >= 0.0 )
 		{
 			isProjected = true;
 		}

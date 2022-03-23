@@ -13,7 +13,7 @@
 
 namespace Bloom
 {
-	namespace
+	namespace postfx
 	{
 		static uint32_t constexpr BaseFilterCount = 4u;
 		static uint32_t constexpr BaseKernelSize = 5u;
@@ -33,8 +33,8 @@ namespace Bloom
 			, renderTarget
 			, renderSystem
 			, params }
-		, m_blurKernelSize{ BaseKernelSize }
-		, m_blurPassesCount{ BaseFilterCount }
+		, m_blurKernelSize{ postfx::BaseKernelSize }
+		, m_blurPassesCount{ postfx::BaseFilterCount }
 	{
 		setParameters( params );
 	}

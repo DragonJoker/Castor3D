@@ -10,17 +10,15 @@
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp"
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceNode.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*************************************************************************************************
 
-	namespace
+	namespace sklanminst
 	{
-		castor::String const & getObjectTypeName( SkeletonAnimationObjectType type )
+		static castor::String const & getObjectTypeName( SkeletonAnimationObjectType type )
 		{
-			static std::map< SkeletonAnimationObjectType, String > Names
+			static std::map< SkeletonAnimationObjectType, castor::String > Names
 			{
 				{ SkeletonAnimationObjectType::eNode, cuT( "Node_" ) },
 				{ SkeletonAnimationObjectType::eBone, cuT( "Bone_" ) },
@@ -89,12 +87,12 @@ namespace castor3d
 		, castor::String const & name )const
 	{
 		SkeletonAnimationInstanceObjectSPtr result;
-		auto fullName = getObjectTypeName( type ) + name;
+		auto fullName = sklanminst::getObjectTypeName( type ) + name;
 		auto it = std::find_if( m_toMove.begin()
 			, m_toMove.end()
 			, [&fullName]( SkeletonAnimationInstanceObjectSPtr lookup )
 			{
-				return getObjectTypeName( lookup->getObject().getType() ) + lookup->getObject().getName() == fullName;
+				return sklanminst::getObjectTypeName( lookup->getObject().getType() ) + lookup->getObject().getName() == fullName;
 			} );
 
 		if ( it != m_toMove.end() )

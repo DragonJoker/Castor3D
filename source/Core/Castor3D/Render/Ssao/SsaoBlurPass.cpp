@@ -31,11 +31,9 @@
 
 CU_ImplementCUSmartPtr( castor3d, SsaoBlurPass )
 
-using namespace castor;
-
 namespace castor3d
 {
-	namespace
+	namespace ssaoblr
 	{
 		enum Idx : uint32_t
 		{
@@ -47,7 +45,7 @@ namespace castor3d
 			BntImgIdx,
 		};
 
-		ShaderPtr getVertexProgram()
+		static ShaderPtr getVertexProgram()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -63,7 +61,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 		
-		ShaderPtr getPixelProgram( bool useNormalsBuffer )
+		static ShaderPtr getPixelProgram( bool useNormalsBuffer )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -348,9 +346,9 @@ namespace castor3d
 #undef keyPassThrough
 		}
 
-		Texture doCreateTexture( RenderDevice const & device
+		static Texture doCreateTexture( RenderDevice const & device
 			, crg::ResourceHandler & handler
-			, String const & name
+			, castor::String const & name
 			, VkFormat format
 			, VkExtent2D const & size
 			, bool transferDst )
@@ -369,12 +367,12 @@ namespace castor3d
 					| VkImageUsageFlags( transferDst ? VK_IMAGE_USAGE_TRANSFER_DST_BIT : VkImageUsageFlagBits{} ) ) };
 		}
 
-		castor::String getName( bool useNormalsBuffer )
+		static castor::String getName( bool useNormalsBuffer )
 		{
 			return "SsaoBlur" + ( useNormalsBuffer ? std::string{ "Nml" } : std::string{} );
 		}
 
-		crg::rq::Config getConfig( VkExtent2D const & renderSize
+		static crg::rq::Config getConfig( VkExtent2D const & renderSize
 			, SsaoConfig const & ssaoConfig
 			, uint32_t const & passIndex
 			, ashes::PipelineShaderStageCreateInfoArray const & stages0
@@ -389,7 +387,7 @@ namespace castor3d
 			return result;
 		}
 
-		crg::ru::Config makeConfig( bool isVertical
+		static crg::ru::Config makeConfig( bool isVertical
 			, crg::Attachment const & attach
 			, crg::Attachment const & bentAttach )
 		{
@@ -435,11 +433,11 @@ namespace castor3d
 		, bool useNormalsBuffer
 		, castor::String const & prefix )
 		: vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
-			, prefix + getName( useNormalsBuffer )
-			, getVertexProgram() }
+			, prefix + ssaoblr::getName( useNormalsBuffer )
+			, ssaoblr::getVertexProgram() }
 		, pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT
-			, prefix + getName( useNormalsBuffer )
-			, getPixelProgram( useNormalsBuffer ) }
+			, prefix + ssaoblr::getName( useNormalsBuffer )
+			, ssaoblr::getPixelProgram( useNormalsBuffer ) }
 		, stages{ makeShaderState( device, vertexShader )
 			, makeShaderState( device, pixelShader ) }
 	{
@@ -451,12 +449,12 @@ namespace castor3d
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, crg::FramePass const & previousPass
-		, String const & prefix
+		, castor::String const & prefix
 		, VkExtent2D const & size
 		, SsaoConfig const & config
 		, SsaoConfigUbo & ssaoConfigUbo
 		, GpInfoUbo const & gpInfoUbo
-		, Point2i const & axis
+		, castor::Point2i const & axis
 		, Texture const & input
 		, Texture const & bentInput
 		, Texture const & normals
@@ -468,8 +466,8 @@ namespace castor3d
 		, m_bentInput{ bentInput }
 		, m_config{ config }
 		, m_size{ size }
-		, m_result{ doCreateTexture( m_device, m_graph.getHandler(), m_graph.getName() + "SsaoBlur" + prefix, input.getFormat(), m_size, axis->y != 0 ) }
-		, m_bentResult{ doCreateTexture( m_device, m_graph.getHandler(), m_graph.getName() + "SsaoBentNormals" + prefix, m_bentInput.getFormat(), m_size, axis->y != 0 ) }
+		, m_result{ ssaoblr::doCreateTexture( m_device, m_graph.getHandler(), m_graph.getName() + "SsaoBlur" + prefix, input.getFormat(), m_size, axis->y != 0 ) }
+		, m_bentResult{ ssaoblr::doCreateTexture( m_device, m_graph.getHandler(), m_graph.getName() + "SsaoBentNormals" + prefix, m_bentInput.getFormat(), m_size, axis->y != 0 ) }
 		, m_configurationUbo{ m_device.uboPool->getBuffer< Configuration >( 0u ) }
 		, m_programs{ Program{ device, false, m_graph.getName() }, Program{ device, true, m_graph.getName() } }
 	{
@@ -487,12 +485,12 @@ namespace castor3d
 				auto result = std::make_unique< RenderQuad >( pass
 					, context
 					, graph
-					, getConfig( m_size
+					, ssaoblr::getConfig( m_size
 						, config
 						, passIndex
 						, m_programs[0].stages
 						, m_programs[1].stages )
-					, makeConfig( axis->y != 0
+					, ssaoblr::makeConfig( axis->y != 0
 						, *resIt
 						, *bentResIt )
 					, m_config );
@@ -502,12 +500,12 @@ namespace castor3d
 			} );
 		m_lastPass = &pass;
 		pass.addDependency( previousPass );
-		m_ssaoConfigUbo.createPassBinding( pass, SsaoCfgUboIdx );
-		m_gpInfoUbo.createPassBinding( pass, GpInfoUboIdx );
-		m_configurationUbo.createPassBinding( pass, "SsaoBlurCfg", BlurCfgUboIdx );
-		pass.addSampledView( normals.sampledViewId, NmlImgIdx );
-		pass.addSampledView( input.sampledViewId, InpImgIdx );
-		pass.addSampledView( bentInput.sampledViewId, BntImgIdx );
+		m_ssaoConfigUbo.createPassBinding( pass, ssaoblr::SsaoCfgUboIdx );
+		m_gpInfoUbo.createPassBinding( pass, ssaoblr::GpInfoUboIdx );
+		m_configurationUbo.createPassBinding( pass, "SsaoBlurCfg", ssaoblr::BlurCfgUboIdx );
+		pass.addSampledView( normals.sampledViewId, ssaoblr::NmlImgIdx );
+		pass.addSampledView( input.sampledViewId, ssaoblr::InpImgIdx );
+		pass.addSampledView( bentInput.sampledViewId, ssaoblr::BntImgIdx );
 		pass.addOutputColourView( m_result.targetViewId, opaqueWhiteClearColor );
 		pass.addOutputColourView( m_bentResult.targetViewId, transparentBlackClearColor );
 		m_result.create();

@@ -47,9 +47,9 @@ namespace castor3d
 {
 	//*************************************************************************************************
 
-	namespace
+	namespace rendtechpass
 	{
-		void bindTexture( VkImageView view
+		static void bindTexture( VkImageView view
 			, VkSampler sampler
 			, ashes::WriteDescriptorSetArray & writes
 			, uint32_t & index )
@@ -88,7 +88,7 @@ namespace castor3d
 	{
 		auto texture = graph.createImageView( view );
 		CU_Require( texture != VK_NULL_HANDLE );
-		bindTexture( texture
+		rendtechpass::bindTexture( texture
 			, sampler
 			, writes
 			, index );
@@ -357,7 +357,7 @@ namespace castor3d
 		, ShadowMapLightTypeArray const & shadowMaps
 		, uint32_t & index )const
 	{
-		bindTexture( m_scene.getEnvironmentMap().getColourId().sampledView
+		rendtechpass::bindTexture( m_scene.getEnvironmentMap().getColourId().sampledView
 			, *m_scene.getEnvironmentMap().getColourId().sampler
 			, descriptorWrites
 			, index );
@@ -367,15 +367,15 @@ namespace castor3d
 		if ( background.hasIbl() )
 		{
 			auto & ibl = background.getIbl();
-			bindTexture( ibl.getPrefilteredBrdfTexture().wholeView
+			rendtechpass::bindTexture( ibl.getPrefilteredBrdfTexture().wholeView
 				, ibl.getPrefilteredBrdfSampler()
 				, descriptorWrites
 				, index );
-			bindTexture( ibl.getIrradianceTexture().wholeView
+			rendtechpass::bindTexture( ibl.getIrradianceTexture().wholeView
 				, ibl.getIrradianceSampler()
 				, descriptorWrites
 				, index );
-			bindTexture( ibl.getPrefilteredEnvironmentTexture().wholeView
+			rendtechpass::bindTexture( ibl.getPrefilteredEnvironmentTexture().wholeView
 				, ibl.getPrefilteredEnvironmentSampler()
 				, descriptorWrites
 				, index );
@@ -394,11 +394,11 @@ namespace castor3d
 			CU_Require( m_vctFirstBounce );
 			CU_Require( m_vctSecondaryBounce );
 			descriptorWrites.push_back( m_vctConfigUbo->getDescriptorWrite( index++ ) );
-			bindTexture( m_vctFirstBounce->wholeView
+			rendtechpass::bindTexture( m_vctFirstBounce->wholeView
 				, *m_vctFirstBounce->sampler
 				, descriptorWrites
 				, index );
-			bindTexture( m_vctSecondaryBounce->wholeView
+			rendtechpass::bindTexture( m_vctSecondaryBounce->wholeView
 				, *m_vctSecondaryBounce->sampler
 				, descriptorWrites
 				, index );
@@ -421,15 +421,15 @@ namespace castor3d
 			{
 				CU_Require( m_lpvResult );
 				auto & lpv = *m_lpvResult;
-				bindTexture( lpv[LpvTexture::eR].wholeView
+				rendtechpass::bindTexture( lpv[LpvTexture::eR].wholeView
 					, *lpv[LpvTexture::eR].sampler
 					, descriptorWrites
 					, index );
-				bindTexture( lpv[LpvTexture::eG].wholeView
+				rendtechpass::bindTexture( lpv[LpvTexture::eG].wholeView
 					, *lpv[LpvTexture::eG].sampler
 					, descriptorWrites
 					, index );
-				bindTexture( lpv[LpvTexture::eB].wholeView
+				rendtechpass::bindTexture( lpv[LpvTexture::eB].wholeView
 					, *lpv[LpvTexture::eB].sampler
 					, descriptorWrites
 					, index );
@@ -442,15 +442,15 @@ namespace castor3d
 				for ( auto & plpv : *m_llpvResult )
 				{
 					auto & lpv = *plpv;
-					bindTexture( lpv[LpvTexture::eR].wholeView
+					rendtechpass::bindTexture( lpv[LpvTexture::eR].wholeView
 						, *lpv[LpvTexture::eR].sampler
 						, descriptorWrites
 						, index );
-					bindTexture( lpv[LpvTexture::eG].wholeView
+					rendtechpass::bindTexture( lpv[LpvTexture::eG].wholeView
 						, *lpv[LpvTexture::eG].sampler
 						, descriptorWrites
 						, index );
-					bindTexture( lpv[LpvTexture::eB].wholeView
+					rendtechpass::bindTexture( lpv[LpvTexture::eB].wholeView
 						, *lpv[LpvTexture::eB].sampler
 						, descriptorWrites
 						, index );
@@ -480,7 +480,7 @@ namespace castor3d
 
 		if ( m_ssao )
 		{
-			bindTexture( m_ssao->wholeView
+			rendtechpass::bindTexture( m_ssao->wholeView
 				, *m_ssao->sampler
 				, descriptorWrites
 				, index );

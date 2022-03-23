@@ -23,7 +23,7 @@ CU_ImplementCUSmartPtr( castor3d, LightCache )
 
 namespace castor3d
 {
-	namespace
+	namespace cachelgt
 	{
 		static castor::String const C3D_UniqueDirectionalLight = cuT( "Only one directional light is allowed." );
 	}
@@ -166,7 +166,7 @@ namespace castor3d
 
 		if ( !result )
 		{
-			log::error << C3D_UniqueDirectionalLight << std::endl;
+			log::error << cachelgt::C3D_UniqueDirectionalLight << std::endl;
 		}
 
 		return result;

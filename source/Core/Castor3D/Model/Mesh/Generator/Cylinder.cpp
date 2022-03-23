@@ -6,8 +6,6 @@
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"
 
-using namespace castor;
-
 namespace castor3d
 {
 	Cylinder::Cylinder()
@@ -25,21 +23,21 @@ namespace castor3d
 
 	void Cylinder::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 	{
-		String param;
+		castor::String param;
 
 		if ( p_parameters.get( cuT( "faces" ), param ) )
 		{
-			m_nbFaces = string::toUInt( param );
+			m_nbFaces = castor::string::toUInt( param );
 		}
 
 		if ( p_parameters.get( cuT( "radius" ), param ) )
 		{
-			m_radius = string::toFloat( param );
+			m_radius = castor::string::toFloat( param );
 		}
 
 		if ( p_parameters.get( cuT( "height" ), param ) )
 		{
-			m_height = string::toFloat( param );
+			m_height = castor::string::toFloat( param );
 		}
 
 		if ( m_nbFaces >= 2 )
@@ -52,7 +50,7 @@ namespace castor3d
 			auto indexMappingSide = std::make_shared< TriFaceMapping >( submeshSide );
 
 			//CALCUL DE LA POSITION DES POINTS
-			float angleRotation = PiMult2< float > / float( m_nbFaces );
+			float angleRotation = castor::PiMult2< float > / float( m_nbFaces );
 			auto rCosRot = float( cos( angleRotation ) );
 			auto rSinRot = float( sin( angleRotation ) );
 			float rCos = 1.0f;
@@ -67,23 +65,23 @@ namespace castor3d
 				if ( i < m_nbFaces )
 				{
 					baseVertex.push_back( InterleavedVertex{}
-						.position( Point3f{ m_radius * rCos, -m_height / 2, m_radius * rSin } )
-						.normal( Point3f{ 0.0, -1.0, 0.0 } )
-						.texcoord( Point2f{ ( 1 + rCos ) / 2, ( 1 + rSin ) / 2 } ) );
+						.position( castor::Point3f{ m_radius * rCos, -m_height / 2, m_radius * rSin } )
+						.normal( castor::Point3f{ 0.0, -1.0, 0.0 } )
+						.texcoord( castor::Point2f{ ( 1 + rCos ) / 2, ( 1 + rSin ) / 2 } ) );
 					topVertex.push_back( InterleavedVertex{}
-						.position( Point3f{ m_radius * rCos, m_height / 2, m_radius * rSinT } )
-						.normal( Point3f{ 0.0, 1.0, 0.0 } )
-						.texcoord( Point2f{ ( 1 + rCos ) / 2, ( 1 + rSinT ) / 2 } ) );
+						.position( castor::Point3f{ m_radius * rCos, m_height / 2, m_radius * rSinT } )
+						.normal( castor::Point3f{ 0.0, 1.0, 0.0 } )
+						.texcoord( castor::Point2f{ ( 1 + rCos ) / 2, ( 1 + rSinT ) / 2 } ) );
 				}
 
 				sideVertex.push_back( InterleavedVertex{}
-					.position( Point3f{ m_radius * rCos, -m_height / 2, m_radius * rSin } )
-					.normal( Point3f{ -rCos, -rSin, 0.0 } )
-					.texcoord( Point2f{ float( 1.0 ) - float( i ) / float( m_nbFaces ), float( 0.0 ) } ) );
+					.position( castor::Point3f{ m_radius * rCos, -m_height / 2, m_radius * rSin } )
+					.normal( castor::Point3f{ -rCos, -rSin, 0.0 } )
+					.texcoord( castor::Point2f{ float( 1.0 ) - float( i ) / float( m_nbFaces ), float( 0.0 ) } ) );
 				sideVertex.push_back( InterleavedVertex{}
-					.position( Point3f{ m_radius * rCos, m_height / 2, m_radius * rSin } )
-					.normal( Point3f{ -rCos, -rSin, 0.0 } )
-					.texcoord( Point2f{ float( 1.0 ) - float( i ) / float( m_nbFaces ), float( 1.0 ) } ) );
+					.position( castor::Point3f{ m_radius * rCos, m_height / 2, m_radius * rSin } )
+					.normal( castor::Point3f{ -rCos, -rSin, 0.0 } )
+					.texcoord( castor::Point2f{ float( 1.0 ) - float( i ) / float( m_nbFaces ), float( 1.0 ) } ) );
 
 				const float newCos = rCosRot * rCos - rSinRot * rSin;
 				const float newSin = rSinRot * rCos + rCosRot * rSin;
@@ -96,13 +94,13 @@ namespace castor3d
 			auto bottomCenterIndex = uint32_t( baseVertex.size() );
 			FaceSPtr pFace;
 			topVertex.push_back( InterleavedVertex{}
-				.position( Point3f{ 0.0, m_height / 2, 0.0 } )
-				.normal( Point3f{ 0.0, 1.0, 0.0 } )
-				.texcoord( Point2f{ 0.5, 0.5 } ) );
+				.position( castor::Point3f{ 0.0, m_height / 2, 0.0 } )
+				.normal( castor::Point3f{ 0.0, 1.0, 0.0 } )
+				.texcoord( castor::Point2f{ 0.5, 0.5 } ) );
 			baseVertex.push_back( InterleavedVertex{}
-				.position( Point3f{ 0.0, -m_height / 2, 0.0 } )
-				.normal( Point3f{ 0.0, -1.0, 0.0 } )
-				.texcoord( Point2f{ 0.5, 0.5 } ) );
+				.position( castor::Point3f{ 0.0, -m_height / 2, 0.0 } )
+				.normal( castor::Point3f{ 0.0, -1.0, 0.0 } )
+				.texcoord( castor::Point2f{ 0.5, 0.5 } ) );
 
 			submeshTop.addPoints( topVertex );
 			submeshBase.addPoints( baseVertex );

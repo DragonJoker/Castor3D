@@ -58,28 +58,26 @@
 
 #pragma GCC diagnostic ignored "-Wnull-dereference"
 
-using namespace castor;
-
 namespace castor3d
 {
-	namespace
+	namespace scnprs
 	{
-		void fillMeshImportParameters( castor::FileParserContext & context
-			, String const & meshParams
+		static void fillMeshImportParameters( castor::FileParserContext & context
+			, castor::String const & meshParams
 			, Parameters & parameters )
 		{
-			StringArray paramArray = string::split( meshParams, cuT( "-" ), 20, false );
+			auto paramArray = castor::string::split( meshParams, cuT( "-" ), 20, false );
 
 			for ( auto param : paramArray )
 			{
 				if ( param.find( cuT( "smooth_normals" ) ) == 0 )
 				{
-					String strNml = cuT( "smooth" );
+					castor::String strNml = cuT( "smooth" );
 					parameters.add( cuT( "normals" ), strNml.c_str(), uint32_t( strNml.size() ) );
 				}
 				else if ( param.find( cuT( "flat_normals" ) ) == 0 )
 				{
-					String strNml = cuT( "flat" );
+					castor::String strNml = cuT( "flat" );
 					parameters.add( cuT( "normals" ), strNml.c_str(), uint32_t( strNml.size() ) );
 				}
 				else if ( param.find( cuT( "tangent_space" ) ) == 0 )
@@ -90,10 +88,10 @@ namespace castor3d
 				{
 					auto eqIndex = param.find( cuT( '=' ) );
 
-					if ( eqIndex != String::npos )
+					if ( eqIndex != castor::String::npos )
 					{
 						float value;
-						string::parse< float >( param.substr( eqIndex + 1 ), value );
+						castor::string::parse< float >( param.substr( eqIndex + 1 ), value );
 						parameters.add( cuT( "pitch" ), value );
 					}
 					else
@@ -105,10 +103,10 @@ namespace castor3d
 				{
 					auto eqIndex = param.find( cuT( '=' ) );
 
-					if ( eqIndex != String::npos )
+					if ( eqIndex != castor::String::npos )
 					{
 						float value;
-						string::parse< float >( param.substr( eqIndex + 1 ), value );
+						castor::string::parse< float >( param.substr( eqIndex + 1 ), value );
 						parameters.add( cuT( "yaw" ), value );
 					}
 					else
@@ -120,10 +118,10 @@ namespace castor3d
 				{
 					auto eqIndex = param.find( cuT( '=' ) );
 
-					if ( eqIndex != String::npos )
+					if ( eqIndex != castor::String::npos )
 					{
 						float value;
-						string::parse< float >( param.substr( eqIndex + 1 ), value );
+						castor::string::parse< float >( param.substr( eqIndex + 1 ), value );
 						parameters.add( cuT( "roll" ), value );
 					}
 					else
@@ -139,10 +137,10 @@ namespace castor3d
 				{
 					auto eqIndex = param.find( cuT( '=' ) );
 
-					if ( eqIndex != String::npos )
+					if ( eqIndex != castor::String::npos )
 					{
 						float value;
-						string::parse< float >( param.substr( eqIndex + 1 ), value );
+						castor::string::parse< float >( param.substr( eqIndex + 1 ), value );
 						parameters.add( cuT( "rescale" ), value );
 					}
 					else
@@ -199,7 +197,7 @@ namespace castor3d
 		}
 		else
 		{
-			String name;
+			castor::String name;
 			parsingContext.sampler = parsingContext.parser->getEngine()->getSamplerCache().tryFind( params[0]->get( name ) );
 
 			if ( !parsingContext.sampler.lock() )
@@ -222,7 +220,7 @@ namespace castor3d
 		}
 		else
 		{
-			String name;
+			castor::String name;
 			params[0]->get( name );
 			parsingContext.scene = parsingContext.parser->getEngine()->getSceneCache().tryFind( name );
 
@@ -293,7 +291,7 @@ namespace castor3d
 		}
 		else
 		{
-			String name;
+			castor::String name;
 			parsingContext.parentOverlays.push_back( parsingContext.overlay );
 			auto parent = parsingContext.parentOverlays.back().get();
 			parsingContext.overlay = parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
@@ -322,7 +320,7 @@ namespace castor3d
 		}
 		else
 		{
-			String name;
+			castor::String name;
 			parsingContext.parentOverlays.push_back( parsingContext.overlay );
 			auto parent = parsingContext.parentOverlays.back().get();
 			parsingContext.overlay = parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
@@ -351,7 +349,7 @@ namespace castor3d
 		}
 		else
 		{
-			String name;
+			castor::String name;
 			parsingContext.parentOverlays.push_back( parsingContext.overlay );
 			auto parent = parsingContext.parentOverlays.back().get();
 			parsingContext.overlay = parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
@@ -478,7 +476,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserRenderTargetScene )
 	{
 		auto & parsingContext = getParserContext( context );
-		String name;
+		castor::String name;
 
 		if ( !parsingContext.renderTarget )
 		{
@@ -503,7 +501,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserRenderTargetCamera )
 	{
 		auto & parsingContext = getParserContext( context );
-		String name;
+		castor::String name;
 
 		if ( !parsingContext.renderTarget )
 		{
@@ -549,7 +547,7 @@ namespace castor3d
 		{
 			params[0]->get( parsingContext.pixelFormat );
 
-			if ( parsingContext.pixelFormat < PixelFormat::eD16_UNORM )
+			if ( parsingContext.pixelFormat < castor::PixelFormat::eD16_UNORM )
 			{
 				if ( parsingContext.size != castor::Size{ 1u, 1u } )
 				{
@@ -598,13 +596,13 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			String name;
+			castor::String name;
 			params[0]->get( name );
 			Parameters parameters;
 
 			if ( params.size() > 1 )
 			{
-				String tmp;
+				castor::String tmp;
 				parameters.parse( params[1]->get( tmp ) );
 			}
 
@@ -637,13 +635,13 @@ namespace castor3d
 		}
 		else
 		{
-			String name;
+			castor::String name;
 			params[0]->get( name );
 			Parameters parameters;
 
 			if ( params.size() > 1 )
 			{
-				String tmp;
+				castor::String tmp;
 				parameters.parse( params[1]->get( tmp ) );
 			}
 
@@ -751,7 +749,7 @@ namespace castor3d
 			}
 			else
 			{
-				CU_ParsingError( cuT( "LOD out of bounds [-1000,1000] : " ) + string::toString( rValue ) );
+				CU_ParsingError( cuT( "LOD out of bounds [-1000,1000] : " ) + castor::string::toString( rValue ) );
 			}
 		}
 		else
@@ -776,7 +774,7 @@ namespace castor3d
 			}
 			else
 			{
-				CU_ParsingError( cuT( "LOD out of bounds [-1000,1000] : " ) + string::toString( rValue ) );
+				CU_ParsingError( cuT( "LOD out of bounds [-1000,1000] : " ) + castor::string::toString( rValue ) );
 			}
 		}
 		else
@@ -801,7 +799,7 @@ namespace castor3d
 			}
 			else
 			{
-				CU_ParsingError( cuT( "LOD out of bounds [-1000,1000] : " ) + string::toString( rValue ) );
+				CU_ParsingError( cuT( "LOD out of bounds [-1000,1000] : " ) + castor::string::toString( rValue ) );
 			}
 		}
 		else
@@ -981,7 +979,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			RgbColour clrBackground;
+			castor::RgbColour clrBackground;
 			params[0]->get( clrBackground );
 			parsingContext.scene->setBackgroundColour( clrBackground );
 		}
@@ -1000,7 +998,7 @@ namespace castor3d
 		{
 			auto imgBackground = std::make_shared< ImageBackground >( *parsingContext.parser->getEngine()
 				, *parsingContext.scene );
-			Path path;
+			castor::Path path;
 			imgBackground->loadImage( context.file.getPath(), params[0]->get( path ) );
 			parsingContext.scene->setBackground( imgBackground );
 			parsingContext.skybox.reset();
@@ -1070,7 +1068,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			String name;
+			castor::String name;
 			params[0]->get( name );
 			parsingContext.sceneNode = std::make_shared< SceneNode >( name
 				, *parsingContext.scene );
@@ -1089,7 +1087,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			String name;
+			castor::String name;
 			params[0]->get( name );
 			parsingContext.sceneNode = std::make_shared< SceneNode >( name
 				, *parsingContext.scene );
@@ -1102,7 +1100,7 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 		parsingContext.geometry.reset();
-		String name;
+		castor::String name;
 
 		if ( !parsingContext.scene )
 		{
@@ -1127,7 +1125,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			RgbColour clColour;
+			castor::RgbColour clColour;
 			params[0]->get( clColour );
 			parsingContext.scene->setAmbientLight( clColour );
 		}
@@ -1151,7 +1149,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			String name;
+			castor::String name;
 			params[0]->get( name );
 			parsingContext.billboards = std::make_shared< BillboardList >( name, *parsingContext.scene );
 		}
@@ -1168,7 +1166,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			String name;
+			castor::String name;
 			params[0]->get( name );
 			parsingContext.animGroup = parsingContext.scene->getAnimatedObjectGroupCache().add( name, *parsingContext.scene ).lock();
 		}
@@ -1185,7 +1183,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			String name;
+			castor::String name;
 			parsingContext.parentOverlays.push_back( parsingContext.overlay );
 			auto parent = parsingContext.parentOverlays.back().get();
 			parsingContext.overlay = parsingContext.scene->getOverlayView().tryFind( params[0]->get( name ) ).lock();
@@ -1214,7 +1212,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			String name;
+			castor::String name;
 			parsingContext.parentOverlays.push_back( parsingContext.overlay );
 			auto parent = parsingContext.parentOverlays.back().get();
 			parsingContext.overlay = parsingContext.scene->getOverlayView().tryFind( params[0]->get( name ) ).lock();
@@ -1243,7 +1241,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			String name;
+			castor::String name;
 			parsingContext.parentOverlays.push_back( parsingContext.overlay );
 			auto parent = parsingContext.parentOverlays.back().get();
 			parsingContext.overlay = parsingContext.scene->getOverlayView().tryFind( params[0]->get( name ) ).lock();
@@ -1326,7 +1324,7 @@ namespace castor3d
 		}
 		else
 		{
-			String value;
+			castor::String value;
 			params[0]->get( value );
 			parsingContext.strName = value;
 			parsingContext.particleCount = 0u;
@@ -1375,10 +1373,10 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserSceneImportFile )
 	{
 		auto & parsingContext = getParserContext( context );
-		Path path;
-		Path pathFile = context.file.getPath() / params[0]->get( path );
+		castor::Path path;
+		castor::Path pathFile = context.file.getPath() / params[0]->get( path );
 		Engine * engine = parsingContext.parser->getEngine();
-		auto extension = string::lowerCase( pathFile.getExtension() );
+		auto extension = castor::string::lowerCase( pathFile.getExtension() );
 
 		if ( !engine->getImporterFactory().isTypeRegistered( extension ) )
 		{
@@ -1430,7 +1428,7 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 		Engine * engine = parsingContext.parser->getEngine();
-		auto extension = string::lowerCase( parsingContext.sceneImportConfig.file.getExtension() );
+		auto extension = castor::string::lowerCase( parsingContext.sceneImportConfig.file.getExtension() );
 		auto importer = engine->getImporterFactory().create( extension, *engine );
 		Parameters parameters;
 
@@ -1473,7 +1471,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserMesh )
 	{
 		auto & parsingContext = getParserContext( context );
-		String name;
+		castor::String name;
 		params[0]->get( name );
 
 		if ( parsingContext.scene )
@@ -1543,7 +1541,7 @@ namespace castor3d
 		else
 		{
 			auto & cache = parsingContext.scene->getSceneNodeCache();
-			String value;
+			castor::String value;
 			params[0]->get( value );
 
 			if ( auto node = cache.tryFind( value ).lock() )
@@ -1594,7 +1592,7 @@ namespace castor3d
 		else
 		{
 			auto & cache = parsingContext.parser->getEngine()->getMaterialCache();
-			String name;
+			castor::String name;
 			params[0]->get( name );
 			auto material = cache.tryFind( name ).lock().get();
 
@@ -1719,11 +1717,11 @@ namespace castor3d
 		}
 		else
 		{
-			String value;
+			castor::String value;
 			params[0]->get( value );
 			Engine * engine = parsingContext.parser->getEngine();
 
-			if ( !engine->getParticleFactory().isTypeRegistered( string::lowerCase( value ) ) )
+			if ( !engine->getParticleFactory().isTypeRegistered( castor::string::lowerCase( value ) ) )
 			{
 				CU_ParsingError( cuT( "Particle type [" ) + value + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
 			}
@@ -1749,9 +1747,9 @@ namespace castor3d
 		}
 		else
 		{
-			String name;
+			castor::String name;
 			uint32_t type;
-			String value;
+			castor::String value;
 			params[0]->get( name );
 			params[1]->get( type );
 
@@ -1775,7 +1773,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			String name;
+			castor::String name;
 
 			if ( auto parent = parsingContext.scene->getSceneNodeCache().find( params[0]->get( name ) ).lock() )
 			{
@@ -1851,7 +1849,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			Point3f value;
+			castor::Point3f value;
 			params[0]->get( value );
 			parsingContext.light->setColour( value.ptr() );
 		}
@@ -1868,7 +1866,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			Point2f value;
+			castor::Point2f value;
 			params[0]->get( value );
 			parsingContext.light->setIntensity( value.ptr() );
 		}
@@ -1885,7 +1883,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			Point3f value;
+			castor::Point3f value;
 			params[0]->get( value );
 
 			if ( parsingContext.lightType == LightType::ePoint )
@@ -1919,7 +1917,7 @@ namespace castor3d
 
 			if ( parsingContext.lightType == LightType::eSpot )
 			{
-				parsingContext.light->getSpotLight()->setCutOff( Angle::fromDegrees( fFloat ) );
+				parsingContext.light->getSpotLight()->setCutOff( castor::Angle::fromDegrees( fFloat ) );
 			}
 			else
 			{
@@ -2328,7 +2326,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			String name;
+			castor::String name;
 			params[0]->get( name );
 			SceneNodeSPtr parent;
 
@@ -2371,7 +2369,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			Point3f value;
+			castor::Point3f value;
 			params[0]->get( value );
 			parsingContext.sceneNode->setPosition( value );
 		}
@@ -2388,11 +2386,12 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			Point3f axis;
+			castor::Point3f axis;
 			float angle;
 			params[0]->get( axis );
 			params[1]->get( angle );
-			parsingContext.sceneNode->setOrientation( Quaternion::fromAxisAngle( axis, Angle::fromDegrees( angle ) ) );
+			parsingContext.sceneNode->setOrientation( castor::Quaternion::fromAxisAngle( axis
+				, castor::Angle::fromDegrees( angle ) ) );
 		}
 	}
 	CU_EndAttribute()
@@ -2407,11 +2406,11 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			Point3f direction;
+			castor::Point3f direction;
 			params[0]->get( direction );
-			Point3f up{ 0, 1, 0 };
-			Point3f right{ point::cross( direction, up ) };
-			parsingContext.sceneNode->setOrientation( Quaternion::fromAxes( right, up, direction ) );
+			castor::Point3f up{ 0, 1, 0 };
+			castor::Point3f right{ castor::point::cross( direction, up ) };
+			parsingContext.sceneNode->setOrientation( castor::Quaternion::fromAxes( right, up, direction ) );
 		}
 	}
 	CU_EndAttribute()
@@ -2426,7 +2425,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			Point3f value;
+			castor::Point3f value;
 			params[0]->get( value );
 			parsingContext.sceneNode->setScale( value );
 		}
@@ -2448,7 +2447,7 @@ namespace castor3d
 			parsingContext.sceneNode.reset();
 
 			castor::PathArray files;
-			File::listDirectoryFiles( context.file.getPath(), files, true );
+			castor::File::listDirectoryFiles( context.file.getPath(), files, true );
 
 			for ( auto fileName : files )
 			{
@@ -2486,7 +2485,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			String name;
+			castor::String name;
 			params[0]->get( name );
 			SceneNodeSPtr parent;
 
@@ -2536,7 +2535,7 @@ namespace castor3d
 			if ( parsingContext.geometry->getMesh().lock() )
 			{
 				auto & cache = parsingContext.parser->getEngine()->getMaterialCache();
-				String name;
+				castor::String name;
 				auto material = cache.tryFind( params[0]->get( name ) ).lock().get();
 
 				if ( material )
@@ -2635,7 +2634,7 @@ namespace castor3d
 			if ( parsingContext.geometry->getMesh().lock() )
 			{
 				auto & cache = parsingContext.parser->getEngine()->getMaterialCache();
-				String name;
+				castor::String name;
 				uint16_t index;
 				auto material = cache.tryFind( params[1]->get( name ) ).lock().get();
 
@@ -2672,14 +2671,14 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserMeshType )
 	{
 		auto & parsingContext = getParserContext( context );
-		String type;
+		castor::String type;
 		params[0]->get( type );
 
 		Parameters parameters;
 
 		if ( params.size() > 1 )
 		{
-			String tmp;
+			castor::String tmp;
 			parameters.parse( params[1]->get( tmp ) );
 		}
 
@@ -2723,19 +2722,19 @@ namespace castor3d
 		}
 		else
 		{
-			Path path;
-			Path pathFile = context.file.getPath() / params[0]->get( path );
+			castor::Path path;
+			castor::Path pathFile = context.file.getPath() / params[0]->get( path );
 			Parameters parameters;
 
 			if ( params.size() > 1 )
 			{
-				String meshParams;
+				castor::String meshParams;
 				params[1]->get( meshParams );
-				fillMeshImportParameters( context, meshParams, parameters );
+				scnprs::fillMeshImportParameters( context, meshParams, parameters );
 			}
 
 			Engine * engine = parsingContext.parser->getEngine();
-			auto extension = string::lowerCase( pathFile.getExtension() );
+			auto extension = castor::string::lowerCase( pathFile.getExtension() );
 
 			if ( !engine->getImporterFactory().isTypeRegistered( extension ) )
 			{
@@ -2767,20 +2766,20 @@ namespace castor3d
 		{
 			float timeIndex;
 			params[1]->get( timeIndex );
-			Path path;
-			Path pathFile = context.file.getPath() / params[0]->get( path );
+			castor::Path path;
+			castor::Path pathFile = context.file.getPath() / params[0]->get( path );
 			Parameters parameters;
 			parameters.add( "no_optimisations", true );
 
 			if ( params.size() > 2 )
 			{
-				String meshParams;
+				castor::String meshParams;
 				params[2]->get( meshParams );
-				fillMeshImportParameters( context, meshParams, parameters );
+				scnprs::fillMeshImportParameters( context, meshParams, parameters );
 			}
 
 			Engine * engine = parsingContext.parser->getEngine();
-			auto extension = string::lowerCase( pathFile.getExtension() );
+			auto extension = castor::string::lowerCase( pathFile.getExtension() );
 
 			if ( !engine->getImporterFactory().isTypeRegistered( extension ) )
 			{
@@ -2797,7 +2796,7 @@ namespace castor3d
 				}
 				else if ( mesh.getSubmeshCount() == parsingContext.mesh.lock()->getSubmeshCount() )
 				{
-					String animName{ "Morph" };
+					castor::String animName{ "Morph" };
 
 					if ( !parsingContext.mesh.lock()->hasAnimation( animName ) )
 					{
@@ -2812,7 +2811,7 @@ namespace castor3d
 					MeshAnimation & animation{ static_cast< MeshAnimation & >( parsingContext.mesh.lock()->getAnimation( animName ) ) };
 					uint32_t index = 0u;
 					MeshAnimationKeyFrameUPtr keyFrame = std::make_unique< MeshAnimationKeyFrame >( animation
-						, Milliseconds{ int64_t( timeIndex * 1000ll ) } );
+						, castor::Milliseconds{ int64_t( timeIndex * 1000ll ) } );
 
 					for ( auto & submesh : mesh )
 					{
@@ -2851,12 +2850,12 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			String name;
+			castor::String name;
 			uint16_t count;
 			params[0]->get( name );
 			params[1]->get( count );
 
-			if ( !engine->getSubdividerFactory().isTypeRegistered( string::lowerCase( name ) ) )
+			if ( !engine->getSubdividerFactory().isTypeRegistered( castor::string::lowerCase( name ) ) )
 			{
 				CU_ParsingError( cuT( "Subdivider [" ) + name + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
 			}
@@ -2885,7 +2884,7 @@ namespace castor3d
 		else if ( !params.empty() )
 		{
 			auto & cache = parsingContext.parser->getEngine()->getMaterialCache();
-			String name;
+			castor::String name;
 			auto material = cache.find( params[0]->get( name ) ).lock().get();
 
 			if ( material )
@@ -2950,7 +2949,7 @@ namespace castor3d
 		else if ( !params.empty() )
 		{
 			auto & cache = parsingContext.parser->getEngine()->getMaterialCache();
-			String name;
+			castor::String name;
 			uint16_t index;
 			auto material = cache.find( params[1]->get( name ) ).lock().get();
 
@@ -2989,7 +2988,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			Point3f value;
+			castor::Point3f value;
 			params[0]->get( value );
 			parsingContext.vertexPos.push_back( value[0] );
 			parsingContext.vertexPos.push_back( value[1] );
@@ -3008,7 +3007,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			Point2f value;
+			castor::Point2f value;
 			params[0]->get( value );
 			parsingContext.vertexTex.push_back( value[0] );
 			parsingContext.vertexTex.push_back( value[1] );
@@ -3027,7 +3026,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			Point3f value;
+			castor::Point3f value;
 			params[0]->get( value );
 			parsingContext.vertexTex.push_back( value[0] );
 			parsingContext.vertexTex.push_back( value[1] );
@@ -3046,7 +3045,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			Point3f value;
+			castor::Point3f value;
 			params[0]->get( value );
 			parsingContext.vertexNml.push_back( value[0] );
 			parsingContext.vertexNml.push_back( value[1] );
@@ -3065,7 +3064,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			Point3f value;
+			castor::Point3f value;
 			params[0]->get( value );
 			parsingContext.vertexTan.push_back( value[0] );
 			parsingContext.vertexTan.push_back( value[1] );
@@ -3084,16 +3083,16 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			String strParams;
+			castor::String strParams;
 			params[0]->get( strParams );
-			Point3i pt3Indices;
-			StringArray arrayValues = string::split( strParams, cuT( " " ) );
+			castor::Point3i pt3Indices;
+			auto arrayValues = castor::string::split( strParams, cuT( " " ) );
 			parsingContext.face1 = -1;
 			parsingContext.face2 = -1;
 
 			if ( arrayValues.size() >= 4 )
 			{
-				Point4i pt4Indices;
+				castor::Point4i pt4Indices;
 
 				if ( castor::parseValues( *parsingContext.logger, strParams, pt4Indices ) )
 				{
@@ -3128,7 +3127,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			String strParams;
+			castor::String strParams;
 			params[0]->get( strParams );
 			SubmeshSPtr submesh = parsingContext.submesh;
 
@@ -3137,27 +3136,27 @@ namespace castor3d
 				parsingContext.vertexTex.resize( parsingContext.vertexPos.size() );
 			}
 
-			Point3i pt3Indices;
-			StringArray arrayValues = string::split( strParams, cuT( " " ), 20 );
+			castor::Point3i pt3Indices;
+			auto arrayValues = castor::string::split( strParams, cuT( " " ), 20 );
 
 			if ( arrayValues.size() >= 6 && parsingContext.face1 != -1 )
 			{
-				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = string::toFloat( arrayValues[0] );
-				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = string::toFloat( arrayValues[1] );
-				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = string::toFloat( arrayValues[2] );
-				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = string::toFloat( arrayValues[3] );
-				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = string::toFloat( arrayValues[4] );
-				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = string::toFloat( arrayValues[5] );
+				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[0] );
+				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[1] );
+				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[2] );
+				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[3] );
+				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[4] );
+				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[5] );
 			}
 
 			if ( arrayValues.size() >= 8 && parsingContext.face2 != -1 )
 			{
-				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = string::toFloat( arrayValues[0] );
-				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = string::toFloat( arrayValues[1] );
-				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = string::toFloat( arrayValues[4] );
-				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = string::toFloat( arrayValues[5] );
-				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[6] );
-				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[7] );
+				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[0] );
+				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[1] );
+				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[4] );
+				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[5] );
+				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[6] );
+				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[7] );
 			}
 		}
 	}
@@ -3173,7 +3172,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			String strParams;
+			castor::String strParams;
 			params[0]->get( strParams );
 			SubmeshSPtr submesh = parsingContext.submesh;
 
@@ -3182,33 +3181,33 @@ namespace castor3d
 				parsingContext.vertexTex.resize( parsingContext.vertexPos.size() );
 			}
 
-			Point3i pt3Indices;
-			StringArray arrayValues = string::split( strParams, cuT( " " ), 20 );
+			castor::Point3i pt3Indices;
+			auto arrayValues = castor::string::split( strParams, cuT( " " ), 20 );
 
 			if ( arrayValues.size() >= 9 && parsingContext.face1 != -1 )
 			{
-				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = string::toFloat( arrayValues[0] );
-				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = string::toFloat( arrayValues[1] );
-				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = string::toFloat( arrayValues[2] );
-				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = string::toFloat( arrayValues[3] );
-				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = string::toFloat( arrayValues[4] );
-				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = string::toFloat( arrayValues[5] );
-				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = string::toFloat( arrayValues[6] );
-				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = string::toFloat( arrayValues[7] );
-				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = string::toFloat( arrayValues[8] );
+				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[0] );
+				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[1] );
+				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[2] );
+				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[3] );
+				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[4] );
+				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[5] );
+				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[6] );
+				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[7] );
+				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[8] );
 			}
 
 			if ( arrayValues.size() >= 12 && parsingContext.face2 != -1 )
 			{
-				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = string::toFloat( arrayValues[0] );
-				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = string::toFloat( arrayValues[1] );
-				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = string::toFloat( arrayValues[2] );
-				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[6] );
-				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[7] );
-				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[8] );
-				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[ 9] );
-				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[10] );
-				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[11] );
+				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[0] );
+				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[1] );
+				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[2] );
+				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[6] );
+				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[7] );
+				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[8] );
+				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 9] );
+				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[10] );
+				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[11] );
 			}
 		}
 	}
@@ -3224,7 +3223,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			String strParams;
+			castor::String strParams;
 			params[0]->get( strParams );
 			SubmeshSPtr submesh = parsingContext.submesh;
 
@@ -3233,33 +3232,33 @@ namespace castor3d
 				parsingContext.vertexNml.resize( parsingContext.vertexPos.size() );
 			}
 
-			Point3i pt3Indices;
-			StringArray arrayValues = string::split( strParams, cuT( " " ), 20 );
+			castor::Point3i pt3Indices;
+			auto arrayValues = castor::string::split( strParams, cuT( " " ), 20 );
 
 			if ( arrayValues.size() >= 9 && parsingContext.face1 != -1 )
 			{
-				parsingContext.vertexNml[0 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = string::toFloat( arrayValues[0] );
-				parsingContext.vertexNml[1 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = string::toFloat( arrayValues[1] );
-				parsingContext.vertexNml[2 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = string::toFloat( arrayValues[2] );
-				parsingContext.vertexNml[0 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = string::toFloat( arrayValues[3] );
-				parsingContext.vertexNml[1 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = string::toFloat( arrayValues[4] );
-				parsingContext.vertexNml[2 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = string::toFloat( arrayValues[5] );
-				parsingContext.vertexNml[0 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = string::toFloat( arrayValues[6] );
-				parsingContext.vertexNml[1 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = string::toFloat( arrayValues[7] );
-				parsingContext.vertexNml[2 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = string::toFloat( arrayValues[8] );
+				parsingContext.vertexNml[0 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[0] );
+				parsingContext.vertexNml[1 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[1] );
+				parsingContext.vertexNml[2 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[2] );
+				parsingContext.vertexNml[0 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[3] );
+				parsingContext.vertexNml[1 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[4] );
+				parsingContext.vertexNml[2 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[5] );
+				parsingContext.vertexNml[0 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[6] );
+				parsingContext.vertexNml[1 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[7] );
+				parsingContext.vertexNml[2 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[8] );
 			}
 
 			if ( arrayValues.size() >= 12 && parsingContext.face2 != -1 )
 			{
-				parsingContext.vertexNml[0 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = string::toFloat( arrayValues[ 0] );
-				parsingContext.vertexNml[1 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = string::toFloat( arrayValues[ 1] );
-				parsingContext.vertexNml[2 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = string::toFloat( arrayValues[ 2] );
-				parsingContext.vertexNml[0 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = string::toFloat( arrayValues[ 6] );
-				parsingContext.vertexNml[1 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = string::toFloat( arrayValues[ 7] );
-				parsingContext.vertexNml[2 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = string::toFloat( arrayValues[ 8] );
-				parsingContext.vertexNml[0 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[ 9] );
-				parsingContext.vertexNml[1 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[10] );
-				parsingContext.vertexNml[2 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[11] );
+				parsingContext.vertexNml[0 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 0] );
+				parsingContext.vertexNml[1 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 1] );
+				parsingContext.vertexNml[2 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 2] );
+				parsingContext.vertexNml[0 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 6] );
+				parsingContext.vertexNml[1 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 7] );
+				parsingContext.vertexNml[2 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 8] );
+				parsingContext.vertexNml[0 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 9] );
+				parsingContext.vertexNml[1 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[10] );
+				parsingContext.vertexNml[2 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[11] );
 			}
 		}
 	}
@@ -3275,7 +3274,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			String strParams;
+			castor::String strParams;
 			params[0]->get( strParams );
 			SubmeshSPtr submesh = parsingContext.submesh;
 
@@ -3284,33 +3283,33 @@ namespace castor3d
 				parsingContext.vertexTan.resize( parsingContext.vertexPos.size() );
 			}
 
-			Point3i pt3Indices;
-			StringArray arrayValues = string::split( strParams, cuT( " " ), 20 );
+			castor::Point3i pt3Indices;
+			auto arrayValues = castor::string::split( strParams, cuT( " " ), 20 );
 
 			if ( arrayValues.size() >= 9 && parsingContext.face1 != -1 )
 			{
-				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = string::toFloat( arrayValues[0] );
-				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = string::toFloat( arrayValues[1] );
-				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = string::toFloat( arrayValues[2] );
-				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = string::toFloat( arrayValues[3] );
-				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = string::toFloat( arrayValues[4] );
-				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = string::toFloat( arrayValues[5] );
-				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = string::toFloat( arrayValues[6] );
-				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = string::toFloat( arrayValues[7] );
-				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = string::toFloat( arrayValues[8] );
+				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[0] );
+				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[1] );
+				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[2] );
+				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[3] );
+				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[4] );
+				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[5] );
+				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[6] );
+				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[7] );
+				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[8] );
 			}
 
 			if ( arrayValues.size() >= 12 && parsingContext.face2 != -1 )
 			{
-				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = string::toFloat( arrayValues[ 0] );
-				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = string::toFloat( arrayValues[ 1] );
-				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = string::toFloat( arrayValues[ 2] );
-				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = string::toFloat( arrayValues[ 6] );
-				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = string::toFloat( arrayValues[ 7] );
-				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = string::toFloat( arrayValues[ 8] );
-				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[ 9] );
-				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[10] );
-				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[11] );
+				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 0] );
+				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 1] );
+				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 2] );
+				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 6] );
+				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 7] );
+				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 8] );
+				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 9] );
+				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[10] );
+				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[11] );
 			}
 		}
 	}
@@ -3477,7 +3476,7 @@ namespace castor3d
 		{
 			float value;
 			params[0]->get( value );
-			parsingContext.textureTransform.rotate = Angle::fromDegrees( value );
+			parsingContext.textureTransform.rotate = castor::Angle::fromDegrees( value );
 		}
 	}
 	CU_EndAttribute()
@@ -3494,7 +3493,7 @@ namespace castor3d
 		{
 			castor::Point2f value;
 			params[0]->get( value );
-			parsingContext.textureTransform.translate = Point4f{ value->x, value->y, 0.0f, 0.0f };
+			parsingContext.textureTransform.translate = castor::Point4f{ value->x, value->y, 0.0f, 0.0f };
 		}
 	}
 	CU_EndAttribute()
@@ -3511,7 +3510,7 @@ namespace castor3d
 		{
 			castor::Point2f value;
 			params[0]->get( value );
-			parsingContext.textureTransform.scale = Point4f{ value->x, value->y, 1.0f, 0.0f };
+			parsingContext.textureTransform.scale = castor::Point4f{ value->x, value->y, 1.0f, 0.0f };
 		}
 	}
 	CU_EndAttribute()
@@ -3550,7 +3549,7 @@ namespace castor3d
 		{
 			float value;
 			params[0]->get( value );
-			parsingContext.textureAnimation->setRotateSpeed( TextureRotateSpeed{ Angle::fromDegrees( value ) } );
+			parsingContext.textureAnimation->setRotateSpeed( TextureRotateSpeed{ castor::Angle::fromDegrees( value ) } );
 		}
 	}
 	CU_EndAttribute()
@@ -3712,7 +3711,7 @@ namespace castor3d
 		{
 			if ( parsingContext.shaderStage != VkShaderStageFlagBits( 0u ) )
 			{
-				Path path;
+				castor::Path path;
 				params[0]->get( path );
 				parsingContext.shaderProgram->setFile( parsingContext.shaderStage
 					, context.file.getPath() / path );
@@ -3737,7 +3736,7 @@ namespace castor3d
 		{
 			if ( parsingContext.shaderStage != VkShaderStageFlagBits( 0u ) )
 			{
-				Point3i sizes;
+				castor::Point3i sizes;
 				params[0]->get( sizes );
 				parsingContext.particleSystem->setCSGroupSizes( sizes );
 			}
@@ -3891,7 +3890,7 @@ namespace castor3d
 
 		if ( parsingContext.overlay )
 		{
-			Point2d ptPosition;
+			castor::Point2d ptPosition;
 			params[0]->get( ptPosition );
 			parsingContext.overlay->setPosition( ptPosition );
 		}
@@ -3908,7 +3907,7 @@ namespace castor3d
 
 		if ( parsingContext.overlay )
 		{
-			Point2d ptSize;
+			castor::Point2d ptSize;
 			params[0]->get( ptSize );
 			parsingContext.overlay->setSize( ptSize );
 		}
@@ -3925,7 +3924,7 @@ namespace castor3d
 
 		if ( parsingContext.overlay )
 		{
-			Size size;
+			castor::Size size;
 			params[0]->get( size );
 			parsingContext.overlay->setPixelSize( size );
 		}
@@ -3942,7 +3941,7 @@ namespace castor3d
 
 		if ( parsingContext.overlay )
 		{
-			Position position;
+			castor::Position position;
 			params[0]->get( position );
 			parsingContext.overlay->setPixelPosition( position );
 		}
@@ -3959,7 +3958,7 @@ namespace castor3d
 
 		if ( parsingContext.overlay )
 		{
-			String name;
+			castor::String name;
 			params[0]->get( name );
 			auto & cache = parsingContext.parser->getEngine()->getMaterialCache();
 			parsingContext.overlay->setMaterial( cache.find( name ).lock().get() );
@@ -3974,7 +3973,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserOverlayPanelOverlay )
 	{
 		auto & parsingContext = getParserContext( context );
-		String name;
+		castor::String name;
 		parsingContext.parentOverlays.push_back( parsingContext.overlay );
 		auto parent = parsingContext.parentOverlays.back().get();
 		parsingContext.overlay = parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
@@ -3995,7 +3994,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserOverlayBorderPanelOverlay )
 	{
 		auto & parsingContext = getParserContext( context );
-		String name;
+		castor::String name;
 		parsingContext.parentOverlays.push_back( parsingContext.overlay );
 		auto parent = parsingContext.parentOverlays.back().get();
 		parsingContext.overlay = parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
@@ -4016,7 +4015,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserOverlayTextOverlay )
 	{
 		auto & parsingContext = getParserContext( context );
-		String name;
+		castor::String name;
 		parsingContext.parentOverlays.push_back( parsingContext.overlay );
 		auto parent = parsingContext.parentOverlays.back().get();
 		parsingContext.overlay = parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
@@ -4083,7 +4082,7 @@ namespace castor3d
 
 		if ( overlay && overlay->getType() == OverlayType::ePanel )
 		{
-			Point4d uvs;
+			castor::Point4d uvs;
 			params[0]->get( uvs );
 			overlay->getPanelOverlay()->setUV( uvs );
 		}
@@ -4101,7 +4100,7 @@ namespace castor3d
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
-			Point4d ptSize;
+			castor::Point4d ptSize;
 			params[0]->get( ptSize );
 			overlay->getBorderPanelOverlay()->setBorderSize( ptSize );
 		}
@@ -4137,7 +4136,7 @@ namespace castor3d
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
-			String name;
+			castor::String name;
 			params[0]->get( name );
 			auto & cache = parsingContext.parser->getEngine()->getMaterialCache();
 			overlay->getBorderPanelOverlay()->setBorderMaterial( cache.find( name ).lock().get() );
@@ -4174,7 +4173,7 @@ namespace castor3d
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
-			Point4d uvs;
+			castor::Point4d uvs;
 			params[0]->get( uvs );
 			overlay->getBorderPanelOverlay()->setUV( uvs );
 		}
@@ -4192,7 +4191,7 @@ namespace castor3d
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
-			Point4d uvs;
+			castor::Point4d uvs;
 			params[0]->get( uvs );
 			overlay->getBorderPanelOverlay()->setBorderOuterUV( uvs );
 		}
@@ -4210,7 +4209,7 @@ namespace castor3d
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
-			Point4d uvs;
+			castor::Point4d uvs;
 			params[0]->get( uvs );
 			overlay->getBorderPanelOverlay()->setBorderInnerUV( uvs );
 		}
@@ -4229,7 +4228,7 @@ namespace castor3d
 		if ( overlay && overlay->getType() == OverlayType::eText )
 		{
 			auto & cache = parsingContext.parser->getEngine()->getFontCache();
-			String name;
+			castor::String name;
 			params[0]->get( name );
 
 			if ( cache.find( name ).lock() )
@@ -4347,12 +4346,12 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 		auto overlay = parsingContext.overlay;
-		String strParams;
+		castor::String strParams;
 		params[0]->get( strParams );
 
 		if ( overlay && overlay->getType() == OverlayType::eText )
 		{
-			string::replace( strParams, cuT( "\\n" ), cuT( "\n" ) );
+			castor::string::replace( strParams, cuT( "\\n" ), cuT( "\n" ) );
 			overlay->getTextOverlay()->setCaption( strParams );
 		}
 		else
@@ -4365,7 +4364,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserCameraParent )
 	{
 		auto & parsingContext = getParserContext( context );
-		String name;
+		castor::String name;
 		SceneNodeSPtr parent = parsingContext.scene->getSceneNodeCache().find( params[0]->get( name ) ).lock();
 
 		if ( parent )
@@ -4511,7 +4510,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserViewportSize )
 	{
 		auto & parsingContext = getParserContext( context );
-		Size size;
+		castor::Size size;
 		params[0]->get( size );
 		parsingContext.viewport->resize( size );
 	}
@@ -4522,7 +4521,7 @@ namespace castor3d
 		auto & parsingContext = getParserContext( context );
 		float fFovY;
 		params[0]->get( fFovY );
-		parsingContext.viewport->updateFovY( Angle::fromDegrees( fFovY ) );
+		parsingContext.viewport->updateFovY( castor::Angle::fromDegrees( fFovY ) );
 	}
 	CU_EndAttribute()
 
@@ -4541,7 +4540,7 @@ namespace castor3d
 
 		if ( parsingContext.billboards )
 		{
-			String name;
+			castor::String name;
 			params[0]->get( name );
 			SceneNodeSPtr pParent = parsingContext.scene->getSceneNodeCache().find( name ).lock();
 
@@ -4617,7 +4616,7 @@ namespace castor3d
 		if ( parsingContext.billboards )
 		{
 			auto & cache = parsingContext.parser->getEngine()->getMaterialCache();
-			String name;
+			castor::String name;
 			auto material = cache.tryFind( params[0]->get( name ) ).lock().get();
 
 			if ( material )
@@ -4639,7 +4638,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserBillboardDimensions )
 	{
 		auto & parsingContext = getParserContext( context );
-		Point2f dimensions;
+		castor::Point2f dimensions;
 		params[0]->get( dimensions );
 		parsingContext.billboards->setDimensions( dimensions );
 	}
@@ -4658,7 +4657,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserBillboardPoint )
 	{
 		auto & parsingContext = getParserContext( context );
-		Point3f position;
+		castor::Point3f position;
 		params[0]->get( position );
 		parsingContext.billboards->addPoint( position );
 	}
@@ -4667,7 +4666,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserAnimatedObjectGroupAnimatedObject )
 	{
 		auto & parsingContext = getParserContext( context );
-		String name;
+		castor::String name;
 		params[0]->get( name );
 
 		if ( parsingContext.animGroup )
@@ -4753,7 +4752,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserAnimatedObjectGroupAnimationStart )
 	{
 		auto & parsingContext = getParserContext( context );
-		String name;
+		castor::String name;
 		params[0]->get( name );
 
 		if ( parsingContext.animGroup )
@@ -4770,7 +4769,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserAnimatedObjectGroupAnimationPause )
 	{
 		auto & parsingContext = getParserContext( context );
-		String name;
+		castor::String name;
 		params[0]->get( name );
 
 		if ( parsingContext.animGroup )
@@ -4886,11 +4885,11 @@ namespace castor3d
 		}
 		else
 		{
-			Path path;
-			Path filePath = context.file.getPath();
+			castor::Path path;
+			castor::Path filePath = context.file.getPath();
 			params[0]->get( path );
 
-			if ( File::fileExists( filePath / path ) )
+			if ( castor::File::fileExists( filePath / path ) )
 			{
 				uint32_t size;
 				params[1]->get( size );
@@ -4918,11 +4917,11 @@ namespace castor3d
 		}
 		else
 		{
-			Path path;
-			Path filePath = context.file.getPath();
+			castor::Path path;
+			castor::Path filePath = context.file.getPath();
 			params[0]->get( path );
 
-			if ( File::fileExists( filePath / path ) )
+			if ( castor::File::fileExists( filePath / path ) )
 			{
 				parsingContext.skybox->loadCrossTexture( filePath, path );
 			}
@@ -4940,7 +4939,7 @@ namespace castor3d
 
 		if ( parsingContext.skybox )
 		{
-			Path path;
+			castor::Path path;
 			parsingContext.skybox->loadLeftImage( context.file.getPath(), params[0]->get( path ) );
 		}
 		else
@@ -4956,7 +4955,7 @@ namespace castor3d
 
 		if ( parsingContext.skybox )
 		{
-			Path path;
+			castor::Path path;
 			parsingContext.skybox->loadRightImage( context.file.getPath(), params[0]->get( path ) );
 		}
 		else
@@ -4972,7 +4971,7 @@ namespace castor3d
 
 		if ( parsingContext.skybox )
 		{
-			Path path;
+			castor::Path path;
 			parsingContext.skybox->loadTopImage( context.file.getPath(), params[0]->get( path ) );
 		}
 		else
@@ -4988,7 +4987,7 @@ namespace castor3d
 
 		if ( parsingContext.skybox )
 		{
-			Path path;
+			castor::Path path;
 			parsingContext.skybox->loadBottomImage( context.file.getPath(), params[0]->get( path ) );
 		}
 		else
@@ -5004,7 +5003,7 @@ namespace castor3d
 
 		if ( parsingContext.skybox )
 		{
-			Path path;
+			castor::Path path;
 			parsingContext.skybox->loadFrontImage( context.file.getPath(), params[0]->get( path ) );
 		}
 		else
@@ -5020,7 +5019,7 @@ namespace castor3d
 
 		if ( parsingContext.skybox )
 		{
-			Path path;
+			castor::Path path;
 			parsingContext.skybox->loadBackImage( context.file.getPath(), params[0]->get( path ) );
 		}
 		else
@@ -5479,7 +5478,7 @@ namespace castor3d
 		}
 		else
 		{
-			Point4f value;
+			castor::Point4f value;
 			params[0]->get( value );
 			parsingContext.subsurfaceScattering->addProfileFactor( value );
 		}

@@ -4,9 +4,9 @@
 
 namespace castor3d
 {
-	namespace
+	namespace texconf
 	{
-		void mergeMasks( uint32_t toMerge
+		static void mergeMasks( uint32_t toMerge
 			, TextureFlag flag
 			, TextureFlags & result )
 		{
@@ -15,7 +15,7 @@ namespace castor3d
 				: TextureFlag::eNone;
 		}
 
-		void updateStartIndex( castor::PixelFormat format
+		static void updateStartIndex( castor::PixelFormat format
 			, castor::Point2ui & mask )
 		{
 			if ( mask[0] )
@@ -194,17 +194,17 @@ namespace castor3d
 	TextureFlags getFlags( TextureConfiguration const & config )
 	{
 		TextureFlags result = TextureFlag::eNone;
-		mergeMasks( config.colourMask[0], TextureFlag::eDiffuse, result );
-		mergeMasks( config.specularMask[0], TextureFlag::eSpecular, result );
-		mergeMasks( config.metalnessMask[0], TextureFlag::eMetalness, result );
-		mergeMasks( config.glossinessMask[0], TextureFlag::eGlossiness, result );
-		mergeMasks( config.roughnessMask[0], TextureFlag::eRoughness, result );
-		mergeMasks( config.opacityMask[0], TextureFlag::eOpacity, result );
-		mergeMasks( config.emissiveMask[0], TextureFlag::eEmissive, result );
-		mergeMasks( config.normalMask[0], TextureFlag::eNormal, result );
-		mergeMasks( config.heightMask[0], TextureFlag::eHeight, result );
-		mergeMasks( config.occlusionMask[0], TextureFlag::eOcclusion, result );
-		mergeMasks( config.transmittanceMask[0], TextureFlag::eTransmittance, result );
+		texconf::mergeMasks( config.colourMask[0], TextureFlag::eDiffuse, result );
+		texconf::mergeMasks( config.specularMask[0], TextureFlag::eSpecular, result );
+		texconf::mergeMasks( config.metalnessMask[0], TextureFlag::eMetalness, result );
+		texconf::mergeMasks( config.glossinessMask[0], TextureFlag::eGlossiness, result );
+		texconf::mergeMasks( config.roughnessMask[0], TextureFlag::eRoughness, result );
+		texconf::mergeMasks( config.opacityMask[0], TextureFlag::eOpacity, result );
+		texconf::mergeMasks( config.emissiveMask[0], TextureFlag::eEmissive, result );
+		texconf::mergeMasks( config.normalMask[0], TextureFlag::eNormal, result );
+		texconf::mergeMasks( config.heightMask[0], TextureFlag::eHeight, result );
+		texconf::mergeMasks( config.occlusionMask[0], TextureFlag::eOcclusion, result );
+		texconf::mergeMasks( config.transmittanceMask[0], TextureFlag::eTransmittance, result );
 		return result;
 	}
 
@@ -238,16 +238,16 @@ namespace castor3d
 	void updateIndices( castor::PixelFormat format
 		, TextureConfiguration & config )
 	{
-		updateStartIndex( format, config.colourMask );
-		updateStartIndex( format, config.specularMask );
-		updateStartIndex( format, config.metalnessMask );
-		updateStartIndex( format, config.glossinessMask );
-		updateStartIndex( format, config.roughnessMask );
-		updateStartIndex( format, config.opacityMask );
-		updateStartIndex( format, config.emissiveMask );
-		updateStartIndex( format, config.normalMask );
-		updateStartIndex( format, config.heightMask );
-		updateStartIndex( format, config.occlusionMask );
-		updateStartIndex( format, config.transmittanceMask );
+		texconf::updateStartIndex( format, config.colourMask );
+		texconf::updateStartIndex( format, config.specularMask );
+		texconf::updateStartIndex( format, config.metalnessMask );
+		texconf::updateStartIndex( format, config.glossinessMask );
+		texconf::updateStartIndex( format, config.roughnessMask );
+		texconf::updateStartIndex( format, config.opacityMask );
+		texconf::updateStartIndex( format, config.emissiveMask );
+		texconf::updateStartIndex( format, config.normalMask );
+		texconf::updateStartIndex( format, config.heightMask );
+		texconf::updateStartIndex( format, config.occlusionMask );
+		texconf::updateStartIndex( format, config.transmittanceMask );
 	}
 }

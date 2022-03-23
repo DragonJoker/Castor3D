@@ -22,17 +22,15 @@
 
 #include <RenderGraph/ResourceHandler.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace radcomp
 	{
-		Texture doCreateRadianceTexture( RenderDevice const & device
+		static Texture doCreateRadianceTexture( RenderDevice const & device
 			, crg::ResourceHandler & handler
-			, Size const & size )
+			, castor::Size const & size )
 		{
 			Texture result{ device
 				, handler
@@ -47,7 +45,7 @@ namespace castor3d
 			return result;
 		}
 
-		SamplerResPtr doCreateSampler( Engine & engine
+		static SamplerResPtr doCreateSampler( Engine & engine
 			, RenderDevice const & device )
 		{
 			auto name = cuT( "IblTexturesRadiance" );
@@ -68,7 +66,7 @@ namespace castor3d
 			return result;
 		}
 
-		ashes::ImageView doCreateSrcView( ashes::Image const & texture )
+		static ashes::ImageView doCreateSrcView( ashes::Image const & texture )
 		{
 			return texture.createView( VK_IMAGE_VIEW_TYPE_CUBE
 				, texture.getFormat()
@@ -78,7 +76,7 @@ namespace castor3d
 				, 6u );
 		}
 
-		ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device )
+		static ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device )
 		{
 			ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "RadianceCompute" };
 			{
@@ -137,9 +135,9 @@ namespace castor3d
 						auto nrSamples = writer.declLocale( "nrSamples"
 							, 0_i );
 
-						FOR( writer, Float, phi, 0.0_f, phi < Float{ PiMult2< float > }, phi += sampleDelta )
+						FOR( writer, Float, phi, 0.0_f, phi < Float{ castor::PiMult2< float > }, phi += sampleDelta )
 						{
-							FOR( writer, Float, theta, 0.0_f, theta < Float{ PiDiv2< float > }, theta += sampleDelta )
+							FOR( writer, Float, theta, 0.0_f, theta < Float{ castor::PiDiv2< float > }, theta += sampleDelta )
 							{
 								// spherical to cartesian (in tangent space)
 								auto tangentSample = writer.declLocale( "tangentSample"
@@ -155,7 +153,7 @@ namespace castor3d
 						}
 						ROF;
 
-						irradiance = irradiance * Float{ Pi< float > } * ( 1.0_f / writer.cast< Float >( nrSamples ) );
+						irradiance = irradiance * Float{ castor::Pi< float > } * ( 1.0_f / writer.cast< Float >( nrSamples ) );
 						pxl_fragColor = vec4( irradiance, 1.0_f );
 					} );
 
@@ -169,7 +167,7 @@ namespace castor3d
 			};
 		}
 
-		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
+		static ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
 			, VkFormat format )
 		{
 			ashes::VkAttachmentDescriptionArray attaches
@@ -226,15 +224,15 @@ namespace castor3d
 
 	RadianceComputer::RadianceComputer( Engine & engine
 		, RenderDevice const & device
-		, Size const & size
+		, castor::Size const & size
 		, Texture const & srcTexture )
 		: RenderCube{ device, false }
-		, m_result{ doCreateRadianceTexture( m_device, engine.getGraphResourceHandler(), size ) }
-		, m_sampler{ doCreateSampler( engine, m_device ) }
+		, m_result{ radcomp::doCreateRadianceTexture( m_device, engine.getGraphResourceHandler(), size ) }
+		, m_sampler{ radcomp::doCreateSampler( engine, m_device ) }
 		, m_srcView{ srcTexture }
 		, m_srcImage{ std::make_unique< ashes::Image >( *device, m_srcView.image, m_srcView.imageId.data->info ) }
-		, m_srcImageView{ doCreateSrcView( *m_srcImage ) }
-		, m_renderPass{ doCreateRenderPass( m_device, m_result.getFormat() ) }
+		, m_srcImageView{ radcomp::doCreateSrcView( *m_srcImage ) }
+		, m_renderPass{ radcomp::doCreateRenderPass( m_device, m_result.getFormat() ) }
 		, m_commands{ m_device, *m_device.graphicsData(), "RadianceComputer" }
 	{
 		auto & handler = engine.getGraphResourceHandler();
@@ -243,7 +241,7 @@ namespace castor3d
 		for ( auto face = 0u; face < 6u; ++face )
 		{
 			auto & facePass = m_renderPasses[face];
-			auto name = "RadianceComputer" + string::toString( face );
+			auto name = "RadianceComputer" + castor::string::toString( face );
 			// Create the views.
 			facePass.dstView = handler.createImageView( device.makeContext()
 				, dstTexture.subViewsId[face] );
@@ -259,9 +257,9 @@ namespace castor3d
 				, std::move( createInfo ) );
 		}
 
-		auto program = doCreateProgram( m_device );
+		auto program = radcomp::doCreateProgram( m_device );
 		createPipelines( { size.getWidth(), size.getHeight() }
-			, Position{}
+			, castor::Position{}
 			, program
 			, m_srcImageView
 			, *m_renderPass

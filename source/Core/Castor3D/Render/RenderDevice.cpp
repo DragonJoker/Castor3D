@@ -18,9 +18,9 @@ CU_ImplementCUSmartPtr( castor3d, RenderDevice )
 
 namespace castor3d
 {
-	namespace
+	namespace renddvc
 	{
-		QueueFamilies initialiseQueueFamilies( ashes::Instance const & instance
+		static QueueFamilies initialiseQueueFamilies( ashes::Instance const & instance
 			, ashes::PhysicalDevice const & gpu )
 		{
 			QueueFamilies result;
@@ -65,7 +65,7 @@ namespace castor3d
 			return result;
 		}
 
-		ashes::DeviceQueueCreateInfoArray getQueueCreateInfos( QueueFamilies const & queues )
+		static ashes::DeviceQueueCreateInfoArray getQueueCreateInfos( QueueFamilies const & queues )
 		{
 			ashes::DeviceQueueCreateInfoArray queueCreateInfos;
 
@@ -82,7 +82,7 @@ namespace castor3d
 			return queueCreateInfos;
 		}
 
-		ashes::DeviceCreateInfo getDeviceCreateInfo( ashes::Instance const & instance
+		static ashes::DeviceCreateInfo getDeviceCreateInfo( ashes::Instance const & instance
 			, ashes::PhysicalDevice const & gpu
 			, ashes::DeviceQueueCreateInfoArray queueCreateInfos
 			, ashes::StringArray const & enabledExtensions
@@ -97,7 +97,7 @@ namespace castor3d
 			return result;
 		}
 
-		bool isExtensionSupported( std::string const & name
+		static bool isExtensionSupported( std::string const & name
 			, ashes::VkExtensionPropertiesArray const & cont )
 		{
 			return ( cont.end() != std::find_if( cont.begin()
@@ -108,7 +108,7 @@ namespace castor3d
 				} ) );
 		}
 
-		bool tryAddExtension( std::string name
+		static bool tryAddExtension( std::string name
 			, ashes::VkExtensionPropertiesArray const & available
 			, Extensions & enabled
 			, void * pFeature = nullptr )
@@ -323,7 +323,7 @@ namespace castor3d
 		, memoryProperties{ gpu.getMemoryProperties() }
 		, features{ gpu.getFeatures() }
 		, properties{ gpu.getProperties() }
-		, queueFamilies{ initialiseQueueFamilies( renderSystem.getInstance(), gpu ) }
+		, queueFamilies{ renddvc::initialiseQueueFamilies( renderSystem.getInstance(), gpu ) }
 		, m_deviceExtensions{ std::move( pdeviceExtensions ) }
 		, m_availableExtensions{ gpu.enumerateExtensionProperties( std::string{} ) }
 	{
@@ -444,9 +444,9 @@ namespace castor3d
 		}
 
 		device = renderSystem.getInstance().createDevice( gpu
-			, getDeviceCreateInfo( renderSystem.getInstance()
+			, renddvc::getDeviceCreateInfo( renderSystem.getInstance()
 				, gpu
-				, getQueueCreateInfos( queueFamilies )
+				, renddvc::getQueueCreateInfos( queueFamilies )
 				, m_deviceExtensions.getExtensionsNames()
 				, m_features2 ) );
 		device->setCallstackCallback( []()
@@ -741,7 +741,7 @@ namespace castor3d
 		, void * pFeature
 		, void * pProperty )
 	{
-		bool result = tryAddExtension( name, m_availableExtensions, m_deviceExtensions, pFeature );
+		bool result = renddvc::tryAddExtension( name, m_availableExtensions, m_deviceExtensions, pFeature );
 
 		if ( result  && pProperty )
 		{

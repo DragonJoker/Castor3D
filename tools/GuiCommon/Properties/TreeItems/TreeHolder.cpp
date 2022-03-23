@@ -6,9 +6,6 @@
 
 #include <wx/treectrl.h>
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
 	namespace

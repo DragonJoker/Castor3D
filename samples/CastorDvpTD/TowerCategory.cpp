@@ -1,8 +1,5 @@
 #include "TowerCategory.hpp"
 
-using namespace castor;
-using namespace castor3d;
-
 namespace castortd
 {
 	LongRangeTower::LongRangeTower()
@@ -27,8 +24,8 @@ namespace castortd
 		{
 			return p_value + p_inc;
 		};
-		auto decrement = []( Milliseconds p_inc
-			, Milliseconds p_value
+		auto decrement = []( castor::Milliseconds p_inc
+			, castor::Milliseconds p_value
 			, uint32_t p_level )
 		{
 			p_value -= p_inc;
@@ -46,9 +43,9 @@ namespace castortd
 			, std::bind( costIncrement, 30u, std::placeholders::_1, std::placeholders::_2 )
 			, 15u );
 
-		m_initialCooldown = Milliseconds{ 6000u };
+		m_initialCooldown = castor::Milliseconds{ 6000u };
 		m_cooldown.initialise( m_initialCooldown
-			, std::bind( decrement, Milliseconds{ 240u }, std::placeholders::_1, std::placeholders::_2 )
+			, std::bind( decrement, castor::Milliseconds{ 240u }, std::placeholders::_1, std::placeholders::_2 )
 			, 200u
 			, std::bind( costIncrement, 20u, std::placeholders::_1, std::placeholders::_2 ) );
 
@@ -60,7 +57,7 @@ namespace castortd
 		m_bulletSpeed = 96.0f;
 		m_towerCost = 250u;
 		m_material = cuT( "OrangeTowerCube" );
-		m_colour = RgbColour::fromComponents( 1.0f, 1.0f, 0.0f );
+		m_colour = castor::RgbColour::fromComponents( 1.0f, 1.0f, 0.0f );
 	}
 
 	ShortRangeTower::ShortRangeTower()
@@ -85,8 +82,8 @@ namespace castortd
 		{
 			return p_value + p_inc;
 		};
-		auto decrement = []( Milliseconds p_inc
-			, Milliseconds p_value
+		auto decrement = []( castor::Milliseconds p_inc
+			, castor::Milliseconds p_value
 			, uint32_t p_level )
 		{
 			p_value -= p_inc;
@@ -103,9 +100,9 @@ namespace castortd
 			, 400u
 			, std::bind( costIncrement, 30u, std::placeholders::_1, std::placeholders::_2 ) );
 
-		m_initialCooldown = Milliseconds{ 1000u };
+		m_initialCooldown = castor::Milliseconds{ 1000u };
 		m_cooldown.initialise( m_initialCooldown
-			, std::bind( decrement, Milliseconds{ 50u }, std::placeholders::_1, std::placeholders::_2 )
+			, std::bind( decrement, castor::Milliseconds{ 50u }, std::placeholders::_1, std::placeholders::_2 )
 			, 150u
 			, std::bind( costIncrement, 10u, std::placeholders::_1, std::placeholders::_2 ) );
 
@@ -117,6 +114,6 @@ namespace castortd
 		m_bulletSpeed = 120.0f;
 		m_towerCost = 170u;
 		m_material = cuT( "BlueTowerCube" );
-		m_colour = RgbColour::fromComponents( 0.0f, 0.0f, 1.0f );
+		m_colour = castor::RgbColour::fromComponents( 0.0f, 0.0f, 1.0f );
 	}
 }

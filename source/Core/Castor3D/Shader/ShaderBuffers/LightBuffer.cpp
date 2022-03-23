@@ -13,9 +13,9 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace lgtbuf
 	{
-		LightBuffer::LightsData doBindData( uint8_t * buffer
+		static LightBuffer::LightsData doBindData( uint8_t * buffer
 			, uint32_t count )
 		{
 			return castor::makeArrayView( reinterpret_cast< LightBuffer::LightData * >( buffer )
@@ -29,7 +29,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, uint32_t count )
 		: m_buffer{ engine, device, count * DataSize, cuT( "LightBuffer" ) }
-		, m_data{ doBindData( m_buffer.getPtr(), count ) }
+		, m_data{ lgtbuf::doBindData( m_buffer.getPtr(), count ) }
 	{
 	}
 

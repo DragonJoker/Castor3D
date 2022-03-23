@@ -38,9 +38,9 @@ namespace castor
 {
 	//************************************************************************************************
 
-	namespace
+	namespace stbil
 	{
-		PxBufferBaseSPtr doLoad8BitsPerChannel( uint8_t const * input
+		static PxBufferBaseSPtr doLoad8BitsPerChannel( uint8_t const * input
 			, uint32_t size )
 		{
 			PxBufferBaseSPtr result;
@@ -90,7 +90,7 @@ namespace castor
 			return result;
 		}
 
-		PxBufferBaseSPtr doLoad32BitsPerChannel( uint8_t const * input
+		static PxBufferBaseSPtr doLoad32BitsPerChannel( uint8_t const * input
 			, uint32_t size )
 		{
 			PxBufferBaseSPtr result;
@@ -140,7 +140,7 @@ namespace castor
 			return result;
 		}
 
-		StringArray const & listExtensions()
+		static StringArray const & listExtensions()
 		{
 			static StringArray const list
 			{
@@ -169,13 +169,13 @@ namespace castor
 
 	void StbImageLoader::registerLoader( ImageLoader & reg )
 	{
-		reg.registerLoader( listExtensions()
+		reg.registerLoader( stbil::listExtensions()
 			, std::make_unique< StbImageLoader >() );
 	}
 
 	void StbImageLoader::unregisterLoader( ImageLoader & reg )
 	{
-		reg.unregisterLoader( listExtensions() );
+		reg.unregisterLoader( stbil::listExtensions() );
 	}
 
 	ImageLayout StbImageLoader::load( String const & imageFormat
@@ -185,11 +185,11 @@ namespace castor
 	{
 		if ( string::upperCase( imageFormat ).find( cuT( "HDR" ) ) != String::npos )
 		{
-			buffer = doLoad32BitsPerChannel( data, size );
+			buffer = stbil::doLoad32BitsPerChannel( data, size );
 		}
 		else
 		{
-			buffer = doLoad8BitsPerChannel( data, size );
+			buffer = stbil::doLoad8BitsPerChannel( data, size );
 		}
 
 		return ImageLayout{ ImageLayout::e2D, *buffer };

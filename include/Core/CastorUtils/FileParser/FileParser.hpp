@@ -234,7 +234,7 @@ namespace castor
 		 *\param[in]	path			Le chemin d'accès au fichier.
 		 *\param[in]	preprocessed	Le fichier pré-traité.
 		 */
-		CU_API void processFile( Path const & path
+		CU_API void processFile( Path path
 			, PreprocessedFile & preprocessed );
 		/**
 		 *\~english

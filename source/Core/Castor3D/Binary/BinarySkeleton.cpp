@@ -10,9 +10,9 @@ namespace castor3d
 {
 	//*************************************************************************************************
 
-	namespace
+	namespace binskl
 	{
-		BonePtrArray reorderBones( BonePtrArray bones )
+		static BonePtrArray reorderBones( BonePtrArray bones )
 		{
 			BonePtrArray result;
 			std::set< Bone * > inserted;
@@ -44,7 +44,7 @@ namespace castor3d
 	{
 		bool result = doWriteChunk( obj.getGlobalInverseTransform(), ChunkType::eSkeletonGlobalInverse, m_chunk );
 
-		for ( auto bone : reorderBones( obj.m_bones ) )
+		for ( auto bone : binskl::reorderBones( obj.m_bones ) )
 		{
 			result = result && BinaryWriter< Bone >{}.write( *bone, m_chunk );
 		}

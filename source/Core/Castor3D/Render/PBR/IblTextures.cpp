@@ -26,26 +26,21 @@
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Graphics/Image.hpp>
 
-#include <ShaderWriter/Source.hpp>
-
 #include <RenderGraph/ResourceHandler.hpp>
-
-using namespace castor;
-using namespace sdw;
 
 #define C3D_GenerateBRDFIntegration 0
 
 namespace castor3d
 {
-	namespace
+	namespace ibltex
 	{
 #if !C3D_GenerateBRDFIntegration
-		void doLoadPrefilteredBrdfView( Engine & engine
+		static void doLoadPrefilteredBrdfView( Engine & engine
 			, RenderDevice const & device
 			, Texture const & texture )
 		{
 			auto image = std::make_unique< ashes::Image >( *device, texture.image, texture.imageId.data->info );
-			PxBufferBaseSPtr buffer;
+			castor::PxBufferBaseSPtr buffer;
 
 			if ( engine.getImageCache().has( cuT( "BRDF" ) ) )
 			{
@@ -60,8 +55,8 @@ namespace castor3d
 				buffer = img.lock()->getPixels();
 			}
 
-			buffer = PxBufferBase::create( buffer->getDimensions()
-				, PixelFormat::eR8G8B8A8_UNORM
+			buffer = castor::PxBufferBase::create( buffer->getDimensions()
+				, castor::PixelFormat::eR8G8B8A8_UNORM
 				, buffer->getConstPtr()
 				, buffer->getFormat() );
 			auto result = image->createView( VK_IMAGE_VIEW_TYPE_2D, texture.getFormat() );
@@ -76,9 +71,9 @@ namespace castor3d
 		}
 #endif
 
-		Texture doCreatePrefilteredBrdf( RenderDevice const & device
+		static Texture doCreatePrefilteredBrdf( RenderDevice const & device
 			, crg::ResourceHandler & handler
-			, Size const & size )
+			, castor::Size const & size )
 		{
 			Texture result{ device
 				, handler
@@ -110,7 +105,7 @@ namespace castor3d
 			return result;
 		}
 
-		SamplerResPtr doCreateSampler( Engine & engine
+		static SamplerResPtr doCreateSampler( Engine & engine
 			, RenderDevice const & device )
 		{
 			auto name = cuT( "IblTexturesBRDF" );
@@ -139,10 +134,10 @@ namespace castor3d
 		, Texture const & source
 		, SamplerResPtr sampler )
 		: OwnedBy< Scene >{ scene }
-		, m_prefilteredBrdf{ doCreatePrefilteredBrdf( device, scene.getEngine()->getGraphResourceHandler(), Size{ 512u, 512u } ) }
-		, m_sampler{ doCreateSampler( *scene.getEngine(), device ) }
-		, m_radianceComputer{ *scene.getEngine(), device, Size{ 32u, 32u }, source }
-		, m_environmentPrefilter{ *scene.getEngine(), device, Size{ 128u, 128u }, source, std::move( sampler ) }
+		, m_prefilteredBrdf{ ibltex::doCreatePrefilteredBrdf( device, scene.getEngine()->getGraphResourceHandler(), castor::Size{ 512u, 512u } ) }
+		, m_sampler{ ibltex::doCreateSampler( *scene.getEngine(), device ) }
+		, m_radianceComputer{ *scene.getEngine(), device, castor::Size{ 32u, 32u }, source }
+		, m_environmentPrefilter{ *scene.getEngine(), device, castor::Size{ 128u, 128u }, source, std::move( sampler ) }
 	{
 	}
 

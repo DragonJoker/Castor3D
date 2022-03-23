@@ -13,18 +13,15 @@
 #include <Castor3D/Event/Frame/GpuFunctorEvent.hpp>
 #include <Castor3D/Overlay/BorderPanelOverlay.hpp>
 
-using namespace castor;
-using namespace castor3d;
-
 namespace CastorGui
 {
-	namespace
+	namespace ctrlmgr
 	{
 		using LockType = std::unique_lock< std::mutex >;
 	}
 
-	ControlsManager::ControlsManager( Engine & engine )
-		: UserInputListener{ engine, PLUGIN_NAME }
+	ControlsManager::ControlsManager( castor3d::Engine & engine )
+		: castor3d::UserInputListener{ engine, PLUGIN_NAME }
 		, m_changed{ false }
 	{
 	}
@@ -69,7 +66,7 @@ namespace CastorGui
 	void ControlsManager::addControl( ControlSPtr p_control )
 	{
 		doAddHandler( p_control );
-		LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
+		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
 
 		if ( m_controlsById.find( p_control->getId() ) != m_controlsById.end() )
 		{
@@ -119,7 +116,7 @@ namespace CastorGui
 	void ControlsManager::connectEvents( EditCtrl & p_control )
 	{
 		m_onEditUpdates.emplace( &p_control, p_control.connect( EditEvent::eUpdated
-			, [this, &p_control]( String const & p_text )
+			, [this, &p_control]( castor::String const & p_text )
 			{
 				onTextAction( p_control.getName(), p_text );
 			} ) );
@@ -212,7 +209,7 @@ namespace CastorGui
 
 	void ControlsManager::doCleanup()
 	{
-		LockType lock{ castor::makeUniqueLock( m_mutexHandlers ) };
+		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexHandlers ) };
 
 		for ( auto handler : m_handlers )
 		{
@@ -265,9 +262,9 @@ namespace CastorGui
 		if ( it != std::end( controls ) )
 		{
 			auto control = *it;
-			m_frameListener->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [control, p_caption]( RenderDevice const & device
-					, QueueData const & queueData )
+			m_frameListener->postEvent( makeGpuFunctorEvent( castor3d::EventType::ePreRender
+				, [control, p_caption]( castor3d::RenderDevice const & device
+					, castor3d::QueueData const & queueData )
 				{
 					control->setCaption( p_caption );
 				} ) );
@@ -277,7 +274,7 @@ namespace CastorGui
 		return result;
 	}
 
-	castor3d::EventHandler * ControlsManager::doGetMouseTargetableHandler( Position const & p_position )const
+	castor3d::EventHandler * ControlsManager::doGetMouseTargetableHandler( castor::Position const & p_position )const
 	{
 		if ( m_changed )
 		{
@@ -310,7 +307,7 @@ namespace CastorGui
 
 	void ControlsManager::doUpdate()const
 	{
-		LockType lock{ castor::makeUniqueLock( m_mutexControlsByZIndex ) };
+		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsByZIndex ) };
 		{
 			auto handlers = doGetHandlers();
 			m_controlsByZIndex.clear();
@@ -357,7 +354,7 @@ namespace CastorGui
 	{
 		castor3d::EventHandler * handler;
 		{
-			LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
+			ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
 			auto it = m_controlsById.find( p_id );
 
 			if ( it == m_controlsById.end() )
@@ -375,7 +372,7 @@ namespace CastorGui
 
 	std::vector< Control * > ControlsManager::doGetControlsByZIndex()const
 	{
-		LockType lock{ castor::makeUniqueLock( m_mutexControlsByZIndex ) };
+		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
 		std::vector< Control * > result;
 
 		if ( !m_controlsByZIndex.empty() )
@@ -388,7 +385,7 @@ namespace CastorGui
 
 	std::map< uint32_t, ControlWPtr > ControlsManager::doGetControlsById()const
 	{
-		LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
+		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
 		std::map< uint32_t, ControlWPtr > result;
 
 		if ( !m_controlsById.empty() )

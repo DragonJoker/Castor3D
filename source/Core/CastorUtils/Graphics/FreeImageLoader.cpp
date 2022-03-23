@@ -18,11 +18,11 @@ namespace castor
 {
 	//************************************************************************************************
 
-	namespace
+	namespace freeimgl
 	{
 #if C3D_UseFreeImage
 
-		void swapComponents( uint8_t * pixels, PixelFormat format, uint32_t width, uint32_t height )
+		static void swapComponents( uint8_t * pixels, PixelFormat format, uint32_t width, uint32_t height )
 		{
 			uint32_t count{ width * height };
 			auto bpp( uint32_t( getBytesPerPixel( format ) ) );
@@ -48,7 +48,7 @@ namespace castor
 			}
 		}
 
-		PixelFormat convertTo32Bits( FIBITMAP *& fiImage )
+		static PixelFormat convertTo32Bits( FIBITMAP *& fiImage )
 		{
 			FIBITMAP * dib = FreeImage_ConvertTo32Bits( fiImage );
 			FreeImage_Unload( fiImage );
@@ -62,7 +62,7 @@ namespace castor
 			return PixelFormat::eR8G8B8A8_SRGB;
 		}
 
-		void outputMessageFunction( FREE_IMAGE_FORMAT fif
+		static void outputMessageFunction( FREE_IMAGE_FORMAT fif
 			, const char * msg )
 		{
 			std::string format;
@@ -78,7 +78,7 @@ namespace castor
 
 #endif
 
-		StringArray const & listExtensions()
+		static StringArray const & listExtensions()
 		{
 			static StringArray const list
 #if C3D_UseFreeImage
@@ -95,13 +95,13 @@ namespace castor
 
 	void FreeImageLoader::registerLoader( ImageLoader & reg )
 	{
-		reg.registerLoader( listExtensions()
+		reg.registerLoader( freeimgl::listExtensions()
 			, std::make_unique< FreeImageLoader >() );
 	}
 
 	void FreeImageLoader::unregisterLoader( ImageLoader & reg )
 	{
-		reg.unregisterLoader( listExtensions() );
+		reg.unregisterLoader( freeimgl::listExtensions() );
 	}
 
 	ImageLayout FreeImageLoader::load( String const & CU_UnusedParam( imageFormat )
@@ -112,7 +112,7 @@ namespace castor
 #if C3D_UseFreeImage
 
 		PixelFormat sourceFmt{ PixelFormat::eR8G8B8A8_UNORM };
-		FreeImage_SetOutputMessage( outputMessageFunction );
+		FreeImage_SetOutputMessage( freeimgl::outputMessageFunction );
 		auto fiMemory = FreeImage_OpenMemory( const_cast< uint8_t * >( data ), size );
 		FREE_IMAGE_FORMAT fiFormat = FreeImage_GetFileTypeFromMemory( fiMemory, 0 );
 
@@ -163,7 +163,7 @@ namespace castor
 			needsComponentSwap = true;
 			break;
 		default:
-			sourceFmt = convertTo32Bits( fiImage );
+			sourceFmt = freeimgl::convertTo32Bits( fiImage );
 			needsComponentSwap = true;
 			break;
 		}
@@ -175,7 +175,7 @@ namespace castor
 #if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_BGR
 		if ( needsComponentSwap )
 		{
-			swapComponents( pixels, sourceFmt, width, height );
+			freeimgl::swapComponents( pixels, sourceFmt, width, height );
 		}
 #endif
 		buffer = PxBufferBase::create( dimensions

@@ -8,13 +8,10 @@
 
 #include <ShaderWriter/Source.hpp>
 
-using namespace castor;
-using namespace castor3d;
-
 namespace Uncharted2
 {
-	String ToneMapping::Type = cuT( "uncharted2" );
-	String ToneMapping::Name = cuT( "Uncharted 2 Tone Mapping" );
+	castor::String ToneMapping::Type = cuT( "uncharted2" );
+	castor::String ToneMapping::Name = cuT( "Uncharted 2 Tone Mapping" );
 
 	castor3d::ShaderPtr ToneMapping::create()
 	{

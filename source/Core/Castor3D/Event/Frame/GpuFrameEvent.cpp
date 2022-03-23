@@ -2,8 +2,6 @@
 
 #include <CastorUtils/Miscellaneous/Debug.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
 	GpuFrameEvent::GpuFrameEvent( GpuFrameEvent const & rhs )
@@ -54,7 +52,7 @@ namespace castor3d
 #if !defined( NDEBUG )
 
 		castor::StringStream stream = castor::makeStringStream();
-		stream << Debug::Backtrace{ 20 };
+		stream << castor::Debug::Backtrace{ 20 };
 		m_stackTrace = stream.str();
 
 #endif

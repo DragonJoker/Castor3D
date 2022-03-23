@@ -12,10 +12,10 @@ namespace castor3d
 
 	castor::String getTextureName( DsTexture texture )
 	{
-		return cuT( "c3d_map" ) + getName( texture );
+		return cuT( "c3d_map" ) + getTexName( texture );
 	}
 
-	castor::String getName( DsTexture texture )
+	castor::String getTexName( DsTexture texture )
 	{
 		static std::array< castor::String, size_t( DsTexture::eCount ) > Values
 		{

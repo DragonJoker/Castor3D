@@ -9,20 +9,18 @@
 #include <CastorUtils/Graphics/PixelBuffer.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
-	namespace
+	namespace lgtspot
 	{
 		static uint32_t constexpr FaceCount = 40;
 
-		Point2f doCalcSpotLightBCone( const castor3d::SpotLight & light )
+		static castor::Point2f doCalcSpotLightBCone( const castor3d::SpotLight & light )
 		{
 			float length{ getMaxDistance( light
 				, light.getAttenuation() ) };
 			float width{ light.getCutOff().degrees() / ( 45.0f * 2.0f ) };
-			return Point2f{ length * width, length };
+			return castor::Point2f{ length * width, length };
 		}
 	}
 
@@ -43,20 +41,20 @@ namespace castor3d
 		return std::unique_ptr< SpotLight >( new SpotLight{ p_light } );
 	}
 
-	Point3fArray const & SpotLight::generateVertices()
+	castor::Point3fArray const & SpotLight::generateVertices()
 	{
-		static Point3fArray result;
+		static castor::Point3fArray result;
 
 		if ( result.empty() )
 		{
-			Angle const angle = Angle::fromDegrees( 360.0f / FaceCount );
-			std::vector< Point2f > arc{ FaceCount + 1 };
-			Angle alpha;
-			Point3fArray data;
+			auto const angle = castor::Angle::fromDegrees( 360.0f / lgtspot::FaceCount );
+			std::vector< castor::Point2f > arc{ lgtspot::FaceCount + 1 };
+			castor::Angle alpha;
+			castor::Point3fArray data;
 
-			data.reserve( FaceCount * FaceCount * 4 );
+			data.reserve( lgtspot::FaceCount * lgtspot::FaceCount * 4 );
 
-			for ( uint32_t i = 0; i <= FaceCount; i++ )
+			for ( uint32_t i = 0; i <= lgtspot::FaceCount; i++ )
 			{
 				float x = +alpha.sin();
 				float y = -alpha.cos();
@@ -65,10 +63,10 @@ namespace castor3d
 				alpha += angle / 2;
 			}
 
-			Angle iAlpha;
-			Point3f pos;
+			castor::Angle iAlpha;
+			castor::Point3f pos;
 
-			for ( uint32_t k = 0; k < FaceCount; ++k )
+			for ( uint32_t k = 0; k < lgtspot::FaceCount; ++k )
 			{
 				auto ptT = arc[k + 0];
 				auto ptB = arc[k + 1];
@@ -76,7 +74,7 @@ namespace castor3d
 				if ( k == 0 )
 				{
 					// Calcul de la position des points du haut
-					for ( uint32_t i = 0; i <= FaceCount; iAlpha += angle, ++i )
+					for ( uint32_t i = 0; i <= lgtspot::FaceCount; iAlpha += angle, ++i )
 					{
 						auto cos = iAlpha.cos();
 						auto sin = iAlpha.sin();
@@ -87,7 +85,7 @@ namespace castor3d
 				// Calcul de la position des points
 				iAlpha = 0.0_radians;
 
-				for ( uint32_t i = 0; i <= FaceCount; iAlpha += angle, ++i )
+				for ( uint32_t i = 0; i <= lgtspot::FaceCount; iAlpha += angle, ++i )
 				{
 					auto cos = iAlpha.cos();
 					auto sin = iAlpha.sin();
@@ -95,21 +93,21 @@ namespace castor3d
 				}
 			}
 
-			result.reserve( FaceCount * FaceCount * 6u );
+			result.reserve( lgtspot::FaceCount * lgtspot::FaceCount * 6u );
 			uint32_t cur = 0;
 			uint32_t prv = 0;
 
-			for ( uint32_t k = 0; k < FaceCount; ++k )
+			for ( uint32_t k = 0; k < lgtspot::FaceCount; ++k )
 			{
 				if ( k == 0 )
 				{
-					for ( uint32_t i = 0; i <= FaceCount; ++i )
+					for ( uint32_t i = 0; i <= lgtspot::FaceCount; ++i )
 					{
 						cur++;
 					}
 				}
 
-				for ( uint32_t i = 0; i < FaceCount; ++i )
+				for ( uint32_t i = 0; i < lgtspot::FaceCount; ++i )
 				{
 					result.push_back( data[prv + 0] );
 					result.push_back( data[cur + 0] );
@@ -132,10 +130,10 @@ namespace castor3d
 	void SpotLight::update()
 	{
 		SpotLight::generateVertices();
-		auto scale = doCalcSpotLightBCone( *this ) / 2.0f;
+		auto scale = lgtspot::doCalcSpotLightBCone( *this ) / 2.0f;
 		m_cubeBox.load( castor::Point3f{ -scale[0], -scale[0], -scale[1] }
 			, castor::Point3f{ scale[0], scale[0], scale[1] } );
-		m_farPlane = float( point::distance( m_cubeBox.getMin(), m_cubeBox.getMax() ) );
+		m_farPlane = float( castor::point::distance( m_cubeBox.getMin(), m_cubeBox.getMax() ) );
 		m_dirtyData = false;
 	}
 
@@ -180,7 +178,7 @@ namespace castor3d
 		spot.transform = m_lightSpace;
 	}
 
-	void SpotLight::setAttenuation( Point3f const & attenuation )
+	void SpotLight::setAttenuation( castor::Point3f const & attenuation )
 	{
 		m_attenuation = attenuation;
 
@@ -200,7 +198,7 @@ namespace castor3d
 		}
 	}
 
-	void SpotLight::setCutOff( Angle const & cutOff )
+	void SpotLight::setCutOff( castor::Angle const & cutOff )
 	{
 		m_cutOff = cutOff;
 
@@ -212,7 +210,7 @@ namespace castor3d
 
 	void SpotLight::updateNode( SceneNode const & node )
 	{
-		auto direction = Point3f{ 0, 0, 1 };
+		auto direction = castor::Point3f{ 0, 0, 1 };
 		node.getDerivedOrientation().transform( direction, direction );
 		m_direction = direction;
 
