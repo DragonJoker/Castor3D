@@ -6,8 +6,6 @@
 
 CU_ImplementCUSmartPtr( castor3d, OverlayFactory )
 
-using namespace castor;
-
 namespace castor3d
 {
 	OverlayFactory::OverlayFactory()

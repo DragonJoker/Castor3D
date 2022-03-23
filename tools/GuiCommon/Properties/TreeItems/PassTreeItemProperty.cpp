@@ -18,10 +18,6 @@
 
 #include <wx/propgrid/advprops.h>
 
-using namespace castor3d;
-using namespace castor;
-using namespace GuiCommon;
-
 namespace GuiCommon
 {
 	namespace
@@ -30,7 +26,7 @@ namespace GuiCommon
 			: public castor3d::PassVisitor
 		{
 		public:
-			static void submit( Pass & pass
+			static void submit( castor3d::Pass & pass
 				, TreeItemProperty * properties
 				, wxPropertyGrid * grid )
 			{
@@ -193,8 +189,8 @@ namespace GuiCommon
 			: public castor3d::RenderTechniqueVisitor
 		{
 		private:
-			PassShaderGatherer( PipelineFlags flags
-				, Scene const & scene
+			PassShaderGatherer( castor3d::PipelineFlags flags
+				, castor3d::Scene const & scene
 				, ShaderSources & sources )
 				: castor3d::RenderTechniqueVisitor{ std::move( flags ), scene }
 				, m_sources{ sources }
@@ -202,8 +198,8 @@ namespace GuiCommon
 			}
 
 		public:
-			static ShaderSources submit( Pass const & pass
-				, Scene const & scene )
+			static ShaderSources submit( castor3d::Pass const & pass
+				, castor3d::Scene const & scene )
 			{
 				ShaderSources result;
 				PassShaderGatherer vis{ { pass.getColourBlendMode()
@@ -214,7 +210,7 @@ namespace GuiCommon
 							: castor3d::RenderPassTypeID{} )
 						, pass.getTypeID()
 						, pass.getHeightTextureIndex()
-						, ProgramFlags{}
+						, castor3d::ProgramFlags{}
 						, scene.getFlags()
 						, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
 						, 3u
@@ -224,7 +220,7 @@ namespace GuiCommon
 					, scene
 					, result };
 				auto & engine = *pass.getOwner()->getEngine();
-				engine.getRenderTargetCache().forEach( [&vis]( RenderTarget const & target )
+				engine.getRenderTargetCache().forEach( [&vis]( castor3d::RenderTarget const & target )
 					{
 						if ( target.isInitialised() )
 						{
@@ -514,8 +510,8 @@ namespace GuiCommon
 	}
 
 	PassTreeItemProperty::PassTreeItemProperty( bool editable
-		, PassSPtr pass
-		, Scene & scene
+		, castor3d::PassSPtr pass
+		, castor3d::Scene & scene
 		, wxWindow * parent )
 		: TreeItemProperty{ pass->getOwner()->getEngine(), editable }
 		, m_pass{ pass }
@@ -531,7 +527,7 @@ namespace GuiCommon
 		static wxString PROPERTY_PASS_SHADER = _( "Shader" );
 		static wxString PROPERTY_PASS_EDIT_SHADER = _( "View Shaders..." );
 
-		PassSPtr pass = getPass();
+		castor3d::PassSPtr pass = getPass();
 
 		if ( pass )
 		{
@@ -540,11 +536,11 @@ namespace GuiCommon
 			addProperty( grid, PROPERTY_PASS_SHADER, editor
 				, [this]( wxVariant const & var )
 				{
-					PassSPtr lpass = getPass();
+					castor3d::PassSPtr lpass = getPass();
 					ShaderSources sources = PassShaderGatherer::submit( *lpass, m_scene );
 					ShaderDialog * editor = new ShaderDialog{ lpass->getOwner()->getEngine()
 						, std::move( sources )
-						, lpass->getOwner()->getName() + string::toString( lpass->getId(), 10, std::locale{ "C" } )
+						, lpass->getOwner()->getName() + castor::string::toString( lpass->getId() )
 						, m_parent };
 					editor->Show();
 				} );

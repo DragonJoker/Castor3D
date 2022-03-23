@@ -13,27 +13,24 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
-using namespace castor;
-using namespace castor3d;
-
 namespace CastorGui
 {
-	void setMaterialColour( Pass & pass, RgbColour const & colour )
+	void setMaterialColour( castor3d::Pass & pass, castor::RgbColour const & colour )
 	{
 		pass.setColour( colour );
 	}
 
-	RgbColour const & getMaterialColour( Pass const & pass )
+	castor::RgbColour const & getMaterialColour( castor3d::Pass const & pass )
 	{
 		return pass.getColour();
 	}
 
-	MaterialRPtr createMaterial( Engine & engine
-		, String const & name
-		, RgbColour const & colour )
+	castor3d::MaterialRPtr createMaterial( castor3d::Engine & engine
+		, castor::String const & name
+		, castor::RgbColour const & colour )
 	{
 		auto & cache = engine.getMaterialCache();
-		MaterialResPtr created;
+		castor3d::MaterialResPtr created;
 		auto result = cache.tryAdd( name
 			, true
 			, created
@@ -49,12 +46,12 @@ namespace CastorGui
 		return result.lock().get();
 	}
 
-	MaterialRPtr createMaterial( Engine & engine
-		, String const & name
-		, TextureLayoutSPtr texture )
+	castor3d::MaterialRPtr createMaterial( castor3d::Engine & engine
+		, castor::String const & name
+		, castor3d::TextureLayoutSPtr texture )
 	{
 		auto & cache = engine.getMaterialCache();
-		MaterialResPtr created;
+		castor3d::MaterialResPtr created;
 		auto result = cache.tryAdd( name
 			, true
 			, created
@@ -70,13 +67,13 @@ namespace CastorGui
 
 		if ( pass->getTextureUnitsCount() == 0 )
 		{
-			auto unit = std::make_shared< TextureUnit >( engine
+			auto unit = std::make_shared< castor3d::TextureUnit >( engine
 				, castor3d::TextureSourceInfo{ nullptr, texture->getCreateInfo() } );
-			unit->setConfiguration( TextureConfiguration::DiffuseTexture );
+			unit->setConfiguration( castor3d::TextureConfiguration::DiffuseTexture );
 			//pass->addTextureUnit( unit );
 		}
 
-		TextureUnitSPtr unit = pass->getTextureUnit( 0 );
+		castor3d::TextureUnitSPtr unit = pass->getTextureUnit( 0 );
 		unit->setTexture( texture );
 		return result.lock().get();
 	}

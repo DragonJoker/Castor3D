@@ -10,8 +10,6 @@
 
 CU_ImplementCUSmartPtr( castor3d, OverlayCategory )
 
-using namespace castor;
-
 namespace castor3d
 {
 	OverlayCategory::OverlayCategory( OverlayType type )
@@ -58,33 +56,33 @@ namespace castor3d
 		}
 		else
 		{
-			m_strMatName = cuEmptyString;
+			m_strMatName = castor::cuEmptyString;
 		}
 	}
 
-	String const & OverlayCategory::getOverlayName()const
+	castor::String const & OverlayCategory::getOverlayName()const
 	{
 		return m_pOverlay->getName();
 	}
 
-	Position OverlayCategory::getAbsolutePosition( castor::Size const & size )const
+	castor::Position OverlayCategory::getAbsolutePosition( castor::Size const & size )const
 	{
 		// TODO: Bug here
-		Point2d position = getAbsolutePosition();
-		return Position{ int32_t( size.getWidth() * position[0] )
+		castor::Point2d position = getAbsolutePosition();
+		return castor::Position{ int32_t( size.getWidth() * position[0] )
 			, int32_t( size.getHeight() * position[1] ) };
 	}
 
-	Size OverlayCategory::getAbsoluteSize( castor::Size const & size )const
+	castor::Size OverlayCategory::getAbsoluteSize( castor::Size const & size )const
 	{
-		Point2d absoluteSize = getAbsoluteSize();
-		return Size{ uint32_t( size.getWidth() * absoluteSize[0] )
+		castor::Point2d absoluteSize = getAbsoluteSize();
+		return castor::Size{ uint32_t( size.getWidth() * absoluteSize[0] )
 			, uint32_t( size.getHeight() * absoluteSize[1] ) };
 	}
 
-	Point2f OverlayCategory::getRenderRatio( Size const & size )const
+	castor::Point2f OverlayCategory::getRenderRatio( castor::Size const & size )const
 	{
-		Point2f result{ 1, 1 };
+		castor::Point2f result{ 1, 1 };
 
 		if ( m_computeSize.getWidth() != 0 )
 		{
@@ -99,9 +97,9 @@ namespace castor3d
 		return result;
 	}
 
-	Point2d OverlayCategory::getAbsolutePosition()const
+	castor::Point2d OverlayCategory::getAbsolutePosition()const
 	{
-		Point2d position = getPosition();
+		castor::Point2d position = getPosition();
 
 		if ( auto parent = getOverlay().getParent() )
 		{
@@ -112,9 +110,9 @@ namespace castor3d
 		return position;
 	}
 
-	Point2d OverlayCategory::getAbsoluteSize()const
+	castor::Point2d OverlayCategory::getAbsoluteSize()const
 	{
-		Point2d size = getSize();
+		castor::Point2d size = getSize();
 
 		if ( auto parent = getOverlay().getParent() )
 		{
@@ -150,15 +148,15 @@ namespace castor3d
 		return changed;
 	}
 
-	Point2d OverlayCategory::doGetTotalSize( OverlayRenderer const & renderer )const
+	castor::Point2d OverlayCategory::doGetTotalSize( OverlayRenderer const & renderer )const
 	{
 		auto parent = getOverlay().getParent();
-		Size renderSize = renderer.getSize();
-		Point2d totalSize( renderSize.getWidth(), renderSize.getHeight() );
+		castor::Size renderSize = renderer.getSize();
+		castor::Point2d totalSize( renderSize.getWidth(), renderSize.getHeight() );
 
 		if ( parent )
 		{
-			Point2d parentSize = parent->getAbsoluteSize();
+			castor::Point2d parentSize = parent->getAbsoluteSize();
 			totalSize[0] = parentSize[0] * totalSize[0];
 			totalSize[1] = parentSize[1] * totalSize[1];
 		}
@@ -170,11 +168,11 @@ namespace castor3d
 	{
 		if ( isPositionChanged() || renderer.isSizeChanged() )
 		{
-			Size renderSize = renderer.getSize();
-			Point2d totalSize = doGetTotalSize( renderer );
+			castor::Size renderSize = renderer.getSize();
+			castor::Point2d totalSize = doGetTotalSize( renderer );
 			bool changed = m_positionChanged;
-			Position pos = getPixelPosition();
-			Point2d ptPos = getPosition();
+			castor::Position pos = getPixelPosition();
+			castor::Point2d ptPos = getPosition();
 
 			if ( pos.x() )
 			{
@@ -201,11 +199,11 @@ namespace castor3d
 	{
 		if ( isSizeChanged() || renderer.isSizeChanged() )
 		{
-			Size renderSize = renderer.getSize();
-			Point2d totalSize = doGetTotalSize( renderer );
+			castor::Size renderSize = renderer.getSize();
+			castor::Point2d totalSize = doGetTotalSize( renderer );
 			bool changed = m_sizeChanged;
-			Size size = getPixelSize();
-			Point2d ptSize = getSize();
+			castor::Size size = getPixelSize();
+			castor::Point2d ptSize = getSize();
 
 			if ( size.getWidth() )
 			{

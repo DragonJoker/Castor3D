@@ -9,9 +9,9 @@ namespace castor3d
 {
 	//*************************************************************************************************
 
-	namespace
+	namespace mshanmkf
 	{
-		castor::BoundingBox doComputeBoundingBox( InterleavedVertexArray const & points )
+		static castor::BoundingBox doComputeBoundingBox( InterleavedVertexArray const & points )
 		{
 			if ( points.empty() )
 			{
@@ -56,7 +56,7 @@ namespace castor3d
 	void MeshAnimationKeyFrame::addSubmeshBuffer( Submesh const & submesh
 		, InterleavedVertexArray const & buffer )
 	{
-		auto boundingBox = doComputeBoundingBox( buffer );
+		auto boundingBox = mshanmkf::doComputeBoundingBox( buffer );
 		m_submeshesBuffers.emplace( submesh.getId()
 			, SubmeshAnimationBuffer
 			{

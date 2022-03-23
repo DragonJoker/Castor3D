@@ -2,8 +2,6 @@
 
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationNode.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	SkeletonAnimationInstanceNode::SkeletonAnimationInstanceNode( SkeletonAnimationInstance & animationInstance

@@ -24,14 +24,12 @@
 
 CU_ImplementCUSmartPtr( castor3d, RenderLoop )
 
-using namespace castor;
-
 namespace castor3d
 {
 	RenderLoop::RenderLoop( Engine & engine
 		, uint32_t wantedFPS
 		, bool isAsync )
-		: OwnedBy< Engine >( engine )
+		: castor::OwnedBy< Engine >( engine )
 		, m_renderSystem{ *engine.getRenderSystem() }
 		, m_wantedFPS{ wantedFPS }
 		, m_frameTime{ 1000ull / wantedFPS }
@@ -39,13 +37,13 @@ namespace castor3d
 		, m_uploadResources{ UploadResources{ { nullptr, nullptr }, nullptr }
 			, UploadResources{ { nullptr, nullptr }, nullptr } }
 	{
-		auto lock( makeUniqueLock( m_debugOverlaysMtx ) );
+		auto lock( castor::makeUniqueLock( m_debugOverlaysMtx ) );
 		m_debugOverlays->initialise( getEngine()->getOverlayCache() );
 	}
 
 	RenderLoop::~RenderLoop()
 	{
-		auto lock( makeUniqueLock( m_debugOverlaysMtx ) );
+		auto lock( castor::makeUniqueLock( m_debugOverlaysMtx ) );
 		m_debugOverlays->cleanup();
 		m_debugOverlays.reset();
 	}
@@ -121,26 +119,26 @@ namespace castor3d
 	uint32_t RenderLoop::registerTimer( castor::String const & category
 		, crg::FramePassTimer & timer )
 	{
-		auto lock( makeUniqueLock( m_debugOverlaysMtx ) );
+		auto lock( castor::makeUniqueLock( m_debugOverlaysMtx ) );
 		return m_debugOverlays->registerTimer( category, timer );
 	}
 
 	void RenderLoop::unregisterTimer( castor::String const & category
 		, crg::FramePassTimer & timer )
 	{
-		auto lock( makeUniqueLock( m_debugOverlaysMtx ) );
+		auto lock( castor::makeUniqueLock( m_debugOverlaysMtx ) );
 		m_debugOverlays->unregisterTimer( category, timer );
 	}
 
 	void RenderLoop::registerBuffer( ShaderBuffer const & buffer )
 	{
-		auto lock( makeUniqueLock( m_shaderBuffersMtx ) );
+		auto lock( castor::makeUniqueLock( m_shaderBuffersMtx ) );
 		m_shaderBuffers.insert( &buffer );
 	}
 
 	void RenderLoop::unregisterBuffer( ShaderBuffer const & buffer )
 	{
-		auto lock( makeUniqueLock( m_shaderBuffersMtx ) );
+		auto lock( castor::makeUniqueLock( m_shaderBuffersMtx ) );
 		m_shaderBuffers.erase( &buffer );
 	}
 

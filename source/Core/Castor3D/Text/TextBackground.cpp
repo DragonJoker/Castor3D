@@ -4,10 +4,10 @@
 #include "Castor3D/Text/TextImageBackground.hpp"
 #include "Castor3D/Text/TextSkyboxBackground.hpp"
 
-using namespace castor3d;
-
 namespace castor
 {
+	using namespace castor3d;
+
 	TextWriter< SceneBackground >::TextWriter( String const & tabs
 		, Path const & folder )
 		: TextWriterT< SceneBackground >{ tabs }

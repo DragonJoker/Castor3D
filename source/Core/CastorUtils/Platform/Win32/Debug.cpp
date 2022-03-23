@@ -20,7 +20,7 @@ namespace castor::Debug
 {
 #if !defined( NDEBUG )
 
-	namespace
+	namespace dbg
 	{
 		struct DbgHelpContext
 		{
@@ -103,14 +103,14 @@ namespace castor::Debug
 
 		using DbgHelpContextPtr = std::unique_ptr< DbgHelpContext >;
 
-		DbgHelpContextPtr & getContext()
+		static DbgHelpContextPtr & getContext()
 		{
 			static DbgHelpContextPtr result{ std::make_unique< DbgHelpContext >() };
 			return result;
 		}
 
 		template< typename CharT >
-		void showBacktrace( std::basic_ostream< CharT > & stream
+		static void showBacktrace( std::basic_ostream< CharT > & stream
 			, int toCapture
 			, int toSkip )
 		{
@@ -176,27 +176,27 @@ namespace castor::Debug
 
 	void initialise()
 	{
-		getContext();
+		dbg::getContext();
 	}
 
 	void cleanup()
 	{
-		getContext().reset();
+		dbg::getContext().reset();
 	}
 
 	void loadModule( DynamicLibrary const & library )
 	{
-		getContext()->loadModule( library );
+		dbg::getContext()->loadModule( library );
 	}
 
 	void unloadModule( DynamicLibrary const & library )
 	{
-		getContext()->unloadModule( library );
+		dbg::getContext()->unloadModule( library );
 	}
 
 #else
 
-	namespace
+	namespace dbg
 	{
 		template< typename CharT >
 		void showBacktrace( std::basic_ostream< CharT > & p_stream, int, int )
@@ -226,7 +226,7 @@ namespace castor::Debug
 	{
 		static std::locale const loc{ "C" };
 		p_stream.imbue( loc );
-		showBacktrace( p_stream, p_backtrace.m_toCapture, p_backtrace.m_toSkip );
+		dbg::showBacktrace( p_stream, p_backtrace.m_toCapture, p_backtrace.m_toSkip );
 		return p_stream;
 	}
 
@@ -234,7 +234,7 @@ namespace castor::Debug
 	{
 		static std::locale const loc{ "C" };
 		p_stream.imbue( loc );
-		showBacktrace( p_stream, p_backtrace.m_toCapture, p_backtrace.m_toSkip );
+		dbg::showBacktrace( p_stream, p_backtrace.m_toCapture, p_backtrace.m_toSkip );
 		return p_stream;
 	}
 }

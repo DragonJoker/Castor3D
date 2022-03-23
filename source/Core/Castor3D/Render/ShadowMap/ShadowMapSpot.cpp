@@ -32,13 +32,11 @@
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/RunnableGraph.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
-	namespace
+	namespace shdmapspot
 	{
-		std::vector< ShadowMap::PassDataPtr > createPass( crg::ResourceHandler & handler
+		static std::vector< ShadowMap::PassDataPtr > createPass( crg::ResourceHandler & handler
 			, std::vector< std::unique_ptr< crg::FrameGraph > > & graphs
 			, std::vector< std::unique_ptr< GaussianBlur > > & blurs
 			, crg::ImageViewId intermediate
@@ -50,7 +48,7 @@ namespace castor3d
 			auto & engine = *scene.getEngine();
 			std::vector< ShadowMap::PassDataPtr > result;
 			Viewport viewport{ engine };
-			viewport.resize( Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize } );
+			viewport.resize( castor::Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize } );
 			auto & smResult = shadowMap.getShadowPassResult();
 			auto & depth = smResult[SmTexture::eDepth];
 			auto & linear = smResult[SmTexture::eNormalLinear];
@@ -116,7 +114,7 @@ namespace castor3d
 			, scene
 			, LightType::eSpot
 			, 0u
-			, Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize }
+			, castor::Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize }
 			, shader::getSpotShadowMapCount()
 			, shader::getSpotShadowMapCount() }
 		, m_blurIntermediate{ handler.createImageId( crg::ImageData{ "SpotGB"
@@ -153,7 +151,7 @@ namespace castor3d
 
 	std::vector< ShadowMap::PassDataPtr > ShadowMapSpot::doCreatePass( uint32_t index )
 	{
-		return createPass( m_handler
+		return shdmapspot::createPass( m_handler
 			, m_graphs
 			, m_blurs
 			, m_blurIntermediateView

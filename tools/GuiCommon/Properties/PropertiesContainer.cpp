@@ -34,9 +34,6 @@
 
 #pragma clang diagnostic ignored "-Wold-style-cast"
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
 	wxPGEditor * PropertiesContainer::m_buttonEditor = nullptr;

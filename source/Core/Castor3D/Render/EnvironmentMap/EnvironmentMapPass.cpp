@@ -22,13 +22,11 @@
 #include <RenderGraph/RunnablePasses/GenerateMipmaps.hpp>
 #include <RenderGraph/RunnableGraph.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
-	namespace
+	namespace envpass
 	{
-		CameraSPtr doCreateCamera( SceneNode & node
+		static CameraSPtr doCreateCamera( SceneNode & node
 			, VkExtent3D const & size )
 		{
 			float const aspect = float( size.width ) / float( size.height );
@@ -58,14 +56,14 @@ namespace castor3d
 		, CubeMapFace face
 		, SceneBackground & background )
 		: OwnedBy< EnvironmentMap >{ environmentMap }
-		, Named{ "Env" + castor::string::toString( index ) + "_" + castor::string::toString( uint32_t( face ) ) }
+		, castor::Named{ "Env" + castor::string::toString( index ) + "_" + castor::string::toString( uint32_t( face ) ) }
 		, m_device{ device }
 		, m_graph{ graph.createPassGroup( getName() ) }
 		, m_background{ background }
 		, m_node{ faceNode }
 		, m_index{ index }
 		, m_face{ face }
-		, m_camera{ doCreateCamera( *faceNode, getOwner()->getSize() ) }
+		, m_camera{ envpass::doCreateCamera( *faceNode, getOwner()->getSize() ) }
 		, m_culler{ std::make_unique< FrustumCuller >( *m_camera ) }
 		, m_matrixUbo{ m_device }
 		, m_hdrConfigUbo{ m_device }

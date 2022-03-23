@@ -20,23 +20,9 @@
 
 namespace castor3d
 {
-	namespace
+	namespace mshimp
 	{
-		std::ostream & operator<<( std::ostream & stream, castor::Point3f const & obj )
-		{
-			stream << std::setprecision( 4 ) << obj->x
-				<< ", " << std::setprecision( 4 ) << obj->y
-				<< ", " << std::setprecision( 4 ) << obj->z;
-			return stream;
-		}
-
-		std::ostream & operator<<( std::ostream & stream, castor::BoundingBox const & obj )
-		{
-			stream << "min: " << obj.getMin() << ", max: " << obj.getMax();
-			return stream;
-		}
-
-		bool findImage( castor::Path const & path
+		static bool findImage( castor::Path const & path
 			, castor::Path const & filePath
 			, castor::Path & folder
 			, castor::Path & relative )
@@ -175,7 +161,7 @@ namespace castor3d
 
 				mesh.computeContainers();
 				log::info << "Loaded mesh [" << mesh.getName() << "]"
-					<< " AABB (" << mesh.getBoundingBox() << ")"
+					<< " AABB (" << print( mesh.getBoundingBox() ) << ")"
 					<< ", " << mesh.getVertexCount() << " vertices"
 					<< ", " << mesh.getSubmeshCount() << " submeshes" << std::endl;
 
@@ -291,7 +277,7 @@ namespace castor3d
 				auto mesh = meshIt.second.lock();
 				mesh->computeContainers();
 				log::info << "Loaded mesh [" << mesh->getName() << "]"
-					<< " AABB (" << mesh->getBoundingBox() << ")"
+					<< " AABB (" << print( mesh->getBoundingBox() ) << ")"
 					<< ", " << mesh->getVertexCount() << " vertices"
 					<< ", " << mesh->getSubmeshCount() << " submeshes" << std::endl;
 			}
@@ -339,7 +325,7 @@ namespace castor3d
 		castor::Path relative;
 		castor::Path folder;
 
-		if ( findImage( path, m_filePath, folder, relative ) )
+		if ( mshimp::findImage( path, m_filePath, folder, relative ) )
 		{
 			result = loadImage( relative.getFileName()
 				, castor::ImageCreateParams{ folder / relative

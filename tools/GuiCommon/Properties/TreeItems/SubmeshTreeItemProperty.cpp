@@ -14,12 +14,11 @@
 
 #include <wx/propgrid/advprops.h>
 
-using namespace castor;
-using namespace castor3d;
-
 namespace GuiCommon
 {
-	SubmeshTreeItemProperty::SubmeshTreeItemProperty( bool editable, Geometry & geometry, Submesh & submesh )
+	SubmeshTreeItemProperty::SubmeshTreeItemProperty( bool editable
+		, castor3d::Geometry & geometry
+		, castor3d::Submesh & submesh )
 		: TreeItemProperty( submesh.getOwner()->getScene()->getEngine(), editable )
 		, m_geometry( geometry )
 		, m_submesh( submesh )
@@ -61,7 +60,7 @@ namespace GuiCommon
 		choices.Add( PROPERTY_TOPOLOGY_PATCH_LIST );
 
 		addProperty( grid, PROPERTY_CATEGORY_SUBMESH + wxString( m_geometry.getName() ) );
-		addPropertyET( grid, PROPERTY_TOPOLOGY, choices, m_submesh.getTopology(), &m_submesh, &Submesh::setTopology );
+		addPropertyET( grid, PROPERTY_TOPOLOGY, choices, m_submesh.getTopology(), &m_submesh, &castor3d::Submesh::setTopology );
 		addProperty( grid, PROPERTY_SUBMESH_MATERIAL, getMaterialsList(), m_geometry.getMaterial( m_submesh )->getName()
 			, [this]( wxVariant const & var )
 			{

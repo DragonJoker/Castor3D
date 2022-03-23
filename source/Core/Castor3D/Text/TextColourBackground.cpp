@@ -4,10 +4,10 @@
 
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
-using namespace castor3d;
-
 namespace castor
 {
+	using namespace castor3d;
+
 	TextWriter< ColourBackground >::TextWriter( String const & tabs )
 		: TextWriterT< ColourBackground >{ tabs }
 	{

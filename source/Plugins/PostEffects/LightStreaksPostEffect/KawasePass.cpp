@@ -16,7 +16,7 @@
 
 namespace light_streaks
 {
-	namespace
+	namespace kawase
 	{
 		enum Idx
 		{
@@ -24,7 +24,7 @@ namespace light_streaks
 			DifImgIdx,
 		};
 
-		std::unique_ptr< ast::Shader > getVertexProgram()
+		static std::unique_ptr< ast::Shader > getVertexProgram()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -45,7 +45,7 @@ namespace light_streaks
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > getPixelProgram()
+		static std::unique_ptr< ast::Shader > getPixelProgram()
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -86,7 +86,7 @@ namespace light_streaks
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::vector< KawasePass::Subpass > doCreateSubpasses( crg::FramePassGroup & graph
+		static std::vector< KawasePass::Subpass > doCreateSubpasses( crg::FramePassGroup & graph
 			, crg::FramePass const *& previousPass
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewIdArray const & srcImages
@@ -178,10 +178,10 @@ namespace light_streaks
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
 		pass.addDependency( previousPass );
 		kawaseUbo.createPassBinding( pass
-			, KawaseUboIdx
+			, kawase::KawaseUboIdx
 			, index );
 		pass.addSampledView( srcView
-			, DifImgIdx
+			, kawase::DifImgIdx
 			, {}
 			, linearSampler );
 		pass.addOutputColourView( dstView );
@@ -199,12 +199,12 @@ namespace light_streaks
 		, bool const * enabled )
 		: m_device{ device }
 		, m_kawaseUbo{ kawaseUbo }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LightStreaksKawasePass", getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LightStreaksKawasePass", getPixelProgram() }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LightStreaksKawasePass", kawase::getVertexProgram() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LightStreaksKawasePass", kawase::getPixelProgram() }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_lastPass{ &previousPass }
-		, m_subpasses{ doCreateSubpasses( graph
+		, m_subpasses{ kawase::doCreateSubpasses( graph
 			, m_lastPass
 			, m_device
 			, hiViews

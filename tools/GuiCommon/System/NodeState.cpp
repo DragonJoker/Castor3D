@@ -4,14 +4,11 @@
 #include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
 #include <Castor3D/Scene/SceneNode.hpp>
 
-using namespace castor;
-using namespace castor3d;
-
 namespace GuiCommon
 {
 	namespace
 	{
-		float getValue( Angle const & value )
+		float getValue( castor::Angle const & value )
 		{
 			return value.degrees();
 		}
@@ -22,7 +19,7 @@ namespace GuiCommon
 		}
 
 		template< typename T >
-		RangedValue< T > doUpdateVelocity( RangedValue< T > velocity )
+		castor::RangedValue< T > doUpdateVelocity( castor::RangedValue< T > velocity )
 		{
 			static T const zero{};
 			auto ret = velocity.value() / 1.2f;
@@ -32,12 +29,12 @@ namespace GuiCommon
 				ret = zero;
 			}
 
-			return RangedValue< T >( ret, velocity.range() );
+			return castor::RangedValue< T >( ret, velocity.range() );
 		}
 	}
 
-	NodeState::NodeState( FrameListener & listener
-		, SceneNodeRPtr node
+	NodeState::NodeState( castor3d::FrameListener & listener
+		, castor3d::SceneNodeRPtr node
 		, bool camera )
 		: m_listener{ listener }
 		, m_node{ node }
@@ -47,7 +44,7 @@ namespace GuiCommon
 		{
 			m_originalOrientation.getPitch(),
 			m_originalOrientation.getYaw(),
-			camera ? Angle{} : m_originalOrientation.getRoll(),
+			camera ? castor::Angle{} : m_originalOrientation.getRoll(),
 		}
 		, m_angles{ m_originalAngles }
 	{
@@ -63,7 +60,7 @@ namespace GuiCommon
 		m_scalarVelocityY = 0.0f;
 		m_scalarVelocityZ = 0.0f;
 
-		m_listener.postEvent( makeCpuFunctorEvent( EventType::ePostRender
+		m_listener.postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
 			, [this]()
 			{
 				m_node->setOrientation( m_originalOrientation );
@@ -73,9 +70,9 @@ namespace GuiCommon
 
 	void NodeState::setMaxSpeed( float speed )
 	{
-		m_scalarVelocityX.updateRange( makeRange( -speed, speed ) );
-		m_scalarVelocityY.updateRange( makeRange( -speed, speed ) );
-		m_scalarVelocityZ.updateRange( makeRange( -speed, speed ) );
+		m_scalarVelocityX.updateRange( castor::makeRange( -speed, speed ) );
+		m_scalarVelocityY.updateRange( castor::makeRange( -speed, speed ) );
+		m_scalarVelocityZ.updateRange( castor::makeRange( -speed, speed ) );
 	}
 
 	bool NodeState::update()
@@ -111,14 +108,14 @@ namespace GuiCommon
 		if ( result )
 		{
 			angles = m_angles;
-			m_listener.postEvent( makeCpuFunctorEvent( EventType::ePostRender
+			m_listener.postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
 			, [this, translate, angles]()
 			{
 				m_node->translate( translate );
 
-				Quaternion pitch{ Quaternion::fromAxisAngle( castor::Point3f{ 1.0, 0.0, 0.0 }, angles[0] ) };
-				Quaternion yaw{ Quaternion::fromAxisAngle( castor::Point3f{ 0.0, 1.0, 0.0 }, angles[1] ) };
-				Quaternion roll{ Quaternion::fromAxisAngle( castor::Point3f{ 0.0, 0.0, 1.0 }, angles[2] ) };
+				castor::Quaternion pitch{ castor::Quaternion::fromAxisAngle( castor::Point3f{ 1.0, 0.0, 0.0 }, angles[0] ) };
+				castor::Quaternion yaw{ castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0, 1.0, 0.0 }, angles[1] ) };
+				castor::Quaternion roll{ castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0, 0.0, 1.0 }, angles[2] ) };
 				m_node->setOrientation( roll * yaw * pitch );
 			} ) );
 		}
@@ -128,8 +125,8 @@ namespace GuiCommon
 
 	void NodeState::setAngularVelocity( castor::Point2f const & value )noexcept
 	{
-		m_angularVelocityX = Angle::fromDegrees( value[0] );
-		m_angularVelocityY = Angle::fromDegrees( value[1] );
+		m_angularVelocityX = castor::Angle::fromDegrees( value[0] );
+		m_angularVelocityY = castor::Angle::fromDegrees( value[1] );
 	}
 
 	 void NodeState::setScalarVelocity( castor::Point3f const & value )noexcept
@@ -141,8 +138,8 @@ namespace GuiCommon
 
 	void NodeState::addAngularVelocity( castor::Point2f const & value )noexcept
 	{
-		m_angularVelocityX += Angle::fromDegrees( value[0] );
-		m_angularVelocityY += Angle::fromDegrees( value[1] );
+		m_angularVelocityX += castor::Angle::fromDegrees( value[0] );
+		m_angularVelocityY += castor::Angle::fromDegrees( value[1] );
 	}
 
 	void NodeState::addScalarVelocity( castor::Point3f const & value )noexcept

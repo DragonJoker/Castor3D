@@ -42,8 +42,6 @@
 #include <ashespp/Image/ImageView.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
 	castor::String const ForwardRenderTechniquePass::Type = "c3d.forward";

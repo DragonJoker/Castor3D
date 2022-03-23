@@ -12,9 +12,9 @@
 
 namespace castor3d
 {
-	namespace
+	namespace passovy
 	{
-		void doParseOverlay( Scene const & refScene
+		static void doParseOverlay( Scene const & refScene
 			, Overlay const & overlay
 			, OverlayRenderer & renderer
 			, OverlayRenderer::Preparer & preparer
@@ -45,7 +45,7 @@ namespace castor3d
 			}
 		}
 
-		void doParseOverlays( Scene const & refScene
+		static void doParseOverlays( Scene const & refScene
 			, OverlayRenderer & renderer
 			, OverlayRenderer::Preparer & preparer )
 		{
@@ -93,7 +93,7 @@ namespace castor3d
 		m_renderer->beginPrepare( m_renderPass.getRenderPass()
 			, m_renderPass.getFramebuffer( 0u ) );
 		auto preparer = m_renderer->getPreparer( m_device );
-		doParseOverlays( m_scene, *m_renderer, preparer );
+		passovy::doParseOverlays( m_scene, *m_renderer, preparer );
 		m_renderer->endPrepare();
 		reRecordCurrent();
 	}

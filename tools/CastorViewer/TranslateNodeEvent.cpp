@@ -2,23 +2,20 @@
 
 #include <Castor3D/Scene/SceneNode.hpp>
 
-using namespace castor3d;
-using namespace castor;
-
 namespace CastorViewer
 {
-	TranslateNodeEvent::TranslateNodeEvent( SceneNodeSPtr p_node, float p_dx, float p_dy, float p_dz )
+	TranslateNodeEvent::TranslateNodeEvent( castor3d::SceneNodeSPtr p_node, float p_dx, float p_dy, float p_dz )
 		: MouseNodeEvent( p_node, p_dx, p_dy, p_dz )
 	{
 	}
 
 	void TranslateNodeEvent::doApply()
 	{
-		SceneNodeSPtr node = m_node.lock();
+		castor3d::SceneNodeSPtr node = m_node.lock();
 
 		if ( node )
 		{
-			Quaternion orientation = node->getOrientation();
+			castor::Quaternion orientation = node->getOrientation();
 			castor::Point3f right{ 1.0f, 0.0f, 0.0f };
 			castor::Point3f up{ 0.0f, 1.0f, 0.0f };
 			castor::Point3f front{ 0.0f, 0.0f, 1.0f };

@@ -2,12 +2,10 @@
 
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	MeshAnimation::MeshAnimation( Mesh & mesh
-		, String const & name )
+		, castor::String const & name )
 		: Animation{ *mesh.getEngine()
 			, AnimationType::eMesh
 			, mesh

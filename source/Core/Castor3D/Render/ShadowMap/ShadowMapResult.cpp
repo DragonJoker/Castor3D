@@ -7,8 +7,6 @@
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*********************************************************************************************
@@ -16,12 +14,12 @@ namespace castor3d
 	castor::String getTextureName( LightType light
 		, SmTexture texture )
 	{
-		return cuT( "c3d_" ) + getName( light ) + getName( texture );
+		return cuT( "c3d_" ) + getName( light ) + getTexName( texture );
 	}
 
-	castor::String getName( SmTexture texture )
+	castor::String getTexName( SmTexture texture )
 	{
-		static std::array< String, size_t( SmTexture::eCount ) > Values
+		static std::array< castor::String, size_t( SmTexture::eCount ) > Values
 		{
 			{
 				cuT( "Depth" ),

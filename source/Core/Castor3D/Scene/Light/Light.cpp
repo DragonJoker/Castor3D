@@ -7,11 +7,9 @@
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
-	Light::Light( String const & name
+	Light::Light( castor::String const & name
 		, Scene & scene
 		, SceneNode & node
 		, LightFactory & factory

@@ -23,11 +23,9 @@
 
 CU_ImplementCUSmartPtr( castor3d, GaussianBlur )
 
-using namespace castor;
-
 namespace castor3d
 {
-	namespace
+	namespace passgauss
 	{
 		enum Idx
 		{
@@ -35,7 +33,7 @@ namespace castor3d
 			DifImgIdx,
 		};
 
-		ShaderPtr getVertexProgram()
+		static ShaderPtr getVertexProgram()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -56,7 +54,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderPtr getBlurXProgram( bool isDepth )
+		static ShaderPtr getBlurXProgram( bool isDepth )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -97,7 +95,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderPtr getBlurYProgram( bool isDepth )
+		static ShaderPtr getBlurYProgram( bool isDepth )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -138,7 +136,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::vector< float > getHalfPascal( uint32_t height )
+		static std::vector< float > getHalfPascal( uint32_t height )
 		{
 			std::vector< float > result;
 			result.resize( height );
@@ -176,7 +174,7 @@ namespace castor3d
 			return result;
 		}
 
-		crg::ImageViewData createMipView( crg::ImageViewId const & source
+		static crg::ImageViewData createMipView( crg::ImageViewId const & source
 			, uint32_t layer
 			, uint32_t level )
 		{
@@ -198,12 +196,12 @@ namespace castor3d
 			}
 
 			result.name = source.data->name;
-			result.name += "L" + string::toString( layer );
-			result.name += "M" + string::toString( level );
+			result.name += "L" + castor::string::toString( layer );
+			result.name += "M" + castor::string::toString( level );
 			return result;
 		}
 
-		crg::ImageViewId createIntermediate( crg::FramePassGroup & graph
+		static crg::ImageViewId createIntermediate( crg::FramePassGroup & graph
 			, castor::String const & prefix
 			, VkFormat format
 			, VkExtent3D const & size
@@ -228,7 +226,7 @@ namespace castor3d
 				, { ashes::getAspectMask( format ), 0u, mipLevels, 0u, 1u } } );
 		}
 
-		crg::ImageViewIdArray createViews( crg::FramePassGroup & graph
+		static crg::ImageViewIdArray createViews( crg::FramePassGroup & graph
 			, crg::ImageViewId input )
 		{
 			crg::ImageViewIdArray result;
@@ -252,10 +250,10 @@ namespace castor3d
 
 	//*********************************************************************************************
 	
-	String const GaussianBlur::Config = cuT( "Config" );
-	String const GaussianBlur::Coefficients = cuT( "c3d_coefficients" );
-	String const GaussianBlur::CoefficientsCount = cuT( "c3d_coefficientsCount" );
-	String const GaussianBlur::TextureSize = cuT( "c3d_textureSize" );
+	castor::String const GaussianBlur::Config = cuT( "Config" );
+	castor::String const GaussianBlur::Coefficients = cuT( "c3d_coefficients" );
+	castor::String const GaussianBlur::CoefficientsCount = cuT( "c3d_coefficientsCount" );
+	castor::String const GaussianBlur::TextureSize = cuT( "c3d_textureSize" );
 
 	GaussianBlur::GaussianBlur( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
@@ -274,10 +272,10 @@ namespace castor3d
 		, m_format{ getFormat( m_sources[0] ) }
 		, m_intermediateView{ intermediateView }
 		, m_blurUbo{ m_device.uboPool->getBuffer< Configuration >( 0u ) }
-		, m_kernel{ getHalfPascal( kernelSize ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + cuT( "GB" ), getVertexProgram() }
-		, m_pixelShaderX{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + cuT( "GBX" ), getBlurXProgram( ashes::isDepthFormat( m_format ) ) }
-		, m_pixelShaderY{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + cuT( "GBY" ), getBlurYProgram( ashes::isDepthFormat( m_format ) ) }
+		, m_kernel{ passgauss::getHalfPascal( kernelSize ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + cuT( "GB" ), passgauss::getVertexProgram() }
+		, m_pixelShaderX{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + cuT( "GBX" ), passgauss::getBlurXProgram( ashes::isDepthFormat( m_format ) ) }
+		, m_pixelShaderY{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + cuT( "GBY" ), passgauss::getBlurYProgram( ashes::isDepthFormat( m_format ) ) }
 		, m_stagesX{ makeShaderState( device, m_vertexShader ), makeShaderState( device, m_pixelShaderX ) }
 		, m_stagesY{ makeShaderState( device, m_vertexShader ), makeShaderState( device, m_pixelShaderY ) }
 	{
@@ -313,8 +311,8 @@ namespace castor3d
 					} );
 				passX.addDependency( *m_lastPass );
 				m_lastPass = &passX;
-				m_blurUbo.createPassBinding( passX, "BlurCfgX", GaussCfgIdx );
-				passX.addSampledView( input, DifImgIdx, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+				m_blurUbo.createPassBinding( passX, "BlurCfgX", passgauss::GaussCfgIdx );
+				passX.addSampledView( input, passgauss::DifImgIdx, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 				passX.addOutputColourView( m_intermediateView );
 			}
 			{
@@ -337,8 +335,8 @@ namespace castor3d
 					} );
 				passY.addDependency( *m_lastPass );
 				m_lastPass = &passY;
-				m_blurUbo.createPassBinding( passY, "BlurCfgY", GaussCfgIdx );
-				passY.addSampledView( m_intermediateView, DifImgIdx, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+				m_blurUbo.createPassBinding( passY, "BlurCfgY", passgauss::GaussCfgIdx );
+				passY.addSampledView( m_intermediateView, passgauss::DifImgIdx, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 				passY.addOutputColourView( input
 					, {}
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
@@ -359,7 +357,7 @@ namespace castor3d
 			, category
 			, prefix
 			, views
-			, createIntermediate( graph, prefix, getFormat( views[0] ), getExtent( views[0] ), getMipLevels( views[0] ) )
+			, passgauss::createIntermediate( graph, prefix, getFormat( views[0] ), getExtent( views[0] ), getMipLevels( views[0] ) )
 			, kernelSize }
 	{
 	}
@@ -376,8 +374,8 @@ namespace castor3d
 			, device
 			, category
 			, prefix
-			, createViews( graph, view )
-			, createIntermediate( graph, prefix, getFormat( view ), getExtent( view ), getMipLevels( view ) )
+			, passgauss::createViews( graph, view )
+			, passgauss::createIntermediate( graph, prefix, getFormat( view ), getExtent( view ), getMipLevels( view ) )
 			, kernelSize }
 	{
 	}
@@ -395,7 +393,7 @@ namespace castor3d
 			, device
 			, category
 			, prefix
-			, createViews( graph, view )
+			, passgauss::createViews( graph, view )
 			, intermediateView
 			, kernelSize }
 	{

@@ -42,7 +42,7 @@ namespace castor3d
 {
 	//*************************************************************************
 
-	namespace
+	namespace rendsys
 	{
 #if C3D_HasSPIRVCross
 
@@ -69,7 +69,7 @@ namespace castor3d
 			std::locale m_prvLoc;
 		};
 
-		spv::ExecutionModel getExecutionModel( VkShaderStageFlagBits stage )
+		static spv::ExecutionModel getExecutionModel( VkShaderStageFlagBits stage )
 		{
 			spv::ExecutionModel result{};
 
@@ -101,7 +101,7 @@ namespace castor3d
 			return result;
 		}
 
-		void doSetEntryPoint( VkShaderStageFlagBits stage
+		static void doSetEntryPoint( VkShaderStageFlagBits stage
 			, spirv_cross::CompilerGLSL & compiler )
 		{
 			auto model = getExecutionModel( stage );
@@ -123,7 +123,7 @@ namespace castor3d
 			compiler.set_entry_point( entryPoint, model );
 		}
 
-		void doSetupOptions( castor3d::RenderDevice const & device
+		static void doSetupOptions( castor3d::RenderDevice const & device
 			, spirv_cross::CompilerGLSL & compiler )
 		{
 			auto options = compiler.get_common_options();
@@ -137,7 +137,7 @@ namespace castor3d
 			compiler.set_common_options( options );
 		}
 
-		std::string compileSpvToGlsl( castor3d::RenderDevice const & device
+		static std::string compileSpvToGlsl( castor3d::RenderDevice const & device
 			, ashes::UInt32Array const & spv
 			, VkShaderStageFlagBits stage )
 		{
@@ -152,7 +152,7 @@ namespace castor3d
 #if !defined( NDEBUG )
 #	if C3D_HasGLSL
 
-		glsl::GlslExtensionSet getGLSLExtensions( uint32_t glslVersion )
+		static glsl::GlslExtensionSet getGLSLExtensions( uint32_t glslVersion )
 		{
 			glsl::GlslExtensionSet result;
 
@@ -344,7 +344,7 @@ namespace castor3d
 
 		//*************************************************************************
 
-		bool isValidationLayer( std::string const & name
+		static bool isValidationLayer( std::string const & name
 			, std::string const & description )
 		{
 			static std::set< std::string > const validNames
@@ -354,7 +354,7 @@ namespace castor3d
 			return validNames.find( name ) != validNames.end();
 		}
 
-		bool isSynchronisationLayer( std::string const & name
+		static bool isSynchronisationLayer( std::string const & name
 			, std::string const & description )
 		{
 			static std::set< std::string > const validNames
@@ -364,7 +364,7 @@ namespace castor3d
 			return validNames.find( name ) != validNames.end();
 		}
 
-		bool isApiTraceLayer( std::string const & name
+		static bool isApiTraceLayer( std::string const & name
 			, std::string const & description )
 		{
 			static std::set< std::string > const validNames
@@ -374,7 +374,7 @@ namespace castor3d
 			return validNames.find( name ) != validNames.end();
 		}
 
-		bool isExtensionAvailable( std::vector< VkExtensionProperties > const & available
+		static bool isExtensionAvailable( std::vector< VkExtensionProperties > const & available
 			, std::string const & requested )
 		{
 			return available.end() != std::find_if( available.begin()
@@ -385,7 +385,7 @@ namespace castor3d
 				} );
 		}
 
-		void addOptionalDebugLayers( std::vector< VkExtensionProperties > const & available
+		static void addOptionalDebugLayers( std::vector< VkExtensionProperties > const & available
 			, Extensions & extensions )
 		{
 #if VK_KHR_synchronization2
@@ -419,7 +419,7 @@ namespace castor3d
 #endif
 		}
 
-		void checkExtensionsAvailability( std::vector< VkExtensionProperties > const & available
+		static void checkExtensionsAvailability( std::vector< VkExtensionProperties > const & available
 			, ashes::StringArray const & requested )
 		{
 			for ( auto const & name : requested )
@@ -431,7 +431,7 @@ namespace castor3d
 			}
 		}
 
-		ashes::VkLayerPropertiesArray enumerateLayerProperties( PFN_vkEnumerateInstanceLayerProperties enumLayerProperties )
+		static ashes::VkLayerPropertiesArray enumerateLayerProperties( PFN_vkEnumerateInstanceLayerProperties enumLayerProperties )
 		{
 			if ( !enumLayerProperties )
 			{
@@ -462,7 +462,7 @@ namespace castor3d
 			return result;
 		}
 
-		ashes::VkExtensionPropertiesArray enumerateExtensionProperties( PFN_vkEnumerateInstanceExtensionProperties enumInstanceExtensionProperties
+		static ashes::VkExtensionPropertiesArray enumerateExtensionProperties( PFN_vkEnumerateInstanceExtensionProperties enumInstanceExtensionProperties
 			, std::string const & layerName )
 		{
 			if ( !enumInstanceExtensionProperties )
@@ -498,7 +498,7 @@ namespace castor3d
 			return result;
 		}
 
-		ashes::ApplicationInfo createApplicationInfo( Engine & engine
+		static ashes::ApplicationInfo createApplicationInfo( Engine & engine
 			, uint32_t vkApiVersion )
 		{
 			return ashes::ApplicationInfo
@@ -511,7 +511,7 @@ namespace castor3d
 			};
 		}
 
-		uint32_t getSpirVVersion( uint32_t vkApiVersion )
+		static uint32_t getSpirVVersion( uint32_t vkApiVersion )
 		{
 			uint32_t result{ spirv::v1_0 };
 
@@ -531,7 +531,7 @@ namespace castor3d
 			return result;
 		}
 
-		spirv::SpirVExtensionSet listSpirVExtensions( RenderDevice const & device )
+		static spirv::SpirVExtensionSet listSpirVExtensions( RenderDevice const & device )
 		{
 			spirv::SpirVExtensionSet result;
 
@@ -732,9 +732,9 @@ namespace castor3d
 		enumInstanceExtensionProperties = reinterpret_cast< PFN_vkEnumerateInstanceExtensionProperties >( plugin.getInstanceProcAddr( VK_NULL_HANDLE,
 			"vkEnumerateInstanceExtensionProperties" ) );
 
-		auto layers = enumerateLayerProperties( enumLayerProperties );
+		auto layers = rendsys::enumerateLayerProperties( enumLayerProperties );
 		VkLayerProperties globalLayer{};
-		auto globalLayerExtensions = enumerateExtensionProperties( enumInstanceExtensionProperties
+		auto globalLayerExtensions = rendsys::enumerateExtensionProperties( enumInstanceExtensionProperties
 			, globalLayer.layerName );
 
 		// On récupère la liste d'extensions pour chaque couche de l'instance.
@@ -742,11 +742,11 @@ namespace castor3d
 		for ( auto layerProperties : layers )
 		{
 			layersExtensions.emplace( layerProperties.layerName
-				, enumerateExtensionProperties( enumInstanceExtensionProperties
+				, rendsys::enumerateExtensionProperties( enumInstanceExtensionProperties
 					, layerProperties.layerName ) );
 		}
 
-		uint32_t apiVersion{ vk1_0 };
+		uint32_t apiVersion{ rendsys::vk1_0 };
 		PFN_vkEnumerateInstanceVersion enumerateInstanceVersion;
 		enumerateInstanceVersion = reinterpret_cast< PFN_vkEnumerateInstanceVersion >( plugin.getInstanceProcAddr( VK_NULL_HANDLE,
 			"vkEnumerateInstanceVersion" ) );
@@ -758,60 +758,88 @@ namespace castor3d
 
 		ashes::StringArray layerNames;
 		completeLayerNames( engine, layers, layerNames );
-		instanceExtensions.addExtension( VK_KHR_SURFACE_EXTENSION_NAME );
+
+		if ( rendsys::isExtensionAvailable( globalLayerExtensions, VK_KHR_SURFACE_EXTENSION_NAME ) )
+		{
+			instanceExtensions.addExtension( VK_KHR_SURFACE_EXTENSION_NAME );
+		}
 #if defined( VK_KHR_get_physical_device_properties2 )
-		instanceExtensions.addExtension( VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME );
+		if ( rendsys::isExtensionAvailable( globalLayerExtensions, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME ) )
+		{
+			instanceExtensions.addExtension( VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME );
+		}
 #endif
 #if defined( VK_USE_PLATFORM_ANDROID_KHR )
-		instanceExtensions.addExtension( VK_KHR_ANDROID_SURFACE_EXTENSION_NAME );
+		if ( rendsys::isExtensionAvailable( globalLayerExtensions, VK_KHR_ANDROID_SURFACE_EXTENSION_NAME ) )
+		{
+			instanceExtensions.addExtension( VK_KHR_ANDROID_SURFACE_EXTENSION_NAME );
+		}
 #endif
 #if defined( VK_USE_PLATFORM_MIR_KHR )
-		m_extensionNames.push_back( VK_KHR_MIR_SURFACE_EXTENSION_NAME );
+		if ( rendsys::isExtensionAvailable( globalLayerExtensions, VK_KHR_MIR_SURFACE_EXTENSION_NAME ) )
+		{
+			instanceExtensions.addExtension( VK_KHR_MIR_SURFACE_EXTENSION_NAME );
+		}
 #endif
 #if defined( VK_USE_PLATFORM_FUCHSIA )
-		instanceExtensions.addExtension( VK_FUCHSIA_IMAGEPIPE_SURFACE_EXTENSION_NAME );
+		if ( rendsys::isExtensionAvailable( globalLayerExtensions, VK_FUCHSIA_IMAGEPIPE_SURFACE_EXTENSION_NAME ) )
+		{
+			instanceExtensions.addExtension( VK_FUCHSIA_IMAGEPIPE_SURFACE_EXTENSION_NAME );
+		}
 #endif
 #if defined( VK_USE_PLATFORM_IOS_MVK )
-		instanceExtensions.addExtension( VK_MVK_IOS_SURFACE_EXTENSION_NAME );
+		if ( rendsys::isExtensionAvailable( globalLayerExtensions, VK_MVK_IOS_SURFACE_EXTENSION_NAME ) )
+		{
+			instanceExtensions.addExtension( VK_MVK_IOS_SURFACE_EXTENSION_NAME );
+		}
 #endif
 #if defined( VK_USE_PLATFORM_MACOS_MVK )
-		instanceExtensions.addExtension( VK_MVK_MACOS_SURFACE_EXTENSION_NAME );
+		if ( rendsys::isExtensionAvailable( globalLayerExtensions, VK_MVK_MACOS_SURFACE_EXTENSION_NAME ) )
+		{
+			instanceExtensions.addExtension( VK_MVK_MACOS_SURFACE_EXTENSION_NAME );
+		}
 #endif
 #if defined( VK_USE_PLATFORM_VI_NN )
-		instanceExtensions.addExtension( VK_NN_VI_SURFACE_EXTENSION_NAME );
+		if ( rendsys::isExtensionAvailable( globalLayerExtensions, VK_NN_VI_SURFACE_EXTENSION_NAME ) )
+		{
+			instanceExtensions.addExtension( VK_NN_VI_SURFACE_EXTENSION_NAME );
+		}
 #endif
 #if defined( VK_USE_PLATFORM_XCB_KHR )
-		if ( isExtensionAvailable( globalLayerExtensions, VK_KHR_XCB_SURFACE_EXTENSION_NAME ) )
+		if ( rendsys::isExtensionAvailable( globalLayerExtensions, VK_KHR_XCB_SURFACE_EXTENSION_NAME ) )
 		{
 			instanceExtensions.addExtension( VK_KHR_XCB_SURFACE_EXTENSION_NAME );
 		}
 #endif
 #if defined( VK_USE_PLATFORM_XLIB_KHR )
-		if ( isExtensionAvailable( globalLayerExtensions, VK_KHR_XLIB_SURFACE_EXTENSION_NAME ) )
+		if ( rendsys::isExtensionAvailable( globalLayerExtensions, VK_KHR_XLIB_SURFACE_EXTENSION_NAME ) )
 		{
 			instanceExtensions.addExtension( VK_KHR_XLIB_SURFACE_EXTENSION_NAME );
 		}
 #endif
 #if defined( VK_USE_PLATFORM_WAYLAND_KHR )
-		if ( isExtensionAvailable( globalLayerExtensions, VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME ) )
+		if ( rendsys::isExtensionAvailable( globalLayerExtensions, VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME ) )
 		{
 			instanceExtensions.addExtension( VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME );
 		}
 #endif
 #if defined( VK_USE_PLATFORM_WIN32_KHR )
-		instanceExtensions.addExtension( VK_KHR_WIN32_SURFACE_EXTENSION_NAME );
+		if ( rendsys::isExtensionAvailable( globalLayerExtensions, VK_KHR_WIN32_SURFACE_EXTENSION_NAME ) )
+		{
+			instanceExtensions.addExtension( VK_KHR_WIN32_SURFACE_EXTENSION_NAME );
+		}
 #endif
 		if ( engine.isValidationEnabled() )
 		{
-			addOptionalDebugLayers( globalLayerExtensions, instanceExtensions );
+			rendsys::addOptionalDebugLayers( globalLayerExtensions, instanceExtensions );
 		}
 
 		auto & extensionNames = instanceExtensions.getExtensionsNames();
-		checkExtensionsAvailability( globalLayerExtensions, extensionNames );
+		rendsys::checkExtensionsAvailability( globalLayerExtensions, extensionNames );
 		ashes::InstanceCreateInfo createInfo
 		{
 			0u,
-			createApplicationInfo( engine, apiVersion ),
+			rendsys::createApplicationInfo( engine, apiVersion ),
 			layerNames,
 			extensionNames,
 		};
@@ -833,10 +861,10 @@ namespace castor3d
 		for ( auto const & props : layers )
 		{
 			if ( ( engine.isValidationEnabled()
-				&& ( isValidationLayer( props.layerName, props.description )
-					|| isSynchronisationLayer( props.layerName, props.description ) ) )
+				&& ( rendsys::isValidationLayer( props.layerName, props.description )
+					|| rendsys::isSynchronisationLayer( props.layerName, props.description ) ) )
 				|| ( engine.isApiTraceEnabled()
-					&& isApiTraceLayer( props.layerName, props.description ) ) )
+					&& rendsys::isApiTraceLayer( props.layerName, props.description ) ) )
 			{
 				names.push_back( props.layerName );
 			}
@@ -884,8 +912,8 @@ namespace castor3d
 		, ast::Shader const & shader )const
 	{
 		SpirVShader result;
-		auto availableExtensions = listSpirVExtensions( *m_device );
-		spirv::SpirVConfig spirvConfig{ getSpirVVersion( m_properties.apiVersion )
+		auto availableExtensions = rendsys::listSpirVExtensions( *m_device );
+		spirv::SpirVConfig spirvConfig{ rendsys::getSpirVVersion( m_properties.apiVersion )
 			, &availableExtensions };
 		result.spirv = spirv::serialiseSpirv( shader, spirvConfig );
 
@@ -893,7 +921,7 @@ namespace castor3d
 #	if C3D_HasGLSL
 		glsl::GlslConfig config{ shader.getType()
 			, glsl::v4_6
-			, getGLSLExtensions( glsl::v4_6 )
+			, rendsys::getGLSLExtensions( glsl::v4_6 )
 			, true
 			, false
 			, true
@@ -915,7 +943,7 @@ namespace castor3d
 
 		try
 		{
-			auto glslFromSpv = compileSpvToGlsl( getRenderDevice()
+			auto glslFromSpv = rendsys::compileSpvToGlsl( getRenderDevice()
 				, result.spirv
 				, stage );
 			const_cast< castor3d::ShaderModule & >( module ).source += "\n" + glslFromSpv;

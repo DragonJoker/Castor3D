@@ -36,9 +36,9 @@ namespace castor
 {
 	//************************************************************************************************
 
-	namespace
+	namespace stbiw
 	{
-		bool doSave8BitsPerChannel( Path const & path
+		static bool doSave8BitsPerChannel( Path const & path
 			, PxBufferBase const & buffer )
 		{
 			bool result = false;
@@ -102,7 +102,7 @@ namespace castor
 			return result;
 		}
 
-		bool doSave32BitsPerChannel( Path const & path
+		static bool doSave32BitsPerChannel( Path const & path
 			, PxBufferBase const & buffer )
 		{
 			bool result = false;
@@ -132,7 +132,7 @@ namespace castor
 			return result;
 		}
 
-		StringArray const & listExtensions()
+		static StringArray const & listExtensions()
 		{
 			static StringArray const list
 			{
@@ -157,13 +157,13 @@ namespace castor
 
 	void StbImageWriter::registerWriter( ImageWriter & reg )
 	{
-		reg.registerWriter( listExtensions()
+		reg.registerWriter( stbiw::listExtensions()
 			, std::make_unique< StbImageWriter >() );
 	}
 
 	void StbImageWriter::unregisterWriter( ImageWriter & reg )
 	{
-		reg.unregisterWriter( listExtensions() );
+		reg.unregisterWriter( stbiw::listExtensions() );
 	}
 
 	bool StbImageWriter::write( Path const & path
@@ -173,11 +173,11 @@ namespace castor
 
 		if ( isFloatingPoint( buffer.getFormat() ) )
 		{
-			result = doSave32BitsPerChannel( path, buffer );
+			result = stbiw::doSave32BitsPerChannel( path, buffer );
 		}
 		else
 		{
-			result = doSave8BitsPerChannel( path, buffer );
+			result = stbiw::doSave8BitsPerChannel( path, buffer );
 		}
 
 		return result;

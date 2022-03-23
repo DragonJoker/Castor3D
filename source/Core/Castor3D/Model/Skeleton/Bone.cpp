@@ -5,13 +5,11 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	Bone::Bone( Skeleton & skeleton
 		, castor::Matrix4x4f const & offset )
-		: Named{ cuEmptyString }
+		: castor::Named{ castor::cuEmptyString }
 		, m_offset{ offset }
 		, m_absoluteOffset{ skeleton.getGlobalInverseTransform() }
 		, m_skeleton{ skeleton }
@@ -36,7 +34,7 @@ namespace castor3d
 		m_absoluteOffset = m_offset * m_parent->m_absoluteOffset;
 	}
 
-	BoundingBox Bone::computeBoundingBox( Mesh const & mesh
+	castor::BoundingBox Bone::computeBoundingBox( Mesh const & mesh
 		, uint32_t boneIndex )const
 	{
 		auto constexpr rmax = std::numeric_limits< float >::max();
@@ -71,6 +69,6 @@ namespace castor3d
 			}
 		}
 
-		return BoundingBox{ min, max };
+		return castor::BoundingBox{ min, max };
 	}
 }

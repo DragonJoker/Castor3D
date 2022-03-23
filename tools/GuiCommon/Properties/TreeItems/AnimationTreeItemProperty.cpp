@@ -8,16 +8,13 @@
 
 #include <wx/propgrid/advprops.h>
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
-	AnimationTreeItemProperty::AnimationTreeItemProperty( Engine * engine
+	AnimationTreeItemProperty::AnimationTreeItemProperty( castor3d::Engine * engine
 		, bool editable
-		, AnimatedObjectGroup & group
+		, castor3d::AnimatedObjectGroup & group
 		, castor::String const & name
-		, GroupAnimation const & anim )
+		, castor3d::GroupAnimation const & anim )
 		: TreeItemProperty( engine, editable )
 		, m_group( group )
 		, m_name( name )
@@ -72,19 +69,19 @@ namespace GuiCommon
 
 						switch ( m_groupAnim.state )
 						{
-						case AnimationState::ePlaying:
+						case castor3d::AnimationState::ePlaying:
 							group->pauseAnimation( m_name );
-							m_groupAnim.state = AnimationState::ePaused;
+							m_groupAnim.state = castor3d::AnimationState::ePaused;
 							break;
 
-						case AnimationState::eStopped:
+						case castor3d::AnimationState::eStopped:
 							group->startAnimation( m_name );
-							m_groupAnim.state = AnimationState::ePlaying;
+							m_groupAnim.state = castor3d::AnimationState::ePlaying;
 							break;
 
-						case AnimationState::ePaused:
+						case castor3d::AnimationState::ePaused:
 							group->stopAnimation( m_name );
-							m_groupAnim.state = AnimationState::eStopped;
+							m_groupAnim.state = castor3d::AnimationState::eStopped;
 							break;
 
 						default:

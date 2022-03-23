@@ -12,8 +12,6 @@
 #include <iostream>
 #pragma warning( pop )
 
-using namespace castor;
-
 namespace GuiCommon
 {
 	//************************************************************************************************
@@ -197,7 +195,7 @@ namespace GuiCommon
 						, buffer->getFormat() );
 				}
 
-				m_image = std::make_unique< Image >( name, *buffer );
+				m_image = std::make_unique< castor::Image >( name, *buffer );
 			}
 			catch ( std::exception & exc )
 			{

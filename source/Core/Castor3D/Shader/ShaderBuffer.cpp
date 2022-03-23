@@ -10,8 +10,6 @@
 
 CU_ImplementCUSmartPtr( castor3d, ShaderBuffer )
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*********************************************************************************************

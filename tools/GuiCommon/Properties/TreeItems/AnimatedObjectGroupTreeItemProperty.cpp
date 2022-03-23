@@ -6,9 +6,6 @@
 
 #include <wx/propgrid/advprops.h>
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
 	namespace
@@ -17,7 +14,7 @@ namespace GuiCommon
 	}
 
 	AnimatedObjectGroupTreeItemProperty::AnimatedObjectGroupTreeItemProperty( bool editable
-		, AnimatedObjectGroup & group )
+		, castor3d::AnimatedObjectGroup & group )
 		: TreeItemProperty( group.getScene()->getEngine(), editable )
 		, m_group( group )
 	{

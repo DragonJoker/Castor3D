@@ -1,10 +1,9 @@
 #include "Castor3D/Scene/ParticleSystem/Particle.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
-	Particle::Particle( ParticleDeclaration const & description, StrStrMap const & defaultValues )
+	Particle::Particle( ParticleDeclaration const & description
+		, castor::StrStrMap const & defaultValues )
 		: m_description{ description }
 	{
 		m_data.resize( description.stride() );

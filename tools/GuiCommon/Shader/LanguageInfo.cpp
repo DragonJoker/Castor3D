@@ -2,9 +2,6 @@
 
 #include "GuiCommon/Shader/StyleInfo.hpp"
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
 	static wxColour const CommentColour{ wxT( "FOREST GREEN" ) };
@@ -55,8 +52,8 @@ namespace GuiCommon
 		, castor::StringArray const & keywords )
 	{
 		CU_Require( index < 9 );
-		String & toAdd = m_keywords[index];
-		String sep;
+		castor::String & toAdd = m_keywords[index];
+		castor::String sep;
 
 		for ( auto keyword : keywords )
 		{

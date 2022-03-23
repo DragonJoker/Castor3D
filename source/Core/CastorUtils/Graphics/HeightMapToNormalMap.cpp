@@ -7,9 +7,9 @@
 
 namespace castor
 {
-	namespace
+	namespace hgttonml
 	{
-		int clamp( int value, int max )
+		static int clamp( int value, int max )
 		{
 			if ( value >= max )
 			{
@@ -24,12 +24,12 @@ namespace castor
 			return value;
 		}
 
-		size_t getIndex( int x, int y, int width, int CU_UnusedParam( height ) )
+		static size_t getIndex( int x, int y, int width, int CU_UnusedParam( height ) )
 		{
 			return size_t( y * width + x );
 		}
 
-		float getHeight( castor::ArrayView< uint8_t const > const & data
+		static float getHeight( castor::ArrayView< uint8_t const > const & data
 			, int width
 			, int height
 			, int x
@@ -40,12 +40,12 @@ namespace castor
 			return float( data[getIndex( x, y, width, height )] ) / 255.0f;
 		}
 
-		uint8_t textureCoordinateToRgb( float value )
+		static uint8_t textureCoordinateToRgb( float value )
 		{
 			return uint8_t( ( value * 0.5 + 0.5 ) * 255.0 );
 		}
 
-		castor::Point4f calculateNormal( float strength
+		static castor::Point4f calculateNormal( float strength
 			, castor::ArrayView< uint8_t const > const & data
 			, int width
 			, int height
@@ -73,7 +73,7 @@ namespace castor
 			return { n->x, n->y, n->z, c };
 		}
 
-		castor::ByteArray calculateNormals( float strength
+		static castor::ByteArray calculateNormals( float strength
 			, castor::ArrayView< uint8_t const > const & data
 			, castor::Size const & size )
 		{
@@ -115,7 +115,7 @@ namespace castor
 				, image.getPxBuffer().getConstPtr()
 				, image.getPixelFormat()
 				, image.getPxBuffer().getAlign() );
-			auto normals = calculateNormals( strength
+			auto normals = hgttonml::calculateNormals( strength
 				, castor::makeArrayView( buffer->getConstPtr(), buffer->getSize() )
 				, dimensions );
 			auto nmlHeights = castor::PxBufferBase::create( buffer->getDimensions()

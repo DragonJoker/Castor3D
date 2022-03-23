@@ -46,7 +46,7 @@ CU_ImplementCUSmartPtr( castor3d, OpaqueResolvePass )
 
 namespace castor3d
 {
-	namespace
+	namespace dropqrslv
 	{
 		struct ResolveProgramConfig
 		{
@@ -87,7 +87,7 @@ namespace castor3d
 			static uint32_t constexpr MaxProgramsCount = SsaoCount * SsssCount * DiffuseGiCount * SpecularGiCount;
 		};
 
-		ShaderPtr createVertexProgram()
+		static ShaderPtr createVertexProgram()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -132,7 +132,7 @@ namespace castor3d
 			ePrefiltered,
 		};
 
-		ShaderPtr createPixelProgram( RenderSystem const & renderSystem
+		static ShaderPtr createPixelProgram( RenderSystem const & renderSystem
 			, ResolveProgramConfig const & config
 			, PassTypeID passType )
 		{
@@ -347,24 +347,23 @@ namespace castor3d
 		, m_lightIndirectDiffuse{ lightIndirectDiffuse }
 		, m_lightIndirectSpecular{ lightIndirectSpecular }
 	{
-		m_programs.resize( ResolveProgramConfig::MaxProgramsCount );
+		m_programs.resize( dropqrslv::ResolveProgramConfig::MaxProgramsCount );
 		previousPass = &doCreatePass( graph, *previousPass, progress );
 	}
 
 	OpaqueResolvePass::Program & OpaqueResolvePass::doCreateProgram( uint32_t programIndex )
 	{
-		CU_Require( programIndex < ResolveProgramConfig::MaxProgramsCount );
+		CU_Require( programIndex < dropqrslv::ResolveProgramConfig::MaxProgramsCount );
 
 		if ( !m_programs[programIndex] )
 		{
-			ResolveProgramConfig config{ programIndex };
+			dropqrslv::ResolveProgramConfig config{ programIndex };
 			m_programs[programIndex] = std::make_unique< Program >( ShaderModule{ VK_SHADER_STAGE_VERTEX_BIT
 					, "OpaqueResolve" + std::to_string( programIndex )
-					, createVertexProgram() }
+					, dropqrslv::createVertexProgram() }
 				, ShaderModule{ VK_SHADER_STAGE_FRAGMENT_BIT
 					, "OpaqueResolve" + std::to_string( programIndex )
-					, createPixelProgram( m_device.renderSystem, config, m_scene.getPassesType() ) }
-				, ashes::PipelineShaderStageCreateInfoArray{} );
+					, dropqrslv::createPixelProgram( m_device.renderSystem, config, m_scene.getPassesType() ) } );
 			m_programs[programIndex]->stages = { makeShaderState( m_device, m_programs[programIndex]->vertexShader )
 				, makeShaderState( m_device, m_programs[programIndex]->pixelShader ) };
 		}
@@ -390,7 +389,7 @@ namespace castor3d
 					.texcoordConfig( crg::Texcoord{} )
 					.renderSize( makeExtent2D( m_result.getExtent() ) )
 					.passIndex( &m_programIndex )
-					.programCreator( { ResolveProgramConfig::MaxProgramsCount
+					.programCreator( { dropqrslv::ResolveProgramConfig::MaxProgramsCount
 						, [this]( uint32_t programIndex )
 						{
 							auto & program = doCreateProgram( programIndex );
@@ -404,40 +403,40 @@ namespace castor3d
 		pass.addDependency( previousPass );
 
 		passBuffer.createPassBinding( pass
-			, uint32_t( ResolveBind::eMaterials ) );
+			, uint32_t( dropqrslv::ResolveBind::eMaterials ) );
 		pass.addInputStorageBuffer( { modelBuffer, "Models" }
-			, uint32_t( ResolveBind::eModels )
+			, uint32_t( dropqrslv::ResolveBind::eModels )
 			, 0u
 			, uint32_t( modelBuffer.getSize() ) );
 		m_sceneUbo.createPassBinding( pass
-			, uint32_t( ResolveBind::eScene ) );
+			, uint32_t( dropqrslv::ResolveBind::eScene ) );
 		m_gpInfoUbo.createPassBinding( pass
-			, uint32_t( ResolveBind::eGpInfo ) );
+			, uint32_t( dropqrslv::ResolveBind::eGpInfo ) );
 		m_hdrConfigUbo.createPassBinding( pass
-			, uint32_t( ResolveBind::eHdrConfig ) );
+			, uint32_t( dropqrslv::ResolveBind::eHdrConfig ) );
 
 		pass.addSampledView( m_opaquePassResult[DsTexture::eData0].sampledViewId
-			, uint32_t( ResolveBind::eData0 ) );
+			, uint32_t( dropqrslv::ResolveBind::eData0 ) );
 		pass.addSampledView( m_opaquePassResult[DsTexture::eData1].sampledViewId
-			, uint32_t( ResolveBind::eData1 ) );
+			, uint32_t( dropqrslv::ResolveBind::eData1 ) );
 		pass.addSampledView( m_opaquePassResult[DsTexture::eData2].sampledViewId
-			, uint32_t( ResolveBind::eData2 ) );
+			, uint32_t( dropqrslv::ResolveBind::eData2 ) );
 		pass.addSampledView( m_opaquePassResult[DsTexture::eData3].sampledViewId
-			, uint32_t( ResolveBind::eData3 ) );
+			, uint32_t( dropqrslv::ResolveBind::eData3 ) );
 		pass.addSampledView( m_opaquePassResult[DsTexture::eData4].sampledViewId
-			, uint32_t( ResolveBind::eData4 ) );
+			, uint32_t( dropqrslv::ResolveBind::eData4 ) );
 		pass.addSampledView( m_opaquePassResult[DsTexture::eData5].sampledViewId
-			, uint32_t( ResolveBind::eData5 ) );
+			, uint32_t( dropqrslv::ResolveBind::eData5 ) );
 		pass.addSampledView( m_ssaoResult.sampledViewId
-			, uint32_t( ResolveBind::eSsao ) );
+			, uint32_t( dropqrslv::ResolveBind::eSsao ) );
 		pass.addSampledView( m_subsurfaceScattering.sampledViewId
-			, uint32_t( ResolveBind::eDirectDiffuse ) );
+			, uint32_t( dropqrslv::ResolveBind::eDirectDiffuse ) );
 		pass.addSampledView( m_lightSpecular.sampledViewId
-			, uint32_t( ResolveBind::eDirectSpecular ) );
+			, uint32_t( dropqrslv::ResolveBind::eDirectSpecular ) );
 		pass.addSampledView( m_lightIndirectDiffuse.sampledViewId
-			, uint32_t( ResolveBind::eIndirectDiffuse ) );
+			, uint32_t( dropqrslv::ResolveBind::eIndirectDiffuse ) );
 		pass.addSampledView( m_lightIndirectSpecular.sampledViewId
-			, uint32_t( ResolveBind::eIndirectSpecular ) );
+			, uint32_t( dropqrslv::ResolveBind::eIndirectSpecular ) );
 
 		auto & background = *m_scene.getBackground();
 		background.initialise( m_device );
@@ -448,19 +447,19 @@ namespace castor3d
 			{
 				auto & ibl = background.getIbl();;
 				pass.addSampledView( ibl.getPrefilteredBrdfTexture().sampledViewId
-					, uint32_t( ResolveBind::eBrdf )
+					, uint32_t( dropqrslv::ResolveBind::eBrdf )
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 					, crg::SamplerDesc{ VK_FILTER_LINEAR
 					, VK_FILTER_LINEAR
 					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
 				pass.addSampledView( ibl.getIrradianceTexture().sampledViewId
-					, uint32_t( ResolveBind::eIrradiance )
+					, uint32_t( dropqrslv::ResolveBind::eIrradiance )
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 					, crg::SamplerDesc{ VK_FILTER_LINEAR
 					, VK_FILTER_LINEAR
 					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
 				pass.addSampledView( ibl.getPrefilteredEnvironmentTexture().sampledViewId
-					, uint32_t( ResolveBind::ePrefiltered )
+					, uint32_t( dropqrslv::ResolveBind::ePrefiltered )
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 					, crg::SamplerDesc{ VK_FILTER_LINEAR
 					, VK_FILTER_LINEAR
@@ -469,7 +468,7 @@ namespace castor3d
 		}
 
 		pass.addSampledView( m_scene.getEnvironmentMap().getColourId().sampledViewId
-			, uint32_t( ResolveBind::eEnvironment )
+			, uint32_t( dropqrslv::ResolveBind::eEnvironment )
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, crg::SamplerDesc{ VK_FILTER_LINEAR
 				, VK_FILTER_LINEAR
@@ -481,7 +480,7 @@ namespace castor3d
 
 	void OpaqueResolvePass::update( CpuUpdater & updater )
 	{
-		ResolveProgramConfig config{ m_scene, m_ssao };
+		dropqrslv::ResolveProgramConfig config{ m_scene, m_ssao };
 		m_programIndex = config.index;
 	}
 

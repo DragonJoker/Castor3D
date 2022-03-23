@@ -24,9 +24,9 @@ namespace castor
 {
 	//************************************************************************************************
 
-	namespace
+	namespace glil
 	{
-		PixelFormat convert( gli::format format )
+		static PixelFormat convert( gli::format format )
 		{
 			if ( format < uint32_t( PixelFormat::eCount ) )
 			{
@@ -70,7 +70,7 @@ namespace castor
 			}
 		}
 
-		ImageLayout::Type convert( gli::target target )
+		static ImageLayout::Type convert( gli::target target )
 		{
 			switch ( target )
 			{
@@ -94,7 +94,7 @@ namespace castor
 			}
 		}
 
-		StringArray const & listExtensions()
+		static StringArray const & listExtensions()
 		{
 			static StringArray const list
 			{
@@ -110,13 +110,13 @@ namespace castor
 
 	void GliImageLoader::registerLoader( ImageLoader & reg )
 	{
-		reg.registerLoader( listExtensions()
+		reg.registerLoader( glil::listExtensions()
 			, std::make_unique< GliImageLoader >() );
 	}
 
 	void GliImageLoader::unregisterLoader( ImageLoader & reg )
 	{
-		reg.unregisterLoader( listExtensions() );
+		reg.unregisterLoader( glil::listExtensions() );
 	}
 
 	ImageLayout GliImageLoader::load( String const & imageFormat
@@ -147,8 +147,8 @@ namespace castor
 		}
 
 		ImageLayout result;
-		result.type = convert( texture.target() );
-		result.format = convert( texture.format() );
+		result.type = glil::convert( texture.target() );
+		result.format = glil::convert( texture.format() );
 		result.extent = { texture.extent().x, texture.extent().y, texture.extent().z };
 		result.layers = uint32_t( texture.layers() );
 		result.levels = uint32_t( texture.levels() );

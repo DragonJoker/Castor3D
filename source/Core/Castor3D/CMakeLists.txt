@@ -1823,6 +1823,10 @@ if ( CASTOR_C3D_NEEDS_GLSL )
 	)
 endif ()
 
+target_compile_options( ${PROJECT_NAME}
+	PRIVATE
+		$<$<CXX_COMPILER_ID:MSVC>:/bigobj>
+)
 install_target_ex( ${PROJECT_NAME}
 	Castor3D
 	api_dll
@@ -1833,6 +1837,7 @@ set_target_properties( ${PROJECT_NAME}
 		CXX_STANDARD 20
 		CXX_EXTENSIONS OFF
 		FOLDER "Core/${MAIN_PROJECT_NAME}"
+		UNITY_BUILD "${CASTOR_UNITY_BUILD}"
 )
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 target_add_doc_ex( ${PROJECT_NAME} "French" "*.h *.hpp" ${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME} )

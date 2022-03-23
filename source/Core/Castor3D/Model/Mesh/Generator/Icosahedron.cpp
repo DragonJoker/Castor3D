@@ -8,8 +8,6 @@
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"
 
-using namespace castor;
-
 namespace castor3d
 {
 	Icosahedron::Icosahedron()
@@ -26,11 +24,11 @@ namespace castor3d
 
 	void Icosahedron::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 	{
-		String param;
+		castor::String param;
 
 		if ( p_parameters.get( cuT( "radius" ), param ) )
 		{
-			m_radius = string::toFloat( param );
+			m_radius = castor::string::toFloat( param );
 		}
 
 		if ( m_radius < 0 )
@@ -51,51 +49,51 @@ namespace castor3d
 		float Z = X * phi;
 		vertex = castor::Point3f( -X, 0, Z );
 		memcpy( vertices[index].pos.ptr(), vertex.ptr(), 3 * sizeof( float ) );
-		memcpy( vertices[index].nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( float ) );
+		memcpy( vertices[index].nml.ptr(), castor::point::getNormalised( vertex ).ptr(), 3 * sizeof( float ) );
 		++index;
 		vertex = castor::Point3f( X, 0, Z );
 		memcpy( vertices[index].pos.ptr(), vertex.ptr(), 3 * sizeof( float ) );
-		memcpy( vertices[index].nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( float ) );
+		memcpy( vertices[index].nml.ptr(), castor::point::getNormalised( vertex ).ptr(), 3 * sizeof( float ) );
 		++index;
 		vertex = castor::Point3f( -X, 0, -Z );
 		memcpy( vertices[index].pos.ptr(), vertex.ptr(), 3 * sizeof( float ) );
-		memcpy( vertices[index].nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( float ) );
+		memcpy( vertices[index].nml.ptr(), castor::point::getNormalised( vertex ).ptr(), 3 * sizeof( float ) );
 		++index;
 		vertex = castor::Point3f( X, 0, -Z );
 		memcpy( vertices[index].pos.ptr(), vertex.ptr(), 3 * sizeof( float ) );
-		memcpy( vertices[index].nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( float ) );
+		memcpy( vertices[index].nml.ptr(), castor::point::getNormalised( vertex ).ptr(), 3 * sizeof( float ) );
 		++index;
 		vertex = castor::Point3f( 0, Z, X );
 		memcpy( vertices[index].pos.ptr(), vertex.ptr(), 3 * sizeof( float ) );
-		memcpy( vertices[index].nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( float ) );
+		memcpy( vertices[index].nml.ptr(), castor::point::getNormalised( vertex ).ptr(), 3 * sizeof( float ) );
 		++index;
 		vertex = castor::Point3f( 0, Z, -X );
 		memcpy( vertices[index].pos.ptr(), vertex.ptr(), 3 * sizeof( float ) );
-		memcpy( vertices[index].nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( float ) );
+		memcpy( vertices[index].nml.ptr(), castor::point::getNormalised( vertex ).ptr(), 3 * sizeof( float ) );
 		++index;
 		vertex = castor::Point3f( 0, -Z, X );
 		memcpy( vertices[index].pos.ptr(), vertex.ptr(), 3 * sizeof( float ) );
-		memcpy( vertices[index].nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( float ) );
+		memcpy( vertices[index].nml.ptr(), castor::point::getNormalised( vertex ).ptr(), 3 * sizeof( float ) );
 		++index;
 		vertex = castor::Point3f( 0, -Z, -X );
 		memcpy( vertices[index].pos.ptr(), vertex.ptr(), 3 * sizeof( float ) );
-		memcpy( vertices[index].nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( float ) );
+		memcpy( vertices[index].nml.ptr(), castor::point::getNormalised( vertex ).ptr(), 3 * sizeof( float ) );
 		++index;
 		vertex = castor::Point3f( Z, X, 0 );
 		memcpy( vertices[index].pos.ptr(), vertex.ptr(), 3 * sizeof( float ) );
-		memcpy( vertices[index].nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( float ) );
+		memcpy( vertices[index].nml.ptr(), castor::point::getNormalised( vertex ).ptr(), 3 * sizeof( float ) );
 		++index;
 		vertex = castor::Point3f( -Z, X, 0 );
 		memcpy( vertices[index].pos.ptr(), vertex.ptr(), 3 * sizeof( float ) );
-		memcpy( vertices[index].nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( float ) );
+		memcpy( vertices[index].nml.ptr(), castor::point::getNormalised( vertex ).ptr(), 3 * sizeof( float ) );
 		++index;
 		vertex = castor::Point3f( Z, -X, 0 );
 		memcpy( vertices[index].pos.ptr(), vertex.ptr(), 3 * sizeof( float ) );
-		memcpy( vertices[index].nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( float ) );
+		memcpy( vertices[index].nml.ptr(), castor::point::getNormalised( vertex ).ptr(), 3 * sizeof( float ) );
 		++index;
 		vertex = castor::Point3f( -Z, -X, 0 );
 		memcpy( vertices[index].pos.ptr(), vertex.ptr(), 3 * sizeof( float ) );
-		memcpy( vertices[index].nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( float ) );
+		memcpy( vertices[index].nml.ptr(), castor::point::getNormalised( vertex ).ptr(), 3 * sizeof( float ) );
 		submesh->addPoints( vertices );
 
 		// on construit toutes les faces de l'icosaèdre
@@ -130,21 +128,21 @@ namespace castor3d
 			auto posA = submesh->getPoint( face[0] ).pos;
 			auto posB = submesh->getPoint( face[1] ).pos;
 			auto posC = submesh->getPoint( face[2] ).pos;
-			float u = 0.5f * ( 1.0f + float( atan2( posA[2], posA[0] ) * ( 1 / Pi< float > ) ) );
-			float v = float( acos( posA[1] ) * ( 1 / Pi< float > ) );
-			submesh->getPoint( face[0] ).tex = Point3f{ u, v, 0 };
-			u = 0.5f * ( 1.0f + float( atan2( posB[2], posB[0] ) * ( 1 / Pi< float > ) ) );
-			v = float( acos( posB[1] ) * ( 1 / Pi< float > ) );
-			submesh->getPoint( face[1] ).tex = Point3f{ u, v, 0 };
-			u = 0.5f * ( 1.0f + float( atan2( posC[2], posC[0] ) * ( 1 / Pi< float > ) ) );
-			v = float( acos( posC[1] ) * ( 1 / Pi< float > ) );
-			submesh->getPoint( face[2] ).tex = Point3f{ u, v, 0 };
+			float u = 0.5f * ( 1.0f + float( atan2( posA[2], posA[0] ) * ( 1 / castor::Pi< float > ) ) );
+			float v = float( acos( posA[1] ) * ( 1 / castor::Pi< float > ) );
+			submesh->getPoint( face[0] ).tex = castor::Point3f{ u, v, 0 };
+			u = 0.5f * ( 1.0f + float( atan2( posB[2], posB[0] ) * ( 1 / castor::Pi< float > ) ) );
+			v = float( acos( posB[1] ) * ( 1 / castor::Pi< float > ) );
+			submesh->getPoint( face[1] ).tex = castor::Point3f{ u, v, 0 };
+			u = 0.5f * ( 1.0f + float( atan2( posC[2], posC[0] ) * ( 1 / castor::Pi< float > ) ) );
+			v = float( acos( posC[1] ) * ( 1 / castor::Pi< float > ) );
+			submesh->getPoint( face[2] ).tex = castor::Point3f{ u, v, 0 };
 		}
 
 		for ( auto & curVertex : submesh->getPoints() )
 		{
-			SphericalVertex vsVertex1( curVertex.nml );
-			curVertex.tex = Point3f{ vsVertex1.m_phi, vsVertex1.m_theta, 0 };
+			castor::SphericalVertex vsVertex1( curVertex.nml );
+			curVertex.tex = castor::Point3f{ vsVertex1.m_phi, vsVertex1.m_theta, 0 };
 		}
 
 		indexMapping->computeTangentsFromNormals();

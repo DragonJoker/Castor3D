@@ -2,17 +2,15 @@
 
 #include "Castor3D/Animation/Animation.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	AnimationInstance::AnimationInstance( AnimatedObject & object, Animation & animation )
-		: OwnedBy< AnimatedObject >{ object }
+		: castor::OwnedBy< AnimatedObject >{ object }
 		, m_animation{ animation }
 	{
 	}
 
-	void AnimationInstance::update( Milliseconds const & elapsed )
+	void AnimationInstance::update( castor::Milliseconds const & elapsed )
 	{
 		auto length = m_stoppingPoint == 0_ms
 			? m_animation.getLength()
@@ -24,7 +22,7 @@ namespace castor3d
 		{
 			if ( m_state == AnimationState::ePlaying )
 			{
-				m_currentTime += Milliseconds( int64_t( double( elapsed.count() ) * scale ) );
+				m_currentTime += castor::Milliseconds( int64_t( double( elapsed.count() ) * scale ) );
 
 				if ( m_currentTime >= length )
 				{

@@ -10,11 +10,11 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace passbuf
 	{
 #if C3D_MaterialsStructOfArrays
 
-		PassBuffer::PassesData doBindData( uint8_t * buffer
+		static PassBuffer::PassesData doBindData( uint8_t * buffer
 			, uint32_t count )
 		{
 			auto colourDiv = castor::makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
@@ -63,7 +63,7 @@ namespace castor3d
 
 #else
 
-		PassBuffer::PassesData doBindData( uint8_t * buffer
+		static PassBuffer::PassesData doBindData( uint8_t * buffer
 			, uint32_t count )
 		{
 			return castor::makeArrayView( reinterpret_cast< PassBuffer::PassData * >( buffer )
@@ -79,7 +79,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, uint32_t count )
 		: m_buffer{ engine, device, count * DataSize, cuT( "PassBuffer" ) }
-		, m_data{ doBindData( m_buffer.getPtr(), count ) }
+		, m_data{ passbuf::doBindData( m_buffer.getPtr(), count ) }
 	{
 	}
 

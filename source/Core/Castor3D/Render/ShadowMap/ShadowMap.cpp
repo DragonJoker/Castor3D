@@ -146,7 +146,7 @@ namespace castor3d
 
 			for ( auto & view : result.subViewsId )
 			{
-				visitor.visit( m_name + getName( SmTexture( i ) ) + cuT( "L" ) + castor::string::toString( index++ )
+				visitor.visit( m_name + getTexName( SmTexture( i ) ) + cuT( "L" ) + castor::string::toString( index++ )
 					, view
 					, ( ashes::isDepthOrStencilFormat( view.data->info.format )
 						? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL

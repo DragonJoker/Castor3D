@@ -2,11 +2,6 @@
 #include "LoopDivider/LoopVertex.hpp"
 #include "LoopDivider/LoopDivider.hpp"
 
-using namespace Loop;
-using namespace castor;
-
-//*********************************************************************************************
-
 namespace Loop
 {
 	Edge::Edge( VertexSPtr v1
@@ -58,5 +53,3 @@ namespace Loop
 		return result;
 	}
 }
-
-//*********************************************************************************************

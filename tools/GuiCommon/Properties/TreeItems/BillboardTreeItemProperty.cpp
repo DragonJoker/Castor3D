@@ -11,12 +11,9 @@
 
 #include <wx/propgrid/advprops.h>
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
-	BillboardTreeItemProperty::BillboardTreeItemProperty( bool p_editable, BillboardList & p_billboard )
+	BillboardTreeItemProperty::BillboardTreeItemProperty( bool p_editable, castor3d::BillboardList & p_billboard )
 		: TreeItemProperty( p_billboard.getParentScene().getEngine(), p_editable )
 		, m_billboard( p_billboard )
 	{
@@ -31,7 +28,7 @@ namespace GuiCommon
 		static wxString PROPERTY_BILLBOARD_SIZE = _( "Size" );
 
 		addProperty( grid, PROPERTY_CATEGORY_BILLBOARD + wxString( m_billboard.getName() ) );
-		addPropertyT( grid, PROPERTY_BILLBOARD_SIZE, m_billboard.getDimensions(), &m_billboard, &BillboardList::setDimensions );
+		addPropertyT( grid, PROPERTY_BILLBOARD_SIZE, m_billboard.getDimensions(), &m_billboard, &castor3d::BillboardList::setDimensions );
 		addProperty( grid, PROPERTY_BILLBOARD_MATERIAL, getMaterialsList(), m_billboard.getMaterial()->getName()
 			, [this]( wxVariant const & var )
 			{

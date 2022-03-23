@@ -8,10 +8,10 @@
 
 #include <CastorUtils/Data/Text/TextPoint.hpp>
 
-using namespace castor3d;
-
 namespace castor
 {
+	using namespace castor3d;
+
 	TextWriter< ParticleSystem >::TextWriter( String const & tabs )
 		: TextWriterT< ParticleSystem >{ tabs }
 	{

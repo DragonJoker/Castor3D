@@ -6,8 +6,6 @@
 #include "Castor3D/Material/Texture/Animation/TextureAnimationKeyFrame.hpp"
 #include "Castor3D/Scene/Animation/AnimatedTexture.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*************************************************************************************************

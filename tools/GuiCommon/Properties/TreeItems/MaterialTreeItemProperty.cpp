@@ -6,12 +6,9 @@
 
 #include <wx/propgrid/advprops.h>
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
-	MaterialTreeItemProperty::MaterialTreeItemProperty( bool p_editable, Material & p_material )
+	MaterialTreeItemProperty::MaterialTreeItemProperty( bool p_editable, castor3d::Material & p_material )
 		: TreeItemProperty( p_material.getEngine(), p_editable )
 		, m_material( &p_material )
 	{

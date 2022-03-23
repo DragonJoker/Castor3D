@@ -6,10 +6,10 @@
 
 #include <CastorUtils/Data/Text/TextPoint.hpp>
 
-using namespace castor3d;
-
 namespace castor
 {
+	using namespace castor3d;
+
 	TextWriter< TextOverlay >::TextWriter( castor::String const & tabs )
 		: TextWriterT< TextOverlay >{ tabs }
 	{

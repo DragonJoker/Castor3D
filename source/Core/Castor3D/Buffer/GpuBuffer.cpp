@@ -8,26 +8,27 @@
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Buffer/StagingBuffer.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*********************************************************************************************
 	
-	static std::pair< VkDeviceSize, VkDeviceSize > adaptRange( VkDeviceSize offset
-		, VkDeviceSize size
-		, VkDeviceSize align )
+	namespace buffergpu
 	{
-		auto newOffset = ashes::getAlignedSize( offset, align );
-
-		if ( newOffset != offset )
+		static std::pair< VkDeviceSize, VkDeviceSize > adaptRange( VkDeviceSize offset
+			, VkDeviceSize size
+			, VkDeviceSize align )
 		{
-			CU_Require( newOffset >= align );
-			newOffset -= align;
-			size += offset - newOffset;
-		}
+			auto newOffset = ashes::getAlignedSize( offset, align );
 
-		return { newOffset, ashes::getAlignedSize( size, align ) };
+			if ( newOffset != offset )
+			{
+				CU_Require( newOffset >= align );
+				newOffset -= align;
+				size += offset - newOffset;
+			}
+
+			return { newOffset, ashes::getAlignedSize( size, align ) };
+		}
 	}
 
 	//*********************************************************************************************
@@ -136,7 +137,7 @@ namespace castor3d
 
 						for ( auto & range : rangesIt.second )
 						{
-							auto [offset, size] = adaptRange( range.offset
+							auto [offset, size] = buffergpu::adaptRange( range.offset
 								, range.size
 								, 4u );
 							regions.push_back( { offset, offset, size } );
@@ -166,7 +167,7 @@ namespace castor3d
 
 						for ( auto & range : rangesIt.second )
 						{
-							auto [offset, size] = adaptRange( range.offset
+							auto [offset, size] = buffergpu::adaptRange( range.offset
 								, range.size
 								, m_renderSystem.getValue( GpuMin::eBufferMapSize ) );
 							regions.push_back( { offset, offset, size } );
@@ -199,7 +200,7 @@ namespace castor3d
 		auto commandBuffer = commandPool.createCommandBuffer( "StaginBufferUpload"
 			, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 		commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-		auto [o, s] = adaptRange( offset
+		auto [o, s] = buffergpu::adaptRange( offset
 			, size
 			, m_renderSystem.getValue( GpuMin::eBufferMapSize ) );
 		std::vector< VkBufferCopy > regions;
@@ -260,7 +261,7 @@ namespace castor3d
 
 			if ( m_stagingBuffer )
 			{
-				auto [o, s] = adaptRange( offset, size, m_renderSystem.getValue( GpuMin::eBufferMapSize ) );
+				auto [o, s] = buffergpu::adaptRange( offset, size, m_renderSystem.getValue( GpuMin::eBufferMapSize ) );
 				m_stagingBuffer->getBuffer().flush( o, s );
 			}
 		}

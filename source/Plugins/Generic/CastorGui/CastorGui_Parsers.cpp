@@ -15,15 +15,11 @@
 #include <Castor3D/Overlay/BorderPanelOverlay.hpp>
 #include <Castor3D/Scene/SceneFileParser.hpp>
 
-using namespace CastorGui;
-using namespace castor3d;
-using namespace castor;
-
 namespace CastorGui
 {
 	namespace
 	{
-		ControlsManager & getControlsManager( FileParserContext & context )
+		ControlsManager & getControlsManager( castor::FileParserContext & context )
 		{
 			return static_cast< ControlsManager & >( *static_cast< castor3d::SceneFileParser * >( context.parser )->getEngine()->getUserInputListener() );
 		}
@@ -33,15 +29,15 @@ namespace CastorGui
 			return static_cast< ControlsManager & >( *context.engine->getUserInputListener() );
 		}
 
-		ParserContext & getParserContext( FileParserContext & context )
+		ParserContext & getParserContext( castor::FileParserContext & context )
 		{
 			return *static_cast< ParserContext * >( context.getUserContext( PLUGIN_NAME ) );
 		}
 
 		template< typename ControlT >
 		std::shared_ptr< ControlT > createControl( ParserContext & context
-			, String const & controlName
-			, String const & themeName
+			, castor::String const & controlName
+			, castor::String const & themeName
 			, std::shared_ptr< ControlT > & control )
 		{
 			auto theme = getControlsManager( context ).getTheme( themeName );
@@ -217,7 +213,7 @@ namespace CastorGui
 		{
 			uint32_t value;
 			params[0]->get( value );
-			control->setHAlign( HAlign( value ) );
+			control->setHAlign( castor3d::HAlign( value ) );
 		}
 		else
 		{
@@ -234,7 +230,7 @@ namespace CastorGui
 		{
 			uint32_t value;
 			params[0]->get( value );
-			control->setVAlign( VAlign( value ) );
+			control->setVAlign( castor3d::VAlign( value ) );
 		}
 		else
 		{
@@ -249,7 +245,7 @@ namespace CastorGui
 
 		if ( auto control = guiContext.button )
 		{
-			String text;
+			castor::String text;
 			params[0]->get( text );
 			control->setCaption( text );
 		}
@@ -294,7 +290,7 @@ namespace CastorGui
 
 		if ( combo )
 		{
-			String text;
+			castor::String text;
 			params[0]->get( text );
 			combo->appendItem( text );
 		}
@@ -339,7 +335,7 @@ namespace CastorGui
 
 		if ( edit )
 		{
-			String text;
+			castor::String text;
 			params[0]->get( text );
 			edit->setCaption( text );
 		}
@@ -404,7 +400,7 @@ namespace CastorGui
 
 		if ( listbox )
 		{
-			String text;
+			castor::String text;
 			params[0]->get( text );
 			listbox->appendItem( text );
 		}
@@ -477,7 +473,7 @@ namespace CastorGui
 		{
 			uint32_t value;
 			params[0]->get( value );
-			control->setHAlign( HAlign( value ) );
+			control->setHAlign( castor3d::HAlign( value ) );
 		}
 		else
 		{
@@ -494,7 +490,7 @@ namespace CastorGui
 		{
 			uint32_t value;
 			params[0]->get( value );
-			control->setVAlign( VAlign( value ) );
+			control->setVAlign( castor3d::VAlign( value ) );
 		}
 		else
 		{
@@ -509,7 +505,7 @@ namespace CastorGui
 
 		if ( auto control = guiContext.staticTxt )
 		{
-			String text;
+			castor::String text;
 			params[0]->get( text );
 			control->setCaption( text );
 		}
@@ -534,7 +530,7 @@ namespace CastorGui
 
 		if ( auto control = guiContext.getTop() )
 		{
-			Position position;
+			castor::Position position;
 			params[0]->get( position );
 			control->setPosition( position );
 		}
@@ -551,7 +547,7 @@ namespace CastorGui
 
 		if ( auto control = guiContext.getTop() )
 		{
-			Size size;
+			castor::Size size;
 			params[0]->get( size );
 			control->setSize( size );
 		}
@@ -585,7 +581,7 @@ namespace CastorGui
 
 		if ( auto control = guiContext.getTop() )
 		{
-			Point4d value;
+			castor::Point4d value;
 			params[0]->get( value );
 			control->getBackground()->setBorderInnerUV( value );
 		}
@@ -602,7 +598,7 @@ namespace CastorGui
 
 		if ( auto control = guiContext.getTop() )
 		{
-			Point4d value;
+			castor::Point4d value;
 			params[0]->get( value );
 			control->getBackground()->setBorderOuterUV( value );
 		}
@@ -619,7 +615,7 @@ namespace CastorGui
 
 		if ( auto control = guiContext.getTop() )
 		{
-			Point4d value;
+			castor::Point4d value;
 			params[0]->get( value );
 			control->getBackground()->setUV( value );
 		}
@@ -651,7 +647,7 @@ namespace CastorGui
 	{
 		ParserContext & guiContext = getParserContext( context );
 		auto & cache = guiContext.engine->getFontCache();
-		String name;
+		castor::String name;
 		params[0]->get( name );
 		auto font = cache.find( name );
 
@@ -825,7 +821,7 @@ namespace CastorGui
 
 		if ( auto style = guiContext.buttonStyle )
 		{
-			String name;
+			castor::String name;
 			params[0]->get( name );
 			style->setFont( name );
 		}
@@ -842,7 +838,7 @@ namespace CastorGui
 
 		if ( auto style = guiContext.buttonStyle )
 		{
-			String name;
+			castor::String name;
 			params[0]->get( name );
 			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
 
@@ -868,7 +864,7 @@ namespace CastorGui
 
 		if ( auto style = guiContext.buttonStyle )
 		{
-			String name;
+			castor::String name;
 			params[0]->get( name );
 			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
 
@@ -894,7 +890,7 @@ namespace CastorGui
 
 		if ( auto style = guiContext.buttonStyle )
 		{
-			String name;
+			castor::String name;
 			params[0]->get( name );
 			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
 
@@ -920,7 +916,7 @@ namespace CastorGui
 
 		if ( auto style = guiContext.buttonStyle )
 		{
-			String name;
+			castor::String name;
 			params[0]->get( name );
 			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
 
@@ -946,7 +942,7 @@ namespace CastorGui
 
 		if ( auto style = guiContext.buttonStyle )
 		{
-			String name;
+			castor::String name;
 			params[0]->get( name );
 			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
 
@@ -972,7 +968,7 @@ namespace CastorGui
 
 		if ( auto style = guiContext.buttonStyle )
 		{
-			String name;
+			castor::String name;
 			params[0]->get( name );
 			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
 
@@ -998,7 +994,7 @@ namespace CastorGui
 
 		if ( auto style = guiContext.buttonStyle )
 		{
-			String name;
+			castor::String name;
 			params[0]->get( name );
 			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
 
@@ -1024,7 +1020,7 @@ namespace CastorGui
 
 		if ( auto style = guiContext.editStyle )
 		{
-			String name;
+			castor::String name;
 			params[0]->get( name );
 			style->setFont( name );
 		}
@@ -1041,7 +1037,7 @@ namespace CastorGui
 
 		if ( auto style = guiContext.editStyle )
 		{
-			String name;
+			castor::String name;
 			params[0]->get( name );
 			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
 
@@ -1067,7 +1063,7 @@ namespace CastorGui
 
 		if ( auto style = guiContext.staticStyle )
 		{
-			String name;
+			castor::String name;
 			params[0]->get( name );
 			style->setFont( name );
 		}
@@ -1110,7 +1106,7 @@ namespace CastorGui
 
 		if ( auto style = guiContext.style )
 		{
-			String name;
+			castor::String name;
 			params[0]->get( name );
 			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
 
@@ -1136,7 +1132,7 @@ namespace CastorGui
 
 		if ( auto style = guiContext.style )
 		{
-			String name;
+			castor::String name;
 			params[0]->get( name );
 			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
 
@@ -1162,7 +1158,7 @@ namespace CastorGui
 
 		if ( auto style = guiContext.style )
 		{
-			String name;
+			castor::String name;
 			params[0]->get( name );
 			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
 

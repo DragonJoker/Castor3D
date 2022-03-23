@@ -6,13 +6,13 @@
 #include <CastorUtils/Data/Text/TextPoint.hpp>
 #include <CastorUtils/Data/Text/TextQuaternion.hpp>
 
-using namespace castor3d;
-
 namespace castor
 {
-	namespace
+	using namespace castor3d;
+
+	namespace txtnode
 	{
-		bool isIgnored( castor::String const & name )
+		static bool isIgnored( castor::String const & name )
 		{
 			return name == Scene::RootNode
 				|| name == Scene::ObjectRootNode
@@ -21,7 +21,7 @@ namespace castor
 				|| name.find( cuT( "_LEye" ) ) != castor::String::npos;
 		}
 
-		bool isIgnored( SceneNode const & node )
+		static bool isIgnored( SceneNode const & node )
 		{
 			return isIgnored( node.getName() );
 		}
@@ -39,7 +39,7 @@ namespace castor
 	{
 		bool result = true;
 
-		if ( !isIgnored( node ) )
+		if ( !txtnode::isIgnored( node ) )
 		{
 			log::info << tabs() << cuT( "Writing Node " ) << node.getName() << std::endl;
 			result = false;
@@ -47,7 +47,7 @@ namespace castor
 			if ( auto block{ beginBlock( file, "scene_node", node.getName() ) } )
 			{
 				if ( node.getParent()
-					&& !isIgnored( *node.getParent() ) )
+					&& !txtnode::isIgnored( *node.getParent() ) )
 				{
 					result = writeName( file, "parent", node.getParent()->getName() );
 				}

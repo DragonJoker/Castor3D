@@ -4,8 +4,6 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	void SubmeshUtils::computeFacesFromPolygonVertex( InterleavedVertexArray & points
@@ -60,7 +58,7 @@ namespace castor3d
 				auto const vec3m1 = vtx3.pos - vtx1.pos;
 				auto const tex2m1 = vtx2.tex - vtx1.tex;
 				auto const tex3m1 = vtx3.tex - vtx1.tex;
-				auto const faceNormal = -point::cross( vec3m1, vec2m1 );
+				auto const faceNormal = -castor::point::cross( vec3m1, vec2m1 );
 				auto const faceTangent = ( vec3m1 * tex2m1[1] ) - ( vec2m1 * tex3m1[1] );
 				vtx1.nml += faceNormal;
 				vtx2.nml += faceNormal;
@@ -81,7 +79,7 @@ namespace castor3d
 				auto const vec3m1 = vtx3.pos - vtx1.pos;
 				auto const tex2m1 = vtx2.tex - vtx1.tex;
 				auto const tex3m1 = vtx3.tex - vtx1.tex;
-				auto const faceNormal = -point::cross( vec3m1, vec2m1 );
+				auto const faceNormal = -castor::point::cross( vec3m1, vec2m1 );
 				auto const faceTangent = ( vec3m1 * tex2m1[1] ) - ( vec2m1 * tex3m1[1] );
 				vtx1.nml += faceNormal;
 				vtx2.nml += faceNormal;
@@ -95,8 +93,8 @@ namespace castor3d
 		// Eventually we normalize the normals and tangents
 		for ( auto & vtx : points )
 		{
-			point::normalise( vtx.nml );
-			point::normalise( vtx.tan );
+			castor::point::normalise( vtx.nml );
+			castor::point::normalise( vtx.tan );
 		}
 	}
 
@@ -140,7 +138,7 @@ namespace castor3d
 		for ( auto & value : arrayTangents )
 		{
 			auto & point = points[i];
-			castor::Point3f tangent = point::getNormalised( value );
+			castor::Point3f tangent = castor::point::getNormalised( value );
 			tangent -= point.nml * castor::point::dot( tangent, point.nml );
 			point.tan = tangent;
 			i++;
@@ -155,7 +153,7 @@ namespace castor3d
 		auto & vtx3 = points[face[2]];
 		auto const vec2m1 = vtx2.pos - vtx1.pos;
 		auto const vec3m1 = vtx3.pos - vtx1.pos;
-		auto const faceNormal = point::getNormalised( -point::cross( vec3m1, vec2m1 ) );
+		auto const faceNormal = castor::point::getNormalised( -castor::point::cross( vec3m1, vec2m1 ) );
 		vtx1.nml += faceNormal;
 		vtx2.nml += faceNormal;
 		vtx3.nml += faceNormal;
@@ -172,7 +170,7 @@ namespace castor3d
 		auto const vec3m1 = vtx3.pos - vtx1.pos;
 		auto const tex2m1 = vtx2.tex - vtx1.tex;
 		auto const tex3m1 = vtx3.tex - vtx1.tex;
-		auto const faceTangent = point::getNormalised( ( vec2m1 * tex3m1[1] ) - ( vec3m1 * tex2m1[1] ) );
+		auto const faceTangent = castor::point::getNormalised( ( vec2m1 * tex3m1[1] ) - ( vec3m1 * tex2m1[1] ) );
 		vtx1.tan += faceTangent;
 		vtx2.tan += faceTangent;
 		vtx3.tan += faceTangent;

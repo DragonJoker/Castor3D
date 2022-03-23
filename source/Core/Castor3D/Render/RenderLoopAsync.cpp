@@ -7,17 +7,14 @@
 #include <CastorUtils/Design/ScopeGuard.hpp>
 #include <CastorUtils/Design/BlockGuard.hpp>
 
-using namespace castor;
-
-//*************************************************************************************************
-
 namespace castor3d
 {
-	static const char * CALL_RENDER_SYNC_FRAME = "Can't call renderSyncFrame in threaded render loop";
-	static const char * CALL_PAUSE_RENDERING = "Can't call Pause on a paused render loop";
-	static const char * CALL_RESUME_RENDERING = "Can't call Resume on a non paused render loop";
-
-	using LockType = std::unique_lock< std::mutex >;
+	namespace rendlpasnc
+	{
+		static const char * CALL_RENDER_SYNC_FRAME = "Can't call renderSyncFrame in threaded render loop";
+		static const char * CALL_PAUSE_RENDERING = "Can't call Pause on a paused render loop";
+		static const char * CALL_RESUME_RENDERING = "Can't call Resume on a non paused render loop";
+	}
 
 	RenderLoopAsync::RenderLoopAsync( Engine & engine, uint32_t wantedFPS )
 		: RenderLoop{ engine, wantedFPS, true }
@@ -87,7 +84,7 @@ namespace castor3d
 	{
 		if ( !m_paused )
 		{
-			CU_Exception( CALL_RENDER_SYNC_FRAME );
+			CU_Exception( rendlpasnc::CALL_RENDER_SYNC_FRAME );
 		}
 
 		if ( m_rendering )
@@ -100,14 +97,14 @@ namespace castor3d
 	{
 		if ( m_paused )
 		{
-			CU_Exception( CALL_PAUSE_RENDERING );
+			CU_Exception( rendlpasnc::CALL_PAUSE_RENDERING );
 		}
 
 		m_paused = true;
 
 		while ( !m_frameEnded )
 		{
-			System::sleep( 5 );
+			castor::System::sleep( 5 );
 		}
 	}
 
@@ -115,7 +112,7 @@ namespace castor3d
 	{
 		if ( !m_paused )
 		{
-			CU_Exception( CALL_RESUME_RENDERING );
+			CU_Exception( rendlpasnc::CALL_RESUME_RENDERING );
 		}
 
 		m_paused = false;
@@ -127,15 +124,15 @@ namespace castor3d
 
 		while ( !isEnded() )
 		{
-			System::sleep( 5 );
+			castor::System::sleep( 5 );
 		}
 	}
 
 	void RenderLoopAsync::doMainLoop()
 	{
-		PreciseTimer timer;
+		castor::PreciseTimer timer;
 		m_frameEnded = true;
-		auto scopeGuard{ makeScopeGuard( [this]()
+		auto scopeGuard{ castor::makeScopeGuard( [this]()
 		{
 			cleanup();
 		} ) };
@@ -158,7 +155,7 @@ namespace castor3d
 				// Tant qu'on n'a pas demandé le début du rendu, on attend.
 				while ( !isInterrupted() && !isRendering() )
 				{
-					System::sleep( 10 );
+					castor::System::sleep( 10 );
 				}
 
 				// Le rendu est en cours
@@ -173,7 +170,7 @@ namespace castor3d
 						m_frameEnded = true;
 					}
 
-					auto endTime = std::chrono::duration_cast< Milliseconds >( timer.getElapsed() );
+					auto endTime = std::chrono::duration_cast< castor::Milliseconds >( timer.getElapsed() );
 					std::this_thread::sleep_for( std::max( 0_ms, getFrameTime() - endTime ) );
 				}
 

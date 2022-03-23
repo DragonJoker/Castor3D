@@ -1,7 +1,5 @@
 #include "Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	ParticleDeclaration::ParticleDeclaration()

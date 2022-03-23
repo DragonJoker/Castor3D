@@ -28,7 +28,7 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace vxlbuftotex
 	{
 		enum IDs : uint32_t
 		{
@@ -36,7 +36,7 @@ namespace castor3d
 			eResult,
 		};
 
-		ashes::DescriptorSetLayoutPtr createDescriptorLayout( RenderDevice const & device )
+		static ashes::DescriptorSetLayoutPtr createDescriptorLayout( RenderDevice const & device )
 		{
 			ashes::VkDescriptorSetLayoutBindingArray bindings{ makeDescriptorSetLayoutBinding( eVoxels
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
@@ -48,7 +48,7 @@ namespace castor3d
 				, std::move( bindings ) );
 		}
 
-		ashes::DescriptorSetPtr createDescriptorSet( crg::RunnableGraph & graph
+		static ashes::DescriptorSetPtr createDescriptorSet( crg::RunnableGraph & graph
 			, ashes::DescriptorSetPool const & pool
 			, crg::FramePass const & pass )
 		{
@@ -73,14 +73,14 @@ namespace castor3d
 			return descriptorSet;
 		}
 
-		ashes::PipelineLayoutPtr createPipelineLayout( RenderDevice const & device
+		static ashes::PipelineLayoutPtr createPipelineLayout( RenderDevice const & device
 			, ashes::DescriptorSetLayout const & dslayout )
 		{
 			return device->createPipelineLayout( "VoxelBufferToTexture"
 				, ashes::DescriptorSetLayoutCRefArray{ std::ref( dslayout ) } );
 		}
 
-		ashes::ComputePipelinePtr createPipeline( RenderDevice const & device
+		static ashes::ComputePipelinePtr createPipeline( RenderDevice const & device
 			, ashes::PipelineLayout const & pipelineLayout
 			, ShaderModule const & computeShader )
 		{
@@ -91,7 +91,7 @@ namespace castor3d
 					, pipelineLayout ) );
 		}
 
-		ShaderPtr createShader( bool temporalSmoothing
+		static ShaderPtr createShader( bool temporalSmoothing
 			, uint32_t voxelGridSize
 			, RenderSystem const & renderSystem )
 		{
@@ -140,7 +140,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		VoxelBufferToTexture::Pipeline createPipeline( RenderDevice const & device
+		static VoxelBufferToTexture::Pipeline createPipeline( RenderDevice const & device
 			, ashes::PipelineLayout const & pipelineLayout
 			, uint32_t index
 			, uint32_t voxelGridSize )
@@ -153,7 +153,7 @@ namespace castor3d
 			return result;
 		}
 
-		std::array< VoxelBufferToTexture::Pipeline, 4u > createPipelines( RenderDevice const & device
+		static std::array< VoxelBufferToTexture::Pipeline, 4u > createPipelines( RenderDevice const & device
 			, ashes::PipelineLayout const & pipelineLayout
 			, uint32_t voxelGridSize )
 		{
@@ -184,11 +184,11 @@ namespace castor3d
 				, crg::RecordContext::clearAttachment( pass.images.front().view(), transparentBlackClearColor ) ) }
 		, m_device{ device }
 		, m_vctConfig{ vctConfig }
-		, m_descriptorSetLayout{ createDescriptorLayout( m_device ) }
-		, m_pipelineLayout{ createPipelineLayout( m_device, *m_descriptorSetLayout ) }
-		, m_pipelines{ createPipelines( device, *m_pipelineLayout, m_vctConfig.gridSize.value() ) }
+		, m_descriptorSetLayout{ vxlbuftotex::createDescriptorLayout( m_device ) }
+		, m_pipelineLayout{ vxlbuftotex::createPipelineLayout( m_device, *m_descriptorSetLayout ) }
+		, m_pipelines{ vxlbuftotex::createPipelines( device, *m_pipelineLayout, m_vctConfig.gridSize.value() ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
-		, m_descriptorSet{ createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }
+		, m_descriptorSet{ vxlbuftotex::createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }
 	{
 	}
 

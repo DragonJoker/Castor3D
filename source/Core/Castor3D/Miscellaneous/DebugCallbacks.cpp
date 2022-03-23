@@ -10,9 +10,9 @@
 
 namespace castor3d
 {
-	namespace
+	namespace dbg
 	{
-		std::string formatMessage( std::string_view prefix
+		static std::string formatMessage( std::string_view prefix
 			, std::string_view message )
 		{
 			if ( message.find_first_of( "|\n" ) == message.find( "\n" ) )
@@ -51,7 +51,7 @@ namespace castor3d
 
 #if VK_EXT_debug_utils
 
-		std::ostream & operator<<( std::ostream & stream, VkDebugUtilsObjectNameInfoEXT const & value )
+		static std::ostream & operator<<( std::ostream & stream, VkDebugUtilsObjectNameInfoEXT const & value )
 		{
 			stream << "(" << std::hex << value.objectHandle << ") " << ashes::getName( value.objectType );
 
@@ -63,7 +63,7 @@ namespace castor3d
 			return stream;
 		}
 
-		std::ostream & operator<<( std::ostream & stream, VkDebugUtilsLabelEXT const & value )
+		static std::ostream & operator<<( std::ostream & stream, VkDebugUtilsLabelEXT const & value )
 		{
 			stream << "(" << value.color[0]
 				<< ", " << value.color[1]
@@ -79,7 +79,7 @@ namespace castor3d
 		}
 
 		template< typename ObjectT >
-		void print( std::ostream & stream
+		static void print( std::ostream & stream
 			, std::string const & name
 			, uint32_t count
 			, ObjectT const * objects
@@ -94,7 +94,7 @@ namespace castor3d
 			}
 		}
 
-		VkBool32 VKAPI_PTR debugMessageCallback( VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity
+		static VkBool32 VKAPI_PTR debugMessageCallback( VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity
 			, VkDebugUtilsMessageTypeFlagsEXT messageTypes
 			, const VkDebugUtilsMessengerCallbackDataEXT * pCallbackData
 			, void * pUserData )
@@ -191,7 +191,7 @@ namespace castor3d
 			return result;
 		}
 
-		VkDebugUtilsMessengerEXT createDebugUtilsMessenger( ashes::Instance const & instance
+		static VkDebugUtilsMessengerEXT createDebugUtilsMessenger( ashes::Instance const & instance
 			, void * userData )
 		{
 			VkDebugUtilsMessageSeverityFlagsEXT severityFlags = 0u
@@ -214,7 +214,7 @@ namespace castor3d
 #endif
 #if VK_EXT_debug_report
 
-		VkBool32 VKAPI_PTR debugReportCallback( VkDebugReportFlagsEXT flags
+		static VkBool32 VKAPI_PTR debugReportCallback( VkDebugReportFlagsEXT flags
 			, VkDebugReportObjectTypeEXT objectType
 			, uint64_t object
 			, size_t location
@@ -300,7 +300,7 @@ namespace castor3d
 			return result;
 		}
 
-		VkDebugReportCallbackEXT createDebugReportCallback( ashes::Instance const & instance
+		static VkDebugReportCallbackEXT createDebugReportCallback( ashes::Instance const & instance
 			, void * userData )
 		{
 			VkDebugReportFlagsEXT debugReportFlags = 0u
@@ -326,7 +326,7 @@ namespace castor3d
 	{
 #if VK_EXT_debug_utils
 
-		m_messenger = createDebugUtilsMessenger( instance, userData );
+		m_messenger = dbg::createDebugUtilsMessenger( instance, userData );
 
 		if ( m_messenger == VK_NULL_HANDLE )
 #endif
@@ -334,7 +334,7 @@ namespace castor3d
 
 #if VK_EXT_debug_report
 
-			m_callback = createDebugReportCallback( instance, userData );
+			m_callback = dbg::createDebugReportCallback( instance, userData );
 
 #endif
 		}

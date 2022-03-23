@@ -30,17 +30,15 @@
 
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
-	namespace
+	namespace dropqpass
 	{
-		static String const Output1 = "outData1";
-		static String const Output2 = "outData2";
-		static String const Output3 = "outData3";
-		static String const Output4 = "outData4";
-		static String const Output5 = "outData5";
+		static castor::String const Output1 = "outData1";
+		static castor::String const Output2 = "outData2";
+		static castor::String const Output3 = "outData3";
+		static castor::String const Output4 = "outData4";
+		static castor::String const Output5 = "outData5";
 	}
 
 	castor::String const OpaquePass::Type = "c3d.deferred.geometry";
@@ -156,10 +154,10 @@ namespace castor3d
 
 		// Fragment Outputs
 		auto index = 0u;
-		auto outData2 = writer.declOutput< Vec4 >( Output2, index++ );
-		auto outData3 = writer.declOutput< Vec4 >( Output3, index++ );
-		auto outData4 = writer.declOutput< Vec4 >( Output4, index++ );
-		auto outData5 = writer.declOutput< Vec4 >( Output5, index++ );
+		auto outData2 = writer.declOutput< Vec4 >( dropqpass::Output2, index++ );
+		auto outData3 = writer.declOutput< Vec4 >( dropqpass::Output3, index++ );
+		auto outData4 = writer.declOutput< Vec4 >( dropqpass::Output4, index++ );
+		auto outData5 = writer.declOutput< Vec4 >( dropqpass::Output5, index++ );
 
 		shader::Utils utils{ writer, *renderSystem.getEngine() };
 		auto lightingModel = utils.createLightingModel( shader::getLightingModelName( *getEngine(), flags.passType )

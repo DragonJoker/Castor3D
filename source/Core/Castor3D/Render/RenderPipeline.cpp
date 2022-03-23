@@ -22,8 +22,6 @@
 
 CU_ImplementCUSmartPtr( castor3d, RenderPipeline )
 
-using namespace castor;
-
 namespace castor3d
 {
 	RenderPipeline::RenderPipeline( RenderNodesPass & owner
@@ -34,7 +32,7 @@ namespace castor3d
 		, ashes::PipelineMultisampleStateCreateInfo msState
 		, ShaderProgramSPtr program
 		, PipelineFlags const & flags )
-		: OwnedBy< RenderNodesPass >{ owner }
+		: castor::OwnedBy< RenderNodesPass >{ owner }
 		, m_renderSystem{ renderSystem }
 		, m_dsState{ std::move( dsState ) }
 		, m_rsState{ std::move( rsState ) }

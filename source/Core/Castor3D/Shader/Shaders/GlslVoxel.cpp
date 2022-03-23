@@ -2,19 +2,16 @@
 
 #include <ShaderWriter/Source.hpp>
 
-using namespace castor;
-using namespace sdw;
-
 namespace castor3d
 {
 	namespace shader
 	{
-		Voxel::Voxel( ShaderWriter & writer
+		Voxel::Voxel( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
 			: StructInstance{ writer, std::move( expr ), enabled }
-			, colorMask{ getMember< UInt >( "colorMask" ) }
-			, normalMask{ getMember< UInt >( "normalMask" ) }
+			, colorMask{ getMember< sdw::UInt >( "colorMask" ) }
+			, normalMask{ getMember< sdw::UInt >( "normalMask" ) }
 		{
 		}
 

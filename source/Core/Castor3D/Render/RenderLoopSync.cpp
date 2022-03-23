@@ -5,15 +5,16 @@
 
 #include <CastorUtils/Design/BlockGuard.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
-	static const char * CALL_START_RENDERING = "Can't call beginRendering in a synchronous render loop";
-	static const char * CALL_END_RENDERING = "Can't call endRendering in a synchronous render loop";
-	static const char * CALL_PAUSE_RENDERING = "Can't call Pause in a synchronous render loop";
-	static const char * CALL_RESUME_RENDERING = "Can't call Resume in a synchronous render loop";
-	static const char * RLS_UNKNOWN_EXCEPTION = "Unknown exception";
+	namespace rendlpsnc
+	{
+		static const char * CALL_START_RENDERING = "Can't call beginRendering in a synchronous render loop";
+		static const char * CALL_END_RENDERING = "Can't call endRendering in a synchronous render loop";
+		static const char * CALL_PAUSE_RENDERING = "Can't call Pause in a synchronous render loop";
+		static const char * CALL_RESUME_RENDERING = "Can't call Resume in a synchronous render loop";
+		static const char * RLS_UNKNOWN_EXCEPTION = "Unknown exception";
+	}
 
 	RenderLoopSync::RenderLoopSync( Engine & engine
 		, uint32_t wantedFPS )
@@ -29,7 +30,7 @@ namespace castor3d
 
 	void RenderLoopSync::beginRendering()
 	{
-		CU_Exception( CALL_START_RENDERING );
+		CU_Exception( rendlpsnc::CALL_START_RENDERING );
 	}
 
 	void RenderLoopSync::renderSyncFrame( castor::Milliseconds tslf )
@@ -52,7 +53,7 @@ namespace castor3d
 			}
 			catch ( ... )
 			{
-				log::error << RLS_UNKNOWN_EXCEPTION << std::endl;
+				log::error << rendlpsnc::RLS_UNKNOWN_EXCEPTION << std::endl;
 				m_active = false;
 			}
 		}
@@ -60,16 +61,16 @@ namespace castor3d
 
 	void RenderLoopSync::pause()
 	{
-		CU_Exception( CALL_PAUSE_RENDERING );
+		CU_Exception( rendlpsnc::CALL_PAUSE_RENDERING );
 	}
 
 	void RenderLoopSync::resume()
 	{
-		CU_Exception( CALL_RESUME_RENDERING );
+		CU_Exception( rendlpsnc::CALL_RESUME_RENDERING );
 	}
 
 	void RenderLoopSync::endRendering()
 	{
-		CU_Exception( CALL_END_RENDERING );
+		CU_Exception( rendlpsnc::CALL_END_RENDERING );
 	}
 }

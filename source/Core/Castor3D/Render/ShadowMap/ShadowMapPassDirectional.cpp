@@ -42,15 +42,13 @@
 
 #include <ShaderWriter/Source.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
-	namespace
+	namespace shdpassdir
 	{
-		castor::String getPassName( uint32_t cascadeIndex )
+		static castor::String getPassName( uint32_t cascadeIndex )
 		{
-			return cuT( "DirectionalSMC" ) + string::toString( cascadeIndex );
+			return cuT( "DirectionalSMC" ) + castor::string::toString( cascadeIndex );
 		}
 	}
 
@@ -72,7 +70,7 @@ namespace castor3d
 			, graph
 			, device
 			, Type
-			, getPassName( cascadeCount )
+			, shdpassdir::getPassName( cascadeCount )
 			, matrixUbo
 			, culler
 			, shadowMap }

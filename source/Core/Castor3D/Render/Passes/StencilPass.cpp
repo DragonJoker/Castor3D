@@ -26,15 +26,13 @@
 
 CU_ImplementCUSmartPtr( castor3d, StencilPass )
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace passstencil
 	{
-		ShaderPtr doGetVertexShader( RenderSystem & renderSystem )
+		static ShaderPtr doGetVertexShader( RenderSystem & renderSystem )
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -57,7 +55,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	StencilPass::StencilPass( Engine const & engine
-		, String const & prefix
+		, castor::String const & prefix
 		, crg::ImageViewId depthView
 		, MatrixUbo & matrixUbo
 		, UniformBufferT< ModelBufferConfiguration > const & modelUbo )
@@ -104,7 +102,7 @@ namespace castor3d
 		m_program =
 		{
 			makeShaderState( device
-				, ShaderModule{ VK_SHADER_STAGE_VERTEX_BIT, name, doGetVertexShader( renderSystem ) } ),
+				, ShaderModule{ VK_SHADER_STAGE_VERTEX_BIT, name, passstencil::doGetVertexShader( renderSystem ) } ),
 		};
 
 		ashes::PipelineDepthStencilStateCreateInfo dsstate;

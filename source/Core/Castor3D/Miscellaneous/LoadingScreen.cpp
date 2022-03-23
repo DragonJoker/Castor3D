@@ -30,9 +30,9 @@ CU_ImplementCUSmartPtr( castor3d, LoadingScreen )
 
 namespace castor3d
 {
-	namespace
+	namespace loadscreen
 	{
-		Texture createTexture( RenderDevice const & device
+		static Texture createTexture( RenderDevice const & device
 			, crg::ResourceHandler & handler
 			, std::string const & name
 			, castor::Size const & size
@@ -53,7 +53,7 @@ namespace castor3d
 			return result;
 		}
 
-		Texture createColour( RenderDevice const & device
+		static Texture createColour( RenderDevice const & device
 			, crg::ResourceHandler & handler
 			, std::string const & name
 			, castor::Size const & size )
@@ -67,7 +67,7 @@ namespace castor3d
 					| VK_IMAGE_USAGE_SAMPLED_BIT ) );
 		}
 
-		Texture createDepth( RenderDevice const & device
+		static Texture createDepth( RenderDevice const & device
 			, crg::ResourceHandler & handler
 			, std::string const & name
 			, castor::Size const & size )
@@ -80,7 +80,7 @@ namespace castor3d
 				, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT );
 		}
 
-		CameraSPtr createCamera( Scene & scene
+		static CameraSPtr createCamera( Scene & scene
 			, castor::Size const & size )
 		{
 			CameraSPtr result;
@@ -111,7 +111,7 @@ namespace castor3d
 			return result;
 		}
 
-		SceneUbo createSceneUbo( RenderDevice const & device
+		static SceneUbo createSceneUbo( RenderDevice const & device
 			, castor::Size const & size )
 		{
 			SceneUbo result{ device };
@@ -119,7 +119,7 @@ namespace castor3d
 			return result;
 		}
 
-		ShaderPtr getVertexProgram()
+		static ShaderPtr getVertexProgram()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -135,7 +135,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderPtr getPixelProgram()
+		static ShaderPtr getPixelProgram()
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -154,7 +154,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		crg::RunnableGraphPtr createRunnableGraph( crg::FrameGraph & graph
+		static crg::RunnableGraphPtr createRunnableGraph( crg::FrameGraph & graph
 			, RenderDevice const & device )
 		{
 			auto result = graph.compile( device.makeContext() );
@@ -186,8 +186,8 @@ namespace castor3d
 			, { 1u, true } }
 		, m_renderSize{ renderSize }
 		, m_renderPass{ renderPass }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, SceneName, getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, SceneName, getPixelProgram() }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, SceneName, loadscreen::getVertexProgram() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, SceneName, loadscreen::getPixelProgram() }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_renderQuad{ pass
@@ -271,13 +271,13 @@ namespace castor3d
 		, m_background{ *m_scene->getBackground() }
 		, m_renderPass{ renderPass }
 		, m_renderSize{ size }
-		, m_camera{ createCamera( *m_scene, m_renderSize ) }
+		, m_camera{ loadscreen::createCamera( *m_scene, m_renderSize ) }
 		, m_culler{ std::make_unique< FrustumCuller >( *m_camera ) }
-		, m_colour{ createColour( m_device, handler, SceneName, m_renderSize ) }
-		, m_depth{ createDepth( m_device, handler, SceneName, m_renderSize ) }
+		, m_colour{ loadscreen::createColour( m_device, handler, SceneName, m_renderSize ) }
+		, m_depth{ loadscreen::createDepth( m_device, handler, SceneName, m_renderSize ) }
 		, m_matrixUbo{ m_device }
 		, m_hdrConfigUbo{ m_device }
-		, m_sceneUbo{ createSceneUbo( m_device, m_renderSize ) }
+		, m_sceneUbo{ loadscreen::createSceneUbo( m_device, m_renderSize ) }
 		, m_backgroundRenderer{ castor::makeUnique< BackgroundRenderer >( m_graph.getDefaultGroup()
 			, nullptr
 			, m_device
@@ -291,7 +291,7 @@ namespace castor3d
 		, m_transparentPassDesc{ &doCreateTransparentPass( m_opaquePassDesc ) }
 		, m_overlayPassDesc{ &doCreateOverlayPass( m_transparentPassDesc ) }
 		, m_windowPassDesc{ &doCreateWindowPass( m_overlayPassDesc ) }
-		, m_runnable{ createRunnableGraph( m_graph, m_device ) }
+		, m_runnable{ loadscreen::createRunnableGraph( m_graph, m_device ) }
 	{
 	}
 

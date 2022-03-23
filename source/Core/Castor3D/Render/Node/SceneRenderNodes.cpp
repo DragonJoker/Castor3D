@@ -35,9 +35,9 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace scnrendnd
 	{
-		size_t makeNodeHash( Pass & pass
+		static size_t makeNodeHash( Pass & pass
 			, Submesh & data
 			, Geometry & instance )
 		{
@@ -47,7 +47,7 @@ namespace castor3d
 			return hash;
 		}
 
-		size_t makeNodeHash( Pass & pass
+		static size_t makeNodeHash( Pass & pass
 			, BillboardBase & instance )
 		{
 			auto hash = std::hash< BillboardBase * >{}( &instance );
@@ -55,7 +55,7 @@ namespace castor3d
 			return hash;
 		}
 
-		void fillEntry( Pass const & pass
+		static void fillEntry( Pass const & pass
 			, SceneNode const & sceneNode
 			, RenderedObject const & rendered
 			, ModelBufferConfiguration & modelData )
@@ -201,7 +201,7 @@ namespace castor3d
 	{
 		auto lock( castor::makeUniqueLock( m_nodesMutex ) );
 		auto & pool = m_submeshNodes.emplace( pass.getTexturesMask().size(), DescriptorNodesPtrT< SubmeshRenderNode >{} ).first->second;
-		auto it = pool.emplace( makeNodeHash( pass, data, instance ), nullptr );
+		auto it = pool.emplace( scnrendnd::makeNodeHash( pass, data, instance ), nullptr );
 
 		if ( it.second )
 		{
@@ -222,7 +222,7 @@ namespace castor3d
 	{
 		auto lock( castor::makeUniqueLock( m_nodesMutex ) );
 		auto & pool = m_billboardNodes.emplace( pass.getTexturesMask().size(), DescriptorNodesPtrT< BillboardRenderNode >{} ).first->second;
-		auto it = pool.emplace( makeNodeHash( pass, instance ), nullptr );
+		auto it = pool.emplace( scnrendnd::makeNodeHash( pass, instance ), nullptr );
 
 		if ( it.second )
 		{
@@ -349,7 +349,7 @@ namespace castor3d
 	void SceneRenderNodes::doUpdateNode( SubmeshRenderNode & node
 		, ModelBufferConfiguration * modelBufferData )
 	{
-		fillEntry( node.pass
+		scnrendnd::fillEntry( node.pass
 			, *node.instance.getParent()
 			, node.instance
 			, modelBufferData[node.getId() - 1u] );
@@ -359,7 +359,7 @@ namespace castor3d
 		, ModelBufferConfiguration * modelBufferData
 		, BillboardUboConfiguration * billboardBufferData )
 	{
-		fillEntry( node.pass
+		scnrendnd::fillEntry( node.pass
 			, *node.instance.getNode()
 			, node.instance
 			, modelBufferData[node.getId() - 1u] );

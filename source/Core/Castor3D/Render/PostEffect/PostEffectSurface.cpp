@@ -7,14 +7,12 @@
 
 #include <ashespp/RenderPass/RenderPass.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
-	namespace
+	namespace postfxsfc
 	{
-		TextureLayoutSPtr doCreateTexture( RenderSystem & renderSystem
-			, Size const & size
+		static TextureLayoutSPtr doCreateTexture( RenderSystem & renderSystem
+			, castor::Size const & size
 			, VkFormat format
 			, uint32_t mipLevels
 			, bool isDepthStencil
@@ -70,7 +68,7 @@ namespace castor3d
 	bool PostEffectSurface::initialise( RenderDevice const & device
 		, QueueData const & queueData
 		, ashes::RenderPass const & renderPass
-		, Size const & newSize
+		, castor::Size const & newSize
 		, VkFormat format
 		, uint32_t mipLevels )
 	{
@@ -78,7 +76,7 @@ namespace castor3d
 			, queueData
 			, renderPass
 			, newSize
-			, doCreateTexture( *getEngine()->getRenderSystem()
+			, postfxsfc::doCreateTexture( *getEngine()->getRenderSystem()
 				, newSize
 				, format
 				, mipLevels
@@ -90,7 +88,7 @@ namespace castor3d
 	bool PostEffectSurface::initialise( RenderDevice const & device
 		, QueueData const & queueData
 		, ashes::RenderPass const & renderPass
-		, Size const & newSize
+		, castor::Size const & newSize
 		, VkFormat colourFormat
 		, VkFormat depthFormat )
 	{
@@ -98,13 +96,13 @@ namespace castor3d
 			, queueData
 			, renderPass
 			, newSize
-			, doCreateTexture( *getEngine()->getRenderSystem()
+			, postfxsfc::doCreateTexture( *getEngine()->getRenderSystem()
 				, newSize
 				, colourFormat
 				, 1u
 				, false
 				, m_debugName + cuT( "_Colour" ) )
-			, doCreateTexture( *getEngine()->getRenderSystem()
+			, postfxsfc::doCreateTexture( *getEngine()->getRenderSystem()
 				, newSize
 				, depthFormat
 				, 1u
@@ -138,7 +136,7 @@ namespace castor3d
 			, renderPass
 			, newSize
 			, newColourTexture
-			, doCreateTexture( *getEngine()->getRenderSystem()
+			, postfxsfc::doCreateTexture( *getEngine()->getRenderSystem()
 				, newSize
 				, depthFormat
 				, 1u
@@ -157,7 +155,7 @@ namespace castor3d
 			, queueData
 			, renderPass
 			, newSize
-			, doCreateTexture( *getEngine()->getRenderSystem()
+			, postfxsfc::doCreateTexture( *getEngine()->getRenderSystem()
 				, newSize
 				, colourFormat
 				, 1u
@@ -169,7 +167,7 @@ namespace castor3d
 	bool PostEffectSurface::initialise( RenderDevice const & device
 		, QueueData const & queueData
 		, ashes::RenderPass const & renderPass
-		, Size const & newSize
+		, castor::Size const & newSize
 		, TextureLayoutSPtr newColourTexture
 		, TextureLayoutSPtr newDepthTexture )
 	{

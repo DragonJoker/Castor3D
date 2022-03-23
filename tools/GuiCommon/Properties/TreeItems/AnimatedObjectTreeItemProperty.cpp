@@ -5,9 +5,6 @@
 
 #include <wx/propgrid/advprops.h>
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
 	namespace
@@ -15,7 +12,7 @@ namespace GuiCommon
 		static wxString PROPERTY_CATEGORY_ANIMATED_OBJECT = _( "Animated Object: " );
 	}
 
-	AnimatedObjectTreeItemProperty::AnimatedObjectTreeItemProperty( Engine * engine, bool p_editable, AnimatedObjectSPtr p_object )
+	AnimatedObjectTreeItemProperty::AnimatedObjectTreeItemProperty( castor3d::Engine * engine, bool p_editable, castor3d::AnimatedObjectSPtr p_object )
 		: TreeItemProperty( engine, p_editable )
 		, m_object( p_object )
 	{

@@ -6,8 +6,6 @@
 
 CU_ImplementCUSmartPtr( castor3d, PanelOverlay )
 
-using namespace castor;
-
 namespace castor3d
 {
 	PanelOverlay::PanelOverlay()
@@ -26,19 +24,23 @@ namespace castor3d
 		visitor.visit( *this );
 	}
 
-	void PanelOverlay::doUpdateBuffer( Size const & size )
+	void PanelOverlay::doUpdateBuffer( castor::Size const & size )
 	{
-		Size absoluteSize = getAbsoluteSize( size );
+		castor::Size absoluteSize = getAbsoluteSize( size );
 
 		int32_t l = 0;
 		int32_t t = 0;
 		auto r = int32_t( absoluteSize.getWidth() );
 		auto b = int32_t( absoluteSize.getHeight() );
 
-		OverlayCategory::Vertex lt = { Point2f{ float( l ) / float( size.getWidth() ), float( t ) / float( size.getHeight() ) }, Point2f{ float( m_uv[0] ), float( m_uv[3] ) } };
-		OverlayCategory::Vertex lb = { Point2f{ float( l ) / float( size.getWidth() ), float( b ) / float( size.getHeight() ) }, Point2f{ float( m_uv[0] ), float( m_uv[1] ) } };
-		OverlayCategory::Vertex rb = { Point2f{ float( r ) / float( size.getWidth() ), float( b ) / float( size.getHeight() ) }, Point2f{ float( m_uv[2] ), float( m_uv[1] ) } };
-		OverlayCategory::Vertex rt = { Point2f{ float( r ) / float( size.getWidth() ), float( t ) / float( size.getHeight() ) }, Point2f{ float( m_uv[2] ), float( m_uv[3] ) } };
+		OverlayCategory::Vertex lt = { castor::Point2f{ float( l ) / float( size.getWidth() ), float( t ) / float( size.getHeight() ) }
+			, castor::Point2f{ float( m_uv[0] ), float( m_uv[3] ) } };
+		OverlayCategory::Vertex lb = { castor::Point2f{ float( l ) / float( size.getWidth() ), float( b ) / float( size.getHeight() ) }
+			, castor::Point2f{ float( m_uv[0] ), float( m_uv[1] ) } };
+		OverlayCategory::Vertex rb = { castor::Point2f{ float( r ) / float( size.getWidth() ), float( b ) / float( size.getHeight() ) }
+			, castor::Point2f{ float( m_uv[2] ), float( m_uv[1] ) } };
+		OverlayCategory::Vertex rt = { castor::Point2f{ float( r ) / float( size.getWidth() ), float( t ) / float( size.getHeight() ) }
+			, castor::Point2f{ float( m_uv[2] ), float( m_uv[3] ) } };
 
 		m_arrayVtx[0] = lt;
 		m_arrayVtx[1] = lb;

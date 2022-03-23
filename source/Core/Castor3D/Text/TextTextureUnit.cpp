@@ -11,10 +11,10 @@
 
 #include <CastorUtils/Data/Text/TextPoint.hpp>
 
-using namespace castor3d;
-
 namespace castor
 {
+	using namespace castor3d;
+
 	TextWriter< TextureUnit >::TextWriter( String const & tabs
 		, PassTypeID type
 		, bool isPbr

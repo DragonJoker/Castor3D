@@ -7,8 +7,6 @@
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 #include <CastorUtils/Log/Logger.hpp>
 
-using namespace castor;
-
 namespace GuiCommon
 {
 	//*********************************************************************************************
@@ -47,12 +45,12 @@ namespace GuiCommon
 			}
 			else
 			{
-				String strParams;
+				castor::String strParams;
 				params[0]->get( strParams );
 
 				if ( !strParams.empty() )
 				{
-					StringArray array = string::split( strParams, cuT( "\t ,;" ), 100, false );
+					auto array = castor::string::split( strParams, cuT( "\t ,;" ), 100, false );
 					langContext.currentLanguage->filePattern.clear();
 
 					for ( auto & pattern : array )
@@ -83,12 +81,12 @@ namespace GuiCommon
 			}
 			else
 			{
-				String strParams;
+				castor::String strParams;
 				params[0]->get( strParams );
 
 				if ( !strParams.empty() )
 				{
-					StringArray array = string::split( strParams, cuT( "\t ,;" ), 100, false );
+					auto array = castor::string::split( strParams, cuT( "\t ,;" ), 100, false );
 					langContext.currentLanguage->foldFlags = 0u;
 
 					for ( auto & flag : array )
@@ -197,7 +195,7 @@ namespace GuiCommon
 			}
 			else
 			{
-				String name;
+				castor::String name;
 				params[0]->get( name );
 				langContext.currentStyle->foreground = wxColour( name );
 			}
@@ -214,7 +212,7 @@ namespace GuiCommon
 			}
 			else
 			{
-				String name;
+				castor::String name;
 				params[0]->get( name );
 				langContext.currentStyle->background = wxColour( name );
 			}
@@ -223,13 +221,13 @@ namespace GuiCommon
 
 		CU_ImplementAttributeParser( Style_FontStyle )
 		{
-			String langParams;
+			castor::String langParams;
 			params[0]->get( langParams );
 
 			if ( !langParams.empty() )
 			{
 				auto & langContext = getParserContext( context );
-				StringArray styles = string::split( string::lowerCase( string::trim( langParams ) ), cuT( "\t " ), 10, false );
+				auto styles = castor::string::split( castor::string::lowerCase( castor::string::trim( langParams ) ), cuT( "\t " ), 10, false );
 				int style = 0;
 
 				for ( auto name : styles )
@@ -296,7 +294,8 @@ namespace GuiCommon
 
 		castor::AttributeParsers registerParsers()
 		{
-			static castor::UInt32StrMap mapTypes;
+			using namespace castor;
+			static UInt32StrMap mapTypes;
 
 			if ( mapTypes.empty() )
 			{
@@ -386,9 +385,9 @@ namespace GuiCommon
 			return castor::FileParser::doDiscardParser( preprocessed, line );
 		}
 
-		String strWords( line );
-		string::replace( strWords, cuT( "\\" ), cuT( "" ) );
-		StringArray arrayWords = string::split( string::trim( strWords ), cuT( "\t " ), 1000, false );
+		castor::String strWords( line );
+		castor::string::replace( strWords, cuT( "\\" ), cuT( "" ) );
+		auto arrayWords = castor::string::split( castor::string::trim( strWords ), cuT( "\t " ), 1000, false );
 		auto & langContext = getParserContext( context );
 		langContext.keywords.insert( langContext.keywords.end(), arrayWords.begin(), arrayWords.end() );
 		return true;
@@ -402,7 +401,7 @@ namespace GuiCommon
 
 	castor::String LanguageFileParser::doGetSectionName( castor::SectionId section )const
 	{
-		String result;
+		castor::String result;
 
 		switch ( LANGSection( section ) )
 		{

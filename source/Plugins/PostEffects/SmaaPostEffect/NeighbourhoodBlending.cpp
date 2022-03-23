@@ -22,11 +22,9 @@
 
 #include <numeric>
 
-using namespace castor;
-
 namespace smaa
 {
-	namespace
+	namespace neighblend
 	{
 		enum Idx : uint32_t
 		{
@@ -35,7 +33,7 @@ namespace smaa
 			VelocityTexIdx,
 		};
 
-		std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingVP()
+		static std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingVP()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -72,7 +70,7 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingFP( bool reprojection )
+		static std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingFP( bool reprojection )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -226,8 +224,8 @@ namespace smaa
 		, m_blendView{ blendView }
 		, m_velocityView{ velocityView }
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaNeighbourhood", doGetNeighbourhoodBlendingVP() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaNeighbourhood", doGetNeighbourhoodBlendingFP( velocityView != nullptr ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaNeighbourhood", neighblend::doGetNeighbourhoodBlendingVP() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaNeighbourhood", neighblend::doGetNeighbourhoodBlendingFP( velocityView != nullptr ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_pass{ m_graph.createPass( "NeighbourhoodBlending"
@@ -258,18 +256,18 @@ namespace smaa
 		ubo.createPassBinding( m_pass
 			, SmaaUboIdx );
 		m_pass.addSampledView( m_sourceView
-			, ColorTexIdx
+			, neighblend::ColorTexIdx
 			, {}
 			, linearSampler );
 		m_pass.addSampledView( m_blendView
-			, BlendTexIdx
+			, neighblend::BlendTexIdx
 			, {}
 			, linearSampler );
 
 		if ( m_velocityView )
 		{
 			m_pass.addSampledView( *m_velocityView
-				, VelocityTexIdx
+				, neighblend::VelocityTexIdx
 				, {}
 				, linearSampler );
 		}

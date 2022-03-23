@@ -4,12 +4,9 @@
 
 #include <wx/propgrid/advprops.h>
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
-	FrameVariableBufferTreeItemProperty::FrameVariableBufferTreeItemProperty( Engine * engine
+	FrameVariableBufferTreeItemProperty::FrameVariableBufferTreeItemProperty( castor3d::Engine * engine
 		, bool editable
 		, UniformBufferValues & /*buffer*/ )
 		: TreeItemProperty{ engine, editable }

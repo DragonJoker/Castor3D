@@ -4,20 +4,17 @@
 
 #include <ShaderWriter/Source.hpp>
 
-using namespace castor;
-using namespace sdw;
-
 namespace castor3d
 {
 	namespace shader
 	{
 		//*********************************************************************************************
 
-		LightData::LightData( ShaderWriter & writer
+		LightData::LightData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
 			: StructInstance{ writer, std::move( expr ), enabled }
-			, data{ getMemberArray< Vec4 >( "data" ) }
+			, data{ getMemberArray< sdw::Vec4 >( "data" ) }
 		{
 		}
 
@@ -36,21 +33,21 @@ namespace castor3d
 
 		//*********************************************************************************************
 
-		Light::Light( ShaderWriter & writer
+		Light::Light( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
 			: StructInstance{ writer, std::move( expr ), enabled }
-			, m_colourIndex{ getMember< Vec4 >( "colourIndex" ) }
-			, m_intensityFarPlane{ getMember< Vec4 >( "intensityFarPlane" ) }
-			, m_volumetric{ getMember< Vec4 >( "volumetric" ) }
-			, m_shadowsOffsets{ getMember< Vec4 >( "shadowsOffsets" ) }
-			, m_shadowsVariances{ getMember< Vec4 >( "shadowsVariances" ) }
+			, m_colourIndex{ getMember< sdw::Vec4 >( "colourIndex" ) }
+			, m_intensityFarPlane{ getMember< sdw::Vec4 >( "intensityFarPlane" ) }
+			, m_volumetric{ getMember< sdw::Vec4 >( "volumetric" ) }
+			, m_shadowsOffsets{ getMember< sdw::Vec4 >( "shadowsOffsets" ) }
+			, m_shadowsVariances{ getMember< sdw::Vec4 >( "shadowsVariances" ) }
 			, colour{ m_colourIndex.xyz() }
 			, intensity{ m_intensityFarPlane.xy() }
 			, farPlane{ m_intensityFarPlane.z() }
-			, shadowType{ writer.cast< Int >( m_intensityFarPlane.w() ) }
-			, index{ writer.cast< Int >( m_colourIndex.w() ) }
-			, volumetricSteps{ writer.cast< UInt >( m_volumetric.x() ) }
+			, shadowType{ writer.cast< sdw::Int >( m_intensityFarPlane.w() ) }
+			, index{ writer.cast< sdw::Int >( m_colourIndex.w() ) }
+			, volumetricSteps{ writer.cast< sdw::UInt >( m_volumetric.x() ) }
 			, volumetricScattering{ m_volumetric.y() }
 			, rawShadowOffsets{ m_shadowsOffsets.xy() }
 			, pcfShadowOffsets{ m_shadowsOffsets.zw() }
@@ -83,17 +80,17 @@ namespace castor3d
 
 		//*********************************************************************************************
 
-		DirectionalLight::DirectionalLight( ShaderWriter & writer
+		DirectionalLight::DirectionalLight( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
 			: StructInstance{ writer, std::move( expr ), enabled }
 			, base{ getMember< Light >( "lightBase" ) }
-			, m_directionCount{ getMember< Vec4 >( "directionCount" ) }
-			, splitDepths{ getMember< Vec4 >( "splitDepths" ) }
-			, splitScales{ getMember< Vec4 >( "splitScales" ) }
-			, transforms{ getMemberArray< Mat4 >( "transforms" ) }
+			, m_directionCount{ getMember< sdw::Vec4 >( "directionCount" ) }
+			, splitDepths{ getMember< sdw::Vec4 >( "splitDepths" ) }
+			, splitScales{ getMember< sdw::Vec4 >( "splitScales" ) }
+			, transforms{ getMemberArray< sdw::Mat4 >( "transforms" ) }
 			, direction{ m_directionCount.xyz() }
-			, cascadeCount{ writer.cast< UInt >( m_directionCount.w() ) }
+			, cascadeCount{ writer.cast< sdw::UInt >( m_directionCount.w() ) }
 		{
 		}
 
@@ -122,13 +119,13 @@ namespace castor3d
 
 		//*********************************************************************************************
 
-		PointLight::PointLight( ShaderWriter & writer
+		PointLight::PointLight( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
 			: StructInstance{ writer, std::move( expr ), enabled }
 			, base{ getMember< Light >( "lightBase" ) }
-			, m_position4{ getMember< Vec4 >( "position" ) }
-			, m_attenuation4{ getMember< Vec4 >( "attenuation" ) }
+			, m_position4{ getMember< sdw::Vec4 >( "position" ) }
+			, m_attenuation4{ getMember< sdw::Vec4 >( "attenuation" ) }
 			, position{ m_position4.xyz() }
 		{
 		}
@@ -165,16 +162,16 @@ namespace castor3d
 
 		//*********************************************************************************************
 
-		SpotLight::SpotLight( ShaderWriter & writer
+		SpotLight::SpotLight( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
 			: StructInstance{ writer, std::move( expr ), enabled }
 			, base{ getMember< Light >( "lightBase" ) }
-			, m_position4{ getMember< Vec4 >( "position" ) }
-			, m_attenuation4{ getMember< Vec4 >( "attenuation" ) }
-			, m_direction4{ getMember< Vec4 >( "direction" ) }
-			, m_exponentCutOff{ getMember< Vec4 >( "exponentCutOff" ) }
-			, transform{ getMember< Mat4 >( "transform" ) }
+			, m_position4{ getMember< sdw::Vec4 >( "position" ) }
+			, m_attenuation4{ getMember< sdw::Vec4 >( "attenuation" ) }
+			, m_direction4{ getMember< sdw::Vec4 >( "direction" ) }
+			, m_exponentCutOff{ getMember< sdw::Vec4 >( "exponentCutOff" ) }
+			, transform{ getMember< sdw::Mat4 >( "transform" ) }
 			, position{ m_position4.xyz() }
 			, direction{ m_direction4.xyz() }
 			, exponent{ m_exponentCutOff.x() }

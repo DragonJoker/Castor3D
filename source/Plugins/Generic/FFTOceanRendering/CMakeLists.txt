@@ -93,6 +93,7 @@ if ( CASTOR_USE_GLSLANG AND EXISTS ${VkFFT_DIR} )
 			CXX_EXTENSIONS OFF
 			PREFIX ${C3D_LIB_PREFIX}
 			FOLDER "Plugins/Generic"
+			UNITY_BUILD "${CASTOR_UNITY_BUILD}"
 	)
 	install_target_ex( ${PROJECT_NAME}
 		Plugins

@@ -28,7 +28,7 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace rendpick
 	{
 		static std::string const Picking = "Picking";
 		static std::string const DrawIndex = "c3d_iDrawIndex";
@@ -37,7 +37,7 @@ namespace castor3d
 		static int constexpr PickingOffset = int( Picking::PickingWidth / 2 );
 		static int constexpr BufferOffset = ( PickingOffset * Picking::PickingWidth ) + PickingOffset - 1;
 
-		castor::Position convertToTopDown( castor::Position const & position
+		inline castor::Position convertToTopDown( castor::Position const & position
 			, castor::Size const & size )
 		{
 			return
@@ -79,7 +79,7 @@ namespace castor3d
 			}
 		}
 
-		std::vector< VkBufferImageCopy > createPickDisplayRegions()
+		inline std::vector< VkBufferImageCopy > createPickDisplayRegions()
 		{
 			std::vector< VkBufferImageCopy > result;
 
@@ -149,7 +149,7 @@ namespace castor3d
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 0u, 1u }
 			, { 0, 0, 0 }
 			, { PickingWidth, PickingWidth, 1u } }
-		, m_pickDisplayRegions{ createPickDisplayRegions() }
+		, m_pickDisplayRegions{ rendpick::createPickDisplayRegions() }
 		, m_commandBuffer{ queueData.commandPool->createCommandBuffer( "PickingPass" ) }
 		, m_stagingBuffer{ makeBuffer< castor::Point4ui >( m_device
 			, PickingWidth * PickingWidth
@@ -186,7 +186,7 @@ namespace castor3d
 	{
 		if ( !m_picking.exchange( true ) )
 		{
-			position = convertToTopDown( position, m_size );
+			position = rendpick::convertToTopDown( position, m_size );
 			m_pickNodeType = PickNodeType::eNone;
 			m_geometry = {};
 			m_submesh = {};
@@ -261,10 +261,10 @@ namespace castor3d
 		auto queueData = m_device.graphicsData();
 		m_toWait = m_runnable->run( crg::SemaphoreWaitArray{}, *queueData->queue );
 
-		m_copyRegion.imageOffset.x = std::clamp( position.x() - PickingOffset
+		m_copyRegion.imageOffset.x = std::clamp( position.x() - rendpick::PickingOffset
 			, 0
 			, int32_t( m_colourImage.data->info.extent.width - PickingWidth ) );
-		m_copyRegion.imageOffset.y = std::clamp( position.y() - PickingOffset
+		m_copyRegion.imageOffset.y = std::clamp( position.y() - rendpick::PickingOffset
 			, 0
 			, int32_t( m_colourImage.data->info.extent.height - PickingWidth ) );
 
@@ -342,7 +342,7 @@ namespace castor3d
 
 #endif
 
-		auto & result = *( m_buffer.begin() + BufferOffset );
+		auto & result = *( m_buffer.begin() + rendpick::BufferOffset );
 		log::trace << cuT( "Picked" )
 			<< cuT( ": " ) << std::dec << result->x
 			<< cuT( ", " ) << std::dec << result->y
@@ -366,7 +366,7 @@ namespace castor3d
 			switch ( result )
 			{
 			case PickNodeType::eSubmesh:
-				pickSubmesh( scene.getGeometryCache()
+				rendpick::pickSubmesh( scene.getGeometryCache()
 					, nodeId
 					, primitiveId
 					, m_geometry
@@ -375,7 +375,7 @@ namespace castor3d
 				break;
 
 			case PickNodeType::eBillboard:
-				pickBillboard( scene.getBillboardListCache()
+				rendpick::pickBillboard( scene.getBillboardListCache()
 					, nodeId
 					, primitiveId
 					, m_billboard

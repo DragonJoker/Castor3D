@@ -11,9 +11,6 @@
 
 #include <wx/propgrid/advprops.h>
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
 	namespace
@@ -53,7 +50,7 @@ namespace GuiCommon
 		}
 	}
 
-	LightTreeItemProperty::LightTreeItemProperty( bool editable, Light & light )
+	LightTreeItemProperty::LightTreeItemProperty( bool editable, castor3d::Light & light )
 		: TreeItemProperty( light.getScene()->getEngine(), editable )
 		, m_light( light )
 	{
@@ -74,17 +71,17 @@ namespace GuiCommon
 			{
 				m_light.setColour( variantCast< castor::Point3f >( value ) );
 			} );
-		addPropertyT( grid, PROPERTY_LIGHT_INTENSITY, m_light.getIntensity(), &m_light, &Light::setIntensity );
+		addPropertyT( grid, PROPERTY_LIGHT_INTENSITY, m_light.getIntensity(), &m_light, &castor3d::Light::setIntensity );
 
 		switch ( m_light.getLightType() )
 		{
-		case LightType::eDirectional:
+		case castor3d::LightType::eDirectional:
 			doCreateDirectionalLightProperties( grid, *m_light.getDirectionalLight() );
 			break;
-		case LightType::ePoint:
+		case castor3d::LightType::ePoint:
 			doCreatePointLightProperties( grid, *m_light.getPointLight() );
 			break;
-		case LightType::eSpot:
+		case castor3d::LightType::eSpot:
 			doCreateSpotLightProperties( grid, *m_light.getSpotLight() );
 			break;
 		default:
@@ -95,20 +92,20 @@ namespace GuiCommon
 		doCreateShadowProperties( grid );
 	}
 
-	void LightTreeItemProperty::doCreateDirectionalLightProperties( wxPropertyGrid * grid, DirectionalLight & light )
+	void LightTreeItemProperty::doCreateDirectionalLightProperties( wxPropertyGrid * grid, castor3d::DirectionalLight & light )
 	{
 	}
 
-	void LightTreeItemProperty::doCreatePointLightProperties( wxPropertyGrid * grid, PointLight & light )
+	void LightTreeItemProperty::doCreatePointLightProperties( wxPropertyGrid * grid, castor3d::PointLight & light )
 	{
 		static wxString PROPERTY_CATEGORY_POINT_LIGHT = _( "Point Light" );
 		static wxString PROPERTY_LIGHT_ATTENUATION = _( "Attenuation" );
 
 		addProperty( grid, PROPERTY_CATEGORY_POINT_LIGHT );
-		addPropertyT( grid, PROPERTY_LIGHT_ATTENUATION, light.getAttenuation(), &light, &PointLight::setAttenuation );
+		addPropertyT( grid, PROPERTY_LIGHT_ATTENUATION, light.getAttenuation(), &light, &castor3d::PointLight::setAttenuation );
 	}
 
-	void LightTreeItemProperty::doCreateSpotLightProperties( wxPropertyGrid * grid, SpotLight & light )
+	void LightTreeItemProperty::doCreateSpotLightProperties( wxPropertyGrid * grid, castor3d::SpotLight & light )
 	{
 		static wxString PROPERTY_CATEGORY_SPOT_LIGHT = _( "Spot Light" );
 		static wxString PROPERTY_LIGHT_ATTENUATION = _( "Attenuation" );
@@ -116,9 +113,9 @@ namespace GuiCommon
 		static wxString PROPERTY_LIGHT_EXPONENT = _( "Exponent" );
 
 		addProperty( grid, PROPERTY_CATEGORY_SPOT_LIGHT );
-		addPropertyT( grid, PROPERTY_LIGHT_ATTENUATION, light.getAttenuation(), &light, &SpotLight::setAttenuation );
-		addPropertyT( grid, PROPERTY_LIGHT_CUT_OFF, light.getCutOff(), &light, &SpotLight::setCutOff );
-		addPropertyT( grid, PROPERTY_LIGHT_EXPONENT, light.getExponent(), &light, &SpotLight::setExponent );
+		addPropertyT( grid, PROPERTY_LIGHT_ATTENUATION, light.getAttenuation(), &light, &castor3d::SpotLight::setAttenuation );
+		addPropertyT( grid, PROPERTY_LIGHT_CUT_OFF, light.getCutOff(), &light, &castor3d::SpotLight::setCutOff );
+		addPropertyT( grid, PROPERTY_LIGHT_EXPONENT, light.getExponent(), &light, &castor3d::SpotLight::setExponent );
 	}
 
 	void LightTreeItemProperty::doCreateShadowProperties( wxPropertyGrid * grid )
@@ -163,31 +160,31 @@ namespace GuiCommon
 		giChoices.Add( PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LPV );
 		giChoices.Add( PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LPVG );
 
-		if ( m_light.getLightType() == LightType::eDirectional )
+		if ( m_light.getLightType() == castor3d::LightType::eDirectional )
 		{
 			giChoices.Add( PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LAYERED_LPV );
 			giChoices.Add( PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LAYERED_LPVG );
 		}
 
 		auto shadows = addProperty( grid, PROPERTY_CATEGORY_SHADOW );
-		addPropertyE( shadows, PROPERTY_SHADOW_TYPE, shadowChoices, m_light.isShadowProducer() ? m_light.getShadowType() : ShadowType::eNone
-			, [this]( ShadowType value ){ m_light.setShadowProducer( value != ShadowType::eNone );m_light.setShadowType( value ); } );
+		addPropertyE( shadows, PROPERTY_SHADOW_TYPE, shadowChoices, m_light.isShadowProducer() ? m_light.getShadowType() : castor3d::ShadowType::eNone
+			, [this]( castor3d::ShadowType value ){ m_light.setShadowProducer( value != castor3d::ShadowType::eNone );m_light.setShadowType( value ); } );
 
-		if ( m_light.getLightType() == LightType::eDirectional )
+		if ( m_light.getLightType() == castor3d::LightType::eDirectional )
 		{
-			addPropertyT( shadows, PROPERTY_SHADOW_VOLUMETRIC_STEPS, m_light.getCategory()->getVolumetricSteps(), m_light.getCategory().get(), &LightCategory::setVolumetricSteps );
-			addPropertyT( shadows, PROPERTY_SHADOW_VOLUMETRIC_SCATTERING_FACTOR, m_light.getCategory()->getVolumetricScatteringFactor(), m_light.getCategory().get(), &LightCategory::setVolumetricScatteringFactor );
+			addPropertyT( shadows, PROPERTY_SHADOW_VOLUMETRIC_STEPS, m_light.getCategory()->getVolumetricSteps(), m_light.getCategory().get(), &castor3d::LightCategory::setVolumetricSteps );
+			addPropertyT( shadows, PROPERTY_SHADOW_VOLUMETRIC_SCATTERING_FACTOR, m_light.getCategory()->getVolumetricScatteringFactor(), m_light.getCategory().get(), &castor3d::LightCategory::setVolumetricScatteringFactor );
 		}
 
 		auto raw = addProperty( shadows, PROPERTY_CATEGORY_SHADOW_RAW );
-		addPropertyT( raw, PROPERTY_SHADOW_RAW_MIN_OFFSET, m_light.getCategory()->getShadowRawOffsets()[0], m_light.getCategory().get(), &LightCategory::setRawMinOffset );
-		addPropertyT( raw, PROPERTY_SHADOW_RAW_MAX_SLOPE_OFFSET, m_light.getCategory()->getShadowRawOffsets()[1], m_light.getCategory().get(), &LightCategory::setRawMaxSlopeOffset );
+		addPropertyT( raw, PROPERTY_SHADOW_RAW_MIN_OFFSET, m_light.getCategory()->getShadowRawOffsets()[0], m_light.getCategory().get(), &castor3d::LightCategory::setRawMinOffset );
+		addPropertyT( raw, PROPERTY_SHADOW_RAW_MAX_SLOPE_OFFSET, m_light.getCategory()->getShadowRawOffsets()[1], m_light.getCategory().get(), &castor3d::LightCategory::setRawMaxSlopeOffset );
 		auto pcf = addProperty( shadows, PROPERTY_CATEGORY_SHADOW_PCF );
-		addPropertyT( pcf, PROPERTY_SHADOW_PCF_MIN_OFFSET, m_light.getCategory()->getShadowPcfOffsets()[0], m_light.getCategory().get(), &LightCategory::setPcfMinOffset );
-		addPropertyT( pcf, PROPERTY_SHADOW_PCF_MAX_SLOPE_OFFSET, m_light.getCategory()->getShadowPcfOffsets()[1], m_light.getCategory().get(), &LightCategory::setPcfMaxSlopeOffset );
+		addPropertyT( pcf, PROPERTY_SHADOW_PCF_MIN_OFFSET, m_light.getCategory()->getShadowPcfOffsets()[0], m_light.getCategory().get(), &castor3d::LightCategory::setPcfMinOffset );
+		addPropertyT( pcf, PROPERTY_SHADOW_PCF_MAX_SLOPE_OFFSET, m_light.getCategory()->getShadowPcfOffsets()[1], m_light.getCategory().get(), &castor3d::LightCategory::setPcfMaxSlopeOffset );
 		auto vsm = addProperty( shadows, PROPERTY_CATEGORY_SHADOW_VSM );
-		addPropertyT( vsm, PROPERTY_SHADOW_MAX_VARIANCE, m_light.getCategory()->getShadowVariance()[0], m_light.getCategory().get(), &LightCategory::setVsmMaxVariance );
-		addPropertyT( vsm, PROPERTY_SHADOW_VARIANCE_BIAS, m_light.getCategory()->getShadowVariance()[1], m_light.getCategory().get(), &LightCategory::setVsmVarianceBias );
+		addPropertyT( vsm, PROPERTY_SHADOW_MAX_VARIANCE, m_light.getCategory()->getShadowVariance()[0], m_light.getCategory().get(), &castor3d::LightCategory::setVsmMaxVariance );
+		addPropertyT( vsm, PROPERTY_SHADOW_VARIANCE_BIAS, m_light.getCategory()->getShadowVariance()[1], m_light.getCategory().get(), &castor3d::LightCategory::setVsmVarianceBias );
 
 		auto globalIllum = addProperty( shadows, PROPERTY_CATEGORY_GLOBAL_ILLUM );
 		addPropertyE( globalIllum, PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE, giChoices, convert( m_light.getGlobalIlluminationType() )
@@ -198,7 +195,7 @@ namespace GuiCommon
 				doUpdateGIProperties( type );
 			} );
 
-		if ( m_light.getLightType() != LightType::ePoint )
+		if ( m_light.getLightType() != castor3d::LightType::ePoint )
 		{
 			auto & lpvConfig = m_light.getLpvConfig();
 			m_lpvProperties = addProperty( globalIllum, PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LPV );

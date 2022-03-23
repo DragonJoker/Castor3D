@@ -41,8 +41,6 @@
 #include <ashespp/Pipeline/PipelineColorBlendStateCreateInfo.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
 	castor::String const TransparentPass::Type = "c3d.transparent.accumulation";

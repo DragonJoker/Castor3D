@@ -15,9 +15,9 @@
 
 namespace castor
 {
-	namespace
+	namespace file
 	{
-		void printErrnoName( String const & type
+		static void printErrnoName( String const & type
 			, Path const & path )
 		{
 			switch ( errno )
@@ -72,7 +72,7 @@ namespace castor
 			}
 		}
 
-		bool isLink( Path const & filePath )
+		static bool isLink( Path const & filePath )
 		{
 			auto cfilePath = string::stringCast< char >( filePath );
 			struct stat buf;
@@ -96,7 +96,7 @@ namespace castor
 
 		if ( ( dir = opendir( string::stringCast< char >( folderPath ).c_str() ) ) == nullptr )
 		{
-			printErrnoName( cuT( "folder" ), folderPath );
+			file::printErrnoName( cuT( "folder" ), folderPath );
 			result = false;
 		}
 		else
@@ -114,7 +114,7 @@ namespace castor
 					{
 						result = directoryFunction( folderPath / name );
 					}
-					else if ( !isLink( folderPath / name ) )
+					else if ( !file::isLink( folderPath / name ) )
 					{
 						fileFunction( folderPath, name );
 					}

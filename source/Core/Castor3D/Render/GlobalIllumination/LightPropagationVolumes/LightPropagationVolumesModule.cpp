@@ -13,10 +13,10 @@ namespace castor3d
 	castor::String getTextureName( LpvTexture texture
 		, std::string const & infix )
 	{
-		return cuT( "c3d_mapLpv" ) + infix + getName( texture );
+		return cuT( "c3d_mapLpv" ) + infix + getTexName( texture );
 	}
 
-	castor::String getName( LpvTexture texture )
+	castor::String getTexName( LpvTexture texture )
 	{
 		static std::array< castor::String, size_t( LpvTexture::eCount ) > Values
 		{

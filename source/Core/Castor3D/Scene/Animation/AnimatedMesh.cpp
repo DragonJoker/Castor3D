@@ -6,11 +6,9 @@
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
-	AnimatedMesh::AnimatedMesh( String const & name
+	AnimatedMesh::AnimatedMesh( castor::String const & name
 		, Mesh & mesh
 		, Geometry & geometry )
 		: AnimatedObject{ AnimationType::eMesh, name }
@@ -19,7 +17,7 @@ namespace castor3d
 	{
 	}
 
-	void AnimatedMesh::update( Milliseconds const & elpased )
+	void AnimatedMesh::update( castor::Milliseconds const & elpased )
 	{
 		if ( m_playingAnimation )
 		{
@@ -27,7 +25,7 @@ namespace castor3d
 		}
 	}
 
-	void AnimatedMesh::doAddAnimation( String const & name )
+	void AnimatedMesh::doAddAnimation( castor::String const & name )
 	{
 		auto it = m_animations.find( name );
 

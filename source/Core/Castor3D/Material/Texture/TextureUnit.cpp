@@ -15,9 +15,9 @@ CU_ImplementCUSmartPtr( castor3d, TextureUnit )
 
 namespace castor3d
 {
-	namespace
+	namespace texunit
 	{
-		TextureUnit createTextureUnit( Engine & engine
+		static TextureUnit createTextureUnit( Engine & engine
 			, RenderDevice const & device
 			, castor::String const & name
 			, VkFormat format
@@ -145,7 +145,7 @@ namespace castor3d
 		, VkImageCreateFlags createFlags
 		, VkImageUsageFlags usageFlags )
 	{
-		return createTextureUnit( engine
+		return texunit::createTextureUnit( engine
 			, device
 			, name
 			, format
@@ -165,7 +165,7 @@ namespace castor3d
 		, VkImageCreateFlags createFlags
 		, VkImageUsageFlags usageFlags )
 	{
-		return createTextureUnit( engine
+		return texunit::createTextureUnit( engine
 			, device
 			, name
 			, format
@@ -184,7 +184,7 @@ namespace castor3d
 		, VkImageCreateFlags createFlags
 		, VkImageUsageFlags usageFlags )
 	{
-		return createTextureUnit( engine
+		return texunit::createTextureUnit( engine
 			, device
 			, name
 			, format
@@ -204,7 +204,7 @@ namespace castor3d
 		, VkImageCreateFlags createFlags
 		, VkImageUsageFlags usageFlags )
 	{
-		return createTextureUnit( engine
+		return texunit::createTextureUnit( engine
 			, device
 			, name
 			, format
@@ -223,7 +223,7 @@ namespace castor3d
 		, VkImageCreateFlags createFlags
 		, VkImageUsageFlags usageFlags )
 	{
-		return createTextureUnit( engine
+		return texunit::createTextureUnit( engine
 			, device
 			, name
 			, format

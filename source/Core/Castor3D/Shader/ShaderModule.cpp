@@ -8,8 +8,6 @@
 #include <ShaderWriter/CompositeTypes/Struct.hpp>
 #include <ShaderWriter/CompositeTypes/ArraySsbo.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*************************************************************************

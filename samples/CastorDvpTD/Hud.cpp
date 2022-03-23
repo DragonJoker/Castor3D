@@ -8,16 +8,14 @@
 #include <Castor3D/Overlay/TextOverlay.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 
-using namespace castor;
-using namespace castor3d;
-
 namespace castortd
 {
 	namespace
 	{
-		TextOverlaySPtr getTextOverlay( OverlayCache & cache, String const & p_name )
+		castor3d::TextOverlaySPtr getTextOverlay( castor3d::OverlayCache & cache
+			, castor::String const & p_name )
 		{
-			TextOverlaySPtr result;
+			castor3d::TextOverlaySPtr result;
 			auto overlay = cache.find( p_name ).lock();
 
 			if ( overlay )

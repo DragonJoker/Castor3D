@@ -4,10 +4,10 @@
 #include "Castor3D/Text/TextLpvConfig.hpp"
 #include "Castor3D/Text/TextRsmConfig.hpp"
 
-using namespace castor3d;
-
 namespace castor
 {
+	using namespace castor3d;
+
 	TextWriter< ShadowConfig >::TextWriter( String const & tabs )
 		: TextWriterT< ShadowConfig >{ tabs }
 	{

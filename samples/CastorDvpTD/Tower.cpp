@@ -5,9 +5,6 @@
 
 #include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>
 
-using namespace castor;
-using namespace castor3d;
-
 namespace castortd
 {
 	//*********************************************************************************************
@@ -38,7 +35,7 @@ namespace castortd
 	//*********************************************************************************************
 
 	Tower::Tower( CategoryPtr && p_category
-		, SceneNode & p_node
+		, castor3d::SceneNode & p_node
 		, castor3d::AnimatedObjectGroup & p_anim
 		, Cell const & p_cell )
 		: m_node{ p_node }
@@ -110,7 +107,7 @@ namespace castortd
 			m_state = State::Idle;
 		}
 
-		return m_state != State::Idle && m_remaining == Milliseconds{};
+		return m_state != State::Idle && m_remaining == castor::Milliseconds{};
 	}
 
 	void Tower::doStartAttack()
@@ -123,7 +120,7 @@ namespace castortd
 
 	bool Tower::doAnimEnded( EnemyArray & p_enemies )
 	{
-		bool result = m_animRemain <= Milliseconds{};
+		bool result = m_animRemain <= castor::Milliseconds{};
 
 		if ( !result
 			&& ( !m_target->IsAlive()
@@ -143,9 +140,9 @@ namespace castortd
 		return result;
 	}
 
-	void Tower::doUpdateTimes( Milliseconds const & p_elapsed )
+	void Tower::doUpdateTimes( castor::Milliseconds const & p_elapsed )
 	{
-		static Milliseconds zeroTime;
+		static castor::Milliseconds zeroTime;
 		m_remaining -= p_elapsed;
 
 		if ( m_remaining < zeroTime )
@@ -175,7 +172,7 @@ namespace castortd
 
 	bool Tower::doIsInRange( Enemy const & p_enemy )const
 	{
-		return point::length( m_node.getPosition() - p_enemy.getNode().getPosition() ) <= m_category->getRange();
+		return castor::point::length( m_node.getPosition() - p_enemy.getNode().getPosition() ) <= m_category->getRange();
 	}
 
 	void Tower::doTurnToTarget()
@@ -183,9 +180,9 @@ namespace castortd
 		auto targetPosition = m_target->getNode().getDerivedPosition();
 		targetPosition[1] = m_node.getPosition()[1];
 		auto direction = targetPosition - m_node.getDerivedPosition();
-		direction = point::getNormalised( direction );
+		direction = castor::point::getNormalised( direction );
 		castor::Point3f up{ 0, 1, 0 };
-		auto transform = matrix::lookAt( m_node.getDerivedPosition(), m_node.getDerivedPosition() - direction, up );
-		m_node.setOrientation( Quaternion::fromMatrix( transform ) );
+		auto transform = castor::matrix::lookAt( m_node.getDerivedPosition(), m_node.getDerivedPosition() - direction, up );
+		m_node.setOrientation( castor::Quaternion::fromMatrix( transform ) );
 	}
 }

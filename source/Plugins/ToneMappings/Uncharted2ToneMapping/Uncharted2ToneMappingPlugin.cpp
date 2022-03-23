@@ -8,8 +8,6 @@
 
 #include <CastorUtils/Log/Logger.hpp>
 
-using namespace Uncharted2;
-
 #ifndef CU_PlatformWindows
 #	define C3D_Uncharted2ToneMapping_API
 #else
@@ -40,18 +38,19 @@ extern "C"
 
 	C3D_Uncharted2ToneMapping_API void getName( char const ** p_name )
 	{
-		*p_name = ToneMapping::Name.c_str();
+		*p_name = Uncharted2::ToneMapping::Name.c_str();
 	}
 
 	C3D_Uncharted2ToneMapping_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
 	{
-		engine->getToneMappingFactory().registerType( ToneMapping::Type
-			, &ToneMapping::create );
-		engine->getRenderTargetCache().registerToneMappingName( ToneMapping::Type, ToneMapping::Name );
+		engine->getToneMappingFactory().registerType( Uncharted2::ToneMapping::Type
+			, &Uncharted2::ToneMapping::create );
+		engine->getRenderTargetCache().registerToneMappingName( Uncharted2::ToneMapping::Type
+			, Uncharted2::ToneMapping::Name );
 	}
 
 	C3D_Uncharted2ToneMapping_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->getToneMappingFactory().unregisterType( ToneMapping::Type );
+		engine->getToneMappingFactory().unregisterType( Uncharted2::ToneMapping::Type );
 	}
 }

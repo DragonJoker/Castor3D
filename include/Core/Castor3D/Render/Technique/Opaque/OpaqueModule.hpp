@@ -37,7 +37,7 @@ namespace castor3d
 		CU_ScopedEnumBounds( eData0 ),
 	};
 	C3D_API castor::String getTextureName( DsTexture texture );
-	C3D_API castor::String getName( DsTexture texture );
+	C3D_API castor::String getTexName( DsTexture texture );
 	C3D_API VkFormat getFormat( RenderDevice const & device, DsTexture texture );
 	C3D_API VkClearValue getClearValue( DsTexture texture );
 	C3D_API VkImageUsageFlags getUsageFlags( DsTexture texture );

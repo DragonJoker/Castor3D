@@ -43,8 +43,6 @@
 
 CU_ImplementCUSmartPtr( castor3d, LightInjectionPass )
 
-using namespace castor;
-
 namespace castor3d
 {
 	namespace lpvlgt
@@ -414,11 +412,11 @@ namespace castor3d
 					auto lobeDir = writer.declLocale( "lobeDir"
 						, evalCosineLobeToDir( in.rsmNormal ) );
 					auto SHCoeffsR = writer.declLocale( "SHCoeffsR"
-						, lobeDir / Float{ Pi< float > } * in.rsmFlux.r() );
+						, lobeDir / Float{ castor::Pi< float > } * in.rsmFlux.r() );
 					auto SHCoeffsG = writer.declLocale( "SHCoeffsG"
-						, lobeDir / Float{ Pi< float > } * in.rsmFlux.g() );
+						, lobeDir / Float{ castor::Pi< float > } * in.rsmFlux.g() );
 					auto SHCoeffsB = writer.declLocale( "SHCoeffsB"
-						, lobeDir / Float{ Pi< float > } * in.rsmFlux.b() );
+						, lobeDir / Float{ castor::Pi< float > } * in.rsmFlux.b() );
 
 					outLpvGridR = SHCoeffsR;
 					outLpvGridG = SHCoeffsG;
@@ -568,7 +566,7 @@ namespace castor3d
 		, LightType lightType
 		, uint32_t gridSize
 		, uint32_t rsmSize )
-		: Named{ pass.getName() }
+		: castor::Named{ pass.getName() }
 		, crg::RenderPass{ pass
 			, context
 			, graph
@@ -600,7 +598,7 @@ namespace castor3d
 		, CubeMapFace face
 		, uint32_t gridSize
 		, uint32_t rsmSize )
-		: Named{ pass.getName() }
+		: castor::Named{ pass.getName() }
 		, crg::RenderPass{ pass
 			, context
 			, graph

@@ -20,7 +20,7 @@
 
 namespace draw_edges
 {
-	namespace
+	namespace px
 	{
 		enum Idx : uint32_t
 		{
@@ -34,7 +34,7 @@ namespace draw_edges
 			eDrawEdges,
 		};
 
-		std::unique_ptr< ast::Shader > getVertexProgram()
+		static std::unique_ptr< ast::Shader > getVertexProgram()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -55,7 +55,7 @@ namespace draw_edges
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > getFragmentProgram( VkExtent3D const & extent )
+		static std::unique_ptr< ast::Shader > getFragmentProgram( VkExtent3D const & extent )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -178,8 +178,8 @@ namespace draw_edges
 			, renderSystem
 			, parameters
 			, 1u }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DECombine", getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DECombine", getFragmentProgram( castor3d::getSafeBandedExtent3D( m_renderTarget.getSize() ) ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DECombine", px::getVertexProgram() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DECombine", px::getFragmentProgram( castor3d::getSafeBandedExtent3D( m_renderTarget.getSize() ) ) }
 		, m_stages{ makeShaderState( renderSystem.getRenderDevice(), m_vertexShader )
 			, makeShaderState( renderSystem.getRenderDevice(), m_pixelShader ) }
 		, m_ubo{ renderSystem.getRenderDevice() }
@@ -306,17 +306,17 @@ namespace draw_edges
 		auto & modelBuffer = m_renderTarget.getScene()->getModelBuffer().getBuffer();
 		pass.addDependency( m_depthNormal->getPass() );
 		pass.addDependency( m_objectID->getPass() );
-		passBuffer.createPassBinding( pass,eMaterials );
+		passBuffer.createPassBinding( pass, px::eMaterials );
 		pass.addInputStorageBuffer( { modelBuffer, "Models" }
-			, uint32_t( eModels )
+			, uint32_t( px::eModels )
 			, 0u
 			, uint32_t( modelBuffer.getSize() ) );
-		pass.addSampledView( data0, eData0 );
-		pass.addSampledView( data1, eData1 );
-		pass.addSampledView( *m_target, eSource );
-		pass.addSampledView( m_depthNormal->getResult(), eEdgeDN );
-		pass.addSampledView( m_objectID->getResult(), eEdgeO );
-		m_ubo.createPassBinding( pass, eDrawEdges );
+		pass.addSampledView( data0, px::eData0 );
+		pass.addSampledView( data1, px::eData1 );
+		pass.addSampledView( *m_target, px::eSource );
+		pass.addSampledView( m_depthNormal->getResult(), px::eEdgeDN );
+		pass.addSampledView( m_objectID->getResult(), px::eEdgeO );
+		m_ubo.createPassBinding( pass, px::eDrawEdges );
 		pass.addOutputColourView( m_resultView );
 
 		m_pass = &pass;

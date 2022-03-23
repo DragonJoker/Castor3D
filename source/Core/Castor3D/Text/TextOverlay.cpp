@@ -4,10 +4,10 @@
 #include "Castor3D/Text/TextPanelOverlay.hpp"
 #include "Castor3D/Text/TextTextOverlay.hpp"
 
-using namespace castor3d;
-
 namespace castor
 {
+	using namespace castor3d;
+
 	TextWriter< Overlay >::TextWriter( String const & tabs )
 		: TextWriterT< Overlay >{ tabs }
 	{

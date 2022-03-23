@@ -22,11 +22,9 @@
 
 #include <numeric>
 
-using namespace castor;
-
 namespace smaa
 {
-	namespace
+	namespace coled
 	{
 		enum Idx : uint32_t
 		{
@@ -34,7 +32,7 @@ namespace smaa
 			PredicationTexIdx,
 		};
 
-		std::unique_ptr< ast::Shader > doGetEdgeDetectionFPPredication()
+		static std::unique_ptr< ast::Shader > doGetEdgeDetectionFPPredication()
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -172,7 +170,7 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > doGetEdgeDetectionFPNoPredication()
+		static std::unique_ptr< ast::Shader > doGetEdgeDetectionFPNoPredication()
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -275,7 +273,7 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		crg::ImageViewData doCreatePredicationView( crg::ImageViewId const & pred )
+		static crg::ImageViewData doCreatePredicationView( crg::ImageViewId const & pred )
 		{
 			return crg::ImageViewData{ "SMCEDPred"
 				, pred.data->image
@@ -304,12 +302,12 @@ namespace smaa
 			, ubo
 			, config
 			, ( predication
-				? doGetEdgeDetectionFPPredication()
-				: doGetEdgeDetectionFPNoPredication() )
+				? coled::doGetEdgeDetectionFPPredication()
+				: coled::doGetEdgeDetectionFPNoPredication() )
 			, enabled }
 		, m_colourView{ colourView }
 		, m_predicationView{ ( predication
-			? m_graph.createView( doCreatePredicationView( *predication ) )
+			? m_graph.createView( coled::doCreatePredicationView( *predication ) )
 			: crg::ImageViewId{} ) }
 	{
 		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
@@ -319,14 +317,14 @@ namespace smaa
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
 		m_pass.addSampledView( m_colourView
-			, ColorTexIdx
+			, coled::ColorTexIdx
 			, {}
 			, linearSampler );
 
 		if ( predication )
 		{
 			m_pass.addSampledView( m_predicationView
-				, PredicationTexIdx
+				, coled::PredicationTexIdx
 				, {}
 				, linearSampler );
 		}

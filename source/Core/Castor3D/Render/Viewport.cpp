@@ -5,13 +5,11 @@
 
 CU_ImplementCUSmartPtr( castor3d, Viewport )
 
-using namespace castor;
-
 namespace castor3d
 {
-	namespace
+	namespace viewport
 	{
-		castor::Matrix4x4f getSafeBandedOrtho( RenderSystem const & renderSystem
+		static castor::Matrix4x4f getSafeBandedOrtho( RenderSystem const & renderSystem
 			, castor::Size const & size
 			, float left
 			, float right
@@ -32,7 +30,7 @@ namespace castor3d
 				, farZ );
 		}
 
-		castor::Matrix4x4f getSafeBandedFrustum( RenderSystem const & renderSystem
+		static castor::Matrix4x4f getSafeBandedFrustum( RenderSystem const & renderSystem
 			, castor::Size const & size
 			, float left
 			, float right
@@ -53,9 +51,9 @@ namespace castor3d
 				, farZ );
 		}
 
-		castor::Matrix4x4f getSafeBandedPerspective( RenderSystem const & renderSystem
+		static castor::Matrix4x4f getSafeBandedPerspective( RenderSystem const & renderSystem
 			, castor::Size const & size
-			, Angle fovY
+			, castor::Angle fovY
 			, float aspect
 			, float nearZ
 			, float farZ )
@@ -73,7 +71,7 @@ namespace castor3d
 		}
 	}
 
-	const std::array< String, size_t( ViewportType::eCount ) > Viewport::TypeName
+	const std::array< castor::String, size_t( ViewportType::eCount ) > Viewport::TypeName
 	{
 		cuT( "undefined" ),
 		cuT( "ortho" ),
@@ -156,7 +154,7 @@ namespace castor3d
 	}
 
 	Viewport::Viewport( Engine const & engine )
-		: Viewport{ engine, ViewportType::eOrtho, Angle{}, 1, 0, 1, 0, 1, 0, 1 }
+		: Viewport{ engine, ViewportType::eOrtho, castor::Angle{}, 1, 0, 1, 0, 1, 0, 1 }
 	{
 	}
 
@@ -175,7 +173,7 @@ namespace castor3d
 					, m_top
 					, m_near
 					, m_far );
-				m_safeBandedProjection = getSafeBandedOrtho( *m_engine.getRenderSystem()
+				m_safeBandedProjection = viewport::getSafeBandedOrtho( *m_engine.getRenderSystem()
 					, m_size
 					, m_left
 					, m_right
@@ -190,7 +188,7 @@ namespace castor3d
 					, m_ratio
 					, m_near
 					, m_far );
-				m_safeBandedProjection = getSafeBandedPerspective( *m_engine.getRenderSystem()
+				m_safeBandedProjection = viewport::getSafeBandedPerspective( *m_engine.getRenderSystem()
 					, m_size
 					, m_fovY
 					, m_ratio
@@ -205,7 +203,7 @@ namespace castor3d
 					, m_top
 					, m_near
 					, m_far );
-				m_safeBandedProjection = getSafeBandedFrustum( *m_engine.getRenderSystem()
+				m_safeBandedProjection = viewport::getSafeBandedFrustum( *m_engine.getRenderSystem()
 					, m_size
 					, m_left
 					, m_right
@@ -226,7 +224,7 @@ namespace castor3d
 		return result;
 	}
 
-	void Viewport::setPerspective( Angle const & fovY
+	void Viewport::setPerspective( castor::Angle const & fovY
 		, float aspect
 		, float nearZ
 		, float farZ )
@@ -251,7 +249,7 @@ namespace castor3d
 		, float farZ )
 	{
 		m_type = ViewportType::eFrustum;
-		m_fovY = Angle{};
+		m_fovY = castor::Angle{};
 		m_ratio = 0;
 		m_left = left;
 		m_right = right;
@@ -270,7 +268,7 @@ namespace castor3d
 		, float farZ )
 	{
 		m_type = ViewportType::eOrtho;
-		m_fovY = Angle{};
+		m_fovY = castor::Angle{};
 		m_ratio = 0;
 		m_left = left;
 		m_right = right;

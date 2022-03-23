@@ -20,9 +20,9 @@ CU_ImplementCUSmartPtr( castor3d, TextOverlay )
 
 namespace castor3d
 {
-	namespace
+	namespace ovrltxt
 	{
-		castor::Font & getFont( TextOverlay const & overlay )
+		static castor::Font & getFont( TextOverlay const & overlay )
 		{
 			FontTextureSPtr fontTexture = overlay.getFontTexture();
 
@@ -293,7 +293,7 @@ namespace castor3d
 
 	TextOverlay::DisplayableLineArray TextOverlay::doPrepareText( castor::Size const & p_renderSize, castor::Point2d const & p_size )
 	{
-		auto & font = getFont( *this );
+		auto & font = ovrltxt::getFont( *this );
 		castor::StringArray lines = castor::string::split( m_previousCaption
 			, cuT( "\n" )
 			, uint32_t( std::count( m_previousCaption.begin(), m_previousCaption.end(), cuT( '\n' ) ) + 1 )
@@ -342,7 +342,7 @@ namespace castor3d
 
 	void TextOverlay::doPrepareWord( castor::Size const & p_renderSize, std::u32string const & p_word, double p_wordWidth, castor::Point2d const & p_size, double & p_left, DisplayableLine & p_line, DisplayableLineArray & p_lines )
 	{
-		auto & font = getFont( *this );
+		auto & font = ovrltxt::getFont( *this );
 
 		if ( p_left + p_wordWidth > p_size[0] && m_wrappingMode == TextWrappingMode::eBreakWords )
 		{
@@ -471,7 +471,7 @@ namespace castor3d
 			}
 			else if ( m_lineSpacingMode == TextLineSpacingMode::eMaxFontHeight )
 			{
-				height = double( getFont( *this ).getMaxHeight() );
+				height = double( ovrltxt::getFont( *this ).getMaxHeight() );
 			}
 
 			double offset{ 0.0 };

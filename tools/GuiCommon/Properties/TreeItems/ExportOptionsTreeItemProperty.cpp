@@ -4,13 +4,10 @@
 
 #include <wx/propgrid/advprops.h>
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
 	ExportOptionsTreeItemProperty::ExportOptionsTreeItemProperty( bool editable
-		, exporter::ExportOptions & options )
+		, castor3d::exporter::ExportOptions & options )
 		: TreeItemProperty{ nullptr, editable }
 		, m_options{ options }
 	{

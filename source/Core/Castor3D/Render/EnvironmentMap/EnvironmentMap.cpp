@@ -28,18 +28,16 @@
 
 #include <RenderGraph/RunnableGraph.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
-	namespace
+	namespace envmap
 	{
-		static Size const MapSize{ EnvironmentMap::Size, EnvironmentMap::Size };
+		static castor::Size const MapSize{ EnvironmentMap::Size, EnvironmentMap::Size };
 
-		Texture createTexture( RenderDevice const & device
+		static Texture createTexture( RenderDevice const & device
 			, crg::ResourceHandler & handler
 			, std::string const & name
-			, Size const & size )
+			, castor::Size const & size )
 		{
 			return Texture{ device
 				, handler
@@ -57,10 +55,10 @@ namespace castor3d
 				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK };
 		}
 
-		Texture createDepthBuffer( RenderDevice const & device
+		static Texture createDepthBuffer( RenderDevice const & device
 			, crg::ResourceHandler & handler
 			, std::string const & name
-			, Size const & size )
+			, castor::Size const & size )
 		{
 			return Texture{ device
 				, handler
@@ -74,21 +72,21 @@ namespace castor3d
 				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK };
 		}
 
-		EnvironmentMap::EnvironmentMapPasses createPass( crg::FrameGraph & graph
+		static EnvironmentMap::EnvironmentMapPasses createPass( crg::FrameGraph & graph
 			, RenderDevice const & device
 			, EnvironmentMap & map
 			, uint32_t index
 			, SceneBackground & background )
 		{
 			static castor::Point3f const position;
-			static std::array< Quaternion, size_t( CubeMapFace::eCount ) > orients
+			static std::array< castor::Quaternion, size_t( CubeMapFace::eCount ) > orients
 			{
-				Quaternion::fromMatrix( matrix::lookAt( position, castor::Point3f{ -1.0f, +0.0f, +0.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Positive X
-				Quaternion::fromMatrix( matrix::lookAt( position, castor::Point3f{ +1.0f, +0.0f, +0.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Negative X
-				Quaternion::fromMatrix( matrix::lookAt( position, castor::Point3f{ +0.0f, -1.0f, +0.0f }, castor::Point3f{ +0.0f, +0.0f, +1.0f } ) ),// Positive Y
-				Quaternion::fromMatrix( matrix::lookAt( position, castor::Point3f{ +0.0f, +1.0f, +0.0f }, castor::Point3f{ +0.0f, +0.0f, -1.0f } ) ),// Negative Y
-				Quaternion::fromMatrix( matrix::lookAt( position, castor::Point3f{ +0.0f, +0.0f, -1.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Positive Z
-				Quaternion::fromMatrix( matrix::lookAt( position, castor::Point3f{ +0.0f, +0.0f, +1.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Negative Z
+				castor::Quaternion::fromMatrix( castor::matrix::lookAt( position, castor::Point3f{ -1.0f, +0.0f, +0.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Positive X
+				castor::Quaternion::fromMatrix( castor::matrix::lookAt( position, castor::Point3f{ +1.0f, +0.0f, +0.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Negative X
+				castor::Quaternion::fromMatrix( castor::matrix::lookAt( position, castor::Point3f{ +0.0f, -1.0f, +0.0f }, castor::Point3f{ +0.0f, +0.0f, +1.0f } ) ),// Positive Y
+				castor::Quaternion::fromMatrix( castor::matrix::lookAt( position, castor::Point3f{ +0.0f, +1.0f, +0.0f }, castor::Point3f{ +0.0f, +0.0f, -1.0f } ) ),// Negative Y
+				castor::Quaternion::fromMatrix( castor::matrix::lookAt( position, castor::Point3f{ +0.0f, +0.0f, -1.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Positive Z
+				castor::Quaternion::fromMatrix( castor::matrix::lookAt( position, castor::Point3f{ +0.0f, +0.0f, +1.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Negative Z
 			};
 
 			auto & scene = background.getScene();
@@ -118,7 +116,7 @@ namespace castor3d
 				, std::make_unique< EnvironmentMapPass >( graph, device, map, nodes[5], index, CubeMapFace::eNegativeZ, background ) };
 		}
 
-		std::vector< ashes::ImageView > createViews( Texture const & envMap
+		static std::vector< ashes::ImageView > createViews( Texture const & envMap
 			, ashes::ImagePtr & image )
 		{
 			std::vector< ashes::ImageView > result;
@@ -140,14 +138,14 @@ namespace castor3d
 			return result;
 		}
 
-		std::multimap< double, SceneNode * > sortNodes( std::set< SceneNode * > nodes
+		static std::multimap< double, SceneNode * > sortNodes( std::set< SceneNode * > nodes
 			, Camera const & camera )
 		{
 			std::multimap< double, SceneNode * > result;
 
 			for ( auto & node : nodes )
 			{
-				result.emplace( point::distanceSquared( camera.getParent()->getDerivedPosition()
+				result.emplace( castor::point::distanceSquared( camera.getParent()->getDerivedPosition()
 					, node->getDerivedPosition() )
 					, node );
 			}
@@ -166,8 +164,8 @@ namespace castor3d
 		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, m_device{ device }
 		, m_scene{ scene }
-		, m_environmentMap{ createTexture( device, handler, "Env" + scene.getName(), MapSize ) }
-		, m_depthBuffer{ createDepthBuffer( device, handler, "Env" + scene.getName(), MapSize ) }
+		, m_environmentMap{ envmap::createTexture( device, handler, "Env" + scene.getName(), envmap::MapSize ) }
+		, m_depthBuffer{ envmap::createDepthBuffer( device, handler, "Env" + scene.getName(), envmap::MapSize ) }
 		, m_extent{ getExtent( m_environmentMap.imageId ) }
 		, m_render{ 0u }
 		, m_onSetBackground{ scene.onSetBackground.connect( [this]( SceneBackground const & background )
@@ -179,7 +177,7 @@ namespace castor3d
 					m_runnables[index].reset();
 					auto & graph = *m_graphs[index];
 					m_passes[index] = {};
-					m_passes[index] = createPass( graph
+					m_passes[index] = envmap::createPass( graph
 						, m_device
 						, *this
 						, index
@@ -196,7 +194,7 @@ namespace castor3d
 			} ) }
 	{
 		m_environmentMap.create();
-		m_environmentMapViews = createViews( m_environmentMap, m_image );
+		m_environmentMapViews = envmap::createViews( m_environmentMap, m_image );
 		auto commandBuffer = queueData.commandPool->createCommandBuffer( "Env" + scene.getName() + "InitialiseViews" );
 		commandBuffer->begin();
 
@@ -233,7 +231,7 @@ namespace castor3d
 	{
 		if ( m_savedReflectionNodes != m_reflectionNodes )
 		{
-			auto sortedNodes = sortNodes( m_reflectionNodes, *updater.camera );
+			auto sortedNodes = envmap::sortNodes( m_reflectionNodes, *updater.camera );
 			m_count = std::min( Count, uint32_t( sortedNodes.size() ) );
 			m_savedReflectionNodes = m_reflectionNodes;
 			m_sortedNodes.clear();
@@ -401,7 +399,7 @@ namespace castor3d
 		auto index = uint32_t( m_graphs.size() );
 		m_graphs.emplace_back( std::make_unique< crg::FrameGraph >( getEngine()->getGraphResourceHandler(), "Env" + m_scene.getName() + std::to_string( index ) ) );
 		auto & graph = *m_graphs.back();
-		m_passes.emplace_back( createPass( graph
+		m_passes.emplace_back( envmap::createPass( graph
 			, m_device
 			, *this
 			, index

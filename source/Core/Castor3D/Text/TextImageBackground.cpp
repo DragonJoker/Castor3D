@@ -2,10 +2,10 @@
 
 #include "Castor3D/Miscellaneous/Logger.hpp"
 
-using namespace castor3d;
-
 namespace castor
 {
+	using namespace castor3d;
+
 	TextWriter< ImageBackground >::TextWriter( String const & tabs, Path const & folder )
 		: TextWriterT< ImageBackground >{ tabs }
 		, m_folder{ folder }

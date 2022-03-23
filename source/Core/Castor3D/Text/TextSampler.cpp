@@ -3,10 +3,10 @@
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 
-using namespace castor3d;
-
 namespace castor
 {
+	using namespace castor3d;
+
 	TextWriter< Sampler >::TextWriter( castor::String const & tabs )
 		: TextWriterT< Sampler >{ tabs }
 	{

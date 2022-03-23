@@ -7,11 +7,11 @@
 
 namespace castor3d
 {
-	namespace
+	namespace lgtpoint
 	{
 		uint32_t constexpr FaceCount = 20u;
 
-		void doUpdateShadowMatrices( castor::Point3f const & position
+		static void doUpdateShadowMatrices( castor::Point3f const & position
 			, std::array< castor::Matrix4x4f, size_t( CubeMapFace::eCount ) > & matrices )
 		{
 			matrices[0] = castor::matrix::lookAt( position, position + castor::Point3f{ +1.0f, +0.0f, +0.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ); /* Positive X */
@@ -22,7 +22,7 @@ namespace castor3d
 			matrices[5] = castor::matrix::lookAt( position, position + castor::Point3f{ +0.0f, +0.0f, -1.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ); /* Negative Z */
 		}
 
-		float doCalcPointLightBSphere( const castor3d::PointLight & light )
+		static float doCalcPointLightBSphere( const castor3d::PointLight & light )
 		{
 			return getMaxDistance( light
 				, light.getAttenuation() );
@@ -47,14 +47,14 @@ namespace castor3d
 
 		if ( result.empty() )
 		{
-			castor::Angle const angle = castor::Angle::fromDegrees( 360.0f / FaceCount );
-			std::vector< castor::Point2f > arc{ FaceCount + 1 };
+			castor::Angle const angle = castor::Angle::fromDegrees( 360.0f / lgtpoint::FaceCount );
+			std::vector< castor::Point2f > arc{ lgtpoint::FaceCount + 1 };
 			castor::Angle alpha;
 			castor::Point3fArray data;
 
-			data.reserve( FaceCount * FaceCount * 4 );
+			data.reserve( lgtpoint::FaceCount * lgtpoint::FaceCount * 4 );
 
-			for ( uint32_t i = 0; i <= FaceCount; i++ )
+			for ( uint32_t i = 0; i <= lgtpoint::FaceCount; i++ )
 			{
 				float x = +alpha.sin();
 				float y = -alpha.cos();
@@ -66,7 +66,7 @@ namespace castor3d
 			castor::Angle iAlpha;
 			castor::Point3f pos;
 
-			for ( uint32_t k = 0; k < FaceCount; ++k )
+			for ( uint32_t k = 0; k < lgtpoint::FaceCount; ++k )
 			{
 				auto ptT = arc[k + 0];
 				auto ptB = arc[k + 1];
@@ -74,7 +74,7 @@ namespace castor3d
 				if ( k == 0 )
 				{
 					// Calcul de la position des points du haut
-					for ( uint32_t i = 0; i <= FaceCount; iAlpha += angle, ++i )
+					for ( uint32_t i = 0; i <= lgtpoint::FaceCount; iAlpha += angle, ++i )
 					{
 						auto cos = iAlpha.cos();
 						auto sin = iAlpha.sin();
@@ -85,7 +85,7 @@ namespace castor3d
 				// Calcul de la position des points
 				iAlpha = 0.0_radians;
 
-				for ( uint32_t i = 0; i <= FaceCount; iAlpha += angle, ++i )
+				for ( uint32_t i = 0; i <= lgtpoint::FaceCount; iAlpha += angle, ++i )
 				{
 					auto cos = iAlpha.cos();
 					auto sin = iAlpha.sin();
@@ -93,21 +93,21 @@ namespace castor3d
 				}
 			}
 
-			result.reserve( FaceCount * FaceCount * 6u );
+			result.reserve( lgtpoint::FaceCount * lgtpoint::FaceCount * 6u );
 			uint32_t cur = 0;
 			uint32_t prv = 0;
 
-			for ( uint32_t k = 0; k < FaceCount; ++k )
+			for ( uint32_t k = 0; k < lgtpoint::FaceCount; ++k )
 			{
 				if ( k == 0 )
 				{
-					for ( uint32_t i = 0; i <= FaceCount; ++i )
+					for ( uint32_t i = 0; i <= lgtpoint::FaceCount; ++i )
 					{
 						cur++;
 					}
 				}
 
-				for ( uint32_t i = 0; i < FaceCount; ++i )
+				for ( uint32_t i = 0; i < lgtpoint::FaceCount; ++i )
 				{
 					result.push_back( data[prv + 0] );
 					result.push_back( data[cur + 0] );
@@ -130,7 +130,7 @@ namespace castor3d
 	void PointLight::update()
 	{
 		PointLight::generateVertices();
-		auto scale = doCalcPointLightBSphere( *this ) / 2.0f;
+		auto scale = lgtpoint::doCalcPointLightBSphere( *this ) / 2.0f;
 		m_cubeBox.load( castor::Point3f{ -scale, -scale, -scale }
 			, castor::Point3f{ scale, scale, scale } );
 		m_farPlane = float( castor::point::distance( m_cubeBox.getMin(), m_cubeBox.getMax() ) );
@@ -144,7 +144,7 @@ namespace castor3d
 
 		if ( m_position.isDirty() )
 		{
-			doUpdateShadowMatrices( m_position, m_lightViews );
+			lgtpoint::doUpdateShadowMatrices( m_position, m_lightViews );
 			getLight().onGPUChanged( getLight() );
 			m_position.reset();
 		}

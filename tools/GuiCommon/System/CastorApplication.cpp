@@ -11,6 +11,8 @@
 
 #include <ashespp/Core/RendererList.hpp>
 
+namespace app
+{
 #include "GuiCommon/xpms/animated_object_group.xpm"
 #include "GuiCommon/xpms/animated_object_group_sel.xpm"
 #include "GuiCommon/xpms/animated_object.xpm"
@@ -72,6 +74,7 @@
 #include "GuiCommon/xpms/tone_mapping_sel.xpm"
 #include "GuiCommon/xpms/viewport.xpm"
 #include "GuiCommon/xpms/viewport_sel.xpm"
+}
 
 #if defined( __WXGTK__ )
 #	include <X11/Xlib.h>
@@ -525,67 +528,67 @@ namespace GuiCommon
 	{
 		splashScreen.Step( _( "Loading images" ), 1 );
 		wxInitAllImageHandlers();
-		m_imagesLoader.addBitmap( CV_IMG_CASTOR, castor_transparent_xpm );
-		m_imagesLoader.addBitmap( eBMP_ANIMATED_OBJECTGROUP, animated_object_group_xpm );
-		m_imagesLoader.addBitmap( eBMP_ANIMATED_OBJECTGROUP_SEL, animated_object_group_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_ANIMATED_OBJECT, animated_object_xpm );
-		m_imagesLoader.addBitmap( eBMP_ANIMATED_OBJECT_SEL, animated_object_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_ANIMATION, animation_xpm );
-		m_imagesLoader.addBitmap( eBMP_ANIMATION_SEL, animation_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_BONE, bone_xpm );
-		m_imagesLoader.addBitmap( eBMP_BONE_SEL, bone_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_SCENE, scene_xpm );
-		m_imagesLoader.addBitmap( eBMP_SCENE_SEL, scene_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_SKELETON, skeleton_xpm );
-		m_imagesLoader.addBitmap( eBMP_SKELETON_SEL, skeleton_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_NODE, node_xpm );
-		m_imagesLoader.addBitmap( eBMP_NODE_SEL, node_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_CAMERA, camera_xpm );
-		m_imagesLoader.addBitmap( eBMP_CAMERA_SEL, camera_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_GEOMETRY, geometry_xpm );
-		m_imagesLoader.addBitmap( eBMP_GEOMETRY_SEL, geometry_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_DIRECTIONAL_LIGHT, directional_xpm );
-		m_imagesLoader.addBitmap( eBMP_DIRECTIONAL_LIGHT_SEL, directional_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_POINT_LIGHT, point_xpm );
-		m_imagesLoader.addBitmap( eBMP_POINT_LIGHT_SEL, point_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_SPOT_LIGHT, spot_xpm );
-		m_imagesLoader.addBitmap( eBMP_SPOT_LIGHT_SEL, spot_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_SUBMESH, submesh_xpm );
-		m_imagesLoader.addBitmap( eBMP_SUBMESH_SEL, submesh_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_PANEL_OVERLAY, panel_xpm );
-		m_imagesLoader.addBitmap( eBMP_PANEL_OVERLAY_SEL, panel_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_BORDER_PANEL_OVERLAY, border_panel_xpm );
-		m_imagesLoader.addBitmap( eBMP_BORDER_PANEL_OVERLAY_SEL, border_panel_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_TEXT_OVERLAY, text_xpm );
-		m_imagesLoader.addBitmap( eBMP_TEXT_OVERLAY_SEL, text_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_MATERIAL, material_xpm );
-		m_imagesLoader.addBitmap( eBMP_MATERIAL_SEL, material_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_PASS, pass_xpm );
-		m_imagesLoader.addBitmap( eBMP_PASS_SEL, pass_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_TEXTURE, texture_xpm );
-		m_imagesLoader.addBitmap( eBMP_TEXTURE_SEL, texture_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_BILLBOARD, billboard_xpm );
-		m_imagesLoader.addBitmap( eBMP_BILLBOARD_SEL, billboard_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_VIEWPORT, viewport_xpm );
-		m_imagesLoader.addBitmap( eBMP_VIEWPORT_SEL, viewport_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_POST_EFFECT, post_effect_xpm );
-		m_imagesLoader.addBitmap( eBMP_POST_EFFECT_SEL, post_effect_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_TONE_MAPPING, tone_mapping_xpm );
-		m_imagesLoader.addBitmap( eBMP_TONE_MAPPING_SEL, tone_mapping_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_RENDER_TARGET, render_target_xpm );
-		m_imagesLoader.addBitmap( eBMP_RENDER_TARGET_SEL, render_target_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_RENDER_WINDOW, render_window_xpm );
-		m_imagesLoader.addBitmap( eBMP_RENDER_WINDOW_SEL, render_window_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_FRAME_VARIABLE, frame_variable_xpm );
-		m_imagesLoader.addBitmap( eBMP_FRAME_VARIABLE_SEL, frame_variable_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_FRAME_VARIABLE_BUFFER, frame_variable_buffer_xpm );
-		m_imagesLoader.addBitmap( eBMP_FRAME_VARIABLE_BUFFER_SEL, frame_variable_buffer_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_SSAO_CONFIG, ssao_config_xpm );
-		m_imagesLoader.addBitmap( eBMP_SSAO_CONFIG_SEL, ssao_config_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_BACKGROUND, background_xpm );
-		m_imagesLoader.addBitmap( eBMP_BACKGROUND_SEL, background_sel_xpm );
-		m_imagesLoader.addBitmap( eBMP_COLLAPSE_ALL, collapse_all_xpm );
-		m_imagesLoader.addBitmap( eBMP_EXPAND_ALL, expand_all_xpm );
+		m_imagesLoader.addBitmap( CV_IMG_CASTOR, app::castor_transparent_xpm );
+		m_imagesLoader.addBitmap( eBMP_ANIMATED_OBJECTGROUP, app::animated_object_group_xpm );
+		m_imagesLoader.addBitmap( eBMP_ANIMATED_OBJECTGROUP_SEL, app::animated_object_group_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_ANIMATED_OBJECT, app::animated_object_xpm );
+		m_imagesLoader.addBitmap( eBMP_ANIMATED_OBJECT_SEL, app::animated_object_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_ANIMATION, app::animation_xpm );
+		m_imagesLoader.addBitmap( eBMP_ANIMATION_SEL, app::animation_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_BONE, app::bone_xpm );
+		m_imagesLoader.addBitmap( eBMP_BONE_SEL, app::bone_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_SCENE, app::scene_xpm );
+		m_imagesLoader.addBitmap( eBMP_SCENE_SEL, app::scene_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_SKELETON, app::skeleton_xpm );
+		m_imagesLoader.addBitmap( eBMP_SKELETON_SEL, app::skeleton_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_NODE, app::node_xpm );
+		m_imagesLoader.addBitmap( eBMP_NODE_SEL, app::node_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_CAMERA, app::camera_xpm );
+		m_imagesLoader.addBitmap( eBMP_CAMERA_SEL, app::camera_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_GEOMETRY, app::geometry_xpm );
+		m_imagesLoader.addBitmap( eBMP_GEOMETRY_SEL, app::geometry_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_DIRECTIONAL_LIGHT, app::directional_xpm );
+		m_imagesLoader.addBitmap( eBMP_DIRECTIONAL_LIGHT_SEL, app::directional_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_POINT_LIGHT, app::point_xpm );
+		m_imagesLoader.addBitmap( eBMP_POINT_LIGHT_SEL, app::point_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_SPOT_LIGHT, app::spot_xpm );
+		m_imagesLoader.addBitmap( eBMP_SPOT_LIGHT_SEL, app::spot_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_SUBMESH, app::submesh_xpm );
+		m_imagesLoader.addBitmap( eBMP_SUBMESH_SEL, app::submesh_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_PANEL_OVERLAY, app::panel_xpm );
+		m_imagesLoader.addBitmap( eBMP_PANEL_OVERLAY_SEL, app::panel_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_BORDER_PANEL_OVERLAY, app::border_panel_xpm );
+		m_imagesLoader.addBitmap( eBMP_BORDER_PANEL_OVERLAY_SEL, app::border_panel_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_TEXT_OVERLAY, app::text_xpm );
+		m_imagesLoader.addBitmap( eBMP_TEXT_OVERLAY_SEL, app::text_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_MATERIAL, app::material_xpm );
+		m_imagesLoader.addBitmap( eBMP_MATERIAL_SEL, app::material_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_PASS, app::pass_xpm );
+		m_imagesLoader.addBitmap( eBMP_PASS_SEL, app::pass_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_TEXTURE, app::texture_xpm );
+		m_imagesLoader.addBitmap( eBMP_TEXTURE_SEL, app::texture_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_BILLBOARD, app::billboard_xpm );
+		m_imagesLoader.addBitmap( eBMP_BILLBOARD_SEL, app::billboard_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_VIEWPORT, app::viewport_xpm );
+		m_imagesLoader.addBitmap( eBMP_VIEWPORT_SEL, app::viewport_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_POST_EFFECT, app::post_effect_xpm );
+		m_imagesLoader.addBitmap( eBMP_POST_EFFECT_SEL, app::post_effect_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_TONE_MAPPING, app::tone_mapping_xpm );
+		m_imagesLoader.addBitmap( eBMP_TONE_MAPPING_SEL, app::tone_mapping_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_RENDER_TARGET, app::render_target_xpm );
+		m_imagesLoader.addBitmap( eBMP_RENDER_TARGET_SEL, app::render_target_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_RENDER_WINDOW, app::render_window_xpm );
+		m_imagesLoader.addBitmap( eBMP_RENDER_WINDOW_SEL, app::render_window_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_FRAME_VARIABLE, app::frame_variable_xpm );
+		m_imagesLoader.addBitmap( eBMP_FRAME_VARIABLE_SEL, app::frame_variable_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_FRAME_VARIABLE_BUFFER, app::frame_variable_buffer_xpm );
+		m_imagesLoader.addBitmap( eBMP_FRAME_VARIABLE_BUFFER_SEL, app::frame_variable_buffer_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_SSAO_CONFIG, app::ssao_config_xpm );
+		m_imagesLoader.addBitmap( eBMP_SSAO_CONFIG_SEL, app::ssao_config_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_BACKGROUND, app::background_xpm );
+		m_imagesLoader.addBitmap( eBMP_BACKGROUND_SEL, app::background_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_COLLAPSE_ALL, app::collapse_all_xpm );
+		m_imagesLoader.addBitmap( eBMP_EXPAND_ALL, app::expand_all_xpm );
 		doLoadAppImages();
 		ImagesLoader::waitAsyncLoads();
 	}

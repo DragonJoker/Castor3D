@@ -21,19 +21,14 @@
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 #include <ashespp/Shader/ShaderModule.hpp>
 
-#include <ShaderWriter/Source.hpp>
-
-using namespace castor;
-using namespace sdw;
-
 namespace castor3d
 {
 	//************************************************************************************************
 
-	namespace
+	namespace bgimage
 	{
-		ashes::ImageCreateInfo doGetImageCreate( VkFormat format
-			, Size const & dimensions
+		static ashes::ImageCreateInfo doGetImageCreate( VkFormat format
+			, castor::Size const & dimensions
 			, bool attachment
 			, uint32_t mipLevel = 1u )
 		{
@@ -64,12 +59,12 @@ namespace castor3d
 		: SceneBackground{ engine, scene, name + cuT( "Image" ), BackgroundType::eImage }
 	{
 		m_texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
-			, doGetImageCreate( VK_FORMAT_R8G8B8A8_UNORM, { 16u, 16u }, false )
+			, bgimage::doGetImageCreate( VK_FORMAT_R8G8B8A8_UNORM, { 16u, 16u }, false )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "ImageBackground_Dummy" ) );
 	}
 
-	bool ImageBackground::loadImage( Path const & folder, Path const & relative )
+	bool ImageBackground::loadImage( castor::Path const & folder, castor::Path const & relative )
 	{
 		bool result = false;
 
@@ -144,11 +139,11 @@ namespace castor3d
 			, 2.0f );
 		viewport.update();
 		auto node = updater.camera->getParent();
-		Matrix4x4f view;
-		matrix::lookAt( view
+		castor::Matrix4x4f view;
+		castor::matrix::lookAt( view
 			, node->getDerivedPosition()
-			, node->getDerivedPosition() + Point3f{ 0.0f, 0.0f, 1.0f }
-			, Point3f{ 0.0f, 1.0f, 0.0f } );
+			, node->getDerivedPosition() + castor::Point3f{ 0.0f, 0.0f, 1.0f }
+			, castor::Point3f{ 0.0f, 1.0f, 0.0f } );
 		updater.bgMtxView = view;
 		updater.bgMtxProj = updater.isSafeBanded
 			? viewport.getSafeBandedProjection()

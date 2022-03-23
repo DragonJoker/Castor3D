@@ -9,9 +9,6 @@
 
 #include <wx/propgrid/advprops.h>
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
 	namespace
@@ -60,34 +57,34 @@ namespace GuiCommon
 				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< float > > & >( uniform ).getValue() );
 				break;
 			case UniformType::eVec2f:
-				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< Point2f > > & >( uniform ).getValue() );
+				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::Point2f > > & >( uniform ).getValue() );
 				break;
 			case UniformType::eVec3f:
-				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< Point3f > > & >( uniform ).getValue() );
+				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::Point3f > > & >( uniform ).getValue() );
 				break;
 			case UniformType::eVec4f:
-				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< Point4f > > & >( uniform ).getValue() );
+				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::Point4f > > & >( uniform ).getValue() );
 				break;
 			case UniformType::eVec2i:
-				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< Point2i > > & >( uniform ).getValue() );
+				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::Point2i > > & >( uniform ).getValue() );
 				break;
 			case UniformType::eVec3i:
-				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< Point3i > > & >( uniform ).getValue() );
+				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::Point3i > > & >( uniform ).getValue() );
 				break;
 			case UniformType::eVec4i:
-				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< Point4i > > & >( uniform ).getValue() );
+				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::Point4i > > & >( uniform ).getValue() );
 				break;
 			case UniformType::eVec2ui:
-				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< Point2ui > > & >( uniform ).getValue() );
+				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::Point2ui > > & >( uniform ).getValue() );
 				break;
 			case UniformType::eVec3ui:
-				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< Point3ui > > & >( uniform ).getValue() );
+				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::Point3ui > > & >( uniform ).getValue() );
 				break;
 			case UniformType::eVec4ui:
-				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< Point4ui > > & >( uniform ).getValue() );
+				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::Point4ui > > & >( uniform ).getValue() );
 				break;
 			case UniformType::eMat4f:
-				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< Matrix4x4f > > & >( uniform ).getValue() );
+				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::Matrix4x4f > > & >( uniform ).getValue() );
 				break;
 			default:
 				CU_Failure( "Unsupported UniformType" );
@@ -96,7 +93,7 @@ namespace GuiCommon
 		}
 	}
 
-	FrameVariableTreeItemProperty::FrameVariableTreeItemProperty( Engine * engine
+	FrameVariableTreeItemProperty::FrameVariableTreeItemProperty( castor3d::Engine * engine
 		, bool editable
 		, UniformValueBase & uniform )
 		: TreeItemProperty{ engine, editable }

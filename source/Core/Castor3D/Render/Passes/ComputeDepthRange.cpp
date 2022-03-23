@@ -26,9 +26,9 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace passcompdr
 	{
-		ashes::DescriptorSetLayoutPtr createDescriptorLayout( RenderDevice const & device )
+		static ashes::DescriptorSetLayoutPtr createDescriptorLayout( RenderDevice const & device )
 		{
 			ashes::VkDescriptorSetLayoutBindingArray bindings{ makeDescriptorSetLayoutBinding( ComputeDepthRange::eInput
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
@@ -40,7 +40,7 @@ namespace castor3d
 				, std::move( bindings ) );
 		}
 
-		ashes::DescriptorSetPtr createDescriptorSet( crg::RunnableGraph & graph
+		static ashes::DescriptorSetPtr createDescriptorSet( crg::RunnableGraph & graph
 			, ashes::DescriptorSetPool const & pool
 			, crg::FramePass const & pass )
 		{
@@ -65,14 +65,14 @@ namespace castor3d
 			return descriptorSet;
 		}
 
-		ashes::PipelineLayoutPtr createPipelineLayout( RenderDevice const & device
+		static ashes::PipelineLayoutPtr createPipelineLayout( RenderDevice const & device
 			, ashes::DescriptorSetLayout const & dslayout )
 		{
 			return device->createPipelineLayout( "ComputeDepthRange"
 				, ashes::DescriptorSetLayoutCRefArray{ std::ref( dslayout ) } );
 		}
 
-		ashes::ComputePipelinePtr createPipeline( RenderDevice const & device
+		static ashes::ComputePipelinePtr createPipeline( RenderDevice const & device
 			, ashes::PipelineLayout const & pipelineLayout
 			, ShaderModule const & computeShader )
 		{
@@ -83,7 +83,7 @@ namespace castor3d
 					, pipelineLayout ) );
 		}
 
-		ShaderPtr createShader( RenderSystem const & renderSystem )
+		static ShaderPtr createShader( RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
 			ComputeWriter writer;
@@ -146,12 +146,12 @@ namespace castor3d
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
 			, { 2u, false } }
 		, m_device{ device }
-		, m_descriptorSetLayout{ createDescriptorLayout( m_device ) }
-		, m_pipelineLayout{ createPipelineLayout( m_device, *m_descriptorSetLayout ) }
-		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, "ComputeDepthRange", createShader( device.renderSystem ) }
-		, m_pipeline{ createPipeline( device, *m_pipelineLayout, m_shader ) }
+		, m_descriptorSetLayout{ passcompdr::createDescriptorLayout( m_device ) }
+		, m_pipelineLayout{ passcompdr::createPipelineLayout( m_device, *m_descriptorSetLayout ) }
+		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, "ComputeDepthRange", passcompdr::createShader( device.renderSystem ) }
+		, m_pipeline{ passcompdr::createPipeline( device, *m_pipelineLayout, m_shader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
-		, m_descriptorSet{ createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }
+		, m_descriptorSet{ passcompdr::createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }
 	{
 	}
 

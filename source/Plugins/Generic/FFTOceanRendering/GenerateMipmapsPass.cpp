@@ -21,9 +21,9 @@ namespace ocean_fft
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace genmips
 	{
-		ashes::DescriptorSetLayoutPtr createDescriptorLayout( castor3d::RenderDevice const & device )
+		static ashes::DescriptorSetLayoutPtr createDescriptorLayout( castor3d::RenderDevice const & device )
 		{
 			ashes::VkDescriptorSetLayoutBindingArray bindings{ castor3d::makeDescriptorSetLayoutBinding( GenerateMipmapsPass::eInput
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
@@ -35,7 +35,7 @@ namespace ocean_fft
 				, std::move( bindings ) );
 		}
 
-		std::vector< ashes::DescriptorSetPtr > createDescriptorSets( crg::RunnableGraph & graph
+		static std::vector< ashes::DescriptorSetPtr > createDescriptorSets( crg::RunnableGraph & graph
 			, ashes::DescriptorSetPool const & pool
 			, crg::FramePass const & pass )
 		{
@@ -85,7 +85,7 @@ namespace ocean_fft
 			return result;
 		}
 
-		ashes::PipelineLayoutPtr createPipelineLayout( castor3d::RenderDevice const & device
+		static ashes::PipelineLayoutPtr createPipelineLayout( castor3d::RenderDevice const & device
 			, ashes::DescriptorSetLayout const & dslayout )
 		{
 			return device->createPipelineLayout( GenerateMipmapsPass::Name
@@ -93,7 +93,7 @@ namespace ocean_fft
 				, ashes::VkPushConstantRangeArray{ { VK_SHADER_STAGE_COMPUTE_BIT, 0u, uint32_t( sizeof( castor::Point2f ) ) } } );
 		}
 
-		ashes::ComputePipelinePtr createPipeline( castor3d::RenderDevice const & device
+		static ashes::ComputePipelinePtr createPipeline( castor3d::RenderDevice const & device
 			, ashes::PipelineLayout const & pipelineLayout
 			, castor3d::ShaderModule const & computeShader )
 		{
@@ -104,7 +104,7 @@ namespace ocean_fft
 					, pipelineLayout ) );
 		}
 
-		castor3d::ShaderPtr createShader()
+		static castor3d::ShaderPtr createShader()
 		{
 			sdw::ComputeWriter writer;
 			auto const G = writer.declConstant( "G", 9.81_f );
@@ -159,12 +159,12 @@ namespace ocean_fft
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
 			, { 1u } }
 		, m_device{ device }
-		, m_descriptorSetLayout{ createDescriptorLayout( m_device ) }
-		, m_pipelineLayout{ createPipelineLayout( m_device, *m_descriptorSetLayout ) }
-		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, Name, createShader() }
-		, m_pipeline{ createPipeline( device, *m_pipelineLayout, m_shader ) }
+		, m_descriptorSetLayout{ genmips::createDescriptorLayout( m_device ) }
+		, m_pipelineLayout{ genmips::createPipelineLayout( m_device, *m_descriptorSetLayout ) }
+		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, Name, genmips::createShader() }
+		, m_pipeline{ genmips::createPipeline( device, *m_pipelineLayout, m_shader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( crg::getMipLevels( m_pass.images.front().image.view() ) + crg::getMipLevels( m_pass.images.back().image.view() ) ) }
-		, m_descriptorSets{ createDescriptorSets( m_graph, *m_descriptorSetPool, m_pass ) }
+		, m_descriptorSets{ genmips::createDescriptorSets( m_graph, *m_descriptorSetPool, m_pass ) }
 	{
 		auto extent = getExtent( m_pass.images.front().view() );
 

@@ -3,8 +3,6 @@
 #include "Castor3D/Model/Skeleton/Bone.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*************************************************************************************************
@@ -35,7 +33,7 @@ namespace castor3d
 	{
 		bool result = true;
 		BoneSPtr bone;
-		String name;
+		castor::String name;
 		BinaryChunk chunk;
 		auto & skeleton = obj.m_skeleton;
 

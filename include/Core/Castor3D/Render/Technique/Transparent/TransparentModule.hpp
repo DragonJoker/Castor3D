@@ -33,7 +33,7 @@ namespace castor3d
 		CU_ScopedEnumBounds( eDepth ),
 	};
 	C3D_API castor::String getTextureName( WbTexture texture );
-	C3D_API castor::String getName( WbTexture texture );
+	C3D_API castor::String getTexName( WbTexture texture );
 	C3D_API VkFormat getFormat( RenderDevice const & device
 		, WbTexture texture );
 	C3D_API VkClearValue getClearValue( WbTexture texture );
