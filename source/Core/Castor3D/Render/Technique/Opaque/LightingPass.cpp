@@ -2,7 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Buffer/ObjectBufferPool.hpp"
+#include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -116,6 +116,7 @@ namespace castor3d
 			, graph
 			, crg::pp::Config{ std::vector< crg::VkPipelineShaderStageCreateInfoArray >{ crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages )
 					, crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) }
+				, crg::defaultV< crg::ProgramCreator >
 				, std::vector< VkDescriptorSetLayout >{ descriptorSetLayout } }
 			, VK_PIPELINE_BIND_POINT_GRAPHICS
 			, 2u }
@@ -367,8 +368,8 @@ namespace castor3d
 	{
 		if ( !m_enabledLights.empty() )
 		{
-			VkBuffer vertexBuffer = m_vertexBuffer.getVertexBuffer();
-			VkDeviceSize offset{ m_vertexBuffer.getVertexOffset() };
+			VkBuffer vertexBuffer = m_vertexBuffer.getBuffer();
+			VkDeviceSize offset{ m_vertexBuffer.getOffset() };
 			VkDescriptorSet baseDS{};
 			auto & renderPass = m_renderPasses[index];
 			{
@@ -586,15 +587,17 @@ namespace castor3d
 		return model;
 	}
 
-	ObjectBufferOffset LightsPipeline::doCreateVertexBuffer()
+	GpuBufferOffsetT< float > LightsPipeline::doCreateVertexBuffer()
 	{
-		ObjectBufferOffset result;
+		GpuBufferOffsetT< float > result;
 
 		if ( m_config.lightType == LightType::eDirectional )
 		{
 			m_count = 6u;
-			result = m_device.vertexPools->getBuffer< float >( 12u );
-			auto buffer = result.getVertexData< float >();
+			result = m_device.bufferPool->getBuffer< float >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
+				, 12u
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+			auto buffer = result.getData();
 			float data[] =
 			{
 				-1.0f, -1.0f,
@@ -605,7 +608,6 @@ namespace castor3d
 				+1.0f, +1.0f,
 			};
 			std::memcpy( buffer.data(), data, sizeof( data ) );
-			result.markVertexDirty();
 		}
 		else
 		{
@@ -621,12 +623,15 @@ namespace castor3d
 			}
 
 			m_count = uint32_t( data.size() );
-			result = m_device.vertexPools->getBuffer< float >( uint32_t( data.size() * 3u ) );
-			auto buffer = result.getVertexData< float >();
-			std::memcpy( buffer.data(), data.data()->constPtr(), result.getVertexSize() );
-			result.markVertexDirty();
+			result = m_device.bufferPool->getBuffer< float >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
+				, uint32_t( data.size() * 3u )
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+			auto buffer = result.getData();
+			std::memcpy( buffer.data(), data.data()->constPtr(), result.getSize() );
 		}
 
+		result.markDirty( VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+			, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 		return result;
 	}
 

@@ -88,6 +88,13 @@ namespace castor3d
 					return lookup->getFlags() == flags;
 				} );
 		}
+
+		size_t makeHash( ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags )
+		{
+			auto nodeType = getRenderNodeType( programFlags );
+			return size_t( nodeType ) | ( size_t( sceneFlags ) << 16u );
+		}
 	}
 
 	//*********************************************************************************************
@@ -424,8 +431,10 @@ namespace castor3d
 	{
 		auto programFlags = pipeline.getFlags().programFlags;
 		programFlags = doAdjustProgramFlags( programFlags );
-		auto nodeType = getRenderNodeType( programFlags );
-		auto & descriptors = m_additionalDescriptors[size_t( nodeType )];
+		auto sceneFlags = doAdjustSceneFlags( pipeline.getFlags().sceneFlags );
+		auto descLayoutIt = m_additionalDescriptors.emplace( makeHash( programFlags, sceneFlags )
+			, PassDescriptors{} ).first;
+		auto & descriptors = descLayoutIt->second;
 
 		if ( !descriptors.set )
 		{
@@ -742,7 +751,9 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = renderSystem.getRenderDevice();
 		RenderPipeline * result{};
-		auto & descriptors = m_additionalDescriptors[size_t( getRenderNodeType( flags.programFlags ) )];
+		auto descLayoutIt = m_additionalDescriptors.emplace( makeHash( flags.programFlags, flags.sceneFlags )
+			, PassDescriptors{} ).first;
+		auto & descriptors = descLayoutIt->second;
 
 		if ( !descriptors.layout )
 		{

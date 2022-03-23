@@ -194,7 +194,7 @@ namespace castor3d
 			, context
 			, graph
 			, crg::rq::Config{}
-				.programs( { crg::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) } )
+				.program( crg::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 			, 1u }
 	{
 	}

@@ -311,18 +311,6 @@ namespace castor3d
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
-
-		std::vector< crg::VkPipelineShaderStageCreateInfoArray > createPrograms( std::vector< OpaqueResolvePass::Program > const & programs )
-		{
-			std::vector< crg::VkPipelineShaderStageCreateInfoArray > result;
-
-			for ( auto & program : programs )
-			{
-				result.push_back( crg::makeVkArray< VkPipelineShaderStageCreateInfo >( program.stages ) );
-			}
-
-			return result;
-		}
 	}
 
 	//*********************************************************************************************
@@ -358,27 +346,30 @@ namespace castor3d
 		, m_lightSpecular{ lightSpecular }
 		, m_lightIndirectDiffuse{ lightIndirectDiffuse }
 		, m_lightIndirectSpecular{ lightIndirectSpecular }
-		, m_programs{ doCreatePrograms() }
 	{
+		m_programs.resize( ResolveProgramConfig::MaxProgramsCount );
 		previousPass = &doCreatePass( graph, *previousPass, progress );
 	}
 
-	std::vector< OpaqueResolvePass::Program > OpaqueResolvePass::doCreatePrograms()
+	OpaqueResolvePass::Program & OpaqueResolvePass::doCreateProgram( uint32_t programIndex )
 	{
-		std::vector< Program > result;
+		CU_Require( programIndex < ResolveProgramConfig::MaxProgramsCount );
 
-		for ( uint32_t i = 0u; i < ResolveProgramConfig::MaxProgramsCount; ++i )
+		if ( !m_programs[programIndex] )
 		{
-			ResolveProgramConfig config{ i };
-			Program program{ { VK_SHADER_STAGE_VERTEX_BIT, "OpaqueResolve" + std::to_string( i ), createVertexProgram() }
-				, { VK_SHADER_STAGE_FRAGMENT_BIT, "OpaqueResolve" + std::to_string( i ), createPixelProgram( m_device.renderSystem, config, m_scene.getPassesType() ) }
-				, {} };
-			program.stages = { makeShaderState( m_device, program.vertexShader )
-				, makeShaderState( m_device, program.pixelShader ) };
-			result.emplace_back( std::move( program ) );
+			ResolveProgramConfig config{ programIndex };
+			m_programs[programIndex] = std::make_unique< Program >( ShaderModule{ VK_SHADER_STAGE_VERTEX_BIT
+					, "OpaqueResolve" + std::to_string( programIndex )
+					, createVertexProgram() }
+				, ShaderModule{ VK_SHADER_STAGE_FRAGMENT_BIT
+					, "OpaqueResolve" + std::to_string( programIndex )
+					, createPixelProgram( m_device.renderSystem, config, m_scene.getPassesType() ) }
+				, ashes::PipelineShaderStageCreateInfoArray{} );
+			m_programs[programIndex]->stages = { makeShaderState( m_device, m_programs[programIndex]->vertexShader )
+				, makeShaderState( m_device, m_programs[programIndex]->pixelShader ) };
 		}
 
-		return result;
+		return *m_programs[programIndex];
 	}
 
 	crg::FramePass const & OpaqueResolvePass::doCreatePass( crg::FramePassGroup & graph
@@ -399,7 +390,12 @@ namespace castor3d
 					.texcoordConfig( crg::Texcoord{} )
 					.renderSize( makeExtent2D( m_result.getExtent() ) )
 					.passIndex( &m_programIndex )
-					.programs( createPrograms( m_programs ) )
+					.programCreator( { ResolveProgramConfig::MaxProgramsCount
+						, [this]( uint32_t programIndex )
+						{
+							auto & program = doCreateProgram( programIndex );
+							return crg::makeVkArray< VkPipelineShaderStageCreateInfo >( program.stages );
+						} } )
 					.build( framePass, context, runnableGraph, { uint32_t( m_programs.size() ) } );
 				engine.registerTimer( framePass.getFullName()
 					, result->getTimer() );
@@ -492,7 +488,11 @@ namespace castor3d
 	void OpaqueResolvePass::accept( PipelineVisitorBase & visitor )
 	{
 		auto & program = m_programs[m_programIndex];
-		visitor.visit( program.vertexShader );
-		visitor.visit( program.pixelShader );
+
+		if ( program )
+		{
+			visitor.visit( program->vertexShader );
+			visitor.visit( program->pixelShader );
+		}
 	}
 }

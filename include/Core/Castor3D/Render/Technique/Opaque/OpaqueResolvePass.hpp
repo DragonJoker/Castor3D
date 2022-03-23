@@ -30,6 +30,7 @@ namespace castor3d
 			ShaderModule pixelShader;
 			ashes::PipelineShaderStageCreateInfoArray stages;
 		};
+		using ProgramPtr = std::unique_ptr< Program >;
 
 	public:
 		using EnvMapArray = std::vector< std::reference_wrapper< EnvironmentMap > >;
@@ -108,7 +109,7 @@ namespace castor3d
 		crg::FramePass const & doCreatePass( crg::FramePassGroup & graph
 			, crg::FramePass const & pass
 			, ProgressBar * progress );
-		std::vector< Program > doCreatePrograms();
+		Program & doCreateProgram( uint32_t index );
 
 	private:
 		RenderDevice const & m_device;
@@ -124,7 +125,7 @@ namespace castor3d
 		Texture const & m_lightSpecular;
 		Texture const & m_lightIndirectDiffuse;
 		Texture const & m_lightIndirectSpecular;
-		std::vector< Program > m_programs;
+		std::vector< ProgramPtr > m_programs;
 		uint32_t m_programIndex{};
 	};
 }

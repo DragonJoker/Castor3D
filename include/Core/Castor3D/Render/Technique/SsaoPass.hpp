@@ -108,6 +108,7 @@ namespace castor3d
 		crg::FramePassGroup & m_group;
 		VkExtent2D m_size;
 		MatrixUbo m_matrixUbo;
+		uint32_t m_passIndex{};
 		LineariseDepthPassUPtr m_linearisePass;
 		SsaoConfigUbo m_ssaoConfigUbo;
 		SsaoRawAOPassUPtr m_rawAoPass;
