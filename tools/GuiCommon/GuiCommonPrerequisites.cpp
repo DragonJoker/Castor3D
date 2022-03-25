@@ -377,7 +377,6 @@ namespace GuiCommon
 		{
 			gtk_widget_realize( gtkWidget );
 			auto gdkDisplay = gtk_widget_get_display( gtkWidget );
-			auto gdkWindow = gtk_widget_get_window( gtkWidget );
 
 			if ( gdkDisplay )
 			{
@@ -385,6 +384,7 @@ namespace GuiCommon
 #	ifdef GDK_WINDOWING_WAYLAND
 				if ( GDK_IS_WAYLAND_DISPLAY( gdkDisplay ) )
 				{
+					auto gdkWindow = gtk_widget_get_window( gtkWidget );
 					auto display = gdk_wayland_display_get_wl_display( gdkDisplay );
 					auto surface = gdkWindow
 						? gdk_wayland_window_get_wl_surface( gdkWindow )
@@ -397,6 +397,7 @@ namespace GuiCommon
 #	ifdef GDK_WINDOWING_X11
 				if ( GDK_IS_X11_DISPLAY( gdkDisplay ) )
 				{
+					auto gdkWindow = gtk_widget_get_window( gtkWidget );
 					auto display = gdk_x11_display_get_xdisplay( gdkDisplay );
 					GLXDrawable drawable = gdkWindow
 						? gdk_x11_window_get_xid( gdkWindow )
