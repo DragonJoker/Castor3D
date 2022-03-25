@@ -24,7 +24,7 @@ namespace castortd
 	{
 		bool reachDst{ true };
 
-		if ( m_target.get().IsAlive() )
+		if ( m_target.get().isAlive() )
 		{
 			auto speed = float( p_game.getElapsed().count() ) * m_speed / 1000;
 			castor::Point3f result = m_target.get().getNode().getPosition();
@@ -42,7 +42,7 @@ namespace castortd
 			}
 			else
 			{
-				m_target.get().TakeDamage( m_damage );
+				m_target.get().takeDamage( m_damage );
 			}
 		}
 

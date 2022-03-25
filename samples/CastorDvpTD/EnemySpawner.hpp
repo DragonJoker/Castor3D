@@ -9,28 +9,28 @@ namespace castortd
 	public:
 		EnemySpawner();
 
-		void Reset();
-		void StartWave( uint32_t m_count );
-		bool CanSpawn( castor::Milliseconds const & p_elapsed );
-		EnemyPtr Spawn( Game const & p_game, Path const & p_path );
-		void KillEnemy( Game & p_game, EnemyPtr && p_enemy );
+		void reset();
+		void startWave( uint32_t count );
+		bool canSpawn( castor::Milliseconds const & elapsed );
+		EnemyPtr spawn( Game const & game, Path const & path );
+		void killEnemy( Game & game, EnemyPtr && enemy );
 
-		inline uint32_t getWave()const
+		uint32_t getWave()const
 		{
 			return m_totalsWaves;
 		}
 
-		inline bool IsWaveEnded()const
+		bool isWaveEnded()const
 		{
 			return m_count == 0;
 		}
 
-		inline uint32_t getEnemiesLife()const
+		uint32_t getEnemiesLife()const
 		{
 			return m_category.m_life.getValue();
 		}
 
-		inline uint32_t getEnemiesBounty()const
+		uint32_t getEnemiesBounty()const
 		{
 			return m_category.m_bounty.getValue();
 		}

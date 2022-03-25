@@ -16,10 +16,10 @@ namespace castortd
 {
 	EnemySpawner::EnemySpawner()
 	{
-		Reset();
+		reset();
 	}
 
-	void EnemySpawner::Reset()
+	void EnemySpawner::reset()
 	{
 		m_category = BaseEnemy{};
 
@@ -29,75 +29,78 @@ namespace castortd
 		m_count = 0u;
 	}
 
-	void EnemySpawner::StartWave( uint32_t p_count )
+	void EnemySpawner::startWave( uint32_t count )
 	{
-		m_category.Upgrade();
-		m_count = p_count;
+		m_category.upgrade();
+		m_count = count;
 		++m_totalsWaves;
 		m_timeBetweenTwoSpawns = castor::Milliseconds( 1000 );
 		m_timeSinceLastSpawn = m_timeBetweenTwoSpawns;
 	}
 
-	bool EnemySpawner::CanSpawn( castor::Milliseconds const & p_elapsed )
+	bool EnemySpawner::canSpawn( castor::Milliseconds const & elapsed )
 	{
-		m_timeSinceLastSpawn += p_elapsed;
+		m_timeSinceLastSpawn += elapsed;
 		return m_count && m_timeSinceLastSpawn >= m_timeBetweenTwoSpawns;
 	}
 
-	EnemyPtr EnemySpawner::Spawn( Game const & p_game, Path const & p_path )
+	EnemyPtr EnemySpawner::spawn( Game const & game, Path const & path )
 	{
 		--m_count;
 		m_timeSinceLastSpawn = castor::Milliseconds{};
 		++m_totalSpawned;
-		auto & pathNode = *p_path.begin();
-		auto & cell = p_game.getCell( castor::Point2i{ pathNode.m_x, pathNode.m_y } );
+		auto & pathNode = *path.begin();
+		auto & cell = game.getCell( castor::Point2i{ pathNode.m_x, pathNode.m_y } );
 		EnemyPtr result;
 
 		if ( m_enemiesCache.empty() )
 		{
 			castor::String name = cuT( "EnemyCube_" ) + std::to_string( m_totalSpawned );
-			auto baseNode = p_game.getScene().getSceneNodeCache().add( name + cuT( "_Base" )
-				, p_game.getScene() ).lock();
-			baseNode->setPosition( p_game.convert( castor::Point2i{ cell.m_x, cell.m_y - 1 } ) + castor::Point3f{ 0, p_game.getCellHeight(), 0 } );
-			baseNode->attachTo( *p_game.getMapNode() );
-			auto node = p_game.getScene().getSceneNodeCache().add( name
-				, p_game.getScene() ).lock();
+			auto baseNode = game.getScene().getSceneNodeCache().add( name + cuT( "_Base" )
+				, game.getScene() ).lock();
+			baseNode->setPosition( game.convert( castor::Point2i{ cell.m_x, cell.m_y - 1 } ) + castor::Point3f{ 0, game.getCellHeight(), 0 } );
+			baseNode->attachTo( *game.getMapNode() );
+			auto node = game.getScene().getSceneNodeCache().add( name
+				, game.getScene() ).lock();
 			node->setOrientation( castor::Quaternion::fromAxisAngle( castor::Point3f{ 1, 0, 1 }, 45.0_degrees ) );
 			node->attachTo( *baseNode );
-			auto geometry = p_game.getScene().getGeometryCache().add( name
-				, p_game.getScene()
+			auto geometry = game.getScene().getGeometryCache().create( name
+				, game.getScene()
 				, *node
-				, p_game.getEnemyMesh() ).lock();
+				, game.getEnemyMesh() );
 
 			for ( auto submesh : *geometry->getMesh().lock() )
 			{
-				geometry->setMaterial( *submesh, p_game.getEnemyMaterial() );
+				geometry->setMaterial( *submesh, game.getEnemyMaterial() );
 			}
 
-			auto light = p_game.getScene().getLightCache().add( name
-				, p_game.getScene()
+			game.getScene().getGeometryCache().add( geometry );
+
+			auto light = game.getScene().getLightCache().create( name
+				, game.getScene()
 				, *node
-				, p_game.getScene().getLightsFactory()
-				, castor3d::LightType::ePoint ).lock();
+				, game.getScene().getLightsFactory()
+				, castor3d::LightType::ePoint );
 			light->setColour( castor::RgbColour::fromPredefined( castor::PredefinedRgbColour::eRed ) );
 			light->setIntensity( 0.8f, 1.0f );
 			light->getPointLight()->setAttenuation( castor::Point3f{ 1.0f, 0.1f, 0.0f } );
-			result = std::make_shared< Enemy >( *baseNode, p_game, p_path, m_category );
+			game.getScene().getLightCache().add( name, light );
+			result = std::make_shared< Enemy >( *baseNode, game, path, m_category );
 		}
 		else
 		{
 			result = m_enemiesCache.front();
 			m_enemiesCache.erase( m_enemiesCache.begin() );
-			result->getNode().setPosition( p_game.convert( castor::Point2i{ cell.m_x, cell.m_y - 1 } ) + castor::Point3f{ 0, p_game.getCellHeight(), 0 } );
-			result->load( p_game );
+			result->getNode().setPosition( game.convert( castor::Point2i{ cell.m_x, cell.m_y - 1 } ) + castor::Point3f{ 0, game.getCellHeight(), 0 } );
+			result->load( game );
 		}
 
 		return result;
 	}
 
-	void EnemySpawner::KillEnemy( Game & p_game, EnemyPtr && p_enemy )
+	void EnemySpawner::killEnemy( Game & game, EnemyPtr && enemy )
 	{
-		p_enemy->getNode().setPosition( castor::Point3f{ 0, -1000, 0 } );
-		m_enemiesCache.push_back( std::move( p_enemy ) );
+		enemy->getNode().setPosition( castor::Point3f{ 0, -1000, 0 } );
+		m_enemiesCache.push_back( std::move( enemy ) );
 	}
 }

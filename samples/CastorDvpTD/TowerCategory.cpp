@@ -6,46 +6,37 @@ namespace castortd
 		: Category{ Tower::Category::Kind::eLongRange
 			, cuT( "armature_short_range.1|attack" ) }
 	{
-		auto costIncrement = []( uint32_t p_inc
-			, uint32_t p_value
-			, uint32_t p_level )
+		auto costIncrement = []( uint32_t inc
+			, uint32_t value
+			, uint32_t level )
 		{
-			return p_value + p_inc + p_inc * ( p_level / 5 );
+			return value + inc + inc * ( level / 5 );
 		};
-		auto uintIncrement = []( uint32_t p_inc
-			, uint32_t p_value
-			, uint32_t p_level )
+		auto damageIncrement = []( uint32_t inc
+			, uint32_t value
+			, uint32_t level )
 		{
-			return p_value + p_inc;
+			return value + inc;
 		};
-		auto floatIncrement = []( float p_inc
-			, float p_value
-			, uint32_t p_level )
+		auto floatIncrement = []( float inc
+			, float value
+			, uint32_t level )
 		{
-			return p_value + p_inc;
+			return value + inc;
 		};
-		auto decrement = []( castor::Milliseconds p_inc
-			, castor::Milliseconds p_value
-			, uint32_t p_level )
+		auto speedIncrement = []( float inc
+			, float value
+			, uint32_t level )
 		{
-			p_value -= p_inc;
-
-			if ( p_value < p_inc )
-			{
-				p_value = p_inc;
-			}
-
-			return p_value;
+			return value * inc;
 		};
 		m_damage.initialise( 5u
-			, std::bind( uintIncrement, 9u, std::placeholders::_1, std::placeholders::_2 )
+			, std::bind( damageIncrement, 9u, std::placeholders::_1, std::placeholders::_2 )
 			, 400u
-			, std::bind( costIncrement, 30u, std::placeholders::_1, std::placeholders::_2 )
-			, 15u );
+			, std::bind( costIncrement, 30u, std::placeholders::_1, std::placeholders::_2 ) );
 
-		m_initialCooldown = castor::Milliseconds{ 6000u };
-		m_cooldown.initialise( m_initialCooldown
-			, std::bind( decrement, castor::Milliseconds{ 240u }, std::placeholders::_1, std::placeholders::_2 )
+		m_speed.initialise( 1.0f
+			, std::bind( speedIncrement, 1.1f, std::placeholders::_1, std::placeholders::_2 )
 			, 200u
 			, std::bind( costIncrement, 20u, std::placeholders::_1, std::placeholders::_2 ) );
 
@@ -56,8 +47,6 @@ namespace castortd
 
 		m_bulletSpeed = 96.0f;
 		m_towerCost = 250u;
-		m_material = cuT( "OrangeTowerCube" );
-		m_colour = castor::RgbColour::fromComponents( 1.0f, 1.0f, 0.0f );
 	}
 
 	ShortRangeTower::ShortRangeTower()
@@ -82,27 +71,19 @@ namespace castortd
 		{
 			return p_value + p_inc;
 		};
-		auto decrement = []( castor::Milliseconds p_inc
-			, castor::Milliseconds p_value
+		auto speedIncrement = []( float p_inc
+			, float p_value
 			, uint32_t p_level )
 		{
-			p_value -= p_inc;
-
-			if ( p_value < p_inc )
-			{
-				p_value = p_inc;
-			}
-
-			return p_value;
+			return p_value * p_inc;
 		};
 		m_damage.initialise( 3u
 			, std::bind( uintIncrement, 5u, std::placeholders::_1, std::placeholders::_2 )
 			, 400u
 			, std::bind( costIncrement, 30u, std::placeholders::_1, std::placeholders::_2 ) );
 
-		m_initialCooldown = castor::Milliseconds{ 1000u };
-		m_cooldown.initialise( m_initialCooldown
-			, std::bind( decrement, castor::Milliseconds{ 50u }, std::placeholders::_1, std::placeholders::_2 )
+		m_speed.initialise( 1.0f
+			, std::bind( speedIncrement, 1.1f, std::placeholders::_1, std::placeholders::_2 )
 			, 150u
 			, std::bind( costIncrement, 10u, std::placeholders::_1, std::placeholders::_2 ) );
 
@@ -113,7 +94,5 @@ namespace castortd
 
 		m_bulletSpeed = 120.0f;
 		m_towerCost = 170u;
-		m_material = cuT( "BlueTowerCube" );
-		m_colour = castor::RgbColour::fromComponents( 0.0f, 0.0f, 1.0f );
 	}
 }

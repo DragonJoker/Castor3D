@@ -12,10 +12,10 @@ namespace castortd
 	public:
 		struct Category
 		{
-			inline void Upgrade()
+			void upgrade()
 			{
-				m_life.Upgrade();
-				m_bounty.Upgrade();
+				m_life.upgrade();
+				m_bounty.upgrade();
 			}
 
 			float m_speed;
@@ -34,17 +34,20 @@ namespace castortd
 		};
 
 	public:
-		Enemy( castor3d::SceneNode & p_node, Game const & p_game, Path const & p_path, Category const & p_category );
+		Enemy( castor3d::SceneNode & node
+			, Game const & game
+			, Path const & path
+			, Category const & category );
 
-		void load( Game const & p_game );
+		void load( Game const & game );
 
-		bool accept( Game const & p_game );
+		bool accept( Game const & game );
 
-		inline void TakeDamage( uint32_t p_damage )
+		void takeDamage( uint32_t damage )
 		{
-			if ( m_life > p_damage )
+			if ( m_life > damage )
 			{
-				m_life -= p_damage;
+				m_life -= damage;
 			}
 			else
 			{
@@ -53,33 +56,33 @@ namespace castortd
 			}
 		}
 
-		inline void Die()
+		void die()
 		{
 			m_state = State::Dead;
 			m_node.get().setPosition( castor::Point3f{ 0, -10, 0 } );
 		}
 
-		inline bool IsAlive()const
+		bool isAlive()const
 		{
 			return m_life > 0;
 		}
 
-		inline State getState()const
+		State getState()const
 		{
 			return m_state;
 		}
 
-		inline uint32_t getBounty()const
+		uint32_t getBounty()const
 		{
 			return m_category.get().m_bounty.getValue();
 		}
 
-		inline castor3d::SceneNode & getNode()
+		castor3d::SceneNode & getNode()
 		{
 			return m_node;
 		}
 
-		inline castor3d::SceneNode const & getNode()const
+		castor3d::SceneNode const & getNode()const
 		{
 			return m_node;
 		}
