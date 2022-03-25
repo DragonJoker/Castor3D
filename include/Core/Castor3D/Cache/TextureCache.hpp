@@ -113,7 +113,8 @@ namespace castor3d
 			, castor::String const & name
 			, TextureUnit & unit );
 		void doUpload( ThreadData & data );
-		void doUpdateWrite( TextureUnit & unit );
+		void doAddWrite( TextureUnit & unit );
+		void doUpdateWrite( TextureUnit const & unit );
 		ThreadData & doCreateThreadData( TextureSourceInfo const & sourceInfo
 			, PassTextureConfig const & config
 			, TextureUnit & unit );
@@ -130,6 +131,7 @@ namespace castor3d
 		ashes::DescriptorSetPtr m_bindlessTexSet;
 		std::mutex m_dirtyWritesMtx;
 		std::vector< ashes::WriteDescriptorSet > m_dirtyWrites;
+		std::map< TextureUnit const *, OnTextureUnitChangedConnection > m_units;
 	};
 }
 
