@@ -11,9 +11,6 @@ See LICENSE file in root folder
 namespace castor
 {
 	/**
-	\author 	Sylvain DOREMUS
-	\version	0.8.0
-	\date		09/02/2016
 	\~english
 	\brief		Retrieves the basic CPU informations.
 	\~french
@@ -30,6 +27,7 @@ namespace castor
 			bool m_isAMD{ false };
 			uint32_t m_coreCount{ 0u };
 			std::string m_vendor{};
+			std::string m_model{};
 			std::bitset< 32 > m_f_1_ECX{ 0 };
 			std::bitset< 32 > m_f_1_EDX{ 0 };
 			std::bitset< 32 > m_f_7_EBX{ 0 };
@@ -70,6 +68,16 @@ namespace castor
 		inline std::string getVendor()const
 		{
 			return m_internal.m_vendor;
+		}
+		/**
+		 *\~english
+		 *\return		The CPU model.
+		 *\~french
+		 *\return		Le modèle du CPU.
+		 */
+		inline std::string getModel()const
+		{
+			return m_internal.m_model;
 		}
 		/**
 		 *\~english

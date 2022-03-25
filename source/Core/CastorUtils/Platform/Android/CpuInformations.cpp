@@ -18,6 +18,11 @@ namespace castor
 		{
 			android_getCpuCount();
 		}
+
+		std::string getCPUModel()
+		{
+			return std::string{};
+		}
 	}
 }
 
