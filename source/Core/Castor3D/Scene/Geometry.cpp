@@ -71,8 +71,7 @@ namespace castor3d
 	}
 
 	void Geometry::setMaterial( Submesh & submesh
-		, MaterialRPtr material
-		, bool updateSubmesh )
+		, MaterialRPtr material )
 	{
 		if ( auto mesh = getMesh().lock() )
 		{
@@ -102,7 +101,7 @@ namespace castor3d
 
 			if ( changed )
 			{
-				submesh.setMaterial( oldMaterial, material, updateSubmesh );
+				submesh.setMaterial( oldMaterial, material, true );
 
 				if ( material->hasEnvironmentMapping() )
 				{
@@ -229,9 +228,15 @@ namespace castor3d
 			for ( auto submesh : *mesh )
 			{
 				CU_Require( &submesh->getParent() == mesh.get() );
-				m_submeshesMaterials.emplace( submesh.get(), submesh->getDefaultMaterial() );
+				auto material = submesh->getDefaultMaterial();
+				m_submeshesMaterials.emplace( submesh.get(), material );
 				m_submeshesBoxes.emplace( submesh.get(), submesh->getBoundingBox() );
 				m_submeshesSpheres.emplace( submesh.get(), submesh->getBoundingSphere() );
+
+				if ( material )
+				{
+					submesh->setMaterial( {}, material, true );
+				}
 			}
 		}
 		else
