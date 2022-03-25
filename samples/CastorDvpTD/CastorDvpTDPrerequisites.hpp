@@ -21,6 +21,7 @@ namespace castortd
 	class Tower;
 	class Enemy;
 	class Bullet;
+	class Boulder;
 
 	using EnemyPtr = std::shared_ptr< Enemy >;
 	using TowerPtr = std::shared_ptr< Tower >;
@@ -29,14 +30,15 @@ namespace castortd
 	using TowerArray = std::vector< TowerPtr >;
 	using EnemyArray = std::vector< EnemyPtr >;
 	using BulletArray = std::vector< Bullet >;
+	using BoulderArray = std::vector< Boulder >;
 
 	using Clock = std::chrono::high_resolution_clock;
 
 	wxString const ApplicationName = wxT( "CastorDvpTD" );
 
 	template< typename T, typename ... Params >
-	inline wxWindowPtr< T > wxMakeWindowPtr( Params && ... p_params )
+	wxWindowPtr< T > wxMakeWindowPtr( Params && ... params )
 	{
-		return wxWindowPtr< T >( new T( std::forward< Params >( p_params )... ) );
+		return wxWindowPtr< T >( new T( std::forward< Params >( params )... ) );
 	}
 }

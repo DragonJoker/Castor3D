@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Boulder.hpp"
 #include "Bullet.hpp"
 #include "EnemySpawner.hpp"
 #include "Hud.hpp"
@@ -14,136 +15,139 @@ namespace castortd
 	public:
 		explicit Game( castor3d::Scene & p_scene );
 
-		void Reset();
+		void reset();
 		void start();
 		void pause();
 		void resume();
-		void Help();
+		void help();
 		void update();
-		Cell & getCell( castor::Point3f const & p_position );
-		Cell & getCell( castor::Point2i const & p_position );
-		Cell & getCell( int p_x, int p_y );
-		Cell const & getCell( castor::Point3f const & p_position )const;
-		Cell const & getCell( castor::Point2i const & p_position )const;
-		Cell const & getCell( int p_x, int p_y )const;
-		castor::Point3f convert( castor::Point2i const & p_position )const;
-		castor::Point2i convert( castor::Point3f const & p_position )const;
-		void EmitBullet( float p_speed, uint32_t p_damage, castor::Point3f const & p_origin, Enemy & p_target );
-		bool BuildTower( castor::Point3f const & p_position, Tower::CategoryPtr && p_category );
-		void Spend( uint32_t p_value );
-		void Gain( uint32_t p_value );
-		void LoseLife( uint32_t p_value );
+		Cell & getCell( castor::Point3f const & position );
+		Cell & getCell( castor::Point2i const & position );
+		Cell & getCell( int x, int y );
+		Cell const & getCell( castor::Point3f const & position )const;
+		Cell const & getCell( castor::Point2i const & position )const;
+		Cell const & getCell( int x, int y )const;
+		castor::Point3f convert( castor::Point2i const & position )const;
+		castor::Point2i convert( castor::Point3f const & position )const;
+		void emitBullet( float speed, uint32_t damage, castor::Point3f const & origin, Enemy & target );
+		void emitBoulder( float speed, uint32_t damage, castor::Point3f const & origin, castor::Point3f const & target );
+		bool buildTower( castor::Point3f const & position, Tower::CategoryPtr && category );
+		void spend( uint32_t value );
+		void earn( uint32_t value );
+		void loseLife( uint32_t value );
+		void areaDamage( castor::Point3f const & position, uint32_t damage );
 
-		TowerPtr SelectTower( Cell const & p_cell );
-		void UpgradeTowerSpeed( Tower & p_tower );
-		void UpgradeTowerRange( Tower & p_tower );
-		void UpgradeTowerDamage( Tower & p_tower );
-		bool CanAfford( uint32_t p_price );
+		TowerPtr selectTower( Cell const & cell );
+		void upgradeTowerSpeed( Tower & tower );
+		void upgradeTowerRange( Tower & tower );
+		void upgradeTowerDamage( Tower & tower );
+		bool canAfford( uint32_t price );
 
-		inline TowerPtr getSelectedTower()const
+		TowerPtr getSelectedTower()const
 		{
 			return m_selectedTower.lock();
 		}
 
-		inline float getCellHeight()const
+		float getCellHeight()const
 		{
 			return m_cellDimensions[2];
 		}
 
-		inline uint32_t getLives()const
+		uint32_t getLives()const
 		{
 			return m_lives;
 		}
 
-		inline uint32_t getOre()const
+		uint32_t getOre()const
 		{
 			return m_ore;
 		}
 
-		inline uint32_t getWave()const
+		uint32_t getWave()const
 		{
 			return m_spawner.getWave();
 		}
 
-		inline uint32_t getKills()const
+		uint32_t getKills()const
 		{
 			return m_kills;
 		}
 
-		inline bool IsStarted()const
+		bool isStarted()const
 		{
 			return m_started;
 		}
 
-		inline bool IsRunning()const
+		bool isRunning()const
 		{
 			return m_started && !m_paused;
 		}
 
-		inline bool isEnded()const
+		bool isEnded()const
 		{
 			return m_ended;
 		}
 
-		inline bool isPaused()const
+		bool isPaused()const
 		{
 			return m_paused;
 		}
 
-		inline castor3d::Scene & getScene()const
+		castor3d::Scene & getScene()const
 		{
 			return m_scene;
 		}
 
-		inline castor3d::SceneNodeSPtr getMapNode()const
+		castor3d::SceneNodeSPtr getMapNode()const
 		{
 			return m_mapNode;
 		}
 
-		inline castor3d::MaterialRPtr getEnemyMaterial()const
+		castor3d::MaterialRPtr getEnemyMaterial()const
 		{
 			return m_enemyCubeMaterial.lock().get();
 		}
 
-		inline castor3d::MeshResPtr getEnemyMesh()const
+		castor3d::MeshResPtr getEnemyMesh()const
 		{
 			return m_enemyCubeMesh;
 		}
 
-		inline uint32_t getEnemiesLife()const
+		uint32_t getEnemiesLife()const
 		{
 			return m_spawner.getEnemiesLife();
 		}
 
-		inline uint32_t getEnemiesBounty()const
+		uint32_t getEnemiesBounty()const
 		{
 			return m_spawner.getEnemiesBounty();
 		}
 
-		inline castor::Milliseconds getElapsed()const
+		castor::Milliseconds getElapsed()const
 		{
 			return m_elapsed;
 		}
 
-		inline EnemyArray & getEnemies()
+		EnemyArray & getEnemies()
 		{
 			return m_enemies;
 		}
 
-		inline EnemyArray const & getEnemies()const
+		EnemyArray const & getEnemies()const
 		{
 			return m_enemies;
 		}
 
 	private:
 		void doPrepareGrid();
-		void doAddMapCube( Cell & p_cell );
-		void doAddTarget( Cell & p_cell );
-		castor3d::MeshResPtr doSelectMesh( Tower::Category & p_category );
-		void doAddTower( Cell & p_cell, Tower::CategoryPtr && p_category );
+		void doAddMapCube( Cell & cell );
+		void doAddTarget( Cell & cell );
+		castor3d::MeshResPtr doSelectMesh( Tower::Category & category );
+		void doAddTower( Cell & cell, Tower::CategoryPtr && category );
 		void doUpdateTowers();
 		void doUpdateEnemies();
 		void doUpdateBullets();
+		void doUpdateBoulders();
 		void doGameOver();
 
 	private:
@@ -162,6 +166,8 @@ namespace castortd
 		castor3d::MaterialResPtr m_enemyCubeMaterial;
 		castor3d::MeshResPtr m_bulletMesh;
 		castor3d::MaterialResPtr m_bulletMaterial;
+		castor3d::MeshResPtr m_boulderMesh;
+		castor3d::MaterialResPtr m_boulderMaterial;
 		// Varying data
 		Clock::time_point m_saved;
 		castor::Milliseconds m_elapsed;
@@ -172,6 +178,9 @@ namespace castortd
 		BulletArray m_bullets;
 		BulletArray m_bulletsCache;
 		uint64_t m_totalBullets{ 0ull };
+		BoulderArray m_boulders;
+		BoulderArray m_bouldersCache;
+		uint64_t m_totalBoulders{ 0ull };
 		uint32_t m_lives{ 0u };
 		uint32_t m_ore{ 0u };
 		uint32_t m_kills{ 0u };

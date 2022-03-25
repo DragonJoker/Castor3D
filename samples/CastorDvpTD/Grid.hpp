@@ -25,10 +25,10 @@ namespace castortd
 			Invalid,
 		};
 
-		inline Cell( uint32_t p_x = 0u, uint32_t p_y = 0u, State p_state = State::Empty )
-			: m_x{ p_x }
-			, m_y{ p_y }
-			, m_state{ p_state }
+		Cell( uint32_t x = 0u, uint32_t y = 0u, State state = State::Empty )
+			: m_x{ x }
+			, m_y{ y }
+			, m_state{ state }
 		{
 		}
 
@@ -42,42 +42,42 @@ namespace castortd
 	public:
 		Grid();
 
-		inline auto begin()const
+		auto begin()const
 		{
 			return m_cells.begin();
 		}
 
-		inline auto begin()
+		auto begin()
 		{
 			return m_cells.begin();
 		}
 
-		inline auto end()const
+		auto end()const
 		{
 			return m_cells.end();
 		}
 
-		inline auto end()
+		auto end()
 		{
 			return m_cells.end();
 		}
 
-		inline auto getWidth()const
+		auto getWidth()const
 		{
 			return m_width;
 		}
 
-		inline auto getHeight()const
+		auto getHeight()const
 		{
 			return m_height;
 		}
 
-		inline auto & operator()( uint32_t x, uint32_t y )const
+		auto & operator()( uint32_t x, uint32_t y )const
 		{
 			return m_cells[size_t( x ) * m_height + y];
 		}
 
-		inline auto & operator()( uint32_t x, uint32_t y )
+		auto & operator()( uint32_t x, uint32_t y )
 		{
 			return m_cells[size_t( x ) * m_height + y];
 		}
