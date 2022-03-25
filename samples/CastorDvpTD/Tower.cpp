@@ -11,25 +11,27 @@ namespace castortd
 
 	namespace
 	{
-		//// Nearest enemy
-		//EnemyArray doSortNearest( EnemyArray const & p_enemies, castor::Point3f const & p_position )
-		//{
-		//	EnemyArray result{ p_enemies };
-		//	std::sort( std::begin( result )
-		//		, std::end( result )
-		//		, [&p_position]( EnemyPtr a, EnemyPtr b )
-		//		{
-		//			return point::distanceSquared( a->getNode().getPosition(), p_position )
-		//				< point::distanceSquared( b->getNode().getPosition(), p_position );
-		//		} );
-		//	return result;
-		//}
+		static castor::Milliseconds constexpr zeroTime{ 0_ms };
 
-		// First enemy
-		EnemyArray doSortFirst( EnemyArray const & p_enemies, castor::Point3f const & p_position )
+		// Nearest enemy
+		EnemyArray doSortNearest( EnemyArray const & p_enemies, castor::Point3f const & p_position )
 		{
-			return p_enemies;
+			EnemyArray result{ p_enemies };
+			std::sort( std::begin( result )
+				, std::end( result )
+				, [&p_position]( EnemyPtr a, EnemyPtr b )
+				{
+					return castor::point::distanceSquared( a->getNode().getPosition(), p_position )
+						< castor::point::distanceSquared( b->getNode().getPosition(), p_position );
+				} );
+			return result;
 		}
+
+		//// First enemy
+		//EnemyArray doSortFirst( EnemyArray const & p_enemies, castor::Point3f const & p_position )
+		//{
+		//	return p_enemies;
+		//}
 	}
 
 	//*********************************************************************************************
@@ -54,7 +56,7 @@ namespace castortd
 		switch ( m_state )
 		{
 		case Tower::State::Idle:
-			sorted = doSortFirst( p_game.getEnemies(), m_node.getPosition() );
+			sorted = doSortNearest( p_game.getEnemies(), m_node.getPosition() );
 			doLookForEnemy( sorted );
 			break;
 
@@ -66,7 +68,7 @@ namespace castortd
 			break;
 
 		case Tower::State::Shooting:
-			sorted = doSortFirst( p_game.getEnemies(), m_node.getPosition() );
+			sorted = doSortNearest( p_game.getEnemies(), m_node.getPosition() );
 			if ( doAnimEnded( sorted ) )
 			{
 				doShoot( p_game );
@@ -75,7 +77,7 @@ namespace castortd
 		}
 
 		if ( m_target
-			&& m_target->IsAlive()
+			&& m_target->isAlive()
 			&& doIsInRange( *m_target ) )
 		{
 			doTurnToTarget();
@@ -86,7 +88,7 @@ namespace castortd
 	{
 		for ( auto & enemy : p_enemies )
 		{
-			if ( enemy->IsAlive()
+			if ( enemy->isAlive()
 				&& doIsInRange( *enemy ) )
 			{
 				m_target = enemy;
@@ -100,30 +102,29 @@ namespace castortd
 	bool Tower::doCanShoot()
 	{
 		if ( !m_target
-			 || !m_target->IsAlive()
+			 || !m_target->isAlive()
 			 || !doIsInRange( *m_target ) )
 		{
 			m_target = nullptr;
 			m_state = State::Idle;
 		}
 
-		return m_state != State::Idle && m_remaining == castor::Milliseconds{};
+		return m_state != State::Idle && m_remaining == 0_ms;
 	}
 
 	void Tower::doStartAttack()
 	{
-		m_remaining = m_category->getSpeed();
-		m_animRemain = m_category->getAttackAnimationTime();
+		m_animRemain = castor::Milliseconds{ int64_t( float( m_category->getAttackAnimationTime().count() ) / m_category->getSpeed() ) };
 		m_anim.startAnimation( m_category->getAttackAnimationName() );
 		m_state = State::Shooting;
 	}
 
 	bool Tower::doAnimEnded( EnemyArray & p_enemies )
 	{
-		bool result = m_animRemain <= castor::Milliseconds{};
+		bool result = m_animRemain <= zeroTime;
 
 		if ( !result
-			&& ( !m_target->IsAlive()
+			&& ( !m_target->isAlive()
 			|| !doIsInRange( *m_target ) ) )
 		{
 			if ( !doLookForEnemy( p_enemies ) )
@@ -140,10 +141,9 @@ namespace castortd
 		return result;
 	}
 
-	void Tower::doUpdateTimes( castor::Milliseconds const & p_elapsed )
+	void Tower::doUpdateTimes( castor::Milliseconds const & elapsed )
 	{
-		static castor::Milliseconds zeroTime;
-		m_remaining -= p_elapsed;
+		m_remaining -= elapsed;
 
 		if ( m_remaining < zeroTime )
 		{
@@ -152,7 +152,7 @@ namespace castortd
 
 		if ( m_state == State::Shooting )
 		{
-			m_animRemain -= p_elapsed;
+			m_animRemain -= elapsed;
 
 			if ( m_animRemain <= zeroTime )
 			{
@@ -164,10 +164,25 @@ namespace castortd
 		}
 	}
 
-	void Tower::doShoot( Game & p_game )
+	void Tower::doShoot( Game & game )
 	{
 		m_state = State::Idle;
-		p_game.EmitBullet( m_category->getBulletSpeed(), m_category->getDamage(), m_node.getPosition(), *m_target );
+
+		switch ( m_category->getKind() )
+		{
+		case Category::Kind::eShortRange:
+			game.emitBullet( m_category->getBulletSpeed()
+				, m_category->getDamage()
+				, m_node.getPosition()
+				, *m_target );
+			break;
+		case Category::Kind::eLongRange:
+			game.emitBoulder( m_category->getBulletSpeed()
+				, m_category->getDamage()
+				, m_node.getPosition()
+				, m_target->getNode().getDerivedPosition() );
+			break;
+		}
 	}
 
 	bool Tower::doIsInRange( Enemy const & p_enemy )const

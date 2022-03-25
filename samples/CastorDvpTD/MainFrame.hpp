@@ -17,10 +17,10 @@ namespace castortd
 		void doLoadScene();
 
 		DECLARE_EVENT_TABLE()
-		void OnPaint( wxPaintEvent  & p_event );
-		void OnClose( wxCloseEvent  & p_event );
-		void OnEraseBackground( wxEraseEvent & p_event );
-		void OnRenderTimer( wxTimerEvent & p_event );
+		void OnPaint( wxPaintEvent  & event );
+		void OnClose( wxCloseEvent  & event );
+		void OnEraseBackground( wxEraseEvent & event );
+		void OnRenderTimer( wxTimerEvent & event );
 
 	private:
 		wxWindowPtr< RenderPanel > m_panel;

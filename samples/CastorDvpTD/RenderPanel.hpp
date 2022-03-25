@@ -31,7 +31,7 @@ namespace castortd
 		void reset();
 		void setRenderTarget( castor3d::RenderTargetSPtr target );
 
-		inline castor3d::RenderWindow const & getRenderWindow()const
+		castor3d::RenderWindow const & getRenderWindow()const
 		{
 			return *m_renderWindow;
 		}

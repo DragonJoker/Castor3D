@@ -19,125 +19,112 @@ namespace castortd
 				eLongRange
 			};
 
-			Category( Kind p_kind
-				, castor::String const & p_attackAnimName )
-				: m_kind{ p_kind }
-				, m_attackAnimName{ p_attackAnimName }
+			Category( Kind kind
+				, castor::String const & attackAnimName )
+				: m_kind{ kind }
+				, m_attackAnimName{ attackAnimName }
 				, m_attackAnimTime{}
 			{
 			}
 
-			inline void UpgradeDamage()
+			void upgradeDamage()
 			{
-				m_damage.Upgrade();
+				m_damage.upgrade();
 			}
 
-			inline void UpgradeRange()
+			void upgradeRange()
 			{
-				m_range.Upgrade();
+				m_range.upgrade();
 			}
 
-			inline float UpgradeSpeed()
+			void upgradeSpeed()
 			{
-				m_cooldown.Upgrade();
-				return float( m_initialCooldown.count() ) / float( m_cooldown.getValue().count() );
+				m_speed.upgrade();
 			}
 
-			inline bool CanUpgradeDamage()
+			bool canUpgradeDamage()
 			{
-				return m_damage.CanUpgrade();
+				return m_damage.canUpgrade();
 			}
 
-			inline bool CanUpgradeRange()
+			bool canUpgradeRange()
 			{
-				return m_range.CanUpgrade();
+				return m_range.canUpgrade();
 			}
 
-			inline bool CanUpgradeSpeed()
+			bool canUpgradeSpeed()
 			{
-				return m_cooldown.CanUpgrade();
+				return m_speed.canUpgrade();
 			}
 
-			inline uint32_t getDamageUpgradeCost()const
+			uint32_t getDamageUpgradeCost()const
 			{
 				return m_damage.getCost();
 			}
 
-			inline uint32_t getRangeUpgradeCost()const
+			uint32_t getRangeUpgradeCost()const
 			{
 				return m_range.getCost();
 			}
 
-			inline uint32_t getSpeedUpgradeCost()const
+			uint32_t getSpeedUpgradeCost()const
 			{
-				return m_cooldown.getCost();
+				return m_speed.getCost();
 			}
 
-			inline uint32_t getTowerCost()const
+			uint32_t getTowerCost()const
 			{
 				return m_towerCost;
 			}
 
-			inline uint32_t getDamage()const
+			uint32_t getDamage()const
 			{
 				return m_damage.getValue();
 			}
 
-			inline float getRange()const
+			float getRange()const
 			{
 				return m_range.getValue();
 			}
 
-			inline castor::Milliseconds getSpeed()const
+			float getSpeed()const
 			{
-				return m_cooldown.getValue();
+				return m_speed.getValue();
 			}
 
-			inline float getBulletSpeed()const
+			float getBulletSpeed()const
 			{
 				return m_bulletSpeed;
 			}
 
-			inline castor::String const & getMaterialName()const
-			{
-				return m_material;
-			}
-
-			inline castor::RgbColour const & getColour()const
-			{
-				return m_colour;
-			}
-
-			inline castor::String const & getAttackAnimationName()const
+			castor::String const & getAttackAnimationName()const
 			{
 				return m_attackAnimName;
 			}
 
-			inline castor::Milliseconds const & getAttackAnimationTime()const
+			castor::Milliseconds const & getAttackAnimationTime()const
 			{
 				return m_attackAnimTime;
 			}
 
-			inline Kind const & getKind()const
+			Kind const & getKind()const
 			{
 				return m_kind;
 			}
 
-			inline void setAttackAnimationTime( castor::Milliseconds const & p_time )
+			void setAttackAnimationTime( castor::Milliseconds const & time )
 			{
-				m_attackAnimTime = p_time;
+				m_attackAnimTime = time;
 			}
 
 		protected:
 			Kind m_kind;
 			PaidAbility< uint32_t > m_damage;
-			PaidAbility< castor::Milliseconds > m_cooldown;
+			PaidAbility< float > m_speed;
 			castor::Milliseconds m_initialCooldown{};
 			PaidAbility< float > m_range;
 			float m_bulletSpeed{ 0.0f };
 			uint32_t m_towerCost{ 0u };
-			castor::String m_material;
-			castor::RgbColour m_colour;
 			castor::String m_attackAnimName;
 			castor::Milliseconds m_attackAnimTime;
 		};
@@ -152,104 +139,105 @@ namespace castortd
 		};
 
 	public:
-		Tower( CategoryPtr && p_category
-			, castor3d::SceneNode & p_node
-			, castor3d::AnimatedObjectGroup & p_anim
-			, Cell const & p_cell );
+		Tower( CategoryPtr && category
+			, castor3d::SceneNode & node
+			, castor3d::AnimatedObjectGroup & anim
+			, Cell const & cell );
 
-		void accept( Game & p_game );
+		void accept( Game & game );
 
-		inline State getState()const
+		State getState()const
 		{
 			return m_state;
 		}
 
-		inline castor3d::SceneNode const & getNode()const
+		castor3d::SceneNode const & getNode()const
 		{
 			return m_node;
 		}
 
-		inline Cell const & getCell()const
+		Cell const & getCell()const
 		{
 			return m_cell;
 		}
 
-		inline uint32_t getDamageUpgradeCost()const
+		uint32_t getDamageUpgradeCost()const
 		{
 			return m_category->getDamageUpgradeCost();
 		}
 
-		inline uint32_t getRangeUpgradeCost()const
+		uint32_t getRangeUpgradeCost()const
 		{
 			return m_category->getRangeUpgradeCost();
 		}
 
-		inline uint32_t getSpeedUpgradeCost()const
+		uint32_t getSpeedUpgradeCost()const
 		{
 			return m_category->getSpeedUpgradeCost();
 		}
 
-		inline bool CanUpgradeDamage()
+		bool canUpgradeDamage()
 		{
-			return m_category->CanUpgradeDamage();
+			return m_category->canUpgradeDamage();
 		}
 
-		inline bool CanUpgradeRange()
+		bool canUpgradeRange()
 		{
-			return m_category->CanUpgradeRange();
+			return m_category->canUpgradeRange();
 		}
 
-		inline bool CanUpgradeSpeed()
+		bool canUpgradeSpeed()
 		{
-			return m_category->CanUpgradeSpeed();
+			return m_category->canUpgradeSpeed();
 		}
 
-		inline uint32_t getTowerCost()const
+		uint32_t getTowerCost()const
 		{
 			return m_category->getTowerCost();
 		}
 
-		inline uint32_t getDamage()const
+		uint32_t getDamage()const
 		{
 			return m_category->getDamage();
 		}
 
-		inline uint32_t getRange()const
+		uint32_t getRange()const
 		{
 			return uint32_t( m_category->getRange() );
 		}
 
-		inline uint32_t getSpeed()const
+		float getSpeed()const
 		{
-			return uint32_t( m_category->getSpeed().count() );
+			return m_category->getSpeed();
 		}
 
-		inline void UpgradeDamage()
+		void upgradeDamage()
 		{
-			m_category->UpgradeDamage();
+			m_category->upgradeDamage();
 		}
 
-		inline void UpgradeRange()
+		void upgradeRange()
 		{
-			m_category->UpgradeRange();
+			m_category->upgradeRange();
 		}
 
-		inline void UpgradeSpeed()
+		void upgradeSpeed()
 		{
-			m_animScale = m_category->UpgradeSpeed();
+			m_category->upgradeSpeed();
+			m_animScale = getSpeed();
 		}
 
 	private:
-		bool doLookForEnemy( EnemyArray & p_enemies );
+		bool doLookForEnemy( EnemyArray & enemies );
 		bool doCanShoot();
 		void doStartAttack();
-		bool doAnimEnded( EnemyArray & p_enemies );
-		void doShoot( Game & p_game );
-		void doUpdateTimes( castor::Milliseconds const & p_elapsed );
-		bool doIsInRange( Enemy const & p_enemy )const;
+		bool doAnimEnded( EnemyArray & enemies );
+		void doShoot( Game & game );
+		void doUpdateTimes( castor::Milliseconds const & elapsed );
+		bool doIsInRange( Enemy const & enemy )const;
 		void doTurnToTarget();
 
-		inline castor3d::SceneNode & getNode()
+		castor3d::SceneNode & getNode()
 		{
 			return m_node;
 		}

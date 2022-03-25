@@ -9,6 +9,7 @@ set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 set( ${PROJECT_NAME}_HDR_FILES
 	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/Ability.hpp
 	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/Bullet.hpp
+	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/Boulder.hpp
 	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/CastorDvpTD.hpp
 	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/CastorDvpTDPrerequisites.hpp
 	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/Enemy.hpp
@@ -24,6 +25,7 @@ set( ${PROJECT_NAME}_HDR_FILES
 )
 set( ${PROJECT_NAME}_SRC_FILES
 	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/Bullet.cpp
+	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/Boulder.cpp
 	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/CastorDvpTD.cpp
 	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/CastorDvpTDPrerequisites.cpp
 	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/Enemy.cpp

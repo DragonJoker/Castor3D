@@ -7,18 +7,24 @@ namespace castortd
 	class Bullet
 	{
 	public:
-		Bullet( float p_speed, uint32_t p_damage, castor3d::SceneNode & p_node, Enemy & p_enemy );
+		Bullet( float speed
+			, uint32_t damage
+			, castor3d::SceneNode & node
+			, Enemy & enemy );
 
-		bool accept( Game & p_game );
+		bool accept( Game & game );
 
-		void load( float p_speed, uint32_t p_damage, castor::Point3f const & p_node, Enemy & p_enemy );
+		void load( float speed
+			, uint32_t damage
+			, castor::Point3f const & node
+			, Enemy & enemy );
 
-		inline castor3d::SceneNode & getNode()
+		castor3d::SceneNode & getNode()
 		{
 			return m_node;
 		}
 
-		inline castor3d::SceneNode const & getNode()const
+		castor3d::SceneNode const & getNode()const
 		{
 			return m_node;
 		}

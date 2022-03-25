@@ -11,28 +11,27 @@ namespace castortd
 	{
 		using ValueIncrementFunction = std::function< T( T const &, uint32_t ) >;
 
-		inline void initialise( T const & p_value
-								, ValueIncrementFunction const & p_valueIncrement )
+		void initialise( T const & value
+			, ValueIncrementFunction const & increment )
 		{
 			m_level = 0;
-			m_value = p_value;
-			m_valueIncrement = p_valueIncrement;
+			m_value = value;
+			m_increment = increment;
 		}
 
-		inline void Upgrade()
+		void upgrade()
 		{
-			m_value = m_valueIncrement( m_value, m_level );
-			++m_level;
+			m_value = m_increment( m_value, m_level++ );
 		}
 
-		inline T const & getValue()const
+		T const & getValue()const
 		{
 			return m_value;
 		}
 
 	protected:
 		T m_value{};
-		ValueIncrementFunction m_valueIncrement;
+		ValueIncrementFunction m_increment;
 		uint32_t m_level{ 0u };
 	};
 
@@ -43,33 +42,33 @@ namespace castortd
 		using ValueIncrementFunction = typename Ability< T >::ValueIncrementFunction;
 		using CostIncrementFunction = std::function< uint32_t( uint32_t, uint32_t ) >;
 
-		inline void initialise( T const & p_value
-								, ValueIncrementFunction const & p_valueIncrement
-								, uint32_t p_cost
-								, CostIncrementFunction p_costIncrement
-								, uint32_t p_maxLevel = 15u )
+		void initialise( T const & value
+			, ValueIncrementFunction const & valueIncrement
+			, uint32_t cost
+			, CostIncrementFunction costIncrement
+			, uint32_t maxLevel = 15u )
 		{
-			Ability< T >::initialise( p_value, p_valueIncrement );
-			m_cost = p_cost;
-			m_costIncrement = p_costIncrement;
-			m_maxLevel = p_maxLevel;
+			Ability< T >::initialise( value, valueIncrement );
+			m_cost = cost;
+			m_costIncrement = costIncrement;
+			m_maxLevel = maxLevel;
 		}
 
-		inline void Upgrade()
+		void upgrade()
 		{
-			if ( CanUpgrade() )
+			if ( canUpgrade() )
 			{
-				Ability< T >::Upgrade();
 				m_cost = m_costIncrement( m_cost, Ability< T >::m_level );
+				Ability< T >::upgrade();
 			}
 		}
 
-		inline bool CanUpgrade()
+		bool canUpgrade()
 		{
 			return Ability< T >::m_level < m_maxLevel;
 		}
 
-		inline uint32_t const & getCost()const
+		uint32_t const & getCost()const
 		{
 			return m_cost;
 		}
