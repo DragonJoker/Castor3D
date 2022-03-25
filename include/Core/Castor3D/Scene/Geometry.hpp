@@ -92,18 +92,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Defines a submesh material.
-		 *\param[in]	submesh			The submesh.
-		 *\param[in]	material		The material.
-		 *\param[in]	updateSubmesh	Tells if the submesh's buffers need to be updated.
+		 *\param[in]	submesh		The submesh.
+		 *\param[in]	material	The material.
 		 *\~french
 		 *\brief		Définit le matériau d'un sous-maillage.
-		 *\param[in]	submesh			Le sous-maillage.
-		 *\param[in]	material		Le matériau.
-		 *\param[in]	updateSubmesh	Dit si les tampons du sous-maillage doivent être mis à jour.
+		 *\param[in]	submesh		Le sous-maillage.
+		 *\param[in]	material	Le matériau.
 		 */
 		C3D_API void setMaterial( Submesh & submesh
-			, MaterialRPtr material
-			, bool updateSubmesh = true );
+			, MaterialRPtr material );
 		/**
 		 *\~english
 		 *\brief		Computes the bounding box from the given submeshes boxes.

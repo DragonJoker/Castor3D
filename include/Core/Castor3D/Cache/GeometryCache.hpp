@@ -86,7 +86,7 @@ namespace castor3d
 		 */
 		C3D_API void add( ElementPtrT element );
 
-	public:
+	private:
 		using ElementObjectCacheT::add;
 
 	private:

@@ -213,12 +213,12 @@ namespace castor3d
 		 *\brief		Sets the material.
 		 *\param[in]	oldMaterial	The old material.
 		 *\param[in]	newMaterial	The new material.
-		 *\param[in]	update		Tells if the buffers must be updated.
+		 *\param[in]	update		Tells if the instantiation component must be updated.
 		 *\~french
 		 *\brief		Définit le materiau.
 		 *\param[in]	oldMaterial	Le matériau précédent.
 		 *\param[in]	newMaterial	Le nouveau matériau.
-		 *\param[in]	update		Dit si les tampons doivent être mis à jour.
+		 *\param[in]	update		Dit si le composant d'instantiation doit être mis à jour.
 		 */
 		C3D_API void setMaterial( MaterialRPtr oldMaterial
 			, MaterialRPtr newMaterial
