@@ -161,6 +161,7 @@ namespace CastorViewer
 				{
 					engine->getRenderLoop().beginRendering();
 					GuiCommon::loadScene( *engine
+						, "Castor3D"
 						, m_filePath
 						, &window.getProgressBar()
 						, this
@@ -169,6 +170,7 @@ namespace CastorViewer
 				else
 				{
 					auto target = GuiCommon::loadScene( *engine
+						, "Castor3D"
 						, m_filePath
 						, nullptr );
 					doSceneLoadEnd( target );

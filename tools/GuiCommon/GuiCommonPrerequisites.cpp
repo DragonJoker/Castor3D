@@ -235,6 +235,7 @@ namespace GuiCommon
 	}
 
 	castor3d::RenderTargetSPtr loadScene( castor3d::Engine & engine
+		, castor::String const & appName
 		, castor::Path const & fileName
 		, castor3d::ProgressBar * progress )
 	{
@@ -249,7 +250,7 @@ namespace GuiCommon
 				try
 				{
 					castor3d::SceneFileParser parser( engine );
-					auto preprocessed = parser.processFile( fileName );
+					auto preprocessed = parser.processFile( appName, fileName );
 
 					if ( progress )
 					{
@@ -287,16 +288,17 @@ namespace GuiCommon
 	}
 
 	void loadScene( castor3d::Engine & engine
+		, castor::String const & appName
 		, castor::Path const & fileName
 		, castor3d::ProgressBar * progress
 		, wxWindow * window
 		, int eventID )
 	{
-		std::thread async{ [&engine, fileName, progress, window, eventID]()
+		std::thread async{ [&engine, appName, fileName, progress, window, eventID]()
 			{
 				try
 				{
-					auto target = loadScene( engine, fileName, progress );
+					auto target = loadScene( engine, appName, fileName, progress );
 					auto event = new wxThreadEvent{ wxEVT_THREAD, eventID };
 					auto var = new wxVariant{ target.get() };
 					event->SetEventObject( var );

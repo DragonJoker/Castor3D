@@ -766,7 +766,7 @@ namespace castor3d
 		{
 			SceneFileParser parser( *this );
 
-			if ( !parser.parseFile( path / cuT( "Core.zip" ) ) )
+			if ( !parser.parseFile( "Castor3D", path / cuT( "Core.zip" ) ) )
 			{
 				log::error << cuT( "Can't read Core.zip data file" ) << std::endl;
 			}

@@ -61,6 +61,7 @@ namespace castortd
 	{
 		auto & engine = *wxGetApp().getCastor();
 		auto target = GuiCommon::loadScene( engine
+			, "CastorDvpTD"
 			, castor::File::getExecutableDirectory().getPath() / cuT( "share" ) / cuT( "CastorDvpTD" ) / cuT( "Data.zip" )
 			, nullptr );
 
