@@ -275,11 +275,13 @@ namespace castor3d
 		void setId( uint32_t value )
 		{
 			m_id = value;
+			onIdChanged( *this );
 		}
 		/**@}*/
 
 	public:
 		OnTextureUnitChanged onChanged;
+		OnTextureUnitChanged onIdChanged;
 
 	private:
 		using AnimableT< Engine >::hasAnimation;

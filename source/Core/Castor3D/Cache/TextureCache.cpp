@@ -722,7 +722,7 @@ namespace castor3d
 						config.tileSet->w = 1u;
 						data.unit->setConfiguration( std::move( config ) );
 						data.unit->initialise( device, queueData );
-						doUpdateWrite( *data.unit );
+						doAddWrite( *data.unit );
 						doDestroyThreadData( data );
 					} ) );
 		}
@@ -845,18 +845,39 @@ namespace castor3d
 
 					data.unit->setConfiguration( std::move( config ) );
 					data.unit->initialise( device, queueData );
-					doUpdateWrite( *data.unit );
+					doAddWrite( *data.unit );
 					doDestroyThreadData( data );
 				} ) );
 	}
 
-	void TextureUnitCache::doUpdateWrite( TextureUnit & unit )
+	void TextureUnitCache::doAddWrite( TextureUnit & unit )
 	{
-		if ( !hasBindless() || unit.getId() == 0u )
+		if ( !hasBindless() )
 		{
 			return;
 		}
 
+		auto it = m_units.find( &unit );
+
+		if ( it == m_units.end() )
+		{
+			m_units.emplace( &unit, unit.onIdChanged.connect( [this]( TextureUnit const & tex )
+				{
+					if ( tex.getId() )
+					{
+						doUpdateWrite( tex );
+					}
+				} ) );
+		}
+
+		if ( unit.getId() != 0u )
+		{
+			doUpdateWrite( unit );
+		}
+	}
+
+	void TextureUnitCache::doUpdateWrite( TextureUnit const & unit )
+	{
 		auto write = unit.getDescriptor();
 		write->dstArrayElement = unit.getId() - 1u;
 		write->dstSet = *m_bindlessTexSet;
