@@ -192,7 +192,7 @@ namespace castor3d
 		C3D_API QueueDataWrapper();
 		C3D_API QueueDataWrapper( QueueDataWrapper && rhs );
 		C3D_API QueueDataWrapper & operator=( QueueDataWrapper && rhs );
-		C3D_API QueueDataWrapper( QueuesData * parent );
+		C3D_API explicit QueueDataWrapper( QueuesData * parent );
 		C3D_API ~QueueDataWrapper();
 
 		QueueData const * release()

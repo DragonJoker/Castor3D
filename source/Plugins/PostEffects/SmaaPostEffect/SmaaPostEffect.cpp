@@ -26,13 +26,13 @@
 
 #include <numeric>
 
-#define C3D_DebugEdgeDetection 0
-#define C3D_DebugBlendingWeightCalculation 0
-#define C3D_DebugNeighbourhoodBlending 0
-#define C3D_DebugVelocity 0
-
 namespace smaa
 {
+	static bool constexpr C3D_DebugEdgeDetection = false;
+	static bool constexpr C3D_DebugBlendingWeightCalculation = false;
+	static bool constexpr C3D_DebugNeighbourhoodBlending = false;
+	static bool constexpr C3D_DebugVelocity = false;
+
 	//*********************************************************************************************
 
 	namespace
@@ -312,63 +312,66 @@ namespace smaa
 		previous = &m_edgeDetection->getPass();
 		smaaResult = { m_edgeDetection->getColourResult() };
 
-#if !C3D_DebugEdgeDetection
-		m_blendingWeightCalculation = std::make_unique< BlendingWeightCalculation >( m_graph
-			, *previous
-			, m_renderTarget
-			, device
-			, m_ubo
-			, m_edgeDetection->getColourResult()
-			, m_edgeDetection->getDepthResult()
-			, m_config
-			, &m_enabled );
-		previous = &m_blendingWeightCalculation->getPass();
-		smaaResult = { m_blendingWeightCalculation->getResult() };
-
-#	if !C3D_DebugBlendingWeightCalculation
-		auto * velocityView = doGetVelocityView();
-		m_neighbourhoodBlending = std::make_unique< NeighbourhoodBlending >( m_graph
-			, *previous
-			, m_renderTarget
-			, device
-			, m_ubo
-			, *m_srgbTextureView
-			, m_blendingWeightCalculation->getResult()
-			, velocityView
-			, m_config
-			, &m_enabled );
-		previous = &m_neighbourhoodBlending->getPass();
-		smaaResult = m_neighbourhoodBlending->getResult();
-
-#		if !C3D_DebugNeighbourhoodBlending
-		if ( m_config.data.mode == Mode::eT2X )
+		if constexpr ( !C3D_DebugEdgeDetection )
 		{
-			crg::ImageViewIdArray currentViews = m_neighbourhoodBlending->getResult();
-			crg::ImageViewIdArray previousViews;
-
-			for ( size_t i = 0; i < currentViews.size(); ++i )
-			{
-				previousViews.push_back( i == 0u
-					? currentViews[m_config.maxSubsampleIndices - 1u]
-					: currentViews[i - 1u] );
-			}
-
-			m_reproject = std::make_unique< Reproject >( m_graph
+			m_blendingWeightCalculation = std::make_unique< BlendingWeightCalculation >( m_graph
 				, *previous
 				, m_renderTarget
 				, device
 				, m_ubo
-				, currentViews
-				, previousViews
-				, velocityView
+				, m_edgeDetection->getColourResult()
+				, m_edgeDetection->getDepthResult()
 				, m_config
 				, &m_enabled );
-			previous = &m_reproject->getPass();
-			smaaResult = { m_reproject->getResult() };
+			previous = &m_blendingWeightCalculation->getPass();
+			smaaResult = { m_blendingWeightCalculation->getResult() };
+
+			if constexpr ( !C3D_DebugBlendingWeightCalculation )
+			{
+				auto * velocityView = doGetVelocityView();
+				m_neighbourhoodBlending = std::make_unique< NeighbourhoodBlending >( m_graph
+					, *previous
+					, m_renderTarget
+					, device
+					, m_ubo
+					, *m_srgbTextureView
+					, m_blendingWeightCalculation->getResult()
+					, velocityView
+					, m_config
+					, &m_enabled );
+				previous = &m_neighbourhoodBlending->getPass();
+				smaaResult = m_neighbourhoodBlending->getResult();
+
+				if constexpr ( !C3D_DebugNeighbourhoodBlending )
+				{
+					if ( m_config.data.mode == Mode::eT2X )
+					{
+						crg::ImageViewIdArray currentViews = m_neighbourhoodBlending->getResult();
+						crg::ImageViewIdArray previousViews;
+
+						for ( size_t i = 0; i < currentViews.size(); ++i )
+						{
+							previousViews.push_back( i == 0u
+								? currentViews[m_config.maxSubsampleIndices - 1u]
+								: currentViews[i - 1u] );
+						}
+
+						m_reproject = std::make_unique< Reproject >( m_graph
+							, *previous
+							, m_renderTarget
+							, device
+							, m_ubo
+							, currentViews
+							, previousViews
+							, velocityView
+							, m_config
+							, &m_enabled );
+						previous = &m_reproject->getPass();
+						smaaResult = { m_reproject->getResult() };
+					}
+				}
+			}
 		}
-#		endif
-#	endif
-#endif
 
 		auto & pass = m_graph.createPass( "Copy"
 			, [this]( crg::FramePass const & framePass

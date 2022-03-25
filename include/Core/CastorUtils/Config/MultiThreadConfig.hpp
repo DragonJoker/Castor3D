@@ -41,7 +41,7 @@ namespace castor
 	private:
 		bool doCheckUnlocked()const
 		{
-			auto lock = makeUniqueLock( this->m_lockedMtx );
+			auto lock( makeUniqueLock( this->m_lockedMtx ) );
 			auto it = m_locked.emplace( std::this_thread::get_id(), false ).first;
 			auto result = it->second;
 			it->second = true;
@@ -50,7 +50,7 @@ namespace castor
 
 		bool doCheckLocked()const
 		{
-			auto lock = makeUniqueLock( this->m_lockedMtx );
+			auto lock( makeUniqueLock( this->m_lockedMtx ) );
 			auto it = m_locked.find( std::this_thread::get_id() );
 			assert( it != m_locked.end() );
 			auto result = it->second;

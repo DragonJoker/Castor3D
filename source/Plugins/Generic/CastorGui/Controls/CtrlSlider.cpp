@@ -368,11 +368,10 @@ namespace CastorGui
 		{
 			castor::Point2i position = tick->getPosition() + delta;
 			double tickValue = 0;
-			castor::Size size = getSize();
 
 			if ( auto line = m_line.lock() )
 			{
-				size = line->getSize();
+				auto size = line->getSize();
 
 				if ( castor::checkFlag( getFlags(), SliderFlag::eVertical ) )
 				{
