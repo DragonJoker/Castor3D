@@ -6,6 +6,9 @@
 #include "CastorUtils/Miscellaneous/CpuInformations.hpp"
 
 #include <cpuid.h>
+#include <sstream>
+#include <fstream>
+#include <string>
 
 namespace castor
 {
@@ -41,6 +44,30 @@ namespace castor
 
 			pclose( fp );
 			return uint32_t( res[0] );
+		}
+
+		std::string getCPUModel()
+		{
+			std::string line;
+			std::ifstream finfo( "/proc/cpuinfo" );
+			std::string result;
+
+			while ( std::getline( finfo, line ) )
+			{
+				std::stringstream str( line );
+				std::string itype;
+				std::string info;
+
+				if ( std::getline( str, itype, ':' )
+					&& std::getline( str, info )
+					&& itype.substr( 0, 10 ) == "model name" )
+				{
+					result = info.substr( 1 );
+					break;
+				}
+			}
+
+			return result;
 		}
 #pragma GCC diagnostic pop
 #pragma clang diagnostic pop

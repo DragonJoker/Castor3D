@@ -4,8 +4,9 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Material/Material.hpp>
-#include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
+#include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/SceneFileParser.hpp>
@@ -388,6 +389,8 @@ namespace test_launcher
 
 			if ( stream.is_open() )
 			{
+				stream << m_engine.getCpuInformations().getModel() << "\n";
+				stream << m_engine.getRenderSystem()->getGpuInformations().getRenderer() << "\n";
 				stream << totalTime.count()
 					<< " " << std::chrono::duration_cast< castor::Microseconds >( avg ).count()
 					<< " " << std::chrono::duration_cast< castor::Microseconds >( last ).count();

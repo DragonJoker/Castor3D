@@ -8,18 +8,40 @@ namespace castor
 	{
 		void callCpuid( uint32_t func, std::array< int32_t, 4 > & p_data );
 		uint32_t getCoreCount();
+		std::string getCPUModel();
 	}
 
 	CpuInformations::CpuInformationsInternal::CpuInformationsInternal()
 	{
 		auto makeString = []( int32_t v )
 		{
-			return std::string( {
-				char( ( v >> 0 ) & 0xFF ),
-				char( ( v >> 8 ) & 0xFF ),
-				char( ( v >> 16 ) & 0xFF ),
-				char( ( v >> 24 ) & 0xFF )
-			} );
+			std::string result;
+			auto c = char( ( v >> 0 ) & 0xff );
+
+			if ( c )
+			{
+				result += c;
+				c = char( ( v >> 8 ) & 0xff );
+			}
+
+			if ( c )
+			{
+				result += c;
+				c = char( ( v >> 16 ) & 0xff );
+			}
+
+			if ( c )
+			{
+				result += c;
+				c = char( ( v >> 24 ) & 0xff );
+			}
+
+			if ( c )
+			{
+				result += c;
+			}
+
+			return result;
 		};
 
 		std::vector< std::array< int, 4 > > datas{};
@@ -61,6 +83,7 @@ namespace castor
 		}
 
 		m_coreCount = Platform::getCoreCount();
+		m_model = Platform::getCPUModel();
 	}
 
 	CpuInformations::CpuInformationsInternal const CpuInformations::m_internal;
@@ -82,6 +105,7 @@ namespace castor
 
 		stream << "CPU informations:" << std::endl;
 		stream << "    Vendor: " << object.getVendor() << std::endl;
+		stream << "    Model: " << object.getModel() << std::endl;
 		stream << "    Core count: " << object.getCoreCount() << std::endl;
 		stream << "    ADX: " << support( object.ADX() ) << std::endl;
 		stream << "    AES: " << support( object.AES() ) << std::endl;
