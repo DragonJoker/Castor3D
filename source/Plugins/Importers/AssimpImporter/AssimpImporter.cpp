@@ -1750,8 +1750,7 @@ namespace C3dAssimp
 				| aiProcess_OptimizeMeshes
 				| aiProcess_OptimizeGraph
 				| aiProcess_FixInfacingNormals
-				| aiProcess_LimitBoneWeights
-				| aiProcess_Debone;
+				| aiProcess_LimitBoneWeights;
 		}
 
 		bool tangentSpace = false;
