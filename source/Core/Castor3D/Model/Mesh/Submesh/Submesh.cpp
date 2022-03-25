@@ -413,7 +413,7 @@ namespace castor3d
 	{
 		if ( oldMaterial != newMaterial )
 		{
-			if ( m_instantiation )
+			if ( update && m_instantiation )
 			{
 				m_instantiation->unref( oldMaterial );
 				m_instantiation->ref( newMaterial );
