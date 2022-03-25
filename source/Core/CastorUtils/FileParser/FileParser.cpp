@@ -280,7 +280,19 @@ namespace castor
 	{
 	}
 
-	void FileParser::processFile( Path path
+	void FileParser::registerParsers( String const & name
+		, AdditionalParsers const & parsers )
+	{
+		auto ires = m_additionalParsers.emplace( name, parsers );
+
+		if ( !ires.second )
+		{
+			CU_Exception( "Addiional parsers for name [" + string::stringCast< char >( name ) + "] already exist." );
+		}
+	}
+
+	void FileParser::processFile( String const & appName
+		, Path path
 		, PreprocessedFile & preprocessed )
 	{
 		m_ignoreLevel = 0;
@@ -290,7 +302,7 @@ namespace castor
 		{
 			auto pathFile = path;
 			ZipArchive archive{ path, File::OpenMode::eRead };
-			path = castor::File::getUserDirectory() / cuT( ".Castor" ) / pathFile.getFileName();
+			path = File::getUserDirectory() / ( cuT( "." ) + appName ) / pathFile.getFileName();
 			bool carryOn = true;
 
 			if ( !File::directoryExists( path ) )
@@ -317,6 +329,7 @@ namespace castor
 					if ( it != files.end() )
 					{
 						path = *it;
+						preprocessed.getContext().file = path;
 					}
 					else
 					{
@@ -330,6 +343,7 @@ namespace castor
 						if ( fileIt != files.end() )
 						{
 							path = *fileIt;
+							preprocessed.getContext().file = path;
 						}
 					}
 				}
@@ -352,6 +366,12 @@ namespace castor
 		{
 			m_logger.logError( cuT( "FileParser : Couldn't open file [" ) + path.getFileName( true ) + cuT( "]." ) );
 		}
+	}
+
+	void FileParser::processFile( Path path
+		, PreprocessedFile & preprocessed )
+	{
+		processFile( "Castor", path, preprocessed );
 	}
 
 	void FileParser::processFile( Path const & path
@@ -505,23 +525,18 @@ namespace castor
 		m_preprocessed = nullptr;
 	}
 
-	void FileParser::registerParsers( castor::String const & name
-		, AdditionalParsers const & parsers )
+	PreprocessedFile FileParser::processFile( String const & appName
+		, Path const & path )
 	{
-		auto ires = m_additionalParsers.emplace( name, parsers );
-
-		if ( !ires.second )
-		{
-			CU_Exception( "Addiional parsers for name [" + string::stringCast< char >( name ) + "] already exist." );
-		}
+		PreprocessedFile result{ *this
+			, doInitialiseParser( path ) };
+		processFile( appName, path, result );
+		return result;
 	}
 
 	PreprocessedFile FileParser::processFile( Path const & path )
 	{
-		PreprocessedFile result{ *this
-			, doInitialiseParser( path ) };
-		processFile( path, result );
-		return result;
+		return processFile( "Castor", path );
 	}
 
 	PreprocessedFile FileParser::processFile( Path const & path
@@ -533,10 +548,16 @@ namespace castor
 		return result;
 	}
 
+	bool FileParser::parseFile( String const & appName
+		, Path const & path )
+	{
+		auto preprocessed = processFile( appName, path );
+		return preprocessed.parse();
+	}
+
 	bool FileParser::parseFile( Path const & path )
 	{
-		auto preprocessed = processFile( path );
-		return preprocessed.parse();
+		return parseFile( "Castor", path );
 	}
 
 	bool FileParser::parseFile( Path const & path

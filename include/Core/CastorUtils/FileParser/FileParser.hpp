@@ -202,28 +202,18 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Parsing function.
-		 *\param[in]	path	The file access path.
-		 *\return		The preprocessed file.
+		 *\param[in]	appName			The application name, if a dezip is needed.
+		 *\param[in]	path			The file access path.
+		 *\param[in]	preprocessed	The preprocessed file.
 		 *\~french
 		 *\brief		Fonction de traitement.
-		 *\param[in]	path	Le chemin d'accès au fichier.
-		 *\return		Le fichier pré-traité.
+		 *\param[in]	appName			Le nom de l'application, si un dézip est nécessaire.
+		 *\param[in]	path			Le chemin d'accès au fichier.
+		 *\param[in]	preprocessed	Le fichier pré-traité.
 		 */
-		CU_API PreprocessedFile processFile( Path const & path );
-		/**
-		 *\~english
-		 *\brief		Parsing function.
-		 *\param[in]	path	The file access path.
-		 *\param[in]	content	The file content.
-		 *\return		The preprocessed file.
-		 *\~french
-		 *\brief		Fonction de traitement.
-		 *\param[in]	path	Le chemin d'accès au fichier.
-		 *\param[in]	content	Le contenu du fichier.
-		 *\return		Le fichier pré-traité.
-		 */
-		CU_API PreprocessedFile processFile( Path const & path
-			, String const & content );
+		CU_API void processFile( String const & appName
+			, Path path
+			, PreprocessedFile & preprocessed );
 		/**
 		 *\~english
 		 *\brief		Parsing function.
@@ -251,6 +241,59 @@ namespace castor
 		CU_API void processFile( Path const & path
 			, String const & content
 			, PreprocessedFile & preprocessed );
+		/**
+		 *\~english
+		 *\brief		Parsing function.
+		 *\param[in]	appName	The application name, if a dezip is needed.
+		 *\param[in]	path	The file access path.
+		 *\return		The preprocessed file.
+		 *\~french
+		 *\brief		Fonction de traitement.
+		 *\param[in]	appName	Le nom de l'application, si un dézip est nécessaire.
+		 *\param[in]	path	Le chemin d'accès au fichier.
+		 *\return		Le fichier pré-traité.
+		 */
+		CU_API PreprocessedFile processFile( String const & appName
+			, Path const & path );
+		/**
+		 *\~english
+		 *\brief		Parsing function.
+		 *\param[in]	path	The file access path.
+		 *\return		The preprocessed file.
+		 *\~french
+		 *\brief		Fonction de traitement.
+		 *\param[in]	path	Le chemin d'accès au fichier.
+		 *\return		Le fichier pré-traité.
+		 */
+		CU_API PreprocessedFile processFile( Path const & path );
+		/**
+		 *\~english
+		 *\brief		Parsing function.
+		 *\param[in]	path	The file access path.
+		 *\param[in]	content	The file content.
+		 *\return		The preprocessed file.
+		 *\~french
+		 *\brief		Fonction de traitement.
+		 *\param[in]	path	Le chemin d'accès au fichier.
+		 *\param[in]	content	Le contenu du fichier.
+		 *\return		Le fichier pré-traité.
+		 */
+		CU_API PreprocessedFile processFile( Path const & path
+			, String const & content );
+		/**
+		 *\~english
+		 *\brief		Parsing function.
+		 *\param[in]	appName	The application name, if a dezip is needed.
+		 *\param[in]	path	The file access path.
+		 *\return		\p true if OK.
+		 *\~french
+		 *\brief		Fonction de traitement.
+		 *\param[in]	appName	Le nom de l'application, si un dézip est nécessaire.
+		 *\param[in]	path	Le chemin d'accès au fichier.
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		CU_API bool parseFile( String const & appName
+			, Path const & path );
 		/**
 		 *\~english
 		 *\brief		Parsing function.

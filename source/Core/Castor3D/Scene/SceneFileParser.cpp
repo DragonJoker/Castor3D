@@ -566,63 +566,6 @@ namespace castor3d
 		return m_renderWindow;
 	}
 
-	bool SceneFileParser::parseFile( castor::Path const & pathFile )
-	{
-		castor::Path path = pathFile;
-
-		if ( path.getExtension() == cuT( "zip" ) )
-		{
-			castor::ZipArchive archive( path, castor::File::OpenMode::eRead );
-			path = Engine::getEngineDirectory() / pathFile.getFileName();
-
-			bool ok = true;
-
-			if ( !castor::File::directoryExists( path ) )
-			{
-				ok = archive.inflate( path );
-			}
-
-			if ( ok )
-			{
-				castor::PathArray files;
-
-				if ( castor::File::listDirectoryFiles( path, files, true ) )
-				{
-					auto it = std::find_if( files.begin()
-						, files.end()
-						, [pathFile]( castor::Path const & lookup )
-						{
-							auto fileName = lookup.getFileName( true );
-							return fileName == cuT( "main.cscn" )
-								|| fileName == cuT( "scene.cscn" )
-								|| fileName == pathFile.getFileName() + cuT( ".cscn" );
-						} );
-
-					if ( it != files.end() )
-					{
-						path = *it;
-					}
-					else
-					{
-						auto fileIt = std::find_if( files.begin()
-							, files.end()
-							, []( castor::Path const & p_path )
-							{
-								return p_path.getExtension() == cuT( "cscn" );
-							} );
-
-						if ( fileIt != files.end() )
-						{
-							path = *fileIt;
-						}
-					}
-				}
-			}
-		}
-
-		return FileParser::parseFile( path );
-	}
-
 	void SceneFileParser::doCleanupParser( castor::PreprocessedFile & preprocessed )
 	{
 		auto & context = getParserContext( preprocessed.getContext() );

@@ -220,17 +220,6 @@ namespace castor3d
 		 *\return		La fenêtre de rendu définie par la scène.
 		 */
 		C3D_API RenderWindowDesc getRenderWindow();
-		/**
-		 *\~english
-		 *\brief		Parses the given file (expecting it to be in CSCN file format).
-		 *\param[in]	path	The file access path.
-		 *\return		\p false if any problem occured.
-		 *\~french
-		 *\brief		Analyse le fichier donné (s'attend à recevoir un fichier CSCN).
-		 *\param[in]	path	Le chemin d'accès au fichier.
-		 *\return		\p false si un problème est survenu.
-		 */
-		C3D_API bool parseFile( castor::Path const & path );
 
 		ScenePtrStrMap::iterator scenesBegin()
 		{
