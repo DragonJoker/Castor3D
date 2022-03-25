@@ -282,6 +282,13 @@ namespace castor3d
 			{
 				auto & node = nodeIt.second;
 				auto & instantiation = node->data.getInstantiation();
+				auto submeshFlags = node->data.getProgramFlags( node->pass.getOwner() );
+				node->mesh = checkFlag( submeshFlags, ProgramFlag::eMorphing )
+					? std::static_pointer_cast< AnimatedMesh >( findAnimatedObject( *getOwner(), node->instance.getName() + cuT( "_Mesh" ) ) ).get()
+					: nullptr;
+				node->skeleton = checkFlag( submeshFlags, ProgramFlag::eSkinning )
+					? std::static_pointer_cast< AnimatedSkeleton >( findAnimatedObject( *getOwner(), node->instance.getName() + cuT( "_Skeleton" ) ) ).get()
+					: nullptr;
 
 				if ( instantiation.isInstanced() )
 				{
