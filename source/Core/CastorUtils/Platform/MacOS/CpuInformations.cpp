@@ -56,6 +56,20 @@ namespace castor
 
 			return uint32_t( numCPU );
 		}
+
+		std::string getCPUModel()
+		{
+			char buffer[1024];
+			size_t size = sizeof( buffer );
+			std::string result;
+
+			if ( sysctlbyname( "machdep.cpu.brand_string", &buffer, &size, NULL, 0 ) >= 0 )
+			{
+				result = buffer;
+			}
+
+			return result;
+		}
 #pragma GCC diagnostic pop
 #pragma clang diagnostic pop
 	}
