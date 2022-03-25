@@ -77,13 +77,15 @@ namespace ocean_fft
 
 	struct IsRenderPassEnabled
 	{
-		IsRenderPassEnabled( castor3d::RenderNodesPass const & pass )
+		explicit IsRenderPassEnabled( castor3d::RenderNodesPass const & pass )
 			: m_pass{ &pass }
-		{}
+		{
+		}
 
 		IsRenderPassEnabled()
 			: m_pass{}
-		{}
+		{
+		}
 
 		void setPass( castor3d::RenderNodesPass const & pass )
 		{

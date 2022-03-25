@@ -40,7 +40,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		C3D_API PassFactory( Engine & engine );
+		C3D_API explicit PassFactory( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor

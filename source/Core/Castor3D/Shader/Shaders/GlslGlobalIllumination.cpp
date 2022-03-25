@@ -421,7 +421,7 @@ namespace castor3d
 			ELSE
 			{
 				vxlRadiance = traceConeRadiance( mapVoxelsFirstBounce
-				, surface
+					, surface
 					, voxelData );
 			}
 			FI;
