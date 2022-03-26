@@ -37,6 +37,7 @@ source_group( "Source Files"
 )
 if ( WIN32 )
 	find_rsc_file( ${PROJECT_NAME} bin )
+	target_add_manifest( ${PROJECT_NAME} )
 endif ()
 add_target_min(
 	${PROJECT_NAME}

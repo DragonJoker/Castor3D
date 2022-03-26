@@ -6,6 +6,7 @@
 #include "CastorUtils/Graphics/Size.hpp"
 
 #include <Windows.h>
+#include <VersionHelpers.h>
 #include <codecvt>
 
 namespace castor
@@ -96,6 +97,78 @@ namespace castor
 			auto result = stream.str();
 			string::replace( result, cuT( "\r" ), cuT( "" ) );
 			string::replace( result, cuT( "\n" ), cuT( "" ) );
+			return result;
+		}
+
+#define _WIN32_WINNT_WIN11                  0x0B00
+
+		BOOL IsWindows11OrGreater()
+		{
+			return IsWindowsVersionOrGreater( HIBYTE( _WIN32_WINNT_WIN11 ), LOBYTE( _WIN32_WINNT_WIN11 ), 0 );
+		}
+
+		String getOSName()
+		{
+			String result = cuT( "Windows" );
+
+			if ( IsWindows11OrGreater() )
+			{
+				result += " 11 or greater";
+			}
+			else if ( IsWindows10OrGreater() )
+			{
+				result += " 10 or greater";
+			}
+			else if ( IsWindows8Point1OrGreater() )
+			{
+				result += " 8.1";
+			}
+			else if ( IsWindows8OrGreater() )
+			{
+				result += " 8";
+			}
+			else if ( IsWindows7SP1OrGreater() )
+			{
+				result += " 7 SP 1";
+			}
+			else if ( IsWindows7OrGreater() )
+			{
+				result += " 7";
+			}
+			else if ( IsWindowsVistaSP2OrGreater() )
+			{
+				result += "Vista SP 2";
+			}
+			else if ( IsWindowsVistaSP1OrGreater() )
+			{
+				result += "Vista SP 1";
+			}
+			else if ( IsWindowsVistaOrGreater() )
+			{
+				result += "Vista";
+			}
+			else if ( IsWindowsXPSP3OrGreater() )
+			{
+				result += "XP SP 3";
+			}
+			else if ( IsWindowsXPSP2OrGreater() )
+			{
+				result += "XP SP 2";
+			}
+			else if ( IsWindowsXPSP1OrGreater() )
+			{
+				result += "XP SP 1";
+			}
+			else if ( IsWindowsXPOrGreater() )
+			{
+				result += "XP";
+			}
+
+			if ( IsWindowsServer() )
+			{
+				result += " Server";
+			}
+
 			return result;
 		}
 	}

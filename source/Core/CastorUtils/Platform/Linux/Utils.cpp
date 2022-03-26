@@ -127,6 +127,27 @@ namespace castor
 
 			return strReturn;
 		}
+
+		String getOSName()
+		{
+			std::string line;
+			std::ifstream finfo( "/etc/os-release" );
+			std::string result;
+
+			while ( std::getline( finfo, line ) )
+			{
+				std::stringstream str( line );
+
+				if ( line.substr( 0, 11 ) == "PRETTY_NAME" )
+				{
+					result = line.substr( 13 );
+					result = result.substr( 0, result.size() - 1u );
+					break;
+				}
+			}
+
+			return result;
+		}
 	}
 
 	void getLocaltime( std::tm * p_tm, time_t const * p_pTime )
@@ -136,4 +157,3 @@ namespace castor
 }
 
 #endif
-

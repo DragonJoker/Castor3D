@@ -57,6 +57,11 @@ namespace castor
 
 			return strReturn;
 		}
+
+		String getOSName()
+		{
+			return "Android";
+		}
 	}
 
 	void getLocaltime( std::tm * p_tm, time_t const * p_pTime )
