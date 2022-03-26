@@ -45,11 +45,18 @@ namespace castor
 		 *\return		Le texte.
 		 */
 		CU_API String getLastErrorText();
+		/**
+		 *\~english
+		 *\return		The operating system name.
+		 *\~french
+		 *\return		Le nom de l'operating system.
+		 */
+		CU_API String getOSName();
 	}
 	/**
 	 *\see			localtime
 	 */
-	void getLocaltime( std::tm * tm, time_t const * time );
+	CU_API void getLocaltime( std::tm * tm, time_t const * time );
 	/**
 	 *\~english
 	 *\return		The buffer's elements count.
