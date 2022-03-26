@@ -356,13 +356,10 @@ namespace castor3d
 			CU_Exception( "Couldn't find image at path [" + path + "]" );
 		}
 
-		castor::Path relative;
-		castor::Path folder;
-
 		bool allowCompression = config.normalMask[0] == 0;
 		return TextureSourceInfo{ sampler
-			, folder
-			, relative
+			, image->getPath().getPath()
+			, image->getPath().getFileName( true )
 			, { allowCompression, true, true } };
 	}
 
