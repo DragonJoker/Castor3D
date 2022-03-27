@@ -488,7 +488,6 @@ namespace castor3d
 		, m_signalFinished{ m_device->createSemaphore( "RenderTechnique" ) }
 		, m_clearLpvGraph{ rendtech::doCreateClearLpvCommands( getOwner()->getGraphResourceHandler(), device, progress, getName(), *m_lpvResult, m_llpvResult ) }
 		, m_clearLpvRunnable{ m_clearLpvGraph.compile( m_device.makeContext() ) }
-		, m_particleTimer{ castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Particles" ) ) }
 	{
 		m_renderTarget.getGraph().addDependency( m_voxelizer->getGraph() );
 #if C3D_DebugSSAOGraph
@@ -527,7 +526,6 @@ namespace castor3d
 
 	RenderTechnique::~RenderTechnique()
 	{
-		m_particleTimer.reset();
 #if C3D_UseWeightedBlendedRendering
 		m_weightedBlendRendering.reset();
 		m_transparentPassResult.reset();
@@ -600,7 +598,6 @@ namespace castor3d
 
 		doUpdateShadowMaps( updater );
 		doUpdateLpv( updater );
-		doUpdateParticles( updater );
 
 		if ( m_renderTarget.getTargetType() == TargetType::eWindow )
 		{
@@ -693,7 +690,6 @@ namespace castor3d
 		doInitialiseLpv();
 		doUpdateShadowMaps( updater );
 		doUpdateLpv( updater );
-		doUpdateParticles( updater );
 
 		if ( m_renderTarget.getTargetType() == TargetType::eWindow )
 		{
@@ -1397,40 +1393,6 @@ namespace castor3d
 
 	void RenderTechnique::doUpdateLpv( GpuUpdater & updater )
 	{
-	}
-	
-	void RenderTechnique::doUpdateParticles( CpuUpdater & updater )
-	{
-		auto & cache = updater.camera->getScene()->getParticleSystemCache();
-		auto lock( castor::makeUniqueLock( cache ) );
-		updater.index = 0u;
-
-		for ( auto & particleSystem : cache )
-		{
-			particleSystem.second->update( updater );
-		}
-	}
-	
-	void RenderTechnique::doUpdateParticles( GpuUpdater & updater )
-	{
-		auto & cache = updater.scene->getParticleSystemCache();
-		auto lock( castor::makeUniqueLock( cache ) );
-		auto count = 2u * cache.getObjectCountNoLock();
-
-		if ( m_particleTimer->getCount() < count )
-		{
-			m_particleTimer->updateCount( count );
-		}
-
-		auto timerBlock( m_particleTimer->start() );
-		updater.index = 0u;
-		updater.timer = m_particleTimer.get();
-
-		for ( auto & particleSystem : cache )
-		{
-			particleSystem.second->update( updater );
-			updater.info.m_particlesCount += particleSystem.second->getParticlesCount();
-		}
 	}
 
 	crg::SemaphoreWaitArray RenderTechnique::doRenderLPV( crg::SemaphoreWaitArray const & semaphore

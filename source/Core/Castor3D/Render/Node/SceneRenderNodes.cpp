@@ -328,9 +328,13 @@ namespace castor3d
 		{
 			for ( auto & nodes : m_submeshNodes )
 			{
-				for ( auto & node : nodes.second )
+				for ( auto & nodeIt : nodes.second )
 				{
-					doUpdateNode( *node.second, nodesBuffer );
+					auto & node = *nodeIt.second;
+					scnrendnd::fillEntry( node.pass
+						, *node.instance.getParent()
+						, node.instance
+						, nodesBuffer[node.getId() - 1u] );
 				}
 			}
 
@@ -338,9 +342,15 @@ namespace castor3d
 			{
 				for ( auto & nodes : m_billboardNodes )
 				{
-					for ( auto & node : nodes.second )
+					for ( auto & nodeIt : nodes.second )
 					{
-						doUpdateNode( *node.second, nodesBuffer, billboardsBuffer );
+						auto & node = *nodeIt.second;
+						scnrendnd::fillEntry( node.pass
+							, *node.instance.getNode()
+							, node.instance
+							, nodesBuffer[node.getId() - 1u] );
+						auto & billboardData = billboardsBuffer[node.getId() - 1u];
+						billboardData.dimensions = node.instance.getDimensions();
 					}
 				}
 
@@ -351,28 +361,6 @@ namespace castor3d
 			m_nodesData->flush( 0u, ashes::WholeSize );
 			m_nodesData->unlock();
 		}
-	}
-
-	void SceneRenderNodes::doUpdateNode( SubmeshRenderNode & node
-		, ModelBufferConfiguration * modelBufferData )
-	{
-		scnrendnd::fillEntry( node.pass
-			, *node.instance.getParent()
-			, node.instance
-			, modelBufferData[node.getId() - 1u] );
-	}
-
-	void SceneRenderNodes::doUpdateNode( BillboardRenderNode & node
-		, ModelBufferConfiguration * modelBufferData
-		, BillboardUboConfiguration * billboardBufferData )
-	{
-		scnrendnd::fillEntry( node.pass
-			, *node.instance.getNode()
-			, node.instance
-			, modelBufferData[node.getId() - 1u] );
-
-		auto & billboardData = billboardBufferData[node.getId() - 1u];
-		billboardData.dimensions = node.instance.getDimensions();
 	}
 
 	//*************************************************************************************************

@@ -352,8 +352,6 @@ namespace castor3d
 		void doUpdateShadowMaps( GpuUpdater & updater );
 		void doUpdateLpv( CpuUpdater & updater );
 		void doUpdateLpv( GpuUpdater & updater );
-		void doUpdateParticles( CpuUpdater & updater );
-		void doUpdateParticles( GpuUpdater & updater );
 
 		crg::SemaphoreWaitArray doRenderShadowMaps( crg::SemaphoreWaitArray const & semaphore
 			, ashes::Queue const & queue )const;
@@ -408,7 +406,6 @@ namespace castor3d
 		ashes::SemaphorePtr m_signalFinished;
 		crg::FrameGraph m_clearLpvGraph;
 		crg::RunnableGraphPtr m_clearLpvRunnable;
-		FramePassTimerUPtr m_particleTimer;
 		ShadowMapLightTypeArray m_allShadowMaps;
 		ShadowMapLightArray m_activeShadowMaps;
 		LightPropagationVolumesLightType m_lightPropagationVolumes;

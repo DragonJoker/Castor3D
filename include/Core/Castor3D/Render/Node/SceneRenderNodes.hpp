@@ -75,13 +75,6 @@ namespace castor3d
 		}
 
 	private:
-		void doUpdateNode( SubmeshRenderNode & node
-			, ModelBufferConfiguration * modelBufferData );
-		void doUpdateNode( BillboardRenderNode & node
-			, ModelBufferConfiguration * modelBufferData
-			, BillboardUboConfiguration * billboardBufferData );
-
-	private:
 		RenderDevice const & m_device;
 		std::mutex m_nodesMutex;
 		DescriptorNodesPoolsT< SubmeshRenderNode > m_submeshNodes;
