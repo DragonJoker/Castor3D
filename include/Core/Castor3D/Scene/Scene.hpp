@@ -38,7 +38,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Log/Logger.hpp>
 #include <CastorUtils/Multithreading/ThreadPool.hpp>
 
-#include <RenderGraph/FrameGraphPrerequisites.hpp>
+#include <RenderGraph/FramePassTimer.hpp>
 
 #pragma warning( push )
 #pragma warning( disable:4365 )
@@ -381,6 +381,8 @@ namespace castor3d
 	private:
 		void doUpdateBoundingBox();
 		void doUpdateAnimations( CpuUpdater & updater );
+		void doUpdateParticles( CpuUpdater & updater );
+		void doUpdateParticles( GpuUpdater & updater );
 		void doUpdateMaterials();
 		bool doUpdateLightDependent( LightType lightType
 			, bool shadowProducer
@@ -424,7 +426,6 @@ namespace castor3d
 		Fog m_fog;
 		FrameListenerWPtr m_listener;
 		std::unique_ptr< EnvironmentMap > m_reflectionMap;
-		castor::ThreadPool m_animationUpdater;
 		bool m_needsSubsurfaceScattering{ false };
 		bool m_hasOpaqueObjects{ false };
 		bool m_hasTransparentObjects{ false };
@@ -440,6 +441,15 @@ namespace castor3d
 		float m_lpvIndirectAttenuation{ 1.7f };
 		VoxelSceneData m_voxelConfig;
 		SceneRenderNodesUPtr m_renderNodes;
+		FramePassTimerUPtr m_timerSceneNodes;
+		FramePassTimerUPtr m_timerBoundingBox;
+		FramePassTimerUPtr m_timerAnimations;
+		FramePassTimerUPtr m_timerMaterials;
+		FramePassTimerUPtr m_timerLights;
+		FramePassTimerUPtr m_timerRenderNodes;
+		FramePassTimerUPtr m_timerAnimGroups;
+		FramePassTimerUPtr m_timerParticlesCpu;
+		FramePassTimerUPtr m_timerParticlesGpu;
 
 	public:
 		//!\~english	The cameras root node name.
