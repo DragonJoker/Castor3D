@@ -276,6 +276,8 @@ namespace castor3d
 		std::unordered_set< ShaderBuffer const * > m_shaderBuffers;
 		std::mutex m_shaderBuffersMtx;
 		std::unique_ptr< crg::FramePassTimer > m_uploadTimer;
+		std::array< FramePassTimerUPtr, size_t( EventType::eCount ) > m_timerCpuEvents;
+		std::array< FramePassTimerUPtr, size_t( EventType::eCount ) > m_timerGpuEvents;
 	};
 }
 

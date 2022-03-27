@@ -16,8 +16,8 @@ namespace castor3d
 			, Camera * camera = nullptr  );
 
 	private:
-		void doCullGeometries()override;
-		void doCullBillboards()override;
+		bool isSubmeshCulled( SubmeshRenderNode const & node )const override;
+		bool isBillboardCulled( BillboardRenderNode const & node )const override;
 	};
 }
 

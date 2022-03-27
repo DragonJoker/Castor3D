@@ -11,31 +11,13 @@ namespace castor3d
 	{
 	}
 
-	void DummyCuller::doCullGeometries()
+	bool DummyCuller::isSubmeshCulled( SubmeshRenderNode const & node )const
 	{
-		auto & nodes = getScene().getRenderNodes().getSubmeshNodes();
-		auto & culled = m_culledSubmeshes;
-
-		for ( auto & itPass : nodes )
-		{
-			for ( auto & itNode : itPass.second )
-			{
-				culled.push_back( itNode.second.get() );
-			}
-		}
+		return false;
 	}
 
-	void DummyCuller::doCullBillboards()
+	bool DummyCuller::isBillboardCulled( BillboardRenderNode const & node )const
 	{
-		auto & nodes = getScene().getRenderNodes().getBillboardNodes();
-		auto & culled = m_culledBillboards;
-
-		for ( auto & itPass : nodes )
-		{
-			for ( auto & itNode : itPass.second )
-			{
-				culled.push_back( itNode.second.get() );
-			}
-		}
+		return false;
 	}
 }
