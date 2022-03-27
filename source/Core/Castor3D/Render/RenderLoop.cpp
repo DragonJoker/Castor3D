@@ -1,5 +1,6 @@
 #include "Castor3D/Render/RenderLoop.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Buffer/ObjectBufferPool.hpp"
@@ -12,6 +13,7 @@
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Overlay/DebugOverlays.hpp"
 #include "Castor3D/Render/RenderQueue.hpp"
+#include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderWindow.hpp"
@@ -36,13 +38,42 @@ namespace castor3d
 		, m_debugOverlays{ std::make_unique< DebugOverlays >( engine ) }
 		, m_uploadResources{ UploadResources{ { nullptr, nullptr }, nullptr }
 			, UploadResources{ { nullptr, nullptr }, nullptr } }
+#if C3D_DebugTimers
+		, m_timerCpuEvents{ castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "CPUEvents/PreRender" )
+			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "CPUEvents/QueueRender" )
+			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "CPUEvents/PostRender" ) }
+		, m_timerGpuEvents{ castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "GPUEvents/PreRender" )
+			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "GPUEvents/QueueRender" )
+			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "GPUEvents/PostRender" ) }
+#endif
 	{
-		auto lock( castor::makeUniqueLock( m_debugOverlaysMtx ) );
-		m_debugOverlays->initialise( getEngine()->getOverlayCache() );
+		{
+			auto lock( castor::makeUniqueLock( m_debugOverlaysMtx ) );
+			m_debugOverlays->initialise( getEngine()->getOverlayCache() );
+		}
+
+#if C3D_DebugTimers
+		registerTimer( "CPUEvents/PreRender", *m_timerCpuEvents[0] );
+		registerTimer( "CPUEvents/QueueRender", *m_timerCpuEvents[1] );
+		registerTimer( "CPUEvents/PostRender", *m_timerCpuEvents[2] );
+
+		registerTimer( "GPUEvents/PreRender", *m_timerGpuEvents[0] );
+		registerTimer( "GPUEvents/QueueRender", *m_timerGpuEvents[1] );
+		registerTimer( "GPUEvents/PostRender", *m_timerGpuEvents[2] );
+#endif
 	}
 
 	RenderLoop::~RenderLoop()
 	{
+#if C3D_DebugTimers
+		m_timerCpuEvents[0].reset();
+		m_timerCpuEvents[1].reset();
+		m_timerCpuEvents[2].reset();
+
+		m_timerGpuEvents[0].reset();
+		m_timerGpuEvents[1].reset();
+		m_timerGpuEvents[2].reset();
+#endif
 		auto lock( castor::makeUniqueLock( m_debugOverlaysMtx ) );
 		m_debugOverlays->cleanup();
 		m_debugOverlays.reset();
@@ -50,6 +81,16 @@ namespace castor3d
 
 	void RenderLoop::cleanup()
 	{
+#if C3D_DebugTimers
+		unregisterTimer( "CPUEvents/PreRender", *m_timerCpuEvents[0] );
+		unregisterTimer( "CPUEvents/QueueRender", *m_timerCpuEvents[1] );
+		unregisterTimer( "CPUEvents/PostRender", *m_timerCpuEvents[2] );
+
+		unregisterTimer( "GPUEvents/PreRender", *m_timerGpuEvents[0] );
+		unregisterTimer( "GPUEvents/QueueRender", *m_timerGpuEvents[1] );
+		unregisterTimer( "GPUEvents/PostRender", *m_timerGpuEvents[2] );
+#endif
+
 		if ( m_uploadTimer )
 		{
 			auto & device = m_renderSystem.getRenderDevice();
@@ -180,6 +221,9 @@ namespace castor3d
 
 	void RenderLoop::doProcessEvents( EventType eventType )
 	{
+#if C3D_DebugTimers
+		auto block = m_timerCpuEvents[size_t( eventType )]->start();
+#endif
 		getEngine()->getFrameListenerCache().forEach( [eventType]( FrameListener & listener )
 			{
 				listener.fireEvents( eventType );
@@ -190,6 +234,9 @@ namespace castor3d
 		, RenderDevice const & device
 		, QueueData const & queueData )
 	{
+#if C3D_DebugTimers
+		auto block = m_timerGpuEvents[size_t( eventType )]->start();
+#endif
 		getEngine()->getFrameListenerCache().forEach( [eventType, &device, &queueData]( FrameListener & listener )
 			{
 				listener.fireEvents( eventType, device, queueData );

@@ -14,6 +14,7 @@ namespace castortd
 	{
 	public:
 		explicit Game( castor3d::Scene & p_scene );
+		~Game();
 
 		void reset();
 		void start();
@@ -168,6 +169,7 @@ namespace castortd
 		castor3d::MaterialResPtr m_bulletMaterial;
 		castor3d::MeshResPtr m_boulderMesh;
 		castor3d::MaterialResPtr m_boulderMaterial;
+		castor3d::FramePassTimerUPtr m_updateTimer;
 		// Varying data
 		Clock::time_point m_saved;
 		castor::Milliseconds m_elapsed;

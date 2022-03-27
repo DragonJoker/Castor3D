@@ -23,8 +23,8 @@ namespace castor3d
 			, castor::Matrix4x4f const & view );
 
 	private:
-		void doCullGeometries()override;
-		void doCullBillboards()override;
+		bool isSubmeshCulled( SubmeshRenderNode const & node )const override;
+		bool isBillboardCulled( BillboardRenderNode const & node )const override;
 
 		Frustum * m_frustum{};
 	};

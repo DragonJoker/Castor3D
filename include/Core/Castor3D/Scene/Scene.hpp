@@ -394,6 +394,9 @@ namespace castor3d
 		//!\~english	The signal raised when the scene has changed.
 		//!\~french		Le signal levé lorsque la scène a changé.
 		mutable OnSceneChanged onChanged;
+		//!\~english	The signal raised when the scene has changed.
+		//!\~french		Le signal levé lorsque la scène a changé.
+		mutable OnSceneNodeChanged onNodeChanged;
 		//!\~english	The signal raised when the scene is updating.
 		//!\~french		Le signal levé lorsque la scène se met à jour.
 		mutable OnSceneUpdate onUpdate;
@@ -438,6 +441,7 @@ namespace castor3d
 		std::array< std::set< GlobalIlluminationType >, size_t( LightType::eCount ) > m_giTypes;
 		std::atomic_bool m_hasAnyShadows;
 		std::map< castor::String, OnLightChangedConnection > m_lightConnections;
+		std::map< SceneNode const *, OnSceneNodeChangedConnection > m_nodeConnections;
 		float m_lpvIndirectAttenuation{ 1.7f };
 		VoxelSceneData m_voxelConfig;
 		SceneRenderNodesUPtr m_renderNodes;

@@ -1,5 +1,6 @@
 #include "Castor3D/Render/RenderTarget.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
@@ -462,6 +463,10 @@ namespace castor3d
 				, m_overlays
 				, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 			getEngine()->registerTimer( getName() + cuT( "/Overlays/Overlays" ), *m_overlaysTimer );
+#if C3D_DebugTimers
+			m_testTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "AAATests" ) );
+			getEngine()->registerTimer( cuT( "AAATests" ), *m_testTimer );
+#endif
 			m_signalReady = device->createSemaphore( getName() + "Ready" );
 			m_initialising = false;
 		}
@@ -478,6 +483,10 @@ namespace castor3d
 		{
 			m_signalReady.reset();
 			m_overlayRenderer.reset();
+#if C3D_DebugTimers
+			getEngine()->unregisterTimer( cuT( "AAATests" ), *m_testTimer );
+			m_testTimer.reset();
+#endif
 			getEngine()->unregisterTimer( getName() + cuT( "/Overlays/Overlays" ), *m_overlaysTimer );
 			m_overlaysTimer.reset();
 			m_runnable.reset();
@@ -522,9 +531,13 @@ namespace castor3d
 		camera.update();
 
 		CU_Require( m_culler );
-		m_culler->compute();
-
-		m_renderTechnique->update( updater );
+		{
+#if C3D_DebugTimers
+			auto block = m_testTimer->start();
+#endif
+			m_culler->compute();
+			m_renderTechnique->update( updater );
+		}
 
 		m_hdrConfigUbo->cpuUpdate( getHdrConfig() );
 
