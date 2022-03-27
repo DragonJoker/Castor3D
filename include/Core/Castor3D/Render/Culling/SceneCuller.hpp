@@ -203,14 +203,37 @@ namespace castor3d
 
 	private:
 		void onSceneChanged( Scene const & scene );
+		void onSceneNodeChanged( SceneNode const & sceneNode );
 		void onCameraChanged( Camera const & camera );
 		void doClearAll();
 		void doClearCulled();
 		void doUpdateMinCuller();
 		void doSortNodes();
 		void doFillIndirect();
-		virtual void doCullGeometries() = 0;
-		virtual void doCullBillboards() = 0;
+		void doMakeDirty( Geometry const & object );
+		void doMakeDirty( BillboardBase const & object );
+		void doCullGeometries();
+		void doCullBillboards();
+		void doAddSubmesh( SubmeshRenderNode const & node
+			, RenderNodesPass const & renderPass
+			, SidedNodePipelineMapT< SubmeshRenderNode > & sorted
+			, SidedObjectNodePipelineMapT< SubmeshRenderNode > & sortedInstanced
+			, PipelineBufferArray & nodesIds );
+		void doAddBillboard( BillboardRenderNode const & node
+			, RenderNodesPass const & renderPass
+			, SidedNodePipelineMapT< BillboardRenderNode > & sorted
+			, PipelineBufferArray & nodesIds );
+		void doRemoveSubmesh( SubmeshRenderNode const & node
+			, RenderNodesPass const & renderPass
+			, SidedNodePipelineMapT< SubmeshRenderNode > & sorted
+			, SidedObjectNodePipelineMapT< SubmeshRenderNode > & sortedInstanced
+			, PipelineBufferArray & nodesIds );
+		void doRemoveBillboard( BillboardRenderNode const & node
+			, RenderNodesPass const & renderPass
+			, SidedNodePipelineMapT< BillboardRenderNode > & sorted
+			, PipelineBufferArray & nodesIds );
+		virtual bool isSubmeshCulled( SubmeshRenderNode const & node )const = 0;
+		virtual bool isBillboardCulled( BillboardRenderNode const & node )const = 0;
 
 	private:
 		Scene & m_scene;
@@ -223,6 +246,8 @@ namespace castor3d
 		bool m_sceneDirty{ true };
 		bool m_cameraDirty{ true };
 		float m_minCullersZ{ 0.0f };
+		NodeArrayT< SubmeshRenderNode > m_dirtySubmeshes;
+		NodeArrayT< BillboardRenderNode > m_dirtyBillboards;
 
 		NodeArrayT< SubmeshRenderNode > m_culledSubmeshes;
 		NodeArrayT< BillboardRenderNode > m_culledBillboards;
@@ -230,6 +255,7 @@ namespace castor3d
 		std::map< RenderNodesPass const *, RenderPassBuffers > m_renderPasses;
 
 		OnSceneChangedConnection m_sceneChanged;
+		OnSceneNodeChangedConnection m_sceneNodeChanged;
 		OnCameraChangedConnection m_cameraChanged;
 	};
 }

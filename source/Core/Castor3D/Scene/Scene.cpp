@@ -152,8 +152,20 @@ namespace castor3d
 			, m_rootNode
 			, m_rootCameraNode
 			, m_rootObjectNode
-			, castor::DummyFunctorT< SceneNodeCache >{}
-			, castor::DummyFunctorT< SceneNodeCache >{}
+			, [this]( SceneNodeCache::ElementT & element )
+			{
+				m_nodeConnections.emplace( &element
+					, element.onChanged.connect( [this]( SceneNode const & node )
+						{
+							onNodeChanged( node );
+						} ) );
+				setChanged();
+			}
+			, [this]( SceneNodeCache::ElementT & element )
+			{
+				m_nodeConnections.erase( &element );
+				setChanged();
+			}
 			, MovableMergerT< SceneNodeCache >{ getName() }
 			, SceneNodeAttacherT< SceneNodeCache >{}
 			, SceneNodeDetacherT< SceneNodeCache >{} );
@@ -225,7 +237,6 @@ namespace castor3d
 		m_onParticleSystemChanged = m_particleSystemCache->onChanged.connect( setThisChanged );
 		m_onBillboardListChanged = m_billboardCache->onChanged.connect( setThisChanged );
 		m_onGeometryChanged = m_geometryCache->onChanged.connect( setThisChanged );
-		m_onSceneNodeChanged = m_sceneNodeCache->onChanged.connect( setThisChanged );
 		m_animatedObjectGroupCache->add( cuT( "C3D_Textures" ), *this );
 		auto & device = engine.getRenderSystem()->getRenderDevice();
 		auto data = device.graphicsData();
@@ -819,7 +830,8 @@ namespace castor3d
 		, GlobalIlluminationType globalIllumination )
 	{
 		auto changed = m_hasShadows[size_t( lightType )] != shadowProducer
-			|| m_giTypes[size_t( lightType )].find( globalIllumination ) == m_giTypes[size_t( lightType )].end();
+			|| ( globalIllumination != GlobalIlluminationType::eNone
+				&& m_giTypes[size_t( lightType )].find( globalIllumination ) == m_giTypes[size_t( lightType )].end() );
 
 		if ( changed )
 		{

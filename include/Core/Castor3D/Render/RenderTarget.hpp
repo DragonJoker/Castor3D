@@ -416,6 +416,7 @@ namespace castor3d
 		ToneMappingSPtr m_toneMapping;
 		PostEffectPtrArray m_srgbPostEffects;
 		FramePassTimerUPtr m_overlaysTimer;
+		FramePassTimerUPtr m_testTimer;
 		ShaderModule m_combineVtx{ VK_SHADER_STAGE_VERTEX_BIT, "Target - Combine" };
 		ShaderModule m_combinePxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "Target - Combine" };
 		ashes::PipelineShaderStageCreateInfoArray m_combineStages;

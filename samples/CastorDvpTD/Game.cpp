@@ -11,11 +11,15 @@
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
+#include <Castor3D/Render/RenderDevice.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Scene/Geometry.hpp>
 #include <Castor3D/Scene/Animation/AnimatedObject.hpp>
 #include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/Light/PointLight.hpp>
+
+#include <RenderGraph/FramePassTimer.hpp>
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
@@ -123,12 +127,20 @@ namespace castortd
 		m_boulderMesh = m_scene.getMeshCache().find( cuT( "Boulder" ) );
 		m_boulderMaterial = m_scene.getMaterialView().find( cuT( "Boulder" ) );
 		m_targetNode = m_scene.getSceneNodeCache().find( cuT( "Target" ) ).lock();
+		m_updateTimer = castor::makeUnique< castor3d::FramePassTimer >( m_scene.getEngine()->getRenderSystem()->getRenderDevice().makeContext()
+			, "CastorDvpTD/Update" );
+		m_scene.getEngine()->registerTimer( "CastorDvpTD/Update", *m_updateTimer );
 		m_cellDimensions[0] = m_mapCubeMesh.lock()->getBoundingBox().getMax()[0] - m_mapCubeMesh.lock()->getBoundingBox().getMin()[0];
 		m_cellDimensions[1] = m_mapCubeMesh.lock()->getBoundingBox().getMax()[1] - m_mapCubeMesh.lock()->getBoundingBox().getMin()[1];
 		m_cellDimensions[2] = m_mapCubeMesh.lock()->getBoundingBox().getMax()[2] - m_mapCubeMesh.lock()->getBoundingBox().getMin()[2];
 
 		m_hud.initialise();
 		reset();
+	}
+
+	Game::~Game()
+	{
+		m_scene.getEngine()->unregisterTimer( "CastorDvpTD/Update", *m_updateTimer );
 	}
 
 	void Game::reset()
@@ -223,6 +235,7 @@ namespace castortd
 	{
 		if ( m_started && !m_paused )
 		{
+			auto block = m_updateTimer->start();
 #if !defined( NDEBUG )
 			m_elapsed = std::chrono::duration_cast< castor::Milliseconds >( Clock::now() - m_saved );
 #else

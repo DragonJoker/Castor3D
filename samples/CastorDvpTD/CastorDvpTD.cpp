@@ -6,15 +6,20 @@ wxIMPLEMENT_APP( castortd::CastorDvpTD );
 
 namespace castortd
 {
-	static const bool CASTOR3D_THREADED = true;
+	static const bool isCastor3DThreaded = true;
+#if defined( NDEBUG )
+	static const int wantedFPS = 1000;
+#else
+	static const int wantedFPS = 60;
+#endif
 
 	CastorDvpTD::CastorDvpTD()
 		: CastorApplication{ cuT( "CastorDvpTD" )
 			, cuT( "Castor TD" )
 			, 7
 			, castor3d::Version{ CastorDvpTD_VERSION_MAJOR, CastorDvpTD_VERSION_MINOR, CastorDvpTD_VERSION_BUILD }
-			, 120u
-			, CASTOR3D_THREADED }
+			, wantedFPS
+			, isCastor3DThreaded }
 	{
 	}
 

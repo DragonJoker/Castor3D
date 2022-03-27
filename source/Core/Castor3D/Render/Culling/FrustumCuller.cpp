@@ -61,35 +61,15 @@ namespace castor3d
 		m_frustum->update( projection, view );
 	}
 
-	void FrustumCuller::doCullGeometries()
+	bool FrustumCuller::isSubmeshCulled( SubmeshRenderNode const & node )const
 	{
-		if ( m_camera )
-		{
-			cullfrust::cullNodes( getCamera().getFrustum()
-				, getScene().getRenderNodes().getSubmeshNodes()
-				, m_culledSubmeshes );
-		}
-		else
-		{
-			cullfrust::cullNodes( *m_frustum
-				, getScene().getRenderNodes().getSubmeshNodes()
-				, m_culledSubmeshes );
-		}
+		return !isCulled( node )
+			&& !isVisible( getCamera().getFrustum(), node );
 	}
 
-	void FrustumCuller::doCullBillboards()
+	bool FrustumCuller::isBillboardCulled( BillboardRenderNode const & node )const
 	{
-		if ( m_camera )
-		{
-			cullfrust::cullNodes( getCamera().getFrustum()
-				, getScene().getRenderNodes().getBillboardNodes()
-				, m_culledBillboards );
-		}
-		else
-		{
-			cullfrust::cullNodes( *m_frustum
-				, getScene().getRenderNodes().getBillboardNodes()
-				, m_culledBillboards );
-		}
+		return !isCulled( node )
+			&& !isVisible( getCamera().getFrustum(), node );
 	}
 }
