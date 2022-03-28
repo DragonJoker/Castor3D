@@ -54,7 +54,9 @@ namespace castor3d
 			, castor::String name
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
-			, ShadowMap const & shadowMap );
+			, ShadowMap const & shadowMap
+			, bool needsVsm
+			, bool needsRsm );
 		/**
 		*\~english
 		*name
@@ -117,6 +119,8 @@ namespace castor3d
 
 	protected:
 		ShadowMap const & m_shadowMap;
+		bool m_needsVsm;
+		bool m_needsRsm;
 		mutable bool m_initialised{ false };
 		bool m_outOfDate{ true };
 		ShadowMapUbo m_shadowMapUbo;

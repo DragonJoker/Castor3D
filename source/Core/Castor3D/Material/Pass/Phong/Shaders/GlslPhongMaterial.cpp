@@ -22,17 +22,20 @@ namespace castor3d::shader
 		, sdw::Vec4 const & data2
 		, Material const & material )
 	{
-		create( newAlbedo
-			, data3
-			, data2
-			, material.colourDiv.a() );
-		edgeFactors = material.edgeFactors;
-		edgeColour = material.edgeColour;
-		specific = material.specific;
-		edgeWidth = material.edgeWidth;
-		depthFactor = material.depthFactor;
-		normalFactor = material.normalFactor;
-		objectFactor = material.objectFactor;
+		if ( isEnabled() )
+		{
+			create( newAlbedo
+				, data3
+				, data2
+				, material.colourDiv.a() );
+			edgeFactors = material.edgeFactors;
+			edgeColour = material.edgeColour;
+			specific = material.specific;
+			edgeWidth = material.edgeWidth;
+			depthFactor = material.depthFactor;
+			normalFactor = material.normalFactor;
+			objectFactor = material.objectFactor;
+		}
 	}
 
 	void PhongLightMaterial::create( sdw::Vec3 const & newAlbedo
@@ -40,10 +43,13 @@ namespace castor3d::shader
 		, sdw::Vec4 const & data2
 		, sdw::Float const & newAmbient )
 	{
-		albedo = newAlbedo;
-		specular = data3.rgb();
-		ambient = newAmbient;
-		shininess = data2.a();
+		if ( isEnabled() )
+		{
+			albedo = newAlbedo;
+			specular = data3.rgb();
+			ambient = newAmbient;
+			shininess = data2.a();
+		}
 	}
 
 	void PhongLightMaterial::create( Material const & material )

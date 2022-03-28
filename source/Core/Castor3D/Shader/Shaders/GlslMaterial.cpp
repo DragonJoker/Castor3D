@@ -90,7 +90,9 @@ namespace castor3d::shader
 
 	Material Materials::getMaterial( sdw::UInt const & index )const
 	{
-		return ( *m_ssbo )[index - 1_u];
+		return ( m_ssbo
+			? ( *m_ssbo )[index - 1_u]
+			: m_writer.declLocale< Material >( "mat", false ) );
 	}
 
 	//*****************************************************************************************

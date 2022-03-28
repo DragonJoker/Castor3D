@@ -9,6 +9,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPass.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/Light/Light.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
@@ -21,6 +22,30 @@ CU_ImplementCUSmartPtr( castor3d, ShadowMap )
 
 namespace castor3d
 {
+	namespace shdmap
+	{
+		static uint32_t getPassesIndex( bool needsVsm
+			, bool needsRsm )
+		{
+			if ( needsVsm )
+			{
+				if ( needsRsm )
+				{
+					return 3u;
+				}
+
+				return 1u;
+			}
+
+			if ( needsRsm )
+			{
+				return 2u;
+			}
+
+			return 0u;
+		}
+	}
+
 	ShadowMap::ShadowMap( crg::ResourceHandler & handler
 		, RenderDevice const & device
 		, Scene & scene
@@ -119,18 +144,23 @@ namespace castor3d
 
 	void ShadowMap::update( CpuUpdater & updater )
 	{
+		auto vsm = updater.light->getShadowType() == ShadowType::eVariance;
+		auto rsm = updater.light->needsRsmShadowMaps();
+		m_passesIndex = shdmap::getPassesIndex( vsm, rsm );
+		auto & myPasses = m_passes[m_passesIndex];
+
 		if ( updater.index < doGetMaxCount()
-			&& updater.index >= m_runnables.size() )
+			&& updater.index >= myPasses.runnables.size() )
 		{
-			auto passes = doCreatePass( updater.index );
+			auto passes = doCreatePass( updater.index, vsm, rsm );
 
 			for ( auto & pass : passes )
 			{
-				m_passes.emplace_back( std::move( pass ) );
+				myPasses.passes.emplace_back( std::move( pass ) );
 			}
 
-			m_runnables.push_back( m_graphs.back()->compile( m_device.makeContext() ) );
-			auto runnable = m_runnables.back().get();
+			myPasses.runnables.push_back( myPasses.graphs.back()->compile( m_device.makeContext() ) );
+			auto runnable = myPasses.runnables.back().get();
 			runnable->record();
 		}
 
@@ -168,15 +198,17 @@ namespace castor3d
 		}
 #endif
 
-		if ( !m_runnables[index] )
+		auto & myPasses = m_passes[m_passesIndex];
+
+		if ( !myPasses.runnables[index] )
 		{
-			m_runnables[index] = m_graphs[index]->compile( m_device.makeContext() );
-			auto runnable = m_runnables[index].get();
+			myPasses.runnables[index] = myPasses.graphs[index]->compile( m_device.makeContext() );
+			auto runnable = myPasses.runnables[index].get();
 			runnable->record();
 		}
 
 		doSetUpToDate( index );
-		return m_runnables[index]->run( toWait, queue );
+		return myPasses.runnables[index]->run( toWait, queue );
 	}
 
 	ashes::VkClearValueArray const & ShadowMap::getClearValues()const

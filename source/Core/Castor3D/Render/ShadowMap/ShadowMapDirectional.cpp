@@ -119,12 +119,14 @@ namespace castor3d
 		static std::vector< ShadowMap::PassDataPtr > createPasses( crg::ResourceHandler & handler
 			, std::vector< std::unique_ptr< crg::FrameGraph > > & graphs
 			, std::vector< crg::RunnableGraphPtr > & runnables
-			, std::vector< std::unique_ptr< GaussianBlur > > & blurs
+			, std::vector< GaussianBlurUPtr > & blurs
 			, crg::ImageViewId intermediate
 			, RenderDevice const & device
 			, Scene & scene
 			, ShadowMap & shadowMap
-			, uint32_t cascadeCount )
+			, uint32_t cascadeCount
+			, bool vsm
+			, bool rsm )
 		{
 			auto & engine = *scene.getEngine();
 			std::vector< ShadowMap::PassDataPtr > result;
@@ -161,7 +163,7 @@ namespace castor3d
 				auto & passData = *result.back();
 				passData.culler = std::make_unique< FrustumCuller >( scene, *passData.camera );
 				auto & pass = graph.createPass( debugName
-					, [&passData, &device, &shadowMap, cascade]( crg::FramePass const & framePass
+					, [&passData, &device, &shadowMap, cascade, vsm, rsm]( crg::FramePass const & framePass
 						, crg::GraphContext & context
 						, crg::RunnableGraph & runnableGraph )
 					{
@@ -172,6 +174,8 @@ namespace castor3d
 							, *passData.matrixUbo
 							, *passData.culler
 							, shadowMap
+							, vsm
+							, rsm
 							, cascade );
 						passData.pass = res.get();
 						device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
@@ -190,36 +194,58 @@ namespace castor3d
 				{
 					pass.addOutputDepthView( depth.targetViewId, getClearValue( SmTexture::eDepth ) );
 					pass.addOutputColourView( linear.targetViewId, getClearValue( SmTexture::eLinearDepth ) );
-					pass.addOutputColourView( variance.targetViewId, getClearValue( SmTexture::eVariance ) );
-					pass.addOutputColourView( normal.targetViewId, getClearValue( SmTexture::eNormal ) );
-					pass.addOutputColourView( position.targetViewId, getClearValue( SmTexture::ePosition ) );
-					pass.addOutputColourView( flux.targetViewId, getClearValue( SmTexture::eFlux ) );
 
-					blurs.push_back( std::make_unique< GaussianBlur >( graph
-						, *previousPass
-						, device
-						, cuT( "ShadowMapDirectional" )
-						, debugName
-						, variance.wholeViewId
-						, 5u ) );
+					if ( vsm )
+					{
+						pass.addOutputColourView( variance.targetViewId, getClearValue( SmTexture::eVariance ) );
+					}
+
+					if ( rsm )
+					{
+						pass.addOutputColourView( normal.targetViewId, getClearValue( SmTexture::eNormal ) );
+						pass.addOutputColourView( position.targetViewId, getClearValue( SmTexture::ePosition ) );
+						pass.addOutputColourView( flux.targetViewId, getClearValue( SmTexture::eFlux ) );
+					}
+
+					if ( vsm )
+					{
+						blurs.push_back( castor::makeUnique< GaussianBlur >( graph
+							, *previousPass
+							, device
+							, cuT( "ShadowMapDirectional" )
+							, debugName
+							, variance.wholeViewId
+							, 5u ) );
+					}
 				}
 				else
 				{
 					pass.addOutputDepthView( depth.subViewsId[cascade], getClearValue( SmTexture::eDepth ) );
 					pass.addOutputColourView( linear.subViewsId[cascade], getClearValue( SmTexture::eLinearDepth ) );
-					pass.addOutputColourView( variance.subViewsId[cascade], getClearValue( SmTexture::eVariance ) );
-					pass.addOutputColourView( normal.subViewsId[cascade], getClearValue( SmTexture::eNormal ) );
-					pass.addOutputColourView( position.subViewsId[cascade], getClearValue( SmTexture::ePosition ) );
-					pass.addOutputColourView( flux.subViewsId[cascade], getClearValue( SmTexture::eFlux ) );
 
-					blurs.push_back( std::make_unique< GaussianBlur >( graph
-						, *previousPass
-						, device
-						, cuT( "ShadowMapDirectional" )
-						, debugName
-						, variance.subViewsId[cascade]
-						, intermediate
-						, 5u ) );
+					if ( vsm )
+					{
+						pass.addOutputColourView( variance.subViewsId[cascade], getClearValue( SmTexture::eVariance ) );
+					}
+
+					if ( rsm )
+					{
+						pass.addOutputColourView( normal.subViewsId[cascade], getClearValue( SmTexture::eNormal ) );
+						pass.addOutputColourView( position.subViewsId[cascade], getClearValue( SmTexture::ePosition ) );
+						pass.addOutputColourView( flux.subViewsId[cascade], getClearValue( SmTexture::eFlux ) );
+					}
+
+					if ( vsm )
+					{
+						blurs.push_back( castor::makeUnique< GaussianBlur >( graph
+							, *previousPass
+							, device
+							, cuT( "ShadowMapDirectional" )
+							, debugName
+							, variance.subViewsId[cascade]
+							, intermediate
+							, 5u ) );
+					}
 				}
 			}
 
@@ -295,7 +321,9 @@ namespace castor3d
 
 	void ShadowMapDirectional::update( GpuUpdater & updater )
 	{
-		if ( m_runnables[updater.index] )
+		auto & myPasses = m_passes[m_passesIndex];
+
+		if ( myPasses.runnables[updater.index] )
 		{
 			auto & light = *updater.light;
 			auto & camera = *updater.camera;
@@ -310,7 +338,7 @@ namespace castor3d
 			{
 				if ( shadowModified )
 				{
-					auto & culler = m_passes[cascade]->pass->getCuller();
+					auto & culler = myPasses.passes[cascade]->pass->getCuller();
 					auto & lightCamera = culler.getCamera();
 					lightCamera.attachTo( *node );
 					lightCamera.setProjection( directional.getProjMatrix( cascade ) );
@@ -345,28 +373,34 @@ namespace castor3d
 				}
 
 				updater.index = cascade;
-				m_passes[cascade]->pass->update( updater );
+				myPasses.passes[cascade]->pass->update( updater );
 			}
 		}
 	}
 
-	std::vector< ShadowMap::PassDataPtr > ShadowMapDirectional::doCreatePass( uint32_t index )
+	std::vector< ShadowMap::PassDataPtr > ShadowMapDirectional::doCreatePass( uint32_t index
+		, bool vsm
+		, bool rsm )
 	{
+		auto & myPasses = m_passes[m_passesIndex];
 		return shdmapdir::createPasses( m_handler
-			, m_graphs
-			, m_runnables
-			, m_blurs
+			, myPasses.graphs
+			, myPasses.runnables
+			, myPasses.blurs
 			, m_blurIntermediateView
 			, m_device
 			, m_scene
 			, *this
-			, m_scene.getDirectionalShadowCascades() );
+			, m_scene.getDirectionalShadowCascades()
+			, vsm
+			, rsm );
 	}
 
 	bool ShadowMapDirectional::doIsUpToDate( uint32_t index )const
 	{
-		return std::all_of( m_passes.begin()
-			, m_passes.begin() + std::min( m_cascades, uint32_t( m_passes.size() ) )
+		auto & myPasses = m_passes[m_passesIndex];
+		return std::all_of( myPasses.passes.begin()
+			, myPasses.passes.begin() + std::min( m_cascades, uint32_t( myPasses.passes.size() ) )
 			, []( ShadowMap::PassDataPtr const & data )
 			{
 				return data->pass->isUpToDate();
@@ -375,7 +409,9 @@ namespace castor3d
 
 	void ShadowMapDirectional::doSetUpToDate( uint32_t index )
 	{
-		for ( auto & data : castor::makeArrayView( m_passes.begin(), m_passes.begin() + std::min( m_cascades, uint32_t( m_passes.size() ) ) ) )
+		auto & myPasses = m_passes[m_passesIndex];
+
+		for ( auto & data : castor::makeArrayView( myPasses.passes.begin(), myPasses.passes.begin() + std::min( m_cascades, uint32_t( myPasses.passes.size() ) ) ) )
 		{
 			data->pass->setUpToDate();
 		}
@@ -383,12 +419,14 @@ namespace castor3d
 
 	void ShadowMapDirectional::doUpdate( CpuUpdater & updater )
 	{
-		if ( m_runnables[updater.index] )
+		auto & myPasses = m_passes[m_passesIndex];
+
+		if ( myPasses.runnables[updater.index] )
 		{
 			for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
 			{
 				updater.index = cascade;
-				m_passes[cascade]->pass->update( updater );
+				myPasses.passes[cascade]->pass->update( updater );
 			}
 		}
 	}

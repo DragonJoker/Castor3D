@@ -173,7 +173,8 @@ namespace castor3d
 
 		bool needsRsmShadowMaps()const
 		{
-			return getGlobalIlluminationType() != GlobalIlluminationType::eNone;
+			return getGlobalIlluminationType() != GlobalIlluminationType::eNone
+				&& getGlobalIlluminationType() != GlobalIlluminationType::eVoxelConeTracing;
 		}
 
 		GlobalIlluminationType getGlobalIlluminationType()const
