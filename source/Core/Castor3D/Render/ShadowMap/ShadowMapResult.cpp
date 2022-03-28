@@ -23,8 +23,9 @@ namespace castor3d
 		{
 			{
 				cuT( "Depth" ),
-				cuT( "NormalDepth" ),
+				cuT( "Linear" ),
 				cuT( "Variance" ),
+				cuT( "Normal" ),
 				cuT( "Position" ),
 				cuT( "Flux" ),
 			}
@@ -39,9 +40,12 @@ namespace castor3d
 		{
 			{
 				VK_FORMAT_D16_UNORM,							// Depth
-				VK_FORMAT_R16G16B16A16_SFLOAT,					// NormalLinear
+				VK_FORMAT_R32_SFLOAT,							// Linear
 				VK_FORMAT_R32G32_SFLOAT,						// Variance
-				VK_FORMAT_R16G16B16A16_SFLOAT,					// Position
+				device.selectSmallestFormatRGBSFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
+					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT ),	// Normal
+				device.selectSmallestFormatRGBSFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
+					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT ),	// Position
 				device.selectSmallestFormatRGBUFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
 					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT ),	// Flux
 			}
@@ -56,11 +60,12 @@ namespace castor3d
 		static std::array< VkClearValue, size_t( SmTexture::eCount ) > Values
 		{
 			{
-				defaultClearDepthStencil,						// Depth
-				makeClearValue( 0.0f, 0.0f, 0.0f, component ),	// NormalLinear
-				rgb32fMaxColor,									// Variance
-				opaqueBlackClearColor,							// Position
-				opaqueBlackClearColor							// Flux
+				defaultClearDepthStencil,		// Depth
+				makeClearValue( component ),	// Linear
+				rgb32fMaxColor,					// Variance
+				transparentBlackClearColor,		// Normal
+				transparentBlackClearColor,		// Position
+				transparentBlackClearColor		// Flux
 			}
 		};
 		return Values[size_t( texture )];
@@ -72,8 +77,9 @@ namespace castor3d
 		{
 			{
 				VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,	// Depth
-				VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,			// NormalLinear
+				VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,			// Linear
 				VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,			// Variance
+				VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,			// Normal
 				VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,			// Position
 				VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,			// Flux
 			}
@@ -86,11 +92,12 @@ namespace castor3d
 		static std::array< VkBorderColor, size_t( SmTexture::eCount ) > Values
 		{
 			{
-				VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,	// Depth
-				VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,	// NormalLinear
-				VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,	// Variance
-				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,	// Position
-				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,	// Flux
+				VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,			// Depth
+				VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,			// Linear
+				VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,			// Variance
+				VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,	// Normal
+				VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,	// Position
+				VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,	// Flux
 			}
 		};
 		return Values[size_t( texture )];

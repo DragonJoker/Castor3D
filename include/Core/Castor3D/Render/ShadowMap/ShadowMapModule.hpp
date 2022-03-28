@@ -31,11 +31,12 @@ namespace castor3d
 	enum class SmTexture
 		: uint8_t
 	{
-		eDepth, // D24S8 Depth stencil buffer
-		eNormalLinear, // R32G32B32A32F, RGB => World space normal used by RSM, A => Shadow map used for raw and PCF shadow maps
-		eVariance, // R32G32F Shadow map used by VSM.
-		ePosition, // R16G16B16A16F, RGB => World space position used by RSM.
-		eFlux, // R16G16B16A16F, RGB => Light flux, used by RSM.
+		eDepth,			// D24S8 Depth stencil buffer
+		eLinearDepth,	// R32F Shadow map used for raw and PCF shadow maps
+		eVariance,		// R32G32F Shadow map used by VSM.
+		eNormal,		// R16G16B16A16F, RGB => World space normal used by RSM.
+		ePosition,		// R16G16B16A16F, RGB => World space position used by RSM.
+		eFlux,			// R16G16B16A16F, RGB => Light flux, used by RSM.
 		CU_ScopedEnumBounds( eDepth ),
 	};
 	C3D_API castor::String getTextureName( LightType light

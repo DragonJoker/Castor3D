@@ -51,8 +51,9 @@ namespace castor3d
 			viewport.resize( castor::Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize } );
 			auto & smResult = shadowMap.getShadowPassResult();
 			auto & depth = smResult[SmTexture::eDepth];
-			auto & linear = smResult[SmTexture::eNormalLinear];
+			auto & linear = smResult[SmTexture::eLinearDepth];
 			auto & variance = smResult[SmTexture::eVariance];
+			auto & normal = smResult[SmTexture::eNormal];
 			auto & position = smResult[SmTexture::ePosition];
 			auto & flux = smResult[SmTexture::eFlux];
 
@@ -87,8 +88,9 @@ namespace castor3d
 				} );
 			auto previousPass = &pass;
 			pass.addOutputDepthView( depth.subViewsId[shadowMapIndex], getClearValue( SmTexture::eDepth ) );
-			pass.addOutputColourView( linear.subViewsId[shadowMapIndex], getClearValue( SmTexture::eNormalLinear ) );
+			pass.addOutputColourView( linear.subViewsId[shadowMapIndex], getClearValue( SmTexture::eLinearDepth ) );
 			pass.addOutputColourView( variance.subViewsId[shadowMapIndex], getClearValue( SmTexture::eVariance ) );
+			pass.addOutputColourView( normal.subViewsId[shadowMapIndex], getClearValue( SmTexture::eNormal ) );
 			pass.addOutputColourView( position.subViewsId[shadowMapIndex], getClearValue( SmTexture::ePosition ) );
 			pass.addOutputColourView( flux.subViewsId[shadowMapIndex], getClearValue( SmTexture::eFlux ) );
 

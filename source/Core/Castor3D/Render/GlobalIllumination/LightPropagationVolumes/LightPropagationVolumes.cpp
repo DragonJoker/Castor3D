@@ -187,7 +187,7 @@ namespace castor3d
 		pass.addDependency( *lastPass );
 		lightCache.createPassBinding( pass
 			, LightInjectionPass::LightsIdx );
-		pass.addSampledView( smResult[SmTexture::eNormalLinear].sampledViewId
+		pass.addSampledView( smResult[SmTexture::eNormal].sampledViewId
 			, LightInjectionPass::RsmNormalsIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		pass.addSampledView( smResult[SmTexture::ePosition].sampledViewId
@@ -285,7 +285,7 @@ namespace castor3d
 		else
 		{
 			std::vector< crg::ImageViewId > arrayViews;
-			arrayViews.push_back( lpvpropvol::createArrayView( graph, smResult[SmTexture::eNormalLinear].sampledViewId ) );
+			arrayViews.push_back( lpvpropvol::createArrayView( graph, smResult[SmTexture::eNormal].sampledViewId ) );
 			arrayViews.push_back( lpvpropvol::createArrayView( graph, smResult[SmTexture::ePosition].sampledViewId ) );
 			arrayViews.push_back( lpvpropvol::createArrayView( graph, smResult[SmTexture::eFlux].sampledViewId ) );
 
@@ -337,7 +337,7 @@ namespace castor3d
 		pass.addDependency( *lastPass );
 		lightCache.createPassBinding( pass
 			, GeometryInjectionPass::LightsIdx );
-		pass.addSampledView( smResult[SmTexture::eNormalLinear].sampledViewId
+		pass.addSampledView( smResult[SmTexture::eNormal].sampledViewId
 			, GeometryInjectionPass::RsmNormalsIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		pass.addSampledView( smResult[SmTexture::ePosition].sampledViewId
@@ -426,7 +426,7 @@ namespace castor3d
 		else
 		{
 			std::vector< crg::ImageViewId > arrayViews;
-			arrayViews.push_back( lpvpropvol::createArrayView( graph, smResult[SmTexture::eNormalLinear].sampledViewId ) );
+			arrayViews.push_back( lpvpropvol::createArrayView( graph, smResult[SmTexture::eNormal].sampledViewId ) );
 			arrayViews.push_back( lpvpropvol::createArrayView( graph, smResult[SmTexture::ePosition].sampledViewId ) );
 
 			for ( uint32_t faceIndex = 0u; faceIndex < 6u; ++faceIndex )

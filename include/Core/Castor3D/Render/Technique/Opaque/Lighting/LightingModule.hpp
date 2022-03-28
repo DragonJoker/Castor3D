@@ -59,7 +59,7 @@ namespace castor3d
 		eLight,
 		eMatrix,
 		eModelMatrix,
-		eSmNormalLinear,
+		eSmLinear,
 		eSmVariance,
 	};
 	/**
