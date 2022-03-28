@@ -33,34 +33,43 @@ namespace castor3d::shader
 	struct ShadowOptions
 	{
 		SceneFlags type = SceneFlags( 0 );
+		// Use VSM result
+		bool vsm{ false };
 		// Use RSM result
 		bool rsm{ false };
 
 		ShadowOptions()
 			: type{ SceneFlag::eNone }
+			, vsm{ false }
 			, rsm{ false }
 		{
 		}
 
-		explicit ShadowOptions( bool rsm )
+		explicit ShadowOptions( bool vsm
+			, bool rsm )
 			: type{ SceneFlag::eNone }
+			, vsm{ rsm }
 			, rsm{ rsm }
 		{
 		}
 
 		ShadowOptions( bool enabled
 			, LightType lightType
+			, bool vsm
 			, bool rsm )
 			: type{ ( enabled
 				? SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << int( lightType ) )
 				: SceneFlag::eNone ) }
+			, vsm{ vsm }
 			, rsm{ rsm }
 		{
 		}
 
 		ShadowOptions( SceneFlags sceneFlags
+			, bool vsm
 			, bool rsm )
 			: type{ sceneFlags & SceneFlag::eShadowAny }
+			, vsm{ vsm }
 			, rsm{ rsm }
 		{
 		}

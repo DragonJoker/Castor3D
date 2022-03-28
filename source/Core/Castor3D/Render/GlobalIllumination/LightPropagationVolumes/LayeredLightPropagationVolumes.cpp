@@ -223,7 +223,7 @@ namespace castor3d
 		result.addDependency( *lastLightPass );
 		lightCache.createPassBinding( result
 			, LightInjectionPass::LightsIdx );
-		result.addSampledView( smResult[SmTexture::eNormalLinear].sampledViewId
+		result.addSampledView( smResult[SmTexture::eNormal].sampledViewId
 			, LightInjectionPass::RsmNormalsIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		result.addSampledView( smResult[SmTexture::ePosition].sampledViewId
@@ -275,7 +275,7 @@ namespace castor3d
 		result.addDependency( *lastGeomPass );
 		lightCache.createPassBinding( result
 			, GeometryInjectionPass::LightsIdx );
-		result.addSampledView( smResult[SmTexture::eNormalLinear].sampledViewId
+		result.addSampledView( smResult[SmTexture::eNormal].sampledViewId
 			, GeometryInjectionPass::RsmNormalsIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		result.addSampledView( smResult[SmTexture::ePosition].sampledViewId

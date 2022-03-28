@@ -109,8 +109,8 @@ namespace castor3d
 				{
 					auto & result = shadowMapRef.first.get().getShadowPassResult();
 					bindTexture( graph
-						, result[SmTexture::eNormalLinear].sampledViewId
-						, *result[SmTexture::eNormalLinear].sampler
+						, result[SmTexture::eLinearDepth].sampledViewId
+						, *result[SmTexture::eLinearDepth].sampler
 						, writes
 						, index );
 					bindTexture( graph

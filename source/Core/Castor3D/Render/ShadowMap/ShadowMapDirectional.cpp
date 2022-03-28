@@ -138,8 +138,9 @@ namespace castor3d
 			viewport.update();
 			auto & smResult = shadowMap.getShadowPassResult();
 			auto & depth = smResult[SmTexture::eDepth];
-			auto & linear = smResult[SmTexture::eNormalLinear];
+			auto & linear = smResult[SmTexture::eLinearDepth];
 			auto & variance = smResult[SmTexture::eVariance];
+			auto & normal = smResult[SmTexture::eNormal];
 			auto & position = smResult[SmTexture::ePosition];
 			auto & flux = smResult[SmTexture::eFlux];
 
@@ -188,8 +189,9 @@ namespace castor3d
 				if ( cascadeCount == 1u )
 				{
 					pass.addOutputDepthView( depth.targetViewId, getClearValue( SmTexture::eDepth ) );
-					pass.addOutputColourView( linear.targetViewId, getClearValue( SmTexture::eNormalLinear ) );
+					pass.addOutputColourView( linear.targetViewId, getClearValue( SmTexture::eLinearDepth ) );
 					pass.addOutputColourView( variance.targetViewId, getClearValue( SmTexture::eVariance ) );
+					pass.addOutputColourView( normal.targetViewId, getClearValue( SmTexture::eNormal ) );
 					pass.addOutputColourView( position.targetViewId, getClearValue( SmTexture::ePosition ) );
 					pass.addOutputColourView( flux.targetViewId, getClearValue( SmTexture::eFlux ) );
 
@@ -204,8 +206,9 @@ namespace castor3d
 				else
 				{
 					pass.addOutputDepthView( depth.subViewsId[cascade], getClearValue( SmTexture::eDepth ) );
-					pass.addOutputColourView( linear.subViewsId[cascade], getClearValue( SmTexture::eNormalLinear ) );
+					pass.addOutputColourView( linear.subViewsId[cascade], getClearValue( SmTexture::eLinearDepth ) );
 					pass.addOutputColourView( variance.subViewsId[cascade], getClearValue( SmTexture::eVariance ) );
+					pass.addOutputColourView( normal.subViewsId[cascade], getClearValue( SmTexture::eNormal ) );
 					pass.addOutputColourView( position.subViewsId[cascade], getClearValue( SmTexture::ePosition ) );
 					pass.addOutputColourView( flux.subViewsId[cascade], getClearValue( SmTexture::eFlux ) );
 

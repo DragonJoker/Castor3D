@@ -116,7 +116,7 @@ namespace castor3d
 
 			if constexpr ( shader::DirectionalMaxCascadesCount > 1u )
 			{
-				auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormalLinear )
+				auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormal )
 					, LightInjectionPass::RsmNormalsIdx
 					, 0u );
 				auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::ePosition )
@@ -137,7 +137,7 @@ namespace castor3d
 					, uint32_t( LightInjectionPass::LightsIdx )
 					, 0u
 					, false
-					, shader::ShadowOptions{ SceneFlag::eNone, true }
+					, shader::ShadowOptions{ SceneFlag::eNone, false, true }
 					, nullptr
 					, index
 					, 1u );
@@ -169,7 +169,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormalLinear )
+				auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormal )
 					, LightInjectionPass::RsmNormalsIdx
 					, 0u );
 				auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::ePosition )
@@ -190,7 +190,7 @@ namespace castor3d
 					, uint32_t( LightInjectionPass::LightsIdx )
 					, 0u
 					, false
-					, shader::ShadowOptions{ SceneFlag::eNone, true }
+					, shader::ShadowOptions{ SceneFlag::eNone, false, true }
 					, nullptr
 					, index
 					, 1u );
@@ -225,7 +225,7 @@ namespace castor3d
 			using namespace sdw;
 			VertexWriter writer;
 
-			auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::ePoint, SmTexture::eNormalLinear )
+			auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::ePoint, SmTexture::eNormal )
 				, LightInjectionPass::RsmNormalsIdx
 				, 0u );
 			auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::ePoint, SmTexture::ePosition )
@@ -246,7 +246,7 @@ namespace castor3d
 				, uint32_t( LightInjectionPass::LightsIdx )
 				, 0u
 				, false
-				, shader::ShadowOptions{ SceneFlag::eNone, true }
+				, shader::ShadowOptions{ SceneFlag::eNone, false, true }
 				, nullptr
 				, index
 				, 1u );
@@ -280,7 +280,7 @@ namespace castor3d
 			using namespace sdw;
 			VertexWriter writer;
 
-			auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::eNormalLinear )
+			auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::eNormal )
 				, LightInjectionPass::RsmNormalsIdx
 				, 0u );
 			auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::ePosition )
@@ -301,7 +301,7 @@ namespace castor3d
 				, uint32_t( LightInjectionPass::LightsIdx )
 				, 0u
 				, false
-				, shader::ShadowOptions{ SceneFlag::eNone, true }
+				, shader::ShadowOptions{ SceneFlag::eNone, false, true }
 				, nullptr
 				, index
 				, 1u );

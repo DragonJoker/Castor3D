@@ -45,7 +45,7 @@ namespace castor3d
 						IF( m_writer
 							, material.sssProfileIndex != 0.0_f )
 						{
-							auto c3d_mapNormalDepthDirectional = m_writer.getVariable< sdw::CombinedImage2DArrayRgba32 >( Shadow::MapNormalDepthDirectional );
+							auto c3d_mapNormalDepthDirectional = m_writer.getVariable< sdw::CombinedImage2DArrayR32 >( Shadow::MapDepthDirectional );
 
 							// We shrink the position inwards the surface to avoid artifacts.
 							auto shrinkedPos = m_writer.declLocale( "shrinkedPos"
@@ -58,7 +58,7 @@ namespace castor3d
 								, vec2( 0.5_f )
 								, vec2( 0.5_f ) );
 							auto shadowDepth = m_writer.declLocale( "shadowDepth"
-								, c3d_mapNormalDepthDirectional.sample( vec3( lightSpacePosition.xy(), 0.0_f ) ).w() );
+								, c3d_mapNormalDepthDirectional.sample( vec3( lightSpacePosition.xy(), 0.0_f ) ) );
 							result = m_compute( lightSpacePosition.z()
 								, shadowDepth
 								, sssProfileIndex
@@ -107,7 +107,7 @@ namespace castor3d
 						IF( m_writer
 							, material.sssProfileIndex != 0.0_f )
 						{
-							auto c3d_mapNormalDepthPoint = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( Shadow::MapNormalDepthPoint );
+							auto c3d_mapNormalDepthPoint = m_writer.getVariable< sdw::CombinedImageCubeArrayR32 >( Shadow::MapDepthPoint );
 
 							// We shrink the position inwards the surface to avoid artifacts.
 							auto shrinkedPos = m_writer.declLocale( "shrinkedPos"
@@ -116,7 +116,7 @@ namespace castor3d
 							auto vertexToLight = m_writer.declLocale( "vertexToLight"
 								, shrinkedPos - light.position );
 							auto shadowDepth = m_writer.declLocale( "shadowDepth"
-								, c3d_mapNormalDepthPoint.sample( vec4( vertexToLight, m_writer.cast< sdw::Float >( light.base.index ) ) ).w() );
+								, c3d_mapNormalDepthPoint.sample( vec4( vertexToLight, m_writer.cast< sdw::Float >( light.base.index ) ) ) );
 							result = m_compute( ( shrinkedPos - light.position ).z()
 								, shadowDepth
 								, sssProfileIndex
@@ -165,7 +165,7 @@ namespace castor3d
 						IF( m_writer
 							, sssProfileIndex != 0_u )
 						{
-							auto c3d_mapNormalDepthSpot = m_writer.getVariable< sdw::CombinedImage2DArrayRgba32 >( Shadow::MapNormalDepthSpot );
+							auto c3d_mapNormalDepthSpot = m_writer.getVariable< sdw::CombinedImage2DArrayR32 >( Shadow::MapDepthSpot );
 
 							// We shrink the position inwards the surface to avoid artifacts.
 							auto shrinkedPos = m_writer.declLocale( "shrinkedPos"
@@ -179,7 +179,7 @@ namespace castor3d
 								, vec2( 0.5_f ) );
 							auto shadowDepth = m_writer.declLocale( "shadowDepth"
 								, c3d_mapNormalDepthSpot.sample( vec3( lightSpacePosition.xy()
-									, m_writer.cast< sdw::Float >( light.base.index ) ) ).w() );
+									, m_writer.cast< sdw::Float >( light.base.index ) ) ) );
 							result = m_compute( lightSpacePosition.z()
 								, shadowDepth
 								, sssProfileIndex
