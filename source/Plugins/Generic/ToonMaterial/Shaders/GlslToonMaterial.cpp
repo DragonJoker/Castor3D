@@ -23,18 +23,21 @@ namespace toon::shader
 		, sdw::Vec4 const & data2
 		, c3d::Material const & material )
 	{
-		create( palbedo
-			, data3
-			, data2
-			, material.colourDiv.a() );
-		edgeFactors = material.edgeFactors;
-		edgeColour = material.edgeColour;
-		specific = material.specific;
-		edgeWidth = material.edgeWidth;
-		depthFactor = material.depthFactor;
-		normalFactor = material.normalFactor;
-		objectFactor = material.objectFactor;
-		smoothBand = material.specific.r();
+		if ( isEnabled() )
+		{
+			create( palbedo
+				, data3
+				, data2
+				, material.colourDiv.a() );
+			edgeFactors = material.edgeFactors;
+			edgeColour = material.edgeColour;
+			specific = material.specific;
+			edgeWidth = material.edgeWidth;
+			depthFactor = material.depthFactor;
+			normalFactor = material.normalFactor;
+			objectFactor = material.objectFactor;
+			smoothBand = material.specific.r();
+		}
 	}
 
 	void ToonPhongLightMaterial::create( sdw::Vec3 const & palbedo
@@ -42,10 +45,13 @@ namespace toon::shader
 		, sdw::Vec4 const & data2
 		, sdw::Float const & pambient )
 	{
-		albedo = palbedo;
-		specular = data3.rgb();
-		ambient = pambient;
-		shininess = data2.a();
+		if ( isEnabled() )
+		{
+			albedo = palbedo;
+			specular = data3.rgb();
+			ambient = pambient;
+			shininess = data2.a();
+		}
 	}
 
 	void ToonPhongLightMaterial::create( c3d::Material const & material )
@@ -114,18 +120,21 @@ namespace toon::shader
 		, sdw::Vec4 const & data2
 		, c3d::Material const & material )
 	{
-		create( palbedo
-			, data3
-			, data2
-			, 0.0_f );
-		edgeFactors = material.edgeFactors;
-		edgeColour = material.edgeColour;
-		specific = material.specific;
-		edgeWidth = material.edgeWidth;
-		depthFactor = material.depthFactor;
-		normalFactor = material.normalFactor;
-		objectFactor = material.objectFactor;
-		smoothBand = material.specific.r();
+		if ( isEnabled() )
+		{
+			create( palbedo
+				, data3
+				, data2
+				, 0.0_f );
+			edgeFactors = material.edgeFactors;
+			edgeColour = material.edgeColour;
+			specific = material.specific;
+			edgeWidth = material.edgeWidth;
+			depthFactor = material.depthFactor;
+			normalFactor = material.normalFactor;
+			objectFactor = material.objectFactor;
+			smoothBand = material.specific.r();
+		}
 	}
 
 	void ToonPbrLightMaterial::create( sdw::Vec3 const & palbedo
@@ -133,10 +142,13 @@ namespace toon::shader
 		, sdw::Vec4 const & data2
 		, sdw::Float const & ambient )
 	{
-		albedo = palbedo;
-		specular = data3.rgb();
-		metalness = data3.a();
-		roughness = data2.a();
+		if ( isEnabled() )
+		{
+			albedo = palbedo;
+			specular = data3.rgb();
+			metalness = data3.a();
+			roughness = data2.a();
+		}
 	}
 
 	void ToonPbrLightMaterial::create( c3d::Material const & material )

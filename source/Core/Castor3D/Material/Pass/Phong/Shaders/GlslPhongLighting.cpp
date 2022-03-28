@@ -106,9 +106,10 @@ namespace castor3d::shader
 			+ reflected * ambientOcclusion;
 	}
 
-	std::unique_ptr< LightMaterial > PhongLightingModel::declMaterial( std::string const & name )
+	std::unique_ptr< LightMaterial > PhongLightingModel::declMaterial( std::string const & name
+		, bool enabled )
 	{
-		return m_writer.declDerivedLocale< LightMaterial, PhongLightMaterial >( name );
+		return m_writer.declDerivedLocale< LightMaterial, PhongLightMaterial >( name, enabled );
 	}
 
 	ReflectionModelPtr PhongLightingModel::getReflectionModel( uint32_t & envMapBinding
@@ -402,7 +403,7 @@ namespace castor3d::shader
 									* m_shadowModel->computeDirectional( light.base
 										, surface
 										, light.transforms[cascadeIndex - 1u]
-										, -lightDirection
+										, lightDirection
 										, cascadeIndex - 1u
 										, light.cascadeCount );
 							}

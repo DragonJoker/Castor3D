@@ -190,7 +190,9 @@ namespace castor3d
 			| TextureFlag::eTransmittance };
 
 	private:
-		C3D_API virtual std::vector< ShadowMap::PassDataPtr > doCreatePass( uint32_t index ) = 0;
+		C3D_API virtual std::vector< ShadowMap::PassDataPtr > doCreatePass( uint32_t index
+			, bool vsm
+			, bool rsm ) = 0;
 		C3D_API virtual bool doIsUpToDate( uint32_t index )const = 0;
 		C3D_API virtual void doSetUpToDate( uint32_t index ) = 0;
 		C3D_API virtual void doUpdate( CpuUpdater & updater ) = 0;
@@ -205,9 +207,15 @@ namespace castor3d
 		ShadowMapResult m_result;
 		uint32_t m_count;
 		std::set< std::reference_wrapper< GeometryBuffers > > m_geometryBuffers;
-		std::vector< PassDataPtr > m_passes;
-		std::vector< std::unique_ptr< crg::FrameGraph > > m_graphs;
-		std::vector< crg::RunnableGraphPtr > m_runnables;
+		struct Passes
+		{
+			std::vector< PassDataPtr > passes;
+			std::vector< std::unique_ptr< crg::FrameGraph > > graphs;
+			std::vector< crg::RunnableGraphPtr > runnables;
+			std::vector< GaussianBlurUPtr > blurs;
+		};
+		std::array< Passes, 4u > m_passes;
+		uint32_t m_passesIndex{};
 	};
 }
 

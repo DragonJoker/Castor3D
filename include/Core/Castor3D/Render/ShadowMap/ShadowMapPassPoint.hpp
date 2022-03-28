@@ -46,7 +46,9 @@ namespace castor3d
 			, uint32_t index
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
-			, ShadowMap const & shadowMap );
+			, ShadowMap const & shadowMap
+			, bool needsVsm
+			, bool needsRsm );
 		/**
 		 *\~english
 		 *\brief		Destructor.

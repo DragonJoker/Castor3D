@@ -137,9 +137,15 @@ namespace castor3d
 		//!\~english	Forces texcoords binding.
 		//\~french		Force le binding des UV.
 		eForceTexCoords = 0x80000,
+		//!\~english	Writes to Variance shadow map.
+		//\~french		Ecrit dans la Variance shadow map.
+		eVsmShadowMap = 0x100000,
+		//!\~english	Writes to Reflective shadow map.
+		//\~french		Ecrit dans la Reflective shadow map.
+		eRsmShadowMap = 0x200000,
 		//!\~english	All flags.
 		//\~french		Tous les indicateurs.
-		eAll = 0xFFFFF,
+		eAll = 0x3FFFFF,
 	};
 	CU_ImplementFlags( ProgramFlag )
 	/**

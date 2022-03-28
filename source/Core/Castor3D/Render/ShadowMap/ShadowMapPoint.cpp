@@ -42,12 +42,14 @@ namespace castor3d
 	{
 		static std::vector< ShadowMap::PassDataPtr > createPass( crg::ResourceHandler & handler
 			, std::vector< std::unique_ptr< crg::FrameGraph > > & graphs
-			, std::vector< std::unique_ptr< GaussianBlur > > & blurs
+			, std::vector< GaussianBlurUPtr > & blurs
 			, crg::ImageViewId intermediate
 			, uint32_t shadowMapIndex
 			, RenderDevice const & device
 			, Scene & scene
-			, ShadowMap & shadowMap )
+			, ShadowMap & shadowMap
+			, bool vsm
+			, bool rsm )
 		{
 			auto & engine = *scene.getEngine();
 			std::vector< ShadowMap::PassDataPtr > result;
@@ -77,7 +79,7 @@ namespace castor3d
 				auto faceIndex = shadowMapIndex * 6u + face;
 				auto name = debugName + "F" + std::to_string( face );
 				auto & pass = graph.createPass( name
-					, [faceIndex, &passData, &device, &shadowMap]( crg::FramePass const & framePass
+					, [faceIndex, &passData, &device, &shadowMap, vsm, rsm]( crg::FramePass const & framePass
 						, crg::GraphContext & context
 						, crg::RunnableGraph & runnableGraph )
 					{
@@ -88,7 +90,9 @@ namespace castor3d
 							, faceIndex
 							, *passData.matrixUbo
 							, *passData.culler
-							, shadowMap );
+							, shadowMap
+							, vsm
+							, rsm );
 						passData.pass = res.get();
 						device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 							, res->getTimer() );
@@ -103,19 +107,30 @@ namespace castor3d
 				previousPass = &pass;
 				pass.addOutputDepthView( depth.subViewsId[faceIndex], getClearValue( SmTexture::eDepth ) );
 				pass.addOutputColourView( linear.subViewsId[faceIndex], getClearValue( SmTexture::eLinearDepth ) );
-				pass.addOutputColourView( variance.subViewsId[faceIndex], getClearValue( SmTexture::eVariance ) );
-				pass.addOutputColourView( normal.subViewsId[faceIndex], getClearValue( SmTexture::eNormal ) );
-				pass.addOutputColourView( position.subViewsId[faceIndex], getClearValue( SmTexture::ePosition ) );
-				pass.addOutputColourView( flux.subViewsId[faceIndex], getClearValue( SmTexture::eFlux ) );
 
-				blurs.push_back( std::make_unique< GaussianBlur >( graph
-					, *previousPass
-					, device
-					, cuT( "ShadowMapPoint" )
-					, name
-					, variance.subViewsId[faceIndex]
-					, intermediate
-					, 5u ) );
+				if ( vsm )
+				{
+					pass.addOutputColourView( variance.subViewsId[faceIndex], getClearValue( SmTexture::eVariance ) );
+				}
+
+				if ( rsm )
+				{
+					pass.addOutputColourView( normal.subViewsId[faceIndex], getClearValue( SmTexture::eNormal ) );
+					pass.addOutputColourView( position.subViewsId[faceIndex], getClearValue( SmTexture::ePosition ) );
+					pass.addOutputColourView( flux.subViewsId[faceIndex], getClearValue( SmTexture::eFlux ) );
+				}
+
+				if ( vsm )
+				{
+					blurs.push_back( castor::makeUnique< GaussianBlur >( graph
+						, *previousPass
+						, device
+						, cuT( "ShadowMapPoint" )
+						, name
+						, variance.subViewsId[faceIndex]
+						, intermediate
+						, 5u ) );
+				}
 			}
 
 			return result;
@@ -154,8 +169,10 @@ namespace castor3d
 
 	void ShadowMapPoint::update( GpuUpdater & updater )
 	{
-		if ( m_runnables.size() > updater.index
-			&& m_runnables[updater.index] )
+		auto & myPasses = m_passes[m_passesIndex];
+
+		if ( myPasses.runnables.size() > updater.index
+			&& myPasses.runnables[updater.index] )
 		{
 			auto & pointLight = *updater.light->getPointLight();
 			pointLight.updateShadow( int32_t( updater.index ) );
@@ -163,7 +180,7 @@ namespace castor3d
 
 			for ( uint32_t face = offset; face < offset + 6u; ++face )
 			{
-				auto & pass = static_cast< ShadowMapPassPoint & >( *m_passes[face]->pass );
+				auto & pass = static_cast< ShadowMapPassPoint & >( *myPasses.passes[face]->pass );
 				updater.index = face - offset;
 				pass.update( updater );
 				pass.updateFrustum( pointLight.getViewMatrix( CubeMapFace( updater.index ) ) );
@@ -171,26 +188,32 @@ namespace castor3d
 		}
 	}
 
-	std::vector< ShadowMap::PassDataPtr > ShadowMapPoint::doCreatePass( uint32_t index )
+	std::vector< ShadowMap::PassDataPtr > ShadowMapPoint::doCreatePass( uint32_t index
+		, bool vsm
+		, bool rsm )
 	{
+		auto & myPasses = m_passes[m_passesIndex];
 		return shdmappoint::createPass( m_handler
-			, m_graphs
-			, m_blurs
+			, myPasses.graphs
+			, myPasses.blurs
 			, m_blurIntermediateView
 			, index
 			, m_device
 			, m_scene
-			, *this );
+			, *this
+			, vsm
+			, rsm );
 	}
 
 	bool ShadowMapPoint::doIsUpToDate( uint32_t index )const
 	{
+		auto & myPasses = m_passes[m_passesIndex];
 		uint32_t offset = index * 6u;
 
-		if ( m_passes.size() >= offset + 6u )
+		if ( myPasses.passes.size() >= offset + 6u )
 		{
-			return std::all_of( m_passes.begin() + offset
-				, m_passes.begin() + offset + 6u
+			return std::all_of( myPasses.passes.begin() + offset
+				, myPasses.passes.begin() + offset + 6u
 				, []( ShadowMap::PassDataPtr const & data )
 				{
 					return data->pass->isUpToDate();
@@ -202,11 +225,12 @@ namespace castor3d
 
 	void ShadowMapPoint::doSetUpToDate( uint32_t index )
 	{
+		auto & myPasses = m_passes[m_passesIndex];
 		uint32_t offset = index * 6u;
 
-		if ( m_passes.size() >= offset + 6u )
+		if ( myPasses.passes.size() >= offset + 6u )
 		{
-			for ( auto & data : castor::makeArrayView( m_passes.begin() + offset, m_passes.begin() + offset + 6u ) )
+			for ( auto & data : castor::makeArrayView( myPasses.passes.begin() + offset, myPasses.passes.begin() + offset + 6u ) )
 			{
 				data->pass->setUpToDate();
 			}
@@ -215,15 +239,17 @@ namespace castor3d
 
 	void ShadowMapPoint::doUpdate( CpuUpdater & updater )
 	{
-		if ( m_runnables.size() > updater.index
-			&& m_runnables[updater.index] )
+		auto & myPasses = m_passes[m_passesIndex];
+
+		if ( myPasses.runnables.size() > updater.index
+			&& myPasses.runnables[updater.index] )
 		{
 			uint32_t offset = updater.index * 6u;
 
 			for ( uint32_t face = offset; face < offset + 6u; ++face )
 			{
 				updater.index = face - offset;
-				m_passes[face]->pass->update( updater );
+				myPasses.passes[face]->pass->update( updater );
 			}
 		}
 	}

@@ -109,9 +109,10 @@ namespace toon::shader
 			+ reflected * ambientOcclusion;
 	}
 
-	std::unique_ptr< c3d::LightMaterial > ToonPhongLightingModel::declMaterial( std::string const & name )
+	std::unique_ptr< c3d::LightMaterial > ToonPhongLightingModel::declMaterial( std::string const & name
+		, bool enabled )
 	{
-		return m_writer.declDerivedLocale< c3d::LightMaterial, ToonPhongLightMaterial >( name );
+		return m_writer.declDerivedLocale< c3d::LightMaterial, ToonPhongLightMaterial >( name, enabled );
 	}
 
 	c3d::ReflectionModelPtr ToonPhongLightingModel::getReflectionModel( uint32_t & envMapBinding
@@ -1691,9 +1692,10 @@ namespace toon::shader
 			, isOpaqueProgram );
 	}
 
-	std::unique_ptr< c3d::LightMaterial > ToonPbrMRLightingModel::declMaterial( std::string const & name )
+	std::unique_ptr< c3d::LightMaterial > ToonPbrMRLightingModel::declMaterial( std::string const & name
+		, bool enabled )
 	{
-		return m_writer.declDerivedLocale< c3d::LightMaterial, ToonPbrMRLightMaterial >( name );
+		return m_writer.declDerivedLocale< c3d::LightMaterial, ToonPbrMRLightMaterial >( name, enabled );
 	}
 
 	//***********************************************************************************************
@@ -1730,9 +1732,10 @@ namespace toon::shader
 			, isOpaqueProgram );
 	}
 
-	std::unique_ptr< c3d::LightMaterial > ToonPbrSGLightingModel::declMaterial( std::string const & name )
+	std::unique_ptr< c3d::LightMaterial > ToonPbrSGLightingModel::declMaterial( std::string const & name
+		, bool enabled )
 	{
-		return m_writer.declDerivedLocale< c3d::LightMaterial, ToonPbrSGLightMaterial >( name );
+		return m_writer.declDerivedLocale< c3d::LightMaterial, ToonPbrSGLightMaterial >( name, enabled );
 	}
 
 	//*********************************************************************************************

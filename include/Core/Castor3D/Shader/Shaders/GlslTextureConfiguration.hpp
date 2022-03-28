@@ -65,6 +65,16 @@ namespace castor3d
 				, sdw::CombinedImage2DRgba32 const & map
 				, sdw::Vec3 & texCoords
 				, sdw::Float & opacity
+				, sdw::Vec3 & tangentSpaceViewPosition
+				, sdw::Vec3 & tangentSpaceFragPosition );
+			C3D_API void computeGeometryMapContribution( Utils &  utils
+				, PassFlags const & passFlags
+				, TextureFlags const & textureFlags
+				, std::string const & name
+				, shader::TextureAnimData const & anim
+				, sdw::CombinedImage2DRgba32 const & map
+				, sdw::Vec3 & texCoords
+				, sdw::Float & opacity
 				, sdw::Vec3 & normal
 				, sdw::Vec3 & tangent
 				, sdw::Vec3 & bitangent
@@ -305,6 +315,17 @@ namespace castor3d
 				, bool enable = true );
 			C3D_API void declare( uint32_t binding, uint32_t set );
 			C3D_API TextureConfigData getTextureConfiguration( sdw::UInt const & index )const;
+			C3D_API void computeGeometryMapContributions( Utils & utils
+				, PassFlags const & passFlags
+				, TextureFlagsArray const & textures
+				, TextureAnimations const & textureAnims
+				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+				, sdw::UVec4 const & textures0
+				, sdw::UVec4 const & textures1
+				, sdw::Vec3 & texCoords
+				, sdw::Float & opacity
+				, sdw::Vec3 & tangentSpaceViewPosition
+				, sdw::Vec3 & tangentSpaceFragPosition )const;
 
 		private:
 			sdw::ShaderWriter & m_writer;

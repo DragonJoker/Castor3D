@@ -59,7 +59,9 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		std::vector< ShadowMap::PassDataPtr > doCreatePass( uint32_t index )override;
+		std::vector< ShadowMap::PassDataPtr > doCreatePass( uint32_t index
+			, bool vsm
+			, bool rsm )override;
 		bool doIsUpToDate( uint32_t index )const override;
 		void doSetUpToDate( uint32_t index )override;
 		void doUpdate( CpuUpdater & updater )override;
@@ -68,7 +70,6 @@ namespace castor3d
 	private:
 		crg::ImageId m_blurIntermediate;
 		crg::ImageViewId m_blurIntermediateView;
-		std::vector< std::unique_ptr< GaussianBlur > > m_blurs;
 	};
 }
 
