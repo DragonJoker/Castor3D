@@ -55,9 +55,6 @@ namespace castor3d
 			auto & depth = smResult[SmTexture::eDepth];
 			auto & linear = smResult[SmTexture::eLinearDepth];
 			auto & variance = smResult[SmTexture::eVariance];
-			auto & normal = smResult[SmTexture::eNormal];
-			auto & position = smResult[SmTexture::ePosition];
-			auto & flux = smResult[SmTexture::eFlux];
 
 			std::string debugName = "SpotSM" + std::to_string( shadowMapIndex );
 			graphs.push_back( std::make_unique< crg::FrameGraph >( handler, debugName ) );
@@ -101,6 +98,9 @@ namespace castor3d
 
 			if ( rsm )
 			{
+				auto & normal = smResult[SmTexture::eNormal];
+				auto & position = smResult[SmTexture::ePosition];
+				auto & flux = smResult[SmTexture::eFlux];
 				pass.addOutputColourView( normal.subViewsId[shadowMapIndex], getClearValue( SmTexture::eNormal ) );
 				pass.addOutputColourView( position.subViewsId[shadowMapIndex], getClearValue( SmTexture::ePosition ) );
 				pass.addOutputColourView( flux.subViewsId[shadowMapIndex], getClearValue( SmTexture::eFlux ) );
