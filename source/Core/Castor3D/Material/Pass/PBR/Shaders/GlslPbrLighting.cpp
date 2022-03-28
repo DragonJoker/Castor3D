@@ -825,9 +825,10 @@ namespace castor3d::shader
 			, isOpaqueProgram );
 	}
 
-	std::unique_ptr< LightMaterial > PbrMRLightingModel::declMaterial( std::string const & name )
+	std::unique_ptr< LightMaterial > PbrMRLightingModel::declMaterial( std::string const & name
+		, bool enabled )
 	{
-		return m_writer.declDerivedLocale< LightMaterial, PbrMRLightMaterial >( name );
+		return m_writer.declDerivedLocale< LightMaterial, PbrMRLightMaterial >( name, enabled );
 	}
 
 	//***********************************************************************************************
@@ -864,9 +865,10 @@ namespace castor3d::shader
 			, isOpaqueProgram );
 	}
 
-	std::unique_ptr< LightMaterial > PbrSGLightingModel::declMaterial( std::string const & name )
+	std::unique_ptr< LightMaterial > PbrSGLightingModel::declMaterial( std::string const & name
+		, bool enabled )
 	{
-		return m_writer.declDerivedLocale< LightMaterial, PbrSGLightMaterial >( name );
+		return m_writer.declDerivedLocale< LightMaterial, PbrSGLightMaterial >( name, enabled );
 	}
 
 	//***********************************************************************************************

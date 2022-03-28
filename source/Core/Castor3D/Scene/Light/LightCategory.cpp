@@ -31,7 +31,7 @@ namespace castor3d
 
 		data.shadowsOffsets.x = getShadowRawOffsets()->x;
 		data.shadowsOffsets.y = getShadowRawOffsets()->y;
-		data.shadowsOffsets.z = getShadowPcfOffsets()->y;
+		data.shadowsOffsets.z = getShadowPcfOffsets()->x;
 		data.shadowsOffsets.w = getShadowPcfOffsets()->y;
 
 		data.shadowsVariances = getShadowVariance();

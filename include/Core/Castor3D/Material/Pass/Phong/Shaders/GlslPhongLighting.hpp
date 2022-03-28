@@ -37,7 +37,8 @@ namespace castor3d::shader
 			, sdw::Vec3 const & reflected
 			, sdw::Vec3 const & refracted
 			, sdw::Vec3 const & materialAlbedo )override;
-		C3D_API std::unique_ptr< LightMaterial > declMaterial( std::string const & name )override;
+		C3D_API std::unique_ptr< LightMaterial > declMaterial( std::string const & name
+			, bool enabled )override;
 		C3D_API ReflectionModelPtr getReflectionModel( uint32_t & envMapBinding
 			, uint32_t envMapSet )const override;
 		/**

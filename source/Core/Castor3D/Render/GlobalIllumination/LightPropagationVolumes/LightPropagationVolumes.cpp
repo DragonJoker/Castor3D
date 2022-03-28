@@ -682,7 +682,7 @@ namespace castor3d
 				for ( auto i = 0u; i < uint32_t( LpvTexture::eCount ); ++i )
 				{
 					auto tex = LpvTexture( i );
-					visitor.visit( "Layered LPV Propagation" + std::to_string( level ) + " " + getTexName( tex )
+					visitor.visit( "LPV Propagation" + std::to_string( level ) + " " + getTexName( tex )
 						, propagate[tex]
 						, m_graph.getFinalLayoutState( propagate[tex].wholeViewId ).layout
 						, TextureFactors::tex3D( &m_gridsSize ) );
@@ -695,7 +695,7 @@ namespace castor3d
 
 	crg::FramePass & LightPropagationVolumesBase::doCreateClearPass()
 	{
-		auto & result = m_graph.createPass( "LpvClear"
+		auto & result = m_graph.createPass( "LpvClearInjection"
 			, []( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )

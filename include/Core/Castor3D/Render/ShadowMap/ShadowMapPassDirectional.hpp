@@ -43,6 +43,8 @@ namespace castor3d
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, ShadowMap const & shadowMap
+			, bool needsVsm
+			, bool needsRsm
 			, uint32_t cascadeCount );
 		/**
 		 *\~english

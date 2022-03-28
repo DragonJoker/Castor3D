@@ -43,7 +43,8 @@ namespace toon::shader
 			, sdw::Vec3 const & reflected
 			, sdw::Vec3 const & refracted
 			, sdw::Vec3 const & materialAlbedo )override;
-		std::unique_ptr< c3d::LightMaterial > declMaterial( std::string const & name )override;
+		std::unique_ptr< c3d::LightMaterial > declMaterial( std::string const & name
+			, bool enabled )override;
 		c3d::ReflectionModelPtr getReflectionModel( uint32_t & envMapBinding
 			, uint32_t envMapSet )const override;
 		/**
@@ -394,7 +395,8 @@ namespace toon::shader
 			, c3d::SssProfiles const * sssProfiles
 			, bool isOpaqueProgram );
 
-		std::unique_ptr< c3d::LightMaterial > declMaterial( std::string const & name )override;
+		std::unique_ptr< c3d::LightMaterial > declMaterial( std::string const & name
+			, bool enabled )override;
 	};
 
 	class ToonPbrSGLightingModel
@@ -414,7 +416,8 @@ namespace toon::shader
 			, c3d::SssProfiles const * sssProfiles
 			, bool isOpaqueProgram );
 
-		std::unique_ptr< c3d::LightMaterial > declMaterial( std::string const & name )override;
+		std::unique_ptr< c3d::LightMaterial > declMaterial( std::string const & name
+			, bool enabled )override;
 	};
  }
 

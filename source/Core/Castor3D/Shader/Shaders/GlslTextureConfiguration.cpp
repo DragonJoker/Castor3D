@@ -2,6 +2,7 @@
 
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/CompositeTypes/ArraySsbo.hpp>
@@ -86,6 +87,61 @@ namespace castor3d
 			}
 
 			return result;
+		}
+
+		void TextureConfigData::computeGeometryMapContribution( Utils & utils
+			, PassFlags const & passFlags
+			, TextureFlags const & textureFlags
+			, std::string const & name
+			, shader::TextureAnimData const & anim
+			, sdw::CombinedImage2DRgba32 const & map
+			, sdw::Vec3 & texCoords
+			, sdw::Float & opacity
+			, sdw::Vec3 & tangentSpaceViewPosition
+			, sdw::Vec3 & tangentSpaceFragPosition )
+		{
+			auto & writer = findWriterMandat( *this );
+			auto texCoord = writer.declLocale( "c3d_texCoord" + name
+				, texCoords.xy() );
+			transformUV( anim, texCoord );
+
+			if ( checkFlag( textureFlags, TextureFlag::eHeight )
+				&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
+					|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
+			{
+				IF( writer, isHeight() )
+				{
+					texCoord = utils.parallaxMapping( texCoord
+						, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
+						, map
+						, *this );
+					texCoords.xy() = texCoord;
+
+					if ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne ) )
+					{
+						IF( writer, texCoords.x() > 1.0_f
+							|| texCoords.y() > 1.0_f
+							|| texCoords.x() < 0.0_f
+							|| texCoords.y() < 0.0_f )
+						{
+							writer.demote();
+						}
+						FI;
+					}
+				}
+				FI;
+			}
+
+			if ( checkFlag( textureFlags, TextureFlag::eOpacity ) )
+			{
+				IF( *getWriter(), isOpacity() )
+				{
+					auto sampled = writer.declLocale( "c3d_sampled" + name
+						, map.sample( texCoord ) );
+					opacity = opacity * getFloat( sampled, opaMask );
+				}
+				FI;
+			}
 		}
 
 		void TextureConfigData::computeGeometryMapContribution( Utils & utils
@@ -546,6 +602,53 @@ namespace castor3d
 		TextureConfigData TextureConfigurations::getTextureConfiguration( sdw::UInt const & index )const
 		{
 			return ( *m_ssbo )[index - 1_u];
+		}
+
+		void TextureConfigurations::computeGeometryMapContributions( Utils & utils
+			, PassFlags const & passFlags
+			, TextureFlagsArray const & textures
+			, TextureAnimations const & textureAnims
+			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			, sdw::UVec4 const & textures0
+			, sdw::UVec4 const & textures1
+			, sdw::Vec3 & texCoords
+			, sdw::Float & opacity
+			, sdw::Vec3 & tangentSpaceViewPosition
+			, sdw::Vec3 & tangentSpaceFragPosition )const
+		{
+			auto textureFlags = merge( textures );
+
+			if ( ( checkFlag( textureFlags, TextureFlag::eHeight )
+				&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
+					|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
+				|| checkFlag( textureFlags, TextureFlag::eOpacity ) )
+			{
+				for ( uint32_t index = 0u; index < textures.size(); ++index )
+				{
+					auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
+					auto id = m_writer.declLocale( "c3d_id" + name
+						, ModelIndices::getTexture( textures0, textures1, index ) );
+
+					IF( m_writer, id > 0_u )
+					{
+						auto config = m_writer.declLocale( "config" + name
+							, getTextureConfiguration( id ) );
+						auto anim = m_writer.declLocale( "anim" + name
+							, textureAnims.getTextureAnimation( id ) );
+						config.computeGeometryMapContribution( utils
+							, passFlags
+							, textureFlags
+							, name
+							, anim
+							, maps[id - 1_u]
+							, texCoords
+							, opacity
+							, tangentSpaceViewPosition
+							, tangentSpaceFragPosition );
+					}
+					FI;
+				}
+			}
 		}
 
 		//*********************************************************************************************

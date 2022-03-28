@@ -46,9 +46,23 @@ namespace castor3d
 {
 	namespace shdpasspoint
 	{
-		static castor::String getPassName( uint32_t index )
+		static castor::String getPassName( uint32_t index
+			, bool needsVsm
+			, bool needsRsm )
 		{
-			return cuT( "PointSML" ) + castor::string::toString( index / 6u ) + "F" + castor::string::toString( index % 6u );
+			auto result = cuT( "PointSML" ) + castor::string::toString( index / 6u ) + "F" + castor::string::toString( index % 6u );
+
+			if ( needsVsm )
+			{
+				result += "_VSM";
+			}
+
+			if ( needsRsm )
+			{
+				result += "_RSM";
+			}
+
+			return result;
 		}
 	}
 
@@ -62,16 +76,20 @@ namespace castor3d
 		, uint32_t index
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
-		, ShadowMap const & shadowMap )
+		, ShadowMap const & shadowMap
+		, bool needsVsm
+		, bool needsRsm )
 		: ShadowMapPass{ pass
 			, context
 			, graph
 			, device
 			, Type
-			, shdpasspoint::getPassName( index )
+			, shdpasspoint::getPassName( index, needsVsm, needsRsm )
 			, matrixUbo
 			, culler
-			, shadowMap }
+			, shadowMap
+			, needsVsm
+			, needsRsm }
 	{
 		log::trace << "Created " << m_name << std::endl;
 	}
@@ -134,9 +152,21 @@ namespace castor3d
 
 	ashes::PipelineColorBlendStateCreateInfo ShadowMapPassPoint::doCreateBlendState( PipelineFlags const & flags )const
 	{
+		uint32_t result = 1u;
+
+		if ( m_needsVsm )
+		{
+			++result;
+		}
+
+		if ( m_needsRsm )
+		{
+			result += 3;
+		}
+
 		return RenderNodesPass::createBlendState( BlendMode::eNoBlend
 			, BlendMode::eNoBlend
-			, uint32_t( SmTexture::eCount ) - 1u );
+			, result );
 	}
 
 	PassFlags ShadowMapPassPoint::doAdjustPassFlags( PassFlags flags )const
@@ -149,6 +179,17 @@ namespace castor3d
 	{
 		addFlag( flags, ProgramFlag::eLighting );
 		addFlag( flags, ProgramFlag::eShadowMapPoint );
+
+		if ( m_needsVsm )
+		{
+			addFlag( flags, ProgramFlag::eVsmShadowMap );
+		}
+
+		if ( m_needsRsm )
+		{
+			addFlag( flags, ProgramFlag::eRsmShadowMap );
+		}
+
 		return flags;
 	}
 
@@ -263,7 +304,10 @@ namespace castor3d
 			, RenderPipeline::eBuffers );
 		shader::Materials materials{ writer
 			, uint32_t( GlobalBuffersIdx::eMaterials )
-			, RenderPipeline::eBuffers };
+			, RenderPipeline::eBuffers
+			, ( m_needsRsm
+				|| ( checkFlag( flags.texturesFlags, TextureFlag::eOpacity )
+					&& flags.alphaFunc != VK_COMPARE_OP_ALWAYS ) ) };
 		shader::TextureConfigurations textureConfigs{ writer
 			, uint32_t( GlobalBuffersIdx::eTexConfigs )
 			, RenderPipeline::eBuffers
@@ -294,11 +338,12 @@ namespace castor3d
 			, hasTextures ) );
 
 		// Fragment Outputs
-		auto pxl_linear( writer.declOutput< Float >( "pxl_linear", 0u ) );
-		auto pxl_variance( writer.declOutput< Vec2 >( "pxl_variance", 1u ) );
-		auto pxl_normal( writer.declOutput< Vec4 >( "pxl_normal", 2u ) );
-		auto pxl_position( writer.declOutput< Vec4 >( "pxl_position", 3u ) );
-		auto pxl_flux( writer.declOutput< Vec4 >( "pxl_flux", 4u ) );
+		uint32_t outIndex{};
+		auto pxl_linear( writer.declOutput< Float >( "pxl_linear", outIndex++ ) );
+		auto pxl_variance( writer.declOutput< Vec2 >( "pxl_variance", m_needsVsm ? outIndex++ : 0u, m_needsVsm ) );
+		auto pxl_normal( writer.declOutput< Vec4 >( "pxl_normal", m_needsRsm ? outIndex++ : 0u, m_needsRsm ) );
+		auto pxl_position( writer.declOutput< Vec4 >( "pxl_position", m_needsRsm ? outIndex++ : 0u, m_needsRsm ) );
+		auto pxl_flux( writer.declOutput< Vec4 >( "pxl_flux", m_needsRsm ? outIndex++ : 0u, m_needsRsm ) );
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
 				, flags.programFlags
@@ -318,86 +363,118 @@ namespace castor3d
 				pxl_position = vec4( 0.0_f );
 				pxl_flux = vec4( 0.0_f );
 				auto texCoord = writer.declLocale( "texCoord"
-					, in.texture0 );
+					, in.texture0
+					, hasTextures );
 				auto normal = writer.declLocale( "normal"
-					, normalize( in.normal ) );
+					, normalize( in.normal )
+					, m_needsRsm );
 				auto tangent = writer.declLocale( "tangent"
-					, normalize( in.tangent ) );
+					, normalize( in.tangent )
+					, m_needsRsm );
 				auto bitangent = writer.declLocale( "bitangent"
-					, normalize( in.bitangent ) );
+					, normalize( in.bitangent )
+					, m_needsRsm );
 				auto material = materials.getMaterial( modelData.getMaterialId() );
 				auto emissive = writer.declLocale( "emissive"
-					, vec3( material.emissive ) );
+					, vec3( material.emissive )
+					, m_needsRsm );
 				auto alpha = writer.declLocale( "alpha"
-					, material.opacity );
+					, material.opacity
+					, ( checkFlag( flags.texturesFlags, TextureFlag::eOpacity )
+						&& flags.alphaFunc != VK_COMPARE_OP_ALWAYS ) );
 				auto alphaRef = writer.declLocale( "alphaRef"
-					, material.alphaRef );
-				auto lightMat = lightingModel->declMaterial( "lightMat" );
+					, material.alphaRef
+					, flags.alphaFunc != VK_COMPARE_OP_ALWAYS );
+				auto lightMat = lightingModel->declMaterial( "lightMat"
+					, m_needsRsm );
 				lightMat->create( material );
-				auto occlusion = writer.declLocale( "occlusion"
-					, 1.0_f );
-				auto transmittance = writer.declLocale( "transmittance"
-					, 0.0_f );
 
 				if ( hasTextures )
 				{
-					lightingModel->computeMapContributions( flags.passFlags
-						, flags.textures
-						, textureConfigs
-						, textureAnims
-						, c3d_maps
-						, modelData.getTextures0()
-						, modelData.getTextures1()
-						, texCoord
-						, normal
-						, tangent
-						, bitangent
-						, emissive
-						, alpha
-						, occlusion
-						, transmittance
-						, *lightMat
-						, in.tangentSpaceViewPosition
-						, in.tangentSpaceFragPosition );
+					if ( m_needsRsm )
+					{
+						auto occlusion = writer.declLocale( "occlusion"
+							, 1.0_f );
+						auto transmittance = writer.declLocale( "transmittance"
+							, 0.0_f );
+						lightingModel->computeMapContributions( flags.passFlags
+							, flags.textures
+							, textureConfigs
+							, textureAnims
+							, c3d_maps
+							, modelData.getTextures0()
+							, modelData.getTextures1()
+							, texCoord
+							, normal
+							, tangent
+							, bitangent
+							, emissive
+							, alpha
+							, occlusion
+							, transmittance
+							, *lightMat
+							, in.tangentSpaceViewPosition
+							, in.tangentSpaceFragPosition );
+					}
+					else
+					{
+						textureConfigs.computeGeometryMapContributions( utils
+							, flags.passFlags
+							, flags.textures
+							, textureAnims
+							, c3d_maps
+							, modelData.getTextures0()
+							, modelData.getTextures1()
+							, texCoord
+							, alpha
+							, in.tangentSpaceViewPosition
+							, in.tangentSpaceFragPosition );
+					}
 				}
 
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
 					, alphaRef );
 
-				auto lightDiffuse = writer.declLocale( "lightDiffuse"
-					, vec3( 0.0_f ) );
-				auto lightSpecular = writer.declLocale( "lightSpecular"
-					, vec3( 0.0_f ) );
-				shader::OutputComponents output{ lightDiffuse, lightSpecular };
-				auto light = writer.declLocale( "light"
-					, c3d_shadowMapData.getPointLight( *lightingModel ) );
-				auto lightToVertex = writer.declLocale( "lightToVertex"
-					, light.position - in.worldPosition.xyz() );
-				auto distance = writer.declLocale( "distance"
-					, length( lightToVertex ) );
-				auto attenuation = writer.declLocale( "attenuation"
-					, light.getAttenuationFactor( distance ) );
-				pxl_flux.rgb() = ( lightMat->albedo
-						* light.base.colour
-						* light.base.intensity.x()
-						* clamp( dot( lightToVertex / distance, normal ), 0.0_f, 1.0_f ) )
-					/ attenuation;
-
 				auto depth = writer.declLocale( "depth"
 					, c3d_shadowMapData.getLinearisedDepth( in.worldPosition.xyz() ) );
 				pxl_linear = depth;
-				pxl_normal.xyz() = normal;
-				pxl_position.xyz() = in.worldPosition.xyz();
 
-				pxl_variance.x() = depth;
-				pxl_variance.y() = depth * depth;
+				if ( m_needsVsm )
+				{
+					pxl_variance.x() = depth;
+					pxl_variance.y() = depth * depth;
 
-				auto dx = writer.declLocale( "dx"
-					, dFdx( depth ) );
-				auto dy = writer.declLocale( "dy"
-					, dFdy( depth ) );
-				pxl_variance.y() += 0.25_f * ( dx * dx + dy * dy );
+					auto dx = writer.declLocale( "dx"
+						, dFdx( depth ) );
+					auto dy = writer.declLocale( "dy"
+						, dFdy( depth ) );
+					pxl_variance.y() += 0.25_f * ( dx * dx + dy * dy );
+				}
+
+				if ( m_needsRsm )
+				{
+					auto lightDiffuse = writer.declLocale( "lightDiffuse"
+						, vec3( 0.0_f ) );
+					auto lightSpecular = writer.declLocale( "lightSpecular"
+						, vec3( 0.0_f ) );
+					shader::OutputComponents output{ lightDiffuse, lightSpecular };
+					auto light = writer.declLocale( "light"
+						, c3d_shadowMapData.getPointLight( *lightingModel ) );
+					auto lightToVertex = writer.declLocale( "lightToVertex"
+						, light.position - in.worldPosition.xyz() );
+					auto distance = writer.declLocale( "distance"
+						, length( lightToVertex ) );
+					auto attenuation = writer.declLocale( "attenuation"
+						, light.getAttenuationFactor( distance ) );
+					pxl_flux.rgb() = ( lightMat->albedo
+							* light.base.colour
+							* light.base.intensity.x()
+							* clamp( dot( lightToVertex / distance, normal ), 0.0_f, 1.0_f ) )
+						/ attenuation;
+					pxl_normal.xyz() = normal;
+					pxl_position.xyz() = in.worldPosition.xyz();
+				}
 			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}

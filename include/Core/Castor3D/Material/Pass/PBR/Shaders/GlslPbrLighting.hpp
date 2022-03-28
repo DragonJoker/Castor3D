@@ -184,7 +184,8 @@ namespace castor3d::shader
 			, SssProfiles const * sssProfiles
 			, bool isOpaqueProgram );
 
-		C3D_API std::unique_ptr< LightMaterial > declMaterial( std::string const & name )override;
+		C3D_API std::unique_ptr< LightMaterial > declMaterial( std::string const & name
+			, bool enabled )override;
 	};
 
 	class PbrSGLightingModel
@@ -204,7 +205,8 @@ namespace castor3d::shader
 			, SssProfiles const * sssProfiles
 			, bool isOpaqueProgram );
 
-		C3D_API std::unique_ptr< LightMaterial > declMaterial( std::string const & name )override;
+		C3D_API std::unique_ptr< LightMaterial > declMaterial( std::string const & name
+			, bool enabled )override;
 	};
 }
 

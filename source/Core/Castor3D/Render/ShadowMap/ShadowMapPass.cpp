@@ -30,7 +30,9 @@ namespace castor3d
 		, castor::String name
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
-		, ShadowMap const & shadowMap )
+		, ShadowMap const & shadowMap
+		, bool needsVsm
+		, bool needsRsm )
 		: RenderNodesPass{ pass
 			, context
 			, graph
@@ -45,6 +47,8 @@ namespace castor3d
 				, true
 				, false } }
 		, m_shadowMap{ shadowMap }
+		, m_needsVsm{ needsVsm }
+		, m_needsRsm{ needsRsm }
 		, m_shadowMapUbo{ device }
 	{
 	}
