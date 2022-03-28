@@ -53,8 +53,9 @@ namespace castor3d
 			std::vector< ShadowMap::PassDataPtr > result;
 			auto & smResult = shadowMap.getShadowPassResult();
 			auto & depth = smResult[SmTexture::eDepth];
-			auto & linear = smResult[SmTexture::eNormalLinear];
+			auto & linear = smResult[SmTexture::eLinearDepth];
 			auto & variance = smResult[SmTexture::eVariance];
+			auto & normal = smResult[SmTexture::eNormal];
 			auto & position = smResult[SmTexture::ePosition];
 			auto & flux = smResult[SmTexture::eFlux];
 
@@ -101,8 +102,9 @@ namespace castor3d
 
 				previousPass = &pass;
 				pass.addOutputDepthView( depth.subViewsId[faceIndex], getClearValue( SmTexture::eDepth ) );
-				pass.addOutputColourView( linear.subViewsId[faceIndex], getClearValue( SmTexture::eNormalLinear ) );
+				pass.addOutputColourView( linear.subViewsId[faceIndex], getClearValue( SmTexture::eLinearDepth ) );
 				pass.addOutputColourView( variance.subViewsId[faceIndex], getClearValue( SmTexture::eVariance ) );
+				pass.addOutputColourView( normal.subViewsId[faceIndex], getClearValue( SmTexture::eNormal ) );
 				pass.addOutputColourView( position.subViewsId[faceIndex], getClearValue( SmTexture::ePosition ) );
 				pass.addOutputColourView( flux.subViewsId[faceIndex], getClearValue( SmTexture::eFlux ) );
 

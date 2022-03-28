@@ -283,7 +283,7 @@ namespace castor3d
 			, lightsIndex
 			, RenderPipeline::eBuffers
 			, false
-			, shader::ShadowOptions{ SceneFlag::eNone, false }
+			, shader::ShadowOptions{ SceneFlag::eNone, true, false }
 			, nullptr
 			, index
 			, RenderPipeline::eBuffers );
@@ -294,10 +294,11 @@ namespace castor3d
 			, hasTextures ) );
 
 		// Fragment Outputs
-		auto pxl_normalLinear( writer.declOutput< Vec4 >( "pxl_normalLinear", 0u ) );
+		auto pxl_linear( writer.declOutput< Float >( "pxl_linear", 0u ) );
 		auto pxl_variance( writer.declOutput< Vec2 >( "pxl_variance", 1u ) );
-		auto pxl_position( writer.declOutput< Vec4 >( "pxl_position", 2u ) );
-		auto pxl_flux( writer.declOutput< Vec4 >( "pxl_flux", 3u ) );
+		auto pxl_normal( writer.declOutput< Vec4 >( "pxl_normal", 2u ) );
+		auto pxl_position( writer.declOutput< Vec4 >( "pxl_position", 3u ) );
+		auto pxl_flux( writer.declOutput< Vec4 >( "pxl_flux", 4u ) );
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
 				, flags.programFlags
@@ -311,8 +312,9 @@ namespace castor3d
 			{
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1] );
-				pxl_normalLinear = vec4( 0.0_f );
+				pxl_linear = 0.0_f;
 				pxl_variance = vec2( 0.0_f );
+				pxl_normal = vec4( 0.0_f );
 				pxl_position = vec4( 0.0_f );
 				pxl_flux = vec4( 0.0_f );
 				auto texCoord = writer.declLocale( "texCoord"
@@ -384,8 +386,8 @@ namespace castor3d
 
 				auto depth = writer.declLocale( "depth"
 					, c3d_shadowMapData.getLinearisedDepth( in.worldPosition.xyz() ) );
-				pxl_normalLinear.w() = depth;
-				pxl_normalLinear.xyz() = normal;
+				pxl_linear = depth;
+				pxl_normal.xyz() = normal;
 				pxl_position.xyz() = in.worldPosition.xyz();
 
 				pxl_variance.x() = depth;

@@ -19,12 +19,15 @@ namespace castor3d
 		class Shadow
 		{
 		public:
+			C3D_API static castor::String const MapDepthDirectional;
+			C3D_API static castor::String const MapDepthSpot;
+			C3D_API static castor::String const MapDepthPoint;
 			C3D_API static castor::String const MapVarianceDirectional;
 			C3D_API static castor::String const MapVarianceSpot;
 			C3D_API static castor::String const MapVariancePoint;
-			C3D_API static castor::String const MapNormalDepthDirectional;
-			C3D_API static castor::String const MapNormalDepthSpot;
-			C3D_API static castor::String const MapNormalDepthPoint;
+			C3D_API static castor::String const MapNormalDirectional;
+			C3D_API static castor::String const MapNormalSpot;
+			C3D_API static castor::String const MapNormalPoint;
 			C3D_API static castor::String const MapPositionDirectional;
 			C3D_API static castor::String const MapPositionSpot;
 			C3D_API static castor::String const MapPositionPoint;
@@ -99,7 +102,7 @@ namespace castor3d
 				, sdw::InFloat > m_getShadowOffset;
 			sdw::Function< sdw::Float
 				, sdw::InVec4
-				, sdw::InCombinedImage2DArrayRgba32
+				, sdw::InCombinedImage2DArrayR32
 				, sdw::InVec2
 				, sdw::InInt
 				, sdw::InFloat
@@ -111,18 +114,18 @@ namespace castor3d
 				, sdw::InFloat > m_chebyshevUpperBound;
 			sdw::Function< sdw::Float
 				, sdw::InVec4
-				, sdw::InCombinedImage2DRgba32
+				, sdw::InCombinedImage2DR32
 				, sdw::InVec2
 				, sdw::InFloat > m_filterPCFNoCascade;
 			sdw::Function< sdw::Float
 				, sdw::InVec4
-				, sdw::InCombinedImage2DArrayRgba32
+				, sdw::InCombinedImage2DArrayR32
 				, sdw::InVec2
 				, sdw::InUInt
 				, sdw::InFloat > m_filterPCFCascade;
 			sdw::Function< sdw::Float
 				, sdw::InVec3
-				, sdw::InCombinedImageCubeArrayRgba32
+				, sdw::InCombinedImageCubeArrayR32
 				, sdw::InVec2
 				, sdw::InInt
 				, sdw::InFloat

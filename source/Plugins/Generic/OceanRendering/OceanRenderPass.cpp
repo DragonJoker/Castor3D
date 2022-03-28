@@ -1101,7 +1101,7 @@ namespace ocean
 			, shader::getLightingModelName( *getEngine(), flags.passType )
 			, lightsIndex
 			, RenderPipeline::eBuffers
-			, shader::ShadowOptions{ flags.sceneFlags, false }
+			, shader::ShadowOptions{ flags.sceneFlags, true, false }
 			, nullptr
 			, index
 			, RenderPipeline::eBuffers

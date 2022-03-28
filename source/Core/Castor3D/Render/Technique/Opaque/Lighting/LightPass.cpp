@@ -137,14 +137,14 @@ namespace castor3d
 			: ShadowType::eNone;
 
 		// Utility functions
-		index = uint32_t( LightPassLgtIdx::eSmNormalLinear );
+		index = uint32_t( LightPassLgtIdx::eSmLinear );
 		auto lightingModel = shader::LightingModel::createModel( utils
 			, shader::getLightingModelName( *renderSystem.getEngine(), passType )
 			, lightType
 			, uint32_t( LightPassLgtIdx::eLight )
 			, 1u
 			, true
-			, shader::ShadowOptions{ shadows, lightType, false }
+			, shader::ShadowOptions{ shadows, lightType, shadowType == ShadowType::eVariance, false }
 			, &sssProfiles
 			, index
 			, 1u );
