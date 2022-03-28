@@ -533,7 +533,7 @@ namespace castor3d
 		CU_Require( m_culler );
 		{
 #if C3D_DebugTimers
-			auto block = m_testTimer->start();
+			auto block( m_testTimer->start() );
 #endif
 			m_culler->compute();
 			m_renderTechnique->update( updater );

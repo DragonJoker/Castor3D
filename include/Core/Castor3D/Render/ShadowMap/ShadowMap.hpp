@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "ShadowMapModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Render/Passes/PassesModule.hpp"
 
 #include "Castor3D/Material/MaterialModule.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
