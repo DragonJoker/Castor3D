@@ -34,7 +34,7 @@ namespace castortd
 		m_category.upgrade();
 		m_count = count;
 		++m_totalsWaves;
-		m_timeBetweenTwoSpawns = castor::Milliseconds( 1000 );
+		m_timeBetweenTwoSpawns = castor::Milliseconds( 600 );
 		m_timeSinceLastSpawn = m_timeBetweenTwoSpawns;
 	}
 
@@ -56,12 +56,10 @@ namespace castortd
 		if ( m_enemiesCache.empty() )
 		{
 			castor::String name = cuT( "EnemyCube_" ) + std::to_string( m_totalSpawned );
-			auto baseNode = game.getScene().getSceneNodeCache().add( name + cuT( "_Base" )
-				, game.getScene() ).lock();
+			auto baseNode = game.getScene().getSceneNodeCache().add( name + cuT( "_Base" ) ).lock();
 			baseNode->setPosition( game.convert( castor::Point2i{ cell.m_x, cell.m_y - 1 } ) + castor::Point3f{ 0, game.getCellHeight(), 0 } );
 			baseNode->attachTo( *game.getMapNode() );
-			auto node = game.getScene().getSceneNodeCache().add( name
-				, game.getScene() ).lock();
+			auto node = game.getScene().getSceneNodeCache().add( name ).lock();
 			node->setOrientation( castor::Quaternion::fromAxisAngle( castor::Point3f{ 1, 0, 1 }, 45.0_degrees ) );
 			node->attachTo( *baseNode );
 			auto geometry = game.getScene().getGeometryCache().create( name

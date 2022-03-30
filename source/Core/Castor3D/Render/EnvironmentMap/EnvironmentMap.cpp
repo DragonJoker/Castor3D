@@ -160,7 +160,7 @@ namespace castor3d
 	EnvironmentMap::EnvironmentMap( crg::ResourceHandler & handler
 		, RenderDevice const & device
 		, QueueData const & queueData
-		, Scene const & scene )
+		, Scene & scene )
 		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, m_device{ device }
 		, m_scene{ scene }
@@ -247,6 +247,7 @@ namespace castor3d
 					pass->attachTo( *it->second );
 				}
 
+				m_scene.markDirty( *it->second );
 				++it;
 			}
 

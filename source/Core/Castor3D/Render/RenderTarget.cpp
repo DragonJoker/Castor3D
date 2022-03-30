@@ -523,6 +523,10 @@ namespace castor3d
 			return;
 		}
 
+#if C3D_DebugTimers
+		auto block( m_testTimer->start() );
+#endif
+
 		auto & camera = *getCamera();
 		auto & scene = *getScene();
 		updater.scene = &scene;
@@ -531,13 +535,8 @@ namespace castor3d
 		camera.update();
 
 		CU_Require( m_culler );
-		{
-#if C3D_DebugTimers
-			auto block( m_testTimer->start() );
-#endif
-			m_culler->compute();
-			m_renderTechnique->update( updater );
-		}
+		m_culler->update( updater );
+		m_renderTechnique->update( updater );
 
 		m_hdrConfigUbo->cpuUpdate( getHdrConfig() );
 
@@ -558,6 +557,10 @@ namespace castor3d
 		{
 			return;
 		}
+
+#if C3D_DebugTimers
+		auto block( m_testTimer->start() );
+#endif
 
 		auto & camera = *getCamera();
 		auto & scene = *getScene();
@@ -742,12 +745,18 @@ namespace castor3d
 
 	void RenderTarget::setExposure( float value )
 	{
-		getCamera()->setExposure( value );
+		if ( auto camera = getCamera() )
+		{
+			camera->setExposure( value );
+		}
 	}
 
 	void RenderTarget::setGamma( float value )
 	{
-		getCamera()->setGamma( value );
+		if ( auto camera = getCamera() )
+		{
+			camera->setGamma( value );
+		}
 	}
 
 	void RenderTarget::addTechniqueParameters( Parameters const & parameters )

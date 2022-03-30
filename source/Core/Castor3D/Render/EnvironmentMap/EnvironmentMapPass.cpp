@@ -105,7 +105,7 @@ namespace castor3d
 		camera.getParent()->setPosition( position );
 		camera.getParent()->update();
 		camera.update();
-		m_culler->compute();
+		m_culler->update( updater );
 
 		auto oldCamera = updater.camera;
 		auto oldSafeBanded = updater.isSafeBanded;

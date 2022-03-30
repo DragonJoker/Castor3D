@@ -418,11 +418,6 @@ namespace castor3d
 				m_instantiation->unref( oldMaterial );
 				m_instantiation->ref( newMaterial );
 			}
-
-			if ( !m_disableSceneUpdate )
-			{
-				getOwner()->getScene()->setChanged();
-			}
 		}
 	}
 
@@ -486,11 +481,6 @@ namespace castor3d
 	void Submesh::enableSceneUpdate( bool updateScene )
 	{
 		m_disableSceneUpdate = false;
-
-		if ( updateScene )
-		{
-			getOwner()->getScene()->setChanged();
-		}
 	}
 
 	void Submesh::doFillVertexBuffer()

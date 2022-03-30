@@ -12,9 +12,9 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
-#include "Castor3D/Buffer/UniformBufferOffset.hpp"
-
 #include <CastorUtils/Design/OwnedBy.hpp>
+
+#include <ashespp/Buffer/Buffer.hpp>
 
 #pragma warning( push )
 #pragma warning( disable:4365 )
@@ -28,12 +28,20 @@ namespace castor3d
 	{
 	public:
 		template< typename NodeT >
-		using DescriptorNodesPtrT = std::unordered_map< size_t, castor::UniquePtr< NodeT > >;
+		using NodesPtrMapT = std::unordered_map< size_t, castor::UniquePtr< NodeT > >;
 		template< typename NodeT >
-		using DescriptorNodesPoolsT = std::unordered_map< size_t, DescriptorNodesPtrT< NodeT > >;
+		using NodesPtrFlagsMapT = std::unordered_map< size_t, NodesPtrMapT< NodeT > >;
+		struct NodeData
+		{
+			Pass const * pass;
+			SceneNode const * node;
+			RenderedObject const * object;
+		};
+		using NodeDataArray = std::vector< NodeData >;
 
 	public:
 		C3D_API explicit SceneRenderNodes( Scene const & scene );
+		C3D_API ~SceneRenderNodes();
 
 		C3D_API void clear();
 		C3D_API SubmeshRenderNode & createNode( Pass & pass
@@ -56,7 +64,7 @@ namespace castor3d
 
 		ashes::Buffer< ModelBufferConfiguration > const & getModelBuffer()const
 		{
-			return *m_nodesData;
+			return *m_modelsData;
 		}
 
 		ashes::Buffer< BillboardUboConfiguration > const & getBillboardsBuffer()const
@@ -64,12 +72,12 @@ namespace castor3d
 			return *m_billboardsData;
 		}
 
-		DescriptorNodesPoolsT< SubmeshRenderNode > const & getSubmeshNodes()const
+		NodesPtrFlagsMapT< SubmeshRenderNode > const & getSubmeshNodes()const
 		{
 			return m_submeshNodes;
 		}
 
-		DescriptorNodesPoolsT< BillboardRenderNode > const & getBillboardNodes()const
+		NodesPtrFlagsMapT< BillboardRenderNode > const & getBillboardNodes()const
 		{
 			return m_billboardNodes;
 		}
@@ -77,10 +85,14 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		std::mutex m_nodesMutex;
-		DescriptorNodesPoolsT< SubmeshRenderNode > m_submeshNodes;
-		DescriptorNodesPoolsT< BillboardRenderNode > m_billboardNodes;
-		ashes::BufferPtr< ModelBufferConfiguration > m_nodesData;
-		ashes::BufferPtr< BillboardUboConfiguration >m_billboardsData;
+		NodesPtrFlagsMapT< SubmeshRenderNode > m_submeshNodes;
+		NodesPtrFlagsMapT< BillboardRenderNode > m_billboardNodes;
+		ashes::BufferPtr< ModelBufferConfiguration > m_modelsData;
+		ashes::BufferPtr< BillboardUboConfiguration > m_billboardsData;
+		ModelBufferConfiguration * m_modelsBuffer{};
+		BillboardUboConfiguration * m_billboardsBuffer{};
+		FramePassTimerUPtr m_timerRenderNodes;
+		NodeDataArray m_nodesData;
 		uint32_t m_nodeId{};
 		bool m_dirty{ true };
 	};

@@ -151,17 +151,6 @@ namespace castor3d
 		}
 		/**@}*/
 
-	protected:
-		/**
-		 *\~english
-		 *\brief		Updates the light source's informations related to the scene node.
-		 *\param[in]	node	The scene node.
-		 *\~french
-		 *\brief		Met à jour les informations de la source lumineuse, relatives au noeud de scène.
-		 *\param[in]	node	Le noeud de scène.
-		 */
-		C3D_API virtual void updateNode( SceneNode const & node ) = 0;
-
 	private:
 		/**
 		 *\~english

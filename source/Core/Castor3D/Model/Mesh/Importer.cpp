@@ -205,7 +205,7 @@ namespace castor3d
 				&& std::abs( value ) > std::numeric_limits< float >::epsilon()
 				&& std::abs( value - 1.0f ) > std::numeric_limits< float >::epsilon() )
 			{
-				auto scaleNode = scene.getSceneNodeCache().add( fileName.getFileName() + "ScaleNode", scene ).lock();
+				auto scaleNode = scene.getSceneNodeCache().add( fileName.getFileName() + "ScaleNode" ).lock();
 				scaleNode->setScale( { value, value, value } );
 				scaleNode->attachTo( *scene.getObjectRootNode() );
 

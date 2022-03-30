@@ -25,6 +25,7 @@ See LICENSE file in root folder
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"
+#include "Castor3D/Cache/SceneNodeCache.hpp"
 #include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Scene/Fog.hpp"
 #include "Castor3D/Scene/Shadow.hpp"
@@ -188,31 +189,70 @@ namespace castor3d
 		C3D_API bool hasEnvironmentMap( SceneNode & node )const;
 		/**
 		 *\~english
-		 *\remarks		Call hasEnvironmentMap before calling this function (since this one returns a reference to an existing EnvironmentMap).
 		 *\return		Retrieves the reflection map for given node.
+		 *\remarks		Call hasEnvironmentMap before calling this function (since this one returns a reference to an existing EnvironmentMap).
 		 *\param[in]	node	The scene node.
 		 *\~french
-		 *\remarks		Appelez hasEnvironmentMap avant d'appeler cette fonction (celle-ci retournant une référence sur une EnvironmentMap existante)
 		 *\return		Récupère la reflection map pour le noeud donné.
+		 *\remarks		Appelez hasEnvironmentMap avant d'appeler cette fonction (celle-ci retournant une référence sur une EnvironmentMap existante)
 		 *\param[in]	node	Le noeud de scène.
 		 */
 		C3D_API EnvironmentMap & getEnvironmentMap()const;
 		/**
 		 *\~english
-		 *\remarks		Call hasEnvironmentMap before calling this function (since this one returns a reference to an existing EnvironmentMap).
 		 *\return		Retrieves the reflection map for given node.
+		 *\remarks		Call hasEnvironmentMap before calling this function (since this one returns a reference to an existing EnvironmentMap).
 		 *\param[in]	node	The scene node.
 		 *\~french
-		 *\remarks		Appelez hasEnvironmentMap avant d'appeler cette fonction (celle-ci retournant une référence sur une EnvironmentMap existante)
 		 *\return		Récupère la reflection map pour le noeud donné.
+		 *\remarks		Appelez hasEnvironmentMap avant d'appeler cette fonction (celle-ci retournant une référence sur une EnvironmentMap existante)
 		 *\param[in]	node	Le noeud de scène.
 		 */
 		C3D_API uint32_t getEnvironmentMapIndex( SceneNode const & node )const;
+		/**
+		 *\~english
+		 *\brief		Creates an animated texture and adds it to animated textures group.
+		 *\param[in]	sourceInfo	The texture source info.
+		 *\param[in]	config		The texture configuration.
+		 *\param[in]	pass		The target material pass.
+		 *\return		The animated texture.
+		 *\~french
+		 *\brief		Crée une texture animée et l'ajoute au group e de textures animées.
+		 *\param[in]	sourceInfo	Les informations de source de la texture.
+		 *\param[in]	config		La configuration de la texture.
+		 *\param[in]	pass		La passe de matériau cible.
+		 *\return		La texture animée.
+		 */
 		C3D_API AnimatedObjectSPtr addAnimatedTexture( TextureSourceInfo const & sourceInfo
 			, TextureConfiguration const & config
 			, Pass & pass );
-		C3D_API void registerLight( Light & light );
-		C3D_API void unregisterLight( Light & light );
+		/**
+		 *\~english
+		 *\brief		Adds given node to dirty nodes list.
+		 *\param[in]	object	The scene node.
+		 *\~french
+		 *\brief		Ajoute le noeud donné à la liste des noeuds à mettre à jour.
+		 *\param[in]	object	Le noeud de scène.
+		 */
+		C3D_API void markDirty( SceneNode & object );
+		/**
+		 *\~english
+		 *\brief		Adds given BillboardBase to dirty BillboardBase list.
+		 *\param[in]	object	The scene node.
+		 *\~french
+		 *\brief		Ajoute le BillboardBase donné à la liste des BillboardBase à mettre à jour.
+		 *\param[in]	object	Le noeud de scène.
+		 */
+		C3D_API void markDirty( BillboardBase & object );
+		/**
+		 *\~english
+		 *\brief		Adds given object to dirty object list.
+		 *\param[in]	object	The object.
+		 *\~french
+		 *\brief		Ajoute l'objet donné à la liste des objets à mettre à jour.
+		 *\param[in]	object	L'objet.
+		 */
+		C3D_API void markDirty( MovableObject & object );
 		/**
 		*\~english
 		*\name
@@ -264,11 +304,6 @@ namespace castor3d
 		SceneNodeSPtr getObjectRootNode()const
 		{
 			return m_rootObjectNode;
-		}
-
-		bool hasChanged()const
-		{
-			return m_changed;
 		}
 
 		castor::RgbColour const & getAmbientLight()const
@@ -366,12 +401,6 @@ namespace castor3d
 			m_backgroundColour = value;
 		}
 
-		void setChanged()
-		{
-			m_changed = true;
-			onChanged( *this );
-		}
-
 		void setAmbientLight( castor::RgbColour const & value )
 		{
 			m_ambientLight = value;
@@ -379,9 +408,16 @@ namespace castor3d
 		/**@}*/
 
 	private:
+		void doGatherDirty( CpuUpdater::DirtyObjects & sceneObjs );
 		void doUpdateBoundingBox();
-		void doUpdateAnimations( CpuUpdater & updater );
-		void doUpdateParticles( CpuUpdater & updater );
+		void doUpdateSceneNodes( CpuUpdater & updater
+			, CpuUpdater::DirtyObjects & sceneObjs );
+		void doUpdateMovables( CpuUpdater & updater
+			, CpuUpdater::DirtyObjects & sceneObjs );
+		void doUpdateLights( CpuUpdater & updater
+			, CpuUpdater::DirtyObjects & sceneObjs );
+		void doUpdateParticles( CpuUpdater & updater
+			, CpuUpdater::DirtyObjects & sceneObjs );
 		void doUpdateParticles( GpuUpdater & updater );
 		void doUpdateMaterials();
 		bool doUpdateLightDependent( LightType lightType
@@ -391,12 +427,6 @@ namespace castor3d
 		void onMaterialChanged( Material const & material );
 
 	public:
-		//!\~english	The signal raised when the scene has changed.
-		//!\~french		Le signal levé lorsque la scène a changé.
-		mutable OnSceneChanged onChanged;
-		//!\~english	The signal raised when the scene has changed.
-		//!\~french		Le signal levé lorsque la scène a changé.
-		mutable OnSceneNodeChanged onNodeChanged;
 		//!\~english	The signal raised when the scene is updating.
 		//!\~french		Le signal levé lorsque la scène se met à jour.
 		mutable OnSceneUpdate onUpdate;
@@ -406,6 +436,9 @@ namespace castor3d
 
 	private:
 		bool m_initialised{ false };
+		std::vector< SceneNode * > m_dirtyNodes;
+		std::vector< BillboardBase * > m_dirtyBillboards;
+		std::vector< MovableObject * > m_dirtyObjects;
 		SceneNodeSPtr m_rootNode;
 		SceneNodeSPtr m_rootCameraNode;
 		SceneNodeSPtr m_rootObjectNode;
@@ -440,20 +473,17 @@ namespace castor3d
 		std::array< std::atomic_bool, size_t( LightType::eCount ) > m_hasShadows;
 		std::array< std::set< GlobalIlluminationType >, size_t( LightType::eCount ) > m_giTypes;
 		std::atomic_bool m_hasAnyShadows;
-		std::map< castor::String, OnLightChangedConnection > m_lightConnections;
-		std::map< SceneNode const *, OnSceneNodeChangedConnection > m_nodeConnections;
 		float m_lpvIndirectAttenuation{ 1.7f };
 		VoxelSceneData m_voxelConfig;
 		SceneRenderNodesUPtr m_renderNodes;
 		FramePassTimerUPtr m_timerSceneNodes;
 		FramePassTimerUPtr m_timerBoundingBox;
-		FramePassTimerUPtr m_timerAnimations;
 		FramePassTimerUPtr m_timerMaterials;
 		FramePassTimerUPtr m_timerLights;
-		FramePassTimerUPtr m_timerRenderNodes;
-		FramePassTimerUPtr m_timerAnimGroups;
 		FramePassTimerUPtr m_timerParticlesCpu;
 		FramePassTimerUPtr m_timerParticlesGpu;
+		FramePassTimerUPtr m_timerGpuUpdate;
+		FramePassTimerUPtr m_timerMovables;
 
 	public:
 		//!\~english	The cameras root node name.

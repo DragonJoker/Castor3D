@@ -156,7 +156,7 @@ namespace castor3d
 	{
 		if ( m_voxelConfig.enabled )
 		{
-			getCuller().compute();
+			getCuller().update( updater );
 			RenderNodesPass::update( updater );
 		}
 	}

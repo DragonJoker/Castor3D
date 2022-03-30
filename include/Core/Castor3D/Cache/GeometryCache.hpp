@@ -15,8 +15,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	using GeometryCacheTraits = ObjectCacheTraitsT< Geometry, castor::String >;
-
 	C3D_API size_t hash( Geometry const & geometry
 		, Submesh const & submesh
 		, Pass const & pass );

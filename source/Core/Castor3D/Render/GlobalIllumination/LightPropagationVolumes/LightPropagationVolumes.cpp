@@ -107,18 +107,18 @@ namespace castor3d
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
 		, castor::String const & name
-		, LightCache const & lightCache
+		, LightCache const & plightCache
 		, LightType lightType
 		, ShadowMapResult const & smResult
 		, LpvGridConfigUbo const & lpvGridConfigUbo
 		, LightVolumePassResult const & injection
 		, Texture * geometry )
-		: lpvLightConfigUbos{ lpvpropvol::createUbos( device, lightType ) }
+		: lightCache{ plightCache }
+		, lpvLightConfigUbos{ lpvpropvol::createUbos( device, lightType ) }
 		, lastPass{ &previousPass }
 		, lightInjectionPassDescs{ doCreateInjectionPasses( graph
 			, device
 			, name
-			, lightCache
 			, lightType
 			, smResult
 			, lpvGridConfigUbo
@@ -127,7 +127,6 @@ namespace castor3d
 			? doCreateGeometryPasses( graph
 				, device
 				, name
-				, lightCache
 				, lightType
 				, smResult
 				, lpvGridConfigUbo
@@ -139,8 +138,9 @@ namespace castor3d
 	bool LightPropagationVolumesBase::LightLpv::update( CpuUpdater & updater
 		, float lpvCellSize )
 	{
+		auto & sceneObjs = updater.dirtyScenes[lightCache.getScene()];
 		auto & light = *updater.light;
-		auto changed = light.hasChanged()
+		auto changed = sceneObjs.dirtyLights.end() != std::find( sceneObjs.dirtyLights.begin(), sceneObjs.dirtyLights.end(), &light )
 			|| light.getLpvConfig().indirectAttenuation.isDirty()
 			|| light.getLpvConfig().texelAreaModifier.isDirty();
 
@@ -160,7 +160,6 @@ namespace castor3d
 	crg::FramePass const & LightPropagationVolumesBase::LightLpv::doCreateInjectionPass( crg::FrameGraph & graph
 		, RenderDevice const & device
 		, castor::String const & name
-		, LightCache const & lightCache
 		, LightType lightType
 		, ShadowMapResult const & smResult
 		, LpvGridConfigUbo const & lpvGridConfigUbo
@@ -211,7 +210,6 @@ namespace castor3d
 	crg::FramePass const & LightPropagationVolumesBase::LightLpv::doCreateInjectionPass( crg::FrameGraph & graph
 		, RenderDevice const & device
 		, castor::String const & name
-		, LightCache const & lightCache
 		, std::vector< crg::ImageViewId > const & arrayViews
 		, CubeMapFace face
 		, ShadowMapResult const & smResult
@@ -262,7 +260,6 @@ namespace castor3d
 	crg::FramePassArray LightPropagationVolumesBase::LightLpv::doCreateInjectionPasses( crg::FrameGraph & graph
 		, RenderDevice const & device
 		, castor::String const & name
-		, LightCache const & lightCache
 		, LightType lightType
 		, ShadowMapResult const & smResult
 		, LpvGridConfigUbo const & lpvGridConfigUbo
@@ -275,7 +272,6 @@ namespace castor3d
 			result.push_back( &doCreateInjectionPass( graph
 				, device
 				, name
-				, lightCache
 				, lightType
 				, smResult
 				, lpvGridConfigUbo
@@ -294,7 +290,6 @@ namespace castor3d
 				result.push_back( &doCreateInjectionPass( graph
 					, device
 					, name
-					, lightCache
 					, arrayViews
 					, CubeMapFace( faceIndex )
 					, smResult
@@ -310,7 +305,6 @@ namespace castor3d
 	crg::FramePass const & LightPropagationVolumesBase::LightLpv::doCreateGeometryPass( crg::FrameGraph & graph
 		, RenderDevice const & device
 		, castor::String const & name
-		, LightCache const & lightCache
 		, LightType lightType
 		, ShadowMapResult const & smResult
 		, LpvGridConfigUbo const & lpvGridConfigUbo
@@ -356,7 +350,6 @@ namespace castor3d
 	crg::FramePass const & LightPropagationVolumesBase::LightLpv::doCreateGeometryPass( crg::FrameGraph & graph
 		, RenderDevice const & device
 		, castor::String const & name
-		, LightCache const & lightCache
 		, std::vector< crg::ImageViewId > const & arrayViews
 		, CubeMapFace face
 		, ShadowMapResult const & smResult
@@ -403,7 +396,6 @@ namespace castor3d
 	crg::FramePassArray LightPropagationVolumesBase::LightLpv::doCreateGeometryPasses( crg::FrameGraph & graph
 		, RenderDevice const & device
 		, castor::String const & name
-		, LightCache const & lightCache
 		, LightType lightType
 		, ShadowMapResult const & smResult
 		, LpvGridConfigUbo const & lpvGridConfigUbo
@@ -416,7 +408,6 @@ namespace castor3d
 			result.push_back( &doCreateGeometryPass( graph
 				, device
 				, name
-				, lightCache
 				, lightType
 				, smResult
 				, lpvGridConfigUbo
@@ -434,7 +425,6 @@ namespace castor3d
 				result.push_back( &doCreateGeometryPass( graph
 					, device
 					, name
-					, lightCache
 					, arrayViews
 					, CubeMapFace( faceIndex )
 					, smResult

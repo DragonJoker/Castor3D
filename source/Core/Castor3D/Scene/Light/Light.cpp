@@ -17,24 +17,12 @@ namespace castor3d
 		: MovableObject{ name, scene, MovableType::eLight, node }
 	{
 		m_category = factory.create( lightType, std::ref( *this ) );
-		m_notifyIndex = node.onChanged.connect( [this]( SceneNode const & pnode )
-			{
-				onNodeChanged( pnode );
-			} );
-		onNodeChanged( node );
-		getScene()->registerLight( *this );
 	}
 
 	void Light::update( CpuUpdater & updater )
 	{
 		m_category->update();
-
-		if ( m_dirty )
-		{
-			onGPUChanged( *this );
-			m_dirty = false;
-		}
-
+		onGPUChanged( *this );
 		m_currentGlobalIllumination = m_shadows.globalIllumination;
 		m_currentShadowCaster = m_shadowCaster;
 	}
@@ -44,22 +32,6 @@ namespace castor3d
 	{
 		m_bufferIndex = index;
 		m_category->fillBuffer( data );
-	}
-
-	void Light::attachTo( SceneNode & node )
-	{
-		MovableObject::attachTo( node );
-		auto parent = getParent();
-
-		if ( parent )
-		{
-			m_notifyIndex = node.onChanged.connect( [this]( SceneNode const & pnode )
-				{
-					onNodeChanged( pnode );
-				} );
-			onNodeChanged( *parent );
-			m_dirty = true;
-		}
 	}
 
 	DirectionalLightSPtr Light::getDirectionalLight()const
@@ -78,12 +50,5 @@ namespace castor3d
 	{
 		CU_Require( m_category->getLightType() == LightType::eSpot );
 		return std::static_pointer_cast< SpotLight >( m_category );
-	}
-
-	void Light::onNodeChanged( SceneNode const & node )
-	{
-		m_dirty = true;
-		m_category->updateNode( node );
-		onChanged( *this );
 	}
 }

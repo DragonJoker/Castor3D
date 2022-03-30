@@ -337,18 +337,14 @@ namespace CastorViewer
 	{
 		auto oldSubmesh = m_selectedSubmesh;
 		auto oldGeometry = m_selectedGeometry;
-		bool changed = false;
-		castor3d::SceneRPtr scene = geometry ? geometry->getScene() : nullptr;
 
 		if ( oldGeometry != geometry )
 		{
-			changed = true;
 			m_selectedSubmesh = nullptr;
 
 			if ( oldGeometry )
 			{
 				m_cubeManager->hideObject( *oldGeometry );
-				scene = oldGeometry->getScene();
 			}
 
 			if ( geometry )
@@ -361,22 +357,11 @@ namespace CastorViewer
 
 		if ( oldSubmesh != submesh )
 		{
-			changed = true;
-
 			if ( submesh )
 			{
 				m_selectedSubmesh = submesh;
 				wxGetApp().getMainFrame()->select( m_selectedGeometry, m_selectedSubmesh );
 			}
-		}
-
-		if ( changed )
-		{
-			scene->getListener().postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
-				, [scene]()
-				{
-					scene->setChanged();
-				} ) );
 		}
 
 		if ( geometry )

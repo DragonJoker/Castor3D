@@ -1,5 +1,6 @@
 #include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
@@ -55,55 +56,6 @@ namespace castor3d
 			hash = castor::hashCombinePtr( hash, pass );
 			return hash;
 		}
-
-		static void fillEntry( Pass const & pass
-			, SceneNode const & sceneNode
-			, RenderedObject const & rendered
-			, ModelBufferConfiguration & modelData )
-		{
-			modelData.prvModel = modelData.curModel;
-			modelData.curModel = sceneNode.getDerivedTransformationMatrix();
-			auto normal = castor::Matrix3x3f{ modelData.curModel };
-			modelData.normal = castor::Matrix4x4f{ normal.getInverse().getTransposed() };
-			uint32_t index = 0u;
-
-			for ( auto & unit : pass )
-			{
-				if ( index < 4 )
-				{
-					modelData.textures0[index] = unit->getId();
-				}
-				else if ( index < 8 )
-				{
-					modelData.textures1[index - 4] = unit->getId();
-				}
-
-				++index;
-			}
-
-			while ( index < 8u )
-			{
-				if ( index < 4 )
-				{
-					modelData.textures0[index] = 0u;
-				}
-				else
-				{
-					modelData.textures1[index - 4] = 0u;
-				}
-
-				++index;
-			}
-
-			modelData.countsIDs->x = int32_t( std::min( 8u, pass.getTextureUnitsCount() ) );
-			modelData.countsIDs->y = int( pass.getId() );
-			modelData.countsIDs->w = rendered.isShadowReceiver();
-
-			if ( pass.hasEnvironmentMapping() )
-			{
-				modelData.countsIDs->z = int( sceneNode.getScene()->getEnvironmentMapIndex( sceneNode ) + 1u );
-			}
-		}
 	}
 
 	//*********************************************************************************************
@@ -157,7 +109,7 @@ namespace castor3d
 	SceneRenderNodes::SceneRenderNodes( Scene const & scene )
 		: castor::OwnedBy< Scene const >{ scene }
 		, m_device{ scene.getEngine()->getRenderSystem()->getRenderDevice() }
-		, m_nodesData{ makeBuffer< ModelBufferConfiguration >( m_device
+		, m_modelsData{ makeBuffer< ModelBufferConfiguration >( m_device
 			, 250'000ull
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
@@ -167,7 +119,21 @@ namespace castor3d
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, getOwner()->getName() + cuT( "BillboardsDimensions" ) ) }
+		, m_modelsBuffer{ m_modelsData->lock( 0u, ashes::WholeSize, 0u ) }
+		, m_billboardsBuffer{ m_billboardsData->lock( 0u, ashes::WholeSize, 0u ) }
 	{
+#if C3D_DebugTimers
+		m_timerRenderNodes = castor::makeUnique< crg::FramePassTimer >( m_device.makeContext(), getOwner()->getName() + "/RenderNodes" );
+		getOwner()->getEngine()->registerTimer( getOwner()->getName() + "/RenderNodes", *m_timerRenderNodes );
+#endif
+	}
+
+	SceneRenderNodes::~SceneRenderNodes()
+	{
+#if C3D_DebugTimers
+		getOwner()->getEngine()->unregisterTimer( getOwner()->getName() + "/RenderNodes", *m_timerRenderNodes );
+		m_timerRenderNodes.reset();
+#endif
 	}
 
 	void SceneRenderNodes::clear()
@@ -178,7 +144,10 @@ namespace castor3d
 		{
 			for ( auto & node : nodes.second )
 			{
-				node.second->instance.setId( node.second->pass, node.second->data, 0u );
+				node.second->instance.setId( node.second->pass
+					, node.second->data
+					, nullptr
+					, 0u );
 			}
 		}
 
@@ -186,10 +155,13 @@ namespace castor3d
 		{
 			for ( auto & node : nodes.second )
 			{
-				node.second->instance.setId( node.second->pass, 0u );
+				node.second->instance.setId( node.second->pass
+					, nullptr
+					, 0u );
 			}
 		}
 
+		m_nodesData.clear();
 		m_submeshNodes.clear();
 		m_billboardNodes.clear();
 	}
@@ -201,17 +173,25 @@ namespace castor3d
 		, AnimatedSkeleton * skeleton )
 	{
 		auto lock( castor::makeUniqueLock( m_nodesMutex ) );
-		auto & pool = m_submeshNodes.emplace( pass.getTexturesMask().size(), DescriptorNodesPtrT< SubmeshRenderNode >{} ).first->second;
+		auto & pool = m_submeshNodes.emplace( pass.getTexturesMask().size(), NodesPtrMapT< SubmeshRenderNode >{} ).first->second;
 		auto it = pool.emplace( scnrendnd::makeNodeHash( pass, data, instance ), nullptr );
 
 		if ( it.second )
 		{
 			it.first->second = castor::makeUnique< SubmeshRenderNode >( pass
 				, data
-				, instance );
+				, instance
+				, m_modelsBuffer[m_nodeId] );
 			it.first->second->mesh = mesh;
 			it.first->second->skeleton = skeleton;
-			instance.setId( pass, data, ++m_nodeId );
+			m_nodesData.push_back( { &pass, instance.getParent(), &instance } );
+			instance.setId( pass
+				, data
+				, it.first->second.get()
+				, ++m_nodeId );
+			instance.fillEntry( pass
+				, *instance.getParent()
+				, it.first->second->modelData );
 			m_dirty = true;
 		}
 
@@ -222,14 +202,22 @@ namespace castor3d
 		, BillboardBase & instance )
 	{
 		auto lock( castor::makeUniqueLock( m_nodesMutex ) );
-		auto & pool = m_billboardNodes.emplace( pass.getTexturesMask().size(), DescriptorNodesPtrT< BillboardRenderNode >{} ).first->second;
+		auto & pool = m_billboardNodes.emplace( pass.getTexturesMask().size(), NodesPtrMapT< BillboardRenderNode >{} ).first->second;
 		auto it = pool.emplace( scnrendnd::makeNodeHash( pass, instance ), nullptr );
 
 		if ( it.second )
 		{
 			it.first->second = castor::makeUnique< BillboardRenderNode >( pass
-				, instance );
-			instance.setId( pass, ++m_nodeId );
+				, instance
+				, m_modelsBuffer[m_nodeId]
+				, m_billboardsBuffer[m_nodeId] );
+			m_nodesData.push_back( { &pass, instance.getNode(), &instance } );
+			instance.setId( pass
+				, it.first->second.get()
+				, ++m_nodeId );
+			instance.fillEntry( pass
+				, *instance.getNode()
+				, it.first->second->modelData );
 			m_dirty = true;
 		}
 
@@ -275,6 +263,9 @@ namespace castor3d
 			return;
 		}
 
+#if C3D_DebugTimers
+		auto block( m_timerRenderNodes->start() );
+#endif
 		std::map< Submesh const *, std::map< Pass const *, uint32_t > > indices;
 
 		for ( auto & nodes : m_submeshNodes )
@@ -325,42 +316,16 @@ namespace castor3d
 
 	void SceneRenderNodes::update( GpuUpdater & updater )
 	{
-		if ( auto nodesBuffer = m_nodesData->lock( 0u, ashes::WholeSize, 0u ) )
+		if ( m_nodesData.empty() )
 		{
-			for ( auto & nodes : m_submeshNodes )
-			{
-				for ( auto & nodeIt : nodes.second )
-				{
-					auto & node = *nodeIt.second;
-					scnrendnd::fillEntry( node.pass
-						, *node.instance.getParent()
-						, node.instance
-						, nodesBuffer[node.getId() - 1u] );
-				}
-			}
+			return;
+		}
 
-			if ( auto billboardsBuffer = m_billboardsData->lock( 0u, ashes::WholeSize, 0u ) )
-			{
-				for ( auto & nodes : m_billboardNodes )
-				{
-					for ( auto & nodeIt : nodes.second )
-					{
-						auto & node = *nodeIt.second;
-						scnrendnd::fillEntry( node.pass
-							, *node.instance.getNode()
-							, node.instance
-							, nodesBuffer[node.getId() - 1u] );
-						auto & billboardData = billboardsBuffer[node.getId() - 1u];
-						billboardData.dimensions = node.instance.getDimensions();
-					}
-				}
+		m_modelsData->flush( 0u, m_nodesData.size() );
 
-				m_billboardsData->flush( 0u, ashes::WholeSize );
-				m_billboardsData->unlock();
-			}
-
-			m_nodesData->flush( 0u, ashes::WholeSize );
-			m_nodesData->unlock();
+		if ( !m_billboardNodes.empty() )
+		{
+			m_billboardsData->flush( 0u, m_nodesData.size() );
 		}
 	}
 
