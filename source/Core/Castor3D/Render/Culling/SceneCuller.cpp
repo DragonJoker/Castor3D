@@ -1,5 +1,6 @@
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/BillboardCache.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
@@ -68,134 +69,38 @@ namespace castor3d
 			}
 		}
 
-		static void unregisterPipelineNodes( size_t hash
-			, ashes::BufferBase const & buffer
-			, std::vector< PipelineBuffer > & cont )
-		{
-			auto it = std::find_if( cont.begin()
-				, cont.end()
-				, [hash, &buffer]( PipelineBuffer const & lookup )
-				{
-					return lookup.first == hash
-						&& lookup.second == &buffer;
-				} );
-
-			if ( it != cont.end() )
-			{
-				cont.erase( it );
-			}
-		}
-
 		template< typename NodeT >
-		static void addRenderNode( NodeT const & node
+		static void addRenderNode( SceneCuller::CulledNodeT< NodeT > const & culled
 			, RenderNodesPass const & renderPass
 			, bool isFrontCulled
 			, SceneCuller::SidedNodePipelineMapT< NodeT > & sortedNodes
 			, SceneCuller::PipelineBufferArray & nodesIds )
 		{
+			auto & node = *culled.node;
 			auto hash = getPipelineHash( renderPass, node, isFrontCulled );
 			auto & pipelineNodes = sortedNodes.emplace( hash, SceneCuller::SidedNodeBufferMapT< NodeT >{} ).first->second;
 			auto buffer = &node.data.getBufferOffsets().vtxBuffer->getBuffer().getBuffer();
 			auto bufferIres = pipelineNodes.emplace( buffer, SceneCuller::SidedNodeArrayT< NodeT >{} );
-			bufferIres.first->second.emplace_back( &node, isFrontCulled );
+			bufferIres.first->second.emplace_back( culled, isFrontCulled );
 			registerPipelineNodes( hash, *buffer, nodesIds );
 		}
 
 		template< typename NodeT >
-		static void addRenderNode( NodeT const & node
+		static void addRenderNode( SceneCuller::CulledNodeT< NodeT > const & culled
 			, RenderNodesPass const & renderPass
 			, bool isFrontCulled
 			, SceneCuller::SidedObjectNodePipelineMapT< NodeT > & sortedInstancedSubmeshes
 			, SceneCuller::PipelineBufferArray & nodesIds )
 		{
+			auto & node = *culled.node;
 			auto hash = getPipelineHash( renderPass, node, isFrontCulled );
 			auto & pipelineNodes = sortedInstancedSubmeshes.emplace( hash, SceneCuller::SidedObjectNodeBufferMapT< SubmeshRenderNode >{} ).first->second;
 			auto buffer = &node.data.getBufferOffsets().vtxBuffer->getBuffer().getBuffer();
 			auto bufferIres = pipelineNodes.emplace( buffer, SceneCuller::SidedObjectNodePassMapT< SubmeshRenderNode >{} );
 			auto & passNodes = bufferIres.first->second.emplace( &node.pass, SceneCuller::SidedObjectNodeMapT< SubmeshRenderNode >{} ).first->second;
 			auto & objectNodes = passNodes.emplace( &node.data, SceneCuller::SidedNodeArrayT< SubmeshRenderNode >{} ).first->second;
-			objectNodes.emplace_back( &node, isFrontCulled );
+			objectNodes.emplace_back( culled, isFrontCulled );
 			registerPipelineNodes( hash, *buffer, nodesIds );
-		}
-
-		template< typename NodeT >
-		static void removeRenderNode( NodeT const & node
-			, RenderNodesPass const & renderPass
-			, bool isFrontCulled
-			, SceneCuller::SidedNodePipelineMapT< NodeT > & sortedNodes
-			, SceneCuller::PipelineBufferArray & nodesIds )
-		{
-			auto hash = getPipelineHash( renderPass, node, isFrontCulled );
-			auto pipelineNodesIt = sortedNodes.find( hash );
-
-			if ( pipelineNodesIt != sortedNodes.end() )
-			{
-				auto & pipelineNodes = pipelineNodesIt->second;
-				auto buffer = &node.data.getBufferOffsets().vtxBuffer->getBuffer().getBuffer();
-				auto bufferIt = pipelineNodes.find( buffer );
-
-				if ( bufferIt != pipelineNodes.end() )
-				{
-					auto nodeIt = std::find_if( bufferIt->second.begin()
-						, bufferIt->second.end()
-						, [&node, isFrontCulled]( auto & lookup )
-						{
-							return lookup.first == &node
-								&& lookup.second == isFrontCulled;
-						} );
-
-					if ( nodeIt != bufferIt->second.end() )
-					{
-						bufferIt->second.erase( nodeIt );
-						unregisterPipelineNodes( hash, *buffer, nodesIds );
-					}
-				}
-			}
-		}
-
-		template< typename NodeT >
-		static void removeRenderNode( NodeT const & node
-			, RenderNodesPass const & renderPass
-			, bool isFrontCulled
-			, SceneCuller::SidedObjectNodePipelineMapT< NodeT > & sortedInstancedSubmeshes
-			, SceneCuller::PipelineBufferArray & nodesIds )
-		{
-			auto hash = getPipelineHash( renderPass, node, isFrontCulled );
-			auto pipelineNodesIt = sortedInstancedSubmeshes.find( hash );
-
-			if ( pipelineNodesIt != sortedInstancedSubmeshes.end() )
-			{
-				auto & pipelineNodes = pipelineNodesIt->second;
-				auto buffer = &node.data.getBufferOffsets().vtxBuffer->getBuffer().getBuffer();
-				auto bufferIt = pipelineNodes.find( buffer );
-
-				if ( bufferIt != pipelineNodes.end() )
-				{
-					auto passNodesIt = bufferIt->second.find( &node.pass );
-
-					if ( passNodesIt != bufferIt->second.end() )
-					{
-						auto objectNodesIt = passNodesIt->second.find( &node.data );
-
-						if ( objectNodesIt != passNodesIt->second.end() )
-						{
-							auto nodeIt = std::find_if( objectNodesIt->second.begin()
-								, objectNodesIt->second.end()
-								, [&node, isFrontCulled]( auto & lookup )
-								{
-									return lookup.first == &node
-										&& lookup.second == isFrontCulled;
-								} );
-
-							if ( nodeIt != objectNodesIt->second.end() )
-							{
-								objectNodesIt->second.erase( nodeIt );
-								unregisterPipelineNodes( hash, *buffer, nodesIds );
-							}
-						}
-					}
-				}
-			}
 		}
 
 		//*****************************************************************************************
@@ -475,22 +380,17 @@ namespace castor3d
 		: m_scene{ scene }
 		, m_camera{ camera }
 	{
-		m_sceneChanged = m_scene.onChanged.connect( [this]( Scene const & )
-			{
-				onSceneChanged( m_scene );
-			} );
-		m_sceneNodeChanged = m_scene.onNodeChanged.connect( [this]( SceneNode const & node )
-			{
-				onSceneNodeChanged( node );
-			} );
-
-		if ( m_camera )
-		{
-			m_cameraChanged = m_camera->onChanged.connect( [this]( Camera const & cam )
-				{
-					onCameraChanged( cam );
-				} );
-		}
+#if C3D_DebugTimers
+		auto & device = m_scene.getEngine()->getRenderSystem()->getRenderDevice();
+		m_timer = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Culling/General" ) );
+		m_timerDirty = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Culling/Dirty" ) );
+		m_timerCompute = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Culling/Compute" ) );
+		m_timerIndirect = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Culling/Indirect" ) );
+		m_scene.getEngine()->registerTimer( cuT( "Culling/General" ), *m_timer );
+		m_scene.getEngine()->registerTimer( cuT( "Culling/Dirty" ), *m_timerDirty );
+		m_scene.getEngine()->registerTimer( cuT( "Culling/Compute" ), *m_timerCompute );
+		m_scene.getEngine()->registerTimer( cuT( "Culling/Indirect" ), *m_timerIndirect );
+#endif
 	}
 
 	void SceneCuller::registerRenderPass( RenderNodesPass const & renderPass )
@@ -505,150 +405,40 @@ namespace castor3d
 		m_renderPasses.erase( it );
 	}
 
-	void SceneCuller::compute()
+	void SceneCuller::update( CpuUpdater & updater )
 	{
-		if ( m_sceneDirty || m_cameraDirty )
+#if C3D_DebugTimers
+		auto block( m_timer->start() );
+#endif
+		m_anyChanged = false;
+		m_culledChanged = false;
+		auto sceneIt = updater.dirtyScenes.find( &m_scene );
+
+		if ( !m_first
+			&& ( sceneIt == updater.dirtyScenes.end()
+				|| sceneIt->second.isEmpty() ) )
 		{
-			m_allChanged = m_sceneDirty;
-
-			if ( m_allChanged )
-			{
-				doClearAll();
-				doUpdateMinCuller();
-				m_cameraDirty = true;
-			}
-
-			m_culledChanged = m_cameraDirty;
-
-			if ( m_culledChanged )
-			{
-				doClearCulled();
-				doCullGeometries();
-				doCullBillboards();
-				doSortNodes();
-				doFillIndirect();
-			}
-
-			m_sceneDirty = false;
-			m_cameraDirty = false;
-			m_dirtySubmeshes.clear();
-			m_dirtyBillboards.clear();
-
-			if ( m_allChanged || m_culledChanged )
-			{
-				onCompute( *this );
-			}
+			return;
 		}
-		else if ( !m_dirtySubmeshes.empty()
-			|| !m_dirtyBillboards.empty() )
+
+		auto & sceneObjs = sceneIt->second;
+
+		if ( m_first )
 		{
-			NodeArrayT< SubmeshRenderNode > submeshToRemove;
-			NodeArrayT< SubmeshRenderNode > submeshToAdd;
-			NodeArrayT< BillboardRenderNode > billboardToRemove;
-			NodeArrayT< BillboardRenderNode > billboardToAdd;
+			doInitialiseCulled();
+		}
+		else
+		{
+			doUpdateChanged( sceneObjs );
+			doUpdateCulled( sceneObjs );
+		}
 
-			for ( auto node : m_dirtySubmeshes )
-			{
-				auto it = std::find_if( m_culledSubmeshes.begin()
-					, m_culledSubmeshes.end()
-					, [&node]( SubmeshRenderNode const * lookup )
-					{
-						return lookup == node;
-					} );
-
-				if ( isSubmeshCulled( *node ) )
-				{
-					if ( it != m_culledSubmeshes.end() )
-					{
-						m_culledSubmeshes.erase( it );
-						submeshToRemove.push_back( node );
-					}
-				}
-				else if ( it == m_culledSubmeshes.end() )
-				{
-					m_culledSubmeshes.push_back( node );
-					submeshToAdd.push_back( node );
-				}
-			}
-
-			for ( auto node : m_dirtyBillboards )
-			{
-				auto it = std::find_if( m_culledBillboards.begin()
-					, m_culledBillboards.end()
-					, [&node]( BillboardRenderNode const * lookup )
-					{
-						return lookup == node;
-					} );
-
-				if ( !isBillboardCulled( *node ) )
-				{
-					if ( it != m_culledBillboards.end() )
-					{
-						m_culledBillboards.erase( it );
-						billboardToRemove.push_back( node );
-					}
-				}
-				else if ( it == m_culledBillboards.end() )
-				{
-					m_culledBillboards.push_back( node );
-					billboardToAdd.push_back( node );
-				}
-			}
-
-			if ( !submeshToRemove.empty()
-				|| !billboardToRemove.empty()
-				|| !submeshToAdd.empty()
-				|| !billboardToAdd.empty() )
-			{
-				for ( auto & renderPassIt : m_renderPasses )
-				{
-					auto & renderPass = *renderPassIt.first;
-					auto & sortedSubmeshes = renderPassIt.second.sortedSubmeshes;
-					auto & sortedInstancedSubmeshes = renderPassIt.second.sortedInstancedSubmeshes;
-
-					for ( auto toRemove : submeshToRemove )
-					{
-						doRemoveSubmesh( *toRemove
-							, renderPass
-							, sortedSubmeshes
-							, sortedInstancedSubmeshes
-							, renderPassIt.second.nodesIds );
-					}
-
-					for ( auto toAdd : submeshToAdd )
-					{
-						doAddSubmesh( *toAdd
-							, renderPass
-							, sortedSubmeshes
-							, sortedInstancedSubmeshes
-							, renderPassIt.second.nodesIds );
-					}
-
-					auto & sortedBillboards = renderPassIt.second.sortedBillboards;
-
-					for ( auto toRemove : billboardToRemove )
-					{
-						doRemoveBillboard( *toRemove
-							, renderPass
-							, sortedBillboards
-							, renderPassIt.second.nodesIds );
-					}
-
-					for ( auto toAdd : billboardToAdd )
-					{
-						doAddBillboard( *toAdd
-							, renderPass
-							, sortedBillboards
-							, renderPassIt.second.nodesIds );
-					}
-				}
-
-				m_dirtySubmeshes.clear();
-				m_dirtyBillboards.clear();
-				m_culledChanged = true;
-				doFillIndirect();
-				onCompute( *this );
-			}
+		if ( m_culledChanged )
+		{
+			doSortNodes();
+			doInitGpuBuffers();
+			doFillIndirect();
+			onCompute( *this );
 		}
 	}
 
@@ -678,256 +468,86 @@ namespace castor3d
 			, it->second.nodesIds );
 	}
 
-	void SceneCuller::onSceneChanged( Scene const & scene )
+	void SceneCuller::doInitialiseCulled()
 	{
-		m_sceneDirty = true;
-	}
+#if C3D_DebugTimers
+		auto blockCompute( m_timerCompute->start() );
+#endif
+		m_first = false;
+		m_anyChanged = true;
+		m_culledChanged = true;
+		auto & submeshNodes = getScene().getRenderNodes().getSubmeshNodes();
 
-	void SceneCuller::onSceneNodeChanged( SceneNode const & node )
-	{
-		std::vector< SceneNode const * > work;
-		work.push_back( &node );
-
-		while ( !work.empty() )
+		for ( auto & texturesIt : submeshNodes )
 		{
-			auto & cur = *work.back();
-			work.pop_back();
-
-			for ( auto & movable : cur.getObjects() )
+			for ( auto & programIt : texturesIt.second )
 			{
-				switch ( movable.get().getType() )
-				{
-				case MovableType::eGeometry:
-					doMakeDirty( static_cast< Geometry const & >( movable.get() ) );
-					break;
-				case MovableType::eBillboard:
-					doMakeDirty( static_cast< BillboardBase const & >( static_cast< BillboardList const & >( movable.get() ) ) );
-					break;
-				case MovableType::eParticleEmitter:
-					doMakeDirty( *static_cast< ParticleSystem const & >( movable.get() ).getBillboards() );
-					break;
-				default:
-					break;
-				}
+				m_culledSubmeshes.push_back( { programIt.second.get()
+					, isSubmeshCulled( *programIt.second )
+					, 1u } );
 			}
+		}
 
-			for ( auto & child : cur.getChildren() )
+		auto & billboardNodes = getScene().getRenderNodes().getBillboardNodes();
+
+		for ( auto & texturesIt : billboardNodes )
+		{
+			for ( auto & programIt : texturesIt.second )
 			{
-				work.push_back( child.second.lock().get() );
+				m_culledBillboards.push_back( { programIt.second.get()
+					, isBillboardCulled( *programIt.second )
+					, programIt.second->getInstanceCount() } );
 			}
 		}
 	}
 
-	void SceneCuller::onCameraChanged( Camera const & camera )
+	void SceneCuller::doUpdateChanged( CpuUpdater::DirtyObjects & sceneObjs )
 	{
-		m_cameraDirty = true;
-	}
+		auto itCamera = std::find( sceneObjs.dirtyCameras.begin()
+			, sceneObjs.dirtyCameras.end()
+			, m_camera );
 
-	void SceneCuller::doClearAll()
-	{
-		m_index = 0u;
-		m_minCullersZ = std::numeric_limits< float >::max();
-	}
-
-	void SceneCuller::doClearCulled()
-	{
-		m_culledSubmeshes.clear();
-		m_culledBillboards.clear();
-
-		for ( auto & renderPassIt : m_renderPasses )
+		if ( itCamera != sceneObjs.dirtyCameras.end() )
 		{
-			renderPassIt.second.sortedSubmeshes.clear();
-			renderPassIt.second.sortedInstancedSubmeshes.clear();
-			renderPassIt.second.sortedBillboards.clear();
-			renderPassIt.second.nodesIds.clear();
+			m_anyChanged = true;
+#if C3D_DebugTimers
+			auto blockCompute( m_timerCompute->start() );
+#endif
+			for ( auto & node : m_culledSubmeshes )
+			{
+				auto culled = isSubmeshCulled( *node.node );
+				m_culledChanged = m_culledChanged || node.culled != culled;
+				node.culled = culled;
+			}
+
+			for ( auto & node : m_culledBillboards )
+			{
+				auto culled = isBillboardCulled( *node.node );
+				m_culledChanged = m_culledChanged || node.culled != culled;
+				node.culled = culled;
+			}
+		}
+		else
+		{
+			m_anyChanged = !sceneObjs.dirtyGeometries.empty()
+				|| !sceneObjs.dirtyBillboards.empty();
 		}
 	}
 
-	void SceneCuller::doUpdateMinCuller()
+	void SceneCuller::doUpdateCulled( CpuUpdater::DirtyObjects & sceneObjs )
 	{
-		auto & scene = getScene();
-		auto lock( castor::makeUniqueLock( scene.getGeometryCache() ) );
+		std::vector< SubmeshRenderNode const * > dirtySubmeshes;
+		std::vector< BillboardRenderNode const * > dirtyBillboards;
+		doMarkDirty( sceneObjs, dirtySubmeshes, dirtyBillboards );
 
-		for ( auto primitive : scene.getGeometryCache() )
+		if ( !dirtySubmeshes.empty()
+			|| !dirtyBillboards.empty() )
 		{
-			if ( primitive.second
-				&& primitive.second->getParent() )
-			{
-				auto & geometry = *primitive.second;
-				auto & node = *geometry.getParent();
-
-				if ( auto mesh = primitive.second->getMesh().lock() )
-				{
-					if ( m_camera )
-					{
-						auto aabbMin = mesh->getBoundingBox().getMin();
-						auto aabbMax = mesh->getBoundingBox().getMax();
-						auto & camera = getCamera();
-						castor::Point3f corners[8]
-						{
-							castor::Point3f{ aabbMin[0], aabbMin[1], aabbMin[2] },
-							castor::Point3f{ aabbMin[0], aabbMin[1], aabbMax[2] },
-							castor::Point3f{ aabbMin[0], aabbMax[1], aabbMin[2] },
-							castor::Point3f{ aabbMin[0], aabbMax[1], aabbMax[2] },
-							castor::Point3f{ aabbMax[0], aabbMin[1], aabbMin[2] },
-							castor::Point3f{ aabbMax[0], aabbMin[1], aabbMax[2] },
-							castor::Point3f{ aabbMax[0], aabbMax[1], aabbMin[2] },
-							castor::Point3f{ aabbMax[0], aabbMax[1], aabbMax[2] },
-						};
-
-						for ( auto & corner : corners )
-						{
-							m_minCullersZ = std::min( m_minCullersZ
-								, ( camera.getView() * node.getDerivedTransformationMatrix() * corner )[2] );
-						}
-					}
-					else
-					{
-						m_minCullersZ = std::min( m_minCullersZ
-							, node.getDerivedPosition()[2] - mesh->getBoundingSphere().getRadius() );
-					}
-				}
-			}
-		}
-	}
-
-	void SceneCuller::doAddSubmesh( SubmeshRenderNode const & node
-		, RenderNodesPass const & renderPass
-		, SceneCuller::SidedNodePipelineMapT< SubmeshRenderNode > & sorted
-		, SceneCuller::SidedObjectNodePipelineMapT< SubmeshRenderNode > & sortedInstanced
-		, SceneCuller::PipelineBufferArray & nodesIds )
-	{
-		if ( renderPass.isValidPass( node.pass )
-			&& renderPass.isValidRenderable( node.instance )
-			&& node.instance.getParent() != renderPass.getIgnoredNode() )
-		{
-			bool needsFront = renderPass.getRenderMode() == RenderMode::eTransparentOnly
-				|| renderPass.forceTwoSided()
-				|| node.pass.isTwoSided()
-				|| node.pass.hasAlphaBlending();
-			auto & instantiation = node.data.getInstantiation();
-
-			if ( instantiation.isInstanced( node.instance.getMaterial( node.data ) ) )
-			{
-				cullscn::addRenderNode( node
-					, renderPass
-					, false
-					, sortedInstanced
-					, nodesIds );
-
-				if ( needsFront )
-				{
-					cullscn::addRenderNode( node
-						, renderPass
-						, true
-						, sortedInstanced
-						, nodesIds );
-				}
-			}
-			else
-			{
-				cullscn::addRenderNode( node
-					, renderPass
-					, false
-					, sorted
-					, nodesIds );
-
-				if ( needsFront )
-				{
-					cullscn::addRenderNode( node
-						, renderPass
-						, true
-						, sorted
-						, nodesIds );
-				}
-			}
-		}
-	}
-
-	void SceneCuller::doAddBillboard( BillboardRenderNode const & node
-		, RenderNodesPass const & renderPass
-		, SceneCuller::SidedNodePipelineMapT< BillboardRenderNode > & sorted
-		, SceneCuller::PipelineBufferArray & nodesIds )
-	{
-		if ( renderPass.isValidPass( node.pass )
-			&& renderPass.isValidRenderable( node.instance )
-			&& node.instance.getNode() != renderPass.getIgnoredNode() )
-		{
-			cullscn::addRenderNode( node
-				, renderPass
-				, false
-				, sorted
-				, nodesIds );
-		}
-	}
-
-	void SceneCuller::doRemoveSubmesh( SubmeshRenderNode const & node
-		, RenderNodesPass const & renderPass
-		, SceneCuller::SidedNodePipelineMapT< SubmeshRenderNode > & sorted
-		, SceneCuller::SidedObjectNodePipelineMapT< SubmeshRenderNode > & sortedInstanced
-		, SceneCuller::PipelineBufferArray & nodesIds )
-	{
-		if ( renderPass.isValidPass( node.pass )
-			&& renderPass.isValidRenderable( node.instance )
-			&& node.instance.getParent() != renderPass.getIgnoredNode() )
-		{
-			bool needsFront = renderPass.getRenderMode() == RenderMode::eTransparentOnly
-				|| renderPass.forceTwoSided()
-				|| node.pass.isTwoSided()
-				|| node.pass.hasAlphaBlending();
-			auto & instantiation = node.data.getInstantiation();
-
-			if ( instantiation.isInstanced( node.instance.getMaterial( node.data ) ) )
-			{
-				cullscn::removeRenderNode( node
-					, renderPass
-					, false
-					, sortedInstanced
-					, nodesIds );
-
-				if ( needsFront )
-				{
-					cullscn::removeRenderNode( node
-						, renderPass
-						, true
-						, sortedInstanced
-						, nodesIds );
-				}
-			}
-			else
-			{
-				cullscn::removeRenderNode( node
-					, renderPass
-					, false
-					, sorted
-					, nodesIds );
-
-				if ( needsFront )
-				{
-					cullscn::removeRenderNode( node
-						, renderPass
-						, true
-						, sorted
-						, nodesIds );
-				}
-			}
-		}
-	}
-
-	void SceneCuller::doRemoveBillboard( BillboardRenderNode const & node
-		, RenderNodesPass const & renderPass
-		, SceneCuller::SidedNodePipelineMapT< BillboardRenderNode > & sorted
-		, SceneCuller::PipelineBufferArray & nodesIds )
-	{
-		if ( renderPass.isValidPass( node.pass )
-			&& renderPass.isValidRenderable( node.instance )
-			&& node.instance.getNode() != renderPass.getIgnoredNode() )
-		{
-			cullscn::removeRenderNode( node
-				, renderPass
-				, false
-				, sorted
-				, nodesIds );
+#if C3D_DebugTimers
+			auto blockCompute( m_timerCompute->start() );
+#endif
+			duUpdateCulledSubmeshes( dirtySubmeshes );
+			duUpdateCulledBillboards( dirtyBillboards );
 		}
 	}
 
@@ -936,31 +556,37 @@ namespace castor3d
 		for ( auto & renderPassIt : m_renderPasses )
 		{
 			auto & renderPass = *renderPassIt.first;
+			auto & nodesIds = renderPassIt.second.nodesIds;
 			auto & sortedSubmeshes = renderPassIt.second.sortedSubmeshes;
 			auto & sortedInstancedSubmeshes = renderPassIt.second.sortedInstancedSubmeshes;
+			nodesIds.clear();
+			sortedSubmeshes.clear();
+			sortedInstancedSubmeshes.clear();
 
-			for ( auto & culled : m_culledSubmeshes )
+			for ( auto toAdd : m_culledSubmeshes )
 			{
-				culled->pass.prepareTextures();
-				doAddSubmesh( *culled
+				doAddSubmesh( toAdd
 					, renderPass
 					, sortedSubmeshes
 					, sortedInstancedSubmeshes
-					, renderPassIt.second.nodesIds );
+					, nodesIds );
 			}
 
 			auto & sortedBillboards = renderPassIt.second.sortedBillboards;
+			sortedBillboards.clear();
 
-			for ( auto & culled : m_culledBillboards )
+			for ( auto toAdd : m_culledBillboards )
 			{
-				culled->pass.prepareTextures();
-				doAddBillboard( *culled
+				doAddBillboard( toAdd
 					, renderPass
 					, sortedBillboards
-					, renderPassIt.second.nodesIds );
+					, nodesIds );
 			}
 		}
+	}
 
+	void SceneCuller::doInitGpuBuffers()
+	{
 		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
 
 		for ( auto & renderPassIt : m_renderPasses )
@@ -1007,6 +633,9 @@ namespace castor3d
 
 	void SceneCuller::doFillIndirect()
 	{
+#if C3D_DebugTimers
+		auto block( m_timerIndirect->start() );
+#endif
 		for ( auto & renderPassIt : m_renderPasses )
 		{
 			auto & pipelinesNodes = renderPassIt.second.nodesIds;
@@ -1038,11 +667,14 @@ namespace castor3d
 
 							for ( auto & sidedCulled : bufferIt.second )
 							{
-								cullscn::fillNodeCommands( *sidedCulled.first
-									, m_scene
-									, indirectIdxBuffer
-									, indirectNIdxBuffer
-									, pipelinesBuffer );
+								if ( !sidedCulled.first.culled )
+								{
+									cullscn::fillNodeCommands( *sidedCulled.first.node
+										, m_scene
+										, indirectIdxBuffer
+										, indirectNIdxBuffer
+										, pipelinesBuffer );
+								}
 							}
 						}
 					}
@@ -1055,7 +687,7 @@ namespace castor3d
 							{
 								for ( auto & submeshIt : passIt.second )
 								{
-									cullscn::fillNodeCommands( *submeshIt.second.front().first
+									cullscn::fillNodeCommands( *submeshIt.second.front().first.node
 										, indirectIdxBuffer
 										, indirectNIdxBuffer );
 								}
@@ -1089,9 +721,13 @@ namespace castor3d
 							for ( auto & sidedCulled : perBuffer.second )
 							{
 								auto culled = sidedCulled.first;
-								cullscn::fillIndirectCommand( *culled, indirectBuffer );
-								( *pipelinesBuffer )->x = culled->instance.getId( culled->pass );
-								++pipelinesBuffer;
+
+								if ( !culled.culled )
+								{
+									cullscn::fillIndirectCommand( *culled.node, indirectBuffer );
+									( *pipelinesBuffer )->x = culled.node->instance.getId( culled.node->pass );
+									++pipelinesBuffer;
+								}
 							}
 						}
 					}
@@ -1106,70 +742,182 @@ namespace castor3d
 		}
 	}
 
-	void SceneCuller::doMakeDirty( Geometry const & object )
+	void SceneCuller::doMarkDirty( CpuUpdater::DirtyObjects & sceneObjs
+		, std::vector< SubmeshRenderNode const * > & dirtySubmeshes
+		, std::vector< BillboardRenderNode const * > & dirtyBillboards )
+	{
+#if C3D_DebugTimers
+		auto blockDirty( m_timerDirty->start() );
+#endif
+		for ( auto geometry : sceneObjs.dirtyGeometries )
+		{
+			doMakeDirty( *geometry, dirtySubmeshes );
+		}
+
+		for ( auto billboard : sceneObjs.dirtyBillboards )
+		{
+			doMakeDirty( *billboard, dirtyBillboards );
+		}
+	}
+
+	void SceneCuller::duUpdateCulledSubmeshes( std::vector< SubmeshRenderNode const * > const & dirtySubmeshes )
+	{
+		for ( auto dirty : dirtySubmeshes )
+		{
+			auto it = std::find_if( m_culledSubmeshes.begin()
+				, m_culledSubmeshes.end()
+				, [dirty]( CulledNodeT< SubmeshRenderNode > const & lookup )
+				{
+					return lookup.node == dirty;
+				} );
+			auto culled = isSubmeshCulled( *dirty );
+
+			if ( it != m_culledSubmeshes.end() )
+			{
+				m_culledChanged = m_culledChanged || it->culled != culled;
+				it->culled = culled;
+			}
+			else
+			{
+				m_culledChanged = true;
+				m_culledSubmeshes.push_back( { dirty, culled, 1u } );
+			}
+		}
+	}
+
+	void SceneCuller::duUpdateCulledBillboards( std::vector< BillboardRenderNode const * > const & dirtyBillboards )
+	{
+		for ( auto dirty : dirtyBillboards )
+		{
+			auto it = std::find_if( m_culledBillboards.begin()
+				, m_culledBillboards.end()
+				, [dirty]( CulledNodeT< BillboardRenderNode > const & lookup )
+				{
+					return lookup.node == dirty;
+				} );
+			auto culled = isBillboardCulled( *dirty );
+			auto count = dirty->getInstanceCount();
+
+			if ( it != m_culledBillboards.end() )
+			{
+				m_culledChanged = m_culledChanged
+					|| it->culled != culled
+					|| it->count != count;
+				it->culled = culled;
+				it->count = count;
+			}
+			else
+			{
+				m_culledChanged = true;
+				m_culledBillboards.push_back( { dirty, culled, count } );
+			}
+		}
+	}
+
+	void SceneCuller::doMakeDirty( Geometry const & object
+		, std::vector< SubmeshRenderNode const * > & dirtySubmeshes )const
 	{
 		if ( auto mesh = object.getMesh().lock() )
 		{
-			auto & nodes = getScene().getRenderNodes();
-
 			for ( auto & submesh : *mesh )
 			{
 				if ( auto material = object.getMaterial( *submesh ) )
 				{
 					for ( auto & pass : *material )
 					{
-						m_dirtySubmeshes.push_back( nodes.getSubmeshNode( object.getId( *pass
-							, *submesh ) ) );
+						auto node = object.getRenderNode( *pass
+							, *submesh );
+						dirtySubmeshes.push_back( node );
 					}
 				}
 			}
 		}
 	}
 
-	void SceneCuller::doMakeDirty( BillboardBase const & object )
+	void SceneCuller::doMakeDirty( BillboardBase const & object
+		, std::vector< BillboardRenderNode const * > & dirtyBillboards )const
 	{
-		auto & nodes = getScene().getRenderNodes();
-
 		if ( auto material = object.getMaterial() )
 		{
 			for ( auto & pass : *material )
 			{
-				m_dirtyBillboards.push_back( nodes.getBillboardNode( object.getId( *pass ) ) );
+				auto node = object.getRenderNode( *pass );
+				dirtyBillboards.push_back( node );
 			}
 		}
 	}
 
-	void SceneCuller::doCullGeometries()
+	void SceneCuller::doAddSubmesh( CulledNodeT< SubmeshRenderNode > const & culled
+		, RenderNodesPass const & renderPass
+		, SceneCuller::SidedNodePipelineMapT< SubmeshRenderNode > & sorted
+		, SceneCuller::SidedObjectNodePipelineMapT< SubmeshRenderNode > & sortedInstanced
+		, SceneCuller::PipelineBufferArray & nodesIds )
 	{
-		auto & nodes = getScene().getRenderNodes().getSubmeshNodes();
-		auto & culled = m_culledSubmeshes;
+		auto & node = *culled.node;
 
-		for ( auto & itPass : nodes )
+		if ( renderPass.isValidPass( node.pass )
+			&& renderPass.isValidRenderable( node.instance )
+			&& node.instance.getParent() != renderPass.getIgnoredNode() )
 		{
-			for ( auto & itNode : itPass.second )
+			bool needsFront = renderPass.getRenderMode() == RenderMode::eTransparentOnly
+				|| renderPass.forceTwoSided()
+				|| node.pass.isTwoSided()
+				|| node.pass.hasAlphaBlending();
+			auto & instantiation = node.data.getInstantiation();
+
+			if ( instantiation.isInstanced( node.instance.getMaterial( node.data ) ) )
 			{
-				if ( !isSubmeshCulled( *itNode.second ) )
+				cullscn::addRenderNode( culled
+					, renderPass
+					, false
+					, sortedInstanced
+					, nodesIds );
+
+				if ( needsFront )
 				{
-					culled.push_back( itNode.second.get() );
+					cullscn::addRenderNode( culled
+						, renderPass
+						, true
+						, sortedInstanced
+						, nodesIds );
+				}
+			}
+			else
+			{
+				cullscn::addRenderNode( culled
+					, renderPass
+					, false
+					, sorted
+					, nodesIds );
+
+				if ( needsFront )
+				{
+					cullscn::addRenderNode( culled
+						, renderPass
+						, true
+						, sorted
+						, nodesIds );
 				}
 			}
 		}
 	}
 
-	void SceneCuller::doCullBillboards()
+	void SceneCuller::doAddBillboard( CulledNodeT< BillboardRenderNode > const & culled
+		, RenderNodesPass const & renderPass
+		, SceneCuller::SidedNodePipelineMapT< BillboardRenderNode > & sorted
+		, SceneCuller::PipelineBufferArray & nodesIds )
 	{
-		auto & nodes = getScene().getRenderNodes().getBillboardNodes();
-		auto & culled = m_culledBillboards;
+		auto & node = *culled.node;
 
-		for ( auto & itPass : nodes )
+		if ( renderPass.isValidPass( node.pass )
+			&& renderPass.isValidRenderable( node.instance )
+			&& node.instance.getNode() != renderPass.getIgnoredNode() )
 		{
-			for ( auto & itNode : itPass.second )
-			{
-				if ( !isBillboardCulled( *itNode.second ) )
-				{
-					culled.push_back( itNode.second.get() );
-				}
-			}
+			cullscn::addRenderNode( culled
+				, renderPass
+				, false
+				, sorted
+				, nodesIds );
 		}
 	}
 

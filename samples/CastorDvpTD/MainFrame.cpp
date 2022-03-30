@@ -22,17 +22,18 @@ namespace castortd
 			eID_RENDER_TIMER,
 		}	eID;
 
-		static void doUpdate( Game & p_game )
+		static void doUpdate( Game & game )
 		{
 			auto & engine = *wxGetApp().getCastor();
 
 			if ( !engine.isCleaned() )
 			{
-				p_game.update();
-				engine.postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender, [&p_game]()
-				{
-					doUpdate( p_game );
-				} ) );
+				game.update();
+				engine.postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
+					, [&game]()
+					{
+						doUpdate( game );
+					} ) );
 			}
 		}
 	}

@@ -71,7 +71,6 @@ namespace GuiCommon
 				if ( material )
 				{
 					m_geometry.setMaterial( m_submesh, material );
-					m_geometry.getScene()->setChanged();
 				}
 			} );
 		addProperty( grid, PROPERTY_SUBMESH_SPHERE_BOX, m_submesh.getBoundingSphere(), EmptyHandler );

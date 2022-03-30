@@ -56,8 +56,6 @@
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 
-#pragma GCC diagnostic ignored "-Wnull-dereference"
-
 namespace castor3d
 {
 	namespace scnprs

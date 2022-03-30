@@ -210,12 +210,20 @@ namespace castor3d
 	uint32_t BillboardBase::getId( Pass const & pass )const
 	{
 		auto it = m_ids.find( &pass );
-		return it == m_ids.end() ? 0u : it->second;
+		return it == m_ids.end() ? 0u : it->second.first;
 	}
 
-	void BillboardBase::setId( Pass const & pass, uint32_t id )
+	BillboardRenderNode const * BillboardBase::getRenderNode( Pass const & pass )const
 	{
-		m_ids[&pass] = id;
+		auto it = m_ids.find( &pass );
+		return it == m_ids.end() ? nullptr : it->second.second;
+	}
+
+	void BillboardBase::setId( Pass const & pass
+		, BillboardRenderNode const * renderNode
+		, uint32_t id )
+	{
+		m_ids[&pass] = { id, renderNode };
 	}
 
 	void BillboardBase::setMaterial( MaterialRPtr value )
@@ -225,11 +233,7 @@ namespace castor3d
 		if ( oldMaterial != value )
 		{
 			m_material = value;
-
-			if ( oldMaterial )
-			{
-				onMaterialChanged( *this, oldMaterial, value );
-			}
+			getParentScene().markDirty( *this );
 		}
 	}
 
@@ -238,7 +242,7 @@ namespace castor3d
 		if ( m_count != value )
 		{
 			m_count = value;
-			getParentScene().setChanged();
+			getParentScene().markDirty( *this );
 		}
 	}
 

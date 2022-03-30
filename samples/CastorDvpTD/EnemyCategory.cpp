@@ -5,7 +5,7 @@ namespace castortd
 	BaseEnemy::BaseEnemy()
 		: Enemy::Category{}
 	{
-		m_speed = 24.0f;
+		m_speed = 40.0f;
 		m_flying = false;
 
 		m_life.initialise( 1u, []( uint32_t p_value, uint32_t p_level )

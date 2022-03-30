@@ -14,29 +14,6 @@
 
 namespace castor3d
 {
-	namespace cullfrust
-	{
-		template< typename NodeT >
-		static void cullNodes( Frustum const & frustum
-			, SceneRenderNodes::DescriptorNodesPoolsT< NodeT > const & all
-			, SceneCuller::NodeArrayT< NodeT > & culled )
-		{
-			for ( auto & itPass : all )
-			{
-				for ( auto & itNode : itPass.second )
-				{
-					auto & node = *itNode.second;
-
-					if ( !isCulled( node )
-						|| isVisible( frustum, node ) )
-					{
-						culled.push_back( &node );
-					}
-				}
-			}
-		}
-	}
-
 	FrustumCuller::FrustumCuller( Scene & scene
 		, Camera & camera )
 		: SceneCuller{ scene, &camera }

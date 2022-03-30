@@ -11,9 +11,10 @@ namespace castor3d
 		, SceneNode & node )
 		: castor::OwnedBy< Scene >{ scene }
 		, castor::Named( name )
-		, m_type( type )
-		, m_sceneNode( &node )
+		, m_type{ type }
+		, m_sceneNode{ nullptr }
 	{
+		node.attachObject( *this );
 	}
 	
 	MovableObject::MovableObject( castor::String const & name
@@ -29,11 +30,19 @@ namespace castor3d
 				: *scene.getObjectRootNode() ),
 		}
 	{
+		markDirty();
 	}
 
 	MovableObject::~MovableObject()
 	{
-		detach();
+		auto node = getParent();
+
+		if ( node )
+		{
+			m_notifyIndex.disconnect();
+			m_sceneNode = nullptr;
+			node->detachObject( *this );
+		}
 	}
 
 	void MovableObject::detach()
@@ -50,16 +59,16 @@ namespace castor3d
 
 	void MovableObject::attachTo( SceneNode & node )
 	{
-		m_sceneNode = &node;
+		if ( m_sceneNode != &node )
+		{
+			m_sceneNode = &node;
+			markDirty();
+		}
+	}
 
-		if ( m_sceneNode )
-		{
-			m_strNodeName = m_sceneNode->getName();
-		}
-		else
-		{
-			m_strNodeName.clear();
-		}
+	void MovableObject::markDirty()
+	{
+		getScene()->markDirty( *this );
 	}
 
 	EngineRPtr MovableObject::getEngine()const

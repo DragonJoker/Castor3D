@@ -134,13 +134,14 @@ namespace castor3d
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
 		, castor::String const & name
-		, LightCache const & lightCache
+		, LightCache const & plightCache
 		, LightType lightType
 		, ShadowMapResult const & smResult
 		, LpvGridConfigUboArray const & lpvGridConfigUbos
 		, std::vector< LightVolumePassResult > const & injection
 		, TextureArray const * geometry )
-		: lastLightPass{ &previousPass }
+		: lightCache{ plightCache }
+		, lastLightPass{ &previousPass }
 		, lastGeomPass{ &previousPass }
 	{
 		for ( uint32_t cascade = 0u; cascade < CascadeCount; ++cascade )
@@ -149,7 +150,6 @@ namespace castor3d
 			lightInjectionPassesDesc.push_back( &doCreateInjectionPass( graph
 				, device
 				, name
-				, lightCache
 				, lightType
 				, smResult
 				, lpvGridConfigUbos
@@ -161,7 +161,6 @@ namespace castor3d
 				geometryInjectionPassesDesc.push_back( &doCreateGeometryPass( graph
 					, device
 					, name
-					, lightCache
 					, lightType
 					, smResult
 					, lpvGridConfigUbos
@@ -174,8 +173,9 @@ namespace castor3d
 	bool LayeredLightPropagationVolumesBase::LightLpv::update( CpuUpdater & updater
 		, std::vector< float > const & lpvCellSizes )
 	{
+		auto & sceneObjs = updater.dirtyScenes[lightCache.getScene()];
 		auto & light = *updater.light;
-		auto changed = light.hasChanged()
+		auto changed = sceneObjs.dirtyLights.end() != std::find( sceneObjs.dirtyLights.begin(), sceneObjs.dirtyLights.end(), &light )
 			|| light.getLpvConfig().indirectAttenuation.isDirty()
 			|| light.getLpvConfig().texelAreaModifier.isDirty();
 
@@ -195,7 +195,6 @@ namespace castor3d
 	crg::FramePass & LayeredLightPropagationVolumesBase::LightLpv::doCreateInjectionPass( crg::FrameGraph & graph
 		, RenderDevice const & device
 		, castor::String const & name
-		, LightCache const & lightCache
 		, LightType lightType
 		, ShadowMapResult const & smResult
 		, LpvGridConfigUboArray const & lpvGridConfigUbos
@@ -247,7 +246,6 @@ namespace castor3d
 	crg::FramePass & LayeredLightPropagationVolumesBase::LightLpv::doCreateGeometryPass( crg::FrameGraph & graph
 		, RenderDevice const & device
 		, castor::String const & name
-		, LightCache const & lightCache
 		, LightType lightType
 		, ShadowMapResult const & smResult
 		, LpvGridConfigUboArray const & lpvGridConfigUbos

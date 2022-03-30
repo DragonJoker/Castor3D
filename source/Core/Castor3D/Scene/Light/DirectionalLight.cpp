@@ -176,6 +176,10 @@ namespace castor3d
 
 	void DirectionalLight::update()
 	{
+		auto & node = *getLight().getParent();
+		m_direction = castor::Point3f{ 0, 0, 1 };
+		node.getDerivedOrientation().transform( m_direction, m_direction );
+		castor::point::normalise( m_direction );
 	}
 
 	bool DirectionalLight::updateShadow( Camera const & viewCamera )
@@ -191,13 +195,6 @@ namespace castor3d
 		}
 
 		return result;
-	}
-
-	void DirectionalLight::updateNode( SceneNode const & node )
-	{
-		m_direction = castor::Point3f{ 0, 0, 1 };
-		node.getDerivedOrientation().transform( m_direction, m_direction );
-		castor::point::normalise( m_direction );
 	}
 
 	void DirectionalLight::doFillBuffer( LightBuffer::LightData & data )const

@@ -122,24 +122,24 @@ namespace castor3d
 	void LightCategory::setColour( castor::Point3f const & value )
 	{
 		m_colour = value;
-		getLight().onGPUChanged( getLight() );
+		getLight().markDirty();
 	}
 
 	void LightCategory::setIntensity( castor::Point2f const & value )
 	{
 		m_intensity = value;
-		getLight().onGPUChanged( getLight() );
+		getLight().markDirty();
 	}
 
 	void LightCategory::setDiffuseIntensity( float value )
 	{
 		m_intensity[0] = value;
-		getLight().onGPUChanged( getLight() );
+		getLight().markDirty();
 	}
 
 	void LightCategory::setSpecularIntensity( float value )
 	{
 		m_intensity[1] = value;
-		getLight().onGPUChanged( getLight() );
+		getLight().markDirty();
 	}
 }

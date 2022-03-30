@@ -297,11 +297,11 @@ namespace GuiCommon
 	void SceneObjectsList::select( castor3d::GeometrySPtr geometry
 		, castor3d::SubmeshSPtr submesh )
 	{
-		auto itg = m_ids.find( geometry );
+		auto itg = m_ids.find( geometry.get() );
 
 		if ( itg != m_ids.end() )
 		{
-			auto its = itg->second.find( submesh );
+			auto its = itg->second.find( submesh.get() );
 
 			if ( its != itg->second.end() )
 			{
@@ -310,8 +310,8 @@ namespace GuiCommon
 		}
 	}
 
-	void SceneObjectsList::doAddSubmesh( castor3d::GeometrySPtr geometry
-		, castor3d::SubmeshSPtr submesh
+	void SceneObjectsList::doAddSubmesh( castor3d::GeometryRPtr geometry
+		, castor3d::SubmeshRPtr submesh
 		, wxTreeItemId id )
 	{
 		auto itg = m_ids.insert( { geometry, SubmeshIdMap{} } ).first;
@@ -341,8 +341,8 @@ namespace GuiCommon
 					, eBMP_SUBMESH
 					, eBMP_SUBMESH_SEL
 					, new SubmeshTreeItemProperty( m_propertiesHolder->isEditable(), geometry, *submesh ) );
-				doAddSubmesh( std::static_pointer_cast< castor3d::Geometry >( geometry.shared_from_this() )
-					, submesh
+				doAddSubmesh( &geometry
+					, submesh.get()
 					, idSubmesh );
 			}
 

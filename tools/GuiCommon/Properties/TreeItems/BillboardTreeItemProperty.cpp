@@ -38,7 +38,6 @@ namespace GuiCommon
 				if ( material )
 				{
 					m_billboard.setMaterial( material );
-					m_billboard.getParentScene().setChanged();
 				}
 			} );
 	}

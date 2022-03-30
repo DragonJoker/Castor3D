@@ -106,7 +106,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom du noeud
 		 *\return		\p true si un des enfants de ce noeud a le nom donné
 		 */
-		C3D_API bool hasChild( castor::String const & name );
+		C3D_API bool hasChild( castor::String const & name )const;
 		/**
 		 *\~english
 		 *\brief		add the given node to my childs if it isn't already
@@ -303,9 +303,9 @@ namespace castor3d
 		void doUpdateChildsDerivedTransform();
 
 	public:
-		//!\~english	Signal used to notify that the node has changed.
-		//!\~french		Signal utilisé pour notifier que le noeud a changé.
-		OnSceneNodeChanged onChanged;
+		//!\~english	Signal used to notify that the node has been attached to another one.
+		//!\~french		Signal utilisé pour notifier que le noeud a été attaché à un autre.
+		OnSceneNodeReparent onParentChanged;
 
 	private:
 		static uint64_t CurrentId;
@@ -321,8 +321,6 @@ namespace castor3d
 		castor::Matrix4x4f m_derivedTransform{ 1.0f };
 		bool m_derivedMtxChanged{ true };
 		SceneNode * m_parent{ nullptr };
-		mutable castor::SpinMutex m_childrenLock;
-		mutable castor::SpinMutex m_objectsLock;
 		SceneNodeMap m_children;
 		MovableArray m_objects;
 	};

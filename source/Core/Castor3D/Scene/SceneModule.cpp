@@ -9,13 +9,11 @@
 CU_ImplementExportedOwnedBy( castor3d::Scene, Scene )
 CU_ImplementCUSmartPtr( castor3d, CameraCache )
 CU_ImplementCUSmartPtr( castor3d, SceneCache )
-CU_ImplementCUSmartPtr( castor3d, SceneNodeCache )
 
 namespace castor3d
 {
-	const castor::String PtrCacheTraitsT< castor3d::Scene, castor::String >::Name = cuT( "Scene" );
+	const castor::String PtrCacheTraitsT< Scene, castor::String >::Name = cuT( "Scene" );
 	const castor::String ObjectCacheTraitsT< Camera, castor::String >::Name = cuT( "Camera" );
-	const castor::String ObjectCacheTraitsT< SceneNode, castor::String >::Name = cuT( "SceneNode" );
 
 	castor::String getName( MovableType value )
 	{

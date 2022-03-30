@@ -129,6 +129,10 @@ namespace castor3d
 
 	void SpotLight::update()
 	{
+		auto & node = *getLight().getParent();
+		auto direction = castor::Point3f{ 0, 0, 1 };
+		node.getDerivedOrientation().transform( direction, direction );
+		m_direction = direction;
 		SpotLight::generateVertices();
 		auto scale = lgtspot::doCalcSpotLightBCone( *this ) / 2.0f;
 		m_cubeBox.load( castor::Point3f{ -scale[0], -scale[0], -scale[1] }
@@ -184,7 +188,7 @@ namespace castor3d
 
 		if ( m_dirtyData )
 		{
-			getLight().onGPUChanged( getLight() );
+			getLight().markDirty();
 		}
 	}
 
@@ -194,7 +198,7 @@ namespace castor3d
 
 		if ( m_dirtyData )
 		{
-			getLight().onGPUChanged( getLight() );
+			getLight().markDirty();
 		}
 	}
 
@@ -204,19 +208,7 @@ namespace castor3d
 
 		if ( m_dirtyData )
 		{
-			getLight().onGPUChanged( getLight() );
-		}
-	}
-
-	void SpotLight::updateNode( SceneNode const & node )
-	{
-		auto direction = castor::Point3f{ 0, 0, 1 };
-		node.getDerivedOrientation().transform( direction, direction );
-		m_direction = direction;
-
-		if ( m_dirtyData )
-		{
-			getLight().onGPUChanged( getLight() );
+			getLight().markDirty();
 		}
 	}
 }

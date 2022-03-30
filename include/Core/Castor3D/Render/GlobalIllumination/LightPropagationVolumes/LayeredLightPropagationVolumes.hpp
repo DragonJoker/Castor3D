@@ -94,6 +94,7 @@ namespace castor3d
 			bool update( CpuUpdater & updater
 				, std::vector< float > const & lpvCellSizes );
 
+			LightCache const & lightCache;
 			LpvLightConfigUboArray lpvLightConfigUbos;
 			crg::FramePass const * lastLightPass{};
 			crg::FramePass const * lastGeomPass{};
@@ -106,7 +107,6 @@ namespace castor3d
 			crg::FramePass & doCreateInjectionPass( crg::FrameGraph & graph
 				, RenderDevice const & device
 				, castor::String const & name
-				, LightCache const & lightCache
 				, LightType lightType
 				, ShadowMapResult const & smResult
 				, LpvGridConfigUboArray const & lpvGridConfigUbos
@@ -115,7 +115,6 @@ namespace castor3d
 			crg::FramePass & doCreateGeometryPass( crg::FrameGraph & graph
 				, RenderDevice const & device
 				, castor::String const & name
-				, LightCache const & lightCache
 				, LightType lightType
 				, ShadowMapResult const & smResult
 				, LpvGridConfigUboArray const & lpvGridConfigUbos

@@ -15,8 +15,8 @@ namespace GuiCommon
 		: public wxTreeCtrl
 	{
 	private:
-		using SubmeshIdMap = std::map< castor3d::SubmeshSPtr, wxTreeItemId >;
-		using GeometrySubmeshIdMap = std::map< castor3d::GeometrySPtr, SubmeshIdMap >;
+		using SubmeshIdMap = std::map< castor3d::SubmeshRPtr, wxTreeItemId >;
+		using GeometrySubmeshIdMap = std::map< castor3d::GeometryRPtr, SubmeshIdMap >;
 
 	public:
 		SceneObjectsList( PropertiesContainer * propertiesHolder
@@ -32,8 +32,8 @@ namespace GuiCommon
 			, castor3d::SubmeshSPtr submesh );
 
 	protected:
-		void doAddSubmesh( castor3d::GeometrySPtr geometry
-			, castor3d::SubmeshSPtr submesh
+		void doAddSubmesh( castor3d::GeometryRPtr geometry
+			, castor3d::SubmeshRPtr submesh
 			, wxTreeItemId id );
 		void doAddSkeleton( castor3d::Skeleton const & skeleton
 			, wxTreeItemId id );

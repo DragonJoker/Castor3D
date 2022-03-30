@@ -73,7 +73,22 @@ namespace castor3d
 		 *\brief		Attache l'object à un noeud
 		 */
 		C3D_API virtual void attachTo( SceneNode & node );
-
+		/**
+		 *\~english
+		 *\brief		Adds the object to dirty object list in the scene.
+		 *\~french
+		 *\brief		Ajout l'objet à la liste des objets à mettre à jour de la scène.
+		 */
+		C3D_API void markDirty();
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		C3D_API EngineRPtr getEngine()const;
 
 		SceneNode *  getParent()const
@@ -85,14 +100,12 @@ namespace castor3d
 		{
 			return m_type;
 		}
+		/**@}*/
 
 	protected:
 		//!\~english	Movable object type.
 		//!\~french		Le type d'objet déplaçable.
 		MovableType m_type;
-		//!\~english	The parent node name.
-		//!\~french		Le nom du noeud parent.
-		castor::String m_strNodeName;
 		//!\~english	The parent scene node.
 		//!\~french		Le noeud parent.
 		SceneNode * m_sceneNode;

@@ -11,10 +11,12 @@ namespace castor3d
 {
 	SubmeshRenderNode::SubmeshRenderNode( Pass & pass
 		, Submesh & data
-		, Geometry & instance )
+		, Geometry & instance
+		, ModelBufferConfiguration & modelData )
 		: pass{ pass }
 		, data{ data }
 		, instance{ instance }
+		, modelData{ modelData }
 	{
 	}
 

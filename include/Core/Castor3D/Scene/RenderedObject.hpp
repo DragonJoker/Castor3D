@@ -4,16 +4,21 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderedObject_H___
 #define ___C3D_RenderedObject_H___
 
-#include "SceneModule.hpp"
+#include "Castor3D/Material/Pass/PassModule.hpp"
+#include "Castor3D/Scene/SceneModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
 namespace castor3d
 {
 	class RenderedObject
-		: public std::enable_shared_from_this< RenderedObject >
 	{
 	public:
+		C3D_API void fillEntry( Pass const & pass
+			, SceneNode const & sceneNode
+			, ModelBufferConfiguration & modelData );
+
 		void setVisible( bool value )
 		{
 			m_visible = value;

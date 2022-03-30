@@ -145,7 +145,7 @@ namespace castor3d
 		if ( m_position.isDirty() )
 		{
 			lgtpoint::doUpdateShadowMatrices( m_position, m_lightViews );
-			getLight().onGPUChanged( getLight() );
+			getLight().markDirty();
 			m_position.reset();
 		}
 	}
@@ -162,11 +162,6 @@ namespace castor3d
 	void PointLight::setAttenuation( castor::Point3f const & attenuation )
 	{
 		m_attenuation = attenuation;
-		getLight().onChanged( getLight() );
-		getLight().onGPUChanged( getLight() );
-	}
-
-	void PointLight::updateNode( SceneNode const & p_node )
-	{
+		getLight().markDirty();
 	}
 }

@@ -86,6 +86,7 @@ namespace castor3d
 			bool update( CpuUpdater & updater
 				, float lpvCellSize );
 
+			LightCache const & lightCache;
 			std::vector< LpvLightConfigUbo > lpvLightConfigUbos;
 			crg::FramePass const * lastPass{};
 			std::vector< LightInjectionPass * > lightInjectionPasses;
@@ -97,7 +98,6 @@ namespace castor3d
 			crg::FramePass const & doCreateInjectionPass( crg::FrameGraph & graph
 				, RenderDevice const & device
 				, castor::String const & name
-				, LightCache const & lightCache
 				, LightType lightType
 				, ShadowMapResult const & smResult
 				, LpvGridConfigUbo const & lpvGridConfigUbo
@@ -105,7 +105,6 @@ namespace castor3d
 			crg::FramePass const & doCreateInjectionPass( crg::FrameGraph & graph
 				, RenderDevice const & device
 				, castor::String const & name
-				, LightCache const & lightCache
 				, std::vector< crg::ImageViewId > const & arrayViews
 				, CubeMapFace face
 				, ShadowMapResult const & smResult
@@ -114,7 +113,6 @@ namespace castor3d
 			crg::FramePassArray doCreateInjectionPasses( crg::FrameGraph & graph
 				, RenderDevice const & device
 				, castor::String const & name
-				, LightCache const & lightCache
 				, LightType lightType
 				, ShadowMapResult const & smResult
 				, LpvGridConfigUbo const & lpvGridConfigUbo
@@ -122,7 +120,6 @@ namespace castor3d
 			crg::FramePass const & doCreateGeometryPass( crg::FrameGraph & graph
 				, RenderDevice const & device
 				, castor::String const & name
-				, LightCache const & lightCache
 				, LightType lightType
 				, ShadowMapResult const & smResult
 				, LpvGridConfigUbo const & lpvGridConfigUbo
@@ -130,7 +127,6 @@ namespace castor3d
 			crg::FramePass const & doCreateGeometryPass( crg::FrameGraph & graph
 				, RenderDevice const & device
 				, castor::String const & name
-				, LightCache const & lightCache
 				, std::vector< crg::ImageViewId > const & arrayViews
 				, CubeMapFace face
 				, ShadowMapResult const & smResult
@@ -139,7 +135,6 @@ namespace castor3d
 			crg::FramePassArray doCreateGeometryPasses( crg::FrameGraph & graph
 				, RenderDevice const & device
 				, castor::String const & name
-				, LightCache const & lightCache
 				, LightType lightType
 				, ShadowMapResult const & smResult
 				, LpvGridConfigUbo const & lpvGridConfigUbo

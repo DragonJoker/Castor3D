@@ -40,20 +40,11 @@ namespace castor3d
 			, rootObjectNode
 			, [this]( ElementT & element )
 			{
-				getScene()->registerLight( element );
-				m_dirtyLights.emplace_back( &element );
-				m_connections.emplace( &element
-					, element.onChanged.connect( [this]( Light & light )
-						{
-							m_dirtyLights.emplace_back( &light );
-						} ) );
 				doRegisterLight( element );
 			}
 			, [this]( ElementT & element )
 			{
 				doUnregisterLight( element );
-				m_connections.erase( &element );
-				getScene()->unregisterLight( element );
 			}
 			, MovableMergerT< LightCache >{ scene.getName() }
 			, MovableAttacherT< LightCache >{}
@@ -95,6 +86,10 @@ namespace castor3d
 	void ObjectCacheT< Light, castor::String, LightCacheTraits >::update( CpuUpdater & updater )
 	{
 		auto lock( castor::makeUniqueLock( *this ) );
+		auto & sceneObjs = updater.dirtyScenes[getScene()];
+		m_dirtyLights.insert( m_dirtyLights.end()
+			, sceneObjs.dirtyLights.begin()
+			, sceneObjs.dirtyLights.end() );
 
 		if ( !m_dirtyLights.empty() )
 		{

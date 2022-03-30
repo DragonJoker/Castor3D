@@ -49,9 +49,17 @@ namespace castor3d
 	{
 	public:
 		template< typename NodeT >
-		using NodeArrayT = std::vector< NodeT const * >;
+		struct CulledNodeT
+		{
+			NodeT const * node;
+			bool culled;
+			uint32_t count;
+		};
+
 		template< typename NodeT >
-		using SidedNodeArrayT = std::vector< std::pair< NodeT const *, bool > >;
+		using NodeArrayT = std::vector< CulledNodeT< NodeT > >;
+		template< typename NodeT >
+		using SidedNodeArrayT = std::vector< std::pair< CulledNodeT< NodeT >, bool > >;
 
 		template< typename NodeT >
 		using SidedNodeBufferMapT = std::map< ashes::BufferBase const *, SidedNodeArrayT< NodeT > >;
@@ -91,7 +99,7 @@ namespace castor3d
 		C3D_API virtual ~SceneCuller() = default;
 		C3D_API void registerRenderPass( RenderNodesPass const & renderPass );
 		C3D_API void unregisterRenderPass( RenderNodesPass const & renderPass );
-		C3D_API void compute();
+		C3D_API void update( CpuUpdater & updater );
 		C3D_API uint32_t getPipelineNodesIndex( RenderNodesPass const & renderPass
 			, Submesh const & submesh
 			, Pass const & pass
@@ -102,12 +110,15 @@ namespace castor3d
 			, Pass const & pass
 			, ashes::BufferBase const & buffer
 			, bool isFrontCulled )const;
-
-		float getMinCastersZ()
-		{
-			return m_minCullersZ;
-		}
-
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		Scene & getScene()const
 		{
 			return m_scene;
@@ -130,9 +141,9 @@ namespace castor3d
 			return *m_camera;
 		}
 
-		bool areAllChanged()const
+		bool areAnyChanged()const
 		{
-			return m_allChanged;
+			return m_anyChanged;
 		}
 
 		bool areCulledChanged()const
@@ -197,38 +208,33 @@ namespace castor3d
 			CU_Require( it != m_renderPasses.end() );
 			return it->second.sortedBillboards;
 		}
+		/**@}*/
 
 	public:
 		mutable SceneCullerSignal onCompute;
 
 	private:
-		void onSceneChanged( Scene const & scene );
-		void onSceneNodeChanged( SceneNode const & sceneNode );
-		void onCameraChanged( Camera const & camera );
-		void doClearAll();
-		void doClearCulled();
-		void doUpdateMinCuller();
+		void doInitialiseCulled();
+		void doUpdateChanged( CpuUpdater::DirtyObjects & sceneObjs );
+		void doUpdateCulled( CpuUpdater::DirtyObjects & sceneObjs );
 		void doSortNodes();
+		void doInitGpuBuffers();
 		void doFillIndirect();
-		void doMakeDirty( Geometry const & object );
-		void doMakeDirty( BillboardBase const & object );
-		void doCullGeometries();
-		void doCullBillboards();
-		void doAddSubmesh( SubmeshRenderNode const & node
+		void doMarkDirty( CpuUpdater::DirtyObjects & sceneObjs
+			, std::vector< SubmeshRenderNode const * > & dirtySubmeshes
+			, std::vector< BillboardRenderNode const * > & dirtyBillboards );
+		void duUpdateCulledSubmeshes( std::vector< SubmeshRenderNode const * > const & dirtySubmeshes );
+		void duUpdateCulledBillboards( std::vector< BillboardRenderNode const * > const & dirtyBillboards );
+		void doMakeDirty( Geometry const & object
+			, std::vector< SubmeshRenderNode const * > & dirtySubmeshes )const;
+		void doMakeDirty( BillboardBase const & object
+			, std::vector< BillboardRenderNode const * > & dirtyBillboards )const;
+		void doAddSubmesh( CulledNodeT< SubmeshRenderNode > const & culled
 			, RenderNodesPass const & renderPass
 			, SidedNodePipelineMapT< SubmeshRenderNode > & sorted
 			, SidedObjectNodePipelineMapT< SubmeshRenderNode > & sortedInstanced
 			, PipelineBufferArray & nodesIds );
-		void doAddBillboard( BillboardRenderNode const & node
-			, RenderNodesPass const & renderPass
-			, SidedNodePipelineMapT< BillboardRenderNode > & sorted
-			, PipelineBufferArray & nodesIds );
-		void doRemoveSubmesh( SubmeshRenderNode const & node
-			, RenderNodesPass const & renderPass
-			, SidedNodePipelineMapT< SubmeshRenderNode > & sorted
-			, SidedObjectNodePipelineMapT< SubmeshRenderNode > & sortedInstanced
-			, PipelineBufferArray & nodesIds );
-		void doRemoveBillboard( BillboardRenderNode const & node
+		void doAddBillboard( CulledNodeT< BillboardRenderNode > const & culled
 			, RenderNodesPass const & renderPass
 			, SidedNodePipelineMapT< BillboardRenderNode > & sorted
 			, PipelineBufferArray & nodesIds );
@@ -241,22 +247,18 @@ namespace castor3d
 	protected:
 		Camera * m_camera;
 		uint32_t m_index;
-		bool m_allChanged{ true };
+		bool m_first{ true };
+		bool m_anyChanged{ true };
 		bool m_culledChanged{ true };
-		bool m_sceneDirty{ true };
-		bool m_cameraDirty{ true };
-		float m_minCullersZ{ 0.0f };
-		NodeArrayT< SubmeshRenderNode > m_dirtySubmeshes;
-		NodeArrayT< BillboardRenderNode > m_dirtyBillboards;
+		FramePassTimerUPtr m_timer;
+		FramePassTimerUPtr m_timerDirty;
+		FramePassTimerUPtr m_timerCompute;
+		FramePassTimerUPtr m_timerIndirect;
 
 		NodeArrayT< SubmeshRenderNode > m_culledSubmeshes;
 		NodeArrayT< BillboardRenderNode > m_culledBillboards;
 
 		std::map< RenderNodesPass const *, RenderPassBuffers > m_renderPasses;
-
-		OnSceneChangedConnection m_sceneChanged;
-		OnSceneNodeChangedConnection m_sceneNodeChanged;
-		OnCameraChangedConnection m_cameraChanged;
 	};
 }
 

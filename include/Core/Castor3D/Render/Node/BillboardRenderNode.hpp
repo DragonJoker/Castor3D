@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Buffer/BufferModule.hpp"
 #include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 namespace castor3d
 {
@@ -24,7 +25,9 @@ namespace castor3d
 		C3D_API BillboardRenderNode & operator=( BillboardRenderNode && ) = delete;
 
 		C3D_API BillboardRenderNode( Pass & pass
-			, DataType & data );
+			, DataType & data
+			, ModelBufferConfiguration & modelData
+			, BillboardUboConfiguration & billboardData );
 
 		C3D_API uint32_t getId()const;
 		C3D_API uint32_t getInstanceCount()const;
@@ -37,6 +40,8 @@ namespace castor3d
 		Pass & pass;
 		DataType & data;
 		InstanceType & instance;
+		ModelBufferConfiguration & modelData;
+		BillboardUboConfiguration & billboardData;
 	};
 }
 
