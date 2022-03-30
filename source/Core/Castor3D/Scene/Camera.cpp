@@ -17,11 +17,6 @@ namespace castor3d
 		, m_frustum{ m_viewport }
 		, m_ownProjection{ ownProjMtx }
 	{
-		m_notifyIndex = node.onChanged.connect( [this]( SceneNode const & pnode )
-			{
-				onNodeChanged( pnode );
-			} );
-		onNodeChanged( node );
 	}
 
 	Camera::Camera( castor::String const & name
@@ -34,19 +29,6 @@ namespace castor3d
 			, Viewport{ *scene.getEngine() }
 			, ownProjMtx }
 	{
-	}
-
-	void Camera::attachTo( SceneNode & node )
-	{
-		if ( &node != getParent() )
-		{
-			MovableObject::attachTo( node );
-			m_notifyIndex = node.onChanged.connect( [this]( SceneNode const & pnode )
-				{
-					onNodeChanged( pnode );
-				} );
-			onNodeChanged( node );
-		}
 	}
 
 	void Camera::updateFrustum()
@@ -67,24 +49,20 @@ namespace castor3d
 
 		if ( node )
 		{
-			bool modified = m_viewport.update();
+			m_viewport.update();
+			auto position = node->getDerivedPosition();
+			auto const & orientation = node->getDerivedOrientation();
+			castor::Point3f right{ 1.0, 0.0, 0.0 };
+			castor::Point3f up{ 0.0, 1.0, 0.0 };
+			orientation.transform( right, right );
+			orientation.transform( up, up );
+			castor::Point3f front{ castor::point::cross( right, up ) };
+			up = castor::point::cross( front, right );
 
-			if ( modified || m_nodeChanged )
-			{
-				auto position = node->getDerivedPosition();
-				auto const & orientation = node->getDerivedOrientation();
-				castor::Point3f right{ 1.0, 0.0, 0.0 };
-				castor::Point3f up{ 0.0, 1.0, 0.0 };
-				orientation.transform( right, right );
-				orientation.transform( up, up );
-				castor::Point3f front{ castor::point::cross( right, up ) };
-				up = castor::point::cross( front, right );
-
-				// Update view matrix
-				castor::matrix::lookAt( m_view, position, position + front, up );
-				updateFrustum();
-				m_nodeChanged = false;
-			}
+			// Update view matrix
+			castor::matrix::lookAt( m_view, position, position + front, up );
+			updateFrustum();
+			onGpuChanged( *this );
 		}
 	}
 
@@ -96,7 +74,7 @@ namespace castor3d
 		{
 			m_projection = projection;
 			updateFrustum();
-			onChanged( *this );
+			markDirty();
 		}
 	}
 
@@ -109,11 +87,5 @@ namespace castor3d
 			&& m_frustum.isVisible( geometry.getBoundingBox( submesh )
 				, sceneNode.getDerivedTransformationMatrix() );
 		return result;
-	}
-
-	void Camera::onNodeChanged( SceneNode const & node )
-	{
-		m_nodeChanged = true;
-		onChanged( *this );
 	}
 }

@@ -101,10 +101,9 @@ namespace castor3d
 
 	void ShadowMapPassPoint::update( CpuUpdater & updater )
 	{
-		getCuller().compute();
+		getCuller().update( updater );
 		m_outOfDate = m_outOfDate
-			|| getCuller().areAllChanged()
-			|| getCuller().areCulledChanged();
+			|| getCuller().areAnyChanged();
 		RenderNodesPass::update( updater );
 	}
 

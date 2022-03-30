@@ -1,5 +1,6 @@
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
@@ -63,11 +64,20 @@ namespace castor
 			, 1'000ull
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 	{
+#if C3D_DebugTimers
+		m_timerAnimations = castor::makeUnique< crg::FramePassTimer >( m_device.makeContext(), getScene()->getName() + "/Animations" );
+		m_engine.registerTimer( getScene()->getName() + "/Animations", *m_timerAnimations );
+#endif
 		cacheanmgrp::doInitialiseBuffer( m_skinningTransformsData );
 	}
 
 	ResourceCacheT< AnimatedObjectGroup, castor::String, AnimatedObjectGroupCacheTraits >::~ResourceCacheT()
 	{
+#if C3D_DebugTimers
+		m_engine.unregisterTimer( getScene()->getName() + "/Animations", *m_timerAnimations );
+		m_timerAnimations.reset();
+#endif
+
 		if ( m_skinningTransformsData )
 		{
 			m_device.bufferPool->putBuffer( m_skinningTransformsData );
@@ -112,7 +122,16 @@ namespace castor
 
 	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::update( CpuUpdater & updater )
 	{
+#if C3D_DebugTimers
+		auto block( m_timerAnimations->start() );
+#endif
 		auto lock( castor::makeUniqueLock( *this ) );
+
+		for ( auto & group : *this )
+		{
+			group.second->update( updater );
+		}
+
 		auto skinningTransformsBuffer = m_skinningTransformsData.getData();
 
 		for ( auto & pair : m_skeletonEntries )

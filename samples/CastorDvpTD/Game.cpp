@@ -23,13 +23,20 @@
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
+#define Cheat 0
+
 namespace castortd
 {
 	namespace game
 	{
 #if defined( NDEBUG )
+#	if Cheat
+		constexpr uint32_t InitialLives = 500u;
+		constexpr uint32_t InitialOre = 75000u;
+#	else
 		constexpr uint32_t InitialLives = 5u;
 		constexpr uint32_t InitialOre = 750u;
+#	endif
 #else
 		constexpr uint32_t InitialLives = 1u;
 		constexpr uint32_t InitialOre = 75000u;
@@ -140,7 +147,6 @@ namespace castortd
 
 	Game::~Game()
 	{
-		m_scene.getEngine()->unregisterTimer( "CastorDvpTD/Update", *m_updateTimer );
 	}
 
 	void Game::reset()
@@ -202,8 +208,6 @@ namespace castortd
 			}
 		}
 
-		m_scene.setChanged();
-
 		auto & node = *m_path.rbegin();
 		doAddTarget( getCell( int( node.m_x ), int( node.m_y ) ) );
 
@@ -236,11 +240,8 @@ namespace castortd
 		if ( m_started && !m_paused )
 		{
 			auto block = m_updateTimer->start();
-#if !defined( NDEBUG )
-			m_elapsed = std::chrono::duration_cast< castor::Milliseconds >( Clock::now() - m_saved );
-#else
-			m_elapsed = std::chrono::duration_cast< castor::Milliseconds >( Clock::now() - m_saved );
-#endif
+			m_elapsed = std::min( 40_ms
+				, std::chrono::duration_cast< castor::Milliseconds >( Clock::now() - m_saved ) );
 			doUpdateBullets();
 			doUpdateBoulders();
 			doUpdateTowers();
@@ -340,8 +341,7 @@ namespace castortd
 		if ( m_bulletsCache.empty() )
 		{
 			castor::String name = cuT( "Bullet_" ) + castor::string::toString( ++m_totalBullets );
-			auto node = m_scene.getSceneNodeCache().add( name
-				, m_scene ).lock();
+			auto node = m_scene.getSceneNodeCache().add( name ).lock();
 			auto geometry = m_scene.getGeometryCache().create( name
 				, m_scene
 				, *node
@@ -374,8 +374,7 @@ namespace castortd
 		if ( m_bouldersCache.empty() )
 		{
 			castor::String name = cuT( "Boulder_" ) + castor::string::toString( ++m_totalBoulders );
-			auto node = m_scene.getSceneNodeCache().add( name
-				, m_scene ).lock();
+			auto node = m_scene.getSceneNodeCache().add( name ).lock();
 			auto geometry = m_scene.getGeometryCache().create( name
 				, m_scene
 				, *node
@@ -437,9 +436,7 @@ namespace castortd
 		for ( auto & enemy : m_enemies )
 		{
 			auto distance = castor::point::distance( enemy->getNode().getDerivedPosition(), position );
-			castor3d::log::debug << distance << std::endl;
 			auto enemyRatio = distance / area;
-			castor3d::log::debug << enemyRatio << std::endl;
 
 			if ( enemyRatio <= 1.0 )
 			{
@@ -642,8 +639,7 @@ namespace castortd
 	void Game::doAddMapCube( Cell & p_cell )
 	{
 		castor::String name = cuT( "MapCube_" ) + std::to_string( p_cell.m_x ) + cuT( "x" ) + std::to_string( p_cell.m_y );
-		auto node = m_scene.getSceneNodeCache().add( name
-			, m_scene ).lock();
+		auto node = m_scene.getSceneNodeCache().add( name ).lock();
 		auto geometry = m_scene.getGeometryCache().create( name
 			, m_scene
 			, *node
@@ -688,8 +684,7 @@ namespace castortd
 	void Game::doAddTower( Cell & p_cell, Tower::CategoryPtr && p_category )
 	{
 		castor::String name = cuT( "Tower_" ) + std::to_string( p_cell.m_x ) + cuT( "x" ) + std::to_string( p_cell.m_y );
-		auto node = m_scene.getSceneNodeCache().add( name
-			, m_scene ).lock();
+		auto node = m_scene.getSceneNodeCache().add( name ).lock();
 		node->setPosition( convert( castor::Point2i{ p_cell.m_x, p_cell.m_y } ) + castor::Point3f{ 0, m_cellDimensions[1], 0 } );
 		node->attachTo( *m_mapNode );
 		auto mesh = doSelectMesh( *p_category );

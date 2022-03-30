@@ -12,6 +12,7 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 
@@ -30,7 +31,8 @@ namespace castor3d
 
 		C3D_API SubmeshRenderNode( Pass & pass
 			, DataType & data
-			, InstanceType & instance );
+			, InstanceType & instance
+			, ModelBufferConfiguration & modelData );
 
 		C3D_API uint32_t getId()const;
 		C3D_API uint32_t getInstanceCount()const;
@@ -43,6 +45,7 @@ namespace castor3d
 		Pass & pass;
 		DataType & data;
 		InstanceType & instance;
+		ModelBufferConfiguration & modelData;
 		// Morphing node
 		AnimatedMesh * mesh{};
 		// Skinning node

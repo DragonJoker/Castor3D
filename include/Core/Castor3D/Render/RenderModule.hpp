@@ -650,6 +650,24 @@ namespace castor3d
 		castor::Matrix4x4f bgMtxView;
 		castor::Matrix4x4f bgMtxProj;
 		bool isSafeBanded{ true };
+		struct DirtyObjects
+		{
+			bool isEmpty()const
+			{
+				return dirtyNodes.empty()
+					&& dirtyGeometries.empty()
+					&& dirtyBillboards.empty()
+					&& dirtyLights.empty()
+					&& dirtyCameras.empty();
+			}
+
+			std::vector< SceneNode * > dirtyNodes;
+			std::vector< Geometry * > dirtyGeometries;
+			std::vector< BillboardBase * > dirtyBillboards;
+			std::vector< Light * > dirtyLights;
+			std::vector< Camera * > dirtyCameras;
+		};
+		std::map< Scene const *, DirtyObjects > dirtyScenes;
 	};
 
 	struct GpuUpdater

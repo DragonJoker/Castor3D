@@ -7,10 +7,14 @@ CU_ImplementCUSmartPtr( castor3d, BillboardRenderNode )
 namespace castor3d
 {
 	BillboardRenderNode::BillboardRenderNode( Pass & pass
-		, BillboardBase & data )
+		, BillboardBase & data
+		, ModelBufferConfiguration & modelData
+		, BillboardUboConfiguration & billboardData )
 		: pass{ pass }
 		, data{ data }
 		, instance{ data }
+		, modelData{ modelData }
+		, billboardData{ billboardData }
 	{
 	}
 

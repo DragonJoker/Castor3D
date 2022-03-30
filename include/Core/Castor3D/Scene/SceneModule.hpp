@@ -386,14 +386,11 @@ namespace castor3d
 	using OnSceneNodeChanged = castor::SignalT< OnSceneNodeChangedFunction >;
 	using OnSceneNodeChangedConnection = OnSceneNodeChanged::connection;
 
-	using SubmeshMaterialMap = std::map< Submesh const *, MaterialRPtr >;
-	using OnSubmeshMaterialChangedFunction = std::function< void( Geometry &, Submesh const &, MaterialRPtr oldMaterial, MaterialRPtr newMaterial) >;
-	using OnSubmeshMaterialChanged = castor::SignalT< OnSubmeshMaterialChangedFunction >;
-	using OnSubmeshMaterialChangedConnection = OnSubmeshMaterialChanged::connection;
+	using OnSceneNodeReparentFunction = std::function< void( SceneNode & ) >;
+	using OnSceneNodeReparent = castor::SignalT< OnSceneNodeReparentFunction >;
+	using OnSceneNodeReparentConnection = OnSceneNodeReparent::connection;
 
-	using OnBillboardMaterialChangedFunction = std::function< void( BillboardBase &, MaterialRPtr oldMaterial, MaterialRPtr newMaterial ) >;
-	using OnBillboardMaterialChanged = castor::SignalT< OnBillboardMaterialChangedFunction >;
-	using OnBillboardMaterialChangedConnection = OnBillboardMaterialChanged::connection;
+	using SubmeshMaterialMap = std::map< Submesh const *, MaterialRPtr >;
 
 	C3D_API castor::LoggerInstance & getLogger( Scene const & scene );
 	C3D_API Engine & getEngine( Scene const & scene );

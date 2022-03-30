@@ -70,15 +70,6 @@ namespace castor3d
 		C3D_API void fillBuffer( uint32_t index
 			, LightBuffer::LightData & data );
 		/**
-		 *\~english
-		 *\brief		Attaches this light to a SceneNode.
-		 *\param[in]	node	The new light's parent node.
-		 *\~french
-		 *\brief		Attache cette lumière au SceneNode donné.
-		 *\param[in]	node	Le nouveau node parent de cette lumière.
-		 */
-		C3D_API void attachTo( SceneNode & node )override;
-		/**
 		*\~english
 		*name
 		*	Getters.
@@ -90,11 +81,6 @@ namespace castor3d
 		C3D_API DirectionalLightSPtr getDirectionalLight()const;
 		C3D_API PointLightSPtr getPointLight()const;
 		C3D_API SpotLightSPtr getSpotLight()const;
-
-		bool hasChanged()const
-		{
-			return m_dirty;
-		}
 
 		LightType getLightType()const
 		{
@@ -309,7 +295,7 @@ namespace castor3d
 		void setShadowProducer( bool value )
 		{
 			m_shadowCaster = value;
-			onChanged( *this );
+			markDirty();
 		}
 
 		void setShadowMap( ShadowMapRPtr value, uint32_t index = 0u )
@@ -326,7 +312,7 @@ namespace castor3d
 		void setGlobalIlluminationType( GlobalIlluminationType value )
 		{
 			m_shadows.globalIllumination = value;
-			onChanged( *this );
+			markDirty();
 		}
 
 		void setShadowType( ShadowType value )
@@ -381,11 +367,7 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		OnLightChanged onChanged;
 		OnLightChanged onGPUChanged;
-
-	protected:
-		void onNodeChanged( SceneNode const & node );
 
 	protected:
 		bool m_enabled{ false };

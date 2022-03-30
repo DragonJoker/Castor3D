@@ -1,5 +1,6 @@
 #include "Castor3D/Scene/Scene.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
@@ -18,7 +19,9 @@
 #include "Castor3D/Render/RenderWindow.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp"
+#include "Castor3D/Render/Node/BillboardRenderNode.hpp"
 #include "Castor3D/Render/Node/SceneRenderNodes.hpp"
+#include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
@@ -152,20 +155,8 @@ namespace castor3d
 			, m_rootNode
 			, m_rootCameraNode
 			, m_rootObjectNode
-			, [this]( SceneNodeCache::ElementT & element )
-			{
-				m_nodeConnections.emplace( &element
-					, element.onChanged.connect( [this]( SceneNode const & node )
-						{
-							onNodeChanged( node );
-						} ) );
-				setChanged();
-			}
-			, [this]( SceneNodeCache::ElementT & element )
-			{
-				m_nodeConnections.erase( &element );
-				setChanged();
-			}
+			, castor::DummyFunctorT< SceneNodeCache >{}
+			, castor::DummyFunctorT< SceneNodeCache >{}
 			, MovableMergerT< SceneNodeCache >{ getName() }
 			, SceneNodeAttacherT< SceneNodeCache >{}
 			, SceneNodeDetacherT< SceneNodeCache >{} );
@@ -230,13 +221,6 @@ namespace castor3d
 		m_sceneNodeCache->add( ObjectRootNode, node, false );
 		node = m_rootCameraNode;
 		m_sceneNodeCache->add( CameraRootNode, node, false );
-		auto setThisChanged = [this]()
-		{
-			setChanged();
-		};
-		m_onParticleSystemChanged = m_particleSystemCache->onChanged.connect( setThisChanged );
-		m_onBillboardListChanged = m_billboardCache->onChanged.connect( setThisChanged );
-		m_onGeometryChanged = m_geometryCache->onChanged.connect( setThisChanged );
 		m_animatedObjectGroupCache->add( cuT( "C3D_Textures" ), *this );
 		auto & device = engine.getRenderSystem()->getRenderDevice();
 		auto data = device.graphicsData();
@@ -299,24 +283,24 @@ namespace castor3d
 	{
 		auto & engine = *getEngine();
 		auto & device = engine.getRenderSystem()->getRenderDevice();
-		m_timerSceneNodes = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/SceneNodes" );
-		engine.registerTimer( getName() + "SceneNodes", *m_timerSceneNodes );
-		m_timerBoundingBox = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/BoundingBoxes" );
-		engine.registerTimer( getName() + "BoundingBoxes", *m_timerBoundingBox );
-		m_timerAnimations = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/Animations" );
-		engine.registerTimer( getName() + "Animations", *m_timerAnimations );
-		m_timerMaterials = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/Materials" );
-		engine.registerTimer( getName() + "Materials", *m_timerMaterials );
-		m_timerLights = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/Lights" );
-		engine.registerTimer( getName() + "Lights", *m_timerLights );
-		m_timerRenderNodes = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/RenderNodes" );
-		engine.registerTimer( getName() + "RenderNodes", *m_timerRenderNodes );
-		m_timerAnimGroups = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/AnimGroups" );
-		engine.registerTimer( getName() + "AnimGroups", *m_timerAnimGroups );
-		m_timerParticlesCpu = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/ParticlesCPU" );
-		engine.registerTimer( getName() + "ParticlesCPU", *m_timerParticlesCpu );
 		m_timerParticlesGpu = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/ParticlesGPU" );
-		engine.registerTimer( getName() + "ParticlesGPU", *m_timerParticlesGpu );
+		engine.registerTimer( getName() + "/ParticlesGPU", *m_timerParticlesGpu );
+#if C3D_DebugTimers
+		m_timerSceneNodes = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/SceneNodes" );
+		engine.registerTimer( getName() + "/SceneNodes", *m_timerSceneNodes );
+		m_timerBoundingBox = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/BoundingBoxes" );
+		engine.registerTimer( getName() + "/BoundingBoxes", *m_timerBoundingBox );
+		m_timerMaterials = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/Materials" );
+		engine.registerTimer( getName() + "/Materials", *m_timerMaterials );
+		m_timerLights = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/Lights" );
+		engine.registerTimer( getName() + "/Lights", *m_timerLights );
+		m_timerParticlesCpu = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/ParticlesCPU" );
+		engine.registerTimer( getName() + "/ParticlesCPU", *m_timerParticlesCpu );
+		m_timerGpuUpdate = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/GPUUpdate" );
+		engine.registerTimer( getName() + "/GPUUpdate", *m_timerGpuUpdate );
+		m_timerMovables = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/Movables" );
+		engine.registerTimer( getName() + "/Movables", *m_timerMovables );
+#endif
 
 		m_animatedObjectGroupCache->initialise( device );
 		m_lightCache->initialise( device );
@@ -357,23 +341,23 @@ namespace castor3d
 			} ) );
 
 		auto & engine = *getEngine();
-		engine.unregisterTimer( getName() + "SceneNodes", *m_timerSceneNodes );
+#if C3D_DebugTimers
+		engine.unregisterTimer( getName() + "/SceneNodes", *m_timerSceneNodes );
 		m_timerSceneNodes.reset();
-		engine.unregisterTimer( getName() + "BoundingBoxes", *m_timerBoundingBox );
+		engine.unregisterTimer( getName() + "/BoundingBoxes", *m_timerBoundingBox );
 		m_timerBoundingBox.reset();
-		engine.unregisterTimer( getName() + "Animations", *m_timerAnimations );
-		m_timerAnimations.reset();
-		engine.unregisterTimer( getName() + "Materials", *m_timerMaterials );
+		engine.unregisterTimer( getName() + "/Materials", *m_timerMaterials );
 		m_timerMaterials.reset();
-		engine.unregisterTimer( getName() + "Lights", *m_timerLights );
+		engine.unregisterTimer( getName() + "/Lights", *m_timerLights );
 		m_timerLights.reset();
-		engine.unregisterTimer( getName() + "RenderNodes", *m_timerRenderNodes );
-		m_timerRenderNodes.reset();
-		engine.unregisterTimer( getName() + "AnimGroups", *m_timerAnimGroups );
-		m_timerAnimGroups.reset();
-		engine.unregisterTimer( getName() + "ParticlesCPU", *m_timerParticlesCpu );
+		engine.unregisterTimer( getName() + "/ParticlesCPU", *m_timerParticlesCpu );
 		m_timerParticlesCpu.reset();
-		engine.unregisterTimer( getName() + "ParticlesGPU", *m_timerParticlesGpu );
+		engine.unregisterTimer( getName() + "/GPUUpdate", *m_timerGpuUpdate );
+		m_timerGpuUpdate.reset();
+		engine.unregisterTimer( getName() + "/Movables", *m_timerMovables );
+		m_timerMovables.reset();
+#endif
+		engine.unregisterTimer( getName() + "/ParticlesGPU", *m_timerParticlesGpu );
 		m_timerParticlesGpu.reset();
 	}
 
@@ -381,53 +365,28 @@ namespace castor3d
 	{
 		if ( m_initialised )
 		{
-			updater.scene = this;
-			{
-				auto block( m_timerSceneNodes->start() );
-				m_rootNode->update();
-			}
-			{
-				auto block( m_timerBoundingBox->start() );
-				doUpdateBoundingBox();
-			}
-			{
-				auto block( m_timerAnimations->start() );
-				doUpdateAnimations( updater );
-			}
-			{
-				auto block( m_timerMaterials->start() );
-				doUpdateMaterials();
-			}
-			{
-				auto block( m_timerLights->start() );
-				m_lightCache->update( updater );
-			}
-			{
-				auto block( m_timerRenderNodes->start() );
-				m_renderNodes->update( updater );
-			}
-			{
-				auto block( m_timerAnimGroups->start() );
-				m_animatedObjectGroupCache->update( updater );
-			}
-			{
-				auto block( m_timerParticlesCpu->start() );
-				doUpdateParticles( updater );
-			}
-
 			onUpdate( *this );
-
-			if ( doUpdateLightsDependent() )
-			{
-				onChanged( *this );
-			}
-
+			updater.scene = this;
+			auto & sceneObjs = updater.dirtyScenes.emplace( this, CpuUpdater::DirtyObjects{} ).first->second;
+			doGatherDirty( sceneObjs );
+			doUpdateSceneNodes( updater, sceneObjs );
+			m_animatedObjectGroupCache->update( updater );
+			doUpdateMovables( updater, sceneObjs );
+			doUpdateBoundingBox();
+			doUpdateMaterials();
+			doUpdateLights( updater, sceneObjs );
+			m_renderNodes->update( updater );
+			doUpdateParticles( updater, sceneObjs );
+			doUpdateLightsDependent();
 			m_changed = false;
 		}
 	}
 
 	void Scene::update( GpuUpdater & updater )
 	{
+#if C3D_DebugTimers
+		auto block( m_timerGpuUpdate->start() );
+#endif
 		updater.scene = this;
 		doUpdateParticles( updater );
 		m_renderNodes->update( updater );
@@ -457,8 +416,6 @@ namespace castor3d
 		scene.getLightCache().mergeInto( *m_lightCache );
 		scene.getSceneNodeCache().mergeInto( *m_sceneNodeCache );
 		m_ambientLight = scene.getAmbientLight();
-		setChanged();
-
 		scene.cleanup();
 	}
 
@@ -587,11 +544,13 @@ namespace castor3d
 	void Scene::addEnvironmentMap( SceneNode & node )
 	{
 		m_reflectionMap->addNode( node );
+		markDirty( node );
 	}
 
 	void Scene::removeEnvironmentMap( SceneNode & node )
 	{
 		m_reflectionMap->removeNode( node );
+		markDirty( node );
 	}
 
 	bool Scene::hasEnvironmentMap( SceneNode & node )const
@@ -618,20 +577,106 @@ namespace castor3d
 		return group->addObject( sourceInfo, config, pass );
 	}
 
-	void Scene::registerLight( Light & light )
+	void Scene::markDirty( SceneNode & node )
 	{
-		m_lightConnections.emplace( light.getName()
-			, light.onChanged.connect( [this]( Light const & lgt )
+		if ( !node.isDisplayable() )
+		{
+			return;
+		}
+
+		std::vector< SceneNode * > work;
+		work.push_back( &node );
+
+		while ( !work.empty() )
+		{
+			auto & curNode = *work.back();
+			work.pop_back();
+			auto it = std::find( m_dirtyNodes.begin()
+				, m_dirtyNodes.end()
+				, &curNode );
+
+			if ( it != m_dirtyNodes.end() )
+			{
+				m_dirtyNodes.erase( it );
+			}
+
+			auto parent = curNode.getParent();
+
+			if ( !parent )
+			{
+				it = m_dirtyNodes.begin();
+			}
+			else
+			{
+				do
 				{
-					doUpdateLightDependent( lgt.getLightType()
-						, lgt.isShadowProducer()
-						, lgt.getExpectedGlobalIlluminationType() );
-				} ) );
+					it = std::find( m_dirtyNodes.begin()
+						, m_dirtyNodes.end()
+						, parent );
+					parent = parent->getParent();
+
+				}
+				while ( parent && it == m_dirtyNodes.end() );
+
+				if ( it == m_dirtyNodes.end() )
+				{
+					it = m_dirtyNodes.begin();
+				}
+				else
+				{
+					it = std::next( it );
+				}
+			}
+
+			m_dirtyNodes.insert( it, &curNode );
+
+			for ( auto & object : curNode.getObjects() )
+			{
+				markDirty( object.get() );
+			}
+
+			for ( auto child : curNode.getChildren() )
+			{
+				if ( auto nd = child.second.lock() )
+				{
+					work.push_back( nd.get() );
+				}
+			}
+		}
 	}
 
-	void Scene::unregisterLight( Light & light )
+	void Scene::markDirty( BillboardBase & object )
 	{
-		m_lightConnections.erase( light.getName() );
+		if ( !object.getNode()->isDisplayable() )
+		{
+			return;
+		}
+
+		auto it = std::find( m_dirtyBillboards.begin()
+			, m_dirtyBillboards.end()
+			, &object );
+
+		if ( it == m_dirtyBillboards.end() )
+		{
+			m_dirtyBillboards.emplace_back( &object );
+		}
+	}
+
+	void Scene::markDirty( MovableObject & object )
+	{
+		if ( !object.getParent()->isDisplayable() )
+		{
+			return;
+		}
+
+		auto it = std::find( m_dirtyObjects.begin()
+			, m_dirtyObjects.end()
+			, &object );
+
+		if ( it == m_dirtyObjects.end() )
+		{
+			m_dirtyObjects.emplace_back( &object );
+		}
 	}
 
 	PassTypeID Scene::getPassesType()const
@@ -727,10 +772,62 @@ namespace castor3d
 		m_lpvIndirectAttenuation = value;
 	}
 
+	void Scene::doGatherDirty( CpuUpdater::DirtyObjects & sceneObjs )
+	{
+		sceneObjs.dirtyNodes.insert( sceneObjs.dirtyNodes.end()
+			, m_dirtyNodes.begin()
+			, m_dirtyNodes.end() );
+
+		for ( auto movable : m_dirtyObjects )
+		{
+			switch ( movable->getType() )
+			{
+			case MovableType::eGeometry:
+				sceneObjs.dirtyGeometries.emplace_back( static_cast< Geometry * >( movable ) );
+				break;
+			case MovableType::eBillboard:
+				markDirty( *static_cast< BillboardBase * >( static_cast< BillboardList * >( movable ) ) );
+				break;
+			case MovableType::eParticleEmitter:
+				markDirty( *static_cast< ParticleSystem & >( *movable ).getBillboards() );
+				break;
+			case MovableType::eLight:
+				sceneObjs.dirtyLights.emplace_back( static_cast< Light * >( movable ) );
+				break;
+			case MovableType::eCamera:
+				sceneObjs.dirtyCameras.emplace_back( static_cast< Camera * >( movable ) );
+				break;
+			default:
+				break;
+			}
+		}
+
+		if ( !sceneObjs.dirtyCameras.empty() )
+		{
+			for ( auto & light : getLightCache() )
+			{
+				if ( light.second->getLightType() == LightType::eDirectional )
+				{
+					sceneObjs.dirtyLights.push_back( light.second.get() );
+				}
+			}
+		}
+
+		sceneObjs.dirtyBillboards.insert( sceneObjs.dirtyBillboards.end()
+			, m_dirtyBillboards.begin()
+			, m_dirtyBillboards.end() );
+		m_dirtyBillboards.clear();
+		m_dirtyObjects.clear();
+		m_dirtyNodes.clear();
+	}
+
 	void Scene::doUpdateBoundingBox()
 	{
-		float fmin = std::numeric_limits< float >::max();
-		float fmax = std::numeric_limits< float >::lowest();
+#if C3D_DebugTimers
+		auto block( m_timerBoundingBox->start() );
+#endif
+		constexpr float fmin = std::numeric_limits< float >::max();
+		constexpr float fmax = std::numeric_limits< float >::lowest();
 		castor::Point3f min{ fmin, fmin, fmin };
 		castor::Point3f max{ fmax, fmax, fmax };
 		m_geometryCache->forEach( [&min, &max]( Geometry const & geometry )
@@ -752,16 +849,95 @@ namespace castor3d
 		m_boundingBox.load( min, max );
 	}
 
-	void Scene::doUpdateAnimations( CpuUpdater & updater )
+	void Scene::doUpdateSceneNodes( CpuUpdater & updater
+		, CpuUpdater::DirtyObjects & sceneObjs )
 	{
-		m_animatedObjectGroupCache->forEach( [&updater]( AnimatedObjectGroup & group )
-			{
-				group.update( updater );
-			} );
+#if C3D_DebugTimers
+		auto block( m_timerSceneNodes->start() );
+#endif
+
+		for ( auto & node : sceneObjs.dirtyNodes )
+		{
+			node->update();
+		}
 	}
 
-	void Scene::doUpdateParticles( CpuUpdater & updater )
+	void Scene::doUpdateMovables( CpuUpdater & updater
+		, CpuUpdater::DirtyObjects & sceneObjs )
 	{
+#if C3D_DebugTimers
+		auto block( m_timerMovables->start() );
+#endif
+
+		for ( auto camera : sceneObjs.dirtyCameras )
+		{
+			camera->update();
+		}
+
+		for ( auto object : sceneObjs.dirtyGeometries )
+		{
+			bool dirty = false;
+
+			for ( auto & passIt : object->getIds() )
+			{
+				for ( auto & submeshIt : passIt.second )
+				{
+					object->fillEntry( *passIt.first
+						, *object->getParent()
+						, submeshIt.second.second->modelData );
+					dirty = dirty || passIt.first->getId() == 0;
+				}
+			}
+
+			if ( dirty )
+			{
+				markDirty( *object );
+			}
+		}
+
+		for ( auto object : sceneObjs.dirtyBillboards )
+		{
+			bool dirty = false;
+
+			for ( auto & billboardIt : object->getIds() )
+			{
+				object->fillEntry( *billboardIt.first
+					, *object->getNode()
+					, billboardIt.second.second->modelData );
+				billboardIt.second.second->billboardData.dimensions = object->getDimensions();
+				dirty = dirty || billboardIt.first->getId() == 0;
+			}
+
+			if ( dirty )
+			{
+				markDirty( *object );
+			}
+		}
+	}
+
+	void Scene::doUpdateLights( CpuUpdater & updater
+		, CpuUpdater::DirtyObjects & sceneObjs )
+	{
+#if C3D_DebugTimers
+		auto block( m_timerLights->start() );
+#endif
+
+		for ( auto light : sceneObjs.dirtyLights )
+		{
+			doUpdateLightDependent( light->getLightType()
+				, light->isShadowProducer()
+				, light->getExpectedGlobalIlluminationType() );
+		}
+
+		m_lightCache->update( updater );
+	}
+
+	void Scene::doUpdateParticles( CpuUpdater & updater
+		, CpuUpdater::DirtyObjects & sceneObjs )
+	{
+#if C3D_DebugTimers
+		auto block( m_timerParticlesCpu->start() );
+#endif
 		auto & cache = getParticleSystemCache();
 		auto lock( castor::makeUniqueLock( cache ) );
 		updater.index = 0u;
@@ -796,6 +972,10 @@ namespace castor3d
 
 	void Scene::doUpdateMaterials()
 	{
+#if C3D_DebugTimers
+		auto block( m_timerMaterials->start() );
+#endif
+
 		if ( m_dirtyMaterials )
 		{
 			auto & cache = getEngine()->getMaterialCache();
@@ -841,8 +1021,6 @@ namespace castor3d
 			{
 				m_giTypes[size_t( lightType )].insert( globalIllumination );
 			}
-
-			onChanged( *this );
 		}
 
 		return changed;

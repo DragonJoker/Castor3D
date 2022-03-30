@@ -211,7 +211,7 @@ namespace GuiCommon
 
 		if ( !m_scene.getSceneNodeCache().has( name ) )
 		{
-			result = m_scene.getSceneNodeCache().add( name, m_scene ).lock();
+			result = m_scene.getSceneNodeCache().add( name ).lock();
 		}
 		else
 		{
@@ -268,7 +268,6 @@ namespace GuiCommon
 				auto scale = obb.getDimensions() / 2.0f;
 				m_obbNode->setScale( scale );
 				m_obbNode->setPosition( obb.getCenter() );
-				m_obbNode->update();
 			}
 
 			if ( m_obbSelectedSubmeshNode )
@@ -276,7 +275,6 @@ namespace GuiCommon
 				auto & sobb = m_object->getBoundingBox( *m_submesh );
 				m_obbSelectedSubmeshNode->setScale( sobb.getDimensions() / 2.0f );
 				m_obbSelectedSubmeshNode->setPosition( sobb.getCenter() );
-				m_obbSelectedSubmeshNode->update();
 			}
 
 			uint32_t i = 0u;
@@ -288,7 +286,6 @@ namespace GuiCommon
 					auto & ssobb = m_object->getBoundingBox( *submesh );
 					m_obbSubmeshNodes[i]->setScale( ssobb.getDimensions() / 2.0f );
 					m_obbSubmeshNodes[i]->setPosition( ssobb.getCenter() );
-					m_obbSubmeshNodes[i]->update();
 					++i;
 				}
 			}

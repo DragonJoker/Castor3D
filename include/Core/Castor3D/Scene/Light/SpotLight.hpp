@@ -120,7 +120,6 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void updateNode( SceneNode const & node )override;
 		void doFillBuffer( LightBuffer::LightData & data )const override;
 
 	private:

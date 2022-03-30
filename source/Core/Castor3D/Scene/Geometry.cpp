@@ -108,7 +108,7 @@ namespace castor3d
 					getScene()->addEnvironmentMap( *getParent() );
 				}
 
-				onMaterialChanged( *this, submesh, oldMaterial, material );
+				markDirty();
 			}
 		}
 		else
@@ -201,18 +201,33 @@ namespace castor3d
 		if ( itPass != m_ids.end() )
 		{
 			auto it = itPass->second.find( submesh.getId() );
-			return it == itPass->second.end() ? 0u : it->second;
+			return it == itPass->second.end() ? 0u : it->second.first;
 		}
 
 		return 0u;
 	}
 
+	SubmeshRenderNode const * Geometry::getRenderNode( Pass const & pass
+		, Submesh const & submesh )const
+	{
+		auto itPass = m_ids.find( &pass );
+
+		if ( itPass != m_ids.end() )
+		{
+			auto it = itPass->second.find( submesh.getId() );
+			return it == itPass->second.end() ? nullptr : it->second.second;
+		}
+
+		return nullptr;
+	}
+
 	void Geometry::setId( Pass const & pass
 		, Submesh const & submesh
+		, SubmeshRenderNode const * node
 		, uint32_t id )
 	{
-		auto itPass = m_ids.emplace( &pass, std::unordered_map< uint32_t, uint32_t >{} ).first;
-		itPass->second[submesh.getId()] = id;
+		auto itPass = m_ids.emplace( &pass, std::unordered_map< uint32_t, std::pair< uint32_t, SubmeshRenderNode const * > >{} ).first;
+		itPass->second[submesh.getId()] = { id, node };
 	}
 
 	void Geometry::doUpdateMesh()

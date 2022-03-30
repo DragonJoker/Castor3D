@@ -170,6 +170,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/MaterialCache.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/OverlayCache.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/PluginCache.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/SceneNodeCache.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/ShaderCache.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/TargetCache.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/TextureCache.cpp
@@ -188,6 +189,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/ObjectCacheBase.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/OverlayCache.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/PluginCache.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/SceneNodeCache.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/ShaderCache.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/TargetCache.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/TextureCache.hpp

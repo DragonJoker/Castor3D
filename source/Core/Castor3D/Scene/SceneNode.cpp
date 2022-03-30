@@ -1,7 +1,10 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 
 #include "Castor3D/Miscellaneous/Logger.hpp"
+#include "Castor3D/Scene/BillboardList.hpp"
+#include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/MovableObject.hpp"
+#include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Animation/SceneNodeAnimation.hpp"
 
@@ -24,6 +27,7 @@ namespace castor3d
 			m_name += castor::string::toString( Count );
 		}
 
+		m_scene.markDirty( *this );
 		Count++;
 	}
 
@@ -44,39 +48,22 @@ namespace castor3d
 	void SceneNode::update()
 	{
 		doComputeMatrix();
-		{
-			auto lock( castor::makeUniqueLock( m_childrenLock ) );
-
-			for ( auto it : m_children )
-			{
-				auto child = it.second.lock();
-
-				if ( child )
-				{
-					child->update();
-				}
-			}
-		}
 	}
 
 	void SceneNode::attachObject( MovableObject & object )
 	{
 		object.detach();
-		{
-			auto lock( castor::makeUniqueLock( m_objectsLock ) );
-			m_objects.push_back( object );
-		}
+		m_objects.push_back( object );
 		object.attachTo( *this );
 	}
 
 	void SceneNode::detachObject( MovableObject & object )
 	{
-		auto lock( castor::makeUniqueLock( m_objectsLock ) );
 		auto it = std::find_if( m_objects.begin()
 			, m_objects.end()
 			, [&object]( std::reference_wrapper< MovableObject > obj )
 			{
-				return obj.get().getName() == object.getName();
+				return &obj.get() == &object;
 			} );
 
 		if ( it != m_objects.end() )
@@ -89,19 +76,25 @@ namespace castor3d
 	{
 		auto old = getParent();
 
-		if ( old )
+		if ( old != &node )
 		{
-			m_parent = nullptr;
-			old->detachChild( shared_from_this() );
-		}
+			if ( old )
+			{
+				m_parent = nullptr;
+				old->detachChild( shared_from_this() );
+			}
 
-		m_parent = &node;
+			m_parent = &node;
 
-		if ( m_parent )
-		{
-			m_displayable = m_parent->m_displayable;
-			m_parent->addChild( shared_from_this() );
-			m_mtxChanged = true;
+			if ( m_parent )
+			{
+				m_displayable = m_parent->m_displayable;
+				m_parent->addChild( shared_from_this() );
+				m_mtxChanged = true;
+			}
+
+			onParentChanged( *this );
+			m_scene.markDirty( *this );
 		}
 	}
 
@@ -115,12 +108,12 @@ namespace castor3d
 			m_parent = nullptr;
 			parent->detachChild( shared_from_this() );
 			m_mtxChanged = true;
+			m_scene.markDirty( *this );
 		}
 	}
 
-	bool SceneNode::hasChild( castor::String const & name )
+	bool SceneNode::hasChild( castor::String const & name )const
 	{
-		auto lock( castor::makeUniqueLock( m_childrenLock ) );
 		bool found = false;
 
 		if ( m_children.find( name ) == m_children.end() )
@@ -138,7 +131,6 @@ namespace castor3d
 
 	void SceneNode::addChild( SceneNodeSPtr child )
 	{
-		auto lock( castor::makeUniqueLock( m_childrenLock ) );
 		auto name = child->getName();
 
 		if ( m_children.find( name ) == m_children.end() )
@@ -165,7 +157,6 @@ namespace castor3d
 
 	void SceneNode::detachChild( castor::String const & childName )
 	{
-		auto lock( castor::makeUniqueLock( m_childrenLock ) );
 		auto it = m_children.find( childName );
 
 		if ( it != m_children.end() )
@@ -187,10 +178,7 @@ namespace castor3d
 	void SceneNode::detachChildren()
 	{
 		SceneNodeMap flush;
-		{
-			auto lock( castor::makeUniqueLock( m_childrenLock ) );
-			std::swap( flush, m_children );
-		}
+		std::swap( flush, m_children );
 
 		for ( auto it : flush )
 		{
@@ -223,6 +211,7 @@ namespace castor3d
 		m_orientation *= orientation;
 		doUpdateChildsDerivedTransform();
 		m_mtxChanged = true;
+		m_scene.markDirty( *this );
 	}
 
 	void SceneNode::translate( castor::Point3f const & position )
@@ -230,6 +219,7 @@ namespace castor3d
 		m_position += position;
 		doUpdateChildsDerivedTransform();
 		m_mtxChanged = true;
+		m_scene.markDirty( *this );
 	}
 
 	void SceneNode::scale( castor::Point3f const & scale )
@@ -237,6 +227,7 @@ namespace castor3d
 		m_scale *= scale;
 		doUpdateChildsDerivedTransform();
 		m_mtxChanged = true;
+		m_scene.markDirty( *this );
 	}
 
 	SceneNodeAnimation & SceneNode::createAnimation( castor::String const & name )
@@ -262,6 +253,7 @@ namespace castor3d
 		m_orientation = orientation;
 		doUpdateChildsDerivedTransform();
 		m_mtxChanged = true;
+		m_scene.markDirty( *this );
 	}
 
 	void SceneNode::setPosition( castor::Point3f const & position )
@@ -269,6 +261,7 @@ namespace castor3d
 		m_position = position;
 		doUpdateChildsDerivedTransform();
 		m_mtxChanged = true;
+		m_scene.markDirty( *this );
 	}
 
 	void SceneNode::setScale( castor::Point3f const & scale )
@@ -276,6 +269,7 @@ namespace castor3d
 		m_scale = scale;
 		doUpdateChildsDerivedTransform();
 		m_mtxChanged = true;
+		m_scene.markDirty( *this );
 	}
 
 	castor::Point3f SceneNode::getDerivedPosition()const
@@ -331,8 +325,8 @@ namespace castor3d
 	{
 		if ( m_visible != visible )
 		{
-			getScene()->setChanged();
 			m_visible = visible;
+			getScene()->markDirty( *this );
 		}
 	}
 
@@ -344,19 +338,16 @@ namespace castor3d
 
 	SceneNode::SceneNodeMap const & SceneNode::getChildren()const
 	{
-		auto lock( castor::makeUniqueLock( m_childrenLock ) );
 		return m_children;
 	}
 
 	SceneNodeSPtr SceneNode::getChild( castor::String const & name )const
 	{
-		auto lock( castor::makeUniqueLock( m_childrenLock ) );
 		return ( m_children.find( name ) != m_children.end() ? m_children.find( name )->second.lock() : nullptr );
 	}
 
 	SceneNode::MovableArray const & SceneNode::getObjects()const
 	{
-		auto lock( castor::makeUniqueLock( m_objectsLock ) );
 		return m_objects;
 	}
 
@@ -383,14 +374,11 @@ namespace castor3d
 			}
 
 			m_derivedMtxChanged = false;
-			onChanged( *this );
 		}
 	}
 
 	void SceneNode::doUpdateChildsDerivedTransform()
 	{
-		auto lock( castor::makeUniqueLock( m_childrenLock ) );
-
 		for ( auto it : m_children )
 		{
 			SceneNodeSPtr current = it.second.lock();

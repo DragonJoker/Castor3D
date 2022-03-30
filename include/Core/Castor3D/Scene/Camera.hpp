@@ -63,15 +63,6 @@ namespace castor3d
 			, bool ownProjMtx = false );
 		/**
 		 *\~english
-		 *\brief		Attaches this light to a Material
-		 *\param[in]	node	The new light's parent node
-		 *\~french
-		 *\brief		Attache cette lumière au node donné
-		 *\param[in]	node	Le nouveau node parent de cette lumière
-		 */
-		C3D_API void attachTo( SceneNode & node )override;
-		/**
-		 *\~english
 		 *\brief		Updates the frustum.
 		 *\~french
 		 *\brief		Met à jour le frustum.
@@ -233,7 +224,7 @@ namespace castor3d
 		void setView( castor::Matrix4x4f const & view )
 		{
 			m_view = view;
-			onChanged( *this );
+			markDirty();
 		}
 
 		void resize( uint32_t width, uint32_t height )
@@ -246,36 +237,31 @@ namespace castor3d
 			if ( m_viewport.getSize() != size )
 			{
 				m_viewport.resize( size );
-				onChanged( *this );
+				markDirty();
 			}
 		}
 
 		void setViewportType( ViewportType value )
 		{
 			m_viewport.updateType( value );
-			onChanged( *this );
+			markDirty();
 		}
 
 		void setExposure( float value )
 		{
 			m_hdrConfig.exposure = value;
-			onChanged( *this );
 		}
 
 		void setGamma( float value )
 		{
 			m_hdrConfig.gamma = value;
-			onChanged( *this );
 		}
 		/**@}*/
-
-	private:
-		void onNodeChanged( SceneNode const & node );
 
 	public:
 		//!\~english	The signal raised when the camera has changed.
 		//!\~french		Le signal levé lorsque la caméra a changé.
-		mutable OnCameraChanged onChanged;
+		mutable OnCameraChanged onGpuChanged;
 
 	private:
 		friend class Scene;
@@ -283,7 +269,6 @@ namespace castor3d
 		Frustum m_frustum;
 		castor::Matrix4x4f m_view;
 		HdrConfig m_hdrConfig;
-		bool m_nodeChanged{ true };
 		bool m_ownProjection{ false };
 		castor::Matrix4x4f m_projection;
 	};

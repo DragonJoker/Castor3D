@@ -329,7 +329,7 @@ namespace castor3d
 			m_scene->update( updater );
 			m_camera->update();
 
-			m_culler->compute();
+			m_culler->update( updater );
 			m_matrixUbo.cpuUpdate( m_camera->getView()
 				, m_camera->getProjection( false ) );
 			m_hdrConfigUbo.cpuUpdate( m_camera->getHdrConfig() );

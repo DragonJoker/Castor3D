@@ -244,8 +244,7 @@ namespace castor3d
 		castor::Matrix4x4f prvModel;
 		castor::Matrix4x4f curModel;
 		castor::Matrix4x4f normal;
-		castor::Point4ui textures0;
-		castor::Point4ui textures1;
+		castor::Point4ui textures[2];
 		castor::Point4i countsIDs;
 	};
 	/**

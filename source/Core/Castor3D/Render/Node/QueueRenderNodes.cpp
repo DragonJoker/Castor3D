@@ -330,34 +330,39 @@ namespace castor3d
 			{
 				for ( auto sidedCulled : itBuffer.second )
 				{
-					auto culledNode = sidedCulled.first;
-					auto & submesh = culledNode->data;
-					auto & pass = culledNode->pass;
-					auto material = pass.getOwner();
-					auto programFlags = submesh.getProgramFlags( material );
-					auto sceneFlags = scene.getFlags();
-					auto textures = pass.getTexturesMask();
-					auto pipelineFlags = renderPass.createPipelineFlags( pass
-						, textures
-						, programFlags
-						, sceneFlags
-						, submesh.getTopology()
-						, sidedCulled.second );
-					auto vertexLayouts = submesh.getGeometryBuffers( renderPass.getShaderFlags()
-						, pipelineFlags.programFlags
-						, material
-						, textures
-						, checkFlag( pipelineFlags.programFlags, ProgramFlag::eForceTexCoords ) ).layouts;
-					auto & pipeline = sidedCulled.second
-						? renderPass.prepareFrontPipeline( pipelineFlags
-							, vertexLayouts )
-						: renderPass.prepareBackPipeline( pipelineFlags
-							, vertexLayouts );
-					queuerndnd::doAddRenderNode( pipeline
-						, *culledNode
-						, submeshNodes );
-					renderPass.initialiseAdditionalDescriptor( pipeline
-						, shadowMaps );
+					auto culled = sidedCulled.first;
+
+					if ( !culled.culled )
+					{
+						auto culledNode = culled.node;
+						auto & submesh = culledNode->data;
+						auto & pass = culledNode->pass;
+						auto material = pass.getOwner();
+						auto programFlags = submesh.getProgramFlags( material );
+						auto sceneFlags = scene.getFlags();
+						auto textures = pass.getTexturesMask();
+						auto pipelineFlags = renderPass.createPipelineFlags( pass
+							, textures
+							, programFlags
+							, sceneFlags
+							, submesh.getTopology()
+							, sidedCulled.second );
+						auto vertexLayouts = submesh.getGeometryBuffers( renderPass.getShaderFlags()
+							, pipelineFlags.programFlags
+							, material
+							, textures
+							, checkFlag( pipelineFlags.programFlags, ProgramFlag::eForceTexCoords ) ).layouts;
+						auto & pipeline = sidedCulled.second
+							? renderPass.prepareFrontPipeline( pipelineFlags
+								, vertexLayouts )
+							: renderPass.prepareBackPipeline( pipelineFlags
+								, vertexLayouts );
+						queuerndnd::doAddRenderNode( pipeline
+							, *culledNode
+							, submeshNodes );
+						renderPass.initialiseAdditionalDescriptor( pipeline
+							, shadowMaps );
+					}
 				}
 			}
 		}
@@ -372,34 +377,39 @@ namespace castor3d
 					{
 						for ( auto sidedCulled : itSubmesh.second )
 						{
-							auto culledNode = sidedCulled.first;
-							auto & submesh = culledNode->data;
-							auto & pass = culledNode->pass;
-							auto material = pass.getOwner();
-							auto programFlags = submesh.getProgramFlags( material );
-							auto sceneFlags = scene.getFlags();
-							auto textures = pass.getTexturesMask();
-							auto pipelineFlags = renderPass.createPipelineFlags( pass
-								, textures
-								, programFlags
-								, sceneFlags
-								, submesh.getTopology()
-								, sidedCulled.second );
-							auto vertexLayouts = submesh.getGeometryBuffers( renderPass.getShaderFlags()
-								, pipelineFlags.programFlags
-								, material
-								, textures
-								, checkFlag( pipelineFlags.programFlags, ProgramFlag::eForceTexCoords ) ).layouts;
-							auto & pipeline = sidedCulled.second
-								? renderPass.prepareFrontPipeline( pipelineFlags
-									, vertexLayouts )
-								: renderPass.prepareBackPipeline( pipelineFlags
-									, vertexLayouts );
-							queuerndnd::doAddRenderNode( pipeline
-								, *culledNode
-								, instancedSubmeshNodes );
-							renderPass.initialiseAdditionalDescriptor( pipeline
-								, shadowMaps );
+							auto culled = sidedCulled.first;
+
+							if ( !culled.culled )
+							{
+								auto culledNode = culled.node;
+								auto & submesh = culledNode->data;
+								auto & pass = culledNode->pass;
+								auto material = pass.getOwner();
+								auto programFlags = submesh.getProgramFlags( material );
+								auto sceneFlags = scene.getFlags();
+								auto textures = pass.getTexturesMask();
+								auto pipelineFlags = renderPass.createPipelineFlags( pass
+									, textures
+									, programFlags
+									, sceneFlags
+									, submesh.getTopology()
+									, sidedCulled.second );
+								auto vertexLayouts = submesh.getGeometryBuffers( renderPass.getShaderFlags()
+									, pipelineFlags.programFlags
+									, material
+									, textures
+									, checkFlag( pipelineFlags.programFlags, ProgramFlag::eForceTexCoords ) ).layouts;
+								auto & pipeline = sidedCulled.second
+									? renderPass.prepareFrontPipeline( pipelineFlags
+										, vertexLayouts )
+									: renderPass.prepareBackPipeline( pipelineFlags
+										, vertexLayouts );
+								queuerndnd::doAddRenderNode( pipeline
+									, *culledNode
+									, instancedSubmeshNodes );
+								renderPass.initialiseAdditionalDescriptor( pipeline
+									, shadowMaps );
+							}
 						}
 					}
 				}
@@ -412,25 +422,30 @@ namespace castor3d
 			{
 				for ( auto sidedCulled : itBuffer.second )
 				{
-					auto culledNode = sidedCulled.first;
-					auto & billboard = culledNode->data;
-					auto & pass = culledNode->pass;
-					auto programFlags = billboard.getProgramFlags();
-					auto sceneFlags = scene.getFlags();
-					auto textures = pass.getTexturesMask();
-					auto pipelineFlags = renderPass.createPipelineFlags( pass
-						, textures
-						, programFlags
-						, sceneFlags
-						, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP
-						, sidedCulled.second );
-					auto & pipeline = renderPass.prepareBackPipeline( pipelineFlags
-						, billboard.getGeometryBuffers().layouts );
-					queuerndnd::doAddRenderNode( pipeline
-						, *culledNode
-						, billboardNodes );
-					renderPass.initialiseAdditionalDescriptor( pipeline
-						, shadowMaps );
+					auto culled = sidedCulled.first;
+
+					if ( !culled.culled )
+					{
+						auto culledNode = culled.node;
+						auto & billboard = culledNode->data;
+						auto & pass = culledNode->pass;
+						auto programFlags = billboard.getProgramFlags();
+						auto sceneFlags = scene.getFlags();
+						auto textures = pass.getTexturesMask();
+						auto pipelineFlags = renderPass.createPipelineFlags( pass
+							, textures
+							, programFlags
+							, sceneFlags
+							, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP
+							, sidedCulled.second );
+						auto & pipeline = renderPass.prepareBackPipeline( pipelineFlags
+							, billboard.getGeometryBuffers().layouts );
+						queuerndnd::doAddRenderNode( pipeline
+							, *culledNode
+							, billboardNodes );
+						renderPass.initialiseAdditionalDescriptor( pipeline
+							, shadowMaps );
+					}
 				}
 			}
 		}

@@ -49,7 +49,7 @@ namespace castor3d
 		C3D_API EnvironmentMap( crg::ResourceHandler & handler
 			, RenderDevice const & device
 			, QueueData const & queueData
-			, Scene const & scene );
+			, Scene & scene );
 		/**
 		 *\~english
 		 *\brief		Clears the passes.
@@ -173,7 +173,7 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
-		Scene const & m_scene;
+		Scene & m_scene;
 		std::vector< std::unique_ptr< crg::FrameGraph > > m_graphs;
 		Texture m_environmentMap;
 		Texture m_depthBuffer;

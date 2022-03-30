@@ -170,7 +170,6 @@ namespace castor3d
 
 	private:
 		LightsRefArray m_dirtyLights;
-		std::map< Light *, OnLightChangedConnection > m_connections;
 		LightBufferUPtr m_lightBuffer;
 		std::vector< Light * > m_pendingLights;
 	};

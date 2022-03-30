@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Material/MaterialModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Render/Node/RenderNodeModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 
@@ -22,6 +23,9 @@ namespace castor3d
 	class BillboardBase
 		: public RenderedObject
 	{
+	public:
+		using IdRenderNode = std::pair< uint32_t, BillboardRenderNode const * >;
+
 	public:
 		/**
 		 *\~english
@@ -93,6 +97,39 @@ namespace castor3d
 		 */
 		C3D_API void update( GpuUpdater & updater );
 		/**
+		 *\~english
+		 *\brief		Retrieves the object ID in models buffer.
+		 *\param[in]	pass	The material pass.
+		 *\~french
+		 *\brief		Récupère l'ID de l'objet dans le buffer de modèles.
+		 *\param[in]	pass	La passe de matériau.
+		 */
+		C3D_API uint32_t getId( Pass const & pass )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the object render node.
+		 *\param[in]	pass	The material pass.
+		 *\~french
+		 *\brief		Récupère le noeud de rendu de l'objet.
+		 *\param[in]	pass	La passe de matériau.
+		 */
+		C3D_API BillboardRenderNode const * getRenderNode( Pass const & pass )const;
+		/**
+		 *\~english
+		 *\brief		Sets the object render node and ID in models buffer.
+		 *\param[in]	pass		The material pass.
+		 *\param[in]	renderNode	The render node.
+		 *\param[in]	id			The ID.
+		 *\~french
+		 *\brief		Définit le noeud de rendu de l'objet et son ID dans le buffer de modèles.
+		 *\param[in]	pass		La passe de matériau.
+		 *\param[in]	renderNode	Le noeud de rendu.
+		 *\param[in]	id			L'ID.
+		 */
+		C3D_API void setId( Pass const & pass
+			, BillboardRenderNode const * renderNode
+			, uint32_t id );
+		/**
 		*\~english
 		*name
 		*	Getters.
@@ -102,7 +139,6 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API ProgramFlags getProgramFlags()const;
-		C3D_API uint32_t getId( Pass const & pass )const;
 
 		MaterialRPtr getMaterial()const
 		{
@@ -168,6 +204,11 @@ namespace castor3d
 		{
 			return m_billboardSize;
 		}
+
+		std::unordered_map< Pass const *, IdRenderNode > const & getIds()const
+		{
+			return m_ids;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -178,8 +219,6 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		C3D_API void setId( Pass const & pass, uint32_t id );
-
 		void setDimensions( castor::Point2f const & value )
 		{
 			m_dimensions = value;
@@ -209,8 +248,6 @@ namespace castor3d
 		C3D_API void setCount( uint32_t value );
 		/**@}*/
 
-		OnBillboardMaterialChanged onMaterialChanged;
-
 	private:
 		void doGatherBuffers( ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
@@ -236,7 +273,7 @@ namespace castor3d
 		uint32_t m_centerOffset{ 0u };
 		BillboardType m_billboardType{ BillboardType::eCylindrical };
 		BillboardSize m_billboardSize{ BillboardSize::eDynamic };
-		std::unordered_map< Pass const *, uint32_t > m_ids{};
+		std::unordered_map< Pass const *, IdRenderNode > m_ids{};
 	};
 
 	class BillboardList

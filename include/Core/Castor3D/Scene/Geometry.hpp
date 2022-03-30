@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/MaterialModule.hpp"
 #include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
+#include "Castor3D/Render/Node/RenderNodeModule.hpp"
 
 #include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/RenderedObject.hpp"
@@ -24,6 +25,10 @@ namespace castor3d
 		: public MovableObject
 		, public RenderedObject
 	{
+	public:
+		using IdRenderNode = std::pair< uint32_t, SubmeshRenderNode const * >;
+		using SubmeshIdRenderNodeMap = std::unordered_map< uint32_t, IdRenderNode >;
+
 	public:
 		/**
 		 *\~english
@@ -138,12 +143,61 @@ namespace castor3d
 		 */
 		C3D_API void setBoundingBox( Submesh const & submesh
 			, castor::BoundingBox const & box );
-
+		/**
+		 *\~english
+		 *\brief		Retrieves the object ID in models buffer.
+		 *\param[in]	pass	The material pass.
+		 *\param[in]	submesh	The submesh.
+		 *\~french
+		 *\brief		Récupère l'ID de l'objet dans le buffer de modèles.
+		 *\param[in]	pass	La passe de matériau.
+		 *\param[in]	submesh	Le sous-maillage.
+		 */
 		C3D_API uint32_t getId( Pass const & pass
 			, Submesh const & submesh )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the object render node.
+		 *\param[in]	pass	The material pass.
+		 *\param[in]	submesh	The submesh.
+		 *\~french
+		 *\brief		Récupère le noeud de rendu de l'objet.
+		 *\param[in]	pass	La passe de matériau.
+		 *\param[in]	submesh	Le sous-maillage.
+		 */
+		C3D_API SubmeshRenderNode const * getRenderNode( Pass const & pass
+			, Submesh const & submesh )const;
+		/**
+		 *\~english
+		 *\brief		Sets the object render node and ID in models buffer.
+		 *\param[in]	pass		The material pass.
+		 *\param[in]	submesh		The submesh.
+		 *\param[in]	renderNode	The render node.
+		 *\param[in]	id			The ID.
+		 *\~french
+		 *\brief		Définit le noeud de rendu de l'objet et son ID dans le buffer de modèles.
+		 *\param[in]	pass		La passe de matériau.
+		 *\param[in]	submesh		Le sous-maillage.
+		 *\param[in]	renderNode	Le noeud de rendu.
+		 *\param[in]	id			L'ID.
+		 */
 		C3D_API void setId( Pass const & pass
 			, Submesh const & submesh
+			, SubmeshRenderNode const * renderNode
 			, uint32_t id );
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		std::unordered_map< Pass const *, SubmeshIdRenderNodeMap > const & getIds()const
+		{
+			return m_ids;
+		}
 
 		MeshResPtr getMesh()const
 		{
@@ -159,8 +213,7 @@ namespace castor3d
 		{
 			return m_sphere;
 		}
-
-		OnSubmeshMaterialChanged onMaterialChanged;
+		/**@}*/
 
 	private:
 		void doUpdateMesh();
@@ -176,7 +229,7 @@ namespace castor3d
 		SubmeshBoundingSphereMap m_submeshesSpheres;
 		castor::BoundingBox m_box;
 		castor::BoundingSphere m_sphere;
-		std::unordered_map< Pass const *, std::unordered_map< uint32_t, uint32_t > > m_ids{};
+		std::unordered_map< Pass const *, SubmeshIdRenderNodeMap > m_ids{};
 	};
 }
 
