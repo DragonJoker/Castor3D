@@ -63,6 +63,7 @@ if ( CASTOR_USE_GLSLANG AND EXISTS ${VkFFT_DIR} )
 			glslang/Include
 			${glslang_INCLUDE_DIR}
 			${glslang_INCLUDE_DIR}/glslang/Include
+			${glslang_INCLUDE_DIR}/glslang/glslang/Include
 	)
 	add_library( castor::${FOLDER_NAME}
 		ALIAS
