@@ -35,7 +35,7 @@ namespace castor3d
 	{
 		if ( !m_ownProjection )
 		{
-			m_frustum.update( m_viewport.getProjection(), m_view );
+			m_frustum.update( m_view );
 		}
 		else
 		{
@@ -73,7 +73,6 @@ namespace castor3d
 		if ( m_projection != projection )
 		{
 			m_projection = projection;
-			updateFrustum();
 			markDirty();
 		}
 	}

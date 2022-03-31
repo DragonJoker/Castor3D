@@ -46,7 +46,6 @@ namespace castor3d
 			float clipRange = farClip - nearClip;
 			float minZ = nearClip;
 			float maxZ = nearClip + clipRange;
-			float range = maxZ - minZ;
 			float ratio = maxZ / minZ;
 
 			// Calculate split depths based on view camera frustum
@@ -58,7 +57,7 @@ namespace castor3d
 			{
 				float p = float( i + 1 ) / float( cascades );
 				float log = minZ * std::pow( ratio, p );
-				float uniform = minZ + range * p;
+				float uniform = minZ + clipRange * p;
 				float d = lambda * ( log - uniform ) + uniform;
 				cascadeSplits[i] = ( d - nearClip ) / clipRange;
 			}
@@ -130,8 +129,8 @@ namespace castor3d
 				// Extrude bounds to avoid early shadow clipping:
 				auto ext = float( fabs( frustumCenter->z - minExtents->z ) );
 				ext = std::max( ext, farClip * 0.5f );
-				minExtents->z =frustumCenter->z - ext;
-				maxExtents->z =frustumCenter->z + ext;
+				minExtents->z = frustumCenter->z - ext;
+				maxExtents->z = frustumCenter->z + ext;
 
 				// Fill cascade
 				auto & cascade = result[cascadeIdx];

@@ -29,6 +29,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the frustum planes.
+		 *\param[in]	view		The view matrix.
+		 *\~french
+		 *\brief		Met à jour les plans du frustum.
+		 *\param[in]	view		Le matrice de vue.
+		 */
+		C3D_API void update( castor::Matrix4x4f const & view );
+		/**
+		 *\~english
+		 *\brief		Updates the frustum planes.
 		 *\param[in]	projection	The projection matrix.
 		 *\param[in]	view		The view matrix.
 		 *\~french
@@ -36,41 +45,8 @@ namespace castor3d
 		 *\param[in]	projection	La matrice de projection.
 		 *\param[in]	view		Le matrice de vue.
 		 */
-		C3D_API Planes update( castor::Matrix4x4f const & projection
+		C3D_API void update( castor::Matrix4x4f const & projection
 			, castor::Matrix4x4f const & view );
-		/**
-		 *\~english
-		 *\brief		Updates the frustum planes.
-		 *\param[in]	position	The view position.
-		 *\param[in]	right		The X vector.
-		 *\param[in]	up			The Y vector.
-		 *\param[in]	front		The Z vector.
-		 *\~french
-		 *\brief		Met à jour les plans du frustum.
-		 *\param[in]	position	La position de la vue.
-		 *\param[in]	right		Le vecteur X.
-		 *\param[in]	up			Le vecteur Y.
-		 *\param[in]	front		Le vecteur Z.
-		 */
-		C3D_API Planes update( castor::Point3f const & position
-			, castor::Point3f const & right
-			, castor::Point3f const & up
-			, castor::Point3f const & front );
-		/**
-		 *\~english
-		 *\brief		Updates the frustum planes.
-		 *\param[in]	eye		The view position.
-		 *\param[in]	target	The view target vector.
-		 *\param[in]	up		The direction of the up vector according to the orientation of the view.
-		 *\~french
-		 *\brief		Met à jour les plans du frustum.
-		 *\param[in]	eye		La position de la vue.
-		 *\param[in]	target	La position de la cible de la vue.
-		 *\param[in]	up		La direction du vecteur haut, selon l'orientation de la vue.
-		 */
-		C3D_API Planes update( castor::Point3f const & eye
-			, castor::Point3f const & target
-			, castor::Point3f const & up );
 		/**
 		 *\~english
 		 *\brief		Checks if given BoundingBox is in the view frustum.
@@ -116,7 +92,7 @@ namespace castor3d
 		 */
 		C3D_API bool isVisible( castor::Point3f const & point )const;
 
-		std::array< InterleavedVertex, 6u * 4u > const & getPoints()const
+		std::array< InterleavedVertex, 8u > const & getPoints()const
 		{
 			return m_points;
 		}
@@ -124,7 +100,7 @@ namespace castor3d
 	private:
 		Viewport * m_viewport;
 		Planes m_planes;
-		std::array< InterleavedVertex, 6u * 4u > m_points;
+		std::array< InterleavedVertex, 8u > m_points;
 	};
 }
 
