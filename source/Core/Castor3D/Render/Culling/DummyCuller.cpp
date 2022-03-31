@@ -11,13 +11,13 @@ namespace castor3d
 	{
 	}
 
-	bool DummyCuller::isSubmeshCulled( SubmeshRenderNode const & node )const
+	bool DummyCuller::isSubmeshVisible( SubmeshRenderNode const & node )const
 	{
-		return false;
+		return true;
 	}
 
-	bool DummyCuller::isBillboardCulled( BillboardRenderNode const & node )const
+	bool DummyCuller::isBillboardVisible( BillboardRenderNode const & node )const
 	{
-		return false;
+		return true;
 	}
 }

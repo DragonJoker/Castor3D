@@ -32,14 +32,12 @@ namespace castor3d
 		, bool isFrontCulled );
 
 	size_t hash( SubmeshRenderNode const & culled );
-	bool isCulled( SubmeshRenderNode const & node );
 	bool isVisible( Camera const & camera
 		, SubmeshRenderNode const & node );
 	bool isVisible( Frustum const & frustum
 		, SubmeshRenderNode const & node );
 
 	size_t hash( BillboardRenderNode const & culled );
-	bool isCulled( BillboardRenderNode const & node );
 	bool isVisible( Camera const & camera
 		, BillboardRenderNode const & node );
 	bool isVisible( Frustum const & frustum
@@ -52,7 +50,7 @@ namespace castor3d
 		struct CulledNodeT
 		{
 			NodeT const * node;
-			bool culled;
+			bool visible;
 			uint32_t count;
 		};
 
@@ -238,8 +236,8 @@ namespace castor3d
 			, RenderNodesPass const & renderPass
 			, SidedNodePipelineMapT< BillboardRenderNode > & sorted
 			, PipelineBufferArray & nodesIds );
-		virtual bool isSubmeshCulled( SubmeshRenderNode const & node )const = 0;
-		virtual bool isBillboardCulled( BillboardRenderNode const & node )const = 0;
+		virtual bool isSubmeshVisible( SubmeshRenderNode const & node )const = 0;
+		virtual bool isBillboardVisible( BillboardRenderNode const & node )const = 0;
 
 	private:
 		Scene & m_scene;

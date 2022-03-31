@@ -16,8 +16,8 @@ namespace castor3d
 			, Camera * camera = nullptr  );
 
 	private:
-		bool isSubmeshCulled( SubmeshRenderNode const & node )const override;
-		bool isBillboardCulled( BillboardRenderNode const & node )const override;
+		bool isSubmeshVisible( SubmeshRenderNode const & node )const override;
+		bool isBillboardVisible( BillboardRenderNode const & node )const override;
 	};
 }
 
