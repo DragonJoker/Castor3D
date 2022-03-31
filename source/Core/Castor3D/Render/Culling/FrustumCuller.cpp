@@ -25,7 +25,7 @@ namespace castor3d
 	{
 	}
 
-	FrustumCuller::FrustumCuller(Scene & scene
+	FrustumCuller::FrustumCuller( Scene & scene
 		, Frustum & frustum )
 		: SceneCuller{ scene, nullptr }
 		, m_frustum{ &frustum }
@@ -41,12 +41,12 @@ namespace castor3d
 	bool FrustumCuller::isSubmeshVisible( SubmeshRenderNode const & node )const
 	{
 		return !node.instance.isCullable()
-			|| isVisible( getCamera().getFrustum(), node );
+			|| isVisible( hasCamera() ? getCamera().getFrustum() : *m_frustum , node );
 	}
 
 	bool FrustumCuller::isBillboardVisible( BillboardRenderNode const & node )const
 	{
 		return !node.instance.isCullable()
-			|| isVisible( getCamera().getFrustum(), node );
+			|| isVisible( hasCamera() ? getCamera().getFrustum() : *m_frustum, node );
 	}
 }

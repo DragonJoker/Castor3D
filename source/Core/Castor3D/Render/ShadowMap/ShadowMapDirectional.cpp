@@ -11,12 +11,12 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/Culling/FrustumCuller.hpp"
+#include "Castor3D/Render/Culling/DummyCuller.hpp"
 #include "Castor3D/Render/Passes/GaussianBlur.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPassDirectional.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -51,43 +51,44 @@ namespace castor3d
 			, castor::RgbColour const & colour
 			, castor::String const & colourName )
 		{
+
 			auto result = scene.getMeshCache().add( name, scene );
 			result.lock()->setSerialisable( false );
 			auto submesh = result.lock()->createSubmesh();
-			InterleavedVertexArray vertex{
-				InterleavedVertex{}.position( { -1, -1, -1 } ),
-				InterleavedVertex{}.position( { -1, +1, -1 } ),
-				InterleavedVertex{}.position( { +1, +1, -1 } ),
-				InterleavedVertex{}.position( { +1, -1, -1 } ),
-				InterleavedVertex{}.position( { -1, -1, +1 } ),
-				InterleavedVertex{}.position( { -1, +1, +1 } ),
-				InterleavedVertex{}.position( { +1, +1, +1 } ),
-				InterleavedVertex{}.position( { +1, -1, +1 } ),
-				InterleavedVertex{}.position( { -1, -1, -1 } ),
-				InterleavedVertex{}.position( { -1, +1, -1 } ),
-				InterleavedVertex{}.position( { +1, +1, -1 } ),
-				InterleavedVertex{}.position( { +1, -1, -1 } ),
-				InterleavedVertex{}.position( { -1, -1, +1 } ),
-				InterleavedVertex{}.position( { -1, +1, +1 } ),
-				InterleavedVertex{}.position( { +1, +1, +1 } ),
-				InterleavedVertex{}.position( { +1, -1, +1 } ),
-				InterleavedVertex{}.position( { -1, -1, -1 } ),
-				InterleavedVertex{}.position( { -1, +1, -1 } ),
-				InterleavedVertex{}.position( { +1, +1, -1 } ),
-				InterleavedVertex{}.position( { +1, -1, -1 } ),
-				InterleavedVertex{}.position( { -1, -1, +1 } ),
-				InterleavedVertex{}.position( { -1, +1, +1 } ),
-				InterleavedVertex{}.position( { +1, +1, +1 } ),
-				InterleavedVertex{}.position( { +1, -1, +1 } ), };
-			submesh->setTopology( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST );
+			static castor3d::InterleavedVertexArray const vertex{ []()
+				{
+					castor3d::InterleavedVertexArray result;
+					result.resize( 8u );
+					result[size_t( FrustumCorner::eFarLeftBottom )].position( castor::Point3f{ -1, -1, +1 } );
+					result[size_t( FrustumCorner::eFarLeftTop )].position( castor::Point3f{ -1, +1, +1 } );
+					result[size_t( FrustumCorner::eFarRightTop )].position( castor::Point3f{ +1, +1, +1 } );
+					result[size_t( FrustumCorner::eFarRightBottom )].position( castor::Point3f{ +1, -1, +1 } );
+					result[size_t( FrustumCorner::eNearLeftBottom )].position( castor::Point3f{ -1, -1, -1 } );
+					result[size_t( FrustumCorner::eNearLeftTop )].position( castor::Point3f{ -1, +1, -1 } );
+					result[size_t( FrustumCorner::eNearRightTop )].position( castor::Point3f{ +1, +1, -1 } );
+					result[size_t( FrustumCorner::eNearRightBottom )].position( castor::Point3f{ +1, -1, -1 } );
+					return result;
+				}()
+			};
+			submesh->setTopology( VK_PRIMITIVE_TOPOLOGY_LINE_LIST );
 			submesh->addPoints( vertex );
-			auto mapping = std::make_shared< TriFaceMapping >( *submesh );
-			mapping->addQuadFace( 0u, 1u, 2u, 3u );
-			mapping->addQuadFace( 4u, 5u, 6u, 7u );
-			mapping->addQuadFace( 8u, 9u, 10u, 11u );
-			mapping->addQuadFace( 12u, 13u, 14u, 15u );
-			mapping->addQuadFace( 16u, 17u, 18u, 19u );
-			mapping->addQuadFace( 20u, 21u, 22u, 23u );
+			auto mapping = std::make_shared< castor3d::LinesMapping >( *submesh );
+			castor3d::LineIndices lines[]
+			{
+				castor3d::LineIndices{ { 0u, 1u } },
+				castor3d::LineIndices{ { 1u, 2u } },
+				castor3d::LineIndices{ { 2u, 3u } },
+				castor3d::LineIndices{ { 3u, 0u } },
+				castor3d::LineIndices{ { 4u, 5u } },
+				castor3d::LineIndices{ { 5u, 6u } },
+				castor3d::LineIndices{ { 6u, 7u } },
+				castor3d::LineIndices{ { 7u, 4u } },
+				castor3d::LineIndices{ { 0u, 4u } },
+				castor3d::LineIndices{ { 1u, 5u } },
+				castor3d::LineIndices{ { 2u, 6u } },
+				castor3d::LineIndices{ { 3u, 7u } },
+			};
+			mapping->addLineGroup( lines );
 			submesh->setIndexMapping( mapping );
 			MaterialResPtr material;
 			castor::String matName = cuT( "Frustum_" ) + colourName;
@@ -101,7 +102,6 @@ namespace castor3d
 				pass->enableLighting( false );
 				pass->enablePicking( false );
 				pass->setColour( colour );
-				pass->setOpacity( 0.2f );
 			}
 			else
 			{
@@ -161,7 +161,7 @@ namespace castor3d
 						, true )
 					, nullptr ) );
 				auto & passData = *result.back();
-				passData.culler = std::make_unique< FrustumCuller >( scene, *passData.camera );
+				passData.culler = std::make_unique< DummyCuller >( scene, passData.camera.get() );
 				auto & pass = graph.createPass( debugName
 					, [&passData, &device, &shadowMap, cascade, vsm, rsm]( crg::FramePass const & framePass
 						, crg::GraphContext & context
@@ -299,7 +299,7 @@ namespace castor3d
 
 			if ( !scene.getGeometryCache().has( name ) )
 			{
-				auto sceneNode = scene.getSceneNodeCache().add( name, scene ).lock();
+				auto sceneNode = scene.getSceneNodeCache().add( name ).lock();
 				auto geometry = std::make_shared< Geometry >( name, scene, *sceneNode, mesh );
 				geometry->setShadowCaster( false );
 				geometry->setCullable( false );
@@ -338,11 +338,10 @@ namespace castor3d
 			{
 				if ( shadowModified )
 				{
-					auto & culler = myPasses.passes[cascade]->pass->getCuller();
-					auto & lightCamera = culler.getCamera();
+					auto & lightCamera = *myPasses.passes[cascade]->camera;
 					lightCamera.attachTo( *node );
-					lightCamera.setProjection( directional.getProjMatrix( cascade ) );
 					lightCamera.setView( directional.getViewMatrix( cascade ) );
+					lightCamera.setProjection( directional.getProjMatrix( cascade ) );
 					lightCamera.updateFrustum();
 
 #if C3D_DebugCascadeFrustum

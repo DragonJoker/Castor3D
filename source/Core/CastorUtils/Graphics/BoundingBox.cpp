@@ -77,7 +77,7 @@ namespace castor
 			Point3f{ max[0], min[1], max[2] }
 		};
 
-		// Express object box in axis aligned coordinates.
+		// Express object box in transformed coordinates.
 		for ( auto & corner : corners )
 		{
 			corner = transformations * corner;

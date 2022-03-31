@@ -585,10 +585,8 @@ namespace castor3d
 			return;
 		}
 
-		auto & scene = *m_renderTarget.getScene();
-		auto & camera = *m_renderTarget.getCamera();
-		updater.scene = &scene;
-		updater.camera = &camera;
+		auto & scene = *updater.scene;
+		auto & camera = *updater.camera;
 		updater.voxelConeTracing = scene.getVoxelConeTracingConfig().enabled;
 
 		if ( getSsaoConfig().enabled )
