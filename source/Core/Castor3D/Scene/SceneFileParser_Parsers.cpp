@@ -2595,7 +2595,7 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserObjectCulled )
+	CU_ImplementAttributeParser( parserObjectCullable )
 	{
 		auto & parsingContext = getParserContext( context );
 
@@ -2607,7 +2607,7 @@ namespace castor3d
 		{
 			bool value;
 			params[0]->get( value );
-			parsingContext.geometry->setCulled( value );
+			parsingContext.geometry->setCullable( value );
 		}
 	}
 	CU_EndAttribute()

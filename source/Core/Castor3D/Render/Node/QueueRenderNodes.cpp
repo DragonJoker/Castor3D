@@ -332,7 +332,7 @@ namespace castor3d
 				{
 					auto culled = sidedCulled.first;
 
-					if ( !culled.culled )
+					if ( culled.visible )
 					{
 						auto culledNode = culled.node;
 						auto & submesh = culledNode->data;
@@ -379,7 +379,7 @@ namespace castor3d
 						{
 							auto culled = sidedCulled.first;
 
-							if ( !culled.culled )
+							if ( culled.visible )
 							{
 								auto culledNode = culled.node;
 								auto & submesh = culledNode->data;
@@ -424,7 +424,7 @@ namespace castor3d
 				{
 					auto culled = sidedCulled.first;
 
-					if ( !culled.culled )
+					if ( culled.visible )
 					{
 						auto culledNode = culled.node;
 						auto & billboard = culledNode->data;

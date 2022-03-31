@@ -38,15 +38,15 @@ namespace castor3d
 		m_frustum->update( projection, view );
 	}
 
-	bool FrustumCuller::isSubmeshCulled( SubmeshRenderNode const & node )const
+	bool FrustumCuller::isSubmeshVisible( SubmeshRenderNode const & node )const
 	{
-		return !isCulled( node )
-			&& !isVisible( getCamera().getFrustum(), node );
+		return !node.instance.isCullable()
+			|| isVisible( getCamera().getFrustum(), node );
 	}
 
-	bool FrustumCuller::isBillboardCulled( BillboardRenderNode const & node )const
+	bool FrustumCuller::isBillboardVisible( BillboardRenderNode const & node )const
 	{
-		return !isCulled( node )
-			&& !isVisible( getCamera().getFrustum(), node );
+		return !node.instance.isCullable()
+			|| isVisible( getCamera().getFrustum(), node );
 	}
 }

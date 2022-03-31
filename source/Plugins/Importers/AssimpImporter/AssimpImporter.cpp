@@ -1466,7 +1466,8 @@ namespace C3dAssimp
 							, scene
 							, *node
 							, meshRepl->lmesh );
-						geom->setCulled( false );
+						// TODO: Why should it be uncullable ?
+						geom->setCullable( false );
 						uint32_t index = 0u;
 						auto matIt = meshRepl->submeshes.find( aiMeshIndex );
 						CU_Assert( matIt != meshRepl->submeshes.end(), "Couldn't find material in imported materials." );
