@@ -34,9 +34,9 @@ namespace castor3d
 			m_receivesShadows = value;
 		}
 
-		void setCulled( bool value )
+		void setCullable( bool value )
 		{
-			m_culled = value;
+			m_cullable = value;
 		}
 
 		bool isVisible()const
@@ -54,16 +54,16 @@ namespace castor3d
 			return m_receivesShadows;
 		}
 
-		bool isCulled()const
+		bool isCullable()const
 		{
-			return m_culled;
+			return m_cullable;
 		}
 
 	private:
 		bool m_visible{ true };
 		bool m_castsShadows{ true };
 		bool m_receivesShadows{ true };
-		bool m_culled{ true };
+		bool m_cullable{ true };
 	};
 }
 

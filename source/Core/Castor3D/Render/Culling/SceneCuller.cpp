@@ -320,11 +320,6 @@ namespace castor3d
 		return hash( culled.instance, culled.data, culled.pass );
 	}
 
-	bool isCulled( SubmeshRenderNode const & node )
-	{
-		return node.instance.isCulled();
-	}
-
 	bool isVisible( Camera const & camera
 		, SubmeshRenderNode const & node )
 	{
@@ -338,11 +333,11 @@ namespace castor3d
 		return sceneNode
 			&& sceneNode->isDisplayable()
 			&& sceneNode->isVisible()
-			&& ( node.data.getInstantiation().isInstanced( node.pass.getOwner() )
-				|| ( frustum.isVisible( node.instance.getBoundingSphere( node.data )
-					, sceneNode->getDerivedTransformationMatrix()
-					, sceneNode->getDerivedScale() )
-					&& frustum.isVisible( node.instance.getBoundingBox( node.data )
+			&& ( node.data.getInstantiation().isInstanced( node.pass.getOwner() )		// Don't cull individual instances
+				|| ( frustum.isVisible( node.instance.getBoundingSphere( node.data )	// First test against bounding sphere
+						, sceneNode->getDerivedTransformationMatrix()
+						, sceneNode->getDerivedScale() )
+					&& frustum.isVisible( node.instance.getBoundingBox( node.data )		// Then against bounding box
 						, sceneNode->getDerivedTransformationMatrix() ) ) );
 	}
 
@@ -351,11 +346,6 @@ namespace castor3d
 	size_t hash( BillboardRenderNode const & culled )
 	{
 		return hash( culled.data, culled.pass );
-	}
-
-	bool isCulled( BillboardRenderNode const & node )
-	{
-		return node.instance.isCulled();
 	}
 
 	bool isVisible( Camera const & camera
@@ -483,7 +473,7 @@ namespace castor3d
 			for ( auto & programIt : texturesIt.second )
 			{
 				m_culledSubmeshes.push_back( { programIt.second.get()
-					, isSubmeshCulled( *programIt.second )
+					, isSubmeshVisible( *programIt.second )
 					, 1u } );
 			}
 		}
@@ -495,7 +485,7 @@ namespace castor3d
 			for ( auto & programIt : texturesIt.second )
 			{
 				m_culledBillboards.push_back( { programIt.second.get()
-					, isBillboardCulled( *programIt.second )
+					, isBillboardVisible( *programIt.second )
 					, programIt.second->getInstanceCount() } );
 			}
 		}
@@ -515,16 +505,16 @@ namespace castor3d
 #endif
 			for ( auto & node : m_culledSubmeshes )
 			{
-				auto culled = isSubmeshCulled( *node.node );
-				m_culledChanged = m_culledChanged || node.culled != culled;
-				node.culled = culled;
+				auto visible = isSubmeshVisible( *node.node );
+				m_culledChanged = m_culledChanged || node.visible != visible;
+				node.visible = visible;
 			}
 
 			for ( auto & node : m_culledBillboards )
 			{
-				auto culled = isBillboardCulled( *node.node );
-				m_culledChanged = m_culledChanged || node.culled != culled;
-				node.culled = culled;
+				auto visible = isBillboardVisible( *node.node );
+				m_culledChanged = m_culledChanged || node.visible != visible;
+				node.visible = visible;
 			}
 		}
 		else
@@ -667,7 +657,7 @@ namespace castor3d
 
 							for ( auto & sidedCulled : bufferIt.second )
 							{
-								if ( !sidedCulled.first.culled )
+								if ( sidedCulled.first.visible )
 								{
 									cullscn::fillNodeCommands( *sidedCulled.first.node
 										, m_scene
@@ -722,7 +712,7 @@ namespace castor3d
 							{
 								auto culled = sidedCulled.first;
 
-								if ( !culled.culled )
+								if ( culled.visible )
 								{
 									cullscn::fillIndirectCommand( *culled.node, indirectBuffer );
 									( *pipelinesBuffer )->x = culled.node->instance.getId( culled.node->pass );
@@ -770,17 +760,17 @@ namespace castor3d
 				{
 					return lookup.node == dirty;
 				} );
-			auto culled = isSubmeshCulled( *dirty );
+			auto visible = isSubmeshVisible( *dirty );
 
 			if ( it != m_culledSubmeshes.end() )
 			{
-				m_culledChanged = m_culledChanged || it->culled != culled;
-				it->culled = culled;
+				m_culledChanged = m_culledChanged || it->visible != visible;
+				it->visible = visible;
 			}
 			else
 			{
 				m_culledChanged = true;
-				m_culledSubmeshes.push_back( { dirty, culled, 1u } );
+				m_culledSubmeshes.push_back( { dirty, visible, 1u } );
 			}
 		}
 	}
@@ -795,21 +785,21 @@ namespace castor3d
 				{
 					return lookup.node == dirty;
 				} );
-			auto culled = isBillboardCulled( *dirty );
+			auto visible = isBillboardVisible( *dirty );
 			auto count = dirty->getInstanceCount();
 
 			if ( it != m_culledBillboards.end() )
 			{
 				m_culledChanged = m_culledChanged
-					|| it->culled != culled
+					|| it->visible != visible
 					|| it->count != count;
-				it->culled = culled;
+				it->visible = visible;
 				it->count = count;
 			}
 			else
 			{
 				m_culledChanged = true;
-				m_culledBillboards.push_back( { dirty, culled, count } );
+				m_culledBillboards.push_back( { dirty, visible, count } );
 			}
 		}
 	}

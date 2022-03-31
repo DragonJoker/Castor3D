@@ -302,7 +302,7 @@ namespace castor3d
 				auto sceneNode = scene.getSceneNodeCache().add( name, scene ).lock();
 				auto geometry = std::make_shared< Geometry >( name, scene, *sceneNode, mesh );
 				geometry->setShadowCaster( false );
-				geometry->setCulled( false );
+				geometry->setCullable( false );
 
 				for ( auto & submesh : *geometry->getMesh().lock() )
 				{

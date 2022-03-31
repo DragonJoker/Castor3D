@@ -165,7 +165,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserObjectMaterials )
 	CU_DeclareAttributeParser( parserObjectCastShadows )
 	CU_DeclareAttributeParser( parserObjectReceivesShadows )
-	CU_DeclareAttributeParser( parserObjectCulled )
+	CU_DeclareAttributeParser( parserObjectCullable )
 	CU_DeclareAttributeParser( parserObjectEnd )
 
 	// Object Materials Parsers
