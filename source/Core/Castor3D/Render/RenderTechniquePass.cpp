@@ -271,6 +271,11 @@ namespace castor3d
 			remFlag( flags, SceneFlag::eVoxelConeTracing );
 		}
 
+		if ( !m_indirectLighting.rsmResult )
+		{
+			remFlag( flags, SceneFlag::eRsmGI );
+		}
+
 		if ( !m_indirectLighting.lpvConfigUbo || !m_indirectLighting.lpvResult )
 		{
 			remFlag( flags, SceneFlag::eLpvGI );

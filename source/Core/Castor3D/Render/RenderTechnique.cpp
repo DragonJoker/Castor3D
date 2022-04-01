@@ -21,6 +21,7 @@
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp"
+#include "Castor3D/Render/GlobalIllumination/ReflectiveShadowMaps/ReflectiveShadowMaps.hpp"
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 #include "Castor3D/Render/Opaque/OpaqueRendering.hpp"
@@ -113,6 +114,7 @@ namespace castor3d
 			, LightPropagationVolumesGLightType const & lightPropagationVolumesG
 			, LayeredLightPropagationVolumesLightType const & layeredLightPropagationVolumes
 			, LayeredLightPropagationVolumesGLightType const & layeredLightPropagationVolumesG
+			, ReflectiveShadowMapsUPtr const & reflectiveShadowMaps
 			, CpuUpdater & updater )
 		{
 			auto lights = doSortLights( cache, type, *updater.camera );
@@ -137,6 +139,12 @@ namespace castor3d
 
 					switch ( updater.light->getGlobalIlluminationType() )
 					{
+					case GlobalIlluminationType::eRsm:
+						if ( reflectiveShadowMaps )
+						{
+							reflectiveShadowMaps->registerLight( updater.light );
+						}
+						break;
 					case GlobalIlluminationType::eLpv:
 						if ( lightPropagationVolumes[size_t( type )] )
 						{
@@ -404,6 +412,19 @@ namespace castor3d
 				, m_renderTarget.getScene()->getVoxelConeTracingConfig()
 				, previousPasses )
 			: nullptr ) }
+		, m_rsmResult{ ( m_shadowBuffer
+			? castor::makeUnique< Texture >( m_device
+				, m_renderTarget.getResources()
+				, getName() + "RSMResult"
+				, 0u
+				, colour.getExtent()
+				, 1u
+				, 1u
+				, VK_FORMAT_R16G16B16A16_SFLOAT
+				, VkImageUsageFlags( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+					| VK_IMAGE_USAGE_SAMPLED_BIT
+					| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) )
+			: nullptr ) }
 		, m_lpvResult{ ( m_shadowBuffer
 			? castor::makeUnique< LightVolumePassResult >( m_renderTarget.getResources()
 				, m_device
@@ -419,6 +440,7 @@ namespace castor3d
 		, m_indirectLighting{ ( ( m_renderTarget.isFullLoadingEnabled() || m_renderTarget.getScene()->needsGlobalIllumination() ) ? &m_lpvConfigUbo : nullptr )
 			, ( ( m_renderTarget.isFullLoadingEnabled() || m_renderTarget.getScene()->needsGlobalIllumination() ) ? &m_llpvConfigUbo : nullptr )
 			, ( m_voxelizer ? &m_vctConfigUbo : nullptr )
+			, ( ( m_renderTarget.isFullLoadingEnabled() || m_renderTarget.getScene()->needsGlobalIllumination() ) ? m_rsmResult.get() : nullptr )
 			, ( ( m_renderTarget.isFullLoadingEnabled() || m_renderTarget.getScene()->needsGlobalIllumination() ) ? m_lpvResult.get() : nullptr )
 			, ( ( m_renderTarget.isFullLoadingEnabled() || m_renderTarget.getScene()->needsGlobalIllumination() ) ? &m_llpvResult : nullptr )
 			, ( m_voxelizer ? &m_voxelizer->getFirstBounce() : nullptr )
@@ -502,6 +524,7 @@ namespace castor3d
 			m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( castor::ref( *m_pointShadowMap ), UInt32Array{} );
 		}
 
+		doInitialiseRsm();
 		doInitialiseLpv();
 #endif
 	}
@@ -516,6 +539,13 @@ namespace castor3d
 
 		m_llpvResult.clear();
 		m_lpvResult.reset();
+
+		if ( m_rsmResult )
+		{
+			m_rsmResult->destroy();
+			m_rsmResult.reset();
+		}
+
 		m_voxelizer.reset();
 		m_diffuse.destroy();
 		m_scattering.destroy();
@@ -560,6 +590,7 @@ namespace castor3d
 		updater.debugIndex = debugConfig.intermediateShaderValueIndex;
 
 		doUpdateShadowMaps( updater );
+		doUpdateRsm( updater );
 		doUpdateLpv( updater );
 
 		if ( m_renderTarget.getTargetType() == TargetType::eWindow )
@@ -634,6 +665,7 @@ namespace castor3d
 		auto & scene = *pscene;
 		updater.voxelConeTracing = scene.getVoxelConeTracingConfig().enabled;
 
+		doInitialiseRsm();
 		doInitialiseLpv();
 		doUpdateShadowMaps( updater );
 
@@ -652,6 +684,7 @@ namespace castor3d
 	{
 		auto result = toWait;
 		result = doRenderShadowMaps( result, queue );
+		result = doRenderRSM( result, queue );
 		result = doRenderLPV( result, queue );
 		result = doRenderEnvironmentMaps( result, queue );
 		result = doRenderVCT( result, queue );
@@ -705,6 +738,11 @@ namespace castor3d
 			{
 				renderPass.accept( visitor );
 			} );
+
+		if ( m_reflectiveShadowMaps )
+		{
+			m_reflectiveShadowMaps->accept( visitor );
+		}
 
 #if !C3D_DebugDisableShadowMaps
 		if ( m_directionalShadowMap )
@@ -875,6 +913,29 @@ namespace castor3d
 		return result;
 	}
 
+	void RenderTechnique::doInitialiseRsm()
+	{
+		auto & scene = *m_renderTarget.getScene();
+		auto needRsm = scene.needsGlobalIllumination( GlobalIlluminationType::eRsm );
+
+		if ( needRsm && !m_reflectiveShadowMaps )
+		{
+			m_rsmResult->create();
+			m_reflectiveShadowMaps = castor::makeUnique< ReflectiveShadowMaps >( getOwner()->getGraphResourceHandler()
+				, scene
+				, m_device
+				, m_cameraUbo
+				, *m_shadowBuffer
+				, m_prepass.getDepthObj().sampledViewId
+				, m_normal.sampledViewId
+				, m_allShadowMaps[size_t( LightType::eDirectional )].front().first.get().getShadowPassResult( false )
+				, m_allShadowMaps[size_t( LightType::ePoint )].front().first.get().getShadowPassResult( false )
+				, m_allShadowMaps[size_t( LightType::eSpot )].front().first.get().getShadowPassResult( false )
+				, *m_rsmResult );
+			m_reflectiveShadowMaps->initialise();
+		}
+	}
+
 	void RenderTechnique::doInitialiseLpv()
 	{
 		auto & scene = *m_renderTarget.getScene();
@@ -983,6 +1044,7 @@ namespace castor3d
 					, m_lightPropagationVolumesG
 					, m_layeredLightPropagationVolumes
 					, m_layeredLightPropagationVolumesG
+					, m_reflectiveShadowMaps
 					, updater );
 			}
 
@@ -997,6 +1059,7 @@ namespace castor3d
 					, m_lightPropagationVolumesG
 					, m_layeredLightPropagationVolumes
 					, m_layeredLightPropagationVolumesG
+					, m_reflectiveShadowMaps
 					, updater );
 			}
 
@@ -1011,6 +1074,7 @@ namespace castor3d
 					, m_lightPropagationVolumesG
 					, m_layeredLightPropagationVolumes
 					, m_layeredLightPropagationVolumesG
+					, m_reflectiveShadowMaps
 					, updater );
 			}
 		}
@@ -1030,6 +1094,14 @@ namespace castor3d
 					map.shadowMap.get().update( updater );
 				}
 			}
+		}
+	}
+
+	void RenderTechnique::doUpdateRsm( CpuUpdater & updater )
+	{
+		if ( m_reflectiveShadowMaps )
+		{
+			m_reflectiveShadowMaps->update( updater );
 		}
 	}
 
@@ -1057,6 +1129,20 @@ namespace castor3d
 				m_layeredLightPropagationVolumesG[i]->update( updater );
 			}
 		}
+	}
+
+	crg::SemaphoreWaitArray RenderTechnique::doRenderRSM( crg::SemaphoreWaitArray const & semaphore
+		, ashes::Queue const & queue )
+	{
+		crg::SemaphoreWaitArray result = semaphore;
+
+		if ( m_renderTarget.getScene()->needsGlobalIllumination( GlobalIlluminationType::eRsm )
+			&& m_reflectiveShadowMaps )
+		{
+			result = m_reflectiveShadowMaps->render( result, queue );
+		}
+
+		return result;
 	}
 
 	crg::SemaphoreWaitArray RenderTechnique::doRenderLPV( crg::SemaphoreWaitArray const & semaphore

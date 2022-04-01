@@ -62,6 +62,7 @@ namespace castor3d
 		eRaw = CU_MakeSectionName( 'R', 'A', 'W', 'S' ),
 		ePcf = CU_MakeSectionName( 'P', 'C', 'F', 'S' ),
 		eVsm = CU_MakeSectionName( 'V', 'S', 'M', 'S' ),
+		eRsm = CU_MakeSectionName( 'R', 'S', 'M', 'S' ),
 		eTextureAnimation = CU_MakeSectionName( 'T', 'X', 'A', 'N' ),
 		eVoxelConeTracing = CU_MakeSectionName( 'V', 'C', 'T', 'C' ),
 		eTextureTransform = CU_MakeSectionName( 'T', 'X', 'T', 'R' ),

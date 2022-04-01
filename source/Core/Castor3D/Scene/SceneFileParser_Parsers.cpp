@@ -5631,6 +5631,7 @@ namespace castor3d
 			, { uint32_t( CSCNSection::eRaw ), cuT( "raw_config" ) }
 			, { uint32_t( CSCNSection::ePcf ), cuT( "pcf_config" ) }
 			, { uint32_t( CSCNSection::eVsm ), cuT( "vsm_config" ) }
+			, { uint32_t( CSCNSection::eRsm ), cuT( "rsm_config" ) }
 			, { uint32_t( CSCNSection::eTextureAnimation ), cuT( "texture_animation" ) }
 			, { uint32_t( CSCNSection::eVoxelConeTracing ), cuT( "voxel_cone_tracing" ) }
 			, { uint32_t( CSCNSection::eTextureTransform ), cuT( "texture_transform" ) }

@@ -25,10 +25,10 @@ namespace castor3d
 		: uint32_t
 	{
 		eNone = 0,
-		// Reflective shadow maps.
-		eRsm = 1,
 		// Voxel Cone Tracing.
-		eVoxelConeTracing = 2,
+		eVoxelConeTracing = 1,
+		// Reflective shadow maps.
+		eRsm = 2,
 		// Light Propagation Volumes without geometry injection.
 		eLpv = 3,
 		// Light Propagation Volumes with geometry injection.
@@ -86,6 +86,7 @@ namespace castor3d
 		LpvGridConfigUbo const * lpvConfigUbo{};
 		LayeredLpvGridConfigUbo const * llpvConfigUbo{};
 		VoxelizerUbo const * vctConfigUbo{};
+		Texture const * rsmResult{};
 		LightVolumePassResult const * lpvResult{};
 		LightVolumePassResultArray const * llpvResult{};
 		Texture const * vctFirstBounce{};

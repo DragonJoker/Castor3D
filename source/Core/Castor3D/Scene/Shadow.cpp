@@ -303,34 +303,11 @@ namespace castor3d
 			{
 				filterType = newV;
 			} ) );
-
-		if ( lightType == castor3d::LightType::eDirectional )
-		{
-			baseBlock.visit( cuT( "Volumetric Steps" ), volumetricSteps );
-			baseBlock.visit( cuT( "Volumetric Scattering Factor" ), volumetricScattering );
-		}
-		{
-			auto block = baseBlock.visit( cuT( "Raw:" ) );
-			block.visit( cuT( "Raw Min. Offset" ), rawOffsets[0] );
-			block.visit( cuT( "Raw Max. Slope Offset" ), rawOffsets[1] );
-		}
-		{
-			auto block = baseBlock.visit( cuT( "PCF: " ) );
-			block.visit( cuT( "PCF Min. Offset" ), pcfOffsets[0] );
-			block.visit( cuT( "PCF Max. Slope Offset" ), pcfOffsets[1] );
-			block.visit( cuT( "PCF Filter Size" ), pcfFilterSize );
-			block.visit( cuT( "PCF Sample Count" ), pcfSampleCount );
-		}
-		{
-			auto block = baseBlock.visit( cuT( "VSM:" ) );
-			block.visit( cuT( "Min. Variance" ), vsmMinVariance );
-			block.visit( cuT( "Light Bleeding Reduction" ), vsmLightBleedingReduction );
-		}
 		if ( lightType == castor3d::LightType::eDirectional )
 		{
 			baseBlock.visit( cuT( "GI Type" )
 				, globalIllumination
-				, castor::StringArray{ cuT( "None" ), cuT( "LPV" ), cuT( "LPV (Geometry)" ), cuT( "Layered LPV" ), cuT( "Layered LPV (Geometry)" ) }
+				, castor::StringArray{ cuT( "None" ), cuT( "VCT" ), cuT( "RSM" ), cuT( "LPV" ), cuT( "LPV (Geometry)" ), cuT( "Layered LPV" ), cuT( "Layered LPV (Geometry)" ) }
 				, ConfigurationVisitorBase::OnEnumValueChangeT< GlobalIlluminationType >( [this]( GlobalIlluminationType, GlobalIlluminationType newV )
 				{
 					globalIllumination = GlobalIlluminationType( newV );
@@ -340,12 +317,36 @@ namespace castor3d
 		{
 			baseBlock.visit( cuT( "GI Type" )
 				, globalIllumination
-				, castor::StringArray{ cuT( "None" ), cuT( "LPV" ), cuT( "LPV (Geometry)" ) }
+				, castor::StringArray{ cuT( "None" ), cuT( "VCT" ), cuT( "RSM" ), cuT( "LPV" ), cuT( "LPV (Geometry)" ) }
 				, ConfigurationVisitorBase::OnEnumValueChangeT< GlobalIlluminationType >( [this]( GlobalIlluminationType, GlobalIlluminationType newV )
 				{
 					globalIllumination = GlobalIlluminationType( newV );
 				} ) );
 		}
+
+		if ( lightType == castor3d::LightType::eDirectional )
+		{
+			baseBlock.visit( cuT( "Volumetric Steps" ), volumetricSteps );
+			baseBlock.visit( cuT( "Volumetric Scattering Factor" ), volumetricScattering );
+		}
+		{
+			auto block = baseBlock.visit( cuT( "Raw" ) );
+			block.visit( cuT( "Raw Min. Offset" ), rawOffsets[0] );
+			block.visit( cuT( "Raw Max. Slope Offset" ), rawOffsets[1] );
+		}
+		{
+			auto block = baseBlock.visit( cuT( "Percentage Closer Filtering" ) );
+			block.visit( cuT( "PCF Min. Offset" ), pcfOffsets[0] );
+			block.visit( cuT( "PCF Max. Slope Offset" ), pcfOffsets[1] );
+			block.visit( cuT( "PCF Filter Size" ), pcfFilterSize );
+			block.visit( cuT( "PCF Sample Count" ), pcfSampleCount );
+		}
+		{
+			auto block = baseBlock.visit( cuT( "Variance Shadow Maps" ) );
+			block.visit( cuT( "Min. Variance" ), vsmMinVariance );
+			block.visit( cuT( "Light Bleeding Reduction" ), vsmLightBleedingReduction );
+		}
+		rsmConfig.accept( *baseBlock );
 		lpvConfig.accept( *baseBlock );
 	}
 
@@ -386,5 +387,6 @@ namespace castor3d
 		vsmContext.addDefaultPopParser();
 
 		LpvConfig::addParsers( result );
+		RsmConfig::addParsers( result );
 	}
 }

@@ -80,7 +80,8 @@ namespace castor3d::shader
 	struct PointShadowData
 		: public sdw::StructInstanceHelperT< "C3D_PointShadowData"
 		, sdw::type::MemoryLayout::eStd140
-		, sdw::StructFieldT< ShadowData, "base" > >
+		, sdw::StructFieldT< ShadowData, "base" >
+		, sdw::Vec4Field< "position" > >
 	{
 		PointShadowData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -90,6 +91,7 @@ namespace castor3d::shader
 		}
 		
 		auto base()const { return getMember< "base" >(); }
+		auto position()const { return getMember< "position" >(); }
 	};
 
 	struct SpotShadowData

@@ -13,6 +13,7 @@ namespace GuiCommon
 	enum class GIType
 	{
 		eNone,
+		eRSM,
 		eLPV,
 		eLPVG,
 		eLLPV,

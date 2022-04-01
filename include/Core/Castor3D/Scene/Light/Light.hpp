@@ -213,6 +213,11 @@ namespace castor3d
 			return m_shadows.globalIllumination;
 		}
 
+		RsmConfig const & getRsmConfig()const
+		{
+			return m_shadows.rsmConfig;
+		}
+
 		LpvConfig const & getLpvConfig()const
 		{
 			return m_shadows.lpvConfig;

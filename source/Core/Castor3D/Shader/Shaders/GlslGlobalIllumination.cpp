@@ -45,6 +45,15 @@ namespace castor3d
 					bindingIndex += 3u; // VCT: UBO + FirstBounce + SecondBounce.
 				}
 
+				if ( checkFlag( sceneFlags, SceneFlag::eRsmGI ) )
+				{
+					declareRsm( bindingIndex, setIndex );
+				}
+				else if ( indirectLighting.rsmResult )
+				{
+					bindingIndex++;
+				}
+
 				if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 				{
 					declareLpv( bindingIndex, bindingIndex, setIndex, setIndex );
@@ -147,6 +156,11 @@ namespace castor3d
 			}
 			else
 			{
+				if ( checkFlag( sceneFlags, SceneFlag::eRsmGI ) )
+				{
+					indirectLighting.rawDiffuse() += computeRSMRadiance( lightSurface.clipPosition().xy() );
+				}
+
 				if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 				{
 					auto llpvGridData = m_writer.getVariable< LayeredLpvGridData >( "c3d_llpvGridData" );
@@ -160,6 +174,7 @@ namespace castor3d
 				}
 			}
 
+			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Raw Diffuse" ), indirectLighting.rawDiffuse() );
 			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Diffuse Colour" ), indirectLighting.diffuseColour() );
 			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Diffuse Blend" ), indirectLighting.diffuseBlend() );
 		}
@@ -181,6 +196,11 @@ namespace castor3d
 			{
 				auto lpvGridData = m_writer.getVariable< LpvGridData >( "c3d_lpvGridData" );
 				indirectLighting.ambient() = indirectLighting.diffuseColour() / lpvGridData.indirectAttenuation();
+			}
+
+			if ( checkFlag( sceneFlags, SceneFlag::eRsmGI ) )
+			{
+				indirectLighting.ambient() = indirectLighting.diffuseColour();
 			}
 
 			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Ambient" ), indirectLighting.ambient() );
@@ -299,6 +319,19 @@ namespace castor3d
 			C3D_Voxelizer( m_writer, uboBindingIndex++, uboSetIndex, true );
 			m_writer.declCombinedImg< FImg3DRgba32 >( "c3d_mapVoxelsFirstBounce", texBindingIndex++, texSetIndex );
 			m_writer.declCombinedImg< FImg3DRgba32 >( "c3d_mapVoxelsSecondaryBounce", texBindingIndex++, texSetIndex );
+		}
+
+		void GlobalIllumination::declareRsm( uint32_t & texBindingIndex
+			, uint32_t texSetIndex )
+		{
+			auto c3d_mapRsmResult = m_writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapRsmResult", texBindingIndex++, texSetIndex );
+
+			m_computeRSMRadiance = m_writer.implementFunction< sdw::Vec4 >( "computeRSMRadiance"
+				, [&]( sdw::Vec2 const & texcoord )
+				{
+					m_writer.returnStmt( vec4( c3d_mapRsmResult.fetch( ivec2( texcoord ), 0_i ).xyz(), 1.0f ) );
+				}
+				, sdw::InVec2{ m_writer, "texcoord" } );
 		}
 
 		void GlobalIllumination::declareLpv( uint32_t & uboBindingIndex
@@ -500,6 +533,12 @@ namespace castor3d
 			return mix( vec3( 0.0_f )
 					, vxlReflection.xyz()
 					, vec3( vxlReflection.a() * indirectBlend * indirectOcclusion ) );
+		}
+
+		sdw::Vec4 GlobalIllumination::computeRSMRadiance( sdw::Vec2 const & texcoord )
+		{
+			CU_Require( m_computeRSMRadiance );
+			return m_computeRSMRadiance( texcoord );
 		}
 
 		sdw::Vec4 GlobalIllumination::computeLPVRadiance( LightSurface lightSurface

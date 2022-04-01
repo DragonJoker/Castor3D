@@ -187,6 +187,7 @@ namespace castor3d
 
 	SceneFlags VoxelizePass::doAdjustSceneFlags( SceneFlags flags )const
 	{
+		remFlag( flags, SceneFlag::eRsmGI );
 		remFlag( flags, SceneFlag::eLpvGI );
 		remFlag( flags, SceneFlag::eLayeredLpvGI );
 		remFlag( flags, SceneFlag::eFogLinear );
