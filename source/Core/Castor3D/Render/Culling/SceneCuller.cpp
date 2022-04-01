@@ -411,14 +411,13 @@ namespace castor3d
 			return;
 		}
 
-		auto & sceneObjs = sceneIt->second;
-
 		if ( m_first )
 		{
 			doInitialiseCulled();
 		}
 		else
 		{
+			auto & sceneObjs = sceneIt->second;
 			doUpdateChanged( sceneObjs );
 			doUpdateCulled( sceneObjs );
 		}
