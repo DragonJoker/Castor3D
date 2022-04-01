@@ -520,15 +520,18 @@ namespace castor3d
 				++layer;
 			}
 
-			layer = 0u;
-
-			for ( auto & geometry : m_geometry )
+			if ( m_geometryVolumes )
 			{
-				visitor.visit( "Layered LPV Geometry" + std::to_string( layer )
-					, *geometry
-					, m_graph.getFinalLayoutState( geometry->wholeViewId ).layout
-					, TextureFactors::tex3D( &m_gridsSizes[layer] ) );
-				++layer;
+				layer = 0u;
+
+				for ( auto & geometry : m_geometry )
+				{
+					visitor.visit( "Layered LPV Geometry" + std::to_string( layer )
+						, *geometry
+						, m_graph.getFinalLayoutState( geometry->wholeViewId ).layout
+						, TextureFactors::tex3D( &m_gridsSizes[layer] ) );
+					++layer;
+				}
 			}
 
 			uint32_t level = 0u;
