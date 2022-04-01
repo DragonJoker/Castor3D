@@ -582,6 +582,13 @@ namespace castor3d
 		}
 		else
 		{
+			if ( needsGlobalIllumination( LightType::eDirectional, GlobalIlluminationType::eRsm )
+				|| needsGlobalIllumination( LightType::ePoint, GlobalIlluminationType::eRsm )
+				|| needsGlobalIllumination( LightType::eSpot, GlobalIlluminationType::eRsm ) )
+			{
+				result |= SceneFlag::eRsmGI;
+			}
+
 			if ( needsGlobalIllumination( LightType::eDirectional, GlobalIlluminationType::eLpv )
 				|| needsGlobalIllumination( LightType::eDirectional, GlobalIlluminationType::eLpvG )
 				|| needsGlobalIllumination( LightType::ePoint, GlobalIlluminationType::eLpv )
@@ -791,6 +798,16 @@ namespace castor3d
 	bool Scene::needsGlobalIllumination()const
 	{
 		return m_needsGlobalIllumination;
+	}
+
+	bool Scene::needsGlobalIllumination( GlobalIlluminationType giType )const
+	{
+		return std::any_of( m_giTypes.begin()
+			, m_giTypes.end()
+			, [&giType]( castor::Set< GlobalIlluminationType > const & lookup )
+			{
+				return lookup.end() != lookup.find( giType );
+			} );
 	}
 
 	bool Scene::needsGlobalIllumination( LightType ltType

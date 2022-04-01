@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "LightModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp"
+#include "Castor3D/Render/GlobalIllumination/ReflectiveShadowMaps/ReflectiveShadowMapsModule.hpp"
 #include "Castor3D/Shader/ShaderBuffers/LightBuffer.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>

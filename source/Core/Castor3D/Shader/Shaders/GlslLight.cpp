@@ -822,6 +822,55 @@ namespace castor3d::shader
 		return m_lightsBuffer->getSpotLight( offset );
 	}
 
+	sdw::Vec3 Lights::getCascadeFactors( sdw::ShaderWriter & writer
+		, sdw::Vec3 const & viewVertex
+		, sdw::Vec4Array const & splitDepths
+		, sdw::UInt const & cascadeCount
+		, sdw::UInt const & maxCascadeCount )
+	{
+		auto getSplitDepth = [&splitDepths]( sdw::UInt const & index )
+			{
+				return splitDepths[index / 4u][index % 4u];
+			};
+
+		auto maxCount = writer.declLocale( "maxCount"
+			, writer.cast< sdw::Int >( clamp( cascadeCount, 1_u, maxCascadeCount ) - 1_u ) );
+		auto cascadeFactors = writer.declLocale( "cascadeFactors"
+			, vec3( writer.cast< sdw::Float >( maxCount ), 1.0_f, 0.0_f ) );
+
+		// Start at maxCount - 1 because the conditions inside the loop will never be true for maxCount.
+		FOR( writer, sdw::Int, i, maxCount - 1, i >= 0, --i )
+		{
+			auto index = writer.declLocale( "index"
+				, writer.cast< sdw::UInt >( i ) );
+			auto splitDepth = writer.declLocale( "splitDepth"
+				, getSplitDepth( index ) );
+			auto splitDiff = writer.declLocale( "splitDiff"
+				, ( getSplitDepth( index + 1u ) - splitDepth ) / 16.0f );
+			auto splitMax = writer.declLocale( "splitMax"
+				, splitDepth );
+			auto splitMin = writer.declLocale( "splitMin"
+				, splitDepth - splitDiff );
+
+			IF( writer, viewVertex.z() > splitMin )
+			{
+				cascadeFactors.x() = writer.cast< sdw::Float >( i );
+			}
+			ELSEIF( viewVertex.z() > splitMax && viewVertex.z() <= splitMin )
+			{
+				auto factor = writer.declLocale( "factor"
+					, ( viewVertex.z() - splitMin ) / splitDiff );
+				cascadeFactors = vec3( writer.cast< sdw::Float >( i )
+					, 1.0_f - factor
+					, factor );
+			}
+			FI
+		}
+		ROF
+
+		return cascadeFactors;
+	}
+
 	sdw::Vec3 Lights::getCascadeFactors( DirectionalShadowData const shadows
 		, sdw::Vec3 pviewVertex
 		, sdw::UInt pmaxCascadeCount )
@@ -834,47 +883,11 @@ namespace castor3d::shader
 					, sdw::UInt const & cascadeCount
 					, sdw::UInt const & maxCascadeCount )
 				{
-					auto getSplitDepth = [&splitDepths]( sdw::UInt const & index )
-					{
-						return splitDepths[index / 4u][index % 4u];
-					};
-
-					auto maxCount = m_writer.declLocale( "maxCount"
-						, m_writer.cast< sdw::Int >( clamp( cascadeCount, 1_u, maxCascadeCount ) - 1_u ) );
-					auto cascadeFactors = m_writer.declLocale( "cascadeFactors"
-						, vec3( m_writer.cast< sdw::Float >( maxCount ), 1.0_f, 0.0_f));
-
-					// Start at maxCount - 1 because the conditions inside the loop will never be true for maxCount.
-					FOR( m_writer, sdw::Int, i, maxCount - 1, i >= 0, --i )
-					{
-						auto index = m_writer.declLocale( "index"
-							, m_writer.cast< sdw::UInt >( i ) );
-						auto splitDepth = m_writer.declLocale( "splitDepth"
-							, getSplitDepth( index ) );
-						auto splitDiff = m_writer.declLocale( "splitDiff"
-							, ( getSplitDepth( index + 1u ) - splitDepth ) / 16.0f );
-						auto splitMax = m_writer.declLocale( "splitMax"
-							, splitDepth );
-						auto splitMin = m_writer.declLocale( "splitMin"
-							, splitDepth - splitDiff );
-
-						IF( m_writer, viewVertex.z() > splitMin )
-						{
-							cascadeFactors.x() = m_writer.cast< sdw::Float >( i );
-						}
-						ELSEIF( viewVertex.z() > splitMax && viewVertex.z() <= splitMin )
-						{
-							auto factor = m_writer.declLocale( "factor"
-								, ( viewVertex.z() - splitMin ) / splitDiff );
-							cascadeFactors = vec3( m_writer.cast< sdw::Float >( i )
-								, 1.0_f - factor
-								, factor );
-						}
-						FI
-					}
-					ROF
-
-					m_writer.returnStmt( cascadeFactors );
+					m_writer.returnStmt( getCascadeFactors( m_writer
+						, viewVertex
+						, splitDepths
+						, cascadeCount
+						, maxCascadeCount ) );
 				}
 				, sdw::InVec3{ m_writer, "viewVertex" }
 				, sdw::InVec4Array{ m_writer, "splitDepths", uint32_t( ashes::getAlignedSize( MaxDirectionalCascadesCount, 4u ) / 4u ) }

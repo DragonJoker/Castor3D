@@ -129,17 +129,20 @@ namespace castor3d
 		eShadowSpot = eShadowBegin << 2,
 		eShadowEnd = eShadowSpot,
 		eShadowAny = eShadowSpot | eShadowPoint | eShadowDirectional,
+		//!\~english	Reflective Shadow Maps enabling.
+		//!\~french		Activation des Reflective Shadow Maps.
+		eRsmGI = 0x0001 << 6,
 		//!\~english	Light Propagation Volumes enabling.
 		//!\~french		Activation des Light Propagation Volumes.
-		eLpvGI = 0x0001 << 6,
-		eLayeredLpvGI = 0x0001 << 7,
+		eLpvGI = 0x0001 << 7,
+		eLayeredLpvGI = 0x0001 << 8,
 		//!\~english	Voxel Cone Tracing enabling.
 		//!\~french		Activation du Voxel Cone Tracing.
-		eVoxelConeTracing = 0x0001 << 8,
-		eGIAny = eLpvGI | eLayeredLpvGI | eVoxelConeTracing,
+		eVoxelConeTracing = 0x0001 << 9,
+		eGIAny = eRsmGI | eLpvGI | eLayeredLpvGI | eVoxelConeTracing,
 		//!\~english	All flags.
 		//!\~french		Tous les indicateurs.
-		eAll = 0x01FF,
+		eAll = 0x03FF,
 	};
 	CU_ImplementFlags( SceneFlag )
 	/**

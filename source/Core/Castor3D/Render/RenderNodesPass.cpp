@@ -597,6 +597,17 @@ namespace castor3d
 				index += 3u; // VCT: UBO + FirstBounce + SecondBounce.
 			}
 
+			if ( checkFlag( sceneFlags, SceneFlag::eRsmGI ) )
+			{
+				addDescriptorSetLayoutBinding( bindings, index
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, shaderStages );
+			}
+			else if ( indirectLighting.rsmResult )
+			{
+				++index; // RSM: Result.
+			}
+
 			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 			{
 				addDescriptorSetLayoutBinding( bindings, index
@@ -797,6 +808,18 @@ namespace castor3d
 			if ( indirectLighting.vctConfigUbo )
 			{
 				index += 3u; // VCT: UBO + FirstBounce + SecondBounce.
+			}
+
+			if ( checkFlag( sceneFlags, SceneFlag::eRsmGI ) )
+			{
+				bindTexture( indirectLighting.rsmResult->wholeView
+					, *indirectLighting.rsmResult->sampler
+					, descriptorWrites
+					, index );
+			}
+			else if ( indirectLighting.rsmResult )
+			{
+				++index; // RSM: Result.
 			}
 
 			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )

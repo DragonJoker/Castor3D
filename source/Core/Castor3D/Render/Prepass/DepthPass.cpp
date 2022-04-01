@@ -78,6 +78,7 @@ namespace castor3d
 
 	SceneFlags DepthPass::doAdjustSceneFlags( SceneFlags flags )const
 	{
+		remFlag( flags, SceneFlag::eRsmGI );
 		remFlag( flags, SceneFlag::eLpvGI );
 		remFlag( flags, SceneFlag::eLayeredLpvGI );
 		remFlag( flags, SceneFlag::eVoxelConeTracing );

@@ -582,6 +582,12 @@ namespace castor3d::shader
 		C3D_API sdw::Vec3 getCascadeFactors( DirectionalShadowData const light
 			, sdw::Vec3 viewVertex
 			, sdw::UInt maxCascadeCount );
+
+		C3D_API static sdw::Vec3 getCascadeFactors( sdw::ShaderWriter & writer
+			, sdw::Vec3 const & viewVertex
+			, sdw::Vec4Array const & splitDepths
+			, sdw::UInt const & cascadeCount
+			, sdw::UInt const & maxCascadeCount );
 		//\}
 
 		Shadow & getShadowModel()const noexcept

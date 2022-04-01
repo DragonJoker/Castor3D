@@ -147,6 +147,9 @@ namespace castor3d
 	void PointLight::fillShadowBuffer( AllShadowData & data )const
 	{
 		auto & point = data.point[size_t( getLight().getShadowMapIndex() )];
+		point.position->x = m_position.value()->x;
+		point.position->y = m_position.value()->y;
+		point.position->z = m_position.value()->z;
 		LightCategory::doFillBaseShadowData( point );
 	}
 

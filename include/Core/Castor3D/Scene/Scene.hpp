@@ -296,6 +296,7 @@ namespace castor3d
 		C3D_API LightingModelID getDefaultLightingModel()const;
 		C3D_API castor::String getDefaultLightingModelName()const;
 		C3D_API bool needsGlobalIllumination()const;
+		C3D_API bool needsGlobalIllumination( GlobalIlluminationType giType )const;
 		C3D_API bool needsGlobalIllumination( LightType ltType
 			, GlobalIlluminationType giType )const;
 		C3D_API crg::SemaphoreWaitArray getRenderTargetsSemaphores()const;

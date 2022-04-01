@@ -8,8 +8,6 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
 
-#include "Castor3D/Limits.hpp"
-
 namespace castor3d
 {
 	/**@name Scene */
@@ -197,13 +195,17 @@ namespace castor3d
 		castor::Array< castor::Matrix4x4f, MaxDirectionalCascadesCount > transforms;
 	};
 
+	struct PointShadowData
+		: BaseShadowData
+	{
+		castor::Point4f position;
+	};
+
 	struct SpotShadowData
 		: BaseShadowData
 	{
 		castor::Matrix4x4f transform;
 	};
-
-	using PointShadowData = BaseShadowData;
 
 	struct AllShadowData
 	{

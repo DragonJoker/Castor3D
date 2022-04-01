@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp"
+#include "Castor3D/Render/GlobalIllumination/ReflectiveShadowMaps/RsmConfig.hpp"
 
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
@@ -33,6 +34,7 @@ namespace castor3d
 		castor::RangedValue< uint32_t > pcfFilterSize{ 4u, castor::makeRange( 0u, MaxPcfFilterSize ) };
 		castor::RangedValue< uint32_t > pcfSampleCount{ 8u, castor::makeRange( 0u, MaxPcfSampleCount ) };
 		LpvConfig lpvConfig;
+		RsmConfig rsmConfig;
 	};
 
 	inline bool operator==( ShadowConfig const & lhs, ShadowConfig const & rhs )noexcept
@@ -47,7 +49,8 @@ namespace castor3d
 			&& lhs.vsmLightBleedingReduction == rhs.vsmLightBleedingReduction
 			&& lhs.pcfFilterSize == rhs.pcfFilterSize
 			&& lhs.pcfSampleCount == rhs.pcfSampleCount
-			&& lhs.lpvConfig == rhs.lpvConfig;
+			&& lhs.lpvConfig == rhs.lpvConfig
+			&& lhs.rsmConfig == rhs.rsmConfig;
 	}
 }
 

@@ -64,6 +64,8 @@ namespace castor3d::shader
 			, uint32_t & texBindingIndex
 			, uint32_t uboSetIndex = 0u
 			, uint32_t texSetIndex = 0u );
+		void declareRsm( uint32_t & texBindingIndex
+			, uint32_t texSetIndex = 0u );
 		void declareLpv( uint32_t & uboBindingIndex
 			, uint32_t & texBindingIndex
 			, uint32_t uboSetIndex = 0u
@@ -80,6 +82,7 @@ namespace castor3d::shader
 			, sdw::Float const & indirectOcclusion
 			, sdw::Float const & indirectBlend
 			, VoxelData const & voxelData );
+		sdw::Vec4 computeRSMRadiance( sdw::Vec2 const & texcoord );
 		sdw::Vec4 computeLPVRadiance( LightSurface surface
 			, LpvGridData lpvGridData );
 		sdw::Vec4 computeLLPVRadiance( LightSurface surface
@@ -103,6 +106,8 @@ namespace castor3d::shader
 		Utils & m_utils;
 		sdw::Function< sdw::Vec4
 			, sdw::InVec3 > m_evalSH;
+		sdw::Function< sdw::Vec4
+			, sdw::InVec2 > m_computeRSMRadiance;
 		sdw::Function< sdw::Vec4
 			, sdw::InVec3
 			, sdw::InVec3

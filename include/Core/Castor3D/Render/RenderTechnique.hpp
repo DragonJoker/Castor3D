@@ -10,6 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Clustered/ClusteredModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp"
+#include "Castor3D/Render/GlobalIllumination/ReflectiveShadowMaps/ReflectiveShadowMapsModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelizeModule.hpp"
 #include "Castor3D/Render/Opaque/OpaqueModule.hpp"
 #include "Castor3D/Render/Prepass/PrepassModule.hpp"
@@ -375,13 +376,17 @@ namespace castor3d
 			, crg::FramePass const * previousPass
 			, crg::FramePassArray previousPasses = {} );
 		BackgroundRendererUPtr doCreateBackgroundPass( ProgressBar * progress );
+		void doInitialiseRsm();
 		void doInitialiseLpv();
 		void doUpdateShadowMaps( CpuUpdater & updater );
 		void doUpdateShadowMaps( GpuUpdater & updater )const;
+		void doUpdateRsm( CpuUpdater & updater );
 		void doUpdateLpv( CpuUpdater & updater );
 
 		crg::SemaphoreWaitArray doRenderShadowMaps( crg::SemaphoreWaitArray const & semaphore
 			, ashes::Queue const & queue )const;
+		crg::SemaphoreWaitArray doRenderRSM( crg::SemaphoreWaitArray const & semaphore
+			, ashes::Queue const & queue );
 		crg::SemaphoreWaitArray doRenderLPV( crg::SemaphoreWaitArray const & semaphore
 			, ashes::Queue const & queue );
 		crg::SemaphoreWaitArray doRenderEnvironmentMaps( crg::SemaphoreWaitArray const & semaphore
@@ -411,6 +416,7 @@ namespace castor3d
 		ShadowMapUPtr m_pointShadowMap;
 		ShadowMapUPtr m_spotShadowMap;
 		VoxelizerUPtr m_voxelizer;
+		TextureUPtr m_rsmResult;
 		LightVolumePassResultUPtr m_lpvResult;
 		LightVolumePassResultArray m_llpvResult;
 		IndirectLightingData m_indirectLighting;
@@ -433,6 +439,7 @@ namespace castor3d
 		LayeredLightPropagationVolumesLightType m_layeredLightPropagationVolumes;
 		LightPropagationVolumesGLightType m_lightPropagationVolumesG;
 		LayeredLightPropagationVolumesGLightType m_layeredLightPropagationVolumesG;
+		ReflectiveShadowMapsUPtr m_reflectiveShadowMaps;
 	};
 }
 
