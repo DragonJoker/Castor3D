@@ -196,7 +196,7 @@ namespace castor3d
 		glspv::doInitResources( *device.device, resources );
 
 		// Enable SPIR-V and Vulkan rules when parsing GLSL
-		auto messages = ( EShMessages )( EShMsgSpvRules | EShMsgVulkanRules );
+		auto messages = EShMessages( EShMsgSpvRules | EShMsgVulkanRules );
 		auto glstage = glspv::doGetLanguage( stage );
 
 		std::string source = shader;
