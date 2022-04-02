@@ -178,7 +178,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Récupère un itérateur sur le début des sous maillages
 		 */
-		inline SubmeshPtrArrayIt begin()
+		SubmeshPtrArrayIt begin()
 		{
 			return m_submeshes.begin();
 		}
@@ -188,7 +188,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Récupère un itérateur constant sur le début des sous maillages
 		 */
-		inline SubmeshPtrArrayConstIt begin()const
+		SubmeshPtrArrayConstIt begin()const
 		{
 			return m_submeshes.begin();
 		}
@@ -198,7 +198,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Récupère un itérateur sur la fin des sous maillages
 		 */
-		inline SubmeshPtrArrayIt end()
+		SubmeshPtrArrayIt end()
 		{
 			return m_submeshes.end();
 		}
@@ -208,97 +208,58 @@ namespace castor3d
 		 *\~french
 		 *\brief		Récupère un itérateur constant sur la fin des sous maillages
 		 */
-		inline SubmeshPtrArrayConstIt end()const
+		SubmeshPtrArrayConstIt end()const
 		{
 			return m_submeshes.end();
 		}
 		/**
-		 *\~english
-		 *\brief		Retrieves the modify status
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le statut de modification
-		 *\return		La valeur
-		 */
-		inline bool isModified()const
+		 *\name Getters.
+		**/
+		/**@{*/
+		bool isModified()const
 		{
 			return m_modified;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the submesh count
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le nombre de sous maillages
-		 *\return		La valeur
-		 */
-		inline uint32_t getSubmeshCount()const
+
+		uint32_t getSubmeshCount()const
 		{
 			return uint32_t( m_submeshes.size() );
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the collision box
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la boîte de collision
-		 *\return		La valeur
-		 */
-		inline castor::BoundingBox const & getBoundingBox()const
+
+		castor::BoundingBox const & getBoundingBox()const
 		{
 			return m_box;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the collision sphere
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la sphère de collision
-		 *\return		La valeur
-		 */
-		inline castor::BoundingSphere const & getBoundingSphere()const
+
+		castor::BoundingSphere const & getBoundingSphere()const
 		{
 			return m_sphere;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the skeleton
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le squelette
-		 *\return		La valeur
-		 */
-		inline SkeletonSPtr getSkeleton()const
+
+		SkeletonSPtr getSkeleton()const
 		{
 			return m_skeleton;
 		}
-		/**
-		 *\~english
-		 *\return		The serialisable status.
-		 *\~french
-		 *\return		Le statut de sérialisation.
-		 */
-		inline bool isSerialisable()const
+
+		bool isSerialisable()const
 		{
 			return m_serialisable;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the serialisable status.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit le statut de sérialisation.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setSerialisable( bool value )
-		{
-			m_serialisable = value;
 		}
 
 		SceneRPtr getScene()const
 		{
 			return m_scene;
 		}
+		/**@}*/
+		/**
+		 *\name Setters.
+		**/
+		/**@{*/
+		void setSerialisable( bool value )
+		{
+			m_serialisable = value;
+		}
+		/**@}*/
 
 	private:
 		friend class MeshGenerator;

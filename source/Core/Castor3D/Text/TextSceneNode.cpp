@@ -23,7 +23,8 @@ namespace castor
 
 		static bool isIgnored( SceneNode const & node )
 		{
-			return isIgnored( node.getName() );
+			return !node.isSerialisable()
+				|| isIgnored( node.getName() );
 		}
 	}
 
