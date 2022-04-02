@@ -4,6 +4,7 @@
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
 #include "Castor3D/Model/Skeleton/Bone.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
+#include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp"
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceObject.hpp"
 
@@ -22,9 +23,14 @@ namespace castor3d
 
 	void AnimatedSkeleton::update( castor::Milliseconds const & elapsed )
 	{
-		for ( auto & animation : m_playingAnimations )
+		if ( !m_playingAnimations.empty() )
 		{
-			animation.get().update( elapsed );
+			for ( auto & animation : m_playingAnimations )
+			{
+				animation.get().update( elapsed );
+			}
+
+			m_geometry.markDirty();
 		}
 	}
 
