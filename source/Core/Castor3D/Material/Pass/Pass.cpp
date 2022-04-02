@@ -509,9 +509,9 @@ namespace castor3d
 		data.common->g = getEmissive();
 		data.common->b = getAlphaValue();
 		data.common->a = float( getSssProfileId() );
-		data.opacity->r = powf( getTransmission()->x, 2.2f );
-		data.opacity->g = powf( getTransmission()->y, 2.2f );
-		data.opacity->b = powf( getTransmission()->z, 2.2f );
+		data.opacity->r = powf( getTransmission().red(), 2.2f );
+		data.opacity->g = powf( getTransmission().green(), 2.2f );
+		data.opacity->b = powf( getTransmission().blue(), 2.2f );
 		data.opacity->a = getOpacity();
 		data.reflRefr->r = getRefractionRatio();
 		data.reflRefr->g = hasRefraction() ? 1.0f : 0.0f;
