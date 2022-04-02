@@ -118,17 +118,26 @@ namespace castor3d
 					switch ( lightIt->second->getGlobalIlluminationType() )
 					{
 					case GlobalIlluminationType::eLpv:
-						lightPropagationVolumes[size_t( type )]->registerLight( updater.light );
+						if ( lightPropagationVolumes[size_t( type )] )
+						{
+							lightPropagationVolumes[size_t( type )]->registerLight( updater.light );
+						}
 						break;
 					case GlobalIlluminationType::eLpvG:
-						lightPropagationVolumesG[size_t( type )]->registerLight( updater.light );
+						if ( lightPropagationVolumesG[size_t( type )] )
+						{
+							lightPropagationVolumesG[size_t( type )]->registerLight( updater.light );
+						}
 						break;
 					case GlobalIlluminationType::eLayeredLpv:
 						if ( shadowMap.getEngine()->getRenderSystem()->hasLLPV() )
 						{
-							layeredLightPropagationVolumes[size_t( type )]->registerLight( updater.light );
+							if ( layeredLightPropagationVolumes[size_t( type )] )
+							{
+								layeredLightPropagationVolumes[size_t( type )]->registerLight( updater.light );
+							}
 						}
-						else
+						else if ( lightPropagationVolumes[size_t( type )] )
 						{
 							lightPropagationVolumes[size_t( type )]->registerLight( updater.light );
 						}
@@ -136,9 +145,12 @@ namespace castor3d
 					case GlobalIlluminationType::eLayeredLpvG:
 						if ( shadowMap.getEngine()->getRenderSystem()->hasLLPV() )
 						{
-							layeredLightPropagationVolumesG[size_t( type )]->registerLight( updater.light );
+							if ( layeredLightPropagationVolumesG[size_t( type )] )
+							{
+								layeredLightPropagationVolumesG[size_t( type )]->registerLight( updater.light );
+							}
 						}
-						else
+						else if ( lightPropagationVolumesG[size_t( type )] )
 						{
 							lightPropagationVolumesG[size_t( type )]->registerLight( updater.light );
 						}
