@@ -212,6 +212,7 @@ namespace GuiCommon
 		if ( !m_scene.getSceneNodeCache().has( name ) )
 		{
 			result = m_scene.getSceneNodeCache().add( name ).lock();
+			result->setSerialisable( false );
 		}
 		else
 		{

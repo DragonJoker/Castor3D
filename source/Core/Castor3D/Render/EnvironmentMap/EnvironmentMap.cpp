@@ -104,6 +104,7 @@ namespace castor3d
 
 			for ( auto & node : nodes )
 			{
+				node->setSerialisable( false );
 				node->setOrientation( orients[i] );
 				++i;
 			}

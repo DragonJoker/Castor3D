@@ -274,9 +274,14 @@ namespace castor3d
 		{
 			return &m_scene;
 		}
+
+		bool isSerialisable()const
+		{
+			return m_serialisable;
+		}
 		/**@}*/
 		/**
-		 *\name Other getters.
+		 *\name Setters.
 		**/
 		/**@{*/
 		C3D_API void setOrientation( castor::Quaternion const & orientation );
@@ -296,6 +301,11 @@ namespace castor3d
 		{
 			return m_id;
 		}
+
+		void setSerialisable( bool value )
+		{
+			m_serialisable = value;
+		}
 		/**@}*/
 
 	private:
@@ -313,6 +323,7 @@ namespace castor3d
 		uint64_t m_id;
 		bool m_displayable;
 		bool m_visible{ true };
+		bool m_serialisable{ true };
 		castor::Quaternion m_orientation;
 		castor::Point3f m_position{ 0.0f, 0.0f, 0.0f };
 		castor::Point3f m_scale{ 1.0, 1.0f, 1.0f };
