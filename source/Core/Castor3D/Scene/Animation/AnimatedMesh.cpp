@@ -3,6 +3,7 @@
 #include "Castor3D/Animation/Animable.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
+#include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 
@@ -22,6 +23,7 @@ namespace castor3d
 		if ( m_playingAnimation )
 		{
 			m_playingAnimation->update( elpased );
+			m_geometry.markDirty();
 		}
 	}
 
