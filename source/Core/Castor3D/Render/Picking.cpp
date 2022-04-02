@@ -1,4 +1,4 @@
-#include "Castor3D/Render/Picking.hpp"
+﻿#include "Castor3D/Render/Picking.hpp"
 
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
@@ -112,13 +112,14 @@ namespace castor3d
 		, SceneCuller & culler )
 		: castor::OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, m_device{ device }
-		, m_size{ size }
+		, m_bandSize{ getSafeBandSize( size ) }
+		, m_realSize{ getSafeBandedSize( size ) }
 		, m_graph{ handler, "PickingGraph" }
 		, m_colourImage{ m_graph.createImage( { "PickingColour"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, VK_FORMAT_R32G32B32A32_UINT
-			, makeExtent3D( size )
+			, makeExtent3D( m_realSize )
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
@@ -133,7 +134,7 @@ namespace castor3d
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, VK_FORMAT_D32_SFLOAT
-			, makeExtent3D( size )
+			, makeExtent3D( m_realSize )
 			, ( VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT ) } ) }
 		, m_depthImageView{ m_graph.createView( { "PickingDepth"
@@ -186,7 +187,9 @@ namespace castor3d
 	{
 		if ( !m_picking.exchange( true ) )
 		{
-			position = rendpick::convertToTopDown( position, m_size );
+			position[0] += m_bandSize;
+			position[1] += m_bandSize;
+			position = rendpick::convertToTopDown( position, m_realSize );
 			m_pickNodeType = PickNodeType::eNone;
 			m_geometry = {};
 			m_submesh = {};
@@ -194,7 +197,7 @@ namespace castor3d
 			m_face = 0u;
 #if !C3D_DebugPicking
 			auto scissor = VkRect2D{ { 0u, 0u }
-				, { m_size.getWidth(), m_size.getHeight() } };
+				, { m_realSize.getWidth(), m_realSize.getHeight() } };
 #else
 			int32_t offsetX = std::clamp( position.x() - PickingOffset
 				, 0
@@ -236,7 +239,7 @@ namespace castor3d
 					, context
 					, graph
 					, m_device
-					, m_size
+					, m_realSize
 					, matrixUbo
 					, culler );
 				m_pickingPass = res.get();

@@ -149,7 +149,8 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
-		castor::Size m_size;
+		uint32_t m_bandSize;
+		castor::Size m_realSize;
 		crg::FrameGraph m_graph;
 		crg::ImageId m_colourImage;
 		crg::ImageViewId m_colourImageView;
