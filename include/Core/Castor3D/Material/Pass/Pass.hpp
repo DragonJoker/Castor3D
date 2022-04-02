@@ -17,6 +17,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/FlagCombination.hpp>
 #include <CastorUtils/Design/GroupChangeTracked.hpp>
 #include <CastorUtils/Design/Signal.hpp>
+#include <CastorUtils/Graphics/RgbColour.hpp>
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
@@ -380,7 +381,7 @@ namespace castor3d
 			return m_blendAlphaFunc;
 		}
 
-		castor::Point3f getTransmission()const
+		castor::RgbColour getTransmission()const
 		{
 			return m_transmission;
 		}
@@ -535,7 +536,7 @@ namespace castor3d
 			m_refractionRatio = value;
 		}
 
-		void setTransmission( castor::Point3f value )
+		void setTransmission( castor::RgbColour value )
 		{
 			m_transmission = std::move( value );
 		}
@@ -731,7 +732,7 @@ namespace castor3d
 		castor::GroupChangeTracked< BlendMode > m_alphaBlendMode;
 		castor::GroupChangeTracked< BlendMode > m_colourBlendMode;
 		castor::GroupChangeTracked< float > m_alphaValue;
-		castor::GroupChangeTracked< castor::Point3f > m_transmission;
+		castor::GroupChangeTracked< castor::RgbColour > m_transmission;
 		castor::GroupChangeTracked< VkCompareOp > m_alphaFunc;
 		castor::GroupChangeTracked< VkCompareOp > m_blendAlphaFunc;
 		castor::GroupChangeTracked< ParallaxOcclusionMode > m_parallaxOcclusionMode;

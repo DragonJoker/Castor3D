@@ -350,7 +350,7 @@ namespace castor3d
 			}
 			else
 			{
-				castor::Point3f value{ 1.0f, 1.0f, 1.0f };
+				castor::RgbColour value{ 1.0f, 1.0f, 1.0f };
 				params[0]->get( value );
 				parsingContext.pass->setTransmission( value );
 			}
@@ -988,7 +988,7 @@ namespace castor3d
 		Pass::addParser( result, mtlSectionID, cuT( "bw_accumulation" ), parserPassBWAccumulationOperator, { makeParameter< ParameterType::eUInt32 >( makeRange( 0u, 6u ) ) } );
 		Pass::addParser( result, mtlSectionID, cuT( "reflections" ), parserPassReflections, { makeParameter< ParameterType::eBool >() } );
 		Pass::addParser( result, mtlSectionID, cuT( "refractions" ), parserPassRefractions, { makeParameter< ParameterType::eBool >() } );
-		Pass::addParser( result, mtlSectionID, cuT( "transmission" ), parserPassTransmission, { makeParameter< ParameterType::ePoint3F >() } );
+		Pass::addParser( result, mtlSectionID, cuT( "transmission" ), parserPassTransmission, { makeParameter< ParameterType::eRgbColour >() } );
 		Pass::addParser( result, mtlSectionID, cuT( "edge_colour" ), parserPassEdgeColour, { makeParameter< ParameterType::eRgbaColour >() } );
 		Pass::addParser( result, mtlSectionID, cuT( "edge_width" ), parserPassEdgeWidth, { makeParameter< ParameterType::eFloat >( makeRange( MinEdgeWidth, MaxEdgeWidth ) ) } );
 		Pass::addParser( result, mtlSectionID, cuT( "edge_depth_factor" ), parserPassDepthFactor, { makeParameter< ParameterType::eFloat >( makeRange( 0.0f, 1.0f ) ) } );

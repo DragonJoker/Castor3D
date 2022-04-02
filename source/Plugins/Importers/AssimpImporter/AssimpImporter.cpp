@@ -261,10 +261,12 @@ namespace C3dAssimp
 						}
 					}
 
-					if ( m_result.getTransmission() != castor::Point3f{ 1.0f, 1.0f, 1.0f }
+					if ( m_result.getTransmission() != castor::RgbColour{ 1.0f, 1.0f, 1.0f }
 						&& m_result.getOpacity() == 1.0f )
 					{
-						m_result.setOpacity( float( castor::point::length( m_result.getTransmission() ) ) );
+						m_result.setOpacity( float( castor::point::length( castor::Point3f{ m_result.getTransmission().red()
+							, m_result.getTransmission().green() 
+							, m_result.getTransmission().blue() } ) ) );
 					}
 				}
 				else
