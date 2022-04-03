@@ -1829,11 +1829,20 @@ target_compile_options( ${PROJECT_NAME}
 	PRIVATE
 		$<$<CXX_COMPILER_ID:MSVC>:/bigobj>
 )
-install_target_ex( ${PROJECT_NAME}
-	Castor3D
-	api_dll
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}
-)
+if ( VCPKG_BUILD )
+	target_install_headers( ${PROJECT_NAME}
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}
+	)
+	target_install_headers( ${PROJECT_NAME}
+		${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}
+	)
+else ()
+	install_target_ex( ${PROJECT_NAME}
+		Castor3D
+		api_dll
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}
+	)
+endif ()
 set_target_properties( ${PROJECT_NAME}
 	PROPERTIES
 		CXX_STANDARD 20
