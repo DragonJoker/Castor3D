@@ -82,6 +82,17 @@ set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 13 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
+if ( CASTOR_USE_SYSTEM_LIBS )
+	if ( VCPKG_BUILD )
+		find_library( ZLIB_LIBRARY_DEBUG zlib PATHS ${VCPKG_INSTALLED_DIR}/debug/lib )
+		find_library( ZLIB_LIBRARY_RELEASE zlib PATHS ${VCPKG_INSTALLED_DIR}/lib )
+		find_path( ZLIB_INCLUDE_DIR zlib.h PATHS ${VCPKG_INSTALLED_DIR}/include )
+	else ()
+		find_package( ZLIB 1.2.7 QUIET REQUIRED )
+	endif ()
+else ()
+	set( ZLIB_FOUND ON )
+endif ()
 if ( CASTOR_USE_SYSTEM_LIBS OR APPLE )
 	if ( VCPKG_TOOLCHAIN )
 		if ( APPLE )
@@ -101,12 +112,6 @@ endif ()
 if ( FreeType_FOUND OR FREETYPE_FOUND )
 	set( FreeType_FOUND FREETYPE_FOUND )
 endif ()
-if ( CASTOR_USE_SYSTEM_LIBS )
-	find_package( ZLIB 1.2.7 QUIET REQUIRED )
-else ()
-	set( ZLIB_FOUND ON )
-endif ()
-
 if ( ZLIB_FOUND AND FreeType_FOUND )
 	if ( NOT TARGET MiniZip )
 		set( MiniZip_SOURCE_DIR
@@ -889,11 +894,20 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		PRIVATE
 			$<$<CXX_COMPILER_ID:MSVC>:/bigobj>
 	)
-	install_target_ex( ${PROJECT_NAME}
-		Castor3D
-		api_dll
-		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}
-	)
+	if ( VCPKG_BUILD )
+		target_install_headers( ${PROJECT_NAME}
+			${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}
+		)
+		target_install_headers( ${PROJECT_NAME}
+			${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}
+		)
+	else ()
+		install_target_ex( ${PROJECT_NAME}
+			Castor3D
+			api_dll
+			${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}
+		)
+	endif ()
 	set_target_properties( ${PROJECT_NAME}
 		PROPERTIES
 			CXX_STANDARD 20

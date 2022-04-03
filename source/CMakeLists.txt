@@ -16,42 +16,46 @@ else ()
 	set( C3D_LIB_PREFIX libcastor3d )
 endif ()
 
-# Ashes external library
-set( ASHES_BUILD_RENDERER_PLUGINS ${CASTOR_BUILD_PLUGINS} )
-set( ASHES_BUILD_RENDERER_VKN ON )
-set( ASHES_BUILD_TESTS OFF )
-set( ASHES_BUILD_SAMPLES OFF )
-set( ASHES_BUILD_SW_SAMPLES OFF )
-
-set( ASHES_BUILD_RENDERER_TEST ${CASTOR_BUILDGRP_TEST} )
-if ( WIN32 )
-	set( Ashes_BINARY_DEFINITIONS
-		VK_USE_PLATFORM_WIN32_KHR
-	)
-elseif ( ANDROID )
-	set( Ashes_BINARY_DEFINITIONS
-		VK_USE_PLATFORM_ANDROID_KHR
-	)
-elseif ( APPLE )
-	set( Ashes_BINARY_DEFINITIONS
-		VK_USE_PLATFORM_MACOS_MVK
-	)
+if ( VCPKG_BUILD )
+	find_package( Ashes CONFIG REQUIRED ashespp )
 else ()
-	set( Ashes_BINARY_DEFINITIONS
-		VK_USE_PLATFORM_XLIB_KHR
-		VK_USE_PLATFORM_XCB_KHR
-		VK_USE_PLATFORM_WAYLAND_KHR
-	)
+	# Ashes external library
+	set( ASHES_BUILD_RENDERER_PLUGINS ${CASTOR_BUILD_PLUGINS} )
+	set( ASHES_BUILD_RENDERER_VKN ON )
+	set( ASHES_BUILD_TESTS OFF )
+	set( ASHES_BUILD_SAMPLES OFF )
+	set( ASHES_BUILD_SW_SAMPLES OFF )
+
+	set( ASHES_BUILD_RENDERER_TEST ${CASTOR_BUILDGRP_TEST} )
+	if ( WIN32 )
+		set( Ashes_BINARY_DEFINITIONS
+			VK_USE_PLATFORM_WIN32_KHR
+		)
+	elseif ( ANDROID )
+		set( Ashes_BINARY_DEFINITIONS
+			VK_USE_PLATFORM_ANDROID_KHR
+		)
+	elseif ( APPLE )
+		set( Ashes_BINARY_DEFINITIONS
+			VK_USE_PLATFORM_MACOS_MVK
+		)
+	else ()
+		set( Ashes_BINARY_DEFINITIONS
+			VK_USE_PLATFORM_XLIB_KHR
+			VK_USE_PLATFORM_XCB_KHR
+			VK_USE_PLATFORM_WAYLAND_KHR
+		)
+	endif ()
+
+	get_filename_component( ASHES_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../${ASHES_DIR} REALPATH )
+
+	if ( NOT VCPKG_TOOLCHAIN )
+		set( SPIRV_CROSS_DIR ${ASHES_SOURCE_DIR}/external/spirv_cross REALPATH )
+	endif ()
+	include( PCHSupport )
+
+	add_subdirectory( ${ASHES_SOURCE_DIR}/source ${CMAKE_BINARY_DIR}/${ASHES_DIR} )
 endif ()
-
-get_filename_component( ASHES_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../${ASHES_DIR} REALPATH )
-
-if ( NOT VCPKG_TOOLCHAIN )
-	set( SPIRV_CROSS_DIR ${ASHES_SOURCE_DIR}/external/spirv_cross REALPATH )
-endif ()
-include( PCHSupport )
-
-add_subdirectory( ${ASHES_SOURCE_DIR}/source ${CMAKE_BINARY_DIR}/${ASHES_DIR} )
 
 if ( ${CASTOR_BUILD_CASTOR3D} )
 	if ( CASTOR_USE_GLSLANG )
@@ -109,30 +113,39 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 		endif ()
 	endif ()
 
-	# RenderGraph external library
-	set( CRG_BUILD_STATIC OFF )
-	set( CRG_UNITY_BUILD ON )
-	set( CRG_BUILD_TESTS OFF )
-	set( CRG_BASE_DIR "Core/RenderGraph" )
-	set( VULKAN_HEADERS_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../${ASHES_DIR}/external/Vulkan-Headers/include )
-	add_subdirectory( ../${RENDERGRAPH_DIR} ${CMAKE_BINARY_DIR}/${RENDERGRAPH_DIR} )
+	if ( VCPKG_BUILD )
+		find_package( RenderGraph CONFIG REQUIRED )
+	else ()
+		# RenderGraph external library
+		set( CRG_BUILD_STATIC OFF )
+		set( CRG_UNITY_BUILD ON )
+		set( CRG_BUILD_TESTS OFF )
+		set( CRG_BASE_DIR "Core/RenderGraph" )
+		set( VULKAN_HEADERS_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../${ASHES_DIR}/external/Vulkan-Headers/include )
+		add_subdirectory( ../${RENDERGRAPH_DIR} ${CMAKE_BINARY_DIR}/${RENDERGRAPH_DIR} )
+	endif ()
 
-	# ShaderWriter external library
-	set( SDW_BUILD_EXPORTERS ON )
-	set( SDW_UNITY_BUILD ON )
-	set( SDW_BUILD_STATIC OFF )
-	set( SDW_BUILD_STATIC_SDAST OFF )
-	set( SDW_BUILD_STATIC_SDW OFF )
-	set( SDW_BUILD_STATIC_EXPORTERS OFF )
-	set( SDW_BUILD_EXPORTER_HLSL ${CASTOR_GUICOMMON_NEEDS_HLSL} )
-	set( SDW_BUILD_EXPORTER_GLSL ${CASTOR_C3D_NEEDS_GLSL} )
-	set( SDW_BUILD_EXPORTER_SPIRV ON )
-	set( SDW_BUILD_VULKAN_LAYER OFF )
-	set( SDW_BUILD_TESTS OFF )
-	set( SDW_BUILD_SDW OFF )
-	set( SDW_GENERATE_SOURCE OFF )
-	set( SDW_BASE_DIR "Core/ShaderWriter" )
-	add_subdirectory( ../${SHADERWRITER_DIR} ${CMAKE_BINARY_DIR}/${SHADERWRITER_DIR} )
+	if ( VCPKG_BUILD )
+		find_package( ShaderWriter CONFIG REQUIRED ShaderAST ShaderWriter CompilerSpirV )
+		find_package( SdwCompilers CONFIG REQUIRED CompilerSpirV )
+	else ()
+		# ShaderWriter external library
+		set( SDW_BUILD_EXPORTERS ON )
+		set( SDW_UNITY_BUILD ON )
+		set( SDW_BUILD_STATIC OFF )
+		set( SDW_BUILD_STATIC_SDAST OFF )
+		set( SDW_BUILD_STATIC_SDW OFF )
+		set( SDW_BUILD_STATIC_EXPORTERS OFF )
+		set( SDW_BUILD_EXPORTER_HLSL ${CASTOR_GUICOMMON_NEEDS_HLSL} )
+		set( SDW_BUILD_EXPORTER_GLSL ${CASTOR_C3D_NEEDS_GLSL} )
+		set( SDW_BUILD_EXPORTER_SPIRV ON )
+		set( SDW_BUILD_VULKAN_LAYER OFF )
+		set( SDW_BUILD_TESTS OFF )
+		set( SDW_BUILD_SDW OFF )
+		set( SDW_GENERATE_SOURCE OFF )
+		set( SDW_BASE_DIR "Core/ShaderWriter" )
+		add_subdirectory( ../${SHADERWRITER_DIR} ${CMAKE_BINARY_DIR}/${SHADERWRITER_DIR} )
+	endif ()
 endif ()
 
 CoreInit()
