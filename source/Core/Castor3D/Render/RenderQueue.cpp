@@ -102,6 +102,7 @@ namespace castor3d
 		, VkRect2D const & scissor )
 	{
 		m_scissor = scissor;
+		m_commandsChanged = m_commandsChanged || m_scissor.isDirty();
 		update( shadowMaps );
 	}
 
