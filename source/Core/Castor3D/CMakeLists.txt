@@ -1829,20 +1829,6 @@ target_compile_options( ${PROJECT_NAME}
 	PRIVATE
 		$<$<CXX_COMPILER_ID:MSVC>:/bigobj>
 )
-if ( VCPKG_BUILD )
-	target_install_headers( ${PROJECT_NAME}
-		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}
-	)
-	target_install_headers( ${PROJECT_NAME}
-		${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}
-	)
-else ()
-	install_target_ex( ${PROJECT_NAME}
-		Castor3D
-		api_dll
-		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}
-	)
-endif ()
 set_target_properties( ${PROJECT_NAME}
 	PROPERTIES
 		CXX_STANDARD 20
@@ -1850,15 +1836,31 @@ set_target_properties( ${PROJECT_NAME}
 		FOLDER "Core/${MAIN_PROJECT_NAME}"
 		UNITY_BUILD "${CASTOR_UNITY_BUILD}"
 )
+install(
+	FILES ${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/RequiredVersion.hpp
+	DESTINATION include/${PROJECT_NAME}
+	COMPONENT Castor3D_dev
+)
+target_install_headers( ${PROJECT_NAME}
+	${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}
+)
+install_target_ex( ${PROJECT_NAME}
+	Castor3D
+	api_dll
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}
+)
+set( CASTOR_INSTEXP_LIST
+	${CASTOR_INSTEXP_LIST}
+	${PROJECT_NAME}
+	PARENT_SCOPE
+)
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 target_add_doc_ex( ${PROJECT_NAME} "French" "*.h *.hpp" ${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME} )
 target_add_doc_ex( ${PROJECT_NAME} "English" "*.h *.hpp" ${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME} )
 
 # Copying core zip data files
-file(
-	GLOB
-		CoreZipFiles
-		${CASTOR_SOURCE_DIR}/data/${PROJECT_NAME}/*.zip
+file( GLOB CoreZipFiles
+	${CASTOR_SOURCE_DIR}/data/${PROJECT_NAME}/*.zip
 )
 copy_target_files_ex( ${PROJECT_NAME}
 	Castor3D
@@ -1867,10 +1869,8 @@ copy_target_files_ex( ${PROJECT_NAME}
 )
 
 # Copying shader languages files
-file(
-	GLOB
-		ShaderLanguagesFiles
-		${CASTOR_SOURCE_DIR}/languages/${PROJECT_NAME}/*.lang
+file( GLOB ShaderLanguagesFiles
+	${CASTOR_SOURCE_DIR}/languages/${PROJECT_NAME}/*.lang
 )
 copy_target_files_ex( ${PROJECT_NAME}
 	Castor3D
