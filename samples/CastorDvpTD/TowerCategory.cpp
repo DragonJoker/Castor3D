@@ -36,7 +36,7 @@ namespace castortd
 			, std::bind( costIncrement, 30u, std::placeholders::_1, std::placeholders::_2 ) );
 
 		m_speed.initialise( 1.0f
-			, std::bind( speedIncrement, 1.2f, std::placeholders::_1, std::placeholders::_2 )
+			, std::bind( speedIncrement, float( sqrt( 2.0f ) ), std::placeholders::_1, std::placeholders::_2 )
 			, 200u
 			, std::bind( costIncrement, 20u, std::placeholders::_1, std::placeholders::_2 ) );
 
@@ -83,7 +83,7 @@ namespace castortd
 			, std::bind( costIncrement, 30u, std::placeholders::_1, std::placeholders::_2 ) );
 
 		m_speed.initialise( 1.0f
-			, std::bind( speedIncrement, 1.5f, std::placeholders::_1, std::placeholders::_2 )
+			, std::bind( speedIncrement, float( sqrt( 2.0f ) ), std::placeholders::_1, std::placeholders::_2 )
 			, 150u
 			, std::bind( costIncrement, 10u, std::placeholders::_1, std::placeholders::_2 ) );
 

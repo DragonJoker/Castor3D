@@ -124,16 +124,21 @@ namespace castortd
 		EVT_CLOSE( MainFrame::OnClose )
 		EVT_ERASE_BACKGROUND( MainFrame::OnEraseBackground )
 		EVT_TIMER( main::eID_RENDER_TIMER, MainFrame::OnRenderTimer )
+		EVT_KEY_DOWN( MainFrame::onKeyDown )
+		EVT_KEY_UP( MainFrame::onKeyUp )
+		EVT_LEFT_DOWN( MainFrame::OnMouseLdown )
+		EVT_LEFT_UP( MainFrame::OnMouseLUp )
+		EVT_RIGHT_UP( MainFrame::OnMouseRUp )
 	END_EVENT_TABLE()
 #pragma GCC diagnostic pop
 
-	void MainFrame::OnPaint( wxPaintEvent & p_event )
+	void MainFrame::OnPaint( wxPaintEvent & event )
 	{
 		wxPaintDC paintDC( this );
-		p_event.Skip();
+		event.Skip();
 	}
 
-	void MainFrame::OnClose( wxCloseEvent & p_event )
+	void MainFrame::OnClose( wxCloseEvent & event )
 	{
 		Hide();
 
@@ -173,15 +178,15 @@ namespace castortd
 		}
 
 		DestroyChildren();
-		p_event.Skip();
+		event.Skip();
 	}
 
-	void MainFrame::OnEraseBackground( wxEraseEvent & p_event )
+	void MainFrame::OnEraseBackground( wxEraseEvent & event )
 	{
-		p_event.Skip();
+		event.Skip();
 	}
 
-	void MainFrame::OnRenderTimer( wxTimerEvent & p_event )
+	void MainFrame::OnRenderTimer( wxTimerEvent & event )
 	{
 		if ( wxGetApp().getCastor() )
 		{
@@ -196,6 +201,60 @@ namespace castortd
 					m_timer->Start( 1000 / int( castor.getRenderLoop().getWantedFps() ), true );
 				}
 			}
+		}
+	}
+
+	void MainFrame::onKeyDown( wxKeyEvent & event )
+	{
+		if ( m_panel )
+		{
+			m_panel->GetEventHandler()->QueueEvent( new wxKeyEvent{ event } );
+			event.Skip();
+		}
+	}
+
+	void MainFrame::onKeyUp( wxKeyEvent & event )
+	{
+		if ( m_panel )
+		{
+			m_panel->GetEventHandler()->QueueEvent( new wxKeyEvent{ event } );
+			event.Skip();
+		}
+	}
+
+	void MainFrame::OnMouseLdown( wxMouseEvent & event )
+	{
+		if ( m_panel )
+		{
+			m_panel->GetEventHandler()->QueueEvent( new wxMouseEvent{ event } );
+			event.Skip();
+		}
+	}
+
+	void MainFrame::OnMouseLUp( wxMouseEvent & event )
+	{
+		if ( m_panel )
+		{
+			m_panel->GetEventHandler()->QueueEvent( new wxMouseEvent{ event } );
+			event.Skip();
+		}
+	}
+
+	void MainFrame::OnMouseRUp( wxMouseEvent & event )
+	{
+		if ( m_panel )
+		{
+			m_panel->GetEventHandler()->QueueEvent( new wxMouseEvent{ event } );
+			event.Skip();
+		}
+	}
+
+	void MainFrame::OnMouseWheel( wxMouseEvent & event )
+	{
+		if ( m_panel )
+		{
+			m_panel->GetEventHandler()->QueueEvent( new wxMouseEvent{ event } );
+			event.Skip();
 		}
 	}
 }
