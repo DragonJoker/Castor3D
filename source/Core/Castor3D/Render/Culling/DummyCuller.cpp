@@ -1,7 +1,10 @@
 #include "Castor3D/Render/Culling/DummyCuller.hpp"
 
-#include "Castor3D/Render/Node/SceneRenderNodes.hpp"
-#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Render/Node/BillboardRenderNode.hpp"
+#include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
+#include "Castor3D/Scene/BillboardList.hpp"
+#include "Castor3D/Scene/Geometry.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
 
 namespace castor3d
 {
@@ -13,11 +16,11 @@ namespace castor3d
 
 	bool DummyCuller::isSubmeshVisible( SubmeshRenderNode const & node )const
 	{
-		return true;
+		return node.instance.getParent()->isVisible();
 	}
 
 	bool DummyCuller::isBillboardVisible( BillboardRenderNode const & node )const
 	{
-		return true;
+		return node.instance.getNode()->isVisible();
 	}
 }
