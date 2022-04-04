@@ -195,29 +195,23 @@ namespace castor3d
 			m_submesh = {};
 			m_billboard = {};
 			m_face = 0u;
-#if !C3D_DebugPicking
-			auto scissor = VkRect2D{ { 0u, 0u }
-				, { m_realSize.getWidth(), m_realSize.getHeight() } };
-#else
-			int32_t offsetX = std::clamp( position.x() - PickingOffset
+			int32_t offsetX = std::clamp( position.x() - rendpick::PickingOffset
 				, 0
-				, int32_t( m_size.getWidth() - PickingWidth ) );
-			int32_t offsetY = std::clamp( position.y() - PickingOffset
+				, int32_t( m_realSize.getWidth() - PickingWidth ) );
+			int32_t offsetY = std::clamp( position.y() - rendpick::PickingOffset
 				, 0
-				, int32_t( m_size.getHeight() - PickingWidth ) );
-			auto scissor = VkRect2D{ { offsetX, offsetY }
-			, { m_size.getWidth(), m_size.getHeight() } };
-#endif
-
-			m_pickingPass->updateArea( scissor );
+				, int32_t( m_realSize.getHeight() - PickingWidth ) );
+			VkRect2D scissor{ { offsetX, offsetY }
+				, { PickingWidth, PickingWidth } };
 
 			if ( m_first )
 			{
-				doFboPick( position );
 				m_pickingPass->updateArea( scissor );
+				doFboPick( position );
 				m_first = false;
 			}
 
+			m_pickingPass->updateArea( scissor );
 			auto pixel = doFboPick( position );
 			m_pickNodeType = doPick( pixel
 				, m_pickingPass->getCuller().getScene() );
