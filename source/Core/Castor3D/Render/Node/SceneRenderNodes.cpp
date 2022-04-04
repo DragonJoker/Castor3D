@@ -258,7 +258,7 @@ namespace castor3d
 
 	void SceneRenderNodes::update( CpuUpdater & updater )
 	{
-		if ( !m_dirty )
+		if ( !m_dirty && updater.dirtyScenes[getOwner()].dirtyNodes.empty() )
 		{
 			return;
 		}
@@ -282,7 +282,8 @@ namespace castor3d
 					? std::static_pointer_cast< AnimatedSkeleton >( findAnimatedObject( *getOwner(), node->instance.getName() + cuT( "_Skeleton" ) ) ).get()
 					: nullptr;
 
-				if ( instantiation.isInstanced() )
+				if ( instantiation.isInstanced()
+					&& node->instance.getParent()->isVisible() )
 				{
 					auto & passes = indices.emplace( &node->data, std::map< Pass const *, uint32_t >{} ).first->second;
 					auto & index = passes.emplace( &node->pass, 0u ).first->second;
