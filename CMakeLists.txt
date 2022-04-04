@@ -267,6 +267,44 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 		add_subdirectory( test )
 	endif()
 
+	install(
+		TARGETS ${CASTOR_INSTEXP_LIST}
+		COMPONENT Castor3D
+		EXPORT Castor3D
+		CONFIGURATIONS Release
+		RUNTIME DESTINATION bin
+		LIBRARY DESTINATION lib
+		ARCHIVE DESTINATION lib
+	)
+	install(
+		TARGETS ${CASTOR_INSTEXP_LIST}
+		COMPONENT Castor3D
+		EXPORT Castor3DDebug
+		CONFIGURATIONS Debug
+		RUNTIME DESTINATION bin/Debug
+		LIBRARY DESTINATION lib/Debug
+		ARCHIVE DESTINATION lib/Debug
+	)
+	install( EXPORT Castor3D
+		FILE Castor3DConfig.cmake
+		COMPONENT Castor3D
+		NAMESPACE castor::
+		CONFIGURATIONS Release
+		DESTINATION lib/cmake/Castor3D
+	)
+	install( EXPORT Castor3DDebug
+		FILE Castor3DConfig-debug.cmake
+		COMPONENT Castor3D
+		NAMESPACE castor::
+		CONFIGURATIONS Debug
+		DESTINATION lib/cmake/Castor3D
+	)
+	include( CMakePackageConfigHelpers )
+	write_basic_package_version_file( Castor3DConfigVersion.cmake
+		VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_BUILD}
+		COMPATIBILITY AnyNewerVersion
+	)
+
 	if ( CASTOR_BUILDGRP_SETUP )
 		if ( ( "${PROJECTS_PACKAGE_WIX}" STREQUAL "ON" ) OR ( "${PROJECTS_PACKAGE_DEB}" STREQUAL "ON" ) OR ( "${PROJECTS_PACKAGE_RPM}" STREQUAL "ON" ) )
 			file( MAKE_DIRECTORY "${PROJECTS_SETUP_OUTPUT_DIR}/${CMAKE_BUILD_TYPE}" )

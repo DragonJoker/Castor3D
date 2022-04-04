@@ -62,6 +62,10 @@ if( EXISTS ${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels.h )
 		lib
 		${CASTOR_SOURCE_DIR}/include/Core/CastorUtils/${PROJECT_NAME}
 	)
+	set( Castor3DInstallTargets
+		${Castor3DInstallTargets}
+		${PROJECT_NAME}
+	)
 	set_target_properties( ${PROJECT_NAME}
 		PROPERTIES
 			CXX_STANDARD 20
@@ -848,6 +852,18 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		endif ()
 	endif ()
 
+	target_compile_options( ${PROJECT_NAME}
+		PRIVATE
+			$<$<CXX_COMPILER_ID:MSVC>:/bigobj>
+	)
+	set_target_properties( ${PROJECT_NAME}
+		PROPERTIES
+			CXX_STANDARD 20
+			CXX_EXTENSIONS OFF
+			FOLDER "Core/${MAIN_PROJECT_NAME}"
+			UNITY_BUILD "${CASTOR_UNITY_BUILD}"
+	)
+
 	install(
 		FILES ${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/config.hpp
 		DESTINATION include/${PROJECT_NAME}
@@ -858,7 +874,16 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		DESTINATION include/${PROJECT_NAME}/Graphics
 		COMPONENT Castor3D_dev
 	)
-
+	install_target_ex( ${PROJECT_NAME}
+		Castor3D
+		api_dll
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}
+	)
+	set( CASTOR_INSTEXP_LIST
+		${CASTOR_INSTEXP_LIST}
+		${PROJECT_NAME}
+		PARENT_SCOPE
+	)
 	if ( WIN32 )
 		set( CMAKE_INSTALL_DEBUG_LIBRARIES TRUE )
 		set( CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION bin/$<$<CONFIG:Debug>:Debug/> )
@@ -890,31 +915,6 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 			endif ()
 		endif ()
 	endif ()
-	target_compile_options( ${PROJECT_NAME}
-		PRIVATE
-			$<$<CXX_COMPILER_ID:MSVC>:/bigobj>
-	)
-	if ( VCPKG_BUILD )
-		target_install_headers( ${PROJECT_NAME}
-			${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}
-		)
-		target_install_headers( ${PROJECT_NAME}
-			${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}
-		)
-	else ()
-		install_target_ex( ${PROJECT_NAME}
-			Castor3D
-			api_dll
-			${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}
-		)
-	endif ()
-	set_target_properties( ${PROJECT_NAME}
-		PROPERTIES
-			CXX_STANDARD 20
-			CXX_EXTENSIONS OFF
-			FOLDER "Core/${MAIN_PROJECT_NAME}"
-			UNITY_BUILD "${CASTOR_UNITY_BUILD}"
-	)
 
 	add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 	target_add_doc_ex( ${PROJECT_NAME} "French" "*.h *.hpp" ${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME} )
@@ -932,9 +932,3 @@ else ()
 	set( Build "${msg})" PARENT_SCOPE )
 	set( Error TRUE PARENT_SCOPE )
 endif ()
-
-set( CastorMinLibraries
-	${CastorMinLibraries}
-	${PROJECT_NAME}
-	PARENT_SCOPE
-)

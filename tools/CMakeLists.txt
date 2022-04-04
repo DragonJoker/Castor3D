@@ -157,9 +157,12 @@ function( ToolsBuild )
 			${CastorMinLibraries}
 			PARENT_SCOPE
 		)
-
 		set( Castor3DBinsDependencies
 			${Castor3DBinsDependencies}
+			PARENT_SCOPE
+		)
+		set( CASTOR_INSTEXP_LIST
+			${CASTOR_INSTEXP_LIST}
 			PARENT_SCOPE
 		)
 	endif ()
