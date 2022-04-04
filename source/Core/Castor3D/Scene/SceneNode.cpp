@@ -333,7 +333,9 @@ namespace castor3d
 	bool SceneNode::isVisible()const
 	{
 		auto parent = m_parent;
-		return m_visible && ( parent ? parent->isVisible() : true );
+		return isDisplayable()
+			&& m_visible
+			&& ( parent ? parent->isVisible() : true );
 	}
 
 	SceneNode::SceneNodeMap const & SceneNode::getChildren()const

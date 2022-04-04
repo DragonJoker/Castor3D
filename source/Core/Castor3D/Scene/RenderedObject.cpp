@@ -11,6 +11,11 @@ namespace castor3d
 		, SceneNode const & sceneNode
 		, ModelBufferConfiguration & modelData )
 	{
+		if ( !sceneNode.isVisible() )
+		{
+			return;
+		}
+
 		auto & modelMtx = sceneNode.getDerivedTransformationMatrix();
 		auto normal = castor::Matrix3x3f{ modelMtx };
 

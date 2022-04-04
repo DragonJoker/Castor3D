@@ -143,11 +143,12 @@ namespace castor3d
 		}
 
 		static void fillIndirectCommand( SubmeshRenderNode const & culled
-			, VkDrawIndexedIndirectCommand *& indirectIndexedCommands )
+			, VkDrawIndexedIndirectCommand *& indirectIndexedCommands
+			, uint32_t instanceCount )
 		{
 			auto & bufferOffsets = culled.data.getBufferOffsets();
 			indirectIndexedCommands->indexCount = bufferOffsets.getIndexCount();
-			indirectIndexedCommands->instanceCount = getInstanceCount( culled );
+			indirectIndexedCommands->instanceCount = instanceCount;
 			indirectIndexedCommands->firstIndex = bufferOffsets.getFirstIndex();
 			indirectIndexedCommands->vertexOffset = int32_t( bufferOffsets.getFirstVertex< InterleavedVertex >() );
 			indirectIndexedCommands->firstInstance = 0u;
@@ -155,11 +156,12 @@ namespace castor3d
 		}
 
 		static void fillIndirectCommand( SubmeshRenderNode const & culled
-			, VkDrawIndirectCommand *& indirectCommands )
+			, VkDrawIndirectCommand *& indirectCommands
+			, uint32_t instanceCount )
 		{
 			auto & bufferOffsets = culled.data.getBufferOffsets();
 			indirectCommands->vertexCount = bufferOffsets.getVertexCount< InterleavedVertex >();
-			indirectCommands->instanceCount = getInstanceCount( culled );
+			indirectCommands->instanceCount = instanceCount;
 			indirectCommands->firstVertex = bufferOffsets.getFirstVertex< InterleavedVertex >();
 			indirectCommands->firstInstance = 0u;
 			++indirectCommands;
@@ -178,16 +180,37 @@ namespace castor3d
 
 		static void fillNodeCommands( SubmeshRenderNode const & node
 			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
-			, VkDrawIndirectCommand *& indirectNIdxBuffer )
+			, VkDrawIndirectCommand *& indirectNIdxBuffer
+			, uint32_t instanceCount )
 		{
 			if ( node.data.getBufferOffsets().hasIndices() )
 			{
-				fillIndirectCommand( node, indirectIdxBuffer );
+				fillIndirectCommand( node, indirectIdxBuffer, instanceCount );
 			}
 			else
 			{
-				fillIndirectCommand( node, indirectNIdxBuffer );
+				fillIndirectCommand( node, indirectNIdxBuffer, instanceCount );
 			}
+		}
+
+		static void fillNodeCommands( SceneCuller::SidedNodeArrayT< SubmeshRenderNode > const & nodes
+			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
+			, VkDrawIndirectCommand *& indirectNIdxBuffer )
+		{
+			uint32_t instanceCount = 0u;
+
+			for ( auto & node : nodes )
+			{
+				if ( node.first.node->instance.getParent()->isVisible() )
+				{
+					++instanceCount;
+				}
+			}
+
+			fillNodeCommands( *nodes.front().first.node
+				, indirectIdxBuffer
+				, indirectNIdxBuffer
+				, instanceCount );
 		}
 
 		static void fillNodeCommands( SubmeshRenderNode const & node
@@ -198,7 +221,8 @@ namespace castor3d
 		{
 			fillNodeCommands( node
 				, indirectIdxBuffer
-				, indirectNIdxBuffer );
+				, indirectNIdxBuffer
+				, getInstanceCount( node ) );
 			auto submeshFlags = node.data.getProgramFlags( node.pass.getOwner() );
 
 			auto mesh = checkFlag( submeshFlags, ProgramFlag::eMorphing )
@@ -676,7 +700,7 @@ namespace castor3d
 							{
 								for ( auto & submeshIt : passIt.second )
 								{
-									cullscn::fillNodeCommands( *submeshIt.second.front().first.node
+									cullscn::fillNodeCommands( submeshIt.second
 										, indirectIdxBuffer
 										, indirectNIdxBuffer );
 								}
@@ -856,19 +880,22 @@ namespace castor3d
 
 			if ( instantiation.isInstanced( node.instance.getMaterial( node.data ) ) )
 			{
-				cullscn::addRenderNode( culled
-					, renderPass
-					, false
-					, sortedInstanced
-					, nodesIds );
-
-				if ( needsFront )
+				if ( node.instance.getParent()->isVisible() )
 				{
 					cullscn::addRenderNode( culled
 						, renderPass
-						, true
+						, false
 						, sortedInstanced
 						, nodesIds );
+
+					if ( needsFront )
+					{
+						cullscn::addRenderNode( culled
+							, renderPass
+							, true
+							, sortedInstanced
+							, nodesIds );
+					}
 				}
 			}
 			else
