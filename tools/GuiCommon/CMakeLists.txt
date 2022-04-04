@@ -344,7 +344,7 @@ if ( CASTOR_C3D_NEEDS_GLSL )
 	)
 endif ()
 install_target_ex( ${PROJECT_NAME}
-	${PROJECT_NAME}
+	Castor3D
 	lib
 	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}
 )

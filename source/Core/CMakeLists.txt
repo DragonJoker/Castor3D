@@ -43,6 +43,10 @@ function( CoreBuild )
 		${Castor3D_MATERIAL_DIRS}
 		PARENT_SCOPE
 	)
+	set( CASTOR_INSTEXP_LIST
+		${CASTOR_INSTEXP_LIST}
+		PARENT_SCOPE
+	)
 endfunction( CoreBuild )
 
 function( CoreSummary msg )
