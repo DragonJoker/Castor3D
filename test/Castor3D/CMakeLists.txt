@@ -31,6 +31,7 @@ target_include_directories( ${PROJECT_NAME}
 )
 target_link_libraries( ${PROJECT_NAME} PRIVATE
 	castor::Castor3D
+	castor::SceneExporter
 	castor::CastorTest
 )
 

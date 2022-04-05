@@ -13,6 +13,8 @@
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp>
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp>
@@ -151,6 +153,28 @@ namespace Testing
 	};
 
 	template<>
+	struct Stringifier< castor3d::Face >
+	{
+		static std::string get( castor3d::Face const & value )
+		{
+			std::stringstream stream;
+			stream << value[0] << " " << value[1] << " " << value[2];
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::Line >
+	{
+		static std::string get( castor3d::Line const & value )
+		{
+			std::stringstream stream;
+			stream << value[0] << " " << value[1];
+			return stream.str();
+		}
+	};
+
+	template<>
 	struct Stringifier< castor3d::Animation >
 	{
 		static std::string get( castor3d::Animation const & value )
@@ -237,7 +261,7 @@ namespace Testing
 		{
 			static std::map< castor3d::AnimationType, std::string > Names
 			{
-				{ castor3d::AnimationType::eMovable, "Movable" },
+				{ castor3d::AnimationType::eSceneNode, "SceneNode" },
 				{ castor3d::AnimationType::eMesh, "Mesh" },
 				{ castor3d::AnimationType::eSkeleton, "Skeleton" },
 			};
@@ -319,9 +343,25 @@ namespace Testing
 	{
 		static std::string get( castor3d::SubmeshComponent const & value )
 		{
-			std::string result = castor::string::stringCast< char >( value.getType() );
-			//result += ", " + toString( p_value.getProgramFlags() );
-			return result;
+			return castor::string::stringCast< char >( value.getType() );
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::TriFaceMapping >
+	{
+		static std::string get( castor3d::TriFaceMapping const & value )
+		{
+			return std::string{ "castor3d::TriFaceMapping" };
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::LinesMapping >
+	{
+		static std::string get( castor3d::LinesMapping const & value )
+		{
+			return std::string{ "castor3d::LinesMapping" };
 		}
 	};
 
@@ -695,6 +735,10 @@ namespace Testing
 		bool compare( castor3d::Submesh const & p_a, castor3d::Submesh const & p_b );
 		bool compare( castor3d::SubmeshComponent const & p_a, castor3d::SubmeshComponent const & p_b );
 		bool compare( castor3d::BonesComponent const & p_a, castor3d::BonesComponent const & p_b );
+		bool compare( castor3d::Face const & p_a, castor3d::Face const & p_b );
+		bool compare( castor3d::TriFaceMapping const & p_a, castor3d::TriFaceMapping const & p_b );
+		bool compare( castor3d::Line const & p_a, castor3d::Line const & p_b );
+		bool compare( castor3d::LinesMapping const & p_a, castor3d::LinesMapping const & p_b );
 		bool compare( castor3d::Skeleton const & p_a, castor3d::Skeleton const & p_b );
 		bool compare( castor3d::Bone const & p_a, castor3d::Bone const & p_b );
 		bool compare( castor3d::Animation const & p_a, castor3d::Animation const & p_b );
