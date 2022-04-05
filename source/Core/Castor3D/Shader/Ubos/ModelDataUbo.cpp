@@ -173,7 +173,7 @@ namespace castor3d::shader
 
 	castor::String const ObjectsIds::BufferName = cuT( "ObjectIdsBuffer" );
 	castor::String const ObjectsIds::DataName = cuT( "c3d_objectIdsData" );
-	uint32_t const ObjectsIds::NodesCount = 50'000u;
+	uint32_t const ObjectsIds::NodesCount = 10'000u;
 
 	ObjectsIds::ObjectsIds( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
@@ -192,7 +192,7 @@ namespace castor3d::shader
 		{
 			result->declMember( "data"
 				, ast::type::Kind::eVec4U
-				, 10'000u );
+				, NodesCount );
 		}
 
 		return result;

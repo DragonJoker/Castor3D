@@ -44,3 +44,8 @@ if( CASTOR_BUILD_CASTOR3D )
 endif ()
 set( msgtest "${msgtest}${msgtest_tmp}" )
 message( STATUS "${msgtest}\n" )
+
+set( CASTOR_INSTEXP_LIST
+	${CASTOR_INSTEXP_LIST}
+	PARENT_SCOPE
+)

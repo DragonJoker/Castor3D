@@ -24,7 +24,7 @@ namespace Testing
 		void AnimatedScene();
 
 	private:
-		castor3d::SceneSPtr doParseScene( castor::Path const & p_path );
+		castor3d::SceneRPtr doParseScene( castor::Path const & p_path );
 		void doTestScene( castor::String const & p_name );
 	};
 }
