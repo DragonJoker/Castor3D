@@ -207,7 +207,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les indicateurs de shader.
 		 */
-		C3D_API ProgramFlags getProgramFlags( MaterialRPtr material )const;
+		C3D_API ProgramFlags getProgramFlags( Material const & material )const;
 		/**
 		 *\~english
 		 *\brief		Sets the material.

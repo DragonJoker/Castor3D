@@ -5,6 +5,7 @@
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
 namespace castor3d
@@ -101,7 +102,39 @@ namespace castor3d
 
 			if ( changed )
 			{
-				submesh.setMaterial( oldMaterial, material, true );
+				if ( oldMaterial )
+				{
+					getScene()->getRenderNodes().reportPassChange( submesh
+						, *this
+						, *oldMaterial
+						, *material );
+
+					submesh.setMaterial( oldMaterial, material, true );
+
+					for ( auto & pass : *oldMaterial )
+					{
+						auto itPass = m_ids.find( pass.get() );
+
+						if ( itPass != m_ids.end() )
+						{
+							auto itSubmesh = itPass->second.find( submesh.getId() );
+
+							if ( itSubmesh != itPass->second.end() )
+							{
+								itPass->second.erase( itSubmesh );
+
+								if ( itPass->second.empty() )
+								{
+									m_ids.erase( itPass );
+								}
+							}
+						}
+					}
+				}
+				else
+				{
+					submesh.setMaterial( oldMaterial, material, true );
+				}
 
 				if ( material->hasEnvironmentMapping() )
 				{
@@ -207,7 +240,7 @@ namespace castor3d
 		return 0u;
 	}
 
-	SubmeshRenderNode const * Geometry::getRenderNode( Pass const & pass
+	SubmeshRenderNode * Geometry::getRenderNode( Pass const & pass
 		, Submesh const & submesh )const
 	{
 		auto itPass = m_ids.find( &pass );
@@ -223,10 +256,10 @@ namespace castor3d
 
 	void Geometry::setId( Pass const & pass
 		, Submesh const & submesh
-		, SubmeshRenderNode const * node
+		, SubmeshRenderNode * node
 		, uint32_t id )
 	{
-		auto itPass = m_ids.emplace( &pass, std::unordered_map< uint32_t, std::pair< uint32_t, SubmeshRenderNode const * > >{} ).first;
+		auto itPass = m_ids.emplace( &pass, std::unordered_map< uint32_t, IdRenderNode >{} ).first;
 		itPass->second[submesh.getId()] = { id, node };
 	}
 

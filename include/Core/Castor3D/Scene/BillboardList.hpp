@@ -258,8 +258,8 @@ namespace castor3d
 
 	protected:
 		Scene & m_scene;
-		SceneNode * m_node;
-		MaterialRPtr m_material;
+		SceneNode * m_node{};
+		MaterialRPtr m_material{};
 		castor::Point2f m_dimensions;
 		castor::Point3f m_cameraPosition;
 		GpuBufferOffsetT< uint8_t > m_vertexBuffer;

@@ -66,7 +66,7 @@ namespace castor3d
 			return m_data;
 		}
 
-		ProgramFlags getProgramFlags( MaterialRPtr material )const override
+		ProgramFlags getProgramFlags( Material const & material )const override
 		{
 			return ProgramFlag::eMorphing;
 		}

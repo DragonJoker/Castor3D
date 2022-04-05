@@ -82,7 +82,7 @@ namespace castor3d
 			auto & flags = pipeline.getFlags();
 			auto baseHash = getPipelineBaseHash( *pipeline.getOwner()
 				, node.data
-				, node.pass
+				, *node.pass
 				, checkFlag( flags.programFlags, ProgramFlag::eInvertNormals ) );
 
 			auto & bufferOffsets = node.data.getBufferOffsets();
@@ -107,14 +107,14 @@ namespace castor3d
 			auto & flags = pipeline.getFlags();
 			auto baseHash = getPipelineBaseHash( *pipeline.getOwner()
 				, node.data
-				, node.pass
+				, *node.pass
 				, checkFlag( flags.programFlags, ProgramFlag::eInvertNormals ) );
 
 			auto & bufferOffsets = node.data.getBufferOffsets();
 			auto buffer = &bufferOffsets.vtxBuffer->getBuffer().getBuffer();
 			auto & pipelineMap = nodes.emplace( baseHash, std::make_pair( &pipeline, ObjectNodesPtrByBufferMapT< NodeT >{} ) ).first->second.second;
 			auto & bufferMap = pipelineMap.emplace( buffer, ObjectNodesPtrByPassT< NodeT >{} ).first->second;
-			auto & passMap = bufferMap.emplace( &node.pass, ObjectNodesPtrMapT< NodeT >{} ).first->second;
+			auto & passMap = bufferMap.emplace( node.pass, ObjectNodesPtrMapT< NodeT >{} ).first->second;
 			auto & objectMap = passMap.emplace( &node.data, NodePtrArrayT< NodeT >{} ).first->second;
 			auto it = std::find_if( objectMap.begin()
 				, objectMap.end()
@@ -162,7 +162,7 @@ namespace castor3d
 
 				auto pipelineId = culler.getPipelineNodesIndex( nodesPass
 					, node.data
-					, node.pass
+					, *node.pass
 					, buffer
 					, checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eInvertNormals ) );
 				commandBuffer.pushConstants( pipeline.getPipelineLayout()
@@ -186,8 +186,8 @@ namespace castor3d
 		{
 			GeometryBuffers const & geometryBuffers = node.getGeometryBuffers( nodesPass.getShaderFlags()
 				, pipeline.getFlags().programFlags
-				, *node.pass.getOwner()
-				, node.pass.getTexturesMask()
+				, *node.pass->getOwner()
+				, node.pass->getTexturesMask()
 				, checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eForceTexCoords ) );
 			commandBuffer.bindVertexBuffer( geometryBuffers.layouts[0].get().vertexBindingDescriptions[0].binding
 				, geometryBuffers.bufferOffset.getVertexBuffer()
@@ -336,9 +336,9 @@ namespace castor3d
 					{
 						auto culledNode = culled.node;
 						auto & submesh = culledNode->data;
-						auto & pass = culledNode->pass;
+						auto & pass = *culledNode->pass;
 						auto material = pass.getOwner();
-						auto programFlags = submesh.getProgramFlags( material );
+						auto programFlags = submesh.getProgramFlags( *material );
 						auto sceneFlags = scene.getFlags();
 						auto textures = pass.getTexturesMask();
 						auto pipelineFlags = renderPass.createPipelineFlags( pass
@@ -383,9 +383,9 @@ namespace castor3d
 							{
 								auto culledNode = culled.node;
 								auto & submesh = culledNode->data;
-								auto & pass = culledNode->pass;
+								auto & pass = *culledNode->pass;
 								auto material = pass.getOwner();
-								auto programFlags = submesh.getProgramFlags( material );
+								auto programFlags = submesh.getProgramFlags( *material );
 								auto sceneFlags = scene.getFlags();
 								auto textures = pass.getTexturesMask();
 								auto pipelineFlags = renderPass.createPipelineFlags( pass
@@ -428,7 +428,7 @@ namespace castor3d
 					{
 						auto culledNode = culled.node;
 						auto & billboard = culledNode->data;
-						auto & pass = culledNode->pass;
+						auto & pass = *culledNode->pass;
 						auto programFlags = billboard.getProgramFlags();
 						auto sceneFlags = scene.getFlags();
 						auto textures = pass.getTexturesMask();

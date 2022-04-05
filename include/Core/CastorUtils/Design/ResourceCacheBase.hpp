@@ -357,6 +357,41 @@ namespace castor
 		}
 		/**
 		 *\~english
+		 *\brief		Renames a resource.
+		 *\param[in]	oldName	The current element name.
+		 *\param[in]	newName	The new element name.
+		 *\~french
+		 *\brief		Renomme une ressource.
+		 *\param[in]	oldName	Le nom actuel de l'élément.
+		 *\param[in]	newName	Le nouveau nom de l'élément.
+		 */
+		void rename( ElementKeyT const & oldName
+			, ElementKeyT const & newName )
+		{
+			auto lock( castor::makeUniqueLock( *this ) );
+			auto newIt = m_resources.find( newName );
+
+			if ( newIt != m_resources.end() )
+			{
+				this->reportDuplicate( newName );
+				return;
+			}
+
+			auto oldIt = m_resources.find( oldName );
+
+			if ( oldIt == m_resources.end() )
+			{
+				this->reportUnknown( oldName );
+				return;
+			}
+
+			ElementPtrT element = std::move( oldIt->second );
+			m_resources.erase( oldIt );
+			element->rename( newName );
+			m_resources.emplace( newName, std::move( element ) );
+		}
+		/**
+		 *\~english
 		 *\brief		Looks for an element with given name.
 		 *\param[in]	name	The object name.
 		 *\return		The found element, nullptr if not found.

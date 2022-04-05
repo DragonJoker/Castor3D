@@ -535,7 +535,7 @@ namespace castor3d
 					for ( auto & itSubmeshes : itPass.second )
 					{
 						auto & instantiation = itSubmeshes.first->getInstantiation();
-						auto it = instantiation.find( itPass.first->getOwner() );
+						auto it = instantiation.find( *itPass.first->getOwner() );
 
 						if ( !itSubmeshes.second.empty()
 							&& it != instantiation.end()

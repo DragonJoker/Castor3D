@@ -80,7 +80,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
 		 */
-		ProgramFlags getProgramFlags( MaterialRPtr material )const override
+		ProgramFlags getProgramFlags( Material const & material )const override
 		{
 			return ProgramFlags{};
 		}
