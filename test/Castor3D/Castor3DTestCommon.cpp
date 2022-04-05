@@ -188,7 +188,7 @@ namespace Testing
 	{
 		bool result{ CT_EQUAL( lhs.getName(), rhs.getName() ) };
 		result = result && CT_EQUAL( lhs.getParent()->getName(), rhs.getParent()->getName() );
-		result = result && CT_EQUAL( static_cast< Animable const & >( lhs ), static_cast< Animable const & >( rhs ) );
+		result = result && CT_EQUAL( static_cast< Animable const & >( *lhs.getParent() ), static_cast< Animable const & >( *rhs.getParent() ) );
 		return result;
 	}
 
@@ -306,12 +306,40 @@ namespace Testing
 
 	bool C3DTestCase::compare( BonesComponent const & lhs, BonesComponent const & rhs )
 	{
-		auto * lhsData = lhs.getBonesBuffer().lock();
-		auto * rhsData = rhs.getBonesBuffer().lock();
-		auto result = CT_EQUAL( castor::makeArrayView( lhsData, lhs.getBonesBuffer().getCount() )
-			, castor::makeArrayView( rhsData, rhs.getBonesBuffer().getCount() ) );
-		lhs.getBonesBuffer().unlock();
-		rhs.getBonesBuffer().unlock();
+		auto lhsData = lhs.getBonesData();
+		auto rhsData = rhs.getBonesData();
+		auto result = CT_EQUAL( lhsData, rhsData );
+		return result;
+	}
+
+	bool C3DTestCase::compare( Face const & lhs, Face const & rhs )
+	{
+		bool result{ CT_EQUAL( lhs[0], rhs[0] ) };
+		result = result && CT_EQUAL( lhs[1], rhs[1] );
+		result = result && CT_EQUAL( lhs[2], rhs[2] );
+		return result;
+	}
+
+	bool C3DTestCase::compare( TriFaceMapping const & lhs, TriFaceMapping const & rhs )
+	{
+		auto lhsData = lhs.getFaces();
+		auto rhsData = rhs.getFaces();
+		auto result = CT_EQUAL( lhsData, rhsData );
+		return result;
+	}
+
+	bool C3DTestCase::compare( Line const & lhs, Line const & rhs )
+	{
+		bool result{ CT_EQUAL( lhs[0], rhs[0] ) };
+		result = result && CT_EQUAL( lhs[1], rhs[1] );
+		return result;
+	}
+
+	bool C3DTestCase::compare( LinesMapping const & lhs, LinesMapping const & rhs )
+	{
+		auto lhsData = lhs.getFaces();
+		auto rhsData = rhs.getFaces();
+		auto result = CT_EQUAL( lhsData, rhsData );
 		return result;
 	}
 
@@ -320,9 +348,20 @@ namespace Testing
 		bool result = CT_EQUAL( lhs.getType(), rhs.getType() );
 		//result = result && CT_EQUAL( lhs.getProgramFlags(), rhs.getProgramFlags() );
 
-		if ( result && lhs.getType() == BonesComponent::Name )
+		if ( result )
 		{
-			result = result && CT_EQUAL( static_cast< BonesComponent const & >( lhs ), static_cast< BonesComponent const & >( rhs ) );
+			if ( lhs.getType() == BonesComponent::Name )
+			{
+				result = CT_EQUAL( static_cast< BonesComponent const & >( lhs ), static_cast< BonesComponent const & >( rhs ) );
+			}
+			else if ( lhs.getType() == TriFaceMapping::Name )
+			{
+				result = CT_EQUAL( static_cast< TriFaceMapping const & >( lhs ), static_cast< TriFaceMapping const & >( rhs ) );
+			}
+			else if ( lhs.getType() == LinesMapping::Name )
+			{
+				result = CT_EQUAL( static_cast< LinesMapping const & >( lhs ), static_cast< LinesMapping const & >( rhs ) );
+			}
 		}
 
 		return result;
@@ -331,18 +370,9 @@ namespace Testing
 	bool C3DTestCase::compare( Submesh const & lhs, Submesh const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getPointsCount(), rhs.getPointsCount() ) };
-		auto * lhsVtx = lhs.getVertexBuffer().lock();
-		auto * rhsVtx = rhs.getVertexBuffer().lock();
-		result = result && CT_EQUAL( castor::makeArrayView( lhsVtx, lhs.getVertexBuffer().getCount() )
-							  , castor::makeArrayView( rhsVtx, rhs.getVertexBuffer().getCount() ) );
-		lhs.getVertexBuffer().unlock();
-		rhs.getVertexBuffer().unlock();
-		auto * lhsIdx = lhs.getIndexBuffer().lock();
-		auto * rhsIdx = rhs.getIndexBuffer().lock();
-		result = result && CT_EQUAL( castor::makeArrayView( lhsIdx, lhs.getIndexBuffer().getCount() )
-								, castor::makeArrayView( rhsIdx, rhs.getIndexBuffer().getCount() ) );
-		lhs.getIndexBuffer().unlock();
-		rhs.getIndexBuffer().unlock();
+		auto lhsVtx = lhs.getPoints();
+		auto rhsVtx = rhs.getPoints();
+		result = result && CT_EQUAL( lhsVtx, rhsVtx );
 
 		if ( result )
 		{

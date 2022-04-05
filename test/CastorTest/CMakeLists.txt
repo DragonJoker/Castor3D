@@ -39,8 +39,9 @@ target_link_libraries( ${PROJECT_NAME}
 )
 target_include_directories( ${PROJECT_NAME}
 	PUBLIC
-		${CMAKE_SOURCE_DIR}/test/${PROJECT_NAME}
-		${CMAKE_BINARY_DIR}/test/${PROJECT_NAME}
+		$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/test/${PROJECT_NAME}>
+		$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/test/${PROJECT_NAME}>
+		$<INSTALL_INTERFACE:include>
 )
 set_target_properties( ${PROJECT_NAME}
 	PROPERTIES
@@ -49,6 +50,17 @@ set_target_properties( ${PROJECT_NAME}
 		CXX_EXTENSIONS OFF
 		FOLDER "Tests/Castor"
 )
+install_target_ex( ${PROJECT_NAME}
+	Castor3D
+	lib
+	${CASTOR_SOURCE_DIR}/test/${PROJECT_NAME}
+)
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 
 set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
+
+set( CASTOR_INSTEXP_LIST
+	${CASTOR_INSTEXP_LIST}
+	${PROJECT_NAME}
+	PARENT_SCOPE
+)

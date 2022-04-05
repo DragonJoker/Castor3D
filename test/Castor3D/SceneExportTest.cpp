@@ -21,6 +21,8 @@
 #include <Castor3D/Scene/SceneFileParser.hpp>
 #include <Castor3D/Text/TextScene.hpp>
 
+#include <SceneExporter/CscnExporter.hpp>
+
 #include <CastorUtils/Data/BinaryFile.hpp>
 
 using namespace castor;
@@ -30,69 +32,14 @@ namespace Testing
 {
 	namespace
 	{
-		bool ExportScene( Scene const & p_scene, Path const & p_fileName )
+		bool exportScene( Scene const & p_scene, Path const & p_fileName )
 		{
-			Path folder = p_fileName.getPath();
-
-			if ( folder.empty() )
-			{
-				folder = Path{ p_fileName.getFileName() };
-			}
-			else
-			{
-				folder /= p_fileName.getFileName();
-			}
-
-			if ( !File::directoryExists( folder ) )
-			{
-				File::directoryCreate( folder );
-			}
-
-			Path filePath = folder / p_fileName.getFileName();
-			auto stream = castor::makeStringStream();
-			auto result = castor::TextWriter< Scene >( String() )( p_scene, stream );
-
-			Path subfolder{ cuT( "Meshes" ) };
-
-			if ( result )
-			{
-				if ( !File::directoryExists( folder / subfolder ) )
-				{
-					File::directoryCreate( folder / subfolder );
-				}
-
-				auto lock = castor::makeUniqueLock( p_scene.getMeshCache() );
-
-				for ( auto const & it : p_scene.getMeshCache() )
-				{
-					auto mesh = it.second;
-					Path path{ folder / subfolder / it.second->getName() + cuT( ".cmsh" ) };
-					{
-						BinaryFile mshfile{ path, File::OpenMode::eWrite };
-						result &= castor3d::BinaryWriter< Mesh >{}.write( *mesh, mshfile );
-					}
-
-					auto skeleton = mesh->getSkeleton();
-
-					if ( result && skeleton )
-					{
-						BinaryFile sklfile{ folder / subfolder / ( it.second->getName() + cuT( ".cskl" ) ), File::OpenMode::eWrite };
-						result = castor3d::BinaryWriter< Skeleton >{}.write( *skeleton, sklfile );
-					}
-				}
-			}
-
-			if ( result )
-			{
-				TextFile scnFile( Path{ filePath + cuT( ".cscn" ) }, File::OpenMode::eWrite, File::EncodingMode::eASCII );
-				result = scnFile.writeText( stream.str() ) > 0;
-			}
-
-			return result;
+			castor3d::exporter::CscnSceneExporter exporter{ castor3d::exporter::ExportOptions{} };
+			return exporter.exportScene( p_scene, p_fileName );
 		}
 
 		template< typename ObjT, typename CacheT >
-		void RenameObject( ObjT p_object, CacheT & p_cache )
+		void renameObject( ObjT p_object, CacheT & p_cache )
 		{
 			auto name = p_object->getName();
 			p_object->rename( name + cuT( "_ren" ) );
@@ -100,13 +47,12 @@ namespace Testing
 			p_cache.add( p_object->getName(), p_object );
 		}
 
-		void cleanup( SceneSPtr & scene )
+		void cleanup( SceneRPtr & scene )
 		{
 			auto & engine = *scene->getEngine();
 			scene->cleanup();
 			engine.getRenderLoop().renderSyncFrame();
 			engine.getSceneCache().remove( scene->getName() );
-			scene.reset();
 		}
 	}
 
@@ -143,12 +89,12 @@ namespace Testing
 		doTestScene( cuT( "Anim.zip" ) );
 	}
 
-	SceneSPtr SceneExportTest::doParseScene( Path const & p_path )
+	SceneRPtr SceneExportTest::doParseScene( Path const & p_path )
 	{
 		SceneFileParser dstParser{ m_engine };
 		CT_REQUIRE( dstParser.parseFile( p_path ) );
 		CT_REQUIRE( dstParser.scenesBegin() != dstParser.scenesEnd() );
-		SceneSPtr scene{ dstParser.scenesBegin()->second };
+		auto scene{ dstParser.scenesBegin()->second };
 		auto window = std::make_shared< RenderWindow >( "SceneExportTest"
 			, m_engine
 			, Size{ 800u, 600u }
@@ -165,16 +111,17 @@ namespace Testing
 
 	void SceneExportTest::doTestScene( String const & p_name )
 	{
-		SceneSPtr src{ doParseScene( m_testDataFolder / p_name ) };
+		SceneRPtr src{ doParseScene( m_testDataFolder / p_name ) };
 		Path path{ cuT( "TestScene.cscn" ) };
-		CT_CHECK( ExportScene( *src, path ) );
+		CT_CHECK( exportScene( *src, path ) );
 		auto window = std::make_shared< RenderWindow >( "SceneExportTest"
 			, m_engine
 			, Size{ 800u, 600u }
 			, ashes::WindowHandle{ std::make_unique< TestWindowHandle >() } );
-		
-		RenameObject( src, m_engine.getSceneCache() );
-		SceneSPtr dst{ doParseScene( Path{ cuT( "TestScene" ) } / cuT( "TestScene.cscn" ) ) };
+
+		m_engine.getSceneCache().rename( src->getName()
+			, src->getName() + cuT( "_ren" ) );
+		SceneRPtr dst{ doParseScene( Path{ cuT( "TestScene" ) } / cuT( "TestScene.cscn" ) ) };
 		CT_EQUAL( *src, *dst );
 		File::directoryDelete( Path{ cuT( "TestScene" ) } );
 		cleanup( dst );
