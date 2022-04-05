@@ -78,7 +78,7 @@ namespace castor3d
 
 	uint32_t InstantiationComponent::ref( MaterialRPtr material )
 	{
-		auto it = find( material );
+		auto it = find( *material );
 
 		if ( it == m_instances.end() )
 		{
@@ -102,7 +102,7 @@ namespace castor3d
 
 	uint32_t InstantiationComponent::unref( MaterialRPtr material )
 	{
-		auto it = find( material );
+		auto it = find( *material );
 		uint32_t result{ 0u };
 
 		if ( it != end() )
@@ -131,7 +131,7 @@ namespace castor3d
 	uint32_t InstantiationComponent::getRefCount( MaterialRPtr material )const
 	{
 		uint32_t result = 0;
-		auto it = find( material );
+		auto it = find( *material );
 
 		if ( it != end() )
 		{
@@ -203,7 +203,7 @@ namespace castor3d
 		return std::static_pointer_cast< SubmeshComponent >( result );
 	}
 
-	ProgramFlags InstantiationComponent::getProgramFlags( MaterialRPtr material )const
+	ProgramFlags InstantiationComponent::getProgramFlags( Material const & material )const
 	{
 		auto it = find( material );
 		return ( it != end() && it->second.buffer )

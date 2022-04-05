@@ -36,7 +36,7 @@ namespace castor3d
 			GpuBufferOffsetT< InstantiationData > buffer;
 			std::vector< InstantiationData > data;
 		};
-		using InstanceDataMap = std::map< MaterialRPtr, Data >;
+		using InstanceDataMap = std::map< Material const *, Data >;
 
 	public:
 		/**
@@ -131,7 +131,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API ProgramFlags getProgramFlags( MaterialRPtr material )const override;
+		C3D_API ProgramFlags getProgramFlags( Material const & material )const override;
 
 		inline uint32_t getThreshold()const
 		{
@@ -148,15 +148,15 @@ namespace castor3d
 			return m_instances.end();
 		}
 
-		inline InstanceDataMap::const_iterator find( MaterialRPtr material )const
+		inline InstanceDataMap::const_iterator find( Material const & material )const
 		{
-			return m_instances.find( material );
+			return m_instances.find( &material );
 		}
 
-		inline InstanceDataMap::iterator find( MaterialRPtr material )
+		inline InstanceDataMap::iterator find( Material const & material )
 		{
 			needsUpdate();
-			return m_instances.find( material );
+			return m_instances.find( &material );
 		}
 		/**@}*/
 

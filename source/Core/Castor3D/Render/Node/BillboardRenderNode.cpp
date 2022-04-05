@@ -10,7 +10,7 @@ namespace castor3d
 		, BillboardBase & data
 		, ModelBufferConfiguration & modelData
 		, BillboardUboConfiguration & billboardData )
-		: pass{ pass }
+		: pass{ &pass }
 		, data{ data }
 		, instance{ data }
 		, modelData{ modelData }
@@ -20,7 +20,7 @@ namespace castor3d
 
 	uint32_t BillboardRenderNode::getId()const
 	{
-		return instance.getId( pass );
+		return instance.getId( *pass );
 	}
 
 	uint32_t BillboardRenderNode::getInstanceCount()const

@@ -43,6 +43,8 @@ namespace castor3d
 		C3D_API explicit SceneRenderNodes( Scene const & scene );
 		C3D_API ~SceneRenderNodes();
 
+		C3D_API void registerCuller( SceneCuller & culler );
+		C3D_API void unregisterCuller( SceneCuller & culler );
 		C3D_API void clear();
 		C3D_API SubmeshRenderNode & createNode( Pass & pass
 			, Submesh & data
@@ -53,6 +55,13 @@ namespace castor3d
 			, BillboardBase & instance );
 		C3D_API SubmeshRenderNode const * getSubmeshNode( uint32_t nodeId );
 		C3D_API BillboardRenderNode const * getBillboardNode( uint32_t nodeId );
+		C3D_API void reportPassChange( Submesh & data
+			, Geometry & instance
+			, Material const & oldMaterial
+			, Material const & newMaterial );
+		C3D_API void reportPassChange( BillboardBase & billboard
+			, Material const & oldMaterial
+			, Material const & newMaterial );
 		C3D_API void update( CpuUpdater & updater );
 		C3D_API void update( GpuUpdater & updater );
 
@@ -94,6 +103,7 @@ namespace castor3d
 		FramePassTimerUPtr m_timerRenderNodes;
 		NodeDataArray m_nodesData;
 		uint32_t m_nodeId{};
+		std::vector< SceneCuller * > m_cullers;
 		bool m_dirty{ true };
 	};
 }

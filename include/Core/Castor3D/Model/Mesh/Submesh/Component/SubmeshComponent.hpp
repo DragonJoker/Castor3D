@@ -100,7 +100,7 @@ namespace castor3d
 		 *\return		Les indicateurs de shader.
 		 *\param[in]	material	Les matériau.
 		 */
-		C3D_API virtual ProgramFlags getProgramFlags( MaterialRPtr material )const = 0;
+		C3D_API virtual ProgramFlags getProgramFlags( Material const & material )const = 0;
 		/**
 		 *\~english
 		 *\return		The buffer usage flags.

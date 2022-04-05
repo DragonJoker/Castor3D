@@ -26,7 +26,7 @@ namespace castor3d
 		, public RenderedObject
 	{
 	public:
-		using IdRenderNode = std::pair< uint32_t, SubmeshRenderNode const * >;
+		using IdRenderNode = std::pair< uint32_t, SubmeshRenderNode * >;
 		using SubmeshIdRenderNodeMap = std::unordered_map< uint32_t, IdRenderNode >;
 
 	public:
@@ -165,7 +165,7 @@ namespace castor3d
 		 *\param[in]	pass	La passe de matériau.
 		 *\param[in]	submesh	Le sous-maillage.
 		 */
-		C3D_API SubmeshRenderNode const * getRenderNode( Pass const & pass
+		C3D_API SubmeshRenderNode * getRenderNode( Pass const & pass
 			, Submesh const & submesh )const;
 		/**
 		 *\~english
@@ -183,7 +183,7 @@ namespace castor3d
 		 */
 		C3D_API void setId( Pass const & pass
 			, Submesh const & submesh
-			, SubmeshRenderNode const * renderNode
+			, SubmeshRenderNode * renderNode
 			, uint32_t id );
 		/**
 		*\~english

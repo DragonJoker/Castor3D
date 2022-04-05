@@ -61,10 +61,11 @@ namespace GuiCommon
 
 		addProperty( grid, PROPERTY_CATEGORY_SUBMESH + wxString( m_geometry.getName() ) );
 		addPropertyET( grid, PROPERTY_TOPOLOGY, choices, m_submesh.getTopology(), &m_submesh, &castor3d::Submesh::setTopology );
-		addProperty( grid, PROPERTY_SUBMESH_MATERIAL, getMaterialsList(), m_geometry.getMaterial( m_submesh )->getName()
+		m_materials = getMaterialsList();
+		addProperty( grid, PROPERTY_SUBMESH_MATERIAL, m_materials, m_geometry.getMaterial( m_submesh )->getName()
 			, [this]( wxVariant const & var )
 			{
-				auto name = make_String( var.GetString() );
+				auto name = make_String( m_materials[size_t( var.GetLong() )] );
 				auto & cache = m_submesh.getOwner()->getScene()->getEngine()->getMaterialCache();
 				auto material = cache.find( name ).lock().get();
 
