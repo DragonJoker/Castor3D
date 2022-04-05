@@ -13,7 +13,7 @@ namespace castor3d
 		, Submesh & data
 		, Geometry & instance
 		, ModelBufferConfiguration & modelData )
-		: pass{ pass }
+		: pass{ &pass }
 		, data{ data }
 		, instance{ instance }
 		, modelData{ modelData }
@@ -22,13 +22,13 @@ namespace castor3d
 
 	uint32_t SubmeshRenderNode::getId()const
 	{
-		return instance.getId( pass, data );
+		return instance.getId( *pass, data );
 	}
 
 	uint32_t SubmeshRenderNode::getInstanceCount()const
 	{
 		auto & instantiation = data.getInstantiation();
-		return instantiation.getRefCount( pass.getOwner() );
+		return instantiation.getRefCount( pass->getOwner() );
 	}
 
 	GeometryBuffers const & SubmeshRenderNode::getGeometryBuffers( ShaderFlags const & shaderFlags

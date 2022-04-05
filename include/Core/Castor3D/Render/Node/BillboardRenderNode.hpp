@@ -37,7 +37,7 @@ namespace castor3d
 			, TextureFlagsArray const & texturesMask
 			, bool forceTexCoords )const;
 
-		Pass & pass;
+		Pass * pass;
 		DataType & data;
 		InstanceType & instance;
 		ModelBufferConfiguration & modelData;

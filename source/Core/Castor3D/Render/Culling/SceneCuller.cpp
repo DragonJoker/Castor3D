@@ -41,14 +41,14 @@ namespace castor3d
 			, SubmeshRenderNode const & culled
 			, bool isFrontCulled )
 		{
-			return getPipelineBaseHash( renderPass, culled.data, culled.pass, isFrontCulled );
+			return getPipelineBaseHash( renderPass, culled.data, *culled.pass, isFrontCulled );
 		}
 
 		static uint64_t getPipelineHash( RenderNodesPass const & renderPass
 			, BillboardRenderNode const & culled
 			, bool isFrontCulled )
 		{
-			return getPipelineBaseHash( renderPass, culled.data, culled.pass, isFrontCulled );
+			return getPipelineBaseHash( renderPass, culled.data, *culled.pass, isFrontCulled );
 		}
 
 		static void registerPipelineNodes( size_t hash
@@ -97,7 +97,7 @@ namespace castor3d
 			auto & pipelineNodes = sortedInstancedSubmeshes.emplace( hash, SceneCuller::SidedObjectNodeBufferMapT< SubmeshRenderNode >{} ).first->second;
 			auto buffer = &node.data.getBufferOffsets().vtxBuffer->getBuffer().getBuffer();
 			auto bufferIres = pipelineNodes.emplace( buffer, SceneCuller::SidedObjectNodePassMapT< SubmeshRenderNode >{} );
-			auto & passNodes = bufferIres.first->second.emplace( &node.pass, SceneCuller::SidedObjectNodeMapT< SubmeshRenderNode >{} ).first->second;
+			auto & passNodes = bufferIres.first->second.emplace( node.pass, SceneCuller::SidedObjectNodeMapT< SubmeshRenderNode >{} ).first->second;
 			auto & objectNodes = passNodes.emplace( &node.data, SceneCuller::SidedNodeArrayT< SubmeshRenderNode >{} ).first->second;
 			objectNodes.emplace_back( culled, isFrontCulled );
 			registerPipelineNodes( hash, *buffer, nodesIds );
@@ -134,7 +134,7 @@ namespace castor3d
 		static uint32_t getInstanceCount( SubmeshRenderNode const & culled )
 		{
 			auto & instantiation = culled.data.getInstantiation();
-			return instantiation.getRefCount( culled.pass.getOwner() );
+			return instantiation.getRefCount( culled.pass->getOwner() );
 		}
 
 		static uint32_t getInstanceCount( BillboardRenderNode const & culled )
@@ -223,7 +223,7 @@ namespace castor3d
 				, indirectIdxBuffer
 				, indirectNIdxBuffer
 				, getInstanceCount( node ) );
-			auto submeshFlags = node.data.getProgramFlags( node.pass.getOwner() );
+			auto submeshFlags = node.data.getProgramFlags( *node.pass->getOwner() );
 
 			auto mesh = checkFlag( submeshFlags, ProgramFlag::eMorphing )
 				? std::static_pointer_cast< AnimatedMesh >( findAnimatedObject( scene, node.instance.getName() + cuT( "_Mesh" ) ) )
@@ -232,7 +232,7 @@ namespace castor3d
 				? std::static_pointer_cast< AnimatedSkeleton >( findAnimatedObject( scene, node.instance.getName() + cuT( "_Skeleton" ) ) )
 				: nullptr;
 
-			( *pipelinesBuffer )->x = node.instance.getId( node.pass, node.data );
+			( *pipelinesBuffer )->x = node.instance.getId( *node.pass, node.data );
 
 			if ( mesh )
 			{
@@ -280,7 +280,7 @@ namespace castor3d
 		, Pass const & pass
 		, bool isFrontCulled )
 	{
-		auto programFlags = data.getProgramFlags( pass.getOwner() );
+		auto programFlags = data.getProgramFlags( *pass.getOwner() );
 
 		if ( isFrontCulled )
 		{
@@ -341,7 +341,7 @@ namespace castor3d
 
 	size_t hash( SubmeshRenderNode const & culled )
 	{
-		return hash( culled.instance, culled.data, culled.pass );
+		return hash( culled.instance, culled.data, *culled.pass );
 	}
 
 	bool isVisible( Camera const & camera
@@ -357,7 +357,7 @@ namespace castor3d
 		return sceneNode
 			&& sceneNode->isDisplayable()
 			&& sceneNode->isVisible()
-			&& ( node.data.getInstantiation().isInstanced( node.pass.getOwner() )		// Don't cull individual instances
+			&& ( node.data.getInstantiation().isInstanced( node.pass->getOwner() )		// Don't cull individual instances
 				|| ( frustum.isVisible( node.instance.getBoundingSphere( node.data )	// First test against bounding sphere
 						, sceneNode->getDerivedTransformationMatrix()
 						, sceneNode->getDerivedScale() )
@@ -369,7 +369,7 @@ namespace castor3d
 
 	size_t hash( BillboardRenderNode const & culled )
 	{
-		return hash( culled.data, culled.pass );
+		return hash( culled.data, *culled.pass );
 	}
 
 	bool isVisible( Camera const & camera
@@ -394,6 +394,7 @@ namespace castor3d
 		: m_scene{ scene }
 		, m_camera{ camera }
 	{
+		m_scene.getRenderNodes().registerCuller( *this );
 #if C3D_DebugTimers
 		auto & device = m_scene.getEngine()->getRenderSystem()->getRenderDevice();
 		m_timer = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Culling/General" ) );
@@ -405,6 +406,11 @@ namespace castor3d
 		m_scene.getEngine()->registerTimer( cuT( "Culling/Compute" ), *m_timerCompute );
 		m_scene.getEngine()->registerTimer( cuT( "Culling/Indirect" ), *m_timerIndirect );
 #endif
+	}
+
+	SceneCuller::~SceneCuller()
+	{
+		m_scene.getRenderNodes().unregisterCuller( *this );
 	}
 
 	void SceneCuller::registerRenderPass( RenderNodesPass const & renderPass )
@@ -479,6 +485,36 @@ namespace castor3d
 		return cullscn::getPipelineNodeIndex( getPipelineBaseHash( renderPass, billboard, pass, isFrontCulled )
 			, buffer
 			, it->second.nodesIds );
+	}
+
+	void SceneCuller::removeCulled( SubmeshRenderNode const & node )
+	{
+		auto it = std::find_if( m_culledSubmeshes.begin()
+			, m_culledSubmeshes.end()
+			, [&node]( CulledNodeT< SubmeshRenderNode > const & lookup )
+			{
+				return &node == lookup.node;
+			} );
+
+		if ( m_culledSubmeshes.end() != it )
+		{
+			m_culledSubmeshes.erase( it );
+		}
+	}
+
+	void SceneCuller::removeCulled( BillboardRenderNode const & node )
+	{
+		auto it = std::find_if( m_culledBillboards.begin()
+			, m_culledBillboards.end()
+			, [&node]( CulledNodeT< BillboardRenderNode > const & lookup )
+			{
+				return &node == lookup.node;
+			} );
+
+		if ( m_culledBillboards.end() != it )
+		{
+			m_culledBillboards.erase( it );
+		}
 	}
 
 	void SceneCuller::doInitialiseCulled()
@@ -738,7 +774,7 @@ namespace castor3d
 								if ( culled.visible )
 								{
 									cullscn::fillIndirectCommand( *culled.node, indirectBuffer );
-									( *pipelinesBuffer )->x = culled.node->instance.getId( culled.node->pass );
+									( *pipelinesBuffer )->x = culled.node->instance.getId( *culled.node->pass );
 									++pipelinesBuffer;
 								}
 							}
@@ -838,9 +874,11 @@ namespace castor3d
 				{
 					for ( auto & pass : *material )
 					{
-						auto node = object.getRenderNode( *pass
-							, *submesh );
-						dirtySubmeshes.push_back( node );
+						if ( auto node = object.getRenderNode( *pass
+							, *submesh ) )
+						{
+							dirtySubmeshes.push_back( node );
+						}
 					}
 				}
 			}
@@ -854,8 +892,10 @@ namespace castor3d
 		{
 			for ( auto & pass : *material )
 			{
-				auto node = object.getRenderNode( *pass );
-				dirtyBillboards.push_back( node );
+				if ( auto node = object.getRenderNode( *pass ) )
+				{
+					dirtyBillboards.push_back( node );
+				}
 			}
 		}
 	}
@@ -868,14 +908,14 @@ namespace castor3d
 	{
 		auto & node = *culled.node;
 
-		if ( renderPass.isValidPass( node.pass )
+		if ( renderPass.isValidPass( *node.pass )
 			&& renderPass.isValidRenderable( node.instance )
 			&& node.instance.getParent() != renderPass.getIgnoredNode() )
 		{
 			bool needsFront = renderPass.getRenderMode() == RenderMode::eTransparentOnly
 				|| renderPass.forceTwoSided()
-				|| node.pass.isTwoSided()
-				|| node.pass.hasAlphaBlending();
+				|| node.pass->isTwoSided()
+				|| node.pass->hasAlphaBlending();
 			auto & instantiation = node.data.getInstantiation();
 
 			if ( instantiation.isInstanced( node.instance.getMaterial( node.data ) ) )
@@ -925,7 +965,7 @@ namespace castor3d
 	{
 		auto & node = *culled.node;
 
-		if ( renderPass.isValidPass( node.pass )
+		if ( renderPass.isValidPass( *node.pass )
 			&& renderPass.isValidRenderable( node.instance )
 			&& node.instance.getNode() != renderPass.getIgnoredNode() )
 		{

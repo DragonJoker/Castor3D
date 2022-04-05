@@ -72,6 +72,7 @@ namespace GuiCommon
 	private:
 		castor3d::Geometry & m_geometry;
 		castor3d::Submesh & m_submesh;
+		wxArrayString m_materials;
 	};
 }
 

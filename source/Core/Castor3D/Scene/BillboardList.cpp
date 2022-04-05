@@ -6,6 +6,7 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
 namespace castor3d
@@ -232,7 +233,28 @@ namespace castor3d
 
 		if ( oldMaterial != value )
 		{
-			m_material = value;
+			if ( oldMaterial )
+			{
+				getParentScene().getRenderNodes().reportPassChange( *this
+					, *oldMaterial
+					, *value );
+				m_material = value;
+
+				for ( auto & pass : *oldMaterial )
+				{
+					auto itPass = m_ids.find( pass.get() );
+
+					if ( itPass != m_ids.end() )
+					{
+						m_ids.erase( itPass );
+					}
+				}
+			}
+			else
+			{
+				m_material = value;
+			}
+
 			getParentScene().markDirty( *this );
 		}
 	}

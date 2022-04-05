@@ -94,7 +94,7 @@ namespace castor3d
 	public:
 		C3D_API SceneCuller( Scene & scene
 			, Camera * camera );
-		C3D_API virtual ~SceneCuller() = default;
+		C3D_API virtual ~SceneCuller();
 		C3D_API void registerRenderPass( RenderNodesPass const & renderPass );
 		C3D_API void unregisterRenderPass( RenderNodesPass const & renderPass );
 		C3D_API void update( CpuUpdater & updater );
@@ -108,6 +108,8 @@ namespace castor3d
 			, Pass const & pass
 			, ashes::BufferBase const & buffer
 			, bool isFrontCulled )const;
+		C3D_API void removeCulled( SubmeshRenderNode const & node );
+		C3D_API void removeCulled( BillboardRenderNode const & node );
 		/**
 		*\~english
 		*name

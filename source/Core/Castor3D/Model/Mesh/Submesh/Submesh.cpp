@@ -395,7 +395,7 @@ namespace castor3d
 		}
 	}
 
-	ProgramFlags Submesh::getProgramFlags( MaterialRPtr material )const
+	ProgramFlags Submesh::getProgramFlags( Material const & material )const
 	{
 		auto result = m_programFlags;
 
