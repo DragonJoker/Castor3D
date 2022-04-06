@@ -32,6 +32,7 @@ See LICENSE file in root folder
 
 #pragma warning( push )
 #pragma warning( disable: 4365 )
+#pragma warning( disable: 4619 )
 #include <assimp/Importer.hpp> // C++ importer interface
 #include <assimp/scene.h> // Output data structure
 #include <assimp/postprocess.h> // Post processing flags

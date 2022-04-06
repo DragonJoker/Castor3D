@@ -141,9 +141,6 @@ namespace castor3d
 		PickNodeType doPick( castor::Point4ui const & pixel
 			, Scene const & scene );
 
-	public:
-		static uint32_t constexpr PickingWidth = 32u;
-
 	private:
 		C3D_API static uint32_t const UboBindingPoint;
 

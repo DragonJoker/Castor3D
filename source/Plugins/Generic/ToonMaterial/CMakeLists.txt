@@ -77,7 +77,7 @@ set_target_properties( ${PROJECT_NAME}
 )
 install_target_ex( ${PROJECT_NAME}
 	Plugins
-	plugin
+	api_plugin
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}
 )
 set( CASTOR_INSTEXP_LIST

@@ -1,6 +1,7 @@
 #include "Castor3D/Scene/SceneFileParser.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
 #include "Castor3D/Scene/SceneFileParser_Parsers.hpp"
@@ -110,7 +111,7 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "fog_density" ), parserSceneFogDensity, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "particle_system" ), parserSceneParticleSystem, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "mesh" ), parserMesh, { makeParameter< ParameterType::eName >() } );
-			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "directional_shadow_cascades" ), parserDirectionalShadowCascades, { makeParameter< ParameterType::eUInt32 >( castor::makeRange( 0u, shader::DirectionalMaxCascadesCount ) ) } );
+			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "directional_shadow_cascades" ), parserDirectionalShadowCascades, { makeParameter< ParameterType::eUInt32 >( castor::makeRange( 0u, DirectionalMaxCascadesCount ) ) } );
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "lpv_indirect_attenuation" ), parserLpvIndirectAttenuation, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "voxel_cone_tracing" ), parserVoxelConeTracing );
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "}" ), parserSceneEnd );

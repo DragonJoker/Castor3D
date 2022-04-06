@@ -1,6 +1,7 @@
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -775,7 +776,7 @@ namespace castor3d
 			result.addOutputColourView( lpvResult[LpvTexture::eG].targetViewId );
 			result.addOutputColourView( lpvResult[LpvTexture::eB].targetViewId );
 		}
-		else if ( index == MaxPropagationSteps - 1u )
+		else if ( index == LpvMaxPropagationSteps - 1u )
 		{
 			result.addInOutColourView( lpvResult[LpvTexture::eR].targetViewId
 				, {}
@@ -852,7 +853,7 @@ namespace castor3d
 			}
 		}
 
-		for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
+		for ( uint32_t i = 1u; i < LpvMaxPropagationSteps; ++i )
 		{
 			input = &m_propagate[propIndex];
 			propIndex = 1u - propIndex;

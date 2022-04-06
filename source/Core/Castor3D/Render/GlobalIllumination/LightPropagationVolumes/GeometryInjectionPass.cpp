@@ -2,6 +2,7 @@
 
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
@@ -113,7 +114,7 @@ namespace castor3d
 			using namespace sdw;
 			VertexWriter writer;
 
-			if constexpr ( shader::DirectionalMaxCascadesCount > 1u )
+			if constexpr ( DirectionalMaxCascadesCount > 1u )
 			{
 				auto inPosition = writer.declInput< Vec2 >( "inPosition", 0u );
 				auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormal )

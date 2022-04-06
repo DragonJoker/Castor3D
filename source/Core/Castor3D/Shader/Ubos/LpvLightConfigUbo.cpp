@@ -1,6 +1,7 @@
 #include "Castor3D/Shader/Ubos/LpvLightConfigUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
@@ -103,7 +104,7 @@ namespace castor3d
 		case LightType::eDirectional:
 			CU_Require( faceIndex == 0u );
 			configuration.lightView = lpvlubo::snapMatrix( lpvCellSize
-				, light.getDirectionalLight()->getViewMatrix( shader::DirectionalMaxCascadesCount - 1u ) );
+				, light.getDirectionalLight()->getViewMatrix( DirectionalMaxCascadesCount - 1u ) );
 			configuration.tanFovXHalf = 1.0f;
 			configuration.tanFovYHalf = 1.0f;
 			break;

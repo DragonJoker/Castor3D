@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "ShaderBuffersModule.hpp"
 #include "Castor3D/Material/Pass/PassModule.hpp"
 
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Shader/ShaderBuffer.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>
@@ -34,14 +35,14 @@ namespace castor3d
 		struct SssProfileData
 		{
 			Data sssInfo;
-			std::array< Data, 10u > transmittanceProfile;
+			std::array< Data, TransmittanceProfileSize > transmittanceProfile;
 		};
 		using SssProfilesData = castor::ArrayView< SssProfileData >;
 
 		struct SssProfileDataPtr
 		{
 			Data * sssInfo;
-			std::array< Data, 10u > * transmittanceProfile;
+			std::array< Data, TransmittanceProfileSize > * transmittanceProfile;
 		};
 
 		static constexpr uint32_t DataSize = sizeof( SssProfileData );

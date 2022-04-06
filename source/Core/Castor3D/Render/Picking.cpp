@@ -34,8 +34,8 @@ namespace castor3d
 		static std::string const DrawIndex = "c3d_iDrawIndex";
 		static std::string const NodeIndex = "c3d_iNodeIndex";
 
-		static int constexpr PickingOffset = int( Picking::PickingWidth / 2 );
-		static int constexpr BufferOffset = ( PickingOffset * Picking::PickingWidth ) + PickingOffset - 1;
+		static int constexpr PickingOffset = int( PickingAreaWidth / 2 );
+		static int constexpr BufferOffset = ( PickingOffset * PickingAreaWidth ) + PickingOffset - 1;
 
 		inline castor::Position convertToTopDown( castor::Position const & position
 			, castor::Size const & size )
@@ -83,15 +83,15 @@ namespace castor3d
 		{
 			std::vector< VkBufferImageCopy > result;
 
-			for ( int i = 0; i < int( Picking::PickingWidth ); ++i )
+			for ( int i = 0; i < int( PickingAreaWidth ); ++i )
 			{
-				for ( int j = 0; j < int( Picking::PickingWidth ); ++j )
+				for ( int j = 0; j < int( PickingAreaWidth ); ++j )
 				{
 					result.push_back( { BufferOffset * ashes::getMinimalSize( VK_FORMAT_R32G32B32A32_UINT )
 						, 0u
 						, 0u
 						, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 0u, 1u }
-						, { int( Picking::PickingWidth ) * 2 + i, j, 0 }
+						, { int( PickingAreaWidth ) * 2 + i, j, 0 }
 						, { 1u, 1u, 1u } } );
 				}
 			}
@@ -149,16 +149,16 @@ namespace castor3d
 			, 0u
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 0u, 1u }
 			, { 0, 0, 0 }
-			, { PickingWidth, PickingWidth, 1u } }
+			, { PickingAreaWidth, PickingAreaWidth, 1u } }
 		, m_pickDisplayRegions{ rendpick::createPickDisplayRegions() }
 		, m_commandBuffer{ queueData.commandPool->createCommandBuffer( "PickingPass" ) }
 		, m_stagingBuffer{ makeBuffer< castor::Point4ui >( m_device
-			, PickingWidth * PickingWidth
+			, PickingAreaWidth * PickingAreaWidth
 			, ( VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				| VK_BUFFER_USAGE_TRANSFER_SRC_BIT )
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, "PickingPassStagingBuffer" ) }
-		, m_buffer{ PickingWidth * PickingWidth }
+		, m_buffer{ PickingAreaWidth * PickingAreaWidth }
 		, m_transferFence{ m_device->createFence( "PickingPass" ) }
 	{
 		m_runnable = m_graph.compile( device.makeContext() );
@@ -197,12 +197,12 @@ namespace castor3d
 			m_face = 0u;
 			int32_t offsetX = std::clamp( position.x() - rendpick::PickingOffset
 				, 0
-				, int32_t( m_realSize.getWidth() - PickingWidth ) );
+				, int32_t( m_realSize.getWidth() - PickingAreaWidth ) );
 			int32_t offsetY = std::clamp( position.y() - rendpick::PickingOffset
 				, 0
-				, int32_t( m_realSize.getHeight() - PickingWidth ) );
+				, int32_t( m_realSize.getHeight() - PickingAreaWidth ) );
 			VkRect2D scissor{ { offsetX, offsetY }
-				, { PickingWidth, PickingWidth } };
+				, { PickingAreaWidth, PickingAreaWidth } };
 
 			if ( m_first )
 			{
@@ -260,10 +260,10 @@ namespace castor3d
 
 		m_copyRegion.imageOffset.x = std::clamp( position.x() - rendpick::PickingOffset
 			, 0
-			, int32_t( m_colourImage.data->info.extent.width - PickingWidth ) );
+			, int32_t( m_colourImage.data->info.extent.width - PickingAreaWidth ) );
 		m_copyRegion.imageOffset.y = std::clamp( position.y() - rendpick::PickingOffset
 			, 0
-			, int32_t( m_colourImage.data->info.extent.height - PickingWidth ) );
+			, int32_t( m_colourImage.data->info.extent.height - PickingAreaWidth ) );
 
 #if !C3D_DebugPicking
 		m_commandBuffer->begin();

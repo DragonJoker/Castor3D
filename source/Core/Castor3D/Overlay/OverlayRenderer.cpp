@@ -1,6 +1,7 @@
 #include "Castor3D/Overlay/OverlayRenderer.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/ObjectBufferPool.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
@@ -47,8 +48,6 @@ namespace castor3d
 
 	namespace ovrlrend
 	{
-		static uint32_t constexpr MaxPanelsPerBuffer = 100u;
-
 		enum class OverlayBindingId : uint32_t
 		{
 			eMaterials,
@@ -325,7 +324,7 @@ namespace castor3d
 				, device
 				, ( fontTexture ? m_renderer.m_noTexTextDeclaration : m_renderer.m_noTexDeclaration )
 				, ( fontTexture ? m_renderer.m_texTextDeclaration : m_renderer.m_texDeclaration )
-				, ovrlrend::MaxPanelsPerBuffer );
+				, OverlayMaxPanelsPerBuffer );
 			ovrlrend::doUpdateUbo( bufferIndex.overlayUbo
 				, overlay
 				, pass
@@ -508,7 +507,7 @@ namespace castor3d
 			, device
 			, m_noTexDeclaration
 			, m_texDeclaration
-			, ovrlrend::MaxPanelsPerBuffer ) );
+			, OverlayMaxPanelsPerBuffer ) );
 
 		// Create one border overlays buffer pool
 		m_borderVertexBuffers.emplace_back( std::make_unique< BorderPanelVertexBufferPool >( *getRenderSystem()->getEngine()
@@ -517,7 +516,7 @@ namespace castor3d
 			, device
 			, m_noTexDeclaration
 			, m_texDeclaration
-			, ovrlrend::MaxPanelsPerBuffer ) );
+			, OverlayMaxPanelsPerBuffer ) );
 
 		// create one text overlays buffer
 		m_textVertexBuffers.emplace_back( std::make_unique< TextVertexBufferPool >( *getRenderSystem()->getEngine()
@@ -526,7 +525,7 @@ namespace castor3d
 			, device
 			, m_noTexTextDeclaration
 			, m_texTextDeclaration
-			, ovrlrend::MaxPanelsPerBuffer ) );
+			, OverlayMaxPanelsPerBuffer ) );
 
 		m_matrixUbo.cpuUpdate( getRenderSystem()->getOrtho( 0.0f
 			, float( m_size.getWidth() )

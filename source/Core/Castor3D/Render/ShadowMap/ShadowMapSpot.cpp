@@ -1,6 +1,7 @@
 #include "Castor3D/Render/ShadowMap/ShadowMapSpot.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -50,7 +51,7 @@ namespace castor3d
 			auto & engine = *scene.getEngine();
 			std::vector< ShadowMap::PassDataPtr > result;
 			Viewport viewport{ engine };
-			viewport.resize( castor::Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize } );
+			viewport.resize( castor::Size{ ShadowMapSpotTextureSize, ShadowMapSpotTextureSize } );
 			auto & smResult = shadowMap.getShadowPassResult();
 			auto & depth = smResult[SmTexture::eDepth];
 			auto & linear = smResult[SmTexture::eLinearDepth];
@@ -132,7 +133,7 @@ namespace castor3d
 			, scene
 			, LightType::eSpot
 			, 0u
-			, castor::Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize }
+			, castor::Size{ ShadowMapSpotTextureSize, ShadowMapSpotTextureSize }
 			, shader::getSpotShadowMapCount()
 			, shader::getSpotShadowMapCount() }
 		, m_blurIntermediate{ handler.createImageId( crg::ImageData{ "SpotGB"

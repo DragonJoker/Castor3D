@@ -104,7 +104,6 @@ namespace castor3d
 
 	public:
 		C3D_API static castor::String const Type;
-		static uint32_t constexpr PickingWidth = 32u;
 
 	private:
 		using CameraQueueMap = std::map< Camera const *, RenderQueue >;

@@ -1,6 +1,7 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/ShaderCache.hpp"
 #include "Castor3D/Cache/TextureCache.hpp"
@@ -156,7 +157,7 @@ namespace castor3d
 		, m_blendAlphaFunc{ m_dirty, VK_COMPARE_OP_ALWAYS }
 		, m_parallaxOcclusionMode{ m_dirty, ParallaxOcclusionMode::eNone }
 		, m_edgeColour{ m_dirty, castor::RgbaColour::fromComponents( 0.0f, 0.0f, 0.0f, 1.0f ) }
-		, m_edgeWidth{ m_dirty, { 1.0f, castor::makeRange( MinEdgeWidth, MaxEdgeWidth ) } }
+		, m_edgeWidth{ m_dirty, { 1.0f, castor::makeRange( MinMaterialEdgeWidth, MaxMaterialEdgeWidth ) } }
 		, m_depthFactor{ m_dirty, { 1.0f, castor::makeRange( 0.0f, 1.0f ) } }
 		, m_normalFactor{ m_dirty, { 1.0f, castor::makeRange( 0.0f, 1.0f ) } }
 		, m_objectFactor{ m_dirty, { 1.0f, castor::makeRange( 0.0f, 1.0f ) } }

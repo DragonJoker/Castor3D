@@ -1,6 +1,7 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/ShaderCache.hpp"
 #include "Castor3D/Cache/TextureCache.hpp"
@@ -990,7 +991,7 @@ namespace castor3d
 		Pass::addParser( result, mtlSectionID, cuT( "refractions" ), parserPassRefractions, { makeParameter< ParameterType::eBool >() } );
 		Pass::addParser( result, mtlSectionID, cuT( "transmission" ), parserPassTransmission, { makeParameter< ParameterType::eRgbColour >() } );
 		Pass::addParser( result, mtlSectionID, cuT( "edge_colour" ), parserPassEdgeColour, { makeParameter< ParameterType::eRgbaColour >() } );
-		Pass::addParser( result, mtlSectionID, cuT( "edge_width" ), parserPassEdgeWidth, { makeParameter< ParameterType::eFloat >( makeRange( MinEdgeWidth, MaxEdgeWidth ) ) } );
+		Pass::addParser( result, mtlSectionID, cuT( "edge_width" ), parserPassEdgeWidth, { makeParameter< ParameterType::eFloat >( makeRange( MinMaterialEdgeWidth, MaxMaterialEdgeWidth ) ) } );
 		Pass::addParser( result, mtlSectionID, cuT( "edge_depth_factor" ), parserPassDepthFactor, { makeParameter< ParameterType::eFloat >( makeRange( 0.0f, 1.0f ) ) } );
 		Pass::addParser( result, mtlSectionID, cuT( "edge_normal_factor" ), parserPassNormalFactor, { makeParameter< ParameterType::eFloat >( makeRange( 0.0f, 1.0f ) ) } );
 		Pass::addParser( result, mtlSectionID, cuT( "edge_object_factor" ), parserPassObjectFactor, { makeParameter< ParameterType::eFloat >( makeRange( 0.0f, 1.0f ) ) } );

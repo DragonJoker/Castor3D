@@ -1,6 +1,7 @@
 #include "Castor3D/Material/Pass/Phong/PhongPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Material/Pass/PassVisitor.hpp"
@@ -339,7 +340,7 @@ namespace castor3d
 		, m_diffuse{ m_dirty, castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
 		, m_specular{ m_dirty, castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
 		, m_ambient{ m_dirty, 1.0f }
-		, m_shininess{ m_dirty, { 50.0f, castor::makeRange( 0.0001f, MaxShininess ) } }
+		, m_shininess{ m_dirty, { 50.0f, castor::makeRange( 0.0001f, MaxPhongShininess ) } }
 	{
 	}
 

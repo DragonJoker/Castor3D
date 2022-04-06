@@ -2,6 +2,7 @@
 
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
@@ -58,10 +59,10 @@ namespace castor
 		, m_engine{ *scene.getEngine() }
 		, m_device{ m_engine.getRenderSystem()->getRenderDevice() }
 		, m_morphingData{ m_device.bufferPool->getBuffer< MorphingBufferConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-			, 10'000ull
+			, MaxMorphingDataCount
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 		, m_skinningTransformsData{ m_device.bufferPool->getBuffer< SkinningTransformsConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-			, 1'000ull
+			, MaxSkinningDataCount
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 	{
 #if C3D_DebugTimers
@@ -94,10 +95,10 @@ namespace castor
 		if ( !m_morphingData )
 		{
 			m_morphingData = m_device.bufferPool->getBuffer< MorphingBufferConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-				, 10'000ull
+				, MaxMorphingDataCount
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 			m_skinningTransformsData = m_device.bufferPool->getBuffer< SkinningTransformsConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-				, 1'000ull
+				, MaxSkinningDataCount
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 			cacheanmgrp::doInitialiseBuffer( m_skinningTransformsData );
 		}

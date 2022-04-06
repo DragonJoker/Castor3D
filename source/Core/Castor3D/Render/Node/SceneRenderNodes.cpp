@@ -110,12 +110,12 @@ namespace castor3d
 		: castor::OwnedBy< Scene const >{ scene }
 		, m_device{ scene.getEngine()->getRenderSystem()->getRenderDevice() }
 		, m_modelsData{ makeBuffer< ModelBufferConfiguration >( m_device
-			, 250'000ull
+			, MaxObjectNodesCount
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, getOwner()->getName() + cuT( "RenderNodesData" ) ) }
 		, m_billboardsData{ makeBuffer< BillboardUboConfiguration >( m_device
-			, 250'000ull
+			, MaxObjectNodesCount
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, getOwner()->getName() + cuT( "BillboardsDimensions" ) ) }

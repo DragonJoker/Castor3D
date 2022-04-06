@@ -6,12 +6,14 @@ See LICENSE file in root folder
 
 #include "LightPropagationVolumesModule.hpp"
 
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
+
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
-#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
-#include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Shader/Ubos/LpvLightConfigUbo.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
@@ -25,9 +27,6 @@ namespace castor3d
 	class LightPropagationVolumesBase
 		: public castor::Named
 	{
-	public:
-		static constexpr uint32_t MaxPropagationSteps = 8u;
-
 	protected:
 		C3D_API LightPropagationVolumesBase( crg::ResourceHandler & handler
 			, Scene const & scene
@@ -186,7 +185,7 @@ namespace castor3d
 				++result;// geom injection;
 			}
 
-			result += MaxPropagationSteps;// propagation;
+			result += LpvMaxPropagationSteps;// propagation;
 			return result;
 		}
 	};

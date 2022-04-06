@@ -467,7 +467,7 @@ namespace castor3d
 		bool m_hasTransparentObjects{ false };
 		std::map< Material *, OnMaterialChangedConnection > m_materialsListeners;
 		bool m_dirtyMaterials{ true };
-		uint32_t m_directionalShadowCascades{ ShadowMapDirectionalTileCountX * ShadowMapDirectionalTileCountY };
+		uint32_t m_directionalShadowCascades{ DirectionalMaxCascadesCount };
 		castor::BoundingBox m_boundingBox;
 		std::atomic_bool m_needsGlobalIllumination;
 		std::array< std::atomic_bool, size_t( LightType::eCount ) > m_hasShadows;

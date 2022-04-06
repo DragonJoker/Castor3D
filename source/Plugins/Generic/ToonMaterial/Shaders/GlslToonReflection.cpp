@@ -1,5 +1,6 @@
 #include "ToonMaterial/Shaders/GlslToonReflection.hpp"
 
+#include <Castor3D/Limits.hpp>
 #include <Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp>
 #include <Castor3D/Render/PBR/EnvironmentPrefilter.hpp>
 #include <Castor3D/Shader/Shaders/GlslMaterial.hpp>
@@ -1176,7 +1177,7 @@ namespace toon::shader
 				R.y() = -R.y();
 
 				auto prefilteredColor = m_writer.declLocale( "prefilteredColor"
-					, prefilteredEnvMap.lod( R, material.roughness * sdw::Float( float( castor3d::EnvironmentPrefilter::MaxIblReflectionLod ) ) ).rgb() );
+					, prefilteredEnvMap.lod( R, material.roughness * sdw::Float( float( castor3d::MaxIblReflectionLod ) ) ).rgb() );
 				auto envBRDFCoord = m_writer.declLocale( "envBRDFCoord"
 					, vec2( NdotV, material.roughness ) );
 				auto envBRDF = m_writer.declLocale( "envBRDF"
@@ -1215,7 +1216,7 @@ namespace toon::shader
 					, reflect( wsIncident, wsNormal ) );
 				auto radiance = m_writer.declLocale( "radiance"
 					, envMap.lod( reflected
-						, material.roughness * sdw::Float( float( castor::getBitSize( castor3d::EnvironmentMap::Size ) ) ) ).xyz() );
+						, material.roughness * sdw::Float( float( castor::getBitSize( castor3d::EnvironmentMapSize ) ) ) ).xyz() );
 				m_writer.returnStmt( radiance * material.specular );
 			}
 			, sdw::InVec3{ m_writer, "wsIncident" }
@@ -1242,7 +1243,7 @@ namespace toon::shader
 				auto refracted = m_writer.declLocale( "refracted"
 					, refract( wsIncident, wsNormal, refractionRatio ) );
 				m_writer.returnStmt( envMap.lod( refracted
-						, material.roughness * sdw::Float( float( castor::getBitSize( castor3d::EnvironmentMap::Size ) ) ) ).xyz()
+						, material.roughness * sdw::Float( float( castor::getBitSize( castor3d::EnvironmentMapSize ) ) ) ).xyz()
 					* transmission
 					* material.albedo );
 			}
@@ -1324,7 +1325,7 @@ namespace toon::shader
 					, reflect( wsIncident, wsNormal ) );
 				auto radiance = m_writer.declLocale( "radiance"
 					, envMap.lod( vec4( reflected, m_writer.cast< sdw::Float >( envMapIndex ) )
-						, material.roughness * sdw::Float( float( castor::getBitSize( castor3d::EnvironmentMap::Size ) ) ) ).xyz() );
+						, material.roughness * sdw::Float( float( castor::getBitSize( castor3d::EnvironmentMapSize ) ) ) ).xyz() );
 				m_writer.returnStmt( radiance * material.specular );
 			}
 			, sdw::InVec3{ m_writer, "wsIncident" }
@@ -1353,7 +1354,7 @@ namespace toon::shader
 				auto refracted = m_writer.declLocale( "refracted"
 					, refract( wsIncident, wsNormal, refractionRatio ) );
 				m_writer.returnStmt( envMap.lod( vec4( refracted, m_writer.cast< sdw::Float >( envMapIndex ) )
-						, material.roughness * sdw::Float( float( castor::getBitSize( castor3d::EnvironmentMap::Size ) ) ) ).xyz()
+						, material.roughness * sdw::Float( float( castor::getBitSize( castor3d::EnvironmentMapSize ) ) ) ).xyz()
 					* transmission
 					* material.albedo );
 			}

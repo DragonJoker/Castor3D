@@ -2,6 +2,7 @@
 
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapDirectional.hpp"
@@ -122,7 +123,7 @@ namespace castor3d
 
 				// Snap cascade to texel grid:
 				auto extent = maxExtents - minExtents;
-				auto texelSize = extent / float( ShadowMapPassDirectional::TileSize );
+				auto texelSize = extent / float( ShadowMapDirectionalTextureSize );
 				minExtents = castor::point::getFloored( minExtents / texelSize ) * texelSize;
 				maxExtents = castor::point::getFloored( maxExtents / texelSize ) * texelSize;
 
@@ -218,7 +219,7 @@ namespace castor3d
 			directional.transforms[i] = m_cascades[i].viewProjMatrix;
 		}
 
-		for ( auto i = uint32_t( m_cascades.size() ); i < shader::DirectionalMaxCascadesCount; ++i )
+		for ( auto i = uint32_t( m_cascades.size() ); i < DirectionalMaxCascadesCount; ++i )
 		{
 			directional.transforms[i] = castor::Matrix4x4f{ 0.0f };
 		}
