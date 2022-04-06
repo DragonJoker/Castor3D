@@ -66,7 +66,6 @@ namespace castor3d
 		}
 	}
 
-	uint32_t const ShadowMapPassPoint::TextureSize = 512u;
 	castor::String const ShadowMapPassPoint::Type = "c3d.shadows.point";
 
 	ShadowMapPassPoint::ShadowMapPassPoint( crg::FramePass const & pass

@@ -1,6 +1,7 @@
 #include "Castor3D/Render/ShadowMap/ShadowMapPoint.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -69,8 +70,8 @@ namespace castor3d
 					, castor::makeUnique< Viewport >( engine )
 					, nullptr ) );
 				auto & passData = *result.back();
-				passData.viewport->resize( castor::Size{ ShadowMapPassPoint::TextureSize
-					, ShadowMapPassPoint::TextureSize } );
+				passData.viewport->resize( castor::Size{ ShadowMapPointTextureSize
+					, ShadowMapPointTextureSize } );
 				passData.frustum = castor::makeUnique< Frustum >( *passData.viewport );
 				passData.culler = std::make_unique< FrustumCuller >( scene, *passData.frustum );
 				auto faceIndex = shadowMapIndex * 6u + face;
@@ -146,7 +147,7 @@ namespace castor3d
 			, scene
 			, LightType::ePoint
 			, VkImageCreateFlags( VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT )
-			, { ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize }
+			, { ShadowMapPointTextureSize, ShadowMapPointTextureSize }
 			, 6u * shader::getPointShadowMapCount()
 			, shader::getPointShadowMapCount() }
 		, m_blurIntermediate{ handler.createImageId( crg::ImageData{ "PointGB"

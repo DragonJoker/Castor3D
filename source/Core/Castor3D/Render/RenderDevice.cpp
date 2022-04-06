@@ -1,5 +1,6 @@
 #include "Castor3D/Render/RenderDevice.hpp"
 
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Buffer/ObjectBufferPool.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
@@ -709,7 +710,6 @@ namespace castor3d
 	uint32_t RenderDevice::getMaxBindlessSampled()const
 	{
 #if VK_EXT_descriptor_indexing
-		static constexpr uint32_t MaxBindlessResources = 16536u;
 		return std::min( MaxBindlessResources, m_descriptorIndexingProperties.maxDescriptorSetUpdateAfterBindSampledImages );
 #else
 		return 0u;
@@ -719,7 +719,6 @@ namespace castor3d
 	uint32_t RenderDevice::getMaxBindlessStorage()const
 	{
 #if VK_EXT_descriptor_indexing
-		static constexpr uint32_t MaxBindlessResources = 16536u;
 		return std::min( MaxBindlessResources, m_descriptorIndexingProperties.maxDescriptorSetUpdateAfterBindStorageBuffers );
 #else
 		return 0u;

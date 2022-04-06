@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "LightPropagationVolumesModule.hpp"
 
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/GeometryInjectionPass.hpp"
@@ -29,10 +30,6 @@ namespace castor3d
 	class LayeredLightPropagationVolumesBase
 		: public castor::Named
 	{
-	public:
-		static constexpr uint32_t MaxPropagationSteps = 8u;
-		static constexpr uint32_t CascadeCount = shader::LpvMaxCascadesCount;
-
 	protected:
 		C3D_API LayeredLightPropagationVolumesBase( crg::ResourceHandler & handler
 			, Scene const & scene
@@ -69,8 +66,8 @@ namespace castor3d
 		ShadowMapResult const & m_smResult;
 		LightVolumePassResultArray const & m_lpvResult;
 		LayeredLpvGridConfigUbo & m_lpvGridConfigUbo;
-		std::array< castor::Grid const *, CascadeCount > m_grids;
-		std::array < castor::Point4f, CascadeCount > m_gridsSizes;
+		std::array< castor::Grid const *, LpvMaxCascadesCount > m_grids;
+		std::array < castor::Point4f, LpvMaxCascadesCount > m_gridsSizes;
 		LpvGridConfigUboArray m_lpvGridConfigUbos;
 		bool m_geometryVolumes{ false };
 		crg::FrameGraph m_graph;
@@ -166,7 +163,7 @@ namespace castor3d
 				++result;// geom injection;
 			}
 
-			result += MaxPropagationSteps;// propagation;
+			result += LpvMaxPropagationSteps;// propagation;
 			return result;
 		}
 	};

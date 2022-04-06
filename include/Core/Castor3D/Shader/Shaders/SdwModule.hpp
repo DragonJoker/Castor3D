@@ -75,25 +75,6 @@ namespace castor3d::shader
 		}
 	};
 
-	// Light Propagation Volumes Cascades.
-	constexpr uint32_t LpvMaxCascadesCount = 3u;
-	// Directional Shadow Cascades.
-	static uint32_t constexpr DirectionalMaxCascadesCount = ShadowMapDirectionalTileCountX * ShadowMapDirectionalTileCountY;
-	// Light Buffer.
-	static uint32_t constexpr MaxLightsCount = 2000u;
-	// Pass Buffer.
-	static uint32_t constexpr MaxMaterialsCount = 2000u;
-	static uint32_t constexpr MaxSssProfilesCount = 100u;
-	static int constexpr MaxMaterialComponentsCount = 8;
-	// Texture Configuration Buffer.
-	static uint32_t constexpr MaxTextureConfigurationCount = 4000u;
-	static int constexpr MaxTextureConfigurationComponentsCount = 12;
-	// Texture Animation Buffer.
-	static uint32_t constexpr MaxTextureAnimationCount = MaxTextureConfigurationCount;
-	static int constexpr MaxTextureAnimationComponentsCount = 4;
-	// Model Data Buffer.
-	static uint32_t constexpr MaxModelDataCount = 16384;
-
 	struct DirectionalLight;
 	struct Light;
 	struct LightData;

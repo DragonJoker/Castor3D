@@ -1,6 +1,7 @@
 #include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
@@ -64,7 +65,7 @@ namespace castor3d
 		m_device.uboPool->putBuffer( m_ubo );
 	}
 
-	void LayeredLpvGridConfigUbo::cpuUpdate( std::array< castor::Grid const *, shader::LpvMaxCascadesCount > const & grids
+	void LayeredLpvGridConfigUbo::cpuUpdate( std::array< castor::Grid const *, LpvMaxCascadesCount > const & grids
 		, float indirectAttenuation )
 	{
 		CU_Require( m_ubo );

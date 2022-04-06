@@ -32,7 +32,7 @@ namespace castor3d
 {
 	namespace envmap
 	{
-		static castor::Size const MapSize{ EnvironmentMap::Size, EnvironmentMap::Size };
+		static castor::Size const MapSize{ EnvironmentMapSize, EnvironmentMapSize };
 
 		static Texture createTexture( RenderDevice const & device
 			, crg::ResourceHandler & handler
@@ -44,7 +44,7 @@ namespace castor3d
 				, name
 				, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
 				, makeExtent3D( size )
-				, 6u * EnvironmentMap::Count
+				, 6u * MaxEnvironmentMapCount
 				, uint32_t( castor::getBitSize( MapSize[0] ) )
 				, device.selectSmallestFormatRGBUFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
 					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT )
@@ -65,7 +65,7 @@ namespace castor3d
 				, name + "Dpt"
 				, 0u
 				, makeExtent3D( size )
-				, 6u * EnvironmentMap::Count
+				, 6u * MaxEnvironmentMapCount
 				, 1u
 				, device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT )
 				, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
@@ -129,7 +129,7 @@ namespace castor3d
 				, envMap.image
 				, envMap.imageId.data->info );
 
-			for ( uint32_t i = 0u; i < EnvironmentMap::Count; ++i )
+			for ( uint32_t i = 0u; i < MaxEnvironmentMapCount; ++i )
 			{
 				createInfo.subresourceRange.baseArrayLayer = i * 6u;
 				result.emplace_back( image->createView( envMap.imageId.data->name + std::to_string( i )
@@ -154,9 +154,6 @@ namespace castor3d
 			return result;
 		}
 	}
-
-	uint32_t const EnvironmentMap::Count = 10u;
-	uint32_t const EnvironmentMap::Size = 128u;
 
 	EnvironmentMap::EnvironmentMap( crg::ResourceHandler & handler
 		, RenderDevice const & device
@@ -233,7 +230,7 @@ namespace castor3d
 		if ( m_savedReflectionNodes != m_reflectionNodes )
 		{
 			auto sortedNodes = envmap::sortNodes( m_reflectionNodes, *updater.camera );
-			m_count = std::min( Count, uint32_t( sortedNodes.size() ) );
+			m_count = std::min( MaxEnvironmentMapCount, uint32_t( sortedNodes.size() ) );
 			m_savedReflectionNodes = m_reflectionNodes;
 			m_sortedNodes.clear();
 			auto it = sortedNodes.begin();
@@ -363,7 +360,7 @@ namespace castor3d
 		auto ires = m_reflectionNodes.insert( &node );
 
 		if ( ires.second
-			&& m_reflectionNodes.size() < Count )
+			&& m_reflectionNodes.size() < MaxEnvironmentMapCount )
 		{
 			doAddPass();
 		}

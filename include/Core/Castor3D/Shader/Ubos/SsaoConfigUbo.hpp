@@ -118,7 +118,7 @@ namespace castor3d
 			// If this number is too small (< 3), too many taps will land in the same pixel, and we'll get bad variance that manifests as flashing.
 			// If it is too high (> 5), we'll get bad performance because we're not using the MIP levels effectively
 			int32_t logMaxOffset;
-			// This must be less than or equal to LineariseDepthPass::MaxMipLevel.
+			// This must be less than or equal to LinearizedDepthMaxMipLevel.
 			int32_t maxMipLevel;
 			// pixels
 			float minRadius;

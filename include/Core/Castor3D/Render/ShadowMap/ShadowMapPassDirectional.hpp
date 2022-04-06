@@ -75,9 +75,6 @@ namespace castor3d
 		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
 
 	public:
-		C3D_API static uint32_t const TileSize;
-		C3D_API static uint32_t const TileCountX;
-		C3D_API static uint32_t const TileCountY;
 		C3D_API static castor::String const Type;
 	};
 }

@@ -1,6 +1,7 @@
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 
 #include "Castor3D/DebugDefines.hpp"
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPassDirectional.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPassSpot.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
@@ -645,7 +646,7 @@ namespace castor3d
 											, light.pcfShadowOffsets.y() ) );
 									result = m_filterPCFCascade( lightSpacePosition
 										, c3d_mapNormalDepthDirectional
-										, vec2( sdw::Float( 1.0f / float( ShadowMapPassDirectional::TileSize ) ) )
+										, vec2( sdw::Float( 1.0f / float( ShadowMapDirectionalTextureSize ) ) )
 										, cascadeIndex
 										, bias );
 								}
@@ -693,7 +694,7 @@ namespace castor3d
 											, light.pcfShadowOffsets.y() ) );
 									result = m_filterPCFNoCascade( lightSpacePosition
 										, c3d_mapNormalDepthDirectional
-										, vec2( sdw::Float( 1.0f / float( ShadowMapPassDirectional::TileSize ) ) )
+										, vec2( sdw::Float( 1.0f / float( ShadowMapDirectionalTextureSize ) ) )
 										, bias );
 								}
 								ELSE
@@ -772,7 +773,7 @@ namespace castor3d
 										, light.pcfShadowOffsets.y() ) );
 								result = m_filterPCF( lightSpacePosition
 									, c3d_mapNormalDepthSpot
-									, vec2( sdw::Float( 1.0f / float( ShadowMapPassSpot::TextureSize ) ) )
+									, vec2( sdw::Float( 1.0f / float( ShadowMapSpotTextureSize ) ) )
 									, light.index
 									, depth
 									, bias );
@@ -847,7 +848,7 @@ namespace castor3d
 										, light.pcfShadowOffsets.y() ) );
 								result = m_filterPCFCube( lightToVertex
 									, c3d_mapNormalDepthPoint
-									, vec2( sdw::Float( 1.0f / float( ShadowMapPassSpot::TextureSize ) ) )
+									, vec2( sdw::Float( 1.0f / float( ShadowMapPointTextureSize ) ) )
 									, light.index
 									, depth
 									, bias );

@@ -167,10 +167,6 @@ namespace castor3d
 	private:
 		void doAddPass();
 
-	public:
-		C3D_API static uint32_t const Count;
-		C3D_API static uint32_t const Size;
-
 	private:
 		RenderDevice const & m_device;
 		Scene & m_scene;

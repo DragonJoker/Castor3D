@@ -1,6 +1,7 @@
 #include "Castor3D/Cache/LightCache.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
@@ -59,7 +60,7 @@ namespace castor3d
 			auto lock( makeUniqueLock( *this ) );
 			m_lightBuffer = castor::makeUnique< LightBuffer >( m_engine
 				, device
-				, shader::MaxLightsCount );
+				, MaxLightsCount );
 
 			for ( auto light : m_pendingLights )
 			{

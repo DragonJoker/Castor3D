@@ -1,6 +1,7 @@
 #include "Castor3D/Render/PBR/IblTextures.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
@@ -134,10 +135,10 @@ namespace castor3d
 		, Texture const & source
 		, SamplerResPtr sampler )
 		: OwnedBy< Scene >{ scene }
-		, m_prefilteredBrdf{ ibltex::doCreatePrefilteredBrdf( device, scene.getEngine()->getGraphResourceHandler(), castor::Size{ 512u, 512u } ) }
+		, m_prefilteredBrdf{ ibltex::doCreatePrefilteredBrdf( device, scene.getEngine()->getGraphResourceHandler(), castor::Size{ PrefilteredBrdfMapSize, PrefilteredBrdfMapSize } ) }
 		, m_sampler{ ibltex::doCreateSampler( *scene.getEngine(), device ) }
-		, m_radianceComputer{ *scene.getEngine(), device, castor::Size{ 32u, 32u }, source }
-		, m_environmentPrefilter{ *scene.getEngine(), device, castor::Size{ 128u, 128u }, source, std::move( sampler ) }
+		, m_radianceComputer{ *scene.getEngine(), device, castor::Size{ RadianceMapSize, RadianceMapSize }, source }
+		, m_environmentPrefilter{ *scene.getEngine(), device, castor::Size{ PrefilteredEnvironmentMapSize, PrefilteredEnvironmentMapSize }, source, std::move( sampler ) }
 	{
 	}
 

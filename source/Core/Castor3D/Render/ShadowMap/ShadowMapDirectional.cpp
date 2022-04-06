@@ -2,6 +2,7 @@
 
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
@@ -130,8 +131,8 @@ namespace castor3d
 		{
 			auto & engine = *scene.getEngine();
 			std::vector< ShadowMap::PassDataPtr > result;
-			auto const width = ShadowMapPassDirectional::TileSize;
-			auto const height = ShadowMapPassDirectional::TileSize;
+			auto const width = ShadowMapDirectionalTextureSize;
+			auto const height = ShadowMapDirectionalTextureSize;
 			auto const w = float( width );
 			auto const h = float( height );
 			Viewport viewport{ engine };
@@ -262,7 +263,7 @@ namespace castor3d
 			, scene
 			, LightType::eDirectional
 			, 0u
-			, { ShadowMapPassDirectional::TileSize, ShadowMapPassDirectional::TileSize }
+			, { ShadowMapDirectionalTextureSize, ShadowMapDirectionalTextureSize }
 			, scene.getDirectionalShadowCascades()
 			, 1u }
 		, m_blurIntermediate{ handler.createImageId( crg::ImageData{ "DirectionalGB"

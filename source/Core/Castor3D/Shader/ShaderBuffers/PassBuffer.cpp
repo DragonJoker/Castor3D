@@ -1,6 +1,7 @@
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
@@ -89,7 +90,7 @@ namespace castor3d
 		{
 			auto lock( castor::makeUniqueLock( m_mutex ) );
 
-			CU_Require( m_passes.size() < shader::MaxMaterialsCount );
+			CU_Require( m_passes.size() < MaxMaterialsCount );
 			m_passes.emplace_back( &pass );
 			pass.setId( m_passID++ );
 			m_connections.emplace_back( pass.onChanged.connect( [this]( Pass const & ppass )

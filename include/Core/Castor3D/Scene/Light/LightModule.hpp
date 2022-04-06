@@ -7,6 +7,8 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 
+#include "Castor3D/Limits.hpp"
+
 namespace castor3d
 {
 	/**@name Scene */
@@ -141,11 +143,9 @@ namespace castor3d
 		C3D_API void accept( castor::String const & name
 			, PipelineVisitorBase & visitor );
 
-		static constexpr uint32_t MaxRange = 800u;
-
 		castor::ChangeTracked< float > intensity;
 		castor::ChangeTracked< float > maxRadius;
-		castor::ChangeTracked< castor::RangedValue< uint32_t > > sampleCount{ castor::makeRangedValue( 100u, 20u, MaxRange ) };
+		castor::ChangeTracked< castor::RangedValue< uint32_t > > sampleCount{ castor::makeRangedValue( 100u, 20u, MaxRsmRange ) };
 	};
 	/**
 	*\~english

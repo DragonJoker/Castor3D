@@ -54,7 +54,7 @@ if ( CASTOR_USE_GLSLANG AND EXISTS ${VkFFT_DIR} )
 
 	add_target_min(
 		${PROJECT_NAME}
-		api_plugin
+		plugin
 		""
 		""
 	)

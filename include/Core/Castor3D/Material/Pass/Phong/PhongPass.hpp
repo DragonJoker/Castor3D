@@ -204,7 +204,6 @@ namespace castor3d
 		C3D_API void doJoinSpcShn( TextureUnitPtrArray & result );
 
 	public:
-		static constexpr float MaxShininess = 256.0f;
 		C3D_API static castor::String const Type;
 		C3D_API static castor::String const LightingModel;
 

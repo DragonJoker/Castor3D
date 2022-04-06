@@ -2,6 +2,8 @@
 
 #include "ToonMaterial/ToonPass.hpp"
 
+#include <Castor3D/Limits.hpp>
+
 #include <ShaderWriter/Source.hpp>
 
 namespace toon::shader
@@ -95,12 +97,12 @@ namespace toon::shader
 
 	sdw::Float ToonPhongLightMaterial::computeGlossiness( sdw::Float const & shininess )
 	{
-		return shininess / ToonPhongPass::MaxShininess;
+		return shininess / castor3d::MaxPhongShininess;
 	}
 
 	sdw::Float ToonPhongLightMaterial::computeShininess( sdw::Float const & glossiness )
 	{
-		return glossiness * ToonPhongPass::MaxShininess;
+		return glossiness * castor3d::MaxPhongShininess;
 	}
 
 	//*********************************************************************************************

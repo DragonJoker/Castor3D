@@ -2,6 +2,7 @@
 
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
@@ -219,7 +220,7 @@ namespace castor3d
 			LightVolumePassResultArray result;
 			auto & engine = *device.renderSystem.getEngine();
 
-			for ( uint32_t i = 0u; i < shader::LpvMaxCascadesCount; ++i )
+			for ( uint32_t i = 0u; i < LpvMaxCascadesCount; ++i )
 			{
 				result.emplace_back( castor::makeUnique< LightVolumePassResult >( handler
 					, device
