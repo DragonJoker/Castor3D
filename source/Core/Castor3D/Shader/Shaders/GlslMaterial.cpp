@@ -116,7 +116,7 @@ namespace castor3d::shader
 		if ( result->empty() )
 		{
 			result->declMember( "sssInfo", ast::type::Kind::eVec4F );
-			result->declMember( "transmittanceProfile", ast::type::Kind::eVec4F, 10u );
+			result->declMember( "transmittanceProfile", ast::type::Kind::eVec4F, TransmittanceProfileSize );
 		}
 
 		return result;

@@ -70,8 +70,6 @@ namespace castor3d
 	{
 		namespace
 		{
-			static constexpr uint32_t SpotShadowMapCount = 10u;
-			static constexpr uint32_t PointShadowMapCount = 6u;
 			static constexpr uint32_t BaseLightComponentsCount = 5u;
 		}
 

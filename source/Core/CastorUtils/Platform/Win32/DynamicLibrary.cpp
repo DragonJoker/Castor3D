@@ -18,7 +18,6 @@ namespace castor
 		if ( !m_library )
 		{
 			std::string name( string::stringCast< char >( m_pathLibrary ) );
-			//UINT oldMode = ::SetErrorMode( SEM_FAILCRITICALERRORS );
 
 			try
 			{
@@ -48,8 +47,6 @@ namespace castor
 				m_library = nullptr;
 				m_pathLibrary.clear();
 			}
-
-			//::SetErrorMode( oldMode );
 		}
 	}
 

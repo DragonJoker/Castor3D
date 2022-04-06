@@ -3,6 +3,7 @@
 
 #include "AssimpImporter/AssimpImporter.hpp"
 
+#include <Castor3D/Limits.hpp>
 #include <Castor3D/Animation/Interpolator.hpp>
 #include <Castor3D/Cache/GeometryCache.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
@@ -425,12 +426,12 @@ namespace C3dAssimp
 
 					if ( m_material.Get( AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_ROUGHNESS_FACTOR, shininess ) == aiReturn_SUCCESS )
 					{
-						value = ( 1.0f - shininess ) * PhongPass::MaxShininess;
+						value = ( 1.0f - shininess ) * castor3d::MaxPhongShininess;
 					}
 					else if ( m_material.Get( AI_MATKEY_GLTF_PBRSPECULARGLOSSINESS_GLOSSINESS_FACTOR, shininess ) == aiReturn_SUCCESS
 						|| m_material.Get( AI_MATKEY_GLTF_PBRSPECULARGLOSSINESS, shininess ) == aiReturn_SUCCESS )
 					{
-						value = shininess * PhongPass::MaxShininess;
+						value = shininess * castor3d::MaxPhongShininess;
 					}
 					else if ( m_material.Get( AI_MATKEY_SHININESS, shininess ) == aiReturn_SUCCESS )
 					{

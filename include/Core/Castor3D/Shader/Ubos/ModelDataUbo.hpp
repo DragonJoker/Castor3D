@@ -118,7 +118,6 @@ namespace castor3d::shader
 	public:
 		C3D_API static castor::String const BufferName;
 		C3D_API static castor::String const DataName;
-		C3D_API static uint32_t const NodesCount;
 
 	private:
 		sdw::Array< sdw::UVec4 > m_data;

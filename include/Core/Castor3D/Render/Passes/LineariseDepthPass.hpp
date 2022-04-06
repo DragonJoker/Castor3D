@@ -108,9 +108,6 @@ namespace castor3d
 		crg::FramePass const & doInitialiseLinearisePass( ProgressBar * progress );
 		void doInitialiseMinifyPass( ProgressBar * progress );
 
-	public:
-		static constexpr uint32_t MaxMipLevel = 5u;
-
 	private:
 		RenderDevice const & m_device;
 		crg::FramePassGroup & m_graph;

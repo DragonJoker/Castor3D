@@ -2,6 +2,7 @@
 
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
@@ -763,7 +764,7 @@ namespace castor3d
 
 	void Scene::setDirectionalShadowCascades( uint32_t value )
 	{
-		CU_Require( value <= shader::DirectionalMaxCascadesCount );
+		CU_Require( value <= DirectionalMaxCascadesCount );
 		m_directionalShadowCascades = value;
 	}
 

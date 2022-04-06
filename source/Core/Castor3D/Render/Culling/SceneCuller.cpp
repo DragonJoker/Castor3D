@@ -2,6 +2,7 @@
 
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Cache/BillboardCache.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Cache/ObjectCache.hpp"
@@ -32,11 +33,6 @@ namespace castor3d
 
 	namespace cullscn
 	{
-		static constexpr VkDeviceSize MaxPipelineNodes = 1000ull;
-		static constexpr VkDeviceSize MaxSubmeshIdxDrawIndirectCommand = 1000ull;
-		static constexpr VkDeviceSize MaxSubmeshNIdxDrawIndirectCommand = 1000ull;
-		static constexpr VkDeviceSize MaxBillboardDrawIndirectCommand = 1000ull;
-
 		static uint64_t getPipelineHash( RenderNodesPass const & renderPass
 			, SubmeshRenderNode const & culled
 			, bool isFrontCulled )
@@ -646,7 +642,7 @@ namespace castor3d
 					|| !renderPassIt.second.sortedInstancedSubmeshes.empty() ) )
 			{
 				renderPassIt.second.pipelinesNodes = makeBuffer< PipelineNodes >( device
-					, cullscn::MaxPipelineNodes
+					, MaxPipelineNodes
 					, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 					, renderPassIt.first->getTypeName() + "/NodesIDs" );
@@ -657,12 +653,12 @@ namespace castor3d
 					|| !renderPassIt.second.sortedInstancedSubmeshes.empty() ) )
 			{
 				renderPassIt.second.submeshIdxIndirectCommands = makeBuffer< VkDrawIndexedIndirectCommand >( device
-					, cullscn::MaxSubmeshIdxDrawIndirectCommand
+					, MaxSubmeshIdxDrawIndirectCommand
 					, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 					, renderPassIt.first->getTypeName() + "/SubmeshIndexedIndirectBuffer" );
 				renderPassIt.second.submeshNIdxIndirectCommands = makeBuffer< VkDrawIndirectCommand >( device
-					, cullscn::MaxSubmeshNIdxDrawIndirectCommand
+					, MaxSubmeshNIdxDrawIndirectCommand
 					, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 					, renderPassIt.first->getTypeName() + "/SubmeshIndirectBuffer" );
@@ -672,7 +668,7 @@ namespace castor3d
 				&& !renderPassIt.second.sortedBillboards.empty() )
 			{
 				renderPassIt.second.billboardIndirectCommands = makeBuffer< VkDrawIndirectCommand >( device
-					, cullscn::MaxBillboardDrawIndirectCommand
+					, MaxBillboardDrawIndirectCommand
 					, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 					, renderPassIt.first->getTypeName() + "/BillboardIndirectBuffer" );

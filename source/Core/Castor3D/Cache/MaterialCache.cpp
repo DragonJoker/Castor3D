@@ -1,6 +1,7 @@
 #include "Castor3D/Cache/MaterialCache.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
@@ -64,20 +65,20 @@ namespace castor
 			m_defaultMaterial = material.get();
 			m_passBuffer = std::make_shared< PassBuffer >( m_engine
 				, device
-				, shader::MaxMaterialsCount );
+				, MaxMaterialsCount );
 			m_sssProfileBuffer = std::make_shared< SssProfileBuffer >( m_engine
 				, device
-				, shader::MaxSssProfilesCount );
+				, MaxSssProfilesCount );
 			m_texConfigBuffer = std::make_shared< TextureConfigurationBuffer >( m_engine
 				, device
 				, ( device.hasBindless()
 					? device.getMaxBindlessSampled()
-					: shader::MaxTextureConfigurationCount ) );
+					: MaxTextureConfigurationCount ) );
 			m_texAnimBuffer = std::make_shared< TextureAnimationBuffer >( m_engine
 				, device
 				, ( device.hasBindless()
 					? device.getMaxBindlessSampled()
-					: shader::MaxTextureAnimationCount ) );
+					: MaxTextureAnimationCount ) );
 
 			for ( auto & it : *this )
 			{

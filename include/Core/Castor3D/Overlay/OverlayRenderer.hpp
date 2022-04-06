@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Overlay/TextOverlay.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Buffer/GeometryBuffers.hpp"
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
@@ -274,7 +275,7 @@ namespace castor3d
 		using PanelVertexBufferIndex = PanelVertexBufferPool::MyBufferIndex;
 		using BorderPanelVertexBufferPool = VertexBufferPoolT< OverlayCategory::Vertex, 8u * 6u >;
 		using BorderPanelVertexBufferIndex = BorderPanelVertexBufferPool::MyBufferIndex;
-		using TextVertexBufferPool = VertexBufferPoolT< TextOverlay::Vertex, 600u >;
+		using TextVertexBufferPool = VertexBufferPoolT< TextOverlay::Vertex, OverlayMaxCharsPerBuffer >;
 		using TextVertexBufferIndex = TextVertexBufferPool::MyBufferIndex;
 
 	private:

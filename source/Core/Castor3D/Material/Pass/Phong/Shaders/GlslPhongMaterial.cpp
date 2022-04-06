@@ -1,5 +1,6 @@
 #include "Castor3D/Material/Pass/Phong/Shaders/GlslPhongMaterial.hpp"
 
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Material/Pass/Phong/PhongPass.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -93,12 +94,12 @@ namespace castor3d::shader
 
 	sdw::Float PhongLightMaterial::computeGlossiness( sdw::Float const & shininess )
 	{
-		return shininess / PhongPass::MaxShininess;
+		return shininess / MaxPhongShininess;
 	}
 
 	sdw::Float PhongLightMaterial::computeShininess( sdw::Float const & glossiness )
 	{
-		return glossiness * PhongPass::MaxShininess;
+		return glossiness * MaxPhongShininess;
 	}
 
 	//*********************************************************************************************

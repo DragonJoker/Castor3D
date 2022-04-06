@@ -8,6 +8,8 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Light/LightModule.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
+#include "Castor3D/Limits.hpp"
+
 #include <CastorUtils/Graphics/Size.hpp>
 
 namespace castor3d
@@ -136,20 +138,10 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, LightPropagationVolumesG, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, LightVolumePassResult, C3D_API );
 
-	namespace lpv
-	{
-		// 2 passes: First and Blend.
-		static uint32_t constexpr ResolvePassCount = 2u;
-		// 2 passes: with or without geometry occlusion.
-		static uint32_t constexpr PropagationPassCount = 2u;
-	}
-
 	using LightPropagationVolumesLightType = std::array< LightPropagationVolumesUPtr, size_t( LightType::eCount ) >;
 	using LayeredLightPropagationVolumesLightType = std::array< LayeredLightPropagationVolumesUPtr, size_t( LightType::eCount ) >;
 	using LightPropagationVolumesGLightType = std::array< LightPropagationVolumesGUPtr, size_t( LightType::eCount ) >;
 	using LayeredLightPropagationVolumesGLightType = std::array< LayeredLightPropagationVolumesGUPtr, size_t( LightType::eCount ) >;
-
-	CU_DeclareArray( LightPropagationPassUPtr, lpv::PropagationPassCount, LightPropagationPass );
 
 	CU_DeclareVector( GeometryInjectionPass, GeometryInjectionPass );
 	CU_DeclareVector( LightInjectionPass, LightInjectionPass );

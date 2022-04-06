@@ -1,6 +1,7 @@
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
@@ -45,7 +46,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		auto mtxBoneTransform = writer.declLocale< Mat4 >( "mtxBoneTransform" );
-		auto mtxInstanceOffset = writer.declLocale( "mtxInstanceOffset", skinningId * 400_u );
+		auto mtxInstanceOffset = writer.declLocale( "mtxInstanceOffset", skinningId * BonesCount );
 
 		auto & ssbo = *data.transforms;
 		mtxBoneTransform = ssbo[mtxInstanceOffset + writer.cast< UInt >( boneIds0[0_i] )] * boneWeights0[0_i];

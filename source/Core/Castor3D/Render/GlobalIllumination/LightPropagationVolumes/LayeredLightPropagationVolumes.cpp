@@ -1,6 +1,7 @@
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -144,7 +145,7 @@ namespace castor3d
 		, lastLightPass{ &previousPass }
 		, lastGeomPass{ &previousPass }
 	{
-		for ( uint32_t cascade = 0u; cascade < CascadeCount; ++cascade )
+		for ( uint32_t cascade = 0u; cascade < LpvMaxCascadesCount; ++cascade )
 		{
 			lpvLightConfigUbos.emplace_back( device );
 			lightInjectionPassesDesc.push_back( &doCreateInjectionPass( graph
@@ -308,12 +309,12 @@ namespace castor3d
 		, m_geometryVolumes{ geometryVolumes }
 		, m_graph{ handler, getName() }
 		, m_lightType{ lightType }
-		, m_injection{ llpvpropvol::createInjection( handler, m_device, getName(), m_scene.getLpvGridSize(), CascadeCount ) }
-		, m_geometry{ llpvpropvol::createGeometry( handler, m_device, getName(), m_scene.getLpvGridSize(), CascadeCount, m_geometryVolumes ) }
-		, m_propagate{ llpvpropvol::createPropagation( handler, m_device, getName(), m_scene.getLpvGridSize(), CascadeCount ) }
+		, m_injection{ llpvpropvol::createInjection( handler, m_device, getName(), m_scene.getLpvGridSize(), LpvMaxCascadesCount ) }
+		, m_geometry{ llpvpropvol::createGeometry( handler, m_device, getName(), m_scene.getLpvGridSize(), LpvMaxCascadesCount, m_geometryVolumes ) }
+		, m_propagate{ llpvpropvol::createPropagation( handler, m_device, getName(), m_scene.getLpvGridSize(), LpvMaxCascadesCount ) }
 		, m_clearInjectionPass{ doCreateClearInjectionPass() }
 	{
-		for ( uint32_t cascade = 0u; cascade < CascadeCount; ++cascade )
+		for ( uint32_t cascade = 0u; cascade < LpvMaxCascadesCount; ++cascade )
 		{
 			m_lpvGridConfigUbos.emplace_back( m_device );
 		}
@@ -367,9 +368,9 @@ namespace castor3d
 						? &m_geometry
 						: nullptr ) } );
 
-			for ( uint32_t cascade = 0u; cascade < CascadeCount; ++cascade )
+			for ( uint32_t cascade = 0u; cascade < LpvMaxCascadesCount; ++cascade )
 			{
-				auto index = cascade * MaxPropagationSteps;
+				auto index = cascade * LpvMaxPropagationSteps;
 				m_lightPropagationPassesDesc[index]->addDependency( *ires.first->second.lightInjectionPassesDesc[cascade] );
 
 				if ( m_geometryVolumes )
@@ -432,9 +433,9 @@ namespace castor3d
 				, m_aabb.getDimensions()->y )
 				, m_aabb.getDimensions()->z ) / float( m_scene.getLpvGridSize() );
 			castor::Grid grid{ m_scene.getLpvGridSize(), cellSize, m_aabb.getMax(), m_aabb.getMin(), 1.0f };
-			std::array< float, CascadeCount > const scales{ 1.0f, 0.65f, 0.4f };
+			std::array< float, LpvMaxCascadesCount > const scales{ 1.0f, 0.65f, 0.4f };
 
-			for ( auto i = 0u; i < CascadeCount; ++i )
+			for ( auto i = 0u; i < LpvMaxCascadesCount; ++i )
 			{
 				m_grids[i] = &m_lpvGridConfigUbos[i].cpuUpdate( i
 					, scales[i]
@@ -658,7 +659,7 @@ namespace castor3d
 			result.addOutputColourView( lpvResult[LpvTexture::eG].targetViewId );
 			result.addOutputColourView( lpvResult[LpvTexture::eB].targetViewId );
 		}
-		else if ( index == MaxPropagationSteps - 1u )
+		else if ( index == LpvMaxPropagationSteps - 1u )
 		{
 			result.addInOutColourView( lpvResult[LpvTexture::eR].targetViewId
 				, {}
@@ -701,7 +702,7 @@ namespace castor3d
 		std::vector< crg::FramePass * > result;
 		std::vector< crg::FramePass const * > previousPasses;
 
-		for ( uint32_t cascade = 0u; cascade < CascadeCount; ++cascade )
+		for ( uint32_t cascade = 0u; cascade < LpvMaxCascadesCount; ++cascade )
 		{
 			auto & propagate = m_propagate[cascade];
 			auto & lpvResult = *m_lpvResult[cascade];
@@ -725,7 +726,7 @@ namespace castor3d
 				}
 			}
 
-			for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
+			for ( uint32_t i = 1u; i < LpvMaxPropagationSteps; ++i )
 			{
 				auto & input = propagate[propIndex];
 				propIndex = 1u - propIndex;

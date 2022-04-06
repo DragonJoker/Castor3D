@@ -66,9 +66,6 @@ namespace castor3d
 		}
 	}
 
-	uint32_t const ShadowMapPassDirectional::TileSize = 2048u;
-	uint32_t const ShadowMapPassDirectional::TileCountX = ShadowMapDirectionalTileCountX;
-	uint32_t const ShadowMapPassDirectional::TileCountY = ShadowMapDirectionalTileCountY;
 	castor::String const ShadowMapPassDirectional::Type = "c3d.shadows.directional";
 
 	ShadowMapPassDirectional::ShadowMapPassDirectional( crg::FramePass const & pass

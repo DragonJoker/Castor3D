@@ -31,7 +31,7 @@ source_group( "Source Files" FILES ${${PROJECT_NAME}_SRC_FILES} )
 
 add_target_min(
 	${PROJECT_NAME}
-	api_plugin
+	plugin
 	""
 	""
 )

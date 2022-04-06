@@ -702,8 +702,6 @@ namespace castor3d
 	public:
 		OnPassChanged onChanged;
 		OnPassChanged onSssProfileChanged;
-		static float constexpr MinEdgeWidth = 0.001f;
-		static float constexpr MaxEdgeWidth = 1000.0f;
 
 	protected:
 		bool m_dirty{ true };

@@ -4,15 +4,16 @@ See LICENSE file in root folder
 #ifndef ___C3D_SceneCuller_H___
 #define ___C3D_SceneCuller_H___
 
-#include "CullingModule.hpp"
-
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
+#include "Castor3D/Render/Culling/CullingModule.hpp"
 #include "Castor3D/Render/Node/RenderNodeModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 
+#include "Castor3D/Limits.hpp"
+
 namespace castor3d
 {
-	using PipelineNodes = std::array< castor::Point4ui, 10'000u >;
+	using PipelineNodes = std::array< castor::Point4ui, MaxObjectIDNodesCount >;
 	using PipelineBuffer = std::pair< size_t, ashes::BufferBase const * >;
 
 	AnimatedObjectSPtr findAnimatedObject( Scene const & scene

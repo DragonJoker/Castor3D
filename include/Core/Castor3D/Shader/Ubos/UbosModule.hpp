@@ -7,6 +7,8 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/ShaderModule.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
+#include "Castor3D/Limits.hpp"
+
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
 #include <ShaderWriter/ShaderWriterPrerequisites.hpp>
@@ -183,7 +185,7 @@ namespace castor3d
 	*/
 	struct LayeredLpvGridConfigUboConfiguration
 	{
-		std::array< castor::Point4f, shader::LpvMaxCascadesCount > allMinVolumeCorners;
+		std::array< castor::Point4f, LpvMaxCascadesCount > allMinVolumeCorners;
 		castor::Point4f allCellSizes;
 		castor::Point4f gridSizeAtt;
 	};
@@ -383,7 +385,7 @@ namespace castor3d
 	*/
 	struct SkinningTransformsConfiguration
 	{
-		std::array< castor::Matrix4x4f, 400u > bonesMatrix;
+		std::array< castor::Matrix4x4f, BonesCount > bonesMatrix;
 	};
 	/**
 	*\~english

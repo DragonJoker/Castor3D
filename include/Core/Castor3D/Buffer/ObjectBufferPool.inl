@@ -1,5 +1,6 @@
 #include "Castor3D/Buffer/ObjectBufferPool.hpp"
 
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 
 namespace castor3d
@@ -15,7 +16,7 @@ namespace castor3d
 			, std::string debugName
 			, bool smallData )
 		{
-			VkDeviceSize maxCount = 1'000'000;
+			VkDeviceSize maxCount = BaseObjectPoolBufferCount;
 
 			while ( maxCount < count )
 			{
