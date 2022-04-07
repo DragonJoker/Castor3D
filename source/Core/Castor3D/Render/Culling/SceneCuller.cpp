@@ -75,7 +75,7 @@ namespace castor3d
 			auto & node = *culled.node;
 			auto hash = getPipelineHash( renderPass, node, isFrontCulled );
 			auto & pipelineNodes = sortedNodes.emplace( hash, SceneCuller::SidedNodeBufferMapT< NodeT >{} ).first->second;
-			auto buffer = &node.data.getBufferOffsets().vtxBuffer->getBuffer().getBuffer();
+			auto buffer = &node.data.getBufferOffsets().getVertexBuffer();
 			auto bufferIres = pipelineNodes.emplace( buffer, SceneCuller::SidedNodeArrayT< NodeT >{} );
 			bufferIres.first->second.emplace_back( culled, isFrontCulled );
 			registerPipelineNodes( hash, *buffer, nodesIds );
@@ -91,7 +91,7 @@ namespace castor3d
 			auto & node = *culled.node;
 			auto hash = getPipelineHash( renderPass, node, isFrontCulled );
 			auto & pipelineNodes = sortedInstancedSubmeshes.emplace( hash, SceneCuller::SidedObjectNodeBufferMapT< SubmeshRenderNode >{} ).first->second;
-			auto buffer = &node.data.getBufferOffsets().vtxBuffer->getBuffer().getBuffer();
+			auto buffer = &node.data.getBufferOffsets().getVertexBuffer();
 			auto bufferIres = pipelineNodes.emplace( buffer, SceneCuller::SidedObjectNodePassMapT< SubmeshRenderNode >{} );
 			auto & passNodes = bufferIres.first->second.emplace( node.pass, SceneCuller::SidedObjectNodeMapT< SubmeshRenderNode >{} ).first->second;
 			auto & objectNodes = passNodes.emplace( &node.data, SceneCuller::SidedNodeArrayT< SubmeshRenderNode >{} ).first->second;
@@ -194,12 +194,28 @@ namespace castor3d
 			, VkDrawIndirectCommand *& indirectNIdxBuffer )
 		{
 			uint32_t instanceCount = 0u;
+#ifndef NDEBUG
+			auto vtxBuffer = &nodes.front().first.node->data.getBufferOffsets().getVertexBuffer();
+			auto idxBuffer = nodes.front().first.node->data.getBufferOffsets().hasIndices()
+				? &nodes.front().first.node->data.getBufferOffsets().getIndexBuffer()
+				: nullptr;
+			auto bonBuffer = nodes.front().first.node->data.getBufferOffsets().hasBones()
+				? &nodes.front().first.node->data.getBufferOffsets().getBonesBuffer()
+				: nullptr;
+#endif
 
 			for ( auto & node : nodes )
 			{
 				if ( node.first.node->instance.getParent()->isVisible() )
 				{
 					++instanceCount;
+					CU_Require( vtxBuffer == &node.first.node->data.getBufferOffsets().getVertexBuffer() );
+					CU_Require( idxBuffer == ( node.first.node->data.getBufferOffsets().hasIndices()
+						? &node.first.node->data.getBufferOffsets().getIndexBuffer()
+						: nullptr ));
+					CU_Require( bonBuffer == ( node.first.node->data.getBufferOffsets().hasBones()
+						? &node.first.node->data.getBufferOffsets().getBonesBuffer()
+						: nullptr) );
 				}
 			}
 
@@ -642,7 +658,7 @@ namespace castor3d
 					|| !renderPassIt.second.sortedInstancedSubmeshes.empty() ) )
 			{
 				renderPassIt.second.pipelinesNodes = makeBuffer< PipelineNodes >( device
-					, MaxPipelineNodes
+					, MaxPipelines
 					, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 					, renderPassIt.first->getTypeName() + "/NodesIDs" );
@@ -697,8 +713,10 @@ namespace castor3d
 				{
 					auto & indirectIdxCommands = renderPassIt.second.submeshIdxIndirectCommands;
 					auto & indirectNIdxCommands = renderPassIt.second.submeshNIdxIndirectCommands;
-					auto indirectIdxBuffer = indirectIdxCommands->lock( 0u, ashes::WholeSize, 0u );
-					auto indirectNIdxBuffer = indirectNIdxCommands->lock( 0u, ashes::WholeSize, 0u );
+					auto origIndirectIdxBuffer = indirectIdxCommands->lock( 0u, ashes::WholeSize, 0u );
+					auto indirectIdxBuffer = origIndirectIdxBuffer;
+					auto origIndirectNIdxBuffer = indirectNIdxCommands->lock( 0u, ashes::WholeSize, 0u );
+					auto indirectNIdxBuffer = origIndirectNIdxBuffer;
 
 					for ( auto & pipelineIt : sortedSubmeshes )
 					{
@@ -719,6 +737,9 @@ namespace castor3d
 										, indirectIdxBuffer
 										, indirectNIdxBuffer
 										, pipelinesBuffer );
+									CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= indirectIdxCommands->getCount() );
+									CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= indirectNIdxCommands->getCount() );
+									CU_Require( size_t( std::distance( pipelineNodes.data(), pipelinesBuffer ) ) <= pipelineNodes.size() );
 								}
 							}
 						}
@@ -735,6 +756,8 @@ namespace castor3d
 									cullscn::fillNodeCommands( submeshIt.second
 										, indirectIdxBuffer
 										, indirectNIdxBuffer );
+									CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= indirectIdxCommands->getCount() );
+									CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= indirectNIdxCommands->getCount() );
 								}
 							}
 						}
@@ -751,7 +774,8 @@ namespace castor3d
 				if ( !sortedBillboards.empty() )
 				{
 					auto & indirectCommands = renderPassIt.second.billboardIndirectCommands;
-					auto indirectBuffer = indirectCommands->lock( 0u, ashes::WholeSize, 0u );
+					auto origIndirectBuffer = indirectCommands->lock( 0u, ashes::WholeSize, 0u );
+					auto indirectBuffer = origIndirectBuffer;
 
 					for ( auto & perPipeline : sortedBillboards )
 					{
@@ -772,6 +796,8 @@ namespace castor3d
 									cullscn::fillIndirectCommand( *culled.node, indirectBuffer );
 									( *pipelinesBuffer )->x = culled.node->instance.getId( *culled.node->pass );
 									++pipelinesBuffer;
+									CU_Require( size_t( std::distance( origIndirectBuffer, indirectBuffer ) ) <= indirectCommands->getCount() );
+									CU_Require( size_t( std::distance( pipelineNodes.data(), pipelinesBuffer ) ) <= pipelineNodes.size() );
 								}
 							}
 						}

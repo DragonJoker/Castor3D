@@ -56,15 +56,6 @@ namespace castor3d
 		 */
 		C3D_API uint32_t fillShader( SkinningTransformsConfiguration * variable )const;
 		/**
-		 *\~english
-		 *\brief		Fills a buffer with this object's skeleton transforms.
-		 *\param[out]	buffer	Receives the transforms.
-		 *\~french
-		 *\brief		Remplit un tampon avec les transformations du squelette de cet objet.
-		 *\param[out]	buffer	Reçoit les transformations.
-		 */
-		C3D_API void fillBuffer( uint8_t * buffer )const;
-		/**
 		 *\copydoc		castor3d::AnimatedObject::update
 		 */
 		C3D_API void update( castor::Milliseconds const & elapsed )override;
@@ -111,6 +102,7 @@ namespace castor3d
 		Geometry & m_geometry;
 		SkeletonAnimationInstanceArray m_playingAnimations;
 		uint32_t m_id{};
+		mutable bool m_reinit = true;
 	};
 }
 

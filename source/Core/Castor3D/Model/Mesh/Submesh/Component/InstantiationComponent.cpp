@@ -28,12 +28,12 @@ namespace castor3d
 			return ashes::getAlignedSize( count, CountAlign );
 		}
 
-		static GpuBufferOffsetT< InstantiationData > updateBuffer( RenderDevice const & device
+		static bool updateBuffer( RenderDevice const & device
 			, castor::String const & name
 			, uint32_t count
-			, GpuBufferOffsetT< InstantiationData > buffer )
+			, GpuBufferOffsetT< InstantiationData > & buffer )
 		{
-			using namespace castor::string;
+			bool result{ false };
 			count = uint32_t( count ? getNextCount( count ) : 0u );
 
 			if ( count
@@ -47,9 +47,10 @@ namespace castor3d
 				buffer = device.bufferPool->getBuffer< InstantiationData >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
 					, count
 					, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+				result = true;
 			}
 
-			return buffer;
+			return result;
 		}
 
 		static ashes::PipelineVertexInputStateCreateInfo getInstantiationLayout( ProgramFlags programFlags
@@ -76,8 +77,9 @@ namespace castor3d
 	{
 	}
 
-	uint32_t InstantiationComponent::ref( MaterialRPtr material )
+	bool InstantiationComponent::ref( MaterialRPtr material )
 	{
+		bool result{ false };
 		auto it = find( *material );
 
 		if ( it == m_instances.end() )
@@ -86,29 +88,27 @@ namespace castor3d
 		}
 
 		auto & data = it->second;
-		auto result = data.count++;
+		++data.count;
 
 		if ( doCheckInstanced( data.count ) )
 		{
 			data.data.resize( data.count );
-			data.buffer = smshcompinst::updateBuffer( material->getEngine()->getRenderSystem()->getRenderDevice()
+			result = smshcompinst::updateBuffer( material->getEngine()->getRenderSystem()->getRenderDevice()
 				, getOwner()->getParent().getName() + "_" + it->first->getName()
 				, data.count
-				, std::move( data.buffer ) );
+				, data.buffer );
 		}
 
 		return result;
 	}
 
-	uint32_t InstantiationComponent::unref( MaterialRPtr material )
+	void InstantiationComponent::unref( MaterialRPtr material )
 	{
 		auto it = find( *material );
-		uint32_t result{ 0u };
 
 		if ( it != end() )
 		{
 			auto & data = it->second;
-			result = data.count;
 
 			if ( data.count )
 			{
@@ -124,8 +124,6 @@ namespace castor3d
 				}
 			}
 		}
-
-		return result;
 	}
 
 	uint32_t InstantiationComponent::getRefCount( MaterialRPtr material )const
@@ -221,10 +219,10 @@ namespace castor3d
 			{
 				if ( doCheckInstanced( data.second.count ) )
 				{
-					data.second.buffer = smshcompinst::updateBuffer( device
+					smshcompinst::updateBuffer( device
 						, getOwner()->getParent().getName() + "_" + data.first->getName()
 						, data.second.count
-						, std::move( data.second.buffer ) );
+						, data.second.buffer );
 				}
 			}
 		}

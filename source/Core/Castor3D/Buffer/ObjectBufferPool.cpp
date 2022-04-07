@@ -202,7 +202,7 @@ namespace castor3d
 					, m_debugName + "Vertex" + std::to_string( m_buffers.size() )
 					, false )
 				, details::createBuffer< VertexBoneData >( m_device
-					, indexCount
+					, vertexCount
 					, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 					, m_debugName + "Bones" + std::to_string( m_buffers.size() )
 					, false )
@@ -268,6 +268,7 @@ namespace castor3d
 
 		while ( it != array.end()
 			&& ( !( *it )->vertex.hasAvailable( sizeof( InterleavedVertex ) * vertexCount )
+				|| !( *it )->bones.hasAvailable( sizeof( VertexBoneData ) * vertexCount )
 				|| !( *it )->index.hasAvailable( sizeof( uint32_t ) * indexCount ) ) )
 		{
 			++it;
