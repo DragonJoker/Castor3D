@@ -1841,6 +1841,7 @@ install(
 	FILES ${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/RequiredVersion.hpp
 	DESTINATION include/${PROJECT_NAME}
 	COMPONENT Castor3D_dev
+	CONFIGURATIONS Release
 )
 target_install_headers( ${PROJECT_NAME}
 	${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}
