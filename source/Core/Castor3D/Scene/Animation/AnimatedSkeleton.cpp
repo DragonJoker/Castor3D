@@ -41,9 +41,14 @@ namespace castor3d
 
 		if ( m_playingAnimations.empty() )
 		{
-			for ( auto bone : skeleton )
+			if ( m_reinit )
 			{
-				variable->bonesMatrix[i++] = skeleton.getGlobalInverseTransform();
+				m_reinit = false;
+
+				for ( auto bone : skeleton )
+				{
+					variable->bonesMatrix[i++] = skeleton.getGlobalInverseTransform();
+				}
 			}
 		}
 		else
@@ -67,41 +72,6 @@ namespace castor3d
 		}
 
 		return i;
-	}
-
-	void AnimatedSkeleton::fillBuffer( uint8_t * buffer )const
-	{
-		Skeleton & skeleton = m_skeleton;
-		auto stride = 16u * sizeof( float );
-
-		if ( m_playingAnimations.empty() )
-		{
-			for ( auto bone : skeleton )
-			{
-				std::memcpy( buffer, skeleton.getGlobalInverseTransform().constPtr(), stride );
-				buffer += stride;
-			}
-		}
-		else
-		{
-			for ( auto bone : skeleton )
-			{
-				castor::Matrix4x4f final{ 1.0f };
-
-				for ( auto & animation : m_playingAnimations )
-				{
-					auto object = animation.get().getObject( *bone );
-
-					if ( object )
-					{
-						final *= object->getFinalTransform();
-					}
-				}
-
-				std::memcpy( buffer, final.constPtr (), stride );
-				buffer += stride;
-			}
-		}
 	}
 
 	void AnimatedSkeleton::doAddAnimation( castor::String const & name )
@@ -129,10 +99,12 @@ namespace castor3d
 			{
 				return &instance.get() == &static_cast< SkeletonAnimationInstance & >( animation );
 			} ) );
+		m_reinit = m_playingAnimations.empty();
 	}
 
 	void AnimatedSkeleton::doClearAnimations()
 	{
+		m_reinit = true;
 		m_playingAnimations.clear();
 	}
 }

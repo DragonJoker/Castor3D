@@ -193,7 +193,7 @@ namespace castor3d::shader
 		{
 			result->declMember( "data"
 				, ast::type::Kind::eVec4U
-				, MaxObjectIDNodesCount );
+				, MaxNodesPerPipeline );
 		}
 
 		return result;
