@@ -29,18 +29,13 @@ namespace castortd
 {
 	namespace game
 	{
-#if defined( NDEBUG )
-#	if Cheat
+#if !defined( NDEBUG ) || Cheat
 		constexpr uint32_t InitialLives = 500u;
 		constexpr uint32_t InitialOre = 75000u;
 #	else
 		constexpr uint32_t InitialLives = 5u;
 		constexpr uint32_t InitialOre = 750u;
 #	endif
-#else
-		constexpr uint32_t InitialLives = 1u;
-		constexpr uint32_t InitialOre = 75000u;
-#endif
 
 		static void doPrepareGridLine( PathNode const & p_prv, PathNode const & p_cur, Grid & p_grid )
 		{
@@ -79,24 +74,25 @@ namespace castortd
 			p_grid( p_cur.m_y, p_cur.m_x ).m_state = Cell::State::Target;
 		}
 
-		static void doUpdateMaterials( castor3d::Geometry & p_geometry
-			, Tower::Category::Kind p_kind
-			, castor3d::CacheViewT< castor3d::MaterialCache, castor3d::EventType::ePreRender > const & p_materials )
+		static void doUpdateMaterials( castor3d::Geometry & geometry
+			, Tower::Category::Kind kind
+			, castor3d::CacheViewT< castor3d::MaterialCache, castor3d::EventType::ePreRender > const & materials )
 		{
-			auto & mesh = *p_geometry.getMesh().lock();
-
-			switch ( p_kind )
+			if ( auto mesh = geometry.getMesh().lock() )
 			{
-			case Tower::Category::Kind::eLongRange:
-				p_geometry.setMaterial( *mesh.getSubmesh( 0u ), p_materials.find( cuT( "splash_accessories" ) ).lock().get() );
-				p_geometry.setMaterial( *mesh.getSubmesh( 1u ), p_materials.find( cuT( "splash_accessories" ) ).lock().get() );
-				p_geometry.setMaterial( *mesh.getSubmesh( 2u ), p_materials.find( cuT( "splash_body" ) ).lock().get() );
-				break;
+				switch ( kind )
+				{
+				case Tower::Category::Kind::eLongRange:
+					geometry.setMaterial( *mesh->getSubmesh( 0u ), materials.find( cuT( "splash_accessories" ) ).lock().get() );
+					geometry.setMaterial( *mesh->getSubmesh( 1u ), materials.find( cuT( "splash_accessories" ) ).lock().get() );
+					geometry.setMaterial( *mesh->getSubmesh( 2u ), materials.find( cuT( "splash_body" ) ).lock().get() );
+					break;
 
-			case Tower::Category::Kind::eShortRange:
-				p_geometry.setMaterial( *mesh.getSubmesh( 0u ), p_materials.find( cuT( "short_range_body" ) ).lock().get() );
-				p_geometry.setMaterial( *mesh.getSubmesh( 1u ), p_materials.find( cuT( "short_range_accessories" ) ).lock().get() );
-				break;
+				case Tower::Category::Kind::eShortRange:
+					geometry.setMaterial( *mesh->getSubmesh( 0u ), materials.find( cuT( "short_range_body" ) ).lock().get() );
+					geometry.setMaterial( *mesh->getSubmesh( 1u ), materials.find( cuT( "short_range_accessories" ) ).lock().get() );
+					break;
+				}
 			}
 		}
 	}

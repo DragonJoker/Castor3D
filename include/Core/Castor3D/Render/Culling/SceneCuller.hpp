@@ -13,7 +13,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	using PipelineNodes = std::array< castor::Point4ui, MaxObjectIDNodesCount >;
+	using PipelineNodes = std::array< castor::Point4ui, MaxNodesPerPipeline >;
 	using PipelineBuffer = std::pair< size_t, ashes::BufferBase const * >;
 
 	AnimatedObjectSPtr findAnimatedObject( Scene const & scene

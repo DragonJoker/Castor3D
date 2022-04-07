@@ -55,24 +55,22 @@ namespace castor3d
 		 *\~english
 		 *\brief		Increments instance count.
 		 *\param[in]	material	The material for which the instance count is incremented.
-		 *\return		The previous instance count.
+		 *\return		\p true if the instance buffer has changed.
 		 *\~french
 		 *\brief		Incrémente le compte d'instances.
 		 *\param[in]	material	Le matériau pour lequel le compte est incrémenté.
-		 *\return		Le compte précédent.
+		 *\return		\p true Si le buffer d'instances a changé.
 		 */
-		C3D_API uint32_t ref( MaterialRPtr material );
+		C3D_API bool ref( MaterialRPtr material );
 		/**
 		 *\~english
 		 *\brief		Decrements instance count.
 		 *\param[in]	material	The material for which the instance count is decremented.
-		 *\return		The previous instance count.
 		 *\~french
 		 *\brief		Décrémente le compte d'instances.
 		 *\param[in]	material	Le matériau pour lequel le compte est décrémenté.
-		 *\return		Le compte précédent.
 		 */
-		C3D_API uint32_t unref( MaterialRPtr material );
+		C3D_API void unref( MaterialRPtr material );
 		/**
 		 *\~english
 		 *\brief		Retrieves the instances count
