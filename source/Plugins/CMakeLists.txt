@@ -31,8 +31,8 @@ macro( PluginsBuild )
 		GenericBuild()
 		ParticlesBuild()
 		GeneratorBuild()
-		set( CASTOR_INSTEXP_LIST
-			${CASTOR_INSTEXP_LIST}
+		set( CASTOR_INSTEXP_PLUGINS
+			${CASTOR_INSTEXP_PLUGINS}
 			PARENT_SCOPE
 		)
 		set( ADDITIONAL_DEPS_REL

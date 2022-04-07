@@ -66,10 +66,14 @@ function( ToneMappingsBuild )
 		${Castor3DBinsDependencies}
 		PARENT_SCOPE
 	)
-		set( CASTOR_INSTEXP_LIST
-			${CASTOR_INSTEXP_LIST}
-			PARENT_SCOPE
-		)
+	set( CASTOR_INSTEXP_LIST
+		${CASTOR_INSTEXP_LIST}
+		PARENT_SCOPE
+	)
+	set( CASTOR_INSTEXP_PLUGINS
+		${CASTOR_INSTEXP_PLUGINS}
+		PARENT_SCOPE
+	)
 endfunction( ToneMappingsBuild )
 
 function( ToneMappingsSummary msg )
