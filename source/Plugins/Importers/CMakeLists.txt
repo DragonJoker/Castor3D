@@ -45,6 +45,10 @@ function( ImportersBuild )
 			${CASTOR_INSTEXP_LIST}
 			PARENT_SCOPE
 		)
+		set( CASTOR_INSTEXP_PLUGINS
+			${CASTOR_INSTEXP_PLUGINS}
+			PARENT_SCOPE
+		)
 	endif ()
 endfunction( ImportersBuild )
 

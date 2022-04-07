@@ -868,11 +868,13 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		FILES ${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/config.hpp
 		DESTINATION include/${PROJECT_NAME}
 		COMPONENT Castor3D_dev
+		CONFIGURATIONS Release
 	)
 	install(
 		FILES ${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/PixelFormat.enum
 		DESTINATION include/${PROJECT_NAME}/Graphics
 		COMPONENT Castor3D_dev
+		CONFIGURATIONS Release
 	)
 	install_target_ex( ${PROJECT_NAME}
 		Castor3D

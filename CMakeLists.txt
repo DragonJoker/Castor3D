@@ -299,8 +299,44 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 		CONFIGURATIONS Debug
 		DESTINATION lib/cmake/Castor3D
 	)
+	install(
+		TARGETS ${CASTOR_INSTEXP_PLUGINS}
+		COMPONENT Castor3DPlugins
+		EXPORT Castor3DPlugins
+		CONFIGURATIONS Release
+		RUNTIME DESTINATION bin/Castor3D
+		LIBRARY DESTINATION lib/Castor3D
+		ARCHIVE DESTINATION lib/Castor3D
+	)
+	install(
+		TARGETS ${CASTOR_INSTEXP_PLUGINS}
+		COMPONENT Castor3DPlugins
+		EXPORT Castor3DPluginsDebug
+		CONFIGURATIONS Debug
+		RUNTIME DESTINATION bin/Debug/Castor3D
+		LIBRARY DESTINATION lib/Debug/Castor3D
+		ARCHIVE DESTINATION lib/Debug/Castor3D
+	)
+	install( EXPORT Castor3D
+		FILE Castor3DPluginsConfig.cmake
+		COMPONENT Castor3DPlugins
+		NAMESPACE castor::
+		CONFIGURATIONS Release
+		DESTINATION lib/cmake/Castor3D
+	)
+	install( EXPORT Castor3DDebug
+		FILE Castor3DPluginsConfig-debug.cmake
+		COMPONENT Castor3DPlugins
+		NAMESPACE castor::
+		CONFIGURATIONS Debug
+		DESTINATION lib/cmake/Castor3D
+	)
 	include( CMakePackageConfigHelpers )
 	write_basic_package_version_file( Castor3DConfigVersion.cmake
+		VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_BUILD}
+		COMPATIBILITY AnyNewerVersion
+	)
+	write_basic_package_version_file( Castor3DPluginsConfigVersion.cmake
 		VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_BUILD}
 		COMPATIBILITY AnyNewerVersion
 	)
