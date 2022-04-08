@@ -82,7 +82,8 @@ namespace
 				extensions.emplace_back( cuT( "NDO" ), cuT( "Nendo Mesh" ) );
 				extensions.emplace_back( cuT( "OGEX" ), cuT( "open Game Engine Exchange" ) );
 				extensions.emplace_back( cuT( "UC" ), cuT( "Unreal" ) );
-				extensions.emplace_back( cuT( "GLTF" ), cuT( "glTF" ) );
+				extensions.emplace_back( cuT( "GLTF" ), cuT( "Text glTF" ) );
+				extensions.emplace_back( cuT( "GLB" ), cuT( "Binary glTF" ) );
 			}
 
 			std::set< castor::String > alreadyLoaded;
