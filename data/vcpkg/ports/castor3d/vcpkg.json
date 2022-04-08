@@ -1,0 +1,25 @@
+{
+  "name": "castor3d",
+  "version": "0.13.0",
+  "description": "C++17 and Vulkan 3D engine.",
+  "homepage": "https://github.com/DragonJoker/Castor3D",
+  "license": "MIT",
+  "dependencies": [
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    },
+    "assimp",
+    "freetype",
+    "glslang",
+    "shaderwriter",
+    "ashes",
+    "rendergraph",
+    "vulkan-headers",
+    "zlib"
+  ]
+}
