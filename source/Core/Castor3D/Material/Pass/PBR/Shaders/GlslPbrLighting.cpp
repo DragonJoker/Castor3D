@@ -83,12 +83,12 @@ namespace castor3d::shader
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
-		, bool isOpaqueProgram )
+		, bool enableVolumetric )
 		: LightingModel{ writer
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
-			, isOpaqueProgram
+			, enableVolumetric
 			, isSpecularGlossiness ? std::string{ "c3d_pbrsg_" } : std::string{ "c3d_pbrmr_" } }
 		, m_isSpecularGlossiness{ isSpecularGlossiness }
 		, m_cookTorrance{ writer, utils }
@@ -417,7 +417,7 @@ namespace castor3d::shader
 						}
 						FI;
 
-						if ( m_isOpaqueProgram )
+						if ( m_enableVolumetric )
 						{
 							IF( m_writer, light.base.volumetricSteps != 0_u )
 							{
@@ -797,13 +797,13 @@ namespace castor3d::shader
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
-		, bool isOpaqueProgram )
+		, bool enableVolumetric )
 		: PbrLightingModel{ false
 			, writer
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
-			, isOpaqueProgram }
+			, enableVolumetric }
 	{
 	}
 
@@ -816,13 +816,13 @@ namespace castor3d::shader
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
-		, bool isOpaqueProgram )
+		, bool enableVolumetric )
 	{
 		return std::make_unique< PbrMRLightingModel >( writer
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
-			, isOpaqueProgram );
+			, enableVolumetric );
 	}
 
 	std::unique_ptr< LightMaterial > PbrMRLightingModel::declMaterial( std::string const & name
@@ -837,13 +837,13 @@ namespace castor3d::shader
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
-		, bool isOpaqueProgram )
+		, bool enableVolumetric )
 		: PbrLightingModel{ true
 			, writer
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
-			, isOpaqueProgram }
+			, enableVolumetric }
 	{
 	}
 
@@ -856,13 +856,13 @@ namespace castor3d::shader
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
-		, bool isOpaqueProgram )
+		, bool enableVolumetric )
 	{
 		return std::make_unique< PbrSGLightingModel >( writer
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
-			, isOpaqueProgram );
+			, enableVolumetric );
 	}
 
 	std::unique_ptr< LightMaterial > PbrSGLightingModel::declMaterial( std::string const & name

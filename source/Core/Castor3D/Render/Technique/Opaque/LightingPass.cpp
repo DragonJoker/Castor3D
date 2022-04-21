@@ -308,7 +308,7 @@ namespace castor3d
 		, m_stages{ makeShaderState( m_device, m_vertexShader )
 			, makeShaderState( m_device, m_pixelShader ) }
 		, m_descriptorLayout{ doCreateDescriptorLayout() }
-		, m_descriptorPool{ m_descriptorLayout->createPool( 300u ) }
+		, m_descriptorPool{ m_descriptorLayout->createPool( MaxLightsCount ) }
 		, m_pipeline{ pass, context, graph, m_config, m_renderPasses, m_stages, *m_descriptorLayout }
 		, m_vertexBuffer{ doCreateVertexBuffer() }
 		, m_viewport{ *device.renderSystem.getEngine() }

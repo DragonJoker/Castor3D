@@ -60,13 +60,13 @@ namespace castor3d::shader
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
-		, bool isOpaqueProgram
+		, bool enableVolumetric
 		, bool isBlinnPhong )
 		: LightingModel{ m_writer
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
-			, isOpaqueProgram
+			, enableVolumetric
 			, isBlinnPhong ? std::string{ "c3d_blinnphong_" } : std::string{ "c3d_phong_" } }
 		, m_isBlinnPhong{ isBlinnPhong }
 	{
@@ -76,13 +76,13 @@ namespace castor3d::shader
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
-		, bool isOpaqueProgram )
+		, bool enableVolumetric )
 	{
 		return std::make_unique< PhongLightingModel >( writer
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
-			, isOpaqueProgram
+			, enableVolumetric
 			, false );
 	}
 
@@ -414,7 +414,7 @@ namespace castor3d::shader
 						}
 						FI;
 
-						if ( m_isOpaqueProgram )
+						if ( m_enableVolumetric )
 						{
 							IF( m_writer, light.base.volumetricSteps != 0_u )
 							{
@@ -896,12 +896,12 @@ namespace castor3d::shader
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
-		, bool isOpaqueProgram )
+		, bool enableVolumetric )
 		: PhongLightingModel{ writer
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
-			, isOpaqueProgram
+			, enableVolumetric
 			, true }
 	{
 	}
@@ -910,13 +910,13 @@ namespace castor3d::shader
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
-		, bool isOpaqueProgram )
+		, bool enableVolumetric )
 	{
 		return std::make_unique< BlinnPhongLightingModel >( writer
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
-			, isOpaqueProgram );
+			, enableVolumetric );
 	}
 
 	castor::String BlinnPhongLightingModel::getName()
