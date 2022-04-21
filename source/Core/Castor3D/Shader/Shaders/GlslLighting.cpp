@@ -97,11 +97,11 @@ namespace castor3d::shader
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
-		, bool isOpaqueProgram
+		, bool enableVolumetric
 		, std::string prefix )
 		: m_writer{ writer }
 		, m_utils{ utils }
-		, m_isOpaqueProgram{ isOpaqueProgram }
+		, m_enableVolumetric{ enableVolumetric }
 		, m_prefix{ std::move( prefix ) }
 		, m_shadowModel{ std::make_shared< Shadow >( shadowOptions, writer ) }
 		, m_sssTransmittance{ ( sssProfiles
@@ -196,12 +196,12 @@ namespace castor3d::shader
 		, SssProfiles const * sssProfiles
 		, uint32_t & shadowMapBinding
 		, uint32_t shadowMapSet
-		, bool isOpaqueProgram )
+		, bool enableVolumetric )
 	{
 		auto result = utils.createLightingModel( name
 			, shadows
 			, sssProfiles
-			, true );
+			, enableVolumetric );
 		result->declareModel( lightsBufBinding
 			, lightsBufSet
 			, shadowMapBinding
@@ -342,12 +342,12 @@ namespace castor3d::shader
 		, ShadowOptions const & shadows
 		, uint32_t & shadowMapBinding
 		, uint32_t shadowMapSet
-		, bool isOpaqueProgram )
+		, bool enableVolumetric )
 	{
 		auto result = utils.createLightingModel( name
 			, shadows
 			, nullptr
-			, isOpaqueProgram );
+			, enableVolumetric );
 		result->declareDiffuseModel( lightsBufBinding
 			, lightsBufSet
 			, shadowMapBinding

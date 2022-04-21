@@ -22,14 +22,14 @@ namespace castor3d::shader
 	LightingModelPtr Utils::createLightingModel( castor::String const & name
 		, ShadowOptions shadowsOptions
 		, SssProfiles const * sssProfiles
-		, bool isOpaqueProgram )
+		, bool enableVolumetric )
 	{
 		return m_engine.getLightingModelFactory().create( name
 			, m_writer
 			, *this
 			, std::move( shadowsOptions )
 			, sssProfiles
-			, isOpaqueProgram );
+			, enableVolumetric );
 	}
 
 	void Utils::declareSwap1F()

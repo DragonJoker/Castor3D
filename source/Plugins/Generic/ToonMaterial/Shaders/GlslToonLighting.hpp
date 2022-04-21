@@ -25,13 +25,13 @@ namespace toon::shader
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
 			, c3d::SssProfiles const * sssProfiles
-			, bool isOpaqueProgram
+			, bool enableVolumetric
 			, bool isBlinnPhong );
 		static c3d::LightingModelPtr create( sdw::ShaderWriter & writer
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
 			, c3d::SssProfiles const * sssProfiles
-			, bool isOpaqueProgram );
+			, bool enableVolumetric );
 		sdw::Vec3 combine( sdw::Vec3 const & directDiffuse
 			, sdw::Vec3 const & indirectDiffuse
 			, sdw::Vec3 const & directSpecular
@@ -213,13 +213,13 @@ namespace toon::shader
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
 			, c3d::SssProfiles const * sssProfiles
-			, bool isOpaqueProgram );
+			, bool enableVolumetric );
 
 		static c3d::LightingModelPtr create( sdw::ShaderWriter & writer
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
 			, c3d::SssProfiles const * sssProfiles
-			, bool isOpaqueProgram );
+			, bool enableVolumetric );
 		static castor::String getName();
 	};
 
@@ -232,7 +232,7 @@ namespace toon::shader
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
 			, c3d::SssProfiles const * sssProfiles
-			, bool isOpaqueProgram );
+			, bool enableVolumetric );
 
 	public:
 		sdw::Vec3 combine( sdw::Vec3 const & directDiffuse
@@ -386,14 +386,14 @@ namespace toon::shader
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
 			, c3d::SssProfiles const * sssProfiles
-			, bool isOpaqueProgram );
+			, bool enableVolumetric );
 
 		static const castor::String getName();
 		static c3d::LightingModelPtr create( sdw::ShaderWriter & writer
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
 			, c3d::SssProfiles const * sssProfiles
-			, bool isOpaqueProgram );
+			, bool enableVolumetric );
 
 		std::unique_ptr< c3d::LightMaterial > declMaterial( std::string const & name
 			, bool enabled )override;
@@ -407,14 +407,14 @@ namespace toon::shader
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
 			, c3d::SssProfiles const * sssProfiles
-			, bool isOpaqueProgram );
+			, bool enableVolumetric );
 
 		static const castor::String getName();
 		static c3d::LightingModelPtr create( sdw::ShaderWriter & writer
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
 			, c3d::SssProfiles const * sssProfiles
-			, bool isOpaqueProgram );
+			, bool enableVolumetric );
 
 		std::unique_ptr< c3d::LightMaterial > declMaterial( std::string const & name
 			, bool enabled )override;
