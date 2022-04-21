@@ -87,7 +87,7 @@ namespace castor3d::shader
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
-			, bool isOpaqueProgram
+			, bool enableVolumetric
 			, std::string prefix );
 		C3D_API virtual ~LightingModel() = default;
 		C3D_API virtual sdw::Vec3 combine( sdw::Vec3 const & directDiffuse
@@ -133,7 +133,7 @@ namespace castor3d::shader
 			, SssProfiles const * sssProfiles
 			, uint32_t & shadowMapBinding
 			, uint32_t shadowMapSet
-			, bool isOpaqueProgram );
+			, bool enableVolumetric );
 		template< typename LightsBufBindingT >
 		static LightingModelPtr createModelT( Utils & utils
 			, castor::String const & name
@@ -143,7 +143,7 @@ namespace castor3d::shader
 			, SssProfiles const * sssProfiles
 			, uint32_t & shadowMapBinding
 			, uint32_t shadowMapSet
-			, bool isOpaqueProgram )
+			, bool enableVolumetric )
 		{
 			return createModel( utils
 				, name
@@ -153,7 +153,7 @@ namespace castor3d::shader
 				, sssProfiles
 				, shadowMapBinding
 				, shadowMapSet
-				, isOpaqueProgram );
+				, enableVolumetric );
 		}
 		template< typename LightBindingT >
 		static LightingModelPtr createModel( Utils & utils
@@ -200,7 +200,7 @@ namespace castor3d::shader
 			, ShadowOptions const & shadows
 			, uint32_t & shadowMapBinding
 			, uint32_t shadowMapSet
-			, bool isOpaqueProgram );
+			, bool enableVolumetric );
 		template< typename LightsBufBindingT >
 		static LightingModelPtr createDiffuseModelT( Utils & utils
 			, castor::String const & name
@@ -209,7 +209,7 @@ namespace castor3d::shader
 			, ShadowOptions const & shadows
 			, uint32_t & shadowMapBinding
 			, uint32_t shadowMapSet
-			, bool isOpaqueProgram )
+			, bool enableVolumetric )
 		{
 			return createDiffuseModel( utils
 				, name
@@ -218,7 +218,7 @@ namespace castor3d::shader
 				, shadows
 				, shadowMapBinding
 				, shadowMapSet
-				, isOpaqueProgram );
+				, enableVolumetric );
 		}
 		//\}
 		//\}
@@ -376,7 +376,7 @@ namespace castor3d::shader
 		std::unique_ptr< sdw::Struct > m_type;
 		std::unique_ptr< sdw::Ssbo > m_ssbo;
 		std::unique_ptr < sdw::RImageBufferRgba32 > m_tbo;
-		bool m_isOpaqueProgram;
+		bool m_enableVolumetric;
 		std::string m_prefix;
 		std::shared_ptr< Shadow > m_shadowModel;
 		std::shared_ptr< SssTransmittance > m_sssTransmittance;

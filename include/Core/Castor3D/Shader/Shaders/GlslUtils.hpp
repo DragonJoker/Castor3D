@@ -21,7 +21,7 @@ namespace castor3d::shader
 		C3D_API LightingModelPtr createLightingModel( castor::String const & name
 			, ShadowOptions shadowsOptions
 			, SssProfiles const * sssProfiles
-			, bool isOpaqueProgram );
+			, bool enableVolumetric );
 
 		C3D_API void swap( sdw::Float const A, sdw::Float const & B );
 		C3D_API sdw::Float saturate( sdw::Float const v );

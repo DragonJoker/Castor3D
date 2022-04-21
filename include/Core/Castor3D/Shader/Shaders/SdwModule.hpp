@@ -125,7 +125,7 @@ namespace castor3d::shader
 		, Utils & utils
 		, ShadowOptions shadowsOptions
 		, SssProfiles const * sssProfiles
-		, bool isOpaqueProgram ) >;
+		, bool enableVolumetric ) >;
 
 	using LightingModelFactory = castor::Factory< LightingModel
 		, castor::String

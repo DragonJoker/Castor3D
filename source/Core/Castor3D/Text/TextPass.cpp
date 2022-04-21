@@ -5,6 +5,7 @@
 
 #include <CastorUtils/Data/Text/TextPoint.hpp>
 #include <CastorUtils/Data/Text/TextRgbaColour.hpp>
+#include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
 namespace castor
 {

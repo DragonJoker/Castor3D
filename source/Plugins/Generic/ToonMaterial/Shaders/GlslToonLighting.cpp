@@ -63,13 +63,13 @@ namespace toon::shader
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
-		, bool isOpaqueProgram
+		, bool enableVolumetric
 		, bool isBlinnPhong )
 		: c3d::PhongLightingModel{ m_writer
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
-			, isOpaqueProgram
+			, enableVolumetric
 			, isBlinnPhong }
 	{
 		m_prefix = m_prefix + "toon_";
@@ -79,13 +79,13 @@ namespace toon::shader
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
-		, bool isOpaqueProgram )
+		, bool enableVolumetric )
 	{
 		return std::make_unique< ToonPhongLightingModel >( writer
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
-			, isOpaqueProgram
+			, enableVolumetric
 			, false );
 	}
 
@@ -417,7 +417,7 @@ namespace toon::shader
 						}
 						FI;
 
-						if ( m_isOpaqueProgram )
+						if ( m_enableVolumetric )
 						{
 							IF( m_writer, light.base.volumetricSteps != 0_u )
 							{
@@ -852,12 +852,12 @@ namespace toon::shader
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
-		, bool isOpaqueProgram )
+		, bool enableVolumetric )
 		: ToonPhongLightingModel{ writer
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
-			, isOpaqueProgram
+			, enableVolumetric
 			, true }
 	{
 	}
@@ -866,13 +866,13 @@ namespace toon::shader
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
-		, bool isOpaqueProgram )
+		, bool enableVolumetric )
 	{
 		return std::make_unique< ToonBlinnPhongLightingModel >( writer
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
-			, isOpaqueProgram );
+			, enableVolumetric );
 	}
 
 	castor::String ToonBlinnPhongLightingModel::getName()
@@ -958,12 +958,12 @@ namespace toon::shader
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
-		, bool isOpaqueProgram )
+		, bool enableVolumetric )
 		: c3d::LightingModel{ writer
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
-			, isOpaqueProgram
+			, enableVolumetric
 			, isSpecularGlossiness ? std::string{ "c3d_pbrsg_toon_" } : std::string{ "c3d_pbrmr_toon_" } }
 		, m_isSpecularGlossiness{ isSpecularGlossiness }
 		, m_cookTorrance{ writer, utils }
@@ -1301,7 +1301,7 @@ namespace toon::shader
 						}
 						FI;
 
-						if ( m_isOpaqueProgram )
+						if ( m_enableVolumetric )
 						{
 							IF( m_writer, light.base.volumetricSteps != 0_u )
 							{
@@ -1664,13 +1664,13 @@ namespace toon::shader
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
-		, bool isOpaqueProgram )
+		, bool enableVolumetric )
 		: ToonPbrLightingModel{ false
 			, writer
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
-			, isOpaqueProgram }
+			, enableVolumetric }
 	{
 	}
 
@@ -1683,13 +1683,13 @@ namespace toon::shader
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
-		, bool isOpaqueProgram )
+		, bool enableVolumetric )
 	{
 		return std::make_unique< ToonPbrMRLightingModel >( writer
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
-			, isOpaqueProgram );
+			, enableVolumetric );
 	}
 
 	std::unique_ptr< c3d::LightMaterial > ToonPbrMRLightingModel::declMaterial( std::string const & name
@@ -1704,13 +1704,13 @@ namespace toon::shader
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
-		, bool isOpaqueProgram )
+		, bool enableVolumetric )
 		: ToonPbrLightingModel{ true
 			, writer
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
-			, isOpaqueProgram }
+			, enableVolumetric }
 	{
 	}
 
@@ -1723,13 +1723,13 @@ namespace toon::shader
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
-		, bool isOpaqueProgram )
+		, bool enableVolumetric )
 	{
 		return std::make_unique< ToonPbrSGLightingModel >( writer
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
-			, isOpaqueProgram );
+			, enableVolumetric );
 	}
 
 	std::unique_ptr< c3d::LightMaterial > ToonPbrSGLightingModel::declMaterial( std::string const & name
