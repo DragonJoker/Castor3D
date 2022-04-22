@@ -119,7 +119,7 @@ namespace castor3d
 							, surface
 							, wsConeDirection
 							, sdw::Float{ castor::Angle::fromRadians( castor::PiDiv2< float > / 3 ).tan() }
-						, voxelData );
+							, voxelData );
 					}
 					ROF;
 
