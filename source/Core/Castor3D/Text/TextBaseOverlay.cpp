@@ -1,4 +1,4 @@
-#include "Castor3D/Text/TextOverlay.hpp"
+#include "Castor3D/Text/TextBaseOverlay.hpp"
 
 #include "Castor3D/Text/TextBorderPanelOverlay.hpp"
 #include "Castor3D/Text/TextPanelOverlay.hpp"
