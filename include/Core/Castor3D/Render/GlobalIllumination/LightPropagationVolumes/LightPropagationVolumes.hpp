@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_LightPropagationVolumes_H___
 
 #include "LightPropagationVolumesModule.hpp"
+#include "Castor3D/Event/Frame/FrameEventModule.hpp"
 
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
@@ -149,6 +150,7 @@ namespace castor3d
 		castor::BoundingBox m_aabb;
 		castor::Point3f m_cameraPos;
 		castor::Point3f m_cameraDir;
+		GpuFrameEvent * m_recordEvent{};
 		crg::RunnableGraphPtr m_runnable;
 	};
 

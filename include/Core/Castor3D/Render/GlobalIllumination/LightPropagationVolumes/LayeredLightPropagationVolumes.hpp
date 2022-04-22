@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_LayeredLightPropagationVolumes_H___
 
 #include "LightPropagationVolumesModule.hpp"
+#include "Castor3D/Event/Frame/FrameEventModule.hpp"
 
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
@@ -127,6 +128,7 @@ namespace castor3d
 		castor::BoundingBox m_aabb;
 		castor::Point3f m_cameraPos;
 		castor::Point3f m_cameraDir;
+		GpuFrameEvent * m_recordEvent{};
 		crg::RunnableGraphPtr m_runnable;
 	};
 
