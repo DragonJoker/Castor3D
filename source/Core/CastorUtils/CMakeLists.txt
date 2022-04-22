@@ -681,13 +681,13 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		set( _PLATFORM Linux )
 	endif ()
 	set( ${PROJECT_NAME}_FOLDER_SRC_FILES
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/Aligned.cpp
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/CpuInformations.cpp
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/Debug.cpp
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/DynamicLibrary.cpp
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/File.cpp
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/LoggerConsole.cpp
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/Utils.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/${_PLATFORM}Aligned.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/${_PLATFORM}CpuInformations.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/${_PLATFORM}Debug.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/${_PLATFORM}DynamicLibrary.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/${_PLATFORM}File.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/${_PLATFORM}LoggerConsole.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/${_PLATFORM}Utils.cpp
 	)
 	if ( APPLE )
 		set( ${PROJECT_NAME}_FOLDER_SRC_FILES
