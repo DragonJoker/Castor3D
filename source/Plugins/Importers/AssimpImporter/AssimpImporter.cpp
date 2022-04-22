@@ -1327,9 +1327,9 @@ namespace C3dAssimp
 		castor::String name = m_prefix + aiLight.mName.C_Str();
 		SceneNodeSPtr node;
 
-		if ( scene.getSceneNodeCache().has( aiLight.mName.C_Str() ) )
+		if ( scene.getSceneNodeCache().has( name ) )
 		{
-			node = scene.getSceneNodeCache().find( aiLight.mName.C_Str() ).lock();
+			node = scene.getSceneNodeCache().find( name ).lock();
 		}
 		else
 		{
