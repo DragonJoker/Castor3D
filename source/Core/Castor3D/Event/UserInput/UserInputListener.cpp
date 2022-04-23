@@ -208,6 +208,36 @@ namespace castor3d
 		}
 	}
 
+	void UserInputListener::enableHandler( castor::String const & handler )
+	{
+		auto it = std::find_if( m_handlers.begin()
+			, m_handlers.end()
+			, [&handler]( EventHandlerSPtr const & lookup )
+			{
+				return lookup->getName() == handler;
+			} );
+
+		if ( it != m_handlers.end() )
+		{
+			( *it )->enable();
+		}
+	}
+
+	void UserInputListener::disableHandler( castor::String const & handler )
+	{
+		auto it = std::find_if( m_handlers.begin()
+			, m_handlers.end()
+			, [&handler]( EventHandlerSPtr const & lookup )
+			{
+				return lookup->getName() == handler;
+			} );
+
+		if ( it != m_handlers.end() )
+		{
+			( *it )->disable();
+		}
+	}
+
 	bool UserInputListener::fireMouseMove( castor::Position const & position )
 	{
 		bool result = false;
@@ -337,7 +367,8 @@ namespace castor3d
 		{
 			auto active = m_activeHandler;
 
-			if ( active )
+			if ( active
+				&& active->isEnabled() )
 			{
 				if ( key == KeyboardKey::eControl )
 				{
@@ -370,7 +401,8 @@ namespace castor3d
 		{
 			auto active = m_activeHandler;
 
-			if ( active )
+			if ( active
+				&& active->isEnabled() )
 			{
 				if ( key == KeyboardKey::eControl )
 				{
@@ -403,7 +435,8 @@ namespace castor3d
 		{
 			auto active = m_activeHandler;
 
-			if ( active )
+			if ( active
+				&& active->isEnabled() )
 			{
 				active->pushEvent( KeyboardEvent( KeyboardEventType::eChar, key, value, m_keyboard.ctrl, m_keyboard.alt, m_keyboard.shift ) );
 				result = true;

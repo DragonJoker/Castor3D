@@ -219,6 +219,24 @@ namespace castor3d
 		 */
 		C3D_API void onTextAction( castor::String const & handler
 			, castor::String const & text );
+		/**
+		 *\~english
+		 *\~brief		Enables handler.
+		 *\param[in]	handler	The handler.
+		 *\~french
+		 *\~brief		Active un handler.
+		 *\param[in]	handler	Le handler.
+		 */
+		C3D_API void enableHandler( castor::String const & handler );
+		/**
+		 *\~english
+		 *\~brief		Disables handler.
+		 *\param[in]	handler	The handler.
+		 *\~french
+		 *\~brief		Désactive un handler.
+		 *\param[in]	handler	Le handler.
+		 */
+		C3D_API void disableHandler( castor::String const & handler );
 
 		//@}
 		/**@name Mouse input events */
