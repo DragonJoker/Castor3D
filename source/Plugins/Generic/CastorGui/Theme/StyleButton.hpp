@@ -28,6 +28,9 @@ namespace CastorGui
 			, m_pushedTextMaterial{ doCreateMaterial( getTextMaterial(), -0.1f, "_TPU" ) }
 			, m_pushedBackgroundMaterial{ doCreateMaterial( getBackgroundMaterial(), 0.1f, "_BPU" ) }
 			, m_pushedForegroundMaterial{ doCreateMaterial( getForegroundMaterial(), -0.1f, "_FPU" ) }
+			, m_disabledTextMaterial{ doCreateMaterial( getTextMaterial(), -0.2f, "_TDS" ) }
+			, m_disabledBackgroundMaterial{ doCreateMaterial( getBackgroundMaterial(), +0.2f, "_BDS" ) }
+			, m_disabledForegroundMaterial{ doCreateMaterial( getForegroundMaterial(), -0.2f, "_FDS" ) }
 			, m_fontName{ fontName }
 		{
 		}
@@ -67,6 +70,21 @@ namespace CastorGui
 			m_pushedTextMaterial = material;
 		}
 
+		void setDisabledBackgroundMaterial( castor3d::MaterialRPtr material )
+		{
+			m_disabledBackgroundMaterial = material;
+		}
+
+		void setDisabledForegroundMaterial( castor3d::MaterialRPtr material )
+		{
+			m_disabledForegroundMaterial = material;
+		}
+
+		void setDisabledTextMaterial( castor3d::MaterialRPtr material )
+		{
+			m_disabledTextMaterial = material;
+		}
+
 		void setFont( castor::String const & value )
 		{
 			m_fontName = value;
@@ -102,6 +120,21 @@ namespace CastorGui
 			return m_pushedTextMaterial;
 		}
 
+		castor3d::MaterialRPtr getDisabledBackgroundMaterial()const
+		{
+			return m_disabledBackgroundMaterial;
+		}
+
+		castor3d::MaterialRPtr getDisabledForegroundMaterial()const
+		{
+			return m_disabledForegroundMaterial;
+		}
+
+		castor3d::MaterialRPtr getDisabledTextMaterial()const
+		{
+			return m_disabledTextMaterial;
+		}
+
 		castor3d::MaterialRPtr getTextMaterial()const
 		{
 			return m_textMaterial;
@@ -131,6 +164,9 @@ namespace CastorGui
 		castor3d::MaterialRPtr m_pushedTextMaterial{};
 		castor3d::MaterialRPtr m_pushedBackgroundMaterial{};
 		castor3d::MaterialRPtr m_pushedForegroundMaterial{};
+		castor3d::MaterialRPtr m_disabledTextMaterial{};
+		castor3d::MaterialRPtr m_disabledBackgroundMaterial{};
+		castor3d::MaterialRPtr m_disabledForegroundMaterial{};
 		castor::String m_fontName{};
 	};
 }

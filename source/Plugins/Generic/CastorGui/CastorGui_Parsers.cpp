@@ -1014,6 +1014,84 @@ namespace CastorGui
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserStyleButtonDisabledBackgroundMaterial )
+	{
+		ParserContext & guiContext = getParserContext( context );
+
+		if ( auto style = guiContext.buttonStyle )
+		{
+			castor::String name;
+			params[0]->get( name );
+			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+
+			if ( material )
+			{
+				style->setDisabledBackgroundMaterial( material );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No button style initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserStyleButtonDisabledForegroundMaterial )
+	{
+		ParserContext & guiContext = getParserContext( context );
+
+		if ( auto style = guiContext.buttonStyle )
+		{
+			castor::String name;
+			params[0]->get( name );
+			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+
+			if ( material )
+			{
+				style->setDisabledForegroundMaterial( material );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No button style initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserStyleButtonDisabledTextMaterial )
+	{
+		ParserContext & guiContext = getParserContext( context );
+
+		if ( auto style = guiContext.buttonStyle )
+		{
+			castor::String name;
+			params[0]->get( name );
+			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+
+			if ( material )
+			{
+				style->setDisabledTextMaterial( material );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No button style initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserStyleEditFont )
 	{
 		ParserContext & guiContext = getParserContext( context );

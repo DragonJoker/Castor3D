@@ -872,7 +872,6 @@ namespace castor3d
 		, crg::FramePass const *& previousPass
 		, RenderDevice const & device
 		, ProgressBar * progress
-		, castor::Size const & size
 		, Scene & scene
 		, Texture const & depth
 		, OpaquePassResult const & gpResult
@@ -892,7 +891,7 @@ namespace castor3d
 		, m_sceneUbo{ sceneUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_group{ graph.createPassGroup( "DirectLighting" ) }
-		, m_size{ size }
+		, m_size{ makeSize( lpResult[LpTexture::eDiffuse].getExtent() ) }
 	{
 		previousPass = &doCreateDepthBlitPass( m_group
 			, *previousPass

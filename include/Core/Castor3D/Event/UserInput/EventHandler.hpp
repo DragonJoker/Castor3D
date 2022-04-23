@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Event/UserInput/MouseEvent.hpp"
 #include "Castor3D/Event/UserInput/HandlerEvent.hpp"
 
+#include <CastorUtils/Design/Named.hpp>
 #include <CastorUtils/Design/Signal.hpp>
 
 #include <deque>
@@ -20,6 +21,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class EventHandler
+		: public castor::Named
 	{
 	protected:
 		using EventHandlerFunction = std::function< void() >;
@@ -35,6 +37,9 @@ namespace castor3d
 		//!\~english	Catcher definition for handler events.
 		//!\~french		Définition d'une fonction de traitement d'évènement de gestionnaire.
 		using ClientHandlerFunction = std::function< void( HandlerEvent const & ) >;
+		//!\~english	Signal function when handler is enabled/disabled.
+		//!\~french		Fonction de signal d'activation/désactivation du gestionnaire.
+		using EnableFunction = std::function< void( bool ) >;
 		//!\~english	Mouse event signal definition.
 		//!\~french		Définition d'un signal d'évènement de souris.
 		using OnClientMouseEvent = castor::SignalT< ClientMouseFunction >;
@@ -44,6 +49,9 @@ namespace castor3d
 		//!\~english	Handler event signal definition.
 		//!\~french		Définition d'un signal d'évènement de gestionnaire.
 		using OnClientHandlerEvent = castor::SignalT< ClientHandlerFunction >;
+		//!\~english	Signal when handler is enabled/disabled.
+		//!\~french		Signal d'activation/désactivation du gestionnaire.
+		using OnEnable = castor::SignalT< EnableFunction >;
 		//!\~english	Mouse event signal connection definition.
 		//!\~french		Définition d'une connexion au signal d'évènement de souris.
 		using OnClientMouseEventConnection = OnClientMouseEvent::connection;
@@ -53,6 +61,9 @@ namespace castor3d
 		//!\~english	Handler event signal connection definition.
 		//!\~french		Définition d'une connexion au signal d'évènement de gestionnaire.
 		using OnClientHandlerEventConnection = OnClientHandlerEvent::connection;
+		//!\~english	Signal connection when handler is enabled/disabled.
+		//!\~french		Connection au signal d'activation/désactivation du gestionnaire.
+		using OnEnableConnection = OnEnable::connection;
 
 		/**@name General */
 		//@{
@@ -65,8 +76,10 @@ namespace castor3d
 		*\~brief		Constructeur.
 		 *\param[in]	catchMouseEvents	Dit si le gestionnaire d'évènements ràcupàre les évènements souris.
 		 */
-		explicit EventHandler( bool catchMouseEvents )
-			: m_enabled{ true }
+		explicit EventHandler( castor::String const & name
+			, bool catchMouseEvents )
+			: castor::Named{ name }
+			, m_enabled{ true }
 			, m_catchMouseEvents{ catchMouseEvents }
 			, m_catchTabKey{ false }
 			, m_catchReturnKey{ false }
@@ -194,6 +207,33 @@ namespace castor3d
 		{
 			m_catchMouseEvents = value;
 		}
+		/**
+		 *\~english
+		 *\return		\p false if the control is disabled.
+		 */
+		bool isEnabled()const
+		{
+			return m_enabled;
+		}
+		/**
+		 *\~english
+		 *\~brief		Sets if the control is enabled.
+		 */
+		void enable()
+		{
+			m_enabled = true;
+			onEnable( m_enabled );
+		}
+		/**
+		 *\~english
+		 *\~brief		Sets if the control is disabled.
+		 */
+		void disable()
+		{
+			m_enabled = false;
+			onEnable( m_enabled );
+		}
+		OnEnable onEnable;
 
 		//@}
 		/**@name Keyboard events */
@@ -403,9 +443,6 @@ namespace castor3d
 		bool m_catchReturnKey;
 	};
 	/**
-	*\author	Sylvain DOREMUS
-	*\date		17/04/2016
-	*\version	0.9.0
 	*\~english
 	*\brief		Description of an event handler, class that can receive event.
 	*\~french
@@ -462,8 +499,9 @@ namespace castor3d
 		*\~brief		Constructeur.
 		 *\param[in]	catchMouseEvents	Dit si le gestionnaire d'évènements ràcupàre les évènements souris.
 		 */
-		explicit NonClientEventHandler( bool catchMouseEvents )
-			: EventHandler{ catchMouseEvents }
+		explicit NonClientEventHandler( castor::String const & name
+			, bool catchMouseEvents )
+			: EventHandler{ name, catchMouseEvents }
 		{
 		}
 		/**
@@ -555,8 +593,8 @@ namespace castor3d
 		: public EventHandler
 	{
 	public:
-		MouseEventHandler()
-			: EventHandler{ true }
+		MouseEventHandler( castor::String const & name )
+			: EventHandler{ name, true }
 		{
 		}
 
