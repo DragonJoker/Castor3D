@@ -22,8 +22,7 @@ namespace CastorGui
 		, castor::Size const & size
 		, uint32_t flags
 		, bool visible )
-		: castor3d::NonClientEventHandler< Control >{ type != ControlType::eStatic }
-		, castor::Named{ name }
+		: castor3d::NonClientEventHandler< Control >{ name, type != ControlType::eStatic }
 		, m_parent{ parent }
 		, m_id{ id }
 		, m_type{ type }

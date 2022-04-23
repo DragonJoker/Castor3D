@@ -22,7 +22,6 @@ namespace CastorGui
 	*/
 	class Control
 		: public castor3d::NonClientEventHandler< Control >
-		, public castor::Named
 	{
 		friend class ControlsManager;
 

@@ -152,6 +152,7 @@ namespace CastorGui
 		castor::String m_caption;
 		castor3d::TextOverlayWPtr m_text;
 		OnButtonEvent m_signals[size_t( ButtonEvent::eCount )];
+		OnEnableConnection m_onEnable;
 	};
 }
 

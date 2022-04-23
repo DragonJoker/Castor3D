@@ -95,7 +95,7 @@ namespace castor3d
 		{
 		public:
 			explicit EvtHandler( RenderWindow & window )
-				: MouseEventHandler{}
+				: MouseEventHandler{ window.getName() }
 				, m_window{ &window }
 			{
 			}

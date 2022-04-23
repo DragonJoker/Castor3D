@@ -215,7 +215,6 @@ namespace castor3d
 		 *\param[in]	previousPass		The previous frame pass.
 		 *\param[in]	device				The GPU device.
 		 *\param[in]	progress			The progress bar.
-		 *\param[in]	size				The render area dimensions.
 		 *\param[in]	scene				The scene.
 		 *\param[in]	depth				The depth texture.
 		 *\param[in]	gpResult			The geometry pass buffers.
@@ -231,7 +230,6 @@ namespace castor3d
 		 *\param[in]	previousPass		La frame pass précédente.
 		 *\param[in]	device				Le device GPU.
 		 *\param[in]	progress			La barre de progression.
-		 *\param[in]	size				Les dimensions de la zone de rendu.
 		 *\param[in]	scene				La scène.
 		 *\param[in]	depth				La texxture de profondeur.
 		 *\param[in]	gpResult			Les textures de la passe de géométries.
@@ -246,7 +244,6 @@ namespace castor3d
 			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, ProgressBar * progress
-			, castor::Size const & size
 			, Scene & scene
 			, Texture const & depth
 			, OpaquePassResult const & gpResult

@@ -51,6 +51,30 @@ namespace CastorGui
 			, flags
 			, visible }
 		, m_caption{ caption }
+		, m_onEnable{ EventHandler::onEnable.connect( [this]( bool enabled )
+			{
+				auto & style = getStyle();
+				if ( enabled )
+				{
+					m_text.lock()->setMaterial( style.getTextMaterial() );
+
+					if ( auto panel = getBackground() )
+					{
+						panel->setMaterial( style.getBackgroundMaterial() );
+						panel->setBorderMaterial( style.getForegroundMaterial() );
+					}
+				}
+				else
+				{
+					m_text.lock()->setMaterial( style.getDisabledTextMaterial() );
+
+					if ( auto panel = getBackground() )
+					{
+						panel->setMaterial( style.getDisabledBackgroundMaterial() );
+						panel->setBorderMaterial( style.getDisabledForegroundMaterial() );
+					}
+				}
+			} ) }
 	{
 		setBackgroundBorders( castor::Rectangle{ 1, 1, 1, 1 } );
 		EventHandler::connect( castor3d::MouseEventType::eEnter
@@ -199,7 +223,6 @@ namespace CastorGui
 		{
 			panel->setMaterial( style.getBackgroundMaterial() );
 			panel->setBorderMaterial( style.getForegroundMaterial() );
-			panel.reset();
 		}
 	}
 
