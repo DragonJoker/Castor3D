@@ -1,0 +1,25 @@
+// Materials
+
+material "EnemyCube"
+{
+	pass
+	{
+		albedo 1.0 0.5 0.5
+		specular 1.0 0.5 0.5
+
+		texture_unit
+		{
+			image "Textures/Cube.png"
+			sampler "Nearest"
+			albedo_mask 0x00FFFFFF
+		}
+	}
+}
+
+// Meshes
+
+mesh "EnemyCube"
+{
+	type "cube" -width=8 -height=8 -depth=8
+	default_material "EnemyCube"
+}
