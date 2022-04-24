@@ -125,24 +125,9 @@ namespace castor
 		*\name Itération.
 		**/
 		/**@{*/
-		inline auto begin()
+		inline auto const & getCategories()const
 		{
-			return m_overlays.begin();
-		}
-
-		inline auto begin()const
-		{
-			return m_overlays.begin();
-		}
-
-		inline auto end()
-		{
-			return m_overlays.end();
-		}
-
-		inline auto end()const
-		{
-			return m_overlays.end();
+			return m_overlays;
 		}
 		/**@}*/
 		/**

@@ -5,6 +5,7 @@
 #include "Castor3D/Overlay/BorderPanelOverlay.hpp"
 #include "Castor3D/Overlay/PanelOverlay.hpp"
 #include "Castor3D/Overlay/TextOverlay.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 CU_ImplementCUSmartPtr( castor3d, Overlay )
 
@@ -18,7 +19,9 @@ namespace castor3d
 		: OwnedBy< Engine >{ engine }
 		, m_name{ name }
 		, m_parent{ parent }
-		, m_category{ engine.getOverlayCache().getFactory().create( type ) }
+		, m_category{ scene
+			? scene->getOverlayCache().getFactory().create( type )
+			: engine.getOverlayCache().getFactory().create( type ) }
 		, m_scene{ scene }
 		, m_renderSystem{ engine.getRenderSystem() }
 	{

@@ -450,7 +450,7 @@ namespace castor3d
 		DECLARE_OBJECT_CACHE_MEMBER( particleSystem, ParticleSystem );
 		DECLARE_CACHE_MEMBER( mesh, Mesh );
 		DECLARE_CACHE_MEMBER( animatedObjectGroup, AnimatedObjectGroup );
-		DECLARE_CACHE_VIEW_MEMBER( overlay, Overlay, EventType::ePreRender );
+		DECLARE_CACHE_MEMBER( overlay, Overlay );
 		DECLARE_CACHE_VIEW_MEMBER( material, Material, EventType::ePreRender );
 		DECLARE_CACHE_VIEW_MEMBER( sampler, Sampler, EventType::ePreRender );
 		DECLARE_CU_CACHE_VIEW_MEMBER( font, Font, EventType::ePreRender );

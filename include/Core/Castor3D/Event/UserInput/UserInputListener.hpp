@@ -347,40 +347,6 @@ namespace castor3d
 			, castor::String const & c );
 
 		//@}
-		/**@name Overlay events */
-		//@{
-
-		/**
-		 *\~english
-		 *\~brief		Fires a material change event.
-		 *\param[in]	overlay		The overlay name.
-		 *\param[in]	material	The material name.
-		 *\return		\p true if the event is processed by a control.
-		 *\~french
-		 *\~brief		Lance un évènement de changement de matériau.
-		 *\param[in]	overlay		Le nom de l'incrustation.
-		 *\param[in]	material	Le nom du matériau.
-		 *\return		\p true si l'évènement est traité par un gestionnaire.
-		 */
-		C3D_API virtual bool fireMaterialEvent( castor::String const & overlay
-			, castor::String const & material );
-		
-		/**
-		 *\~english
-		 *\~brief		Fires a caption change event.
-		 *\param[in]	overlay	The overlay name.
-		 *\param[in]	caption	The new caption.
-		 *\return		\p true if the event is processed by a control.
-		 *\~french
-		 *\~brief		Lance un évènement de changement de texte.
-		 *\param[in]	overlay	Le nom de l'incrustation.
-		 *\param[in]	caption	Le nouveau texte.
-		 *\return		\p true si l'évènement est traité par un gestionnaire.
-		 */
-		C3D_API virtual bool fireTextEvent( castor::String const & overlay
-			, castor::String const & caption );
-
-		//@}
 
 	protected:
 		/**

@@ -242,43 +242,37 @@ namespace GuiCommon
 				, _( "Overlays" )
 				, eBMP_PANEL_OVERLAY
 				, eBMP_PANEL_OVERLAY_SEL );
-			for ( auto overlay : engine->getOverlayCache() )
+			for ( auto overlay : scene->getOverlayCache().getCategories() )
 			{
-				if ( overlay->getOverlayName().find( cuT( "MainDebugPanel" ) ) != 0
-					&& overlay->getOverlayName().find( cuT( "RenderPassOverlays" ) ) != 0
-					&& overlay->getOverlayName().find( cuT( "DebugPanels" ) ) != 0
-					&& overlay->getOverlayName().find( cuT( "DebugPanel" ) ) != 0 )
+				switch ( overlay->getType() )
 				{
-					switch ( overlay->getType() )
-					{
-					case castor3d::OverlayType::ePanel:
-						doAddOverlay( AppendItem( catId
-								, overlay->getOverlayName()
-								, eBMP_PANEL_OVERLAY
-								, eBMP_PANEL_OVERLAY_SEL
-								, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay ) )
-							, *overlay );
-						break;
-					case castor3d::OverlayType::eBorderPanel:
-						doAddOverlay( AppendItem( catId
-								, overlay->getOverlayName()
-								, eBMP_BORDER_PANEL_OVERLAY
-								, eBMP_BORDER_PANEL_OVERLAY_SEL
-								, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay ) )
-							, *overlay );
-						break;
-					case castor3d::OverlayType::eText:
-						doAddOverlay( AppendItem( catId
-								, overlay->getOverlayName()
-								, eBMP_TEXT_OVERLAY
-								, eBMP_TEXT_OVERLAY_SEL
-								, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay ) )
-							, *overlay );
-						break;
-					default:
-						CU_Failure( "Unsupported OverlayType" );
-						break;
-					}
+				case castor3d::OverlayType::ePanel:
+					doAddOverlay( AppendItem( catId
+							, overlay->getOverlayName()
+							, eBMP_PANEL_OVERLAY
+							, eBMP_PANEL_OVERLAY_SEL
+							, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay ) )
+						, *overlay );
+					break;
+				case castor3d::OverlayType::eBorderPanel:
+					doAddOverlay( AppendItem( catId
+							, overlay->getOverlayName()
+							, eBMP_BORDER_PANEL_OVERLAY
+							, eBMP_BORDER_PANEL_OVERLAY_SEL
+							, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay ) )
+						, *overlay );
+					break;
+				case castor3d::OverlayType::eText:
+					doAddOverlay( AppendItem( catId
+							, overlay->getOverlayName()
+							, eBMP_TEXT_OVERLAY
+							, eBMP_TEXT_OVERLAY_SEL
+							, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay ) )
+						, *overlay );
+					break;
+				default:
+					CU_Failure( "Unsupported OverlayType" );
+					break;
 				}
 			}
 

@@ -9,16 +9,19 @@
 #include <Castor3D/Overlay/Overlay.hpp>
 #include <Castor3D/Overlay/BorderPanelOverlay.hpp>
 #include <Castor3D/Overlay/TextOverlay.hpp>
+#include <Castor3D/Scene/Scene.hpp>
 
 #include <CastorUtils/Graphics/Font.hpp>
 
 namespace CastorGui
 {
-	ComboBoxCtrl::ComboBoxCtrl( castor::String const & name
+	ComboBoxCtrl::ComboBoxCtrl( castor3d::SceneRPtr scene
+		, castor::String const & name
 		, ComboBoxStyle * style
 		, ControlRPtr parent
 		, uint32_t id )
-		: ComboBoxCtrl{ name
+		: ComboBoxCtrl{ scene
+			, name
 			, style
 			, parent
 			, id
@@ -31,7 +34,8 @@ namespace CastorGui
 	{
 	}
 
-	ComboBoxCtrl::ComboBoxCtrl( castor::String const & name
+	ComboBoxCtrl::ComboBoxCtrl( castor3d::SceneRPtr scene
+		, castor::String const & name
 		, ComboBoxStyle * style
 		, ControlRPtr parent
 		, uint32_t id
@@ -42,6 +46,7 @@ namespace CastorGui
 		, uint32_t flags
 		, bool visible )
 		: Control{ Type
+			, scene
 			, name
 			, style
 			, parent
@@ -53,7 +58,8 @@ namespace CastorGui
 		, m_values{ values }
 		, m_selected{ selected }
 	{
-		m_expand = std::make_shared< ButtonCtrl >( name + cuT( "_Expand" )
+		m_expand = std::make_shared< ButtonCtrl >( m_scene
+			, name + cuT( "_Expand" )
 			, &style->getButtonStyle()
 			, this
 			, getId() << 12
@@ -67,7 +73,8 @@ namespace CastorGui
 				doSwitchExpand();
 			} );
 
-		m_choices = std::make_shared< ListBoxCtrl >( name + cuT( "_Choices" )
+		m_choices = std::make_shared< ListBoxCtrl >( m_scene
+			, name + cuT( "_Choices" )
 			, &style->getListBoxStyle()
 			, this
 			, ( getId() << 12 ) + 1
@@ -83,11 +90,17 @@ namespace CastorGui
 				onSelected( sel );
 			} );
 
-		auto text = getEngine().getOverlayCache().add( cuT( "T_CtrlCombo_" ) + castor::string::toString( getId() )
-			, getEngine()
-			, castor3d::OverlayType::eText
-			, nullptr
-			, &getBackground()->getOverlay() ).lock()->getTextOverlay();
+		auto text = m_scene
+			? m_scene->getOverlayCache().add( cuT( "T_CtrlCombo_" ) + castor::string::toString( getId() )
+				, getEngine()
+				, castor3d::OverlayType::eText
+				, nullptr
+				, &getBackground()->getOverlay() ).lock()->getTextOverlay()
+			: getEngine().getOverlayCache().add( cuT( "T_CtrlCombo_" ) + castor::string::toString( getId() )
+				, getEngine()
+				, castor3d::OverlayType::eText
+				, nullptr
+				, &getBackground()->getOverlay() ).lock()->getTextOverlay();
 		text->setPixelSize( castor::Size( getSize().getWidth() - getSize().getHeight(), getSize().getHeight() ) );
 		text->setVAlign( castor3d::VAlign::eCenter );
 		m_text = text;

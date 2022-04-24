@@ -22,7 +22,8 @@ namespace CastorGui
 		 *\param[in]	parent	The parent control, if any
 		 *\param[in]	id		The control ID.
 		*/
-		StaticCtrl( castor::String const & name
+		StaticCtrl( castor3d::SceneRPtr scene
+			, castor::String const & name
 			, StaticStyle * style
 			, ControlRPtr parent
 			, uint32_t id );
@@ -37,7 +38,8 @@ namespace CastorGui
 		 *\param[in]	flags		The configuration flags
 		 *\param[in]	visible		Initial visibility status
 		 */
-		StaticCtrl( castor::String const & name
+		StaticCtrl( castor3d::SceneRPtr scene
+			, castor::String const & name
 			, StaticStyle * style
 			, ControlRPtr parent
 			, castor::String const & caption

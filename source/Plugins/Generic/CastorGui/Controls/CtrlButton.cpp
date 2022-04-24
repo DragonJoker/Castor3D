@@ -8,19 +8,21 @@
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Overlay/Overlay.hpp>
-
 #include <Castor3D/Overlay/BorderPanelOverlay.hpp>
 #include <Castor3D/Overlay/TextOverlay.hpp>
+#include <Castor3D/Scene/Scene.hpp>
 
 #include <CastorUtils/Graphics/Font.hpp>
 
 namespace CastorGui
 {
-	ButtonCtrl::ButtonCtrl( castor::String const & name
-			, ButtonStyleRPtr style
+	ButtonCtrl::ButtonCtrl( castor3d::SceneRPtr scene
+		, castor::String const & name
+		, ButtonStyleRPtr style
 		, ControlRPtr parent
 		, uint32_t id )
-		: ButtonCtrl{ name
+		: ButtonCtrl{ scene
+			, name
 			, style
 			, parent
 			, id
@@ -32,7 +34,8 @@ namespace CastorGui
 	{
 	}
 
-	ButtonCtrl::ButtonCtrl( castor::String const & name
+	ButtonCtrl::ButtonCtrl( castor3d::SceneRPtr scene
+		, castor::String const & name
 		, ButtonStyleRPtr style
 		, ControlRPtr parent
 		, uint32_t id
@@ -42,6 +45,7 @@ namespace CastorGui
 		, uint32_t flags
 		, bool visible )
 		: Control{ Type
+			, scene
 			, name
 			, style
 			, parent
@@ -98,11 +102,17 @@ namespace CastorGui
 				onMouseButtonUp( event );
 			} );
 
-		auto text = getEngine().getOverlayCache().add( cuT( "T_CtrlButton_" ) + castor::string::toString( getId() )
-			, getEngine()
-			, castor3d::OverlayType::eText
-			, nullptr
-			, &getBackground()->getOverlay() ).lock()->getTextOverlay();
+		auto text = m_scene
+			? m_scene->getOverlayCache().add( cuT( "T_CtrlButton_" ) + castor::string::toString( getId() )
+				, getEngine()
+				, castor3d::OverlayType::eText
+				, nullptr
+				, &getBackground()->getOverlay() ).lock()->getTextOverlay()
+			: getEngine().getOverlayCache().add( cuT( "T_CtrlButton_" ) + castor::string::toString( getId() )
+				, getEngine()
+				, castor3d::OverlayType::eText
+				, nullptr
+				, &getBackground()->getOverlay() ).lock()->getTextOverlay();
 		text->setPixelSize( getSize() );
 		text->setHAlign( castor3d::HAlign::eCenter );
 		text->setVAlign( castor3d::VAlign::eCenter );

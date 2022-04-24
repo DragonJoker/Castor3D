@@ -1009,18 +1009,28 @@ namespace castor3d
 		, crg::SemaphoreWaitArray const & toWait )
 	{
 		auto timerBlock = m_overlaysTimer->start();
-		using LockType = std::unique_lock< OverlayCache >;
-		LockType lock{ castor::makeUniqueLock( getEngine()->getOverlayCache() ) };
 		m_overlayRenderer->beginPrepare( *m_overlaysTimer );
 		auto preparer = m_overlayRenderer->getPreparer( device );
 
-		for ( auto category : getEngine()->getOverlayCache() )
+		if ( m_type == TargetType::eWindow )
 		{
-			auto scene = category->getOverlay().getScene();
+			auto lock( castor::makeUniqueLock( getEngine()->getOverlayCache() ) );
 
-			if ( category->getOverlay().isVisible()
-				&& ( ( !scene && m_type == TargetType::eWindow )
-					|| scene == getScene() ) )
+			for ( auto category : getEngine()->getOverlayCache().getCategories() )
+			{
+				if ( category->getOverlay().isVisible() )
+				{
+					category->update( *m_overlayRenderer );
+					category->accept( preparer );
+				}
+			}
+		}
+
+		auto lock( castor::makeUniqueLock( getScene()->getOverlayCache() ) );
+
+		for ( auto category : getScene()->getOverlayCache().getCategories() )
+		{
+			if ( category->getOverlay().isVisible() )
 			{
 				category->update( *m_overlayRenderer );
 				category->accept( preparer );
