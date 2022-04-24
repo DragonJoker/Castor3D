@@ -380,6 +380,13 @@ namespace castor3d
 		 */
 		C3D_API IntermediateViewArray const & listIntermediateViews()const;
 		/**
+		 *\~english
+		 *\return		Changes the loading scene to the latest one.
+		 *\~french
+		 *\return		Change la loading scene pour la dernière.
+		 */
+		C3D_API void changeLoadingScene();
+		/**
 		*\~english
 		*name
 		*	Getters.

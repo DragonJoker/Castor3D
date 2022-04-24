@@ -889,6 +889,12 @@ namespace castor3d
 		return m_intermediates;
 	}
 
+	void RenderWindow::changeLoadingScene()
+	{
+		doDestroyLoadingScreen();
+		doCreateLoadingScreen();
+	}
+
 	GeometrySPtr RenderWindow::getPickedGeometry()const
 	{
 		auto sel = m_picking->getPickedGeometry();
