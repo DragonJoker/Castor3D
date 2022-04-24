@@ -18,11 +18,13 @@
 
 namespace CastorGui
 {
-	ListBoxCtrl::ListBoxCtrl( castor::String const & name
+	ListBoxCtrl::ListBoxCtrl( castor3d::SceneRPtr scene
+		, castor::String const & name
 		, ListBoxStyle * style
 		, ControlRPtr parent
 		, uint32_t id )
-		: ListBoxCtrl{ name
+		: ListBoxCtrl{ scene
+			, name
 			, style
 			, parent
 			, id
@@ -35,7 +37,8 @@ namespace CastorGui
 	{
 	}
 
-	ListBoxCtrl::ListBoxCtrl( castor::String const & name
+	ListBoxCtrl::ListBoxCtrl( castor3d::SceneRPtr scene
+		, castor::String const & name
 		, ListBoxStyle * style
 		, ControlRPtr parent
 		, uint32_t id
@@ -46,6 +49,7 @@ namespace CastorGui
 		, uint32_t flags
 		, bool visible )
 		: Control{ Type
+			, scene
 			, name
 			, style
 			, parent
@@ -234,7 +238,8 @@ namespace CastorGui
 		, uint32_t itemIndex )
 	{
 		auto & style = getStyle();
-		auto item = std::make_shared< StaticCtrl >( getName() + cuT( "_Item" ) + castor::string::toString( itemIndex )
+		auto item = std::make_shared< StaticCtrl >( m_scene
+			, getName() + cuT( "_Item" ) + castor::string::toString( itemIndex )
 			, &style.getItemStyle()
 			, this
 			, value

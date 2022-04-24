@@ -36,6 +36,7 @@ namespace CastorGui
 
 		template< typename ControlT >
 		std::shared_ptr< ControlT > createControl( ParserContext & context
+			, castor3d::SceneRPtr scene
 			, castor::String const & controlName
 			, castor::String const & themeName
 			, std::shared_ptr< ControlT > & control )
@@ -45,42 +46,48 @@ namespace CastorGui
 
 			if constexpr ( ControlT::Type == ControlType::eButton )
 			{
-				control = std::make_shared< ControlT >( controlName
+				control = std::make_shared< ControlT >( scene
+					, controlName
 					, theme->getButtonStyle()
 					, context.getTop()
 					, context.ctrlId++ );
 			}
 			else if constexpr ( ControlT::Type == ControlType::eComboBox )
 			{
-				control = std::make_shared< ControlT >( controlName
+				control = std::make_shared< ControlT >( scene
+					, controlName
 					, theme->getComboBoxStyle()
 					, context.getTop()
 					, context.ctrlId++ );
 			}
 			else if constexpr ( ControlT::Type == ControlType::eEdit )
 			{
-				control = std::make_shared< ControlT >( controlName
+				control = std::make_shared< ControlT >( scene
+					, controlName
 					, theme->getEditStyle()
 					, context.getTop()
 					, context.ctrlId++ );
 			}
 			else if constexpr ( ControlT::Type == ControlType::eListBox )
 			{
-				control = std::make_shared< ControlT >( controlName
+				control = std::make_shared< ControlT >( scene
+					, controlName
 					, theme->getListBoxStyle()
 					, context.getTop()
 					, context.ctrlId++ );
 			}
 			else if constexpr ( ControlT::Type == ControlType::eSlider )
 			{
-				control = std::make_shared< ControlT >( controlName
+				control = std::make_shared< ControlT >( scene
+					, controlName
 					, theme->getSliderStyle()
 					, context.getTop()
 					, context.ctrlId++ );
 			}
 			else if constexpr ( ControlT::Type == ControlType::eStatic )
 			{
-				control = std::make_shared< ControlT >( controlName
+				control = std::make_shared< ControlT >( scene
+					, controlName
 					, theme->getStaticStyle()
 					, context.getTop()
 					, context.ctrlId++ );
@@ -197,8 +204,10 @@ namespace CastorGui
 	{
 		castor::String themeName;
 		params[0]->get( themeName );
+		auto & parsingContext = castor3d::getParserContext( context );
 		ParserContext & guiContext = getParserContext( context );
 		createControl( guiContext
+			, parsingContext.scene
 			, guiContext.controlName
 			, themeName
 			, guiContext.button );
@@ -275,8 +284,10 @@ namespace CastorGui
 	{
 		castor::String themeName;
 		params[0]->get( themeName );
+		auto & parsingContext = castor3d::getParserContext( context );
 		ParserContext & guiContext = getParserContext( context );
 		createControl( guiContext
+			, parsingContext.scene
 			, guiContext.controlName
 			, themeName
 			, guiContext.combo );
@@ -320,8 +331,10 @@ namespace CastorGui
 	{
 		castor::String themeName;
 		params[0]->get( themeName );
+		auto & parsingContext = castor3d::getParserContext( context );
 		ParserContext & guiContext = getParserContext( context );
 		createControl( guiContext
+			, parsingContext.scene
 			, guiContext.controlName
 			, themeName
 			, guiContext.edit );
@@ -385,8 +398,10 @@ namespace CastorGui
 	{
 		castor::String themeName;
 		params[0]->get( themeName );
+		auto & parsingContext = castor3d::getParserContext( context );
 		ParserContext & guiContext = getParserContext( context );
 		createControl( guiContext
+			, parsingContext.scene
 			, guiContext.controlName
 			, themeName
 			, guiContext.listbox );
@@ -430,8 +445,10 @@ namespace CastorGui
 	{
 		castor::String themeName;
 		params[0]->get( themeName );
+		auto & parsingContext = castor3d::getParserContext( context );
 		ParserContext & guiContext = getParserContext( context );
 		createControl( guiContext
+			, parsingContext.scene
 			, guiContext.controlName
 			, themeName
 			, guiContext.slider );
@@ -457,8 +474,10 @@ namespace CastorGui
 	{
 		castor::String themeName;
 		params[0]->get( themeName );
+		auto & parsingContext = castor3d::getParserContext( context );
 		ParserContext & guiContext = getParserContext( context );
 		createControl( guiContext
+			, parsingContext.scene
 			, guiContext.controlName
 			, themeName
 			, guiContext.staticTxt );

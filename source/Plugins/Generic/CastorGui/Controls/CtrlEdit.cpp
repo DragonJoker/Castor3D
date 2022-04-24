@@ -9,16 +9,19 @@
 #include <Castor3D/Overlay/BorderPanelOverlay.hpp>
 #include <Castor3D/Overlay/PanelOverlay.hpp>
 #include <Castor3D/Overlay/TextOverlay.hpp>
+#include <Castor3D/Scene/Scene.hpp>
 
 #include <CastorUtils/Graphics/Font.hpp>
 
 namespace CastorGui
 {
-	EditCtrl::EditCtrl( castor::String const & name
+	EditCtrl::EditCtrl( castor3d::SceneRPtr scene
+		, castor::String const & name
 		, EditStyleRPtr style
 		, ControlRPtr parent
 		, uint32_t id )
-		: EditCtrl{ name
+		: EditCtrl{ scene
+			, name
 			, style
 			, parent
 			, id
@@ -30,7 +33,8 @@ namespace CastorGui
 	{
 	}
 
-	EditCtrl::EditCtrl( castor::String const & name
+	EditCtrl::EditCtrl( castor3d::SceneRPtr scene
+		, castor::String const & name
 		, EditStyleRPtr style
 		, ControlRPtr parent
 		, uint32_t id
@@ -40,6 +44,7 @@ namespace CastorGui
 		, uint32_t flags
 		, bool visible )
 		: Control{ Type
+			, scene
 			, name
 			, style
 			, parent
@@ -89,11 +94,17 @@ namespace CastorGui
 				onDeactivate( event );
 			} );
 
-		auto text = getEngine().getOverlayCache().add( cuT( "T_CtrlEdit_" ) + castor::string::toString( getId() )
-			, getEngine()
-			, castor3d::OverlayType::eText
-			, nullptr
-			, &getBackground()->getOverlay() ).lock()->getTextOverlay();
+		auto text = m_scene
+			? m_scene->getOverlayCache().add( cuT( "T_CtrlEdit_" ) + castor::string::toString( getId() )
+				, getEngine()
+				, castor3d::OverlayType::eText
+				, nullptr
+				, &getBackground()->getOverlay() ).lock()->getTextOverlay()
+			: getEngine().getOverlayCache().add( cuT( "T_CtrlEdit_" ) + castor::string::toString( getId() )
+				, getEngine()
+				, castor3d::OverlayType::eText
+				, nullptr
+				, &getBackground()->getOverlay() ).lock()->getTextOverlay();
 		text->setPixelSize( getSize() );
 		text->setVAlign( castor3d::VAlign::eCenter );
 		text->setVisible( visible );

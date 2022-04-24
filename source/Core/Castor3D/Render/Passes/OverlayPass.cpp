@@ -14,33 +14,25 @@ namespace castor3d
 {
 	namespace passovy
 	{
-		static void doParseOverlay( Scene const & refScene
-			, Overlay const & overlay
+		static void doParseOverlay( Overlay const & overlay
 			, OverlayRenderer & renderer
 			, OverlayRenderer::Preparer & preparer
 			, std::set< Overlay const * > & visited )
 		{
 			auto ires = visited.insert( &overlay );
 
-			if ( ires.second )
+			if ( ires.second
+				&& overlay.isVisible() )
 			{
-				auto scene = overlay.getScene();
+				overlay.getCategory()->update( renderer );
+				overlay.getCategory()->accept( preparer );
 
-				if ( overlay.isVisible()
-					&& scene
-					&& scene == &refScene )
+				for ( auto & child : overlay )
 				{
-					overlay.getCategory()->update( renderer );
-					overlay.getCategory()->accept( preparer );
-
-					for ( auto & child : overlay )
-					{
-						doParseOverlay( refScene
-							, *child
-							, renderer
-							, preparer
-							, visited );
-					}
+					doParseOverlay( *child
+						, renderer
+						, preparer
+						, visited );
 				}
 			}
 		}
@@ -51,10 +43,9 @@ namespace castor3d
 		{
 			std::set< Overlay const * > visited;
 
-			for ( auto category : refScene.getEngine()->getOverlayCache() )
+			for ( auto category : refScene.getOverlayCache().getCategories() )
 			{
-				doParseOverlay( refScene
-					, category->getOverlay()
+				doParseOverlay( category->getOverlay()
 					, renderer
 					, preparer
 					, visited );

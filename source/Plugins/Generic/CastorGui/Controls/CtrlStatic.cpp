@@ -7,6 +7,7 @@
 #include <Castor3D/Overlay/Overlay.hpp>
 #include <Castor3D/Overlay/BorderPanelOverlay.hpp>
 #include <Castor3D/Overlay/TextOverlay.hpp>
+#include <Castor3D/Scene/Scene.hpp>
 
 #include <CastorUtils/Graphics/Font.hpp>
 
@@ -14,11 +15,13 @@ namespace CastorGui
 {
 	uint32_t StaticCtrl::m_count = 0xFF000000u;
 
-	StaticCtrl::StaticCtrl( castor::String const & name
+	StaticCtrl::StaticCtrl( castor3d::SceneRPtr scene
+		, castor::String const & name
 		, StaticStyle * style
 		, ControlRPtr parent
 		, uint32_t id )
-		: StaticCtrl{ name
+		: StaticCtrl{ scene
+			, name
 			, style
 			, parent
 			, castor::String{}
@@ -29,7 +32,8 @@ namespace CastorGui
 	{
 	}
 
-	StaticCtrl::StaticCtrl( castor::String const & name
+	StaticCtrl::StaticCtrl( castor3d::SceneRPtr scene
+		, castor::String const & name
 		, StaticStyle * style
 		, ControlRPtr parent
 		, castor::String const & caption
@@ -38,6 +42,7 @@ namespace CastorGui
 		, uint32_t flags
 		, bool visible )
 		: Control{ Type
+			, scene
 			, name
 			, style
 			, parent
@@ -49,11 +54,17 @@ namespace CastorGui
 		, m_caption{ caption }
 	{
 		setBackgroundBorders( castor::Rectangle{} );
-		auto text = getEngine().getOverlayCache().add( cuT( "T_CtrlStatic_" ) + castor::string::toString( getId() )
-			, getEngine()
-			, castor3d::OverlayType::eText
-			, nullptr
-			, &getBackground()->getOverlay() ).lock()->getTextOverlay();
+		auto text = m_scene
+			? m_scene->getOverlayCache().add( cuT( "T_CtrlStatic_" ) + castor::string::toString( getId() )
+				, getEngine()
+				, castor3d::OverlayType::eText
+				, nullptr
+				, &getBackground()->getOverlay() ).lock()->getTextOverlay()
+			: getEngine().getOverlayCache().add( cuT( "T_CtrlStatic_" ) + castor::string::toString( getId() )
+				, getEngine()
+				, castor3d::OverlayType::eText
+				, nullptr
+				, &getBackground()->getOverlay() ).lock()->getTextOverlay();
 		m_text = text;
 		text->setPixelSize( getSize() );
 		text->setCaption( m_caption );

@@ -1184,7 +1184,7 @@ namespace castor3d
 			castor::String name;
 			parsingContext.parentOverlays.push_back( parsingContext.overlay );
 			auto parent = parsingContext.parentOverlays.back().get();
-			parsingContext.overlay = parsingContext.scene->getOverlayView().tryFind( params[0]->get( name ) ).lock();
+			parsingContext.overlay = parsingContext.scene->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
 
 			if ( !parsingContext.overlay )
 			{
@@ -1213,7 +1213,7 @@ namespace castor3d
 			castor::String name;
 			parsingContext.parentOverlays.push_back( parsingContext.overlay );
 			auto parent = parsingContext.parentOverlays.back().get();
-			parsingContext.overlay = parsingContext.scene->getOverlayView().tryFind( params[0]->get( name ) ).lock();
+			parsingContext.overlay = parsingContext.scene->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
 
 			if ( !parsingContext.overlay )
 			{
@@ -1242,7 +1242,7 @@ namespace castor3d
 			castor::String name;
 			parsingContext.parentOverlays.push_back( parsingContext.overlay );
 			auto parent = parsingContext.parentOverlays.back().get();
-			parsingContext.overlay = parsingContext.scene->getOverlayView().tryFind( params[0]->get( name ) ).lock();
+			parsingContext.overlay = parsingContext.scene->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
 
 			if ( !parsingContext.overlay )
 			{
@@ -3974,7 +3974,9 @@ namespace castor3d
 		castor::String name;
 		parsingContext.parentOverlays.push_back( parsingContext.overlay );
 		auto parent = parsingContext.parentOverlays.back().get();
-		parsingContext.overlay = parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
+		parsingContext.overlay = parsingContext.scene
+			? parsingContext.scene->getOverlayCache().tryFind( params[0]->get( name ) ).lock()
+			: parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
 
 		if ( !parsingContext.overlay )
 		{
@@ -3995,7 +3997,9 @@ namespace castor3d
 		castor::String name;
 		parsingContext.parentOverlays.push_back( parsingContext.overlay );
 		auto parent = parsingContext.parentOverlays.back().get();
-		parsingContext.overlay = parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
+		parsingContext.overlay = parsingContext.scene
+			? parsingContext.scene->getOverlayCache().tryFind( params[0]->get( name ) ).lock()
+			: parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
 
 		if ( !parsingContext.overlay )
 		{
@@ -4016,7 +4020,9 @@ namespace castor3d
 		castor::String name;
 		parsingContext.parentOverlays.push_back( parsingContext.overlay );
 		auto parent = parsingContext.parentOverlays.back().get();
-		parsingContext.overlay = parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
+		parsingContext.overlay = parsingContext.scene
+			? parsingContext.scene->getOverlayCache().tryFind( params[0]->get( name ) ).lock()
+			: parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
 
 		if ( !parsingContext.overlay )
 		{
@@ -4056,7 +4062,7 @@ namespace castor3d
 
 		if ( parsingContext.scene )
 		{
-			parsingContext.scene->getOverlayView().add( parsingContext.overlay->getName()
+			parsingContext.scene->getOverlayCache().add( parsingContext.overlay->getName()
 				, parsingContext.overlay
 				, true );
 		}

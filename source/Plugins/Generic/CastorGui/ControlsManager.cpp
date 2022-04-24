@@ -217,63 +217,6 @@ namespace CastorGui
 		}
 	}
 
-	bool ControlsManager::fireMaterialEvent( castor::String const & p_overlay, castor::String const & p_material )
-	{
-		auto controls = doGetControlsByZIndex();
-		auto it = std::find_if( std::begin( controls )
-			, std::end( controls )
-			, [&p_overlay]( Control * p_control )
-		{
-			return p_control->getName() == p_overlay;
-		} );
-		bool result = false;
-
-		if ( it != std::end( controls ) )
-		{
-			auto material = getEngine()->getMaterialCache().find( p_material ).lock().get();
-
-			if ( material )
-			{
-				//auto control = *it;
-				//m_frameListener->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				//	, [control, material]( RenderDevice const & device
-				//		, QueueData const & queueData )
-				//	{
-				//		control->setBackgroundMaterial( material );
-				//	} ) );
-				result = true;
-			}
-		}
-
-		return result;
-	}
-
-	bool ControlsManager::fireTextEvent( castor::String const & p_overlay, castor::String const & p_caption )
-	{
-		auto controls = doGetControlsByZIndex();
-		auto it = std::find_if( std::begin( controls )
-			, std::end( controls )
-			, [&p_overlay]( Control * p_control )
-		{
-			return p_control->getName() == p_overlay;
-		} );
-		bool result = false;
-
-		if ( it != std::end( controls ) )
-		{
-			auto control = *it;
-			m_frameListener->postEvent( makeGpuFunctorEvent( castor3d::EventType::ePreRender
-				, [control, p_caption]( castor3d::RenderDevice const & device
-					, castor3d::QueueData const & queueData )
-				{
-					control->setCaption( p_caption );
-				} ) );
-			result = true;
-		}
-
-		return result;
-	}
-
 	castor3d::EventHandler * ControlsManager::doGetMouseTargetableHandler( castor::Position const & p_position )const
 	{
 		if ( m_changed )

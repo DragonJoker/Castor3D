@@ -312,7 +312,7 @@ namespace castor3d
 
 		static OverlayResPtr getOverlay( Scene const & scene, castor::String const & name )
 		{
-			return scene.getOverlayView().tryFind( name );
+			return scene.getOverlayCache().tryFind( name );
 		}
 
 		static TextOverlaySPtr getTextOverlay( Scene const & scene, castor::String const & name )

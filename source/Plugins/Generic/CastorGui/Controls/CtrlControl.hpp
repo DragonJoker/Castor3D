@@ -38,6 +38,7 @@ namespace CastorGui
 		 *\param[in]	visible		Initial visibility status.
 		 */
 		Control( ControlType type
+			, castor3d::SceneRPtr scene
 			, castor::String const & name
 			, ControlStyleRPtr style
 			, ControlRPtr parent
@@ -293,6 +294,7 @@ namespace CastorGui
 		}
 
 	protected:
+		castor3d::SceneRPtr m_scene{};
 		//! The parent control, if any
 		ControlRPtr m_parent;
 		//! The cursor when mouse is over this control
