@@ -98,7 +98,7 @@ source_group( "Source Files\\Style"
 )
 add_target_min(
 	${PROJECT_NAME}
-	plugin
+	api_plugin
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/${FOLDER_NAME}Pch.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/${FOLDER_NAME}Pch.cpp
 )
@@ -114,11 +114,6 @@ target_link_libraries( ${PROJECT_NAME}
 	PUBLIC
 		castor::Castor3D
 )
-install_target_ex( ${PROJECT_NAME}
-	Plugins
-	plugin
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}
-)
 set_target_properties( ${PROJECT_NAME}
 	PROPERTIES
 		VERSION ${PROJECT_VERSION}
@@ -128,6 +123,11 @@ set_target_properties( ${PROJECT_NAME}
 		PREFIX ${C3D_LIB_PREFIX}
 		FOLDER "Plugins/Generic"
 		UNITY_BUILD "${CASTOR_UNITY_BUILD}"
+)
+install_target_ex( ${PROJECT_NAME}
+	Plugins
+	api_plugin
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}
 )
 set( CASTOR_INSTEXP_PLUGINS
 	${CASTOR_INSTEXP_PLUGINS}
