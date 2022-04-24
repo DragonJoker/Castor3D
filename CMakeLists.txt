@@ -287,7 +287,6 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 		FILE Castor3DConfig.cmake
 		COMPONENT Castor3DPlugins
 		NAMESPACE castor::
-		CONFIGURATIONS Release
 		DESTINATION lib/cmake/Castor3D
 	)
 	include( CMakePackageConfigHelpers )
