@@ -491,7 +491,7 @@ namespace castor
 						&& txtscn::writeView( file, scene.getFontView(), cuT( "Fonts" ), m_options.rootFolder, *this )
 						&& txtscn::writeIncludedView( file, scene.getSamplerView(), cuT( "Samplers" ), m_options.materialsFile, *this )
 						&& txtscn::writeIncludedView( file, scene.getMaterialView(), cuT( "Materials" ), m_options.rootFolder, m_options.materialsFile, m_options.subfolder, *this )
-						&& txtscn::writeView( file, scene.getOverlayView(), cuT( "Overlays" ), *this, txtscn::writable< Overlay > )
+						&& txtscn::writeCache( file, scene.getOverlayCache(), cuT( "Overlays" ), *this, txtscn::writable< Overlay > )
 						&& txtscn::writeIncludedCache( file, scene.getMeshCache(), cuT( "Meshes" ), m_options.meshesFile, m_options.subfolder, *this, txtscn::writable< Mesh > )
 						&& txtscn::writeNodes( file, scene.getCameraRootNode()->getChildren(), cuT( "Cameras nodes" ), m_options.scale, *this )
 						&& txtscn::writeCache( file, scene.getCameraCache(), cuT( "Cameras" ), *this, txtscn::writable< Camera > )

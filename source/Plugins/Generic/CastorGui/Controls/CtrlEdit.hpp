@@ -22,7 +22,8 @@ namespace CastorGui
 		 *\param[in]	parent	The parent control, if any
 		 *\param[in]	id		The control ID
 		 */
-		EditCtrl( castor::String const & name
+		EditCtrl( castor3d::SceneRPtr scene
+			, castor::String const & name
 			, EditStyleRPtr style
 			, ControlRPtr parent
 			, uint32_t id );
@@ -38,7 +39,8 @@ namespace CastorGui
 		 *\param[in]	flags		The configuration flags
 		 *\param[in]	visible		Initial visibility status
 		 */
-		EditCtrl( castor::String const & name
+		EditCtrl( castor3d::SceneRPtr scene
+			, castor::String const & name
 			, EditStyleRPtr style
 			, ControlRPtr parent
 			, uint32_t id

@@ -187,15 +187,6 @@ namespace CastorGui
 		 */
 		void doCleanup()override;
 		/**
-		 *copydoc		castor3d::UserInputListener::fireMaterialEvent
-		 */
-		bool fireMaterialEvent( castor::String const & p_overlay, castor::String const & p_material )override;
-		
-		/**
-		 *copydoc		castor3d::UserInputListener::fireTextEvent
-		 */
-		bool fireTextEvent( castor::String const & p_overlay, castor::String const & p_caption )override;
-		/**
 		*\brief
 		*	Retrieves the first handler which can be targeted by mouse, at its position
 		*\param[in] p_position

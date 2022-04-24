@@ -10,10 +10,12 @@
 #include <Castor3D/Overlay/Overlay.hpp>
 #include <Castor3D/Overlay/BorderPanelOverlay.hpp>
 #include <Castor3D/Overlay/TextOverlay.hpp>
+#include <Castor3D/Scene/Scene.hpp>
 
 namespace CastorGui
 {
 	Control::Control( ControlType type
+		, castor3d::SceneRPtr scene
 		, castor::String const & name
 		, ControlStyleRPtr style
 		, ControlRPtr parent
@@ -23,6 +25,7 @@ namespace CastorGui
 		, uint32_t flags
 		, bool visible )
 		: castor3d::NonClientEventHandler< Control >{ name, type != ControlType::eStatic }
+		, m_scene{ scene }
 		, m_parent{ parent }
 		, m_id{ id }
 		, m_type{ type }
@@ -45,11 +48,17 @@ namespace CastorGui
 			parentOv = &bg->getOverlay();
 		}
 
-		auto overlay = getEngine().getOverlayCache().add( name
-			, getEngine()
-			, castor3d::OverlayType::eBorderPanel
-			, nullptr
-			, parentOv ).lock();
+		auto overlay = m_scene
+			? m_scene->getOverlayCache().add( name
+				, getEngine()
+				, castor3d::OverlayType::eBorderPanel
+				, nullptr
+				, parentOv ).lock()
+			: getEngine().getOverlayCache().add( name
+				, getEngine()
+				, castor3d::OverlayType::eBorderPanel
+				, nullptr
+				, parentOv ).lock();
 
 		if ( !overlay )
 		{

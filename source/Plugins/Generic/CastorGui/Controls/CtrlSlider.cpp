@@ -11,11 +11,13 @@
 
 namespace CastorGui
 {
-	SliderCtrl::SliderCtrl( castor::String const & name
+	SliderCtrl::SliderCtrl( castor3d::SceneRPtr scene
+		, castor::String const & name
 		, SliderStyleRPtr style
 		, ControlRPtr parent
 		, uint32_t id )
-		: SliderCtrl{ name
+		: SliderCtrl{ scene
+			, name
 			, style
 			, parent
 			, id
@@ -27,7 +29,8 @@ namespace CastorGui
 	{
 	}
 
-	SliderCtrl::SliderCtrl( castor::String const & name
+	SliderCtrl::SliderCtrl( castor3d::SceneRPtr scene
+		, castor::String const & name
 		, SliderStyleRPtr style
 		, ControlRPtr parent
 		, uint32_t id
@@ -37,6 +40,7 @@ namespace CastorGui
 		, uint32_t flags
 		, bool visible )
 		: Control{ Type
+			, scene
 			, name
 			, style
 			, parent
@@ -70,7 +74,8 @@ namespace CastorGui
 				onKeyDown( event );
 			} );
 
-		auto line = std::make_shared< StaticCtrl >( name + cuT( "_Line" )
+		auto line = std::make_shared< StaticCtrl >( m_scene
+			, name + cuT( "_Line" )
 			, &style->getLineStyle()
 			, this
 			, castor::String{}
@@ -84,7 +89,8 @@ namespace CastorGui
 			} );
 		m_line = line;
 
-		auto tick = std::make_shared< StaticCtrl >( name + cuT( "_Tick" )
+		auto tick = std::make_shared< StaticCtrl >( m_scene
+			, name + cuT( "_Tick" )
 			, &style->getTickStyle()
 			, this
 			, castor::String{}

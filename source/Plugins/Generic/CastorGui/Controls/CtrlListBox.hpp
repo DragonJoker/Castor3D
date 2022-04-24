@@ -22,7 +22,8 @@ namespace CastorGui
 		 *\param[in]	parent	The parent control, if any
 		 *\param[in]	id		The control ID
 		 */
-		ListBoxCtrl( castor::String const & name
+		ListBoxCtrl( castor3d::SceneRPtr scene
+			, castor::String const & name
 			, ListBoxStyle * style
 			, ControlRPtr parent
 			, uint32_t id );
@@ -39,7 +40,8 @@ namespace CastorGui
 		 *\param[in]	flags		The configuration flags
 		 *\param[in]	visible		Initial visibility status
 		 */
-		ListBoxCtrl( castor::String const & name
+		ListBoxCtrl( castor3d::SceneRPtr scene
+			, castor::String const & name
 			, ListBoxStyle * style
 			, ControlRPtr parent
 			, uint32_t id
@@ -63,7 +65,8 @@ namespace CastorGui
 		 *\param[in]	visible		Initial visibility status
 		 */
 		template< size_t N >
-		ListBoxCtrl( castor::String const & name
+		ListBoxCtrl( castor3d::SceneRPtr scene
+			, castor::String const & name
 			, ListBoxStyle * style
 			, ControlRPtr parent
 			, castor::String const( & values )[N]

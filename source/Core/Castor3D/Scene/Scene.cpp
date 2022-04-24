@@ -3,6 +3,7 @@
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
+#include "Castor3D/Cache/OverlayCache.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
@@ -195,16 +196,7 @@ namespace castor3d
 			{
 				element.cleanup();
 			} );
-		m_overlayCacheView = makeCacheView< EventType::ePreRender >( getName()
-			, getEngine()->getOverlayCache()
-			, [this]( OverlayCache::ElementT & element )
-			{
-				getEngine()->getOverlayCache().initialise( element );
-			}
-			, [this]( OverlayCache::ElementT & element )
-			{
-				getEngine()->getOverlayCache().cleanup( element );
-			} );
+		m_overlayCache = castor::makeCache< Overlay, castor::String, OverlayCacheTraits >( *getEngine() );
 		m_fontCacheView = makeCacheView< EventType::ePreRender >( getName()
 			, getEngine()->getFontCache()
 			, []( castor::FontCache::ElementT & element )
@@ -240,6 +232,7 @@ namespace castor3d
 		m_onParticleSystemChanged.disconnect();
 
 		m_meshCache->clear();
+		m_overlayCache->clear();
 
 		m_reflectionMap.reset();
 
@@ -268,7 +261,7 @@ namespace castor3d
 		m_meshCache.reset();
 		m_materialCacheView.reset();
 		m_samplerCacheView.reset();
-		m_overlayCacheView.reset();
+		m_overlayCache.reset();
 		m_fontCacheView.reset();
 
 		if ( m_rootNode )
@@ -326,7 +319,7 @@ namespace castor3d
 
 		m_materialCacheView->clear();
 		m_samplerCacheView->clear();
-		m_overlayCacheView->clear();
+		m_overlayCache->cleanup();
 		m_fontCacheView->clear();
 
 		m_renderNodes->clear();
