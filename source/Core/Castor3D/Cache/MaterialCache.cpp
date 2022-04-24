@@ -251,5 +251,14 @@ namespace castor
 		{
 			m_texAnimBuffer->removeTextureAnimation( texture );
 		}
+
+		auto it = std::find( m_pendingTextures.begin()
+			, m_pendingTextures.end()
+			, &texture );
+
+		if ( it != m_pendingTextures.end() )
+		{
+			m_pendingTextures.erase( it );
+		}
 	}
 }

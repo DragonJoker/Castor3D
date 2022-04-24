@@ -754,8 +754,30 @@ namespace castor3d
 
 	void Engine::setLoadingScene( SceneUPtr scene )
 	{
+		bool hadLoadingScene = false;
+
+		if ( m_loadingScene )
+		{
+			m_loadingScene->cleanup();
+			auto pending = m_loadingScene.release();
+			hadLoadingScene = true;
+			postEvent( makeCpuFunctorEvent( EventType::ePostRender
+				, [pending]()
+				{
+					delete pending;
+				} ) );
+		}
+
 		m_loadingScene = std::move( scene );
 		m_loadingScene->initialise();
+
+		if ( hadLoadingScene )
+		{
+			for ( auto & windowIt : m_renderWindows )
+			{
+				windowIt.second->changeLoadingScene();
+			}
+		}
 	}
 
 	void Engine::doLoadCoreData()
