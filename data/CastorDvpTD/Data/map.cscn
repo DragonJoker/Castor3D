@@ -1,0 +1,176 @@
+// Materials
+
+material "MapBase"
+{
+	pass
+	{
+		albedo 0.2 1.0 0.5
+		specular 0.2 1.0 0.5
+	}
+}
+
+material "MapMouseOk"
+{
+	pass
+	{
+		albedo 0.0 1.0 0.0
+		specular 0.0 1.0 0.0
+		alpha 0.75
+	}
+}
+
+material "MapMouseNOk"
+{
+	pass
+	{
+		albedo 1.0 0.0 0.0
+		specular 1.0 0.0 0.0
+		alpha 0.75
+	}
+}
+
+material "MapCube"
+{
+	pass
+	{
+		albedo 0.5 0.5 0.5
+		specular 0.5 0.5 0.5
+
+		texture_unit
+		{
+			image "Textures/Cube.png"
+			sampler "Nearest"
+			albedo_mask 0x00FFFFFF
+		}
+	}
+}
+
+material "Target"
+{
+	pass
+	{
+		albedo 1 1 0 1
+		specular 1 1 0 1
+	}
+}
+
+// Meshes
+
+mesh "MapBase"
+{
+	type "plane" -width_subdiv=0 -depth_subdiv=0 -width=577 -depth=577
+	default_material "MapBase"
+}
+
+mesh "MapCube"
+{
+	type "cube" -width=16 -height=16 -depth=16
+	default_material "MapCube"
+}
+
+mesh "Target"
+{
+	type "sphere" -subdiv=10 -radius=32
+	default_material "Target"
+}
+
+mesh "MapMouse"
+{
+	type "plane" -width_subdiv=0 -depth_subdiv=0 -width=17 -depth=17
+}
+
+// Nodes
+
+scene_node "MapBase"
+{
+}
+
+scene_node "Map"
+{
+	parent "MapBase"
+	orientation 1 0 0 -90
+}
+
+scene_node "Target"
+{
+	parent "MapBase"
+}
+
+scene_node "Light01"
+{
+	orientation 1 1 0 135.0
+}
+
+scene_node "MapMouse"
+{
+	parent "MapBase"
+	position 0 17 0
+}
+
+scene_node "MapMouse2"
+{
+	parent "MapMouse"
+	orientation 1 0 0 -90
+}
+
+// Lights
+
+light "Target"
+{
+	parent "Target"
+	type point
+	colour 1 1 0
+	intensity 8.0 10.0
+	attenuation 1.0 0.2 0
+}
+
+light "Light01"
+{
+	parent "Light01"
+	type directional
+	colour 1 1 1
+	intensity 8.0 10.0
+	shadows
+	{
+		producer true
+		filter pcf
+		raw_config
+		{
+			min_offset 0.0
+			max_slope_offset 0.001
+		}
+		pcf_config
+		{
+			min_offset 0.0
+			max_slope_offset 0.001
+		}
+		vsm_config
+		{
+			variance_max 0.0000001
+			variance_bias 0.15
+		}
+	}
+}
+
+// Objects
+
+object "MapBase"
+{
+	parent "Map"
+	mesh "MapBase"
+}
+
+object "Target"
+{
+	parent "Target"
+	mesh "Target"
+}
+
+object "MapMouse"
+{
+	parent "MapMouse2"
+	receive_shadows false
+	cast_shadows false
+	mesh "MapMouse"
+	material "MapMouseOk"
+}
