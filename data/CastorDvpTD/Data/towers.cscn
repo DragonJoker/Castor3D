@@ -1,0 +1,248 @@
+// Materials
+
+material "inventor_accessories"
+{
+	pass
+	{
+		texture_unit
+		{
+			image "Textures/inventor_tower_tower1_inventor_Normal.dds"
+			normal_mask 0x00ffffff
+			invert_y true
+		}
+
+		texture_unit
+		{
+			levels_count 9
+			image "Textures/inventor_tower_tower1_inventor_Diffuse.dds"
+			albedo_mask 0x00ffffff
+			invert_y true
+		}
+
+		texture_unit
+		{
+			levels_count 9
+			image "Textures/inventor_tower_tower1_inventor_SpecularGloss.dds"
+			specular_mask 0x00ffffff
+			glossiness_mask 0xff000000
+			invert_y true
+		}
+	}
+}
+
+material "inventor_body"
+{
+	pass
+	{
+		texture_unit
+		{
+			image "Textures/inventor_tower_tower1_inventor_Normal_0.dds"
+			normal_mask 0x00ffffff
+			invert_y true
+		}
+
+		texture_unit
+		{
+			levels_count 9
+			image "Textures/inventor_tower_tower1_inventor_Diffuse_0.dds"
+			albedo_mask 0x00ffffff
+			invert_y true
+		}
+
+		texture_unit
+		{
+			levels_count 9
+			image "Textures/inventor_tower_tower1_inventor_SpecularGloss_0.dds"
+			specular_mask 0x00ffffff
+			glossiness_mask 0xff000000
+			invert_y true
+		}
+	}
+}
+
+material "short_range_accessories"
+{
+	pass
+	{
+		texture_unit
+		{
+			image "Textures/short_range_tower_tower1_quick_short_Normal_0.dds"
+			normal_mask 0x00ffffff
+			invert_y true
+		}
+
+		texture_unit
+		{
+			levels_count 9
+			image "Textures/short_range_tower_tower1_quick_short_Diffuse.dds"
+			albedo_mask 0x00ffffff
+			invert_y true
+		}
+
+		texture_unit
+		{
+			levels_count 9
+			image "Textures/short_range_tower_tower1_quick_short_SpecularGloss_0.dds"
+			specular_mask 0x00ffffff
+			glossiness_mask 0xff000000
+			invert_y true
+		}
+	}
+}
+
+material "short_range_body"
+{
+	pass
+	{
+		texture_unit
+		{
+			image "Textures/short_range_tower_tower1_quick_short_Normal.dds"
+			normal_mask 0x00ffffff
+			invert_y true
+		}
+
+		texture_unit
+		{
+			levels_count 9
+			image "Textures/short_range_tower_tower1_quick_short_Diffuse_0.dds"
+			albedo_mask 0x00ffffff
+			invert_y true
+		}
+
+		texture_unit
+		{
+			levels_count 9
+			image "Textures/short_range_tower_tower1_quick_short_SpecularGloss.dds"
+			specular_mask 0x00ffffff
+			glossiness_mask 0xff000000
+			invert_y true
+		}
+	}
+}
+
+material "splash_accessories"
+{
+	pass
+	{
+		texture_unit
+		{
+			image "Textures/splash_tower_tower1_heavy_splash_Normal.dds"
+			normal_mask 0x00ffffff
+			invert_y true
+		}
+
+		texture_unit
+		{
+			levels_count 9
+			image "Textures/splash_tower_tower1_heavy_splash_Diffuse.dds"
+			albedo_mask 0x00ffffff
+			invert_y true
+		}
+
+		texture_unit
+		{
+			levels_count 9
+			image "Textures/splash_tower_tower1_heavy_splash_SpecularGloss.dds"
+			specular_mask 0x00ffffff
+			glossiness_mask 0xff000000
+			invert_y true
+		}
+	}
+}
+
+material "splash_body"
+{
+	pass
+	{
+		texture_unit
+		{
+			image "Textures/splash_tower_tower1_heavy_splash_Normal_0.dds"
+			normal_mask 0x00ffffff
+			invert_y true
+		}
+
+		texture_unit
+		{
+			levels_count 9
+			image "Textures/splash_tower_tower1_heavy_splash_Diffuse_0.dds"
+			albedo_mask 0x00ffffff
+			invert_y true
+		}
+
+		texture_unit
+		{
+			levels_count 9
+			image "Textures/splash_tower_tower1_heavy_splash_SpecularGloss_0.dds"
+			specular_mask 0x00ffffff
+			glossiness_mask 0xff000000
+			invert_y true
+		}
+	}
+}
+
+material "Bullet"
+{
+	pass
+	{
+		albedo 0.5 0.0 0.5
+		specular 0.5 0.0 0.5
+	}
+}
+
+material "Boulder"
+{
+	pass
+	{
+		albedo 0.5 0.5 0.0
+		specular 0.5 0.5 0.0
+	}
+}
+
+// Meshes
+
+mesh "HeavySplash"
+{
+	import "Meshes/HeavySplash.cmsh"
+
+	default_materials
+	{
+		material 0 "splash_accessories"
+		material 1 "splash_accessories"
+		material 2 "splash_body"
+	}
+}
+
+mesh "Inventor"
+{
+	import "Meshes/Inventor.cmsh"
+
+	default_materials
+	{
+		material 0 "inventor_accessories"
+		material 1 "inventor_accessories"
+		material 2 "inventor_body"
+	}
+}
+
+mesh "ShortRange"
+{
+	import "Meshes/ShortRange.cmsh"
+
+	default_materials
+	{
+		material 0 "short_range_body"
+		material 1 "short_range_accessories"
+	}
+}
+
+mesh "Bullet"
+{
+	type "cone" -faces=10 -radius=1 -height=1
+	default_material "Bullet"
+}
+
+mesh "Boulder"
+{
+	type "sphere" -subdiv=25 -radius=2
+	default_material "Boulder"
+}

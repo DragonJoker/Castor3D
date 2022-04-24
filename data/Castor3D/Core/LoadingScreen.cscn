@@ -1,0 +1,116 @@
+material "TransparentBlack"
+{
+	pass
+	{
+		diffuse 0.0 0.0 0.0
+		specular 0.0 0.0 0.0
+		alpha 0.0
+	}
+}
+
+material "Black"
+{
+	pass
+	{
+		diffuse 0.0 0.0 0.0
+		specular 0.0 0.0 0.0
+	}
+}
+
+material "Green"
+{
+	pass
+	{
+		diffuse 0.0 1.0 0.0
+		specular 0.0 1.0 0.0
+	}
+}
+
+font "Arial16"
+{
+	file "arial.ttf"
+	height 16
+}
+
+font "Arial8"
+{
+	file "arial.ttf"
+	height 8
+}
+
+loading_screen
+{
+	ambient_light 0.0 0.0 0.0
+	background_colour 1.0 1.0 1.0
+
+	material "PufiWalk2D"
+	{
+		pass
+		{
+			diffuse 1.0 1.0 1.0
+			specular 0.0 0.0 0.0
+			mixed_interpolation true
+
+			texture_unit
+			{
+				image "PufiAnimAlpha128x128.dds"
+				diffuse_mask 0x00FFFFFF
+				opacity_mask 0xFF000000
+				sampler	"Default"
+				animation
+				{
+					tile true
+				}
+			}
+		}
+	}
+
+	panel_overlay "PufiWalk2D"
+	{
+		pxl_size 128 128
+		pxl_position 84 20
+		material "PufiWalk2D"
+	}
+
+	panel_overlay "Progress"
+	{
+		pxl_size 256 56
+		pxl_position 20 176
+		material "TransparentBlack"
+
+		text_overlay "ProgressTitle"
+		{
+			pxl_size 256 16
+			pxl_position 0 0
+			material "Black"
+			font "Arial16"
+			text "Title"
+		}
+
+		border_panel_overlay "ProgressBarCont"
+		{
+			pxl_size 256 32
+			pxl_position 0 24
+			material "TransparentBlack"
+			pxl_border_size 4 4 4 4
+			border_position external
+			border_material "Black"
+
+			panel_overlay "ProgressBar"
+			{
+				size 0.0 1.0
+				position 0.0 0.0
+				material "Green"
+			}
+
+			text_overlay "ProgressLabel"
+			{
+				pxl_size 240 8
+				pxl_position 8 12
+				material "Black"
+				font "Arial8"
+				text "Label"
+			}
+		}
+	}
+}

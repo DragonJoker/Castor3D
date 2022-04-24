@@ -1,0 +1,593 @@
+font "TitleFont"
+{
+	file "Fonts/neuropolitical.ttf"
+	height 60
+}
+
+font "ResourcesFont"
+{
+	file "Fonts/neuropolitical.ttf"
+	height 16
+}
+
+font "ResourcesValueFont"
+{
+	file "Fonts/neuropolitical.ttf"
+	height 10
+}
+
+sampler "Linear"
+{
+	min_filter linear
+	mag_filter linear
+	lod_bias 0.0
+	u_wrap_mode clamp_to_edge
+	v_wrap_mode clamp_to_edge
+	w_wrap_mode clamp_to_edge
+	border_colour float_opaque_black
+}
+
+material "HUDBackground"
+{
+	pass
+	{
+		alpha 0.0
+	}
+}
+
+material "PauseBackground"
+{
+	pass
+	{
+		albedo 0 0 0
+		alpha 0.8
+	}
+}
+
+material "HUDDetails"
+{
+	pass
+	{
+		texture_unit
+		{
+			image "Textures/HUDDetails.png"
+			sampler	"Linear"
+			albedo_mask 0x00FFFFFF
+			opacity_mask 0xFF000000
+		}
+	}
+}
+
+material "HUDBackgroundTop"
+{
+	pass
+	{
+		texture_unit
+		{
+			image "Textures/HUDBackgroundTop.png"
+			sampler	"Linear"
+			albedo_mask 0x00FFFFFF
+			opacity_mask 0xFF000000
+		}
+	}
+}
+
+material "HUDBackgroundBottom"
+{
+	pass
+	{
+		texture_unit
+		{
+			image "Textures/HUDBackgroundBottom.png"
+			sampler	"Linear"
+			albedo_mask 0x00FFFFFF
+			opacity_mask 0xFF000000
+		}
+	}
+}
+
+material "ResourcePanel"
+{
+	pass
+	{
+		texture_unit
+		{
+			image "Textures/HUDPanel.png"
+			sampler	"Linear"
+			albedo_mask 0x00FFFFFF
+			opacity_mask 0xFF000000
+		}
+	}
+}
+
+panel_overlay "GameEndPanel"
+{
+	size 1 1
+	position 0 0
+	material "Black"
+
+	panel_overlay "GameEndPanelMask"
+	{
+		size 0.5 0.5
+		position 0.25 0.25
+		material "HUDBackground"
+
+		text_overlay "GameOver"
+		{
+			size 1.0 0.5
+			position 0 0
+			material "White"
+			font "TitleFont"
+			horizontal_align center
+			text "Game Over !"
+		}
+
+		panel_overlay "ResultLevel"
+		{
+			size 0.5 0.060
+			position 0.25 0.5
+			material "HUDBackground"
+
+			text_overlay "ResultLevelTitle"
+			{
+				size 0.5 1.0
+				position 0 0
+				material "White"
+				font "ResourcesFont"
+				horizontal_align center
+				text "Niveau :"
+			}
+
+			text_overlay "ResultLevelValue"
+			{
+				size 0.5 1.0
+				position 0.5 0
+				material "White"
+				font "ResourcesFont"
+				horizontal_align center
+				text ""
+			}
+		}
+
+		panel_overlay "ResultKills"
+		{
+			size 0.5 0.06
+			position 0.25 0.6
+			material "HUDBackground"
+
+			text_overlay "ResultKillsTitle"
+			{
+				size 0.5 1.0
+				position 0 0
+				material "White"
+				font "ResourcesFont"
+				horizontal_align center
+				text "Kills :"
+			}
+
+			text_overlay "ResultKillsValue"
+			{
+				size 0.5 1.0
+				position 0.5 0
+				material "White"
+				font "ResourcesFont"
+				horizontal_align center
+				text ""
+			}
+		}
+
+		text_overlay "Restart"
+		{
+			size 1.0 0.1
+			position 0 0.9
+			material "White"
+			font "ResourcesFont"
+			horizontal_align center
+			text "Appuyez sur Entrée pour recommencer..."
+		}
+	}
+}
+
+panel_overlay "TitlePanel"
+{
+	size 1 1
+	position 0 0
+	material "Black"
+
+	text_overlay "Title"
+	{
+		size 1 0.375
+		position 0 0.25
+		material "White"
+		font "TitleFont"
+		horizontal_align center
+		text_wrapping break_words
+		text "Castor Tower Defense"
+	}
+
+	text_overlay "Start"
+	{
+		size 1.0 0.125
+		position 0 0.625
+		material "White"
+		font "ResourcesFont"
+		horizontal_align center
+		text "Appuyez sur Entrée pour commencer..."
+	}
+
+	text_overlay "TitleHelpLine1"
+	{
+		size 1.0 0.030
+		position 0 0.905
+		material "White"
+		font "ResourcesValueFont"
+		text "Bouton gauche de la souris sur une case pour la sélectionner."
+	}
+
+	text_overlay "TitleHelpLine2"
+	{
+		size 1.0 0.030
+		position 0 0.935
+		material "White"
+		font "ResourcesValueFont"
+		text "Bouton droit de la souris pour afficher les options de la case précédemment sélectionnée."
+	}
+}
+
+panel_overlay "HUDResources"
+{
+	pxl_size 220 240
+	pxl_position 804 0
+	material "HUDBackground"
+
+	panel_overlay "HUDTop"
+	{
+		pxl_size 220 75
+		pxl_position 0 0
+		material "HUDBackgroundTop"
+	}
+
+	panel_overlay "HUDBottom"
+	{
+		pxl_size 220 75
+		pxl_position 0 150
+		material "HUDBackgroundBottom"
+	}
+
+	panel_overlay "LivesPanel"
+	{
+		pxl_size 190 40
+		pxl_position 15 70
+		material "ResourcePanel"
+
+		text_overlay "LivesTitle"
+		{
+			pxl_size 114 40
+			pxl_position 38 5
+			material "White"
+			font "ResourcesFont"
+			text "Vies"
+		}
+
+		text_overlay "LivesValue"
+		{
+			pxl_size 40 40
+			pxl_position 130 -5
+			material "White"
+			font "ResourcesValueFont"
+			horizontal_align right
+			text ""
+		}
+	}
+
+	panel_overlay "OrePanel"
+	{
+		pxl_size 190 40
+		pxl_position 15 130
+		material "ResourcePanel"
+
+		text_overlay "OreTitle"
+		{
+			pxl_size 95 40
+			pxl_position 38 5
+			material "White"
+			font "ResourcesFont"
+			text "Minerai"
+		}
+
+		text_overlay "OreValue"
+		{
+			pxl_size 70 40
+			pxl_position 100 -5
+			material "White"
+			font "ResourcesValueFont"
+			horizontal_align right
+			text ""
+		}
+	}
+}
+
+panel_overlay "HUDScore"
+{
+	pxl_size 220 240
+	pxl_position 0 0
+	material "HUDBackground"
+
+	panel_overlay "HUDScoreTop"
+	{
+		pxl_size 220 75
+		pxl_position 0 0
+		material "HUDBackgroundTop"
+	}
+
+	panel_overlay "HUDScoreBottom"
+	{
+		pxl_size 220 75
+		pxl_position 0 150
+		material "HUDBackgroundBottom"
+	}
+
+	panel_overlay "LevelPanel"
+	{
+		pxl_size 190 40
+		pxl_position 15 70
+		material "ResourcePanel"
+
+		text_overlay "LevelTitle"
+		{
+			pxl_size 114 40
+			pxl_position 38 5
+			material "White"
+			font "ResourcesFont"
+			text "Niveau"
+		}
+
+		text_overlay "LevelValue"
+		{
+			pxl_size 40 40
+			pxl_position 130 -5
+			material "White"
+			font "ResourcesValueFont"
+			horizontal_align right
+			text ""
+		}
+	}
+
+	panel_overlay "KillsPanel"
+	{
+		pxl_size 190 40
+		pxl_position 15 130
+		material "ResourcePanel"
+
+		text_overlay "KillsTitle"
+		{
+			pxl_size 95 40
+			pxl_position 38 5
+			material "White"
+			font "ResourcesFont"
+			text "Kills"
+		}
+
+		text_overlay "KillsValue"
+		{
+			pxl_size 60 40
+			pxl_position 110 -5
+			material "White"
+			font "ResourcesValueFont"
+			horizontal_align right
+			text ""
+		}
+	}
+}
+
+panel_overlay "HUDDetails"
+{
+	pxl_size 200 400
+	pxl_position 10 240
+	material "HUDDetails"
+
+	text_overlay "MonsterTitle"
+	{
+		pxl_size 180 40
+		pxl_position 15 40
+		material "White"
+		font "ResourcesFont"
+		horizontal_align center
+		text "Ennemis"
+	}
+
+	panel_overlay "MonsterLife"
+	{
+		pxl_size 120 30
+		pxl_position 40 80
+		material "HUDBackground"
+
+		text_overlay "MonsterLifeTitle"
+		{
+			pxl_size 60 30
+			pxl_position 0 0
+			material "White"
+			font "ResourcesValueFont"
+			text "Vie"
+		}
+
+		text_overlay "MonsterLifeValue"
+		{
+			pxl_size 60 30
+			pxl_position 60 0
+			material "White"
+			font "ResourcesValueFont"
+			horizontal_align right
+			text ""
+		}
+	}
+
+	panel_overlay "MonsterBounty"
+	{
+		pxl_size 120 30
+		pxl_position 40 110
+		material "HUDBackground"
+
+		text_overlay "MonsterBountyTitle"
+		{
+			pxl_size 60 30
+			pxl_position 0 0
+			material "White"
+			font "ResourcesValueFont"
+			text "Prime"
+		}
+
+		text_overlay "MonsterBountyValue"
+		{
+			pxl_size 60 30
+			pxl_position 60 0
+			material "White"
+			font "ResourcesValueFont"
+			horizontal_align right
+			text ""
+		}
+	}
+
+	text_overlay "TowerTitle"
+	{
+		pxl_size 180 40
+		pxl_position 15 230
+		material "White"
+		font "ResourcesFont"
+		horizontal_align center
+		text "Tourelle"
+	}
+
+	panel_overlay "TowerDamage"
+	{
+		pxl_size 120 30
+		pxl_position 40 270
+		material "HUDBackground"
+
+		text_overlay "TowerDamageTitle"
+		{
+			pxl_size 60 30
+			pxl_position 0 0
+			material "White"
+			font "ResourcesValueFont"
+			text "Dégâts"
+		}
+
+		text_overlay "TowerDamageValue"
+		{
+			pxl_size 60 30
+			pxl_position 60 0
+			material "White"
+			font "ResourcesValueFont"
+			horizontal_align right
+			text ""
+		}
+	}
+
+	panel_overlay "TowerSpeed"
+	{
+		pxl_size 120 30
+		pxl_position 40 300
+		material "HUDBackground"
+
+		text_overlay "TowerSpeedTitle"
+		{
+			pxl_size 60 30
+			pxl_position 0 0
+			material "White"
+			font "ResourcesValueFont"
+			text "Vitesse"
+		}
+
+		text_overlay "TowerSpeedValue"
+		{
+			pxl_size 60 30
+			pxl_position 60 0
+			material "White"
+			font "ResourcesValueFont"
+			horizontal_align right
+			text ""
+		}
+	}
+
+	panel_overlay "TowerRange"
+	{
+		pxl_size 120 30
+		pxl_position 40 330
+		material "HUDBackground"
+
+		text_overlay "TowerRangeTitle"
+		{
+			pxl_size 60 30
+			pxl_position 0 0
+			material "White"
+			font "ResourcesValueFont"
+			text "Portée"
+		}
+
+		text_overlay "TowerRangeValue"
+		{
+			pxl_size 60 30
+			pxl_position 60 0
+			material "White"
+			font "ResourcesValueFont"
+			horizontal_align right
+			text ""
+		}
+	}
+}
+
+panel_overlay "HUDPause"
+{
+	size 1 1
+	position 0 0
+	material "PauseBackground"
+
+	text_overlay "PauseText"
+	{
+		size 0.5 0.5
+		position 0.25 0.25
+		material "White"
+		font "TitleFont"
+		horizontal_align center
+		text "...En Pause..."
+	}
+
+	text_overlay "PauseEnd"
+	{
+		size 1.0 0.125
+		position 0 0.625
+		material "White"
+		font "ResourcesFont"
+		horizontal_align center
+		text "Appuyez sur Espace pour reprendre la partie..."
+	}
+}
+
+panel_overlay "HelpPanel"
+{
+	size 1 1
+	position 0 0
+	material "PauseBackground"
+
+	text_overlay "HelpTitle"
+	{
+		size 1 0.1
+		position 0 0.1
+		material "White"
+		font "TitleFont"
+		text "Aide"
+		horizontal_align center
+	}
+
+	text_overlay "HelpText"
+	{
+		size 0.8 0.7
+		position 0.1 0.2
+		material "White"
+		font "ResourcesFont"
+		text "Bouton gauche de la souris sur une case pour la sélectionner.\n\nBouton droit de la souris pour afficher les options de la case\nprécédemment sélectionnée.\n\nBarre d espace: Met le jeu en pause, reprend la partie (depuis la pause\net depuis l aide).\n\nTouche 1: Améliorer les dégâts de la tour actuellement sélectionnée.\n\nTouche 2: Améliorer la portée de la tour actuellement sélectionnée.\n\nTouche 3: Améliorer la vitesse de la tour actuellement sélectionnée.\n\nTouche F1: Affiche l'aide."
+		text_wrapping break_words
+		line_spacing_mode max_font_height
+	}
+}

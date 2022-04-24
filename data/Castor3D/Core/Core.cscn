@@ -1,0 +1,662 @@
+font "Arial20"
+{
+	file "arial.ttf"
+	height 16
+}
+
+font "Arial10"
+{
+	file "arial.ttf"
+	height 10
+}
+
+material "White"
+{
+	pass
+	{
+		diffuse 1.0 1.0 1.0
+		specular 1.0 1.0 1.0
+	}
+}
+
+material "DarkGray"
+{
+	pass
+	{
+		diffuse 0.25 0.25 0.25
+		specular 0.25 0.25 0.25
+	}
+}
+
+material "Gray"
+{
+	pass
+	{
+		diffuse 0.5 0.5 0.5
+		specular 0.5 0.5 0.5
+	}
+}
+
+material "LightGray"
+{
+	pass
+	{
+		diffuse 0.75 0.75 0.75
+		specular 0.75 0.75 0.75
+	}
+}
+
+material "DarkRed"
+{
+	pass
+	{
+		diffuse 0.5 0.0 0.0
+		specular 0.5 0.0 0.0
+	}
+}
+
+material "Red"
+{
+	pass
+	{
+		diffuse 1.0 0.0 0.0
+		specular 1.0 0.0 0.0
+	}
+}
+
+material "LightRed"
+{
+	pass
+	{
+		diffuse 1.0 0.5 0.5
+		specular 1.0 0.5 0.5
+	}
+}
+
+material "DarkGreen"
+{
+	pass
+	{
+		diffuse 0.0 0.5 0.0
+		specular 0.0 0.5 0.0
+	}
+}
+
+material "LightGreen"
+{
+	pass
+	{
+		diffuse 0.5 1.0 0.5
+		specular 0.5 1.0 0.5
+	}
+}
+
+material "DarkBlue"
+{
+	pass
+	{
+		diffuse 0.0 0.0 0.5
+		specular 0.0 0.0 0.5
+	}
+}
+
+material "Blue"
+{
+	pass
+	{
+		diffuse 0.0 0.0 1.0
+		specular 0.0 0.0 1.0
+	}
+}
+
+material "LightBlue"
+{
+	pass
+	{
+		diffuse 0.5 0.5 1.0
+		specular 0.5 0.5 1.0
+	}
+}
+
+material "DarkTeal"
+{
+	pass
+	{
+		diffuse 0.0 0.5 0.5
+		specular 0.0 0.5 0.5
+	}
+}
+
+material "Teal"
+{
+	pass
+	{
+		diffuse 0.0 1.0 1.0
+		specular 0.0 1.0 1.0
+	}
+}
+
+material "LightTeal"
+{
+	pass
+	{
+		diffuse 0.5 1.0 1.0
+		specular 0.5 1.0 1.0
+	}
+}
+
+material "DarkYellow"
+{
+	pass
+	{
+		diffuse 0.5 0.5 0.0
+		specular 0.5 0.5 0.0
+	}
+}
+
+material "Yellow"
+{
+	pass
+	{
+		diffuse 1.0 1.0 0.0
+		specular 1.0 1.0 0.0
+	}
+}
+
+material "LightYellow"
+{
+	pass
+	{
+		diffuse 1.0 1.0 0.5
+		specular 1.0 1.0 0.5
+	}
+}
+
+material "DarkMagenta"
+{
+	pass
+	{
+		diffuse 0.5 0.0 0.5
+		specular 0.5 0.0 0.5
+	}
+}
+
+material "Magenta"
+{
+	pass
+	{
+		diffuse 1.0 0.0 1.0
+		specular 1.0 0.0 1.0
+	}
+}
+
+material "LightMagenta"
+{
+	pass
+	{
+		diffuse 1.0 0.5 1.0
+		specular 1.0 0.5 1.0
+	}
+}
+
+material "AlphaBlack"
+{
+	pass
+	{
+		diffuse 0.0 0.0 0.0
+		specular 0.0 0.0 0.0
+		alpha 0.5
+	}
+}
+
+material "AlphaWhite"
+{
+	pass
+	{
+		diffuse 1.0 1.0 1.0
+		specular 1.0 1.0 1.0
+		alpha 0.5
+	}
+}
+
+material "AlphaDarkGray"
+{
+	pass
+	{
+		diffuse 0.25 0.25 0.25
+		specular 0.25 0.25 0.25
+		alpha 0.5
+	}
+}
+
+material "AlphaGray"
+{
+	pass
+	{
+		diffuse 0.5 0.5 0.5
+		specular 0.5 0.5 0.5
+		alpha 0.5
+	}
+}
+
+material "AlphaLightGray"
+{
+	pass
+	{
+		diffuse 0.75 0.75 0.75
+		specular 0.75 0.75 0.75
+		alpha 0.5
+	}
+}
+
+material "AlphaDarkRed"
+{
+	pass
+	{
+		diffuse 0.5 0.0 0.0
+		specular 0.5 0.0 0.0
+		alpha 0.5
+	}
+}
+
+material "AlphaRed"
+{
+	pass
+	{
+		diffuse 1.0 0.0 0.0
+		specular 1.0 0.0 0.0
+		alpha 0.5
+	}
+}
+
+material "AlphaLightRed"
+{
+	pass
+	{
+		diffuse 1.0 0.5 0.5
+		specular 1.0 0.5 0.5
+		alpha 0.5
+	}
+}
+
+material "AlphaDarkGreen"
+{
+	pass
+	{
+		diffuse 0.0 0.5 0.0
+		specular 0.0 0.5 0.0
+		alpha 0.5
+	}
+}
+
+material "AlphaGreen"
+{
+	pass
+	{
+		diffuse 0.0 1.0 0.0
+		specular 0.0 1.0 0.0
+		alpha 0.5
+	}
+}
+
+material "AlphaLightGreen"
+{
+	pass
+	{
+		diffuse 0.5 1.0 0.5
+		specular 0.5 1.0 0.5
+		alpha 0.5
+	}
+}
+
+material "AlphaDarkBlue"
+{
+	pass
+	{
+		diffuse 0.0 0.0 0.5
+		specular 0.0 0.0 0.5
+		alpha 0.5
+	}
+}
+
+material "AlphaBlue"
+{
+	pass
+	{
+		diffuse 0.0 0.0 1.0
+		specular 0.0 0.0 1.0
+		alpha 0.5
+	}
+}
+
+material "AlphaLightBlue"
+{
+	pass
+	{
+		diffuse 0.5 0.5 1.0
+		specular 0.5 0.5 1.0
+		alpha 0.5
+	}
+}
+
+material "AlphaDarkTeal"
+{
+	pass
+	{
+		diffuse 0.0 0.5 0.5
+		specular 0.0 0.5 0.5
+		alpha 0.5
+	}
+}
+
+material "AlphaTeal"
+{
+	pass
+	{
+		diffuse 0.0 1.0 1.0
+		specular 0.0 1.0 1.0
+		alpha 0.5
+	}
+}
+
+material "AlphaLightTeal"
+{
+	pass
+	{
+		diffuse 0.5 1.0 1.0
+		specular 0.5 1.0 1.0
+		alpha 0.5
+	}
+}
+
+material "AlphaDarkYellow"
+{
+	pass
+	{
+		diffuse 0.5 0.5 0.0
+		specular 0.5 0.5 0.0
+		alpha 0.5
+	}
+}
+
+material "AlphaYellow"
+{
+	pass
+	{
+		diffuse 1.0 1.0 0.0
+		specular 1.0 1.0 0.0
+		alpha 0.5
+	}
+}
+
+material "AlphaLightYellow"
+{
+	pass
+	{
+		diffuse 1.0 1.0 0.5
+		specular 1.0 1.0 0.5
+		alpha 0.5
+	}
+}
+
+material "AlphaDarkMagenta"
+{
+	pass
+	{
+		diffuse 0.5 0.0 0.5
+		specular 0.5 0.0 0.5
+		alpha 0.5
+	}
+}
+
+material "AlphaMagenta"
+{
+	pass
+	{
+		diffuse 1.0 0.0 1.0
+		specular 1.0 0.0 1.0
+		alpha 0.5
+	}
+}
+
+material "AlphaLightMagenta"
+{
+	pass
+	{
+		diffuse 1.0 0.5 1.0
+		specular 1.0 0.5 1.0
+		alpha 0.5
+	}
+}
+
+material "HighAlphaBlack"
+{
+	pass
+	{
+		diffuse 0.0 0.0 0.0
+		specular 0.0 0.0 0.0
+		alpha 0.75
+	}
+}
+
+material "HighAlphaWhite"
+{
+	pass
+	{
+		diffuse 1.0 1.0 1.0
+		specular 1.0 1.0 1.0
+		alpha 0.75
+	}
+}
+
+material "HighAlphaDarkGray"
+{
+	pass
+	{
+		diffuse 0.25 0.25 0.25
+		specular 0.25 0.25 0.25
+		alpha 0.75
+	}
+}
+
+material "HighAlphaGray"
+{
+	pass
+	{
+		diffuse 0.5 0.5 0.5
+		specular 0.5 0.5 0.5
+		alpha 0.75
+	}
+}
+
+material "HighAlphaLightGray"
+{
+	pass
+	{
+		diffuse 0.75 0.75 0.75
+		specular 0.75 0.75 0.75
+		alpha 0.75
+	}
+}
+
+material "HighAlphaDarkRed"
+{
+	pass
+	{
+		diffuse 0.5 0.0 0.0
+		specular 0.5 0.0 0.0
+		alpha 0.75
+	}
+}
+
+material "HighAlphaRed"
+{
+	pass
+	{
+		diffuse 1.0 0.0 0.0
+		specular 1.0 0.0 0.0
+		alpha 0.75
+	}
+}
+
+material "HighAlphaLightRed"
+{
+	pass
+	{
+		diffuse 1.0 0.5 0.5
+		specular 1.0 0.5 0.5
+		alpha 0.75
+	}
+}
+
+material "HighAlphaDarkGreen"
+{
+	pass
+	{
+		diffuse 0.0 0.5 0.0
+		specular 0.0 0.5 0.0
+		alpha 0.75
+	}
+}
+
+material "HighAlphaGreen"
+{
+	pass
+	{
+		diffuse 0.0 1.0 0.0
+		specular 0.0 1.0 0.0
+		alpha 0.75
+	}
+}
+
+material "HighAlphaLightGreen"
+{
+	pass
+	{
+		diffuse 0.5 1.0 0.5
+		specular 0.5 1.0 0.5
+		alpha 0.75
+	}
+}
+
+material "HighAlphaDarkBlue"
+{
+	pass
+	{
+		diffuse 0.0 0.0 0.5
+		specular 0.0 0.0 0.5
+		alpha 0.75
+	}
+}
+
+material "HighAlphaBlue"
+{
+	pass
+	{
+		diffuse 0.0 0.0 1.0
+		specular 0.0 0.0 1.0
+		alpha 0.75
+	}
+}
+
+material "HighAlphaLightBlue"
+{
+	pass
+	{
+		diffuse 0.5 0.5 1.0
+		specular 0.5 0.5 1.0
+		alpha 0.75
+	}
+}
+
+material "HighAlphaDarkTeal"
+{
+	pass
+	{
+		diffuse 0.0 0.5 0.5
+		specular 0.0 0.5 0.5
+		alpha 0.75
+	}
+}
+
+material "HighAlphaTeal"
+{
+	pass
+	{
+		diffuse 0.0 1.0 1.0
+		specular 0.0 1.0 1.0
+		alpha 0.75
+	}
+}
+
+material "HighAlphaLightTeal"
+{
+	pass
+	{
+		diffuse 0.5 1.0 1.0
+		specular 0.5 1.0 1.0
+		alpha 0.75
+	}
+}
+
+material "HighAlphaDarkYellow"
+{
+	pass
+	{
+		diffuse 0.5 0.5 0.0
+		specular 0.5 0.5 0.0
+		alpha 0.75
+	}
+}
+
+material "HighAlphaYellow"
+{
+	pass
+	{
+		diffuse 1.0 1.0 0.0
+		specular 1.0 1.0 0.0
+		alpha 0.75
+	}
+}
+
+material "HighAlphaLightYellow"
+{
+	pass
+	{
+		diffuse 1.0 1.0 0.5
+		specular 1.0 1.0 0.5
+		alpha 0.75
+	}
+}
+
+material "HighAlphaDarkMagenta"
+{
+	pass
+	{
+		diffuse 0.5 0.0 0.5
+		specular 0.5 0.0 0.5
+		alpha 0.75
+	}
+}
+
+material "HighAlphaMagenta"
+{
+	pass
+	{
+		diffuse 1.0 0.0 1.0
+		specular 1.0 0.0 1.0
+		alpha 0.75
+	}
+}
+
+material "HighAlphaLightMagenta"
+{
+	pass
+	{
+		diffuse 1.0 0.5 1.0
+		specular 1.0 0.5 1.0
+		alpha 0.75
+	}
+}
+
+include "LoadingScreen.cscn"
