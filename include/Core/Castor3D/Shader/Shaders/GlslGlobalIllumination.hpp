@@ -35,7 +35,6 @@ namespace castor3d
 				, uint32_t & llpvTexBindingIndex
 				, uint32_t texSetIndex
 				, SceneFlags sceneFlags );
-			C3D_API void declareTraceConeRadiance();
 			C3D_API void declareVct( uint32_t & uboBindingIndex
 				, uint32_t & texBindingIndex
 				, uint32_t uboSetIndex = 0u
@@ -52,14 +51,14 @@ namespace castor3d
 				, bool declUbo = true );
 			C3D_API sdw::Vec4 computeVCTRadiance( Surface const & surface
 				, VoxelData const & voxelData
-				, sdw::Float const & indirectOcclusion )const;
+				, sdw::Float const & indirectOcclusion );
 			C3D_API sdw::Vec3 computeVCTSpecular( sdw::Vec3 const & wsCamera
 				, sdw::Vec3 const & vsPosition
 				, Surface const & surface
 				, sdw::Float const & roughness
 				, sdw::Float const & indirectOcclusion
 				, sdw::Float const & indirectBlend
-				, VoxelData const & voxelData )const;
+				, VoxelData const & voxelData );
 			C3D_API sdw::Vec4 computeLPVRadiance( Surface surface
 				, LpvGridData lpvGridData );
 			C3D_API sdw::Vec4 computeLLPVRadiance( Surface surface
@@ -77,27 +76,29 @@ namespace castor3d
 				, sdw::Vec3 wsCamera
 				, sdw::Vec3 vsPosition
 				, Surface surface
-				, sdw::Vec3 specular
 				, sdw::Float roughness
 				, sdw::Float indirectOcclusion
-				, sdw::Float indirectBlend );
+				, sdw::Float indirectBlend
+				, sdw::CombinedImage2DRg32 brdfMap );
 			sdw::Vec4 traceConeRadiance( sdw::CombinedImage3DRgba32 const & voxels
 				, Surface surface
-				, VoxelData const & voxelData )const;
+				, VoxelData const & voxelData );
 
 		private:
-			void declareTraceCone();
-			void declareTraceConeReflection();
-			void declareTraceConeOcclusion();
+			sdw::Vec4 traceCone( sdw::CombinedImage3DRgba32 const & voxels
+				, Surface surface
+				, sdw::Vec3 const & wsConeDirection
+				, sdw::Float const & coneAperture
+				, VoxelData const & voxelData );
 			sdw::Vec4 traceConeReflection( sdw::CombinedImage3DRgba32 const & voxels
 				, Surface surface
 				, sdw::Vec3 const & wsViewVector
 				, sdw::Float const & roughness
-				, VoxelData const & voxelData )const;
+				, VoxelData const & voxelData );
 			sdw::Float traceConeOcclusion( sdw::CombinedImage3DRgba32 const & voxels
 				, Surface surface
 				, sdw::Vec3 const & wsConeDirection
-				, VoxelData const & voxelData )const;
+				, VoxelData const & voxelData );
 
 		private:
 			sdw::ShaderWriter & m_writer;

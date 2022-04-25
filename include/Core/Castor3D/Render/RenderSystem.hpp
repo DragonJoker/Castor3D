@@ -74,6 +74,7 @@ namespace castor3d
 		C3D_API RenderSystem( Engine & engine
 			, Renderer renderer
 			, Extensions deviceExtensions = {} );
+		C3D_API ~RenderSystem();
 		/**
 		*\~english
 		*\brief
@@ -399,6 +400,11 @@ namespace castor3d
 		{
 			return m_properties.limits.maxDescriptorSetSampledImages > 16u;
 		}
+
+		Texture const & getPrefilteredBrdfTexture()const
+		{
+			return m_brdf;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -433,6 +439,7 @@ namespace castor3d
 		RenderDeviceSPtr m_device;
 		std::stack< SceneRPtr > m_stackScenes;
 		castor::Nanoseconds m_gpuTime;
+		Texture m_brdf;
 	};
 }
 
