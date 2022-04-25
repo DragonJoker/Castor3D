@@ -53,7 +53,7 @@ namespace castor3d
 		, m_opaquePass{ opaquePass }
 		, m_lastPass{ &m_opaquePass }
 		, m_opaquePassResult{ opaquePassResult }
-		, m_gpInfoUbo{ gpInfoUbo }
+		, m_lightingGpInfoUbo{ device }
 		, m_size{ size }
 		, m_lightPassResult{ scene.getOwner()->getGraphResourceHandler(), device, m_size }
 		, m_lightingPass{ castor::makeUnique< LightingPass >( graph
@@ -68,7 +68,7 @@ namespace castor3d
 			, smSpotResult
 			, m_lightPassResult
 			, sceneUbo
-			, m_gpInfoUbo ) }
+			, m_lightingGpInfoUbo ) }
 		, m_indirectLightingPass{ castor::makeUnique< IndirectLightingPass >( m_device
 			, progress
 			, scene
@@ -81,7 +81,7 @@ namespace castor3d
 			, vctFirstBounce
 			, vctSecondaryBounce
 			, sceneUbo
-			, m_gpInfoUbo
+			, m_lightingGpInfoUbo
 			, lpvConfigUbo
 			, llpvConfigUbo
 			, vctConfigUbo ) }
@@ -90,9 +90,8 @@ namespace castor3d
 			, m_device
 			, progress
 			, scene
-			, m_gpInfoUbo
+			, m_lightingGpInfoUbo
 			, sceneUbo
-			, m_size
 			, m_opaquePassResult
 			, m_lightPassResult ) }
 		, m_resolve{ castor::makeUnique< OpaqueResolvePass >( graph
@@ -110,7 +109,7 @@ namespace castor3d
 			, m_lightPassResult[LpTexture::eIndirectSpecular]
 			, resultTexture
 			, sceneUbo
-			, m_gpInfoUbo
+			, gpInfoUbo
 			, hdrConfigUbo ) }
 	{
 		m_lightPassResult.create();
@@ -122,6 +121,9 @@ namespace castor3d
 		m_lightingPass->update( updater );
 		m_indirectLightingPass->update( updater );
 		m_resolve->update( updater );
+		auto & camera = *updater.camera;
+		m_lightingGpInfoUbo.cpuUpdate( makeSize( m_lightPassResult[LpTexture::eDiffuse].getExtent() )
+			, camera );
 	}
 
 	void DeferredRendering::accept( RenderTechniqueVisitor & visitor )

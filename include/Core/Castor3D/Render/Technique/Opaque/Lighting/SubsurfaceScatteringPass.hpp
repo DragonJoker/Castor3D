@@ -32,7 +32,6 @@ namespace castor3d
 		 *\param[in]	scene			The scene.
 		 *\param[in]	gpInfoUbo		The geometry pass UBO.
 		 *\param[in]	sceneUbo		The scene UBO.
-		 *\param[in]	textureSize		The render area dimensions.
 		 *\param[in]	gpResult		The geometry pass result.
 		 *\param[in]	lpResult		The light pass result.
 		 *\~french
@@ -44,7 +43,6 @@ namespace castor3d
 		 *\param[in]	scene			La scène.
 		 *\param[in]	gpInfoUbo		L'UBO de la passe géométrique.
 		 *\param[in]	sceneUbo		L'UBO de la scène.
-		 *\param[in]	textureSize		Les dimensions de la zone de rendu.
 		 *\param[in]	gpResult		Le résultat de la geometry pass.
 		 *\param[in]	lpResult		Le résultat de la light pass.
 		 */
@@ -55,7 +53,6 @@ namespace castor3d
 			, Scene const & scene
 			, GpInfoUbo const & gpInfoUbo
 			, SceneUbo const & sceneUbo
-			, castor::Size const & textureSize
 			, OpaquePassResult const & gpResult
 			, LightPassResult const & lpResult );
 		C3D_API ~SubsurfaceScatteringPass();
