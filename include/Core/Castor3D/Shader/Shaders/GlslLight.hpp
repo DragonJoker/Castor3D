@@ -151,7 +151,7 @@ namespace castor3d
 			sdw::Vec4 m_position4;
 			sdw::Vec4 m_attenuation4;
 			sdw::Vec4 m_direction4;
-			sdw::Vec4 m_exponentCutOff;
+			sdw::Vec4 m_exponentCutOffs;
 
 		public:
 			sdw::Mat4 transform;
@@ -159,7 +159,9 @@ namespace castor3d
 			sdw::Vec3 position;
 			sdw::Vec3 direction;
 			sdw::Float exponent;
-			sdw::Float cutOff;
+			sdw::Float innerCutOff;
+			sdw::Float outerCutOff;
+			sdw::Float cutOffsDiff;
 
 		private:
 			using sdw::StructInstance::getMember;

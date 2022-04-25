@@ -258,7 +258,8 @@ namespace Testing
 	{
 		bool result{ CT_EQUAL( lhs.getExponent(), rhs.getExponent() ) };
 		result = result && CT_EQUAL( lhs.getAttenuation(), rhs.getAttenuation() );
-		result = result && CT_EQUAL( lhs.getCutOff(), rhs.getCutOff() );
+		result = result && CT_EQUAL( lhs.getInnerCutOff(), rhs.getInnerCutOff() );
+		result = result && CT_EQUAL( lhs.getOuterCutOff(), rhs.getOuterCutOff() );
 		return result;
 	}
 

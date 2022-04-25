@@ -141,6 +141,8 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eLight ), cuT( "intensity" ), parserLightIntensity, { makeParameter< ParameterType::ePoint2F >() } );
 			addParser( result, uint32_t( CSCNSection::eLight ), cuT( "attenuation" ), parserLightAttenuation, { makeParameter< ParameterType::ePoint3F >() } );
 			addParser( result, uint32_t( CSCNSection::eLight ), cuT( "cut_off" ), parserLightCutOff, { makeParameter< ParameterType::eFloat >() } );
+			addParser( result, uint32_t( CSCNSection::eLight ), cuT( "inner_cut_off" ), parserLightInnerCutOff, { makeParameter< ParameterType::eFloat >() } );
+			addParser( result, uint32_t( CSCNSection::eLight ), cuT( "outer_cut_off" ), parserLightOuterCutOff, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eLight ), cuT( "exponent" ), parserLightExponent, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eLight ), cuT( "shadows" ), parserLightShadows );
 			addParser( result, uint32_t( CSCNSection::eLight ), cuT( "shadow_producer" ), parserLightShadowProducer, { makeParameter< ParameterType::eBool >() } );

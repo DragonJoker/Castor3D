@@ -594,7 +594,7 @@ namespace castor3d::shader
 				result.m_position4 = lightsData[offset]; ++offset;
 				result.m_attenuation4 = lightsData[offset]; ++offset;
 				result.m_direction4 = normalize( lightsData[offset] ); ++offset;
-				result.m_exponentCutOff = lightsData[offset]; ++offset;
+				result.m_exponentCutOffs = lightsData[offset]; ++offset;
 				result.transform = mat4( lightsData[offset + 0_u]
 					, lightsData[offset + 1_u]
 					, lightsData[offset + 2_u]

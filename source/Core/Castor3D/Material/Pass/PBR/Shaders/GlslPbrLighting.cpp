@@ -549,7 +549,7 @@ namespace castor3d::shader
 				auto spotFactor = m_writer.declLocale( "spotFactor"
 					, dot( lightDirection, -light.direction ) );
 
-				IF( m_writer, spotFactor > light.cutOff )
+				IF( m_writer, spotFactor > light.outerCutOff )
 				{
 					auto distance = m_writer.declLocale( "distance"
 						, length( vertexToLight ) );
@@ -585,7 +585,7 @@ namespace castor3d::shader
 
 					auto attenuation = m_writer.declLocale( "attenuation"
 						, light.getAttenuationFactor( distance ) );
-					spotFactor = 1.0_f - ( 1.0_f - spotFactor ) * ( 1.0_f / ( 1.0_f - light.cutOff ) );
+					spotFactor = clamp( ( spotFactor - light.outerCutOff ) / light.cutOffsDiff, 0.0_f, 1.0_f );
 					output.m_diffuse = spotFactor * output.m_diffuse / attenuation;
 
 #if !C3D_DisableSSSTransmittance
@@ -746,7 +746,7 @@ namespace castor3d::shader
 				auto diffuse = m_writer.declLocale( "diffuse"
 					, vec3( 0.0_f ) );
 
-				IF( m_writer, spotFactor > light.cutOff )
+				IF( m_writer, spotFactor > light.outerCutOff )
 				{
 					auto distance = m_writer.declLocale( "distance"
 						, length( lightToVertex ) );
@@ -777,7 +777,7 @@ namespace castor3d::shader
 
 					auto attenuation = m_writer.declLocale( "attenuation"
 						, light.getAttenuationFactor( distance ) );
-					spotFactor = 1.0_f - ( 1.0_f - spotFactor ) * ( 1.0_f / ( 1.0_f - light.cutOff ) );
+					spotFactor = clamp( ( spotFactor - light.outerCutOff ) / light.cutOffsDiff, 0.0_f, 1.0_f );
 					diffuse = max( vec3( 0.0_f ), spotFactor * diffuse / attenuation );
 				}
 				FI;
