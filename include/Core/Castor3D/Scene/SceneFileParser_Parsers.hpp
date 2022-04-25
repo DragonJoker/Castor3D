@@ -114,6 +114,8 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserLightIntensity )
 	CU_DeclareAttributeParser( parserLightAttenuation )
 	CU_DeclareAttributeParser( parserLightCutOff )
+	CU_DeclareAttributeParser( parserLightInnerCutOff )
+	CU_DeclareAttributeParser( parserLightOuterCutOff )
 	CU_DeclareAttributeParser( parserLightExponent )
 	CU_DeclareAttributeParser( parserLightShadows )
 	CU_DeclareAttributeParser( parserLightShadowProducer )

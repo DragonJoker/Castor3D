@@ -1387,7 +1387,8 @@ namespace C3dAssimp
 					, castor3d::LightType::eSpot );
 				auto spot = light->getSpotLight();
 				spot->setAttenuation( { aiLight.mAttenuationConstant, aiLight.mAttenuationLinear, aiLight.mAttenuationQuadratic } );
-				spot->setCutOff( castor::Angle::fromRadians( aiLight.mAngleOuterCone ) );
+				spot->setInnerCutOff( castor::Angle::fromRadians( aiLight.mAngleInnerCone ) );
+				spot->setOuterCutOff( castor::Angle::fromRadians( aiLight.mAngleOuterCone ) );
 			}
 			break;
 		default:
@@ -1397,7 +1398,16 @@ namespace C3dAssimp
 		if ( light )
 		{
 			m_nodes.push_back( node );
-			light->setColour( castor::RgbColour::fromComponents( aiLight.mColorDiffuse.r, aiLight.mColorDiffuse.g, aiLight.mColorDiffuse.b ) );
+			castor::Point3f colour{ aiLight.mColorDiffuse.r, aiLight.mColorDiffuse.g, aiLight.mColorDiffuse.b };
+			auto length = float( castor::point::length( colour ) );
+
+			if ( length != 0.0 )
+			{
+				castor::point::normalise( colour );
+				light->setIntensity( length, length );
+			}
+
+			light->setColour( castor::RgbColour::fromComponents( colour->x, colour->y, colour->z ) );
 			node->attachObject( *light );
 			scene.getLightCache().add( name, light );
 		}

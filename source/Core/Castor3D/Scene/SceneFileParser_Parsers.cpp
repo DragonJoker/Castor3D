@@ -1915,7 +1915,58 @@ namespace castor3d
 
 			if ( parsingContext.lightType == LightType::eSpot )
 			{
-				parsingContext.light->getSpotLight()->setCutOff( castor::Angle::fromDegrees( fFloat ) );
+				parsingContext.light->getSpotLight()->setInnerCutOff( castor::Angle::fromDegrees( fFloat / 2.0f ) );
+				parsingContext.light->getSpotLight()->setOuterCutOff( castor::Angle::fromDegrees( fFloat ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Wrong type of light to apply a cut off, needs spotlight" ) );
+			}
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserLightInnerCutOff )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( !parsingContext.light )
+		{
+			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else if ( !params.empty() )
+		{
+			float fFloat;
+			params[0]->get( fFloat );
+
+			if ( parsingContext.lightType == LightType::eSpot )
+			{
+				parsingContext.light->getSpotLight()->setInnerCutOff( castor::Angle::fromDegrees( fFloat ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Wrong type of light to apply a cut off, needs spotlight" ) );
+			}
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserLightOuterCutOff )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( !parsingContext.light )
+		{
+			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else if ( !params.empty() )
+		{
+			float fFloat;
+			params[0]->get( fFloat );
+
+			if ( parsingContext.lightType == LightType::eSpot )
+			{
+				parsingContext.light->getSpotLight()->setOuterCutOff( castor::Angle::fromDegrees( fFloat ) );
 			}
 			else
 			{

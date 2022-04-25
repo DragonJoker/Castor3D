@@ -170,12 +170,14 @@ namespace castor3d
 			, m_position4{ getMember< sdw::Vec4 >( "position" ) }
 			, m_attenuation4{ getMember< sdw::Vec4 >( "attenuation" ) }
 			, m_direction4{ getMember< sdw::Vec4 >( "direction" ) }
-			, m_exponentCutOff{ getMember< sdw::Vec4 >( "exponentCutOff" ) }
+			, m_exponentCutOffs{ getMember< sdw::Vec4 >( "exponentCutOffs" ) }
 			, transform{ getMember< sdw::Mat4 >( "transform" ) }
 			, position{ m_position4.xyz() }
 			, direction{ m_direction4.xyz() }
-			, exponent{ m_exponentCutOff.x() }
-			, cutOff{ m_exponentCutOff.y() }
+			, exponent{ m_exponentCutOffs.x() }
+			, innerCutOff{ m_exponentCutOffs.y() }
+			, outerCutOff{ m_exponentCutOffs.z() }
+			, cutOffsDiff{ innerCutOff - outerCutOff }
 		{
 		}
 
@@ -199,7 +201,7 @@ namespace castor3d
 				result->declMember( "position", ast::type::Kind::eVec4F );
 				result->declMember( "attenuation", ast::type::Kind::eVec4F );
 				result->declMember( "direction", ast::type::Kind::eVec4F );
-				result->declMember( "exponentCutOff", ast::type::Kind::eVec4F );
+				result->declMember( "exponentCutOffs", ast::type::Kind::eVec4F );
 				result->declMember( "transform", ast::type::Kind::eMat4x4F );
 			}
 

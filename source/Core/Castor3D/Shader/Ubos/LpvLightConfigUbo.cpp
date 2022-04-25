@@ -127,7 +127,7 @@ namespace castor3d
 				auto & spotLight = *light.getSpotLight();
 				configuration.lightView = lpvlubo::snapMatrix( lpvCellSize
 					, spotLight.getViewMatrix() );
-				auto lightFov = spotLight.getCutOff();
+				auto lightFov = spotLight.getOuterCutOff();
 				configuration.tanFovXHalf = ( lightFov * 0.5 ).tan();
 				configuration.tanFovYHalf = ( lightFov * 0.5 ).tan();
 			}

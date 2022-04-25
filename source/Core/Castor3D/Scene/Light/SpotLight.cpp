@@ -19,7 +19,7 @@ namespace castor3d
 		{
 			float length{ getMaxDistance( light
 				, light.getAttenuation() ) };
-			float width{ light.getCutOff().degrees() / ( 45.0f * 2.0f ) };
+			float width{ light.getOuterCutOff().degrees() / ( 45.0f * 2.0f ) };
 			return castor::Point2f{ length * width, length };
 		}
 	}
@@ -30,7 +30,8 @@ namespace castor3d
 		: LightCategory{ LightType::eSpot, p_light }
 		, m_attenuation{ m_dirtyData, castor::Point3f{ 1, 0, 0 } }
 		, m_exponent{ m_dirtyData, 1.0f }
-		, m_cutOff{ m_dirtyData, 45.0_degrees }
+		, m_innerCutOff{ m_dirtyData, 22.5_degrees }
+		, m_outerCutOff{ m_dirtyData, 45.0_degrees }
 		, m_lightView{ m_dirtyShadow }
 		, m_lightProj{ m_dirtyShadow }
 	{
@@ -147,7 +148,7 @@ namespace castor3d
 		auto node = getLight().getParent();
 		node->update();
 		lightCamera.attachTo( *node );
-		lightCamera.getViewport().setPerspective( getCutOff() * 2
+		lightCamera.getViewport().setPerspective( getOuterCutOff() * 2.0f
 			, lightCamera.getRatio()
 			, ( m_farPlane >= 1000.0f
 				? 1.0f
@@ -175,8 +176,8 @@ namespace castor3d
 		spot.attenuation = ( *m_attenuation );
 		spot.direction = m_direction;
 		spot.exponentCutOff.x = m_exponent;
-		spot.exponentCutOff.y = m_cutOff.value().cos();
-		spot.exponentCutOff.z = 0.0f;
+		spot.exponentCutOff.y = m_innerCutOff.value().cos();
+		spot.exponentCutOff.z = m_outerCutOff.value().cos();
 		spot.exponentCutOff.w = 0.0f;
 
 		spot.transform = m_lightSpace;
@@ -202,9 +203,19 @@ namespace castor3d
 		}
 	}
 
-	void SpotLight::setCutOff( castor::Angle const & cutOff )
+	void SpotLight::setInnerCutOff( castor::Angle const & cutOff )
 	{
-		m_cutOff = cutOff;
+		m_innerCutOff = cutOff;
+
+		if ( m_dirtyData )
+		{
+			getLight().markDirty();
+		}
+	}
+
+	void SpotLight::setOuterCutOff( castor::Angle const & cutOff )
+	{
+		m_outerCutOff = cutOff;
 
 		if ( m_dirtyData )
 		{
