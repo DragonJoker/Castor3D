@@ -64,7 +64,8 @@ namespace CastorGui
 		*\param[in]	visible		Initial visibility statu
 		*/
 		template< size_t N >
-		ComboBoxCtrl( castor::String const & name
+		ComboBoxCtrl( castor3d::SceneRPtr scene
+			, castor::String const & name
 			, ComboBoxStyle * style
 			, ControlRPtr parent
 			, castor::String const( & values )[N]
@@ -75,6 +76,7 @@ namespace CastorGui
 			, uint32_t flags = 0
 			, bool visible = true )
 			: Control{ ControlType::eComboBox
+				, scene
 				, name
 				, style
 				, parent
