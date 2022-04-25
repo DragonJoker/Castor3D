@@ -32,6 +32,7 @@ namespace castor3d
 			eData1,
 			eData2,
 			eData3,
+			eBrdf,
 			eVctFirstBounce,
 			eVctSecondBounce,
 			eLpvR,
@@ -92,6 +93,7 @@ namespace castor3d
 			, Scene const & scene
 			, crg::FramePassGroup & graph
 			, crg::FramePass const *& previousPass
+			, Texture const & brdf
 			, OpaquePassResult const & gpResult
 			, LightPassResult const & lpResult
 			, LightVolumePassResult const & lpvResult
@@ -127,6 +129,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		Scene const & m_scene;
+		Texture const & m_brdf;
 		OpaquePassResult const & m_gpResult;
 		LightPassResult const & m_lpResult;
 		LightVolumePassResult const & m_lpvResult;

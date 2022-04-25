@@ -662,7 +662,6 @@ namespace toon::shader
 		: ReflectionModel{ writer, utils }
 	{
 		m_writer.declCombinedImg< FImgCubeArrayRgba32 >( "c3d_mapEnvironment", envMapBinding++, envMapSet );
-		writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf", envMapBinding++, envMapSet );
 		writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapIrradiance", envMapBinding++, envMapSet );
 		writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapPrefiltered", envMapBinding++, envMapSet );
 	}
@@ -680,7 +679,7 @@ namespace toon::shader
 		, sdw::Vec3 & refracted )
 	{
 		auto & toonMaterial = static_cast< ToonPbrLightMaterial & >( material );
-		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
+		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRg32 >( "c3d_mapBrdf" );
 		auto irradiance = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapIrradiance" );
 		auto prefiltered = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
 		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
@@ -812,7 +811,7 @@ namespace toon::shader
 				, toonMaterial );
 		}
 
-		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
+		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRg32 >( "c3d_mapBrdf" );
 		auto irradiance = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapIrradiance" );
 		auto prefiltered = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
 		return computeIBL( surface
@@ -865,7 +864,7 @@ namespace toon::shader
 		, sdw::Vec3 & refracted )
 	{
 		auto & toonMaterial = static_cast< ToonPbrLightMaterial const & >( material );
-		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
+		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRg32 >( "c3d_mapBrdf" );
 		auto irradiance = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapIrradiance" );
 		auto prefiltered = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
 
@@ -986,7 +985,7 @@ namespace toon::shader
 		, sdw::Vec3 const & worldEye
 		, sdw::CombinedImageCubeRgba32 const & irradianceMap
 		, sdw::CombinedImageCubeRgba32 const & prefilteredEnvMap
-		, sdw::CombinedImage2DRgba32 const & brdfMap )
+		, sdw::CombinedImage2DRg32 const & brdfMap )
 	{
 		doDeclareComputeIBL();
 		return m_computeIBL( surface
@@ -1154,7 +1153,7 @@ namespace toon::shader
 				, sdw::Vec3 const & worldEye
 				, sdw::CombinedImageCubeRgba32 const & irradianceMap
 				, sdw::CombinedImageCubeRgba32 const & prefilteredEnvMap
-				, sdw::CombinedImage2DRgba32 const & brdfMap )
+				, sdw::CombinedImage2DRg32 const & brdfMap )
 			{
 				auto V = m_writer.declLocale( "V"
 					, normalize( worldEye - surface.worldPosition ) );
@@ -1196,7 +1195,7 @@ namespace toon::shader
 			, sdw::InVec3{ m_writer, "worldEye" }
 			, sdw::InCombinedImageCubeRgba32{ m_writer, "irradianceMap" }
 			, sdw::InCombinedImageCubeRgba32{ m_writer, "prefilteredEnvMap" }
-			, sdw::InCombinedImage2DRgba32{ m_writer, "brdfMap" } );
+			, sdw::InCombinedImage2DRg32{ m_writer, "brdfMap" } );
 	}
 
 	void ToonPbrReflectionModel::doDeclareComputeReflEnvMap()

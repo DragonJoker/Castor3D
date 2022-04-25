@@ -143,9 +143,7 @@ namespace castor3d
 				, 0u ) );
 
 			shader::Utils utils{ writer, *renderSystem.getEngine() };
-
 			shader::GlobalIllumination indirect{ writer, utils };
-			indirect.declareTraceConeRadiance();
 
 			writer.implementMainT< VoidT >( 64u, [&]( ComputeIn in )
 				{

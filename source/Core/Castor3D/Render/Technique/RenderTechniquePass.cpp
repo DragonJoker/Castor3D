@@ -11,6 +11,7 @@
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderQueue.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp"
@@ -265,9 +266,6 @@ namespace castor3d
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapIrradiance
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
@@ -367,10 +365,6 @@ namespace castor3d
 		if ( background.hasIbl() )
 		{
 			auto & ibl = background.getIbl();
-			rendtechpass::bindTexture( ibl.getPrefilteredBrdfTexture().wholeView
-				, ibl.getPrefilteredBrdfSampler()
-				, descriptorWrites
-				, index );
 			rendtechpass::bindTexture( ibl.getIrradianceTexture().wholeView
 				, ibl.getIrradianceSampler()
 				, descriptorWrites
@@ -466,6 +460,9 @@ namespace castor3d
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) ); // c3d_mapOcclusion
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
 
 		doAddShadowBindings( bindings, index );
 		doAddEnvBindings( bindings, index );
@@ -486,6 +483,10 @@ namespace castor3d
 				, index );
 		}
 
+		rendtechpass::bindTexture( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().wholeView
+			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
+			, descriptorWrites
+			, index );
 		doAddShadowDescriptor( descriptorWrites, shadowMaps, index );
 		doAddEnvDescriptor( descriptorWrites, shadowMaps, index );
 		doAddGIDescriptor( descriptorWrites, shadowMaps, index );

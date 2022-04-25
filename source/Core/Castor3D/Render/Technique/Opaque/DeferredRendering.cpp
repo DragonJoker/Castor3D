@@ -29,6 +29,7 @@ namespace castor3d
 		, crg::FramePass const & opaquePass
 		, RenderDevice const & device
 		, ProgressBar * progress
+		, Texture const & brdf
 		, Texture const & depth
 		, OpaquePassResult const & opaquePassResult
 		, Texture const & resultTexture
@@ -74,6 +75,7 @@ namespace castor3d
 			, scene
 			, graph
 			, m_lastPass
+			, brdf
 			, m_opaquePassResult
 			, m_lightPassResult
 			, lpvResult

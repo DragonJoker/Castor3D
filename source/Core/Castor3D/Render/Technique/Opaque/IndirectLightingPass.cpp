@@ -84,6 +84,7 @@ namespace castor3d
 			auto c3d_mapData1 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), uint32_t( IndirectLightingPass::eData1 ), 0u );
 			auto c3d_mapData2 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), uint32_t( IndirectLightingPass::eData2 ), 0u );
 			auto c3d_mapData3 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), uint32_t( IndirectLightingPass::eData3 ), 0u );
+			auto c3d_brdfMap = writer.declCombinedImg< FImg2DRg32 >( "c3d_brdfMap", uint32_t( IndirectLightingPass::eBrdf ), 0u );
 
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
@@ -144,10 +145,10 @@ namespace castor3d
 							, eye
 							, c3d_sceneData.getPosToCamera( surface.worldPosition )
 							, surface
-							, lightMat->specular
 							, lightMat->getRoughness()
 							, occlusion
-							, indirectDiffuse.w() );
+							, indirectDiffuse.w()
+							, c3d_brdfMap );
 						pxl_indirectDiffuse = indirectDiffuse.xyz();
 						pxl_indirectSpecular = indirectSpecular;
 					}
@@ -259,6 +260,7 @@ namespace castor3d
 		, Scene const & scene
 		, crg::FramePassGroup & graph
 		, crg::FramePass const *& previousPass
+		, Texture const & brdf
 		, OpaquePassResult const & gpResult
 		, LightPassResult const & lpResult
 		, LightVolumePassResult const & lpvResult
@@ -272,6 +274,7 @@ namespace castor3d
 		, VoxelizerUbo const & vctConfigUbo )
 		: m_device{ device }
 		, m_scene{ scene }
+		, m_brdf{ brdf }
 		, m_gpResult{ gpResult }
 		, m_lpResult{ lpResult }
 		, m_lpvResult{ lpvResult }
@@ -371,6 +374,8 @@ namespace castor3d
 			, uint32_t( IndirectLightingPass::eData2 ) );
 		pass.addSampledView( m_gpResult[DsTexture::eData3].sampledViewId
 			, uint32_t( IndirectLightingPass::eData3 ) );
+		pass.addSampledView( m_brdf.sampledViewId
+			, uint32_t( IndirectLightingPass::eBrdf ) );
 		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
 			, VK_FILTER_LINEAR
 			, VK_SAMPLER_MIPMAP_MODE_LINEAR };

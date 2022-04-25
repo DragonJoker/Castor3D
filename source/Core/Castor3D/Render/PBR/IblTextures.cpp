@@ -29,83 +29,10 @@
 
 #include <RenderGraph/ResourceHandler.hpp>
 
-#define C3D_GenerateBRDFIntegration 0
-
 namespace castor3d
 {
 	namespace ibltex
 	{
-#if !C3D_GenerateBRDFIntegration
-		static void doLoadPrefilteredBrdfView( Engine & engine
-			, RenderDevice const & device
-			, Texture const & texture )
-		{
-			auto image = std::make_unique< ashes::Image >( *device, texture.image, texture.imageId.data->info );
-			castor::PxBufferBaseSPtr buffer;
-
-			if ( engine.getImageCache().has( cuT( "BRDF" ) ) )
-			{
-				auto img = engine.getImageCache().find( cuT( "BRDF" ) );
-				buffer = img.lock()->getPixels();
-			}
-			else
-			{
-				auto imagePath = Engine::getEngineDirectory() / cuT( "Core" ) / cuT( "brdf.png" );
-				auto img = engine.getImageCache().add( cuT( "BRDF" )
-					, castor::ImageCreateParams{ imagePath, { false, false, false } } );
-				buffer = img.lock()->getPixels();
-			}
-
-			buffer = castor::PxBufferBase::create( buffer->getDimensions()
-				, castor::PixelFormat::eR8G8B8A8_UNORM
-				, buffer->getConstPtr()
-				, buffer->getFormat() );
-			auto result = image->createView( VK_IMAGE_VIEW_TYPE_2D, texture.getFormat() );
-			auto staging = device->createStagingTexture( VK_FORMAT_R8G8B8A8_UNORM
-				, makeExtent2D( buffer->getDimensions() ) );
-			auto data = device.graphicsData();;
-			staging->uploadTextureData( *data->queue
-				, *data->commandPool
-				, VK_FORMAT_R8G8B8A8_UNORM
-				, buffer->getConstPtr()
-				, result );
-		}
-#endif
-
-		static Texture doCreatePrefilteredBrdf( RenderDevice const & device
-			, crg::ResourceHandler & handler
-			, castor::Size const & size )
-		{
-			Texture result{ device
-				, handler
-				, "IblTexturesResult"
-				, 0u
-				, { size[0], size[1], 1u }
-				, 1u
-				, 1u
-#if !C3D_GenerateBRDFIntegration
-				, VK_FORMAT_R8G8B8A8_UNORM
-#else
-				, VK_FORMAT_R32G32B32A32_SFLOAT
-#endif
-				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-#if !C3D_GenerateBRDFIntegration
-					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-#endif
-					| VK_IMAGE_USAGE_SAMPLED_BIT ) };
-			result.create();
-
-#if !C3D_GenerateBRDFIntegration
-			doLoadPrefilteredBrdfView( *device.renderSystem.getEngine(), device, result );
-#else
-			BrdfPrefilter filter{ *scene.getEngine()
-				, { m_prefilteredBrdf->getDimensions().width, m_prefilteredBrdf->getDimensions().height }
-			, *m_prefilteredBrdfView };
-			filter.render();
-#endif
-			return result;
-		}
-
 		static SamplerResPtr doCreateSampler( Engine & engine
 			, RenderDevice const & device )
 		{
@@ -133,9 +60,10 @@ namespace castor3d
 	IblTextures::IblTextures( Scene & scene
 		, RenderDevice const & device
 		, Texture const & source
+		, Texture const & brdf
 		, SamplerResPtr sampler )
 		: OwnedBy< Scene >{ scene }
-		, m_prefilteredBrdf{ ibltex::doCreatePrefilteredBrdf( device, scene.getEngine()->getGraphResourceHandler(), castor::Size{ PrefilteredBrdfMapSize, PrefilteredBrdfMapSize } ) }
+		, m_brdf{ brdf }
 		, m_sampler{ ibltex::doCreateSampler( *scene.getEngine(), device ) }
 		, m_radianceComputer{ *scene.getEngine(), device, castor::Size{ RadianceMapSize, RadianceMapSize }, source }
 		, m_environmentPrefilter{ *scene.getEngine(), device, castor::Size{ PrefilteredEnvironmentMapSize, PrefilteredEnvironmentMapSize }, source, std::move( sampler ) }
@@ -144,7 +72,6 @@ namespace castor3d
 
 	IblTextures::~IblTextures()
 	{
-		m_prefilteredBrdf.destroy();
 	}
 
 	void IblTextures::update( QueueData const & queueData )

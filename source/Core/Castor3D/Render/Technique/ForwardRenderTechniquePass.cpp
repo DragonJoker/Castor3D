@@ -121,6 +121,9 @@ namespace castor3d
 			, ( m_ssao ? index++ : 0u )
 			, RenderPipeline::eBuffers
 			, m_ssao != nullptr );
+		auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRg32 >( "c3d_mapBrdf"
+			, index++
+			, RenderPipeline::eBuffers );
 		auto lightingModel = shader::LightingModel::createModel( utils
 			, shader::getLightingModelName( *getEngine(), flags.passType )
 			, lightsIndex
@@ -265,10 +268,10 @@ namespace castor3d
 						, worldEye
 						, c3d_sceneData.getPosToCamera( surface.worldPosition )
 						, surface
-						, lightMat->specular
 						, lightMat->getRoughness()
 						, indirectOcclusion
-						, lightIndirectDiffuse.w() );
+						, lightIndirectDiffuse.w()
+						, c3d_mapBrdf );
 					auto indirectAmbient = writer.declLocale( "indirectAmbient"
 						, lightMat->getIndirectAmbient( indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() ) ) );
 					auto indirectDiffuse = writer.declLocale( "indirectDiffuse"

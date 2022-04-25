@@ -122,12 +122,12 @@ namespace castor3d
 			eData4,
 			eData5,
 			eSsao,
+			eBrdf,
 			eDirectDiffuse,
 			eDirectSpecular,
 			eIndirectDiffuse,
 			eIndirectSpecular,
 			eEnvironment,
-			eBrdf,
 			eIrradiance,
 			ePrefiltered,
 		};
@@ -155,6 +155,7 @@ namespace castor3d
 			auto c3d_mapData4 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), uint32_t( ResolveBind::eData4 ), 0u );
 			auto c3d_mapData5 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), uint32_t( ResolveBind::eData5 ), 0u );
 			auto c3d_mapSsao = writer.declCombinedImg< FImg2DRg32 >( "c3d_mapSsao", uint32_t( ResolveBind::eSsao ), 0u, config.hasSsao );
+			auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRg32 >( "c3d_mapBrdf", uint32_t( ResolveBind::eBrdf ), 0u );
 			auto c3d_mapLightDiffuse = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightDiffuse", uint32_t( ResolveBind::eDirectDiffuse ), 0u );
 			auto c3d_mapLightSpecular = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightSpecular", uint32_t( ResolveBind::eDirectSpecular ), 0u );
 			auto c3d_mapLightIndirectDiffuse = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightIndirectDiffuse", uint32_t( ResolveBind::eIndirectDiffuse ), 0u, config.hasDiffuseGi );
@@ -429,6 +430,12 @@ namespace castor3d
 			, uint32_t( dropqrslv::ResolveBind::eData5 ) );
 		pass.addSampledView( m_ssaoResult.sampledViewId
 			, uint32_t( dropqrslv::ResolveBind::eSsao ) );
+		pass.addSampledView( m_device.renderSystem.getPrefilteredBrdfTexture().sampledViewId
+			, uint32_t( dropqrslv::ResolveBind::eBrdf )
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, crg::SamplerDesc{ VK_FILTER_LINEAR
+				, VK_FILTER_LINEAR
+				, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
 		pass.addSampledView( m_subsurfaceScattering.sampledViewId
 			, uint32_t( dropqrslv::ResolveBind::eDirectDiffuse ) );
 		pass.addSampledView( m_lightSpecular.sampledViewId
@@ -445,13 +452,7 @@ namespace castor3d
 		{
 			if ( background.hasIbl() )
 			{
-				auto & ibl = background.getIbl();;
-				pass.addSampledView( ibl.getPrefilteredBrdfTexture().sampledViewId
-					, uint32_t( dropqrslv::ResolveBind::eBrdf )
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-					, crg::SamplerDesc{ VK_FILTER_LINEAR
-					, VK_FILTER_LINEAR
-					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+				auto & ibl = background.getIbl();
 				pass.addSampledView( ibl.getIrradianceTexture().sampledViewId
 					, uint32_t( dropqrslv::ResolveBind::eIrradiance )
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL

@@ -53,7 +53,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & worldEye
 			, sdw::CombinedImageCubeRgba32 const & irradiance
 			, sdw::CombinedImageCubeRgba32 const & prefiltered
-			, sdw::CombinedImage2DRgba32 const & brdf );
+			, sdw::CombinedImage2DRg32 const & brdf );
 		sdw::Vec3 computeIncident( sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & wsCamera )const;
 		sdw::Vec3 computeReflEnvMap( sdw::Vec3 const & wsIncident
@@ -126,7 +126,7 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, sdw::InCombinedImageCubeRgba32
 			, sdw::InCombinedImageCubeRgba32
-			, sdw::InCombinedImage2DRgba32 > m_computeIBL;
+			, sdw::InCombinedImage2DRg32 > m_computeIBL;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
