@@ -14,6 +14,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
+#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 
 namespace castor3d
 {
@@ -140,7 +141,7 @@ namespace castor3d
 		crg::FramePass const & m_opaquePass;
 		crg::FramePass const * m_lastPass{};
 		OpaquePassResult const & m_opaquePassResult;
-		GpInfoUbo const & m_gpInfoUbo;
+		GpInfoUbo m_lightingGpInfoUbo;
 		castor::Size m_size;
 		LightPassResult m_lightPassResult;
 		LightingPassUPtr m_lightingPass;

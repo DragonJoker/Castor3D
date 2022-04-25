@@ -662,6 +662,7 @@ namespace castor3d
 			} );
 
 #if C3D_UseDeferredRendering
+		updater.camera = &camera;
 		m_deferredRendering->update( updater );
 #endif
 #if C3D_UseWeightedBlendedRendering
