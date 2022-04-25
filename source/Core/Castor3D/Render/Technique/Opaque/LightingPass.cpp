@@ -40,7 +40,7 @@
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 
-#include <RenderGraph/RunnablePasses/ImageCopy.hpp>
+#include <RenderGraph/RunnablePasses/ImageBlit.hpp>
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
 #include <ShaderWriter/Source.hpp>
@@ -961,16 +961,22 @@ namespace castor3d
 	{
 		stepProgressBar( progress, "Creating depth blit pass" );
 		auto & engine = *m_device.renderSystem.getEngine();
+		auto srcSize = m_depth.getExtent();
+		auto dstSize = makeExtent3D( m_size );
 		auto & pass = graph.createPass( "DepthBlit"
-			, [this, progress, &engine]( crg::FramePass const & framePass
+			, [this, progress, srcSize, dstSize, &engine]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				stepProgressBar( progress, "Initialising depth blit pass" );
-				auto result = std::make_unique< crg::ImageCopy >( framePass
+				auto result = std::make_unique< crg::ImageBlit >( framePass
 					, context
 					, graph
-					, makeExtent3D( m_size )
+					, VkOffset3D{}
+					, srcSize
+					, VkOffset3D{}
+					, dstSize
+					, VK_FILTER_NEAREST
 					, crg::ru::Config{}
 					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 					, crg::RunnablePass::IsEnabledCallback( [this](){ return isEnabled(); } ) );
