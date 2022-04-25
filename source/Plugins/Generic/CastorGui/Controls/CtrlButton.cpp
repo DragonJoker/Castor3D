@@ -55,27 +55,28 @@ namespace CastorGui
 			, flags
 			, visible }
 		, m_caption{ caption }
-		, m_onEnable{ EventHandler::onEnable.connect( [this]( bool enabled )
+		, m_onEnable{ EventHandler::onEnable.connect( [this]( bool penabled )
 			{
-				auto & style = getStyle();
-				if ( enabled )
+				auto & mystyle = getStyle();
+
+				if ( penabled )
 				{
-					m_text.lock()->setMaterial( style.getTextMaterial() );
+					m_text.lock()->setMaterial( mystyle.getTextMaterial() );
 
 					if ( auto panel = getBackground() )
 					{
-						panel->setMaterial( style.getBackgroundMaterial() );
-						panel->setBorderMaterial( style.getForegroundMaterial() );
+						panel->setMaterial( mystyle.getBackgroundMaterial() );
+						panel->setBorderMaterial( mystyle.getForegroundMaterial() );
 					}
 				}
 				else
 				{
-					m_text.lock()->setMaterial( style.getDisabledTextMaterial() );
+					m_text.lock()->setMaterial( mystyle.getDisabledTextMaterial() );
 
 					if ( auto panel = getBackground() )
 					{
-						panel->setMaterial( style.getDisabledBackgroundMaterial() );
-						panel->setBorderMaterial( style.getDisabledForegroundMaterial() );
+						panel->setMaterial( mystyle.getDisabledBackgroundMaterial() );
+						panel->setBorderMaterial( mystyle.getDisabledForegroundMaterial() );
 					}
 				}
 			} ) }

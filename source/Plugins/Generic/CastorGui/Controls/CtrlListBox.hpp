@@ -77,6 +77,7 @@ namespace CastorGui
 			, uint32_t flags = 0
 			, bool visible = true )
 			: Control{ ControlType::eListBox
+				, scene
 				, name
 				, style
 				, parent
