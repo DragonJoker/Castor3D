@@ -417,6 +417,11 @@ namespace castor3d
 
 	void PhongPass::fillBuffer( PassBuffer & buffer )const
 	{
+		if ( !getId() )
+		{
+			return;
+		}
+
 		auto data = buffer.getData( getId() );
 
 		data.colourDiv->r = powf( getDiffuse().red(), 2.2f );

@@ -270,7 +270,6 @@ namespace castor3d
 		}
 
 		m_rootNode.reset();
-		getEngine()->getFrameListenerCache().remove( m_listener.lock()->getName() );
 	}
 
 	void Scene::initialise()
@@ -327,11 +326,10 @@ namespace castor3d
 		// These ones, being ResourceCache, need to be cleared in destructor only
 		m_meshCache->cleanup();
 
-		getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [this]( RenderDevice const & device
-				, QueueData const & queueData )
+		getListener().postEvent( makeCpuFunctorEvent( EventType::ePreRender
+			, [this]()
 			{
-				m_background->cleanup( device );
+				m_background->cleanup();
 			} ) );
 
 		auto & engine = *getEngine();

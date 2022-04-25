@@ -29,6 +29,7 @@ See LICENSE file in root folder
 #pragma warning( push )
 #pragma warning( disable:4365 )
 #include <atomic>
+#include <mutex>
 #pragma warning( pop )
 
 namespace castor3d
@@ -381,11 +382,18 @@ namespace castor3d
 		C3D_API IntermediateViewArray const & listIntermediateViews()const;
 		/**
 		 *\~english
-		 *\return		Changes the loading scene to the latest one.
+		 *\return		Destroys the loading scene.
 		 *\~french
-		 *\return		Change la loading scene pour la dernière.
+		 *\return		Détruit la loading scene.
 		 */
-		C3D_API void changeLoadingScene();
+		C3D_API void destroyLoadingScreen();
+		/**
+		 *\~english
+		 *\return		Creates the loading scene.
+		 *\~french
+		 *\return		Crée la loading scene.
+		 */
+		C3D_API void createLoadingScreen();
 		/**
 		*\~english
 		*name
@@ -582,6 +590,7 @@ namespace castor3d
 		UniformBufferOffsetT< Configuration > m_configUbo;
 		ProgressBarUPtr m_progressBar;
 		LoadingScreenUPtr m_loadingScreen;
+		std::mutex m_renderMutex;
 	};
 }
 

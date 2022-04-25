@@ -203,6 +203,15 @@ namespace castor
 
 			m_passBuffer->removePass( pass );
 		}
+
+		auto it = std::find( m_pendingPasses.begin()
+			, m_pendingPasses.end()
+			, &pass );
+
+		if ( it != m_pendingPasses.end() )
+		{
+			m_pendingPasses.erase( it );
+		}
 	}
 
 	bool ResourceCacheT< Material, String, MaterialCacheTraits >::registerUnit( TextureUnit & unit )
@@ -225,6 +234,15 @@ namespace castor
 			&& unit.getId() )
 		{
 			m_texConfigBuffer->removeTextureConfiguration( unit );
+		}
+
+		auto it = std::find( m_pendingUnits.begin()
+			, m_pendingUnits.end()
+			, &unit );
+
+		if ( it != m_pendingUnits.end() )
+		{
+			m_pendingUnits.erase( it );
 		}
 	}
 
