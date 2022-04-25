@@ -164,7 +164,7 @@ namespace castor3d
 		posX += 75;
 		m_panel->setPixelSize( castor::Size{ uint32_t( posX ), 20 } );
 
-		m_passName->setFont( cuT( "Arial20" ) );
+		m_passName->setFont( cuT( "Arial16" ) );
 		m_cpu.name->setFont( cuT( "Arial10" ) );
 		m_gpu.name->setFont( cuT( "Arial10" ) );
 		m_cpu.value->setFont( cuT( "Arial10" ) );
@@ -336,7 +336,7 @@ namespace castor3d
 		m_container->setPixelSize( castor::Size{ uint32_t( m_posX ), 20 } );
 		m_firstLinePanel->setPixelSize( castor::Size{ uint32_t( m_posX ), 20 } );
 
-		m_name->setFont( cuT( "Arial20" ) );
+		m_name->setFont( cuT( "Arial16" ) );
 		m_cpu.name->setFont( cuT( "Arial10" ) );
 		m_gpu.name->setFont( cuT( "Arial10" ) );
 		m_cpu.value->setFont( cuT( "Arial10" ) );

@@ -74,16 +74,20 @@ namespace castor3d
 		doFlush();
 	}
 
-	void FrameListener::postEvent( CpuFrameEventUPtr event )
+	CpuFrameEvent * FrameListener::postEvent( CpuFrameEventUPtr event )
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
+		auto result = event.get();
 		m_cpuEvents[size_t( event->getType() )].push_back( std::move( event ) );
+		return result;
 	}
 
-	void FrameListener::postEvent( GpuFrameEventUPtr event )
+	GpuFrameEvent * FrameListener::postEvent( GpuFrameEventUPtr event )
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
+		auto result = event.get();
 		m_gpuEvents[size_t( event->getType() )].push_back( std::move( event ) );
+		return result;
 	}
 
 	bool FrameListener::fireEvents( EventType type )

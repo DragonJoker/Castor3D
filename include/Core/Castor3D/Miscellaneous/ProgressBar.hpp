@@ -22,6 +22,10 @@ namespace castor3d
 			, TextOverlaySPtr label
 			, uint32_t max );
 
+		C3D_API void update( OverlayResPtr parent
+			, OverlayResPtr bar
+			, TextOverlaySPtr title
+			, TextOverlaySPtr label );
 		C3D_API void setTitle( castor::String const & value );
 		C3D_API void setLabel( castor::String const & value );
 		C3D_API void step( castor::String const & label );
@@ -56,10 +60,15 @@ namespace castor3d
 		FrameListenerRes m_listener;
 		castor::RangedValue< uint32_t > m_index;
 		castor::String m_title;
+		castor::String m_label;
 		OverlayRPtr m_progress;
 		OverlayRPtr m_progressBar;
 		TextOverlaySPtr m_progressTitle;
 		TextOverlaySPtr m_progressLabel;
+		CpuFrameEvent * m_titleEvent{};
+		CpuFrameEvent * m_labelEvent{};
+		CpuFrameEvent * m_stepLabelEvent{};
+		CpuFrameEvent * m_stepEvent{};
 		std::mutex m_mutex;
 	};
 

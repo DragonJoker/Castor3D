@@ -53,8 +53,8 @@ namespace castor3d
 		m_label->setPixelSize( castor::Size{ 190, 20 } );
 		m_value->setPixelSize( castor::Size{ 110, 20 } );
 
-		m_label->setFont( cuT( "Arial20" ) );
-		m_value->setFont( cuT( "Arial20" ) );
+		m_label->setFont( cuT( "Arial16" ) );
+		m_value->setFont( cuT( "Arial16" ) );
 
 		m_label->setVAlign( VAlign::eCenter );
 		m_value->setVAlign( VAlign::eCenter );
@@ -123,7 +123,7 @@ namespace castor3d
 		m_titleText->setVAlign( VAlign::eCenter );
 		m_titleText->setHAlign( HAlign::eCenter );
 		m_titleText->setMaterial( materials.find( cuT( "White" ) ).lock().get() );
-		m_titleText->setFont( cuT( "Arial20" ) );
+		m_titleText->setFont( cuT( "Arial16" ) );
 		m_titleText->setCaption( title );
 	}
 
