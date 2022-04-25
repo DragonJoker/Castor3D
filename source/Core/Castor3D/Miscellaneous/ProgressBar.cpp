@@ -29,50 +29,139 @@ namespace castor3d
 	{
 	}
 
-	void ProgressBar::setTitle( castor::String const & value )
+	void ProgressBar::update( OverlayResPtr parent
+		, OverlayResPtr bar
+		, TextOverlaySPtr title
+		, TextOverlaySPtr label )
 	{
 		auto lock( castor::makeUniqueLock( *this ) );
-		m_title = value;
-		m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+
+		if ( m_titleEvent )
+		{
+			m_titleEvent->skip();
+			m_titleEvent = nullptr;
+		}
+
+		if ( m_labelEvent )
+		{
+			m_labelEvent->skip();
+			m_labelEvent = nullptr;
+		}
+
+		if ( m_stepLabelEvent )
+		{
+			m_stepLabelEvent->skip();
+			m_stepLabelEvent = nullptr;
+		}
+
+		if ( m_stepEvent )
+		{
+			m_stepEvent->skip();
+			m_stepEvent = nullptr;
+		}
+
+		m_progress = parent.lock().get();
+		m_progressBar = bar.lock().get();
+		m_progressTitle = title;
+		m_progressLabel = label;
+		m_titleEvent = m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
 			, [this]()
 			{
-				if ( m_progressLabel )
+				if ( m_progressTitle )
 				{
 					m_progressTitle->setCaption( m_title );
 				}
-			} ) );
-	}
 
-	void ProgressBar::setLabel( castor::String const & value )
-	{
-		auto lock( castor::makeUniqueLock( *this ) );
-		m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
-			, [this, value]()
-			{
-				if ( m_progressLabel )
-				{
-					m_progressLabel->setCaption( value );
-				}
+				m_titleEvent = nullptr;
 			} ) );
-	}
-
-	void ProgressBar::step( castor::String const & label )
-	{
-		auto lock( castor::makeUniqueLock( *this ) );
-		m_index = m_index + 1u;
 		auto index = m_index.percent();
-		m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
-			, [this, label, index]()
+		m_stepLabelEvent = m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+			, [this, index]()
 			{
 				if ( m_progressLabel )
 				{
-					m_progressLabel->setCaption( label );
+					m_progressLabel->setCaption( m_label );
 				}
 
 				if ( m_progressBar )
 				{
 					m_progressBar->setSize( { index, 1.0f } );
 				}
+
+				m_stepLabelEvent = nullptr;
+			} ) );
+	}
+
+	void ProgressBar::setTitle( castor::String const & value )
+	{
+		auto lock( castor::makeUniqueLock( *this ) );
+		m_title = value;
+
+		if ( m_titleEvent )
+		{
+			m_titleEvent->skip();
+		}
+
+		m_titleEvent = m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+			, [this]()
+			{
+				if ( m_progressTitle )
+				{
+					m_progressTitle->setCaption( m_title );
+				}
+
+				m_titleEvent = nullptr;
+			} ) );
+	}
+
+	void ProgressBar::setLabel( castor::String const & value )
+	{
+		auto lock( castor::makeUniqueLock( *this ) );
+		m_label = value;
+
+		if ( m_labelEvent )
+		{
+			m_labelEvent->skip();
+		}
+
+		m_labelEvent = m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+			, [this]()
+			{
+				if ( m_progressLabel )
+				{
+					m_progressLabel->setCaption( m_label );
+				}
+
+				m_labelEvent = nullptr;
+			} ) );
+	}
+
+	void ProgressBar::step( castor::String const & label )
+	{
+		auto lock( castor::makeUniqueLock( *this ) );
+		m_label = label;
+		m_index = m_index + 1u;
+		auto index = m_index.percent();
+
+		if ( m_stepLabelEvent )
+		{
+			m_stepLabelEvent->skip();
+		}
+
+		m_stepLabelEvent = m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+			, [this, index]()
+			{
+				if ( m_progressLabel )
+				{
+					m_progressLabel->setCaption( m_label );
+				}
+
+				if ( m_progressBar )
+				{
+					m_progressBar->setSize( { index, 1.0f } );
+				}
+
+				m_stepLabelEvent = nullptr;
 			} ) );
 	}
 
@@ -81,13 +170,21 @@ namespace castor3d
 		auto lock( castor::makeUniqueLock( *this ) );
 		m_index = m_index + 1u;
 		auto index = m_index.percent();
-		m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+
+		if ( m_stepEvent )
+		{
+			m_stepEvent->skip();
+		}
+
+		m_stepEvent = m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
 			, [this, index]()
 			{
 				if ( m_progressBar )
 				{
 					m_progressBar->setSize( { index, 1.0f } );
 				}
+
+				m_stepEvent = nullptr;
 			} ) );
 	}
 

@@ -758,10 +758,15 @@ namespace castor3d
 
 		if ( m_loadingScene )
 		{
+			for ( auto & windowIt : m_renderWindows )
+			{
+				windowIt.second->destroyLoadingScreen();
+			}
+
 			m_loadingScene->cleanup();
 			auto pending = m_loadingScene.release();
 			hadLoadingScene = true;
-			postEvent( makeCpuFunctorEvent( EventType::ePostRender
+			postEvent( makeCpuFunctorEvent( EventType::ePreRender
 				, [pending]()
 				{
 					delete pending;
@@ -775,7 +780,7 @@ namespace castor3d
 		{
 			for ( auto & windowIt : m_renderWindows )
 			{
-				windowIt.second->changeLoadingScene();
+				windowIt.second->createLoadingScreen();
 			}
 		}
 	}

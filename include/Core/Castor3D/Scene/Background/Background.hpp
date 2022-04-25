@@ -103,7 +103,7 @@ namespace castor3d
 		*\param[in] device
 		*	Le device actuel.
 		*/
-		C3D_API void cleanup( RenderDevice const & device );
+		C3D_API void cleanup();
 		/**
 		*\~english
 		*\brief

@@ -540,6 +540,8 @@ namespace castor3d
 			return;
 		}
 
+		auto lock( castor::makeUniqueLock( m_renderMutex ) );
+
 		if ( m_loadingScreen && m_loadingScreen->isEnabled() )
 		{
 			m_loadingScreen->update( updater );
@@ -588,6 +590,8 @@ namespace castor3d
 			return;
 		}
 
+		auto lock( castor::makeUniqueLock( m_renderMutex ) );
+
 		if ( m_loadingScreen && m_loadingScreen->isEnabled() )
 		{
 			m_loadingScreen->update( updater );
@@ -604,6 +608,8 @@ namespace castor3d
 		{
 			return;
 		}
+
+		auto lock( castor::makeUniqueLock( m_renderMutex ) );
 
 		if ( m_loadingScreen && m_loadingScreen->isEnabled() )
 		{
@@ -889,10 +895,17 @@ namespace castor3d
 		return m_intermediates;
 	}
 
-	void RenderWindow::changeLoadingScene()
+	void RenderWindow::destroyLoadingScreen()
 	{
+		m_renderMutex.lock();
 		doDestroyLoadingScreen();
+	}
+
+	void RenderWindow::createLoadingScreen()
+	{
 		doCreateLoadingScreen();
+		m_loadingScreen->setRenderPass( *m_renderPass, m_size );
+		m_renderMutex.unlock();
 	}
 
 	GeometrySPtr RenderWindow::getPickedGeometry()const
@@ -1173,6 +1186,13 @@ namespace castor3d
 				, 1u );
 			m_progressBar->setTitle( "Initialising..." );
 			m_progressBar->setLabel( "" );
+		}
+		else
+		{
+			m_progressBar->update( rendwndw::getOverlay( *scene, cuT( "Progress" ) )
+				, rendwndw::getOverlay( *scene, cuT( "ProgressBar" ) )
+				, rendwndw::getTextOverlay( *scene, cuT( "ProgressTitle" ) )
+				, rendwndw::getTextOverlay( *scene, cuT( "ProgressLabel" ) ) );
 		}
 
 		m_loadingScreen = castor::makeUnique< LoadingScreen >( *m_progressBar

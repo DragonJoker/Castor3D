@@ -46,7 +46,7 @@ namespace castor3d
 		 *\brief		Ajoute un évènement à la liste d'évènements correspondant à sont type.
 		 *\param[in]	event	L'évènement à ajouter.
 		 */
-		C3D_API void postEvent( CpuFrameEventUPtr event );
+		C3D_API CpuFrameEvent * postEvent( CpuFrameEventUPtr event );
 		/**
 		 *\~english
 		 *\brief		Puts an event in the corresponding array.
@@ -55,7 +55,7 @@ namespace castor3d
 		 *\brief		Ajoute un évènement à la liste d'évènements correspondant à sont type.
 		 *\param[in]	event	L'évènement à ajouter.
 		 */
-		C3D_API void postEvent( GpuFrameEventUPtr event );
+		C3D_API GpuFrameEvent * postEvent( GpuFrameEventUPtr event );
 		/**
 		 *\~english
 		 *\brief		Applies all events of a given type, then discards them.

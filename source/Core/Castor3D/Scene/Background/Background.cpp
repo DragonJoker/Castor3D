@@ -85,7 +85,7 @@ namespace castor3d
 		return m_initialised;
 	}
 
-	void SceneBackground::cleanup( RenderDevice const & device )
+	void SceneBackground::cleanup()
 	{
 		doCleanup();
 
