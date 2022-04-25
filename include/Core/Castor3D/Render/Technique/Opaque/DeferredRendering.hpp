@@ -28,6 +28,7 @@ namespace castor3d
 		 *\param[in]	opaquePass			The opaque nodes render pass.
 		 *\param[in]	device				The GPU device.
 		 *\param[in]	progress			The progress status.
+		 *\param[in]	brdf				The prefiltered BRDF map.
 		 *\param[in]	depth				The render target depth texture.
 		 *\param[in]	opaquePassResult	The geometry pass buffers.
 		 *\param[in]	resultTexture		The render technique texture.
@@ -54,6 +55,7 @@ namespace castor3d
 		 *\param[in]	opaquePass			La passe de rendu des noeuds opaques.
 		 *\param[in]	device				Le device GPU.
 		 *\param[in]	progress			Le statut de progression.
+		 *\param[in]	brdf				La texture de BRDF.
 		 *\param[in]	depth				La texture de profondeur de la cible de rendu.
 		 *\param[in]	opaquePassResult	Le résultat de la geometry pass.
 		 *\param[in]	resultTexture		La texture de la technique de rendu.
@@ -79,6 +81,7 @@ namespace castor3d
 			, crg::FramePass const & opaquePass
 			, RenderDevice const & device
 			, ProgressBar * progress
+			, Texture const & brdf
 			, Texture const & depth
 			, OpaquePassResult const & opaquePassResult
 			, Texture const & resultTexture

@@ -58,6 +58,7 @@ namespace ocean
 			eSceneNormals,
 			eSceneDepth,
 			eSceneResult,
+			eBrdf,
 		};
 
 		void bindTexture( VkImageView view
@@ -514,8 +515,11 @@ namespace ocean
 		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaveIdx::eSceneResult
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaveIdx::eBrdf
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
-		auto index = uint32_t( WaveIdx::eSceneResult ) + 1u;
+		auto index = uint32_t( WaveIdx::eBrdf ) + 1u;
 		doAddShadowBindings( bindings, index );
 		doAddEnvBindings( bindings, index );
 		doAddGIBindings( bindings, index );
@@ -569,6 +573,10 @@ namespace ocean
 		bindTexture( m_parent->getNormalTexture().sampledView, *m_pointClampSampler, descriptorWrites, index );
 		bindTexture( m_depthInput->sampledView, *m_pointClampSampler, descriptorWrites, index );
 		bindTexture( m_colourInput->sampledView, *m_pointClampSampler, descriptorWrites, index );
+		bindTexture( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampledView
+			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
+			, descriptorWrites
+			, index );
 		doAddShadowDescriptor( descriptorWrites, shadowMaps, index );
 		doAddEnvDescriptor( descriptorWrites, shadowMaps, index );
 		doAddGIDescriptor( descriptorWrites, shadowMaps, index );
@@ -1097,6 +1105,9 @@ namespace ocean
 		auto c3d_colour = writer.declCombinedImg< FImg2DRgba32 >( "c3d_colour"
 			, index++
 			, RenderPipeline::eBuffers );
+		auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRg32 >( "c3d_mapBrdf"
+			, index++
+			, RenderPipeline::eBuffers );
 		auto lightingModel = shader::LightingModel::createModel( utils
 			, shader::getLightingModelName( *getEngine(), flags.passType )
 			, lightsIndex
@@ -1214,10 +1225,10 @@ namespace ocean
 						, worldEye
 						, c3d_sceneData.getPosToCamera( surface.worldPosition )
 						, surface
-						, lightMat->specular
 						, lightMat->getRoughness()
 						, indirectOcclusion
-						, lightIndirectDiffuse.w() );
+						, lightIndirectDiffuse.w()
+						, c3d_mapBrdf );
 					displayDebugData( eLightIndirectSpecular, lightIndirectSpecular, 1.0_f );
 					auto indirectAmbient = writer.declLocale( "indirectAmbient"
 						, lightMat->getIndirectAmbient( indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() ) ) );

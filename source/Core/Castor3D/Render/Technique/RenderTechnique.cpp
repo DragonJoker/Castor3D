@@ -456,6 +456,7 @@ namespace castor3d
 			, *m_opaquePassDesc
 			, m_device
 			, progress
+			, m_device.renderSystem.getPrefilteredBrdfTexture()
 			, *m_depth
 			, *m_opaquePassResult
 			, m_colour

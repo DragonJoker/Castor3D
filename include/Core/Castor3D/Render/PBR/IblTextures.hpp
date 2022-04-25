@@ -24,17 +24,20 @@ namespace castor3d
 		 *\param[in]	scene	The scene.
 		 *\param[in]	device	The GPU device.
 		 *\param[in]	source	The source environment map.
+		 *\param[in]	brdf	The prefiltered BRDF map.
 		 *\param[in]	sampler	The sampler used for the environment map.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	scene	La scène.
 		 *\param[in]	device	Le device GPU.
 		 *\param[in]	source	La texture d'environnement source.
+		 *\param[in]	brdf	La texture de BRDF.
 		 *\param[in]	sampler	Le sampler utilisé pour la texture d'environnement.
 		 */
 		C3D_API explicit IblTextures( Scene & scene
 			, RenderDevice const & device
 			, Texture const & source
+			, Texture const & brdf
 			, SamplerResPtr sampler );
 		C3D_API ~IblTextures();
 		/**
@@ -69,39 +72,39 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline Texture const & getIrradianceTexture()const
+		Texture const & getIrradianceTexture()const
 		{
 			return m_radianceComputer.getResult();
 		}
 
-		inline Texture const & getPrefilteredEnvironmentTexture()const
+		Texture const & getPrefilteredEnvironmentTexture()const
 		{
 			return m_environmentPrefilter.getResult();
 		}
 
-		inline Texture const & getPrefilteredBrdfTexture()const
+		Texture const & getPrefilteredBrdfTexture()const
 		{
-			return m_prefilteredBrdf;
+			return m_brdf;
 		}
 
-		inline ashes::Sampler const & getIrradianceSampler()const
+		ashes::Sampler const & getIrradianceSampler()const
 		{
 			return m_radianceComputer.getSampler();
 		}
 
-		inline ashes::Sampler const & getPrefilteredEnvironmentSampler()const
+		ashes::Sampler const & getPrefilteredEnvironmentSampler()const
 		{
 			return m_environmentPrefilter.getSampler();
 		}
 
-		inline ashes::Sampler const & getPrefilteredBrdfSampler()const
+		ashes::Sampler const & getPrefilteredBrdfSampler()const
 		{
 			return m_sampler.lock()->getSampler();
 		}
 		/**@}*/
 
 	private:
-		Texture m_prefilteredBrdf;
+		Texture const & m_brdf;
 		SamplerResPtr m_sampler;
 		RadianceComputer m_radianceComputer;
 		EnvironmentPrefilter m_environmentPrefilter;

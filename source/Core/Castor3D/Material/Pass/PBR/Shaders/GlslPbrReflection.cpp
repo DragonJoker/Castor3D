@@ -24,7 +24,6 @@ namespace castor3d::shader
 		: ReflectionModel{ writer, utils }
 	{
 		m_writer.declCombinedImg< FImgCubeArrayRgba32 >( "c3d_mapEnvironment", envMapBinding++, envMapSet );
-		m_writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf", envMapBinding++, envMapSet );
 		m_writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapIrradiance", envMapBinding++, envMapSet );
 		m_writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapPrefiltered", envMapBinding++, envMapSet );
 	}
@@ -42,7 +41,7 @@ namespace castor3d::shader
 		, sdw::Vec3 & refracted )
 	{
 		auto & pbrMaterial = static_cast< PbrLightMaterial const & >( material );
-		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
+		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRg32 >( "c3d_mapBrdf" );
 		auto irradiance = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapIrradiance" );
 		auto prefiltered = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
 		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
@@ -174,7 +173,7 @@ namespace castor3d::shader
 				, pbrMaterial );
 		}
 
-		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
+		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRg32 >( "c3d_mapBrdf" );
 		auto irradiance = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapIrradiance" );
 		auto prefiltered = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
 		return computeIBL( surface
@@ -227,7 +226,7 @@ namespace castor3d::shader
 		, sdw::Vec3 & refracted )
 	{
 		auto & pbrMaterial = static_cast< PbrLightMaterial const & >( material );
-		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
+		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRg32 >( "c3d_mapBrdf" );
 		auto irradiance = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapIrradiance" );
 		auto prefiltered = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
 
@@ -348,7 +347,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & worldEye
 		, sdw::CombinedImageCubeRgba32 const & irradianceMap
 		, sdw::CombinedImageCubeRgba32 const & prefilteredEnvMap
-		, sdw::CombinedImage2DRgba32 const & brdfMap )
+		, sdw::CombinedImage2DRg32 const & brdfMap )
 	{
 		doDeclareComputeIBL();
 		return m_computeIBL( surface
@@ -516,7 +515,7 @@ namespace castor3d::shader
 				, sdw::Vec3 const & worldEye
 				, sdw::CombinedImageCubeRgba32 const & irradianceMap
 				, sdw::CombinedImageCubeRgba32 const & prefilteredEnvMap
-				, sdw::CombinedImage2DRgba32 const & brdfMap )
+				, sdw::CombinedImage2DRg32 const & brdfMap )
 			{
 				auto V = m_writer.declLocale( "V"
 					, normalize( worldEye - surface.worldPosition ) );
@@ -543,7 +542,7 @@ namespace castor3d::shader
 				auto envBRDFCoord = m_writer.declLocale( "envBRDFCoord"
 					, vec2( NdotV, material.roughness ) );
 				auto envBRDF = m_writer.declLocale( "envBRDF"
-					, brdfMap.sample( envBRDFCoord ).rg() );
+					, brdfMap.sample( envBRDFCoord ) );
 				auto specularReflection = m_writer.declLocale( "specularReflection"
 					, prefilteredColor * sdw::fma( kS
 						, vec3( envBRDF.x() )
@@ -558,7 +557,7 @@ namespace castor3d::shader
 			, sdw::InVec3{ m_writer, "worldEye" }
 			, sdw::InCombinedImageCubeRgba32{ m_writer, "irradianceMap" }
 			, sdw::InCombinedImageCubeRgba32{ m_writer, "prefilteredEnvMap" }
-			, sdw::InCombinedImage2DRgba32{ m_writer, "brdfMap" } );
+			, sdw::InCombinedImage2DRg32{ m_writer, "brdfMap" } );
 	}
 
 	void PbrReflectionModel::doDeclareComputeReflEnvMap()
