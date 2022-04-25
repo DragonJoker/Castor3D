@@ -109,12 +109,14 @@ namespace GuiCommon
 	{
 		static wxString PROPERTY_CATEGORY_SPOT_LIGHT = _( "Spot Light" );
 		static wxString PROPERTY_LIGHT_ATTENUATION = _( "Attenuation" );
-		static wxString PROPERTY_LIGHT_CUT_OFF = _( "Cut off" );
+		static wxString PROPERTY_LIGHT_INNER_CUT_OFF = _( "Inner cut off" );
+		static wxString PROPERTY_LIGHT_OUTER_CUT_OFF = _( "Outer cut off" );
 		static wxString PROPERTY_LIGHT_EXPONENT = _( "Exponent" );
 
 		addProperty( grid, PROPERTY_CATEGORY_SPOT_LIGHT );
 		addPropertyT( grid, PROPERTY_LIGHT_ATTENUATION, light.getAttenuation(), &light, &castor3d::SpotLight::setAttenuation );
-		addPropertyT( grid, PROPERTY_LIGHT_CUT_OFF, light.getCutOff(), &light, &castor3d::SpotLight::setCutOff );
+		addPropertyT( grid, PROPERTY_LIGHT_INNER_CUT_OFF, light.getInnerCutOff(), &light, &castor3d::SpotLight::setInnerCutOff );
+		addPropertyT( grid, PROPERTY_LIGHT_OUTER_CUT_OFF, light.getOuterCutOff(), &light, &castor3d::SpotLight::setOuterCutOff );
 		addPropertyT( grid, PROPERTY_LIGHT_EXPONENT, light.getExponent(), &light, &castor3d::SpotLight::setExponent );
 	}
 

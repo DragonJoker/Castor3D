@@ -74,7 +74,8 @@ namespace castor3d
 		/**@{*/
 		C3D_API void setAttenuation( castor::Point3f const & value );
 		C3D_API void setExponent( float value );
-		C3D_API void setCutOff( castor::Angle const & value );
+		C3D_API void setInnerCutOff( castor::Angle const & value );
+		C3D_API void setOuterCutOff( castor::Angle const & value );
 		/**@}*/
 		/**
 		 *\~english
@@ -113,9 +114,14 @@ namespace castor3d
 			return m_exponent.value();
 		}
 
-		castor::Angle const & getCutOff()const
+		castor::Angle const & getInnerCutOff()const
 		{
-			return m_cutOff.value();
+			return m_innerCutOff.value();
+		}
+
+		castor::Angle const & getOuterCutOff()const
+		{
+			return m_outerCutOff.value();
 		}
 		/**@}*/
 
@@ -127,7 +133,8 @@ namespace castor3d
 		bool m_dirtyShadow{ false };
 		castor::GroupChangeTracked< castor::Point3f > m_attenuation;
 		castor::GroupChangeTracked< float > m_exponent;
-		castor::GroupChangeTracked< castor::Angle > m_cutOff;
+		castor::GroupChangeTracked< castor::Angle > m_innerCutOff;
+		castor::GroupChangeTracked< castor::Angle > m_outerCutOff;
 		castor::GroupChangeTracked< castor::Matrix4x4f > m_lightView;
 		castor::GroupChangeTracked< castor::Matrix4x4f > m_lightProj;
 		castor::Matrix4x4f m_lightSpace;

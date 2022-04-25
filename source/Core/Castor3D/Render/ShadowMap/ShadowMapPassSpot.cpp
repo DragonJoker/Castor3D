@@ -447,7 +447,7 @@ namespace castor3d
 						, dot( lightDirection, -light.direction ) );
 					spotFactor = max( 0.0_f
 						, sdw::fma( ( spotFactor - 1.0_f )
-							, 1.0_f / ( 1.0_f - light.cutOff )
+							, 1.0_f / ( 1.0_f - light.outerCutOff )
 							, 1.0_f ) );
 					spotFactor = 1.0_f - step( spotFactor, 0.0_f );
 					pxl_flux.rgb() = ( lightMat->albedo

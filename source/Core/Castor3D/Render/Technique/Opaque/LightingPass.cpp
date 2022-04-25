@@ -57,7 +57,7 @@ namespace castor3d
 			float length{ getMaxDistance( light
 				, light.getAttenuation()
 				, max ) };
-			float width{ light.getCutOff().degrees() / ( 45.0f ) };
+			float width{ light.getOuterCutOff().degrees() / ( 45.0f ) };
 			return castor::Point2f{ length * width, length };
 		}
 

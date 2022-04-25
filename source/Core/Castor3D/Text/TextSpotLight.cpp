@@ -31,7 +31,8 @@ namespace castor
 				&& writeNamedSub( file, cuT( "intensity" ), light.getIntensity() )
 				&& writeNamedSub( file, cuT( "attenuation" ), light.getAttenuation() )
 				&& write( file, cuT( "exponent" ), light.getExponent() )
-				&& write( file, cuT( "cut_off" ), light.getCutOff().degrees() )
+				&& write( file, cuT( "inner_cut_off" ), light.getInnerCutOff().degrees() )
+				&& write( file, cuT( "outer_cut_off" ), light.getOuterCutOff().degrees() )
 				&& write( file, cuT( "shadow_producer" ), light.getLight().isShadowProducer() )
 				&& writeSub( file, light.getShadowConfig() );
 		}
