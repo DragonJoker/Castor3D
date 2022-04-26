@@ -40,23 +40,23 @@ namespace castor3d
 				? VK_FILTER_NEAREST
 				: VK_FILTER_LINEAR;
 			auto & cache = renderSystem.getEngine()->getSamplerCache();
-			SamplerResPtr sampler;
+			SamplerResPtr result;
 
 			if ( cache.has( name ) )
 			{
-				sampler = cache.find( name );
+				result = cache.find( name );
 			}
-			else
-			{
-				sampler = cache.add( name, *renderSystem.getEngine() );
-				sampler.lock()->setMinFilter( filter );
-				sampler.lock()->setMagFilter( filter );
-				sampler.lock()->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				sampler.lock()->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				sampler.lock()->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+			else if ( auto sampler = cache.add( name, *renderSystem.getEngine() ).lock() )
+			{	
+				sampler->setMinFilter( filter );
+				sampler->setMagFilter( filter );
+				sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				sampler->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				result = sampler;
 			}
 
-			return sampler;
+			return result;
 		}
 
 		static UniformBufferUPtrT< castor::Matrix4x4f > doCreateMatrixUbo( RenderDevice const & device
