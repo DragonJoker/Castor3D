@@ -73,7 +73,7 @@ namespace castor3d
 			return m_holder.getPipeline( index );
 		}
 
-		VkPipelineLayout getPipelineLayout()
+		VkPipelineLayout getPipelineLayout()const
 		{
 			return m_holder.getPipelineLayout();
 		}
@@ -81,6 +81,11 @@ namespace castor3d
 		VkDescriptorSet getDescriptorSet()
 		{
 			return m_holder.getDescriptorSet( 0u );
+		}
+
+		LightType getLightType()const
+		{
+			return m_config.lightType;
 		}
 
 	protected:

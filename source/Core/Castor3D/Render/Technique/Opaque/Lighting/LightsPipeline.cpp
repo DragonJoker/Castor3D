@@ -128,120 +128,17 @@ namespace castor3d
 	{
 		if ( !m_enabledLights.empty() )
 		{
-			VkBuffer vertexBuffer = m_vertexBuffer.getBuffer();
-			VkDeviceSize offset{ m_vertexBuffer.getOffset() };
-			VkDescriptorSet baseDS{};
-			auto & renderPass = m_renderPasses[index];
-			{
-				auto beginRenderPass = makeVkStruct< VkRenderPassBeginInfo >( *renderPass.renderPass
-					, *renderPass.framebuffer
-					, VkRect2D{ {}, renderPass.framebuffer->getDimensions() }
-					, uint32_t( renderPass.clearValues.size() )
-					, renderPass.clearValues.data() );
-				m_context.vkCmdBeginRenderPass( commandBuffer
-					, &beginRenderPass
-					, VK_SUBPASS_CONTENTS_INLINE );
-				auto pipeline = m_pipeline.getPipeline( index );
-				m_context.vkCmdBindPipeline( commandBuffer
-					, VK_PIPELINE_BIND_POINT_GRAPHICS
-					, pipeline );
-				baseDS = m_pipeline.getDescriptorSet();
-				m_context.vkCmdBindDescriptorSets( commandBuffer
-					, VK_PIPELINE_BIND_POINT_GRAPHICS
-					, m_pipeline.getPipelineLayout()
-					, 0u
-					, 1u
-					, &baseDS
-					, 0u
-					, nullptr );
-				auto & descriptors = m_enabledLights[0];
-				VkDescriptorSet specDS = *descriptors->descriptorSet;
-				m_context.vkCmdBindDescriptorSets( commandBuffer
-					, VK_PIPELINE_BIND_POINT_GRAPHICS
-					, m_pipeline.getPipelineLayout()
-					, 1u
-					, 1u
-					, &specDS
-					, 0u
-					, nullptr );
-				m_context.vkCmdBindVertexBuffers( commandBuffer
-					, 0u
-					, 1u
-					, &vertexBuffer
-					, &offset );
-				m_context.vkCmdDraw( commandBuffer
-					, m_count
-					, 1u
-					, 0u
-					, 0u );
-				m_context.vkCmdEndRenderPass( commandBuffer );
-
-				for ( auto & attach : renderPass.attaches )
-				{
-					context.setLayoutState( attach.view
-						, { attach.output
-							, crg::getAccessMask( attach.output )
-							, crg::getStageMask( attach.output ) } );
-				}
-			}
+			auto baseDS = m_pipeline.getDescriptorSet();
+			doRecordLightPass( m_renderPasses[index], baseDS, 0u, context, commandBuffer, index );
 			index = 1u;
 
 			if ( m_enabledLights.size() > 1u )
 			{
 				auto & renderPasses = m_renderPasses[index];
 
-				auto beginRenderPass = makeVkStruct< VkRenderPassBeginInfo >( *renderPasses.renderPass
-					, *renderPasses.framebuffer
-					, VkRect2D{ {}, renderPasses.framebuffer->getDimensions() }
-					, uint32_t( renderPasses.clearValues.size() )
-					, renderPasses.clearValues.data() );
-
 				for ( size_t i = 1u; i < m_enabledLights.size(); ++i )
 				{
-					auto & descriptors = m_enabledLights[i];
-					VkDescriptorSet specDS = *descriptors->descriptorSet;
-					m_context.vkCmdBeginRenderPass( commandBuffer
-						, &beginRenderPass
-						, VK_SUBPASS_CONTENTS_INLINE );
-					auto pipeline = m_pipeline.getPipeline( index );
-					m_context.vkCmdBindPipeline( commandBuffer
-						, VK_PIPELINE_BIND_POINT_GRAPHICS
-						, pipeline );
-					m_context.vkCmdBindDescriptorSets( commandBuffer
-						, VK_PIPELINE_BIND_POINT_GRAPHICS
-						, m_pipeline.getPipelineLayout()
-						, 0u
-						, 1u
-						, &baseDS
-						, 0u
-						, nullptr );
-					m_context.vkCmdBindDescriptorSets( commandBuffer
-						, VK_PIPELINE_BIND_POINT_GRAPHICS
-						, m_pipeline.getPipelineLayout()
-						, 1u
-						, 1u
-						, &specDS
-						, 0u
-						, nullptr );
-					m_context.vkCmdBindVertexBuffers( commandBuffer
-						, 0u
-						, 1u
-						, &vertexBuffer
-						, &offset );
-					m_context.vkCmdDraw( commandBuffer
-						, m_count
-						, 1u
-						, 0u
-						, 0u );
-					m_context.vkCmdEndRenderPass( commandBuffer );
-
-					for ( auto & attach : renderPass.attaches )
-					{
-						context.setLayoutState( attach.view
-							, { attach.output
-								, crg::getAccessMask( attach.output )
-								, crg::getStageMask( attach.output ) } );
-					}
+					doRecordLightPass( renderPasses, baseDS, i, context, commandBuffer, index );
 				}
 			}
 		}
@@ -393,6 +290,65 @@ namespace castor3d
 		result.markDirty( VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
 			, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 		return result;
+	}
+
+	void LightsPipeline::doRecordLightPass( LightRenderPass const & renderPass
+		, VkDescriptorSet baseDS
+		, size_t lightIndex
+		, crg::RecordContext & context
+		, VkCommandBuffer commandBuffer
+		, uint32_t & index )
+	{
+		VkBuffer vertexBuffer{ m_vertexBuffer.getBuffer() };
+		VkDeviceSize offset{ m_vertexBuffer.getOffset() };
+		VkDescriptorSet specDS = *m_enabledLights[lightIndex]->descriptorSet;
+		auto beginRenderPass = makeVkStruct< VkRenderPassBeginInfo >( *renderPass.renderPass
+			, *renderPass.framebuffer
+			, VkRect2D{ {}, renderPass.framebuffer->getDimensions() }
+			, uint32_t( renderPass.clearValues.size() )
+			, renderPass.clearValues.data() );
+		m_context.vkCmdBeginRenderPass( commandBuffer
+			, &beginRenderPass
+			, VK_SUBPASS_CONTENTS_INLINE );
+		auto pipeline = m_pipeline.getPipeline( index );
+		m_context.vkCmdBindPipeline( commandBuffer
+			, VK_PIPELINE_BIND_POINT_GRAPHICS
+			, pipeline );
+		m_context.vkCmdBindDescriptorSets( commandBuffer
+			, VK_PIPELINE_BIND_POINT_GRAPHICS
+			, m_pipeline.getPipelineLayout()
+			, 0u
+			, 1u
+			, &baseDS
+			, 0u
+			, nullptr );
+		m_context.vkCmdBindDescriptorSets( commandBuffer
+			, VK_PIPELINE_BIND_POINT_GRAPHICS
+			, m_pipeline.getPipelineLayout()
+			, 1u
+			, 1u
+			, &specDS
+			, 0u
+			, nullptr );
+		m_context.vkCmdBindVertexBuffers( commandBuffer
+			, 0u
+			, 1u
+			, &vertexBuffer
+			, &offset );
+		m_context.vkCmdDraw( commandBuffer
+			, m_count
+			, 1u
+			, 0u
+			, 0u );
+		m_context.vkCmdEndRenderPass( commandBuffer );
+
+		for ( auto & attach : renderPass.attaches )
+		{
+			context.setLayoutState( attach.view
+				, { attach.output
+				, crg::getAccessMask( attach.output )
+				, crg::getStageMask( attach.output ) } );
+		}
 	}
 
 	//*********************************************************************************************
