@@ -41,6 +41,9 @@ namespace castor3d
 
 	private:
 		LightRenderPass doCreateRenderPass( bool blend
+			, bool hasStencil
+			, LightPassResult const & result );
+		LightRenderPass doCreateStencilRenderPass( bool blend
 			, LightPassResult const & result );
 		LightsPipeline & doFindPipeline( Light const & light );
 
@@ -52,6 +55,7 @@ namespace castor3d
 		ShadowMapResult const & m_smPointResult;
 		ShadowMapResult const & m_smSpotResult;
 		std::vector< LightRenderPass > m_renderPasses;
+		std::vector< LightRenderPass > m_stencilRenderPasses;
 		std::map< size_t, LightsPipelinePtr > m_pipelines;
 	};
 }

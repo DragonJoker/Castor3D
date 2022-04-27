@@ -43,6 +43,29 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	uint32_t getLightRenderPassIndex( bool blend
+		, LightType lightType )
+	{
+		if ( blend )
+		{
+			if ( lightType != LightType::eDirectional )
+			{
+				return 3u;
+			}
+
+			return 2u;
+		}
+
+		if ( lightType != LightType::eDirectional )
+		{
+			return 1u;
+		}
+
+		return 0u;
+	}
+
+	//*********************************************************************************************
+
 	LightPipeline::LightPipeline( crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
@@ -98,7 +121,8 @@ namespace castor3d
 
 		for ( uint32_t index = 0u; index < 2u; ++index )
 		{
-			auto viewportState = doCreateViewportState( *m_renderPasses[index].framebuffer );
+			auto rpIndex = getLightRenderPassIndex( index != 0u, m_config.lightType );
+			auto viewportState = doCreateViewportState( *m_renderPasses[rpIndex].framebuffer );
 			auto colourBlend = doCreateBlendState( index != 0u );
 			auto & program = m_holder.getProgram( index );
 			auto & pipeline = m_holder.getPipeline( index );
@@ -117,7 +141,7 @@ namespace castor3d
 				, &cbState
 				, nullptr
 				, m_holder.getPipelineLayout()
-				, *m_renderPasses[index].renderPass
+				, *m_renderPasses[rpIndex].renderPass
 				, 0u
 				, VK_NULL_HANDLE
 				, 0 );

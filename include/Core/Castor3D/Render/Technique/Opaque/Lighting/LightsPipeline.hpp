@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Buffer/GpuBufferOffset.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPipeline.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/StencilPipeline.hpp"
 
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
 #include <ashespp/Descriptor/DescriptorSetPool.hpp>
@@ -24,7 +25,8 @@ namespace castor3d
 			, LightPipelineConfig const & config
 			, LightPassResult const & lpResult
 			, ShadowMapResult const & smResult
-			, std::vector< LightRenderPass > const & renderPasses );
+			, std::vector< LightRenderPass > const & renderPasses
+			, std::vector< LightRenderPass > const & stencilRenderPasses );
 
 		void clear();
 		void addLight( Camera const & camera
@@ -53,13 +55,20 @@ namespace castor3d
 			, crg::RecordContext & context
 			, VkCommandBuffer commandBuffer
 			, uint32_t passIndex );
+		void doRecordStencilPrePass( LightRenderPass const & renderPass
+			, VkDescriptorSet baseDS
+			, size_t lightIndex
+			, crg::RecordContext & context
+			, VkCommandBuffer commandBuffer );
 		void doRecordMeshLightPass( LightRenderPass const & renderPass
+			, LightRenderPass const & stencilRenderPass
 			, VkDescriptorSet baseDS
 			, size_t lightIndex
 			, crg::RecordContext & context
 			, VkCommandBuffer commandBuffer
 			, uint32_t passIndex );
 		void doRecordLightPass( LightRenderPass const & renderPass
+			, LightRenderPass const & stencilRenderPass
 			, VkDescriptorSet baseDS
 			, size_t lightIndex
 			, crg::RecordContext & context
@@ -67,7 +76,6 @@ namespace castor3d
 			, uint32_t passIndex );
 
 	private:
-		crg::FramePass const & m_pass;
 		crg::GraphContext & m_context;
 		ShadowMapResult const & m_smResult;
 		RenderDevice const & m_device;
@@ -78,7 +86,9 @@ namespace castor3d
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
 		ashes::DescriptorSetPoolPtr m_descriptorPool;
-		LightPipeline m_pipeline;
+		LightPipeline m_lightPipeline;
+		std::vector< LightRenderPass > const & m_stencilRenderPasses;
+		StencilPipelinePtr m_stencilPipeline;
 		uint32_t m_count{};
 		GpuBufferOffsetT< float > m_vertexBuffer;
 		std::map< size_t, std::unique_ptr< LightDescriptors > > m_lightDescriptors;
