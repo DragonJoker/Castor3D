@@ -48,7 +48,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les sommets nécessaires au dessin du maillage représentant le volume d'effet de la lumière.
 		 */
-		C3D_API static castor::Point3fArray const & generateVertices();
+		C3D_API static castor::Point3fArray const & generateVertices( uint32_t angle );
 		/**
 		 *\copydoc		castor3d::LightCategory::update
 		 */

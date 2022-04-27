@@ -115,6 +115,13 @@ namespace castor3d
 			, updater.index );
 		m_matrixUbo.cpuUpdate( myCamera.getView()
 			, myCamera.getProjection( false ) );
+		auto angle = light.getSpotLight()->getOuterCutOff().radians();
+
+		if ( angle != m_angle )
+		{
+			m_outOfDate = true;
+			m_angle = angle;
+		}
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo ShadowMapPassSpot::doCreateDepthStencilState( PipelineFlags const & flags )const
