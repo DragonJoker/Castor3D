@@ -546,6 +546,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Generator/Plane.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Generator/Projection.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Generator/Sphere.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Generator/SphereSection.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Generator/Torus.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
@@ -557,6 +558,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Generator/Plane.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Generator/Projection.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Generator/Sphere.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Generator/SphereSection.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Generator/Torus.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES

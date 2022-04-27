@@ -7,6 +7,7 @@
 #include "Castor3D/Model/Mesh/Generator/Plane.hpp"
 #include "Castor3D/Model/Mesh/Generator/Projection.hpp"
 #include "Castor3D/Model/Mesh/Generator/Sphere.hpp"
+#include "Castor3D/Model/Mesh/Generator/SphereSection.hpp"
 #include "Castor3D/Model/Mesh/Generator/Torus.hpp"
 
 CU_ImplementCUSmartPtr( castor3d, MeshFactory )
@@ -24,6 +25,7 @@ namespace castor3d
 		registerType( cuT( "plane" ), Plane::create );
 		registerType( cuT( "projection" ), Projection::create );
 		registerType( cuT( "sphere" ), Sphere::create );
+		registerType( cuT( "sphere_section" ), SphereSection::create );
 		registerType( cuT( "torus" ), Torus::create );
 	}
 
