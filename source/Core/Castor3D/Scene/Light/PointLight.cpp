@@ -110,11 +110,11 @@ namespace castor3d
 				for ( uint32_t i = 0; i < lgtpoint::FaceCount; ++i )
 				{
 					result.push_back( data[prv + 0] );
-					result.push_back( data[cur + 0] );
 					result.push_back( data[prv + 1] );
 					result.push_back( data[cur + 0] );
+					result.push_back( data[cur + 0] );
+					result.push_back( data[prv + 1] );
 					result.push_back( data[cur + 1] );
-					result.push_back( data[prv + 1] );
 					prv++;
 					cur++;
 				}

@@ -94,7 +94,32 @@ namespace castor3d
 		ashes::PipelineVertexInputStateCreateInfo vertexLayout = doCreateVertexLayout();
 		crg::VkVertexInputAttributeDescriptionArray vertexAttribs;
 		crg::VkVertexInputBindingDescriptionArray vertexBindings;
-		ashes::PipelineDepthStencilStateCreateInfo depthStencil{ 0u, false, false };
+		ashes::PipelineDepthStencilStateCreateInfo depthStencil{ 0u
+			, VK_FALSE
+			, VK_FALSE
+			, VK_COMPARE_OP_LESS
+			, VK_FALSE
+			, ( m_config.lightType == LightType::eDirectional
+				? VK_FALSE
+				: VK_TRUE )
+			, ( m_config.lightType == LightType::eDirectional
+				? VkStencilOpState{}
+				: VkStencilOpState{ VK_STENCIL_OP_KEEP
+					, VK_STENCIL_OP_KEEP
+					, VK_STENCIL_OP_KEEP
+					, VK_COMPARE_OP_NOT_EQUAL
+					, 0xFFFFFFFFu
+					, 0xFFFFFFFFu
+					, 0x0u } )
+			, ( m_config.lightType == LightType::eDirectional
+				? VkStencilOpState{}
+				: VkStencilOpState{ VK_STENCIL_OP_KEEP
+					, VK_STENCIL_OP_KEEP
+					, VK_STENCIL_OP_KEEP
+					, VK_COMPARE_OP_NOT_EQUAL
+					, 0xFFFFFFFFu
+					, 0xFFFFFFFFu
+					, 0x0u } ) };
 		auto iaState = makeVkStruct< VkPipelineInputAssemblyStateCreateInfo >( 0u
 			, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
 			, VK_FALSE );
@@ -118,6 +143,7 @@ namespace castor3d
 			, 0.0f );
 		VkPipelineVertexInputStateCreateInfo const & vsState = vertexLayout;
 		VkPipelineDepthStencilStateCreateInfo const & dsState = depthStencil;
+		auto nameBase = m_holder.getPass().getGroupName() + "/Lighting";
 
 		for ( uint32_t index = 0u; index < 2u; ++index )
 		{
@@ -151,8 +177,9 @@ namespace castor3d
 				, &createInfo
 				, m_holder.getContext().allocator
 				, &pipeline );
-			crg::checkVkResult( res, m_holder.getPass().getGroupName() + " - Pipeline creation" );
-			crgRegisterObject( m_holder.getContext(), m_holder.getPass().getGroupName(), pipeline );
+			auto name = nameBase + ( index ? std::string{ "/Blend" } : std::string{ "/First" } );
+			crg::checkVkResult( res, name + " - Pipeline creation" );
+			crgRegisterObject( m_holder.getContext(), name, pipeline );
 		}
 	}
 
@@ -239,7 +266,7 @@ namespace castor3d
 			return VK_CULL_MODE_NONE;
 		}
 
-		return VK_CULL_MODE_BACK_BIT;
+		return VK_CULL_MODE_FRONT_BIT;
 	}
 
 	//*********************************************************************************************

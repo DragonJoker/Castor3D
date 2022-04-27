@@ -1,4 +1,4 @@
-#include "Castor3D/Scene/Light/SpotLight.hpp"
+﻿#include "Castor3D/Scene/Light/SpotLight.hpp"
 
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPass.hpp"
@@ -15,12 +15,10 @@ namespace castor3d
 	{
 		static uint32_t constexpr FaceCount = 40;
 
-		static castor::Point2f doCalcSpotLightBCone( const castor3d::SpotLight & light )
+		static float doCalcSpotLightBCone( const castor3d::SpotLight & light )
 		{
-			float length{ getMaxDistance( light
-				, light.getAttenuation() ) };
-			float width{ light.getOuterCutOff().degrees() / ( 45.0f * 2.0f ) };
-			return castor::Point2f{ length * width, length };
+			return getMaxDistance( light
+				, light.getAttenuation() );
 		}
 	}
 
@@ -42,55 +40,56 @@ namespace castor3d
 		return std::unique_ptr< SpotLight >( new SpotLight{ p_light } );
 	}
 
-	castor::Point3fArray const & SpotLight::generateVertices()
+	castor::Point3fArray const & SpotLight::generateVertices( uint32_t angle )
 	{
-		static castor::Point3fArray result;
+		static std::map< uint32_t, castor::Point3fArray > cache;
+		angle += 2u;
+		angle *= 2u;
+		auto & result = cache.emplace( angle, castor::Point3fArray{} ).first->second;
 
 		if ( result.empty() )
 		{
-			auto const angle = castor::Angle::fromDegrees( 360.0f / lgtspot::FaceCount );
-			std::vector< castor::Point2f > arc{ lgtspot::FaceCount + 1 };
-			castor::Angle alpha;
-			castor::Point3fArray data;
-
-			data.reserve( lgtspot::FaceCount * lgtspot::FaceCount * 4 );
+			auto arcAngle = castor::Angle::fromDegrees( float( angle ) ) / ( 2.0f * float( lgtspot::FaceCount ) );
+			std::vector< castor::Point2f > arc( lgtspot::FaceCount + 1u );
+			castor::Angle arcAlpha = 0.0_degrees;
+			float rAlphaI = 0;
+			auto rAngle = castor::PiMult2< float > / float( lgtspot::FaceCount );
 
 			for ( uint32_t i = 0; i <= lgtspot::FaceCount; i++ )
 			{
-				float x = +alpha.sin();
-				float y = -alpha.cos();
-				arc[i][0] = x;
-				arc[i][1] = y;
-				alpha += angle / 2;
+				arc[i]->x = float( arcAlpha.sin() );
+				arc[i]->y = float( arcAlpha.cos() );
+				arcAlpha += arcAngle;
 			}
 
-			castor::Angle iAlpha;
-			castor::Point3f pos;
+			castor::Point3fArray data;
+			// Constitution de la base sphérique
+			data.reserve( ( lgtspot::FaceCount + 1u ) * ( lgtspot::FaceCount + 1u ) );
 
-			for ( uint32_t k = 0; k < lgtspot::FaceCount; ++k )
+			for ( uint32_t k = 0; k < lgtspot::FaceCount; k++ )
 			{
-				auto ptT = arc[k + 0];
-				auto ptB = arc[k + 1];
+				castor::Point2f ptT = arc[k + 0];
+				castor::Point2f ptB = arc[k + 1];
 
 				if ( k == 0 )
 				{
 					// Calcul de la position des points du haut
-					for ( uint32_t i = 0; i <= lgtspot::FaceCount; iAlpha += angle, ++i )
+					for ( uint32_t i = 0; i <= lgtspot::FaceCount; rAlphaI += rAngle, i++ )
 					{
-						auto cos = iAlpha.cos();
-						auto sin = iAlpha.sin();
-						data.emplace_back( ptT[0] * cos, ptT[1], ptT[0] * sin );
+						auto rCos = float( cos( rAlphaI ) );
+						auto rSin = float( sin( rAlphaI ) );
+						data.push_back( castor::Point3f{ ptT->x * rCos, ptT->x * rSin, ptT->y } );
 					}
 				}
 
-				// Calcul de la position des points
-				iAlpha = 0.0_radians;
+				// Calcul de la position des autres points
+				rAlphaI = 0;
 
-				for ( uint32_t i = 0; i <= lgtspot::FaceCount; iAlpha += angle, ++i )
+				for ( uint32_t i = 0; i <= lgtspot::FaceCount; rAlphaI += rAngle, i++ )
 				{
-					auto cos = iAlpha.cos();
-					auto sin = iAlpha.sin();
-					data.emplace_back( ptB[0] * cos, ptB[1], ptB[0] * sin );
+					auto rCos = float( cos( rAlphaI ) );
+					auto rSin = float( sin( rAlphaI ) );
+					data.push_back( { ptB->x * rCos, ptB->x * rSin, ptB->y } );
 				}
 			}
 
@@ -110,11 +109,11 @@ namespace castor3d
 
 				for ( uint32_t i = 0; i < lgtspot::FaceCount; ++i )
 				{
+					result.push_back( data[cur + 0] );
 					result.push_back( data[prv + 0] );
-					result.push_back( data[cur + 0] );
 					result.push_back( data[prv + 1] );
-					result.push_back( data[cur + 0] );
 					result.push_back( data[cur + 1] );
+					result.push_back( data[cur + 0] );
 					result.push_back( data[prv + 1] );
 					prv++;
 					cur++;
@@ -122,6 +121,29 @@ namespace castor3d
 
 				prv++;
 				cur++;
+			}
+
+			castor::Point2f ptA = arc[lgtspot::FaceCount];
+			rAlphaI = 0;
+			data.clear();
+			data.reserve( ( lgtspot::FaceCount + 1u ) * 2 );
+
+			// Calcul de la position des points des côtés
+			for ( uint32_t i = 0; i <= lgtspot::FaceCount; rAlphaI += rAngle, i++ )
+			{
+				auto rCos = float( cos( rAlphaI ) );
+				auto rSin = float( sin( rAlphaI ) );
+				data.push_back( { ptA->x * rCos, ptA->x * rSin, ptA->y } );
+				data.push_back( { 0.0f, 0.0f, 0.0f } );
+			}
+
+			result.reserve( result.size() + lgtspot::FaceCount * 6u );
+
+			for ( uint32_t i = 0; i < 2 * lgtspot::FaceCount; i += 2 )
+			{
+				result.push_back( data[i + 1] );
+				result.push_back( data[i + 0] );
+				result.push_back( data[i + 2] );
 			}
 		}
 
@@ -134,10 +156,10 @@ namespace castor3d
 		auto direction = castor::Point3f{ 0, 0, 1 };
 		node.getDerivedOrientation().transform( direction, direction );
 		m_direction = direction;
-		SpotLight::generateVertices();
+		SpotLight::generateVertices( uint32_t( std::ceil( getOuterCutOff().degrees() ) ) );
 		auto scale = lgtspot::doCalcSpotLightBCone( *this ) / 2.0f;
-		m_cubeBox.load( castor::Point3f{ -scale[0], -scale[0], -scale[1] }
-			, castor::Point3f{ scale[0], scale[0], scale[1] } );
+		m_cubeBox.load( castor::Point3f{ -scale, -scale, -scale }
+			, castor::Point3f{ scale, scale, scale } );
 		m_farPlane = float( castor::point::distance( m_cubeBox.getMin(), m_cubeBox.getMax() ) );
 		m_dirtyData = false;
 	}
@@ -162,6 +184,7 @@ namespace castor3d
 		{
 			m_lightSpace = ( *m_lightProj ) * ( *m_lightView );
 			getLight().onGPUChanged( getLight() );
+			m_dirtyShadow = false;
 		}
 
 		m_shadowMapIndex = index;

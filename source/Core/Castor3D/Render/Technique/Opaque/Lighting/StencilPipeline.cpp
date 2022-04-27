@@ -63,30 +63,35 @@ namespace castor3d
 			, 0.0f
 			, 0.0f );
 		VkPipelineVertexInputStateCreateInfo const & vsState = vertexLayout;
-		ashes::PipelineDepthStencilStateCreateInfo depthStencil;
-		depthStencil->depthTestEnable = VK_TRUE;
-		depthStencil->depthWriteEnable = VK_FALSE;
-		depthStencil->stencilTestEnable = VK_TRUE;
-		depthStencil->back.compareMask = 0u;
-		depthStencil->back.reference = 0u;
-		depthStencil->back.compareOp = VK_COMPARE_OP_ALWAYS;
-		depthStencil->back.failOp = VK_STENCIL_OP_KEEP;
-		depthStencil->back.depthFailOp = VK_STENCIL_OP_INCREMENT_AND_WRAP;
-		depthStencil->back.passOp = VK_STENCIL_OP_KEEP;
-		depthStencil->front.compareMask = 0u;
-		depthStencil->front.reference = 0u;
-		depthStencil->front.compareOp = VK_COMPARE_OP_ALWAYS;
-		depthStencil->front.failOp = VK_STENCIL_OP_KEEP;
-		depthStencil->front.depthFailOp = VK_STENCIL_OP_DECREMENT_AND_WRAP;
-		depthStencil->front.passOp = VK_STENCIL_OP_KEEP;
+		ashes::PipelineDepthStencilStateCreateInfo depthStencil{ 0u
+			, VK_TRUE
+			, VK_FALSE
+			, VK_COMPARE_OP_LESS
+			, VK_FALSE
+			, VK_TRUE
+			, { VK_STENCIL_OP_KEEP
+				, VK_STENCIL_OP_KEEP
+				, VK_STENCIL_OP_INCREMENT_AND_WRAP
+				, VK_COMPARE_OP_ALWAYS
+				, 0u
+				, 0xFFFFFFFFu
+				, 0x0u }
+			, { VK_STENCIL_OP_KEEP
+				, VK_STENCIL_OP_KEEP
+				, VK_STENCIL_OP_DECREMENT_AND_WRAP
+				, VK_COMPARE_OP_ALWAYS
+				, 0u
+				, 0xFFFFFFFFu
+				, 0x0u } };
 		VkPipelineDepthStencilStateCreateInfo dsState = depthStencil;
+		auto nameBase = m_holder.getPass().getGroupName() + "/Stencil";
 
 		for ( uint32_t index = 0u; index < 2u; ++index )
 		{
 			auto viewportState = doCreateViewportState( *m_renderPasses[index].framebuffer );
 			ashes::PipelineColorBlendStateCreateInfo colourBlend;
-			auto & program = m_holder.getProgram( 0u );
-			auto & pipeline = m_holder.getPipeline( 0u );
+			auto & program = m_holder.getProgram( index );
+			auto & pipeline = m_holder.getPipeline( index );
 			VkPipelineColorBlendStateCreateInfo const & cbState = colourBlend;
 			VkPipelineViewportStateCreateInfo const & vpState = viewportState;
 			auto createInfo = makeVkStruct< VkGraphicsPipelineCreateInfo >( 0u
@@ -112,8 +117,9 @@ namespace castor3d
 				, &createInfo
 				, m_holder.getContext().allocator
 				, &pipeline );
-			crg::checkVkResult( res, m_holder.getPass().getGroupName() + " - Pipeline creation" );
-			crgRegisterObject( m_holder.getContext(), m_holder.getPass().getGroupName(), pipeline );
+			auto name = nameBase + ( index ? std::string{ "/Blend" } : std::string{ "/First" } );
+			crg::checkVkResult( res, name + " - Pipeline creation" );
+			crgRegisterObject( m_holder.getContext(), name, pipeline );
 		}
 	}
 
