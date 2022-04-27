@@ -49,7 +49,8 @@ namespace castor3d
 		, LightPassResult const & lpResult
 		, ShadowMapResult const & smResult
 		, std::vector< LightRenderPass > const & renderPasses )
-		: m_context{ context }
+		: m_pass{ pass }
+		, m_context{ context }
 		, m_smResult{ smResult }
 		, m_device{ device }
 		, m_renderPasses{ renderPasses }
@@ -292,13 +293,16 @@ namespace castor3d
 		return result;
 	}
 
-	void LightsPipeline::doRecordLightPass( LightRenderPass const & renderPass
+	void LightsPipeline::doRecordLightPassBase( LightRenderPass const & renderPass
 		, VkDescriptorSet baseDS
 		, size_t lightIndex
 		, crg::RecordContext & context
 		, VkCommandBuffer commandBuffer
-		, uint32_t & index )
+		, uint32_t passIndex )
 	{
+		m_context.vkCmdBeginDebugBlock( commandBuffer
+			, { "Light" + std::to_string( lightIndex ) + "/Lighting"
+				, m_context.getNextRainbowColour() } );
 		VkBuffer vertexBuffer{ m_vertexBuffer.getBuffer() };
 		VkDeviceSize offset{ m_vertexBuffer.getOffset() };
 		VkDescriptorSet specDS = *m_enabledLights[lightIndex]->descriptorSet;
@@ -310,7 +314,7 @@ namespace castor3d
 		m_context.vkCmdBeginRenderPass( commandBuffer
 			, &beginRenderPass
 			, VK_SUBPASS_CONTENTS_INLINE );
-		auto pipeline = m_pipeline.getPipeline( index );
+		auto pipeline = m_pipeline.getPipeline( passIndex );
 		m_context.vkCmdBindPipeline( commandBuffer
 			, VK_PIPELINE_BIND_POINT_GRAPHICS
 			, pipeline );
@@ -341,6 +345,7 @@ namespace castor3d
 			, 0u
 			, 0u );
 		m_context.vkCmdEndRenderPass( commandBuffer );
+		m_context.vkCmdEndDebugBlock( commandBuffer );
 
 		for ( auto & attach : renderPass.attaches )
 		{
@@ -349,6 +354,70 @@ namespace castor3d
 				, crg::getAccessMask( attach.output )
 				, crg::getStageMask( attach.output ) } );
 		}
+	}
+
+	void LightsPipeline::doRecordDirectionalLightPass( LightRenderPass const & renderPass
+		, VkDescriptorSet baseDS
+		, size_t lightIndex
+		, crg::RecordContext & context
+		, VkCommandBuffer commandBuffer
+		, uint32_t passIndex )
+	{
+		doRecordLightPassBase( renderPass
+			, baseDS
+			, lightIndex
+			, context
+			, commandBuffer
+			, passIndex );
+		m_context.vkCmdEndDebugBlock( commandBuffer );
+	}
+
+	void LightsPipeline::doRecordMeshLightPass( LightRenderPass const & renderPass
+		, VkDescriptorSet baseDS
+		, size_t lightIndex
+		, crg::RecordContext & context
+		, VkCommandBuffer commandBuffer
+		, uint32_t passIndex )
+	{
+		doRecordLightPassBase( renderPass
+			, baseDS
+			, lightIndex
+			, context
+			, commandBuffer
+			, passIndex );
+	}
+
+	void LightsPipeline::doRecordLightPass( LightRenderPass const & renderPass
+		, VkDescriptorSet baseDS
+		, size_t lightIndex
+		, crg::RecordContext & context
+		, VkCommandBuffer commandBuffer
+		, uint32_t passIndex )
+	{
+		m_context.vkCmdBeginDebugBlock( commandBuffer
+			, { "Light" + std::to_string( lightIndex )
+				, m_context.getNextRainbowColour() } );
+
+		if ( m_config.lightType == LightType::eDirectional )
+		{
+			doRecordDirectionalLightPass( renderPass
+				, baseDS
+				, lightIndex
+				, context
+				, commandBuffer
+				, passIndex );
+		}
+		else
+		{
+			doRecordMeshLightPass( renderPass
+				, baseDS
+				, lightIndex
+				, context
+				, commandBuffer
+				, passIndex );
+		}
+
+		m_context.vkCmdEndDebugBlock( commandBuffer );
 	}
 
 	//*********************************************************************************************

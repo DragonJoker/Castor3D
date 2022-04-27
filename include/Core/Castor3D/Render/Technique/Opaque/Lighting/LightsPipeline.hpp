@@ -41,14 +41,33 @@ namespace castor3d
 		castor::Matrix4x4f doComputeModelMatrix( castor3d::Light const & light
 			, Camera const & camera )const;
 		GpuBufferOffsetT< float > doCreateVertexBuffer();
+		void doRecordLightPassBase( LightRenderPass const & renderPass
+			, VkDescriptorSet baseDS
+			, size_t lightIndex
+			, crg::RecordContext & context
+			, VkCommandBuffer commandBuffer
+			, uint32_t passIndex );
+		void doRecordDirectionalLightPass( LightRenderPass const & renderPass
+			, VkDescriptorSet baseDS
+			, size_t lightIndex
+			, crg::RecordContext & context
+			, VkCommandBuffer commandBuffer
+			, uint32_t passIndex );
+		void doRecordMeshLightPass( LightRenderPass const & renderPass
+			, VkDescriptorSet baseDS
+			, size_t lightIndex
+			, crg::RecordContext & context
+			, VkCommandBuffer commandBuffer
+			, uint32_t passIndex );
 		void doRecordLightPass( LightRenderPass const & renderPass
 			, VkDescriptorSet baseDS
 			, size_t lightIndex
 			, crg::RecordContext & context
 			, VkCommandBuffer commandBuffer
-			, uint32_t & index );
+			, uint32_t passIndex );
 
 	private:
+		crg::FramePass const & m_pass;
 		crg::GraphContext & m_context;
 		ShadowMapResult const & m_smResult;
 		RenderDevice const & m_device;
