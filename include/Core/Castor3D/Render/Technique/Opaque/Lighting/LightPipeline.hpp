@@ -58,6 +58,8 @@ namespace castor3d
 		MatrixUbo matrixUbo;
 		UniformBufferOffsetT< ModelBufferConfiguration > modelMatrixUbo;
 		ashes::DescriptorSetPtr descriptorSet;
+		GpuBufferOffsetT< float > vertexBuffer;
+		uint32_t angle;
 	};
 
 	class LightPipeline

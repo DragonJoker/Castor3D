@@ -42,7 +42,9 @@ namespace castor3d
 		LightDescriptors & doCreateLightEntry( Light const & light );
 		castor::Matrix4x4f doComputeModelMatrix( castor3d::Light const & light
 			, Camera const & camera )const;
-		GpuBufferOffsetT< float > doCreateVertexBuffer();
+		GpuBufferOffsetT< float > doCreateVertexBuffer( Light const * light );
+		void doUpdateVertexBuffer( GpuBufferOffsetT< float > & vertexBuffer
+			, uint32_t angle );
 		void doRecordLightPassBase( LightRenderPass const & renderPass
 			, VkDescriptorSet baseDS
 			, size_t lightIndex

@@ -91,6 +91,7 @@ namespace castor3d
 	private:
 		ShadowType m_shadowType{ ShadowType::eRaw };
 		castor::Matrix4x4f m_view;
+		float m_angle{};
 	};
 }
 

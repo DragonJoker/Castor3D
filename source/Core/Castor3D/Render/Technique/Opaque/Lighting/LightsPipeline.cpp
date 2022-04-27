@@ -20,17 +20,15 @@ namespace castor3d
 {
 	namespace drlgtpass
 	{
-		static castor::Point2f calcSpotLightBCone( const castor3d::SpotLight & light
+		static float calcLightScale( const castor3d::SpotLight & light
 			, float max )
 		{
-			float length{ getMaxDistance( light
+			return getMaxDistance( light
 				, light.getAttenuation()
-				, max ) };
-			float width{ light.getOuterCutOff().degrees() / ( 45.0f ) };
-			return castor::Point2f{ length * width, length };
+				, max );
 		}
 
-		static float calcPointLightBSphere( const castor3d::PointLight & light
+		static float calcLightScale( const castor3d::PointLight & light
 			, float max )
 		{
 			return getMaxDistance( light
@@ -75,7 +73,9 @@ namespace castor3d
 		, m_stencilPipeline{ m_config.lightType == LightType::eDirectional
 			? nullptr
 			: std::make_unique< StencilPipeline >( pass, context, graph, m_device, m_config, stencilRenderPasses, *m_descriptorLayout ) }
-		, m_vertexBuffer{ doCreateVertexBuffer() }
+		, m_vertexBuffer{ m_config.lightType == LightType::eSpot
+			? GpuBufferOffsetT< float >{}
+			: doCreateVertexBuffer( nullptr ) }
 		, m_viewport{ *device.renderSystem.getEngine() }
 	{
 		m_viewport.setOrtho( -1, 1, -1, 1, -1, 1 );
@@ -227,6 +227,28 @@ namespace castor3d
 			result.descriptorSet = m_descriptorPool->createDescriptorSet( 1u );
 			result.descriptorSet->setBindings( writes );
 			result.descriptorSet->update();
+
+			if ( m_config.lightType == LightType::eSpot )
+			{
+				result.angle = uint32_t( std::ceil( light.getSpotLight()->getOuterCutOff().degrees() ) );
+				result.vertexBuffer = doCreateVertexBuffer( &light );
+			}
+			else
+			{
+				result.vertexBuffer = m_vertexBuffer;
+			}
+		}
+		else if ( m_config.lightType == LightType::eSpot )
+		{
+			auto & result = *ires.first->second;
+			auto angle = uint32_t( std::ceil( light.getSpotLight()->getOuterCutOff().degrees() ) );
+
+			if ( angle != result.angle )
+			{
+				result.angle = angle;
+				doUpdateVertexBuffer( result.vertexBuffer
+					, result.angle );
+			}
 		}
 
 		return *ires.first->second;
@@ -242,7 +264,7 @@ namespace castor3d
 
 		if ( m_config.lightType == LightType::ePoint )
 		{
-			auto scale = drlgtpass::calcPointLightBSphere( *light.getPointLight()
+			auto scale = drlgtpass::calcLightScale( *light.getPointLight()
 				, float( farZ - castor::point::distance( lightPos, camPos ) - ( farZ / 50.0f ) ) );
 			model = castor::matrix::setTransform( model
 				, lightPos
@@ -251,28 +273,23 @@ namespace castor3d
 		}
 		else
 		{
-			auto scale = drlgtpass::calcSpotLightBCone( *light.getSpotLight()
+			auto scale = drlgtpass::calcLightScale( *light.getSpotLight()
 				, float( farZ - castor::point::distance( lightPos, camPos ) - ( farZ / 50.0f ) ) );
 			model = castor::matrix::setTransform( model
 				, lightPos
-				, castor::Point3f{ scale[0], scale[0], scale[1] }
+				, castor::Point3f{ scale, scale, scale }
 				, light.getParent()->getDerivedOrientation() );
 		}
 
 		return model;
 	}
 
-	GpuBufferOffsetT< float > LightsPipeline::doCreateVertexBuffer()
+	GpuBufferOffsetT< float > LightsPipeline::doCreateVertexBuffer( Light const * light )
 	{
 		GpuBufferOffsetT< float > result;
 
 		if ( m_config.lightType == LightType::eDirectional )
 		{
-			m_count = 6u;
-			result = m_device.bufferPool->getBuffer< float >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
-				, 12u
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
-			auto buffer = result.getData();
 			float data[] =
 			{
 				-1.0f, -1.0f,
@@ -282,21 +299,18 @@ namespace castor3d
 				-1.0f, +1.0f,
 				+1.0f, +1.0f,
 			};
+			m_count = 6u;
+			result = m_device.bufferPool->getBuffer< float >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
+				, 12u
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+			auto buffer = result.getData();
 			std::memcpy( buffer.data(), data, sizeof( data ) );
 		}
 		else
 		{
-			castor::Point3fArray data;
-
-			if ( m_config.lightType == LightType::ePoint )
-			{
-				data = PointLight::generateVertices();
-			}
-			else
-			{
-				data = SpotLight::generateVertices();
-			}
-
+			auto & data = m_config.lightType == LightType::ePoint
+				? PointLight::generateVertices()
+				: SpotLight::generateVertices( uint32_t( std::ceil( light->getSpotLight()->getOuterCutOff().degrees() ) ) );
 			m_count = uint32_t( data.size() );
 			result = m_device.bufferPool->getBuffer< float >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
 				, uint32_t( data.size() * 3u )
@@ -310,6 +324,16 @@ namespace castor3d
 		return result;
 	}
 
+	void LightsPipeline::doUpdateVertexBuffer( GpuBufferOffsetT< float > & vertexBuffer
+		, uint32_t angle )
+	{
+		auto & data = SpotLight::generateVertices( angle );
+		auto buffer = vertexBuffer.getData();
+		std::memcpy( buffer.data(), data.data()->constPtr(), vertexBuffer.getSize() );
+		vertexBuffer.markDirty( VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+			, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+	}
+
 	void LightsPipeline::doRecordLightPassBase( LightRenderPass const & renderPass
 		, VkDescriptorSet baseDS
 		, size_t lightIndex
@@ -320,9 +344,10 @@ namespace castor3d
 		m_context.vkCmdBeginDebugBlock( commandBuffer
 			, { "Light" + std::to_string( lightIndex ) + "/Lighting"
 				, m_context.getNextRainbowColour() } );
-		VkBuffer vertexBuffer{ m_vertexBuffer.getBuffer() };
-		VkDeviceSize offset{ m_vertexBuffer.getOffset() };
-		VkDescriptorSet specDS = *m_enabledLights[lightIndex]->descriptorSet;
+		auto & entry = *m_enabledLights[lightIndex];
+		VkBuffer vertexBuffer{ entry.vertexBuffer.getBuffer() };
+		VkDeviceSize offset{ entry.vertexBuffer.getOffset() };
+		VkDescriptorSet specDS = *entry.descriptorSet;
 		auto beginRenderPass = makeVkStruct< VkRenderPassBeginInfo >( *renderPass.renderPass
 			, *renderPass.framebuffer
 			, VkRect2D{ {}, renderPass.framebuffer->getDimensions() }
@@ -398,9 +423,10 @@ namespace castor3d
 		m_context.vkCmdBeginDebugBlock( commandBuffer
 			, { "Light" + std::to_string( lightIndex ) + "/Stencil"
 				, m_context.getNextRainbowColour() } );
-		VkBuffer vertexBuffer{ m_vertexBuffer.getBuffer() };
-		VkDeviceSize offset{ m_vertexBuffer.getOffset() };
-		VkDescriptorSet specDS = *m_enabledLights[lightIndex]->descriptorSet;
+		auto & entry = *m_enabledLights[lightIndex];
+		VkBuffer vertexBuffer{ entry.vertexBuffer.getBuffer() };
+		VkDeviceSize offset{ entry.vertexBuffer.getOffset() };
+		VkDescriptorSet specDS = *entry.descriptorSet;
 		auto beginRenderPass = makeVkStruct< VkRenderPassBeginInfo >( *renderPass.renderPass
 			, *renderPass.framebuffer
 			, VkRect2D{ {}, renderPass.framebuffer->getDimensions() }
