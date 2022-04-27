@@ -41,6 +41,12 @@ namespace castor3d
 		castor::Matrix4x4f doComputeModelMatrix( castor3d::Light const & light
 			, Camera const & camera )const;
 		GpuBufferOffsetT< float > doCreateVertexBuffer();
+		void doRecordLightPass( LightRenderPass const & renderPass
+			, VkDescriptorSet baseDS
+			, size_t lightIndex
+			, crg::RecordContext & context
+			, VkCommandBuffer commandBuffer
+			, uint32_t & index );
 
 	private:
 		crg::GraphContext & m_context;
