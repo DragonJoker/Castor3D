@@ -46,6 +46,9 @@ namespace castor3d
 		std::vector< Entry > attaches;
 	};
 
+	uint32_t getLightRenderPassIndex( bool blend
+		, LightType lightType );
+
 	struct LightDescriptors
 	{
 		explicit LightDescriptors( Light const & light
