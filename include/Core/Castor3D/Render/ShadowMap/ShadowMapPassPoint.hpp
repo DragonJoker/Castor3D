@@ -78,6 +78,7 @@ namespace castor3d
 	private:
 		OnSceneNodeChangedConnection m_onNodeChanged;
 		castor::Matrix4x4f m_projection;
+		uint32_t m_count{};
 	};
 }
 
