@@ -83,14 +83,14 @@ namespace castor3d
 				{
 					castor3d::InterleavedVertexArray result;
 					result.resize( 8u );
-					result[size_t( FrustumCorner::eFarLeftBottom )].position( castor::Point3f{ -1, -1, +1 } );
-					result[size_t( FrustumCorner::eFarLeftTop )].position( castor::Point3f{ -1, +1, +1 } );
-					result[size_t( FrustumCorner::eFarRightTop )].position( castor::Point3f{ +1, +1, +1 } );
-					result[size_t( FrustumCorner::eFarRightBottom )].position( castor::Point3f{ +1, -1, +1 } );
-					result[size_t( FrustumCorner::eNearLeftBottom )].position( castor::Point3f{ -1, -1, -1 } );
-					result[size_t( FrustumCorner::eNearLeftTop )].position( castor::Point3f{ -1, +1, -1 } );
-					result[size_t( FrustumCorner::eNearRightTop )].position( castor::Point3f{ +1, +1, -1 } );
-					result[size_t( FrustumCorner::eNearRightBottom )].position( castor::Point3f{ +1, -1, -1 } );
+					result[size_t( Corner::eFarLeftBottom )].position( castor::Point3f{ -1, -1, +1 } );
+					result[size_t( Corner::eFarLeftTop )].position( castor::Point3f{ -1, +1, +1 } );
+					result[size_t( Corner::eFarRightTop )].position( castor::Point3f{ +1, +1, +1 } );
+					result[size_t( Corner::eFarRightBottom )].position( castor::Point3f{ +1, -1, +1 } );
+					result[size_t( Corner::eNearLeftBottom )].position( castor::Point3f{ -1, -1, -1 } );
+					result[size_t( Corner::eNearLeftTop )].position( castor::Point3f{ -1, +1, -1 } );
+					result[size_t( Corner::eNearRightTop )].position( castor::Point3f{ +1, +1, -1 } );
+					result[size_t( Corner::eNearRightBottom )].position( castor::Point3f{ +1, -1, -1 } );
 					return result;
 				}()
 			};

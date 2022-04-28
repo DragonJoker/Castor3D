@@ -33,28 +33,28 @@ namespace castor3d
 		}
 	}
 
-	castor::String getName( FrustumCorner value )
+	castor::String getName( Corner value )
 	{
 		switch ( value )
 		{
-		case FrustumCorner::eFarLeftBottom:
+		case Corner::eFarLeftBottom:
 			return cuT( "far_left_bottom" );
-		case FrustumCorner::eFarLeftTop:
+		case Corner::eFarLeftTop:
 			return cuT( "far_left_top" );
-		case FrustumCorner::eFarRightTop:
+		case Corner::eFarRightTop:
 			return cuT( "far_right_top" );
-		case FrustumCorner::eFarRightBottom:
+		case Corner::eFarRightBottom:
 			return cuT( "far_right_bottom" );
-		case FrustumCorner::eNearLeftBottom:
+		case Corner::eNearLeftBottom:
 			return cuT( "near_left_bottom" );
-		case FrustumCorner::eNearLeftTop:
+		case Corner::eNearLeftTop:
 			return cuT( "near_left_top" );
-		case FrustumCorner::eNearRightTop:
+		case Corner::eNearRightTop:
 			return cuT( "near_right_top" );
-		case FrustumCorner::eNearRightBottom:
+		case Corner::eNearRightBottom:
 			return cuT( "near_right_bottom" );
 		default:
-			CU_Failure( "Unsupported FrustumCorner" );
+			CU_Failure( "Unsupported Corner" );
 			return castor::cuEmptyString;
 		}
 	}
