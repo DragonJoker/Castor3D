@@ -225,6 +225,12 @@ namespace castor3d
 
 	Scene::~Scene()
 	{
+		if ( m_cleanBackground )
+		{
+			m_cleanBackground->skip();
+			m_cleanBackground = nullptr;
+		}
+
 		m_reflectionMap.reset();
 		m_onSceneNodeChanged.disconnect();
 		m_onGeometryChanged.disconnect();
@@ -326,10 +332,17 @@ namespace castor3d
 		// These ones, being ResourceCache, need to be cleared in destructor only
 		m_meshCache->cleanup();
 
-		getListener().postEvent( makeCpuFunctorEvent( EventType::ePreRender
+		if ( m_cleanBackground )
+		{
+			m_cleanBackground->skip();
+			m_cleanBackground = nullptr;
+		}
+
+		m_cleanBackground = getListener().postEvent( makeCpuFunctorEvent( EventType::ePreRender
 			, [this]()
 			{
 				m_background->cleanup();
+				m_cleanBackground = nullptr;
 			} ) );
 
 		auto & engine = *getEngine();
