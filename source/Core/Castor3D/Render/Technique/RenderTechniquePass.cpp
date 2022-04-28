@@ -160,25 +160,6 @@ namespace castor3d
 	{
 	}
 
-	void RenderTechniquePass::update( GpuUpdater & updater )
-	{
-		doUpdateNodes( m_renderQueue->getRenderNodes()
-			, updater.jitter
-			, updater.info );
-	}
-
-	void RenderTechniquePass::doUpdateNodes( QueueRenderNodes & nodes
-		, castor::Point2f const & jitter
-		, RenderInfo & info )
-	{
-		if ( m_renderQueue->hasNodes() )
-		{
-			RenderNodesPass::doUpdate( nodes.submeshNodes );
-			RenderNodesPass::doUpdate( nodes.instancedSubmeshNodes );
-			RenderNodesPass::doUpdate( nodes.billboardNodes );
-		}
-	}
-
 	void RenderTechniquePass::doUpdateUbos( CpuUpdater & updater )
 	{
 		m_sceneUbo.cpuUpdate( *updater.camera->getScene()

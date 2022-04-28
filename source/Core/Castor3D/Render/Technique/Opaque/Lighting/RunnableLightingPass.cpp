@@ -71,7 +71,19 @@ namespace castor3d
 
 	bool RunnableLightingPass::hasEnabledLights()const
 	{
-		return !m_pipelines.empty();
+		return getEnabledLightsCount() != 0u;
+	}
+
+	uint32_t RunnableLightingPass::getEnabledLightsCount()const
+	{
+		uint32_t result{};
+
+		for ( auto & pipeline : m_pipelines )
+		{
+			result += pipeline.second->getLightCount();
+		}
+
+		return result;
 	}
 
 	void RunnableLightingPass::doInitialise()

@@ -166,7 +166,6 @@ namespace castor3d
 			auto & myCamera = pass.getCuller().getCamera();
 			light.getSpotLight()->updateShadow( myCamera
 				, int32_t( updater.index ) );
-			pass.update( updater );
 		}
 	}
 

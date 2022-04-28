@@ -217,15 +217,6 @@ namespace castor3d
 		C3D_API virtual void update( CpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief			Updates the render pass, GPU wise.
-		 *\param[in, out]	updater	The update data.
-		 *\~french
-		 *\brief			Met à jour la passe de rendu, au niveau GPU.
-		 *\param[in, out]	updater	Les données d'update.
-		 */
-		C3D_API virtual void update( GpuUpdater & updater );
-		/**
-		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags.
 		 *\param[in]	flags	The pipeline flags.
 		 *\~french
@@ -532,69 +523,6 @@ namespace castor3d
 			, uint32_t index );
 
 	protected:
-		/**
-		 *\~english
-		 *\brief		Updates instantiated submeshes.
-		 *\param[in]	nodes	The render nodes.
-		 *\~french
-		 *\brief		Met à jour des sous maillages instanciés.
-		 *\param[in]	nodes	Les noeuds de rendu.
-		 */
-		C3D_API void doUpdate( SubmeshRenderNodesPtrByPipelineMap & nodes );
-		/**
-		 *\~english
-		 *\brief			Updates instantiated submeshes.
-		 *\param[in]		nodes	The render nodes.
-		 *\param[in, out]	info	Receives the render informations.
-		 *\~french
-		 *\brief			Met à jour des sous maillages instanciés.
-		 *\param[in]		nodes	Les noeuds de rendu.
-		 *\param[in,out]	info	Reçoit les informations de rendu.
-		 */
-		C3D_API void doUpdate( SubmeshRenderNodesPtrByPipelineMap & nodes
-			, RenderInfo & info );
-		/**
-		 *\~english
-		 *\brief		Updates non instantiated submeshes.
-		 *\param[in]	nodes	The render nodes.
-		 *\~french
-		 *\brief		Met à jour des sous maillages non instanciés.
-		 *\param[in]	nodes	Les noeuds de rendu.
-		 */
-		C3D_API void doUpdate( SubmeshRenderNodePtrByPipelineMap & nodes );
-		/**
-		 *\~english
-		 *\brief			Updates non instantiated submeshes.
-		 *\param[in]		nodes	The render nodes.
-		 *\param[in, out]	info	Receives the render informations.
-		 *\~french
-		 *\brief			Met à jour des sous maillages non instanciés.
-		 *\param[in]		nodes	Les noeuds de rendu.
-		 *\param[in,out]	info	Reçoit les informations de rendu.
-		 */
-		C3D_API void doUpdate( SubmeshRenderNodePtrByPipelineMap & nodes
-			, RenderInfo & info );
-		/**
-		 *\~english
-		 *\brief		Updates billboards.
-		 *\param[in]	nodes	The render nodes.
-		 *\~french
-		 *\brief		Met à jour des billboards.
-		 *\param[in]	nodes	Les noeuds de rendu.
-		 */
-		C3D_API void doUpdate( BillboardRenderNodePtrByPipelineMap & nodes );
-		/**
-		 *\~english
-		 *\brief			Updates billboards.
-		 *\param[in]		nodes		The render nodes.
-		 *\param[in, out]	info		Receives the render informations.
-		 *\~french
-		 *\brief			Met à jour des billboards.
-		 *\param[in]		nodes	Les noeuds de rendu.
-		 *\param[in,out]	info	Reçoit les informations de rendu.
-		 */
-		C3D_API void doUpdate( BillboardRenderNodePtrByPipelineMap & nodes
-			, RenderInfo & info );
 		/**
 		 *\~english
 		 *\brief		Updates the specific data.

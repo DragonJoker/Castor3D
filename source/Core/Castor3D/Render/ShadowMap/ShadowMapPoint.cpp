@@ -183,7 +183,6 @@ namespace castor3d
 			{
 				auto & pass = static_cast< ShadowMapPassPoint & >( *myPasses.passes[face]->pass );
 				updater.index = face - offset;
-				pass.update( updater );
 				pass.updateFrustum( pointLight.getViewMatrix( CubeMapFace( updater.index ) ) );
 			}
 		}

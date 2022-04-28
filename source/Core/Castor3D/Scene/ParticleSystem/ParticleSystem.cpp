@@ -4,7 +4,7 @@
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Cache/BillboardCache.hpp"
 #include "Castor3D/Material/Material.hpp"
-#include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Render/RenderInfo.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -218,6 +218,7 @@ namespace castor3d
 		updater.time = m_time;
 		updater.total = m_totalTime;
 		m_activeParticlesCount = m_impl->update( updater );
+		updater.info.particlesCount += m_activeParticlesCount;
 
 		if ( getBillboards()->getCount() != m_activeParticlesCount )
 		{

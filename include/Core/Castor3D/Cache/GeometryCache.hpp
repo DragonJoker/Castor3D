@@ -72,8 +72,6 @@ namespace castor3d
 		 *\brief		Destructeur.
 		 */
 		C3D_API ~ObjectCacheT()override = default;
-
-		C3D_API void fillInfo( RenderInfo & info )const;
 		/**
 		 *\~english
 		 *\brief		Adds an object.

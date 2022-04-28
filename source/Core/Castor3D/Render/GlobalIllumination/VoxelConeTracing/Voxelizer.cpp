@@ -150,14 +150,6 @@ namespace castor3d
 		}
 	}
 
-	void Voxelizer::update( GpuUpdater & updater )
-	{
-		if ( m_voxelizePass )
-		{
-			m_voxelizePass->update( updater );
-		}
-	}
-
 	void Voxelizer::accept( RenderTechniqueVisitor & visitor )
 	{
 		visitor.visit( "Voxelisation First Bounce"

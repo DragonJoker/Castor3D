@@ -615,7 +615,6 @@ namespace castor3d
 				if ( camera )
 				{
 					getEngine()->getRenderSystem()->pushScene( scene );
-					scene->getGeometryCache().fillInfo( info );
 					result = doRender( device, info, queue, getCamera(), signalsToWait );
 					getEngine()->getRenderSystem()->popScene();
 				}

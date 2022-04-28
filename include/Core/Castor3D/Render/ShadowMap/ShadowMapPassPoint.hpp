@@ -60,15 +60,8 @@ namespace castor3d
 		 *\copydoc		castor3d::ShadowMapPass::update
 		 */
 		C3D_API void update( CpuUpdater & updater )override;
-		/**
-		 *\copydoc		castor3d::ShadowMapPass::update
-		 */
-		C3D_API void update( GpuUpdater & updater )override;
 
 		C3D_API void updateFrustum( castor::Matrix4x4f const & viewMatrix );
-
-	protected:
-		void doUpdateNodes( QueueRenderNodes & nodes );
 
 	private:
 		void doUpdateUbos( CpuUpdater & updater )override;

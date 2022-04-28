@@ -29,7 +29,7 @@ namespace castor3d
 				, crg::defaultV< crg::ProgramCreator >
 				, std::vector< VkDescriptorSetLayout >{ descriptorSetLayout } }
 			, VK_PIPELINE_BIND_POINT_GRAPHICS
-			, 1u }
+			, 2u }
 		, m_renderPasses{ renderPasses }
 	{
 		m_holder.initialise();
