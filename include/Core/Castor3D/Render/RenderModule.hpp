@@ -214,7 +214,7 @@ namespace castor3d
 	*\brief
 	*	Enumération des coins d'un frustum
 	*/
-	enum class FrustumCorner
+	enum class Corner
 	{
 		//!\~english	Far left bottom corner.
 		//!\~french		Coin éloigné bas gauche.
@@ -242,7 +242,7 @@ namespace castor3d
 		eNearRightBottom = 7,
 		CU_ScopedEnumBounds( eFarLeftBottom, eNearRightBottom )
 	};
-	C3D_API castor::String getName( FrustumCorner value );
+	C3D_API castor::String getName( Corner value );
 	/**
 	*\~english
 	*\brief
