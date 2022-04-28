@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightingModule.hpp"
 
+#include "Castor3D/Buffer/GpuBufferOffset.hpp"
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
