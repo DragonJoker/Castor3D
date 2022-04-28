@@ -158,31 +158,12 @@ namespace castor3d
 		{
 			getCuller().update( updater );
 			RenderNodesPass::update( updater );
-		}
-	}
-
-	void VoxelizePass::update( GpuUpdater & updater )
-	{
-		if ( m_voxelConfig.enabled )
-		{
-			auto & nodes = m_renderQueue->getRenderNodes();
-
-			if ( m_renderQueue->hasNodes() )
-			{
-				RenderNodesPass::doUpdate( nodes.submeshNodes, updater.info );
-				RenderNodesPass::doUpdate( nodes.instancedSubmeshNodes, updater.info );
-				RenderNodesPass::doUpdate( nodes.billboardNodes, updater.info );
-			}
-
-			static const castor::Matrix4x4f identity
-			{
-				[]()
+			static const castor::Matrix4x4f identity{ []()
 				{
 					castor::Matrix4x4f res;
 					res.setIdentity();
 					return res;
-			}( )
-			};
+				}() };
 			//Orthograhic projection
 			auto sceneBoundingBox = m_scene.getBoundingBox();
 			auto ortho = castor::matrix::ortho( sceneBoundingBox.getMin()->x

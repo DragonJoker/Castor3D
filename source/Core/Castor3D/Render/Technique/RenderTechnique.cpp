@@ -13,12 +13,14 @@
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp"
+#include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 #include "Castor3D/Render/Passes/BackgroundPass.hpp"
 #include "Castor3D/Render/Passes/ComputeDepthRange.hpp"
 #include "Castor3D/Render/Passes/DepthPass.hpp"
@@ -312,6 +314,57 @@ namespace castor3d
 			for ( auto & renderPass : renderPasses )
 			{
 				action( *renderPass );
+			}
+		}
+
+		static void countNodes( RenderNodesPass const & renderPass
+			, RenderInfo & info )
+		{
+
+			for ( auto & pipelineNodes : renderPass.getCuller().getSubmeshNodes( renderPass ) )
+			{
+				for ( auto & bufferNodes : pipelineNodes.second )
+				{
+					for ( auto & sidedNode : bufferNodes.second )
+					{
+						if ( sidedNode.first.visible )
+						{
+							++info.visibleObjectsCount;
+							info.visibleFaceCount += sidedNode.first.node->data.getFaceCount();
+							info.visibleVertexCount += sidedNode.first.node->data.getPointsCount();
+						}
+
+						++info.totalObjectsCount;
+						info.totalFaceCount += sidedNode.first.node->data.getFaceCount();
+						info.totalVertexCount += sidedNode.first.node->data.getPointsCount();
+					}
+				}
+			}
+
+			for ( auto & pipelineNodes : renderPass.getCuller().getInstancedSubmeshNodes( renderPass ) )
+			{
+				for ( auto & bufferNodes : pipelineNodes.second )
+				{
+					for ( auto & passNodes : bufferNodes.second )
+					{
+						for ( auto & dataNodes : passNodes.second )
+						{
+							for ( auto & sidedNode : dataNodes.second )
+							{
+								if ( sidedNode.first.visible )
+								{
+									++info.visibleObjectsCount;
+									info.visibleFaceCount += sidedNode.first.node->data.getFaceCount();
+									info.visibleVertexCount += sidedNode.first.node->data.getPointsCount();
+								}
+
+								++info.totalObjectsCount;
+								info.totalFaceCount += sidedNode.first.node->data.getFaceCount();
+								info.totalVertexCount += sidedNode.first.node->data.getPointsCount();
+							}
+						}
+					}
+				}
 			}
 		}
 	}
@@ -709,51 +762,11 @@ namespace castor3d
 			scene.getEnvironmentMap().update( updater );
 		}
 
-		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeDepth )]
-			, [&updater]( RenderTechniquePass & renderPass )
-			{
-				renderPass.update( updater );
-			} );
-		m_depthPass->update( updater );
-		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeBackground )]
-			, [&updater]( RenderTechniquePass & renderPass )
-			{
-				renderPass.update( updater );
-			} );
-		m_backgroundRenderer->update( updater );
-
-		if ( updater.voxelConeTracing )
-		{
-			m_voxelizer->update( updater );
-		}
-
-		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeOpaque )]
-			, [&updater]( RenderTechniquePass & renderPass )
-			{
-				renderPass.update( updater );
-			} );
-
-		if ( m_opaquePass )
-		{
-			static_cast< rendtech::OpaquePassType & >( *m_opaquePass ).update( updater );
-		}
-
-		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeTransparent )]
-			, [&updater]( RenderTechniquePass & renderPass )
-			{
-				renderPass.update( updater );
-			} );
-
-		if ( m_transparentPass )
-		{
-			static_cast< rendtech::TransparentPassType & >( *m_transparentPass ).update( updater );
-		}
-
-		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforePostEffects )]
-			, [&updater]( RenderTechniquePass & renderPass )
-			{
-				renderPass.update( updater );
-			} );
+#if C3D_UseDeferredRendering
+		m_deferredRendering->update( updater );
+#endif
+		rendtech::countNodes( *m_opaquePass, updater.info );
+		rendtech::countNodes( *m_transparentPass, updater.info );
 	}
 
 	crg::SemaphoreWaitArray RenderTechnique::preRender( crg::SemaphoreWaitArray const & toWait

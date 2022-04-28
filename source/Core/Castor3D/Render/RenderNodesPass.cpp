@@ -55,26 +55,6 @@ namespace castor3d
 
 	namespace rendndpass
 	{
-		static uint32_t getPrimitiveCount( Submesh const & submesh )
-		{
-			return submesh.getFaceCount();
-		}
-
-		static uint32_t getPrimitiveCount( BillboardBase const & instance )
-		{
-			return instance.getCount() * 2u;
-		}
-
-		static uint32_t getVertexCount( Submesh const & submesh )
-		{
-			return submesh.getPointsCount();
-		}
-
-		static uint32_t getVertexCount( BillboardBase const & instance )
-		{
-			return instance.getCount();
-		}
-
 		template< typename PipelineContT >
 		static auto findPipeline( PipelineFlags const & flags
 			, PipelineContT & pipelines )
@@ -154,10 +134,6 @@ namespace castor3d
 		doUpdate( *updater.queues );
 		doUpdateUbos( updater );
 		m_isDirty = false;
-	}
-
-	void RenderNodesPass::update( GpuUpdater & updater )
-	{
 	}
 
 	ShaderPtr RenderNodesPass::getVertexShaderSource( PipelineFlags const & flags )const
@@ -515,86 +491,6 @@ namespace castor3d
 		m_context.vkCmdExecuteCommands( commandBuffer
 			, 1u
 			, &secondary );
-	}
-
-	void RenderNodesPass::doUpdate( SubmeshRenderNodesPtrByPipelineMap & nodes )
-	{
-	}
-
-	void RenderNodesPass::doUpdate( SubmeshRenderNodesPtrByPipelineMap & nodes
-		, RenderInfo & info )
-	{
-		doUpdate( nodes );
-
-		for ( auto & itPipelines : nodes )
-		{
-			for ( auto & itBuffers : itPipelines.second.second )
-			{
-				for ( auto & itPass : itBuffers.second )
-				{
-					for ( auto & itSubmeshes : itPass.second )
-					{
-						auto & instantiation = itSubmeshes.first->getInstantiation();
-						auto it = instantiation.find( *itPass.first->getOwner() );
-
-						if ( !itSubmeshes.second.empty()
-							&& it != instantiation.end()
-							&& it->second.buffer )
-						{
-							auto const count = std::min( uint32_t( it->second.data.size() )
-								, uint32_t( itSubmeshes.second.size() ) );
-							info.m_visibleFaceCount += itSubmeshes.first->getFaceCount() * count;
-							info.m_visibleVertexCount += itSubmeshes.first->getPointsCount() * count;
-							++info.m_drawCalls;
-						}
-					}
-				}
-			}
-		}
-	}
-
-	namespace rendndpass
-	{
-		template< typename NodeT >
-		inline void doUpdateInfos( NodePtrByPipelineMapT< NodeT > & nodes
-			, RenderInfo & info )
-		{
-			for ( auto & itPipelines : nodes )
-			{
-				for ( auto & itBuffers : itPipelines.second.second )
-				{
-					for ( auto & renderNode : itBuffers.second )
-					{
-						info.m_visibleFaceCount += getPrimitiveCount( renderNode->data );
-						info.m_visibleVertexCount += getVertexCount( renderNode->data );
-						++info.m_drawCalls;
-						++info.m_visibleObjectsCount;
-					}
-				}
-			}
-		}
-	}
-
-	void RenderNodesPass::doUpdate( SubmeshRenderNodePtrByPipelineMap & nodes )
-	{
-	}
-
-	void RenderNodesPass::doUpdate( SubmeshRenderNodePtrByPipelineMap & nodes
-		, RenderInfo & info )
-	{
-		doUpdate( nodes );
-		rendndpass::doUpdateInfos( nodes, info );
-	}
-
-	void RenderNodesPass::doUpdate( BillboardRenderNodePtrByPipelineMap & nodes )
-	{
-	}
-
-	void RenderNodesPass::doUpdate( BillboardRenderNodePtrByPipelineMap & nodes
-		, RenderInfo & info )
-	{
-		doUpdate( nodes );
-		rendndpass::doUpdateInfos( nodes, info );
 	}
 
 	void RenderNodesPass::doUpdate( RenderQueueArray & queues )

@@ -373,7 +373,6 @@ namespace castor3d
 				}
 
 				updater.index = cascade;
-				myPasses.passes[cascade]->pass->update( updater );
 			}
 		}
 	}

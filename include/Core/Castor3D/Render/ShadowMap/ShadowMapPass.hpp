@@ -97,17 +97,6 @@ namespace castor3d
 		}
 		/**@}*/
 
-	protected:
-		/**
-		 *\~english
-		 *\brief		Updates the given nodes.
-		 *\param		nodes	The nodes.
-		 *\~french
-		 *\brief		Met à jour les noeuds donnés.
-		 *\param		nodes	Les noeuds.
-		 */
-		void doUpdateNodes( QueueRenderNodes & nodes );
-
 	private:
 		bool doIsValidRenderable( RenderedObject const & object )const override;
 		void doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;

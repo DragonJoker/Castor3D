@@ -73,6 +73,15 @@ namespace castor3d
 		 */
 		void update( CpuUpdater & updater );
 		/**
+		 *\~english
+		 *\brief			Updates the render pass, GPU wise.
+		 *\param[in, out]	updater	The update data.
+		 *\~french
+		 *\brief			Met à jour la passe de rendu, au niveau GPU.
+		 *\param[in, out]	updater	Les données d'update.
+		 */
+		void update( GpuUpdater & updater );
+		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		void accept( PipelineVisitorBase & visitor );

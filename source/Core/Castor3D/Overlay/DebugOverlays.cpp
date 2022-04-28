@@ -685,34 +685,34 @@ namespace castor3d
 			, m_averageFps );
 		m_debugPanel->addCountPanel( cuT( "TotalVertexCount" )
 			, cuT( "Vertices Count:" )
-			, m_renderInfo.m_totalVertexCount );
+			, m_renderInfo.totalVertexCount );
 		m_debugPanel->addCountPanel( cuT( "TotalFaceCount" )
 			, cuT( "Faces Count:" )
-			, m_renderInfo.m_totalFaceCount );
+			, m_renderInfo.totalFaceCount );
 		m_debugPanel->addCountPanel( cuT( "TotalObjectCount" )
 			, cuT( "Objects Count:" )
-			, m_renderInfo.m_totalObjectsCount );
+			, m_renderInfo.totalObjectsCount );
 		m_debugPanel->addCountPanel( cuT( "VisibleVertexCount" )
 			, cuT( "Visible Vertices Count:" )
-			, m_renderInfo.m_visibleVertexCount );
+			, m_renderInfo.visibleVertexCount );
 		m_debugPanel->addCountPanel( cuT( "VisibleFaceCount" )
 			, cuT( "Visible Faces Count:" )
-			, m_renderInfo.m_visibleFaceCount );
+			, m_renderInfo.visibleFaceCount );
 		m_debugPanel->addCountPanel( cuT( "VisibleObjectCount" )
 			, cuT( "Visible Objects Count:" )
-			, m_renderInfo.m_visibleObjectsCount );
+			, m_renderInfo.visibleObjectsCount );
 		m_debugPanel->addCountPanel( cuT( "ParticlesCount" )
 			, cuT( "Particles Count:" )
-			, m_renderInfo.m_particlesCount );
+			, m_renderInfo.particlesCount );
 		m_debugPanel->addCountPanel( cuT( "LightCount" )
 			, cuT( "Lights Count:" )
-			, m_renderInfo.m_totalLightsCount );
+			, m_renderInfo.totalLightsCount );
 		m_debugPanel->addCountPanel( cuT( "VisibleLightCount" )
 			, cuT( "Visible Lights Count:" )
-			, m_renderInfo.m_visibleLightsCount );
+			, m_renderInfo.visibleLightsCount );
 		m_debugPanel->addCountPanel( cuT( "DrawCalls" )
 			, cuT( "Draw calls:" )
-			, m_renderInfo.m_drawCalls );
+			, m_renderInfo.drawCalls );
 		m_debugPanel->updatePosition();
 		m_debugPanel->setVisible( m_visible );
 	}

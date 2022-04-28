@@ -32,6 +32,7 @@ namespace castor3d
 			, Light const & light );
 		void resetCommandBuffer();
 		bool hasEnabledLights()const;
+		uint32_t getEnabledLightsCount()const;
 
 	protected:
 		void doInitialise();

@@ -106,14 +106,6 @@ namespace castor3d
 		RenderNodesPass::update( updater );
 	}
 
-	void ShadowMapPassPoint::update( GpuUpdater & updater )
-	{
-		if ( m_initialised )
-		{
-			doUpdateNodes( m_renderQueue->getRenderNodes() );
-		}
-	}
-
 	void ShadowMapPassPoint::updateFrustum( castor::Matrix4x4f const & viewMatrix )
 	{
 		static_cast< FrustumCuller & >( getCuller() ).updateFrustum( m_projection, viewMatrix );
@@ -134,13 +126,6 @@ namespace castor3d
 			, farPlane );
 		m_matrixUbo.cpuUpdate( pointLight.getViewMatrix( CubeMapFace( updater.index ) )
 			, m_projection );
-	}
-
-	void ShadowMapPassPoint::doUpdateNodes( QueueRenderNodes & nodes )
-	{
-		RenderNodesPass::doUpdate( nodes.submeshNodes );
-		RenderNodesPass::doUpdate( nodes.instancedSubmeshNodes );
-		RenderNodesPass::doUpdate( nodes.billboardNodes );
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo ShadowMapPassPoint::doCreateDepthStencilState( PipelineFlags const & flags )const

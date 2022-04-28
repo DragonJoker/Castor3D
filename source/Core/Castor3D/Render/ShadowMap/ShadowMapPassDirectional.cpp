@@ -106,14 +106,6 @@ namespace castor3d
 		RenderNodesPass::update( updater );
 	}
 
-	void ShadowMapPassDirectional::update( GpuUpdater & updater )
-	{
-		if ( m_initialised )
-		{
-			doUpdateNodes( m_renderQueue->getRenderNodes() );
-		}
-	}
-
 	void ShadowMapPassDirectional::doUpdateUbos( CpuUpdater & updater )
 	{
 		RenderNodesPass::doUpdateUbos( updater );
