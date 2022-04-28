@@ -101,8 +101,10 @@ namespace castor3d
 	void ShadowMapPassPoint::update( CpuUpdater & updater )
 	{
 		getCuller().update( updater );
-		m_outOfDate = m_outOfDate
+		m_outOfDate = ++m_count < 3u
+			|| m_outOfDate
 			|| getCuller().areAnyChanged();
+		m_count = std::min( m_count, 2u );
 		RenderNodesPass::update( updater );
 	}
 
