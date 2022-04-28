@@ -9,7 +9,6 @@
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
-#include "Castor3D/Render/RenderInfo.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
@@ -96,21 +95,6 @@ namespace castor3d
 			, MovableAttacherT< GeometryCache >{}
 			, MovableDetacherT< GeometryCache >{} }
 	{
-	}
-
-	void ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::fillInfo( RenderInfo & info )const
-	{
-		auto lock( castor::makeUniqueLock( *this ) );
-
-		for ( auto element : *this )
-		{
-			if ( auto mesh = element.second->getMesh().lock() )
-			{
-				info.m_totalObjectsCount += mesh->getSubmeshCount();
-				info.m_totalVertexCount += mesh->getVertexCount();
-				info.m_totalFaceCount += mesh->getFaceCount();
-			}
-		}
 	}
 
 	void ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::add( ElementPtrT element )

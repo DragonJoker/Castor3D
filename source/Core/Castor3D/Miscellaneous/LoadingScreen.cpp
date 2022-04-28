@@ -357,8 +357,6 @@ namespace castor3d
 
 			m_scene->update( updater );
 			m_backgroundRenderer->update( updater );
-			m_opaquePass->update( updater );
-			m_transparentPass->update( updater );
 			m_overlayPass->update( updater );
 
 			updater.camera = oldCamera;

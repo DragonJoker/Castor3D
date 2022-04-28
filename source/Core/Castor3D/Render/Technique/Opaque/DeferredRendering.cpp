@@ -128,6 +128,11 @@ namespace castor3d
 			, camera );
 	}
 
+	void DeferredRendering::update( GpuUpdater & updater )
+	{
+		m_lightingPass->update( updater );
+	}
+
 	void DeferredRendering::accept( RenderTechniqueVisitor & visitor )
 	{
 		visitor.visit( "Opaque Data1"

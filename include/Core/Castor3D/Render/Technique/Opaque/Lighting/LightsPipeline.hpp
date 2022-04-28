@@ -37,6 +37,11 @@ namespace castor3d
 			, VkCommandBuffer commandBuffer
 			, uint32_t & index );
 
+		uint32_t getLightCount()const
+		{
+			return uint32_t( m_enabledLights.size() );
+		}
+
 	private:
 		ashes::DescriptorSetLayoutPtr doCreateDescriptorLayout();
 		LightDescriptors & doCreateLightEntry( Light const & light );

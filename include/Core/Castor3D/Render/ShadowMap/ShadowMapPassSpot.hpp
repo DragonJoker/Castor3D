@@ -58,10 +58,6 @@ namespace castor3d
 		 */
 		C3D_API void update( CpuUpdater & updater )override;
 		/**
-		 *\copydoc		castor3d::ShadowMapPass::update
-		 */
-		C3D_API void update( GpuUpdater & updater )override;
-		/**
 		*\~english
 		*name
 		*	Getters.

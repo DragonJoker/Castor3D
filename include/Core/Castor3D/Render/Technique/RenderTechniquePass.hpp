@@ -188,15 +188,6 @@ namespace castor3d
 		 */
 		C3D_API virtual void accept( RenderTechniqueVisitor & visitor );
 		/**
-		 *\~english
-		 *\brief			Updates the render pass, GPU wise.
-		 *\param[in, out]	updater	The update data.
-		 *\~french
-		 *\brief			Met à jour la passe de rendu, au niveau GPU.
-		 *\param[in, out]	updater	Les données d'update.
-		 */
-		C3D_API void update( GpuUpdater & updater )override;
-		/**
 		*\~english
 		*name
 		*	Getters.
@@ -229,9 +220,6 @@ namespace castor3d
 		using RenderNodesPass::update;
 
 	protected:
-		C3D_API void doUpdateNodes( QueueRenderNodes & nodes
-			, castor::Point2f const & jitter
-			, RenderInfo & info );
 		C3D_API void doUpdateUbos( CpuUpdater & updater )override;
 		C3D_API ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;
 		C3D_API SceneFlags doAdjustSceneFlags( SceneFlags flags )const override;

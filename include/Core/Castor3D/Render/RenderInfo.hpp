@@ -12,34 +12,34 @@ namespace castor3d
 	{
 		//!\~english	The total vertex count.
 		//!\~french		Le nombre total de sommets.
-		uint32_t m_totalVertexCount{ 0u };
+		uint32_t totalVertexCount{ 0u };
 		//!\~english	The total face count.
 		//!\~french		Le nombre total de faces.
-		uint32_t m_totalFaceCount{ 0u };
+		uint32_t totalFaceCount{ 0u };
 		//!\~english	The visble objects vertex count.
 		//!\~french		Le nombre de sommets visibles.
-		uint32_t m_visibleVertexCount{ 0u };
+		uint32_t visibleVertexCount{ 0u };
 		//!\~english	The visible objects face count.
 		//!\~french		Le nombre de faces visibles.
-		uint32_t m_visibleFaceCount{ 0u };
+		uint32_t visibleFaceCount{ 0u };
 		//!\~english	The total object count.
 		//!\~french		Le nombre total d'objets.
-		uint32_t m_totalObjectsCount{ 0u };
+		uint32_t totalObjectsCount{ 0u };
 		//!\~english	The visible objects count.
 		//!\~french		Le nombre d'objets visibles.
-		uint32_t m_visibleObjectsCount{ 0u };
+		uint32_t visibleObjectsCount{ 0u };
 		//!\~english	The particles count.
 		//!\~french		Le nombre de particules.
-		uint32_t m_particlesCount{ 0u };
+		uint32_t particlesCount{ 0u };
 		//!\~english	The total lights count.
 		//!\~french		Le nombre total de lumières.
-		uint32_t m_totalLightsCount{ 0u };
+		uint32_t totalLightsCount{ 0u };
 		//!\~english	The visible lights count.
 		//!\~french		Le nombre de lumières visibles.
-		uint32_t m_visibleLightsCount{ 0u };
+		uint32_t visibleLightsCount{ 0u };
 		//!\~english	The draw calls count.
 		//!\~french		Le nombre d'appels aux fonctions de dessin.
-		uint32_t m_drawCalls{ 0u };
+		uint32_t drawCalls{ 0u };
 	};
 }
 

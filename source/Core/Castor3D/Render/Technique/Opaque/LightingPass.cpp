@@ -6,6 +6,7 @@
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
+#include "Castor3D/Render/RenderInfo.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPassResult.hpp"
@@ -76,6 +77,11 @@ namespace castor3d
 
 			m_lightPass->resetCommandBuffer();
 		}
+	}
+
+	void LightingPass::update( GpuUpdater & updater )
+	{
+		updater.info.visibleLightsCount += m_lightPass->getEnabledLightsCount();
 	}
 
 	void LightingPass::accept( PipelineVisitorBase & visitor )

@@ -136,8 +136,6 @@ namespace castor3d
 
 		m_sceneUbo.cpuUpdate( *updater.scene, updater.camera );
 		m_backgroundRenderer->update( updater );
-		m_opaquePass->update( updater );
-		m_transparentPass->update( updater );
 		updater.camera = oldCamera;
 	}
 

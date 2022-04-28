@@ -53,16 +53,6 @@ namespace castor3d
 	{
 	}
 
-	void ShadowMapPass::doUpdateNodes( QueueRenderNodes & nodes )
-	{
-		if ( m_renderQueue->hasNodes() )
-		{
-			RenderNodesPass::doUpdate( nodes.submeshNodes );
-			RenderNodesPass::doUpdate( nodes.instancedSubmeshNodes );
-			RenderNodesPass::doUpdate( nodes.billboardNodes );
-		}
-	}
-
 	bool ShadowMapPass::doIsValidRenderable( RenderedObject const & object )const
 	{
 		return object.isShadowCaster();
