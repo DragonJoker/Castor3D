@@ -484,6 +484,7 @@ namespace castor3d
 		FramePassTimerUPtr m_timerParticlesGpu;
 		FramePassTimerUPtr m_timerGpuUpdate;
 		FramePassTimerUPtr m_timerMovables;
+		CpuFrameEvent * m_cleanBackground{};
 
 	public:
 		//!\~english	The cameras root node name.

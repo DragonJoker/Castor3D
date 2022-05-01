@@ -399,16 +399,35 @@ namespace Testing
 
 		if ( result )
 		{
-			result = CT_EQUAL( lhs.getBonesCount(), rhs.getBonesCount() );
-			auto itA = lhs.begin();
-			auto const endItA = lhs.end();
-			auto itB = rhs.begin();
-			auto const endItB = rhs.end();
+			result = CT_EQUAL( lhs.getNodes().size(), rhs.getNodes().size() );
+			auto itA = lhs.getNodes().begin();
+			auto const endItA = lhs.getNodes().end();
+			auto itB = rhs.getNodes().begin();
+			auto const endItB = rhs.getNodes().end();
 
 			while ( result && itA != endItA && itB != endItB )
 			{
-				auto boneA = *itA;
-				auto boneB = *itB;
+				auto & nodeA = *itA;
+				auto & nodeB = *itB;
+				CT_REQUIRE( nodeA != nullptr && nodeB != nullptr );
+				result = CT_EQUAL( *nodeA, *nodeB );
+				++itA;
+				++itB;
+			}
+		}
+
+		if ( result )
+		{
+			result = CT_EQUAL( lhs.getBonesCount(), rhs.getBonesCount() );
+			auto itA = lhs.getBones().begin();
+			auto const endItA = lhs.getBones().end();
+			auto itB = rhs.getBones().begin();
+			auto const endItB = rhs.getBones().end();
+
+			while ( result && itA != endItA && itB != endItB )
+			{
+				auto & boneA = *itA;
+				auto & boneB = *itB;
 				CT_REQUIRE( boneA != nullptr && boneB != nullptr );
 				result = CT_EQUAL( *boneA, *boneB );
 				++itA;
@@ -424,7 +443,7 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( Bone const & lhs, Bone const & rhs )
+	bool C3DTestCase::compare( SkeletonNode const & lhs, SkeletonNode const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getName(), rhs.getName() ) };
 		result = result && CT_EQUAL( lhs.getParent() == nullptr, rhs.getParent() == nullptr );
@@ -434,7 +453,15 @@ namespace Testing
 			result = CT_EQUAL( lhs.getParent()->getName(), rhs.getParent()->getName() );
 		}
 
-		result = result && CT_EQUAL( lhs.getOffsetMatrix(), rhs.getOffsetMatrix() );
+		return result;
+	}
+
+	bool C3DTestCase::compare( BoneNode const & lhs, BoneNode const & rhs )
+	{
+		bool result{ compare( static_cast< SkeletonNode const & >( lhs )
+			, static_cast< SkeletonNode const & >( rhs ) ) };
+		result = result && CT_EQUAL( lhs.getInverseTransform(), rhs.getInverseTransform() );
+		result = result && CT_EQUAL( lhs.getId(), rhs.getId() );
 		return result;
 	}
 

@@ -187,6 +187,10 @@ namespace castor3d
 					layoutIt = m_mtxLayouts.emplace( hash
 						, smshcompinst::getInstantiationLayout( programFlags, currentLocation ) ).first;
 				}
+				else
+				{
+					currentLocation = layoutIt->second.vertexAttributeDescriptions.back().location + 1u;
+				}
 
 				buffers.emplace_back( it->second.buffer.getBuffer().getBuffer() );
 				offsets.emplace_back( it->second.buffer.getOffset() );

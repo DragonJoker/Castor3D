@@ -141,6 +141,12 @@ namespace castor3d
 				if ( result )
 				{
 					m_chunk->resetParse();
+					result = doParse_v1_5( obj );
+				}
+
+				if ( result )
+				{
+					m_chunk->resetParse();
 					result = doParse( obj );
 				}
 
@@ -302,6 +308,46 @@ namespace castor3d
 			if ( result )
 			{
 				result = doParse_v1_4( obj );
+				checkError( result, "Couldn't parse chunk." );
+
+				if ( !result )
+				{
+					m_chunk->endParse();
+				}
+			}
+
+			return result;
+		}
+		/**
+		 *\~english
+		 *\brief		From chunk reader function
+		 *\param[out]	obj		The object to read
+		 *\param[in]	chunk	The chunk
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Fonction de lecture à partir d'un chunk
+		 *\param[out]	obj		L'objet à lire
+		 *\param[in]	chunk	Le chunk
+		 *\return		\p false si une erreur quelconque est arrivée
+		 */
+		inline bool parse_v1_5( TParsed & obj
+			, BinaryChunk & chunk )
+		{
+			bool result = true;
+
+			if ( chunk.getChunkType() == ChunkTyper< TParsed >::Value )
+			{
+				m_chunk = &chunk;
+			}
+			else
+			{
+				result = false;
+				checkError( result, "Not a valid chunk for parsed type." );
+			}
+
+			if ( result )
+			{
+				result = doParse_v1_5( obj );
 				checkError( result, "Couldn't parse chunk." );
 
 				if ( !result )
@@ -569,6 +615,20 @@ namespace castor3d
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		C3D_API virtual bool doParse_v1_4( TParsed & obj )
+		{
+			return true;
+		}
+		/**
+		 *\~english
+		 *\brief		Chunk reader function from a chunk of version 1.5.
+		 *\param[out]	obj	The object to read
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Fonction de lecture à partir d'un chunk en version 1.5.
+		 *\param[out]	obj	L'objet à lire
+		 *\return		\p false si une erreur quelconque est arrivée
+		 */
+		C3D_API virtual bool doParse_v1_5( TParsed & obj )
 		{
 			return true;
 		}

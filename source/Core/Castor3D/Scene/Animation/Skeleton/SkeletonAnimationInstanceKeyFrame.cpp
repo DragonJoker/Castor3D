@@ -6,7 +6,7 @@
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Vertex.hpp"
-#include "Castor3D/Model/Skeleton/Bone.hpp"
+#include "Castor3D/Model/Skeleton/BoneNode.hpp"
 #include "Castor3D/Model/Skeleton/BonedVertex.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp"
@@ -44,16 +44,16 @@ namespace castor3d
 
 					if ( boneData.m_weights[0] > 0 )
 					{
-						auto bone = *( skeleton.begin() + boneData.m_ids[0] );
+						auto bone = *( skeleton.getBones().begin() + boneData.m_ids[0] );
 						auto it = keyFrame.find( *bone );
 
 						if ( it != keyFrame.end() )
 						{
-							transform = castor::Matrix4x4f{ it->second * bone->getOffsetMatrix() * boneData.m_weights[0] };
+							transform = castor::Matrix4x4f{ it->second * bone->getInverseTransform() * boneData.m_weights[0] };
 						}
 						else
 						{
-							transform = castor::Matrix4x4f{ bone->getOffsetMatrix() * boneData.m_weights[0] };
+							transform = castor::Matrix4x4f{ bone->getInverseTransform() * boneData.m_weights[0] };
 						}
 					}
 
@@ -61,16 +61,16 @@ namespace castor3d
 					{
 						if ( boneData.m_weights[i] > 0 )
 						{
-							auto bone = *( skeleton.begin() + boneData.m_ids[i] );
+							auto bone = *( skeleton.getBones().begin() + boneData.m_ids[i] );
 							auto it = keyFrame.find( *bone );
 
 							if ( it != keyFrame.end() )
 							{
-								transform += castor::Matrix4x4f{ it->second * bone->getOffsetMatrix() * boneData.m_weights[i] };
+								transform += castor::Matrix4x4f{ it->second * bone->getInverseTransform() * boneData.m_weights[i] };
 							}
 							else
 							{
-								transform += castor::Matrix4x4f{ bone->getOffsetMatrix() * boneData.m_weights[0] };
+								transform += castor::Matrix4x4f{ bone->getInverseTransform() * boneData.m_weights[0] };
 							}
 						}
 					}

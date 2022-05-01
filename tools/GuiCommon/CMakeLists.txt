@@ -18,7 +18,7 @@ set( CastorBinLibraries
 
 set( ${PROJECT_NAME}_DESCRIPTION "${MAIN_PROJECT_NAME} Common GUI tools" )
 set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
-set( ${PROJECT_NAME}_VERSION_MINOR 12 )
+set( ${PROJECT_NAME}_VERSION_MINOR 13 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 set( ${PROJECT_NAME}_HDR_FILES
@@ -131,6 +131,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	Properties/TreeItems/RenderWindowTreeItemProperty.cpp
 	Properties/TreeItems/SceneTreeItemProperty.cpp
 	Properties/TreeItems/SkeletonAnimationTreeItemProperty.cpp
+	Properties/TreeItems/SkeletonNodeTreeItemProperty.cpp
 	Properties/TreeItems/SkeletonTreeItemProperty.cpp
 	Properties/TreeItems/SsaoConfigTreeItemProperty.cpp
 	Properties/TreeItems/SubmeshTreeItemProperty.cpp
@@ -163,6 +164,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	Properties/TreeItems/RenderWindowTreeItemProperty.hpp
 	Properties/TreeItems/SceneTreeItemProperty.hpp
 	Properties/TreeItems/SkeletonAnimationTreeItemProperty.hpp
+	Properties/TreeItems/SkeletonNodeTreeItemProperty.hpp
 	Properties/TreeItems/SkeletonTreeItemProperty.hpp
 	Properties/TreeItems/SsaoConfigTreeItemProperty.hpp
 	Properties/TreeItems/SubmeshTreeItemProperty.hpp

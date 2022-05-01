@@ -5,7 +5,7 @@
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationBone.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationNode.hpp"
-#include "Castor3D/Model/Skeleton/Bone.hpp"
+#include "Castor3D/Model/Skeleton/BoneNode.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp"
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceNode.hpp"
@@ -73,14 +73,14 @@ namespace castor3d
 			: m_keyFrames.begin();
 	}
 
-	SkeletonAnimationInstanceObjectSPtr SkeletonAnimationInstance::getObject( Bone const & bone )const
+	SkeletonAnimationInstanceObjectSPtr SkeletonAnimationInstance::getObject( BoneNode const & bone )const
 	{
 		return getObject( SkeletonAnimationObjectType::eBone, bone.getName() );
 	}
 
-	SkeletonAnimationInstanceObjectSPtr SkeletonAnimationInstance::getObject( castor::String const & name )const
+	SkeletonAnimationInstanceObjectSPtr SkeletonAnimationInstance::getObject( SkeletonNode const & node )const
 	{
-		return getObject( SkeletonAnimationObjectType::eNode, name );
+		return getObject( SkeletonAnimationObjectType::eNode, node.getName() );
 	}
 
 	SkeletonAnimationInstanceObjectSPtr SkeletonAnimationInstance::getObject( SkeletonAnimationObjectType type

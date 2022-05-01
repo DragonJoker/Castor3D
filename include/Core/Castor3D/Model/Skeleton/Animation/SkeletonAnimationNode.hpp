@@ -18,14 +18,11 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	animation	The parent animation.
-		 *\param[in]	name		The node name.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	animation	L'animation parente.
-		 *\param[in]	name		Le nom du noeud.
 		 */
-		C3D_API explicit SkeletonAnimationNode( SkeletonAnimation & animation
-			, castor::String const & name = castor::cuEmptyString );
+		C3D_API explicit SkeletonAnimationNode( SkeletonAnimation & animation );
 		/**
 		 *\~english
 		 *\brief		Move constructor.
@@ -62,15 +59,22 @@ namespace castor3d
 		 *\brief		Récupère le nom de l'objet
 		 *\return		Le nom
 		 */
-		C3D_API castor::String const & getName()const override
+		C3D_API castor::String const & getName()const override;
+
+		void setNode( SkeletonNode & node )
 		{
-			return m_name;
+			m_node = &node;
+		}
+
+		SkeletonNode * getNode()const
+		{
+			return m_node;
 		}
 
 	private:
-		//!\~english	The node name.
-		//!\~french		Le nom du noeud.
-		castor::String m_name;
+		//!\~english	The node.
+		//!\~french		Le noeud.
+		SkeletonNode * m_node;
 
 		friend class BinaryWriter< SkeletonAnimationNode >;
 		friend class BinaryParser< SkeletonAnimationNode >;

@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___GC_BoneTreeItemProperty_H___
-#define ___GC_BoneTreeItemProperty_H___
+#ifndef ___GC_SkeletonNodeTreeItemProperty_H___
+#define ___GC_SkeletonNodeTreeItemProperty_H___
 
 #include "GuiCommon/Properties/TreeItems/TreeItemProperty.hpp"
 
@@ -14,7 +14,7 @@ namespace GuiCommon
 	\~french
 	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesContainer.
 	*/
-	class BoneTreeItemProperty
+	class SkeletonNodeTreeItemProperty
 		: public TreeItemProperty
 	{
 	public:
@@ -22,13 +22,13 @@ namespace GuiCommon
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	editable	Tells if the properties are modifiable.
-		 *\param[in]	material	The target.
+		 *\param[in]	node		The target.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	editable	Dit si les propriétés sont modifiables.
-		 *\param[in]	material	La cible.
+		 *\param[in]	node		La cible.
 		 */
-		BoneTreeItemProperty( bool editable, castor3d::BoneNode & bone );
+		SkeletonNodeTreeItemProperty( bool editable, castor3d::SkeletonNode & node );
 
 	private:
 		/**
@@ -37,7 +37,7 @@ namespace GuiCommon
 		void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )override;
 
 	private:
-		castor3d::BoneNode & m_bone;
+		castor3d::SkeletonNode & m_node;
 	};
 }
 

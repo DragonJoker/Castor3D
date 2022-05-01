@@ -90,6 +90,10 @@ namespace castor3d
 				layoutIt = m_bonesLayouts.emplace( hash
 					, smshcompskin::doCreateVertexLayout( shaderFlags, currentLocation ) ).first;
 			}
+			else
+			{
+				currentLocation = layoutIt->second.vertexAttributeDescriptions.back().location + 1u;
+			}
 
 			buffers.emplace_back( getOwner()->getBufferOffsets().getBonesBuffer() );
 			offsets.emplace_back( 0u );
