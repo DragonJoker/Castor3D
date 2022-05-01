@@ -92,7 +92,7 @@ namespace
 			{
 				auto const importer = std::static_pointer_cast< castor3d::ImporterPlugin >( it.second );
 
-				if ( importer->getName() != C3dAssimp::AssimpImporter::Name )
+				if ( importer->getName() != c3d_assimp::AssimpImporter::Name )
 				{
 					for ( auto extension : importer->getExtensions() )
 					{
@@ -137,7 +137,7 @@ extern "C"
 
 	C3D_Assimp_API void getName( char const ** p_name )
 	{
-		*p_name = C3dAssimp::AssimpImporter::Name.c_str();
+		*p_name = c3d_assimp::AssimpImporter::Name.c_str();
 	}
 
 	C3D_Assimp_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
@@ -148,7 +148,7 @@ extern "C"
 		for ( auto const & extension : extensions )
 		{
 			plugin->addExtension( extension );
-			engine->getImporterFactory().registerType( castor::string::lowerCase( extension.first ), &C3dAssimp::AssimpImporter::create );
+			engine->getImporterFactory().registerType( castor::string::lowerCase( extension.first ), &c3d_assimp::AssimpImporter::create );
 		}
 	}
 
