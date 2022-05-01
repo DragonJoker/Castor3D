@@ -39,7 +39,7 @@ namespace castor3d
 
 	//!\~english	The current format version number.
 	//!\~french		La version actuelle du format.
-	uint32_t constexpr CurrentCmshVersion = makeCmshVersion( 0x01u, 0x05u, 0x0000u );
+	uint32_t constexpr CurrentCmshVersion = makeCmshVersion( 0x01u, 0x06u, 0x0000u );
 	//!\~english	A define to ease the declaration of a chunk id.
 	//!\~french		Un define pour faciliter la déclaration d'un id de chunk.
 	uint64_t constexpr makeChunkID( char a, char b, char c, char d
@@ -72,6 +72,7 @@ namespace castor3d
 		eSkeleton = makeChunkID( 'S', 'K', 'E', 'L', 'E', 'T', 'O', 'N' ),
 		eSkeletonGlobalInverse = makeChunkID( 'S', 'K', 'E', 'L', 'G', 'I', 'M', 'X' ),
 		eSkeletonBone = makeChunkID( 'S', 'K', 'E', 'L', 'B', 'O', 'N', 'E' ),
+		eSkeletonNode = makeChunkID( 'S', 'K', 'E', 'L', 'N', 'O', 'D', 'E' ),
 		eBoneParentName = makeChunkID( 'B', 'O', 'N', 'E', 'P', 'A', 'R', 'T' ),
 		eBoneOffsetMatrix = makeChunkID( 'B', 'O', 'N', 'E', 'O', 'M', 'T', 'X' ),
 		eSubmesh = makeChunkID( 'S', 'U', 'B', 'M', 'E', 'S', 'H', ' ' ),
@@ -119,6 +120,8 @@ namespace castor3d
 		eSceneNodeAnimationKeyFrameTranslate = makeChunkID( 'S', 'N', 'A', 'N', 'K', 'F', 'T', 'R' ),
 		eSceneNodeAnimationKeyFrameRotate = makeChunkID( 'S', 'N', 'A', 'N', 'K', 'F', 'R', 'T' ),
 		eSceneNodeAnimationKeyFrameScale = makeChunkID( 'S', 'N', 'A', 'N', 'K', 'F', 'S', 'L' ),
+		// Version 1.6
+		eBoneId = makeChunkID( 'B', 'O', 'N', 'E', 'I', 'D', ' ', ' ' ),
 	};
 	/**
 	 *\~english

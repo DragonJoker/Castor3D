@@ -16,6 +16,7 @@
 #include "GuiCommon/Properties/TreeItems/RenderWindowTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/SceneTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/SkeletonAnimationTreeItemProperty.hpp"
+#include "GuiCommon/Properties/TreeItems/SkeletonNodeTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/SkeletonTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/SubmeshTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/ViewportTreeItemProperty.hpp"
@@ -38,7 +39,7 @@
 #include <Castor3D/Cache/TargetCache.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
-#include <Castor3D/Model/Skeleton/Bone.hpp>
+#include <Castor3D/Model/Skeleton/BoneNode.hpp>
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp>
 #include <Castor3D/Overlay/Overlay.hpp>
@@ -357,13 +358,25 @@ namespace GuiCommon
 	void SceneObjectsList::doAddSkeleton( castor3d::Skeleton const & skeleton
 		, wxTreeItemId idSkeleton )
 	{
-		for ( auto bone : skeleton )
+		for ( auto & node : skeleton.getNodes() )
 		{
-			AppendItem( idSkeleton
-				, bone->getName()
-				, eBMP_SKELETON
-				, eBMP_SKELETON_SEL
-				, new BoneTreeItemProperty( m_propertiesHolder->isEditable(), *bone ) );
+			if ( node->getType() == castor3d::SkeletonNode::eBone )
+			{
+				AppendItem( idSkeleton
+					, node->getName()
+					, eBMP_SKELETON
+					, eBMP_SKELETON_SEL
+					, new BoneTreeItemProperty( m_propertiesHolder->isEditable()
+						, static_cast< castor3d::BoneNode & >( *node ) ) );
+			}
+			else
+			{
+				AppendItem( idSkeleton
+					, node->getName()
+					, eBMP_SKELETON
+					, eBMP_SKELETON_SEL
+					, new SkeletonNodeTreeItemProperty( m_propertiesHolder->isEditable(), *node ) );
+			}
 		}
 
 		for ( auto & anim : skeleton.getAnimations() )

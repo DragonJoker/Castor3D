@@ -78,7 +78,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'itérateur correspondant à l'os donné, dans la map des transformations cumulatives.
 		 */
-		C3D_API TransformArray::const_iterator find( Bone const & bone )const;
+		C3D_API TransformArray::const_iterator find( BoneNode const & bone )const;
 		/**
 		 *\~english
 		 *\brief		Initialises the keyframe.

@@ -85,6 +85,10 @@ namespace castor3d
 				layoutIt = m_animLayouts.emplace( hash
 					, smshcompmorph::doCreateVertexLayout( shaderFlags, !mask.empty(), currentLocation ) ).first;
 			}
+			else
+			{
+				currentLocation = layoutIt->second.vertexAttributeDescriptions.back().location + 1u;
+			}
 
 			buffers.emplace_back( m_animBuffer.getBuffer().getBuffer() );
 			offsets.emplace_back( m_animBuffer.getOffset() );

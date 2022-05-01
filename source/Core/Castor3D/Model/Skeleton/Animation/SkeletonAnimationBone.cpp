@@ -1,6 +1,6 @@
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationBone.hpp"
 
-#include "Castor3D/Model/Skeleton/Bone.hpp"
+#include "Castor3D/Model/Skeleton/BoneNode.hpp"
 
 namespace castor3d
 {

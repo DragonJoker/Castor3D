@@ -1,5 +1,7 @@
 #include "Castor3D/Binary/BinarySkeletonAnimationObject.hpp"
 
+#include "Castor3D/Model/Skeleton/BoneNode.hpp"
+#include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationObject.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationBone.hpp"
@@ -76,12 +78,6 @@ namespace castor3d
 	bool BinaryParser< SkeletonAnimationObject >::doParse( SkeletonAnimationObject & obj )
 	{
 		bool result = true;
-		castor::Matrix4x4f transform;
-		std::vector< binsklanmobj::KeyFrame > keyframes;
-		std::vector< binsklanmobj::KeyFramed > keyframesd;
-		SkeletonAnimationNodeSPtr node;
-		SkeletonAnimationObjectSPtr object;
-		SkeletonAnimationBoneSPtr bone;
 		BinaryChunk chunk;
 
 		while ( result && doGetSubChunk( chunk ) )
@@ -92,33 +88,34 @@ namespace castor3d
 				result = doParseChunk( obj.m_nodeTransform, chunk );
 				checkError( result, "Couldn't parse transform." );
 				break;
-
 			case ChunkType::eSkeletonAnimationBone:
-				bone = std::make_shared< SkeletonAnimationBone >( *obj.getOwner() );
-				obj.addChild( bone );
-				result = createBinaryParser< SkeletonAnimationBone >().parse( *bone, chunk );
-				checkError( result, "Couldn't parse animation bone." );
-
-				if ( result )
+				if ( m_fileVersion > Version{ 1, 5, 0 } )
 				{
-					obj.getOwner()->addObject( bone, obj.shared_from_this() );
+					auto bone = std::make_shared< SkeletonAnimationBone >( *obj.getOwner() );
+					result = createBinaryParser< SkeletonAnimationBone >().parse( *bone, chunk );
+					checkError( result, "Couldn't parse animation bone." );
+
+					if ( result )
+					{
+						obj.addChild( bone );
+						obj.getOwner()->addObject( bone, obj.shared_from_this() );
+					}
 				}
-
 				break;
-
 			case ChunkType::eSkeletonAnimationNode:
-				node = std::make_shared< SkeletonAnimationNode >( *obj.getOwner() );
-				obj.addChild( node );
-				result = createBinaryParser< SkeletonAnimationNode >().parse( *node, chunk );
-				checkError( result, "Couldn't parse animation node." );
-
-				if ( result )
+				if ( m_fileVersion > Version{ 1, 5, 0 } )
 				{
-					obj.getOwner()->addObject( node, obj.shared_from_this() );
+					auto node = std::make_shared< SkeletonAnimationNode >( *obj.getOwner() );
+					result = createBinaryParser< SkeletonAnimationNode >().parse( *node, chunk );
+					checkError( result, "Couldn't parse animation node." );
+
+					if ( result )
+					{
+						obj.addChild( node );
+						obj.getOwner()->addObject( node, obj.shared_from_this() );
+					}
 				}
-
 				break;
-
 			default:
 				break;
 			}
@@ -130,12 +127,8 @@ namespace castor3d
 	bool BinaryParser< SkeletonAnimationObject >::doParse_v1_1( SkeletonAnimationObject & obj )
 	{
 		bool result = true;
-		castor::Matrix4x4f transform;
 		std::vector< binsklanmobj::KeyFrame > keyframes;
 		std::vector< binsklanmobj::KeyFramed > keyframesd;
-		SkeletonAnimationNodeSPtr node;
-		SkeletonAnimationObjectSPtr object;
-		SkeletonAnimationBoneSPtr bone;
 		BinaryChunk chunk;
 		uint32_t count{ 0 };
 		float length{ 0.0f };
@@ -153,12 +146,10 @@ namespace castor3d
 #pragma warning( pop )
 				result = doParseChunk( count, chunk );
 				checkError( result, "Couldn't parse keyframes count." );
-
 				if ( result )
 				{
 					keyframesd.resize( count );
 				}
-
 				break;
 
 #pragma warning( push )
@@ -170,7 +161,6 @@ namespace castor3d
 #pragma warning( pop )
 				result = doParseChunk( keyframesd, chunk );
 				checkError( result, "Couldn't parse keyframes." );
-
 				if ( result )
 				{
 					doConvert( keyframesd, keyframes );
@@ -196,14 +186,70 @@ namespace castor3d
 						keyFrame->initialise();
 					}
 				}
-
 				break;
-
 			case ChunkType::eAnimLength:
 				result = doParseChunk( length, chunk );
 				checkError( result, "Couldn't parse animation length." );
 				break;
+			default:
+				break;
+			}
+		}
 
+		return result;
+	}
+
+	bool BinaryParser< SkeletonAnimationObject >::doParse_v1_5( SkeletonAnimationObject & obj )
+	{
+		BinaryChunk chunk;
+		auto & skeleton = static_cast< Skeleton & >( *obj.getOwner()->getAnimable() );
+		auto objNode = ( obj.getType() == SkeletonAnimationObjectType::eNode
+			? static_cast< SkeletonAnimationNode const & >( obj ).getNode()
+			: &static_cast< SkeletonNode & >( *static_cast< SkeletonAnimationBone const & >( obj ).getBone() ) );
+		bool result = true;
+
+		while ( result && doGetSubChunk( chunk ) )
+		{
+			switch ( chunk.getChunkType() )
+			{
+			case ChunkType::eSkeletonAnimationBone:
+				if ( m_fileVersion <= Version{ 1, 5, 0 } )
+				{
+					auto bone = std::make_shared< SkeletonAnimationBone >( *obj.getOwner() );
+					result = createBinaryParser< SkeletonAnimationBone >().parse( *bone, chunk );
+					checkError( result, "Couldn't parse animation bone." );
+
+					if ( result )
+					{
+						obj.addChild( bone );
+						obj.getOwner()->addObject( bone, obj.shared_from_this() );
+
+						if ( !bone->getBone()->getParent() )
+						{
+							skeleton.setNodeParent( *bone->getBone(), *objNode );
+						}
+					}
+				}
+				break;
+			case ChunkType::eSkeletonAnimationNode:
+				if ( m_fileVersion <= Version{ 1, 5, 0 } )
+				{
+					auto node = std::make_shared< SkeletonAnimationNode >( *obj.getOwner() );
+					result = createBinaryParser< SkeletonAnimationNode >().parse( *node, chunk );
+					checkError( result, "Couldn't parse animation node." );
+
+					if ( result )
+					{
+						obj.addChild( node );
+						obj.getOwner()->addObject( node, obj.shared_from_this() );
+
+						if ( !node->getNode()->getParent() )
+						{
+							skeleton.setNodeParent( *node->getNode(), *objNode );
+						}
+					}
+				}
+				break;
 			default:
 				break;
 			}

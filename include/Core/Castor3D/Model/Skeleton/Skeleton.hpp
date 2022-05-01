@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_Skeleton_H___
 
 #include "SkeletonModule.hpp"
+#include "SkeletonNode.hpp"
 #include "Castor3D/Binary/BinaryModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 
@@ -48,16 +49,25 @@ namespace castor3d
 		C3D_API ~Skeleton()override;
 		/**
 		 *\~english
+		 *\brief		Creates a node.
+		 *\param[in]	name	The node name.
+		 *\~french
+		 *\brief		Crée un nodue.
+		 *\param[in]	name	Le nom du noeud.
+		 */
+		C3D_API SkeletonNode * createNode( castor::String name );
+		/**
+		 *\~english
 		 *\brief		Creates a bone.
-		 *\param[in]	name	The bone name.
-		 *\param[in]	offset	The transfromation matrix from mesh space to bone space.
+		 *\param[in]	name				The bone name.
+		 *\param[in]	inverseTransform	The transfromation matrix from mesh space to bone space.
 		 *\~french
 		 *\brief		Crée un os.
-		 *\param[in]	name	Le nom de l'os.
-		 *\param[in]	offset	La matrice de transformation de l'espace objet vers l'espace du bone.
+		 *\param[in]	name				Le nom de l'os.
+		 *\param[in]	inverseTransform	La matrice de transformation de l'espace objet vers l'espace du bone.
 		 */
-		C3D_API BoneSPtr createBone( castor::String const & name
-			, castor::Matrix4x4f const & offset );
+		C3D_API BoneNode * createBone( castor::String name
+			, castor::Matrix4x4f const & inverseTransform );
 		/**
 		 *\~english
 		 *\brief		Finds a bone from a name.
@@ -66,18 +76,18 @@ namespace castor3d
 		 *\brief		Trouve un os à partir de son nom.
 		 *\param[in]	name	Le nom de l'os.
 		 */
-		C3D_API BoneSPtr findBone( castor::String const & name )const;
+		C3D_API SkeletonNode * findNode( castor::String const & name )const;
 		/**
 		 *\~english
-		 *\brief		adds a bone to another bone's children
-		 *\param[in]	bone	The bone.
+		 *\brief		Adds a node to another node's children
+		 *\param[in]	node	The node.
 		 *\param[in]	parent	The parent bone.
 		 *\~french
-		 *\brief		Ajoute un os aux enfants d'un autre os.
-		 *\param[in]	bone	L'os.
-		 *\param[in]	parent	L'os parent.
+		 *\brief		Ajoute un noeud aux enfants d'un autre noeud.
+		 *\param[in]	node	Le noeud.
+		 *\param[in]	parent	Le neoud parent.
 		 */
-		C3D_API void setBoneParent( BoneSPtr bone, BoneSPtr parent );
+		C3D_API void setNodeParent( SkeletonNode & node, SkeletonNode & parent );
 		/**
 		 *\~english
 		 *\brief		Creates an animation
@@ -105,85 +115,33 @@ namespace castor3d
 		 *\brief		Calcule les bounding box et sphere, pour chaque os, pour le maillage donné.
 		 */
 		C3D_API void computeContainers( Mesh & mesh );
-		/**
-		 *\~english
-		 *\return		The global inverse transform.
-		 *\~french
-		 *\return		La transformation globale inversée.
-		 */
-		inline castor::Matrix4x4f const & getGlobalInverseTransform()const
+
+		castor::Matrix4x4f const & getGlobalInverseTransform()const
 		{
 			return m_globalInverse;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the global inverse transform.
-		 *\param[in]	transform	The new value.
-		 *\~french
-		 *\brief		Définit la transformation globale inversée.
-		 *\param[in]	transform	La nouvelle valeur.
-		 */
-		inline void setGlobalInverseTransform( castor::Matrix4x4f const & transform )
+
+		void setGlobalInverseTransform( castor::Matrix4x4f const & transform )
 		{
 			m_globalInverse = transform;
 		}
-		/**
-		 *\~english
-		 *\return		The bones count.
-		 *\~french
-		 *\return		Le nombre d'os.
-		 */
-		inline size_t getBonesCount()const
+
+		std::vector< BoneNode * > const & getBones()const
+		{
+			return m_bones;
+		}
+
+		SkeletonNodePtrArray const & getNodes()const
+		{
+			return m_nodes;
+		}
+
+		size_t getBonesCount()const
 		{
 			return m_bones.size();
 		}
-		/**
-		 *\~english
-		 *\return		An iterator to the first bone.
-		 *\~french
-		 *\return		Un itérateur sur le premier os.
-		 */
-		inline auto begin()
-		{
-			return m_bones.begin();
-		}
-		/**
-		 *\~english
-		 *\return		An iterator to the first bone.
-		 *\~french
-		 *\return		Un itérateur sur le premier os.
-		 */
-		inline auto begin()const
-		{
-			return m_bones.begin();
-		}
-		/**
-		 *\~english
-		 *\return		An iterator to the end of the bones array.
-		 *\~french
-		 *\return		Un itérateur sur la fin du tableau d'os.
-		 */
-		inline auto end()
-		{
-			return m_bones.end();
-		}
-		/**
-		 *\~english
-		 *\return		An iterator to the end of the bones array.
-		 *\~french
-		 *\return		Un itérateur sur la fin du tableau d'os.
-		 */
-		inline auto end()const
-		{
-			return m_bones.end();
-		}
-		/**
-		 *\~english
-		 *\return		The bones boxes.
-		 *\~french
-		 *\return		Les boîtes des os.
-		 */
-		inline std::vector< castor::BoundingBox > const & getContainers( Mesh & mesh )const
+
+		std::vector< castor::BoundingBox > const & getContainers( Mesh & mesh )const
 		{
 			auto it = m_boxes.find( &mesh );
 
@@ -203,7 +161,8 @@ namespace castor3d
 
 	private:
 		SceneRPtr m_scene;
-		BonePtrArray m_bones;
+		SkeletonNodePtrArray m_nodes;
+		std::vector< BoneNode * > m_bones;
 		castor::Matrix4x4f m_globalInverse;
 		std::map< Mesh *, std::vector< castor::BoundingBox > > m_boxes;
 

@@ -1,7 +1,8 @@
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Model/Skeleton/Bone.hpp"
+#include "Castor3D/Model/Skeleton/BoneNode.hpp"
+#include "Castor3D/Model/Skeleton/SkeletonNode.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
@@ -19,46 +20,67 @@ namespace castor3d
 		Animable::cleanupAnimations();
 	}
 
-	BoneSPtr Skeleton::createBone( castor::String const & name
+	SkeletonNode * Skeleton::createNode( castor::String name )
+	{
+		auto node = std::make_unique< SkeletonNode >( std::move( name ), *this );
+		auto result = node.get();
+		m_nodes.emplace_back( std::move( node ) );
+		return result;
+	}
+
+	BoneNode * Skeleton::createBone( castor::String name
 		, castor::Matrix4x4f const & offset )
 	{
-		auto bone = std::make_shared< Bone >( *this, offset );
-		bone->rename( name );
-		m_bones.push_back( bone );
-		return bone;
+		auto node = std::make_unique< BoneNode >( std::move( name ), *this, offset, uint32_t( m_bones.size() ) );
+		auto result = node.get();
+		m_nodes.emplace_back( std::move( node ) );
+		m_bones.emplace_back( result );
+		return result;
 	}
 
-	BoneSPtr Skeleton::findBone( castor::String const & name )const
+	SkeletonNode * Skeleton::findNode( castor::String const & name )const
 	{
-		auto it = std::find_if( begin(), end(), [&name]( BoneSPtr bone )
-		{
-			return bone->getName() == name;
-		} );
+		auto it = std::find_if( m_nodes.begin()
+			, m_nodes.end()
+			, [&name]( SkeletonNodeUPtr const & lookup )
+			{
+				return lookup->getName() == name;
+			} );
 
-		BoneSPtr bone;
+		SkeletonNode * result{};
 
-		if ( it != end() )
+		if ( it != m_nodes.end() )
 		{
-			bone = *it;
+			result = it->get();
 		}
 
-		return bone;
+		return result;
 	}
 
-	void Skeleton::setBoneParent( BoneSPtr bone, BoneSPtr parent )
+	void Skeleton::setNodeParent( SkeletonNode & node, SkeletonNode & parent )
 	{
-		if ( std::find( begin(), end(), bone ) == end() )
+		if ( m_nodes.end() == std::find_if( m_nodes.begin()
+			, m_nodes.end()
+			, [&node]( SkeletonNodeUPtr const & lookup )
+			{
+				return lookup.get() == &node;
+			} ) )
 		{
 			CU_Exception( "Skeleton::setBoneParent - Child bone is not in the Skeleton's nodes" );
 		}
 
-		if ( std::find( begin(), end(), parent ) == end() )
+			if ( m_nodes.end() == std::find_if( m_nodes.begin()
+				, m_nodes.end()
+				, [&parent]( SkeletonNodeUPtr const & lookup )
+				{
+					return lookup.get() == &parent;
+				} ) )
 		{
 			CU_Exception( "Skeleton::setBoneParent - Parent bone is not in the Skeleton's nodes" );
 		}
 
-		parent->addChild( bone );
-		bone->setParent( parent );
+		parent.addChild( node );
+		node.setParent( parent );
 	}
 
 	SkeletonAnimation & Skeleton::createAnimation( castor::String const & name )
@@ -81,18 +103,17 @@ namespace castor3d
 
 	void Skeleton::computeContainers( Mesh & mesh )
 	{
-		auto it = m_boxes.find( &mesh );
+		auto it = m_boxes.emplace( &mesh, std::vector< castor::BoundingBox >{} ).first;
 
 		if ( it == m_boxes.end() )
 		{
-			uint32_t index = 0u;
-			std::vector< castor::BoundingBox > boxes;
+			auto & boxes = it->second;
 			boxes.reserve( m_bones.size() );
 
 			for ( auto & bone : m_bones )
 			{
-				boxes.emplace_back( bone->computeBoundingBox( mesh, index ) );
-				++index;
+				boxes.emplace_back( bone->computeBoundingBox( mesh
+					, bone->getId() ) );
 			}
 		}
 	}

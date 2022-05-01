@@ -60,14 +60,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates and adds a moving node.
-		 *\param[in]	name	The node name.
+		 *\param[in]	node	The node to add.
 		 *\param[in]	parent	The moving object's parent.
 		 *\~french
 		 *\brief		Crée et ajoute un noeud mouvant.
-		 *\param[in]	name	Le nom du noeud.
+		 *\param[in]	node	Le noeud.
 		 *\param[in]	parent	Le parent de l'objet déplaçable.
 		 */
-		C3D_API SkeletonAnimationObjectSPtr addObject( castor::String const & name
+		C3D_API SkeletonAnimationObjectSPtr addObject( SkeletonNode & node
 			, SkeletonAnimationObjectSPtr parent );
 		/**
 		 *\~english
@@ -79,7 +79,7 @@ namespace castor3d
 		 *\param[in]	bone	L'os.
 		 *\param[in]	parent	Le parent de l'objet déplaçable.
 		 */
-		C3D_API SkeletonAnimationObjectSPtr addObject( BoneSPtr bone
+		C3D_API SkeletonAnimationObjectSPtr addObject( BoneNode & bone
 			, SkeletonAnimationObjectSPtr parent );
 		/**
 		 *\~english
@@ -107,22 +107,22 @@ namespace castor3d
 			, castor::String const & name )const;
 		/**
 		 *\~english
+		 *\brief		Retrieves an animated node.
+		 *\param[in]	node	The node.
+		 *\~french
+		 *\brief		Récupère un noeud animé.
+		 *\param[in]	node	Le noeud.
+		 */
+		C3D_API SkeletonAnimationObjectSPtr getObject( SkeletonNode const & node )const;
+		/**
+		 *\~english
 		 *\brief		Retrieves an animated bone.
 		 *\param[in]	bone	The bone.
 		 *\~french
 		 *\brief		Récupère un os animé.
 		 *\param[in]	bone	L'os.
 		 */
-		C3D_API SkeletonAnimationObjectSPtr getObject( Bone const & bone )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves an animated object.
-		 *\param[in]	name	The object name.
-		 *\~french
-		 *\brief		Récupère un objet animé.
-		 *\param[in]	name	Le nom de l'objet.
-		 */
-		C3D_API SkeletonAnimationObjectSPtr getObject( castor::String const & name )const;
+		C3D_API SkeletonAnimationObjectSPtr getObject( BoneNode const & bone )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animated object.

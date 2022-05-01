@@ -3,6 +3,7 @@
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationBone.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
 #include "Castor3D/Binary/BinarySkeletonAnimationObject.hpp"
+#include "Castor3D/Model/Skeleton/BoneNode.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 
 namespace castor3d
@@ -42,11 +43,18 @@ namespace castor3d
 
 				if ( result )
 				{
-					auto bone = static_cast< Skeleton * >( obj.getOwner()->getAnimable() )->findBone( name );
+					auto bone = static_cast< Skeleton * >( obj.getOwner()->getAnimable() )->findNode( name );
 
 					if ( bone )
 					{
-						obj.setBone( bone );
+						if ( bone->getType() == SkeletonNode::eBone )
+						{
+							obj.setBone( static_cast< BoneNode & >( *bone ) );
+						}
+						else
+						{
+							log::error << cuT( "Skeleton node with name " ) << name << cuT( " is not a bone" ) << std::endl;
+						}
 					}
 					else
 					{

@@ -66,7 +66,7 @@ source_group( "Source Files\\Animation" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinaryAnimation.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinaryBone.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinaryBoneNode.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinaryBonesComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinaryChunk.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinaryMesh.cpp
@@ -80,12 +80,13 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinarySkeletonAnimationKeyFrame.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinarySkeletonAnimationNode.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinarySkeletonAnimationObject.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinarySkeletonNode.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinarySubmesh.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/CmshImporter.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinaryAnimation.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinaryBone.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinaryBoneNode.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinaryBonesComponent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinaryChunk.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinaryMesh.hpp
@@ -101,6 +102,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinarySkeletonAnimationKeyFrame.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinarySkeletonAnimationNode.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinarySkeletonAnimationObject.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinarySkeletonNode.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinarySubmesh.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinaryWriter.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/ChunkData.hpp
@@ -633,15 +635,17 @@ source_group( "Header Files\\Model\\Mesh\\Submesh\\Component" FILES ${${PROJECT_
 source_group( "Source Files\\Model\\Mesh\\Submesh\\Component" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Skeleton/Bone.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Skeleton/BoneNode.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Skeleton/BonedVertex.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Skeleton/Skeleton.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Skeleton/SkeletonNode.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Skeleton/VertexBoneData.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Skeleton/Bone.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Skeleton/BoneNode.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Skeleton/BonedVertex.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Skeleton/Skeleton.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Skeleton/SkeletonNode.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Skeleton/SkeletonModule.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Skeleton/VertexBoneData.hpp
 )
