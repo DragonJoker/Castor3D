@@ -10,7 +10,7 @@
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Model/Mesh/Importer.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
-#include <Castor3D/Model/Skeleton/Bone.hpp>
+#include <Castor3D/Model/Skeleton/BoneNode.hpp>
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp>
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationBone.hpp>

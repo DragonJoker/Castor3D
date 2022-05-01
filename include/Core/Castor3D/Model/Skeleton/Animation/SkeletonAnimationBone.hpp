@@ -58,33 +58,21 @@ namespace castor3d
 		 *\return		Le nom de l'objet.
 		 */
 		castor::String const & getName()const override;
-		/**
-		 *\~english
-		 *\brief		Sets the moving object.
-		 *\param[in]	bone		The bone.
-		 *\~french
-		 *\brief		Définit l'objet mouvant.
-		 *\param[in]	bone		L'os.
-		 */
-		void setBone( BoneSPtr bone )
+
+		void setBone( BoneNode & node )
 		{
-			m_bone = bone;
+			m_bone = &node;
 		}
-		/**
-		 *\~english
-		 *\return		The moving object.
-		 *\~french
-		 *\return		L'objet mouvant.
-		 */
-		BoneSPtr getBone()const
+
+		BoneNode * getBone()const
 		{
-			return m_bone.lock();
+			return m_bone;
 		}
 
 	private:
 		//!\~english	The bone affected by the animations.
 		//!\~french		L'os affecté par les animations.
-		BoneWPtr m_bone;
+		BoneNode * m_bone{};
 
 		friend class BinaryWriter< SkeletonAnimationBone >;
 		friend class BinaryParser< SkeletonAnimationBone >;

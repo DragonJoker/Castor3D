@@ -19,7 +19,7 @@
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp>
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp>
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationObject.hpp>
-#include <Castor3D/Model/Skeleton/Bone.hpp>
+#include <Castor3D/Model/Skeleton/BoneNode.hpp>
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
 #include <Castor3D/Model/Skeleton/VertexBoneData.hpp>
 #include <Castor3D/Render/Viewport.hpp>
@@ -142,9 +142,20 @@ namespace Testing
 	};
 
 	template<>
-	struct Stringifier< castor3d::Bone >
+	struct Stringifier< castor3d::BoneNode >
 	{
-		static std::string get( castor3d::Bone const & value )
+		static std::string get( castor3d::BoneNode const & value )
+		{
+			std::stringstream stream;
+			stream << value.getName();
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::SkeletonNode >
+	{
+		static std::string get( castor3d::SkeletonNode const & value )
 		{
 			std::stringstream stream;
 			stream << value.getName();
@@ -740,7 +751,8 @@ namespace Testing
 		bool compare( castor3d::Line const & p_a, castor3d::Line const & p_b );
 		bool compare( castor3d::LinesMapping const & p_a, castor3d::LinesMapping const & p_b );
 		bool compare( castor3d::Skeleton const & p_a, castor3d::Skeleton const & p_b );
-		bool compare( castor3d::Bone const & p_a, castor3d::Bone const & p_b );
+		bool compare( castor3d::SkeletonNode const & p_a, castor3d::SkeletonNode const & p_b );
+		bool compare( castor3d::BoneNode const & p_a, castor3d::BoneNode const & p_b );
 		bool compare( castor3d::Animation const & p_a, castor3d::Animation const & p_b );
 		bool compare( castor3d::SkeletonAnimation const & p_a, castor3d::SkeletonAnimation const & p_b );
 		bool compare( castor3d::SkeletonAnimationObject const & p_a, castor3d::SkeletonAnimationObject const & p_b );

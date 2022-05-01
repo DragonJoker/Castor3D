@@ -2,7 +2,7 @@
 
 #include "Castor3D/Animation/Animable.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
-#include "Castor3D/Model/Skeleton/Bone.hpp"
+#include "Castor3D/Model/Skeleton/BoneNode.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp"
@@ -37,7 +37,6 @@ namespace castor3d
 	uint32_t AnimatedSkeleton::fillShader( SkinningTransformsConfiguration * variable )const
 	{
 		Skeleton & skeleton = m_skeleton;
-		uint32_t i{ 0u };
 
 		if ( m_playingAnimations.empty() )
 		{
@@ -45,15 +44,15 @@ namespace castor3d
 			{
 				m_reinit = false;
 
-				for ( auto bone : skeleton )
+				for ( auto bone : skeleton.getBones() )
 				{
-					variable->bonesMatrix[i++] = skeleton.getGlobalInverseTransform();
+					variable->bonesMatrix[bone->getId()] = skeleton.getGlobalInverseTransform();
 				}
 			}
 		}
 		else
 		{
-			for ( auto bone : skeleton )
+			for ( auto bone : skeleton.getBones() )
 			{
 				castor::Matrix4x4f final{ 1.0 };
 
@@ -67,11 +66,11 @@ namespace castor3d
 					}
 				}
 
-				variable->bonesMatrix[i++] = final;
+				variable->bonesMatrix[bone->getId()] = final;
 			}
 		}
 
-		return i;
+		return uint32_t( skeleton.getBonesCount() );
 	}
 
 	void AnimatedSkeleton::doAddAnimation( castor::String const & name )

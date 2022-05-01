@@ -46,16 +46,16 @@ namespace castor3d
 		 *\brief		Récupère un os animé.
 		 *\param[in]	bone	L'os.
 		 */
-		C3D_API SkeletonAnimationInstanceObjectSPtr getObject( Bone const & bone )const;
+		C3D_API SkeletonAnimationInstanceObjectSPtr getObject( BoneNode const & bone )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animated node.
-		 *\param[in]	name	The node name.
+		 *\param[in]	node	The node.
 		 *\~french
 		 *\brief		Récupère un noeud animé.
-		 *\param[in]	name	Le nom du noeud.
+		 *\param[in]	node	Le noeud.
 		 */
-		C3D_API SkeletonAnimationInstanceObjectSPtr getObject( castor::String const & name )const;
+		C3D_API SkeletonAnimationInstanceObjectSPtr getObject( SkeletonNode const & node )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animated object.

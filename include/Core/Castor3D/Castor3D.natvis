@@ -212,4 +212,24 @@
 		</Expand>
 	</Type>
 
+	<Type Name="castor3d::BoneNode">
+		<DisplayString>Bone [{m_id}]{m_name}</DisplayString>
+		<Expand>
+			<Item Name="id">m_id</Item>
+			<Item Name="name">m_name</Item>
+      <Item Name="inverseTransform">m_inverseTransform</Item>
+			<Item Name="parent">m_parent</Item>
+			<Item Name="children">m_children</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::SkeletonNode">
+		<DisplayString>Node {m_name}</DisplayString>
+		<Expand>
+			<Item Name="name">m_name</Item>
+			<Item Name="parent">m_parent</Item>
+			<Item Name="children">m_children</Item>
+		</Expand>
+	</Type>
+
 </AutoVisualizer>

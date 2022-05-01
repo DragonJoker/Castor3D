@@ -1,11 +1,16 @@
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationNode.hpp"
 
+#include "Castor3D/Model/Skeleton/SkeletonNode.hpp"
+
 namespace castor3d
 {
-	SkeletonAnimationNode::SkeletonAnimationNode( SkeletonAnimation & animation
-		, castor::String const & name )
+	SkeletonAnimationNode::SkeletonAnimationNode( SkeletonAnimation & animation )
 		: SkeletonAnimationObject{ animation, SkeletonAnimationObjectType::eNode }
-		, m_name{ name }
 	{
+	}
+
+	castor::String const & SkeletonAnimationNode::getName()const
+	{
+		return getNode()->getName();
 	}
 }

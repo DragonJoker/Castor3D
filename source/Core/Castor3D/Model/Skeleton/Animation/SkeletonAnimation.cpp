@@ -3,7 +3,7 @@
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationBone.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationNode.hpp"
-#include "Castor3D/Model/Skeleton/Bone.hpp"
+#include "Castor3D/Model/Skeleton/BoneNode.hpp"
 #include "Castor3D/Animation/Animable.hpp"
 
 namespace castor3d
@@ -31,13 +31,15 @@ namespace castor3d
 	{
 	}
 
-	SkeletonAnimationObjectSPtr SkeletonAnimation::addObject( castor::String const & name
+	SkeletonAnimationObjectSPtr SkeletonAnimation::addObject( SkeletonNode & node
 		, SkeletonAnimationObjectSPtr parent )
 	{
-		return addObject( std::make_shared< SkeletonAnimationNode >( *this, name ), parent );
+		auto result = std::make_shared< SkeletonAnimationNode >( *this );
+		result->setNode( node );
+		return addObject( result, parent );
 	}
 
-	SkeletonAnimationObjectSPtr SkeletonAnimation::addObject( BoneSPtr bone
+	SkeletonAnimationObjectSPtr SkeletonAnimation::addObject( BoneNode & bone
 		, SkeletonAnimationObjectSPtr parent )
 	{
 		auto result = std::make_shared< SkeletonAnimationBone >( *this );
@@ -78,14 +80,14 @@ namespace castor3d
 		return m_toMove.find( sklanm::getMovingTypeName( type ) + name ) != m_toMove.end();
 	}
 
-	SkeletonAnimationObjectSPtr SkeletonAnimation::getObject( Bone const & bone )const
+	SkeletonAnimationObjectSPtr SkeletonAnimation::getObject( SkeletonNode const & node )const
 	{
-		return getObject( SkeletonAnimationObjectType::eBone, bone.getName() );
+		return getObject( SkeletonAnimationObjectType::eNode, node.getName() );
 	}
 
-	SkeletonAnimationObjectSPtr SkeletonAnimation::getObject( castor::String const & name )const
+	SkeletonAnimationObjectSPtr SkeletonAnimation::getObject( BoneNode const & bone )const
 	{
-		return getObject( SkeletonAnimationObjectType::eNode, name );
+		return getObject( SkeletonAnimationObjectType::eBone, bone.getName() );
 	}
 
 	SkeletonAnimationObjectSPtr SkeletonAnimation::getObject( SkeletonAnimationObjectType type

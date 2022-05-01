@@ -1,7 +1,7 @@
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp"
 
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationBone.hpp"
-#include "Castor3D/Model/Skeleton/Bone.hpp"
+#include "Castor3D/Model/Skeleton/BoneNode.hpp"
 
 namespace castor3d
 {
@@ -15,11 +15,11 @@ namespace castor3d
 
 	void SkeletonAnimationInstanceBone::doApply()
 	{
-		BoneSPtr bone = m_animationBone.getBone();
+		auto bone = m_animationBone.getBone();
 
 		if ( bone )
 		{
-			m_finalTransform = m_cumulativeTransform * bone->getOffsetMatrix();
+			m_finalTransform = m_cumulativeTransform * bone->getInverseTransform();
 		}
 	}
 }

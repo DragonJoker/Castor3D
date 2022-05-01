@@ -54,6 +54,10 @@ namespace castor3d
 				layoutIt = m_layouts.emplace( currentLocation
 					, smshcompsecuv::doCreateVertexLayout( currentLocation ) ).first;
 			}
+			else
+			{
+				currentLocation = layoutIt->second.vertexAttributeDescriptions.back().location + 1u;
+			}
 
 			buffers.emplace_back( m_buffer.getBuffer().getBuffer() );
 			offsets.emplace_back( m_buffer.getOffset() );

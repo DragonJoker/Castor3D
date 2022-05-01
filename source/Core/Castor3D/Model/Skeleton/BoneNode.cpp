@@ -1,4 +1,4 @@
-#include "Castor3D/Model/Skeleton/Bone.hpp"
+#include "Castor3D/Model/Skeleton/BoneNode.hpp"
 
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
@@ -7,34 +7,17 @@
 
 namespace castor3d
 {
-	Bone::Bone( Skeleton & skeleton
-		, castor::Matrix4x4f const & offset )
-		: castor::Named{ castor::cuEmptyString }
-		, m_offset{ offset }
-		, m_absoluteOffset{ skeleton.getGlobalInverseTransform() }
-		, m_skeleton{ skeleton }
+	BoneNode::BoneNode( castor::String name
+		, Skeleton & skeleton
+		, castor::Matrix4x4f inverseTransform
+		, uint32_t id )
+		: SkeletonNode{ eBone, std::move( name ), skeleton }
+		, m_id{ id }
+		, m_inverseTransform{ std::move( inverseTransform ) }
 	{
 	}
 
-	Bone::~Bone()
-	{
-	}
-
-	void Bone::addChild( BoneSPtr bone )
-	{
-		if ( m_children.end() == m_children.find( bone->getName() ) )
-		{
-			m_children.emplace( bone->getName(), bone );
-		}
-	}
-
-	void Bone::setParent( BoneSPtr bone )
-	{
-		m_parent = bone;
-		m_absoluteOffset = m_offset * m_parent->m_absoluteOffset;
-	}
-
-	castor::BoundingBox Bone::computeBoundingBox( Mesh const & mesh
+	castor::BoundingBox BoneNode::computeBoundingBox( Mesh const & mesh
 		, uint32_t boneIndex )const
 	{
 		auto constexpr rmax = std::numeric_limits< float >::max();
