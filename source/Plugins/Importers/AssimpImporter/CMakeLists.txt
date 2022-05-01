@@ -64,11 +64,20 @@ if( assimp_FOUND )
 		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpImporter.natvis
 	)
 	set( ${PROJECT_NAME}_HDR_FILES
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpHelpers.hpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpImporter.hpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/MaterialImporter.hpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/MeshImporter.hpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/SceneImporter.hpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/SkeletonImporter.hpp
 	)
 	set( ${PROJECT_NAME}_SRC_FILES
 		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpImporter.cpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpImporterPlugin.cpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/MaterialImporter.cpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/MeshImporter.cpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/SceneImporter.cpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/SkeletonImporter.cpp
 	)
 	source_group( "Header Files"
 		FILES
@@ -120,6 +129,7 @@ if( assimp_FOUND )
 			CXX_EXTENSIONS OFF
 			PREFIX ${C3D_LIB_PREFIX}
 			FOLDER "Plugins/Importers"
+			UNITY_BUILD "${CASTOR_UNITY_BUILD}"
 	)
 	set( CASTOR_INSTEXP_PLUGINS
 		${CASTOR_INSTEXP_PLUGINS}
