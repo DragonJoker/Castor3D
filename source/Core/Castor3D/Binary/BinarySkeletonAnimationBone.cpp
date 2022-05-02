@@ -47,7 +47,7 @@ namespace castor3d
 
 					if ( bone )
 					{
-						if ( bone->getType() == SkeletonNode::eBone )
+						if ( bone->getType() == SkeletonNodeType::eBone )
 						{
 							obj.setBone( static_cast< BoneNode & >( *bone ) );
 						}

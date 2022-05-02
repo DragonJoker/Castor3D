@@ -49,7 +49,7 @@ namespace castor3d
 
 						if ( node )
 						{
-							if ( node->getType() == SkeletonNode::eNode )
+							if ( node->getType() == SkeletonNodeType::eNode )
 							{
 								obj.setNode( *node );
 							}

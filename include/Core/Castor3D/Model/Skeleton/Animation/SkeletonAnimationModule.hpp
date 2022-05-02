@@ -18,29 +18,6 @@ namespace castor3d
 	//@{
 
 	/**
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Class which represents the moving things.
-	\remark		Manages translation, scaling, rotation of the thing.
-	\~french
-	\brief		Classe de représentation de choses mouvantes.
-	\remark		Gère les translations, mises à l'échelle, rotations de la chose.
-	*/
-	enum class SkeletonAnimationObjectType
-		: uint8_t
-	{
-		//!\~english	Node objects.
-		//!\~french		Objets noeud.
-		eNode,
-		//!\~english	Bone objects.
-		//!\~french		Objets os.
-		eBone,
-		CU_ScopedEnumBounds( eNode )
-	};
-	C3D_API castor::String getName( SkeletonAnimationObjectType value );
-	/**
 	\~english
 	\brief		Skeleton animation class.
 	\~french

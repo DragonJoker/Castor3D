@@ -76,7 +76,7 @@ namespace castor3d
 
 					if ( result )
 					{
-						obj.addAnimationObject( *obj.getOwner()->getObject( SkeletonAnimationObjectType( type )
+						obj.addAnimationObject( *obj.getOwner()->getObject( SkeletonNodeType( type )
 							, name )
 							, matrix );
 					}
@@ -122,7 +122,7 @@ namespace castor3d
 
 					if ( result )
 					{
-						obj.addAnimationObject( *obj.getOwner()->getObject( SkeletonAnimationObjectType( type )
+						obj.addAnimationObject( *obj.getOwner()->getObject( SkeletonNodeType( type )
 							, name )
 							, castor::Matrix4x4f{ matrix } );
 					}

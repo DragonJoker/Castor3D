@@ -123,7 +123,7 @@ namespace castor3d
 			, m_cumulative.end()
 			, [&bone]( ObjectTransform const & lookup )
 		{
-			return lookup.first->getType() == SkeletonAnimationObjectType::eBone
+			return lookup.first->getType() == SkeletonNodeType::eBone
 				&& static_cast< SkeletonAnimationBone const & >( *lookup.first ).getBone() == &bone;
 		} );
 	}

@@ -652,7 +652,7 @@ namespace castor3d::exporter
 					{
 						if ( result )
 						{
-							castor::BinaryFile animFile{ normalizePath( options.path / ( options.name + cuT( "-" ) + animation.first + cuT( ".cmsa" ) ) )
+							castor::BinaryFile animFile{ normalizePath( options.path / ( options.object.getName() + cuT( "-" ) + animation.first + cuT( ".cmsa" ) ) )
 								, castor::File::OpenMode::eWrite };
 							result = castor3d::BinaryWriter< MeshAnimation >{}.write( static_cast< MeshAnimation const & >( *animation.second ), animFile );
 						}

@@ -66,7 +66,7 @@ namespace castor3d
 		 *\param[in]	type	Le type de l'objet.
 		 *\param[in]	name	Le nom de l'objet.
 		 */
-		C3D_API SkeletonAnimationInstanceObjectSPtr getObject( SkeletonAnimationObjectType type
+		C3D_API SkeletonAnimationInstanceObjectSPtr getObject( SkeletonNodeType type
 			, castor::String const & name )const;
 		/**
 		 *\~english

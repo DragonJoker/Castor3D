@@ -360,7 +360,7 @@ namespace GuiCommon
 	{
 		for ( auto & node : skeleton.getNodes() )
 		{
-			if ( node->getType() == castor3d::SkeletonNode::eBone )
+			if ( node->getType() == castor3d::SkeletonNodeType::eBone )
 			{
 				AppendItem( idSkeleton
 					, node->getName()

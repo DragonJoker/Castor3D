@@ -281,14 +281,14 @@ namespace Testing
 	};
 
 	template<>
-	struct Stringifier< castor3d::SkeletonAnimationObjectType >
+	struct Stringifier< castor3d::SkeletonNodeType >
 	{
-		static std::string get( castor3d::SkeletonAnimationObjectType const & value )
+		static std::string get( castor3d::SkeletonNodeType const & value )
 		{
-			static std::map< castor3d::SkeletonAnimationObjectType, std::string > Names
+			static std::map< castor3d::SkeletonNodeType, std::string > Names
 			{
-				{ castor3d::SkeletonAnimationObjectType::eBone, "Bone" },
-				{ castor3d::SkeletonAnimationObjectType::eNode, "Node" },
+				{ castor3d::SkeletonNodeType::eBone, "Bone" },
+				{ castor3d::SkeletonNodeType::eNode, "Node" },
 			};
 			return Names[value];
 		}
