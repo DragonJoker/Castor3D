@@ -277,7 +277,8 @@ namespace castor3d
 			, castor::String const & name
 			, bool allowCompression
 			, bool layersToTiles
-			, uint32_t & layers )
+			, uint32_t & layers
+			, std::atomic_bool & interrupted )
 		{
 			// Finish buffer initialisation.
 			auto & loader = engine.getImageLoader();
@@ -288,6 +289,7 @@ namespace castor3d
 			{
 				log::debug << ( name + cuT( " - Compressing result.\n" ) );
 				buffer = castor::PxBufferBase::createUnique( &loader.getOptions()
+					, &interrupted
 					, buffer->getDimensions()
 					, compressedFormat
 					, buffer->getConstPtr()
@@ -585,6 +587,14 @@ namespace castor3d
 		m_bindlessTexLayout.reset();
 	}
 
+	void TextureUnitCache::stopLoad()
+	{
+		for ( auto & data : m_loading )
+		{
+			data->interrupted.exchange( true );
+		}
+	}
+
 	void TextureUnitCache::update( GpuUpdater & updater )
 	{
 		if ( !hasBindless() )
@@ -700,7 +710,8 @@ namespace castor3d
 			, name
 			, data.sourceInfo.allowCompression() && ( data.config.config.normalMask[0] == 0 )
 			, data.sourceInfo.layersToTiles()
-			, data.tiles );
+			, data.tiles
+			, data.interrupted );
 	}
 
 	void TextureUnitCache::doLoadSource( TextureSourceInfo const & sourceInfo
@@ -715,14 +726,18 @@ namespace castor3d
 				, [this, &data]( RenderDevice const & device
 					, QueueData const & queueData )
 					{
-						data.unit->setSampler( data.sourceInfo.sampler() );
-						data.unit->setRenderTarget( data.sourceInfo.renderTarget() );
-						auto config = data.config.config;
-						config.tileSet->z = data.tiles;
-						config.tileSet->w = 1u;
-						data.unit->setConfiguration( std::move( config ) );
-						data.unit->initialise( device, queueData );
-						doAddWrite( *data.unit );
+						if ( !data.interrupted )
+						{
+							data.unit->setSampler( data.sourceInfo.sampler() );
+							data.unit->setRenderTarget( data.sourceInfo.renderTarget() );
+							auto config = data.config.config;
+							config.tileSet->z = data.tiles;
+							config.tileSet->w = 1u;
+							data.unit->setConfiguration( std::move( config ) );
+							data.unit->initialise( device, queueData );
+							doAddWrite( *data.unit );
+						}
+
 						doDestroyThreadData( data );
 					} ) );
 		}
@@ -730,30 +745,44 @@ namespace castor3d
 		{
 			getEngine()->pushCpuJob( [this, &data]()
 				{
-					// Load CPU buffer on CPU thread
-					data.buffer = cachetex::getBufferImage( *getEngine()
-						, data.sourceInfo.name()
-						, data.sourceInfo.type()
-						, data.sourceInfo.buffer()
-						, data.config.config );
-					doCreateLayout( data, data.sourceInfo.name() );
-					// On buffer load end, upload to VRAM on GPU thread.
-					doUpload( data );
+					if ( !data.interrupted )
+					{
+						// Load CPU buffer on CPU thread
+						data.buffer = cachetex::getBufferImage( *getEngine()
+							, data.sourceInfo.name()
+							, data.sourceInfo.type()
+							, data.sourceInfo.buffer()
+							, data.config.config );
+						doCreateLayout( data, data.sourceInfo.name() );
+						// On buffer load end, upload to VRAM on GPU thread.
+						doUpload( data );
+					}
+					else
+					{
+						doDestroyThreadData( data );
+					}
 				} );
 		}
 		else
 		{
 			getEngine()->pushCpuJob( [this, &data]()
 				{
-					// Load CPU buffer on CPU thread
-					data.buffer = cachetex::getFileImage( *getEngine()
-						, data.sourceInfo.relative()
-						, data.sourceInfo.folder()
-						, data.sourceInfo.relative()
-						, data.config.config );
-					doCreateLayout( data, data.sourceInfo.relative() );
-					// On buffer load end, upload to VRAM on GPU thread.
-					doUpload( data );
+					if ( !data.interrupted )
+					{
+						// Load CPU buffer on CPU thread
+						data.buffer = cachetex::getFileImage( *getEngine()
+							, data.sourceInfo.relative()
+							, data.sourceInfo.folder()
+							, data.sourceInfo.relative()
+							, data.config.config );
+						doCreateLayout( data, data.sourceInfo.relative() );
+						// On buffer load end, upload to VRAM on GPU thread.
+						doUpload( data );
+					}
+					else
+					{
+						doDestroyThreadData( data );
+					}
 				} );
 		}
 	}
@@ -774,27 +803,34 @@ namespace castor3d
 		auto & data = doCreateThreadData( resultSourceInfo, resultConfig, unit );
 		getEngine()->pushCpuJob( [this, &data, name, lhsConfig, lhsSrcMask, lhsDstMask, lhsSourceInfo, rhsConfig, rhsSrcMask, rhsDstMask, rhsSourceInfo]()
 			{
-				// Merge CPU buffers on CPU thread.
-				auto lhsImage = cachetex::getFileImage( *getEngine()
-					, lhsSourceInfo.relative()
-					, lhsSourceInfo.folder()
-					, lhsSourceInfo.relative()
-					, lhsConfig );
-				auto rhsImage = cachetex::getFileImage( *getEngine()
-					, rhsSourceInfo.relative()
-					, rhsSourceInfo.folder()
-					, rhsSourceInfo.relative()
-					, rhsConfig );
-				data.buffer = cachetex::mergeBuffers( std::move( lhsImage )
-					, lhsSrcMask
-					, lhsDstMask
-					, std::move( rhsImage )
-					, rhsSrcMask
-					, rhsDstMask
-					, name );
-				doCreateLayout( data, name );
-				// On buffer load end, upload to VRAM on GPU thread.
-				doUpload( data );
+				if ( !data.interrupted )
+				{
+					// Merge CPU buffers on CPU thread.
+					auto lhsImage = cachetex::getFileImage( *getEngine()
+						, lhsSourceInfo.relative()
+						, lhsSourceInfo.folder()
+						, lhsSourceInfo.relative()
+						, lhsConfig );
+					auto rhsImage = cachetex::getFileImage( *getEngine()
+						, rhsSourceInfo.relative()
+						, rhsSourceInfo.folder()
+						, rhsSourceInfo.relative()
+						, rhsConfig );
+					data.buffer = cachetex::mergeBuffers( std::move( lhsImage )
+						, lhsSrcMask
+						, lhsDstMask
+						, std::move( rhsImage )
+						, rhsSrcMask
+						, rhsDstMask
+						, name );
+					doCreateLayout( data, name );
+					// On buffer load end, upload to VRAM on GPU thread.
+					doUpload( data );
+				}
+				else
+				{
+					doDestroyThreadData( data );
+				}
 			} );
 	}
 
@@ -828,24 +864,28 @@ namespace castor3d
 			, [this, &data]( RenderDevice const & device
 				, QueueData const & queueData )
 				{
-					data.unit->setSampler( data.sourceInfo.sampler() );
-					data.unit->setTexture( data.layout );
-					auto config = data.config.config;
-					auto tiles = data.layout->getImage().getPixels()->getTiles();
-
-					if ( config.tileSet->z <= 1 && tiles->x >= 1 )
+					if ( !data.interrupted )
 					{
-						config.tileSet->z = tiles->x;
+						data.unit->setSampler( data.sourceInfo.sampler() );
+						data.unit->setTexture( data.layout );
+						auto config = data.config.config;
+						auto tiles = data.layout->getImage().getPixels()->getTiles();
+
+						if ( config.tileSet->z <= 1 && tiles->x >= 1 )
+						{
+							config.tileSet->z = tiles->x;
+						}
+
+						if ( config.tileSet->w <= 1 && tiles->y >= 1 )
+						{
+							config.tileSet->w = tiles->y;
+						}
+
+						data.unit->setConfiguration( std::move( config ) );
+						data.unit->initialise( device, queueData );
+						doAddWrite( *data.unit );
 					}
 
-					if ( config.tileSet->w <= 1 && tiles->y >= 1 )
-					{
-						config.tileSet->w = tiles->y;
-					}
-
-					data.unit->setConfiguration( std::move( config ) );
-					data.unit->initialise( device, queueData );
-					doAddWrite( *data.unit );
 					doDestroyThreadData( data );
 				} ) );
 	}

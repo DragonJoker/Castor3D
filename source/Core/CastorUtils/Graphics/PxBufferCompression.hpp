@@ -38,7 +38,8 @@ namespace castor
 		cvtt::BC7EncodingPlan encodingPlan;
 	};
 
-	std::vector< cvtt::PixelBlockU8 > createBlocksU8( Size const & srcDimensions
+	std::vector< cvtt::PixelBlockU8 > createBlocksU8( std::atomic_bool const * interrupt
+		, Size const & srcDimensions
 		, uint32_t srcPixelSize
 		, uint8_t const * srcBuffer
 		, uint32_t srcSize
@@ -46,7 +47,8 @@ namespace castor
 		, X8UGetter getG
 		, X8UGetter getB
 		, X8UGetter getA );
-	std::vector< cvtt::PixelBlockS8 > createBlocksS8( Size const & srcDimensions
+	std::vector< cvtt::PixelBlockS8 > createBlocksS8( std::atomic_bool const * interrupt
+		, Size const & srcDimensions
 		, uint32_t srcPixelSize
 		, uint8_t const * srcBuffer
 		, uint32_t srcSize
@@ -54,7 +56,8 @@ namespace castor
 		, X8SGetter getG
 		, X8SGetter getB
 		, X8SGetter getA );
-	std::vector< cvtt::PixelBlockF16 > createBlocksF16( Size const & srcDimensions
+	std::vector< cvtt::PixelBlockF16 > createBlocksF16( std::atomic_bool const * interrupt
+		, Size const & srcDimensions
 		, uint32_t srcPixelSize
 		, uint8_t const * srcBuffer
 		, uint32_t srcSize
@@ -64,16 +67,19 @@ namespace castor
 		, X16FGetter getA );
 
 	void compressBlocks( CVTTOptions  const & options
+		, std::atomic_bool const * interrupt
 		, std::vector< cvtt::PixelBlockU8 > const & blocksCont
 		, PixelFormat dstFormat
 		, uint8_t * dstBuffer
 		, uint32_t dstSize );
 	void compressBlocks( CVTTOptions  const & options
+		, std::atomic_bool const * interrupt
 		, std::vector< cvtt::PixelBlockS8 > const & blocksCont
 		, PixelFormat dstFormat
 		, uint8_t * dstBuffer
 		, uint32_t dstSize );
 	void compressBlocks( CVTTOptions  const & options
+		, std::atomic_bool const * interrupt
 		, std::vector< cvtt::PixelBlockF16 > const & blocksCont
 		, PixelFormat dstFormat
 		, uint8_t * dstBuffer
@@ -83,8 +89,10 @@ namespace castor
 	struct CVTTCompressorU
 	{
 		CVTTCompressorU( PxBufferConvertOptions const * optionsData
+			, std::atomic_bool const * interrupt
 			, uint32_t srcPixelSize )
 			: options{ reinterpret_cast< CVTTOptions * >( optionsData->additionalOptions ) }
+			, interrupt{ interrupt }
 			, srcPixelSize{ srcPixelSize }
 		{
 		}
@@ -97,7 +105,8 @@ namespace castor
 			, uint8_t * dstBuffer
 			, uint32_t dstSize )
 		{
-			auto blocks = createBlocksU8( srcDimensions
+			auto blocks = createBlocksU8( interrupt
+				, srcDimensions
 				, srcPixelSize
 				, srcBuffer
 				, srcSize
@@ -106,6 +115,7 @@ namespace castor
 				, getB8U< PFSrc >
 				, getA8U< PFSrc > );
 			compressBlocks( *options
+				, interrupt
 				, blocks
 				, dstFormat
 				, dstBuffer
@@ -114,6 +124,7 @@ namespace castor
 
 	private:
 		CVTTOptions const * options;
+		std::atomic_bool const * interrupt;
 		uint32_t const srcPixelSize;
 	};
 
@@ -121,6 +132,7 @@ namespace castor
 	struct CVTTCompressorS
 	{
 		CVTTCompressorS( PxBufferConvertOptions const * optionsData
+			, std::atomic_bool const * interrupt
 			, uint32_t srcPixelSize )
 			: options{ reinterpret_cast< CVTTOptions * >( optionsData->additionalOptions ) }
 			, srcPixelSize{ srcPixelSize }
@@ -135,7 +147,8 @@ namespace castor
 			, uint8_t * dstBuffer
 			, uint32_t dstSize )
 		{
-			auto blocks = createBlocksS8( srcDimensions
+			auto blocks = createBlocksS8( interrupt
+				, srcDimensions
 				, srcPixelSize
 				, srcBuffer
 				, srcSize
@@ -144,6 +157,7 @@ namespace castor
 				, getB8S< PFSrc >
 				, getA8S< PFSrc > );
 			compressBlocks( *options
+				, interrupt
 				, blocks
 				, dstFormat
 				, dstBuffer
@@ -152,6 +166,7 @@ namespace castor
 
 	private:
 		CVTTOptions const * options;
+		std::atomic_bool const * interrupt;
 		uint32_t const srcPixelSize;
 	};
 
@@ -159,6 +174,7 @@ namespace castor
 	struct CVTTCompressorF
 	{
 		CVTTCompressorF( PxBufferConvertOptions const * optionsData
+			, std::atomic_bool const * interrupt
 			, uint32_t srcPixelSize )
 			: options{ reinterpret_cast< CVTTOptions * >( optionsData->additionalOptions ) }
 			, srcPixelSize{ srcPixelSize }
@@ -173,7 +189,8 @@ namespace castor
 			, uint8_t * dstBuffer
 			, uint32_t dstSize )
 		{
-			auto blocks = createBlocksF16( srcDimensions
+			auto blocks = createBlocksF16( interrupt
+				, srcDimensions
 				, srcPixelSize
 				, srcBuffer
 				, srcSize
@@ -182,6 +199,7 @@ namespace castor
 				, getB16F< PFSrc >
 				, getA16F< PFSrc > );
 			compressBlocks( *options
+				, interrupt
 				, blocks
 				, dstFormat
 				, dstBuffer
@@ -190,6 +208,7 @@ namespace castor
 
 	private:
 		CVTTOptions const * options;
+		std::atomic_bool const * interrupt;
 		uint32_t const srcPixelSize;
 	};
 
@@ -205,7 +224,8 @@ namespace castor
 			, X8UGetter getR
 			, X8UGetter getG
 			, X8UGetter getB
-			, X8UGetter getA );
+			, X8UGetter getA
+			, std::atomic_bool const * interrupt );
 
 		CU_API uint32_t extractBlock( uint8_t const * inPtr
 			, uint32_t width
@@ -225,6 +245,7 @@ namespace castor
 		X8UGetter getG;
 		X8UGetter getB;
 		X8UGetter getA;
+		std::atomic_bool const * interrupt;
 	};
 
 	struct BC1Compressor
@@ -234,7 +255,8 @@ namespace castor
 			, X8UGetter getR
 			, X8UGetter getG
 			, X8UGetter getB
-			, X8UGetter getA );
+			, X8UGetter getA
+			, std::atomic_bool const * interrupt );
 
 		CU_API void compress( Size const & srcDimensions
 			, Size const & dstDimensions
@@ -256,7 +278,8 @@ namespace castor
 			, X8UGetter getR
 			, X8UGetter getG
 			, X8UGetter getB
-			, X8UGetter getA );
+			, X8UGetter getA
+			, std::atomic_bool const * interrupt );
 
 		CU_API void compress( Size const & srcDimensions
 			, Size const & dstDimensions

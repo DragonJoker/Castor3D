@@ -44,6 +44,7 @@ namespace castor3d
 			TextureLayoutSPtr layout{};
 			TextureUnit * unit{};
 			uint32_t tiles{ 1u };
+			std::atomic_bool interrupted{ false };
 		};
 
 	public:
@@ -52,6 +53,7 @@ namespace castor3d
 
 		C3D_API void initialise( RenderDevice const & device );
 		C3D_API void cleanup();
+		C3D_API void stopLoad();
 
 		C3D_API void update( GpuUpdater & updater );
 
