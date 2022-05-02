@@ -645,6 +645,7 @@ namespace castor
 	{
 		template< PixelFormat PFSrc >
 		void compressBufferT( PxBufferConvertOptions const * options
+			, std::atomic_bool const * interrupt
 			, Size const & srcDimensions
 			, Size const & dstDimensions
 			, uint8_t const * srcBuffer
@@ -673,6 +674,7 @@ namespace castor
 				case PixelFormat::eBC7_SRGB_BLOCK:
 					{
 						CVTTCompressorU< PFSrc > compressor{ options
+							, interrupt
 							, uint32_t( getBytesPerPixel( PFSrc ) ) };
 						compressor.compress( dstFormat
 							, srcDimensions
@@ -687,6 +689,7 @@ namespace castor
 				case PixelFormat::eBC5_SNORM_BLOCK:
 					{
 						CVTTCompressorS< PFSrc > compressor{ options
+							, interrupt
 							, uint32_t( getBytesPerPixel( PFSrc ) ) };
 						compressor.compress( dstFormat
 							, srcDimensions
@@ -701,6 +704,7 @@ namespace castor
 				case PixelFormat::eBC6H_SFLOAT_BLOCK:
 					{
 						CVTTCompressorF< PFSrc > compressor{ options
+							, interrupt
 							, uint32_t( getBytesPerPixel( PFSrc ) ) };
 						compressor.compress( dstFormat
 							, srcDimensions
@@ -719,7 +723,8 @@ namespace castor
 							, getR8U< PFSrc >
 							, getG8U< PFSrc >
 							, getB8U< PFSrc >
-							, getA8U< PFSrc > };
+							, getA8U< PFSrc >
+							, interrupt };
 						compressor.compress( srcDimensions
 							, dstDimensions
 							, srcBuffer
@@ -735,7 +740,8 @@ namespace castor
 							, getR8U< PFSrc >
 							, getG8U< PFSrc >
 							, getB8U< PFSrc >
-							, getA8U< PFSrc > };
+							, getA8U< PFSrc >
+							, interrupt };
 						compressor.compress( srcDimensions
 							, dstDimensions
 							, srcBuffer
@@ -753,6 +759,7 @@ namespace castor
 	}
 
 	void compressBuffer( PxBufferConvertOptions const * options
+		, std::atomic_bool const * interrupt
 		, Size const & srcDimensions
 		, Size const & dstDimensions
 		, PixelFormat srcFormat
@@ -766,7 +773,14 @@ namespace castor
 		{
 #define CUPF_ENUM_VALUE_COLOR( name, value, components, alpha )\
 		case PixelFormat::e##name:\
-			compressBufferT< PixelFormat::e##name >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );\
+			compressBufferT< PixelFormat::e##name >( options\
+				, interrupt\
+				, srcDimensions\
+				, dstDimensions\
+				, srcBuffer\
+				, srcSize\
+				, dstFormat\
+				, dstBuffer, dstSize );\
 			break;
 #include "CastorUtils/Graphics/PixelFormat.enum"
 		default:

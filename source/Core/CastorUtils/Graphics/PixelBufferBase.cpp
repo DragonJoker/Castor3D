@@ -201,8 +201,7 @@ namespace castor
 			return result;
 		}
 
-		static void copyBuffer( PxBufferConvertOptions const * CU_UnusedParam( options )
-			, Size const & dimensions
+		static void copyBuffer( Size const & dimensions
 			, uint8_t const * srcBuffer
 			, PixelFormat srcFormat
 			, uint32_t srcAlign
@@ -272,6 +271,7 @@ namespace castor
 		}
 
 		static void compressBuffer( PxBufferConvertOptions const * options
+			, std::atomic_bool const * interrupt
 			, Size const & dimensions
 			, uint8_t const * srcBuffer
 			, PixelFormat srcFormat
@@ -303,6 +303,11 @@ namespace castor
 
 				for ( uint32_t level = 0u; level < levels; ++level )
 				{
+					if ( interrupt && *interrupt )
+					{
+						return;
+					}
+
 					auto srcLevel = srcLevelStart;
 					auto dstLevel = dstLevelStart;
 					auto srcLevelSize = uint32_t( ashes::getSize( VkFormat( srcFormat )
@@ -324,6 +329,7 @@ namespace castor
 
 					CU_Require( ( written + dstLevelSize ) <= dstBufferSize );
 					compressBuffer( options
+						, interrupt
 						, { srcLevelExtent.width, srcLevelExtent.height }
 						, { dstLevelExtent.width, dstLevelExtent.height }
 						, srcFormat
@@ -443,6 +449,7 @@ namespace castor
 	//*********************************************************************************************
 
 	PxBufferBase::PxBufferBase( PxBufferConvertOptions const * options
+		, std::atomic_bool const * interrupt
 		, Size const & size
 		, PixelFormat format
 		, uint32_t layers
@@ -456,7 +463,7 @@ namespace castor
 		, m_levels{ levels }
 		, m_buffer{ 0 }
 	{
-		initialise( options, buffer, bufferFormat, bufferAlign );
+		initialise( options, interrupt, buffer, bufferFormat, bufferAlign );
 	}
 
 	PxBufferBase::PxBufferBase( Size const & size
@@ -467,6 +474,7 @@ namespace castor
 		, PixelFormat bufferFormat
 		, uint32_t bufferAlign )
 		: PxBufferBase{ nullptr
+			, nullptr
 			, size
 			, format
 			, layers
@@ -509,6 +517,7 @@ namespace castor
 	}
 
 	void PxBufferBase::initialise( PxBufferConvertOptions const * options
+		, std::atomic_bool const * interrupt
 		, uint8_t const * buffer
 		, PixelFormat bufferFormat
 		, uint32_t bufferAlign )
@@ -539,6 +548,7 @@ namespace castor
 					, m_align );
 			m_buffer.resize( newSize );
 			pxbb::compressBuffer( options
+				, interrupt
 				, m_size
 				, buffer
 				, bufferFormat
@@ -570,8 +580,7 @@ namespace castor
 			}
 			else
 			{
-				pxbb::copyBuffer( options
-					, m_size
+				pxbb::copyBuffer( m_size
 					, buffer
 					, bufferFormat
 					, bufferAlign
@@ -770,6 +779,7 @@ namespace castor
 		, uint32_t bufferAlign )
 	{
 		return std::make_shared< PxBufferBase >( options
+			, nullptr
 			, size
 			, wantedFormat
 			, layers
@@ -780,6 +790,7 @@ namespace castor
 	}
 
 	PxBufferBaseUPtr PxBufferBase::createUnique( PxBufferConvertOptions const * options
+		, std::atomic_bool const * interrupt
 		, Size const & size
 		, uint32_t layers
 		, uint32_t levels
@@ -789,6 +800,7 @@ namespace castor
 		, uint32_t bufferAlign )
 	{
 		return castor::makeUnique< PxBufferBase >( options
+			, interrupt
 			, size
 			, wantedFormat
 			, layers
