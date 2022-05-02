@@ -53,8 +53,12 @@ namespace castor3d
 			{
 				return lookup.offset == pointer;
 			} );
-		m_currentAllocated -= it->size;
-		m_deallocated.push_back( *it );
-		m_allocated.erase( it );
+
+		if ( it != m_allocated.end() )
+		{
+			m_currentAllocated -= it->size;
+			m_deallocated.push_back( *it );
+			m_allocated.erase( it );
+		}
 	}
 }
