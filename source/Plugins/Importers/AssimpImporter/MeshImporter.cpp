@@ -411,7 +411,7 @@ namespace c3d_assimp
 					int32_t index = 0u;
 					castor::String name{ m_prefix + castor::string::stringCast< castor::xchar >( aiMesh.mName.C_Str() ) };
 					castor3d::log::info << cuT( "  Mesh Animation found: [" ) << name << cuT( "]" ) << std::endl;
-					auto & animation = mesh.createAnimation( name );
+					auto & animation = mesh.createAnimation( "Morph" );
 					castor3d::MeshAnimationSubmesh animSubmesh{ animation, submesh };
 					animation.addChild( std::move( animSubmesh ) );
 					castor3d::MeshAnimationKeyFrameUPtr keyFrame = std::make_unique< castor3d::MeshAnimationKeyFrame >( animation
@@ -455,7 +455,7 @@ namespace c3d_assimp
 		{
 			castor::String name = m_prefix + castor::string::stringCast< castor::xchar >( aiBone->mName.C_Str() );
 			auto node = skeleton.findNode( name );
-			CU_Require( node && node->getType() == castor3d::SkeletonNode::eBone );
+			CU_Require( node && node->getType() == castor3d::SkeletonNodeType::eBone );
 			auto bone = &static_cast< castor3d::BoneNode & >( *node );
 
 			for ( auto weight : castor::makeArrayView( aiBone->mWeights, aiBone->mNumWeights ) )
