@@ -101,8 +101,6 @@ namespace castor3d
 				data = device.graphicsData().release();
 			}
 
-			m_uploadTimer = nullptr;
-			m_reservedQueue = nullptr;
 			getEngine()->getFrameListenerCache().forEach( [&device, data]( FrameListener & listener )
 				{
 					listener.fireEvents( EventType::ePreRender, device, *data );
@@ -122,6 +120,9 @@ namespace castor3d
 				uploadResources.used = false;
 				uploadResources.waitCount = 1u;
 			}
+
+			m_uploadTimer = nullptr;
+			m_reservedQueue = nullptr;
 		}
 		else
 		{
