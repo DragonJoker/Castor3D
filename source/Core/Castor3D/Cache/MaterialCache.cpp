@@ -115,7 +115,7 @@ namespace castor
 			auto lock( makeUniqueLock( *this ) );
 			doCleanupNoLock();
 		}
-		m_engine.postEvent( makeCpuFunctorEvent( EventType::ePreRender
+		m_engine.postEvent( makeCpuFunctorEvent( EventType::ePostRender
 			, [this]()
 			{
 				m_passBuffer.reset();
