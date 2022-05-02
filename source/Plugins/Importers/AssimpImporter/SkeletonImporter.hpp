@@ -32,14 +32,9 @@ namespace c3d_assimp
 		castor3d::SkeletonSPtr getSkeleton( aiMesh const & aiMesh )const;
 
 	private:
-		bool doCheckNewSkeleton( castor3d::SkeletonSPtr & skeleton );
 		void doProcessSkeletons( aiScene const & aiScene
 			, castor3d::Scene & scene
 			, castor::ArrayView< aiMesh * > aiMeshes );
-		void doProcessBones( castor3d::Skeleton & skeleton
-			, castor::ArrayView< aiBone * > aiBones );
-		void doLinkSkeletonNodes( castor3d::Skeleton & skeleton
-			, aiNode const & aiNode );
 		void doProcessSkeletonAnimation( castor::String const & name
 			, castor3d::Skeleton & skeleton
 			, aiNode const & aiNode
@@ -49,12 +44,8 @@ namespace c3d_assimp
 			, castor3d::Skeleton & skeleton
 			, aiNode const & aiNode
 			, aiAnimation const & aiAnimation
-			, castor3d::SkeletonAnimationObjectSPtr object
 			, SkeletonAnimationKeyFrameMap & keyFrames
 			, SkeletonAnimationObjectSet & notAnimated );
-		void doProcessSkeletonNodes( castor3d::Skeleton & skeleton
-			, aiScene const & aiScene
-			, aiNode const & aiNode );
 		void doProcessAnimationNodeKeys( aiNodeAnim const & aiNodeAnim
 			, int64_t ticksPerSecond
 			, castor3d::SkeletonAnimationObject & object
@@ -67,7 +58,7 @@ namespace c3d_assimp
 		castor::Path m_fileName;
 		uint32_t m_importFlags{};
 		std::map< aiNode const *, aiBone const * > m_bonesNodes;
-		std::set< castor3d::SkeletonSPtr > m_skeletons;
+		std::map< aiNode const *, castor3d::SkeletonSPtr > m_skeletons;
 		std::map< aiMesh const *, castor3d::SkeletonSPtr > m_meshSkeletons;
 	};
 }
