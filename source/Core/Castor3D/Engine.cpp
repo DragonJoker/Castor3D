@@ -256,6 +256,7 @@ namespace castor3d
 		if ( !isCleaned() )
 		{
 			setCleaned();
+			m_textureCache->stopLoad();
 			m_cpuJobs.finish();
 
 			if ( m_threaded

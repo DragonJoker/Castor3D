@@ -10,9 +10,13 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Exception/Exception.hpp"
 
-#include <vector>
+#pragma warning( push )
+#pragma warning( disable:4365 )
 #include <algorithm>
+#include <atomic>
 #include <numeric>
+#include <vector>
+#pragma warning( pop )
 
 namespace castor
 {
@@ -278,6 +282,7 @@ namespace castor
 	 *\~english
 	 *\brief		Function to perform convertion without templates.
 	 *\param[in]	options			The convertion options.
+	 *\param[in]	interrupt		Tells if the convertion is to be interrupted.
 	 *\param[in]	srcDimensions	The source dimensions.
 	 *\param[in]	dstDimensions	The destination dimensions (used only when block compressing).
 	 *\param[in]	srcFormat		The source format.
@@ -289,6 +294,7 @@ namespace castor
 	 *\~french
 	 *\brief		Fonction de conversion sans templates
 	 *\param[in]	options			Les options de conversion.
+	 *\param[in]	interrupt		Dit si la conversion est à interrompre.
 	 *\param[in]	srcDimensions	Les dimensions de la source.
 	 *\param[in]	dstDimensions	Les dimensions de la destination (utilisé uniquement lors d'une compression par blocs).
 	 *\param[in]	srcFormat		Le format de la source.
@@ -299,6 +305,7 @@ namespace castor
 	 *\param[in]	dstSize			La taille de la destination.
 	 */
 	CU_API void compressBuffer( PxBufferConvertOptions const * options
+		, std::atomic_bool const * interrupt
 		, Size const & srcDimensions
 		, Size const & dstDimensions
 		, PixelFormat srcFormat

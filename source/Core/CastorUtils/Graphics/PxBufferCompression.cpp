@@ -74,7 +74,8 @@ namespace castor
 		}
 
 		template< typename TypeT >
-		static std::vector< BlockTypeT< TypeT > > extractBlocks( Size const & srcDimensions
+		static std::vector< BlockTypeT< TypeT > > extractBlocks( std::atomic_bool const * interrupt
+			, Size const & srcDimensions
 			, uint32_t srcPixelSize
 			, uint8_t const * srcBuffer
 			, uint32_t srcSize
@@ -111,6 +112,11 @@ namespace castor
 
 				for ( uint32_t x = 0; x < bw; x += 4u )
 				{
+					if ( interrupt && *interrupt )
+					{
+						return result;
+					}
+
 					BlockTypeT< TypeT > block;
 					getLinePixels( block, x, w, srcPixelSize, 0u, line0Ptr, getR, getG, getB, getA );
 					getLinePixels( block, x, w, srcPixelSize, 1u, line1Ptr, getR, getG, getB, getA );
@@ -166,7 +172,8 @@ namespace castor
 
 	//*****************************************************************************************
 
-	std::vector< cvtt::PixelBlockU8 > createBlocksU8( Size const & srcDimensions
+	std::vector< cvtt::PixelBlockU8 > createBlocksU8( std::atomic_bool const * interrupt
+		, Size const & srcDimensions
 		, uint32_t srcPixelSize
 		, uint8_t const * srcBuffer
 		, uint32_t srcSize
@@ -175,7 +182,8 @@ namespace castor
 		, X8UGetter getB
 		, X8UGetter getA )
 	{
-		return pxcomp::extractBlocks( srcDimensions
+		return pxcomp::extractBlocks( interrupt
+			, srcDimensions
 			, srcPixelSize
 			, srcBuffer
 			, srcSize
@@ -185,7 +193,8 @@ namespace castor
 			, getA );
 	}
 
-	std::vector< cvtt::PixelBlockS8 > createBlocksS8( Size const & srcDimensions
+	std::vector< cvtt::PixelBlockS8 > createBlocksS8( std::atomic_bool const * interrupt
+		, Size const & srcDimensions
 		, uint32_t srcPixelSize
 		, uint8_t const * srcBuffer
 		, uint32_t srcSize
@@ -194,7 +203,8 @@ namespace castor
 		, X8SGetter getB
 		, X8SGetter getA )
 	{
-		return pxcomp::extractBlocks( srcDimensions
+		return pxcomp::extractBlocks( interrupt
+			, srcDimensions
 			, srcPixelSize
 			, srcBuffer
 			, srcSize
@@ -204,7 +214,8 @@ namespace castor
 			, getA );
 	}
 
-	std::vector< cvtt::PixelBlockF16 > createBlocksF16( Size const & srcDimensions
+	std::vector< cvtt::PixelBlockF16 > createBlocksF16( std::atomic_bool const * interrupt
+		, Size const & srcDimensions
 		, uint32_t srcPixelSize
 		, uint8_t const * srcBuffer
 		, uint32_t srcSize
@@ -213,7 +224,8 @@ namespace castor
 		, X16FGetter getB
 		, X16FGetter getA )
 	{
-		return pxcomp::extractBlocks( srcDimensions
+		return pxcomp::extractBlocks( interrupt
+			, srcDimensions
 			, srcPixelSize
 			, srcBuffer
 			, srcSize
@@ -224,6 +236,7 @@ namespace castor
 	}
 
 	void compressBlocks( CVTTOptions  const & options
+		, std::atomic_bool const * interrupt
 		, std::vector< cvtt::PixelBlockU8 > const & blocksCont
 		, PixelFormat dstFormat
 		, uint8_t * dstBuffer
@@ -236,47 +249,52 @@ namespace castor
 
 		for ( auto it = blocksCont.begin(); it != blocksCont.end(); it += cvtt::NumParallelBlocks )
 		{
-				switch ( dstFormat )
-				{
-				case PixelFormat::eBC1_RGB_UNORM_BLOCK:
-				case PixelFormat::eBC1_RGB_SRGB_BLOCK:
-				case PixelFormat::eBC1_RGBA_UNORM_BLOCK:
-				case PixelFormat::eBC1_RGBA_SRGB_BLOCK:
-					EncodeBC1( dstBuffer, blocks, options.options );
-					break;
-				case PixelFormat::eBC2_UNORM_BLOCK:
-				case PixelFormat::eBC2_SRGB_BLOCK:
-					EncodeBC2( dstBuffer, blocks, options.options );
-					break;
-				case PixelFormat::eBC3_UNORM_BLOCK:
-				case PixelFormat::eBC3_SRGB_BLOCK:
-					EncodeBC3( dstBuffer, blocks, options.options );
-					break;
-				case PixelFormat::eBC4_UNORM_BLOCK:
-					EncodeBC4U( dstBuffer, blocks, options.options );
-					break;
-				case PixelFormat::eBC5_UNORM_BLOCK:
-					EncodeBC5U( dstBuffer, blocks, options.options );
-					break;
-				case PixelFormat::eBC7_UNORM_BLOCK:
-				case PixelFormat::eBC7_SRGB_BLOCK:
-					EncodeBC7( dstBuffer, blocks, options.options, options.encodingPlan );
-					break;
-				case PixelFormat::eETC2_R8G8B8_UNORM_BLOCK:
-				case PixelFormat::eETC2_R8G8B8_SRGB_BLOCK:
-					EncodeETC2( dstBuffer, blocks, options.options, options.etc2CompressionData );
-					break;
-				case PixelFormat::eETC2_R8G8B8A1_UNORM_BLOCK:
-				case PixelFormat::eETC2_R8G8B8A1_SRGB_BLOCK:
-					EncodeETC2PunchthroughAlpha( dstBuffer, blocks, options.options, options.etc2CompressionData );
-					break;
-				case PixelFormat::eETC2_R8G8B8A8_UNORM_BLOCK:
-				case PixelFormat::eETC2_R8G8B8A8_SRGB_BLOCK:
-					EncodeETC2RGBA( dstBuffer, blocks, options.options, options.etc2CompressionData );
-					break;
-				default:
-					break;
-				}
+			if ( interrupt && *interrupt )
+			{
+				return;
+			}
+
+			switch ( dstFormat )
+			{
+			case PixelFormat::eBC1_RGB_UNORM_BLOCK:
+			case PixelFormat::eBC1_RGB_SRGB_BLOCK:
+			case PixelFormat::eBC1_RGBA_UNORM_BLOCK:
+			case PixelFormat::eBC1_RGBA_SRGB_BLOCK:
+				EncodeBC1( dstBuffer, blocks, options.options );
+				break;
+			case PixelFormat::eBC2_UNORM_BLOCK:
+			case PixelFormat::eBC2_SRGB_BLOCK:
+				EncodeBC2( dstBuffer, blocks, options.options );
+				break;
+			case PixelFormat::eBC3_UNORM_BLOCK:
+			case PixelFormat::eBC3_SRGB_BLOCK:
+				EncodeBC3( dstBuffer, blocks, options.options );
+				break;
+			case PixelFormat::eBC4_UNORM_BLOCK:
+				EncodeBC4U( dstBuffer, blocks, options.options );
+				break;
+			case PixelFormat::eBC5_UNORM_BLOCK:
+				EncodeBC5U( dstBuffer, blocks, options.options );
+				break;
+			case PixelFormat::eBC7_UNORM_BLOCK:
+			case PixelFormat::eBC7_SRGB_BLOCK:
+				EncodeBC7( dstBuffer, blocks, options.options, options.encodingPlan );
+				break;
+			case PixelFormat::eETC2_R8G8B8_UNORM_BLOCK:
+			case PixelFormat::eETC2_R8G8B8_SRGB_BLOCK:
+				EncodeETC2( dstBuffer, blocks, options.options, options.etc2CompressionData );
+				break;
+			case PixelFormat::eETC2_R8G8B8A1_UNORM_BLOCK:
+			case PixelFormat::eETC2_R8G8B8A1_SRGB_BLOCK:
+				EncodeETC2PunchthroughAlpha( dstBuffer, blocks, options.options, options.etc2CompressionData );
+				break;
+			case PixelFormat::eETC2_R8G8B8A8_UNORM_BLOCK:
+			case PixelFormat::eETC2_R8G8B8A8_SRGB_BLOCK:
+				EncodeETC2RGBA( dstBuffer, blocks, options.options, options.etc2CompressionData );
+				break;
+			default:
+				break;
+			}
 
 			written += uint32_t( cvtt::NumParallelBlocks * pixelSize );
 			dstBuffer += uint32_t( cvtt::NumParallelBlocks * pixelSize );
@@ -287,6 +305,7 @@ namespace castor
 	}
 
 	void compressBlocks( CVTTOptions  const & options
+		, std::atomic_bool const * interrupt
 		, std::vector< cvtt::PixelBlockS8 > const & blocksCont
 		, PixelFormat dstFormat
 		, uint8_t * dstBuffer
@@ -299,6 +318,11 @@ namespace castor
 
 		for ( auto it = blocksCont.begin(); it != blocksCont.end(); it += cvtt::NumParallelBlocks )
 		{
+			if ( interrupt && *interrupt )
+			{
+				return;
+			}
+
 			switch ( dstFormat )
 			{
 			case castor::PixelFormat::eBC4_SNORM_BLOCK:
@@ -320,6 +344,7 @@ namespace castor
 	}
 
 	void compressBlocks( CVTTOptions  const & options
+		, std::atomic_bool const * interrupt
 		, std::vector< cvtt::PixelBlockF16 > const & blocksCont
 		, PixelFormat dstFormat
 		, uint8_t * dstBuffer
@@ -332,6 +357,11 @@ namespace castor
 
 		for ( auto it = blocksCont.begin(); it != blocksCont.end(); it += cvtt::NumParallelBlocks )
 		{
+			if ( interrupt && *interrupt )
+			{
+				return;
+			}
+
 			switch ( dstFormat )
 			{
 			case castor::PixelFormat::eBC6H_UFLOAT_BLOCK:
@@ -356,16 +386,18 @@ namespace castor
 
 	//*****************************************************************************************
 
-	BC4x4Compressor::BC4x4Compressor( uint32_t srcPixelSize
-		, X8UGetter getR
-		, X8UGetter getG
-		, X8UGetter getB
-		, X8UGetter getA )
-		: srcPixelSize{ srcPixelSize }
-		, getR{ getR }
-		, getG{ getG }
-		, getB{ getB }
-		, getA{ getA }
+	BC4x4Compressor::BC4x4Compressor( uint32_t psrcPixelSize
+		, X8UGetter pgetR
+		, X8UGetter pgetG
+		, X8UGetter pgetB
+		, X8UGetter pgetA
+		, std::atomic_bool const * pinterrupt )
+		: srcPixelSize{ psrcPixelSize }
+		, getR{ pgetR }
+		, getG{ pgetG }
+		, getB{ pgetB }
+		, getA{ pgetA }
+		, interrupt{ pinterrupt }
 	{
 	}
 
@@ -596,8 +628,9 @@ namespace castor
 		, X8UGetter getR
 		, X8UGetter getG
 		, X8UGetter getB
-		, X8UGetter getA )
-		: BC4x4Compressor{ srcPixelSize, getR, getG, getB, getA }
+		, X8UGetter getA
+		, std::atomic_bool const * interrupt )
+		: BC4x4Compressor{ srcPixelSize, getR, getG, getB, getA, interrupt }
 	{
 	}
 
@@ -626,6 +659,11 @@ namespace castor
 		{
 			for ( uint32_t i = 0; i < srcWidth; i += 4 )
 			{
+				if ( interrupt && *interrupt )
+				{
+					return;
+				}
+
 				read += extractBlock( srcBuffer + i * srcPixelSize, srcWidth, block );
 				getMinMaxColors( block, minColor, maxColor );
 
@@ -694,8 +732,9 @@ namespace castor
 		, X8UGetter getR
 		, X8UGetter getG
 		, X8UGetter getB
-		, X8UGetter getA )
-		: BC4x4Compressor{ srcPixelSize, getR, getG, getB, getA }
+		, X8UGetter getA
+		, std::atomic_bool const * interrupt )
+		: BC4x4Compressor{ srcPixelSize, getR, getG, getB, getA, interrupt }
 	{
 	}
 
@@ -724,6 +763,11 @@ namespace castor
 		{
 			for ( uint32_t i = 0; i < srcWidth; i += 4 )
 			{
+				if ( interrupt && *interrupt )
+				{
+					return;
+				}
+
 				read += extractBlock( srcBuffer + i * srcPixelSize, srcWidth, block );
 				getMinMaxColors( block, minColor, maxColor );
 
