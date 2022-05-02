@@ -11,7 +11,7 @@ namespace castor3d
 		, Skeleton & skeleton
 		, castor::Matrix4x4f inverseTransform
 		, uint32_t id )
-		: SkeletonNode{ eBone, std::move( name ), skeleton }
+		: SkeletonNode{ SkeletonNodeType::eBone, std::move( name ), skeleton }
 		, m_id{ id }
 		, m_inverseTransform{ std::move( inverseTransform ) }
 	{

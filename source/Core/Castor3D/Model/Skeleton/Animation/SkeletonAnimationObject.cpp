@@ -3,7 +3,7 @@
 namespace castor3d
 {
 	SkeletonAnimationObject::SkeletonAnimationObject( SkeletonAnimation & animation
-		, SkeletonAnimationObjectType type )
+		, SkeletonNodeType type )
 		:castor::OwnedBy< SkeletonAnimation >{ animation }
 		, m_type{ type }
 	{

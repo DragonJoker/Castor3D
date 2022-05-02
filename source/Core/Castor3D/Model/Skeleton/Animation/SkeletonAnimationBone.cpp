@@ -5,7 +5,7 @@
 namespace castor3d
 {
 	SkeletonAnimationBone::SkeletonAnimationBone( SkeletonAnimation & animation )
-		: SkeletonAnimationObject{ animation, SkeletonAnimationObjectType::eBone }
+		: SkeletonAnimationObject{ animation, SkeletonNodeType::eBone }
 	{
 	}
 

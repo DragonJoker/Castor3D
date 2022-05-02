@@ -12,12 +12,12 @@ namespace castor3d
 
 	namespace sklanm
 	{
-		static castor::String const & getMovingTypeName( SkeletonAnimationObjectType type )
+		static castor::String const & getMovingTypeName( SkeletonNodeType type )
 		{
-			static std::map< SkeletonAnimationObjectType, castor::String > const names
+			static std::map< SkeletonNodeType, castor::String > const names
 			{
-				{ SkeletonAnimationObjectType::eNode, cuT( "Node_" ) },
-				{ SkeletonAnimationObjectType::eBone, cuT( "Bone_" ) },
+				{ SkeletonNodeType::eNode, cuT( "Node_" ) },
+				{ SkeletonNodeType::eBone, cuT( "Bone_" ) },
 			};
 			return names.at( type );
 		}
@@ -74,7 +74,7 @@ namespace castor3d
 		return result;
 	}
 
-	bool SkeletonAnimation::hasObject( SkeletonAnimationObjectType type
+	bool SkeletonAnimation::hasObject( SkeletonNodeType type
 		, castor::String const & name )const
 	{
 		return m_toMove.find( sklanm::getMovingTypeName( type ) + name ) != m_toMove.end();
@@ -82,15 +82,15 @@ namespace castor3d
 
 	SkeletonAnimationObjectSPtr SkeletonAnimation::getObject( SkeletonNode const & node )const
 	{
-		return getObject( SkeletonAnimationObjectType::eNode, node.getName() );
+		return getObject( SkeletonNodeType::eNode, node.getName() );
 	}
 
 	SkeletonAnimationObjectSPtr SkeletonAnimation::getObject( BoneNode const & bone )const
 	{
-		return getObject( SkeletonAnimationObjectType::eBone, bone.getName() );
+		return getObject( SkeletonNodeType::eBone, bone.getName() );
 	}
 
-	SkeletonAnimationObjectSPtr SkeletonAnimation::getObject( SkeletonAnimationObjectType type
+	SkeletonAnimationObjectSPtr SkeletonAnimation::getObject( SkeletonNodeType type
 		, castor::String const & name )const
 	{
 		SkeletonAnimationObjectSPtr result;

@@ -23,13 +23,6 @@ namespace castor3d
 		friend class BinaryWriter< BoneNode >;
 		friend class BinaryParser< BoneNode >;
 
-	public:
-		enum Type
-		{
-			eNode,
-			eBone,
-		};
-
 	protected:
 		/**
 		 *\~english
@@ -43,7 +36,7 @@ namespace castor3d
 		 *\param[in]	name				Le nom du noeud.
 		 *\param[in]	skeleton			Le squelette parent.
 		 */
-		C3D_API explicit SkeletonNode( Type type
+		C3D_API explicit SkeletonNode( SkeletonNodeType type
 			, castor::String name
 			, Skeleton & skeleton );
 
@@ -78,7 +71,7 @@ namespace castor3d
 			return m_parent;
 		}
 
-		Type getType()const noexcept
+		SkeletonNodeType getType()const noexcept
 		{
 			return m_type;
 		}
@@ -104,7 +97,7 @@ namespace castor3d
 		void setParent( SkeletonNode & node );
 
 	private:
-		Type m_type;
+		SkeletonNodeType m_type;
 		Skeleton & m_skeleton;
 		SkeletonNode * m_parent{};
 		std::map< castor::String, SkeletonNode * > m_children;

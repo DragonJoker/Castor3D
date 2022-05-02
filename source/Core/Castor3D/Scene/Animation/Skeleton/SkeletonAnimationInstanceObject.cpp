@@ -17,7 +17,7 @@ namespace castor3d
 		{
 			switch ( moving->getType() )
 			{
-			case SkeletonAnimationObjectType::eNode:
+			case SkeletonNodeType::eNode:
 				{
 					auto instance = std::make_shared< SkeletonAnimationInstanceNode >( animationInstance
 						, *std::static_pointer_cast< SkeletonAnimationNode >( moving )
@@ -27,7 +27,7 @@ namespace castor3d
 				}
 				break;
 
-			case SkeletonAnimationObjectType::eBone:
+			case SkeletonNodeType::eBone:
 				{
 					auto instance = std::make_shared< SkeletonAnimationInstanceBone >( animationInstance
 						, *std::static_pointer_cast< SkeletonAnimationBone >( moving )

@@ -2,16 +2,16 @@
 
 namespace castor3d
 {
-	castor::String getName( SkeletonAnimationObjectType value )
+	castor::String getName( SkeletonNodeType value )
 	{
 		switch ( value )
 		{
-		case SkeletonAnimationObjectType::eNode:
+		case SkeletonNodeType::eNode:
 			return cuT( "node" );
-		case SkeletonAnimationObjectType::eBone:
+		case SkeletonNodeType::eBone:
 			return cuT( "bone" );
 		default:
-			CU_Failure( "Unsupported SkeletonAnimationObjectType" );
+			CU_Failure( "Unsupported SkeletonNodeType" );
 			return castor::cuEmptyString;
 		}
 	}
