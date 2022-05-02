@@ -62,6 +62,9 @@ namespace c3d_assimp
 			, uint32_t aiMeshIndex
 			, aiScene const & aiScene
 			, castor3d::Submesh & submesh );
+		void doProcessAnim( aiMesh const & aiMesh
+			, castor3d::Mesh & mesh
+			, castor3d::Submesh & submesh );
 		void doFillBonesData( castor3d::Skeleton & skeleton
 			, castor::ArrayView< aiBone * > aiBones
 			, std::vector< castor3d::VertexBoneData > & arrayVertices );

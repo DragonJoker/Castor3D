@@ -327,7 +327,17 @@ namespace c3d_assimp
 			auto curSkeleton = m_skeletons.getSkeleton( *aiMesh );
 			CU_Require( !skeleton || curSkeleton == skeleton );
 			skeleton = curSkeleton;
-			create = doProcessMesh( *mesh.getScene(), mesh, skeleton, *aiMesh, aiMeshIndex, aiScene, *submesh );
+
+			if ( aiMesh->HasFaces() && aiMesh->HasPositions() )
+			{
+				create = doProcessMesh( *mesh.getScene(), mesh, skeleton, *aiMesh, aiMeshIndex, aiScene, *submesh );
+
+				if ( aiMesh->mNumAnimMeshes )
+				{
+					doProcessAnim( *aiMesh, mesh, *submesh );
+				}
+			}
+
 			++aiMeshIndex;
 		}
 
@@ -356,7 +366,7 @@ namespace c3d_assimp
 			material = m_materials.getMaterial( aiMesh.mMaterialIndex );
 		}
 
-		if ( aiMesh.HasFaces() && aiMesh.HasPositions() && material.lock() )
+		if ( material.lock() )
 		{
 			auto faces = castor::makeArrayView( aiMesh.mFaces, aiMesh.mNumFaces );
 			auto count = uint32_t( std::count_if( faces.begin()
@@ -405,46 +415,47 @@ namespace c3d_assimp
 				}
 
 				submesh.setIndexMapping( mapping );
-
-				if ( aiMesh.mNumAnimMeshes )
-				{
-					int32_t index = 0u;
-					castor::String name{ m_prefix + castor::string::stringCast< castor::xchar >( aiMesh.mName.C_Str() ) };
-					castor3d::log::info << cuT( "  Mesh Animation found: [" ) << name << cuT( "]" ) << std::endl;
-					auto & animation = mesh.createAnimation( "Morph" );
-					castor3d::MeshAnimationSubmesh animSubmesh{ animation, submesh };
-					animation.addChild( std::move( animSubmesh ) );
-					castor3d::MeshAnimationKeyFrameUPtr keyFrame = std::make_unique< castor3d::MeshAnimationKeyFrame >( animation
-						, castor::Milliseconds{ int64_t( index++ * 2000 ) } );
-					keyFrame->addSubmeshBuffer( submesh, submesh.getPoints() );
-					animation.addKeyFrame( std::move( keyFrame ) );
-					auto const & cmapping = *mapping;
-
-					for ( auto aiAnimMesh : castor::makeArrayView( aiMesh.mAnimMeshes, aiMesh.mNumAnimMeshes ) )
-					{
-						keyFrame = std::make_unique< castor3d::MeshAnimationKeyFrame >( animation
-							, castor::Milliseconds{ int64_t( index++ * 2000 ) } );
-						auto points = meshes::createVertexBuffer( *aiAnimMesh );
-
-						if ( !aiAnimMesh->HasNormals() )
-						{
-							cmapping.computeNormals( points, true );
-						}
-						else if ( !aiAnimMesh->HasTangentsAndBitangents() )
-						{
-							cmapping.computeTangentsFromNormals( points );
-						}
-
-						keyFrame->addSubmeshBuffer( submesh, points );
-						animation.addKeyFrame( std::move( keyFrame ) );
-					}
-				}
-
 				result = true;
 			}
 		}
 
 		return result;
+	}
+
+	void MeshesImporter::doProcessAnim( aiMesh const & aiMesh
+		, castor3d::Mesh & mesh
+		, castor3d::Submesh & submesh )
+	{
+		int32_t index = 0u;
+		castor::String name{ m_prefix + castor::string::stringCast< castor::xchar >( aiMesh.mName.C_Str() ) };
+		castor3d::log::info << cuT( "  Mesh Animation found: [" ) << name << cuT( "]" ) << std::endl;
+		auto & animation = mesh.createAnimation( "Morph" );
+		castor3d::MeshAnimationSubmesh animSubmesh{ animation, submesh };
+		animation.addChild( std::move( animSubmesh ) );
+		castor3d::MeshAnimationKeyFrameUPtr keyFrame = std::make_unique< castor3d::MeshAnimationKeyFrame >( animation
+			, castor::Milliseconds{ int64_t( index++ * 2000 ) } );
+		keyFrame->addSubmeshBuffer( submesh, submesh.getPoints() );
+		animation.addKeyFrame( std::move( keyFrame ) );
+		auto const & cmapping = static_cast< castor3d::TriFaceMapping const & >( *submesh.getIndexMapping() );
+
+		for ( auto aiAnimMesh : castor::makeArrayView( aiMesh.mAnimMeshes, aiMesh.mNumAnimMeshes ) )
+		{
+			keyFrame = std::make_unique< castor3d::MeshAnimationKeyFrame >( animation
+				, castor::Milliseconds{ int64_t( index++ * 2000 ) } );
+			auto points = meshes::createVertexBuffer( *aiAnimMesh );
+
+			if ( !aiAnimMesh->HasNormals() )
+			{
+				cmapping.computeNormals( points, true );
+			}
+			else if ( !aiAnimMesh->HasTangentsAndBitangents() )
+			{
+				cmapping.computeTangentsFromNormals( points );
+			}
+
+			keyFrame->addSubmeshBuffer( submesh, points );
+			animation.addKeyFrame( std::move( keyFrame ) );
+		}
 	}
 
 	void MeshesImporter::doFillBonesData( castor3d::Skeleton & skeleton
