@@ -15,6 +15,23 @@ namespace castor3d
 
 	static const uint32_t MaxBonesPerVertex = 8;
 	/**
+	\~english
+	\brief		Skeleton node types enumeration.
+	\~french
+	\brief		Enumération des types de noeud de squelette.
+	*/
+	enum class SkeletonNodeType
+	{
+		//!\~english	Node objects.
+		//!\~french		Objets noeud.
+		eNode,
+		//!\~english	Bone objects.
+		//!\~french		Objets os.
+		eBone,
+		CU_ScopedEnumBounds( eNode )
+	};
+	C3D_API castor::String getName( SkeletonNodeType value );
+	/**
 	*\~english
 	*\brief
 	*	A node in the skeleton.

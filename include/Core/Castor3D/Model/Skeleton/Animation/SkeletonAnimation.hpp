@@ -103,7 +103,7 @@ namespace castor3d
 		 *\param[in]	type	Le type de l'objet.
 		 *\param[in]	name	Le nom de l'objet.
 		 */
-		C3D_API bool hasObject( SkeletonAnimationObjectType type
+		C3D_API bool hasObject( SkeletonNodeType type
 			, castor::String const & name )const;
 		/**
 		 *\~english
@@ -133,7 +133,7 @@ namespace castor3d
 		 *\param[in]	type	Le type d'objet.
 		 *\param[in]	name	Le nom de l'objet.
 		 */
-		C3D_API SkeletonAnimationObjectSPtr getObject( SkeletonAnimationObjectType type
+		C3D_API SkeletonAnimationObjectSPtr getObject( SkeletonNodeType type
 			, castor::String const & name )const;
 		/**
 		 *\~english

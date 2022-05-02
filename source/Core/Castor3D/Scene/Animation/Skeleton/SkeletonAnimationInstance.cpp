@@ -16,12 +16,12 @@ namespace castor3d
 
 	namespace sklanminst
 	{
-		static castor::String const & getObjectTypeName( SkeletonAnimationObjectType type )
+		static castor::String const & getObjectTypeName( SkeletonNodeType type )
 		{
-			static std::map< SkeletonAnimationObjectType, castor::String > Names
+			static std::map< SkeletonNodeType, castor::String > Names
 			{
-				{ SkeletonAnimationObjectType::eNode, cuT( "Node_" ) },
-				{ SkeletonAnimationObjectType::eBone, cuT( "Bone_" ) },
+				{ SkeletonNodeType::eNode, cuT( "Node_" ) },
+				{ SkeletonNodeType::eBone, cuT( "Bone_" ) },
 			};
 
 			return Names[type];
@@ -38,7 +38,7 @@ namespace castor3d
 		{
 			switch ( moving->getType() )
 			{
-			case SkeletonAnimationObjectType::eNode:
+			case SkeletonNodeType::eNode:
 				{
 					auto instance = std::make_shared< SkeletonAnimationInstanceNode >( *this
 						, *std::static_pointer_cast< SkeletonAnimationNode >( moving )
@@ -47,7 +47,7 @@ namespace castor3d
 				}
 				break;
 
-			case SkeletonAnimationObjectType::eBone:
+			case SkeletonNodeType::eBone:
 				{
 					auto instance = std::make_shared< SkeletonAnimationInstanceBone >( *this
 						, *std::static_pointer_cast< SkeletonAnimationBone >( moving )
@@ -75,15 +75,15 @@ namespace castor3d
 
 	SkeletonAnimationInstanceObjectSPtr SkeletonAnimationInstance::getObject( BoneNode const & bone )const
 	{
-		return getObject( SkeletonAnimationObjectType::eBone, bone.getName() );
+		return getObject( SkeletonNodeType::eBone, bone.getName() );
 	}
 
 	SkeletonAnimationInstanceObjectSPtr SkeletonAnimationInstance::getObject( SkeletonNode const & node )const
 	{
-		return getObject( SkeletonAnimationObjectType::eNode, node.getName() );
+		return getObject( SkeletonNodeType::eNode, node.getName() );
 	}
 
-	SkeletonAnimationInstanceObjectSPtr SkeletonAnimationInstance::getObject( SkeletonAnimationObjectType type
+	SkeletonAnimationInstanceObjectSPtr SkeletonAnimationInstance::getObject( SkeletonNodeType type
 		, castor::String const & name )const
 	{
 		SkeletonAnimationInstanceObjectSPtr result;

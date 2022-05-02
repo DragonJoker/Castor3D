@@ -30,7 +30,7 @@ namespace castor3d
 		 *\param[in]	type		Le type d'objet d'animation de squelette.
 		 */
 		C3D_API SkeletonAnimationObject( SkeletonAnimation & animation
-			, SkeletonAnimationObjectType type );
+			, SkeletonNodeType type );
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
@@ -83,7 +83,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le type d'objet mouvant.
 		 */
-		SkeletonAnimationObjectType getType()const
+		SkeletonNodeType getType()const
 		{
 			return m_type;
 		}
@@ -138,7 +138,7 @@ namespace castor3d
 		InterpolatorType m_mode{ InterpolatorType::eCount };
 		//!\~english	The moving thing type.
 		//!\~french		Le type du machin mouvant.
-		SkeletonAnimationObjectType m_type;
+		SkeletonNodeType m_type;
 		//!\~english	Animation node transformations.
 		//!\~french		Transformations du noeud d'animation.
 		castor::Matrix4x4f m_nodeTransform;

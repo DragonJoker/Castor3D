@@ -19,11 +19,13 @@ namespace castor3d
 		{
 			switch ( node->getType() )
 			{
-			case SkeletonNode::eNode:
+			case SkeletonNodeType::eNode:
 				result = result && BinaryWriter< SkeletonNode >{}.write( *node, m_chunk );
 				break;
-			case SkeletonNode::eBone:
+			case SkeletonNodeType::eBone:
 				result = result && BinaryWriter< BoneNode >{}.write( static_cast< BoneNode const & >( *node ), m_chunk );
+				break;
+			default:
 				break;
 			}
 		}
