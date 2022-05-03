@@ -65,7 +65,7 @@ namespace castor3d
 	AnimatedObjectSPtr AnimatedObjectGroup::addObject( SceneNode & node
 		, castor::String const & name )
 	{
-		auto object = std::make_shared< AnimatedSceneNode >( name, node );
+		auto object = std::make_shared< AnimatedSceneNode >( name + "_Node", node );
 
 		if ( !addObject( object ) )
 		{
@@ -79,7 +79,7 @@ namespace castor3d
 		, Geometry & geometry
 		, castor::String const & name )
 	{
-		auto object = std::make_shared< AnimatedMesh >( name, mesh, geometry );
+		auto object = std::make_shared< AnimatedMesh >( name + "_Mesh", mesh, geometry );
 
 		if ( !addObject( object ) )
 		{
@@ -94,7 +94,7 @@ namespace castor3d
 		, Geometry & geometry
 		, castor::String const & name )
 	{
-		auto object = std::make_shared< AnimatedSkeleton >( name, skeleton, mesh, geometry );
+		auto object = std::make_shared< AnimatedSkeleton >( name + "_Skeleton", skeleton, mesh, geometry );
 
 		if ( !addObject( object ) )
 		{

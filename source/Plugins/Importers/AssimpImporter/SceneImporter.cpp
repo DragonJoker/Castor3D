@@ -313,7 +313,7 @@ namespace c3d_assimp
 			if ( node->hasAnimation() )
 			{
 				auto animGroup = scene.getAnimatedObjectGroupCache().add( node->getName() + "Node", scene ).lock();
-				auto animObject = animGroup->addObject( *node, node->getName() + cuT( "_Node" ) );
+				auto animObject = animGroup->addObject( *node, node->getName() );
 
 				for ( auto & animation : node->getAnimations() )
 				{
@@ -327,7 +327,7 @@ namespace c3d_assimp
 				auto animGroup = scene.getAnimatedObjectGroupCache().add( geometry->getName() + "Morph", scene ).lock();
 				auto animObject = animGroup->addObject( *mesh
 					, *geometry
-					, geometry->getName() + cuT( "_Mesh" ) );
+					, geometry->getName() );
 
 				for ( auto & animation : mesh->getAnimations() )
 				{
@@ -466,7 +466,7 @@ namespace c3d_assimp
 		animGroup->addObject( skeleton
 			, mesh
 			, geometry
-			, name + cuT( "_Skeleton" ) );
+			, name );
 	}
 
 	void SceneImporter::doProcessAnimationSceneNodes( castor3d::SceneNode & node
