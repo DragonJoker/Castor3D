@@ -39,6 +39,14 @@ namespace castor3d
 		return result;
 	}
 
+	void MeshAnimationInstance::clear()
+	{
+		m_currentTime = 0_ms;
+		play();
+		update( 0_ms );
+		stop();
+	}
+
 	void MeshAnimationInstance::doUpdate()
 	{
 		if ( !m_meshAnimation.isEmpty() )

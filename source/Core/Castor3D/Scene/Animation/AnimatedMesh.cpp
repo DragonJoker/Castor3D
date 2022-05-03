@@ -51,11 +51,20 @@ namespace castor3d
 	void AnimatedMesh::doStopAnimation( AnimationInstance & animation )
 	{
 		CU_Require( m_playingAnimation == &animation );
+		m_playingAnimation->clear();
 		m_playingAnimation = nullptr;
+		m_reinit = true;
 	}
 
 	void AnimatedMesh::doClearAnimations()
 	{
+		m_reinit = true;
+
+		if ( m_playingAnimation )
+		{
+			m_playingAnimation->clear();
+		}
+
 		m_playingAnimation = nullptr;
 	}
 }
