@@ -4763,7 +4763,7 @@ namespace castor3d
 				if ( node && node->hasAnimation() )
 				{
 					parsingContext.animNode = parsingContext.animGroup->addObject( *node
-						, node->getName() + cuT( "_Node" ) );
+						, node->getName() );
 				}
 
 				auto mesh = geometry->getMesh().lock();
@@ -4774,7 +4774,7 @@ namespace castor3d
 					{
 						parsingContext.animMesh = parsingContext.animGroup->addObject( *mesh
 							, *geometry
-							, geometry->getName() + cuT( "_Mesh" ) );
+							, geometry->getName() );
 					}
 
 					auto skeleton = mesh->getSkeleton();
@@ -4786,7 +4786,7 @@ namespace castor3d
 							parsingContext.animSkeleton = parsingContext.animGroup->addObject( *skeleton
 								, *mesh
 								, *geometry
-								, geometry->getName() + cuT( "_Skeleton" ) );
+								, geometry->getName() );
 						}
 					}
 				}
@@ -4800,7 +4800,7 @@ namespace castor3d
 					if ( node->hasAnimation() )
 					{
 						parsingContext.animNode = parsingContext.animGroup->addObject( *node
-							, node->getName() + cuT( "_Node" ) );
+							, node->getName() );
 					}
 				}
 				else
