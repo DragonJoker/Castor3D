@@ -47,6 +47,13 @@ namespace castor3d
 		C3D_API MeshAnimationInstanceSubmesh const * getAnimationSubmesh( uint32_t index )const;
 		/**
 		 *\~english
+		 *\brief		Moves the objects back to initial state.
+		 *\~french
+		 *\brief		Remet les objets à l'état initial.
+		 */
+		C3D_API void clear();
+		/**
+		 *\~english
 		 *\return		The animation.
 		 *\~french
 		 *\return		L'animation.

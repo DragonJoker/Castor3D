@@ -62,6 +62,13 @@ namespace castor3d
 			, SubmeshAnimationBuffer const & cur );
 		/**
 		 *\~english
+		 *\brief		Moves the object back to initial state.
+		 *\~french
+		 *\brief		Remet l'objet à l'état initial.
+		 */
+		C3D_API void clear();
+		/**
+		 *\~english
 		 *\brief		The submesh.
 		 *\~french
 		 *\brief		Le sous-maillage.
