@@ -158,6 +158,29 @@ namespace c3d_assimp
 			processSkeletonNodes( prefix, bonesNodes, skeleton, *previousPreRootNode, rootNode );
 		}
 
+		static void replaceInverseTransforms( castor::String const & prefix
+			, std::map< castor::String, BoneData > const & bonesNodes
+			, castor3d::Skeleton & skeleton )
+		{
+			for ( auto & node : skeleton.getNodes() )
+			{
+				if ( node->getType() == castor3d::SkeletonNodeType::eBone )
+				{
+					auto & bone = static_cast< castor3d::BoneNode & >( *node );
+					auto it = bonesNodes.find( prefix + node->getName() );
+
+					if ( it != bonesNodes.end() )
+					{
+						bone.setInverseTransform( it->second.inverseTransform );
+					}
+					else
+					{
+						bone.setInverseTransform( castor::Matrix4x4f{ 1.0f } );
+					}
+				}
+			}
+		}
+
 		static bool isAnimForSkeleton( castor::String const & prefix
 			, aiAnimation const & animation
 			, castor3d::Skeleton const & skeleton )
@@ -216,17 +239,24 @@ namespace c3d_assimp
 	void SkeletonImporter::import( castor::String const & prefix
 		, castor::Path const & fileName
 		, aiScene const & aiScene
-		, castor3d::Scene & scene )
+		, castor3d::Scene & scene
+		, bool replaceInverseTransforms )
 	{
+		if ( replaceInverseTransforms )
+		{
+			m_bonesNodes.clear();
+		}
 
 		for ( auto aiMesh : castor::makeArrayView( aiScene.mMeshes, aiScene.mNumMeshes ) )
 		{
 			for ( auto aiBone : castor::makeArrayView( aiMesh->mBones, aiMesh->mNumBones ) )
 			{
-				m_bonesNodes.emplace( aiBone->mName.C_Str(), BoneData{ makeMatrix4x4f( aiBone->mOffsetMatrix ) } );
+				m_bonesNodes.emplace( aiBone->mName.C_Str()
+					, BoneData{ makeMatrix4x4f( aiBone->mOffsetMatrix ) } );
 			}
 		}
 
+		m_replaceInverseTransforms = replaceInverseTransforms;
 		m_needsAnimsReparse = false;
 		m_prefix = prefix;
 		m_fileName = fileName;
@@ -311,6 +341,13 @@ namespace c3d_assimp
 						skeleton = it->second;
 						m_skeletons.erase( it );
 						it = m_skeletons.emplace( preRootNode->mName.C_Str(), skeleton ).first;
+
+						if ( m_replaceInverseTransforms )
+						{
+							skeletons::replaceInverseTransforms( m_prefix
+								, m_bonesNodes
+								, *skeleton );
+						}
 					}
 				}
 
