@@ -57,6 +57,19 @@ namespace castor3d
 		return result;
 	}
 
+	SkeletonNode * Skeleton::getRootNode()const
+	{
+		auto it = std::find_if( m_nodes.begin()
+			, m_nodes.end()
+			, []( SkeletonNodeUPtr const & lookup )
+			{
+				return lookup->getParent() == nullptr;
+			} );
+		return it == m_nodes.end()
+			? nullptr
+			: it->get();
+	}
+
 	void Skeleton::setNodeParent( SkeletonNode & node, SkeletonNode & parent )
 	{
 		if ( m_nodes.end() == std::find_if( m_nodes.begin()
