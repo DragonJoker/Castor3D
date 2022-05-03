@@ -29,7 +29,6 @@ namespace c3d_assimp
 
 		void import( castor::String const & prefix
 			, castor::Path const & fileName
-			, uint32_t importFlags
 			, aiScene const & aiScene
 			, castor3d::Scene & scene );
 		bool isBoneNode( aiNode const & aiNode )const;
@@ -38,11 +37,6 @@ namespace c3d_assimp
 		bool needsAnimsReparse()const
 		{
 			return m_needsAnimsReparse;
-		}
-
-		std::map< uint32_t, castor::String > const & getAdditionalBones()const
-		{
-			return m_additionalBones;
 		}
 
 	private:
@@ -70,12 +64,10 @@ namespace c3d_assimp
 		castor3d::MeshImporter & m_importer;
 		castor::String m_prefix;
 		castor::Path m_fileName;
-		uint32_t m_importFlags{};
 		std::map< castor::String, BoneData > m_bonesNodes;
 		std::map< castor::String, castor3d::SkeletonSPtr > m_skeletons;
 		std::map< castor::String, castor3d::SkeletonSPtr > m_meshSkeletons;
 		bool m_needsAnimsReparse{};
-		std::map< uint32_t, castor::String > m_additionalBones;
 	};
 }
 
