@@ -39,6 +39,7 @@ namespace c3d_assimp
 						, m_importFlags
 						, *aiScene
 						, *mesh.getScene() );
+					result = true;
 				}
 				else
 				{

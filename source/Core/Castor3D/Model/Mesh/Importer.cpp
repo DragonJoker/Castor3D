@@ -82,7 +82,8 @@ namespace castor3d
 	bool MeshImporter::import( Mesh & mesh
 		, castor::Path const & fileName
 		, Parameters const & parameters
-		, bool initialise )
+		, bool initialise
+		, bool isSecondary )
 	{
 		bool splitSubmeshes = false;
 		m_parameters.get( cuT( "split_mesh" ), splitSubmeshes );
@@ -91,7 +92,7 @@ namespace castor3d
 		m_parameters = parameters;
 		bool result = true;
 
-		if ( !mesh.getSubmeshCount() )
+		if ( !mesh.getSubmeshCount() || isSecondary )
 		{
 			result = doImportMesh( mesh );
 
