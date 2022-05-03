@@ -32,28 +32,38 @@ namespace c3d_assimp
 		{
 			if ( aiScene->HasMeshes() )
 			{
-				m_materialsImp.import( m_prefix
-					, m_fileName
-					, m_textureRemaps
-					, *aiScene
-					, *mesh.getScene() );
-				m_skeletonsImp.import( m_prefix
-					, m_fileName
-					, m_importFlags
-					, *aiScene
-					, *mesh.getScene() );
-				auto indices = m_meshesImp.import( m_prefix
-					, m_fileName
-					, *aiScene
-					, mesh );
-				result = !indices.empty();
-
-				if ( result )
+				if ( m_fileName.getExtension() == "md5anim" )
 				{
-					m_scenesImp.import( m_prefix
+					m_skeletonsImp.import( m_prefix
+						, m_fileName
+						, m_importFlags
+						, *aiScene
+						, *mesh.getScene() );
+				}
+				else
+				{
+					m_materialsImp.import( m_prefix
+						, m_fileName
+						, m_textureRemaps
+						, *aiScene
+						, *mesh.getScene() );
+					m_skeletonsImp.import( m_prefix
+						, m_fileName
+						, m_importFlags
+						, *aiScene
+						, *mesh.getScene() );
+					auto indices = m_meshesImp.import( m_prefix
 						, m_fileName
 						, *aiScene
-						, indices );
+						, mesh );
+					result = !indices.empty();
+
+					if ( result )
+					{
+						m_scenesImp.import( m_prefix
+							, *aiScene
+							, indices );
+					}
 				}
 			}
 
@@ -69,25 +79,41 @@ namespace c3d_assimp
 
 		if ( auto aiScene = doLoadScene() )
 		{
-			m_materialsImp.import( m_prefix
-				, m_fileName
-				, m_textureRemaps
-				, *aiScene
-				, scene );
-			m_skeletonsImp.import( m_prefix
-				, m_fileName
-				, m_importFlags
-				, *aiScene
-				, scene );
-			auto meshes = m_meshesImp.import( m_prefix
-				, m_fileName
-				, *aiScene
-				, scene );
-			m_scenesImp.import( m_prefix
-				, m_fileName
-				, *aiScene
-				, scene
-				, meshes );
+			if ( m_fileName.getExtension() == "md5anim" )
+			{
+				m_skeletonsImp.import( m_prefix
+					, m_fileName
+					, m_importFlags
+					, *aiScene
+					, scene );
+
+				if ( m_skeletonsImp.needsAnimsReparse() )
+				{
+					m_scenesImp.importAnims();
+				}
+			}
+			else
+			{
+				m_materialsImp.import( m_prefix
+					, m_fileName
+					, m_textureRemaps
+					, *aiScene
+					, scene );
+				m_skeletonsImp.import( m_prefix
+					, m_fileName
+					, m_importFlags
+					, *aiScene
+					, scene );
+				auto meshes = m_meshesImp.import( m_prefix
+					, m_fileName
+					, *aiScene
+					, scene );
+				m_scenesImp.import( m_prefix
+					, *aiScene
+					, scene
+					, meshes );
+			}
+
 			result = true;
 		}
 		else
