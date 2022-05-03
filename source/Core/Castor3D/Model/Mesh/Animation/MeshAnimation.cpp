@@ -15,6 +15,19 @@ namespace castor3d
 
 	void MeshAnimation::addChild( MeshAnimationSubmesh object )
 	{
-		m_submeshes.push_back( std::move( object ) );
+		if ( !hasChild( object.getSubmesh() ) )
+		{
+			m_submeshes.push_back( std::move( object ) );
+		}
+	}
+
+	bool MeshAnimation::hasChild( Submesh const & object )const noexcept
+	{
+		return m_submeshes.end() != std::find_if( m_submeshes.begin()
+			, m_submeshes.end()
+			, [&object]( MeshAnimationSubmesh const & lookup )
+			{
+				return &lookup.getSubmesh() == &object;
+			} );
 	}
 }

@@ -55,6 +55,15 @@ namespace castor3d
 		C3D_API void addChild( MeshAnimationSubmesh object );
 		/**
 		 *\~english
+		 *\param[in]	object	The submesh.
+		 *\return		\p true if given submesh is already in children.
+		 *\~french
+		 *\param[in]	object	L'enfant.
+		 *\return		\p true si le submesh donné fait partie des enfants.
+		 */
+		C3D_API bool hasChild( Submesh const & object )const noexcept;
+		/**
+		 *\~english
 		 *\param[in]	index	The index.
 		 *\return		The animated submesh at given index.
 		 *\~french
