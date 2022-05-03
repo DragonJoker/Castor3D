@@ -268,6 +268,7 @@ namespace c3d_assimp
 
 				if ( it == m_skeletons.end() )
 				{
+					// Is the loaded skeletons' pre-root node in the current pre-root node ?
 					it = std::find_if( m_skeletons.begin()
 						, m_skeletons.end()
 						, [preRootNode]( auto & lookup )
@@ -292,7 +293,6 @@ namespace c3d_assimp
 
 				if ( it == m_skeletons.end() )
 				{
-					// Is the loaded skeletons' pre-root node in the current pre-root node ?
 					it = std::find_if( m_skeletons.begin()
 						, m_skeletons.end()
 						, [preRootNode]( auto & lookup )
@@ -359,7 +359,7 @@ namespace c3d_assimp
 		, aiNode const & aiNode
 		, aiAnimation const & aiAnimation )
 	{
-		castor::String name{ m_prefix + castor::string::stringCast< castor::xchar >( aiAnimation.mName.C_Str() ) };
+		castor::String name{ normalizeName( m_prefix + castor::string::stringCast< castor::xchar >( aiAnimation.mName.C_Str() ) ) };
 
 		if ( name.empty() )
 		{
