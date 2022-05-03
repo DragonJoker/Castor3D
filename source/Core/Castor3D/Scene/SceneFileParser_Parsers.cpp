@@ -1412,6 +1412,13 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserSceneImportNoOptimisations )
+	{
+		auto & parsingContext = getParserContext( context );
+		params[0]->get( parsingContext.sceneImportConfig.noOptimisations );
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserSceneImportEnd )
 	{
 		auto & parsingContext = getParserContext( context );
@@ -1456,6 +1463,11 @@ namespace castor3d
 			if ( !parsingContext.sceneImportConfig.prefix.empty() )
 			{
 				parameters.add( cuT( "prefix" ), parsingContext.sceneImportConfig.prefix );
+			}
+
+			if ( parsingContext.sceneImportConfig.noOptimisations )
+			{
+				parameters.add( cuT( "no_optimisations" ), parsingContext.sceneImportConfig.noOptimisations );
 			}
 
 			for ( auto & file : parsingContext.sceneImportConfig.files )
