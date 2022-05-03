@@ -24,14 +24,13 @@ namespace c3d_assimp
 			, castor3d::GeometryPtrStrMap & geometries );
 
 		void import( castor::String const & prefix
-			, castor::Path const & fileName
 			, aiScene const & aiScene
 			, castor3d::Scene & scene
 			, std::map< uint32_t, MeshData * > const & meshes );
 		void import( castor::String const & prefix
-			, castor::Path const & fileName
 			, aiScene const & aiScene
 			, MeshIndices const & meshes );
+		void importAnims();
 
 	private:
 		void doProcessLight( aiLight const & light
@@ -51,6 +50,7 @@ namespace c3d_assimp
 			, aiAnimation const & aiAnimation
 			, aiNode const & aiNode
 			, aiNodeAnim const & aiNodeAnim );
+		void doProcessAnimGroups();
 		void doAddAnimatedObjectGroup( castor3d::Scene & scene
 			, castor3d::SceneNode const & sceneNode
 			, castor3d::Skeleton & skeleton
