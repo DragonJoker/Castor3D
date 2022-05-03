@@ -19,6 +19,12 @@ See LICENSE file in root folder
 
 namespace c3d_assimp
 {
+	static castor::String normalizeName( castor::String name )
+	{
+		castor::string::replace( name, "\\", "-" );
+		return castor::string::replace( name, "/", "-" );
+	}
+
 	static castor::Matrix4x4f makeMatrix4x4f( aiMatrix4x4 const & aiMatrix )
 	{
 		std::array< float, 16u > data

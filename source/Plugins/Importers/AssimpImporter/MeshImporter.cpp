@@ -3,6 +3,8 @@
 
 #include "AssimpImporter/MeshImporter.hpp"
 
+#include "AssimpImporter/AssimpHelpers.hpp"
+
 #include <Castor3D/Event/Frame/GpuFunctorEvent.hpp>
 #include <Castor3D/Model/Vertex.hpp>
 #include <Castor3D/Model/Mesh/Importer.hpp>
@@ -392,7 +394,7 @@ namespace c3d_assimp
 
 		for ( auto & aiMesh : aiMeshes )
 		{
-			castor::String name = m_prefix + aiMesh->mName.C_Str();
+			castor::String name = normalizeName( m_prefix + aiMesh->mName.C_Str() );
 
 			if ( name.size() > 150u )
 			{
@@ -592,7 +594,7 @@ namespace c3d_assimp
 
 			for ( auto anim : anims )
 			{
-				castor::String name{ m_prefix + castor::string::stringCast< castor::xchar >( anim.first ) };
+				castor::String name{ normalizeName( m_prefix + castor::string::stringCast< castor::xchar >( anim.first ) ) };
 				castor3d::log::info << cuT( "  Mesh Animation found: [" ) << name << cuT( "] " ) << std::endl;
 				auto & animation = mesh.createAnimation( name );
 				castor3d::MeshAnimationSubmesh animSubmesh{ animation, submesh };
