@@ -111,13 +111,14 @@ namespace castor3d
 	public:
 		struct SceneImportConfig
 		{
-			castor::Path file;
+			castor::PathArray files;
 			castor::String prefix;
 			std::map< TextureFlag, TextureConfiguration > textureRemaps;
 			float rescale{ 1.0f };
 			float pitch{ 0.0f };
 			float yaw{ 0.0f };
 			float roll{ 0.0f };
+			bool noOptimisations{ false };
 			std::map< TextureFlag, TextureConfiguration >::iterator textureRemapIt;
 		};
 
