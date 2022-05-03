@@ -479,7 +479,7 @@ namespace c3d_assimp
 			return;
 		}
 
-		castor::String name{ m_prefix + castor::string::stringCast< xchar >( aiAnimation.mName.C_Str() ) };
+		castor::String name{ normalizeName( m_prefix + castor::string::stringCast< xchar >( aiAnimation.mName.C_Str() ) ) };
 
 		if ( name.empty() )
 		{
