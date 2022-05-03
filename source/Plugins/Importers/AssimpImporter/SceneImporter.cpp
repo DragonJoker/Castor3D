@@ -449,16 +449,18 @@ namespace c3d_assimp
 			m_animGroups.emplace_back( &sceneNode
 				, scene.getAnimatedObjectGroupCache().add( name + cuT( "Skin" ), scene ).lock() );
 			animGroup = m_animGroups.back().second;
-
-			for ( auto & animation : skeleton.getAnimations() )
-			{
-				animGroup->addAnimation( animation.first );
-				animGroup->setAnimationLooped( animation.first, true );
-			}
 		}
 		else
 		{
 			animGroup = it->second;
+		}
+
+		for ( auto & animation : skeleton.getAnimations() )
+		{
+			if ( animGroup->addAnimation( animation.first ) )
+			{
+				animGroup->setAnimationLooped( animation.first, true );
+			}
 		}
 
 		animGroup->addObject( skeleton
