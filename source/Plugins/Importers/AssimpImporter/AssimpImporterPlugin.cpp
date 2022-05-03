@@ -50,6 +50,7 @@ namespace
 			extensions.emplace_back( cuT( "MD2" ), cuT( "Quake II Mesh" ) );
 			extensions.emplace_back( cuT( "MD3" ), cuT( "Quake III Mesh" ) );
 			extensions.emplace_back( cuT( "MD5MESH" ), cuT( "doom 3 / MD5 Mesh" ) );
+			extensions.emplace_back( cuT( "MD5ANIM" ), cuT( "doom 3 / MD5 Animation" ) );
 			extensions.emplace_back( cuT( "MDC" ), cuT( "Return To Castle Wolfenstein Mesh" ) );
 			extensions.emplace_back( cuT( "MDL" ), cuT( "Quake Mesh / 3D GameStudio Mesh" ) );
 			extensions.emplace_back( cuT( "MESH" ), cuT( "Ogre 3D Mesh" ) );

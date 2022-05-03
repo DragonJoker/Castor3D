@@ -32,6 +32,8 @@ using namespace castor3d;
 
 namespace c3d_assimp
 {
+	using SceneNodeAnimationKeyFrameMap = std::map< castor::Milliseconds, castor3d::SceneNodeAnimationKeyFrameUPtr >;
+
 	SceneImporter::SceneImporter( castor3d::MeshImporter & importer
 		, SkeletonImporter const & skeletons
 		, MeshesImporter const & meshes
@@ -46,7 +48,6 @@ namespace c3d_assimp
 	}
 
 	void SceneImporter::import( castor::String const & prefix
-		, castor::Path const & fileName
 		, aiScene const & aiScene
 		, castor3d::Scene & scene
 		, std::map< uint32_t, MeshData * > const & meshes )
@@ -69,16 +70,21 @@ namespace c3d_assimp
 			, *aiScene.mRootNode
 			, scene
 			, meshes );
+		doProcessAnimGroups();
 	}
 
 	void SceneImporter::import( castor::String const & prefix
-		, castor::Path const & fileName
 		, aiScene const & aiScene
 		, MeshIndices const & meshes )
 	{
 		m_prefix = prefix;
 		doScaleMesh( *aiScene.mRootNode
 			, meshes );
+	}
+
+	void SceneImporter::importAnims()
+	{
+		doProcessAnimGroups();
 	}
 
 	void SceneImporter::doProcessLight( aiLight const & aiLight
@@ -294,11 +300,63 @@ namespace c3d_assimp
 		}
 	}
 
+	void SceneImporter::doProcessAnimGroups()
+	{
+		for ( auto geometryIt : m_geometries )
+		{
+			auto geometry = geometryIt.second;
+			auto & scene = *geometry->getScene();
+			auto mesh = geometry->getMesh().lock();
+			auto node = geometry->getParent();
+			auto skeleton = mesh->getSkeleton();
+
+			if ( node->hasAnimation() )
+			{
+				auto animGroup = scene.getAnimatedObjectGroupCache().add( node->getName() + "Node", scene ).lock();
+				auto animObject = animGroup->addObject( *node, node->getName() + cuT( "_Node" ) );
+
+				for ( auto & animation : node->getAnimations() )
+				{
+					animGroup->addAnimation( animation.first );
+					animGroup->setAnimationLooped( animation.first, true );
+				}
+			}
+
+			if ( mesh->hasAnimation() )
+			{
+				auto animGroup = scene.getAnimatedObjectGroupCache().add( geometry->getName() + "Morph", scene ).lock();
+				auto animObject = animGroup->addObject( *mesh
+					, *geometry
+					, geometry->getName() + cuT( "_Mesh" ) );
+
+				for ( auto & animation : mesh->getAnimations() )
+				{
+					animGroup->addAnimation( animation.first );
+					animGroup->setAnimationLooped( animation.first, true );
+				}
+			}
+
+			if ( skeleton && skeleton->hasAnimation() )
+			{
+				doAddAnimatedObjectGroup( scene
+					, *node
+					, *skeleton
+					, *mesh
+					, *geometry );
+			}
+		}
+	}
+
 	void SceneImporter::doProcessNodes( aiScene const & aiScene
 		, aiNode const & aiNode
 		, Scene & scene
 		, std::map< uint32_t, MeshData * > const & meshes )
 	{
+		if ( m_skeletons.isBoneNode( aiNode ) )
+		{
+			return;
+		}
+
 		if ( aiNode.mNumMeshes > 0 )
 		{
 			castor::String name = m_prefix + aiNode.mName.C_Str();
@@ -339,42 +397,6 @@ namespace c3d_assimp
 						m_geometries.emplace( geom->getName(), geom );
 						node->attachObject( *geom );
 						scene.getGeometryCache().add( geom );
-						auto skeleton = meshRepl->mesh->getSkeleton();
-
-						if ( node->hasAnimation() )
-						{
-							auto animGroup = scene.getAnimatedObjectGroupCache().add( node->getName() + "Node", scene ).lock();
-							auto animObject = animGroup->addObject( *node, node->getName() + cuT( "_Node" ) );
-
-							for ( auto & animation : node->getAnimations() )
-							{
-								animGroup->addAnimation( animation.first );
-								animGroup->setAnimationLooped( animation.first, true );
-							}
-						}
-
-						if ( meshRepl->mesh->hasAnimation() )
-						{
-							auto animGroup = scene.getAnimatedObjectGroupCache().add( geom->getName() + "Morph", scene ).lock();
-							auto animObject = animGroup->addObject( *meshRepl->mesh
-								, *geom
-								, geom->getName() + cuT( "_Mesh" ) );
-
-							for ( auto & animation : meshRepl->mesh->getAnimations() )
-							{
-								animGroup->addAnimation( animation.first );
-								animGroup->setAnimationLooped( animation.first, true );
-							}
-						}
-
-						if ( skeleton && skeleton->hasAnimation() )
-						{
-							doAddAnimatedObjectGroup( scene
-								, *node
-								, *skeleton
-								, *meshRepl->mesh
-								, *geom );
-						}
 					}
 				}
 			}

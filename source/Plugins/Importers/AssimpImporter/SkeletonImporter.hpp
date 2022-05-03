@@ -15,8 +15,12 @@ See LICENSE file in root folder
 namespace c3d_assimp
 {
 	using SkeletonAnimationKeyFrameMap = std::map< castor::Milliseconds, castor3d::SkeletonAnimationKeyFrameUPtr >;
-	using SceneNodeAnimationKeyFrameMap = std::map< castor::Milliseconds, castor3d::SceneNodeAnimationKeyFrameUPtr >;
 	using SkeletonAnimationObjectSet = std::set< castor3d::SkeletonAnimationObjectSPtr >;
+
+	struct BoneData
+	{
+		castor::Matrix4x4f inverseTransform;
+	};
 
 	class SkeletonImporter
 	{
@@ -30,6 +34,16 @@ namespace c3d_assimp
 			, castor3d::Scene & scene );
 		bool isBoneNode( aiNode const & aiNode )const;
 		castor3d::SkeletonSPtr getSkeleton( aiMesh const & aiMesh )const;
+
+		bool needsAnimsReparse()const
+		{
+			return m_needsAnimsReparse;
+		}
+
+		std::map< uint32_t, castor::String > const & getAdditionalBones()const
+		{
+			return m_additionalBones;
+		}
 
 	private:
 		void doProcessSkeletons( aiScene const & aiScene
@@ -57,9 +71,11 @@ namespace c3d_assimp
 		castor::String m_prefix;
 		castor::Path m_fileName;
 		uint32_t m_importFlags{};
-		std::map< aiNode const *, aiBone const * > m_bonesNodes;
-		std::map< aiNode const *, castor3d::SkeletonSPtr > m_skeletons;
-		std::map< aiMesh const *, castor3d::SkeletonSPtr > m_meshSkeletons;
+		std::map< castor::String, BoneData > m_bonesNodes;
+		std::map< castor::String, castor3d::SkeletonSPtr > m_skeletons;
+		std::map< castor::String, castor3d::SkeletonSPtr > m_meshSkeletons;
+		bool m_needsAnimsReparse{};
+		std::map< uint32_t, castor::String > m_additionalBones;
 	};
 }
 
