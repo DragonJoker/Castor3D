@@ -1373,17 +1373,7 @@ namespace castor3d
 		auto & parsingContext = getParserContext( context );
 		castor::Path path;
 		castor::Path pathFile = context.file.getPath() / params[0]->get( path );
-		Engine * engine = parsingContext.parser->getEngine();
-		auto extension = castor::string::lowerCase( pathFile.getExtension() );
-
-		if ( !engine->getImporterFactory().isTypeRegistered( extension ) )
-		{
-			CU_ParsingError( cuT( "Importer for [" ) + extension + cuT( "] files is not registered, make sure you've got the matching plug-in installed." ) );
-		}
-		else
-		{
-			parsingContext.sceneImportConfig.file = pathFile;
-		}
+		parsingContext.sceneImportConfig.files.push_back( pathFile );
 	}
 	CU_EndAttribute()
 
@@ -1426,43 +1416,62 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 		Engine * engine = parsingContext.parser->getEngine();
-		auto extension = castor::string::lowerCase( parsingContext.sceneImportConfig.file.getExtension() );
-		auto importer = engine->getImporterFactory().create( extension, *engine );
-		Parameters parameters;
 
-		if ( parsingContext.sceneImportConfig.rescale != 1.0f )
+		if ( parsingContext.sceneImportConfig.files.empty() )
 		{
-			parameters.add( cuT( "rescale" ), parsingContext.sceneImportConfig.rescale );
+			CU_ParsingError( cuT( "No file chosen to import" ) );
+		}
+		else
+		{
+			auto extension = castor::string::lowerCase( parsingContext.sceneImportConfig.files.front().getExtension() );
+
+			if ( !engine->getImporterFactory().isTypeRegistered( extension ) )
+			{
+				CU_ParsingError( cuT( "Importer for [" ) + extension + cuT( "] files is not registered, make sure you've got the matching plug-in installed." ) );
+			}
+
+			auto importer = engine->getImporterFactory().create( extension, *engine );
+			Parameters parameters;
+
+			if ( parsingContext.sceneImportConfig.rescale != 1.0f )
+			{
+				parameters.add( cuT( "rescale" ), parsingContext.sceneImportConfig.rescale );
+			}
+
+			if ( parsingContext.sceneImportConfig.pitch != 0.0f )
+			{
+				parameters.add( cuT( "pitch" ), parsingContext.sceneImportConfig.pitch );
+			}
+
+			if ( parsingContext.sceneImportConfig.yaw != 0.0f )
+			{
+				parameters.add( cuT( "yaw" ), parsingContext.sceneImportConfig.yaw );
+			}
+
+			if ( parsingContext.sceneImportConfig.roll != 0.0f )
+			{
+				parameters.add( cuT( "roll" ), parsingContext.sceneImportConfig.roll );
+			}
+
+			if ( !parsingContext.sceneImportConfig.prefix.empty() )
+			{
+				parameters.add( cuT( "prefix" ), parsingContext.sceneImportConfig.prefix );
+			}
+
+			for ( auto & file : parsingContext.sceneImportConfig.files )
+			{
+				if ( !importer->import( *parsingContext.scene
+					, file
+					, parameters
+					, parsingContext.sceneImportConfig.textureRemaps
+					, true ) )
+				{
+					CU_ParsingError( cuT( "External scene Import failed" ) );
+				}
+			}
 		}
 
-		if ( parsingContext.sceneImportConfig.pitch != 1.0f )
-		{
-			parameters.add( cuT( "pitch" ), parsingContext.sceneImportConfig.pitch );
-		}
-
-		if ( parsingContext.sceneImportConfig.yaw != 1.0f )
-		{
-			parameters.add( cuT( "yaw" ), parsingContext.sceneImportConfig.yaw );
-		}
-
-		if ( parsingContext.sceneImportConfig.roll != 1.0f )
-		{
-			parameters.add( cuT( "roll" ), parsingContext.sceneImportConfig.roll );
-		}
-
-		if ( !parsingContext.sceneImportConfig.prefix.empty() )
-		{
-			parameters.add( cuT( "prefix" ), parsingContext.sceneImportConfig.prefix );
-		}
-
-		if ( !importer->import( *parsingContext.scene
-			, parsingContext.sceneImportConfig.file
-			, parameters
-			, parsingContext.sceneImportConfig.textureRemaps
-			, true ) )
-		{
-			CU_ParsingError( cuT( "External scene Import failed" ) );
-		}
+		parsingContext.sceneImportConfig = {};
 	}
 	CU_EndAttributePop()
 
