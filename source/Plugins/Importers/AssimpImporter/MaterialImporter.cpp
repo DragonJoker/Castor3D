@@ -646,6 +646,16 @@ namespace c3d_assimp
 									texConfig.opacityMask[0] = 0x00FF0000;
 								}
 							}
+							else if ( texConfig == castor3d::TextureConfiguration::DiffuseTexture
+								&& hasAlphaChannel( image ) )
+							{
+								texConfig.opacityMask[0] = 0xFF000000;
+								m_result.setTwoSided( true );
+								m_result.setAlphaValue( 0.95f );
+								m_result.setAlphaFunc( VK_COMPARE_OP_GREATER );
+								m_result.setBlendAlphaFunc( VK_COMPARE_OP_LESS_OR_EQUAL );
+								m_result.setAlphaBlendMode( castor3d::BlendMode::eInterpolative );
+							}
 
 							m_result.registerTexture( std::move( *sourceInfo )
 								, { create, texConfig } );
@@ -860,11 +870,11 @@ namespace c3d_assimp
 
 		for ( auto aiMaterial : castor::makeArrayView( aiScene.mMaterials, aiScene.mNumMaterials ) )
 		{
+			castor3d::log::info << cuT( "  Material: [" ) << index << cuT( " (" ) << aiMaterial->GetName().C_Str() << cuT( ")]" ) << std::endl;
 			auto material = doProcessMaterial( scene
 				, aiScene
 				, *aiMaterial
 				, index );
-			castor3d::log::info << cuT( "  Material: [" ) << index << cuT( " (" ) << material.lock()->getName() << cuT( ")]" ) << std::endl;
 			m_materials.emplace( index, material );
 			++index;
 		}
