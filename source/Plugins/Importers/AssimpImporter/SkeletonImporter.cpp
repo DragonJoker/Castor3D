@@ -128,7 +128,6 @@ namespace c3d_assimp
 
 		static void completeSkeleton( castor::String const & prefix
 			, std::map< castor::String, BoneData > const & bonesNodes
-			, std::map< uint32_t, castor::String > & additionalBones
 			, castor3d::Skeleton & skeleton
 			, aiNode const & preRootNode
 			, aiNode const * previousPreRootNode )
@@ -139,7 +138,7 @@ namespace c3d_assimp
 			{
 				auto name = prefix + previousPreRootNode->mName.C_Str();
 				castor3d::SkeletonNode * node;
-				auto it = bonesNodes.find( name );
+				auto it = bonesNodes.find( previousPreRootNode->mName.C_Str() );
 
 				if ( it == bonesNodes.end() )
 				{
@@ -147,9 +146,7 @@ namespace c3d_assimp
 				}
 				else
 				{
-					auto bone = skeleton.createBone( name, it->second.inverseTransform );
-					node = bone;
-					additionalBones.emplace( bone->getId(), name );
+					node = skeleton.createBone( name, it->second.inverseTransform );
 				}
 
 				skeleton.setNodeParent( *node, *rootNode );
@@ -199,40 +196,6 @@ namespace c3d_assimp
 			return result;
 		}
 
-		static void processSkeletonAnimNodes( castor::String const & prefix
-			, std::map< aiNode const *, aiBone const * > const & bonesNodes
-			, castor3d::Skeleton & skeleton
-			, aiScene const & aiScene
-			, aiNode const & parentAiNode )
-		{
-			for ( auto node : castor::makeArrayView( parentAiNode.mChildren, parentAiNode.mNumChildren ) )
-			{
-				castor::String name = prefix + node->mName.C_Str();
-				auto skelNode = skeleton.findNode( name );
-
-				for ( auto aiAnimation : castor::makeArrayView( aiScene.mAnimations, aiScene.mNumAnimations ) )
-				{
-					const aiNodeAnim * aiNodeAnim = skeletons::findNodeAnim( *aiAnimation, node->mName.C_Str() );
-
-					if ( aiNodeAnim && !skelNode )
-					{
-						auto it = bonesNodes.find( node );
-
-						if ( it == bonesNodes.end() )
-						{
-							skelNode = skeleton.createNode( name );
-						}
-						else
-						{
-							skelNode = skeleton.createBone( name, makeMatrix4x4f( it->second->mOffsetMatrix ) );
-						}
-					}
-				}
-
-				processSkeletonAnimNodes( prefix, bonesNodes, skeleton, aiScene, *node );
-			}
-		}
-
 		bool operator==( aiVertexWeight const & lhs
 			, aiVertexWeight const & rhs )
 		{
@@ -252,11 +215,9 @@ namespace c3d_assimp
 
 	void SkeletonImporter::import( castor::String const & prefix
 		, castor::Path const & fileName
-		, uint32_t importFlags
 		, aiScene const & aiScene
 		, castor3d::Scene & scene )
 	{
-		m_additionalBones.clear();
 
 		for ( auto aiMesh : castor::makeArrayView( aiScene.mMeshes, aiScene.mNumMeshes ) )
 		{
@@ -269,7 +230,6 @@ namespace c3d_assimp
 		m_needsAnimsReparse = false;
 		m_prefix = prefix;
 		m_fileName = fileName;
-		m_importFlags = importFlags;
 		doProcessSkeletons( aiScene
 			, scene
 			, castor::makeArrayView( aiScene.mMeshes, aiScene.mNumMeshes ) );
@@ -317,11 +277,11 @@ namespace c3d_assimp
 
 					if ( it != m_skeletons.end() )
 					{
+						// If so, complete the skeleton and update the list
 						skeleton = it->second;
 						m_needsAnimsReparse = true;
 						skeletons::completeSkeleton( m_prefix
 							, m_bonesNodes
-							, m_additionalBones
 							, *skeleton
 							, *preRootNode
 							, aiScene.mRootNode->FindNode( it->first.c_str() ) );
@@ -332,6 +292,7 @@ namespace c3d_assimp
 
 				if ( it == m_skeletons.end() )
 				{
+					// Is the loaded skeletons' pre-root node in the current pre-root node ?
 					it = std::find_if( m_skeletons.begin()
 						, m_skeletons.end()
 						, [preRootNode]( auto & lookup )
@@ -455,8 +416,6 @@ namespace c3d_assimp
 		, SkeletonAnimationKeyFrameMap & keyFrames
 		, SkeletonAnimationObjectSet & notAnimated )
 	{
-		uint32_t processedChannels{};
-
 		for ( auto & skelNode : skeleton.getNodes() )
 		{
 			auto name = skelNode->getName();
@@ -494,7 +453,6 @@ namespace c3d_assimp
 
 			if ( aiNodeAnim )
 			{
-				++processedChannels;
 				processAnimationNodeKeys( *aiNodeAnim
 					, m_importer.getEngine()->getRenderLoop().getWantedFps()
 					, ticksPerSecond
@@ -513,8 +471,6 @@ namespace c3d_assimp
 				notAnimated.insert( object );
 			}
 		}
-
-		//CU_Require( processedChannels == aiAnimation.mNumChannels );
 	}
 
 	//*********************************************************************************************
