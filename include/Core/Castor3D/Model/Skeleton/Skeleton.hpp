@@ -79,6 +79,13 @@ namespace castor3d
 		C3D_API SkeletonNode * findNode( castor::String const & name )const;
 		/**
 		 *\~english
+		 *\return		The root skeleton node.
+		 *\~french
+		 *\return		Le noeud racine du squelette.
+		 */
+		C3D_API SkeletonNode * getRootNode()const;
+		/**
+		 *\~english
 		 *\brief		Adds a node to another node's children
 		 *\param[in]	node	The node.
 		 *\param[in]	parent	The parent bone.
