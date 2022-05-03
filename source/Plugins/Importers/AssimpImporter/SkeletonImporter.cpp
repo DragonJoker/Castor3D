@@ -197,7 +197,14 @@ namespace c3d_assimp
 							auto name = prefix + animLookup->mNodeName.C_Str();
 							return nodeLookup->getName() == name;
 						} );
-				} );
+				} )
+				|| channels.end() == std::find_if( channels.begin()
+					, channels.end()
+					, [&prefix, &skeleton]( aiNodeAnim const * animLookup )
+					{
+						auto name = prefix + animLookup->mNodeName.C_Str();
+						return skeleton.findNode( name ) == nullptr;
+					} );
 		}
 
 		static aiNodeAnim const * findNodeAnim( aiAnimation const & animation
