@@ -58,9 +58,17 @@ namespace castor3d
 
 			for ( auto & submesh : m_submeshes )
 			{
-				submesh.second.update( m_ratio
-					, static_cast< MeshAnimationKeyFrame const & >( *( *m_prev ) ).find( submesh.second.getSubmesh() )->second
-					, static_cast< MeshAnimationKeyFrame const & >( *( *m_curr ) ).find( submesh.second.getSubmesh() )->second );
+				auto & prvKF = static_cast< MeshAnimationKeyFrame const & >( *( *m_prev ) );
+				auto & curKF = static_cast< MeshAnimationKeyFrame const & >( *( *m_curr ) );
+				auto prvIt = prvKF.find( submesh.second.getSubmesh() );
+				auto curIt = curKF.find( submesh.second.getSubmesh() );
+
+				if ( prvIt != prvKF.end() && curIt != curKF.end() )
+				{
+					submesh.second.update( m_ratio
+						, prvIt->second
+						, curIt->second );
+				}
 			}
 
 			static_cast< Mesh & >( *m_meshAnimation.getAnimable() ).updateContainers();
