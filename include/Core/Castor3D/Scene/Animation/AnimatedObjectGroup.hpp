@@ -122,13 +122,15 @@ namespace castor3d
 		C3D_API AnimatedObject * findObject( castor::String const & name )const;
 		/**
 		 *\~english
-		 *\brief		adds the animation to the list
-		 *\param[in]	name	The animation to add
+		 *\brief		adds the animation to the list.
+		 *\param[in]	name	The animation to add.
+		 *\return		\p true if the animation didn't exist already.
 		 *\~french
-		 *\brief		Ajoute une animation à la liste
-		 *\param[in]	name	L'animation à ajouter
+		 *\brief		Ajoute une animation à la liste.
+		 *\param[in]	name	L'animation à ajouter.
+		 *\return		\p true si l'animation n'existait pas encore.
 		 */
-		C3D_API void addAnimation( castor::String const & name );
+		C3D_API bool addAnimation( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Sets the loop status of wanted animation.

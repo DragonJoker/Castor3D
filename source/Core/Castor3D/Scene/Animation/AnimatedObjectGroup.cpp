@@ -171,10 +171,13 @@ namespace castor3d
 		return nullptr;
 	}
 
-	void AnimatedObjectGroup::addAnimation( castor::String const & name )
+	bool AnimatedObjectGroup::addAnimation( castor::String const & name )
 	{
+		bool result = false;
+
 		if ( m_animations.find( name ) == m_animations.end() )
 		{
+			result = true;
 			m_animations.insert( { name, { name, AnimationState::eStopped, false, 1.0f } } );
 
 			for ( auto it : m_objects )
@@ -182,6 +185,8 @@ namespace castor3d
 				it.second->addAnimation( name );
 			}
 		}
+
+		return result;
 	}
 
 	void AnimatedObjectGroup::setAnimationLooped( castor::String const & name
