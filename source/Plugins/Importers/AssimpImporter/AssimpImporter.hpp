@@ -43,7 +43,6 @@ namespace c3d_assimp
 		SkeletonImporter m_skeletonsImp;
 		MeshesImporter m_meshesImp;
 		SceneImporter m_scenesImp;
-		uint32_t m_importFlags{};
 		castor::String m_prefix;
 	};
 }

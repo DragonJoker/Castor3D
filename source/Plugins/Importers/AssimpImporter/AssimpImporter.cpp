@@ -36,7 +36,6 @@ namespace c3d_assimp
 				{
 					m_skeletonsImp.import( m_prefix
 						, m_fileName
-						, m_importFlags
 						, *aiScene
 						, *mesh.getScene() );
 					result = true;
@@ -50,7 +49,6 @@ namespace c3d_assimp
 						, *mesh.getScene() );
 					m_skeletonsImp.import( m_prefix
 						, m_fileName
-						, m_importFlags
 						, *aiScene
 						, *mesh.getScene() );
 					auto indices = m_meshesImp.import( m_prefix
@@ -84,7 +82,6 @@ namespace c3d_assimp
 			{
 				m_skeletonsImp.import( m_prefix
 					, m_fileName
-					, m_importFlags
 					, *aiScene
 					, scene );
 
@@ -102,7 +99,6 @@ namespace c3d_assimp
 					, scene );
 				m_skeletonsImp.import( m_prefix
 					, m_fileName
-					, m_importFlags
 					, *aiScene
 					, scene );
 				auto meshes = m_meshesImp.import( m_prefix
@@ -130,10 +126,11 @@ namespace c3d_assimp
 	{
 		bool noOptim = false;
 		auto found = m_parameters.get( "no_optimisations", noOptim );
+		uint32_t importFlags{};
 
 		if ( !found || !noOptim )
 		{
-			m_importFlags = aiProcess_Triangulate
+			importFlags = aiProcess_Triangulate
 				| aiProcess_JoinIdenticalVertices
 				| aiProcess_OptimizeMeshes
 				| aiProcess_OptimizeGraph
@@ -154,13 +151,13 @@ namespace c3d_assimp
 		{
 			if ( normals == cuT( "smooth" ) )
 			{
-				m_importFlags |= aiProcess_GenSmoothNormals;
+				importFlags |= aiProcess_GenSmoothNormals;
 			}
 		}
 
 		if ( m_parameters.get( cuT( "tangent_space" ), tangentSpace ) && tangentSpace )
 		{
-			m_importFlags |= aiProcess_CalcTangentSpace;
+			importFlags |= aiProcess_CalcTangentSpace;
 		}
 
 		// And have it read the given file with some postprocessing
@@ -168,7 +165,7 @@ namespace c3d_assimp
 
 		try
 		{
-			aiScene = m_importer.ReadFile( castor::string::stringCast< char >( m_fileName ), m_importFlags );
+			aiScene = m_importer.ReadFile( castor::string::stringCast< char >( m_fileName ), importFlags );
 		}
 		catch ( std::exception & exc )
 		{
