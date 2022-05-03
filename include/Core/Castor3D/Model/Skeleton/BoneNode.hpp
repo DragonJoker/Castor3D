@@ -47,9 +47,14 @@ namespace castor3d
 			return m_id;
 		}
 
-		const castor::Matrix4x4f & getInverseTransform()const noexcept
+		castor::Matrix4x4f const & getInverseTransform()const noexcept
 		{
 			return m_inverseTransform;
+		}
+
+		void setInverseTransform( castor::Matrix4x4f value )noexcept
+		{
+			m_inverseTransform = std::move( value );
 		}
 
 	private:
