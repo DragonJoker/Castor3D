@@ -72,28 +72,41 @@ namespace castor3d
 
 	void Skeleton::setNodeParent( SkeletonNode & node, SkeletonNode & parent )
 	{
-		if ( m_nodes.end() == std::find_if( m_nodes.begin()
+		auto nodeIt = std::find_if( m_nodes.begin()
 			, m_nodes.end()
 			, [&node]( SkeletonNodeUPtr const & lookup )
 			{
 				return lookup.get() == &node;
-			} ) )
+			} );
+
+		if ( m_nodes.end() == nodeIt )
 		{
 			CU_Exception( "Skeleton::setBoneParent - Child bone is not in the Skeleton's nodes" );
 		}
 
-			if ( m_nodes.end() == std::find_if( m_nodes.begin()
-				, m_nodes.end()
-				, [&parent]( SkeletonNodeUPtr const & lookup )
-				{
-					return lookup.get() == &parent;
-				} ) )
+		auto parentIt = std::find_if( m_nodes.begin()
+			, m_nodes.end()
+			, [&parent]( SkeletonNodeUPtr const & lookup )
+			{
+				return lookup.get() == &parent;
+			} );
+
+		if ( m_nodes.end() == parentIt )
 		{
 			CU_Exception( "Skeleton::setBoneParent - Parent bone is not in the Skeleton's nodes" );
 		}
 
 		parent.addChild( node );
 		node.setParent( parent );
+		auto parentDist = std::distance( m_nodes.begin(), parentIt );
+		auto nodeDist = std::distance( m_nodes.begin(), nodeIt );
+
+		if ( parentDist > nodeDist )
+		{
+			auto parentNode = std::move( *parentIt );
+			m_nodes.erase( parentIt );
+			m_nodes.emplace( std::next( m_nodes.begin(), nodeDist ), std::move( parentNode ) );
+		}
 	}
 
 	SkeletonAnimation & Skeleton::createAnimation( castor::String const & name )
