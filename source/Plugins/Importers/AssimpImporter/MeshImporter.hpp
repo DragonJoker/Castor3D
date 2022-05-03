@@ -51,7 +51,7 @@ namespace c3d_assimp
 		void doProcessMeshesAndAnims( aiScene const & aiScene
 			, castor3d::Scene & scene
 			, castor::ArrayView< aiMesh * > aiMeshes );
-		std::map< uint32_t, MeshData * > doMergeMeshes( castor3d::Scene & scene );
+		std::map< uint32_t, MeshData * > doRemoveDuplicateMeshes( castor3d::Scene & scene );
 		MeshIndices doProcessMeshAndAnims( aiScene const & aiScene
 			, castor::ArrayView< aiMesh * > aiMeshes
 			, castor3d::Mesh & mesh );
@@ -62,7 +62,9 @@ namespace c3d_assimp
 			, uint32_t aiMeshIndex
 			, aiScene const & aiScene
 			, castor3d::Submesh & submesh );
-		void doProcessAnim( aiMesh const & aiMesh
+		void doProcessAnim( aiScene const & aiScene
+			, aiMesh const & aiMesh
+			, uint32_t aiMeshIndex
 			, castor3d::Mesh & mesh
 			, castor3d::Submesh & submesh );
 		void doFillBonesData( castor3d::Skeleton & skeleton
