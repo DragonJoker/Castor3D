@@ -37,7 +37,8 @@ namespace c3d_assimp
 					m_skeletonsImp.import( m_prefix
 						, m_fileName
 						, *aiScene
-						, *mesh.getScene() );
+						, *mesh.getScene()
+						, false );
 					result = true;
 				}
 				else
@@ -50,7 +51,8 @@ namespace c3d_assimp
 					m_skeletonsImp.import( m_prefix
 						, m_fileName
 						, *aiScene
-						, *mesh.getScene() );
+						, *mesh.getScene()
+						, true );
 					auto indices = m_meshesImp.import( m_prefix
 						, m_fileName
 						, *aiScene
@@ -83,7 +85,8 @@ namespace c3d_assimp
 				m_skeletonsImp.import( m_prefix
 					, m_fileName
 					, *aiScene
-					, scene );
+					, scene
+					, false );
 
 				if ( m_skeletonsImp.needsAnimsReparse() )
 				{
@@ -100,7 +103,8 @@ namespace c3d_assimp
 				m_skeletonsImp.import( m_prefix
 					, m_fileName
 					, *aiScene
-					, scene );
+					, scene
+					, true );
 				auto meshes = m_meshesImp.import( m_prefix
 					, m_fileName
 					, *aiScene

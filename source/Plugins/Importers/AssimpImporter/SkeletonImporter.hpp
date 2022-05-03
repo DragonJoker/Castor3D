@@ -30,7 +30,8 @@ namespace c3d_assimp
 		void import( castor::String const & prefix
 			, castor::Path const & fileName
 			, aiScene const & aiScene
-			, castor3d::Scene & scene );
+			, castor3d::Scene & scene
+			, bool replaceInverseTransforms );
 		bool isBoneNode( aiNode const & aiNode )const;
 		castor3d::SkeletonSPtr getSkeleton( aiMesh const & aiMesh )const;
 
@@ -64,10 +65,11 @@ namespace c3d_assimp
 		castor3d::MeshImporter & m_importer;
 		castor::String m_prefix;
 		castor::Path m_fileName;
+		bool m_needsAnimsReparse{};
+		bool m_replaceInverseTransforms{};
 		std::map< castor::String, BoneData > m_bonesNodes;
 		std::map< castor::String, castor3d::SkeletonSPtr > m_skeletons;
 		std::map< castor::String, castor3d::SkeletonSPtr > m_meshSkeletons;
-		bool m_needsAnimsReparse{};
 	};
 }
 
