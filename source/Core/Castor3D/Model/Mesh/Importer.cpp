@@ -89,9 +89,6 @@ namespace castor3d
 		m_fileName = fileName;
 		m_filePath = m_fileName.getPath();
 		m_parameters = parameters;
-		m_nodes.clear();
-		m_geometries.clear();
-		m_meshes.clear();
 		bool result = true;
 
 		if ( !mesh.getSubmeshCount() )
@@ -192,9 +189,6 @@ namespace castor3d
 		m_fileName = fileName;
 		m_filePath = m_fileName.getPath();
 		m_parameters = parameters;
-		m_nodes.clear();
-		m_geometries.clear();
-		m_meshes.clear();
 		bool result = doImportScene( scene );
 
 		if ( result && initialise )
