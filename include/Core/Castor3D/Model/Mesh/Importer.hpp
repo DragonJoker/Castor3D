@@ -50,7 +50,8 @@ namespace castor3d
 		C3D_API bool import( Mesh & mesh
 			, castor::Path const & pathFile
 			, Parameters const & parameters
-			, bool initialise );
+			, bool initialise
+			, bool isSecondary );
 		/**
 		 *\~english
 		 *\brief		Scene import Function.

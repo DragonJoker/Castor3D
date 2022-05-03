@@ -2812,9 +2812,15 @@ namespace castor3d
 			}
 			else
 			{
-				auto importer = engine->getImporterFactory().create( extension, *engine );
+				bool secondary = true;
 
-				if ( !importer->import( *parsingContext.mesh.lock(), pathFile, parameters, true ) )
+				if ( !parsingContext.importer )
+				{
+					parsingContext.importer = engine->getImporterFactory().create( extension, *engine );
+					secondary = false;
+				}
+
+				if ( !parsingContext.importer->import( *parsingContext.mesh.lock(), pathFile, parameters, true, secondary ) )
 				{
 					CU_ParsingError( cuT( "Mesh Import failed" ) );
 					parsingContext.mesh.reset();
@@ -2860,7 +2866,7 @@ namespace castor3d
 				auto importer = engine->getImporterFactory().create( extension, *engine );
 				Mesh mesh{ cuT( "MorphImport" ), *parsingContext.scene };
 
-				if ( !importer->import( mesh, pathFile, parameters, false ) )
+				if ( !importer->import( mesh, pathFile, parameters, false, false ) )
 				{
 					CU_ParsingError( cuT( "Mesh Import failed" ) );
 				}
@@ -3003,6 +3009,7 @@ namespace castor3d
 				parsingContext.geometry->setMesh( parsingContext.mesh );
 			}
 
+			parsingContext.importer.reset();
 			parsingContext.mesh.reset();
 		}
 	}

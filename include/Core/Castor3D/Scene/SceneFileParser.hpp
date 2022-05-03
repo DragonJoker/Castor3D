@@ -198,6 +198,7 @@ namespace castor3d
 		TextureConfiguration textureConfiguration{};
 		TextureTransform textureTransform{};
 		SceneImportConfig sceneImportConfig;
+		MeshImporterUPtr importer;
 	};
 
 	class SceneFileParser
