@@ -694,7 +694,7 @@ namespace castortd
 
 		if ( node->hasAnimation() )
 		{
-			animGroup->addObject( *node, tower->getName() + cuT( "_Node" ) );
+			animGroup->addObject( *node, tower->getName() );
 		}
 
 		if ( tower->getMesh().lock() )
@@ -703,7 +703,7 @@ namespace castortd
 
 			if ( tmesh->hasAnimation() )
 			{
-			  animGroup->addObject( *tmesh, *tower, tower->getName() + cuT( "_Mesh" ) );
+			  animGroup->addObject( *tmesh, *tower, tower->getName() );
 				time = std::max( time
 					, tmesh->getAnimation( p_category->getAttackAnimationName() ).getLength() );
 			}
@@ -714,7 +714,7 @@ namespace castortd
 			{
 				if ( skeleton->hasAnimation() )
 				{
-					animGroup->addObject( *skeleton, *tmesh, *tower, tower->getName() + cuT( "_Skeleton" ) );
+					animGroup->addObject( *skeleton, *tmesh, *tower, tower->getName() );
 					time = std::max( time
 						, skeleton->getAnimation( p_category->getAttackAnimationName() ).getLength() );
 				}
