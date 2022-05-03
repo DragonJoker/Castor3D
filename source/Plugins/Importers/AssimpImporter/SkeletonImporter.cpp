@@ -149,7 +149,7 @@ namespace c3d_assimp
 					node = skeleton.createBone( name, it->second.inverseTransform );
 				}
 
-				skeleton.setNodeParent( *node, *rootNode );
+				skeleton.setNodeParent( *rootNode , *node );
 				rootNode = node;
 				previousPreRootNode = previousPreRootNode->mParent;
 			}
