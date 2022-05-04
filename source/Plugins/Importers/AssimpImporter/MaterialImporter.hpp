@@ -14,13 +14,14 @@ See LICENSE file in root folder
 
 namespace c3d_assimp
 {
+	class AssimpImporter;
+
 	class MaterialImporter
 	{
 	public:
-		MaterialImporter( castor3d::MeshImporter & importer );
+		MaterialImporter( AssimpImporter & importer );
 
-		void import( castor::String const & prefix
-			, castor::Path const & fileName
+		void import( castor::Path const & fileName
 			, std::map< castor3d::TextureFlag, castor3d::TextureConfiguration > const & textureRemaps
 			, aiScene const & aiScene
 			, castor3d::Scene & scene );
@@ -39,9 +40,7 @@ namespace c3d_assimp
 			, uint32_t index );
 
 	private:
-		uint32_t m_anonymous{};
-		castor3d::MeshImporter & m_importer;
-		castor::String m_prefix;
+		AssimpImporter & m_importer;
 		castor::Path m_fileName;
 		std::map< castor3d::TextureFlag, castor3d::TextureConfiguration > m_textureRemaps;
 		std::map< uint32_t, castor3d::MaterialResPtr > m_materials;

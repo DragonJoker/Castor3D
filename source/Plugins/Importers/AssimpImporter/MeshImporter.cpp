@@ -4,6 +4,7 @@
 #include "AssimpImporter/MeshImporter.hpp"
 
 #include "AssimpImporter/AssimpHelpers.hpp"
+#include "AssimpImporter/AssimpImporter.hpp"
 
 #include <Castor3D/Event/Frame/GpuFunctorEvent.hpp>
 #include <Castor3D/Model/Vertex.hpp>
@@ -115,7 +116,7 @@ namespace c3d_assimp
 
 				if ( morphIt != morphChannels.end() )
 				{
-					result.emplace( anim->mName.C_Str(), *morphIt );
+					result.emplace( makeString( anim->mName ), *morphIt );
 				}
 			}
 
@@ -301,7 +302,7 @@ namespace c3d_assimp
 
 	//*********************************************************************************************
 
-	MeshesImporter::MeshesImporter( castor3d::MeshImporter & importer
+	MeshesImporter::MeshesImporter( AssimpImporter & importer
 		, MaterialImporter const & materials
 		, SkeletonImporter const & skeletons
 		, castor3d::MeshPtrStrMap & meshes )
@@ -312,24 +313,20 @@ namespace c3d_assimp
 	{
 	}
 
-	MeshIndices MeshesImporter::import( castor::String const & prefix
-		, castor::Path const & fileName
+	MeshIndices MeshesImporter::import( castor::Path const & fileName
 		, aiScene const & aiScene
 		, castor3d::Mesh & mesh )
 	{
-		m_prefix = prefix;
 		m_fileName = fileName;
 		return doProcessMeshAndAnims( aiScene
 			, castor::makeArrayView( aiScene.mMeshes, aiScene.mNumMeshes )
 			, mesh );
 	}
 
-	std::map< uint32_t, MeshData * > MeshesImporter::import( castor::String const & prefix
-		, castor::Path const & fileName
+	std::map< uint32_t, MeshData * > MeshesImporter::import( castor::Path const & fileName
 		, aiScene const & aiScene
 		, castor3d::Scene & scene )
 	{
-		m_prefix = prefix;
 		m_fileName = fileName;
 		doProcessMeshesAndAnims( aiScene
 			, scene
@@ -400,11 +397,11 @@ namespace c3d_assimp
 
 		for ( auto & aiMesh : aiMeshes )
 		{
-			castor::String name = normalizeName( m_prefix + aiMesh->mName.C_Str() );
+			castor::String name = normalizeName( m_importer.getInternalName( aiMesh->mName ) );
 
 			if ( name.size() > 150u )
 			{
-				name = m_prefix + m_fileName.getFileName() + "-" + castor::string::toString( m_registeredMeshes.size() );
+				name = m_importer.getInternalName( m_fileName.getFileName() + "-" + castor::string::toString( m_registeredMeshes.size() ) );
 			}
 
 			auto regIt = m_registeredMeshes.find( name );
@@ -474,14 +471,13 @@ namespace c3d_assimp
 		castor3d::SubmeshSPtr submesh;
 		castor3d::SkeletonSPtr skeleton;
 		MeshIndices result;
-		auto it = result.begin();
 
 		for ( auto aiMesh : aiMeshes )
 		{
 			if ( create )
 			{
 				submesh = mesh.createSubmesh();
-				result.emplace( aiMeshIndex, submesh ).first;
+				result.emplace( aiMeshIndex, submesh );
 			}
 
 			auto curSkeleton = m_skeletons.getSkeleton( *aiMesh );
@@ -519,7 +515,7 @@ namespace c3d_assimp
 	{
 		bool result = false;
 		castor3d::MaterialResPtr material;
-		castor3d::log::info << cuT( "Mesh found: [" ) << m_prefix + aiMesh.mName.C_Str() << cuT( "]" ) << std::endl;
+		castor3d::log::info << cuT( "Mesh found: [" ) << m_importer.getInternalName( aiMesh.mName ) << cuT( "]" ) << std::endl;
 
 		if ( aiMesh.mMaterialIndex < aiScene.mNumMaterials )
 		{
@@ -615,7 +611,7 @@ namespace c3d_assimp
 
 			for ( auto anim : anims )
 			{
-				castor::String name{ normalizeName( m_prefix + castor::string::stringCast< castor::xchar >( anim.first ) ) };
+				castor::String name{ normalizeName( anim.first ) };
 				castor3d::log::info << cuT( "  Mesh Animation found: [" ) << name << cuT( "] " ) << std::endl;
 				auto & animation = mesh.createAnimation( name );
 				castor3d::MeshAnimationSubmesh animSubmesh{ animation, submesh };
@@ -673,7 +669,7 @@ namespace c3d_assimp
 	{
 		for ( auto aiBone : aiBones )
 		{
-			castor::String name = m_prefix + castor::string::stringCast< castor::xchar >( aiBone->mName.C_Str() );
+			castor::String name = m_importer.getInternalName( aiBone->mName );
 			auto node = skeleton.findNode( name );
 			CU_Require( node && node->getType() == castor3d::SkeletonNodeType::eBone );
 			auto bone = &static_cast< castor3d::BoneNode & >( *node );
