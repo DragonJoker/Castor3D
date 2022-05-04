@@ -372,8 +372,10 @@ namespace c3d_assimp
 					skeleton = it->second;
 				}
 
-				m_meshSkeletons.emplace( makeString( aiMesh->mName ) + "_" + castor::string::toString( meshIndex++ ), skeleton );
+				m_meshSkeletons.emplace( makeString( aiMesh->mName ) + "_" + castor::string::toString( meshIndex ), skeleton );
 			}
+
+			++meshIndex;
 		}
 
 		for ( auto skeletonIt : m_skeletons )
