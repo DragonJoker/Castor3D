@@ -7,6 +7,7 @@
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Miscellaneous/StagingData.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -159,7 +160,20 @@ namespace castor3d
 
 				if ( hasComponent( BonesComponent::Name ) )
 				{
-					m_bufferOffset = device.skinnedGeometryPools->getBuffer( m_points.size()
+					if ( hasComponent( MorphComponent::Name ) )
+					{
+						m_bufferOffset = device.morphedSkinnedGeometryPools->getBuffer( m_points.size()
+							, indexCount );
+					}
+					else
+					{
+						m_bufferOffset = device.skinnedGeometryPools->getBuffer( m_points.size()
+							, indexCount );
+					}
+				}
+				else if ( hasComponent( MorphComponent::Name ) )
+				{
+					m_bufferOffset = device.morphedGeometryPools->getBuffer( m_points.size()
 						, indexCount );
 				}
 				else
@@ -212,7 +226,18 @@ namespace castor3d
 		{
 			if ( m_bufferOffset.hasBones() )
 			{
-				device.skinnedGeometryPools->putBuffer( m_bufferOffset );
+				if ( hasComponent( MorphComponent::Name ) )
+				{
+					device.morphedSkinnedGeometryPools->putBuffer( m_bufferOffset );
+				}
+				else
+				{
+					device.skinnedGeometryPools->putBuffer( m_bufferOffset );
+				}
+			}
+			else if ( hasComponent( MorphComponent::Name ) )
+			{
+				device.morphedGeometryPools->putBuffer( m_bufferOffset );
 			}
 			else
 			{

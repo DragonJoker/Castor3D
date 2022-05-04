@@ -10,7 +10,9 @@
 
 CU_ImplementCUSmartPtr( castor3d, VertexBufferPool )
 CU_ImplementCUSmartPtr( castor3d, ObjectBufferPool )
+CU_ImplementCUSmartPtr( castor3d, MorphedObjectBufferPool )
 CU_ImplementCUSmartPtr( castor3d, SkinnedObjectBufferPool )
+CU_ImplementCUSmartPtr( castor3d, MorphedSkinnedObjectBufferPool )
 
 namespace castor3d
 {
@@ -165,6 +167,120 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	MorphedObjectBufferPool::MorphedObjectBufferPool( RenderDevice const & device
+		, castor::String debugName )
+		: OwnedBy< RenderSystem >{ device.renderSystem }
+		, m_device{ device }
+		, m_debugName{ std::move( debugName ) }
+	{
+	}
+
+	void MorphedObjectBufferPool::cleanup()
+	{
+		m_buffers.clear();
+	}
+
+	void MorphedObjectBufferPool::upload( ashes::CommandBuffer const & commandBuffer )
+	{
+		for ( auto & buffer : m_buffers )
+		{
+			buffer->vertex.upload( commandBuffer );
+			buffer->morph.upload( commandBuffer );
+			buffer->index.upload( commandBuffer );
+		}
+	}
+
+	ObjectBufferOffset MorphedObjectBufferPool::getBuffer( VkDeviceSize vertexCount
+		, VkDeviceSize indexCount )
+	{
+		ObjectBufferOffset result;
+		auto it = doFindBuffer( vertexCount, indexCount, m_buffers );
+
+		if ( it == m_buffers.end() )
+		{
+			auto buffers = std::make_unique< ModelBuffers >( details::createBuffer< InterleavedVertex >( m_device
+					, vertexCount
+					, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+					, m_debugName + "Vertex" + std::to_string( m_buffers.size() )
+					, false )
+				, details::createBuffer< InterleavedVertex >( m_device
+					, vertexCount
+					, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+					, m_debugName + "Morph" + std::to_string( m_buffers.size() )
+					, false )
+				, details::createBuffer< uint32_t >( m_device
+					, indexCount
+					, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+					, m_debugName + "Index" + std::to_string( m_buffers.size() )
+					, false ) );
+			m_buffers.emplace_back( std::move( buffers ) );
+			it = std::next( m_buffers.begin()
+				, ptrdiff_t( m_buffers.size() - 1u ) );
+		}
+
+		result.vtxBuffer = &( *it )->vertex;
+		result.vtxChunk = ( *it )->vertex.allocate( sizeof( InterleavedVertex ) * vertexCount );
+		result.mphBuffer = &( *it )->morph;
+		result.mphChunk = ( *it )->morph.allocate( sizeof( InterleavedVertex ) * vertexCount );
+
+		if ( indexCount )
+		{
+			result.idxBuffer = &( *it )->index;
+			result.idxChunk = ( *it )->index.allocate( sizeof( uint32_t ) * indexCount );
+		}
+
+		return result;
+	}
+
+	void MorphedObjectBufferPool::putBuffer( ObjectBufferOffset const & bufferOffset )
+	{
+		auto it = std::find_if( m_buffers.begin()
+			, m_buffers.end()
+			, [&bufferOffset]( std::unique_ptr< ModelBuffers > const & lookup )
+			{
+				bool result = &lookup->vertex.getBuffer().getBuffer() == &bufferOffset.getVertexBuffer();
+
+				if ( result && bufferOffset.idxBuffer )
+				{
+					result = &lookup->index.getBuffer().getBuffer() == &bufferOffset.getIndexBuffer();
+				}
+
+				if ( result && bufferOffset.mphBuffer )
+				{
+					result = &lookup->morph.getBuffer().getBuffer() == &bufferOffset.getMorphBuffer();
+				}
+
+				return result;
+			} );
+		CU_Require( it != m_buffers.end() );
+		( *it )->vertex.deallocate( bufferOffset.vtxChunk );
+		( *it )->morph.deallocate( bufferOffset.mphChunk );
+
+		if ( bufferOffset.idxBuffer )
+		{
+			( *it )->index.deallocate( bufferOffset.idxChunk );
+		}
+	}
+
+	MorphedObjectBufferPool::BufferArray::iterator MorphedObjectBufferPool::doFindBuffer( VkDeviceSize vertexCount
+		, VkDeviceSize indexCount
+		, MorphedObjectBufferPool::BufferArray & array )
+	{
+		auto it = array.begin();
+
+		while ( it != array.end()
+			&& ( !( *it )->vertex.hasAvailable( sizeof( InterleavedVertex ) * vertexCount )
+				|| !( *it )->morph.hasAvailable( sizeof( InterleavedVertex ) * vertexCount )
+				|| !( *it )->index.hasAvailable( sizeof( uint32_t ) * indexCount ) ) )
+		{
+			++it;
+		}
+
+		return it;
+	}
+
+	//*********************************************************************************************
+
 	SkinnedObjectBufferPool::SkinnedObjectBufferPool( RenderDevice const & device
 		, castor::String debugName )
 		: OwnedBy< RenderSystem >{ device.renderSystem }
@@ -268,6 +384,135 @@ namespace castor3d
 
 		while ( it != array.end()
 			&& ( !( *it )->vertex.hasAvailable( sizeof( InterleavedVertex ) * vertexCount )
+				|| !( *it )->bones.hasAvailable( sizeof( VertexBoneData ) * vertexCount )
+				|| !( *it )->index.hasAvailable( sizeof( uint32_t ) * indexCount ) ) )
+		{
+			++it;
+		}
+
+		return it;
+	}
+
+	//*********************************************************************************************
+
+	MorphedSkinnedObjectBufferPool::MorphedSkinnedObjectBufferPool( RenderDevice const & device
+		, castor::String debugName )
+		: OwnedBy< RenderSystem >{ device.renderSystem }
+		, m_device{ device }
+		, m_debugName{ std::move( debugName ) }
+	{
+	}
+
+	void MorphedSkinnedObjectBufferPool::cleanup()
+	{
+		m_buffers.clear();
+	}
+
+	void MorphedSkinnedObjectBufferPool::upload( ashes::CommandBuffer const & commandBuffer )
+	{
+		for ( auto & buffer : m_buffers )
+		{
+			buffer->vertex.upload( commandBuffer );
+			buffer->morph.upload( commandBuffer );
+			buffer->bones.upload( commandBuffer );
+			buffer->index.upload( commandBuffer );
+		}
+	}
+
+	ObjectBufferOffset MorphedSkinnedObjectBufferPool::getBuffer( VkDeviceSize vertexCount
+		, VkDeviceSize indexCount )
+	{
+		ObjectBufferOffset result;
+		auto it = doFindBuffer( vertexCount, indexCount, m_buffers );
+
+		if ( it == m_buffers.end() )
+		{
+			auto buffers = std::make_unique< ModelBuffers >( details::createBuffer< InterleavedVertex >( m_device
+					, vertexCount
+					, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+					, m_debugName + "Vertex" + std::to_string( m_buffers.size() )
+					, false )
+				, details::createBuffer< InterleavedVertex >( m_device
+					, vertexCount
+					, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+					, m_debugName + "Morph" + std::to_string( m_buffers.size() )
+					, false )
+				, details::createBuffer< VertexBoneData >( m_device
+					, vertexCount
+					, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+					, m_debugName + "Bones" + std::to_string( m_buffers.size() )
+					, false )
+				, details::createBuffer< uint32_t >( m_device
+					, indexCount
+					, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+					, m_debugName + "Index" + std::to_string( m_buffers.size() )
+					, false ) );
+			m_buffers.emplace_back( std::move( buffers ) );
+			it = std::next( m_buffers.begin()
+				, ptrdiff_t( m_buffers.size() - 1u ) );
+		}
+
+		result.vtxBuffer = &( *it )->vertex;
+		result.vtxChunk = ( *it )->vertex.allocate( sizeof( InterleavedVertex ) * vertexCount );
+		result.mphBuffer = &( *it )->morph;
+		result.mphChunk = ( *it )->morph.allocate( sizeof( InterleavedVertex ) * vertexCount );
+		result.bonBuffer = &( *it )->bones;
+		result.bonChunk = ( *it )->bones.allocate( sizeof( VertexBoneData ) * vertexCount );
+
+		if ( indexCount )
+		{
+			result.idxBuffer = &( *it )->index;
+			result.idxChunk = ( *it )->index.allocate( sizeof( uint32_t ) * indexCount );
+		}
+
+		return result;
+	}
+
+	void MorphedSkinnedObjectBufferPool::putBuffer( ObjectBufferOffset const & bufferOffset )
+	{
+		auto it = std::find_if( m_buffers.begin()
+			, m_buffers.end()
+			, [&bufferOffset]( std::unique_ptr< ModelBuffers > const & lookup )
+			{
+				bool result = &lookup->vertex.getBuffer().getBuffer() == &bufferOffset.getVertexBuffer();
+
+				if ( result && bufferOffset.idxBuffer )
+				{
+					result = &lookup->index.getBuffer().getBuffer() == &bufferOffset.getIndexBuffer();
+				}
+
+				if ( result && bufferOffset.mphBuffer )
+				{
+					result = &lookup->morph.getBuffer().getBuffer() == &bufferOffset.getMorphBuffer();
+				}
+
+				if ( result && bufferOffset.bonBuffer )
+				{
+					result = &lookup->bones.getBuffer().getBuffer() == &bufferOffset.getBonesBuffer();
+				}
+
+				return result;
+			} );
+		CU_Require( it != m_buffers.end() );
+		( *it )->vertex.deallocate( bufferOffset.vtxChunk );
+		( *it )->morph.deallocate( bufferOffset.mphChunk );
+		( *it )->bones.deallocate( bufferOffset.bonChunk );
+
+		if ( bufferOffset.idxBuffer )
+		{
+			( *it )->index.deallocate( bufferOffset.idxChunk );
+		}
+	}
+
+	MorphedSkinnedObjectBufferPool::BufferArray::iterator MorphedSkinnedObjectBufferPool::doFindBuffer( VkDeviceSize vertexCount
+		, VkDeviceSize indexCount
+		, MorphedSkinnedObjectBufferPool::BufferArray & array )
+	{
+		auto it = array.begin();
+
+		while ( it != array.end()
+			&& ( !( *it )->vertex.hasAvailable( sizeof( InterleavedVertex ) * vertexCount )
+				|| !( *it )->morph.hasAvailable( sizeof( InterleavedVertex ) * vertexCount )
 				|| !( *it )->bones.hasAvailable( sizeof( VertexBoneData ) * vertexCount )
 				|| !( *it )->index.hasAvailable( sizeof( uint32_t ) * indexCount ) ) )
 		{

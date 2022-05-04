@@ -361,7 +361,9 @@ namespace castor3d
 		GpuBufferPoolUPtr bufferPool;
 		VertexBufferPoolUPtr vertexPools;
 		ObjectBufferPoolUPtr geometryPools;
+		MorphedObjectBufferPoolUPtr morphedGeometryPools;
 		SkinnedObjectBufferPoolUPtr skinnedGeometryPools;
+		MorphedSkinnedObjectBufferPoolUPtr morphedSkinnedGeometryPools;
 		UniformBufferPoolUPtr uboPool;
 
 	private:

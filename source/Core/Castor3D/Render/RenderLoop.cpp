@@ -306,7 +306,9 @@ namespace castor3d
 		device.bufferPool->upload( *uploadResources.commands.commandBuffer );
 		device.uboPool->upload( *uploadResources.commands.commandBuffer );
 		device.geometryPools->upload( *uploadResources.commands.commandBuffer );
+		device.morphedGeometryPools->upload( *uploadResources.commands.commandBuffer );
 		device.skinnedGeometryPools->upload( *uploadResources.commands.commandBuffer );
+		device.morphedSkinnedGeometryPools->upload( *uploadResources.commands.commandBuffer );
 		device.vertexPools->upload( *uploadResources.commands.commandBuffer );
 		getEngine()->upload( *uploadResources.commands.commandBuffer );
 
