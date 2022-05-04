@@ -6,8 +6,6 @@
 #include <Castor3D/Cache/TargetCache.hpp>
 #include <Castor3D/Miscellaneous/Version.hpp>
 
-using namespace HaarmPieterDuiker;
-
 #ifndef CU_PlatformWindows
 #	define C3D_HaarmPieterDuikerToneMapping_API
 #else
@@ -38,18 +36,19 @@ extern "C"
 
 	C3D_HaarmPieterDuikerToneMapping_API void getName( char const ** p_name )
 	{
-		*p_name = ToneMapping::Name.c_str();
+		*p_name = HaarmPieterDuiker::ToneMapping::Name.c_str();
 	}
 
 	C3D_HaarmPieterDuikerToneMapping_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
 	{
-		engine->getToneMappingFactory().registerType( ToneMapping::Type
-			, &ToneMapping::create );
-		engine->getRenderTargetCache().registerToneMappingName( ToneMapping::Type, ToneMapping::Name );
+		engine->getToneMappingFactory().registerType( HaarmPieterDuiker::ToneMapping::Type
+			, &HaarmPieterDuiker::ToneMapping::create );
+		engine->getRenderTargetCache().registerToneMappingName( HaarmPieterDuiker::ToneMapping::Type
+			, HaarmPieterDuiker::ToneMapping::Name );
 	}
 
 	C3D_HaarmPieterDuikerToneMapping_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->getToneMappingFactory().unregisterType( ToneMapping::Type );
+		engine->getToneMappingFactory().unregisterType( HaarmPieterDuiker::ToneMapping::Type );
 	}
 }

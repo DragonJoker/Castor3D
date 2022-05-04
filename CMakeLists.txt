@@ -66,9 +66,6 @@ endif ()
 
 option( CASTOR_USE_GLSLANG "Use glslang to convert GLSL shaders to SPIR-V" OFF )
 option( CASTOR_BUILGRP_RENDERER "Build Ashes renderer plugins" ON )
-if ( NOT DEFINED CASTOR_UNITY_BUILD )
-	option( CASTOR_UNITY_BUILD "Build Castor3D using Unity (Jumbo) build method" OFF )
-endif ()
 
 if ( WIN32 )
 	option( CASTOR_USE_DEPS_WXWIDGETS "Use wxWidgets from dependencies submodule instead of system/vcpkg one" OFF )

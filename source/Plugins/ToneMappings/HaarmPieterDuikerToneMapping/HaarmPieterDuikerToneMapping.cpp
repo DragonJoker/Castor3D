@@ -7,17 +7,14 @@
 
 #include <ShaderWriter/Source.hpp>
 
-using namespace castor;
-using namespace castor3d;
-using namespace sdw;
-
 namespace HaarmPieterDuiker
 {
-	String ToneMapping::Type = cuT( "haarm" );
-	String ToneMapping::Name = cuT( "Haarm Pieter Duiker Tone Mapping" );
+	castor::String ToneMapping::Type = cuT( "haarm" );
+	castor::String ToneMapping::Name = cuT( "Haarm Pieter Duiker Tone Mapping" );
 
 	castor3d::ShaderPtr ToneMapping::create()
 	{
+		using namespace sdw;
 		FragmentWriter writer;
 
 		// Shader inputs

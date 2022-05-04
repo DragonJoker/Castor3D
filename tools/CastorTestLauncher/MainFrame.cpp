@@ -42,27 +42,24 @@ using Bool = int;
 
 #include <castor.xpm>
 
-using namespace castor3d;
-using namespace castor;
-
 namespace test_launcher
 {
 	namespace
 	{
-		RenderTargetSPtr doLoadScene( Engine & engine
-			, Path const & fileName )
+		castor3d::RenderTargetSPtr doLoadScene( castor3d::Engine & engine
+			, castor::Path const & fileName )
 		{
-			RenderTargetSPtr result;
+			castor3d::RenderTargetSPtr result;
 
-			if ( File::fileExists( fileName ) )
+			if ( castor::File::fileExists( fileName ) )
 			{
-				Logger::logInfo( cuT( "Loading scene file : " ) + fileName );
+				castor::Logger::logInfo( cuT( "Loading scene file : " ) + fileName );
 
 				if ( fileName.getExtension() == cuT( "cscn" ) || fileName.getExtension() == cuT( "zip" ) )
 				{
 					try
 					{
-						SceneFileParser parser( engine );
+						castor3d::SceneFileParser parser( engine );
 
 						if ( parser.parseFile( fileName ) )
 						{
@@ -70,22 +67,22 @@ namespace test_launcher
 						}
 						else
 						{
-							Logger::logWarning( cuT( "Can't read scene file" ) );
+							castor::Logger::logWarning( cuT( "Can't read scene file" ) );
 						}
 					}
 					catch ( std::exception & exc )
 					{
-						Logger::logError( makeStringStream() << cuT( "Failed to parse the scene file, with following error: " ) << exc.what() );
+						castor::Logger::logError( castor::makeStringStream() << cuT( "Failed to parse the scene file, with following error: " ) << exc.what() );
 					}
 				}
 				else
 				{
-					Logger::logError( cuT( "Unsupported scene file type: " ) + fileName.getFileName() );
+					castor::Logger::logError( cuT( "Unsupported scene file type: " ) + fileName.getFileName() );
 				}
 			}
 			else
 			{
-				Logger::logError( cuT( "Scene file doesn't exist: " ) + fileName );
+				castor::Logger::logError( cuT( "Scene file doesn't exist: " ) + fileName );
 			}
 
 			return result;
@@ -173,21 +170,21 @@ namespace test_launcher
 				}
 				catch ( ... )
 				{
-					Logger::logWarning( cuT( "doCreateBitmapFromBuffer encountered an exception" ) );
+					castor::Logger::logWarning( cuT( "doCreateBitmapFromBuffer encountered an exception" ) );
 				}
 			}
 		}
 
-		void doCreateBitmapFromBuffer( PxBufferBaseSPtr input
+		void doCreateBitmapFromBuffer( castor::PxBufferBaseSPtr input
 			, bool flip
 			, wxBitmap & output )
 		{
-			PxBufferBaseSPtr buffer;
+			castor::PxBufferBaseSPtr buffer;
 
-			if ( input->getFormat() != PixelFormat::eR8G8B8A8_UNORM )
+			if ( input->getFormat() != castor::PixelFormat::eR8G8B8A8_UNORM )
 			{
-				buffer = PxBufferBase::create( Size( input->getWidth(), input->getHeight() )
-					, PixelFormat::eR8G8B8A8_UNORM
+				buffer = castor::PxBufferBase::create( castor::Size( input->getWidth(), input->getHeight() )
+					, castor::PixelFormat::eR8G8B8A8_UNORM
 					, input->getConstPtr()
 					, input->getFormat() );
 			}
@@ -277,21 +274,21 @@ namespace test_launcher
 		wxIcon icon = wxIcon( castor_xpm );
 		SetIcon( icon );
 		bool result = true;
-		Logger::logInfo( cuT( "Initialising Castor3D" ) );
+		castor::Logger::logInfo( cuT( "Initialising Castor3D" ) );
 
 		try
 		{
 			m_engine.initialise( 60, false );
-			Logger::logInfo( cuT( "Castor3D Initialised" ) );
+			castor::Logger::logInfo( cuT( "Castor3D Initialised" ) );
 		}
 		catch ( std::exception & exc )
 		{
-			Logger::logError( makeStringStream() << cuT( "Problem occured while initialising Castor3D: " ) << exc.what() );
+			castor::Logger::logError( castor::makeStringStream() << cuT( "Problem occured while initialising Castor3D: " ) << exc.what() );
 			result = false;
 		}
 		catch ( ... )
 		{
-			Logger::logError( cuT( "Problem occured while initialising Castor3D." ) );
+			castor::Logger::logError( cuT( "Problem occured while initialising Castor3D." ) );
 			result = false;
 		}
 
@@ -302,14 +299,14 @@ namespace test_launcher
 	{
 		if ( !fileName.empty() )
 		{
-			m_filePath = Path{ static_cast< wxChar const * >( fileName.c_str() ) };
+			m_filePath = castor::Path{ static_cast< wxChar const * >( fileName.c_str() ) };
 		}
 
 		if ( !m_filePath.empty() )
 		{
 			auto sizewx = GetClientSize();
 			castor::Size sizeWnd{ uint32_t( sizewx.GetWidth() ), uint32_t( sizewx.GetHeight() ) };
-			m_renderWindow = std::make_unique< RenderWindow >( "CastorTest"
+			m_renderWindow = std::make_unique< castor3d::RenderWindow >( "CastorTest"
 				, m_engine
 				, sizeWnd
 				, makeWindowHandle( this ) );
@@ -317,7 +314,7 @@ namespace test_launcher
 
 			if ( !target )
 			{
-				Logger::logError( cuT( "Can't initialise the render window." ) );
+				castor::Logger::logError( cuT( "Can't initialise the render window." ) );
 			}
 			else
 			{
@@ -326,7 +323,7 @@ namespace test_launcher
 		}
 		else
 		{
-			Logger::logError( cuT( "Can't open a scene file : empty file name." ) );
+			castor::Logger::logError( cuT( "Can't open a scene file : empty file name." ) );
 		}
 
 		return m_renderWindow != nullptr;
@@ -359,7 +356,7 @@ namespace test_launcher
 				castor::File::directoryCreate( folder );
 			}
 
-			Path outputPath = folder / ( m_filePath.getFileName() + cuT( "_" ) + suffix + cuT( ".png" ) );
+			castor::Path outputPath = folder / ( m_filePath.getFileName() + cuT( "_" ) + suffix + cuT( ".png" ) );
 
 			image.SaveFile( wxString( outputPath ) );
 		}

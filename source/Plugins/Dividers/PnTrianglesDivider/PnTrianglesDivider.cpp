@@ -1,8 +1,5 @@
 #include "PnTrianglesDivider/PnTrianglesDivider.hpp"
 
-using namespace castor;
-using namespace castor3d;
-
 namespace PnTriangles
 {
 	namespace
@@ -32,8 +29,8 @@ namespace PnTriangles
 		b111 = e + ( e - barycenter( 1 / 3.0f, 1 / 3.0f, p1.point, p2.point, p3.point ) ) / 2.0f;
 	}
 
-	String const Subdivider::Name = cuT( "PN-Triangles Divider" );
-	String const Subdivider::Type = cuT( "pn_tri" );
+	castor::String const Subdivider::Name = cuT( "PN-Triangles Divider" );
+	castor::String const Subdivider::Type = cuT( "pn_tri" );
 
 	Subdivider::Subdivider()
 		: castor3d::MeshSubdivider()
@@ -46,7 +43,7 @@ namespace PnTriangles
 		cleanup();
 	}
 
-	MeshSubdividerUPtr Subdivider::create()
+	castor3d::MeshSubdividerUPtr Subdivider::create()
 	{
 		return std::make_unique< Subdivider >();
 	}
@@ -56,7 +53,7 @@ namespace PnTriangles
 		castor3d::MeshSubdivider::cleanup();
 	}
 
-	void Subdivider::subdivide( SubmeshSPtr submesh
+	void Subdivider::subdivide( castor3d::SubmeshSPtr submesh
 		, int occurences
 		, bool generateBuffers
 		, bool threaded )
@@ -105,11 +102,11 @@ namespace PnTriangles
 	{
 		for ( uint32_t i = 0; i < m_submesh->getPointsCount(); ++i )
 		{
-			m_points.emplace_back( std::make_unique< SubmeshVertex >( SubmeshVertex{ i, m_submesh->getPoint( i ) } ) );
+			m_points.emplace_back( std::make_unique< castor3d::SubmeshVertex >( castor3d::SubmeshVertex{ i, m_submesh->getPoint( i ) } ) );
 		}
 
 		castor3d::MeshSubdivider::doInitialise();
-		m_indexMapping = m_submesh->getComponent< TriFaceMapping >();
+		m_indexMapping = m_submesh->getComponent< castor3d::TriFaceMapping >();
 	}
 
 	void Subdivider::doAddGeneratedFaces()

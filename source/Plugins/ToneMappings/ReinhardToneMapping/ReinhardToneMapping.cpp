@@ -8,14 +8,10 @@
 
 #include <ShaderWriter/Source.hpp>
 
-using namespace castor;
-using namespace sdw;
-using namespace castor3d;
-
 namespace Reinhard
 {
-	String ToneMapping::Type = cuT( "reinhard" );
-	String ToneMapping::Name = cuT( "Reinhard Tone Mapping" );
+	castor::String ToneMapping::Type = cuT( "reinhard" );
+	castor::String ToneMapping::Name = cuT( "Reinhard Tone Mapping" );
 
 	castor3d::ShaderPtr ToneMapping::create()
 	{

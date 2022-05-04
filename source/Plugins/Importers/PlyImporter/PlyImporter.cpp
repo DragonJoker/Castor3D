@@ -20,37 +20,34 @@
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
-using namespace castor3d;
-using namespace castor;
-
 namespace C3dPly
 {
-	PlyImporter::PlyImporter( Engine & engine )
+	PlyImporter::PlyImporter( castor3d::Engine & engine )
 		: MeshImporter( engine )
 	{
 	}
 
-	MeshImporterUPtr PlyImporter::create( Engine & engine )
+	castor3d::MeshImporterUPtr PlyImporter::create( castor3d::Engine & engine )
 	{
 		return std::make_unique< PlyImporter >( engine );
 	}
 
-	bool PlyImporter::doImportMesh( Mesh & p_mesh )
+	bool PlyImporter::doImportMesh( castor3d::Mesh & p_mesh )
 	{
 		bool result{ false };
-		UInt32Array faces;
-		FloatArray sizes;
-		String name = m_fileName.getFileName();
-		String meshName = name.substr( 0, name.find_last_of( '.' ) );
-		String materialName = meshName;
+		castor3d::UInt32Array faces;
+		castor3d::FloatArray sizes;
+		castor::String name = m_fileName.getFileName();
+		castor::String meshName = name.substr( 0, name.find_last_of( '.' ) );
+		castor::String materialName = meshName;
 		std::ifstream isFile;
-		isFile.open( string::stringCast< char >( m_fileName ).c_str(), std::ios::in );
+		isFile.open( castor::string::stringCast< char >( m_fileName ).c_str(), std::ios::in );
 		std::string strLine;
 		std::istringstream ssToken;
-		String::size_type stIndex;
+		castor::String::size_type stIndex;
 		int iNbProperties = 0;
-		SubmeshSPtr submesh = p_mesh.createSubmesh();
-		MaterialResPtr created;
+		castor3d::SubmeshSPtr submesh = p_mesh.createSubmesh();
+		castor3d::MaterialResPtr created;
 		auto pMaterial = p_mesh.getScene()->getMaterialView().tryAdd( materialName
 			, true
 			, created
@@ -64,7 +61,7 @@ namespace C3dPly
 
 		pMaterial.lock()->getPass( 0 )->setTwoSided( true );
 		submesh->setDefaultMaterial( pMaterial.lock().get() );
-		auto mapping = std::make_shared< TriFaceMapping >( *submesh );
+		auto mapping = std::make_shared< castor3d::TriFaceMapping >( *submesh );
 		// Parsing the ply identification line
 		std::getline( isFile, strLine );
 
@@ -92,7 +89,7 @@ namespace C3dPly
 						ssToken.str( strLine.substr( std::string( "element vertex " ).length() ) );
 						ssToken >> iNbVertex;
 						ssToken.clear( std::istringstream::goodbit );
-						log::info << cuT( "Vertices: " ) << iNbVertex << std::endl;
+						castor3d::log::info << cuT( "Vertices: " ) << iNbVertex << std::endl;
 						break;
 					}
 				}
@@ -109,7 +106,7 @@ namespace C3dPly
 					else
 					{
 						isFile.seekg( -isFile.gcount() ); // Unget last line
-						log::info << cuT( "Vertex properties: " ) << iNbProperties << std::endl;
+						castor3d::log::info << cuT( "Vertex properties: " ) << iNbProperties << std::endl;
 						break;
 					}
 				}
@@ -128,7 +125,7 @@ namespace C3dPly
 						ssToken.str( strLine.substr( std::string( "element face " ).size() ) );
 						ssToken >> iNbFaces;
 						ssToken.clear( std::istringstream::goodbit );
-						log::info << cuT( "Triangles: " ) << iNbFaces << std::endl;
+						castor3d::log::info << cuT( "Triangles: " ) << iNbFaces << std::endl;
 						break;
 					}
 				}
@@ -148,7 +145,7 @@ namespace C3dPly
 					}
 				}
 
-				std::vector< InterleavedVertex > vertices{ size_t( iNbVertex ) };
+				std::vector< castor3d::InterleavedVertex > vertices{ size_t( iNbVertex ) };
 
 				if ( iNbProperties >= 8 )
 				{
@@ -189,10 +186,10 @@ namespace C3dPly
 
 				submesh->addPoints( vertices );
 				// Parsing triangles
-				FaceSPtr pFace;
-				std::vector< FaceIndices > facesIndices;
+				castor3d::FaceSPtr pFace;
+				std::vector< castor3d::FaceIndices > facesIndices;
 				facesIndices.resize( size_t( iNbFaces ) );
-				FaceIndices * face = &facesIndices[0];
+				castor3d::FaceIndices * face = &facesIndices[0];
 
 				for ( int i = 0; i < iNbFaces; i++ )
 				{
