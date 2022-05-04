@@ -33,17 +33,15 @@ namespace c3d_assimp
 	class MeshesImporter
 	{
 	public:
-		MeshesImporter( castor3d::MeshImporter & importer
+		MeshesImporter( AssimpImporter & importer
 			, MaterialImporter const & materials
 			, SkeletonImporter const & skeletons
 			, castor3d::MeshPtrStrMap & meshes );
 
-		MeshIndices import( castor::String const & prefix
-			, castor::Path const & fileName
+		MeshIndices import( castor::Path const & fileName
 			, aiScene const & aiScene
 			, castor3d::Mesh & mesh );
-		std::map< uint32_t, MeshData * > import( castor::String const & prefix
-			, castor::Path const & fileName
+		std::map< uint32_t, MeshData * > import( castor::Path const & fileName
 			, aiScene const & aiScene
 			, castor3d::Scene & scene );
 
@@ -72,11 +70,10 @@ namespace c3d_assimp
 			, std::vector< castor3d::VertexBoneData > & arrayVertices );
 
 	private:
-		castor3d::MeshImporter & m_importer;
+		AssimpImporter & m_importer;
 		MaterialImporter const & m_materials;
 		SkeletonImporter const & m_skeletons;
 		castor3d::MeshPtrStrMap & m_meshes;
-		castor::String m_prefix;
 		castor::Path m_fileName;
 		std::vector< MeshData > m_loadedMeshes;
 		castor3d::MeshPtrStrMap m_registeredMeshes;

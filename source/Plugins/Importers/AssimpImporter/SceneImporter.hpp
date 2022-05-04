@@ -17,18 +17,15 @@ namespace c3d_assimp
 	class SceneImporter
 	{
 	public:
-		SceneImporter( castor3d::MeshImporter & importer
+		SceneImporter( AssimpImporter & importer
 			, SkeletonImporter const & skeletons
-			, MeshesImporter const & meshes
 			, castor3d::SceneNodePtrArray & nodes
 			, castor3d::GeometryPtrStrMap & geometries );
 
-		void import( castor::String const & prefix
-			, aiScene const & aiScene
+		void import( aiScene const & aiScene
 			, castor3d::Scene & scene
 			, std::map< uint32_t, MeshData * > const & meshes );
-		void import( castor::String const & prefix
-			, aiScene const & aiScene
+		void import( aiScene const & aiScene
 			, MeshIndices const & meshes );
 		void importAnims();
 
@@ -61,12 +58,10 @@ namespace c3d_assimp
 		static castor::String const Name;
 
 	private:
-		castor3d::MeshImporter & m_importer;
+		AssimpImporter & m_importer;
 		SkeletonImporter const & m_skeletons;
-		MeshesImporter const & m_meshes;
 		castor3d::SceneNodePtrArray & m_nodes;
 		castor3d::GeometryPtrStrMap & m_geometries;
-		castor::String m_prefix;
 		using NodeAnimGroup = std::pair< castor3d::SceneNode const *, castor3d::AnimatedObjectGroupSPtr >;
 		std::vector< NodeAnimGroup > m_animGroups;
 	};
