@@ -23,12 +23,14 @@ namespace castor3d
 		eFrontInstancedStatic,
 		eFrontInstancedSkinned,
 		eFrontMorphing,
+		eFrontMorphingSkinned,
 		eFrontBillboard,
 		eBackStatic,
 		eBackSkinned,
 		eBackInstancedStatic,
 		eBackInstancedSkinned,
 		eBackMorphing,
+		eBackMorphingSkinned,
 		eBackBillboard,
 		CU_ScopedEnumBounds( eFrontStatic )
 	};
