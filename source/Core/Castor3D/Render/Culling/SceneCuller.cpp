@@ -202,6 +202,9 @@ namespace castor3d
 			auto bonBuffer = nodes.front().first.node->data.getBufferOffsets().hasBones()
 				? &nodes.front().first.node->data.getBufferOffsets().getBonesBuffer()
 				: nullptr;
+			auto mphBuffer = nodes.front().first.node->data.getBufferOffsets().hasMorph()
+				? &nodes.front().first.node->data.getBufferOffsets().getMorphBuffer()
+				: nullptr;
 #endif
 
 			for ( auto & node : nodes )
@@ -215,6 +218,9 @@ namespace castor3d
 						: nullptr ));
 					CU_Require( bonBuffer == ( node.first.node->data.getBufferOffsets().hasBones()
 						? &node.first.node->data.getBufferOffsets().getBonesBuffer()
+						: nullptr) );
+					CU_Require( mphBuffer == ( node.first.node->data.getBufferOffsets().hasMorph()
+						? &node.first.node->data.getBufferOffsets().getMorphBuffer()
 						: nullptr) );
 				}
 			}

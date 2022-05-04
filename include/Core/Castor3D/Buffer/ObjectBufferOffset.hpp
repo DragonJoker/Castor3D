@@ -17,9 +17,11 @@ namespace castor3d
 		GpuPackedBuffer * vtxBuffer{};
 		GpuPackedBuffer * idxBuffer{};
 		GpuPackedBuffer * bonBuffer{};
+		GpuPackedBuffer * mphBuffer{};
 		MemChunk vtxChunk{};
 		MemChunk idxChunk{};
 		MemChunk bonChunk{};
+		MemChunk mphChunk{};
 
 		explicit operator bool()const
 		{
@@ -41,6 +43,11 @@ namespace castor3d
 			return bonBuffer->getBuffer().getBuffer();
 		}
 
+		ashes::BufferBase const & getMorphBuffer()const
+		{
+			return mphBuffer->getBuffer().getBuffer();
+		}
+
 		bool hasIndices()const
 		{
 			return idxChunk.askedSize != 0;
@@ -54,6 +61,11 @@ namespace castor3d
 		bool hasBones()const
 		{
 			return bonChunk.askedSize != 0;
+		}
+
+		bool hasMorph()const
+		{
+			return mphChunk.askedSize != 0;
 		}
 
 		template< typename IndexT >
@@ -79,6 +91,14 @@ namespace castor3d
 				, getBonesCount() );
 		}
 
+		template< typename VertexT >
+		castor::ArrayView< VertexT > getMorphData()const
+		{
+			CU_Require( hasMorph() );
+			return castor::makeArrayView( reinterpret_cast< VertexT * >( mphBuffer->getDatas().data() + getMorphOffset() )
+				, getMorphCount< VertexT >() );
+		}
+
 		uint32_t getIndexSize()const
 		{
 			return uint32_t( idxChunk.askedSize );
@@ -92,6 +112,11 @@ namespace castor3d
 		uint32_t getBonesSize()const
 		{
 			return uint32_t( bonChunk.askedSize );
+		}
+
+		uint32_t getMorphSize()const
+		{
+			return uint32_t( mphChunk.askedSize );
 		}
 
 		uint32_t getIndexCount()const
@@ -110,6 +135,12 @@ namespace castor3d
 			return uint32_t( getBonesSize() / sizeof( VertexBoneData ) );
 		}
 
+		template< typename VertexT >
+		uint32_t getMorphCount()const
+		{
+			return uint32_t( getMorphSize() / sizeof( VertexT ) );
+		}
+
 		VkDeviceSize getIndexOffset()const
 		{
 			return idxChunk.offset;
@@ -123,6 +154,11 @@ namespace castor3d
 		VkDeviceSize getBonesOffset()const
 		{
 			return bonChunk.offset;
+		}
+
+		VkDeviceSize getMorphOffset()const
+		{
+			return mphChunk.offset;
 		}
 
 		uint32_t getFirstIndex()const
@@ -139,6 +175,12 @@ namespace castor3d
 		uint32_t getFirstBone()const
 		{
 			return uint32_t( getBonesOffset() / sizeof( VertexBoneData ) );
+		}
+
+		template< typename VertexT >
+		uint32_t getFirstMorph()const
+		{
+			return uint32_t( getMorphOffset() / sizeof( VertexT ) );
 		}
 
 		void markVertexDirty( VkAccessFlags dstAccessFlags = VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
@@ -164,6 +206,15 @@ namespace castor3d
 		{
 			bonBuffer->markDirty( getBonesOffset()
 				, getBonesSize()
+				, dstAccessFlags
+				, dstPipelineFlags );
+		}
+
+		void markMorphDirty( VkAccessFlags dstAccessFlags = VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+			, VkPipelineStageFlags dstPipelineFlags = VK_PIPELINE_STAGE_VERTEX_INPUT_BIT )const
+		{
+			mphBuffer->markDirty( getMorphOffset()
+				, getMorphSize()
 				, dstAccessFlags
 				, dstPipelineFlags );
 		}

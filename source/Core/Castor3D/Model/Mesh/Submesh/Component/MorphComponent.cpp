@@ -26,14 +26,14 @@ namespace castor3d
 				, sizeof( InterleavedVertex ), VK_VERTEX_INPUT_RATE_VERTEX } };
 			ashes::VkVertexInputAttributeDescriptionArray attributes{ 1u, { currentLocation++
 				, MorphComponent::BindingPoint
-				, VK_FORMAT_R32G32B32A32_SFLOAT
+				, VK_FORMAT_R32G32B32_SFLOAT
 				, offsetof( InterleavedVertex, pos ) } };
 
 			if ( checkFlag( flags, ShaderFlag::eNormal ) )
 			{
 				attributes.push_back( { currentLocation++
 					, MorphComponent::BindingPoint
-					, VK_FORMAT_R32G32B32A32_SFLOAT
+					, VK_FORMAT_R32G32B32_SFLOAT
 					, offsetof( InterleavedVertex, nml ) } );
 			}
 
@@ -41,7 +41,7 @@ namespace castor3d
 			{
 				attributes.push_back( { currentLocation++
 					, MorphComponent::BindingPoint
-					, VK_FORMAT_R32G32B32A32_SFLOAT
+					, VK_FORMAT_R32G32B32_SFLOAT
 					, offsetof( InterleavedVertex, tan ) } );
 			}
 
@@ -49,7 +49,7 @@ namespace castor3d
 			{
 				attributes.push_back( { currentLocation++
 					, MorphComponent::BindingPoint
-					, VK_FORMAT_R32G32B32A32_SFLOAT
+					, VK_FORMAT_R32G32B32_SFLOAT
 					, offsetof( InterleavedVertex, tex ) } );
 			}
 
@@ -90,8 +90,8 @@ namespace castor3d
 				currentLocation = layoutIt->second.vertexAttributeDescriptions.back().location + 1u;
 			}
 
-			buffers.emplace_back( m_animBuffer.getBuffer().getBuffer() );
-			offsets.emplace_back( m_animBuffer.getOffset() );
+			buffers.emplace_back( getOwner()->getBufferOffsets().getMorphBuffer() );
+			offsets.emplace_back( 0u );
 			layouts.emplace_back( layoutIt->second );
 		}
 	}
@@ -105,27 +105,11 @@ namespace castor3d
 
 	bool MorphComponent::doInitialise( RenderDevice const & device )
 	{
-		auto count = getOwner()->getBufferOffsets().getVertexCount< InterleavedVertex >();
-
-		if ( !m_animBuffer || m_animBuffer.getCount() != count )
-		{
-			m_animBuffer = device.bufferPool->getBuffer< InterleavedVertex >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
-				, count
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
-		}
-
-		return bool( m_animBuffer );
+		return true;
 	}
 
 	void MorphComponent::doCleanup( RenderDevice const & device )
 	{
-		if ( m_animBuffer )
-		{
-			device.bufferPool->putBuffer( m_animBuffer );
-			m_animBuffer = {};
-		}
-
-		m_animLayouts.clear();
 	}
 
 	void MorphComponent::doUpload()
@@ -134,11 +118,11 @@ namespace castor3d
 		{
 			if ( getOwner()->getBufferOffsets().hasVertices() )
 			{
+				auto & offsets = getOwner()->getBufferOffsets();
 				std::copy( m_data.begin()
 					, m_data.end()
-					, m_animBuffer.getData().begin() );
-				m_animBuffer.markDirty( VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-					, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+					, offsets.getMorphData< InterleavedVertex >().begin() );
+				offsets.markMorphDirty();
 			}
 		}
 	}

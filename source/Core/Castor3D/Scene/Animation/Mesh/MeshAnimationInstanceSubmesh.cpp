@@ -47,22 +47,17 @@ namespace castor3d
 	{
 		if ( &cur != m_cur )
 		{
-			if ( m_animationObject.getComponent().isReady() )
-			{
-				auto & offsets = m_animationObject.getSubmesh().getBufferOffsets();
-				auto & animBuffer = m_animationObject.getComponent().getAnimationBuffer();
+			auto & offsets = m_animationObject.getSubmesh().getBufferOffsets();
 
-				std::copy( prv.buffer.begin()
-					, prv.buffer.end()
-					, offsets.getVertexData< InterleavedVertex >().begin() );
-				offsets.markVertexDirty();
+			std::copy( prv.buffer.begin()
+				, prv.buffer.end()
+				, offsets.getVertexData< InterleavedVertex >().begin() );
+			offsets.markVertexDirty();
 
-				std::copy( cur.buffer.begin()
-					, cur.buffer.end()
-					, animBuffer.getData().begin() );
-				animBuffer.markDirty( VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-					, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
-			}
+			std::copy( cur.buffer.begin()
+				, cur.buffer.end()
+				, offsets.getMorphData< InterleavedVertex >().begin() );
+			offsets.markMorphDirty();
 		}
 
 		getOwner()->getAnimatedMesh().getGeometry().setBoundingBox( m_animationObject.getSubmesh()

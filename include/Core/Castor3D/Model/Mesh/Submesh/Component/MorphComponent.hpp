@@ -46,21 +46,6 @@ namespace castor3d
 		 */
 		C3D_API SubmeshComponentSPtr clone( Submesh & submesh )const override;
 
-		GpuBufferOffsetT< InterleavedVertex > const & getAnimationBuffer()const
-		{
-			return m_animBuffer;
-		}
-
-		GpuBufferOffsetT< InterleavedVertex > & getAnimationBuffer()
-		{
-			return m_animBuffer;
-		}
-
-		bool isReady()const
-		{
-			return bool( m_animBuffer );
-		}
-
 		InterleavedVertexArray & getData()
 		{
 			return m_data;
@@ -81,7 +66,6 @@ namespace castor3d
 		C3D_API static uint32_t constexpr BindingPoint = 1u;
 
 	private:
-		GpuBufferOffsetT< InterleavedVertex > m_animBuffer;
 		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_animLayouts;
 		InterleavedVertexArray m_data;
 	};

@@ -489,7 +489,9 @@ namespace castor3d
 		bufferPool = castor::makeUnique< GpuBufferPool >( *this, cuT( "GlobalBufferPool" ) );
 		geometryPools = castor::makeUnique< ObjectBufferPool >( *this, cuT( "ModelBuffersPool" ) );
 		vertexPools = castor::makeUnique< VertexBufferPool >( *this, cuT( "VertexBuffersPool" ) );
+		morphedGeometryPools = castor::makeUnique< MorphedObjectBufferPool >( *this, cuT( "MorphedModelBuffersPool" ) );
 		skinnedGeometryPools = castor::makeUnique< SkinnedObjectBufferPool >( *this, cuT( "SkinnedModelBuffersPool" ) );
+		morphedSkinnedGeometryPools = castor::makeUnique< MorphedSkinnedObjectBufferPool >( *this, cuT( "MorphedSkinnedModelBuffersPool" ) );
 		uboPool = castor::makeUnique< UniformBufferPool >( *this, cuT( "UniformBufferPool" ) );
 	}
 
@@ -497,7 +499,9 @@ namespace castor3d
 	{
 		renderSystem.getEngine()->getGraphResourceHandler().clear( makeContext() );
 		uboPool.reset();
+		morphedSkinnedGeometryPools.reset();
 		skinnedGeometryPools.reset();
+		morphedGeometryPools.reset();
 		vertexPools.reset();
 		geometryPools.reset();
 		bufferPool.reset();
