@@ -41,10 +41,9 @@ namespace castor3d
 
 	void MeshAnimationInstance::clear()
 	{
-		m_currentTime = 0_ms;
 		play();
-		update( 0_ms );
-		stop();
+		m_stopping = true;
+		m_currentTime = 0_ms;
 	}
 
 	void MeshAnimationInstance::doUpdate()
@@ -62,16 +61,17 @@ namespace castor3d
 				auto & curKF = static_cast< MeshAnimationKeyFrame const & >( *( *m_curr ) );
 				auto prvIt = prvKF.find( submesh.second.getSubmesh() );
 				auto curIt = curKF.find( submesh.second.getSubmesh() );
-
-				if ( prvIt != prvKF.end() && curIt != curKF.end() )
-				{
-					submesh.second.update( m_ratio
-						, prvIt->second
-						, curIt->second );
-				}
+				CU_Require( prvIt != prvKF.end() && curIt != curKF.end() );
+				submesh.second.update( m_ratio, prvIt->second, curIt->second );
 			}
 
 			static_cast< Mesh & >( *m_meshAnimation.getAnimable() ).updateContainers();
+		}
+
+		if ( m_stopping )
+		{
+			stop();
+			m_stopping = false;
 		}
 	}
 
