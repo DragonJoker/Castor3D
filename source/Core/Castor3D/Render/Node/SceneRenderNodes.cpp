@@ -78,18 +78,25 @@ namespace castor3d
 				: RenderNodeType::eBackInstancedStatic;
 		}
 
+		if ( checkFlag( flags, ProgramFlag::eSkinning ) )
+		{
+			if ( checkFlag( flags, ProgramFlag::eMorphing ) )
+			{
+				return isFrontCulled
+					? RenderNodeType::eFrontMorphingSkinned
+					: RenderNodeType::eBackMorphingSkinned;
+			}
+
+			return isFrontCulled
+				? RenderNodeType::eFrontSkinned
+				: RenderNodeType::eBackSkinned;
+		}
+
 		if ( checkFlag( flags, ProgramFlag::eMorphing ) )
 		{
 			return isFrontCulled
 				? RenderNodeType::eFrontMorphing
 				: RenderNodeType::eBackMorphing;
-		}
-
-		if ( checkFlag( flags, ProgramFlag::eSkinning ) )
-		{
-			return isFrontCulled
-				? RenderNodeType::eFrontSkinned
-				: RenderNodeType::eBackSkinned;
 		}
 
 		if ( checkFlag( flags, ProgramFlag::eBillboards ) )
