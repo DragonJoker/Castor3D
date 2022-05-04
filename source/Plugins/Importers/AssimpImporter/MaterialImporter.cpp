@@ -144,24 +144,22 @@ namespace c3d_assimp
 					if ( m_material.Get( AI_MATKEY_GLTF_ALPHAMODE, value ) == aiReturn_SUCCESS )
 					{
 						auto mode = makeString( value );
-						auto colConfig = getRemap( castor3d::TextureFlag::eDiffuse
-							, castor3d::TextureConfiguration::DiffuseTexture );
-						colConfig.opacityMask[0] = 0xFF000000;
-						m_textureRemaps.emplace( castor3d::TextureFlag::eDiffuse, colConfig );
 
 						if ( mode != "OPAQUE" )
 						{
-							m_result.setTwoSided( true );
-							m_result.setAlphaFunc( VK_COMPARE_OP_GREATER );
-							m_result.setBlendAlphaFunc( VK_COMPARE_OP_LESS_OR_EQUAL );
-						}
-						else if ( mode == "BLEND" )
-						{
+							auto colConfig = getRemap( castor3d::TextureFlag::eDiffuse
+								, castor3d::TextureConfiguration::DiffuseTexture );
+							colConfig.opacityMask[0] = 0xFF000000;
+							m_textureRemaps.emplace( castor3d::TextureFlag::eDiffuse, colConfig );
 							m_result.setTwoSided( true );
 							m_result.setAlphaValue( 0.95f );
 							m_result.setAlphaFunc( VK_COMPARE_OP_GREATER );
 							m_result.setBlendAlphaFunc( VK_COMPARE_OP_LESS_OR_EQUAL );
-							m_result.setAlphaBlendMode( castor3d::BlendMode::eInterpolative );
+
+							if ( mode == "BLEND" )
+							{
+								m_result.setAlphaBlendMode( castor3d::BlendMode::eInterpolative );
+							}
 						}
 					}
 
