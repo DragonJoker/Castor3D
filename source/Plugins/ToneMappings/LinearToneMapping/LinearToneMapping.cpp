@@ -8,29 +8,25 @@
 
 #include <ShaderWriter/Source.hpp>
 
-using namespace castor;
-using namespace sdw;
-using namespace castor3d;
-
 namespace Linear
 {
-	String ToneMapping::Type = cuT( "linear" );
-	String ToneMapping::Name = cuT( "Linear Tone Mapping" );
+	castor::String ToneMapping::Type = cuT( "linear" );
+	castor::String ToneMapping::Name = cuT( "Linear Tone Mapping" );
 
 	castor3d::ShaderPtr ToneMapping::create()
 	{
-		FragmentWriter writer;
+		sdw::FragmentWriter writer;
 
 		// Shader inputs
 		C3D_HdrConfig( writer, 0u, 0u );
 		auto c3d_mapHdr = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapHdr", 1u, 0u );
-		auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
+		auto vtx_texture = writer.declInput< sdw::Vec2 >( "vtx_texture", 0u );
 
 		// Shader outputs
-		auto pxl_rgb = writer.declOutput< Vec4 >( "pxl_rgb", 0 );
+		auto pxl_rgb = writer.declOutput< sdw::Vec4 >( "pxl_rgb", 0 );
 
-		writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-			, FragmentOut out )
+		writer.implementMainT< sdw::VoidT, sdw::VoidT >( [&]( sdw::FragmentIn in
+			, sdw::FragmentOut out )
 			{
 				auto hdrColor = writer.declLocale( "hdrColor"
 					, c3d_mapHdr.sample( vtx_texture ).rgb() );

@@ -7,17 +7,14 @@
 
 #include <ShaderWriter/Source.hpp>
 
-using namespace castor;
-using namespace castor3d;
-using namespace sdw;
-
 namespace HejlBurgessDawson
 {
-	String ToneMapping::Type = cuT( "hejl" );
-	String ToneMapping::Name = cuT( "Hejl Burgess Dawson Tone Mapping" );
+	castor::String ToneMapping::Type = cuT( "hejl" );
+	castor::String ToneMapping::Name = cuT( "Hejl Burgess Dawson Tone Mapping" );
 
 	castor3d::ShaderPtr ToneMapping::create()
 	{
+		using namespace sdw;
 		FragmentWriter writer;
 
 		// Shader inputs

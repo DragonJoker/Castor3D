@@ -6,8 +6,6 @@
 
 #include <CastorUtils/Log/Logger.hpp>
 
-using namespace HejlBurgessDawson;
-
 #ifndef CU_PlatformWindows
 #	define C3D_HejlBurgessDawsonToneMapping_API
 #else
@@ -38,18 +36,19 @@ extern "C"
 
 	C3D_HejlBurgessDawsonToneMapping_API void getName( char const ** p_name )
 	{
-		*p_name = ToneMapping::Name.c_str();
+		*p_name = HejlBurgessDawson::ToneMapping::Name.c_str();
 	}
 
 	C3D_HejlBurgessDawsonToneMapping_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
 	{
-		engine->getToneMappingFactory().registerType( ToneMapping::Type
-			, &ToneMapping::create );
-		engine->getRenderTargetCache().registerToneMappingName( ToneMapping::Type, ToneMapping::Name );
+		engine->getToneMappingFactory().registerType( HejlBurgessDawson::ToneMapping::Type
+			, &HejlBurgessDawson::ToneMapping::create );
+		engine->getRenderTargetCache().registerToneMappingName( HejlBurgessDawson::ToneMapping::Type
+			, HejlBurgessDawson::ToneMapping::Name );
 	}
 
 	C3D_HejlBurgessDawsonToneMapping_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->getToneMappingFactory().unregisterType( ToneMapping::Type );
+		engine->getToneMappingFactory().unregisterType( HejlBurgessDawson::ToneMapping::Type );
 	}
 }

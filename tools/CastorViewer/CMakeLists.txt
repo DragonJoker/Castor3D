@@ -51,10 +51,7 @@ target_link_libraries( ${PROJECT_NAME}
 )
 set_target_properties( ${PROJECT_NAME}
 	PROPERTIES
-		CXX_STANDARD 20
-		CXX_EXTENSIONS OFF
 		FOLDER "Tools"
-		UNITY_BUILD "${CASTOR_UNITY_BUILD}"
 )
 install_target_ex( ${PROJECT_NAME}
 	${PROJECT_NAME}

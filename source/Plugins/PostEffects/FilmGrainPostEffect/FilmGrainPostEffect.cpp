@@ -35,8 +35,6 @@
 
 #include <numeric>
 
-using namespace castor;
-
 namespace film_grain
 {
 	namespace
@@ -162,8 +160,8 @@ namespace film_grain
 
 	//*********************************************************************************************
 
-	String PostEffect::Type = cuT( "film_grain" );
-	String PostEffect::Name = cuT( "FilmGrain PostEffect" );
+	castor::String PostEffect::Type = cuT( "film_grain" );
+	castor::String PostEffect::Name = cuT( "FilmGrain PostEffect" );
 
 	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
 		, castor3d::RenderSystem & renderSystem
@@ -181,7 +179,7 @@ namespace film_grain
 		, m_configUbo{ renderSystem.getRenderDevice().uboPool->getBuffer< Configuration >( 0u ) }
 		, m_noiseImages{ loadImages( *renderTarget.getEngine() ) }
 	{
-		m_config.pixelSize = Point2f{ m_renderTarget.getSize().getWidth()
+		m_config.pixelSize = castor::Point2f{ m_renderTarget.getSize().getWidth()
 			, m_renderTarget.getSize().getHeight() };
 		m_config.noiseIntensity = 1.0f;
 		m_config.exposure = 1.0f;
@@ -360,7 +358,7 @@ namespace film_grain
 	void PostEffect::doCpuUpdate( castor3d::CpuUpdater & updater )
 	{
 		static auto const defaultTime = 25_ms;
-		auto time = std::chrono::duration_cast< Milliseconds >( m_timer.getElapsed() );
+		auto time = std::chrono::duration_cast< castor::Milliseconds >( m_timer.getElapsed() );
 
 		if ( m_firstUpdate )
 		{
@@ -394,7 +392,8 @@ namespace film_grain
 		}
 	}
 
-	bool PostEffect::doWriteInto( StringStream & file, String const & tabs )
+	bool PostEffect::doWriteInto( castor::StringStream & file
+		, castor::String const & tabs )
 	{
 		file << ( tabs + cuT( "postfx \"" ) + Type + cuT( "\"" ) );
 		return true;

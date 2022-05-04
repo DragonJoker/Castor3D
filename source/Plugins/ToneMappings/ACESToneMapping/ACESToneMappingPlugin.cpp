@@ -8,8 +8,6 @@
 
 #include <CastorUtils/Log/Logger.hpp>
 
-using namespace aces;
-
 #ifndef CU_PlatformWindows
 #	define C3D_ACESToneMapping_API
 #else
@@ -40,18 +38,19 @@ extern "C"
 
 	C3D_ACESToneMapping_API void getName( char const ** p_name )
 	{
-		*p_name = ToneMapping::Name.c_str();
+		*p_name = aces::ToneMapping::Name.c_str();
 	}
 
 	C3D_ACESToneMapping_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
 	{
-		engine->getToneMappingFactory().registerType( ToneMapping::Type
-			, &ToneMapping::create );
-		engine->getRenderTargetCache().registerToneMappingName( ToneMapping::Type, ToneMapping::Name );
+		engine->getToneMappingFactory().registerType( aces::ToneMapping::Type
+			, &aces::ToneMapping::create );
+		engine->getRenderTargetCache().registerToneMappingName( aces::ToneMapping::Type
+			, aces::ToneMapping::Name );
 	}
 
 	C3D_ACESToneMapping_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->getToneMappingFactory().unregisterType( ToneMapping::Type );
+		engine->getToneMappingFactory().unregisterType( aces::ToneMapping::Type );
 	}
 }
