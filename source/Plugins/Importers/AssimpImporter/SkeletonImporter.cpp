@@ -456,8 +456,9 @@ namespace c3d_assimp
 		for ( auto & skelNode : skeleton.getNodes() )
 		{
 			auto name = skelNode->getName();
+			auto nodeName = m_importer.getExternalName( name );
 			const aiNodeAnim * aiNodeAnim = skeletons::findNodeAnim( aiAnimation
-				, m_importer.getExternalName( name ) );
+				, nodeName );
 			auto parentSkelNode = skelNode->getParent();
 			castor3d::SkeletonAnimationObjectSPtr parent;
 
@@ -486,7 +487,9 @@ namespace c3d_assimp
 				parent->addChild( object );
 			}
 
-			object->setNodeTransform( makeMatrix4x4f( aiNode.mTransformation ) );
+			auto aiObjectNode = aiNode.FindNode( nodeName.c_str() );
+			CU_Require( aiObjectNode );
+			object->setNodeTransform( makeMatrix4x4f( aiObjectNode->mTransformation ) );
 
 			if ( aiNodeAnim )
 			{
