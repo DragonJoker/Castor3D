@@ -80,6 +80,7 @@ namespace c3d_assimp
 		castor::Path m_fileName;
 		std::vector< MeshData > m_loadedMeshes;
 		castor3d::MeshPtrStrMap m_registeredMeshes;
+		std::map< aiMesh const *, std::vector< castor3d::InterleavedVertexArray > > m_animBuffers;
 	};
 }
 

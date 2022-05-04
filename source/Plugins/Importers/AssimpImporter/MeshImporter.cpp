@@ -122,12 +122,10 @@ namespace c3d_assimp
 			return result;
 		}
 
-		static std::vector< castor3d::InterleavedVertexArray > gatherMeshAnimBuffers( castor3d::Submesh const & submesh
+		static std::vector< castor3d::InterleavedVertexArray > gatherMeshAnimBuffers( castor3d::InterleavedVertexArray const & srcPoints
 			, castor::ArrayView< aiAnimMesh * > animMeshes )
 		{
 			std::vector< castor3d::InterleavedVertexArray > result;
-			auto const & cmapping = static_cast< castor3d::TriFaceMapping const & >( *submesh.getIndexMapping() );
-			auto & srcPoints = submesh.getPoints();
 
 			for ( auto aiAnimMesh : animMeshes )
 			{
@@ -176,16 +174,34 @@ namespace c3d_assimp
 						++it;
 					}
 				}
-				if ( !aiAnimMesh->HasNormals()
-					|| !aiAnimMesh->HasTextureCoords( 0u ) )
-				{
-					cmapping.computeTangentsFromNormals( points );
-				}
 
 				result.emplace_back( std::move( points ) );
 			}
 
 			return result;
+		}
+
+		static void applyMorphTarget( float weight
+			, castor3d::InterleavedVertexArray const & target
+			, castor3d::InterleavedVertexArray & points )
+		{
+			if ( weight != 0.0f )
+			{
+				auto pointsIt = points.begin();
+				auto bufferIt = target.begin();
+
+				while ( pointsIt != points.end() )
+				{
+					auto & pnt = *pointsIt;
+					auto & buf = *bufferIt;
+					pnt.pos += buf.pos * weight;
+					pnt.nml += buf.nml * weight;
+					pnt.tan += buf.tan * weight;
+					pnt.tex += buf.tex * weight;
+					++pointsIt;
+					++bufferIt;
+				}
+			}
 		}
 
 		static void fillKeyFrame( std::vector< castor3d::InterleavedVertexArray > const & meshAnimBuffers
@@ -201,20 +217,10 @@ namespace c3d_assimp
 			while ( valueIt != values.end() )
 			{
 				auto value = *valueIt;
-				auto weight = float( *weightIt );
 				CU_Require( value < meshAnimBuffers.size() );
-				auto buffer = meshAnimBuffers[value];
-
-				for ( size_t index = 0u; index < points.size(); ++index )
-				{
-					auto & point = points[index];
-					auto & buf = buffer[index];
-					point.pos += buf.pos * weight;
-					point.nml += buf.nml * weight;
-					point.tan += buf.tan * weight;
-					point.tex += buf.tex * weight;
-				}
-
+				applyMorphTarget( float( *weightIt )
+					, meshAnimBuffers[value]
+					, points );
 				++valueIt;
 				++weightIt;
 			}
@@ -534,7 +540,21 @@ namespace c3d_assimp
 			if ( count > 0 )
 			{
 				submesh.setDefaultMaterial( material.lock().get() );
-				submesh.addPoints( meshes::createVertexBuffer( aiMesh ) );
+				auto points = meshes::createVertexBuffer( aiMesh );
+				auto & animBuffers = m_animBuffers.emplace( &aiMesh
+					, meshes::gatherMeshAnimBuffers( points
+						, castor::makeArrayView( aiMesh.mAnimMeshes, aiMesh.mNumAnimMeshes ) ) ).first->second;
+				auto index = 0u;
+
+				for ( auto & animBuffer : animBuffers )
+				{
+					meshes::applyMorphTarget( float( aiMesh.mAnimMeshes[index]->mWeight )
+						, animBuffer
+						, points );
+					++index;
+				}
+
+				submesh.addPoints( points );
 
 				if ( aiMesh.HasBones() && skeleton )
 				{
@@ -589,8 +609,9 @@ namespace c3d_assimp
 
 		if ( !anims.empty() )
 		{
-			auto meshAnimBuffers = meshes::gatherMeshAnimBuffers( submesh
-				, castor::makeArrayView( aiMesh.mAnimMeshes, aiMesh.mNumAnimMeshes ) );
+			auto animBufferIt = m_animBuffers.find( &aiMesh );
+			CU_Require( animBufferIt != m_animBuffers.end() );
+			auto & meshAnimBuffers = animBufferIt->second;
 
 			for ( auto anim : anims )
 			{

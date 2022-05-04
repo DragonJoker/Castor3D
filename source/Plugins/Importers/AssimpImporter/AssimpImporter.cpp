@@ -130,11 +130,11 @@ namespace c3d_assimp
 	{
 		bool noOptim = false;
 		auto found = m_parameters.get( "no_optimisations", noOptim );
-		uint32_t importFlags{};
+		uint32_t importFlags{ aiProcess_ValidateDataStructure };
 
 		if ( !found || !noOptim )
 		{
-			importFlags = aiProcess_Triangulate
+			importFlags |= aiProcess_Triangulate
 				| aiProcess_JoinIdenticalVertices
 				| aiProcess_OptimizeMeshes
 				| aiProcess_OptimizeGraph
