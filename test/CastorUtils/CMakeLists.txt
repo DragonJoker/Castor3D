@@ -116,6 +116,10 @@ if( OPENCL_FOUND )
 			OpenCL::OpenCL
 	)
 endif()
+target_compile_options( ${PROJECT_NAME}
+	PRIVATE
+		$<$<CXX_COMPILER_ID:MSVC>:/bigobj>
+)
 set_target_properties( ${PROJECT_NAME}
 	PROPERTIES
 		VERSION ${PROJECT_VERSION}
