@@ -269,9 +269,10 @@ namespace c3d_assimp
 		return m_bonesNodes.find( makeString( aiNode.mName ) ) != m_bonesNodes.end();
 	}
 
-	castor3d::SkeletonSPtr SkeletonImporter::getSkeleton( aiMesh const & aiMesh )const
+	castor3d::SkeletonSPtr SkeletonImporter::getSkeleton( aiMesh const & aiMesh
+		, uint32_t aiMeshIndex )const
 	{
-		auto it = m_meshSkeletons.find( makeString( aiMesh.mName ) );
+		auto it = m_meshSkeletons.find( makeString( aiMesh.mName ) + "_" + castor::string::toString( aiMeshIndex ) );
 
 		if ( it != m_meshSkeletons.end() )
 		{
@@ -285,6 +286,8 @@ namespace c3d_assimp
 		, castor3d::Scene & scene
 		, castor::ArrayView< aiMesh * > aiMeshes )
 	{
+		uint32_t meshIndex = 0u;
+
 		for ( auto aiMesh : aiMeshes )
 		{
 			if ( aiMesh->HasBones() )
@@ -369,7 +372,7 @@ namespace c3d_assimp
 					skeleton = it->second;
 				}
 
-				m_meshSkeletons.emplace( makeString( aiMesh->mName ), skeleton );
+				m_meshSkeletons.emplace( makeString( aiMesh->mName ) + "_" + castor::string::toString( meshIndex++ ), skeleton );
 			}
 		}
 
