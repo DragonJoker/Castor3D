@@ -409,7 +409,7 @@ namespace c3d_assimp
 
 			if ( regIt == m_registeredMeshes.end() )
 			{
-				auto skeleton = m_skeletons.getSkeleton( *aiMesh );
+				auto skeleton = m_skeletons.getSkeleton( *aiMesh, aiMeshIndex );
 				regIt = std::find_if( m_registeredMeshes.begin()
 					, m_registeredMeshes.end()
 					, [&skeleton]( castor3d::MeshPtrStrMap::value_type const & lookup )
@@ -484,7 +484,7 @@ namespace c3d_assimp
 				result.emplace( aiMeshIndex, submesh );
 			}
 
-			auto curSkeleton = m_skeletons.getSkeleton( *aiMesh );
+			auto curSkeleton = m_skeletons.getSkeleton( *aiMesh, aiMeshIndex );
 			CU_Require( !skeleton || curSkeleton == skeleton );
 			skeleton = curSkeleton;
 
