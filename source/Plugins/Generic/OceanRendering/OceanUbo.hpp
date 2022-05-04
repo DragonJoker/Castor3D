@@ -20,6 +20,8 @@ namespace ocean
 #if Ocean_Debug
 	enum OceanDisplayData : uint32_t
 	{
+#pragma clang push
+#pragma clang diagnostic ignored "-Wduplicate-enum"
 		eResult,
 		eFinalNormal,
 		eMatSpecular,
@@ -46,6 +48,7 @@ namespace ocean
 		eFinalRefraction,
 		eWaterBaseColour,
 		CU_EnumBounds( OceanDisplayData, eResult )
+#pragma clang pop
 	};
 	castor::StringArray const & getOceanDisplayDataNames();
 #endif

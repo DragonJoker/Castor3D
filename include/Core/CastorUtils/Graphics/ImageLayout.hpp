@@ -16,6 +16,8 @@ namespace castor
 		enum Type
 			: uint8_t
 		{
+#pragma clang push
+#pragma clang diagnostic ignored "-Wduplicate-enum"
 			e1D,
 			e2D,
 			e3D,
@@ -24,6 +26,7 @@ namespace castor
 			e2DArray,
 			eCubeArray,
 			CU_EnumBounds( Type, e1D ),
+#pragma clang pop
 		};
 
 		using Buffer = castor::ArrayView< uint8_t >;
