@@ -88,12 +88,12 @@ namespace castor
 	template< PixelFormat PFSrc >
 	struct CVTTCompressorU
 	{
-		CVTTCompressorU( PxBufferConvertOptions const * optionsData
-			, std::atomic_bool const * interrupt
-			, uint32_t srcPixelSize )
-			: options{ reinterpret_cast< CVTTOptions * >( optionsData->additionalOptions ) }
-			, interrupt{ interrupt }
-			, srcPixelSize{ srcPixelSize }
+		CVTTCompressorU( PxBufferConvertOptions const * poptionsData
+			, std::atomic_bool const * pinterrupt
+			, uint32_t psrcPixelSize )
+			: options{ reinterpret_cast< CVTTOptions * >( poptionsData->additionalOptions ) }
+			, interrupt{ pinterrupt }
+			, srcPixelSize{ psrcPixelSize }
 		{
 		}
 
@@ -131,11 +131,12 @@ namespace castor
 	template< PixelFormat PFSrc >
 	struct CVTTCompressorS
 	{
-		CVTTCompressorS( PxBufferConvertOptions const * optionsData
-			, std::atomic_bool const * interrupt
-			, uint32_t srcPixelSize )
-			: options{ reinterpret_cast< CVTTOptions * >( optionsData->additionalOptions ) }
-			, srcPixelSize{ srcPixelSize }
+		CVTTCompressorS( PxBufferConvertOptions const * poptionsData
+			, std::atomic_bool const * pinterrupt
+			, uint32_t psrcPixelSize )
+			: options{ reinterpret_cast< CVTTOptions * >( poptionsData->additionalOptions ) }
+			, interrupt{ pinterrupt }
+			, srcPixelSize{ psrcPixelSize }
 		{
 		}
 
@@ -173,11 +174,12 @@ namespace castor
 	template< PixelFormat PFSrc >
 	struct CVTTCompressorF
 	{
-		CVTTCompressorF( PxBufferConvertOptions const * optionsData
-			, std::atomic_bool const * interrupt
-			, uint32_t srcPixelSize )
-			: options{ reinterpret_cast< CVTTOptions * >( optionsData->additionalOptions ) }
-			, srcPixelSize{ srcPixelSize }
+		CVTTCompressorF( PxBufferConvertOptions const * poptionsData
+			, std::atomic_bool const * pinterrupt
+			, uint32_t psrcPixelSize )
+			: options{ reinterpret_cast< CVTTOptions * >( poptionsData->additionalOptions ) }
+			, interrupt{ pinterrupt }
+			, srcPixelSize{ psrcPixelSize }
 		{
 		}
 

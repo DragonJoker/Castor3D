@@ -20,6 +20,8 @@ namespace water
 #if Water_Debug
 	enum WaterDisplayData : uint32_t
 	{
+#pragma clang push
+#pragma clang diagnostic ignored "-Wduplicate-enum"
 		eResult,
 		eFinalNormal,
 		eMatSpecular,
@@ -46,6 +48,7 @@ namespace water
 		eFinalRefraction,
 		eWaterBaseColour,
 		CU_EnumBounds( WaterDisplayData, eResult )
+#pragma clang pop
 	};
 	castor::StringArray const & getWaterDisplayDataNames();
 #endif

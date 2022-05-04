@@ -22,6 +22,8 @@ namespace ocean_fft
 #if Ocean_Debug
 	enum OceanDisplayData : uint32_t
 	{
+#pragma clang push
+#pragma clang diagnostic ignored "-Wduplicate-enum"
 		eResult,
 		eGradJacobian,
 		eNoiseGradient,
@@ -54,6 +56,7 @@ namespace ocean_fft
 		eFinalReflection,
 		eFinalRefraction,
 		CU_EnumBounds( OceanDisplayData, eResult )
+#pragma clang pop
 	};
 	castor::StringArray const & getOceanDisplayDataNames();
 #endif

@@ -126,11 +126,8 @@ namespace castor
 
 #else
 
-#	pragma clang push
-#	pragma clang diagnostic ignored "-Wextra-semi-stmt"
-#	define CU_Assert( pred, text )
-#	define CU_CheckInvariants()
-#	pragma clang pop
+#	define CU_Assert( pred, text ) ((void)0)
+#	define CU_CheckInvariants() ((void)0)
 
 #endif
 

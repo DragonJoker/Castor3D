@@ -26,9 +26,12 @@ namespace castor3d
 	public:
 		enum Descriptor
 		{
+#pragma clang push
+#pragma clang diagnostic ignored "-Wduplicate-enum"
 			eTextures,
 			eBuffers,
 			CU_EnumBounds( Descriptor, eBuffers )
+#pragma clang pop
 		};
 
 	public:
