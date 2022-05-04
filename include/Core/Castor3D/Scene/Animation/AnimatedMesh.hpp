@@ -87,7 +87,7 @@ namespace castor3d
 		Geometry & m_geometry;
 		MeshAnimationInstanceRPtr m_playingAnimation{ nullptr };
 		uint32_t m_id{};
-		mutable bool m_reinit{ true };
+		mutable bool m_reinit{ false };
 	};
 }
 

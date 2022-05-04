@@ -18,13 +18,28 @@ namespace castor3d
 	{
 	}
 
-	void AnimatedMesh::update( castor::Milliseconds const & elpased )
+	void AnimatedMesh::update( castor::Milliseconds const & elapsed )
 	{
 		if ( m_playingAnimation )
 		{
-			m_playingAnimation->update( elpased );
+			auto real = elapsed;
+
+			if ( m_reinit )
+			{
+				real = 0_ms;
+				m_playingAnimation->clear();
+			}
+
+			m_playingAnimation->update( real );
 			m_geometry.markDirty();
+
+			if ( m_reinit )
+			{
+				m_playingAnimation = nullptr;
+				m_reinit = false;
+			}
 		}
+
 	}
 
 	void AnimatedMesh::doAddAnimation( castor::String const & name )
@@ -51,20 +66,11 @@ namespace castor3d
 	void AnimatedMesh::doStopAnimation( AnimationInstance & animation )
 	{
 		CU_Require( m_playingAnimation == &animation );
-		m_playingAnimation->clear();
-		m_playingAnimation = nullptr;
 		m_reinit = true;
 	}
 
 	void AnimatedMesh::doClearAnimations()
 	{
 		m_reinit = true;
-
-		if ( m_playingAnimation )
-		{
-			m_playingAnimation->clear();
-		}
-
-		m_playingAnimation = nullptr;
 	}
 }

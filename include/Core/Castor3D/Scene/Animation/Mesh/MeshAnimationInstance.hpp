@@ -93,6 +93,7 @@ namespace castor3d
 		AnimationKeyFrameArray::iterator m_prev;
 		AnimationKeyFrameArray::iterator m_curr;
 		float m_ratio{ 0.0f };
+		bool m_stopping{ false };
 
 		friend class BinaryWriter< MeshAnimation >;
 		friend class BinaryParser< MeshAnimation >;
