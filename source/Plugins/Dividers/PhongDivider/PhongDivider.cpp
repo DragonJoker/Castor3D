@@ -1,7 +1,5 @@
 #include "PhongDivider/PhongDivider.hpp"
 
-using namespace castor3d;
-
 namespace Phong
 {
 	namespace
@@ -41,7 +39,7 @@ namespace Phong
 		cleanup();
 	}
 
-	MeshSubdividerUPtr Subdivider::create()
+	castor3d::MeshSubdividerUPtr Subdivider::create()
 	{
 		return std::make_unique< Subdivider >();
 	}
@@ -51,7 +49,7 @@ namespace Phong
 		castor3d::MeshSubdivider::cleanup();
 	}
 
-	void Subdivider::subdivide( SubmeshSPtr submesh
+	void Subdivider::subdivide( castor3d::SubmeshSPtr submesh
 		, int occurences
 		, bool generateBuffers
 		, bool threaded )
@@ -107,11 +105,11 @@ namespace Phong
 	{
 		for ( uint32_t i = 0; i < m_submesh->getPointsCount(); ++i )
 		{
-			m_points.emplace_back( std::make_unique< SubmeshVertex >( SubmeshVertex{ i, m_submesh->getPoint( i ) } ) );
+			m_points.emplace_back( std::make_unique< castor3d::SubmeshVertex >( castor3d::SubmeshVertex{ i, m_submesh->getPoint( i ) } ) );
 		}
 
 		castor3d::MeshSubdivider::doInitialise();
-		m_indexMapping = m_submesh->getComponent< TriFaceMapping >();
+		m_indexMapping = m_submesh->getComponent< castor3d::TriFaceMapping >();
 	}
 
 	void Subdivider::doAddGeneratedFaces()

@@ -6,9 +6,6 @@
 
 #include <random>
 
-using namespace castor;
-using namespace castor3d;
-
 namespace diamond_square_terrain
 {
 	namespace
@@ -61,23 +58,23 @@ namespace diamond_square_terrain
 		}
 	}
 
-	String const Generator::Type = cuT( "diamond_square_terrain" );
-	String const Generator::Name = cuT( "Diamond Square Terrain Generator" );
+	castor::String const Generator::Type = cuT( "diamond_square_terrain" );
+	castor::String const Generator::Name = cuT( "Diamond Square Terrain Generator" );
 
 	Generator::Generator()
 		: MeshGenerator{ cuT( "diamond_square_terrain" ) }
 	{
 	}
 
-	MeshGeneratorSPtr Generator::create()
+	castor3d::MeshGeneratorSPtr Generator::create()
 	{
 		return std::make_shared< Generator >();
 	}
 
-	void Generator::doGenerate( Mesh & p_mesh
-		, Parameters const & p_parameters )
+	void Generator::doGenerate( castor3d::Mesh & p_mesh
+		, castor3d::Parameters const & p_parameters )
 	{
-		String param;
+		castor::String param;
 		uint32_t size = 0u;
 		float roughness = 0.0f;
 		float scale = 1.0f;
@@ -85,7 +82,7 @@ namespace diamond_square_terrain
 
 		if ( p_parameters.get( cuT( "roughness" ), param ) )
 		{
-			roughness = string::toFloat( param );
+			roughness = castor::string::toFloat( param );
 		}
 
 		if ( p_parameters.get( cuT( "disableRandomSeed" ), param ) )
@@ -95,12 +92,12 @@ namespace diamond_square_terrain
 
 		if ( p_parameters.get( cuT( "scale" ), param ) )
 		{
-			scale = string::toFloat( param );
+			scale = castor::string::toFloat( param );
 		}
 
 		if ( p_parameters.get( cuT( "detail" ), param ) )
 		{
-			size = uint32_t( pow( 2, string::toUInt( param ) ) + 1u );
+			size = uint32_t( pow( 2, castor::string::toUInt( param ) ) + 1u );
 		}
 
 		if ( size )
@@ -190,7 +187,7 @@ namespace diamond_square_terrain
 			divide( size, roughness );
 
 			auto submesh = p_mesh.createSubmesh();
-			auto mapping = std::make_shared< TriFaceMapping >( *submesh );
+			auto mapping = std::make_shared< castor3d::TriFaceMapping >( *submesh );
 			auto transform = [&]( uint32_t v )
 			{
 				return scale * ( float( v ) - float( max ) / 2.0f );
@@ -200,7 +197,7 @@ namespace diamond_square_terrain
 			{
 				for ( auto x = 1u; x < max; x++ )
 				{
-					submesh->addPoint( InterleavedVertex{}
+					submesh->addPoint( castor3d::InterleavedVertex{}
 						.position( castor::Point3f{ transform( x ), scale * map( x, z ), transform( z ) } )
 						.texcoord( castor::Point2f{ float( x ) / scale, float( z ) / scale } ) );
 				}

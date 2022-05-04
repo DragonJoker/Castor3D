@@ -1844,10 +1844,7 @@ target_compile_options( ${PROJECT_NAME}
 )
 set_target_properties( ${PROJECT_NAME}
 	PROPERTIES
-		CXX_STANDARD 20
-		CXX_EXTENSIONS OFF
 		FOLDER "Core/${MAIN_PROJECT_NAME}"
-		UNITY_BUILD "${CASTOR_UNITY_BUILD}"
 )
 install(
 	FILES ${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/RequiredVersion.hpp
