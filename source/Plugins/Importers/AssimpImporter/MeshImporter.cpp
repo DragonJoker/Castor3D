@@ -320,6 +320,7 @@ namespace c3d_assimp
 		m_fileName = fileName;
 		return doProcessMeshAndAnims( aiScene
 			, castor::makeArrayView( aiScene.mMeshes, aiScene.mNumMeshes )
+			, 0u
 			, mesh );
 	}
 
@@ -393,7 +394,7 @@ namespace c3d_assimp
 		, castor3d::Scene & scene
 		, castor::ArrayView< aiMesh * > aiMeshes )
 	{
-		uint32_t index = 0u;
+		uint32_t aiMeshIndex = 0u;
 
 		for ( auto & aiMesh : aiMeshes )
 		{
@@ -432,7 +433,10 @@ namespace c3d_assimp
 				m_registeredMeshes.emplace( name, lmesh );
 			}
 
-			if ( !doProcessMeshAndAnims( aiScene, castor::makeArrayView( &aiMesh, 1u ), *mesh ).empty() )
+			if ( !doProcessMeshAndAnims( aiScene
+				, castor::makeArrayView( &aiMesh, 1u )
+				, aiMeshIndex
+				, *mesh ).empty() )
 			{
 				if ( regIt == m_registeredMeshes.end() )
 				{
@@ -440,8 +444,8 @@ namespace c3d_assimp
 					SubmeshData submesh{ { mesh->getSubmesh( mesh->getSubmeshCount() - 1u )->getDefaultMaterial() } };
 					m_loadedMeshes.push_back( { mesh
 						, lmesh
-						, { index }
-						, { { index, submesh } } } );
+						, { aiMeshIndex }
+						, { { aiMeshIndex, submesh } } } );
 				}
 				else
 				{
@@ -453,21 +457,21 @@ namespace c3d_assimp
 							return lookup.mesh == mesh;
 						} );
 					CU_Require( it != m_loadedMeshes.end() );
-					it->aiMeshIndices.insert( index );
+					it->aiMeshIndices.insert( aiMeshIndex );
 					it->submeshes.begin()->second.materials.push_back( mesh->getSubmesh( mesh->getSubmeshCount() - 1u )->getDefaultMaterial() );
 				}
 			}
 
-			++index;
+			++aiMeshIndex;
 		}
 	}
 
 	MeshIndices MeshesImporter::doProcessMeshAndAnims( aiScene const & aiScene
 		, castor::ArrayView< aiMesh * > aiMeshes
+		, uint32_t aiMeshIndex
 		, castor3d::Mesh & mesh )
 	{
 		bool create = true;
-		uint32_t aiMeshIndex = 0u;
 		castor3d::SubmeshSPtr submesh;
 		castor3d::SkeletonSPtr skeleton;
 		MeshIndices result;
