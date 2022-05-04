@@ -44,6 +44,7 @@ namespace c3d_assimp
 
 				while ( node->mParent
 					&& ( node->mNumChildren != 1u
+						|| makeString( node->mName ).find( "$AssimpFbx$" ) != castor::String::npos
 						|| bonesNodes.end() != bonesNodes.find( makeString( node->mParent->mName ) ) ) )
 				{
 					node = node->mParent;
@@ -89,6 +90,31 @@ namespace c3d_assimp
 			return *bonesRootNodes.begin();
 		}
 
+		static castor3d::SkeletonNode * addNode( castor3d::Skeleton & skeleton
+			, std::map< castor::String, BoneData > const & bonesNodes
+			, castor::String const & nodeName
+			, castor::String const & name )
+		{
+			auto it = bonesNodes.find( nodeName );
+
+			if ( it == bonesNodes.end() )
+			{
+				castor3d::log::debug << "  Skeleton Node [" << nodeName << "]" << std::endl;
+				return skeleton.createNode( name );
+			}
+
+			castor3d::log::debug << "  Skeleton Bone [" << nodeName << "]" << std::endl;
+			return skeleton.createBone( name, it->second.inverseTransform );
+		}
+
+		static castor3d::SkeletonNode * addNode( castor3d::Skeleton & skeleton
+			, castor::String const & name
+			, castor::Matrix4x4f const & inverseTransform )
+		{
+			castor3d::log::debug << "  Skeleton Bone [" << name << "]" << std::endl;
+			return skeleton.createBone( name, inverseTransform );
+		}
+
 		static void processSkeletonNodes( AssimpImporter const & importer
 			, std::map< castor::String, BoneData > const & bonesNodes
 			, castor3d::Skeleton & skeleton
@@ -103,16 +129,7 @@ namespace c3d_assimp
 
 				if ( !skelNode )
 				{
-					auto it = bonesNodes.find( nodeName );
-
-					if ( it == bonesNodes.end() )
-					{
-						skelNode = skeleton.createNode( name );
-					}
-					else
-					{
-						skelNode = skeleton.createBone( name, it->second.inverseTransform );
-					}
+					skelNode = addNode( skeleton, bonesNodes, nodeName, name );
 
 					if ( parentSkelNode )
 					{
@@ -140,18 +157,7 @@ namespace c3d_assimp
 			{
 				auto nodeName = makeString( previousPreRootNode->mName );
 				auto name = importer.getInternalName( nodeName );
-				castor3d::SkeletonNode * node;
-				auto it = bonesNodes.find( nodeName );
-
-				if ( it == bonesNodes.end() )
-				{
-					node = skeleton.createNode( name );
-				}
-				else
-				{
-					node = skeleton.createBone( name, it->second.inverseTransform );
-				}
-
+				auto node = addNode( skeleton, bonesNodes, nodeName, name );
 				skeleton.setNodeParent( *rootNode , *node );
 				rootNode = node;
 				previousPreRootNode = previousPreRootNode->mParent;
@@ -189,7 +195,7 @@ namespace c3d_assimp
 			, castor3d::Skeleton const & skeleton )
 		{
 			auto channels = castor::makeArrayView( animation.mChannels, animation.mNumChannels );
-			return skeleton.getNodes().end() == std::find_if( skeleton.getNodes().begin()
+			return ( skeleton.getNodes().end() == std::find_if( skeleton.getNodes().begin()
 				, skeleton.getNodes().end()
 				, [&importer, &channels]( castor3d::SkeletonNodeUPtr const & nodeLookup )
 				{
@@ -200,14 +206,14 @@ namespace c3d_assimp
 							auto name = importer.getInternalName( animLookup->mNodeName );
 							return nodeLookup->getName() == name;
 						} );
-				} )
-				|| channels.end() == std::find_if( channels.begin()
+				} ) )
+				|| ( channels.end() == std::find_if( channels.begin()
 					, channels.end()
 					, [&importer, &skeleton]( aiNodeAnim const * animLookup )
 					{
 						auto name = importer.getInternalName( animLookup->mNodeName );
 						return skeleton.findNode( name ) == nullptr;
-					} );
+					} ) );
 		}
 
 		static aiNodeAnim const * findNodeAnim( aiAnimation const & animation
@@ -492,9 +498,11 @@ namespace c3d_assimp
 				parent->addChild( object );
 			}
 
-			auto aiObjectNode = aiNode.FindNode( nodeName.c_str() );
-			CU_Require( aiObjectNode );
-			object->setNodeTransform( makeMatrix4x4f( aiObjectNode->mTransformation ) );
+			if ( nodeName.find( "$AssimpFbx$_PreRotation" ) == castor::String::npos )
+			{
+				auto aiObjectNode = aiNode.FindNode( nodeName.c_str() );
+				object->setNodeTransform( makeMatrix4x4f( aiObjectNode->mTransformation ) );
+			}
 
 			if ( aiNodeAnim )
 			{

@@ -141,7 +141,7 @@ namespace castor3d
 		SkeletonNodeType m_type;
 		//!\~english	Animation node transformations.
 		//!\~french		Transformations du noeud d'animation.
-		castor::Matrix4x4f m_nodeTransform;
+		castor::Matrix4x4f m_nodeTransform{ 1.0f };
 		//!\~english	The objects depending on this one.
 		//!\~french		Les objets dépendant de celui-ci.
 		SkeletonAnimationObjectPtrArray m_children;
