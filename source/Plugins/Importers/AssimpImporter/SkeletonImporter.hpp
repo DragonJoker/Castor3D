@@ -14,6 +14,7 @@ See LICENSE file in root folder
 
 namespace c3d_assimp
 {
+	class AssimpImporter;
 	using SkeletonAnimationKeyFrameMap = std::map< castor::Milliseconds, castor3d::SkeletonAnimationKeyFrameUPtr >;
 	using SkeletonAnimationObjectSet = std::set< castor3d::SkeletonAnimationObjectSPtr >;
 
@@ -25,10 +26,9 @@ namespace c3d_assimp
 	class SkeletonImporter
 	{
 	public:
-		explicit SkeletonImporter( castor3d::MeshImporter & importer );
+		explicit SkeletonImporter( AssimpImporter & importer );
 
-		void import( castor::String const & prefix
-			, castor::Path const & fileName
+		void import( castor::Path const & fileName
 			, aiScene const & aiScene
 			, castor3d::Scene & scene
 			, bool replaceInverseTransforms );
@@ -62,8 +62,7 @@ namespace c3d_assimp
 			, SkeletonAnimationKeyFrameMap & keyframes );
 
 	private:
-		castor3d::MeshImporter & m_importer;
-		castor::String m_prefix;
+		AssimpImporter & m_importer;
 		castor::Path m_fileName;
 		bool m_needsAnimsReparse{};
 		bool m_replaceInverseTransforms{};

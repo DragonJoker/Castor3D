@@ -3,6 +3,7 @@
 
 #include "AssimpImporter/SceneImporter.hpp"
 #include "AssimpImporter/AssimpHelpers.hpp"
+#include "AssimpImporter/AssimpImporter.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Limits.hpp>
@@ -28,31 +29,25 @@
 #include <Castor3D/Scene/Light/PointLight.hpp>
 #include <Castor3D/Scene/Light/SpotLight.hpp>
 
-using namespace castor3d;
-
 namespace c3d_assimp
 {
 	using SceneNodeAnimationKeyFrameMap = std::map< castor::Milliseconds, castor3d::SceneNodeAnimationKeyFrameUPtr >;
 
-	SceneImporter::SceneImporter( castor3d::MeshImporter & importer
+	SceneImporter::SceneImporter( AssimpImporter & importer
 		, SkeletonImporter const & skeletons
-		, MeshesImporter const & meshes
 		, castor3d::SceneNodePtrArray & nodes
 		, castor3d::GeometryPtrStrMap & geometries )
 		: m_importer{ importer }
 		, m_skeletons{ skeletons }
-		, m_meshes{ meshes }
 		, m_nodes{ nodes }
 		, m_geometries{ geometries }
 	{
 	}
 
-	void SceneImporter::import( castor::String const & prefix
-		, aiScene const & aiScene
+	void SceneImporter::import( aiScene const & aiScene
 		, castor3d::Scene & scene
 		, std::map< uint32_t, MeshData * > const & meshes )
 	{
-		m_prefix = prefix;
 		castor::Matrix4x4f transform;
 		transform.setIdentity();
 		doProcessSceneNodes( aiScene
@@ -73,11 +68,9 @@ namespace c3d_assimp
 		doProcessAnimGroups();
 	}
 
-	void SceneImporter::import( castor::String const & prefix
-		, aiScene const & aiScene
+	void SceneImporter::import( aiScene const & aiScene
 		, MeshIndices const & meshes )
 	{
-		m_prefix = prefix;
 		doScaleMesh( *aiScene.mRootNode
 			, meshes );
 	}
@@ -88,10 +81,10 @@ namespace c3d_assimp
 	}
 
 	void SceneImporter::doProcessLight( aiLight const & aiLight
-		, Scene & scene )
+		, castor3d::Scene & scene )
 	{
-		castor::String name = m_prefix + aiLight.mName.C_Str();
-		SceneNodeSPtr node;
+		castor::String name = m_importer.getInternalName( aiLight.mName );
+		castor3d::SceneNodeSPtr node;
 
 		if ( scene.getSceneNodeCache().has( name ) )
 		{
@@ -99,7 +92,7 @@ namespace c3d_assimp
 		}
 		else
 		{
-			node = std::make_shared< SceneNode >( name
+			node = std::make_shared< castor3d::SceneNode >( name
 				, scene );
 
 			if ( aiLight.mType == aiLightSource_DIRECTIONAL
@@ -120,13 +113,13 @@ namespace c3d_assimp
 			node = scene.getSceneNodeCache().add( name, node ).lock();
 		}
 
-		LightSPtr light;
+		castor3d::LightSPtr light;
 
 		switch ( aiLight.mType )
 		{
 		case aiLightSource_DIRECTIONAL:
 			{
-				light = std::make_shared< Light >( name
+				light = std::make_shared< castor3d::Light >( name
 					, scene
 					, *node
 					, scene.getLightsFactory()
@@ -135,7 +128,7 @@ namespace c3d_assimp
 			break;
 		case aiLightSource_POINT:
 			{
-				light = std::make_shared< Light >( name
+				light = std::make_shared< castor3d::Light >( name
 					, scene
 					, *node
 					, scene.getLightsFactory()
@@ -146,7 +139,7 @@ namespace c3d_assimp
 			break;
 		case aiLightSource_SPOT:
 			{
-				light = std::make_shared< Light >( name
+				light = std::make_shared< castor3d::Light >( name
 					, scene
 					, *node
 					, scene.getLightsFactory()
@@ -181,8 +174,8 @@ namespace c3d_assimp
 
 	void SceneImporter::doProcessSceneNodes( aiScene const & aiScene
 		, aiNode const & aiNode
-		, Scene & scene
-		, SceneNodeSPtr parent
+		, castor3d::Scene & scene
+		, castor3d::SceneNodeSPtr parent
 		, castor::Matrix4x4f accTransform )
 	{
 		if ( m_skeletons.isBoneNode( aiNode ) )
@@ -190,7 +183,7 @@ namespace c3d_assimp
 			return;
 		}
 
-		castor::String name = m_prefix + aiNode.mName.C_Str();
+		castor::String name = m_importer.getInternalName( aiNode.mName );
 		auto lnode = scene.getSceneNodeCache().tryFind( name );
 
 		if ( !lnode.lock() )
@@ -215,7 +208,7 @@ namespace c3d_assimp
 						, aiAnimation->mChannels + aiAnimation->mNumChannels
 						, [&name]( aiNodeAnim const * lookup )
 						{
-							return lookup->mNodeName.C_Str() == name;
+							return makeString( lookup->mNodeName ) == name;
 						} );
 
 					if ( it != aiAnimation->mChannels + aiAnimation->mNumChannels )
@@ -349,7 +342,7 @@ namespace c3d_assimp
 
 	void SceneImporter::doProcessNodes( aiScene const & aiScene
 		, aiNode const & aiNode
-		, Scene & scene
+		, castor3d::Scene & scene
 		, std::map< uint32_t, MeshData * > const & meshes )
 	{
 		if ( m_skeletons.isBoneNode( aiNode ) )
@@ -359,10 +352,10 @@ namespace c3d_assimp
 
 		if ( aiNode.mNumMeshes > 0 )
 		{
-			castor::String name = m_prefix + aiNode.mName.C_Str();
+			castor::String name = m_importer.getInternalName( aiNode.mName );
 			auto node = *std::find_if( m_nodes.begin()
 				, m_nodes.end()
-				, [&name]( SceneNodeSPtr lookup )
+				, [&name]( castor3d::SceneNodeSPtr lookup )
 				{
 					return lookup->getName() == name;
 				} );
@@ -481,14 +474,14 @@ namespace c3d_assimp
 			return;
 		}
 
-		castor::String name{ normalizeName( m_prefix + castor::string::stringCast< xchar >( aiAnimation.mName.C_Str() ) ) };
+		castor::String name{ normalizeName( makeString( aiAnimation.mName ) ) };
 
 		if ( name.empty() )
 		{
-			name = node.getName();
+			name = normalizeName( node.getName() );
 		}
 
-		log::info << cuT( "  SceneNode Animation found: [" ) << name << cuT( "]" ) << std::endl;
+		castor3d::log::info << cuT( "  SceneNode Animation found: [" ) << name << cuT( "]" ) << std::endl;
 		auto & animation = node.createAnimation( name );
 		int64_t ticksPerSecond = aiAnimation.mTicksPerSecond != 0.0
 			? int64_t( aiAnimation.mTicksPerSecond )
@@ -499,7 +492,7 @@ namespace c3d_assimp
 			, ticksPerSecond
 			, animation
 			, keyframes
-			, []( SceneNodeAnimationKeyFrame & keyframe
+			, []( castor3d::SceneNodeAnimationKeyFrame & keyframe
 				, castor::Point3f const & position
 				, castor::Quaternion const & orientation
 				, castor::Point3f const & scale )

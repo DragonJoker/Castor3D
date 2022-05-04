@@ -3,6 +3,7 @@
 
 #include "AssimpImporter/SkeletonImporter.hpp"
 #include "AssimpImporter/AssimpHelpers.hpp"
+#include "AssimpImporter/AssimpImporter.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Animation/Interpolator.hpp>
@@ -43,7 +44,7 @@ namespace c3d_assimp
 
 				while ( node->mParent
 					&& ( node->mNumChildren != 1u
-						|| bonesNodes.end() != bonesNodes.find( node->mParent->mName.C_Str() ) ) )
+						|| bonesNodes.end() != bonesNodes.find( makeString( node->mParent->mName ) ) ) )
 				{
 					node = node->mParent;
 				}
@@ -88,7 +89,7 @@ namespace c3d_assimp
 			return *bonesRootNodes.begin();
 		}
 
-		static void processSkeletonNodes( castor::String const & prefix
+		static void processSkeletonNodes( AssimpImporter const & importer
 			, std::map< castor::String, BoneData > const & bonesNodes
 			, castor3d::Skeleton & skeleton
 			, aiNode const & parentAiNode
@@ -96,12 +97,13 @@ namespace c3d_assimp
 		{
 			for ( auto node : castor::makeArrayView( parentAiNode.mChildren, parentAiNode.mNumChildren ) )
 			{
-				castor::String name = prefix + node->mName.C_Str();
+				auto nodeName = makeString( node->mName );
+				auto name = importer.getInternalName( nodeName );
 				auto skelNode = skeleton.findNode( name );
 
 				if ( !skelNode )
 				{
-					auto it = bonesNodes.find( node->mName.C_Str() );
+					auto it = bonesNodes.find( nodeName );
 
 					if ( it == bonesNodes.end() )
 					{
@@ -118,7 +120,7 @@ namespace c3d_assimp
 					}
 				}
 
-				processSkeletonNodes( prefix
+				processSkeletonNodes( importer
 					, bonesNodes
 					, skeleton
 					, *node
@@ -126,7 +128,7 @@ namespace c3d_assimp
 			}
 		}
 
-		static void completeSkeleton( castor::String const & prefix
+		static void completeSkeleton( AssimpImporter const & importer
 			, std::map< castor::String, BoneData > const & bonesNodes
 			, castor3d::Skeleton & skeleton
 			, aiNode const & preRootNode
@@ -136,9 +138,10 @@ namespace c3d_assimp
 
 			while ( previousPreRootNode != &preRootNode )
 			{
-				auto name = prefix + previousPreRootNode->mName.C_Str();
+				auto nodeName = makeString( previousPreRootNode->mName );
+				auto name = importer.getInternalName( nodeName );
 				castor3d::SkeletonNode * node;
-				auto it = bonesNodes.find( previousPreRootNode->mName.C_Str() );
+				auto it = bonesNodes.find( nodeName );
 
 				if ( it == bonesNodes.end() )
 				{
@@ -155,10 +158,10 @@ namespace c3d_assimp
 			}
 
 			skeleton.setGlobalInverseTransform( makeMatrix4x4f( preRootNode.mChildren[0]->mTransformation ).getInverse() );
-			processSkeletonNodes( prefix, bonesNodes, skeleton, *previousPreRootNode, rootNode );
+			processSkeletonNodes( importer, bonesNodes, skeleton, *previousPreRootNode, rootNode );
 		}
 
-		static void replaceInverseTransforms( castor::String const & prefix
+		static void replaceInverseTransforms( AssimpImporter const & importer
 			, std::map< castor::String, BoneData > const & bonesNodes
 			, castor3d::Skeleton & skeleton )
 		{
@@ -167,7 +170,7 @@ namespace c3d_assimp
 				if ( node->getType() == castor3d::SkeletonNodeType::eBone )
 				{
 					auto & bone = static_cast< castor3d::BoneNode & >( *node );
-					auto it = bonesNodes.find( prefix + node->getName() );
+					auto it = bonesNodes.find( importer.getExternalName( node->getName() ) );
 
 					if ( it != bonesNodes.end() )
 					{
@@ -181,28 +184,28 @@ namespace c3d_assimp
 			}
 		}
 
-		static bool isAnimForSkeleton( castor::String const & prefix
+		static bool isAnimForSkeleton( AssimpImporter const & importer
 			, aiAnimation const & animation
 			, castor3d::Skeleton const & skeleton )
 		{
 			auto channels = castor::makeArrayView( animation.mChannels, animation.mNumChannels );
 			return skeleton.getNodes().end() == std::find_if( skeleton.getNodes().begin()
 				, skeleton.getNodes().end()
-				, [&prefix, &channels]( castor3d::SkeletonNodeUPtr const & nodeLookup )
+				, [&importer, &channels]( castor3d::SkeletonNodeUPtr const & nodeLookup )
 				{
 					return channels.end() == std::find_if( channels.begin()
 						, channels.end()
-						, [&nodeLookup, &prefix]( aiNodeAnim const * animLookup )
+						, [&nodeLookup, &importer]( aiNodeAnim const * animLookup )
 						{
-							auto name = prefix + animLookup->mNodeName.C_Str();
+							auto name = importer.getInternalName( animLookup->mNodeName );
 							return nodeLookup->getName() == name;
 						} );
 				} )
 				|| channels.end() == std::find_if( channels.begin()
 					, channels.end()
-					, [&prefix, &skeleton]( aiNodeAnim const * animLookup )
+					, [&importer, &skeleton]( aiNodeAnim const * animLookup )
 					{
-						auto name = prefix + animLookup->mNodeName.C_Str();
+						auto name = importer.getInternalName( animLookup->mNodeName );
 						return skeleton.findNode( name ) == nullptr;
 					} );
 		}
@@ -225,26 +228,16 @@ namespace c3d_assimp
 
 			return result;
 		}
-
-		bool operator==( aiVertexWeight const & lhs
-			, aiVertexWeight const & rhs )
-		{
-			return lhs.mVertexId == rhs.mVertexId
-				&& std::abs( lhs.mWeight - rhs.mWeight ) < 0.00001f;
-		}
 	}
-
-	using skeletons::operator==;
 
 	//*********************************************************************************************
 
-	SkeletonImporter::SkeletonImporter( castor3d::MeshImporter & importer )
+	SkeletonImporter::SkeletonImporter( AssimpImporter & importer )
 		: m_importer{ importer }
 	{
 	}
 
-	void SkeletonImporter::import( castor::String const & prefix
-		, castor::Path const & fileName
+	void SkeletonImporter::import( castor::Path const & fileName
 		, aiScene const & aiScene
 		, castor3d::Scene & scene
 		, bool replaceInverseTransforms )
@@ -258,14 +251,13 @@ namespace c3d_assimp
 		{
 			for ( auto aiBone : castor::makeArrayView( aiMesh->mBones, aiMesh->mNumBones ) )
 			{
-				m_bonesNodes.emplace( aiBone->mName.C_Str()
+				m_bonesNodes.emplace( makeString( aiBone->mName )
 					, BoneData{ makeMatrix4x4f( aiBone->mOffsetMatrix ) } );
 			}
 		}
 
 		m_replaceInverseTransforms = replaceInverseTransforms;
 		m_needsAnimsReparse = false;
-		m_prefix = prefix;
 		m_fileName = fileName;
 		doProcessSkeletons( aiScene
 			, scene
@@ -274,12 +266,12 @@ namespace c3d_assimp
 
 	bool SkeletonImporter::isBoneNode( aiNode const & aiNode )const
 	{
-		return m_bonesNodes.find( aiNode.mName.C_Str() ) != m_bonesNodes.end();
+		return m_bonesNodes.find( makeString( aiNode.mName ) ) != m_bonesNodes.end();
 	}
 
 	castor3d::SkeletonSPtr SkeletonImporter::getSkeleton( aiMesh const & aiMesh )const
 	{
-		auto it = m_meshSkeletons.find( aiMesh.mName.C_Str() );
+		auto it = m_meshSkeletons.find( makeString( aiMesh.mName ) );
 
 		if ( it != m_meshSkeletons.end() )
 		{
@@ -301,7 +293,8 @@ namespace c3d_assimp
 					, castor::makeArrayView( aiMesh->mBones, aiMesh->mNumBones )
 					, m_bonesNodes );
 				castor3d::SkeletonSPtr skeleton;
-				auto it = m_skeletons.find( preRootNode->mName.C_Str() );
+				auto nodeName = makeString( preRootNode->mName );
+				auto it = m_skeletons.find( nodeName );
 
 				if ( it == m_skeletons.end() )
 				{
@@ -318,13 +311,13 @@ namespace c3d_assimp
 						// If so, complete the skeleton and update the list
 						skeleton = it->second;
 						m_needsAnimsReparse = true;
-						skeletons::completeSkeleton( m_prefix
+						skeletons::completeSkeleton( m_importer
 							, m_bonesNodes
 							, *skeleton
 							, *preRootNode
 							, aiScene.mRootNode->FindNode( it->first.c_str() ) );
 						m_skeletons.erase( it );
-						it = m_skeletons.emplace( preRootNode->mName.C_Str(), skeleton ).first;
+						it = m_skeletons.emplace( nodeName, skeleton ).first;
 					}
 				}
 
@@ -347,11 +340,11 @@ namespace c3d_assimp
 					{
 						skeleton = it->second;
 						m_skeletons.erase( it );
-						it = m_skeletons.emplace( preRootNode->mName.C_Str(), skeleton ).first;
+						it = m_skeletons.emplace( nodeName, skeleton ).first;
 
 						if ( m_replaceInverseTransforms )
 						{
-							skeletons::replaceInverseTransforms( m_prefix
+							skeletons::replaceInverseTransforms( m_importer
 								, m_bonesNodes
 								, *skeleton );
 						}
@@ -360,12 +353,12 @@ namespace c3d_assimp
 
 				if ( it == m_skeletons.end() )
 				{
-					it = m_skeletons.emplace( preRootNode->mName.C_Str(), nullptr ).first;
+					it = m_skeletons.emplace( nodeName, nullptr ).first;
 					castor3d::log::info << cuT( "  Skeleton found" ) << std::endl;
 					it->second = std::make_shared< castor3d::Skeleton >( scene );
 					skeleton = it->second;
 					skeleton->setGlobalInverseTransform( makeMatrix4x4f( preRootNode->mChildren[0]->mTransformation ).getInverse() );
-					skeletons::processSkeletonNodes( m_prefix
+					skeletons::processSkeletonNodes( m_importer
 						, m_bonesNodes
 						, *skeleton
 						, *preRootNode
@@ -376,7 +369,7 @@ namespace c3d_assimp
 					skeleton = it->second;
 				}
 
-				m_meshSkeletons.emplace( aiMesh->mName.C_Str(), skeleton );
+				m_meshSkeletons.emplace( makeString( aiMesh->mName ), skeleton );
 			}
 		}
 
@@ -386,7 +379,7 @@ namespace c3d_assimp
 
 			for ( auto aiAnimation : castor::makeArrayView( aiScene.mAnimations, aiScene.mNumAnimations ) )
 			{
-				if ( skeletons::isAnimForSkeleton( m_prefix, *aiAnimation, skeleton ) )
+				if ( skeletons::isAnimForSkeleton( m_importer, *aiAnimation, skeleton ) )
 				{
 					m_needsAnimsReparse = true;
 					doProcessSkeletonAnimation( m_fileName.getFileName()
@@ -403,11 +396,11 @@ namespace c3d_assimp
 		, aiNode const & aiNode
 		, aiAnimation const & aiAnimation )
 	{
-		castor::String name{ normalizeName( m_prefix + castor::string::stringCast< castor::xchar >( aiAnimation.mName.C_Str() ) ) };
+		castor::String name{ normalizeName( makeString( aiAnimation.mName ) ) };
 
 		if ( name.empty() )
 		{
-			name = animName;
+			name = normalizeName( animName );
 		}
 
 		auto & animation = skeleton.createAnimation( name );
@@ -464,7 +457,7 @@ namespace c3d_assimp
 		{
 			auto name = skelNode->getName();
 			const aiNodeAnim * aiNodeAnim = skeletons::findNodeAnim( aiAnimation
-				, name.substr( m_prefix.size() ) );
+				, m_importer.getExternalName( name ) );
 			auto parentSkelNode = skelNode->getParent();
 			castor3d::SkeletonAnimationObjectSPtr parent;
 

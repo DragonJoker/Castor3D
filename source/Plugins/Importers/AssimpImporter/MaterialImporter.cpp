@@ -3,6 +3,9 @@
 
 #include "AssimpImporter/MaterialImporter.hpp"
 
+#include "AssimpImporter/AssimpHelpers.hpp"
+#include "AssimpImporter/AssimpImporter.hpp"
+
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/Pass.hpp>
@@ -140,26 +143,25 @@ namespace c3d_assimp
 					aiString value;
 					if ( m_material.Get( AI_MATKEY_GLTF_ALPHAMODE, value ) == aiReturn_SUCCESS )
 					{
-						std::string mode = value.C_Str();
+						auto mode = makeString( value );
+						auto colConfig = getRemap( castor3d::TextureFlag::eDiffuse
+							, castor3d::TextureConfiguration::DiffuseTexture );
+						colConfig.opacityMask[0] = 0xFF000000;
+						m_textureRemaps.emplace( castor3d::TextureFlag::eDiffuse, colConfig );
 
 						if ( mode != "OPAQUE" )
 						{
-							auto colConfig = getRemap( castor3d::TextureFlag::eDiffuse
-								, castor3d::TextureConfiguration::DiffuseTexture );
-							colConfig.opacityMask[0] = 0xFF000000;
-							m_textureRemaps.emplace( castor3d::TextureFlag::eDiffuse, colConfig );
 							m_result.setTwoSided( true );
 							m_result.setAlphaFunc( VK_COMPARE_OP_GREATER );
 							m_result.setBlendAlphaFunc( VK_COMPARE_OP_LESS_OR_EQUAL );
-
-							if ( mode == "BLEND" )
-							{
-								m_result.setTwoSided( true );
-								m_result.setAlphaValue( 0.95f );
-								m_result.setAlphaFunc( VK_COMPARE_OP_GREATER );
-								m_result.setBlendAlphaFunc( VK_COMPARE_OP_LESS_OR_EQUAL );
-								m_result.setAlphaBlendMode( castor3d::BlendMode::eInterpolative );
-							}
+						}
+						else if ( mode == "BLEND" )
+						{
+							m_result.setTwoSided( true );
+							m_result.setAlphaValue( 0.95f );
+							m_result.setAlphaFunc( VK_COMPARE_OP_GREATER );
+							m_result.setBlendAlphaFunc( VK_COMPARE_OP_LESS_OR_EQUAL );
+							m_result.setAlphaBlendMode( castor3d::BlendMode::eInterpolative );
 						}
 					}
 
@@ -211,8 +213,6 @@ namespace c3d_assimp
 				{
 					m_result.setEmissive( 1.0f );
 				}
-
-				m_result.setTwoSided( true );
 			}
 
 			void visit( castor::String const & name
@@ -679,7 +679,7 @@ namespace c3d_assimp
 
 				if ( name.length > 0 )
 				{
-					result.name = castor::string::stringCast< castor::xchar >( name.C_Str() );
+					result.name = makeString( name );
 					m_material.Get( AI_MATKEY_UVTRANSFORM( type, index ), result.transform );
 				}
 
@@ -852,18 +852,16 @@ namespace c3d_assimp
 
 	//*********************************************************************************************
 
-	MaterialImporter::MaterialImporter( castor3d::MeshImporter & importer )
+	MaterialImporter::MaterialImporter( AssimpImporter & importer )
 		: m_importer{ importer }
 	{
 	}
 
-	void MaterialImporter::import( castor::String const & prefix
-		, castor::Path const & fileName
+	void MaterialImporter::import( castor::Path const & fileName
 		, std::map< castor3d::TextureFlag, castor3d::TextureConfiguration > const & textureRemaps
 		, aiScene const & aiScene
 		, castor3d::Scene & scene )
 	{
-		m_prefix = prefix;
 		m_fileName = fileName;
 		m_textureRemaps = textureRemaps;
 		uint32_t index{};
@@ -892,16 +890,11 @@ namespace c3d_assimp
 
 		if ( aiMaterial.Get( AI_MATKEY_NAME, mtlname ) == aiReturn_SUCCESS )
 		{
-			name += castor::string::stringCast< castor::xchar >( mtlname.C_Str() );
+			name += makeString( mtlname );
 		}
 		else
 		{
-			name += castor::string::toString( index );
-		}
-
-		if ( name.empty() )
-		{
-			name = m_fileName.getFileName() + castor::string::toString( m_anonymous++ );
+			name += m_fileName.getFileName() + castor::string::toString( index );
 		}
 
 		if ( cache.has( name ) )

@@ -15,7 +15,7 @@ namespace c3d_assimp
 		, m_materialsImp{ *this }
 		, m_skeletonsImp{ *this }
 		, m_meshesImp{ *this, m_materialsImp, m_skeletonsImp, m_meshes }
-		, m_scenesImp{ *this, m_skeletonsImp, m_meshesImp, m_nodes, m_geometries }
+		, m_scenesImp{ *this, m_skeletonsImp, m_nodes, m_geometries }
 	{
 	}
 
@@ -34,8 +34,7 @@ namespace c3d_assimp
 			{
 				if ( m_fileName.getExtension() == "md5anim" )
 				{
-					m_skeletonsImp.import( m_prefix
-						, m_fileName
+					m_skeletonsImp.import( m_fileName
 						, *aiScene
 						, *mesh.getScene()
 						, false );
@@ -43,26 +42,22 @@ namespace c3d_assimp
 				}
 				else
 				{
-					m_materialsImp.import( m_prefix
-						, m_fileName
+					m_materialsImp.import( m_fileName
 						, m_textureRemaps
 						, *aiScene
 						, *mesh.getScene() );
-					m_skeletonsImp.import( m_prefix
-						, m_fileName
+					m_skeletonsImp.import( m_fileName
 						, *aiScene
 						, *mesh.getScene()
 						, true );
-					auto indices = m_meshesImp.import( m_prefix
-						, m_fileName
+					auto indices = m_meshesImp.import( m_fileName
 						, *aiScene
 						, mesh );
 					result = !indices.empty();
 
 					if ( result )
 					{
-						m_scenesImp.import( m_prefix
-							, *aiScene
+						m_scenesImp.import( *aiScene
 							, indices );
 					}
 				}
@@ -82,8 +77,7 @@ namespace c3d_assimp
 		{
 			if ( m_fileName.getExtension() == "md5anim" )
 			{
-				m_skeletonsImp.import( m_prefix
-					, m_fileName
+				m_skeletonsImp.import( m_fileName
 					, *aiScene
 					, scene
 					, false );
@@ -95,22 +89,18 @@ namespace c3d_assimp
 			}
 			else
 			{
-				m_materialsImp.import( m_prefix
-					, m_fileName
+				m_materialsImp.import( m_fileName
 					, m_textureRemaps
 					, *aiScene
 					, scene );
-				m_skeletonsImp.import( m_prefix
-					, m_fileName
+				m_skeletonsImp.import( m_fileName
 					, *aiScene
 					, scene
 					, true );
-				auto meshes = m_meshesImp.import( m_prefix
-					, m_fileName
+				auto meshes = m_meshesImp.import( m_fileName
 					, *aiScene
 					, scene );
-				m_scenesImp.import( m_prefix
-					, *aiScene
+				m_scenesImp.import( *aiScene
 					, scene
 					, meshes );
 			}
