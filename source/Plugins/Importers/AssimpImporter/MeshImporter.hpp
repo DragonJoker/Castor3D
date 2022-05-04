@@ -52,6 +52,7 @@ namespace c3d_assimp
 		std::map< uint32_t, MeshData * > doRemoveDuplicateMeshes( castor3d::Scene & scene );
 		MeshIndices doProcessMeshAndAnims( aiScene const & aiScene
 			, castor::ArrayView< aiMesh * > aiMeshes
+			, uint32_t aiMeshIndex
 			, castor3d::Mesh & mesh );
 		bool doProcessMesh( castor3d::Scene & scene
 			, castor3d::Mesh & mesh
