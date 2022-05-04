@@ -204,7 +204,6 @@ namespace c3d_assimp
 		, std::map< castor::Milliseconds, castor::Quaternion > const & rotates
 		, std::set< castor::Milliseconds > const & times
 		, uint32_t fps
-		, int64_t ticksPerSecond
 		, AnimationT & animation
 		, std::map< castor::Milliseconds, std::unique_ptr< KeyFrameT > > & keyframes
 		, FuncT fillKeyFrame )
@@ -257,7 +256,6 @@ namespace c3d_assimp
 			, rotates
 			, times
 			, wantedFps
-			, ticksPerSecond
 			, animation
 			, keyframes
 			, fillKeyFrame );
