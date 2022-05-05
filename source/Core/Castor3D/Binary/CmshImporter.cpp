@@ -50,7 +50,9 @@ namespace castor3d
 	bool CmshImporter::doImportMesh( Mesh & mesh )
 	{
 		castor::BinaryFile meshFile{ m_fileName, castor::File::OpenMode::eRead };
-		auto result = BinaryParser< Mesh >{}.parse( mesh, meshFile );
+		auto result = m_animsOnly
+			? m_animsOnly
+			: BinaryParser< Mesh >{}.parse( mesh, meshFile );
 
 		castor::PathArray files;
 		castor::File::listDirectoryFiles( m_fileName.getPath(), files );
@@ -61,10 +63,14 @@ namespace castor3d
 			if ( fileName.getExtension() == "cskl"
 				&& fileName.getFileName() == meshName )
 			{
-				auto skeleton = std::make_shared< Skeleton >( *mesh.getScene() );
+				auto skeleton = m_animsOnly
+					? mesh.getSkeleton()
+					: std::make_shared< Skeleton >( *mesh.getScene() );
 				castor::BinaryFile skelFile{ m_fileName.getPath() / ( meshName + cuT( ".cskl" ) )
 					, castor::File::OpenMode::eRead };
-				result = BinaryParser< Skeleton >{}.parse( *skeleton, skelFile );
+				result = m_animsOnly
+					? m_animsOnly
+					: BinaryParser< Skeleton >{}.parse( *skeleton, skelFile );
 
 				if ( result )
 				{
