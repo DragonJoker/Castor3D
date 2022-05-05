@@ -107,14 +107,6 @@ namespace c3d_assimp
 			return skeleton.createBone( name, it->second.inverseTransform );
 		}
 
-		static castor3d::SkeletonNode * addNode( castor3d::Skeleton & skeleton
-			, castor::String const & name
-			, castor::Matrix4x4f const & inverseTransform )
-		{
-			castor3d::log::debug << "  Skeleton Bone [" << name << "]" << std::endl;
-			return skeleton.createBone( name, inverseTransform );
-		}
-
 		static void processSkeletonNodes( AssimpImporter const & importer
 			, std::map< castor::String, BoneData > const & bonesNodes
 			, castor3d::Skeleton & skeleton

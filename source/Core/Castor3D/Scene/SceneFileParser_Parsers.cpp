@@ -2879,12 +2879,9 @@ namespace castor3d
 			}
 			else
 			{
-				bool secondary = true;
-
 				if ( !parsingContext.importer )
 				{
 					parsingContext.importer = engine->getImporterFactory().create( extension, *engine );
-					secondary = false;
 				}
 
 				if ( !parsingContext.importer->importAnimations( *parsingContext.mesh.lock(), pathFile, parameters ) )
