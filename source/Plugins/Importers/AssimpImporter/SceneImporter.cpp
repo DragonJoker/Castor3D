@@ -33,7 +33,7 @@ namespace c3d_assimp
 {
 	namespace scenes
 	{
-		castor::Matrix4x4f getTranslation( aiMatrix4x4 const & transform )
+		static castor::Matrix4x4f getTranslation( aiMatrix4x4 const & transform )
 		{
 			aiQuaternion quat;
 			aiVector3D tran;
