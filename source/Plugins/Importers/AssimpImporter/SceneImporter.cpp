@@ -31,6 +31,20 @@
 
 namespace c3d_assimp
 {
+	namespace scenes
+	{
+		castor::Matrix4x4f getTranslation( aiMatrix4x4 const & transform )
+		{
+			aiQuaternion quat;
+			aiVector3D tran;
+			transform.DecomposeNoScaling( quat, tran );
+
+			castor::Matrix4x4f result;
+			castor::matrix::setTranslate( result, convert( tran ) );
+			return result;
+		}
+	}
+
 	using SceneNodeAnimationKeyFrameMap = std::map< castor::Milliseconds, castor3d::SceneNodeAnimationKeyFrameUPtr >;
 
 	SceneImporter::SceneImporter( AssimpImporter & importer
@@ -48,13 +62,10 @@ namespace c3d_assimp
 		, castor3d::Scene & scene
 		, std::map< uint32_t, MeshData * > const & meshes )
 	{
-		castor::Matrix4x4f transform;
-		transform.setIdentity();
 		doProcessSceneNodes( aiScene
 			, *aiScene.mRootNode
 			, scene
-			, scene.getObjectRootNode()
-			, transform );
+			, scene.getObjectRootNode() );
 
 		for ( aiLight * aiLight : castor::makeArrayView( aiScene.mLights, aiScene.mNumLights ) )
 		{
@@ -71,7 +82,7 @@ namespace c3d_assimp
 	void SceneImporter::import( aiScene const & aiScene
 		, MeshIndices const & meshes )
 	{
-		doScaleMesh( *aiScene.mRootNode
+		doTransformMesh( *aiScene.mRootNode
 			, meshes );
 	}
 
@@ -175,8 +186,7 @@ namespace c3d_assimp
 	void SceneImporter::doProcessSceneNodes( aiScene const & aiScene
 		, aiNode const & aiNode
 		, castor3d::Scene & scene
-		, castor3d::SceneNodeSPtr parent
-		, castor::Matrix4x4f accTransform )
+		, castor3d::SceneNodeSPtr parent )
 	{
 		if ( m_skeletons.isBoneNode( aiNode ) )
 		{
@@ -224,72 +234,43 @@ namespace c3d_assimp
 		}
 
 		parent = lnode.lock();
-		accTransform = makeMatrix4x4f( aiNode.mTransformation ) * accTransform;
 
 		// continue for all child nodes
 		for ( auto aiChild : castor::makeArrayView( aiNode.mChildren, aiNode.mNumChildren ) )
 		{
-			doProcessSceneNodes( aiScene, *aiChild, scene, parent, accTransform );
+			doProcessSceneNodes( aiScene, *aiChild, scene, parent );
 		}
 	}
 
-	void SceneImporter::doScaleMesh( aiNode const & aiNode
-		, MeshIndices const & meshes )
+	void SceneImporter::doTransformMesh( aiNode const & aiNode
+		, MeshIndices const & meshes
+		, aiMatrix4x4 transformAcc )
 	{
+		transformAcc = transformAcc * aiNode.mTransformation;
+
 		for ( auto aiMeshIndex : castor::makeArrayView( aiNode.mMeshes, aiNode.mNumMeshes ) )
 		{
 			auto it = meshes.find( aiMeshIndex );
 
 			if ( it != meshes.end() )
 			{
-				castor::Matrix4x4f transform;
-
-				if ( it->second->hasComponent( castor3d::BonesComponent::Name ) )
-				{
-					aiQuaternion quat;
-					aiVector3D tran;
-					aiVector3D scal;
-					aiNode.mTransformation.DecomposeNoScaling( quat, tran );
-					castor::matrix::setTransform( transform
-						, convert( tran )
-						, castor::Point3f{ 1.0f, 1.0f, 1.0f }
-						, castor::Quaternion::identity() );
-					auto parent = aiNode.mParent;
-
-					while ( parent )
-					{
-						parent->mTransformation.DecomposeNoScaling( quat, tran );
-						castor::Matrix4x4f parentTransform;
-						castor::matrix::setTransform( parentTransform
-							, convert( tran )
-							, castor::Point3f{ 1.0f, 1.0f, 1.0f }
-							, castor::Quaternion::identity() );
-						transform = transform * parentTransform;
-						parent = parent->mParent;
-					}
-				}
-				else
-				{
-					transform = makeMatrix4x4f( aiNode.mTransformation );
-					auto parent = aiNode.mParent;
-
-					while ( parent )
-					{
-						transform = transform * makeMatrix4x4f( parent->mTransformation );
-						parent = parent->mParent;
-					}
-				}
+				auto transform = ( it->second->hasComponent( castor3d::BonesComponent::Name )
+					? scenes::getTranslation( transformAcc )
+					: makeMatrix4x4f( transformAcc ) );
 
 				for ( auto & vertex : it->second->getPoints() )
 				{
 					vertex.pos = transform * vertex.pos;
 				}
+
+				auto indexMapping = it->second->getIndexMapping();
+				indexMapping->computeNormals( true );
 			}
 		}
 
 		for ( auto child : castor::makeArrayView( aiNode.mChildren, aiNode.mNumChildren ) )
 		{
-			doScaleMesh( *child, meshes );
+			doTransformMesh( *child, meshes, transformAcc );
 		}
 	}
 
