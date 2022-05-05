@@ -117,6 +117,7 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "}" ), parserSceneEnd );
 
 			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "file" ), parserSceneImportFile, { makeParameter< ParameterType::ePath >() } );
+			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "anim_file" ), parserSceneImportAnimFile, { makeParameter< ParameterType::ePath >() } );
 			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "prefix" ), parserSceneImportPrefix, { makeParameter< ParameterType::eText >() } );
 			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "rescale" ), parserSceneImportRescale, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "pitch" ), parserSceneImportPitch, { makeParameter< ParameterType::eFloat >() } );
@@ -197,6 +198,7 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "type" ), parserMeshType, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eText >() } );
 			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "submesh" ), parserMeshSubmesh );
 			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "import" ), parserMeshImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
+			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "anim_import" ), parserMeshAnimImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
 			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "morph_import" ), parserMeshMorphImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eFloat >(), makeParameter< ParameterType::eText >() } );
 			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "division" ), parserMeshDivide, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eUInt16 >() } );
 			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "default_material" ), parserMeshDefaultMaterial, { makeParameter< ParameterType::eName >() } );

@@ -1377,6 +1377,15 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserSceneImportAnimFile )
+	{
+		auto & parsingContext = getParserContext( context );
+		castor::Path path;
+		castor::Path pathFile = context.file.getPath() / params[0]->get( path );
+		parsingContext.sceneImportConfig.animFiles.push_back( pathFile );
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserSceneImportPrefix )
 	{
 		auto & parsingContext = getParserContext( context );
@@ -1477,6 +1486,16 @@ namespace castor3d
 					, parameters
 					, parsingContext.sceneImportConfig.textureRemaps
 					, true ) )
+				{
+					CU_ParsingError( cuT( "External scene Import failed" ) );
+				}
+			}
+
+			for ( auto & file : parsingContext.sceneImportConfig.animFiles )
+			{
+				if ( !importer->importAnimations( *parsingContext.scene
+					, file
+					, parameters ) )
 				{
 					CU_ParsingError( cuT( "External scene Import failed" ) );
 				}
@@ -2821,6 +2840,54 @@ namespace castor3d
 				}
 
 				if ( !parsingContext.importer->import( *parsingContext.mesh.lock(), pathFile, parameters, true, secondary ) )
+				{
+					CU_ParsingError( cuT( "Mesh Import failed" ) );
+					parsingContext.mesh.reset();
+				}
+			}
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserMeshAnimImport )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( !parsingContext.scene )
+		{
+			CU_ParsingError( cuT( "No scene initialised." ) );
+		}
+		else
+		{
+			castor::Path path;
+			castor::Path pathFile = context.file.getPath() / params[0]->get( path );
+			Parameters parameters;
+
+			if ( params.size() > 1 )
+			{
+				castor::String meshParams;
+				params[1]->get( meshParams );
+				scnprs::fillMeshImportParameters( context, meshParams, parameters );
+			}
+
+			Engine * engine = parsingContext.parser->getEngine();
+			auto extension = castor::string::lowerCase( pathFile.getExtension() );
+
+			if ( !engine->getImporterFactory().isTypeRegistered( extension ) )
+			{
+				CU_ParsingError( cuT( "Importer for [" ) + extension + cuT( "] files is not registered, make sure you've got the matching plug-in installed." ) );
+			}
+			else
+			{
+				bool secondary = true;
+
+				if ( !parsingContext.importer )
+				{
+					parsingContext.importer = engine->getImporterFactory().create( extension, *engine );
+					secondary = false;
+				}
+
+				if ( !parsingContext.importer->importAnimations( *parsingContext.mesh.lock(), pathFile, parameters ) )
 				{
 					CU_ParsingError( cuT( "Mesh Import failed" ) );
 					parsingContext.mesh.reset();

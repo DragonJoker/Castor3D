@@ -38,6 +38,7 @@ namespace castor3d
 		 *\param[in]	pathFile	The location of the file to import.
 		 *\param[in]	parameters	Import configuration parameters.
 		 *\param[in]	initialise	Tells if the imported mesh must be initialised.
+		 *\param[in]	forceImport	Tells if the mesh needs to be imported even if it's already filled.
 		 *\return		\p false if any problem occured.
 		 *\~french
 		 *\brief		Fonction d'import de Mesh.
@@ -45,13 +46,14 @@ namespace castor3d
 		 *\param[in]	pathFile	Le chemin vers le fichier à importer.
 		 *\param[in]	parameters	Paramètres de configuration de l'import.
 		 *\param[in]	initialise	Dit si le mesh importé doit être initialisé.
+		 *\param[in]	forceImport	Dit si le mesh importé doit être importé même s'il est déjà rempli.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
 		C3D_API bool import( Mesh & mesh
 			, castor::Path const & pathFile
 			, Parameters const & parameters
 			, bool initialise
-			, bool isSecondary );
+			, bool forceImport );
 		/**
 		 *\~english
 		 *\brief		Scene import Function.
@@ -75,6 +77,40 @@ namespace castor3d
 			, Parameters const & parameters
 			, std::map< TextureFlag, TextureConfiguration > const & textureRemaps
 			, bool initialise );
+		/**
+		 *\~english
+		 *\brief		Mesh animations import Function.
+		 *\param[out]	mesh		Receives the imported data.
+		 *\param[in]	pathFile	The location of the file to import.
+		 *\param[in]	parameters	Import configuration parameters.
+		 *\return		\p false if any problem occured.
+		 *\~french
+		 *\brief		Fonction d'import des animations de Mesh.
+		 *\param[out]	mesh		Reçoit les données importées.
+		 *\param[in]	pathFile	Le chemin vers le fichier à importer.
+		 *\param[in]	parameters	Paramètres de configuration de l'import.
+		 *\return		\p false si un problème quelconque est survenu.
+		 */
+		C3D_API bool importAnimations( Mesh & mesh
+			, castor::Path const & pathFile
+			, Parameters const & parameters );
+		/**
+		 *\~english
+		 *\brief		Scene animations import Function.
+		 *\param[out]	scene			Receives the imported data.
+		 *\param[in]	pathFile		The location of the file to import.
+		 *\param[in]	parameters		Import configuration parameters.
+		 *\return		\p false if any problem occured.
+		 *\~french
+		 *\brief		Fonction d'import des animations de Scene.
+		 *\param[out]	scene			Reçoit les données importées.
+		 *\param[in]	pathFile		Le chemin vers le fichier à importer.
+		 *\param[in]	parameters		Paramètres de configuration de l'import.
+		 *\return		\p false si un problème quelconque est survenu.
+		 */
+		C3D_API bool importAnimations( Scene & scene
+			, castor::Path const & pathFile
+			, Parameters const & parameters );
 		/**
 		 *\~english
 		 *\brief		Loads an image.
@@ -243,20 +279,30 @@ namespace castor3d
 		C3D_API virtual bool doImportScene( Scene & scene ) = 0;
 
 	protected:
-		//!\~english The file name	\~french Le nom du fichier
+		//!\~english The file name.
+		//!\~french Le nom du fichier.
 		castor::Path m_fileName;
-		//!\~english The file full path	\~french Le chemin complet du fichier
+		//!\~english The file full path.
+		//!\~french Le chemin complet du fichier.
 		castor::Path m_filePath;
-		//!\~english The loaded scene nodes	\~french Les noeuds chargés
+		//!\~english The loaded scene nodes.
+		//!\~french Les noeuds chargés.
 		SceneNodePtrArray m_nodes;
-		//!\~english The loaded geometries	\~french Les géométries chargées
+		//!\~english The loaded geometries.
+		//!\~french Les géométries chargées.
 		GeometryPtrStrMap m_geometries;
-		//!\~english The loaded meshes	\~french Les maillages chargés
+		//!\~english The loaded meshes.
+		//!\~french Les maillages chargés.
 		MeshPtrStrMap m_meshes;
-		//!\~english Import configuration parameters	\~french Paramètres de configuration de l'import
+		//!\~english Import configuration parameters.
+		//!\~french Paramètres de configuration de l'import.
 		Parameters m_parameters;
-		//!\~english Import texture remapping parameters	\~french Paramètres de reaffectation des textures importées
+		//!\~english Import texture remapping parameters.
+		//!\~french Paramètres de reaffectation des textures importées.
 		std::map< TextureFlag, TextureConfiguration > m_textureRemaps;
+		//!\~english Tells if only the animations need to be imported.
+		//!\~french Dit si seules les animations doivent être importées+.
+		bool m_animsOnly{ false };
 	};
 }
 

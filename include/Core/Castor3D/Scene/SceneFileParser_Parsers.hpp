@@ -87,6 +87,7 @@ namespace castor3d
 
 	// Scene import parsers
 	CU_DeclareAttributeParser( parserSceneImportFile )
+	CU_DeclareAttributeParser( parserSceneImportAnimFile )
 	CU_DeclareAttributeParser( parserSceneImportPrefix )
 	CU_DeclareAttributeParser( parserSceneImportRescale )
 	CU_DeclareAttributeParser( parserSceneImportPitch )
@@ -179,6 +180,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserMeshType )
 	CU_DeclareAttributeParser( parserMeshSubmesh )
 	CU_DeclareAttributeParser( parserMeshImport )
+	CU_DeclareAttributeParser( parserMeshAnimImport )
 	CU_DeclareAttributeParser( parserMeshMorphImport )
 	CU_DeclareAttributeParser( parserMeshDivide )
 	CU_DeclareAttributeParser( parserMeshDefaultMaterial )

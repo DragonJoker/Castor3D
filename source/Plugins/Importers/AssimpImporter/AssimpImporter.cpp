@@ -32,7 +32,7 @@ namespace c3d_assimp
 		{
 			if ( aiScene->HasMeshes() )
 			{
-				if ( m_fileName.getExtension() == "md5anim" )
+				if ( m_animsOnly )
 				{
 					m_skeletonsImp.import( m_fileName
 						, *aiScene
@@ -75,7 +75,7 @@ namespace c3d_assimp
 
 		if ( auto aiScene = doLoadScene() )
 		{
-			if ( m_fileName.getExtension() == "md5anim" )
+			if ( m_animsOnly )
 			{
 				m_skeletonsImp.import( m_fileName
 					, *aiScene
