@@ -83,16 +83,17 @@ namespace castor3d
 		, castor::Path const & fileName
 		, Parameters const & parameters
 		, bool initialise
-		, bool isSecondary )
+		, bool forceImport )
 	{
 		bool splitSubmeshes = false;
 		m_parameters.get( cuT( "split_mesh" ), splitSubmeshes );
 		m_fileName = fileName;
 		m_filePath = m_fileName.getPath();
 		m_parameters = parameters;
+		m_animsOnly = false;
 		bool result = true;
 
-		if ( !mesh.getSubmeshCount() || isSecondary )
+		if ( !mesh.getSubmeshCount() || forceImport )
 		{
 			result = doImportMesh( mesh );
 
@@ -190,6 +191,7 @@ namespace castor3d
 		m_fileName = fileName;
 		m_filePath = m_fileName.getPath();
 		m_parameters = parameters;
+		m_animsOnly = false;
 		bool result = doImportScene( scene );
 
 		if ( result && initialise )
@@ -279,6 +281,28 @@ namespace castor3d
 		}
 
 		return result;
+	}
+
+	bool MeshImporter::importAnimations( Mesh & mesh
+		, castor::Path const & fileName
+		, Parameters const & parameters )
+	{
+		m_fileName = fileName;
+		m_filePath = m_fileName.getPath();
+		m_parameters = parameters;
+		m_animsOnly = true;
+		return doImportMesh( mesh );
+	}
+
+	bool MeshImporter::importAnimations( Scene & scene
+		, castor::Path const & fileName
+		, Parameters const & parameters )
+	{
+		m_fileName = fileName;
+		m_filePath = m_fileName.getPath();
+		m_parameters = parameters;
+		m_animsOnly = true;
+		return doImportScene( scene );
 	}
 
 	castor::ImageSPtr MeshImporter::loadImage( castor::String const & name
