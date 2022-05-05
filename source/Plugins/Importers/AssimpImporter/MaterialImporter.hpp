@@ -19,7 +19,7 @@ namespace c3d_assimp
 	class MaterialImporter
 	{
 	public:
-		MaterialImporter( AssimpImporter & importer );
+		explicit MaterialImporter( AssimpImporter & importer );
 
 		void import( castor::Path const & fileName
 			, std::map< castor3d::TextureFlag, castor3d::TextureConfiguration > const & textureRemaps
