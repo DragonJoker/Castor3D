@@ -33,7 +33,7 @@ namespace c3d_assimp
 			, castor3d::Scene & scene
 			, bool replaceInverseTransforms );
 		bool isBoneNode( aiNode const & aiNode )const;
-		castor3d::SkeletonSPtr getSkeleton( aiMesh const & aiMesh
+		castor3d::SkeletonRPtr getSkeleton( aiMesh const & aiMesh
 			, uint32_t aiMeshIndex )const;
 
 		bool needsAnimsReparse()const
@@ -69,8 +69,8 @@ namespace c3d_assimp
 		bool m_replaceInverseTransforms{};
 		std::map< uint32_t, aiNode * > m_meshesNodes;
 		std::map< castor::String, BoneData > m_bonesNodes;
-		std::map< castor::String, castor3d::SkeletonSPtr > m_skeletons;
-		std::map< castor::String, castor3d::SkeletonSPtr > m_meshSkeletons;
+		std::map< castor::String, castor3d::SkeletonRPtr > m_skeletons;
+		std::map< castor::String, castor3d::SkeletonRPtr > m_meshSkeletons;
 	};
 }
 

@@ -79,6 +79,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserSceneFogType )
 	CU_DeclareAttributeParser( parserSceneFogDensity )
 	CU_DeclareAttributeParser( parserSceneParticleSystem )
+	CU_DeclareAttributeParser( parserSkeleton )
 	CU_DeclareAttributeParser( parserMesh )
 	CU_DeclareAttributeParser( parserDirectionalShadowCascades )
 	CU_DeclareAttributeParser( parserLpvIndirectAttenuation )
@@ -176,6 +177,11 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserObjectMaterialsMaterial )
 	CU_DeclareAttributeParser( parserObjectMaterialsEnd )
 
+	// Skeleton Parsers
+	CU_DeclareAttributeParser( parserSkeletonImport )
+	CU_DeclareAttributeParser( parserSkeletonAnimImport )
+	CU_DeclareAttributeParser( parserSkeletonEnd )
+
 	// Mesh Parsers
 	CU_DeclareAttributeParser( parserMeshType )
 	CU_DeclareAttributeParser( parserMeshSubmesh )
@@ -185,6 +191,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserMeshDivide )
 	CU_DeclareAttributeParser( parserMeshDefaultMaterial )
 	CU_DeclareAttributeParser( parserMeshDefaultMaterials )
+	CU_DeclareAttributeParser( parserMeshSkeleton )
 	CU_DeclareAttributeParser( parserMeshEnd )
 
 	// Object Materials Parsers

@@ -35,6 +35,7 @@
 #include <Castor3D/Text/TextSampler.hpp>
 #include <Castor3D/Text/TextScene.hpp>
 #include <Castor3D/Text/TextSceneNode.hpp>
+#include <Castor3D/Text/TextSkeleton.hpp>
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
@@ -180,6 +181,26 @@ namespace castor3d::exporter
 	{
 		namespace
 		{
+			bool writeSkeletons( castor::Path const & folder
+				, castor::Path const & filePath
+				, Scene const & scene
+				, castor::TextWriter< Scene >::Options & options
+				, castor::StringStream & stream )
+			{
+				bool result = false;
+				{
+					result = writeCache< Skeleton >( scene.getSkeletonCache()
+						, cuT( "Skeletons" )
+						, options.subfolder
+						, stream
+						, []( Skeleton const & object )
+						{
+							return true;
+						} );
+				}
+				return result;
+			}
+
 			bool writeMeshes( castor::Path const & folder
 				, castor::Path const & filePath
 				, Scene const & scene
@@ -233,52 +254,56 @@ namespace castor3d::exporter
 		template< typename ObjectT >
 		struct ObjectWriterOptionsT
 		{
-			ObjectWriterOptionsT( ExportOptions const & options
-				, ObjectT const & object
-				, GeometryCache const & geometries
-				, castor::StringStream & meshes
-				, castor::StringStream & nodes
-				, castor::StringStream & objects
-				, castor::Path path
-				, castor::String name
-				, castor::String subfolder
-				, castor::String outputName
-				, bool singleMesh )
-				: options{ options }
-				, object{ object }
-				, geometries{ geometries }
-				, meshes{ meshes }
-				, nodes{ nodes }
-				, objects{ objects }
-				, path{ path }
-				, name{ name }
-				, subfolder{ subfolder }
-				, outputName{ outputName }
-				, singleMesh{ singleMesh }
+			ObjectWriterOptionsT( ExportOptions const & poptions
+				, ObjectT const & pobject
+				, GeometryCache const & pgeometries
+				, castor::StringStream & pskeletons
+				, castor::StringStream & pmeshes
+				, castor::StringStream & pnodes
+				, castor::StringStream & pobjects
+				, castor::Path ppath
+				, castor::String pname
+				, castor::String psubfolder
+				, castor::String poutputName
+				, bool psingleMesh )
+				: options{ poptions }
+				, object{ pobject }
+				, geometries{ pgeometries }
+				, skeletons{ pskeletons }
+				, meshes{ pmeshes }
+				, nodes{ pnodes }
+				, objects{ pobjects }
+				, path{ ppath }
+				, name{ pname }
+				, subfolder{ psubfolder }
+				, outputName{ poutputName }
+				, singleMesh{ psingleMesh }
 			{
 			}
 
 			template< typename ObjectU >
-			ObjectWriterOptionsT( ObjectWriterOptionsT< ObjectU > const & options
-				, ObjectT const & object
-				, castor::String name )
-				: options{ options.options }
-				, object{ object }
-				, geometries{ options.geometries }
-				, meshes{ options.meshes }
-				, nodes{ options.nodes }
-				, objects{ options.objects }
-				, path{ options.path }
-				, name{ name }
-				, subfolder{ options.subfolder }
-				, outputName{ options.outputName }
-				, singleMesh{ options.singleMesh }
+			ObjectWriterOptionsT( ObjectWriterOptionsT< ObjectU > const & poptions
+				, ObjectT const & pobject
+				, castor::String pname )
+				: options{ poptions.options }
+				, object{ pobject }
+				, geometries{ poptions.geometries }
+				, skeletons{ poptions.skeletons }
+				, meshes{ poptions.meshes }
+				, nodes{ poptions.nodes }
+				, objects{ poptions.objects }
+				, path{ poptions.path }
+				, name{ pname }
+				, subfolder{ poptions.subfolder }
+				, outputName{ poptions.outputName }
+				, singleMesh{ poptions.singleMesh }
 			{
 			}
 
 			ExportOptions const & options;
 			ObjectT const & object;
 			GeometryCache const & geometries;
+			castor::StringStream & skeletons;
 			castor::StringStream & meshes;
 			castor::StringStream & nodes;
 			castor::StringStream & objects;
@@ -386,8 +411,10 @@ namespace castor3d::exporter
 
 					if ( options.options.recenter )
 					{
-						auto & submesh = *options.object.getSubmesh( 0u );
-						position = submesh.getBoundingBox().getCenter();
+						if ( auto submesh = options.object.getSubmesh( 0u ) )
+						{
+							position = submesh->getBoundingBox().getCenter();
+						}
 					}
 
 					auto stream = castor::makeStringStream();
@@ -396,9 +423,13 @@ namespace castor3d::exporter
 					options.meshes << ( cuT( "\nmesh \"Mesh_" ) + options.name + cuT( "\"\n" ) );
 					options.meshes << ( cuT( "{\n" ) );
 					options.meshes << ( cuT( "\timport \"Meshes/" ) + ( options.subfolder.empty() ? castor::cuEmptyString : ( options.subfolder + cuT( "/" ) ) ) + options.name + cuT( ".cmsh\"\n" ) );
-					auto material = options.object.getSubmesh( 0u )->getDefaultMaterial();
 
-					if ( material )
+					if ( auto skeleton = options.object.getSkeleton() )
+					{
+						options.meshes << ( cuT( "\tskeleton \"" ) + skeleton->getName() + cuT( "\"\n" ) );
+					}
+
+					if ( auto material = options.object.getSubmesh( 0u )->getDefaultMaterial() )
 					{
 						options.meshes << ( cuT( "\tdefault_material \"" ) + material->getName() + cuT( "\"\n" ) );
 					}
@@ -454,21 +485,17 @@ namespace castor3d::exporter
 				}
 				else
 				{
-					auto skeleton = options.object.getSkeleton();
-
-					if ( skeleton )
-					{
-						result = writeObjectT< false >( SkeletonWriterOptions{ options
-								, *skeleton
-								, options.object.getName() }
-							, split );
-					}
-
 					if ( options.singleMesh )
 					{
 						options.meshes << ( cuT( "\nmesh \"Mesh_" ) + options.name + cuT( "\"\n" ) );
 						options.meshes << ( cuT( "{\n" ) );
 						options.meshes << ( cuT( "\timport \"Meshes/" ) + ( options.subfolder.empty() ? castor::cuEmptyString : ( options.subfolder + cuT( "/" ) ) ) + options.name + cuT( ".cmsh\"\n" ) );
+
+						if ( auto skeleton = options.object.getSkeleton() )
+						{
+							options.meshes << ( cuT( "\tskeleton \"" ) + skeleton->getName() + cuT( "\"\n" ) );
+						}
+
 						options.meshes << ( cuT( "}\n" ) );
 
 						options.nodes << ( cuT( "\nscene_node \"Node_" ) + options.name + cuT( "\"\n" ) );
@@ -507,8 +534,23 @@ namespace castor3d::exporter
 			{
 				bool result = true;
 
-				if constexpr ( !SplitT )
+				if constexpr ( SplitT )
 				{
+					options.skeletons << ( cuT( "\nskeleton \"Skeleton_" ) + options.name + cuT( "\"\n" ) );
+					options.skeletons << ( cuT( "{\n" ) );
+					options.skeletons << ( cuT( "\timport \"Skeletons/" ) + ( options.subfolder.empty() ? castor::cuEmptyString : ( options.subfolder + cuT( "/" ) ) ) + options.name + cuT( ".cskl\"\n" ) );
+					options.skeletons << ( cuT( "}\n" ) );
+				}
+				else
+				{
+					if ( options.singleMesh )
+					{
+						options.skeletons << ( cuT( "\nskeleton \"Skeleton_" ) + options.name + cuT( "\"\n" ) );
+						options.skeletons << ( cuT( "{\n" ) );
+						options.skeletons << ( cuT( "\timport \"Skeletons/" ) + ( options.subfolder.empty() ? castor::cuEmptyString : ( options.subfolder + cuT( "/" ) ) ) + options.name + cuT( ".cskl\"\n" ) );
+						options.skeletons << ( cuT( "}\n" ) );
+					}
+
 					for ( auto & animation : options.object.getAnimations() )
 					{
 						if ( result )
@@ -701,13 +743,16 @@ namespace castor3d::exporter
 			{
 				std::set< castor3d::SamplerSPtr > samplers;
 
-				for ( auto & material : scene.getMaterialView() )
+				for ( auto & materialName : scene.getMaterialView() )
 				{
-					for ( auto & pass : *scene.tryFindMaterial( material ).lock() )
+					if ( auto material = scene.tryFindMaterial( materialName ).lock() )
 					{
-						for ( auto & unit : pass->getTextureUnits() )
+						for ( auto & pass : *material )
 						{
-							samplers.insert( unit->getSampler().lock() );
+							for ( auto & unit : pass->getTextureUnits() )
+							{
+								samplers.insert( unit->getSampler().lock() );
+							}
 						}
 					}
 				}
@@ -833,6 +878,7 @@ namespace castor3d::exporter
 			, castor::Path const & fileName
 			, castor::Path & folder
 			, castor::Path & filePath
+			, castor::Path & skeletonFolder
 			, castor::Path & meshFolder )
 		{
 			folder = fileName.getPath();
@@ -852,11 +898,18 @@ namespace castor3d::exporter
 				options.subfolder = dataSubfolder;
 			}
 
+			skeletonFolder = folder / cuT( "Skeletons" );
 			meshFolder = folder / cuT( "Meshes" );
 
 			if ( exportOptions.dataSubfolders )
 			{
+				skeletonFolder /= dataSubfolder;
 				meshFolder /= dataSubfolder;
+			}
+
+			if ( !castor::File::directoryExists( skeletonFolder ) )
+			{
+				castor::File::directoryCreate( skeletonFolder );
 			}
 
 			if ( !castor::File::directoryExists( meshFolder ) )
@@ -871,6 +924,7 @@ namespace castor3d::exporter
 				castor::File::directoryCreate( folder / cuT( "Helpers" ) );
 			}
 
+			options.skeletonsFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-Skeletons.cscn" ) );
 			options.meshesFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-Meshes.cscn" ) );
 			options.objectsFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-Objects.cscn" ) );
 			options.nodesFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-Nodes.cscn" ) );
@@ -892,6 +946,7 @@ namespace castor3d::exporter
 
 		bool finaliseExport( castor3d::Mesh const * singleMesh
 			, castor::TextWriter< castor3d::Scene >::Options const & options
+			, castor::StringStream const & skeletons
 			, castor::StringStream const & meshes
 			, castor::StringStream const & nodes
 			, castor::StringStream const & objects
@@ -899,9 +954,16 @@ namespace castor3d::exporter
 			, castor::Path const & folder
 			, castor::Path const & filePath )
 		{
-			castor::TextFile mshFile{ folder / options.meshesFile
+			castor::TextFile sklFile{ folder / options.skeletonsFile
 				, castor::File::OpenMode::eWrite };
-			auto result = mshFile.writeText( meshes.str() ) > 0;
+			auto result = sklFile.writeText( skeletons.str() ) > 0;
+
+			if ( result )
+			{
+				castor::TextFile mshFile{ folder / options.meshesFile
+					, castor::File::OpenMode::eWrite };
+				result = mshFile.writeText( meshes.str() ) > 0;
+			}
 
 			if ( result )
 			{
@@ -933,6 +995,7 @@ namespace castor3d::exporter
 					stream << "	ambient_light 1.0 1.0 1.0\n";
 					stream << "	background_colour 0.50000 0.50000 0.50000\n";
 					stream << "	include \"Helpers/" << name << "-Materials.cscn\"\n";
+					stream << "	include \"Helpers/" << name << "-Skeletons.cscn\"\n";
 					stream << "	include \"Helpers/" << name << "-Meshes.cscn\"\n";
 					stream << "	include \"Helpers/" << name << "-Nodes.cscn\"\n";
 					stream << "	include \"Helpers/" << name << "-Objects.cscn\"\n";
@@ -1002,8 +1065,7 @@ namespace castor3d::exporter
 				}
 				else
 				{
-					result = castor::TextWriter< Scene >( castor::cuEmptyString
-						, std::move( options ) )( scene, stream );
+					result = castor::TextWriter< Scene >{ castor::cuEmptyString, options }( scene, stream );
 				}
 
 				if ( result )
@@ -1032,11 +1094,13 @@ namespace castor3d::exporter
 	{
 		castor::Path folder;
 		castor::Path filePath;
+		castor::Path skeletonFolder;
 		castor::Path meshFolder;
 		auto options = prepareExport( m_options
 			, outputFolder
 			, folder
 			, filePath
+			, skeletonFolder
 			, meshFolder );
 		bool result = writeMaterials( folder
 			, filePath
@@ -1045,18 +1109,39 @@ namespace castor3d::exporter
 
 		if ( result )
 		{
+			castor::StringStream skeletons;
 			castor::StringStream meshes;
 			castor::StringStream nodes;
 			castor::StringStream objects;
+			skeletons << "// Skeletons\n";
 			meshes << "// Meshes\n";
 			nodes << "// Nodes\n";
 			objects << "// Objects\n";
+			auto skeleton = mesh.getSkeleton();
 
 			if ( m_options.splitPerMaterial )
 			{
+				if ( skeleton )
+				{
+					result = writeObjectT< true >( SkeletonWriterOptions{ m_options
+							, *skeleton
+							, scene.getGeometryCache()
+							, skeletons
+							, meshes
+							, nodes
+							, objects
+							, skeletonFolder
+							, skeleton->getName()
+							, options.subfolder
+							, outputName
+							, true }
+						, { nullptr, nullptr } );
+				}
+
 				result = writeObjectT< true >( MeshWriterOptions{ m_options
 						, mesh
 						, scene.getGeometryCache()
+						, skeletons
 						, meshes
 						, nodes
 						, objects
@@ -1069,9 +1154,27 @@ namespace castor3d::exporter
 			}
 			else
 			{
+				if ( skeleton )
+				{
+					result = writeObjectT< false >( SkeletonWriterOptions{ m_options
+							, *skeleton
+							, scene.getGeometryCache()
+							, skeletons
+							, meshes
+							, nodes
+							, objects
+							, skeletonFolder
+							, skeleton->getName()
+							, options.subfolder
+							, outputName
+							, true }
+						, { nullptr, nullptr } );
+				}
+
 				result = writeObjectT< false >( MeshWriterOptions{ m_options
 						, mesh
 						, scene.getGeometryCache()
+						, skeletons
 						, meshes
 						, nodes
 						, objects
@@ -1087,6 +1190,7 @@ namespace castor3d::exporter
 			{
 				result = finaliseExport( &mesh
 					, options
+					, skeletons
 					, meshes
 					, nodes
 					, objects
@@ -1104,11 +1208,13 @@ namespace castor3d::exporter
 	{
 		castor::Path folder;
 		castor::Path filePath;
+		castor::Path skeletonFolder;
 		castor::Path meshFolder;
 		auto options = prepareExport( m_options
 			, fileName
 			, folder
 			, filePath
+			, skeletonFolder
 			, meshFolder );
 		bool result = writeMaterials( folder
 			, filePath
@@ -1125,6 +1231,7 @@ namespace castor3d::exporter
 					, options );
 			}
 
+			castor::StringStream skeletons;
 			castor::StringStream meshes;
 			castor::StringStream nodes;
 			castor::StringStream objects;
@@ -1143,6 +1250,23 @@ namespace castor3d::exporter
 			{
 				auto lock( castor::makeUniqueLock( scene.getMeshCache() ) );
 
+				for ( auto & skelIt : scene.getSkeletonCache() )
+				{
+					result = writeObjectT< true >( SkeletonWriterOptions{ m_options
+							, *skelIt.second
+							, scene.getGeometryCache()
+							, skeletons
+							, meshes
+							, nodes
+							, objects
+							, skeletonFolder
+							, skelIt.first
+							, options.subfolder
+							, skelIt.first
+							, false }
+						, { nullptr, nullptr } );
+				}
+
 				for ( auto & meshIt : scene.getMeshCache() )
 				{
 					if ( result && meshIt.second->isSerialisable() )
@@ -1150,6 +1274,7 @@ namespace castor3d::exporter
 						result = writeObjectT< true >( MeshWriterOptions{ m_options
 								, *meshIt.second
 								, scene.getGeometryCache()
+								, skeletons
 								, meshes
 								, nodes
 								, objects
@@ -1164,11 +1289,20 @@ namespace castor3d::exporter
 			}
 			else
 			{
-				result = unsplitted::writeMeshes( folder
+				result = unsplitted::writeSkeletons( folder
 					, filePath
 					, scene
 					, options
-					, meshes );
+					, skeletons );
+
+				if ( result )
+				{
+					result = unsplitted::writeMeshes( folder
+						, filePath
+						, scene
+						, options
+						, meshes );
+				}
 
 				if ( result )
 				{
@@ -1183,6 +1317,23 @@ namespace castor3d::exporter
 				{
 					auto lock( castor::makeUniqueLock( scene.getMeshCache() ) );
 
+					for ( auto const & skelIt : scene.getSkeletonCache() )
+					{
+						result = writeObjectT< false >( SkeletonWriterOptions{ m_options
+								, *skelIt.second
+								, scene.getGeometryCache()
+								, skeletons
+								, meshes
+								, nodes
+								, objects
+								, skeletonFolder
+								, skelIt.first
+								, options.subfolder
+								, skelIt.first
+								, false }
+							, { nullptr, nullptr } );
+					}
+
 					for ( auto const & meshIt : scene.getMeshCache() )
 					{
 						if ( result && meshIt.second->isSerialisable() )
@@ -1190,6 +1341,7 @@ namespace castor3d::exporter
 							result = writeObjectT< false >( MeshWriterOptions{ m_options
 									, *meshIt.second
 									, scene.getGeometryCache()
+									, skeletons
 									, meshes
 									, nodes
 									, objects
@@ -1208,6 +1360,7 @@ namespace castor3d::exporter
 			{
 				result = finaliseExport( nullptr
 					, options
+					, skeletons
 					, meshes
 					, nodes
 					, objects

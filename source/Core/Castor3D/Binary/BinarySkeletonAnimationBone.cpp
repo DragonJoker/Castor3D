@@ -53,12 +53,14 @@ namespace castor3d
 						}
 						else
 						{
-							log::error << cuT( "Skeleton node with name " ) << name << cuT( " is not a bone" ) << std::endl;
+							result = false;
+							checkError( result, cuT( "Skeleton node with name " ) + name + cuT( " is not a bone" ) );
 						}
 					}
 					else
 					{
-						log::error << cuT( "Couldn't find bone " ) << name << cuT( " in skeleton" ) << std::endl;
+						result = false;
+						checkError( result, cuT( "Couldn't find bone " ) + name + cuT( " in skeleton" ) );
 					}
 				}
 

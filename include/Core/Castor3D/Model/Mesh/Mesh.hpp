@@ -151,7 +151,7 @@ namespace castor3d
 		 *\brief		Définit le squelette
 		 *\param[in]	skeleton	La nouvelle valeur
 		 */
-		C3D_API void setSkeleton( SkeletonSPtr skeleton );
+		C3D_API void setSkeleton( SkeletonRPtr skeleton );
 		/**
 		 *\~english
 		 *\brief		Creates an animation
@@ -236,7 +236,7 @@ namespace castor3d
 			return m_sphere;
 		}
 
-		SkeletonSPtr getSkeleton()const
+		SkeletonRPtr getSkeleton()const
 		{
 			return m_skeleton;
 		}
@@ -270,7 +270,7 @@ namespace castor3d
 		castor::BoundingBox m_box;
 		castor::BoundingSphere m_sphere;
 		SubmeshPtrArray m_submeshes;
-		SkeletonSPtr m_skeleton;
+		SkeletonRPtr m_skeleton{};
 		bool m_serialisable{ true };
 
 		friend class BinaryWriter< Mesh >;

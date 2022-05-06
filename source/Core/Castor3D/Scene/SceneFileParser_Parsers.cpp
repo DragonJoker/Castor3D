@@ -146,6 +146,30 @@ namespace castor3d
 						CU_ParsingError( cuT( "Malformed parameter -rescale=<float>." ) );
 					}
 				}
+				else if ( param.find( cuT( "prefix" ) ) == 0 )
+				{
+					auto eqIndex = param.find( cuT( '=' ) );
+
+					if ( eqIndex != castor::String::npos )
+					{
+						castor::String value = param.substr( eqIndex + 1 );
+
+						if ( value.size() > 2
+							&& value.front() == '\"'
+							&& value.back() == '\"' )
+						{
+							parameters.add( cuT( "prefix" ), value.substr( 1, value.size() - 2 ) );
+						}
+						else
+						{
+							CU_ParsingError( cuT( "Malformed parameter -prefix=\"name\"." ) );
+						}
+					}
+					else
+					{
+						CU_ParsingError( cuT( "Malformed parameter -prefix=\"name\"." ) );
+					}
+				}
 				else if ( param.find( cuT( "no_optimisations" ) ) == 0 )
 				{
 					parameters.add( cuT( "no_optimisations" ), true );
@@ -1484,8 +1508,7 @@ namespace castor3d
 				if ( !importer->import( *parsingContext.scene
 					, file
 					, parameters
-					, parsingContext.sceneImportConfig.textureRemaps
-					, true ) )
+					, parsingContext.sceneImportConfig.textureRemaps ) )
 				{
 					CU_ParsingError( cuT( "External scene Import failed" ) );
 				}
@@ -1529,6 +1552,29 @@ namespace castor3d
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eMesh )
+
+	CU_ImplementAttributeParser( parserSkeleton )
+	{
+		auto & parsingContext = getParserContext( context );
+		castor::String name;
+		params[0]->get( name );
+
+		if ( parsingContext.scene )
+		{
+			parsingContext.skeleton = parsingContext.scene->tryFindSkeleton( name );
+
+			if ( !parsingContext.skeleton )
+			{
+				parsingContext.skeleton = parsingContext.scene->addNewSkeleton( name
+					, *parsingContext.scene );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No scene initialised" ) );
+		}
+	}
+	CU_EndAttributePush( CSCNSection::eSkeleton )
 
 	CU_ImplementAttributeParser( parserDirectionalShadowCascades )
 	{
@@ -1638,7 +1684,7 @@ namespace castor3d
 			}
 			else
 			{
-				CU_ParsingError( cuT( "Material " ) + name + cuT( " does not exist" ) );
+				CU_ParsingError( cuT( "Material [" ) + name + cuT( "] does not exist" ) );
 			}
 		}
 	}
@@ -1823,7 +1869,7 @@ namespace castor3d
 			}
 			else
 			{
-				CU_ParsingError( cuT( "Node " ) + name + cuT( " does not exist" ) );
+				CU_ParsingError( cuT( "Node [" ) + name + cuT( "] does not exist" ) );
 			}
 		}
 	}
@@ -2439,7 +2485,7 @@ namespace castor3d
 			}
 			else
 			{
-				CU_ParsingError( cuT( "Node " ) + name + cuT( " does not exist" ) );
+				CU_ParsingError( cuT( "Node [" ) + name + cuT( "] does not exist" ) );
 			}
 		}
 	}
@@ -2598,7 +2644,7 @@ namespace castor3d
 			}
 			else
 			{
-				CU_ParsingError( cuT( "Node " ) + name + cuT( " does not exist" ) );
+				CU_ParsingError( cuT( "Node [" ) + name + cuT( "] does not exist" ) );
 			}
 		}
 		else
@@ -2632,7 +2678,7 @@ namespace castor3d
 				}
 				else
 				{
-					CU_ParsingError( cuT( "Material " ) + name + cuT( " does not exist" ) );
+					CU_ParsingError( cuT( "Material [" ) + name + cuT( "] does not exist" ) );
 				}
 			}
 			else
@@ -2736,7 +2782,7 @@ namespace castor3d
 				}
 				else
 				{
-					CU_ParsingError( cuT( "Material " ) + name + cuT( " does not exist" ) );
+					CU_ParsingError( cuT( "Material [" ) + name + cuT( "] does not exist" ) );
 				}
 			}
 			else
@@ -2752,28 +2798,134 @@ namespace castor3d
 	}
 	CU_EndAttributePop()
 
-	CU_ImplementAttributeParser( parserMeshType )
+	CU_ImplementAttributeParser( parserSkeletonImport )
 	{
 		auto & parsingContext = getParserContext( context );
-		castor::String type;
-		params[0]->get( type );
 
-		Parameters parameters;
-
-		if ( params.size() > 1 )
+		if ( !parsingContext.scene )
 		{
-			castor::String tmp;
-			parameters.parse( params[1]->get( tmp ) );
+			CU_ParsingError( cuT( "No scene initialised." ) );
 		}
-
-		if ( parsingContext.scene )
+		else if ( !parsingContext.skeleton )
 		{
-			auto & factory = parsingContext.scene->getEngine()->getMeshFactory();
-			factory.create( type )->generate( *parsingContext.mesh.lock(), parameters );
+			CU_ParsingError( cuT( "No Skeleton initialised." ) );
 		}
 		else
 		{
+			castor::Path path;
+			castor::Path pathFile = context.file.getPath() / params[0]->get( path );
+			Parameters parameters;
+			Engine * engine = parsingContext.parser->getEngine();
+			auto extension = castor::string::lowerCase( pathFile.getExtension() );
+
+			if ( !engine->getImporterFactory().isTypeRegistered( extension ) )
+			{
+				CU_ParsingError( cuT( "Importer for [" ) + extension + cuT( "] files is not registered, make sure you've got the matching plug-in installed." ) );
+			}
+			else
+			{
+				if ( !parsingContext.importer )
+				{
+					parsingContext.importer = engine->getImporterFactory().create( extension, *engine );
+				}
+
+				if ( !parsingContext.importer->import( *parsingContext.skeleton, pathFile, parameters ) )
+				{
+					CU_ParsingError( cuT( "Skeleton Import failed" ) );
+					parsingContext.skeleton = nullptr;
+				}
+			}
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserSkeletonAnimImport )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( !parsingContext.scene )
+		{
+			CU_ParsingError( cuT( "No scene initialised." ) );
+		}
+		else if ( !parsingContext.skeleton )
+		{
+			CU_ParsingError( cuT( "No Skeleton initialised." ) );
+		}
+		else
+		{
+			castor::Path path;
+			castor::Path pathFile = context.file.getPath() / params[0]->get( path );
+			Parameters parameters;
+			Engine * engine = parsingContext.parser->getEngine();
+			auto extension = castor::string::lowerCase( pathFile.getExtension() );
+
+			if ( !engine->getImporterFactory().isTypeRegistered( extension ) )
+			{
+				CU_ParsingError( cuT( "Importer for [" ) + extension + cuT( "] files is not registered, make sure you've got the matching plug-in installed." ) );
+			}
+			else
+			{
+				if ( !parsingContext.importer )
+				{
+					parsingContext.importer = engine->getImporterFactory().create( extension, *engine );
+				}
+
+				if ( !parsingContext.importer->importAnimations( *parsingContext.skeleton, pathFile, parameters ) )
+				{
+					CU_ParsingError( cuT( "Skeleton Animations Import failed" ) );
+				}
+			}
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserSkeletonEnd )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( !parsingContext.scene )
+		{
+			CU_ParsingError( cuT( "No Scene initialised." ) );
+		}
+		else if ( !parsingContext.skeleton )
+		{
+			CU_ParsingError( cuT( "No Skeleton initialised." ) );
+		}
+		else
+		{
+			parsingContext.importer.reset();
+			parsingContext.skeleton = nullptr;
+		}
+	}
+	CU_EndAttributePop()
+
+	CU_ImplementAttributeParser( parserMeshType )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( !parsingContext.scene )
+		{
 			CU_ParsingError( cuT( "No scene initialised" ) );
+		}
+		else if ( !parsingContext.mesh.lock() )
+		{
+			CU_ParsingError( cuT( "No Mesh initialised." ) );
+		}
+		else
+		{
+			castor::String type;
+			params[0]->get( type );
+
+			Parameters parameters;
+
+			if ( params.size() > 1 )
+			{
+				castor::String tmp;
+				parameters.parse( params[1]->get( tmp ) );
+			}
+
+			auto & factory = parsingContext.scene->getEngine()->getMeshFactory();
+			factory.create( type )->generate( *parsingContext.mesh.lock(), parameters );
 		}
 	}
 	CU_EndAttribute()
@@ -2800,11 +2952,7 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else
+		if ( auto mesh = parsingContext.mesh.lock() )
 		{
 			castor::Path path;
 			castor::Path pathFile = context.file.getPath() / params[0]->get( path );
@@ -2826,20 +2974,24 @@ namespace castor3d
 			}
 			else
 			{
-				bool secondary = true;
+				bool force = true;
 
 				if ( !parsingContext.importer )
 				{
 					parsingContext.importer = engine->getImporterFactory().create( extension, *engine );
-					secondary = false;
+					force = false;
 				}
 
-				if ( !parsingContext.importer->import( *parsingContext.mesh.lock(), pathFile, parameters, true, secondary ) )
+				if ( !parsingContext.importer->import( *mesh, pathFile, parameters, force ) )
 				{
 					CU_ParsingError( cuT( "Mesh Import failed" ) );
 					parsingContext.mesh.reset();
 				}
 			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No Mesh initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -2848,9 +3000,9 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( !parsingContext.scene )
+		if ( !parsingContext.mesh.lock() )
 		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
+			CU_ParsingError( cuT( "No Mesh initialised." ) );
 		}
 		else
 		{
@@ -2925,7 +3077,7 @@ namespace castor3d
 				auto importer = engine->getImporterFactory().create( extension, *engine );
 				Mesh mesh{ cuT( "MorphImport" ), *parsingContext.scene };
 
-				if ( !importer->import( mesh, pathFile, parameters, false, false ) )
+				if ( !importer->import( mesh, pathFile, parameters, false ) )
 				{
 					CU_ParsingError( cuT( "Mesh Import failed" ) );
 				}
@@ -2977,7 +3129,6 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserMeshDivide )
 	{
 		auto & parsingContext = getParserContext( context );
-		Engine * engine = parsingContext.parser->getEngine();
 
 		if ( !parsingContext.mesh.lock() )
 		{
@@ -2985,6 +3136,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
+			Engine * engine = parsingContext.parser->getEngine();
 			castor::String name;
 			uint16_t count;
 			params[0]->get( name );
@@ -3030,7 +3182,7 @@ namespace castor3d
 			}
 			else
 			{
-				CU_ParsingError( cuT( "Material " ) + name + cuT( " does not exist" ) );
+				CU_ParsingError( cuT( "Material [" ) + name + cuT( "] does not exist" ) );
 			}
 		}
 	}
@@ -3041,6 +3193,35 @@ namespace castor3d
 	}
 	CU_EndAttributePush( CSCNSection::eMeshDefaultMaterials )
 
+	CU_ImplementAttributeParser( parserMeshSkeleton )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( !parsingContext.scene )
+		{
+			CU_ParsingError( cuT( "No Scene initialised." ) );
+		}
+		else if ( auto mesh = parsingContext.mesh.lock() )
+		{
+			castor::String name;
+			auto skeleton = parsingContext.scene->findSkeleton( params[0]->get( name ) );
+
+			if ( skeleton )
+			{
+				mesh->setSkeleton( skeleton );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Skeleton [" ) + name + cuT( "] does not exist" ) );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No Mesh initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserMeshEnd )
 	{
 		auto & parsingContext = getParserContext( context );
@@ -3049,26 +3230,31 @@ namespace castor3d
 		{
 			CU_ParsingError( cuT( "No Scene initialised." ) );
 		}
-		else if ( !parsingContext.mesh.lock() )
-		{
-			CU_ParsingError( cuT( "No Mesh initialised." ) );
-		}
-		else
+		else if ( auto mesh = parsingContext.mesh.lock() )
 		{
 			if ( parsingContext.ownMesh )
 			{
-				parsingContext.scene->addMesh( parsingContext.mesh.lock()->getName()
+				parsingContext.scene->addMesh( mesh->getName()
 					, parsingContext.ownMesh
 					, true );
 			}
 
 			if ( parsingContext.geometry )
 			{
-				parsingContext.geometry->setMesh( parsingContext.mesh );
+				parsingContext.geometry->setMesh( mesh );
 			}
 
 			parsingContext.importer.reset();
 			parsingContext.mesh.reset();
+
+			for ( auto submesh : *mesh )
+			{
+				mesh->getScene()->getListener().postEvent( makeGpuInitialiseEvent( *submesh ) );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No Mesh initialised." ) );
 		}
 	}
 	CU_EndAttributePop()
@@ -3101,7 +3287,7 @@ namespace castor3d
 			}
 			else
 			{
-				CU_ParsingError( cuT( "Material " ) + name + cuT( " does not exist" ) );
+				CU_ParsingError( cuT( "Material [" ) + name + cuT( "] does not exist" ) );
 			}
 		}
 	}
@@ -4524,7 +4710,7 @@ namespace castor3d
 		}
 		else
 		{
-			CU_ParsingError( cuT( "Node " ) + name + cuT( " does not exist" ) );
+			CU_ParsingError( cuT( "Node [" ) + name + cuT( "] does not exist" ) );
 		}
 	}
 	CU_EndAttribute()
@@ -4688,7 +4874,7 @@ namespace castor3d
 			}
 			else
 			{
-				CU_ParsingError( cuT( "Node " ) + name + cuT( " does not exist" ) );
+				CU_ParsingError( cuT( "Node [" ) + name + cuT( "] does not exist" ) );
 			}
 		}
 		else
@@ -4762,7 +4948,7 @@ namespace castor3d
 			}
 			else
 			{
-				CU_ParsingError( cuT( "Material " ) + name + cuT( " does not exist" ) );
+				CU_ParsingError( cuT( "Material [" ) + name + cuT( "] does not exist" ) );
 			}
 		}
 		else

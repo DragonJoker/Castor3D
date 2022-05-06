@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "MeshModule.hpp"
 #include "Castor3D/Material/Texture/TextureModule.hpp"
 #include "Castor3D/Material/Pass/PassModule.hpp"
+#include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
@@ -33,11 +34,27 @@ namespace castor3d
 		C3D_API explicit MeshImporter( Engine & engine );
 		/**
 		 *\~english
+		 *\brief		Skeleton import Function.
+		 *\param[out]	skeleton	Receives the imported data.
+		 *\param[in]	pathFile	The location of the file to import.
+		 *\param[in]	parameters	Import configuration parameters.
+		 *\return		\p false if any problem occured.
+		 *\~french
+		 *\brief		Fonction d'import de Skeleton.
+		 *\param[out]	skeleton	Reçoit les données importées.
+		 *\param[in]	pathFile	Le chemin vers le fichier à importer.
+		 *\param[in]	parameters	Paramètres de configuration de l'import.
+		 *\return		\p false si un problème quelconque est survenu.
+		 */
+		C3D_API bool import( Skeleton & skeleton
+			, castor::Path const & pathFile
+			, Parameters const & parameters );
+		/**
+		 *\~english
 		 *\brief		Mesh import Function.
 		 *\param[out]	mesh		Receives the imported data.
 		 *\param[in]	pathFile	The location of the file to import.
 		 *\param[in]	parameters	Import configuration parameters.
-		 *\param[in]	initialise	Tells if the imported mesh must be initialised.
 		 *\param[in]	forceImport	Tells if the mesh needs to be imported even if it's already filled.
 		 *\return		\p false if any problem occured.
 		 *\~french
@@ -45,14 +62,12 @@ namespace castor3d
 		 *\param[out]	mesh		Reçoit les données importées.
 		 *\param[in]	pathFile	Le chemin vers le fichier à importer.
 		 *\param[in]	parameters	Paramètres de configuration de l'import.
-		 *\param[in]	initialise	Dit si le mesh importé doit être initialisé.
 		 *\param[in]	forceImport	Dit si le mesh importé doit être importé même s'il est déjà rempli.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
 		C3D_API bool import( Mesh & mesh
 			, castor::Path const & pathFile
 			, Parameters const & parameters
-			, bool initialise
 			, bool forceImport );
 		/**
 		 *\~english
@@ -61,7 +76,6 @@ namespace castor3d
 		 *\param[in]	pathFile		The location of the file to import.
 		 *\param[in]	parameters		Import configuration parameters.
 		 *\param[in]	textureRemaps	The imported textures remapping parameters.
-		 *\param[in]	initialise		Tells if the imported meshes must be initialised.
 		 *\return		\p false if any problem occured.
 		 *\~french
 		 *\brief		Fonction d'import de Scene.
@@ -69,14 +83,29 @@ namespace castor3d
 		 *\param[in]	pathFile		Le chemin vers le fichier à importer.
 		 *\param[in]	parameters		Paramètres de configuration de l'import.
 		 *\param[in]	textureRemaps	Les paramètres de reaffectation des textures importées.
-		 *\param[in]	initialise		Dit si les meshes importés doit être initialisé.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
 		C3D_API bool import( Scene & scene
 			, castor::Path const & pathFile
 			, Parameters const & parameters
-			, std::map< TextureFlag, TextureConfiguration > const & textureRemaps
-			, bool initialise );
+			, std::map< TextureFlag, TextureConfiguration > const & textureRemaps );
+		/**
+		 *\~english
+		 *\brief		Skeleton animations import Function.
+		 *\param[out]	skeleton	Receives the imported data.
+		 *\param[in]	pathFile	The location of the file to import.
+		 *\param[in]	parameters	Import configuration parameters.
+		 *\return		\p false if any problem occured.
+		 *\~french
+		 *\brief		Fonction d'import des animations de Skeleton.
+		 *\param[out]	skeleton	Reçoit les données importées.
+		 *\param[in]	pathFile	Le chemin vers le fichier à importer.
+		 *\param[in]	parameters	Paramètres de configuration de l'import.
+		 *\return		\p false si un problème quelconque est survenu.
+		 */
+		C3D_API bool importAnimations( Skeleton & skeleton
+			, castor::Path const & pathFile
+			, Parameters const & parameters );
 		/**
 		 *\~english
 		 *\brief		Mesh animations import Function.
@@ -255,6 +284,17 @@ namespace castor3d
 			, castor3d::TextureConfiguration & config )const;
 
 	protected:
+		/**
+		 *\~english
+		 *\brief		Skeleton import Function.
+		 *\param[out]	skeleton	Receives the imported data.
+		 *\return		\p false if any problem occured.
+		 *\~french
+		 *\brief		Fonction d'import de Skeleton.
+		 *\param[out]	skeleton	Reçoit les données importées.
+		 *\return		\p false si un problème quelconque est survenu.
+		 */
+		C3D_API virtual bool doImportSkeleton( Skeleton & skeleton ) = 0;
 		/**
 		 *\~english
 		 *\brief		Mesh import Function.

@@ -110,6 +110,7 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "fog_type" ), parserSceneFogType, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::fogTypes ) } );
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "fog_density" ), parserSceneFogDensity, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "particle_system" ), parserSceneParticleSystem, { makeParameter< ParameterType::eName >() } );
+			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "skeleton" ), parserSkeleton, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "mesh" ), parserMesh, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "directional_shadow_cascades" ), parserDirectionalShadowCascades, { makeParameter< ParameterType::eUInt32 >( castor::makeRange( 0u, DirectionalMaxCascadesCount ) ) } );
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "lpv_indirect_attenuation" ), parserLpvIndirectAttenuation, { makeParameter< ParameterType::eFloat >() } );
@@ -195,6 +196,10 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eObjectMaterials ), cuT( "material" ), parserObjectMaterialsMaterial, { makeParameter< ParameterType::eUInt16 >(), makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eObjectMaterials ), cuT( "}" ), parserObjectMaterialsEnd );
 
+			addParser( result, uint32_t( CSCNSection::eSkeleton ), cuT( "import" ), parserSkeletonImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
+			addParser( result, uint32_t( CSCNSection::eSkeleton ), cuT( "anim_import" ), parserSkeletonAnimImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
+			addParser( result, uint32_t( CSCNSection::eSkeleton ), cuT( "}" ), parserSkeletonEnd );
+
 			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "type" ), parserMeshType, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eText >() } );
 			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "submesh" ), parserMeshSubmesh );
 			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "import" ), parserMeshImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
@@ -203,6 +208,7 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "division" ), parserMeshDivide, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eUInt16 >() } );
 			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "default_material" ), parserMeshDefaultMaterial, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "default_materials" ), parserMeshDefaultMaterials );
+			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "skeleton" ), parserMeshSkeleton, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "}" ), parserMeshEnd );
 
 			addParser( result, uint32_t( CSCNSection::eMeshDefaultMaterials ), cuT( "material" ), parserMeshDefaultMaterialsMaterial, { makeParameter< ParameterType::eUInt16 >(), makeParameter< ParameterType::eName >() } );

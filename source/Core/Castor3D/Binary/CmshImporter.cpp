@@ -8,6 +8,7 @@
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 #include <CastorUtils/Data/BinaryFile.hpp>
 
@@ -35,7 +36,11 @@ namespace castor3d
 		}
 	}
 
-	castor::String const CmshImporter::Type = cuT( "cmsh" );
+	castor::String const CmshImporter::MeshType = cuT( "cmsh" );
+	castor::String const CmshImporter::MeshAnimType = cuT( "cmsa" );
+	castor::String const CmshImporter::SkeletonType = cuT( "cskl" );
+	castor::String const CmshImporter::SkeletonAnimType = cuT( "cska" );
+	castor::String const CmshImporter::NodeAnimType = cuT( "csna" );
 
 	CmshImporter::CmshImporter( Engine & engine )
 		: MeshImporter{ engine }
@@ -45,6 +50,38 @@ namespace castor3d
 	MeshImporterUPtr CmshImporter::create( Engine & engine )
 	{
 		return std::make_unique< CmshImporter >( engine );
+	}
+
+	bool CmshImporter::doImportSkeleton( Skeleton & skeleton )
+	{
+		castor::BinaryFile skelFile{ m_fileName, castor::File::OpenMode::eRead };
+		auto result = m_animsOnly
+			? m_animsOnly
+			: BinaryParser< Skeleton >{}.parse( skeleton, skelFile );
+
+		castor::PathArray files;
+		castor::File::listDirectoryFiles( m_fileName.getPath(), files );
+		auto skeletonName = m_fileName.getFileName();
+
+		for ( auto & animFileName : files )
+		{
+			if ( result
+				&& animFileName.getExtension() == SkeletonAnimType
+				&& animFileName.getFileName().find( skeletonName ) == 0u )
+			{
+				auto animName = binmshimp::cleanName( animFileName.getFileName().substr( skeletonName.size() ) );
+				auto animation = std::make_unique< SkeletonAnimation >( skeleton, animName );
+				castor::BinaryFile animFile{ animFileName, castor::File::OpenMode::eRead };
+				result = BinaryParser< SkeletonAnimation >{}.parse( *animation, animFile );
+
+				if ( result )
+				{
+					skeleton.addAnimation( std::move( animation ) );
+				}
+			}
+		}
+
+		return result;
 	}
 
 	bool CmshImporter::doImportMesh( Mesh & mesh )
@@ -60,42 +97,7 @@ namespace castor3d
 
 		for ( auto & fileName : files )
 		{
-			if ( fileName.getExtension() == "cskl"
-				&& fileName.getFileName() == meshName )
-			{
-				auto skeleton = m_animsOnly
-					? mesh.getSkeleton()
-					: std::make_shared< Skeleton >( *mesh.getScene() );
-				castor::BinaryFile skelFile{ m_fileName.getPath() / ( meshName + cuT( ".cskl" ) )
-					, castor::File::OpenMode::eRead };
-				result = m_animsOnly
-					? m_animsOnly
-					: BinaryParser< Skeleton >{}.parse( *skeleton, skelFile );
-
-				if ( result )
-				{
-					mesh.setSkeleton( skeleton );
-				}
-
-				for ( auto & animFileName : files )
-				{
-					if ( animFileName.getExtension() == "cska"
-						&& animFileName.getFileName().find( meshName ) == 0u )
-					{
-						auto animName = binmshimp::cleanName( animFileName.getFileName().substr( meshName.size() ) );
-						auto animation = std::make_unique< SkeletonAnimation >( *skeleton, animName );
-						castor::BinaryFile animFile{ animFileName, castor::File::OpenMode::eRead };
-						result = BinaryParser< SkeletonAnimation >{}.parse( *animation, animFile );
-
-						if ( result )
-						{
-							skeleton->addAnimation( std::move( animation ) );
-						}
-					}
-				}
-			}
-
-			if ( fileName.getExtension() == "cmsa"
+			if ( fileName.getExtension() == MeshAnimType
 				&& fileName.getFileName().find( meshName ) == 0u )
 			{
 				auto animName = binmshimp::cleanName( fileName.getFileName().substr( meshName.size() ) );

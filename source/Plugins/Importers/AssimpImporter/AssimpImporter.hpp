@@ -48,9 +48,16 @@ namespace c3d_assimp
 
 	private:
 		/**
+		 *\copydoc		castor3d::MeshImporter::doImportSkeleton
+		 */
+		bool doImportSkeleton( castor3d::Skeleton & skeleton )override;
+		/**
 		 *\copydoc		castor3d::MeshImporter::doImportMesh
 		 */
 		bool doImportMesh( castor3d::Mesh & mesh )override;
+		/**
+		 *\copydoc		castor3d::MeshImporter::doImportScene
+		 */
 		bool doImportScene( castor3d::Scene & scene )override;
 
 		aiScene const * doLoadScene();

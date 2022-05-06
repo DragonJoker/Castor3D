@@ -70,7 +70,7 @@ namespace castor3d
 		addPoints( vertices.data(), vertices.data() + vertices.size() );
 	}
 
-	inline SkeletonSPtr Submesh::getSkeleton()const
+	inline SkeletonRPtr Submesh::getSkeleton()const
 	{
 		return getParent().getSkeleton();
 	}

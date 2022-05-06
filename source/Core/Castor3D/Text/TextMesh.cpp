@@ -3,6 +3,7 @@
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Skeleton/Skeleton.hpp"
 
 namespace castor
 {
@@ -32,6 +33,11 @@ namespace castor
 				result = writeName( file, "import", "Meshes/" + object.getName() + ".cmsh" );
 			}
 
+			if ( auto skeleton = object.getSkeleton() )
+			{
+				result = result && writeName( file, "skeleton", skeleton->getName() );
+			}
+
 			auto it = std::find_if( object.begin()
 				, object.end()
 				, []( SubmeshSPtr lookup )
@@ -39,7 +45,7 @@ namespace castor
 					return lookup->getDefaultMaterial() != nullptr;
 				} );
 
-			if ( it != object.end() )
+			if ( result && it != object.end() )
 			{
 				if ( object.getSubmeshCount() == 1 )
 				{

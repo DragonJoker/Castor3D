@@ -85,7 +85,7 @@ namespace Testing
 
 			if ( result && File::fileExists( m_testDataFolder / ( name + cuT( ".cskl" ) ) ) )
 			{
-				auto skeleton = std::make_shared< Skeleton >( *src->getScene() );
+				auto skeleton = src->getScene()->addNewSkeleton( name, *src->getScene() );
 				BinaryFile sklfile{ m_testDataFolder / ( name + cuT( ".cskl" ) )
 					, File::OpenMode::eRead };
 				result = CT_CHECK( BinaryParser< Skeleton >().parse( *skeleton, sklfile ) );
@@ -137,7 +137,7 @@ namespace Testing
 
 			if ( result && File::fileExists( Path{ path.getFileName() + cuT( ".cskl" ) } ) )
 			{
-				auto skeleton = std::make_shared< Skeleton >( *dst->getScene() );
+				auto skeleton = dst->getScene()->addNewSkeleton( path.getFileName(), *dst->getScene() );
 				BinaryFile sklfile{ Path{ path.getFileName() + cuT( ".cskl" ) }
 					, File::OpenMode::eRead };
 				result = CT_CHECK( BinaryParser< Skeleton >().parse( *skeleton, sklfile ) );

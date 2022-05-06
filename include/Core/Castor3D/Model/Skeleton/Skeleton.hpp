@@ -13,10 +13,13 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationModule.hpp"
 
+#include <CastorUtils/Design/Named.hpp>
+
 namespace castor3d
 {
 	class Skeleton
-		: public Animable
+		: public castor::Named
+		, public Animable
 	{
 	public:
 		/**
@@ -34,12 +37,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
+		 *\param[in]	name	The skeleton name.
 		 *\param[in]	scene	The scene.
 		 *\~french
 		 *\brief		Constructeur.
+		 *\param[in]	name	Le nom du squelette.
 		 *\param[in]	scene	La scène.
 		 */
-		C3D_API explicit Skeleton( Scene & scene );
+		C3D_API Skeleton( castor::String name
+			, Scene & scene );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -141,6 +147,11 @@ namespace castor3d
 		SkeletonNodePtrArray const & getNodes()const
 		{
 			return m_nodes;
+		}
+
+		size_t getNodesCount()const
+		{
+			return m_nodes.size();
 		}
 
 		size_t getBonesCount()const

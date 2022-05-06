@@ -399,7 +399,7 @@ namespace Testing
 
 		if ( result )
 		{
-			result = CT_EQUAL( lhs.getNodes().size(), rhs.getNodes().size() );
+			result = CT_EQUAL( lhs.getNodesCount(), rhs.getNodesCount() );
 			auto itA = lhs.getNodes().begin();
 			auto const endItA = lhs.getNodes().end();
 			auto itB = rhs.getNodes().begin();

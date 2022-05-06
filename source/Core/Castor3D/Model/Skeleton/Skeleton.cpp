@@ -6,10 +6,17 @@
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, SkeletonCache )
+CU_ImplementCUSmartPtr( castor3d, Skeleton )
+
 namespace castor3d
 {
-	Skeleton::Skeleton( Scene & scene )
-		: Animable{ *scene.getEngine() }
+	const castor::String PtrCacheTraitsT< castor3d::Skeleton, castor::String >::Name = cuT( "Skeleton" );
+
+	Skeleton::Skeleton( castor::String name
+		, Scene & scene )
+		: castor::Named{ name }
+		, Animable{ *scene.getEngine() }
 		, m_scene{ &scene }
 		, m_globalInverse{ 1 }
 	{
@@ -22,7 +29,7 @@ namespace castor3d
 
 	SkeletonNode * Skeleton::createNode( castor::String name )
 	{
-		auto node = std::make_unique< SkeletonNode >( std::move( name ), *this );
+		auto node = castor::makeUnique< SkeletonNode >( std::move( name ), *this );
 		auto result = node.get();
 		m_nodes.emplace_back( std::move( node ) );
 		return result;
@@ -31,8 +38,8 @@ namespace castor3d
 	BoneNode * Skeleton::createBone( castor::String name
 		, castor::Matrix4x4f const & offset )
 	{
-		auto node = std::make_unique< BoneNode >( std::move( name ), *this, offset, uint32_t( m_bones.size() ) );
-		auto result = node.get();
+		auto node = castor::makeUniqueDerived< SkeletonNode, BoneNode >( std::move( name ), *this, offset, uint32_t( m_bones.size() ) );
+		auto result = &static_cast< BoneNode & >( *node );
 		m_nodes.emplace_back( std::move( node ) );
 		m_bones.emplace_back( result );
 		return result;
@@ -129,9 +136,10 @@ namespace castor3d
 
 	void Skeleton::computeContainers( Mesh & mesh )
 	{
-		auto it = m_boxes.emplace( &mesh, std::vector< castor::BoundingBox >{} ).first;
+		auto ires = m_boxes.emplace( &mesh, std::vector< castor::BoundingBox >{} );
+		auto it = ires.first;
 
-		if ( it == m_boxes.end() )
+		if ( ires.second )
 		{
 			auto & boxes = it->second;
 			boxes.reserve( m_bones.size() );
