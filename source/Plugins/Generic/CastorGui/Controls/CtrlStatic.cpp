@@ -55,12 +55,12 @@ namespace CastorGui
 	{
 		setBackgroundBorders( castor::Rectangle{} );
 		auto text = m_scene
-			? m_scene->getOverlayCache().add( cuT( "T_CtrlStatic_" ) + castor::string::toString( getId() )
+			? m_scene->addNewOverlay( cuT( "T_CtrlStatic_" ) + castor::string::toString( getId() )
 				, getEngine()
 				, castor3d::OverlayType::eText
 				, nullptr
 				, &getBackground()->getOverlay() ).lock()->getTextOverlay()
-			: getEngine().getOverlayCache().add( cuT( "T_CtrlStatic_" ) + castor::string::toString( getId() )
+			: getEngine().addNewOverlay( cuT( "T_CtrlStatic_" ) + castor::string::toString( getId() )
 				, getEngine()
 				, castor3d::OverlayType::eText
 				, nullptr

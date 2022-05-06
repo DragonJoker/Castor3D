@@ -245,55 +245,196 @@ namespace castor3d
 	//@}
 }
 
-#define DECLARE_CACHE_MEMBER( memberName, className )\
+#define DECLARE_CACHE_MEMBER_MIN( memberName, className )\
 	public:\
-		inline className##Cache & get##className##Cache()\
+		className##Cache & get##className##Cache()\
 		{\
 			return *m_##memberName##Cache;\
 		}\
-		inline className##Cache const & get##className##Cache()const\
+		className##Cache const & get##className##Cache()const\
 		{\
 			return *m_##memberName##Cache;\
 		}\
 	private:\
 		className##Cache##SPtr m_##memberName##Cache
 
-#define DECLARE_OBJECT_CACHE_MEMBER( memberName, className )\
+#define DECLARE_CACHE_MEMBER( memberName, className )\
 	public:\
-		inline className##Cache & get##className##Cache()\
+		template< typename ... ParametersT >\
+		className##Cache::ElementPtrT create##className( className##Cache::ElementKeyT const & key\
+			, ParametersT && ... parameters )const\
+		{\
+			return m_##memberName##Cache->create( key\
+				, std::forward< ParametersT >( parameters )... );\
+		}\
+		template< typename ... ParametersT >\
+		className##Cache::ElementObsT addNew##className( className##Cache::ElementKeyT const & key\
+			, ParametersT && ... parameters )\
+		{\
+			return m_##memberName##Cache->add( key\
+				, std::forward< ParametersT >( parameters )... );\
+		}\
+		className##Cache::ElementObsT add##className( className##Cache::ElementKeyT const & key\
+			, className##Cache::ElementPtrT & element\
+			, bool initialise = false )\
+		{\
+			return m_##memberName##Cache->add( key, element, initialise );\
+		}\
+		void remove##className( className##Cache::ElementKeyT const & key\
+			, bool cleanup = false )\
+		{\
+			m_##memberName##Cache->remove( key, cleanup );\
+		}\
+		className##Cache::ElementObsT find##className( className##Cache::ElementKeyT const & key )const\
+		{\
+			return m_##memberName##Cache->find( key );\
+		}\
+		bool has##className( className##Cache::ElementKeyT const & key )const\
+		{\
+			return m_##memberName##Cache->has( key );\
+		}\
+		className##Cache::ElementObsT tryFind##className( className##Cache::ElementKeyT const & key )const\
+		{\
+			return m_##memberName##Cache->tryFind( key );\
+		}\
+		DECLARE_CACHE_MEMBER_MIN( memberName, className )
+
+#define DECLARE_OBJECT_CACHE_MEMBER_MIN( memberName, className )\
+	public:\
+		className##Cache & get##className##Cache()\
 		{\
 			return *m_##memberName##Cache;\
 		}\
-		inline className##Cache const & get##className##Cache()const\
+		className##Cache const & get##className##Cache()const\
 		{\
 			return *m_##memberName##Cache;\
+		}\
+	public:\
+		template< typename ... ParametersT >\
+		className##Cache::ElementPtrT create##className( className##Cache::ElementKeyT const & key\
+			, ParametersT && ... parameters )const\
+		{\
+			return m_##memberName##Cache->create( key\
+				, std::forward< ParametersT >( parameters )... );\
+		}\
+		void remove##className( className##Cache::ElementKeyT const & key\
+			, bool cleanup = false )\
+		{\
+			m_##memberName##Cache->remove( key, cleanup );\
+		}\
+		className##Cache::ElementObsT find##className( className##Cache::ElementKeyT const & key )const\
+		{\
+			return m_##memberName##Cache->find( key );\
+		}\
+		bool has##className( className##Cache::ElementKeyT const & key )const\
+		{\
+			return m_##memberName##Cache->has( key );\
+		}\
+		className##Cache::ElementObsT tryFind##className( className##Cache::ElementKeyT const & key )const\
+		{\
+			return m_##memberName##Cache->tryFind( key );\
 		}\
 	private:\
 		castor::ConnectionT< castor::OnCacheChanged > m_on##className##Changed;\
 		className##Cache##SPtr m_##memberName##Cache
 
+#define DECLARE_OBJECT_CACHE_MEMBER( memberName, className )\
+	public:\
+		template< typename ... ParametersT >\
+		className##Cache::ElementObsT addNew##className( className##Cache::ElementKeyT const & key\
+			, ParametersT && ... parameters )\
+		{\
+			return m_##memberName##Cache->add( key\
+				, std::forward< ParametersT >( parameters )... );\
+		}\
+		className##Cache::ElementObsT add##className( className##Cache::ElementKeyT const & key\
+			, className##Cache::ElementPtrT & element\
+			, bool initialise = false )\
+		{\
+			return m_##memberName##Cache->add( key, element, initialise );\
+		}\
+		DECLARE_OBJECT_CACHE_MEMBER_MIN( memberName, className )
+
 #define DECLARE_CACHE_VIEW_MEMBER( memberName, className, eventType )\
 	public:\
-		inline castor3d::CacheViewT< className##Cache, eventType > & get##className##View()\
+		castor3d::CacheViewT< className##Cache, eventType > & get##className##View()\
 		{\
 			return *m_##memberName##CacheView;\
 		}\
-		inline castor3d::CacheViewT< className##Cache, eventType > const & get##className##View()const\
+		castor3d::CacheViewT< className##Cache, eventType > const & get##className##View()const\
 		{\
 			return *m_##memberName##CacheView;\
+		}\
+		bool has##className( className##Cache::ElementKeyT const & key )const\
+		{\
+			return m_##memberName##CacheView->has( key );\
+		}\
+		template< typename ... ParametersT >\
+		className##Cache::ElementObsT addNew##className( className##Cache::ElementKeyT const & key\
+			, ParametersT && ... parameters )\
+		{\
+			return m_##memberName##CacheView->add( key\
+				, std::forward< ParametersT >( parameters )... );\
+		}\
+		className##Cache::ElementObsT add##className( className##Cache::ElementKeyT const & key\
+			, className##Cache::ElementPtrT & element\
+			, bool initialise = false )\
+		{\
+			return m_##memberName##CacheView->add( key, element, initialise );\
+		}\
+		void remove##className( className##Cache::ElementKeyT const & key )\
+		{\
+			m_##memberName##CacheView->remove( key );\
+		}\
+		className##Cache::ElementObsT find##className( className##Cache::ElementKeyT const & key )const\
+		{\
+			return m_##memberName##CacheView->find( key );\
+		}\
+		className##Cache::ElementObsT tryFind##className( className##Cache::ElementKeyT const & key )const\
+		{\
+			return m_##memberName##CacheView->tryFind( key );\
 		}\
 	private:\
 		castor3d::CacheViewPtrT< className##Cache, eventType > m_##memberName##CacheView
 
 #define DECLARE_CU_CACHE_VIEW_MEMBER( memberName, className, eventType )\
 	public:\
-		inline castor3d::CacheViewT< castor::className##Cache, eventType > & get##className##View()\
+		castor3d::CacheViewT< castor::className##Cache, eventType > & get##className##View()\
 		{\
 			return *m_##memberName##CacheView;\
 		}\
-		inline castor3d::CacheViewT< castor::className##Cache, eventType > const & get##className##View()const\
+		castor3d::CacheViewT< castor::className##Cache, eventType > const & get##className##View()const\
 		{\
 			return *m_##memberName##CacheView;\
+		}\
+		bool has##className( castor::className##Cache::ElementKeyT const & key )const\
+		{\
+			return m_##memberName##CacheView->has( key );\
+		}\
+		template< typename ... ParametersT >\
+		castor::className##Cache::ElementObsT addNew##className( castor::className##Cache::ElementKeyT const & key\
+			, ParametersT && ... parameters )\
+		{\
+			return m_##memberName##CacheView->add( key\
+				, std::forward< ParametersT >( parameters )... );\
+		}\
+		castor::className##Cache::ElementObsT add##className( castor::className##Cache::ElementKeyT const & key\
+			, castor::className##Cache::ElementPtrT & element\
+			, bool initialise = false )\
+		{\
+			return m_##memberName##CacheView->add( key, element, initialise );\
+		}\
+		void remove##className( castor::className##Cache::ElementKeyT const & key )\
+		{\
+			m_##memberName##CacheView->remove( key );\
+		}\
+		castor::className##Cache::ElementObsT find##className( castor::className##Cache::ElementKeyT const & key )const\
+		{\
+			return m_##memberName##CacheView->find( key );\
+		}\
+		castor::className##Cache::ElementObsT tryFind##className( castor::className##Cache::ElementKeyT const & key )const\
+		{\
+			return m_##memberName##CacheView->tryFind( key );\
 		}\
 	private:\
 		castor3d::CacheViewPtrT< castor::className##Cache, eventType > m_##memberName##CacheView

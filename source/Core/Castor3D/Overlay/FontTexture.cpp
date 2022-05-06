@@ -18,7 +18,7 @@ namespace castor3d
 	{
 		if ( auto fnt = m_font.lock() )
 		{
-			if ( auto sampler = getEngine()->getSamplerCache().add( fnt->getName(), *getEngine() ).lock() )
+			if ( auto sampler = getEngine()->addNewSampler( fnt->getName(), *getEngine() ).lock() )
 			{
 				sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 				sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );

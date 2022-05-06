@@ -50,7 +50,7 @@ namespace Testing
 		Path path{ name + cuT( ".cmsh" ) };
 		Scene scene{ cuT( "TestScene" ), m_engine };
 
-		auto src = scene.getMeshCache().add( name, scene ).lock();
+		auto src = scene.addNewMesh( name, scene ).lock();
 		CT_REQUIRE( src != nullptr );
 		Parameters parameters;
 		parameters.add( cuT( "width" ), cuT( "1.0" ) );
@@ -76,7 +76,7 @@ namespace Testing
 		Path path{ name + cuT( ".cmsh" ) };
 		Scene scene{ cuT( "TestScene" ), m_engine };
 
-		auto src = scene.getMeshCache().add( name, scene ).lock();
+		auto src = scene.addNewMesh( name, scene ).lock();
 		CT_REQUIRE( src != nullptr );
 		{
 			BinaryFile mshfile{ m_testDataFolder / path, File::OpenMode::eRead };
@@ -128,7 +128,7 @@ namespace Testing
 			}
 		}
 
-		auto dst = scene.getMeshCache().add( name + cuT( "_imp" ), scene ).lock();
+		auto dst = scene.addNewMesh( name + cuT( "_imp" ), scene ).lock();
 		CT_REQUIRE( dst != nullptr );
 		{
 			BinaryFile mshfile{ path, File::OpenMode::eRead };

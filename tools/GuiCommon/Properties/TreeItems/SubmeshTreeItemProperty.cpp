@@ -66,8 +66,8 @@ namespace GuiCommon
 			, [this]( wxVariant const & var )
 			{
 				auto name = make_String( m_materials[size_t( var.GetLong() )] );
-				auto & cache = m_submesh.getOwner()->getScene()->getEngine()->getMaterialCache();
-				auto material = cache.find( name ).lock().get();
+				auto & engine = *m_submesh.getOwner()->getScene()->getEngine();
+				auto material = engine.findMaterial( name ).lock().get();
 
 				if ( material )
 				{

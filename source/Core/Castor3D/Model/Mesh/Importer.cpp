@@ -238,7 +238,7 @@ namespace castor3d
 
 			if ( needsTransform )
 			{
-				auto transformNode = scene.getSceneNodeCache().add( fileName.getFileName() + "TransformNode" ).lock();
+				auto transformNode = scene.addNewSceneNode( fileName.getFileName() + "TransformNode" ).lock();
 				transformNode->setScale( scale );
 				transformNode->setOrientation( orientation );
 				transformNode->attachTo( *scene.getObjectRootNode() );

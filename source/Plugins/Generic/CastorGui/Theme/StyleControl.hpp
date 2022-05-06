@@ -35,8 +35,8 @@ namespace CastorGui
 			: castor::Named{ name }
 			, m_engine{ engine }
 			, m_cursor{ cursor }
-			, m_backgroundMaterial{ getEngine().getMaterialCache().find( cuT( "Black" ) ).lock().get() }
-			, m_foregroundMaterial{ getEngine().getMaterialCache().find( cuT( "White" ) ).lock().get() }
+			, m_backgroundMaterial{ getEngine().findMaterial( cuT( "Black" ) ).lock().get() }
+			, m_foregroundMaterial{ getEngine().findMaterial( cuT( "White" ) ).lock().get() }
 		{
 		}
 

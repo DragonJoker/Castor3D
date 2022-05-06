@@ -26,6 +26,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
+#include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 #include "Castor3D/Miscellaneous/Version.hpp"
@@ -731,7 +732,7 @@ namespace castor3d
 		SamplerResPtr m_lightsSampler;
 		castor::ImageLoader m_imageLoader;
 		castor::ImageWriter m_imageWriter;
-		DECLARE_CACHE_MEMBER( shader, ShaderProgram );
+		DECLARE_CACHE_MEMBER_MIN( shader, ShaderProgram );
 		DECLARE_CACHE_MEMBER( sampler, Sampler );
 		DECLARE_CACHE_MEMBER( material, Material );
 		DECLARE_CACHE_MEMBER( plugin, Plugin );
@@ -742,8 +743,8 @@ namespace castor3d
 		std::map< castor::String, RenderWindow * > m_renderWindows;
 		std::map< RenderWindow const *, UserInputListenerSPtr > m_windowInputListeners;
 		UserInputListenerSPtr m_userInputListener;
-		DECLARE_CACHE_MEMBER( target, RenderTarget );
-		DECLARE_CACHE_MEMBER( texture, TextureUnit );
+		DECLARE_CACHE_MEMBER_MIN( target, RenderTarget );
+		DECLARE_CACHE_MEMBER_MIN( texture, TextureUnit );
 		castor::FontCache m_fontCache;
 		castor::ImageCache m_imageCache;
 		std::map< castor::String, castor::AdditionalParsers > m_additionalParsers;

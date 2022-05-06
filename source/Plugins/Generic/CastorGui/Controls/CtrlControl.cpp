@@ -49,12 +49,12 @@ namespace CastorGui
 		}
 
 		auto overlay = m_scene
-			? m_scene->getOverlayCache().add( name
+			? m_scene->addNewOverlay( name
 				, getEngine()
 				, castor3d::OverlayType::eBorderPanel
 				, nullptr
 				, parentOv ).lock()
-			: getEngine().getOverlayCache().add( name
+			: getEngine().addNewOverlay( name
 				, getEngine()
 				, castor3d::OverlayType::eBorderPanel
 				, nullptr

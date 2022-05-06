@@ -88,7 +88,7 @@ namespace castortd
 
 			if ( scene )
 			{
-				m_marker = scene->getSceneNodeCache().find( cuT( "MapMouse" ) ).lock();
+				m_marker = scene->findSceneNode( cuT( "MapMouse" ) ).lock();
 				m_marker->setVisible( false );
 
 				m_listener = m_renderWindow->getListener();

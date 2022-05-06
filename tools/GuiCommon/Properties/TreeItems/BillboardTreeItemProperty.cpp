@@ -32,8 +32,8 @@ namespace GuiCommon
 		addProperty( grid, PROPERTY_BILLBOARD_MATERIAL, getMaterialsList(), m_billboard.getMaterial()->getName()
 			, [this]( wxVariant const & var )
 			{
-				auto & cache = m_billboard.getParentScene().getEngine()->getMaterialCache();
-				auto material = cache.find( variantCast< castor::String >( var ) ).lock().get();
+				auto & engine = *m_billboard.getParentScene().getEngine();
+				auto material = engine.findMaterial( variantCast< castor::String >( var ) ).lock().get();
 
 				if ( material )
 				{

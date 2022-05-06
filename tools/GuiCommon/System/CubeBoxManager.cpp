@@ -30,7 +30,7 @@ namespace GuiCommon
 			, castor::RgbColour const & colour
 			, castor::String const & colourName )
 		{
-			auto result = scene.getMeshCache().add( name, scene );
+			auto result = scene.addNewMesh( name, scene );
 			result.lock()->setSerialisable( false );
 			auto submesh = result.lock()->createSubmesh();
 			static castor3d::InterleavedVertexArray const vertex
@@ -67,9 +67,9 @@ namespace GuiCommon
 			castor3d::MaterialResPtr material;
 			castor::String matName = cuT( "BBox_" ) + colourName;
 
-			if ( !scene.getEngine()->getMaterialCache().has( matName ) )
+			if ( !scene.getEngine()->hasMaterial( matName ) )
 			{
-				material = scene.getEngine()->getMaterialCache().add( matName
+				material = scene.getEngine()->addNewMaterial( matName
 					, *scene.getEngine()
 					, scene.getPassesType() );
 				auto pass = material.lock()->createPass();
@@ -79,7 +79,7 @@ namespace GuiCommon
 			}
 			else
 			{
-				material = scene.getEngine()->getMaterialCache().find( matName );
+				material = scene.getEngine()->findMaterial( matName );
 			}
 
 			submesh->setDefaultMaterial( material.lock().get() );
@@ -207,27 +207,27 @@ namespace GuiCommon
 		castor3d::SceneNodeSPtr result;
 		auto name = m_object->getName() + cuT( "-" ) + nameSpec;
 
-		if ( !m_scene.getSceneNodeCache().has( name ) )
+		if ( !m_scene.hasSceneNode( name ) )
 		{
-			result = m_scene.getSceneNodeCache().add( name ).lock();
+			result = m_scene.addNewSceneNode( name ).lock();
 			result->setSerialisable( false );
 		}
 		else
 		{
-			result = m_scene.getSceneNodeCache().find( name ).lock();
+			result = m_scene.findSceneNode( name ).lock();
 		}
 
 		castor3d::GeometrySPtr ownGeometry;
 		castor3d::GeometrySPtr geometry;
 
-		if ( !m_scene.getGeometryCache().has( name ) )
+		if ( !m_scene.hasGeometry( name ) )
 		{
 			ownGeometry = std::make_shared< castor3d::Geometry >( name, m_scene, *result, bbMesh );
 			geometry = ownGeometry;
 		}
 		else
 		{
-			geometry = m_scene.getGeometryCache().find( name ).lock();
+			geometry = m_scene.findGeometry( name ).lock();
 		}
 
 		geometry->setShadowCaster( false );
@@ -244,7 +244,7 @@ namespace GuiCommon
 
 		if ( ownGeometry )
 		{
-			m_scene.getGeometryCache().add( std::move( ownGeometry ) );
+			m_scene.addGeometry( std::move( ownGeometry ) );
 		}
 
 		return result;

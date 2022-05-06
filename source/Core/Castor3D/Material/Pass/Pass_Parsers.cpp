@@ -672,7 +672,7 @@ namespace castor3d
 			if ( !params.empty() )
 			{
 				castor::String name;
-				auto sampler = parsingContext.parser->getEngine()->getSamplerCache().find( params[0]->get( name ) );
+				auto sampler = parsingContext.parser->getEngine()->findSampler( params[0]->get( name ) );
 
 				if ( sampler.lock() )
 				{

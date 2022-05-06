@@ -312,7 +312,7 @@ namespace castor3d
 
 		static OverlayResPtr getOverlay( Scene const & scene, castor::String const & name )
 		{
-			return scene.getOverlayCache().tryFind( name );
+			return scene.tryFindOverlay( name );
 		}
 
 		static TextOverlaySPtr getTextOverlay( Scene const & scene, castor::String const & name )
@@ -360,7 +360,7 @@ namespace castor3d
 			, std::move( handle ) ) }
 		, m_queues{ rendwndw::getQueueFamily( *m_surface, m_device.queueFamilies ) }
 		, m_reservedQueue{ m_queues->getQueueSize() > 1 ? m_queues->reserveQueue() : nullptr }
-		, m_listener{ getEngine()->getFrameListenerCache().add( getName() + castor::string::toString( m_index ) ) }
+		, m_listener{ getEngine()->addNewFrameListener( getName() + castor::string::toString( m_index ) ) }
 		, m_size{ size }
 		, m_loading{ engine.isThreaded() }
 		, m_configUbo{ m_device.uboPool->getBuffer< Configuration >( 0u ) }
@@ -405,7 +405,7 @@ namespace castor3d
 		log::debug << "Destroyed render window " << m_index << std::endl;
 		auto & engine = *getEngine();
 		auto listener = getListener();
-		engine.getFrameListenerCache().remove( getName() + castor::string::toString( m_index ) );
+		engine.removeFrameListener( getName() + castor::string::toString( m_index ) );
 
 #if C3D_PersistLoadingScreen
 		if ( engine.isThreaded() )
@@ -917,7 +917,7 @@ namespace castor3d
 			return nullptr;
 		}
 
-		auto geometry = sel->getScene()->getGeometryCache().find( sel->getName() );
+		auto geometry = sel->getScene()->findGeometry( sel->getName() );
 		return geometry.lock();
 	}
 

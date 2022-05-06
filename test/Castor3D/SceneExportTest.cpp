@@ -52,7 +52,7 @@ namespace Testing
 			auto & engine = *scene->getEngine();
 			scene->cleanup();
 			engine.getRenderLoop().renderSyncFrame();
-			engine.getSceneCache().remove( scene->getName() );
+			engine.removeScene( scene->getName() );
 		}
 	}
 

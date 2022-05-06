@@ -48,8 +48,8 @@ namespace GuiCommon
 				, [this]( wxVariant const & var )
 				{
 					castor3d::OverlayCategorySPtr ov = getOverlay();
-					auto & cache = ov->getOverlay().getEngine()->getMaterialCache();
-					auto material = cache.find( variantCast< castor::String >( var ) ).lock().get();
+					auto & engine = *ov->getOverlay().getEngine();
+					auto material = engine.findMaterial( variantCast< castor::String >( var ) ).lock().get();
 
 					if ( material )
 					{
@@ -106,8 +106,8 @@ namespace GuiCommon
 				{
 					castor3d::BorderPanelOverlaySPtr ov = std::static_pointer_cast< castor3d::BorderPanelOverlay >( getOverlay() );
 					CU_Require( ov->getType() == castor3d::OverlayType::eBorderPanel );
-					auto & cache = ov->getOverlay().getEngine()->getMaterialCache();
-					auto material = cache.find( variantCast< castor::String >( var ) ).lock().get();
+					auto & engine = *ov->getOverlay().getEngine();
+					auto material = engine.findMaterial( variantCast< castor::String >( var ) ).lock().get();
 
 					if ( material )
 					{
@@ -124,8 +124,8 @@ namespace GuiCommon
 				{
 					castor3d::BorderPanelOverlaySPtr ov = std::static_pointer_cast< castor3d::BorderPanelOverlay >( getOverlay() );
 					CU_Require( ov->getType() == castor3d::OverlayType::eBorderPanel );
-					auto & cache = ov->getOverlay().getEngine()->getMaterialCache();
-					auto material = cache.find( variantCast< castor::String >( var ) ).lock().get();
+					auto & engine = *ov->getOverlay().getEngine();
+					auto material = engine.findMaterial( variantCast< castor::String >( var ) ).lock().get();
 
 					if ( material )
 					{

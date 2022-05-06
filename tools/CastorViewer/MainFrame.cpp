@@ -518,7 +518,7 @@ namespace CastorViewer
 			}
 
 			engine->getRenderLoop().cleanup();
-			engine->getSceneCache().remove( m_mainScene->getName() );
+			engine->removeScene( m_mainScene->getName() );
 			castor::Logger::logDebug( cuT( "MainFrame::doCleanupScene - Scene related objects unloaded." ) );
 
 			if ( engine->isThreaded() )

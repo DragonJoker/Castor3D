@@ -45,11 +45,11 @@ namespace castor3d
 		{
 			m_initialised = doInitialise( device );
 			castor::String const name = cuT( "Skybox" );
-			auto sampler = getEngine()->getSamplerCache().tryFind( name );
+			auto sampler = getEngine()->tryFindSampler( name );
 
 			if ( !sampler.lock() )
 			{
-				auto created = getEngine()->getSamplerCache().create( name, *getEngine() );
+				auto created = getEngine()->createSampler( name, *getEngine() );
 				created->setMinFilter( VK_FILTER_LINEAR );
 				created->setMagFilter( VK_FILTER_LINEAR );
 				created->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
@@ -57,7 +57,7 @@ namespace castor3d
 				created->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 				created->setMinLod( 0.0f );
 				created->setMaxLod( float( m_texture->getMipmapCount() - 1u ) );
-				sampler = getEngine()->getSamplerCache().add( name, created, false );
+				sampler = getEngine()->addSampler( name, created, false );
 
 				if ( m_texture->getMipmapCount() > 1u )
 				{
