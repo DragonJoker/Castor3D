@@ -67,6 +67,7 @@ namespace c3d_assimp
 		castor::Path m_fileName;
 		bool m_needsAnimsReparse{};
 		bool m_replaceInverseTransforms{};
+		std::map< uint32_t, aiNode * > m_meshesNodes;
 		std::map< castor::String, BoneData > m_bonesNodes;
 		std::map< castor::String, castor3d::SkeletonSPtr > m_skeletons;
 		std::map< castor::String, castor3d::SkeletonSPtr > m_meshSkeletons;
