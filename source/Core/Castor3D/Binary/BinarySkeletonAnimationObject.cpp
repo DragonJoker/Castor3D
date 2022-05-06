@@ -48,7 +48,7 @@ namespace castor3d
 
 	bool BinaryWriter< SkeletonAnimationObject >::doWrite( SkeletonAnimationObject const & obj )
 	{
-		bool result = doWriteChunk( obj.m_nodeTransform, ChunkType::eMovingTransform, m_chunk );
+		bool result = true;
 
 		for ( auto const & moving : obj.m_children )
 		{
@@ -84,10 +84,6 @@ namespace castor3d
 		{
 			switch ( chunk.getChunkType() )
 			{
-			case ChunkType::eMovingTransform:
-				result = doParseChunk( obj.m_nodeTransform, chunk );
-				checkError( result, "Couldn't parse transform." );
-				break;
 			case ChunkType::eSkeletonAnimationBone:
 				if ( m_fileVersion > Version{ 1, 5, 0 } )
 				{
@@ -212,6 +208,8 @@ namespace castor3d
 		{
 			switch ( chunk.getChunkType() )
 			{
+			case ChunkType::eMovingTransform:
+				break;
 			case ChunkType::eSkeletonAnimationBone:
 				if ( m_fileVersion <= Version{ 1, 5, 0 } )
 				{
