@@ -351,7 +351,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline SkeletonSPtr getSkeleton()const;
+		inline SkeletonRPtr getSkeleton()const;
 		inline InterleavedVertex const & operator[]( uint32_t index )const;
 		inline InterleavedVertex & operator[]( uint32_t index );
 		inline InterleavedVertex const & getPoint( uint32_t index )const;

@@ -5,6 +5,7 @@
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 namespace castor3d
 {
@@ -31,8 +32,6 @@ namespace castor3d
 	{
 		bool result = true;
 		SubmeshSPtr submesh;
-		SkeletonSPtr skeleton;
-		castor::String name;
 		BinaryChunk chunk;
 
 		while ( result && doGetSubChunk( chunk ) )
@@ -68,8 +67,7 @@ namespace castor3d
 	{
 		bool result = true;
 		SubmeshSPtr submesh;
-		SkeletonSPtr skeleton;
-		castor::String name;
+		SkeletonRPtr skeleton;
 		BinaryChunk chunk;
 
 		while ( result && doGetSubChunk( chunk ) )
@@ -77,7 +75,7 @@ namespace castor3d
 			switch ( chunk.getChunkType() )
 			{
 			case ChunkType::eSkeleton:
-				skeleton = std::make_shared< Skeleton >( *obj.getScene() );
+				skeleton = obj.getScene()->addNewSkeleton( obj.getName(), *obj.getScene() );
 				result = createBinaryParser< Skeleton >().parse( *skeleton, chunk );
 				checkError( result, "Couldn't parse skeleton." );
 
@@ -99,7 +97,6 @@ namespace castor3d
 	bool BinaryParser< Mesh >::doParse_v1_4( Mesh & obj )
 	{
 		bool result = true;
-		castor::String name;
 		BinaryChunk chunk;
 
 		while ( result && doGetSubChunk( chunk ) )
@@ -107,9 +104,7 @@ namespace castor3d
 			switch ( chunk.getChunkType() )
 			{
 			case ChunkType::eName:
-				// Name is parsed then ignored, since it's now set by the scene file
-				result = doParseChunk( name, chunk );
-				checkError( result, "Couldn't parse name." );
+				// Name is ignored, since it's now set by the scene file
 				break;
 
 			default:

@@ -473,7 +473,7 @@ namespace c3d_assimp
 	{
 		bool create = true;
 		castor3d::SubmeshSPtr submesh;
-		castor3d::SkeletonSPtr skeleton;
+		castor3d::SkeletonRPtr skeleton{};
 		MeshIndices result;
 
 		for ( auto aiMesh : aiMeshes )
@@ -511,7 +511,7 @@ namespace c3d_assimp
 
 	bool MeshesImporter::doProcessMesh( castor3d::Scene & scene
 		, castor3d::Mesh & mesh
-		, castor3d::SkeletonSPtr skeleton
+		, castor3d::SkeletonRPtr skeleton
 		, aiMesh const & aiMesh
 		, uint32_t aiMeshIndex
 		, aiScene const & aiScene

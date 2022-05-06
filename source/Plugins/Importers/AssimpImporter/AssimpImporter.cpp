@@ -5,6 +5,7 @@
 
 #include <Castor3D/Miscellaneous/Logger.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
+#include <Castor3D/Model/Skeleton/Skeleton.hpp>
 
 namespace c3d_assimp
 {
@@ -22,6 +23,25 @@ namespace c3d_assimp
 	castor3d::MeshImporterUPtr AssimpImporter::create( castor3d::Engine & engine )
 	{
 		return std::make_unique< AssimpImporter >( engine );
+	}
+
+	bool AssimpImporter::doImportSkeleton( castor3d::Skeleton & skeleton )
+	{
+		bool result{ false };
+
+		if ( auto aiScene = doLoadScene() )
+		{
+			if ( aiScene->HasMeshes() )
+			{
+				m_skeletonsImp.import( m_fileName
+					, *aiScene
+					, *skeleton.getScene()
+					, !m_animsOnly );
+				result = true;
+			}
+		}
+
+		return result;
 	}
 
 	bool AssimpImporter::doImportMesh( castor3d::Mesh & mesh )

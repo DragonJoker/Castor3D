@@ -5,6 +5,8 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, BoneNode )
+
 namespace castor3d
 {
 	BoneNode::BoneNode( castor::String name

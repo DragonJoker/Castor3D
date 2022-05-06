@@ -337,7 +337,7 @@ int main( int argc, char * argv[] )
 			}
 			else if ( extension == cuT( "cskl" ) )
 			{
-				castor3d::Skeleton skeleton{ scene };
+				castor3d::Skeleton skeleton{ name, scene };
 
 				if ( doParseObject( device, inputPath, skeleton ) )
 				{

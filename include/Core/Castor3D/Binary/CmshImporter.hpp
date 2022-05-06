@@ -35,6 +35,10 @@ namespace castor3d
 
 	protected:
 		/**
+		 *\copydoc		castor3d::MeshImporter::doImportSkeleton
+		 */
+		C3D_API bool doImportSkeleton( Skeleton & skeleton )override;
+		/**
 		 *\copydoc		castor3d::MeshImporter::doImportMesh
 		 */
 		C3D_API bool doImportMesh( Mesh & mesh )override;
@@ -47,7 +51,11 @@ namespace castor3d
 		}
 
 	public:
-		static castor::String const Type;
+		static castor::String const MeshType;
+		static castor::String const MeshAnimType;
+		static castor::String const SkeletonType;
+		static castor::String const SkeletonAnimType;
+		static castor::String const NodeAnimType;
 	};
 }
 

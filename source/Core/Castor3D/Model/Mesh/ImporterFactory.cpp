@@ -10,7 +10,11 @@ namespace castor3d
 	MeshImporterFactory::MeshImporterFactory()
 		: Factory< MeshImporter, castor::String, MeshImporterUPtr, std::function< MeshImporterUPtr( Engine & ) > >{}
 	{
-		registerType( CmshImporter::Type, CmshImporter::create );
+		registerType( CmshImporter::MeshType, CmshImporter::create );
+		registerType( CmshImporter::MeshAnimType, CmshImporter::create );
+		registerType( CmshImporter::SkeletonType, CmshImporter::create );
+		registerType( CmshImporter::SkeletonAnimType, CmshImporter::create );
+		registerType( CmshImporter::NodeAnimType, CmshImporter::create );
 	}
 
 	MeshImporterFactory::~MeshImporterFactory()

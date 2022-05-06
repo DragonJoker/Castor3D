@@ -16,6 +16,7 @@
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationBone.hpp>
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationNode.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>
+#include <Castor3D/Scene/Scene.hpp>
 
 #include <CastorUtils/Data/Path.hpp>
 #include <CastorUtils/Design/ArrayView.hpp>
@@ -289,7 +290,7 @@ namespace c3d_assimp
 		return m_bonesNodes.find( makeString( aiNode.mName ) ) != m_bonesNodes.end();
 	}
 
-	castor3d::SkeletonSPtr SkeletonImporter::getSkeleton( aiMesh const & aiMesh
+	castor3d::SkeletonRPtr SkeletonImporter::getSkeleton( aiMesh const & aiMesh
 		, uint32_t aiMeshIndex )const
 	{
 		auto it = m_meshSkeletons.find( makeString( aiMesh.mName ) + "_" + castor::string::toString( aiMeshIndex ) );
@@ -320,7 +321,7 @@ namespace c3d_assimp
 				auto preRootNode = rootNode->mParent
 					? rootNode->mParent
 					: rootNode;
-				castor3d::SkeletonSPtr skeleton;
+				castor3d::SkeletonRPtr skeleton;
 				auto nodeName = makeString( preRootNode->mName );
 				auto it = m_skeletons.find( nodeName );
 
@@ -384,7 +385,7 @@ namespace c3d_assimp
 				{
 					it = m_skeletons.emplace( nodeName, nullptr ).first;
 					castor3d::log::info << cuT( "  Skeleton found" ) << std::endl;
-					it->second = std::make_shared< castor3d::Skeleton >( scene );
+					it->second = scene.addNewSkeleton( normalizeName( m_importer.getInternalName( rootNode->mName ) ), scene );
 					skeleton = it->second;
 					skeleton->setGlobalInverseTransform( makeMatrix4x4f( rootNode->mTransformation ).getInverse() );
 					skeletons::processSkeletonNodes( m_importer

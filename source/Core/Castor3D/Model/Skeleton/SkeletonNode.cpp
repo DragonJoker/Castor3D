@@ -2,6 +2,8 @@
 
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, SkeletonNode )
+
 namespace castor3d
 {
 	SkeletonNode::SkeletonNode( SkeletonNodeType type

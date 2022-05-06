@@ -313,7 +313,7 @@ int main( int argc, char * argv[] )
 						mesh = scene.addNewMesh( name, scene ).lock().get();
 						auto importer = engine.getImporterFactory().create( extension, engine );
 
-						if ( !importer->import( *mesh, path, castor3d::Parameters{}, true, false ) )
+						if ( !importer->import( *mesh, path, castor3d::Parameters{}, false ) )
 						{
 							castor::Logger::logError( castor::makeStringStream() << "Mesh Import failed" );
 							scene.removeMesh( name );
