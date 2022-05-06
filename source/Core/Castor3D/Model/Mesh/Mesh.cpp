@@ -136,7 +136,7 @@ namespace castor3d
 		}
 	}
 
-	void Mesh::setSkeleton( SkeletonSPtr skeleton )
+	void Mesh::setSkeleton( SkeletonRPtr skeleton )
 	{
 		m_skeleton = skeleton;
 		m_skeleton->computeContainers( *this );

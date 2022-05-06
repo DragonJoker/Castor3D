@@ -12,6 +12,7 @@
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -79,15 +80,39 @@ namespace castor3d
 	{
 	}
 
+	bool MeshImporter::import( Skeleton & skeleton
+		, castor::Path const & pathFile
+		, Parameters const & parameters )
+	{
+		m_fileName = pathFile;
+		m_filePath = m_fileName.getPath();
+		m_parameters = parameters;
+		m_animsOnly = false;
+		bool result = true;
+
+		if ( skeleton.getNodes().empty() )
+		{
+			result = doImportSkeleton( skeleton );
+
+			if ( result )
+			{
+				log::info << "Loaded skeleton [" << skeleton.getName() << "]"
+					<< " " << skeleton.getNodesCount() << " Node(s)"
+					<< ", " << skeleton.getBonesCount() << " Bones(s)" << std::endl;
+			}
+		}
+
+		return result;
+	}
+
 	bool MeshImporter::import( Mesh & mesh
-		, castor::Path const & fileName
+		, castor::Path const & pathFile
 		, Parameters const & parameters
-		, bool initialise
 		, bool forceImport )
 	{
 		bool splitSubmeshes = false;
 		m_parameters.get( cuT( "split_mesh" ), splitSubmeshes );
-		m_fileName = fileName;
+		m_fileName = pathFile;
 		m_filePath = m_fileName.getPath();
 		m_parameters = parameters;
 		m_animsOnly = false;
@@ -97,7 +122,7 @@ namespace castor3d
 		{
 			result = doImportMesh( mesh );
 
-			if ( result && initialise )
+			if ( result )
 			{
 				float value = 1.0f;
 				castor::Point3f scale{ 1.0f, 1.0f, 1.0f };
@@ -163,11 +188,6 @@ namespace castor3d
 					<< " AABB (" << print( mesh.getBoundingBox() ) << ")"
 					<< ", " << mesh.getVertexCount() << " vertices"
 					<< ", " << mesh.getSubmeshCount() << " submeshes" << std::endl;
-
-				for ( auto submesh : mesh )
-				{
-					mesh.getScene()->getListener().postEvent( makeGpuInitialiseEvent( *submesh ) );
-				}
 			}
 		}
 		else
@@ -182,19 +202,18 @@ namespace castor3d
 	}
 
 	bool MeshImporter::import( Scene & scene
-		, castor::Path const & fileName
+		, castor::Path const & pathFile
 		, Parameters const & parameters
-		, std::map< TextureFlag, TextureConfiguration > const & textureRemaps
-		, bool initialise )
+		, std::map< TextureFlag, TextureConfiguration > const & textureRemaps )
 	{
 		m_textureRemaps = textureRemaps;
-		m_fileName = fileName;
+		m_fileName = pathFile;
 		m_filePath = m_fileName.getPath();
 		m_parameters = parameters;
 		m_animsOnly = false;
 		bool result = doImportScene( scene );
 
-		if ( result && initialise )
+		if ( result )
 		{
 			float value = 1.0f;
 			castor::Point3f scale{ 1.0f, 1.0f, 1.0f };
@@ -238,7 +257,7 @@ namespace castor3d
 
 			if ( needsTransform )
 			{
-				auto transformNode = scene.addNewSceneNode( fileName.getFileName() + "TransformNode" ).lock();
+				auto transformNode = scene.addNewSceneNode( pathFile.getFileName() + "TransformNode" ).lock();
 				transformNode->setScale( scale );
 				transformNode->setOrientation( orientation );
 				transformNode->attachTo( *scene.getObjectRootNode() );
@@ -266,11 +285,22 @@ namespace castor3d
 		return result;
 	}
 
-	bool MeshImporter::importAnimations( Mesh & mesh
-		, castor::Path const & fileName
+	bool MeshImporter::importAnimations( Skeleton & skeleton
+		, castor::Path const & pathFile
 		, Parameters const & parameters )
 	{
-		m_fileName = fileName;
+		m_fileName = pathFile;
+		m_filePath = m_fileName.getPath();
+		m_parameters = parameters;
+		m_animsOnly = true;
+		return doImportSkeleton( skeleton );
+	}
+
+	bool MeshImporter::importAnimations( Mesh & mesh
+		, castor::Path const & pathFile
+		, Parameters const & parameters )
+	{
+		m_fileName = pathFile;
 		m_filePath = m_fileName.getPath();
 		m_parameters = parameters;
 		m_animsOnly = true;
@@ -278,10 +308,10 @@ namespace castor3d
 	}
 
 	bool MeshImporter::importAnimations( Scene & scene
-		, castor::Path const & fileName
+		, castor::Path const & pathFile
 		, Parameters const & parameters )
 	{
-		m_fileName = fileName;
+		m_fileName = pathFile;
 		m_filePath = m_fileName.getPath();
 		m_parameters = parameters;
 		m_animsOnly = true;

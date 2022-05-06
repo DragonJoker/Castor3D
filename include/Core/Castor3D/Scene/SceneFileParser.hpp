@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimationModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
+#include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
@@ -83,6 +84,7 @@ namespace castor3d
 		eVoxelConeTracing = CU_MakeSectionName( 'V', 'C', 'T', 'C' ),
 		eTextureTransform = CU_MakeSectionName( 'T', 'X', 'T', 'R' ),
 		eSceneImport = CU_MakeSectionName( 'I', 'M', 'P', 'T' ),
+		eSkeleton = CU_MakeSectionName( 'S', 'K', 'E', 'L' ),
 	};
 
 	class SceneFileContext
@@ -130,6 +132,7 @@ namespace castor3d
 		bool inWindow{};
 		SceneNodeSPtr sceneNode{};
 		GeometrySPtr geometry{};
+		SkeletonRPtr skeleton{};
 		MeshResPtr mesh{};
 		MeshRes ownMesh{};
 		SubmeshSPtr submesh{};

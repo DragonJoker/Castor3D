@@ -19,6 +19,7 @@ namespace castor
 		{
 			Options( Path prootFolder = {}
 				, Path pmaterialsFile = {}
+				, Path pskeletonsFile = {}
 				, Path pmeshesFile = {}
 				, Path pnodesFile = {}
 				, Path pobjectsFile = {}
@@ -27,6 +28,7 @@ namespace castor
 				, float pscale = 1.0f )
 				: rootFolder{ std::move( prootFolder ) }
 				, materialsFile{ std::move( pmaterialsFile ) }
+				, skeletonsFile{ std::move( pskeletonsFile ) }
 				, meshesFile{ std::move( pmeshesFile ) }
 				, nodesFile{ std::move( pnodesFile ) }
 				, objectsFile{ std::move( pobjectsFile ) }
@@ -38,6 +40,7 @@ namespace castor
 
 			Path rootFolder;
 			Path materialsFile;
+			Path skeletonsFile;
 			Path meshesFile;
 			Path nodesFile;
 			Path objectsFile;

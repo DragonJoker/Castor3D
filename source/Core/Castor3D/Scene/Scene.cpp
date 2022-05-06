@@ -167,6 +167,10 @@ namespace castor3d
 			, CpuEventInitialiserT< MeshCache >{ getListener() }
 			, CpuEventCleanerT< MeshCache >{ getListener() }
 			, castor::ResourceMergerT< MeshCache >{ getName() } );
+		m_skeletonCache = castor::makeCache< Skeleton, castor::String, SkeletonCacheTraits >( getLogger( engine )
+			, castor::DummyFunctorT< SkeletonCache >{}
+			, castor::DummyFunctorT< SkeletonCache >{}
+			, castor::ResourceMergerT< SkeletonCache >{ getName() } );
 
 		m_materialCacheView = makeCacheView< EventType::ePreRender >( getName()
 			, getEngine()->getMaterialCache()

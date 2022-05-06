@@ -74,7 +74,7 @@ namespace castor3d
 	private:
 		//!\~english	The node.
 		//!\~french		Le noeud.
-		SkeletonNode * m_node;
+		SkeletonNode * m_node{};
 
 		friend class BinaryWriter< SkeletonAnimationNode >;
 		friend class BinaryParser< SkeletonAnimationNode >;

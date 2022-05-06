@@ -56,7 +56,7 @@ namespace c3d_assimp
 			, castor3d::Mesh & mesh );
 		bool doProcessMesh( castor3d::Scene & scene
 			, castor3d::Mesh & mesh
-			, castor3d::SkeletonSPtr skeleton
+			, castor3d::SkeletonRPtr skeleton
 			, aiMesh const & aiMesh
 			, uint32_t aiMeshIndex
 			, aiScene const & aiScene

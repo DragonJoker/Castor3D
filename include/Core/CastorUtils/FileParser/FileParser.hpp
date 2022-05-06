@@ -20,7 +20,7 @@ namespace castor
 		bool result = false;
 
 #define CU_DO_WRITE_PARSER_END( retval )\
-		result = retval;\
+		result = retval;
 
 	//!\~english	Define to ease the declaration of a parser.
 	//!\~french		Un define pour faciliter la déclaration d'un analyseur.

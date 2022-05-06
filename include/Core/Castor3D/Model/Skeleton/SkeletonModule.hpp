@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_ModelSkeletonModule_H___
 #define ___C3D_ModelSkeletonModule_H___
 
+#include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Model/ModelModule.hpp"
 
 namespace castor3d
@@ -67,15 +68,47 @@ namespace castor3d
 	*	Contient les données de bones pour un vertice
 	*/
 	struct VertexBoneData;
+	/**
+	*\~english
+	*	Helper structure to specialise a cache behaviour.
+	*\remarks
+	*	Specialisation for Skeleton.
+	*\~french
+	*	Structure permettant de spécialiser le comportement d'un cache.
+	*\remarks
+	*	Spécialisation pour Skeleton.
+	*/
+	template<>
+	struct PtrCacheTraitsT< Skeleton, castor::String >
+		: CUPtrCacheTraitsBaseT< Skeleton, castor::String >
+	{
+		using ResT = Skeleton;
+		using KeyT = castor::String;
+		using Base = CUPtrCacheTraitsBaseT< ResT, KeyT >;
+		using ElementT = typename Base::ElementT;
+		using ElementPtrT = typename Base::ElementPtrT;
 
-	CU_DeclareSmartPtr( BoneNode );
-	CU_DeclareSmartPtr( SkeletonNode );
-	CU_DeclareSmartPtr( Skeleton );
+		C3D_API static const castor::String Name;
+	};
+
+	using SkeletonCacheTraits = PtrCacheTraitsT< Skeleton, castor::String >;
+	using SkeletonCache = castor::ResourceCacheT< Skeleton
+		, castor::String
+		, SkeletonCacheTraits >;
+
+	using SkeletonRes = SkeletonCacheTraits::ElementPtrT;
+	using SkeletonResPtr = SkeletonCacheTraits::ElementObsT;
+
+	CU_DeclareCUSmartPtr( castor3d, BoneNode, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, SkeletonNode, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, Skeleton, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, SkeletonCache, C3D_API );
 
 	//! Skinned vertex data array
 	CU_DeclareVector( VertexBoneData, VertexBoneData );
 	//! Bone pointer array
 	CU_DeclareVector( SkeletonNodeUPtr, SkeletonNodePtr );
+
 
 	//@}
 	//@}

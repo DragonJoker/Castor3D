@@ -46,7 +46,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le squelette.
 		 */
-		C3D_API SkeletonSPtr getSkeleton()const;
+		C3D_API SkeletonRPtr getSkeleton()const;
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */

@@ -39,6 +39,16 @@ namespace C3dPly
 		 *\copydoc		castor3d::MeshImporter::doImportMesh
 		 */
 		bool doImportMesh( castor3d::Mesh & mesh )override;
+		/**
+		 *\copydoc		castor3d::MeshImporter::doImportSkeleton
+		 */
+		bool doImportSkeleton( castor3d::Skeleton & skeleton )override
+		{
+			return false;
+		}
+		/**
+		 *\copydoc		castor3d::MeshImporter::doImportScene
+		 */
 		bool doImportScene( castor3d::Scene & scene )override
 		{
 			return false;

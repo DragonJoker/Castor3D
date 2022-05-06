@@ -1667,6 +1667,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextScene.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextSceneNode.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextShadow.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextSkeleton.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextSkyboxBackground.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextSpotLight.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextSsaoConfig.cpp
@@ -1709,6 +1710,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextScene.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextSceneNode.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextShadow.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextSkeleton.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextSkyboxBackground.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextSpotLight.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextSsaoConfig.hpp

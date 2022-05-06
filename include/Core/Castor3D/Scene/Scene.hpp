@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMapModule.hpp"
+#include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
 #include "Castor3D/Render/Node/RenderNodeModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelSceneData.hpp"
@@ -27,6 +28,7 @@ See LICENSE file in root folder
 #include "Castor3D/Cache/OverlayCache.hpp"
 #include "Castor3D/Cache/SceneNodeCache.hpp"
 #include "Castor3D/Cache/TargetCache.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Scene/Fog.hpp"
 #include "Castor3D/Scene/Shadow.hpp"
@@ -458,6 +460,7 @@ namespace castor3d
 		DECLARE_CACHE_MEMBER( mesh, Mesh );
 		DECLARE_CACHE_MEMBER( animatedObjectGroup, AnimatedObjectGroup );
 		DECLARE_CACHE_MEMBER( overlay, Overlay );
+		DECLARE_CACHE_MEMBER( skeleton, Skeleton );
 		DECLARE_CACHE_VIEW_MEMBER( material, Material, EventType::ePreRender );
 		DECLARE_CACHE_VIEW_MEMBER( sampler, Sampler, EventType::ePreRender );
 		DECLARE_CU_CACHE_VIEW_MEMBER( font, Font, EventType::ePreRender );

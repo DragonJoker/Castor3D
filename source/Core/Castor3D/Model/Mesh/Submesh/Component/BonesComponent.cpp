@@ -64,7 +64,7 @@ namespace castor3d
 		m_bones.insert( m_bones.end(), begin, end );
 	}
 
-	SkeletonSPtr BonesComponent::getSkeleton()const
+	SkeletonRPtr BonesComponent::getSkeleton()const
 	{
 		return getOwner()->getParent().getSkeleton();
 	}

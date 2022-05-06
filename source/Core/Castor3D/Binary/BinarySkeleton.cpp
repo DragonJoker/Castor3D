@@ -42,7 +42,6 @@ namespace castor3d
 	{
 		bool result = true;
 		SkeletonNodeUPtr node;
-		BoneNodeUPtr bone;
 		BinaryChunk chunk;
 		SkeletonAnimationUPtr animation;
 		std::map< SkeletonNode *, castor::String > hierarchy;
@@ -57,9 +56,10 @@ namespace castor3d
 				break;
 			case ChunkType::eSkeletonBone:
 				{
-					bone = std::make_unique< BoneNode >( castor::cuEmptyString, obj, castor::Matrix4x4f{ 1.0f }, 0u );
+					node = castor::makeUniqueDerived< SkeletonNode, BoneNode >( castor::cuEmptyString, obj, castor::Matrix4x4f{ 1.0f }, 0u );
+					auto & bone = static_cast< BoneNode & >( *node );
 					auto parser = createBinaryParser< BoneNode >();
-					result = parser.parse( *bone, chunk );
+					result = parser.parse( bone, chunk );
 					checkError( result, "Couldn't parse bone." );
 
 					if ( result )
@@ -68,22 +68,22 @@ namespace castor3d
 						{
 							if ( !parser.parentName.empty() )
 							{
-								hierarchy.emplace( bone.get(), parser.parentName );
+								hierarchy.emplace( &bone, parser.parentName );
 							}
 						}
 						else
 						{
-							bone->m_id = uint32_t( obj.m_bones.size() );
+							bone.m_id = uint32_t( obj.m_bones.size() );
 						}
 
-						obj.m_bones.emplace_back( bone.get() );
-						obj.m_nodes.emplace_back( std::move( bone ) );
+						obj.m_bones.emplace_back( &bone );
+						obj.m_nodes.emplace_back( std::move( node ) );
 					}
 				}
 				break;
 			case ChunkType::eSkeletonNode:
 				{
-					node = std::make_unique< SkeletonNode >( castor::cuEmptyString, obj );
+					node = castor::makeUnique< SkeletonNode >( castor::cuEmptyString, obj );
 					auto parser = createBinaryParser< SkeletonNode >();
 					result = parser.parse( *node, chunk );
 					checkError( result, "Couldn't parse bone." );
