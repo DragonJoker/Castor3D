@@ -90,7 +90,7 @@ namespace castor3d
 
 			if ( parent && findTransform( *parent ) == m_transforms.end() )
 			{
-				addAnimationObject( *parent, parent->getNodeTransform() );
+				addAnimationObject( *parent, castor::Matrix4x4f{ 1.0f } );
 			}
 
 			m_transforms.emplace_back( &object, transform );

@@ -539,7 +539,6 @@ namespace Testing
 	{
 		bool result{ CT_EQUAL( lhs.getName(), rhs.getName() ) };
 		result = result && CT_EQUAL( lhs.getInterpolationMode(), rhs.getInterpolationMode() );
-		result = result && CT_EQUAL( lhs.getNodeTransform(), rhs.getNodeTransform() );
 		result = result && CT_EQUAL( lhs.getType(), rhs.getType() );
 		result = result && CT_EQUAL( lhs.getParent() == nullptr, rhs.getParent() == nullptr );
 

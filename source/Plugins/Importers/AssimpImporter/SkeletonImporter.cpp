@@ -458,7 +458,7 @@ namespace c3d_assimp
 			{
 				if ( !keyFrame.second->hasObject( *object ) )
 				{
-					keyFrame.second->addAnimationObject( *object, object->getNodeTransform() );
+					keyFrame.second->addAnimationObject( *object, castor::Matrix4x4f{ 1.0f } );
 				}
 			}
 		}
@@ -520,12 +520,6 @@ namespace c3d_assimp
 			if ( parent )
 			{
 				parent->addChild( object );
-			}
-
-			if ( nodeName.find( "$AssimpFbx$_PreRotation" ) == castor::String::npos )
-			{
-				auto aiObjectNode = aiNode.FindNode( nodeName.c_str() );
-				object->setNodeTransform( makeMatrix4x4f( aiObjectNode->mTransformation ) );
 			}
 
 			if ( aiNodeAnim )

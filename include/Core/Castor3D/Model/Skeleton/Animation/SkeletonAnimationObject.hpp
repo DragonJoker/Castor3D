@@ -89,30 +89,6 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the animation node transformation.
-		 *\return		The value.
-		 *\~french
-		 *\brief		Récupère les animations du noeud de transformation.
-		 *\return		La valeur.
-		 */
-		castor::Matrix4x4f const & getNodeTransform()const
-		{
-			return m_nodeTransform;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the animation node transformation.
-		 *\param[in]	transform	The new value.
-		 *\~french
-		 *\brief		Définit les animations du noeud de transformation.
-		 *\param[in]	transform	La nouvelle valeur.
-		 */
-		void setNodeTransform( castor::Matrix4x4f const & transform )
-		{
-			m_nodeTransform = transform;
-		}
-		/**
-		 *\~english
 		 *\return		The children array.
 		 *\~french
 		 *\return		Le tableau d'enfants.
@@ -139,9 +115,6 @@ namespace castor3d
 		//!\~english	The moving thing type.
 		//!\~french		Le type du machin mouvant.
 		SkeletonNodeType m_type;
-		//!\~english	Animation node transformations.
-		//!\~french		Transformations du noeud d'animation.
-		castor::Matrix4x4f m_nodeTransform{ 1.0f };
 		//!\~english	The objects depending on this one.
 		//!\~french		Les objets dépendant de celui-ci.
 		SkeletonAnimationObjectPtrArray m_children;
