@@ -43,6 +43,30 @@ namespace c3d_assimp
 			castor::matrix::setTranslate( result, convert( tran ) );
 			return result;
 		}
+
+		static std::map< aiAnimation const *, aiNodeAnim const * > findNodeAnims( aiNode const & aiNode
+			, castor::ArrayView< aiAnimation * > const & animations )
+		{
+			std::map< aiAnimation const *, aiNodeAnim const * > result;
+
+			for ( auto aiAnimation : animations )
+			{
+				auto channels = castor::makeArrayView( aiAnimation->mChannels, aiAnimation->mNumChannels );
+				auto it = std::find_if( channels.begin()
+					, channels.end()
+					, [&aiNode]( aiNodeAnim const * lookup )
+					{
+						return lookup->mNodeName == aiNode.mName;
+					} );
+
+				if ( it != channels.end() )
+				{
+					result.emplace( aiAnimation, *it );
+				}
+			}
+
+			return result;
+		}
 	}
 
 	using SceneNodeAnimationKeyFrameMap = std::map< castor::Milliseconds, castor3d::SceneNodeAnimationKeyFrameUPtr >;
@@ -65,7 +89,9 @@ namespace c3d_assimp
 		doProcessSceneNodes( aiScene
 			, *aiScene.mRootNode
 			, scene
-			, scene.getObjectRootNode() );
+			, meshes
+			, scene.getObjectRootNode()
+			, castor::Matrix4x4f{ 1.0f } );
 
 		for ( aiLight * aiLight : castor::makeArrayView( aiScene.mLights, aiScene.mNumLights ) )
 		{
@@ -186,59 +212,66 @@ namespace c3d_assimp
 	void SceneImporter::doProcessSceneNodes( aiScene const & aiScene
 		, aiNode const & aiNode
 		, castor3d::Scene & scene
-		, castor3d::SceneNodeSPtr parent )
+		, std::map< uint32_t, MeshData * > const & meshes
+		, castor3d::SceneNodeSPtr parent
+		, castor::Matrix4x4f transform )
 	{
 		if ( m_skeletons.isBoneNode( aiNode ) )
 		{
 			return;
 		}
 
-		castor::String name = m_importer.getInternalName( aiNode.mName );
-		auto lnode = scene.getSceneNodeCache().tryFind( name );
-
-		if ( !lnode.lock() )
-		{
-			auto node = scene.getSceneNodeCache().create( name, scene );
-			node->attachTo( *parent );
-			aiVector3D scale, position;
-			aiQuaternion orientation;
-			aiNode.mTransformation.Decompose( scale, orientation, position );
-			node->setPosition( { position.x, position.y, position.z } );
-			node->setScale( { scale.x, scale.y, scale.z } );
-			node->setOrientation( castor::Quaternion{ castor::Point4f{ orientation.x, orientation.y, orientation.z, orientation.w } } );
-			m_nodes.push_back( node );
-			lnode = scene.getSceneNodeCache().add( node->getName(), node );
-			node = lnode.lock();
-
-			if ( aiScene.HasAnimations() )
+		auto anims = scenes::findNodeAnims( aiNode
+			, castor::makeArrayView( aiScene.mAnimations, aiScene.mNumAnimations ) );
+		auto aiMeshes = castor::makeArrayView( aiNode.mMeshes, aiNode.mNumMeshes );
+		auto meshIt = std::find_if( aiMeshes.begin()
+			, aiMeshes.end()
+			, [&meshes]( uint32_t aiMeshIndex )
 			{
-				for ( auto aiAnimation : castor::makeArrayView( aiScene.mAnimations, aiScene.mNumAnimations ) )
-				{
-					auto it = std::find_if( aiAnimation->mChannels
-						, aiAnimation->mChannels + aiAnimation->mNumChannels
-						, [&name]( aiNodeAnim const * lookup )
-						{
-							return makeString( lookup->mNodeName ) == name;
-						} );
+				return meshes.find( aiMeshIndex ) != meshes.end();
+			} );
 
-					if ( it != aiAnimation->mChannels + aiAnimation->mNumChannels )
-					{
-						doProcessAnimationSceneNodes( *node, *aiAnimation, aiNode, *( *it ) );
-					}
+		if ( meshIt != aiMeshes.end()
+			|| !anims.empty() )
+		{
+			castor::String name = m_importer.getInternalName( aiNode.mName );
+			auto lnode = scene.getSceneNodeCache().tryFind( name );
+
+			if ( !lnode.lock() )
+			{
+				auto node = scene.getSceneNodeCache().create( name, scene );
+				node->attachTo( *parent );
+				aiVector3D scale, position;
+				aiQuaternion orientation;
+				aiNode.mTransformation.Decompose( scale, orientation, position );
+				node->setPosition( { position.x, position.y, position.z } );
+				node->setScale( { scale.x, scale.y, scale.z } );
+				node->setOrientation( castor::Quaternion{ castor::Point4f{ orientation.x, orientation.y, orientation.z, orientation.w } } );
+				m_nodes.push_back( node );
+				lnode = scene.getSceneNodeCache().add( node->getName(), node );
+				node = lnode.lock();
+
+				for ( auto nodeAnim : anims )
+				{
+					doProcessAnimationSceneNodes( *node, *nodeAnim.first, aiNode, *nodeAnim.second );
 				}
 			}
+			else
+			{
+				m_nodes.push_back( lnode.lock() );
+			}
+
+			parent = lnode.lock();
 		}
 		else
 		{
-			m_nodes.push_back( lnode.lock() );
+			transform = transform * makeMatrix4x4f( aiNode.mTransformation );
 		}
-
-		parent = lnode.lock();
 
 		// continue for all child nodes
 		for ( auto aiChild : castor::makeArrayView( aiNode.mChildren, aiNode.mNumChildren ) )
 		{
-			doProcessSceneNodes( aiScene, *aiChild, scene, parent );
+			doProcessSceneNodes( aiScene, *aiChild, scene, meshes, parent, transform );
 		}
 	}
 
@@ -334,7 +367,7 @@ namespace c3d_assimp
 		if ( aiNode.mNumMeshes > 0 )
 		{
 			castor::String name = m_importer.getInternalName( aiNode.mName );
-			auto node = *std::find_if( m_nodes.begin()
+			auto nodeIt = std::find_if( m_nodes.begin()
 				, m_nodes.end()
 				, [&name]( castor3d::SceneNodeSPtr lookup )
 				{
@@ -347,6 +380,8 @@ namespace c3d_assimp
 
 				if ( meshIt != meshes.end() )
 				{
+					CU_Require( nodeIt != m_nodes.end() );
+					auto node = *nodeIt;
 					auto * meshRepl = meshIt->second;
 					auto lgeom = scene.getGeometryCache().tryFind( name + castor::string::toString( aiMeshIndex ) );
 
