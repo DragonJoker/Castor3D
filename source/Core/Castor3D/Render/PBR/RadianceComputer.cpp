@@ -49,17 +49,17 @@ namespace castor3d
 			, RenderDevice const & device )
 		{
 			auto name = cuT( "IblTexturesRadiance" );
-			auto result = engine.getSamplerCache().tryFind( name );
+			auto result = engine.tryFindSampler( name );
 
 			if ( !result.lock() )
 			{
-				auto created = engine.getSamplerCache().create( name, engine );
+				auto created = engine.createSampler( name, engine );
 				created->setMinFilter( VK_FILTER_LINEAR );
 				created->setMagFilter( VK_FILTER_LINEAR );
 				created->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 				created->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 				created->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				result = engine.getSamplerCache().add( name, created, false );
+				result = engine.addSampler( name, created, false );
 			}
 
 			result.lock()->initialise( engine.getRenderSystem()->getRenderDevice() );

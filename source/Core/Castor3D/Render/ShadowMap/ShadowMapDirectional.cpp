@@ -53,7 +53,7 @@ namespace castor3d
 			, castor::String const & colourName )
 		{
 
-			auto result = scene.getMeshCache().add( name, scene );
+			auto result = scene.addNewMesh( name, scene );
 			result.lock()->setSerialisable( false );
 			auto submesh = result.lock()->createSubmesh();
 			static castor3d::InterleavedVertexArray const vertex{ []()
@@ -94,9 +94,9 @@ namespace castor3d
 			MaterialResPtr material;
 			castor::String matName = cuT( "Frustum_" ) + colourName;
 
-			if ( !scene.getEngine()->getMaterialCache().has( matName ) )
+			if ( !scene.getEngine()->hasMaterial( matName ) )
 			{
-				material = scene.getEngine()->getMaterialCache().add( matName
+				material = scene.getEngine()->addNewMaterial( matName
 					, *scene.getEngine()
 					, scene.getPassesType() );
 				auto pass = material.lock()->createPass();
@@ -106,7 +106,7 @@ namespace castor3d
 			}
 			else
 			{
-				material = scene.getEngine()->getMaterialCache().find( matName );
+				material = scene.getEngine()->findMaterial( matName );
 			}
 
 			submesh->setDefaultMaterial( material.lock().get() );
@@ -298,9 +298,9 @@ namespace castor3d
 			auto mesh = shdmapdir::doCreateFrustumMesh( name, scene, colours[cascade], colourNames[cascade] );
 			m_frustumMeshes.push_back( mesh );
 
-			if ( !scene.getGeometryCache().has( name ) )
+			if ( !scene.hasGeometry( name ) )
 			{
-				auto sceneNode = scene.getSceneNodeCache().add( name ).lock();
+				auto sceneNode = scene.addNewSceneNode( name ).lock();
 				auto geometry = std::make_shared< Geometry >( name, scene, *sceneNode, mesh );
 				geometry->setShadowCaster( false );
 				geometry->setCullable( false );
@@ -312,7 +312,7 @@ namespace castor3d
 
 				sceneNode->attachTo( *scene.getObjectRootNode() );
 				sceneNode->setVisible( false );
-				scene.getGeometryCache().add( std::move( geometry ) );
+				scene.addGeometry( std::move( geometry ) );
 			}
 		}
 
@@ -348,7 +348,7 @@ namespace castor3d
 #if C3D_DebugCascadeFrustum
 					auto name = "CascadeFrustum" + std::to_string( cascade );
 					auto & scene = *light.getScene();
-					auto sceneNode = scene.getGeometryCache().tryFind( name ).lock();
+					auto sceneNode = scene.tryFindGeometry( name ).lock();
 					sceneNode->setVisible( true );
 					auto & frustum = lightCamera.getFrustum();
 					auto mesh = m_frustumMeshes[cascade].lock();

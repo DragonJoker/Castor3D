@@ -310,13 +310,13 @@ int main( int argc, char * argv[] )
 					else
 					{
 						scene.setPassesType( scene.getEngine()->getPassFactory().getNameId( options.passType ) );
-						mesh = scene.getMeshCache().add( name, scene ).lock().get();
+						mesh = scene.addNewMesh( name, scene ).lock().get();
 						auto importer = engine.getImporterFactory().create( extension, engine );
 
 						if ( !importer->import( *mesh, path, castor3d::Parameters{}, true, false ) )
 						{
 							castor::Logger::logError( castor::makeStringStream() << "Mesh Import failed" );
-							scene.getMeshCache().remove( name );
+							scene.removeMesh( name );
 							mesh = nullptr;
 						}
 

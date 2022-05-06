@@ -303,11 +303,11 @@ namespace castor3d
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_combinePass{ doCreateCombinePass( nullptr ) }
 	{
-		auto sampler = engine.getSamplerCache().add( RenderTarget::DefaultSamplerName + getName() + cuT( "Linear" ), engine ).lock();
+		auto sampler = engine.addNewSampler( RenderTarget::DefaultSamplerName + getName() + cuT( "Linear" ), engine ).lock();
 		sampler->setMinFilter( VK_FILTER_LINEAR );
 		sampler->setMagFilter( VK_FILTER_LINEAR );
 
-		sampler = engine.getSamplerCache().add( RenderTarget::DefaultSamplerName + getName() + cuT( "Nearest" ), engine ).lock();
+		sampler = engine.addNewSampler( RenderTarget::DefaultSamplerName + getName() + cuT( "Nearest" ), engine ).lock();
 		sampler->setMinFilter( VK_FILTER_NEAREST );
 		sampler->setMagFilter( VK_FILTER_NEAREST );
 

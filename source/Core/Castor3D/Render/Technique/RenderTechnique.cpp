@@ -608,8 +608,8 @@ namespace castor3d
 		m_depth->destroy();
 		m_depthBuffer->cleanup();
 		m_colourTexture->cleanup();
-		getEngine()->getSamplerCache().remove( cuT( "RenderTechnique_Colour" ) );
-		getEngine()->getSamplerCache().remove( cuT( "RenderTechnique_Depth" ) );
+		getEngine()->removeSampler( cuT( "RenderTechnique_Colour" ) );
+		getEngine()->removeSampler( cuT( "RenderTechnique_Depth" ) );
 		m_signalFinished.reset();
 
 		for ( auto & array : m_activeShadowMaps )

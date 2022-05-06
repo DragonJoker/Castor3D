@@ -39,14 +39,14 @@ namespace castor3d
 			VkFilter const filter = nearest
 				? VK_FILTER_NEAREST
 				: VK_FILTER_LINEAR;
-			auto & cache = renderSystem.getEngine()->getSamplerCache();
+			auto & engine = *renderSystem.getEngine();
 			SamplerResPtr result;
 
-			if ( cache.has( name ) )
+			if ( engine.hasSampler( name ) )
 			{
-				result = cache.find( name );
+				result = engine.findSampler( name );
 			}
-			else if ( auto sampler = cache.add( name, *renderSystem.getEngine() ).lock() )
+			else if ( auto sampler = engine.addNewSampler( name, engine ).lock() )
 			{	
 				sampler->setMinFilter( filter );
 				sampler->setMagFilter( filter );

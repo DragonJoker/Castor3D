@@ -53,13 +53,13 @@ namespace castor3d
 			stream << cuT( "IblTexturesPrefiltered_" ) << maxLod;
 			auto name = stream.str();
 
-			if ( engine.getSamplerCache().has( name ) )
+			if ( engine.hasSampler( name ) )
 			{
-				result = engine.getSamplerCache().find( name );
+				result = engine.findSampler( name );
 			}
 			else
 			{
-				auto created = engine.getSamplerCache().create( name, engine );
+				auto created = engine.createSampler( name, engine );
 				created->setMinFilter( VK_FILTER_LINEAR );
 				created->setMagFilter( VK_FILTER_LINEAR );
 				created->setMipFilter( VK_SAMPLER_MIPMAP_MODE_LINEAR );
@@ -68,7 +68,7 @@ namespace castor3d
 				created->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 				created->setMinLod( 0.0f );
 				created->setMaxLod( float( maxLod ) );
-				result = engine.getSamplerCache().add( name, created, false );
+				result = engine.addSampler( name, created, false );
 			}
 
 			result.lock()->initialise( device );

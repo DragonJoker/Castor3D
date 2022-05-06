@@ -243,13 +243,13 @@ namespace castor3d
 			, addressMode
 			, addressMode );
 
-		if ( engine.getSamplerCache().has( splName ) )
+		if ( engine.hasSampler( splName ) )
 		{
-			c3dSampler = engine.getSamplerCache().find( splName );
+			c3dSampler = engine.findSampler( splName );
 		}
 		else
 		{
-			auto created = castor::makeResource< Sampler, castor::String >( splName, engine );
+			auto created = engine.createSampler( splName, engine );
 			created->setMinFilter( minFilter );
 			created->setMagFilter( magFilter );
 			created->setMipFilter( mipFilter );
@@ -258,7 +258,7 @@ namespace castor3d
 			created->setWrapR( addressMode );
 			created->setBorderColour( borderColor );
 			created->initialise( device );
-			c3dSampler = engine.getSamplerCache().add( splName, created, false );
+			c3dSampler = engine.addSampler( splName, created, false );
 		}
 
 		sampler = &c3dSampler.lock()->getSampler();

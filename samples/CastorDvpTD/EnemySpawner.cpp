@@ -56,13 +56,13 @@ namespace castortd
 		if ( m_enemiesCache.empty() )
 		{
 			castor::String name = cuT( "EnemyCube_" ) + std::to_string( m_totalSpawned );
-			auto baseNode = game.getScene().getSceneNodeCache().add( name + cuT( "_Base" ) ).lock();
+			auto baseNode = game.getScene().addNewSceneNode( name + cuT( "_Base" ) ).lock();
 			baseNode->setPosition( game.convert( castor::Point2i{ cell.m_x, cell.m_y - 1 } ) + castor::Point3f{ 0, game.getCellHeight(), 0 } );
 			baseNode->attachTo( *game.getMapNode() );
-			auto node = game.getScene().getSceneNodeCache().add( name ).lock();
+			auto node = game.getScene().addNewSceneNode( name ).lock();
 			node->setOrientation( castor::Quaternion::fromAxisAngle( castor::Point3f{ 1, 0, 1 }, 45.0_degrees ) );
 			node->attachTo( *baseNode );
-			auto geometry = game.getScene().getGeometryCache().create( name
+			auto geometry = game.getScene().createGeometry( name
 				, game.getScene()
 				, *node
 				, game.getEnemyMesh() );
@@ -72,9 +72,9 @@ namespace castortd
 				geometry->setMaterial( *submesh, game.getEnemyMaterial() );
 			}
 
-			game.getScene().getGeometryCache().add( geometry );
+			game.getScene().addGeometry( geometry );
 
-			auto light = game.getScene().getLightCache().create( name
+			auto light = game.getScene().createLight( name
 				, game.getScene()
 				, *node
 				, game.getScene().getLightsFactory()
@@ -82,7 +82,7 @@ namespace castortd
 			light->setColour( castor::RgbColour::fromPredefined( castor::PredefinedRgbColour::eRed ) );
 			light->setIntensity( 0.8f, 1.0f );
 			light->getPointLight()->setAttenuation( castor::Point3f{ 1.0f, 0.1f, 0.0f } );
-			game.getScene().getLightCache().add( name, light );
+			game.getScene().addLight( name, light );
 			result = std::make_shared< Enemy >( *baseNode, game, path, m_category );
 		}
 		else

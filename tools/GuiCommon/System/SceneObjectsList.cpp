@@ -217,7 +217,7 @@ namespace GuiCommon
 				, eBMP_MATERIAL_SEL );
 			for ( auto materialName : scene->getMaterialView() )
 			{
-				auto material = engine->getMaterialCache().find( materialName ).lock().get();
+				auto material = engine->findMaterial( materialName ).lock().get();
 				MaterialsList::addMaterial( this
 					, *scene
 					, m_propertiesHolder->isEditable()

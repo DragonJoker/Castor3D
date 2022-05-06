@@ -23,12 +23,11 @@ namespace castor3d
 			+ ( range
 				? cuT( "_" ) + castor::string::toString( range->baseMipLevel ) + cuT( "_" ) + castor::string::toString( range->levelCount )
 				: castor::String{} );
-		auto & cache = engine.getSamplerCache();
 		SamplerResPtr sampler;
 
-		if ( cache.has( name ) )
+		if ( engine.hasSampler( name ) )
 		{
-			sampler = cache.find( name );
+			sampler = engine.findSampler( name );
 		}
 		else
 		{
@@ -56,7 +55,7 @@ namespace castor3d
 			auto resource = castor::makeResource< Sampler, castor::String >( name
 				, engine
 				, std::move( createInfo ) );
-			sampler = cache.add( name
+			sampler = engine.addSampler( name
 				, resource
 				, false );
 		}

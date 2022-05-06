@@ -34,10 +34,9 @@ namespace castor3d
 		, m_fps{ std::make_unique< DebugPanelsT< float > >( cuT( "FPS" ), m_panel, cache ) }
 		, m_counts{ std::make_unique< DebugPanelsT< uint32_t > >( cuT( "Counts" ), m_panel, cache ) }
 	{
-		auto & materials = m_cache.getEngine().getMaterialCache();
 		m_panel->setPixelPosition( castor::Position{ 0, 0 } );
 		m_panel->setPixelSize( castor::Size{ 320, 20 } );
-		m_panel->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ).lock().get() );
+		m_panel->setMaterial( m_cache.getEngine().findMaterial( cuT( "AlphaDarkBlue" ) ).lock().get() );
 		m_panel->setVisible( true );
 	}
 
@@ -174,13 +173,13 @@ namespace castor3d
 		m_cpu.name->setCaption( cuT( "CPU:" ) );
 		m_gpu.name->setCaption( cuT( "GPU:" ) );
 
-		auto & materials = cache.getEngine().getMaterialCache();
-		m_panel->setMaterial( materials.find( cuT( "TransparentBlack" ) ).lock().get() );
-		m_passName->setMaterial( materials.find( cuT( "White" ) ).lock().get() );
-		m_cpu.name->setMaterial( materials.find( cuT( "White" ) ).lock().get() );
-		m_gpu.name->setMaterial( materials.find( cuT( "White" ) ).lock().get() );
-		m_cpu.value->setMaterial( materials.find( cuT( "White" ) ).lock().get() );
-		m_gpu.value->setMaterial( materials.find( cuT( "White" ) ).lock().get() );
+		auto & engine = cache.getEngine();
+		m_panel->setMaterial( engine.findMaterial( cuT( "TransparentBlack" ) ).lock().get() );
+		m_passName->setMaterial( engine.findMaterial( cuT( "White" ) ).lock().get() );
+		m_cpu.name->setMaterial( engine.findMaterial( cuT( "White" ) ).lock().get() );
+		m_gpu.name->setMaterial( engine.findMaterial( cuT( "White" ) ).lock().get() );
+		m_cpu.value->setMaterial( engine.findMaterial( cuT( "White" ) ).lock().get() );
+		m_gpu.value->setMaterial( engine.findMaterial( cuT( "White" ) ).lock().get() );
 
 		m_passName->setVAlign( VAlign::eCenter );
 		m_passName->setHAlign( HAlign::eLeft );
@@ -346,14 +345,14 @@ namespace castor3d
 		m_cpu.name->setCaption( cuT( "CPU:" ) );
 		m_gpu.name->setCaption( cuT( "GPU:" ) );
 
-		auto & materials = cache.getEngine().getMaterialCache();
-		m_container->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ).lock().get() );
-		m_firstLinePanel->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ).lock().get() );
-		m_name->setMaterial( materials.find( cuT( "White" ) ).lock().get() );
-		m_cpu.name->setMaterial( materials.find( cuT( "White" ) ).lock().get() );
-		m_gpu.name->setMaterial( materials.find( cuT( "White" ) ).lock().get() );
-		m_cpu.value->setMaterial( materials.find( cuT( "White" ) ).lock().get() );
-		m_gpu.value->setMaterial( materials.find( cuT( "White" ) ).lock().get() );
+		auto & engine = cache.getEngine();
+		m_container->setMaterial( engine.findMaterial( cuT( "AlphaDarkBlue" ) ).lock().get() );
+		m_firstLinePanel->setMaterial( engine.findMaterial( cuT( "AlphaDarkBlue" ) ).lock().get() );
+		m_name->setMaterial( engine.findMaterial( cuT( "White" ) ).lock().get() );
+		m_cpu.name->setMaterial( engine.findMaterial( cuT( "White" ) ).lock().get() );
+		m_gpu.name->setMaterial( engine.findMaterial( cuT( "White" ) ).lock().get() );
+		m_cpu.value->setMaterial( engine.findMaterial( cuT( "White" ) ).lock().get() );
+		m_gpu.value->setMaterial( engine.findMaterial( cuT( "White" ) ).lock().get() );
 
 		m_name->setVAlign( VAlign::eCenter );
 		m_name->setHAlign( HAlign::eLeft );
