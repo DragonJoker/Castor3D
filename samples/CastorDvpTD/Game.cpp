@@ -118,18 +118,18 @@ namespace castortd
 			{ 17, 27 },
 		}
 	{
-		m_mapNode = m_scene.getSceneNodeCache().find( cuT( "MapBase" ) ).lock();
-		m_mapCubeMesh = m_scene.getMeshCache().find( cuT( "MapCube" ) );
-		m_mapCubeMaterial = m_scene.getMaterialView().find( cuT( "MapCube" ) );
-		m_shortRangeTowerMesh = m_scene.getMeshCache().find( cuT( "ShortRange" ) );
-		m_longRangeTowerMesh = m_scene.getMeshCache().find( cuT( "HeavySplash" ) );
-		m_enemyCubeMesh = m_scene.getMeshCache().find( cuT( "EnemyCube" ) );
-		m_enemyCubeMaterial = m_scene.getMaterialView().find( cuT( "EnemyCube" ) );
-		m_bulletMesh = m_scene.getMeshCache().find( cuT( "Bullet" ) );
-		m_bulletMaterial = m_scene.getMaterialView().find( cuT( "Bullet" ) );
-		m_boulderMesh = m_scene.getMeshCache().find( cuT( "Boulder" ) );
-		m_boulderMaterial = m_scene.getMaterialView().find( cuT( "Boulder" ) );
-		m_targetNode = m_scene.getSceneNodeCache().find( cuT( "Target" ) ).lock();
+		m_mapNode = m_scene.findSceneNode( cuT( "MapBase" ) ).lock();
+		m_mapCubeMesh = m_scene.findMesh( cuT( "MapCube" ) );
+		m_mapCubeMaterial = m_scene.findMaterial( cuT( "MapCube" ) );
+		m_shortRangeTowerMesh = m_scene.findMesh( cuT( "ShortRange" ) );
+		m_longRangeTowerMesh = m_scene.findMesh( cuT( "HeavySplash" ) );
+		m_enemyCubeMesh = m_scene.findMesh( cuT( "EnemyCube" ) );
+		m_enemyCubeMaterial = m_scene.findMaterial( cuT( "EnemyCube" ) );
+		m_bulletMesh = m_scene.findMesh( cuT( "Bullet" ) );
+		m_bulletMaterial = m_scene.findMaterial( cuT( "Bullet" ) );
+		m_boulderMesh = m_scene.findMesh( cuT( "Boulder" ) );
+		m_boulderMaterial = m_scene.findMaterial( cuT( "Boulder" ) );
+		m_targetNode = m_scene.findSceneNode( cuT( "Target" ) ).lock();
 		m_updateTimer = castor::makeUnique< castor3d::FramePassTimer >( m_scene.getEngine()->getRenderSystem()->getRenderDevice().makeContext()
 			, "CastorDvpTD/Update" );
 		m_scene.getEngine()->registerTimer( "CastorDvpTD/Update", *m_updateTimer );
@@ -337,8 +337,8 @@ namespace castortd
 		if ( m_bulletsCache.empty() )
 		{
 			castor::String name = cuT( "Bullet_" ) + castor::string::toString( ++m_totalBullets );
-			auto node = m_scene.getSceneNodeCache().add( name ).lock();
-			auto geometry = m_scene.getGeometryCache().create( name
+			auto node = m_scene.addNewSceneNode( name ).lock();
+			auto geometry = m_scene.createGeometry( name
 				, m_scene
 				, *node
 				, m_bulletMesh );
@@ -350,7 +350,7 @@ namespace castortd
 				geometry->setMaterial( *submesh, m_bulletMaterial.lock().get() );
 			}
 
-			m_scene.getGeometryCache().add( geometry );
+			m_scene.addGeometry( geometry );
 			m_bullets.emplace_back( p_speed, p_damage, *node, p_target );
 		}
 		else
@@ -370,8 +370,8 @@ namespace castortd
 		if ( m_bouldersCache.empty() )
 		{
 			castor::String name = cuT( "Boulder_" ) + castor::string::toString( ++m_totalBoulders );
-			auto node = m_scene.getSceneNodeCache().add( name ).lock();
-			auto geometry = m_scene.getGeometryCache().create( name
+			auto node = m_scene.addNewSceneNode( name ).lock();
+			auto geometry = m_scene.createGeometry( name
 				, m_scene
 				, *node
 				, m_boulderMesh );
@@ -383,7 +383,7 @@ namespace castortd
 				geometry->setMaterial( *submesh, m_boulderMaterial.lock().get() );
 			}
 
-			m_scene.getGeometryCache().add( geometry );
+			m_scene.addGeometry( geometry );
 			m_boulders.emplace_back( speed, damage, *node, target );
 		}
 		else
@@ -635,8 +635,8 @@ namespace castortd
 	void Game::doAddMapCube( Cell & p_cell )
 	{
 		castor::String name = cuT( "MapCube_" ) + std::to_string( p_cell.m_x ) + cuT( "x" ) + std::to_string( p_cell.m_y );
-		auto node = m_scene.getSceneNodeCache().add( name ).lock();
-		auto geometry = m_scene.getGeometryCache().create( name
+		auto node = m_scene.addNewSceneNode( name ).lock();
+		auto geometry = m_scene.createGeometry( name
 			, m_scene
 			, *node
 			, m_mapCubeMesh );
@@ -648,7 +648,7 @@ namespace castortd
 			geometry->setMaterial( *submesh, m_mapCubeMaterial.lock().get() );
 		}
 
-		m_scene.getGeometryCache().add( geometry );
+		m_scene.addGeometry( geometry );
 		m_lastMapCube = geometry;
 		p_cell.m_state = Cell::State::Empty;
 	}
@@ -680,15 +680,15 @@ namespace castortd
 	void Game::doAddTower( Cell & p_cell, Tower::CategoryPtr && p_category )
 	{
 		castor::String name = cuT( "Tower_" ) + std::to_string( p_cell.m_x ) + cuT( "x" ) + std::to_string( p_cell.m_y );
-		auto node = m_scene.getSceneNodeCache().add( name ).lock();
+		auto node = m_scene.addNewSceneNode( name ).lock();
 		node->setPosition( convert( castor::Point2i{ p_cell.m_x, p_cell.m_y } ) + castor::Point3f{ 0, m_cellDimensions[1], 0 } );
 		node->attachTo( *m_mapNode );
 		auto mesh = doSelectMesh( *p_category );
-		auto tower = m_scene.getGeometryCache().create( name
+		auto tower = m_scene.createGeometry( name
 			, m_scene
 			, *node
 			, mesh );
-		auto animGroup = m_scene.getAnimatedObjectGroupCache().add( name
+		auto animGroup = m_scene.addNewAnimatedObjectGroup( name
 			, m_scene ).lock();
 		castor::Milliseconds time{ 0 };
 
@@ -726,7 +726,7 @@ namespace castortd
 		game::doUpdateMaterials( *tower
 			, p_category->getKind()
 			, m_scene.getMaterialView() );
-		m_scene.getGeometryCache().add( tower );
+		m_scene.addGeometry( tower );
 		p_cell.m_state = Cell::State::Tower;
 		p_category->setAttackAnimationTime( time );
 		animGroup->startAnimation( p_category->getAttackAnimationName() );

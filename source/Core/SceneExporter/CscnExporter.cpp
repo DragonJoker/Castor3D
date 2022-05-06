@@ -703,7 +703,7 @@ namespace castor3d::exporter
 
 				for ( auto & material : scene.getMaterialView() )
 				{
-					for ( auto & pass : *scene.getMaterialView().tryFind( material ).lock() )
+					for ( auto & pass : *scene.tryFindMaterial( material ).lock() )
 					{
 						for ( auto & unit : pass->getTextureUnits() )
 						{

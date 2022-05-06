@@ -882,7 +882,6 @@ namespace c3d_assimp
 		, uint32_t index )
 	{
 		castor3d::MaterialResPtr result;
-		auto & cache = scene.getMaterialView();
 		aiString mtlname;
 		castor::String name = cuT( "Imp-" );
 
@@ -895,13 +894,13 @@ namespace c3d_assimp
 			name += m_fileName.getFileName() + castor::string::toString( index );
 		}
 
-		if ( cache.has( name ) )
+		if ( scene.hasMaterial( name ) )
 		{
-			result = cache.find( name );
+			result = scene.findMaterial( name );
 		}
 		else
 		{
-			result = cache.add( name
+			result = scene.addNewMaterial( name
 				, *scene.getEngine()
 				, scene.getPassesType() );
 			auto pass = result.lock()->createPass();

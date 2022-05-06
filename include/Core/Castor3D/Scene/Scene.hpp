@@ -27,6 +27,7 @@ See LICENSE file in root folder
 #include "Castor3D/Cache/OverlayCache.hpp"
 #include "Castor3D/Cache/SceneNodeCache.hpp"
 #include "Castor3D/Cache/TargetCache.hpp"
+#include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Scene/Fog.hpp"
 #include "Castor3D/Scene/Shadow.hpp"
 
@@ -34,6 +35,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/Named.hpp>
 #include <CastorUtils/Design/Signal.hpp>
 #include <CastorUtils/Graphics/FontCache.hpp>
+#include <CastorUtils/Graphics/Font.hpp>
 #include <CastorUtils/Graphics/ImageCache.hpp>
 #include <CastorUtils/Graphics/RgbColour.hpp>
 #include <CastorUtils/Log/Logger.hpp>
@@ -405,6 +407,11 @@ namespace castor3d
 		{
 			m_ambientLight = value;
 		}
+
+		void addGeometry( GeometryCache::ElementPtrT element )
+		{
+			m_geometryCache->add( element );
+		}
 		/**@}*/
 
 	private:
@@ -442,10 +449,10 @@ namespace castor3d
 		SceneNodeSPtr m_rootNode;
 		SceneNodeSPtr m_rootCameraNode;
 		SceneNodeSPtr m_rootObjectNode;
+		DECLARE_OBJECT_CACHE_MEMBER_MIN( geometry, Geometry );
 		DECLARE_OBJECT_CACHE_MEMBER( sceneNode, SceneNode );
 		DECLARE_OBJECT_CACHE_MEMBER( camera, Camera );
 		DECLARE_OBJECT_CACHE_MEMBER( light, Light );
-		DECLARE_OBJECT_CACHE_MEMBER( geometry, Geometry );
 		DECLARE_OBJECT_CACHE_MEMBER( billboard, BillboardList );
 		DECLARE_OBJECT_CACHE_MEMBER( particleSystem, ParticleSystem );
 		DECLARE_CACHE_MEMBER( mesh, Mesh );

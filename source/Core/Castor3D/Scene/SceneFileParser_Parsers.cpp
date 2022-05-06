@@ -170,13 +170,13 @@ namespace castor3d
 		else
 		{
 			params[0]->get( parsingContext.strName );
-			parsingContext.material = parsingContext.parser->getEngine()->getMaterialCache().tryFind( parsingContext.strName ).lock().get();
+			parsingContext.material = parsingContext.parser->getEngine()->tryFindMaterial( parsingContext.strName ).lock().get();
 			parsingContext.passIndex = 0u;
 			parsingContext.createMaterial = parsingContext.material == nullptr;
 
 			if ( parsingContext.createMaterial )
 			{
-				parsingContext.ownMaterial = parsingContext.parser->getEngine()->getMaterialCache().create( parsingContext.strName
+				parsingContext.ownMaterial = parsingContext.parser->getEngine()->createMaterial( parsingContext.strName
 					, *parsingContext.parser->getEngine()
 					, parsingContext.parser->getEngine()->getPassesType() );
 				parsingContext.material = parsingContext.ownMaterial.get();
@@ -196,11 +196,11 @@ namespace castor3d
 		else
 		{
 			castor::String name;
-			parsingContext.sampler = parsingContext.parser->getEngine()->getSamplerCache().tryFind( params[0]->get( name ) );
+			parsingContext.sampler = parsingContext.parser->getEngine()->tryFindSampler( params[0]->get( name ) );
 
 			if ( !parsingContext.sampler.lock() )
 			{
-				parsingContext.ownSampler = parsingContext.parser->getEngine()->getSamplerCache().create( name
+				parsingContext.ownSampler = parsingContext.parser->getEngine()->createSampler( name
 					, *parsingContext.parser->getEngine() );
 				parsingContext.sampler = parsingContext.ownSampler;
 			}
@@ -220,7 +220,7 @@ namespace castor3d
 		{
 			castor::String name;
 			params[0]->get( name );
-			parsingContext.scene = parsingContext.parser->getEngine()->getSceneCache().tryFind( name );
+			parsingContext.scene = parsingContext.parser->getEngine()->tryFindScene( name );
 
 			if ( !parsingContext.scene )
 			{
@@ -292,7 +292,7 @@ namespace castor3d
 			castor::String name;
 			parsingContext.parentOverlays.push_back( parsingContext.overlay );
 			auto parent = parsingContext.parentOverlays.back().get();
-			parsingContext.overlay = parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
+			parsingContext.overlay = parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) ).lock();
 
 			if ( !parsingContext.overlay )
 			{
@@ -321,7 +321,7 @@ namespace castor3d
 			castor::String name;
 			parsingContext.parentOverlays.push_back( parsingContext.overlay );
 			auto parent = parsingContext.parentOverlays.back().get();
-			parsingContext.overlay = parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
+			parsingContext.overlay = parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) ).lock();
 
 			if ( !parsingContext.overlay )
 			{
@@ -350,7 +350,7 @@ namespace castor3d
 			castor::String name;
 			parsingContext.parentOverlays.push_back( parsingContext.overlay );
 			auto parent = parsingContext.parentOverlays.back().get();
-			parsingContext.overlay = parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
+			parsingContext.overlay = parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) ).lock();
 
 			if ( !parsingContext.overlay )
 			{
@@ -509,7 +509,7 @@ namespace castor3d
 		{
 			if ( parsingContext.renderTarget->getScene() )
 			{
-				parsingContext.renderTarget->setCamera( parsingContext.renderTarget->getScene()->getCameraCache().find( params[0]->get( name ) ).lock() );
+				parsingContext.renderTarget->setCamera( parsingContext.renderTarget->getScene()->findCamera( params[0]->get( name ) ).lock() );
 			}
 			else
 			{
@@ -957,7 +957,7 @@ namespace castor3d
 		{
 			if ( parsingContext.ownSampler )
 			{
-				parsingContext.parser->getEngine()->getSamplerCache().add( parsingContext.ownSampler->getName()
+				parsingContext.parser->getEngine()->addSampler( parsingContext.ownSampler->getName()
 					, parsingContext.ownSampler
 					, true );
 			}
@@ -1166,7 +1166,7 @@ namespace castor3d
 		{
 			castor::String name;
 			params[0]->get( name );
-			parsingContext.animGroup = parsingContext.scene->getAnimatedObjectGroupCache().add( name, *parsingContext.scene ).lock();
+			parsingContext.animGroup = parsingContext.scene->addNewAnimatedObjectGroup( name, *parsingContext.scene ).lock();
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eAnimGroup )
@@ -1184,7 +1184,7 @@ namespace castor3d
 			castor::String name;
 			parsingContext.parentOverlays.push_back( parsingContext.overlay );
 			auto parent = parsingContext.parentOverlays.back().get();
-			parsingContext.overlay = parsingContext.scene->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
+			parsingContext.overlay = parsingContext.scene->tryFindOverlay( params[0]->get( name ) ).lock();
 
 			if ( !parsingContext.overlay )
 			{
@@ -1213,7 +1213,7 @@ namespace castor3d
 			castor::String name;
 			parsingContext.parentOverlays.push_back( parsingContext.overlay );
 			auto parent = parsingContext.parentOverlays.back().get();
-			parsingContext.overlay = parsingContext.scene->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
+			parsingContext.overlay = parsingContext.scene->tryFindOverlay( params[0]->get( name ) ).lock();
 
 			if ( !parsingContext.overlay )
 			{
@@ -1242,7 +1242,7 @@ namespace castor3d
 			castor::String name;
 			parsingContext.parentOverlays.push_back( parsingContext.overlay );
 			auto parent = parsingContext.parentOverlays.back().get();
-			parsingContext.overlay = parsingContext.scene->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
+			parsingContext.overlay = parsingContext.scene->tryFindOverlay( params[0]->get( name ) ).lock();
 
 			if ( !parsingContext.overlay )
 			{
@@ -1359,7 +1359,7 @@ namespace castor3d
 			}
 			else
 			{
-				parsingContext.parser->getEngine()->getSceneCache().add( parsingContext.scene->getName()
+				parsingContext.parser->getEngine()->addScene( parsingContext.scene->getName()
 					, parsingContext.ownScene
 					, true );
 				parsingContext.scene = {};
@@ -1514,11 +1514,11 @@ namespace castor3d
 
 		if ( parsingContext.scene )
 		{
-			parsingContext.mesh = parsingContext.scene->getMeshCache().tryFind( name );
+			parsingContext.mesh = parsingContext.scene->tryFindMesh( name );
 
 			if ( !parsingContext.mesh.lock() )
 			{
-				parsingContext.ownMesh = parsingContext.scene->getMeshCache().create( name
+				parsingContext.ownMesh = parsingContext.scene->createMesh( name
 					, *parsingContext.scene );
 				parsingContext.mesh = parsingContext.ownMesh;
 			}
@@ -1578,11 +1578,10 @@ namespace castor3d
 		}
 		else
 		{
-			auto & cache = parsingContext.scene->getSceneNodeCache();
 			castor::String value;
 			params[0]->get( value );
 
-			if ( auto node = cache.tryFind( value ).lock() )
+			if ( auto node = parsingContext.scene->tryFindSceneNode( value ).lock() )
 			{
 				parsingContext.sceneNode = node;
 			}
@@ -1629,10 +1628,9 @@ namespace castor3d
 		}
 		else
 		{
-			auto & cache = parsingContext.parser->getEngine()->getMaterialCache();
 			castor::String name;
 			params[0]->get( name );
-			auto material = cache.tryFind( name ).lock().get();
+			auto material = parsingContext.parser->getEngine()->tryFindMaterial( name ).lock().get();
 
 			if ( material )
 			{
@@ -1688,7 +1686,7 @@ namespace castor3d
 				parsingContext.material = parsingContext.parser->getEngine()->getMaterialCache().getDefaultMaterial();
 			}
 
-			parsingContext.particleSystem = parsingContext.scene->getParticleSystemCache().tryFind( parsingContext.strName ).lock();
+			parsingContext.particleSystem = parsingContext.scene->tryFindParticleSystem( parsingContext.strName ).lock();
 
 			if ( !parsingContext.particleSystem )
 			{
@@ -1733,7 +1731,7 @@ namespace castor3d
 		}
 		else
 		{
-			parsingContext.scene->getParticleSystemCache().add( parsingContext.particleSystem->getName()
+			parsingContext.scene->addParticleSystem( parsingContext.particleSystem->getName()
 				, parsingContext.particleSystem
 				, true );
 			parsingContext.particleSystem.reset();
@@ -1813,7 +1811,7 @@ namespace castor3d
 		{
 			castor::String name;
 
-			if ( auto parent = parsingContext.scene->getSceneNodeCache().find( params[0]->get( name ) ).lock() )
+			if ( auto parent = parsingContext.scene->findSceneNode( params[0]->get( name ) ).lock() )
 			{
 				parsingContext.sceneNode = parent;
 
@@ -1841,7 +1839,7 @@ namespace castor3d
 		}
 		else
 		{
-			parsingContext.scene->getLightCache().add( parsingContext.light->getName()
+			parsingContext.scene->addLight( parsingContext.light->getName()
 				, parsingContext.light
 				, true );
 			parsingContext.light.reset();
@@ -1862,8 +1860,7 @@ namespace castor3d
 			uint32_t uiType;
 			params[0]->get( uiType );
 			parsingContext.lightType = LightType( uiType );
-			auto & cache = parsingContext.scene->getLightCache();
-			parsingContext.light = cache.tryFind( parsingContext.strName ).lock();
+			parsingContext.light = parsingContext.scene->tryFindLight( parsingContext.strName ).lock();
 
 			if ( !parsingContext.light )
 			{
@@ -2433,7 +2430,7 @@ namespace castor3d
 			}
 			else
 			{
-				parent = parsingContext.scene->getSceneNodeCache().find( name ).lock();
+				parent = parsingContext.scene->findSceneNode( name ).lock();
 			}
 
 			if ( parent )
@@ -2532,7 +2529,7 @@ namespace castor3d
 		else
 		{
 			auto name = parsingContext.sceneNode->getName();
-			auto node = parsingContext.scene->getSceneNodeCache().add( name, parsingContext.sceneNode ).lock();
+			auto node = parsingContext.scene->addSceneNode( name, parsingContext.sceneNode ).lock();
 			parsingContext.sceneNode.reset();
 
 			castor::PathArray files;
@@ -2592,7 +2589,7 @@ namespace castor3d
 			}
 			else
 			{
-				parent = parsingContext.scene->getSceneNodeCache().find( name ).lock();
+				parent = parsingContext.scene->findSceneNode( name ).lock();
 			}
 
 			if ( parent )
@@ -2623,9 +2620,8 @@ namespace castor3d
 		{
 			if ( parsingContext.geometry->getMesh().lock() )
 			{
-				auto & cache = parsingContext.parser->getEngine()->getMaterialCache();
 				castor::String name;
-				auto material = cache.tryFind( params[0]->get( name ) ).lock().get();
+				auto material = parsingContext.parser->getEngine()->tryFindMaterial( params[0]->get( name ) ).lock().get();
 
 				if ( material )
 				{
@@ -2706,7 +2702,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserObjectEnd )
 	{
 		auto & parsingContext = getParserContext( context );
-		parsingContext.scene->getGeometryCache().add( std::move( parsingContext.geometry ) );
+		parsingContext.scene->addGeometry( std::move( parsingContext.geometry ) );
 	}
 	CU_EndAttributePop()
 
@@ -2722,10 +2718,9 @@ namespace castor3d
 		{
 			if ( parsingContext.geometry->getMesh().lock() )
 			{
-				auto & cache = parsingContext.parser->getEngine()->getMaterialCache();
 				castor::String name;
 				uint16_t index;
-				auto material = cache.tryFind( params[1]->get( name ) ).lock().get();
+				auto material = parsingContext.parser->getEngine()->tryFindMaterial( params[1]->get( name ) ).lock().get();
 
 				if ( material )
 				{
@@ -3023,9 +3018,8 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			auto & cache = parsingContext.parser->getEngine()->getMaterialCache();
 			castor::String name;
-			auto material = cache.find( params[0]->get( name ) ).lock().get();
+			auto material = parsingContext.parser->getEngine()->findMaterial( params[0]->get( name ) ).lock().get();
 
 			if ( material )
 			{
@@ -3063,7 +3057,7 @@ namespace castor3d
 		{
 			if ( parsingContext.ownMesh )
 			{
-				parsingContext.scene->getMeshCache().add( parsingContext.mesh.lock()->getName()
+				parsingContext.scene->addMesh( parsingContext.mesh.lock()->getName()
 					, parsingContext.ownMesh
 					, true );
 			}
@@ -3089,10 +3083,9 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			auto & cache = parsingContext.parser->getEngine()->getMaterialCache();
 			castor::String name;
 			uint16_t index;
-			auto material = cache.find( params[1]->get( name ) ).lock().get();
+			auto material = parsingContext.parser->getEngine()->findMaterial( params[1]->get( name ) ).lock().get();
 
 			if ( material )
 			{
@@ -3587,13 +3580,13 @@ namespace castor3d
 		{
 			if ( parsingContext.scene )
 			{
-				parsingContext.scene->getMaterialView().add( parsingContext.material->getName()
+				parsingContext.scene->addMaterial( parsingContext.material->getName()
 					, parsingContext.ownMaterial
 					, true );
 			}
 			else
 			{
-				parsingContext.parser->getEngine()->getMaterialCache().add( parsingContext.material->getName()
+				parsingContext.parser->getEngine()->addMaterial( parsingContext.material->getName()
 					, parsingContext.ownMaterial
 					, true );
 			}
@@ -4101,8 +4094,7 @@ namespace castor3d
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto & cache = parsingContext.parser->getEngine()->getMaterialCache();
-			parsingContext.overlay->setMaterial( cache.find( name ).lock().get() );
+			parsingContext.overlay->setMaterial( parsingContext.parser->getEngine()->findMaterial( name ).lock().get() );
 		}
 		else
 		{
@@ -4118,8 +4110,8 @@ namespace castor3d
 		parsingContext.parentOverlays.push_back( parsingContext.overlay );
 		auto parent = parsingContext.parentOverlays.back().get();
 		parsingContext.overlay = parsingContext.scene
-			? parsingContext.scene->getOverlayCache().tryFind( params[0]->get( name ) ).lock()
-			: parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
+			? parsingContext.scene->tryFindOverlay( params[0]->get( name ) ).lock()
+			: parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) ).lock();
 
 		if ( !parsingContext.overlay )
 		{
@@ -4141,8 +4133,8 @@ namespace castor3d
 		parsingContext.parentOverlays.push_back( parsingContext.overlay );
 		auto parent = parsingContext.parentOverlays.back().get();
 		parsingContext.overlay = parsingContext.scene
-			? parsingContext.scene->getOverlayCache().tryFind( params[0]->get( name ) ).lock()
-			: parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
+			? parsingContext.scene->tryFindOverlay( params[0]->get( name ) ).lock()
+			: parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) ).lock();
 
 		if ( !parsingContext.overlay )
 		{
@@ -4164,8 +4156,8 @@ namespace castor3d
 		parsingContext.parentOverlays.push_back( parsingContext.overlay );
 		auto parent = parsingContext.parentOverlays.back().get();
 		parsingContext.overlay = parsingContext.scene
-			? parsingContext.scene->getOverlayCache().tryFind( params[0]->get( name ) ).lock()
-			: parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
+			? parsingContext.scene->tryFindOverlay( params[0]->get( name ) ).lock()
+			: parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) ).lock();
 
 		if ( !parsingContext.overlay )
 		{
@@ -4205,13 +4197,13 @@ namespace castor3d
 
 		if ( parsingContext.scene )
 		{
-			parsingContext.scene->getOverlayCache().add( parsingContext.overlay->getName()
+			parsingContext.scene->addOverlay( parsingContext.overlay->getName()
 				, parsingContext.overlay
 				, true );
 		}
 		else
 		{
-			parsingContext.parser->getEngine()->getOverlayCache().add( parsingContext.overlay->getName()
+			parsingContext.parser->getEngine()->addOverlay( parsingContext.overlay->getName()
 				, parsingContext.overlay
 				, true );
 		}
@@ -4285,8 +4277,7 @@ namespace castor3d
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto & cache = parsingContext.parser->getEngine()->getMaterialCache();
-			overlay->getBorderPanelOverlay()->setBorderMaterial( cache.find( name ).lock().get() );
+			overlay->getBorderPanelOverlay()->setBorderMaterial( parsingContext.parser->getEngine()->findMaterial( name ).lock().get() );
 		}
 		else
 		{
@@ -4512,7 +4503,7 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 		castor::String name;
-		SceneNodeSPtr parent = parsingContext.scene->getSceneNodeCache().find( params[0]->get( name ) ).lock();
+		SceneNodeSPtr parent = parsingContext.scene->findSceneNode( params[0]->get( name ) ).lock();
 
 		if ( parent )
 		{
@@ -4573,7 +4564,7 @@ namespace castor3d
 
 		if ( parsingContext.sceneNode && parsingContext.viewport )
 		{
-			auto camera = parsingContext.scene->getCameraCache().add( parsingContext.strName
+			auto camera = parsingContext.scene->addNewCamera( parsingContext.strName
 				, *parsingContext.scene
 				, *parsingContext.sceneNode
 				, std::move( *parsingContext.viewport ) ).lock();
@@ -4689,7 +4680,7 @@ namespace castor3d
 		{
 			castor::String name;
 			params[0]->get( name );
-			SceneNodeSPtr pParent = parsingContext.scene->getSceneNodeCache().find( name ).lock();
+			SceneNodeSPtr pParent = parsingContext.scene->findSceneNode( name ).lock();
 
 			if ( pParent )
 			{
@@ -4762,9 +4753,8 @@ namespace castor3d
 
 		if ( parsingContext.billboards )
 		{
-			auto & cache = parsingContext.parser->getEngine()->getMaterialCache();
 			castor::String name;
-			auto material = cache.tryFind( params[0]->get( name ) ).lock().get();
+			auto material = parsingContext.parser->getEngine()->tryFindMaterial( params[0]->get( name ) ).lock().get();
 
 			if ( material )
 			{
@@ -4794,7 +4784,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserBillboardEnd )
 	{
 		auto & parsingContext = getParserContext( context );
-		parsingContext.scene->getBillboardListCache().add( parsingContext.billboards->getName()
+		parsingContext.scene->addBillboardList( parsingContext.billboards->getName()
 			, parsingContext.billboards 
 			, true );
 		parsingContext.billboards.reset();
@@ -4818,7 +4808,7 @@ namespace castor3d
 
 		if ( parsingContext.animGroup )
 		{
-			GeometrySPtr geometry = parsingContext.scene->getGeometryCache().find( name ).lock();
+			GeometrySPtr geometry = parsingContext.scene->findGeometry( name ).lock();
 
 			if ( geometry )
 			{
@@ -4857,7 +4847,7 @@ namespace castor3d
 			}
 			else
 			{
-				SceneNodeSPtr node = parsingContext.scene->getSceneNodeCache().find( name ).lock();
+				SceneNodeSPtr node = parsingContext.scene->findSceneNode( name ).lock();
 
 				if ( node )
 				{

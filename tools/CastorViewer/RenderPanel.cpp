@@ -145,13 +145,13 @@ namespace CastorViewer
 
 			if ( camera )
 			{
-				if ( scene->getSceneNodeCache().has( cuT( "PointLightsNode" ) ) )
+				if ( scene->hasSceneNode( cuT( "PointLightsNode" ) ) )
 				{
-					m_lightsNode = scene->getSceneNodeCache().find( cuT( "PointLightsNode" ) ).lock().get();
+					m_lightsNode = scene->findSceneNode( cuT( "PointLightsNode" ) ).lock().get();
 				}
-				else if ( scene->getSceneNodeCache().has( cuT( "LightNode" ) ) )
+				else if ( scene->hasSceneNode( cuT( "LightNode" ) ) )
 				{
-					m_lightsNode = scene->getSceneNodeCache().find( cuT( "LightNode" ) ).lock().get();
+					m_lightsNode = scene->findSceneNode( cuT( "LightNode" ) ).lock().get();
 				}
 
 				auto cameraNode = camera->getParent();

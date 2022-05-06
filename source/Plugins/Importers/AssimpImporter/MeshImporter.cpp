@@ -375,7 +375,7 @@ namespace c3d_assimp
 				scene.getListener().postEvent( castor3d::makeGpuInitialiseEvent( *submesh ) );
 			}
 
-			mesh->lmesh = scene.getMeshCache().add( mesh->mesh->getName()
+			mesh->lmesh = scene.addMesh( mesh->mesh->getName()
 				, mesh->mesh
 				, true );
 
@@ -428,7 +428,7 @@ namespace c3d_assimp
 			}
 			else
 			{
-				mesh = scene.getMeshCache().create( name, scene );
+				mesh = scene.createMesh( name, scene );
 				lmesh = mesh;
 				m_registeredMeshes.emplace( name, lmesh );
 			}

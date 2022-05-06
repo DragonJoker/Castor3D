@@ -29,13 +29,13 @@ namespace castor3d
 		{
 			SamplerResPtr sampler;
 
-			if ( engine.getSamplerCache().has( name ) )
+			if ( engine.hasSampler( name ) )
 			{
-				sampler = engine.getSamplerCache().find( name );
+				sampler = engine.findSampler( name );
 			}
 			else
 			{
-				sampler = engine.getSamplerCache().add( name, engine );
+				sampler = engine.addNewSampler( name, engine );
 
 				if ( auto obj = sampler.lock() )
 				{

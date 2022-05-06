@@ -59,9 +59,9 @@ namespace castor3d
 		m_label->setVAlign( VAlign::eCenter );
 		m_value->setVAlign( VAlign::eCenter );
 
-		auto & materials = cache.getEngine().getMaterialCache();
-		m_label->setMaterial( materials.find( cuT( "White" ) ).lock().get() );
-		m_value->setMaterial( materials.find( cuT( "White" ) ).lock().get() );
+		auto & engine = cache.getEngine();
+		m_label->setMaterial( engine.findMaterial( cuT( "White" ) ).lock().get() );
+		m_value->setMaterial( engine.findMaterial( cuT( "White" ) ).lock().get() );
 
 		m_label->setCaption( label );
 	}
@@ -114,15 +114,15 @@ namespace castor3d
 			, nullptr
 			, &m_titlePanel->getOverlay() ).lock()->getTextOverlay() }
 	{
-		auto & materials = m_cache.getEngine().getMaterialCache();
+		auto & engine = m_cache.getEngine();
 
 		m_titlePanel->setPixelSize( castor::Size{ 320, 20 } );
-		m_titlePanel->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ).lock().get() );
+		m_titlePanel->setMaterial( engine.findMaterial( cuT( "AlphaDarkBlue" ) ).lock().get() );
 
 		m_titleText->setPixelSize( castor::Size{ 300, 20 } );
 		m_titleText->setVAlign( VAlign::eCenter );
 		m_titleText->setHAlign( HAlign::eCenter );
-		m_titleText->setMaterial( materials.find( cuT( "White" ) ).lock().get() );
+		m_titleText->setMaterial( engine.findMaterial( cuT( "White" ) ).lock().get() );
 		m_titleText->setFont( cuT( "Arial16" ) );
 		m_titleText->setCaption( title );
 	}

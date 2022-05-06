@@ -123,9 +123,9 @@ namespace c3d_assimp
 		castor::String name = m_importer.getInternalName( aiLight.mName );
 		castor3d::SceneNodeSPtr node;
 
-		if ( scene.getSceneNodeCache().has( name ) )
+		if ( scene.hasSceneNode( name ) )
 		{
-			node = scene.getSceneNodeCache().find( name ).lock();
+			node = scene.findSceneNode( name ).lock();
 		}
 		else
 		{
@@ -147,7 +147,7 @@ namespace c3d_assimp
 			}
 
 			node->attachTo( *scene.getObjectRootNode() );
-			node = scene.getSceneNodeCache().add( name, node ).lock();
+			node = scene.addSceneNode( name, node ).lock();
 		}
 
 		castor3d::LightSPtr light;
@@ -205,7 +205,7 @@ namespace c3d_assimp
 
 			light->setColour( castor::RgbColour::fromComponents( colour->x, colour->y, colour->z ) );
 			node->attachObject( *light );
-			scene.getLightCache().add( name, light );
+			scene.addLight( name, light );
 		}
 	}
 
@@ -235,11 +235,11 @@ namespace c3d_assimp
 			|| !anims.empty() )
 		{
 			castor::String name = m_importer.getInternalName( aiNode.mName );
-			auto lnode = scene.getSceneNodeCache().tryFind( name );
+			auto lnode = scene.tryFindSceneNode( name );
 
 			if ( !lnode.lock() )
 			{
-				auto node = scene.getSceneNodeCache().create( name, scene );
+				auto node = scene.createSceneNode( name, scene );
 				node->attachTo( *parent );
 				aiVector3D scale, position;
 				aiQuaternion orientation;
@@ -248,7 +248,7 @@ namespace c3d_assimp
 				node->setScale( { scale.x, scale.y, scale.z } );
 				node->setOrientation( castor::Quaternion{ castor::Point4f{ orientation.x, orientation.y, orientation.z, orientation.w } } );
 				m_nodes.push_back( node );
-				lnode = scene.getSceneNodeCache().add( node->getName(), node );
+				lnode = scene.addSceneNode( node->getName(), node );
 				node = lnode.lock();
 
 				for ( auto nodeAnim : anims )
@@ -319,7 +319,7 @@ namespace c3d_assimp
 
 			if ( node->hasAnimation() )
 			{
-				auto animGroup = scene.getAnimatedObjectGroupCache().add( node->getName() + "Node", scene ).lock();
+				auto animGroup = scene.addNewAnimatedObjectGroup( node->getName() + "Node", scene ).lock();
 				auto animObject = animGroup->addObject( *node, node->getName() );
 
 				for ( auto & animation : node->getAnimations() )
@@ -331,7 +331,7 @@ namespace c3d_assimp
 
 			if ( mesh->hasAnimation() )
 			{
-				auto animGroup = scene.getAnimatedObjectGroupCache().add( geometry->getName() + "Morph", scene ).lock();
+				auto animGroup = scene.addNewAnimatedObjectGroup( geometry->getName() + "Morph", scene ).lock();
 				auto animObject = animGroup->addObject( *mesh
 					, *geometry
 					, geometry->getName() );
@@ -383,11 +383,11 @@ namespace c3d_assimp
 					CU_Require( nodeIt != m_nodes.end() );
 					auto node = *nodeIt;
 					auto * meshRepl = meshIt->second;
-					auto lgeom = scene.getGeometryCache().tryFind( name + castor::string::toString( aiMeshIndex ) );
+					auto lgeom = scene.tryFindGeometry( name + castor::string::toString( aiMeshIndex ) );
 
 					if ( !lgeom.lock() )
 					{
-						auto geom = scene.getGeometryCache().create( name + castor::string::toString( aiMeshIndex )
+						auto geom = scene.createGeometry( name + castor::string::toString( aiMeshIndex )
 							, scene
 							, *node
 							, meshRepl->lmesh );
@@ -405,7 +405,7 @@ namespace c3d_assimp
 
 						m_geometries.emplace( geom->getName(), geom );
 						node->attachObject( *geom );
-						scene.getGeometryCache().add( geom );
+						scene.addGeometry( geom );
 					}
 				}
 			}
@@ -456,7 +456,7 @@ namespace c3d_assimp
 		if ( it == m_animGroups.end() )
 		{
 			m_animGroups.emplace_back( &sceneNode
-				, scene.getAnimatedObjectGroupCache().add( name + cuT( "Skin" ), scene ).lock() );
+				, scene.addNewAnimatedObjectGroup( name + cuT( "Skin" ), scene ).lock() );
 			animGroup = m_animGroups.back().second;
 		}
 		else

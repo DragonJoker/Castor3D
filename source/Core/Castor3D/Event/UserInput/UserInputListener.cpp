@@ -15,7 +15,7 @@ namespace castor3d
 {
 	UserInputListener::UserInputListener( Engine & engine, castor::String const & name )
 		: castor::OwnedBy< Engine >{ engine }
-		, m_frameListener{ engine.getFrameListenerCache().add( name ) }
+		, m_frameListener{ engine.addNewFrameListener( name ) }
 	{
 		m_mouse.buttons[size_t( MouseButton::eLeft )] = false;
 		m_mouse.buttons[size_t( MouseButton::eMiddle )] = false;

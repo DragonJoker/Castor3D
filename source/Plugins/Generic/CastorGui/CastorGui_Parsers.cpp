@@ -859,7 +859,7 @@ namespace CastorGui
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name ).lock().get();
 
 			if ( material )
 			{
@@ -885,7 +885,7 @@ namespace CastorGui
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name ).lock().get();
 
 			if ( material )
 			{
@@ -911,7 +911,7 @@ namespace CastorGui
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name ).lock().get();
 
 			if ( material )
 			{
@@ -937,7 +937,7 @@ namespace CastorGui
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name ).lock().get();
 
 			if ( material )
 			{
@@ -963,7 +963,7 @@ namespace CastorGui
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name ).lock().get();
 
 			if ( material )
 			{
@@ -989,7 +989,7 @@ namespace CastorGui
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name ).lock().get();
 
 			if ( material )
 			{
@@ -1015,7 +1015,7 @@ namespace CastorGui
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name ).lock().get();
 
 			if ( material )
 			{
@@ -1041,7 +1041,7 @@ namespace CastorGui
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name ).lock().get();
 
 			if ( material )
 			{
@@ -1067,7 +1067,7 @@ namespace CastorGui
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name ).lock().get();
 
 			if ( material )
 			{
@@ -1093,7 +1093,7 @@ namespace CastorGui
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name ).lock().get();
 
 			if ( material )
 			{
@@ -1136,7 +1136,7 @@ namespace CastorGui
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name ).lock().get();
 
 			if ( material )
 			{
@@ -1179,7 +1179,7 @@ namespace CastorGui
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name ).lock().get();
 
 			if ( material )
 			{
@@ -1205,7 +1205,7 @@ namespace CastorGui
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name ).lock().get();
 
 			if ( material )
 			{
@@ -1231,7 +1231,7 @@ namespace CastorGui
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name ).lock().get();
 
 			if ( material )
 			{
@@ -1257,7 +1257,7 @@ namespace CastorGui
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name ).lock().get();
 
 			if ( material )
 			{
