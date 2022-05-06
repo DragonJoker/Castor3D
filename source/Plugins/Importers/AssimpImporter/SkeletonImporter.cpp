@@ -34,55 +34,46 @@ namespace c3d_assimp
 	{
 		static aiNode const * findRootSkeletonNode( aiNode const & sceneRootNode
 			, castor::ArrayView< aiBone * > bones
+			, uint32_t aiMeshIndex
+			, std::map< uint32_t, aiNode * > meshesNodes
 			, std::map< castor::String, BoneData > const & bonesNodes )
 		{
+			auto meshNode = meshesNodes.find( aiMeshIndex )->second;
 			std::vector< aiNode const * > bonesRootNodes;
+			auto insertNode = [&bonesRootNodes]( aiNode const * node )
+			{
+				if ( std::all_of( bonesRootNodes.begin()
+					, bonesRootNodes.end()
+					, [node]( aiNode const * lookup )
+					{
+						return lookup->FindNode( node->mName ) == nullptr;
+					} ) )
+				{
+					std::erase_if( bonesRootNodes
+						, [node]( aiNode const * lookup )
+						{
+							return node->FindNode( lookup->mName ) != nullptr;
+						} );
+					bonesRootNodes.push_back( node );
+				}
+			};
 
 			for ( auto bone : bones )
 			{
 				auto node = sceneRootNode.FindNode( bone->mName );
+				insertNode( node );
 
-				while ( node->mParent
-					&& ( node->mNumChildren != 1u
-						|| makeString( node->mName ).find( "$AssimpFbx$" ) != castor::String::npos
-						|| bonesNodes.end() != bonesNodes.find( makeString( node->mParent->mName ) ) ) )
+				while ( node->mParent )
 				{
 					node = node->mParent;
-				}
 
-				if ( node->mParent )
-				{
-					node = node->mParent;
-				}
-
-				auto it = std::find_if( bonesRootNodes.begin()
-					, bonesRootNodes.end()
-					, [node]( aiNode const * lookup )
+					if ( node == meshNode
+						|| node->FindNode( meshNode->mName ) )
 					{
-						return lookup == node
-							|| lookup->FindNode( node->mName ) != nullptr;
-					} );
-
-				if ( it == bonesRootNodes.end() )
-				{
-					bool found = false;
-					do
-					{
-						it = std::find_if( bonesRootNodes.begin()
-							, bonesRootNodes.end()
-							, [node]( aiNode const * lookup )
-							{
-								return node->FindNode( lookup->mName ) == nullptr;
-							} );
-						found = it != bonesRootNodes.end();
-
-						if ( found )
-						{
-							bonesRootNodes.erase( it );
-						}
+						break;
 					}
-					while ( found );
-					bonesRootNodes.push_back( node );
+
+					insertNode( node );
 				}
 			}
 
@@ -107,6 +98,29 @@ namespace c3d_assimp
 			return skeleton.createBone( name, it->second.inverseTransform );
 		}
 
+		static castor3d::SkeletonNode * processSkeletonNode( AssimpImporter const & importer
+			, std::map< castor::String, BoneData > const & bonesNodes
+			, castor3d::Skeleton & skeleton
+			, aiNode const & aiNode
+			, castor3d::SkeletonNode * parentSkelNode )
+		{
+			auto nodeName = makeString( aiNode.mName );
+			auto name = importer.getInternalName( nodeName );
+			auto skelNode = skeleton.findNode( name );
+
+			if ( !skelNode )
+			{
+				skelNode = addNode( skeleton, bonesNodes, nodeName, name );
+
+				if ( parentSkelNode )
+				{
+					skeleton.setNodeParent( *skelNode, *parentSkelNode );
+				}
+			}
+
+			return skelNode;
+		}
+
 		static void processSkeletonNodes( AssimpImporter const & importer
 			, std::map< castor::String, BoneData > const & bonesNodes
 			, castor3d::Skeleton & skeleton
@@ -115,25 +129,15 @@ namespace c3d_assimp
 		{
 			for ( auto node : castor::makeArrayView( parentAiNode.mChildren, parentAiNode.mNumChildren ) )
 			{
-				auto nodeName = makeString( node->mName );
-				auto name = importer.getInternalName( nodeName );
-				auto skelNode = skeleton.findNode( name );
-
-				if ( !skelNode )
-				{
-					skelNode = addNode( skeleton, bonesNodes, nodeName, name );
-
-					if ( parentSkelNode )
-					{
-						skeleton.setNodeParent( *skelNode, *parentSkelNode );
-					}
-				}
-
 				processSkeletonNodes( importer
 					, bonesNodes
 					, skeleton
 					, *node
-					, skelNode );
+					, processSkeletonNode( importer
+						, bonesNodes
+						, skeleton
+						, *node
+						, parentSkelNode ) );
 			}
 		}
 
@@ -245,6 +249,24 @@ namespace c3d_assimp
 			m_bonesNodes.clear();
 		}
 
+		m_meshesNodes.clear();
+		std::vector< aiNode * > work;
+		work.push_back( aiScene.mRootNode );
+
+		while ( !work.empty() )
+		{
+			auto node = work.back();
+			work.pop_back();
+			work.insert( work.end()
+				, node->mChildren
+				, node->mChildren + node->mNumChildren );
+
+			for ( auto aiMeshIndex : castor::makeArrayView( node->mMeshes, node->mNumMeshes ) )
+			{
+				m_meshesNodes.emplace( aiMeshIndex, node );
+			}
+		}
+
 		for ( auto aiMesh : castor::makeArrayView( aiScene.mMeshes, aiScene.mNumMeshes ) )
 		{
 			for ( auto aiBone : castor::makeArrayView( aiMesh->mBones, aiMesh->mNumBones ) )
@@ -290,9 +312,14 @@ namespace c3d_assimp
 		{
 			if ( aiMesh->HasBones() )
 			{
-				auto preRootNode = skeletons::findRootSkeletonNode( *aiScene.mRootNode
+				auto rootNode = skeletons::findRootSkeletonNode( *aiScene.mRootNode
 					, castor::makeArrayView( aiMesh->mBones, aiMesh->mNumBones )
+					, meshIndex
+					, m_meshesNodes
 					, m_bonesNodes );
+				auto preRootNode = rootNode->mParent
+					? rootNode->mParent
+					: rootNode;
 				castor3d::SkeletonSPtr skeleton;
 				auto nodeName = makeString( preRootNode->mName );
 				auto it = m_skeletons.find( nodeName );
@@ -312,8 +339,9 @@ namespace c3d_assimp
 						// If so, complete the skeleton and update the list
 						skeleton = it->second;
 						m_needsAnimsReparse = true;
+						std::map< castor::String, BoneData > fake;
 						skeletons::completeSkeleton( m_importer
-							, m_bonesNodes
+							, fake
 							, *skeleton
 							, *preRootNode
 							, aiScene.mRootNode->FindNode( it->first.c_str() ) );
@@ -358,12 +386,16 @@ namespace c3d_assimp
 					castor3d::log::info << cuT( "  Skeleton found" ) << std::endl;
 					it->second = std::make_shared< castor3d::Skeleton >( scene );
 					skeleton = it->second;
-					skeleton->setGlobalInverseTransform( makeMatrix4x4f( preRootNode->mChildren[0]->mTransformation ).getInverse() );
+					skeleton->setGlobalInverseTransform( makeMatrix4x4f( rootNode->mTransformation ).getInverse() );
 					skeletons::processSkeletonNodes( m_importer
 						, m_bonesNodes
 						, *skeleton
-						, *preRootNode
-						, nullptr );
+						, *rootNode
+						, skeletons::processSkeletonNode( m_importer
+							, m_bonesNodes
+							, *skeleton
+							, *rootNode
+							, nullptr ) );
 				}
 				else
 				{
