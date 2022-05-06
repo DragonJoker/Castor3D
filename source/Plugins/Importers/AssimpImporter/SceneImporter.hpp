@@ -35,7 +35,9 @@ namespace c3d_assimp
 		void doProcessSceneNodes( aiScene const & aiScene
 			, aiNode const & aiNode
 			, castor3d::Scene & scene
-			, castor3d::SceneNodeSPtr targetParent );
+			, std::map< uint32_t, MeshData * > const & meshes
+			, castor3d::SceneNodeSPtr targetParent
+			, castor::Matrix4x4f transform );
 		void doTransformMesh( aiNode const & aiNode
 			, MeshIndices const & meshes
 			, aiMatrix4x4 transformAcc = aiMatrix4x4{} );
