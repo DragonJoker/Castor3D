@@ -15,8 +15,6 @@
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/SceneFileParser.hpp>
-#include <Castor3D/Text/TextMaterial.hpp>
-#include <Castor3D/Text/TextScene.hpp>
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 

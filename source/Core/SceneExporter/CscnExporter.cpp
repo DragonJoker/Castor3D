@@ -1,5 +1,14 @@
 #include "SceneExporter/CscnExporter.hpp"
 
+#include "Text/TextGeometry.hpp"
+#include "Text/TextLight.hpp"
+#include "Text/TextMaterial.hpp"
+#include "Text/TextMesh.hpp"
+#include "Text/TextSampler.hpp"
+#include "Text/TextScene.hpp"
+#include "Text/TextSceneNode.hpp"
+#include "Text/TextSkeleton.hpp"
+
 #include <Castor3D/Binary/BinaryMesh.hpp>
 #include <Castor3D/Binary/BinaryMeshAnimation.hpp>
 #include <Castor3D/Binary/BinarySceneNodeAnimation.hpp>
@@ -28,14 +37,6 @@
 #include <Castor3D/Scene/Animation/SceneNodeAnimation.hpp>
 #include <Castor3D/Scene/Animation/SceneNode/SceneNodeAnimationInstance.hpp>
 #include <Castor3D/Scene/Animation/AnimatedSceneNode.hpp>
-#include <Castor3D/Text/TextGeometry.hpp>
-#include <Castor3D/Text/TextLight.hpp>
-#include <Castor3D/Text/TextMaterial.hpp>
-#include <Castor3D/Text/TextMesh.hpp>
-#include <Castor3D/Text/TextSampler.hpp>
-#include <Castor3D/Text/TextScene.hpp>
-#include <Castor3D/Text/TextSceneNode.hpp>
-#include <Castor3D/Text/TextSkeleton.hpp>
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
