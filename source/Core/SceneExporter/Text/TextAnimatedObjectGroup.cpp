@@ -60,28 +60,27 @@ namespace castor
 				// Only add objects, and not skeletons or meshes
 				if ( skel != String::npos )
 				{
-					name = name.substr( 0, skel );
 					write = group.getObjects().find( name ) == group.getObjects().end()
 						&& written.find( name ) == written.end();
+					written.insert( name );
+					name = name.substr( 0, skel );
+					result = result && writeName( file, "animated_skeleton", name );
 				}
 				else if ( mesh != String::npos )
 				{
-					name = name.substr( 0, mesh );
 					write = group.getObjects().find( name ) == group.getObjects().end()
 						&& written.find( name ) == written.end();
+					written.insert( name );
+					name = name.substr( 0, mesh );
+					result = result && writeName( file, "animated_mesh", name );
 				}
 				else if ( node != String::npos )
 				{
-					name = name.substr( 0, node );
 					write = group.getObjects().find( name ) == group.getObjects().end()
 						&& written.find( name ) == written.end();
-				}
-
-				if ( write )
-				{
-					result = result
-						&& writeName( file, "animated_object", name );
 					written.insert( name );
+					name = name.substr( 0, node );
+					result = result && writeName( file, "animated_node", name );
 				}
 			}
 

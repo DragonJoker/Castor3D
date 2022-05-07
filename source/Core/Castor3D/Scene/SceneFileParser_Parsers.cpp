@@ -5056,6 +5056,126 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserAnimatedObjectGroupAnimatedMesh )
+	{
+		auto & parsingContext = getParserContext( context );
+		castor::String name;
+		params[0]->get( name );
+
+		if ( parsingContext.animGroup )
+		{
+			GeometrySPtr geometry = parsingContext.scene->findGeometry( name ).lock();
+
+			if ( geometry )
+			{
+				auto mesh = geometry->getMesh().lock();
+
+				if ( mesh )
+				{
+					if ( mesh->hasAnimation() )
+					{
+						parsingContext.animMesh = parsingContext.animGroup->addObject( *mesh
+							, *geometry
+							, geometry->getName() );
+					}
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Geometry [" ) + name + "] has no mesh" );
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No geometry with name [" ) + name + "]" );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No animated object group not initialised" ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserAnimatedObjectGroupAnimatedSkeleton )
+	{
+		auto & parsingContext = getParserContext( context );
+		castor::String name;
+		params[0]->get( name );
+
+		if ( parsingContext.animGroup )
+		{
+			GeometrySPtr geometry = parsingContext.scene->findGeometry( name ).lock();
+
+			if ( geometry )
+			{
+				auto mesh = geometry->getMesh().lock();
+
+				if ( mesh )
+				{
+					auto skeleton = mesh->getSkeleton();
+
+					if ( skeleton )
+					{
+						if ( skeleton->hasAnimation() )
+						{
+							parsingContext.animSkeleton = parsingContext.animGroup->addObject( *skeleton
+								, *mesh
+								, *geometry
+								, geometry->getName() );
+						}
+					}
+					else
+					{
+						CU_ParsingError( cuT( "Geometry [" ) + name + "]'s mesh has no skeleton" );
+					}
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Geometry [" ) + name + "] has no mesh" );
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No geometry with name [" ) + name + "]" );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No animated object group not initialised" ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserAnimatedObjectGroupAnimatedNode )
+	{
+		auto & parsingContext = getParserContext( context );
+		castor::String name;
+		params[0]->get( name );
+
+		if ( parsingContext.animGroup )
+		{
+			SceneNodeSPtr node = parsingContext.scene->findSceneNode( name ).lock();
+
+			if ( node )
+			{
+				if ( node->hasAnimation() )
+				{
+					parsingContext.animNode = parsingContext.animGroup->addObject( *node
+						, node->getName() );
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No node with name [" ) + name + "]" );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No animated object group not initialised" ) );
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserAnimatedObjectGroupAnimation )
 	{
 		auto & parsingContext = getParserContext( context );
