@@ -47,38 +47,28 @@ namespace castor
 		if ( auto block{ beginBlock( file, "animated_object_group", group.getName() ) } )
 		{
 			result = true;
-			StrSet written;
 
 			for ( auto it : group.getObjects() )
 			{
 				auto name = it.first;
-				bool write{ true };
 				size_t skel = name.find( cuT( "_Skeleton" ) );
 				size_t mesh = name.find( cuT( "_Mesh" ) );
 				size_t node = name.find( cuT( "_Node" ) );
 
-				// Only add objects, and not skeletons or meshes
 				if ( skel != String::npos )
 				{
-					write = group.getObjects().find( name ) == group.getObjects().end()
-						&& written.find( name ) == written.end();
-					written.insert( name );
 					name = name.substr( 0, skel );
 					result = result && writeName( file, "animated_skeleton", name );
 				}
-				else if ( mesh != String::npos )
+
+				if ( mesh != String::npos )
 				{
-					write = group.getObjects().find( name ) == group.getObjects().end()
-						&& written.find( name ) == written.end();
-					written.insert( name );
 					name = name.substr( 0, mesh );
 					result = result && writeName( file, "animated_mesh", name );
 				}
-				else if ( node != String::npos )
+
+				if ( node != String::npos )
 				{
-					write = group.getObjects().find( name ) == group.getObjects().end()
-						&& written.find( name ) == written.end();
-					written.insert( name );
 					name = name.substr( 0, node );
 					result = result && writeName( file, "animated_node", name );
 				}
