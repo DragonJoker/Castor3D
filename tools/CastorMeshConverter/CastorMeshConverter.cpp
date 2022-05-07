@@ -6,6 +6,9 @@
 #include <Castor3D/Cache/PluginCache.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/PassFactory.hpp>
+#include <Castor3D/Material/Pass/Phong/BlinnPhongPass.hpp>
+#include <Castor3D/Material/Pass/Phong/PhongPass.hpp>
+#include <Castor3D/Material/Pass/PBR/MetallicRoughnessPbrPass.hpp>
 #include <Castor3D/Material/Pass/PBR/SpecularGlossinessPbrPass.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Model/Mesh/Importer.hpp>
@@ -13,14 +16,18 @@
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
+#include <Castor3D/Render/RenderLoop.hpp>
+#include <Castor3D/Scene/Camera.hpp>
+#include <Castor3D/Scene/Light/Light.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/SceneFileParser.hpp>
 
 #include <CastorUtils/Design/ResourceCache.hpp>
+#include <CastorUtils/Graphics/RgbColour.hpp>
 
 #include <SceneExporter/CscnExporter.hpp>
 
-namespace
+namespace convert
 {
 	using StringArray = std::vector< std::string >;
 
@@ -30,22 +37,71 @@ namespace
 		castor::String output;
 		castor::String passType{ castor3d::SpecularGlossinessPbrPass::Type };
 		castor3d::exporter::ExportOptions options;
+		castor3d::Parameters params;
 	};
 
-	void printUsage()
+	static void printUsage()
 	{
 		std::cout << "Castor Mesh Converter is a tool that allows you to convert any mesh file to the CMSH file format." << std::endl;
 		std::cout << "Usage:" << std::endl;
-		std::cout << "CastorMeshConverter FILE [-o NAME] [-s] [-r]" << std::endl;
+		std::cout << "CastorMeshConverter FILE [-o NAME] [-s] [-c] [-p DEGREES] [-y DEGREES] [-r DEGREES] [-a VALUE] [-m VALUE]" << std::endl;
 		std::cout << "Options:" << std::endl;
 		std::cout << "  -o NAME     Allows you to specify the output file name." << std::endl;
 		std::cout << "              NAME can omit the extension." << std::endl << std::endl;
 		std::cout << "  -s          Splits the mesh per material." << std::endl;
-		std::cout << "  -r          Recenters the submesh in its bounding box." << std::endl;
+		std::cout << "  -c          Recenters the submesh in its bounding box." << std::endl;
 		std::cout << "              Only useful whe -s is specified" << std::endl;
+		std::cout << "  -p DEGREES  Pitch model by given angle in floating point degrees" << std::endl;
+		std::cout << "  -y DEGREES  Yaw model by given angle in floating point degrees" << std::endl;
+		std::cout << "  -r DEGREES  Roll model by given angle in floating point degrees" << std::endl;
+		std::cout << "  -a SCALE    Rescales model by given floating point value" << std::endl;
+		std::cout << "  -m VALUE    Specify materials type" << std::endl;
+		std::cout << "              VALUE can be one of:" << std::endl;
+		std::cout << "              - phong : Phong" << std::endl;
+		std::cout << "              - blinn_phong : Blinn-Phong" << std::endl;
+		std::cout << "              - pbr_sg : PBR Specular Glossiness (default value)" << std::endl;
+		std::cout << "              - pbr_mr : PBR Metallic Roughness (default value for glTF files)" << std::endl;
 	}
 
-	bool doParseArgs( int argc
+	static bool parseSwitchOption( castor::String const & option
+		, castor::StringArray & args )
+	{
+		auto it = std::find( args.begin(), args.end(), "-" + option );
+		auto result = it != args.end();
+
+		if ( result )
+		{
+			args.erase( it );
+		}
+
+		return result;
+	}
+
+	static bool parseValueOption( castor::String const & option
+		, castor::StringArray & args
+		, castor::String & value )
+	{
+		auto it = std::find( args.begin(), args.end(), "-" + option );
+		auto result = it != args.end();
+
+		if ( it != args.end() )
+		{
+			if ( std::next( it ) == args.end() )
+			{
+				std::cerr << "Missing value parameter for -" << option << " option." << std::endl << std::endl;
+				printUsage();
+				return false;
+			}
+
+			it = args.erase( it );
+			value = *it;
+			args.erase( it );
+		}
+
+		return result;
+	}
+
+	static bool parseArgs( int argc
 		, char * argv[]
 		, Options & options )
 	{
@@ -72,33 +128,91 @@ namespace
 			return false;
 		}
 
-		options.input = castor::Path{ castor::string::stringCast< castor::xchar >( args[0] ) };
-		it = std::find( args.begin(), args.end(), "-o" );
+		castor::String value;
+		bool overridePassType{ false };
 
-		if ( it == args.end() )
+		if ( parseValueOption( "o", args, value ) )
 		{
-			options.output = options.input.getFileName();
+			options.output = castor::Path{ value }.getFileName();
 		}
-		else if ( ++it == args.end() )
+
+		if ( parseValueOption( "m", args, value ) )
 		{
-			std::cerr << "Missing NAME parameter for -o option." << std::endl << std::endl;
+			overridePassType = true;
+
+			if ( value == "phong" )
+			{
+				options.passType = castor3d::PhongPass::Type;
+			}
+			else if ( value == "blinn_phong" )
+			{
+				options.passType = castor3d::BlinnPhongPass::Type;
+			}
+			else if ( value == "pbr_sg" )
+			{
+				options.passType = castor3d::SpecularGlossinessPbrPass::Type;
+			}
+			else if ( value == "pbr_mr" )
+			{
+				options.passType = castor3d::MetallicRoughnessPbrPass::Type;
+			}
+			else
+			{
+				std::cerr << "Wrong VALUE parameter for -m option." << std::endl << std::endl;
+				printUsage();
+				return false;
+			}
+		}
+
+		if ( parseValueOption( "p", args, value ) )
+		{
+			options.params.add( cuT( "pitch" ),  castor::string::toFloat( value ) );
+		}
+
+		if ( parseValueOption( "y", args, value ) )
+		{
+			options.params.add( cuT( "yaw" ), castor::string::toFloat( value ) );
+		}
+
+		if ( parseValueOption( "r", args, value ) )
+		{
+			options.params.add( cuT( "roll" ), castor::string::toFloat( value ) );
+		}
+
+		if ( parseValueOption( "a", args, value ) )
+		{
+			options.params.add( cuT( "rescale" ), castor::string::toFloat( value ) );
+		}
+
+		options.options.splitPerMaterial = parseSwitchOption( "s", args );
+		options.options.recenter = parseSwitchOption( "c", args );
+
+		if ( args.empty() )
+		{
+			std::cerr << "Missing mesh file parameter." << std::endl << std::endl;
 			printUsage();
 			return false;
 		}
-		else
+
+		options.input = castor::Path{ args.front() };
+
+		if ( options.output.empty() )
 		{
-			options.output = castor::Path{ *it }.getFileName();
+			options.output = options.input.getFileName();
 		}
 
-		it = std::find( args.begin(), args.end(), "-s" );
-		options.options.splitPerMaterial = it != args.end();
-		it = std::find( args.begin(), args.end(), "-r" );
-		options.options.recenter = it != args.end();
+		auto extension = castor::string::lowerCase( options.input.getExtension() );
+
+		if ( !overridePassType
+			&& ( extension == "gltf" || extension == "glb" ) )
+		{
+			options.passType = castor3d::MetallicRoughnessPbrPass::Type;
+		}
 
 		return true;
 	}
 
-	castor::PathArray listPluginsFiles( castor::Path const & folder )
+	static castor::PathArray listPluginsFiles( castor::Path const & folder )
 	{
 		castor::PathArray files;
 		castor::File::listDirectoryFiles( folder, files );
@@ -117,7 +231,7 @@ namespace
 		return result;
 	}
 
-	void loadPlugins( castor3d::Engine & engine )
+	static void loadPlugins( castor3d::Engine & engine )
 	{
 		castor::PathArray arrayKept = listPluginsFiles( castor3d::Engine::getPluginsDirectory() );
 
@@ -175,7 +289,7 @@ namespace
 		castor::Logger::logInfo( cuT( "Plugins loaded" ) );
 	}
 
-	bool doInitialiseEngine( castor3d::Engine & engine )
+	static bool initialiseEngine( castor3d::Engine & engine )
 	{
 		if ( !castor::File::directoryExists( castor3d::Engine::getEngineDirectory() ) )
 		{
@@ -197,7 +311,7 @@ namespace
 			{
 				if ( engine.loadRenderer( renderer->name ) )
 				{
-					engine.initialise( 1, false );
+					engine.initialise( 100, false );
 					loadPlugins( engine );
 					result = true;
 				}
@@ -214,13 +328,24 @@ namespace
 
 		return result;
 	}
+
+	static castor::Point3f getCameraPosition( castor::BoundingBox const & aabb
+		, float & farPlane )
+	{
+		auto height = aabb.getDimensions()->y;
+		auto z = -( height * 1.5f );
+		farPlane = std::abs( z ) + std::max( aabb.getMax()->z, std::max( aabb.getMax()->x, aabb.getMax()->y ) ) * 2.0f;
+		return { aabb.getCenter()->x
+			, aabb.getCenter()->y
+			, z };
+	}
 }
 
 int main( int argc, char * argv[] )
 {
-	Options options;
+	convert::Options options;
 
-	if ( doParseArgs( argc, argv, options ) )
+	if ( convert::parseArgs( argc, argv, options ) )
 	{
 		auto path = options.input;
 
@@ -232,7 +357,7 @@ int main( int argc, char * argv[] )
 		if ( !castor::File::fileExists( path ) )
 		{
 			std::cerr << "File [" << path << "] does not exist." << std::endl << std::endl;
-			printUsage();
+			convert::printUsage();
 			return EXIT_SUCCESS;
 		}
 
@@ -251,7 +376,7 @@ int main( int argc, char * argv[] )
 				false
 			};
 
-			if ( doInitialiseEngine( engine ) )
+			if ( convert::initialiseEngine( engine ) )
 			{
 				auto name = path.getFileName();
 				auto extension = castor::string::lowerCase( path.getExtension() );
@@ -299,7 +424,8 @@ int main( int argc, char * argv[] )
 				else
 				{
 					castor3d::Scene scene{ cuT( "DummyScene" ), engine };
-					castor3d::MeshRPtr mesh{};
+					scene.setAmbientLight( castor::RgbColour::fromComponents( 1.0f, 1.0f, 1.0f ) );
+					scene.setBackgroundColour( castor::RgbColour::fromComponents( 0.5f, 0.5f, 0.5f ) );
 
 					if ( !engine.getImporterFactory().isTypeRegistered( extension ) )
 					{
@@ -308,18 +434,16 @@ int main( int argc, char * argv[] )
 					else
 					{
 						scene.setPassesType( scene.getEngine()->getPassFactory().getNameId( options.passType ) );
-						mesh = scene.addNewMesh( name, scene ).lock().get();
 						auto importer = engine.getImporterFactory().create( extension, engine );
 
-						if ( !importer->import( *mesh, path, castor3d::Parameters{}, false ) )
+						if ( !importer->import( scene, path, options.params, {} ) )
 						{
 							castor::Logger::logError( castor::makeStringStream() << "Mesh Import failed" );
 							scene.removeMesh( name );
-							mesh = nullptr;
 						}
-
-						if ( mesh )
+						else
 						{
+							scene.initialise();
 							auto rootFolder = path.getPath() / name;
 
 							if ( !castor::File::directoryExists( rootFolder ) )
@@ -327,9 +451,48 @@ int main( int argc, char * argv[] )
 								castor::File::directoryCreate( rootFolder );
 							}
 
+							if ( scene.getCameraCache().isEmpty() )
+							{
+								float farPlane = 0.0f;
+								auto cameraNode = scene.createSceneNode( "MainCameraNode", scene );
+								cameraNode->setPosition( convert::getCameraPosition( scene.getBoundingBox(), farPlane ) );
+								cameraNode->attachTo( *scene.getCameraRootNode() );
+								cameraNode = scene.addSceneNode( "MainCameraNode", cameraNode ).lock();
+								castor3d::Viewport viewport{ *scene.getEngine() };
+								viewport.setPerspective( 45.0_degrees
+									, 1.7778f
+									, std::max( 0.1f, farPlane / 1000.0f )
+									, std::min( farPlane, 1000.0f ) );
+								auto camera = scene.createCamera( "MainCamera"
+									, scene
+									, *cameraNode
+									, viewport );
+								camera->attachTo( *cameraNode );
+								scene.addCamera( "MainCamera", camera, false );
+							}
+
+							if ( scene.getLightCache().isEmpty() )
+							{
+								auto lightNode = scene.createSceneNode( "LightNode", scene );
+								lightNode->setOrientation( castor::Quaternion::fromAxisAngle( castor::Point3f{ 1.0, 0.0, 0.0 }, 90.0_degrees ) );
+								lightNode->attachTo( *scene.getObjectRootNode() );
+								lightNode = scene.addSceneNode( "LightNode", lightNode ).lock();
+								auto light = scene.createLight( "SunLight"
+									, scene
+									, *lightNode
+									, scene.getLightsFactory()
+									, castor3d::LightType::eDirectional );
+								light->setColour( castor::RgbColour::fromComponents( 1.0f, 1.0f, 1.0f ) );
+								light->setIntensity( { 8.0f, 10.0f } );
+								light->attachTo( *lightNode );
+								scene.addLight( "SunLight", light, false );
+							}
+
 							castor3d::exporter::CscnSceneExporter exporter{ options.options };
-							exporter.exportMesh( scene, *mesh, rootFolder, options.output );
-							mesh->cleanup();
+							engine.getRenderLoop().renderSyncFrame();
+							exporter.exportScene( scene, rootFolder / options.output );
+							scene.cleanup();
+							engine.getRenderLoop().renderSyncFrame();
 						}
 					}
 				}
