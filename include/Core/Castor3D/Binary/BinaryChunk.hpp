@@ -342,7 +342,7 @@ namespace castor3d
 			, uint32_t count )
 		{
 			auto size = count * uint32_t( sizeof( T ) );
-			bool result{ m_index + size < m_data.size() };
+			bool result{ m_index + size <= m_data.size() };
 
 			if ( result )
 			{

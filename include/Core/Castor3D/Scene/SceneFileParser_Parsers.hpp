@@ -320,6 +320,9 @@ namespace castor3d
 
 	// Animated object group parsers
 	CU_DeclareAttributeParser( parserAnimatedObjectGroupAnimatedObject )
+	CU_DeclareAttributeParser( parserAnimatedObjectGroupAnimatedMesh )
+	CU_DeclareAttributeParser( parserAnimatedObjectGroupAnimatedSkeleton )
+	CU_DeclareAttributeParser( parserAnimatedObjectGroupAnimatedNode )
 	CU_DeclareAttributeParser( parserAnimatedObjectGroupAnimatedTexture )
 	CU_DeclareAttributeParser( parserAnimatedObjectGroupAnimation )
 	CU_DeclareAttributeParser( parserAnimatedObjectGroupAnimationStart )
