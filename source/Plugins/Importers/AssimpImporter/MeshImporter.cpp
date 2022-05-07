@@ -414,7 +414,9 @@ namespace c3d_assimp
 					, m_registeredMeshes.end()
 					, [&skeleton]( castor3d::MeshPtrStrMap::value_type const & lookup )
 					{
-						return lookup.second.lock()->getSkeleton() == skeleton;
+						auto mesh = lookup.second.lock();
+						return mesh
+							&& mesh->getSkeleton() == skeleton;
 					} );
 			}
 

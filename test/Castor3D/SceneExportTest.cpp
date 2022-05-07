@@ -19,7 +19,6 @@
 #include <Castor3D/Render/RenderLoop.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
 #include <Castor3D/Scene/SceneFileParser.hpp>
-#include <Castor3D/Text/TextScene.hpp>
 
 #include <SceneExporter/CscnExporter.hpp>
 

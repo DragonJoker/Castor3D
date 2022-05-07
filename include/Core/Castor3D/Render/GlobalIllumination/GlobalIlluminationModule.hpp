@@ -39,7 +39,7 @@ namespace castor3d
 		eLayeredLpvG,
 		CU_ScopedEnumBounds( eNone ),
 	};
-	castor::String getName( GlobalIlluminationType giType );
+	C3D_API castor::String getName( GlobalIlluminationType giType );
 
 	//@}
 	//@}
