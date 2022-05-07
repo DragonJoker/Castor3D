@@ -753,7 +753,7 @@ namespace castor
 		ElementObsT doAddNoLockT( ElementKeyT const & name
 			, ParametersT && ... parameters )
 		{
-			ElementObsT created;
+			ElementObsT created{};
 			auto result = doTryAddNoLockT( name
 				, true
 				, created

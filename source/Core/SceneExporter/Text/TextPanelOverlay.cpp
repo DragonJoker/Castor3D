@@ -1,0 +1,32 @@
+#include "TextPanelOverlay.hpp"
+
+#include "TextOverlayCategory.hpp"
+
+#include <Castor3D/Miscellaneous/Logger.hpp>
+#include <Castor3D/Overlay/Overlay.hpp>
+
+#include <CastorUtils/Data/Text/TextPoint.hpp>
+
+namespace castor
+{
+	using namespace castor3d;
+
+	TextWriter< PanelOverlay >::TextWriter( String const & tabs )
+		: TextWriterT< PanelOverlay >{ tabs }
+	{
+	}
+
+	bool TextWriter< PanelOverlay >::operator()( PanelOverlay const & overlay
+		, StringStream & file )
+	{
+		log::info << tabs() << cuT( "Writing PanelOverlay " ) << overlay.getOverlayName() << std::endl;
+		bool result = false;
+
+		if ( auto block{ beginBlock( file, cuT( "panel_overlay" ), overlay.getOverlay().getName() ) } )
+		{
+			result = writeSub< OverlayCategory >( file, overlay );
+		}
+
+		return result;
+	}
+}

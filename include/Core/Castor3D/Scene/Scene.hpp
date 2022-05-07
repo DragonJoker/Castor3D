@@ -499,13 +499,13 @@ namespace castor3d
 	public:
 		//!\~english	The cameras root node name.
 		//!\~french		Le nom du noeud de scène racine des caméras.
-		static castor::String CameraRootNode;
+		C3D_API static castor::String CameraRootNode;
 		//!\~english	The objects root node name.
 		//!\~french		Le nom du noeud de scène racine des objets.
-		static castor::String ObjectRootNode;
+		C3D_API static castor::String ObjectRootNode;
 		//!\~english	The root node name.
 		//!\~french		Le nom du noeud de scène racine.
-		static castor::String RootNode;
+		C3D_API static castor::String RootNode;
 	};
 }
 
