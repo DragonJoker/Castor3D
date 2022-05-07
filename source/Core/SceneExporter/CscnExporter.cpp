@@ -9,6 +9,7 @@
 #include "Text/TextSceneNode.hpp"
 #include "Text/TextSkeleton.hpp"
 
+#include <Castor3D/Engine.hpp>
 #include <Castor3D/Binary/BinaryMesh.hpp>
 #include <Castor3D/Binary/BinaryMeshAnimation.hpp>
 #include <Castor3D/Binary/BinarySceneNodeAnimation.hpp>
@@ -32,6 +33,7 @@
 #include <Castor3D/Model/Mesh/Submesh/Component/IndexMapping.hpp>
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp>
+#include <Castor3D/Scene/Camera.hpp>
 #include <Castor3D/Scene/Geometry.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/Animation/SceneNodeAnimation.hpp>
@@ -945,6 +947,29 @@ namespace castor3d::exporter
 				+ castor::string::toString( z );
 		}
 
+		void printRenderWindow( castor::String const & sceneName
+			, castor::String const & cameraName
+			, castor::StringStream & stream )
+		{
+			stream << "\n";
+			stream << "//Windows\n";
+			stream << "\n";
+			stream << "window \"MainWindow\"\n";
+			stream << "{\n";
+			stream << "	vsync false\n";
+			stream << "	fullscreen false\n";
+			stream << "\n";
+			stream << "	render_target\n";
+			stream << "	{\n";
+			stream << "		size 1920 1080\n";
+			stream << "		format argb32\n";
+			stream << "		scene \"" << sceneName << "\"\n";
+			stream << "		camera \"" << cameraName << "\"\n";
+			stream << "		tone_mapping \"linear\"\n";
+			stream << "	}\n";
+			stream << "}\n";
+		}
+
 		bool finaliseExport( castor3d::Mesh const * singleMesh
 			, castor::TextWriter< castor3d::Scene >::Options const & options
 			, castor::StringStream const & skeletons
@@ -1043,36 +1068,30 @@ namespace castor3d::exporter
 					stream << "		type directional\n";
 					stream << "		colour 1.00000 1.00000 1.00000\n";
 					stream << "		intensity 8.0 10.0\n";
-					stream << "		shadow_producer false\n";
 					stream << "	}\n";
 					stream << "}\n";
-					stream << "\n";
-					stream << "//Windows\n";
-					stream << "\n";
-					stream << "window \"MainWindow\"\n";
-					stream << "{\n";
-					stream << "	vsync false\n";
-					stream << "	fullscreen false\n";
-					stream << "\n";
-					stream << "	render_target\n";
-					stream << "	{\n";
-					stream << "		size 1920 1080\n";
-					stream << "		format argb32\n";
-					stream << "		scene \"" << name << "\"\n";
-					stream << "		camera \"MainCamera\"\n";
-					stream << "		tone_mapping \"linear\"\n";
-					stream << "	}\n";
-					stream << "}\n";
+					printRenderWindow( name, "MainCamera", stream );
 				}
 				else
 				{
 					result = castor::TextWriter< Scene >{ castor::cuEmptyString, options }( scene, stream );
+
+					if ( scene.getEngine()->getRenderWindows().empty() )
+					{
+						if ( !scene.getCameraCache().isEmpty() )
+						{
+							auto camera = scene.getCameraCache().begin()->second;
+							printRenderWindow( scene.getName()
+								, camera->getName()
+								, stream );
+						}
+					}
 				}
 
 				if ( result )
 				{
 					castor::TextFile scnFile{ castor::Path{ filePath }
-					, castor::File::OpenMode::eWrite };
+						, castor::File::OpenMode::eWrite };
 					result = scnFile.writeText( stream.str() ) > 0;
 				}
 			}
@@ -1139,19 +1158,22 @@ namespace castor3d::exporter
 						, { nullptr, nullptr } );
 				}
 
-				result = writeObjectT< true >( MeshWriterOptions{ m_options
-						, mesh
-						, scene.getGeometryCache()
-						, skeletons
-						, meshes
-						, nodes
-						, objects
-						, meshFolder
-						, mesh.getName()
-						, options.subfolder
-						, outputName
-						, true }
-					, { nullptr, nullptr } );
+				if ( result )
+				{
+					result = writeObjectT< true >( MeshWriterOptions{ m_options
+							, mesh
+							, scene.getGeometryCache()
+							, skeletons
+							, meshes
+							, nodes
+							, objects
+							, meshFolder
+							, mesh.getName()
+							, options.subfolder
+							, outputName
+							, true }
+						, { nullptr, nullptr } );
+				}
 			}
 			else
 			{
@@ -1172,19 +1194,22 @@ namespace castor3d::exporter
 						, { nullptr, nullptr } );
 				}
 
-				result = writeObjectT< false >( MeshWriterOptions{ m_options
-						, mesh
-						, scene.getGeometryCache()
-						, skeletons
-						, meshes
-						, nodes
-						, objects
-						, meshFolder
-						, mesh.getName()
-						, options.subfolder
-						, outputName
-						, true }
-					, { nullptr, nullptr } );
+				if ( result )
+				{
+					result = writeObjectT< false >( MeshWriterOptions{ m_options
+							, mesh
+							, scene.getGeometryCache()
+							, skeletons
+							, meshes
+							, nodes
+							, objects
+							, meshFolder
+							, mesh.getName()
+							, options.subfolder
+							, outputName
+							, true }
+						, { nullptr, nullptr } );
+				}
 			}
 
 			if ( result )
