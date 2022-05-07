@@ -336,6 +336,9 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eBillboardList ), cuT( "pos" ), parserBillboardPoint, { makeParameter< ParameterType::ePoint3F >() } );
 
 			addParser( result, uint32_t( CSCNSection::eAnimGroup ), cuT( "animated_object" ), parserAnimatedObjectGroupAnimatedObject, { makeParameter< ParameterType::eName >() } );
+			addParser( result, uint32_t( CSCNSection::eAnimGroup ), cuT( "animated_mesh" ), parserAnimatedObjectGroupAnimatedMesh, { makeParameter< ParameterType::eName >() } );
+			addParser( result, uint32_t( CSCNSection::eAnimGroup ), cuT( "animated_skeleton" ), parserAnimatedObjectGroupAnimatedSkeleton, { makeParameter< ParameterType::eName >() } );
+			addParser( result, uint32_t( CSCNSection::eAnimGroup ), cuT( "animated_node" ), parserAnimatedObjectGroupAnimatedNode, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eAnimGroup ), cuT( "animation" ), parserAnimatedObjectGroupAnimation, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eAnimGroup ), cuT( "start_animation" ), parserAnimatedObjectGroupAnimationStart, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eAnimGroup ), cuT( "pause_animation" ), parserAnimatedObjectGroupAnimationPause, { makeParameter< ParameterType::eName >() } );
