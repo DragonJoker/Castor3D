@@ -145,6 +145,7 @@ namespace castor3d
 		shader::Utils utils{ writer, *renderSystem.getEngine() };
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
+				, flags.submeshFlags
 				, flags.programFlags
 				, getShaderFlags()
 				, textureFlags

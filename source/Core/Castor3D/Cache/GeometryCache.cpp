@@ -62,11 +62,11 @@ namespace castor3d
 					for ( auto & submesh : *mesh )
 					{
 						auto material = element.getMaterial( *submesh );
-						auto submeshFlags = submesh->getProgramFlags( *material );
-						auto animMesh = checkFlag( submeshFlags, ProgramFlag::eMorphing )
+						auto submeshFlags = submesh->getSubmeshFlags( *material );
+						auto animMesh = checkFlag( submeshFlags, SubmeshFlag::eMorphing )
 							? std::static_pointer_cast< AnimatedMesh >( findAnimatedObject( scene, element.getName() + cuT( "_Mesh" ) ) )
 							: nullptr;
-						auto animSkeleton = checkFlag( submeshFlags, ProgramFlag::eSkinning )
+						auto animSkeleton = checkFlag( submeshFlags, SubmeshFlag::eSkinning )
 							? std::static_pointer_cast< AnimatedSkeleton >( findAnimatedObject( scene, element.getName() + cuT( "_Skeleton" ) ) )
 							: nullptr;
 

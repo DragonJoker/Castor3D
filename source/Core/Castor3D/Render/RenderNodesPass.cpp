@@ -67,10 +67,11 @@ namespace castor3d
 				} );
 		}
 
-		static size_t makeHash( ProgramFlags const & programFlags
+		static size_t makeHash( SubmeshFlags const & submeshFlags
+			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )
 		{
-			auto nodeType = getRenderNodeType( programFlags );
+			auto nodeType = getRenderNodeType( submeshFlags, programFlags );
 			return size_t( nodeType ) | ( size_t( sceneFlags ) << 16u );
 		}
 	}
@@ -172,6 +173,11 @@ namespace castor3d
 		return doGetPixelShaderSource( flags );
 	}
 
+	SubmeshFlags RenderNodesPass::adjustFlags( SubmeshFlags flags )const
+	{
+		return doAdjustSubmeshFlags( flags );
+	}
+
 	PassFlags RenderNodesPass::adjustFlags( PassFlags flags )const
 	{
 		return doAdjustPassFlags( flags );
@@ -196,6 +202,7 @@ namespace castor3d
 		, VkCompareOp alphaFunc
 		, VkCompareOp blendAlphaFunc
 		, TextureFlagsArray const & textures
+		, SubmeshFlags const & submeshFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, VkPrimitiveTopology topology
@@ -207,6 +214,7 @@ namespace castor3d
 			, renderPassTypeID
 			, passTypeID
 			, heightTextureIndex
+			, submeshFlags
 			, programFlags
 			, sceneFlags
 			, topology
@@ -226,6 +234,7 @@ namespace castor3d
 
 	PipelineFlags RenderNodesPass::createPipelineFlags( Pass const & pass
 		, TextureFlagsArray const & textures
+		, SubmeshFlags const & submeshFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, VkPrimitiveTopology topology
@@ -242,6 +251,7 @@ namespace castor3d
 			, pass.getAlphaFunc()
 			, pass.getBlendAlphaFunc()
 			, textures
+			, submeshFlags
 			, programFlags
 			, sceneFlags
 			, topology
@@ -403,10 +413,12 @@ namespace castor3d
 	void RenderNodesPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
+		auto submeshFlags = pipeline.getFlags().submeshFlags;
 		auto programFlags = pipeline.getFlags().programFlags;
+		submeshFlags = doAdjustSubmeshFlags( submeshFlags );
 		programFlags = doAdjustProgramFlags( programFlags );
 		auto sceneFlags = doAdjustSceneFlags( pipeline.getFlags().sceneFlags );
-		auto descLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( programFlags, sceneFlags )
+		auto descLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( submeshFlags, programFlags, sceneFlags )
 			, PassDescriptors{} ).first;
 		auto & descriptors = descLayoutIt->second;
 
@@ -459,12 +471,12 @@ namespace castor3d
 
 			auto & animCache = scene.getAnimatedObjectGroupCache();
 
-			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
+			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphing ) )
 			{
 				descriptorWrites.push_back( animCache.getMorphingBuffer().getStorageBinding( uint32_t( GlobalBuffersIdx::eMorphingData ) ) );
 			}
 
-			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
+			if ( checkFlag( submeshFlags, SubmeshFlag::eSkinning ) )
 			{
 				descriptorWrites.push_back( animCache.getSkinningTransformsBuffer().getStorageBinding( uint32_t( GlobalBuffersIdx::eSkinningTransformData ) ) );
 			}
@@ -519,6 +531,11 @@ namespace castor3d
 	bool RenderNodesPass::doIsValidRenderable( RenderedObject const & object )const
 	{
 		return true;
+	}
+
+	SubmeshFlags RenderNodesPass::doAdjustSubmeshFlags( SubmeshFlags flags )const
+	{
+		return flags;
 	}
 
 	PassFlags RenderNodesPass::doAdjustPassFlags( PassFlags flags )const
@@ -600,14 +617,14 @@ namespace castor3d
 				, stageFlags ) );
 		}
 
-		if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
+		if ( checkFlag( flags.submeshFlags, SubmeshFlag::eMorphing ) )
 		{
 			addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eMorphingData )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, stageFlags ) );
 		}
 
-		if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
+		if ( checkFlag( flags.submeshFlags, SubmeshFlag::eSkinning ) )
 		{
 			addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eSkinningTransformData )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
@@ -645,7 +662,7 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = renderSystem.getRenderDevice();
 		RenderPipeline * result{};
-		auto descLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( flags.programFlags, flags.sceneFlags )
+		auto descLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( flags.submeshFlags, flags.programFlags, flags.sceneFlags )
 			, PassDescriptors{} ).first;
 		auto & descriptors = descLayoutIt->second;
 
@@ -708,6 +725,7 @@ namespace castor3d
 			flags.alphaBlendMode = BlendMode::eNoBlend;
 		}
 
+		flags.submeshFlags = doAdjustSubmeshFlags( flags.submeshFlags );
 		flags.programFlags = doAdjustProgramFlags( flags.programFlags );
 		flags.passFlags = doAdjustPassFlags( flags.passFlags );
 		flags.sceneFlags = doAdjustSceneFlags( flags.sceneFlags );
@@ -721,8 +739,8 @@ namespace castor3d
 	ShaderPtr RenderNodesPass::doGetVertexShaderSource( PipelineFlags const & flags )const
 	{
 		// Since their vertex attribute locations overlap, we must not have both set at the same time.
-		CU_Require( ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) ? 1 : 0 )
-			+ ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) ? 1 : 0 ) < 2
+		CU_Require( ( checkFlag( flags.submeshFlags, SubmeshFlag::eInstantiation ) ? 1 : 0 )
+			+ ( checkFlag( flags.submeshFlags, SubmeshFlag::eMorphing ) ? 1 : 0 ) < 2
 			&& "Can't have both instantiation and morphing yet." );
 		using namespace sdw;
 		VertexWriter writer;
@@ -744,23 +762,24 @@ namespace castor3d
 		C3D_Morphing( writer
 			, GlobalBuffersIdx::eMorphingData
 			, RenderPipeline::eBuffers
-			, flags.programFlags );
+			, flags.submeshFlags );
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
 			, RenderPipeline::eBuffers
-			, flags.programFlags );
+			, flags.submeshFlags );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 
 		writer.implementMainT< shader::VertexSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
-				, flags.programFlags
+				, flags.submeshFlags
 				, getShaderFlags()
 				, textureFlags
 				, flags.passFlags
 				, hasTextures }
 			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer
+				, flags.submeshFlags
 				, flags.programFlags
 				, getShaderFlags()
 				, textureFlags
@@ -773,7 +792,7 @@ namespace castor3d
 					, in
 					, pipelineID
 					, in.drawID
-					, flags.programFlags );
+					, flags.submeshFlags );
 				auto curPosition = writer.declLocale( "curPosition"
 					, in.position );
 				auto v4Normal = writer.declLocale( "v4Normal"
@@ -783,7 +802,7 @@ namespace castor3d
 				out.texture0 = in.texture0;
 				auto morphingData = writer.declLocale( "morphingData"
 					, c3d_morphingData[ids.morphingId]
-					, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
+					, checkFlag( flags.submeshFlags, SubmeshFlag::eMorphing ) );
 				in.morph( morphingData
 					, curPosition
 					, v4Normal
@@ -795,7 +814,7 @@ namespace castor3d
 				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 
 				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
-					, modelData.getCurModelMtx( flags.programFlags
+					, modelData.getCurModelMtx( flags.submeshFlags
 						, skinningData
 						, ids.skinningId
 						, in.boneIds0
@@ -803,7 +822,7 @@ namespace castor3d
 						, in.boneWeights0
 						, in.boneWeights1 ) );
 				auto prvMtxModel = writer.declLocale< Mat4 >( "prvMtxModel"
-					, modelData.getPrvModelMtx( flags.programFlags, curMtxModel ) );
+					, modelData.getPrvModelMtx( flags.submeshFlags, curMtxModel ) );
 				auto prvPosition = writer.declLocale( "prvPosition"
 					, c3d_matrixData.worldToPrvProj( prvMtxModel * curPosition ) );
 				auto worldPos = writer.declLocale( "worldPos"
@@ -817,7 +836,7 @@ namespace castor3d
 				out.vtx.position = curPosition;
 
 				auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
-					, modelData.getNormalMtx( flags.programFlags, curMtxModel ) );
+					, modelData.getNormalMtx( flags.submeshFlags, curMtxModel ) );
 				out.computeTangentSpace( flags.programFlags
 					, c3d_sceneData.cameraPosition
 					, worldPos.xyz()
@@ -863,6 +882,7 @@ namespace castor3d
 
 		writer.implementMainT< VoidT, shader::FragmentSurfaceT >( sdw::VertexInT< sdw::VoidT >{ writer }
 			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer
+				, flags.submeshFlags
 				, flags.programFlags
 				, getShaderFlags()
 				, textureFlags

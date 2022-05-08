@@ -321,6 +321,7 @@ namespace castor3d
 			, RenderPassTypeID renderPassType = 0u
 			, PassTypeID passType = 0u
 			, uint32_t heightMapIndex = InvalidIndex
+			, SubmeshFlags submeshFlags = SubmeshFlag::eNone
 			, ProgramFlags programFlags = ProgramFlag::eNone
 			, SceneFlags sceneFlags = SceneFlag::eNone
 			, VkPrimitiveTopology topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
@@ -335,6 +336,7 @@ namespace castor3d
 			, renderPassType{ renderPassType }
 			, passType{ passType }
 			, heightMapIndex{ heightMapIndex }
+			, submeshFlags{ submeshFlags }
 			, programFlags{ programFlags }
 			, sceneFlags{ sceneFlags }
 			, topology{ topology }
@@ -353,6 +355,7 @@ namespace castor3d
 		RenderPassTypeID renderPassType;
 		PassTypeID passType;
 		uint32_t heightMapIndex;
+		SubmeshFlags submeshFlags;
 		ProgramFlags programFlags;
 		SceneFlags sceneFlags;
 		VkPrimitiveTopology topology;

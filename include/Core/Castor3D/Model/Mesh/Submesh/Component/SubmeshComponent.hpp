@@ -66,7 +66,7 @@ namespace castor3d
 		 *\~english
 		 *\brief			Gathers buffers that need to go in a vertex layout.
 		 *\param[in]		shaderFlags		The shader flags.
-		 *\param[in]		programFlags	The program flags.
+		 *\param[in]		submeshFlags	The submesh flags.
 		 *\param[in]		material		The material.
 		 *\param[in,out]	buffers			Receives the buffers.
 		 *\param[in,out]	offsets			Receives the buffers offsets.
@@ -76,7 +76,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Récupère les tampons qui doivent aller dans un vertex layout.
 		 *\param[in]		shaderFlags		Les shader flags.
-		 *\param[in]		programFlags	Les program flags.
+		 *\param[in]		submeshFlags	Les submesh flags.
 		 *\param[in]		material		Les matériau.
 		 *\param[in,out]	buffers			Reçoit les buffers.
 		 *\param[in,out]	offsets			Reçoit les offsets dans les buffers.
@@ -85,7 +85,7 @@ namespace castor3d
 		 *\param[in,out]	currentLocation	La position actuelle des attributs.
 		 */
 		C3D_API virtual void gather( ShaderFlags const & shaderFlags
-			, ProgramFlags const & programFlags
+			, SubmeshFlags const & submeshFlags
 			, MaterialRPtr material
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
@@ -94,13 +94,13 @@ namespace castor3d
 			, uint32_t & currentLocation ) = 0;
 		/**
 		 *\~english
-		 *\return		The shader program flags.
+		 *\return		The submesh flags.
 		 *\param[in]	material	The material.
 		 *\~french
-		 *\return		Les indicateurs de shader.
+		 *\return		Les indicateurs de submesh.
 		 *\param[in]	material	Les matériau.
 		 */
-		C3D_API virtual ProgramFlags getProgramFlags( Material const & material )const = 0;
+		C3D_API virtual SubmeshFlags getSubmeshFlags( Material const & material )const = 0;
 		/**
 		 *\~english
 		 *\return		The buffer usage flags.

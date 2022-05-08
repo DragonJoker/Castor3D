@@ -31,7 +31,7 @@ namespace castor3d
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
 		C3D_API void gather( ShaderFlags const & shaderFlags
-			, ProgramFlags const & programFlags
+			, SubmeshFlags const & submeshFlags
 			, MaterialRPtr material
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
@@ -43,11 +43,11 @@ namespace castor3d
 		 */
 		C3D_API SubmeshComponentSPtr clone( Submesh & submesh )const override;
 		/**
-		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
+		 *\copydoc		castor3d::SubmeshComponent::getSubmeshFlags
 		 */
-		ProgramFlags getProgramFlags( Material const & material )const override
+		SubmeshFlags getSubmeshFlags( Material const & material )const override
 		{
-			return ProgramFlag::eSecondaryUV;
+			return SubmeshFlag::eSecondaryUV;
 		}
 
 		C3D_API void addTexcoords( std::vector< castor::Point3f > const & uvs );

@@ -18,7 +18,8 @@ namespace castor3d
 {
 	namespace smshcompmorph
 	{
-		static ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout( ShaderFlags const & flags
+		static ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout( SubmeshFlags const & submeshFlags
+			, ShaderFlags const & shaderFlags
 			, bool hasTextures
 			, uint32_t & currentLocation )
 		{
@@ -29,7 +30,7 @@ namespace castor3d
 				, VK_FORMAT_R32G32B32_SFLOAT
 				, offsetof( InterleavedVertex, pos ) } };
 
-			if ( checkFlag( flags, ShaderFlag::eNormal ) )
+			if ( checkFlag( shaderFlags, ShaderFlag::eNormal ) )
 			{
 				attributes.push_back( { currentLocation++
 					, MorphComponent::BindingPoint
@@ -37,7 +38,7 @@ namespace castor3d
 					, offsetof( InterleavedVertex, nml ) } );
 			}
 
-			if ( checkFlag( flags, ShaderFlag::eTangentSpace ) )
+			if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) )
 			{
 				attributes.push_back( { currentLocation++
 					, MorphComponent::BindingPoint
@@ -65,7 +66,7 @@ namespace castor3d
 	}
 
 	void MorphComponent::gather( ShaderFlags const & shaderFlags
-		, ProgramFlags const & programFlags
+		, SubmeshFlags const & submeshFlags
 		, MaterialRPtr material
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
@@ -73,9 +74,10 @@ namespace castor3d
 		, TextureFlagsArray const & mask
 		, uint32_t & currentLocation )
 	{
-		if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
+		if ( checkFlag( submeshFlags, SubmeshFlag::eMorphing ) )
 		{
-			auto hash = std::hash< ShaderFlags::BaseType >{}( shaderFlags );
+			auto hash = std::hash< SubmeshFlags::BaseType >{}( submeshFlags );
+			hash = castor::hashCombine( hash, shaderFlags.value() );
 			hash = castor::hashCombine( hash, mask.empty() );
 			hash = castor::hashCombine( hash, currentLocation );
 			auto layoutIt = m_animLayouts.find( hash );
@@ -83,7 +85,9 @@ namespace castor3d
 			if ( layoutIt == m_animLayouts.end() )
 			{
 				layoutIt = m_animLayouts.emplace( hash
-					, smshcompmorph::doCreateVertexLayout( shaderFlags, !mask.empty(), currentLocation ) ).first;
+					, smshcompmorph::doCreateVertexLayout( submeshFlags
+						, shaderFlags
+						, !mask.empty(), currentLocation ) ).first;
 			}
 			else
 			{

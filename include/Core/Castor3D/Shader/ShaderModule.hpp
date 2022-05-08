@@ -76,76 +76,58 @@ namespace castor3d
 	{
 		//!\~english	No flag.
 		//!\~french		Aucun indicateur.
-		eNone = 0x0000,
-		//!\~english	Program using instanciation.
-		//!\~french		Programme utilisant l'instanciation.
-		eInstantiation = 0x0001,
-		//!\~english	Program using skeleton animations.
-		//!\~french		Programme utilisant les animations par squelette.
-		eSkinning = 0x0002,
+		eNone = 0x00000,
 		//!\~english	Program used by billboards.
 		//!\~french		Programme utilisé par des billboards.
-		eBillboards = 0x0004,
-		//!\~english	Program using per-vertex animations.
-		//!\~french		Programme utilisant les animations par sommet.
-		eMorphing = 0x0008,
+		eBillboards = 0x00001,
 		//!\~english	Picking pass program.
 		//\~french		Programme de passe de picking.
-		ePicking = 0x0010,
+		ePicking = 0x00002,
 		//!\~english	Shader supporting lighting.
 		//\~french		Shader supportant les éclairages.
-		eLighting = 0x0020,
+		eLighting = 0x00004,
 		//!\~english	Shader for spherical billboards.
 		//\~french		Shader pour les billboards sphériques.
-		eSpherical = 0x0040,
+		eSpherical = 0x00008,
 		//!\~english	Shader for fixed size billboards.
 		//\~french		Shader pour les billboards à dimensions fixes.
-		eFixedSize = 0x0080,
-		//!\~english	Program using and instances multiplier.
-		//!\~french		Programme utilisant un multiplicateur d'instances.
-		eInstanceMult = 0x0100,
+		eFixedSize = 0x00010,
 		//!\~english	Shader used to render a shadow map for directional light.
 		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière directionnalle.
-		eShadowMapDirectional = 0x0200,
+		eShadowMapDirectional = 0x00020,
 		//!\~english	Shader used to render a shadow map for spot light.
 		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière projecteur.
-		eShadowMapSpot = 0x0400,
+		eShadowMapSpot = 0x00040,
 		//!\~english	Shader used to render a shadow map for point light.
 		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière omnidirectionnelle.
-		eShadowMapPoint = 0x0800,
+		eShadowMapPoint = 0x00080,
 		//!\~english	Shader used to render an environment map.
 		//\~french		Shader utilisé pour dessiner une texture d'environnement.
-		eEnvironmentMapping = 0x1000,
+		eEnvironmentMapping = 0x00100,
 		//!\~english	Shader for the depth pre-pass.
 		//\~french		Shader pour la pré-passe de profondeur.
-		eDepthPass = 0x2000,
+		eDepthPass = 0x00200,
 		//!\~english	Vertex shader inverts normals (for front culling).
 		//\~french		Le vertex shader inverse les normales (pour le front culling).
-		eInvertNormals = 0x4000,
+		eInvertNormals = 0x00400,
 		//!\~english	Vertex shader inverts normals (for front culling).
 		//\~french		Le vertex shader inverse les normales (pour le front culling).
-		eHasGeometry = 0x8000,
+		eHasGeometry = 0x00800,
 		//!\~english	Vertex shader inverts normals (for front culling).
 		//\~french		Le vertex shader inverse les normales (pour le front culling).
-		eHasTessellation = 0x10000,
+		eHasTessellation = 0x01000,
 		//!\~english	Voxelization uses conservative rasterization.
 		//\~french		La voxelisation utilise la conservative rasterization.
-		eConservativeRasterization = 0x20000,
-		//!\~english	Mesh uses a second UV set.
-		//\~french		Le mesh utilise un second set d'UV.
-		eSecondaryUV = 0x40000,
-		//!\~english	Forces texcoords binding.
-		//\~french		Force le binding des UV.
-		eForceTexCoords = 0x80000,
+		eConservativeRasterization = 0x02000,
 		//!\~english	Writes to Variance shadow map.
 		//\~french		Ecrit dans la Variance shadow map.
-		eVsmShadowMap = 0x100000,
+		eVsmShadowMap = 0x04000,
 		//!\~english	Writes to Reflective shadow map.
 		//\~french		Ecrit dans la Reflective shadow map.
-		eRsmShadowMap = 0x200000,
+		eRsmShadowMap = 0x08000,
 		//!\~english	All flags.
 		//\~french		Tous les indicateurs.
-		eAll = 0x3FFFFF,
+		eAll = 0x0FFFF,
 	};
 	CU_ImplementFlags( ProgramFlag )
 	/**

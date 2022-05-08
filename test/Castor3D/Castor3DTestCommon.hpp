@@ -325,6 +325,25 @@ namespace Testing
 	};
 
 	template<>
+	struct Stringifier< castor3d::SubmeshFlag >
+	{
+		static std::string get( castor3d::SubmeshFlag const & value )
+		{
+			static std::map< castor3d::SubmeshFlag, std::string > Names
+			{
+				{ castor3d::SubmeshFlag::eTangents, "eTangents" },
+				{ castor3d::SubmeshFlag::eTexcoords, "eTexcoords" },
+				{ castor3d::SubmeshFlag::eSecondaryUV, "eSecondaryUV" },
+				{ castor3d::SubmeshFlag::eInstantiation, "eInstantiation" },
+				{ castor3d::SubmeshFlag::eMorphing, "eMorphing" },
+				{ castor3d::SubmeshFlag::eSkinning, "eSkinning" },
+				{ castor3d::SubmeshFlag::eForceTexCoords, "eForceTexCoords" },
+			};
+			return Names[value];
+		}
+	};
+
+	template<>
 	struct Stringifier< castor3d::ProgramFlag >
 	{
 		static std::string get( castor3d::ProgramFlag const & value )
@@ -334,15 +353,12 @@ namespace Testing
 				{ castor3d::ProgramFlag::eBillboards, "eBillboards" },
 				{ castor3d::ProgramFlag::eEnvironmentMapping, "eEnvironmentMapping" },
 				{ castor3d::ProgramFlag::eFixedSize, "eFixedSize" },
-				{ castor3d::ProgramFlag::eInstantiation, "eInstantiation" },
 				{ castor3d::ProgramFlag::eLighting, "eLighting" },
-				{ castor3d::ProgramFlag::eMorphing, "eMorphing" },
 				{ castor3d::ProgramFlag::eDepthPass, "eDepthPass" },
 				{ castor3d::ProgramFlag::ePicking, "ePicking" },
 				{ castor3d::ProgramFlag::eShadowMapDirectional, "eShadowMapDirectional" },
 				{ castor3d::ProgramFlag::eShadowMapPoint, "eShadowMapPoint" },
 				{ castor3d::ProgramFlag::eShadowMapSpot, "eShadowMapSpot" },
-				{ castor3d::ProgramFlag::eSkinning, "eSkinning" },
 				{ castor3d::ProgramFlag::eSpherical, "eSpherical" },
 			};
 			return Names[value];

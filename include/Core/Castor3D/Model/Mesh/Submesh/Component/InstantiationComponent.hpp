@@ -109,7 +109,7 @@ namespace castor3d
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
 		C3D_API void gather( ShaderFlags const & shaderFlags
-			, ProgramFlags const & programFlags
+			, SubmeshFlags const & submeshFlags
 			, MaterialRPtr material
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
@@ -129,7 +129,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API ProgramFlags getProgramFlags( Material const & material )const override;
+		C3D_API SubmeshFlags getSubmeshFlags( Material const & material )const override;
 
 		inline uint32_t getThreshold()const
 		{

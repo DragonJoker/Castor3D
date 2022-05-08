@@ -18,7 +18,8 @@ namespace castor3d
 
 	AnimatedObjectSPtr findAnimatedObject( Scene const & scene
 		, castor::String const & name );
-	uint64_t getPipelineBaseHash( ProgramFlags programFlags
+	uint64_t getPipelineBaseHash( SubmeshFlags submeshFlags
+		, ProgramFlags programFlags
 		, PassFlags passFlags
 		, uint32_t texturesCount
 		, TextureFlags texturesFlags
