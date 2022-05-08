@@ -10,12 +10,31 @@
 
 CU_ImplementCUSmartPtr( castor3d, VertexBufferPool )
 CU_ImplementCUSmartPtr( castor3d, ObjectBufferPool )
-CU_ImplementCUSmartPtr( castor3d, MorphedObjectBufferPool )
-CU_ImplementCUSmartPtr( castor3d, SkinnedObjectBufferPool )
-CU_ImplementCUSmartPtr( castor3d, MorphedSkinnedObjectBufferPool )
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
+	namespace objbuf
+	{
+		static castor::String getName( SubmeshFlags submeshFlags )
+		{
+			castor::String result;
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eSkinning ) )
+			{
+				result += "Skin";
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphing ) )
+			{
+				result += "Morph";
+			}
+
+			return result;
+		}
+	}
+
 	//*********************************************************************************************
 
 	VertexBufferPool::VertexBufferPool( RenderDevice const & device
@@ -35,7 +54,7 @@ namespace castor3d
 	{
 		for ( auto & buffer : m_buffers )
 		{
-			buffer->vertex.upload( commandBuffer );
+			buffer.vertex->upload( commandBuffer );
 		}
 	}
 
@@ -43,12 +62,12 @@ namespace castor3d
 	{
 		auto it = std::find_if( m_buffers.begin()
 			, m_buffers.end()
-			, [&bufferOffset]( std::unique_ptr< ModelBuffers > const & lookup )
+			, [&bufferOffset]( ModelBuffers const & lookup )
 			{
-				return &lookup->vertex.getBuffer().getBuffer() == &bufferOffset.getVertexBuffer();
+				return &lookup.vertex->getBuffer().getBuffer() == &bufferOffset.getVertexBuffer();
 			} );
 		CU_Require( it != m_buffers.end() );
-		( *it )->vertex.deallocate( bufferOffset.vtxChunk );
+		it->vertex->deallocate( bufferOffset.vtxChunk );
 	}
 
 	VertexBufferPool::BufferArray::iterator VertexBufferPool::doFindBuffer( VkDeviceSize size
@@ -58,7 +77,7 @@ namespace castor3d
 		auto it = array.begin();
 
 		while ( it != array.end()
-			&& !( *it )->vertex.hasAvailable( size ) )
+			&& !it->vertex->hasAvailable( size ) )
 		{
 			++it;
 		}
@@ -83,43 +102,91 @@ namespace castor3d
 
 	void ObjectBufferPool::upload( ashes::CommandBuffer const & commandBuffer )
 	{
-		for ( auto & buffer : m_buffers )
+		for ( auto & bufferIt : m_buffers )
 		{
-			buffer->vertex.upload( commandBuffer );
-			buffer->index.upload( commandBuffer );
+			for ( auto & buffer : bufferIt.second )
+			{
+				buffer.vertex->upload( commandBuffer );
+
+				if ( buffer.bones )
+				{
+					buffer.bones->upload( commandBuffer );
+				}
+
+				if ( buffer.morph )
+				{
+					buffer.morph->upload( commandBuffer );
+				}
+
+				if ( buffer.index )
+				{
+					buffer.index->upload( commandBuffer );
+				}
+			}
 		}
 	}
 
 	ObjectBufferOffset ObjectBufferPool::getBuffer( VkDeviceSize vertexCount
-		, VkDeviceSize indexCount )
+		, VkDeviceSize indexCount
+		, SubmeshFlags submeshFlags )
 	{
-		ObjectBufferOffset result;
-		auto it = doFindBuffer( vertexCount, indexCount, m_buffers );
+		ObjectBufferOffset result{ submeshFlags };
+		auto & buffers = m_buffers.emplace( submeshFlags.value(), BufferArray{} ).first->second;
+		auto it = doFindBuffer( vertexCount
+			, indexCount
+			, buffers );
 
-		if ( it == m_buffers.end() )
+		if ( it == buffers.end() )
 		{
-			auto buffers = std::make_unique< ModelBuffers >( details::createBuffer< InterleavedVertex >( m_device
+			auto name = objbuf::getName( submeshFlags );
+			ModelBuffers modelBuffers{ details::createBuffer< InterleavedVertex >( m_device
 					, vertexCount
 					, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, m_debugName + "Vertex" + std::to_string( m_buffers.size() )
+					, m_debugName + name + "Vertex" + std::to_string( buffers.size() )
 					, false )
 				, details::createBuffer< uint32_t >( m_device
 					, indexCount
 					, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, m_debugName + "Index" + std::to_string( m_buffers.size() )
-					, false ) );
-			m_buffers.emplace_back( std::move( buffers ) );
-			it = std::next( m_buffers.begin()
-				, ptrdiff_t( m_buffers.size() - 1u ) );
+					, m_debugName + name + "Index" + std::to_string( buffers.size() )
+					, false )
+				, ( checkFlag( submeshFlags, SubmeshFlag::eSkinning )
+					? details::createBuffer< VertexBoneData >( m_device
+						, vertexCount
+						, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+						, m_debugName + name + "Bones" + std::to_string( buffers.size() )
+						, false )
+					: nullptr )
+				, ( checkFlag( submeshFlags, SubmeshFlag::eMorphing )
+					? details::createBuffer< InterleavedVertex >( m_device
+						, vertexCount
+						, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+						, m_debugName + name + "Morph" + std::to_string( buffers.size() )
+						, false )
+					: nullptr ) };
+			buffers.emplace_back( std::move( modelBuffers ) );
+			it = std::next( buffers.begin()
+				, ptrdiff_t( buffers.size() - 1u ) );
 		}
 
-		result.vtxBuffer = &( *it )->vertex;
-		result.vtxChunk = ( *it )->vertex.allocate( sizeof( InterleavedVertex ) * vertexCount );
+		result.vtxBuffer = it->vertex.get();
+		result.vtxChunk = it->vertex->allocate( sizeof( InterleavedVertex ) * vertexCount );
+
+		if ( checkFlag( submeshFlags, SubmeshFlag::eSkinning ) )
+		{
+			result.bonBuffer = it->bones.get();
+			result.bonChunk = it->bones->allocate( sizeof( VertexBoneData ) * vertexCount );
+		}
+
+		if ( checkFlag( submeshFlags, SubmeshFlag::eMorphing ) )
+		{
+			result.mphBuffer = it->morph.get();
+			result.mphChunk = it->morph->allocate( sizeof( InterleavedVertex ) * vertexCount );
+		}
 
 		if ( indexCount )
 		{
-			result.idxBuffer = &( *it )->index;
-			result.idxChunk = ( *it )->index.allocate( sizeof( uint32_t ) * indexCount );
+			result.idxBuffer = it->index.get();
+			result.idxChunk = it->index->allocate( sizeof( uint32_t ) * indexCount );
 		}
 
 		return result;
@@ -127,25 +194,51 @@ namespace castor3d
 
 	void ObjectBufferPool::putBuffer( ObjectBufferOffset const & bufferOffset )
 	{
-		auto it = std::find_if( m_buffers.begin()
-			, m_buffers.end()
-			, [&bufferOffset]( std::unique_ptr< ModelBuffers > const & lookup )
+		auto buffersIt = m_buffers.find( bufferOffset.submeshFlags.value() );
+		CU_Require( buffersIt  != m_buffers.end() );
+		auto & buffers = buffersIt->second;
+		auto it = std::find_if( buffers.begin()
+			, buffers.end()
+			, [&bufferOffset]( ModelBuffers const & lookup )
 			{
-				bool result = &lookup->vertex.getBuffer().getBuffer() == &bufferOffset.getVertexBuffer();
+				bool result = &lookup.vertex->getBuffer().getBuffer() == &bufferOffset.getVertexBuffer();
+
+				if ( result && bufferOffset.bonBuffer )
+				{
+					result = &lookup.bones->getBuffer().getBuffer() == &bufferOffset.getBonesBuffer();
+				}
+
+				if ( result && bufferOffset.mphBuffer )
+				{
+					result = &lookup.morph->getBuffer().getBuffer() == &bufferOffset.getMorphBuffer();
+				}
 
 				if ( result && bufferOffset.idxBuffer )
 				{
-					result = &lookup->index.getBuffer().getBuffer() == &bufferOffset.getIndexBuffer();
+					result = &lookup.index->getBuffer().getBuffer() == &bufferOffset.getIndexBuffer();
 				}
 
 				return result;
 			} );
-		CU_Require( it != m_buffers.end() );
-		( *it )->vertex.deallocate( bufferOffset.vtxChunk );
+		CU_Require( it != buffers.end() );
+		it->vertex->deallocate( bufferOffset.vtxChunk );
+
+		if ( bufferOffset.bonBuffer )
+		{
+			CU_Require( it->bones );
+			it->bones->deallocate( bufferOffset.bonChunk );
+		}
+
+		if ( bufferOffset.mphBuffer )
+		{
+			CU_Require( it->morph );
+			it->morph->deallocate( bufferOffset.mphChunk );
+		}
 
 		if ( bufferOffset.idxBuffer )
 		{
-			( *it )->index.deallocate( bufferOffset.idxChunk );
+			CU_Require( it->index );
+			it->index->deallocate( bufferOffset.idxChunk );
 		}
 	}
 
@@ -156,365 +249,10 @@ namespace castor3d
 		auto it = array.begin();
 
 		while ( it != array.end()
-			&& ( !( *it )->vertex.hasAvailable( sizeof( InterleavedVertex ) * vertexCount )
-				|| !( *it )->index.hasAvailable( sizeof( uint32_t ) * indexCount ) ) )
-		{
-			++it;
-		}
-
-		return it;
-	}
-
-	//*********************************************************************************************
-
-	MorphedObjectBufferPool::MorphedObjectBufferPool( RenderDevice const & device
-		, castor::String debugName )
-		: OwnedBy< RenderSystem >{ device.renderSystem }
-		, m_device{ device }
-		, m_debugName{ std::move( debugName ) }
-	{
-	}
-
-	void MorphedObjectBufferPool::cleanup()
-	{
-		m_buffers.clear();
-	}
-
-	void MorphedObjectBufferPool::upload( ashes::CommandBuffer const & commandBuffer )
-	{
-		for ( auto & buffer : m_buffers )
-		{
-			buffer->vertex.upload( commandBuffer );
-			buffer->morph.upload( commandBuffer );
-			buffer->index.upload( commandBuffer );
-		}
-	}
-
-	ObjectBufferOffset MorphedObjectBufferPool::getBuffer( VkDeviceSize vertexCount
-		, VkDeviceSize indexCount )
-	{
-		ObjectBufferOffset result;
-		auto it = doFindBuffer( vertexCount, indexCount, m_buffers );
-
-		if ( it == m_buffers.end() )
-		{
-			auto buffers = std::make_unique< ModelBuffers >( details::createBuffer< InterleavedVertex >( m_device
-					, vertexCount
-					, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, m_debugName + "Vertex" + std::to_string( m_buffers.size() )
-					, false )
-				, details::createBuffer< InterleavedVertex >( m_device
-					, vertexCount
-					, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, m_debugName + "Morph" + std::to_string( m_buffers.size() )
-					, false )
-				, details::createBuffer< uint32_t >( m_device
-					, indexCount
-					, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, m_debugName + "Index" + std::to_string( m_buffers.size() )
-					, false ) );
-			m_buffers.emplace_back( std::move( buffers ) );
-			it = std::next( m_buffers.begin()
-				, ptrdiff_t( m_buffers.size() - 1u ) );
-		}
-
-		result.vtxBuffer = &( *it )->vertex;
-		result.vtxChunk = ( *it )->vertex.allocate( sizeof( InterleavedVertex ) * vertexCount );
-		result.mphBuffer = &( *it )->morph;
-		result.mphChunk = ( *it )->morph.allocate( sizeof( InterleavedVertex ) * vertexCount );
-
-		if ( indexCount )
-		{
-			result.idxBuffer = &( *it )->index;
-			result.idxChunk = ( *it )->index.allocate( sizeof( uint32_t ) * indexCount );
-		}
-
-		return result;
-	}
-
-	void MorphedObjectBufferPool::putBuffer( ObjectBufferOffset const & bufferOffset )
-	{
-		auto it = std::find_if( m_buffers.begin()
-			, m_buffers.end()
-			, [&bufferOffset]( std::unique_ptr< ModelBuffers > const & lookup )
-			{
-				bool result = &lookup->vertex.getBuffer().getBuffer() == &bufferOffset.getVertexBuffer();
-
-				if ( result && bufferOffset.idxBuffer )
-				{
-					result = &lookup->index.getBuffer().getBuffer() == &bufferOffset.getIndexBuffer();
-				}
-
-				if ( result && bufferOffset.mphBuffer )
-				{
-					result = &lookup->morph.getBuffer().getBuffer() == &bufferOffset.getMorphBuffer();
-				}
-
-				return result;
-			} );
-		CU_Require( it != m_buffers.end() );
-		( *it )->vertex.deallocate( bufferOffset.vtxChunk );
-		( *it )->morph.deallocate( bufferOffset.mphChunk );
-
-		if ( bufferOffset.idxBuffer )
-		{
-			( *it )->index.deallocate( bufferOffset.idxChunk );
-		}
-	}
-
-	MorphedObjectBufferPool::BufferArray::iterator MorphedObjectBufferPool::doFindBuffer( VkDeviceSize vertexCount
-		, VkDeviceSize indexCount
-		, MorphedObjectBufferPool::BufferArray & array )
-	{
-		auto it = array.begin();
-
-		while ( it != array.end()
-			&& ( !( *it )->vertex.hasAvailable( sizeof( InterleavedVertex ) * vertexCount )
-				|| !( *it )->morph.hasAvailable( sizeof( InterleavedVertex ) * vertexCount )
-				|| !( *it )->index.hasAvailable( sizeof( uint32_t ) * indexCount ) ) )
-		{
-			++it;
-		}
-
-		return it;
-	}
-
-	//*********************************************************************************************
-
-	SkinnedObjectBufferPool::SkinnedObjectBufferPool( RenderDevice const & device
-		, castor::String debugName )
-		: OwnedBy< RenderSystem >{ device.renderSystem }
-		, m_device{ device }
-		, m_debugName{ std::move( debugName ) }
-	{
-	}
-
-	void SkinnedObjectBufferPool::cleanup()
-	{
-		m_buffers.clear();
-	}
-
-	void SkinnedObjectBufferPool::upload( ashes::CommandBuffer const & commandBuffer )
-	{
-		for ( auto & buffer : m_buffers )
-		{
-			buffer->vertex.upload( commandBuffer );
-			buffer->bones.upload( commandBuffer );
-			buffer->index.upload( commandBuffer );
-		}
-	}
-
-	ObjectBufferOffset SkinnedObjectBufferPool::getBuffer( VkDeviceSize vertexCount
-		, VkDeviceSize indexCount )
-	{
-		ObjectBufferOffset result;
-		auto it = doFindBuffer( vertexCount, indexCount, m_buffers );
-
-		if ( it == m_buffers.end() )
-		{
-			auto buffers = std::make_unique< ModelBuffers >( details::createBuffer< InterleavedVertex >( m_device
-					, vertexCount
-					, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, m_debugName + "Vertex" + std::to_string( m_buffers.size() )
-					, false )
-				, details::createBuffer< VertexBoneData >( m_device
-					, vertexCount
-					, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, m_debugName + "Bones" + std::to_string( m_buffers.size() )
-					, false )
-				, details::createBuffer< uint32_t >( m_device
-					, indexCount
-					, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, m_debugName + "Index" + std::to_string( m_buffers.size() )
-					, false ) );
-			m_buffers.emplace_back( std::move( buffers ) );
-			it = std::next( m_buffers.begin()
-				, ptrdiff_t( m_buffers.size() - 1u ) );
-		}
-
-		result.vtxBuffer = &( *it )->vertex;
-		result.vtxChunk = ( *it )->vertex.allocate( sizeof( InterleavedVertex ) * vertexCount );
-		result.bonBuffer = &( *it )->bones;
-		result.bonChunk = ( *it )->bones.allocate( sizeof( VertexBoneData ) * vertexCount );
-
-		if ( indexCount )
-		{
-			result.idxBuffer = &( *it )->index;
-			result.idxChunk = ( *it )->index.allocate( sizeof( uint32_t ) * indexCount );
-		}
-
-		return result;
-	}
-
-	void SkinnedObjectBufferPool::putBuffer( ObjectBufferOffset const & bufferOffset )
-	{
-		auto it = std::find_if( m_buffers.begin()
-			, m_buffers.end()
-			, [&bufferOffset]( std::unique_ptr< ModelBuffers > const & lookup )
-			{
-				bool result = &lookup->vertex.getBuffer().getBuffer() == &bufferOffset.getVertexBuffer();
-
-				if ( result && bufferOffset.idxBuffer )
-				{
-					result = &lookup->index.getBuffer().getBuffer() == &bufferOffset.getIndexBuffer();
-				}
-
-				if ( result && bufferOffset.bonBuffer )
-				{
-					result = &lookup->bones.getBuffer().getBuffer() == &bufferOffset.getBonesBuffer();
-				}
-
-				return result;
-			} );
-		CU_Require( it != m_buffers.end() );
-		( *it )->vertex.deallocate( bufferOffset.vtxChunk );
-		( *it )->bones.deallocate( bufferOffset.bonChunk );
-
-		if ( bufferOffset.idxBuffer )
-		{
-			( *it )->index.deallocate( bufferOffset.idxChunk );
-		}
-	}
-
-	SkinnedObjectBufferPool::BufferArray::iterator SkinnedObjectBufferPool::doFindBuffer( VkDeviceSize vertexCount
-		, VkDeviceSize indexCount
-		, SkinnedObjectBufferPool::BufferArray & array )
-	{
-		auto it = array.begin();
-
-		while ( it != array.end()
-			&& ( !( *it )->vertex.hasAvailable( sizeof( InterleavedVertex ) * vertexCount )
-				|| !( *it )->bones.hasAvailable( sizeof( VertexBoneData ) * vertexCount )
-				|| !( *it )->index.hasAvailable( sizeof( uint32_t ) * indexCount ) ) )
-		{
-			++it;
-		}
-
-		return it;
-	}
-
-	//*********************************************************************************************
-
-	MorphedSkinnedObjectBufferPool::MorphedSkinnedObjectBufferPool( RenderDevice const & device
-		, castor::String debugName )
-		: OwnedBy< RenderSystem >{ device.renderSystem }
-		, m_device{ device }
-		, m_debugName{ std::move( debugName ) }
-	{
-	}
-
-	void MorphedSkinnedObjectBufferPool::cleanup()
-	{
-		m_buffers.clear();
-	}
-
-	void MorphedSkinnedObjectBufferPool::upload( ashes::CommandBuffer const & commandBuffer )
-	{
-		for ( auto & buffer : m_buffers )
-		{
-			buffer->vertex.upload( commandBuffer );
-			buffer->morph.upload( commandBuffer );
-			buffer->bones.upload( commandBuffer );
-			buffer->index.upload( commandBuffer );
-		}
-	}
-
-	ObjectBufferOffset MorphedSkinnedObjectBufferPool::getBuffer( VkDeviceSize vertexCount
-		, VkDeviceSize indexCount )
-	{
-		ObjectBufferOffset result;
-		auto it = doFindBuffer( vertexCount, indexCount, m_buffers );
-
-		if ( it == m_buffers.end() )
-		{
-			auto buffers = std::make_unique< ModelBuffers >( details::createBuffer< InterleavedVertex >( m_device
-					, vertexCount
-					, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, m_debugName + "Vertex" + std::to_string( m_buffers.size() )
-					, false )
-				, details::createBuffer< InterleavedVertex >( m_device
-					, vertexCount
-					, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, m_debugName + "Morph" + std::to_string( m_buffers.size() )
-					, false )
-				, details::createBuffer< VertexBoneData >( m_device
-					, vertexCount
-					, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, m_debugName + "Bones" + std::to_string( m_buffers.size() )
-					, false )
-				, details::createBuffer< uint32_t >( m_device
-					, indexCount
-					, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, m_debugName + "Index" + std::to_string( m_buffers.size() )
-					, false ) );
-			m_buffers.emplace_back( std::move( buffers ) );
-			it = std::next( m_buffers.begin()
-				, ptrdiff_t( m_buffers.size() - 1u ) );
-		}
-
-		result.vtxBuffer = &( *it )->vertex;
-		result.vtxChunk = ( *it )->vertex.allocate( sizeof( InterleavedVertex ) * vertexCount );
-		result.mphBuffer = &( *it )->morph;
-		result.mphChunk = ( *it )->morph.allocate( sizeof( InterleavedVertex ) * vertexCount );
-		result.bonBuffer = &( *it )->bones;
-		result.bonChunk = ( *it )->bones.allocate( sizeof( VertexBoneData ) * vertexCount );
-
-		if ( indexCount )
-		{
-			result.idxBuffer = &( *it )->index;
-			result.idxChunk = ( *it )->index.allocate( sizeof( uint32_t ) * indexCount );
-		}
-
-		return result;
-	}
-
-	void MorphedSkinnedObjectBufferPool::putBuffer( ObjectBufferOffset const & bufferOffset )
-	{
-		auto it = std::find_if( m_buffers.begin()
-			, m_buffers.end()
-			, [&bufferOffset]( std::unique_ptr< ModelBuffers > const & lookup )
-			{
-				bool result = &lookup->vertex.getBuffer().getBuffer() == &bufferOffset.getVertexBuffer();
-
-				if ( result && bufferOffset.idxBuffer )
-				{
-					result = &lookup->index.getBuffer().getBuffer() == &bufferOffset.getIndexBuffer();
-				}
-
-				if ( result && bufferOffset.mphBuffer )
-				{
-					result = &lookup->morph.getBuffer().getBuffer() == &bufferOffset.getMorphBuffer();
-				}
-
-				if ( result && bufferOffset.bonBuffer )
-				{
-					result = &lookup->bones.getBuffer().getBuffer() == &bufferOffset.getBonesBuffer();
-				}
-
-				return result;
-			} );
-		CU_Require( it != m_buffers.end() );
-		( *it )->vertex.deallocate( bufferOffset.vtxChunk );
-		( *it )->morph.deallocate( bufferOffset.mphChunk );
-		( *it )->bones.deallocate( bufferOffset.bonChunk );
-
-		if ( bufferOffset.idxBuffer )
-		{
-			( *it )->index.deallocate( bufferOffset.idxChunk );
-		}
-	}
-
-	MorphedSkinnedObjectBufferPool::BufferArray::iterator MorphedSkinnedObjectBufferPool::doFindBuffer( VkDeviceSize vertexCount
-		, VkDeviceSize indexCount
-		, MorphedSkinnedObjectBufferPool::BufferArray & array )
-	{
-		auto it = array.begin();
-
-		while ( it != array.end()
-			&& ( !( *it )->vertex.hasAvailable( sizeof( InterleavedVertex ) * vertexCount )
-				|| !( *it )->morph.hasAvailable( sizeof( InterleavedVertex ) * vertexCount )
-				|| !( *it )->bones.hasAvailable( sizeof( VertexBoneData ) * vertexCount )
-				|| !( *it )->index.hasAvailable( sizeof( uint32_t ) * indexCount ) ) )
+			&& ( !it->vertex->hasAvailable( sizeof( InterleavedVertex ) * vertexCount )
+				|| !it->index->hasAvailable( sizeof( uint32_t ) * indexCount )
+				|| ( it->bones && !it->bones->hasAvailable( sizeof( VertexBoneData ) * vertexCount ) )
+				|| ( it->morph && !it->morph->hasAvailable( sizeof( InterleavedVertex ) * vertexCount ) ) ) )
 		{
 			++it;
 		}
