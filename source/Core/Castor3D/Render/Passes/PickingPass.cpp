@@ -127,23 +127,24 @@ namespace castor3d
 		C3D_Morphing( writer
 			, GlobalBuffersIdx::eMorphingData
 			, RenderPipeline::eBuffers
-			, flags.programFlags );
+			, flags.submeshFlags );
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
 			, RenderPipeline::eBuffers
-			, flags.programFlags );
+			, flags.submeshFlags );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 
 		writer.implementMainT< shader::VertexSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
-				, flags.programFlags
+				, flags.submeshFlags
 				, getShaderFlags()
 				, textureFlags
 				, flags.passFlags
 				, hasTextures }
 			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer
+				, flags.submeshFlags
 				, flags.programFlags
 				, getShaderFlags()
 				, textureFlags
@@ -156,13 +157,13 @@ namespace castor3d
 					, in
 					, pipelineID
 					, in.drawID
-					, flags.programFlags );
+					, flags.submeshFlags );
 				auto curPosition = writer.declLocale( "curPosition"
 					, in.position );
 				out.texture0 = in.texture0;
 				auto morphingData = writer.declLocale( "morphingData"
 					, c3d_morphingData[ids.morphingId]
-					, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
+					, checkFlag( flags.submeshFlags, SubmeshFlag::eMorphing ) );
 				in.morph( morphingData
 					, curPosition
 					, out.texture0 );
@@ -172,7 +173,7 @@ namespace castor3d
 				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 
 				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
-					, modelData.getCurModelMtx( flags.programFlags
+					, modelData.getCurModelMtx( flags.submeshFlags
 						, skinningData
 						, ids.skinningId
 						, in.boneIds0
@@ -235,6 +236,7 @@ namespace castor3d
 		auto pxl_fragColor( writer.declOutput< UVec4 >( "pxl_fragColor", 0 ) );
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
+				, flags.submeshFlags
 				, flags.programFlags
 				, getShaderFlags()
 				, textureFlags
@@ -242,7 +244,7 @@ namespace castor3d
 				, hasTextures }
 			, FragmentOut{ writer }
 			, [&]( FragmentInT< shader::FragmentSurfaceT > in
-			, FragmentOut out )
+				, FragmentOut out )
 			{
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId ) - 1u] );

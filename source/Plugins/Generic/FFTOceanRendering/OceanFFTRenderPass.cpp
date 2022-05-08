@@ -619,6 +619,16 @@ namespace ocean_fft
 		doAddGIDescriptor( descriptorWrites, shadowMaps, index );
 	}
 
+	castor3d::SubmeshFlags OceanRenderPass::doAdjustSubmeshFlags( castor3d::SubmeshFlags flags )const
+	{
+		remFlag( flags, castor3d::SubmeshFlag::eInstantiation );
+		remFlag( flags, castor3d::SubmeshFlag::eMorphing );
+		remFlag( flags, castor3d::SubmeshFlag::eSkinning );
+		remFlag( flags, castor3d::SubmeshFlag::eSecondaryUV );
+		remFlag( flags, castor3d::SubmeshFlag::eForceTexCoords );
+		return flags;
+	}
+
 	castor3d::PassFlags OceanRenderPass::doAdjustPassFlags( castor3d::PassFlags flags )const
 	{
 		remFlag( flags, castor3d::PassFlag::eReflection );
@@ -637,10 +647,6 @@ namespace ocean_fft
 	{
 		addFlag( flags, castor3d::ProgramFlag::eLighting );
 		addFlag( flags, castor3d::ProgramFlag::eHasTessellation );
-		remFlag( flags, castor3d::ProgramFlag::eMorphing );
-		remFlag( flags, castor3d::ProgramFlag::eInstantiation );
-		remFlag( flags, castor3d::ProgramFlag::eSecondaryUV );
-		remFlag( flags, castor3d::ProgramFlag::eForceTexCoords );
 		return flags;
 	}
 
@@ -657,8 +663,8 @@ namespace ocean_fft
 		VertexWriter writer;
 
 		// Since their vertex attribute locations overlap, we must not have both set at the same time.
-		CU_Require( ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) ? 1 : 0 )
-			+ ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) ? 1 : 0 ) < 2
+		CU_Require( ( checkFlag( flags.submeshFlags, SubmeshFlag::eInstantiation ) ? 1 : 0 )
+			+ ( checkFlag( flags.submeshFlags, SubmeshFlag::eMorphing ) ? 1 : 0 ) < 2
 			&& "Can't have both instantiation and morphing yet." );
 		auto textureFlags = filterTexturesFlags( flags.textures );
 
@@ -683,7 +689,7 @@ namespace ocean_fft
 		pcb.end();
 
 		writer.implementMainT< castor3d::shader::VertexSurfaceT, PatchT >( sdw::VertexInT< castor3d::shader::VertexSurfaceT >{ writer
-				, flags.programFlags
+				, flags.submeshFlags
 				, getShaderFlags()
 				, textureFlags
 				, flags.passFlags
@@ -701,7 +707,7 @@ namespace ocean_fft
 						, in
 						, pipelineID
 						, in.drawID
-						, flags.programFlags ) );
+						, flags.submeshFlags ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId - 1u] );
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
@@ -942,7 +948,7 @@ namespace ocean_fft
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
 			, RenderPipeline::eBuffers
-			, flags.programFlags );
+			, flags.submeshFlags );
 		C3D_FftOcean( writer
 			, OceanFFTIdx::eOceanUbo
 			, RenderPipeline::eBuffers );
@@ -999,6 +1005,7 @@ namespace ocean_fft
 				, type::PrimitiveOrdering::eCW }
 			, QuadsTessPatchInT< PatchT >{ writer, 9u }
 			, TessEvalDataOutT< castor3d::shader::FragmentSurfaceT >{ writer
+				, flags.submeshFlags
 				, flags.programFlags
 				, getShaderFlags()
 				, textureFlags
@@ -1153,6 +1160,7 @@ namespace ocean_fft
 			, sdw::InVec3{ writer, "diffuseColour" } );
 
 		writer.implementMainT< castor3d::shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< castor3d::shader::FragmentSurfaceT >{ writer
+				, flags.submeshFlags
 				, flags.programFlags
 				, getShaderFlags()
 				, textureFlags

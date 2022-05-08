@@ -204,6 +204,7 @@ namespace castor3d
 		auto pxl_velocity( writer.declOutput< Vec4 >( "pxl_velocity", 2 ) );
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
+				, flags.submeshFlags
 				, flags.programFlags
 				, getShaderFlags()
 				, textureFlags

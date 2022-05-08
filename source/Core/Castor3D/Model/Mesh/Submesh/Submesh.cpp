@@ -16,11 +16,13 @@
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
 	namespace smsh
 	{
 		static size_t hash( MaterialRPtr material
 			, ShaderFlags const & shaderFlags
-			, ProgramFlags const & programFlags
+			, SubmeshFlags const & submeshFlags
 			, TextureFlagsArray const & mask
 			, bool forceTexcoords )
 		{
@@ -33,7 +35,7 @@ namespace castor3d
 			}
 
 			result = castor::hashCombine( result, shaderFlags.value() );
-			result = castor::hashCombine( result, programFlags.value() );
+			result = castor::hashCombine( result, submeshFlags.value() );
 			result = castor::hashCombine( result, forceTexcoords );
 			return result;
 		}
@@ -90,7 +92,8 @@ namespace castor3d
 			return fix( value, defaultValue );
 		}
 
-		static ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout( ShaderFlags const & flags
+		static ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout( SubmeshFlags const & submeshFlags
+			, ShaderFlags const & shaderFlags
 			, bool hasTextures
 			, uint32_t & currentLocation )
 		{
@@ -102,7 +105,7 @@ namespace castor3d
 				, VK_FORMAT_R32G32B32_SFLOAT
 				, offsetof( InterleavedVertex, pos ) } };
 
-			if ( checkFlag( flags, ShaderFlag::eNormal ) )
+			if ( checkFlag( shaderFlags, ShaderFlag::eNormal ) )
 			{
 				attributes.push_back( { currentLocation++
 					, 0u
@@ -110,7 +113,7 @@ namespace castor3d
 					, offsetof( InterleavedVertex, nml ) } );
 			}
 
-			if ( checkFlag( flags, ShaderFlag::eTangentSpace ) )
+			if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) )
 			{
 				attributes.push_back( { currentLocation++
 					, 0u
@@ -130,11 +133,14 @@ namespace castor3d
 		}
 	}
 
+	//*********************************************************************************************
+
 	Submesh::Submesh( Mesh & mesh
 		, uint32_t id )
 		: OwnedBy< Mesh >{ mesh }
 		, m_id{ id }
 		, m_defaultMaterial{ mesh.getScene()->getEngine()->getMaterialCache().getDefaultMaterial() }
+		, m_submeshFlags{ SubmeshFlag::eTangents | SubmeshFlag::eTexcoords }
 	{
 		addComponent( std::make_shared< InstantiationComponent >( *this, 2u ) );
 	}
@@ -420,13 +426,13 @@ namespace castor3d
 		}
 	}
 
-	ProgramFlags Submesh::getProgramFlags( Material const & material )const
+	SubmeshFlags Submesh::getSubmeshFlags( Material const & material )const
 	{
-		auto result = m_programFlags;
+		auto result = m_submeshFlags;
 
 		for ( auto & component : m_components )
 		{
-			result |= component.second->getProgramFlags( material );
+			result |= component.second->getSubmeshFlags( material );
 		}
 
 		return result;
@@ -451,12 +457,12 @@ namespace castor3d
 	}
 
 	GeometryBuffers const & Submesh::getGeometryBuffers( ShaderFlags const & shaderFlags
-		, ProgramFlags const & programFlags
+		, SubmeshFlags const & submeshFlags
 		, MaterialRPtr material
 		, TextureFlagsArray const & mask
 		, bool forceTexcoords )const
 	{
-		auto key = smsh::hash( material, shaderFlags, programFlags, mask, forceTexcoords );
+		auto key = smsh::hash( material, shaderFlags, submeshFlags, mask, forceTexcoords );
 		auto it = m_geometryBuffers.find( key );
 		bool hasTextures = forceTexcoords || ( !mask.empty() );
 
@@ -465,7 +471,8 @@ namespace castor3d
 			ashes::BufferCRefArray buffers;
 			ashes::UInt64Array offsets;
 			ashes::PipelineVertexInputStateCreateInfoCRefArray layouts;
-			auto hash = std::hash< ShaderFlags::BaseType >{}( shaderFlags );
+			auto hash = std::hash< SubmeshFlags::BaseType >{}( submeshFlags );
+			hash = castor::hashCombine( hash, shaderFlags.value() );
 			hash = castor::hashCombine( hash, hasTextures );
 
 			auto layoutIt = m_vertexLayouts.find( hash );
@@ -474,7 +481,9 @@ namespace castor3d
 			if ( layoutIt == m_vertexLayouts.end() )
 			{
 				layoutIt = m_vertexLayouts.emplace( hash
-					, smsh::doCreateVertexLayout( shaderFlags, hasTextures, currentLocation ) ).first;
+					, smsh::doCreateVertexLayout( submeshFlags
+						, shaderFlags
+						, hasTextures, currentLocation ) ).first;
 			}
 			else
 			{
@@ -486,7 +495,7 @@ namespace castor3d
 			for ( auto & component : m_components )
 			{
 				component.second->gather( shaderFlags
-					, programFlags
+					, submeshFlags
 					, material
 					, buffers
 					, offsets
@@ -524,4 +533,6 @@ namespace castor3d
 			m_bufferOffset.markVertexDirty();
 		}
 	}
+
+	//*********************************************************************************************
 }

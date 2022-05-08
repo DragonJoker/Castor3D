@@ -22,15 +22,15 @@ namespace castor3d::shader
 
 		C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 
-		C3D_API sdw::Mat4 getPrvModelMtx( ProgramFlags programFlags
+		C3D_API sdw::Mat4 getPrvModelMtx( SubmeshFlags submeshFlags
 			, sdw::Mat4 const & curModelMatrix )const;
-		C3D_API sdw::Mat3 getNormalMtx( ProgramFlags programFlags
+		C3D_API sdw::Mat3 getNormalMtx( SubmeshFlags submeshFlags
 			, sdw::Mat4 const & curModelMatrix )const;
 		C3D_API sdw::Vec4 worldToModel( sdw::Vec4 const & pos )const;
 		C3D_API sdw::Vec4 modelToWorld( sdw::Vec4 const & pos )const;
 		C3D_API sdw::Vec4 modelToCurWorld( sdw::Vec4 const & pos )const;
 		C3D_API sdw::Vec4 modelToPrvWorld( sdw::Vec4 const & pos )const;
-		C3D_API sdw::Mat4 getCurModelMtx( ProgramFlags programFlags
+		C3D_API sdw::Mat4 getCurModelMtx( SubmeshFlags submeshFlags
 			, SkinningData const & skinning
 			, sdw::Mat4 const & transform
 			, sdw::UInt const & skinningId
@@ -38,7 +38,7 @@ namespace castor3d::shader
 			, sdw::UVec4 const & boneIds1
 			, sdw::Vec4 const & boneWeights0
 			, sdw::Vec4 const & boneWeights1 )const;
-		C3D_API sdw::Mat4 getCurModelMtx( ProgramFlags programFlags
+		C3D_API sdw::Mat4 getCurModelMtx( SubmeshFlags submeshFlags
 			, SkinningData const & skinning
 			, sdw::UInt const & skinningId
 			, sdw::UVec4 const & boneIds0
@@ -128,20 +128,20 @@ namespace castor3d::shader
 		, shader::VertexSurfaceT< FlagT > const & surface
 		, sdw::UInt pipelineID
 		, sdw::Int drawID
-		, ProgramFlags const & flags )
+		, SubmeshFlags const & flags )
 	{
 		auto & writer = *data.getWriter();
 
-		if ( checkFlag( flags, ProgramFlag::eInstantiation ) )
+		if ( checkFlag( flags, SubmeshFlag::eInstantiation ) )
 		{
 			return { writer.declLocale( "nodeId"
 					, surface.objectIds.x() )
 				, writer.declLocale( "morphingId"
 					, surface.objectIds.y()
-					, checkFlag( flags, ProgramFlag::eMorphing ) )
+					, checkFlag( flags, SubmeshFlag::eMorphing ) )
 				, writer.declLocale( "skinningId"
 					, surface.objectIds.z()
-					, checkFlag( flags, ProgramFlag::eSkinning ) ) };
+					, checkFlag( flags, SubmeshFlag::eSkinning ) ) };
 		}
 
 		auto objectIdsData = writer.declLocale( "objectIdsData"
@@ -150,10 +150,10 @@ namespace castor3d::shader
 			, objectIdsData.x() )
 			, writer.declLocale( "morphingId"
 				, objectIdsData.y()
-				, checkFlag( flags, ProgramFlag::eMorphing ) )
+				, checkFlag( flags, SubmeshFlag::eMorphing ) )
 			, writer.declLocale( "skinningId"
 				, objectIdsData.z()
-				, checkFlag( flags, ProgramFlag::eSkinning ) ) };
+				, checkFlag( flags, SubmeshFlag::eSkinning ) ) };
 	}
 
 	template< ast::var::Flag FlagT >
@@ -161,11 +161,11 @@ namespace castor3d::shader
 		, shader::VertexSurfaceT< FlagT > const & surface
 		, sdw::UInt pipelineID
 		, sdw::Int drawID
-		, ProgramFlags const & flags )
+		, SubmeshFlags const & flags )
 	{
 		auto & writer = *data.getWriter();
 
-		if ( checkFlag( flags, ProgramFlag::eInstantiation ) )
+		if ( checkFlag( flags, SubmeshFlag::eInstantiation ) )
 		{
 			return surface.objectIds.x();
 		}

@@ -60,13 +60,14 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	RenderNodeType getRenderNodeType( ProgramFlags const & flags )
+	RenderNodeType getRenderNodeType( SubmeshFlags const & submeshFlags
+		, ProgramFlags const & programFlags )
 	{
-		bool isFrontCulled = checkFlag( flags, ProgramFlag::eInvertNormals );
+		bool isFrontCulled = checkFlag( programFlags, ProgramFlag::eInvertNormals );
 
-		if ( checkFlag( flags, ProgramFlag::eInstantiation ) )
+		if ( checkFlag( submeshFlags, SubmeshFlag::eInstantiation ) )
 		{
-			if ( checkFlag( flags, ProgramFlag::eSkinning ) )
+			if ( checkFlag( submeshFlags, SubmeshFlag::eSkinning ) )
 			{
 				return isFrontCulled
 					? RenderNodeType::eFrontInstancedSkinned
@@ -78,9 +79,9 @@ namespace castor3d
 				: RenderNodeType::eBackInstancedStatic;
 		}
 
-		if ( checkFlag( flags, ProgramFlag::eSkinning ) )
+		if ( checkFlag( submeshFlags, SubmeshFlag::eSkinning ) )
 		{
-			if ( checkFlag( flags, ProgramFlag::eMorphing ) )
+			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphing ) )
 			{
 				return isFrontCulled
 					? RenderNodeType::eFrontMorphingSkinned
@@ -92,14 +93,14 @@ namespace castor3d
 				: RenderNodeType::eBackSkinned;
 		}
 
-		if ( checkFlag( flags, ProgramFlag::eMorphing ) )
+		if ( checkFlag( submeshFlags, SubmeshFlag::eMorphing ) )
 		{
 			return isFrontCulled
 				? RenderNodeType::eFrontMorphing
 				: RenderNodeType::eBackMorphing;
 		}
 
-		if ( checkFlag( flags, ProgramFlag::eBillboards ) )
+		if ( checkFlag( programFlags, ProgramFlag::eBillboards ) )
 		{
 			return isFrontCulled
 				? RenderNodeType::eFrontBillboard
@@ -346,11 +347,11 @@ namespace castor3d
 
 			if ( passIt != newMaterial.end() )
 			{
-				auto submeshFlags = data.getProgramFlags( newMaterial );
-				auto animMesh = checkFlag( submeshFlags, ProgramFlag::eMorphing )
+				auto submeshFlags = data.getSubmeshFlags( newMaterial );
+				auto animMesh = checkFlag( submeshFlags, SubmeshFlag::eMorphing )
 					? std::static_pointer_cast< AnimatedMesh >( findAnimatedObject( *getOwner(), instance.getName() + cuT( "_Mesh" ) ) )
 					: nullptr;
-				auto animSkeleton = checkFlag( submeshFlags, ProgramFlag::eSkinning )
+				auto animSkeleton = checkFlag( submeshFlags, SubmeshFlag::eSkinning )
 					? std::static_pointer_cast< AnimatedSkeleton >( findAnimatedObject( *getOwner(), instance.getName() + cuT( "_Skeleton" ) ) )
 					: nullptr;
 
@@ -461,11 +462,11 @@ namespace castor3d
 			{
 				auto & node = nodeIt.second;
 				auto & instantiation = node->data.getInstantiation();
-				auto submeshFlags = node->data.getProgramFlags( *node->pass->getOwner() );
-				node->mesh = checkFlag( submeshFlags, ProgramFlag::eMorphing )
+				auto submeshFlags = node->data.getSubmeshFlags( *node->pass->getOwner() );
+				node->mesh = checkFlag( submeshFlags, SubmeshFlag::eMorphing )
 					? std::static_pointer_cast< AnimatedMesh >( findAnimatedObject( *getOwner(), node->instance.getName() + cuT( "_Mesh" ) ) ).get()
 					: nullptr;
-				node->skeleton = checkFlag( submeshFlags, ProgramFlag::eSkinning )
+				node->skeleton = checkFlag( submeshFlags, SubmeshFlag::eSkinning )
 					? std::static_pointer_cast< AnimatedSkeleton >( findAnimatedObject( *getOwner(), node->instance.getName() + cuT( "_Skeleton" ) ) ).get()
 					: nullptr;
 

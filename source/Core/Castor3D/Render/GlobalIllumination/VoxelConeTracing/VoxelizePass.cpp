@@ -306,18 +306,18 @@ namespace castor3d
 		C3D_Morphing( writer
 			, GlobalBuffersIdx::eMorphingData
 			, RenderPipeline::eBuffers
-			, flags.programFlags );
+			, flags.submeshFlags );
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
 			, RenderPipeline::eBuffers
-			, flags.programFlags );
+			, flags.submeshFlags );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 
 		writer.implementMainT< shader::VertexSurfaceT, vxlpass::SurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
-				, flags.programFlags
+				, flags.submeshFlags
 				, getShaderFlags()
 				, textureFlags
 				, flags.passFlags
@@ -330,7 +330,7 @@ namespace castor3d
 					, in
 					, pipelineID
 					, in.drawID
-					, flags.programFlags );
+					, flags.submeshFlags );
 				auto curPosition = writer.declLocale( "curPosition"
 					, in.position );
 				auto v4Normal = writer.declLocale( "v4Normal"
@@ -346,14 +346,14 @@ namespace castor3d
 
 				auto morphingData = writer.declLocale( "morphingData"
 					, c3d_morphingData[ids.morphingId]
-					, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
+					, checkFlag( flags.submeshFlags, SubmeshFlag::eMorphing ) );
 				in.morph( morphingData
 					, curPosition
 					, v4Normal
 					, out.texture );
 
 				auto modelMtx = writer.declLocale< Mat4 >( "modelMtx"
-					, modelData.getCurModelMtx( flags.programFlags
+					, modelData.getCurModelMtx( flags.submeshFlags
 						, skinningData
 						, ids.skinningId
 						, in.boneIds0

@@ -51,7 +51,7 @@ namespace castor3d
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
 		C3D_API void gather( ShaderFlags const & shaderFlags
-			, ProgramFlags const & programFlags
+			, SubmeshFlags const & submeshFlags
 			, MaterialRPtr material
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
@@ -85,13 +85,13 @@ namespace castor3d
 			addBoneDatas( boneData.data(), boneData.data() + boneData.size() );
 		}
 		/**
-		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
+		 *\copydoc		castor3d::SubmeshComponent::getSubmeshFlags
 		 */
-		ProgramFlags getProgramFlags( Material const & material )const override
+		SubmeshFlags getSubmeshFlags( Material const & material )const override
 		{
 			return hasBoneData()
-				? ProgramFlag::eSkinning
-				: ProgramFlag( 0 );
+				? SubmeshFlag::eSkinning
+				: SubmeshFlag( 0 );
 		}
 
 		bool hasBoneData()const

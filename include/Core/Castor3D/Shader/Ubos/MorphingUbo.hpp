@@ -87,9 +87,9 @@ namespace castor3d
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd430\
-		, checkFlag( flags, castor3d::ProgramFlag::eMorphing ) };\
+		, checkFlag( flags, castor3d::SubmeshFlag::eMorphing ) };\
 	auto c3d_morphingData = morphing.declMemberArray< castor3d::shader::MorphingData >( castor3d::shader::MorphingData::DataName\
-		, checkFlag( flags, castor3d::ProgramFlag::eMorphing ) );\
+		, checkFlag( flags, castor3d::SubmeshFlag::eMorphing ) );\
 	morphing.end()
 
 #endif

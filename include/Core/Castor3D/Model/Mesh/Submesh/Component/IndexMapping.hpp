@@ -68,7 +68,7 @@ namespace castor3d
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
 		void gather( ShaderFlags const & shaderFlags
-			, ProgramFlags const & programFlags
+			, SubmeshFlags const & submeshFlags
 			, MaterialRPtr material
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
@@ -78,11 +78,11 @@ namespace castor3d
 		{
 		}
 		/**
-		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
+		 *\copydoc		castor3d::SubmeshComponent::getSubmeshFlags
 		 */
-		ProgramFlags getProgramFlags( Material const & material )const override
+		SubmeshFlags getSubmeshFlags( Material const & material )const override
 		{
-			return ProgramFlags{};
+			return SubmeshFlags{};
 		}
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getUsageFlags
