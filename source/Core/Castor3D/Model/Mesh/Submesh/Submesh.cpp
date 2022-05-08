@@ -164,30 +164,21 @@ namespace castor3d
 					indexCount = VkDeviceSize( m_indexMapping->getCount() ) * m_indexMapping->getComponentsCount();
 				}
 
+				auto submeshFlags = m_submeshFlags;
+
 				if ( hasComponent( BonesComponent::Name ) )
 				{
-					if ( hasComponent( MorphComponent::Name ) )
-					{
-						m_bufferOffset = device.morphedSkinnedGeometryPools->getBuffer( m_points.size()
-							, indexCount );
-					}
-					else
-					{
-						m_bufferOffset = device.skinnedGeometryPools->getBuffer( m_points.size()
-							, indexCount );
-					}
-				}
-				else if ( hasComponent( MorphComponent::Name ) )
-				{
-					m_bufferOffset = device.morphedGeometryPools->getBuffer( m_points.size()
-						, indexCount );
-				}
-				else
-				{
-					m_bufferOffset = device.geometryPools->getBuffer( m_points.size()
-						, indexCount );
+					submeshFlags |= SubmeshFlag::eSkinning;
 				}
 
+				if ( hasComponent( MorphComponent::Name ) )
+				{
+					submeshFlags |= SubmeshFlag::eMorphing;
+				}
+
+				m_bufferOffset = device.geometryPools->getBuffer( m_points.size()
+					, indexCount
+					, submeshFlags );
 				doFillVertexBuffer();
 			}
 
@@ -230,25 +221,7 @@ namespace castor3d
 
 		if ( m_bufferOffset )
 		{
-			if ( m_bufferOffset.hasBones() )
-			{
-				if ( hasComponent( MorphComponent::Name ) )
-				{
-					device.morphedSkinnedGeometryPools->putBuffer( m_bufferOffset );
-				}
-				else
-				{
-					device.skinnedGeometryPools->putBuffer( m_bufferOffset );
-				}
-			}
-			else if ( hasComponent( MorphComponent::Name ) )
-			{
-				device.morphedGeometryPools->putBuffer( m_bufferOffset );
-			}
-			else
-			{
-				device.geometryPools->putBuffer( m_bufferOffset );
-			}
+			device.geometryPools->putBuffer( m_bufferOffset );
 		}
 
 		m_vertexLayouts.clear();

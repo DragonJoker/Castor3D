@@ -14,6 +14,7 @@ namespace castor3d
 	struct ObjectBufferOffset
 	{
 	public:
+		SubmeshFlags submeshFlags{};
 		GpuPackedBuffer * vtxBuffer{};
 		GpuPackedBuffer * idxBuffer{};
 		GpuPackedBuffer * bonBuffer{};
