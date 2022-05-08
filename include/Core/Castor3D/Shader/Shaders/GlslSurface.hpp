@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_GlslSurface_H___
 
 #include "SdwModule.hpp"
+#include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
@@ -59,7 +60,7 @@ namespace castor3d::shader
 		SDW_DeclStructInstance( , VertexSurfaceT );
 
 		static ast::type::IOStructPtr makeIOType( ast::type::TypesCache & cache
-			, ProgramFlags programFlags
+			, SubmeshFlags submeshFlags
 			, ShaderFlags shaderFlags
 			, FilteredTextureFlags textureFlags
 			, PassFlags passFlags
@@ -113,6 +114,7 @@ namespace castor3d::shader
 		SDW_DeclStructInstance( , FragmentSurfaceT );
 
 		static ast::type::IOStructPtr makeIOType( ast::type::TypesCache & cache
+			, SubmeshFlags submeshFlags
 			, ProgramFlags programFlags
 			, ShaderFlags shaderFlags
 			, FilteredTextureFlags textureFlags

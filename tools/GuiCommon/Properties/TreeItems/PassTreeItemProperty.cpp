@@ -210,6 +210,7 @@ namespace GuiCommon
 							: castor3d::RenderPassTypeID{} )
 						, pass.getTypeID()
 						, pass.getHeightTextureIndex()
+						, castor3d::SubmeshFlags{}
 						, castor3d::ProgramFlags{}
 						, scene.getFlags()
 						, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST

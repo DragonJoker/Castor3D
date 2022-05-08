@@ -34,7 +34,8 @@ namespace castor3d
 		eBackBillboard,
 		CU_ScopedEnumBounds( eFrontStatic )
 	};
-	RenderNodeType getRenderNodeType( ProgramFlags const & flags );
+	RenderNodeType getRenderNodeType( SubmeshFlags const & submeshFlags
+		, ProgramFlags const & flags );
 	/**
 	*\~english
 	*\brief

@@ -53,7 +53,7 @@ namespace castor3d
 			return result;
 		}
 
-		static ashes::PipelineVertexInputStateCreateInfo getInstantiationLayout( ProgramFlags programFlags
+		static ashes::PipelineVertexInputStateCreateInfo getInstantiationLayout( SubmeshFlags const & submeshFlags
 			, uint32_t & currentLocation )
 		{
 			ashes::VkVertexInputBindingDescriptionArray bindings{ { InstantiationComponent::BindingPoint
@@ -162,7 +162,7 @@ namespace castor3d
 	}
 
 	void InstantiationComponent::gather( ShaderFlags const & shaderFlags
-		, ProgramFlags const & programFlags
+		, SubmeshFlags const & submeshFlags
 		, MaterialRPtr material
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
@@ -170,14 +170,14 @@ namespace castor3d
 		, TextureFlagsArray const & mask
 		, uint32_t & currentLocation )
 	{
-		if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
+		if ( checkFlag( submeshFlags, SubmeshFlag::eInstantiation ) )
 		{
 			auto it = m_instances.find( material );
 
 			if ( it != m_instances.end()
 				&& it->second.buffer )
 			{
-				auto hash = std::hash< ProgramFlags::BaseType >{}( programFlags );
+				auto hash = std::hash< SubmeshFlags::BaseType >{}( submeshFlags );
 				hash = castor::hashCombine( hash, mask.empty() );
 				hash = castor::hashCombine( hash, currentLocation );
 				auto layoutIt = m_mtxLayouts.find( hash );
@@ -185,7 +185,7 @@ namespace castor3d
 				if ( layoutIt == m_mtxLayouts.end() )
 				{
 					layoutIt = m_mtxLayouts.emplace( hash
-						, smshcompinst::getInstantiationLayout( programFlags, currentLocation ) ).first;
+						, smshcompinst::getInstantiationLayout( submeshFlags, currentLocation ) ).first;
 				}
 				else
 				{
@@ -205,12 +205,12 @@ namespace castor3d
 		return std::static_pointer_cast< SubmeshComponent >( result );
 	}
 
-	ProgramFlags InstantiationComponent::getProgramFlags( Material const & material )const
+	SubmeshFlags InstantiationComponent::getSubmeshFlags( Material const & material )const
 	{
 		auto it = find( material );
 		return ( it != end() && it->second.buffer )
-			? ProgramFlag::eInstantiation
-			: ProgramFlag( 0 );
+			? SubmeshFlag::eInstantiation
+			: SubmeshFlag( 0 );
 	}
 
 	bool InstantiationComponent::doInitialise( RenderDevice const & device )

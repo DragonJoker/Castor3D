@@ -491,6 +491,16 @@ namespace water
 		doAddGIDescriptor( descriptorWrites, shadowMaps, index );
 	}
 
+	castor3d::SubmeshFlags WaterRenderPass::doAdjustSubmeshFlags( castor3d::SubmeshFlags flags )const
+	{
+		remFlag( flags, castor3d::SubmeshFlag::eInstantiation );
+		remFlag( flags, castor3d::SubmeshFlag::eMorphing );
+		remFlag( flags, castor3d::SubmeshFlag::eSkinning );
+		remFlag( flags, castor3d::SubmeshFlag::eSecondaryUV );
+		addFlag( flags, castor3d::SubmeshFlag::eForceTexCoords );
+		return flags;
+	}
+
 	castor3d::PassFlags WaterRenderPass::doAdjustPassFlags( castor3d::PassFlags flags )const
 	{
 		remFlag( flags, castor3d::PassFlag::eReflection );
@@ -508,11 +518,6 @@ namespace water
 	castor3d::ProgramFlags WaterRenderPass::doAdjustProgramFlags( castor3d::ProgramFlags flags )const
 	{
 		addFlag( flags, castor3d::ProgramFlag::eLighting );
-		addFlag( flags, castor3d::ProgramFlag::eForceTexCoords );
-		remFlag( flags, castor3d::ProgramFlag::eInstantiation );
-		remFlag( flags, castor3d::ProgramFlag::eMorphing );
-		remFlag( flags, castor3d::ProgramFlag::eSkinning );
-		remFlag( flags, castor3d::ProgramFlag::eSecondaryUV );
 		return flags;
 	}
 
@@ -630,6 +635,7 @@ namespace water
 		auto pxl_colour( writer.declOutput< Vec4 >( "pxl_colour", 0 ) );
 
 		writer.implementMainT< castor3d::shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< castor3d::shader::FragmentSurfaceT >{ writer
+				, flags.submeshFlags
 				, flags.programFlags
 				, getShaderFlags()
 				, textureFlags

@@ -32,13 +32,14 @@ namespace castor3d
 	}
 
 	GeometryBuffers const & SubmeshRenderNode::getGeometryBuffers( ShaderFlags const & shaderFlags
+		, SubmeshFlags const & submeshFlags
 		, ProgramFlags const & programFlags
 		, Material & material
 		, TextureFlagsArray const & texturesMask
 		, bool forceTexCoords )const
 	{
 		return data.getGeometryBuffers( shaderFlags
-			, programFlags
+			, submeshFlags
 			, &material
 			, texturesMask
 			, forceTexCoords );

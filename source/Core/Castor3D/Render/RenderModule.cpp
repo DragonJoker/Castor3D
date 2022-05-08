@@ -246,6 +246,7 @@ namespace castor3d
 			&& lhs.renderPassType == rhs.renderPassType
 			&& lhs.passType == rhs.passType
 			&& lhs.heightMapIndex == rhs.heightMapIndex
+			&& lhs.submeshFlags == rhs.submeshFlags
 			&& lhs.programFlags == rhs.programFlags
 			&& lhs.sceneFlags == rhs.sceneFlags
 			&& lhs.topology == rhs.topology

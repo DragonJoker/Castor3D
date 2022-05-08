@@ -241,12 +241,12 @@ namespace castor3d
 				, indirectIdxBuffer
 				, indirectNIdxBuffer
 				, getInstanceCount( node ) );
-			auto submeshFlags = node.data.getProgramFlags( *node.pass->getOwner() );
+			auto submeshFlags = node.data.getSubmeshFlags( *node.pass->getOwner() );
 
-			auto mesh = checkFlag( submeshFlags, ProgramFlag::eMorphing )
+			auto mesh = checkFlag( submeshFlags, SubmeshFlag::eMorphing )
 				? std::static_pointer_cast< AnimatedMesh >( findAnimatedObject( scene, node.instance.getName() + cuT( "_Mesh" ) ) )
 				: nullptr;
-			auto skeleton = checkFlag( submeshFlags, ProgramFlag::eSkinning )
+			auto skeleton = checkFlag( submeshFlags, SubmeshFlag::eSkinning )
 				? std::static_pointer_cast< AnimatedSkeleton >( findAnimatedObject( scene, node.instance.getName() + cuT( "_Skeleton" ) ) )
 				: nullptr;
 
@@ -268,7 +268,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	uint64_t getPipelineBaseHash( ProgramFlags programFlags
+	uint64_t getPipelineBaseHash( SubmeshFlags submeshFlags
+		, ProgramFlags programFlags
 		, PassFlags passFlags
 		, uint32_t texturesCount
 		, TextureFlags texturesFlags
@@ -285,7 +286,8 @@ namespace castor3d
 		remFlag( programFlags, ProgramFlag::eConservativeRasterization );
 		remFlag( passFlags, PassFlag::eAlphaBlending );
 		remFlag( passFlags, PassFlag::eDrawEdge );
-		uint32_t result{ programFlags };
+		uint32_t result{ submeshFlags };
+		castor::hashCombine32( result, uint32_t( programFlags ) );
 		castor::hashCombine32( result, uint32_t( passFlags ) );
 		castor::hashCombine32( result, texturesCount );
 		castor::hashCombine32( result, uint32_t( texturesFlags ) );
@@ -298,14 +300,16 @@ namespace castor3d
 		, Pass const & pass
 		, bool isFrontCulled )
 	{
-		auto programFlags = data.getProgramFlags( *pass.getOwner() );
+		auto submeshFlags = data.getSubmeshFlags( *pass.getOwner() );
+		ProgramFlags programFlags{};
 
 		if ( isFrontCulled )
 		{
 			addFlag( programFlags, ProgramFlag::eInvertNormals );
 		}
 
-		return getPipelineBaseHash( renderPass.adjustFlags( programFlags )
+		return getPipelineBaseHash( renderPass.adjustFlags( submeshFlags )
+			, renderPass.adjustFlags( programFlags )
 			, renderPass.adjustFlags( pass.getPassFlags() )
 			, pass.getTextureUnitsCount()
 			, pass.getTextures()
@@ -324,7 +328,8 @@ namespace castor3d
 			addFlag( programFlags, ProgramFlag::eInvertNormals );
 		}
 
-		return getPipelineBaseHash( renderPass.adjustFlags( programFlags )
+		return getPipelineBaseHash( SubmeshFlags{}
+			, renderPass.adjustFlags( programFlags )
 			, renderPass.adjustFlags( pass.getPassFlags() )
 			, pass.getTextureUnitsCount()
 			, pass.getTextures()

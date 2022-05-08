@@ -185,10 +185,11 @@ namespace castor3d
 			, uint32_t & nidxIndex )
 		{
 			GeometryBuffers const & geometryBuffers = node.getGeometryBuffers( nodesPass.getShaderFlags()
+				, pipeline.getFlags().submeshFlags
 				, pipeline.getFlags().programFlags
 				, *node.pass->getOwner()
 				, node.pass->getTexturesMask()
-				, checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eForceTexCoords ) );
+				, checkFlag( pipeline.getFlags().submeshFlags, SubmeshFlag::eForceTexCoords ) );
 			commandBuffer.bindVertexBuffer( geometryBuffers.layouts[0].get().vertexBindingDescriptions[0].binding
 				, geometryBuffers.bufferOffset.getVertexBuffer()
 				, 0u );
@@ -338,20 +339,21 @@ namespace castor3d
 						auto & submesh = culledNode->data;
 						auto & pass = *culledNode->pass;
 						auto material = pass.getOwner();
-						auto programFlags = submesh.getProgramFlags( *material );
+						auto submeshFlags = submesh.getSubmeshFlags( *material );
 						auto sceneFlags = scene.getFlags();
 						auto textures = pass.getTexturesMask();
 						auto pipelineFlags = renderPass.createPipelineFlags( pass
 							, textures
-							, programFlags
+							, submeshFlags
+							, ProgramFlags{}
 							, sceneFlags
 							, submesh.getTopology()
 							, sidedCulled.second );
 						auto vertexLayouts = submesh.getGeometryBuffers( renderPass.getShaderFlags()
-							, pipelineFlags.programFlags
+							, pipelineFlags.submeshFlags
 							, material
 							, textures
-							, checkFlag( pipelineFlags.programFlags, ProgramFlag::eForceTexCoords ) ).layouts;
+							, checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eForceTexCoords ) ).layouts;
 						auto & pipeline = sidedCulled.second
 							? renderPass.prepareFrontPipeline( pipelineFlags
 								, vertexLayouts )
@@ -385,20 +387,21 @@ namespace castor3d
 								auto & submesh = culledNode->data;
 								auto & pass = *culledNode->pass;
 								auto material = pass.getOwner();
-								auto programFlags = submesh.getProgramFlags( *material );
+								auto submeshFlags = submesh.getSubmeshFlags( *material );
 								auto sceneFlags = scene.getFlags();
 								auto textures = pass.getTexturesMask();
 								auto pipelineFlags = renderPass.createPipelineFlags( pass
 									, textures
-									, programFlags
+									, submeshFlags
+									, ProgramFlags{}
 									, sceneFlags
 									, submesh.getTopology()
 									, sidedCulled.second );
 								auto vertexLayouts = submesh.getGeometryBuffers( renderPass.getShaderFlags()
-									, pipelineFlags.programFlags
+									, pipelineFlags.submeshFlags
 									, material
 									, textures
-									, checkFlag( pipelineFlags.programFlags, ProgramFlag::eForceTexCoords ) ).layouts;
+									, checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eForceTexCoords ) ).layouts;
 								auto & pipeline = sidedCulled.second
 									? renderPass.prepareFrontPipeline( pipelineFlags
 										, vertexLayouts )
@@ -434,6 +437,7 @@ namespace castor3d
 						auto textures = pass.getTexturesMask();
 						auto pipelineFlags = renderPass.createPipelineFlags( pass
 							, textures
+							, SubmeshFlags{}
 							, programFlags
 							, sceneFlags
 							, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP

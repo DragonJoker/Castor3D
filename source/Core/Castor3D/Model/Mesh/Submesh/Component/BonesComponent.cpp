@@ -70,7 +70,7 @@ namespace castor3d
 	}
 
 	void BonesComponent::gather( ShaderFlags const & shaderFlags
-		, ProgramFlags const & programFlags
+		, SubmeshFlags const & submeshFlags
 		, MaterialRPtr material
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
@@ -78,7 +78,7 @@ namespace castor3d
 		, TextureFlagsArray const & mask
 		, uint32_t & currentLocation )
 	{
-		if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
+		if ( checkFlag( submeshFlags, SubmeshFlag::eSkinning ) )
 		{
 			auto hash = std::hash< ShaderFlags::BaseType >{}( shaderFlags );
 			hash = castor::hashCombine( hash, mask.empty() );

@@ -203,11 +203,11 @@ namespace castor3d
 		C3D_API void sortByDistance( castor::Point3f const & cameraPosition );
 		/**
 		 *\~english
-		 *\return		The shader program flags.
+		 *\return		The submesh flags.
 		 *\~french
-		 *\return		Les indicateurs de shader.
+		 *\return		Les indicateurs de submesh.
 		 */
-		C3D_API ProgramFlags getProgramFlags( Material const & material )const;
+		C3D_API SubmeshFlags getSubmeshFlags( Material const & material )const;
 		/**
 		 *\~english
 		 *\brief		Sets the material.
@@ -227,20 +227,20 @@ namespace castor3d
 		*\~english
 		*\return		The geometry buffers for given material.
 		 *\param[in]	shaderFlags		The shader flags.
-		 *\param[in]	programFlags	The program flags.
+		 *\param[in]	submeshFlags	The submesh flags.
 		 *\param[in]	material		The material.
 		 *\param[in]	mask			The textures mask.
 		 *\param[in]	forceTexcoords	\p true to force texture coordinates in the vertex layout.
 		*\~french
 		*\return		Les tampons de géométrie associés au materiau donné.
 		 *\param[in]	shaderFlags		Les shader flags.
-		 *\param[in]	programFlags	Les program flags.
+		 *\param[in]	submeshFlags	Les submesh flags.
 		 *\param[in]	material		Les matériau.
 		 *\param[in]	mask			Le masque de textures.
 		 *\param[in]	forceTexcoords	\p true pour forcer les coordonnées de texture dans le vertex layout.
 		*/
 		C3D_API GeometryBuffers const & getGeometryBuffers( ShaderFlags const & shaderFlags
-			, ProgramFlags const & programFlags
+			, SubmeshFlags const & submeshFlags
 			, MaterialRPtr material
 			, TextureFlagsArray const & mask
 			, bool forceTexcoords )const;
@@ -378,6 +378,7 @@ namespace castor3d
 		inline InstantiationComponent const & getInstantiation()const;
 		inline SubmeshComponentIDMap const & getComponents()const;
 		inline VkPrimitiveTopology getTopology()const;
+		/**@}*/
 
 	private:
 		void doFillVertexBuffer();
@@ -391,7 +392,7 @@ namespace castor3d
 		SubmeshComponentIDMap m_components;
 		InstantiationComponentSPtr m_instantiation;
 		IndexMappingSPtr m_indexMapping;
-		ProgramFlags m_programFlags{ 0u };
+		SubmeshFlags m_submeshFlags{ 0u };
 		bool m_dynamic{ false };
 		bool m_generated{ false };
 		bool m_initialised{ false };

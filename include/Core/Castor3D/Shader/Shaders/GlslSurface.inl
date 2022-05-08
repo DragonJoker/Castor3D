@@ -117,13 +117,13 @@ namespace castor3d::shader
 
 	template< ast::var::Flag FlagT >
 	ast::type::IOStructPtr VertexSurfaceT< FlagT >::makeIOType( ast::type::TypesCache & cache
-		, ProgramFlags programFlags
+		, SubmeshFlags submeshFlags
 		, ShaderFlags shaderFlags
 		, FilteredTextureFlags textureFlags
 		, PassFlags passFlags
 		, bool hasTextures )
 	{
-		hasTextures |= checkFlag( programFlags, ProgramFlag::eForceTexCoords );
+		hasTextures |= checkFlag( submeshFlags, SubmeshFlag::eForceTexCoords );
 		auto result = cache.getIOStruct( ast::type::MemoryLayout::eC
 			, "C3D_" + ( FlagT == sdw::var::Flag::eShaderOutput
 				? std::string{ "Output" }
@@ -146,8 +146,8 @@ namespace castor3d::shader
 				, checkFlag( shaderFlags, ShaderFlag::eNormal ) );
 			result->declMember( "tangent", ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ? index++ : 0 )
-				, checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) );
+				, ( ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ) ? index++ : 0 )
+				, ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ) );
 			result->declMember( "texcoord0", ast::type::Kind::eVec3F
 				, ast::type::NotArray
 				, ( hasTextures ? index++ : 0 )
@@ -159,20 +159,20 @@ namespace castor3d::shader
 			//@{
 			result->declMember( "position2", ast::type::Kind::eVec4F
 				, ast::type::NotArray
-				, ( checkFlag( programFlags, ProgramFlag::eMorphing ) ? index++ : 0 )
-				, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+				, ( checkFlag( submeshFlags, SubmeshFlag::eMorphing ) ? index++ : 0 )
+				, checkFlag( submeshFlags, SubmeshFlag::eMorphing ) );
 			result->declMember( "normal2", ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( ( checkFlag( programFlags, ProgramFlag::eMorphing ) && checkFlag( shaderFlags, ShaderFlag::eNormal ) ) ? index++ : 0 )
-				, checkFlag( programFlags, ProgramFlag::eMorphing ) && checkFlag( shaderFlags, ShaderFlag::eNormal ) );
+				, ( ( checkFlag( submeshFlags, SubmeshFlag::eMorphing ) && checkFlag( shaderFlags, ShaderFlag::eNormal ) ) ? index++ : 0 )
+				, checkFlag( submeshFlags, SubmeshFlag::eMorphing ) && checkFlag( shaderFlags, ShaderFlag::eNormal ) );
 			result->declMember( "tangent2", ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( ( checkFlag( programFlags, ProgramFlag::eMorphing ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ) ? index++ : 0 )
-				, checkFlag( programFlags, ProgramFlag::eMorphing ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) );
+				, ( ( checkFlag( submeshFlags, SubmeshFlag::eTangents | SubmeshFlag::eMorphing ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ) ? index++ : 0 )
+				, ( checkFlag( submeshFlags, SubmeshFlag::eTangents | SubmeshFlag::eMorphing ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ) );
 			result->declMember( "texcoord2", ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( ( checkFlag( programFlags, ProgramFlag::eMorphing ) && hasTextures ) ? index++ : 0 )
-				, checkFlag( programFlags, ProgramFlag::eMorphing ) && hasTextures );
+				, ( ( checkFlag( submeshFlags, SubmeshFlag::eMorphing ) && hasTextures ) ? index++ : 0 )
+				, checkFlag( submeshFlags, SubmeshFlag::eMorphing ) && hasTextures );
 			//@}
 			/**
 			*	Instantiation
@@ -180,8 +180,8 @@ namespace castor3d::shader
 			//@{
 			result->declMember( "objectIds", ast::type::Kind::eVec4U
 				, ast::type::NotArray
-				, ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? index++ : 0 )
-				, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
+				, ( checkFlag( submeshFlags, SubmeshFlag::eInstantiation ) ? index++ : 0 )
+				, checkFlag( submeshFlags, SubmeshFlag::eInstantiation ) );
 			//@}
 			/**
 			*	Skinning
@@ -189,20 +189,20 @@ namespace castor3d::shader
 			//@{
 			result->declMember( "boneIds0", ast::type::Kind::eVec4U
 				, ast::type::NotArray
-				, ( checkFlag( programFlags, ProgramFlag::eSkinning ) ? index++ : 0 )
-				, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+				, ( checkFlag( submeshFlags, SubmeshFlag::eSkinning ) ? index++ : 0 )
+				, checkFlag( submeshFlags, SubmeshFlag::eSkinning ) );
 			result->declMember( "boneIds1", ast::type::Kind::eVec4U
 				, ast::type::NotArray
-				, ( checkFlag( programFlags, ProgramFlag::eSkinning ) ? index++ : 0 )
-				, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+				, ( checkFlag( submeshFlags, SubmeshFlag::eSkinning ) ? index++ : 0 )
+				, checkFlag( submeshFlags, SubmeshFlag::eSkinning ) );
 			result->declMember( "boneWeights0", ast::type::Kind::eVec4F
 				, ast::type::NotArray
-				, ( checkFlag( programFlags, ProgramFlag::eSkinning ) ? index++ : 0 )
-				, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+				, ( checkFlag( submeshFlags, SubmeshFlag::eSkinning ) ? index++ : 0 )
+				, checkFlag( submeshFlags, SubmeshFlag::eSkinning ) );
 			result->declMember( "boneWeights1", ast::type::Kind::eVec4F
 				, ast::type::NotArray
-				, ( checkFlag( programFlags, ProgramFlag::eSkinning ) ? index++ : 0 )
-				, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+				, ( checkFlag( submeshFlags, SubmeshFlag::eSkinning ) ? index++ : 0 )
+				, checkFlag( submeshFlags, SubmeshFlag::eSkinning ) );
 			//@}
 			/**
 			*	Secondary UV
@@ -210,8 +210,8 @@ namespace castor3d::shader
 			//@{
 			result->declMember( "texcoord1", ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( ( checkFlag( programFlags, ProgramFlag::eSecondaryUV ) && hasTextures ) ? index++ : 0 )
-				, checkFlag( programFlags, ProgramFlag::eSecondaryUV ) && hasTextures );
+				, ( ( checkFlag( submeshFlags, SubmeshFlag::eSecondaryUV ) && hasTextures ) ? index++ : 0 )
+				, checkFlag( submeshFlags, SubmeshFlag::eSecondaryUV ) && hasTextures );
 			//@}
 		}
 
@@ -276,13 +276,14 @@ namespace castor3d::shader
 
 	template< ast::var::Flag FlagT >
 	ast::type::IOStructPtr FragmentSurfaceT< FlagT >::makeIOType( ast::type::TypesCache & cache
+		, SubmeshFlags submeshFlags
 		, ProgramFlags programFlags
 		, ShaderFlags shaderFlags
 		, FilteredTextureFlags textureFlags
 		, PassFlags passFlags
 		, bool hasTextures )
 	{
-		hasTextures |= checkFlag( programFlags, ProgramFlag::eForceTexCoords );
+		hasTextures |= checkFlag( submeshFlags, SubmeshFlag::eForceTexCoords );
 		auto result = cache.getIOStruct( ast::type::MemoryLayout::eC
 			, "C3D_" + ( FlagT == sdw::var::Flag::eShaderOutput
 				? std::string{ "Output" }
@@ -314,13 +315,13 @@ namespace castor3d::shader
 			result->declMember( "tangentSpaceFragPosition"
 				, ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( ( checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) && hasParallaxOcclusionMapping ) ? index++ : 0 )
-				, ( checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) && hasParallaxOcclusionMapping ) );
+				, ( ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) && hasParallaxOcclusionMapping ) ? index++ : 0 )
+				, ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) && hasParallaxOcclusionMapping ) );
 			result->declMember( "tangentSpaceViewPosition"
 				, ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( ( checkFlag(shaderFlags, ShaderFlag::eTangentSpace ) && hasParallaxOcclusionMapping ) ? index++ : 0 )
-				, ( checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) && hasParallaxOcclusionMapping ) );
+				, ( ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag(shaderFlags, ShaderFlag::eTangentSpace ) && hasParallaxOcclusionMapping ) ? index++ : 0 )
+				, ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) && hasParallaxOcclusionMapping ) );
 			result->declMember( "normal"
 				, ast::type::Kind::eVec3F
 				, ast::type::NotArray
@@ -328,20 +329,20 @@ namespace castor3d::shader
 				, checkFlag( shaderFlags, ShaderFlag::eNormal ) );
 			result->declMember( "tangent", ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ? index++ : 0 )
-				, checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) );
+				, ( ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ) ? index++ : 0 )
+				, ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ) );
 			result->declMember( "bitangent", ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ? index++ : 0 )
-				, checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) );
+				, ( ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ) ? index++ : 0 )
+				, ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ) );
 			result->declMember( "texcoord0", ast::type::Kind::eVec3F
 				, ast::type::NotArray
 				, ( hasTextures ? index++ : 0 )
 				, hasTextures );
 			result->declMember( "texcoord1", ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( ( checkFlag( programFlags, ProgramFlag::eSecondaryUV ) && hasTextures ) ? index++ : 0 )
-				, checkFlag( programFlags, ProgramFlag::eSecondaryUV ) && hasTextures );
+				, ( ( checkFlag( submeshFlags, SubmeshFlag::eSecondaryUV ) && hasTextures ) ? index++ : 0 )
+				, checkFlag( submeshFlags, SubmeshFlag::eSecondaryUV ) && hasTextures );
 			result->declMember( "instanceId"
 				, ast::type::Kind::eUInt
 				, ast::type::NotArray

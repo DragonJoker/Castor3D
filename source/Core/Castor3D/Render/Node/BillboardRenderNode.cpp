@@ -29,6 +29,7 @@ namespace castor3d
 	}
 
 	GeometryBuffers const & BillboardRenderNode::getGeometryBuffers( ShaderFlags const & shaderFlags
+		, SubmeshFlags const & submeshFlags
 		, ProgramFlags const & programFlags
 		, Material & material
 		, TextureFlagsArray const & texturesMask

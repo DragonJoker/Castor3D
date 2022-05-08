@@ -34,7 +34,7 @@ namespace castor3d
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
 		C3D_API void gather( ShaderFlags const & shaderFlags
-			, ProgramFlags const & programFlags
+			, SubmeshFlags const & submeshFlags
 			, MaterialRPtr material
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
@@ -45,15 +45,17 @@ namespace castor3d
 		 *\copydoc		castor3d::SubmeshComponent::clone
 		 */
 		C3D_API SubmeshComponentSPtr clone( Submesh & submesh )const override;
+		/**
+		 *\copydoc		castor3d::SubmeshComponent::getSubmeshFlags
+		 */
+		SubmeshFlags getSubmeshFlags( Material const & material )const override
+		{
+			return SubmeshFlag::eMorphing;
+		}
 
 		InterleavedVertexArray & getData()
 		{
 			return m_data;
-		}
-
-		ProgramFlags getProgramFlags( Material const & material )const override
-		{
-			return ProgramFlag::eMorphing;
 		}
 
 	private:
