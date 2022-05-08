@@ -10,7 +10,7 @@ namespace castor3d
 	namespace details
 	{
 		template< typename DataT >
-		GpuPackedBuffer createBuffer( RenderDevice const & device
+		GpuPackedBufferPtr createBuffer( RenderDevice const & device
 			, VkDeviceSize count
 			, VkBufferUsageFlags usage
 			, std::string debugName
@@ -23,13 +23,13 @@ namespace castor3d
 				maxCount *= 2u;
 			}
 
-			return GpuPackedBuffer{ device.renderSystem
+			return std::make_unique< GpuPackedBuffer >( device.renderSystem
 				, usage
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, debugName
 				, ashes::QueueShare{}
 				, GpuBufferPackedAllocator{ uint32_t( maxCount * sizeof( DataT ) ) }
-				, smallData };
+				, smallData );
 		}
 	}
 
@@ -44,18 +44,18 @@ namespace castor3d
 
 		if ( it == m_buffers.end() )
 		{
-			auto buffers = std::make_unique< ModelBuffers >( details::createBuffer< uint8_t >( m_device
+			ModelBuffers buffers{ details::createBuffer< uint8_t >( m_device
 				, size
 				, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, m_debugName + "Vertex" + std::to_string( m_buffers.size() )
-				, true ) );
+				, true ) };
 			m_buffers.emplace_back( std::move( buffers ) );
 			it = std::next( m_buffers.begin()
 				, ptrdiff_t( m_buffers.size() - 1u ) );
 		}
 
-		result.vtxBuffer = &( *it )->vertex;
-		result.vtxChunk = ( *it )->vertex.allocate( size );
+		result.vtxBuffer = it->vertex.get();
+		result.vtxChunk = it->vertex->allocate( size );
 		return result;
 	}
 
