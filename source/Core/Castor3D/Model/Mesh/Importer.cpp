@@ -11,8 +11,14 @@
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
+#include "Castor3D/Model/Mesh/Animation/MeshAnimationKeyFrame.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
+#include "Castor3D/Model/Skeleton/BoneNode.hpp"
+#include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -71,6 +77,94 @@ namespace castor3d
 			}
 
 			return true;
+		}
+
+		static void transformMesh( castor::Matrix4x4f const & transform
+			, Mesh & mesh )
+		{
+			for ( auto submesh : mesh )
+			{
+				for ( auto & vertex : submesh->getPositions() )
+				{
+					vertex = transform * vertex;
+				}
+
+				static castor::Point3fArray tan;
+				static castor::Point3fArray tex;
+				castor::Point3fArray * tangents = &tan;
+				castor::Point3fArray const * texcoords = &tex;
+
+				if ( auto tanComp = submesh->getComponent< TangentsComponent >() )
+				{
+					tangents = &tanComp->getData();
+				}
+
+				if ( auto texComp = submesh->getComponent< TexcoordsComponent >() )
+				{
+					texcoords = &texComp->getData();
+				}
+
+				SubmeshUtils::computeNormals( submesh->getPositions()
+					, *texcoords
+					, submesh->getNormals()
+					, *tangents
+					, static_cast< TriFaceMapping const & >( *submesh->getIndexMapping() )
+					, true );
+			}
+		}
+
+		static void transformMeshAnimations( castor::Matrix4x4f const & transform
+			, Mesh & mesh )
+		{
+			for ( auto & animIt : mesh.getAnimations() )
+			{
+				for ( auto & keyFrame : *animIt.second )
+				{
+					for ( auto & submeshIt : static_cast< MeshAnimationKeyFrame & >( *keyFrame ) )
+					{
+						for ( auto & vertex : submeshIt.second.positions )
+						{
+							vertex = transform * vertex;
+						}
+
+						SubmeshUtils::computeNormals( submeshIt.second.positions
+							, submeshIt.second.texcoords
+							, submeshIt.second.normals
+							, submeshIt.second.tangents
+							, static_cast< TriFaceMapping const & >( *mesh.getSubmesh( submeshIt.first )->getIndexMapping() )
+							, true );
+					}
+				}
+			}
+		}
+
+		static void transformSkeleton( castor::Matrix4x4f const & transform
+			, Skeleton & skeleton )
+		{
+			auto invTransform = transform.getInverse();
+			skeleton.setGlobalInverseTransform( transform * skeleton.getGlobalInverseTransform() * invTransform );
+
+			for ( auto bone : skeleton.getBones() )
+			{
+				bone->setInverseTransform( transform * bone->getInverseTransform() * invTransform );
+			}
+		}
+
+		static void transformSkeletonAnimations( castor::Matrix4x4f const & transform
+			, Skeleton & skeleton )
+		{
+			//for ( auto & animIt : skeleton.getAnimations() )
+			//{
+			//	for ( auto & keyFrame : *animIt.second )
+			//	{
+			//		for ( auto & transformIt : static_cast< SkeletonAnimationKeyFrame & >( *keyFrame ).getTransforms() )
+			//		{
+			//			transformIt.second = transform * transformIt.second;
+			//		}
+
+			//		keyFrame->initialise();
+			//	}
+			//}
 		}
 	}
 
@@ -172,14 +266,16 @@ namespace castor3d
 						, scale
 						, orientation );
 
-					for ( auto submesh : mesh )
+					if ( !mesh.getSkeleton() )
 					{
-						for ( auto & vertex : submesh->getPositions() )
-						{
-							vertex = transform * vertex;
-						}
+						mshimp::transformMesh( transform, mesh );
+						mshimp::transformMeshAnimations( transform, mesh );
 
-						submesh->computeNormals( true );
+						if ( auto skeleton = mesh.getSkeleton() )
+						{
+							mshimp::transformSkeleton( transform, *skeleton );
+							mshimp::transformSkeletonAnimations( transform, *skeleton );
+						}
 					}
 				}
 
