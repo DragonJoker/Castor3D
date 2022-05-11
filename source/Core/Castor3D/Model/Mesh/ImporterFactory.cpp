@@ -3,7 +3,6 @@
 #include "Castor3D/Binary/CmshImporter.hpp"
 
 CU_ImplementCUSmartPtr( castor3d, MeshImporterFactory )
-CU_ImplementCUSmartPtr( castor3d, MeshSubdividerFactory )
 
 namespace castor3d
 {

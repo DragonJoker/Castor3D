@@ -69,33 +69,13 @@ namespace castor3d
 	*	La fabrique d'importeurs.
 	*/
 	class MeshImporterFactory;
-	/**
-	*\~english
-	*\brief
-	*	Abstract class C3D_API for subdivisers, contains the header for the main Subdivide function
-	*\~french
-	*\brief
-	*	Contient l'interface commune aux subdiviseurs
-	*/
-	class MeshSubdivider;
-	/**
-	*\~english
-	*\brief
-	*	The subdivider factory.
-	*\~french
-	*\brief
-	*	La fabrique de subdiviseurs.
-	*/
-	using MeshSubdividerFactory = castor::Factory< MeshSubdivider, castor::String, std::unique_ptr< MeshSubdivider > >;
 
 	CU_DeclareSmartPtr( Mesh );
 	CU_DeclareSmartPtr( MeshGenerator );
 	CU_DeclareSmartPtr( MeshImporter );
-	CU_DeclareSmartPtr( MeshSubdivider );
 
 	CU_DeclareCUSmartPtr( castor3d, MeshFactory, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, MeshImporterFactory, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, MeshSubdividerFactory, C3D_API );
 	/**
 	*\~english
 	*	Helper structure to specialise a cache behaviour.

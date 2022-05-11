@@ -602,11 +602,6 @@ namespace castor3d
 			return *m_passFactory;
 		}
 
-		MeshSubdividerFactory & getSubdividerFactory()const
-		{
-			return *m_subdividerFactory;
-		}
-
 		MeshImporterFactory & getImporterFactory()const
 		{
 			return *m_importerFactory;
@@ -749,7 +744,6 @@ namespace castor3d
 		castor::ImageCache m_imageCache;
 		std::map< castor::String, castor::AdditionalParsers > m_additionalParsers;
 		MeshFactoryUPtr m_meshFactory;
-		MeshSubdividerFactoryUPtr m_subdividerFactory;
 		MeshImporterFactoryUPtr m_importerFactory;
 		ParticleFactoryUPtr m_particleFactory;
 		PassFactoryUPtr m_passFactory;
