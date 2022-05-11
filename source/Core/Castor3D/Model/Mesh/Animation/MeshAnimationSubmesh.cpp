@@ -11,8 +11,7 @@ namespace castor3d
 	{
 		if ( !m_submesh.hasComponent( MorphComponent::Name ) )
 		{
-			m_submesh.addComponent( MorphComponent::Name
-				, std::make_shared< MorphComponent >( submesh ) );
+			m_submesh.addComponent( std::make_shared< MorphComponent >( submesh ) );
 		}
 
 		m_component = m_submesh.getComponent< MorphComponent >();

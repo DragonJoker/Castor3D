@@ -85,12 +85,10 @@ namespace castor3d::shader
 		sdw::Vec3 tangent;
 		sdw::Vec3 texture0;
 		// Morphing
-		sdw::Vec4 position2;
-		sdw::Vec3 normal2;
-		sdw::Vec3 tangent2;
-		sdw::Vec3 texture2;
-		// Instantiation
-		sdw::UVec4 objectIds;
+		sdw::Vec4 morphPosition;
+		sdw::Vec3 morphNormal;
+		sdw::Vec3 morphTangent;
+		sdw::Vec3 morphTexture;
 		// Skinning
 		sdw::UVec4 boneIds0;
 		sdw::UVec4 boneIds1;
@@ -98,6 +96,8 @@ namespace castor3d::shader
 		sdw::Vec4 boneWeights1;
 		// Secondary UV
 		sdw::Vec3 texture1;
+		// Instantiation
+		sdw::UVec4 objectIds;
 	};
 
 	using InVertexSurface = VertexSurfaceT< ast::var::Flag::eShaderInput >;
@@ -125,13 +125,15 @@ namespace castor3d::shader
 		void computeVelocity( MatrixData const & matrixData
 			, sdw::Vec4 & curPos
 			, sdw::Vec4 & prvPos );
-		void computeTangentSpace( ProgramFlags programFlags
+		void computeTangentSpace( SubmeshFlags submeshFlags
+			, ProgramFlags programFlags
 			, sdw::Vec3 const & cameraPosition
 			, sdw::Vec3 const & worldPos
 			, sdw::Mat3 const & mtx
 			, sdw::Vec4 const & nml
 			, sdw::Vec4 const & tan );
-		void computeTangentSpace( sdw::Vec3 const & cameraPosition
+		void computeTangentSpace( SubmeshFlags submeshFlags
+			, sdw::Vec3 const & cameraPosition
 			, sdw::Vec3 const & worldPos
 			, sdw::Vec3 const & nml
 			, sdw::Vec3 const & tan

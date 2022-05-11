@@ -181,6 +181,13 @@ namespace castor3d
 		}
 	}
 
+	SubmeshFlags VoxelizePass::doAdjustSubmeshFlags( SubmeshFlags flags )const
+	{
+		remFlag( flags, SubmeshFlag::eTangents );
+		remFlag( flags, SubmeshFlag::eMorphTangents );
+		return flags;
+	}
+
 	PassFlags VoxelizePass::doAdjustPassFlags( PassFlags flags )const
 	{
 		remFlag( flags, PassFlag::eReflection );
@@ -292,7 +299,7 @@ namespace castor3d
 		using namespace sdw;
 		VertexWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = !flags.textures.empty();
+		bool hasTextures = flags.hasTextures();
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
@@ -339,7 +346,8 @@ namespace castor3d
 					, c3d_modelsData[ids.nodeId - 1u] );
 				out.nodeId = writer.cast< sdw::Int >( ids.nodeId );
 
-				if ( hasTextures )
+				if ( hasTextures
+					&& checkFlag( flags.submeshFlags, SubmeshFlag::eTexcoords ) )
 				{
 					out.texture = in.texture0;
 				}
@@ -374,7 +382,7 @@ namespace castor3d
 		using namespace sdw;
 		VertexWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = !flags.textures.empty();
+		bool hasTextures = flags.hasTextures();
 
 		// Shader inputs
 		auto inPosition = writer.declInput< Vec4 >( "inPosition", 0u );
@@ -464,7 +472,7 @@ namespace castor3d
 		using namespace sdw;
 		GeometryWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = !flags.textures.empty();
+		bool hasTextures = flags.hasTextures();
 
 		C3D_Voxelizer( writer
 			, uint32_t( GlobalBuffersIdx::eCount ) + 1u
@@ -544,7 +552,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
-		bool hasTextures = !flags.textures.empty();
+		bool hasTextures = flags.hasTextures();
 		shader::Utils utils{ writer, *getEngine() };
 
 		C3D_Scene( writer

@@ -25,6 +25,10 @@
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimationKeyFrame.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Overlay/BorderPanelOverlay.hpp"
@@ -3104,10 +3108,28 @@ namespace castor3d
 						auto & submeshAnim = animation.getSubmesh( index );
 						std::clog << "Source: " << submeshAnim.getSubmesh().getPointsCount() << " - Anim: " << submesh->getPointsCount() << std::endl;
 
-
 						if ( submesh->getPointsCount() == submeshAnim.getSubmesh().getPointsCount() )
 						{
-							keyFrame->addSubmeshBuffer( *submesh, submesh->getPoints() );
+							static castor::Point3fArray tan;
+							static castor::Point3fArray tex;
+							castor::Point3fArray * tangents = &tan;
+							castor::Point3fArray const * texcoords = &tex;
+
+							if ( auto tanComp = submesh->getComponent< TangentsComponent >() )
+							{
+								tangents = &tanComp->getData();
+							}
+
+							if ( auto texComp = submesh->getComponent< TexcoordsComponent >() )
+							{
+								texcoords = &texComp->getData();
+							}
+
+							keyFrame->addSubmeshBuffer( *submesh
+								, { submesh->getPositions()
+									, submesh->getNormals()
+									, *tangents
+									, *texcoords } );
 						}
 
 						++index;
@@ -3606,6 +3628,29 @@ namespace castor3d
 
 		if ( !parsingContext.vertexPos.empty() )
 		{
+			if ( !parsingContext.submesh->hasComponent( PositionsComponent::Name ) )
+			{
+				parsingContext.submesh->createComponent< PositionsComponent >();
+			}
+
+			if ( !parsingContext.vertexNml.empty()
+				&& !parsingContext.submesh->hasComponent( NormalsComponent::Name ) )
+			{
+				parsingContext.submesh->createComponent< NormalsComponent >();
+			}
+
+			if ( !parsingContext.vertexTan.empty()
+				&& !parsingContext.submesh->hasComponent( TangentsComponent::Name ) )
+			{
+				parsingContext.submesh->createComponent< TangentsComponent >();
+			}
+
+			if ( !parsingContext.vertexTex.empty()
+				&& !parsingContext.submesh->hasComponent( TexcoordsComponent::Name ) )
+			{
+				parsingContext.submesh->createComponent< TexcoordsComponent >();
+			}
+
 			std::vector< InterleavedVertex > vertices{ parsingContext.vertexPos.size() / 3 };
 			uint32_t index{ 0u };
 
@@ -3636,12 +3681,13 @@ namespace castor3d
 			if ( !parsingContext.faces.empty() )
 			{
 				auto indices = reinterpret_cast< FaceIndices * >( &parsingContext.faces[0] );
-				auto mapping = std::make_shared< TriFaceMapping >( *parsingContext.submesh );
+				auto mapping = parsingContext.submesh->createComponent< TriFaceMapping >();
 				mapping->addFaceGroup( indices, indices + ( parsingContext.faces.size() / 3 ) );
 
 				if ( !parsingContext.vertexNml.empty() )
 				{
-					if ( parsingContext.vertexTan.empty() )
+					if ( !parsingContext.vertexTex.empty()
+						&& parsingContext.vertexTan.empty() )
 					{
 						mapping->computeTangentsFromNormals();
 					}
@@ -3650,8 +3696,6 @@ namespace castor3d
 				{
 					mapping->computeNormals();
 				}
-
-				parsingContext.submesh->setIndexMapping( mapping );
 			}
 
 			parsingContext.vertexPos.clear();

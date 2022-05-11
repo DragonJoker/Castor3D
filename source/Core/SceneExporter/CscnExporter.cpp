@@ -29,8 +29,12 @@
 #include <Castor3D/Model/Mesh/Animation/MeshAnimation.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/IndexMapping.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp>
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp>
 #include <Castor3D/Scene/Camera.hpp>
@@ -629,28 +633,40 @@ namespace castor3d::exporter
 
 							auto dstSubmesh = mesh->createSubmesh();
 							dstSubmesh->disableSceneUpdate();
-							dstSubmesh->addPoints( srcSubmesh->getPoints() );
-							auto indexMapping = srcSubmesh->getIndexMapping();
 
-							if ( indexMapping )
+							if ( auto positions = srcSubmesh->getComponent< castor3d::PositionsComponent >() )
 							{
-								dstSubmesh->setIndexMapping( std::static_pointer_cast< castor3d::IndexMapping >( indexMapping->clone( *dstSubmesh ) ) );
+								dstSubmesh->addComponent( positions->clone( *dstSubmesh ) );
 							}
 
-							auto bones = srcSubmesh->getComponent< castor3d::BonesComponent >();
-
-							if ( bones )
+							if ( auto normals = srcSubmesh->getComponent< castor3d::NormalsComponent >() )
 							{
-								dstSubmesh->addComponent( bones->getType()
-									, bones->clone( *dstSubmesh ) );
+								dstSubmesh->addComponent( normals->clone( *dstSubmesh ) );
 							}
 
-							auto morph = srcSubmesh->getComponent< castor3d::MorphComponent >();
-
-							if ( morph )
+							if ( auto tangents = srcSubmesh->getComponent< castor3d::TangentsComponent >() )
 							{
-								dstSubmesh->addComponent( morph->getType()
-									, morph->clone( *dstSubmesh ) );
+								dstSubmesh->addComponent( tangents->clone( *dstSubmesh ) );
+							}
+
+							if ( auto texcoords = srcSubmesh->getComponent< castor3d::TexcoordsComponent >() )
+							{
+								dstSubmesh->addComponent( texcoords->clone( *dstSubmesh ) );
+							}
+
+							if ( auto indexMapping = srcSubmesh->getIndexMapping() )
+							{
+								dstSubmesh->addComponent( std::static_pointer_cast< castor3d::IndexMapping >( indexMapping->clone( *dstSubmesh ) );
+							}
+
+							if ( auto bones = srcSubmesh->getComponent< castor3d::BonesComponent >() )
+							{
+								dstSubmesh->addComponent( bones->clone( *dstSubmesh ) );
+							}
+
+							if ( auto morph = srcSubmesh->getComponent< castor3d::MorphComponent >() )
+							{
+								dstSubmesh->addComponent( morph->clone( *dstSubmesh ) );
 							}
 
 							dstSubmesh->setDefaultMaterial( srcSubmesh->getDefaultMaterial() );
@@ -660,9 +676,9 @@ namespace castor3d::exporter
 							{
 								castor::Point3f position = dstSubmesh->getBoundingBox().getCenter();
 
-								for ( auto & point : dstSubmesh->getPoints() )
+								for ( auto & point : dstSubmesh->getPositions() )
 								{
-									point.pos -= position;
+									point -= position;
 								}
 							}
 
@@ -971,7 +987,7 @@ namespace castor3d::exporter
 		}
 
 		bool finaliseExport( castor3d::Mesh const * singleMesh
-			, castor::TextWriter< castor3d::Scene >::Options const & options
+			, castor::TextWriter< castor3d::Scene >::Options & options
 			, castor::StringStream const & skeletons
 			, castor::StringStream const & meshes
 			, castor::StringStream const & nodes
@@ -980,29 +996,54 @@ namespace castor3d::exporter
 			, castor::Path const & folder
 			, castor::Path const & filePath )
 		{
-			castor::TextFile sklFile{ folder / options.skeletonsFile
-				, castor::File::OpenMode::eWrite };
-			auto result = sklFile.writeText( skeletons.str() ) > 0;
+			bool result = true;
+			auto skl = skeletons.str();
+			auto msh = meshes.str();
+			auto obj = objects.str();
+			auto nod = nodes.str();
 
-			if ( result )
+			if ( !skl.empty() )
+			{
+				castor::TextFile sklFile{ folder / options.skeletonsFile
+					, castor::File::OpenMode::eWrite };
+				result = sklFile.writeText( skl ) > 0;
+			}
+			else
+			{
+				options.skeletonsFile.clear();
+			}
+
+			if ( result && !msh.empty() )
 			{
 				castor::TextFile mshFile{ folder / options.meshesFile
 					, castor::File::OpenMode::eWrite };
-				result = mshFile.writeText( meshes.str() ) > 0;
+				result = mshFile.writeText( msh ) > 0;
+			}
+			else
+			{
+				options.meshesFile.clear();
 			}
 
-			if ( result )
+			if ( result && !obj.empty() )
 			{
 				castor::TextFile objFile{ folder / options.objectsFile
 					, castor::File::OpenMode::eWrite };
-				result = objFile.writeText( objects.str() ) > 0;
+				result = objFile.writeText( obj ) > 0;
+			}
+			else
+			{
+				options.objectsFile.clear();
 			}
 
-			if ( result )
+			if ( result && !nod.empty() )
 			{
 				castor::TextFile nodFile{ folder / options.nodesFile
 					, castor::File::OpenMode::eWrite };
-				result = nodFile.writeText( nodes.str() ) > 0;
+				result = nodFile.writeText( nod ) > 0;
+			}
+			else
+			{
+				options.nodesFile.clear();
 			}
 
 			if ( result )
@@ -1021,10 +1062,27 @@ namespace castor3d::exporter
 					stream << "	ambient_light 1.0 1.0 1.0\n";
 					stream << "	background_colour 0.50000 0.50000 0.50000\n";
 					stream << "	include \"Helpers/" << name << "-Materials.cscn\"\n";
-					stream << "	include \"Helpers/" << name << "-Skeletons.cscn\"\n";
-					stream << "	include \"Helpers/" << name << "-Meshes.cscn\"\n";
-					stream << "	include \"Helpers/" << name << "-Nodes.cscn\"\n";
-					stream << "	include \"Helpers/" << name << "-Objects.cscn\"\n";
+
+					if ( !skl.empty() )
+					{
+						stream << "	include \"Helpers/" << name << "-Skeletons.cscn\"\n";
+					}
+
+					if ( !msh.empty() )
+					{
+						stream << "	include \"Helpers/" << name << "-Meshes.cscn\"\n";
+					}
+
+					if ( !nod.empty() )
+					{
+						stream << "	include \"Helpers/" << name << "-Nodes.cscn\"\n";
+					}
+
+					if ( !nod.empty() )
+					{
+						stream << "	include \"Helpers/" << name << "-Objects.cscn\"\n";
+					}
+
 					stream << "\n";
 					stream << "\n";
 					stream << "	//Cameras nodes\n";

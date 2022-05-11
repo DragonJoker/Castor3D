@@ -1269,7 +1269,10 @@ namespace castor3d
 	{
 		if ( !castor::isBigEndian() )
 		{
-			castor::switchEndianness( value.buffer );
+			castor::switchEndianness( value.positions );
+			castor::switchEndianness( value.normals );
+			castor::switchEndianness( value.tangents );
+			castor::switchEndianness( value.texcoords );
 		}
 	}
 	/**

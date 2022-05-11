@@ -138,6 +138,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		C3D_API SubmeshFlags getSubmeshFlags()const;
 		C3D_API ProgramFlags getProgramFlags()const;
 
 		MaterialRPtr getMaterial()const

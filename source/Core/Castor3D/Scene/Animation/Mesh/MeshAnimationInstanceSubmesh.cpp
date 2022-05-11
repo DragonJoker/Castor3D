@@ -49,15 +49,65 @@ namespace castor3d
 		{
 			auto & offsets = m_animationObject.getSubmesh().getBufferOffsets();
 
-			std::copy( prv.buffer.begin()
-				, prv.buffer.end()
-				, offsets.getVertexData< InterleavedVertex >().begin() );
-			offsets.markVertexDirty();
+			if ( offsets.hasData( SubmeshFlag::eMorphPositions ) )
+			{
+				auto & prev = offsets.getBufferChunk( SubmeshFlag::ePositions );
+				std::copy( prv.positions.begin()
+					, prv.positions.end()
+					, prev.getData< castor::Point3f >().begin() );
+				prev.markDirty();
 
-			std::copy( cur.buffer.begin()
-				, cur.buffer.end()
-				, offsets.getMorphData< InterleavedVertex >().begin() );
-			offsets.markMorphDirty();
+				auto & curr = offsets.getBufferChunk( SubmeshFlag::eMorphPositions );
+				std::copy( cur.positions.begin()
+					, cur.positions.end()
+					, curr.getData< castor::Point3f >().begin() );
+				curr.markDirty();
+			}
+
+			if ( offsets.hasData( SubmeshFlag::eMorphNormals ) )
+			{
+				auto & prev = offsets.getBufferChunk( SubmeshFlag::eNormals );
+				std::copy( prv.normals.begin()
+					, prv.normals.end()
+					, prev.getData< castor::Point3f >().begin() );
+				prev.markDirty();
+
+				auto & curr = offsets.getBufferChunk( SubmeshFlag::eMorphNormals );
+				std::copy( cur.normals.begin()
+					, cur.normals.end()
+					, curr.getData< castor::Point3f >().begin() );
+				curr.markDirty();
+			}
+
+			if ( offsets.hasData( SubmeshFlag::eMorphTangents ) )
+			{
+				auto & prev = offsets.getBufferChunk( SubmeshFlag::eTangents );
+				std::copy( prv.tangents.begin()
+					, prv.tangents.end()
+					, prev.getData< castor::Point3f >().begin() );
+				prev.markDirty();
+
+				auto & curr = offsets.getBufferChunk( SubmeshFlag::eMorphTangents );
+				std::copy( cur.tangents.begin()
+					, cur.tangents.end()
+					, curr.getData< castor::Point3f >().begin() );
+				curr.markDirty();
+			}
+
+			if ( offsets.hasData( SubmeshFlag::eMorphTexcoords ) )
+			{
+				auto & prev = offsets.getBufferChunk( SubmeshFlag::eTexcoords );
+				std::copy( prv.texcoords.begin()
+					, prv.texcoords.end()
+					, prev.getData< castor::Point3f >().begin() );
+				prev.markDirty();
+
+				auto & curr = offsets.getBufferChunk( SubmeshFlag::eMorphTexcoords );
+				std::copy( cur.texcoords.begin()
+					, cur.texcoords.end()
+					, curr.getData< castor::Point3f >().begin() );
+				curr.markDirty();
+			}
 		}
 
 		getOwner()->getAnimatedMesh().getGeometry().setBoundingBox( m_animationObject.getSubmesh()

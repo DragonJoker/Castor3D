@@ -2,6 +2,10 @@
 
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 
 #include <random>
@@ -187,7 +191,11 @@ namespace diamond_square_terrain
 			divide( size, roughness );
 
 			auto submesh = p_mesh.createSubmesh();
-			auto mapping = std::make_shared< castor3d::TriFaceMapping >( *submesh );
+			auto positions = submesh->createComponent< castor3d::PositionsComponent >();
+			auto normals = submesh->createComponent< castor3d::NormalsComponent >();
+			auto tangents = submesh->createComponent< castor3d::TangentsComponent >();
+			auto texcoords = submesh->createComponent< castor3d::TexcoordsComponent >();
+			auto mapping = submesh->createComponent< castor3d::TriFaceMapping >();
 			auto transform = [&]( uint32_t v )
 			{
 				return scale * ( float( v ) - float( max ) / 2.0f );
@@ -218,7 +226,6 @@ namespace diamond_square_terrain
 			}
 
 			mapping->computeNormals( true );
-			submesh->setIndexMapping( mapping );
 			p_mesh.computeContainers();
 		}
 	}

@@ -104,33 +104,35 @@ namespace castor3d
 			if ( m_cameraPosition != cameraPosition )
 			{
 				if ( getOwner()->isInitialised()
-					&& getOwner()->getBufferOffsets().hasVertices()
-					&& getOwner()->getBufferOffsets().hasIndices() )
+					&& getOwner()->getBufferOffsets().hasData( SubmeshFlag::ePositions )
+					&& getOwner()->getBufferOffsets().hasData( SubmeshFlag::eIndex ) )
 				{
 					auto offsets = getOwner()->getBufferOffsets();
-					auto & indices = offsets.getIndexBuffer();
-					auto & vertices = offsets.getVertexBuffer();
-					auto indexSize = uint32_t( offsets.getIndexCount() );
+					auto & vtxChunk = offsets.getBufferChunk( SubmeshFlag::ePositions );
+					auto & idxChunk = offsets.getBufferChunk( SubmeshFlag::eIndex );
+					auto & indices = idxChunk.getBuffer();
+					auto & vertices = vtxChunk.getBuffer();
+					auto indexSize = uint32_t( idxChunk.getCount< uint32_t >() );
 
 					m_cameraPosition = cameraPosition;
 
-					if ( auto * index = reinterpret_cast< uint32_t * >( indices.lock( offsets.getIndexOffset()
-						, offsets.idxChunk.size
+					if ( auto * index = reinterpret_cast< uint32_t * >( indices.lock( idxChunk.getOffset()
+						, idxChunk.chunk.size
 						, 0u ) ) )
 					{
 						smshcompline::LineDistArray arraySorted;
 						arraySorted.reserve( indexSize / 2 );
 
-						if ( auto * vertex = reinterpret_cast< InterleavedVertex const * >( vertices.lock( offsets.getVertexOffset()
-							, offsets.vtxChunk.size
+						if ( auto * vertex = reinterpret_cast< castor::Point3f const * >( vertices.lock( vtxChunk.getOffset()
+							, vtxChunk.chunk.size
 							, 0u ) ) )
 						{
 							for ( uint32_t * it = index + 0; it < index + indexSize; it += 2 )
 							{
 								double dDistance = 0.0;
-								auto & vtx1 = vertex[it[0]].pos;
+								auto & vtx1 = vertex[it[0]];
 								dDistance += castor::point::lengthSquared( vtx1 - cameraPosition );
-								auto & vtx2 = vertex[it[1]].pos;
+								auto & vtx2 = vertex[it[1]];
 								dDistance += castor::point::lengthSquared( vtx2 - cameraPosition );
 								arraySorted.push_back( smshcompline::LineDistance{ { it[0], it[1] }, dDistance } );
 							}
@@ -146,8 +148,8 @@ namespace castor3d
 							vertices.unlock();
 						}
 
-						indices.flush( offsets.getIndexOffset()
-							, offsets.idxChunk.size );
+						indices.flush( idxChunk.getOffset()
+							, idxChunk.chunk.size );
 						indices.unlock();
 					}
 				}
@@ -167,15 +169,16 @@ namespace castor3d
 	void LinesMapping::doUpload()
 	{
 		auto count = uint32_t( m_lines.size() * 2 );
+		auto & offsets = getOwner()->getBufferOffsets();
+		auto & buffer = offsets.getBufferChunk( SubmeshFlag::eIndex );
 
-		if ( count
-			&& getOwner()->getBufferOffsets().getIndexCount() )
+		if ( count && buffer.hasData() )
 		{
-			auto offsets = getOwner()->getBufferOffsets();
 			std::copy( m_lines.begin()
 				, m_lines.end()
-				, offsets.getIndexData< Line >().begin() );
-			offsets.markIndexDirty();
+				, buffer.getData< Line >().begin() );
+			buffer.markDirty( VK_ACCESS_INDEX_READ_BIT
+				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 		}
 	}
 }

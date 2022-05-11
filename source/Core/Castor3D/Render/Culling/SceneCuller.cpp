@@ -75,7 +75,7 @@ namespace castor3d
 			auto & node = *culled.node;
 			auto hash = getPipelineHash( renderPass, node, isFrontCulled );
 			auto & pipelineNodes = sortedNodes.emplace( hash, SceneCuller::SidedNodeBufferMapT< NodeT >{} ).first->second;
-			auto buffer = &node.data.getBufferOffsets().getVertexBuffer();
+			auto buffer = &node.data.getBufferOffsets().getBuffer( SubmeshFlag::ePositions );
 			auto bufferIres = pipelineNodes.emplace( buffer, SceneCuller::SidedNodeArrayT< NodeT >{} );
 			bufferIres.first->second.emplace_back( culled, isFrontCulled );
 			registerPipelineNodes( hash, *buffer, nodesIds );
@@ -91,7 +91,7 @@ namespace castor3d
 			auto & node = *culled.node;
 			auto hash = getPipelineHash( renderPass, node, isFrontCulled );
 			auto & pipelineNodes = sortedInstancedSubmeshes.emplace( hash, SceneCuller::SidedObjectNodeBufferMapT< SubmeshRenderNode >{} ).first->second;
-			auto buffer = &node.data.getBufferOffsets().getVertexBuffer();
+			auto buffer = &node.data.getBufferOffsets().getBuffer( SubmeshFlag::ePositions );
 			auto bufferIres = pipelineNodes.emplace( buffer, SceneCuller::SidedObjectNodePassMapT< SubmeshRenderNode >{} );
 			auto & passNodes = bufferIres.first->second.emplace( node.pass, SceneCuller::SidedObjectNodeMapT< SubmeshRenderNode >{} ).first->second;
 			auto & objectNodes = passNodes.emplace( &node.data, SceneCuller::SidedNodeArrayT< SubmeshRenderNode >{} ).first->second;
@@ -143,10 +143,10 @@ namespace castor3d
 			, uint32_t instanceCount )
 		{
 			auto & bufferOffsets = culled.data.getBufferOffsets();
-			indirectIndexedCommands->indexCount = bufferOffsets.getIndexCount();
+			indirectIndexedCommands->indexCount = bufferOffsets.getCount< uint32_t >( SubmeshFlag::eIndex );
 			indirectIndexedCommands->instanceCount = instanceCount;
-			indirectIndexedCommands->firstIndex = bufferOffsets.getFirstIndex();
-			indirectIndexedCommands->vertexOffset = int32_t( bufferOffsets.getFirstVertex< InterleavedVertex >() );
+			indirectIndexedCommands->firstIndex = bufferOffsets.getFirstIndex< uint32_t >();
+			indirectIndexedCommands->vertexOffset = int32_t( bufferOffsets.getFirstVertex< castor::Point3f >() );
 			indirectIndexedCommands->firstInstance = 0u;
 			++indirectIndexedCommands;
 		}
@@ -156,9 +156,9 @@ namespace castor3d
 			, uint32_t instanceCount )
 		{
 			auto & bufferOffsets = culled.data.getBufferOffsets();
-			indirectCommands->vertexCount = bufferOffsets.getVertexCount< InterleavedVertex >();
+			indirectCommands->vertexCount = bufferOffsets.getCount< castor::Point3f >( SubmeshFlag::ePositions );
 			indirectCommands->instanceCount = instanceCount;
-			indirectCommands->firstVertex = bufferOffsets.getFirstVertex< InterleavedVertex >();
+			indirectCommands->firstVertex = bufferOffsets.getFirstVertex< castor::Point3f >();
 			indirectCommands->firstInstance = 0u;
 			++indirectCommands;
 		}
@@ -167,7 +167,7 @@ namespace castor3d
 			, VkDrawIndirectCommand *& indirectCommands )
 		{
 			auto & bufferOffsets = culled.data.getGeometryBuffers().bufferOffset;
-			indirectCommands->vertexCount = bufferOffsets.getVertexCount< BillboardVertex >();
+			indirectCommands->vertexCount = bufferOffsets.getCount< BillboardVertex >( SubmeshFlag::ePositions );
 			indirectCommands->instanceCount = getInstanceCount( culled );
 			indirectCommands->firstVertex = bufferOffsets.getFirstVertex< BillboardVertex >();
 			indirectCommands->firstInstance = 0u;
@@ -179,7 +179,7 @@ namespace castor3d
 			, VkDrawIndirectCommand *& indirectNIdxBuffer
 			, uint32_t instanceCount )
 		{
-			if ( node.data.getBufferOffsets().hasIndices() )
+			if ( node.data.getBufferOffsets().hasData( SubmeshFlag::eIndex ) )
 			{
 				fillIndirectCommand( node, indirectIdxBuffer, instanceCount );
 			}
@@ -195,15 +195,35 @@ namespace castor3d
 		{
 			uint32_t instanceCount = 0u;
 #ifndef NDEBUG
-			auto vtxBuffer = &nodes.front().first.node->data.getBufferOffsets().getVertexBuffer();
-			auto idxBuffer = nodes.front().first.node->data.getBufferOffsets().hasIndices()
-				? &nodes.front().first.node->data.getBufferOffsets().getIndexBuffer()
+			auto posBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::ePositions )
+				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::ePositions )
 				: nullptr;
-			auto bonBuffer = nodes.front().first.node->data.getBufferOffsets().hasBones()
-				? &nodes.front().first.node->data.getBufferOffsets().getBonesBuffer()
+			auto nmlBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eNormals )
+				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eNormals )
 				: nullptr;
-			auto mphBuffer = nodes.front().first.node->data.getBufferOffsets().hasMorph()
-				? &nodes.front().first.node->data.getBufferOffsets().getMorphBuffer()
+			auto tanBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTangents )
+				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTangents )
+				: nullptr;
+			auto texBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTexcoords )
+				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTexcoords )
+				: nullptr;
+			auto idxBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eIndex )
+				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eIndex )
+				: nullptr;
+			auto bonBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eBones )
+				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eBones )
+				: nullptr;
+			auto mphPosBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphPositions )
+				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphPositions )
+				: nullptr;
+			auto mphNmlBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphNormals )
+				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphNormals )
+				: nullptr;
+			auto mphTanBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTangents )
+				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTangents )
+				: nullptr;
+			auto mphTexBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTexcoords )
+				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTexcoords )
 				: nullptr;
 #endif
 
@@ -212,15 +232,35 @@ namespace castor3d
 				if ( node.first.node->instance.getParent()->isVisible() )
 				{
 					++instanceCount;
-					CU_Require( vtxBuffer == &node.first.node->data.getBufferOffsets().getVertexBuffer() );
-					CU_Require( idxBuffer == ( node.first.node->data.getBufferOffsets().hasIndices()
-						? &node.first.node->data.getBufferOffsets().getIndexBuffer()
-						: nullptr ));
-					CU_Require( bonBuffer == ( node.first.node->data.getBufferOffsets().hasBones()
-						? &node.first.node->data.getBufferOffsets().getBonesBuffer()
+					CU_Require( posBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::ePositions )
+						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::ePositions )
+						: nullptr ) );
+					CU_Require( nmlBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eNormals )
+						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eNormals )
+						: nullptr ) );
+					CU_Require( tanBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTangents )
+						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTangents )
+						: nullptr ) );
+					CU_Require( texBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTexcoords )
+						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTexcoords )
+						: nullptr ) );
+					CU_Require( idxBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eIndex )
+						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eIndex )
+						: nullptr ) );
+					CU_Require( bonBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eBones )
+						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eBones )
 						: nullptr) );
-					CU_Require( mphBuffer == ( node.first.node->data.getBufferOffsets().hasMorph()
-						? &node.first.node->data.getBufferOffsets().getMorphBuffer()
+					CU_Require( mphPosBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphPositions )
+						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphPositions )
+						: nullptr) );
+					CU_Require( mphNmlBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphNormals )
+						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphNormals )
+						: nullptr) );
+					CU_Require( mphTanBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTangents )
+						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTangents )
+						: nullptr) );
+					CU_Require( mphTexBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTexcoords )
+						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTexcoords )
 						: nullptr) );
 				}
 			}
@@ -321,6 +361,7 @@ namespace castor3d
 		, Pass const & pass
 		, bool isFrontCulled )
 	{
+		auto submeshFlags = data.getSubmeshFlags();
 		auto programFlags = data.getProgramFlags();
 
 		if ( isFrontCulled )
@@ -328,7 +369,7 @@ namespace castor3d
 			addFlag( programFlags, ProgramFlag::eInvertNormals );
 		}
 
-		return getPipelineBaseHash( SubmeshFlags{}
+		return getPipelineBaseHash( renderPass.adjustFlags( submeshFlags )
 			, renderPass.adjustFlags( programFlags )
 			, renderPass.adjustFlags( pass.getPassFlags() )
 			, pass.getTextureUnitsCount()

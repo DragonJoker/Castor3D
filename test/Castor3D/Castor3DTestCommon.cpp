@@ -313,6 +313,38 @@ namespace Testing
 		return result;
 	}
 
+	bool C3DTestCase::compare( castor3d::PositionsComponent const & lhs, castor3d::PositionsComponent const & rhs )
+	{
+		auto lhsData = lhs.getData();
+		auto rhsData = rhs.getData();
+		auto result = CT_EQUAL( lhsData, rhsData );
+		return result;
+	}
+
+	bool C3DTestCase::compare( castor3d::NormalsComponent const & lhs, castor3d::NormalsComponent const & rhs )
+	{
+		auto lhsData = lhs.getData();
+		auto rhsData = rhs.getData();
+		auto result = CT_EQUAL( lhsData, rhsData );
+		return result;
+	}
+
+	bool C3DTestCase::compare( castor3d::TangentsComponent const & lhs, castor3d::TangentsComponent const & rhs )
+	{
+		auto lhsData = lhs.getData();
+		auto rhsData = rhs.getData();
+		auto result = CT_EQUAL( lhsData, rhsData );
+		return result;
+	}
+
+	bool C3DTestCase::compare( castor3d::TexcoordsComponent const & lhs, castor3d::TexcoordsComponent const & rhs )
+	{
+		auto lhsData = lhs.getData();
+		auto rhsData = rhs.getData();
+		auto result = CT_EQUAL( lhsData, rhsData );
+		return result;
+	}
+
 	bool C3DTestCase::compare( Face const & lhs, Face const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs[0], rhs[0] ) };
@@ -351,17 +383,40 @@ namespace Testing
 
 		if ( result )
 		{
-			if ( lhs.getType() == BonesComponent::Name )
+			if ( lhs.getType() == PositionsComponent::Name )
 			{
-				result = CT_EQUAL( static_cast< BonesComponent const & >( lhs ), static_cast< BonesComponent const & >( rhs ) );
+				result = CT_EQUAL( static_cast< PositionsComponent const & >( lhs )
+					, static_cast< PositionsComponent const & >( rhs ) );
+			}
+			else if ( lhs.getType() == NormalsComponent::Name )
+			{
+				result = CT_EQUAL( static_cast< NormalsComponent const & >( lhs )
+					, static_cast< NormalsComponent const & >( rhs ) );
+			}
+			else if ( lhs.getType() == TangentsComponent::Name )
+			{
+				result = CT_EQUAL( static_cast< TangentsComponent const & >( lhs )
+					, static_cast< TangentsComponent const & >( rhs ) );
+			}
+			else if ( lhs.getType() == TexcoordsComponent::Name )
+			{
+				result = CT_EQUAL( static_cast< TexcoordsComponent const & >( lhs )
+					, static_cast< TexcoordsComponent const & >( rhs ) );
+			}
+			else if ( lhs.getType() == BonesComponent::Name )
+			{
+				result = CT_EQUAL( static_cast< BonesComponent const & >( lhs )
+					, static_cast< BonesComponent const & >( rhs ) );
 			}
 			else if ( lhs.getType() == TriFaceMapping::Name )
 			{
-				result = CT_EQUAL( static_cast< TriFaceMapping const & >( lhs ), static_cast< TriFaceMapping const & >( rhs ) );
+				result = CT_EQUAL( static_cast< TriFaceMapping const & >( lhs )
+					, static_cast< TriFaceMapping const & >( rhs ) );
 			}
 			else if ( lhs.getType() == LinesMapping::Name )
 			{
-				result = CT_EQUAL( static_cast< LinesMapping const & >( lhs ), static_cast< LinesMapping const & >( rhs ) );
+				result = CT_EQUAL( static_cast< LinesMapping const & >( lhs )
+					, static_cast< LinesMapping const & >( rhs ) );
 			}
 		}
 
@@ -371,9 +426,6 @@ namespace Testing
 	bool C3DTestCase::compare( Submesh const & lhs, Submesh const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getPointsCount(), rhs.getPointsCount() ) };
-		auto lhsVtx = lhs.getPoints();
-		auto rhsVtx = rhs.getPoints();
-		result = result && CT_EQUAL( lhsVtx, rhsVtx );
 
 		if ( result )
 		{

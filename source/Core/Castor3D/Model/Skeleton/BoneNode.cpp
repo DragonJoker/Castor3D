@@ -42,7 +42,7 @@ namespace castor3d
 
 					if ( it != boneData.m_ids.data.end() )
 					{
-						auto position = submesh->getPoint( i ).pos;
+						auto position = submesh->getPositions()[i];
 						min[0] = std::min( min[0], position[0] );
 						min[1] = std::min( min[1], position[1] );
 						min[2] = std::min( min[2], position[2] );

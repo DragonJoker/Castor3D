@@ -5,6 +5,10 @@
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Miscellaneous/StagingData.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -18,51 +22,96 @@ namespace castor3d
 {
 	namespace smshcompmorph
 	{
-		static ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout( SubmeshFlags const & submeshFlags
+		static std::vector< ashes::PipelineVertexInputStateCreateInfo > createVertexLayout( SubmeshFlags const & submeshFlags
 			, ShaderFlags const & shaderFlags
 			, bool hasTextures
 			, uint32_t & currentLocation )
 		{
-			ashes::VkVertexInputBindingDescriptionArray bindings{ { MorphComponent::BindingPoint
-				, sizeof( InterleavedVertex ), VK_VERTEX_INPUT_RATE_VERTEX } };
-			ashes::VkVertexInputAttributeDescriptionArray attributes{ 1u, { currentLocation++
-				, MorphComponent::BindingPoint
-				, VK_FORMAT_R32G32B32_SFLOAT
-				, offsetof( InterleavedVertex, pos ) } };
+			std::vector< ashes::PipelineVertexInputStateCreateInfo > result;
 
-			if ( checkFlag( shaderFlags, ShaderFlag::eNormal ) )
+			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphPositions ) )
 			{
+				ashes::VkVertexInputBindingDescriptionArray bindings;
+				ashes::VkVertexInputAttributeDescriptionArray attributes;
+				bindings.push_back( { MorphComponent::PosBindingPoint
+					, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } );
 				attributes.push_back( { currentLocation++
-					, MorphComponent::BindingPoint
+					, MorphComponent::PosBindingPoint
 					, VK_FORMAT_R32G32B32_SFLOAT
-					, offsetof( InterleavedVertex, nml ) } );
+					, 0u } );
+				result .emplace_back( 0u, bindings, attributes );
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) )
+			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphNormals )
+				&& checkFlag( shaderFlags, ShaderFlag::eNormal ) )
 			{
+				ashes::VkVertexInputBindingDescriptionArray bindings;
+				ashes::VkVertexInputAttributeDescriptionArray attributes;
+				bindings.push_back( { MorphComponent::NmlBindingPoint
+					, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } );
 				attributes.push_back( { currentLocation++
-					, MorphComponent::BindingPoint
+					, MorphComponent::NmlBindingPoint
 					, VK_FORMAT_R32G32B32_SFLOAT
-					, offsetof( InterleavedVertex, tan ) } );
+					, 0u } );
+				result.emplace_back( 0u, bindings, attributes );
 			}
 
-			if ( hasTextures )
+			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphTangents )
+				&& checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) )
 			{
+				ashes::VkVertexInputBindingDescriptionArray bindings;
+				ashes::VkVertexInputAttributeDescriptionArray attributes;
+				bindings.push_back( { MorphComponent::TanBindingPoint
+					, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } );
 				attributes.push_back( { currentLocation++
-					, MorphComponent::BindingPoint
+					, MorphComponent::TanBindingPoint
 					, VK_FORMAT_R32G32B32_SFLOAT
-					, offsetof( InterleavedVertex, tex ) } );
+					, 0u } );
+				result.emplace_back( 0u, bindings, attributes );
 			}
 
-			return ashes::PipelineVertexInputStateCreateInfo{ 0u, bindings, attributes };
+			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords )
+				&& hasTextures )
+			{
+				ashes::VkVertexInputBindingDescriptionArray bindings;
+				ashes::VkVertexInputAttributeDescriptionArray attributes;
+				bindings.push_back( { MorphComponent::TexBindingPoint
+					, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } );
+				attributes.push_back( { currentLocation++
+					, MorphComponent::TexBindingPoint
+					, VK_FORMAT_R32G32B32_SFLOAT
+					, 0u } );
+				result.emplace_back( 0u, bindings, attributes );
+			}
+
+			return result;
 		}
 	}
 
 	castor::String const MorphComponent::Name = cuT( "morph" );
 
 	MorphComponent::MorphComponent( Submesh & submesh )
-		: SubmeshComponent{ submesh, Name, BindingPoint }
+		: SubmeshComponent{ submesh, Name, PosBindingPoint }
 	{
+		if ( submesh.hasComponent( PositionsComponent::Name ) )
+		{
+			m_flags |= SubmeshFlag::eMorphPositions;
+		}
+
+		if ( submesh.hasComponent( NormalsComponent::Name ) )
+		{
+			m_flags |= SubmeshFlag::eMorphNormals;
+		}
+
+		if ( submesh.hasComponent( TangentsComponent::Name ) )
+		{
+			m_flags |= SubmeshFlag::eMorphTangents;
+		}
+
+		if ( submesh.hasComponent( TexcoordsComponent::Name ) )
+		{
+			m_flags |= SubmeshFlag::eMorphTexcoords;
+		}
 	}
 
 	void MorphComponent::gather( ShaderFlags const & shaderFlags
@@ -80,30 +129,31 @@ namespace castor3d
 			hash = castor::hashCombine( hash, shaderFlags.value() );
 			hash = castor::hashCombine( hash, mask.empty() );
 			hash = castor::hashCombine( hash, currentLocation );
-			auto layoutIt = m_animLayouts.find( hash );
+			auto layoutIt = m_layouts.find( hash );
 
-			if ( layoutIt == m_animLayouts.end() )
+			if ( layoutIt == m_layouts.end() )
 			{
-				layoutIt = m_animLayouts.emplace( hash
-					, smshcompmorph::doCreateVertexLayout( submeshFlags
+				layoutIt = m_layouts.emplace( hash
+					, smshcompmorph::createVertexLayout( submeshFlags
 						, shaderFlags
-						, !mask.empty(), currentLocation ) ).first;
+						, !mask.empty()
+						, currentLocation ) ).first;
 			}
 			else
 			{
-				currentLocation = layoutIt->second.vertexAttributeDescriptions.back().location + 1u;
+				currentLocation = layoutIt->second.back().vertexAttributeDescriptions.back().location + 1u;
 			}
 
-			buffers.emplace_back( getOwner()->getBufferOffsets().getMorphBuffer() );
-			offsets.emplace_back( 0u );
-			layouts.emplace_back( layoutIt->second );
+			layouts.insert( layouts.end()
+				, layoutIt->second.begin()
+				, layoutIt->second.end() );
 		}
 	}
 
 	SubmeshComponentSPtr MorphComponent::clone( Submesh & submesh )const
 	{
 		auto result = std::make_shared< MorphComponent >( submesh );
-		result->m_data = m_data;
+		result->m_flags = m_flags;
 		return std::static_pointer_cast< SubmeshComponent >( result );
 	}
 
@@ -118,16 +168,5 @@ namespace castor3d
 
 	void MorphComponent::doUpload()
 	{
-		if ( getOwner()->hasBufferOffsets() )
-		{
-			if ( getOwner()->getBufferOffsets().hasVertices() )
-			{
-				auto & offsets = getOwner()->getBufferOffsets();
-				std::copy( m_data.begin()
-					, m_data.end()
-					, offsets.getMorphData< InterleavedVertex >().begin() );
-				offsets.markMorphDirty();
-			}
-		}
 	}
 }

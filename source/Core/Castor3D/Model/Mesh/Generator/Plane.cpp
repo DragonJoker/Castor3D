@@ -1,6 +1,10 @@
 #include "Castor3D/Model/Mesh/Generator/Plane.hpp"
 
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
@@ -69,6 +73,10 @@ namespace castor3d
 		castor::Point3f ptTangent;
 		castor::Point2f ptUv;
 		SubmeshSPtr submesh = mesh.createSubmesh();
+		auto positions = submesh->createComponent< PositionsComponent >();
+		auto normals = submesh->createComponent< NormalsComponent >();
+		auto tangents = submesh->createComponent< TangentsComponent >();
+		auto texcoords = submesh->createComponent< TexcoordsComponent >();
 		InterleavedVertexArray points;
 
 		if ( flipYZ )
@@ -126,7 +134,7 @@ namespace castor3d
 
 		if ( !sortAroundCenter )
 		{
-			auto indexMapping = std::make_shared< TriFaceMapping >( *submesh );
+			auto indexMapping = submesh->createComponent< TriFaceMapping >();
 
 			for ( uint32_t i = 0; i < subDivisionsW; i++ )
 			{
@@ -138,12 +146,13 @@ namespace castor3d
 			}
 
 			indexMapping->computeTangentsFromNormals();
-			submesh->setIndexMapping( indexMapping );
 		}
 
 		if ( tileUV )
 		{
-			std::vector< castor::Point3f > tiledUV;
+			auto secondaryUV = submesh->createComponent< SecondaryUVComponent >();
+			auto & tiledUV = secondaryUV->getData();
+			tiledUV.reserve( nbVertexW * nbVertexH );
 
 			for ( uint32_t i = 0; i < nbVertexW; i++ )
 			{
@@ -154,10 +163,6 @@ namespace castor3d
 						, 0.0f } );
 				}
 			}
-
-			auto secondaryUV = std::make_shared< SecondaryUVComponent >( *submesh );
-			secondaryUV->addTexcoords( tiledUV );
-			submesh->addComponent( secondaryUV );
 		}
 
 		mesh.computeContainers();

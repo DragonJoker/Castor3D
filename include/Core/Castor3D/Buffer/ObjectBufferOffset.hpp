@@ -6,217 +6,173 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/GpuBufferPackedAllocator.hpp"
-#include "Castor3D/Model/VertexGroup.hpp"
 #include "Castor3D/Model/Skeleton/VertexBoneData.hpp"
+#include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
+
+#include <unordered_map>
 
 namespace castor3d
 {
 	struct ObjectBufferOffset
 	{
 	public:
+		struct GpuBufferChunk
+		{
+			GpuPackedBuffer * buffer{};
+			MemChunk chunk{};
+
+			ashes::BufferBase const & getBuffer()const
+			{
+				return buffer->getBuffer().getBuffer();
+			}
+
+			bool hasData()const
+			{
+				return chunk.askedSize != 0;
+			}
+
+			uint32_t getSize()const
+			{
+				return uint32_t( chunk.askedSize );
+			}
+
+			template< typename DataT >
+			castor::ArrayView< DataT > getData()const
+			{
+				CU_Require( hasData() );
+				return castor::makeArrayView( reinterpret_cast< DataT * >( buffer->getDatas().data() + getOffset() )
+					, uint32_t( chunk.askedSize / sizeof( DataT ) ) );
+			}
+
+			template< typename DataT >
+			uint32_t getCount()const
+			{
+				return uint32_t( getSize() / sizeof( DataT ) );
+			}
+
+			VkDeviceSize getOffset()const
+			{
+				return chunk.offset;
+			}
+
+			void markDirty( VkAccessFlags dstAccessFlags = VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+				, VkPipelineStageFlags dstPipelineFlags = VK_PIPELINE_STAGE_VERTEX_INPUT_BIT )const
+			{
+				buffer->markDirty( getOffset()
+					, getSize()
+					, dstAccessFlags
+					, dstPipelineFlags );
+			}
+
+			void reset()
+			{
+				buffer = nullptr;
+				chunk.offset = 0u;
+				chunk.askedSize = 0u;
+				chunk.size = 0u;
+			}
+
+			void directUpload( ashes::Queue const & queue
+				, ashes::CommandPool const & commandPool
+				, VkAccessFlags dstAccessFlags
+				, VkPipelineStageFlags dstPipelineFlags )
+			{
+				buffer->uploadDirect( queue
+					, commandPool
+					, chunk.offset
+					, chunk.askedSize
+					, dstAccessFlags
+					, dstPipelineFlags);
+			}
+		};
+
 		SubmeshFlags submeshFlags{};
-		GpuPackedBuffer * vtxBuffer{};
-		GpuPackedBuffer * idxBuffer{};
-		GpuPackedBuffer * bonBuffer{};
-		GpuPackedBuffer * mphBuffer{};
-		MemChunk vtxChunk{};
-		MemChunk idxChunk{};
-		MemChunk bonChunk{};
-		MemChunk mphChunk{};
+		std::array< GpuBufferChunk, getIndex( SubmeshFlag::eAllComponents ) > buffers{};
 
 		explicit operator bool()const
 		{
-			return vtxBuffer != nullptr;
+			return hasData( SubmeshFlag::ePositions );
 		}
 
-		ashes::BufferBase const & getIndexBuffer()const
+		GpuBufferChunk & getBufferChunk( SubmeshFlag flag )
 		{
-			return idxBuffer->getBuffer().getBuffer();
+			return buffers[getIndex( flag )];
 		}
 
-		ashes::BufferBase const & getVertexBuffer()const
+		GpuBufferChunk const & getBufferChunk( SubmeshFlag flag )const
 		{
-			return vtxBuffer->getBuffer().getBuffer();
+			return buffers[getIndex( flag )];
 		}
 
-		ashes::BufferBase const & getBonesBuffer()const
+		void reset()
 		{
-			return bonBuffer->getBuffer().getBuffer();
+			for ( auto & buffer : buffers )
+			{
+				buffer.reset();
+			}
 		}
 
-		ashes::BufferBase const & getMorphBuffer()const
+		void directUpload( SubmeshFlag flag
+			, ashes::Queue const & queue
+			, ashes::CommandPool const & commandPool
+			, VkAccessFlags dstAccessFlags
+			, VkPipelineStageFlags dstPipelineFlags )
 		{
-			return mphBuffer->getBuffer().getBuffer();
+			getBufferChunk( flag ).directUpload( queue
+				, commandPool
+				, dstAccessFlags
+				, dstPipelineFlags );
 		}
 
-		bool hasIndices()const
+		ashes::BufferBase const & getBuffer( SubmeshFlag flag )const
 		{
-			return idxChunk.askedSize != 0;
+			return getBufferChunk( flag ).getBuffer();
 		}
 
-		bool hasVertices()const
+		bool hasData( SubmeshFlag flag )const
 		{
-			return vtxChunk.askedSize != 0;
+			return getBufferChunk( flag ).hasData();
 		}
 
-		bool hasBones()const
+		template< typename DataT >
+		castor::ArrayView< DataT > getData( SubmeshFlag flag )const
 		{
-			return bonChunk.askedSize != 0;
+			return getBufferChunk( flag ).getData< DataT >();
 		}
 
-		bool hasMorph()const
+		uint32_t getSize( SubmeshFlag flag )const
 		{
-			return mphChunk.askedSize != 0;
+			return getBufferChunk( flag ).getSize();
+		}
+
+		template< typename DataT >
+		uint32_t getCount( SubmeshFlag flag )const
+		{
+			return getBufferChunk( flag ).getCount< DataT >();
+		}
+
+		VkDeviceSize getOffset( SubmeshFlag flag )const
+		{
+			return getBufferChunk( flag ).getOffset();
 		}
 
 		template< typename IndexT >
-		castor::ArrayView< IndexT > getIndexData()const
-		{
-			CU_Require( hasIndices() );
-			return castor::makeArrayView( reinterpret_cast< IndexT * >( idxBuffer->getDatas().data() + getIndexOffset() )
-				, uint32_t( idxChunk.askedSize / sizeof( IndexT ) ) );
-		}
-
-		template< typename VertexT >
-		castor::ArrayView< VertexT > getVertexData()const
-		{
-			CU_Require( hasVertices() );
-			return castor::makeArrayView( reinterpret_cast< VertexT * >( vtxBuffer->getDatas().data() + getVertexOffset() )
-				, getVertexCount< VertexT >() );
-		}
-
-		castor::ArrayView< VertexBoneData > getBoneData()const
-		{
-			CU_Require( hasBones() );
-			return castor::makeArrayView( reinterpret_cast< VertexBoneData * >( bonBuffer->getDatas().data() + getBonesOffset() )
-				, getBonesCount() );
-		}
-
-		template< typename VertexT >
-		castor::ArrayView< VertexT > getMorphData()const
-		{
-			CU_Require( hasMorph() );
-			return castor::makeArrayView( reinterpret_cast< VertexT * >( mphBuffer->getDatas().data() + getMorphOffset() )
-				, getMorphCount< VertexT >() );
-		}
-
-		uint32_t getIndexSize()const
-		{
-			return uint32_t( idxChunk.askedSize );
-		}
-
-		uint32_t getVertexSize()const
-		{
-			return uint32_t( vtxChunk.askedSize );
-		}
-
-		uint32_t getBonesSize()const
-		{
-			return uint32_t( bonChunk.askedSize );
-		}
-
-		uint32_t getMorphSize()const
-		{
-			return uint32_t( mphChunk.askedSize );
-		}
-
-		uint32_t getIndexCount()const
-		{
-			return uint32_t( getIndexSize() / sizeof( uint32_t ) );
-		}
-
-		template< typename VertexT >
-		uint32_t getVertexCount()const
-		{
-			return uint32_t( getVertexSize() / sizeof( VertexT ) );
-		}
-
-		uint32_t getBonesCount()const
-		{
-			return uint32_t( getBonesSize() / sizeof( VertexBoneData ) );
-		}
-
-		template< typename VertexT >
-		uint32_t getMorphCount()const
-		{
-			return uint32_t( getMorphSize() / sizeof( VertexT ) );
-		}
-
-		VkDeviceSize getIndexOffset()const
-		{
-			return idxChunk.offset;
-		}
-
-		VkDeviceSize getVertexOffset()const
-		{
-			return vtxChunk.offset;
-		}
-
-		VkDeviceSize getBonesOffset()const
-		{
-			return bonChunk.offset;
-		}
-
-		VkDeviceSize getMorphOffset()const
-		{
-			return mphChunk.offset;
-		}
-
 		uint32_t getFirstIndex()const
 		{
-			return uint32_t( getIndexOffset() / sizeof( uint32_t ) );
+			return uint32_t( getOffset( SubmeshFlag::eIndex ) / sizeof( IndexT ) );
 		}
 
-		template< typename VertexT >
+		template< typename PositionT >
 		uint32_t getFirstVertex()const
 		{
-			return uint32_t( getVertexOffset() / sizeof( VertexT ) );
+			return uint32_t( getOffset( SubmeshFlag::ePositions ) / sizeof( PositionT ) );
 		}
 
-		uint32_t getFirstBone()const
-		{
-			return uint32_t( getBonesOffset() / sizeof( VertexBoneData ) );
-		}
-
-		template< typename VertexT >
-		uint32_t getFirstMorph()const
-		{
-			return uint32_t( getMorphOffset() / sizeof( VertexT ) );
-		}
-
-		void markVertexDirty( VkAccessFlags dstAccessFlags = VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+		void markDirty( SubmeshFlag flag
+			, VkAccessFlags dstAccessFlags = VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
 			, VkPipelineStageFlags dstPipelineFlags = VK_PIPELINE_STAGE_VERTEX_INPUT_BIT )const
 		{
-			vtxBuffer->markDirty( getVertexOffset()
-				, getVertexSize()
-				, dstAccessFlags
-				, dstPipelineFlags );
-		}
-
-		void markIndexDirty( VkAccessFlags dstAccessFlags = VK_ACCESS_INDEX_READ_BIT
-			, VkPipelineStageFlags dstPipelineFlags = VK_PIPELINE_STAGE_VERTEX_INPUT_BIT )const
-		{
-			idxBuffer->markDirty( getIndexOffset()
-				, getIndexSize()
-				, dstAccessFlags
-				, dstPipelineFlags );
-		}
-
-		void markBonesDirty( VkAccessFlags dstAccessFlags = VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-			, VkPipelineStageFlags dstPipelineFlags = VK_PIPELINE_STAGE_VERTEX_INPUT_BIT )const
-		{
-			bonBuffer->markDirty( getBonesOffset()
-				, getBonesSize()
-				, dstAccessFlags
-				, dstPipelineFlags );
-		}
-
-		void markMorphDirty( VkAccessFlags dstAccessFlags = VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-			, VkPipelineStageFlags dstPipelineFlags = VK_PIPELINE_STAGE_VERTEX_INPUT_BIT )const
-		{
-			mphBuffer->markDirty( getMorphOffset()
-				, getMorphSize()
-				, dstAccessFlags
+			getBufferChunk( flag ).markDirty( dstAccessFlags
 				, dstPipelineFlags );
 		}
 	};

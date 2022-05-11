@@ -1,6 +1,10 @@
 #include "Castor3D/Model/Mesh/Generator/Torus.hpp"
 
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 
@@ -51,6 +55,10 @@ namespace castor3d
 		if ( m_internalNbFaces >= 3 && m_externalNbFaces >= 3 )
 		{
 			Submesh & submesh = *( mesh.createSubmesh() );
+			auto positions = submesh.createComponent< PositionsComponent >();
+			auto normals = submesh.createComponent< NormalsComponent >();
+			auto tangents = submesh.createComponent< TangentsComponent >();
+			auto texcoords = submesh.createComponent< TexcoordsComponent >();
 			uint32_t uiCur = 0;
 			uint32_t uiPrv = 0;
 			uint32_t uiPCr = 0;
@@ -75,7 +83,7 @@ namespace castor3d
 
 			// Build the torus
 			step = castor::PiMult2< float > / float( m_externalNbFaces );
-			auto indexMapping = std::make_shared< TriFaceMapping >( submesh );
+			auto indexMapping = submesh.createComponent< TriFaceMapping >();
 
 			for ( uint32_t i = 1; i <= uiExtMax; i++ )
 			{
@@ -85,7 +93,7 @@ namespace castor3d
 
 				for ( uint32_t j = 0; j <= uiIntMax; j++ )
 				{
-					auto vertex = submesh[j];
+					auto vertex = submesh.getInterleavedPoint( j );
 					vertex.pos = castor::Point3f{ vertex.pos[0] * cos( rAngleEx ), vertex.pos[1], vertex.pos[0] * sin( rAngleEx ) };
 					vertex.tex = castor::Point3f{ float( i ) / float( m_externalNbFaces ), float( j ) / float( m_internalNbFaces ) };
 					vertex.nml = castor::point::getNormalised( castor::Point3f( float( vertex.nml[0] * cos( rAngleEx ) ), vertex.nml[1], float( vertex.nml[0] * sin( rAngleEx ) ) ) );
@@ -122,7 +130,6 @@ namespace castor3d
 			indexMapping->addFace( uiPrv + 0, uiCur + 0, uiPCr + 0 );
 
 			indexMapping->computeTangentsFromNormals();
-			submesh.setIndexMapping( indexMapping );
 		}
 
 		mesh.computeContainers();

@@ -295,7 +295,6 @@ namespace castor3d
 		size_t getMinAlignment()const;
 
 	private:
-		std::set< MemChunk > m_allocated;
 		AllocatorT m_allocator;
 	};
 

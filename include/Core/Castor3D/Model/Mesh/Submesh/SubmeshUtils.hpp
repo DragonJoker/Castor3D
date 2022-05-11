@@ -21,15 +21,15 @@ namespace castor3d
 		 *\~english
 		 *\brief			Creates faces from the points.
 		 *\remarks			This function assumes the points are sorted like triangles fan.
-		 *\param[in,out]	points	The points.
-		 *\param[in,out]	triFace	The component that will receive the computed triangles.
+		 *\param[in,out]	texcoords	The texture coordinates.
+		 *\param[in,out]	triFace		The component that will receive the computed triangles.
 		 *\~french
 		 *\brief			Crée les faces à partir des points.
 		 *\remarks			Cette fonction suppose que les points sont tirés à la manière triangles fan.
-		 *\param[in,out]	points	Les points.
-		 *\param[in,out]	triFace	Le composant qui va recevoir les faces calculées.
+		 *\param[in,out]	texcoords	Les coordonnées de texture.
+		 *\param[in,out]	triFace		Le composant qui va recevoir les faces calculées.
 		 */
-		C3D_API static void computeFacesFromPolygonVertex( InterleavedVertexArray & points
+		C3D_API static void computeFacesFromPolygonVertex( castor::Point3fArray & texcoords
 			, TriFaceMapping & triFace );
 		/**
 		 *\~english
@@ -43,7 +43,10 @@ namespace castor3d
 		 *\param[in]		reverted	Dit si les normales doivent être inversées.
 		 *\param[in]		triFace		Le composant qui va recevoir les faces calculées.
 		 */
-		C3D_API static void computeNormals( InterleavedVertexArray & points
+		C3D_API static void computeNormals( castor::Point3fArray const & positions
+			, castor::Point3fArray const & texcoords
+			, castor::Point3fArray & normals
+			, castor::Point3fArray & tangents
 			, TriFaceMapping const & triFace
 			, bool reverted = false );
 		/**
@@ -58,7 +61,10 @@ namespace castor3d
 		 *\param[in,out]	points	Les points.
 		 *\param[in]		triFace	Le composant qui va recevoir les faces calculées.
 		 */
-		C3D_API static void computeTangentsFromNormals( InterleavedVertexArray & points
+		C3D_API static void computeTangentsFromNormals( castor::Point3fArray const & positions
+			, castor::Point3fArray const & texcoords
+			, castor::Point3fArray const & normals
+			, castor::Point3fArray & tangents
 			, TriFaceMapping const & triFace );
 		/**
 		 *\~english
@@ -70,7 +76,10 @@ namespace castor3d
 		 *\param[in,out]	points	Les points.
 		 *\param[in]		face	La face.
 		 */
-		C3D_API static void computeNormals( InterleavedVertexArray & points
+		C3D_API static void computeNormals( castor::Point3fArray const & positions
+			, castor::Point3fArray const & texcoords
+			, castor::Point3fArray & normals
+			, castor::Point3fArray & tangents
 			, Face const & face );
 		/**
 		 *\~english
@@ -82,7 +91,9 @@ namespace castor3d
 		 *\param[in,out]	points	Les points.
 		 *\param[in]		face	La face.
 		 */
-		C3D_API static void computeTangents( InterleavedVertexArray & points
+		C3D_API static void computeTangents( castor::Point3fArray const & positions
+			, castor::Point3fArray const & texcoords
+			, castor::Point3fArray & tangents
 			, Face const & face );
 	};
 }

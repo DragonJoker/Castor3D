@@ -12,8 +12,12 @@
 #include <Castor3D/Model/Mesh/Animation/MeshAnimationKeyFrame.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp>
@@ -331,12 +335,20 @@ namespace Testing
 		{
 			static std::map< castor3d::SubmeshFlag, std::string > Names
 			{
+				{ castor3d::SubmeshFlag::eIndex, "eIndex" },
+				{ castor3d::SubmeshFlag::ePositions, "ePositions" },
+				{ castor3d::SubmeshFlag::eNormals, "eNormals" },
 				{ castor3d::SubmeshFlag::eTangents, "eTangents" },
 				{ castor3d::SubmeshFlag::eTexcoords, "eTexcoords" },
 				{ castor3d::SubmeshFlag::eSecondaryUV, "eSecondaryUV" },
-				{ castor3d::SubmeshFlag::eInstantiation, "eInstantiation" },
+				{ castor3d::SubmeshFlag::eBones, "eBones" },
+				{ castor3d::SubmeshFlag::eMorphPositions, "eMorphPositions" },
+				{ castor3d::SubmeshFlag::eMorphNormals, "eMorphNormals" },
+				{ castor3d::SubmeshFlag::eMorphTangents, "eMorphTangents" },
+				{ castor3d::SubmeshFlag::eMorphTexcoords, "eMorphTexcoords" },
 				{ castor3d::SubmeshFlag::eMorphing, "eMorphing" },
 				{ castor3d::SubmeshFlag::eSkinning, "eSkinning" },
+				{ castor3d::SubmeshFlag::eInstantiation, "eInstantiation" },
 				{ castor3d::SubmeshFlag::eForceTexCoords, "eForceTexCoords" },
 			};
 			return Names[value];
@@ -564,6 +576,42 @@ namespace Testing
 	};
 
 	template<>
+	struct Stringifier< castor3d::PositionsComponent >
+	{
+		static std::string get( castor3d::PositionsComponent const & value )
+		{
+			return std::string{ "castor3d::PositionsComponent" };
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::NormalsComponent >
+	{
+		static std::string get( castor3d::NormalsComponent const & value )
+		{
+			return std::string{ "castor3d::NormalsComponent" };
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::TangentsComponent >
+	{
+		static std::string get( castor3d::TangentsComponent const & value )
+		{
+			return std::string{ "castor3d::TangentsComponent" };
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::TexcoordsComponent >
+	{
+		static std::string get( castor3d::TexcoordsComponent const & value )
+		{
+			return std::string{ "castor3d::TexcoordsComponent" };
+		}
+	};
+
+	template<>
 	struct Stringifier< castor3d::BonesComponent >
 	{
 		static std::string get( castor3d::BonesComponent const & value )
@@ -762,6 +810,10 @@ namespace Testing
 		bool compare( castor3d::Submesh const & p_a, castor3d::Submesh const & p_b );
 		bool compare( castor3d::SubmeshComponent const & p_a, castor3d::SubmeshComponent const & p_b );
 		bool compare( castor3d::BonesComponent const & p_a, castor3d::BonesComponent const & p_b );
+		bool compare( castor3d::PositionsComponent const & p_a, castor3d::PositionsComponent const & p_b );
+		bool compare( castor3d::NormalsComponent const & p_a, castor3d::NormalsComponent const & p_b );
+		bool compare( castor3d::TangentsComponent const & p_a, castor3d::TangentsComponent const & p_b );
+		bool compare( castor3d::TexcoordsComponent const & p_a, castor3d::TexcoordsComponent const & p_b );
 		bool compare( castor3d::Face const & p_a, castor3d::Face const & p_b );
 		bool compare( castor3d::TriFaceMapping const & p_a, castor3d::TriFaceMapping const & p_b );
 		bool compare( castor3d::Line const & p_a, castor3d::Line const & p_b );

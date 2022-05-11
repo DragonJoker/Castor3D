@@ -169,7 +169,7 @@ namespace castor3d
 
 	public:
 		C3D_API static castor::String const Name;
-		C3D_API static uint32_t constexpr BindingPoint = 2u;
+		C3D_API static uint32_t constexpr BindingPoint = 10u;
 
 	private:
 		InstanceDataMap m_instances;

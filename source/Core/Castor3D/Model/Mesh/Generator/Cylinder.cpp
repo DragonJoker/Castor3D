@@ -1,6 +1,10 @@
 #include "Castor3D/Model/Mesh/Generator/Cylinder.hpp"
 
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 
@@ -43,11 +47,23 @@ namespace castor3d
 		if ( m_nbFaces >= 2 )
 		{
 			Submesh & submeshBase = *p_mesh.createSubmesh();
+			auto basePositions = submeshBase.createComponent< PositionsComponent >();
+			auto baseNormals = submeshBase.createComponent< NormalsComponent >();
+			auto baseTangents = submeshBase.createComponent< TangentsComponent >();
+			auto baseTexcoords = submeshBase.createComponent< TexcoordsComponent >();
+			auto indexMappingBase = submeshBase.createComponent< TriFaceMapping >();
 			Submesh & submeshTop = *p_mesh.createSubmesh();
+			auto topPositions = submeshTop.createComponent< PositionsComponent >();
+			auto topNormals = submeshTop.createComponent< NormalsComponent >();
+			auto topTangents = submeshTop.createComponent< TangentsComponent >();
+			auto topTexcoords = submeshTop.createComponent< TexcoordsComponent >();
+			auto indexMappingTop = submeshTop.createComponent< TriFaceMapping >();
 			Submesh & submeshSide = *p_mesh.createSubmesh();
-			auto indexMappingBase = std::make_shared< TriFaceMapping >( submeshBase );
-			auto indexMappingTop = std::make_shared< TriFaceMapping >( submeshTop );
-			auto indexMappingSide = std::make_shared< TriFaceMapping >( submeshSide );
+			auto sidePositions = submeshSide.createComponent< PositionsComponent >();
+			auto sideNormals = submeshSide.createComponent< NormalsComponent >();
+			auto sideTangents = submeshSide.createComponent< TangentsComponent >();
+			auto sideTexcoords = submeshSide.createComponent< TexcoordsComponent >();
+			auto indexMappingSide = submeshSide.createComponent< TriFaceMapping >();
 
 			//CALCUL DE LA POSITION DES POINTS
 			float angleRotation = castor::PiMult2< float > / float( m_nbFaces );
@@ -136,10 +152,6 @@ namespace castor3d
 			indexMappingBase->computeTangentsFromNormals();
 			indexMappingTop->computeTangentsFromNormals();
 			indexMappingSide->computeTangentsFromNormals();
-
-			submeshBase.setIndexMapping( indexMappingBase );
-			submeshTop.setIndexMapping( indexMappingTop );
-			submeshSide.setIndexMapping( indexMappingSide );
 		}
 
 		p_mesh.computeContainers();
