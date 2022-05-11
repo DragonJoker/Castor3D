@@ -57,11 +57,31 @@ namespace castor3d
 		}
 		/**
 		 *\~english
+		 *\return		The beginning of the submeshes buffers.
+		 *\~french
+		 *\return		Le début des tampons des sous-maillages.
+		 */
+		SubmeshAnimationBufferMap::iterator begin()
+		{
+			return m_submeshesBuffers.begin();
+		}
+		/**
+		 *\~english
 		 *\return		The end of the submeshes buffers.
 		 *\~french
 		 *\return		La fin des tampons des sous-maillages.
 		 */
 		SubmeshAnimationBufferMap::const_iterator end()const
+		{
+			return m_submeshesBuffers.end();
+		}
+		/**
+		 *\~english
+		 *\return		The end of the submeshes buffers.
+		 *\~french
+		 *\return		La fin des tampons des sous-maillages.
+		 */
+		SubmeshAnimationBufferMap::iterator end()
 		{
 			return m_submeshesBuffers.end();
 		}
