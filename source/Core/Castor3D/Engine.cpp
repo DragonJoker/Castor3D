@@ -76,7 +76,6 @@ namespace castor3d
 		, m_fontCache{ *m_logger }
 		, m_imageCache{ *m_logger, m_imageLoader }
 		, m_meshFactory{ castor::makeUnique< MeshFactory >() }
-		, m_subdividerFactory{ castor::makeUnique< MeshSubdividerFactory >() }
 		, m_importerFactory{ castor::makeUnique< MeshImporterFactory >() }
 		, m_particleFactory{ castor::makeUnique< ParticleFactory >() }
 		, m_enableValidation{ enableValidation }
