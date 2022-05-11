@@ -139,13 +139,39 @@ namespace castor3d
 	//*********************************************************************************************
 
 	Submesh::Submesh( Mesh & mesh
-		, uint32_t id )
+		, uint32_t id
+		, SubmeshFlags const & flags )
 		: OwnedBy< Mesh >{ mesh }
 		, m_id{ id }
 		, m_defaultMaterial{ mesh.getScene()->getEngine()->getMaterialCache().getDefaultMaterial() }
-		, m_submeshFlags{}
+		, m_submeshFlags{ flags }
 	{
 		addComponent( std::make_shared< InstantiationComponent >( *this, 2u ) );
+
+		if ( checkFlag( flags, SubmeshFlag::ePositions ) )
+		{
+			createComponent< PositionsComponent >();
+		}
+
+		if ( checkFlag( flags, SubmeshFlag::eNormals ) )
+		{
+			createComponent< NormalsComponent >();
+		}
+
+		if ( checkFlag( flags, SubmeshFlag::eTangents ) )
+		{
+			createComponent< TangentsComponent >();
+		}
+
+		if ( checkFlag( flags, SubmeshFlag::eTexcoords ) )
+		{
+			createComponent< TexcoordsComponent >();
+		}
+
+		if ( checkFlag( flags, SubmeshFlag::eSecondaryUV ) )
+		{
+			createComponent< SecondaryUVComponent >();
+		}
 	}
 
 	Submesh::~Submesh()
@@ -327,11 +353,11 @@ namespace castor3d
 		, double precision )
 	{
 		int result = -1;
-		int index = 0;
 		auto positions = getComponent< PositionsComponent >();
 
 		if ( positions )
 		{
+			int index = 0;
 			auto & points = positions->getData();
 
 			for ( auto it = points.begin(); it != points.end() && result == -1; ++it )

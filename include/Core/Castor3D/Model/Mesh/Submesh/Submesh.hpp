@@ -57,7 +57,8 @@ namespace castor3d
 		 *\param[in]	id		L'ID du sous-maillage.
 		 */
 		C3D_API explicit Submesh( Mesh & mesh
-			, uint32_t id = 1 );
+			, uint32_t id = 1
+			, SubmeshFlags const & flags = SubmeshFlags{} );
 		/**
 		 *\~english
 		 *\brief		Destructor

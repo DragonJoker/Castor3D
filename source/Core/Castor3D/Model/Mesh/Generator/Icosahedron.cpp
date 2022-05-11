@@ -2,8 +2,6 @@
 
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
@@ -40,11 +38,9 @@ namespace castor3d
 			m_radius = -m_radius;
 		}
 
-		SubmeshSPtr submesh = p_mesh.createSubmesh();
-		auto positions = submesh->createComponent< PositionsComponent >();
-		auto normals = submesh->createComponent< NormalsComponent >();
-		auto tangents = submesh->createComponent< TangentsComponent >();
-		auto texcoords = submesh->createComponent< TexcoordsComponent >();
+		SubmeshSPtr submesh = p_mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+		auto normals = submesh->getComponent< NormalsComponent >();
+		auto texcoords = submesh->getComponent< TexcoordsComponent >();
 
 		// Construction de l'icosaèdre
 		std::vector< InterleavedVertex > vertices{ 12 };

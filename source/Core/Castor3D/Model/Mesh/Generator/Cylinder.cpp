@@ -1,10 +1,6 @@
 #include "Castor3D/Model/Mesh/Generator/Cylinder.hpp"
 
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 
@@ -46,23 +42,11 @@ namespace castor3d
 
 		if ( m_nbFaces >= 2 )
 		{
-			Submesh & submeshBase = *p_mesh.createSubmesh();
-			auto basePositions = submeshBase.createComponent< PositionsComponent >();
-			auto baseNormals = submeshBase.createComponent< NormalsComponent >();
-			auto baseTangents = submeshBase.createComponent< TangentsComponent >();
-			auto baseTexcoords = submeshBase.createComponent< TexcoordsComponent >();
+			Submesh & submeshBase = *p_mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
 			auto indexMappingBase = submeshBase.createComponent< TriFaceMapping >();
-			Submesh & submeshTop = *p_mesh.createSubmesh();
-			auto topPositions = submeshTop.createComponent< PositionsComponent >();
-			auto topNormals = submeshTop.createComponent< NormalsComponent >();
-			auto topTangents = submeshTop.createComponent< TangentsComponent >();
-			auto topTexcoords = submeshTop.createComponent< TexcoordsComponent >();
+			Submesh & submeshTop = *p_mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
 			auto indexMappingTop = submeshTop.createComponent< TriFaceMapping >();
-			Submesh & submeshSide = *p_mesh.createSubmesh();
-			auto sidePositions = submeshSide.createComponent< PositionsComponent >();
-			auto sideNormals = submeshSide.createComponent< NormalsComponent >();
-			auto sideTangents = submeshSide.createComponent< TangentsComponent >();
-			auto sideTexcoords = submeshSide.createComponent< TexcoordsComponent >();
+			Submesh & submeshSide = *p_mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
 			auto indexMappingSide = submeshSide.createComponent< TriFaceMapping >();
 
 			//CALCUL DE LA POSITION DES POINTS

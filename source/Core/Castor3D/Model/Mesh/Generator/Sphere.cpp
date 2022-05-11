@@ -1,10 +1,6 @@
 #include "Castor3D/Model/Mesh/Generator/Sphere.hpp"
 
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 
 #include "Castor3D/Miscellaneous/Parameter.hpp"
@@ -41,11 +37,7 @@ namespace castor3d
 
 		if ( m_nbFaces >= 3 )
 		{
-			Submesh & submesh = *mesh.createSubmesh();
-			auto positions = submesh.createComponent< PositionsComponent >();
-			auto normals = submesh.createComponent< NormalsComponent >();
-			auto tangents = submesh.createComponent< TangentsComponent >();
-			auto texcoords = submesh.createComponent< TexcoordsComponent >();
+			Submesh & submesh = *mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
 			float rAngle = castor::PiMult2< float > / float( m_nbFaces );
 			std::vector< castor::Point2f > arc( m_nbFaces + 1u );
 			float rAlpha = 0;

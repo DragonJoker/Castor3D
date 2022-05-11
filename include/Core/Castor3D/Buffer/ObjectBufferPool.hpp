@@ -95,7 +95,7 @@ namespace castor3d
 	public:
 		struct ModelBuffers
 		{
-			ModelBuffers( std::array< GpuPackedBufferPtr, getIndex( SubmeshFlag::eAllComponents ) > bufs )
+			explicit ModelBuffers( std::array< GpuPackedBufferPtr, getIndex( SubmeshFlag::eAllComponents ) > bufs )
 				: buffers{ std::move( bufs ) }
 			{
 			}
