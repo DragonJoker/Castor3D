@@ -95,6 +95,10 @@ namespace castor3d
 
 			m_transforms.emplace_back( &object, transform );
 		}
+		else
+		{
+			it->second = transform;
+		}
 	}
 
 	bool SkeletonAnimationKeyFrame::hasObject( SkeletonAnimationObject const & object )const
