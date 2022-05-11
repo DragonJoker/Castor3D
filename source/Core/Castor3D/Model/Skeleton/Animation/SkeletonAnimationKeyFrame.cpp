@@ -8,6 +8,8 @@
 
 namespace castor3d
 {
+	//*************************************************************************************************
+
 	namespace sklanmkf
 	{
 		template< typename T, typename U >
@@ -63,8 +65,8 @@ namespace castor3d
 		, castor::Quaternion const & rotate
 		, castor::Point3f const & scale )
 	{
-		castor::Matrix4x4f transform{ 1.0f };
-		castor::matrix::translate( transform, translate );
+		castor::Matrix4x4f transform;
+		castor::matrix::setTranslate( transform, translate );
 		sklanmkf::rotate( transform, rotate );
 		castor::matrix::scale( transform, scale );
 		addAnimationObject( object, transform );
@@ -135,6 +137,7 @@ namespace castor3d
 	void SkeletonAnimationKeyFrame::initialise()
 	{
 		m_cumulative.clear();
+		m_cumulative.reserve( m_transforms.size() );
 
 		for ( auto & transform : m_transforms )
 		{

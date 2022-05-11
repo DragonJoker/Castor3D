@@ -88,6 +88,26 @@ namespace castor3d
 		C3D_API void initialise()override;
 		/**
 		 *\~english
+		 *\return		The objects transforms.
+		 *\~french
+		 *\return		Les transformations des objets.
+		 */
+		C3D_API TransformArray & getTransforms()
+		{
+			return m_transforms;
+		}
+		/**
+		 *\~english
+		 *\return		The objects transforms.
+		 *\~french
+		 *\return		Les transformations des objets.
+		 */
+		C3D_API TransformArray const & getTransforms()const
+		{
+			return m_transforms;
+		}
+		/**
+		 *\~english
 		 *\return		The beginning of the cumulative transforms map.
 		 *\~french
 		 *\return		Le début de la map des transformations cumulatives.
