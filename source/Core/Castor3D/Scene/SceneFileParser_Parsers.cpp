@@ -22,7 +22,6 @@
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/MeshFactory.hpp"
 #include "Castor3D/Model/Mesh/MeshGenerator.hpp"
-#include "Castor3D/Model/Mesh/Subdivider.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimationKeyFrame.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
@@ -3120,40 +3119,6 @@ namespace castor3d
 				else
 				{
 					CU_ParsingError( cuT( "The new mesh doesn't match the original mesh" ) );
-				}
-			}
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserMeshDivide )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.mesh.lock() )
-		{
-			CU_ParsingError( cuT( "No Mesh initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			Engine * engine = parsingContext.parser->getEngine();
-			castor::String name;
-			uint16_t count;
-			params[0]->get( name );
-			params[1]->get( count );
-
-			if ( !engine->getSubdividerFactory().isTypeRegistered( castor::string::lowerCase( name ) ) )
-			{
-				CU_ParsingError( cuT( "Subdivider [" ) + name + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
-			}
-			else if ( auto mesh = parsingContext.mesh.lock() )
-			{
-				auto divider = engine->getSubdividerFactory().create( name );
-				mesh->computeContainers();
-
-				for ( auto submesh : *mesh )
-				{
-					divider->subdivide( submesh, count, false );
 				}
 			}
 		}

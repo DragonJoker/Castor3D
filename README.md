@@ -39,11 +39,6 @@ The project itself is compilable on supported platforms using CMake (\ref build)
 - ASSIMP: Multiple format mesh importer.
 - PLY: Stanford Polygon library mesh importer.
 
-### Dividers
-- Loop subdivision surfaces.
-- Phong tessellation.
-- PN-Triangles surfaces.
-
 ### PostEffects
 - Bloom: HDR Bloom implementation.
 - DrawEdges: Detects and renders edges, based on normal, depth, and or object ID.

@@ -188,7 +188,6 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserMeshImport )
 	CU_DeclareAttributeParser( parserMeshAnimImport )
 	CU_DeclareAttributeParser( parserMeshMorphImport )
-	CU_DeclareAttributeParser( parserMeshDivide )
 	CU_DeclareAttributeParser( parserMeshDefaultMaterial )
 	CU_DeclareAttributeParser( parserMeshDefaultMaterials )
 	CU_DeclareAttributeParser( parserMeshSkeleton )
