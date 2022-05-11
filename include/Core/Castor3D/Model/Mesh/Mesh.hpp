@@ -126,7 +126,7 @@ namespace castor3d
 		 *\brief		Crée un sous maillage
 		 *\return		Le sous maillage créé
 		 */
-		C3D_API SubmeshSPtr createSubmesh();
+		C3D_API SubmeshSPtr createSubmesh( SubmeshFlags const & flags = SubmeshFlags{} );
 		/**
 		 *\~english
 		 *\brief		Deletes a given submesh if it is in the mesh's submeshes

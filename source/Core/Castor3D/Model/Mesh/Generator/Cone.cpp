@@ -2,9 +2,7 @@
 
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 
@@ -47,16 +45,8 @@ namespace castor3d
 			&& m_height > std::numeric_limits< float >::epsilon()
 			&& m_radius > std::numeric_limits< float >::epsilon() )
 		{
-			Submesh & submeshBase = *mesh.createSubmesh();
-			auto basePositions = submeshBase.createComponent< PositionsComponent >();
-			auto baseNormals = submeshBase.createComponent< NormalsComponent >();
-			auto baseTangents = submeshBase.createComponent< TangentsComponent >();
-			auto baseTexcoords = submeshBase.createComponent< TexcoordsComponent >();
-			Submesh & submeshSide = *mesh.createSubmesh();
-			auto sidePositions = submeshSide.createComponent< PositionsComponent >();
-			auto sideNormals = submeshSide.createComponent< NormalsComponent >();
-			auto sideTangents = submeshSide.createComponent< TangentsComponent >();
-			auto sideTexcoords = submeshSide.createComponent< TexcoordsComponent >();
+			Submesh & submeshBase = *mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+			Submesh & submeshSide = *mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
 			//CALCUL DE LA POSITION DES POINTS
 			float const dalpha = castor::PiMult2< float > / float( m_nbFaces );
 			uint32_t i = 0;
@@ -119,6 +109,8 @@ namespace castor3d
 			indexMappingBase->computeNormals( true );
 			indexMappingSide->computeNormals( true );
 
+			auto sideNormals = submeshSide.getComponent< NormalsComponent >();
+			auto sideTangents = submeshSide.getComponent< TangentsComponent >();
 			auto normal0Top = sideNormals->getData()[0];
 			auto normal0Base = sideNormals->getData()[1];
 			auto tangent0Top = sideTangents->getData()[0];

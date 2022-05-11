@@ -57,12 +57,12 @@ namespace castor3d
 
 	//		for( uint32_t i = 0; i < nbElem; i++ )
 	//		{
-	//			mesh.createSubmesh();
+	//			mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
 	//		}
 
 	//		if (m_closed)
 	//		{
-	//			mesh.createSubmesh();
+	//			mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
 	//		}
 
 	//		// Construction des faces
