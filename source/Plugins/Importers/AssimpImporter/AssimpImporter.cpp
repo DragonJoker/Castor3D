@@ -150,9 +150,10 @@ namespace c3d_assimp
 				| aiProcess_OptimizeGraph
 				| aiProcess_FixInfacingNormals
 				| aiProcess_LimitBoneWeights;
-			m_importer.SetPropertyInteger( AI_CONFIG_PP_LBW_MAX_WEIGHTS, 8 ); //< Limit to 8 bone weights
 		}
 
+		m_importer.SetPropertyInteger( AI_CONFIG_PP_LBW_MAX_WEIGHTS, 8 ); //< Limit to 8 bone weights
+		m_importer.SetPropertyInteger( AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, 0 ); //< Get rid of $AssimpFbx$_PreRotation nodes
 		bool tangentSpace = false;
 		castor::String normals;
 		castor::String prefix;

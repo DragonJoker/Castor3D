@@ -63,6 +63,7 @@ namespace c3d_assimp
 		AssimpImporter & m_importer;
 		SkeletonImporter const & m_skeletons;
 		castor3d::SceneNodePtrArray & m_nodes;
+		castor3d::SceneNodePtrStrMap m_sortedNodes;
 		castor3d::GeometryPtrStrMap & m_geometries;
 		using NodeAnimGroup = std::pair< castor3d::SceneNode const *, castor3d::AnimatedObjectGroupSPtr >;
 		std::vector< NodeAnimGroup > m_animGroups;

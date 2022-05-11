@@ -23,7 +23,7 @@ namespace castor3d
 	{
 		if ( m_name.empty() )
 		{
-			m_name = cuT( "SceneNode_%d" );
+			m_name = cuT( "SceneNode_" );
 			m_name += castor::string::toString( Count );
 		}
 

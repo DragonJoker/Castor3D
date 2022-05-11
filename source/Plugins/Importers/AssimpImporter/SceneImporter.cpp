@@ -193,6 +193,7 @@ namespace c3d_assimp
 
 		if ( light )
 		{
+			m_sortedNodes.emplace( makeString( aiLight.mName ), node );
 			m_nodes.push_back( node );
 			castor::Point3f colour{ aiLight.mColorDiffuse.r, aiLight.mColorDiffuse.g, aiLight.mColorDiffuse.b };
 			auto length = float( castor::point::length( colour ) );
@@ -247,7 +248,6 @@ namespace c3d_assimp
 				node->setPosition( { position.x, position.y, position.z } );
 				node->setScale( { scale.x, scale.y, scale.z } );
 				node->setOrientation( castor::Quaternion{ castor::Point4f{ orientation.x, orientation.y, orientation.z, orientation.w } } );
-				m_nodes.push_back( node );
 				lnode = scene.addSceneNode( node->getName(), node );
 				node = lnode.lock();
 
@@ -256,11 +256,9 @@ namespace c3d_assimp
 					doProcessAnimationSceneNodes( *node, *nodeAnim.first, aiNode, *nodeAnim.second );
 				}
 			}
-			else
-			{
-				m_nodes.push_back( lnode.lock() );
-			}
 
+			m_sortedNodes.emplace( makeString( aiNode.mName ), lnode.lock() );
+			m_nodes.push_back( lnode.lock() );
 			parent = lnode.lock();
 		}
 		else
@@ -373,6 +371,18 @@ namespace c3d_assimp
 				{
 					return lookup->getName() == name;
 				} );
+			castor3d::SceneNodeSPtr node;
+
+			if ( nodeIt != m_nodes.end() )
+			{
+				node = *nodeIt;
+			}
+			else
+			{
+				auto it = m_sortedNodes.find( makeString( aiNode.mName ) );
+				CU_Require( it == m_sortedNodes.end() );
+				node = it->second;
+			}
 
 			for ( auto aiMeshIndex : castor::makeArrayView( aiNode.mMeshes, aiNode.mNumMeshes ) )
 			{
@@ -380,8 +390,6 @@ namespace c3d_assimp
 
 				if ( meshIt != meshes.end() )
 				{
-					CU_Require( nodeIt != m_nodes.end() );
-					auto node = *nodeIt;
 					auto * meshRepl = meshIt->second;
 					auto lgeom = scene.tryFindGeometry( name + castor::string::toString( aiMeshIndex ) );
 
