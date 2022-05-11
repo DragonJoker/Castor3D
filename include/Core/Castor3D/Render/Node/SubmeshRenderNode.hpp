@@ -22,7 +22,6 @@ namespace castor3d
 	{
 		using DataType = Submesh;
 		using InstanceType = Geometry;
-		using VertexType = InterleavedVertex;
 
 		C3D_API SubmeshRenderNode( SubmeshRenderNode const & ) = delete;
 		C3D_API SubmeshRenderNode( SubmeshRenderNode && ) = default;

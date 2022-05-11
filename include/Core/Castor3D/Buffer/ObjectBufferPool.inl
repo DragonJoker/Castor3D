@@ -31,6 +31,22 @@ namespace castor3d
 				, GpuBufferPackedAllocator{ uint32_t( maxCount * sizeof( DataT ) ) }
 				, smallData );
 		}
+
+		template< typename DataT >
+		GpuPackedBufferPtr createRawBuffer( RenderDevice const & device
+			, VkDeviceSize maxCount
+			, VkBufferUsageFlags usage
+			, std::string debugName
+			, bool smallData )
+		{
+			return std::make_unique< GpuPackedBuffer >( device.renderSystem
+				, usage
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+				, debugName
+				, ashes::QueueShare{}
+				, GpuBufferPackedAllocator{ uint32_t( maxCount * sizeof( DataT ) ) }
+				, smallData );
+		}
 	}
 
 	//*********************************************************************************************
@@ -54,8 +70,8 @@ namespace castor3d
 				, ptrdiff_t( m_buffers.size() - 1u ) );
 		}
 
-		result.vtxBuffer = it->vertex.get();
-		result.vtxChunk = it->vertex->allocate( size );
+		result.buffers[getIndex( SubmeshFlag::ePositions )].buffer = it->vertex.get();
+		result.buffers[getIndex( SubmeshFlag::ePositions )].chunk = it->vertex->allocate( size );
 		return result;
 	}
 

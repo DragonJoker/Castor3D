@@ -101,7 +101,10 @@ namespace castor3d
 		 *\param[in,out]	points		Les points.
 		 *\param[in]		reverted	\p true pour inverser les normales.
 		 */
-		C3D_API void computeNormals( InterleavedVertexArray & points
+		C3D_API void computeNormals( castor::Point3fArray const & positions
+			, castor::Point3fArray const & texcoords
+			, castor::Point3fArray & normals
+			, castor::Point3fArray & tangents
 			, bool reverted = false )const;
 		/**
 		 *\~english
@@ -122,7 +125,10 @@ namespace castor3d
 		 *\param[in,out]	points	Les points.
 		 *\param[in]		face	La face.
 		 */
-		C3D_API void computeNormals( InterleavedVertexArray & points
+		C3D_API void computeNormals( castor::Point3fArray const & positions
+			, castor::Point3fArray const & texcoords
+			, castor::Point3fArray & normals
+			, castor::Point3fArray & tangents
 			, Face const & face )const;
 		/**
 		 *\~english
@@ -143,7 +149,9 @@ namespace castor3d
 		 *\param[in,out]	points	Les points.
 		 *\param[in]		face	La face.
 		 */
-		C3D_API void computeTangents( InterleavedVertexArray & points
+		C3D_API void computeTangents( castor::Point3fArray const & positions
+			, castor::Point3fArray const & texcoords
+			, castor::Point3fArray & tangents
 			, Face const & face )const;
 		/**
 		 *\~english
@@ -164,7 +172,10 @@ namespace castor3d
 		 *\remarks			Cette fonction suppose que les normales sont définies.
 		 *\param[in,out]	points	Les points.
 		 */
-		C3D_API void computeTangentsFromNormals( InterleavedVertexArray & points )const;
+		C3D_API void computeTangentsFromNormals( castor::Point3fArray const & positions
+			, castor::Point3fArray const & texcoords
+			, castor::Point3fArray const & normals
+			, castor::Point3fArray & tangents )const;
 		/**
 		 *\copydoc		castor3d::IndexMapping::getCount
 		 */

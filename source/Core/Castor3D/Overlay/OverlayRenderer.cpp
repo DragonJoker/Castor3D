@@ -67,8 +67,8 @@ namespace castor3d
 			auto & bufferOffset = bufferIndex.geometryBuffers.textured.bufferOffset;
 			std::copy( begin
 				, std::next( begin, count )
-				, bufferOffset.template getVertexData< VertexT >().begin() );
-			bufferOffset.markVertexDirty();
+				, bufferOffset.template getData< VertexT >( SubmeshFlag::ePositions ).begin() );
+			bufferOffset.markDirty( SubmeshFlag::ePositions );
 			return count;
 		}
 
@@ -375,8 +375,8 @@ namespace castor3d
 			commandBuffer.bindDescriptorSet( *bufferIndex.descriptorSet
 				, *bufferIndex.node.pipeline.pipelineLayout );
 			commandBuffer.bindVertexBuffer( 0u
-				, bufferIndex.geometryBuffers.noTexture.bufferOffset.getVertexBuffer()
-				, bufferIndex.geometryBuffers.noTexture.bufferOffset.getVertexOffset() );
+				, bufferIndex.geometryBuffers.noTexture.bufferOffset.getBuffer( SubmeshFlag::ePositions )
+				, bufferIndex.geometryBuffers.noTexture.bufferOffset.getOffset( SubmeshFlag::ePositions ) );
 			commandBuffer.draw( uint32_t( vertices.size() )
 				, 1u
 				, 0u
@@ -410,7 +410,7 @@ namespace castor3d
 			, allocated.end()
 			, []( ObjectBufferOffset const & lookup )
 			{
-				return lookup.vtxBuffer == nullptr;
+				return lookup.getBufferChunk( SubmeshFlag::ePositions ).buffer == nullptr;
 			} );
 
 		if ( it == allocated.end() )

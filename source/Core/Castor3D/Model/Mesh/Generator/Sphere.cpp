@@ -1,6 +1,10 @@
 #include "Castor3D/Model/Mesh/Generator/Sphere.hpp"
 
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 
 #include "Castor3D/Miscellaneous/Parameter.hpp"
@@ -38,6 +42,10 @@ namespace castor3d
 		if ( m_nbFaces >= 3 )
 		{
 			Submesh & submesh = *mesh.createSubmesh();
+			auto positions = submesh.createComponent< PositionsComponent >();
+			auto normals = submesh.createComponent< NormalsComponent >();
+			auto tangents = submesh.createComponent< TangentsComponent >();
+			auto texcoords = submesh.createComponent< TexcoordsComponent >();
 			float rAngle = castor::PiMult2< float > / float( m_nbFaces );
 			std::vector< castor::Point2f > arc( m_nbFaces + 1u );
 			float rAlpha = 0;
@@ -55,7 +63,7 @@ namespace castor3d
 				rAlpha += rAngle / 2;
 			}
 
-			auto indexMapping = std::make_shared< TriFaceMapping >( submesh );
+			auto indexMapping = submesh.createComponent< TriFaceMapping >();
 
 			for ( uint32_t k = 0; k < m_nbFaces; k++ )
 			{
@@ -106,7 +114,6 @@ namespace castor3d
 			}
 
 			indexMapping->computeTangentsFromNormals();
-			submesh.setIndexMapping( indexMapping );
 		}
 
 		mesh.computeContainers();

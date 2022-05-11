@@ -63,7 +63,7 @@ namespace castor3d
 		static VkDeviceSize compareOffsets( ObjectBufferOffset const & lhs
 			, ObjectBufferOffset const & rhs )
 		{
-			auto result = lhs.getVertexOffset() >= rhs.getVertexOffset();
+			auto result = lhs.getOffset( SubmeshFlag::ePositions ) >= rhs.getOffset( SubmeshFlag::ePositions );
 			return result;
 		}
 
@@ -85,8 +85,8 @@ namespace castor3d
 				, *node.pass
 				, checkFlag( flags.programFlags, ProgramFlag::eInvertNormals ) );
 
-			auto & bufferOffsets = node.data.getBufferOffsets();
-			auto buffer = &bufferOffsets.vtxBuffer->getBuffer().getBuffer();
+			auto & bufferChunk = node.data.getBufferOffsets().getBufferChunk( SubmeshFlag::ePositions );
+			auto buffer = &bufferChunk.buffer->getBuffer().getBuffer();
 			auto & pipelineMap = nodes.emplace( baseHash, std::make_pair( &pipeline, NodePtrByBufferMapT< NodeT >{} ) ).first->second.second;
 			auto & bufferMap = pipelineMap.emplace( buffer, NodePtrArrayT< NodeT >{} ).first->second;
 			auto it = std::find_if( bufferMap.begin()
@@ -110,8 +110,8 @@ namespace castor3d
 				, *node.pass
 				, checkFlag( flags.programFlags, ProgramFlag::eInvertNormals ) );
 
-			auto & bufferOffsets = node.data.getBufferOffsets();
-			auto buffer = &bufferOffsets.vtxBuffer->getBuffer().getBuffer();
+			auto & bufferChunk = node.data.getBufferOffsets().getBufferChunk( SubmeshFlag::ePositions );
+			auto buffer = &bufferChunk.buffer->getBuffer().getBuffer();
 			auto & pipelineMap = nodes.emplace( baseHash, std::make_pair( &pipeline, ObjectNodesPtrByBufferMapT< NodeT >{} ) ).first->second.second;
 			auto & bufferMap = pipelineMap.emplace( buffer, ObjectNodesPtrByPassT< NodeT >{} ).first->second;
 			auto & passMap = bufferMap.emplace( node.pass, ObjectNodesPtrMapT< NodeT >{} ).first->second;
@@ -173,6 +173,26 @@ namespace castor3d
 			}
 		}
 
+		static bool isBufferEnabled( uint32_t submeshFlagIndex
+			, ShaderFlags shaderFlags
+			, PipelineFlags const & pipelineFlags )
+		{
+			if ( submeshFlagIndex == getIndex( SubmeshFlag::eTangents )
+				|| submeshFlagIndex == getIndex( SubmeshFlag::eMorphTangents ) )
+			{
+				return checkFlag( shaderFlags, ShaderFlag::eTangentSpace );
+			}
+
+			if ( submeshFlagIndex == getIndex( SubmeshFlag::eTexcoords )
+				|| submeshFlagIndex == getIndex( SubmeshFlag::eMorphTexcoords ) )
+			{
+				return !pipelineFlags.textures.empty()
+					|| checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eForceTexCoords );
+			}
+
+			return true;
+		}
+
 		template< typename NodeT >
 		static void doAddGeometryNodeCommands( RenderPipeline const & pipeline
 			, NodeT const & node
@@ -190,20 +210,31 @@ namespace castor3d
 				, *node.pass->getOwner()
 				, node.pass->getTexturesMask()
 				, checkFlag( pipeline.getFlags().submeshFlags, SubmeshFlag::eForceTexCoords ) );
-			commandBuffer.bindVertexBuffer( geometryBuffers.layouts[0].get().vertexBindingDescriptions[0].binding
-				, geometryBuffers.bufferOffset.getVertexBuffer()
-				, 0u );
+			uint32_t currentLayout = 0u;
+
+			for ( uint32_t i = 1u; i < getIndex( SubmeshFlag::eAllComponents ); ++i )
+			{
+				if ( geometryBuffers.bufferOffset.buffers[i].buffer
+					&& isBufferEnabled( i, pipeline.getOwner()->getShaderFlags(), pipeline.getFlags() ) )
+				{
+					commandBuffer.bindVertexBuffer( geometryBuffers.layouts[currentLayout].get().vertexBindingDescriptions[0].binding
+						, geometryBuffers.bufferOffset.buffers[i].getBuffer()
+						, 0u );
+					++currentLayout;
+				}
+			}
 
 			for ( uint32_t i = 0u; i < geometryBuffers.other.size(); ++i )
 			{
-				commandBuffer.bindVertexBuffer( geometryBuffers.layouts[i + 1u].get().vertexBindingDescriptions[0].binding
+				commandBuffer.bindVertexBuffer( geometryBuffers.layouts[currentLayout].get().vertexBindingDescriptions[0].binding
 					, geometryBuffers.other[i]
 					, geometryBuffers.otherOffsets[i] );
+				++currentLayout;
 			}
 
-			if ( geometryBuffers.bufferOffset.idxBuffer )
+			if ( geometryBuffers.bufferOffset.hasData( SubmeshFlag::eIndex ) )
 			{
-				commandBuffer.bindIndexBuffer( geometryBuffers.bufferOffset.getIndexBuffer()
+				commandBuffer.bindIndexBuffer( geometryBuffers.bufferOffset.getBuffer( SubmeshFlag::eIndex )
 					, 0u
 					, VK_INDEX_TYPE_UINT32 );
 				commandBuffer.drawIndexedIndirect( indirectIndexedCommands.getBuffer()
@@ -432,12 +463,13 @@ namespace castor3d
 						auto culledNode = culled.node;
 						auto & billboard = culledNode->data;
 						auto & pass = *culledNode->pass;
+						auto submeshFlags = billboard.getSubmeshFlags();
 						auto programFlags = billboard.getProgramFlags();
 						auto sceneFlags = scene.getFlags();
 						auto textures = pass.getTexturesMask();
 						auto pipelineFlags = renderPass.createPipelineFlags( pass
 							, textures
-							, SubmeshFlags{}
+							, submeshFlags
 							, programFlags
 							, sceneFlags
 							, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP

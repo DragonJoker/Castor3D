@@ -4,6 +4,10 @@
 #include "Castor3D/Buffer/GeometryBuffers.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp"
 
@@ -14,7 +18,7 @@ namespace castor3d
 	namespace v1_3
 	{
 		template< typename T >
-		inline void doCopyVertices( uint32_t count
+		inline void copyVertices( uint32_t count
 			, OldInterleavedVertexT< T > const * src
 			, InterleavedVertex * dst )
 		{
@@ -40,14 +44,62 @@ namespace castor3d
 
 	//*************************************************************************************************
 
+	namespace v1_5
+	{
+		inline void dispatchVertices( InterleavedVertexArray const & src
+			, castor::Point3fArray & pos
+			, castor::Point3fArray & nml
+			, castor::Point3fArray & tan
+			, castor::Point3fArray & tex )
+		{
+			pos.reserve( src.size() );
+			nml.reserve( src.size() );
+			tan.reserve( src.size() );
+			tex.reserve( src.size() );
+
+			for ( auto & vertex : src )
+			{
+				pos.push_back( vertex.pos );
+				nml.push_back( vertex.nml );
+				tan.push_back( vertex.tan );
+				tex.push_back( vertex.tex );
+			}
+		}
+	}
+
+	//*************************************************************************************************
+
 	bool BinaryWriter< Submesh >::doWrite( Submesh const & obj )
 	{
 		auto count = obj.getPointsCount();
 		bool result = doWriteChunk( count, ChunkType::eSubmeshVertexCount, m_chunk );
 
-		if ( result )
+		if ( result
+			&& obj.hasComponent( PositionsComponent::Name ) )
 		{
-			result = doWriteChunk( obj.getPoints(), ChunkType::eSubmeshVertex, m_chunk );
+			auto & values = obj.getComponent< PositionsComponent >()->getData();
+			result = doWriteChunk( values, ChunkType::eSubmeshPositions, m_chunk );
+		}
+
+		if ( result
+			&& obj.hasComponent( NormalsComponent::Name ) )
+		{
+			auto & values = obj.getComponent< NormalsComponent >()->getData();
+			result = doWriteChunk( values, ChunkType::eSubmeshNormals, m_chunk );
+		}
+
+		if ( result
+			&& obj.hasComponent( TangentsComponent::Name ) )
+		{
+			auto & values = obj.getComponent< TangentsComponent >()->getData();
+			result = doWriteChunk( values, ChunkType::eSubmeshTangents, m_chunk );
+		}
+
+		if ( result
+			&& obj.hasComponent( TexcoordsComponent::Name ) )
+		{
+			auto & values = obj.getComponent< TexcoordsComponent >()->getData();
+			result = doWriteChunk( values, ChunkType::eSubmeshTexcoords, m_chunk );
 		}
 
 		if ( result )
@@ -111,96 +163,99 @@ namespace castor3d
 		castor::String name;
 		std::vector< FaceIndices > faces;
 		std::vector< LineIndices > lines;
-		std::vector< VertexBoneData > bones;
-		std::vector< InterleavedVertex > vertices;
+		std::vector< castor::Point3f > values;
 		uint32_t count{ 0u };
 		uint32_t components{ 0u };
 		uint32_t faceCount{ 0u };
-		uint32_t boneCount{ 0u };
 		BinaryChunk chunk;
-		std::shared_ptr< BonesComponent > bonesComponent;
 
 		while ( result && doGetSubChunk( chunk ) )
 		{
 			switch ( chunk.getChunkType() )
 			{
 			case ChunkType::eSubmeshVertexCount:
-				if ( m_fileVersion > Version{ 1, 3, 0 } )
+				if ( m_fileVersion > Version{ 1, 5, 0 } )
 				{
 					result = doParseChunk( count, chunk );
 					checkError( result, "Couldn't parse vertex count." );
 
 					if ( result )
 					{
-						vertices.resize( count );
+						values.resize( count );
 					}
 				}
 				break;
-
-			case ChunkType::eSubmeshVertex:
-				if ( m_fileVersion > Version{ 1, 3, 0 } )
+			case ChunkType::eSubmeshPositions:
+				if ( auto component = std::make_shared< PositionsComponent >( obj ) )
 				{
-					result = doParseChunk( vertices, chunk );
-					checkError( result, "Couldn't parse vertex data." );
+					component->getData().resize( count );
+					result = doParseChunk( component->getData(), chunk );
+					checkError( result, "Couldn't parse vertex positions." );
 
-					if ( result && !vertices.empty() )
+					if ( result )
 					{
-						obj.addPoints( vertices );
+						obj.addComponent( component );
 					}
 				}
 				break;
-
-			case ChunkType::eSubmeshBoneCount:
-				if ( !bonesComponent )
+			case ChunkType::eSubmeshNormals:
+				if ( auto component = std::make_shared< NormalsComponent >( obj ) )
 				{
-					bonesComponent = std::make_shared< BonesComponent >( obj );
-					obj.addComponent( bonesComponent );
+					component->getData().resize( count );
+					result = doParseChunk( component->getData(), chunk );
+					checkError( result, "Couldn't parse vertex normals." );
+
+					if ( result )
+					{
+						obj.addComponent( component );
+					}
 				}
-
-				result = doParseChunk( count, chunk );
-				checkError( result, "Couldn't parse bones count." );
-
-				if ( result )
-				{
-					boneCount = count;
-					bones.resize( count );
-				}
-
 				break;
-
-			case ChunkType::eSubmeshBones:
-				result = doParseChunk( bones, chunk );
-				checkError( result, "Couldn't parse bones data." );
-
-				if ( result && boneCount > 0 )
+			case ChunkType::eSubmeshTangents:
+				if ( auto component = std::make_shared< TangentsComponent >( obj ) )
 				{
-					bonesComponent->addBoneDatas( bones );
+					component->getData().resize( count );
+					result = doParseChunk( component->getData(), chunk );
+					checkError( result, "Couldn't parse vertex tangents." );
+
+					if ( result )
+					{
+						obj.addComponent( component );
+					}
 				}
-
-				boneCount = 0u;
 				break;
+			case ChunkType::eSubmeshTexcoords:
+				if ( auto component = std::make_shared< TexcoordsComponent >( obj ) )
+				{
+					component->getData().resize( count );
+					result = doParseChunk( component->getData(), chunk );
+					checkError( result, "Couldn't parse vertex texcoords." );
 
+					if ( result )
+					{
+						obj.addComponent( component );
+					}
+				}
+				break;
 			case ChunkType::eBonesComponent:
-				bonesComponent = std::make_shared< BonesComponent >( obj );
-				result = createBinaryParser< BonesComponent >().parse( *bonesComponent, chunk );
-				checkError( result, "Couldn't parse bones component." );
-
-				if ( result )
+				if ( auto component = std::make_shared< BonesComponent >( obj ) )
 				{
-					obj.addComponent( bonesComponent );
+					result = createBinaryParser< BonesComponent >().parse( *component, chunk );
+					checkError( result, "Couldn't parse bones component." );
+
+					if ( result )
+					{
+						obj.addComponent( component );
+					}
 				}
-
 				break;
-
 			case ChunkType::eSubmeshIndexComponentCount:
 				result = doParseChunk( components, chunk );
 				checkError( result, "Couldn't parse index component size." );
 				break;
-
 			case ChunkType::eSubmeshIndexCount:
 				result = doParseChunk( count, chunk );
 				checkError( result, "Couldn't parse index count." );
-
 				if ( result )
 				{
 					faceCount = count;
@@ -214,11 +269,8 @@ namespace castor3d
 						lines.resize( count );
 					}
 				}
-
 				break;
-
 			case ChunkType::eSubmeshIndices:
-
 				if ( faceCount > 0 )
 				{
 					if ( components == 3u )
@@ -228,9 +280,8 @@ namespace castor3d
 
 						if ( result )
 						{
-							auto indexMapping = std::make_shared< TriFaceMapping >( obj );
+							auto indexMapping = obj.createComponent< TriFaceMapping >();
 							indexMapping->addFaceGroup( faces );
-							obj.setIndexMapping( indexMapping );
 						}
 					}
 					else if ( components == 2u )
@@ -240,16 +291,13 @@ namespace castor3d
 
 						if ( result )
 						{
-							auto indexMapping = std::make_shared< LinesMapping >( obj );
+							auto indexMapping = obj.createComponent< LinesMapping >();
 							indexMapping->addLineGroup( lines );
-							obj.setIndexMapping( indexMapping );
 						}
 					}
 				}
-
 				faceCount = 0u;
 				break;
-
 			default:
 				break;
 			}
@@ -269,6 +317,9 @@ namespace castor3d
 			uint32_t count{ 0u };
 			uint32_t faceCount{ 0u };
 			BinaryChunk chunk;
+			uint32_t boneCount{ 0u };
+			std::vector< VertexBoneData > bones;
+			std::shared_ptr< BonesComponent > bonesComponent;
 
 			while ( result && doGetSubChunk( chunk ) )
 			{
@@ -277,27 +328,36 @@ namespace castor3d
 				case ChunkType::eSubmeshVertexCount:
 					result = doParseChunk( count, chunk );
 					checkError( result, "Couldn't parse vertex count." );
-
 					if ( result )
 					{
 						srcbuf.resize( count );
 					}
-
 					break;
 
+#pragma warning( push )
+#pragma warning( disable: 4996 )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 				case ChunkType::eSubmeshVertex:
+#pragma GCC diagnostic pop
+#pragma warning( pop )
 					result = doParseChunk( srcbuf, chunk );
 					checkError( result, "Couldn't parse vertex data." );
-
 					if ( result && !srcbuf.empty() )
 					{
 						std::vector< InterleavedVertex > dstbuf( srcbuf.size() );
-						v1_3::doCopyVertices( uint32_t( srcbuf.size() ), srcbuf.data(), dstbuf.data() );
-						obj.addPoints( dstbuf );
+						v1_3::copyVertices( uint32_t( srcbuf.size() ), srcbuf.data(), dstbuf.data() );
+						auto positions = obj.createComponent< PositionsComponent >();
+						auto normals = obj.createComponent< NormalsComponent >();
+						auto tangents = obj.createComponent< TangentsComponent >();
+						auto texcoords = obj.createComponent< TexcoordsComponent >();
+						v1_5::dispatchVertices( dstbuf
+							, positions->getData()
+							, normals->getData()
+							, tangents->getData()
+							, texcoords->getData() );
 					}
-
 					break;
-
 #pragma warning( push )
 #pragma warning( disable: 4996 )
 #pragma GCC diagnostic push
@@ -307,15 +367,12 @@ namespace castor3d
 #pragma warning( pop )
 					result = doParseChunk( count, chunk );
 					checkError( result, "Couldn't parse faces count." );
-
 					if ( result )
 					{
 						faceCount = count;
 						faces.resize( count );
 					}
-
 					break;
-
 #pragma warning( push )
 #pragma warning( disable: 4996 )
 #pragma GCC diagnostic push
@@ -325,10 +382,9 @@ namespace castor3d
 #pragma warning( pop )
 					result = doParseChunk( faces, chunk );
 					checkError( result, "Couldn't parse faces data." );
-
 					if ( result && faceCount > 0 )
 					{
-						auto indexMapping = std::make_shared< TriFaceMapping >( obj );
+						auto indexMapping = obj.createComponent< TriFaceMapping >();
 
 						for ( auto & face : faces )
 						{
@@ -336,12 +392,92 @@ namespace castor3d
 						}
 
 						indexMapping->addFaceGroup( faces );
-						obj.setIndexMapping( indexMapping );
 					}
-
 					faceCount = 0u;
 					break;
+				case ChunkType::eSubmeshBoneCount:
+					if ( !bonesComponent )
+					{
+						bonesComponent = std::make_shared< BonesComponent >( obj );
+						obj.addComponent( bonesComponent );
+					}
+					result = doParseChunk( count, chunk );
+					checkError( result, "Couldn't parse bones count." );
+					if ( result )
+					{
+						boneCount = count;
+						bones.resize( count );
+					}
+					break;
+				case ChunkType::eSubmeshBones:
+					result = doParseChunk( bones, chunk );
+					checkError( result, "Couldn't parse bones data." );
+					if ( result && boneCount > 0 )
+					{
+						bonesComponent->addBoneDatas( bones );
+					}
+					boneCount = 0u;
+					break;
+				default:
+					break;
+				}
+			}
+		}
 
+		return result;
+	}
+
+	bool BinaryParser< Submesh >::doParse_v1_5( Submesh & obj )
+	{
+		bool result = true;
+
+		if ( m_fileVersion <= Version{ 1, 5, 0 } )
+		{
+			BinaryChunk chunk;
+			uint32_t count{};
+			std::vector< InterleavedVertex > vertices;
+
+			while ( result && doGetSubChunk( chunk ) )
+			{
+				switch ( chunk.getChunkType() )
+				{
+				case ChunkType::eSubmeshVertexCount:
+					if ( m_fileVersion > Version{ 1, 3, 0 } )
+					{
+						result = doParseChunk( count, chunk );
+						checkError( result, "Couldn't parse vertex count." );
+						if ( result )
+						{
+							vertices.resize( count );
+						}
+					}
+					break;
+#pragma warning( push )
+#pragma warning( disable: 4996 )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+				case ChunkType::eSubmeshVertex:
+#pragma GCC diagnostic pop
+#pragma warning( pop )
+					if ( m_fileVersion > Version{ 1, 3, 0 } )
+					{
+						result = doParseChunk( vertices, chunk );
+						checkError( result, "Couldn't parse vertex data." );
+
+						if ( result && !vertices.empty() )
+						{
+							auto positions = obj.createComponent< PositionsComponent >();
+							auto normals = obj.createComponent< NormalsComponent >();
+							auto tangents = obj.createComponent< TangentsComponent >();
+							auto texcoords = obj.createComponent< TexcoordsComponent >();
+							v1_5::dispatchVertices( vertices
+								, positions->getData()
+								, normals->getData()
+								, tangents->getData()
+								, texcoords->getData() );
+						}
+					}
+					break;
 				default:
 					break;
 				}

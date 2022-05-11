@@ -17,7 +17,6 @@ namespace castor3d
 	{
 		using DataType = BillboardBase;
 		using InstanceType = BillboardBase;
-		using VertexType = BillboardVertex;
 
 		C3D_API BillboardRenderNode( BillboardRenderNode const & ) = delete;
 		C3D_API BillboardRenderNode( BillboardRenderNode && ) = default;

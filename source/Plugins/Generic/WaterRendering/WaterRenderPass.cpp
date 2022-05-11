@@ -555,7 +555,7 @@ namespace water
 		FragmentWriter writer;
 
 		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = !flags.textures.empty();
+		bool hasTextures = flags.hasTextures();
 		bool hasDiffuseGI = checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing )
 			|| checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
 			|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
@@ -650,9 +650,11 @@ namespace water
 				auto normal = writer.declLocale( "normal"
 					, normalize( in.normal ) );
 				auto tangent = writer.declLocale( "tangent"
-					, normalize( in.tangent ) );
+					, normalize( in.tangent )
+					, checkFlag( flags.submeshFlags, SubmeshFlag::eTangents ) );
 				auto bitangent = writer.declLocale( "bitangent"
-					, normalize( in.bitangent ) );
+					, normalize( in.bitangent )
+					, checkFlag( flags.submeshFlags, SubmeshFlag::eTangents ) );
 
 				auto normalMapCoords1 = writer.declLocale( "normalMapCoords1"
 					, in.texture0.xy() + c3d_waterData.time * c3d_waterData.normalMapScroll.xy() * c3d_waterData.normalMapScrollSpeed.x() );

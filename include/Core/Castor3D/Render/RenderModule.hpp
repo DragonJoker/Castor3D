@@ -321,7 +321,7 @@ namespace castor3d
 			, RenderPassTypeID renderPassType = 0u
 			, PassTypeID passType = 0u
 			, uint32_t heightMapIndex = InvalidIndex
-			, SubmeshFlags submeshFlags = SubmeshFlag::eNone
+			, SubmeshFlags submeshFlags = SubmeshFlag::eIndex
 			, ProgramFlags programFlags = ProgramFlag::eNone
 			, SceneFlags sceneFlags = SceneFlag::eNone
 			, VkPrimitiveTopology topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
@@ -365,6 +365,12 @@ namespace castor3d
 		TextureFlagsArray textures;
 		TextureFlags texturesFlags;
 		uint32_t layerIndex;
+
+		bool hasTextures()const
+		{
+			return checkFlag( submeshFlags, SubmeshFlag::eForceTexCoords )
+				|| ( !textures.empty() && checkFlag( submeshFlags, SubmeshFlag::eTexcoords ) );
+		}
 	};
 	C3D_API bool operator==( PipelineFlags const & lhs, PipelineFlags const & rhs );
 	/**

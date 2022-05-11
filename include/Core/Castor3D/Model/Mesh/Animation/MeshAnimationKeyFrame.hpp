@@ -37,7 +37,7 @@ namespace castor3d
 		 *\brief		Ajoute un tampon de sous-maillage.
 		 */
 		C3D_API void addSubmeshBuffer( Submesh const & submesh
-			, InterleavedVertexArray const & buffer );
+			, SubmeshAnimationBuffer buffer );
 		/**
 		 *\~english
 		 *\return		The submesh buffer matching given submesh.

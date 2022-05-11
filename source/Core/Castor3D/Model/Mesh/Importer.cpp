@@ -174,9 +174,9 @@ namespace castor3d
 
 					for ( auto submesh : mesh )
 					{
-						for ( auto & vertex : submesh->getPoints() )
+						for ( auto & vertex : submesh->getPositions() )
 						{
-							vertex.pos = transform * vertex.pos;
+							vertex = transform * vertex;
 						}
 
 						submesh->computeNormals( true );

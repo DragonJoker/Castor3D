@@ -8,6 +8,9 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Graphics/BoundingBox.hpp>
 #include <CastorUtils/Graphics/BoundingSphere.hpp>
+#include <CastorUtils/Miscellaneous/BitSize.hpp>
+
+#include <cstdint>
 
 namespace castor3d
 {
@@ -29,35 +32,64 @@ namespace castor3d
 	enum class SubmeshFlag
 		: uint32_t
 	{
-		//!\~english	No flag.
-		//!\~french		Aucun indicateur.
-		eNone = 0x0000,
+		//!\~english	The submesh has indices (always).
+		//!\~french		Le submesh a des indices (toujours).
+		eIndex = 0x0000,
+		//!\~english	The submesh has positions.
+		//!\~french		Le submesh a des positions.
+		ePositions = 0x0001,
+		//!\~english	The submesh has normals.
+		//!\~french		Le submesh a des normales.
+		eNormals = 0x0002,
 		//!\~english	The submesh has tangents.
 		//!\~french		Le submesh a des tangentes.
-		eTangents = 0x0001,
+		eTangents = 0x0004,
 		//!\~english	Submesh has texture coordinates.
 		//!\~french		Le submesh a des coordonnées de texture.
-		eTexcoords = 0x0002,
+		eTexcoords = 0x0008,
+		//!\~english	The submesh has morphing positions.
+		//!\~french		Le submesh a des positions de morphing.
+		eMorphPositions = 0x0010,
+		//!\~english	The submesh has morphing normals.
+		//!\~french		Le submesh a des normales de morphing.
+		eMorphNormals = 0x0020,
+		//!\~english	The submesh has morphing tangents.
+		//!\~french		Le submesh a des tangentes de morphing.
+		eMorphTangents = 0x0040,
+		//!\~english	The submesh has morphing texture coordinates.
+		//!\~french		Le submesh a des coordonnées de texture de morphing.
+		eMorphTexcoords = 0x0080,
+		//!\~english	Submesh has bones data.
+		//!\~french		Submesh a des données d'os.
+		eBones = 0x0100,
 		//!\~english	Submesh has a second set of texture coordinates.
 		//!\~french		Le submesh a un second set de coordonnées de texture.
-		eSecondaryUV = 0x0004,
-		//!\~english	Submesh using instanciation.
-		//!\~french		Submesh utilisant l'instanciation.
-		eInstantiation = 0x0008,
-		//!\~english	Submesh using skeleton animations.
-		//!\~french		Submesh utilisant les animations par squelette.
-		eSkinning = 0x0010,
+		eSecondaryUV = 0x0200,
+		//!\~english	All component flags.
+		//\~french		Tous les indicateurs de composant.
+		eAllComponents = 0x07FF,
 		//!\~english	Submesh using per-vertex animations.
 		//!\~french		Submesh utilisant les animations par sommet.
-		eMorphing = 0x0020,
+		eMorphing = 0x0400,
+		//!\~english	Submesh using skeleton animations.
+		//!\~french		Submesh utilisant les animations par squelette.
+		eSkinning = 0x0800,
+		//!\~english	Submesh using instanciation.
+		//!\~french		Submesh utilisant l'instanciation.
+		eInstantiation = 0x1000,
 		//!\~english	Forces texcoords binding.
 		//\~french		Force le binding des UV.
-		eForceTexCoords = 0x0040,
+		eForceTexCoords = 0x2000,
 		//!\~english	All flags.
 		//\~french		Tous les indicateurs.
-		eAll = 0x007F,
+		eAll = 0x3FFF,
 	};
 	CU_ImplementFlags( SubmeshFlag )
+
+	static constexpr uint32_t getIndex( SubmeshFlag value )
+	{
+		return uint32_t( castor::getBitSize( uint32_t( value ) ) );
+	}
 	/**
 	*\~english
 	*\brief
@@ -76,10 +108,19 @@ namespace castor3d
 	{
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
-		InterleavedVertexArray buffer;
+		castor::Point3fArray positions;
+		//!\~english	The vertex buffer.
+		//!\~french		Le tampon de sommets.
+		castor::Point3fArray normals;
+		//!\~english	The vertex buffer.
+		//!\~french		Le tampon de sommets.
+		castor::Point3fArray tangents;
+		//!\~english	The vertex buffer.
+		//!\~french		Le tampon de sommets.
+		castor::Point3fArray texcoords;
 		//!\~english	The bounding box.
 		//!\~french		La bounding box.
-		castor::BoundingBox boundingBox;
+		castor::BoundingBox boundingBox{};
 	};
 
 	CU_DeclareSmartPtr( Submesh );

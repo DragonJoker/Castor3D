@@ -6,31 +6,34 @@
 
 namespace castor3d
 {
-	void SubmeshUtils::computeFacesFromPolygonVertex( InterleavedVertexArray & points
+	void SubmeshUtils::computeFacesFromPolygonVertex( castor::Point3fArray & texcoords
 		, TriFaceMapping & triFace )
 	{
-		if ( !points.empty() )
+		if ( !texcoords.empty() )
 		{
-			auto * v1 = &points[0];
-			auto * v2 = &points[1];
-			auto * v3 = &points[2];
+			auto * v1 = &texcoords[0];
+			auto * v2 = &texcoords[1];
+			auto * v3 = &texcoords[2];
 			triFace.addFace( 0, 1, 2 );
-			v1->tex = castor::Point3f{ 0.0, 0.0, 0.0 };
-			v2->tex = castor::Point3f{ 0.0, 0.0, 0.0 };
-			v3->tex = castor::Point3f{ 0.0, 0.0, 0.0 };
+			*v1 = castor::Point3f{ 0.0, 0.0, 0.0 };
+			*v2 = castor::Point3f{ 0.0, 0.0, 0.0 };
+			*v3 = castor::Point3f{ 0.0, 0.0, 0.0 };
 
-			for ( uint32_t i = 2; i < uint32_t( points.size() - 1 ); i++ )
+			for ( uint32_t i = 2; i < uint32_t( texcoords.size() - 1 ); i++ )
 			{
-				v2 = &points[i];
-				v3 = &points[i + 1];
+				v2 = &texcoords[i];
+				v3 = &texcoords[i + 1];
 				triFace.addFace( 0, i, i + 1 );
-				v2->tex = castor::Point3f{ 0.0, 0.0, 0.0 };
-				v3->tex = castor::Point3f{ 0.0, 0.0, 0.0 };
+				*v2 = castor::Point3f{ 0.0, 0.0, 0.0 };
+				*v3 = castor::Point3f{ 0.0, 0.0, 0.0 };
 			}
 		}
 	}
 
-	void SubmeshUtils::computeNormals( InterleavedVertexArray & points
+	void SubmeshUtils::computeNormals( castor::Point3fArray const & positions
+		, castor::Point3fArray const & texcoords
+		, castor::Point3fArray & normals
+		, castor::Point3fArray & tangents
 		, TriFaceMapping const & triFace
 		, bool reverted )
 	{
@@ -38,10 +41,14 @@ namespace castor3d
 		castor::Point3f pt0;
 
 		// First we flush normals and tangents
-		for ( auto & pt : points )
+		for ( auto & pt : normals )
 		{
-			pt.nml = pt0;
-			pt.tan = pt0;
+			pt = pt0;
+		}
+
+		for ( auto & pt : tangents )
+		{
+			pt = pt0;
 		}
 
 		castor::Coords3f coord;
@@ -49,71 +56,151 @@ namespace castor3d
 		// Then we compute normals and tangents
 		if ( reverted )
 		{
-			for ( auto const & face : faces )
+			if ( texcoords.empty() )
 			{
-				auto & vtx1 = points[face[0]];
-				auto & vtx2 = points[face[2]];
-				auto & vtx3 = points[face[1]];
-				auto const vec2m1 = vtx2.pos - vtx1.pos;
-				auto const vec3m1 = vtx3.pos - vtx1.pos;
-				auto const tex2m1 = vtx2.tex - vtx1.tex;
-				auto const tex3m1 = vtx3.tex - vtx1.tex;
-				auto const faceNormal = -castor::point::cross( vec3m1, vec2m1 );
-				auto const faceTangent = ( vec3m1 * tex2m1[1] ) - ( vec2m1 * tex3m1[1] );
-				vtx1.nml += faceNormal;
-				vtx2.nml += faceNormal;
-				vtx3.nml += faceNormal;
-				vtx1.tan += faceTangent;
-				vtx2.tan += faceTangent;
-				vtx3.tan += faceTangent;
+				for ( auto const & face : faces )
+				{
+					auto & pos1 = positions[face[0]];
+					auto & pos2 = positions[face[2]];
+					auto & pos3 = positions[face[1]];
+					auto & nml1 = normals[face[0]];
+					auto & nml2 = normals[face[2]];
+					auto & nml3 = normals[face[1]];
+					auto const vec2m1 = pos2 - pos1;
+					auto const vec3m1 = pos3 - pos1;
+					auto const faceNormal = -castor::point::cross( vec3m1, vec2m1 );
+					nml1 += faceNormal;
+					nml2 += faceNormal;
+					nml3 += faceNormal;
+				}
+			}
+			else
+			{
+				for ( auto const & face : faces )
+				{
+					auto & pos1 = positions[face[0]];
+					auto & pos2 = positions[face[2]];
+					auto & pos3 = positions[face[1]];
+					auto & nml1 = normals[face[0]];
+					auto & nml2 = normals[face[2]];
+					auto & nml3 = normals[face[1]];
+					auto const vec2m1 = pos2 - pos1;
+					auto const vec3m1 = pos3 - pos1;
+					auto const faceNormal = -castor::point::cross( vec3m1, vec2m1 );
+					nml1 += faceNormal;
+					nml2 += faceNormal;
+					nml3 += faceNormal;
+
+					auto & tex1 = texcoords[face[0]];
+					auto & tex2 = texcoords[face[2]];
+					auto & tex3 = texcoords[face[1]];
+					auto & tan1 = tangents[face[0]];
+					auto & tan2 = tangents[face[2]];
+					auto & tan3 = tangents[face[1]];
+					auto const tex2m1 = tex2 - tex1;
+					auto const tex3m1 = tex3 - tex1;
+					auto const faceTangent = ( vec3m1 * tex2m1[1] ) - ( vec2m1 * tex3m1[1] );
+					tan1 += faceTangent;
+					tan2 += faceTangent;
+					tan3 += faceTangent;
+				}
 			}
 		}
 		else
 		{
-			for ( auto const & face : faces )
+			if ( texcoords.empty() )
 			{
-				auto & vtx1 = points[face[0]];
-				auto & vtx2 = points[face[1]];
-				auto & vtx3 = points[face[2]];
-				auto const vec2m1 = vtx2.pos - vtx1.pos;
-				auto const vec3m1 = vtx3.pos - vtx1.pos;
-				auto const tex2m1 = vtx2.tex - vtx1.tex;
-				auto const tex3m1 = vtx3.tex - vtx1.tex;
-				auto const faceNormal = -castor::point::cross( vec3m1, vec2m1 );
-				auto const faceTangent = ( vec3m1 * tex2m1[1] ) - ( vec2m1 * tex3m1[1] );
-				vtx1.nml += faceNormal;
-				vtx2.nml += faceNormal;
-				vtx3.nml += faceNormal;
-				vtx1.tan += faceTangent;
-				vtx2.tan += faceTangent;
-				vtx3.tan += faceTangent;
+				for ( auto const & face : faces )
+				{
+					auto & pos1 = positions[face[0]];
+					auto & pos2 = positions[face[1]];
+					auto & pos3 = positions[face[2]];
+					auto & nml1 = normals[face[0]];
+					auto & nml2 = normals[face[1]];
+					auto & nml3 = normals[face[2]];
+					auto const vec2m1 = pos2 - pos1;
+					auto const vec3m1 = pos3 - pos1;
+					auto const faceNormal = -castor::point::cross( vec3m1, vec2m1 );
+					nml1 += faceNormal;
+					nml2 += faceNormal;
+					nml3 += faceNormal;
+				}
+			}
+			else
+			{
+				for ( auto const & face : faces )
+				{
+					auto & pos1 = positions[face[0]];
+					auto & pos2 = positions[face[1]];
+					auto & pos3 = positions[face[2]];
+					auto & nml1 = normals[face[0]];
+					auto & nml2 = normals[face[1]];
+					auto & nml3 = normals[face[2]];
+					auto const vec2m1 = pos2 - pos1;
+					auto const vec3m1 = pos3 - pos1;
+					auto const faceNormal = -castor::point::cross( vec3m1, vec2m1 );
+					nml1 += faceNormal;
+					nml2 += faceNormal;
+					nml3 += faceNormal;
+
+					auto & tex1 = texcoords[face[0]];
+					auto & tex2 = texcoords[face[1]];
+					auto & tex3 = texcoords[face[2]];
+					auto & tan1 = tangents[face[0]];
+					auto & tan2 = tangents[face[1]];
+					auto & tan3 = tangents[face[2]];
+					auto const tex2m1 = tex2 - tex1;
+					auto const tex3m1 = tex3 - tex1;
+					auto const faceTangent = ( vec3m1 * tex2m1[1] ) - ( vec2m1 * tex3m1[1] );
+					tan1 += faceTangent;
+					tan2 += faceTangent;
+					tan3 += faceTangent;
+				}
 			}
 		}
 
 		// Eventually we normalize the normals and tangents
-		for ( auto & vtx : points )
+		for ( auto & nml : normals )
 		{
-			castor::point::normalise( vtx.nml );
-			castor::point::normalise( vtx.tan );
+			castor::point::normalise( nml );
+		}
+
+		if ( !texcoords.empty() )
+		{
+			for ( auto & tan : tangents )
+			{
+				castor::point::normalise( tan );
+			}
 		}
 	}
 
-	void SubmeshUtils::computeTangentsFromNormals( InterleavedVertexArray & points
+	void SubmeshUtils::computeTangentsFromNormals( castor::Point3fArray const & positions
+		, castor::Point3fArray const & texcoords
+		, castor::Point3fArray const & normals
+		, castor::Point3fArray & tangents
 		, TriFaceMapping const & triFace )
 	{
+		if ( texcoords.empty() )
+		{
+			return;
+		}
+
 		auto & faces = triFace.getFaces();
-		castor::Point3fArray arrayTangents( points.size() );
+		tangents.resize( positions.size() );
 
 		// Pour chaque vertex, on stocke la somme des tangentes qui peuvent lui être affectées
 		for ( auto const & face : faces )
 		{
-			auto & vtx1 = points[face[0]];
-			auto & vtx2 = points[face[1]];
-			auto & vtx3 = points[face[2]];
-			auto const vec2m1 = vtx2.pos - vtx1.pos;
-			auto const vec3m1 = vtx3.pos - vtx1.pos;
-			auto const tex2m1 = vtx2.tex - vtx1.tex;
-			auto const tex3m1 = vtx3.tex - vtx1.tex;
+			auto & pos1 = positions[face[0]];
+			auto & pos2 = positions[face[1]];
+			auto & pos3 = positions[face[2]];
+			auto & tex1 = texcoords[face[0]];
+			auto & tex2 = texcoords[face[1]];
+			auto & tex3 = texcoords[face[2]];
+			auto const vec2m1 = pos2 - pos1;
+			auto const vec3m1 = pos3 - pos1;
+			auto const tex2m1 = tex2 - tex1;
+			auto const tex3m1 = tex3 - tex1;
 
 			// Calculates the triangle's area.
 			float dirCorrection = tex2m1[0] * tex3m1[1] - tex2m1[1] * tex3m1[0];
@@ -128,51 +215,70 @@ namespace castor3d
 				faceTangent[2] = dirCorrection * ( ( vec2m1[2] * tex3m1[1] ) + ( vec3m1[2] * -tex2m1[1] ) );
 			}
 
-			arrayTangents[face[0]] += faceTangent;
-			arrayTangents[face[1]] += faceTangent;
-			arrayTangents[face[2]] += faceTangent;
+			tangents[face[0]] += faceTangent;
+			tangents[face[1]] += faceTangent;
+			tangents[face[2]] += faceTangent;
 		}
 
 		uint32_t i = 0;
 		// Average tangents
-		for ( auto & value : arrayTangents )
+		for ( auto & value : tangents )
 		{
-			auto & point = points[i];
+			auto & nml = normals[i];
 			castor::Point3f tangent = castor::point::getNormalised( value );
-			tangent -= point.nml * castor::point::dot( tangent, point.nml );
-			point.tan = tangent;
+			tangent -= nml * castor::point::dot( tangent, nml );
+			value = tangent;
 			i++;
 		}
 	}
 
-	void SubmeshUtils::computeNormals( InterleavedVertexArray & points
+	void SubmeshUtils::computeNormals( castor::Point3fArray const & positions
+		, castor::Point3fArray const & texcoords
+		, castor::Point3fArray & normals
+		, castor::Point3fArray & tangents
 		, Face const & face )
 	{
-		auto & vtx1 = points[face[0]];
-		auto & vtx2 = points[face[1]];
-		auto & vtx3 = points[face[2]];
-		auto const vec2m1 = vtx2.pos - vtx1.pos;
-		auto const vec3m1 = vtx3.pos - vtx1.pos;
+		auto & vtx1 = positions[face[0]];
+		auto & vtx2 = positions[face[1]];
+		auto & vtx3 = positions[face[2]];
+		auto & nml1 = normals[face[0]];
+		auto & nml2 = normals[face[1]];
+		auto & nml3 = normals[face[2]];
+		auto const vec2m1 = vtx2 - vtx1;
+		auto const vec3m1 = vtx3 - vtx1;
 		auto const faceNormal = castor::point::getNormalised( -castor::point::cross( vec3m1, vec2m1 ) );
-		vtx1.nml += faceNormal;
-		vtx2.nml += faceNormal;
-		vtx3.nml += faceNormal;
-		computeTangents( points, face );
+		nml1 += faceNormal;
+		nml2 += faceNormal;
+		nml3 += faceNormal;
+		computeTangents( positions, texcoords, tangents, face );
 	}
 
-	void SubmeshUtils::computeTangents( InterleavedVertexArray & points
+	void SubmeshUtils::computeTangents( castor::Point3fArray const & positions
+		, castor::Point3fArray const & texcoords
+		, castor::Point3fArray & tangents
 		, Face const & face )
 	{
-		auto & vtx1 = points[face[0]];
-		auto & vtx2 = points[face[1]];
-		auto & vtx3 = points[face[2]];
-		auto const vec2m1 = vtx2.pos - vtx1.pos;
-		auto const vec3m1 = vtx3.pos - vtx1.pos;
-		auto const tex2m1 = vtx2.tex - vtx1.tex;
-		auto const tex3m1 = vtx3.tex - vtx1.tex;
+		if ( texcoords.empty() )
+		{
+			return;
+		}
+
+		auto & vtx1 = positions[face[0]];
+		auto & vtx2 = positions[face[1]];
+		auto & vtx3 = positions[face[2]];
+		auto & tan1 = tangents[face[0]];
+		auto & tan2 = tangents[face[1]];
+		auto & tan3 = tangents[face[2]];
+		auto & tex1 = texcoords[face[0]];
+		auto & tex2 = texcoords[face[1]];
+		auto & tex3 = texcoords[face[2]];
+		auto const vec2m1 = vtx2 - vtx1;
+		auto const vec3m1 = vtx3 - vtx1;
+		auto const tex2m1 = tex2 - tex1;
+		auto const tex3m1 = tex3 - tex1;
 		auto const faceTangent = castor::point::getNormalised( ( vec2m1 * tex3m1[1] ) - ( vec3m1 * tex2m1[1] ) );
-		vtx1.tan += faceTangent;
-		vtx2.tan += faceTangent;
-		vtx3.tan += faceTangent;
+		tan1 += faceTangent;
+		tan2 += faceTangent;
+		tan3 += faceTangent;
 	}
 }

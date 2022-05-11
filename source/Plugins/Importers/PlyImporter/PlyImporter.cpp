@@ -7,8 +7,12 @@
 #include <Castor3D/Cache/ObjectCache.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/Pass.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/Face.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/Face.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp>
 #include <Castor3D/Model/Vertex.hpp>
 #include <Castor3D/Plugin/Plugin.hpp>
 #include <Castor3D/Miscellaneous/Version.hpp>
@@ -66,7 +70,7 @@ namespace C3dPly
 
 		pMaterial.lock()->getPass( 0 )->setTwoSided( true );
 		submesh->setDefaultMaterial( pMaterial.lock().get() );
-		auto mapping = std::make_shared< castor3d::TriFaceMapping >( *submesh );
+		auto mapping = submesh->createComponent< castor3d::TriFaceMapping >();
 		// Parsing the ply identification line
 		std::getline( isFile, strLine );
 
@@ -150,46 +154,52 @@ namespace C3dPly
 					}
 				}
 
-				std::vector< castor3d::InterleavedVertex > vertices{ size_t( iNbVertex ) };
+				auto & positions = submesh->createComponent< castor3d::PositionsComponent >()->getData();
+				auto & normals = submesh->createComponent< castor3d::NormalsComponent >()->getData();
+				positions.resize( size_t( iNbVertex ) );
+				normals.resize( size_t( iNbVertex ) );
 
 				if ( iNbProperties >= 8 )
 				{
+					auto & texcoords = submesh->createComponent< castor3d::TexcoordsComponent >()->getData();
+					auto & tangents = submesh->createComponent< castor3d::TangentsComponent >()->getData();
+					texcoords.resize( size_t( iNbVertex ) );
+					tangents.resize( size_t( iNbVertex ) );
 					// Parsing vertices : position + normal + texture
-					for ( auto & vertex : vertices )
+					for ( size_t i = 0u; i < size_t( iNbVertex ); ++i )
 					{
 						std::getline( isFile, strLine );
 						ssToken.str( strLine );
-						ssToken >> vertex.pos[0] >> vertex.pos[1] >> vertex.pos[2];
-						ssToken >> vertex.nml[0] >> vertex.nml[1] >> vertex.nml[2];
-						ssToken >> vertex.tex[0] >> vertex.tex[1];
+						ssToken >> positions[i][0] >> positions[i][1] >> positions[i][2];
+						ssToken >> normals[i][0] >> normals[i][1] >> normals[i][2];
+						ssToken >> texcoords[i][0] >> texcoords[i][1];
 						ssToken.clear( std::istringstream::goodbit );
 					}
 				}
 				else if ( iNbProperties >= 6 )
 				{
 					// Parsing vertices : position + normal
-					for ( auto & vertex : vertices )
+					for ( size_t i = 0u; i < size_t( iNbVertex ); ++i )
 					{
 						std::getline( isFile, strLine );
 						ssToken.str( strLine );
-						ssToken >> vertex.pos[0] >> vertex.pos[1] >> vertex.pos[2];
-						ssToken >> vertex.nml[0] >> vertex.nml[1] >> vertex.nml[2];
+						ssToken >> positions[i][0] >> positions[i][1] >> positions[i][2];
+						ssToken >> normals[i][0] >> normals[i][1] >> normals[i][2];
 						ssToken.clear( std::istringstream::goodbit );
 					}
 				}
 				else
 				{
 					// Parsing vertices : position
-					for ( auto & vertex : vertices )
+					for ( size_t i = 0u; i < size_t( iNbVertex ); ++i )
 					{
 						std::getline( isFile, strLine );
 						ssToken.str( strLine );
-						ssToken >> vertex.pos[0] >> vertex.pos[1] >> vertex.pos[2];
+						ssToken >> positions[i][0] >> positions[i][1] >> positions[i][2];
 						ssToken.clear( std::istringstream::goodbit );
 					}
 				}
 
-				submesh->addPoints( vertices );
 				// Parsing triangles
 				castor3d::FaceSPtr pFace;
 				std::vector< castor3d::FaceIndices > facesIndices;
@@ -223,12 +233,11 @@ namespace C3dPly
 		{
 			mapping->computeNormals( false );
 		}
-		else
+		else if (iNbProperties >= 8 )
 		{
 			mapping->computeTangentsFromNormals();
 		}
 
-		submesh->setIndexMapping( mapping );
 		isFile.close();
 		return result;
 	}

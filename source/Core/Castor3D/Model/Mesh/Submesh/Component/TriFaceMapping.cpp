@@ -5,6 +5,8 @@
 #include "Castor3D/Miscellaneous/StagingData.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
@@ -84,57 +86,140 @@ namespace castor3d
 	{
 		addFace( a, b, c );
 		addFace( a, c, d );
-		getOwner()->getPoint( a ).tex = castor::Point3f{ minUV[0], minUV[1], 0.0f };
-		getOwner()->getPoint( b ).tex = castor::Point3f{ maxUV[0], minUV[1], 0.0f };
-		getOwner()->getPoint( c ).tex = castor::Point3f{ maxUV[0], maxUV[1], 0.0f };
-		getOwner()->getPoint( d ).tex = castor::Point3f{ minUV[0], maxUV[1], 0.0f };
+
+		if ( auto texComp = getOwner()->getComponent< TexcoordsComponent >() )
+		{
+			texComp->getData()[a] = castor::Point3f{ minUV[0], minUV[1], 0.0f };
+			texComp->getData()[b] = castor::Point3f{ maxUV[0], minUV[1], 0.0f };
+			texComp->getData()[c] = castor::Point3f{ maxUV[0], maxUV[1], 0.0f };
+			texComp->getData()[d] = castor::Point3f{ minUV[0], maxUV[1], 0.0f };
+		}
 	}
 
 	void TriFaceMapping::computeFacesFromPolygonVertex()
 	{
-		SubmeshUtils::computeFacesFromPolygonVertex( getOwner()->getPoints()
+		SubmeshUtils::computeFacesFromPolygonVertex( getOwner()->getTexcoords()
 			, *this );
 	}
 
-	void TriFaceMapping::computeNormals( InterleavedVertexArray & points
+	void TriFaceMapping::computeNormals( castor::Point3fArray const & positions
+		, castor::Point3fArray const & texcoords
+		, castor::Point3fArray & normals
+		, castor::Point3fArray & tangents
 		, bool reverted )const
 	{
-		SubmeshUtils::computeNormals( points
+		SubmeshUtils::computeNormals( positions
+			, texcoords
+			, normals
+			, tangents
 			, *this
 			, reverted );
 	}
 
 	void TriFaceMapping::computeNormals( Face const & face )
 	{
-		SubmeshUtils::computeNormals( getOwner()->getPoints(), face );
+		static castor::Point3fArray tan;
+		static castor::Point3fArray tex;
+		castor::Point3fArray * tangents = &tan;
+		castor::Point3fArray const * texcoords = &tex;
+
+		if ( auto tanComp = getOwner()->getComponent< TangentsComponent >() )
+		{
+			tangents = &tanComp->getData();
+		}
+
+		if ( auto texComp = getOwner()->getComponent< TexcoordsComponent >() )
+		{
+			texcoords = &texComp->getData();
+		}
+
+		SubmeshUtils::computeNormals( getOwner()->getPositions()
+			, *texcoords
+			, getOwner()->getNormals()
+			, *tangents
+			, face );
 	}
 
-	void TriFaceMapping::computeNormals( InterleavedVertexArray & points
+	void TriFaceMapping::computeNormals( castor::Point3fArray const & positions
+		, castor::Point3fArray const & texcoords
+		, castor::Point3fArray & normals
+		, castor::Point3fArray & tangents
 		, Face const & face )const
 	{
-		SubmeshUtils::computeNormals( points, face );
+		SubmeshUtils::computeNormals( positions
+			, texcoords
+			, normals
+			, tangents
+			, face );
 	}
 
 	void TriFaceMapping::computeTangents( Face const & face )
 	{
-		SubmeshUtils::computeTangents( getOwner()->getPoints(), face );
+		static castor::Point3fArray tan;
+		static castor::Point3fArray tex;
+		castor::Point3fArray * tangents = &tan;
+		castor::Point3fArray const * texcoords = &tex;
+
+		if ( auto tanComp = getOwner()->getComponent< TangentsComponent >() )
+		{
+			tangents = &tanComp->getData();
+		}
+
+		if ( auto texComp = getOwner()->getComponent< TexcoordsComponent >() )
+		{
+			texcoords = &texComp->getData();
+		}
+
+		SubmeshUtils::computeTangents( getOwner()->getPositions()
+			, *texcoords
+			, *tangents
+			, face );
 	}
 
-	void TriFaceMapping::computeTangents( InterleavedVertexArray & points
+	void TriFaceMapping::computeTangents( castor::Point3fArray const & positions
+		, castor::Point3fArray const & texcoords
+		, castor::Point3fArray & tangents
 		, Face const & face )const
 	{
-		SubmeshUtils::computeTangents( points, face );
+		SubmeshUtils::computeTangents( positions
+			, texcoords
+			, tangents
+			, face );
 	}
 
 	void TriFaceMapping::computeTangentsFromNormals()
 	{
-		SubmeshUtils::computeTangentsFromNormals( getOwner()->getPoints()
+		static castor::Point3fArray tan;
+		static castor::Point3fArray tex;
+		castor::Point3fArray * tangents = &tan;
+		castor::Point3fArray const * texcoords = &tex;
+
+		if ( auto tanComp = getOwner()->getComponent< TangentsComponent >() )
+		{
+			tangents = &tanComp->getData();
+		}
+
+		if ( auto texComp = getOwner()->getComponent< TexcoordsComponent >() )
+		{
+			texcoords = &texComp->getData();
+		}
+
+		SubmeshUtils::computeTangentsFromNormals( getOwner()->getPositions()
+			, *texcoords
+			, getOwner()->getNormals()
+			, *tangents
 			, *this );
 	}
 
-	void TriFaceMapping::computeTangentsFromNormals( InterleavedVertexArray & points )const
+	void TriFaceMapping::computeTangentsFromNormals( castor::Point3fArray const & positions
+		, castor::Point3fArray const & texcoords
+		, castor::Point3fArray const & normals
+		, castor::Point3fArray & tangents )const
 	{
-		SubmeshUtils::computeTangentsFromNormals( points
+		SubmeshUtils::computeTangentsFromNormals( positions
+			, texcoords
+			, normals
+			, tangents
 			, *this );
 	}
 
@@ -157,35 +242,37 @@ namespace castor3d
 			if ( m_cameraPosition != cameraPosition )
 			{
 				if ( getOwner()->isInitialised()
-					&& getOwner()->getBufferOffsets().hasVertices()
-					&& getOwner()->getBufferOffsets().hasIndices() )
+					&& getOwner()->getBufferOffsets().hasData( SubmeshFlag::ePositions )
+					&& getOwner()->getBufferOffsets().hasData( SubmeshFlag::eIndex ) )
 				{
 					auto offsets = getOwner()->getBufferOffsets();
-					auto & indices = offsets.getIndexBuffer();
-					auto & vertices = offsets.getVertexBuffer();
+					auto & vtxChunk = offsets.getBufferChunk( SubmeshFlag::ePositions );
+					auto & idxChunk = offsets.getBufferChunk( SubmeshFlag::eIndex );
+					auto & indices = idxChunk.getBuffer();
+					auto & vertices = vtxChunk.getBuffer();
 
 					m_cameraPosition = cameraPosition;
-					auto indexSize = uint32_t( offsets.getIndexCount() );
+					auto indexSize = uint32_t( idxChunk.getCount< uint32_t >() );
 
-					if ( auto * index = reinterpret_cast< uint32_t * >( indices.lock( offsets.getIndexOffset()
-						, offsets.idxChunk.size
+					if ( auto * index = reinterpret_cast< uint32_t * >( indices.lock( idxChunk.getOffset()
+						, idxChunk.chunk.size
 						, 0u ) ) )
 					{
 						smshcomptri::FaceDistArray arraySorted;
 						arraySorted.reserve( indexSize / 3 );
 
-						if ( auto * vertex = reinterpret_cast< InterleavedVertex const * >( vertices.lock( offsets.getVertexOffset()
-							, offsets.vtxChunk.size
+						if ( auto * vertex = reinterpret_cast< castor::Point3f const * >( vertices.lock( vtxChunk.getOffset()
+							, vtxChunk.chunk.size
 							, 0u ) ) )
 						{
 							for ( uint32_t * it = index + 0; it < index + indexSize; it += 3 )
 							{
 								double dDistance = 0.0;
-								auto & vtx1 = vertex[it[0]].pos;
+								auto & vtx1 = vertex[it[0]];
 								dDistance += castor::point::lengthSquared( vtx1 - cameraPosition );
-								auto & vtx2 = vertex[it[1]].pos;
+								auto & vtx2 = vertex[it[1]];
 								dDistance += castor::point::lengthSquared( vtx2 - cameraPosition );
-								auto & vtx3 = vertex[it[2]].pos;
+								auto & vtx3 = vertex[it[2]];
 								dDistance += castor::point::lengthSquared( vtx3 - cameraPosition );
 								arraySorted.push_back( smshcomptri::FaceDistance{ { it[0], it[1], it[2] }, dDistance } );
 							}
@@ -202,8 +289,8 @@ namespace castor3d
 							vertices.unlock();
 						}
 
-						indices.flush( offsets.getIndexOffset()
-							, offsets.idxChunk.size );
+						indices.flush( idxChunk.getOffset()
+							, idxChunk.chunk.size );
 						indices.unlock();
 					}
 				}
@@ -219,7 +306,25 @@ namespace castor3d
 	{
 		if ( !m_hasNormals )
 		{
-			SubmeshUtils::computeNormals( getOwner()->getPoints()
+			static castor::Point3fArray tan;
+			static castor::Point3fArray tex;
+			castor::Point3fArray * tangents = &tan;
+			castor::Point3fArray const * texcoords = &tex;
+
+			if ( auto tanComp = getOwner()->getComponent< TangentsComponent >() )
+			{
+				tangents = &tanComp->getData();
+			}
+
+			if ( auto texComp = getOwner()->getComponent< TexcoordsComponent >() )
+			{
+				texcoords = &texComp->getData();
+			}
+
+			SubmeshUtils::computeNormals( getOwner()->getPositions()
+				, *texcoords
+				, getOwner()->getNormals()
+				, *tangents
 				, *this
 				, reverted );
 			m_hasNormals = true;
@@ -243,15 +348,16 @@ namespace castor3d
 	void TriFaceMapping::doUpload()
 	{
 		auto count = uint32_t( m_faces.size() * 3 );
+		auto & offsets = getOwner()->getBufferOffsets();
+		auto & buffer = offsets.getBufferChunk( SubmeshFlag::eIndex );
 
-		if ( count
-			&& getOwner()->getBufferOffsets().getIndexCount() )
+		if ( count && buffer.hasData() )
 		{
-			auto offsets = getOwner()->getBufferOffsets();
 			std::copy( m_faces.begin()
 				, m_faces.end()
-				, offsets.getIndexData< Face >().begin() );
-			offsets.markIndexDirty();
+				, buffer.getData< Face >().begin() );
+			buffer.markDirty( VK_ACCESS_INDEX_READ_BIT
+				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 		}
 	}
 }

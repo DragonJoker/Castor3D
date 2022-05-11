@@ -99,12 +99,10 @@ namespace castor3d::shader
 		, tangent{ this->getMember< sdw::Vec3 >( "tangent", true ) }
 		, texture0{ this->getMember< sdw::Vec3 >( "texcoord0", true ) }
 		// Morphing
-		, position2{ this->getMember< sdw::Vec4 >( "position2", true ) }
-		, normal2{ this->getMember< sdw::Vec3 >( "normal2", true ) }
-		, tangent2{ this->getMember< sdw::Vec3 >( "tangent2", true ) }
-		, texture2{ this->getMember< sdw::Vec3 >( "texcoord2", true ) }
-		// Instantiation
-		, objectIds{ this->getMember< sdw::UVec4 >( "objectIds", true ) }
+		, morphPosition{ this->getMember< sdw::Vec4 >( "morphPosition", true ) }
+		, morphNormal{ this->getMember< sdw::Vec3 >( "morphNormal", true ) }
+		, morphTangent{ this->getMember< sdw::Vec3 >( "morphTangent", true ) }
+		, morphTexture{ this->getMember< sdw::Vec3 >( "morphTexcoord", true ) }
 		// Morphing
 		, boneIds0{ this->getMember< sdw::UVec4 >( "boneIds0", true ) }
 		, boneIds1{ this->getMember< sdw::UVec4 >( "boneIds1", true ) }
@@ -112,6 +110,8 @@ namespace castor3d::shader
 		, boneWeights1{ this->getMember< sdw::Vec4 >( "boneWeights1", true ) }
 		// Secondary UV
 		, texture1{ this->getMember< sdw::Vec3 >( "texcoord1", true ) }
+		// Instantiation
+		, objectIds{ this->getMember< sdw::UVec4 >( "objectIds", true ) }
 	{
 	}
 
@@ -142,46 +142,37 @@ namespace castor3d::shader
 				, index++ );
 			result->declMember( "normal", ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( checkFlag( shaderFlags, ShaderFlag::eNormal ) ? index++ : 0 )
-				, checkFlag( shaderFlags, ShaderFlag::eNormal ) );
+				, ( ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) && checkFlag( shaderFlags, ShaderFlag::eNormal ) ) ? index++ : 0 )
+				, ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) && checkFlag( shaderFlags, ShaderFlag::eNormal ) ) );
 			result->declMember( "tangent", ast::type::Kind::eVec3F
 				, ast::type::NotArray
 				, ( ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ) ? index++ : 0 )
 				, ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ) );
 			result->declMember( "texcoord0", ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( hasTextures ? index++ : 0 )
+				, ( ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords ) && hasTextures ) ? index++ : 0 )
 				, hasTextures );
 			//@}
 			/**
 			*	Morphing
 			*/
 			//@{
-			result->declMember( "position2", ast::type::Kind::eVec4F
+			result->declMember( "morphPosition", ast::type::Kind::eVec4F
 				, ast::type::NotArray
-				, ( checkFlag( submeshFlags, SubmeshFlag::eMorphing ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eMorphing ) );
-			result->declMember( "normal2", ast::type::Kind::eVec3F
+				, ( checkFlag( submeshFlags, SubmeshFlag::eMorphPositions ) ? index++ : 0 )
+				, checkFlag( submeshFlags, SubmeshFlag::eMorphPositions ) );
+			result->declMember( "morphNormal", ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( ( checkFlag( submeshFlags, SubmeshFlag::eMorphing ) && checkFlag( shaderFlags, ShaderFlag::eNormal ) ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eMorphing ) && checkFlag( shaderFlags, ShaderFlag::eNormal ) );
-			result->declMember( "tangent2", ast::type::Kind::eVec3F
+				, ( ( checkFlag( submeshFlags, SubmeshFlag::eMorphNormals ) && checkFlag( shaderFlags, ShaderFlag::eNormal ) ) ? index++ : 0 )
+				, checkFlag( submeshFlags, SubmeshFlag::eMorphNormals ) && checkFlag( shaderFlags, ShaderFlag::eNormal ) );
+			result->declMember( "morphTangent", ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( ( checkFlag( submeshFlags, SubmeshFlag::eTangents | SubmeshFlag::eMorphing ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ) ? index++ : 0 )
-				, ( checkFlag( submeshFlags, SubmeshFlag::eTangents | SubmeshFlag::eMorphing ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ) );
-			result->declMember( "texcoord2", ast::type::Kind::eVec3F
+				, ( ( checkFlag( submeshFlags, SubmeshFlag::eMorphTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ) ? index++ : 0 )
+				, ( checkFlag( submeshFlags, SubmeshFlag::eMorphTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ) );
+			result->declMember( "morphTexcoord", ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( ( checkFlag( submeshFlags, SubmeshFlag::eMorphing ) && hasTextures ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eMorphing ) && hasTextures );
-			//@}
-			/**
-			*	Instantiation
-			*/
-			//@{
-			result->declMember( "objectIds", ast::type::Kind::eVec4U
-				, ast::type::NotArray
-				, ( checkFlag( submeshFlags, SubmeshFlag::eInstantiation ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eInstantiation ) );
+				, ( ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords ) && hasTextures ) ? index++ : 0 )
+				, checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords ) && hasTextures );
 			//@}
 			/**
 			*	Skinning
@@ -189,20 +180,20 @@ namespace castor3d::shader
 			//@{
 			result->declMember( "boneIds0", ast::type::Kind::eVec4U
 				, ast::type::NotArray
-				, ( checkFlag( submeshFlags, SubmeshFlag::eSkinning ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eSkinning ) );
+				, ( checkFlag( submeshFlags, SubmeshFlag::eBones ) ? index++ : 0 )
+				, checkFlag( submeshFlags, SubmeshFlag::eBones ) );
 			result->declMember( "boneIds1", ast::type::Kind::eVec4U
 				, ast::type::NotArray
-				, ( checkFlag( submeshFlags, SubmeshFlag::eSkinning ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eSkinning ) );
+				, ( checkFlag( submeshFlags, SubmeshFlag::eBones ) ? index++ : 0 )
+				, checkFlag( submeshFlags, SubmeshFlag::eBones ) );
 			result->declMember( "boneWeights0", ast::type::Kind::eVec4F
 				, ast::type::NotArray
-				, ( checkFlag( submeshFlags, SubmeshFlag::eSkinning ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eSkinning ) );
+				, ( checkFlag( submeshFlags, SubmeshFlag::eBones ) ? index++ : 0 )
+				, checkFlag( submeshFlags, SubmeshFlag::eBones ) );
 			result->declMember( "boneWeights1", ast::type::Kind::eVec4F
 				, ast::type::NotArray
-				, ( checkFlag( submeshFlags, SubmeshFlag::eSkinning ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eSkinning ) );
+				, ( checkFlag( submeshFlags, SubmeshFlag::eBones ) ? index++ : 0 )
+				, checkFlag( submeshFlags, SubmeshFlag::eBones ) );
 			//@}
 			/**
 			*	Secondary UV
@@ -212,6 +203,15 @@ namespace castor3d::shader
 				, ast::type::NotArray
 				, ( ( checkFlag( submeshFlags, SubmeshFlag::eSecondaryUV ) && hasTextures ) ? index++ : 0 )
 				, checkFlag( submeshFlags, SubmeshFlag::eSecondaryUV ) && hasTextures );
+			//@}
+			/**
+			*	Instantiation
+			*/
+			//@{
+			result->declMember( "objectIds", ast::type::Kind::eVec4U
+				, ast::type::NotArray
+				, ( checkFlag( submeshFlags, SubmeshFlag::eInstantiation ) ? index++ : 0 )
+				, checkFlag( submeshFlags, SubmeshFlag::eInstantiation ) );
 			//@}
 		}
 
@@ -223,8 +223,8 @@ namespace castor3d::shader
 		, sdw::Vec4 & pos
 		, sdw::Vec3 & uvw )const
 	{
-		morphing.morph( pos, position2
-			, uvw, texture2 );
+		morphing.morph( pos, morphPosition
+			, uvw, morphTexture );
 	}
 
 	template< ast::var::Flag FlagT >
@@ -233,9 +233,9 @@ namespace castor3d::shader
 		, sdw::Vec4 & nml
 		, sdw::Vec3 & uvw )const
 	{
-		morphing.morph( pos, position2
-			, nml, normal2
-			, uvw, texture2 );
+		morphing.morph( pos, morphPosition
+			, nml, morphNormal
+			, uvw, morphTexture );
 	}
 
 	template< ast::var::Flag FlagT >
@@ -245,10 +245,10 @@ namespace castor3d::shader
 		, sdw::Vec4 & tan
 		, sdw::Vec3 & uvw )const
 	{
-		morphing.morph( pos, position2
-			, nml, normal2
-			, tan, tangent2
-			, uvw, texture2 );
+		morphing.morph( pos, morphPosition
+			, nml, morphNormal
+			, tan, morphTangent
+			, uvw, morphTexture );
 	}
 
 	//*****************************************************************************************
@@ -325,8 +325,8 @@ namespace castor3d::shader
 			result->declMember( "normal"
 				, ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( checkFlag( shaderFlags, ShaderFlag::eNormal ) ? index++ : 0 )
-				, checkFlag( shaderFlags, ShaderFlag::eNormal ) );
+				, ( ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) && checkFlag( shaderFlags, ShaderFlag::eNormal ) ) ? index++ : 0 )
+				, ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) && checkFlag( shaderFlags, ShaderFlag::eNormal ) ) );
 			result->declMember( "tangent", ast::type::Kind::eVec3F
 				, ast::type::NotArray
 				, ( ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ) ? index++ : 0 )
@@ -337,8 +337,8 @@ namespace castor3d::shader
 				, ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ) );
 			result->declMember( "texcoord0", ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( hasTextures ? index++ : 0 )
-				, hasTextures );
+				, ( ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords ) && hasTextures ) ? index++ : 0 )
+				, ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords ) && hasTextures ) );
 			result->declMember( "texcoord1", ast::type::Kind::eVec3F
 				, ast::type::NotArray
 				, ( ( checkFlag( submeshFlags, SubmeshFlag::eSecondaryUV ) && hasTextures ) ? index++ : 0 )
@@ -380,61 +380,84 @@ namespace castor3d::shader
 	}
 
 	template< ast::var::Flag FlagT >
-	void FragmentSurfaceT< FlagT >::computeTangentSpace( ProgramFlags programFlags
+	void FragmentSurfaceT< FlagT >::computeTangentSpace( SubmeshFlags submeshFlags
+		, ProgramFlags programFlags
 		, sdw::Vec3 const & cameraPosition
 		, sdw::Vec3 const & worldPos
 		, sdw::Mat3 const & mtx
 		, sdw::Vec4 const & nml
 		, sdw::Vec4 const & tan )
 	{
-		CU_Require( !normal.getExpr()->isDummy() );
-		CU_Require( !tangent.getExpr()->isDummy() );
-		CU_Require( !bitangent.getExpr()->isDummy() );
-		normal = normalize( mtx * nml.xyz() );
-		tangent = normalize( mtx * tan.xyz() );
-		tangent = normalize( sdw::fma( -normal, vec3( dot( tangent, normal ) ), tangent ) );
-		bitangent = cross( normal, tangent );
-
-		if ( checkFlag( programFlags, ProgramFlag::eInvertNormals ) )
+		if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) )
 		{
-			normal = -normal;
-			tangent = -tangent;
-			bitangent = -bitangent;
+			CU_Require( !normal.getExpr()->isDummy() );
+			CU_Require( !tangent.getExpr()->isDummy() );
+			CU_Require( !bitangent.getExpr()->isDummy() );
+			normal = normalize( mtx * nml.xyz() );
+			tangent = normalize( mtx * tan.xyz() );
+			tangent = normalize( sdw::fma( -normal, vec3( dot( tangent, normal ) ), tangent ) );
+			bitangent = cross( normal, tangent );
+
+			if ( checkFlag( programFlags, ProgramFlag::eInvertNormals ) )
+			{
+				normal = -normal;
+				tangent = -tangent;
+				bitangent = -bitangent;
+			}
+
+			if ( !tangentSpaceFragPosition.getExpr()->isDummy() )
+			{
+				CU_Require( !worldPos.getExpr()->isDummy() );
+				CU_Require( !tangentSpaceViewPosition.getExpr()->isDummy() );
+				auto tbn = getWriter()->declLocale( "tbn"
+					, transpose( mat3( tangent, bitangent, normal ) ) );
+				tangentSpaceFragPosition = tbn * worldPos;
+				tangentSpaceViewPosition = tbn * cameraPosition.xyz();
+			}
 		}
-
-		if ( !tangentSpaceFragPosition.getExpr()->isDummy() )
+		else
 		{
-			CU_Require( !worldPos.getExpr()->isDummy() );
-			CU_Require( !tangentSpaceViewPosition.getExpr()->isDummy() );
-			auto tbn = getWriter()->declLocale( "tbn"
-				, transpose( mat3( tangent, bitangent, normal ) ) );
-			tangentSpaceFragPosition = tbn * worldPos;
-			tangentSpaceViewPosition = tbn * cameraPosition.xyz();
+			CU_Require( !normal.getExpr()->isDummy() );
+			normal = normalize( mtx * nml.xyz() );
+
+			if ( checkFlag( programFlags, ProgramFlag::eInvertNormals ) )
+			{
+				normal = -normal;
+			}
 		}
 	}
 
 	template< ast::var::Flag FlagT >
-	void FragmentSurfaceT< FlagT >::computeTangentSpace( sdw::Vec3 const & cameraPosition
+	void FragmentSurfaceT< FlagT >::computeTangentSpace( SubmeshFlags submeshFlags
+		, sdw::Vec3 const & cameraPosition
 		, sdw::Vec3 const & worldPos
 		, sdw::Vec3 const & nml
 		, sdw::Vec3 const & tan
 		, sdw::Vec3 const & bin )
 	{
-		CU_Require( !normal.getExpr()->isDummy() );
-		CU_Require( !tangent.getExpr()->isDummy() );
-		CU_Require( !bitangent.getExpr()->isDummy() );
-		normal = nml;
-		tangent = tan;
-		bitangent = bin;
-
-		if ( !tangentSpaceFragPosition.getExpr()->isDummy() )
+		if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) )
 		{
-			CU_Require( !worldPos.getExpr()->isDummy() );
-			CU_Require( !tangentSpaceViewPosition.getExpr()->isDummy() );
-			auto tbn = getWriter()->declLocale( "tbn"
-				, transpose( mat3( tangent, bitangent, normal ) ) );
-			tangentSpaceFragPosition = tbn * worldPos;
-			tangentSpaceViewPosition = tbn * cameraPosition.xyz();
+			CU_Require( !normal.getExpr()->isDummy() );
+			CU_Require( !tangent.getExpr()->isDummy() );
+			CU_Require( !bitangent.getExpr()->isDummy() );
+			normal = nml;
+			tangent = tan;
+			bitangent = bin;
+
+			if ( !tangentSpaceFragPosition.getExpr()->isDummy() )
+			{
+				CU_Require( !worldPos.getExpr()->isDummy() );
+				CU_Require( !tangentSpaceViewPosition.getExpr()->isDummy() );
+				auto tbn = getWriter()->declLocale( "tbn"
+					, transpose( mat3( tangent, bitangent, normal ) ) );
+				tangentSpaceFragPosition = tbn * worldPos;
+				tangentSpaceViewPosition = tbn * cameraPosition.xyz();
+			}
+		}
+		else
+		{
+			CU_Require( !normal.getExpr()->isDummy() );
+			normal = nml;
 		}
 	}
 

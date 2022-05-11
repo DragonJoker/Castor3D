@@ -1,6 +1,10 @@
 #include "Castor3D/Model/Mesh/Generator/Cube.hpp"
 
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 
@@ -56,11 +60,35 @@ namespace castor3d
 		}
 
 		SubmeshSPtr submesh1 = p_mesh.createSubmesh();
+		auto positions1 = submesh1->createComponent< PositionsComponent >();
+		auto normals1 = submesh1->createComponent< NormalsComponent >();
+		auto tangents1 = submesh1->createComponent< TangentsComponent >();
+		auto texcoords1 = submesh1->createComponent< TexcoordsComponent >();
 		SubmeshSPtr submesh2 = p_mesh.createSubmesh();
+		auto positions2 = submesh2->createComponent< PositionsComponent >();
+		auto normals2 = submesh2->createComponent< NormalsComponent >();
+		auto tangents2 = submesh2->createComponent< TangentsComponent >();
+		auto texcoords2 = submesh2->createComponent< TexcoordsComponent >();
 		SubmeshSPtr submesh3 = p_mesh.createSubmesh();
+		auto positions3 = submesh3->createComponent< PositionsComponent >();
+		auto normals3 = submesh3->createComponent< NormalsComponent >();
+		auto tangents3 = submesh3->createComponent< TangentsComponent >();
+		auto texcoords3 = submesh3->createComponent< TexcoordsComponent >();
 		SubmeshSPtr submesh4 = p_mesh.createSubmesh();
+		auto positions4 = submesh4->createComponent< PositionsComponent >();
+		auto normals4 = submesh4->createComponent< NormalsComponent >();
+		auto tangents4 = submesh4->createComponent< TangentsComponent >();
+		auto texcoords4 = submesh4->createComponent< TexcoordsComponent >();
 		SubmeshSPtr submesh5 = p_mesh.createSubmesh();
+		auto positions5 = submesh5->createComponent< PositionsComponent >();
+		auto normals5 = submesh5->createComponent< NormalsComponent >();
+		auto tangents5 = submesh5->createComponent< TangentsComponent >();
+		auto texcoords5 = submesh5->createComponent< TexcoordsComponent >();
 		SubmeshSPtr submesh6 = p_mesh.createSubmesh();
+		auto positions6 = submesh6->createComponent< PositionsComponent >();
+		auto normals6 = submesh6->createComponent< NormalsComponent >();
+		auto tangents6 = submesh6->createComponent< TangentsComponent >();
+		auto texcoords6 = submesh6->createComponent< TexcoordsComponent >();
 		static castor::Point3f const zero;
 
 		// Face avant
@@ -111,12 +139,12 @@ namespace castor3d
 			{ castor::Point3f{ -m_width / 2, m_height / 2, +m_depth / 2 }, castor::Point3f{ 0.0, 1.0, 0.0 }, zero, castor::Point3f{ 1.0, 1.0, 0.0 } },
 		} );
 
-		auto mapping1 = std::make_shared< TriFaceMapping >( *submesh1 );
-		auto mapping2 = std::make_shared< TriFaceMapping >( *submesh2 );
-		auto mapping3 = std::make_shared< TriFaceMapping >( *submesh3 );
-		auto mapping4 = std::make_shared< TriFaceMapping >( *submesh4 );
-		auto mapping5 = std::make_shared< TriFaceMapping >( *submesh5 );
-		auto mapping6 = std::make_shared< TriFaceMapping >( *submesh6 );
+		auto mapping1 = submesh1->createComponent< TriFaceMapping >();
+		auto mapping2 = submesh2->createComponent< TriFaceMapping >();
+		auto mapping3 = submesh3->createComponent< TriFaceMapping >();
+		auto mapping4 = submesh4->createComponent< TriFaceMapping >();
+		auto mapping5 = submesh5->createComponent< TriFaceMapping >();
+		auto mapping6 = submesh6->createComponent< TriFaceMapping >();
 
 		if ( CptNegatif == 1 || CptNegatif == 3 )
 		{
@@ -167,13 +195,6 @@ namespace castor3d
 		mapping4->computeTangentsFromNormals();
 		mapping5->computeTangentsFromNormals();
 		mapping6->computeTangentsFromNormals();
-
-		submesh1->setIndexMapping( mapping1 );
-		submesh2->setIndexMapping( mapping2 );
-		submesh3->setIndexMapping( mapping3 );
-		submesh4->setIndexMapping( mapping4 );
-		submesh5->setIndexMapping( mapping5 );
-		submesh6->setIndexMapping( mapping6 );
 
 		p_mesh.computeContainers();
 	}

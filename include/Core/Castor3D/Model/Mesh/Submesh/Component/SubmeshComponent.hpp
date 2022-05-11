@@ -103,6 +103,16 @@ namespace castor3d
 		C3D_API virtual SubmeshFlags getSubmeshFlags( Material const & material )const = 0;
 		/**
 		 *\~english
+		 *\return		The submesh data flags.
+		 *\~french
+		 *\return		Les indicateurs de données de submesh.
+		 */
+		C3D_API virtual SubmeshFlags getDataFlags()const
+		{
+			return SubmeshFlags{};
+		}
+		/**
+		 *\~english
 		 *\return		The buffer usage flags.
 		 *\~french
 		 *\return		Les flags d'utilisation du buffer.

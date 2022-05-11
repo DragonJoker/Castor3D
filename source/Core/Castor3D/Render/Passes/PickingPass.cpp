@@ -113,7 +113,7 @@ namespace castor3d
 		using namespace sdw;
 		VertexWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = !flags.textures.empty();
+		bool hasTextures = flags.hasTextures();
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
@@ -206,7 +206,7 @@ namespace castor3d
 		using namespace sdw;
 		FragmentWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = !flags.textures.empty();
+		bool hasTextures = flags.hasTextures();
 
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		shader::Utils utils{ writer, *renderSystem.getEngine() };
@@ -253,7 +253,7 @@ namespace castor3d
 					, material.opacity );
 				auto textureFlags = merge( flags.textures );
 
-				if ( checkFlag( textureFlags, TextureFlag::eOpacity ) )
+				if ( hasTextures && checkFlag( textureFlags, TextureFlag::eOpacity ) )
 				{
 					for ( uint32_t index = 0u; index < flags.textures.size(); ++index )
 					{

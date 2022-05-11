@@ -1,6 +1,10 @@
 #include "Castor3D/Model/Mesh/Generator/Cone.hpp"
 
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 
@@ -44,7 +48,15 @@ namespace castor3d
 			&& m_radius > std::numeric_limits< float >::epsilon() )
 		{
 			Submesh & submeshBase = *mesh.createSubmesh();
+			auto basePositions = submeshBase.createComponent< PositionsComponent >();
+			auto baseNormals = submeshBase.createComponent< NormalsComponent >();
+			auto baseTangents = submeshBase.createComponent< TangentsComponent >();
+			auto baseTexcoords = submeshBase.createComponent< TexcoordsComponent >();
 			Submesh & submeshSide = *mesh.createSubmesh();
+			auto sidePositions = submeshSide.createComponent< PositionsComponent >();
+			auto sideNormals = submeshSide.createComponent< NormalsComponent >();
+			auto sideTangents = submeshSide.createComponent< TangentsComponent >();
+			auto sideTexcoords = submeshSide.createComponent< TexcoordsComponent >();
 			//CALCUL DE LA POSITION DES POINTS
 			float const dalpha = castor::PiMult2< float > / float( m_nbFaces );
 			uint32_t i = 0;
@@ -85,8 +97,8 @@ namespace castor3d
 				m_height = -m_height;
 			}
 
-			auto indexMappingBase = std::make_shared< TriFaceMapping >( submeshBase );
-			auto indexMappingSide = std::make_shared< TriFaceMapping >( submeshSide );
+			auto indexMappingBase = submeshBase.createComponent< TriFaceMapping >();
+			auto indexMappingSide = submeshSide.createComponent< TriFaceMapping >();
 
 			//Composition des extrémités
 			for ( i = 0; i < m_nbFaces - 1; i++ )
@@ -104,28 +116,25 @@ namespace castor3d
 				indexMappingSide->addFace( i + 1, i + 0, i + 2 );
 			}
 
-			submeshBase.setIndexMapping( indexMappingBase );
-			submeshSide.setIndexMapping( indexMappingSide );
-
 			indexMappingBase->computeNormals( true );
 			indexMappingSide->computeNormals( true );
 
-			auto normal0Top = submeshSide[0].nml;
-			auto normal0Base = submeshSide[1].nml;
-			auto tangent0Top = submeshSide[0].tan;
-			auto tangent0Base = submeshSide[1].tan;
-			normal0Top += submeshSide[submeshSide.getPointsCount() - 2].nml;
-			normal0Base += submeshSide[submeshSide.getPointsCount() - 1].nml;
-			tangent0Top += submeshSide[submeshSide.getPointsCount() - 2].tan;
-			tangent0Base += submeshSide[submeshSide.getPointsCount() - 1].tan;
+			auto normal0Top = sideNormals->getData()[0];
+			auto normal0Base = sideNormals->getData()[1];
+			auto tangent0Top = sideTangents->getData()[0];
+			auto tangent0Base = sideTangents->getData()[1];
+			normal0Top += sideNormals->getData()[submeshSide.getPointsCount() - 2];
+			normal0Base += sideNormals->getData()[submeshSide.getPointsCount() - 1];
+			tangent0Top += sideTangents->getData()[submeshSide.getPointsCount() - 2];
+			tangent0Base += sideTangents->getData()[submeshSide.getPointsCount() - 1];
 			castor::point::normalise( normal0Top );
 			castor::point::normalise( normal0Base );
 			castor::point::normalise( tangent0Top );
 			castor::point::normalise( tangent0Base );
-			submeshSide[submeshSide.getPointsCount() - 2].nml = normal0Top;
-			submeshSide[submeshSide.getPointsCount() - 1].nml = normal0Base;
-			submeshSide[submeshSide.getPointsCount() - 2].tan = tangent0Top;
-			submeshSide[submeshSide.getPointsCount() - 1].tan = tangent0Base;
+			sideNormals->getData()[submeshSide.getPointsCount() - 2] = normal0Top;
+			sideNormals->getData()[submeshSide.getPointsCount() - 1] = normal0Base;
+			sideTangents->getData()[submeshSide.getPointsCount() - 2] = tangent0Top;
+			sideTangents->getData()[submeshSide.getPointsCount() - 1] = tangent0Base;
 
 			mesh.computeContainers();
 		}

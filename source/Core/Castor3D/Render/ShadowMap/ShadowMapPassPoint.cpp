@@ -187,7 +187,7 @@ namespace castor3d
 		using namespace sdw;
 		VertexWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = !flags.textures.empty();
+		bool hasTextures = flags.hasTextures();
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
@@ -267,7 +267,8 @@ namespace castor3d
 
 				auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
 					, modelData.getNormalMtx( flags.submeshFlags, mtxModel ) );
-				out.computeTangentSpace( flags.programFlags
+				out.computeTangentSpace( flags.submeshFlags
+					, flags.programFlags
 					, c3d_matrixData.getCurViewCenter()
 					, worldPos.xyz()
 					, mtxNormal
@@ -282,7 +283,7 @@ namespace castor3d
 		using namespace sdw;
 		FragmentWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = !flags.textures.empty();
+		bool hasTextures = flags.hasTextures();
 
 		shader::Utils utils{ writer, *getEngine() };
 
@@ -350,18 +351,15 @@ namespace castor3d
 				pxl_normal = vec4( 0.0_f );
 				pxl_position = vec4( 0.0_f );
 				pxl_flux = vec4( 0.0_f );
-				auto texCoord = writer.declLocale( "texCoord"
-					, in.texture0
-					, hasTextures );
 				auto normal = writer.declLocale( "normal"
 					, normalize( in.normal )
 					, m_needsRsm );
 				auto tangent = writer.declLocale( "tangent"
 					, normalize( in.tangent )
-					, m_needsRsm );
+					, m_needsRsm && checkFlag( flags.submeshFlags, SubmeshFlag::eTangents ) );
 				auto bitangent = writer.declLocale( "bitangent"
 					, normalize( in.bitangent )
-					, m_needsRsm );
+					, m_needsRsm && checkFlag( flags.submeshFlags, SubmeshFlag::eTangents ) );
 				auto material = materials.getMaterial( modelData.getMaterialId() );
 				auto emissive = writer.declLocale( "emissive"
 					, vec3( material.emissive )
@@ -379,6 +377,9 @@ namespace castor3d
 
 				if ( hasTextures )
 				{
+					auto texCoord = writer.declLocale( "texCoord"
+						, in.texture0 );
+
 					if ( m_needsRsm )
 					{
 						auto occlusion = writer.declLocale( "occlusion"

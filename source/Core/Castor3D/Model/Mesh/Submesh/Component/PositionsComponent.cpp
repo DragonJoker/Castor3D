@@ -1,4 +1,4 @@
-#include "Castor3D/Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp"
 
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
@@ -15,28 +15,28 @@
 
 namespace castor3d
 {
-	namespace smshcompsecuv
+	namespace smshcomppos
 	{
-		static ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout( uint32_t & currentLocation )
+		static ashes::PipelineVertexInputStateCreateInfo createVertexLayout( uint32_t & currentLocation )
 		{
-			ashes::VkVertexInputBindingDescriptionArray bindings{ { SecondaryUVComponent::BindingPoint
+			ashes::VkVertexInputBindingDescriptionArray bindings{ { PositionsComponent::BindingPoint
 				, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } };
 			ashes::VkVertexInputAttributeDescriptionArray attributes{ 1u, { currentLocation++
-				, SecondaryUVComponent::BindingPoint
+				, PositionsComponent::BindingPoint
 				, VK_FORMAT_R32G32B32_SFLOAT
 				, 0u } };
 			return ashes::PipelineVertexInputStateCreateInfo{ 0u, bindings, attributes };
 		}
 	}
 
-	castor::String const SecondaryUVComponent::Name = cuT( "secondary_uv" );
+	castor::String const PositionsComponent::Name = cuT( "positions" );
 
-	SecondaryUVComponent::SecondaryUVComponent( Submesh & submesh )
+	PositionsComponent::PositionsComponent( Submesh & submesh )
 		: SubmeshComponent{ submesh, Name, BindingPoint }
 	{
 	}
 
-	void SecondaryUVComponent::gather( ShaderFlags const & shaderFlags
+	void PositionsComponent::gather( ShaderFlags const & shaderFlags
 		, SubmeshFlags const & submeshFlags
 		, MaterialRPtr material
 		, ashes::BufferCRefArray & buffers
@@ -45,7 +45,7 @@ namespace castor3d
 		, TextureFlagsArray const & mask
 		, uint32_t & currentLocation )
 	{
-		if ( checkFlag( submeshFlags, SubmeshFlag::eSecondaryUV ) )
+		if ( checkFlag( submeshFlags, SubmeshFlag::ePositions ) )
 		{
 			auto layoutIt = m_layouts.find( currentLocation );
 
@@ -53,7 +53,7 @@ namespace castor3d
 			{
 				auto loc = currentLocation;
 				layoutIt = m_layouts.emplace( loc
-					, smshcompsecuv::doCreateVertexLayout( currentLocation ) ).first;
+					, smshcomppos::createVertexLayout( currentLocation ) ).first;
 			}
 			else
 			{
@@ -64,33 +64,28 @@ namespace castor3d
 		}
 	}
 
-	SubmeshComponentSPtr SecondaryUVComponent::clone( Submesh & submesh )const
+	SubmeshComponentSPtr PositionsComponent::clone( Submesh & submesh )const
 	{
-		auto result = std::make_shared< SecondaryUVComponent >( submesh );
+		auto result = std::make_shared< PositionsComponent >( submesh );
 		result->m_data = m_data;
 		return std::static_pointer_cast< SubmeshComponent >( result );
 	}
 
-	void SecondaryUVComponent::addTexcoords( std::vector< castor::Point3f > const & uvs )
-	{
-		m_data.reserve( m_data.size() + uvs.size() );
-		m_data.insert( m_data.end(), uvs.begin(), uvs.end() );
-	}
-
-	bool SecondaryUVComponent::doInitialise( RenderDevice const & device )
+	bool PositionsComponent::doInitialise( RenderDevice const & device )
 	{
 		return true;
 	}
 
-	void SecondaryUVComponent::doCleanup( RenderDevice const & device )
+	void PositionsComponent::doCleanup( RenderDevice const & device )
 	{
+		m_data.clear();
 	}
 
-	void SecondaryUVComponent::doUpload()
+	void PositionsComponent::doUpload()
 	{
 		auto count = uint32_t( m_data.size() );
 		auto & offsets = getOwner()->getBufferOffsets();
-		auto & buffer = offsets.getBufferChunk( SubmeshFlag::eSecondaryUV );
+		auto & buffer = offsets.getBufferChunk( SubmeshFlag::ePositions );
 
 		if ( count && buffer.hasData() )
 		{

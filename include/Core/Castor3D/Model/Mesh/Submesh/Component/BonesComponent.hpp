@@ -89,8 +89,15 @@ namespace castor3d
 		 */
 		SubmeshFlags getSubmeshFlags( Material const & material )const override
 		{
+			return getDataFlags();
+		}
+		/**
+		 *\copydoc		castor3d::SubmeshComponent::getDataFlags
+		 */
+		SubmeshFlags getDataFlags()const override
+		{
 			return hasBoneData()
-				? SubmeshFlag::eSkinning
+				? SubmeshFlag::eSkinning | SubmeshFlag::eBones
 				: SubmeshFlag( 0 );
 		}
 
@@ -111,7 +118,7 @@ namespace castor3d
 
 	public:
 		C3D_API static castor::String const Name;
-		C3D_API static uint32_t constexpr BindingPoint = 3u;
+		C3D_API static uint32_t constexpr BindingPoint = 8u;
 
 	private:
 		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_bonesLayouts;
