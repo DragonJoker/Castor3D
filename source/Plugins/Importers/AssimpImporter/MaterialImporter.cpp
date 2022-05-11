@@ -596,22 +596,16 @@ namespace c3d_assimp
 					{
 						std::unique_ptr< castor3d::TextureSourceInfo > sourceInfo;
 
-						if ( info.name[0] == '*' )
+						if ( aiTexture const * embeddedTexture = m_scene.GetEmbeddedTexture( info.name.c_str() ) )
 						{
-							auto id = uint32_t( castor::string::toInt( info.name.substr( 1u ) ) );
-
-							if ( id < m_scene.mNumTextures )
-							{
-								auto texture = m_scene.mTextures[id];
-								castor::ByteArray data;
-								data.resize( texture->mWidth );
-								std::memcpy( data.data(), texture->pcData, data.size() );
-								sourceInfo = std::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( m_sampler
-									, "Image" + castor::string::toString( id )
-									, texture->achFormatHint
-									, std::move( data )
-									, texConfig ) );
-							}
+							castor::ByteArray data;
+							data.resize( embeddedTexture->mWidth );
+							std::memcpy( data.data(), embeddedTexture->pcData, data.size() );
+							sourceInfo = std::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( m_sampler
+								, info.name
+								, embeddedTexture->achFormatHint
+								, std::move( data )
+								, texConfig ) );
 						}
 						else
 						{
