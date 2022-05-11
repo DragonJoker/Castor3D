@@ -1,10 +1,6 @@
 #include "Castor3D/Model/Mesh/Generator/Cube.hpp"
 
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 
@@ -59,36 +55,12 @@ namespace castor3d
 			CptNegatif++;
 		}
 
-		SubmeshSPtr submesh1 = p_mesh.createSubmesh();
-		auto positions1 = submesh1->createComponent< PositionsComponent >();
-		auto normals1 = submesh1->createComponent< NormalsComponent >();
-		auto tangents1 = submesh1->createComponent< TangentsComponent >();
-		auto texcoords1 = submesh1->createComponent< TexcoordsComponent >();
-		SubmeshSPtr submesh2 = p_mesh.createSubmesh();
-		auto positions2 = submesh2->createComponent< PositionsComponent >();
-		auto normals2 = submesh2->createComponent< NormalsComponent >();
-		auto tangents2 = submesh2->createComponent< TangentsComponent >();
-		auto texcoords2 = submesh2->createComponent< TexcoordsComponent >();
-		SubmeshSPtr submesh3 = p_mesh.createSubmesh();
-		auto positions3 = submesh3->createComponent< PositionsComponent >();
-		auto normals3 = submesh3->createComponent< NormalsComponent >();
-		auto tangents3 = submesh3->createComponent< TangentsComponent >();
-		auto texcoords3 = submesh3->createComponent< TexcoordsComponent >();
-		SubmeshSPtr submesh4 = p_mesh.createSubmesh();
-		auto positions4 = submesh4->createComponent< PositionsComponent >();
-		auto normals4 = submesh4->createComponent< NormalsComponent >();
-		auto tangents4 = submesh4->createComponent< TangentsComponent >();
-		auto texcoords4 = submesh4->createComponent< TexcoordsComponent >();
-		SubmeshSPtr submesh5 = p_mesh.createSubmesh();
-		auto positions5 = submesh5->createComponent< PositionsComponent >();
-		auto normals5 = submesh5->createComponent< NormalsComponent >();
-		auto tangents5 = submesh5->createComponent< TangentsComponent >();
-		auto texcoords5 = submesh5->createComponent< TexcoordsComponent >();
-		SubmeshSPtr submesh6 = p_mesh.createSubmesh();
-		auto positions6 = submesh6->createComponent< PositionsComponent >();
-		auto normals6 = submesh6->createComponent< NormalsComponent >();
-		auto tangents6 = submesh6->createComponent< TangentsComponent >();
-		auto texcoords6 = submesh6->createComponent< TexcoordsComponent >();
+		SubmeshSPtr submesh1 = p_mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+		SubmeshSPtr submesh2 = p_mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+		SubmeshSPtr submesh3 = p_mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+		SubmeshSPtr submesh4 = p_mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+		SubmeshSPtr submesh5 = p_mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+		SubmeshSPtr submesh6 = p_mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
 		static castor::Point3f const zero;
 
 		// Face avant

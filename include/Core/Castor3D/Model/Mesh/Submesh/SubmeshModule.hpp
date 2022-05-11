@@ -47,6 +47,9 @@ namespace castor3d
 		//!\~english	Submesh has texture coordinates.
 		//!\~french		Le submesh a des coordonnées de texture.
 		eTexcoords = 0x0008,
+		//!\~english	Base components flags.
+		//\~french		Indicateurs de composants de base.
+		ePosNmlTanTex = ePositions | eNormals | eTangents | eTexcoords,
 		//!\~english	The submesh has morphing positions.
 		//!\~french		Le submesh a des positions de morphing.
 		eMorphPositions = 0x0010,
