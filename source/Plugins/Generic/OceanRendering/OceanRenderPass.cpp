@@ -587,7 +587,6 @@ namespace ocean
 		remFlag( flags, castor3d::SubmeshFlag::eInstantiation );
 		remFlag( flags, castor3d::SubmeshFlag::eMorphing );
 		remFlag( flags, castor3d::SubmeshFlag::eSkinning );
-		addFlag( flags, castor3d::SubmeshFlag::eSecondaryUV );
 		addFlag( flags, castor3d::SubmeshFlag::eForceTexCoords );
 		return flags;
 	}
@@ -693,7 +692,8 @@ namespace ocean
 			out.vtx.position = c3d_matrixData.viewToProj( out.viewPosition );
 			auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
 				, c3d_modelData.getNormalMtx( flags.submeshFlags, curMtxModel ) );
-			out.computeTangentSpace( flags.programFlags
+			out.computeTangentSpace( flags.submeshFlags
+				, flags.programFlags
 				, c3d_sceneData.cameraPosition
 				, out.worldPosition.xyz()
 				, mtxNormal
@@ -1157,9 +1157,11 @@ namespace ocean
 				auto normal = writer.declLocale( "normal"
 					, normalize( in.normal ) );
 				auto tangent = writer.declLocale( "tangent"
-					, normalize( in.tangent ) );
+					, normalize( in.tangent )
+					, checkFlag( flags.submeshFlags, SubmeshFlag::eTangents ) );
 				auto bitangent = writer.declLocale( "bitangent"
-					, normalize( in.bitangent ) );
+					, normalize( in.bitangent )
+					, checkFlag( flags.submeshFlags, SubmeshFlag::eTangents ) );
 
 				auto normalMapCoords1 = writer.declLocale( "normalMapCoords1"
 					, in.texture1.xy() + c3d_oceanData.time * c3d_oceanData.normalMapScroll.xy() * c3d_oceanData.normalMapScrollSpeed.x() );

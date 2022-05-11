@@ -73,7 +73,7 @@ namespace castor3d
 			};
 			submesh->setTopology( VK_PRIMITIVE_TOPOLOGY_LINE_LIST );
 			submesh->addPoints( vertex );
-			auto mapping = std::make_shared< castor3d::LinesMapping >( *submesh );
+			auto mapping = submesh->createComponent< LinesMapping >();
 			castor3d::LineIndices lines[]
 			{
 				castor3d::LineIndices{ { 0u, 1u } },
@@ -90,7 +90,6 @@ namespace castor3d
 				castor3d::LineIndices{ { 3u, 7u } },
 			};
 			mapping->addLineGroup( lines );
-			submesh->setIndexMapping( mapping );
 			MaterialResPtr material;
 			castor::String matName = cuT( "Frustum_" ) + colourName;
 

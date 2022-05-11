@@ -62,7 +62,11 @@ namespace castor3d
 
 			// Constitution de la base sphérique
 			Submesh & baseSubmesh = *mesh.createSubmesh();
-			auto baseIndexMapping = std::make_shared< TriFaceMapping >( baseSubmesh );
+			auto basePositions = baseSubmesh.createComponent< PositionsComponent >();
+			auto baseNormals = baseSubmesh.createComponent< NormalsComponent >();
+			auto baseTangents = baseSubmesh.createComponent< TangentsComponent >();
+			auto baseTexcoords = baseSubmesh.createComponent< TexcoordsComponent >();
+			auto baseIndexMapping = baseSubmesh.createComponent< TriFaceMapping >();
 
 			for ( uint32_t k = 0; k < m_nbFaces; k++ )
 			{
@@ -115,10 +119,13 @@ namespace castor3d
 			}
 
 			baseIndexMapping->computeTangentsFromNormals();
-			baseSubmesh.setIndexMapping( baseIndexMapping );
 
 			// Constitution des côtés
 			Submesh & sideSubmesh = *mesh.createSubmesh();
+			auto sidePositions = sideSubmesh.createComponent< PositionsComponent >();
+			auto sideNormals = sideSubmesh.createComponent< NormalsComponent >();
+			auto sideTangents = sideSubmesh.createComponent< TangentsComponent >();
+			auto sideTexcoords = sideSubmesh.createComponent< TexcoordsComponent >();
 			castor::Point2f ptA = arc[m_nbFaces];
 			rAlphaI = 0;
 
@@ -137,7 +144,7 @@ namespace castor3d
 			}
 
 			// Reconstition des faces des côtés
-			auto sideIndexMapping = std::make_shared< TriFaceMapping >( sideSubmesh );
+			auto sideIndexMapping = sideSubmesh.createComponent< TriFaceMapping >();
 
 			for ( uint32_t i = 0; i < 2 * m_nbFaces; i += 2 )
 			{
@@ -145,7 +152,6 @@ namespace castor3d
 			}
 
 			sideIndexMapping->computeNormals( true );
-			sideSubmesh.setIndexMapping( sideIndexMapping );
 		}
 
 		mesh.computeContainers();

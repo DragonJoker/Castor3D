@@ -291,9 +291,9 @@ namespace c3d_assimp
 					? scenes::getTranslation( transformAcc )
 					: makeMatrix4x4f( transformAcc ) );
 
-				for ( auto & vertex : it->second->getPoints() )
+				for ( auto & vertex : it->second->getPositions() )
 				{
-					vertex.pos = transform * vertex.pos;
+					vertex = transform * vertex;
 				}
 
 				auto indexMapping = it->second->getIndexMapping();

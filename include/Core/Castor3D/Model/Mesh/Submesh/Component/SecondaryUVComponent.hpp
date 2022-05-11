@@ -47,20 +47,17 @@ namespace castor3d
 		 */
 		SubmeshFlags getSubmeshFlags( Material const & material )const override
 		{
+			return getDataFlags();
+		}
+		/**
+		 *\copydoc		castor3d::SubmeshComponent::getDataFlags
+		 */
+		SubmeshFlags getDataFlags()const override
+		{
 			return SubmeshFlag::eSecondaryUV;
 		}
 
 		C3D_API void addTexcoords( std::vector< castor::Point3f > const & uvs );
-
-		GpuBufferOffsetT< castor::Point3f > const & getAnimationBuffer()const
-		{
-			return m_buffer;
-		}
-
-		GpuBufferOffsetT< castor::Point3f > & getAnimationBuffer()
-		{
-			return m_buffer;
-		}
 
 		std::vector< castor::Point3f > & getData()
 		{
@@ -74,10 +71,9 @@ namespace castor3d
 
 	public:
 		C3D_API static castor::String const Name;
-		C3D_API static uint32_t constexpr BindingPoint = 4u;
+		C3D_API static uint32_t constexpr BindingPoint = 9u;
 
 	private:
-		GpuBufferOffsetT< castor::Point3f > m_buffer;
 		std::vector< castor::Point3f > m_data;
 		std::unordered_map< uint32_t, ashes::PipelineVertexInputStateCreateInfo > m_layouts;
 	};

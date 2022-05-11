@@ -150,6 +150,7 @@ namespace c3d_assimp
 				| aiProcess_OptimizeGraph
 				| aiProcess_FixInfacingNormals
 				| aiProcess_LimitBoneWeights;
+			m_importer.SetPropertyInteger( AI_CONFIG_PP_LBW_MAX_WEIGHTS, 8 ); //< Limit to 8 bone weights
 		}
 
 		bool tangentSpace = false;

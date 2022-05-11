@@ -98,9 +98,10 @@ namespace castor3d
 				BillboardVertex{ castor::Point3f{ +0.5f, +0.5f, 1.0f }, castor::Point2f{ 1.0f, 1.0f } },
 			};
 			m_geometryBuffers.bufferOffset = device.vertexPools->getBuffer< Quad >( 1u );
-			auto bufferData = m_geometryBuffers.bufferOffset.getVertexData< Quad >();
+			auto bufferData = m_geometryBuffers.bufferOffset.getData< Quad >( SubmeshFlag::ePositions );
 			bufferData.front() = vertices;
-			m_geometryBuffers.bufferOffset.markVertexDirty( VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+			m_geometryBuffers.bufferOffset.markDirty( SubmeshFlag::ePositions
+				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
 				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 
 			m_quadLayout = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
@@ -128,10 +129,7 @@ namespace castor3d
 		{
 			m_initialised = false;
 			device.vertexPools->putBuffer( m_geometryBuffers.bufferOffset );
-			m_geometryBuffers.bufferOffset.vtxBuffer = nullptr;
-			m_geometryBuffers.bufferOffset.vtxChunk.offset = 0u;
-			m_geometryBuffers.bufferOffset.vtxChunk.askedSize = 0u;
-			m_geometryBuffers.bufferOffset.vtxChunk.size = 0u;
+			m_geometryBuffers.bufferOffset.reset();
 			m_geometryBuffers.other.clear();
 			m_geometryBuffers.otherOffsets.clear();
 			m_geometryBuffers.layouts.clear();
@@ -189,6 +187,14 @@ namespace castor3d
 				log::error << "Submesh::SortFaces - Error: " << p_exc.what() << std::endl;
 			}
 		}
+	}
+
+	SubmeshFlags BillboardBase::getSubmeshFlags()const
+	{
+		return SubmeshFlag::ePositions
+			| SubmeshFlag::eNormals
+			| SubmeshFlag::eTangents
+			| SubmeshFlag::eTexcoords;
 	}
 
 	ProgramFlags BillboardBase::getProgramFlags()const

@@ -95,21 +95,12 @@ namespace castor3d
 	public:
 		struct ModelBuffers
 		{
-			ModelBuffers( GpuPackedBufferPtr vtx
-				, GpuPackedBufferPtr idx
-				, GpuPackedBufferPtr bon
-				, GpuPackedBufferPtr mph )
-				: vertex{ std::move( vtx ) }
-				, index{ std::move( idx ) }
-				, bones{ std::move( bon ) }
-				, morph{ std::move( mph ) }
+			ModelBuffers( std::array< GpuPackedBufferPtr, getIndex( SubmeshFlag::eAllComponents ) > bufs )
+				: buffers{ std::move( bufs ) }
 			{
 			}
 
-			GpuPackedBufferPtr vertex;
-			GpuPackedBufferPtr index;
-			GpuPackedBufferPtr bones;
-			GpuPackedBufferPtr morph;
+			std::array< GpuPackedBufferPtr, getIndex( SubmeshFlag::eAllComponents ) > buffers;
 		};
 		using BufferArray = std::vector< ModelBuffers >;
 

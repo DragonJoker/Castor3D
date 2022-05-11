@@ -21,7 +21,7 @@ namespace castor3d
 
 	namespace smshcompskin
 	{
-		static ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout( ShaderFlags shaderFlags
+		static ashes::PipelineVertexInputStateCreateInfo createVertexLayout( ShaderFlags shaderFlags
 			, uint32_t & currentLocation )
 		{
 			ashes::VkVertexInputBindingDescriptionArray bindings{ { BonesComponent::BindingPoint
@@ -88,15 +88,13 @@ namespace castor3d
 			if ( layoutIt == m_bonesLayouts.end() )
 			{
 				layoutIt = m_bonesLayouts.emplace( hash
-					, smshcompskin::doCreateVertexLayout( shaderFlags, currentLocation ) ).first;
+					, smshcompskin::createVertexLayout( shaderFlags, currentLocation ) ).first;
 			}
 			else
 			{
 				currentLocation = layoutIt->second.vertexAttributeDescriptions.back().location + 1u;
 			}
 
-			buffers.emplace_back( getOwner()->getBufferOffsets().getBonesBuffer() );
-			offsets.emplace_back( 0u );
 			layouts.emplace_back( layoutIt->second );
 		}
 	}
@@ -126,13 +124,15 @@ namespace castor3d
 	{
 		auto count = uint32_t( m_bones.size() );
 		auto & offsets = getOwner()->getBufferOffsets();
+		auto & buffer = offsets.getBufferChunk( SubmeshFlag::eBones );
 
-		if ( count && offsets.hasBones() )
+		if ( count && buffer.hasData() )
 		{
+			CU_Require( buffer.getCount< VertexBoneData >() == count );
 			std::copy( m_bones.begin()
 				, m_bones.end()
-				, offsets.getBoneData().begin() );
-			offsets.markBonesDirty();
+				, buffer.getData< VertexBoneData >().begin() );
+			buffer.markDirty();
 		}
 	}
 

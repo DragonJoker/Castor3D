@@ -7,7 +7,12 @@
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Miscellaneous/StagingData.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -92,44 +97,42 @@ namespace castor3d
 			return fix( value, defaultValue );
 		}
 
-		static ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout( SubmeshFlags const & submeshFlags
-			, ShaderFlags const & shaderFlags
-			, bool hasTextures
-			, uint32_t & currentLocation )
+		template< typename ComponentT >
+		static uint32_t getComponentCount( Submesh const & submesh )
 		{
-			ashes::VkVertexInputBindingDescriptionArray bindings{ { 0u
-				, sizeof( InterleavedVertex ), VK_VERTEX_INPUT_RATE_VERTEX } };
+			uint32_t result{};
+			auto comp = submesh.getComponent< ComponentT >();
 
-			ashes::VkVertexInputAttributeDescriptionArray attributes{ 1u, { currentLocation++
-				, 0u
-				, VK_FORMAT_R32G32B32_SFLOAT
-				, offsetof( InterleavedVertex, pos ) } };
-
-			if ( checkFlag( shaderFlags, ShaderFlag::eNormal ) )
+			if ( comp )
 			{
-				attributes.push_back( { currentLocation++
-					, 0u
-					, VK_FORMAT_R32G32B32_SFLOAT
-					, offsetof( InterleavedVertex, nml ) } );
+				result = uint32_t( comp->getData().size() );
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) )
-			{
-				attributes.push_back( { currentLocation++
-					, 0u
-					, VK_FORMAT_R32G32B32_SFLOAT
-					, offsetof( InterleavedVertex, tan ) } );
-			}
+			return result;
+		}
 
-			if ( hasTextures )
-			{
-				attributes.push_back( { currentLocation++
-					, 0u
-					, VK_FORMAT_R32G32B32_SFLOAT
-					, offsetof( InterleavedVertex, tex ) } );
-			}
+		template< typename ComponentT, typename DataT >
+		void addComponentData( Submesh & submesh
+			, DataT const & data )
+		{
+			auto comp = submesh.getComponent< ComponentT >();
 
-			return ashes::PipelineVertexInputStateCreateInfo{ 0u, bindings, attributes };
+			if ( comp )
+			{
+				comp->getData().push_back( data );
+			}
+		}
+
+		template< typename ComponentT >
+		void reserveComponentData( Submesh & submesh
+			, uint32_t size )
+		{
+			auto comp = submesh.getComponent< ComponentT >();
+
+			if ( comp )
+			{
+				comp->getData().reserve( size );
+			}
 		}
 	}
 
@@ -140,7 +143,7 @@ namespace castor3d
 		: OwnedBy< Mesh >{ mesh }
 		, m_id{ id }
 		, m_defaultMaterial{ mesh.getScene()->getEngine()->getMaterialCache().getDefaultMaterial() }
-		, m_submeshFlags{ SubmeshFlag::eTangents | SubmeshFlag::eTexcoords }
+		, m_submeshFlags{}
 	{
 		addComponent( std::make_shared< InstantiationComponent >( *this, 2u ) );
 	}
@@ -155,7 +158,7 @@ namespace castor3d
 		if ( !m_generated )
 		{
 			if ( !m_bufferOffset
-				|| m_points.size() != m_bufferOffset.getVertexCount< InterleavedVertex >() )
+				|| getPointsCount() != m_bufferOffset.getCount< castor::Point3f >( SubmeshFlag::ePositions ) )
 			{
 				VkDeviceSize indexCount = 0u;
 
@@ -164,28 +167,14 @@ namespace castor3d
 					indexCount = VkDeviceSize( m_indexMapping->getCount() ) * m_indexMapping->getComponentsCount();
 				}
 
-				auto submeshFlags = m_submeshFlags;
-
-				if ( hasComponent( BonesComponent::Name ) )
+				for ( auto & component : m_components )
 				{
-					submeshFlags |= SubmeshFlag::eSkinning;
+					m_submeshFlags |= component.second->getDataFlags();
 				}
 
-				if ( hasComponent( MorphComponent::Name ) )
-				{
-					submeshFlags |= SubmeshFlag::eMorphing;
-				}
-
-				m_bufferOffset = device.geometryPools->getBuffer( m_points.size()
+				m_bufferOffset = device.geometryPools->getBuffer( getPointsCount()
 					, indexCount
-					, submeshFlags );
-				doFillVertexBuffer();
-			}
-
-			for ( auto & component : m_components )
-			{
-				component.second->initialise( device );
-				component.second->upload();
+					, m_submeshFlags );
 			}
 
 			m_generated = true;
@@ -195,15 +184,17 @@ namespace castor3d
 		{
 			m_initialised = true;
 
-			if ( m_instantiation )
-			{
-				// Make sure instantiation is initialised, for the components that need it.
-				m_instantiation->initialise( device );
-			}
-
 			for ( auto & component : m_components )
 			{
-				m_initialised = m_initialised && component.second->initialise( device );
+				if ( m_initialised )
+				{
+					m_initialised = component.second->initialise( device );
+				}
+
+				if ( m_initialised )
+				{
+					component.second->upload();
+				}
 			}
 
 			m_dirty = !m_initialised;
@@ -223,16 +214,17 @@ namespace castor3d
 		{
 			device.geometryPools->putBuffer( m_bufferOffset );
 		}
-
-		m_vertexLayouts.clear();
-		m_points.clear();
 	}
 
 	void Submesh::update()
 	{
 		if ( m_dirty && m_bufferOffset )
 		{
-			doFillVertexBuffer();
+			for ( auto & component : m_components )
+			{
+				component.second->upload();
+			}
+
 			m_dirty = false;
 		}
 
@@ -244,15 +236,18 @@ namespace castor3d
 
 	void Submesh::computeContainers()
 	{
-		if ( !m_points.empty() )
+		auto positions = getComponent< PositionsComponent >();
+
+		if ( positions && getPointsCount() )
 		{
-			castor::Point3f min = m_points[0].pos;
-			castor::Point3f max = m_points[0].pos;
+			auto & points = positions->getData();
+			castor::Point3f min = points[0];
+			castor::Point3f max = points[0];
 			uint32_t nbVertex = getPointsCount();
 
 			for ( uint32_t i = 1; i < nbVertex; i++ )
 			{
-				castor::Point3f cur = m_points[i].pos;
+				castor::Point3f cur = points[i];
 				max[0] = std::max( cur[0], max[0] );
 				max[1] = std::max( cur[1], max[1] );
 				max[2] = std::max( cur[2], max[2] );
@@ -321,8 +316,11 @@ namespace castor3d
 
 	uint32_t Submesh::getPointsCount()const
 	{
-		return std::max< uint32_t >( uint32_t( m_points.size() )
-			, ( m_bufferOffset ? m_bufferOffset.getVertexCount< InterleavedVertex >() : 0u ) );
+		return std::max( { smsh::getComponentCount< PositionsComponent >( *this )
+			, smsh::getComponentCount< NormalsComponent >( *this )
+			, smsh::getComponentCount< TangentsComponent >( *this )
+			, smsh::getComponentCount< TexcoordsComponent >( *this )
+			, uint32_t( m_bufferOffset ? m_bufferOffset.getCount< castor::Point3f >( SubmeshFlag::ePositions ) : 0u ) } );
 	}
 
 	int Submesh::isInMyPoints( castor::Point3f const & vertex
@@ -330,15 +328,21 @@ namespace castor3d
 	{
 		int result = -1;
 		int index = 0;
+		auto positions = getComponent< PositionsComponent >();
 
-		for ( auto it = m_points.begin(); it != m_points.end() && result == -1; ++it )
+		if ( positions )
 		{
-			if ( castor::point::distanceSquared( vertex, it->pos ) < precision )
-			{
-				result = index;
-			}
+			auto & points = positions->getData();
 
-			index++;
+			for ( auto it = points.begin(); it != points.end() && result == -1; ++it )
+			{
+				if ( castor::point::distanceSquared( vertex, *it ) < precision )
+				{
+					result = index;
+				}
+
+				index++;
+			}
 		}
 
 		return result;
@@ -368,13 +372,20 @@ namespace castor3d
 		m_needsNormalsCompute = smsh::fixNml( point.nml );
 		m_needsNormalsCompute = smsh::fixPos( point.pos ) || m_needsNormalsCompute;
 		m_needsNormalsCompute = smsh::fixTex( point.tex ) || m_needsNormalsCompute;
-		m_points.push_back( point );
+		smsh::addComponentData< PositionsComponent >( *this, point.pos );
+		smsh::addComponentData< NormalsComponent >( *this, point.nml );
+		smsh::addComponentData< TangentsComponent >( *this, point.tan );
+		smsh::addComponentData< TexcoordsComponent >( *this, point.tex );
 	}
 
 	void Submesh::addPoints( InterleavedVertex const * const begin
 		, InterleavedVertex const * const end )
 	{
-		m_points.reserve( size_t( m_points.size() + end - begin ) );
+		auto size = getPointsCount() + uint32_t( std::distance( begin, end ) );
+		smsh::reserveComponentData< PositionsComponent >( *this, size );
+		smsh::reserveComponentData< NormalsComponent >( *this, size );
+		smsh::reserveComponentData< TangentsComponent >( *this, size );
+		smsh::reserveComponentData< TexcoordsComponent >( *this, size );
 
 		for ( auto & point : castor::makeArrayView( begin, end ) )
 		{
@@ -437,33 +448,13 @@ namespace castor3d
 	{
 		auto key = smsh::hash( material, shaderFlags, submeshFlags, mask, forceTexcoords );
 		auto it = m_geometryBuffers.find( key );
-		bool hasTextures = forceTexcoords || ( !mask.empty() );
 
 		if ( it == m_geometryBuffers.end() )
 		{
 			ashes::BufferCRefArray buffers;
 			ashes::UInt64Array offsets;
 			ashes::PipelineVertexInputStateCreateInfoCRefArray layouts;
-			auto hash = std::hash< SubmeshFlags::BaseType >{}( submeshFlags );
-			hash = castor::hashCombine( hash, shaderFlags.value() );
-			hash = castor::hashCombine( hash, hasTextures );
-
-			auto layoutIt = m_vertexLayouts.find( hash );
 			uint32_t currentLocation = 0u;
-
-			if ( layoutIt == m_vertexLayouts.end() )
-			{
-				layoutIt = m_vertexLayouts.emplace( hash
-					, smsh::doCreateVertexLayout( submeshFlags
-						, shaderFlags
-						, hasTextures, currentLocation ) ).first;
-			}
-			else
-			{
-				currentLocation = layoutIt->second.vertexAttributeDescriptions.back().location + 1u;
-			}
-
-			layouts.push_back( layoutIt->second );
 
 			for ( auto & component : m_components )
 			{
@@ -494,17 +485,116 @@ namespace castor3d
 		m_disableSceneUpdate = false;
 	}
 
-	void Submesh::doFillVertexBuffer()
+	InterleavedVertex Submesh::getInterleavedPoint( uint32_t index )const
 	{
-		auto size = uint32_t( m_points.size() );
+		CU_Require( index < getPointsCount() );
+		InterleavedVertex result;
+		auto positions = getComponent< PositionsComponent >();
+		auto normals = getComponent< NormalsComponent >();
+		auto tangents = getComponent< TangentsComponent >();
+		auto texcoords = getComponent< TexcoordsComponent >();
 
-		if ( size )
+		if ( positions )
 		{
-			std::copy( m_points.begin()
-				, m_points.end()
-				, m_bufferOffset.getVertexData< InterleavedVertex >().begin() );
-			m_bufferOffset.markVertexDirty();
+			result.pos = positions->getData()[index];
 		}
+
+		if ( normals )
+		{
+			result.nml = normals->getData()[index];
+		}
+
+		if ( tangents )
+		{
+			result.tan = tangents->getData()[index];
+		}
+
+		if ( texcoords )
+		{
+			result.tex = texcoords->getData()[index];
+		}
+
+		return result;
+	}
+
+	castor::Point3fArray const & Submesh::getPositions()const
+	{
+		auto positions = getComponent< PositionsComponent >();
+
+		if ( positions )
+		{
+			return positions->getData();
+		}
+
+		static castor::Point3fArray const dummy;
+		return dummy;
+	}
+
+	castor::Point3fArray & Submesh::getPositions()
+	{
+		auto positions = getComponent< PositionsComponent >();
+		CU_Require( positions );
+		return positions->getData();
+	}
+
+	castor::Point3fArray const & Submesh::getNormals()const
+	{
+		auto positions = getComponent< NormalsComponent >();
+
+		if ( positions )
+		{
+			return positions->getData();
+		}
+
+		static castor::Point3fArray const dummy;
+		return dummy;
+	}
+
+	castor::Point3fArray & Submesh::getNormals()
+	{
+		auto positions = getComponent< NormalsComponent >();
+		CU_Require( positions );
+		return positions->getData();
+	}
+
+	castor::Point3fArray const & Submesh::getTangents()const
+	{
+		auto positions = getComponent< TangentsComponent >();
+
+		if ( positions )
+		{
+			return positions->getData();
+		}
+
+		static castor::Point3fArray const dummy;
+		return dummy;
+	}
+
+	castor::Point3fArray & Submesh::getTangents()
+	{
+		auto positions = getComponent< TangentsComponent >();
+		CU_Require( positions );
+		return positions->getData();
+	}
+
+	castor::Point3fArray const & Submesh::getTexcoords()const
+	{
+		auto positions = getComponent< TexcoordsComponent >();
+
+		if ( positions )
+		{
+			return positions->getData();
+		}
+
+		static castor::Point3fArray const dummy;
+		return dummy;
+	}
+
+	castor::Point3fArray & Submesh::getTexcoords()
+	{
+		auto positions = getComponent< TexcoordsComponent >();
+		CU_Require( positions );
+		return positions->getData();
 	}
 
 	//*********************************************************************************************

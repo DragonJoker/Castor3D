@@ -21,17 +21,73 @@ namespace castor3d
 		{
 			castor::String result;
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eSkinning ) )
+			if ( checkFlag( submeshFlags, SubmeshFlag::ePositions ) )
 			{
-				result += "Skin";
+				result += "Pos";
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphing ) )
+			if ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) )
 			{
-				result += "Morph";
+				result += "Nml";
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) )
+			{
+				result += "Tan";
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords ) )
+			{
+				result += "Tex";
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eSecondaryUV ) )
+			{
+				result += "SecUV";
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eBones ) )
+			{
+				result += "Bones";
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphPositions ) )
+			{
+				result += "MphPos";
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphNormals ) )
+			{
+				result += "MphNml";
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphTangents ) )
+			{
+				result += "MphTan";
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords ) )
+			{
+				result += "MphTex";
 			}
 
 			return result;
+		}
+
+		static uint32_t getSize( uint32_t flagIndex )
+		{
+			constexpr size_t sizes[] = { sizeof( uint32_t ) /* SubmeshFlag::eIndex */
+				, sizeof( castor::Point3f ) /* SubmeshFlag::ePositions */
+				, sizeof( castor::Point3f ) /* SubmeshFlag::eNormals */
+				, sizeof( castor::Point3f ) /* SubmeshFlag::eTangents */
+				, sizeof( castor::Point3f ) /* SubmeshFlag::eTexcoords */
+				, sizeof( castor::Point3f ) /* SubmeshFlag::eMorphPositions */
+				, sizeof( castor::Point3f ) /* SubmeshFlag::eMorphNormals */
+				, sizeof( castor::Point3f ) /* SubmeshFlag::eMorphTangents */
+				, sizeof( castor::Point3f ) /* SubmeshFlag::eMorphTexcoords */
+				, sizeof( VertexBoneData ) /* SubmeshFlag::eBones */
+				, sizeof( castor::Point3f ) /* SubmeshFlag::eSecondaryUV */ };
+			return uint32_t( sizes[flagIndex] );
 		}
 	}
 
@@ -64,10 +120,10 @@ namespace castor3d
 			, m_buffers.end()
 			, [&bufferOffset]( ModelBuffers const & lookup )
 			{
-				return &lookup.vertex->getBuffer().getBuffer() == &bufferOffset.getVertexBuffer();
+				return &lookup.vertex->getBuffer().getBuffer() == &bufferOffset.getBuffer( SubmeshFlag::ePositions );
 			} );
 		CU_Require( it != m_buffers.end() );
-		it->vertex->deallocate( bufferOffset.vtxChunk );
+		it->vertex->deallocate( bufferOffset.buffers[getIndex( SubmeshFlag::ePositions )].chunk );
 	}
 
 	VertexBufferPool::BufferArray::iterator VertexBufferPool::doFindBuffer( VkDeviceSize size
@@ -104,23 +160,14 @@ namespace castor3d
 	{
 		for ( auto & bufferIt : m_buffers )
 		{
-			for ( auto & buffer : bufferIt.second )
+			for ( auto & buffers : bufferIt.second )
 			{
-				buffer.vertex->upload( commandBuffer );
-
-				if ( buffer.bones )
+				for ( uint32_t i = 0u; i < getIndex( SubmeshFlag::eAllComponents ); ++i )
 				{
-					buffer.bones->upload( commandBuffer );
-				}
-
-				if ( buffer.morph )
-				{
-					buffer.morph->upload( commandBuffer );
-				}
-
-				if ( buffer.index )
-				{
-					buffer.index->upload( commandBuffer );
+					if ( buffers.buffers[i] )
+					{
+						buffers.buffers[i]->upload( commandBuffer );
+					}
 				}
 			}
 		}
@@ -139,54 +186,101 @@ namespace castor3d
 		if ( it == buffers.end() )
 		{
 			auto name = objbuf::getName( submeshFlags );
-			ModelBuffers modelBuffers{ details::createBuffer< InterleavedVertex >( m_device
-					, vertexCount
-					, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, m_debugName + name + "Vertex" + std::to_string( buffers.size() )
-					, false )
-				, details::createBuffer< uint32_t >( m_device
-					, indexCount
-					, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, m_debugName + name + "Index" + std::to_string( buffers.size() )
-					, false )
-				, ( checkFlag( submeshFlags, SubmeshFlag::eSkinning )
+			ModelBuffers modelBuffers{ { ( indexCount
+					? details::createBuffer< uint32_t >( m_device
+						, indexCount
+						, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+						, m_debugName + name + "Index" + std::to_string( buffers.size() )
+						, false )
+					: nullptr )
+				, ( checkFlag( submeshFlags, SubmeshFlag::ePositions )
+					? details::createBuffer< castor::Point3f >( m_device
+						, vertexCount
+						, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+						, m_debugName + name + "Positions" + std::to_string( buffers.size() )
+						, false )
+					: nullptr )
+				, ( checkFlag( submeshFlags, SubmeshFlag::eNormals )
+					? details::createBuffer< castor::Point3f >( m_device
+						, vertexCount
+						, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+						, m_debugName + name + "Normals" + std::to_string( buffers.size() )
+						, false )
+					: nullptr )
+				, ( checkFlag( submeshFlags, SubmeshFlag::eTangents )
+					? details::createBuffer< castor::Point3f >( m_device
+						, vertexCount
+						, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+						, m_debugName + name + "Tangents" + std::to_string( buffers.size() )
+						, false )
+					: nullptr )
+				, ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords )
+					? details::createBuffer< castor::Point3f >( m_device
+						, vertexCount
+						, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+						, m_debugName + name + "Texcoords" + std::to_string( buffers.size() )
+						, false )
+					: nullptr )
+				, ( checkFlag( submeshFlags, SubmeshFlag::eMorphPositions )
+					? details::createBuffer< castor::Point3f >( m_device
+						, vertexCount
+						, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+						, m_debugName + name + "MorphPos" + std::to_string( buffers.size() )
+						, false )
+					: nullptr )
+				, ( checkFlag( submeshFlags, SubmeshFlag::eMorphNormals )
+					? details::createBuffer< castor::Point3f >( m_device
+						, vertexCount
+						, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+						, m_debugName + name + "MorphNml" + std::to_string( buffers.size() )
+						, false )
+					: nullptr )
+				, ( checkFlag( submeshFlags, SubmeshFlag::eMorphTangents )
+					? details::createBuffer< castor::Point3f >( m_device
+						, vertexCount
+						, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+						, m_debugName + name + "MorphTan" + std::to_string( buffers.size() )
+						, false )
+					: nullptr )
+				, ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords )
+					? details::createBuffer< castor::Point3f >( m_device
+						, vertexCount
+						, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+						, m_debugName + name + "MorphTex" + std::to_string( buffers.size() )
+						, false )
+					: nullptr )
+				, ( checkFlag( submeshFlags, SubmeshFlag::eBones )
 					? details::createBuffer< VertexBoneData >( m_device
 						, vertexCount
 						, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 						, m_debugName + name + "Bones" + std::to_string( buffers.size() )
 						, false )
 					: nullptr )
-				, ( checkFlag( submeshFlags, SubmeshFlag::eMorphing )
-					? details::createBuffer< InterleavedVertex >( m_device
+				, ( checkFlag( submeshFlags, SubmeshFlag::eSecondaryUV )
+					? details::createBuffer< castor::Point3f >( m_device
 						, vertexCount
 						, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-						, m_debugName + name + "Morph" + std::to_string( buffers.size() )
+						, m_debugName + name + "SecondaryUVs" + std::to_string( buffers.size() )
 						, false )
-					: nullptr ) };
+					: nullptr ) } };
 			buffers.emplace_back( std::move( modelBuffers ) );
 			it = std::next( buffers.begin()
 				, ptrdiff_t( buffers.size() - 1u ) );
 		}
 
-		result.vtxBuffer = it->vertex.get();
-		result.vtxChunk = it->vertex->allocate( sizeof( InterleavedVertex ) * vertexCount );
-
-		if ( checkFlag( submeshFlags, SubmeshFlag::eSkinning ) )
-		{
-			result.bonBuffer = it->bones.get();
-			result.bonChunk = it->bones->allocate( sizeof( VertexBoneData ) * vertexCount );
-		}
-
-		if ( checkFlag( submeshFlags, SubmeshFlag::eMorphing ) )
-		{
-			result.mphBuffer = it->morph.get();
-			result.mphChunk = it->morph->allocate( sizeof( InterleavedVertex ) * vertexCount );
-		}
-
 		if ( indexCount )
 		{
-			result.idxBuffer = it->index.get();
-			result.idxChunk = it->index->allocate( sizeof( uint32_t ) * indexCount );
+			result.buffers[0u].buffer = it->buffers[0u].get();
+			result.buffers[0u].chunk = it->buffers[0u]->allocate( objbuf::getSize( 0u ) * indexCount );
+		}
+
+		for ( uint32_t i = 1u; i < getIndex( SubmeshFlag::eAllComponents ); ++i )
+		{
+			if ( it->buffers[i] )
+			{
+				result.buffers[i].buffer = it->buffers[i].get();
+				result.buffers[i].chunk = it->buffers[i]->allocate( objbuf::getSize( i ) * vertexCount );
+			}
 		}
 
 		return result;
@@ -201,44 +295,27 @@ namespace castor3d
 			, buffers.end()
 			, [&bufferOffset]( ModelBuffers const & lookup )
 			{
-				bool result = &lookup.vertex->getBuffer().getBuffer() == &bufferOffset.getVertexBuffer();
+				bool result = true;
 
-				if ( result && bufferOffset.bonBuffer )
+				for ( uint32_t i = 0u; i < getIndex( SubmeshFlag::eAllComponents ); ++i )
 				{
-					result = &lookup.bones->getBuffer().getBuffer() == &bufferOffset.getBonesBuffer();
-				}
-
-				if ( result && bufferOffset.mphBuffer )
-				{
-					result = &lookup.morph->getBuffer().getBuffer() == &bufferOffset.getMorphBuffer();
-				}
-
-				if ( result && bufferOffset.idxBuffer )
-				{
-					result = &lookup.index->getBuffer().getBuffer() == &bufferOffset.getIndexBuffer();
+					if ( result && lookup.buffers[i] && bufferOffset.buffers[i].buffer )
+					{
+						result = &lookup.buffers[i]->getBuffer().getBuffer() == &bufferOffset.buffers[i].getBuffer();
+					}
 				}
 
 				return result;
 			} );
 		CU_Require( it != buffers.end() );
-		it->vertex->deallocate( bufferOffset.vtxChunk );
 
-		if ( bufferOffset.bonBuffer )
+		for ( uint32_t i = 0u; i < getIndex( SubmeshFlag::eAllComponents ); ++i )
 		{
-			CU_Require( it->bones );
-			it->bones->deallocate( bufferOffset.bonChunk );
-		}
-
-		if ( bufferOffset.mphBuffer )
-		{
-			CU_Require( it->morph );
-			it->morph->deallocate( bufferOffset.mphChunk );
-		}
-
-		if ( bufferOffset.idxBuffer )
-		{
-			CU_Require( it->index );
-			it->index->deallocate( bufferOffset.idxChunk );
+			if ( bufferOffset.buffers[i].buffer )
+			{
+				CU_Require( it->buffers[i] );
+				it->buffers[i]->deallocate( bufferOffset.buffers[i].chunk );
+			}
 		}
 	}
 
@@ -246,18 +323,28 @@ namespace castor3d
 		, VkDeviceSize indexCount
 		, ObjectBufferPool::BufferArray & array )
 	{
-		auto it = array.begin();
+		return std::find_if( array.begin()
+			, array.end()
+			, [vertexCount, indexCount]( ModelBuffers const & lookup )
+			{
+				auto it = lookup.buffers.begin();
+				uint32_t index = 0u;
 
-		while ( it != array.end()
-			&& ( !it->vertex->hasAvailable( sizeof( InterleavedVertex ) * vertexCount )
-				|| !it->index->hasAvailable( sizeof( uint32_t ) * indexCount )
-				|| ( it->bones && !it->bones->hasAvailable( sizeof( VertexBoneData ) * vertexCount ) )
-				|| ( it->morph && !it->morph->hasAvailable( sizeof( InterleavedVertex ) * vertexCount ) ) ) )
-		{
-			++it;
-		}
+				if ( ( *it )
+					&& !( *it )->hasAvailable( objbuf::getSize( index++ ) * indexCount ) )
+				{
+					return false;
+				}
 
-		return it;
+				++it;
+				return lookup.buffers.end() == std::find_if( it
+					, lookup.buffers.end()
+					, [vertexCount, &index]( GpuPackedBufferPtr const & buffer )
+					{
+						return buffer
+							&& !buffer->hasAvailable( objbuf::getSize( index++ ) * vertexCount );
+					} );
+			} );
 	}
 
 	//*********************************************************************************************

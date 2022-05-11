@@ -112,7 +112,7 @@ namespace castor3d
 		FragmentWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
 		auto & renderSystem = *getEngine()->getRenderSystem();
-		bool hasTextures = !flags.textures.empty();
+		bool hasTextures = flags.hasTextures();
 
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
@@ -165,9 +165,11 @@ namespace castor3d
 				auto normal = writer.declLocale( "normal"
 					, normalize( in.normal ) );
 				auto tangent = writer.declLocale( "tangent"
-					, normalize( in.tangent ) );
+					, normalize( in.tangent )
+					, checkFlag( flags.submeshFlags, SubmeshFlag::eTangents ) );
 				auto bitangent = writer.declLocale( "bitangent"
-					, normalize( in.bitangent ) );
+					, normalize( in.bitangent )
+					, checkFlag( flags.submeshFlags, SubmeshFlag::eTangents ) );
 
 				if ( hasTextures )
 				{

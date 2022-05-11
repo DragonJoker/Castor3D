@@ -127,7 +127,7 @@ namespace castor3d
 		using namespace sdw;
 		FragmentWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = !flags.textures.empty();
+		bool hasTextures = flags.hasTextures();
 
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
@@ -181,7 +181,8 @@ namespace castor3d
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( modelData.getMaterialId() ) );
 				auto texCoord = writer.declLocale( "texCoord"
-					, in.texture0 );
+					, in.texture0
+					, hasTextures );
 				auto alpha = writer.declLocale( "alpha"
 					, material.opacity );
 				auto emissive = writer.declLocale( "emissive"
@@ -191,9 +192,11 @@ namespace castor3d
 				auto normal = writer.declLocale( "normal"
 					, normalize( in.normal ) );
 				auto tangent = writer.declLocale( "tangent"
-					, normalize( in.tangent ) );
+					, normalize( in.tangent )
+					, checkFlag( flags.submeshFlags, SubmeshFlag::eTangents ) );
 				auto bitangent = writer.declLocale( "bitangent"
-					, normalize( in.bitangent ) );
+					, normalize( in.bitangent )
+					, checkFlag( flags.submeshFlags, SubmeshFlag::eTangents ) );
 				auto occlusion = writer.declLocale( "occlusion"
 					, 1.0_f );
 				auto transmittance = writer.declLocale( "transmittance"

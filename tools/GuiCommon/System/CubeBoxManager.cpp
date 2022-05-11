@@ -12,6 +12,7 @@
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp>
 #include <Castor3D/Model/Vertex.hpp>
 #include <Castor3D/Scene/Geometry.hpp>
 #include <Castor3D/Scene/Scene.hpp>
@@ -33,20 +34,21 @@ namespace GuiCommon
 			auto result = scene.addNewMesh( name, scene );
 			result.lock()->setSerialisable( false );
 			auto submesh = result.lock()->createSubmesh();
-			static castor3d::InterleavedVertexArray const vertex
+			static castor::Point3fArray const vertex
 			{
-				castor3d::InterleavedVertex{}.position( castor::Point3f{ -1, -1, -1 } ),
-				castor3d::InterleavedVertex{}.position( castor::Point3f{ -1, +1, -1 } ),
-				castor3d::InterleavedVertex{}.position( castor::Point3f{ +1, +1, -1 } ),
-				castor3d::InterleavedVertex{}.position( castor::Point3f{ +1, -1, -1 } ),
-				castor3d::InterleavedVertex{}.position( castor::Point3f{ -1, -1, +1 } ),
-				castor3d::InterleavedVertex{}.position( castor::Point3f{ -1, +1, +1 } ),
-				castor3d::InterleavedVertex{}.position( castor::Point3f{ +1, +1, +1 } ),
-				castor3d::InterleavedVertex{}.position( castor::Point3f{ +1, -1, +1 } ),
+				castor::Point3f{ -1, -1, -1 },
+				castor::Point3f{ -1, +1, -1 },
+				castor::Point3f{ +1, +1, -1 },
+				castor::Point3f{ +1, -1, -1 },
+				castor::Point3f{ -1, -1, +1 },
+				castor::Point3f{ -1, +1, +1 },
+				castor::Point3f{ +1, +1, +1 },
+				castor::Point3f{ +1, -1, +1 },
 			};
 			submesh->setTopology( VK_PRIMITIVE_TOPOLOGY_LINE_LIST );
-			submesh->addPoints( vertex );
-			auto mapping = std::make_shared< castor3d::LinesMapping >( *submesh );
+			auto positions = submesh->createComponent< castor3d::PositionsComponent >();
+			positions->getData() = vertex;
+			auto mapping = submesh->createComponent< castor3d::LinesMapping >();
 			castor3d::LineIndices lines[]
 			{
 				castor3d::LineIndices{ { 0u, 1u } },
@@ -63,7 +65,6 @@ namespace GuiCommon
 				castor3d::LineIndices{ { 3u, 7u } },
 			};
 			mapping->addLineGroup( lines );
-			submesh->setIndexMapping( mapping );
 			castor3d::MaterialResPtr material;
 			castor::String matName = cuT( "BBox_" ) + colourName;
 
@@ -293,14 +294,14 @@ namespace GuiCommon
 			auto aabbMin = aabb.getMin();
 			auto aabbMax = aabb.getMax();
 			auto aabbSubmesh = m_aabbMesh.lock()->getSubmesh( 0u );
-			aabbSubmesh->getPoint( 0u ).pos = castor::Point3f( aabbMin->x, aabbMin->y, aabbMin->z );
-			aabbSubmesh->getPoint( 1u ).pos = castor::Point3f( aabbMin->x, aabbMax->y, aabbMin->z );
-			aabbSubmesh->getPoint( 2u ).pos = castor::Point3f( aabbMax->x, aabbMax->y, aabbMin->z );
-			aabbSubmesh->getPoint( 3u ).pos = castor::Point3f( aabbMax->x, aabbMin->y, aabbMin->z );
-			aabbSubmesh->getPoint( 4u ).pos = castor::Point3f( aabbMin->x, aabbMin->y, aabbMax->z );
-			aabbSubmesh->getPoint( 5u ).pos = castor::Point3f( aabbMin->x, aabbMax->y, aabbMax->z );
-			aabbSubmesh->getPoint( 6u ).pos = castor::Point3f( aabbMax->x, aabbMax->y, aabbMax->z );
-			aabbSubmesh->getPoint( 7u ).pos = castor::Point3f( aabbMax->x, aabbMin->y, aabbMax->z );
+			aabbSubmesh->getPositions()[0u] = castor::Point3f( aabbMin->x, aabbMin->y, aabbMin->z );
+			aabbSubmesh->getPositions()[1u] = castor::Point3f( aabbMin->x, aabbMax->y, aabbMin->z );
+			aabbSubmesh->getPositions()[2u] = castor::Point3f( aabbMax->x, aabbMax->y, aabbMin->z );
+			aabbSubmesh->getPositions()[3u] = castor::Point3f( aabbMax->x, aabbMin->y, aabbMin->z );
+			aabbSubmesh->getPositions()[4u] = castor::Point3f( aabbMin->x, aabbMin->y, aabbMax->z );
+			aabbSubmesh->getPositions()[5u] = castor::Point3f( aabbMin->x, aabbMax->y, aabbMax->z );
+			aabbSubmesh->getPositions()[6u] = castor::Point3f( aabbMax->x, aabbMax->y, aabbMax->z );
+			aabbSubmesh->getPositions()[7u] = castor::Point3f( aabbMax->x, aabbMin->y, aabbMax->z );
 			aabbSubmesh->needsUpdate();
 
 			castor3d::Engine * engine = m_scene.getEngine();

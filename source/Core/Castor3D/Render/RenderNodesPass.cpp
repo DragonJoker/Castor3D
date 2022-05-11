@@ -745,7 +745,7 @@ namespace castor3d
 		using namespace sdw;
 		VertexWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = !flags.textures.empty();
+		bool hasTextures = flags.hasTextures();
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
@@ -837,7 +837,8 @@ namespace castor3d
 
 				auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
 					, modelData.getNormalMtx( flags.submeshFlags, curMtxModel ) );
-				out.computeTangentSpace( flags.programFlags
+				out.computeTangentSpace( flags.submeshFlags
+					, flags.programFlags
 					, c3d_sceneData.cameraPosition
 					, worldPos.xyz()
 					, mtxNormal
@@ -853,7 +854,7 @@ namespace castor3d
 		using namespace sdw;
 		VertexWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = !flags.textures.empty();
+		bool hasTextures = flags.hasTextures();
 
 		// Shader inputs
 		auto position = writer.declInput< Vec4 >( "position", 0u );
@@ -942,7 +943,8 @@ namespace castor3d
 					, prvPosition );
 				out.vtx.position = curPosition;
 
-				out.computeTangentSpace( c3d_sceneData.cameraPosition
+				out.computeTangentSpace( flags.submeshFlags
+					, c3d_sceneData.cameraPosition
 					, worldPos.xyz()
 					, curToCamera
 					, up

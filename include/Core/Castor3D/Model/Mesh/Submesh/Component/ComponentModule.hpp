@@ -98,6 +98,20 @@ namespace castor3d
 	class MorphComponent;
 	/**
 	\~english
+	\brief		The submesh component holding normals.
+	\~french
+	\brief		Le composant de sous-maillage contenant les normales.
+	*/
+	class NormalsComponent;
+	/**
+	\~english
+	\brief		The submesh component holding positions.
+	\~french
+	\brief		Le composant de sous-maillage contenant les positions.
+	*/
+	class PositionsComponent;
+	/**
+	\~english
 	\brief		Component for a secondary UV set.
 	\~french
 	\brief		Composant pour un set d'UV secondaire.
@@ -110,6 +124,20 @@ namespace castor3d
 	\brief		Composant pour un sous-maillage.
 	*/
 	class SubmeshComponent;
+	/**
+	\~english
+	\brief		The submesh component holding tangents.
+	\~french
+	\brief		Le composant de sous-maillage contenant les tangents.
+	*/
+	class TangentsComponent;
+	/**
+	\~english
+	\brief		The submesh component holding texture coordinates.
+	\~french
+	\brief		Le composant de sous-maillage contenant les coordonnées de texture.
+	*/
+	class TexcoordsComponent;
 	/**
 	\~english
 	\brief		The submesh component for triangular faces.

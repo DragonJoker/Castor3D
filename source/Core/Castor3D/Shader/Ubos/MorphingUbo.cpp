@@ -59,10 +59,10 @@ namespace castor3d
 		{
 			morph( pos, pos2, uvw, uvw2 );
 
-			if ( isEnabled() )
+			if ( isEnabled()
+				&& !nml.getExpr()->isDummy()
+				&& !nml2.getExpr()->isDummy() )
 			{
-				CU_Require( !nml.getExpr()->isDummy() );
-				CU_Require( !nml2.getExpr()->isDummy() );
 				nml = vec4( sdw::mix( nml.xyz(), nml2, vec3( m_time ) ), 0.0f );
 			}
 		}
@@ -78,10 +78,10 @@ namespace castor3d
 		{
 			morph( pos, pos2, nml, nml2, uvw, uvw2 );
 
-			if ( isEnabled() )
+			if ( isEnabled()
+				&& !tan.getExpr()->isDummy()
+				&& !tan2.getExpr()->isDummy() )
 			{
-				CU_Require( !tan.getExpr()->isDummy() );
-				CU_Require( !tan2.getExpr()->isDummy() );
 				tan = vec4( sdw::mix( tan.xyz(), tan2, vec3( m_time ) ), 0.0f );
 			}
 		}
@@ -95,10 +95,13 @@ namespace castor3d
 			{
 				CU_Require( !pos.getExpr()->isDummy() );
 				CU_Require( !pos2.getExpr()->isDummy() );
-				CU_Require( !uvuv.getExpr()->isDummy() );
-				CU_Require( !uvuv2.getExpr()->isDummy() );
 				pos = vec4( sdw::mix( pos.xyz(), pos2.xyz(), vec3( m_time ) ), 1.0f );
-				uvuv = sdw::mix( uvuv, uvuv2, vec4( m_time ) );
+
+				if ( !uvuv.getExpr()->isDummy()
+					&& !uvuv2.getExpr()->isDummy() )
+				{
+					uvuv = sdw::mix( uvuv, uvuv2, vec4( m_time ) );
+				}
 			}
 		}
 
@@ -130,10 +133,10 @@ namespace castor3d
 		{
 			morph( pos, pos2, nml, nml2, uvuv, uvuv2 );
 
-			if ( isEnabled() )
+			if ( isEnabled()
+				&& !tan.getExpr()->isDummy()
+				&& !tan2.getExpr()->isDummy() )
 			{
-				CU_Require( !tan.getExpr()->isDummy() );
-				CU_Require( !tan2.getExpr()->isDummy() );
 				tan = vec4( sdw::mix( tan.xyz(), tan2, vec3( m_time ) ), 0.0f );
 			}
 		}

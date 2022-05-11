@@ -11,21 +11,22 @@ namespace castor3d
 
 	namespace mshanmkf
 	{
-		static castor::BoundingBox doComputeBoundingBox( InterleavedVertexArray const & points )
+		static void doComputeBoundingBox( SubmeshAnimationBuffer & buffer )
 		{
-			if ( points.empty() )
+			if ( buffer.positions.empty() )
 			{
-				return castor::BoundingBox{};
+				return;
 			}
 
-			castor::Point3f min{ points[0].pos };
-			castor::Point3f max{ points[0].pos };
+			auto & points = buffer.positions;
+			castor::Point3f min{ points[0] };
+			castor::Point3f max{ points[0] };
 
 			if ( points.size() > 1 )
 			{
 				for ( auto & vertex : castor::makeArrayView( &points[1], points.data() + points.size() ) )
 				{
-					castor::Point3f cur{ vertex.pos };
+					castor::Point3f cur{ vertex };
 					max[0] = std::max( cur[0], max[0] );
 					max[1] = std::max( cur[1], max[1] );
 					max[2] = std::max( cur[2], max[2] );
@@ -35,7 +36,7 @@ namespace castor3d
 				}
 			}
 
-			return castor::BoundingBox{ min, max };
+			buffer.boundingBox.load( min, max );
 		}
 	}
 
@@ -54,23 +55,18 @@ namespace castor3d
 	}
 
 	void MeshAnimationKeyFrame::addSubmeshBuffer( Submesh const & submesh
-		, InterleavedVertexArray const & buffer )
+		, SubmeshAnimationBuffer buffer )
 	{
-		auto boundingBox = mshanmkf::doComputeBoundingBox( buffer );
-		m_submeshesBuffers.emplace( submesh.getId()
-			, SubmeshAnimationBuffer
-			{
-				buffer,
-				boundingBox
-			} );
+		mshanmkf::doComputeBoundingBox( buffer );
+		auto & data = m_submeshesBuffers.emplace( submesh.getId(), std::move( buffer ) ).first->second;
 
 		if ( m_submeshesBuffers.size() == 1u )
 		{
-			m_boundingBox = boundingBox;
+			m_boundingBox = data.boundingBox;
 		}
 		else
 		{
-			m_boundingBox = m_boundingBox.getUnion( boundingBox );
+			m_boundingBox = m_boundingBox.getUnion( data.boundingBox );
 		}
 	}
 

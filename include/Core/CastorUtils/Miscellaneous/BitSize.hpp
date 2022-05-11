@@ -8,9 +8,9 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	static inline int getBitSize( uint64_t value )
+	static constexpr int getBitSize( uint64_t value )
 	{
-		static constexpr int bitPatternToLog2[128]
+		int constexpr bitPatternToLog2[128]
 		{
 			0, // change to 0 if you want bitSize(0) = 0
 			48, -1, -1, 31, -1, 15, 51, -1, 63, 5, -1, -1, -1, 19, -1,
@@ -22,7 +22,7 @@ namespace castor
 			41, -1, 25, 37, -1, 47, -1, 30, 14, -1, -1, -1, -1, 22, -1, -1,
 			35, 12, -1, -1, -1, 59, 42, -1, -1, 61, 3, 26, 38, 44, -1, 56
 		};
-		static uint64_t constexpr multiplicator = 0x6c04f118e9966f6bull;
+		uint64_t constexpr multiplicator = 0x6c04f118e9966f6bull;
 		value |= value >> 1;
 		value |= value >> 2;
 		value |= value >> 4;
@@ -32,7 +32,7 @@ namespace castor
 		return bitPatternToLog2[(value * multiplicator) >> 57];
 	}
 
-	static inline int getBitSize( uint32_t value )
+	static constexpr int getBitSize( uint32_t value )
 	{
 		return getBitSize( uint64_t( value ) );
 	}

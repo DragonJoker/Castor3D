@@ -1,6 +1,10 @@
 #include "Castor3D/Model/Mesh/Generator/Icosahedron.hpp"
 
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 
@@ -37,6 +41,10 @@ namespace castor3d
 		}
 
 		SubmeshSPtr submesh = p_mesh.createSubmesh();
+		auto positions = submesh->createComponent< PositionsComponent >();
+		auto normals = submesh->createComponent< NormalsComponent >();
+		auto tangents = submesh->createComponent< TangentsComponent >();
+		auto texcoords = submesh->createComponent< TexcoordsComponent >();
 
 		// Construction de l'icosaèdre
 		std::vector< InterleavedVertex > vertices{ 12 };
@@ -97,56 +105,35 @@ namespace castor3d
 		submesh->addPoints( vertices );
 
 		// on construit toutes les faces de l'icosaèdre
-		auto indexMapping = std::make_shared< TriFaceMapping >( *submesh );
+		auto indexMapping = submesh->createComponent< TriFaceMapping >();
+		indexMapping->addFace( 1, 0, 4 );
+		indexMapping->addFace( 0, 9, 4 );
+		indexMapping->addFace( 4, 9, 5 );
+		indexMapping->addFace( 8, 4, 5 );
+		indexMapping->addFace( 1, 4, 8 );
+		indexMapping->addFace( 10, 1, 8 );
+		indexMapping->addFace( 8, 3, 10 );
+		indexMapping->addFace( 5, 3, 8 );
+		indexMapping->addFace( 5, 2, 3 );
+		indexMapping->addFace( 2, 7, 3 );
+		indexMapping->addFace( 10, 3, 7 );
+		indexMapping->addFace( 7, 6, 10 );
+		indexMapping->addFace( 11, 6, 7 );
+		indexMapping->addFace( 6, 11, 0 );
+		indexMapping->addFace( 0, 1, 6 );
+		indexMapping->addFace( 6, 1, 10 );
+		indexMapping->addFace( 9, 0, 11 );
+		indexMapping->addFace( 9, 11, 2 );
+		indexMapping->addFace( 5, 9, 2 );
+		indexMapping->addFace( 7, 2, 11 );
 
-		Face faces[20]
+		for ( uint32_t i = 0u; i < submesh->getPointsCount(); ++i )
 		{
-			indexMapping->addFace( 1, 0, 4 ),
-			indexMapping->addFace( 0, 9, 4 ),
-			indexMapping->addFace( 4, 9, 5 ),
-			indexMapping->addFace( 8, 4, 5 ),
-			indexMapping->addFace( 1, 4, 8 ),
-			indexMapping->addFace( 10, 1, 8 ),
-			indexMapping->addFace( 8, 3, 10 ),
-			indexMapping->addFace( 5, 3, 8 ),
-			indexMapping->addFace( 5, 2, 3 ),
-			indexMapping->addFace( 2, 7, 3 ),
-			indexMapping->addFace( 10, 3, 7 ),
-			indexMapping->addFace( 7, 6, 10 ),
-			indexMapping->addFace( 11, 6, 7 ),
-			indexMapping->addFace( 6, 11, 0 ),
-			indexMapping->addFace( 0, 1, 6 ),
-			indexMapping->addFace( 6, 1, 10 ),
-			indexMapping->addFace( 9, 0, 11 ),
-			indexMapping->addFace( 9, 11, 2 ),
-			indexMapping->addFace( 5, 9, 2 ),
-			indexMapping->addFace( 7, 2, 11 ),
-		};
-
-		for ( auto const & face : faces )
-		{
-			auto posA = submesh->getPoint( face[0] ).pos;
-			auto posB = submesh->getPoint( face[1] ).pos;
-			auto posC = submesh->getPoint( face[2] ).pos;
-			float u = 0.5f * ( 1.0f + float( atan2( posA[2], posA[0] ) * ( 1 / castor::Pi< float > ) ) );
-			float v = float( acos( posA[1] ) * ( 1 / castor::Pi< float > ) );
-			submesh->getPoint( face[0] ).tex = castor::Point3f{ u, v, 0 };
-			u = 0.5f * ( 1.0f + float( atan2( posB[2], posB[0] ) * ( 1 / castor::Pi< float > ) ) );
-			v = float( acos( posB[1] ) * ( 1 / castor::Pi< float > ) );
-			submesh->getPoint( face[1] ).tex = castor::Point3f{ u, v, 0 };
-			u = 0.5f * ( 1.0f + float( atan2( posC[2], posC[0] ) * ( 1 / castor::Pi< float > ) ) );
-			v = float( acos( posC[1] ) * ( 1 / castor::Pi< float > ) );
-			submesh->getPoint( face[2] ).tex = castor::Point3f{ u, v, 0 };
-		}
-
-		for ( auto & curVertex : submesh->getPoints() )
-		{
-			castor::SphericalVertex vsVertex1( curVertex.nml );
-			curVertex.tex = castor::Point3f{ vsVertex1.m_phi, vsVertex1.m_theta, 0 };
+			castor::SphericalVertex vsVertex1( normals->getData()[i] );
+			texcoords->getData()[i] = castor::Point3f{ vsVertex1.m_phi, vsVertex1.m_theta, 0 };
 		}
 
 		indexMapping->computeTangentsFromNormals();
-		submesh->setIndexMapping( indexMapping );
 		p_mesh.computeContainers();
 	}
 }

@@ -1,23 +1,20 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_MorphComponent_H___
-#define ___C3D_MorphComponent_H___
+#ifndef ___C3D_NormalsUVComponent_H___
+#define ___C3D_NormalsUVComponent_H___
 
-#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 
-#include "Castor3D/Buffer/GpuBufferOffset.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp"
 
-#include <ashespp/Buffer/StagingBuffer.hpp>
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 
 #include <unordered_map>
 
 namespace castor3d
 {
-	class MorphComponent
+	class NormalsComponent
 		: public SubmeshComponent
 	{
 	public:
@@ -29,7 +26,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	submesh	Le sous-maillage parent.
 		 */
-		C3D_API explicit MorphComponent( Submesh & submesh );
+		C3D_API explicit NormalsComponent( Submesh & submesh );
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
@@ -57,7 +54,22 @@ namespace castor3d
 		 */
 		SubmeshFlags getDataFlags()const override
 		{
-			return SubmeshFlag::eMorphing | m_flags;
+			return SubmeshFlag::eNormals;
+		}
+
+		void setData( std::vector< castor::Point3f > const & data )
+		{
+			m_data = data;
+		}
+
+		std::vector< castor::Point3f > & getData()
+		{
+			return m_data;
+		}
+
+		std::vector< castor::Point3f > const & getData()const
+		{
+			return m_data;
 		}
 
 	private:
@@ -67,14 +79,11 @@ namespace castor3d
 
 	public:
 		C3D_API static castor::String const Name;
-		C3D_API static uint32_t constexpr PosBindingPoint = 4u;
-		C3D_API static uint32_t constexpr NmlBindingPoint = 5u;
-		C3D_API static uint32_t constexpr TanBindingPoint = 6u;
-		C3D_API static uint32_t constexpr TexBindingPoint = 7u;
+		C3D_API static uint32_t constexpr BindingPoint = 1u;
 
 	private:
-		SubmeshFlags m_flags{};
-		std::unordered_map< size_t, std::vector< ashes::PipelineVertexInputStateCreateInfo > > m_layouts;
+		std::vector< castor::Point3f > m_data;
+		std::unordered_map< uint32_t, ashes::PipelineVertexInputStateCreateInfo > m_layouts;
 	};
 }
 

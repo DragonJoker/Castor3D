@@ -75,7 +75,8 @@ namespace castor3d
 						}
 					}
 
-					auto & cposition = submesh.getPoint( index ).pos;
+					auto & positions = submesh.getPositions();
+					auto & cposition = positions[index];
 					castor::Point4f position{ cposition[0], cposition[1], cposition[2], 1.0f };
 					position = transform * position;
 					min[0] = std::min( min[0], position[0] );

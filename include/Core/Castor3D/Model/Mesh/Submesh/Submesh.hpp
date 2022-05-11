@@ -298,15 +298,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Adds a component.
-		 *\param[in]	name		The component name.
 		 *\param[in]	component	The component.
 		 *\~french
 		 *\brief		Ajoute un composant.
-		 *\param[in]	name		Le nom du composant.
 		 *\param[in]	component	Le composant.
 		 */
-		inline void addComponent( castor::String const & name
-			, SubmeshComponentSPtr component );
+		template< typename ComponentT, typename ... ParamsT >
+		inline std::shared_ptr< ComponentT > createComponent( ParamsT && ... params );
 		/**
 		 *\~english
 		 *\brief		Adds a component.
@@ -315,8 +313,17 @@ namespace castor3d
 		 *\brief		Ajoute un composant.
 		 *\param[in]	component	Le composant.
 		 */
-		template< typename T >
-		inline void addComponent( std::shared_ptr< T > component );
+		inline void addComponent( SubmeshComponentSPtr component );
+		/**
+		 *\~english
+		 *\brief		Adds a component.
+		 *\param[in]	component	The component.
+		 *\~french
+		 *\brief		Ajoute un composant.
+		 *\param[in]	component	Le composant.
+		 */
+		template< typename ComponentT >
+		inline void addComponent( std::shared_ptr< ComponentT > component );
 		/**
 		 *\~english
 		 *\brief		Sets the topology.
@@ -351,18 +358,21 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		C3D_API InterleavedVertex getInterleavedPoint( uint32_t index )const;
+		C3D_API castor::Point3fArray const & getPositions()const;
+		C3D_API castor::Point3fArray & getPositions();
+		C3D_API castor::Point3fArray const & getNormals()const;
+		C3D_API castor::Point3fArray & getNormals();
+		C3D_API castor::Point3fArray const & getTangents()const;
+		C3D_API castor::Point3fArray & getTangents();
+		C3D_API castor::Point3fArray const & getTexcoords()const;
+		C3D_API castor::Point3fArray & getTexcoords();
 		inline SkeletonRPtr getSkeleton()const;
-		inline InterleavedVertex const & operator[]( uint32_t index )const;
-		inline InterleavedVertex & operator[]( uint32_t index );
-		inline InterleavedVertex const & getPoint( uint32_t index )const;
-		inline InterleavedVertex & getPoint( uint32_t index );
 		inline MaterialRPtr getDefaultMaterial()const;
 		inline castor::BoundingBox const & getBoundingBox()const;
 		inline castor::BoundingBox & getBoundingBox();
 		inline castor::BoundingSphere const & getBoundingSphere()const;
 		inline castor::BoundingSphere & getBoundingSphere();
-		inline InterleavedVertexArray const & getPoints()const;
-		inline InterleavedVertexArray & getPoints();
 		inline bool hasBufferOffsets()const;
 		inline ObjectBufferOffset const & getBufferOffsets()const;
 		inline bool isInitialised()const;
@@ -372,8 +382,8 @@ namespace castor3d
 		inline uint32_t getId()const;
 		inline bool hasComponent( castor::String const & name )const;
 		inline SubmeshComponentSPtr getComponent( castor::String const & name )const;
-		template< typename T >
-		inline std::shared_ptr< T > getComponent()const;
+		template< typename ComponentT >
+		inline std::shared_ptr< ComponentT > getComponent()const;
 		inline InstantiationComponent & getInstantiation();
 		inline InstantiationComponent const & getInstantiation()const;
 		inline SubmeshComponentIDMap const & getComponents()const;
@@ -381,14 +391,10 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doFillVertexBuffer();
-
-	private:
 		uint32_t m_id;
 		MaterialRPtr m_defaultMaterial;
 		castor::BoundingBox m_box;
 		castor::BoundingSphere m_sphere;
-		InterleavedVertexArray m_points;
 		SubmeshComponentIDMap m_components;
 		InstantiationComponentSPtr m_instantiation;
 		IndexMappingSPtr m_indexMapping;
@@ -399,7 +405,6 @@ namespace castor3d
 		bool m_dirty{ true };
 		VkPrimitiveTopology m_topology{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST };
 		ObjectBufferOffset m_bufferOffset;
-		mutable std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_vertexLayouts;
 		mutable std::unordered_map< size_t, GeometryBuffers > m_geometryBuffers;
 		bool m_needsNormalsCompute{ false };
 		bool m_disableSceneUpdate{ false };

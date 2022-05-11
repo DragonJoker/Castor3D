@@ -35,16 +35,15 @@ namespace castor3d
 		// Initialise the vertex buffer.
 		auto queueData = m_device.graphicsData();
 		m_vertexBuffer = device.vertexPools->getBuffer< TexturedQuad >( 1u );
-		m_vertexBuffer.getVertexData< TexturedQuad >().front() = { { { castor::Point2f{ -1.0, -1.0 }, castor::Point2f{ 0.0, 0.0 } }
+		m_vertexBuffer.getData< TexturedQuad >( SubmeshFlag::ePositions ).front() = { { { castor::Point2f{ -1.0, -1.0 }, castor::Point2f{ 0.0, 0.0 } }
 			, { castor::Point2f{ -1.0, +1.0 }, castor::Point2f{ 0.0, 1.0 } }
 			, { castor::Point2f{ +1.0, -1.0 }, castor::Point2f{ 1.0, 0.0 } }
 			, { castor::Point2f{ +1.0, -1.0 }, castor::Point2f{ 1.0, 0.0 } }
 			, { castor::Point2f{ -1.0, +1.0 }, castor::Point2f{ 0.0, 1.0 } }
 			, { castor::Point2f{ +1.0, +1.0 }, castor::Point2f{ 1.0, 1.0 } } } };
-		m_vertexBuffer.vtxBuffer->uploadDirect( *queueData->queue
+		m_vertexBuffer.directUpload( SubmeshFlag::ePositions 
+			, *queueData->queue
 			, *queueData->commandPool
-			, m_vertexBuffer.getVertexOffset()
-			, m_vertexBuffer.getVertexSize()
 			, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
 			, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 
@@ -153,7 +152,9 @@ namespace castor3d
 			, { transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
 		cmd.bindPipeline( *m_pipeline );
-		cmd.bindVertexBuffer( 0u, m_vertexBuffer.getVertexBuffer(), m_vertexBuffer.getVertexOffset() );
+		cmd.bindVertexBuffer( 0u
+			, m_vertexBuffer.getBuffer( SubmeshFlag::ePositions )
+			, m_vertexBuffer.getOffset( SubmeshFlag::ePositions ) );
 		cmd.draw( 6u );
 		cmd.endRenderPass();
 		cmd.endDebugBlock();

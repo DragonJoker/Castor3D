@@ -205,9 +205,7 @@ namespace GuiCommon
 				PassShaderGatherer vis{ { pass.getColourBlendMode()
 						, pass.getAlphaBlendMode()
 						, pass.getPassFlags()
-						, ( pass.getRenderPassInfo()
-							? pass.getRenderPassInfo()->id
-							: castor3d::RenderPassTypeID{} )
+						, ( pass.getRenderPassInfo()? pass.getRenderPassInfo()->id: castor3d::RenderPassTypeID{} )
 						, pass.getTypeID()
 						, pass.getHeightTextureIndex()
 						, castor3d::SubmeshFlags{}
@@ -217,7 +215,8 @@ namespace GuiCommon
 						, 3u
 						, pass.getAlphaFunc()
 						, pass.getBlendAlphaFunc()
-						, pass.getTexturesMask() }
+						, pass.getTexturesMask()
+						, 0u }
 					, scene
 					, result };
 				auto & engine = *pass.getOwner()->getEngine();

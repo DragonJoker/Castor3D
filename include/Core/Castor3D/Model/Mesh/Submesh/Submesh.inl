@@ -36,11 +36,10 @@ namespace castor3d
 	template<>
 	struct SubmeshComponentAdder< IndexMapping >
 	{
-		[[noreturn]]
 		static inline void add( std::shared_ptr< IndexMapping > component
 			, Submesh & submesh )
 		{
-			CU_Exception( "Use setIndexMapping, to define the index mapping for a Submesh" );
+			submesh.setIndexMapping( component );
 		}
 	};
 
@@ -49,11 +48,10 @@ namespace castor3d
 	template<>
 	struct SubmeshComponentAdder< TriFaceMapping >
 	{
-		[[noreturn]]
 		static inline void add( std::shared_ptr< TriFaceMapping > component
 			, Submesh & submesh )
 		{
-			CU_Exception( "Use setIndexMapping, to define the index mapping for a Submesh" );
+			submesh.setIndexMapping( component );
 		}
 	};
 
@@ -81,30 +79,6 @@ namespace castor3d
 		setMaterial( {}, mat, false );
 	}
 
-	inline InterleavedVertex const & Submesh::operator[]( uint32_t index )const
-	{
-		CU_Require( index < m_points.size() );
-		return m_points[index];
-	}
-
-	inline InterleavedVertex & Submesh::operator[]( uint32_t index )
-	{
-		CU_Require( index < m_points.size() );
-		return m_points[index];
-	}
-
-	inline InterleavedVertex const & Submesh::getPoint( uint32_t index )const
-	{
-		CU_Require( index < m_points.size() );
-		return m_points[index];
-	}
-
-	inline InterleavedVertex & Submesh::getPoint( uint32_t index )
-	{
-		CU_Require( index < m_points.size() );
-		return m_points[index];
-	}
-
 	inline MaterialRPtr Submesh::getDefaultMaterial()const
 	{
 		return m_defaultMaterial;
@@ -128,16 +102,6 @@ namespace castor3d
 	inline castor::BoundingSphere & Submesh::getBoundingSphere()
 	{
 		return m_sphere;
-	}
-
-	inline InterleavedVertexArray const & Submesh::getPoints()const
-	{
-		return m_points;
-	}
-
-	inline InterleavedVertexArray & Submesh::getPoints()
-	{
-		return m_points;
 	}
 
 	inline bool Submesh::hasBufferOffsets()const
@@ -210,10 +174,18 @@ namespace castor3d
 		return it != m_components.end();
 	}
 
-	inline void Submesh::addComponent( castor::String const & name
-		, SubmeshComponentSPtr component )
+	template< typename ComponentT, typename ... ParamsT >
+	inline std::shared_ptr< ComponentT > Submesh::createComponent( ParamsT && ... params )
 	{
-		m_components.emplace( component->getID(), component);
+		auto component = std::make_shared< ComponentT >( *this
+			, std::forward< ParamsT >( params )... );
+		addComponent( component );
+		return component;
+	}
+
+	inline void Submesh::addComponent( SubmeshComponentSPtr component )
+	{
+		m_components.emplace( component->getID(), component );
 	}
 
 	template< typename T >
