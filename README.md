@@ -43,7 +43,7 @@ The project itself is compilable on supported platforms using CMake (\ref build)
 - Bloom: HDR Bloom implementation.
 - DrawEdges: Detects and renders edges, based on normal, depth, and or object ID.
 - FilmGrain: To display some grain on the render.
-- GrayScale.
+- GrayScale: To convert the result to grayscale.
 - LightStreaks (using Kawase Light Streaks).
 - FXAA Antialiasing.
 - SMAA Antialiasing (1X and T2X so far).
@@ -55,6 +55,9 @@ The project itself is compilable on supported platforms using CMake (\ref build)
 ### Generic
 - CastorGUI: to build GUIs inside Castor3D scenes.
 - ToonMaterial: A toon material (to be combined with DrawEdges plugin).
+- FFTOceanRendering: Ocean rendering using FFT generated surfaces.
+- OceanRendering: Basic ocean rendering, specifying waves attributes.
+- WaterRendering: Plane water surfaces rendering, using normal maps.
 
 ### ToneMappings
 - LinearToneMapping: Default tone mapping.
@@ -62,12 +65,14 @@ The project itself is compilable on supported platforms using CMake (\ref build)
 - HejlBurgessDawsonToneMapping: Hejl Burgess Dawson tone mapping.
 - ReinhardToneMapping: Reinhard tone mapping.
 - Uncharted2ToneMapping: Uncharted 2 tone mapping.
+- ACES: ACES tone mapping.
 
 ## Other applications
 
 - CastorViewer: A scene viewer based on Castor3D.
 - CastorMeshConverter: A converter from various mesh files to Castor3D mesh format.
 - CastorMeshUpgrader: Upgrades from earlier versions of Castor3D mesh format to the latest one.
+- HeightMapToNormalMap: Converts height maps to normal maps.
 - ImgConverter: Allows you to convert any image file type to XPM or ICO.
 
 ## Links
