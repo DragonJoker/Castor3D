@@ -621,11 +621,7 @@ namespace ocean_fft
 
 	castor3d::SubmeshFlags OceanRenderPass::doAdjustSubmeshFlags( castor3d::SubmeshFlags flags )const
 	{
-		remFlag( flags, castor3d::SubmeshFlag::eInstantiation );
-		remFlag( flags, castor3d::SubmeshFlag::eMorphing );
-		remFlag( flags, castor3d::SubmeshFlag::eSkinning );
 		remFlag( flags, castor3d::SubmeshFlag::eSecondaryUV );
-		remFlag( flags, castor3d::SubmeshFlag::eForceTexCoords );
 		return flags;
 	}
 
@@ -645,6 +641,10 @@ namespace ocean_fft
 
 	castor3d::ProgramFlags OceanRenderPass::doAdjustProgramFlags( castor3d::ProgramFlags flags )const
 	{
+		remFlag( flags, castor3d::ProgramFlag::eInstantiation );
+		remFlag( flags, castor3d::ProgramFlag::eMorphing );
+		remFlag( flags, castor3d::ProgramFlag::eSkinning );
+		remFlag( flags, castor3d::ProgramFlag::eForceTexCoords );
 		addFlag( flags, castor3d::ProgramFlag::eLighting );
 		addFlag( flags, castor3d::ProgramFlag::eHasTessellation );
 		return flags;
@@ -662,10 +662,6 @@ namespace ocean_fft
 		using namespace castor3d;
 		VertexWriter writer;
 
-		// Since their vertex attribute locations overlap, we must not have both set at the same time.
-		CU_Require( ( checkFlag( flags.submeshFlags, SubmeshFlag::eInstantiation ) ? 1 : 0 )
-			+ ( checkFlag( flags.submeshFlags, SubmeshFlag::eMorphing ) ? 1 : 0 ) < 2
-			&& "Can't have both instantiation and morphing yet." );
 		auto textureFlags = filterTexturesFlags( flags.textures );
 
 		C3D_Matrix( writer
@@ -690,6 +686,7 @@ namespace ocean_fft
 
 		writer.implementMainT< castor3d::shader::VertexSurfaceT, PatchT >( sdw::VertexInT< castor3d::shader::VertexSurfaceT >{ writer
 				, flags.submeshFlags
+				, flags.programFlags
 				, getShaderFlags()
 				, textureFlags
 				, flags.passFlags
@@ -707,7 +704,7 @@ namespace ocean_fft
 						, in
 						, pipelineID
 						, in.drawID
-						, flags.submeshFlags ) );
+						, flags.programFlags ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId - 1u] );
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
@@ -948,7 +945,7 @@ namespace ocean_fft
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
 			, RenderPipeline::eBuffers
-			, flags.submeshFlags );
+			, flags.programFlags );
 		C3D_FftOcean( writer
 			, OceanFFTIdx::eOceanUbo
 			, RenderPipeline::eBuffers );

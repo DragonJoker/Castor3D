@@ -37,12 +37,13 @@ namespace castor3d
 	}
 
 	void NormalsComponent::gather( ShaderFlags const & shaderFlags
+		, ProgramFlags const & programFlags
 		, SubmeshFlags const & submeshFlags
 		, MaterialRPtr material
+		, TextureFlagsArray const & mask
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
-		, TextureFlagsArray const & mask
 		, uint32_t & currentLocation )
 	{
 		if ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) )

@@ -346,10 +346,6 @@ namespace Testing
 				{ castor3d::SubmeshFlag::eMorphNormals, "eMorphNormals" },
 				{ castor3d::SubmeshFlag::eMorphTangents, "eMorphTangents" },
 				{ castor3d::SubmeshFlag::eMorphTexcoords, "eMorphTexcoords" },
-				{ castor3d::SubmeshFlag::eMorphing, "eMorphing" },
-				{ castor3d::SubmeshFlag::eSkinning, "eSkinning" },
-				{ castor3d::SubmeshFlag::eInstantiation, "eInstantiation" },
-				{ castor3d::SubmeshFlag::eForceTexCoords, "eForceTexCoords" },
 			};
 			return Names[value];
 		}
@@ -372,6 +368,10 @@ namespace Testing
 				{ castor3d::ProgramFlag::eShadowMapPoint, "eShadowMapPoint" },
 				{ castor3d::ProgramFlag::eShadowMapSpot, "eShadowMapSpot" },
 				{ castor3d::ProgramFlag::eSpherical, "eSpherical" },
+				{ castor3d::ProgramFlag::eMorphing, "eMorphing" },
+				{ castor3d::ProgramFlag::eSkinning, "eSkinning" },
+				{ castor3d::ProgramFlag::eInstantiation, "eInstantiation" },
+				{ castor3d::ProgramFlag::eForceTexCoords, "eForceTexCoords" },
 			};
 			return Names[value];
 		}

@@ -242,6 +242,7 @@
 			<Item Name="depthFactor">m_depthFactor</Item>
 			<Item Name="normalFactor">m_normalFactor</Item>
 			<Item Name="objectFactor">m_objectFactor</Item>
+			<Item Name="renderPassInfo">m_renderPassInfo</Item>
 		</Expand>
 	</Type>
 

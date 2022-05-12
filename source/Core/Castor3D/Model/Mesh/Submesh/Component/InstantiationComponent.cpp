@@ -162,15 +162,16 @@ namespace castor3d
 	}
 
 	void InstantiationComponent::gather( ShaderFlags const & shaderFlags
+		, ProgramFlags const & programFlags
 		, SubmeshFlags const & submeshFlags
 		, MaterialRPtr material
+		, TextureFlagsArray const & mask
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
-		, TextureFlagsArray const & mask
 		, uint32_t & currentLocation )
 	{
-		if ( checkFlag( submeshFlags, SubmeshFlag::eInstantiation ) )
+		if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 		{
 			auto it = m_instances.find( material );
 
@@ -205,12 +206,12 @@ namespace castor3d
 		return std::static_pointer_cast< SubmeshComponent >( result );
 	}
 
-	SubmeshFlags InstantiationComponent::getSubmeshFlags( Material const & material )const
+	ProgramFlags InstantiationComponent::getProgramFlags( Material const & material )const
 	{
 		auto it = find( material );
 		return ( it != end() && it->second.buffer )
-			? SubmeshFlag::eInstantiation
-			: SubmeshFlag( 0 );
+			? ProgramFlag::eInstantiation
+			: ProgramFlag{};
 	}
 
 	bool InstantiationComponent::doInitialise( RenderDevice const & device )

@@ -17,11 +17,11 @@ namespace castor3d
 	shader::SkinningData SkinningUbo::declare( sdw::ShaderWriter & writer
 		, uint32_t transformsBinding
 		, uint32_t transformsSet
-		, SubmeshFlags const & flags )
+		, ProgramFlags const & flags )
 	{
 		shader::SkinningData result;
 
-		if ( checkFlag( flags, SubmeshFlag::eSkinning ) )
+		if ( checkFlag( flags, ProgramFlag::eSkinning ) )
 		{
 			result.transforms = std::make_unique< sdw::ArraySsboT< sdw::Mat4 > >( writer
 				, SkinningUbo::BufferSkinning
