@@ -144,7 +144,7 @@ namespace castor3d
 		: OwnedBy< Mesh >{ mesh }
 		, m_id{ id }
 		, m_defaultMaterial{ mesh.getScene()->getEngine()->getMaterialCache().getDefaultMaterial() }
-		, m_submeshFlags{ flags }
+		, m_submeshFlags{ SubmeshFlag::eIndex | flags }
 	{
 		addComponent( std::make_shared< InstantiationComponent >( *this, 2u ) );
 
@@ -166,6 +166,19 @@ namespace castor3d
 		if ( checkFlag( flags, SubmeshFlag::eTexcoords ) )
 		{
 			createComponent< TexcoordsComponent >();
+		}
+
+		if ( checkFlag( flags, SubmeshFlag::eMorphPositions )
+			|| checkFlag( flags, SubmeshFlag::eMorphNormals )
+			|| checkFlag( flags, SubmeshFlag::eMorphTangents )
+			|| checkFlag( flags, SubmeshFlag::eMorphTexcoords ) )
+		{
+			createComponent< MorphComponent >();
+		}
+
+		if ( checkFlag( flags, SubmeshFlag::eBones ) )
+		{
+			createComponent< BonesComponent >();
 		}
 
 		if ( checkFlag( flags, SubmeshFlag::eSecondaryUV ) )

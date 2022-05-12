@@ -86,7 +86,7 @@ namespace castor3d
 			}
 		};
 
-		SubmeshFlags submeshFlags{};
+		size_t hash{};
 		std::array< GpuBufferChunk, getIndex( SubmeshFlag::eAllComponents ) > buffers{};
 
 		explicit operator bool()const
