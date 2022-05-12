@@ -368,7 +368,7 @@ namespace castor3d
 
 		bool hasTextures()const
 		{
-			return checkFlag( submeshFlags, SubmeshFlag::eForceTexCoords )
+			return checkFlag( programFlags, ProgramFlag::eForceTexCoords )
 				|| ( !textures.empty() && checkFlag( submeshFlags, SubmeshFlag::eTexcoords ) );
 		}
 	};

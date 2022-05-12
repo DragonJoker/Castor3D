@@ -27,9 +27,9 @@ namespace castor3d
 	{
 		static size_t hash( MaterialRPtr material
 			, ShaderFlags const & shaderFlags
+			, ProgramFlags const & programFlags
 			, SubmeshFlags const & submeshFlags
-			, TextureFlagsArray const & mask
-			, bool forceTexcoords )
+			, TextureFlagsArray const & mask )
 		{
 			auto result = std::hash< Material * >{}( material );
 
@@ -40,8 +40,8 @@ namespace castor3d
 			}
 
 			result = castor::hashCombine( result, shaderFlags.value() );
+			result = castor::hashCombine( result, programFlags.value() );
 			result = castor::hashCombine( result, submeshFlags.value() );
-			result = castor::hashCombine( result, forceTexcoords );
 			return result;
 		}
 
@@ -195,7 +195,7 @@ namespace castor3d
 
 				for ( auto & component : m_components )
 				{
-					m_submeshFlags |= component.second->getDataFlags();
+					m_submeshFlags |= component.second->getSubmeshFlags();
 				}
 
 				m_bufferOffset = device.geometryPools->getBuffer( getPointsCount()
@@ -436,13 +436,25 @@ namespace castor3d
 		}
 	}
 
-	SubmeshFlags Submesh::getSubmeshFlags( Material const & material )const
+	ProgramFlags Submesh::getProgramFlags( Material const & material )const
+	{
+		ProgramFlags result{};
+
+		for ( auto & component : m_components )
+		{
+			result |= component.second->getProgramFlags( material );
+		}
+
+		return result;
+	}
+
+	SubmeshFlags Submesh::getSubmeshFlags()const
 	{
 		auto result = m_submeshFlags;
 
 		for ( auto & component : m_components )
 		{
-			result |= component.second->getSubmeshFlags( material );
+			result |= component.second->getSubmeshFlags();
 		}
 
 		return result;
@@ -467,12 +479,16 @@ namespace castor3d
 	}
 
 	GeometryBuffers const & Submesh::getGeometryBuffers( ShaderFlags const & shaderFlags
+		, ProgramFlags const & programFlags
 		, SubmeshFlags const & submeshFlags
 		, MaterialRPtr material
-		, TextureFlagsArray const & mask
-		, bool forceTexcoords )const
+		, TextureFlagsArray const & mask )const
 	{
-		auto key = smsh::hash( material, shaderFlags, submeshFlags, mask, forceTexcoords );
+		auto key = smsh::hash( material
+			, shaderFlags
+			, programFlags
+			, submeshFlags
+			, mask );
 		auto it = m_geometryBuffers.find( key );
 
 		if ( it == m_geometryBuffers.end() )
@@ -485,12 +501,13 @@ namespace castor3d
 			for ( auto & component : m_components )
 			{
 				component.second->gather( shaderFlags
+					, programFlags
 					, submeshFlags
 					, material
+					, mask
 					, buffers
 					, offsets
 					, layouts
-					, mask
 					, currentLocation );
 			}
 

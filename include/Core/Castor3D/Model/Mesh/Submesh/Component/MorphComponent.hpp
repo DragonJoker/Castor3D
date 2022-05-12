@@ -34,30 +34,31 @@ namespace castor3d
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
 		C3D_API void gather( ShaderFlags const & shaderFlags
+			, ProgramFlags const & programFlags
 			, SubmeshFlags const & submeshFlags
 			, MaterialRPtr material
+			, TextureFlagsArray const & mask
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
-			, TextureFlagsArray const & mask
 			, uint32_t & currentLocation )override;
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::clone
 		 */
 		C3D_API SubmeshComponentSPtr clone( Submesh & submesh )const override;
 		/**
-		 *\copydoc		castor3d::SubmeshComponent::getSubmeshFlags
+		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
 		 */
-		SubmeshFlags getSubmeshFlags( Material const & material )const override
+		ProgramFlags getProgramFlags( Material const & material )const override
 		{
-			return getDataFlags();
+			return ProgramFlag::eMorphing;
 		}
 		/**
-		 *\copydoc		castor3d::SubmeshComponent::getDataFlags
+		 *\copydoc		castor3d::SubmeshComponent::getSubmeshFlags
 		 */
-		SubmeshFlags getDataFlags()const override
+		SubmeshFlags getSubmeshFlags()const override
 		{
-			return SubmeshFlag::eMorphing | m_flags;
+			return m_flags;
 		}
 
 	private:

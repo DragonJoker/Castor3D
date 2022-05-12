@@ -281,12 +281,12 @@ namespace castor3d
 				, indirectIdxBuffer
 				, indirectNIdxBuffer
 				, getInstanceCount( node ) );
-			auto submeshFlags = node.data.getSubmeshFlags( *node.pass->getOwner() );
+			auto submeshFlags = node.data.getProgramFlags( *node.pass->getOwner() );
 
-			auto mesh = checkFlag( submeshFlags, SubmeshFlag::eMorphing )
+			auto mesh = checkFlag( submeshFlags, ProgramFlag::eMorphing )
 				? std::static_pointer_cast< AnimatedMesh >( findAnimatedObject( scene, node.instance.getName() + cuT( "_Mesh" ) ) )
 				: nullptr;
-			auto skeleton = checkFlag( submeshFlags, SubmeshFlag::eSkinning )
+			auto skeleton = checkFlag( submeshFlags, ProgramFlag::eSkinning )
 				? std::static_pointer_cast< AnimatedSkeleton >( findAnimatedObject( scene, node.instance.getName() + cuT( "_Skeleton" ) ) )
 				: nullptr;
 
@@ -340,8 +340,8 @@ namespace castor3d
 		, Pass const & pass
 		, bool isFrontCulled )
 	{
-		auto submeshFlags = data.getSubmeshFlags( *pass.getOwner() );
-		ProgramFlags programFlags{};
+		auto submeshFlags = data.getSubmeshFlags();
+		auto programFlags = data.getProgramFlags( *pass.getOwner() );
 
 		if ( isFrontCulled )
 		{

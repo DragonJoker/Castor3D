@@ -71,21 +71,6 @@ namespace castor3d
 		//!\~english	All component flags.
 		//\~french		Tous les indicateurs de composant.
 		eAllComponents = 0x07FF,
-		//!\~english	Submesh using per-vertex animations.
-		//!\~french		Submesh utilisant les animations par sommet.
-		eMorphing = 0x0400,
-		//!\~english	Submesh using skeleton animations.
-		//!\~french		Submesh utilisant les animations par squelette.
-		eSkinning = 0x0800,
-		//!\~english	Submesh using instanciation.
-		//!\~french		Submesh utilisant l'instanciation.
-		eInstantiation = 0x1000,
-		//!\~english	Forces texcoords binding.
-		//\~french		Force le binding des UV.
-		eForceTexCoords = 0x2000,
-		//!\~english	All flags.
-		//\~french		Tous les indicateurs.
-		eAll = 0x3FFF,
 	};
 	CU_ImplementFlags( SubmeshFlag )
 

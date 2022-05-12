@@ -167,8 +167,8 @@ namespace castor3d
 	ShaderPtr ShadowMapPassSpot::doGetVertexShaderSource( PipelineFlags const & flags )const
 	{
 		// Since their vertex attribute locations overlap, we must not have both set at the same time.
-		CU_Require( ( checkFlag( flags.submeshFlags, SubmeshFlag::eInstantiation ) ? 1 : 0 )
-			+ ( checkFlag( flags.submeshFlags, SubmeshFlag::eMorphing ) ? 1 : 0 ) < 2
+		CU_Require( ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) ? 1 : 0 )
+			+ ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) ? 1 : 0 ) < 2
 			&& "Can't have both instantiation and morphing yet." );
 		using namespace sdw;
 		VertexWriter writer;
@@ -187,11 +187,11 @@ namespace castor3d
 		C3D_Morphing( writer
 			, GlobalBuffersIdx::eMorphingData
 			, RenderPipeline::eBuffers
-			, flags.submeshFlags );
+			, flags.programFlags );
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
 			, RenderPipeline::eBuffers
-			, flags.submeshFlags );
+			, flags.programFlags );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
@@ -199,6 +199,7 @@ namespace castor3d
 
 		writer.implementMainT< shader::VertexSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
 				, flags.submeshFlags
+				, flags.programFlags
 				, getShaderFlags()
 				, textureFlags
 				, flags.passFlags
@@ -217,7 +218,7 @@ namespace castor3d
 					, in
 					, pipelineID
 					, in.drawID
-					, flags.submeshFlags );
+					, flags.programFlags );
 				auto curPosition = writer.declLocale( "curPosition"
 					, in.position );
 				auto v4Normal = writer.declLocale( "v4Normal"
@@ -227,7 +228,7 @@ namespace castor3d
 				out.texture0 = in.texture0;
 				auto morphingData = writer.declLocale( "morphingData"
 					, c3d_morphingData[ids.morphingId]
-					, checkFlag( flags.submeshFlags, SubmeshFlag::eMorphing ) );
+					, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 				in.morph( morphingData
 					, curPosition
 					, v4Normal
@@ -239,7 +240,7 @@ namespace castor3d
 				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 
 				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
-					, modelData.getCurModelMtx( flags.submeshFlags
+					, modelData.getCurModelMtx( flags.programFlags
 						, skinningData
 						, ids.skinningId
 						, in.boneIds0
@@ -252,7 +253,7 @@ namespace castor3d
 				out.vtx.position = c3d_matrixData.worldToCurProj( worldPos );
 
 				auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
-					, modelData.getNormalMtx( flags.submeshFlags, mtxModel ) );
+					, modelData.getNormalMtx( flags.programFlags, mtxModel ) );
 				out.computeTangentSpace( flags.submeshFlags
 					, flags.programFlags
 					, c3d_matrixData.getCurViewCenter()

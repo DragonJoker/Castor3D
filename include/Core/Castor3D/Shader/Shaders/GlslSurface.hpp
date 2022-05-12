@@ -61,6 +61,7 @@ namespace castor3d::shader
 
 		static ast::type::IOStructPtr makeIOType( ast::type::TypesCache & cache
 			, SubmeshFlags submeshFlags
+			, ProgramFlags programFlags
 			, ShaderFlags shaderFlags
 			, FilteredTextureFlags textureFlags
 			, PassFlags passFlags
