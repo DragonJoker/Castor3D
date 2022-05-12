@@ -11,6 +11,8 @@ See LICENSE file in root folder
 
 #include <ashespp/Buffer/StagingBuffer.hpp>
 
+#include <unordered_map>
+
 namespace castor3d
 {
 	class VertexBufferPool
@@ -95,7 +97,7 @@ namespace castor3d
 	public:
 		struct ModelBuffers
 		{
-			explicit ModelBuffers( std::array< GpuPackedBufferPtr, getIndex( SubmeshFlag::eAllComponents ) > bufs )
+			explicit ModelBuffers( std::array< GpuPackedBufferPtr, getIndex( SubmeshFlag::eAllComponents ) > bufs = {} )
 				: buffers{ std::move( bufs ) }
 			{
 			}
@@ -166,7 +168,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		castor::String m_debugName;
-		std::map< SubmeshFlags::BaseType, BufferArray > m_buffers;
+		std::unordered_map< size_t, BufferArray > m_buffers;
 	};
 }
 
