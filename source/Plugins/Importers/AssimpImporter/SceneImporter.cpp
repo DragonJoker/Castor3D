@@ -380,8 +380,16 @@ namespace c3d_assimp
 			else
 			{
 				auto it = m_sortedNodes.find( makeString( aiNode.mName ) );
-				CU_Require( it == m_sortedNodes.end() );
-				node = it->second;
+
+				if ( it != m_sortedNodes.end() )
+				{
+					node = it->second;
+				}
+			}
+
+			if ( !node )
+			{
+				return;
 			}
 
 			for ( auto aiMeshIndex : castor::makeArrayView( aiNode.mMeshes, aiNode.mNumMeshes ) )
