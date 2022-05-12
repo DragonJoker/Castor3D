@@ -18,7 +18,9 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Model/Skeleton/BoneNode.hpp"
+#include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp"
+#include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationObject.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -142,29 +144,47 @@ namespace castor3d
 			, Skeleton & skeleton )
 		{
 			auto invTransform = transform.getInverse();
-			skeleton.setGlobalInverseTransform( transform * skeleton.getGlobalInverseTransform() * invTransform );
+			skeleton.setGlobalInverseTransform( transform * ( skeleton.getGlobalInverseTransform() * invTransform ) );
 
 			for ( auto bone : skeleton.getBones() )
 			{
-				bone->setInverseTransform( transform * bone->getInverseTransform() * invTransform );
+				bone->setInverseTransform( transform * ( bone->getInverseTransform() * invTransform ) );
 			}
 		}
 
-		static void transformSkeletonAnimations( castor::Matrix4x4f const & transform
+		static void transformSkeletonAnimations( castor::Point3f translate
+			, castor::Point3f scale
+			, castor::Quaternion rotation
 			, Skeleton & skeleton )
 		{
-			//for ( auto & animIt : skeleton.getAnimations() )
-			//{
-			//	for ( auto & keyFrame : *animIt.second )
-			//	{
-			//		for ( auto & transformIt : static_cast< SkeletonAnimationKeyFrame & >( *keyFrame ).getTransforms() )
-			//		{
-			//			transformIt.second = transform * transformIt.second;
-			//		}
+			castor::Matrix4x4f othersTransform;
+			castor::matrix::setTranslate( othersTransform, castor::Point3f{} );
+			castor::matrix::rotate( othersTransform, rotation );
 
-			//		keyFrame->initialise();
-			//	}
-			//}
+			castor::Matrix4x4f rootTransform{ othersTransform };
+			castor::matrix::scale( rootTransform, scale );
+
+			for ( auto & animIt : skeleton.getAnimations() )
+			{
+				auto & animation = static_cast< SkeletonAnimation & >( *animIt.second );
+
+				for ( auto & keyFrame : animation )
+				{
+					for ( auto & transformIt : static_cast< SkeletonAnimationKeyFrame & >( *keyFrame ) )
+					{
+						if ( transformIt.object->getParent() )
+						{
+							transformIt.transform = othersTransform * transformIt.transform;
+						}
+						else
+						{
+							transformIt.transform = rootTransform * transformIt.transform;
+						}
+					}
+
+					keyFrame->initialise();
+				}
+			}
 		}
 	}
 
@@ -274,7 +294,10 @@ namespace castor3d
 						if ( auto skeleton = mesh.getSkeleton() )
 						{
 							mshimp::transformSkeleton( transform, *skeleton );
-							mshimp::transformSkeletonAnimations( transform, *skeleton );
+							mshimp::transformSkeletonAnimations( castor::Point3f{}
+								, scale
+								, orientation
+								, *skeleton );
 						}
 					}
 				}

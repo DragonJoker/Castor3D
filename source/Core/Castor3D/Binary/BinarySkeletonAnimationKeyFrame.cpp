@@ -13,21 +13,21 @@ namespace castor3d
 	{
 		bool result = doWriteChunk( double( obj.getTimeIndex().count() ) / 1000.0, ChunkType::eSkeletonAnimationKeyFrameTime, m_chunk );
 
-		for ( auto & it : obj.m_transforms )
+		for ( auto & it : obj )
 		{
 			if ( result )
 			{
-				result = doWriteChunk( uint8_t( it.first->getType() ), ChunkType::eSkeletonAnimationKeyFrameObjectType, m_chunk );
+				result = doWriteChunk( uint8_t( it.object->getType() ), ChunkType::eSkeletonAnimationKeyFrameObjectType, m_chunk );
 			}
 
 			if ( result )
 			{
-				result = doWriteChunk( it.first->getName(), ChunkType::eSkeletonAnimationKeyFrameObjectName, m_chunk );
+				result = doWriteChunk( it.object->getName(), ChunkType::eSkeletonAnimationKeyFrameObjectName, m_chunk );
 			}
 
 			if ( result )
 			{
-				result = doWriteChunk( it.second, ChunkType::eSkeletonAnimationKeyFrameObjectTransform, m_chunk );
+				result = doWriteChunk( it.transform, ChunkType::eSkeletonAnimationKeyFrameObjectTransform, m_chunk );
 			}
 		}
 
