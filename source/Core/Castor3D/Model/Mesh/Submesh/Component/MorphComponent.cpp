@@ -115,15 +115,16 @@ namespace castor3d
 	}
 
 	void MorphComponent::gather( ShaderFlags const & shaderFlags
+		, ProgramFlags const & programFlags
 		, SubmeshFlags const & submeshFlags
 		, MaterialRPtr material
+		, TextureFlagsArray const & mask
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
-		, TextureFlagsArray const & mask
 		, uint32_t & currentLocation )
 	{
-		if ( checkFlag( submeshFlags, SubmeshFlag::eMorphing ) )
+		if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
 		{
 			auto hash = std::hash< SubmeshFlags::BaseType >{}( submeshFlags );
 			hash = castor::hashCombine( hash, shaderFlags.value() );

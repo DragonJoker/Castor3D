@@ -204,11 +204,18 @@ namespace castor3d
 		C3D_API void sortByDistance( castor::Point3f const & cameraPosition );
 		/**
 		 *\~english
+		 *\return		The program flags.
+		 *\~french
+		 *\return		Les indicateurs de programme.
+		 */
+		C3D_API ProgramFlags getProgramFlags( Material const & material )const;
+		/**
+		 *\~english
 		 *\return		The submesh flags.
 		 *\~french
 		 *\return		Les indicateurs de submesh.
 		 */
-		C3D_API SubmeshFlags getSubmeshFlags( Material const & material )const;
+		C3D_API SubmeshFlags getSubmeshFlags()const;
 		/**
 		 *\~english
 		 *\brief		Sets the material.
@@ -228,23 +235,23 @@ namespace castor3d
 		*\~english
 		*\return		The geometry buffers for given material.
 		 *\param[in]	shaderFlags		The shader flags.
+		 *\param[in]	programFlags	The program flags.
 		 *\param[in]	submeshFlags	The submesh flags.
 		 *\param[in]	material		The material.
 		 *\param[in]	mask			The textures mask.
-		 *\param[in]	forceTexcoords	\p true to force texture coordinates in the vertex layout.
 		*\~french
 		*\return		Les tampons de géométrie associés au materiau donné.
 		 *\param[in]	shaderFlags		Les shader flags.
+		 *\param[in]	programFlags	Les program flags.
 		 *\param[in]	submeshFlags	Les submesh flags.
 		 *\param[in]	material		Les matériau.
 		 *\param[in]	mask			Le masque de textures.
-		 *\param[in]	forceTexcoords	\p true pour forcer les coordonnées de texture dans le vertex layout.
 		*/
 		C3D_API GeometryBuffers const & getGeometryBuffers( ShaderFlags const & shaderFlags
+			, ProgramFlags const & programFlags
 			, SubmeshFlags const & submeshFlags
 			, MaterialRPtr material
-			, TextureFlagsArray const & mask
-			, bool forceTexcoords )const;
+			, TextureFlagsArray const & mask )const;
 		/**
 		 *\~english
 		 *\brief		Adds a points list to my list

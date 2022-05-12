@@ -582,15 +582,6 @@ namespace ocean
 		doAddGIDescriptor( descriptorWrites, shadowMaps, index );
 	}
 
-	castor3d::SubmeshFlags OceanRenderPass::doAdjustSubmeshFlags( castor3d::SubmeshFlags flags )const
-	{
-		remFlag( flags, castor3d::SubmeshFlag::eInstantiation );
-		remFlag( flags, castor3d::SubmeshFlag::eMorphing );
-		remFlag( flags, castor3d::SubmeshFlag::eSkinning );
-		addFlag( flags, castor3d::SubmeshFlag::eForceTexCoords );
-		return flags;
-	}
-
 	castor3d::PassFlags OceanRenderPass::doAdjustPassFlags( castor3d::PassFlags flags )const
 	{
 		remFlag( flags, castor3d::PassFlag::eReflection );
@@ -607,6 +598,10 @@ namespace ocean
 
 	castor3d::ProgramFlags OceanRenderPass::doAdjustProgramFlags( castor3d::ProgramFlags flags )const
 	{
+		remFlag( flags, castor3d::ProgramFlag::eInstantiation );
+		remFlag( flags, castor3d::ProgramFlag::eMorphing );
+		remFlag( flags, castor3d::ProgramFlag::eSkinning );
+		addFlag( flags, castor3d::ProgramFlag::eForceTexCoords );
 		addFlag( flags, castor3d::ProgramFlag::eLighting );
 		addFlag( flags, castor3d::ProgramFlag::eHasTessellation );
 		return flags;
@@ -626,10 +621,6 @@ namespace ocean
 		using namespace castor3d;
 		VertexWriter writer;
 
-		// Since their vertex attribute locations overlap, we must not have both set at the same time.
-		CU_Require( ( checkFlag( flags.submeshFlags, SubmeshFlag::eInstantiation ) ? 1 : 0 )
-			+ ( checkFlag( flags.submeshFlags, SubmeshFlag::eMorphing ) ? 1 : 0 ) < 2
-			&& "Can't have both instantiation and morphing yet." );
 		auto textureFlags = filterTexturesFlags( flags.textures );
 
 		C3D_Matrix( writer
@@ -651,6 +642,7 @@ namespace ocean
 
 		writer.implementMainT< castor3d::shader::VertexSurfaceT, castor3d::shader::FragmentSurfaceT >( sdw::VertexInT< castor3d::shader::VertexSurfaceT >{ writer
 				, flags.submeshFlags
+				, flags.programFlags
 				, getShaderFlags()
 				, textureFlags
 				, flags.passFlags
@@ -673,14 +665,14 @@ namespace ocean
 					, in
 					, pipelineID
 					, in.drawID
-					, flags.submeshFlags ) );
+					, flags.programFlags ) );
 			auto modelData = writer.declLocale( "modelData"
 				, c3d_modelsData[nodeId - 1u] );
 			out.nodeId = writer.cast< sdw::Int >( nodeId );
 
 #if Ocean_DebugPixelShader
 			auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
-				, c3d_modelData.getCurModelMtx( flags.submeshFlags
+				, c3d_modelData.getCurModelMtx( flags.programFlags
 					, skinningData
 					, in.boneIds0
 					, in.boneIds1
@@ -691,7 +683,7 @@ namespace ocean
 			out.viewPosition = c3d_matrixData.worldToCurView( out.worldPosition );
 			out.vtx.position = c3d_matrixData.viewToProj( out.viewPosition );
 			auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
-				, c3d_modelData.getNormalMtx( flags.submeshFlags, curMtxModel ) );
+				, c3d_modelData.getNormalMtx( flags.programFlags, curMtxModel ) );
 			out.computeTangentSpace( flags.submeshFlags
 				, flags.programFlags
 				, c3d_sceneData.cameraPosition
@@ -881,7 +873,7 @@ namespace ocean
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
 			, RenderPipeline::eBuffers
-			, flags.submeshFlags );
+			, flags.programFlags );
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		index++; // lights buffer
 		C3D_Ocean( writer
@@ -1033,7 +1025,7 @@ namespace ocean
 				auto mtxModel = writer.declLocale( "mtxModel"
 					, modelData.getModelMtx() );
 				auto mtxNormal = writer.declLocale( "mtxNormal"
-					, modelData.getNormalMtx( flags.submeshFlags, mtxModel ) );
+					, modelData.getNormalMtx( flags.programFlags, mtxModel ) );
 
 				out.normal = normalize( mtxNormal * finalWaveResult.normal );
 				out.tangent = normalize( mtxNormal * finalWaveResult.tangent );

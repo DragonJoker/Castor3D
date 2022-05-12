@@ -493,11 +493,7 @@ namespace water
 
 	castor3d::SubmeshFlags WaterRenderPass::doAdjustSubmeshFlags( castor3d::SubmeshFlags flags )const
 	{
-		remFlag( flags, castor3d::SubmeshFlag::eInstantiation );
-		remFlag( flags, castor3d::SubmeshFlag::eMorphing );
-		remFlag( flags, castor3d::SubmeshFlag::eSkinning );
 		remFlag( flags, castor3d::SubmeshFlag::eSecondaryUV );
-		addFlag( flags, castor3d::SubmeshFlag::eForceTexCoords );
 		return flags;
 	}
 
@@ -517,6 +513,10 @@ namespace water
 
 	castor3d::ProgramFlags WaterRenderPass::doAdjustProgramFlags( castor3d::ProgramFlags flags )const
 	{
+		remFlag( flags, castor3d::ProgramFlag::eInstantiation );
+		remFlag( flags, castor3d::ProgramFlag::eMorphing );
+		remFlag( flags, castor3d::ProgramFlag::eSkinning );
+		addFlag( flags, castor3d::ProgramFlag::eForceTexCoords );
 		addFlag( flags, castor3d::ProgramFlag::eLighting );
 		return flags;
 	}

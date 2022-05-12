@@ -39,8 +39,7 @@ namespace castor3d
 			, SubmeshFlags const & submeshFlags
 			, ProgramFlags const & programFlags
 			, Material & material
-			, TextureFlagsArray const & texturesMask
-			, bool forceTexCoords )const;
+			, TextureFlagsArray const & texturesMask )const;
 
 		Pass * pass;
 		DataType & data;

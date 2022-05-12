@@ -47,7 +47,7 @@ namespace castor3d
 		C3D_API static shader::SkinningData declare( sdw::ShaderWriter & writer
 			, uint32_t transformsBinding
 			, uint32_t transformsSet
-			, SubmeshFlags const & flags );
+			, ProgramFlags const & flags );
 		/**
 		 *\~english
 		 *\brief		Computes skinning transformation in vertex shader.

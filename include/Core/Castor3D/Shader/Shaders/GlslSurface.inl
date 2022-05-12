@@ -118,12 +118,13 @@ namespace castor3d::shader
 	template< ast::var::Flag FlagT >
 	ast::type::IOStructPtr VertexSurfaceT< FlagT >::makeIOType( ast::type::TypesCache & cache
 		, SubmeshFlags submeshFlags
+		, ProgramFlags programFlags
 		, ShaderFlags shaderFlags
 		, FilteredTextureFlags textureFlags
 		, PassFlags passFlags
 		, bool hasTextures )
 	{
-		hasTextures |= checkFlag( submeshFlags, SubmeshFlag::eForceTexCoords );
+		hasTextures |= checkFlag( programFlags, ProgramFlag::eForceTexCoords );
 		auto result = cache.getIOStruct( ast::type::MemoryLayout::eC
 			, "C3D_" + ( FlagT == sdw::var::Flag::eShaderOutput
 				? std::string{ "Output" }
@@ -210,8 +211,8 @@ namespace castor3d::shader
 			//@{
 			result->declMember( "objectIds", ast::type::Kind::eVec4U
 				, ast::type::NotArray
-				, ( checkFlag( submeshFlags, SubmeshFlag::eInstantiation ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eInstantiation ) );
+				, ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? index++ : 0 )
+				, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
 			//@}
 		}
 
@@ -283,7 +284,7 @@ namespace castor3d::shader
 		, PassFlags passFlags
 		, bool hasTextures )
 	{
-		hasTextures |= checkFlag( submeshFlags, SubmeshFlag::eForceTexCoords );
+		hasTextures |= checkFlag( programFlags, ProgramFlag::eForceTexCoords );
 		auto result = cache.getIOStruct( ast::type::MemoryLayout::eC
 			, "C3D_" + ( FlagT == sdw::var::Flag::eShaderOutput
 				? std::string{ "Output" }
