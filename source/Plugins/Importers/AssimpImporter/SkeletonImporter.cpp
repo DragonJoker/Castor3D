@@ -455,14 +455,9 @@ namespace c3d_assimp
 
 		for ( auto & object : notAnimated )
 		{
-			castor::Matrix4x4f transform{ 1.0f };
-
-			if ( object->getName().find( "$AssimpFbx$_PreRotation" ) == castor::String::npos )
-			{
-				auto node = aiNode.FindNode( m_importer.getExternalName( object->getName() ).c_str() );
-				CU_Require( node );
-				transform = makeMatrix4x4f( node->mTransformation );
-			}
+			auto node = aiNode.FindNode( m_importer.getExternalName( object->getName() ).c_str() );
+			CU_Require( node );
+			auto transform = makeMatrix4x4f( node->mTransformation );
 
 			for ( auto & keyFrame : keyframes )
 			{
