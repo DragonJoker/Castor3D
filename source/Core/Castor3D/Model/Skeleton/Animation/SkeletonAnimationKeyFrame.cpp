@@ -75,31 +75,20 @@ namespace castor3d
 	void SkeletonAnimationKeyFrame::addAnimationObject( SkeletonAnimationObject & object
 		, castor::Matrix4x4f const & transform )
 	{
-		auto findTransform = [this]( SkeletonAnimationObject & obj )
-		{
-			return std::find_if( m_transforms.begin()
-				, m_transforms.end()
-				, [&obj]( auto const & lookup )
-				{
-					return lookup.first == &obj;
-				} );
-		};
-		auto it = findTransform( object );
+		auto it = find( object );
 
 		if ( it == m_transforms.end() )
 		{
 			auto parent = object.getParent();
 
-			if ( parent && findTransform( *parent ) == m_transforms.end() )
+			if ( parent && find( *parent ) == m_transforms.end() )
 			{
 				addAnimationObject( *parent, castor::Matrix4x4f{ 1.0f } );
 			}
 
-			m_transforms.emplace_back( &object, transform );
-		}
-		else
-		{
-			it->second = transform;
+			auto & ins = m_transforms.emplace_back();
+			ins.object = &object;
+			ins.transform = transform;
 		}
 	}
 
@@ -107,51 +96,74 @@ namespace castor3d
 	{
 		return m_transforms.end() != std::find_if( m_transforms.begin()
 			, m_transforms.end()
-			, [&object]( auto const & lookup )
+			, [&object]( ObjectTransform const & lookup )
 			{
-				return lookup.first == &object;
+				return lookup.object == &object;
 			} );
 	}
 
 	TransformArray::const_iterator SkeletonAnimationKeyFrame::find( SkeletonAnimationObject const & object )const
 	{
-		return std::find_if( m_cumulative.begin()
-			, m_cumulative.end()
+		return std::find_if( m_transforms.begin()
+			, m_transforms.end()
 			, [&object]( ObjectTransform const & lookup )
 			{
-				return lookup.first == &object;
+				return lookup.object == &object;
 			} );
 	}
 
 	TransformArray::const_iterator SkeletonAnimationKeyFrame::find( BoneNode const & bone )const
 	{
-		return std::find_if( m_cumulative.begin()
-			, m_cumulative.end()
+		return std::find_if( m_transforms.begin()
+			, m_transforms.end()
 			, [&bone]( ObjectTransform const & lookup )
 		{
-			return lookup.first->getType() == SkeletonNodeType::eBone
-				&& static_cast< SkeletonAnimationBone const & >( *lookup.first ).getBone() == &bone;
+			return lookup.object->getType() == SkeletonNodeType::eBone
+				&& static_cast< SkeletonAnimationBone const & >( *lookup.object ).getBone() == &bone;
+		} );
+	}
+
+	TransformArray::iterator SkeletonAnimationKeyFrame::find( SkeletonAnimationObject const & object )
+	{
+		return std::find_if( m_transforms.begin()
+			, m_transforms.end()
+			, [&object]( ObjectTransform const & lookup )
+			{
+				return lookup.object == &object;
+			} );
+	}
+
+	TransformArray::iterator SkeletonAnimationKeyFrame::find( BoneNode const & bone )
+	{
+		return std::find_if( m_transforms.begin()
+			, m_transforms.end()
+			, [&bone]( ObjectTransform const & lookup )
+		{
+			return lookup.object->getType() == SkeletonNodeType::eBone
+				&& static_cast< SkeletonAnimationBone const & >( *lookup.object ).getBone() == &bone;
 		} );
 	}
 
 	void SkeletonAnimationKeyFrame::initialise()
 	{
-		m_cumulative.clear();
-		m_cumulative.reserve( m_transforms.size() );
+		for ( auto & transform : m_transforms )
+		{
+			transform.cumulative = castor::Matrix4x4f{ 1.0f };
+		}
 
 		for ( auto & transform : m_transforms )
 		{
-			auto parent = transform.first->getParent();
+			auto parent = transform.object->getParent();
 
 			if ( parent )
 			{
 				auto it = find( *parent );
 				CU_Ensure( it != end() );
-				m_cumulative.emplace_back( transform.first, it->second * transform.second );
+				transform.cumulative = it->cumulative * transform.transform;
 			}
 			else
 			{
-				m_cumulative.push_back( transform );
+				transform.cumulative = transform.transform;
 			}
 		}
 	}

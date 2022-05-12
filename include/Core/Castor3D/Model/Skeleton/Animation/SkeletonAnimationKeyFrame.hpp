@@ -81,31 +81,25 @@ namespace castor3d
 		C3D_API TransformArray::const_iterator find( BoneNode const & bone )const;
 		/**
 		 *\~english
+		 *\return		The iterator matching given animation object, into cumulative transforms map.
+		 *\~french
+		 *\return		L'itérateur correspondant à l'objet d'animation donné, dans la map des transformations cumulatives.
+		 */
+		C3D_API TransformArray::iterator find( SkeletonAnimationObject const & object );
+		/**
+		 *\~english
+		 *\return		The iterator matching given bone, into cumulative transforms map.
+		 *\~french
+		 *\return		L'itérateur correspondant à l'os donné, dans la map des transformations cumulatives.
+		 */
+		C3D_API TransformArray::iterator find( BoneNode const & bone );
+		/**
+		 *\~english
 		 *\brief		Initialises the keyframe.
 		 *\~french
 		 *\brief		Initialise la keyframe.
 		 */
 		C3D_API void initialise()override;
-		/**
-		 *\~english
-		 *\return		The objects transforms.
-		 *\~french
-		 *\return		Les transformations des objets.
-		 */
-		C3D_API TransformArray & getTransforms()
-		{
-			return m_transforms;
-		}
-		/**
-		 *\~english
-		 *\return		The objects transforms.
-		 *\~french
-		 *\return		Les transformations des objets.
-		 */
-		C3D_API TransformArray const & getTransforms()const
-		{
-			return m_transforms;
-		}
 		/**
 		 *\~english
 		 *\return		The beginning of the cumulative transforms map.
@@ -114,7 +108,7 @@ namespace castor3d
 		 */
 		TransformArray::const_iterator begin()const
 		{
-			return m_cumulative.begin();
+			return m_transforms.begin();
 		}
 		/**
 		 *\~english
@@ -124,7 +118,7 @@ namespace castor3d
 		 */
 		TransformArray::iterator begin()
 		{
-			return m_cumulative.begin();
+			return m_transforms.begin();
 		}
 		/**
 		 *\~english
@@ -134,7 +128,7 @@ namespace castor3d
 		 */
 		TransformArray::const_iterator end()const
 		{
-			return m_cumulative.end();
+			return m_transforms.end();
 		}
 		/**
 		 *\~english
@@ -144,7 +138,7 @@ namespace castor3d
 		 */
 		TransformArray::iterator end()
 		{
-			return m_cumulative.end();
+			return m_transforms.end();
 		}
 
 	private:
@@ -157,9 +151,6 @@ namespace castor3d
 		//!\~english	The transformations, per animation object.
 		//!\~french		Les transformations, par objet d'animation.
 		TransformArray m_transforms;
-		//!\~english	The cumulative transformations, per animation object.
-		//!\~french		Les transformations cumulatives, par objet d'animation.
-		TransformArray m_cumulative;
 
 		friend class BinaryParser< SkeletonAnimationKeyFrame >;
 		friend class BinaryWriter< SkeletonAnimationKeyFrame >;

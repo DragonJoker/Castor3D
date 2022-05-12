@@ -665,8 +665,8 @@ namespace Testing
 
 			while ( result && itA != endItA && itB != endItB )
 			{
-				result = CT_EQUAL( itA->first->getName(), itB->first->getName() );
-				result = result && CT_EQUAL( itA->second, itB->second );
+				result = CT_EQUAL( itA->object->getName(), itB->object->getName() );
+				result = result && CT_EQUAL( itA->transform, itB->transform );
 				++itA;
 				++itB;
 			}
