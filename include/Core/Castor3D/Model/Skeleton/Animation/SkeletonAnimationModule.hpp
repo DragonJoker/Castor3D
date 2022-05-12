@@ -68,7 +68,12 @@ namespace castor3d
 	*/
 	class SkeletonAnimationObject;
 
-	using ObjectTransform = std::pair< SkeletonAnimationObject *, castor::Matrix4x4f >;
+	struct ObjectTransform
+	{
+		SkeletonAnimationObject * object{};
+		castor::Matrix4x4f transform{};
+		castor::Matrix4x4f cumulative{};
+	};
 	using TransformArray = std::vector< ObjectTransform >;
 
 	CU_DeclareSmartPtr( SkeletonAnimation );

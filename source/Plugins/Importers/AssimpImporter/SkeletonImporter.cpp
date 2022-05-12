@@ -461,7 +461,16 @@ namespace c3d_assimp
 
 			for ( auto & keyFrame : keyframes )
 			{
-				keyFrame.second->addAnimationObject( *object, transform );
+				auto it = keyFrame.second->find( *object );
+
+				if ( it == keyFrame.second->end() )
+				{
+					keyFrame.second->addAnimationObject( *object, transform );
+				}
+				else
+				{
+					it->transform = transform;
+				}
 			}
 		}
 

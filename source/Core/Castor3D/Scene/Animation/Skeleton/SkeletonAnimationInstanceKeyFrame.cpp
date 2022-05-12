@@ -49,7 +49,7 @@ namespace castor3d
 
 						if ( it != keyFrame.end() )
 						{
-							transform = castor::Matrix4x4f{ it->second * bone->getInverseTransform() * boneData.m_weights[0] };
+							transform = castor::Matrix4x4f{ it->cumulative * bone->getInverseTransform() * boneData.m_weights[0] };
 						}
 						else
 						{
@@ -66,7 +66,7 @@ namespace castor3d
 
 							if ( it != keyFrame.end() )
 							{
-								transform += castor::Matrix4x4f{ it->second * bone->getInverseTransform() * boneData.m_weights[i] };
+								transform += castor::Matrix4x4f{ it->cumulative * bone->getInverseTransform() * boneData.m_weights[i] };
 							}
 							else
 							{
@@ -112,7 +112,7 @@ namespace castor3d
 			auto it = keyFrame.find( object->getObject() );
 			m_objects.emplace_back( object.get()
 				, ( it != keyFrame.end()
-					? it->second
+					? it->cumulative
 					: castor::Matrix4x4f{ castor::Matrix4x4f::getIdentity() } ) );
 		}
 
