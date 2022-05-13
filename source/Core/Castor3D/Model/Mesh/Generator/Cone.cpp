@@ -1,8 +1,7 @@
 #include "Castor3D/Model/Mesh/Generator/Cone.hpp"
 
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 

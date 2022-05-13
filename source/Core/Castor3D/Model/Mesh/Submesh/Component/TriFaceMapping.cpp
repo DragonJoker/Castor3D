@@ -5,8 +5,7 @@
 #include "Castor3D/Miscellaneous/StagingData.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/Texcoords0Component.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 

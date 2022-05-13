@@ -15,9 +15,6 @@ namespace castor3d
 	class BonesComponent
 		: public SubmeshComponent
 	{
-	private:
-		CU_DeclareList( castor::ByteArray, BytePtr );
-
 	public:
 		/**
 		 *\~english
@@ -120,7 +117,7 @@ namespace castor3d
 
 	public:
 		C3D_API static castor::String const Name;
-		C3D_API static uint32_t constexpr Id = 8u;
+		C3D_API static uint32_t constexpr Id = getIndex( SubmeshFlag::eBones ) - 1u;
 
 	private:
 		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_bonesLayouts;

@@ -594,6 +594,7 @@ source_group( "Header Files\\Model\\Mesh\\Submesh" FILES ${${PROJECT_NAME}_FOLDE
 source_group( "Source Files\\Model\\Mesh\\Submesh" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/BaseDataComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/BonesComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/Face.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/IndexMapping.cpp
@@ -601,17 +602,11 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/Line.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/LinesMapping.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/MorphComponent.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/NormalsComponent.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/PositionsComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/SubmeshComponent.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/TangentsComponent.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/Texcoords0Component.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/Texcoords1Component.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/Texcoords2Component.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/Texcoords3Component.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/TriFaceMapping.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/BaseDataComponent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/BonesComponent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/ComponentModule.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/Face.hpp
@@ -623,14 +618,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/LineIndices.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/LinesMapping.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/MorphComponent.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/NormalsComponent.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/PositionsComponent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/SubmeshComponent.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/TangentsComponent.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/Texcoords0Component.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/Texcoords1Component.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/Texcoords2Component.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/Texcoords3Component.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/TriFaceMapping.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES

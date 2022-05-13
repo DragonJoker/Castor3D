@@ -12,7 +12,7 @@
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp>
 #include <Castor3D/Model/Vertex.hpp>
 #include <Castor3D/Scene/Geometry.hpp>
 #include <Castor3D/Scene/Scene.hpp>
