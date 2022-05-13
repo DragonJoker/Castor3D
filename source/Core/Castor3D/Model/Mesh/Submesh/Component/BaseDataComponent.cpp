@@ -1,4 +1,4 @@
-#include "Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
 
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
@@ -15,7 +15,7 @@
 
 namespace castor3d
 {
-	namespace smshcomptan
+	namespace smshbase
 	{
 		static ashes::PipelineVertexInputStateCreateInfo createVertexLayout( uint32_t & currentBinding
 			, uint32_t & currentLocation )
@@ -29,36 +29,56 @@ namespace castor3d
 			++currentBinding;
 			return ashes::PipelineVertexInputStateCreateInfo{ 0u, bindings, attributes };
 		}
+
+		static bool isTexcoordComponent( SubmeshFlag submeshData )
+		{
+			return submeshData == SubmeshFlag::eTexcoords0
+				|| submeshData == SubmeshFlag::eTexcoords1
+				|| submeshData == SubmeshFlag::eTexcoords2
+				|| submeshData == SubmeshFlag::eTexcoords3;
+		}
 	}
 
-	castor::String const TangentsComponent::Name = cuT( "tangents" );
-
-	TangentsComponent::TangentsComponent( Submesh & submesh )
-		: SubmeshComponent{ submesh, Name, Id }
+	void uploadBaseData( SubmeshFlag submeshData
+		, Submesh const & submesh
+		, castor::Point3fArray const & data )
 	{
+		auto count = uint32_t( data.size() );
+		auto & offsets = submesh.getBufferOffsets();
+		auto & buffer = offsets.getBufferChunk( submeshData );
+
+		if ( count && buffer.hasData() )
+		{
+			std::copy( data.begin()
+				, data.end()
+				, buffer.getData< castor::Point3f >().begin() );
+			buffer.markDirty();
+		}
 	}
 
-	void TangentsComponent::gather( ShaderFlags const & shaderFlags
+	void gatherBaseDataBuffer( SubmeshFlag submeshData
 		, ProgramFlags const & programFlags
 		, SubmeshFlags const & submeshFlags
-		, MaterialRPtr material
-		, TextureFlagsArray const & mask
-		, ashes::BufferCRefArray & buffers
-		, std::vector< uint64_t > & offsets
+		, bool hasTextures
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 		, uint32_t & currentBinding
-		, uint32_t & currentLocation )
+		, uint32_t & currentLocation
+		, std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > & cache )
 	{
-		if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) )
+		if ( ( smshbase::isTexcoordComponent( submeshData )
+				&& ( checkFlag( programFlags, ProgramFlag::eForceTexCoords )
+					|| ( checkFlag( submeshFlags, submeshData ) && hasTextures ) ) )
+			|| ( !smshbase::isTexcoordComponent( submeshData )
+				&& checkFlag( submeshFlags, submeshData ) ) )
 		{
 			auto hash = std::hash< uint32_t >{}( currentBinding );
 			hash = castor::hashCombine( hash, currentLocation );
-			auto layoutIt = m_layouts.find( hash );
+			auto layoutIt = cache.find( hash );
 
-			if ( layoutIt == m_layouts.end() )
+			if ( layoutIt == cache.end() )
 			{
-				layoutIt = m_layouts.emplace( hash
-					, smshcomptan::createVertexLayout( currentBinding, currentLocation ) ).first;
+				layoutIt = cache.emplace( hash
+					, smshbase::createVertexLayout( currentBinding, currentLocation ) ).first;
 			}
 			else
 			{
@@ -67,38 +87,6 @@ namespace castor3d
 			}
 
 			layouts.emplace_back( layoutIt->second );
-		}
-	}
-
-	SubmeshComponentSPtr TangentsComponent::clone( Submesh & submesh )const
-	{
-		auto result = std::make_shared< TangentsComponent >( submesh );
-		result->m_data = m_data;
-		return std::static_pointer_cast< SubmeshComponent >( result );
-	}
-
-	bool TangentsComponent::doInitialise( RenderDevice const & device )
-	{
-		return true;
-	}
-
-	void TangentsComponent::doCleanup( RenderDevice const & device )
-	{
-		m_data.clear();
-	}
-
-	void TangentsComponent::doUpload()
-	{
-		auto count = uint32_t( m_data.size() );
-		auto & offsets = getOwner()->getBufferOffsets();
-		auto & buffer = offsets.getBufferChunk( SubmeshFlag::eTangents );
-
-		if ( count && buffer.hasData() )
-		{
-			std::copy( m_data.begin()
-				, m_data.end()
-				, buffer.getData< castor::Point3f >().begin() );
-			buffer.markDirty();
 		}
 	}
 }

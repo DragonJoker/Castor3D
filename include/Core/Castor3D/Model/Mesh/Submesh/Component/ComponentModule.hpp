@@ -19,6 +19,14 @@ namespace castor3d
 
 	/**
 	\~english
+	\brief		Submesh component holding base submesh data.
+	\~french
+	\brief		Composant de sous-maillage détenant des données basiques d'un sous-maillage.
+	*/
+	template< SubmeshFlag SubmeshFlagT >
+	class BaseDataComponentT;
+	/**
+	\~english
 	\brief		The submesh component used for skinning.
 	\~french
 	\brief		Le composant de sous-maillage pour le skinning.
@@ -98,20 +106,6 @@ namespace castor3d
 	class MorphComponent;
 	/**
 	\~english
-	\brief		The submesh component holding normals.
-	\~french
-	\brief		Le composant de sous-maillage contenant les normales.
-	*/
-	class NormalsComponent;
-	/**
-	\~english
-	\brief		The submesh component holding positions.
-	\~french
-	\brief		Le composant de sous-maillage contenant les positions.
-	*/
-	class PositionsComponent;
-	/**
-	\~english
 	\brief		Component for a submesh.
 	\~french
 	\brief		Composant pour un sous-maillage.
@@ -119,46 +113,60 @@ namespace castor3d
 	class SubmeshComponent;
 	/**
 	\~english
-	\brief		The submesh component holding tangents.
-	\~french
-	\brief		Le composant de sous-maillage contenant les tangents.
-	*/
-	class TangentsComponent;
-	/**
-	\~english
-	\brief		The submesh component holding texture coordinates.
-	\~french
-	\brief		Le composant de sous-maillage contenant les coordonnées de texture.
-	*/
-	class Texcoords0Component;
-	/**
-	\~english
-	\brief		The submesh component holding texture coordinates.
-	\~french
-	\brief		Le composant de sous-maillage contenant les coordonnées de texture.
-	*/
-	class Texcoords1Component;
-	/**
-	\~english
-	\brief		The submesh component holding texture coordinates.
-	\~french
-	\brief		Le composant de sous-maillage contenant les coordonnées de texture.
-	*/
-	class Texcoords2Component;
-	/**
-	\~english
-	\brief		The submesh component holding texture coordinates.
-	\~french
-	\brief		Le composant de sous-maillage contenant les coordonnées de texture.
-	*/
-	class Texcoords3Component;
-	/**
-	\~english
 	\brief		The submesh component for triangular faces.
 	\~french
 	\brief		Composant de sous-maillage pour les faces triangulaires.
 	*/
 	class TriFaceMapping;
+	/**
+	\~english
+	\brief		The submesh component holding normals.
+	\~french
+	\brief		Le composant de sous-maillage contenant les normales.
+	*/
+	using NormalsComponent = BaseDataComponentT< SubmeshFlag::eNormals >;
+	/**
+	\~english
+	\brief		The submesh component holding positions.
+	\~french
+	\brief		Le composant de sous-maillage contenant les positions.
+	*/
+	using PositionsComponent = BaseDataComponentT< SubmeshFlag::ePositions >;
+	/**
+	\~english
+	\brief		The submesh component holding tangents.
+	\~french
+	\brief		Le composant de sous-maillage contenant les tangents.
+	*/
+	using TangentsComponent = BaseDataComponentT< SubmeshFlag::eTangents >;
+	/**
+	\~english
+	\brief		The submesh component holding texture coordinates.
+	\~french
+	\brief		Le composant de sous-maillage contenant les coordonnées de texture.
+	*/
+	using Texcoords0Component = BaseDataComponentT< SubmeshFlag::eTexcoords0 >;
+	/**
+	\~english
+	\brief		The submesh component holding texture coordinates.
+	\~french
+	\brief		Le composant de sous-maillage contenant les coordonnées de texture.
+	*/
+	using Texcoords1Component = BaseDataComponentT< SubmeshFlag::eTexcoords1 >;
+	/**
+	\~english
+	\brief		The submesh component holding texture coordinates.
+	\~french
+	\brief		Le composant de sous-maillage contenant les coordonnées de texture.
+	*/
+	using Texcoords2Component = BaseDataComponentT< SubmeshFlag::eTexcoords2 >;
+	/**
+	\~english
+	\brief		The submesh component holding texture coordinates.
+	\~french
+	\brief		Le composant de sous-maillage contenant les coordonnées de texture.
+	*/
+	using Texcoords3Component = BaseDataComponentT< SubmeshFlag::eTexcoords3 >;
 
 	CU_DeclareSmartPtr( Face );
 	CU_DeclareSmartPtr( IndexMapping );
