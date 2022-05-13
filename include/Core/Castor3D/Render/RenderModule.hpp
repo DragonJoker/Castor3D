@@ -369,7 +369,11 @@ namespace castor3d
 		bool hasTextures()const
 		{
 			return checkFlag( programFlags, ProgramFlag::eForceTexCoords )
-				|| ( !textures.empty() && checkFlag( submeshFlags, SubmeshFlag::eTexcoords ) );
+				|| ( !textures.empty()
+					&& ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 )
+						|| checkFlag( submeshFlags, SubmeshFlag::eTexcoords1 )
+						|| checkFlag( submeshFlags, SubmeshFlag::eTexcoords2 )
+						|| checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) ) );
 		}
 	};
 	C3D_API bool operator==( PipelineFlags const & lhs, PipelineFlags const & rhs );

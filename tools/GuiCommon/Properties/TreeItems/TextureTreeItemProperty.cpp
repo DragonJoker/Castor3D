@@ -339,6 +339,7 @@ namespace GuiCommon
 	{
 		static wxString CATEGORY_TEXTURE = _( "Texture" );
 		static wxString PROPERTY_TEXTURE_IMAGE = _( "Image" );
+		static wxString PROPERTY_TEXTURE_TEXCOORDSET = _( "Texcoord Set" );
 		static wxString PROPERTY_FLAG_DIFFUSE = _( "Diffuse" );
 		static wxString PROPERTY_FLAG_SPECULAR = _( "Specular" );
 		static wxString PROPERTY_FLAG_METALLIC = _( "Metallic" );
@@ -400,6 +401,7 @@ namespace GuiCommon
 					} );
 			}
 
+			addPropertyT( grid, PROPERTY_TEXTURE_TEXCOORDSET, unit->getTexcoordSet(), unit.get(), &castor3d::TextureUnit::setTexcoordSet );
 			m_properties = UnitTreeGatherer::submit( m_pass
 				, m_configuration
 				, this

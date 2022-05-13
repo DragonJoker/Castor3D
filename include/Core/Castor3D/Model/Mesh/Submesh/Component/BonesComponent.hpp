@@ -58,6 +58,7 @@ namespace castor3d
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
+			, uint32_t & currentBinding
 			, uint32_t & currentLocation )override;
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::clone
@@ -95,7 +96,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getSubmeshFlags
 		 */
-		SubmeshFlags getSubmeshFlags()const override
+		SubmeshFlags getSubmeshFlags( Pass const * pass )const override
 		{
 			return hasBoneData()
 				? SubmeshFlag::eBones
@@ -119,7 +120,7 @@ namespace castor3d
 
 	public:
 		C3D_API static castor::String const Name;
-		C3D_API static uint32_t constexpr BindingPoint = 8u;
+		C3D_API static uint32_t constexpr Id = 8u;
 
 	private:
 		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_bonesLayouts;

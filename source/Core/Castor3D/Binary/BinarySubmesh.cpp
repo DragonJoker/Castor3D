@@ -7,7 +7,10 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/Texcoords0Component.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/Texcoords1Component.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/Texcoords2Component.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/Texcoords3Component.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp"
 
@@ -96,10 +99,31 @@ namespace castor3d
 		}
 
 		if ( result
-			&& obj.hasComponent( TexcoordsComponent::Name ) )
+			&& obj.hasComponent( Texcoords0Component::Name ) )
 		{
-			auto & values = obj.getComponent< TexcoordsComponent >()->getData();
-			result = doWriteChunk( values, ChunkType::eSubmeshTexcoords, m_chunk );
+			auto & values = obj.getComponent< Texcoords0Component >()->getData();
+			result = doWriteChunk( values, ChunkType::eSubmeshTexcoords0, m_chunk );
+		}
+
+		if ( result
+			&& obj.hasComponent( Texcoords1Component::Name ) )
+		{
+			auto & values = obj.getComponent< Texcoords1Component >()->getData();
+			result = doWriteChunk( values, ChunkType::eSubmeshTexcoords1, m_chunk );
+		}
+
+		if ( result
+			&& obj.hasComponent( Texcoords2Component::Name ) )
+		{
+			auto & values = obj.getComponent< Texcoords2Component >()->getData();
+			result = doWriteChunk( values, ChunkType::eSubmeshTexcoords2, m_chunk );
+		}
+
+		if ( result
+			&& obj.hasComponent( Texcoords3Component::Name ) )
+		{
+			auto & values = obj.getComponent< Texcoords3Component >()->getData();
+			result = doWriteChunk( values, ChunkType::eSubmeshTexcoords3, m_chunk );
 		}
 
 		if ( result )
@@ -141,11 +165,9 @@ namespace castor3d
 
 		if ( result )
 		{
-			auto it = obj.m_components.find( BonesComponent::BindingPoint );
-
-			if ( it != obj.m_components.end() )
+			if ( auto component = obj.getComponent< BonesComponent >() )
 			{
-				BinaryWriter< BonesComponent >{}.write( *std::static_pointer_cast< BonesComponent >( it->second ), m_chunk );
+				BinaryWriter< BonesComponent >{}.write( *component, m_chunk );
 			}
 		}
 
@@ -224,8 +246,47 @@ namespace castor3d
 					}
 				}
 				break;
-			case ChunkType::eSubmeshTexcoords:
-				if ( auto component = std::make_shared< TexcoordsComponent >( obj ) )
+			case ChunkType::eSubmeshTexcoords0:
+				if ( auto component = std::make_shared< Texcoords0Component >( obj ) )
+				{
+					component->getData().resize( count );
+					result = doParseChunk( component->getData(), chunk );
+					checkError( result, "Couldn't parse vertex texcoords." );
+
+					if ( result )
+					{
+						obj.addComponent( component );
+					}
+				}
+				break;
+			case ChunkType::eSubmeshTexcoords1:
+				if ( auto component = std::make_shared< Texcoords1Component >( obj ) )
+				{
+					component->getData().resize( count );
+					result = doParseChunk( component->getData(), chunk );
+					checkError( result, "Couldn't parse vertex texcoords." );
+
+					if ( result )
+					{
+						obj.addComponent( component );
+					}
+				}
+				break;
+			case ChunkType::eSubmeshTexcoords2:
+				if ( auto component = std::make_shared< Texcoords2Component >( obj ) )
+				{
+					component->getData().resize( count );
+					result = doParseChunk( component->getData(), chunk );
+					checkError( result, "Couldn't parse vertex texcoords." );
+
+					if ( result )
+					{
+						obj.addComponent( component );
+					}
+				}
+				break;
+			case ChunkType::eSubmeshTexcoords3:
+				if ( auto component = std::make_shared< Texcoords3Component >( obj ) )
 				{
 					component->getData().resize( count );
 					result = doParseChunk( component->getData(), chunk );
@@ -350,7 +411,7 @@ namespace castor3d
 						auto positions = obj.createComponent< PositionsComponent >();
 						auto normals = obj.createComponent< NormalsComponent >();
 						auto tangents = obj.createComponent< TangentsComponent >();
-						auto texcoords = obj.createComponent< TexcoordsComponent >();
+						auto texcoords = obj.createComponent< Texcoords0Component >();
 						v1_5::dispatchVertices( dstbuf
 							, positions->getData()
 							, normals->getData()
@@ -469,7 +530,7 @@ namespace castor3d
 							auto positions = obj.createComponent< PositionsComponent >();
 							auto normals = obj.createComponent< NormalsComponent >();
 							auto tangents = obj.createComponent< TangentsComponent >();
-							auto texcoords = obj.createComponent< TexcoordsComponent >();
+							auto texcoords = obj.createComponent< Texcoords0Component >();
 							v1_5::dispatchVertices( vertices
 								, positions->getData()
 								, normals->getData()

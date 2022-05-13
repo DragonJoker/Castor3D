@@ -17,7 +17,10 @@
 #include <Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/Texcoords0Component.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/Texcoords1Component.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/Texcoords2Component.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/Texcoords3Component.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp>
@@ -339,13 +342,18 @@ namespace Testing
 				{ castor3d::SubmeshFlag::ePositions, "ePositions" },
 				{ castor3d::SubmeshFlag::eNormals, "eNormals" },
 				{ castor3d::SubmeshFlag::eTangents, "eTangents" },
-				{ castor3d::SubmeshFlag::eTexcoords, "eTexcoords" },
-				{ castor3d::SubmeshFlag::eSecondaryUV, "eSecondaryUV" },
+				{ castor3d::SubmeshFlag::eTexcoords0, "eTexcoords0" },
+				{ castor3d::SubmeshFlag::eTexcoords1, "eTexcoords1" },
+				{ castor3d::SubmeshFlag::eTexcoords2, "eTexcoords2" },
+				{ castor3d::SubmeshFlag::eTexcoords3, "eTexcoords3" },
 				{ castor3d::SubmeshFlag::eBones, "eBones" },
 				{ castor3d::SubmeshFlag::eMorphPositions, "eMorphPositions" },
 				{ castor3d::SubmeshFlag::eMorphNormals, "eMorphNormals" },
 				{ castor3d::SubmeshFlag::eMorphTangents, "eMorphTangents" },
-				{ castor3d::SubmeshFlag::eMorphTexcoords, "eMorphTexcoords" },
+				{ castor3d::SubmeshFlag::eMorphTexcoords0, "eMorphTexcoords0" },
+				{ castor3d::SubmeshFlag::eMorphTexcoords1, "eMorphTexcoords1" },
+				{ castor3d::SubmeshFlag::eMorphTexcoords2, "eMorphTexcoords2" },
+				{ castor3d::SubmeshFlag::eMorphTexcoords3, "eMorphTexcoords3" },
 			};
 			return Names[value];
 		}
@@ -603,11 +611,38 @@ namespace Testing
 	};
 
 	template<>
-	struct Stringifier< castor3d::TexcoordsComponent >
+	struct Stringifier< castor3d::Texcoords0Component >
 	{
-		static std::string get( castor3d::TexcoordsComponent const & value )
+		static std::string get( castor3d::Texcoords0Component const & value )
 		{
-			return std::string{ "castor3d::TexcoordsComponent" };
+			return std::string{ "castor3d::Texcoords0Component" };
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::Texcoords1Component >
+	{
+		static std::string get( castor3d::Texcoords1Component const & value )
+		{
+			return std::string{ "castor3d::Texcoords1Component" };
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::Texcoords2Component >
+	{
+		static std::string get( castor3d::Texcoords2Component const & value )
+		{
+			return std::string{ "castor3d::Texcoords2Component" };
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::Texcoords3Component >
+	{
+		static std::string get( castor3d::Texcoords3Component const & value )
+		{
+			return std::string{ "castor3d::Texcoords3Component" };
 		}
 	};
 
@@ -813,7 +848,10 @@ namespace Testing
 		bool compare( castor3d::PositionsComponent const & p_a, castor3d::PositionsComponent const & p_b );
 		bool compare( castor3d::NormalsComponent const & p_a, castor3d::NormalsComponent const & p_b );
 		bool compare( castor3d::TangentsComponent const & p_a, castor3d::TangentsComponent const & p_b );
-		bool compare( castor3d::TexcoordsComponent const & p_a, castor3d::TexcoordsComponent const & p_b );
+		bool compare( castor3d::Texcoords0Component const & p_a, castor3d::Texcoords0Component const & p_b );
+		bool compare( castor3d::Texcoords1Component const & p_a, castor3d::Texcoords1Component const & p_b );
+		bool compare( castor3d::Texcoords2Component const & p_a, castor3d::Texcoords2Component const & p_b );
+		bool compare( castor3d::Texcoords3Component const & p_a, castor3d::Texcoords3Component const & p_b );
 		bool compare( castor3d::Face const & p_a, castor3d::Face const & p_b );
 		bool compare( castor3d::TriFaceMapping const & p_a, castor3d::TriFaceMapping const & p_b );
 		bool compare( castor3d::Line const & p_a, castor3d::Line const & p_b );

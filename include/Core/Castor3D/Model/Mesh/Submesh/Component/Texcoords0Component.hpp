@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_TexcoordsComponent_H___
-#define ___C3D_TexcoordsComponent_H___
+#ifndef ___C3D_Texcoords0Component_H___
+#define ___C3D_Texcoords0Component_H___
 
 #include "Castor3D/Render/RenderModule.hpp"
 
@@ -14,7 +14,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class TexcoordsComponent
+	class Texcoords0Component
 		: public SubmeshComponent
 	{
 	public:
@@ -26,7 +26,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	submesh	Le sous-maillage parent.
 		 */
-		C3D_API explicit TexcoordsComponent( Submesh & submesh );
+		C3D_API explicit Texcoords0Component( Submesh & submesh );
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
@@ -38,6 +38,7 @@ namespace castor3d
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
+			, uint32_t & currentBinding
 			, uint32_t & currentLocation )override;
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::clone
@@ -46,9 +47,9 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getSubmeshFlags
 		 */
-		SubmeshFlags getSubmeshFlags()const override
+		SubmeshFlags getSubmeshFlags( Pass const * pass )const override
 		{
-			return SubmeshFlag::eTexcoords;
+			return SubmeshFlag::eTexcoords0;
 		}
 
 		void setData( std::vector< castor::Point3f > const & data )
@@ -73,11 +74,11 @@ namespace castor3d
 
 	public:
 		C3D_API static castor::String const Name;
-		C3D_API static uint32_t constexpr BindingPoint = 3u;
+		C3D_API static uint32_t constexpr Id = 3u;
 
 	private:
 		std::vector< castor::Point3f > m_data;
-		std::unordered_map< uint32_t, ashes::PipelineVertexInputStateCreateInfo > m_layouts;
+		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_layouts;
 	};
 }
 

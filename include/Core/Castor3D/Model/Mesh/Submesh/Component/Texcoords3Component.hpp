@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_NormalsUVComponent_H___
-#define ___C3D_NormalsUVComponent_H___
+#ifndef ___C3D_Texcoords3Component_H___
+#define ___C3D_Texcoords3Component_H___
 
 #include "Castor3D/Render/RenderModule.hpp"
 
@@ -14,7 +14,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class NormalsComponent
+	class Texcoords3Component
 		: public SubmeshComponent
 	{
 	public:
@@ -26,7 +26,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	submesh	Le sous-maillage parent.
 		 */
-		C3D_API explicit NormalsComponent( Submesh & submesh );
+		C3D_API explicit Texcoords3Component( Submesh & submesh );
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
@@ -47,10 +47,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getSubmeshFlags
 		 */
-		SubmeshFlags getSubmeshFlags( Pass const * pass )const override
-		{
-			return SubmeshFlag::eNormals;
-		}
+		C3D_API SubmeshFlags getSubmeshFlags( Pass const * pass )const override;
 
 		void setData( std::vector< castor::Point3f > const & data )
 		{
@@ -74,7 +71,7 @@ namespace castor3d
 
 	public:
 		C3D_API static castor::String const Name;
-		C3D_API static uint32_t constexpr Id = 1u;
+		C3D_API static uint32_t constexpr Id = 6u;
 
 	private:
 		std::vector< castor::Point3f > m_data;

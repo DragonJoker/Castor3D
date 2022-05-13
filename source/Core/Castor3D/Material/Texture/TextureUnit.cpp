@@ -91,6 +91,7 @@ namespace castor3d
 		, m_name{ std::move( rhs.m_name ) }
 		, m_initialised{ std::move( rhs.m_initialised ) }
 		, m_animated{ std::move( rhs.m_animated ) }
+		, m_setIndex{ std::move( rhs.m_setIndex ) }
 	{
 		getOwner()->getMaterialCache().unregisterUnit( rhs );
 		rhs.m_id = 0u;
@@ -118,6 +119,7 @@ namespace castor3d
 			VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 		}
 		, m_changed{ false }
+		, m_setIndex{ m_sourceInfo.getTexcoordSet() }
 	{
 		m_transformations.setIdentity();
 	}
@@ -479,6 +481,12 @@ namespace castor3d
 		doUpdateTransform( castor::Point3f{ m_transform.translate } + translate
 			, m_transform.rotate + rotate
 			, castor::Point3f{ m_transform.scale } * scale );
+	}
+
+	void TextureUnit::setTexcoordSet( uint32_t value )
+	{
+		m_setIndex = value;
+		onChanged( *this );
 	}
 
 	void TextureUnit::doUpdateTransform( castor::Point3f const & translate

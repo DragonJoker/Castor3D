@@ -212,14 +212,17 @@ namespace castor3d
 
 #if C3D_TextureConfigStructOfArrays
 
-					m_data.colOpa[index] = writeFlags( config.colourMask, config.opacityMask );
-					m_data.spcShn[index] = writeFlags( config.specularMask, config.glossinessMask );
-					m_data.metRgh[index] = writeFlags( config.metalnessMask, config.roughnessMask );
-					m_data.emsOcc[index] = writeFlags( config.emissiveMask, config.occlusionMask );
-					m_data.trsDum[index] = writeFlags( config.transmittanceMask, {} );
-					m_data.nmlFcr[index] = writeFlags( config.normalMask, config.normalFactor, config.normalGMultiplier );
-					m_data.hgtFcr[index] = writeFlags( config.heightMask, config.heightFactor );
-					m_data.mscVls[index] = writeFlags( float( config.needsYInversion ), writeBool( unit->isTransformAnimated() ), writeBool( unit->isTileAnimated() ) );
+					m_data.colOpa[index] = texcfgbuf::writeFlags( config.colourMask, config.opacityMask );
+					m_data.spcShn[index] = texcfgbuf::writeFlags( config.specularMask, config.glossinessMask );
+					m_data.metRgh[index] = texcfgbuf::writeFlags( config.metalnessMask, config.roughnessMask );
+					m_data.emsOcc[index] = texcfgbuf::writeFlags( config.emissiveMask, config.occlusionMask );
+					m_data.trsDum[index] = texcfgbuf::writeFlags( config.transmittanceMask, {} );
+					m_data.nmlFcr[index] = texcfgbuf::writeFlags( config.normalMask, config.normalFactor, config.normalGMultiplier );
+					m_data.hgtFcr[index] = texcfgbuf::writeFlags( config.heightMask, config.heightFactor );
+					m_data.mscVls[index] = texcfgbuf::writeFlags( float( config.needsYInversion )
+						, texcfgbuf::writeBool( unit->isTransformAnimated() )
+						, texcfgbuf::writeBool( unit->isTileAnimated() )
+						, float( unit->getTexcoordSet() ) );
 					m_data.data.translate[index] = config.translate;
 					m_data.data.rotate[index] = config.rotate;
 					m_data.data.scale[index] = config.scale;
@@ -235,7 +238,10 @@ namespace castor3d
 					data.trsDum = texcfgbuf::writeFlags( config.transmittanceMask, {} );
 					data.nmlFcr = texcfgbuf::writeFlags( config.normalMask, config.normalFactor, config.normalGMultiplier );
 					data.hgtFcr = texcfgbuf::writeFlags( config.heightMask, config.heightFactor );
-					data.mscVls = texcfgbuf::writeFlags( float( config.needsYInversion ), texcfgbuf::writeBool( unit->isTransformAnimated() ), texcfgbuf::writeBool( unit->isTileAnimated() ) );
+					data.mscVls = texcfgbuf::writeFlags( float( config.needsYInversion )
+						, texcfgbuf::writeBool( unit->isTransformAnimated() )
+						, texcfgbuf::writeBool( unit->isTileAnimated() )
+						, float( unit->getTexcoordSet() ) );
 					data.translate = config.transform.translate;
 					data.rotate = { config.transform.rotate.cos(), config.transform.rotate.sin(), 0.0f, 0.0f };
 					data.scale = config.transform.scale;

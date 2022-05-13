@@ -124,12 +124,18 @@ namespace castor3d
 		eSubmeshPositions = makeChunkID( 'S', 'M', 'S', 'H', 'P', 'O', 'S', 'I' ),
 		eSubmeshNormals = makeChunkID( 'S', 'M', 'S', 'H', 'N', 'O', 'R', 'M' ),
 		eSubmeshTangents = makeChunkID( 'S', 'M', 'S', 'H', 'T', 'A', 'N', 'G' ),
-		eSubmeshTexcoords = makeChunkID( 'S', 'M', 'S', 'H', 'T', 'E', 'X', 'C' ),
+		eSubmeshTexcoords0 = makeChunkID( 'S', 'M', 'S', 'H', 'T', 'E', 'X', 'C' ),
+		eSubmeshTexcoords1 = makeChunkID( 'S', 'M', 'S', 'H', 'T', 'E', 'X', '1' ),
+		eSubmeshTexcoords2 = makeChunkID( 'S', 'M', 'S', 'H', 'T', 'E', 'X', '2' ),
+		eSubmeshTexcoords3 = makeChunkID( 'S', 'M', 'S', 'H', 'T', 'E', 'X', '3' ),
 		eMeshAnimationKeyFrameBufferData [[deprecated]] = makeChunkID( 'M', 'H', 'A', 'N', 'K', 'F', 'D', 'T' ),
 		eMeshAnimationKeyFramePositions = makeChunkID( 'M', 'H', 'A', 'N', 'K', 'F', 'P', 'O' ),
 		eMeshAnimationKeyFrameNormals = makeChunkID( 'M', 'H', 'A', 'N', 'K', 'F', 'N', 'M' ),
 		eMeshAnimationKeyFrameTangents= makeChunkID( 'M', 'H', 'A', 'N', 'K', 'F', 'T', 'A' ),
-		eMeshAnimationKeyFrameTexcoords = makeChunkID( 'M', 'H', 'A', 'N', 'K', 'F', 'T', 'X' ),
+		eMeshAnimationKeyFrameTexcoords0 = makeChunkID( 'M', 'H', 'A', 'N', 'K', 'F', 'T', 'X' ),
+		eMeshAnimationKeyFrameTexcoords1 = makeChunkID( 'M', 'H', 'A', 'N', 'K', 'F', 'T', '1' ),
+		eMeshAnimationKeyFrameTexcoords2 = makeChunkID( 'M', 'H', 'A', 'N', 'K', 'F', 'T', '2' ),
+		eMeshAnimationKeyFrameTexcoords3 = makeChunkID( 'M', 'H', 'A', 'N', 'K', 'F', 'T', '3' ),
 	};
 	/**
 	 *\~english

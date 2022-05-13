@@ -116,6 +116,7 @@ namespace castor3d
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
+			, uint32_t & currentBinding
 			, uint32_t & currentLocation )override;
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::clone
@@ -173,7 +174,7 @@ namespace castor3d
 
 	public:
 		C3D_API static castor::String const Name;
-		C3D_API static uint32_t constexpr BindingPoint = 10u;
+		C3D_API static uint32_t constexpr Id = 9u;
 
 	private:
 		InstanceDataMap m_instances;

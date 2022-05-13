@@ -22,29 +22,30 @@ namespace castor3d
 	namespace smshcompskin
 	{
 		static ashes::PipelineVertexInputStateCreateInfo createVertexLayout( ShaderFlags shaderFlags
+			, uint32_t & currentBinding
 			, uint32_t & currentLocation )
 		{
-			ashes::VkVertexInputBindingDescriptionArray bindings{ { BonesComponent::BindingPoint
+			ashes::VkVertexInputBindingDescriptionArray bindings{ { currentBinding
 				, sizeof( VertexBoneData ), VK_VERTEX_INPUT_RATE_VERTEX } };
 
 			ashes::VkVertexInputAttributeDescriptionArray attributes;
 			attributes.push_back( { currentLocation++
-				, BonesComponent::BindingPoint
+				, currentBinding
 				, VK_FORMAT_R32G32B32A32_UINT
 				, offsetof( VertexBoneData, m_ids ) + offsetof( VertexBoneData::Ids::ids, id0 ) } );
 			attributes.push_back( { currentLocation++
-				, BonesComponent::BindingPoint
+				, currentBinding
 				, VK_FORMAT_R32G32B32A32_UINT
 				, offsetof( VertexBoneData, m_ids ) + offsetof( VertexBoneData::Ids::ids, id1 ) } );
 			attributes.push_back( { currentLocation++
-				, BonesComponent::BindingPoint
+				, currentBinding
 				, VK_FORMAT_R32G32B32A32_SFLOAT
 				, offsetof( VertexBoneData, m_weights ) + offsetof( VertexBoneData::Weights::weights, weight0 ) } );
 			attributes.push_back( { currentLocation++
-				, BonesComponent::BindingPoint
+				, currentBinding
 				, VK_FORMAT_R32G32B32A32_SFLOAT
 				, offsetof( VertexBoneData, m_weights ) + offsetof( VertexBoneData::Weights::weights, weight1 ) } );
-
+			++currentBinding;
 			return ashes::PipelineVertexInputStateCreateInfo{ 0u, bindings, attributes };
 		}
 	}
@@ -54,7 +55,7 @@ namespace castor3d
 	castor::String const BonesComponent::Name = cuT( "bones" );
 
 	BonesComponent::BonesComponent( Submesh & submesh )
-		: SubmeshComponent{ submesh, Name, BindingPoint }
+		: SubmeshComponent{ submesh, Name, Id }
 	{
 	}
 
@@ -77,23 +78,26 @@ namespace castor3d
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
+		, uint32_t & currentBinding
 		, uint32_t & currentLocation )
 	{
 		if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 		{
 			auto hash = std::hash< ShaderFlags::BaseType >{}( shaderFlags );
 			hash = castor::hashCombine( hash, mask.empty() );
+			hash = castor::hashCombine( hash, currentBinding );
 			hash = castor::hashCombine( hash, currentLocation );
 			auto layoutIt = m_bonesLayouts.find( hash );
 
 			if ( layoutIt == m_bonesLayouts.end() )
 			{
 				layoutIt = m_bonesLayouts.emplace( hash
-					, smshcompskin::createVertexLayout( shaderFlags, currentLocation ) ).first;
+					, smshcompskin::createVertexLayout( shaderFlags, currentBinding, currentLocation ) ).first;
 			}
 			else
 			{
 				currentLocation = layoutIt->second.vertexAttributeDescriptions.back().location + 1u;
+				currentBinding = layoutIt->second.vertexAttributeDescriptions.back().binding + 1u;
 			}
 
 			layouts.emplace_back( layoutIt->second );

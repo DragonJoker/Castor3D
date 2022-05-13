@@ -36,6 +36,11 @@ namespace castor3d
 			return m_sampler;
 		}
 
+		uint32_t getTexcoordSet()const
+		{
+			return m_texcoordSet;
+		}
+
 		bool isRenderTarget()const
 		{
 			return m_renderTarget != nullptr;
@@ -126,6 +131,11 @@ namespace castor3d
 			return m_createInfo;
 		}
 
+		void setTexcoordSet( uint32_t value )
+		{
+			m_texcoordSet = value;
+		}
+
 	private:
 		SamplerRes m_sampler{};
 		// Render target mode.
@@ -140,6 +150,8 @@ namespace castor3d
 		castor::ByteArray m_data{};
 		// Vulkan image mode.
 		ashes::ImageCreateInfo m_createInfo{ {} };
+		// Texture coordinates set
+		uint32_t m_texcoordSet{};
 	};
 }
 

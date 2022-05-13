@@ -2,7 +2,7 @@
 
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/Texcoords0Component.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 
@@ -40,7 +40,7 @@ namespace castor3d
 
 		SubmeshSPtr submesh = p_mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
 		auto normals = submesh->getComponent< NormalsComponent >();
-		auto texcoords = submesh->getComponent< TexcoordsComponent >();
+		auto texcoords = submesh->getComponent< Texcoords0Component >();
 
 		// Construction de l'icosaèdre
 		std::vector< InterleavedVertex > vertices{ 12 };

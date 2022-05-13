@@ -337,7 +337,31 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( castor3d::TexcoordsComponent const & lhs, castor3d::TexcoordsComponent const & rhs )
+	bool C3DTestCase::compare( castor3d::Texcoords0Component const & lhs, castor3d::Texcoords0Component const & rhs )
+	{
+		auto lhsData = lhs.getData();
+		auto rhsData = rhs.getData();
+		auto result = CT_EQUAL( lhsData, rhsData );
+		return result;
+	}
+
+	bool C3DTestCase::compare( castor3d::Texcoords1Component const & lhs, castor3d::Texcoords1Component const & rhs )
+	{
+		auto lhsData = lhs.getData();
+		auto rhsData = rhs.getData();
+		auto result = CT_EQUAL( lhsData, rhsData );
+		return result;
+	}
+
+	bool C3DTestCase::compare( castor3d::Texcoords2Component const & lhs, castor3d::Texcoords2Component const & rhs )
+	{
+		auto lhsData = lhs.getData();
+		auto rhsData = rhs.getData();
+		auto result = CT_EQUAL( lhsData, rhsData );
+		return result;
+	}
+
+	bool C3DTestCase::compare( castor3d::Texcoords3Component const & lhs, castor3d::Texcoords3Component const & rhs )
 	{
 		auto lhsData = lhs.getData();
 		auto rhsData = rhs.getData();
@@ -398,10 +422,25 @@ namespace Testing
 				result = CT_EQUAL( static_cast< TangentsComponent const & >( lhs )
 					, static_cast< TangentsComponent const & >( rhs ) );
 			}
-			else if ( lhs.getType() == TexcoordsComponent::Name )
+			else if ( lhs.getType() == Texcoords0Component::Name )
 			{
-				result = CT_EQUAL( static_cast< TexcoordsComponent const & >( lhs )
-					, static_cast< TexcoordsComponent const & >( rhs ) );
+				result = CT_EQUAL( static_cast< Texcoords0Component const & >( lhs )
+					, static_cast< Texcoords0Component const & >( rhs ) );
+			}
+			else if ( lhs.getType() == Texcoords1Component::Name )
+			{
+				result = CT_EQUAL( static_cast< Texcoords1Component const & >( lhs )
+					, static_cast< Texcoords1Component const & >( rhs ) );
+			}
+			else if ( lhs.getType() == Texcoords2Component::Name )
+			{
+				result = CT_EQUAL( static_cast< Texcoords2Component const & >( lhs )
+					, static_cast< Texcoords2Component const & >( rhs ) );
+			}
+			else if ( lhs.getType() == Texcoords3Component::Name )
+			{
+				result = CT_EQUAL( static_cast< Texcoords3Component const & >( lhs )
+					, static_cast< Texcoords3Component const & >( rhs ) );
 			}
 			else if ( lhs.getType() == BonesComponent::Name )
 			{

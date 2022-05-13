@@ -12,6 +12,7 @@
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Render/RenderInfo.hpp"
 #include "Castor3D/Render/RenderLoop.hpp"
