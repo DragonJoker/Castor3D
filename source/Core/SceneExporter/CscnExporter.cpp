@@ -31,13 +31,7 @@
 #include <Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/IndexMapping.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/Texcoords0Component.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/Texcoords1Component.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/Texcoords2Component.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/Texcoords3Component.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp>
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp>
 #include <Castor3D/Scene/Camera.hpp>

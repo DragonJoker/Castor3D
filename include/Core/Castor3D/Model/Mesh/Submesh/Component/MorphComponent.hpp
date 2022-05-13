@@ -66,7 +66,7 @@ namespace castor3d
 
 	public:
 		C3D_API static castor::String const Name;
-		C3D_API static uint32_t constexpr Id = 7u;
+		C3D_API static uint32_t constexpr Id = getIndex( SubmeshFlag::eMorphPositions ) - 1u;
 
 	private:
 		SubmeshFlags m_flags{};

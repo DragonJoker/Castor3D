@@ -2,10 +2,7 @@
 
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/Texcoords0Component.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 
 #include <random>

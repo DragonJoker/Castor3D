@@ -74,7 +74,7 @@ namespace castor3d
 
 	InstantiationComponent::InstantiationComponent( Submesh & submesh
 		, uint32_t threshold )
-		: SubmeshComponent{ submesh, Name, Id }
+		: SubmeshComponent{ submesh, Name, uint32_t( std::hash< std::string >{}( Name ) ) }
 		, m_threshold{ threshold }
 	{
 	}

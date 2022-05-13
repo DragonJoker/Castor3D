@@ -9,10 +9,7 @@
 #include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/Face.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/Texcoords0Component.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp>
 #include <Castor3D/Model/Vertex.hpp>
 #include <Castor3D/Plugin/Plugin.hpp>
 #include <Castor3D/Miscellaneous/Version.hpp>
