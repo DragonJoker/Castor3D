@@ -303,6 +303,7 @@ namespace castor3d
 			sdw::UInt needsYI;
 			sdw::Boolean isTrnfAnim;
 			sdw::Boolean isTileAnim;
+			sdw::UInt texSet;
 		};
 
 		class TextureConfigurations
@@ -322,14 +323,61 @@ namespace castor3d
 				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 				, sdw::UVec4 const & textures0
 				, sdw::UVec4 const & textures1
-				, sdw::Vec3 & texCoords
+				, sdw::Vec3 & texCoords0
+				, sdw::Vec3 & texCoords1
+				, sdw::Vec3 & texCoords2
+				, sdw::Vec3 & texCoords3
 				, sdw::Float & opacity
 				, sdw::Vec3 & tangentSpaceViewPosition
 				, sdw::Vec3 & tangentSpaceFragPosition )const;
+			C3D_API sdw::Vec3 getTexcoord( TextureConfigData const & data
+				, sdw::Vec3 const & texCoords0
+				, sdw::Vec3 const & texCoords1
+				, sdw::Vec3 const & texCoords2
+				, sdw::Vec3 const & texCoords3 )const;
+			C3D_API void setTexcoord( TextureConfigData const & data
+				, sdw::Vec3 const & value
+				, sdw::Vec3 & texCoords0
+				, sdw::Vec3 & texCoords1
+				, sdw::Vec3 & texCoords2
+				, sdw::Vec3 & texCoords3 )const;
 
 		private:
 			sdw::ShaderWriter & m_writer;
 			std::unique_ptr< sdw::ArraySsboT< TextureConfigData > > m_ssbo;
+			mutable sdw::Function< sdw::Vec3
+				, sdw::InUInt
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InVec3 > m_getTexcoord4;
+			mutable sdw::Function< sdw::Vec3
+				, sdw::InUInt
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InVec3 > m_getTexcoord3;
+			mutable sdw::Function< sdw::Vec3
+				, sdw::InUInt
+				, sdw::InVec3
+				, sdw::InVec3 > m_getTexcoord2;
+			mutable sdw::Function< sdw::Void
+				, sdw::InUInt
+				, sdw::InVec3
+				, sdw::InOutVec3
+				, sdw::InOutVec3
+				, sdw::InOutVec3
+				, sdw::InOutVec3 > m_setTexcoord4;
+			mutable sdw::Function< sdw::Void
+				, sdw::InUInt
+				, sdw::InVec3
+				, sdw::InOutVec3
+				, sdw::InOutVec3
+				, sdw::InOutVec3 > m_setTexcoord3;
+			mutable sdw::Function< sdw::Void
+				, sdw::InUInt
+				, sdw::InVec3
+				, sdw::InOutVec3
+				, sdw::InOutVec3 > m_setTexcoord2;
 		};
 	}
 }

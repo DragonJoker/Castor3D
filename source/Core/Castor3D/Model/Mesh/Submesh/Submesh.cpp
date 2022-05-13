@@ -12,7 +12,10 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/Texcoords0Component.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/Texcoords1Component.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/Texcoords2Component.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/Texcoords3Component.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -163,15 +166,33 @@ namespace castor3d
 			createComponent< TangentsComponent >();
 		}
 
-		if ( checkFlag( flags, SubmeshFlag::eTexcoords ) )
+		if ( checkFlag( flags, SubmeshFlag::eTexcoords0 ) )
 		{
-			createComponent< TexcoordsComponent >();
+			createComponent< Texcoords0Component >();
+		}
+
+		if ( checkFlag( flags, SubmeshFlag::eTexcoords1 ) )
+		{
+			createComponent< Texcoords1Component >();
+		}
+
+		if ( checkFlag( flags, SubmeshFlag::eTexcoords2 ) )
+		{
+			createComponent< Texcoords2Component >();
+		}
+
+		if ( checkFlag( flags, SubmeshFlag::eTexcoords3 ) )
+		{
+			createComponent< Texcoords3Component >();
 		}
 
 		if ( checkFlag( flags, SubmeshFlag::eMorphPositions )
 			|| checkFlag( flags, SubmeshFlag::eMorphNormals )
 			|| checkFlag( flags, SubmeshFlag::eMorphTangents )
-			|| checkFlag( flags, SubmeshFlag::eMorphTexcoords ) )
+			|| checkFlag( flags, SubmeshFlag::eMorphTexcoords0 )
+			|| checkFlag( flags, SubmeshFlag::eMorphTexcoords1 )
+			|| checkFlag( flags, SubmeshFlag::eMorphTexcoords2 )
+			|| checkFlag( flags, SubmeshFlag::eMorphTexcoords3 ) )
 		{
 			createComponent< MorphComponent >();
 		}
@@ -179,11 +200,6 @@ namespace castor3d
 		if ( checkFlag( flags, SubmeshFlag::eBones ) )
 		{
 			createComponent< BonesComponent >();
-		}
-
-		if ( checkFlag( flags, SubmeshFlag::eSecondaryUV ) )
-		{
-			createComponent< SecondaryUVComponent >();
 		}
 	}
 
@@ -208,7 +224,7 @@ namespace castor3d
 
 				for ( auto & component : m_components )
 				{
-					m_submeshFlags |= component.second->getSubmeshFlags();
+					m_submeshFlags |= component.second->getSubmeshFlags( nullptr );
 				}
 
 				m_bufferOffset = device.geometryPools->getBuffer( getPointsCount()
@@ -358,7 +374,10 @@ namespace castor3d
 		return std::max( { smsh::getComponentCount< PositionsComponent >( *this )
 			, smsh::getComponentCount< NormalsComponent >( *this )
 			, smsh::getComponentCount< TangentsComponent >( *this )
-			, smsh::getComponentCount< TexcoordsComponent >( *this )
+			, smsh::getComponentCount< Texcoords0Component >( *this )
+			, smsh::getComponentCount< Texcoords1Component >( *this )
+			, smsh::getComponentCount< Texcoords2Component >( *this )
+			, smsh::getComponentCount< Texcoords3Component >( *this )
 			, uint32_t( m_bufferOffset ? m_bufferOffset.getCount< castor::Point3f >( SubmeshFlag::ePositions ) : 0u ) } );
 	}
 
@@ -414,7 +433,7 @@ namespace castor3d
 		smsh::addComponentData< PositionsComponent >( *this, point.pos );
 		smsh::addComponentData< NormalsComponent >( *this, point.nml );
 		smsh::addComponentData< TangentsComponent >( *this, point.tan );
-		smsh::addComponentData< TexcoordsComponent >( *this, point.tex );
+		smsh::addComponentData< Texcoords0Component >( *this, point.tex );
 	}
 
 	void Submesh::addPoints( InterleavedVertex const * const begin
@@ -424,7 +443,7 @@ namespace castor3d
 		smsh::reserveComponentData< PositionsComponent >( *this, size );
 		smsh::reserveComponentData< NormalsComponent >( *this, size );
 		smsh::reserveComponentData< TangentsComponent >( *this, size );
-		smsh::reserveComponentData< TexcoordsComponent >( *this, size );
+		smsh::reserveComponentData< Texcoords0Component >( *this, size );
 
 		for ( auto & point : castor::makeArrayView( begin, end ) )
 		{
@@ -461,13 +480,13 @@ namespace castor3d
 		return result;
 	}
 
-	SubmeshFlags Submesh::getSubmeshFlags()const
+	SubmeshFlags Submesh::getSubmeshFlags( Pass const * pass )const
 	{
-		auto result = m_submeshFlags;
+		SubmeshFlags result{};
 
 		for ( auto & component : m_components )
 		{
-			result |= component.second->getSubmeshFlags();
+			result |= component.second->getSubmeshFlags( pass );
 		}
 
 		return result;
@@ -509,6 +528,7 @@ namespace castor3d
 			ashes::BufferCRefArray buffers;
 			ashes::UInt64Array offsets;
 			ashes::PipelineVertexInputStateCreateInfoCRefArray layouts;
+			uint32_t currentBinding = 0u;
 			uint32_t currentLocation = 0u;
 
 			for ( auto & component : m_components )
@@ -521,6 +541,7 @@ namespace castor3d
 					, buffers
 					, offsets
 					, layouts
+					, currentBinding
 					, currentLocation );
 			}
 
@@ -545,29 +566,25 @@ namespace castor3d
 	{
 		CU_Require( index < getPointsCount() );
 		InterleavedVertex result;
-		auto positions = getComponent< PositionsComponent >();
-		auto normals = getComponent< NormalsComponent >();
-		auto tangents = getComponent< TangentsComponent >();
-		auto texcoords = getComponent< TexcoordsComponent >();
 
-		if ( positions )
+		if ( auto positions = getComponent< PositionsComponent >() )
 		{
 			result.pos = positions->getData()[index];
 		}
 
-		if ( normals )
+		if ( auto normals = getComponent< NormalsComponent >() )
 		{
 			result.nml = normals->getData()[index];
 		}
 
-		if ( tangents )
+		if ( auto tangents = getComponent< TangentsComponent >() )
 		{
 			result.tan = tangents->getData()[index];
 		}
 
-		if ( texcoords )
+		if ( auto texcoords0 = getComponent< Texcoords0Component >() )
 		{
-			result.tex = texcoords->getData()[index];
+			result.tex = texcoords0->getData()[index];
 		}
 
 		return result;
@@ -575,11 +592,9 @@ namespace castor3d
 
 	castor::Point3fArray const & Submesh::getPositions()const
 	{
-		auto positions = getComponent< PositionsComponent >();
-
-		if ( positions )
+		if ( auto component = getComponent< PositionsComponent >() )
 		{
-			return positions->getData();
+			return component->getData();
 		}
 
 		static castor::Point3fArray const dummy;
@@ -588,18 +603,16 @@ namespace castor3d
 
 	castor::Point3fArray & Submesh::getPositions()
 	{
-		auto positions = getComponent< PositionsComponent >();
-		CU_Require( positions );
-		return positions->getData();
+		auto component = getComponent< PositionsComponent >();
+		CU_Require( component );
+		return component->getData();
 	}
 
 	castor::Point3fArray const & Submesh::getNormals()const
 	{
-		auto positions = getComponent< NormalsComponent >();
-
-		if ( positions )
+		if ( auto component = getComponent< NormalsComponent >() )
 		{
-			return positions->getData();
+			return component->getData();
 		}
 
 		static castor::Point3fArray const dummy;
@@ -608,18 +621,16 @@ namespace castor3d
 
 	castor::Point3fArray & Submesh::getNormals()
 	{
-		auto positions = getComponent< NormalsComponent >();
-		CU_Require( positions );
-		return positions->getData();
+		auto component = getComponent< NormalsComponent >();
+		CU_Require( component );
+		return component->getData();
 	}
 
 	castor::Point3fArray const & Submesh::getTangents()const
 	{
-		auto positions = getComponent< TangentsComponent >();
-
-		if ( positions )
+		if ( auto component = getComponent< TangentsComponent >() )
 		{
-			return positions->getData();
+			return component->getData();
 		}
 
 		static castor::Point3fArray const dummy;
@@ -628,29 +639,81 @@ namespace castor3d
 
 	castor::Point3fArray & Submesh::getTangents()
 	{
-		auto positions = getComponent< TangentsComponent >();
-		CU_Require( positions );
-		return positions->getData();
+		auto component = getComponent< TangentsComponent >();
+		CU_Require( component );
+		return component->getData();
 	}
 
-	castor::Point3fArray const & Submesh::getTexcoords()const
+	castor::Point3fArray const & Submesh::getTexcoords0()const
 	{
-		auto positions = getComponent< TexcoordsComponent >();
-
-		if ( positions )
+		if ( auto component = getComponent< Texcoords0Component >() )
 		{
-			return positions->getData();
+			return component->getData();
 		}
 
 		static castor::Point3fArray const dummy;
 		return dummy;
 	}
 
-	castor::Point3fArray & Submesh::getTexcoords()
+	castor::Point3fArray & Submesh::getTexcoords0()
 	{
-		auto positions = getComponent< TexcoordsComponent >();
-		CU_Require( positions );
-		return positions->getData();
+		auto component = getComponent< Texcoords0Component >();
+		CU_Require( component );
+		return component->getData();
+	}
+
+	castor::Point3fArray const & Submesh::getTexcoords1()const
+	{
+		if ( auto component = getComponent< Texcoords1Component >() )
+		{
+			return component->getData();
+		}
+
+		static castor::Point3fArray const dummy;
+		return dummy;
+	}
+
+	castor::Point3fArray & Submesh::getTexcoords1()
+	{
+		auto component = getComponent< Texcoords1Component >();
+		CU_Require( component );
+		return component->getData();
+	}
+
+	castor::Point3fArray const & Submesh::getTexcoords2()const
+	{
+		if ( auto component = getComponent< Texcoords2Component >() )
+		{
+			return component->getData();
+		}
+
+		static castor::Point3fArray const dummy;
+		return dummy;
+	}
+
+	castor::Point3fArray & Submesh::getTexcoords2()
+	{
+		auto component = getComponent< Texcoords2Component >();
+		CU_Require( component );
+		return component->getData();
+	}
+
+	castor::Point3fArray const & Submesh::getTexcoords3()const
+	{
+		if ( auto component = getComponent< Texcoords3Component >() )
+		{
+			return component->getData();
+		}
+
+		static castor::Point3fArray const dummy;
+		return dummy;
+	}
+
+	castor::Point3fArray & Submesh::getTexcoords3()
+	{
+		auto component = getComponent< Texcoords3Component >();
+		CU_Require( component );
+		return component->getData();
 	}
 
 	//*********************************************************************************************

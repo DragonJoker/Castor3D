@@ -482,6 +482,11 @@ namespace castor3d
 		{
 			return m_index;
 		}
+
+		uint32_t getMaxTexCoordSet()const
+		{
+			return m_maxTexcoordSet;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -744,6 +749,7 @@ namespace castor3d
 		uint32_t m_heightTextureIndex{ InvalidIndex };
 		std::map< TextureUnit const *, OnTextureUnitChangedConnection > m_unitsConnections;
 		RenderPassRegisterInfo * m_renderPassInfo{};
+		uint32_t m_maxTexcoordSet{};
 	};
 }
 

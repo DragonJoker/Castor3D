@@ -1,7 +1,8 @@
-#include "Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/Texcoords3Component.hpp"
 
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
+#include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
@@ -15,28 +16,30 @@
 
 namespace castor3d
 {
-	namespace smshcomptex
+	namespace smshcomptex3
 	{
-		static ashes::PipelineVertexInputStateCreateInfo createVertexLayout( uint32_t & currentLocation )
+		static ashes::PipelineVertexInputStateCreateInfo createVertexLayout( uint32_t & currentBinding
+			, uint32_t & currentLocation )
 		{
-			ashes::VkVertexInputBindingDescriptionArray bindings{ { TexcoordsComponent::BindingPoint
+			ashes::VkVertexInputBindingDescriptionArray bindings{ { currentBinding
 				, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } };
 			ashes::VkVertexInputAttributeDescriptionArray attributes{ 1u, { currentLocation++
-				, TexcoordsComponent::BindingPoint
+				, currentBinding
 				, VK_FORMAT_R32G32B32_SFLOAT
 				, 0u } };
+			++currentBinding;
 			return ashes::PipelineVertexInputStateCreateInfo{ 0u, bindings, attributes };
 		}
 	}
 
-	castor::String const TexcoordsComponent::Name = cuT( "texcoords" );
+	castor::String const Texcoords3Component::Name = cuT( "texcoords3" );
 
-	TexcoordsComponent::TexcoordsComponent( Submesh & submesh )
-		: SubmeshComponent{ submesh, Name, BindingPoint }
+	Texcoords3Component::Texcoords3Component( Submesh & submesh )
+		: SubmeshComponent{ submesh, Name, Id }
 	{
 	}
 
-	void TexcoordsComponent::gather( ShaderFlags const & shaderFlags
+	void Texcoords3Component::gather( ShaderFlags const & shaderFlags
 		, ProgramFlags const & programFlags
 		, SubmeshFlags const & submeshFlags
 		, MaterialRPtr material
@@ -44,50 +47,63 @@ namespace castor3d
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
+		, uint32_t & currentBinding
 		, uint32_t & currentLocation )
 	{
 		if ( checkFlag( programFlags, ProgramFlag::eForceTexCoords )
-			|| ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords ) && !mask.empty() ) )
+			|| ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) && !mask.empty() ) )
 		{
-			auto layoutIt = m_layouts.find( currentLocation );
+			auto hash = std::hash< uint32_t >{}( currentBinding );
+			hash = castor::hashCombine( hash, currentLocation );
+			auto layoutIt = m_layouts.find( hash );
 
 			if ( layoutIt == m_layouts.end() )
 			{
-				auto loc = currentLocation;
-				layoutIt = m_layouts.emplace( loc
-					, smshcomptex::createVertexLayout( currentLocation ) ).first;
+				layoutIt = m_layouts.emplace( hash
+					, smshcomptex3::createVertexLayout( currentBinding, currentLocation ) ).first;
 			}
 			else
 			{
 				currentLocation = layoutIt->second.vertexAttributeDescriptions.back().location + 1u;
+				currentBinding = layoutIt->second.vertexAttributeDescriptions.back().binding + 1u;
 			}
 
 			layouts.emplace_back( layoutIt->second );
 		}
 	}
 
-	SubmeshComponentSPtr TexcoordsComponent::clone( Submesh & submesh )const
+	SubmeshComponentSPtr Texcoords3Component::clone( Submesh & submesh )const
 	{
-		auto result = std::make_shared< TexcoordsComponent >( submesh );
+		auto result = std::make_shared< Texcoords3Component >( submesh );
 		result->m_data = m_data;
 		return std::static_pointer_cast< SubmeshComponent >( result );
 	}
 
-	bool TexcoordsComponent::doInitialise( RenderDevice const & device )
+	SubmeshFlags Texcoords3Component::getSubmeshFlags( Pass const * pass )const
+	{
+		if ( !pass || pass->getMaxTexCoordSet() > 2u )
+		{
+			return SubmeshFlag::eTexcoords3;
+		}
+
+		return SubmeshFlag{};
+	}
+
+	bool Texcoords3Component::doInitialise( RenderDevice const & device )
 	{
 		return true;
 	}
 
-	void TexcoordsComponent::doCleanup( RenderDevice const & device )
+	void Texcoords3Component::doCleanup( RenderDevice const & device )
 	{
 		m_data.clear();
 	}
 
-	void TexcoordsComponent::doUpload()
+	void Texcoords3Component::doUpload()
 	{
 		auto count = uint32_t( m_data.size() );
 		auto & offsets = getOwner()->getBufferOffsets();
-		auto & buffer = offsets.getBufferChunk( SubmeshFlag::eTexcoords );
+		auto & buffer = offsets.getBufferChunk( SubmeshFlag::eTexcoords3 );
 
 		if ( count && buffer.hasData() )
 		{

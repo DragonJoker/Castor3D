@@ -41,6 +41,7 @@ namespace castor3d
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
+			, uint32_t & currentBinding
 			, uint32_t & currentLocation )override;
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::clone
@@ -56,10 +57,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getSubmeshFlags
 		 */
-		SubmeshFlags getSubmeshFlags()const override
-		{
-			return m_flags;
-		}
+		C3D_API SubmeshFlags getSubmeshFlags( Pass const * pass )const override;
 
 	private:
 		bool doInitialise( RenderDevice const & device )override;
@@ -68,10 +66,7 @@ namespace castor3d
 
 	public:
 		C3D_API static castor::String const Name;
-		C3D_API static uint32_t constexpr PosBindingPoint = 4u;
-		C3D_API static uint32_t constexpr NmlBindingPoint = 5u;
-		C3D_API static uint32_t constexpr TanBindingPoint = 6u;
-		C3D_API static uint32_t constexpr TexBindingPoint = 7u;
+		C3D_API static uint32_t constexpr Id = 7u;
 
 	private:
 		SubmeshFlags m_flags{};

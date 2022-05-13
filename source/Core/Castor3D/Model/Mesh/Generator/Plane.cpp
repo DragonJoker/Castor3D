@@ -1,7 +1,7 @@
 #include "Castor3D/Model/Mesh/Generator/Plane.hpp"
 
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/Texcoords1Component.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 
@@ -142,7 +142,7 @@ namespace castor3d
 
 		if ( tileUV )
 		{
-			auto secondaryUV = submesh->createComponent< SecondaryUVComponent >();
+			auto secondaryUV = submesh->createComponent< Texcoords1Component >();
 			auto & tiledUV = secondaryUV->getData();
 			tiledUV.reserve( nbVertexW * nbVertexH );
 

@@ -84,7 +84,10 @@ namespace castor3d
 				auto size = uint32_t( std::max( { it.second.positions.size()
 					, it.second.normals.size()
 					, it.second.tangents.size()
-					, it.second.texcoords.size() } ) );
+					, it.second.texcoords0.size()
+					, it.second.texcoords1.size()
+					, it.second.texcoords2.size()
+					, it.second.texcoords3.size() } ) );
 				result = doWriteChunk( size, ChunkType::eMeshAnimationKeyFrameBufferSize, m_chunk );
 			}
 
@@ -107,9 +110,27 @@ namespace castor3d
 			}
 
 			if ( result
-				&& !it.second.texcoords.empty() )
+				&& !it.second.texcoords0.empty() )
 			{
-				result = doWriteChunk( it.second.texcoords, ChunkType::eMeshAnimationKeyFrameTexcoords, m_chunk );
+				result = doWriteChunk( it.second.texcoords0, ChunkType::eMeshAnimationKeyFrameTexcoords0, m_chunk );
+			}
+
+			if ( result
+				&& !it.second.texcoords1.empty() )
+			{
+				result = doWriteChunk( it.second.texcoords1, ChunkType::eMeshAnimationKeyFrameTexcoords1, m_chunk );
+			}
+
+			if ( result
+				&& !it.second.texcoords2.empty() )
+			{
+				result = doWriteChunk( it.second.texcoords2, ChunkType::eMeshAnimationKeyFrameTexcoords2, m_chunk );
+			}
+
+			if ( result
+				&& !it.second.texcoords3.empty() )
+			{
+				result = doWriteChunk( it.second.texcoords3, ChunkType::eMeshAnimationKeyFrameTexcoords3, m_chunk );
 			}
 		}
 
@@ -142,6 +163,12 @@ namespace castor3d
 				obj.doSetTimeIndex( castor::Milliseconds{ int64_t( time * 1000 ) } );
 				break;
 			case ChunkType::eMeshAnimationKeyFrameSubmeshID:
+				if ( submesh && count )
+				{
+					obj.addSubmeshBuffer( *submesh, std::move( buffer ) );
+				}
+				count = 0u;
+				submesh = nullptr;
 				result = doParseChunk( id, chunk );
 				checkError( result, "Couldn't parse submesh ID." );
 				if ( result )
@@ -166,17 +193,32 @@ namespace castor3d
 			case ChunkType::eMeshAnimationKeyFrameNormals:
 				buffer.normals.resize( count );
 				result = doParseChunk( buffer.normals, chunk );
-				checkError( result, "Couldn't parse keyframe positions." );
+				checkError( result, "Couldn't parse keyframe normals." );
 				break;
 			case ChunkType::eMeshAnimationKeyFrameTangents:
 				buffer.tangents.resize( count );
 				result = doParseChunk( buffer.tangents, chunk );
-				checkError( result, "Couldn't parse keyframe positions." );
+				checkError( result, "Couldn't parse keyframe tangents." );
 				break;
-			case ChunkType::eMeshAnimationKeyFrameTexcoords:
-				buffer.texcoords.resize( count );
-				result = doParseChunk( buffer.texcoords, chunk );
-				checkError( result, "Couldn't parse keyframe positions." );
+			case ChunkType::eMeshAnimationKeyFrameTexcoords0:
+				buffer.texcoords0.resize( count );
+				result = doParseChunk( buffer.texcoords0, chunk );
+				checkError( result, "Couldn't parse keyframe texcoords0." );
+				break;
+			case ChunkType::eMeshAnimationKeyFrameTexcoords1:
+				buffer.texcoords1.resize( count );
+				result = doParseChunk( buffer.texcoords1, chunk );
+				checkError( result, "Couldn't parse keyframe texcoords1." );
+				break;
+			case ChunkType::eMeshAnimationKeyFrameTexcoords2:
+				buffer.texcoords2.resize( count );
+				result = doParseChunk( buffer.texcoords2, chunk );
+				checkError( result, "Couldn't parse keyframe texcoords2." );
+				break;
+			case ChunkType::eMeshAnimationKeyFrameTexcoords3:
+				buffer.texcoords3.resize( count );
+				result = doParseChunk( buffer.texcoords3, chunk );
+				checkError( result, "Couldn't parse keyframe texcoords3." );
 				break;
 			default:
 				break;
@@ -226,7 +268,7 @@ namespace castor3d
 								, buffer.positions
 								, buffer.normals
 								, buffer.tangents
-								, buffer.texcoords );
+								, buffer.texcoords0 );
 							obj.addSubmeshBuffer( *submesh, std::move( buffer ) );
 						}
 					}
@@ -272,7 +314,7 @@ namespace castor3d
 							, buffer.positions
 							, buffer.normals
 							, buffer.tangents
-							, buffer.texcoords );
+							, buffer.texcoords0 );
 						obj.addSubmeshBuffer( *submesh, std::move( buffer ) );
 					}
 					break;

@@ -798,6 +798,9 @@ namespace castor3d
 				auto v4Tangent = writer.declLocale( "v4Tangent"
 					, vec4( in.tangent, 0.0_f ) );
 				out.texture0 = in.texture0;
+				out.texture1 = in.texture1;
+				out.texture2 = in.texture2;
+				out.texture3 = in.texture3;
 				auto morphingData = writer.declLocale( "morphingData"
 					, c3d_morphingData[ids.morphingId]
 					, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
@@ -805,7 +808,10 @@ namespace castor3d
 					, curPosition
 					, v4Normal
 					, v4Tangent
-					, out.texture0 );
+					, out.texture0
+					, out.texture1
+					, out.texture2
+					, out.texture3 );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[ids.nodeId - 1u] );
 				out.nodeId = writer.cast< Int >( ids.nodeId );

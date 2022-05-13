@@ -12,7 +12,7 @@
 #include <Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/Texcoords0Component.hpp>
 #include <Castor3D/Model/Vertex.hpp>
 #include <Castor3D/Plugin/Plugin.hpp>
 #include <Castor3D/Miscellaneous/Version.hpp>
@@ -161,7 +161,7 @@ namespace C3dPly
 
 				if ( iNbProperties >= 8 )
 				{
-					auto & texcoords = submesh->createComponent< castor3d::TexcoordsComponent >()->getData();
+					auto & texcoords = submesh->createComponent< castor3d::Texcoords0Component >()->getData();
 					auto & tangents = submesh->createComponent< castor3d::TangentsComponent >()->getData();
 					texcoords.resize( size_t( iNbVertex ) );
 					tangents.resize( size_t( iNbVertex ) );

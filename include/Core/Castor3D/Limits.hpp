@@ -133,19 +133,21 @@ namespace castor3d
 	*/
 	//@{
 	// Max chars count for text overlay buffer pool
-	static uint32_t constexpr OverlayMaxCharsPerBuffer = 600u;
+	static uint32_t constexpr MaxOverlayCharsPerBuffer = 600u;
 	// Max count for (border)panel overlay buffer pool
-	static uint32_t constexpr OverlayMaxPanelsPerBuffer = 100u;
+	static uint32_t constexpr MaxOverlayPanelsPerBuffer = 100u;
 	// Base count for objects buffers pool
 	static uint32_t constexpr BaseObjectPoolBufferCount = 1'000'000u;
 	// Max bones in a skeleton
-	static uint32_t constexpr BonesCount = 400u;
+	static uint32_t constexpr MaxBonesCount = 400u;
 	// Number of mip levels in the linearised depth buffer
-	static uint32_t constexpr LinearizedDepthMaxMipLevel = 5u;
+	static uint32_t constexpr MaxLinearizedDepthMipLevel = 5u;
 	// The picking area size
 	static uint32_t constexpr PickingAreaWidth = 32u;
 	static uint32_t constexpr MaxRsmRange = 800u;
 	static uint32_t constexpr MaxBindlessResources = 16536u;
+	// Max supported texture coordinates sets.
+	static uint32_t constexpr MaxTextureCoordinatesSets = 4u;
 	//@}
 }
 

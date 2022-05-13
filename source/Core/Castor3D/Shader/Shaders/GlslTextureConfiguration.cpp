@@ -58,6 +58,7 @@ namespace castor3d
 			, needsYI{ m_writer->cast< sdw::UInt >( mscVls.x() ) }
 			, isTrnfAnim{ mscVls.y() != 0.0_f }
 			, isTileAnim{ mscVls.z() != 0.0_f }
+			, texSet{ m_writer->cast< sdw::UInt >( mscVls.w() ) }
 		{
 		}
 
@@ -611,7 +612,10 @@ namespace castor3d
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::UVec4 const & textures0
 			, sdw::UVec4 const & textures1
-			, sdw::Vec3 & texCoords
+			, sdw::Vec3 & texCoords0
+			, sdw::Vec3 & texCoords1
+			, sdw::Vec3 & texCoords2
+			, sdw::Vec3 & texCoords3
 			, sdw::Float & opacity
 			, sdw::Vec3 & tangentSpaceViewPosition
 			, sdw::Vec3 & tangentSpaceFragPosition )const
@@ -635,19 +639,245 @@ namespace castor3d
 							, getTextureConfiguration( id ) );
 						auto anim = m_writer.declLocale( "anim" + name
 							, textureAnims.getTextureAnimation( id ) );
+						auto texcoordi = m_writer.declLocale( "tex" + name
+							, getTexcoord( config
+								, texCoords0
+								, texCoords1
+								, texCoords2
+								, texCoords3 ) );
 						config.computeGeometryMapContribution( utils
 							, passFlags
 							, textureFlags
 							, name
 							, anim
 							, maps[id - 1_u]
-							, texCoords
+							, texcoordi
 							, opacity
 							, tangentSpaceViewPosition
 							, tangentSpaceFragPosition );
 					}
 					FI;
 				}
+			}
+		}
+
+		sdw::Vec3 TextureConfigurations::getTexcoord( TextureConfigData const & data
+			, sdw::Vec3 const & texCoords0
+			, sdw::Vec3 const & texCoords1
+			, sdw::Vec3 const & texCoords2
+			, sdw::Vec3 const & texCoords3 )const
+		{
+			if ( texCoords3.isEnabled() )
+			{
+				if ( !m_getTexcoord4 )
+				{
+					m_getTexcoord4 = m_writer.implementFunction< sdw::Vec3 >( "c3d_getTexCoord4"
+						, [&]( sdw::UInt const & texSet
+							, sdw::Vec3 const & texCoord0
+							, sdw::Vec3 const & texCoord1
+							, sdw::Vec3 const & texCoord2
+							, sdw::Vec3 const & texCoord3 )
+						{
+							m_writer.returnStmt( m_writer.ternary( texSet >= 3u
+								, texCoord3
+								, m_writer.ternary( texSet >= 2u
+									, texCoord2
+									, m_writer.ternary( texSet >= 1u
+										, texCoord1
+										, texCoord0 ) ) ) );
+						}
+						, sdw::InUInt{ m_writer, "texSet" }
+						, sdw::InVec3{ m_writer, "texcoord0" }
+						, sdw::InVec3{ m_writer, "texcoord1" }
+						, sdw::InVec3{ m_writer, "texcoord2" }
+						, sdw::InVec3{ m_writer, "texcoord3" } );
+				}
+
+				return m_getTexcoord4( data.texSet
+					, texCoords0
+					, texCoords1
+					, texCoords2
+					, texCoords3 );
+			}
+			else if ( texCoords2.isEnabled() )
+			{
+				if ( !m_getTexcoord3 )
+				{
+					m_getTexcoord3 = m_writer.implementFunction< sdw::Vec3 >( "c3d_getTexCoord3"
+						, [&]( sdw::UInt const & texSet
+							, sdw::Vec3 const & texCoord0
+							, sdw::Vec3 const & texCoord1
+							, sdw::Vec3 const & texCoord2 )
+						{
+							m_writer.returnStmt( m_writer.ternary( texSet >= 2u
+								, texCoord2
+								, m_writer.ternary( texSet >= 1u
+									, texCoord1
+									, texCoord0 ) ) );
+						}
+						, sdw::InUInt{ m_writer, "texSet" }
+						, sdw::InVec3{ m_writer, "texcoord0" }
+						, sdw::InVec3{ m_writer, "texcoord1" }
+						, sdw::InVec3{ m_writer, "texcoord2" } );
+				}
+
+				return m_getTexcoord3( data.texSet
+					, texCoords0
+					, texCoords1
+					, texCoords2 );
+			}
+			else if ( texCoords1.isEnabled() )
+			{
+				if ( !m_getTexcoord2 )
+				{
+					m_getTexcoord2 = m_writer.implementFunction< sdw::Vec3 >( "c3d_getTexCoord2"
+						, [&]( sdw::UInt const & texSet
+							, sdw::Vec3 const & texCoord0
+							, sdw::Vec3 const & texCoord1 )
+						{
+							m_writer.returnStmt( m_writer.ternary( texSet >= 1u
+								, texCoord1
+								, texCoord0 ) );
+						}
+						, sdw::InUInt{ m_writer, "texSet" }
+						, sdw::InVec3{ m_writer, "texcoord0" }
+						, sdw::InVec3{ m_writer, "texcoord1" } );
+				}
+
+				return m_getTexcoord2( data.texSet
+					, texCoords0
+					, texCoords1 );
+			}
+			else
+			{
+				return texCoords0;
+			}
+		}
+
+		void TextureConfigurations::setTexcoord( TextureConfigData const & data
+			, sdw::Vec3 const & value
+			, sdw::Vec3 & texCoords0
+			, sdw::Vec3 & texCoords1
+			, sdw::Vec3 & texCoords2
+			, sdw::Vec3 & texCoords3 )const
+		{
+			if ( texCoords3.isEnabled() )
+			{
+				if ( !m_setTexcoord4 )
+				{
+					m_setTexcoord4 = m_writer.implementFunction< sdw::Void >( "c3d_setTexCoord4"
+						, [&]( sdw::UInt const & texSet
+							, sdw::Vec3 const & texCoord
+							, sdw::Vec3 texCoord0
+							, sdw::Vec3 texCoord1
+							, sdw::Vec3 texCoord2
+							, sdw::Vec3 texCoord3 )
+						{
+							IF( m_writer, texSet >= 3u )
+							{
+								texCoord3 = texCoord;
+							}
+							ELSEIF( texSet >= 2u )
+							{
+								texCoord2 = texCoord;
+							}
+							ELSEIF( texSet >= 1u )
+							{
+								texCoord1 = texCoord;
+							}
+							ELSE
+							{
+								texCoord0 = texCoord;
+							}
+							FI;
+						}
+						, sdw::InUInt{ m_writer, "texSet" }
+						, sdw::InVec3{ m_writer, "texCoord" }
+						, sdw::InOutVec3{ m_writer, "texcoord0" }
+						, sdw::InOutVec3{ m_writer, "texcoord1" } 
+						, sdw::InOutVec3{ m_writer, "texcoord2" }
+						, sdw::InOutVec3{ m_writer, "texcoord3" } );
+				}
+
+				m_setTexcoord4( data.texSet
+					, value
+					, texCoords0
+					, texCoords1
+					, texCoords2
+					, texCoords3 );
+			}
+			else if ( texCoords2.isEnabled() )
+			{
+				if ( !m_setTexcoord3 )
+				{
+					m_setTexcoord3 = m_writer.implementFunction< sdw::Void >( "c3d_setTexCoord3"
+						, [&]( sdw::UInt const & texSet
+							, sdw::Vec3 const & texCoord
+							, sdw::Vec3 texCoord0
+							, sdw::Vec3 texCoord1
+							, sdw::Vec3 texCoord2 )
+						{
+							IF( m_writer, texSet >= 2u )
+							{
+								texCoord2 = texCoord;
+							}
+							ELSEIF( texSet >= 1u )
+							{
+								texCoord1 = texCoord;
+							}
+							ELSE
+							{
+								texCoord0 = texCoord;
+							}
+							FI;
+						}
+						, sdw::InUInt{ m_writer, "texSet" }
+						, sdw::InVec3{ m_writer, "texCoord" }
+						, sdw::InOutVec3{ m_writer, "texcoord0" }
+						, sdw::InOutVec3{ m_writer, "texcoord1" } 
+						, sdw::InOutVec3{ m_writer, "texcoord2" } );
+				}
+
+				m_setTexcoord3( data.texSet
+					, value
+					, texCoords0
+					, texCoords1
+					, texCoords2 );
+			}
+			else if ( texCoords1.isEnabled() )
+			{
+				if ( !m_setTexcoord2 )
+				{
+					m_setTexcoord2 = m_writer.implementFunction< sdw::Void >( "c3d_setTexCoord2"
+						, [&]( sdw::UInt const & texSet
+							, sdw::Vec3 const & texCoord
+							, sdw::Vec3 texCoord0
+							, sdw::Vec3 texCoord1 )
+						{
+							IF( m_writer, texSet >= 1u )
+							{
+								texCoord1 = texCoord;
+							}
+							ELSE
+							{
+								texCoord0 = texCoord;
+							}
+							FI;
+						}
+						, sdw::InUInt{ m_writer, "texSet" }
+						, sdw::InVec3{ m_writer, "texCoord" }
+						, sdw::InOutVec3{ m_writer, "texcoord0" }
+						, sdw::InOutVec3{ m_writer, "texcoord1" } );
+				}
+
+				m_setTexcoord2( data.texSet
+					, value
+					, texCoords0
+					, texCoords1 );
+			}
+			else
+			{
+				texCoords0 = value;
 			}
 		}
 

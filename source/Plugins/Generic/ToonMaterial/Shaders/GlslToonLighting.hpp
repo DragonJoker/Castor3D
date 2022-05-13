@@ -77,7 +77,10 @@ namespace toon::shader
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::UVec4 const & textures0
 			, sdw::UVec4 const & textures1
-			, sdw::Vec3 & texCoords
+			, sdw::Vec3 & texCoords0
+			, sdw::Vec3 & texCoords1
+			, sdw::Vec3 & texCoords2
+			, sdw::Vec3 & texCoords3
 			, sdw::Vec3 & normal
 			, sdw::Vec3 & tangent
 			, sdw::Vec3 & bitangent
@@ -116,7 +119,10 @@ namespace toon::shader
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::UVec4 const & textures0
 			, sdw::UVec4 const & textures1
-			, sdw::Vec3 const & texCoords
+			, sdw::Vec3 & texCoords0
+			, sdw::Vec3 & texCoords1
+			, sdw::Vec3 & texCoords2
+			, sdw::Vec3 & texCoords3
 			, sdw::Vec3 & emissive
 			, sdw::Float & opacity
 			, sdw::Float & occlusion
@@ -278,7 +284,10 @@ namespace toon::shader
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::UVec4 const & textures0
 			, sdw::UVec4 const & textures1
-			, sdw::Vec3 & texCoords
+			, sdw::Vec3 & texCoords0
+			, sdw::Vec3 & texCoords1
+			, sdw::Vec3 & texCoords2
+			, sdw::Vec3 & texCoords3
 			, sdw::Vec3 & normal
 			, sdw::Vec3 & tangent
 			, sdw::Vec3 & bitangent
@@ -317,7 +326,10 @@ namespace toon::shader
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::UVec4 const & textures0
 			, sdw::UVec4 const & textures1
-			, sdw::Vec3 const & texCoords
+			, sdw::Vec3 & texCoords0
+			, sdw::Vec3 & texCoords1
+			, sdw::Vec3 & texCoords2
+			, sdw::Vec3 & texCoords3
 			, sdw::Vec3 & emissive
 			, sdw::Float & opacity
 			, sdw::Float & occlusion

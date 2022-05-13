@@ -149,7 +149,7 @@ namespace castor3d
 				, 0u
 				, { size.width, size.height, 1u }
 				, 1u
-				, LinearizedDepthMaxMipLevel + 1u
+				, MaxLinearizedDepthMipLevel + 1u
 				, VK_FORMAT_R32_SFLOAT
 				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 					| VK_IMAGE_USAGE_SAMPLED_BIT
@@ -276,7 +276,7 @@ namespace castor3d
 	{
 		auto size = m_size;
 
-		for ( auto index = 0u; index < LinearizedDepthMaxMipLevel; ++index )
+		for ( auto index = 0u; index < MaxLinearizedDepthMipLevel; ++index )
 		{
 			stepProgressBar( progress, "Creating depth minify pass " + std::to_string( index ) );
 			m_previousLevel.push_back( m_device.uboPool->getBuffer< castor::Point2i >( 0u ) );

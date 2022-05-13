@@ -6,7 +6,7 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/Texcoords0Component.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
@@ -87,7 +87,7 @@ namespace castor3d
 		addFace( a, b, c );
 		addFace( a, c, d );
 
-		if ( auto texComp = getOwner()->getComponent< TexcoordsComponent >() )
+		if ( auto texComp = getOwner()->getComponent< Texcoords0Component >() )
 		{
 			texComp->getData()[a] = castor::Point3f{ minUV[0], minUV[1], 0.0f };
 			texComp->getData()[b] = castor::Point3f{ maxUV[0], minUV[1], 0.0f };
@@ -98,7 +98,7 @@ namespace castor3d
 
 	void TriFaceMapping::computeFacesFromPolygonVertex()
 	{
-		SubmeshUtils::computeFacesFromPolygonVertex( getOwner()->getTexcoords()
+		SubmeshUtils::computeFacesFromPolygonVertex( getOwner()->getTexcoords0()
 			, *this );
 	}
 
@@ -128,7 +128,7 @@ namespace castor3d
 			tangents = &tanComp->getData();
 		}
 
-		if ( auto texComp = getOwner()->getComponent< TexcoordsComponent >() )
+		if ( auto texComp = getOwner()->getComponent< Texcoords0Component >() )
 		{
 			texcoords = &texComp->getData();
 		}
@@ -165,7 +165,7 @@ namespace castor3d
 			tangents = &tanComp->getData();
 		}
 
-		if ( auto texComp = getOwner()->getComponent< TexcoordsComponent >() )
+		if ( auto texComp = getOwner()->getComponent< Texcoords0Component >() )
 		{
 			texcoords = &texComp->getData();
 		}
@@ -199,7 +199,7 @@ namespace castor3d
 			tangents = &tanComp->getData();
 		}
 
-		if ( auto texComp = getOwner()->getComponent< TexcoordsComponent >() )
+		if ( auto texComp = getOwner()->getComponent< Texcoords0Component >() )
 		{
 			texcoords = &texComp->getData();
 		}
@@ -316,7 +316,7 @@ namespace castor3d
 				tangents = &tanComp->getData();
 			}
 
-			if ( auto texComp = getOwner()->getComponent< TexcoordsComponent >() )
+			if ( auto texComp = getOwner()->getComponent< Texcoords0Component >() )
 			{
 				texcoords = &texComp->getData();
 			}

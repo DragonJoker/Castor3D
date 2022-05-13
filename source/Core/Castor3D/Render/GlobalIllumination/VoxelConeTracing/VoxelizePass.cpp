@@ -60,14 +60,18 @@ namespace castor3d
 				, worldPosition{ getMember< sdw::Vec3 >( "worldPosition" ) }
 				, viewPosition{ getMember< sdw::Vec3 >( "viewPosition" ) }
 				, normal{ getMember< sdw::Vec3 >( "normal" ) }
-				, texture{ getMember< sdw::Vec3 >( "texcoord" ) }
+				, texture0{ getMember< sdw::Vec3 >( "texcoord0" ) }
+				, texture1{ getMember< sdw::Vec3 >( "texcoord1" ) }
+				, texture2{ getMember< sdw::Vec3 >( "texcoord2" ) }
+				, texture3{ getMember< sdw::Vec3 >( "texcoord3" ) }
 				, nodeId{ getMember< sdw::Int >( "nodeId" ) }
 			{
 			}
 
 			SDW_DeclStructInstance( , SurfaceT );
 
-			static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache )
+			static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache
+				, SubmeshFlags submeshFlags )
 			{
 				auto result = cache.getIOStruct( sdw::type::MemoryLayout::eStd430
 					, ( FlagT == sdw::var::Flag::eShaderOutput
@@ -90,10 +94,25 @@ namespace castor3d
 						, sdw::type::Kind::eVec3F
 						, sdw::type::NotArray
 						, index++ );
-					result->declMember( "texcoord"
+					result->declMember( "texcoord0"
 						, sdw::type::Kind::eVec3F
 						, sdw::type::NotArray
 						, index++ );
+					result->declMember( "texcoord1"
+						, sdw::type::Kind::eVec3F
+						, sdw::type::NotArray
+						, ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords1 ) ? index++ : 0u )
+						, checkFlag( submeshFlags, SubmeshFlag::eTexcoords1 ) );
+					result->declMember( "texcoord2"
+						, sdw::type::Kind::eVec3F
+						, sdw::type::NotArray
+						, ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords2 ) ? index++ : 0u )
+						, checkFlag( submeshFlags, SubmeshFlag::eTexcoords2 ) );
+					result->declMember( "texcoord3"
+						, sdw::type::Kind::eVec3F
+						, sdw::type::NotArray
+						, ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) ? index++ : 0u )
+						, checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) );
 					result->declMember( "nodeId"
 						, sdw::type::Kind::eInt
 						, sdw::type::NotArray
@@ -106,7 +125,10 @@ namespace castor3d
 			sdw::Vec3 worldPosition;
 			sdw::Vec3 viewPosition;
 			sdw::Vec3 normal;
-			sdw::Vec3 texture;
+			sdw::Vec3 texture0;
+			sdw::Vec3 texture1;
+			sdw::Vec3 texture2;
+			sdw::Vec3 texture3;
 			sdw::Int nodeId;
 		};
 	}
@@ -330,7 +352,8 @@ namespace castor3d
 				, textureFlags
 				, flags.passFlags
 				, hasTextures }
-			, sdw::VertexOutT< vxlpass::SurfaceT >{ writer }
+			, sdw::VertexOutT< vxlpass::SurfaceT >{ writer
+				, flags.submeshFlags }
 			, [&]( VertexInT< shader::VertexSurfaceT > in
 				, VertexOutT< vxlpass::SurfaceT > out )
 			{
@@ -349,7 +372,10 @@ namespace castor3d
 
 				if ( hasTextures )
 				{
-					out.texture = in.texture0;
+					out.texture0 = in.texture0;
+					out.texture1 = in.texture1;
+					out.texture2 = in.texture2;
+					out.texture3 = in.texture3;
 				}
 
 				auto morphingData = writer.declLocale( "morphingData"
@@ -358,7 +384,10 @@ namespace castor3d
 				in.morph( morphingData
 					, curPosition
 					, v4Normal
-					, out.texture );
+					, out.texture0
+					, out.texture1
+					, out.texture2
+					, out.texture3 );
 
 				auto modelMtx = writer.declLocale< Mat4 >( "modelMtx"
 					, modelData.getCurModelMtx( flags.programFlags
@@ -409,7 +438,10 @@ namespace castor3d
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 
-		writer.implementMainT< VoidT, vxlpass::SurfaceT >( [&]( VertexIn in
+		writer.implementMainT< VoidT, vxlpass::SurfaceT >( sdw::VertexInT< VoidT >{ writer }
+			, sdw::VertexOutT< vxlpass::SurfaceT >{ writer
+				, SubmeshFlags{} }
+			,[&]( VertexIn in
 			, VertexOutT< vxlpass::SurfaceT > out )
 			{
 				auto nodeId = writer.declLocale( "nodeId"
@@ -440,7 +472,7 @@ namespace castor3d
 
 				if ( hasTextures )
 				{
-					out.texture = vec3( inTexcoord, 0.0_f );
+					out.texture0 = vec3( inTexcoord, 0.0_f );
 				}
 
 				out.vtx.position = vec4( curBbcenter
@@ -479,9 +511,14 @@ namespace castor3d
 			, RenderPipeline::eBuffers
 			, true );
 
-		writer.implementMainT< 3u, TriangleListT< vxlpass::SurfaceT >, TriangleStreamT< vxlpass::SurfaceT > >( [&]( GeometryIn in
-			, TriangleListT< vxlpass::SurfaceT > list
-			, TriangleStreamT< vxlpass::SurfaceT > out )
+		writer.implementMainT< TriangleListT< vxlpass::SurfaceT >, TriangleStreamT< vxlpass::SurfaceT > >( TriangleListT< vxlpass::SurfaceT >{ writer
+				, flags.submeshFlags }
+			, TriangleStreamT< vxlpass::SurfaceT >{ writer
+				, 3u
+				, flags.submeshFlags }
+			, [&]( GeometryIn in
+				, TriangleListT< vxlpass::SurfaceT > list
+				, TriangleStreamT< vxlpass::SurfaceT > out )
 			{
 				auto facenormal = writer.declLocale( "facenormal"
 					, abs( list[0].normal + list[1].normal + list[2].normal ) );
@@ -535,7 +572,10 @@ namespace castor3d
 
 					if ( hasTextures )
 					{
-						out.texture = list[i].texture;
+						out.texture0 = list[i].texture0;
+						out.texture1 = list[i].texture1;
+						out.texture2 = list[i].texture2;
+						out.texture3 = list[i].texture3;
 					}
 
 					out.append();
@@ -595,8 +635,13 @@ namespace castor3d
 			, RenderPipeline::eTextures
 			, hasTextures ) );
 
-		writer.implementMainT< vxlpass::SurfaceT, VoidT >( [&]( FragmentInT< vxlpass::SurfaceT > in
-			, FragmentOut out )
+		writer.implementMainT< vxlpass::SurfaceT, VoidT >( FragmentInT< vxlpass::SurfaceT >{ writer
+				, FragmentOrigin::eUpperLeft
+				, FragmentCenter::eHalfPixel
+				, flags.submeshFlags }
+			, FragmentOutT< VoidT >{ writer }
+			, [&]( FragmentInT< vxlpass::SurfaceT > in
+				, FragmentOut out )
 			{
 				auto diff = writer.declLocale( "diff"
 					, c3d_voxelData.worldToClip( in.worldPosition ) );
@@ -622,8 +667,14 @@ namespace castor3d
 
 					if ( hasTextures )
 					{
-						auto texCoord = writer.declLocale( "texCoord"
-							, in.texture );
+						auto texCoord0 = writer.declLocale( "texCoord0"
+							, in.texture0 );
+						auto texCoord1 = writer.declLocale( "texCoord1"
+							, in.texture1 );
+						auto texCoord2 = writer.declLocale( "texCoord2"
+							, in.texture2 );
+						auto texCoord3 = writer.declLocale( "texCoord3"
+							, in.texture3 );
 						lightingModel->computeMapDiffuseContributions( flags.passFlags
 							, flags.textures
 							, textureConfigs
@@ -631,7 +682,10 @@ namespace castor3d
 							, c3d_maps
 							, modelData.getTextures0()
 							, modelData.getTextures1()
-							, texCoord
+							, texCoord0
+							, texCoord1
+							, texCoord2
+							, texCoord3
 							, emissive
 							, alpha
 							, occlusion

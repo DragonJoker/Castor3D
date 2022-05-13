@@ -204,8 +204,17 @@ namespace castor3d
 			auto tanBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTangents )
 				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTangents )
 				: nullptr;
-			auto texBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTexcoords )
-				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTexcoords )
+			auto tex0Buffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTexcoords0 )
+				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTexcoords0 )
+				: nullptr;
+			auto tex1Buffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTexcoords1 )
+				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTexcoords1 )
+				: nullptr;
+			auto tex2Buffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTexcoords2 )
+				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTexcoords2 )
+				: nullptr;
+			auto tex3Buffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTexcoords3 )
+				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTexcoords3 )
 				: nullptr;
 			auto idxBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eIndex )
 				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eIndex )
@@ -222,8 +231,17 @@ namespace castor3d
 			auto mphTanBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTangents )
 				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTangents )
 				: nullptr;
-			auto mphTexBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTexcoords )
-				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTexcoords )
+			auto mphTex0Buffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTexcoords0 )
+				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTexcoords0 )
+				: nullptr;
+			auto mphTex1Buffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTexcoords1 )
+				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTexcoords1 )
+				: nullptr;
+			auto mphTex2Buffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTexcoords2 )
+				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTexcoords2 )
+				: nullptr;
+			auto mphTex3Buffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTexcoords3 )
+				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTexcoords3 )
 				: nullptr;
 #endif
 
@@ -241,8 +259,17 @@ namespace castor3d
 					CU_Require( tanBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTangents )
 						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTangents )
 						: nullptr ) );
-					CU_Require( texBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTexcoords )
-						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTexcoords )
+					CU_Require( tex0Buffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTexcoords0 )
+						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTexcoords0 )
+						: nullptr ) );
+					CU_Require( tex1Buffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTexcoords1 )
+						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTexcoords1 )
+						: nullptr ) );
+					CU_Require( tex2Buffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTexcoords2 )
+						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTexcoords2 )
+						: nullptr ) );
+					CU_Require( tex3Buffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTexcoords3 )
+						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTexcoords3 )
 						: nullptr ) );
 					CU_Require( idxBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eIndex )
 						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eIndex )
@@ -259,8 +286,17 @@ namespace castor3d
 					CU_Require( mphTanBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTangents )
 						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTangents )
 						: nullptr) );
-					CU_Require( mphTexBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTexcoords )
-						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTexcoords )
+					CU_Require( mphTex0Buffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTexcoords0 )
+						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTexcoords0 )
+						: nullptr) );
+					CU_Require( mphTex1Buffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTexcoords1 )
+						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTexcoords1 )
+						: nullptr) );
+					CU_Require( mphTex2Buffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTexcoords2 )
+						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTexcoords2 )
+						: nullptr) );
+					CU_Require( mphTex3Buffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTexcoords3 )
+						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTexcoords3 )
 						: nullptr) );
 				}
 			}
@@ -311,6 +347,7 @@ namespace castor3d
 	uint64_t getPipelineBaseHash( SubmeshFlags submeshFlags
 		, ProgramFlags programFlags
 		, PassFlags passFlags
+		, uint32_t maxTexcoordSet
 		, uint32_t texturesCount
 		, TextureFlags texturesFlags
 		, uint32_t layerIndex )
@@ -329,6 +366,7 @@ namespace castor3d
 		uint32_t result{ submeshFlags };
 		castor::hashCombine32( result, uint32_t( programFlags ) );
 		castor::hashCombine32( result, uint32_t( passFlags ) );
+		castor::hashCombine32( result, maxTexcoordSet );
 		castor::hashCombine32( result, texturesCount );
 		castor::hashCombine32( result, uint32_t( texturesFlags ) );
 		castor::hashCombine32( result, checkFlag( programFlags, ProgramFlag::eInvertNormals ) );
@@ -340,7 +378,7 @@ namespace castor3d
 		, Pass const & pass
 		, bool isFrontCulled )
 	{
-		auto submeshFlags = data.getSubmeshFlags();
+		auto submeshFlags = data.getSubmeshFlags( &pass );
 		auto programFlags = data.getProgramFlags( *pass.getOwner() );
 
 		if ( isFrontCulled )
@@ -351,6 +389,7 @@ namespace castor3d
 		return getPipelineBaseHash( renderPass.adjustFlags( submeshFlags )
 			, renderPass.adjustFlags( programFlags )
 			, renderPass.adjustFlags( pass.getPassFlags() )
+			, pass.getMaxTexCoordSet()
 			, pass.getTextureUnitsCount()
 			, pass.getTextures()
 			, pass.getIndex() );
@@ -372,6 +411,7 @@ namespace castor3d
 		return getPipelineBaseHash( renderPass.adjustFlags( submeshFlags )
 			, renderPass.adjustFlags( programFlags )
 			, renderPass.adjustFlags( pass.getPassFlags() )
+			, pass.getMaxTexCoordSet()
 			, pass.getTextureUnitsCount()
 			, pass.getTextures()
 			, pass.getIndex() );

@@ -621,7 +621,14 @@ namespace ocean_fft
 
 	castor3d::SubmeshFlags OceanRenderPass::doAdjustSubmeshFlags( castor3d::SubmeshFlags flags )const
 	{
-		remFlag( flags, castor3d::SubmeshFlag::eSecondaryUV );
+		remFlag( flags, castor3d::SubmeshFlag::eTexcoords0 );
+		remFlag( flags, castor3d::SubmeshFlag::eTexcoords1 );
+		remFlag( flags, castor3d::SubmeshFlag::eTexcoords2 );
+		remFlag( flags, castor3d::SubmeshFlag::eTexcoords3 );
+		remFlag( flags, castor3d::SubmeshFlag::eMorphTexcoords0 );
+		remFlag( flags, castor3d::SubmeshFlag::eMorphTexcoords1 );
+		remFlag( flags, castor3d::SubmeshFlag::eMorphTexcoords2 );
+		remFlag( flags, castor3d::SubmeshFlag::eMorphTexcoords3 );
 		return flags;
 	}
 

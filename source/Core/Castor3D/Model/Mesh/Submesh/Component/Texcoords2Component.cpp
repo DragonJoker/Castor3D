@@ -1,10 +1,11 @@
-#include "Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/Texcoords2Component.hpp"
 
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
+#include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Vertex.hpp"
-#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -15,7 +16,7 @@
 
 namespace castor3d
 {
-	namespace smshcomppos
+	namespace smshcomptex2
 	{
 		static ashes::PipelineVertexInputStateCreateInfo createVertexLayout( uint32_t & currentBinding
 			, uint32_t & currentLocation )
@@ -31,14 +32,14 @@ namespace castor3d
 		}
 	}
 
-	castor::String const PositionsComponent::Name = cuT( "positions" );
+	castor::String const Texcoords2Component::Name = cuT( "texcoords2" );
 
-	PositionsComponent::PositionsComponent( Submesh & submesh )
+	Texcoords2Component::Texcoords2Component( Submesh & submesh )
 		: SubmeshComponent{ submesh, Name, Id }
 	{
 	}
 
-	void PositionsComponent::gather( ShaderFlags const & shaderFlags
+	void Texcoords2Component::gather( ShaderFlags const & shaderFlags
 		, ProgramFlags const & programFlags
 		, SubmeshFlags const & submeshFlags
 		, MaterialRPtr material
@@ -49,7 +50,8 @@ namespace castor3d
 		, uint32_t & currentBinding
 		, uint32_t & currentLocation )
 	{
-		if ( checkFlag( submeshFlags, SubmeshFlag::ePositions ) )
+		if ( checkFlag( programFlags, ProgramFlag::eForceTexCoords )
+			|| ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords2 ) && !mask.empty() ) )
 		{
 			auto hash = std::hash< uint32_t >{}( currentBinding );
 			hash = castor::hashCombine( hash, currentLocation );
@@ -58,7 +60,7 @@ namespace castor3d
 			if ( layoutIt == m_layouts.end() )
 			{
 				layoutIt = m_layouts.emplace( hash
-					, smshcomppos::createVertexLayout( currentBinding, currentLocation ) ).first;
+					, smshcomptex2::createVertexLayout( currentBinding, currentLocation ) ).first;
 			}
 			else
 			{
@@ -70,28 +72,38 @@ namespace castor3d
 		}
 	}
 
-	SubmeshComponentSPtr PositionsComponent::clone( Submesh & submesh )const
+	SubmeshComponentSPtr Texcoords2Component::clone( Submesh & submesh )const
 	{
-		auto result = std::make_shared< PositionsComponent >( submesh );
+		auto result = std::make_shared< Texcoords2Component >( submesh );
 		result->m_data = m_data;
 		return std::static_pointer_cast< SubmeshComponent >( result );
 	}
 
-	bool PositionsComponent::doInitialise( RenderDevice const & device )
+	SubmeshFlags Texcoords2Component::getSubmeshFlags( Pass const * pass )const
+	{
+		if ( !pass || pass->getMaxTexCoordSet() > 1u )
+		{
+			return SubmeshFlag::eTexcoords2;
+		}
+
+		return SubmeshFlag{};
+	}
+
+	bool Texcoords2Component::doInitialise( RenderDevice const & device )
 	{
 		return true;
 	}
 
-	void PositionsComponent::doCleanup( RenderDevice const & device )
+	void Texcoords2Component::doCleanup( RenderDevice const & device )
 	{
 		m_data.clear();
 	}
 
-	void PositionsComponent::doUpload()
+	void Texcoords2Component::doUpload()
 	{
 		auto count = uint32_t( m_data.size() );
 		auto & offsets = getOwner()->getBufferOffsets();
-		auto & buffer = offsets.getBufferChunk( SubmeshFlag::ePositions );
+		auto & buffer = offsets.getBufferChunk( SubmeshFlag::eTexcoords2 );
 
 		if ( count && buffer.hasData() )
 		{

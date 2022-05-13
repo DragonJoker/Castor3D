@@ -21,6 +21,7 @@ namespace castor3d
 	uint64_t getPipelineBaseHash( SubmeshFlags submeshFlags
 		, ProgramFlags programFlags
 		, PassFlags passFlags
+		, uint32_t maxTexcoordSet
 		, uint32_t texturesCount
 		, TextureFlags texturesFlags
 		, uint32_t layerIndex );

@@ -385,7 +385,7 @@ namespace castor3d
 	*/
 	struct SkinningTransformsConfiguration
 	{
-		std::array< castor::Matrix4x4f, BonesCount > bonesMatrix;
+		std::array< castor::Matrix4x4f, MaxBonesCount > bonesMatrix;
 	};
 	/**
 	*\~english

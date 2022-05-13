@@ -1272,7 +1272,10 @@ namespace castor3d
 			castor::switchEndianness( value.positions );
 			castor::switchEndianness( value.normals );
 			castor::switchEndianness( value.tangents );
-			castor::switchEndianness( value.texcoords );
+			castor::switchEndianness( value.texcoords0 );
+			castor::switchEndianness( value.texcoords1 );
+			castor::switchEndianness( value.texcoords2 );
+			castor::switchEndianness( value.texcoords3 );
 		}
 	}
 	/**
