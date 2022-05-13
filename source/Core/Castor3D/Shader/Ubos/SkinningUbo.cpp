@@ -46,7 +46,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		auto mtxBoneTransform = writer.declLocale< Mat4 >( "mtxBoneTransform" );
-		auto mtxInstanceOffset = writer.declLocale( "mtxInstanceOffset", skinningId * BonesCount );
+		auto mtxInstanceOffset = writer.declLocale( "mtxInstanceOffset", skinningId * MaxBonesCount );
 
 		auto & ssbo = *data.transforms;
 		mtxBoneTransform = ssbo[mtxInstanceOffset + writer.cast< UInt >( boneIds0[0_i] )] * boneWeights0[0_i];

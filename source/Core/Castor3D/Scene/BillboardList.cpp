@@ -194,7 +194,7 @@ namespace castor3d
 		return SubmeshFlag::ePositions
 			| SubmeshFlag::eNormals
 			| SubmeshFlag::eTangents
-			| SubmeshFlag::eTexcoords;
+			| SubmeshFlag::eTexcoords0;
 	}
 
 	ProgramFlags BillboardBase::getProgramFlags()const

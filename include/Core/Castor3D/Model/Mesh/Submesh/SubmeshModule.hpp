@@ -48,7 +48,16 @@ namespace castor3d
 		eTangents,
 		//!\~english	Submesh has texture coordinates.
 		//!\~french		Le submesh a des coordonnées de texture.
-		eTexcoords,
+		eTexcoords0,
+		//!\~english	Submesh has a 2nd set of texture coordinates.
+		//!\~french		Le submesh a un 2e set de coordonnées de texture.
+		eTexcoords1,
+		//!\~english	Submesh has a 3rd set of texture coordinates.
+		//!\~french		Le submesh a un 3e set de coordonnées de texture.
+		eTexcoords2,
+		//!\~english	Submesh has a 4th set of texture coordinates.
+		//!\~french		Le submesh a un 4e set de coordonnées de texture.
+		eTexcoords3,
 		//!\~english	The submesh has morphing positions.
 		//!\~french		Le submesh a des positions de morphing.
 		eMorphPositions,
@@ -60,13 +69,19 @@ namespace castor3d
 		eMorphTangents,
 		//!\~english	The submesh has morphing texture coordinates.
 		//!\~french		Le submesh a des coordonnées de texture de morphing.
-		eMorphTexcoords,
+		eMorphTexcoords0,
+		//!\~english	The submesh has a 2nd set of morphing texture coordinates.
+		//!\~french		Le submesh a un 2e set de coordonnées de texture de morphing.
+		eMorphTexcoords1,
+		//!\~english	The submesh has a 3rd set of morphing texture coordinates.
+		//!\~french		Le submesh a un 3e set de coordonnées de texture de morphing.
+		eMorphTexcoords2,
+		//!\~english	The submesh has a 4th set of morphing texture coordinates.
+		//!\~french		Le submesh a un 4e set de coordonnées de texture de morphing.
+		eMorphTexcoords3,
 		//!\~english	Submesh has bones data.
 		//!\~french		Submesh a des données d'os.
 		eBones,
-		//!\~english	Submesh has a second set of texture coordinates.
-		//!\~french		Le submesh a un second set de coordonnées de texture.
-		eSecondaryUV,
 	};
 
 	static castor::String getName( SubmeshData value )
@@ -81,20 +96,30 @@ namespace castor3d
 			return cuT( "Normals" );
 		case castor3d::SubmeshData::eTangents:
 			return cuT( "Tangents" );
-		case castor3d::SubmeshData::eTexcoords:
-			return cuT( "Texcoords" );
+		case castor3d::SubmeshData::eTexcoords0:
+			return cuT( "Texcoords0" );
+		case castor3d::SubmeshData::eTexcoords1:
+			return cuT( "eTexcoords1" );
+		case castor3d::SubmeshData::eTexcoords2:
+			return cuT( "eTexcoords2" );
+		case castor3d::SubmeshData::eTexcoords3:
+			return cuT( "eTexcoords3" );
 		case castor3d::SubmeshData::eMorphPositions:
 			return cuT( "MorphPositions" );
 		case castor3d::SubmeshData::eMorphNormals:
 			return cuT( "MorphNormals" );
 		case castor3d::SubmeshData::eMorphTangents:
 			return cuT( "MorphTangents" );
-		case castor3d::SubmeshData::eMorphTexcoords:
-			return cuT( "MorphTexcoords" );
+		case castor3d::SubmeshData::eMorphTexcoords0:
+			return cuT( "MorphTexcoords0" );
+		case castor3d::SubmeshData::eMorphTexcoords1:
+			return cuT( "MorphTexcoords1" );
+		case castor3d::SubmeshData::eMorphTexcoords2:
+			return cuT( "MorphTexcoords2" );
+		case castor3d::SubmeshData::eMorphTexcoords3:
+			return cuT( "MorphTexcoords3" );
 		case castor3d::SubmeshData::eBones:
 			return cuT( "Bones" );
-		case castor3d::SubmeshData::eSecondaryUV:
-			return cuT( "SecondaryUV" );
 		default:
 			CU_Failure( "Unsupported SubmeshData" );
 			return cuT( "Unknown" );
@@ -107,13 +132,18 @@ namespace castor3d
 			, sizeof( castor::Point3f ) /* SubmeshFlag::ePositions */
 			, sizeof( castor::Point3f ) /* SubmeshFlag::eNormals */
 			, sizeof( castor::Point3f ) /* SubmeshFlag::eTangents */
-			, sizeof( castor::Point3f ) /* SubmeshFlag::eTexcoords */
+			, sizeof( castor::Point3f ) /* SubmeshFlag::eTexcoords0 */
+			, sizeof( castor::Point3f ) /* SubmeshFlag::eTexcoords1 */
+			, sizeof( castor::Point3f ) /* SubmeshFlag::eTexcoords2 */
+			, sizeof( castor::Point3f ) /* SubmeshFlag::eTexcoords3 */
 			, sizeof( castor::Point3f ) /* SubmeshFlag::eMorphPositions */
 			, sizeof( castor::Point3f ) /* SubmeshFlag::eMorphNormals */
 			, sizeof( castor::Point3f ) /* SubmeshFlag::eMorphTangents */
-			, sizeof( castor::Point3f ) /* SubmeshFlag::eMorphTexcoords */
-			, sizeof( VertexBoneData ) /* SubmeshFlag::eBones */
-			, sizeof( castor::Point3f ) /* SubmeshFlag::eSecondaryUV */ };
+			, sizeof( castor::Point3f ) /* SubmeshFlag::eMorphTexcoords0 */
+			, sizeof( castor::Point3f ) /* SubmeshFlag::eMorphTexcoords1 */
+			, sizeof( castor::Point3f ) /* SubmeshFlag::eMorphTexcoords2 */
+			, sizeof( castor::Point3f ) /* SubmeshFlag::eMorphTexcoords3 */
+			, sizeof( VertexBoneData ) /* SubmeshFlag::eBones */ };
 		return uint32_t( sizes[size_t( value )] );
 	}
 	/**
@@ -142,10 +172,19 @@ namespace castor3d
 		eTangents = 0x0001 << int( SubmeshData::eTangents ),
 		//!\~english	Submesh has texture coordinates.
 		//!\~french		Le submesh a des coordonnées de texture.
-		eTexcoords = 0x0001 << int( SubmeshData::eTexcoords ),
+		eTexcoords0 = 0x0001 << int( SubmeshData::eTexcoords0 ),
+		//!\~english	Submesh has a 2nd set of texture coordinates.
+		//!\~french		Le submesh a un 2e set de coordonnées de texture.
+		eTexcoords1 = 0x0001 << int( SubmeshData::eTexcoords1 ),
+		//!\~english	Submesh has a 3rd set of texture coordinates.
+		//!\~french		Le submesh a un 3e set de coordonnées de texture.
+		eTexcoords2 = 0x0001 << int( SubmeshData::eTexcoords2 ),
+		//!\~english	Submesh has a 4th set of texture coordinates.
+		//!\~french		Le submesh a un 4e set de coordonnées de texture.
+		eTexcoords3 = 0x0001 << int( SubmeshData::eTexcoords3 ),
 		//!\~english	Base components flags.
 		//\~french		Indicateurs de composants de base.
-		ePosNmlTanTex = ePositions | eNormals | eTangents | eTexcoords,
+		ePosNmlTanTex = ePositions | eNormals | eTangents | eTexcoords0,
 		//!\~english	The submesh has morphing positions.
 		//!\~french		Le submesh a des positions de morphing.
 		eMorphPositions = 0x0001 << int( SubmeshData::eMorphPositions ),
@@ -157,16 +196,22 @@ namespace castor3d
 		eMorphTangents = 0x0001 << int( SubmeshData::eMorphTangents ),
 		//!\~english	The submesh has morphing texture coordinates.
 		//!\~french		Le submesh a des coordonnées de texture de morphing.
-		eMorphTexcoords = 0x0001 << int( SubmeshData::eMorphTexcoords ),
+		eMorphTexcoords0 = 0x0001 << int( SubmeshData::eMorphTexcoords0 ),
+		//!\~english	Submesh has a 2nd set of morphing texture coordinates.
+		//!\~french		Le submesh a un 2e set de coordonnées de texture de morphing.
+		eMorphTexcoords1 = 0x0001 << int( SubmeshData::eMorphTexcoords1 ),
+		//!\~english	Submesh has a 3rd set of morphing texture coordinates.
+		//!\~french		Le submesh a un 3e set de coordonnées de texture de morphing.
+		eMorphTexcoords2 = 0x0001 << int( SubmeshData::eMorphTexcoords2 ),
+		//!\~english	Submesh has a 4th set of morphing texture coordinates.
+		//!\~french		Le submesh a un 4e set de coordonnées de texture de morphing.
+		eMorphTexcoords3 = 0x0001 << int( SubmeshData::eMorphTexcoords3 ),
 		//!\~english	Submesh has bones data.
 		//!\~french		Submesh a des données d'os.
 		eBones = 0x0001 << int( SubmeshData::eBones ),
-		//!\~english	Submesh has a second set of texture coordinates.
-		//!\~french		Le submesh a un second set de coordonnées de texture.
-		eSecondaryUV = 0x0001 << int( SubmeshData::eSecondaryUV ),
 		//!\~english	All component flags.
 		//\~french		Tous les indicateurs de composant.
-		eAllComponents = 0x0FFF,
+		eAllComponents = 0x1FFFF,
 	};
 	CU_ImplementFlags( SubmeshFlag )
 
@@ -195,18 +240,27 @@ namespace castor3d
 
 	struct SubmeshAnimationBuffer
 	{
-		//!\~english	The vertex buffer.
-		//!\~french		Le tampon de sommets.
+		//!\~english	The positions buffer.
+		//!\~french		Le tampon de positions.
 		castor::Point3fArray positions;
-		//!\~english	The vertex buffer.
-		//!\~french		Le tampon de sommets.
+		//!\~english	The normals buffer.
+		//!\~french		Le tampon de normales.
 		castor::Point3fArray normals;
-		//!\~english	The vertex buffer.
-		//!\~french		Le tampon de sommets.
+		//!\~english	The tangents buffer.
+		//!\~french		Le tampon de tangentes.
 		castor::Point3fArray tangents;
-		//!\~english	The vertex buffer.
-		//!\~french		Le tampon de sommets.
-		castor::Point3fArray texcoords;
+		//!\~english	The texture coordinates buffer.
+		//!\~french		Le tampon de coordonnées de texture.
+		castor::Point3fArray texcoords0;
+		//!\~english	The 2nd texture coordinates buffer.
+		//!\~french		Le 2e tampon de coordonnées de texture.
+		castor::Point3fArray texcoords1;
+		//!\~english	The 3rd texture coordinates buffer.
+		//!\~french		Le 3e tampon de coordonnées de texture.
+		castor::Point3fArray texcoords2;
+		//!\~english	The 4th texture coordinates buffer.
+		//!\~french		Le 4e tampon de coordonnées de texture.
+		castor::Point3fArray texcoords3;
 		//!\~english	The bounding box.
 		//!\~french		La bounding box.
 		castor::BoundingBox boundingBox{};

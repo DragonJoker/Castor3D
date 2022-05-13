@@ -74,6 +74,7 @@ namespace castor3d
 			result = castor::hashCombine( result, static_cast< castor::String const & >( value.relative() ) );
 		}
 
+		result = castor::hashCombine( result, value.getTexcoordSet() );
 		result = castor::hashCombine( result, value.allowCompression() );
 		return castor::hashCombine( result, value.generateMips() );
 	}
@@ -112,6 +113,7 @@ namespace castor3d
 		}
 
 		return result
+			&& ( lhs.getTexcoordSet() == rhs.getTexcoordSet() )
 			&& ( lhs.allowCompression() == rhs.allowCompression() )
 			&& ( lhs.generateMips() == rhs.generateMips() );
 	}

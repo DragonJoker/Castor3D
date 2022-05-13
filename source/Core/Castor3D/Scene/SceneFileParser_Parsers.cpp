@@ -28,7 +28,7 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/Texcoords0Component.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Overlay/BorderPanelOverlay.hpp"
@@ -3120,7 +3120,7 @@ namespace castor3d
 								tangents = &tanComp->getData();
 							}
 
-							if ( auto texComp = submesh->getComponent< TexcoordsComponent >() )
+							if ( auto texComp = submesh->getComponent< Texcoords0Component >() )
 							{
 								texcoords = &texComp->getData();
 							}
@@ -3646,9 +3646,9 @@ namespace castor3d
 			}
 
 			if ( !parsingContext.vertexTex.empty()
-				&& !parsingContext.submesh->hasComponent( TexcoordsComponent::Name ) )
+				&& !parsingContext.submesh->hasComponent( Texcoords0Component::Name ) )
 			{
-				parsingContext.submesh->createComponent< TexcoordsComponent >();
+				parsingContext.submesh->createComponent< Texcoords0Component >();
 			}
 
 			std::vector< InterleavedVertex > vertices{ parsingContext.vertexPos.size() / 3 };

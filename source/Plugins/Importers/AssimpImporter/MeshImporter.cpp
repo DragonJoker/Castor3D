@@ -18,7 +18,10 @@
 #include <Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/Texcoords0Component.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/Texcoords1Component.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/Texcoords2Component.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/Texcoords3Component.hpp>
 #include <Castor3D/Model/Skeleton/BoneNode.hpp>
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
 #include <Castor3D/Scene/Scene.hpp>
@@ -36,7 +39,10 @@ namespace c3d_assimp
 			, castor::Point3fArray & positions
 			, castor::Point3fArray & normals
 			, castor::Point3fArray & tangents
-			, castor::Point3fArray & texcoords )
+			, castor::Point3fArray & texcoords0
+			, castor::Point3fArray & texcoords1
+			, castor::Point3fArray & texcoords2
+			, castor::Point3fArray & texcoords3 )
 		{
 			positions.resize( aiMesh.mNumVertices );
 			normals.resize( aiMesh.mNumVertices );
@@ -65,15 +71,60 @@ namespace c3d_assimp
 
 			if ( aiMesh.HasTextureCoords( 0 ) )
 			{
-				texcoords.resize( aiMesh.mNumVertices );
+				texcoords0.resize( aiMesh.mNumVertices );
 				tangents.resize( aiMesh.mNumVertices );
 				index = 0u;
 
-				for ( auto & tex : texcoords )
+				for ( auto & tex : texcoords0 )
 				{
 					tex[0] = float( aiMesh.mTextureCoords[0][index].x );
 					tex[1] = float( aiMesh.mTextureCoords[0][index].y );
 					tex[2] = float( aiMesh.mTextureCoords[0][index].z );
+					++index;
+				}
+			}
+
+			if ( aiMesh.HasTextureCoords( 1 ) )
+			{
+				texcoords1.resize( aiMesh.mNumVertices );
+				tangents.resize( aiMesh.mNumVertices );
+				index = 0u;
+
+				for ( auto & tex : texcoords1 )
+				{
+					tex[0] = float( aiMesh.mTextureCoords[1][index].x );
+					tex[1] = float( aiMesh.mTextureCoords[1][index].y );
+					tex[2] = float( aiMesh.mTextureCoords[1][index].z );
+					++index;
+				}
+			}
+
+			if ( aiMesh.HasTextureCoords( 2 ) )
+			{
+				texcoords2.resize( aiMesh.mNumVertices );
+				tangents.resize( aiMesh.mNumVertices );
+				index = 0u;
+
+				for ( auto & tex : texcoords2 )
+				{
+					tex[0] = float( aiMesh.mTextureCoords[2][index].x );
+					tex[1] = float( aiMesh.mTextureCoords[2][index].y );
+					tex[2] = float( aiMesh.mTextureCoords[2][index].z );
+					++index;
+				}
+			}
+
+			if ( aiMesh.HasTextureCoords( 3 ) )
+			{
+				texcoords3.resize( aiMesh.mNumVertices );
+				tangents.resize( aiMesh.mNumVertices );
+				index = 0u;
+
+				for ( auto & tex : texcoords3 )
+				{
+					tex[0] = float( aiMesh.mTextureCoords[3][index].x );
+					tex[1] = float( aiMesh.mTextureCoords[3][index].y );
+					tex[2] = float( aiMesh.mTextureCoords[3][index].z );
 					++index;
 				}
 			}
@@ -136,7 +187,10 @@ namespace c3d_assimp
 		static std::vector< castor3d::SubmeshAnimationBuffer > gatherMeshAnimBuffers( castor::Point3fArray const & positions
 			, castor::Point3fArray const & normals
 			, castor::Point3fArray const & tangents
-			, castor::Point3fArray const & texcoords
+			, castor::Point3fArray const & texcoords0
+			, castor::Point3fArray const & texcoords1
+			, castor::Point3fArray const & texcoords2
+			, castor::Point3fArray const & texcoords3
 			, castor::ArrayView< aiAnimMesh * > animMeshes )
 		{
 			std::vector< castor3d::SubmeshAnimationBuffer > result;
@@ -148,7 +202,10 @@ namespace c3d_assimp
 					, buffer.positions
 					, buffer.normals
 					, buffer.tangents
-					, buffer.texcoords );
+					, buffer.texcoords0
+					, buffer.texcoords1
+					, buffer.texcoords2
+					, buffer.texcoords3 );
 
 				if ( aiAnimMesh->HasPositions() )
 				{
@@ -174,9 +231,42 @@ namespace c3d_assimp
 
 				if ( aiAnimMesh->HasTextureCoords( 0u ) )
 				{
-					auto it = buffer.texcoords.begin();
+					auto it = buffer.texcoords0.begin();
 
-					for ( auto & point : texcoords )
+					for ( auto & point : texcoords0 )
+					{
+						*it -= point;
+						++it;
+					}
+				}
+
+				if ( aiAnimMesh->HasTextureCoords( 1u ) )
+				{
+					auto it = buffer.texcoords1.begin();
+
+					for ( auto & point : texcoords1 )
+					{
+						*it -= point;
+						++it;
+					}
+				}
+
+				if ( aiAnimMesh->HasTextureCoords( 2u ) )
+				{
+					auto it = buffer.texcoords2.begin();
+
+					for ( auto & point : texcoords2 )
+					{
+						*it -= point;
+						++it;
+					}
+				}
+
+				if ( aiAnimMesh->HasTextureCoords( 3u ) )
+				{
+					auto it = buffer.texcoords3.begin();
+
+					for ( auto & point : texcoords3 )
 					{
 						*it -= point;
 						++it;
@@ -205,7 +295,10 @@ namespace c3d_assimp
 			, castor::Point3fArray & positions
 			, castor::Point3fArray & normals
 			, castor::Point3fArray & tangents
-			, castor::Point3fArray & texcoords )
+			, castor::Point3fArray & texcoords0
+			, castor::Point3fArray & texcoords1
+			, castor::Point3fArray & texcoords2
+			, castor::Point3fArray & texcoords3 )
 		{
 			if ( weight != 0.0f )
 			{
@@ -251,12 +344,54 @@ namespace c3d_assimp
 					}
 				}
 
-				if ( !texcoords.empty() )
+				if ( !texcoords0.empty() )
 				{
-					auto texIt = texcoords.begin();
-					auto bufferIt = target.texcoords.begin();
+					auto texIt = texcoords0.begin();
+					auto bufferIt = target.texcoords0.begin();
 
-					while ( bufferIt != target.texcoords.end() )
+					while ( bufferIt != target.texcoords0.end() )
+					{
+						auto & buf = *bufferIt;
+						*texIt += buf * weight;
+						++texIt;
+						++bufferIt;
+					}
+				}
+
+				if ( !texcoords1.empty() )
+				{
+					auto texIt = texcoords1.begin();
+					auto bufferIt = target.texcoords1.begin();
+
+					while ( bufferIt != target.texcoords1.end() )
+					{
+						auto & buf = *bufferIt;
+						*texIt += buf * weight;
+						++texIt;
+						++bufferIt;
+					}
+				}
+
+				if ( !texcoords2.empty() )
+				{
+					auto texIt = texcoords2.begin();
+					auto bufferIt = target.texcoords2.begin();
+
+					while ( bufferIt != target.texcoords2.end() )
+					{
+						auto & buf = *bufferIt;
+						*texIt += buf * weight;
+						++texIt;
+						++bufferIt;
+					}
+				}
+
+				if ( !texcoords3.empty() )
+				{
+					auto texIt = texcoords3.begin();
+					auto bufferIt = target.texcoords3.begin();
+
+					while ( bufferIt != target.texcoords3.end() )
 					{
 						auto & buf = *bufferIt;
 						*texIt += buf * weight;
@@ -276,7 +411,10 @@ namespace c3d_assimp
 			castor3d::SubmeshAnimationBuffer buffer{ submesh.getPositions()
 				, submesh.getNormals()
 				, submesh.getTangents()
-				, submesh.getTexcoords() };
+				, submesh.getTexcoords0()
+				, submesh.getTexcoords1()
+				, submesh.getTexcoords2()
+				, submesh.getTexcoords3() };
 			auto valueIt = values.begin();
 			auto weightIt = weights.begin();
 
@@ -289,7 +427,10 @@ namespace c3d_assimp
 					, buffer.positions
 					, buffer.normals
 					, buffer.tangents
-					, buffer.texcoords );
+					, buffer.texcoords0
+					, buffer.texcoords1
+					, buffer.texcoords2
+					, buffer.texcoords3 );
 				++valueIt;
 				++weightIt;
 			}
@@ -618,28 +759,58 @@ namespace c3d_assimp
 			auto positions = submesh.createComponent< castor3d::PositionsComponent >();
 			auto normals = submesh.createComponent< castor3d::NormalsComponent >();
 			castor::Point3fArray tan;
-			castor::Point3fArray tex;
+			castor::Point3fArray tex0;
+			castor::Point3fArray tex1;
+			castor::Point3fArray tex2;
+			castor::Point3fArray tex3;
 			castor::Point3fArray * tangents = &tan;
-			castor::Point3fArray * texcoords = &tex;
+			castor::Point3fArray * texcoords0 = &tex0;
+			castor::Point3fArray * texcoords1 = &tex1;
+			castor::Point3fArray * texcoords2 = &tex2;
+			castor::Point3fArray * texcoords3 = &tex3;
 
 			if ( aiMesh.HasTextureCoords( 0u ) )
 			{
 				auto tanComp = submesh.createComponent< castor3d::TangentsComponent >();
-				auto texComp = submesh.createComponent< castor3d::TexcoordsComponent >();
+				auto texComp = submesh.createComponent< castor3d::Texcoords0Component >();
 				tangents = &tanComp->getData();
-				texcoords = &texComp->getData();
+				texcoords0 = &texComp->getData();
+			}
+
+			if ( aiMesh.HasTextureCoords( 1u ) )
+			{
+				auto texComp = submesh.createComponent< castor3d::Texcoords1Component >();
+				texcoords1 = &texComp->getData();
+			}
+
+			if ( aiMesh.HasTextureCoords( 2u ) )
+			{
+				auto texComp = submesh.createComponent< castor3d::Texcoords2Component >();
+				texcoords2 = &texComp->getData();
+			}
+
+			if ( aiMesh.HasTextureCoords( 3u ) )
+			{
+				auto texComp = submesh.createComponent< castor3d::Texcoords3Component >();
+				texcoords3 = &texComp->getData();
 			}
 
 			meshes::createVertexBuffer( aiMesh
 				, positions->getData()
 				, normals->getData()
 				, *tangents
-				, *texcoords );
+				, *texcoords0
+				, *texcoords1
+				, *texcoords2
+				, *texcoords3 );
 			auto & animBuffers = m_animBuffers.emplace( &aiMesh
 				, meshes::gatherMeshAnimBuffers( positions->getData()
 					, normals->getData()
 					, *tangents
-					, *texcoords
+					, *texcoords0
+					, *texcoords1
+					, *texcoords2
+					, *texcoords3
 					, castor::makeArrayView( aiMesh.mAnimMeshes, aiMesh.mNumAnimMeshes ) ) ).first->second;
 			auto index = 0u;
 
@@ -650,7 +821,10 @@ namespace c3d_assimp
 					, positions->getData()
 					, normals->getData()
 					, *tangents
-					, *texcoords );
+					, *texcoords0
+					, *texcoords1
+					, *texcoords2
+					, *texcoords3 );
 				++index;
 			}
 
@@ -733,11 +907,15 @@ namespace c3d_assimp
 						kf = &static_cast< castor3d::MeshAnimationKeyFrame & >( **it );
 					}
 
+					auto & csubmesh = const_cast< castor3d::Submesh const & >( submesh );
 					kf->addSubmeshBuffer( submesh
-						, { submesh.getPositions()
-							, submesh.getNormals()
-							, submesh.getTangents()
-							, submesh.getTexcoords() } );
+						, { csubmesh.getPositions()
+							, csubmesh.getNormals()
+							, csubmesh.getTangents()
+							, csubmesh.getTexcoords0()
+							, csubmesh.getTexcoords1()
+							, csubmesh.getTexcoords2()
+							, csubmesh.getTexcoords3() } );
 				}
 
 				for ( auto & morphKey : castor::makeArrayView( anim.second->mKeys, anim.second->mNumKeys ) )

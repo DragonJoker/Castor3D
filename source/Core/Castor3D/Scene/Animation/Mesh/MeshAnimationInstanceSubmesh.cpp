@@ -94,17 +94,62 @@ namespace castor3d
 				curr.markDirty();
 			}
 
-			if ( offsets.hasData( SubmeshFlag::eMorphTexcoords ) )
+			if ( offsets.hasData( SubmeshFlag::eMorphTexcoords0 ) )
 			{
-				auto & prev = offsets.getBufferChunk( SubmeshFlag::eTexcoords );
-				std::copy( prv.texcoords.begin()
-					, prv.texcoords.end()
+				auto & prev = offsets.getBufferChunk( SubmeshFlag::eTexcoords0 );
+				std::copy( prv.texcoords0.begin()
+					, prv.texcoords0.end()
 					, prev.getData< castor::Point3f >().begin() );
 				prev.markDirty();
 
-				auto & curr = offsets.getBufferChunk( SubmeshFlag::eMorphTexcoords );
-				std::copy( cur.texcoords.begin()
-					, cur.texcoords.end()
+				auto & curr = offsets.getBufferChunk( SubmeshFlag::eMorphTexcoords0 );
+				std::copy( cur.texcoords0.begin()
+					, cur.texcoords0.end()
+					, curr.getData< castor::Point3f >().begin() );
+				curr.markDirty();
+			}
+
+			if ( offsets.hasData( SubmeshFlag::eMorphTexcoords1 ) )
+			{
+				auto & prev = offsets.getBufferChunk( SubmeshFlag::eTexcoords1 );
+				std::copy( prv.texcoords1.begin()
+					, prv.texcoords1.end()
+					, prev.getData< castor::Point3f >().begin() );
+				prev.markDirty();
+
+				auto & curr = offsets.getBufferChunk( SubmeshFlag::eMorphTexcoords1 );
+				std::copy( cur.texcoords1.begin()
+					, cur.texcoords1.end()
+					, curr.getData< castor::Point3f >().begin() );
+				curr.markDirty();
+			}
+
+			if ( offsets.hasData( SubmeshFlag::eMorphTexcoords2 ) )
+			{
+				auto & prev = offsets.getBufferChunk( SubmeshFlag::eTexcoords2 );
+				std::copy( prv.texcoords2.begin()
+					, prv.texcoords2.end()
+					, prev.getData< castor::Point3f >().begin() );
+				prev.markDirty();
+
+				auto & curr = offsets.getBufferChunk( SubmeshFlag::eMorphTexcoords2 );
+				std::copy( cur.texcoords2.begin()
+					, cur.texcoords2.end()
+					, curr.getData< castor::Point3f >().begin() );
+				curr.markDirty();
+			}
+
+			if ( offsets.hasData( SubmeshFlag::eMorphTexcoords3 ) )
+			{
+				auto & prev = offsets.getBufferChunk( SubmeshFlag::eTexcoords3 );
+				std::copy( prv.texcoords3.begin()
+					, prv.texcoords3.end()
+					, prev.getData< castor::Point3f >().begin() );
+				prev.markDirty();
+
+				auto & curr = offsets.getBufferChunk( SubmeshFlag::eMorphTexcoords3 );
+				std::copy( cur.texcoords3.begin()
+					, cur.texcoords3.end()
 					, curr.getData< castor::Point3f >().begin() );
 				curr.markDirty();
 			}

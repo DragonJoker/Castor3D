@@ -25,22 +25,40 @@ namespace castor3d
 
 			C3D_API void morph( sdw::Vec4 & pos
 				, sdw::Vec4 const & pos2
-				, sdw::Vec3 & uvw
-				, sdw::Vec3 const & uvw2 )const;
+				, sdw::Vec3 & uvw0
+				, sdw::Vec3 const & uvw02
+				, sdw::Vec3 & uvw1
+				, sdw::Vec3 const & uvw12
+				, sdw::Vec3 & uvw2
+				, sdw::Vec3 const & uvw22
+				, sdw::Vec3 & uvw3
+				, sdw::Vec3 const & uvw32 )const;
 			C3D_API void morph( sdw::Vec4 & pos
 				, sdw::Vec4 const & pos2
 				, sdw::Vec4 & nml
 				, sdw::Vec3 const & nml2
-				, sdw::Vec3 & uvw
-				, sdw::Vec3 const & uvw2 )const;
+				, sdw::Vec3 & uvw0
+				, sdw::Vec3 const & uvw02
+				, sdw::Vec3 & uvw1
+				, sdw::Vec3 const & uvw12
+				, sdw::Vec3 & uvw2
+				, sdw::Vec3 const & uvw22
+				, sdw::Vec3 & uvw3
+				, sdw::Vec3 const & uvw32 )const;
 			C3D_API void morph( sdw::Vec4 & pos
 				, sdw::Vec4 const & pos2
 				, sdw::Vec4 & nml
 				, sdw::Vec3 const & nml2
 				, sdw::Vec4 & tan
 				, sdw::Vec3 const & tan2
-				, sdw::Vec3 & uvw
-				, sdw::Vec3 const & uvw2 )const;
+				, sdw::Vec3 & uvw0
+				, sdw::Vec3 const & uvw02
+				, sdw::Vec3 & uvw1
+				, sdw::Vec3 const & uvw12
+				, sdw::Vec3 & uvw2
+				, sdw::Vec3 const & uvw22
+				, sdw::Vec3 & uvw3
+				, sdw::Vec3 const & uvw32 )const;
 			C3D_API void morph( sdw::Vec4 & pos
 				, sdw::Vec4 const & pos2
 				, sdw::Vec4 & uvuv

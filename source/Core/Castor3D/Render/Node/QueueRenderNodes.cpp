@@ -183,11 +183,55 @@ namespace castor3d
 				return checkFlag( shaderFlags, ShaderFlag::eTangentSpace );
 			}
 
-			if ( submeshFlagIndex == getIndex( SubmeshFlag::eTexcoords )
-				|| submeshFlagIndex == getIndex( SubmeshFlag::eMorphTexcoords ) )
+			bool hasTextures = !pipelineFlags.textures.empty()
+				|| checkFlag( pipelineFlags.programFlags, ProgramFlag::eForceTexCoords );
+
+			if ( submeshFlagIndex == getIndex( SubmeshFlag::eTexcoords0 ) )
 			{
-				return !pipelineFlags.textures.empty()
-					|| checkFlag( pipelineFlags.programFlags, ProgramFlag::eForceTexCoords );
+				return hasTextures
+					&& checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eTexcoords0 );
+			}
+
+			if ( submeshFlagIndex == getIndex( SubmeshFlag::eTexcoords1 ) )
+			{
+				return hasTextures
+					&& checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eTexcoords1 );
+			}
+
+			if ( submeshFlagIndex == getIndex( SubmeshFlag::eTexcoords2 ) )
+			{
+				return hasTextures
+					&& checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eTexcoords2 );
+			}
+
+			if ( submeshFlagIndex == getIndex( SubmeshFlag::eTexcoords3 ) )
+			{
+				return hasTextures
+					&& checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eTexcoords3 );
+			}
+
+			if ( submeshFlagIndex == getIndex( SubmeshFlag::eMorphTexcoords0 ) )
+			{
+				return hasTextures
+					|| checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eMorphTexcoords0 );
+			}
+
+			if ( submeshFlagIndex == getIndex( SubmeshFlag::eMorphTexcoords1 ) )
+			{
+				return hasTextures
+					&& checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eMorphTexcoords1 );
+			}
+
+			if ( submeshFlagIndex == getIndex( SubmeshFlag::eMorphTexcoords2 ) )
+			{
+				return hasTextures
+					&& checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eMorphTexcoords2 );
+			}
+
+			if ( submeshFlagIndex == getIndex( SubmeshFlag::eMorphTexcoords3 ) )
+			{
+				return hasTextures
+					&& checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eMorphTexcoords3 );
 			}
 
 			return true;
@@ -369,7 +413,7 @@ namespace castor3d
 						auto & submesh = culledNode->data;
 						auto & pass = *culledNode->pass;
 						auto material = pass.getOwner();
-						auto submeshFlags = submesh.getSubmeshFlags();
+						auto submeshFlags = submesh.getSubmeshFlags( &pass );
 						auto programFlags = submesh.getProgramFlags( *material );
 						auto sceneFlags = scene.getFlags();
 						auto textures = pass.getTexturesMask();
@@ -418,7 +462,7 @@ namespace castor3d
 								auto & submesh = culledNode->data;
 								auto & pass = *culledNode->pass;
 								auto material = pass.getOwner();
-								auto submeshFlags = submesh.getSubmeshFlags();
+								auto submeshFlags = submesh.getSubmeshFlags( &pass );
 								auto programFlags = submesh.getProgramFlags( *material );
 								auto sceneFlags = scene.getFlags();
 								auto textures = pass.getTexturesMask();

@@ -167,7 +167,10 @@ namespace castor3d
 					, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 				in.morph( morphingData
 					, curPosition
-					, out.texture0 );
+					, out.texture0
+					, out.texture1
+					, out.texture2
+					, out.texture3 );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[ids.nodeId - 1u] );
 				out.nodeId = writer.cast< sdw::Int >( ids.nodeId );

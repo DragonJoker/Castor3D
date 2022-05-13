@@ -236,9 +236,18 @@ namespace castor3d
 					, lightMat->albedo * material.emissive );
 				auto worldEye = writer.declLocale( "worldEye"
 					, c3d_sceneData.cameraPosition );
-				auto texCoord = writer.declLocale( "texCoord"
+				auto texCoord0 = writer.declLocale( "texCoord0"
 					, in.texture0
 					, hasTextures );
+				auto texCoord1 = writer.declLocale( "texCoord1"
+					, in.texture1
+					, hasTextures && checkFlag( flags.submeshFlags, SubmeshFlag::eTexcoords1 ) );
+				auto texCoord2 = writer.declLocale( "texCoord2"
+					, in.texture2
+					, hasTextures && checkFlag( flags.submeshFlags, SubmeshFlag::eTexcoords2 ) );
+				auto texCoord3 = writer.declLocale( "texCoord3"
+					, in.texture3
+					, hasTextures && checkFlag( flags.submeshFlags, SubmeshFlag::eTexcoords3 ) );
 				auto occlusion = writer.declLocale( "occlusion"
 					, 1.0_f );
 				auto transmittance = writer.declLocale( "transmittance"
@@ -256,7 +265,10 @@ namespace castor3d
 					, c3d_maps
 					, modelData.getTextures0()
 					, modelData.getTextures1()
-					, texCoord
+					, texCoord0
+					, texCoord1
+					, texCoord2
+					, texCoord3
 					, normal
 					, tangent
 					, bitangent

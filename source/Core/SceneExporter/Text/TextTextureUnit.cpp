@@ -77,6 +77,11 @@ namespace castor
 
 					if ( result )
 					{
+						result = writeOpt( file, cuT( "texcoord_set" ), unit.getSourceInfo().getTexcoordSet(), 0u );
+					}
+
+					if ( result )
+					{
 						if ( !texture->isStatic() )
 						{
 							if ( unit.getRenderTarget() )

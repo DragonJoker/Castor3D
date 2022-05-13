@@ -17,14 +17,16 @@ namespace castor3d
 {
 	namespace smshcompnml
 	{
-		static ashes::PipelineVertexInputStateCreateInfo createVertexLayout( uint32_t & currentLocation )
+		static ashes::PipelineVertexInputStateCreateInfo createVertexLayout( uint32_t & currentBinding
+			, uint32_t & currentLocation )
 		{
-			ashes::VkVertexInputBindingDescriptionArray bindings{ { NormalsComponent::BindingPoint
+			ashes::VkVertexInputBindingDescriptionArray bindings{ { currentBinding
 				, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } };
 			ashes::VkVertexInputAttributeDescriptionArray attributes{ 1u, { currentLocation++
-				, NormalsComponent::BindingPoint
+				, currentBinding
 				, VK_FORMAT_R32G32B32_SFLOAT
 				, 0u } };
+			++currentBinding;
 			return ashes::PipelineVertexInputStateCreateInfo{ 0u, bindings, attributes };
 		}
 	}
@@ -32,7 +34,7 @@ namespace castor3d
 	castor::String const NormalsComponent::Name = cuT( "normals" );
 
 	NormalsComponent::NormalsComponent( Submesh & submesh )
-		: SubmeshComponent{ submesh, Name, BindingPoint }
+		: SubmeshComponent{ submesh, Name, Id }
 	{
 	}
 
@@ -44,21 +46,24 @@ namespace castor3d
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
+		, uint32_t & currentBinding
 		, uint32_t & currentLocation )
 	{
 		if ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) )
 		{
-			auto layoutIt = m_layouts.find( currentLocation );
+			auto hash = std::hash< uint32_t >{}( currentBinding );
+			hash = castor::hashCombine( hash, currentLocation );
+			auto layoutIt = m_layouts.find( hash );
 
 			if ( layoutIt == m_layouts.end() )
 			{
-				auto loc = currentLocation;
-				layoutIt = m_layouts.emplace( loc
-					, smshcompnml::createVertexLayout( currentLocation ) ).first;
+				layoutIt = m_layouts.emplace( hash
+					, smshcompnml::createVertexLayout( currentBinding, currentLocation ) ).first;
 			}
 			else
 			{
 				currentLocation = layoutIt->second.vertexAttributeDescriptions.back().location + 1u;
+				currentBinding = layoutIt->second.vertexAttributeDescriptions.back().binding + 1u;
 			}
 
 			layouts.emplace_back( layoutIt->second );

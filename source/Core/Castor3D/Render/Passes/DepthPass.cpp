@@ -173,8 +173,17 @@ namespace castor3d
 
 				if ( hasTextures )
 				{
-					auto texCoord = writer.declLocale( "texCoord"
+					auto texCoord0 = writer.declLocale( "texCoord0"
 						, in.texture0 );
+					auto texCoord1 = writer.declLocale( "texCoord1"
+						, in.texture1
+						, checkFlag( flags.submeshFlags, SubmeshFlag::eTexcoords1 ) );
+					auto texCoord2 = writer.declLocale( "texCoord2"
+						, in.texture2
+						, checkFlag( flags.submeshFlags, SubmeshFlag::eTexcoords2 ) );
+					auto texCoord3 = writer.declLocale( "texCoord3"
+						, in.texture3
+						, checkFlag( flags.submeshFlags, SubmeshFlag::eTexcoords3 ) );
 					auto textureFlags = merge( flags.textures );
 
 					if ( ( textureFlags & TextureFlag::eGeometry ) != 0 )
@@ -190,24 +199,36 @@ namespace castor3d
 							{
 								auto config = writer.declLocale( "config" + name
 									, textureConfigs.getTextureConfiguration( id ) );
-								auto anim = writer.declLocale( "anim" + name
-									, textureAnims.getTextureAnimation( id ) );
 
 								IF( writer, config.isGeometry() )
 								{
+									auto anim = writer.declLocale( "anim" + name
+										, textureAnims.getTextureAnimation( id ) );
+									auto texcoord = writer.declLocale( "tex" + name
+										, textureConfigs.getTexcoord( config
+											, texCoord0
+											, texCoord1
+											, texCoord2
+											, texCoord3 ) );
 									config.computeGeometryMapContribution( utils
 										, flags.passFlags
 										, textureFlags
 										, name
 										, anim
 										, c3d_maps[id - 1_u]
-										, texCoord
+										, texcoord
 										, opacity
 										, normal
 										, tangent
 										, bitangent
 										, in.tangentSpaceViewPosition
 										, in.tangentSpaceFragPosition );
+									textureConfigs.setTexcoord( config
+										, texcoord
+										, texCoord0
+										, texCoord1
+										, texCoord2
+										, texCoord3 );
 								}
 								FI;
 							}

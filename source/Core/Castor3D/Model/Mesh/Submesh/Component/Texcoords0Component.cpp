@@ -1,4 +1,4 @@
-#include "Castor3D/Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/Texcoords0Component.hpp"
 
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
@@ -15,28 +15,30 @@
 
 namespace castor3d
 {
-	namespace smshcompsecuv
+	namespace smshcomptex0
 	{
-		static ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout( uint32_t & currentLocation )
+		static ashes::PipelineVertexInputStateCreateInfo createVertexLayout( uint32_t & currentBinding
+			, uint32_t & currentLocation )
 		{
-			ashes::VkVertexInputBindingDescriptionArray bindings{ { SecondaryUVComponent::BindingPoint
+			ashes::VkVertexInputBindingDescriptionArray bindings{ { currentBinding
 				, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } };
 			ashes::VkVertexInputAttributeDescriptionArray attributes{ 1u, { currentLocation++
-				, SecondaryUVComponent::BindingPoint
+				, currentBinding
 				, VK_FORMAT_R32G32B32_SFLOAT
 				, 0u } };
+			++currentBinding;
 			return ashes::PipelineVertexInputStateCreateInfo{ 0u, bindings, attributes };
 		}
 	}
 
-	castor::String const SecondaryUVComponent::Name = cuT( "secondary_uv" );
+	castor::String const Texcoords0Component::Name = cuT( "texcoords0" );
 
-	SecondaryUVComponent::SecondaryUVComponent( Submesh & submesh )
-		: SubmeshComponent{ submesh, Name, BindingPoint }
+	Texcoords0Component::Texcoords0Component( Submesh & submesh )
+		: SubmeshComponent{ submesh, Name, Id }
 	{
 	}
 
-	void SecondaryUVComponent::gather( ShaderFlags const & shaderFlags
+	void Texcoords0Component::gather( ShaderFlags const & shaderFlags
 		, ProgramFlags const & programFlags
 		, SubmeshFlags const & submeshFlags
 		, MaterialRPtr material
@@ -44,54 +46,53 @@ namespace castor3d
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
+		, uint32_t & currentBinding
 		, uint32_t & currentLocation )
 	{
-		if ( checkFlag( submeshFlags, SubmeshFlag::eSecondaryUV ) )
+		if ( checkFlag( programFlags, ProgramFlag::eForceTexCoords )
+			|| ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 ) && !mask.empty() ) )
 		{
-			auto layoutIt = m_layouts.find( currentLocation );
+			auto hash = std::hash< uint32_t >{}( currentBinding );
+			hash = castor::hashCombine( hash, currentLocation );
+			auto layoutIt = m_layouts.find( hash );
 
 			if ( layoutIt == m_layouts.end() )
 			{
-				auto loc = currentLocation;
-				layoutIt = m_layouts.emplace( loc
-					, smshcompsecuv::doCreateVertexLayout( currentLocation ) ).first;
+				layoutIt = m_layouts.emplace( hash
+					, smshcomptex0::createVertexLayout( currentBinding, currentLocation ) ).first;
 			}
 			else
 			{
 				currentLocation = layoutIt->second.vertexAttributeDescriptions.back().location + 1u;
+				currentBinding = layoutIt->second.vertexAttributeDescriptions.back().binding + 1u;
 			}
 
 			layouts.emplace_back( layoutIt->second );
 		}
 	}
 
-	SubmeshComponentSPtr SecondaryUVComponent::clone( Submesh & submesh )const
+	SubmeshComponentSPtr Texcoords0Component::clone( Submesh & submesh )const
 	{
-		auto result = std::make_shared< SecondaryUVComponent >( submesh );
+		auto result = std::make_shared< Texcoords0Component >( submesh );
 		result->m_data = m_data;
 		return std::static_pointer_cast< SubmeshComponent >( result );
 	}
 
-	void SecondaryUVComponent::addTexcoords( std::vector< castor::Point3f > const & uvs )
-	{
-		m_data.reserve( m_data.size() + uvs.size() );
-		m_data.insert( m_data.end(), uvs.begin(), uvs.end() );
-	}
-
-	bool SecondaryUVComponent::doInitialise( RenderDevice const & device )
+	bool Texcoords0Component::doInitialise( RenderDevice const & device )
 	{
 		return true;
 	}
 
-	void SecondaryUVComponent::doCleanup( RenderDevice const & device )
+	void Texcoords0Component::doCleanup( RenderDevice const & device )
 	{
+		m_data.clear();
 	}
 
-	void SecondaryUVComponent::doUpload()
+	void Texcoords0Component::doUpload()
 	{
 		auto count = uint32_t( m_data.size() );
 		auto & offsets = getOwner()->getBufferOffsets();
-		auto & buffer = offsets.getBufferChunk( SubmeshFlag::eSecondaryUV );
+		auto & buffer = offsets.getBufferChunk( SubmeshFlag::eTexcoords0 );
 
 		if ( count && buffer.hasData() )
 		{

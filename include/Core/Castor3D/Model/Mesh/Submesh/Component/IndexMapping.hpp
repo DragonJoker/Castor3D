@@ -75,8 +75,16 @@ namespace castor3d
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
+			, uint32_t & currentBinding
 			, uint32_t & currentLocation )override
 		{
+		}
+		/**
+		 *\copydoc		castor3d::SubmeshComponent::getSubmeshFlags
+		 */
+		SubmeshFlags getSubmeshFlags( Pass const * pass )const override
+		{
+			return SubmeshFlag::eIndex;
 		}
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getUsageFlags

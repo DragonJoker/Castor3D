@@ -180,9 +180,18 @@ namespace castor3d
 					, c3d_modelsData[in.nodeId - 1] );
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( modelData.getMaterialId() ) );
-				auto texCoord = writer.declLocale( "texCoord"
+				auto texCoord0 = writer.declLocale( "texCoord0"
 					, in.texture0
 					, hasTextures );
+				auto texCoord1 = writer.declLocale( "texCoord1"
+					, in.texture1
+					, hasTextures && checkFlag( flags.submeshFlags, SubmeshFlag::eTexcoords1 ) );
+				auto texCoord2 = writer.declLocale( "texCoord2"
+					, in.texture2
+					, hasTextures && checkFlag( flags.submeshFlags, SubmeshFlag::eTexcoords2 ) );
+				auto texCoord3 = writer.declLocale( "texCoord3"
+					, in.texture3
+					, hasTextures && checkFlag( flags.submeshFlags, SubmeshFlag::eTexcoords3 ) );
 				auto alpha = writer.declLocale( "alpha"
 					, material.opacity );
 				auto emissive = writer.declLocale( "emissive"
@@ -209,7 +218,10 @@ namespace castor3d
 					, c3d_maps
 					, modelData.getTextures0()
 					, modelData.getTextures1()
-					, texCoord
+					, texCoord0
+					, texCoord1
+					, texCoord2
+					, texCoord3
 					, normal
 					, tangent
 					, bitangent

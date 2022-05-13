@@ -237,6 +237,11 @@ namespace castor3d
 		{
 			return m_sourceInfo;
 		}
+
+		uint32_t getTexcoordSet()const
+		{
+			return m_setIndex;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -255,6 +260,7 @@ namespace castor3d
 		C3D_API void setAnimationTransform( castor::Point3f const & translate
 			, castor::Angle const & rotate
 			, castor::Point3f const & scale );
+		C3D_API void setTexcoordSet( uint32_t value );
 
 		void setRenderTarget( RenderTargetSPtr value )
 		{
@@ -308,6 +314,7 @@ namespace castor3d
 		castor::String m_name;
 		bool m_initialised{ false };
 		bool m_animated{ false };
+		uint32_t m_setIndex{};
 	};
 }
 

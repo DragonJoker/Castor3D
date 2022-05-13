@@ -112,13 +112,6 @@ namespace castor3d
 	class PositionsComponent;
 	/**
 	\~english
-	\brief		Component for a secondary UV set.
-	\~french
-	\brief		Composant pour un set d'UV secondaire.
-	*/
-	class SecondaryUVComponent;
-	/**
-	\~english
 	\brief		Component for a submesh.
 	\~french
 	\brief		Composant pour un sous-maillage.
@@ -137,7 +130,28 @@ namespace castor3d
 	\~french
 	\brief		Le composant de sous-maillage contenant les coordonnées de texture.
 	*/
-	class TexcoordsComponent;
+	class Texcoords0Component;
+	/**
+	\~english
+	\brief		The submesh component holding texture coordinates.
+	\~french
+	\brief		Le composant de sous-maillage contenant les coordonnées de texture.
+	*/
+	class Texcoords1Component;
+	/**
+	\~english
+	\brief		The submesh component holding texture coordinates.
+	\~french
+	\brief		Le composant de sous-maillage contenant les coordonnées de texture.
+	*/
+	class Texcoords2Component;
+	/**
+	\~english
+	\brief		The submesh component holding texture coordinates.
+	\~french
+	\brief		Le composant de sous-maillage contenant les coordonnées de texture.
+	*/
+	class Texcoords3Component;
 	/**
 	\~english
 	\brief		The submesh component for triangular faces.

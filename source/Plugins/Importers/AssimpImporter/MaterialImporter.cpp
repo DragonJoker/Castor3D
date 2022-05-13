@@ -45,7 +45,8 @@ namespace c3d_assimp
 		struct TextureInfo
 		{
 			castor::String name;
-			aiUVTransform transform;
+			uint32_t texcoordSet{};
+			aiUVTransform transform{};
 		};
 
 		class PassFiller
@@ -120,7 +121,7 @@ namespace c3d_assimp
 
 				if ( spcInfo.name.empty() )
 				{
-					spcInfo = getTextureInfo( aiTextureType_UNKNOWN, 0 );
+					spcInfo = getTextureInfo( aiTextureType_UNKNOWN );
 
 					if ( !spcInfo.name.empty() )
 					{
@@ -633,6 +634,7 @@ namespace c3d_assimp
 
 						if ( sourceInfo )
 						{
+							sourceInfo->setTexcoordSet( info.texcoordSet );
 							auto & image = loadImage( *sourceInfo );
 							auto layout = image.getLayout();
 							texConfig.transform = castor3d::TextureTransform{ { info.transform.mTranslation.x, info.transform.mTranslation.y, 0.0f }
@@ -680,16 +682,30 @@ namespace c3d_assimp
 				}
 			}
 
-			TextureInfo getTextureInfo( aiTextureType type, uint32_t index = 0u )
+			TextureInfo getTextureInfo( aiTextureType type )
 			{
 				TextureInfo result;
 				aiString name;
-				m_material.Get( AI_MATKEY_TEXTURE( type, index ), name );
+				uint32_t index{};
 
-				if ( name.length > 0 )
+				while ( name.length == 0 && index < castor3d::MaxTextureCoordinatesSets )
 				{
-					result.name = makeString( name );
-					m_material.Get( AI_MATKEY_UVTRANSFORM( type, index ), result.transform );
+					m_material.Get( AI_MATKEY_TEXTURE( type, index ), name );
+
+					if ( name.length > 0 )
+					{
+						result.name = makeString( name );
+						int texcoordSet{};
+
+						if ( m_material.Get( AI_MATKEY_UVWSRC( type, index ), texcoordSet ) == AI_SUCCESS )
+						{
+							result.texcoordSet = uint32_t( texcoordSet );
+						}
+
+						m_material.Get( AI_MATKEY_UVTRANSFORM( type, index ), result.transform );
+					}
+
+					++index;
 				}
 
 				return result;

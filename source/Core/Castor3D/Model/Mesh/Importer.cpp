@@ -15,7 +15,7 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/Texcoords0Component.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Model/Skeleton/BoneNode.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
@@ -101,7 +101,7 @@ namespace castor3d
 					tangents = &tanComp->getData();
 				}
 
-				if ( auto texComp = submesh->getComponent< TexcoordsComponent >() )
+				if ( auto texComp = submesh->getComponent< Texcoords0Component >() )
 				{
 					texcoords = &texComp->getData();
 				}
@@ -130,7 +130,7 @@ namespace castor3d
 						}
 
 						SubmeshUtils::computeNormals( submeshIt.second.positions
-							, submeshIt.second.texcoords
+							, submeshIt.second.texcoords0
 							, submeshIt.second.normals
 							, submeshIt.second.tangents
 							, static_cast< TriFaceMapping const & >( *mesh.getSubmesh( submeshIt.first )->getIndexMapping() )

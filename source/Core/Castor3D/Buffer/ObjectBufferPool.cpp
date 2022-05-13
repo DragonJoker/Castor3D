@@ -25,57 +25,82 @@ namespace castor3d
 
 			if ( checkFlag( submeshFlags, SubmeshFlag::eIndex ) )
 			{
-				result += "Idx";
+				result += "I";
 			}
 
 			if ( checkFlag( submeshFlags, SubmeshFlag::ePositions ) )
 			{
-				result += "Pos";
+				result += "P";
 			}
 
 			if ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) )
 			{
-				result += "Nml";
+				result += "N";
 			}
 
 			if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) )
 			{
-				result += "Tan";
+				result += "T";
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords ) )
+			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 ) )
 			{
-				result += "Tex";
+				result += "T0";
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eSecondaryUV ) )
+			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords1 ) )
 			{
-				result += "SecUV";
+				result += "1";
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords2 ) )
+			{
+				result += "2";
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) )
+			{
+				result += "3";
 			}
 
 			if ( checkFlag( submeshFlags, SubmeshFlag::eBones ) )
 			{
-				result += "Bones";
+				result += "B";
 			}
 
 			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphPositions ) )
 			{
-				result += "MphPos";
+				result += "MP";
 			}
 
 			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphNormals ) )
 			{
-				result += "MphNml";
+				result += "MN";
 			}
 
 			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphTangents ) )
 			{
-				result += "MphTan";
+				result += "MT";
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords ) )
+			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords0 ) )
 			{
-				result += "MphTex";
+				result += "MT0";
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords1 ) )
+			{
+				result += "1";
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords2 ) )
+			{
+				result += "2";
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords3 ) )
+			{
+				result += "3";
 			}
 
 			return result;

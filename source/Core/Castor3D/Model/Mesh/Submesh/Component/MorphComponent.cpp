@@ -3,12 +3,16 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
+#include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Miscellaneous/StagingData.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/Texcoords0Component.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/Texcoords1Component.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/Texcoords2Component.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/Texcoords3Component.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -25,6 +29,7 @@ namespace castor3d
 		static std::vector< ashes::PipelineVertexInputStateCreateInfo > createVertexLayout( SubmeshFlags const & submeshFlags
 			, ShaderFlags const & shaderFlags
 			, bool hasTextures
+			, uint32_t & currentBinding
 			, uint32_t & currentLocation )
 		{
 			std::vector< ashes::PipelineVertexInputStateCreateInfo > result;
@@ -33,13 +38,14 @@ namespace castor3d
 			{
 				ashes::VkVertexInputBindingDescriptionArray bindings;
 				ashes::VkVertexInputAttributeDescriptionArray attributes;
-				bindings.push_back( { MorphComponent::PosBindingPoint
+				bindings.push_back( { currentBinding
 					, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } );
 				attributes.push_back( { currentLocation++
-					, MorphComponent::PosBindingPoint
+					, currentBinding
 					, VK_FORMAT_R32G32B32_SFLOAT
 					, 0u } );
 				result .emplace_back( 0u, bindings, attributes );
+				++currentBinding;
 			}
 
 			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphNormals )
@@ -47,13 +53,14 @@ namespace castor3d
 			{
 				ashes::VkVertexInputBindingDescriptionArray bindings;
 				ashes::VkVertexInputAttributeDescriptionArray attributes;
-				bindings.push_back( { MorphComponent::NmlBindingPoint
+				bindings.push_back( { currentBinding
 					, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } );
 				attributes.push_back( { currentLocation++
-					, MorphComponent::NmlBindingPoint
+					, currentBinding
 					, VK_FORMAT_R32G32B32_SFLOAT
 					, 0u } );
 				result.emplace_back( 0u, bindings, attributes );
+				++currentBinding;
 			}
 
 			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphTangents )
@@ -61,27 +68,74 @@ namespace castor3d
 			{
 				ashes::VkVertexInputBindingDescriptionArray bindings;
 				ashes::VkVertexInputAttributeDescriptionArray attributes;
-				bindings.push_back( { MorphComponent::TanBindingPoint
+				bindings.push_back( { currentBinding
 					, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } );
 				attributes.push_back( { currentLocation++
-					, MorphComponent::TanBindingPoint
+					, currentBinding
 					, VK_FORMAT_R32G32B32_SFLOAT
 					, 0u } );
 				result.emplace_back( 0u, bindings, attributes );
+				++currentBinding;
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords )
+			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords0 )
 				&& hasTextures )
 			{
 				ashes::VkVertexInputBindingDescriptionArray bindings;
 				ashes::VkVertexInputAttributeDescriptionArray attributes;
-				bindings.push_back( { MorphComponent::TexBindingPoint
+				bindings.push_back( { currentBinding
 					, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } );
 				attributes.push_back( { currentLocation++
-					, MorphComponent::TexBindingPoint
+					, currentBinding
 					, VK_FORMAT_R32G32B32_SFLOAT
 					, 0u } );
 				result.emplace_back( 0u, bindings, attributes );
+				++currentBinding;
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords1 )
+				&& hasTextures )
+			{
+				ashes::VkVertexInputBindingDescriptionArray bindings;
+				ashes::VkVertexInputAttributeDescriptionArray attributes;
+				bindings.push_back( { currentBinding
+					, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } );
+				attributes.push_back( { currentLocation++
+					, currentBinding
+					, VK_FORMAT_R32G32B32_SFLOAT
+					, 0u } );
+				result.emplace_back( 0u, bindings, attributes );
+				++currentBinding;
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords2 )
+				&& hasTextures )
+			{
+				ashes::VkVertexInputBindingDescriptionArray bindings;
+				ashes::VkVertexInputAttributeDescriptionArray attributes;
+				bindings.push_back( { currentBinding
+					, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } );
+				attributes.push_back( { currentLocation++
+					, currentBinding
+					, VK_FORMAT_R32G32B32_SFLOAT
+					, 0u } );
+				result.emplace_back( 0u, bindings, attributes );
+				++currentBinding;
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords3 )
+				&& hasTextures )
+			{
+				ashes::VkVertexInputBindingDescriptionArray bindings;
+				ashes::VkVertexInputAttributeDescriptionArray attributes;
+				bindings.push_back( { currentBinding
+					, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } );
+				attributes.push_back( { currentLocation++
+					, currentBinding
+					, VK_FORMAT_R32G32B32_SFLOAT
+					, 0u } );
+				result.emplace_back( 0u, bindings, attributes );
+				++currentBinding;
 			}
 
 			return result;
@@ -91,7 +145,7 @@ namespace castor3d
 	castor::String const MorphComponent::Name = cuT( "morph" );
 
 	MorphComponent::MorphComponent( Submesh & submesh )
-		: SubmeshComponent{ submesh, Name, PosBindingPoint }
+		: SubmeshComponent{ submesh, Name, Id }
 	{
 		if ( submesh.hasComponent( PositionsComponent::Name ) )
 		{
@@ -108,9 +162,24 @@ namespace castor3d
 			m_flags |= SubmeshFlag::eMorphTangents;
 		}
 
-		if ( submesh.hasComponent( TexcoordsComponent::Name ) )
+		if ( submesh.hasComponent( Texcoords0Component::Name ) )
 		{
-			m_flags |= SubmeshFlag::eMorphTexcoords;
+			m_flags |= SubmeshFlag::eMorphTexcoords0;
+		}
+
+		if ( submesh.hasComponent( Texcoords1Component::Name ) )
+		{
+			m_flags |= SubmeshFlag::eMorphTexcoords1;
+		}
+
+		if ( submesh.hasComponent( Texcoords2Component::Name ) )
+		{
+			m_flags |= SubmeshFlag::eMorphTexcoords2;
+		}
+
+		if ( submesh.hasComponent( Texcoords3Component::Name ) )
+		{
+			m_flags |= SubmeshFlag::eMorphTexcoords3;
 		}
 	}
 
@@ -122,6 +191,7 @@ namespace castor3d
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
+		, uint32_t & currentBinding
 		, uint32_t & currentLocation )
 	{
 		if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
@@ -129,6 +199,7 @@ namespace castor3d
 			auto hash = std::hash< SubmeshFlags::BaseType >{}( submeshFlags );
 			hash = castor::hashCombine( hash, shaderFlags.value() );
 			hash = castor::hashCombine( hash, mask.empty() );
+			hash = castor::hashCombine( hash, currentBinding );
 			hash = castor::hashCombine( hash, currentLocation );
 			auto layoutIt = m_layouts.find( hash );
 
@@ -137,12 +208,14 @@ namespace castor3d
 				layoutIt = m_layouts.emplace( hash
 					, smshcompmorph::createVertexLayout( submeshFlags
 						, shaderFlags
-						, !mask.empty()
+						, checkFlag( programFlags, ProgramFlag::eForceTexCoords ) || !mask.empty()
+						, currentBinding
 						, currentLocation ) ).first;
 			}
 			else
 			{
 				currentLocation = layoutIt->second.back().vertexAttributeDescriptions.back().location + 1u;
+				currentBinding = layoutIt->second.back().vertexAttributeDescriptions.back().binding + 1u;
 			}
 
 			layouts.insert( layouts.end()
@@ -156,6 +229,39 @@ namespace castor3d
 		auto result = std::make_shared< MorphComponent >( submesh );
 		result->m_flags = m_flags;
 		return std::static_pointer_cast< SubmeshComponent >( result );
+	}
+
+	SubmeshFlags MorphComponent::getSubmeshFlags( Pass const * pass )const
+	{
+		if ( !pass )
+		{
+			return m_flags;
+		}
+
+		auto maxTexCoordIndex = pass->getMaxTexCoordSet();
+		auto result = m_flags;
+
+		if ( maxTexCoordIndex == 3u )
+		{
+			return result;
+		}
+
+		remFlag( result, SubmeshFlag::eMorphTexcoords3 );
+
+		if ( maxTexCoordIndex == 2u )
+		{
+			return result;
+		}
+
+		remFlag( result, SubmeshFlag::eMorphTexcoords2 );
+
+		if ( maxTexCoordIndex == 1u )
+		{
+			return result;
+		}
+
+		remFlag( result, SubmeshFlag::eMorphTexcoords1 );
+		return result;
 	}
 
 	bool MorphComponent::doInitialise( RenderDevice const & device )

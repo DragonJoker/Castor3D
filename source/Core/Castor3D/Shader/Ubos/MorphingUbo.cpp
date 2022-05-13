@@ -33,8 +33,14 @@ namespace castor3d
 
 		void MorphingData::morph( sdw::Vec4 & pos
 			, sdw::Vec4 const & pos2
-			, sdw::Vec3 & uvw
-			, sdw::Vec3 const & uvw2 )const
+			, sdw::Vec3 & uvw0
+			, sdw::Vec3 const & uvw02
+			, sdw::Vec3 & uvw1
+			, sdw::Vec3 const & uvw12
+			, sdw::Vec3 & uvw2
+			, sdw::Vec3 const & uvw22
+			, sdw::Vec3 & uvw3
+			, sdw::Vec3 const & uvw32 )const
 		{
 			if ( isEnabled() )
 			{
@@ -42,10 +48,28 @@ namespace castor3d
 				CU_Require( !pos2.getExpr()->isDummy() );
 				pos = vec4( sdw::mix( pos.xyz(), pos2.xyz(), vec3( m_time ) ), 1.0f );
 
-				if ( !uvw.getExpr()->isDummy()
-					&& !uvw2.getExpr()->isDummy() )
+				if ( !uvw0.getExpr()->isDummy()
+					&& !uvw02.getExpr()->isDummy() )
 				{
-					uvw = sdw::mix( uvw, uvw2, vec3( m_time ) );
+					uvw0 = sdw::mix( uvw0.xyz(), uvw02, vec3( m_time ) );
+				}
+
+				if ( !uvw1.getExpr()->isDummy()
+					&& !uvw12.getExpr()->isDummy() )
+				{
+					uvw1 = sdw::mix( uvw1.xyz(), uvw12, vec3( m_time ) );
+				}
+
+				if ( !uvw2.getExpr()->isDummy()
+					&& !uvw22.getExpr()->isDummy() )
+				{
+					uvw2 = sdw::mix( uvw2.xyz(), uvw22, vec3( m_time ) );
+				}
+
+				if ( !uvw3.getExpr()->isDummy()
+					&& !uvw32.getExpr()->isDummy() )
+				{
+					uvw3 = sdw::mix( uvw3.xyz(), uvw32, vec3( m_time ) );
 				}
 			}
 		}
@@ -54,10 +78,20 @@ namespace castor3d
 			, sdw::Vec4 const & pos2
 			, sdw::Vec4 & nml
 			, sdw::Vec3 const & nml2
-			, sdw::Vec3 & uvw
-			, sdw::Vec3 const & uvw2 )const
+			, sdw::Vec3 & uvw0
+			, sdw::Vec3 const & uvw02
+			, sdw::Vec3 & uvw1
+			, sdw::Vec3 const & uvw12
+			, sdw::Vec3 & uvw2
+			, sdw::Vec3 const & uvw22
+			, sdw::Vec3 & uvw3
+			, sdw::Vec3 const & uvw32 )const
 		{
-			morph( pos, pos2, uvw, uvw2 );
+			morph( pos, pos2
+				, uvw0, uvw02
+				, uvw1, uvw12
+				, uvw2, uvw22
+				, uvw3, uvw32 );
 
 			if ( isEnabled()
 				&& !nml.getExpr()->isDummy()
@@ -73,10 +107,21 @@ namespace castor3d
 			, sdw::Vec3 const & nml2
 			, sdw::Vec4 & tan
 			, sdw::Vec3 const & tan2
-			, sdw::Vec3 & uvw
-			, sdw::Vec3 const & uvw2 )const
+			, sdw::Vec3 & uvw0
+			, sdw::Vec3 const & uvw02
+			, sdw::Vec3 & uvw1
+			, sdw::Vec3 const & uvw12
+			, sdw::Vec3 & uvw2
+			, sdw::Vec3 const & uvw22
+			, sdw::Vec3 & uvw3
+			, sdw::Vec3 const & uvw32 )const
 		{
-			morph( pos, pos2, nml, nml2, uvw, uvw2 );
+			morph( pos, pos2
+				, nml, nml2
+				, uvw0, uvw02
+				, uvw1, uvw12
+				, uvw2, uvw22
+				, uvw3, uvw32 );
 
 			if ( isEnabled()
 				&& !tan.getExpr()->isDummy()

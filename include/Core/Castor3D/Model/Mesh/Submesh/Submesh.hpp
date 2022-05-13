@@ -215,7 +215,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les indicateurs de submesh.
 		 */
-		C3D_API SubmeshFlags getSubmeshFlags()const;
+		C3D_API SubmeshFlags getSubmeshFlags( Pass const * pass )const;
 		/**
 		 *\~english
 		 *\brief		Sets the material.
@@ -373,8 +373,14 @@ namespace castor3d
 		C3D_API castor::Point3fArray & getNormals();
 		C3D_API castor::Point3fArray const & getTangents()const;
 		C3D_API castor::Point3fArray & getTangents();
-		C3D_API castor::Point3fArray const & getTexcoords()const;
-		C3D_API castor::Point3fArray & getTexcoords();
+		C3D_API castor::Point3fArray const & getTexcoords0()const;
+		C3D_API castor::Point3fArray & getTexcoords0();
+		C3D_API castor::Point3fArray const & getTexcoords1()const;
+		C3D_API castor::Point3fArray & getTexcoords1();
+		C3D_API castor::Point3fArray const & getTexcoords2()const;
+		C3D_API castor::Point3fArray & getTexcoords2();
+		C3D_API castor::Point3fArray const & getTexcoords3()const;
+		C3D_API castor::Point3fArray & getTexcoords3();
 		inline SkeletonRPtr getSkeleton()const;
 		inline MaterialRPtr getDefaultMaterial()const;
 		inline castor::BoundingBox const & getBoundingBox()const;

@@ -34,7 +34,10 @@
 #include <Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/Texcoords0Component.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/Texcoords1Component.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/Texcoords2Component.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/Texcoords3Component.hpp>
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp>
 #include <Castor3D/Scene/Camera.hpp>
@@ -649,7 +652,22 @@ namespace castor3d::exporter
 								dstSubmesh->addComponent( tangents->clone( *dstSubmesh ) );
 							}
 
-							if ( auto texcoords = srcSubmesh->getComponent< castor3d::TexcoordsComponent >() )
+							if ( auto texcoords = srcSubmesh->getComponent< castor3d::Texcoords0Component >() )
+							{
+								dstSubmesh->addComponent( texcoords->clone( *dstSubmesh ) );
+							}
+
+							if ( auto texcoords = srcSubmesh->getComponent< castor3d::Texcoords1Component >() )
+							{
+								dstSubmesh->addComponent( texcoords->clone( *dstSubmesh ) );
+							}
+
+							if ( auto texcoords = srcSubmesh->getComponent< castor3d::Texcoords2Component >() )
+							{
+								dstSubmesh->addComponent( texcoords->clone( *dstSubmesh ) );
+							}
+
+							if ( auto texcoords = srcSubmesh->getComponent< castor3d::Texcoords3Component >() )
 							{
 								dstSubmesh->addComponent( texcoords->clone( *dstSubmesh ) );
 							}

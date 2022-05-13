@@ -226,6 +226,9 @@ namespace castor3d
 				auto v4Tangent = writer.declLocale( "v4Tangent"
 					, vec4( in.tangent, 0.0_f ) );
 				out.texture0 = in.texture0;
+				out.texture1 = in.texture1;
+				out.texture2 = in.texture2;
+				out.texture3 = in.texture3;
 				auto morphingData = writer.declLocale( "morphingData"
 					, c3d_morphingData[ids.morphingId]
 					, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
@@ -233,7 +236,10 @@ namespace castor3d
 					, curPosition
 					, v4Normal
 					, v4Tangent
-					, out.texture0 );
+					, out.texture0
+					, out.texture1
+					, out.texture2
+					, out.texture3 );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[ids.nodeId - 1u] );
 				out.nodeId = writer.cast< sdw::Int >( ids.nodeId );
@@ -366,8 +372,17 @@ namespace castor3d
 
 				if ( hasTextures )
 				{
-					auto texCoord = writer.declLocale( "texCoord"
+					auto texCoord0 = writer.declLocale( "texCoord0"
 						, in.texture0 );
+					auto texCoord1 = writer.declLocale( "texCoord1"
+						, in.texture1
+						, checkFlag( flags.submeshFlags, SubmeshFlag::eTexcoords1 ) );
+					auto texCoord2 = writer.declLocale( "texCoord2"
+						, in.texture2
+						, checkFlag( flags.submeshFlags, SubmeshFlag::eTexcoords2 ) );
+					auto texCoord3 = writer.declLocale( "texCoord3"
+						, in.texture3
+						, checkFlag( flags.submeshFlags, SubmeshFlag::eTexcoords3 ) );
 
 					if ( m_needsRsm )
 					{
@@ -382,7 +397,10 @@ namespace castor3d
 							, c3d_maps
 							, modelData.getTextures0()
 							, modelData.getTextures1()
-							, texCoord
+							, texCoord0
+							, texCoord1
+							, texCoord2
+							, texCoord3
 							, normal
 							, tangent
 							, bitangent
@@ -403,7 +421,10 @@ namespace castor3d
 							, c3d_maps
 							, modelData.getTextures0()
 							, modelData.getTextures1()
-							, texCoord
+							, texCoord0
+							, texCoord1
+							, texCoord2
+							, texCoord3
 							, alpha
 							, in.tangentSpaceViewPosition
 							, in.tangentSpaceFragPosition );

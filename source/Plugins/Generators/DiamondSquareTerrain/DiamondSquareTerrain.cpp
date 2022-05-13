@@ -5,7 +5,7 @@
 #include <Castor3D/Model/Mesh/Submesh/Component/NormalsComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/PositionsComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/TangentsComponent.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/TexcoordsComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/Texcoords0Component.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 
 #include <random>
@@ -194,7 +194,7 @@ namespace diamond_square_terrain
 			auto positions = submesh->createComponent< castor3d::PositionsComponent >();
 			auto normals = submesh->createComponent< castor3d::NormalsComponent >();
 			auto tangents = submesh->createComponent< castor3d::TangentsComponent >();
-			auto texcoords = submesh->createComponent< castor3d::TexcoordsComponent >();
+			auto texcoords = submesh->createComponent< castor3d::Texcoords0Component >();
 			auto mapping = submesh->createComponent< castor3d::TriFaceMapping >();
 			auto transform = [&]( uint32_t v )
 			{

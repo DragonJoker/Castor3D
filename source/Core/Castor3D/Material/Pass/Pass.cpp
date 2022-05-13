@@ -308,6 +308,7 @@ namespace castor3d
 		}
 		else
 		{
+			m_maxTexcoordSet = std::max( m_maxTexcoordSet, sourceInfo.getTexcoordSet() );
 			it = m_sources.emplace( std::move( sourceInfo )
 				, std::move( configuration ) ).first;
 		}
@@ -582,6 +583,7 @@ namespace castor3d
 
 				if ( lhsFlags.size() == 1u
 					&& rhsFlags.size() == 1u
+					&& lhsIt.first.getTexcoordSet() == rhsIt.first.getTexcoordSet()
 					&& matpass::isMergeable( lhsIt.first, lhsIt.second, lhsAnim )
 					&& matpass::isMergeable( rhsIt.first, rhsIt.second, rhsAnim )
 					&& matpass::areFormatsCompatible( lhsIt.second.imageInfo->format, rhsIt.second.imageInfo->format ) )

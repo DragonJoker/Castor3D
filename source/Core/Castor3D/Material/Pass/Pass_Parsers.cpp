@@ -752,6 +752,17 @@ namespace castor3d
 		}
 		CU_EndAttributePush( CSCNSection::eTextureAnimation )
 
+		CU_ImplementAttributeParser( parserUnitTexcoordSet )
+		{
+			auto & parsingContext = getParserContext( context );
+
+			if ( parsingContext.pass )
+			{
+				params[0]->get( parsingContext.texcoordSet );
+			}
+		}
+		CU_EndAttribute()
+
 		CU_ImplementAttributeParser( parserUnitEnd )
 		{
 			auto & parsingContext = getParserContext( context );
@@ -769,6 +780,8 @@ namespace castor3d
 					: TextureSourceInfo{ parsingContext.sampler.lock()
 						, parsingContext.folder
 						, parsingContext.relative } );
+				sourceInfo.setTexcoordSet( parsingContext.texcoordSet );
+				parsingContext.texcoordSet = 0u;
 
 				if ( parsingContext.textureAnimation && parsingContext.scene )
 				{
@@ -1015,6 +1028,7 @@ namespace castor3d
 		Pass::addParser( result, texSectionID, cuT( "tileset" ), parserUnitTileSet, { makeParameter< ParameterType::ePoint2I >() } );
 		Pass::addParser( result, texSectionID, cuT( "tiles" ), parserUnitTiles, { makeParameter< ParameterType::eUInt32 >() } );
 		Pass::addParser( result, texSectionID, cuT( "animation" ), parserUnitAnimation );
+		Pass::addParser( result, texSectionID, cuT( "texcoord_set" ), parserUnitTexcoordSet, { makeParameter< ParameterType::eUInt32 >() } );
 		Pass::addParser( result, texSectionID, cuT( "}" ), parserUnitEnd );
 
 		Pass::addParser( result, remapChannelSectionID, cuT( "normal_mask" ), parserTexRemapNormalMask, { makeParameter< ParameterType::eUInt32 >() } );

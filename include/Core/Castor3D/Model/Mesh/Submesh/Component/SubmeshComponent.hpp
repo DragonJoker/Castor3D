@@ -73,6 +73,7 @@ namespace castor3d
 		 *\param[in,out]	buffers			Receives the buffers.
 		 *\param[in,out]	offsets			Receives the buffers offsets.
 		 *\param[in,out]	layouts			Receives the vertex layouts.
+		 *\param[in,out]	currentBinding	The current buffer binding.
 		 *\param[in,out]	currentLocation	The current attribute location.
 		 *\~french
 		 *\brief		Récupère les tampons qui doivent aller dans un vertex layout.
@@ -84,6 +85,7 @@ namespace castor3d
 		 *\param[in,out]	buffers			Reçoit les buffers.
 		 *\param[in,out]	offsets			Reçoit les offsets dans les buffers.
 		 *\param[in,out]	layouts			Reçoit les vertex layouts.
+		 *\param[in,out]	currentBinding	L'index de binging actuel des buffers.
 		 *\param[in,out]	currentLocation	La position actuelle des attributs.
 		 */
 		C3D_API virtual void gather( ShaderFlags const & shaderFlags
@@ -94,6 +96,7 @@ namespace castor3d
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
+			, uint32_t & currentBinding
 			, uint32_t & currentLocation ) = 0;
 		/**
 		 *\~english
@@ -113,7 +116,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les indicateurs de submesh.
 		 */
-		C3D_API virtual SubmeshFlags getSubmeshFlags()const
+		C3D_API virtual SubmeshFlags getSubmeshFlags( Pass const * pass )const
 		{
 			return SubmeshFlags{};
 		}

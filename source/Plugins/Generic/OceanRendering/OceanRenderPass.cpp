@@ -582,6 +582,19 @@ namespace ocean
 		doAddGIDescriptor( descriptorWrites, shadowMaps, index );
 	}
 
+	castor3d::SubmeshFlags OceanRenderPass::doAdjustSubmeshFlags( castor3d::SubmeshFlags flags )const
+	{
+		remFlag( flags, castor3d::SubmeshFlag::eTexcoords2 );
+		remFlag( flags, castor3d::SubmeshFlag::eTexcoords3 );
+		remFlag( flags, castor3d::SubmeshFlag::eMorphTexcoords0 );
+		remFlag( flags, castor3d::SubmeshFlag::eMorphTexcoords1 );
+		remFlag( flags, castor3d::SubmeshFlag::eMorphTexcoords2 );
+		remFlag( flags, castor3d::SubmeshFlag::eMorphTexcoords3 );
+		addFlag( flags, castor3d::SubmeshFlag::eTexcoords0 );
+		addFlag( flags, castor3d::SubmeshFlag::eTexcoords1 );
+		return flags;
+	}
+
 	castor3d::PassFlags OceanRenderPass::doAdjustPassFlags( castor3d::PassFlags flags )const
 	{
 		remFlag( flags, castor3d::PassFlag::eReflection );
