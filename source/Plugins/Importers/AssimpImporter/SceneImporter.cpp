@@ -40,7 +40,7 @@ namespace c3d_assimp
 			transform.DecomposeNoScaling( quat, tran );
 
 			castor::Matrix4x4f result;
-			castor::matrix::setTranslate( result, convert( tran ) );
+			castor::matrix::setTranslate( result, fromAssimp( tran ) );
 			return result;
 		}
 
@@ -137,7 +137,7 @@ namespace c3d_assimp
 			{
 				auto direction = castor::point::getNormalised( castor::Point3f{ aiLight.mDirection.x, aiLight.mDirection.y, aiLight.mDirection.z } );
 				auto up = castor::point::getNormalised( castor::Point3f{ aiLight.mUp.x, aiLight.mUp.y, aiLight.mUp.z } );
-				node->setOrientation( castor::Quaternion::fromMatrix( makeMatrix4x4f( direction, up ) ) );
+				node->setOrientation( castor::Quaternion::fromMatrix( fromAssimp( direction, up ) ) );
 			}
 
 			if ( aiLight.mType != aiLightSource_DIRECTIONAL )
@@ -247,7 +247,7 @@ namespace c3d_assimp
 				aiNode.mTransformation.Decompose( scale, orientation, position );
 				node->setPosition( { position.x, position.y, position.z } );
 				node->setScale( { scale.x, scale.y, scale.z } );
-				node->setOrientation( castor::Quaternion{ castor::Point4f{ orientation.x, orientation.y, orientation.z, orientation.w } } );
+				node->setOrientation( fromAssimp( orientation ) );
 				lnode = scene.addSceneNode( node->getName(), node );
 				node = lnode.lock();
 
@@ -263,7 +263,7 @@ namespace c3d_assimp
 		}
 		else
 		{
-			transform = transform * makeMatrix4x4f( aiNode.mTransformation );
+			transform = transform * fromAssimp( aiNode.mTransformation );
 		}
 
 		// continue for all child nodes
@@ -287,7 +287,7 @@ namespace c3d_assimp
 			{
 				auto transform = ( it->second->hasComponent( castor3d::BonesComponent::Name )
 					? scenes::getTranslation( transformAcc )
-					: makeMatrix4x4f( transformAcc ) );
+					: fromAssimp( transformAcc ) );
 
 				for ( auto & vertex : it->second->getPositions() )
 				{

@@ -283,6 +283,25 @@ namespace castor
 			, castor::Quaternion const & value );
 		/**
 		 *\~english
+		 *\brief		Retrieves the given transformation matrix components.
+		 *\param[in]	matrix		The transformation matrix.
+		 *\param[out]	position	The position component.
+		 *\param[out]	scaling		The scaling component.
+		 *\param[out]	rotation	The rotation component.
+		 *\~french
+		 *\brief		Récupère les composantes d'une matrice de transformation.
+		 *\param[in]	matrix		La matrice de transformation.
+		 *\param[out]	position	La composante de position.
+		 *\param[out]	scaling		La composante de mise à l'échelle.
+		 *\param[out]	rotation	La composante de rotation.
+		 */
+		template< typename T, typename U, typename V >
+		static void decompose( Matrix4x4< T > const & matrix
+			, Point3< U > & position
+			, Point3< U > & scaling
+			, QuaternionT< V > & rotation );
+		/**
+		 *\~english
 		 *\brief		Builds a matrix that sets a centered perspective projection from the given parameters
 		 *\param[out]	matrix	The matrix that will receive the perspective matrix
 		 *\param[in]	fovy	Y Field of View

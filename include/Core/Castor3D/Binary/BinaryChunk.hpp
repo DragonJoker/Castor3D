@@ -104,7 +104,6 @@ namespace castor3d
 		eSkeletonAnimationKeyFrameTime = makeChunkID( 'S', 'K', 'A', 'N', 'K', 'F', 'T', 'M' ),
 		eSkeletonAnimationKeyFrameObjectType = makeChunkID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'Y' ),
 		eSkeletonAnimationKeyFrameObjectName = makeChunkID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'N' ),
-		eSkeletonAnimationKeyFrameObjectTransform = makeChunkID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'T' ),
 		// Version 1.4
 		eSubmeshFaceCount [[deprecated]] = makeChunkID( 'S', 'M', 'S', 'H', 'F', 'C', 'C', 'T' ),
 		eSubmeshIndexComponentCount = makeChunkID( 'S', 'M', 'F', 'C', 'C', 'P', 'C', 'T' ),
@@ -136,6 +135,10 @@ namespace castor3d
 		eMeshAnimationKeyFrameTexcoords1 = makeChunkID( 'M', 'H', 'A', 'N', 'K', 'F', 'T', '1' ),
 		eMeshAnimationKeyFrameTexcoords2 = makeChunkID( 'M', 'H', 'A', 'N', 'K', 'F', 'T', '2' ),
 		eMeshAnimationKeyFrameTexcoords3 = makeChunkID( 'M', 'H', 'A', 'N', 'K', 'F', 'T', '3' ),
+		eSkeletonAnimationKeyFrameObjectTransform [[deprecated]] = makeChunkID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'T' ),
+		eSkeletonAnimationKeyFrameObjectTranslate = makeChunkID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'R' ),
+		eSkeletonAnimationKeyFrameObjectRotate = makeChunkID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'O' ),
+		eSkeletonAnimationKeyFrameObjectScale = makeChunkID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'S' ),
 	};
 	/**
 	 *\~english

@@ -705,7 +705,9 @@ namespace Testing
 			while ( result && itA != endItA && itB != endItB )
 			{
 				result = CT_EQUAL( itA->object->getName(), itB->object->getName() );
-				result = result && CT_EQUAL( itA->transform, itB->transform );
+				result = result && CT_EQUAL( itA->translate, itB->translate );
+				result = result && CT_EQUAL( itA->scale, itB->scale );
+				result = result && CT_EQUAL( itA->rotate, itB->rotate );
 				++itA;
 				++itB;
 			}

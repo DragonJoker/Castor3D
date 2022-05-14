@@ -53,44 +53,43 @@ namespace castor
 		void getRotate( Matrix4x4< T > const & matrix
 			, QuaternionT< U > & orientation )
 		{
-			double trace = double( matrix[0][0] + matrix[1][1] + matrix[2][2] );
-			double root;
+			float t = matrix[0][0] + matrix[1][1] + matrix[2][2];
 
-			if ( trace > 0 )
+			// large enough
+			if ( t > 0.0f )
 			{
-				// |w| > 1/2, may as well choose w > 1/2
-				root = std::sqrt( trace + 1 );  // 2w
-				orientation.quat.w = U( 0.5 * root );
-				root = 0.5 / root;  // 1/(4w)
-				orientation.quat.x = U( ( matrix[2][1] - matrix[1][2] ) * root );
-				orientation.quat.y = U( ( matrix[0][2] - matrix[2][0] ) * root );
-				orientation.quat.z = U( ( matrix[1][0] - matrix[0][1] ) * root );
+				float s = std::sqrt( 1 + t ) * 2.0f;
+				orientation.quat.x = ( matrix[1][2] - matrix[2][1] ) / s;
+				orientation.quat.y = ( matrix[2][0] - matrix[0][2] ) / s;
+				orientation.quat.z = ( matrix[0][1] - matrix[1][0] ) / s;
+				orientation.quat.w = 0.25f * s;
+			} // else we have to check several cases
+			else if ( matrix[0][0] > matrix[1][1] && matrix[0][0] > matrix[2][2] )
+			{
+				// Column 0:
+				float s = std::sqrt( 1.0f + matrix[0][0] - matrix[1][1] - matrix[2][2] ) * 2.0f;
+				orientation.quat.x = 0.25f * s;
+				orientation.quat.y = ( matrix[0][1] + matrix[1][0] ) / s;
+				orientation.quat.z = ( matrix[2][0] + matrix[0][2] ) / s;
+				orientation.quat.w = ( matrix[1][2] - matrix[2][1] ) / s;
+			}
+			else if ( matrix[1][1] > matrix[2][2] )
+			{
+				// Column 1:
+				float s = std::sqrt( 1.0f + matrix[1][1] - matrix[0][0] - matrix[2][2] ) * 2.0f;
+				orientation.quat.x = ( matrix[0][1] + matrix[1][0] ) / s;
+				orientation.quat.y = 0.25f * s;
+				orientation.quat.z = ( matrix[1][2] + matrix[2][1] ) / s;
+				orientation.quat.w = ( matrix[2][0] - matrix[0][2] ) / s;
 			}
 			else
 			{
-				// |w| <= 1/2
-				static uint32_t s_next[3] = { 1, 2, 0 };
-				uint32_t i = 0;
-
-				if ( matrix[1][1] > matrix[0][0] )
-				{
-					i = 1;
-				}
-
-				if ( matrix[2][2] > matrix[i][i] )
-				{
-					i = 2;
-				}
-
-				uint32_t j = s_next[i];
-				uint32_t k = s_next[j];
-				root = std::sqrt( double( matrix[i][i] - matrix[j][j] - matrix[k][k] + 1 ) );
-				U * apkQuat[3] = { &orientation.quat.x, &orientation.quat.y, &orientation.quat.z };
-				*apkQuat[i] = U( 0.5 * root );
-				root = 0.5 / root;
-				*apkQuat[j] = U( double( matrix[j][i] + matrix[i][j] ) * root );
-				*apkQuat[k] = U( double( matrix[k][i] + matrix[i][k] ) * root );
-				orientation.quat.w = U( double( matrix[k][j] - matrix[j][k] ) * root );
+				// Column 2:
+				float s = std::sqrt( 1.0f + matrix[2][2] - matrix[0][0] - matrix[1][1] ) * 2.0f;
+				orientation.quat.x = ( matrix[2][0] + matrix[0][2] ) / s;
+				orientation.quat.y = ( matrix[1][2] + matrix[2][1] ) / s;
+				orientation.quat.z = 0.25f * s;
+				orientation.quat.w = ( matrix[0][1] - matrix[1][0] ) / s;
 			}
 
 			point::normalise( orientation );
@@ -249,6 +248,65 @@ namespace castor
 			, castor::QuaternionT< U > const & value )
 		{
 			return matrix * value;
+		}
+
+		template< typename T, typename U, typename V >
+		static void decompose( Matrix4x4< T > const & matrix
+			, Point3< U > & position
+			, Point3< U > & scaling
+			, QuaternionT< V > & rotation )
+		{
+			/* extract translation */
+			position->x = U( matrix[3][0] );
+			position->y = U( matrix[3][1] );
+			position->z = U( matrix[3][2] );
+
+			/* extract the columns of the matrix. */
+			Point3< U > cols[3] = { Point3< U >{ matrix[0] }
+				, Point3< U >{ matrix[1] }
+				, Point3< U >{ matrix[2] } };
+
+			/* extract the scaling factors */
+			scaling->x = U( point::length( cols[0] ) );
+			scaling->y = U( point::length( cols[1] ) );
+			scaling->z = U( point::length( cols[2] ) );
+
+			/* and the sign of the scaling */
+			if ( matrix.getDeterminant() < 0 )
+			{
+				scaling = -scaling;
+			}
+
+			/* and remove all scaling from the matrix */
+			if ( scaling->x )
+			{
+				cols[0] /= scaling->x;
+			}
+
+			if ( scaling->y )
+			{
+				cols[1] /= scaling->y;
+			}
+
+			if ( scaling->z )
+			{
+				cols[2] /= scaling->z;
+			}
+
+			// build a 3x3 rotation matrix
+			Matrix4x4< U > m{ 1.0f };
+			m[0][0] = cols[0][0];
+			m[0][1] = cols[0][1];
+			m[0][2] = cols[0][2];
+			m[1][0] = cols[1][0];
+			m[1][1] = cols[1][1];
+			m[1][2] = cols[1][2];
+			m[2][0] = cols[2][0];
+			m[2][1] = cols[2][1];
+			m[2][2] = cols[2][2];
+
+			// and generate the rotation quaternion from it
+			getRotate( m, rotation );
 		}
 
 		template< typename T, typename U >
