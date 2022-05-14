@@ -151,17 +151,42 @@ namespace castor3d
 			}
 		}
 
-		static void transformSkeletonAnimations( castor::Point3f translate
-			, castor::Point3f scale
-			, castor::Quaternion rotation
+		static void transformPosition( castor::Point3f const & translate
+			, castor::Point3f const & scale
+			, castor::Quaternion const & rotation
+			, castor::Point3f & result )
+		{
+			rotation.transform( scale * result, result );
+			result += translate;
+		}
+
+		static void transformRotation( castor::Point3f const & scale
+			, castor::Quaternion const & rotation
+			, castor::Quaternion & result )
+		{
+			float x = std::copysign( 1.0f, scale->x );
+			float y = std::copysign( 1.0f, scale->y );
+			float z = std::copysign( 1.0f, scale->z );
+
+			result.quat.x = y * z * result.quat.x;
+			result.quat.y = x * z * result.quat.y;
+			result.quat.z = x * y * result.quat.z;
+
+			result *= rotation;
+		}
+
+		static void transformScale( castor::Point3f const & scale
+			, castor::Point3f & result )
+		{
+			result *= scale;
+		}
+
+		static void transformSkeletonAnimations( castor::Point3f const & translate
+			, castor::Point3f const & scale
+			, castor::Quaternion const & rotation
 			, Skeleton & skeleton )
 		{
-			castor::Matrix4x4f othersTransform;
-			castor::matrix::setTranslate( othersTransform, castor::Point3f{} );
-			castor::matrix::rotate( othersTransform, rotation );
-
-			castor::Matrix4x4f rootTransform{ othersTransform };
-			castor::matrix::scale( rootTransform, scale );
+			auto ident = castor::Quaternion::identity();
 
 			for ( auto & animIt : skeleton.getAnimations() )
 			{
@@ -173,11 +198,12 @@ namespace castor3d
 					{
 						if ( transformIt.object->getParent() )
 						{
-							//transformIt.transform = othersTransform * transformIt.transform;
+							transformPosition( {}, scale, ident, transformIt.translate );
 						}
 						else
 						{
-							//transformIt.transform = rootTransform * transformIt.transform;
+							transformPosition( {}, scale, rotation, transformIt.translate );
+							transformRotation( scale, rotation, transformIt.rotate );
 						}
 					}
 
@@ -284,20 +310,16 @@ namespace castor3d
 						, castor::Point3f{}
 						, scale
 						, orientation );
+					mshimp::transformMesh( transform, mesh );
+					mshimp::transformMeshAnimations( transform, mesh );
 
-					if ( !mesh.getSkeleton() )
+					if ( auto skeleton = mesh.getSkeleton() )
 					{
-						mshimp::transformMesh( transform, mesh );
-						mshimp::transformMeshAnimations( transform, mesh );
-
-						if ( auto skeleton = mesh.getSkeleton() )
-						{
-							mshimp::transformSkeleton( transform, *skeleton );
-							mshimp::transformSkeletonAnimations( castor::Point3f{}
-								, scale
-								, orientation
-								, *skeleton );
-						}
+						mshimp::transformSkeleton( transform, *skeleton );
+						mshimp::transformSkeletonAnimations( castor::Point3f{}
+							, scale
+							, orientation
+							, *skeleton );
 					}
 				}
 
