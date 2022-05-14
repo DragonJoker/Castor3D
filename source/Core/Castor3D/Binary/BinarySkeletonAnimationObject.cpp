@@ -174,7 +174,14 @@ namespace castor3d
 						}
 
 						auto & keyFrame = static_cast< SkeletonAnimationKeyFrame & >( **it );
-						keyFrame.addAnimationObject( obj, keyframe.m_transform );
+						castor::Point3f translate;
+						castor::Point3f scale;
+						castor::Quaternion rotate;
+						castor::matrix::decompose( keyframe.m_transform, translate, scale, rotate );
+						keyFrame.addAnimationObject( obj
+							, translate
+							, rotate
+							, scale );
 					}
 
 					for ( auto & keyFrame : animation )

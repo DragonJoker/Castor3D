@@ -54,7 +54,7 @@ namespace castor3d
 		{
 			for ( auto bone : skeleton.getBones() )
 			{
-				castor::Matrix4x4f final{ 1.0 };
+				castor::Matrix4x4f final{ skeleton.getGlobalInverseTransform() };
 
 				for ( auto & animation : m_playingAnimations )
 				{
