@@ -50,7 +50,8 @@ namespace c3d_assimp
 
 		if ( auto aiScene = doLoadScene() )
 		{
-			if ( aiScene->HasMeshes() )
+			if ( aiScene->HasMeshes()
+				|| m_animsOnly )
 			{
 				if ( m_animsOnly )
 				{
