@@ -160,7 +160,7 @@ namespace c3d_assimp
 				previousPreRootNode = previousPreRootNode->mParent;
 			}
 
-			skeleton.setGlobalInverseTransform( makeMatrix4x4f( preRootNode.mChildren[0]->mTransformation ).getInverse() );
+			skeleton.setGlobalInverseTransform( fromAssimp( preRootNode.mChildren[0]->mTransformation ).getInverse() );
 			processSkeletonNodes( importer, bonesNodes, skeleton, *previousPreRootNode, rootNode );
 		}
 
@@ -273,7 +273,7 @@ namespace c3d_assimp
 			for ( auto aiBone : castor::makeArrayView( aiMesh->mBones, aiMesh->mNumBones ) )
 			{
 				m_bonesNodes.emplace( makeString( aiBone->mName )
-					, BoneData{ makeMatrix4x4f( aiBone->mOffsetMatrix ) } );
+					, BoneData{ fromAssimp( aiBone->mOffsetMatrix ) } );
 			}
 		}
 
@@ -387,7 +387,7 @@ namespace c3d_assimp
 					castor3d::log::info << cuT( "  Skeleton found" ) << std::endl;
 					it->second = scene.addNewSkeleton( normalizeName( m_importer.getInternalName( rootNode->mName ) ), scene );
 					skeleton = it->second;
-					skeleton->setGlobalInverseTransform( makeMatrix4x4f( rootNode->mTransformation ).getInverse() );
+					skeleton->setGlobalInverseTransform( fromAssimp( rootNode->mTransformation ).getInverse() );
 					skeletons::processSkeletonNodes( m_importer
 						, m_bonesNodes
 						, *skeleton
@@ -457,7 +457,12 @@ namespace c3d_assimp
 		{
 			auto node = aiNode.FindNode( m_importer.getExternalName( object->getName() ).c_str() );
 			CU_Require( node );
-			auto transform = makeMatrix4x4f( node->mTransformation );
+			aiVector3D scaling, position;
+			aiQuaternion rotate;
+			node->mTransformation.Decompose( scaling, rotate, position );
+			auto translate = fromAssimp( position );
+			auto scale = fromAssimp( scaling );
+			auto orientation = fromAssimp( rotate );
 
 			for ( auto & keyFrame : keyframes )
 			{
@@ -465,11 +470,16 @@ namespace c3d_assimp
 
 				if ( it == keyFrame.second->end() )
 				{
-					keyFrame.second->addAnimationObject( *object, transform );
+					keyFrame.second->addAnimationObject( *object
+						, translate
+						, orientation
+						, scale );
 				}
 				else
 				{
-					it->transform = transform;
+					it->translate = translate;
+					it->rotate = orientation;
+					it->scale = scale;
 				}
 			}
 		}

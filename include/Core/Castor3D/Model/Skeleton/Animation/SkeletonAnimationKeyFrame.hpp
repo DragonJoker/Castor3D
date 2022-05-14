@@ -47,18 +47,6 @@ namespace castor3d
 			, castor::Quaternion const & rotate
 			, castor::Point3f const & scale );
 		/**
-		 *\~english
-		 *\brief		Adds an animation object.
-		 *\param[in]	object		The animation object.
-		 *\param[in]	transform	The transformation at start time.
-		 *\~french
-		 *\brief		Ajoute un objet d'animation.
-		 *\param[in]	object		L'objet d'animation.
-		 *\param[in]	transform	La transformation au temps de début.
-		*/
-		C3D_API void addAnimationObject( SkeletonAnimationObject & object
-			, castor::Matrix4x4f const & transform );
-		/**
 		*\~english
 		*\return		\p true if the given object is into the transforms map (not the cumulative one).
 		*\~french

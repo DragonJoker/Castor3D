@@ -113,7 +113,40 @@ namespace castor
 				result[1][1] = +input[0][0] / determinant;
 			}
 		};
-		template< typename Type, uint32_t Count > struct SqrMtxOperators;
+
+		template< typename Type, uint32_t Count >
+		struct SqrMtxDeterminant;
+
+		template< typename Type >
+		struct SqrMtxDeterminant< Type, 4 >
+		{
+			static inline Type get( castor::SquareMatrix< Type, 4 > const & matrix )
+			{
+				return matrix[0][0] * matrix[1][1] * matrix[2][2] * matrix[3][3] - matrix[0][0] * matrix[1][1] * matrix[3][2] * matrix[2][3] + matrix[0][0] * matrix[2][1] * matrix[3][2] * matrix[1][3] - matrix[0][0] * matrix[2][1] * matrix[1][2] * matrix[3][3]
+					+ matrix[0][0] * matrix[3][1] * matrix[1][2] * matrix[2][3] - matrix[0][0] * matrix[3][1] * matrix[2][2] * matrix[1][3] - matrix[1][0] * matrix[2][1] * matrix[3][2] * matrix[0][3] + matrix[1][0] * matrix[2][1] * matrix[0][2] * matrix[3][3]
+					- matrix[1][0] * matrix[3][1] * matrix[0][2] * matrix[2][3] + matrix[1][0] * matrix[3][1] * matrix[2][2] * matrix[0][3] - matrix[1][0] * matrix[0][1] * matrix[2][2] * matrix[3][3] + matrix[1][0] * matrix[0][1] * matrix[3][2] * matrix[2][3]
+					+ matrix[2][0] * matrix[3][1] * matrix[0][2] * matrix[1][3] - matrix[2][0] * matrix[3][1] * matrix[1][2] * matrix[0][3] + matrix[2][0] * matrix[0][1] * matrix[1][2] * matrix[3][3] - matrix[2][0] * matrix[0][1] * matrix[3][2] * matrix[1][3]
+					+ matrix[2][0] * matrix[1][1] * matrix[3][2] * matrix[0][3] - matrix[2][0] * matrix[1][1] * matrix[0][2] * matrix[3][3] - matrix[3][0] * matrix[0][1] * matrix[1][2] * matrix[2][3] + matrix[3][0] * matrix[0][1] * matrix[2][2] * matrix[1][3]
+					- matrix[3][0] * matrix[1][1] * matrix[2][2] * matrix[0][3] + matrix[3][0] * matrix[1][1] * matrix[0][2] * matrix[2][3] - matrix[3][0] * matrix[2][1] * matrix[0][2] * matrix[1][3] + matrix[3][0] * matrix[2][1] * matrix[1][2] * matrix[0][3];
+			}
+		};
+
+		template< typename Type >
+		struct SqrMtxDeterminant< Type, 3 >
+		{
+			static inline Type get( castor::SquareMatrix< Type, 3 > const & matrix )
+			{
+				return matrix[0][0] * matrix[1][1] * matrix[2][2]
+					- matrix[0][0] * matrix[2][1] * matrix[1][2]
+					+ matrix[1][0] * matrix[2][1] * matrix[0][2]
+					- matrix[1][0] * matrix[0][1] * matrix[2][2]
+					+ matrix[1][0] * matrix[0][1] * matrix[1][2]
+					- matrix[1][0] * matrix[1][1] * matrix[0][2];
+			}
+		};
+
+		template< typename Type, uint32_t Count >
+		struct SqrMtxOperators;
 
 		template< typename Type >
 		struct SqrMtxOperators< Type, 4 >
@@ -412,9 +445,17 @@ namespace castor
 	{
 		T result{};
 
-		for ( uint32_t i = 0; i < Count; i++ )
+		if constexpr ( Count < 3 || Count > 4 )
 		{
-			result += this->operator[]( 0 )[i] * getCofactor( i, 0 );
+
+			for ( uint32_t i = 0; i < Count; i++ )
+			{
+				result += this->operator[]( 0 )[i] * getCofactor( i, 0 );
+			}
+		}
+		else
+		{
+			result = SqrMtxDeterminant< T, Count >::get( *this );
 		}
 
 		return result;

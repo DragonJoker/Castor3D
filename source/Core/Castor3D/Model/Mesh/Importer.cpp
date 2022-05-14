@@ -173,11 +173,11 @@ namespace castor3d
 					{
 						if ( transformIt.object->getParent() )
 						{
-							transformIt.transform = othersTransform * transformIt.transform;
+							//transformIt.transform = othersTransform * transformIt.transform;
 						}
 						else
 						{
-							transformIt.transform = rootTransform * transformIt.transform;
+							//transformIt.transform = rootTransform * transformIt.transform;
 						}
 					}
 

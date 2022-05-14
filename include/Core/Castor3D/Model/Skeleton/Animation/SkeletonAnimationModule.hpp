@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
 
+#include <CastorUtils/Math/Quaternion.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
 namespace castor3d
@@ -71,7 +72,9 @@ namespace castor3d
 	struct ObjectTransform
 	{
 		SkeletonAnimationObject * object{};
-		castor::Matrix4x4f transform{};
+		castor::Point3f translate{};
+		castor::Point3f scale{};
+		castor::Quaternion rotate{};
 		castor::Matrix4x4f cumulative{};
 	};
 	using TransformArray = std::vector< ObjectTransform >;

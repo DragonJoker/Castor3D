@@ -27,7 +27,17 @@ namespace castor3d
 
 			if ( result )
 			{
-				result = doWriteChunk( it.transform, ChunkType::eSkeletonAnimationKeyFrameObjectTransform, m_chunk );
+				result = doWriteChunk( it.translate, ChunkType::eSkeletonAnimationKeyFrameObjectTranslate, m_chunk );
+			}
+
+			if ( result )
+			{
+				result = doWriteChunk( it.rotate, ChunkType::eSkeletonAnimationKeyFrameObjectRotate, m_chunk );
+			}
+
+			if ( result )
+			{
+				result = doWriteChunk( it.scale, ChunkType::eSkeletonAnimationKeyFrameObjectScale, m_chunk );
 			}
 		}
 
@@ -42,11 +52,13 @@ namespace castor3d
 	bool BinaryParser< SkeletonAnimationKeyFrame >::doParse( SkeletonAnimationKeyFrame & obj )
 	{
 		bool result = true;
-		castor::Matrix4x4f matrix;
 		double time{ 0.0 };
 		castor::String name;
 		uint8_t type{};
 		BinaryChunk chunk;
+		castor::Point3f translate;
+		castor::Point3f scale;
+		castor::Quaternion rotate;
 
 		while ( result && doGetSubChunk( chunk ) )
 		{
@@ -57,32 +69,57 @@ namespace castor3d
 				checkError( result, "Couldn't parse time index." );
 				obj.doSetTimeIndex( castor::Milliseconds{ int64_t( time * 1000 ) } );
 				break;
-
 			case ChunkType::eSkeletonAnimationKeyFrameObjectType:
 				result = doParseChunk( type, chunk );
 				checkError( result, "Couldn't parse object type." );
 				break;
-
 			case ChunkType::eSkeletonAnimationKeyFrameObjectName:
 				result = doParseChunk( name, chunk );
 				checkError( result, "Couldn't parse object name." );
 				break;
-
+#pragma warning( push )
+#pragma warning( disable: 4996 )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 			case ChunkType::eSkeletonAnimationKeyFrameObjectTransform:
-				if ( m_fileVersion > Version{ 1, 3, 0 } )
+#pragma GCC diagnostic pop
+#pragma warning( pop )
+				if ( m_fileVersion > Version{ 1, 5, 0 } )
 				{
+					castor::Matrix4x4f matrix;
 					result = doParseChunk( matrix, chunk );
 					checkError( result, "Couldn't parse object transform." );
 
 					if ( result )
 					{
-						obj.addAnimationObject( *obj.getOwner()->getObject( SkeletonNodeType( type )
-							, name )
-							, matrix );
+						castor::matrix::decompose( matrix, translate, scale, rotate );
+						obj.addAnimationObject( *obj.getOwner()->getObject( SkeletonNodeType( type ), name )
+							, translate
+							, rotate
+							, scale );
 					}
 				}
 				break;
-
+			case ChunkType::eSkeletonAnimationKeyFrameObjectTranslate:
+				result = doParseChunk( translate, chunk );
+				checkError( result, "Couldn't parse object translate." );
+				break;
+			case ChunkType::eSkeletonAnimationKeyFrameObjectRotate:
+				result = doParseChunk( rotate, chunk );
+				checkError( result, "Couldn't parse object rotate." );
+				break;
+			case ChunkType::eSkeletonAnimationKeyFrameObjectScale:
+				result = doParseChunk( scale, chunk );
+				checkError( result, "Couldn't parse object scale." );
+				if ( result )
+				{
+					obj.addAnimationObject( *obj.getOwner()->getObject( SkeletonNodeType( type )
+						, name )
+						, translate
+						, rotate
+						, scale );
+				}
+				break;
 			default:
 				break;
 			}
@@ -110,25 +147,88 @@ namespace castor3d
 					result = doParseChunk( type, chunk );
 					checkError( result, "Couldn't parse object type." );
 					break;
-
 				case ChunkType::eSkeletonAnimationKeyFrameObjectName:
 					result = doParseChunk( name, chunk );
 					checkError( result, "Couldn't parse object name." );
 					break;
-
+#pragma warning( push )
+#pragma warning( disable: 4996 )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 				case ChunkType::eSkeletonAnimationKeyFrameObjectTransform:
+#pragma GCC diagnostic pop
+#pragma warning( pop )
 					result = doParseChunk( matrix, chunk );
 					checkError( result, "Couldn't parse object transform." );
-
 					if ( result )
 					{
-						obj.addAnimationObject( *obj.getOwner()->getObject( SkeletonNodeType( type )
-							, name )
-							, castor::Matrix4x4f{ matrix } );
+						castor::Point3f translate;
+						castor::Point3f scale;
+						castor::Quaternion rotate;
+						castor::matrix::decompose( matrix, translate, scale, rotate );
+						obj.addAnimationObject( *obj.getOwner()->getObject( SkeletonNodeType( type ), name )
+							, translate
+							, rotate
+							, scale );
 					}
-
 					break;
+				default:
+					break;
+				}
+			}
+		}
 
+		return result;
+	}
+
+	bool BinaryParser< SkeletonAnimationKeyFrame >::doParse_v1_5( SkeletonAnimationKeyFrame & obj )
+	{
+		bool result = true;
+
+		if ( m_fileVersion <= Version{ 1, 5, 0 } )
+		{
+			castor::Matrix4x4f matrix;
+			castor::String name;
+			uint8_t type{};
+			BinaryChunk chunk;
+
+			while ( result && doGetSubChunk( chunk ) )
+			{
+				switch ( chunk.getChunkType() )
+				{
+				case ChunkType::eSkeletonAnimationKeyFrameObjectType:
+					result = doParseChunk( type, chunk );
+					checkError( result, "Couldn't parse object type." );
+					break;
+				case ChunkType::eSkeletonAnimationKeyFrameObjectName:
+					result = doParseChunk( name, chunk );
+					checkError( result, "Couldn't parse object name." );
+					break;
+#pragma warning( push )
+#pragma warning( disable: 4996 )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+				case ChunkType::eSkeletonAnimationKeyFrameObjectTransform:
+#pragma GCC diagnostic pop
+#pragma warning( pop )
+					if ( m_fileVersion > Version{ 1, 3, 0 } )
+					{
+						result = doParseChunk( matrix, chunk );
+						checkError( result, "Couldn't parse object transform." );
+
+						if ( result )
+						{
+							castor::Point3f translate;
+							castor::Point3f scale;
+							castor::Quaternion rotate;
+							castor::matrix::decompose( matrix, translate, scale, rotate );
+							obj.addAnimationObject( *obj.getOwner()->getObject( SkeletonNodeType( type ), name )
+								, translate
+								, rotate
+								, scale );
+						}
+					}
+					break;
 				default:
 					break;
 				}

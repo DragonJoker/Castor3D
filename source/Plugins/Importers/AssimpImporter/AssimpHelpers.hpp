@@ -25,7 +25,7 @@ namespace c3d_assimp
 		return castor::string::replace( name, "/", "-" );
 	}
 
-	static castor::Matrix4x4f makeMatrix4x4f( aiMatrix4x4 const & aiMatrix )
+	static castor::Matrix4x4f fromAssimp( aiMatrix4x4 const & aiMatrix )
 	{
 		std::array< float, 16u > data
 			{ aiMatrix.a1, aiMatrix.b1, aiMatrix.c1, aiMatrix.d1
@@ -35,7 +35,7 @@ namespace c3d_assimp
 		return castor::Matrix4x4f{ data.data() };
 	}
 
-	static castor::Matrix4x4f makeMatrix4x4f( aiMatrix3x3 const & aiMatrix )
+	static castor::Matrix4x4f fromAssimp( aiMatrix3x3 const & aiMatrix )
 	{
 		std::array< float, 9u > data
 			{ aiMatrix.a1, aiMatrix.b1, aiMatrix.c1
@@ -44,7 +44,7 @@ namespace c3d_assimp
 		return castor::Matrix4x4f{ castor::Matrix3x3f{ data.data() } };
 	}
 
-	static castor::Matrix4x4f makeMatrix4x4f( castor::Point3f const & direction
+	static castor::Matrix4x4f fromAssimp( castor::Point3f const & direction
 		, castor::Point3f const & up )
 	{
 		castor::Matrix4x4f result;
@@ -59,7 +59,7 @@ namespace c3d_assimp
 		return result;
 	}
 
-	static castor::Milliseconds convert( double ticks
+	static castor::Milliseconds fromAssimp( double ticks
 		, int64_t ticksPerSecond )
 	{
 		// Turn ticks to seconds.
@@ -68,14 +68,19 @@ namespace c3d_assimp
 		return castor::Milliseconds{ int64_t( time * 1000.0 ) };
 	}
 
-	static castor::Point3f convert( aiVector3D const & v )
+	static castor::Point3f fromAssimp( aiVector3D const & v )
 	{
 		return castor::Point3f{ v.x, v.y, v.z };
 	}
 
-	static castor::Quaternion convert( aiQuaternion const & v )
+	static castor::Quaternion fromAssimp( aiQuaternion const & v )
 	{
-		return castor::Quaternion::fromMatrix( makeMatrix4x4f( v.GetMatrix() ) );
+		castor::Quaternion result;
+		result.quat.x = v.x;
+		result.quat.y = v.y;
+		result.quat.z = v.z;
+		result.quat.w = v.w;
+		return result;
 	}
 
 	template< typename KeyT >
@@ -107,9 +112,9 @@ namespace c3d_assimp
 		{
 			if ( key.mTime >= 0 )
 			{
-				auto time = convert( key.mTime, ticksPerSecond );
+				auto time = fromAssimp( key.mTime, ticksPerSecond );
 				times.insert( time );
-				result.emplace( time, convert( key.mValue ) );
+				result.emplace( time, fromAssimp( key.mValue ) );
 			}
 		}
 
