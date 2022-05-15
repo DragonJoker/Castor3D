@@ -55,26 +55,35 @@ Certaines sections peuvent avoir des sous-sections :
         }
     }
 
-## Liste des sections
+## Section root
 
-Les différentes sections possibles sont les suivantes :
-- **sampler**  
+- **debug_overlays** : *booléen*  
+  Active ou désactive les incrustation de débogage.
+- **materials** : *value*  
+  Permet de définir le type des matériaux utilisés dans le fichier. Les valeurs possibles sont :
+  - *phong* : Matériaux Phong.
+  - *blinn_phong* : Blinn-Phong.
+  - *metallic_roughness* : Matériaux PBR metallic/roughness.
+  - *specular_glossiness* : Matériaux PBR specular/glossiness.
+- **max_image_size**: *entier*
+  Permet de limiter les dimensions des images chargées (tout en conservant leurs proportions).
+- **sampler** : *section*  
   Permet de définir un objet d’échantillonnage de texture.
-- **material**  
+- **material** : *section*  
   Permet la définition d’un matériau.
-- **mesh**  
-  Permet la définition d’un maillage.
-- **font**  
+- **loading_screen** : *section*  
+  Permet la redéfinition de l'écran de chargement.
+- **font** : *section*  
   Permet la définition d’une police utilisée dans les incrustations texte.
-- **window**  
+- **window** : *section*  
   Permet la définition d’une fenêtre de rendu.
-- **panel_overlay**  
+- **panel_overlay** : *section*  
   Permet de définir une incrustation globale de type panneau simple.
-- **border_panel_overlay**  
+- **border_panel_overlay** : *section*  
   Permet de définir une incrustation globale de type panneau avec bordure.
-- **text_overlay**  
+- **text_overlay** : *section*  
   Permet de définir une incrustation globale de type panneau avec texte.
-- **scene**  
+- **scene** : *section*  
   Permet de définir une scène.
 
 ## Section sampler
@@ -123,16 +132,32 @@ Les différentes sections possibles sont les suivantes :
   - *int_opaque_black* : Noir opaque.
   - *float_opaque_white* : Blanc opaque.
   - *int_opaque_white* : Blanc opaque.
+- **anisotropic_filtering** : *booléen*  
+  Dit si le filtrage anisotropique est activé (si supporté).
 - **max_anisotropy** : *réel*  
   Définit le degré maximal d’anisotropie.
+- **comparison_mode** : *value*  
+  Définit le mode de comparaison de l'échantillonneur. Peut prendre les valeurs suivantes :
+  - *none* : Echantillonneur traditionnel.
+  - *ref_to_texture* : Echantillonneur d'ombres.
+- **comparison_func** : *value*  
+  Définit la fonction de comparaison de l'échantillonneur. Peut prendre les valeurs suivantes :
+  - *always* : la couleur de l’échantillon est toujours appliquée.
+  - *less* : La couleur de l’échantillon est appliquée si sa transparence est inférieure au 2ème paramètre.
+  - *less_or_equal* : La couleur de l’échantillon est appliquée si sa transparence est inférieure ou égal au 2ème paramètre.
+  - *equal* : La couleur de l’échantillon est appliquée si sa transparence est égale au 2ème paramètre.
+  - *not_equal* : La couleur de l’échantillon est appliquée si sa transparence est différente du 2ème paramètre.
+  - *greater_or_equal* : La couleur de l’échantillon est appliquée si sa transparence est supérieure ou égal au 2ème paramètre.
+  - *greater* : La couleur de l’échantillon est appliquée si sa transparence est supérieure au 2ème paramètre.
+  - *never* : La couleur de l’échantillon n’est jamais appliquée.
 
 ## Section material
 
 Les matériaux pouvant être multi-passes, il est possible de définir plusieurs sous-sections de passe.
-
 - **pass** : *section*  
   Commence un nouvelle section décrivant les propriétés de la passe.
-
+- **render_pass** : *name*  
+  Définit le nom de la render pass utilisée pour dessiner les objets utilisant ce matériau.
 
 ### Section pass
 
@@ -171,7 +196,7 @@ Les matériaux pouvant être multi-passes, il est possible de définir plusieurs
   - *additive* : Les couleurs de la source et de la destination s’additionnent.
   - *multiplicative* : Les couleurs de la source et de la destination se multiplient.
 - **alpha_func** : func : *valeur* ref-val : *réel*  
-  Définit la fonction de gestion de l’alpha rejection pour la texture. Le second paramètre est la valeur de référence pour les calculs de transparence. Les valeurs possibles pour le premier paramètre sont :
+  Définit la fonction de gestion de l’alpha rejection pour la passe. Le second paramètre est la valeur de référence pour les calculs de transparence. Les valeurs possibles pour le premier paramètre sont :
   - *always* : la couleur de l’échantillon est toujours appliquée.
   - *less* : La couleur de l’échantillon est appliquée si sa transparence est inférieure au 2ème paramètre.
   - *less_or_equal* : La couleur de l’échantillon est appliquée si sa transparence est inférieure ou égal au 2ème paramètre.
@@ -180,6 +205,18 @@ Les matériaux pouvant être multi-passes, il est possible de définir plusieurs
   - *greater_or_equal* : La couleur de l’échantillon est appliquée si sa transparence est supérieure ou égal au 2ème paramètre.
   - *greater* : La couleur de l’échantillon est appliquée si sa transparence est supérieure au 2ème paramètre.
   - *never* : La couleur de l’échantillon n’est jamais appliquée.
+- **alpha_func** : func : *valeur* ref-val : *réel*  
+  Définit la fonction de gestion de l’alpha blending pour la passe. Le second paramètre est la valeur de référence pour les calculs de transparence. Les valeurs possibles pour le premier paramètre sont :
+  - *always* : la couleur de l’échantillon est toujours appliquée.
+  - *less* : La couleur de l’échantillon est appliquée si sa transparence est inférieure au 2ème paramètre.
+  - *less_or_equal* : La couleur de l’échantillon est appliquée si sa transparence est inférieure ou égal au 2ème paramètre.
+  - *equal* : La couleur de l’échantillon est appliquée si sa transparence est égale au 2ème paramètre.
+  - *not_equal* : La couleur de l’échantillon est appliquée si sa transparence est différente du 2ème paramètre.
+  - *greater_or_equal* : La couleur de l’échantillon est appliquée si sa transparence est supérieure ou égal au 2ème paramètre.
+  - *greater* : La couleur de l’échantillon est appliquée si sa transparence est supérieure au 2ème paramètre.
+  - *never* : La couleur de l’échantillon n’est jamais appliquée.
+- **mixed_interpolation** : *section*  
+  Helper définissant **alpha_blend_mode** à *interpolative*, **blend_alpha_func** à *less_or_equal* et **alpha_func** à *greater* avec une valeur de référence à 0.95.
 - **refraction_ratio** : *réel*  
   Définit le ratio de réfraction de la passe. Notez que même s’il n’y a pas de refraction map, la réfraction sera appliquée tout de même, en utilisant seulement la skybox.
 - **subsurface_scattering** : *section*  
@@ -188,8 +225,10 @@ Les matériaux pouvant être multi-passes, il est possible de définir plusieurs
   Active ou désactive le parallax occlusion mapping (nécessite une normal map et une height map).
 - **bw_accumulation** : *entier compris entre 0 et 5*  
   Définit la fonction d'accumulation, pour le blended weighted rendering.
-- **reflections** : Active les réflexions.
-- **refractions** : Active la réfraction.
+- **reflections** :  
+  Active les réflexions.
+- **refractions** :  
+  Active la réfraction.
 
 #### Section texture_unit
 
@@ -214,6 +253,8 @@ Les matériaux pouvant être multi-passes, il est possible de définir plusieurs
   - *height* : Hauteur.
 - **sampler** : *nom*
   Définit l’échantillonneur pour la texture.
+- **level_count** : *entier*
+  Définit le nombre maximal de mip levels.
 - **diffuse_mask** : *masque_3*  
   Définit les composantes de la texture utilisées pour la couleur diffuse (Phong uniquement).
 - **albedo_mask** : *masque_3*  
@@ -238,12 +279,46 @@ Les matériaux pouvant être multi-passes, il est possible de définir plusieurs
   Définit la composante de la texture utilisée pour le facteur d'occlusion.
 - **normal** : *masque_3*  
   Définit les composantes de la texture utilisées pour les normales.
+- **normal_directx** : *booléen*  
+  Dit si les normales de la texture sont exprimées pour DirectX (la composante verte sera alors inversée).
 - **height** : *masque_1*  
   Définit la composante de la texture utilisée pour la hauteur.
 - **height_factor** : *réel*  
   Définit le facteur de hauteur.
-- **normal_directx** : *booléen*  
-  Dit si les normales de la texture sont exprimées pour DirectX (la composante verte sera alors inversée).
+- **invert_y** : *booléen*  
+  Définit si l'image doit être inversée sur l'axe Y.
+- **transform** : *section*  
+  Définit la transformation de base de la texture.
+- **tileset** : *2 entiers*  
+  Définit les dimensions du tile set de la texture.
+- **tiles** : *entier*  
+  Définit le nombre de tiles de la texture.
+- **animation** : *section*  
+  Définit l'animation de transformation de la texture.
+- **texcoord_set** : *section*  
+  Définit le set de coordonnées de textures que cette texture va utiliser.
+
+##### Section transform
+
+- **rotate** : *réel*  
+  Définit la rotation de la texture.
+- **translate** : *2 réels*  
+  Définit la translation de la texture.
+- **scale** : *2 réels*  
+  Définit la mise à l'échelle de la texture.
+- **tile** : *2 entiers*  
+  Définit la tile sélectionnée.
+
+##### Section animation
+
+- **rotate** : *réel*  
+  Définit la vitesse d'animation de la rotation de la texture.
+- **translate** : *2 réels*  
+  Définit la vitesse d'animation de la translation de la texture.
+- **scale** : *2 réels*  
+  Définit la vitesse d'animation de la mise à l'échelle de la texture.
+- **tile** : *2 entiers*  
+  Définit si les tiles sont animées.
 
 #### Section shader_program
 
@@ -404,6 +479,8 @@ Les matériaux pouvant être multi-passes, il est possible de définir plusieurs
   Définit un groupe d’objets animés avec des animations communes.
 - **mesh** : *section*  
   Définit une nouvelle section décrivant un maillage, pouvant être utilisé pou un ou plusieurs objets.
+- **skeleton** : *section*  
+  Définit une nouvelle section décrivant un squelette, pouvant être utilisé pou un ou plusieurs maillages.
 - **particle_system** : *section*  
   Définit une nouvelle section décrivant un système de particules.
 - **skybox** : *section*  
@@ -419,15 +496,23 @@ Les matériaux pouvant être multi-passes, il est possible de définir plusieurs
   - *squared_exponential* : L’intensité du brouillard augmente encore plus, avec la distance à la caméra.
 - **fog_density** : *réel*  
   Définit la densité du brouillard, qui est multipliée par la distance, en fonction du type de brouillard.
-- **hdr_config** : *section*  
-  Définit une nouvelle section, décrivant la configuration HDR.
 
-### Section hdr_config
+### Section import
 
-- **exposure** : *réel*  
-  Définit l’exposition de la scène.
-- **gamma** : *réel*  
-  Définit la correction gamma de la scène.
+- **file** : *path*  
+  Importe la scène depuis le chemin donné.
+- **anim_file** : *path*  
+  Importe les animations depuis le chemin donné.
+- **prefix** : *text*  
+  Définit un préfixe qui sera attribué aux noms des objets, pour éviter les conflits de noms.
+- **rescale** : *réel*  
+  Met les objects importés à l’échelle, sur les trois axes.
+- **pitch** : *réel*  
+  Tourne les objects importés de l'angle donné (en degrés) autour de l'axe X.
+- **yaw** : *réel*  
+  Tourne les objects importés de l'angle donné (en degrés) autour de l'axe Y.
+- **roll** : *réel*  
+  Tourne les objects importés de l'angle donné (en degrés) autour de l'axe Z.
 
 ### Sections scene_node et camera_node
 
@@ -437,6 +522,8 @@ Les matériaux pouvant être multi-passes, il est possible de définir plusieurs
   La position du node par rapport à son parent.
 - **orientation** : *4 réels*  
   Quaternion représentant l’orientation du node par rapport à son parent.
+- **direction** : *3 réels*  
+  Définit la direction du node, par rapport à son parent.
 - **scale** : *3 réels*  
   Echelle du node par rapport à son parent.
 
@@ -454,8 +541,11 @@ Les matériaux pouvant être multi-passes, il est possible de définir plusieurs
 - **attenuation** : *3 réels*  
   Définit les 3 composantes d’atténuation de la source lumineuse en fonction de l’éloignement de la source : constante, linéaire et quadratique.  
   spot_light et point_light uniquement.
-- **cut_off** : *réel*  
-  Ouverture de l’angle du cône du spot.  
+- **inner_cut_off** : *réel*  
+  Angle d'ouverture intérieur du cône du spot.  
+  spot_light uniquement.
+- **outer_cut_off** : *réel*  
+  Angle d'ouverture extérieur du cône du spot.  
   spot_light uniquement.
 - **exponent** : *réel*  
   Attenuation fonction de la distance entre le point éclairé et le centre du cône lumineux.  
@@ -503,6 +593,8 @@ Les matériaux pouvant être multi-passes, il est possible de définir plusieurs
   Définit si l’objet projette des ombres (*true*, valeur par défaut) ou pas (*false*).
 - **receive_shadows** : *booléen*  
   Définit si l’objet reçoit des ombres (*true*, valeur par défaut) ou pas (*false*).
+- **cullable** : *booléen*  
+  Définit si l’objet est cullable (*true*, valeur par défaut) ou pas (*false*).
 
 #### Section materials
 
@@ -516,16 +608,16 @@ Permet de définir des billboards partageant le même matériau et faisant les m
 
 - **parent** : *nom*  
   Définit le SceneNode auquel ces billboards seront attachés.
+- **type** : *valeur*  
+  Définit le type de billboards. Les valeurs possibles sont :
+  - *cylindrical*: Les billboards font face à la caméra, sauf pour leur axe Y, qui reste fixe.
+  - *spherical*: Les billboards font face à la caméra sur tous les axes.
 - **positions** : *section*  
   Permet de définir les positions relatives des différentes instances des billboards.
 - **material** : *nom*  
   Définit le mtatériau utilisé pour l’affichage des billboards.
 - **dimensions** : *taille*  
   Définit la taille des billboards.
-- **type** : *valeur*  
-  Définit le type de billboards. Les valeurs possibles sont :
-  - *cylindrical*: Les billboards font face à la caméra, sauf pour leur axe Y, qui reste fixe.
-  - *spherical*: Les billboards font face à la caméra sur tous les axes.
 - **size** : *valeur*  
   Définit le redimensionnement des billboards. Les valeurs possibles sont :
   - *dynamic*: La taille varie, en fonction de la distance de la caméra.
@@ -554,11 +646,16 @@ Permet de définir des billboards partageant le même matériau et faisant les m
   - *polygon* : Des polygones.
 - **viewport** : *section*
   Définit la fenêtre d’affichage de la caméra.
+- **hdr_config** : *section*  
+  Définit une nouvelle section, décrivant la configuration HDR.
 
 #### Section viewport
 
 - **type** : *valeur*  
-  Type d’affichage de la fenêtre, peut valoir 2d ou 3d.
+  Type de viewport. Peut prendre les valeurs suivantes :
+  - *ortho* : Viewport orthographique.
+  - *perspective* : Viewport perspective.
+  - *frustum* : Viewport frustum.
 - **left** : *réel*  
   Définit la coordonnée X minimale affichée.
 - **right** : *réel*  
@@ -578,10 +675,23 @@ Permet de définir des billboards partageant le même matériau et faisant les m
 - **aspect_ratio** : *réel*  
   Définit l’aspect global de la fenêtre (1.33333 pour 4/3, 1.77777 pour 16/9 … ).
 
+#### Section hdr_config
+
+- **exposure** : *réel*  
+  Définit l’exposition de la scène.
+- **gamma** : *réel*  
+  Définit la correction gamma de la scène.
+
 ### Section animated_object_group
 
 - **animated_object** : *nom*  
   Définit le nom d’un objet à ajouter dans le groupe.
+- **animated_mesh** : *nom*  
+  Définit le nom d’un objet dont le maillage est à ajouter dans le groupe.
+- **animated_skeleton** : *nom*  
+  Définit le nom d’un objet dont le squelette est à ajouter dans le groupe.
+- **animated_node** : *nom*  
+  Définit le nom d’un node à ajouter dans le groupe.
 - **animation** : *nom*  
   Ajoute l’animation dont le nom est donné à la liste d’animations communes.
 - **start_animation** : *nom*  
@@ -595,6 +705,20 @@ Permet de définir des billboards partageant le même matériau et faisant les m
   Définit si l’animation est bouclée (*true*) ou pas (*false*, valeur par défaut).
 - **scale** : *réel*  
   Définit la vitesse de l’animation (peut être négative, l’animation sera alors jouée à l’envers).
+- **start_at** : *réel*  
+  Définit l'index de départ de l'animation.
+- **stop_at** : *réel*  
+  Définit l'index d'arrêt de l'animation.
+
+## Section skeleton
+
+- **import** : *fichier* &lt;*options*&gt;  
+  Permet l’import d’un fichier contenant les données du squelette. Ce fichier peut être au format cmsh ou tout autre format supporté par Castor3D. Uniquement si le type du maillage est **custom**. Cette directive peut de plus prendre plusieurs options parmi les suivantes :
+  - *rescale*=*réel* : Met le squelette à l’échelle, sur les trois axes.
+- **anim_import** : *fichier* &lt;*options*&gt;  
+  Permet l’import d’un fichier contenant des données d'animation de squelette.  
+  Cette directive peut de plus prendre plusieurs options parmi les suivantes :
+  - *rescale*=*réel* : Met le squelette à l’échelle, sur les trois axes.
 
 ## Section mesh
 
@@ -608,23 +732,25 @@ Permet de définir des billboards partageant le même matériau et faisant les m
   - *icosahedron* : sphère à faces triangulaires, il faut définir le nombre de subdivision et le rayon.
   - *torus* : torre, il est nécessaire de définir le nombre de subdivisions internes, externes et les rayons interne et externe.
   - *plane* : un plan, il est nécessaire de définir le nombre de subdivisions en largeur et en profondeur ainsi que la largeur et la profondeur.
+- **skeleton** : *name*  
+  Définit le squelette utilisé par le maillage.
 - **submesh** : *section*  
   Définit un sous-maillage, uniquement si le type du maillage est **custom**.
 - **import** : *fichier* &lt;*options*&gt;  
   Permet l’import d’un fichier contenant les données du maillage. Ce fichier peut être au format cmsh ou tout autre format supporté par Castor3D. Uniquement si le type du maillage est **custom**. Cette directive peut de plus prendre plusieurs options parmi les suivantes :
-  - *smooth_normals* : Génère les normales par sommet lors de l’import.
-  - *flat_normals* : Génère les normales par face lors de l’import.
-  - *tangent_space* : Génère les informations d’espace tangent (tangente et bitangente) lors de l’import.
   - *rescale*=*réel* : Met le maillage à l’échelle, sur les trois axes.
-- **morph_import** : *fichier* &lt;*options*&gt;  
-  Permet l’import d’un fichier contenant les données du maillage, pour ajouter une animation par sommet.  
+  - *pitch*=*réel* : Tourne le maillage de l'angle donné (en degrés) autour de l'axe X.
+  - *yaw*=*réel* : Tourne le maillage de l'angle donné (en degrés) autour de l'axe Y.
+  - *roll*=*réel* : Tourne le maillage de l'angle donné (en degrés) autour de l'axe Z.
+- **anim_import** : *fichier* &lt;*options*&gt;  
+  Permet l’import d’un fichier contenant des données d'animation de maillage.  
   Ce fichier peut être au format cmsh ou tout autre format supporté par Castor3D.  
   Disponible uniquement si le type du maillage est *custom*.  
   Cette directive peut de plus prendre plusieurs options parmi les suivantes :
-  - *smooth_normals* : Génère les normales par sommet lors de l’import.
-  - *flat_normals* : Génère les normales par face lors de l’import.
-  - *tangent_space* : Génère les informations d’espace tangent (tangente et bitangente) lors de l’import.
   - *rescale*=*réel* : Met le maillage à l’échelle, sur les trois axes.
+  - *pitch*=*réel* : Tourne le maillage de l'angle donné (en degrés) autour de l'axe X.
+  - *yaw*=*réel* : Tourne le maillage de l'angle donné (en degrés) autour de l'axe Y.
+  - *roll*=*réel* : Tourne le maillage de l'angle donné (en degrés) autour de l'axe Z.
 - **division** : *nom* *entier*  
   Permet la subdivision du maillage en utilisant un algorithm défini par le nom donné (support en fonction des plugins). Le second paramètre est le nombre de fois où la division est effectuée (récursivement).
 
@@ -788,20 +914,8 @@ Permet de définir des billboards partageant le même matériau et faisant les m
   - *argb16f* : ARGB 64 bits, chaque composante sur un flottant 16 bits (half float).
   - *rgb32f* : RGB 96 bits, chaque composante sur un flottant 32 bits (float).
   - *argb32f* : ARGB 128 bits, chaque composante sur un flottant 32 bits (float).
-- **depth** : *valeur*  
-  Définit le format des pixels du buffer profondeur de la cible de rendu. Peut valoir :
-  - *depth16* : Profondeur sur un entier en 16 bits.
-  - *depth24* : Profondeur sur un entier en 24 bits.
-  - *depth24s8* : Profondeur sur un entier en 24 bits + Stencil sur un entier 8 bits.
-  - *depth32fs8* : Profondeur sur un nombre en virgule flottante en 32 bits + Stencil sur un entier 8 bits.
-  - *depth32* : Profondeur sur un entier en 32 bits.
-  - *depth32f* : Profondeur sur un nombre en virgule flottante en 32 bits.
-  - *stencil1* : Stencil sur un bit.
-  - *stencil8* : Stencil sur un entier en 8 bits.
 - **postfx** : *nom*, *parametres optionnels*  
   Définit un effet post-rendu à utiliser. Les paramètres optionnels dépendent de l’effet choisi.
-- **stereo** : *booléen*  
-  Définit si on utilise l’affichage stéréoscopique.
 - **tone_mapping** : *nom*  
   Définit l’opérateur de mappage de ton, à utiliser avec la cible de rendu.
 - **ssao** : *section*  

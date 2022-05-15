@@ -7,6 +7,8 @@ See LICENSE file in root folder
 #include "MaterialImporter.hpp"
 #include "SkeletonImporter.hpp"
 
+#include <Castor3D/Model/Mesh/Importer.hpp>
+
 #pragma warning( push )
 #pragma warning( disable: 4365 )
 #pragma warning( disable: 4619 )
@@ -40,20 +42,25 @@ namespace c3d_assimp
 
 		MeshIndices import( castor::Path const & fileName
 			, aiScene const & aiScene
-			, castor3d::Mesh & mesh );
+			, castor3d::Mesh & mesh
+			, castor3d::MeshImporter::Mode mode );
 		std::map< uint32_t, MeshData * > import( castor::Path const & fileName
 			, aiScene const & aiScene
-			, castor3d::Scene & scene );
+			, castor3d::Scene & scene
+			, castor3d::MeshImporter::Mode mode );
 
 	private:
 		void doProcessMeshesAndAnims( aiScene const & aiScene
 			, castor3d::Scene & scene
-			, castor::ArrayView< aiMesh * > aiMeshes );
+			, castor::ArrayView< aiMesh * > aiMeshes
+			, castor3d::MeshImporter::Mode mode );
 		std::map< uint32_t, MeshData * > doRemoveDuplicateMeshes( castor3d::Scene & scene );
 		MeshIndices doProcessMeshAndAnims( aiScene const & aiScene
 			, castor::ArrayView< aiMesh * > aiMeshes
 			, uint32_t aiMeshIndex
-			, castor3d::Mesh & mesh );
+			, castor3d::Mesh & mesh
+			, castor3d::SkeletonRPtr skeleton
+			, castor3d::MeshImporter::Mode mode );
 		bool doProcessMesh( castor3d::Scene & scene
 			, castor3d::Mesh & mesh
 			, castor3d::SkeletonRPtr skeleton
