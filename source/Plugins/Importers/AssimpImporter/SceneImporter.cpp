@@ -513,28 +513,34 @@ namespace c3d_assimp
 			name = normalizeName( node.getName() );
 		}
 
-		castor3d::log::info << cuT( "  SceneNode Animation found: [" ) << name << cuT( "]" ) << std::endl;
-		auto & animation = node.createAnimation( name );
-		int64_t ticksPerSecond = aiAnimation.mTicksPerSecond != 0.0
-			? int64_t( aiAnimation.mTicksPerSecond )
-			: 25ll;
-		SceneNodeAnimationKeyFrameMap keyframes;
-		processAnimationNodeKeys( aiNodeAnim
-			, m_importer.getEngine()->getRenderLoop().getWantedFps()
-			, ticksPerSecond
-			, animation
-			, keyframes
-			, []( castor3d::SceneNodeAnimationKeyFrame & keyframe
-				, castor::Point3f const & position
-				, castor::Quaternion const & orientation
-				, castor::Point3f const & scale )
-			{
-				keyframe.setTransform( position, orientation, scale );
-			} );
+		auto [frameCount, frameTicks] = getAnimationFrameTicks( aiAnimation );
 
-		for ( auto & keyFrame : keyframes )
+		if ( frameCount > 1 )
 		{
-			animation.addKeyFrame( std::move( keyFrame.second ) );
+			castor3d::log::info << cuT( "  SceneNode Animation found: [" ) << name << cuT( "]" ) << std::endl;
+			auto & animation = node.createAnimation( name );
+			int64_t ticksPerSecond = aiAnimation.mTicksPerSecond != 0.0
+				? int64_t( aiAnimation.mTicksPerSecond )
+				: 25ll;
+			SceneNodeAnimationKeyFrameMap keyframes;
+			processAnimationNodeKeys( aiNodeAnim
+				, m_importer.getEngine()->getRenderLoop().getWantedFps()
+				, fromAssimp( frameTicks, ticksPerSecond )
+				, ticksPerSecond
+				, animation
+				, keyframes
+				, []( castor3d::SceneNodeAnimationKeyFrame & keyframe
+					, castor::Point3f const & position
+					, castor::Quaternion const & orientation
+					, castor::Point3f const & scale )
+				{
+					keyframe.setTransform( position, orientation, scale );
+				} );
+
+			for ( auto & keyFrame : keyframes )
+			{
+				animation.addKeyFrame( std::move( keyFrame.second ) );
+			}
 		}
 	}
 

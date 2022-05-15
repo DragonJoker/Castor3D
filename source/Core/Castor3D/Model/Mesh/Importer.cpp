@@ -181,8 +181,7 @@ namespace castor3d
 			result *= scale;
 		}
 
-		static void transformSkeletonAnimations( castor::Point3f const & translate
-			, castor::Point3f const & scale
+		static void transformSkeletonAnimations( castor::Point3f const & scale
 			, castor::Quaternion const & rotation
 			, Skeleton & skeleton )
 		{
@@ -211,6 +210,51 @@ namespace castor3d
 				}
 			}
 		}
+
+		bool parseParameters( Parameters const & parameters
+			, castor::Point3f & scale
+			, castor::Quaternion orientation )
+		{
+			float value = 1.0f;
+			bool needsTransform = false;
+
+			if ( parameters.get( cuT( "rescale" ), value )
+				&& std::abs( value ) > std::numeric_limits< float >::epsilon()
+				&& std::abs( value - 1.0f ) > std::numeric_limits< float >::epsilon() )
+			{
+				scale = { value, value, value };
+				needsTransform = true;
+			}
+
+			if ( parameters.get( cuT( "pitch" ), value )
+				&& std::abs( value ) > std::numeric_limits< float >::epsilon() )
+			{
+				auto rot = castor::Quaternion::fromAxisAngle( castor::Point3f{ 1.0f, 0.0f, 0.0f }
+				, castor::Angle::fromDegrees( value ) );
+				orientation *= rot;
+				needsTransform = true;
+			}
+
+			if ( parameters.get( cuT( "yaw" ), value )
+				&& std::abs( value ) > std::numeric_limits< float >::epsilon() )
+			{
+				auto rot = castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0f, 1.0f, 0.0f }
+				, castor::Angle::fromDegrees( value ) );
+				orientation *= rot;
+				needsTransform = true;
+			}
+
+			if ( parameters.get( cuT( "roll" ), value )
+				&& std::abs( value ) > std::numeric_limits< float >::epsilon() )
+			{
+				auto rot = castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0f, 0.0f, 1.0f }
+				, castor::Angle::fromDegrees( value ) );
+				orientation *= rot;
+				needsTransform = true;
+			}
+
+			return needsTransform;
+		}
 	}
 
 	MeshImporter::MeshImporter( Engine & engine )
@@ -221,20 +265,36 @@ namespace castor3d
 
 	bool MeshImporter::import( Skeleton & skeleton
 		, castor::Path const & pathFile
-		, Parameters const & parameters )
+		, Parameters const & parameters
+		, Mode mode )
 	{
 		m_fileName = pathFile;
 		m_filePath = m_fileName.getPath();
 		m_parameters = parameters;
-		m_animsOnly = false;
+		m_mode = mode;
 		bool result = true;
 
-		if ( skeleton.getNodes().empty() )
+		if ( skeleton.getNodes().empty()
+			|| m_mode == Mode::eAnim )
 		{
 			result = doImportSkeleton( skeleton );
 
 			if ( result )
 			{
+				castor::Point3f scale{ 1.0f, 1.0f, 1.0f };
+				castor::Quaternion orientation{ castor::Quaternion::identity() };
+
+				if ( mshimp::parseParameters( m_parameters, scale, orientation ) )
+				{
+					castor::Matrix4x4f transform;
+					castor::matrix::setRotate( transform, orientation );
+					castor::matrix::scale( transform, scale );
+					mshimp::transformSkeleton( transform, skeleton );
+					mshimp::transformSkeletonAnimations( scale
+						, orientation
+						, skeleton );
+				}
+
 				log::info << "Loaded skeleton [" << skeleton.getName() << "]"
 					<< " " << skeleton.getNodesCount() << " Node(s)"
 					<< ", " << skeleton.getBonesCount() << " Bones(s)" << std::endl;
@@ -247,77 +307,39 @@ namespace castor3d
 	bool MeshImporter::import( Mesh & mesh
 		, castor::Path const & pathFile
 		, Parameters const & parameters
-		, bool forceImport )
+		, Mode mode )
 	{
 		bool splitSubmeshes = false;
 		m_parameters.get( cuT( "split_mesh" ), splitSubmeshes );
 		m_fileName = pathFile;
 		m_filePath = m_fileName.getPath();
 		m_parameters = parameters;
-		m_animsOnly = false;
+		m_mode = mode;
 		bool result = true;
 
-		if ( !mesh.getSubmeshCount() || forceImport )
+		if ( !mesh.getSubmeshCount()
+			|| m_mode == Mode::eForceData
+			|| m_mode == Mode::eAnim )
 		{
 			result = doImportMesh( mesh );
 
 			if ( result )
 			{
-				float value = 1.0f;
 				castor::Point3f scale{ 1.0f, 1.0f, 1.0f };
 				castor::Quaternion orientation{ castor::Quaternion::identity() };
-				bool needsTransform = false;
 
-				if ( m_parameters.get( cuT( "rescale" ), value )
-					&& std::abs( value ) > std::numeric_limits< float >::epsilon()
-					&& std::abs( value - 1.0f ) > std::numeric_limits< float >::epsilon() )
-				{
-					scale = { value, value, value };
-					needsTransform = true;
-				}
-
-				if ( m_parameters.get( cuT( "pitch" ), value )
-					&& std::abs( value ) > std::numeric_limits< float >::epsilon() )
-				{
-					auto rot = castor::Quaternion::fromAxisAngle( castor::Point3f{ 1.0f, 0.0f, 0.0f }
-						, castor::Angle::fromDegrees( value ) );
-					orientation *= rot;
-					needsTransform = true;
-				}
-
-				if ( m_parameters.get( cuT( "yaw" ), value )
-					&& std::abs( value ) > std::numeric_limits< float >::epsilon() )
-				{
-					auto rot = castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0f, 1.0f, 0.0f }
-						, castor::Angle::fromDegrees( value ) );
-					orientation *= rot;
-					needsTransform = true;
-				}
-
-				if ( m_parameters.get( cuT( "roll" ), value )
-					&& std::abs( value ) > std::numeric_limits< float >::epsilon() )
-				{
-					auto rot = castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0f, 0.0f, 1.0f }
-						, castor::Angle::fromDegrees( value ) );
-					orientation *= rot;
-					needsTransform = true;
-				}
-
-				if ( needsTransform )
+				if ( mshimp::parseParameters( m_parameters, scale, orientation ) )
 				{
 					castor::Matrix4x4f transform;
-					castor::matrix::setTransform( transform
-						, castor::Point3f{}
-						, scale
-						, orientation );
+					castor::matrix::setRotate( transform, orientation );
+					castor::matrix::scale( transform, scale );
 					mshimp::transformMesh( transform, mesh );
 					mshimp::transformMeshAnimations( transform, mesh );
 
 					if ( auto skeleton = mesh.getSkeleton() )
 					{
 						mshimp::transformSkeleton( transform, *skeleton );
-						mshimp::transformSkeletonAnimations( castor::Point3f{}
-							, scale
+						mshimp::transformSkeletonAnimations( scale
 							, orientation
 							, *skeleton );
 					}
@@ -350,52 +372,15 @@ namespace castor3d
 		m_fileName = pathFile;
 		m_filePath = m_fileName.getPath();
 		m_parameters = parameters;
-		m_animsOnly = false;
+		m_mode = Mode::eBoth;
 		bool result = doImportScene( scene );
 
 		if ( result )
 		{
-			float value = 1.0f;
 			castor::Point3f scale{ 1.0f, 1.0f, 1.0f };
 			castor::Quaternion orientation{ castor::Quaternion::identity() };
-			bool needsTransform = false;
 
-			if ( m_parameters.get( cuT( "rescale" ), value )
-				&& std::abs( value ) > std::numeric_limits< float >::epsilon()
-				&& std::abs( value - 1.0f ) > std::numeric_limits< float >::epsilon() )
-			{
-				scale = { value, value, value };
-				needsTransform = true;
-			}
-
-			if ( m_parameters.get( cuT( "pitch" ), value )
-				&& std::abs( value ) > std::numeric_limits< float >::epsilon() )
-			{
-				auto rot = castor::Quaternion::fromAxisAngle( castor::Point3f{ 1.0f, 0.0f, 0.0f }
-					, castor::Angle::fromDegrees( value ) );
-				orientation *= rot;
-				needsTransform = true;
-			}
-
-			if ( m_parameters.get( cuT( "yaw" ), value )
-				&& std::abs( value ) > std::numeric_limits< float >::epsilon() )
-			{
-				auto rot = castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0f, 1.0f, 0.0f }
-					, castor::Angle::fromDegrees( value ) );
-				orientation *= rot;
-				needsTransform = true;
-			}
-
-			if ( m_parameters.get( cuT( "roll" ), value )
-				&& std::abs( value ) > std::numeric_limits< float >::epsilon() )
-			{
-				auto rot = castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0f, 0.0f, 1.0f }
-					, castor::Angle::fromDegrees( value ) );
-				orientation *= rot;
-				needsTransform = true;
-			}
-
-			if ( needsTransform )
+			if ( mshimp::parseParameters( m_parameters, scale, orientation ) )
 			{
 				auto transformNode = scene.addNewSceneNode( pathFile.getFileName() + "TransformNode" ).lock();
 				transformNode->setScale( scale );
@@ -429,22 +414,20 @@ namespace castor3d
 		, castor::Path const & pathFile
 		, Parameters const & parameters )
 	{
-		m_fileName = pathFile;
-		m_filePath = m_fileName.getPath();
-		m_parameters = parameters;
-		m_animsOnly = true;
-		return doImportSkeleton( skeleton );
+		return import( skeleton
+			, pathFile
+			, parameters
+			, Mode::eAnim );
 	}
 
 	bool MeshImporter::importAnimations( Mesh & mesh
 		, castor::Path const & pathFile
 		, Parameters const & parameters )
 	{
-		m_fileName = pathFile;
-		m_filePath = m_fileName.getPath();
-		m_parameters = parameters;
-		m_animsOnly = true;
-		return doImportMesh( mesh );
+		return import( mesh
+			, pathFile
+			, parameters
+			, Mode::eAnim );
 	}
 
 	bool MeshImporter::importAnimations( Scene & scene
@@ -454,7 +437,7 @@ namespace castor3d
 		m_fileName = pathFile;
 		m_filePath = m_fileName.getPath();
 		m_parameters = parameters;
-		m_animsOnly = true;
+		m_mode = Mode::eAnim;
 		return doImportScene( scene );
 	}
 

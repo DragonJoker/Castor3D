@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3DAssimp_SkeletonImporter___
 
 #include <Castor3D/Castor3DPrerequisites.hpp>
+#include <Castor3D/Model/Mesh/Importer.hpp>
 
 #pragma warning( push )
 #pragma warning( disable: 4365 )
@@ -31,7 +32,8 @@ namespace c3d_assimp
 		void import( castor::Path const & fileName
 			, aiScene const & aiScene
 			, castor3d::Scene & scene
-			, bool replaceInverseTransforms );
+			, castor3d::SkeletonRPtr skeleton
+			, castor3d::MeshImporter::Mode mode );
 		bool isBoneNode( aiNode const & aiNode )const;
 		castor3d::SkeletonRPtr getSkeleton( aiMesh const & aiMesh
 			, uint32_t aiMeshIndex )const;
@@ -44,12 +46,15 @@ namespace c3d_assimp
 	private:
 		void doProcessSkeletons( aiScene const & aiScene
 			, castor3d::Scene & scene
-			, castor::ArrayView< aiMesh * > aiMeshes );
+			, castor3d::SkeletonRPtr skeleton
+			, castor::ArrayView< aiMesh * > aiMeshes
+			, castor3d::MeshImporter::Mode mode );
 		void doProcessSkeletonAnimation( castor::String const & name
 			, castor3d::Skeleton & skeleton
 			, aiNode const & aiNode
 			, aiAnimation const & aiAnimation );
 		void doProcessSkeletonAnimationNodes( castor3d::SkeletonAnimation & animation
+			, castor::Milliseconds maxTime
 			, int64_t ticksPerSecond
 			, castor3d::Skeleton & skeleton
 			, aiNode const & aiNode
@@ -71,6 +76,7 @@ namespace c3d_assimp
 		std::map< castor::String, BoneData > m_bonesNodes;
 		std::map< castor::String, castor3d::SkeletonRPtr > m_skeletons;
 		std::map< castor::String, castor3d::SkeletonRPtr > m_meshSkeletons;
+		std::map< castor::String, castor3d::ObjectTransform > m_nodeTransforms;
 	};
 }
 

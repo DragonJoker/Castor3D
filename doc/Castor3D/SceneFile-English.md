@@ -53,29 +53,38 @@ Some sections can have child subsections :
         }
     }
 
-## Sections list
+## Root section
 
-The possible sections are the following:
-- **sampler**  
+- **debug_overlays** : *boolean*  
+  Enables or disables debug overlays.
+- **materials** : *value*  
+  Defines the material type used in the whole file. The possible values are :
+  - *phong* : Phong materials.
+  - *blinn_phong* : Blinn-Phong materials.
+  - *metallic_roughness* : PBR metallic/roughness materials.
+  - *specular_glossiness* : PBR specular/glossiness materials.
+- **max_image_size**: *int*
+  Allows limitation of the loaded images (keeping their aspect ratio).
+- **sampler** : *section*  
   Defines a texture sampler object.
-- **material**  
+- **material** : *section*  
   Defines a material.
-- **mesh**  
-  Defines a mesh.
-- **font**  
+- **loading_screen** : *section*  
+  Redefines the loading screen.
+- **font** : *section*  
   Defines a font used in text overlays.
-- **window**  
+- **window** : *section*  
   Defines a render window.
-- **panel_overlay**  
+- **panel_overlay** : *section*  
   Defines a simple panel overlay.
-- **border_panel_overlay**  
+- **border_panel_overlay** : *section*  
   Defines a panel overlay with a border.
-- **text_overlay**  
+- **text_overlay** : *section*  
   Defines a panel overlay with a text.
-- **scene**  
+- **scene** : *section*  
   Defines a whole scene.
 
-## Section sampler
+## sampler section
 
 - **min_filter** : *value*  
   Value used for minification function. The possible values are :
@@ -121,14 +130,32 @@ The possible sections are the following:
   - *int_opaque_black* : Opaque black.
   - *float_opaque_white* : Opaque white.
   - *int_opaque_white* : Opaque white.
+- **anisotropic_filtering** : *booléen*  
+  Defines if anisotropic filtering is enabled (if supported).
 - **max_anisotropy** : *real*  
   Defines the maximum degree of anisotropy.
+- **comparison_mode** : *value*  
+  Defines the sampler comparison mode. The possible values are :
+  - *none* : Traditional sampler.
+  - *ref_to_texture* : Shadow sampler.
+- **comparison_func** : *value*  
+  Defines the sampler comparison function. The possible values are :
+  - *always* : The sample colour is always applied.
+  - *less* : The sample colour is applied if its alpha component is less than the second parameter.
+  - *less_or_equal* : The sample colour is applied if its alpha component is less than or equal to the second parameter.
+  - *equal* : The sample colour is applied if its alpha component is equal to the second parameter.
+  - *not_equal* : The sample colour is applied if its alpha component is different from the second parameter.
+  - *greater_or_equal* : The sample colour is applied if its alpha component is greater than or equal to the second parameter.
+  - *greater* : The sample colour is applied if its alpha component is greater than the second parameter.
+  - *never* : The sample colour is never applied.
 
 ## material section
 
 Materials can be multi-pass, so you can declare more than one pass subsection.
 - **pass** : *section*  
   Defines a new section describing a texture.
+- **render_pass** : *name*  
+  Defines the name of the render pass used to render objects using this material.
 
 ### pass section
 
@@ -167,7 +194,7 @@ Materials can be multi-pass, so you can declare more than one pass subsection.
   - *additive* : Source and destination colour values are added.
   - *multiplicative* : Source and destination colour values are multiplied.
 - **alpha_func** : func : *value* ref-val: *real*  
-  Defines the way alpha rejection is applied to the texture. The second parameter is the reference value used in alpha rejection function. The first parameter values can be :
+  Defines the way alpha rejection is applied to the pass. The second parameter is the reference value used in alpha rejection function. The first parameter values can be :
   - *always* : The sample colour is always applied.
   - *less* : The sample colour is applied if its alpha component is less than the second parameter.
   - *less_or_equal* : The sample colour is applied if its alpha component is less than or equal to the second parameter.
@@ -176,6 +203,18 @@ Materials can be multi-pass, so you can declare more than one pass subsection.
   - *greater_or_equal* : The sample colour is applied if its alpha component is greater than or equal to the second parameter.
   - *greater* : The sample colour is applied if its alpha component is greater than the second parameter.
   - *never* : The sample colour is never applied.
+- **blend_alpha_func** : func : *value* ref-val: *real*  
+  Defines the way alpha blending is applied to the pass. The second parameter is the reference value used in alpha rejection function. The first parameter values can be :
+  - *always* : The sample colour is always applied.
+  - *less* : The sample colour is applied if its alpha component is less than the second parameter.
+  - *less_or_equal* : The sample colour is applied if its alpha component is less than or equal to the second parameter.
+  - *equal* : The sample colour is applied if its alpha component is equal to the second parameter.
+  - *not_equal* : The sample colour is applied if its alpha component is different from the second parameter.
+  - *greater_or_equal* : The sample colour is applied if its alpha component is greater than or equal to the second parameter.
+  - *greater* : The sample colour is applied if its alpha component is greater than the second parameter.
+  - *never* : The sample colour is never applied.
+- **mixed_interpolation** : *section*  
+  Helper that sets **alpha_blend_mode** to *interpolative*, **blend_alpha_func** to *less_or_equal* and **alpha_func** to *greater* with a ref. value to 0.95.
 - **refraction_ratio** : *real*  
   Defines the refraction ratio of the pass. Note that if there is no refraction map, the refraction is still applied, using only the skybox.
 - **subsurface_scattering** : *section*  
@@ -184,8 +223,10 @@ Materials can be multi-pass, so you can declare more than one pass subsection.
   Enables or disables parallax occlusion mapping (needs a normal map and a height map).
 - **bw_accumulation** : *int between 0 and 5*  
   Defines the accumulation function, for blended weighted rendering.
-- **reflections** : Enables reflections.  
-- **refractions** : Enables refraction.
+- **reflections** :  
+  Enables reflections.  
+- **refractions** :  
+  Enables refraction.
 
 #### texture_unit section
 
@@ -210,6 +251,8 @@ Materials can be multi-pass, so you can declare more than one pass subsection.
   - *height* : Height.
 - **sampler** : *name*  
   Defines the sampler object used by the texture.
+- **level_count** : *entier*
+  Defines the maximum mip levels count.
 - **diffuse_mask** : *mask_3*  
   Defines the components from the texture used for the diffuse colour (Phong only).
 - **albedo_mask** : *mask_3*  
@@ -234,12 +277,46 @@ Materials can be multi-pass, so you can declare more than one pass subsection.
   Defines the component from the texture used for the occlusion factor.
 - **normal** : *mask_3*  
   Defines the components from the texture used for the normals.
+- **normal_directx** : *booléen*  
+  Tells if the texture normals are expressed for DirectX (green component will then be inverted).
 - **height** : *mask_1*  
   Defines the component from the texture used for the height.
 - **height_factor** : *real*  
   The height factor multiplier.
-- **normal_directx** : *booléen*  
-  Tells if the texture normals are expressed for DirectX (green component will then be inverted).
+- **invert_y** : *boolean*  
+  Defines if the image must be inverted along Y axis.
+- **transform** : *section*  
+  Defines the texture base transformation.
+- **tileset** : *2 ints*  
+  Defines the tile set dimensions of the texture.
+- **tiles** : *int*  
+  Defines the tile count of the texture.
+- **animation** : *section*  
+  Defines the texture transformation animation.
+- **texcoord_set** : *section*  
+  Defines the target texture coordinates set this texture will be using.
+
+##### transform section
+
+- **rotate** : *réel*  
+  Defines the texture rotation.
+- **translate** : *2 réels*  
+  Defines the texture translation.
+- **scale** : *2 réels*  
+  Defines the texture scaling.
+- **tile** : *2 entiers*  
+  Defines the selected tile.
+
+##### animation section
+
+- **rotate** : *réel*  
+  Defines the texture rotation animation speed.
+- **translate** : *2 réels*  
+  Defines the texture translation animation speed.
+- **scale** : *2 réels*  
+  Defines the texture scaling animation speed.
+- **tile** : *2 entiers*  
+  Defines if the tiles are animated.
 
 #### shader_program section
 
@@ -376,7 +453,7 @@ Materials can be multi-pass, so you can declare more than one pass subsection.
   Defines the background colour.
 - **background_image** : *file*  
   Defines the background image.
-- **import** : *file*  
+- **import** : *section*  
   Allows scene import from a CSCN file or another file format supported by Castor3D importer plug-ins.
 - **scene_node** : *section*  
   Defines a new section describing a scene node for objects, lights or billboards.
@@ -398,6 +475,8 @@ Materials can be multi-pass, so you can declare more than one pass subsection.
   Defines a new section describing a simple panel overlay with text.
 - **animated_object_group** : *section*  
   Defines a new section describing an animated object group, with common animations.
+- **skeleton** : *section*  
+  Defines a new section describing a skeleton, that can be used with one or more meshes.
 - **mesh** : *section*  
   Defines a new section describing a mesh, that can be used with one or more objects.
 - **particle_system** : *section*  
@@ -415,15 +494,23 @@ Materials can be multi-pass, so you can declare more than one pass subsection.
   - *squared_exponential*: Fog intensity increases even more with distance to camera.
 - **fog_density** : *real*  
   Defines the fog density, which is multiplied by the distance, according to chosen fog type.
-- **hdr_config** : *section*  
-  Defines a new section describing the HDR configuration.
 
-### hdr_config section
+### import section
 
-- **exposure** : *real*  
-  Defines the scene’s exposure.
-- **gamma** : *real*  
-  Defines the gamma correction.
+- **file** : *path*  
+  Imports the scene from the given file name.
+- **anim_file** : *path*  
+  Imports animations from the given file name.
+- **prefix** : *text*  
+  Defines the imported objects' name prefix, used to prevent names clash.
+- **rescale** : *real*  
+  Rescales the imported objects by given factor, on three axes.
+- **pitch** : *réel*  
+  Rotates the imported objects by given angle (in degrees) along X axis.
+- **yaw** : *réel*  
+  Rotates the imported objects by given angle (in degrees) along Y axis.
+- **roll** : *réel*  
+  Rotates the imported objects by given angle (in degrees) along Z axis.
 
 ### scene_node and camera_node sections
 
@@ -433,6 +520,8 @@ Materials can be multi-pass, so you can declare more than one pass subsection.
   Node position relative to its parent.
 - **orientation** : *4 reals*  
   A quaternion holding node orientation relative to its parent.
+- **direction** : *3 reals*  
+  Holds node direction relative to its parent.
 - **scale** : *3 reals*  
   Node scale relative to its parent.
 
@@ -450,15 +539,18 @@ Materials can be multi-pass, so you can declare more than one pass subsection.
 - **attenuation** : *3 reals*  
   Defines the three attenuation components : constant, linear and quadratic. This attenuation is computed from the distance to the light source.  
   Only for spot_light and point_light.
-- **cut_off** : *real*  
-  Defines the angle of the emission cone.  
+- **inner_cut_off** : *real*  
+  Defines the inner angle of the emission cone.  
+  Only for spot_light.
+- **outer_cut_off** : *real*  
+  Defines the outer angle of the emission cone.  
   Only for spot_light.
 - **exponent** : *real*  
   Defines the attenuation computed with the distance from the emission cone centre.  
   Only for spot_light.
 - **parent** : *name*  
   Defines the node which this light source is attached to.
-- **shadow_producer** : *section*  
+- **shadows** : *section*  
   Defines a new section describing the shadows for the light source.
 
 #### shadows section
@@ -499,6 +591,8 @@ Materials can be multi-pass, so you can declare more than one pass subsection.
   Defines if the object casts shadows (*true*, default value) or not (*false*).
 - **receive_shadows** : *boolean*  
   Defines if the object receives shadows (*true*, default value) or not (*false*).
+- **cullable** : *boolean*  
+  Defines if the object is cullable (*true*, default value) or not (*false*).
 
 #### materials section
 
@@ -511,16 +605,16 @@ Allows the definition of billboards that share the same material and dimensions.
 
 - **parent** : *name*  
   Defines the parent scene node.
+- **type** : *value*  
+  Defines the type of billboard. Possible values are:
+  - *cylindrical*: The billboard faces the camera, except for their Y axis, which remains still.
+  - *spherical*: The billboard faces the camera on all axes.
 - **positions** : *section*  
   Defines a new section describing each billboard position.
 - **material** : *name*  
   Defines the material used by every billboard of this list.
 - **dimensions** : *size*  
   Defines billboards dimensions.
-- **type** : *value*  
-  Defines the type of billboard. Possible values are:
-  - *cylindrical*: The billboard faces the camera, except for their Y axis, which remains still.
-  - *spherical*: The billboard faces the camera on all axes.
 - **size** : *value*  
   Defines the billboards sizing. Possible values are:
   - *dynamic*: The size varies, depending on the distance to camera.
@@ -549,11 +643,16 @@ Allows the definition of billboards that share the same material and dimensions.
   - *polygon* : Polygons.
 - **viewport** : *section*  
   Defines the camera view port.
+- **hdr_config** : *section*  
+  Defines a new section describing the HDR configuration.
 
 #### viewport section
 
 - **type** : *value*  
-  Window display type, 2d or 3d.
+  Viewport type. Can be one of :
+  - *ortho* : Orthographic viewport.
+  - *perspective* : Perspective viewport.
+  - *frustum* : Frustum viewport.
 - **left** : *real*  
   Defines the minimum displayed X coordinate.
 - **right** : *real*  
@@ -573,10 +672,23 @@ Allows the definition of billboards that share the same material and dimensions.
 - **aspect_ratio** : *real*  
   Defines the global window aspect ratio (1.33333 for 4/3, 1.77777 for 16/9 … ).
 
+#### hdr_config section
+
+- **exposure** : *real*  
+  Defines the scene’s exposure.
+- **gamma** : *real*  
+  Defines the gamma correction.
+
 ### animated_object_group section
 
 - **animated_object** : *name*  
   Adds the object with the given name to the group.
+- **animated_mesh** : *name*  
+  Adds the mesh from the object with the given name to the group.
+- **animated_skeleton** : *name*  
+  Adds the skeleton from the object with the given name to the group.
+- **animated_node** : *name*  
+  Adds the node with the given name to the group.
 - **animation** : *name*  
   Adds the animation with the given name to the group’s common animations list.
 - **start_animation** : *name*  
@@ -590,6 +702,20 @@ Allows the definition of billboards that share the same material and dimensions.
   Defines if the animation is looped (*true*) or not (*false*, default value).
 - **scale** : *real*  
   Defines the time scale of the animation (can be negative, the animation will then be played backwards).
+- **start_at** : *real*  
+  Defines start index of the animation.
+- **stop_at** : *real*  
+  Defines stop index of the animation.
+
+## skeleton section
+
+- **import** : *file* *&lt;options&gt;*  
+  Allows import of skeleton data from a file, in CMSH file format or any format supported by Castor3D import plug-ins. Only if the mesh type is custom. This directive can accept few optional parameters :
+  - *rescale*=*real* : Rescales the resulting skeleton by given factor, on three axes.
+- **anim_import** : *file* *&lt;options*&gt;  
+  Allows import of skeleton animations from a file.  
+  This directive can accept few optional parameters :
+  - *rescale*=*real* : Rescales the resulting mesh by given factor, on three axes.
 
 ## mesh section
 
@@ -603,23 +729,25 @@ Allows the definition of billboards that share the same material and dimensions.
   - *icosahedron* : a sphere with triangular faces, user must then define the subdivisions count and the radius.
   - *torus* : a torus, user must then define the internal and external subdivisions count and the internal and external radius.
   - *plane* : a plane, user must then define the width and depth subdivisions count and the width and depth.
+- **skeleton** : *name*  
+  Defines the skeleton used by the mesh.
 - **submesh** : *section*  
   Defines a new section describing a submesh. Only if the mesh type is custom.
 - **import** : *file* *&lt;options&gt;*  
   Allows import of mesh data from a file, in CMSH file format or any format supported by Castor3D import plug-ins. Only if the mesh type is custom. This directive can accept few optional parameters :
-  - *smooth_normals* : Computes normals per vertex during import.
-  - *flat_normals* : Computes normals per face during the import.
-  - *tangent_space* : Computes tangent space informations (tangent and bi-tangent) during import.
   - *rescale*=*real* : Rescales the resulting mesh by given factor, on three axes.
-- **morph_import** : *file* *&lt;options*&gt;  
-  Allows import of mesh data from a file, to add mophing animation.  
+  - *pitch*=*réel* : Rotates the resulting mesh by given angle (in degrees) along X axis.
+  - *yaw*=*réel* : Rotates the resulting mesh by given angle (in degrees) along Y axis.
+  - *roll*=*réel* : Rotates the resulting mesh by given angle (in degrees) along Z axis.
+- **anim_import** : *file* *&lt;options*&gt;  
+  Allows import of mesh animations from a file.  
   This directive must happen after a first import directive.  
   Available only if the mesh type is *custom*.  
   This directive can accept few optional parameters :
-  - *smooth_normals* : Computes normals per vertex during import.
-  - *flat_normals* : Computes normals per face during the import.
-  - *tangent_space* : Computes tangent space informations (tangent and bi-tangent) during import.
   - *rescale*=*real* : Rescales the resulting mesh by given factor, on three axes.
+  - *pitch*=*réel* : Rotates the resulting mesh by given angle (in degrees) along X axis.
+  - *yaw*=*réel* : Rotates the resulting mesh by given angle (in degrees) along Y axis.
+  - *roll*=*réel* : Rotates the resulting mesh by given angle (in degrees) along Z axis.
 - **division** : *name* *int*  
   Allows the mesh subdivision, using a supported Castor3D divider plug-in algorithm. The second parameter is the application count of the algorithm (its applied recursively).
 
@@ -783,20 +911,8 @@ Allows the definition of billboards that share the same material and dimensions.
   - *argb16f* : ARGB 64 bits, each component on a 16 bits floating point number (half float).
   - *rgb32f* : RGB 96 bits, each component on a 32 bits floating point number (half float).
   - *argb32f* : ARGB 128 bits, each component on a 32 bits floating point number (half float).
-- **depth** : *value*  
-  Defines the depth/stencil buffer pixel format. Can be one of :
-  - *depth16* : Depth on a 16 bits integer.
-  - *depth24* : Depth on a 24 bits integer.
-  - *depth24s8* : Depth on a 24 bits integer, Stencil on a 8 bits integer.
-  - *depth32fs8* : Depth on a 32 bits floating point, Stencil on a 8 bits integer.
-  - *depth32* : Depth on a 32 bits integer.
-  - *depth32f* : Depth on a 32 bits floating point.
-  - *stencil1* : Stencil on 1 bit.
-  - *stencil8* : Stencil on a 8 bits integer.
 - **postfx** : *value*  
   Defines a post render effect to use. The parameters depend on the chosen effect.
-- **stereo** : *boolean*  
-  Tells if we use stereoscopic display mode.
 - **tone_mapping** : *name*  
   Defines the tone mapping operator to use with the render target.
 - **ssao** : *section*  

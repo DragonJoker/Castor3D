@@ -35,7 +35,7 @@ namespace C3dPly
 
 	bool PlyImporter::doImportMesh( castor3d::Mesh & p_mesh )
 	{
-		if ( m_animsOnly )
+		if ( m_mode == Mode::eAnim )
 		{
 			return true;
 		}

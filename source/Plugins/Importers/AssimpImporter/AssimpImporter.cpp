@@ -31,12 +31,14 @@ namespace c3d_assimp
 
 		if ( auto aiScene = doLoadScene() )
 		{
-			if ( aiScene->HasMeshes() )
+			if ( aiScene->HasMeshes()
+				|| m_mode == Mode::eAnim )
 			{
 				m_skeletonsImp.import( m_fileName
 					, *aiScene
 					, *skeleton.getScene()
-					, !m_animsOnly );
+					, &skeleton
+					, m_mode );
 				result = true;
 			}
 		}
@@ -51,14 +53,19 @@ namespace c3d_assimp
 		if ( auto aiScene = doLoadScene() )
 		{
 			if ( aiScene->HasMeshes()
-				|| m_animsOnly )
+				|| m_mode == Mode::eAnim )
 			{
-				if ( m_animsOnly )
+				if ( m_mode == Mode::eAnim )
 				{
 					m_skeletonsImp.import( m_fileName
 						, *aiScene
 						, *mesh.getScene()
-						, false );
+						, mesh.getSkeleton()
+						, m_mode );
+					m_meshesImp.import( m_fileName
+						, *aiScene
+						, mesh
+						, m_mode );
 					result = true;
 				}
 				else
@@ -67,13 +74,21 @@ namespace c3d_assimp
 						, m_textureRemaps
 						, *aiScene
 						, *mesh.getScene() );
-					m_skeletonsImp.import( m_fileName
-						, *aiScene
-						, *mesh.getScene()
-						, true );
+
+					if ( !mesh.getSkeleton()
+						|| m_mode == Mode::eForceData )
+					{
+						m_skeletonsImp.import( m_fileName
+							, *aiScene
+							, *mesh.getScene()
+							, mesh.getSkeleton()
+							, m_mode );
+					}
+
 					auto indices = m_meshesImp.import( m_fileName
 						, *aiScene
-						, mesh );
+						, mesh
+						, m_mode );
 					result = !indices.empty();
 
 					if ( result )
@@ -96,12 +111,17 @@ namespace c3d_assimp
 
 		if ( auto aiScene = doLoadScene() )
 		{
-			if ( m_animsOnly )
+			if ( m_mode == Mode::eAnim )
 			{
 				m_skeletonsImp.import( m_fileName
 					, *aiScene
 					, scene
-					, false );
+					, nullptr
+					, m_mode );
+				auto meshes = m_meshesImp.import( m_fileName
+					, *aiScene
+					, scene
+					, m_mode );
 
 				if ( m_skeletonsImp.needsAnimsReparse() )
 				{
@@ -117,10 +137,12 @@ namespace c3d_assimp
 				m_skeletonsImp.import( m_fileName
 					, *aiScene
 					, scene
-					, true );
+					, nullptr
+					, m_mode );
 				auto meshes = m_meshesImp.import( m_fileName
 					, *aiScene
-					, scene );
+					, scene
+					, m_mode );
 				m_scenesImp.import( *aiScene
 					, scene
 					, meshes );

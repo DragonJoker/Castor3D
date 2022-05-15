@@ -83,6 +83,32 @@ namespace c3d_assimp
 		return result;
 	}
 
+	static std::pair< uint32_t, double > getAnimationFrameTicks( aiAnimation const & aiAnimation )
+	{
+		uint32_t count = 0u;
+		double ticks = 0.0;
+
+		for ( auto nodeAnim : castor::makeArrayView( aiAnimation.mChannels, aiAnimation.mNumChannels ) )
+		{
+			count = std::max( { count
+				, nodeAnim->mNumPositionKeys
+				, nodeAnim->mNumRotationKeys
+				, nodeAnim->mNumScalingKeys } );
+			ticks = std::max( { ticks
+				, ( nodeAnim->mNumPositionKeys > 0
+					? nodeAnim->mPositionKeys[nodeAnim->mNumPositionKeys - 1u].mTime
+					: 0.0 )
+				, ( nodeAnim->mNumRotationKeys > 0
+					? nodeAnim->mRotationKeys[nodeAnim->mNumRotationKeys - 1u].mTime
+					: 0.0 )
+				, ( nodeAnim->mNumScalingKeys > 0
+					? nodeAnim->mScalingKeys[nodeAnim->mNumScalingKeys - 1u].mTime
+					: 0.0 ) } );
+		}
+
+		return { count, ticks };
+	}
+
 	template< typename KeyT >
 	struct KeyDataTyperT;
 
@@ -209,6 +235,7 @@ namespace c3d_assimp
 		, std::map< castor::Milliseconds, castor::Quaternion > const & rotates
 		, std::set< castor::Milliseconds > const & times
 		, uint32_t fps
+		, castor::Milliseconds maxTime
 		, AnimationT & animation
 		, std::map< castor::Milliseconds, std::unique_ptr< KeyFrameT > > & keyframes
 		, FuncT fillKeyFrame )
@@ -218,7 +245,6 @@ namespace c3d_assimp
 		// Limit the key frames per second to 60, to spare RAM...
 		auto wantedFps = std::min< int64_t >( 60, int64_t( fps ) );
 		castor::Milliseconds step{ 1000 / wantedFps };
-		castor::Milliseconds maxTime{ *times.rbegin() };
 
 		for ( auto time = 0_ms; time <= maxTime; time += step )
 		{
@@ -238,6 +264,7 @@ namespace c3d_assimp
 		, typename FuncT >
 	static void processAnimationNodeKeys( aiAnimT const & aiAnim
 		, uint32_t wantedFps
+		, castor::Milliseconds maxTime
 		, int64_t ticksPerSecond
 		, AnimationT & animation
 		, std::map< castor::Milliseconds, std::unique_ptr< KeyFrameT > > & keyframes
@@ -261,6 +288,7 @@ namespace c3d_assimp
 			, rotates
 			, times
 			, wantedFps
+			, maxTime
 			, animation
 			, keyframes
 			, fillKeyFrame );
