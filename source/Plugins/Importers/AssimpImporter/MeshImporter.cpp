@@ -509,23 +509,28 @@ namespace c3d_assimp
 
 	MeshIndices MeshesImporter::import( castor::Path const & fileName
 		, aiScene const & aiScene
-		, castor3d::Mesh & mesh )
+		, castor3d::Mesh & mesh
+		, castor3d::MeshImporter::Mode mode )
 	{
 		m_fileName = fileName;
 		return doProcessMeshAndAnims( aiScene
 			, castor::makeArrayView( aiScene.mMeshes, aiScene.mNumMeshes )
 			, 0u
-			, mesh );
+			, mesh
+			, mesh.getSkeleton()
+			, mode );
 	}
 
 	std::map< uint32_t, MeshData * > MeshesImporter::import( castor::Path const & fileName
 		, aiScene const & aiScene
-		, castor3d::Scene & scene )
+		, castor3d::Scene & scene
+		, castor3d::MeshImporter::Mode mode )
 	{
 		m_fileName = fileName;
 		doProcessMeshesAndAnims( aiScene
 			, scene
-			, castor::makeArrayView( aiScene.mMeshes, aiScene.mNumMeshes ) );
+			, castor::makeArrayView( aiScene.mMeshes, aiScene.mNumMeshes )
+			, mode );
 		return doRemoveDuplicateMeshes( scene );
 	}
 
@@ -586,7 +591,8 @@ namespace c3d_assimp
 
 	void MeshesImporter::doProcessMeshesAndAnims( aiScene const & aiScene
 		, castor3d::Scene & scene
-		, castor::ArrayView< aiMesh * > aiMeshes )
+		, castor::ArrayView< aiMesh * > aiMeshes
+		, castor3d::MeshImporter::Mode mode )
 	{
 		uint32_t aiMeshIndex = 0u;
 
@@ -643,7 +649,9 @@ namespace c3d_assimp
 				if ( !doProcessMeshAndAnims( aiScene
 					, castor::makeArrayView( &aiMesh, 1u )
 					, aiMeshIndex
-					, *mesh ).empty() )
+					, *mesh
+					, nullptr
+					, mode ).empty() )
 				{
 					if ( regIt == m_registeredMeshes.end() )
 					{
@@ -677,7 +685,9 @@ namespace c3d_assimp
 	MeshIndices MeshesImporter::doProcessMeshAndAnims( aiScene const & aiScene
 		, castor::ArrayView< aiMesh * > aiMeshes
 		, uint32_t aiMeshIndex
-		, castor3d::Mesh & mesh )
+		, castor3d::Mesh & mesh
+		, castor3d::SkeletonRPtr srcSkeleton
+		, castor3d::MeshImporter::Mode mode )
 	{
 		bool create = true;
 		castor3d::SubmeshSPtr submesh;
@@ -703,15 +713,24 @@ namespace c3d_assimp
 					result.emplace( aiMeshIndex, submesh );
 				}
 
-				auto curSkeleton = m_skeletons.getSkeleton( *aiMesh, aiMeshIndex );
-				CU_Require( !skeleton || curSkeleton == skeleton );
-				skeleton = curSkeleton;
+				if ( srcSkeleton )
+				{
+					skeleton = srcSkeleton;
+				}
+				else
+				{
+					auto curSkeleton = m_skeletons.getSkeleton( *aiMesh, aiMeshIndex );
+					CU_Require( !skeleton || curSkeleton == skeleton );
+					skeleton = curSkeleton;
+				}
 
 				if ( aiMesh->HasFaces() && aiMesh->HasPositions() )
 				{
 					create = doProcessMesh( *mesh.getScene(), mesh, skeleton, *aiMesh, aiMeshIndex, aiScene, *submesh );
 
-					if ( aiMesh->mNumAnimMeshes )
+					if ( aiMesh->mNumAnimMeshes
+						&& ( mode == castor3d::MeshImporter::Mode::eAnim
+							|| mode == castor3d::MeshImporter::Mode::eBoth ) )
 					{
 						doProcessAnim( aiScene, *aiMesh, aiMeshIndex, mesh, *submesh );
 					}
@@ -721,7 +740,7 @@ namespace c3d_assimp
 			++aiMeshIndex;
 		}
 
-		if ( skeleton )
+		if ( skeleton && !srcSkeleton )
 		{
 			mesh.setSkeleton( skeleton );
 		}

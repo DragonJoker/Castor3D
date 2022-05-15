@@ -22,6 +22,19 @@ namespace castor3d
 		: public castor::OwnedBy< Engine >
 	{
 	public:
+		enum class Mode
+		{
+			// Imports data only (no animations)
+			eData,
+			// Force data import, even if already filled
+			eForceData,
+			// Import animations only (no data).
+			eAnim,
+			// Imports both data and animations.
+			eBoth,
+		};
+
+	public:
 		virtual ~MeshImporter() = default;
 		/**
 		 *\~english
@@ -48,7 +61,8 @@ namespace castor3d
 		 */
 		C3D_API bool import( Skeleton & skeleton
 			, castor::Path const & pathFile
-			, Parameters const & parameters );
+			, Parameters const & parameters
+			, Mode mode );
 		/**
 		 *\~english
 		 *\brief		Mesh import Function.
@@ -68,7 +82,7 @@ namespace castor3d
 		C3D_API bool import( Mesh & mesh
 			, castor::Path const & pathFile
 			, Parameters const & parameters
-			, bool forceImport );
+			, Mode mode );
 		/**
 		 *\~english
 		 *\brief		Scene import Function.
@@ -342,7 +356,7 @@ namespace castor3d
 		std::map< TextureFlag, TextureConfiguration > m_textureRemaps;
 		//!\~english Tells if only the animations need to be imported.
 		//!\~french Dit si seules les animations doivent être importées+.
-		bool m_animsOnly{ false };
+		Mode m_mode;
 	};
 }
 

@@ -101,6 +101,7 @@ namespace c3d_assimp
 
 		static castor3d::SkeletonNode * processSkeletonNode( AssimpImporter const & importer
 			, std::map< castor::String, BoneData > const & bonesNodes
+			, std::map< castor::String, castor3d::ObjectTransform > & nodeTransforms
 			, castor3d::Skeleton & skeleton
 			, aiNode const & aiNode
 			, castor3d::SkeletonNode * parentSkelNode )
@@ -111,6 +112,15 @@ namespace c3d_assimp
 
 			if ( !skelNode )
 			{
+				aiVector3D scaling, position;
+				aiQuaternion rotate;
+				aiNode.mTransformation.Decompose( scaling, rotate, position );
+				auto translate = fromAssimp( position );
+				auto scale = fromAssimp( scaling );
+				auto orientation = fromAssimp( rotate );
+				nodeTransforms.emplace( makeString( aiNode.mName )
+					, castor3d::ObjectTransform{ nullptr, translate, scale, orientation } );
+
 				skelNode = addNode( skeleton, bonesNodes, nodeName, name );
 
 				if ( parentSkelNode )
@@ -124,6 +134,7 @@ namespace c3d_assimp
 
 		static void processSkeletonNodes( AssimpImporter const & importer
 			, std::map< castor::String, BoneData > const & bonesNodes
+			, std::map< castor::String, castor3d::ObjectTransform > & nodeTransforms
 			, castor3d::Skeleton & skeleton
 			, aiNode const & parentAiNode
 			, castor3d::SkeletonNode * parentSkelNode )
@@ -132,10 +143,12 @@ namespace c3d_assimp
 			{
 				processSkeletonNodes( importer
 					, bonesNodes
+					, nodeTransforms
 					, skeleton
 					, *node
 					, processSkeletonNode( importer
 						, bonesNodes
+						, nodeTransforms
 						, skeleton
 						, *node
 						, parentSkelNode ) );
@@ -144,6 +157,7 @@ namespace c3d_assimp
 
 		static void completeSkeleton( AssimpImporter const & importer
 			, std::map< castor::String, BoneData > const & bonesNodes
+			, std::map< castor::String, castor3d::ObjectTransform > & nodeTransforms
 			, castor3d::Skeleton & skeleton
 			, aiNode const & preRootNode
 			, aiNode const * previousPreRootNode )
@@ -161,7 +175,12 @@ namespace c3d_assimp
 			}
 
 			skeleton.setGlobalInverseTransform( fromAssimp( preRootNode.mChildren[0]->mTransformation ).getInverse() );
-			processSkeletonNodes( importer, bonesNodes, skeleton, *previousPreRootNode, rootNode );
+			processSkeletonNodes( importer
+				, bonesNodes
+				, nodeTransforms
+				, skeleton
+				, *previousPreRootNode
+				, rootNode );
 		}
 
 		static void replaceInverseTransforms( AssimpImporter const & importer
@@ -243,8 +262,12 @@ namespace c3d_assimp
 	void SkeletonImporter::import( castor::Path const & fileName
 		, aiScene const & aiScene
 		, castor3d::Scene & scene
-		, bool replaceInverseTransforms )
+		, castor3d::SkeletonRPtr skeleton
+		, castor3d::MeshImporter::Mode mode )
 	{
+		auto replaceInverseTransforms = mode == castor3d::MeshImporter::Mode::eData
+			|| mode == castor3d::MeshImporter::Mode::eForceData;
+
 		if ( replaceInverseTransforms )
 		{
 			m_bonesNodes.clear();
@@ -282,7 +305,9 @@ namespace c3d_assimp
 		m_fileName = fileName;
 		doProcessSkeletons( aiScene
 			, scene
-			, castor::makeArrayView( aiScene.mMeshes, aiScene.mNumMeshes ) );
+			, skeleton
+			, castor::makeArrayView( aiScene.mMeshes, aiScene.mNumMeshes )
+			, mode );
 	}
 
 	bool SkeletonImporter::isBoneNode( aiNode const & aiNode )const
@@ -305,7 +330,9 @@ namespace c3d_assimp
 
 	void SkeletonImporter::doProcessSkeletons( aiScene const & aiScene
 		, castor3d::Scene & scene
-		, castor::ArrayView< aiMesh * > aiMeshes )
+		, castor3d::SkeletonRPtr parsedSkeleton
+		, castor::ArrayView< aiMesh * > aiMeshes
+		, castor3d::MeshImporter::Mode mode )
 	{
 		uint32_t meshIndex = 0u;
 
@@ -343,6 +370,7 @@ namespace c3d_assimp
 						std::map< castor::String, BoneData > fake;
 						skeletons::completeSkeleton( m_importer
 							, fake
+							, m_nodeTransforms
 							, *skeleton
 							, *preRootNode
 							, aiScene.mRootNode->FindNode( it->first.c_str() ) );
@@ -385,15 +413,26 @@ namespace c3d_assimp
 				{
 					it = m_skeletons.emplace( nodeName, nullptr ).first;
 					castor3d::log::info << cuT( "  Skeleton found" ) << std::endl;
-					it->second = scene.addNewSkeleton( normalizeName( m_importer.getInternalName( rootNode->mName ) ), scene );
+
+					if ( parsedSkeleton )
+					{
+						it->second = parsedSkeleton;
+					}
+					else
+					{
+						it->second = scene.addNewSkeleton( normalizeName( m_importer.getInternalName( rootNode->mName ) ), scene );
+					}
+
 					skeleton = it->second;
 					skeleton->setGlobalInverseTransform( fromAssimp( rootNode->mTransformation ).getInverse() );
 					skeletons::processSkeletonNodes( m_importer
 						, m_bonesNodes
+						, m_nodeTransforms
 						, *skeleton
 						, *rootNode
 						, skeletons::processSkeletonNode( m_importer
 							, m_bonesNodes
+							, m_nodeTransforms
 							, *skeleton
 							, *rootNode
 							, nullptr ) );
@@ -409,19 +448,23 @@ namespace c3d_assimp
 			++meshIndex;
 		}
 
-		for ( auto skeletonIt : m_skeletons )
+		if ( mode == castor3d::MeshImporter::Mode::eAnim
+			|| mode == castor3d::MeshImporter::Mode::eBoth )
 		{
-			auto & skeleton = *skeletonIt.second;
-
-			for ( auto aiAnimation : castor::makeArrayView( aiScene.mAnimations, aiScene.mNumAnimations ) )
+			for ( auto skeletonIt : m_skeletons )
 			{
-				if ( skeletons::isAnimForSkeleton( m_importer, *aiAnimation, skeleton ) )
+				auto & skeleton = *skeletonIt.second;
+
+				for ( auto aiAnimation : castor::makeArrayView( aiScene.mAnimations, aiScene.mNumAnimations ) )
 				{
-					m_needsAnimsReparse = true;
-					doProcessSkeletonAnimation( m_fileName.getFileName()
-						, skeleton
-						, *aiScene.mRootNode
-						, *aiAnimation );
+					if ( skeletons::isAnimForSkeleton( m_importer, *aiAnimation, skeleton ) )
+					{
+						m_needsAnimsReparse = true;
+						doProcessSkeletonAnimation( m_fileName.getFileName()
+							, skeleton
+							, *aiScene.mRootNode
+							, *aiAnimation );
+					}
 				}
 			}
 		}
@@ -439,69 +482,87 @@ namespace c3d_assimp
 			name = normalizeName( animName );
 		}
 
-		auto & animation = skeleton.createAnimation( name );
-		int64_t ticksPerSecond = aiAnimation.mTicksPerSecond != 0.0
-			? int64_t( aiAnimation.mTicksPerSecond )
-			: 25ll;
-		SkeletonAnimationKeyFrameMap keyframes;
-		SkeletonAnimationObjectSet notAnimated;
-		doProcessSkeletonAnimationNodes( animation
-			, ticksPerSecond
-			, skeleton
-			, aiNode
-			, aiAnimation
-			, keyframes
-			, notAnimated );
-
-		for ( auto & object : notAnimated )
+		if ( skeleton.hasAnimation( name ) )
 		{
-			auto node = aiNode.FindNode( m_importer.getExternalName( object->getName() ).c_str() );
-			CU_Require( node );
-			aiVector3D scaling, position;
-			aiQuaternion rotate;
-			node->mTransformation.Decompose( scaling, rotate, position );
-			auto translate = fromAssimp( position );
-			auto scale = fromAssimp( scaling );
-			auto orientation = fromAssimp( rotate );
+			name += "_" + m_fileName.getFileName();
+		}
 
-			for ( auto & keyFrame : keyframes )
+		auto [frameCount, frameTicks] = getAnimationFrameTicks( aiAnimation );
+
+		if ( frameCount > 1 )
+		{
+			castor3d::log::info << cuT( "  Skeleton Animation found: [" ) << name << cuT( "]" ) << std::endl;
+			auto animation = std::make_unique< castor3d::SkeletonAnimation >( skeleton, name );
+			int64_t ticksPerSecond = aiAnimation.mTicksPerSecond != 0.0
+				? int64_t( aiAnimation.mTicksPerSecond )
+				: 25ll;
+			SkeletonAnimationKeyFrameMap keyframes;
+			SkeletonAnimationObjectSet notAnimated;
+			doProcessSkeletonAnimationNodes( *animation
+				, fromAssimp( frameTicks, ticksPerSecond )
+				, ticksPerSecond
+				, skeleton
+				, aiNode
+				, aiAnimation
+				, keyframes
+				, notAnimated );
+
+			for ( auto & object : notAnimated )
 			{
-				auto it = keyFrame.second->find( *object );
+				auto node = aiNode.FindNode( m_importer.getExternalName( object->getName() ).c_str() );
+				castor3d::ObjectTransform objTransform{};
 
-				if ( it == keyFrame.second->end() )
+				if ( node )
 				{
-					keyFrame.second->addAnimationObject( *object
-						, translate
-						, orientation
-						, scale );
+					aiVector3D scaling, position;
+					aiQuaternion rotate;
+					node->mTransformation.Decompose( scaling, rotate, position );
+					auto translate = fromAssimp( position );
+					auto scale = fromAssimp( scaling );
+					auto orientation = fromAssimp( rotate );
+					objTransform = castor3d::ObjectTransform{ nullptr, translate, scale, orientation };
+					auto transformIt = m_nodeTransforms.emplace( makeString( node->mName )
+						, objTransform ).first;
+					transformIt->second = objTransform;
 				}
 				else
 				{
-					it->translate = translate;
-					it->rotate = orientation;
-					it->scale = scale;
+					auto transformIt = m_nodeTransforms.find( m_importer.getExternalName( object->getName() ) );
+					CU_Require( transformIt != m_nodeTransforms.end() );
+					objTransform = transformIt->second;
+				}
+
+				for ( auto & keyFrame : keyframes )
+				{
+					auto it = keyFrame.second->find( *object );
+
+					if ( it == keyFrame.second->end() )
+					{
+						keyFrame.second->addAnimationObject( *object
+							, objTransform.translate
+							, objTransform.rotate
+							, objTransform.scale );
+					}
+					else
+					{
+						it->translate = objTransform.translate;
+						it->rotate = objTransform.rotate;
+						it->scale = objTransform.scale;
+					}
 				}
 			}
-		}
 
-		for ( auto & keyFrame : keyframes )
-		{
-			animation.addKeyFrame( std::move( keyFrame.second ) );
-		}
+			for ( auto & keyFrame : keyframes )
+			{
+				animation->addKeyFrame( std::move( keyFrame.second ) );
+			}
 
-		animation.updateLength();
-
-		if ( animation.getLength() == 0_ms )
-		{
-			skeleton.removeAnimation( name );
-		}
-		else
-		{
-			castor3d::log::info << cuT( "  Skeleton Animation found: [" ) << name << cuT( "]" ) << std::endl;
+			skeleton.addAnimation( std::move( animation ) );
 		}
 	}
 
 	void SkeletonImporter::doProcessSkeletonAnimationNodes( castor3d::SkeletonAnimation & animation
+		, castor::Milliseconds maxTime
 		, int64_t ticksPerSecond
 		, castor3d::Skeleton & skeleton
 		, aiNode const & aiNode
@@ -547,6 +608,7 @@ namespace c3d_assimp
 			{
 				processAnimationNodeKeys( *aiNodeAnim
 					, m_importer.getEngine()->getRenderLoop().getWantedFps()
+					, maxTime
 					, ticksPerSecond
 					, animation
 					, keyFrames

@@ -146,17 +146,6 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::SecondaryUVComponent">
-		<DisplayString>{m_id} {m_type} data={m_data}</DisplayString>
-		<Expand>
-			<Item Name="id">m_id</Item>
-			<Item Name="initialised">m_initialised</Item>
-			<Item Name="dirty">m_dirty</Item>
-			<Item Name="data">m_data</Item>
-			<Item Name="layouts">m_layouts</Item>
-		</Expand>
-	</Type>
-
 	<Type Name="castor3d::TangentsComponent">
 		<DisplayString>{m_id} {m_type} data={m_data}</DisplayString>
 		<Expand>
@@ -168,7 +157,40 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::TexcoordsComponent">
+	<Type Name="castor3d::Texcoords0Component">
+		<DisplayString>{m_id} {m_type} data={m_data}</DisplayString>
+		<Expand>
+			<Item Name="id">m_id</Item>
+			<Item Name="initialised">m_initialised</Item>
+			<Item Name="dirty">m_dirty</Item>
+			<Item Name="data">m_data</Item>
+			<Item Name="layouts">m_layouts</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::Texcoords1Component">
+		<DisplayString>{m_id} {m_type} data={m_data}</DisplayString>
+		<Expand>
+			<Item Name="id">m_id</Item>
+			<Item Name="initialised">m_initialised</Item>
+			<Item Name="dirty">m_dirty</Item>
+			<Item Name="data">m_data</Item>
+			<Item Name="layouts">m_layouts</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::Texcoords2Component">
+		<DisplayString>{m_id} {m_type} data={m_data}</DisplayString>
+		<Expand>
+			<Item Name="id">m_id</Item>
+			<Item Name="initialised">m_initialised</Item>
+			<Item Name="dirty">m_dirty</Item>
+			<Item Name="data">m_data</Item>
+			<Item Name="layouts">m_layouts</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::Texcoords3Component">
 		<DisplayString>{m_id} {m_type} data={m_data}</DisplayString>
 		<Expand>
 			<Item Name="id">m_id</Item>
@@ -279,6 +301,7 @@
 		<Expand>
 			<Item Name="timeIndex">m_timeIndex</Item>
 			<Item Name="submeshesBuffers">m_submeshesBuffers</Item>
+      <Item Name="boundingBox">m_boundingBox</Item>
 			<Item Name="owner">m_owner</Item>
 		</Expand>
 	</Type>
@@ -294,12 +317,45 @@
 		</Expand>
 	</Type>
 
+	<Type Name="castor3d::SkeletonAnimationBone">
+		<DisplayString>[{m_bone->m_id}] {m_bone->m_name}</DisplayString>
+		<Expand>
+			<Item Name="bone">m_bone</Item>
+			<Item Name="parent">m_parent</Item>
+			<Item Name="children">m_children</Item>
+			<Item Name="mode">m_mode</Item>
+			<Item Name="boundingBox">m_boundingBox</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::SkeletonAnimationNode">
+		<DisplayString>{m_node->m_name}</DisplayString>
+		<Expand>
+			<Item Name="node">m_node</Item>
+			<Item Name="parent">m_parent</Item>
+			<Item Name="children">m_children</Item>
+			<Item Name="mode">m_mode</Item>
+			<Item Name="boundingBox">m_boundingBox</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::ObjectTransform">
+		<DisplayString>{*object} {translate} {scale} {rotate}</DisplayString>
+		<Expand>
+			<Item Name="object">object</Item>
+			<Item Name="translate">translate</Item>
+			<Item Name="scale">scale</Item>
+			<Item Name="rotate">rotate</Item>
+			<Item Name="cumulative">cumulative</Item>
+		</Expand>
+	</Type>
+
 	<Type Name="castor3d::SkeletonAnimationKeyFrame">
 		<DisplayString>{m_timeIndex} {m_transforms}</DisplayString>
 		<Expand>
 			<Item Name="timeIndex">m_timeIndex</Item>
 			<Item Name="transforms">m_transforms</Item>
-			<Item Name="cumulative">m_cumulative</Item>
+      <Item Name="boundingBox">m_boundingBox</Item>
 			<Item Name="owner">m_owner</Item>
 		</Expand>
 	</Type>

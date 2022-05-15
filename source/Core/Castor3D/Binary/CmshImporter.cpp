@@ -55,8 +55,8 @@ namespace castor3d
 	bool CmshImporter::doImportSkeleton( Skeleton & skeleton )
 	{
 		castor::BinaryFile skelFile{ m_fileName, castor::File::OpenMode::eRead };
-		auto result = m_animsOnly
-			? m_animsOnly
+		auto result = m_mode == Mode::eAnim
+			? true
 			: BinaryParser< Skeleton >{}.parse( skeleton, skelFile );
 
 		castor::PathArray files;
@@ -87,8 +87,8 @@ namespace castor3d
 	bool CmshImporter::doImportMesh( Mesh & mesh )
 	{
 		castor::BinaryFile meshFile{ m_fileName, castor::File::OpenMode::eRead };
-		auto result = m_animsOnly
-			? m_animsOnly
+		auto result = m_mode == Mode::eAnim
+			? true
 			: BinaryParser< Mesh >{}.parse( mesh, meshFile );
 
 		castor::PathArray files;

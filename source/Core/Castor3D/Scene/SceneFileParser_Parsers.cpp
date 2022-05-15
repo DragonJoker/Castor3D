@@ -2829,7 +2829,10 @@ namespace castor3d
 					parsingContext.importer = engine->getImporterFactory().create( extension, *engine );
 				}
 
-				if ( !parsingContext.importer->import( *parsingContext.skeleton, pathFile, parameters ) )
+				if ( !parsingContext.importer->import( *parsingContext.skeleton
+					, pathFile
+					, parameters
+					, MeshImporter::Mode::eData ) )
 				{
 					CU_ParsingError( cuT( "Skeleton Import failed" ) );
 					parsingContext.skeleton = nullptr;
@@ -2870,7 +2873,9 @@ namespace castor3d
 					parsingContext.importer = engine->getImporterFactory().create( extension, *engine );
 				}
 
-				if ( !parsingContext.importer->importAnimations( *parsingContext.skeleton, pathFile, parameters ) )
+				if ( !parsingContext.importer->importAnimations( *parsingContext.skeleton
+					, pathFile
+					, parameters ) )
 				{
 					CU_ParsingError( cuT( "Skeleton Animations Import failed" ) );
 				}
@@ -2974,15 +2979,18 @@ namespace castor3d
 			}
 			else
 			{
-				bool force = true;
+				MeshImporter::Mode mode{ MeshImporter::Mode::eForceData };
 
 				if ( !parsingContext.importer )
 				{
 					parsingContext.importer = engine->getImporterFactory().create( extension, *engine );
-					force = false;
+					mode = MeshImporter::Mode::eData;
 				}
 
-				if ( !parsingContext.importer->import( *mesh, pathFile, parameters, force ) )
+				if ( !parsingContext.importer->import( *mesh
+					, pathFile
+					, parameters
+					, mode ) )
 				{
 					CU_ParsingError( cuT( "Mesh Import failed" ) );
 					parsingContext.mesh.reset();
@@ -3077,7 +3085,10 @@ namespace castor3d
 				auto importer = engine->getImporterFactory().create( extension, *engine );
 				Mesh mesh{ cuT( "MorphImport" ), *parsingContext.scene };
 
-				if ( !importer->import( mesh, pathFile, parameters, false ) )
+				if ( !importer->import( mesh
+					, pathFile
+					, parameters
+					, MeshImporter::Mode::eData ) )
 				{
 					CU_ParsingError( cuT( "Mesh Import failed" ) );
 				}
