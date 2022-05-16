@@ -1,5 +1,6 @@
 #include "Castor3D/Engine.hpp"
 
+#include "Castor3D/ImporterFile.hpp"
 #include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
@@ -9,7 +10,6 @@
 #include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
-#include "Castor3D/Model/Mesh/ImporterFactory.hpp"
 #include "Castor3D/Model/Mesh/MeshFactory.hpp"
 #include "Castor3D/Overlay/DebugOverlays.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
@@ -76,7 +76,7 @@ namespace castor3d
 		, m_fontCache{ *m_logger }
 		, m_imageCache{ *m_logger, m_imageLoader }
 		, m_meshFactory{ castor::makeUnique< MeshFactory >() }
-		, m_importerFactory{ castor::makeUnique< MeshImporterFactory >() }
+		, m_importerFileFactory{ castor::makeUnique< ImporterFileFactory >() }
 		, m_particleFactory{ castor::makeUnique< ParticleFactory >() }
 		, m_enableValidation{ enableValidation }
 		, m_enableApiTrace{ eng::C3D_EnableAPITrace }
@@ -501,6 +501,16 @@ namespace castor3d
 	PostEffectFactory & Engine::getPostEffectFactory()
 	{
 		return getRenderTargetCache().getPostEffectFactory();
+	}
+
+	uint32_t Engine::getWantedFps()const
+	{
+		return m_renderLoop->getWantedFps();
+	}
+
+	castor3d::MaterialRPtr Engine::getDefaultMaterial()const
+	{
+		return m_materialCache->getDefaultMaterial();
 	}
 
 	castor::RgbaColour Engine::getNextRainbowColour()const

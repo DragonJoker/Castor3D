@@ -23,8 +23,6 @@
 #include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
-#include <Castor3D/Model/Mesh/Importer.hpp>
-#include <Castor3D/Model/Mesh/ImporterFactory.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Animation/MeshAnimation.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
