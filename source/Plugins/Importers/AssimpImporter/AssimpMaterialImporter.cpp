@@ -1,10 +1,4 @@
-#pragma GCC diagnostic ignored "-Woverloaded-virtual"
-#pragma GCC diagnostic ignored "-Werror=overloaded-virtual"
-
-#include "AssimpImporter/MaterialImporter.hpp"
-
-#include "AssimpImporter/AssimpHelpers.hpp"
-#include "AssimpImporter/AssimpImporter.hpp"
+#include "AssimpImporter/AssimpMaterialImporter.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Material/Material.hpp>
@@ -13,8 +7,7 @@
 #include <Castor3D/Material/Pass/PassVisitor.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
-#include <Castor3D/Model/Mesh/Importer.hpp>
-#include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Miscellaneous/Logger.hpp>
 
 // Materials
 #include <PhongPass.hpp>
@@ -23,8 +16,13 @@
 #include <SpecularGlossinessPbrPass.hpp>
 #include <ToonPass.hpp>
 
-#include <assimp/version.h>
+#pragma warning( push )
+#pragma warning( disable: 4365 )
+#pragma warning( disable: 4619 )
+#include <assimp/material.h>
 #include <assimp/pbrmaterial.h>
+#include <assimp/version.h>
+#pragma warning( pop )
 
 namespace c3d_assimp
 {
@@ -38,8 +36,14 @@ namespace c3d_assimp
 				, castor::PixelComponent::eAlpha );
 			auto data = alphaChannel->getConstPtr();
 			auto end = data + alphaChannel->getSize();
-			return !std::all_of( data, end, []( uint8_t byte ){ return byte == 0x00; } )
-				&& !std::all_of( data, end, []( uint8_t byte ){ return byte == 0xFF; } );
+			return !std::all_of( data, end, []( uint8_t byte )
+				{
+					return byte == 0x00;
+				} )
+				&& !std::all_of( data, end, []( uint8_t byte )
+					{
+						return byte == 0xFF;
+					} );
 		}
 
 		struct TextureInfo
@@ -56,7 +60,7 @@ namespace c3d_assimp
 			static void submit( aiMaterial const & material
 				, aiScene const & scene
 				, castor3d::SamplerRes sampler
-				, castor3d::MeshImporter const & importer
+				, AssimpMaterialImporter const & importer
 				, std::map< castor3d::TextureFlag, castor3d::TextureConfiguration > const & textureRemaps
 				, castor3d::Pass & pass )
 			{
@@ -70,7 +74,7 @@ namespace c3d_assimp
 			PassFiller( aiMaterial const & material
 				, aiScene const & scene
 				, castor3d::SamplerRes sampler
-				, castor3d::MeshImporter const & importer
+				, AssimpMaterialImporter const & importer
 				, std::map< castor3d::TextureFlag, castor3d::TextureConfiguration > const & textureRemaps
 				, castor3d::Pass & result )
 				: castor3d::PassVisitor{ {} }
@@ -168,7 +172,7 @@ namespace c3d_assimp
 						&& m_result.getOpacity() == 1.0f )
 					{
 						m_result.setOpacity( float( castor::point::length( castor::Point3f{ m_result.getTransmission().red()
-							, m_result.getTransmission().green() 
+							, m_result.getTransmission().green()
 							, m_result.getTransmission().blue() } ) ) );
 					}
 				}
@@ -570,14 +574,14 @@ namespace c3d_assimp
 				{
 					result = m_importer.loadImage( source.name()
 						, castor::ImageCreateParams{ source.type()
-							, source.buffer()
-							, { false, false, false } } );
+						, source.buffer()
+						, { false, false, false } } );
 				}
 				else if ( source.isFileImage() )
 				{
 					result = m_importer.loadImage( source.name()
 						, castor::ImageCreateParams{ source.folder() / source.relative()
-							, { false, false, false } } );
+						, { false, false, false } } );
 				}
 
 				if ( !result )
@@ -629,7 +633,7 @@ namespace c3d_assimp
 						{
 							sourceInfo = std::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( m_sampler
 								, castor::Path{ info.name }
-								, texConfig ) );
+							, texConfig ) );
 						}
 
 						if ( sourceInfo )
@@ -677,7 +681,7 @@ namespace c3d_assimp
 						m_importer.loadTexture( m_sampler
 							, castor::Path{ info.name }
 							, { { {} }, texConfig }
-							, m_result );
+						, m_result );
 					}
 				}
 			}
@@ -814,7 +818,7 @@ namespace c3d_assimp
 			aiMaterial const & m_material;
 			aiScene const & m_scene;
 			castor3d::SamplerRes m_sampler;
-			castor3d::MeshImporter const & m_importer;
+			AssimpMaterialImporter const & m_importer;
 			std::map< castor3d::TextureFlag, castor3d::TextureConfiguration > m_textureRemaps;
 			castor3d::Pass & m_result;
 		};
@@ -842,21 +846,22 @@ namespace c3d_assimp
 			}
 		}
 
-		static void processMaterialPass( castor3d::Scene & scene
+		static void processMaterialPass( castor3d::Engine & engine
 			, castor3d::SamplerRes sampler
 			, std::map< castor3d::TextureFlag, castor3d::TextureConfiguration > const & textureRemaps
 			, castor3d::Pass & pass
 			, aiMaterial const & aiMaterial
 			, aiScene const & aiScene
-			, castor3d::MeshImporter & importer )
+			, AssimpMaterialImporter & importer )
 		{
 			aiShadingMode shadingMode{};
 			aiMaterial.Get( AI_MATKEY_SHADING_MODEL, shadingMode );
-			auto & passFactory = scene.getEngine()->getPassFactory();
+			auto & passFactory = engine.getPassFactory();
 			auto srcType = convert( passFactory, shadingMode );
 			auto dstType = pass.getTypeID();
 
-			if ( dstType != srcType )
+			if ( dstType != srcType
+				&& textureRemaps.empty() )
 			{
 				castor3d::log::warn << "Switching from " << passFactory.getIdName( srcType ) << " to " << passFactory.getIdName( dstType ) << " pass type." << std::endl;
 			}
@@ -877,70 +882,32 @@ namespace c3d_assimp
 
 	//*********************************************************************************************
 
-	MaterialImporter::MaterialImporter( AssimpImporter & importer )
-		: m_importer{ importer }
+	AssimpMaterialImporter::AssimpMaterialImporter( castor3d::Engine & engine )
+		: castor3d::MaterialImporter{ engine }
 	{
 	}
 
-	void MaterialImporter::import( castor::Path const & fileName
-		, std::map< castor3d::TextureFlag, castor3d::TextureConfiguration > const & textureRemaps
-		, aiScene const & aiScene
-		, castor3d::Scene & scene )
+	bool AssimpMaterialImporter::doImportMaterial( castor3d::Material & material )
 	{
-		m_fileName = fileName;
-		m_textureRemaps = textureRemaps;
-		uint32_t index{};
+		auto & file = static_cast< AssimpImporterFile const & >( *m_file );
+		auto name = material.getName();
+		auto it = file.getMaterials().find( name );
 
-		for ( auto aiMaterial : castor::makeArrayView( aiScene.mMaterials, aiScene.mNumMaterials ) )
+		if ( it == file.getMaterials().end() )
 		{
-			castor3d::log::info << cuT( "  Material: [" ) << index << cuT( " (" ) << aiMaterial->GetName().C_Str() << cuT( ")]" ) << std::endl;
-			auto material = doProcessMaterial( scene
-				, aiScene
-				, *aiMaterial
-				, index );
-			m_materials.emplace( index, material );
-			++index;
-		}
-	}
-
-	castor3d::MaterialResPtr MaterialImporter::doProcessMaterial( castor3d::Scene & scene
-		, aiScene const & aiScene
-		, aiMaterial const & aiMaterial
-		, uint32_t index )
-	{
-		castor3d::MaterialResPtr result;
-		aiString mtlname;
-		castor::String name = cuT( "Imp-" );
-
-		if ( aiMaterial.Get( AI_MATKEY_NAME, mtlname ) == aiReturn_SUCCESS )
-		{
-			name += makeString( mtlname );
-		}
-		else
-		{
-			name += m_fileName.getFileName() + castor::string::toString( index );
+			return false;
 		}
 
-		if ( scene.hasMaterial( name ) )
-		{
-			result = scene.findMaterial( name );
-		}
-		else
-		{
-			result = scene.addNewMaterial( name
-				, *scene.getEngine()
-				, scene.getPassesType() );
-			auto pass = result.lock()->createPass();
-			materials::processMaterialPass( scene
-				, scene.getEngine()->getDefaultSampler().lock()
-				, m_textureRemaps
-				, *pass
-				, aiMaterial
-				, aiScene
-				, m_importer );
-		}
-
-		return result;
+		castor3d::log::info << cuT( "  Material found: [" ) << name << cuT( "]" ) << std::endl;
+		auto pass = material.createPass();
+		materials::processMaterialPass( *getEngine()
+			, getEngine()->getDefaultSampler().lock()
+			, m_textureRemaps
+			, *pass
+			, *it->second
+			, file.getScene()
+			, *this );
+		return true;
 	}
 
 	//*********************************************************************************************
