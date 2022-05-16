@@ -1,7 +1,7 @@
 #include "PlyImporter/PlyImporter.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Model/Mesh/ImporterFactory.hpp>
+#include <Castor3D/ImporterFile.hpp>
 #include <Castor3D/Plugin/ImporterPlugin.hpp>
 
 #ifndef CU_PlatformWindows
@@ -18,9 +18,9 @@ namespace
 {
 	castor3d::ImporterPlugin::ExtensionArray getExtensions( castor3d::Engine * engine )
 	{
-		castor3d::ImporterPlugin::ExtensionArray arrayReturn;
-		arrayReturn.push_back( castor3d::ImporterPlugin::Extension( cuT( "PLY" ), cuT( "Stanford Polygon Library" ) ) );
-		return arrayReturn;
+		castor3d::ImporterPlugin::ExtensionArray result;
+		result.push_back( castor3d::ImporterPlugin::Extension( cuT( "PLY" ), cuT( "Stanford Polygon Library" ) ) );
+		return result;
 	}
 }
 
@@ -56,7 +56,7 @@ extern "C"
 		for ( auto const & extension : extensions )
 		{
 			importer->addExtension( extension );
-			engine->getImporterFactory().registerType( castor::string::lowerCase( extension.first ), &C3dPly::PlyImporter::create );
+			engine->getImporterFileFactory().registerType( castor::string::lowerCase( extension.first ), &C3dPly::PlyImporterFile::create );
 		}
 	}
 
@@ -66,7 +66,7 @@ extern "C"
 
 		for ( auto const & extension : extensions )
 		{
-			engine->getImporterFactory().unregisterType( castor::string::lowerCase( extension.first ) );
+			engine->getImporterFileFactory().unregisterType( castor::string::lowerCase( extension.first ) );
 		}
 	}
 }

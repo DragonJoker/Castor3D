@@ -23,42 +23,127 @@
 
 namespace C3dPly
 {
-	PlyImporter::PlyImporter( castor3d::Engine & engine )
-		: MeshImporter( engine )
+	//*********************************************************************************************
+
+	PlyImporterFile::PlyImporterFile( castor3d::Engine & engine
+		, castor::Path const & path
+		, castor3d::Parameters const & parameters )
+		: castor3d::ImporterFile{ engine, path, parameters }
 	{
 	}
 
-	castor3d::MeshImporterUPtr PlyImporter::create( castor3d::Engine & engine )
+	std::vector< castor::String > PlyImporterFile::listMaterials()
 	{
-		return std::make_unique< PlyImporter >( engine );
+		return std::vector< castor::String >{};
 	}
 
-	bool PlyImporter::doImportMesh( castor3d::Mesh & p_mesh )
+	std::vector< castor::String > PlyImporterFile::listMeshes()
 	{
-		if ( m_mode == Mode::eAnim )
+		std::vector< castor::String > result;
+
+		if ( getExtension() == "ply" )
 		{
-			return true;
+			result.push_back( getName() );
 		}
 
+		return result;
+	}
+
+	std::vector< castor::String > PlyImporterFile::listSkeletons()
+	{
+		return std::vector< castor::String >{};
+	}
+
+	std::vector< castor::String > PlyImporterFile::listSceneNodes()
+	{
+		return std::vector< castor::String >{};
+	}
+
+	std::vector< std::pair< castor::String, castor3d::LightType > > PlyImporterFile::listLights()
+	{
+		return std::vector< std::pair< castor::String, castor3d::LightType > >{};
+	}
+
+	std::vector< castor::String > PlyImporterFile::listMeshAnimations( castor3d::Mesh const & mesh )
+	{
+		return std::vector< castor::String >{};
+	}
+
+	std::vector< castor::String > PlyImporterFile::listSkeletonAnimations( castor3d::Skeleton const & skeleton )
+	{
+		return std::vector< castor::String >{};
+	}
+
+	std::vector< castor::String > PlyImporterFile::listSceneNodeAnimations( castor3d::SceneNode const & node )
+	{
+		return std::vector< castor::String >{};
+	}
+
+	castor3d::MaterialImporterUPtr PlyImporterFile::createMaterialImporter()
+	{
+		return nullptr;
+	}
+
+	castor3d::AnimationImporterUPtr PlyImporterFile::createAnimationImporter()
+	{
+		return nullptr;
+	}
+
+	castor3d::SkeletonImporterUPtr PlyImporterFile::createSkeletonImporter()
+	{
+		return nullptr;
+	}
+
+	castor3d::MeshImporterUPtr PlyImporterFile::createMeshImporter()
+	{
+		return std::make_unique< PlyMeshImporter >( *getOwner() );
+	}
+
+	castor3d::SceneNodeImporterUPtr PlyImporterFile::createSceneNodeImporter()
+	{
+		return nullptr;
+	}
+
+	castor3d::LightImporterUPtr PlyImporterFile::createLightImporter()
+	{
+		return nullptr;
+	}
+
+	castor3d::ImporterFileUPtr PlyImporterFile::create( castor3d::Engine & engine
+		, castor::Path const & path
+		, castor3d::Parameters const & parameters )
+	{
+		return std::make_unique< PlyImporterFile >( engine, path, parameters );
+	}
+
+	//*********************************************************************************************
+
+	PlyMeshImporter::PlyMeshImporter( castor3d::Engine & engine )
+		: castor3d::MeshImporter( engine )
+	{
+	}
+
+	bool PlyMeshImporter::doImportMesh( castor3d::Mesh & mesh )
+	{
 		bool result{ false };
 		castor3d::UInt32Array faces;
 		castor3d::FloatArray sizes;
-		castor::String name = m_fileName.getFileName();
+		castor::String name = m_file->getName();
 		castor::String meshName = name.substr( 0, name.find_last_of( '.' ) );
 		castor::String materialName = meshName;
 		std::ifstream isFile;
-		isFile.open( castor::string::stringCast< char >( m_fileName ).c_str(), std::ios::in );
+		isFile.open( castor::string::stringCast< char >( m_file->getFileName() ).c_str(), std::ios::in );
 		std::string strLine;
 		std::istringstream ssToken;
 		castor::String::size_type stIndex;
 		int iNbProperties = 0;
-		castor3d::SubmeshSPtr submesh = p_mesh.createSubmesh();
+		castor3d::SubmeshSPtr submesh = mesh.createSubmesh();
 		castor3d::MaterialResPtr created;
-		auto pMaterial = p_mesh.getScene()->getMaterialView().tryAdd( materialName
+		auto pMaterial = mesh.getScene()->getMaterialView().tryAdd( materialName
 			, true
 			, created
-			, *p_mesh.getEngine()
-			, p_mesh.getScene()->getPassesType() );
+			, *mesh.getEngine()
+			, mesh.getScene()->getPassesType() );
 
 		if ( pMaterial.lock() == created.lock() )
 		{
@@ -238,4 +323,6 @@ namespace C3dPly
 		isFile.close();
 		return result;
 	}
+
+	//*********************************************************************************************
 }
