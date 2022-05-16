@@ -70,6 +70,24 @@ namespace castor3d
 	struct VertexBoneData;
 	/**
 	*\~english
+	*\brief
+	*	Base class for external file import
+	*\~french
+	*\brief
+	*	Classe de base pour l'import de fichiers externes
+	*/
+	class SkeletonImporter;
+	/**
+	*\~english
+	*\brief
+	*	The importer factory.
+	*\~french
+	*\brief
+	*	La fabrique d'importeurs.
+	*/
+	class SkeletonImporterFactory;
+	/**
+	*\~english
 	*	Helper structure to specialise a cache behaviour.
 	*\remarks
 	*	Specialisation for Skeleton.
@@ -99,10 +117,13 @@ namespace castor3d
 	using SkeletonRes = SkeletonCacheTraits::ElementPtrT;
 	using SkeletonResPtr = SkeletonCacheTraits::ElementObsT;
 
+	CU_DeclareSmartPtr( SkeletonImporter );
+
 	CU_DeclareCUSmartPtr( castor3d, BoneNode, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, SkeletonNode, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, Skeleton, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, SkeletonCache, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, SkeletonImporterFactory, C3D_API );
 
 	//! Skinned vertex data array
 	CU_DeclareVector( VertexBoneData, VertexBoneData );

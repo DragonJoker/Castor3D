@@ -19,7 +19,7 @@ See LICENSE file in root folder
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Pass/SubsurfaceScattering.hpp"
-#include "Castor3D/Model/Mesh/Importer.hpp"
+#include "Castor3D/Model/Mesh/MeshImporter.hpp"
 #include "Castor3D/Render/RenderWindow.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 

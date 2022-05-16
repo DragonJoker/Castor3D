@@ -1,4 +1,5 @@
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/ImporterFile.hpp>
 #include <Castor3D/Binary/BinaryMesh.hpp>
 #include <Castor3D/Binary/BinarySkeleton.hpp>
 #include <Castor3D/Cache/CacheView.hpp>
@@ -11,8 +12,7 @@
 #include <Castor3D/Material/Pass/PBR/MetallicRoughnessPbrPass.hpp>
 #include <Castor3D/Material/Pass/PBR/SpecularGlossinessPbrPass.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
-#include <Castor3D/Model/Mesh/Importer.hpp>
-#include <Castor3D/Model/Mesh/ImporterFactory.hpp>
+#include <Castor3D/Model/Mesh/MeshImporter.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
@@ -20,6 +20,7 @@
 #include <Castor3D/Scene/Camera.hpp>
 #include <Castor3D/Scene/Light/Light.hpp>
 #include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Scene/SceneImporter.hpp>
 #include <Castor3D/Scene/SceneFileParser.hpp>
 
 #include <CastorUtils/Design/ResourceCache.hpp>
@@ -426,74 +427,69 @@ int main( int argc, char * argv[] )
 					castor3d::Scene scene{ cuT( "DummyScene" ), engine };
 					scene.setAmbientLight( castor::RgbColour::fromComponents( 1.0f, 1.0f, 1.0f ) );
 					scene.setBackgroundColour( castor::RgbColour::fromComponents( 0.5f, 0.5f, 0.5f ) );
+					scene.setPassesType( scene.getEngine()->getPassFactory().getNameId( options.passType ) );
+					castor3d::SceneImporter importer{ *scene.getEngine() };
 
-					if ( !engine.getImporterFactory().isTypeRegistered( extension ) )
+					if ( !importer.import( scene
+						, path
+						, options.params
+						, {} ) )
 					{
-						castor::Logger::logError( castor::makeStringStream() << "Importer for [" << extension << "] files is not registered, make sure you've got the matching plug-in installed." );
+						castor::Logger::logError( castor::makeStringStream() << "Mesh Import failed" );
+						scene.removeMesh( name );
 					}
 					else
 					{
-						scene.setPassesType( scene.getEngine()->getPassFactory().getNameId( options.passType ) );
-						auto importer = engine.getImporterFactory().create( extension, engine );
+						scene.initialise();
+						auto rootFolder = path.getPath() / name;
 
-						if ( !importer->import( scene, path, options.params, {} ) )
+						if ( !castor::File::directoryExists( rootFolder ) )
 						{
-							castor::Logger::logError( castor::makeStringStream() << "Mesh Import failed" );
-							scene.removeMesh( name );
+							castor::File::directoryCreate( rootFolder );
 						}
-						else
+
+						if ( scene.getCameraCache().isEmpty() )
 						{
-							scene.initialise();
-							auto rootFolder = path.getPath() / name;
-
-							if ( !castor::File::directoryExists( rootFolder ) )
-							{
-								castor::File::directoryCreate( rootFolder );
-							}
-
-							if ( scene.getCameraCache().isEmpty() )
-							{
-								float farPlane = 0.0f;
-								auto cameraNode = scene.createSceneNode( "MainCameraNode", scene );
-								cameraNode->setPosition( convert::getCameraPosition( scene.getBoundingBox(), farPlane ) );
-								cameraNode->attachTo( *scene.getCameraRootNode() );
-								cameraNode = scene.addSceneNode( "MainCameraNode", cameraNode ).lock();
-								castor3d::Viewport viewport{ *scene.getEngine() };
-								viewport.setPerspective( 45.0_degrees
-									, 1.7778f
-									, std::max( 0.1f, farPlane / 1000.0f )
-									, std::min( farPlane, 1000.0f ) );
-								auto camera = scene.createCamera( "MainCamera"
-									, scene
-									, *cameraNode
-									, viewport );
-								camera->attachTo( *cameraNode );
-								scene.addCamera( "MainCamera", camera, false );
-							}
-
-							if ( scene.getLightCache().isEmpty() )
-							{
-								auto lightNode = scene.createSceneNode( "LightNode", scene );
-								lightNode->setOrientation( castor::Quaternion::fromAxisAngle( castor::Point3f{ 1.0, 0.0, 0.0 }, 90.0_degrees ) );
-								lightNode->attachTo( *scene.getObjectRootNode() );
-								lightNode = scene.addSceneNode( "LightNode", lightNode ).lock();
-								auto light = scene.createLight( "SunLight"
-									, scene
-									, *lightNode
-									, scene.getLightsFactory()
-									, castor3d::LightType::eDirectional );
-								light->setColour( castor::RgbColour::fromComponents( 1.0f, 1.0f, 1.0f ) );
-								light->setIntensity( { 8.0f, 10.0f } );
-								light->attachTo( *lightNode );
-								scene.addLight( "SunLight", light, false );
-							}
-
-							castor3d::exporter::CscnSceneExporter exporter{ options.options };
-							engine.getRenderLoop().renderSyncFrame();
-							exporter.exportScene( scene, rootFolder / options.output );
-							scene.cleanup();
-							engine.getRenderLoop().renderSyncFrame();
+							float farPlane = 0.0f;
+							auto cameraNode = scene.createSceneNode( "MainCameraNode", scene );
+							cameraNode->setPosition( convert::getCameraPosition( scene.getBoundingBox(), farPlane ) );
+							cameraNode->attachTo( *scene.getCameraRootNode() );
+							cameraNode = scene.addSceneNode( "MainCameraNode", cameraNode ).lock();
+							castor3d::Viewport viewport{ *scene.getEngine() };
+							viewport.setPerspective( 45.0_degrees
+								, 1.7778f
+								, std::max( 0.1f, farPlane / 1000.0f )
+								, std::min( farPlane, 1000.0f ) );
+							auto camera = scene.createCamera( "MainCamera"
+								, scene
+								, *cameraNode
+								, viewport );
+							camera->attachTo( *cameraNode );
+							scene.addCamera( "MainCamera", camera, false );
 						}
+
+						if ( scene.getLightCache().isEmpty() )
+						{
+							auto lightNode = scene.createSceneNode( "LightNode", scene );
+							lightNode->setOrientation( castor::Quaternion::fromAxisAngle( castor::Point3f{ 1.0, 0.0, 0.0 }, 90.0_degrees ) );
+							lightNode->attachTo( *scene.getObjectRootNode() );
+							lightNode = scene.addSceneNode( "LightNode", lightNode ).lock();
+							auto light = scene.createLight( "SunLight"
+								, scene
+								, *lightNode
+								, scene.getLightsFactory()
+								, castor3d::LightType::eDirectional );
+							light->setColour( castor::RgbColour::fromComponents( 1.0f, 1.0f, 1.0f ) );
+							light->setIntensity( { 8.0f, 10.0f } );
+							light->attachTo( *lightNode );
+							scene.addLight( "SunLight", light, false );
+						}
+
+						castor3d::exporter::CscnSceneExporter exporter{ options.options };
+						engine.getRenderLoop().renderSyncFrame();
+						exporter.exportScene( scene, rootFolder / options.output );
+						scene.cleanup();
+						engine.getRenderLoop().renderSyncFrame();
 					}
 				}
 

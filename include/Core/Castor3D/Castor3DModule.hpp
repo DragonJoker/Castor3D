@@ -64,6 +64,24 @@ namespace castor3d
 	struct GpuUpdater;
 	/**
 	*\~english
+	*\brief
+	*	Base class for external file import
+	*\~french
+	*\brief
+	*	Classe de base pour l'import de fichiers externes
+	*/
+	class ImporterFile;
+	/**
+	*\~english
+	*\brief
+	*	Base class for external file import
+	*\~french
+	*\brief
+	*	Classe de base pour l'import de fichiers externes
+	*/
+	class ImporterFileFactory;
+	/**
+	*\~english
 	*	Helper structure to specialise a cache behaviour.
 	*\~french
 	*	Structure permettant de spécialiser le comportement d'un cache.
@@ -80,7 +98,9 @@ namespace castor3d
 	struct ResourceCacheTraitsT;
 
 	CU_DeclareSmartPtr( Engine );
+	CU_DeclareSmartPtr( ImporterFile );
 	CU_DeclareCUSmartPtr( castor3d, FramePassTimer, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ImporterFileFactory, C3D_API );
 
 	C3D_API castor::LoggerInstance & getLogger( Engine & engine );
 

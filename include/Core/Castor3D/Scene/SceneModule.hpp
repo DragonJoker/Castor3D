@@ -331,6 +331,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Base class for external file import
+	*\~french
+	*\brief
+	*	Classe de base pour l'import de fichiers externes
+	*/
+	class SceneNodeImporter;
+	/**
+	*\~english
+	*\brief
 	*	Shadows configuration class.
 	*\~french
 	*\brief
@@ -343,11 +352,15 @@ namespace castor3d
 	CU_DeclareSmartPtr( Camera );
 	CU_DeclareSmartPtr( Geometry );
 	CU_DeclareSmartPtr( MovableObject );
-	CU_DeclareCUSmartPtr( castor3d, Scene, C3D_API );
 	CU_DeclareSmartPtr( SceneFileContext );
 	CU_DeclareSmartPtr( SceneFileParser );
 	CU_DeclareSmartPtr( SceneImporter );
 	CU_DeclareSmartPtr( SceneNode );
+	CU_DeclareSmartPtr( SceneNodeImporter );
+	CU_DeclareSmartPtr( SceneImporter );
+	CU_DeclareSmartPtr( SceneNodeImporter );
+
+	CU_DeclareCUSmartPtr( castor3d, Scene, C3D_API );
 
 	//! Camera pointer array
 	CU_DeclareVector( CameraSPtr, CameraPtr );

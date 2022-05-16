@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_Engine_H___
 
 #include "Castor3D/Castor3DModule.hpp"
+#include "Castor3D/Animation/AnimationModule.hpp"
 #include "Castor3D/Buffer/BufferModule.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"
@@ -14,8 +15,10 @@ See LICENSE file in root folder
 #include "Castor3D/Cache/TextureCache.hpp"
 #include "Castor3D/Event/Frame/FrameEventModule.hpp"
 #include "Castor3D/Event/UserInput/UserInputEventModule.hpp"
+#include "Castor3D/Material/MaterialModule.hpp"
 #include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Model/Mesh/MeshModule.hpp"
+#include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Plugin/PluginModule.hpp"
 #include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
@@ -496,6 +499,8 @@ namespace castor3d
 		C3D_API ToneMappingFactory & getToneMappingFactory();
 		C3D_API PostEffectFactory const & getPostEffectFactory()const;
 		C3D_API PostEffectFactory & getPostEffectFactory();
+		C3D_API uint32_t getWantedFps()const;
+		C3D_API castor3d::MaterialRPtr getDefaultMaterial()const;
 
 		castor::String const & getAppName()const
 		{
@@ -602,9 +607,9 @@ namespace castor3d
 			return *m_passFactory;
 		}
 
-		MeshImporterFactory & getImporterFactory()const
+		ImporterFileFactory & getImporterFileFactory()const
 		{
-			return *m_importerFactory;
+			return *m_importerFileFactory;
 		}
 
 		ParticleFactory & getParticleFactory()const
@@ -744,7 +749,7 @@ namespace castor3d
 		castor::ImageCache m_imageCache;
 		std::map< castor::String, castor::AdditionalParsers > m_additionalParsers;
 		MeshFactoryUPtr m_meshFactory;
-		MeshImporterFactoryUPtr m_importerFactory;
+		ImporterFileFactoryUPtr m_importerFileFactory;
 		ParticleFactoryUPtr m_particleFactory;
 		PassFactoryUPtr m_passFactory;
 		castor::CpuInformations m_cpuInformations;

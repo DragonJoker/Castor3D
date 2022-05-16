@@ -26,6 +26,7 @@ set( ${PROJECT_NAME}_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Castor3DModule.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Castor3DPrerequisites.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Engine.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/ImporterFile.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Limits.hpp
 	${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/RequiredVersion.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/DebugDefines.hpp
@@ -33,6 +34,7 @@ set( ${PROJECT_NAME}_HDR_FILES
 set( ${PROJECT_NAME}_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Castor3DModule.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Engine.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/ImporterFile.cpp
 )
 set( ${PROJECT_NAME}_NVS_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Castor3D.natvis
@@ -42,6 +44,7 @@ source_group( "Source Files" FILES ${${PROJECT_NAME}_SRC_FILES} )
 source_group( "Natvis Files" FILES ${${PROJECT_NAME}_NVS_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Animation/AnimationImporter.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Animation/AnimationModule.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
@@ -49,6 +52,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Animation/Animable.inl
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Animation/Animation.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Animation/Animation.inl
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Animation/AnimationImporter.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Animation/AnimationKeyFrame.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Animation/AnimationModule.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Animation/Interpolator.hpp
@@ -259,10 +263,12 @@ source_group( "Source Files\\Event\\UserInput" FILES ${${PROJECT_NAME}_FOLDER_SR
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Material.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/MaterialImporter.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/MaterialModule.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Material.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/MaterialImporter.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/MaterialModule.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
@@ -491,18 +497,16 @@ source_group( "Header Files\\Model" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
 source_group( "Source Files\\Model" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Importer.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/ImporterFactory.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Mesh.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/MeshFactory.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/MeshGenerator.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/MeshImporter.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Importer.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/ImporterFactory.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Mesh.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/MeshFactory.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/MeshGenerator.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/MeshImporter.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/MeshModule.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
@@ -636,6 +640,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Skeleton/BoneNode.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Skeleton/BonedVertex.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Skeleton/Skeleton.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Skeleton/SkeletonImporter.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Skeleton/SkeletonNode.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Skeleton/VertexBoneData.cpp
 )
@@ -643,6 +648,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Skeleton/BoneNode.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Skeleton/BonedVertex.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Skeleton/Skeleton.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Skeleton/SkeletonImporter.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Skeleton/SkeletonNode.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Skeleton/SkeletonModule.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Skeleton/VertexBoneData.hpp
@@ -1251,8 +1257,10 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Scene.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/SceneFileParser.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/SceneFileParser_Parsers.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/SceneImporter.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/SceneModule.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/SceneNode.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/SceneNodeImporter.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/BillboardList.hpp
@@ -1264,8 +1272,10 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Scene.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/SceneFileParser.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/SceneFileParser_Parsers.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/SceneImporter.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/SceneModule.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/SceneNode.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/SceneNodeImporter.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Shadow.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
@@ -1428,6 +1438,7 @@ source_group( "Source Files\\Scene\\Background" FILES ${${PROJECT_NAME}_FOLDER_S
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Light/DirectionalLight.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Light/Light.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Light/LightImporter.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Light/LightModule.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Light/LightCategory.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Light/LightFactory.cpp
@@ -1439,6 +1450,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Light/Light.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Light/LightCategory.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Light/LightFactory.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Light/LightImporter.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Light/LightModule.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Light/PointLight.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Light/SpotLight.hpp
