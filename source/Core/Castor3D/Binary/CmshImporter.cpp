@@ -2,6 +2,7 @@
 
 #include "Castor3D/Binary/BinaryMesh.hpp"
 #include "Castor3D/Binary/BinaryMeshAnimation.hpp"
+#include "Castor3D/Binary/BinarySceneNodeAnimation.hpp"
 #include "Castor3D/Binary/BinarySkeleton.hpp"
 #include "Castor3D/Binary/BinarySkeletonAnimation.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
@@ -9,12 +10,15 @@
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
 
 #include <CastorUtils/Data/BinaryFile.hpp>
 
 namespace castor3d
 {
-	namespace binmshimp
+	//*********************************************************************************************
+
+	namespace cmshimp
 	{
 		static castor::String cleanName( castor::String name )
 		{
@@ -36,82 +40,221 @@ namespace castor3d
 		}
 	}
 
-	castor::String const CmshImporter::MeshType = cuT( "cmsh" );
-	castor::String const CmshImporter::MeshAnimType = cuT( "cmsa" );
-	castor::String const CmshImporter::SkeletonType = cuT( "cskl" );
-	castor::String const CmshImporter::SkeletonAnimType = cuT( "cska" );
-	castor::String const CmshImporter::NodeAnimType = cuT( "csna" );
+	//*********************************************************************************************
 
-	CmshImporter::CmshImporter( Engine & engine )
+	CmshImporterFile::CmshImporterFile( Engine & engine
+		, castor::Path const & path
+		, Parameters const & parameters )
+		: ImporterFile{ engine, path, parameters }
+	{
+	}
+
+	std::vector< castor::String > CmshImporterFile::listMaterials()
+	{
+		return std::vector< castor::String >{};
+	}
+
+	std::vector< castor::String > CmshImporterFile::listMeshes()
+	{
+		std::vector< castor::String > result;
+
+		if ( getExtension() == CmshMeshImporter::Type )
+		{
+			result.push_back( getName() );
+		}
+
+		return result;
+	}
+
+	std::vector< castor::String > CmshImporterFile::listSkeletons()
+	{
+		std::vector< castor::String > result;
+
+		if ( getExtension() == CmshSkeletonImporter::Type )
+		{
+			result.push_back( getName() );
+		}
+
+		return result;
+	}
+
+	std::vector< castor::String > CmshImporterFile::listSceneNodes()
+	{
+		return std::vector< castor::String >{};
+	}
+
+	std::vector< std::pair< castor::String, LightType > > CmshImporterFile::listLights()
+	{
+		return std::vector< std::pair< castor::String, LightType > >{};
+	}
+
+	std::vector< castor::String > CmshImporterFile::listMeshAnimations( Mesh const & mesh )
+	{
+		std::vector< castor::String > result;
+
+		if ( getExtension() == CmshAnimationImporter::MeshAnimType )
+		{
+			auto meshName = mesh.getName();
+			auto animName = getName();
+
+			if ( getName().find( meshName ) == castor::String::npos )
+			{
+				animName = cmshimp::cleanName( animName.substr( meshName.size() ) );
+				result.push_back( animName );
+			}
+		}
+
+		return result;
+	}
+
+	std::vector< castor::String > CmshImporterFile::listSkeletonAnimations( Skeleton const & skeleton )
+	{
+		std::vector< castor::String > result;
+
+		if ( getExtension() == CmshAnimationImporter::SkeletonAnimType )
+		{
+			auto skeletonName = skeleton.getName();
+			auto animName = getName();
+
+			if ( getName().find( skeletonName ) == castor::String::npos )
+			{
+				animName = cmshimp::cleanName( animName.substr( skeletonName.size() ) );
+				result.push_back( animName );
+			}
+		}
+
+		return result;
+	}
+
+	std::vector< castor::String > CmshImporterFile::listSceneNodeAnimations( castor3d::SceneNode const & node )
+	{
+		std::vector< castor::String > result;
+
+		if ( getExtension() == CmshAnimationImporter::NodeAnimType )
+		{
+			auto nodeName = node.getName();
+			auto animName = getName();
+
+			if ( getName().find( nodeName ) == castor::String::npos )
+			{
+				animName = cmshimp::cleanName( animName.substr( nodeName.size() ) );
+				result.push_back( animName );
+			}
+		}
+
+		return result;
+	}
+
+	MaterialImporterUPtr CmshImporterFile::createMaterialImporter()
+	{
+		return nullptr;
+	}
+
+	AnimationImporterUPtr CmshImporterFile::createAnimationImporter()
+	{
+		return std::make_unique< CmshAnimationImporter >( *getOwner() );
+	}
+
+	SkeletonImporterUPtr CmshImporterFile::createSkeletonImporter()
+	{
+		return std::make_unique< CmshSkeletonImporter >( *getOwner() );
+	}
+
+	MeshImporterUPtr CmshImporterFile::createMeshImporter()
+	{
+		return std::make_unique< CmshMeshImporter >( *getOwner() );
+	}
+
+	SceneNodeImporterUPtr CmshImporterFile::createSceneNodeImporter()
+	{
+		return nullptr;
+	}
+
+	LightImporterUPtr CmshImporterFile::createLightImporter()
+	{
+		return nullptr;
+	}
+
+	ImporterFileUPtr CmshImporterFile::create( Engine & engine
+		, castor::Path const & path
+		, Parameters const & parameters )
+	{
+		return ImporterFileUPtr( new CmshImporterFile{ engine, path, parameters } );
+	}
+
+	//*********************************************************************************************
+
+	castor::String const CmshMeshImporter::Type = cuT( "cmsh" );
+
+	CmshMeshImporter::CmshMeshImporter( Engine & engine )
 		: MeshImporter{ engine }
 	{
 	}
 
-	MeshImporterUPtr CmshImporter::create( Engine & engine )
+	MeshImporterUPtr CmshMeshImporter::create( Engine & engine )
 	{
-		return std::make_unique< CmshImporter >( engine );
+		return std::make_unique< CmshMeshImporter >( engine );
 	}
 
-	bool CmshImporter::doImportSkeleton( Skeleton & skeleton )
+	bool CmshMeshImporter::doImportMesh( Mesh & mesh )
 	{
-		castor::BinaryFile skelFile{ m_fileName, castor::File::OpenMode::eRead };
-		auto result = m_mode == Mode::eAnim
-			? true
-			: BinaryParser< Skeleton >{}.parse( skeleton, skelFile );
-
-		castor::PathArray files;
-		castor::File::listDirectoryFiles( m_fileName.getPath(), files );
-		auto skeletonName = m_fileName.getFileName();
-
-		for ( auto & animFileName : files )
-		{
-			if ( result
-				&& animFileName.getExtension() == SkeletonAnimType
-				&& animFileName.getFileName().find( skeletonName ) == 0u )
-			{
-				auto animName = binmshimp::cleanName( animFileName.getFileName().substr( skeletonName.size() ) );
-				auto animation = std::make_unique< SkeletonAnimation >( skeleton, animName );
-				castor::BinaryFile animFile{ animFileName, castor::File::OpenMode::eRead };
-				result = BinaryParser< SkeletonAnimation >{}.parse( *animation, animFile );
-
-				if ( result )
-				{
-					skeleton.addAnimation( std::move( animation ) );
-				}
-			}
-		}
-
-		return result;
+		castor::BinaryFile meshFile{ m_file->getFileName(), castor::File::OpenMode::eRead };
+		return BinaryParser< Mesh >{}.parse( mesh, meshFile );
 	}
 
-	bool CmshImporter::doImportMesh( Mesh & mesh )
+	//*********************************************************************************************
+
+	castor::String const CmshSkeletonImporter::Type = cuT( "cskl" );
+
+	CmshSkeletonImporter::CmshSkeletonImporter( Engine & engine )
+		: SkeletonImporter{ engine }
 	{
-		castor::BinaryFile meshFile{ m_fileName, castor::File::OpenMode::eRead };
-		auto result = m_mode == Mode::eAnim
-			? true
-			: BinaryParser< Mesh >{}.parse( mesh, meshFile );
-
-		castor::PathArray files;
-		castor::File::listDirectoryFiles( m_fileName.getPath(), files );
-		auto meshName = m_fileName.getFileName();
-
-		for ( auto & fileName : files )
-		{
-			if ( fileName.getExtension() == MeshAnimType
-				&& fileName.getFileName().find( meshName ) == 0u )
-			{
-				auto animName = binmshimp::cleanName( fileName.getFileName().substr( meshName.size() ) );
-				auto animation = std::make_unique< MeshAnimation >( mesh, animName );
-				castor::BinaryFile animFile{ fileName, castor::File::OpenMode::eRead };
-				result = BinaryParser< MeshAnimation >{}.parse( *animation, animFile );
-
-				if ( result )
-				{
-					mesh.addAnimation( std::move( animation ) );
-				}
-			}
-		}
-
-		return result;
 	}
+
+	SkeletonImporterUPtr CmshSkeletonImporter::create( Engine & engine )
+	{
+		return std::make_unique< CmshSkeletonImporter >( engine );
+	}
+
+	bool CmshSkeletonImporter::doImportSkeleton( Skeleton & skeleton )
+	{
+		castor::BinaryFile skelFile{ m_file->getFileName(), castor::File::OpenMode::eRead };
+		return BinaryParser< Skeleton >{}.parse( skeleton, skelFile );
+	}
+
+	//*********************************************************************************************
+
+	castor::String const CmshAnimationImporter::MeshAnimType = cuT( "cmsa" );
+	castor::String const CmshAnimationImporter::SkeletonAnimType = cuT( "cska" );
+	castor::String const CmshAnimationImporter::NodeAnimType = cuT( "csna" );
+
+	CmshAnimationImporter::CmshAnimationImporter( Engine & engine )
+		: AnimationImporter{ engine }
+	{
+	}
+
+	AnimationImporterUPtr CmshAnimationImporter::create( Engine & engine )
+	{
+		return std::make_unique< CmshAnimationImporter >( engine );
+	}
+
+	bool CmshAnimationImporter::doImportSkeleton( SkeletonAnimation & skeleton )
+	{
+		castor::BinaryFile animFile{ m_file->getFileName(), castor::File::OpenMode::eRead };
+		return BinaryParser< SkeletonAnimation >{}.parse( skeleton, animFile );
+	}
+
+	bool CmshAnimationImporter::doImportMesh( MeshAnimation & mesh )
+	{
+		castor::BinaryFile animFile{ m_file->getFileName(), castor::File::OpenMode::eRead };
+		return BinaryParser< MeshAnimation >{}.parse( mesh, animFile );
+	}
+
+	bool CmshAnimationImporter::doImportNode( SceneNodeAnimation & node )
+	{
+		castor::BinaryFile animFile{ m_file->getFileName(), castor::File::OpenMode::eRead };
+		return BinaryParser< SceneNodeAnimation >{}.parse( node, animFile );
+	}
+
+	//*********************************************************************************************
 }

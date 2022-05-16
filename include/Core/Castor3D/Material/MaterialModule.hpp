@@ -110,8 +110,29 @@ namespace castor3d
 	*	Un matériau est composé d'une ou plusieurs passes
 	*/
 	class Material;
+	/**
+	*\~english
+	*\brief
+	*	Base class for external file import
+	*\~french
+	*\brief
+	*	Classe de base pour l'import de fichiers externes
+	*/
+	class MaterialImporter;
+	/**
+	*\~english
+	*\brief
+	*	The importer factory.
+	*\~french
+	*\brief
+	*	La fabrique d'importeurs.
+	*/
+	class MaterialImporterFactory;
 
 	CU_DeclareSmartPtr( Material );
+	CU_DeclareSmartPtr( MaterialImporter );
+
+	CU_DeclareCUSmartPtr( castor3d, MaterialImporterFactory, C3D_API );
 
 	using PassTypeID = uint16_t;
 

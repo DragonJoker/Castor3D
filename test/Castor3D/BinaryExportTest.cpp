@@ -7,7 +7,6 @@
 #include <Castor3D/Binary/BinarySkeleton.hpp>
 #include <Castor3D/Cache/CacheView.hpp>
 #include <Castor3D/Cache/PluginCache.hpp>
-#include <Castor3D/Model/Mesh/Importer.hpp>
 #include <Castor3D/Model/Mesh/MeshFactory.hpp>
 #include <Castor3D/Model/Mesh/MeshGenerator.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>

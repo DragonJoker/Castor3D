@@ -52,6 +52,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Base class for external file import
+	*\~french
+	*\brief
+	*	Classe de base pour l'import de fichiers externes
+	*/
+	class LightImporter;
+	/**
+	*\~english
+	*\brief
 	*	The light source factory
 	*\~french
 	*\brief
@@ -114,6 +123,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( Light );
 	CU_DeclareSmartPtr( LightFactory );
 	CU_DeclareSmartPtr( LightCategory );
+	CU_DeclareSmartPtr( LightImporter );
 	CU_DeclareSmartPtr( DirectionalLight );
 	CU_DeclareSmartPtr( PointLight );
 	CU_DeclareSmartPtr( SpotLight );

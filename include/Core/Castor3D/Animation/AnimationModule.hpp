@@ -145,11 +145,32 @@ namespace castor3d
 	*	Les key frames sont les frames auxquelles une animation est dans un état précis.
 	*/
 	class AnimationKeyFrame;
+	/**
+	*\~english
+	*\brief
+	*	Base class for external file import
+	*\~french
+	*\brief
+	*	Classe de base pour l'import de fichiers externes
+	*/
+	class AnimationImporter;
+	/**
+	*\~english
+	*\brief
+	*	The importer factory.
+	*\~french
+	*\brief
+	*	La fabrique d'importeurs.
+	*/
+	class AnimationImporterFactory;
 
 	using Point3rInterpolator = Interpolator< castor::Point3f >;
 	using QuaternionInterpolator = Interpolator< castor::Quaternion >;
 
 	CU_DeclareSmartPtr( AnimationKeyFrame );
+	CU_DeclareSmartPtr( AnimationImporter );
+
+	CU_DeclareCUSmartPtr( castor3d, AnimationImporterFactory, C3D_API );
 
 	CU_DeclareVector( AnimationKeyFrameUPtr, AnimationKeyFrame );
 	//@}

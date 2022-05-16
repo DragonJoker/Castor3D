@@ -1,6 +1,8 @@
 #include "Castor3D/Scene/SceneFileParser_Parsers.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Animation/AnimationImporter.hpp"
+#include "Castor3D/Animation/AnimationImporterFactory.hpp"
 #include "Castor3D/Binary/BinarySceneNodeAnimation.hpp"
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 #include "Castor3D/Cache/BillboardCache.hpp"
@@ -13,12 +15,12 @@
 #include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Material/MaterialImporter.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 #include "Castor3D/Miscellaneous/LoadingScreen.hpp"
-#include "Castor3D/Model/Mesh/Importer.hpp"
-#include "Castor3D/Model/Mesh/ImporterFactory.hpp"
+#include "Castor3D/Model/Mesh/MeshImporter.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/MeshFactory.hpp"
 #include "Castor3D/Model/Mesh/MeshGenerator.hpp"
@@ -27,6 +29,8 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
+#include "Castor3D/Model/Skeleton/SkeletonImporter.hpp"
+#include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Overlay/BorderPanelOverlay.hpp"
 #include "Castor3D/Overlay/PanelOverlay.hpp"
@@ -39,6 +43,7 @@
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneImporter.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Castor3D/Scene/Animation/AnimatedTexture.hpp"
@@ -1463,14 +1468,6 @@ namespace castor3d
 		}
 		else
 		{
-			auto extension = castor::string::lowerCase( parsingContext.sceneImportConfig.files.front().getExtension() );
-
-			if ( !engine->getImporterFactory().isTypeRegistered( extension ) )
-			{
-				CU_ParsingError( cuT( "Importer for [" ) + extension + cuT( "] files is not registered, make sure you've got the matching plug-in installed." ) );
-			}
-
-			auto importer = engine->getImporterFactory().create( extension, *engine );
 			Parameters parameters;
 
 			if ( parsingContext.sceneImportConfig.rescale != 1.0f )
@@ -1503,9 +1500,11 @@ namespace castor3d
 				parameters.add( cuT( "no_optimisations" ), parsingContext.sceneImportConfig.noOptimisations );
 			}
 
+			SceneImporter importer{ *engine };
+
 			for ( auto & file : parsingContext.sceneImportConfig.files )
 			{
-				if ( !importer->import( *parsingContext.scene
+				if ( !importer.import( *parsingContext.scene
 					, file
 					, parameters
 					, parsingContext.sceneImportConfig.textureRemaps ) )
@@ -1516,7 +1515,7 @@ namespace castor3d
 
 			for ( auto & file : parsingContext.sceneImportConfig.animFiles )
 			{
-				if ( !importer->importAnimations( *parsingContext.scene
+				if ( !importer.importAnimations( *parsingContext.scene
 					, file
 					, parameters ) )
 				{
@@ -2815,28 +2814,20 @@ namespace castor3d
 			castor::Path path;
 			castor::Path pathFile = context.file.getPath() / params[0]->get( path );
 			Parameters parameters;
-			Engine * engine = parsingContext.parser->getEngine();
-			auto extension = castor::string::lowerCase( pathFile.getExtension() );
 
-			if ( !engine->getImporterFactory().isTypeRegistered( extension ) )
+			if ( params.size() > 1 )
 			{
-				CU_ParsingError( cuT( "Importer for [" ) + extension + cuT( "] files is not registered, make sure you've got the matching plug-in installed." ) );
+				castor::String meshParams;
+				params[1]->get( meshParams );
+				scnprs::fillMeshImportParameters( context, meshParams, parameters );
 			}
-			else
-			{
-				if ( !parsingContext.importer )
-				{
-					parsingContext.importer = engine->getImporterFactory().create( extension, *engine );
-				}
 
-				if ( !parsingContext.importer->import( *parsingContext.skeleton
-					, pathFile
-					, parameters
-					, MeshImporter::Mode::eData ) )
-				{
-					CU_ParsingError( cuT( "Skeleton Import failed" ) );
-					parsingContext.skeleton = nullptr;
-				}
+			if ( !SkeletonImporter::import( *parsingContext.skeleton
+				, pathFile
+				, parameters ) )
+			{
+				CU_ParsingError( cuT( "Skeleton Import failed" ) );
+				parsingContext.skeleton = nullptr;
 			}
 		}
 	}
@@ -2859,25 +2850,46 @@ namespace castor3d
 			castor::Path path;
 			castor::Path pathFile = context.file.getPath() / params[0]->get( path );
 			Parameters parameters;
-			Engine * engine = parsingContext.parser->getEngine();
-			auto extension = castor::string::lowerCase( pathFile.getExtension() );
 
-			if ( !engine->getImporterFactory().isTypeRegistered( extension ) )
+			if ( params.size() > 1 )
+			{
+				castor::String meshParams;
+				params[1]->get( meshParams );
+				scnprs::fillMeshImportParameters( context, meshParams, parameters );
+			}
+
+			auto & engine = *parsingContext.scene->getEngine();
+			auto extension = castor::string::lowerCase( path.getExtension() );
+
+			if ( !engine.getImporterFileFactory().isTypeRegistered( extension ) )
 			{
 				CU_ParsingError( cuT( "Importer for [" ) + extension + cuT( "] files is not registered, make sure you've got the matching plug-in installed." ) );
 			}
 			else
 			{
-				if ( !parsingContext.importer )
-				{
-					parsingContext.importer = engine->getImporterFactory().create( extension, *engine );
-				}
-
-				if ( !parsingContext.importer->importAnimations( *parsingContext.skeleton
+				auto file = engine.getImporterFileFactory().create( extension
+					, engine
 					, pathFile
-					, parameters ) )
+					, parameters );
+
+				if ( auto importer = file->createAnimationImporter() )
 				{
-					CU_ParsingError( cuT( "Skeleton Animations Import failed" ) );
+					for ( auto animName : file->listSkeletonAnimations( *parsingContext.skeleton ) )
+					{
+						auto animation = std::make_unique< SkeletonAnimation >( *parsingContext.skeleton
+							, animName );
+
+						if ( !importer->import( *animation
+							, file.get()
+							, parameters ) )
+						{
+							CU_ParsingError( cuT( "Skeleton animation Import failed" ) );
+						}
+						else
+						{
+							parsingContext.skeleton->addAnimation( std::move( animation ) );
+						}
+					}
 				}
 			}
 		}
@@ -2970,31 +2982,13 @@ namespace castor3d
 				scnprs::fillMeshImportParameters( context, meshParams, parameters );
 			}
 
-			Engine * engine = parsingContext.parser->getEngine();
-			auto extension = castor::string::lowerCase( pathFile.getExtension() );
-
-			if ( !engine->getImporterFactory().isTypeRegistered( extension ) )
+			if ( !MeshImporter::import( *mesh
+				, pathFile
+				, parameters
+				, true ) )
 			{
-				CU_ParsingError( cuT( "Importer for [" ) + extension + cuT( "] files is not registered, make sure you've got the matching plug-in installed." ) );
-			}
-			else
-			{
-				MeshImporter::Mode mode{ MeshImporter::Mode::eForceData };
-
-				if ( !parsingContext.importer )
-				{
-					parsingContext.importer = engine->getImporterFactory().create( extension, *engine );
-					mode = MeshImporter::Mode::eData;
-				}
-
-				if ( !parsingContext.importer->import( *mesh
-					, pathFile
-					, parameters
-					, mode ) )
-				{
-					CU_ParsingError( cuT( "Mesh Import failed" ) );
-					parsingContext.mesh.reset();
-				}
+				CU_ParsingError( cuT( "Mesh Import failed" ) );
+				parsingContext.mesh.reset();
 			}
 		}
 		else
@@ -3025,25 +3019,18 @@ namespace castor3d
 				scnprs::fillMeshImportParameters( context, meshParams, parameters );
 			}
 
-			Engine * engine = parsingContext.parser->getEngine();
-			auto extension = castor::string::lowerCase( pathFile.getExtension() );
+			auto animation = std::make_unique< MeshAnimation >( *parsingContext.mesh.lock()
+				, pathFile.getFileName() );
 
-			if ( !engine->getImporterFactory().isTypeRegistered( extension ) )
+			if ( !AnimationImporter::import( *animation
+				, pathFile
+				, parameters ) )
 			{
-				CU_ParsingError( cuT( "Importer for [" ) + extension + cuT( "] files is not registered, make sure you've got the matching plug-in installed." ) );
+				CU_ParsingError( cuT( "Mesh animation Import failed" ) );
 			}
 			else
 			{
-				if ( !parsingContext.importer )
-				{
-					parsingContext.importer = engine->getImporterFactory().create( extension, *engine );
-				}
-
-				if ( !parsingContext.importer->importAnimations( *parsingContext.mesh.lock(), pathFile, parameters ) )
-				{
-					CU_ParsingError( cuT( "Mesh Import failed" ) );
-					parsingContext.mesh.reset();
-				}
+				parsingContext.mesh.lock()->addAnimation( std::move( animation ) );
 			}
 		}
 	}
@@ -3073,83 +3060,72 @@ namespace castor3d
 				scnprs::fillMeshImportParameters( context, meshParams, parameters );
 			}
 
-			Engine * engine = parsingContext.parser->getEngine();
-			auto extension = castor::string::lowerCase( pathFile.getExtension() );
+			Mesh mesh{ cuT( "MorphImport" ), *parsingContext.scene };
 
-			if ( !engine->getImporterFactory().isTypeRegistered( extension ) )
+			if ( !MeshImporter::import( mesh
+				, pathFile
+				, parameters
+				, false ) )
 			{
-				CU_ParsingError( cuT( "Importer for [" ) + extension + cuT( "] files is not registered, make sure you've got the matching plug-in installed." ) );
+				CU_ParsingError( cuT( "Mesh Import failed" ) );
+			}
+			else if ( mesh.getSubmeshCount() == parsingContext.mesh.lock()->getSubmeshCount() )
+			{
+				castor::String animName{ "Morph" };
+
+				if ( !parsingContext.mesh.lock()->hasAnimation( animName ) )
+				{
+					auto & animation = parsingContext.mesh.lock()->createAnimation( animName );
+
+					for ( auto submesh : *parsingContext.mesh.lock() )
+					{
+						animation.addChild( MeshAnimationSubmesh{ animation, *submesh } );
+					}
+				}
+
+				MeshAnimation & animation{ static_cast< MeshAnimation & >( parsingContext.mesh.lock()->getAnimation( animName ) ) };
+				uint32_t index = 0u;
+				MeshAnimationKeyFrameUPtr keyFrame = std::make_unique< MeshAnimationKeyFrame >( animation
+					, castor::Milliseconds{ int64_t( timeIndex * 1000ll ) } );
+
+				for ( auto & submesh : mesh )
+				{
+					auto & submeshAnim = animation.getSubmesh( index );
+					std::clog << "Source: " << submeshAnim.getSubmesh().getPointsCount() << " - Anim: " << submesh->getPointsCount() << std::endl;
+
+					if ( submesh->getPointsCount() == submeshAnim.getSubmesh().getPointsCount() )
+					{
+						static castor::Point3fArray tan;
+						static castor::Point3fArray tex;
+						castor::Point3fArray * tangents = &tan;
+						castor::Point3fArray const * texcoords = &tex;
+
+						if ( auto tanComp = submesh->getComponent< TangentsComponent >() )
+						{
+							tangents = &tanComp->getData();
+						}
+
+						if ( auto texComp = submesh->getComponent< Texcoords0Component >() )
+						{
+							texcoords = &texComp->getData();
+						}
+
+						keyFrame->addSubmeshBuffer( *submesh
+							, { submesh->getPositions()
+							, submesh->getNormals()
+							, *tangents
+							, *texcoords } );
+					}
+
+					++index;
+				}
+
+				mesh.cleanup();
+				animation.addKeyFrame( std::move( keyFrame ) );
 			}
 			else
 			{
-				auto importer = engine->getImporterFactory().create( extension, *engine );
-				Mesh mesh{ cuT( "MorphImport" ), *parsingContext.scene };
-
-				if ( !importer->import( mesh
-					, pathFile
-					, parameters
-					, MeshImporter::Mode::eData ) )
-				{
-					CU_ParsingError( cuT( "Mesh Import failed" ) );
-				}
-				else if ( mesh.getSubmeshCount() == parsingContext.mesh.lock()->getSubmeshCount() )
-				{
-					castor::String animName{ "Morph" };
-
-					if ( !parsingContext.mesh.lock()->hasAnimation( animName ) )
-					{
-						auto & animation = parsingContext.mesh.lock()->createAnimation( animName );
-
-						for ( auto submesh : *parsingContext.mesh.lock() )
-						{
-							animation.addChild( MeshAnimationSubmesh{ animation, *submesh } );
-						}
-					}
-
-					MeshAnimation & animation{ static_cast< MeshAnimation & >( parsingContext.mesh.lock()->getAnimation( animName ) ) };
-					uint32_t index = 0u;
-					MeshAnimationKeyFrameUPtr keyFrame = std::make_unique< MeshAnimationKeyFrame >( animation
-						, castor::Milliseconds{ int64_t( timeIndex * 1000ll ) } );
-
-					for ( auto & submesh : mesh )
-					{
-						auto & submeshAnim = animation.getSubmesh( index );
-						std::clog << "Source: " << submeshAnim.getSubmesh().getPointsCount() << " - Anim: " << submesh->getPointsCount() << std::endl;
-
-						if ( submesh->getPointsCount() == submeshAnim.getSubmesh().getPointsCount() )
-						{
-							static castor::Point3fArray tan;
-							static castor::Point3fArray tex;
-							castor::Point3fArray * tangents = &tan;
-							castor::Point3fArray const * texcoords = &tex;
-
-							if ( auto tanComp = submesh->getComponent< TangentsComponent >() )
-							{
-								tangents = &tanComp->getData();
-							}
-
-							if ( auto texComp = submesh->getComponent< Texcoords0Component >() )
-							{
-								texcoords = &texComp->getData();
-							}
-
-							keyFrame->addSubmeshBuffer( *submesh
-								, { submesh->getPositions()
-									, submesh->getNormals()
-									, *tangents
-									, *texcoords } );
-						}
-
-						++index;
-					}
-
-					mesh.cleanup();
-					animation.addKeyFrame( std::move( keyFrame ) );
-				}
-				else
-				{
-					CU_ParsingError( cuT( "The new mesh doesn't match the original mesh" ) );
-				}
+				CU_ParsingError( cuT( "The new mesh doesn't match the original mesh" ) );
 			}
 		}
 	}

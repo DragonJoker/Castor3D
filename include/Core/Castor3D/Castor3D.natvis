@@ -230,7 +230,6 @@
 			<Item Name="dirty">m_dirty</Item>
 			<Item Name="topology">m_topology</Item>
 			<Item Name="bufferOffset">m_bufferOffset</Item>
-			<Item Name="vertexLayouts">m_vertexLayouts</Item>
 			<Item Name="geometryBuffers">m_geometryBuffers</Item>
 			<Item Name="needsNormalsCompute">m_needsNormalsCompute</Item>
 			<Item Name="disableSceneUpdate">m_disableSceneUpdate</Item>

@@ -8,7 +8,6 @@
 #include <Castor3D/Cache/CacheView.hpp>
 #include <Castor3D/Cache/PluginCache.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
-#include <Castor3D/Model/Mesh/Importer.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Skeleton/BoneNode.hpp>
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
