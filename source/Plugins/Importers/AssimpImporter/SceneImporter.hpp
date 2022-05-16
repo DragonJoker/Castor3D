@@ -30,14 +30,6 @@ namespace c3d_assimp
 		void importAnims();
 
 	private:
-		void doProcessLight( aiLight const & light
-			, castor3d::Scene & scene );
-		void doProcessSceneNodes( aiScene const & aiScene
-			, aiNode const & aiNode
-			, castor3d::Scene & scene
-			, std::map< uint32_t, MeshData * > const & meshes
-			, castor3d::SceneNodeSPtr targetParent
-			, castor::Matrix4x4f transform );
 		void doTransformMesh( aiNode const & aiNode
 			, MeshIndices const & meshes
 			, aiMatrix4x4 transformAcc = aiMatrix4x4{} );
@@ -50,11 +42,6 @@ namespace c3d_assimp
 			, aiNode const & aiNode
 			, aiNodeAnim const & aiNodeAnim );
 		void doProcessAnimGroups();
-		void doAddAnimatedObjectGroup( castor3d::Scene & scene
-			, castor3d::SceneNode const & sceneNode
-			, castor3d::Skeleton & skeleton
-			, castor3d::Mesh & mesh
-			, castor3d::Geometry & geometry );
 
 	public:
 		static castor::String const Name;

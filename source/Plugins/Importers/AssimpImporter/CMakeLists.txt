@@ -64,20 +64,24 @@ if( assimp_FOUND )
 		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpImporter.natvis
 	)
 	set( ${PROJECT_NAME}_HDR_FILES
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpAnimationImporter.hpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpHelpers.hpp
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpImporter.hpp
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/MaterialImporter.hpp
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/MeshImporter.hpp
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/SceneImporter.hpp
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/SkeletonImporter.hpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpImporterFile.hpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpLightImporter.hpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpMaterialImporter.hpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpMeshImporter.hpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpSceneNodeImporter.hpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpSkeletonImporter.hpp
 	)
 	set( ${PROJECT_NAME}_SRC_FILES
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpImporter.cpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpAnimationImporter.cpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpImporterFile.cpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpImporterPlugin.cpp
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/MaterialImporter.cpp
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/MeshImporter.cpp
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/SceneImporter.cpp
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/SkeletonImporter.cpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpLightImporter.cpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpMaterialImporter.cpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpMeshImporter.cpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpSceneNodeImporter.cpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpSkeletonImporter.cpp
 	)
 	source_group( "Header Files"
 		FILES
