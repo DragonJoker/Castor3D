@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3DAssimp_Helpers___
 
 #include <Castor3D/Animation/Interpolator.hpp>
+#include <Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp>
 
 #include <CastorUtils/Design/ArrayView.hpp>
 #include <CastorUtils/Math/Point.hpp>
@@ -14,11 +15,17 @@ See LICENSE file in root folder
 #pragma warning( push )
 #pragma warning( disable: 4365 )
 #pragma warning( disable: 4619 )
-#include <assimp/scene.h> // Output data structure
+#include <assimp/scene.h>
+#include <assimp/types.h>
 #pragma warning( pop )
 
 namespace c3d_assimp
 {
+	static castor::String makeString( aiString const & name )
+	{
+		return castor::string::stringCast< castor::xchar >( name.C_Str() );
+	}
+
 	static castor::String normalizeName( castor::String name )
 	{
 		castor::string::replace( name, "\\", "-" );
@@ -81,6 +88,350 @@ namespace c3d_assimp
 		result.quat.z = v.z;
 		result.quat.w = v.w;
 		return result;
+	}
+
+	template< typename aiMeshType >
+	static void createVertexBuffer( aiMeshType const & aiMesh
+		, castor::Point3fArray & positions
+		, castor::Point3fArray & normals
+		, castor::Point3fArray & tangents
+		, castor::Point3fArray & texcoords0
+		, castor::Point3fArray & texcoords1
+		, castor::Point3fArray & texcoords2
+		, castor::Point3fArray & texcoords3 )
+	{
+		positions.resize( aiMesh.mNumVertices );
+		normals.resize( aiMesh.mNumVertices );
+		uint32_t index{ 0u };
+
+		for ( auto & pos : positions )
+		{
+			pos[0] = float( aiMesh.mVertices[index].x );
+			pos[1] = float( aiMesh.mVertices[index].y );
+			pos[2] = float( aiMesh.mVertices[index].z );
+			++index;
+		}
+
+		if ( aiMesh.HasNormals() )
+		{
+			index = 0u;
+
+			for ( auto & nml : normals )
+			{
+				nml[0] = float( aiMesh.mNormals[index].x );
+				nml[1] = float( aiMesh.mNormals[index].y );
+				nml[2] = float( aiMesh.mNormals[index].z );
+				++index;
+			}
+		}
+
+		if ( aiMesh.HasTextureCoords( 0 ) )
+		{
+			texcoords0.resize( aiMesh.mNumVertices );
+			tangents.resize( aiMesh.mNumVertices );
+			index = 0u;
+
+			for ( auto & tex : texcoords0 )
+			{
+				tex[0] = float( aiMesh.mTextureCoords[0][index].x );
+				tex[1] = float( aiMesh.mTextureCoords[0][index].y );
+				tex[2] = float( aiMesh.mTextureCoords[0][index].z );
+				++index;
+			}
+		}
+
+		if ( aiMesh.HasTextureCoords( 1 ) )
+		{
+			texcoords1.resize( aiMesh.mNumVertices );
+			tangents.resize( aiMesh.mNumVertices );
+			index = 0u;
+
+			for ( auto & tex : texcoords1 )
+			{
+				tex[0] = float( aiMesh.mTextureCoords[1][index].x );
+				tex[1] = float( aiMesh.mTextureCoords[1][index].y );
+				tex[2] = float( aiMesh.mTextureCoords[1][index].z );
+				++index;
+			}
+		}
+
+		if ( aiMesh.HasTextureCoords( 2 ) )
+		{
+			texcoords2.resize( aiMesh.mNumVertices );
+			tangents.resize( aiMesh.mNumVertices );
+			index = 0u;
+
+			for ( auto & tex : texcoords2 )
+			{
+				tex[0] = float( aiMesh.mTextureCoords[2][index].x );
+				tex[1] = float( aiMesh.mTextureCoords[2][index].y );
+				tex[2] = float( aiMesh.mTextureCoords[2][index].z );
+				++index;
+			}
+		}
+
+		if ( aiMesh.HasTextureCoords( 3 ) )
+		{
+			texcoords3.resize( aiMesh.mNumVertices );
+			tangents.resize( aiMesh.mNumVertices );
+			index = 0u;
+
+			for ( auto & tex : texcoords3 )
+			{
+				tex[0] = float( aiMesh.mTextureCoords[3][index].x );
+				tex[1] = float( aiMesh.mTextureCoords[3][index].y );
+				tex[2] = float( aiMesh.mTextureCoords[3][index].z );
+				++index;
+			}
+		}
+
+		if ( aiMesh.HasTangentsAndBitangents() )
+		{
+			tangents.resize( aiMesh.mNumVertices );
+			index = 0u;
+
+			for ( auto & tan : tangents )
+			{
+				tan[0] = float( aiMesh.mTangents[index].x );
+				tan[1] = float( aiMesh.mTangents[index].y );
+				tan[2] = float( aiMesh.mTangents[index].z );
+				++index;
+			}
+		}
+	}
+
+	static std::vector< castor3d::SubmeshAnimationBuffer > gatherMeshAnimBuffers( castor::Point3fArray const & positions
+		, castor::Point3fArray const & normals
+		, castor::Point3fArray const & tangents
+		, castor::Point3fArray const & texcoords0
+		, castor::Point3fArray const & texcoords1
+		, castor::Point3fArray const & texcoords2
+		, castor::Point3fArray const & texcoords3
+		, castor::ArrayView< aiAnimMesh * > animMeshes )
+	{
+		std::vector< castor3d::SubmeshAnimationBuffer > result;
+
+		for ( auto aiAnimMesh : animMeshes )
+		{
+			castor3d::SubmeshAnimationBuffer buffer;
+			createVertexBuffer( *aiAnimMesh
+				, buffer.positions
+				, buffer.normals
+				, buffer.tangents
+				, buffer.texcoords0
+				, buffer.texcoords1
+				, buffer.texcoords2
+				, buffer.texcoords3 );
+
+			if ( aiAnimMesh->HasPositions() )
+			{
+				auto it = buffer.positions.begin();
+
+				for ( auto & point : positions )
+				{
+					*it -= point;
+					++it;
+				}
+			}
+
+			if ( aiAnimMesh->HasNormals() )
+			{
+				auto it = buffer.normals.begin();
+
+				for ( auto & point : normals )
+				{
+					*it -= point;
+					++it;
+				}
+			}
+
+			if ( aiAnimMesh->HasTextureCoords( 0u ) )
+			{
+				auto it = buffer.texcoords0.begin();
+
+				for ( auto & point : texcoords0 )
+				{
+					*it -= point;
+					++it;
+				}
+			}
+
+			if ( aiAnimMesh->HasTextureCoords( 1u ) )
+			{
+				auto it = buffer.texcoords1.begin();
+
+				for ( auto & point : texcoords1 )
+				{
+					*it -= point;
+					++it;
+				}
+			}
+
+			if ( aiAnimMesh->HasTextureCoords( 2u ) )
+			{
+				auto it = buffer.texcoords2.begin();
+
+				for ( auto & point : texcoords2 )
+				{
+					*it -= point;
+					++it;
+				}
+			}
+
+			if ( aiAnimMesh->HasTextureCoords( 3u ) )
+			{
+				auto it = buffer.texcoords3.begin();
+
+				for ( auto & point : texcoords3 )
+				{
+					*it -= point;
+					++it;
+				}
+			}
+
+			if ( aiAnimMesh->HasTangentsAndBitangents() )
+			{
+				auto it = buffer.tangents.begin();
+
+				for ( auto & point : tangents )
+				{
+					*it -= point;
+					++it;
+				}
+			}
+
+			result.emplace_back( std::move( buffer ) );
+		}
+
+		return result;
+	}
+
+		static void applyMorphTarget( float weight
+			, castor3d::SubmeshAnimationBuffer const & target
+			, castor::Point3fArray & positions
+			, castor::Point3fArray & normals
+			, castor::Point3fArray & tangents
+			, castor::Point3fArray & texcoords0
+			, castor::Point3fArray & texcoords1
+			, castor::Point3fArray & texcoords2
+			, castor::Point3fArray & texcoords3 )
+		{
+			if ( weight != 0.0f )
+			{
+				if ( !positions.empty() )
+				{
+					auto posIt = positions.begin();
+					auto bufferIt = target.positions.begin();
+
+					while ( bufferIt != target.positions.end() )
+					{
+						auto & buf = *bufferIt;
+						*posIt += buf * weight;
+						++posIt;
+						++bufferIt;
+					}
+				}
+
+				if ( !normals.empty() )
+				{
+					auto nmlIt = normals.begin();
+					auto bufferIt = target.normals.begin();
+
+					while ( bufferIt != target.normals.end() )
+					{
+						auto & buf = *bufferIt;
+						*nmlIt += buf * weight;
+						++nmlIt;
+						++bufferIt;
+					}
+				}
+
+				if ( !tangents.empty() )
+				{
+					auto tanIt = tangents.begin();
+					auto bufferIt = target.tangents.begin();
+
+					while ( bufferIt != target.tangents.end() )
+					{
+						auto & buf = *bufferIt;
+						*tanIt += buf * weight;
+						++tanIt;
+						++bufferIt;
+					}
+				}
+
+				if ( !texcoords0.empty() )
+				{
+					auto texIt = texcoords0.begin();
+					auto bufferIt = target.texcoords0.begin();
+
+					while ( bufferIt != target.texcoords0.end() )
+					{
+						auto & buf = *bufferIt;
+						*texIt += buf * weight;
+						++texIt;
+						++bufferIt;
+					}
+				}
+
+				if ( !texcoords1.empty() )
+				{
+					auto texIt = texcoords1.begin();
+					auto bufferIt = target.texcoords1.begin();
+
+					while ( bufferIt != target.texcoords1.end() )
+					{
+						auto & buf = *bufferIt;
+						*texIt += buf * weight;
+						++texIt;
+						++bufferIt;
+					}
+				}
+
+				if ( !texcoords2.empty() )
+				{
+					auto texIt = texcoords2.begin();
+					auto bufferIt = target.texcoords2.begin();
+
+					while ( bufferIt != target.texcoords2.end() )
+					{
+						auto & buf = *bufferIt;
+						*texIt += buf * weight;
+						++texIt;
+						++bufferIt;
+					}
+				}
+
+				if ( !texcoords3.empty() )
+				{
+					auto texIt = texcoords3.begin();
+					auto bufferIt = target.texcoords3.begin();
+
+					while ( bufferIt != target.texcoords3.end() )
+					{
+						auto & buf = *bufferIt;
+						*texIt += buf * weight;
+						++texIt;
+						++bufferIt;
+					}
+				}
+			}
+		}
+
+	static std::pair< uint32_t, double > getNodeAnimFrameTicks( aiNodeAnim const & aiNodeAnim )
+	{
+		return { std::max( { aiNodeAnim.mNumPositionKeys
+				, aiNodeAnim.mNumRotationKeys
+				, aiNodeAnim.mNumScalingKeys } )
+			, std::max( { ( aiNodeAnim.mNumPositionKeys > 0
+					? aiNodeAnim.mPositionKeys[aiNodeAnim.mNumPositionKeys - 1u].mTime
+					: 0.0 )
+				, ( aiNodeAnim.mNumRotationKeys > 0
+					? aiNodeAnim.mRotationKeys[aiNodeAnim.mNumRotationKeys - 1u].mTime
+					: 0.0 )
+				, ( aiNodeAnim.mNumScalingKeys > 0
+					? aiNodeAnim.mScalingKeys[aiNodeAnim.mNumScalingKeys - 1u].mTime
+					: 0.0 ) } ) };
 	}
 
 	static std::pair< uint32_t, double > getAnimationFrameTicks( aiAnimation const & aiAnimation )
