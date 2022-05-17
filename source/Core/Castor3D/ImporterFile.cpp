@@ -10,7 +10,7 @@ namespace castor3d
 
 	bool parseImportParameters( Parameters const & parameters
 		, castor::Point3f & scale
-		, castor::Quaternion orientation )
+		, castor::Quaternion & orientation )
 	{
 		float value = 1.0f;
 		bool needsTransform = false;

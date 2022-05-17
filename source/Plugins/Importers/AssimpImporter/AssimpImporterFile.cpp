@@ -363,15 +363,18 @@ namespace c3d_assimp
 		return result;
 	}
 
-	std::vector< castor::String > AssimpImporterFile::listMeshes()
+	std::vector< std::pair< castor::String, castor::String > > AssimpImporterFile::listMeshes()
 	{
 		m_listedMeshes.clear();
-		std::vector< castor::String > result;
+		std::vector< std::pair< castor::String, castor::String > > result;
 
 		for ( auto it : m_sceneData.meshes )
 		{
 			m_listedMeshes.emplace_back( it.first );
-			result.emplace_back( it.first );
+			result.emplace_back( it.first
+				, ( it.second.skelNode
+					? normalizeName( makeString( it.second.skelNode->mName ) )
+					: castor::String{} ) );
 		}
 
 		return result;
@@ -414,6 +417,32 @@ namespace c3d_assimp
 					: ( light.second->mType == aiLightSource_POINT
 						? castor3d::LightType::ePoint
 						: castor3d::LightType::eSpot ) ) );
+		}
+
+		return result;
+	}
+
+	std::vector< AssimpImporterFile::GeometryData > AssimpImporterFile::listGeometries()
+	{
+		std::vector< GeometryData > result;
+
+		for ( auto & node : m_sceneData.nodes )
+		{
+			for ( auto & mesh : node.second.meshes )
+			{
+				auto it = std::find_if( m_sceneData.meshes.begin()
+					, m_sceneData.meshes.end()
+					, [mesh]( std::map< castor::String, MeshData >::value_type const & lookup )
+					{
+						return mesh == &lookup.second;
+					} );
+				CU_Require( it != m_sceneData.meshes.end() );
+				auto meshName = getInternalName( it->first );
+				auto name = node.first == meshName
+					? node.first
+					: node.first + meshName;
+				result.emplace_back( GeometryData{ name, node.first, it->first } );
+			}
 		}
 
 		return result;
