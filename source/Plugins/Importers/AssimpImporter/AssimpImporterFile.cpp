@@ -82,6 +82,51 @@ namespace c3d_assimp
 			return nullptr;
 		}
 
+		std::string getLongestCommonSubstring( std::string const & a, std::string const & b )
+		{
+			std::vector< std::string > substrings;
+
+			for ( auto beg = a.begin(); beg != std::prev( a.end() ); ++beg )
+			{
+				for ( auto end = beg; end != a.end(); ++end )
+				{
+					if ( b.find( std::string( beg, std::next( end ) ) ) != std::string::npos )
+					{
+						substrings.emplace_back( beg, std::next( end ) );
+					}
+				}
+			}
+
+			if ( substrings.empty() )
+			{
+				return b;
+			}
+
+			auto result = *std::max_element( substrings.begin(), substrings.end(),
+				[]( auto & elem1, auto & elem2 )
+				{
+					return elem1.length() < elem2.length();
+				} );
+			return castor::string::trim( result, true, true, " \r\t-_/\\|*$<>[](){}" );
+		}
+
+		template< typename IterT, typename TypeT >
+		std::pair< IterT, castor::String > replaceIter( castor::String const & name
+			, IterT iter
+			, std::map< castor::String, TypeT > & map )
+		{
+			auto common = getLongestCommonSubstring( name, iter->first );
+
+			if ( !common.empty() && common != iter->first )
+			{
+				auto data = iter->second;
+				map.erase( iter );
+				iter = map.emplace( common, data ).first;
+			}
+
+			return { iter, common };
+		}
+
 		castor::String getMaterialName( AssimpImporterFile const & file
 			, aiMaterial const & aiMaterial
 			, uint32_t materialIndex )
@@ -123,53 +168,6 @@ namespace c3d_assimp
 			}
 
 			return result;
-		}
-
-		static aiNode const * findRootSkeletonNode( aiNode const & sceneRootNode
-			, castor::ArrayView< aiBone * > bones
-			, aiNode const * meshNode
-			, std::map< castor::String, castor::Matrix4x4f > const & bonesNodes )
-		{
-			std::vector< aiNode const * > bonesRootNodes;
-			auto insertNode = [&bonesRootNodes]( aiNode const * node )
-			{
-				if ( std::all_of( bonesRootNodes.begin()
-					, bonesRootNodes.end()
-					, [node]( aiNode const * lookup )
-					{
-						return lookup->FindNode( node->mName ) == nullptr;
-					} ) )
-				{
-					std::erase_if( bonesRootNodes
-						, [node]( aiNode const * lookup )
-						{
-							return node->FindNode( lookup->mName ) != nullptr;
-						} );
-					bonesRootNodes.push_back( node );
-				}
-			};
-
-			for ( auto bone : bones )
-			{
-				auto node = sceneRootNode.FindNode( bone->mName );
-				insertNode( node );
-
-				while ( node->mParent )
-				{
-					node = node->mParent;
-
-					if ( node == meshNode
-						|| node->FindNode( meshNode->mName ) )
-					{
-						break;
-					}
-
-					insertNode( node );
-				}
-			}
-
-			CU_Require( bonesRootNodes.size() == 1u );
-			return *bonesRootNodes.begin();
 		}
 
 		static bool isAnimForSkeleton( AssimpImporterFile const & file
@@ -240,30 +238,6 @@ namespace c3d_assimp
 							return submesh.meshIndex == meshIndex;
 						} );
 				} );
-		}
-
-		aiNode const * findMeshNode( uint32_t meshIndex
-			, aiNode const & node )
-		{
-			auto meshes = castor::makeArrayView( node.mMeshes, node.mNumMeshes );
-			auto meshIt = std::find( meshes.begin(), meshes.end(), meshIndex );
-
-			if ( meshIt != meshes.end() )
-			{
-				return &node;
-			}
-
-			aiNode const * result{};
-			auto children = castor::makeArrayView( node.mChildren, node.mNumChildren );
-			auto childIt = children.begin();
-
-			while ( !result && childIt != children.end() )
-			{
-				result = findMeshNode( meshIndex, **childIt );
-				++childIt;
-			}
-
-			return result;
 		}
 	}
 
@@ -606,7 +580,7 @@ namespace c3d_assimp
 		{
 			if ( aiMesh->HasBones() )
 			{
-				auto meshNode = file::findMeshNode( meshIndex, *m_scene->mRootNode );
+				auto meshNode = findMeshNode( meshIndex, *m_scene->mRootNode );
 
 				if ( meshNode == nullptr )
 				{
@@ -614,10 +588,9 @@ namespace c3d_assimp
 				}
 				else
 				{
-					auto rootNode = file::findRootSkeletonNode( *m_scene->mRootNode
+					auto rootNode = findRootSkeletonNode( *m_scene->mRootNode
 						, castor::makeArrayView( aiMesh->mBones, aiMesh->mNumBones )
-						, meshNode
-						, m_bonesNodes );
+						, meshNode );
 					auto skelName = normalizeName( makeString( rootNode->mName ) );
 					auto & skeleton = m_sceneData.skeletons.emplace( skelName, SkeletonData{ rootNode } ).first->second;
 
@@ -693,6 +666,11 @@ namespace c3d_assimp
 						{
 							return skelNode == lookup.second.skelNode;
 						} );
+
+					if ( regIt != m_sceneData.meshes.end() )
+					{
+						regIt = file::replaceIter( meshName, regIt, m_sceneData.meshes ).first;
+					}
 				}
 
 				if ( regIt == m_sceneData.meshes.end() )
@@ -729,12 +707,13 @@ namespace c3d_assimp
 		work.emplace_back( castor::String{}
 			, m_scene->mRootNode
 			, fromAssimp( m_scene->mRootNode->mTransformation ) );
+		std::map< MeshData const *, castor::String > processed;
 
 		while ( !work.empty() )
 		{
-			auto nodeTransform = work.front();
-			auto node = nodeTransform.node;
-			auto transform = nodeTransform.transform;
+			auto nodeData = work.front();
+			auto node = nodeData.node;
+			auto transform = nodeData.transform;
 			work.erase( work.begin() );
 
 			if ( m_bonesNodes.find( makeString( node->mName ) ) != m_bonesNodes.end() )
@@ -749,8 +728,8 @@ namespace c3d_assimp
 			if ( node->mMeshes
 				|| !anims.empty() )
 			{
+				bool hasAdded = !anims.empty();
 				nodeName = getInternalName( node->mName );
-				auto & nodeData = m_sceneData.nodes.emplace( nodeName, nodeTransform ).first->second;
 
 				for ( auto anim : anims )
 				{
@@ -775,17 +754,43 @@ namespace c3d_assimp
 
 					if ( it != m_sceneData.meshes.end() )
 					{
-						nodeData.meshes.push_back( &it->second );
+						if ( nodeData.meshes.end() == std::find( nodeData.meshes.begin()
+							, nodeData.meshes.end()
+							, &it->second ) )
+						{
+							auto ires = processed.emplace( &it->second, nodeName );
+
+							if ( ires.second )
+							{
+								nodeData.meshes.push_back( &it->second );
+								hasAdded = true;
+							}
+							else
+							{
+								auto replIt = m_sceneData.nodes.find( ires.first->second );
+								auto commonName = file::replaceIter( nodeName, replIt, m_sceneData.nodes ).second;
+
+								if ( commonName != ires.first->second )
+								{
+									ires.first->second = commonName;
+								}
+							}
+						}
 					}
 					else
 					{
 						CU_Failure( "Could not find node's mesh ?" );
 					}
 				}
+
+				if ( hasAdded )
+				{
+					m_sceneData.nodes.emplace( nodeName, std::move( nodeData ) ).first;
+				}
 			}
 			else
 			{
-				nodeName = nodeTransform.parent;
+				nodeName = nodeData.parent;
 				transform = transform * fromAssimp( node->mTransformation );
 			}
 

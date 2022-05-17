@@ -29,6 +29,10 @@ namespace c3d_assimp
 		{
 			node.attachTo( *parent.lock() );
 		}
+		else
+		{
+			node.attachTo( *node.getScene()->getObjectRootNode() );
+		}
 
 		castor::Point3f scale, position;
 		castor::Quaternion rotate;
