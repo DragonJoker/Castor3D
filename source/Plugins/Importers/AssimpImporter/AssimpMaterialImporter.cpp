@@ -36,14 +36,37 @@ namespace c3d_assimp
 				, castor::PixelComponent::eAlpha );
 			auto data = alphaChannel->getConstPtr();
 			auto end = data + alphaChannel->getSize();
-			return !std::all_of( data, end, []( uint8_t byte )
+			return !std::all_of( data, end, []( uint8_t byte ){ return byte == 0x00; } )
+				&& !std::all_of( data, end, []( uint8_t byte ) { return byte == 0xFF; } );
+		}
+
+		static castor::String decodeUri( castor::String uri )
+		{
+			castor::String escaped;
+
+			for ( auto i = uri.begin(), nd = uri.end(); i < nd; ++i )
+			{
+				auto c = ( *i );
+
+				switch ( c )
 				{
-					return byte == 0x00;
-				} )
-				&& !std::all_of( data, end, []( uint8_t byte )
+				case '%':
+					if ( i[1] && i[2] )
 					{
-						return byte == 0xFF;
-					} );
+						char hs[]{ i[1], i[2] };
+						escaped += static_cast< char >( strtol( hs, nullptr, 16 ) );
+						i += 2;
+					}
+					break;
+				case '+':
+					escaped += ' ';
+					break;
+				default:
+					escaped += c;
+				}
+			}
+
+			return escaped;
 		}
 
 		struct TextureInfo
@@ -143,9 +166,12 @@ namespace c3d_assimp
 					}
 				}
 
+				bool hasOpacity = !opaInfo.name.empty();
+
 				if ( opaInfo.name.empty() )
 				{
 					aiString value;
+
 					if ( m_material.Get( AI_MATKEY_GLTF_ALPHAMODE, value ) == aiReturn_SUCCESS )
 					{
 						auto mode = makeString( value );
@@ -160,6 +186,7 @@ namespace c3d_assimp
 							m_result.setAlphaValue( 0.95f );
 							m_result.setAlphaFunc( VK_COMPARE_OP_GREATER );
 							m_result.setBlendAlphaFunc( VK_COMPARE_OP_LESS_OR_EQUAL );
+							hasOpacity = true;
 
 							if ( mode == "BLEND" )
 							{
@@ -179,17 +206,22 @@ namespace c3d_assimp
 				else
 				{
 					loadTexture( opaInfo, getRemap( castor3d::TextureFlag::eOpacity
-						, castor3d::TextureConfiguration::OpacityTexture ) );
+						, castor3d::TextureConfiguration::OpacityTexture )
+						, hasOpacity );
 				}
 
 				loadTexture( colInfo, getRemap( castor3d::TextureFlag::eDiffuse
-					, castor3d::TextureConfiguration::DiffuseTexture ) );
+					, castor3d::TextureConfiguration::DiffuseTexture )
+					, hasOpacity );
 				loadTexture( emiInfo, getRemap( castor3d::TextureFlag::eEmissive
-					, castor3d::TextureConfiguration::EmissiveTexture ) );
+					, castor3d::TextureConfiguration::EmissiveTexture )
+					, hasOpacity );
 				loadTexture( spcInfo, getRemap( castor3d::TextureFlag::eSpecular
-					, castor3d::TextureConfiguration::SpecularTexture ) );
+					, castor3d::TextureConfiguration::SpecularTexture )
+					, hasOpacity );
 				loadTexture( occInfo, getRemap( castor3d::TextureFlag::eOcclusion
-					, castor3d::TextureConfiguration::OcclusionTexture ) );
+					, castor3d::TextureConfiguration::OcclusionTexture )
+					, hasOpacity );
 
 				// force non 0.0 opacity when an opacity map is set
 				if ( !opaInfo.name.empty()
@@ -201,15 +233,19 @@ namespace c3d_assimp
 				if ( !nmlInfo.name.empty() )
 				{
 					loadTexture( nmlInfo, getRemap( castor3d::TextureFlag::eNormal
-						, castor3d::TextureConfiguration::NormalTexture ) );
+						, castor3d::TextureConfiguration::NormalTexture )
+						, hasOpacity );
 					loadTexture( hgtInfo, getRemap( castor3d::TextureFlag::eHeight
-						, castor3d::TextureConfiguration::HeightTexture ) );
+						, castor3d::TextureConfiguration::HeightTexture )
+						, hasOpacity );
 				}
 				else
 				{
 					auto texConfig = castor3d::TextureConfiguration::NormalTexture;
 					convertToNormalMap( hgtInfo, texConfig );
-					loadTexture( hgtInfo, getRemap( castor3d::TextureFlag::eNormal, texConfig ) );
+					loadTexture( hgtInfo
+						, getRemap( castor3d::TextureFlag::eNormal, texConfig )
+						, hasOpacity );
 				}
 
 				if ( !emiInfo.name.empty() )
@@ -593,7 +629,8 @@ namespace c3d_assimp
 			}
 
 			void loadTexture( TextureInfo const & info
-				, castor3d::TextureConfiguration texConfig )
+				, castor3d::TextureConfiguration texConfig
+				, bool hasOpacity )
 			{
 				if ( !info.name.empty() )
 				{
@@ -631,9 +668,10 @@ namespace c3d_assimp
 						}
 						else
 						{
+							auto name = decodeUri( info.name );
 							sourceInfo = std::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( m_sampler
-								, castor::Path{ info.name }
-							, texConfig ) );
+								, castor::Path{ name }
+								, texConfig ) );
 						}
 
 						if ( sourceInfo )
@@ -656,12 +694,19 @@ namespace c3d_assimp
 
 							if ( texConfig.opacityMask[0] && getFlags( texConfig ) == castor3d::TextureFlag::eOpacity )
 							{
+								m_result.setTwoSided( true );
+								m_result.setAlphaValue( 0.95f );
+								m_result.setAlphaFunc( VK_COMPARE_OP_GREATER );
+								m_result.setBlendAlphaFunc( VK_COMPARE_OP_LESS_OR_EQUAL );
+								m_result.setAlphaBlendMode( castor3d::BlendMode::eInterpolative );
+
 								if ( !hasAlphaChannel( image ) )
 								{
 									texConfig.opacityMask[0] = 0x00FF0000;
 								}
 							}
-							else if ( texConfig == castor3d::TextureConfiguration::DiffuseTexture
+							else if ( !hasOpacity
+								&& texConfig == castor3d::TextureConfiguration::DiffuseTexture
 								&& hasAlphaChannel( image ) )
 							{
 								texConfig.opacityMask[0] = 0xFF000000;
