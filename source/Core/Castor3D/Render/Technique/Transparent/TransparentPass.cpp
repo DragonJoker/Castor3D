@@ -140,7 +140,7 @@ namespace castor3d
 		using namespace sdw;
 		FragmentWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = flags.hasTextures();
+		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
 		bool hasDiffuseGI = checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing )
 			|| checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
 			|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );

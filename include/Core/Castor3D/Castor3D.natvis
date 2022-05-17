@@ -124,7 +124,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::PositionsComponent">
+	<Type Name="castor3d::BaseDataComponentT&lt;*&gt;">
 		<DisplayString>{m_id} {m_type} data={m_data}</DisplayString>
 		<Expand>
 			<Item Name="id">m_id</Item>
