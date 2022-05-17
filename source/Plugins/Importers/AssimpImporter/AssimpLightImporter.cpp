@@ -78,12 +78,12 @@ namespace c3d_assimp
 		}
 
 		castor::Point3f colour{ aiLight.mColorDiffuse.r, aiLight.mColorDiffuse.g, aiLight.mColorDiffuse.b };
-		auto length = float( castor::point::length( colour ) );
+		auto max = std::max( { colour->x, colour->y, colour->z } );
 
-		if ( length != 0.0 )
+		if ( max != 0.0 )
 		{
-			castor::point::normalise( colour );
-			light.setIntensity( length, length );
+			colour /= max;
+			light.setIntensity( max, max );
 		}
 
 		light.setColour( castor::RgbColour::fromComponents( colour->x, colour->y, colour->z ) );
