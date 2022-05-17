@@ -499,7 +499,7 @@ Materials can be multi-pass, so you can declare more than one pass subsection.
 
 - **file** : *path*  
   Imports the scene from the given file name.
-- **anim_file** : *path*  
+- **file_anim** : *path*  
   Imports animations from the given file name.
 - **prefix** : *text*  
   Defines the imported objects' name prefix, used to prevent names clash.
@@ -712,7 +712,7 @@ Allows the definition of billboards that share the same material and dimensions.
 - **import** : *file* *&lt;options&gt;*  
   Allows import of skeleton data from a file, in CMSH file format or any format supported by Castor3D import plug-ins. Only if the mesh type is custom. This directive can accept few optional parameters :
   - *rescale*=*real* : Rescales the resulting skeleton by given factor, on three axes.
-- **anim_import** : *file* *&lt;options*&gt;  
+- **import_anim** : *file* *&lt;options*&gt;  
   Allows import of skeleton animations from a file.  
   This directive can accept few optional parameters :
   - *rescale*=*real* : Rescales the resulting mesh by given factor, on three axes.
@@ -739,7 +739,7 @@ Allows the definition of billboards that share the same material and dimensions.
   - *pitch*=*réel* : Rotates the resulting mesh by given angle (in degrees) along X axis.
   - *yaw*=*réel* : Rotates the resulting mesh by given angle (in degrees) along Y axis.
   - *roll*=*réel* : Rotates the resulting mesh by given angle (in degrees) along Z axis.
-- **anim_import** : *file* *&lt;options*&gt;  
+- **import_anim** : *file* *&lt;options*&gt;  
   Allows import of mesh animations from a file.  
   This directive must happen after a first import directive.  
   Available only if the mesh type is *custom*.  

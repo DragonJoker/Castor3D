@@ -116,6 +116,16 @@ namespace castor3d
 		}
 		/**
 		 *\~english
+		 *\return		The key frames count.
+		 *\~french
+		 *\return		Le nombre de key frames.
+		 */
+		inline size_t size()const
+		{
+			return m_keyframes.size();
+		}
+		/**
+		 *\~english
 		 *\return		The beginning of the key frames.
 		 *\~french
 		 *\return		Le début des key frames.
