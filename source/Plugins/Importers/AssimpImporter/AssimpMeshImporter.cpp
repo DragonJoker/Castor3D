@@ -6,6 +6,8 @@
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp>
+#include <Castor3D/Model/Skeleton/BoneNode.hpp>
+#include <Castor3D/Model/Skeleton/Skeleton.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 
 namespace c3d_assimp
@@ -46,6 +48,7 @@ namespace c3d_assimp
 	{
 		auto & file = static_cast< AssimpImporterFile & >( *m_file );
 		auto & aiScene = file.getScene();
+		uint32_t meshIndex{};
 
 		for ( auto aiMesh : castor::makeArrayView( aiScene.mMeshes, aiScene.mNumMeshes ) )
 		{
@@ -62,9 +65,12 @@ namespace c3d_assimp
 			{
 				doProcessMesh( aiScene
 					, *aiMesh
+					, meshIndex
 					, mesh
 					, *mesh.createSubmesh() );
 			}
+
+			++meshIndex;
 		}
 
 		doTransformMesh( *aiScene.mRootNode
@@ -88,6 +94,7 @@ namespace c3d_assimp
 		{
 			doProcessMesh( aiScene
 				, *submesh.mesh
+				, submesh.meshIndex
 				, mesh
 				, *mesh.createSubmesh() );
 		}
@@ -97,6 +104,7 @@ namespace c3d_assimp
 
 	void AssimpMeshImporter::doProcessMesh( aiScene const & aiScene
 		, aiMesh const & aiMesh
+		, uint32_t aiMeshIndex
 		, castor3d::Mesh & mesh
 		, castor3d::Submesh & submesh )
 	{
@@ -192,20 +200,38 @@ namespace c3d_assimp
 		if ( aiMesh.HasBones() )
 		{
 			std::vector< castor3d::VertexBoneData > bonesData( aiMesh.mNumVertices );
-			uint32_t boneIndex{};
-
-			for ( auto aiBone : castor::makeArrayView( aiMesh.mBones, aiMesh.mNumBones ) )
-			{
-				for ( auto weight : castor::makeArrayView( aiBone->mWeights, aiBone->mNumWeights ) )
+			auto meshNode = findMeshNode( aiMeshIndex, *aiScene.mRootNode );
+			auto rootNode = findRootSkeletonNode( *aiScene.mRootNode
+				, castor::makeArrayView( aiMesh.mBones, aiMesh.mNumBones )
+				, meshNode );
+			auto skelName = normalizeName( file.getInternalName( rootNode->mName ) );
+			auto skelIt = std::find_if( scene.getSkeletonCache().begin()
+				, scene.getSkeletonCache().end()
+				, [&skelName]( auto const & lookup )
 				{
-					bonesData[weight.mVertexId].addBoneData( boneIndex, weight.mWeight );
+					return lookup.second->getRootNode()->getName() == skelName;
+				} );
+
+			if ( skelIt != scene.getSkeletonCache().end() )
+			{
+				auto & skeleton = *skelIt->second;
+
+				for ( auto aiBone : castor::makeArrayView( aiMesh.mBones, aiMesh.mNumBones ) )
+				{
+					castor::String boneName = file.getInternalName( aiBone->mName );
+					auto node = skeleton.findNode( boneName );
+					CU_Require( node && node->getType() == castor3d::SkeletonNodeType::eBone );
+					auto bone = &static_cast< castor3d::BoneNode & >( *node );
+
+					for ( auto weight : castor::makeArrayView( aiBone->mWeights, aiBone->mNumWeights ) )
+					{
+						bonesData[weight.mVertexId].addBoneData( bone->getId(), weight.mWeight );
+					}
 				}
 
-				++boneIndex;
+				auto bones = submesh.createComponent< castor3d::BonesComponent >();
+				bones->addBoneDatas( bonesData );
 			}
-
-			auto bones = submesh.createComponent< castor3d::BonesComponent >();
-			bones->addBoneDatas( bonesData );
 		}
 
 		auto mapping = submesh.createComponent< castor3d::TriFaceMapping >();

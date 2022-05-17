@@ -22,6 +22,7 @@ namespace c3d_assimp
 		bool doImportSceneMesh( castor3d::Mesh & mesh );
 		void doProcessMesh( aiScene const & aiScene
 			, aiMesh const & aiMesh
+			, uint32_t aiMeshIndex
 			, castor3d::Mesh & mesh
 			, castor3d::Submesh & submesh );
 		void doTransformMesh( aiNode const & aiNode
