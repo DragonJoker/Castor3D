@@ -187,7 +187,7 @@ namespace castor3d
 		using namespace sdw;
 		VertexWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = flags.hasTextures();
+		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
 
 		C3D_ObjectIdsData( writer
 			, GlobalBuffersIdx::eObjectsNodeID
@@ -294,7 +294,7 @@ namespace castor3d
 		using namespace sdw;
 		FragmentWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = flags.hasTextures();
+		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
 
 		shader::Utils utils{ writer, *renderSystem.getEngine() };
 

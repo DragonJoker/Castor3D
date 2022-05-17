@@ -463,7 +463,7 @@ namespace castor3d::shader
 				tangentSpaceViewPosition = tbn * cameraPosition.xyz();
 			}
 		}
-		else
+		else if ( normal.isEnabled() )
 		{
 			CU_Require( !normal.getExpr()->isDummy() );
 			normal = normalize( mtx * nml.xyz() );

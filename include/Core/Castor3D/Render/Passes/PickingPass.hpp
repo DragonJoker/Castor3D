@@ -92,6 +92,7 @@ namespace castor3d
 		void doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		void doUpdate( RenderQueueArray & queues )override;
+		SubmeshFlags doAdjustSubmeshFlags( SubmeshFlags flags )const override;
 		virtual ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetHullShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetDomainShaderSource( PipelineFlags const & flags )const override;
