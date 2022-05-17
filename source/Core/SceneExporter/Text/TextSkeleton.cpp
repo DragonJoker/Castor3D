@@ -29,6 +29,18 @@ namespace castor
 			{
 				result = writeName( file, "import", "Skeletons/" + object.getName() + ".cskl" );
 			}
+
+			for ( auto & animation : object.getAnimations() )
+			{
+				if ( !m_subfolder.empty() )
+				{
+					result = result && writeName( file, "import_anim", "Skeletons/" + m_subfolder + "/" + object.getName() + "-" + animation.first + ".cska" );
+				}
+				else
+				{
+					result = result && writeName( file, "import_anim", "Skeletons/" + object.getName() + "-" + animation.first + ".cska" );
+				}
+			}
 		}
 
 		return result;

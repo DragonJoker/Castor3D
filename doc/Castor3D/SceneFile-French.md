@@ -501,7 +501,7 @@ Les matériaux pouvant être multi-passes, il est possible de définir plusieurs
 
 - **file** : *path*  
   Importe la scène depuis le chemin donné.
-- **anim_file** : *path*  
+- **file_anim** : *path*  
   Importe les animations depuis le chemin donné.
 - **prefix** : *text*  
   Définit un préfixe qui sera attribué aux noms des objets, pour éviter les conflits de noms.
@@ -715,7 +715,7 @@ Permet de définir des billboards partageant le même matériau et faisant les m
 - **import** : *fichier* &lt;*options*&gt;  
   Permet l’import d’un fichier contenant les données du squelette. Ce fichier peut être au format cmsh ou tout autre format supporté par Castor3D. Uniquement si le type du maillage est **custom**. Cette directive peut de plus prendre plusieurs options parmi les suivantes :
   - *rescale*=*réel* : Met le squelette à l’échelle, sur les trois axes.
-- **anim_import** : *fichier* &lt;*options*&gt;  
+- **import_anim** : *fichier* &lt;*options*&gt;  
   Permet l’import d’un fichier contenant des données d'animation de squelette.  
   Cette directive peut de plus prendre plusieurs options parmi les suivantes :
   - *rescale*=*réel* : Met le squelette à l’échelle, sur les trois axes.
@@ -742,7 +742,7 @@ Permet de définir des billboards partageant le même matériau et faisant les m
   - *pitch*=*réel* : Tourne le maillage de l'angle donné (en degrés) autour de l'axe X.
   - *yaw*=*réel* : Tourne le maillage de l'angle donné (en degrés) autour de l'axe Y.
   - *roll*=*réel* : Tourne le maillage de l'angle donné (en degrés) autour de l'axe Z.
-- **anim_import** : *fichier* &lt;*options*&gt;  
+- **import_anim** : *fichier* &lt;*options*&gt;  
   Permet l’import d’un fichier contenant des données d'animation de maillage.  
   Ce fichier peut être au format cmsh ou tout autre format supporté par Castor3D.  
   Disponible uniquement si le type du maillage est *custom*.  
