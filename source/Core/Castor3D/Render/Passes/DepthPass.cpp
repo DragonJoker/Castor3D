@@ -112,7 +112,7 @@ namespace castor3d
 		FragmentWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
 		auto & renderSystem = *getEngine()->getRenderSystem();
-		bool hasTextures = flags.hasTextures();
+		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
 
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene

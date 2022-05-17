@@ -726,6 +726,21 @@ namespace castor3d
 		flags.programFlags = doAdjustProgramFlags( flags.programFlags );
 		flags.passFlags = doAdjustPassFlags( flags.passFlags );
 		flags.sceneFlags = doAdjustSceneFlags( flags.sceneFlags );
+		auto textureFlags = filterTexturesFlags( flags.textures );
+
+		if ( textureFlags.empty()
+			&& !checkFlag( flags.programFlags, ProgramFlag::eForceTexCoords ) )
+		{
+			remFlag( flags.submeshFlags, SubmeshFlag::eTexcoords0 );
+			remFlag( flags.submeshFlags, SubmeshFlag::eTexcoords1 );
+			remFlag( flags.submeshFlags, SubmeshFlag::eTexcoords2 );
+			remFlag( flags.submeshFlags, SubmeshFlag::eTexcoords3 );
+			remFlag( flags.submeshFlags, SubmeshFlag::eMorphTexcoords0 );
+			remFlag( flags.submeshFlags, SubmeshFlag::eMorphTexcoords1 );
+			remFlag( flags.submeshFlags, SubmeshFlag::eMorphTexcoords2 );
+			remFlag( flags.submeshFlags, SubmeshFlag::eMorphTexcoords3 );
+		}
+
 		doAdjustFlags( flags );
 	}
 
@@ -742,7 +757,7 @@ namespace castor3d
 		using namespace sdw;
 		VertexWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = flags.hasTextures();
+		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
@@ -802,8 +817,7 @@ namespace castor3d
 				out.texture2 = in.texture2;
 				out.texture3 = in.texture3;
 				auto morphingData = writer.declLocale( "morphingData"
-					, c3d_morphingData[ids.morphingId]
-					, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
+					, c3d_morphingData[ids.morphingId] );
 				in.morph( morphingData
 					, curPosition
 					, v4Normal
@@ -858,7 +872,7 @@ namespace castor3d
 		using namespace sdw;
 		VertexWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = flags.hasTextures();
+		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
 
 		// Shader inputs
 		auto position = writer.declInput< Vec4 >( "position", 0u );

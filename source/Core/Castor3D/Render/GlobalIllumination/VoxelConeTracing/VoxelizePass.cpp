@@ -321,7 +321,7 @@ namespace castor3d
 		using namespace sdw;
 		VertexWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = flags.hasTextures();
+		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
@@ -411,7 +411,7 @@ namespace castor3d
 		using namespace sdw;
 		VertexWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = flags.hasTextures();
+		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
 
 		// Shader inputs
 		auto inPosition = writer.declInput< Vec4 >( "inPosition", 0u );
@@ -504,7 +504,7 @@ namespace castor3d
 		using namespace sdw;
 		GeometryWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = flags.hasTextures();
+		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
 
 		C3D_Voxelizer( writer
 			, uint32_t( GlobalBuffersIdx::eCount ) + 1u
@@ -592,7 +592,8 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
-		bool hasTextures = flags.hasTextures();
+		auto textureFlags = filterTexturesFlags( flags.textures );
+		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
 		shader::Utils utils{ writer, *getEngine() };
 
 		C3D_Scene( writer

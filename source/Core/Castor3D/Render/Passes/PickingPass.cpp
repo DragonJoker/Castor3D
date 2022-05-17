@@ -85,6 +85,13 @@ namespace castor3d
 		return TextureFlags{ TextureFlag::eOpacity };
 	}
 
+	SubmeshFlags PickingPass::doAdjustSubmeshFlags( SubmeshFlags flags )const
+	{
+		remFlag( flags, SubmeshFlag::eTangents );
+		remFlag( flags, SubmeshFlag::eMorphTangents );
+		return flags;
+	}
+
 	bool PickingPass::doIsValidPass( Pass const & pass )const
 	{
 		if ( !checkFlag( pass.getPassFlags(), PassFlag::ePickable) )
@@ -113,7 +120,7 @@ namespace castor3d
 		using namespace sdw;
 		VertexWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = flags.hasTextures();
+		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
@@ -210,7 +217,7 @@ namespace castor3d
 		using namespace sdw;
 		FragmentWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = flags.hasTextures();
+		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
 
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		shader::Utils utils{ writer, *renderSystem.getEngine() };
