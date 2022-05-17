@@ -52,16 +52,7 @@ namespace c3d_assimp
 
 		for ( auto aiMesh : castor::makeArrayView( aiScene.mMeshes, aiScene.mNumMeshes ) )
 		{
-			auto faces = castor::makeArrayView( aiMesh->mFaces, aiMesh->mNumFaces );
-			auto count = uint32_t( std::count_if( faces.begin()
-				, faces.end()
-				, []( aiFace const & face )
-				{
-					return face.mNumIndices == 3
-						|| face.mNumIndices == 4;
-				} ) );
-
-			if ( count > 0 && aiMesh->HasPositions() )
+			if ( isValidMesh( *aiMesh ) )
 			{
 				doProcessMesh( aiScene
 					, *aiMesh
