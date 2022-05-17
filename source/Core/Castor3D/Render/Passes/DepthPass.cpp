@@ -171,7 +171,7 @@ namespace castor3d
 					, normalize( in.bitangent )
 					, checkFlag( flags.submeshFlags, SubmeshFlag::eTangents ) );
 
-				if ( hasTextures )
+				if ( hasTextures && textureConfigs.isEnabled() )
 				{
 					auto texCoord0 = writer.declLocale( "texCoord0"
 						, in.texture0 );

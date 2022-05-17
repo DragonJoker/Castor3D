@@ -574,8 +574,10 @@ namespace castor3d
 
 		//*********************************************************************************************
 
-		TextureConfigurations::TextureConfigurations( sdw::ShaderWriter & writer )
+		TextureConfigurations::TextureConfigurations( sdw::ShaderWriter & writer
+			, bool enable )
 			: m_writer{ writer }
+			, m_enable{ enable }
 		{
 		}
 
@@ -583,9 +585,9 @@ namespace castor3d
 			, uint32_t binding
 			, uint32_t set
 			, bool enable )
-			: TextureConfigurations{ writer }
+			: TextureConfigurations{ writer, enable }
 		{
-			if ( enable )
+			if ( m_enable )
 			{
 				declare( binding, set );
 			}
@@ -620,6 +622,11 @@ namespace castor3d
 			, sdw::Vec3 & tangentSpaceViewPosition
 			, sdw::Vec3 & tangentSpaceFragPosition )const
 		{
+			if ( !isEnabled() )
+			{
+				return;
+			}
+
 			auto textureFlags = merge( textures );
 
 			if ( ( checkFlag( textureFlags, TextureFlag::eHeight )

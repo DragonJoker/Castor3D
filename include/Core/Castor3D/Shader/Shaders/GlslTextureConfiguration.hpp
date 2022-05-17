@@ -309,7 +309,8 @@ namespace castor3d
 		class TextureConfigurations
 		{
 		public:
-			C3D_API explicit TextureConfigurations( sdw::ShaderWriter & writer );
+			C3D_API explicit TextureConfigurations( sdw::ShaderWriter & writer
+				, bool enable = true );
 			C3D_API explicit TextureConfigurations( sdw::ShaderWriter & writer
 				, uint32_t binding
 				, uint32_t set
@@ -342,8 +343,14 @@ namespace castor3d
 				, sdw::Vec3 & texCoords2
 				, sdw::Vec3 & texCoords3 )const;
 
+			bool isEnabled()const noexcept
+			{
+				return m_enable;
+			}
+
 		private:
 			sdw::ShaderWriter & m_writer;
+			bool m_enable;
 			std::unique_ptr< sdw::ArraySsboT< TextureConfigData > > m_ssbo;
 			mutable sdw::Function< sdw::Vec3
 				, sdw::InUInt

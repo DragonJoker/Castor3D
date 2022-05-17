@@ -172,9 +172,9 @@ namespace castor3d
 				, textureFlags
 				, flags.passFlags
 				, hasTextures }
-			, FragmentOut{ writer }
+				, FragmentOut{ writer }
 			, [&]( FragmentInT< shader::FragmentSurfaceT > in
-			, FragmentOut out )
+				, FragmentOut out )
 			{
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1] );
