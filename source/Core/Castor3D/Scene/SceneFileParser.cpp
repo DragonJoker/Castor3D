@@ -118,7 +118,7 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "}" ), parserSceneEnd );
 
 			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "file" ), parserSceneImportFile, { makeParameter< ParameterType::ePath >() } );
-			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "anim_file" ), parserSceneImportAnimFile, { makeParameter< ParameterType::ePath >() } );
+			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "file_anim" ), parserSceneImportAnimFile, { makeParameter< ParameterType::ePath >() } );
 			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "prefix" ), parserSceneImportPrefix, { makeParameter< ParameterType::eText >() } );
 			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "rescale" ), parserSceneImportRescale, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "pitch" ), parserSceneImportPitch, { makeParameter< ParameterType::eFloat >() } );
@@ -197,14 +197,14 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eObjectMaterials ), cuT( "}" ), parserObjectMaterialsEnd );
 
 			addParser( result, uint32_t( CSCNSection::eSkeleton ), cuT( "import" ), parserSkeletonImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
-			addParser( result, uint32_t( CSCNSection::eSkeleton ), cuT( "anim_import" ), parserSkeletonAnimImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
+			addParser( result, uint32_t( CSCNSection::eSkeleton ), cuT( "import_anim" ), parserSkeletonAnimImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
 			addParser( result, uint32_t( CSCNSection::eSkeleton ), cuT( "}" ), parserSkeletonEnd );
 
 			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "type" ), parserMeshType, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eText >() } );
 			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "submesh" ), parserMeshSubmesh );
 			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "import" ), parserMeshImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
-			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "anim_import" ), parserMeshAnimImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
-			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "morph_import" ), parserMeshMorphImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eFloat >(), makeParameter< ParameterType::eText >() } );
+			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "import_anim" ), parserMeshAnimImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
+			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "import_morph" ), parserMeshMorphImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eFloat >(), makeParameter< ParameterType::eText >() } );
 			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "default_material" ), parserMeshDefaultMaterial, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "default_materials" ), parserMeshDefaultMaterials );
 			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "skeleton" ), parserMeshSkeleton, { makeParameter< ParameterType::eName >() } );
@@ -444,7 +444,10 @@ namespace castor3d
 				, { uint32_t( CSCNSection::ePcf ), cuT( "pcf" ) }
 				, { uint32_t( CSCNSection::eVsm ), cuT( "vsm" ) }
 				, { uint32_t( CSCNSection::eTextureAnimation ), cuT( "texture_animation" ) }
-				, { uint32_t( CSCNSection::eVoxelConeTracing ), cuT( "voxel_cone_tracing" ) } };
+				, { uint32_t( CSCNSection::eVoxelConeTracing ), cuT( "voxel_cone_tracing" ) }
+				, { uint32_t( CSCNSection::eTextureTransform ), cuT( "texture_transform" ) }
+				, { uint32_t( CSCNSection::eSceneImport ), cuT( "import" ) }
+				, { uint32_t( CSCNSection::eSkeleton ), cuT( "skeleton" ) } };
 		}
 
 		static void * createContext( castor::FileParserContext & context )
@@ -599,53 +602,8 @@ namespace castor3d
 	castor::String SceneFileParser::doGetSectionName( castor::SectionId section )const
 	{
 		castor::String result;
-		static const std::map< CSCNSection, castor::String > baseSections
-		{ { CSCNSection::eRoot, castor::String{} }
-			, { CSCNSection::eScene, cuT( "scene" ) }
-			, { CSCNSection::eWindow, cuT( "window" ) }
-			, { CSCNSection::eSampler, cuT( "sampler" ) }
-			, { CSCNSection::eCamera, cuT( "camera" ) }
-			, { CSCNSection::eViewport, cuT( "viewport" ) }
-			, { CSCNSection::eLight, cuT( "light" ) }
-			, { CSCNSection::eNode, cuT( "scene_node" ) }
-			, { CSCNSection::eObject, cuT( "object" ) }
-			, { CSCNSection::eObjectMaterials, cuT( "materials" ) }
-			, { CSCNSection::eFont, cuT( "font" ) }
-			, { CSCNSection::ePanelOverlay, cuT( "panel_overlay" ) }
-			, { CSCNSection::eBorderPanelOverlay, cuT( "border_panel_overlay" ) }
-			, { CSCNSection::eTextOverlay, cuT( "text_overlay" ) }
-			, { CSCNSection::eMesh, cuT( "mesh" ) }
-			, { CSCNSection::eSubmesh, cuT( "submesh" ) }
-			, { CSCNSection::eMaterial, cuT( "material" ) }
-			, { CSCNSection::ePass, cuT( "pass" ) }
-			, { CSCNSection::eTextureUnit, cuT( "texture_unit" ) }
-			, { CSCNSection::eRenderTarget, cuT( "render_target" ) }
-			, { CSCNSection::eShaderProgram, cuT( "shader_program" ) }
-			, { CSCNSection::eShaderStage, cuT( "shader_object" ) }
-			, { CSCNSection::eShaderUBO, cuT( "constants_buffer" ) }
-			, { CSCNSection::eUBOVariable, cuT( "variable" ) }
-			, { CSCNSection::eBillboard, cuT( "billboard" ) }
-			, { CSCNSection::eBillboardList, cuT( "positions" ) }
-			, { CSCNSection::eAnimGroup, cuT( "animated_object_group" ) }
-			, { CSCNSection::eAnimation, cuT( "animation" ) }
-			, { CSCNSection::eSkybox, cuT( "skybox" ) }
-			, { CSCNSection::eParticleSystem, cuT( "particle_system" ) }
-			, { CSCNSection::eParticle, cuT( "particle" ) }
-			, { CSCNSection::eSsao, cuT( "ssao" ) }
-			, { CSCNSection::eSubsurfaceScattering, cuT( "subsurface_scattering" ) }
-			, { CSCNSection::eTransmittanceProfile, cuT( "transmittance_profile" ) }
-			, { CSCNSection::eHdrConfig, cuT( "hdr_config" ) }
-			, { CSCNSection::eShadows, cuT( "shadows" ) }
-			, { CSCNSection::eMeshDefaultMaterials, cuT( "default_materials" ) }
-			, { CSCNSection::eRsm, cuT( "rsm" ) }
-			, { CSCNSection::eLpv, cuT( "lpv" ) }
-			, { CSCNSection::eRaw, cuT( "raw" ) }
-			, { CSCNSection::ePcf, cuT( "pcf" ) }
-			, { CSCNSection::eVsm, cuT( "vsm" ) }
-			, { CSCNSection::eTextureAnimation, cuT( "texture_animation" ) }
-			, { CSCNSection::eVoxelConeTracing, cuT( "voxel_cone_tracing" ) }
-			, { CSCNSection::eSceneImport, cuT( "import" ) } };
-		auto it = baseSections.find( CSCNSection( section ) );
+		static const std::map< uint32_t, castor::String > baseSections{ scnps::registerSections() };
+		auto it = baseSections.find( section );
 
 		if ( it != baseSections.end() )
 		{

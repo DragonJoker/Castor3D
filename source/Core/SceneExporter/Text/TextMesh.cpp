@@ -33,6 +33,18 @@ namespace castor
 				result = writeName( file, "import", "Meshes/" + object.getName() + ".cmsh" );
 			}
 
+			for ( auto & animation : object.getAnimations() )
+			{
+				if ( !m_subfolder.empty() )
+				{
+					result = result && writeName( file, "import_anim", "Meshes/" + m_subfolder + "/" + object.getName() + "-" + animation.first + ".cmsa" );
+				}
+				else
+				{
+					result = result && writeName( file, "import_anim", "Meshes/" + object.getName() + "-" + animation.first + ".cmsa" );
+				}
+			}
+
 			if ( auto skeleton = object.getSkeleton() )
 			{
 				result = result && writeName( file, "skeleton", skeleton->getName() );
