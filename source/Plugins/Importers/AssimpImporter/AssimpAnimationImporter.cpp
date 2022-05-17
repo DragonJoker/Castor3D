@@ -180,120 +180,118 @@ namespace c3d_assimp
 			auto & animations = file.getMeshesAnimations( mesh, index );
 			auto animIt = animations.find( name );
 
-			if ( animIt == animations.end() )
+			if ( animIt != animations.end() )
 			{
-				return false;
-			}
+				castor3d::log::info << cuT( "  Mesh Animation found for mesh [" ) << mesh.getName() << cuT( "], submesh " ) << index << cuT( ": [" ) << name << cuT( "]" ) << std::endl;
+				auto & aiAnimation = *animIt->second.second;
+				auto & aiMesh = *animIt->second.first;
 
-			castor3d::log::info << cuT( "  Mesh Animation found for submesh " ) << index << cuT( ": [" ) << name << cuT( "]" ) << std::endl;
-			auto & aiAnimation = *animIt->second.second;
-			auto & aiMesh = *animIt->second.first;
+				castor3d::MeshAnimationSubmesh animSubmesh{ animation, *submesh };
+				animation.addChild( std::move( animSubmesh ) );
 
-			castor3d::MeshAnimationSubmesh animSubmesh{ animation, *submesh };
-			animation.addChild( std::move( animSubmesh ) );
-
-			if ( aiAnimation.mKeys->mTime > 0.0 )
-			{
-				auto kfit = animation.find( 0_ms );
-				castor3d::MeshAnimationKeyFrame * kf{};
-
-				if ( kfit == animation.end() )
+				if ( aiAnimation.mKeys->mTime > 0.0 )
 				{
-					auto keyFrame = std::make_unique< castor3d::MeshAnimationKeyFrame >( animation, 0_ms );
-					kf = keyFrame.get();
-					animation.addKeyFrame( std::move( keyFrame ) );
-				}
-				else
-				{
-					kf = &static_cast< castor3d::MeshAnimationKeyFrame & >( **kfit );
-				}
+					auto kfit = animation.find( 0_ms );
+					castor3d::MeshAnimationKeyFrame * kf{};
 
-				auto & csubmesh = const_cast< castor3d::Submesh const & >( *submesh );
-				kf->addSubmeshBuffer( *submesh
-					, { csubmesh.getPositions()
-						, csubmesh.getNormals()
-						, csubmesh.getTangents()
-						, csubmesh.getTexcoords0()
-						, csubmesh.getTexcoords1()
-						, csubmesh.getTexcoords2()
-						, csubmesh.getTexcoords3() } );
-			}
-
-			for ( auto & morphKey : castor::makeArrayView( aiAnimation.mKeys, aiAnimation.mNumKeys ) )
-			{
-				auto timeIndex = castor::Milliseconds{ uint64_t( morphKey.mTime ) };
-				auto kfit = animation.find( timeIndex );
-				castor3d::MeshAnimationKeyFrame * kf{};
-
-				if ( kfit == animation.end() )
-				{
-					auto keyFrame = std::make_unique< castor3d::MeshAnimationKeyFrame >( animation, timeIndex );
-					kf = keyFrame.get();
-					animation.addKeyFrame( std::move( keyFrame ) );
-				}
-				else
-				{
-					kf = &static_cast< castor3d::MeshAnimationKeyFrame & >( **kfit );
-				}
-
-				std::vector< castor3d::SubmeshAnimationBuffer > const * meshAnimBuffers;
-
-				if ( file.hasMeshAnimBuffers( &aiMesh ) )
-				{
-					meshAnimBuffers = &file.getMeshAnimBuffers( &aiMesh );
-				}
-				else
-				{
-					auto positions = submesh->getComponent< castor3d::PositionsComponent >();
-					auto normals = submesh->getComponent< castor3d::NormalsComponent >();
-					castor::Point3fArray tan;
-					castor::Point3fArray tex0;
-					castor::Point3fArray tex1;
-					castor::Point3fArray tex2;
-					castor::Point3fArray tex3;
-					castor::Point3fArray * tangents = &tan;
-					castor::Point3fArray * texcoords0 = &tex0;
-					castor::Point3fArray * texcoords1 = &tex1;
-					castor::Point3fArray * texcoords2 = &tex2;
-					castor::Point3fArray * texcoords3 = &tex3;
-
-					if ( aiMesh.HasTextureCoords( 0u ) )
+					if ( kfit == animation.end() )
 					{
-						tangents = &submesh->getTangents();
-						texcoords0 = &submesh->getTexcoords0();
+						auto keyFrame = std::make_unique< castor3d::MeshAnimationKeyFrame >( animation, 0_ms );
+						kf = keyFrame.get();
+						animation.addKeyFrame( std::move( keyFrame ) );
+					}
+					else
+					{
+						kf = &static_cast< castor3d::MeshAnimationKeyFrame & >( **kfit );
 					}
 
-					if ( aiMesh.HasTextureCoords( 1u ) )
-					{
-						texcoords1 = &submesh->getTexcoords1();
-					}
-
-					if ( aiMesh.HasTextureCoords( 2u ) )
-					{
-						texcoords2 = &submesh->getTexcoords2();
-					}
-
-					if ( aiMesh.HasTextureCoords( 3u ) )
-					{
-						texcoords3 = &submesh->getTexcoords3();
-					}
-
-					meshAnimBuffers = &file.addMeshAnimBuffers( &aiMesh
-						, gatherMeshAnimBuffers( positions->getData()
-							, normals->getData()
-							, *tangents
-							, *texcoords0
-							, *texcoords1
-							, *texcoords2
-							, *texcoords3
-							, castor::makeArrayView( aiMesh.mAnimMeshes, aiMesh.mNumAnimMeshes ) ) );
+					auto & csubmesh = const_cast< castor3d::Submesh const & >( *submesh );
+					kf->addSubmeshBuffer( *submesh
+						, { csubmesh.getPositions()
+							, csubmesh.getNormals()
+							, csubmesh.getTangents()
+							, csubmesh.getTexcoords0()
+							, csubmesh.getTexcoords1()
+							, csubmesh.getTexcoords2()
+							, csubmesh.getTexcoords3() } );
 				}
 
-				anims::fillKeyFrame( *meshAnimBuffers
-					, castor::makeArrayView( morphKey.mValues, morphKey.mNumValuesAndWeights )
-					, castor::makeArrayView( morphKey.mWeights, morphKey.mNumValuesAndWeights )
-					, *submesh
-					, *kf );
+				for ( auto & morphKey : castor::makeArrayView( aiAnimation.mKeys, aiAnimation.mNumKeys ) )
+				{
+					auto timeIndex = castor::Milliseconds{ uint64_t( morphKey.mTime ) };
+					auto kfit = animation.find( timeIndex );
+					castor3d::MeshAnimationKeyFrame * kf{};
+
+					if ( kfit == animation.end() )
+					{
+						auto keyFrame = std::make_unique< castor3d::MeshAnimationKeyFrame >( animation, timeIndex );
+						kf = keyFrame.get();
+						animation.addKeyFrame( std::move( keyFrame ) );
+					}
+					else
+					{
+						kf = &static_cast< castor3d::MeshAnimationKeyFrame & >( **kfit );
+					}
+
+					std::vector< castor3d::SubmeshAnimationBuffer > const * meshAnimBuffers;
+
+					if ( file.hasMeshAnimBuffers( &aiMesh ) )
+					{
+						meshAnimBuffers = &file.getMeshAnimBuffers( &aiMesh );
+					}
+					else
+					{
+						auto positions = submesh->getComponent< castor3d::PositionsComponent >();
+						auto normals = submesh->getComponent< castor3d::NormalsComponent >();
+						castor::Point3fArray tan;
+						castor::Point3fArray tex0;
+						castor::Point3fArray tex1;
+						castor::Point3fArray tex2;
+						castor::Point3fArray tex3;
+						castor::Point3fArray * tangents = &tan;
+						castor::Point3fArray * texcoords0 = &tex0;
+						castor::Point3fArray * texcoords1 = &tex1;
+						castor::Point3fArray * texcoords2 = &tex2;
+						castor::Point3fArray * texcoords3 = &tex3;
+
+						if ( aiMesh.HasTextureCoords( 0u ) )
+						{
+							tangents = &submesh->getTangents();
+							texcoords0 = &submesh->getTexcoords0();
+						}
+
+						if ( aiMesh.HasTextureCoords( 1u ) )
+						{
+							texcoords1 = &submesh->getTexcoords1();
+						}
+
+						if ( aiMesh.HasTextureCoords( 2u ) )
+						{
+							texcoords2 = &submesh->getTexcoords2();
+						}
+
+						if ( aiMesh.HasTextureCoords( 3u ) )
+						{
+							texcoords3 = &submesh->getTexcoords3();
+						}
+
+						meshAnimBuffers = &file.addMeshAnimBuffers( &aiMesh
+							, gatherMeshAnimBuffers( positions->getData()
+								, normals->getData()
+								, *tangents
+								, *texcoords0
+								, *texcoords1
+								, *texcoords2
+								, *texcoords3
+								, castor::makeArrayView( aiMesh.mAnimMeshes, aiMesh.mNumAnimMeshes ) ) );
+					}
+
+					anims::fillKeyFrame( *meshAnimBuffers
+						, castor::makeArrayView( morphKey.mValues, morphKey.mNumValuesAndWeights )
+						, castor::makeArrayView( morphKey.mWeights, morphKey.mNumValuesAndWeights )
+						, *submesh
+						, *kf );
+				}
 			}
 
 			++index;

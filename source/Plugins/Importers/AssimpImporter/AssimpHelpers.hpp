@@ -306,117 +306,117 @@ namespace c3d_assimp
 		return result;
 	}
 
-		static void applyMorphTarget( float weight
-			, castor3d::SubmeshAnimationBuffer const & target
-			, castor::Point3fArray & positions
-			, castor::Point3fArray & normals
-			, castor::Point3fArray & tangents
-			, castor::Point3fArray & texcoords0
-			, castor::Point3fArray & texcoords1
-			, castor::Point3fArray & texcoords2
-			, castor::Point3fArray & texcoords3 )
+	static void applyMorphTarget( float weight
+		, castor3d::SubmeshAnimationBuffer const & target
+		, castor::Point3fArray & positions
+		, castor::Point3fArray & normals
+		, castor::Point3fArray & tangents
+		, castor::Point3fArray & texcoords0
+		, castor::Point3fArray & texcoords1
+		, castor::Point3fArray & texcoords2
+		, castor::Point3fArray & texcoords3 )
+	{
+		if ( weight != 0.0f )
 		{
-			if ( weight != 0.0f )
+			if ( !positions.empty() )
 			{
-				if ( !positions.empty() )
-				{
-					auto posIt = positions.begin();
-					auto bufferIt = target.positions.begin();
+				auto posIt = positions.begin();
+				auto bufferIt = target.positions.begin();
 
-					while ( bufferIt != target.positions.end() )
-					{
-						auto & buf = *bufferIt;
-						*posIt += buf * weight;
-						++posIt;
-						++bufferIt;
-					}
+				while ( bufferIt != target.positions.end() )
+				{
+					auto & buf = *bufferIt;
+					*posIt += buf * weight;
+					++posIt;
+					++bufferIt;
 				}
+			}
 
-				if ( !normals.empty() )
+			if ( !normals.empty() )
+			{
+				auto nmlIt = normals.begin();
+				auto bufferIt = target.normals.begin();
+
+				while ( bufferIt != target.normals.end() )
 				{
-					auto nmlIt = normals.begin();
-					auto bufferIt = target.normals.begin();
-
-					while ( bufferIt != target.normals.end() )
-					{
-						auto & buf = *bufferIt;
-						*nmlIt += buf * weight;
-						++nmlIt;
-						++bufferIt;
-					}
+					auto & buf = *bufferIt;
+					*nmlIt += buf * weight;
+					++nmlIt;
+					++bufferIt;
 				}
+			}
 
-				if ( !tangents.empty() )
+			if ( !tangents.empty() )
+			{
+				auto tanIt = tangents.begin();
+				auto bufferIt = target.tangents.begin();
+
+				while ( bufferIt != target.tangents.end() )
 				{
-					auto tanIt = tangents.begin();
-					auto bufferIt = target.tangents.begin();
-
-					while ( bufferIt != target.tangents.end() )
-					{
-						auto & buf = *bufferIt;
-						*tanIt += buf * weight;
-						++tanIt;
-						++bufferIt;
-					}
+					auto & buf = *bufferIt;
+					*tanIt += buf * weight;
+					++tanIt;
+					++bufferIt;
 				}
+			}
 
-				if ( !texcoords0.empty() )
+			if ( !texcoords0.empty() )
+			{
+				auto texIt = texcoords0.begin();
+				auto bufferIt = target.texcoords0.begin();
+
+				while ( bufferIt != target.texcoords0.end() )
 				{
-					auto texIt = texcoords0.begin();
-					auto bufferIt = target.texcoords0.begin();
-
-					while ( bufferIt != target.texcoords0.end() )
-					{
-						auto & buf = *bufferIt;
-						*texIt += buf * weight;
-						++texIt;
-						++bufferIt;
-					}
+					auto & buf = *bufferIt;
+					*texIt += buf * weight;
+					++texIt;
+					++bufferIt;
 				}
+			}
 
-				if ( !texcoords1.empty() )
+			if ( !texcoords1.empty() )
+			{
+				auto texIt = texcoords1.begin();
+				auto bufferIt = target.texcoords1.begin();
+
+				while ( bufferIt != target.texcoords1.end() )
 				{
-					auto texIt = texcoords1.begin();
-					auto bufferIt = target.texcoords1.begin();
-
-					while ( bufferIt != target.texcoords1.end() )
-					{
-						auto & buf = *bufferIt;
-						*texIt += buf * weight;
-						++texIt;
-						++bufferIt;
-					}
+					auto & buf = *bufferIt;
+					*texIt += buf * weight;
+					++texIt;
+					++bufferIt;
 				}
+			}
 
-				if ( !texcoords2.empty() )
+			if ( !texcoords2.empty() )
+			{
+				auto texIt = texcoords2.begin();
+				auto bufferIt = target.texcoords2.begin();
+
+				while ( bufferIt != target.texcoords2.end() )
 				{
-					auto texIt = texcoords2.begin();
-					auto bufferIt = target.texcoords2.begin();
-
-					while ( bufferIt != target.texcoords2.end() )
-					{
-						auto & buf = *bufferIt;
-						*texIt += buf * weight;
-						++texIt;
-						++bufferIt;
-					}
+					auto & buf = *bufferIt;
+					*texIt += buf * weight;
+					++texIt;
+					++bufferIt;
 				}
+			}
 
-				if ( !texcoords3.empty() )
+			if ( !texcoords3.empty() )
+			{
+				auto texIt = texcoords3.begin();
+				auto bufferIt = target.texcoords3.begin();
+
+				while ( bufferIt != target.texcoords3.end() )
 				{
-					auto texIt = texcoords3.begin();
-					auto bufferIt = target.texcoords3.begin();
-
-					while ( bufferIt != target.texcoords3.end() )
-					{
-						auto & buf = *bufferIt;
-						*texIt += buf * weight;
-						++texIt;
-						++bufferIt;
-					}
+					auto & buf = *bufferIt;
+					*texIt += buf * weight;
+					++texIt;
+					++bufferIt;
 				}
 			}
 		}
+	}
 
 	static std::pair< uint32_t, double > getNodeAnimFrameTicks( aiNodeAnim const & aiNodeAnim )
 	{
@@ -458,6 +458,76 @@ namespace c3d_assimp
 		}
 
 		return { count, ticks };
+	}
+
+	static aiNode const * findMeshNode( uint32_t meshIndex
+		, aiNode const & node )
+	{
+		auto meshes = castor::makeArrayView( node.mMeshes, node.mNumMeshes );
+		auto meshIt = std::find( meshes.begin(), meshes.end(), meshIndex );
+
+		if ( meshIt != meshes.end() )
+		{
+			return &node;
+		}
+
+		aiNode const * result{};
+		auto children = castor::makeArrayView( node.mChildren, node.mNumChildren );
+		auto childIt = children.begin();
+
+		while ( !result && childIt != children.end() )
+		{
+			result = findMeshNode( meshIndex, **childIt );
+			++childIt;
+		}
+
+		return result;
+	}
+
+	static aiNode const * findRootSkeletonNode( aiNode const & sceneRootNode
+		, castor::ArrayView< aiBone * > bones
+		, aiNode const * meshNode )
+	{
+		std::vector< aiNode const * > bonesRootNodes;
+		auto insertNode = [&bonesRootNodes]( aiNode const * node )
+		{
+			if ( std::all_of( bonesRootNodes.begin()
+				, bonesRootNodes.end()
+				, [node]( aiNode const * lookup )
+				{
+					return lookup->FindNode( node->mName ) == nullptr;
+				} ) )
+			{
+				std::erase_if( bonesRootNodes
+					, [node]( aiNode const * lookup )
+					{
+						return node->FindNode( lookup->mName ) != nullptr;
+					} );
+				bonesRootNodes.push_back( node );
+			}
+		};
+
+		for ( auto bone : bones )
+		{
+			auto node = sceneRootNode.FindNode( bone->mName );
+			insertNode( node );
+
+			while ( node->mParent )
+			{
+				node = node->mParent;
+
+				if ( node == meshNode
+					|| node->FindNode( meshNode->mName ) )
+				{
+					break;
+				}
+
+				insertNode( node );
+			}
+		}
+
+		CU_Require( bonesRootNodes.size() == 1u );
+		return *bonesRootNodes.begin();
 	}
 
 	template< typename KeyT >
