@@ -43,17 +43,31 @@ namespace c3d_assimp
 
 	struct NodeData
 	{
+		NodeData( castor::String pparent
+			, castor::String pname
+			, aiNode const * pnode
+			, castor::Matrix4x4f ptransform )
+			: parent{ std::move( pparent ) }
+			, name{ std::move( pname ) }
+			, node{ pnode }
+			, transform{ std::move( ptransform ) }
+		{
+			CU_Require( parent.empty()
+				|| parent != name );
+		}
+
 		castor::String parent{};
+		castor::String name{};
 		aiNode const * node{};
 		castor::Matrix4x4f transform{};
-		std::vector< MeshData const * > meshes;
-		NodeAnimations anims;
+		std::vector< MeshData const * > meshes{};
+		NodeAnimations anims{};
 	};
 
 	struct SceneData
 	{
 		std::map< castor::String, aiMaterial const * > materials;
-		std::map< castor::String, NodeData > nodes;
+		std::vector< NodeData > nodes;
 		std::map< castor::String, MeshData > meshes;
 		std::map< castor::String, SkeletonData > skeletons;
 		std::map< castor::String, aiLight const * > lights;

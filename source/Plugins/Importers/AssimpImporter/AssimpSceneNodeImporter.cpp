@@ -15,7 +15,12 @@ namespace c3d_assimp
 	{
 		auto & file = static_cast< AssimpImporterFile const & >( *m_file );
 		auto name = node.getName();
-		auto it = file.getNodes().find( name );
+		auto it = std::find_if( file.getNodes().begin()
+			, file.getNodes().end()
+			, [&name]( NodeData const & lookup )
+			{
+				return name == lookup.name;
+			} );
 
 		if ( it == file.getNodes().end() )
 		{
@@ -23,7 +28,7 @@ namespace c3d_assimp
 		}
 
 		castor3d::log::info << cuT( "  SceneNode found: [" ) << name << cuT( "]" ) << std::endl;
-		auto parent = node.getScene()->tryFindSceneNode( name );
+		auto parent = node.getScene()->tryFindSceneNode( it->parent );
 
 		if ( parent.lock() )
 		{
@@ -36,7 +41,7 @@ namespace c3d_assimp
 
 		castor::Point3f scale, position;
 		castor::Quaternion rotate;
-		castor::matrix::decompose( it->second.transform, position, scale, rotate );
+		castor::matrix::decompose( it->transform, position, scale, rotate );
 		node.setPosition( position );
 		node.setScale( scale );
 		node.setOrientation( rotate );

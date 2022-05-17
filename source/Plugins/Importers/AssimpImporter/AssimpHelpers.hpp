@@ -90,6 +90,19 @@ namespace c3d_assimp
 		return result;
 	}
 
+	bool isValidMesh( aiMesh const & mesh )
+	{
+		auto faces = castor::makeArrayView( mesh.mFaces, mesh.mNumFaces );
+		auto count = uint32_t( std::count_if( faces.begin()
+			, faces.end()
+			, []( aiFace const & face )
+			{
+				return face.mNumIndices == 3
+					|| face.mNumIndices == 4;
+			} ) );
+		return count > 0 && mesh.HasPositions();
+	}
+
 	template< typename aiMeshType >
 	static void createVertexBuffer( aiMeshType const & aiMesh
 		, castor::Point3fArray & positions
