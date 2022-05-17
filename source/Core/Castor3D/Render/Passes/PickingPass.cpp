@@ -257,7 +257,9 @@ namespace castor3d
 					, material.opacity );
 				auto textureFlags = merge( flags.textures );
 
-				if ( hasTextures && checkFlag( textureFlags, TextureFlag::eOpacity ) )
+				if ( hasTextures
+					&& textureConfigs.isEnabled()
+					&& checkFlag( textureFlags, TextureFlag::eOpacity ) )
 				{
 					for ( uint32_t index = 0u; index < flags.textures.size(); ++index )
 					{

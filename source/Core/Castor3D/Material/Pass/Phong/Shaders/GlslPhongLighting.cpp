@@ -188,6 +188,11 @@ namespace castor3d::shader
 		, sdw::Vec3 & tangentSpaceViewPosition
 		, sdw::Vec3 & tangentSpaceFragPosition )
 	{
+		if ( !textureConfigs.isEnabled() )
+		{
+			return;
+		}
+
 		auto & phongLightMat = static_cast< PhongLightMaterial & >( lightMat );
 		auto textureFlags = merge( textures );
 
@@ -304,6 +309,11 @@ namespace castor3d::shader
 		, sdw::Float & occlusion
 		, LightMaterial & lightMat )
 	{
+		if ( !textureConfigs.isEnabled() )
+		{
+			return;
+		}
+
 		auto & phongLightMat = static_cast< PhongLightMaterial & >( lightMat );
 		auto textureFlags = merge( textures );
 

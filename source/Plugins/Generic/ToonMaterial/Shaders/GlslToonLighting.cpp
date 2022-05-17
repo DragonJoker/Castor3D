@@ -191,6 +191,11 @@ namespace toon::shader
 		, sdw::Vec3 & tangentSpaceViewPosition
 		, sdw::Vec3 & tangentSpaceFragPosition )
 	{
+		if ( !textureConfigs.isEnabled() )
+		{
+			return;
+		}
+
 		auto & phongLightMat = static_cast< ToonPhongLightMaterial & >( lightMat );
 		auto textureFlags = merge( textures );
 
@@ -307,6 +312,11 @@ namespace toon::shader
 		, sdw::Float & occlusion
 		, c3d::LightMaterial & lightMat )
 	{
+		if ( !textureConfigs.isEnabled() )
+		{
+			return;
+		}
+
 		auto & phongLightMat = static_cast< ToonPhongLightMaterial & >( lightMat );
 		auto textureFlags = merge( textures );
 
@@ -1095,6 +1105,11 @@ namespace toon::shader
 		, sdw::Vec3 & tangentSpaceViewPosition
 		, sdw::Vec3 & tangentSpaceFragPosition )
 	{
+		if ( !textureConfigs.isEnabled() )
+		{
+			return;
+		}
+
 		auto & pbrLightMat = static_cast< ToonPbrLightMaterial & >( lightMat );
 		pbr::MaterialTextureMods mods{ m_writer.declLocale( "hasAlbedo", sdw::Boolean{ false } )
 			, m_writer.declLocale( "hasMetalness", sdw::Boolean{ false } )
@@ -1215,6 +1230,11 @@ namespace toon::shader
 		, sdw::Float & occlusion
 		, c3d::LightMaterial & lightMat )
 	{
+		if ( !textureConfigs.isEnabled() )
+		{
+			return;
+		}
+
 		auto & pbrLightMat = static_cast< ToonPbrLightMaterial & >( lightMat );
 		pbr::MaterialTextureMods mods{ m_writer.declLocale( "hasAlbedo", sdw::Boolean{ false } )
 			, m_writer.declLocale( "hasMetalness", sdw::Boolean{ false } )
