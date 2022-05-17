@@ -139,46 +139,53 @@ namespace castor3d
 			}
 		}
 
+		std::map< castor::String, std::vector< SceneNodeRPtr > > nodesAnims;
+
 		if ( auto nodeImporter = file->createSceneNodeImporter() )
 		{
 			for ( auto name : file->listSceneNodes() )
 			{
-				auto node = scene.createSceneNode( name, scene );
-
-				if ( nodeImporter->import( *node
-					, file
-					, emptyParams ) )
+				if ( !scene.hasSceneNode( name ) )
 				{
-					if ( animationImporter )
-					{
-						for ( auto animName : file->listSceneNodeAnimations( *node ) )
-						{
-							auto animation = std::make_unique< SceneNodeAnimation >( *node, animName );
+					auto node = scene.createSceneNode( name, scene );
 
-							if ( animationImporter->import( *animation, m_file, emptyParams ) )
+					if ( nodeImporter->import( *node
+						, file
+						, emptyParams ) )
+					{
+						if ( animationImporter )
+						{
+							for ( auto animName : file->listSceneNodeAnimations( *node ) )
 							{
-								node->addAnimation( std::move( animation ) );
+								auto animation = std::make_unique< SceneNodeAnimation >( *node, animName );
+
+								if ( animationImporter->import( *animation, m_file, emptyParams ) )
+								{
+									auto & nodesAnim = nodesAnims.emplace( animName, std::vector< SceneNodeRPtr >{} ).first->second;
+									nodesAnim.push_back( node.get() );
+									node->addAnimation( std::move( animation ) );
+								}
 							}
 						}
+
+						nodes.emplace( name, node );
+						scene.addSceneNode( name, node, true );
 					}
+				}
+			}
 
-					nodes.emplace( name, node );
-					node = scene.addSceneNode( name, node, true ).lock();
+			for ( auto & nodesIt : nodesAnims )
+			{
+				auto animGroup = scene.addNewAnimatedObjectGroup( cuT( "Node" ) + nodesIt.first, scene ).lock();
 
-					if ( node->hasAnimation() )
-					{
-						auto animGroup = scene.createAnimatedObjectGroup( name, scene );
+				if ( animGroup->addAnimation( nodesIt.first ) )
+				{
+					animGroup->setAnimationLooped( nodesIt.first, true );
+				}
 
-						for ( auto & animation : node->getAnimations() )
-						{
-							if ( animGroup->addAnimation( animation.first ) )
-							{
-								animGroup->setAnimationLooped( animation.first, true );
-							}
-
-							animGroup->addObject( *node, node->getName() );
-						}
-					}
+				for ( auto node : nodesIt.second )
+				{
+					animGroup->addObject( *node, node->getName() );
 				}
 			}
 		}
