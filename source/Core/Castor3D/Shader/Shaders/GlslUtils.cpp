@@ -1034,6 +1034,11 @@ namespace castor3d::shader
 		, sdw::Vec3 & colour
 		, sdw::Float & opacity )
 	{
+		if ( !textureConfigs.isEnabled() )
+		{
+			return;
+		}
+
 		for ( auto & textureIt : flags )
 		{
 			if ( checkFlag( textureIt.second.flags, TextureFlag::eColour )
