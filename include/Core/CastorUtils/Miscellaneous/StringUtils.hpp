@@ -346,7 +346,7 @@ namespace castor
 		 *\param[in]		right	Dit si on enlève les espaces à droite
 		 *\return			La chaîne sans espaces
 		 */
-		CU_API String & trim( String & str, bool left = true, bool right = true );
+		CU_API String & trim( String & str, bool left = true, bool right = true, String seps = " \t\r" );
 		/**
 		 *\~english
 		 *\brief		Puts a value into a String

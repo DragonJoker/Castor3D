@@ -22,11 +22,19 @@ namespace castor3d
 {
 	bool parseImportParameters( Parameters const & parameters
 		, castor::Point3f & scale
-		, castor::Quaternion orientation );
+		, castor::Quaternion & orientation );
 
 	class ImporterFile
 		: public castor::OwnedBy< Engine >
 	{
+	public:
+		struct GeometryData
+		{
+			castor::String name;
+			castor::String node;
+			castor::String mesh;
+		};
+
 	protected:
 		C3D_API ImporterFile( Engine & engine
 			, castor::Path const & path
@@ -36,9 +44,10 @@ namespace castor3d
 		C3D_API virtual ~ImporterFile() = default;
 
 		C3D_API virtual std::vector< castor::String > listMaterials() = 0;
-		C3D_API virtual std::vector< castor::String > listMeshes() = 0;
+		C3D_API virtual std::vector< std::pair< castor::String, castor::String > > listMeshes() = 0;
 		C3D_API virtual std::vector< castor::String > listSkeletons() = 0;
 		C3D_API virtual std::vector< castor::String > listSceneNodes() = 0;
+		C3D_API virtual std::vector< GeometryData > listGeometries() = 0;
 		C3D_API virtual std::vector< std::pair< castor::String, LightType > > listLights() = 0;
 		C3D_API virtual std::vector< castor::String > listMeshAnimations( Mesh const & mesh ) = 0;
 		C3D_API virtual std::vector< castor::String > listSkeletonAnimations( Skeleton const & skeleton ) = 0;

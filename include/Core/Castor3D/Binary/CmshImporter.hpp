@@ -26,10 +26,11 @@ namespace castor3d
 
 	public:
 		std::vector< castor::String > listMaterials()override;
-		std::vector< castor::String > listMeshes()override;
+		std::vector< std::pair< castor::String, castor::String > > listMeshes()override;
 		std::vector< castor::String > listSkeletons()override;
 		std::vector< castor::String > listSceneNodes()override;
 		std::vector< std::pair< castor::String, LightType > > listLights()override;
+		std::vector< GeometryData > listGeometries()override;
 		std::vector< castor::String > listMeshAnimations( Mesh const & mesh )override;
 		std::vector< castor::String > listSkeletonAnimations( Skeleton const & skeleton )override;
 		std::vector< castor::String > listSceneNodeAnimations( SceneNode const & node )override;
