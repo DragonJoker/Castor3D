@@ -37,13 +37,13 @@ namespace C3dPly
 		return std::vector< castor::String >{};
 	}
 
-	std::vector< castor::String > PlyImporterFile::listMeshes()
+	std::vector< std::pair< castor::String, castor::String > > PlyImporterFile::listMeshes()
 	{
-		std::vector< castor::String > result;
+		std::vector< std::pair< castor::String, castor::String > > result;
 
 		if ( getExtension() == "ply" )
 		{
-			result.push_back( getName() );
+			result.emplace_back( getName(), castor::String{} );
 		}
 
 		return result;
@@ -62,6 +62,11 @@ namespace C3dPly
 	std::vector< std::pair< castor::String, castor3d::LightType > > PlyImporterFile::listLights()
 	{
 		return std::vector< std::pair< castor::String, castor3d::LightType > >{};
+	}
+
+	std::vector< PlyImporterFile::GeometryData > PlyImporterFile::listGeometries()
+	{
+		return std::vector< GeometryData >{};
 	}
 
 	std::vector< castor::String > PlyImporterFile::listMeshAnimations( castor3d::Mesh const & mesh )

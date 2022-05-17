@@ -32,10 +32,11 @@ namespace C3dPly
 			, castor3d::Parameters const & parameters );
 
 		std::vector< castor::String > listMaterials()override;
-		std::vector< castor::String > listMeshes()override;
+		std::vector< std::pair< castor::String, castor::String > > listMeshes()override;
 		std::vector< castor::String > listSkeletons()override;
 		std::vector< castor::String > listSceneNodes()override;
 		std::vector< std::pair< castor::String, castor3d::LightType > > listLights()override;
+		std::vector< GeometryData > listGeometries()override;
 		std::vector< castor::String > listMeshAnimations( castor3d::Mesh const & mesh )override;
 		std::vector< castor::String > listSkeletonAnimations( castor3d::Skeleton const & skeleton )override;
 		std::vector< castor::String > listSceneNodeAnimations( castor3d::SceneNode const & node )override;

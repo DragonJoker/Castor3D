@@ -104,7 +104,9 @@ namespace castor3d
 
 	private:
 		void doTransformScene( Scene & scene
-			, Parameters const & parameters );
+			, Parameters const & parameters
+			, std::map< castor::String, SceneNodeSPtr > const & nodes );
+		void doAddAnimationGroup( Geometry & geometry );
 
 	private:
 		ImporterFile * m_file;

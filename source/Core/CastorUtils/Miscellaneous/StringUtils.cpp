@@ -306,7 +306,10 @@ namespace castor
 			return result;
 		}
 
-		String & trim( String & text, bool left, bool right )
+		String & trim( String & text
+			, bool left
+			, bool right
+			, String seps )
 		{
 			if ( !text.empty() )
 			{
@@ -314,7 +317,7 @@ namespace castor
 
 				if ( left )
 				{
-					index = text.find_first_not_of( cuT( " \t\r" ) );
+					index = text.find_first_not_of( seps );
 
 					if ( index > 0 )
 					{
@@ -331,7 +334,7 @@ namespace castor
 
 				if ( right && !text.empty() )
 				{
-					index = text.find_last_not_of( cuT( " \t\r" ) );
+					index = text.find_last_not_of( seps );
 
 					if ( index < text.size() - 1 )
 					{
