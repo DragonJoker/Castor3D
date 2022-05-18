@@ -673,6 +673,7 @@ namespace ocean
 			out.vtx.position = in.position;
 			out.texture0 = in.texture0;
 			out.texture1 = in.texture1;
+			out.colour = in.colour;
 			auto nodeId = writer.declLocale( "nodeId"
 				, shader::getNodeId( c3d_objectIdsData
 					, in
@@ -787,6 +788,7 @@ namespace ocean
 					, ( curBbcenter + scaledRight + scaledUp ) );
 				out.texture0 = vec3( uv, 1.0_f );
 				out.texture1 = vec3( uv * 50.0_f, 1.0_f );
+				out.colour = vec3( 1.0_f );
 				out.vtx.position = modelData.worldToModel( vec4( worldPos, 1.0_f ) );
 			} );
 
@@ -856,6 +858,7 @@ namespace ocean
 				listOut.nodeId = listIn[in.invocationID].nodeId;
 				listOut.texture0 = listIn[in.invocationID].texture0;
 				listOut.texture1 = listIn[in.invocationID].texture1;
+				listOut.colour = listIn[in.invocationID].colour;
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -981,6 +984,9 @@ namespace ocean
 				out.texture1 = patchIn.tessCoord.x() * listIn[0].texture1
 					+ patchIn.tessCoord.y() * listIn[1].texture1
 					+ patchIn.tessCoord.z() * listIn[2].texture1;
+				out.colour = patchIn.tessCoord.x() * listIn[0].colour
+					+ patchIn.tessCoord.y() * listIn[1].colour
+					+ patchIn.tessCoord.z() * listIn[2].colour;
 				out.nodeId = listIn[0].nodeId;
 				auto texcoord = writer.declLocale( "texcoord"
 					, patchIn.tessCoord.x() * listIn[0].texture0
@@ -1199,7 +1205,8 @@ namespace ocean
 				auto worldEye = writer.declLocale( "worldEye"
 					, c3d_sceneData.cameraPosition );
 				auto lightMat = lightingModel->declMaterial( "lightMat" );
-				lightMat->create( material );
+				lightMat->create( in.colour
+					, material );
 				displayDebugData( eMatSpecular, lightMat->specular, 1.0_f );
 
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )

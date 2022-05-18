@@ -120,6 +120,13 @@ namespace castor3d
 			result = doWriteChunk( values, ChunkType::eSubmeshTexcoords3, m_chunk );
 		}
 
+		if ( result
+			&& obj.hasComponent( ColoursComponent::Name ) )
+		{
+			auto & values = obj.getComponent< ColoursComponent >()->getData();
+			result = doWriteChunk( values, ChunkType::eSubmeshColours, m_chunk );
+		}
+
 		if ( result )
 		{
 			count = obj.getFaceCount();
@@ -285,6 +292,19 @@ namespace castor3d
 					component->getData().resize( count );
 					result = doParseChunk( component->getData(), chunk );
 					checkError( result, "Couldn't parse vertex texcoords." );
+
+					if ( result )
+					{
+						obj.addComponent( component );
+					}
+				}
+				break;
+			case ChunkType::eSubmeshColours:
+				if ( auto component = std::make_shared< ColoursComponent >( obj ) )
+				{
+					component->getData().resize( count );
+					result = doParseChunk( component->getData(), chunk );
+					checkError( result, "Couldn't parse vertex colours." );
 
 					if ( result )
 					{

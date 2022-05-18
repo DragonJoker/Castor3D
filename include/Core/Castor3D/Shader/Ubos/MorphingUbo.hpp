@@ -32,7 +32,9 @@ namespace castor3d
 				, sdw::Vec3 & uvw2
 				, sdw::Vec3 const & uvw22
 				, sdw::Vec3 & uvw3
-				, sdw::Vec3 const & uvw32 )const;
+				, sdw::Vec3 const & uvw32
+				, sdw::Vec3 & col
+				, sdw::Vec3 const & col2 )const;
 			C3D_API void morph( sdw::Vec4 & pos
 				, sdw::Vec4 const & pos2
 				, sdw::Vec4 & nml
@@ -44,7 +46,9 @@ namespace castor3d
 				, sdw::Vec3 & uvw2
 				, sdw::Vec3 const & uvw22
 				, sdw::Vec3 & uvw3
-				, sdw::Vec3 const & uvw32 )const;
+				, sdw::Vec3 const & uvw32
+				, sdw::Vec3 & col
+				, sdw::Vec3 const & col2 )const;
 			C3D_API void morph( sdw::Vec4 & pos
 				, sdw::Vec4 const & pos2
 				, sdw::Vec4 & nml
@@ -58,7 +62,9 @@ namespace castor3d
 				, sdw::Vec3 & uvw2
 				, sdw::Vec3 const & uvw22
 				, sdw::Vec3 & uvw3
-				, sdw::Vec3 const & uvw32 )const;
+				, sdw::Vec3 const & uvw32
+				, sdw::Vec3 & col
+				, sdw::Vec3 const & col2 )const;
 			C3D_API void morph( sdw::Vec4 & pos
 				, sdw::Vec4 const & pos2
 				, sdw::Vec4 & uvuv

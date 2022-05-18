@@ -72,14 +72,16 @@ namespace castor3d::shader
 			, sdw::Vec3 & uvw0
 			, sdw::Vec3 & uvw1
 			, sdw::Vec3 & uvw2
-			, sdw::Vec3 & uvw3 )const;
+			, sdw::Vec3 & uvw3
+			, sdw::Vec3 & col )const;
 		void morph( MorphingData const & morphing
 			, sdw::Vec4 & pos
 			, sdw::Vec4 & nml
 			, sdw::Vec3 & uvw0
 			, sdw::Vec3 & uvw1
 			, sdw::Vec3 & uvw2
-			, sdw::Vec3 & uvw3 )const;
+			, sdw::Vec3 & uvw3
+			, sdw::Vec3 & col )const;
 		void morph( MorphingData const & morphing
 			, sdw::Vec4 & pos
 			, sdw::Vec4 & nml
@@ -87,7 +89,8 @@ namespace castor3d::shader
 			, sdw::Vec3 & uvw0
 			, sdw::Vec3 & uvw1
 			, sdw::Vec3 & uvw2
-			, sdw::Vec3 & uvw3 )const;
+			, sdw::Vec3 & uvw3
+			, sdw::Vec3 & col )const;
 
 		// Base
 		sdw::Vec4 position;
@@ -97,6 +100,7 @@ namespace castor3d::shader
 		sdw::Vec3 texture1;
 		sdw::Vec3 texture2;
 		sdw::Vec3 texture3;
+		sdw::Vec3 colour;
 		// Morphing
 		sdw::Vec4 morphPosition;
 		sdw::Vec3 morphNormal;
@@ -105,6 +109,7 @@ namespace castor3d::shader
 		sdw::Vec3 morphTexture1;
 		sdw::Vec3 morphTexture2;
 		sdw::Vec3 morphTexture3;
+		sdw::Vec3 morphColour;
 		// Skinning
 		sdw::UVec4 boneIds0;
 		sdw::UVec4 boneIds1;
@@ -170,6 +175,7 @@ namespace castor3d::shader
 		sdw::Vec3 texture1;
 		sdw::Vec3 texture2;
 		sdw::Vec3 texture3;
+		sdw::Vec3 colour;
 		sdw::UInt instanceId;
 		sdw::Int nodeId;
 	};

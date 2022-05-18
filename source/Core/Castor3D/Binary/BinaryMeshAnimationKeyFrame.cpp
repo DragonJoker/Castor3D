@@ -87,7 +87,8 @@ namespace castor3d
 					, it.second.texcoords0.size()
 					, it.second.texcoords1.size()
 					, it.second.texcoords2.size()
-					, it.second.texcoords3.size() } ) );
+					, it.second.texcoords3.size()
+					, it.second.colours.size() } ) );
 				result = doWriteChunk( size, ChunkType::eMeshAnimationKeyFrameBufferSize, m_chunk );
 			}
 
@@ -131,6 +132,12 @@ namespace castor3d
 				&& !it.second.texcoords3.empty() )
 			{
 				result = doWriteChunk( it.second.texcoords3, ChunkType::eMeshAnimationKeyFrameTexcoords3, m_chunk );
+			}
+
+			if ( result
+				&& !it.second.colours.empty() )
+			{
+				result = doWriteChunk( it.second.texcoords3, ChunkType::eMeshAnimationKeyFrameColours, m_chunk );
 			}
 		}
 
@@ -219,6 +226,11 @@ namespace castor3d
 				buffer.texcoords3.resize( count );
 				result = doParseChunk( buffer.texcoords3, chunk );
 				checkError( result, "Couldn't parse keyframe texcoords3." );
+				break;
+			case ChunkType::eMeshAnimationKeyFrameColours:
+				buffer.colours.resize( count );
+				result = doParseChunk( buffer.colours, chunk );
+				checkError( result, "Couldn't parse keyframe colours." );
 				break;
 			default:
 				break;

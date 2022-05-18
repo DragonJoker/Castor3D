@@ -40,7 +40,9 @@ namespace castor3d
 			, sdw::Vec3 & uvw2
 			, sdw::Vec3 const & uvw22
 			, sdw::Vec3 & uvw3
-			, sdw::Vec3 const & uvw32 )const
+			, sdw::Vec3 const & uvw32
+			, sdw::Vec3 & col
+			, sdw::Vec3 const & col2 )const
 		{
 			if ( isEnabled() )
 			{
@@ -71,6 +73,12 @@ namespace castor3d
 				{
 					uvw3 = sdw::mix( uvw3.xyz(), uvw32, vec3( m_time ) );
 				}
+
+				if ( !col.getExpr()->isDummy()
+					&& !col2.getExpr()->isDummy() )
+				{
+					col = sdw::mix( col.xyz(), col2, vec3( m_time ) );
+				}
 			}
 		}
 
@@ -85,13 +93,16 @@ namespace castor3d
 			, sdw::Vec3 & uvw2
 			, sdw::Vec3 const & uvw22
 			, sdw::Vec3 & uvw3
-			, sdw::Vec3 const & uvw32 )const
+			, sdw::Vec3 const & uvw32
+			, sdw::Vec3 & col
+			, sdw::Vec3 const & col2 )const
 		{
 			morph( pos, pos2
 				, uvw0, uvw02
 				, uvw1, uvw12
 				, uvw2, uvw22
-				, uvw3, uvw32 );
+				, uvw3, uvw32
+				, col, col2 );
 
 			if ( isEnabled()
 				&& !nml.getExpr()->isDummy()
@@ -114,14 +125,17 @@ namespace castor3d
 			, sdw::Vec3 & uvw2
 			, sdw::Vec3 const & uvw22
 			, sdw::Vec3 & uvw3
-			, sdw::Vec3 const & uvw32 )const
+			, sdw::Vec3 const & uvw32
+			, sdw::Vec3 & col
+			, sdw::Vec3 const & col2 )const
 		{
 			morph( pos, pos2
 				, nml, nml2
 				, uvw0, uvw02
 				, uvw1, uvw12
 				, uvw2, uvw22
-				, uvw3, uvw32 );
+				, uvw3, uvw32
+				, col, col2 );
 
 			if ( isEnabled()
 				&& !tan.getExpr()->isDummy()

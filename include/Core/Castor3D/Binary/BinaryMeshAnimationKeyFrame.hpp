@@ -12,9 +12,6 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	/**
-	\author 	Sylvain DOREMUS
-	\version	0.10.0
-	\date 		07/12/2017
 	\~english
 	\brief		Helper structure to find ChunkType from a type.
 	\remarks	Specialisation for MeshAnimationKeyFrame.
@@ -28,9 +25,6 @@ namespace castor3d
 		static ChunkType const Value = ChunkType::eMeshAnimationKeyFrame;
 	};
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.10.0
-	\date 		07/12/2017
 	\~english
 	\brief		MeshAnimationKeyFrame binary loader.
 	\~english
@@ -54,9 +48,6 @@ namespace castor3d
 		C3D_API bool doWrite( MeshAnimationKeyFrame const & obj )override;
 	};
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.10.0
-	\date 		07/12/2017
 	\~english
 	\brief		MeshAnimationKeyFrame binary loader.
 	\~english

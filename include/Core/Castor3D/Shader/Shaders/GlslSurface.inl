@@ -101,6 +101,7 @@ namespace castor3d::shader
 		, texture1{ this->getMember< sdw::Vec3 >( "texcoord1", true ) }
 		, texture2{ this->getMember< sdw::Vec3 >( "texcoord2", true ) }
 		, texture3{ this->getMember< sdw::Vec3 >( "texcoord3", true ) }
+		, colour{ this->getMember< sdw::Vec3 >( "colour", true ) }
 		// Morphing
 		, morphPosition{ this->getMember< sdw::Vec4 >( "morphPosition", true ) }
 		, morphNormal{ this->getMember< sdw::Vec3 >( "morphNormal", true ) }
@@ -109,6 +110,7 @@ namespace castor3d::shader
 		, morphTexture1{ this->getMember< sdw::Vec3 >( "morphTexcoord1", true ) }
 		, morphTexture2{ this->getMember< sdw::Vec3 >( "morphTexcoord2", true ) }
 		, morphTexture3{ this->getMember< sdw::Vec3 >( "morphTexcoord3", true ) }
+		, morphColour{ this->getMember< sdw::Vec3 >( "morphColour", true ) }
 		// Morphing
 		, boneIds0{ this->getMember< sdw::UVec4 >( "boneIds0", true ) }
 		, boneIds1{ this->getMember< sdw::UVec4 >( "boneIds1", true ) }
@@ -169,6 +171,10 @@ namespace castor3d::shader
 				, ast::type::NotArray
 				, ( ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) && hasTextures ) ? index++ : 0 )
 				, checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) && hasTextures );
+			result->declMember( "colour", ast::type::Kind::eVec3F
+				, ast::type::NotArray
+				, ( checkFlag( submeshFlags, SubmeshFlag::eColours ) ? index++ : 0 )
+				, checkFlag( submeshFlags, SubmeshFlag::eColours ) );
 			//@}
 			/**
 			*	Morphing
@@ -202,6 +208,10 @@ namespace castor3d::shader
 				, ast::type::NotArray
 				, ( ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords3 ) && hasTextures ) ? index++ : 0 )
 				, checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords3 ) && hasTextures );
+			result->declMember( "morphColour", ast::type::Kind::eVec3F
+				, ast::type::NotArray
+				, ( checkFlag( submeshFlags, SubmeshFlag::eMorphColours ) ? index++ : 0 )
+				, checkFlag( submeshFlags, SubmeshFlag::eMorphColours ) );
 			//@}
 			/**
 			*	Skinning
@@ -244,13 +254,15 @@ namespace castor3d::shader
 		, sdw::Vec3 & uvw0
 		, sdw::Vec3 & uvw1
 		, sdw::Vec3 & uvw2
-		, sdw::Vec3 & uvw3 )const
+		, sdw::Vec3 & uvw3
+		, sdw::Vec3 & col )const
 	{
 		morphing.morph( pos, morphPosition
 			, uvw0, morphTexture0
 			, uvw1, morphTexture1
 			, uvw2, morphTexture2
-			, uvw3, morphTexture3 );
+			, uvw3, morphTexture3
+			, col, morphColour );
 	}
 
 	template< ast::var::Flag FlagT >
@@ -260,14 +272,16 @@ namespace castor3d::shader
 		, sdw::Vec3 & uvw0
 		, sdw::Vec3 & uvw1
 		, sdw::Vec3 & uvw2
-		, sdw::Vec3 & uvw3 )const
+		, sdw::Vec3 & uvw3
+		, sdw::Vec3 & col )const
 	{
 		morphing.morph( pos, morphPosition
 			, nml, morphNormal
 			, uvw0, morphTexture0
 			, uvw1, morphTexture1
 			, uvw2, morphTexture2
-			, uvw3, morphTexture3 );
+			, uvw3, morphTexture3
+			, col, morphColour );
 	}
 
 	template< ast::var::Flag FlagT >
@@ -278,7 +292,8 @@ namespace castor3d::shader
 		, sdw::Vec3 & uvw0
 		, sdw::Vec3 & uvw1
 		, sdw::Vec3 & uvw2
-		, sdw::Vec3 & uvw3 )const
+		, sdw::Vec3 & uvw3
+		, sdw::Vec3 & col )const
 	{
 		morphing.morph( pos, morphPosition
 			, nml, morphNormal
@@ -286,7 +301,8 @@ namespace castor3d::shader
 			, uvw0, morphTexture0
 			, uvw1, morphTexture1
 			, uvw2, morphTexture2
-			, uvw3, morphTexture3 );
+			, uvw3, morphTexture3
+			, col, morphColour );
 	}
 
 	//*****************************************************************************************
@@ -309,6 +325,7 @@ namespace castor3d::shader
 		, texture1{ this->getMember< sdw::Vec3 >( "texcoord1", true ) }
 		, texture2{ this->getMember< sdw::Vec3 >( "texcoord2", true ) }
 		, texture3{ this->getMember< sdw::Vec3 >( "texcoord3", true ) }
+		, colour{ this->getMember< sdw::Vec3 >( "colour", true ) }
 		, instanceId{ this->getMember< sdw::UInt >( "instanceId", true ) }
 		, nodeId{ this->getMember< sdw::Int >( "nodeId", true ) }
 	{
@@ -391,6 +408,10 @@ namespace castor3d::shader
 				, ast::type::NotArray
 				, ( ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) && hasTextures ) ? index++ : 0 )
 				, checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) && hasTextures );
+			result->declMember( "colour", ast::type::Kind::eVec3F
+				, ast::type::NotArray
+				, ( checkFlag( submeshFlags, SubmeshFlag::eColours ) ? index++ : 0 )
+				, checkFlag( submeshFlags, SubmeshFlag::eColours ) );
 			result->declMember( "instanceId"
 				, ast::type::Kind::eUInt
 				, ast::type::NotArray

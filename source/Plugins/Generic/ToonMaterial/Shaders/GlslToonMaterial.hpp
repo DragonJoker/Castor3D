@@ -30,7 +30,8 @@ namespace toon::shader
 			, sdw::Vec4 const & data3
 			, sdw::Vec4 const & data2
 			, sdw::Float const & ambient )override;
-		void create( c3d::Material const & material )override;
+		void create( sdw::Vec3 const & vtxColour
+			, c3d::Material const & material )override;
 		void output( sdw::Vec4 & outData2, sdw::Vec4 & outData3 )const override;
 		sdw::Vec3 getAmbient( sdw::Vec3 const & ambientLight )const override;
 		void adjustDirectSpecular( sdw::Vec3 & directSpecular )const override;
@@ -64,7 +65,8 @@ namespace toon::shader
 			, sdw::Vec4 const & data3
 			, sdw::Vec4 const & data2
 			, sdw::Float const & ambient )override;
-		void create( c3d::Material const & material )override;
+		void create( sdw::Vec3 const & vtxColour
+			, c3d::Material const & material )override;
 		void output( sdw::Vec4 & outData2, sdw::Vec4 & outData3 )const override;
 		sdw::Vec3 getAmbient( sdw::Vec3 const & ambientLight )const override;
 		void adjustDirectSpecular( sdw::Vec3 & directSpecular )const override;

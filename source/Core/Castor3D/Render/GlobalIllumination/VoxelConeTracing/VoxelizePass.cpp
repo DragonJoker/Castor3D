@@ -64,6 +64,7 @@ namespace castor3d
 				, texture1{ getMember< sdw::Vec3 >( "texcoord1" ) }
 				, texture2{ getMember< sdw::Vec3 >( "texcoord2" ) }
 				, texture3{ getMember< sdw::Vec3 >( "texcoord3" ) }
+				, colour{ getMember< sdw::Vec3 >( "colour" ) }
 				, nodeId{ getMember< sdw::Int >( "nodeId" ) }
 			{
 			}
@@ -113,6 +114,11 @@ namespace castor3d
 						, sdw::type::NotArray
 						, ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) ? index++ : 0u )
 						, checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) );
+					result->declMember( "colour"
+						, sdw::type::Kind::eVec3F
+						, sdw::type::NotArray
+						, ( checkFlag( submeshFlags, SubmeshFlag::eColours ) ? index++ : 0u )
+						, checkFlag( submeshFlags, SubmeshFlag::eColours ) );
 					result->declMember( "nodeId"
 						, sdw::type::Kind::eInt
 						, sdw::type::NotArray
@@ -129,6 +135,7 @@ namespace castor3d
 			sdw::Vec3 texture1;
 			sdw::Vec3 texture2;
 			sdw::Vec3 texture3;
+			sdw::Vec3 colour;
 			sdw::Int nodeId;
 		};
 	}
@@ -386,7 +393,8 @@ namespace castor3d
 					, out.texture0
 					, out.texture1
 					, out.texture2
-					, out.texture3 );
+					, out.texture3
+					, out.colour );
 
 				auto modelMtx = writer.declLocale< Mat4 >( "modelMtx"
 					, modelData.getCurModelMtx( flags.programFlags
@@ -657,7 +665,8 @@ namespace castor3d
 					auto normal = writer.declLocale( "normal"
 						, normalize( in.normal ) );
 					auto lightMat = lightingModel->declMaterial( "lightMat" );
-					lightMat->create( material );
+					lightMat->create( in.colour
+						, material );
 					auto emissive = writer.declLocale( "emissive"
 						, vec3( material.emissive ) );
 					auto alpha = writer.declLocale( "alpha"

@@ -123,11 +123,13 @@ namespace c3d_assimp
 		castor::Point3fArray tex1;
 		castor::Point3fArray tex2;
 		castor::Point3fArray tex3;
+		castor::Point3fArray col;
 		castor::Point3fArray * tangents = &tan;
 		castor::Point3fArray * texcoords0 = &tex0;
 		castor::Point3fArray * texcoords1 = &tex1;
 		castor::Point3fArray * texcoords2 = &tex2;
 		castor::Point3fArray * texcoords3 = &tex3;
+		castor::Point3fArray * colours = &col;
 
 		if ( aiMesh.HasTextureCoords( 0u ) )
 		{
@@ -155,6 +157,12 @@ namespace c3d_assimp
 			texcoords3 = &texComp->getData();
 		}
 
+		if ( aiMesh.HasVertexColors( 0u ) )
+		{
+			auto colComp = submesh.createComponent< castor3d::ColoursComponent >();
+			colours = &colComp->getData();
+		}
+
 		createVertexBuffer( aiMesh
 			, positions->getData()
 			, normals->getData()
@@ -162,7 +170,8 @@ namespace c3d_assimp
 			, *texcoords0
 			, *texcoords1
 			, *texcoords2
-			, *texcoords3 );
+			, *texcoords3
+			, *colours );
 		auto & animBuffers = file.addMeshAnimBuffers( &aiMesh
 			, gatherMeshAnimBuffers( positions->getData()
 				, normals->getData()
@@ -171,6 +180,7 @@ namespace c3d_assimp
 				, *texcoords1
 				, *texcoords2
 				, *texcoords3
+				, *colours
 				, castor::makeArrayView( aiMesh.mAnimMeshes, aiMesh.mNumAnimMeshes ) ) );
 		auto index = 0u;
 
@@ -184,7 +194,8 @@ namespace c3d_assimp
 				, *texcoords0
 				, *texcoords1
 				, *texcoords2
-				, *texcoords3 );
+				, *texcoords3
+				, *colours );
 			++index;
 		}
 

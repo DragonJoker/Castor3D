@@ -193,7 +193,8 @@ namespace castor3d
 				auto emissive = writer.declLocale( "emissive"
 					, vec3( material.emissive ) );
 				auto lightMat = lightingModel->declMaterial( "lightMat" );
-				lightMat->create( material );
+				lightMat->create( in.colour
+					, material );
 				auto normal = writer.declLocale( "normal"
 					, normalize( in.normal ) );
 				auto tangent = writer.declLocale( "tangent"
