@@ -664,6 +664,11 @@ namespace castor3d::exporter
 								dstSubmesh->addComponent( texcoords->clone( *dstSubmesh ) );
 							}
 
+							if ( auto colours = srcSubmesh->getComponent< castor3d::ColoursComponent >() )
+							{
+								dstSubmesh->addComponent( colours->clone( *dstSubmesh ) );
+							}
+
 							if ( auto indexMapping = srcSubmesh->getIndexMapping() )
 							{
 								dstSubmesh->addComponent( std::static_pointer_cast< castor3d::IndexMapping >( indexMapping->clone( *dstSubmesh ) ) );

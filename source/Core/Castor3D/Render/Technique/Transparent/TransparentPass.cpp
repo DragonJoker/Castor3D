@@ -229,7 +229,8 @@ namespace castor3d
 				auto transmission = writer.declLocale( "transmission"
 					, material.transmission );
 				auto lightMat = lightingModel->declMaterial( "lightMat" );
-				lightMat->create( material );
+				lightMat->create( in.colour
+					, material );
 				auto emissive = writer.declLocale( "emissive"
 					, lightMat->albedo * material.emissive );
 				auto worldEye = writer.declLocale( "worldEye"

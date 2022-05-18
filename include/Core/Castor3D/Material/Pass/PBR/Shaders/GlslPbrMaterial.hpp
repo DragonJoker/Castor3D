@@ -27,7 +27,8 @@ namespace castor3d::shader
 			, sdw::Vec4 const & data3
 			, sdw::Vec4 const & data2
 			, sdw::Float const & ambient )override;
-		C3D_API void create( Material const & material )override;
+		C3D_API void create( sdw::Vec3 const & vtxColour
+			, Material const & material )override;
 		C3D_API void output( sdw::Vec4 & outData2, sdw::Vec4 & outData3 )const override;
 		C3D_API sdw::Vec3 getAmbient( sdw::Vec3 const & ambientLight )const override;
 		C3D_API void adjustDirectSpecular( sdw::Vec3 & directSpecular )const override;

@@ -692,7 +692,8 @@ namespace water
 				auto worldEye = writer.declLocale( "worldEye"
 					, c3d_sceneData.cameraPosition );
 				auto lightMat = lightingModel->declMaterial( "lightMat" );
-				lightMat->create( material );
+				lightMat->create( in.colour
+					, material );
 				displayDebugData( eMatSpecular, lightMat->specular, 1.0_f );
 
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )

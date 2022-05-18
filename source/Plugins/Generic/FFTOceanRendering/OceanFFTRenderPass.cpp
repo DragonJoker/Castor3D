@@ -111,6 +111,7 @@ namespace ocean_fft
 				: StructInstance{ writer, std::move( expr ), enabled }
 				, patchWorldPosition{ getMember< sdw::Vec3 >( "patchWorldPosition" ) }
 				, patchLods{ getMember< sdw::Vec4 >( "patchLodsGradNormTex" ) }
+				, colour{ getMember< sdw::Vec3 >( "colour" ) }
 				, nodeId{ getMember< sdw::Int >( "nodeId" ) }
 				, gradNormalTexcoord{ patchLods }
 			{
@@ -118,7 +119,8 @@ namespace ocean_fft
 
 			SDW_DeclStructInstance( , PatchT );
 
-			static ast::type::IOStructPtr makeIOType( ast::type::TypesCache & cache )
+			static ast::type::IOStructPtr makeIOType( ast::type::TypesCache & cache
+				, castor3d::SubmeshFlags submeshFlags )
 			{
 				auto result = cache.getIOStruct( ast::type::MemoryLayout::eC
 					, "C3DORFFT_" + ( FlagT == sdw::var::Flag::eShaderOutput
@@ -137,6 +139,11 @@ namespace ocean_fft
 						, ast::type::Kind::eVec4F
 						, ast::type::NotArray
 						, index++ );
+					result->declMember( "colour"
+						, ast::type::Kind::eVec3F
+						, ast::type::NotArray
+						, ( checkFlag( submeshFlags, castor3d::SubmeshFlag::eColours ) ? index++ : 0 )
+						, checkFlag( submeshFlags, castor3d::SubmeshFlag::eColours ) );
 					result->declMember( "nodeId"
 						, ast::type::Kind::eInt
 						, ast::type::NotArray
@@ -148,6 +155,7 @@ namespace ocean_fft
 
 			sdw::Vec3 patchWorldPosition;
 			sdw::Vec4 patchLods;
+			sdw::Vec3 colour;
 			sdw::Int nodeId;
 			sdw::Vec4 gradNormalTexcoord;
 
@@ -698,7 +706,8 @@ namespace ocean_fft
 				, textureFlags
 				, flags.passFlags
 				, false /* force no texcoords*/ }
-			, sdw::VertexOutT< PatchT >{ writer }
+			, sdw::VertexOutT< PatchT >{ writer
+				, flags.submeshFlags }
 			, [&]( VertexInT< castor3d::shader::VertexSurfaceT > in
 				, VertexOutT< PatchT > out )
 			{
@@ -714,6 +723,7 @@ namespace ocean_fft
 						, flags.programFlags ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId - 1u] );
+				out.colour = in.colour;
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
 			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -755,7 +765,8 @@ namespace ocean_fft
 		pcb.end();
 
 		writer.implementMainT< VoidT, PatchT >( sdw::VertexInT< sdw::VoidT >{ writer }
-			, sdw::VertexOutT< PatchT >{ writer }
+			, sdw::VertexOutT< PatchT >{ writer
+				, flags.submeshFlags }
 			, [&]( VertexInT< VoidT > in
 				, VertexOutT< PatchT > out )
 			{
@@ -765,6 +776,7 @@ namespace ocean_fft
 						, in.drawID ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId - 1u] );
+				out.colour = vec3( 1.0_f );
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
 
 				auto curBbcenter = writer.declLocale( "curBbcenter"
@@ -854,9 +866,11 @@ namespace ocean_fft
 			, sdw::InFloat{ writer, "distanceMod" } );
 
 		writer.implementPatchRoutineT< PatchT, OutputVertices, PatchT >( TessControlListInT< PatchT, OutputVertices >{ writer
-				, false }
+				, false
+				, flags.submeshFlags }
 			, sdw::QuadsTessPatchOutT< PatchT >{ writer
-				, 9u }
+				, 9u
+				, flags.submeshFlags }
 			, [&]( sdw::TessControlPatchRoutineIn in
 				, sdw::TessControlListInT< PatchT, OutputVertices > listIn
 				, sdw::QuadsTessPatchOutT< PatchT > patchOut )
@@ -895,6 +909,7 @@ namespace ocean_fft
 					, vec4( l0, l1, l2, l3 ) );
 				patchOut.patchWorldPosition = p0;
 				patchOut.patchLods = lods;
+				patchOut.colour = listIn[0u].colour;
 				patchOut.nodeId = listIn[0u].nodeId;
 
 				auto outerLods = writer.declLocale( "outerLods"
@@ -915,7 +930,8 @@ namespace ocean_fft
 			} );
 
 		writer.implementMainT< PatchT, OutputVertices, VoidT >( TessControlListInT< PatchT, OutputVertices >{ writer
-				, true }
+				, true
+				, flags.submeshFlags }
 			, TrianglesTessControlListOut{ writer
 				, ast::type::Partitioning::eFractionalEven
 				, ast::type::OutputTopology::eQuad
@@ -1006,8 +1022,11 @@ namespace ocean_fft
 		writer.implementMainT< PatchT, OutputVertices, PatchT, castor3d::shader::FragmentSurfaceT >( TessEvalListInT< PatchT, OutputVertices >{ writer
 				, ast::type::PatchDomain::eQuads
 				, type::Partitioning::eFractionalEven
-				, type::PrimitiveOrdering::eCW }
-			, QuadsTessPatchInT< PatchT >{ writer, 9u }
+				, type::PrimitiveOrdering::eCW
+				, flags.submeshFlags }
+			, QuadsTessPatchInT< PatchT >{ writer
+				, 9u
+				, flags.submeshFlags }
 			, TessEvalDataOutT< castor3d::shader::FragmentSurfaceT >{ writer
 				, flags.submeshFlags
 				, flags.programFlags
@@ -1043,6 +1062,7 @@ namespace ocean_fft
 
 				pos += heightDisplacement.yz();
 
+				out.colour = patchIn.colour;
 				out.nodeId = patchIn.nodeId;
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[writer.cast< sdw::UInt >( out.nodeId ) - 1u] );
@@ -1224,7 +1244,8 @@ namespace ocean_fft
 				auto worldEye = writer.declLocale( "worldEye"
 					, c3d_sceneData.cameraPosition );
 				auto lightMat = lightingModel->declMaterial( "lightMat" );
-				lightMat->create( material );
+				lightMat->create( in.colour
+					, material );
 				displayDebugData( eMatSpecular, lightMat->specular, 1.0_f );
 
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )

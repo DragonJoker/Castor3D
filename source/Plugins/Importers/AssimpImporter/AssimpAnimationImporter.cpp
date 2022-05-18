@@ -51,7 +51,8 @@ namespace c3d_assimp
 				, submesh.getTexcoords0()
 				, submesh.getTexcoords1()
 				, submesh.getTexcoords2()
-				, submesh.getTexcoords3() };
+				, submesh.getTexcoords3()
+				, submesh.getColours() };
 			auto valueIt = values.begin();
 			auto weightIt = weights.begin();
 
@@ -67,7 +68,8 @@ namespace c3d_assimp
 					, buffer.texcoords0
 					, buffer.texcoords1
 					, buffer.texcoords2
-					, buffer.texcoords3 );
+					, buffer.texcoords3
+					, buffer.colours );
 				++valueIt;
 				++weightIt;
 			}
@@ -213,7 +215,8 @@ namespace c3d_assimp
 							, csubmesh.getTexcoords0()
 							, csubmesh.getTexcoords1()
 							, csubmesh.getTexcoords2()
-							, csubmesh.getTexcoords3() } );
+							, csubmesh.getTexcoords3()
+							, csubmesh.getColours() } );
 				}
 
 				for ( auto & morphKey : castor::makeArrayView( aiAnimation.mKeys, aiAnimation.mNumKeys ) )
@@ -248,11 +251,13 @@ namespace c3d_assimp
 						castor::Point3fArray tex1;
 						castor::Point3fArray tex2;
 						castor::Point3fArray tex3;
+						castor::Point3fArray col;
 						castor::Point3fArray * tangents = &tan;
 						castor::Point3fArray * texcoords0 = &tex0;
 						castor::Point3fArray * texcoords1 = &tex1;
 						castor::Point3fArray * texcoords2 = &tex2;
 						castor::Point3fArray * texcoords3 = &tex3;
+						castor::Point3fArray * colours = &col;
 
 						if ( aiMesh.HasTextureCoords( 0u ) )
 						{
@@ -275,6 +280,11 @@ namespace c3d_assimp
 							texcoords3 = &submesh->getTexcoords3();
 						}
 
+						if ( aiMesh.HasVertexColors( 0u ) )
+						{
+							colours = &submesh->getColours();
+						}
+
 						meshAnimBuffers = &file.addMeshAnimBuffers( &aiMesh
 							, gatherMeshAnimBuffers( positions->getData()
 								, normals->getData()
@@ -283,6 +293,7 @@ namespace c3d_assimp
 								, *texcoords1
 								, *texcoords2
 								, *texcoords3
+								, *colours
 								, castor::makeArrayView( aiMesh.mAnimMeshes, aiMesh.mNumAnimMeshes ) ) );
 					}
 

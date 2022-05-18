@@ -167,6 +167,13 @@ namespace castor3d
 	\brief		Le composant de sous-maillage contenant les coordonnées de texture.
 	*/
 	using Texcoords3Component = BaseDataComponentT< SubmeshFlag::eTexcoords3 >;
+	/**
+	\~english
+	\brief		The submesh component holding colours.
+	\~french
+	\brief		Le composant de sous-maillage contenant les couleurs.
+	*/
+	using ColoursComponent = BaseDataComponentT< SubmeshFlag::eColours >;
 
 	CU_DeclareSmartPtr( Face );
 	CU_DeclareSmartPtr( IndexMapping );

@@ -53,12 +53,23 @@ namespace castor3d::shader
 		}
 	}
 
-	void PhongLightMaterial::create( Material const & material )
+	void PhongLightMaterial::create( sdw::Vec3 const & vtxColour
+		, Material const & material )
 	{
-		create( material.colourDiv.rgb()
-			, material.specDiv
-			, material.specDiv
-			, material );
+		if ( vtxColour.isEnabled() )
+		{
+			create( material.colourDiv.rgb() * vtxColour
+				, material.specDiv
+				, material.specDiv
+				, material );
+		}
+		else
+		{
+			create( material.colourDiv.rgb()
+				, material.specDiv
+				, material.specDiv
+				, material );
+		}
 	}
 
 	void PhongLightMaterial::output( sdw::Vec4 & outData2, sdw::Vec4 & outData3 )const
