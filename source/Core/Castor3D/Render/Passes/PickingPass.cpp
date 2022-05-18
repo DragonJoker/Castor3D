@@ -170,8 +170,7 @@ namespace castor3d
 					, in.position );
 				out.texture0 = in.texture0;
 				auto morphingData = writer.declLocale( "morphingData"
-					, c3d_morphingData[ids.morphingId]
-					, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
+					, c3d_morphingData[ids.morphingId] );
 				in.morph( morphingData
 					, curPosition
 					, out.texture0
