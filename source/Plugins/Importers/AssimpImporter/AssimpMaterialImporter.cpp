@@ -869,8 +869,11 @@ namespace c3d_assimp
 		};
 
 		static castor3d::PassTypeID convert( castor3d::PassFactory const & factory
-			, aiShadingMode shadingMode )
+			, aiMaterial const & aiMaterial )
 		{
+			aiShadingMode shadingMode{};
+			aiMaterial.Get( AI_MATKEY_SHADING_MODEL, shadingMode );
+
 			switch ( shadingMode )
 			{
 			case aiShadingMode_NoShading:
@@ -882,13 +885,32 @@ namespace c3d_assimp
 			case aiShadingMode_Toon:
 				return factory.getNameId( toon::ToonBlinnPhongPass::Type );
 			case aiShadingMode::aiShadingMode_CookTorrance:
+			case aiShadingMode::aiShadingMode_PBR_BRDF:
+			{
+				float value{};
+
+				if ( aiMaterial.Get( AI_MATKEY_GLOSSINESS_FACTOR, value ) == aiReturn_SUCCESS )
+				{
+					return factory.getNameId( castor3d::SpecularGlossinessPbrPass::Type );
+				}
+
 				return factory.getNameId( castor3d::MetallicRoughnessPbrPass::Type );
+			}
 			case aiShadingMode_Flat:
 			case aiShadingMode_Gouraud:
 			case aiShadingMode_Phong:
 			default:
 				return factory.getNameId( castor3d::PhongPass::Type );
 			}
+		};
+
+		static bool isPhongBased( castor3d::PassFactory const & factory
+			, castor3d::PassTypeID type )
+		{
+			return type == factory.getNameId( castor3d::PhongPass::Type )
+				|| type == factory.getNameId( castor3d::BlinnPhongPass::Type )
+				|| type == factory.getNameId( toon::ToonPhongPass::Type )
+				|| type == factory.getNameId( toon::ToonBlinnPhongPass::Type );
 		}
 
 		static void processMaterialPass( castor3d::Engine & engine
@@ -899,14 +921,13 @@ namespace c3d_assimp
 			, aiScene const & aiScene
 			, AssimpMaterialImporter & importer )
 		{
-			aiShadingMode shadingMode{};
-			aiMaterial.Get( AI_MATKEY_SHADING_MODEL, shadingMode );
 			auto & passFactory = engine.getPassFactory();
-			auto srcType = convert( passFactory, shadingMode );
+			auto srcType = convert( passFactory, aiMaterial );
 			auto dstType = pass.getTypeID();
 
 			if ( dstType != srcType
-				&& textureRemaps.empty() )
+				&& textureRemaps.empty()
+				&& ( !isPhongBased( passFactory, srcType ) || !isPhongBased( passFactory, dstType ) ) )
 			{
 				castor3d::log::warn << "Switching from " << passFactory.getIdName( srcType ) << " to " << passFactory.getIdName( dstType ) << " pass type." << std::endl;
 			}

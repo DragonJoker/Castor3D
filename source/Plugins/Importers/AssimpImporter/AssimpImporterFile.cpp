@@ -255,6 +255,102 @@ namespace c3d_assimp
 			return meshIndex < scene.mNumMeshes
 				&& c3d_assimp::isValidMesh( *scene.mMeshes[meshIndex] );
 		}
+
+		castor::String reworkMeshName( castor::String const & name
+			, uint32_t meshIndex )
+		{
+			castor::String separators = " \t\r_$|/:\\*!?&#\"()[]{}@+.";
+			auto split = castor::string::split( name, separators, ~( 0u ), false );
+			std::set< int > numbers;
+			std::set< castor::String > names;
+
+			for ( auto s : split )
+			{
+				castor::string::trim( s, true, true, separators );
+
+				if ( !s.empty() )
+				{
+					if ( castor::string::isInteger( s ) )
+					{
+						numbers.emplace( castor::string::toInt( s ) );
+					}
+					else
+					{
+						names.insert( s );
+					}
+				}
+			}
+
+			castor::String result;
+			castor::String sep;
+
+			for ( auto & s : names )
+			{
+				result += sep + s;
+				sep = "_";
+			}
+
+			for ( auto i : numbers )
+			{
+				result += sep + castor::string::toString( i );
+				sep = "_";
+			}
+
+			return result;
+		}
+
+		void accumulateTransformsRec( aiNode const * node
+			, std::vector< NodeData > const & nodes
+			, std::vector< castor::Matrix4x4f > & transforms )
+		{
+			if ( !node )
+			{
+				return;
+			}
+
+			auto it = std::find_if( nodes.begin()
+				, nodes.end()
+				, [&node]( NodeData const & lookup )
+				{
+					return node == lookup.node;
+				} );
+
+			if ( it == nodes.end() )
+			{
+				transforms.push_back( fromAssimp( node->mTransformation ) );
+				accumulateTransformsRec( node->mParent, nodes, transforms );
+			}
+			else
+			{
+				transforms.push_back( it->transform );
+			}
+		}
+
+		castor::Matrix4x4f accumulateTransforms( AssimpImporterFile const & file
+			, castor::String const & name
+			, aiNode const & rootNode
+			, std::vector< NodeData > const & nodes
+			, castor::Matrix4x4f transform )
+		{
+			auto node = rootNode.FindNode( file.getExternalName( name ).c_str() );
+
+			if ( node )
+			{
+				std::vector< castor::Matrix4x4f > transforms;
+				accumulateTransformsRec( node->mParent, nodes, transforms );
+				std::reverse( transforms.begin(), transforms.end() );
+				castor::Matrix4x4f cumulative{ 1.0f };
+
+				for ( auto & t : transforms )
+				{
+					cumulative *= t;
+				}
+
+				transform = cumulative * transform;
+			}
+
+			return transform;
+		}
 	}
 
 	//*********************************************************************************************
@@ -279,9 +375,10 @@ namespace c3d_assimp
 			}
 
 			doPrelistMaterials();
-			doPrelistLights();
 			doPrelistMeshes( doPrelistSkeletons() );
-			doPrelistSceneNodes();
+			std::map< MeshData const *, castor::String > processed;
+			doPrelistSceneNodes( *m_scene->mRootNode, processed );
+			doPrelistLights();
 		}
 	}
 
@@ -557,46 +654,6 @@ namespace c3d_assimp
 		}
 	}
 
-	void AssimpImporterFile::doPrelistLights()
-	{
-		for ( auto aiLight : castor::makeArrayView( m_scene->mLights, m_scene->mNumLights ) )
-		{
-			if ( aiLight->mType == aiLightSource_DIRECTIONAL
-				|| aiLight->mType == aiLightSource_POINT
-				|| aiLight->mType == aiLightSource_SPOT )
-			{
-				castor::String name = getInternalName( aiLight->mName );
-				m_sceneData.lights.emplace( name, aiLight );
-
-				auto position = castor::Point3f{};
-				auto orientation = castor::Quaternion::identity();
-
-				if ( aiLight->mType == aiLightSource_DIRECTIONAL
-					|| aiLight->mType == aiLightSource_SPOT )
-				{
-					auto direction = castor::point::getNormalised( fromAssimp( aiLight->mDirection ) );
-					auto up = castor::point::getNormalised( fromAssimp( aiLight->mUp ) );
-					orientation = castor::Quaternion::fromMatrix( fromAssimp( direction, up ) );
-				}
-
-				if ( aiLight->mType != aiLightSource_DIRECTIONAL )
-				{
-					position = fromAssimp( aiLight->mPosition );
-				}
-
-				auto transform = castor::Matrix4x4f{ 1.0f };
-				castor::matrix::setTransform( transform
-					, position
-					, castor::Point3f{ 1.0, 1.0, 1.0 }
-				, orientation );
-				m_sceneData.nodes.push_back( NodeData{ castor::String{}
-					, name
-					, nullptr
-					, transform } );
-			}
-		}
-	}
-
 	std::map< aiMesh const *, aiNode const * > AssimpImporterFile::doPrelistSkeletons()
 	{
 		std::map< aiMesh const *, aiNode const * > result;
@@ -658,11 +715,11 @@ namespace c3d_assimp
 		{
 			if ( isValidMesh( *aiMesh ) )
 			{
-				auto meshName = normalizeName( getInternalName( aiMesh->mName ) );
+				auto meshName = normalizeName( getInternalName( file::reworkMeshName( makeString( aiMesh->mName ), meshIndex ) ) );
 
 				if ( meshName.size() > 150u )
 				{
-					meshName = getInternalName( getName() );
+					meshName = getInternalName( getName() ) + castor::string::toString( meshIndex );
 				}
 				
 				if ( file::hasNodeAnim( *m_scene, meshIndex ) )
@@ -675,15 +732,12 @@ namespace c3d_assimp
 
 				if ( regIt == m_sceneData.meshes.end() )
 				{
+					// Merge meshes that use the same skeleton
 					auto it = meshSkeletons.find( aiMesh );
 
 					if ( it != meshSkeletons.end() )
 					{
 						skelNode = it->second;
-					}
-
-					if ( skelNode )
-					{
 						regIt = std::find_if( m_sceneData.meshes.begin()
 							, m_sceneData.meshes.end()
 							, [&skelNode]( std::map< castor::String, MeshData >::value_type const & lookup )
@@ -704,7 +758,8 @@ namespace c3d_assimp
 						, MeshData{ skelNode } ).first;
 				}
 
-				regIt->second.submeshes.push_back( { aiMesh, meshIndex, {} } );
+				auto & submeshData = regIt->second.submeshes.emplace_back( aiMesh, meshIndex );
+				m_meshes.insert( meshIndex );
 
 				if ( aiMesh->mNumAnimMeshes )
 				{
@@ -716,7 +771,7 @@ namespace c3d_assimp
 					for ( auto anim : anims )
 					{
 						castor::String animName{ normalizeName( anim.first ) };
-						regIt->second.submeshes.back().anims.emplace( animName
+						submeshData.anims.emplace( animName
 							, std::make_pair( aiMesh, anim.second ) );
 					}
 				}
@@ -726,107 +781,152 @@ namespace c3d_assimp
 		}
 	}
 
-	void AssimpImporterFile::doPrelistSceneNodes()
+	void AssimpImporterFile::doPrelistSceneNodes( aiNode const & aiNode
+		, std::map< MeshData const *, castor::String > & processedMeshes
+		, castor::String parentName
+		, castor::Matrix4x4f transform )
 	{
-		std::vector< NodeData > work;
-		work.emplace_back( castor::String{}
-			, getInternalName( m_scene->mRootNode->mName )
-			, m_scene->mRootNode
-			, fromAssimp( m_scene->mRootNode->mTransformation ) );
-		std::map< MeshData const *, castor::String > processed;
-		std::set< castor::String > visited;
-
-		while ( !work.empty() )
+		if ( m_bonesNodes.find( makeString( aiNode.mName ) ) != m_bonesNodes.end() )
 		{
-			auto nodeData = work.front();
-			auto node = nodeData.node;
-			auto transform = nodeData.transform;
-			work.erase( work.begin() );
+			return;
+		}
 
-			if ( m_bonesNodes.find( makeString( node->mName ) ) != m_bonesNodes.end() )
+		auto anims = file::findNodeAnims( aiNode
+			, castor::makeArrayView( m_scene->mAnimations, m_scene->mNumAnimations ) );
+		auto aiMeshes = castor::makeArrayView( aiNode.mMeshes, aiNode.mNumMeshes );
+		auto meshIt = std::find_if( aiMeshes.begin()
+			, aiMeshes.end()
+			, [this]( uint32_t meshIndex )
 			{
-				continue;
+				return m_meshes.find( meshIndex ) != m_meshes.end();
+			} );
+
+		if ( meshIt != aiMeshes.end() || !anims.empty() )
+		{
+			auto nodeName = getInternalName( aiNode.mName );
+			NodeData nodeData{ parentName
+				, nodeName
+				, &aiNode
+				, transform * fromAssimp( aiNode.mTransformation ) };
+
+			for ( auto anim : anims )
+			{
+				auto [frameCount, frameTicks] = getNodeAnimFrameTicks( *anim.second );
+
+				if ( frameCount > 1 )
+				{
+					castor::String animName{ normalizeName( makeString( anim.first->mName ) ) };
+
+					if ( animName.empty() )
+					{
+						animName = normalizeName( makeString( aiNode.mName ) );
+					}
+
+					nodeData.anims.emplace( animName, anim );
+				}
 			}
 
-			auto nodeName = getInternalName( node->mName );
-			auto anims = file::findNodeAnims( *node
-				, castor::makeArrayView( m_scene->mAnimations, m_scene->mNumAnimations ) );
-			bool hasAdded = true;
-
-			if ( node->mMeshes
-				|| !anims.empty() )
+			for ( auto meshIndex : castor::makeArrayView( aiNode.mMeshes, aiNode.mNumMeshes ) )
 			{
-				hasAdded = !anims.empty();
-
-				for ( auto anim : anims )
+				if ( !file::isValidMesh( *m_scene, meshIndex ) )
 				{
-					auto [frameCount, frameTicks] = getNodeAnimFrameTicks( *anim.second );
+					continue;
+				}
 
-					if ( frameCount > 1 )
+				auto it = file::findNodeMesh( meshIndex, m_sceneData.meshes );
+
+				if ( it != m_sceneData.meshes.end() )
+				{
+					if ( nodeData.meshes.end() == std::find( nodeData.meshes.begin()
+						, nodeData.meshes.end()
+						, &it->second ) )
 					{
-						castor::String animName{ normalizeName( makeString( anim.first->mName ) ) };
+						auto ires = processedMeshes.emplace( &it->second, nodeName );
 
-						if ( animName.empty() )
+						if ( ires.second )
 						{
-							animName = normalizeName( makeString( node->mName ) );
-						}
-
-						nodeData.anims.emplace( animName, anim );
-					}
-				}
-
-				for ( auto meshIndex : castor::makeArrayView( node->mMeshes, node->mNumMeshes ) )
-				{
-					if ( !file::isValidMesh( *m_scene, meshIndex ) )
-					{
-						continue;
-					}
-
-					auto it = file::findNodeMesh( meshIndex, m_sceneData.meshes );
-
-					if ( it != m_sceneData.meshes.end() )
-					{
-						if ( nodeData.meshes.end() == std::find( nodeData.meshes.begin()
-							, nodeData.meshes.end()
-							, &it->second ) )
-						{
-							auto ires = processed.emplace( &it->second, nodeName );
-
-							if ( ires.second )
-							{
-								nodeData.meshes.push_back( &it->second );
-								hasAdded = true;
-							}
+							nodeData.meshes.push_back( &it->second );
 						}
 					}
-					else
+				}
+				else
+				{
+					CU_Failure( "Could not find node's mesh ?" );
+				}
+			}
+
+			m_sceneData.nodes.emplace_back( std::move( nodeData ) );
+			parentName = nodeName;
+			transform = castor::Matrix4x4f{ 1.0f };
+		}
+		else
+		{
+			transform = transform * fromAssimp( aiNode.mTransformation );
+		}
+
+		// continue for all child nodes
+		for ( auto aiChild : castor::makeArrayView( aiNode.mChildren, aiNode.mNumChildren ) )
+		{
+			doPrelistSceneNodes( *aiChild
+				, processedMeshes
+				, parentName
+				, transform );
+		}
+	}
+
+	void AssimpImporterFile::doPrelistLights()
+	{
+		for ( auto aiLight : castor::makeArrayView( m_scene->mLights, m_scene->mNumLights ) )
+		{
+			if ( aiLight->mType == aiLightSource_DIRECTIONAL
+				|| aiLight->mType == aiLightSource_POINT
+				|| aiLight->mType == aiLightSource_SPOT )
+			{
+				castor::String name = getInternalName( aiLight->mName );
+				m_sceneData.lights.emplace( name, aiLight );
+
+				auto position = castor::Point3f{};
+				auto orientation = castor::Quaternion::identity();
+
+				if ( aiLight->mType == aiLightSource_DIRECTIONAL
+					|| aiLight->mType == aiLightSource_SPOT )
+				{
+					auto direction = castor::point::getNormalised( fromAssimp( aiLight->mDirection ) );
+					auto up = castor::point::getNormalised( fromAssimp( aiLight->mUp ) );
+					orientation = castor::Quaternion::fromMatrix( fromAssimp( direction, up ) );
+				}
+
+				if ( aiLight->mType != aiLightSource_DIRECTIONAL )
+				{
+					position = fromAssimp( aiLight->mPosition );
+				}
+
+				auto transform = castor::Matrix4x4f{ 1.0f };
+				castor::matrix::setTransform( transform
+					, position
+					, castor::Point3f{ 1.0, 1.0, 1.0 }
+					, orientation );
+				auto it = std::find_if( m_sceneData.nodes.begin()
+					, m_sceneData.nodes.end()
+					, [&name]( NodeData const & lookup )
 					{
-						CU_Failure( "Could not find node's mesh ?" );
-					}
-				}
-			}
+						return lookup.name == name;
+					} );
 
-			if ( hasAdded )
-			{
-				if ( visited.emplace( nodeData.name ).second )
+				if ( it == m_sceneData.nodes.end() )
 				{
-					m_sceneData.nodes.emplace_back( std::move( nodeData ) );
+					m_sceneData.nodes.push_back( NodeData{ castor::String{}
+						, name
+						, nullptr
+						, file::accumulateTransforms( *this
+							, name
+							, *m_scene->mRootNode
+							, m_sceneData.nodes
+							, transform ) } );
 				}
-			}
-			else
-			{
-				nodeName = nodeData.parent;
-			}
-
-			// continue for all child nodes
-			if ( node->mChildren )
-			{
-				for ( auto aiChild : castor::makeArrayView( node->mChildren, node->mNumChildren ) )
+				else
 				{
-					work.emplace_back( nodeName
-						, getInternalName( aiChild->mName )
-						, aiChild
-						, transform );
+					it->transform = transform;
 				}
 			}
 		}
