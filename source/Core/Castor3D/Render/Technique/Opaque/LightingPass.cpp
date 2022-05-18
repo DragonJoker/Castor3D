@@ -128,12 +128,12 @@ namespace castor3d
 		auto & pass = graph.createPass( "DepthBlit"
 			, [this, progress, srcSize, dstSize, &engine]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runGraph )
 			{
 				stepProgressBar( progress, "Initialising depth blit pass" );
 				auto result = std::make_unique< crg::ImageBlit >( framePass
 					, context
-					, graph
+					, runGraph
 					, VkOffset3D{}
 					, srcSize
 					, VkOffset3D{}

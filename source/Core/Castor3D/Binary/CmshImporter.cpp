@@ -252,7 +252,7 @@ namespace castor3d
 		if ( result )
 		{
 			castor3d::log::info << cuT( "Loaded skeleton animation [" ) << animation.getName() << cuT( "] " )
-				<< animation.getLength() << cuT( ", " )
+				<< animation.getLength().count() << cuT( " ms, " )
 				<< animation.size() << cuT( " Keyframes" ) << std::endl;
 		}
 
@@ -267,7 +267,7 @@ namespace castor3d
 		if ( result )
 		{
 			castor3d::log::info << cuT( "Loaded mesh animation [" ) << animation.getName() << cuT( "] " )
-				<< animation.getLength() << cuT( ", " )
+				<< animation.getLength().count() << cuT( " ms, " )
 				<< animation.size() << cuT( " Keyframes" ) << std::endl;
 		}
 
@@ -282,7 +282,7 @@ namespace castor3d
 		if ( result )
 		{
 			castor3d::log::info << cuT( "Loaded scene node animation [" ) << animation.getName() << cuT( "] " )
-				<< animation.getLength() << cuT( ", " )
+				<< animation.getLength().count() << cuT( " ms, " )
 				<< animation.size() << cuT( " Keyframes" ) << std::endl;
 		}
 

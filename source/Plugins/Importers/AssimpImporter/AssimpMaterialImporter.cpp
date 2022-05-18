@@ -30,6 +30,8 @@ namespace c3d_assimp
 
 	namespace materials
 	{
+		static constexpr aiShadingMode ShadingMode_PBR_BRDF = aiShadingMode( 0xb );
+
 		static bool hasAlphaChannel( castor::Image const & image )
 		{
 			auto alphaChannel = castor::extractComponent( image.getPixels()
@@ -884,12 +886,15 @@ namespace c3d_assimp
 				return factory.getNameId( castor3d::BlinnPhongPass::Type );
 			case aiShadingMode_Toon:
 				return factory.getNameId( toon::ToonBlinnPhongPass::Type );
-			case aiShadingMode::aiShadingMode_CookTorrance:
-			case aiShadingMode::aiShadingMode_PBR_BRDF:
+			case aiShadingMode_CookTorrance:
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wswitch"
+			case ShadingMode_PBR_BRDF:
+#pragma GCC diagnostic pop
 			{
 				float value{};
 
-				if ( aiMaterial.Get( AI_MATKEY_GLOSSINESS_FACTOR, value ) == aiReturn_SUCCESS )
+				if ( aiMaterial.Get( AI_MATKEY_GLTF_PBRSPECULARGLOSSINESS_GLOSSINESS_FACTOR, value ) == aiReturn_SUCCESS )
 				{
 					return factory.getNameId( castor3d::SpecularGlossinessPbrPass::Type );
 				}
@@ -902,7 +907,7 @@ namespace c3d_assimp
 			default:
 				return factory.getNameId( castor3d::PhongPass::Type );
 			}
-		};
+		}
 
 		static bool isPhongBased( castor3d::PassFactory const & factory
 			, castor3d::PassTypeID type )

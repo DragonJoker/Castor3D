@@ -82,7 +82,7 @@ namespace c3d_assimp
 			return nullptr;
 		}
 
-		std::string getLongestCommonSubstring( std::string const & a, std::string const & b )
+		static std::string getLongestCommonSubstring( std::string const & a, std::string const & b )
 		{
 			std::vector< std::string > substrings;
 
@@ -111,7 +111,7 @@ namespace c3d_assimp
 		}
 
 		template< typename IterT, typename TypeT >
-		std::pair< IterT, castor::String > replaceIter( castor::String const & name
+		static std::pair< IterT, castor::String > replaceIter( castor::String const & name
 			, IterT iter
 			, std::map< castor::String, TypeT > & map )
 		{
@@ -127,7 +127,7 @@ namespace c3d_assimp
 			return { iter, common };
 		}
 
-		castor::String getMaterialName( AssimpImporterFile const & file
+		static castor::String getMaterialName( AssimpImporterFile const & file
 			, aiMaterial const & aiMaterial
 			, uint32_t materialIndex )
 		{
@@ -224,7 +224,7 @@ namespace c3d_assimp
 			return result;
 		}
 
-		auto findNodeMesh( uint32_t meshIndex
+		static auto findNodeMesh( uint32_t meshIndex
 			, std::map< castor::String, MeshData > const & meshes )
 		{
 			return std::find_if( meshes.begin()
@@ -240,7 +240,7 @@ namespace c3d_assimp
 				} );
 		}
 
-		bool hasNodeAnim( aiScene const & scene
+		static bool hasNodeAnim( aiScene const & scene
 			, uint32_t meshIndex )
 		{
 			auto node = findMeshNode( meshIndex, *scene.mRootNode );
@@ -249,14 +249,14 @@ namespace c3d_assimp
 				, castor::makeArrayView( scene.mAnimations, scene.mNumAnimations ) ).empty();
 		}
 
-		bool isValidMesh( aiScene const & scene
+		static bool isValidMesh( aiScene const & scene
 			, uint32_t meshIndex )
 		{
 			return meshIndex < scene.mNumMeshes
 				&& c3d_assimp::isValidMesh( *scene.mMeshes[meshIndex] );
 		}
 
-		castor::String reworkMeshName( castor::String const & name
+		static castor::String reworkMeshName( castor::String const & name
 			, uint32_t meshIndex )
 		{
 			castor::String separators = " \t\r_$|/:\\*!?&#\"()[]{}@+.";
@@ -299,7 +299,7 @@ namespace c3d_assimp
 			return result;
 		}
 
-		void accumulateTransformsRec( aiNode const * node
+		static void accumulateTransformsRec( aiNode const * node
 			, std::vector< NodeData > const & nodes
 			, std::vector< castor::Matrix4x4f > & transforms )
 		{
@@ -326,7 +326,7 @@ namespace c3d_assimp
 			}
 		}
 
-		castor::Matrix4x4f accumulateTransforms( AssimpImporterFile const & file
+		static castor::Matrix4x4f accumulateTransforms( AssimpImporterFile const & file
 			, castor::String const & name
 			, aiNode const & rootNode
 			, std::vector< NodeData > const & nodes

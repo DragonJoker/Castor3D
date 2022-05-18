@@ -66,12 +66,6 @@ namespace castor3d
 			result *= rotation;
 		}
 
-		static void transformScale( castor::Point3f const & scale
-			, castor::Point3f & result )
-		{
-			result *= scale;
-		}
-
 		static void transformSkeletonAnimation( castor::Point3f const & scale
 			, castor::Quaternion const & rotation
 			, SkeletonAnimation & animation )
