@@ -278,17 +278,17 @@ namespace castor
 			}
 
 			/* and remove all scaling from the matrix */
-			if ( scaling->x )
+			if ( scaling->x != U{} )
 			{
 				cols[0] /= scaling->x;
 			}
 
-			if ( scaling->y )
+			if ( scaling->y != U{} )
 			{
 				cols[1] /= scaling->y;
 			}
 
-			if ( scaling->z )
+			if ( scaling->z != U{} )
 			{
 				cols[2] /= scaling->z;
 			}
