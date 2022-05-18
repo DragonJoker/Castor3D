@@ -42,15 +42,6 @@ namespace c3d_assimp
 		return castor::Matrix4x4f{ data.data() };
 	}
 
-	static castor::Matrix4x4f fromAssimp( aiMatrix3x3 const & aiMatrix )
-	{
-		std::array< float, 9u > data
-			{ aiMatrix.a1, aiMatrix.b1, aiMatrix.c1
-			, aiMatrix.a2, aiMatrix.b2, aiMatrix.c2
-			, aiMatrix.a3, aiMatrix.b3, aiMatrix.c3 };
-		return castor::Matrix4x4f{ castor::Matrix3x3f{ data.data() } };
-	}
-
 	static castor::Matrix4x4f fromAssimp( castor::Point3f const & direction
 		, castor::Point3f const & up )
 	{
@@ -90,7 +81,7 @@ namespace c3d_assimp
 		return result;
 	}
 
-	bool isValidMesh( aiMesh const & mesh )
+	static bool isValidMesh( aiMesh const & mesh )
 	{
 		auto faces = castor::makeArrayView( mesh.mFaces, mesh.mNumFaces );
 		auto count = uint32_t( std::count_if( faces.begin()

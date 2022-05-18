@@ -24,7 +24,7 @@ namespace c3d_assimp
 
 	struct SkeletonData
 	{
-		SkeletonData( aiNode const * prootNode )
+		explicit SkeletonData( aiNode const * prootNode )
 			: rootNode{ prootNode }
 		{
 		}
@@ -49,7 +49,7 @@ namespace c3d_assimp
 
 	struct MeshData
 	{
-		MeshData( aiNode const * pskelNode )
+		explicit MeshData( aiNode const * pskelNode )
 			: skelNode{ pskelNode }
 		{
 		}

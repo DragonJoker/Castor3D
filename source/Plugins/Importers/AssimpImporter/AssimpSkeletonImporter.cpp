@@ -38,12 +38,6 @@ namespace c3d_assimp
 
 			if ( !skelNode )
 			{
-				aiVector3D scaling, position;
-				aiQuaternion rotate;
-				aiNode.mTransformation.Decompose( scaling, rotate, position );
-				auto translate = fromAssimp( position );
-				auto scale = fromAssimp( scaling );
-				auto orientation = fromAssimp( rotate );
 				skelNode = addNode( skeleton, bonesNodes, nodeName, name );
 
 				if ( parentSkelNode )

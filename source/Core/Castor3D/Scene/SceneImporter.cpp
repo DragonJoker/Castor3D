@@ -47,7 +47,6 @@ namespace castor3d
 		, std::map< TextureFlag, TextureConfiguration > const & textureRemaps )
 	{
 		m_file = file;
-		bool result = true;
 		auto animationImporter = file->createAnimationImporter();
 		Parameters emptyParams;
 		std::map< castor::String, SkeletonRPtr > skeletons;
@@ -223,12 +222,8 @@ namespace castor3d
 			doAddAnimationGroup( *geometry );
 		}
 
-		if ( result )
-		{
-			doTransformScene( scene, parameters, nodes );
-		}
-
-		return result;
+		doTransformScene( scene, parameters, nodes );
+		return true;
 	}
 
 	bool SceneImporter::import( Scene & scene
@@ -365,13 +360,13 @@ namespace castor3d
 
 	void SceneImporter::doAddAnimationGroup( Geometry & geometry )
 	{
-		auto & scene = *geometry.getScene();
 		auto mesh = geometry.getMesh().lock();
 		auto skeleton = mesh->getSkeleton();
 
 		if ( mesh->hasAnimation()
 			|| ( skeleton && skeleton->hasAnimation() ) )
 		{
+			auto & scene = *geometry.getScene();
 			auto animGroup = ( scene.hasAnimatedObjectGroup( geometry.getName() )
 				? scene.findAnimatedObjectGroup( geometry.getName() ).lock()
 				: scene.addNewAnimatedObjectGroup( geometry.getName(), scene ).lock() );
