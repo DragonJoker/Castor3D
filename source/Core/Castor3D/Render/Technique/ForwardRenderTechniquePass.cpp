@@ -160,7 +160,7 @@ namespace castor3d
 				, hasTextures }
 			, FragmentOut{ writer }
 			, [&]( FragmentInT< shader::FragmentSurfaceT > in
-			, FragmentOut out )
+				, FragmentOut out )
 			{
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId ) - 1u] );
@@ -175,11 +175,9 @@ namespace castor3d
 				auto normal = writer.declLocale( "normal"
 					, normalize( in.normal ) );
 				auto tangent = writer.declLocale( "tangent"
-					, normalize( in.tangent )
-					, checkFlag( flags.submeshFlags, SubmeshFlag::eTangents ) );
+					, normalize( in.tangent ) );
 				auto bitangent = writer.declLocale( "bitangent"
-					, normalize( in.bitangent )
-					, checkFlag( flags.submeshFlags, SubmeshFlag::eTangents ) );
+					, normalize( in.bitangent ) );
 				auto occlusion = writer.declLocale( "occlusion"
 					, 1.0_f );
 				auto transmittance = writer.declLocale( "transmittance"
@@ -191,17 +189,13 @@ namespace castor3d
 				}
 
 				auto texCoord0 = writer.declLocale( "texCoord0"
-					, in.texture0
-					, hasTextures );
+					, in.texture0 );
 				auto texCoord1 = writer.declLocale( "texCoord1"
-					, in.texture1
-					, hasTextures && checkFlag( flags.submeshFlags, SubmeshFlag::eTexcoords1 ) );
+					, in.texture1 );
 				auto texCoord2 = writer.declLocale( "texCoord2"
-					, in.texture2
-					, hasTextures && checkFlag( flags.submeshFlags, SubmeshFlag::eTexcoords2 ) );
+					, in.texture2 );
 				auto texCoord3 = writer.declLocale( "texCoord3"
-					, in.texture3
-					, hasTextures && checkFlag( flags.submeshFlags, SubmeshFlag::eTexcoords3 ) );
+					, in.texture3 );
 				lightingModel->computeMapContributions( flags.passFlags
 					, flags.textures
 					, textureConfigs

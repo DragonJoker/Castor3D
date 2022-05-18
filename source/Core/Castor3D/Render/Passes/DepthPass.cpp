@@ -165,25 +165,20 @@ namespace castor3d
 				auto normal = writer.declLocale( "normal"
 					, normalize( in.normal ) );
 				auto tangent = writer.declLocale( "tangent"
-					, normalize( in.tangent )
-					, checkFlag( flags.submeshFlags, SubmeshFlag::eTangents ) );
+					, normalize( in.tangent ) );
 				auto bitangent = writer.declLocale( "bitangent"
-					, normalize( in.bitangent )
-					, checkFlag( flags.submeshFlags, SubmeshFlag::eTangents ) );
+					, normalize( in.bitangent ) );
 
 				if ( hasTextures && textureConfigs.isEnabled() )
 				{
 					auto texCoord0 = writer.declLocale( "texCoord0"
 						, in.texture0 );
 					auto texCoord1 = writer.declLocale( "texCoord1"
-						, in.texture1
-						, checkFlag( flags.submeshFlags, SubmeshFlag::eTexcoords1 ) );
+						, in.texture1 );
 					auto texCoord2 = writer.declLocale( "texCoord2"
-						, in.texture2
-						, checkFlag( flags.submeshFlags, SubmeshFlag::eTexcoords2 ) );
+						, in.texture2 );
 					auto texCoord3 = writer.declLocale( "texCoord3"
-						, in.texture3
-						, checkFlag( flags.submeshFlags, SubmeshFlag::eTexcoords3 ) );
+						, in.texture3 );
 					auto textureFlags = merge( flags.textures );
 
 					if ( ( textureFlags & TextureFlag::eGeometry ) != 0 )
