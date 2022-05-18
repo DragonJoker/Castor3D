@@ -63,6 +63,11 @@ namespace castor3d
 				result += "3";
 			}
 
+			if ( checkFlag( submeshFlags, SubmeshFlag::eColours ) )
+			{
+				result += "C";
+			}
+
 			if ( checkFlag( submeshFlags, SubmeshFlag::eBones ) )
 			{
 				result += "B";
@@ -101,6 +106,11 @@ namespace castor3d
 			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords3 ) )
 			{
 				result += "3";
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphColours ) )
+			{
+				result += "MC";
 			}
 
 			return result;

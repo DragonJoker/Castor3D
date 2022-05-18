@@ -889,7 +889,10 @@ namespace c3d_assimp
 			case aiShadingMode_CookTorrance:
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wswitch"
+#pragma warning( push )
+#pragma warning( disable:4063 )
 			case ShadingMode_PBR_BRDF:
+#pragma warning( pop )
 #pragma GCC diagnostic pop
 			{
 				float value{};

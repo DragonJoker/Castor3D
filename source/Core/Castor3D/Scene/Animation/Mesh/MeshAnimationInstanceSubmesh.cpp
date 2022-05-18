@@ -158,6 +158,21 @@ namespace castor3d
 					, curr.getData< castor::Point3f >().begin() );
 				curr.markDirty();
 			}
+
+			if ( offsets.hasData( SubmeshFlag::eMorphColours ) )
+			{
+				auto & prev = offsets.getBufferChunk( SubmeshFlag::eColours );
+				std::copy( prv.colours.begin()
+					, prv.colours.end()
+					, prev.getData< castor::Point3f >().begin() );
+				prev.markDirty();
+
+				auto & curr = offsets.getBufferChunk( SubmeshFlag::eMorphColours );
+				std::copy( cur.colours.begin()
+					, cur.colours.end()
+					, curr.getData< castor::Point3f >().begin() );
+				curr.markDirty();
+			}
 		}
 
 		getOwner()->getAnimatedMesh().getGeometry().setBoundingBox( m_animationObject.getSubmesh()

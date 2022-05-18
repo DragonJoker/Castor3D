@@ -339,6 +339,7 @@ namespace Testing
 				{ castor3d::SubmeshFlag::eTexcoords1, "eTexcoords1" },
 				{ castor3d::SubmeshFlag::eTexcoords2, "eTexcoords2" },
 				{ castor3d::SubmeshFlag::eTexcoords3, "eTexcoords3" },
+				{ castor3d::SubmeshFlag::eColours, "eColours" },
 				{ castor3d::SubmeshFlag::eBones, "eBones" },
 				{ castor3d::SubmeshFlag::eMorphPositions, "eMorphPositions" },
 				{ castor3d::SubmeshFlag::eMorphNormals, "eMorphNormals" },
@@ -347,6 +348,7 @@ namespace Testing
 				{ castor3d::SubmeshFlag::eMorphTexcoords1, "eMorphTexcoords1" },
 				{ castor3d::SubmeshFlag::eMorphTexcoords2, "eMorphTexcoords2" },
 				{ castor3d::SubmeshFlag::eMorphTexcoords3, "eMorphTexcoords3" },
+				{ castor3d::SubmeshFlag::eMorphColours, "eMorphColours" },
 			};
 			return Names[value];
 		}
@@ -640,6 +642,15 @@ namespace Testing
 	};
 
 	template<>
+	struct Stringifier< castor3d::ColoursComponent >
+	{
+		static std::string get( castor3d::ColoursComponent const & value )
+		{
+			return std::string{ "castor3d::ColoursComponent" };
+		}
+	};
+
+	template<>
 	struct Stringifier< castor3d::BonesComponent >
 	{
 		static std::string get( castor3d::BonesComponent const & value )
@@ -845,6 +856,7 @@ namespace Testing
 		bool compare( castor3d::Texcoords1Component const & p_a, castor3d::Texcoords1Component const & p_b );
 		bool compare( castor3d::Texcoords2Component const & p_a, castor3d::Texcoords2Component const & p_b );
 		bool compare( castor3d::Texcoords3Component const & p_a, castor3d::Texcoords3Component const & p_b );
+		bool compare( castor3d::ColoursComponent const & p_a, castor3d::ColoursComponent const & p_b );
 		bool compare( castor3d::Face const & p_a, castor3d::Face const & p_b );
 		bool compare( castor3d::TriFaceMapping const & p_a, castor3d::TriFaceMapping const & p_b );
 		bool compare( castor3d::Line const & p_a, castor3d::Line const & p_b );

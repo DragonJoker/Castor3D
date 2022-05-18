@@ -132,6 +132,20 @@ namespace castor3d
 				++currentBinding;
 			}
 
+			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphColours ) )
+			{
+				ashes::VkVertexInputBindingDescriptionArray bindings;
+				ashes::VkVertexInputAttributeDescriptionArray attributes;
+				bindings.push_back( { currentBinding
+					, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } );
+				attributes.push_back( { currentLocation++
+					, currentBinding
+					, VK_FORMAT_R32G32B32_SFLOAT
+					, 0u } );
+				result.emplace_back( 0u, bindings, attributes );
+				++currentBinding;
+			}
+
 			return result;
 		}
 	}
@@ -174,6 +188,11 @@ namespace castor3d
 		if ( submesh.hasComponent( Texcoords3Component::Name ) )
 		{
 			m_flags |= SubmeshFlag::eMorphTexcoords3;
+		}
+
+		if ( submesh.hasComponent( ColoursComponent::Name ) )
+		{
+			m_flags |= SubmeshFlag::eMorphColours;
 		}
 	}
 

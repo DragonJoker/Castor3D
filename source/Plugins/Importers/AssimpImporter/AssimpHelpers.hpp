@@ -102,7 +102,8 @@ namespace c3d_assimp
 		, castor::Point3fArray & texcoords0
 		, castor::Point3fArray & texcoords1
 		, castor::Point3fArray & texcoords2
-		, castor::Point3fArray & texcoords3 )
+		, castor::Point3fArray & texcoords3
+		, castor::Point3fArray & colours )
 	{
 		positions.resize( aiMesh.mNumVertices );
 		normals.resize( aiMesh.mNumVertices );
@@ -202,6 +203,20 @@ namespace c3d_assimp
 				++index;
 			}
 		}
+
+		if ( aiMesh.HasVertexColors( 0u ) )
+		{
+			colours.resize( aiMesh.mNumVertices );
+			index = 0u;
+
+			for ( auto & col : colours )
+			{
+				col[0] = float( aiMesh.mColors[0][index].r );
+				col[1] = float( aiMesh.mColors[0][index].g );
+				col[2] = float( aiMesh.mColors[0][index].b );
+				++index;
+			}
+		}
 	}
 
 	static std::vector< castor3d::SubmeshAnimationBuffer > gatherMeshAnimBuffers( castor::Point3fArray const & positions
@@ -211,6 +226,7 @@ namespace c3d_assimp
 		, castor::Point3fArray const & texcoords1
 		, castor::Point3fArray const & texcoords2
 		, castor::Point3fArray const & texcoords3
+		, castor::Point3fArray const & colours
 		, castor::ArrayView< aiAnimMesh * > animMeshes )
 	{
 		std::vector< castor3d::SubmeshAnimationBuffer > result;
@@ -225,7 +241,8 @@ namespace c3d_assimp
 				, buffer.texcoords0
 				, buffer.texcoords1
 				, buffer.texcoords2
-				, buffer.texcoords3 );
+				, buffer.texcoords3
+				, buffer.colours );
 
 			if ( aiAnimMesh->HasPositions() )
 			{
@@ -304,6 +321,17 @@ namespace c3d_assimp
 				}
 			}
 
+			if ( aiAnimMesh->HasVertexColors( 0u ) )
+			{
+				auto it = buffer.colours.begin();
+
+				for ( auto & point : colours )
+				{
+					*it -= point;
+					++it;
+				}
+			}
+
 			result.emplace_back( std::move( buffer ) );
 		}
 
@@ -318,7 +346,8 @@ namespace c3d_assimp
 		, castor::Point3fArray & texcoords0
 		, castor::Point3fArray & texcoords1
 		, castor::Point3fArray & texcoords2
-		, castor::Point3fArray & texcoords3 )
+		, castor::Point3fArray & texcoords3
+		, castor::Point3fArray & colours )
 	{
 		if ( weight != 0.0f )
 		{
@@ -412,6 +441,20 @@ namespace c3d_assimp
 				auto bufferIt = target.texcoords3.begin();
 
 				while ( bufferIt != target.texcoords3.end() )
+				{
+					auto & buf = *bufferIt;
+					*texIt += buf * weight;
+					++texIt;
+					++bufferIt;
+				}
+			}
+
+			if ( !colours.empty() )
+			{
+				auto texIt = colours.begin();
+				auto bufferIt = target.colours.begin();
+
+				while ( bufferIt != target.colours.end() )
 				{
 					auto & buf = *bufferIt;
 					*texIt += buf * weight;

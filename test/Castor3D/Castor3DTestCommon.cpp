@@ -369,6 +369,14 @@ namespace Testing
 		return result;
 	}
 
+	bool C3DTestCase::compare( castor3d::ColoursComponent const & lhs, castor3d::ColoursComponent const & rhs )
+	{
+		auto lhsData = lhs.getData();
+		auto rhsData = rhs.getData();
+		auto result = CT_EQUAL( lhsData, rhsData );
+		return result;
+	}
+
 	bool C3DTestCase::compare( Face const & lhs, Face const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs[0], rhs[0] ) };
@@ -441,6 +449,11 @@ namespace Testing
 			{
 				result = CT_EQUAL( static_cast< Texcoords3Component const & >( lhs )
 					, static_cast< Texcoords3Component const & >( rhs ) );
+			}
+			else if ( lhs.getType() == ColoursComponent::Name )
+			{
+				result = CT_EQUAL( static_cast< ColoursComponent const & >( lhs )
+					, static_cast< ColoursComponent const & >( rhs ) );
 			}
 			else if ( lhs.getType() == BonesComponent::Name )
 			{

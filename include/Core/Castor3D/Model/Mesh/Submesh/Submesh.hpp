@@ -381,6 +381,8 @@ namespace castor3d
 		C3D_API castor::Point3fArray & getTexcoords2();
 		C3D_API castor::Point3fArray const & getTexcoords3()const;
 		C3D_API castor::Point3fArray & getTexcoords3();
+		C3D_API castor::Point3fArray const & getColours()const;
+		C3D_API castor::Point3fArray & getColours();
 		inline SkeletonRPtr getSkeleton()const;
 		inline MaterialRPtr getDefaultMaterial()const;
 		inline castor::BoundingBox const & getBoundingBox()const;

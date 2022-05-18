@@ -50,12 +50,23 @@ namespace castor3d::shader
 		}
 	}
 
-	void PbrLightMaterial::create( Material const & material )
+	void PbrLightMaterial::create( sdw::Vec3 const & vtxColour
+		, Material const & material )
 	{
-		create( material.colourDiv.rgb()
-			, material.specDiv
-			, material.colourDiv
-			, material );
+		if ( vtxColour.isEnabled() )
+		{
+			create( material.colourDiv.rgb() * vtxColour
+				, material.specDiv
+				, material.colourDiv
+				, material );
+		}
+		else
+		{
+			create( material.colourDiv.rgb()
+				, material.specDiv
+				, material.colourDiv
+				, material );
+		}
 	}
 
 	void PbrLightMaterial::output( sdw::Vec4 & outData2, sdw::Vec4 & outData3 )const

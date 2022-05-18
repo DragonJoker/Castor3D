@@ -216,6 +216,9 @@ namespace castor3d
 			auto tex3Buffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTexcoords3 )
 				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTexcoords3 )
 				: nullptr;
+			auto colBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eColours )
+				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eColours )
+				: nullptr;
 			auto idxBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eIndex )
 				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eIndex )
 				: nullptr;
@@ -242,6 +245,9 @@ namespace castor3d
 				: nullptr;
 			auto mphTex3Buffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTexcoords3 )
 				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTexcoords3 )
+				: nullptr;
+			auto mphColBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphColours )
+				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphColours )
 				: nullptr;
 #endif
 
@@ -271,6 +277,9 @@ namespace castor3d
 					CU_Require( tex3Buffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTexcoords3 )
 						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTexcoords3 )
 						: nullptr ) );
+					CU_Require( colBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eColours )
+						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eColours )
+						: nullptr ) );
 					CU_Require( idxBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eIndex )
 						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eIndex )
 						: nullptr ) );
@@ -297,6 +306,9 @@ namespace castor3d
 						: nullptr) );
 					CU_Require( mphTex3Buffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTexcoords3 )
 						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTexcoords3 )
+						: nullptr) );
+					CU_Require( mphColBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphColours )
+						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphColours )
 						: nullptr) );
 				}
 			}

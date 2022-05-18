@@ -180,13 +180,19 @@ namespace castor3d
 			createComponent< Texcoords3Component >();
 		}
 
+		if ( checkFlag( flags, SubmeshFlag::eColours ) )
+		{
+			createComponent< ColoursComponent >();
+		}
+
 		if ( checkFlag( flags, SubmeshFlag::eMorphPositions )
 			|| checkFlag( flags, SubmeshFlag::eMorphNormals )
 			|| checkFlag( flags, SubmeshFlag::eMorphTangents )
 			|| checkFlag( flags, SubmeshFlag::eMorphTexcoords0 )
 			|| checkFlag( flags, SubmeshFlag::eMorphTexcoords1 )
 			|| checkFlag( flags, SubmeshFlag::eMorphTexcoords2 )
-			|| checkFlag( flags, SubmeshFlag::eMorphTexcoords3 ) )
+			|| checkFlag( flags, SubmeshFlag::eMorphTexcoords3 )
+			|| checkFlag( flags, SubmeshFlag::eMorphColours ) )
 		{
 			createComponent< MorphComponent >();
 		}
@@ -372,6 +378,7 @@ namespace castor3d
 			, smsh::getComponentCount< Texcoords1Component >( *this )
 			, smsh::getComponentCount< Texcoords2Component >( *this )
 			, smsh::getComponentCount< Texcoords3Component >( *this )
+			, smsh::getComponentCount< ColoursComponent >( *this )
 			, uint32_t( m_bufferOffset ? m_bufferOffset.getCount< castor::Point3f >( SubmeshFlag::ePositions ) : 0u ) } );
 	}
 
@@ -706,6 +713,24 @@ namespace castor3d
 	castor::Point3fArray & Submesh::getTexcoords3()
 	{
 		auto component = getComponent< Texcoords3Component >();
+		CU_Require( component );
+		return component->getData();
+	}
+
+	castor::Point3fArray const & Submesh::getColours()const
+	{
+		if ( auto component = getComponent< ColoursComponent >() )
+		{
+			return component->getData();
+		}
+
+		static castor::Point3fArray const dummy;
+		return dummy;
+	}
+
+	castor::Point3fArray & Submesh::getColours()
+	{
+		auto component = getComponent< ColoursComponent >();
 		CU_Require( component );
 		return component->getData();
 	}

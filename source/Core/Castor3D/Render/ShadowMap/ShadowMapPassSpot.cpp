@@ -229,6 +229,7 @@ namespace castor3d
 				out.texture1 = in.texture1;
 				out.texture2 = in.texture2;
 				out.texture3 = in.texture3;
+				out.colour = in.colour;
 				auto morphingData = writer.declLocale( "morphingData"
 					, c3d_morphingData[ids.morphingId] );
 				in.morph( morphingData
@@ -238,7 +239,8 @@ namespace castor3d
 					, out.texture0
 					, out.texture1
 					, out.texture2
-					, out.texture3 );
+					, out.texture3
+					, out.colour );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[ids.nodeId - 1u] );
 				out.nodeId = writer.cast< sdw::Int >( ids.nodeId );
@@ -365,7 +367,8 @@ namespace castor3d
 					, flags.alphaFunc != VK_COMPARE_OP_ALWAYS );
 				auto lightMat = lightingModel->declMaterial( "lightMat"
 					, m_needsRsm );
-				lightMat->create( material );
+				lightMat->create( in.colour
+					, material );
 
 				if ( hasTextures )
 				{
