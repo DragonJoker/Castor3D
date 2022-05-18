@@ -213,7 +213,7 @@ namespace castor3d
 			if ( submeshFlagIndex == getIndex( SubmeshFlag::eMorphTexcoords0 ) )
 			{
 				return hasTextures
-					|| checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eMorphTexcoords0 );
+					&& checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eMorphTexcoords0 );
 			}
 
 			if ( submeshFlagIndex == getIndex( SubmeshFlag::eMorphTexcoords1 ) )

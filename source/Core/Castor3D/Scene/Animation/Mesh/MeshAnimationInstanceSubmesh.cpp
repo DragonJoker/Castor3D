@@ -47,6 +47,11 @@ namespace castor3d
 	{
 		if ( &cur != m_cur )
 		{
+			if ( !m_animationObject.getSubmesh().isInitialised() )
+			{
+				return;
+			}
+
 			auto & offsets = m_animationObject.getSubmesh().getBufferOffsets();
 
 			if ( offsets.hasData( SubmeshFlag::eMorphPositions ) )
