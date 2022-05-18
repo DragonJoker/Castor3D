@@ -61,6 +61,7 @@ if( assimp_FOUND )
 	set( PROJECT_SOVERSION "${${PROJECT_NAME}_VERSION_BUILD}" )
 
 	set( ${PROJECT_NAME}_NVS_FILES
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/Assimp.natvis
 		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpImporter.natvis
 	)
 	set( ${PROJECT_NAME}_HDR_FILES

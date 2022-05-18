@@ -21,11 +21,119 @@
 		</Expand>
 	</Type>
 
+	<Type Name="castor3d::AnimationKeyFrame">
+		<DisplayString>{m_timeIndex}</DisplayString>
+		<Expand>
+			<Item Name="timeIndex">m_timeIndex</Item>
+			<Item Name="boundingBox">m_boundingBox</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::BaseDataComponentT&lt;*&gt;">
+		<DisplayString>{m_id} {m_type} data={m_data}</DisplayString>
+		<Expand>
+			<Item Name="id">m_id</Item>
+			<Item Name="initialised">m_initialised</Item>
+			<Item Name="dirty">m_dirty</Item>
+			<Item Name="data">m_data</Item>
+			<Item Name="layouts">m_layouts</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::BoneNode">
+		<DisplayString>Bone [{m_id}]{m_name}</DisplayString>
+		<Expand>
+			<Item Name="id">m_id</Item>
+			<Item Name="name">m_name</Item>
+			<Item Name="inverseTransform">m_inverseTransform</Item>
+			<Item Name="parent">m_parent</Item>
+			<Item Name="children">m_children</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::BonesComponent">
+		<DisplayString>{m_id} {m_type} data={m_data}</DisplayString>
+		<Expand>
+			<Item Name="id">m_id</Item>
+			<Item Name="initialised">m_initialised</Item>
+			<Item Name="dirty">m_dirty</Item>
+			<Item Name="bones">m_bones</Item>
+			<Item Name="layouts">m_bonesLayouts</Item>
+		</Expand>
+	</Type>
+
 	<Type Name="castor3d::Frustum">
 		<DisplayString>{m_planes}</DisplayString>
 		<Expand>
 			<Item Name="viewport">m_viewport</Item>
 			<Item Name="planes">m_planes</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::Geometry">
+		<DisplayString>{m_name}({m_meshName})</DisplayString>
+		<Expand>
+			<Item Name="ids">m_id</Item>
+			<Item Name="mesh">m_mesh</Item>
+			<Item Name="meshName">m_meshName</Item>
+			<Item Name="listCreated">m_listCreated</Item>
+			<Item Name="submeshesMaterials">m_submeshesMaterials</Item>
+			<Item Name="submeshesBoxes">m_submeshesBoxes</Item>
+			<Item Name="submeshesSpheres">m_submeshesSpheres</Item>
+			<Item Name="box">m_box</Item>
+			<Item Name="sphere">m_sphere</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::ImporterFile">
+		<DisplayString>{m_extension} {m_fileName}</DisplayString>
+		<Expand>
+			<Item Name="fileName">m_fileName</Item>
+			<Item Name="filePath">m_filePath</Item>
+      <Item Name="extension">m_extension</Item>
+      <Item Name="parameters">m_parameters</Item>
+      <Item Name="prefix">m_prefix</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::InstantiationComponent">
+		<DisplayString>{m_id} {m_type} instances={m_instances}</DisplayString>
+		<Expand>
+			<Item Name="id">m_id</Item>
+			<Item Name="initialised">m_initialised</Item>
+			<Item Name="dirty">m_dirty</Item>
+			<Item Name="instances">m_instances</Item>
+			<Item Name="threshold">m_threshold</Item>
+			<Item Name="layouts">m_mtxLayouts</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::LineIndices">
+		<DisplayString>{m_index}</DisplayString>
+		<Expand>
+			<Item Name="index">m_index</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::LinesMapping">
+		<DisplayString>{m_id} {m_type} lines={m_lines}</DisplayString>
+		<Expand>
+			<Item Name="id">m_id</Item>
+			<Item Name="initialised">m_initialised</Item>
+			<Item Name="dirty">m_dirty</Item>
+			<Item Name="lines">m_lines</Item>
+			<Item Name="cameraPosition">m_cameraPosition</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::MorphComponent">
+		<DisplayString>{m_id} {m_type}</DisplayString>
+		<Expand>
+			<Item Name="id">m_id</Item>
+			<Item Name="initialised">m_initialised</Item>
+			<Item Name="dirty">m_dirty</Item>
+			<Item Name="flags">m_flags</Item>
+			<Item Name="layouts">m_layouts</Item>
 		</Expand>
 	</Type>
 
@@ -52,6 +160,27 @@
 		</Expand>
 	</Type>
 
+	<Type Name="castor3d::MeshAnimationKeyFrame">
+		<DisplayString>{m_timeIndex} {m_submeshesBuffers}</DisplayString>
+		<Expand>
+			<Item Name="timeIndex">m_timeIndex</Item>
+			<Item Name="submeshesBuffers">m_submeshesBuffers</Item>
+			<Item Name="boundingBox">m_boundingBox</Item>
+			<Item Name="owner">m_owner</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::ObjectTransform">
+		<DisplayString>{*object} {translate} {scale} {rotate}</DisplayString>
+		<Expand>
+			<Item Name="object">object</Item>
+			<Item Name="translate">translate</Item>
+			<Item Name="scale">scale</Item>
+			<Item Name="rotate">rotate</Item>
+			<Item Name="cumulative">cumulative</Item>
+		</Expand>
+	</Type>
+
 	<Type Name="castor3d::Overlay">
 		<DisplayString>{m_name}</DisplayString>
 		<Expand>
@@ -59,180 +188,6 @@
 			<Item Name="parent">m_parent</Item>
 			<Item Name="category">m_category</Item>
 			<Item Name="scene">m_scene</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="castor3d::LineIndices">
-		<DisplayString>{m_index}</DisplayString>
-		<Expand>
-			<Item Name="index">m_index</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="castor3d::SubmeshComponent">
-		<DisplayString>{m_id} {m_type}</DisplayString>
-		<Expand>
-			<Item Name="id">m_id</Item>
-			<Item Name="type">m_type</Item>
-			<Item Name="initialised">m_initialised</Item>
-			<Item Name="dirty">m_dirty</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="castor3d::BonesComponent">
-		<DisplayString>{m_id} {m_type} data={m_data}</DisplayString>
-		<Expand>
-			<Item Name="id">m_id</Item>
-			<Item Name="initialised">m_initialised</Item>
-			<Item Name="dirty">m_dirty</Item>
-			<Item Name="bones">m_bones</Item>
-			<Item Name="layouts">m_bonesLayouts</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="castor3d::InstantiationComponent">
-		<DisplayString>{m_id} {m_type} instances={m_instances}</DisplayString>
-		<Expand>
-			<Item Name="id">m_id</Item>
-			<Item Name="initialised">m_initialised</Item>
-			<Item Name="dirty">m_dirty</Item>
-			<Item Name="instances">m_instances</Item>
-			<Item Name="threshold">m_threshold</Item>
-			<Item Name="layouts">m_mtxLayouts</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="castor3d::LinesMapping">
-		<DisplayString>{m_id} {m_type} lines={m_lines}</DisplayString>
-		<Expand>
-			<Item Name="id">m_id</Item>
-			<Item Name="initialised">m_initialised</Item>
-			<Item Name="dirty">m_dirty</Item>
-			<Item Name="lines">m_lines</Item>
-			<Item Name="cameraPosition">m_cameraPosition</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="castor3d::MorphComponent">
-		<DisplayString>{m_id} {m_type}</DisplayString>
-		<Expand>
-			<Item Name="id">m_id</Item>
-			<Item Name="initialised">m_initialised</Item>
-			<Item Name="dirty">m_dirty</Item>
-			<Item Name="flags">m_flags</Item>
-			<Item Name="layouts">m_layouts</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="castor3d::BaseDataComponentT&lt;*&gt;">
-		<DisplayString>{m_id} {m_type} data={m_data}</DisplayString>
-		<Expand>
-			<Item Name="id">m_id</Item>
-			<Item Name="initialised">m_initialised</Item>
-			<Item Name="dirty">m_dirty</Item>
-			<Item Name="data">m_data</Item>
-			<Item Name="layouts">m_layouts</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="castor3d::NormalsComponent">
-		<DisplayString>{m_id} {m_type} data={m_data}</DisplayString>
-		<Expand>
-			<Item Name="id">m_id</Item>
-			<Item Name="initialised">m_initialised</Item>
-			<Item Name="dirty">m_dirty</Item>
-			<Item Name="data">m_data</Item>
-			<Item Name="layouts">m_layouts</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="castor3d::TangentsComponent">
-		<DisplayString>{m_id} {m_type} data={m_data}</DisplayString>
-		<Expand>
-			<Item Name="id">m_id</Item>
-			<Item Name="initialised">m_initialised</Item>
-			<Item Name="dirty">m_dirty</Item>
-			<Item Name="data">m_data</Item>
-			<Item Name="layouts">m_layouts</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="castor3d::Texcoords0Component">
-		<DisplayString>{m_id} {m_type} data={m_data}</DisplayString>
-		<Expand>
-			<Item Name="id">m_id</Item>
-			<Item Name="initialised">m_initialised</Item>
-			<Item Name="dirty">m_dirty</Item>
-			<Item Name="data">m_data</Item>
-			<Item Name="layouts">m_layouts</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="castor3d::Texcoords1Component">
-		<DisplayString>{m_id} {m_type} data={m_data}</DisplayString>
-		<Expand>
-			<Item Name="id">m_id</Item>
-			<Item Name="initialised">m_initialised</Item>
-			<Item Name="dirty">m_dirty</Item>
-			<Item Name="data">m_data</Item>
-			<Item Name="layouts">m_layouts</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="castor3d::Texcoords2Component">
-		<DisplayString>{m_id} {m_type} data={m_data}</DisplayString>
-		<Expand>
-			<Item Name="id">m_id</Item>
-			<Item Name="initialised">m_initialised</Item>
-			<Item Name="dirty">m_dirty</Item>
-			<Item Name="data">m_data</Item>
-			<Item Name="layouts">m_layouts</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="castor3d::Texcoords3Component">
-		<DisplayString>{m_id} {m_type} data={m_data}</DisplayString>
-		<Expand>
-			<Item Name="id">m_id</Item>
-			<Item Name="initialised">m_initialised</Item>
-			<Item Name="dirty">m_dirty</Item>
-			<Item Name="data">m_data</Item>
-			<Item Name="layouts">m_layouts</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="castor3d::TriFaceMapping">
-		<DisplayString>{m_id} {m_type} faces={m_faces}</DisplayString>
-		<Expand>
-			<Item Name="id">m_id</Item>
-			<Item Name="initialised">m_initialised</Item>
-			<Item Name="dirty">m_dirty</Item>
-			<Item Name="faces">m_faces</Item>
-			<Item Name="hasNormals">m_hasNormals</Item>
-			<Item Name="cameraPosition">m_cameraPosition</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="castor3d::Submesh">
-		<DisplayString>{*m_owner}({m_id})</DisplayString>
-		<Expand>
-			<Item Name="mesh">*m_owner</Item>
-			<Item Name="id">m_id</Item>
-			<Item Name="material">m_defaultMaterial</Item>
-			<Item Name="box">m_box</Item>
-			<Item Name="sphere">m_sphere</Item>
-			<Item Name="components">m_components</Item>
-			<Item Name="instantiation">m_instantiation</Item>
-			<Item Name="indexMapping">m_indexMapping</Item>
-			<Item Name="submeshFlags">m_submeshFlags</Item>
-			<Item Name="generated">m_generated</Item>
-			<Item Name="initialised">m_initialised</Item>
-			<Item Name="dirty">m_dirty</Item>
-			<Item Name="topology">m_topology</Item>
-			<Item Name="bufferOffset">m_bufferOffset</Item>
-			<Item Name="geometryBuffers">m_geometryBuffers</Item>
-			<Item Name="needsNormalsCompute">m_needsNormalsCompute</Item>
-			<Item Name="disableSceneUpdate">m_disableSceneUpdate</Item>
 		</Expand>
 	</Type>
 
@@ -267,124 +222,8 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::ShaderProgram::CompiledShader">
-		<DisplayString>{name}</DisplayString>
-		<Expand>
-			<Item Name="name">name</Item>
-			<Item Name="shader">shader</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="castor3d::ShaderProgram">
-		<DisplayString>{m_name}</DisplayString>
-		<Expand>
-			<Item Name="name">m_name</Item>
-			<Item Name="owner">m_owner</Item>
-			<Item Name="files">m_files</Item>
-			<Item Name="modules">m_modules</Item>
-			<Item Name="compiled">m_compiled</Item>
-			<Item Name="states">m_states</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="castor3d::AnimationKeyFrame">
-		<DisplayString>{m_timeIndex}</DisplayString>
-		<Expand>
-			<Item Name="timeIndex">m_timeIndex</Item>
-			<Item Name="boundingBox">m_boundingBox</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="castor3d::MeshAnimationKeyFrame">
-		<DisplayString>{m_timeIndex} {m_submeshesBuffers}</DisplayString>
-		<Expand>
-			<Item Name="timeIndex">m_timeIndex</Item>
-			<Item Name="submeshesBuffers">m_submeshesBuffers</Item>
-      <Item Name="boundingBox">m_boundingBox</Item>
-			<Item Name="owner">m_owner</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="castor3d::SceneNodeAnimationKeyFrame">
-		<DisplayString>{m_timeIndex}</DisplayString>
-		<Expand>
-			<Item Name="timeIndex">m_timeIndex</Item>
-			<Item Name="position">m_position</Item>
-			<Item Name="rotation">m_rotation</Item>
-			<Item Name="scale">m_scale</Item>
-			<Item Name="owner">m_owner</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="castor3d::SkeletonAnimationBone">
-		<DisplayString>[{m_bone->m_id}] {m_bone->m_name}</DisplayString>
-		<Expand>
-			<Item Name="bone">m_bone</Item>
-			<Item Name="parent">m_parent</Item>
-			<Item Name="children">m_children</Item>
-			<Item Name="mode">m_mode</Item>
-			<Item Name="boundingBox">m_boundingBox</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="castor3d::SkeletonAnimationNode">
-		<DisplayString>{m_node->m_name}</DisplayString>
-		<Expand>
-			<Item Name="node">m_node</Item>
-			<Item Name="parent">m_parent</Item>
-			<Item Name="children">m_children</Item>
-			<Item Name="mode">m_mode</Item>
-			<Item Name="boundingBox">m_boundingBox</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="castor3d::ObjectTransform">
-		<DisplayString>{*object} {translate} {scale} {rotate}</DisplayString>
-		<Expand>
-			<Item Name="object">object</Item>
-			<Item Name="translate">translate</Item>
-			<Item Name="scale">scale</Item>
-			<Item Name="rotate">rotate</Item>
-			<Item Name="cumulative">cumulative</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="castor3d::SkeletonAnimationKeyFrame">
-		<DisplayString>{m_timeIndex} {m_transforms}</DisplayString>
-		<Expand>
-			<Item Name="timeIndex">m_timeIndex</Item>
-			<Item Name="transforms">m_transforms</Item>
-      <Item Name="boundingBox">m_boundingBox</Item>
-			<Item Name="owner">m_owner</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="castor3d::TextureAnimationKeyFrame">
-		<DisplayString>{m_timeIndex} {m_tile}</DisplayString>
-		<Expand>
-			<Item Name="timeIndex">m_timeIndex</Item>
-			<Item Name="tile">m_tile</Item>
-			<Item Name="owner">m_owner</Item>
-		</Expand>
-	</Type>
-
 	<Type Name="castor3d::SceneRenderPass">
 		<DisplayString>{m_name}({m_pass})</DisplayString>
-	</Type>
-
-	<Type Name="castor3d::Geometry">
-		<DisplayString>{m_name}({m_meshName})</DisplayString>
-		<Expand>
-			<Item Name="ids">m_id</Item>
-			<Item Name="mesh">m_mesh</Item>
-			<Item Name="meshName">m_meshName</Item>
-			<Item Name="listCreated">m_listCreated</Item>
-			<Item Name="submeshesMaterials">m_submeshesMaterials</Item>
-			<Item Name="submeshesBoxes">m_submeshesBoxes</Item>
-			<Item Name="submeshesSpheres">m_submeshesSpheres</Item>
-			<Item Name="box">m_box</Item>
-			<Item Name="sphere">m_sphere</Item>
-		</Expand>
 	</Type>
 
 	<Type Name="castor3d::SceneNode">
@@ -406,14 +245,66 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::BoneNode">
-		<DisplayString>Bone [{m_id}]{m_name}</DisplayString>
+	<Type Name="castor3d::SceneNodeAnimationKeyFrame">
+		<DisplayString>{m_timeIndex}</DisplayString>
 		<Expand>
-			<Item Name="id">m_id</Item>
+			<Item Name="timeIndex">m_timeIndex</Item>
+			<Item Name="position">m_position</Item>
+			<Item Name="rotation">m_rotation</Item>
+			<Item Name="scale">m_scale</Item>
+			<Item Name="owner">m_owner</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::ShaderProgram">
+		<DisplayString>{m_name}</DisplayString>
+		<Expand>
 			<Item Name="name">m_name</Item>
-      <Item Name="inverseTransform">m_inverseTransform</Item>
+			<Item Name="owner">m_owner</Item>
+			<Item Name="files">m_files</Item>
+			<Item Name="modules">m_modules</Item>
+			<Item Name="compiled">m_compiled</Item>
+			<Item Name="states">m_states</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::ShaderProgram::CompiledShader">
+		<DisplayString>{name}</DisplayString>
+		<Expand>
+			<Item Name="name">name</Item>
+			<Item Name="shader">shader</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::SkeletonAnimationBone">
+		<DisplayString>[{m_bone->m_id}] {m_bone->m_name}</DisplayString>
+		<Expand>
+			<Item Name="bone">m_bone</Item>
 			<Item Name="parent">m_parent</Item>
 			<Item Name="children">m_children</Item>
+			<Item Name="mode">m_mode</Item>
+			<Item Name="boundingBox">m_boundingBox</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::SkeletonAnimationKeyFrame">
+		<DisplayString>{m_timeIndex} {m_transforms}</DisplayString>
+		<Expand>
+			<Item Name="timeIndex">m_timeIndex</Item>
+			<Item Name="transforms">m_transforms</Item>
+			<Item Name="boundingBox">m_boundingBox</Item>
+			<Item Name="owner">m_owner</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::SkeletonAnimationNode">
+		<DisplayString>{m_node->m_name}</DisplayString>
+		<Expand>
+			<Item Name="node">m_node</Item>
+			<Item Name="parent">m_parent</Item>
+			<Item Name="children">m_children</Item>
+			<Item Name="mode">m_mode</Item>
+			<Item Name="boundingBox">m_boundingBox</Item>
 		</Expand>
 	</Type>
 
@@ -423,6 +314,60 @@
 			<Item Name="name">m_name</Item>
 			<Item Name="parent">m_parent</Item>
 			<Item Name="children">m_children</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::Submesh">
+		<DisplayString>{*m_owner}({m_id})</DisplayString>
+		<Expand>
+			<Item Name="mesh">*m_owner</Item>
+			<Item Name="id">m_id</Item>
+			<Item Name="material">m_defaultMaterial</Item>
+			<Item Name="box">m_box</Item>
+			<Item Name="sphere">m_sphere</Item>
+			<Item Name="components">m_components</Item>
+			<Item Name="instantiation">m_instantiation</Item>
+			<Item Name="indexMapping">m_indexMapping</Item>
+			<Item Name="submeshFlags">m_submeshFlags</Item>
+			<Item Name="generated">m_generated</Item>
+			<Item Name="initialised">m_initialised</Item>
+			<Item Name="dirty">m_dirty</Item>
+			<Item Name="topology">m_topology</Item>
+			<Item Name="bufferOffset">m_bufferOffset</Item>
+			<Item Name="geometryBuffers">m_geometryBuffers</Item>
+			<Item Name="needsNormalsCompute">m_needsNormalsCompute</Item>
+			<Item Name="disableSceneUpdate">m_disableSceneUpdate</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::SubmeshComponent">
+		<DisplayString>{m_id} {m_type}</DisplayString>
+		<Expand>
+			<Item Name="id">m_id</Item>
+			<Item Name="type">m_type</Item>
+			<Item Name="initialised">m_initialised</Item>
+			<Item Name="dirty">m_dirty</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::TextureAnimationKeyFrame">
+		<DisplayString>{m_timeIndex} {m_tile}</DisplayString>
+		<Expand>
+			<Item Name="timeIndex">m_timeIndex</Item>
+			<Item Name="tile">m_tile</Item>
+			<Item Name="owner">m_owner</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::TriFaceMapping">
+		<DisplayString>{m_id} {m_type} faces={m_faces}</DisplayString>
+		<Expand>
+			<Item Name="id">m_id</Item>
+			<Item Name="initialised">m_initialised</Item>
+			<Item Name="dirty">m_dirty</Item>
+			<Item Name="faces">m_faces</Item>
+			<Item Name="hasNormals">m_hasNormals</Item>
+			<Item Name="cameraPosition">m_cameraPosition</Item>
 		</Expand>
 	</Type>
 
