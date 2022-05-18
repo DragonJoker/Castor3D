@@ -24,21 +24,38 @@ namespace c3d_assimp
 
 	struct SkeletonData
 	{
-		aiNode const * rootNode{};
-		SkeletonAnimations anims{};
+		SkeletonData( aiNode const * prootNode )
+			: rootNode{ prootNode }
+		{
+		}
+
+		aiNode const * rootNode;
+		SkeletonAnimations anims;
 	};
 
 	struct SubmeshData
 	{
-		aiMesh const * mesh{};
-		uint32_t meshIndex{};
+		SubmeshData( aiMesh const * pmesh
+			, uint32_t pmeshIndex )
+			: mesh{ pmesh }
+			, meshIndex{ pmeshIndex }
+		{
+		}
+
+		aiMesh const * mesh;
+		uint32_t meshIndex;
 		MeshAnimations anims;
 	};
 
 	struct MeshData
 	{
-		aiNode const * skelNode{};
-		std::vector< SubmeshData > submeshes{};
+		MeshData( aiNode const * pskelNode )
+			: skelNode{ pskelNode }
+		{
+		}
+
+		aiNode const * skelNode;
+		std::vector< SubmeshData > submeshes;
 	};
 
 	struct NodeData
@@ -182,16 +199,20 @@ namespace c3d_assimp
 
 	private:
 		void doPrelistMaterials();
-		void doPrelistLights();
 		std::map< aiMesh const *, aiNode const * > doPrelistSkeletons();
 		void doPrelistMeshes( std::map< aiMesh const *, aiNode const * > const & meshSkeletons );
-		void doPrelistSceneNodes();
+		void doPrelistSceneNodes( aiNode const & aiNode
+			, std::map< MeshData const *, castor::String > & processedMeshes
+			, castor::String parentName = castor::String{}
+			, castor::Matrix4x4f transform = castor::Matrix4x4f{ 1.0f } );
+		void doPrelistLights();
 
 	private:
 		Assimp::Importer m_importer;
 		aiScene const * m_scene{};
 		std::map< castor::String, castor::Matrix4x4f > m_bonesNodes;
 		std::map< aiMesh const *, std::vector< castor3d::SubmeshAnimationBuffer > > m_meshAnimBuffers;
+		std::set< uint32_t > m_meshes;
 		std::vector< castor::String > m_listedMeshes;
 		std::vector< castor::String > m_listedSkeletons;
 
