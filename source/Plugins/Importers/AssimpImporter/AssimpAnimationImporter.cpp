@@ -6,7 +6,7 @@
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp>
 #include <Castor3D/Model/Mesh/Animation/MeshAnimation.hpp>
-#include <Castor3D/Model/Mesh/Animation/MeshAnimationKeyFrame.hpp>
+#include <Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp>
 #include <Castor3D/Model/Skeleton/BoneNode.hpp>
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp>
@@ -39,42 +39,26 @@ namespace c3d_assimp
 			return result;
 		}
 
-		static void fillKeyFrame( std::vector< castor3d::SubmeshAnimationBuffer > const & meshAnimBuffers
-			, castor::ArrayView< uint32_t > values
+		static void fillKeyFrame( castor::ArrayView< uint32_t > values
 			, castor::ArrayView< double > weights
 			, castor3d::Submesh const & submesh
-			, castor3d::MeshAnimationKeyFrame & keyFrame )
+			, castor3d::MeshMorphTarget & keyFrame )
 		{
-			castor3d::SubmeshAnimationBuffer buffer{ submesh.getPositions()
-				, submesh.getNormals()
-				, submesh.getTangents()
-				, submesh.getTexcoords0()
-				, submesh.getTexcoords1()
-				, submesh.getTexcoords2()
-				, submesh.getTexcoords3()
-				, submesh.getColours() };
+			std::vector< float > res;
+			res.resize( submesh.getMorphTargetsCount() );
 			auto valueIt = values.begin();
 			auto weightIt = weights.begin();
 
 			while ( valueIt != values.end() )
 			{
 				auto value = *valueIt;
-				CU_Require( value < meshAnimBuffers.size() );
-				applyMorphTarget( float( *weightIt )
-					, meshAnimBuffers[value]
-					, buffer.positions
-					, buffer.normals
-					, buffer.tangents
-					, buffer.texcoords0
-					, buffer.texcoords1
-					, buffer.texcoords2
-					, buffer.texcoords3
-					, buffer.colours );
+				CU_Require( value < submesh.getMorphTargetsCount() );
+				res[value] = float( *weightIt );
 				++valueIt;
 				++weightIt;
 			}
 
-			keyFrame.addSubmeshBuffer( submesh, buffer );
+			keyFrame.setTargetsWeights( submesh, res );
 		}
 	}
 
@@ -186,119 +170,28 @@ namespace c3d_assimp
 			{
 				castor3d::log::info << cuT( "  Mesh Animation found for mesh [" ) << mesh.getName() << cuT( "], submesh " ) << index << cuT( ": [" ) << name << cuT( "]" ) << std::endl;
 				auto & aiAnimation = *animIt->second.second;
-				auto & aiMesh = *animIt->second.first;
 
 				castor3d::MeshAnimationSubmesh animSubmesh{ animation, *submesh };
 				animation.addChild( std::move( animSubmesh ) );
-
-				if ( aiAnimation.mKeys->mTime > 0.0 )
-				{
-					auto kfit = animation.find( 0_ms );
-					castor3d::MeshAnimationKeyFrame * kf{};
-
-					if ( kfit == animation.end() )
-					{
-						auto keyFrame = std::make_unique< castor3d::MeshAnimationKeyFrame >( animation, 0_ms );
-						kf = keyFrame.get();
-						animation.addKeyFrame( std::move( keyFrame ) );
-					}
-					else
-					{
-						kf = &static_cast< castor3d::MeshAnimationKeyFrame & >( **kfit );
-					}
-
-					auto & csubmesh = const_cast< castor3d::Submesh const & >( *submesh );
-					kf->addSubmeshBuffer( *submesh
-						, { csubmesh.getPositions()
-							, csubmesh.getNormals()
-							, csubmesh.getTangents()
-							, csubmesh.getTexcoords0()
-							, csubmesh.getTexcoords1()
-							, csubmesh.getTexcoords2()
-							, csubmesh.getTexcoords3()
-							, csubmesh.getColours() } );
-				}
 
 				for ( auto & morphKey : castor::makeArrayView( aiAnimation.mKeys, aiAnimation.mNumKeys ) )
 				{
 					auto timeIndex = castor::Milliseconds{ uint64_t( morphKey.mTime ) };
 					auto kfit = animation.find( timeIndex );
-					castor3d::MeshAnimationKeyFrame * kf{};
+					castor3d::MeshMorphTarget * kf{};
 
 					if ( kfit == animation.end() )
 					{
-						auto keyFrame = std::make_unique< castor3d::MeshAnimationKeyFrame >( animation, timeIndex );
+						auto keyFrame = std::make_unique< castor3d::MeshMorphTarget >( animation, timeIndex );
 						kf = keyFrame.get();
 						animation.addKeyFrame( std::move( keyFrame ) );
 					}
 					else
 					{
-						kf = &static_cast< castor3d::MeshAnimationKeyFrame & >( **kfit );
+						kf = &static_cast< castor3d::MeshMorphTarget & >( **kfit );
 					}
 
-					std::vector< castor3d::SubmeshAnimationBuffer > const * meshAnimBuffers;
-
-					if ( file.hasMeshAnimBuffers( &aiMesh ) )
-					{
-						meshAnimBuffers = &file.getMeshAnimBuffers( &aiMesh );
-					}
-					else
-					{
-						auto positions = submesh->getComponent< castor3d::PositionsComponent >();
-						auto normals = submesh->getComponent< castor3d::NormalsComponent >();
-						castor::Point3fArray tan;
-						castor::Point3fArray tex0;
-						castor::Point3fArray tex1;
-						castor::Point3fArray tex2;
-						castor::Point3fArray tex3;
-						castor::Point3fArray col;
-						castor::Point3fArray * tangents = &tan;
-						castor::Point3fArray * texcoords0 = &tex0;
-						castor::Point3fArray * texcoords1 = &tex1;
-						castor::Point3fArray * texcoords2 = &tex2;
-						castor::Point3fArray * texcoords3 = &tex3;
-						castor::Point3fArray * colours = &col;
-
-						if ( aiMesh.HasTextureCoords( 0u ) )
-						{
-							tangents = &submesh->getTangents();
-							texcoords0 = &submesh->getTexcoords0();
-						}
-
-						if ( aiMesh.HasTextureCoords( 1u ) )
-						{
-							texcoords1 = &submesh->getTexcoords1();
-						}
-
-						if ( aiMesh.HasTextureCoords( 2u ) )
-						{
-							texcoords2 = &submesh->getTexcoords2();
-						}
-
-						if ( aiMesh.HasTextureCoords( 3u ) )
-						{
-							texcoords3 = &submesh->getTexcoords3();
-						}
-
-						if ( aiMesh.HasVertexColors( 0u ) )
-						{
-							colours = &submesh->getColours();
-						}
-
-						meshAnimBuffers = &file.addMeshAnimBuffers( &aiMesh
-							, gatherMeshAnimBuffers( positions->getData()
-								, normals->getData()
-								, *tangents
-								, *texcoords0
-								, *texcoords1
-								, *texcoords2
-								, *texcoords3
-								, *colours
-								, castor::makeArrayView( aiMesh.mAnimMeshes, aiMesh.mNumAnimMeshes ) ) );
-					}
-
-					anims::fillKeyFrame( *meshAnimBuffers
-						, castor::makeArrayView( morphKey.mValues, morphKey.mNumValuesAndWeights )
+					anims::fillKeyFrame( castor::makeArrayView( morphKey.mValues, morphKey.mNumValuesAndWeights )
 						, castor::makeArrayView( morphKey.mWeights, morphKey.mNumValuesAndWeights )
 						, *submesh
 						, *kf );

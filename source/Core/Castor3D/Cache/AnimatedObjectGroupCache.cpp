@@ -6,6 +6,7 @@
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -14,6 +15,8 @@
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 #include "Castor3D/Scene/Animation/AnimatedTexture.hpp"
+
+#include <CastorUtils/Miscellaneous/Hash.hpp>
 
 CU_ImplementCUSmartPtr( castor3d, AnimatedObjectGroupCache )
 
@@ -42,6 +45,13 @@ namespace castor
 			transforms.markDirty( VK_ACCESS_SHADER_READ_BIT
 				, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
 		}
+
+		static size_t makeHash( castor3d::AnimatedMesh const & mesh
+			, castor3d::Submesh const & submesh )
+		{
+			auto hash = std::hash< castor3d::AnimatedMesh const * >{}( &mesh );
+			return hashCombinePtr( hash, submesh );
+		}
 	}
 
 	ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::ResourceCacheT( Scene & scene )
@@ -58,7 +68,7 @@ namespace castor
 			, castor::ResourceMergerT< AnimatedObjectGroupCache >{ scene.getName() } }
 		, m_engine{ *scene.getEngine() }
 		, m_device{ m_engine.getRenderSystem()->getRenderDevice() }
-		, m_morphingData{ m_device.bufferPool->getBuffer< MorphingBufferConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+		, m_morphingWeights{ m_device.bufferPool->getBuffer< MorphingWeightsConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 			, MaxMorphingDataCount
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 		, m_skinningTransformsData{ m_device.bufferPool->getBuffer< SkinningTransformsConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
@@ -84,17 +94,17 @@ namespace castor
 			m_device.bufferPool->putBuffer( m_skinningTransformsData );
 		}
 
-		if ( m_morphingData )
+		if ( m_morphingWeights )
 		{
-			m_device.bufferPool->putBuffer( m_morphingData );
+			m_device.bufferPool->putBuffer( m_morphingWeights );
 		}
 	}
 
 	void ResourceCacheT< AnimatedObjectGroup, castor::String, AnimatedObjectGroupCacheTraits >::initialise( RenderDevice const & device )
 	{
-		if ( !m_morphingData )
+		if ( !m_morphingWeights )
 		{
-			m_morphingData = m_device.bufferPool->getBuffer< MorphingBufferConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+			m_morphingWeights = m_device.bufferPool->getBuffer< MorphingWeightsConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 				, MaxMorphingDataCount
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 			m_skinningTransformsData = m_device.bufferPool->getBuffer< SkinningTransformsConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
@@ -114,10 +124,10 @@ namespace castor
 			m_skinningTransformsData = {};
 		}
 
-		if ( m_morphingData )
+		if ( m_morphingWeights )
 		{
-			m_device.bufferPool->putBuffer( m_morphingData );
-			m_morphingData = {};
+			m_device.bufferPool->putBuffer( m_morphingWeights );
+			m_morphingWeights = {};
 		}
 	}
 
@@ -145,20 +155,46 @@ namespace castor
 				, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
 		}
 
-		auto morphingBuffer = m_morphingData.getData();
+		auto morphingBuffer = m_morphingWeights.getData();
 
 		for ( auto & pair : m_meshEntries )
 		{
 			auto & entry = pair.second;
+			auto id = entry.mesh.getId( entry.submesh );
 
-			if ( entry.mesh.isPlayingAnimation() )
+			if ( id && entry.submesh.getMorphTargetsCount() )
 			{
-				auto & morphingData = morphingBuffer[entry.mesh.getId() - 1u];
-				morphingData.time->x = entry.mesh.getPlayingAnimation().getRatio();
-				m_morphingData.buffer->markDirty( m_morphingData.getOffset() + ( entry.mesh.getId() - 1u ) * sizeof( MorphingBufferConfiguration )
-					, sizeof( MorphingBufferConfiguration )
-					, VK_ACCESS_UNIFORM_READ_BIT
-					, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
+				auto & morphingData = morphingBuffer[id - 1u];
+
+				if ( entry.mesh.isPlayingAnimation() )
+				{
+					if ( auto animSubmesh = entry.mesh.getPlayingAnimation().getAnimationSubmesh( entry.submesh.getId() ) )
+					{
+						uint32_t index{};
+
+						for ( auto & weight : animSubmesh->getWeights() )
+						{
+							morphingData.morphTargetsWeights[index++] = weight;
+						}
+
+						m_morphingWeights.buffer->markDirty( m_morphingWeights.getOffset() + ( id - 1u ) * sizeof( MorphingWeightsConfiguration )
+							, sizeof( MorphingWeightsConfiguration )
+							, VK_ACCESS_UNIFORM_READ_BIT
+							, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
+					}
+				}
+				else
+				{
+					for ( uint32_t index = 0u; index < entry.submesh.getMorphTargetsCount(); ++index )
+					{
+						morphingData.morphTargetsWeights[index] = 0.0f;
+					}
+
+					m_morphingWeights.buffer->markDirty( m_morphingWeights.getOffset() + ( id - 1u ) * sizeof( MorphingWeightsConfiguration )
+						, sizeof( MorphingWeightsConfiguration )
+						, VK_ACCESS_UNIFORM_READ_BIT
+						, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
+				}
 			}
 		}
 	}
@@ -189,12 +225,14 @@ namespace castor
 
 	ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::MeshPoolsEntry ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doCreateEntry( RenderDevice const & device
 		, AnimatedObjectGroup const & group
-		, AnimatedMesh const & mesh )
+		, AnimatedMesh const & mesh
+		, castor3d::Submesh const & submesh )
 	{
 		return
 		{
 			group,
 			mesh,
+			submesh,
 		};
 	}
 
@@ -210,9 +248,10 @@ namespace castor
 	}
 
 	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRemoveEntry( RenderDevice const & device
-		, AnimatedMesh const & mesh )
+		, AnimatedMesh const & mesh
+		, castor3d::Submesh const & submesh )
 	{
-		m_meshEntries.erase( &mesh );
+		m_meshEntries.erase( cacheanmgrp::makeHash( mesh, submesh ) );
 	}
 
 	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRemoveEntry( RenderDevice const & device
@@ -237,9 +276,13 @@ namespace castor
 						, [this, &pgroup, &mesh]( RenderDevice const & device
 							, QueueData const & queueData )
 						{
-							m_meshEntries.emplace( &mesh
-								, doCreateEntry( device, pgroup, mesh ) );
-							mesh.setId( uint32_t( m_meshEntries.size() ) );
+							for ( auto submesh : mesh.getMesh() )
+							{
+								m_meshEntries.emplace( cacheanmgrp::makeHash( mesh, *submesh )
+									, doCreateEntry( device, pgroup, mesh, *submesh ) );
+								mesh.setId( *submesh
+									, uint32_t( m_meshEntries.size() ) );
+							}
 						} ) );
 				} ) );
 		m_meshRemovedConnections.emplace( &group
@@ -250,8 +293,11 @@ namespace castor
 						, [this, &mesh]( RenderDevice const & device
 							, QueueData const & queueData )
 						{
-							mesh.setId( 0u );
-							doRemoveEntry( device, mesh );
+							for ( auto submesh : mesh.getMesh() )
+							{
+								mesh.setId( *submesh, 0u );
+								doRemoveEntry( device, mesh, *submesh );
+							}
 						} ) );
 				} ) );
 		m_skeletonAddedConnections.emplace( &group
@@ -309,13 +355,20 @@ namespace castor
 					switch ( pair.second->getKind() )
 					{
 					case AnimationType::eMesh:
-						doRemoveEntry( device, static_cast< AnimatedMesh const & >( *pair.second ) );
+						for ( auto submesh : static_cast< AnimatedMesh const & >( *pair.second ).getMesh() )
+						{
+							doRemoveEntry( device
+								, static_cast< AnimatedMesh const & >( *pair.second )
+								, *submesh );
+						}
 						break;
 					case AnimationType::eSkeleton:
-						doRemoveEntry( device, static_cast< AnimatedSkeleton const & >( *pair.second ) );
+						doRemoveEntry( device
+							, static_cast< AnimatedSkeleton const & >( *pair.second ) );
 						break;
 					case AnimationType::eTexture:
-						doRemoveEntry( device, static_cast< AnimatedTexture const & >( *pair.second ) );
+						doRemoveEntry( device
+							, static_cast< AnimatedTexture const & >( *pair.second ) );
 						break;
 					default:
 						break;

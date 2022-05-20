@@ -2,8 +2,9 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
-#include "Castor3D/Model/Mesh/Animation/MeshAnimationKeyFrame.hpp"
+#include "Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 
@@ -50,19 +51,33 @@ namespace castor3d
 	{
 		if ( !m_meshAnimation.isEmpty() )
 		{
-			m_meshAnimation.findKeyFrame( m_currentTime
-				, m_prev
-				, m_curr );
-			m_ratio = float( ( m_currentTime - ( *m_prev )->getTimeIndex() ).count() ) / float( ( ( *m_curr )->getTimeIndex() - ( *m_prev )->getTimeIndex() ).count() );
-
-			for ( auto & submesh : m_submeshes )
+			if ( m_stopping )
 			{
-				auto & prvKF = static_cast< MeshAnimationKeyFrame const & >( *( *m_prev ) );
-				auto & curKF = static_cast< MeshAnimationKeyFrame const & >( *( *m_curr ) );
-				auto prvIt = prvKF.find( submesh.second.getSubmesh() );
-				auto curIt = curKF.find( submesh.second.getSubmesh() );
-				CU_Require( prvIt != prvKF.end() && curIt != curKF.end() );
-				submesh.second.update( m_ratio, prvIt->second, curIt->second );
+				for ( auto & submesh : m_submeshes )
+				{
+					submesh.second.clear();
+				}
+			}
+			else
+			{
+				m_meshAnimation.findKeyFrame( m_currentTime
+					, m_prev
+					, m_curr );
+				auto ratio = float( ( m_currentTime - ( *m_prev )->getTimeIndex() ).count() ) / float( ( ( *m_curr )->getTimeIndex() - ( *m_prev )->getTimeIndex() ).count() );
+				auto & prvKF = static_cast< MeshMorphTarget const & >( *( *m_prev ) );
+				auto & curKF = static_cast< MeshMorphTarget const & >( *( *m_curr ) );
+
+				for ( auto & submesh : m_submeshes )
+				{
+					auto prvIt = prvKF.find( submesh.second.getSubmesh() );
+					auto curIt = curKF.find( submesh.second.getSubmesh() );
+					CU_Require( prvIt != prvKF.end() && curIt != curKF.end() );
+					submesh.second.update( ratio
+						, prvIt->second
+						, curIt->second
+						, prvKF.getBoundingBox()
+						, curKF.getBoundingBox() );
+				}
 			}
 
 			static_cast< Mesh & >( *m_meshAnimation.getAnimable() ).updateContainers();

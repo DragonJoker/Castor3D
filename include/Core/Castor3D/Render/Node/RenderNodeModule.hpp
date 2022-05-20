@@ -17,6 +17,7 @@ namespace castor3d
 	//@{
 
 	enum class RenderNodeType
+		: uint8_t
 	{
 		eFrontStatic,
 		eFrontSkinned,

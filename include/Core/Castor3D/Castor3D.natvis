@@ -21,6 +21,27 @@
 		</Expand>
 	</Type>
 
+	<Type Name="castor3d::AnimableT&lt;*&gt;">
+		<DisplayString>{m_name}</DisplayString>
+		<Expand>
+			<Item Name="name">m_name</Item>
+			<Item Name="owner">m_owner</Item>
+			<Item Name="animations">m_animations</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::AnimationT&lt;*&gt;">
+		<DisplayString>{m_name} {m_length}</DisplayString>
+		<Expand>
+			<Item Name="name">m_name</Item>
+			<Item Name="owner">m_owner</Item>
+			<Item Name="type">m_type</Item>
+			<Item Name="animable">m_animable</Item>
+			<Item Name="length">m_length</Item>
+			<Item Name="keyframes">m_keyframes</Item>
+		</Expand>
+	</Type>
+
 	<Type Name="castor3d::AnimationKeyFrame">
 		<DisplayString>{m_timeIndex}</DisplayString>
 		<Expand>
@@ -90,9 +111,9 @@
 		<Expand>
 			<Item Name="fileName">m_fileName</Item>
 			<Item Name="filePath">m_filePath</Item>
-      <Item Name="extension">m_extension</Item>
-      <Item Name="parameters">m_parameters</Item>
-      <Item Name="prefix">m_prefix</Item>
+			<Item Name="extension">m_extension</Item>
+			<Item Name="parameters">m_parameters</Item>
+			<Item Name="prefix">m_prefix</Item>
 		</Expand>
 	</Type>
 
@@ -126,17 +147,6 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::MorphComponent">
-		<DisplayString>{m_id} {m_type}</DisplayString>
-		<Expand>
-			<Item Name="id">m_id</Item>
-			<Item Name="initialised">m_initialised</Item>
-			<Item Name="dirty">m_dirty</Item>
-			<Item Name="flags">m_flags</Item>
-			<Item Name="layouts">m_layouts</Item>
-		</Expand>
-	</Type>
-
 	<Type Name="castor3d::Material">
 		<DisplayString>{m_name} (type={m_type}, passes={m_passes})</DisplayString>
 		<Expand>
@@ -160,13 +170,48 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::MeshAnimationKeyFrame">
-		<DisplayString>{m_timeIndex} {m_submeshesBuffers}</DisplayString>
+	<Type Name="castor3d::MeshAnimation">
+		<DisplayString>{m_name} {m_length}</DisplayString>
+		<Expand>
+			<Item Name="name">m_name</Item>
+			<Item Name="owner">m_owner</Item>
+			<Item Name="type">m_type</Item>
+			<Item Name="animable">m_animable</Item>
+			<Item Name="length">m_length</Item>
+			<Item Name="keyframes">m_keyframes</Item>
+			<Item Name="submeshes">m_submeshes</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::MeshAnimationSubmesh">
+		<DisplayString>{m_submesh}</DisplayString>
+		<Expand>
+			<Item Name="length">m_length</Item>
+			<Item Name="submesh">m_submesh</Item>
+			<Item Name="component">m_component</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::MeshMorphTarget">
+		<DisplayString>{m_timeIndex}</DisplayString>
 		<Expand>
 			<Item Name="timeIndex">m_timeIndex</Item>
-			<Item Name="submeshesBuffers">m_submeshesBuffers</Item>
 			<Item Name="boundingBox">m_boundingBox</Item>
-			<Item Name="owner">m_owner</Item>
+			<Item Name="submeshesTargets">m_submeshesTargets</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::MorphComponent">
+		<DisplayString>{m_id} {m_type}</DisplayString>
+		<Expand>
+			<Item Name="id">m_id</Item>
+			<Item Name="initialised">m_initialised</Item>
+			<Item Name="dirty">m_dirty</Item>
+			<Item Name="flags">m_flags</Item>
+			<Item Name="pointsCount">m_pointsCount</Item>
+			<Item Name="targetDataCount">m_targetDataCount</Item>
+			<Item Name="buffer">m_buffer</Item>
+			<Item Name="targets">m_targets</Item>
 		</Expand>
 	</Type>
 

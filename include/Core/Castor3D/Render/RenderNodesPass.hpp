@@ -277,6 +277,15 @@ namespace castor3d
 		 *\brief		Ajuste les flags donnés pour qu'ils correspondent aux pré-requis de la passe.
 		 *\param[in]	flags	Les flags.
 		 */
+		C3D_API MorphFlags adjustFlags( MorphFlags flags )const;
+		/**
+		 *\~english
+		 *\brief		Adjusts given flags to match the render pass requirements.
+		 *\param[in]	flags	The flags.
+		 *\~french
+		 *\brief		Ajuste les flags donnés pour qu'ils correspondent aux pré-requis de la passe.
+		 *\param[in]	flags	Les flags.
+		 */
 		C3D_API PassFlags adjustFlags( PassFlags flags )const;
 		/**
 		 *\~english
@@ -309,6 +318,7 @@ namespace castor3d
 		 *\param[in]	blendAlphaFunc		The alpha comparison function (for transparent nodes).
 		 *\param[in]	textures			The textures configuration.
 		 *\param[in]	submeshFlags		A combination of SubmeshFlag.
+		 *\param[in]	morphFlags			A combination of MorphFlag.
 		 *\param[in]	programFlags		A combination of ProgramFlag.
 		 *\param[in]	sceneFlags			Scene related flags.
 		 *\param[in]	topology			The render topology.
@@ -325,6 +335,7 @@ namespace castor3d
 		 *\param[in]	blendAlphaFunc		La fonction de comparaison de l'alpha (pour les noeuds transparents).
 		 *\param[in]	textures			La configuration des textures.
 		 *\param[in]	submeshFlags		Une combinaison de SubmeshFlag.
+		 *\param[in]	morphFlags			Une combinaison de MorphFlag.
 		 *\param[in]	programFlags		Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags			Les indicateurs relatifs à la scène.
 		 *\param[in]	topology			La topologie de rendu.
@@ -340,16 +351,19 @@ namespace castor3d
 			, VkCompareOp blendAlphaFunc
 			, TextureFlagsArray const & textures
 			, SubmeshFlags const & submeshFlags
+			, MorphFlags const & morphFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, VkPrimitiveTopology topology
-			, bool isFrontCulled );
+			, bool isFrontCulled
+			, GpuBufferOffsetT< castor::Point4f > const & morphTargets );
 		/**
 		 *\~english
 		 *\brief		Creates the pipeline flags for given configuration.
 		 *\param[in]	pass			The pass for whic the pipeline is created.
 		 *\param[in]	textures		The textures configuration.
 		 *\param[in]	submeshFlags	A combination of SubmeshFlag.
+		 *\param[in]	morphFlags		A combination of MorphFlag.
 		 *\param[in]	programFlags	A combination of ProgramFlag.
 		 *\param[in]	sceneFlags		Scene related flags.
 		 *\param[in]	topology		The render topology.
@@ -359,6 +373,7 @@ namespace castor3d
 		 *\param[in]	pass			La passe pour laquelle le pipeline est créé.
 		 *\param[in]	textures		La configuration des textures.
 		 *\param[in]	submeshFlags	Une combinaison de SubmeshFlag.
+		 *\param[in]	morphFlags		Une combinaison de MorphFlag.
 		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	topology		La topologie de rendu.
@@ -367,10 +382,12 @@ namespace castor3d
 		C3D_API PipelineFlags createPipelineFlags( Pass const & pass
 			, TextureFlagsArray const & textures
 			, SubmeshFlags const & submeshFlags
+			, MorphFlags const & morphFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, VkPrimitiveTopology topology
-			, bool isFrontCulled );
+			, bool isFrontCulled
+			, GpuBufferOffsetT< castor::Point4f > const & morphTargets );
 		/**
 		 *\~english
 		 *\brief			Prepares the pipeline matching the given flags, for back face culling nodes.
@@ -406,7 +423,8 @@ namespace castor3d
 		 *\param[in]	shadowMaps	Les shadow maps.
 		 */
 		C3D_API void initialiseAdditionalDescriptor( RenderPipeline & pipeline
-			, ShadowMapLightTypeArray const & shadowMaps );
+			, ShadowMapLightTypeArray const & shadowMaps
+			, GpuBufferOffsetT< castor::Point4f > const & morphTargets );
 		/**
 		 *\~english
 		 *\brief		Filters the given textures flags using this pass needed textures.
@@ -571,6 +589,7 @@ namespace castor3d
 		C3D_API virtual bool doIsValidPass( Pass const & pass )const;
 		C3D_API virtual bool doIsValidRenderable( RenderedObject const & object )const;
 		C3D_API virtual SubmeshFlags doAdjustSubmeshFlags( SubmeshFlags flags )const;
+		C3D_API virtual MorphFlags doAdjustMorphFlags( MorphFlags flags )const;
 		C3D_API virtual PassFlags doAdjustPassFlags( PassFlags flags )const;
 		C3D_API virtual ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const;
 		C3D_API virtual SceneFlags doAdjustSceneFlags( SceneFlags flags )const;

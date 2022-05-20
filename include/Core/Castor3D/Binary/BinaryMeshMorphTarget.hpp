@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_BinaryMeshAnimationKeyFrame_H___
-#define ___C3D_BinaryMeshAnimationKeyFrame_H___
+#ifndef ___C3D_BinaryMeshMorphTarget_H___
+#define ___C3D_BinaryMeshMorphTarget_H___
 
 #include "Castor3D/Binary/BinaryParser.hpp"
 #include "Castor3D/Binary/BinaryWriter.hpp"
@@ -14,25 +14,25 @@ namespace castor3d
 	/**
 	\~english
 	\brief		Helper structure to find ChunkType from a type.
-	\remarks	Specialisation for MeshAnimationKeyFrame.
+	\remarks	Specialisation for MeshMorphTarget.
 	\~french
 	\brief		Classe d'aide pour récupéer un ChunkType depuis un type.
-	\remarks	Spécialisation pour MeshAnimationKeyFrame.
+	\remarks	Spécialisation pour MeshMorphTarget.
 	*/
 	template<>
-	struct ChunkTyper< MeshAnimationKeyFrame >
+	struct ChunkTyper< MeshMorphTarget >
 	{
-		static ChunkType const Value = ChunkType::eMeshAnimationKeyFrame;
+		static ChunkType const Value = ChunkType::eMeshMorphTarget;
 	};
 	/**
 	\~english
-	\brief		MeshAnimationKeyFrame binary loader.
+	\brief		MeshMorphTarget binary loader.
 	\~english
-	\brief		Loader binaire de MeshAnimationKeyFrame.
+	\brief		Loader binaire de MeshMorphTarget.
 	*/
 	template<>
-	class BinaryWriter< MeshAnimationKeyFrame >
-		: public BinaryWriterBase< MeshAnimationKeyFrame >
+	class BinaryWriter< MeshMorphTarget >
+		: public BinaryWriterBase< MeshMorphTarget >
 	{
 	protected:
 		/**
@@ -45,17 +45,17 @@ namespace castor3d
 		 *\param[in]	obj	L'objet à écrire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool doWrite( MeshAnimationKeyFrame const & obj )override;
+		C3D_API bool doWrite( MeshMorphTarget const & obj )override;
 	};
 	/**
 	\~english
-	\brief		MeshAnimationKeyFrame binary loader.
+	\brief		MeshMorphTarget binary loader.
 	\~english
-	\brief		Loader binaire de MeshAnimationKeyFrame.
+	\brief		Loader binaire de MeshMorphTarget.
 	*/
 	template<>
-	class BinaryParser< MeshAnimationKeyFrame >
-		: public BinaryParserBase< MeshAnimationKeyFrame >
+	class BinaryParser< MeshMorphTarget >
+		: public BinaryParserBase< MeshMorphTarget >
 	{
 	private:
 		/**
@@ -68,7 +68,7 @@ namespace castor3d
 		 *\param[out]	obj	L'objet à lire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool doParse( MeshAnimationKeyFrame & obj )override;
+		C3D_API bool doParse( MeshMorphTarget & obj )override;
 		/**
 		 *\~english
 		 *\brief		Function used to retrieve specific data from the chunk.
@@ -79,7 +79,7 @@ namespace castor3d
 		 *\param[out]	obj	L'objet à lire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool doParse_v1_3( MeshAnimationKeyFrame & obj )override;
+		C3D_API bool doParse_v1_3( MeshMorphTarget & obj )override;
 		/**
 		 *\~english
 		 *\brief		Function used to retrieve specific data from the chunk.
@@ -90,7 +90,7 @@ namespace castor3d
 		 *\param[out]	obj	L'objet à lire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool doParse_v1_5( MeshAnimationKeyFrame & obj )override;
+		C3D_API bool doParse_v1_5( MeshMorphTarget & obj )override;
 	};
 }
 

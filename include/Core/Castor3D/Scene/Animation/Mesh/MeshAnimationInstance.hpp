@@ -72,16 +72,6 @@ namespace castor3d
 		{
 			return m_animatedMesh;
 		}
-		/**
-		 *\~english
-		 *\return		The current keyframe current ratio.
-		 *\~french
-		 *\return		Le ratio actuel dans la keyframe courante.
-		 */
-		float getRatio()const
-		{
-			return m_ratio;
-		}
 
 	private:
 		void doUpdate()override;
@@ -92,7 +82,6 @@ namespace castor3d
 		MeshAnimationInstanceSubmeshMap m_submeshes;
 		AnimationKeyFrameArray::iterator m_prev;
 		AnimationKeyFrameArray::iterator m_curr;
-		float m_ratio{ 0.0f };
 		bool m_stopping{ false };
 
 		friend class BinaryWriter< MeshAnimation >;

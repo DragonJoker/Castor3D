@@ -679,7 +679,7 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( castor3d::MeshAnimationKeyFrame const & lhs, castor3d::MeshAnimationKeyFrame const & rhs )
+	bool C3DTestCase::compare( castor3d::MeshMorphTarget const & lhs, castor3d::MeshMorphTarget const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getTimeIndex(), rhs.getTimeIndex() ) };
 
