@@ -496,10 +496,12 @@ namespace water
 		remFlag( flags, castor3d::SubmeshFlag::eTexcoords1 );
 		remFlag( flags, castor3d::SubmeshFlag::eTexcoords2 );
 		remFlag( flags, castor3d::SubmeshFlag::eTexcoords3 );
-		remFlag( flags, castor3d::SubmeshFlag::eMorphTexcoords1 );
-		remFlag( flags, castor3d::SubmeshFlag::eMorphTexcoords2 );
-		remFlag( flags, castor3d::SubmeshFlag::eMorphTexcoords3 );
 		return flags;
+	}
+
+	castor3d::MorphFlags WaterRenderPass::doAdjustMorphFlags( castor3d::MorphFlags flags )const
+	{
+		return castor3d::MorphFlag::eNone;
 	}
 
 	castor3d::PassFlags WaterRenderPass::doAdjustPassFlags( castor3d::PassFlags flags )const

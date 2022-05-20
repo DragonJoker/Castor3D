@@ -20,273 +20,210 @@ namespace castor3d
 {
 	namespace smshcompmorph
 	{
-		static std::vector< ashes::PipelineVertexInputStateCreateInfo > createVertexLayout( SubmeshFlags const & submeshFlags
-			, ShaderFlags const & shaderFlags
-			, bool hasTextures
-			, uint32_t & currentBinding
-			, uint32_t & currentLocation )
+		static void computeBoundingBox( SubmeshAnimationBuffer & buffer )
 		{
-			std::vector< ashes::PipelineVertexInputStateCreateInfo > result;
-
-			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphPositions ) )
+			if ( buffer.positions.empty() )
 			{
-				ashes::VkVertexInputBindingDescriptionArray bindings;
-				ashes::VkVertexInputAttributeDescriptionArray attributes;
-				bindings.push_back( { currentBinding
-					, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } );
-				attributes.push_back( { currentLocation++
-					, currentBinding
-					, VK_FORMAT_R32G32B32_SFLOAT
-					, 0u } );
-				result .emplace_back( 0u, bindings, attributes );
-				++currentBinding;
+				return;
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphNormals )
-				&& checkFlag( shaderFlags, ShaderFlag::eNormal ) )
+			auto & points = buffer.positions;
+			castor::Point3f min{ points[0] };
+			castor::Point3f max{ points[0] };
+
+			if ( points.size() > 1 )
 			{
-				ashes::VkVertexInputBindingDescriptionArray bindings;
-				ashes::VkVertexInputAttributeDescriptionArray attributes;
-				bindings.push_back( { currentBinding
-					, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } );
-				attributes.push_back( { currentLocation++
-					, currentBinding
-					, VK_FORMAT_R32G32B32_SFLOAT
-					, 0u } );
-				result.emplace_back( 0u, bindings, attributes );
-				++currentBinding;
+				for ( auto & vertex : castor::makeArrayView( &points[1], points.data() + points.size() ) )
+				{
+					castor::Point3f cur{ vertex };
+					max[0] = std::max( cur[0], max[0] );
+					max[1] = std::max( cur[1], max[1] );
+					max[2] = std::max( cur[2], max[2] );
+					min[0] = std::min( cur[0], min[0] );
+					min[1] = std::min( cur[1], min[1] );
+					min[2] = std::min( cur[2], min[2] );
+				}
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphTangents )
-				&& checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) )
-			{
-				ashes::VkVertexInputBindingDescriptionArray bindings;
-				ashes::VkVertexInputAttributeDescriptionArray attributes;
-				bindings.push_back( { currentBinding
-					, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } );
-				attributes.push_back( { currentLocation++
-					, currentBinding
-					, VK_FORMAT_R32G32B32_SFLOAT
-					, 0u } );
-				result.emplace_back( 0u, bindings, attributes );
-				++currentBinding;
-			}
-
-			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords0 )
-				&& hasTextures )
-			{
-				ashes::VkVertexInputBindingDescriptionArray bindings;
-				ashes::VkVertexInputAttributeDescriptionArray attributes;
-				bindings.push_back( { currentBinding
-					, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } );
-				attributes.push_back( { currentLocation++
-					, currentBinding
-					, VK_FORMAT_R32G32B32_SFLOAT
-					, 0u } );
-				result.emplace_back( 0u, bindings, attributes );
-				++currentBinding;
-			}
-
-			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords1 )
-				&& hasTextures )
-			{
-				ashes::VkVertexInputBindingDescriptionArray bindings;
-				ashes::VkVertexInputAttributeDescriptionArray attributes;
-				bindings.push_back( { currentBinding
-					, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } );
-				attributes.push_back( { currentLocation++
-					, currentBinding
-					, VK_FORMAT_R32G32B32_SFLOAT
-					, 0u } );
-				result.emplace_back( 0u, bindings, attributes );
-				++currentBinding;
-			}
-
-			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords2 )
-				&& hasTextures )
-			{
-				ashes::VkVertexInputBindingDescriptionArray bindings;
-				ashes::VkVertexInputAttributeDescriptionArray attributes;
-				bindings.push_back( { currentBinding
-					, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } );
-				attributes.push_back( { currentLocation++
-					, currentBinding
-					, VK_FORMAT_R32G32B32_SFLOAT
-					, 0u } );
-				result.emplace_back( 0u, bindings, attributes );
-				++currentBinding;
-			}
-
-			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords3 )
-				&& hasTextures )
-			{
-				ashes::VkVertexInputBindingDescriptionArray bindings;
-				ashes::VkVertexInputAttributeDescriptionArray attributes;
-				bindings.push_back( { currentBinding
-					, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } );
-				attributes.push_back( { currentLocation++
-					, currentBinding
-					, VK_FORMAT_R32G32B32_SFLOAT
-					, 0u } );
-				result.emplace_back( 0u, bindings, attributes );
-				++currentBinding;
-			}
-
-			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphColours ) )
-			{
-				ashes::VkVertexInputBindingDescriptionArray bindings;
-				ashes::VkVertexInputAttributeDescriptionArray attributes;
-				bindings.push_back( { currentBinding
-					, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } );
-				attributes.push_back( { currentLocation++
-					, currentBinding
-					, VK_FORMAT_R32G32B32_SFLOAT
-					, 0u } );
-				result.emplace_back( 0u, bindings, attributes );
-				++currentBinding;
-			}
-
-			return result;
+			buffer.boundingBox.load( min, max );
 		}
 	}
 
 	castor::String const MorphComponent::Name = cuT( "morph" );
 
-	MorphComponent::MorphComponent( Submesh & submesh )
-		: SubmeshComponent{ submesh, Name, Id }
+	MorphComponent::MorphComponent( Submesh & submesh
+		, MorphFlags flags )
+		: SubmeshComponent{ submesh, Name, uint32_t( std::hash< castor::String >{}( Name ) ) }
+		, m_flags{ flags }
 	{
-		if ( submesh.hasComponent( PositionsComponent::Name ) )
+		if ( checkFlag( m_flags, MorphFlag::ePositions ) )
 		{
-			m_flags |= SubmeshFlag::eMorphPositions;
+			++m_targetDataCount;
 		}
 
-		if ( submesh.hasComponent( NormalsComponent::Name ) )
+		if ( checkFlag( m_flags, MorphFlag::eNormals ) )
 		{
-			m_flags |= SubmeshFlag::eMorphNormals;
+			++m_targetDataCount;
 		}
 
-		if ( submesh.hasComponent( TangentsComponent::Name ) )
+		if ( checkFlag( m_flags, MorphFlag::eTangents ) )
 		{
-			m_flags |= SubmeshFlag::eMorphTangents;
+			++m_targetDataCount;
 		}
 
-		if ( submesh.hasComponent( Texcoords0Component::Name ) )
+		if ( checkFlag( m_flags, MorphFlag::eTexcoords0 ) )
 		{
-			m_flags |= SubmeshFlag::eMorphTexcoords0;
+			++m_targetDataCount;
 		}
 
-		if ( submesh.hasComponent( Texcoords1Component::Name ) )
+		if ( checkFlag( m_flags, MorphFlag::eTexcoords1 ) )
 		{
-			m_flags |= SubmeshFlag::eMorphTexcoords1;
+			++m_targetDataCount;
 		}
 
-		if ( submesh.hasComponent( Texcoords2Component::Name ) )
+		if ( checkFlag( m_flags, MorphFlag::eTexcoords2 ) )
 		{
-			m_flags |= SubmeshFlag::eMorphTexcoords2;
+			++m_targetDataCount;
 		}
 
-		if ( submesh.hasComponent( Texcoords3Component::Name ) )
+		if ( checkFlag( m_flags, MorphFlag::eTexcoords3 ) )
 		{
-			m_flags |= SubmeshFlag::eMorphTexcoords3;
+			++m_targetDataCount;
 		}
 
-		if ( submesh.hasComponent( ColoursComponent::Name ) )
+		if ( checkFlag( m_flags, MorphFlag::eColours ) )
 		{
-			m_flags |= SubmeshFlag::eMorphColours;
+			++m_targetDataCount;
 		}
-	}
 
-	void MorphComponent::gather( ShaderFlags const & shaderFlags
-		, ProgramFlags const & programFlags
-		, SubmeshFlags const & submeshFlags
-		, MaterialRPtr material
-		, TextureFlagsArray const & mask
-		, ashes::BufferCRefArray & buffers
-		, std::vector< uint64_t > & offsets
-		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
-		, uint32_t & currentBinding
-		, uint32_t & currentLocation )
-	{
-		if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
-		{
-			auto hash = std::hash< SubmeshFlags::BaseType >{}( submeshFlags );
-			hash = castor::hashCombine( hash, shaderFlags.value() );
-			hash = castor::hashCombine( hash, mask.empty() );
-			hash = castor::hashCombine( hash, currentBinding );
-			hash = castor::hashCombine( hash, currentLocation );
-			auto layoutIt = m_layouts.find( hash );
-
-			if ( layoutIt == m_layouts.end() )
-			{
-				layoutIt = m_layouts.emplace( hash
-					, smshcompmorph::createVertexLayout( submeshFlags
-						, shaderFlags
-						, checkFlag( programFlags, ProgramFlag::eForceTexCoords ) || !mask.empty()
-						, currentBinding
-						, currentLocation ) ).first;
-			}
-			else
-			{
-				currentLocation = layoutIt->second.back().vertexAttributeDescriptions.back().location + 1u;
-				currentBinding = layoutIt->second.back().vertexAttributeDescriptions.back().binding + 1u;
-			}
-
-			layouts.insert( layouts.end()
-				, layoutIt->second.begin()
-				, layoutIt->second.end() );
-		}
+		m_pointsCount = submesh.getPointsCount();
 	}
 
 	SubmeshComponentSPtr MorphComponent::clone( Submesh & submesh )const
 	{
-		auto result = std::make_shared< MorphComponent >( submesh );
-		result->m_flags = m_flags;
+		auto result = submesh.createComponent< MorphComponent >( m_flags );
+		result->m_pointsCount = m_pointsCount;
+		result->m_targets = m_targets;
 		return std::static_pointer_cast< SubmeshComponent >( result );
 	}
 
-	SubmeshFlags MorphComponent::getSubmeshFlags( Pass const * pass )const
+	void MorphComponent::addMorphTarget( SubmeshAnimationBuffer data )
 	{
-		if ( !pass )
-		{
-			return m_flags;
-		}
-
-		auto maxTexCoordIndex = pass->getMaxTexCoordSet();
-		auto result = m_flags;
-
-		if ( maxTexCoordIndex == 3u )
-		{
-			return result;
-		}
-
-		remFlag( result, SubmeshFlag::eMorphTexcoords3 );
-
-		if ( maxTexCoordIndex == 2u )
-		{
-			return result;
-		}
-
-		remFlag( result, SubmeshFlag::eMorphTexcoords2 );
-
-		if ( maxTexCoordIndex == 1u )
-		{
-			return result;
-		}
-
-		remFlag( result, SubmeshFlag::eMorphTexcoords1 );
-		return result;
+		smshcompmorph::computeBoundingBox( data );
+		m_targets.emplace_back( std::move( data ) );
 	}
 
 	bool MorphComponent::doInitialise( RenderDevice const & device )
 	{
+		auto size = m_targetDataCount * m_pointsCount * MaxMorphTargets;
+
+		if ( !m_buffer
+			|| size > m_buffer.getCount() )
+		{
+			m_buffer = device.bufferPool->getBuffer< castor::Point4f >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+				, size
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+		}
+
 		return true;
 	}
 
 	void MorphComponent::doCleanup( RenderDevice const & device )
 	{
+		if ( m_buffer )
+		{
+			device.bufferPool->putBuffer( m_buffer );
+			m_buffer = {};
+		}
 	}
 
 	void MorphComponent::doUpload()
 	{
+		if ( !m_buffer )
+		{
+			return;
+		}
+
+		uint32_t index{};
+		auto bufferIt = m_buffer.getData().begin();
+		auto stride = m_targetDataCount * MaxMorphTargets;
+
+		while ( index < m_pointsCount )
+		{
+			auto bufIt = bufferIt;
+
+			for ( auto & target : m_targets )
+			{
+				if ( auto posIt = target.positions.begin();
+					posIt != target.positions.end() )
+				{
+					posIt += index;
+					*bufIt = castor::Point4f{ *posIt };
+					++bufIt;
+				}
+
+				if ( auto nmlIt = target.normals.begin();
+					nmlIt != target.normals.end() )
+				{
+					nmlIt += index;
+					*bufIt = castor::Point4f{ *nmlIt };
+					++bufIt;
+				}
+
+				if ( auto tanIt = target.tangents.begin();
+					tanIt != target.tangents.end() )
+				{
+					tanIt += index;
+					*bufIt = castor::Point4f{ *tanIt };
+					++bufIt;
+				}
+
+				if ( auto tx0It = target.texcoords0.begin();
+					tx0It != target.texcoords0.end() )
+				{
+					tx0It += index;
+					*bufIt = castor::Point4f{ *tx0It };
+					++bufIt;
+				}
+
+				if ( auto tx1It = target.texcoords1.begin();
+					tx1It != target.texcoords1.end() )
+				{
+					tx1It += index;
+					*bufIt = castor::Point4f{ *tx1It };
+					++bufIt;
+				}
+
+				if ( auto tx2It = target.texcoords2.begin();
+					tx2It != target.texcoords2.end() )
+				{
+					tx2It += index;
+					*bufIt = castor::Point4f{ *tx2It };
+					++bufIt;
+				}
+
+				if ( auto tx3It = target.texcoords3.begin();
+					tx3It != target.texcoords3.end() )
+				{
+					tx3It += index;
+					*bufIt = castor::Point4f{ *tx3It };
+					++bufIt;
+				}
+
+				if ( auto colIt = target.colours.begin();
+					colIt != target.colours.end() )
+				{
+					colIt += index;
+					*bufIt = castor::Point4f{ *colIt };
+					++bufIt;
+				}
+			}
+
+			bufferIt += stride;
+			++index;
+		}
+
+		m_buffer.markDirty( VK_ACCESS_SHADER_READ_BIT
+			, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
 	}
 }

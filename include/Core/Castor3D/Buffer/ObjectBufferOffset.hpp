@@ -87,7 +87,7 @@ namespace castor3d
 		};
 
 		size_t hash{};
-		std::array< GpuBufferChunk, getIndex( SubmeshFlag::eAllComponents ) > buffers{};
+		std::array< GpuBufferChunk, size_t( SubmeshData::eCount ) > buffers{};
 
 		explicit operator bool()const
 		{

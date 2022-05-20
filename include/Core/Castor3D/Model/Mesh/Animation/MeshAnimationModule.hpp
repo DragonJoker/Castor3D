@@ -16,12 +16,12 @@ namespace castor3d
 	//@{
 
 	class MeshAnimation;
-	class MeshAnimationKeyFrame;
 	class MeshAnimationSubmesh;
+	class MeshMorphTarget;
 
 	CU_DeclareSmartPtr( MeshAnimation );
-	CU_DeclareSmartPtr( MeshAnimationKeyFrame );
 	CU_DeclareSmartPtr( MeshAnimationSubmesh );
+	CU_DeclareSmartPtr( MeshMorphTarget );
 
 	CU_DeclareVector( MeshAnimationSubmesh, MeshAnimationSubmesh );
 

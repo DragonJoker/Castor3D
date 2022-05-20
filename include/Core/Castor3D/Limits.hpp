@@ -123,7 +123,7 @@ namespace castor3d
 	// Nodes IDs buffer
 	static uint32_t constexpr MaxObjectIDNodesCount = 10'000u;
 	// Morphing Data buffer
-	static uint32_t constexpr MaxMorphingDataCount = 10'000u;
+	static uint32_t constexpr MaxMorphingDataCount = 1'000u;
 	// Skinning Data buffer
 	static uint32_t constexpr MaxSkinningDataCount = 1'000u;
 	//@}
@@ -140,6 +140,8 @@ namespace castor3d
 	static uint32_t constexpr BaseObjectPoolBufferCount = 1'000'000u;
 	// Max bones in a skeleton
 	static uint32_t constexpr MaxBonesCount = 400u;
+	// Max morph target in a mesh
+	static uint32_t constexpr MaxMorphTargets = 100u;
 	// Number of mip levels in the linearised depth buffer
 	static uint32_t constexpr MaxLinearizedDepthMipLevel = 5u;
 	// The picking area size

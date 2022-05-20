@@ -46,6 +46,11 @@ namespace castor3d
 		 */
 		C3D_API void update( castor::Milliseconds const & elapsed )override;
 
+		C3D_API uint32_t getId( Submesh const & submesh )const;
+
+		C3D_API void setId( Submesh const & submesh
+			, uint32_t id );
+
 		bool isPlayingAnimation()const override
 		{
 			return m_playingAnimation != nullptr;
@@ -59,16 +64,6 @@ namespace castor3d
 		Geometry & getGeometry()const
 		{
 			return m_geometry;
-		}
-
-		uint32_t getId()const
-		{
-			return m_id;
-		}
-
-		void setId( uint32_t id )
-		{
-			m_id = id;
 		}
 
 		MeshAnimationInstance & getPlayingAnimation()const
@@ -86,7 +81,7 @@ namespace castor3d
 		Mesh & m_mesh;
 		Geometry & m_geometry;
 		MeshAnimationInstanceRPtr m_playingAnimation{ nullptr };
-		uint32_t m_id{};
+		std::vector< uint32_t > m_ids;
 		mutable bool m_reinit{ false };
 	};
 }

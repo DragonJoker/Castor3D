@@ -96,6 +96,7 @@ namespace castor3d::shader
 		{
 			sdw::UInt nodeId;
 			sdw::UInt morphingId;
+			sdw::UInt morphTargetsCount;
 			sdw::UInt skinningId;
 		};
 
@@ -139,20 +140,26 @@ namespace castor3d::shader
 				, writer.declLocale( "morphingId"
 					, surface.objectIds.y()
 					, checkFlag( flags, ProgramFlag::eMorphing ) )
-				, writer.declLocale( "skinningId"
+				, writer.declLocale( "morphTargetsCount"
 					, surface.objectIds.z()
+					, checkFlag( flags, ProgramFlag::eMorphing ) )
+				, writer.declLocale( "skinningId"
+					, surface.objectIds.w()
 					, checkFlag( flags, ProgramFlag::eSkinning ) ) };
 		}
 
 		auto objectIdsData = writer.declLocale( "objectIdsData"
 			, data[pipelineID][writer.cast< sdw::UInt >( drawID )] );
 		return { writer.declLocale( "nodeId"
-			, objectIdsData.x() )
+				, objectIdsData.x() )
 			, writer.declLocale( "morphingId"
 				, objectIdsData.y()
 				, checkFlag( flags, ProgramFlag::eMorphing ) )
-			, writer.declLocale( "skinningId"
+			, writer.declLocale( "morphTargetsCount"
 				, objectIdsData.z()
+				, checkFlag( flags, ProgramFlag::eMorphing ) )
+			, writer.declLocale( "skinningId"
+				, objectIdsData.w()
 				, checkFlag( flags, ProgramFlag::eSkinning ) ) };
 	}
 

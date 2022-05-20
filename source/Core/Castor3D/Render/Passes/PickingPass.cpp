@@ -89,8 +89,6 @@ namespace castor3d
 	{
 		remFlag( flags, SubmeshFlag::eTangents );
 		remFlag( flags, SubmeshFlag::eColours );
-		remFlag( flags, SubmeshFlag::eMorphTangents );
-		remFlag( flags, SubmeshFlag::eMorphColours );
 		return flags;
 	}
 
@@ -133,8 +131,13 @@ namespace castor3d
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
-		C3D_Morphing( writer
-			, GlobalBuffersIdx::eMorphingData
+		C3D_MorphTargets( writer
+			, GlobalBuffersIdx::eMorphTargets
+			, RenderPipeline::eBuffers
+			, flags.morphFlags
+			, flags.programFlags );
+		C3D_MorphingWeights( writer
+			, GlobalBuffersIdx::eMorphingWeights
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
 		auto skinningData = SkinningUbo::declare( writer
@@ -174,9 +177,12 @@ namespace castor3d
 				out.texture1 = in.texture1;
 				out.texture2 = in.texture2;
 				out.texture3 = in.texture3;
-				auto morphingData = writer.declLocale( "morphingData"
-					, c3d_morphingData[ids.morphingId] );
-				in.morph( morphingData
+				auto morphingWeights = writer.declLocale( "morphingWeights"
+					, c3d_morphingWeights[ids.morphingId] );
+				morph( c3d_morphTargets
+					, morphingWeights
+					, writer.cast< UInt >( in.vertexIndex - in.baseVertex )
+					, ids.morphTargetsCount
 					, curPosition
 					, out.texture0
 					, out.texture1

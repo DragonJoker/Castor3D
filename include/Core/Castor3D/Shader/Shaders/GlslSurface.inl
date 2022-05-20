@@ -103,15 +103,6 @@ namespace castor3d::shader
 		, texture3{ this->getMember< sdw::Vec3 >( "texcoord3", true ) }
 		, colour{ this->getMember< sdw::Vec3 >( "colour", true ) }
 		// Morphing
-		, morphPosition{ this->getMember< sdw::Vec4 >( "morphPosition", true ) }
-		, morphNormal{ this->getMember< sdw::Vec3 >( "morphNormal", true ) }
-		, morphTangent{ this->getMember< sdw::Vec3 >( "morphTangent", true ) }
-		, morphTexture0{ this->getMember< sdw::Vec3 >( "morphTexcoord0", true ) }
-		, morphTexture1{ this->getMember< sdw::Vec3 >( "morphTexcoord1", true ) }
-		, morphTexture2{ this->getMember< sdw::Vec3 >( "morphTexcoord2", true ) }
-		, morphTexture3{ this->getMember< sdw::Vec3 >( "morphTexcoord3", true ) }
-		, morphColour{ this->getMember< sdw::Vec3 >( "morphColour", true ) }
-		// Morphing
 		, boneIds0{ this->getMember< sdw::UVec4 >( "boneIds0", true ) }
 		, boneIds1{ this->getMember< sdw::UVec4 >( "boneIds1", true ) }
 		, boneWeights0{ this->getMember< sdw::Vec4 >( "boneWeights0", true ) }
@@ -177,43 +168,6 @@ namespace castor3d::shader
 				, checkFlag( submeshFlags, SubmeshFlag::eColours ) );
 			//@}
 			/**
-			*	Morphing
-			*/
-			//@{
-			result->declMember( "morphPosition", ast::type::Kind::eVec4F
-				, ast::type::NotArray
-				, ( checkFlag( submeshFlags, SubmeshFlag::eMorphPositions ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eMorphPositions ) );
-			result->declMember( "morphNormal", ast::type::Kind::eVec3F
-				, ast::type::NotArray
-				, ( ( checkFlag( submeshFlags, SubmeshFlag::eMorphNormals ) && checkFlag( shaderFlags, ShaderFlag::eNormal ) ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eMorphNormals ) && checkFlag( shaderFlags, ShaderFlag::eNormal ) );
-			result->declMember( "morphTangent", ast::type::Kind::eVec3F
-				, ast::type::NotArray
-				, ( ( checkFlag( submeshFlags, SubmeshFlag::eMorphTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ) ? index++ : 0 )
-				, ( checkFlag( submeshFlags, SubmeshFlag::eMorphTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ) );
-			result->declMember( "morphTexcoord0", ast::type::Kind::eVec3F
-				, ast::type::NotArray
-				, ( ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords0 ) && hasTextures ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords0 ) && hasTextures );
-			result->declMember( "morphTexcoord1", ast::type::Kind::eVec3F
-				, ast::type::NotArray
-				, ( ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords1 ) && hasTextures ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords1 ) && hasTextures );
-			result->declMember( "morphTexcoord2", ast::type::Kind::eVec3F
-				, ast::type::NotArray
-				, ( ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords2 ) && hasTextures ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords2 ) && hasTextures );
-			result->declMember( "morphTexcoord3", ast::type::Kind::eVec3F
-				, ast::type::NotArray
-				, ( ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords3 ) && hasTextures ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords3 ) && hasTextures );
-			result->declMember( "morphColour", ast::type::Kind::eVec3F
-				, ast::type::NotArray
-				, ( checkFlag( submeshFlags, SubmeshFlag::eMorphColours ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eMorphColours ) );
-			//@}
-			/**
 			*	Skinning
 			*/
 			//@{
@@ -246,63 +200,6 @@ namespace castor3d::shader
 		}
 
 		return result;
-	}
-
-	template< ast::var::Flag FlagT >
-	void VertexSurfaceT< FlagT >::morph( MorphingData const & morphing
-		, sdw::Vec4 & pos
-		, sdw::Vec3 & uvw0
-		, sdw::Vec3 & uvw1
-		, sdw::Vec3 & uvw2
-		, sdw::Vec3 & uvw3
-		, sdw::Vec3 & col )const
-	{
-		morphing.morph( pos, morphPosition
-			, uvw0, morphTexture0
-			, uvw1, morphTexture1
-			, uvw2, morphTexture2
-			, uvw3, morphTexture3
-			, col, morphColour );
-	}
-
-	template< ast::var::Flag FlagT >
-	void VertexSurfaceT< FlagT >::morph( MorphingData const & morphing
-		, sdw::Vec4 & pos
-		, sdw::Vec4 & nml
-		, sdw::Vec3 & uvw0
-		, sdw::Vec3 & uvw1
-		, sdw::Vec3 & uvw2
-		, sdw::Vec3 & uvw3
-		, sdw::Vec3 & col )const
-	{
-		morphing.morph( pos, morphPosition
-			, nml, morphNormal
-			, uvw0, morphTexture0
-			, uvw1, morphTexture1
-			, uvw2, morphTexture2
-			, uvw3, morphTexture3
-			, col, morphColour );
-	}
-
-	template< ast::var::Flag FlagT >
-	void VertexSurfaceT< FlagT >::morph( MorphingData const & morphing
-		, sdw::Vec4 & pos
-		, sdw::Vec4 & nml
-		, sdw::Vec4 & tan
-		, sdw::Vec3 & uvw0
-		, sdw::Vec3 & uvw1
-		, sdw::Vec3 & uvw2
-		, sdw::Vec3 & uvw3
-		, sdw::Vec3 & col )const
-	{
-		morphing.morph( pos, morphPosition
-			, nml, morphNormal
-			, tan, morphTangent
-			, uvw0, morphTexture0
-			, uvw1, morphTexture1
-			, uvw2, morphTexture2
-			, uvw3, morphTexture3
-			, col, morphColour );
 	}
 
 	//*****************************************************************************************

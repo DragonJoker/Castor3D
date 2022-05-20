@@ -177,8 +177,7 @@ namespace castor3d
 			, ShaderFlags shaderFlags
 			, PipelineFlags const & pipelineFlags )
 		{
-			if ( submeshFlagIndex == getIndex( SubmeshFlag::eTangents )
-				|| submeshFlagIndex == getIndex( SubmeshFlag::eMorphTangents ) )
+			if ( submeshFlagIndex == getIndex( SubmeshFlag::eTangents ) )
 			{
 				return checkFlag( shaderFlags, ShaderFlag::eTangentSpace );
 			}
@@ -210,30 +209,6 @@ namespace castor3d
 					&& checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eTexcoords3 );
 			}
 
-			if ( submeshFlagIndex == getIndex( SubmeshFlag::eMorphTexcoords0 ) )
-			{
-				return hasTextures
-					&& checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eMorphTexcoords0 );
-			}
-
-			if ( submeshFlagIndex == getIndex( SubmeshFlag::eMorphTexcoords1 ) )
-			{
-				return hasTextures
-					&& checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eMorphTexcoords1 );
-			}
-
-			if ( submeshFlagIndex == getIndex( SubmeshFlag::eMorphTexcoords2 ) )
-			{
-				return hasTextures
-					&& checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eMorphTexcoords2 );
-			}
-
-			if ( submeshFlagIndex == getIndex( SubmeshFlag::eMorphTexcoords3 ) )
-			{
-				return hasTextures
-					&& checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eMorphTexcoords3 );
-			}
-
 			return true;
 		}
 
@@ -255,7 +230,7 @@ namespace castor3d
 				, node.pass->getTexturesMask() );
 			uint32_t currentLayout = 0u;
 
-			for ( uint32_t i = 1u; i < getIndex( SubmeshFlag::eAllComponents ); ++i )
+			for ( uint32_t i = 1u; i < uint32_t( SubmeshData::eCount ); ++i )
 			{
 				if ( geometryBuffers.bufferOffset.buffers[i].buffer
 					&& isBufferEnabled( i, pipeline.getOwner()->getShaderFlags(), pipeline.getFlags() ) )
@@ -414,16 +389,19 @@ namespace castor3d
 						auto & pass = *culledNode->pass;
 						auto material = pass.getOwner();
 						auto submeshFlags = submesh.getSubmeshFlags( &pass );
+						auto morphFlags = submesh.getMorphFlags();
 						auto programFlags = submesh.getProgramFlags( *material );
 						auto sceneFlags = scene.getFlags();
 						auto textures = pass.getTexturesMask();
 						auto pipelineFlags = renderPass.createPipelineFlags( pass
 							, textures
 							, submeshFlags
+							, morphFlags
 							, programFlags
 							, sceneFlags
 							, submesh.getTopology()
-							, sidedCulled.second );
+							, sidedCulled.second
+							, submesh.getMorphTargets() );
 						auto vertexLayouts = submesh.getGeometryBuffers( renderPass.getShaderFlags()
 							, pipelineFlags.programFlags
 							, pipelineFlags.submeshFlags
@@ -438,7 +416,8 @@ namespace castor3d
 							, *culledNode
 							, submeshNodes );
 						renderPass.initialiseAdditionalDescriptor( pipeline
-							, shadowMaps );
+							, shadowMaps
+							, submesh.getMorphTargets() );
 					}
 				}
 			}
@@ -463,16 +442,19 @@ namespace castor3d
 								auto & pass = *culledNode->pass;
 								auto material = pass.getOwner();
 								auto submeshFlags = submesh.getSubmeshFlags( &pass );
+								auto morphFlags = submesh.getMorphFlags();
 								auto programFlags = submesh.getProgramFlags( *material );
 								auto sceneFlags = scene.getFlags();
 								auto textures = pass.getTexturesMask();
 								auto pipelineFlags = renderPass.createPipelineFlags( pass
 									, textures
 									, submeshFlags
+									, morphFlags
 									, programFlags
 									, sceneFlags
 									, submesh.getTopology()
-									, sidedCulled.second );
+									, sidedCulled.second
+									, submesh.getMorphTargets() );
 								auto vertexLayouts = submesh.getGeometryBuffers( renderPass.getShaderFlags()
 									, pipelineFlags.programFlags
 									, pipelineFlags.submeshFlags
@@ -487,7 +469,8 @@ namespace castor3d
 									, *culledNode
 									, instancedSubmeshNodes );
 								renderPass.initialiseAdditionalDescriptor( pipeline
-									, shadowMaps );
+									, shadowMaps
+									, submesh.getMorphTargets() );
 							}
 						}
 					}
@@ -515,17 +498,20 @@ namespace castor3d
 						auto pipelineFlags = renderPass.createPipelineFlags( pass
 							, textures
 							, submeshFlags
+							, MorphFlags{}
 							, programFlags
 							, sceneFlags
 							, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP
-							, sidedCulled.second );
+							, sidedCulled.second
+							, {} );
 						auto & pipeline = renderPass.prepareBackPipeline( pipelineFlags
 							, billboard.getGeometryBuffers().layouts );
 						queuerndnd::doAddRenderNode( pipeline
 							, *culledNode
 							, billboardNodes );
 						renderPass.initialiseAdditionalDescriptor( pipeline
-							, shadowMaps );
+							, shadowMaps
+							, {} );
 					}
 				}
 			}

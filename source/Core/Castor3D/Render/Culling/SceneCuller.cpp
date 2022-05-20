@@ -225,30 +225,6 @@ namespace castor3d
 			auto bonBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eBones )
 				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eBones )
 				: nullptr;
-			auto mphPosBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphPositions )
-				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphPositions )
-				: nullptr;
-			auto mphNmlBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphNormals )
-				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphNormals )
-				: nullptr;
-			auto mphTanBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTangents )
-				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTangents )
-				: nullptr;
-			auto mphTex0Buffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTexcoords0 )
-				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTexcoords0 )
-				: nullptr;
-			auto mphTex1Buffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTexcoords1 )
-				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTexcoords1 )
-				: nullptr;
-			auto mphTex2Buffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTexcoords2 )
-				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTexcoords2 )
-				: nullptr;
-			auto mphTex3Buffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTexcoords3 )
-				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTexcoords3 )
-				: nullptr;
-			auto mphColBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphColours )
-				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphColours )
-				: nullptr;
 #endif
 
 			for ( auto & node : nodes )
@@ -286,30 +262,6 @@ namespace castor3d
 					CU_Require( bonBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eBones )
 						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eBones )
 						: nullptr) );
-					CU_Require( mphPosBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphPositions )
-						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphPositions )
-						: nullptr) );
-					CU_Require( mphNmlBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphNormals )
-						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphNormals )
-						: nullptr) );
-					CU_Require( mphTanBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTangents )
-						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTangents )
-						: nullptr) );
-					CU_Require( mphTex0Buffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTexcoords0 )
-						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTexcoords0 )
-						: nullptr) );
-					CU_Require( mphTex1Buffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTexcoords1 )
-						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTexcoords1 )
-						: nullptr) );
-					CU_Require( mphTex2Buffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTexcoords2 )
-						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTexcoords2 )
-						: nullptr) );
-					CU_Require( mphTex3Buffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphTexcoords3 )
-						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphTexcoords3 )
-						: nullptr) );
-					CU_Require( mphColBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eMorphColours )
-						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eMorphColours )
-						: nullptr) );
 				}
 			}
 
@@ -342,12 +294,13 @@ namespace castor3d
 
 			if ( mesh )
 			{
-				( *pipelinesBuffer )->y = mesh->getId() - 1u;
+				( *pipelinesBuffer )->y = mesh->getId( node.data ) - 1u;
+				( *pipelinesBuffer )->z = node.data.getMorphTargetsCount();
 			}
 
 			if ( skeleton )
 			{
-				( *pipelinesBuffer )->z = skeleton->getId() - 1u;
+				( *pipelinesBuffer )->w = skeleton->getId() - 1u;
 			}
 
 			++pipelinesBuffer;
@@ -357,12 +310,14 @@ namespace castor3d
 	//*********************************************************************************************
 
 	uint64_t getPipelineBaseHash( SubmeshFlags submeshFlags
+		, MorphFlags morphFlags
 		, ProgramFlags programFlags
 		, PassFlags passFlags
 		, uint32_t maxTexcoordSet
 		, uint32_t texturesCount
 		, TextureFlags texturesFlags
-		, uint32_t layerIndex )
+		, uint32_t passLayerIndex
+		, VkDeviceSize morphTargetsOffset )
 	{
 		remFlag( programFlags, ProgramFlag::eLighting );
 		remFlag( programFlags, ProgramFlag::eShadowMapDirectional );
@@ -376,13 +331,16 @@ namespace castor3d
 		remFlag( passFlags, PassFlag::eAlphaBlending );
 		remFlag( passFlags, PassFlag::eDrawEdge );
 		uint32_t result{ submeshFlags };
+		castor::hashCombine32( result, uint32_t( morphFlags ) );
 		castor::hashCombine32( result, uint32_t( programFlags ) );
 		castor::hashCombine32( result, uint32_t( passFlags ) );
 		castor::hashCombine32( result, maxTexcoordSet );
 		castor::hashCombine32( result, texturesCount );
 		castor::hashCombine32( result, uint32_t( texturesFlags ) );
 		castor::hashCombine32( result, checkFlag( programFlags, ProgramFlag::eInvertNormals ) );
-		return uint64_t( result ) | ( uint64_t( layerIndex ) << 32ull );
+		return uint64_t( result )
+			| ( uint64_t( passLayerIndex ) << 32ull )
+			| ( uint64_t( morphTargetsOffset ) << 40ull );
 	}
 
 	uint64_t getPipelineBaseHash( RenderNodesPass const & renderPass
@@ -391,6 +349,7 @@ namespace castor3d
 		, bool isFrontCulled )
 	{
 		auto submeshFlags = data.getSubmeshFlags( &pass );
+		auto morphFlags = data.getMorphFlags();
 		auto programFlags = data.getProgramFlags( *pass.getOwner() );
 
 		if ( isFrontCulled )
@@ -399,12 +358,14 @@ namespace castor3d
 		}
 
 		return getPipelineBaseHash( renderPass.adjustFlags( submeshFlags )
+			, renderPass.adjustFlags( morphFlags )
 			, renderPass.adjustFlags( programFlags )
 			, renderPass.adjustFlags( pass.getPassFlags() )
 			, pass.getMaxTexCoordSet()
 			, pass.getTextureUnitsCount()
 			, pass.getTextures()
-			, pass.getIndex() );
+			, pass.getIndex()
+			, data.getMorphTargets().getOffset() );
 	}
 
 	uint64_t getPipelineBaseHash( RenderNodesPass const & renderPass
@@ -421,12 +382,14 @@ namespace castor3d
 		}
 
 		return getPipelineBaseHash( renderPass.adjustFlags( submeshFlags )
+			, MorphFlags{}
 			, renderPass.adjustFlags( programFlags )
 			, renderPass.adjustFlags( pass.getPassFlags() )
 			, pass.getMaxTexCoordSet()
 			, pass.getTextureUnitsCount()
 			, pass.getTextures()
-			, pass.getIndex() );
+			, pass.getIndex()
+			, 0u );
 	}
 
 	AnimatedObjectSPtr findAnimatedObject( Scene const & scene

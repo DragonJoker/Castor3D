@@ -41,6 +41,7 @@ namespace castor
 		{
 			castor3d::AnimatedObjectGroup const & group;
 			castor3d::AnimatedMesh const & mesh;
+			castor3d::Submesh const & submesh;
 		};
 
 		using ElementT = castor3d::AnimatedObjectGroup;
@@ -104,9 +105,9 @@ namespace castor
 
 		C3D_API std::vector< castor3d::AnimatedObject * > findObject( castor::String const & name )const;
 
-		castor3d::GpuBufferOffsetT< castor3d::MorphingBufferConfiguration > const & getMorphingBuffer()const
+		castor3d::GpuBufferOffsetT< castor3d::MorphingWeightsConfiguration > const & getMorphingWeights()const
 		{
-			return m_morphingData;
+			return m_morphingWeights;
 		}
 
 		castor3d::GpuBufferOffsetT< castor3d::SkinningTransformsConfiguration > const & getSkinningTransformsBuffer()const
@@ -123,11 +124,13 @@ namespace castor
 			, castor3d::AnimatedSkeleton const & skeleton );
 		MeshPoolsEntry doCreateEntry( castor3d::RenderDevice const & device
 			, castor3d::AnimatedObjectGroup const & group
-			, castor3d::AnimatedMesh const & mesh );
+			, castor3d::AnimatedMesh const & mesh
+			, castor3d::Submesh const & submesh );
 		void doRemoveEntry( castor3d::RenderDevice const & device
 			, castor3d::AnimatedSkeleton const & skeleton );
 		void doRemoveEntry( castor3d::RenderDevice const & device
-			, castor3d::AnimatedMesh const & mesh );
+			, castor3d::AnimatedMesh const & mesh
+			, castor3d::Submesh const & submesh );
 		void doRemoveEntry( castor3d::RenderDevice const & device
 			, castor3d::AnimatedTexture const & texture );
 		void doRegister( castor3d::AnimatedObjectGroup & group );
@@ -137,13 +140,14 @@ namespace castor
 		castor3d::Engine & m_engine;
 		castor3d::RenderDevice const & m_device;
 		std::map< castor3d::AnimatedSkeleton const *, SkeletonPoolsEntry > m_skeletonEntries;
-		std::map< castor3d::AnimatedMesh const *, MeshPoolsEntry > m_meshEntries;
+		std::map< size_t, MeshPoolsEntry > m_meshEntries;
 		std::map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedSkeletonChangeConnection > m_skeletonAddedConnections;
 		std::map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedSkeletonChangeConnection > m_skeletonRemovedConnections;
 		std::map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedMeshChangeConnection > m_meshAddedConnections;
 		std::map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedMeshChangeConnection > m_meshRemovedConnections;
 		std::map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedTextureChangeConnection > m_textureRemovedConnections;
-		castor3d::GpuBufferOffsetT< castor3d::MorphingBufferConfiguration > m_morphingData;
+		castor3d::GpuBufferOffsetT< castor3d::MorphingWeightsConfiguration > m_morphingWeights;
+		castor3d::GpuBufferOffsetT< castor::Point4f > m_morphTargets;
 		castor3d::GpuBufferOffsetT< castor3d::SkinningTransformsConfiguration > m_skinningTransformsData;
 		castor3d::FramePassTimerUPtr m_timerAnimations;
 	};

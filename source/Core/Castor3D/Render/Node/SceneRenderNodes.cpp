@@ -485,14 +485,15 @@ namespace castor3d
 
 						if ( node->mesh )
 						{
-							CU_Require( node->mesh->getId() > 0u );
-							buffer.m_objectIDs->y = node->mesh->getId() - 1u;
+							CU_Require( node->mesh->getId( node->data ) > 0u );
+							buffer.m_objectIDs->y = node->mesh->getId( node->data ) - 1u;
+							buffer.m_objectIDs->z = node->data.getMorphTargetsCount();
 						}
 
 						if ( node->skeleton )
 						{
 							CU_Require( node->skeleton->getId() > 0u );
-							buffer.m_objectIDs->z = node->skeleton->getId() - 1u;
+							buffer.m_objectIDs->w = node->skeleton->getId() - 1u;
 						}
 					}
 				}

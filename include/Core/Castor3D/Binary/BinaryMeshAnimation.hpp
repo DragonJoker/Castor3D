@@ -78,6 +78,17 @@ namespace castor3d
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
 		C3D_API bool doParse( MeshAnimation & obj )override;
+		/**
+		 *\~english
+		 *\brief		Function used to retrieve specific data from the chunk.
+		 *\param[out]	obj	The object to read.
+		 *\return		\p false if any error occured.
+		 *\~french
+		 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk.
+		 *\param[out]	obj	L'objet à lire.
+		 *\return		\p false si une erreur quelconque est arrivée.
+		 */
+		C3D_API bool doParse_v1_5( MeshAnimation & obj )override;
 	};
 }
 

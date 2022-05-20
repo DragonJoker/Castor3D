@@ -6,258 +6,348 @@ namespace castor3d
 {
 	namespace shader
 	{
-		castor::String const MorphingData::BufferName = cuT( "Morphing" );
-		castor::String const MorphingData::DataName = cuT( "c3d_morphingData" );
+		//*****************************************************************************************
 
-		MorphingData::MorphingData( sdw::ShaderWriter & writer
+		castor::String const MorphTargetData::BufferName = cuT( "MorphTargets" );
+		castor::String const MorphTargetData::DataName = cuT( "c3d_morphTargets" );
+
+		MorphTargetData::MorphTargetData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
 			: StructInstance{ writer, std::move( expr ), enabled }
-			, m_data{ getMember< sdw::Vec4 >( "data" ) }
-			, m_time{ m_data.x() }
+			, morphPosition{ this->getMember< sdw::Vec4 >( "morphPosition", true ) }
+			, morphNormal{ this->getMember< sdw::Vec4 >( "morphNormal", true ) }
+			, morphTangent{ this->getMember< sdw::Vec4 >( "morphTangent", true ) }
+			, morphTexture0{ this->getMember< sdw::Vec4 >( "morphTexcoord0", true ) }
+			, morphTexture1{ this->getMember< sdw::Vec4 >( "morphTexcoord1", true ) }
+			, morphTexture2{ this->getMember< sdw::Vec4 >( "morphTexcoord2", true ) }
+			, morphTexture3{ this->getMember< sdw::Vec4 >( "morphTexcoord3", true ) }
+			, morphColour{ this->getMember< sdw::Vec4 >( "morphColour", true ) }
 		{
 		}
 
-		ast::type::BaseStructPtr MorphingData::makeType( ast::type::TypesCache & cache )
+		ast::type::StructPtr MorphTargetData::makeType( ast::type::TypesCache & cache
+			, MorphFlags morphFlags )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-				, "C3D_MorphingData" );
+				, "C3D_MorphTargetData" );
 
 			if ( result->empty() )
 			{
-				result->declMember( "data", ast::type::Kind::eVec4F );
+				result->declMember( "morphPosition", ast::type::Kind::eVec4F
+					, ast::type::NotArray
+					, checkFlag( morphFlags, MorphFlag::ePositions ) );
+				result->declMember( "morphNormal", ast::type::Kind::eVec4F
+					, ast::type::NotArray
+					, checkFlag( morphFlags, MorphFlag::eNormals ) );
+				result->declMember( "morphTangent", ast::type::Kind::eVec4F
+					, ast::type::NotArray
+					, checkFlag( morphFlags, MorphFlag::eTangents ) );
+				result->declMember( "morphTexcoord0", ast::type::Kind::eVec4F
+					, ast::type::NotArray
+					, checkFlag( morphFlags, MorphFlag::eTexcoords0 ) );
+				result->declMember( "morphTexcoord1", ast::type::Kind::eVec4F
+					, ast::type::NotArray
+					, checkFlag( morphFlags, MorphFlag::eTexcoords1 ) );
+				result->declMember( "morphTexcoord2", ast::type::Kind::eVec4F
+					, ast::type::NotArray
+					, checkFlag( morphFlags, MorphFlag::eTexcoords2 ) );
+				result->declMember( "morphTexcoord3", ast::type::Kind::eVec4F
+					, ast::type::NotArray
+					, checkFlag( morphFlags, MorphFlag::eTexcoords3 ) );
+				result->declMember( "morphColour", ast::type::Kind::eVec4F
+					, ast::type::NotArray
+					, checkFlag( morphFlags, MorphFlag::eColours ) );
 			}
 
 			return result;
 		}
 
-		void MorphingData::morph( sdw::Vec4 & pos
-			, sdw::Vec4 const & pos2
+		void MorphTargetData::morph( sdw::Vec4 & pos
 			, sdw::Vec3 & uvw0
-			, sdw::Vec3 const & uvw02
 			, sdw::Vec3 & uvw1
-			, sdw::Vec3 const & uvw12
 			, sdw::Vec3 & uvw2
-			, sdw::Vec3 const & uvw22
 			, sdw::Vec3 & uvw3
-			, sdw::Vec3 const & uvw32
 			, sdw::Vec3 & col
-			, sdw::Vec3 const & col2 )const
+			, sdw::Float const & weight )const
 		{
-			if ( isEnabled() )
+			if ( !isEnabled() )
 			{
-				CU_Require( !pos.getExpr()->isDummy() );
-				CU_Require( !pos2.getExpr()->isDummy() );
-				pos = vec4( sdw::mix( pos.xyz(), pos2.xyz(), vec3( m_time ) ), 1.0f );
-
-				if ( !uvw0.getExpr()->isDummy()
-					&& !uvw02.getExpr()->isDummy() )
-				{
-					uvw0 = sdw::mix( uvw0.xyz(), uvw02, vec3( m_time ) );
-				}
-
-				if ( !uvw1.getExpr()->isDummy()
-					&& !uvw12.getExpr()->isDummy() )
-				{
-					uvw1 = sdw::mix( uvw1.xyz(), uvw12, vec3( m_time ) );
-				}
-
-				if ( !uvw2.getExpr()->isDummy()
-					&& !uvw22.getExpr()->isDummy() )
-				{
-					uvw2 = sdw::mix( uvw2.xyz(), uvw22, vec3( m_time ) );
-				}
-
-				if ( !uvw3.getExpr()->isDummy()
-					&& !uvw32.getExpr()->isDummy() )
-				{
-					uvw3 = sdw::mix( uvw3.xyz(), uvw32, vec3( m_time ) );
-				}
-
-				if ( !col.getExpr()->isDummy()
-					&& !col2.getExpr()->isDummy() )
-				{
-					col = sdw::mix( col.xyz(), col2, vec3( m_time ) );
-				}
+				return;
 			}
+
+			pos.xyz() += morphPosition.xyz() * weight;
+			uvw0 += morphTexture0.xyz() * weight;
+			uvw1 += morphTexture1.xyz() * weight;
+			uvw2 += morphTexture2.xyz() * weight;
+			uvw3 += morphTexture3.xyz() * weight;
+			col += morphColour.xyz() * weight;
 		}
 
-		void MorphingData::morph( sdw::Vec4 & pos
-			, sdw::Vec4 const & pos2
+		void MorphTargetData::morph( sdw::Vec4 & pos
 			, sdw::Vec4 & nml
-			, sdw::Vec3 const & nml2
 			, sdw::Vec3 & uvw0
-			, sdw::Vec3 const & uvw02
 			, sdw::Vec3 & uvw1
-			, sdw::Vec3 const & uvw12
 			, sdw::Vec3 & uvw2
-			, sdw::Vec3 const & uvw22
 			, sdw::Vec3 & uvw3
-			, sdw::Vec3 const & uvw32
 			, sdw::Vec3 & col
-			, sdw::Vec3 const & col2 )const
+			, sdw::Float const & weight )const
 		{
-			morph( pos, pos2
-				, uvw0, uvw02
-				, uvw1, uvw12
-				, uvw2, uvw22
-				, uvw3, uvw32
-				, col, col2 );
-
-			if ( isEnabled()
-				&& !nml.getExpr()->isDummy()
-				&& !nml2.getExpr()->isDummy() )
+			if ( !isEnabled() )
 			{
-				nml = vec4( sdw::mix( nml.xyz(), nml2, vec3( m_time ) ), 0.0f );
+				return;
 			}
+
+			morph( pos
+				, uvw0
+				, uvw1
+				, uvw2
+				, uvw3
+				, col
+				, weight );
+			nml.xyz() += morphNormal.xyz() * weight;
 		}
 
-		void MorphingData::morph( sdw::Vec4 & pos
-			, sdw::Vec4 const & pos2
+		void MorphTargetData::morph( sdw::Vec4 & pos
 			, sdw::Vec4 & nml
-			, sdw::Vec3 const & nml2
 			, sdw::Vec4 & tan
-			, sdw::Vec3 const & tan2
 			, sdw::Vec3 & uvw0
-			, sdw::Vec3 const & uvw02
 			, sdw::Vec3 & uvw1
-			, sdw::Vec3 const & uvw12
 			, sdw::Vec3 & uvw2
-			, sdw::Vec3 const & uvw22
 			, sdw::Vec3 & uvw3
-			, sdw::Vec3 const & uvw32
 			, sdw::Vec3 & col
-			, sdw::Vec3 const & col2 )const
+			, sdw::Float const & weight )const
 		{
-			morph( pos, pos2
-				, nml, nml2
-				, uvw0, uvw02
-				, uvw1, uvw12
-				, uvw2, uvw22
-				, uvw3, uvw32
-				, col, col2 );
-
-			if ( isEnabled()
-				&& !tan.getExpr()->isDummy()
-				&& !tan2.getExpr()->isDummy() )
+			if ( !isEnabled() )
 			{
-				tan = vec4( sdw::mix( tan.xyz(), tan2, vec3( m_time ) ), 0.0f );
-			}
-		}
-
-		void MorphingData::morph( sdw::Vec4 & pos
-			, sdw::Vec4 const & pos2
-			, sdw::Vec4 & uvuv
-			, sdw::Vec4 const & uvuv2 )const
-		{
-			if ( isEnabled() )
-			{
-				CU_Require( !pos.getExpr()->isDummy() );
-				CU_Require( !pos2.getExpr()->isDummy() );
-				pos = vec4( sdw::mix( pos.xyz(), pos2.xyz(), vec3( m_time ) ), 1.0f );
-
-				if ( !uvuv.getExpr()->isDummy()
-					&& !uvuv2.getExpr()->isDummy() )
-				{
-					uvuv = sdw::mix( uvuv, uvuv2, vec4( m_time ) );
-				}
-			}
-		}
-
-		void MorphingData::morph( sdw::Vec4 & pos
-			, sdw::Vec4 const & pos2
-			, sdw::Vec4 & nml
-			, sdw::Vec3 const & nml2
-			, sdw::Vec4 & uvuv
-			, sdw::Vec4 const & uvuv2 )const
-		{
-			morph( pos, pos2, uvuv, uvuv2 );
-
-			if ( isEnabled() )
-			{
-				CU_Require( !nml.getExpr()->isDummy() );
-				CU_Require( !nml2.getExpr()->isDummy() );
-				nml = vec4( sdw::mix( nml.xyz(), nml2, vec3( m_time ) ), 0.0f );
-			}
-		}
-
-		void MorphingData::morph( sdw::Vec4 & pos
-			, sdw::Vec4 const & pos2
-			, sdw::Vec4 & nml
-			, sdw::Vec3 const & nml2
-			, sdw::Vec4 & tan
-			, sdw::Vec3 const & tan2
-			, sdw::Vec4 & uvuv
-			, sdw::Vec4 const & uvuv2 )const
-		{
-			morph( pos, pos2, nml, nml2, uvuv, uvuv2 );
-
-			if ( isEnabled()
-				&& !tan.getExpr()->isDummy()
-				&& !tan2.getExpr()->isDummy() )
-			{
-				tan = vec4( sdw::mix( tan.xyz(), tan2, vec3( m_time ) ), 0.0f );
-			}
-		}
-
-		sdw::Float MorphingData::morph( sdw::Float & lhs, sdw::Float const & rhs )const
-		{
-			if ( isEnabled() )
-			{
-				CU_Require( !lhs.getExpr()->isDummy() );
-				CU_Require( !rhs.getExpr()->isDummy() );
-				lhs = sdw::mix( lhs, rhs, m_time );
+				return;
 			}
 
-			return lhs;
+			morph( pos
+				, nml
+				, uvw0
+				, uvw1
+				, uvw2
+				, uvw3
+				, col
+				, weight );
+			tan.xyz() += morphTangent.xyz() * weight;
 		}
 
-		sdw::Vec2 MorphingData::morph( sdw::Vec2 & lhs, sdw::Vec2 const & rhs )const
+		//*****************************************************************************************
+
+		MorphTargetsData::MorphTargetsData( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstance{ writer, std::move( expr ), enabled }
+			, m_data{ getMemberArray< MorphTargetData >( "targets" ) }
 		{
-			if ( isEnabled() )
+		}
+
+		ast::type::StructPtr MorphTargetsData::makeType( ast::type::TypesCache & cache
+			, MorphFlags morphFlags )
+		{
+			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
+				, "C3D_MorphTargetsData" );
+
+			if ( result->empty() )
 			{
-				CU_Require( !lhs.getExpr()->isDummy() );
-				CU_Require( !rhs.getExpr()->isDummy() );
-				lhs = sdw::mix( lhs, rhs, vec2( m_time ) );
+				result->declMember( "targets"
+					, MorphTargetData::makeType( cache, morphFlags )
+					, MaxMorphTargets );
 			}
 
-			return lhs;
+			return result;
 		}
 
-		sdw::Vec3 MorphingData::morph( sdw::Vec3 & lhs, sdw::Vec3 const & rhs )const
+		//*****************************************************************************************
+
+		castor::String const MorphingWeightsData::BufferName = cuT( "MorphingWeights" );
+		castor::String const MorphingWeightsData::DataName = cuT( "c3d_morphingWeightsData" );
+
+		MorphingWeightsData::MorphingWeightsData( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstance{ writer, std::move( expr ), enabled }
+			, m_data{ getMember< sdw::Vec4 >( "weights" ) }
 		{
-			if ( isEnabled() )
+		}
+
+		ast::type::BaseStructPtr MorphingWeightsData::makeType( ast::type::TypesCache & cache )
+		{
+			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
+				, "C3D_MorphingWeightsData" );
+
+			if ( result->empty() )
 			{
-				CU_Require( !lhs.getExpr()->isDummy() );
-				CU_Require( !rhs.getExpr()->isDummy() );
-				lhs = sdw::mix( lhs, rhs, vec3( m_time ) );
+				result->declMember( "weights", ast::type::Kind::eVec4F );
 			}
 
-			return lhs;
+			return result;
 		}
 
-		sdw::Vec4 MorphingData::morph( sdw::Vec4 & lhs, sdw::Vec4 const & rhs )const
+		//*****************************************************************************************
+
+		MorphingWeightsDataArray::MorphingWeightsDataArray( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstance{ writer, std::move( expr ), enabled }
+			, m_data{ getMemberArray< MorphingWeightsData >( "weights" ) }
 		{
-			if ( isEnabled() )
+		}
+
+		ast::type::StructPtr MorphingWeightsDataArray::makeType( ast::type::TypesCache & cache )
+		{
+			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
+				, "C3D_MorphingWeightsDataArray" );
+
+			if ( result->empty() )
 			{
-				CU_Require( !lhs.getExpr()->isDummy() );
-				CU_Require( !rhs.getExpr()->isDummy() );
-				lhs = vec4( sdw::mix( lhs.xyz(), rhs.xyz(), vec3( m_time ) ), 1.0_f );
+				result->declMember( "weights"
+					, MorphingWeightsData::makeType( cache )
+					, MaxMorphTargets );
 			}
 
-			return lhs;
+			return result;
 		}
 
-		sdw::Vec4 MorphingData::morph( sdw::Vec4 & lhs, sdw::Vec3 const & rhs )const
-		{
-			if ( isEnabled() )
-			{
-				CU_Require( !lhs.getExpr()->isDummy() );
-				CU_Require( !rhs.getExpr()->isDummy() );
-				lhs = vec4( sdw::mix( lhs.xyz(), rhs, vec3( m_time ) ), 1.0_f );
-			}
-
-			return lhs;
-		}
+		//*****************************************************************************************
 	}
+
+	void morph( sdw::Array< shader::MorphTargetsData > const & targets
+		, shader::MorphingWeightsDataArray const & weights
+		, sdw::UInt vertexId
+		, sdw::UInt morphTargetsCount
+		, sdw::Vec4 & pos
+		, sdw::Vec3 & uvw0
+		, sdw::Vec3 & uvw1
+		, sdw::Vec3 & uvw2
+		, sdw::Vec3 & uvw3
+		, sdw::Vec3 & col )
+	{
+		if ( !targets.isEnabled() )
+		{
+			return;
+		}
+
+		auto & writer = *targets.getWriter();
+		auto morphTargets = writer.declLocale( "morphTargets"
+			, targets[vertexId] );
+		auto morphWeight = writer.declLocale( "morphWeight"
+			, 0.0_f );
+
+		FOR( writer, sdw::UInt, mphIndex, 0_u, mphIndex < morphTargetsCount, ++mphIndex )
+		{
+			morphWeight = weights[mphIndex];
+
+			IF( writer, morphWeight != 0.0_f )
+			{
+				auto target = writer.declLocale( "morphTarget"
+					, morphTargets[mphIndex] );
+				target.morph( pos
+					, uvw0
+					, uvw1
+					, uvw2
+					, uvw3
+					, col
+					, morphWeight );
+			}
+			FI;
+		}
+		ROF;
+	}
+
+	void morph( sdw::Array< shader::MorphTargetsData > const & targets
+		, shader::MorphingWeightsDataArray const & weights
+		, sdw::UInt vertexId
+		, sdw::UInt morphTargetsCount
+		, sdw::Vec4 & pos
+		, sdw::Vec4 & nml
+		, sdw::Vec3 & uvw0
+		, sdw::Vec3 & uvw1
+		, sdw::Vec3 & uvw2
+		, sdw::Vec3 & uvw3
+		, sdw::Vec3 & col )
+	{
+		if ( !targets.isEnabled() )
+		{
+			return;
+		}
+
+		auto & writer = *targets.getWriter();
+		auto morphTargets = writer.declLocale( "morphTargets"
+			, targets[vertexId] );
+		auto morphWeight = writer.declLocale( "morphWeight"
+			, 0.0_f );
+
+		FOR( writer, sdw::UInt, mphIndex, 0_u, mphIndex < morphTargetsCount, ++mphIndex )
+		{
+			morphWeight = weights[mphIndex];
+
+			IF( writer, morphWeight != 0.0_f )
+			{
+				auto target = writer.declLocale( "morphTarget"
+					, morphTargets[mphIndex] );
+				target.morph( pos
+					, nml
+					, uvw0
+					, uvw1
+					, uvw2
+					, uvw3
+					, col
+					, morphWeight );
+			}
+			FI;
+		}
+		ROF;
+	}
+
+	void morph( sdw::Array< shader::MorphTargetsData > const & targets
+		, shader::MorphingWeightsDataArray const & weights
+		, sdw::UInt vertexId
+		, sdw::UInt morphTargetsCount
+		, sdw::Vec4 & pos
+		, sdw::Vec4 & nml
+		, sdw::Vec4 & tan
+		, sdw::Vec3 & uvw0
+		, sdw::Vec3 & uvw1
+		, sdw::Vec3 & uvw2
+		, sdw::Vec3 & uvw3
+		, sdw::Vec3 & col )
+	{
+		if ( !targets.isEnabled() )
+		{
+			return;
+		}
+
+		auto & writer = *targets.getWriter();
+		auto morphTargets = writer.declLocale( "morphTargets"
+			, targets[vertexId] );
+		auto morphWeight = writer.declLocale( "morphWeight"
+			, 0.0_f );
+
+		FOR( writer, sdw::UInt, mphIndex, 0_u, mphIndex < morphTargetsCount, ++mphIndex )
+		{
+			morphWeight = weights[mphIndex];
+
+			IF( writer, morphWeight != 0.0_f )
+			{
+				auto target = writer.declLocale( "morphTarget"
+					, morphTargets[mphIndex] );
+				target.morph( pos
+					, nml
+					, tan
+					, uvw0
+					, uvw1
+					, uvw2
+					, uvw3
+					, col
+					, morphWeight );
+			}
+			FI;
+		}
+		ROF;
+	}
+
+	//*********************************************************************************************
 }

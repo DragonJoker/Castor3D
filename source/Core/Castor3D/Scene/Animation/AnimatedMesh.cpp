@@ -2,6 +2,7 @@
 
 #include "Castor3D/Animation/Animable.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstance.hpp"
@@ -16,6 +17,7 @@ namespace castor3d
 		, m_mesh{ mesh }
 		, m_geometry{ geometry }
 	{
+		m_ids.resize( m_mesh.getSubmeshCount() );
 	}
 
 	void AnimatedMesh::update( castor::Milliseconds const & elapsed )
@@ -39,7 +41,17 @@ namespace castor3d
 				m_reinit = false;
 			}
 		}
+	}
 
+	uint32_t AnimatedMesh::getId( Submesh const & submesh )const
+	{
+		return m_ids[submesh.getId()];
+	}
+
+	void AnimatedMesh::setId( Submesh const & submesh
+		, uint32_t id )
+	{
+		m_ids[submesh.getId()] = id;
 	}
 
 	void AnimatedMesh::doAddAnimation( castor::String const & name )

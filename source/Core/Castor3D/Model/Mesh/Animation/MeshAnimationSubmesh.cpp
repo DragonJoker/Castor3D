@@ -9,11 +9,7 @@ namespace castor3d
 		: castor::OwnedBy< MeshAnimation >{ animation }
 		, m_submesh{ submesh }
 	{
-		if ( !m_submesh.hasComponent( MorphComponent::Name ) )
-		{
-			m_submesh.addComponent( std::make_shared< MorphComponent >( submesh ) );
-		}
-
+		CU_Require( m_submesh.hasComponent( MorphComponent::Name ) );
 		m_component = m_submesh.getComponent< MorphComponent >();
 	}
 }

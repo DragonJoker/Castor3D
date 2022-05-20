@@ -75,7 +75,8 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinaryChunk.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinaryMesh.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinaryMeshAnimation.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinaryMeshAnimationKeyFrame.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinaryMeshMorphTarget.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinaryMorphComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinarySceneNodeAnimation.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinarySceneNodeAnimationKeyFrame.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinarySkeleton.cpp
@@ -95,7 +96,8 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinaryChunk.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinaryMesh.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinaryMeshAnimation.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinaryMeshAnimationKeyFrame.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinaryMeshMorphTarget.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinaryMorphComponent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinaryModule.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinaryParser.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinarySceneNodeAnimation.hpp
@@ -522,14 +524,14 @@ source_group( "Source Files\\Model\\Mesh" FILES ${${PROJECT_NAME}_FOLDER_SRC_FIL
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Animation/MeshAnimation.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Animation/MeshAnimationKeyFrame.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Animation/MeshAnimationSubmesh.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Animation/MeshMorphTarget.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Animation/MeshAnimation.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Animation/MeshAnimationKeyFrame.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Animation/MeshAnimationModule.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Animation/MeshAnimationSubmesh.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Animation/MeshMorphTarget.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
 	${${PROJECT_NAME}_SRC_FILES}
