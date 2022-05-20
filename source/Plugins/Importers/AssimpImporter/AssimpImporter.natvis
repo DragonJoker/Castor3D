@@ -8,7 +8,7 @@
 			<Item Name="scene">m_scene</Item>
       <Item Name="sceneData">m_sceneData</Item>
       <Item Name="bonesNodes">m_bonesNodes</Item>
-      <Item Name="m_meshAnimBuffers">m_meshAnimBuffers</Item>
+      <Item Name="meshAnimBuffers">m_meshAnimBuffers</Item>
 		</Expand>
 	</Type>
 
