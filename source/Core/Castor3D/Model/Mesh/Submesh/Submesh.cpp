@@ -185,18 +185,6 @@ namespace castor3d
 			createComponent< ColoursComponent >();
 		}
 
-		if ( checkFlag( flags, SubmeshFlag::eMorphPositions )
-			|| checkFlag( flags, SubmeshFlag::eMorphNormals )
-			|| checkFlag( flags, SubmeshFlag::eMorphTangents )
-			|| checkFlag( flags, SubmeshFlag::eMorphTexcoords0 )
-			|| checkFlag( flags, SubmeshFlag::eMorphTexcoords1 )
-			|| checkFlag( flags, SubmeshFlag::eMorphTexcoords2 )
-			|| checkFlag( flags, SubmeshFlag::eMorphTexcoords3 )
-			|| checkFlag( flags, SubmeshFlag::eMorphColours ) )
-		{
-			createComponent< MorphComponent >();
-		}
-
 		if ( checkFlag( flags, SubmeshFlag::eBones ) )
 		{
 			createComponent< BonesComponent >();
@@ -493,6 +481,18 @@ namespace castor3d
 		return result;
 	}
 
+	MorphFlags Submesh::getMorphFlags()const
+	{
+		MorphFlags result{};
+
+		if ( auto morph = getComponent< MorphComponent >() )
+		{
+			result = morph->getMorphFlags();
+		}
+
+		return result;
+	}
+
 	void Submesh::setMaterial( MaterialRPtr oldMaterial
 		, MaterialRPtr newMaterial
 		, bool update )
@@ -733,6 +733,27 @@ namespace castor3d
 		auto component = getComponent< ColoursComponent >();
 		CU_Require( component );
 		return component->getData();
+	}
+
+	GpuBufferOffsetT< castor::Point4f > const & Submesh::getMorphTargets()const
+	{
+		if ( auto component = getComponent< MorphComponent >() )
+		{
+			return component->getMorphTargets();
+		}
+
+		static GpuBufferOffsetT< castor::Point4f > const dummy{};
+		return dummy;
+	}
+
+	uint32_t Submesh::getMorphTargetsCount()const
+	{
+		if ( auto component = getComponent< MorphComponent >() )
+		{
+			return component->getMorphTargetsCount();
+		}
+
+		return 0u;
 	}
 
 	//*********************************************************************************************

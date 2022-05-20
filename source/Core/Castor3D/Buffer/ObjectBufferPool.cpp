@@ -73,46 +73,6 @@ namespace castor3d
 				result += "B";
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphPositions ) )
-			{
-				result += "MP";
-			}
-
-			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphNormals ) )
-			{
-				result += "MN";
-			}
-
-			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphTangents ) )
-			{
-				result += "MT";
-			}
-
-			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords0 ) )
-			{
-				result += "MT0";
-			}
-
-			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords1 ) )
-			{
-				result += "1";
-			}
-
-			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords2 ) )
-			{
-				result += "2";
-			}
-
-			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphTexcoords3 ) )
-			{
-				result += "3";
-			}
-
-			if ( checkFlag( submeshFlags, SubmeshFlag::eMorphColours ) )
-			{
-				result += "MC";
-			}
-
 			return result;
 		}
 	}
@@ -188,7 +148,7 @@ namespace castor3d
 		{
 			for ( auto & buffers : bufferIt.second )
 			{
-				for ( uint32_t i = 0u; i < getIndex( SubmeshFlag::eAllComponents ); ++i )
+				for ( uint32_t i = 0u; i < uint32_t( SubmeshData::eCount ); ++i )
 				{
 					if ( buffers.buffers[i] )
 					{
@@ -217,7 +177,7 @@ namespace castor3d
 			auto name = objbuf::getName( submeshFlags );
 			ModelBuffers modelBuffers;
 
-			for ( uint32_t i = 0u; i < getIndex( SubmeshFlag::eAllComponents ); ++i )
+			for ( uint32_t i = 0u; i < uint32_t( SubmeshData::eCount ); ++i )
 			{
 				if ( !checkFlag( submeshFlags, SubmeshFlag( 0x0001u << i ) ) )
 				{
@@ -271,7 +231,7 @@ namespace castor3d
 
 		if ( vertexCount )
 		{
-			for ( uint32_t i = 1u; i < getIndex( SubmeshFlag::eAllComponents ); ++i )
+			for ( uint32_t i = 1u; i < uint32_t( SubmeshData::eCount ); ++i )
 			{
 				if ( it->buffers[i] )
 				{
@@ -295,7 +255,7 @@ namespace castor3d
 			{
 				bool result = true;
 
-				for ( uint32_t i = 0u; i < getIndex( SubmeshFlag::eAllComponents ); ++i )
+				for ( uint32_t i = 0u; i < uint32_t( SubmeshData::eCount ); ++i )
 				{
 					if ( result && lookup.buffers[i] && bufferOffset.buffers[i].buffer )
 					{
@@ -307,7 +267,7 @@ namespace castor3d
 			} );
 		CU_Require( it != buffers.end() );
 
-		for ( uint32_t i = 0u; i < getIndex( SubmeshFlag::eAllComponents ); ++i )
+		for ( uint32_t i = 0u; i < uint32_t( SubmeshData::eCount ); ++i )
 		{
 			if ( bufferOffset.buffers[i].buffer )
 			{

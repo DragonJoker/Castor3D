@@ -47,9 +47,19 @@ namespace castor3d
 		 *\~french
 		 *\return		Le temps de départ.
 		 */
-		inline castor::Milliseconds const & getTimeIndex()const
+		castor::Milliseconds const & getTimeIndex()const
 		{
 			return m_timeIndex;
+		}
+		/**
+		 *\~english
+		 *\return		The keyframe's bounding box.
+		 *\~french
+		 *\return		La bounding box de la keyframe.
+		 */
+		castor::BoundingBox const & getBoundingBox()const
+		{
+			return m_boundingBox;
 		}
 
 	protected:

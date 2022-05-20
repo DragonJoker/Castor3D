@@ -25,9 +25,10 @@
 #include "Castor3D/Model/Mesh/MeshFactory.hpp"
 #include "Castor3D/Model/Mesh/MeshGenerator.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
-#include "Castor3D/Model/Mesh/Animation/MeshAnimationKeyFrame.hpp"
+#include "Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Model/Skeleton/SkeletonImporter.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
@@ -3085,7 +3086,7 @@ namespace castor3d
 
 				MeshAnimation & animation{ static_cast< MeshAnimation & >( parsingContext.mesh.lock()->getAnimation( animName ) ) };
 				uint32_t index = 0u;
-				MeshAnimationKeyFrameUPtr keyFrame = std::make_unique< MeshAnimationKeyFrame >( animation
+				MeshMorphTargetUPtr keyFrame = std::make_unique< MeshMorphTarget >( animation
 					, castor::Milliseconds{ int64_t( timeIndex * 1000ll ) } );
 
 				for ( auto & submesh : mesh )
@@ -3110,11 +3111,15 @@ namespace castor3d
 							texcoords = &texComp->getData();
 						}
 
-						keyFrame->addSubmeshBuffer( *submesh
-							, { submesh->getPositions()
+						submesh->getComponent< MorphComponent >()->addMorphTarget( { submesh->getPositions()
 							, submesh->getNormals()
 							, *tangents
 							, *texcoords } );
+						//keyFrame->addSubmeshBuffer( *submesh
+						//	, { submesh->getPositions()
+						//		, submesh->getNormals()
+						//		, *tangents
+						//		, *texcoords } );
 					}
 
 					++index;

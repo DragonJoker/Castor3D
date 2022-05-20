@@ -68,10 +68,13 @@ namespace castor3d
 		}
 
 		static size_t makeHash( ProgramFlags const & programFlags
-			, SceneFlags const & sceneFlags )
+			, SceneFlags const & sceneFlags
+			, VkDeviceSize morphTargetsOffset )
 		{
 			auto nodeType = getRenderNodeType( programFlags );
-			return size_t( nodeType ) | ( size_t( sceneFlags ) << 16u );
+			return size_t( nodeType )
+				| ( size_t( sceneFlags ) << 8u )
+				| ( size_t( morphTargetsOffset ) << 24u );
 		}
 	}
 
@@ -177,6 +180,11 @@ namespace castor3d
 		return doAdjustSubmeshFlags( flags );
 	}
 
+	MorphFlags RenderNodesPass::adjustFlags( MorphFlags flags )const
+	{
+		return doAdjustMorphFlags( flags );
+	}
+
 	PassFlags RenderNodesPass::adjustFlags( PassFlags flags )const
 	{
 		return doAdjustPassFlags( flags );
@@ -202,10 +210,12 @@ namespace castor3d
 		, VkCompareOp blendAlphaFunc
 		, TextureFlagsArray const & textures
 		, SubmeshFlags const & submeshFlags
+		, MorphFlags const & morphFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, VkPrimitiveTopology topology
-		, bool isFrontCulled )
+		, bool isFrontCulled
+		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )
 	{
 		auto result = PipelineFlags{ colourBlendMode
 			, alphaBlendMode
@@ -214,13 +224,16 @@ namespace castor3d
 			, passTypeID
 			, heightTextureIndex
 			, submeshFlags
+			, morphFlags
 			, programFlags
 			, sceneFlags
 			, topology
 			, 3u
 			, alphaFunc
 			, blendAlphaFunc
-			, textures };
+			, textures
+			, {}
+			, morphTargets.getOffset() };
 
 		if ( isFrontCulled )
 		{
@@ -234,10 +247,12 @@ namespace castor3d
 	PipelineFlags RenderNodesPass::createPipelineFlags( Pass const & pass
 		, TextureFlagsArray const & textures
 		, SubmeshFlags const & submeshFlags
+		, MorphFlags const & morphFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, VkPrimitiveTopology topology
-		, bool isFrontCulled )
+		, bool isFrontCulled
+		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )
 	{
 		return createPipelineFlags( pass.getColourBlendMode()
 			, pass.getAlphaBlendMode()
@@ -251,10 +266,12 @@ namespace castor3d
 			, pass.getBlendAlphaFunc()
 			, textures
 			, submeshFlags
+			, morphFlags
 			, programFlags
 			, sceneFlags
 			, topology
-			, isFrontCulled );
+			, isFrontCulled
+			, morphTargets );
 	}
 
 	RenderPipeline & RenderNodesPass::prepareBackPipeline( PipelineFlags pipelineFlags
@@ -410,12 +427,13 @@ namespace castor3d
 	}
 
 	void RenderNodesPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
-		, ShadowMapLightTypeArray const & shadowMaps )
+		, ShadowMapLightTypeArray const & shadowMaps
+		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )
 	{
 		auto programFlags = pipeline.getFlags().programFlags;
 		programFlags = doAdjustProgramFlags( programFlags );
 		auto sceneFlags = doAdjustSceneFlags( pipeline.getFlags().sceneFlags );
-		auto descLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( programFlags, sceneFlags )
+		auto descLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( programFlags, sceneFlags, morphTargets.getOffset() )
 			, PassDescriptors{} ).first;
 		auto & descriptors = descLayoutIt->second;
 
@@ -470,7 +488,14 @@ namespace castor3d
 
 			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
 			{
-				descriptorWrites.push_back( animCache.getMorphingBuffer().getStorageBinding( uint32_t( GlobalBuffersIdx::eMorphingData ) ) );
+				CU_Require( morphTargets );
+				descriptorWrites.push_back( animCache.getMorphingWeights().getStorageBinding( uint32_t( GlobalBuffersIdx::eMorphingWeights ) ) );
+				descriptorWrites.push_back( ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eMorphTargets )
+					, 0u
+					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+					, { VkDescriptorBufferInfo{ morphTargets.buffer->getBuffer().getBuffer()
+						, morphTargets.getOffset()
+						, morphTargets.getSize() } } } );
 			}
 
 			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
@@ -531,6 +556,11 @@ namespace castor3d
 	}
 
 	SubmeshFlags RenderNodesPass::doAdjustSubmeshFlags( SubmeshFlags flags )const
+	{
+		return flags;
+	}
+
+	MorphFlags RenderNodesPass::doAdjustMorphFlags( MorphFlags flags )const
 	{
 		return flags;
 	}
@@ -616,7 +646,10 @@ namespace castor3d
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
 		{
-			addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eMorphingData )
+			addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eMorphingWeights )
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, stageFlags ) );
+			addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eMorphTargets )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, stageFlags ) );
 		}
@@ -659,7 +692,7 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = renderSystem.getRenderDevice();
 		RenderPipeline * result{};
-		auto descLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( flags.programFlags, flags.sceneFlags )
+		auto descLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( flags.programFlags, flags.sceneFlags, flags.morphTargetsOffset )
 			, PassDescriptors{} ).first;
 		auto & descriptors = descLayoutIt->second;
 
@@ -735,10 +768,6 @@ namespace castor3d
 			remFlag( flags.submeshFlags, SubmeshFlag::eTexcoords1 );
 			remFlag( flags.submeshFlags, SubmeshFlag::eTexcoords2 );
 			remFlag( flags.submeshFlags, SubmeshFlag::eTexcoords3 );
-			remFlag( flags.submeshFlags, SubmeshFlag::eMorphTexcoords0 );
-			remFlag( flags.submeshFlags, SubmeshFlag::eMorphTexcoords1 );
-			remFlag( flags.submeshFlags, SubmeshFlag::eMorphTexcoords2 );
-			remFlag( flags.submeshFlags, SubmeshFlag::eMorphTexcoords3 );
 		}
 
 		doAdjustFlags( flags );
@@ -771,8 +800,13 @@ namespace castor3d
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
-		C3D_Morphing( writer
-			, GlobalBuffersIdx::eMorphingData
+		C3D_MorphTargets( writer
+			, GlobalBuffersIdx::eMorphTargets
+			, RenderPipeline::eBuffers
+			, flags.morphFlags
+			, flags.programFlags );
+		C3D_MorphingWeights( writer
+			, GlobalBuffersIdx::eMorphingWeights
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
 		auto skinningData = SkinningUbo::declare( writer
@@ -817,9 +851,12 @@ namespace castor3d
 				out.texture2 = in.texture2;
 				out.texture3 = in.texture3;
 				out.colour = in.colour;
-				auto morphingData = writer.declLocale( "morphingData"
-					, c3d_morphingData[ids.morphingId] );
-				in.morph( morphingData
+				auto morphingWeights = writer.declLocale( "morphingWeights"
+					, c3d_morphingWeights[ids.morphingId] );
+				morph( c3d_morphTargets
+					, morphingWeights
+					, writer.cast< UInt >( in.vertexIndex - in.baseVertex )
+					, ids.morphTargetsCount
 					, curPosition
 					, v4Normal
 					, v4Tangent

@@ -58,8 +58,10 @@ namespace castor3d
 		 *\param[in]	cur		Le tampon d'animation courant (pourcentage 1).
 		 */
 		C3D_API void update( float factor
-			, SubmeshAnimationBuffer const & prv
-			, SubmeshAnimationBuffer const & cur );
+			, std::vector< float > const & prv
+			, std::vector< float > const & cur
+			, castor::BoundingBox const & prvbb
+			, castor::BoundingBox const & curbb );
 		/**
 		 *\~english
 		 *\brief		Moves the object back to initial state.
@@ -76,25 +78,22 @@ namespace castor3d
 		C3D_API Submesh const & getSubmesh()const;
 		/**
 		 *\~english
-		 *\brief		The current factor.
+		 *\brief		The current weights.
 		 *\~french
-		 *\brief		Le facteur courant.
+		 *\brief		Les poids courants.
 		 */
-		float getCurrentFactor()const
+		std::vector< float > getWeights()const
 		{
-			return m_currentFactor;
+			return m_cur;
 		}
 
 	protected:
 		//!\~english	The animation object.
 		//!\~french		L'animation d'objet.
 		MeshAnimationSubmesh & m_animationObject;
-		//!\~english	The time elapsed since the last keyframe.
-		//!\~french		Le temps écoulé depuis la dernière keyframe.
-		float m_currentFactor{ 0.0f };
 		//!\~english	The current animation buffer.
 		//!\~french		Le tampon d'animation actuel.
-		SubmeshAnimationBuffer const * m_cur{ nullptr };
+		std::vector< float > m_cur;
 	};
 }
 

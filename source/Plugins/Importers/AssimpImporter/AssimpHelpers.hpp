@@ -105,20 +105,24 @@ namespace c3d_assimp
 		, castor::Point3fArray & texcoords3
 		, castor::Point3fArray & colours )
 	{
-		positions.resize( aiMesh.mNumVertices );
-		normals.resize( aiMesh.mNumVertices );
 		uint32_t index{ 0u };
 
-		for ( auto & pos : positions )
+		if ( aiMesh.HasPositions() )
 		{
-			pos[0] = float( aiMesh.mVertices[index].x );
-			pos[1] = float( aiMesh.mVertices[index].y );
-			pos[2] = float( aiMesh.mVertices[index].z );
-			++index;
+			positions.resize( aiMesh.mNumVertices );
+
+			for ( auto & pos : positions )
+			{
+				pos[0] = float( aiMesh.mVertices[index].x );
+				pos[1] = float( aiMesh.mVertices[index].y );
+				pos[2] = float( aiMesh.mVertices[index].z );
+				++index;
+			}
 		}
 
 		if ( aiMesh.HasNormals() )
 		{
+			normals.resize( aiMesh.mNumVertices );
 			index = 0u;
 
 			for ( auto & nml : normals )
@@ -248,9 +252,9 @@ namespace c3d_assimp
 			{
 				auto it = buffer.positions.begin();
 
-				for ( auto & point : positions )
+				for ( auto & ref : positions )
 				{
-					*it -= point;
+					*it -= ref;
 					++it;
 				}
 			}
@@ -259,9 +263,9 @@ namespace c3d_assimp
 			{
 				auto it = buffer.normals.begin();
 
-				for ( auto & point : normals )
+				for ( auto & ref : normals )
 				{
-					*it -= point;
+					*it -= ref;
 					++it;
 				}
 			}
@@ -270,9 +274,9 @@ namespace c3d_assimp
 			{
 				auto it = buffer.texcoords0.begin();
 
-				for ( auto & point : texcoords0 )
+				for ( auto & ref : texcoords0 )
 				{
-					*it -= point;
+					*it -= ref;
 					++it;
 				}
 			}
@@ -281,9 +285,9 @@ namespace c3d_assimp
 			{
 				auto it = buffer.texcoords1.begin();
 
-				for ( auto & point : texcoords1 )
+				for ( auto & ref : texcoords1 )
 				{
-					*it -= point;
+					*it -= ref;
 					++it;
 				}
 			}
@@ -292,9 +296,9 @@ namespace c3d_assimp
 			{
 				auto it = buffer.texcoords2.begin();
 
-				for ( auto & point : texcoords2 )
+				for ( auto & ref : texcoords2 )
 				{
-					*it -= point;
+					*it -= ref;
 					++it;
 				}
 			}
@@ -303,9 +307,9 @@ namespace c3d_assimp
 			{
 				auto it = buffer.texcoords3.begin();
 
-				for ( auto & point : texcoords3 )
+				for ( auto & ref : texcoords3 )
 				{
-					*it -= point;
+					*it -= ref;
 					++it;
 				}
 			}
@@ -314,9 +318,9 @@ namespace c3d_assimp
 			{
 				auto it = buffer.tangents.begin();
 
-				for ( auto & point : tangents )
+				for ( auto & ref : tangents )
 				{
-					*it -= point;
+					*it -= ref;
 					++it;
 				}
 			}
@@ -325,9 +329,9 @@ namespace c3d_assimp
 			{
 				auto it = buffer.colours.begin();
 
-				for ( auto & point : colours )
+				for ( auto & ref : colours )
 				{
-					*it -= point;
+					*it -= ref;
 					++it;
 				}
 			}
@@ -336,133 +340,6 @@ namespace c3d_assimp
 		}
 
 		return result;
-	}
-
-	static void applyMorphTarget( float weight
-		, castor3d::SubmeshAnimationBuffer const & target
-		, castor::Point3fArray & positions
-		, castor::Point3fArray & normals
-		, castor::Point3fArray & tangents
-		, castor::Point3fArray & texcoords0
-		, castor::Point3fArray & texcoords1
-		, castor::Point3fArray & texcoords2
-		, castor::Point3fArray & texcoords3
-		, castor::Point3fArray & colours )
-	{
-		if ( weight != 0.0f )
-		{
-			if ( !positions.empty() )
-			{
-				auto posIt = positions.begin();
-				auto bufferIt = target.positions.begin();
-
-				while ( bufferIt != target.positions.end() )
-				{
-					auto & buf = *bufferIt;
-					*posIt += buf * weight;
-					++posIt;
-					++bufferIt;
-				}
-			}
-
-			if ( !normals.empty() )
-			{
-				auto nmlIt = normals.begin();
-				auto bufferIt = target.normals.begin();
-
-				while ( bufferIt != target.normals.end() )
-				{
-					auto & buf = *bufferIt;
-					*nmlIt += buf * weight;
-					++nmlIt;
-					++bufferIt;
-				}
-			}
-
-			if ( !tangents.empty() )
-			{
-				auto tanIt = tangents.begin();
-				auto bufferIt = target.tangents.begin();
-
-				while ( bufferIt != target.tangents.end() )
-				{
-					auto & buf = *bufferIt;
-					*tanIt += buf * weight;
-					++tanIt;
-					++bufferIt;
-				}
-			}
-
-			if ( !texcoords0.empty() )
-			{
-				auto texIt = texcoords0.begin();
-				auto bufferIt = target.texcoords0.begin();
-
-				while ( bufferIt != target.texcoords0.end() )
-				{
-					auto & buf = *bufferIt;
-					*texIt += buf * weight;
-					++texIt;
-					++bufferIt;
-				}
-			}
-
-			if ( !texcoords1.empty() )
-			{
-				auto texIt = texcoords1.begin();
-				auto bufferIt = target.texcoords1.begin();
-
-				while ( bufferIt != target.texcoords1.end() )
-				{
-					auto & buf = *bufferIt;
-					*texIt += buf * weight;
-					++texIt;
-					++bufferIt;
-				}
-			}
-
-			if ( !texcoords2.empty() )
-			{
-				auto texIt = texcoords2.begin();
-				auto bufferIt = target.texcoords2.begin();
-
-				while ( bufferIt != target.texcoords2.end() )
-				{
-					auto & buf = *bufferIt;
-					*texIt += buf * weight;
-					++texIt;
-					++bufferIt;
-				}
-			}
-
-			if ( !texcoords3.empty() )
-			{
-				auto texIt = texcoords3.begin();
-				auto bufferIt = target.texcoords3.begin();
-
-				while ( bufferIt != target.texcoords3.end() )
-				{
-					auto & buf = *bufferIt;
-					*texIt += buf * weight;
-					++texIt;
-					++bufferIt;
-				}
-			}
-
-			if ( !colours.empty() )
-			{
-				auto texIt = colours.begin();
-				auto bufferIt = target.colours.begin();
-
-				while ( bufferIt != target.colours.end() )
-				{
-					auto & buf = *bufferIt;
-					*texIt += buf * weight;
-					++texIt;
-					++bufferIt;
-				}
-			}
-		}
 	}
 
 	static std::pair< uint32_t, double > getNodeAnimFrameTicks( aiNodeAnim const & aiNodeAnim )

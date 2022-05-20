@@ -31,7 +31,9 @@ namespace castor3d
 		struct MatrixData;
 		struct ModelInstancesData;
 		struct ModelData;
-		struct MorphingData;
+		struct MorphTargetData;
+		struct MorphTargetsData;
+		struct MorphingWeightsData;
 		struct OverlayData;
 		struct PickingData;
 		struct RsmConfigData;
@@ -51,7 +53,9 @@ namespace castor3d
 		Writer_Parameter( MatrixData );
 		Writer_Parameter( ModelInstancesData );
 		Writer_Parameter( ModelData );
-		Writer_Parameter( MorphingData );
+		Writer_Parameter( MorphTargetData );
+		Writer_Parameter( MorphTargetsData );
+		Writer_Parameter( MorphingWeightsData );
 		Writer_Parameter( OverlayData );
 		Writer_Parameter( PickingData );
 		Writer_Parameter( RsmConfigData );
@@ -266,9 +270,10 @@ namespace castor3d
 	*\brief
 	*	Données de morphing (temps).
 	*/
-	struct MorphingBufferConfiguration
+	struct MorphingWeightsConfiguration
 	{
-		castor::Point4f time;
+		// x4 because the shader stores a vec4[MaxMorphTargets]
+		std::array< float, MaxMorphTargets * 4u > morphTargetsWeights;
 	};
 	/**
 	*\~english

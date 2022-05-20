@@ -1,8 +1,8 @@
 #include "Castor3D/Binary/BinaryMeshAnimation.hpp"
 
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
-#include "Castor3D/Model/Mesh/Animation/MeshAnimationKeyFrame.hpp"
-#include "Castor3D/Binary/BinaryMeshAnimationKeyFrame.hpp"
+#include "Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp"
+#include "Castor3D/Binary/BinaryMeshMorphTarget.hpp"
 
 namespace castor3d
 {
@@ -14,7 +14,7 @@ namespace castor3d
 
 		for ( auto const & keyframe : obj )
 		{
-			result = result && BinaryWriter< MeshAnimationKeyFrame >{}.write( static_cast< MeshAnimationKeyFrame const & >( *keyframe ), m_chunk );
+			result = result && BinaryWriter< MeshMorphTarget >{}.write( static_cast< MeshMorphTarget const & >( *keyframe ), m_chunk );
 		}
 
 		return result;
@@ -28,7 +28,7 @@ namespace castor3d
 	bool BinaryParser< MeshAnimation >::doParse( MeshAnimation & obj )
 	{
 		bool result = true;
-		MeshAnimationKeyFrameUPtr keyFrame;
+		MeshMorphTargetUPtr keyFrame;
 		castor::String name;
 		BinaryChunk chunk;
 
@@ -47,9 +47,9 @@ namespace castor3d
 
 				break;
 
-			case ChunkType::eMeshAnimationKeyFrame:
-				keyFrame = std::make_unique< MeshAnimationKeyFrame >( obj, 0_ms );
-				result = createBinaryParser< MeshAnimationKeyFrame >().parse( *keyFrame, chunk );
+			case ChunkType::eMeshMorphTarget:
+				keyFrame = std::make_unique< MeshMorphTarget >( obj, 0_ms );
+				result = createBinaryParser< MeshMorphTarget >().parse( *keyFrame, chunk );
 				checkError( result, "Couldn't parse keyframe." );
 
 				if ( result )
@@ -61,6 +61,58 @@ namespace castor3d
 
 			default:
 				break;
+			}
+		}
+
+		return result;
+	}
+
+	bool BinaryParser< MeshAnimation >::doParse_v1_5( MeshAnimation & obj )
+	{
+		bool result = true;
+
+		if ( m_fileVersion <= Version{ 1, 5, 0 } )
+		{
+			MeshMorphTargetUPtr keyFrame;
+			castor::String name;
+			BinaryChunk chunk;
+
+			while ( result && doGetSubChunk( chunk ) )
+			{
+				switch ( chunk.getChunkType() )
+				{
+				case ChunkType::eName:
+					result = doParseChunk( name, chunk );
+					checkError( result, "Couldn't parse name." );
+
+					if ( result )
+					{
+						obj.m_name = name;
+					}
+
+					break;
+
+#pragma warning( push )
+#pragma warning( disable: 4996 )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+				case ChunkType::eMeshAnimationKeyFrame:
+#pragma GCC diagnostic pop
+#pragma warning( pop )
+					keyFrame = std::make_unique< MeshMorphTarget >( obj, 0_ms );
+					result = createBinaryParser< MeshMorphTarget >().parse( *keyFrame, chunk );
+					checkError( result, "Couldn't parse keyframe." );
+
+					if ( result )
+					{
+						obj.addKeyFrame( std::move( keyFrame ) );
+					}
+
+					break;
+
+				default:
+					break;
+				}
 			}
 		}
 

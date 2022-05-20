@@ -145,7 +145,8 @@ namespace castor3d
 		eTexConfigs,
 		eTexAnims,
 		eBillboardsData,
-		eMorphingData,
+		eMorphTargets,
+		eMorphingWeights,
 		eSkinningTransformData,
 		CU_ScopedEnumBounds( eMatrix ),
 	};
@@ -322,6 +323,7 @@ namespace castor3d
 			, PassTypeID passType = 0u
 			, uint32_t heightMapIndex = InvalidIndex
 			, SubmeshFlags submeshFlags = SubmeshFlag::eIndex
+			, MorphFlags morphFlags = MorphFlag::eNone
 			, ProgramFlags programFlags = ProgramFlag::eNone
 			, SceneFlags sceneFlags = SceneFlag::eNone
 			, VkPrimitiveTopology topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
@@ -329,7 +331,8 @@ namespace castor3d
 			, VkCompareOp alphaFunc = VK_COMPARE_OP_ALWAYS
 			, VkCompareOp blendAlphaFunc = VK_COMPARE_OP_ALWAYS
 			, TextureFlagsArray textures = {}
-			, uint32_t layerIndex = {} )
+			, uint32_t passLayerIndex = {}
+			, VkDeviceSize morphTargetsOffset = {} )
 			: colourBlendMode{ colourBlendMode }
 			, alphaBlendMode{ alphaBlendMode }
 			, passFlags{ passFlags }
@@ -337,6 +340,7 @@ namespace castor3d
 			, passType{ passType }
 			, heightMapIndex{ heightMapIndex }
 			, submeshFlags{ submeshFlags }
+			, morphFlags{ morphFlags }
 			, programFlags{ programFlags }
 			, sceneFlags{ sceneFlags }
 			, topology{ topology }
@@ -345,7 +349,8 @@ namespace castor3d
 			, blendAlphaFunc{ blendAlphaFunc }
 			, textures{ textures }
 			, texturesFlags{ merge( textures ) }
-			, layerIndex{ layerIndex }
+			, passLayerIndex{ passLayerIndex }
+			, morphTargetsOffset{ morphTargetsOffset }
 		{
 		}
 
@@ -356,6 +361,7 @@ namespace castor3d
 		PassTypeID passType;
 		uint32_t heightMapIndex;
 		SubmeshFlags submeshFlags;
+		MorphFlags morphFlags;
 		ProgramFlags programFlags;
 		SceneFlags sceneFlags;
 		VkPrimitiveTopology topology;
@@ -364,7 +370,8 @@ namespace castor3d
 		VkCompareOp blendAlphaFunc;
 		TextureFlagsArray textures;
 		TextureFlags texturesFlags;
-		uint32_t layerIndex;
+		uint32_t passLayerIndex;
+		VkDeviceSize morphTargetsOffset;
 
 		bool hasTextures()const
 		{

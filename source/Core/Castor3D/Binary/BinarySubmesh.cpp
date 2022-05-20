@@ -1,10 +1,12 @@
 #include "Castor3D/Binary/BinarySubmesh.hpp"
 
 #include "Castor3D/Binary/BinaryBonesComponent.hpp"
+#include "Castor3D/Binary/BinaryMorphComponent.hpp"
 #include "Castor3D/Buffer/GeometryBuffers.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp"
 
@@ -172,6 +174,14 @@ namespace castor3d
 			}
 		}
 
+		if ( result )
+		{
+			if ( auto component = obj.getComponent< MorphComponent >() )
+			{
+				BinaryWriter< MorphComponent >{}.write( *component, m_chunk );
+			}
+		}
+
 		return result;
 	}
 
@@ -317,6 +327,18 @@ namespace castor3d
 				{
 					result = createBinaryParser< BonesComponent >().parse( *component, chunk );
 					checkError( result, "Couldn't parse bones component." );
+
+					if ( result )
+					{
+						obj.addComponent( component );
+					}
+				}
+				break;
+			case ChunkType::eMorphComponent:
+				if ( auto component = std::make_shared< MorphComponent >( obj, MorphFlags{} ) )
+				{
+					result = createBinaryParser< MorphComponent >().parse( *component, chunk );
+					checkError( result, "Couldn't parse morph component." );
 
 					if ( result )
 					{

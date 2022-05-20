@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_MeshAnimationKeyFrame_H___
-#define ___C3D_MeshAnimationKeyFrame_H___
+#ifndef ___C3D_MeshMorphTarget_H___
+#define ___C3D_MeshMorphTarget_H___
 
 #include "MeshAnimationModule.hpp"
 #include "Castor3D/Binary/BinaryModule.hpp"
@@ -13,7 +13,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class MeshAnimationKeyFrame
+	class MeshMorphTarget
 		: public AnimationKeyFrame
 		, public castor::OwnedBy< MeshAnimation >
 	{
@@ -28,7 +28,7 @@ namespace castor3d
 		 *\param[in]	parent		L'animation parente.
 		 *\param[in]	timeIndex	Quand la key frame commence.
 		 */
-		C3D_API MeshAnimationKeyFrame( MeshAnimation & parent
+		C3D_API MeshMorphTarget( MeshAnimation & parent
 			, castor::Milliseconds const & timeIndex );
 		/**
 		 *\~english
@@ -36,24 +36,24 @@ namespace castor3d
 		 *\~french
 		 *\brief		Ajoute un tampon de sous-maillage.
 		 */
-		C3D_API void addSubmeshBuffer( Submesh const & submesh
-			, SubmeshAnimationBuffer buffer );
+		C3D_API void setTargetsWeights( Submesh const & submesh
+			, std::vector< float > weights );
 		/**
 		 *\~english
 		 *\return		The submesh buffer matching given submesh.
 		 *\~french
 		 *\return		Le tampon de sous-maillage correspondant au sous-maillage donné.
 		 */
-		C3D_API SubmeshAnimationBufferMap::const_iterator find( Submesh const & submesh )const;
+		C3D_API SubmeshTargetWeightMap::const_iterator find( Submesh const & submesh )const;
 		/**
 		 *\~english
 		 *\return		The beginning of the submeshes buffers.
 		 *\~french
 		 *\return		Le début des tampons des sous-maillages.
 		 */
-		SubmeshAnimationBufferMap::const_iterator begin()const
+		SubmeshTargetWeightMap::const_iterator begin()const
 		{
-			return m_submeshesBuffers.begin();
+			return m_submeshesTargets.begin();
 		}
 		/**
 		 *\~english
@@ -61,9 +61,9 @@ namespace castor3d
 		 *\~french
 		 *\return		Le début des tampons des sous-maillages.
 		 */
-		SubmeshAnimationBufferMap::iterator begin()
+		SubmeshTargetWeightMap::iterator begin()
 		{
-			return m_submeshesBuffers.begin();
+			return m_submeshesTargets.begin();
 		}
 		/**
 		 *\~english
@@ -71,9 +71,9 @@ namespace castor3d
 		 *\~french
 		 *\return		La fin des tampons des sous-maillages.
 		 */
-		SubmeshAnimationBufferMap::const_iterator end()const
+		SubmeshTargetWeightMap::const_iterator end()const
 		{
-			return m_submeshesBuffers.end();
+			return m_submeshesTargets.end();
 		}
 		/**
 		 *\~english
@@ -81,9 +81,9 @@ namespace castor3d
 		 *\~french
 		 *\return		La fin des tampons des sous-maillages.
 		 */
-		SubmeshAnimationBufferMap::iterator end()
+		SubmeshTargetWeightMap::iterator end()
 		{
-			return m_submeshesBuffers.end();
+			return m_submeshesTargets.end();
 		}
 
 	private:
@@ -95,9 +95,9 @@ namespace castor3d
 	private:
 		//!\~english	The buffers, per submesh.
 		//!\~french		Les tampons, par sous-maillage.
-		SubmeshAnimationBufferMap m_submeshesBuffers;
+		SubmeshTargetWeightMap m_submeshesTargets;
 
-		friend class BinaryParser< MeshAnimationKeyFrame >;
+		friend class BinaryParser< MeshMorphTarget >;
 	};
 }
 

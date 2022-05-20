@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_Submesh_H___
 #define ___C3D_Submesh_H___
 
-#include "Component/ComponentModule.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 
 #include "Castor3D/Binary/BinaryModule.hpp"
@@ -218,6 +218,13 @@ namespace castor3d
 		C3D_API SubmeshFlags getSubmeshFlags( Pass const * pass )const;
 		/**
 		 *\~english
+		 *\return		The morphing flags.
+		 *\~french
+		 *\return		Les indicateurs de morphing.
+		 */
+		C3D_API MorphFlags getMorphFlags()const;
+		/**
+		 *\~english
 		 *\brief		Sets the material.
 		 *\param[in]	oldMaterial	The old material.
 		 *\param[in]	newMaterial	The new material.
@@ -383,6 +390,8 @@ namespace castor3d
 		C3D_API castor::Point3fArray & getTexcoords3();
 		C3D_API castor::Point3fArray const & getColours()const;
 		C3D_API castor::Point3fArray & getColours();
+		C3D_API GpuBufferOffsetT< castor::Point4f > const & getMorphTargets()const;
+		C3D_API uint32_t getMorphTargetsCount()const;
 		inline SkeletonRPtr getSkeleton()const;
 		inline MaterialRPtr getDefaultMaterial()const;
 		inline castor::BoundingBox const & getBoundingBox()const;

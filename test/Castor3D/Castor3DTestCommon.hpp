@@ -9,7 +9,7 @@
 #include <Castor3D/Cache/LightCache.hpp>
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Material/Material.hpp>
-#include <Castor3D/Model/Mesh/Animation/MeshAnimationKeyFrame.hpp>
+#include <Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp>
@@ -341,14 +341,26 @@ namespace Testing
 				{ castor3d::SubmeshFlag::eTexcoords3, "eTexcoords3" },
 				{ castor3d::SubmeshFlag::eColours, "eColours" },
 				{ castor3d::SubmeshFlag::eBones, "eBones" },
-				{ castor3d::SubmeshFlag::eMorphPositions, "eMorphPositions" },
-				{ castor3d::SubmeshFlag::eMorphNormals, "eMorphNormals" },
-				{ castor3d::SubmeshFlag::eMorphTangents, "eMorphTangents" },
-				{ castor3d::SubmeshFlag::eMorphTexcoords0, "eMorphTexcoords0" },
-				{ castor3d::SubmeshFlag::eMorphTexcoords1, "eMorphTexcoords1" },
-				{ castor3d::SubmeshFlag::eMorphTexcoords2, "eMorphTexcoords2" },
-				{ castor3d::SubmeshFlag::eMorphTexcoords3, "eMorphTexcoords3" },
-				{ castor3d::SubmeshFlag::eMorphColours, "eMorphColours" },
+			};
+			return Names[value];
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::MorphFlag >
+	{
+		static std::string get( castor3d::MorphFlag const & value )
+		{
+			static std::map< castor3d::MorphFlag, std::string > Names
+			{
+				{ castor3d::MorphFlag::ePositions, "ePositions" },
+				{ castor3d::MorphFlag::eNormals, "eNormals" },
+				{ castor3d::MorphFlag::eTangents, "eTangents" },
+				{ castor3d::MorphFlag::eTexcoords0, "eTexcoords0" },
+				{ castor3d::MorphFlag::eTexcoords1, "eTexcoords1" },
+				{ castor3d::MorphFlag::eTexcoords2, "eTexcoords2" },
+				{ castor3d::MorphFlag::eTexcoords3, "eTexcoords3" },
+				{ castor3d::MorphFlag::eColours, "eColours" },
 			};
 			return Names[value];
 		}
@@ -534,11 +546,11 @@ namespace Testing
 	};
 
 	template<>
-	struct Stringifier< castor3d::MeshAnimationKeyFrame >
+	struct Stringifier< castor3d::MeshMorphTarget >
 	{
-		static std::string get( castor3d::MeshAnimationKeyFrame const & value )
+		static std::string get( castor3d::MeshMorphTarget const & value )
 		{
-			return std::string{ "castor3d::MeshAnimationKeyFrame" };
+			return std::string{ "castor3d::MeshMorphTarget" };
 		}
 	};
 
@@ -868,7 +880,7 @@ namespace Testing
 		bool compare( castor3d::SkeletonAnimation const & p_a, castor3d::SkeletonAnimation const & p_b );
 		bool compare( castor3d::SkeletonAnimationObject const & p_a, castor3d::SkeletonAnimationObject const & p_b );
 		bool compare( castor3d::AnimationKeyFrame const & p_a, castor3d::AnimationKeyFrame const & p_b );
-		bool compare( castor3d::MeshAnimationKeyFrame const & p_a, castor3d::MeshAnimationKeyFrame const & p_b );
+		bool compare( castor3d::MeshMorphTarget const & p_a, castor3d::MeshMorphTarget const & p_b );
 		bool compare( castor3d::SkeletonAnimationKeyFrame const & p_a, castor3d::SkeletonAnimationKeyFrame const & p_b );
 		bool compare( castor3d::AnimatedObjectGroup const & p_a, castor3d::AnimatedObjectGroup const & p_b );
 		bool compare( castor3d::AnimatedObject const & p_a, castor3d::AnimatedObject const & p_b );

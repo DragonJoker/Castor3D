@@ -4,9 +4,10 @@
 
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
-#include "Castor3D/Model/Mesh/Animation/MeshAnimationKeyFrame.hpp"
+#include "Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp"
@@ -23,21 +24,24 @@ namespace castor3d
 		{
 			auto mesh = static_cast< Mesh * >( animation.getAnimable() );
 
-			for ( auto & keyFrame : animation )
+			for ( auto submesh : *mesh )
 			{
-				for ( auto & submeshIt : static_cast< MeshAnimationKeyFrame & >( *keyFrame ) )
+				if ( auto component = submesh->getComponent< MorphComponent >() )
 				{
-					for ( auto & vertex : submeshIt.second.positions )
+					for ( auto & target : component->getMorphTargetsBuffers() )
 					{
-						vertex = transform * vertex;
-					}
+						for ( auto & vertex : target.positions )
+						{
+							vertex = transform * vertex;
+						}
 
-					SubmeshUtils::computeNormals( submeshIt.second.positions
-						, submeshIt.second.texcoords0
-						, submeshIt.second.normals
-						, submeshIt.second.tangents
-						, static_cast< TriFaceMapping const & >( *mesh->getSubmesh( submeshIt.first )->getIndexMapping() )
-						, true );
+						SubmeshUtils::computeNormals( target.positions
+							, target.texcoords0
+							, target.normals
+							, target.tangents
+							, static_cast< TriFaceMapping const & >( *submesh->getIndexMapping() )
+							, true );
+					}
 				}
 			}
 		}
