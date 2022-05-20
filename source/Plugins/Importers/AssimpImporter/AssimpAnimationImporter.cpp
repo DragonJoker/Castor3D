@@ -86,7 +86,7 @@ namespace c3d_assimp
 		auto & aiAnimation = *it->second;
 		auto & aiNode = *file.getScene().mRootNode;
 		auto [frameCount, frameTicks] = getAnimationFrameTicks( aiAnimation );
-		castor3d::log::info << cuT( "  Skeleton Animation found: [" ) << name << cuT( "]" ) << std::endl;
+		castor3d::log::info << cuT( "Skeleton Animation found: [" ) << name << cuT( "]" ) << std::endl;
 		int64_t ticksPerSecond = aiAnimation.mTicksPerSecond != 0.0
 			? int64_t( aiAnimation.mTicksPerSecond )
 			: 25ll;
@@ -168,7 +168,7 @@ namespace c3d_assimp
 
 			if ( animIt != animations.end() )
 			{
-				castor3d::log::info << cuT( "  Mesh Animation found for mesh [" ) << mesh.getName() << cuT( "], submesh " ) << index << cuT( ": [" ) << name << cuT( "]" ) << std::endl;
+				castor3d::log::info << cuT( "Mesh Animation found for mesh [" ) << mesh.getName() << cuT( "], submesh " ) << index << cuT( ": [" ) << name << cuT( "]" ) << std::endl;
 				auto & aiAnimation = *animIt->second.second;
 
 				castor3d::MeshAnimationSubmesh animSubmesh{ animation, *submesh };
@@ -220,7 +220,7 @@ namespace c3d_assimp
 		auto & aiAnimation = *it->second.first;
 		auto & aiNodeAnim = *it->second.second;
 		auto [frameCount, frameTicks] = getNodeAnimFrameTicks( aiNodeAnim );
-		castor3d::log::info << cuT( "  SceneNode Animation found: [" ) << name << cuT( "]" ) << std::endl;
+		castor3d::log::info << cuT( "SceneNode Animation found: [" ) << name << cuT( "]" ) << std::endl;
 		int64_t ticksPerSecond = aiAnimation.mTicksPerSecond != 0.0
 			? int64_t( aiAnimation.mTicksPerSecond )
 			: 25ll;

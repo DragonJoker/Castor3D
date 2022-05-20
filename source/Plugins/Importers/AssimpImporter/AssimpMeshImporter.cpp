@@ -360,7 +360,7 @@ namespace c3d_assimp
 
 		if ( !animBuffers.empty() )
 		{
-			castor3d::log::info << cuT( "  Morph targets found: [" ) << uint32_t( animBuffers.size() ) << cuT( "]" ) << std::endl;
+			castor3d::log::debug << cuT( "  Morph targets found: [" ) << uint32_t( animBuffers.size() ) << cuT( "]" ) << std::endl;
 			auto component = submesh.hasComponent( castor3d::MorphComponent::Name )
 				? submesh.getComponent< castor3d::MorphComponent >()
 				: submesh.createComponent< castor3d::MorphComponent >( meshes::computeMorphFlags( animBuffers.front() ) );

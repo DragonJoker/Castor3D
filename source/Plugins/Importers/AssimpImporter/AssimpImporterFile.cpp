@@ -170,6 +170,40 @@ namespace c3d_assimp
 			return result;
 		}
 
+		static castor::String findSkeletonName( std::map< castor::String, castor::Matrix4x4f > const & bonesNodes
+			, aiNode const & rootNode )
+		{
+			std::vector< aiNode const * > bones;
+			std::vector< aiNode const * > work;
+			work.push_back( &rootNode );
+			auto name = makeString( rootNode.mName );
+
+			while ( !work.empty() )
+			{
+				auto node = work.back();
+				work.pop_back();
+
+				for ( auto child : castor::makeArrayView( node->mChildren, node->mNumChildren ) )
+				{
+					work.push_back( child );
+				}
+
+				auto nodeName = makeString( node->mName );
+
+				if ( bonesNodes.end() != bonesNodes.find( nodeName ) )
+				{
+					name = getLongestCommonSubstring( name, nodeName );
+				}
+			}
+
+			if ( name.empty() )
+			{
+				name = makeString( rootNode.mName );
+			}
+
+			return name;
+		}
+
 		static bool isAnimForSkeleton( AssimpImporterFile const & file
 			, aiAnimation const & animation
 			, SkeletonData const & skeleton )
@@ -465,7 +499,7 @@ namespace c3d_assimp
 			m_listedMeshes.emplace_back( it.first );
 			result.emplace_back( it.first
 				, ( it.second.skelNode
-					? normalizeName( makeString( it.second.skelNode->mName ) )
+					? normalizeName( file::findSkeletonName( m_bonesNodes, *it.second.skelNode ) )
 					: castor::String{} ) );
 		}
 
@@ -674,7 +708,8 @@ namespace c3d_assimp
 					auto rootNode = findRootSkeletonNode( *m_scene->mRootNode
 						, castor::makeArrayView( aiMesh->mBones, aiMesh->mNumBones )
 						, meshNode );
-					auto skelName = normalizeName( makeString( rootNode->mName ) );
+					auto skelName = normalizeName( file::findSkeletonName( m_bonesNodes
+						, *rootNode ) );
 					auto & skeleton = m_sceneData.skeletons.emplace( skelName, SkeletonData{ rootNode } ).first->second;
 
 					for ( auto aiAnimation : castor::makeArrayView( m_scene->mAnimations, m_scene->mNumAnimations ) )
@@ -786,7 +821,9 @@ namespace c3d_assimp
 		, castor::String parentName
 		, castor::Matrix4x4f transform )
 	{
-		if ( m_bonesNodes.find( makeString( aiNode.mName ) ) != m_bonesNodes.end() )
+		auto aiNodeName = makeString( aiNode.mName );
+
+		if ( m_bonesNodes.find( aiNodeName ) != m_bonesNodes.end() )
 		{
 			return;
 		}
@@ -803,7 +840,7 @@ namespace c3d_assimp
 
 		if ( meshIt != aiMeshes.end() || !anims.empty() )
 		{
-			auto nodeName = getInternalName( aiNode.mName );
+			auto nodeName = getInternalName( aiNodeName );
 			NodeData nodeData{ parentName
 				, nodeName
 				, &aiNode
@@ -819,7 +856,7 @@ namespace c3d_assimp
 
 					if ( animName.empty() )
 					{
-						animName = normalizeName( makeString( aiNode.mName ) );
+						animName = normalizeName( aiNodeName );
 					}
 
 					nodeData.anims.emplace( animName, anim );
