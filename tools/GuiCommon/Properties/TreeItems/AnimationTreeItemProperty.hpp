@@ -43,66 +43,6 @@ namespace GuiCommon
 			, castor3d::AnimatedObjectGroup & group
 			, castor::String const & name
 			, castor3d::GroupAnimation const & anim );
-		/**
-		 *\~english
-		 *\brief		Retrieves the AnimatedObjectGroup.
-		 *\return		The value.
-		 *\~french
-		 *\brief		Récupère l'AnimatedObjectGroup.
-		 *\return		La valeur.
-		 */
-		inline castor3d::AnimatedObjectGroupRPtr getGroup()
-		{
-			return &m_group;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the animation name.
-		 *\return		The value.
-		 *\~french
-		 *\brief		Récupère le nom de l'animation.
-		 *\return		La valeur.
-		 */
-		inline castor::String const & getName()
-		{
-			return m_name;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the animation state.
-		 *\return		The value.
-		 *\~french
-		 *\brief		Récupère l'état de l'animation.
-		 *\return		La valeur.
-		 */
-		inline castor3d::AnimationState getState()
-		{
-			return m_groupAnim.state;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the animation state.
-		 *\return		The value.
-		 *\~french
-		 *\brief		Récupère l'état de l'animation.
-		 *\return		La valeur.
-		 */
-		inline float getScale()
-		{
-			return m_groupAnim.scale;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the animation state.
-		 *\return		The value.
-		 *\~french
-		 *\brief		Récupère l'état de l'animation.
-		 *\return		La valeur.
-		 */
-		inline bool isLooped()
-		{
-			return m_groupAnim.looped;
-		}
 
 	private:
 		/**
@@ -114,7 +54,6 @@ namespace GuiCommon
 		castor3d::AnimatedObjectGroup & m_group;
 		castor::String m_name;
 		castor3d::GroupAnimation m_groupAnim;
-		wxPGProperty * m_stateProperty{};
 	};
 }
 
