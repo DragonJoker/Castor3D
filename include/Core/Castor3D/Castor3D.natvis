@@ -362,6 +362,18 @@
 		</Expand>
 	</Type>
 
+	<Type Name="castor3d::Skeleton">
+		<DisplayString>{m_name}</DisplayString>
+		<Expand>
+			<Item Name="scene">m_scene</Item>
+			<Item Name="nodes">m_nodes</Item>
+			<Item Name="bones">m_bones</Item>
+			<Item Name="globalInverse">m_globalInverse</Item>
+			<Item Name="boxes">m_boxes</Item>
+			<Item Name="animations">m_animations</Item>
+		</Expand>
+	</Type>
+
 	<Type Name="castor3d::Submesh">
 		<DisplayString>{*m_owner}({m_id})</DisplayString>
 		<Expand>
