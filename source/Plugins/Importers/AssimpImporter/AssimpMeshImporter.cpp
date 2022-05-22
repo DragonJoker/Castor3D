@@ -396,22 +396,10 @@ namespace c3d_assimp
 			auto component = submesh.hasComponent( castor3d::MorphComponent::Name )
 				? submesh.getComponent< castor3d::MorphComponent >()
 				: submesh.createComponent< castor3d::MorphComponent >( meshes::computeMorphFlags( animBuffers.front() ) );
-			auto index = 0u;
 
 			for ( auto & animBuffer : animBuffers )
 			{
 				component->addMorphTarget( animBuffer );
-				meshes::applyMorphTarget( float( aiMesh.mAnimMeshes[index]->mWeight )
-					, animBuffer
-					, positions->getData()
-					, normals->getData()
-					, *tangents
-					, *texcoords0
-					, *texcoords1
-					, *texcoords2
-					, *texcoords3
-					, *colours );
-				++index;
 			}
 		}
 
