@@ -155,7 +155,6 @@ namespace castor
 				cuT( "pnm" ),
 				cuT( "ppm" ),
 				cuT( "pgm" ),
-				cuT( "tif" ),
 #if !C3D_UseFreeImage
 				cuT( "png" ),
 #endif

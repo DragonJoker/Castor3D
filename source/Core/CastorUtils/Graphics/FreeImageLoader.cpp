@@ -83,6 +83,7 @@ namespace castor
 			static StringArray const list
 #if C3D_UseFreeImage
 			{
+				cuT( "tif" ),
 				cuT( "png" ),
 			}
 #endif
