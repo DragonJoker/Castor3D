@@ -177,6 +177,16 @@ namespace castor3d
 			, ShaderFlags shaderFlags
 			, PipelineFlags const & pipelineFlags )
 		{
+			if ( submeshFlagIndex == getIndex( SubmeshFlag::ePositions ) )
+			{
+				return checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::ePositions );
+			}
+
+			if ( submeshFlagIndex == getIndex( SubmeshFlag::eNormals ) )
+			{
+				return checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eNormals );
+			}
+
 			if ( submeshFlagIndex == getIndex( SubmeshFlag::eTangents ) )
 			{
 				return checkFlag( shaderFlags, ShaderFlag::eTangentSpace );
@@ -207,6 +217,11 @@ namespace castor3d
 			{
 				return hasTextures
 					&& checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eTexcoords3 );
+			}
+
+			if ( submeshFlagIndex == getIndex( SubmeshFlag::eColours ) )
+			{
+				return checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eColours );
 			}
 
 			return true;
