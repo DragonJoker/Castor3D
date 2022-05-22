@@ -146,6 +146,24 @@ namespace c3d_assimp
 			return result;
 		}
 
+		bool isSkeletonNode( aiNode const & node
+			, castor::String const & aiNodeName
+			, std::map< castor::String, castor::Matrix4x4f > const & bonesNodes
+			, std::map< castor::String, SkeletonData > const & skeletons )
+		{
+			if ( bonesNodes.find( aiNodeName ) != bonesNodes.end() )
+			{
+				return true;
+			}
+
+			return skeletons.end() != std::find_if( skeletons.begin()
+				, skeletons.end()
+				, [&aiNodeName]( std::map< castor::String, SkeletonData >::value_type const & lookup )
+				{
+					return lookup.second.rootNode->FindNode( aiNodeName.c_str() ) != nullptr;
+				} );
+		}
+
 		static std::map< aiAnimation const *, aiNodeAnim const * > findNodeAnims( aiNode const & aiNode
 			, castor::ArrayView< aiAnimation * > const & animations )
 		{
@@ -193,6 +211,11 @@ namespace c3d_assimp
 				if ( bonesNodes.end() != bonesNodes.find( nodeName ) )
 				{
 					name = getLongestCommonSubstring( name, nodeName );
+				}
+
+				if ( name.empty() )
+				{
+					return makeString( rootNode.mName );
 				}
 			}
 
@@ -823,7 +846,7 @@ namespace c3d_assimp
 	{
 		auto aiNodeName = makeString( aiNode.mName );
 
-		if ( m_bonesNodes.find( aiNodeName ) != m_bonesNodes.end() )
+		if ( file::isSkeletonNode( aiNode, aiNodeName, m_bonesNodes, m_sceneData.skeletons ) )
 		{
 			return;
 		}
