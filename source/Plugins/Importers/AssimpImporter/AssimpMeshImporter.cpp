@@ -1,5 +1,7 @@
 #include "AssimpImporter/AssimpMeshImporter.hpp"
 
+#include "AssimpImporter/AssimpMaterialImporter.hpp"
+
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Miscellaneous/Logger.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
@@ -223,12 +225,42 @@ namespace c3d_assimp
 	{
 		auto & file = static_cast< AssimpImporterFile & >( *m_file );
 		auto & aiScene = file.getScene();
+		auto & scene = *mesh.getScene();
 		uint32_t meshIndex{};
 
 		for ( auto aiMesh : castor::makeArrayView( aiScene.mMeshes, aiScene.mNumMeshes ) )
 		{
 			if ( isValidMesh( *aiMesh ) )
 			{
+				auto matName = file.getMaterialName( aiMesh->mMaterialIndex );
+				auto materialRes = scene.tryFindMaterial( matName );
+				castor3d::MaterialRPtr material{};
+
+				if ( !materialRes.lock() )
+				{
+					AssimpMaterialImporter importer{ *scene.getEngine() };
+					auto mat = getOwner()->createMaterial( matName
+						, *getOwner()
+						, getOwner()->getPassesType() );
+
+					if ( importer.import( *mat
+						, &file
+						, castor3d::Parameters{}
+						, std::map< castor3d::TextureFlag, castor3d::TextureConfiguration >{} ) )
+					{
+						material = mat.get();
+						scene.getMaterialView().add( matName, mat, true );
+					}
+					else
+					{
+						material = scene.getEngine()->getDefaultMaterial();
+					}
+				}
+				else
+				{
+					material = &( *materialRes.lock() );
+				}
+
 				doProcessMesh( aiScene
 					, *aiMesh
 					, meshIndex
