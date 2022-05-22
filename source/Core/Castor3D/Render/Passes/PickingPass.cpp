@@ -87,6 +87,7 @@ namespace castor3d
 
 	SubmeshFlags PickingPass::doAdjustSubmeshFlags( SubmeshFlags flags )const
 	{
+		remFlag( flags, SubmeshFlag::eNormals );
 		remFlag( flags, SubmeshFlag::eTangents );
 		remFlag( flags, SubmeshFlag::eColours );
 		return flags;
