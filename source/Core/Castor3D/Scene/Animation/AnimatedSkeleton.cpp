@@ -34,7 +34,7 @@ namespace castor3d
 		}
 	}
 
-	uint32_t AnimatedSkeleton::fillShader( SkinningTransformsConfiguration * variable )const
+	uint32_t AnimatedSkeleton::fillBuffer( SkinningTransformsConfiguration * buffer )const
 	{
 		Skeleton & skeleton = m_skeleton;
 
@@ -46,7 +46,7 @@ namespace castor3d
 
 				for ( auto bone : skeleton.getBones() )
 				{
-					variable->bonesMatrix[bone->getId()] = skeleton.getGlobalInverseTransform();
+					buffer->bonesMatrix[bone->getId()] = skeleton.getGlobalInverseTransform();
 				}
 			}
 		}
@@ -66,7 +66,7 @@ namespace castor3d
 					}
 				}
 
-				variable->bonesMatrix[bone->getId()] = final;
+				buffer->bonesMatrix[bone->getId()] = final;
 			}
 		}
 
