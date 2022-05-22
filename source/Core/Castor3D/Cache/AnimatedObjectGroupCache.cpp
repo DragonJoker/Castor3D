@@ -148,11 +148,19 @@ namespace castor
 		for ( auto & pair : m_skeletonEntries )
 		{
 			auto & entry = pair.second;
-			auto max = entry.skeleton.fillShader( &skinningTransformsBuffer[entry.skeleton.getId() - 1u] );
-			m_skinningTransformsData.buffer->markDirty( m_skinningTransformsData.getOffset() + ( entry.skeleton.getId() - 1u ) * sizeof( SkinningTransformsConfiguration )
-				, sizeof( castor::Matrix4x4f ) * max
-				, VK_ACCESS_UNIFORM_READ_BIT
-				, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
+			auto id = entry.skeleton.getId();
+
+			if ( id )
+			{
+				if ( auto max = entry.skeleton.fillBuffer( &skinningTransformsBuffer[id - 1u] );
+					max > 0 )
+				{
+					m_skinningTransformsData.buffer->markDirty( m_skinningTransformsData.getOffset() + ( id - 1u ) * sizeof( SkinningTransformsConfiguration )
+						, sizeof( castor::Matrix4x4f ) * max
+						, VK_ACCESS_UNIFORM_READ_BIT
+						, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
+				}
+			}
 		}
 
 		auto morphingBuffer = m_morphingWeights.getData();
@@ -164,32 +172,9 @@ namespace castor
 
 			if ( id && entry.submesh.getMorphTargetsCount() )
 			{
-				auto & morphingData = morphingBuffer[id - 1u];
-
-				if ( entry.mesh.isPlayingAnimation() )
+				if ( auto max = entry.mesh.fillBuffer( entry.submesh, &morphingBuffer[id - 1u] );
+					max > 0 )
 				{
-					if ( auto animSubmesh = entry.mesh.getPlayingAnimation().getAnimationSubmesh( entry.submesh.getId() ) )
-					{
-						uint32_t index{};
-
-						for ( auto & weight : animSubmesh->getWeights() )
-						{
-							morphingData.morphTargetsWeights[index++] = weight;
-						}
-
-						m_morphingWeights.buffer->markDirty( m_morphingWeights.getOffset() + ( id - 1u ) * sizeof( MorphingWeightsConfiguration )
-							, sizeof( MorphingWeightsConfiguration )
-							, VK_ACCESS_UNIFORM_READ_BIT
-							, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
-					}
-				}
-				else
-				{
-					for ( uint32_t index = 0u; index < entry.submesh.getMorphTargetsCount(); ++index )
-					{
-						morphingData.morphTargetsWeights[index] = 0.0f;
-					}
-
 					m_morphingWeights.buffer->markDirty( m_morphingWeights.getOffset() + ( id - 1u ) * sizeof( MorphingWeightsConfiguration )
 						, sizeof( MorphingWeightsConfiguration )
 						, VK_ACCESS_UNIFORM_READ_BIT
@@ -278,10 +263,13 @@ namespace castor
 						{
 							for ( auto submesh : mesh.getMesh() )
 							{
-								m_meshEntries.emplace( cacheanmgrp::makeHash( mesh, *submesh )
-									, doCreateEntry( device, pgroup, mesh, *submesh ) );
-								mesh.setId( *submesh
-									, uint32_t( m_meshEntries.size() ) );
+								if ( submesh->getMorphTargetsCount() )
+								{
+									m_meshEntries.emplace( cacheanmgrp::makeHash( mesh, *submesh )
+										, doCreateEntry( device, pgroup, mesh, *submesh ) );
+									mesh.setId( *submesh
+										, uint32_t( m_meshEntries.size() ) );
+								}
 							}
 						} ) );
 				} ) );
@@ -295,8 +283,11 @@ namespace castor
 						{
 							for ( auto submesh : mesh.getMesh() )
 							{
-								mesh.setId( *submesh, 0u );
-								doRemoveEntry( device, mesh, *submesh );
+								if ( submesh->getMorphTargetsCount() )
+								{
+									mesh.setId( *submesh, 0u );
+									doRemoveEntry( device, mesh, *submesh );
+								}
 							}
 						} ) );
 				} ) );

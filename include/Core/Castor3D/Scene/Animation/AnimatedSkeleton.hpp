@@ -48,13 +48,13 @@ namespace castor3d
 			, Geometry & geometry );
 		/**
 		 *\~english
-		 *\brief		Fills a shader variable with this object's skeleton transforms.
-		 *\param[out]	variable	Receives the transforms.
+		 *\brief		Fills a buffer with this object's skeleton transforms.
+		 *\param[out]	buffer	Receives the transforms.
 		 *\~french
-		 *\brief		Remplit une variable de shader avec les transformations du squelette de cet objet.
-		 *\param[out]	variable	Reçoit les transformations.
+		 *\brief		Remplit un buffer avec les transformations du squelette de cet objet.
+		 *\param[out]	buffer	Reçoit les transformations.
 		 */
-		C3D_API uint32_t fillShader( SkinningTransformsConfiguration * variable )const;
+		C3D_API uint32_t fillBuffer( SkinningTransformsConfiguration * buffer )const;
 		/**
 		 *\copydoc		castor3d::AnimatedObject::update
 		 */
