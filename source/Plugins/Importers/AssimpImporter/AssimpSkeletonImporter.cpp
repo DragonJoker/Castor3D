@@ -11,19 +11,18 @@ namespace c3d_assimp
 	{
 		static castor3d::SkeletonNode * addNode( castor3d::Skeleton & skeleton
 			, std::map< castor::String, castor::Matrix4x4f > const & bonesNodes
-			, castor::String const & nodeName
-			, castor::String const & name )
+			, castor::String const & nodeName )
 		{
 			auto it = bonesNodes.find( nodeName );
 
 			if ( it == bonesNodes.end() )
 			{
 				castor3d::log::debug << "    Skeleton Node [" << nodeName << "]" << std::endl;
-				return skeleton.createNode( name );
+				return skeleton.createNode( nodeName );
 			}
 
 			castor3d::log::debug << "    Skeleton Bone [" << nodeName << "]" << std::endl;
-			return skeleton.createBone( name, it->second );
+			return skeleton.createBone( nodeName, it->second );
 		}
 
 		static castor3d::SkeletonNode * processSkeletonNode( AssimpImporterFile const & file
@@ -33,12 +32,11 @@ namespace c3d_assimp
 			, castor3d::SkeletonNode * parentSkelNode )
 		{
 			auto nodeName = makeString( aiNode.mName );
-			auto name = file.getInternalName( nodeName );
-			auto skelNode = skeleton.findNode( name );
+			auto skelNode = skeleton.findNode( nodeName );
 
 			if ( !skelNode )
 			{
-				skelNode = addNode( skeleton, bonesNodes, nodeName, name );
+				skelNode = addNode( skeleton, bonesNodes, nodeName );
 
 				if ( parentSkelNode )
 				{
