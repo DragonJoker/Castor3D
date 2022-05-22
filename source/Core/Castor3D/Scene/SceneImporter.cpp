@@ -371,11 +371,14 @@ namespace castor3d
 				? scene.findAnimatedObjectGroup( geometry.getName() ).lock()
 				: scene.addNewAnimatedObjectGroup( geometry.getName(), scene ).lock() );
 
-			for ( auto & animation : mesh->getAnimations() )
+			if ( !mesh->getAnimations().empty() )
 			{
-				if ( animGroup->addAnimation( animation.first ) )
+				for ( auto & animation : mesh->getAnimations() )
 				{
-					animGroup->setAnimationLooped( animation.first, true );
+					if ( animGroup->addAnimation( animation.first ) )
+					{
+						animGroup->setAnimationLooped( animation.first, true );
+					}
 				}
 
 				if ( !animGroup->findObject( geometry.getName() + "_Mesh" ) )
@@ -384,7 +387,7 @@ namespace castor3d
 				}
 			}
 
-			if ( skeleton )
+			if ( skeleton && !skeleton->getAnimations().empty() )
 			{
 				for ( auto & animation : skeleton->getAnimations() )
 				{
