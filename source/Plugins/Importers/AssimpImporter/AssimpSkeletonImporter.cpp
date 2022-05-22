@@ -93,6 +93,7 @@ namespace c3d_assimp
 			return false;
 		}
 
+		castor3d::log::info << cuT( "  Skeleton found: [" ) << name << cuT( "]" ) << std::endl;
 		auto & skelData = it->second;
 		skeleton.setGlobalInverseTransform( fromAssimp( skelData.rootNode->mTransformation ).getInverse() );
 		skeletons::processSkeletonNodes( file
