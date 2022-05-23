@@ -36,4 +36,23 @@ namespace castor3d
 			m_boundingBox = m_boundingBox.getUnion( targetbb );
 		}
 	}
+
+	void MeshMorphTarget::setTargetWeight( Submesh const & submesh
+		, uint32_t targetIndex
+		, float targetWeight )
+	{
+		auto size = submesh.getMorphTargetsCount();
+
+		if ( targetIndex >= size )
+		{
+			log::error << cuT( "Invalid morph target index: " ) << targetIndex << std::endl;
+			return;
+		}
+
+		std::vector< float > weights;
+		weights.resize( size );
+		auto & data = m_submeshesTargets.emplace( submesh.getId(), std::move( weights ) ).first->second;
+		CU_Require( data.size() == submesh.getMorphTargetsCount() );
+		data[targetIndex] = targetWeight;
+	}
 }
