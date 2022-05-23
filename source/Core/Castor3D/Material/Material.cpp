@@ -44,6 +44,13 @@ namespace castor3d
 
 	PassSPtr Material::createPass()
 	{
+		if ( m_passes.size() == MaxPassLayers )
+		{
+			log::error << cuT( "Can't create a new pass, max pass count reached" ) << std::endl;
+			CU_Failure( "Can't create a new pass, max pass count reached" );
+			return nullptr;
+		}
+
 		PassSPtr newPass = getEngine()->getPassFactory().create( getType(), *this );
 		CU_Require( newPass );
 		m_passListeners.emplace( newPass, newPass->onChanged.connect( [this]( Pass const & pass )

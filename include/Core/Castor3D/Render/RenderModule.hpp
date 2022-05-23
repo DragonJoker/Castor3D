@@ -306,6 +306,26 @@ namespace castor3d
 	C3D_API castor::String getName( RenderMode value );
 
 	C3D_API TextureFlags merge( TextureFlagsArray const & flags );
+
+	struct PipelineBaseHash
+	{
+		uint64_t a;
+		uint64_t b;
+	};
+
+	static bool operator<( PipelineBaseHash const & lhs
+		, PipelineBaseHash const & rhs )
+	{
+		return lhs.a < rhs.a
+			|| ( ( lhs.a == rhs.a ) && ( lhs.b < rhs.b ) );
+	}
+
+	static bool operator==( PipelineBaseHash const & lhs
+		, PipelineBaseHash const & rhs )
+	{
+		return lhs.a == rhs.a
+			&& lhs.b == rhs.b;
+	}
 	/**
 	*\~english
 	*\brief
