@@ -460,7 +460,12 @@ namespace c3d_assimp
 			}
 		}
 
-		CU_Require( bonesRootNodes.size() == 1u );
+		if ( bonesRootNodes.size() > 1u )
+		{
+			bonesRootNodes.clear();
+			bonesRootNodes.push_back( &sceneRootNode );
+		}
+
 		return *bonesRootNodes.begin();
 	}
 
