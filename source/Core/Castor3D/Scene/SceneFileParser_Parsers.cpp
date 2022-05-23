@@ -5338,6 +5338,7 @@ namespace castor3d
 			}
 			else
 			{
+				parsingContext.skybox.reset();
 				CU_ParsingError( cuT( "Couldn't load the image" ) );
 			}
 		}
@@ -5368,6 +5369,7 @@ namespace castor3d
 			}
 			else
 			{
+				parsingContext.skybox.reset();
 				CU_ParsingError( cuT( "Couldn't load the image" ) );
 			}
 		}
@@ -5385,6 +5387,7 @@ namespace castor3d
 		}
 		else
 		{
+			parsingContext.skybox.reset();
 			CU_ParsingError( cuT( "No skybox initialised" ) );
 		}
 	}
@@ -5401,6 +5404,7 @@ namespace castor3d
 		}
 		else
 		{
+			parsingContext.skybox.reset();
 			CU_ParsingError( cuT( "No skybox initialised" ) );
 		}
 	}
@@ -5417,6 +5421,7 @@ namespace castor3d
 		}
 		else
 		{
+			parsingContext.skybox.reset();
 			CU_ParsingError( cuT( "No skybox initialised" ) );
 		}
 	}
@@ -5433,6 +5438,7 @@ namespace castor3d
 		}
 		else
 		{
+			parsingContext.skybox.reset();
 			CU_ParsingError( cuT( "No skybox initialised" ) );
 		}
 	}
@@ -5449,6 +5455,7 @@ namespace castor3d
 		}
 		else
 		{
+			parsingContext.skybox.reset();
 			CU_ParsingError( cuT( "No skybox initialised" ) );
 		}
 	}
@@ -5465,6 +5472,7 @@ namespace castor3d
 		}
 		else
 		{
+			parsingContext.skybox.reset();
 			CU_ParsingError( cuT( "No skybox initialised" ) );
 		}
 	}
