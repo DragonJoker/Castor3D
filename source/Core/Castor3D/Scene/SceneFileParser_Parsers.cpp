@@ -2869,7 +2869,7 @@ namespace castor3d
 			else
 			{
 				auto file = engine.getImporterFileFactory().create( extension
-					, engine
+					, *parsingContext.scene
 					, pathFile
 					, parameters );
 

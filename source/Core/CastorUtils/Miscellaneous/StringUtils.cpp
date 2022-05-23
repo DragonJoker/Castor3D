@@ -457,5 +457,44 @@ namespace castor
 			text = result;
 			return text;
 		}
+
+		String getLongestCommonSubstring( String const & lhs
+			, String const & rhs )
+		{
+			if ( lhs.empty() )
+			{
+				return rhs;
+			}
+
+			if ( rhs.empty() )
+			{
+				return lhs;
+			}
+
+			std::vector< String > substrings;
+
+			for ( auto beg = lhs.begin(); beg != std::prev( lhs.end() ); ++beg )
+			{
+				for ( auto end = beg; end != lhs.end(); ++end )
+				{
+					if ( rhs.find( String{ beg, std::next( end ) } ) != String::npos )
+					{
+						substrings.emplace_back( beg, std::next( end ) );
+					}
+				}
+			}
+
+			if ( substrings.empty() )
+			{
+				return castor::String{};
+			}
+
+			auto result = *std::max_element( substrings.begin(), substrings.end(),
+				[]( auto & elem1, auto & elem2 )
+				{
+					return elem1.length() < elem2.length();
+				} );
+			return result;
+		}
 	}
 }

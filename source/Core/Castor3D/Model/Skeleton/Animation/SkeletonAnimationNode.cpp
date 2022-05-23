@@ -13,4 +13,9 @@ namespace castor3d
 	{
 		return getNode()->getName();
 	}
+
+	NodeTransform const & SkeletonAnimationNode::getNodeTransform()const noexcept
+	{
+		return getNode()->getTransform();
+	}
 }

@@ -37,6 +37,7 @@ namespace castor3d
 
 	protected:
 		C3D_API ImporterFile( Engine & engine
+			, Scene * scene
 			, castor::Path const & path
 			, Parameters const & parameters );
 
@@ -87,8 +88,12 @@ namespace castor3d
 
 		castor::String getExternalName( castor::String const & name )const
 		{
-			CU_Require( name.find( m_prefix ) == 0u );
-			return name.substr( m_prefix.size() );
+			if ( name.find( m_prefix ) == 0u )
+			{
+				return name.substr( m_prefix.size() );
+			}
+
+			return name;
 		}
 
 		castor::String getInternalName( castor::String const & name )const
@@ -96,7 +101,18 @@ namespace castor3d
 			return m_prefix + name;
 		}
 
+		void setScene( Scene & scene )
+		{
+			m_scene = &scene;
+		}
+
+		Scene * getScene()const
+		{
+			return m_scene;
+		}
+
 	private:
+		Scene * m_scene{};
 		//!\~english The file full path.
 		//!\~french Le chemin complet du fichier.
 		castor::Path m_fileName;
@@ -112,10 +128,24 @@ namespace castor3d
 		: public castor::Factory< ImporterFile
 			, castor::String
 			, ImporterFileUPtr
-			, std::function< ImporterFileUPtr( Engine &, castor::Path const &, Parameters const & ) > >
+			, std::function< ImporterFileUPtr( Engine &, Scene *, castor::Path const &, Parameters const & ) > >
 	{
+		using MyFactory = castor::Factory< ImporterFile
+			, castor::String
+			, ImporterFileUPtr
+			, std::function< ImporterFileUPtr( Engine &, Scene *, castor::Path const &, Parameters const & ) > >;
+
 	public:
 		C3D_API ImporterFileFactory();
+
+		C3D_API ImporterFileUPtr create( castor::String const & key
+			, Engine & engine
+			, castor::Path const & file
+			, Parameters const & parameters );
+		C3D_API ImporterFileUPtr create( castor::String const & key
+			, Scene & scene
+			, castor::Path const & file
+			, Parameters const & parameters );
 	};
 }
 

@@ -7,9 +7,11 @@
 #include "AssimpImporter/AssimpSceneNodeImporter.hpp"
 #include "AssimpImporter/AssimpSkeletonImporter.hpp"
 
+#include <Castor3D/Engine.hpp>
 #include <Castor3D/Miscellaneous/Logger.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
+#include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/SceneNode.hpp>
 
 #include <CastorUtils/Design/ArrayView.hpp>
@@ -80,34 +82,6 @@ namespace c3d_assimp
 			}
 
 			return nullptr;
-		}
-
-		static std::string getLongestCommonSubstring( std::string const & a, std::string const & b )
-		{
-			std::vector< std::string > substrings;
-
-			for ( auto beg = a.begin(); beg != std::prev( a.end() ); ++beg )
-			{
-				for ( auto end = beg; end != a.end(); ++end )
-				{
-					if ( b.find( std::string( beg, std::next( end ) ) ) != std::string::npos )
-					{
-						substrings.emplace_back( beg, std::next( end ) );
-					}
-				}
-			}
-
-			if ( substrings.empty() )
-			{
-				return b;
-			}
-
-			auto result = *std::max_element( substrings.begin(), substrings.end(),
-				[]( auto & elem1, auto & elem2 )
-				{
-					return elem1.length() < elem2.length();
-				} );
-			return castor::string::trim( result, true, true, " \r\t-_/\\|*$<>[](){}" );
 		}
 
 		template< typename IterT, typename TypeT >
@@ -188,47 +162,7 @@ namespace c3d_assimp
 			return result;
 		}
 
-		static castor::String findSkeletonName( std::map< castor::String, castor::Matrix4x4f > const & bonesNodes
-			, aiNode const & rootNode )
-		{
-			std::vector< aiNode const * > bones;
-			std::vector< aiNode const * > work;
-			work.push_back( &rootNode );
-			auto name = makeString( rootNode.mName );
-
-			while ( !work.empty() )
-			{
-				auto node = work.back();
-				work.pop_back();
-
-				for ( auto child : castor::makeArrayView( node->mChildren, node->mNumChildren ) )
-				{
-					work.push_back( child );
-				}
-
-				auto nodeName = makeString( node->mName );
-
-				if ( bonesNodes.end() != bonesNodes.find( nodeName ) )
-				{
-					name = getLongestCommonSubstring( name, nodeName );
-				}
-
-				if ( name.empty() )
-				{
-					return makeString( rootNode.mName );
-				}
-			}
-
-			if ( name.empty() )
-			{
-				name = makeString( rootNode.mName );
-			}
-
-			return name;
-		}
-
-		static bool isAnimForSkeleton( AssimpImporterFile const & file
-			, aiAnimation const & animation
+		static bool isAnimForSkeleton( aiAnimation const & animation
 			, SkeletonData const & skeleton )
 		{
 			auto channels = castor::makeArrayView( animation.mChannels, animation.mNumChannels );
@@ -239,6 +173,39 @@ namespace c3d_assimp
 					{
 						return skeleton.rootNode->FindNode( animLookup->mNodeName ) != nullptr;
 					} ) );
+		}
+
+		static std::pair< SkeletonData *, castor3d::SkeletonRPtr > findSkeletonForAnim( castor3d::Scene * scene
+			, aiNode const & rootNode
+			, aiAnimation const & animation
+			, SceneData & sceneData )
+		{
+			for ( auto & skeleton : sceneData.skeletons )
+			{
+				if ( isAnimForSkeleton( animation, skeleton.second ) )
+				{
+					return { &skeleton.second, nullptr };
+				}
+			}
+
+			if ( scene )
+			{
+				for ( auto & skeleton : scene->getSkeletonCache() )
+				{
+					if ( auto node = rootNode.FindNode( skeleton.second->getRootNode()->getName().c_str() ) )
+					{
+						auto & data = sceneData.skeletons.emplace( skeleton.first
+							, SkeletonData{ node } ).first->second;
+
+						if ( isAnimForSkeleton( animation, data ) )
+						{
+							return { &data, skeleton.second.get() };
+						}
+					}
+				}
+			}
+
+			return { nullptr, nullptr };
 		}
 
 		static std::map< castor::String, aiMeshMorphAnim const * > findMorphAnims( uint32_t aiMeshIndex
@@ -415,14 +382,15 @@ namespace c3d_assimp
 	castor::String const AssimpImporterFile::Name = cuT( "ASSIMP Importer" );
 
 	AssimpImporterFile::AssimpImporterFile( castor3d::Engine & engine
+		, castor3d::Scene * scene
 		, castor::Path const & path
 		, castor3d::Parameters const & parameters )
-		: castor3d::ImporterFile{ engine, path, parameters }
-		, m_scene{ file::loadScene( m_importer, getFileName(), getParameters() ) }
+		: castor3d::ImporterFile{ engine, scene, path, parameters }
+		, m_aiScene{ file::loadScene( m_importer, getFileName(), getParameters() ) }
 	{
-		if ( m_scene )
+		if ( m_aiScene )
 		{
-			for ( auto aiMesh : castor::makeArrayView( m_scene->mMeshes, m_scene->mNumMeshes ) )
+			for ( auto aiMesh : castor::makeArrayView( m_aiScene->mMeshes, m_aiScene->mNumMeshes ) )
 			{
 				for ( auto aiBone : castor::makeArrayView( aiMesh->mBones, aiMesh->mNumBones ) )
 				{
@@ -434,7 +402,7 @@ namespace c3d_assimp
 			doPrelistMaterials();
 			doPrelistMeshes( doPrelistSkeletons() );
 			std::map< MeshData const *, castor::String > processed;
-			doPrelistSceneNodes( *m_scene->mRootNode, processed );
+			doPrelistSceneNodes( *m_aiScene->mRootNode, processed );
 			doPrelistLights();
 		}
 	}
@@ -442,7 +410,7 @@ namespace c3d_assimp
 	castor::String AssimpImporterFile::getMaterialName( uint32_t materialIndex )const
 	{
 		return file::getMaterialName( *this
-			, *m_scene->mMaterials[materialIndex]
+			, *m_aiScene->mMaterials[materialIndex]
 			, materialIndex );
 	}
 
@@ -522,7 +490,7 @@ namespace c3d_assimp
 			m_listedMeshes.emplace_back( it.first );
 			result.emplace_back( it.first
 				, ( it.second.skelNode
-					? normalizeName( file::findSkeletonName( m_bonesNodes, *it.second.skelNode ) )
+					? findSkeletonName( m_bonesNodes, *it.second.skelNode )
 					: castor::String{} ) );
 		}
 
@@ -693,17 +661,18 @@ namespace c3d_assimp
 	}
 
 	castor3d::ImporterFileUPtr AssimpImporterFile::create( castor3d::Engine & engine
+		, castor3d::Scene * scene
 		, castor::Path const & path
 		, castor3d::Parameters const & parameters )
 	{
-		return std::make_unique< AssimpImporterFile >( engine, path, parameters );
+		return std::make_unique< AssimpImporterFile >( engine, scene, path, parameters );
 	}
 
 	void AssimpImporterFile::doPrelistMaterials()
 	{
 		uint32_t materialIndex = 0u;
 
-		for ( auto aiMaterial : castor::makeArrayView( m_scene->mMaterials, m_scene->mNumMaterials ) )
+		for ( auto aiMaterial : castor::makeArrayView( m_aiScene->mMaterials, m_aiScene->mNumMaterials ) )
 		{
 			auto name = file::getMaterialName( *this, *aiMaterial, materialIndex );
 			m_sceneData.materials.emplace( name, aiMaterial );
@@ -716,11 +685,11 @@ namespace c3d_assimp
 		std::map< aiMesh const *, aiNode const * > result;
 		uint32_t meshIndex = 0u;
 
-		for ( auto aiMesh : castor::makeArrayView( m_scene->mMeshes, m_scene->mNumMeshes ) )
+		for ( auto aiMesh : castor::makeArrayView( m_aiScene->mMeshes, m_aiScene->mNumMeshes ) )
 		{
 			if ( aiMesh->HasBones() )
 			{
-				auto meshNode = findMeshNode( meshIndex, *m_scene->mRootNode );
+				auto meshNode = findMeshNode( meshIndex, *m_aiScene->mRootNode );
 
 				if ( meshNode == nullptr )
 				{
@@ -728,38 +697,43 @@ namespace c3d_assimp
 				}
 				else
 				{
-					auto rootNode = findRootSkeletonNode( *m_scene->mRootNode
+					auto rootNode = findRootSkeletonNode( *m_aiScene->mRootNode
 						, castor::makeArrayView( aiMesh->mBones, aiMesh->mNumBones )
 						, meshNode );
-					auto skelName = normalizeName( file::findSkeletonName( m_bonesNodes
-						, *rootNode ) );
-					auto & skeleton = m_sceneData.skeletons.emplace( skelName, SkeletonData{ rootNode } ).first->second;
-
-					for ( auto aiAnimation : castor::makeArrayView( m_scene->mAnimations, m_scene->mNumAnimations ) )
-					{
-						if ( file::isAnimForSkeleton( *this, *aiAnimation, skeleton ) )
-						{
-							auto [frameCount, frameTicks] = getAnimationFrameTicks( *aiAnimation );
-
-							if ( frameCount > 1 )
-							{
-								castor::String animName{ normalizeName( makeString( aiAnimation->mName ) ) };
-
-								if ( animName.empty() )
-								{
-									animName = normalizeName( getName() );
-								}
-
-								skeleton.anims.emplace( animName, aiAnimation );
-							}
-						}
-					}
-
+					auto skelName = findSkeletonName( m_bonesNodes
+						, *rootNode );
+					m_sceneData.skeletons.emplace( skelName, SkeletonData{ rootNode } );
 					result.emplace( aiMesh, rootNode );
 				}
 			}
 
 			++meshIndex;
+		}
+
+		for ( auto aiAnimation : castor::makeArrayView( m_aiScene->mAnimations, m_aiScene->mNumAnimations ) )
+		{
+			if ( auto [skeletonData, skeleton] = file::findSkeletonForAnim( getScene(), *m_aiScene->mRootNode, *aiAnimation, m_sceneData );
+				skeletonData )
+			{
+				auto [frameCount, frameTicks] = getAnimationFrameTicks( *aiAnimation );
+
+				if ( frameCount > 1 )
+				{
+					castor::String animName{ normalizeName( makeString( aiAnimation->mName ) ) };
+
+					if ( animName.empty() )
+					{
+						animName = normalizeName( getName() );
+					}
+
+					if ( skeleton && skeleton->hasAnimation( animName ) )
+					{
+						animName += "_" + getName();
+					}
+
+					skeletonData->anims.emplace( animName, aiAnimation );
+				}
+			}
 		}
 
 		return result;
@@ -769,7 +743,7 @@ namespace c3d_assimp
 	{
 		uint32_t meshIndex = 0u;
 
-		for ( auto aiMesh : castor::makeArrayView( m_scene->mMeshes, m_scene->mNumMeshes ) )
+		for ( auto aiMesh : castor::makeArrayView( m_aiScene->mMeshes, m_aiScene->mNumMeshes ) )
 		{
 			if ( isValidMesh( *aiMesh ) )
 			{
@@ -780,7 +754,7 @@ namespace c3d_assimp
 					meshName = getInternalName( getName() ) + castor::string::toString( meshIndex );
 				}
 				
-				if ( file::hasNodeAnim( *m_scene, meshIndex ) )
+				if ( file::hasNodeAnim( *m_aiScene, meshIndex ) )
 				{
 					meshName += castor::string::toString( meshIndex );
 				}
@@ -823,8 +797,8 @@ namespace c3d_assimp
 				{
 					auto anims = file::findMorphAnims( meshIndex
 						, aiMesh->mNumAnimMeshes
-						, *m_scene->mRootNode
-						, castor::makeArrayView( m_scene->mAnimations, m_scene->mNumAnimations ) );
+						, *m_aiScene->mRootNode
+						, castor::makeArrayView( m_aiScene->mAnimations, m_aiScene->mNumAnimations ) );
 
 					for ( auto anim : anims )
 					{
@@ -846,13 +820,16 @@ namespace c3d_assimp
 	{
 		auto aiNodeName = makeString( aiNode.mName );
 
-		if ( file::isSkeletonNode( aiNode, aiNodeName, m_bonesNodes, m_sceneData.skeletons ) )
+		if ( m_bonesNodes.find( aiNodeName ) != m_bonesNodes.end() )
 		{
 			return;
 		}
 
-		auto anims = file::findNodeAnims( aiNode
-			, castor::makeArrayView( m_scene->mAnimations, m_scene->mNumAnimations ) );
+		bool isSkeletonNode = file::isSkeletonNode( aiNode, aiNodeName, m_bonesNodes, m_sceneData.skeletons );
+		auto anims = ( aiNode.mParent && isSkeletonNode )
+			? std::map< aiAnimation const *, aiNodeAnim const * >{}
+			: file::findNodeAnims( aiNode
+				, castor::makeArrayView( m_aiScene->mAnimations, m_aiScene->mNumAnimations ) );
 		auto aiMeshes = castor::makeArrayView( aiNode.mMeshes, aiNode.mNumMeshes );
 		auto meshIt = std::find_if( aiMeshes.begin()
 			, aiMeshes.end()
@@ -869,26 +846,29 @@ namespace c3d_assimp
 				, &aiNode
 				, transform * fromAssimp( aiNode.mTransformation ) };
 
-			for ( auto anim : anims )
+			if ( !isSkeletonNode )
 			{
-				auto [frameCount, frameTicks] = getNodeAnimFrameTicks( *anim.second );
-
-				if ( frameCount > 1 )
+				for ( auto anim : anims )
 				{
-					castor::String animName{ normalizeName( makeString( anim.first->mName ) ) };
+					auto [frameCount, frameTicks] = getNodeAnimFrameTicks( *anim.second );
 
-					if ( animName.empty() )
+					if ( frameCount > 1 )
 					{
-						animName = normalizeName( aiNodeName );
-					}
+						castor::String animName{ normalizeName( makeString( anim.first->mName ) ) };
 
-					nodeData.anims.emplace( animName, anim );
+						if ( animName.empty() )
+						{
+							animName = normalizeName( aiNodeName );
+						}
+
+						nodeData.anims.emplace( animName, anim );
+					}
 				}
 			}
 
 			for ( auto meshIndex : castor::makeArrayView( aiNode.mMeshes, aiNode.mNumMeshes ) )
 			{
-				if ( !file::isValidMesh( *m_scene, meshIndex ) )
+				if ( !file::isValidMesh( *m_aiScene, meshIndex ) )
 				{
 					continue;
 				}
@@ -936,7 +916,7 @@ namespace c3d_assimp
 
 	void AssimpImporterFile::doPrelistLights()
 	{
-		for ( auto aiLight : castor::makeArrayView( m_scene->mLights, m_scene->mNumLights ) )
+		for ( auto aiLight : castor::makeArrayView( m_aiScene->mLights, m_aiScene->mNumLights ) )
 		{
 			if ( aiLight->mType == aiLightSource_DIRECTIONAL
 				|| aiLight->mType == aiLightSource_POINT
@@ -980,7 +960,7 @@ namespace c3d_assimp
 						, nullptr
 						, file::accumulateTransforms( *this
 							, name
-							, *m_scene->mRootNode
+							, *m_aiScene->mRootNode
 							, m_sceneData.nodes
 							, transform ) } );
 				}

@@ -10,7 +10,9 @@
 #include <Castor3D/Model/Skeleton/BoneNode.hpp>
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp>
+#include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationBone.hpp>
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp>
+#include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationNode.hpp>
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationObject.hpp>
 #include <Castor3D/Scene/SceneNode.hpp>
 #include <Castor3D/Scene/Animation/SceneNodeAnimation.hpp>
@@ -82,9 +84,8 @@ namespace c3d_assimp
 			return false;
 		}
 
-		std::map< castor::String, castor3d::ObjectTransform > nodeTransforms;
 		auto & aiAnimation = *it->second;
-		auto & aiNode = *file.getScene().mRootNode;
+		auto & aiNode = *file.getAiScene().mRootNode;
 		auto [frameCount, frameTicks] = getAnimationFrameTicks( aiAnimation );
 		castor3d::log::info << cuT( "  Skeleton Animation found: [" ) << name << cuT( "]" ) << std::endl;
 		int64_t ticksPerSecond = aiAnimation.mTicksPerSecond != 0.0
@@ -103,28 +104,7 @@ namespace c3d_assimp
 
 		for ( auto & object : notAnimated )
 		{
-			auto node = aiNode.FindNode( file.getExternalName( object->getName() ).c_str() );
-			castor3d::ObjectTransform objTransform{};
-
-			if ( node )
-			{
-				aiVector3D scaling, position;
-				aiQuaternion rotate;
-				node->mTransformation.Decompose( scaling, rotate, position );
-				auto translate = fromAssimp( position );
-				auto scale = fromAssimp( scaling );
-				auto orientation = fromAssimp( rotate );
-				objTransform = castor3d::ObjectTransform{ nullptr, translate, scale, orientation };
-				auto transformIt = nodeTransforms.emplace( makeString( node->mName )
-					, objTransform ).first;
-				transformIt->second = objTransform;
-			}
-			else
-			{
-				auto transformIt = nodeTransforms.find( file.getExternalName( object->getName() ) );
-				CU_Require( transformIt != nodeTransforms.end() );
-				objTransform = transformIt->second;
-			}
+			auto & objTransform = object->getNodeTransform();
 
 			for ( auto & keyFrame : keyframes )
 			{
@@ -139,9 +119,9 @@ namespace c3d_assimp
 				}
 				else
 				{
-					kfit->translate = objTransform.translate;
-					kfit->rotate = objTransform.rotate;
-					kfit->scale = objTransform.scale;
+					kfit->transform.translate = objTransform.translate;
+					kfit->transform.rotate = objTransform.rotate;
+					kfit->transform.scale = objTransform.scale;
 				}
 			}
 		}

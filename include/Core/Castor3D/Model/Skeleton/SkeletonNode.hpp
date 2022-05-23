@@ -76,6 +76,16 @@ namespace castor3d
 			return m_type;
 		}
 
+		NodeTransform const & getTransform()const noexcept
+		{
+			return m_transform;
+		}
+
+		void setTransform( NodeTransform tranform )noexcept
+		{
+			m_transform = std::move( tranform );
+		}
+
 	private:
 		/**
 		 *\~english
@@ -100,6 +110,7 @@ namespace castor3d
 		SkeletonNodeType m_type;
 		Skeleton & m_skeleton;
 		SkeletonNode * m_parent{};
+		NodeTransform m_transform{};
 		std::map< castor::String, SkeletonNode * > m_children;
 	};
 }

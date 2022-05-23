@@ -82,12 +82,12 @@ namespace castor3d
 				{
 					if ( transformIt.object->getParent() )
 					{
-						transformPosition( {}, scale, ident, transformIt.translate );
+						transformPosition( {}, scale, ident, transformIt.transform.translate );
 					}
 					else
 					{
-						transformPosition( {}, scale, rotation, transformIt.translate );
-						transformRotation( scale, rotation, transformIt.rotate );
+						transformPosition( {}, scale, rotation, transformIt.transform.translate );
+						transformRotation( scale, rotation, transformIt.transform.rotate );
 					}
 				}
 

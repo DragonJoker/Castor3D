@@ -44,9 +44,10 @@ namespace castor3d
 	//*********************************************************************************************
 
 	CmshImporterFile::CmshImporterFile( Engine & engine
+		, Scene * scene
 		, castor::Path const & path
 		, Parameters const & parameters )
-		: ImporterFile{ engine, path, parameters }
+		: ImporterFile{ engine, scene, path, parameters }
 	{
 	}
 
@@ -182,10 +183,11 @@ namespace castor3d
 	}
 
 	ImporterFileUPtr CmshImporterFile::create( Engine & engine
+		, Scene * scene
 		, castor::Path const & path
 		, Parameters const & parameters )
 	{
-		return ImporterFileUPtr( new CmshImporterFile{ engine, path, parameters } );
+		return ImporterFileUPtr( new CmshImporterFile{ engine, scene, path, parameters } );
 	}
 
 	//*********************************************************************************************

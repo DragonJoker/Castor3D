@@ -26,9 +26,10 @@ namespace C3dPly
 	//*********************************************************************************************
 
 	PlyImporterFile::PlyImporterFile( castor3d::Engine & engine
+		, castor3d::Scene * scene
 		, castor::Path const & path
 		, castor3d::Parameters const & parameters )
-		: castor3d::ImporterFile{ engine, path, parameters }
+		: castor3d::ImporterFile{ engine, scene, path, parameters }
 	{
 	}
 
@@ -115,10 +116,14 @@ namespace C3dPly
 	}
 
 	castor3d::ImporterFileUPtr PlyImporterFile::create( castor3d::Engine & engine
+		, castor3d::Scene * scene
 		, castor::Path const & path
 		, castor3d::Parameters const & parameters )
 	{
-		return std::make_unique< PlyImporterFile >( engine, path, parameters );
+		return std::make_unique< PlyImporterFile >( engine
+			, scene
+			, path
+			, parameters );
 	}
 
 	//*********************************************************************************************
