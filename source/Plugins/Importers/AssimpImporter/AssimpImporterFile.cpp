@@ -35,7 +35,8 @@ namespace c3d_assimp
 		{
 			bool noOptim = false;
 			auto found = parameters.get( "no_optimisations", noOptim );
-			uint32_t importFlags{ aiProcess_ValidateDataStructure };
+			uint32_t importFlags{ aiProcess_ValidateDataStructure
+				| aiProcess_FindInvalidData };
 
 			if ( !found || !noOptim )
 			{
