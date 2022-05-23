@@ -70,7 +70,7 @@ namespace castor3d
 			if ( result
 				&& !it.colours.empty() )
 			{
-				result = doWriteChunk( it.texcoords3, ChunkType::eMorphTargetColours, m_chunk );
+				result = doWriteChunk( it.colours, ChunkType::eMorphTargetColours, m_chunk );
 			}
 		}
 

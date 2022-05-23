@@ -251,10 +251,8 @@ namespace castor3d
 				out.colour = in.colour;
 				auto morphingWeights = writer.declLocale( "morphingWeights"
 					, c3d_morphingWeights[ids.morphingId] );
-				morph( c3d_morphTargets
-					, morphingWeights
+				morphingWeights.morph( c3d_morphTargets
 					, writer.cast< UInt >( in.vertexIndex - in.baseVertex )
-					, ids.morphTargetsCount
 					, curPosition
 					, v4Normal
 					, v4Tangent

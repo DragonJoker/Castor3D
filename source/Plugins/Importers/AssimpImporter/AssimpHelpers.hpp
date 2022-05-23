@@ -30,6 +30,13 @@ namespace c3d_assimp
 	static castor::String normalizeName( castor::String name )
 	{
 		castor::string::replace( name, "\\", "-" );
+		castor::string::replace( name, "|", "-" );
+		castor::string::replace( name, ":", "-" );
+		castor::string::replace( name, "*", "-" );
+		castor::string::replace( name, "?", "-" );
+		castor::string::replace( name, "<", "-" );
+		castor::string::replace( name, ">", "-" );
+		castor::string::replace( name, "\"", "-" );
 		return castor::string::replace( name, "/", "-" );
 	}
 
