@@ -320,6 +320,7 @@ namespace castor3d
 				texcoords = &texComp->getData();
 			}
 
+			getOwner()->getNormals().resize( getOwner()->getPositions().size() );
 			SubmeshUtils::computeNormals( getOwner()->getPositions()
 				, *texcoords
 				, getOwner()->getNormals()
