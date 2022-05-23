@@ -172,11 +172,25 @@ namespace castor
 
 			if ( id && entry.submesh.getMorphTargetsCount() )
 			{
-				if ( auto max = entry.mesh.fillBuffer( entry.submesh, &morphingBuffer[id - 1u] );
-					max > 0 )
+				auto max = entry.mesh.fillBuffer( entry.submesh, &morphingBuffer[id - 1u] );
+
+				if ( max )
+				{
+					auto offset = m_morphingWeights.getOffset() + ( id - 1u ) * sizeof( MorphingWeightsConfiguration );
+					m_morphingWeights.buffer->markDirty( offset
+						, sizeof( castor::Point4ui ) + sizeof( float ) * max
+						, VK_ACCESS_UNIFORM_READ_BIT
+						, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
+					offset += sizeof( float ) * MaxMorphTargets * 4u;
+					m_morphingWeights.buffer->markDirty( offset
+						, sizeof( uint32_t ) * max
+						, VK_ACCESS_UNIFORM_READ_BIT
+						, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
+				}
+				else
 				{
 					m_morphingWeights.buffer->markDirty( m_morphingWeights.getOffset() + ( id - 1u ) * sizeof( MorphingWeightsConfiguration )
-						, sizeof( float ) * max
+						, sizeof( castor::Point4ui )
 						, VK_ACCESS_UNIFORM_READ_BIT
 						, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
 				}

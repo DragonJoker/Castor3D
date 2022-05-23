@@ -272,6 +272,10 @@ namespace castor3d
 	*/
 	struct MorphingWeightsConfiguration
 	{
+		// Contains the actual number of weights
+		castor::Point4ui morphTargetsData;
+		// x4 because the shader stores a uvec4[MaxMorphTargets]
+		std::array< uint32_t, MaxMorphTargets * 4u > morphTargetsIndices;
 		// x4 because the shader stores a vec4[MaxMorphTargets]
 		std::array< float, MaxMorphTargets * 4u > morphTargetsWeights;
 	};

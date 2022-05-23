@@ -162,88 +162,69 @@ namespace castor3d
 
 		//*****************************************************************************************
 
-		castor::String const MorphingWeightsData::BufferName = cuT( "MorphingWeights" );
-		castor::String const MorphingWeightsData::DataName = cuT( "c3d_morphingWeightsData" );
+		castor::String const MorphingWeightsData::BufferName = cuT( "MorphingWeightsIndices" );
+		castor::String const MorphingWeightsData::DataName = cuT( "c3d_morphingWeightsIndices" );
 
 		MorphingWeightsData::MorphingWeightsData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
 			: StructInstance{ writer, std::move( expr ), enabled }
-			, m_data{ getMember< sdw::Vec4 >( "weights" ) }
+			, m_limits{ getMember< sdw::UVec4 >( "limits" ) }
+			, m_indices{ getMemberArray< sdw::UVec4 >( "indices" ) }
+			, m_weights{ getMemberArray< sdw::Vec4 >( "weights" ) }
+			, morphTargetsCount{ m_limits.x() }
 		{
 		}
 
-		ast::type::BaseStructPtr MorphingWeightsData::makeType( ast::type::TypesCache & cache )
+		ast::type::StructPtr MorphingWeightsData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-				, "C3D_MorphingWeightsData" );
+				, "C3D_MorphingWeightsIndices" );
 
 			if ( result->empty() )
 			{
-				result->declMember( "weights", ast::type::Kind::eVec4F );
-			}
-
-			return result;
-		}
-
-		//*****************************************************************************************
-
-		MorphingWeightsDataArray::MorphingWeightsDataArray( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled )
-			: StructInstance{ writer, std::move( expr ), enabled }
-			, m_data{ getMemberArray< MorphingWeightsData >( "weights" ) }
-		{
-		}
-
-		ast::type::StructPtr MorphingWeightsDataArray::makeType( ast::type::TypesCache & cache )
-		{
-			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-				, "C3D_MorphingWeightsDataArray" );
-
-			if ( result->empty() )
-			{
+				result->declMember( "limits"
+					, ast::type::Kind::eVec4U
+					, ast::type::NotArray );
+				result->declMember( "indices"
+					, ast::type::Kind::eVec4U
+					, MaxMorphTargets );
 				result->declMember( "weights"
-					, MorphingWeightsData::makeType( cache )
+					, ast::type::Kind::eVec4F
 					, MaxMorphTargets );
 			}
 
 			return result;
 		}
 
-		//*****************************************************************************************
-	}
-
-	void morph( sdw::Array< shader::MorphTargetsData > const & targets
-		, shader::MorphingWeightsDataArray const & weights
-		, sdw::UInt vertexId
-		, sdw::UInt morphTargetsCount
-		, sdw::Vec4 & pos
-		, sdw::Vec3 & uvw0
-		, sdw::Vec3 & uvw1
-		, sdw::Vec3 & uvw2
-		, sdw::Vec3 & uvw3
-		, sdw::Vec3 & col )
-	{
-		if ( !targets.isEnabled() )
+		void MorphingWeightsData::morph( sdw::Array< shader::MorphTargetsData > const & targets
+			, sdw::UInt vertexId
+			, sdw::Vec4 & pos
+			, sdw::Vec3 & uvw0
+			, sdw::Vec3 & uvw1
+			, sdw::Vec3 & uvw2
+			, sdw::Vec3 & uvw3
+			, sdw::Vec3 & col )const
 		{
-			return;
-		}
-
-		auto & writer = *targets.getWriter();
-		auto morphTargets = writer.declLocale( "morphTargets"
-			, targets[vertexId] );
-		auto morphWeight = writer.declLocale( "morphWeight"
-			, 0.0_f );
-
-		FOR( writer, sdw::UInt, mphIndex, 0_u, mphIndex < morphTargetsCount, ++mphIndex )
-		{
-			morphWeight = weights[mphIndex];
-
-			IF( writer, morphWeight != 0.0_f )
+			if ( !targets.isEnabled() )
 			{
+				return;
+			}
+
+			auto & writer = *targets.getWriter();
+			auto morphTargets = writer.declLocale( "morphTargets"
+				, targets[vertexId] );
+			auto morphWeight = writer.declLocale( "morphWeight"
+				, 0.0_f );
+			auto morphIndex = writer.declLocale( "morphIndex"
+				, 0_u );
+
+			FOR( writer, sdw::UInt, mphIndex, 0_u, mphIndex < morphTargetsCount, ++mphIndex )
+			{
+				morphWeight = weight( mphIndex );
+				morphIndex = index( mphIndex );
 				auto target = writer.declLocale( "morphTarget"
-					, morphTargets[mphIndex] );
+					, morphTargets[morphIndex] );
 				target.morph( pos
 					, uvw0
 					, uvw1
@@ -252,42 +233,38 @@ namespace castor3d
 					, col
 					, morphWeight );
 			}
-			FI;
-		}
-		ROF;
-	}
-
-	void morph( sdw::Array< shader::MorphTargetsData > const & targets
-		, shader::MorphingWeightsDataArray const & weights
-		, sdw::UInt vertexId
-		, sdw::UInt morphTargetsCount
-		, sdw::Vec4 & pos
-		, sdw::Vec4 & nml
-		, sdw::Vec3 & uvw0
-		, sdw::Vec3 & uvw1
-		, sdw::Vec3 & uvw2
-		, sdw::Vec3 & uvw3
-		, sdw::Vec3 & col )
-	{
-		if ( !targets.isEnabled() )
-		{
-			return;
+			ROF;
 		}
 
-		auto & writer = *targets.getWriter();
-		auto morphTargets = writer.declLocale( "morphTargets"
-			, targets[vertexId] );
-		auto morphWeight = writer.declLocale( "morphWeight"
-			, 0.0_f );
-
-		FOR( writer, sdw::UInt, mphIndex, 0_u, mphIndex < morphTargetsCount, ++mphIndex )
+		void MorphingWeightsData::morph( sdw::Array< shader::MorphTargetsData > const & targets
+			, sdw::UInt vertexId
+			, sdw::Vec4 & pos
+			, sdw::Vec4 & nml
+			, sdw::Vec3 & uvw0
+			, sdw::Vec3 & uvw1
+			, sdw::Vec3 & uvw2
+			, sdw::Vec3 & uvw3
+			, sdw::Vec3 & col )const
 		{
-			morphWeight = weights[mphIndex];
-
-			IF( writer, morphWeight != 0.0_f )
+			if ( !targets.isEnabled() )
 			{
+				return;
+			}
+
+			auto & writer = *targets.getWriter();
+			auto morphTargets = writer.declLocale( "morphTargets"
+				, targets[vertexId] );
+			auto morphWeight = writer.declLocale( "morphWeight"
+				, 0.0_f );
+			auto morphIndex = writer.declLocale( "morphIndex"
+				, 0_u );
+
+			FOR( writer, sdw::UInt, mphIndex, 0_u, mphIndex < morphTargetsCount, ++mphIndex )
+			{
+				morphWeight = weight( mphIndex );
+				morphIndex = index( mphIndex );
 				auto target = writer.declLocale( "morphTarget"
-					, morphTargets[mphIndex] );
+					, morphTargets[morphIndex] );
 				target.morph( pos
 					, nml
 					, uvw0
@@ -297,43 +274,39 @@ namespace castor3d
 					, col
 					, morphWeight );
 			}
-			FI;
-		}
-		ROF;
-	}
-
-	void morph( sdw::Array< shader::MorphTargetsData > const & targets
-		, shader::MorphingWeightsDataArray const & weights
-		, sdw::UInt vertexId
-		, sdw::UInt morphTargetsCount
-		, sdw::Vec4 & pos
-		, sdw::Vec4 & nml
-		, sdw::Vec4 & tan
-		, sdw::Vec3 & uvw0
-		, sdw::Vec3 & uvw1
-		, sdw::Vec3 & uvw2
-		, sdw::Vec3 & uvw3
-		, sdw::Vec3 & col )
-	{
-		if ( !targets.isEnabled() )
-		{
-			return;
+			ROF;
 		}
 
-		auto & writer = *targets.getWriter();
-		auto morphTargets = writer.declLocale( "morphTargets"
-			, targets[vertexId] );
-		auto morphWeight = writer.declLocale( "morphWeight"
-			, 0.0_f );
-
-		FOR( writer, sdw::UInt, mphIndex, 0_u, mphIndex < morphTargetsCount, ++mphIndex )
+		void MorphingWeightsData::morph( sdw::Array< shader::MorphTargetsData > const & targets
+			, sdw::UInt vertexId
+			, sdw::Vec4 & pos
+			, sdw::Vec4 & nml
+			, sdw::Vec4 & tan
+			, sdw::Vec3 & uvw0
+			, sdw::Vec3 & uvw1
+			, sdw::Vec3 & uvw2
+			, sdw::Vec3 & uvw3
+			, sdw::Vec3 & col )const
 		{
-			morphWeight = weights[mphIndex];
-
-			IF( writer, morphWeight != 0.0_f )
+			if ( !targets.isEnabled() )
 			{
+				return;
+			}
+
+			auto & writer = *targets.getWriter();
+			auto morphTargets = writer.declLocale( "morphTargets"
+				, targets[vertexId] );
+			auto morphWeight = writer.declLocale( "morphWeight"
+				, 0.0_f );
+			auto morphIndex = writer.declLocale( "morphIndex"
+				, 0_u );
+
+			FOR( writer, sdw::UInt, mphIndex, 0_u, mphIndex < morphTargetsCount, ++mphIndex )
+			{
+				morphWeight = weight( mphIndex );
+				morphIndex = index( mphIndex );
 				auto target = writer.declLocale( "morphTarget"
-					, morphTargets[mphIndex] );
+					, morphTargets[morphIndex] );
 				target.morph( pos
 					, nml
 					, tan
@@ -344,10 +317,9 @@ namespace castor3d
 					, col
 					, morphWeight );
 			}
-			FI;
+			ROF;
 		}
-		ROF;
-	}
 
-	//*********************************************************************************************
+		//*****************************************************************************************
+	}
 }

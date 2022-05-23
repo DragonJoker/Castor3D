@@ -23,24 +23,30 @@ namespace castor3d
 	uint32_t AnimatedMesh::fillBuffer( Submesh const & submesh
 		, MorphingWeightsConfiguration * buffer )const
 	{
-		uint32_t index{};
+		uint32_t result{};
 
-		if ( !isPlayingAnimation() )
+		if ( isPlayingAnimation() )
 		{
-			while ( index < submesh.getMorphTargetsCount() )
+			if ( auto animSubmesh = getPlayingAnimation().getAnimationSubmesh( submesh.getId() ) )
 			{
-				buffer->morphTargetsWeights[index++] = 0.0f;
+				uint32_t index{};
+
+				for ( auto & weight : animSubmesh->getWeights() )
+				{
+					if ( weight )
+					{
+						buffer->morphTargetsIndices[result] = index;
+						buffer->morphTargetsWeights[result] = weight;
+						++result;
+					}
+
+					++index;
+				}
 			}
 		}
-		else if ( auto animSubmesh = getPlayingAnimation().getAnimationSubmesh( submesh.getId() ) )
-		{
-			for ( auto & weight : animSubmesh->getWeights() )
-			{
-				buffer->morphTargetsWeights[index++] = weight;
-			}
-		}
 
-		return index;
+		buffer->morphTargetsData->x = result;
+		return result;
 	}
 
 	void AnimatedMesh::update( castor::Milliseconds const & elapsed )
