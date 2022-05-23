@@ -122,7 +122,6 @@ namespace c3d_assimp
 				TextureInfo opaInfo{};
 				TextureInfo spcInfo{};
 				TextureInfo shnInfo{};
-				TextureInfo rghInfo{};
 
 				if ( !colInfo.name.empty()
 					&& colInfo.name.find( "_Cine_" ) != castor::String::npos
@@ -149,7 +148,6 @@ namespace c3d_assimp
 					opaInfo = getTextureInfo( castor3d::TextureFlag::eOpacity );
 					spcInfo = getTextureInfo( castor3d::TextureFlag::eSpecular );
 					shnInfo = getTextureInfo( castor3d::TextureFlag::eShininess );
-					rghInfo = getTextureInfo( castor3d::TextureFlag::eRoughness );
 				}
 
 				if ( spcInfo.name.empty() )
@@ -227,9 +225,6 @@ namespace c3d_assimp
 					, hasOpacity );
 				loadTexture( shnInfo, getRemap( castor3d::TextureFlag::eShininess
 					, castor3d::TextureConfiguration::ShininessTexture )
-					, hasOpacity );
-				loadTexture( rghInfo, getRemap( castor3d::TextureFlag::eRoughness
-					, castor3d::TextureConfiguration::RoughnessTexture )
 					, hasOpacity );
 				loadTexture( occInfo, getRemap( castor3d::TextureFlag::eOcclusion
 					, castor3d::TextureConfiguration::OcclusionTexture )

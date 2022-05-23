@@ -409,16 +409,15 @@ namespace c3d_assimp
 			, *texcoords2
 			, *texcoords3
 			, *colours );
-		auto & animBuffers = file.addMeshAnimBuffers( &aiMesh
-			, gatherMeshAnimBuffers( positions->getData()
-				, normals->getData()
-				, *tangents
-				, *texcoords0
-				, *texcoords1
-				, *texcoords2
-				, *texcoords3
-				, *colours
-				, castor::makeArrayView( aiMesh.mAnimMeshes, aiMesh.mNumAnimMeshes ) ) );
+		auto animBuffers = gatherMeshAnimBuffers( positions->getData()
+			, normals->getData()
+			, *tangents
+			, *texcoords0
+			, *texcoords1
+			, *texcoords2
+			, *texcoords3
+			, *colours
+			, castor::makeArrayView( aiMesh.mAnimMeshes, aiMesh.mNumAnimMeshes ) );
 
 		if ( !animBuffers.empty() )
 		{
