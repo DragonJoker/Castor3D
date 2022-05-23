@@ -11,18 +11,19 @@ namespace c3d_assimp
 	{
 		static castor3d::SkeletonNode * addNode( castor3d::Skeleton & skeleton
 			, std::map< castor::String, castor::Matrix4x4f > const & bonesNodes
-			, castor::String const & nodeName )
+			, castor::String const & nodeName
+			, castor::String const & name )
 		{
 			auto it = bonesNodes.find( nodeName );
 
 			if ( it == bonesNodes.end() )
 			{
 				castor3d::log::debug << "    Skeleton Node [" << nodeName << "]" << std::endl;
-				return skeleton.createNode( nodeName );
+				return skeleton.createNode( name );
 			}
 
 			castor3d::log::debug << "    Skeleton Bone [" << nodeName << "]" << std::endl;
-			return skeleton.createBone( nodeName, it->second );
+			return skeleton.createBone( name, it->second );
 		}
 
 		static castor3d::SkeletonNode * processSkeletonNode( AssimpImporterFile const & file
@@ -32,11 +33,18 @@ namespace c3d_assimp
 			, castor3d::SkeletonNode * parentSkelNode )
 		{
 			auto nodeName = makeString( aiNode.mName );
-			auto skelNode = skeleton.findNode( nodeName );
+			auto name = file.getInternalName( nodeName );
+			auto skelNode = skeleton.findNode( name );
 
 			if ( !skelNode )
 			{
-				skelNode = addNode( skeleton, bonesNodes, nodeName );
+				skelNode = addNode( skeleton, bonesNodes, nodeName, name );
+				aiVector3D scaling, position;
+				aiQuaternion rotate;
+				aiNode.mTransformation.Decompose( scaling, rotate, position );
+				skelNode->setTransform( { fromAssimp( position )
+					, fromAssimp( scaling )
+					, fromAssimp( rotate ) } );
 
 				if ( parentSkelNode )
 				{

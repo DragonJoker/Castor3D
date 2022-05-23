@@ -28,6 +28,7 @@ namespace C3dPly
 	{
 	public:
 		PlyImporterFile( castor3d::Engine & engine
+			, castor3d::Scene * scene
 			, castor::Path const & path
 			, castor3d::Parameters const & parameters );
 
@@ -49,6 +50,7 @@ namespace C3dPly
 		castor3d::LightImporterUPtr createLightImporter()override;
 
 		static castor3d::ImporterFileUPtr create( castor3d::Engine & engine
+			, castor3d::Scene * scene
 			, castor::Path const & path
 			, castor3d::Parameters const & parameters );
 	};

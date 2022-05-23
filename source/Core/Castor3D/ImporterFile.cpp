@@ -1,6 +1,7 @@
 #include "Castor3D/ImporterFile.hpp"
 
 #include "Castor3D/Binary/CmshImporter.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 CU_ImplementCUSmartPtr( castor3d, ImporterFileFactory )
 
@@ -56,9 +57,11 @@ namespace castor3d
 	//*********************************************************************************************
 
 	ImporterFile::ImporterFile( Engine & engine
+		, Scene * scene
 		, castor::Path const & path
 		, Parameters const & parameters )
 		: castor::OwnedBy< Engine >{ engine }
+		, m_scene{ scene }
 		, m_fileName{ path }
 		, m_filePath{ m_fileName.getPath() }
 		, m_extension{ castor::string::lowerCase( m_fileName.getExtension() ) }
@@ -75,16 +78,37 @@ namespace castor3d
 	//*********************************************************************************************
 
 	ImporterFileFactory::ImporterFileFactory()
-		: Factory< ImporterFile
-		, castor::String
-		, ImporterFileUPtr
-		, std::function< ImporterFileUPtr( Engine & , castor::Path const &, Parameters const & ) > >{}
+		: MyFactory{}
 	{
 		registerType( CmshMeshImporter::Type, CmshImporterFile::create );
 		registerType( CmshSkeletonImporter::Type, CmshImporterFile::create );
 		registerType( CmshAnimationImporter::MeshAnimType, CmshImporterFile::create );
 		registerType( CmshAnimationImporter::SkeletonAnimType, CmshImporterFile::create );
 		registerType( CmshAnimationImporter::NodeAnimType, CmshImporterFile::create );
+	}
+
+	ImporterFileUPtr ImporterFileFactory::create( castor::String const & key
+		, Engine & engine
+		, castor::Path const & file
+		, Parameters const & parameters )
+	{
+		return MyFactory::create( key
+			, engine
+			, nullptr
+			, file
+			, parameters );
+	}
+
+	ImporterFileUPtr ImporterFileFactory::create( castor::String const & key
+		, Scene & scene
+		, castor::Path const & file
+		, Parameters const & parameters )
+	{
+		return MyFactory::create( key
+			, *scene.getEngine()
+			, &scene
+			, file
+			, parameters );
 	}
 
 	//*********************************************************************************************

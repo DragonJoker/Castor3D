@@ -201,6 +201,36 @@ namespace c3d_assimp
 
 			return result;
 		}
+
+		static castor3d::SkeletonRPtr findSkeletonForMesh( AssimpImporterFile const & file
+			, castor3d::Scene & scene
+			, aiNode const & sceneRootNode
+			, aiNode const & skelRootNode
+			, castor::String skelName )
+		{
+			auto skelIt = std::find_if( scene.getSkeletonCache().begin()
+				, scene.getSkeletonCache().end()
+				, [&file, &skelName]( auto const & lookup )
+				{
+					return file.getExternalName( lookup.second->getRootNode()->getName() ) == skelName;
+				} );
+
+			if ( skelIt != scene.getSkeletonCache().end() )
+			{
+				return skelIt->second.get();
+			}
+
+			for ( auto & skeleton : scene.getSkeletonCache() )
+			{
+				if ( auto node = sceneRootNode.FindNode( skeleton.second->getRootNode()->getName().c_str() );
+					&skelRootNode == node )
+				{
+					return skeleton.second.get();
+				}
+			}
+
+			return nullptr;
+		}
 	}
 
 	AssimpMeshImporter::AssimpMeshImporter( castor3d::Engine & engine )
@@ -224,7 +254,7 @@ namespace c3d_assimp
 	void AssimpMeshImporter::doImportSingleMesh( castor3d::Mesh & mesh )
 	{
 		auto & file = static_cast< AssimpImporterFile & >( *m_file );
-		auto & aiScene = file.getScene();
+		auto & aiScene = file.getAiScene();
 		auto & scene = *mesh.getScene();
 		uint32_t meshIndex{};
 
@@ -286,7 +316,7 @@ namespace c3d_assimp
 			return false;
 		}
 
-		auto & aiScene = file.getScene();
+		auto & aiScene = file.getAiScene();
 
 		for ( auto submesh : it->second.submeshes )
 		{
@@ -410,22 +440,19 @@ namespace c3d_assimp
 			auto rootNode = findRootSkeletonNode( *aiScene.mRootNode
 				, castor::makeArrayView( aiMesh.mBones, aiMesh.mNumBones )
 				, meshNode );
-			auto skelName = normalizeName( file.getInternalName( rootNode->mName ) );
-			auto skelIt = std::find_if( scene.getSkeletonCache().begin()
-				, scene.getSkeletonCache().end()
-				, [&skelName]( auto const & lookup )
-				{
-					return lookup.second->getRootNode()->getName() == skelName;
-				} );
+			auto skelName = findSkeletonName( file.getBonesNodes(), *rootNode );
+			auto skeleton = meshes::findSkeletonForMesh( file
+				, scene
+				, *file.getAiScene().mRootNode
+				, *rootNode
+				, skelName );
 
-			if ( skelIt != scene.getSkeletonCache().end() )
+			if ( skeleton )
 			{
-				auto & skeleton = *skelIt->second;
-
 				for ( auto aiBone : castor::makeArrayView( aiMesh.mBones, aiMesh.mNumBones ) )
 				{
 					castor::String boneName = file.getInternalName( aiBone->mName );
-					auto node = skeleton.findNode( boneName );
+					auto node = skeleton->findNode( boneName );
 					CU_Require( node && node->getType() == castor3d::SkeletonNodeType::eBone );
 					auto bone = &static_cast< castor3d::BoneNode & >( *node );
 

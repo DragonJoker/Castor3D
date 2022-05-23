@@ -7,6 +7,8 @@ See LICENSE file in root folder
 #include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Model/ModelModule.hpp"
 
+#include <CastorUtils/Math/Quaternion.hpp>
+
 namespace castor3d
 {
 	/**@name Model */
@@ -130,6 +132,12 @@ namespace castor3d
 	//! Bone pointer array
 	CU_DeclareVector( SkeletonNodeUPtr, SkeletonNodePtr );
 
+	struct NodeTransform
+	{
+		castor::Point3f translate{};
+		castor::Point3f scale{};
+		castor::Quaternion rotate{};
+	};
 
 	//@}
 	//@}

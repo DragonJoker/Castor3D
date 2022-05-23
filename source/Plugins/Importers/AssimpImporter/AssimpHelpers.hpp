@@ -11,6 +11,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Math/Point.hpp>
 #include <CastorUtils/Math/Quaternion.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
+#include <CastorUtils/Miscellaneous/StringUtils.hpp>
 
 #pragma warning( push )
 #pragma warning( disable: 4365 )
@@ -79,6 +80,15 @@ namespace c3d_assimp
 		result.quat.z = v.z;
 		result.quat.w = v.w;
 		return result;
+	}
+
+	static std::string getLongestCommonSubstring( std::string const & a, std::string const & b )
+	{
+		auto result = castor::string::getLongestCommonSubstring( a, b );
+		return castor::string::trim( result
+			, true
+			, true
+			, " \r\t-_/\\|*$<>[](){}" );
 	}
 
 	static bool isValidMesh( aiMesh const & mesh )
@@ -452,6 +462,45 @@ namespace c3d_assimp
 
 		CU_Require( bonesRootNodes.size() == 1u );
 		return *bonesRootNodes.begin();
+	}
+
+	static castor::String findSkeletonName( std::map< castor::String, castor::Matrix4x4f > const & bonesNodes
+		, aiNode const & rootNode )
+	{
+		std::vector< aiNode const * > bones;
+		std::vector< aiNode const * > work;
+		work.push_back( &rootNode );
+		auto name = makeString( rootNode.mName );
+
+		while ( !work.empty() )
+		{
+			auto node = work.back();
+			work.pop_back();
+
+			for ( auto child : castor::makeArrayView( node->mChildren, node->mNumChildren ) )
+			{
+				work.push_back( child );
+			}
+
+			auto nodeName = makeString( node->mName );
+
+			if ( bonesNodes.end() != bonesNodes.find( nodeName ) )
+			{
+				name = getLongestCommonSubstring( name, nodeName );
+			}
+
+			if ( name.empty() )
+			{
+				return makeString( rootNode.mName );
+			}
+		}
+
+		if ( name.empty() )
+		{
+			name = makeString( rootNode.mName );
+		}
+
+		return normalizeName( name );
 	}
 
 	template< typename KeyT >

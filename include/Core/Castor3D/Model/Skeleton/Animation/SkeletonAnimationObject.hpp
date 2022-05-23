@@ -69,6 +69,13 @@ namespace castor3d
 		C3D_API virtual castor::String const & getName()const = 0;
 		/**
 		 *\~english
+		 *\return		The object's node transform.
+		 *\~french
+		 *\return		La transformation de noeud de l'objet.
+		 */
+		C3D_API virtual NodeTransform const & getNodeTransform()const noexcept = 0;
+		/**
+		 *\~english
 		 *\return		The scaling key frames interpolation mode.
 		 *\~french
 		 *\return		Le mode d'interpolation des key frames de mise à l'échelle.

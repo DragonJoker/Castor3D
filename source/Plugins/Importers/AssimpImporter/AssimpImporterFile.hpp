@@ -95,6 +95,12 @@ namespace c3d_assimp
 	{
 	public:
 		AssimpImporterFile( castor3d::Engine & engine
+			, castor3d::Scene * scene
+			, castor::Path const & path
+			, castor3d::Parameters const & parameters );
+
+		static castor3d::ImporterFileUPtr create( castor3d::Engine & engine
+			, castor3d::Scene * scene
 			, castor::Path const & path
 			, castor3d::Parameters const & parameters );
 
@@ -123,14 +129,10 @@ namespace c3d_assimp
 		MeshAnimations const & getMeshesAnimations( castor3d::Mesh const & mesh
 			, uint32_t submeshIndex )const;
 
-		static castor3d::ImporterFileUPtr create( castor3d::Engine & engine
-			, castor::Path const & path
-			, castor3d::Parameters const & parameters );
-
-		aiScene const & getScene()const
+		aiScene const & getAiScene()const
 		{
-			CU_Require( m_scene );
-			return *m_scene;
+			CU_Require( m_aiScene );
+			return *m_aiScene;
 		}
 
 		auto const & getMaterials()const
@@ -209,7 +211,7 @@ namespace c3d_assimp
 
 	private:
 		Assimp::Importer m_importer;
-		aiScene const * m_scene{};
+		aiScene const * m_aiScene{};
 		std::map< castor::String, castor::Matrix4x4f > m_bonesNodes;
 		std::map< aiMesh const *, std::vector< castor3d::SubmeshAnimationBuffer > > m_meshAnimBuffers;
 		std::set< uint32_t > m_meshes;

@@ -58,6 +58,13 @@ namespace castor3d
 		 *\return		Le nom de l'objet.
 		 */
 		castor::String const & getName()const override;
+		/**
+		 *\~english
+		 *\return		The object's node transform.
+		 *\~french
+		 *\return		La transformation de noeud de l'objet.
+		 */
+		C3D_API NodeTransform const & getNodeTransform()const noexcept override;
 
 		void setBone( BoneNode & node )
 		{

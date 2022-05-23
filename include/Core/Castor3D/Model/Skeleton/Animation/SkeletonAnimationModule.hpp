@@ -72,9 +72,7 @@ namespace castor3d
 	struct ObjectTransform
 	{
 		SkeletonAnimationObject * object{};
-		castor::Point3f translate{};
-		castor::Point3f scale{};
-		castor::Quaternion rotate{};
+		NodeTransform transform{};
 		castor::Matrix4x4f cumulative{};
 	};
 	using TransformArray = std::vector< ObjectTransform >;

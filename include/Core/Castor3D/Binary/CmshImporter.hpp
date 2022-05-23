@@ -21,6 +21,7 @@ namespace castor3d
 	{
 	private:
 		CmshImporterFile( Engine & engine
+			, Scene * scene
 			, castor::Path const & path
 			, Parameters const & parameters );
 
@@ -43,6 +44,7 @@ namespace castor3d
 		LightImporterUPtr createLightImporter()override;
 
 		static ImporterFileUPtr create( Engine & engine
+			, Scene * scene
 			, castor::Path const & path
 			, Parameters const & parameters );
 	};
