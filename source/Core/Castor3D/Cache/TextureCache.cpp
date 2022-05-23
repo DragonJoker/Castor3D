@@ -806,16 +806,28 @@ namespace castor3d
 				if ( !data.interrupted )
 				{
 					// Merge CPU buffers on CPU thread.
-					auto lhsImage = cachetex::getFileImage( *getEngine()
-						, lhsSourceInfo.relative()
-						, lhsSourceInfo.folder()
-						, lhsSourceInfo.relative()
-						, lhsConfig );
-					auto rhsImage = cachetex::getFileImage( *getEngine()
-						, rhsSourceInfo.relative()
-						, rhsSourceInfo.folder()
-						, rhsSourceInfo.relative()
-						, rhsConfig );
+					auto lhsImage = lhsSourceInfo.isFileImage()
+						? cachetex::getFileImage( *getEngine()
+							, lhsSourceInfo.relative()
+							, lhsSourceInfo.folder()
+							, lhsSourceInfo.relative()
+							, lhsConfig )
+						: cachetex::getBufferImage( *getEngine()
+							, lhsSourceInfo.name()
+							, lhsSourceInfo.type()
+							, lhsSourceInfo.buffer()
+							, lhsConfig );
+					auto rhsImage = rhsSourceInfo.isFileImage()
+						? cachetex::getFileImage( *getEngine()
+							, rhsSourceInfo.relative()
+							, rhsSourceInfo.folder()
+							, rhsSourceInfo.relative()
+							, rhsConfig )
+						: cachetex::getBufferImage( *getEngine()
+							, rhsSourceInfo.name()
+							, rhsSourceInfo.type()
+							, rhsSourceInfo.buffer()
+							, rhsConfig );
 					data.buffer = cachetex::mergeBuffers( std::move( lhsImage )
 						, lhsSrcMask
 						, lhsDstMask

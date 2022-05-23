@@ -126,9 +126,23 @@ namespace castor3d
 		static TextureSourceInfo mergeSourceInfos( TextureSourceInfo const & lhs
 			, TextureSourceInfo const & rhs )
 		{
+			auto folder = lhs.isFileImage()
+				? lhs.folder()
+				: ( rhs.isFileImage()
+					? rhs.folder()
+					: castor::Path{} );
+			auto lhsName = lhs.isFileImage()
+				? lhs.relative()
+				: castor::Path{ lhs.name() }.getFileName();
+			auto rhsName = rhs.isFileImage()
+				? rhs.relative()
+				: castor::Path{ rhs.name() }.getFileName();
+			auto name = castor::string::getLongestCommonSubstring( lhsName, rhsName );
+			castor::string::replace( lhsName, name, castor::String{} );
+			castor::string::replace( rhsName, name, castor::String{} );
 			return TextureSourceInfo{ lhs.sampler()
-				, lhs.folder()
-				, castor::Path{ lhs.relative() + rhs.relative() }
+				, folder
+				, castor::Path{ name + lhsName + rhsName }
 				, lhs.config() };
 		}
 	}
