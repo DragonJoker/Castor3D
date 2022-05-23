@@ -334,6 +334,16 @@ namespace castor
 		CU_API String & replace( String & str, String const & toFind, String const & replacement );
 		/**
 		 *\~english
+		 *\param[in]		lhs, rhs	The input strings.
+		 *\return			The longest string common to the input strings.
+		 *\~french
+		 *\param[in]		lhs, rhs	Les chaînes d'entrée.
+		 *\return			La plus longue chaîne commune aux chaînes d'entrée.
+		 */
+		CU_API String getLongestCommonSubstring( String const & lhs
+			, String const & rhs );
+		/**
+		 *\~english
 		 *\brief			Removes spaces on the left and/or on the right of the given String
 		 *\param[in,out]	str		The String to trim, receives the trimmed string
 		 *\param[in]		left	Tells if we remove the left spaces

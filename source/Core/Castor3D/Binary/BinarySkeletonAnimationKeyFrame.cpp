@@ -27,17 +27,17 @@ namespace castor3d
 
 			if ( result )
 			{
-				result = doWriteChunk( it.translate, ChunkType::eSkeletonAnimationKeyFrameObjectTranslate, m_chunk );
+				result = doWriteChunk( it.transform.translate, ChunkType::eSkeletonAnimationKeyFrameObjectTranslate, m_chunk );
 			}
 
 			if ( result )
 			{
-				result = doWriteChunk( it.rotate, ChunkType::eSkeletonAnimationKeyFrameObjectRotate, m_chunk );
+				result = doWriteChunk( it.transform.rotate, ChunkType::eSkeletonAnimationKeyFrameObjectRotate, m_chunk );
 			}
 
 			if ( result )
 			{
-				result = doWriteChunk( it.scale, ChunkType::eSkeletonAnimationKeyFrameObjectScale, m_chunk );
+				result = doWriteChunk( it.transform.scale, ChunkType::eSkeletonAnimationKeyFrameObjectScale, m_chunk );
 			}
 		}
 

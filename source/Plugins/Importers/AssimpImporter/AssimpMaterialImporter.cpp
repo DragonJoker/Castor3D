@@ -979,7 +979,7 @@ namespace c3d_assimp
 			, m_textureRemaps
 			, *pass
 			, *it->second
-			, file.getScene()
+			, file.getAiScene()
 			, *this );
 		return true;
 	}

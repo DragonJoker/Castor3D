@@ -38,9 +38,9 @@ namespace castor3d
 
 			auto & ins = m_transforms.emplace_back();
 			ins.object = &object;
-			ins.translate = translate;
-			ins.rotate = rotate;
-			ins.scale = scale;
+			ins.transform.translate = translate;
+			ins.transform.rotate = rotate;
+			ins.transform.scale = scale;
 		}
 	}
 
@@ -107,9 +107,9 @@ namespace castor3d
 		{
 			auto parent = transform.object->getParent();
 			castor::Matrix4x4f transformMtx{ 1.0f };
-			castor::matrix::setTranslate( transformMtx, transform.translate );
-			castor::matrix::rotate( transformMtx, transform.rotate );
-			castor::matrix::scale( transformMtx, transform.scale );
+			castor::matrix::setTranslate( transformMtx, transform.transform.translate );
+			castor::matrix::rotate( transformMtx, transform.transform.rotate );
+			castor::matrix::scale( transformMtx, transform.transform.scale );
 
 			if ( parent )
 			{
