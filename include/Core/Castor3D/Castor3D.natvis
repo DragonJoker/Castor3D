@@ -186,7 +186,6 @@
 	<Type Name="castor3d::MeshAnimationSubmesh">
 		<DisplayString>{m_submesh}</DisplayString>
 		<Expand>
-			<Item Name="length">m_length</Item>
 			<Item Name="submesh">m_submesh</Item>
 			<Item Name="component">m_component</Item>
 		</Expand>
