@@ -406,7 +406,8 @@ namespace c3d_assimp
 				{
 					if ( m_material.Get( AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLIC_FACTOR, value ) != aiReturn_SUCCESS )
 					{
-						aiColor4D specular = { 1, 1, 1, 1 };
+						aiColor3D specular = { 1, 1, 1 };
+
 						if ( m_material.Get( AI_MATKEY_COLOR_SPECULAR, specular ) == aiReturn_SUCCESS )
 						{
 							value = float( castor::point::length( castor::Point3f{ specular.r
@@ -418,32 +419,20 @@ namespace c3d_assimp
 				else if ( name == "Opacity" )
 				{
 					float opacity = 1;
+
 					if ( m_material.Get( AI_MATKEY_OPACITY, opacity ) == aiReturn_SUCCESS )
 					{
 						value = opacity;
-
-						if ( opacity == 1.0f
-							&& m_material.Get( AI_MATKEY_TRANSPARENCYFACTOR, opacity ) == aiReturn_SUCCESS )
-						{
-							value = opacity;
-						}
 					}
 					else if ( m_material.Get( AI_MATKEY_TRANSPARENCYFACTOR, opacity ) == aiReturn_SUCCESS )
 					{
-						value = opacity;
-					}
-					else
-					{
-						aiColor4D colour = { 1, 1, 1, 1 };
-						if ( m_material.Get( AI_MATKEY_COLOR_DIFFUSE, colour ) == aiReturn_SUCCESS )
-						{
-							value = colour.a;
-						}
+						value = 1.0f - opacity;
 					}
 				}
 				else if ( name == "Emissive" )
 				{
-					aiColor4D emissive = { 1, 1, 1, 1 };
+					aiColor3D emissive = { 1, 1, 1 };
+
 					if ( m_material.Get( AI_MATKEY_COLOR_EMISSIVE, emissive ) == aiReturn_SUCCESS )
 					{
 						value = float( castor::point::length( castor::Point3f{ emissive.r
@@ -499,7 +488,8 @@ namespace c3d_assimp
 			{
 				if ( name == "Transmission" )
 				{
-					aiColor4D transmission = { 1, 1, 1, 1 };
+					aiColor3D transmission = { 1, 1, 1 };
+
 					if ( m_material.Get( AI_MATKEY_COLOR_TRANSPARENT, transmission ) == aiReturn_SUCCESS )
 					{
 						value = { transmission.r
@@ -515,7 +505,8 @@ namespace c3d_assimp
 			{
 				if ( name == "Ambient" )
 				{
-					aiColor4D ambient = { 1, 1, 1, 1 };
+					aiColor3D ambient = { 1, 1, 1 };
+
 					if ( m_material.Get( AI_MATKEY_COLOR_AMBIENT, ambient ) == aiReturn_SUCCESS )
 					{
 						value = castor::RgbColour::fromComponents( ambient.r
@@ -525,7 +516,8 @@ namespace c3d_assimp
 				}
 				else if ( name == "Albedo" )
 				{
-					aiColor4D colour = { 1, 1, 1, 1 };
+					aiColor3D colour = { 1, 1, 1 };
+
 					if ( m_material.Get( AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_FACTOR, colour ) == aiReturn_SUCCESS )
 					{
 						value = castor::RgbColour::fromComponents( colour.r
@@ -542,7 +534,8 @@ namespace c3d_assimp
 				else if ( name == "Colour"
 					|| name == "Diffuse" )
 				{
-					aiColor4D colour = { 1, 1, 1, 1 };
+					aiColor3D colour = { 1, 1, 1 };
+
 					if ( m_material.Get( AI_MATKEY_COLOR_DIFFUSE, colour ) == aiReturn_SUCCESS )
 					{
 						value = castor::RgbColour::fromComponents( colour.r
@@ -552,7 +545,8 @@ namespace c3d_assimp
 				}
 				else if ( name == "Specular" )
 				{
-					aiColor4D specular = { 1, 1, 1, 1 };
+					aiColor3D specular = { 1, 1, 1 };
+
 					if ( m_material.Get( AI_MATKEY_COLOR_SPECULAR, specular ) == aiReturn_SUCCESS )
 					{
 						value = castor::RgbColour::fromComponents( specular.r
