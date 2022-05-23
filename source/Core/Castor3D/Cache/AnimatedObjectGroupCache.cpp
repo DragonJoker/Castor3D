@@ -176,7 +176,7 @@ namespace castor
 					max > 0 )
 				{
 					m_morphingWeights.buffer->markDirty( m_morphingWeights.getOffset() + ( id - 1u ) * sizeof( MorphingWeightsConfiguration )
-						, sizeof( MorphingWeightsConfiguration )
+						, sizeof( float ) * max
 						, VK_ACCESS_UNIFORM_READ_BIT
 						, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
 				}
