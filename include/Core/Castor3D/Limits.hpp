@@ -14,6 +14,8 @@ namespace castor3d
 	*/
 	//@{
 	// Phong/Blinn-Phong
+	static uint32_t constexpr MaxPassLayers = 8u;
+	// Phong/Blinn-Phong
 	static float constexpr MaxPhongShininess = 256.0f;
 	// Edges (when displayed)
 	static float constexpr MinMaterialEdgeWidth = 0.001f;

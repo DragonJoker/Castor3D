@@ -92,54 +92,57 @@ namespace castor3d
 		//!\~english	Picking pass program.
 		//\~french		Programme de passe de picking.
 		ePicking = 0x00010,
-		//!\~english	Shader supporting lighting.
-		//\~french		Shader supportant les éclairages.
-		eLighting = 0x00020,
 		//!\~english	Shader for spherical billboards.
 		//\~french		Shader pour les billboards sphériques.
-		eSpherical = 0x00040,
+		eSpherical = 0x00020,
 		//!\~english	Shader for fixed size billboards.
 		//\~french		Shader pour les billboards à dimensions fixes.
-		eFixedSize = 0x00080,
-		//!\~english	Shader used to render a shadow map for directional light.
-		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière directionnalle.
-		eShadowMapDirectional = 0x00100,
-		//!\~english	Shader used to render a shadow map for spot light.
-		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière projecteur.
-		eShadowMapSpot = 0x00200,
-		//!\~english	Shader used to render a shadow map for point light.
-		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière omnidirectionnelle.
-		eShadowMapPoint = 0x00400,
-		//!\~english	Shader used to render an environment map.
-		//\~french		Shader utilisé pour dessiner une texture d'environnement.
-		eEnvironmentMapping = 0x00800,
-		//!\~english	Shader for the depth pre-pass.
-		//\~french		Shader pour la pré-passe de profondeur.
-		eDepthPass = 0x01000,
+		eFixedSize = 0x00040,
 		//!\~english	Vertex shader inverts normals (for front culling).
 		//\~french		Le vertex shader inverse les normales (pour le front culling).
-		eInvertNormals = 0x02000,
-		//!\~english	Vertex shader inverts normals (for front culling).
-		//\~french		Le vertex shader inverse les normales (pour le front culling).
-		eHasGeometry = 0x04000,
-		//!\~english	Vertex shader inverts normals (for front culling).
-		//\~french		Le vertex shader inverse les normales (pour le front culling).
-		eHasTessellation = 0x08000,
+		eInvertNormals = 0x00080,
 		//!\~english	Forces texcoords binding.
 		//\~french		Force le binding des UV.
-		eForceTexCoords = 0x10000,
-		//!\~english	Voxelization uses conservative rasterization.
-		//\~french		La voxelisation utilise la conservative rasterization.
-		eConservativeRasterization = 0x20000,
+		eForceTexCoords = 0x00100,
+		//!\~english	Shader supporting lighting.
+		//\~french		Shader supportant les éclairages.
+		eLighting = 0x00200,
 		//!\~english	Writes to Variance shadow map.
 		//\~french		Ecrit dans la Variance shadow map.
-		eVsmShadowMap = 0x40000,
+		eVsmShadowMap = 0x00400,
 		//!\~english	Writes to Reflective shadow map.
 		//\~french		Ecrit dans la Reflective shadow map.
-		eRsmShadowMap = 0x80000,
+		eRsmShadowMap = 0x00800,
+		//!\~english	All flags used in base pipeline flags hashing.
+		//\~french		Tous les indicateurs utilisés dans le hash des indicateurs de pipeline.
+		eAllBase = 0x00FFF,
+		//!\~english	Shader used to render a shadow map for directional light.
+		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière directionnalle.
+		eShadowMapDirectional = 0x01000,
+		//!\~english	Shader used to render a shadow map for spot light.
+		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière projecteur.
+		eShadowMapSpot = 0x02000,
+		//!\~english	Shader used to render a shadow map for point light.
+		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière omnidirectionnelle.
+		eShadowMapPoint = 0x04000,
+		//!\~english	Shader used to render an environment map.
+		//\~french		Shader utilisé pour dessiner une texture d'environnement.
+		eEnvironmentMapping = 0x08000,
+		//!\~english	Shader for the depth pre-pass.
+		//\~french		Shader pour la pré-passe de profondeur.
+		eDepthPass = 0x10000,
+		//!\~english	Vertex shader inverts normals (for front culling).
+		//\~french		Le vertex shader inverse les normales (pour le front culling).
+		eHasGeometry = 0x20000,
+		//!\~english	Vertex shader inverts normals (for front culling).
+		//\~french		Le vertex shader inverse les normales (pour le front culling).
+		eHasTessellation = 0x40000,
+		//!\~english	All other flags.
+		//\~french		Tous les autres indicateurs.
+		eAllOptional = 0x7F000,
 		//!\~english	All flags.
 		//\~french		Tous les indicateurs.
-		eAll = 0xFFFFF,
+		eAll = eAllBase | eAllOptional,
 	};
 	CU_ImplementFlags( ProgramFlag )
 	/**
