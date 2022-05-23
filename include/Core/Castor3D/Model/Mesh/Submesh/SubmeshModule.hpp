@@ -156,6 +156,9 @@ namespace castor3d
 		//!\~english	Submesh has bones data.
 		//!\~french		Submesh a des données d'os.
 		eBones = 0x0001 << int( SubmeshData::eBones ),
+		//!\~english	All flags used in base pipeline flags hashing.
+		//\~french		Tous les indicateurs utilisés dans le hash des indicateurs de pipeline.
+		eAllBase = ( 0x0001 << int( SubmeshData::eCount ) ) - 1,
 	};
 	CU_ImplementFlags( SubmeshFlag )
 
@@ -265,6 +268,9 @@ namespace castor3d
 		//!\~english	Submesh has a morphing colours.
 		//!\~french		Le submesh a des couleurs de morphing.
 		eColours = 0x01 << size_t( MorphData::eColours ),
+		//!\~english	All flags used in base pipeline flags hashing.
+		//\~french		Tous les indicateurs utilisés dans le hash des indicateurs de pipeline.
+		eAllBase = ( 0x0001 << int( MorphData::eCount ) ) - 1,
 	};
 	CU_ImplementFlags( MorphFlag )
 	/**

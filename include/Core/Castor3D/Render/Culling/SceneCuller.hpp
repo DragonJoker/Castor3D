@@ -14,11 +14,11 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	using PipelineNodes = std::array< castor::Point4ui, MaxNodesPerPipeline >;
-	using PipelineBuffer = std::pair< size_t, ashes::BufferBase const * >;
+	using PipelineBuffer = std::pair< PipelineBaseHash, ashes::BufferBase const * >;
 
 	AnimatedObjectSPtr findAnimatedObject( Scene const & scene
 		, castor::String const & name );
-	uint64_t getPipelineBaseHash( SubmeshFlags submeshFlags
+	PipelineBaseHash getPipelineBaseHash( SubmeshFlags submeshFlags
 		, MorphFlags morphFlags
 		, ProgramFlags programFlags
 		, PassFlags passFlags
@@ -27,11 +27,11 @@ namespace castor3d
 		, TextureFlags texturesFlags
 		, uint32_t passLayerIndex
 		, VkDeviceSize morphTargetsOffset );
-	uint64_t getPipelineBaseHash( RenderNodesPass const & renderPass
+	PipelineBaseHash getPipelineBaseHash( RenderNodesPass const & renderPass
 		, Submesh const & data
 		, Pass const & pass
 		, bool isFrontCulled );
-	uint64_t getPipelineBaseHash( RenderNodesPass const & renderPass
+	PipelineBaseHash getPipelineBaseHash( RenderNodesPass const & renderPass
 		, BillboardBase const & data
 		, Pass const & pass
 		, bool isFrontCulled );
@@ -67,7 +67,7 @@ namespace castor3d
 		template< typename NodeT >
 		using SidedNodeBufferMapT = std::map< ashes::BufferBase const *, SidedNodeArrayT< NodeT > >;
 		template< typename NodeT >
-		using SidedNodePipelineMapT = std::map< uint64_t, SidedNodeBufferMapT< NodeT > >;
+		using SidedNodePipelineMapT = std::map< PipelineBaseHash, SidedNodeBufferMapT< NodeT > >;
 
 		template< typename NodeT >
 		using SidedObjectNodeMapT = std::map< NodeObjectT< NodeT > const *, SidedNodeArrayT< NodeT > >;
@@ -76,7 +76,7 @@ namespace castor3d
 		template< typename NodeT >
 		using SidedObjectNodeBufferMapT = std::map< ashes::BufferBase const *, SidedObjectNodePassMapT< NodeT > >;
 		template< typename NodeT >
-		using SidedObjectNodePipelineMapT = std::map< uint64_t, SidedObjectNodeBufferMapT< NodeT > >;
+		using SidedObjectNodePipelineMapT = std::map< PipelineBaseHash, SidedObjectNodeBufferMapT< NodeT > >;
 
 		using IndexedDrawCommandsBuffer = ashes::BufferPtr< VkDrawIndexedIndirectCommand >;
 		using DrawCommandsBuffer = ashes::BufferPtr< VkDrawIndirectCommand >;

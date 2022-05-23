@@ -25,6 +25,7 @@
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 
+#include <CastorUtils/Miscellaneous/BitSize.hpp>
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
 namespace castor3d
@@ -33,27 +34,27 @@ namespace castor3d
 
 	namespace cullscn
 	{
-		static uint64_t getPipelineHash( RenderNodesPass const & renderPass
+		static PipelineBaseHash getPipelineHash( RenderNodesPass const & renderPass
 			, SubmeshRenderNode const & culled
 			, bool isFrontCulled )
 		{
 			return getPipelineBaseHash( renderPass, culled.data, *culled.pass, isFrontCulled );
 		}
 
-		static uint64_t getPipelineHash( RenderNodesPass const & renderPass
+		static PipelineBaseHash getPipelineHash( RenderNodesPass const & renderPass
 			, BillboardRenderNode const & culled
 			, bool isFrontCulled )
 		{
 			return getPipelineBaseHash( renderPass, culled.data, *culled.pass, isFrontCulled );
 		}
 
-		static void registerPipelineNodes( size_t hash
+		static void registerPipelineNodes( PipelineBaseHash hash
 			, ashes::BufferBase const & buffer
 			, std::vector< PipelineBuffer > & cont )
 		{
 			auto it = std::find_if( cont.begin()
 				, cont.end()
-				, [hash, &buffer]( PipelineBuffer const & lookup )
+				, [&hash, &buffer]( PipelineBuffer const & lookup )
 				{
 					return lookup.first == hash
 						&& lookup.second == &buffer;
@@ -101,13 +102,13 @@ namespace castor3d
 
 		//*****************************************************************************************
 
-		static uint32_t getPipelineNodeIndex( uint64_t hash
+		static uint32_t getPipelineNodeIndex( PipelineBaseHash hash
 			, ashes::BufferBase const & buffer
 			, std::vector< PipelineBuffer > const & cont )
 		{
 			auto it = std::find_if( cont.begin()
 				, cont.end()
-				, [hash, &buffer]( PipelineBuffer const & lookup )
+				, [&hash, &buffer]( PipelineBuffer const & lookup )
 				{
 					return lookup.first == hash
 						&& lookup.second == &buffer;
@@ -116,7 +117,7 @@ namespace castor3d
 			return uint32_t( std::distance( cont.begin(), it ) );
 		}
 
-		static PipelineNodes & getPipelineNodes( uint64_t hash
+		static PipelineNodes & getPipelineNodes( PipelineBaseHash hash
 			, ashes::BufferBase const & buffer
 			, std::vector< PipelineBuffer > const & cont
 			, PipelineNodes * nodes )
@@ -309,7 +310,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	uint64_t getPipelineBaseHash( SubmeshFlags submeshFlags
+	PipelineBaseHash getPipelineBaseHash( SubmeshFlags submeshFlags
 		, MorphFlags morphFlags
 		, ProgramFlags programFlags
 		, PassFlags passFlags
@@ -319,31 +320,41 @@ namespace castor3d
 		, uint32_t passLayerIndex
 		, VkDeviceSize morphTargetsOffset )
 	{
-		remFlag( programFlags, ProgramFlag::eLighting );
-		remFlag( programFlags, ProgramFlag::eShadowMapDirectional );
-		remFlag( programFlags, ProgramFlag::eShadowMapSpot );
-		remFlag( programFlags, ProgramFlag::eShadowMapPoint );
-		remFlag( programFlags, ProgramFlag::eEnvironmentMapping );
-		remFlag( programFlags, ProgramFlag::eDepthPass );
-		remFlag( programFlags, ProgramFlag::eHasGeometry );
-		remFlag( programFlags, ProgramFlag::eHasTessellation );
-		remFlag( programFlags, ProgramFlag::eConservativeRasterization );
-		remFlag( passFlags, PassFlag::eAlphaBlending );
-		remFlag( passFlags, PassFlag::eDrawEdge );
-		uint32_t result{ submeshFlags };
-		castor::hashCombine32( result, uint32_t( morphFlags ) );
-		castor::hashCombine32( result, uint32_t( programFlags ) );
-		castor::hashCombine32( result, uint32_t( passFlags ) );
-		castor::hashCombine32( result, maxTexcoordSet );
-		castor::hashCombine32( result, texturesCount );
-		castor::hashCombine32( result, uint32_t( texturesFlags ) );
-		castor::hashCombine32( result, checkFlag( programFlags, ProgramFlag::eInvertNormals ) );
-		return uint64_t( result )
-			| ( uint64_t( passLayerIndex ) << 32ull )
-			| ( uint64_t( morphTargetsOffset ) << 40ull );
+		remFlag( programFlags, ProgramFlag::eAllOptional );
+		remFlag( passFlags, PassFlag::eAllOptional );
+		constexpr auto maxSubmeshSize = castor::getBitSize( uint32_t( SubmeshFlag::eAllBase ) );
+		constexpr auto maxMorphSize = castor::getBitSize( uint32_t( MorphFlag::eAllBase ) );
+		constexpr auto maxProgramSize = castor::getBitSize( uint32_t( ProgramFlag::eAllBase ) );
+		constexpr auto maxPassSize = castor::getBitSize( uint32_t( PassFlag::eAllBase ) );
+		constexpr auto maxTexcoorSetSize = castor::getBitSize( MaxTextureCoordinatesSets );
+		constexpr auto maxTextureSize = castor::getBitSize( uint32_t( TextureFlag::eAll ) );
+		constexpr auto maxTexturesSize = castor::getBitSize( uint32_t( maxTextureSize ) );
+		constexpr auto maxPassLayerSize = castor::getBitSize( MaxPassLayers );
+		constexpr auto maxTargetOffsetSize = 64 - maxPassLayerSize;
+		auto offset = 0u;
+		PipelineBaseHash result{};
+		result.a = uint64_t( submeshFlags ) << offset;
+		offset += maxSubmeshSize;
+		result.a |= uint64_t( morphFlags ) << offset;
+		offset += maxMorphSize;
+		result.a |= uint64_t( programFlags ) << offset;
+		offset += maxProgramSize;
+		result.a |= uint64_t( passFlags ) << offset;
+		offset += maxPassSize;
+		result.a |= uint64_t( maxTexcoordSet ) << offset;
+		offset += maxTexcoorSetSize;
+		result.a |= uint64_t( texturesCount ) << offset;
+		offset += maxTexturesSize;
+		result.a |= uint64_t( texturesFlags ) << offset;
+		offset += maxTextureSize;
+		CU_Require( passLayerIndex < MaxPassLayers );
+		CU_Require( ( morphTargetsOffset >> maxTargetOffsetSize ) == 0 );
+		result.b = morphTargetsOffset
+			| ( uint64_t( passLayerIndex ) << maxTargetOffsetSize );
+		return result;
 	}
 
-	uint64_t getPipelineBaseHash( RenderNodesPass const & renderPass
+	PipelineBaseHash getPipelineBaseHash( RenderNodesPass const & renderPass
 		, Submesh const & data
 		, Pass const & pass
 		, bool isFrontCulled )
@@ -368,7 +379,7 @@ namespace castor3d
 			, data.getMorphTargets().getOffset() );
 	}
 
-	uint64_t getPipelineBaseHash( RenderNodesPass const & renderPass
+	PipelineBaseHash getPipelineBaseHash( RenderNodesPass const & renderPass
 		, BillboardBase const & data
 		, Pass const & pass
 		, bool isFrontCulled )
