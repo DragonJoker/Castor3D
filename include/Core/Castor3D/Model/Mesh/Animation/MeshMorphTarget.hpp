@@ -40,6 +40,15 @@ namespace castor3d
 			, std::vector< float > weights );
 		/**
 		 *\~english
+		 *\brief		Adds a submesh buffer.
+		 *\~french
+		 *\brief		Ajoute un tampon de sous-maillage.
+		 */
+		C3D_API void setTargetWeight( Submesh const & submesh
+			, uint32_t targetIndex
+			, float targetWeight );
+		/**
+		 *\~english
 		 *\return		The submesh buffer matching given submesh.
 		 *\~french
 		 *\return		Le tampon de sous-maillage correspondant au sous-maillage donné.

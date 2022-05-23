@@ -182,6 +182,53 @@ namespace castor3d
 				}
 			}
 		}
+
+		static MorphFlags getMorphFlags( SubmeshFlags submeshFlags )
+		{
+			MorphFlags result{};
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::ePositions ) )
+			{
+				result |= MorphFlag::ePositions;
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) )
+			{
+				result |= MorphFlag::eNormals;
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) )
+			{
+				result |= MorphFlag::eTangents;
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 ) )
+			{
+				result |= MorphFlag::eTexcoords0;
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords1 ) )
+			{
+				result |= MorphFlag::eTexcoords1;
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords2 ) )
+			{
+				result |= MorphFlag::eTexcoords2;
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) )
+			{
+				result |= MorphFlag::eTexcoords3;
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eColours ) )
+			{
+				result |= MorphFlag::eColours;
+			}
+
+			return result;
+		}
 	}
 
 	SceneFileContext & getParserContext( castor::FileParserContext & context )
@@ -3037,7 +3084,7 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserMeshMorphImport )
+	CU_ImplementAttributeParser( parserMeshMorphTargetImport )
 	{
 		auto & parsingContext = getParserContext( context );
 
@@ -3047,17 +3094,14 @@ namespace castor3d
 		}
 		else
 		{
-			float timeIndex;
-			params[1]->get( timeIndex );
 			castor::Path path;
 			castor::Path pathFile = context.file.getPath() / params[0]->get( path );
 			Parameters parameters;
-			parameters.add( "no_optimisations", true );
 
-			if ( params.size() > 2 )
+			if ( params.size() > 1 )
 			{
 				castor::String meshParams;
-				params[2]->get( meshParams );
+				params[1]->get( meshParams );
 				scnprs::fillMeshImportParameters( context, meshParams, parameters );
 			}
 
@@ -3072,61 +3116,108 @@ namespace castor3d
 			}
 			else if ( mesh.getSubmeshCount() == parsingContext.mesh.lock()->getSubmeshCount() )
 			{
-				castor::String animName{ "Morph" };
-
-				if ( !parsingContext.mesh.lock()->hasAnimation( animName ) )
+				for ( auto morphSubmesh : mesh )
 				{
-					auto & animation = parsingContext.mesh.lock()->createAnimation( animName );
+					auto id = morphSubmesh->getId();
+					auto submesh = parsingContext.mesh.lock()->getSubmesh( id );
+					auto submeshFlags = morphSubmesh->getSubmeshFlags( nullptr );
+					auto component = submesh->hasComponent( MorphComponent::Name )
+						? submesh->getComponent< MorphComponent >()
+						: submesh->createComponent< MorphComponent >( scnprs::getMorphFlags( submeshFlags ) );
+					castor3d::SubmeshAnimationBuffer buffer;
 
-					for ( auto submesh : *parsingContext.mesh.lock() )
+					if ( checkFlag( submeshFlags, SubmeshFlag::ePositions ) )
 					{
-						animation.addChild( MeshAnimationSubmesh{ animation, *submesh } );
-					}
-				}
+						buffer.positions = morphSubmesh->getPositions();
+						uint32_t index = 0u;
 
-				MeshAnimation & animation{ static_cast< MeshAnimation & >( parsingContext.mesh.lock()->getAnimation( animName ) ) };
-				uint32_t index = 0u;
-				MeshMorphTargetUPtr keyFrame = std::make_unique< MeshMorphTarget >( animation
-					, castor::Milliseconds{ int64_t( timeIndex * 1000ll ) } );
-
-				for ( auto & submesh : mesh )
-				{
-					auto & submeshAnim = animation.getSubmesh( index );
-					std::clog << "Source: " << submeshAnim.getSubmesh().getPointsCount() << " - Anim: " << submesh->getPointsCount() << std::endl;
-
-					if ( submesh->getPointsCount() == submeshAnim.getSubmesh().getPointsCount() )
-					{
-						static castor::Point3fArray tan;
-						static castor::Point3fArray tex;
-						castor::Point3fArray * tangents = &tan;
-						castor::Point3fArray const * texcoords = &tex;
-
-						if ( auto tanComp = submesh->getComponent< TangentsComponent >() )
+						for ( auto & position : buffer.positions )
 						{
-							tangents = &tanComp->getData();
+							position -= submesh->getPositions()[index++];
 						}
-
-						if ( auto texComp = submesh->getComponent< Texcoords0Component >() )
-						{
-							texcoords = &texComp->getData();
-						}
-
-						submesh->getComponent< MorphComponent >()->addMorphTarget( { submesh->getPositions()
-							, submesh->getNormals()
-							, *tangents
-							, *texcoords } );
-						//keyFrame->addSubmeshBuffer( *submesh
-						//	, { submesh->getPositions()
-						//		, submesh->getNormals()
-						//		, *tangents
-						//		, *texcoords } );
 					}
 
-					++index;
+					if ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) )
+					{
+						buffer.normals = morphSubmesh->getNormals();
+						uint32_t index = 0u;
+
+						for ( auto & normal : buffer.normals )
+						{
+							normal -= submesh->getNormals()[index++];
+						}
+					}
+
+					if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) )
+					{
+						buffer.tangents = morphSubmesh->getTangents();
+						uint32_t index = 0u;
+
+						for ( auto & tangent : buffer.tangents )
+						{
+							tangent -= submesh->getTangents()[index++];
+						}
+					}
+
+					if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 ) )
+					{
+						buffer.texcoords0 = morphSubmesh->getTexcoords0();
+						uint32_t index = 0u;
+
+						for ( auto & texcoord : buffer.texcoords0 )
+						{
+							texcoord -= submesh->getTexcoords0()[index++];
+						}
+					}
+
+					if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords1 ) )
+					{
+						buffer.texcoords1 = morphSubmesh->getTexcoords1();
+						uint32_t index = 0u;
+
+						for ( auto & texcoord : buffer.texcoords1 )
+						{
+							texcoord -= submesh->getTexcoords1()[index++];
+						}
+					}
+
+					if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords2 ) )
+					{
+						buffer.texcoords2 = morphSubmesh->getTexcoords2();
+						uint32_t index = 0u;
+
+						for ( auto & texcoord : buffer.texcoords2 )
+						{
+							texcoord -= submesh->getTexcoords2()[index++];
+						}
+					}
+
+					if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) )
+					{
+						buffer.texcoords3 = morphSubmesh->getTexcoords3();
+						uint32_t index = 0u;
+
+						for ( auto & texcoord : buffer.texcoords3 )
+						{
+							texcoord -= submesh->getTexcoords3()[index++];
+						}
+					}
+
+					if ( checkFlag( submeshFlags, SubmeshFlag::eColours ) )
+					{
+						buffer.colours = morphSubmesh->getColours();
+						uint32_t index = 0u;
+
+						for ( auto & colour : buffer.colours )
+						{
+							colour -= submesh->getColours()[index++];
+						}
+					}
+
+					component->addMorphTarget( std::move( buffer ) );
 				}
 
 				mesh.cleanup();
-				animation.addKeyFrame( std::move( keyFrame ) );
 			}
 			else
 			{
@@ -3198,6 +3289,27 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserMeshMorphAnimation )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( !parsingContext.scene )
+		{
+			CU_ParsingError( cuT( "No Scene initialised." ) );
+		}
+		else if ( auto mesh = parsingContext.mesh.lock() )
+		{
+			castor::String name;
+			params[0]->get( name );
+			parsingContext.morphAnimation = std::make_unique< MeshAnimation >( *mesh, name );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No Mesh initialised." ) );
+		}
+	}
+	CU_EndAttributePush( CSCNSection::eMorphAnimation )
+
 	CU_ImplementAttributeParser( parserMeshEnd )
 	{
 		auto & parsingContext = getParserContext( context );
@@ -3227,6 +3339,84 @@ namespace castor3d
 			{
 				mesh->getScene()->getListener().postEvent( makeGpuInitialiseEvent( *submesh ) );
 			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No Mesh initialised." ) );
+		}
+	}
+	CU_EndAttributePop()
+
+	CU_ImplementAttributeParser( parserMeshMorphTargetWeight )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( !parsingContext.scene )
+		{
+			CU_ParsingError( cuT( "No Scene initialised." ) );
+		}
+		else if ( !parsingContext.morphAnimation )
+		{
+			CU_ParsingError( cuT( "No Morph Animation initialised." ) );
+		}
+		else if ( params.size() < 3u )
+		{
+			CU_ParsingError( cuT( "Invalid parameters." ) );
+		}
+		else if ( auto mesh = parsingContext.mesh.lock() )
+		{
+			float timeIndex{};
+			params[0]->get( timeIndex );
+			uint32_t targetIndex{};
+			params[1]->get( targetIndex );
+			float targetWeight{};
+			params[2]->get( targetWeight );
+			auto & animation = *parsingContext.morphAnimation;
+
+			for ( auto submesh : *mesh )
+			{
+				MeshAnimationSubmesh animSubmesh{ animation, *submesh };
+				animation.addChild( std::move( animSubmesh ) );
+				auto time = castor::Milliseconds{ uint64_t( timeIndex * 1000 ) };
+				auto kfit = animation.find( time );
+				castor3d::MeshMorphTarget * kf{};
+
+				if ( kfit == animation.end() )
+				{
+					auto keyFrame = std::make_unique< MeshMorphTarget >( animation, time );
+					kf = keyFrame.get();
+					animation.addKeyFrame( std::move( keyFrame ) );
+				}
+				else
+				{
+					kf = &static_cast< MeshMorphTarget & >( **kfit );
+				}
+
+				kf->setTargetWeight( *submesh, targetIndex, targetWeight );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No Mesh initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserMeshMorphAnimationEnd )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( !parsingContext.scene )
+		{
+			CU_ParsingError( cuT( "No Scene initialised." ) );
+		}
+		else if ( !parsingContext.morphAnimation )
+		{
+			CU_ParsingError( cuT( "No Morph Animation initialised." ) );
+		}
+		else if ( auto mesh = parsingContext.mesh.lock() )
+		{
+			mesh->addAnimation( std::move( parsingContext.morphAnimation ) );
 		}
 		else
 		{

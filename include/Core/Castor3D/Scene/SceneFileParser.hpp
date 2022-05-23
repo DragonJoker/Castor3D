@@ -20,6 +20,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Pass/SubsurfaceScattering.hpp"
 #include "Castor3D/Model/Mesh/MeshImporter.hpp"
+#include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
 #include "Castor3D/Render/RenderWindow.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 
@@ -86,6 +87,7 @@ namespace castor3d
 		eTextureTransform = CU_MakeSectionName( 'T', 'X', 'T', 'R' ),
 		eSceneImport = CU_MakeSectionName( 'I', 'M', 'P', 'T' ),
 		eSkeleton = CU_MakeSectionName( 'S', 'K', 'E', 'L' ),
+		eMorphAnimation = CU_MakeSectionName( 'M', 'T', 'A', 'N' ),
 	};
 
 	class SceneFileContext
@@ -195,6 +197,7 @@ namespace castor3d
 		AnimatedObjectSPtr animNode{};
 		AnimatedObjectSPtr animTexture{};
 		TextureAnimationUPtr textureAnimation{};
+		MeshAnimationUPtr morphAnimation{};
 		SceneBackgroundSPtr background{};
 		ParticleSystemSPtr particleSystem{};
 		SsaoConfig ssaoConfig{};
