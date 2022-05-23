@@ -95,10 +95,7 @@ namespace castor3d
 			return *m_component;
 		}
 
-	protected:
-		//!\~english	The animation length.
-		//!\~french		La durée de l'animation.
-		castor::Milliseconds m_length{ 0 };
+	private:
 		//!\~english	The submesh.
 		//!\~french		Le sous-maillage.
 		Submesh & m_submesh;
