@@ -204,11 +204,15 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "submesh" ), parserMeshSubmesh );
 			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "import" ), parserMeshImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
 			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "import_anim" ), parserMeshAnimImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
-			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "import_morph" ), parserMeshMorphImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eFloat >(), makeParameter< ParameterType::eText >() } );
+			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "import_morph_target" ), parserMeshMorphTargetImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
 			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "default_material" ), parserMeshDefaultMaterial, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "default_materials" ), parserMeshDefaultMaterials );
 			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "skeleton" ), parserMeshSkeleton, { makeParameter< ParameterType::eName >() } );
+			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "morph_animation" ), parserMeshMorphAnimation, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eMesh ), cuT( "}" ), parserMeshEnd );
+
+			addParser( result, uint32_t( CSCNSection::eMorphAnimation ), cuT( "target_weight" ), parserMeshMorphTargetWeight, { makeParameter< ParameterType::eFloat >(), makeParameter< ParameterType::eUInt32 >(), makeParameter< ParameterType::eFloat >() } );
+			addParser( result, uint32_t( CSCNSection::eMorphAnimation ), cuT( "}" ), parserMeshMorphAnimationEnd );
 
 			addParser( result, uint32_t( CSCNSection::eMeshDefaultMaterials ), cuT( "material" ), parserMeshDefaultMaterialsMaterial, { makeParameter< ParameterType::eUInt16 >(), makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eMeshDefaultMaterials ), cuT( "}" ), parserMeshDefaultMaterialsEnd );
@@ -447,7 +451,8 @@ namespace castor3d
 				, { uint32_t( CSCNSection::eVoxelConeTracing ), cuT( "voxel_cone_tracing" ) }
 				, { uint32_t( CSCNSection::eTextureTransform ), cuT( "texture_transform" ) }
 				, { uint32_t( CSCNSection::eSceneImport ), cuT( "import" ) }
-				, { uint32_t( CSCNSection::eSkeleton ), cuT( "skeleton" ) } };
+				, { uint32_t( CSCNSection::eSkeleton ), cuT( "skeleton" ) }
+				, { uint32_t( CSCNSection::eMorphAnimation ), cuT( "morph_animation" ) } };
 		}
 
 		static void * createContext( castor::FileParserContext & context )
