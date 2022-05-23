@@ -180,10 +180,8 @@ namespace castor3d
 				out.texture3 = in.texture3;
 				auto morphingWeights = writer.declLocale( "morphingWeights"
 					, c3d_morphingWeights[ids.morphingId] );
-				morph( c3d_morphTargets
-					, morphingWeights
+				morphingWeights.morph( c3d_morphTargets
 					, writer.cast< UInt >( in.vertexIndex - in.baseVertex )
-					, ids.morphTargetsCount
 					, curPosition
 					, out.texture0
 					, out.texture1

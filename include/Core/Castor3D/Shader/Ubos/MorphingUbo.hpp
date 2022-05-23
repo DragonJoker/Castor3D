@@ -93,16 +93,51 @@ namespace castor3d
 		struct MorphingWeightsData
 			: public sdw::StructInstance
 		{
+		public:
 			C3D_API MorphingWeightsData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled );
+
 			SDW_DeclStructInstance( C3D_API, MorphingWeightsData );
 
-			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
+			static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 
-			sdw::Float operator[]( sdw::UInt const & index )const
+			C3D_API void morph( sdw::Array< shader::MorphTargetsData > const & targets
+				, sdw::UInt vertexId
+				, sdw::Vec4 & pos
+				, sdw::Vec3 & uvw0
+				, sdw::Vec3 & uvw1
+				, sdw::Vec3 & uvw2
+				, sdw::Vec3 & uvw3
+				, sdw::Vec3 & col )const;
+			C3D_API void morph( sdw::Array< shader::MorphTargetsData > const & targets
+				, sdw::UInt vertexId
+				, sdw::Vec4 & pos
+				, sdw::Vec4 & nml
+				, sdw::Vec3 & uvw0
+				, sdw::Vec3 & uvw1
+				, sdw::Vec3 & uvw2
+				, sdw::Vec3 & uvw3
+				, sdw::Vec3 & col )const;
+			C3D_API void morph( sdw::Array< shader::MorphTargetsData > const & targets
+				, sdw::UInt vertexId
+				, sdw::Vec4 & pos
+				, sdw::Vec4 & nml
+				, sdw::Vec4 & tan
+				, sdw::Vec3 & uvw0
+				, sdw::Vec3 & uvw1
+				, sdw::Vec3 & uvw2
+				, sdw::Vec3 & uvw3
+				, sdw::Vec3 & col )const;
+
+			sdw::UInt index( sdw::UInt const & index )const
 			{
-				return m_data[index];
+				return m_indices[index / 4_u][index % 4_u];
+			}
+
+			sdw::Float weight( sdw::UInt const & index )const
+			{
+				return m_weights[index / 4_u][index % 4_u];
 			}
 
 		public:
@@ -110,68 +145,14 @@ namespace castor3d
 			C3D_API static castor::String const DataName;
 
 		private:
-			using sdw::StructInstance::getMember;
-			using sdw::StructInstance::getMemberArray;
+			sdw::UVec4 m_limits;
+			sdw::Array< sdw::UVec4 > m_indices;
+			sdw::Array< sdw::Vec4 > m_weights;
 
-		private:
-			sdw::Vec4 m_data;
-		};
-
-		struct MorphingWeightsDataArray
-			: public sdw::StructInstance
-		{
 		public:
-			C3D_API MorphingWeightsDataArray( sdw::ShaderWriter & writer
-				, ast::expr::ExprPtr expr
-				, bool enabled );
-
-			SDW_DeclStructInstance( C3D_API, MorphingWeightsDataArray );
-
-			static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
-
-			sdw::Float operator[]( sdw::UInt const & index )const
-			{
-				return m_data[index / 4_u][index % 4_u];
-			}
-
-		private:
-			sdw::Array< MorphingWeightsData > m_data;
+			sdw::UInt morphTargetsCount;
 		};
 	}
-
-	C3D_API void morph( sdw::Array< shader::MorphTargetsData > const & targets
-		, shader::MorphingWeightsDataArray const & weights
-		, sdw::UInt vertexId
-		, sdw::UInt morphTargetsCount
-		, sdw::Vec4 & pos
-		, sdw::Vec3 & uvw0
-		, sdw::Vec3 & uvw1
-		, sdw::Vec3 & uvw2
-		, sdw::Vec3 & uvw3
-		, sdw::Vec3 & col );
-	C3D_API void morph( sdw::Array< shader::MorphTargetsData > const & targets
-		, shader::MorphingWeightsDataArray const & weights
-		, sdw::UInt vertexId
-		, sdw::UInt morphTargetsCount
-		, sdw::Vec4 & pos
-		, sdw::Vec4 & nml
-		, sdw::Vec3 & uvw0
-		, sdw::Vec3 & uvw1
-		, sdw::Vec3 & uvw2
-		, sdw::Vec3 & uvw3
-		, sdw::Vec3 & col );
-	C3D_API void morph( sdw::Array< shader::MorphTargetsData > const & targets
-		, shader::MorphingWeightsDataArray const & weights
-		, sdw::UInt vertexId
-		, sdw::UInt morphTargetsCount
-		, sdw::Vec4 & pos
-		, sdw::Vec4 & nml
-		, sdw::Vec4 & tan
-		, sdw::Vec3 & uvw0
-		, sdw::Vec3 & uvw1
-		, sdw::Vec3 & uvw2
-		, sdw::Vec3 & uvw3
-		, sdw::Vec3 & col );
 }
 
 #define C3D_MorphTargets( writer, binding, set, morphFlags, programFlags )\
@@ -193,7 +174,7 @@ namespace castor3d
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd430\
 		, checkFlag( flags, castor3d::ProgramFlag::eMorphing ) };\
-	auto c3d_morphingWeights = morphingWeights.declMemberArray< castor3d::shader::MorphingWeightsDataArray >( castor3d::shader::MorphingWeightsData::DataName\
+	auto c3d_morphingWeights = morphingWeights.declMemberArray< castor3d::shader::MorphingWeightsData >( castor3d::shader::MorphingWeightsData::DataName\
 		, checkFlag( flags, castor3d::ProgramFlag::eMorphing ) );\
 	morphingWeights.end()
 
