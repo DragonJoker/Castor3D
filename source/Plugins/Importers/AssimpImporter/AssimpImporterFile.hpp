@@ -180,22 +180,6 @@ namespace c3d_assimp
 			return getInternalName( makeString( name ) );
 		}
 
-		std::vector< castor3d::SubmeshAnimationBuffer > const & addMeshAnimBuffers( aiMesh const * aiMesh
-			, std::vector< castor3d::SubmeshAnimationBuffer > buffers )
-		{
-			return m_meshAnimBuffers.emplace( aiMesh, std::move( buffers ) ).first->second;
-		}
-
-		bool hasMeshAnimBuffers( aiMesh const * aiMesh )const
-		{
-			return m_meshAnimBuffers.end() != m_meshAnimBuffers.find( aiMesh );
-		}
-
-		std::vector< castor3d::SubmeshAnimationBuffer > const & getMeshAnimBuffers( aiMesh const * aiMesh )const
-		{
-			return m_meshAnimBuffers.find( aiMesh )->second;
-		}
-
 	public:
 		static castor::String const Name;
 
@@ -213,7 +197,6 @@ namespace c3d_assimp
 		Assimp::Importer m_importer;
 		aiScene const * m_aiScene{};
 		std::map< castor::String, castor::Matrix4x4f > m_bonesNodes;
-		std::map< aiMesh const *, std::vector< castor3d::SubmeshAnimationBuffer > > m_meshAnimBuffers;
 		std::set< uint32_t > m_meshes;
 		std::vector< castor::String > m_listedMeshes;
 		std::vector< castor::String > m_listedSkeletons;
