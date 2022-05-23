@@ -139,10 +139,10 @@ namespace c3d_assimp
 		auto & file = static_cast< AssimpImporterFile & >( *m_file );
 		auto name = animation.getName();
 		auto & mesh = static_cast< castor3d::Mesh const & >( *animation.getAnimable() );
-		uint32_t index{};
 
 		for ( auto submesh : mesh )
 		{
+			auto index = submesh->getId();
 			auto & animations = file.getMeshesAnimations( mesh, index );
 			auto animIt = animations.find( name );
 
@@ -177,8 +177,6 @@ namespace c3d_assimp
 						, *kf );
 				}
 			}
-
-			++index;
 		}
 
 		return true;
