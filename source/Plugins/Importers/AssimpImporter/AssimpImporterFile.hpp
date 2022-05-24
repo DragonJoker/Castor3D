@@ -21,6 +21,7 @@ namespace c3d_assimp
 	using SkeletonAnimations = std::map< castor::String, aiAnimation const * >;
 	using MeshAnimations = std::map< castor::String, std::pair< aiMesh const *, aiMeshMorphAnim const * > >;
 	using NodeAnimations = std::map< castor::String, std::pair< aiAnimation const *, aiNodeAnim const * > >;
+	using aiNodeArray = std::vector< aiNode const * >;
 
 	struct SkeletonData
 	{
@@ -69,8 +70,6 @@ namespace c3d_assimp
 			, node{ pnode }
 			, transform{ std::move( ptransform ) }
 		{
-			CU_Require( parent.empty()
-				|| parent != name );
 		}
 
 		castor::String parent{};
@@ -187,8 +186,9 @@ namespace c3d_assimp
 		void doPrelistMaterials();
 		std::map< aiMesh const *, aiNode const * > doPrelistSkeletons();
 		void doPrelistMeshes( std::map< aiMesh const *, aiNode const * > const & meshSkeletons );
-		void doPrelistSceneNodes( aiNode const & aiNode
-			, std::map< MeshData const *, castor::String > & processedMeshes
+		void doPrelistSceneNodes( aiNode const & node
+			, std::map< MeshData const *, aiNodeArray > & processedMeshes
+			, std::map< aiNode const *, castor::Matrix4x4f > & cumulativeTransforms
 			, castor::String parentName = castor::String{}
 			, castor::Matrix4x4f transform = castor::Matrix4x4f{ 1.0f } );
 		void doPrelistLights();

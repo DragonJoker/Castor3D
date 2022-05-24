@@ -436,8 +436,9 @@ namespace c3d_assimp
 
 			doPrelistMaterials();
 			doPrelistMeshes( doPrelistSkeletons() );
-			std::map< MeshData const *, castor::String > processed;
-			doPrelistSceneNodes( *m_aiScene->mRootNode, processed );
+			std::map< MeshData const *, aiNodeArray > processed;
+			std::map< aiNode const *, castor::Matrix4x4f > cumulativeTransforms;
+			doPrelistSceneNodes( *m_aiScene->mRootNode, processed, cumulativeTransforms );
 			doPrelistLights();
 		}
 	}
@@ -817,6 +818,12 @@ namespace c3d_assimp
 				auto regIt = m_sceneData.meshes.find( meshName );
 				aiNode const * skelNode{};
 
+				if ( regIt != m_sceneData.meshes.end() )
+				{
+					meshName += castor::string::toString( meshIndex );
+					regIt = m_sceneData.meshes.find( meshName );
+				}
+
 				if ( regIt == m_sceneData.meshes.end() )
 				{
 					// Merge meshes that use the same skeleton
@@ -868,102 +875,101 @@ namespace c3d_assimp
 		}
 	}
 
-	void AssimpImporterFile::doPrelistSceneNodes( aiNode const & aiNode
-		, std::map< MeshData const *, castor::String > & processedMeshes
+	void AssimpImporterFile::doPrelistSceneNodes( aiNode const & node
+		, std::map< MeshData const *, aiNodeArray > & processedMeshes
+		, std::map< aiNode const *, castor::Matrix4x4f > & cumulativeTransforms
 		, castor::String parentName
 		, castor::Matrix4x4f transform )
 	{
-		auto aiNodeName = makeString( aiNode.mName );
+		auto aiNodeName = makeString( node.mName );
 
 		if ( m_bonesNodes.find( aiNodeName ) != m_bonesNodes.end() )
 		{
 			return;
 		}
 
-		bool isSkeletonNode = file::isSkeletonNode( aiNode, aiNodeName, m_bonesNodes, m_sceneData.skeletons );
-		auto anims = ( aiNode.mParent && isSkeletonNode )
+		auto nodeTransform = fromAssimp( node.mTransformation );
+		transform *= nodeTransform;
+		cumulativeTransforms.emplace( &node, transform );
+		bool isSkeletonNode = file::isSkeletonNode( node, aiNodeName, m_bonesNodes, m_sceneData.skeletons );
+		auto anims = ( node.mParent && isSkeletonNode )
 			? std::map< aiAnimation const *, aiNodeAnim const * >{}
-			: file::findNodeAnims( aiNode
+			: file::findNodeAnims( node
 				, castor::makeArrayView( m_aiScene->mAnimations, m_aiScene->mNumAnimations ) );
-		auto aiMeshes = castor::makeArrayView( aiNode.mMeshes, aiNode.mNumMeshes );
-		auto meshIt = std::find_if( aiMeshes.begin()
-			, aiMeshes.end()
-			, [this]( uint32_t meshIndex )
-			{
-				return m_meshes.find( meshIndex ) != m_meshes.end();
-			} );
+		auto aiMeshes = castor::makeArrayView( node.mMeshes, node.mNumMeshes );
+		auto nodeName = getInternalName( aiNodeName );
+		NodeData nodeData{ parentName
+			, nodeName
+			, &node
+			, nodeTransform };
 
-		if ( meshIt != aiMeshes.end() || !anims.empty() )
+		if ( !isSkeletonNode )
 		{
-			auto nodeName = getInternalName( aiNodeName );
-			NodeData nodeData{ parentName
-				, nodeName
-				, &aiNode
-				, transform * fromAssimp( aiNode.mTransformation ) };
-
-			if ( !isSkeletonNode )
+			for ( auto anim : anims )
 			{
-				for ( auto anim : anims )
+				auto [frameCount, frameTicks] = getNodeAnimFrameTicks( *anim.second );
+
+				if ( frameCount > 1 )
 				{
-					auto [frameCount, frameTicks] = getNodeAnimFrameTicks( *anim.second );
+					castor::String animName{ normalizeName( makeString( anim.first->mName ) ) };
 
-					if ( frameCount > 1 )
+					if ( animName.empty() )
 					{
-						castor::String animName{ normalizeName( makeString( anim.first->mName ) ) };
+						animName = normalizeName( aiNodeName );
+					}
 
-						if ( animName.empty() )
+					nodeData.anims.emplace( animName, anim );
+				}
+			}
+		}
+
+		for ( auto meshIndex : castor::makeArrayView( node.mMeshes, node.mNumMeshes ) )
+		{
+			if ( !file::isValidMesh( *m_aiScene, meshIndex ) )
+			{
+				continue;
+			}
+
+			auto it = file::findNodeMesh( meshIndex, m_sceneData.meshes );
+
+			if ( it != m_sceneData.meshes.end() )
+			{
+				if ( nodeData.meshes.end() == std::find( nodeData.meshes.begin()
+					, nodeData.meshes.end()
+					, &it->second ) )
+				{
+					// Don't add the mesh if it has already been added to a node with the same transform.
+					auto & nodeArray = processedMeshes.emplace( &it->second, aiNodeArray{} ).first->second;
+					auto nodeIt = std::find_if( nodeArray.begin()
+						, nodeArray.end()
+						, [&cumulativeTransforms, &transform]( aiNode const * lookup )
 						{
-							animName = normalizeName( aiNodeName );
-						}
+							auto lookupIt = cumulativeTransforms.find( lookup );
+							return lookupIt->second == transform;
+						} );
 
-						nodeData.anims.emplace( animName, anim );
+					if ( nodeIt == nodeArray.end() )
+					{
+						nodeArray.push_back( &node );
+						nodeData.meshes.push_back( &it->second );
 					}
 				}
 			}
-
-			for ( auto meshIndex : castor::makeArrayView( aiNode.mMeshes, aiNode.mNumMeshes ) )
+			else
 			{
-				if ( !file::isValidMesh( *m_aiScene, meshIndex ) )
-				{
-					continue;
-				}
-
-				auto it = file::findNodeMesh( meshIndex, m_sceneData.meshes );
-
-				if ( it != m_sceneData.meshes.end() )
-				{
-					if ( nodeData.meshes.end() == std::find( nodeData.meshes.begin()
-						, nodeData.meshes.end()
-						, &it->second ) )
-					{
-						auto ires = processedMeshes.emplace( &it->second, nodeName );
-
-						if ( ires.second )
-						{
-							nodeData.meshes.push_back( &it->second );
-						}
-					}
-				}
-				else
-				{
-					CU_Failure( "Could not find node's mesh ?" );
-				}
+				CU_Failure( "Could not find node's mesh ?" );
 			}
+		}
 
-			m_sceneData.nodes.emplace_back( std::move( nodeData ) );
-			parentName = nodeName;
-			transform = castor::Matrix4x4f{ 1.0f };
-		}
-		else
-		{
-			transform = transform * fromAssimp( aiNode.mTransformation );
-		}
+		m_sceneData.nodes.emplace_back( std::move( nodeData ) );
+		parentName = nodeName;
 
 		// continue for all child nodes
-		for ( auto aiChild : castor::makeArrayView( aiNode.mChildren, aiNode.mNumChildren ) )
+		for ( auto aiChild : castor::makeArrayView( node.mChildren, node.mNumChildren ) )
 		{
 			doPrelistSceneNodes( *aiChild
 				, processedMeshes
+				, cumulativeTransforms
 				, parentName
 				, transform );
 		}
