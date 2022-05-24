@@ -133,6 +133,21 @@ namespace castor3d
 						CU_ParsingError( cuT( "Malformed parameter -roll=<degrees>." ) );
 					}
 				}
+				else if ( param.find( cuT( "emissive_mult" ) ) == 0 )
+				{
+					auto eqIndex = param.find( cuT( '=' ) );
+
+					if ( eqIndex != castor::String::npos )
+					{
+						float value;
+						castor::string::parse< float >( param.substr( eqIndex + 1 ), value );
+						parameters.add( cuT( "emissive_mult" ), value );
+					}
+					else
+					{
+						CU_ParsingError( cuT( "Malformed parameter -emissive_mult=<float>." ) );
+					}
+				}
 				else if ( param.find( cuT( "split_mesh" ) ) == 0 )
 				{
 					parameters.add( cuT( "split_mesh" ), true );
@@ -1505,6 +1520,13 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserSceneImportEmissiveMult )
+	{
+		auto & parsingContext = getParserContext( context );
+		params[0]->get( parsingContext.sceneImportConfig.emissiveMult );
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserSceneImportEnd )
 	{
 		auto & parsingContext = getParserContext( context );
@@ -1546,6 +1568,11 @@ namespace castor3d
 			if ( parsingContext.sceneImportConfig.noOptimisations )
 			{
 				parameters.add( cuT( "no_optimisations" ), parsingContext.sceneImportConfig.noOptimisations );
+			}
+
+			if ( parsingContext.sceneImportConfig.emissiveMult != 1.0f )
+			{
+				parameters.add( cuT( "emissive_mult" ), parsingContext.sceneImportConfig.emissiveMult );
 			}
 
 			SceneImporter importer{ *engine };

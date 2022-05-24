@@ -1,6 +1,7 @@
 #include "AssimpImporter/AssimpMaterialImporter.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Limits.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Material/Pass/PassFactory.hpp>
@@ -86,10 +87,11 @@ namespace c3d_assimp
 				, aiScene const & scene
 				, castor3d::SamplerRes sampler
 				, AssimpMaterialImporter const & importer
+				, float emissiveMult
 				, std::map< castor3d::TextureFlag, castor3d::TextureConfiguration > const & textureRemaps
 				, castor3d::Pass & pass )
 			{
-				PassFiller vis{ material, scene, sampler, importer, textureRemaps, pass };
+				PassFiller vis{ material, scene, sampler, importer, emissiveMult, textureRemaps, pass };
 				pass.accept( vis );
 				vis.finish();
 				pass.prepareTextures();
@@ -100,6 +102,7 @@ namespace c3d_assimp
 				, aiScene const & scene
 				, castor3d::SamplerRes sampler
 				, AssimpMaterialImporter const & importer
+				, float emissiveMult
 				, std::map< castor3d::TextureFlag, castor3d::TextureConfiguration > const & textureRemaps
 				, castor3d::Pass & result )
 				: castor3d::PassVisitor{ {} }
@@ -107,6 +110,7 @@ namespace c3d_assimp
 				, m_scene{ scene }
 				, m_sampler{ sampler }
 				, m_importer{ importer }
+				, m_emissiveMult{ emissiveMult }
 				, m_textureRemaps{ textureRemaps }
 				, m_result{ result }
 			{
@@ -257,7 +261,7 @@ namespace c3d_assimp
 
 				if ( !emiInfo.name.empty() )
 				{
-					m_result.setEmissive( 1.0f );
+					m_result.setEmissive( m_emissiveMult );
 				}
 			}
 
@@ -435,7 +439,7 @@ namespace c3d_assimp
 
 					if ( m_material.Get( AI_MATKEY_COLOR_EMISSIVE, emissive ) == aiReturn_SUCCESS )
 					{
-						value = float( castor::point::length( castor::Point3f{ emissive.r
+						value = m_emissiveMult * float( castor::point::length( castor::Point3f{ emissive.r
 							, emissive.g
 							, emissive.b } ) );
 					}
@@ -865,6 +869,7 @@ namespace c3d_assimp
 			aiScene const & m_scene;
 			castor3d::SamplerRes m_sampler;
 			AssimpMaterialImporter const & m_importer;
+			float m_emissiveMult;
 			std::map< castor3d::TextureFlag, castor3d::TextureConfiguration > m_textureRemaps;
 			castor3d::Pass & m_result;
 		};
@@ -922,6 +927,7 @@ namespace c3d_assimp
 
 		static void processMaterialPass( castor3d::Engine & engine
 			, castor3d::SamplerRes sampler
+			, float emissiveMult
 			, std::map< castor3d::TextureFlag, castor3d::TextureConfiguration > const & textureRemaps
 			, castor3d::Pass & pass
 			, aiMaterial const & aiMaterial
@@ -939,7 +945,7 @@ namespace c3d_assimp
 				castor3d::log::warn << "Switching from " << passFactory.getIdName( srcType ) << " to " << passFactory.getIdName( dstType ) << " pass type." << std::endl;
 			}
 
-			PassFiller::submit( aiMaterial, aiScene, sampler, importer, textureRemaps, pass );
+			PassFiller::submit( aiMaterial, aiScene, sampler, importer, emissiveMult, textureRemaps, pass );
 
 			if ( !pass.getTextureUnits( castor3d::TextureFlag::eOpacity ).empty()
 				&& pass.getAlphaFunc() == VkCompareOp::VK_COMPARE_OP_ALWAYS )
@@ -971,10 +977,20 @@ namespace c3d_assimp
 			return false;
 		}
 
+		float emissiveMult = 1.0f;
+		float value;
+
+		if ( m_parameters.get( cuT( "emissive_mult" ), value )
+			&& std::abs( value - 1.0f ) > std::numeric_limits< float >::epsilon() )
+		{
+			emissiveMult = value;
+		}
+
 		castor3d::log::info << cuT( "  Material found: [" ) << name << cuT( "]" ) << std::endl;
 		auto pass = material.createPass();
 		materials::processMaterialPass( *getEngine()
 			, getEngine()->getDefaultSampler().lock()
+			, emissiveMult
 			, m_textureRemaps
 			, *pass
 			, *it->second
