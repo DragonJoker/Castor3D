@@ -104,6 +104,7 @@ namespace castor3d
 
 	private:
 		void doImportMaterials( Scene & scene
+			, Parameters const & parameters
 			, std::map< TextureFlag, TextureConfiguration > const & textureRemaps );
 		std::map< castor::String, SkeletonRPtr > doImportSkeletons( Scene & scene );
 		std::map< castor::String, MeshResPtr > doImportMeshes( Scene & scene
