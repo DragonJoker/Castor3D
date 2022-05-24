@@ -1,36 +1,22 @@
 #include "Castor3D/Scene/SceneImporter.hpp"
 
 #include "Castor3D/Engine.hpp"
-
 #include "Castor3D/Animation/AnimationImporter.hpp"
 #include "Castor3D/Animation/AnimationImporterFactory.hpp"
-#include "Castor3D/Binary/CmshImporter.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/MaterialImporter.hpp"
-#include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Material/Texture/TextureConfiguration.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
-#include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/MeshImporter.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
-#include "Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
-#include "Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Model/Skeleton/SkeletonImporter.hpp"
-#include "Castor3D/Model/Skeleton/BoneNode.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
-#include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp"
-#include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationObject.hpp"
-#include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
+#include "Castor3D/Scene/SceneNodeImporter.hpp"
 #include "Castor3D/Scene/Animation/SceneNodeAnimation.hpp"
-
-#include <CastorUtils/Graphics/HeightMapToNormalMap.hpp>
+#include "Castor3D/Scene/Light/LightImporter.hpp"
 
 namespace castor3d
 {
@@ -47,181 +33,13 @@ namespace castor3d
 		, std::map< TextureFlag, TextureConfiguration > const & textureRemaps )
 	{
 		m_file = file;
-		auto animationImporter = file->createAnimationImporter();
-		Parameters emptyParams;
-		std::map< castor::String, SkeletonRPtr > skeletons;
-		std::map< castor::String, MeshResPtr > meshes;
-		std::map< castor::String, SceneNodeSPtr > nodes;
-
-		if ( auto materialImporter = file->createMaterialImporter() )
-		{
-			for ( auto name : file->listMaterials() )
-			{
-				auto material = getOwner()->createMaterial( name
-					, *getOwner()
-					, getOwner()->getPassesType() );
-
-				if ( materialImporter->import( *material
-					, file
-					, emptyParams
-					, textureRemaps ) )
-				{
-					scene.getMaterialView().add( name, material, true );
-				}
-			}
-		}
-
-		if ( auto skeletonImporter = file->createSkeletonImporter() )
-		{
-			for ( auto name : file->listSkeletons() )
-			{
-				auto skeleton = scene.createSkeleton( name, scene );
-
-				if ( skeletonImporter->import( *skeleton
-					, file
-					, emptyParams ) )
-				{
-					if ( animationImporter )
-					{
-						for ( auto animName : file->listSkeletonAnimations( *skeleton ) )
-						{
-							auto animation = std::make_unique< SkeletonAnimation >( *skeleton, animName );
-
-							if ( animationImporter->import( *animation, m_file, emptyParams ) )
-							{
-								skeleton->addAnimation( std::move( animation ) );
-							}
-						}
-					}
-
-					skeletons.emplace( name, skeleton.get() );
-					scene.addSkeleton( name, skeleton, true );
-				}
-			}
-		}
-
-		if ( auto meshImporter = file->createMeshImporter() )
-		{
-			for ( auto [meshName, skeletonName] : file->listMeshes() )
-			{
-				auto mesh = scene.createMesh( meshName, scene );
-
-				if ( meshImporter->import( *mesh
-					, file
-					, emptyParams
-					, true ) )
-				{
-
-					if ( animationImporter )
-					{
-						for ( auto animName : file->listMeshAnimations( *mesh ) )
-						{
-							auto animation = std::make_unique< MeshAnimation >( *mesh, animName );
-
-							if ( animationImporter->import( *animation, m_file, emptyParams ) )
-							{
-								mesh->addAnimation( std::move( animation ) );
-							}
-						}
-					}
-
-					if ( !skeletonName.empty() )
-					{
-						auto skelIt = skeletons.find( skeletonName );
-						CU_Require( skelIt != skeletons.end() );
-						mesh->setSkeleton( skelIt->second );
-					}
-
-					meshes.emplace( meshName, mesh );
-					scene.addMesh( meshName, mesh, true );
-				}
-			}
-		}
-
-		std::map< castor::String, std::vector< SceneNodeRPtr > > nodesAnims;
-
-		if ( auto nodeImporter = file->createSceneNodeImporter() )
-		{
-			for ( auto name : file->listSceneNodes() )
-			{
-				if ( !scene.hasSceneNode( name ) )
-				{
-					auto node = scene.createSceneNode( name, scene );
-
-					if ( nodeImporter->import( *node
-						, file
-						, emptyParams ) )
-					{
-						if ( animationImporter )
-						{
-							for ( auto animName : file->listSceneNodeAnimations( *node ) )
-							{
-								auto animation = std::make_unique< SceneNodeAnimation >( *node, animName );
-
-								if ( animationImporter->import( *animation, m_file, emptyParams ) )
-								{
-									auto & nodesAnim = nodesAnims.emplace( animName, std::vector< SceneNodeRPtr >{} ).first->second;
-									nodesAnim.push_back( node.get() );
-									node->addAnimation( std::move( animation ) );
-								}
-							}
-						}
-
-						nodes.emplace( name, node );
-						scene.addSceneNode( name, node, true );
-					}
-				}
-			}
-
-			for ( auto & nodesIt : nodesAnims )
-			{
-				auto animGroup = scene.addNewAnimatedObjectGroup( cuT( "Node" ) + nodesIt.first, scene ).lock();
-
-				if ( animGroup->addAnimation( nodesIt.first ) )
-				{
-					animGroup->setAnimationLooped( nodesIt.first, true );
-				}
-
-				for ( auto node : nodesIt.second )
-				{
-					animGroup->addObject( *node, node->getName() );
-				}
-			}
-		}
-
-		if ( auto lightImporter = file->createLightImporter() )
-		{
-			for ( auto name : file->listLights() )
-			{
-				auto light = scene.createLight( name.first
-					, scene
-					, *scene.getObjectRootNode()
-					, scene.getLightsFactory()
-					, name.second );
-
-				if ( lightImporter->import( *light
-					, file
-					, emptyParams ) )
-				{
-					scene.addLight( name.first, light, true );
-				}
-			}
-		}
-
-		for ( auto geom : file->listGeometries() )
-		{
-			auto meshIt = meshes.find( geom.mesh );
-			CU_Require( meshIt != meshes.end() );
-			auto nodeIt = nodes.find( geom.node );
-			CU_Require( nodeIt != nodes.end() );
-			auto geometry = scene.createGeometry( geom.name
-				, scene
-				, *nodeIt->second
-				, meshIt->second );
-			scene.addGeometry( geometry );
-			doAddAnimationGroup( *geometry );
-		}
-
+		doImportMaterials( scene, textureRemaps );
+		auto skeletons = doImportSkeletons( scene );
+		auto meshes = doImportMeshes( scene, skeletons );
+		auto nodes = doImportNodes( scene );
+		doImportLights( scene );
+		doCreateGeometries( scene, meshes, nodes );
+		importAnimations( scene, file, parameters );
 		doTransformScene( scene, parameters, nodes );
 		return true;
 	}
@@ -252,66 +70,18 @@ namespace castor3d
 		, Parameters const & parameters )
 	{
 		m_file = file;
-		bool result{ true };
-		auto animationImporter = file->createAnimationImporter();
-		Parameters emptyParams;
+		auto importer = file->createAnimationImporter();
 
-		if ( animationImporter )
+		if ( importer )
 		{
-			std::map< MeshRPtr, castor::StringArray > meshAnims;
-			std::map< SkeletonRPtr, castor::StringArray > skelAnims;
-
-			for ( auto & meshIt : scene.getMeshCache() )
-			{
-				auto & mesh = meshIt.second;
-
-				for ( auto animName : file->listMeshAnimations( *mesh ) )
-				{
-					auto it = meshAnims.emplace( mesh.get(), castor::StringArray{} ).first;
-					auto animation = std::make_unique< MeshAnimation >( *mesh, animName );
-
-					if ( animationImporter->import( *animation, m_file, emptyParams ) )
-					{
-						it->second.push_back( animation->getName() );
-						mesh->addAnimation( std::move( animation ) );
-					}
-				}
-			}
-
-			for ( auto & skelIt : scene.getSkeletonCache() )
-			{
-				auto & skeleton = skelIt.second;
-
-				for ( auto animName : file->listSkeletonAnimations( *skeleton ) )
-				{
-					auto it = skelAnims.emplace( skeleton.get(), castor::StringArray{} ).first;
-					auto animation = std::make_unique< SkeletonAnimation >( *skeleton, animName );
-
-					if ( animationImporter->import( *animation, m_file, emptyParams ) )
-					{
-						it->second.push_back( animation->getName() );
-						skeleton->addAnimation( std::move( animation ) );
-					}
-				}
-			}
-
-			for ( auto geometry : scene.getGeometryCache() )
-			{
-				auto & mesh = *geometry.second->getMesh().lock();
-				auto meshIt = meshAnims.find( &mesh );
-				auto skelIt = mesh.getSkeleton()
-					? skelAnims.find( mesh.getSkeleton() )
-					: skelAnims.end();
-
-				if ( meshIt != meshAnims.end()
-					|| skelIt != skelAnims.end() )
-				{
-					doAddAnimationGroup( *geometry.second );
-				}
-			}
+			std::map< castor::String, AnimObjects > anims;
+			doImportSkeletonsAnims( scene, *importer, anims );
+			doImportMeshesAnims( scene, *importer, anims );
+			doImportNodesAnims( scene, *importer, anims );
+			doCreateAnimationGroups( scene, anims );
 		}
 
-		return result;
+		return true;
 	}
 
 	bool SceneImporter::importAnimations( Scene & scene
@@ -334,6 +104,280 @@ namespace castor3d
 		return importAnimations( scene, file.get(), parameters );
 	}
 
+	void SceneImporter::doImportMaterials( Scene & scene
+		, std::map< TextureFlag, TextureConfiguration > const & textureRemaps )
+	{
+		Parameters emptyParams;
+
+		if ( auto materialImporter = m_file->createMaterialImporter() )
+		{
+			for ( auto name : m_file->listMaterials() )
+			{
+				auto material = getOwner()->createMaterial( name
+					, *getOwner()
+					, getOwner()->getPassesType() );
+
+				if ( materialImporter->import( *material
+					, m_file
+					, emptyParams
+					, textureRemaps ) )
+				{
+					scene.getMaterialView().add( name, material, true );
+				}
+			}
+		}
+	}
+
+	std::map< castor::String, SkeletonRPtr > SceneImporter::doImportSkeletons( Scene & scene )
+	{
+		Parameters emptyParams;
+		std::map< castor::String, SkeletonRPtr > result;
+
+		if ( auto skeletonImporter = m_file->createSkeletonImporter() )
+		{
+			for ( auto name : m_file->listSkeletons() )
+			{
+				auto skeleton = scene.createSkeleton( name, scene );
+
+				if ( skeletonImporter->import( *skeleton
+					, m_file
+					, emptyParams ) )
+				{
+					result.emplace( name, skeleton.get() );
+					scene.addSkeleton( name, skeleton, true );
+				}
+			}
+		}
+
+		return result;
+	}
+
+	std::map< castor::String, MeshResPtr > SceneImporter::doImportMeshes( Scene & scene
+		, std::map< castor::String, SkeletonRPtr > const & skeletons )
+	{
+		Parameters emptyParams;
+		std::map< castor::String, MeshResPtr > result;
+
+		if ( auto meshImporter = m_file->createMeshImporter() )
+		{
+			for ( auto [meshName, skeletonName] : m_file->listMeshes() )
+			{
+				auto mesh = scene.createMesh( meshName, scene );
+
+				if ( meshImporter->import( *mesh
+					, m_file
+					, emptyParams
+					, true ) )
+				{
+					if ( !skeletonName.empty() )
+					{
+						auto skelIt = skeletons.find( skeletonName );
+						CU_Require( skelIt != skeletons.end() );
+						mesh->setSkeleton( skelIt->second );
+					}
+
+					result.emplace( meshName, mesh );
+					scene.addMesh( meshName, mesh, true );
+				}
+			}
+		}
+
+		return result;
+	}
+
+	std::map< castor::String, SceneNodeSPtr > SceneImporter::doImportNodes( Scene & scene )
+	{
+		Parameters emptyParams;
+		std::map< castor::String, SceneNodeSPtr > result;
+
+		if ( auto nodeImporter = m_file->createSceneNodeImporter() )
+		{
+			for ( auto name : m_file->listSceneNodes() )
+			{
+				if ( !scene.hasSceneNode( name ) )
+				{
+					auto node = scene.createSceneNode( name, scene );
+
+					if ( nodeImporter->import( *node
+						, m_file
+						, emptyParams ) )
+					{
+						result.emplace( name, node );
+						scene.addSceneNode( name, node, true );
+					}
+				}
+			}
+		}
+
+		return result;
+	}
+
+	void SceneImporter::doImportLights( Scene & scene )
+	{
+		Parameters emptyParams;
+
+		if ( auto lightImporter = m_file->createLightImporter() )
+		{
+			for ( auto name : m_file->listLights() )
+			{
+				auto light = scene.createLight( name.first
+					, scene
+					, *scene.getObjectRootNode()
+					, scene.getLightsFactory()
+					, name.second );
+
+				if ( lightImporter->import( *light
+					, m_file
+					, emptyParams ) )
+				{
+					scene.addLight( name.first, light, true );
+				}
+			}
+		}
+	}
+
+	void SceneImporter::doCreateGeometries( Scene & scene
+		, std::map< castor::String, MeshResPtr > const & meshes
+		, std::map< castor::String, SceneNodeSPtr > const & nodes )
+	{
+		for ( auto geom : m_file->listGeometries() )
+		{
+			auto meshIt = meshes.find( geom.mesh );
+			CU_Require( meshIt != meshes.end() );
+			auto nodeIt = nodes.find( geom.node );
+			CU_Require( nodeIt != nodes.end() );
+			auto geometry = scene.createGeometry( geom.name
+				, scene
+				, *nodeIt->second
+				, meshIt->second );
+			scene.addGeometry( geometry );
+		}
+	}
+
+	void SceneImporter::doImportSkeletonsAnims( Scene & scene
+		, AnimationImporter & importer
+		, std::map< castor::String, AnimObjects > & anims )
+	{
+		Parameters emptyParams;
+
+		for ( auto & skelIt : scene.getSkeletonCache() )
+		{
+			auto & skeleton = skelIt.second;
+
+			for ( auto animName : m_file->listSkeletonAnimations( *skeleton ) )
+			{
+				auto animation = std::make_unique< SkeletonAnimation >( *skeleton, animName );
+
+				if ( importer.import( *animation, m_file, emptyParams ) )
+				{
+					auto & anim = anims.emplace( animName, AnimObjects{} ).first->second;
+					anim.skeletons.push_back( skeleton.get() );
+					skeleton->addAnimation( std::move( animation ) );
+				}
+			}
+		}
+	}
+
+	void SceneImporter::doImportMeshesAnims( Scene & scene
+		, AnimationImporter & importer
+		, std::map< castor::String, AnimObjects > & anims )
+	{
+		Parameters emptyParams;
+
+		for ( auto & meshIt : scene.getMeshCache() )
+		{
+			auto & mesh = meshIt.second;
+
+			for ( auto animName : m_file->listMeshAnimations( *mesh ) )
+			{
+				auto animation = std::make_unique< MeshAnimation >( *mesh, animName );
+
+				if ( importer.import( *animation, m_file, emptyParams ) )
+				{
+					auto & anim = anims.emplace( animName, AnimObjects{} ).first->second;
+					anim.meshes.push_back( mesh.get() );
+					mesh->addAnimation( std::move( animation ) );
+				}
+			}
+		}
+	}
+
+	void SceneImporter::doImportNodesAnims( Scene & scene
+		, AnimationImporter & importer
+		, std::map< castor::String, AnimObjects > & anims )
+	{
+		Parameters emptyParams;
+
+		for ( auto & nodeIt : scene.getSceneNodeCache() )
+		{
+			auto & node = nodeIt.second;
+
+			for ( auto animName : m_file->listSceneNodeAnimations( *node ) )
+			{
+				auto animation = std::make_unique< SceneNodeAnimation >( *node, animName );
+
+				if ( importer.import( *animation, m_file, emptyParams ) )
+				{
+					auto & anim = anims.emplace( animName, AnimObjects{} ).first->second;
+					anim.nodes.push_back( node.get() );
+					node->addAnimation( std::move( animation ) );
+				}
+			}
+		}
+	}
+
+	void SceneImporter::doCreateAnimationGroups( Scene & scene
+		, std::map< castor::String, AnimObjects > & anims )
+	{
+		for ( auto & animIt : anims )
+		{
+			for ( auto geometry : scene.getGeometryCache() )
+			{
+				auto & mesh = *geometry.second->getMesh().lock();
+				auto nodeIt = std::find( animIt.second.nodes.begin()
+					, animIt.second.nodes.end()
+					, geometry.second->getParent() );
+				auto meshIt = std::find( animIt.second.meshes.begin()
+					, animIt.second.meshes.end()
+					, &mesh );
+				auto skelIt = ( mesh.getSkeleton()
+					? std::find( animIt.second.skeletons.begin()
+						, animIt.second.skeletons.end()
+						, mesh.getSkeleton() )
+					: animIt.second.skeletons.end() );
+
+				if ( nodeIt != animIt.second.nodes.end()
+					|| meshIt != animIt.second.meshes.end()
+					|| skelIt != animIt.second.skeletons.end() )
+				{
+					auto animGroup = ( scene.hasAnimatedObjectGroup( geometry.first )
+						? scene.findAnimatedObjectGroup( geometry.first ).lock()
+						: scene.addNewAnimatedObjectGroup( geometry.first, scene ).lock() );
+
+					if ( animGroup->addAnimation( animIt.first ) )
+					{
+						animGroup->setAnimationLooped( animIt.first, true );
+					}
+
+					if ( nodeIt != animIt.second.nodes.end() )
+					{
+						animGroup->addObject( **nodeIt, ( *nodeIt )->getName() );
+					}
+
+					if ( meshIt != animIt.second.meshes.end() )
+					{
+						animGroup->addObject( **meshIt, *geometry.second, geometry.first );
+					}
+
+					if ( skelIt != animIt.second.skeletons.end() )
+					{
+						animGroup->addObject( **skelIt, mesh, *geometry.second, geometry.first );
+					}
+				}
+			}
+		}
+	}
+
 	void SceneImporter::doTransformScene( Scene & scene
 		, Parameters const & parameters
 		, std::map< castor::String, SceneNodeSPtr > const & nodes )
@@ -353,53 +397,6 @@ namespace castor3d
 				if ( nodeIt.second->getParent() == scene.getObjectRootNode().get() )
 				{
 					nodeIt.second->attachTo( *transformNode );
-				}
-			}
-		}
-	}
-
-	void SceneImporter::doAddAnimationGroup( Geometry & geometry )
-	{
-		auto mesh = geometry.getMesh().lock();
-		auto skeleton = mesh->getSkeleton();
-
-		if ( mesh->hasAnimation()
-			|| ( skeleton && skeleton->hasAnimation() ) )
-		{
-			auto & scene = *geometry.getScene();
-			auto animGroup = ( scene.hasAnimatedObjectGroup( geometry.getName() )
-				? scene.findAnimatedObjectGroup( geometry.getName() ).lock()
-				: scene.addNewAnimatedObjectGroup( geometry.getName(), scene ).lock() );
-
-			if ( !mesh->getAnimations().empty() )
-			{
-				for ( auto & animation : mesh->getAnimations() )
-				{
-					if ( animGroup->addAnimation( animation.first ) )
-					{
-						animGroup->setAnimationLooped( animation.first, true );
-					}
-				}
-
-				if ( !animGroup->findObject( geometry.getName() + "_Mesh" ) )
-				{
-					animGroup->addObject( *mesh, geometry, geometry.getName() );
-				}
-			}
-
-			if ( skeleton && !skeleton->getAnimations().empty() )
-			{
-				for ( auto & animation : skeleton->getAnimations() )
-				{
-					if ( animGroup->addAnimation( animation.first ) )
-					{
-						animGroup->setAnimationLooped( animation.first, true );
-					}
-				}
-
-				if ( !animGroup->findObject( geometry.getName() + "_Skeleton" ) )
-				{
-					animGroup->addObject( *skeleton, *mesh, geometry, geometry.getName() );
 				}
 			}
 		}

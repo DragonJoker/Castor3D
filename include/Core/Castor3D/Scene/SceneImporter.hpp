@@ -103,6 +103,36 @@ namespace castor3d
 			, Parameters const & parameters );
 
 	private:
+		void doImportMaterials( Scene & scene
+			, std::map< TextureFlag, TextureConfiguration > const & textureRemaps );
+		std::map< castor::String, SkeletonRPtr > doImportSkeletons( Scene & scene );
+		std::map< castor::String, MeshResPtr > doImportMeshes( Scene & scene
+			, std::map< castor::String, SkeletonRPtr > const & skeletons );
+		std::map< castor::String, SceneNodeSPtr > doImportNodes( Scene & scene );
+		void doImportLights( Scene & scene );
+		void doCreateGeometries( Scene & scene
+			, std::map< castor::String, MeshResPtr > const & meshes
+			, std::map< castor::String, SceneNodeSPtr > const & nodes );
+
+		struct AnimObjects
+		{
+			std::vector< SkeletonRPtr > skeletons;
+			std::vector< MeshRPtr > meshes;
+			std::vector< SceneNodeRPtr > nodes;
+		};
+
+		void doImportSkeletonsAnims( Scene & scene
+			, AnimationImporter & importer
+			, std::map< castor::String, AnimObjects > & anims );
+		void doImportMeshesAnims( Scene & scene
+			, AnimationImporter & importer
+			, std::map< castor::String, AnimObjects > & anims );
+		void doImportNodesAnims( Scene & scene
+			, AnimationImporter & importer
+			, std::map< castor::String, AnimObjects > & anims );
+		void doCreateAnimationGroups( Scene & scene
+			, std::map< castor::String, AnimObjects > & anims );
+
 		void doTransformScene( Scene & scene
 			, Parameters const & parameters
 			, std::map< castor::String, SceneNodeSPtr > const & nodes );
