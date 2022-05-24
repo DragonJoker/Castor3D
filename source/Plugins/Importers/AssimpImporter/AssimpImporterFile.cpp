@@ -36,20 +36,24 @@ namespace c3d_assimp
 			bool noOptim = false;
 			auto found = parameters.get( "no_optimisations", noOptim );
 			uint32_t importFlags{ aiProcess_ValidateDataStructure
-				| aiProcess_FindInvalidData };
+				| aiProcess_FindInvalidData
+				| aiProcess_Triangulate
+				| aiProcess_FixInfacingNormals
+				| aiProcess_LimitBoneWeights
+				| aiProcess_RemoveRedundantMaterials
+				| aiProcess_PopulateArmatureData };
+			importer.SetPropertyInteger( AI_CONFIG_PP_LBW_MAX_WEIGHTS, 8 );
+			importer.SetPropertyBool( AI_CONFIG_IMPORT_NO_SKELETON_MESHES, true );
+			importer.SetPropertyInteger( AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, 0 ); //< Get rid of $AssimpFbx$_PreRotation nodes
+			importer.SetPropertyInteger( AI_CONFIG_FBX_CONVERT_TO_M, 0 ); //< Convert FBX cm to m.
 
 			if ( !found || !noOptim )
 			{
-				importFlags |= aiProcess_Triangulate
-					| aiProcess_JoinIdenticalVertices
+				importFlags |= aiProcess_JoinIdenticalVertices
 					| aiProcess_OptimizeMeshes
-					| aiProcess_OptimizeGraph
-					| aiProcess_FixInfacingNormals
-					| aiProcess_LimitBoneWeights;
+					| aiProcess_OptimizeGraph;
 			}
 
-			importer.SetPropertyInteger( AI_CONFIG_PP_LBW_MAX_WEIGHTS, 8 ); //< Limit to 8 bone weights
-			importer.SetPropertyInteger( AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, 0 ); //< Get rid of $AssimpFbx$_PreRotation nodes
 			bool tangentSpace = false;
 			castor::String normals;
 
@@ -397,6 +401,36 @@ namespace c3d_assimp
 				{
 					m_bonesNodes.emplace( makeString( aiBone->mName )
 						, fromAssimp( aiBone->mOffsetMatrix ) );
+
+					if ( aiBone->mArmature )
+					{
+						auto it = std::find_if( m_armatures.begin()
+							, m_armatures.end()
+							, [aiBone]( aiNode const * lookup )
+							{
+								return lookup == aiBone->mArmature
+									|| lookup->FindNode( aiBone->mArmature->mName ) != nullptr;
+							} );
+
+						if ( it == m_armatures.end() )
+						{
+							it = std::find_if( m_armatures.begin()
+								, m_armatures.end()
+								, [aiBone]( aiNode const * lookup )
+								{
+									return aiBone->mArmature->FindNode( lookup->mName ) != nullptr;
+								} );
+
+							if ( it == m_armatures.end() )
+							{
+								m_armatures.push_back( aiBone->mArmature );
+							}
+							else
+							{
+								*it = aiBone->mArmature;
+							}
+						}
+					}
 				}
 			}
 
@@ -698,9 +732,29 @@ namespace c3d_assimp
 				}
 				else
 				{
-					auto rootNode = findRootSkeletonNode( *m_aiScene->mRootNode
-						, castor::makeArrayView( aiMesh->mBones, aiMesh->mNumBones )
-						, meshNode );
+					auto bone = *aiMesh->mBones;
+					auto const * rootNode = bone->mArmature;
+					auto armatureIt = rootNode == nullptr
+						? m_armatures.end()
+						: std::find_if( m_armatures.begin()
+							, m_armatures.end()
+							, [rootNode]( aiNode const * lookup )
+							{
+								return lookup == rootNode
+									|| lookup->FindNode( rootNode->mName ) != nullptr;
+							} );
+
+					if ( armatureIt != m_armatures.end() )
+					{
+						rootNode = *armatureIt;
+					}
+					else
+					{
+						rootNode = findRootSkeletonNode( *m_aiScene->mRootNode
+							, castor::makeArrayView( aiMesh->mBones, aiMesh->mNumBones )
+							, meshNode );
+					}
+
 					auto skelName = findSkeletonName( m_bonesNodes
 						, *rootNode );
 					m_sceneData.skeletons.emplace( skelName, SkeletonData{ rootNode } );

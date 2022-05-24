@@ -19,7 +19,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="aiColor3D">
+	<Type Name="aiColor3t&lt;*&gt;">
 		<DisplayString>{r} {g} {b}</DisplayString>
 		<Expand>
 			<Item Name="[r]">r</Item>
@@ -28,7 +28,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="aiColor4D">
+	<Type Name="aiColor4t&lt;*&gt;">
 		<DisplayString>{r} {g} {b} {a}</DisplayString>
 		<Expand>
 			<Item Name="[r]">r</Item>
@@ -45,7 +45,15 @@
 		</Expand>
 	</Type>
 
-	<Type Name="aiVector3D">
+	<Type Name="aiVector2t&lt;*&gt;">
+		<DisplayString>{x} {y}</DisplayString>
+		<Expand>
+			<Item Name="[x]">x</Item>
+			<Item Name="[y]">y</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="aiVector3t&lt;*&gt;">
 		<DisplayString>{x} {y} {z}</DisplayString>
 		<Expand>
 			<Item Name="[x]">x</Item>
@@ -54,7 +62,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="aiVector4D">
+	<Type Name="aiVector4t&lt;*&gt;">
 		<DisplayString>{x} {y} {z} {w}</DisplayString>
 		<Expand>
 			<Item Name="[x]">x</Item>
@@ -64,7 +72,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="aiQuaternion">
+	<Type Name="aiQuaterniont&lt;*&gt;">
 		<DisplayString>{w} {x} {y} {z}</DisplayString>
 		<Expand>
 			<Item Name="[w]">w</Item>
@@ -74,7 +82,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="aiMatrix3x3">
+	<Type Name="aiMatrix3x3t&lt;*&gt;">
 		<Expand>
 			<Synthetic Name="[row 1]">
 				<DisplayString>{a1} {a2} {a3}</DisplayString>
@@ -103,7 +111,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="aiMatrix4x4">
+	<Type Name="aiMatrix4x4t&lt;*&gt;">
 		<Expand>
 			<Synthetic Name="[row 1]">
 				<DisplayString>{a1} {a2} {a3} {a4}</DisplayString>
@@ -307,6 +315,8 @@
 		<Expand>
 			<Item Name="[name]">mName</Item>
 			<Item Name="[offsetMatrix]">mOffsetMatrix</Item>
+			<Item Name="[armature]">mArmature</Item>
+			<Item Name="[node]">mNode</Item>
 			<Synthetic Name="[weights]">
 				<DisplayString>[size={mNumWeights}]</DisplayString>
 				<Expand>
