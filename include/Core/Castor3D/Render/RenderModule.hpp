@@ -313,14 +313,14 @@ namespace castor3d
 		uint64_t b;
 	};
 
-	static bool operator<( PipelineBaseHash const & lhs
+	inline bool operator<( PipelineBaseHash const & lhs
 		, PipelineBaseHash const & rhs )
 	{
 		return lhs.a < rhs.a
 			|| ( ( lhs.a == rhs.a ) && ( lhs.b < rhs.b ) );
 	}
 
-	static bool operator==( PipelineBaseHash const & lhs
+	inline bool operator==( PipelineBaseHash const & lhs
 		, PipelineBaseHash const & rhs )
 	{
 		return lhs.a == rhs.a

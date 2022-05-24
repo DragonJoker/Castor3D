@@ -33,7 +33,7 @@ namespace castor3d
 
 				for ( auto & weight : animSubmesh->getWeights() )
 				{
-					if ( weight )
+					if ( weight != 0.0f )
 					{
 						buffer->morphTargetsIndices[result] = index;
 						buffer->morphTargetsWeights[result] = weight;
