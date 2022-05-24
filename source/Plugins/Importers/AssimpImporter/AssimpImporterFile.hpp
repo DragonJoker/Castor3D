@@ -197,6 +197,7 @@ namespace c3d_assimp
 		Assimp::Importer m_importer;
 		aiScene const * m_aiScene{};
 		std::map< castor::String, castor::Matrix4x4f > m_bonesNodes;
+		std::vector< aiNode const * > m_armatures;
 		std::set< uint32_t > m_meshes;
 		std::vector< castor::String > m_listedMeshes;
 		std::vector< castor::String > m_listedSkeletons;
