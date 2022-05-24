@@ -125,6 +125,7 @@ namespace castor3d
 			float yaw{ 0.0f };
 			float roll{ 0.0f };
 			bool noOptimisations{ false };
+			float emissiveMult{ 1.0f };
 			std::map< TextureFlag, TextureConfiguration >::iterator textureRemapIt;
 		};
 

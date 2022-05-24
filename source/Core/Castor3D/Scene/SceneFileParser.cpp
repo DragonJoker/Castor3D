@@ -125,6 +125,7 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "yaw" ), parserSceneImportYaw, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "roll" ), parserSceneImportRoll, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "no_optimisations" ), parserSceneImportNoOptimisations, { makeParameter< ParameterType::eBool >() } );
+			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "emissive_mult" ), parserSceneImportEmissiveMult, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "}" ), parserSceneImportEnd );
 
 			addParser( result, uint32_t( CSCNSection::eParticleSystem ), cuT( "parent" ), parserParticleSystemParent, { makeParameter< ParameterType::eName >() } );

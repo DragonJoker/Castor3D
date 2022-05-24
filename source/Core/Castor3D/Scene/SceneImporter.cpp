@@ -33,7 +33,7 @@ namespace castor3d
 		, std::map< TextureFlag, TextureConfiguration > const & textureRemaps )
 	{
 		m_file = file;
-		doImportMaterials( scene, textureRemaps );
+		doImportMaterials( scene, parameters, textureRemaps );
 		auto skeletons = doImportSkeletons( scene );
 		auto meshes = doImportMeshes( scene, skeletons );
 		auto nodes = doImportNodes( scene );
@@ -105,24 +105,26 @@ namespace castor3d
 	}
 
 	void SceneImporter::doImportMaterials( Scene & scene
+		, Parameters const & parameters
 		, std::map< TextureFlag, TextureConfiguration > const & textureRemaps )
 	{
-		Parameters emptyParams;
-
 		if ( auto materialImporter = m_file->createMaterialImporter() )
 		{
 			for ( auto name : m_file->listMaterials() )
 			{
-				auto material = getOwner()->createMaterial( name
-					, *getOwner()
-					, getOwner()->getPassesType() );
-
-				if ( materialImporter->import( *material
-					, m_file
-					, emptyParams
-					, textureRemaps ) )
+				if ( !getOwner()->hasMaterial( name ) )
 				{
-					scene.getMaterialView().add( name, material, true );
+					auto material = getOwner()->createMaterial( name
+						, *getOwner()
+						, getOwner()->getPassesType() );
+
+					if ( materialImporter->import( *material
+						, m_file
+						, parameters
+						, textureRemaps ) )
+					{
+						scene.getMaterialView().add( name, material, true );
+					}
 				}
 			}
 		}

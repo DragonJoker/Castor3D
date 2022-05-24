@@ -95,6 +95,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserSceneImportYaw )
 	CU_DeclareAttributeParser( parserSceneImportRoll )
 	CU_DeclareAttributeParser( parserSceneImportNoOptimisations )
+	CU_DeclareAttributeParser( parserSceneImportEmissiveMult )
 	CU_DeclareAttributeParser( parserSceneImportEnd )
 
 	// ParticleSystem parsers
