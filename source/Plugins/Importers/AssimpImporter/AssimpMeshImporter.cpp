@@ -28,134 +28,7 @@ namespace c3d_assimp
 			return result;
 		}
 
-		static void applyMorphTarget( float weight
-			, castor3d::SubmeshAnimationBuffer const & target
-			, castor::Point3fArray & positions
-			, castor::Point3fArray & normals
-			, castor::Point3fArray & tangents
-			, castor::Point3fArray & texcoords0
-			, castor::Point3fArray & texcoords1
-			, castor::Point3fArray & texcoords2
-			, castor::Point3fArray & texcoords3
-			, castor::Point3fArray & colours )
-		{
-			if ( weight != 0.0f )
-			{
-				if ( !positions.empty() )
-				{
-					auto posIt = positions.begin();
-					auto bufferIt = target.positions.begin();
-
-					while ( bufferIt != target.positions.end() )
-					{
-						auto & buf = *bufferIt;
-						*posIt += buf * weight;
-						++posIt;
-						++bufferIt;
-					}
-				}
-
-				if ( !normals.empty() )
-				{
-					auto nmlIt = normals.begin();
-					auto bufferIt = target.normals.begin();
-
-					while ( bufferIt != target.normals.end() )
-					{
-						auto & buf = *bufferIt;
-						*nmlIt += buf * weight;
-						++nmlIt;
-						++bufferIt;
-					}
-				}
-
-				if ( !tangents.empty() )
-				{
-					auto tanIt = tangents.begin();
-					auto bufferIt = target.tangents.begin();
-
-					while ( bufferIt != target.tangents.end() )
-					{
-						auto & buf = *bufferIt;
-						*tanIt += buf * weight;
-						++tanIt;
-						++bufferIt;
-					}
-				}
-
-				if ( !texcoords0.empty() )
-				{
-					auto texIt = texcoords0.begin();
-					auto bufferIt = target.texcoords0.begin();
-
-					while ( bufferIt != target.texcoords0.end() )
-					{
-						auto & buf = *bufferIt;
-						*texIt += buf * weight;
-						++texIt;
-						++bufferIt;
-					}
-				}
-
-				if ( !texcoords1.empty() )
-				{
-					auto texIt = texcoords1.begin();
-					auto bufferIt = target.texcoords1.begin();
-
-					while ( bufferIt != target.texcoords1.end() )
-					{
-						auto & buf = *bufferIt;
-						*texIt += buf * weight;
-						++texIt;
-						++bufferIt;
-					}
-				}
-
-				if ( !texcoords2.empty() )
-				{
-					auto texIt = texcoords2.begin();
-					auto bufferIt = target.texcoords2.begin();
-
-					while ( bufferIt != target.texcoords2.end() )
-					{
-						auto & buf = *bufferIt;
-						*texIt += buf * weight;
-						++texIt;
-						++bufferIt;
-					}
-				}
-
-				if ( !texcoords3.empty() )
-				{
-					auto texIt = texcoords3.begin();
-					auto bufferIt = target.texcoords3.begin();
-
-					while ( bufferIt != target.texcoords3.end() )
-					{
-						auto & buf = *bufferIt;
-						*texIt += buf * weight;
-						++texIt;
-						++bufferIt;
-					}
-				}
-
-				if ( !colours.empty() )
-				{
-					auto texIt = colours.begin();
-					auto bufferIt = target.colours.begin();
-
-					while ( bufferIt != target.colours.end() )
-					{
-						auto & buf = *bufferIt;
-						*texIt += buf * weight;
-						++texIt;
-						++bufferIt;
-					}
-				}
-			}
-		}
-
-		castor3d::MorphFlags computeMorphFlags( castor3d::SubmeshAnimationBuffer const & buffer )
+		static castor3d::MorphFlags computeMorphFlags( castor3d::SubmeshAnimationBuffer const & buffer )
 		{
 			castor3d::MorphFlags result{};
 
@@ -222,7 +95,7 @@ namespace c3d_assimp
 
 			for ( auto & skeleton : scene.getSkeletonCache() )
 			{
-				if ( auto node = sceneRootNode.FindNode( skeleton.second->getRootNode()->getName().c_str() );
+				if ( auto node = sceneRootNode.FindNode( file.getExternalName( skeleton.second->getRootNode()->getName() ).c_str() );
 					&skelRootNode == node )
 				{
 					return skeleton.second.get();
@@ -264,7 +137,6 @@ namespace c3d_assimp
 			{
 				auto matName = file.getMaterialName( aiMesh->mMaterialIndex );
 				auto materialRes = scene.tryFindMaterial( matName );
-				castor3d::MaterialRPtr material{};
 
 				if ( !materialRes.lock() )
 				{
@@ -278,17 +150,8 @@ namespace c3d_assimp
 						, castor3d::Parameters{}
 						, std::map< castor3d::TextureFlag, castor3d::TextureConfiguration >{} ) )
 					{
-						material = mat.get();
 						scene.getMaterialView().add( matName, mat, true );
 					}
-					else
-					{
-						material = scene.getEngine()->getDefaultMaterial();
-					}
-				}
-				else
-				{
-					material = &( *materialRes.lock() );
 				}
 
 				doProcessMesh( aiScene
