@@ -6,9 +6,9 @@
 		<Expand>
 			<Item Name="importer">m_importer</Item>
 			<Item Name="scene">m_scene</Item>
-      <Item Name="sceneData">m_sceneData</Item>
+			<Item Name="aiScene">m_aiScene</Item>
       <Item Name="bonesNodes">m_bonesNodes</Item>
-      <Item Name="meshAnimBuffers">m_meshAnimBuffers</Item>
+      <Item Name="sceneData">m_sceneData</Item>
 		</Expand>
 	</Type>
 
