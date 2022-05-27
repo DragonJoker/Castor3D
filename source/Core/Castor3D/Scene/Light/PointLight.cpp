@@ -64,7 +64,6 @@ namespace castor3d
 			}
 
 			castor::Angle iAlpha;
-			castor::Point3f pos;
 
 			for ( uint32_t k = 0; k < lgtpoint::FaceCount; ++k )
 			{
