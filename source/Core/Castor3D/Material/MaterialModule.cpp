@@ -20,7 +20,7 @@ namespace castor3d
 		case TextureFlag::eSpecular:
 			return cuT( "specular" );
 		case TextureFlag::eMetalness:
-			return cuT( "metallic" );
+			return cuT( "metalness" );
 		case TextureFlag::eHeight:
 			return cuT( "height" );
 		case TextureFlag::eGlossiness:

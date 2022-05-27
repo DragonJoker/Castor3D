@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_GlslMetallicPbrReflectionModel_H___
-#define ___C3D_GlslMetallicPbrReflectionModel_H___
+#ifndef ___C3D_GlslPbrReflectionModel_H___
+#define ___C3D_GlslPbrReflectionModel_H___
 
 #include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"

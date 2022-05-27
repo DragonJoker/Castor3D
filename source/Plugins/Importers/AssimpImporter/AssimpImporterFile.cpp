@@ -495,7 +495,7 @@ namespace c3d_assimp
 			m_listedMeshes.emplace_back( it.first );
 			result.emplace_back( it.first
 				, ( it.second.skelNode
-					? findSkeletonName( m_bonesNodes, *it.second.skelNode )
+					? getInternalName( findSkeletonName( m_bonesNodes, *it.second.skelNode ) )
 					: castor::String{} ) );
 		}
 
@@ -705,8 +705,8 @@ namespace c3d_assimp
 					auto rootNode = findRootSkeletonNode( *m_aiScene->mRootNode
 						, castor::makeArrayView( aiMesh->mBones, aiMesh->mNumBones )
 						, meshNode );
-					auto skelName = findSkeletonName( m_bonesNodes
-						, *rootNode );
+					auto skelName = getInternalName( findSkeletonName( m_bonesNodes
+						, *rootNode ) );
 					m_sceneData.skeletons.emplace( skelName, SkeletonData{ rootNode } );
 					result.emplace( aiMesh, rootNode );
 				}

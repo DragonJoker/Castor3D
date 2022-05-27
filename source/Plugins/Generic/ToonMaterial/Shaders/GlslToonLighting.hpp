@@ -232,15 +232,23 @@ namespace toon::shader
 	class ToonPbrLightingModel
 		: public c3d::LightingModel
 	{
-	protected:
-		explicit ToonPbrLightingModel( bool isSpecularGlossiness
-			, sdw::ShaderWriter & writer
+	public:
+		explicit ToonPbrLightingModel( sdw::ShaderWriter & writer
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
 			, c3d::SssProfiles const * sssProfiles
 			, bool enableVolumetric );
 
-	public:
+		static const castor::String getName();
+		static c3d::LightingModelPtr create( sdw::ShaderWriter & writer
+			, c3d::Utils & utils
+			, c3d::ShadowOptions shadowOptions
+			, c3d::SssProfiles const * sssProfiles
+			, bool enableVolumetric );
+
+		std::unique_ptr< c3d::LightMaterial > declMaterial( std::string const & name
+			, bool enabled )override;
+
 		sdw::Vec3 combine( sdw::Vec3 const & directDiffuse
 			, sdw::Vec3 const & indirectDiffuse
 			, sdw::Vec3 const & directSpecular
@@ -347,7 +355,6 @@ namespace toon::shader
 		void doDeclareComputeSpotLightDiffuse()override;
 
 	public:
-		bool m_isSpecularGlossiness;
 		c3d::CookTorranceBRDF m_cookTorrance;
 		sdw::Function< sdw::Void
 			, c3d::InDirectionalLight
@@ -388,48 +395,6 @@ namespace toon::shader
 			, c3d::InSurface
 			, sdw::InVec3
 			, sdw::InInt > m_computeSpotDiffuse;
-	};
-
-	class ToonPbrMRLightingModel
-		: public ToonPbrLightingModel
-	{
-	public:
-		ToonPbrMRLightingModel( sdw::ShaderWriter & writer
-			, c3d::Utils & utils
-			, c3d::ShadowOptions shadowOptions
-			, c3d::SssProfiles const * sssProfiles
-			, bool enableVolumetric );
-
-		static const castor::String getName();
-		static c3d::LightingModelPtr create( sdw::ShaderWriter & writer
-			, c3d::Utils & utils
-			, c3d::ShadowOptions shadowOptions
-			, c3d::SssProfiles const * sssProfiles
-			, bool enableVolumetric );
-
-		std::unique_ptr< c3d::LightMaterial > declMaterial( std::string const & name
-			, bool enabled )override;
-	};
-
-	class ToonPbrSGLightingModel
-		: public ToonPbrLightingModel
-	{
-	public:
-		ToonPbrSGLightingModel( sdw::ShaderWriter & writer
-			, c3d::Utils & utils
-			, c3d::ShadowOptions shadowOptions
-			, c3d::SssProfiles const * sssProfiles
-			, bool enableVolumetric );
-
-		static const castor::String getName();
-		static c3d::LightingModelPtr create( sdw::ShaderWriter & writer
-			, c3d::Utils & utils
-			, c3d::ShadowOptions shadowOptions
-			, c3d::SssProfiles const * sssProfiles
-			, bool enableVolumetric );
-
-		std::unique_ptr< c3d::LightMaterial > declMaterial( std::string const & name
-			, bool enabled )override;
 	};
  }
 

@@ -75,6 +75,6 @@ namespace GuiCommon
 				}
 			} );
 		addProperty( grid, PROPERTY_SUBMESH_SPHERE_BOX, m_submesh.getBoundingSphere(), EmptyHandler );
-		addProperty( grid, PROPERTY_SUBMESH_SPHERE_BOX, m_submesh.getBoundingBox(), EmptyHandler );
+		addProperty( grid, PROPERTY_SUBMESH_CUBE_BOX, m_submesh.getBoundingBox(), EmptyHandler );
 	}
 }

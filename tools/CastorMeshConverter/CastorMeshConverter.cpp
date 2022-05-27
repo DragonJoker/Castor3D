@@ -9,8 +9,7 @@
 #include <Castor3D/Material/Pass/PassFactory.hpp>
 #include <Castor3D/Material/Pass/Phong/BlinnPhongPass.hpp>
 #include <Castor3D/Material/Pass/Phong/PhongPass.hpp>
-#include <Castor3D/Material/Pass/PBR/MetallicRoughnessPbrPass.hpp>
-#include <Castor3D/Material/Pass/PBR/SpecularGlossinessPbrPass.hpp>
+#include <Castor3D/Material/Pass/PBR/PbrPass.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Model/Mesh/MeshImporter.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
@@ -36,7 +35,7 @@ namespace convert
 	{
 		castor::Path input;
 		castor::String output;
-		castor::String passType{ castor3d::SpecularGlossinessPbrPass::Type };
+		castor::String passType{ castor3d::PbrPass::Type };
 		castor3d::exporter::ExportOptions options;
 		castor3d::Parameters params;
 	};
@@ -60,8 +59,7 @@ namespace convert
 		std::cout << "              VALUE can be one of:" << std::endl;
 		std::cout << "              - phong : Phong" << std::endl;
 		std::cout << "              - blinn_phong : Blinn-Phong" << std::endl;
-		std::cout << "              - pbr_sg : PBR Specular Glossiness (default value)" << std::endl;
-		std::cout << "              - pbr_mr : PBR Metallic Roughness (default value for glTF files)" << std::endl;
+		std::cout << "              - pbr : PBR (default value)" << std::endl;
 	}
 
 	static bool parseSwitchOption( castor::String const & option
@@ -149,13 +147,9 @@ namespace convert
 			{
 				options.passType = castor3d::BlinnPhongPass::Type;
 			}
-			else if ( value == "pbr_sg" )
+			else if ( value == "pbr" )
 			{
-				options.passType = castor3d::SpecularGlossinessPbrPass::Type;
-			}
-			else if ( value == "pbr_mr" )
-			{
-				options.passType = castor3d::MetallicRoughnessPbrPass::Type;
+				options.passType = castor3d::PbrPass::Type;
 			}
 			else
 			{
@@ -207,7 +201,7 @@ namespace convert
 		if ( !overridePassType
 			&& ( extension == "gltf" || extension == "glb" ) )
 		{
-			options.passType = castor3d::MetallicRoughnessPbrPass::Type;
+			options.passType = castor3d::PbrPass::Type;
 		}
 
 		return true;
@@ -263,8 +257,9 @@ namespace convert
 			{
 				if ( file.getExtension() == CU_SharedLibExt )
 				{
-					// Only load importer plugins.
-					if ( file.find( cuT( "Importer" ) ) != castor::String::npos )
+					// Only load importer and material plugins.
+					if ( file.find( cuT( "Importer" ) ) != castor::String::npos
+						|| file.find( cuT( "Material" ) ) != castor::String::npos )
 					{
 						if ( !engine.getPluginCache().loadPlugin( file ) )
 						{
@@ -368,7 +363,7 @@ int main( int argc, char * argv[] )
 		castor::Logger::initialise( castor::LogType::eDebug );
 #endif
 
-		castor::Logger::setFileName( castor::File::getExecutableDirectory() / cuT( "Tests.log" ) );
+		castor::Logger::setFileName( castor::File::getExecutableDirectory() / cuT( "CastorMeshConverter.log" ) );
 		{
 			castor3d::Engine engine
 			{
@@ -424,7 +419,7 @@ int main( int argc, char * argv[] )
 				}
 				else
 				{
-					castor3d::Scene scene{ cuT( "DummyScene" ), engine };
+					castor3d::Scene scene{ name, engine };
 					scene.setAmbientLight( castor::RgbColour::fromComponents( 1.0f, 1.0f, 1.0f ) );
 					scene.setBackgroundColour( castor::RgbColour::fromComponents( 0.5f, 0.5f, 0.5f ) );
 					scene.setPassesType( scene.getEngine()->getPassFactory().getNameId( options.passType ) );
@@ -435,8 +430,7 @@ int main( int argc, char * argv[] )
 						, options.params
 						, {} ) )
 					{
-						castor::Logger::logError( castor::makeStringStream() << "Mesh Import failed" );
-						scene.removeMesh( name );
+						castor::Logger::logError( castor::makeStringStream() << "Import failed" );
 					}
 					else
 					{

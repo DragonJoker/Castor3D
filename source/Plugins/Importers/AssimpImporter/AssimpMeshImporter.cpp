@@ -95,7 +95,26 @@ namespace c3d_assimp
 
 			for ( auto & skeleton : scene.getSkeletonCache() )
 			{
-				if ( auto node = sceneRootNode.FindNode( file.getExternalName( skeleton.second->getRootNode()->getName() ).c_str() );
+				auto skelRootNodeName = file.getExternalName( skeleton.second->getRootNode()->getName() );
+
+				if ( makeString( sceneRootNode.mName ) == skelRootNodeName )
+				{
+					auto children = castor::makeArrayView( sceneRootNode.mChildren
+						, sceneRootNode.mNumChildren );
+					auto it = std::find_if( children.begin()
+						, children.end()
+						, [&skelRootNode, &skelRootNodeName]( aiNode const * lookup )
+						{
+							auto node = lookup->FindNode( skelRootNodeName.c_str() );
+							return node != nullptr && node == &skelRootNode;
+						} );
+
+					if ( it != children.end() )
+					{
+						return skeleton.second.get();
+					}
+				}
+				else if ( auto node = sceneRootNode.FindNode( skelRootNodeName.c_str() );
 					&skelRootNode == node )
 				{
 					return skeleton.second.get();
@@ -302,7 +321,7 @@ namespace c3d_assimp
 			auto rootNode = findRootSkeletonNode( *aiScene.mRootNode
 				, castor::makeArrayView( aiMesh.mBones, aiMesh.mNumBones )
 				, meshNode );
-			auto skelName = findSkeletonName( file.getBonesNodes(), *rootNode );
+			auto skelName = file.getInternalName( findSkeletonName( file.getBonesNodes(), *rootNode ) );
 			auto skeleton = meshes::findSkeletonForMesh( file
 				, scene
 				, *file.getAiScene().mRootNode

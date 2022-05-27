@@ -1,4 +1,4 @@
-#include "Castor3D/Material/Pass/PBR/MetallicRoughnessPbrPass.hpp"
+#include "Castor3D/Material/Pass/PBR/PbrPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Material.hpp"
@@ -20,26 +20,27 @@
 namespace castor
 {
 	template<>
-	class TextWriter< castor3d::MetallicRoughnessPbrPass >
-		: public TextWriterT< castor3d::MetallicRoughnessPbrPass >
+	class TextWriter< castor3d::PbrPass >
+		: public TextWriterT< castor3d::PbrPass >
 	{
 	public:
 		TextWriter( String const & tabs
 			, Path const & folder
 			, String const & subfolder )
-			: TextWriterT< castor3d::MetallicRoughnessPbrPass >{ tabs }
+			: TextWriterT< castor3d::PbrPass >{ tabs }
 			, m_folder{ folder }
 			, m_subfolder{ subfolder }
 		{
 		}
 
-		bool operator()( castor3d::MetallicRoughnessPbrPass const & pass
+		bool operator()( castor3d::PbrPass const & pass
 			, StringStream & file )override
 		{
-			castor3d::log::info << tabs() << cuT( "Writing MetallicRoughnessPbrPass " ) << std::endl;
+			castor3d::log::info << tabs() << cuT( "Writing PbrPass " ) << std::endl;
 			return writeNamedSub( file, "albedo", pass.getAlbedo() )
 				&& write( file, "roughness", pass.getRoughness() )
-				&& write( file, "metallic", pass.getMetallic() );
+				&& write( file, "metalness", pass.getMetalness() )
+				&& writeNamedSub( file, "specular", pass.getSpecular() );
 		}
 
 	private:
@@ -52,10 +53,13 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace pbrmr
+	namespace pbr
 	{
 		namespace
 		{
+			static float constexpr DefaultMetalness = 0.0f;
+			static castor::Point3f constexpr DefaultSpecular = { 0.0f, 0.0f, 0.0f };
+
 			enum class Section
 				: uint32_t
 			{
@@ -65,10 +69,10 @@ namespace castor3d
 				eTextureRemapChannel = CU_MakeSectionName( 'M', 'R', 'T', 'C' ),
 			};
 
-			static castor::String const PassSectionName{ cuT( "pbrmr_pass" ) };
-			static castor::String const TextureSectionName{ cuT( "pbrmr_texture_unit" ) };
-			static castor::String const RemapSectionName{ cuT( "pbrmr_texture_remap" ) };
-			static castor::String const RemapChannelSectionName{ cuT( "pbrmr_texture_remap_channel" ) };
+			static castor::String const PassSectionName{ cuT( "pbr_pass" ) };
+			static castor::String const TextureSectionName{ cuT( "pbr_texture_unit" ) };
+			static castor::String const RemapSectionName{ cuT( "pbr_texture_remap" ) };
+			static castor::String const RemapChannelSectionName{ cuT( "pbr_texture_remap_channel" ) };
 
 			CU_ImplementAttributeParser( parserPassAlbedo )
 			{
@@ -80,7 +84,7 @@ namespace castor3d
 				}
 				else if ( !params.empty() )
 				{
-					auto & phongPass = static_cast< MetallicRoughnessPbrPass & >( *parsingContext.pass );
+					auto & phongPass = static_cast< PbrPass & >( *parsingContext.pass );
 					castor::RgbColour value;
 					params[0]->get( value );
 					phongPass.setAlbedo( value );
@@ -98,10 +102,10 @@ namespace castor3d
 				}
 				else if ( !params.empty() )
 				{
-					auto & phongPass = static_cast< MetallicRoughnessPbrPass & >( *parsingContext.pass );
+					auto & phongPass = static_cast< PbrPass & >( *parsingContext.pass );
 					float value;
 					params[0]->get( value );
-					phongPass.setMetallic( value );
+					phongPass.setMetalness( value );
 				}
 			}
 			CU_EndAttribute()
@@ -116,10 +120,46 @@ namespace castor3d
 				}
 				else if ( !params.empty() )
 				{
-					auto & phongPass = static_cast< MetallicRoughnessPbrPass & >( *parsingContext.pass );
+					auto & phongPass = static_cast< PbrPass & >( *parsingContext.pass );
 					float value;
 					params[0]->get( value );
 					phongPass.setRoughness( value );
+				}
+			}
+			CU_EndAttribute()
+
+			CU_ImplementAttributeParser( parserPassGlossiness )
+			{
+				auto & parsingContext = getParserContext( context );
+
+				if ( !parsingContext.pass )
+				{
+					CU_ParsingError( cuT( "No Pass initialised." ) );
+				}
+				else if ( !params.empty() )
+				{
+					auto & phongPass = static_cast< PbrPass & >( *parsingContext.pass );
+					float value;
+					params[0]->get( value );
+					phongPass.setGlossiness( value );
+				}
+			}
+			CU_EndAttribute()
+
+			CU_ImplementAttributeParser( parserPassSpecular )
+			{
+				auto & parsingContext = getParserContext( context );
+
+				if ( !parsingContext.pass )
+				{
+					CU_ParsingError( cuT( "No Pass initialised." ) );
+				}
+				else if ( !params.empty() )
+				{
+					auto & phongPass = static_cast< PbrPass & >( *parsingContext.pass );
+					castor::RgbColour value;
+					params[0]->get( value );
+					phongPass.setSpecular( value );
 				}
 			}
 			CU_EndAttribute()
@@ -178,6 +218,11 @@ namespace castor3d
 					{
 						parsingContext.textureConfiguration.roughnessMask[0] = 0x00FF0000;
 					}
+
+					if ( checkFlag( textures, TextureFlag::eSpecular ) )
+					{
+						parsingContext.textureConfiguration.specularMask[0] = 0x00FFFFFF;
+					}
 				}
 			}
 			CU_EndAttribute()
@@ -227,13 +272,43 @@ namespace castor3d
 			}
 			CU_EndAttribute()
 
+			CU_ImplementAttributeParser( parserUnitGlossinessMask )
+			{
+				auto & parsingContext = getParserContext( context );
+
+				if ( params.empty() )
+				{
+					CU_ParsingError( cuT( "Missing parameter." ) );
+				}
+				else
+				{
+					params[0]->get( parsingContext.textureConfiguration.glossinessMask[0] );
+				}
+			}
+			CU_EndAttribute()
+
+			CU_ImplementAttributeParser( parserUnitSpecularMask )
+			{
+				auto & parsingContext = getParserContext( context );
+
+				if ( params.empty() )
+				{
+					CU_ParsingError( cuT( "Missing parameter." ) );
+				}
+				else
+				{
+					params[0]->get( parsingContext.textureConfiguration.specularMask[0] );
+				}
+			}
+			CU_EndAttribute()
+
 			CU_ImplementAttributeParser( parserSceneImportTexRemap )
 			{
 				auto & parsingContext = getParserContext( context );
 				parsingContext.sceneImportConfig.textureRemaps.clear();
 				parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.end();
 			}
-			CU_EndAttributePush( pbrmr::Section::eTextureRemap )
+			CU_EndAttributePush( pbr::Section::eTextureRemap )
 
 			CU_ImplementAttributeParser( parserTexRemapSpecular )
 			{
@@ -241,7 +316,7 @@ namespace castor3d
 				parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( TextureFlag::eSpecular, TextureConfiguration{} ).first;
 				parsingContext.sceneImportConfig.textureRemapIt->second = TextureConfiguration{};
 			}
-			CU_EndAttributePush( pbrmr::Section::eTextureRemapChannel )
+			CU_EndAttributePush( pbr::Section::eTextureRemapChannel )
 
 			CU_ImplementAttributeParser( parserTexRemapNormal )
 			{
@@ -249,7 +324,7 @@ namespace castor3d
 				parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( TextureFlag::eNormal, TextureConfiguration{} ).first;
 				parsingContext.sceneImportConfig.textureRemapIt->second = TextureConfiguration{};
 			}
-			CU_EndAttributePush( pbrmr::Section::eTextureRemapChannel )
+			CU_EndAttributePush( pbr::Section::eTextureRemapChannel )
 
 			CU_ImplementAttributeParser( parserTexRemapAlbedoMask )
 			{
@@ -295,23 +370,53 @@ namespace castor3d
 				}
 			}
 			CU_EndAttribute()
+
+			CU_ImplementAttributeParser( parserTexRemapGlossinessMask )
+			{
+				auto & parsingContext = getParserContext( context );
+
+				if ( params.empty() )
+				{
+					CU_ParsingError( cuT( "Missing parameter." ) );
+				}
+				else
+				{
+					params[0]->get( parsingContext.sceneImportConfig.textureRemapIt->second.glossinessMask[0] );
+				}
+			}
+			CU_EndAttribute()
+
+			CU_ImplementAttributeParser( parserTexRemapSpecularMask )
+			{
+				auto & parsingContext = getParserContext( context );
+
+				if ( params.empty() )
+				{
+					CU_ParsingError( cuT( "Missing parameter." ) );
+				}
+				else
+				{
+					params[0]->get( parsingContext.sceneImportConfig.textureRemapIt->second.specularMask[0] );
+				}
+			}
+			CU_EndAttribute()
 		}
 	}
 
 	//*********************************************************************************************
 
-	castor::String const MetallicRoughnessPbrPass::Type = cuT( "metallic_roughness" );
-	castor::String const MetallicRoughnessPbrPass::LightingModel = shader::PbrMRLightingModel::getName();
+	castor::String const PbrPass::Type = cuT( "pbr" );
+	castor::String const PbrPass::LightingModel = shader::PbrLightingModel::getName();
 
-	MetallicRoughnessPbrPass::MetallicRoughnessPbrPass( Material & parent
+	PbrPass::PbrPass( Material & parent
 		, PassFlags initialFlags )
-		: MetallicRoughnessPbrPass{ parent
+		: PbrPass{ parent
 			, parent.getEngine()->getPassFactory().getNameId( Type )
 			, initialFlags }
 	{
 	}
 	
-	MetallicRoughnessPbrPass::MetallicRoughnessPbrPass( Material & parent
+	PbrPass::PbrPass( Material & parent
 		, PassTypeID typeID
 		, PassFlags initialFlags )
 		: Pass{ parent
@@ -319,25 +424,29 @@ namespace castor3d
 			, initialFlags | PassFlag::eImageBasedLighting }
 		, m_albedo{ m_dirty, castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
 		, m_roughness{ m_dirty, 1.0f }
-		, m_metalness{ m_dirty, 0.0f }
+		, m_metalness{ m_dirty, pbr::DefaultMetalness }
+		, m_specular{ m_dirty
+			, castor::RgbColour::fromComponents( pbr::DefaultSpecular->x
+				, pbr::DefaultSpecular->y
+				, pbr::DefaultSpecular->z ) }
 	{
 	}
 
-	PassSPtr MetallicRoughnessPbrPass::create( Material & parent )
+	PassSPtr PbrPass::create( Material & parent )
 	{
-		return std::make_shared< MetallicRoughnessPbrPass >( parent );
+		return std::make_shared< PbrPass >( parent );
 	}
 
-	castor::AttributeParsers MetallicRoughnessPbrPass::createParsers()
+	castor::AttributeParsers PbrPass::createParsers()
 	{
-		return createParsers( uint32_t( pbrmr::Section::ePass )
-			, uint32_t( pbrmr::Section::eTextureUnit )
-			, uint32_t( pbrmr::Section::eTextureRemap )
-			, cuT( "pbrmr_texture_remap_config" )
-			, uint32_t( pbrmr::Section::eTextureRemapChannel ) );
+		return createParsers( uint32_t( pbr::Section::ePass )
+			, uint32_t( pbr::Section::eTextureUnit )
+			, uint32_t( pbr::Section::eTextureRemap )
+			, cuT( "pbr_texture_remap_config" )
+			, uint32_t( pbr::Section::eTextureRemapChannel ) );
 	}
 
-	castor::AttributeParsers MetallicRoughnessPbrPass::createParsers( uint32_t mtlSectionID
+	castor::AttributeParsers PbrPass::createParsers( uint32_t mtlSectionID
 		, uint32_t texSectionID
 		, uint32_t texRemapSectionID
 		, castor::String const & texRemapSectionName
@@ -355,79 +464,94 @@ namespace castor3d
 			result[getName( TextureFlag::eAlbedo, true )] = uint32_t( TextureFlag::eAlbedo );
 			result[getName( TextureFlag::eMetalness, true )] = uint32_t( TextureFlag::eMetalness );
 			result[getName( TextureFlag::eRoughness, true )] = uint32_t( TextureFlag::eRoughness );
+			result[getName( TextureFlag::eGlossiness, true )] = uint32_t( TextureFlag::eGlossiness );
+			result[getName( TextureFlag::eSpecular, true )] = uint32_t( TextureFlag::eSpecular );
 			return result;
 		}();
 
 		castor::AttributeParsers result;
 
-		Pass::addParser( result, mtlSectionID, cuT( "albedo" ), pbrmr::parserPassAlbedo, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
-		Pass::addParser( result, mtlSectionID, cuT( "metallic" ), pbrmr::parserPassMetalness, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		Pass::addParser( result, mtlSectionID, cuT( "roughness" ), pbrmr::parserPassRoughness, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		Pass::addParser( result, texSectionID, cuT( "albedo_mask" ), pbrmr::parserUnitAlbedoMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		Pass::addParser( result, texSectionID, cuT( "metalness_mask" ), pbrmr::parserUnitMetalnessMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		Pass::addParser( result, texSectionID, cuT( "roughness_mask" ), pbrmr::parserUnitRoughnessMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		Pass::addParser( result, texSectionID, cuT( "channel" ), pbrmr::parserUnitChannel, { castor::makeParameter< castor::ParameterType::eBitwiseOred32BitsCheckedText >( textureChannels ) } );
+		Pass::addParser( result, mtlSectionID, cuT( "albedo" ), pbr::parserPassAlbedo, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
+		Pass::addParser( result, mtlSectionID, cuT( "metalness" ), pbr::parserPassMetalness, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		Pass::addParser( result, mtlSectionID, cuT( "roughness" ), pbr::parserPassRoughness, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		Pass::addParser( result, mtlSectionID, cuT( "glossiness" ), pbr::parserPassGlossiness, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		Pass::addParser( result, mtlSectionID, cuT( "specular" ), pbr::parserPassSpecular, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
+		Pass::addParser( result, texSectionID, cuT( "albedo_mask" ), pbr::parserUnitAlbedoMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, texSectionID, cuT( "metalness_mask" ), pbr::parserUnitMetalnessMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, texSectionID, cuT( "roughness_mask" ), pbr::parserUnitRoughnessMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, texSectionID, cuT( "glossiness_mask" ), pbr::parserUnitGlossinessMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, texSectionID, cuT( "specular_mask" ), pbr::parserUnitSpecularMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, texSectionID, cuT( "channel" ), pbr::parserUnitChannel, { castor::makeParameter< castor::ParameterType::eBitwiseOred32BitsCheckedText >( textureChannels ) } );
 		Pass::addCommonParsers( mtlSectionID, texSectionID, remapChannelSectionID, result );
 
-		Pass::addParser( result, uint32_t( CSCNSection::eSceneImport ), texRemapSectionName, pbrmr::parserSceneImportTexRemap );
+		Pass::addParser( result, uint32_t( CSCNSection::eSceneImport ), texRemapSectionName, pbr::parserSceneImportTexRemap );
 
-		Pass::addParser( result, texRemapSectionID, cuT( "specular" ), pbrmr::parserTexRemapSpecular );
-		Pass::addParser( result, texRemapSectionID, cuT( "normal" ), pbrmr::parserTexRemapNormal );
+		Pass::addParser( result, texRemapSectionID, cuT( "specular" ), pbr::parserTexRemapSpecular );
+		Pass::addParser( result, texRemapSectionID, cuT( "normal" ), pbr::parserTexRemapNormal );
 
-		Pass::addParser( result, remapChannelSectionID, cuT( "albedo_mask" ), pbrmr::parserTexRemapAlbedoMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		Pass::addParser( result, remapChannelSectionID, cuT( "metalness_mask" ), pbrmr::parserTexRemapMetalnessMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		Pass::addParser( result, remapChannelSectionID, cuT( "roughness_mask" ), pbrmr::parserTexRemapRoughnessMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, remapChannelSectionID, cuT( "albedo_mask" ), pbr::parserTexRemapAlbedoMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, remapChannelSectionID, cuT( "metalness_mask" ), pbr::parserTexRemapMetalnessMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, remapChannelSectionID, cuT( "roughness_mask" ), pbr::parserTexRemapRoughnessMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, remapChannelSectionID, cuT( "glossiness_mask" ), pbr::parserTexRemapGlossinessMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, remapChannelSectionID, cuT( "specular_mask" ), pbr::parserTexRemapSpecularMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 
 		return result;
 	}
 
-	castor::StrUInt32Map MetallicRoughnessPbrPass::createSections()
+	castor::StrUInt32Map PbrPass::createSections()
 	{
 		return
 		{
-			{ uint32_t( pbrmr::Section::ePass ), pbrmr::PassSectionName },
-			{ uint32_t( pbrmr::Section::eTextureUnit ), pbrmr::TextureSectionName },
-			{ uint32_t( pbrmr::Section::eTextureRemap ), pbrmr::RemapSectionName },
-			{ uint32_t( pbrmr::Section::eTextureRemapChannel ), pbrmr::RemapChannelSectionName },
+			{ uint32_t( pbr::Section::ePass ), pbr::PassSectionName },
+			{ uint32_t( pbr::Section::eTextureUnit ), pbr::TextureSectionName },
+			{ uint32_t( pbr::Section::eTextureRemap ), pbr::RemapSectionName },
+			{ uint32_t( pbr::Section::eTextureRemapChannel ), pbr::RemapChannelSectionName },
 		};
 	}
 
-	void MetallicRoughnessPbrPass::fillBuffer( PassBuffer & buffer )const
+	void PbrPass::fillBuffer( PassBuffer & buffer )const
 	{
-		auto f0 = castor::RgbColour{ 0.04f, 0.04f, 0.04f } *( 1.0f - getMetallic() ) + getAlbedo() * getMetallic();
+		auto metalness = m_metalnessSet
+			? getMetalness()
+			: ( m_specularSet
+				? float( castor::point::length( castor::Point3f{ getSpecular().constPtr() } ) )
+				: pbr::DefaultMetalness );
+		auto specular = m_specularSet
+			? getSpecular()
+			: ( castor::RgbColour{ 0.04f, 0.04f, 0.04f } *( 1.0f - metalness ) + getAlbedo() * metalness );
 		auto data = buffer.getData( getId() );
 
 		data.colourDiv->r = getAlbedo().red();
 		data.colourDiv->g = getAlbedo().green();
 		data.colourDiv->b = getAlbedo().blue();
 		data.colourDiv->a = getRoughness();
-		data.specDiv->r = f0.red();
-		data.specDiv->g = f0.green();
-		data.specDiv->b = f0.blue();
-		data.specDiv->a = getMetallic();
+		data.specDiv->r = specular.red();
+		data.specDiv->g = specular.green();
+		data.specDiv->b = specular.blue();
+		data.specDiv->a = metalness;
 
 		doFillData( data );
 	}
 
-	uint32_t MetallicRoughnessPbrPass::getPassSectionID()const
+	uint32_t PbrPass::getPassSectionID()const
 	{
-		return uint32_t( pbrmr::Section::ePass );
+		return uint32_t( pbr::Section::ePass );
 	}
 
-	uint32_t MetallicRoughnessPbrPass::getTextureSectionID()const
+	uint32_t PbrPass::getTextureSectionID()const
 	{
-		return uint32_t( pbrmr::Section::eTextureUnit );
+		return uint32_t( pbr::Section::eTextureUnit );
 	}
 
-	bool MetallicRoughnessPbrPass::writeText( castor::String const & tabs
+	bool PbrPass::writeText( castor::String const & tabs
 		, castor::Path const & folder
 		, castor::String const & subfolder
 		, castor::StringStream & file )const
 	{
-		return castor::TextWriter< MetallicRoughnessPbrPass >{ tabs, folder, subfolder }( *this, file );
+		return castor::TextWriter< PbrPass >{ tabs, folder, subfolder }( *this, file );
 	}
 
-	void MetallicRoughnessPbrPass::doAccept( PassVisitorBase & vis )
+	void PbrPass::doAccept( PassVisitorBase & vis )
 	{
 		vis.visit( cuT( "Albedo" )
 			, m_albedo );
@@ -435,23 +559,28 @@ namespace castor3d
 			, m_metalness );
 		vis.visit( cuT( "Roughness" )
 			, m_roughness );
+		vis.visit( cuT( "Specular" )
+			, m_specular );
 	}
 
-	void MetallicRoughnessPbrPass::doAccept( castor3d::TextureConfiguration & configuration
+	void PbrPass::doAccept( castor3d::TextureConfiguration & configuration
 		, castor3d::PassVisitorBase & vis )
 	{
 		vis.visit( cuT( "Albedo" ), castor3d::TextureFlag::eAlbedo, configuration.colourMask, 3u );
 		vis.visit( cuT( "Metalness" ), castor3d::TextureFlag::eMetalness, configuration.metalnessMask, 1u );
 		vis.visit( cuT( "Roughness" ), castor3d::TextureFlag::eRoughness, configuration.roughnessMask, 1u );
+		vis.visit( cuT( "Glossiness" ), castor3d::TextureFlag::eGlossiness, configuration.glossinessMask, 1u );
+		vis.visit( cuT( "Specular" ), castor3d::TextureFlag::eSpecular, configuration.specularMask, 3u );
 	}
 
-	void MetallicRoughnessPbrPass::doPrepareTextures( TextureUnitPtrArray & result )
+	void PbrPass::doPrepareTextures( TextureUnitPtrArray & result )
 	{
 		doJoinDifOpa( result, cuT( "AlbOpa" ) );
 		doJoinMtlRgh( result );
+		doJoinSpcGls( result );
 	}
 
-	void MetallicRoughnessPbrPass::doJoinMtlRgh( TextureUnitPtrArray & result )
+	void PbrPass::doJoinMtlRgh( TextureUnitPtrArray & result )
 	{
 		doMergeImages( TextureFlag::eMetalness
 			, offsetof( TextureConfiguration, metalnessMask )
@@ -460,6 +589,18 @@ namespace castor3d
 			, offsetof( TextureConfiguration, roughnessMask )
 			, 0x0000FF00
 			, cuT( "MtlRgh" )
+			, result );
+	}
+
+	void PbrPass::doJoinSpcGls( TextureUnitPtrArray & result )
+	{
+		doMergeImages( TextureFlag::eSpecular
+			, offsetof( TextureConfiguration, specularMask )
+			, 0x00FFFFFF
+			, TextureFlag::eGlossiness
+			, offsetof( TextureConfiguration, glossinessMask )
+			, 0xFF000000
+			, cuT( "SpcGls" )
 			, result );
 	}
 }

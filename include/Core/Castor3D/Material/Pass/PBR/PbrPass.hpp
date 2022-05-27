@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_SpecularGlossinessPbrPass_H___
-#define ___C3D_SpecularGlossinessPbrPass_H___
+#ifndef ___C3D_PbrPass_H___
+#define ___C3D_PbrPass_H___
 
 #include "Castor3D/Material/Pass/Pass.hpp"
 
@@ -12,7 +12,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class SpecularGlossinessPbrPass
+	class PbrPass
 		: public Pass
 	{
 	public:
@@ -26,7 +26,7 @@ namespace castor3d
 		 *\param[in]	parent			Le matériau parent.
 		 *\param[in]	initialFlags	Les flags initiaux de la passe.
 		 */
-		C3D_API explicit SpecularGlossinessPbrPass( Material & parent
+		C3D_API explicit PbrPass( Material & parent
 			, PassFlags initialFlags = PassFlag::eNone );
 		/**
 		 *\~english
@@ -40,7 +40,7 @@ namespace castor3d
 		 *\param[in]	typeID			L'ID du type réel de la passe.
 		 *\param[in]	initialFlags	Les flags initiaux de la passe.
 		 */
-		C3D_API SpecularGlossinessPbrPass( Material & parent
+		C3D_API PbrPass( Material & parent
 			, PassTypeID typeID
 			, PassFlags initialFlags = PassFlag::eNone );
 
@@ -72,85 +72,89 @@ namespace castor3d
 			, castor::String const & subfolder
 			, castor::StringStream & file )const override;
 		/**
-		 *\copydoc		castor3d::Pass::setColour
-		 */
-		void setColour( castor::RgbColour const & value ) override
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		castor::RgbColour const & getAlbedo()const
 		{
-			setDiffuse( value );
+			return *m_albedo;
+		}
+
+		float getRoughness()const
+		{
+			return m_roughness;
+		}
+
+		float getGlossiness()const
+		{
+			return 1.0f - m_roughness;
+		}
+
+		float const & getMetalness()const
+		{
+			return *m_metalness;
+		}
+
+		castor::RgbColour const & getSpecular()const
+		{
+			return *m_specular;
 		}
 		/**
 		 *\copydoc		castor3d::Pass::getColour
 		 */
 		castor::RgbColour const & getColour()const override
 		{
-			return getDiffuse();
+			return getAlbedo();
 		}
+		/**@}*/
 		/**
-		 *\~english
-		 *\brief		Sets the albedo colour.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit la couleur d'albédo.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		void setDiffuse( castor::RgbColour const & value )
+		*\~english
+		*name
+		*	Mutators.
+		*\~french
+		*name
+		*	Mutateurs.
+		*/
+		/**@{*/
+		void setAlbedo( castor::RgbColour const & value )
 		{
-			m_diffuse = value;
+			m_albedo = value;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the glossiness.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit la brillance.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
+
+		void setRoughness( float value )
+		{
+			m_roughness = value;
+		}
+
 		void setGlossiness( float value )
 		{
-			m_glossiness = value;
+			m_roughness = 1.0f - value;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the specular.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit la spécularité.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
+
+		void setMetalness( float value )
+		{
+			m_metalness = value;
+			m_metalnessSet = true;
+		}
+
 		void setSpecular( castor::RgbColour const & value )
 		{
 			m_specular = value;
+			m_specularSet = true;
 		}
 		/**
-		 *\~english
-		 *\return		The colour.
-		 *\~french
-		 *\return		La couleur.
+		 *\copydoc		castor3d::Pass::setColour
 		 */
-		castor::RgbColour const & getDiffuse()const
+		void setColour( castor::RgbColour const & value ) override
 		{
-			return *m_diffuse;
+			setAlbedo( value );
 		}
-		/**
-		 *\~english
-		 *\return		The glossiness.
-		 *\~french
-		 *\return		La brillance.
-		 */
-		float getGlossiness()const
-		{
-			return m_glossiness;
-		}
-		/**
-		 *\~english
-		 *\return		The specular.
-		 *\~french
-		 *\return		La spécularité.
-		 */
-		castor::RgbColour const & getSpecular()const
-		{
-			return *m_specular;
-		}
+		/**@}*/
 
 	public:
 		C3D_API static castor::String const Type;
@@ -163,18 +167,16 @@ namespace castor3d
 
 	private:
 		C3D_API void doPrepareTextures( TextureUnitPtrArray & result )override;
+		C3D_API void doJoinMtlRgh( TextureUnitPtrArray & result );
 		C3D_API void doJoinSpcGls( TextureUnitPtrArray & result );
 
 	private:
-		//!\~english	The diffuse colour.
-		//!\~french		La couleur diffuse.
-		castor::GroupChangeTracked< castor::RgbColour > m_diffuse;
-		//!\~english	The specular colour.
-		//!\~french		La couleur spéculaire.
+		castor::GroupChangeTracked< castor::RgbColour > m_albedo;
+		castor::GroupChangeTracked< float > m_roughness;
+		castor::GroupChangeTracked< float > m_metalness;
 		castor::GroupChangeTracked< castor::RgbColour > m_specular;
-		//!\~english	The reflectance.
-		//!\~french		La réflectivité.
-		castor::GroupChangeTracked< float > m_glossiness;
+		bool m_specularSet{ false };
+		bool m_metalnessSet{ false };
 	};
 }
 

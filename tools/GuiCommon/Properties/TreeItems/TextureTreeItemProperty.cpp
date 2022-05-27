@@ -337,58 +337,14 @@ namespace GuiCommon
 
 	void TextureTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )
 	{
-		static wxString CATEGORY_TEXTURE = _( "Texture" );
-		static wxString PROPERTY_TEXTURE_IMAGE = _( "Image" );
-		static wxString PROPERTY_TEXTURE_TEXCOORDSET = _( "Texcoord Set" );
-		static wxString PROPERTY_FLAG_DIFFUSE = _( "Diffuse" );
-		static wxString PROPERTY_FLAG_SPECULAR = _( "Specular" );
-		static wxString PROPERTY_FLAG_METALLIC = _( "Metallic" );
-		static wxString PROPERTY_FLAG_ALBEDO = _( "Albedo" );
-		static wxString PROPERTY_FLAG_SHININESS = _( "Shininess" );
-		static wxString PROPERTY_FLAG_GLOSSINESS = _( "Glossiness" );
-		static wxString PROPERTY_FLAG_ROUGHNESS = _( "Roughness" );
-		static wxString PROPERTY_FLAG_NORMAL = _( "Normal" );
-		static wxString PROPERTY_FLAG_OPACITY = _( "Opacity" );
-		static wxString PROPERTY_FLAG_HEIGHT = _( "Height" );
-		static wxString PROPERTY_FLAG_EMISSIVE = _( "Emissive" );
-		static wxString PROPERTY_FLAG_OCCLUSION = _( "Occlusion" );
-		static wxString PROPERTY_FLAG_TRANSMITTANCE = _( "Transmittance" );
-		static wxString PROPERTY_IS_DIFFUSE = _( "Diffuse Map" );
-		static wxString PROPERTY_IS_ALBEDO = _( "Albedo Map" );
-		static wxString PROPERTY_IS_SPECULAR = _( "Specular Map" );
-		static wxString PROPERTY_IS_METALLIC = _( "Metallic Map" );
-		static wxString PROPERTY_IS_SHININESS = _( "Shininess Map" );
-		static wxString PROPERTY_IS_GLOSSINESS = _( "Glossiness Map" );
-		static wxString PROPERTY_IS_ROUGHNESS = _( "Roughness Map" );
-		static wxString PROPERTY_IS_NORMAL = _( "Normal Map" );
-		static wxString PROPERTY_IS_OPACITY = _( "Opacity Map" );
-		static wxString PROPERTY_IS_HEIGHT = _( "Height Map" );
-		static wxString PROPERTY_IS_EMISSIVE = _( "Emissive Map" );
-		static wxString PROPERTY_IS_OCCLUSION = _( "Occlusion Map" );
-		static wxString PROPERTY_IS_TRANSMITTANCE = _( "Transmittance Map" );
-		static wxString PROPERTY_COMP_DIFFUSE = _( "Diffuse Components" );
-		static wxString PROPERTY_COMP_ALBEDO = _( "Albedo Components" );
-		static wxString PROPERTY_COMP_SPECULAR = _( "Specular Components" );
-		static wxString PROPERTY_COMP_METALLIC = _( "Metallic Component" );
-		static wxString PROPERTY_COMP_SHININESS = _( "Shininess Component" );
-		static wxString PROPERTY_COMP_GLOSSINESS = _( "Glossiness Component" );
-		static wxString PROPERTY_COMP_ROUGHNESS = _( "Roughness Component" );
-		static wxString PROPERTY_COMP_NORMAL = _( "Normal Components" );
-		static wxString PROPERTY_COMP_OPACITY = _( "Opacity Component" );
-		static wxString PROPERTY_COMP_HEIGHT = _( "Height Component" );
-		static wxString PROPERTY_COMP_EMISSIVE = _( "Emissive Components" );
-		static wxString PROPERTY_COMP_OCCLUSION = _( "Occlusion Component" );
-		static wxString PROPERTY_COMP_TRANSMITTANCE = _( "Transmittance Component" );
-		static wxString PROPERTY_COMPONENT = _( "Component" );
-		static wxString PROPERTY_COMPONENTS = _( "Components" );
-		static wxString PROPERTY_FACTOR_NORMAL = _( "Normal Factor" );
-		static wxString PROPERTY_FACTOR_HEIGHT = _( "Height Factor" );
-		static wxString PROPERTY_DIRECTX_NORMAL = _( "Normal DirectX" );
-
 		auto unit = getTexture();
 
 		if ( unit )
 		{
+			static wxString CATEGORY_TEXTURE = _( "Texture" );
+			static wxString PROPERTY_TEXTURE_IMAGE = _( "Image" );
+			static wxString PROPERTY_TEXTURE_TEXCOORDSET = _( "Texcoord Set" );
+
 			grid->Append( new wxPropertyCategory( CATEGORY_TEXTURE ) );
 
 			if ( unit->getTexture()->isStatic() )

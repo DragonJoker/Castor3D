@@ -496,5 +496,25 @@ namespace castor
 				} );
 			return result;
 		}
+
+		bool endsWith( String const & value
+			, String const & lookup )
+		{
+			auto it = value.find( lookup );
+			bool result = it != String::npos;
+
+			if ( result )
+			{
+				result = ( it + lookup.size() ) == value.size();
+			}
+
+			return result;
+		}
+
+		bool startsWith( String const & value
+			, String const & lookup )
+		{
+			return value.find( lookup ) == 0;
+		}
 	}
 }

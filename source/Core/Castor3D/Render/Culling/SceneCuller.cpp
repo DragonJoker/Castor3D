@@ -346,7 +346,6 @@ namespace castor3d
 		result.a |= uint64_t( texturesCount ) << offset;
 		offset += maxTexturesSize;
 		result.a |= uint64_t( texturesFlags ) << offset;
-		offset += maxTextureSize;
 		CU_Require( passLayerIndex < MaxPassLayers );
 		CU_Require( ( morphTargetsOffset >> maxTargetOffsetSize ) == 0 );
 		result.b = morphTargetsOffset
