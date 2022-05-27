@@ -967,21 +967,16 @@ namespace toon::shader
 				, ToonPbrLightMaterial & pbrLightMat
 				, sdw::Vec3 & emissive )
 			{
-				if ( pbrLightMat.isSpecularGlossiness() )
+				if ( !checkFlag( textureFlags, castor3d::TextureFlag::eMetalness )
+					&& ( checkFlag( textureFlags, castor3d::TextureFlag::eSpecular ) || checkFlag( textureFlags, castor3d::TextureFlag::eAlbedo ) ) )
 				{
-					if ( !checkFlag( textureFlags, castor3d::TextureFlag::eMetalness )
-						&& ( checkFlag( textureFlags, castor3d::TextureFlag::eSpecular ) || checkFlag( textureFlags, castor3d::TextureFlag::eAlbedo ) ) )
-					{
-						pbrLightMat.metalness = castor3d::shader::LightMaterial::computeMetalness( pbrLightMat.albedo, pbrLightMat.specular );
-					}
+					pbrLightMat.metalness = castor3d::shader::LightMaterial::computeMetalness( pbrLightMat.albedo, pbrLightMat.specular );
 				}
-				else
+
+				if ( !checkFlag( textureFlags, castor3d::TextureFlag::eSpecular )
+					&& ( checkFlag( textureFlags, castor3d::TextureFlag::eMetalness ) || checkFlag( textureFlags, castor3d::TextureFlag::eAlbedo ) ) )
 				{
-					if ( !checkFlag( textureFlags, castor3d::TextureFlag::eSpecular )
-						&& ( checkFlag( textureFlags, castor3d::TextureFlag::eMetalness ) || checkFlag( textureFlags, castor3d::TextureFlag::eAlbedo ) ) )
-					{
-						pbrLightMat.specular = castor3d::shader::LightMaterial::computeF0( pbrLightMat.albedo, pbrLightMat.metalness );
-					}
+					pbrLightMat.specular = castor3d::shader::LightMaterial::computeF0( pbrLightMat.albedo, pbrLightMat.metalness );
 				}
 
 				if ( checkFlag( passFlags, castor3d::PassFlag::eLighting )
@@ -993,8 +988,7 @@ namespace toon::shader
 		}
 	}
 
-	ToonPbrLightingModel::ToonPbrLightingModel( bool isSpecularGlossiness
-		, sdw::ShaderWriter & writer
+	ToonPbrLightingModel::ToonPbrLightingModel( sdw::ShaderWriter & writer
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
@@ -1004,10 +998,33 @@ namespace toon::shader
 			, std::move( shadowOptions )
 			, sssProfiles
 			, enableVolumetric
-			, isSpecularGlossiness ? std::string{ "c3d_pbrsg_toon_" } : std::string{ "c3d_pbrmr_toon_" } }
-		, m_isSpecularGlossiness{ isSpecularGlossiness }
+			, std::string{ "c3d_pbr_toon_" } }
 		, m_cookTorrance{ writer, utils }
 	{
+	}
+
+	const castor::String ToonPbrLightingModel::getName()
+	{
+		return cuT( "c3d.toon.pbr" );
+	}
+
+	c3d::LightingModelPtr ToonPbrLightingModel::create( sdw::ShaderWriter & writer
+		, c3d::Utils & utils
+		, c3d::ShadowOptions shadowOptions
+		, c3d::SssProfiles const * sssProfiles
+		, bool enableVolumetric )
+	{
+		return std::make_unique< ToonPbrLightingModel >( writer
+			, utils
+			, std::move( shadowOptions )
+			, sssProfiles
+			, enableVolumetric );
+	}
+
+	std::unique_ptr< c3d::LightMaterial > ToonPbrLightingModel::declMaterial( std::string const & name
+		, bool enabled )
+	{
+		return m_writer.declDerivedLocale< c3d::LightMaterial, ToonPbrLightMaterial >( name, enabled );
 	}
 
 	sdw::Vec3 ToonPbrLightingModel::combine( sdw::Vec3 const & directDiffuse
@@ -1736,86 +1753,6 @@ namespace toon::shader
 			, c3d::InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
 			, sdw::InInt( m_writer, "receivesShadows" ) );
-	}
-
-	//***********************************************************************************************
-
-	ToonPbrMRLightingModel::ToonPbrMRLightingModel( sdw::ShaderWriter & writer
-		, c3d::Utils & utils
-		, c3d::ShadowOptions shadowOptions
-		, c3d::SssProfiles const * sssProfiles
-		, bool enableVolumetric )
-		: ToonPbrLightingModel{ false
-			, writer
-			, utils
-			, std::move( shadowOptions )
-			, sssProfiles
-			, enableVolumetric }
-	{
-	}
-
-	const castor::String ToonPbrMRLightingModel::getName()
-	{
-		return cuT( "c3d.toon.pbrmr" );
-	}
-
-	c3d::LightingModelPtr ToonPbrMRLightingModel::create( sdw::ShaderWriter & writer
-		, c3d::Utils & utils
-		, c3d::ShadowOptions shadowOptions
-		, c3d::SssProfiles const * sssProfiles
-		, bool enableVolumetric )
-	{
-		return std::make_unique< ToonPbrMRLightingModel >( writer
-			, utils
-			, std::move( shadowOptions )
-			, sssProfiles
-			, enableVolumetric );
-	}
-
-	std::unique_ptr< c3d::LightMaterial > ToonPbrMRLightingModel::declMaterial( std::string const & name
-		, bool enabled )
-	{
-		return m_writer.declDerivedLocale< c3d::LightMaterial, ToonPbrMRLightMaterial >( name, enabled );
-	}
-
-	//***********************************************************************************************
-
-	ToonPbrSGLightingModel::ToonPbrSGLightingModel( sdw::ShaderWriter & writer
-		, c3d::Utils & utils
-		, c3d::ShadowOptions shadowOptions
-		, c3d::SssProfiles const * sssProfiles
-		, bool enableVolumetric )
-		: ToonPbrLightingModel{ true
-			, writer
-			, utils
-			, std::move( shadowOptions )
-			, sssProfiles
-			, enableVolumetric }
-	{
-	}
-
-	const castor::String ToonPbrSGLightingModel::getName()
-	{
-		return cuT( "c3d.toon.pbrsg" );
-	}
-
-	c3d::LightingModelPtr ToonPbrSGLightingModel::create( sdw::ShaderWriter & writer
-		, c3d::Utils & utils
-		, c3d::ShadowOptions shadowOptions
-		, c3d::SssProfiles const * sssProfiles
-		, bool enableVolumetric )
-	{
-		return std::make_unique< ToonPbrSGLightingModel >( writer
-			, utils
-			, std::move( shadowOptions )
-			, sssProfiles
-			, enableVolumetric );
-	}
-
-	std::unique_ptr< c3d::LightMaterial > ToonPbrSGLightingModel::declMaterial( std::string const & name
-		, bool enabled )
-	{
-		return m_writer.declDerivedLocale< c3d::LightMaterial, ToonPbrSGLightMaterial >( name, enabled );
 	}
 
 	//*********************************************************************************************

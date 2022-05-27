@@ -43,26 +43,18 @@ extern "C"
 				, toon::ToonBlinnPhongPass::createSections()
 				, &toon::shader::ToonBlinnPhongLightingModel::create
 				, false } );
-		engine->getPassFactory().registerType( toon::ToonMetallicRoughnessPass::Type
-			, { toon::shader::ToonPbrMRLightingModel::getName()
-				, toon::ToonMetallicRoughnessPass::create
-				, toon::ToonMetallicRoughnessPass::createParsers()
-				, toon::ToonMetallicRoughnessPass::createSections()
-				, &toon::shader::ToonPbrMRLightingModel::create
-				, true } );
-		engine->getPassFactory().registerType( toon::ToonSpecularGlossinessPass::Type
-			, { toon::shader::ToonPbrSGLightingModel::getName()
-				, toon::ToonSpecularGlossinessPass::create
-				, toon::ToonSpecularGlossinessPass::createParsers()
-				, toon::ToonSpecularGlossinessPass::createSections()
-				, &toon::shader::ToonPbrSGLightingModel::create
+		engine->getPassFactory().registerType( toon::ToonPbrPass::Type
+			, { toon::shader::ToonPbrLightingModel::getName()
+				, toon::ToonPbrPass::create
+				, toon::ToonPbrPass::createParsers()
+				, toon::ToonPbrPass::createSections()
+				, &toon::shader::ToonPbrLightingModel::create
 				, true } );
 	}
 
 	C3D_ToonMaterial_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->getPassFactory().unregisterType( toon::ToonSpecularGlossinessPass::Type );
-		engine->getPassFactory().unregisterType( toon::ToonMetallicRoughnessPass::Type );
+		engine->getPassFactory().unregisterType( toon::ToonPbrPass::Type );
 		engine->getPassFactory().unregisterType( toon::ToonBlinnPhongPass::Type );
 		engine->getPassFactory().unregisterType( toon::ToonPhongPass::Type );
 	}

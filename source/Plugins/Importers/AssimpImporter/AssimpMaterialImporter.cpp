@@ -13,8 +13,7 @@
 // Materials
 #include <PhongPass.hpp>
 #include <BlinnPhongPass.hpp>
-#include <MetallicRoughnessPbrPass.hpp>
-#include <SpecularGlossinessPbrPass.hpp>
+#include <PbrPass.hpp>
 #include <ToonPass.hpp>
 
 #pragma warning( push )
@@ -898,16 +897,7 @@ namespace c3d_assimp
 			case ShadingMode_PBR_BRDF:
 #pragma warning( pop )
 #pragma GCC diagnostic pop
-			{
-				float value{};
-
-				if ( aiMaterial.Get( AI_MATKEY_GLTF_PBRSPECULARGLOSSINESS_GLOSSINESS_FACTOR, value ) == aiReturn_SUCCESS )
-				{
-					return factory.getNameId( castor3d::SpecularGlossinessPbrPass::Type );
-				}
-
-				return factory.getNameId( castor3d::MetallicRoughnessPbrPass::Type );
-			}
+				return factory.getNameId( castor3d::PbrPass::Type );
 			case aiShadingMode_Flat:
 			case aiShadingMode_Gouraud:
 			case aiShadingMode_Phong:

@@ -4,8 +4,7 @@
 #include "Castor3D/Material/Pass/Phong/BlinnPhongPass.hpp"
 #include "Castor3D/Material/Pass/Phong/PhongPass.hpp"
 #include "Castor3D/Material/Pass/Phong/Shaders/GlslPhongLighting.hpp"
-#include "Castor3D/Material/Pass/PBR/MetallicRoughnessPbrPass.hpp"
-#include "Castor3D/Material/Pass/PBR/SpecularGlossinessPbrPass.hpp"
+#include "Castor3D/Material/Pass/PBR/PbrPass.hpp"
 #include "Castor3D/Material/Pass/PBR/Shaders/GlslPbrLighting.hpp"
 
 CU_ImplementCUSmartPtr( castor3d, PassFactory )
@@ -32,20 +31,12 @@ namespace castor3d
 				, &shader::BlinnPhongLightingModel::create
 				, false } );
 
-		registerType( MetallicRoughnessPbrPass::Type
-			, { MetallicRoughnessPbrPass::LightingModel
-				, MetallicRoughnessPbrPass::create
-				, MetallicRoughnessPbrPass::createParsers()
-				, MetallicRoughnessPbrPass::createSections()
-				, &shader::PbrMRLightingModel::create
-				, true } );
-
-		registerType( SpecularGlossinessPbrPass::Type
-			, { SpecularGlossinessPbrPass::LightingModel
-				, SpecularGlossinessPbrPass::create
-				, SpecularGlossinessPbrPass::createParsers()
-				, SpecularGlossinessPbrPass::createSections()
-				, &shader::PbrSGLightingModel::create
+		registerType( PbrPass::Type
+			, { PbrPass::LightingModel
+				, PbrPass::create
+				, PbrPass::createParsers()
+				, PbrPass::createSections()
+				, &shader::PbrLightingModel::create
 				, true } );
 	}
 

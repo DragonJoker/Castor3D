@@ -74,46 +74,12 @@ namespace toon::shader
 		sdw::Float getMetalness()const override;
 		sdw::Float getRoughness()const override;
 
-		bool isSpecularGlossiness()const
-		{
-			return m_isSpecularGlossiness;
-		}
-
 		sdw::Float & roughness;
 		sdw::Float & metalness;
 		sdw::Float smoothBand;
-
-	protected:
-		bool m_isSpecularGlossiness{};
 	};
 
 	Writer_Parameter( ToonPbrLightMaterial );
-
-	struct ToonPbrMRLightMaterial
-		: public ToonPbrLightMaterial
-	{
-		SDW_DeclStructInstance( , ToonPbrMRLightMaterial );
-		ToonPbrMRLightMaterial( sdw::ShaderWriter & writer
-			, sdw::expr::ExprPtr expr
-			, bool enabled )
-			: ToonPbrLightMaterial{ writer, std::move( expr ), enabled }
-		{
-			m_isSpecularGlossiness = false;
-		}
-	};
-
-	struct ToonPbrSGLightMaterial
-		: public ToonPbrLightMaterial
-	{
-		SDW_DeclStructInstance( , ToonPbrSGLightMaterial );
-		ToonPbrSGLightMaterial( sdw::ShaderWriter & writer
-			, sdw::expr::ExprPtr expr
-			, bool enabled )
-			: ToonPbrLightMaterial{ writer, std::move( expr ), enabled }
-		{
-			m_isSpecularGlossiness = true;
-		}
-	};
 }
 
 #endif
