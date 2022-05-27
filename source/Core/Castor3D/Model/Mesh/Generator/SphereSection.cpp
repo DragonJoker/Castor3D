@@ -50,7 +50,6 @@ namespace castor3d
 			uint32_t iCur = 0;
 			uint32_t iPrv = 0;
 			float rAlphaI = 0;
-			castor::Point3f ptPos;
 			auto rAngle = castor::PiMult2< float > / float( m_nbFaces );
 
 			for ( uint32_t i = 0; i <= m_nbFaces; i++ )

@@ -63,11 +63,6 @@ namespace castor3d
 			: -depth / 2 );
 		float gapW = width / float( subDivisionsW );
 		float gapH = depth / float( subDivisionsD );
-		castor::Point3f ptCurrentUV;
-		castor::Point3f ptPreviousUV;
-		castor::Point3f ptNormal( 0.0, 1.0, 0.0 );
-		castor::Point3f ptTangent;
-		castor::Point2f ptUv;
 		SubmeshSPtr submesh = mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
 		InterleavedVertexArray points;
 
