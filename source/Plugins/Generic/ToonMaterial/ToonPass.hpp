@@ -4,8 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_ToonPass_H___
 #define ___C3D_ToonPass_H___
 
-#include <Castor3D/Material/Pass/PBR/MetallicRoughnessPbrPass.hpp>
-#include <Castor3D/Material/Pass/PBR/SpecularGlossinessPbrPass.hpp>
+#include <Castor3D/Material/Pass/PBR/PbrPass.hpp>
 #include <Castor3D/Material/Pass/Phong/BlinnPhongPass.hpp>
 #include <Castor3D/Material/Pass/Phong/PhongPass.hpp>
 
@@ -119,43 +118,15 @@ namespace toon
 		C3D_ToonMaterial_API static castor::String const Type;
 	};
 
-	class ToonMetallicRoughnessPass
-		: public ToonPassT< castor3d::MetallicRoughnessPbrPass >
+	class ToonPbrPass
+		: public ToonPassT< castor3d::PbrPass >
 	{
-		using ToonPass = ToonPassT< castor3d::MetallicRoughnessPbrPass >;
+		using ToonPass = ToonPassT< castor3d::PbrPass >;
 
 	public:
-		explicit ToonMetallicRoughnessPass( castor3d::Material & parent
+		explicit ToonPbrPass( castor3d::Material & parent
 			, castor3d::PassFlags initialFlags = castor3d::PassFlag::eNone );
-		ToonMetallicRoughnessPass( castor3d::Material & parent
-			, castor3d::PassTypeID typeID
-			, castor3d::PassFlags initialFlags = castor3d::PassFlag::eNone );
-
-		static castor3d::PassSPtr create( castor3d::Material & parent );
-		static castor::AttributeParsers createParsers();
-		static castor::StrUInt32Map createSections();
-
-		void fillBuffer( castor3d::PassBuffer & buffer )const override;
-		uint32_t getPassSectionID()const override;
-		uint32_t getTextureSectionID()const override;
-		bool writeText( castor::String const & tabs
-			, castor::Path const & folder
-			, castor::String const & subfolder
-			, castor::StringStream & file )const override;
-
-	public:
-		C3D_ToonMaterial_API static castor::String const Type;
-	};
-
-	class ToonSpecularGlossinessPass
-		: public ToonPassT< castor3d::SpecularGlossinessPbrPass >
-	{
-		using ToonPass = ToonPassT< castor3d::SpecularGlossinessPbrPass >;
-
-	public:
-		explicit ToonSpecularGlossinessPass( castor3d::Material & parent
-			, castor3d::PassFlags initialFlags = castor3d::PassFlag::eNone );
-		ToonSpecularGlossinessPass( castor3d::Material & parent
+		ToonPbrPass( castor3d::Material & parent
 			, castor3d::PassTypeID typeID
 			, castor3d::PassFlags initialFlags = castor3d::PassFlag::eNone );
 

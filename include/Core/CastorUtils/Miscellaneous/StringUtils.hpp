@@ -475,6 +475,30 @@ namespace castor
 		CU_API String toString( uint64_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< xchar >() ) );
 		/**
 		 *\~english
+		 *\param[in]	value	The value.
+		 *\param[in]	suffix	The suffix.
+		 *\return		\p true if \p value ends with \p suffix.
+		 *\~french
+		 *\param[in]	value	La valeur.
+		 *\param[in]	suffix	Le suffixe.
+		 *\return		\p true si \p value se termine par \p suffix.
+		 */
+		CU_API bool endsWith( String const & value
+			, String const & suffix );
+		/**
+		 *\~english
+		 *\param[in]	value	The value.
+		 *\param[in]	prefix	The suffix.
+		 *\return		\p true if \p value starts with \p prefix.
+		 *\~french
+		 *\param[in]	value	La valeur.
+		 *\param[in]	prefix	Le suffixe.
+		 *\return		\p true si \p value commence par \p prefix.
+		 */
+		CU_API bool startsWith( String const & value
+			, String const & prefix );
+		/**
+		 *\~english
 		 *\brief		Retrieves a value from the given String
 		 *\param[in]	str		The String supposedly containing the value
 		 *\param[in]	locale	The locale used in the conversion

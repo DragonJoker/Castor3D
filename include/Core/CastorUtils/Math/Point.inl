@@ -58,13 +58,13 @@ namespace castor
 	//*************************************************************************************************
 
 	template< typename T, uint32_t TCount >
-	Point< T, TCount >::Point()
+	constexpr Point< T, TCount >::Point()noexcept
 		: m_data{}
 	{
 	}
 
 	template< typename T, uint32_t TCount >
-	Point< T, TCount >::Point( T const * rhs )
+	Point< T, TCount >::Point( T const * rhs )noexcept
 	{
 		if ( !rhs )
 		{
@@ -81,7 +81,7 @@ namespace castor
 	}
 
 	template< typename T, uint32_t TCount >
-	Point< T, TCount >::Point( Point< T, TCount > const & rhs )
+	constexpr Point< T, TCount >::Point( Point< T, TCount > const & rhs )noexcept
 	{
 		std::copy( rhs.begin()
 			, rhs.end()
@@ -89,7 +89,7 @@ namespace castor
 	}
 
 	template< typename T, uint32_t TCount >
-	Point< T, TCount >::Point( Point< T, TCount > && rhs )noexcept
+	constexpr Point< T, TCount >::Point( Point< T, TCount > && rhs )noexcept
 	{
 		std::copy( rhs.begin()
 			, rhs.end()
@@ -98,7 +98,7 @@ namespace castor
 
 	template< typename T, uint32_t TCount >
 	template< typename U, uint32_t UCount >
-	Point< T, TCount >::Point( Point< U, UCount > const & rhs )
+	Point< T, TCount >::Point( Point< U, UCount > const & rhs )noexcept
 	{
 		details::DataCopier< U, T, UCount, TCount > copier;
 		copier( rhs.constPtr(), ptr() );
@@ -106,7 +106,7 @@ namespace castor
 
 	template< typename T, uint32_t TCount >
 	template< typename U, uint32_t UCount >
-	Point< T, TCount >::Point( Coords< U, UCount > const & rhs )
+	Point< T, TCount >::Point( Coords< U, UCount > const & rhs )noexcept
 	{
 		details::DataCopier< U, T, UCount, TCount > copier;
 		copier( rhs.constPtr(), ptr() );
@@ -114,7 +114,7 @@ namespace castor
 
 	template< typename T, uint32_t TCount >
 	template< typename U >
-	Point< T, TCount >::Point( U const * rhs )
+	Point< T, TCount >::Point( U const * rhs )noexcept
 	{
 		if ( !rhs )
 		{
@@ -133,34 +133,34 @@ namespace castor
 
 	template< typename T, uint32_t TCount >
 	template< typename ValueA >
-	Point< T, TCount >::Point( ValueA a )
+	constexpr Point< T, TCount >::Point( ValueA a )noexcept
 		: m_data{ std::array< T, TCount >{ T( a ) } }
 	{
 	}
 
 	template< typename T, uint32_t TCount >
 	template< typename ValueA, typename ValueB >
-	Point< T, TCount >::Point( ValueA a, ValueB b )
+	constexpr Point< T, TCount >::Point( ValueA a, ValueB b )noexcept
 		: m_data{ std::array< T, TCount >{ T( a ), T( b ) } }
 	{
 	}
 
 	template< typename T, uint32_t TCount >
 	template< typename ValueA, typename ValueB, typename ValueC >
-	Point< T, TCount >::Point( ValueA a, ValueB b, ValueC c )
+	constexpr Point< T, TCount >::Point( ValueA a, ValueB b, ValueC c )noexcept
 		: m_data{ std::array< T, TCount >{ T( a ), T( b ), T( c ) } }
 	{
 	}
 
 	template< typename T, uint32_t TCount >
 	template< typename ValueA, typename ValueB, typename ValueC, typename ValueD >
-	Point< T, TCount >::Point( ValueA a, ValueB b, ValueC c, ValueD d )
+	constexpr Point< T, TCount >::Point( ValueA a, ValueB b, ValueC c, ValueD d )noexcept
 		: m_data{ std::array< T, TCount >{ T( a ), T( b ), T( c ), T( d ) } }
 	{
 	}
 
 	template< typename T, uint32_t TCount >
-	inline Point< T, TCount > & Point< T, TCount >::operator=( Point< T, TCount > const & rhs )
+	constexpr Point< T, TCount > & Point< T, TCount >::operator=( Point< T, TCount > const & rhs )noexcept
 	{
 		std::copy( rhs.begin()
 			, rhs.end()
@@ -169,15 +169,11 @@ namespace castor
 	}
 
 	template< typename T, uint32_t TCount >
-	inline Point< T, TCount > & Point< T, TCount >::operator=( Point< T, TCount > && rhs )noexcept
+	constexpr Point< T, TCount > & Point< T, TCount >::operator=( Point< T, TCount > && rhs )noexcept
 	{
-		if ( this != &rhs )
-		{
-			std::copy( rhs.begin()
-				, rhs.end()
-				, m_data.coords.begin() );
-		}
-
+		std::copy( rhs.begin()
+			, rhs.end()
+			, m_data.coords.begin() );
 		return *this;
 	}
 

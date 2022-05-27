@@ -68,20 +68,6 @@ namespace GuiCommon
 			wxFont m_font;
 		};
 
-		bool endsWith( castor::String const & value
-			, castor::String const & lookup )
-		{
-			auto it = value.find( lookup );
-			bool result = it != castor::String::npos;
-
-			if ( result )
-			{
-				result = ( it + lookup.size() ) == value.size();
-			}
-
-			return result;
-		}
-
 		castor::PathArray listPluginsFiles( castor::Path const & folder )
 		{
 			static castor::String castor3DLibPrefix{ CU_LibPrefix + castor::String{ cuT( "castor3d" ) } };
@@ -94,7 +80,7 @@ namespace GuiCommon
 			{
 				auto fileName = file.getFileName( true );
 
-				if ( endsWith( fileName, CU_SharedLibExt )
+				if ( castor::string::endsWith( fileName, CU_SharedLibExt )
 					&& fileName.find( castor3DLibPrefix ) == 0u )
 				{
 					result.push_back( file );

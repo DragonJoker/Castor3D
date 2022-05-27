@@ -90,60 +90,27 @@ namespace castor
 	};
 
 	template<>
-	class TextWriter< toon::ToonMetallicRoughnessPass >
-		: public TextWriterT< toon::ToonMetallicRoughnessPass >
+	class TextWriter< toon::ToonPbrPass >
+		: public TextWriterT< toon::ToonPbrPass >
 	{
 	public:
 		TextWriter( String const & tabs
 			, Path const & folder
 			, String const & subfolder )
-			: TextWriterT< toon::ToonMetallicRoughnessPass >{ tabs }
+			: TextWriterT< toon::ToonPbrPass >{ tabs }
 			, m_folder{ folder }
 			, m_subfolder{ subfolder }
 		{
 		}
 
-		bool operator()( toon::ToonMetallicRoughnessPass const & pass
+		bool operator()( toon::ToonPbrPass const & pass
 			, StringStream & file )override
 		{
-			castor3d::log::info << tabs() << cuT( "Writing ToonMetallicRoughnessPass " ) << std::endl;
+			castor3d::log::info << tabs() << cuT( "Writing ToonPbrPass " ) << std::endl;
 			return writeNamedSub( file, "albedo", pass.getAlbedo() )
 				&& write( file, "roughness", pass.getRoughness() )
-				&& write( file, "metallic", pass.getMetallic() )
-				&& write( file, "smooth_band_width", pass.getSmoothBandWidth() )
-				&& write( file, cuT( "edge_width" ), pass.getEdgeWidth() )
-				&& write( file, cuT( "edge_depth_factor" ), pass.getDepthFactor() )
-				&& write( file, cuT( "edge_normal_factor" ), pass.getNormalFactor() )
-				&& write( file, cuT( "edge_object_factor" ), pass.getObjectFactor() )
-				&& writeNamedSub( file, cuT( "edge_colour" ), pass.getEdgeColour() );
-		}
-
-	private:
-		Path m_folder;
-		String m_subfolder;
-	};
-
-	template<>
-	class TextWriter< toon::ToonSpecularGlossinessPass >
-		: public TextWriterT< toon::ToonSpecularGlossinessPass >
-	{
-	public:
-		TextWriter( String const & tabs
-			, Path const & folder
-			, String const & subfolder )
-			: TextWriterT< toon::ToonSpecularGlossinessPass >{ tabs }
-			, m_folder{ folder }
-			, m_subfolder{ subfolder }
-		{
-		}
-
-		bool operator()( toon::ToonSpecularGlossinessPass const & pass
-			, StringStream & file )override
-		{
-			castor3d::log::info << tabs() << cuT( "Writing ToonSpecularGlossinessPass " ) << std::endl;
-			return writeNamedSub( file, "albedo", pass.getDiffuse() )
+				&& write( file, "metalness", pass.getMetalness() )
 				&& writeNamedSub( file, "specular", pass.getSpecular() )
-				&& write( file, "glossiness", pass.getGlossiness() )
 				&& write( file, "smooth_band_width", pass.getSmoothBandWidth() )
 				&& write( file, cuT( "edge_width" ), pass.getEdgeWidth() )
 				&& write( file, cuT( "edge_depth_factor" ), pass.getDepthFactor() )
@@ -200,40 +167,21 @@ namespace toon
 
 	//*********************************************************************************************
 
-	namespace pbrmr
+	namespace pbr
 	{
 		enum class Section
 			: uint32_t
 		{
-			ePass = CU_MakeSectionName( 'T', 'N', 'M', 'R' ),
-			eTextureUnit = CU_MakeSectionName( 'T', 'M', 'T', 'U' ),
-			eTextureRemap = CU_MakeSectionName( 'T', 'M', 'T', 'R' ),
-			eTextureRemapChannel = CU_MakeSectionName( 'T', 'M', 'T', 'C' ),
+			ePass = CU_MakeSectionName( 'T', 'N', 'P', 'B' ),
+			eTextureUnit = CU_MakeSectionName( 'T', 'R', 'T', 'U' ),
+			eTextureRemap = CU_MakeSectionName( 'T', 'R', 'T', 'R' ),
+			eTextureRemapChannel = CU_MakeSectionName( 'T', 'R', 'T', 'C' ),
 		};
 
-		static castor::String const PassSectionName{ cuT( "toon_metallic_roughness_pass" ) };
-		static castor::String const TextureSectionName{ cuT( "toon_metallic_roughness_texture_unit" ) };
-		static castor::String const RemapSectionName{ cuT( "toon_metallic_roughness_texture_remap" ) };
-		static castor::String const RemapChannelSectionName{ cuT( "toon_metallic_roughness_texture_remap_channel" ) };
-	}
-
-	//*********************************************************************************************
-
-	namespace pbrsg
-	{
-		enum class Section
-			: uint32_t
-		{
-			ePass = CU_MakeSectionName( 'T', 'N', 'S', 'G' ),
-			eTextureUnit = CU_MakeSectionName( 'T', 'S', 'T', 'U' ),
-			eTextureRemap = CU_MakeSectionName( 'T', 'S', 'T', 'U' ),
-			eTextureRemapChannel = CU_MakeSectionName( 'T', 'S', 'T', 'C' ),
-		};
-
-		static castor::String const PassSectionName{ cuT( "toon_specular_glossiness_pass" ) };
-		static castor::String const TextureSectionName{ cuT( "toon_specular_glossiness_texture_unit" ) };
-		static castor::String const RemapSectionName{ cuT( "toon_specular_glossiness_texture_remap" ) };
-		static castor::String const RemapChannelSectionName{ cuT( "toon_specular_glossiness_texture_remap_channel" ) };
+		static castor::String const PassSectionName{ cuT( "toon_pbr_pass" ) };
+		static castor::String const TextureSectionName{ cuT( "toon_pbr_texture_unit" ) };
+		static castor::String const RemapSectionName{ cuT( "toon_pbr_texture_remap" ) };
+		static castor::String const RemapChannelSectionName{ cuT( "toon_pbr_texture_remap_channel" ) };
 	}
 
 	//*********************************************************************************************
@@ -392,157 +340,79 @@ namespace toon
 
 	//*********************************************************************************************
 
-	castor::String const ToonMetallicRoughnessPass::Type = cuT( "toon_metallic_roughness" );
+	castor::String const ToonPbrPass::Type = cuT( "toon_pbr" );
 
-	ToonMetallicRoughnessPass::ToonMetallicRoughnessPass( castor3d::Material & parent
+	ToonPbrPass::ToonPbrPass( castor3d::Material & parent
 		, castor3d::PassFlags initialFlags )
-		: ToonMetallicRoughnessPass{ parent, parent.getEngine()->getPassFactory().getNameId( Type ), initialFlags }
+		: ToonPbrPass{ parent, parent.getEngine()->getPassFactory().getNameId( Type ), initialFlags }
 	{
 	}
 	
-	ToonMetallicRoughnessPass::ToonMetallicRoughnessPass( castor3d::Material & parent
+	ToonPbrPass::ToonPbrPass( castor3d::Material & parent
 		, castor3d::PassTypeID typeID
 		, castor3d::PassFlags initialFlags )
 		: ToonPass{ parent, typeID, initialFlags }
 	{
 	}
 
-	castor3d::PassSPtr ToonMetallicRoughnessPass::create( castor3d::Material & parent )
+	castor3d::PassSPtr ToonPbrPass::create( castor3d::Material & parent )
 	{
-		return std::make_shared< ToonMetallicRoughnessPass >( parent );
+		return std::make_shared< ToonPbrPass >( parent );
 	}
 
-	castor::AttributeParsers ToonMetallicRoughnessPass::createParsers()
+	castor::AttributeParsers ToonPbrPass::createParsers()
 	{
-		return ToonPass::createParsers( uint32_t( pbrmr::Section::ePass )
-			, uint32_t( pbrmr::Section::eTextureUnit )
-			, uint32_t( pbrmr::Section::eTextureRemap )
-			, cuT( "toon_pbrmr_texture_remap_config" )
-			, uint32_t( pbrmr::Section::eTextureRemapChannel ) );
+		return ToonPass::createParsers( uint32_t( pbr::Section::ePass )
+			, uint32_t( pbr::Section::eTextureUnit )
+			, uint32_t( pbr::Section::eTextureRemap )
+			, cuT( "toon_pbr_texture_remap_config" )
+			, uint32_t( pbr::Section::eTextureRemapChannel ) );
 	}
 
-	castor::StrUInt32Map ToonMetallicRoughnessPass::createSections()
+	castor::StrUInt32Map ToonPbrPass::createSections()
 	{
 		return
 		{
-			{ uint32_t( pbrmr::Section::ePass ), pbrmr::PassSectionName },
-			{ uint32_t( pbrmr::Section::eTextureUnit ), pbrmr::TextureSectionName },
-			{ uint32_t( pbrmr::Section::eTextureRemap ), pbrmr::RemapSectionName },
-			{ uint32_t( pbrmr::Section::eTextureRemapChannel ), pbrmr::RemapChannelSectionName },
+			{ uint32_t( pbr::Section::ePass ), pbr::PassSectionName },
+			{ uint32_t( pbr::Section::eTextureUnit ), pbr::TextureSectionName },
+			{ uint32_t( pbr::Section::eTextureRemap ), pbr::RemapSectionName },
+			{ uint32_t( pbr::Section::eTextureRemapChannel ), pbr::RemapChannelSectionName },
 		};
 	}
 
-	void ToonMetallicRoughnessPass::fillBuffer( castor3d::PassBuffer & buffer )const
+	void ToonPbrPass::fillBuffer( castor3d::PassBuffer & buffer )const
 	{
-		auto f0 = castor::RgbColour{ 0.04f, 0.04f, 0.04f } *( 1.0f - getMetallic() ) + getAlbedo() * getMetallic();
 		auto data = buffer.getData( getId() );
 
 		data.colourDiv->r = getAlbedo().red();
 		data.colourDiv->g = getAlbedo().green();
 		data.colourDiv->b = getAlbedo().blue();
 		data.colourDiv->a = getRoughness();
-		data.specDiv->r = f0.red();
-		data.specDiv->g = f0.green();
-		data.specDiv->b = f0.blue();
-		data.specDiv->a = getMetallic();
-
-		ToonPass::fillData( data );
-		doFillData( data );
-	}
-
-	uint32_t ToonMetallicRoughnessPass::getPassSectionID()const
-	{
-		return uint32_t( pbrmr::Section::ePass );
-	}
-
-	uint32_t ToonMetallicRoughnessPass::getTextureSectionID()const
-	{
-		return uint32_t( pbrmr::Section::eTextureUnit );
-	}
-
-	bool ToonMetallicRoughnessPass::writeText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
-	{
-		return castor::TextWriter< ToonMetallicRoughnessPass >{ tabs, folder, subfolder }( *this, file );
-	}
-
-	//*********************************************************************************************
-
-	castor::String const ToonSpecularGlossinessPass::Type = cuT( "toon_specular_glossiness" );
-
-	ToonSpecularGlossinessPass::ToonSpecularGlossinessPass( castor3d::Material & parent
-		, castor3d::PassFlags initialFlags )
-		: ToonSpecularGlossinessPass{ parent, parent.getEngine()->getPassFactory().getNameId( Type ), initialFlags }
-	{
-	}
-
-	ToonSpecularGlossinessPass::ToonSpecularGlossinessPass( castor3d::Material & parent
-		, castor3d::PassTypeID typeID
-		, castor3d::PassFlags initialFlags )
-		: ToonPass{ parent, typeID, initialFlags }
-	{
-	}
-
-	castor3d::PassSPtr ToonSpecularGlossinessPass::create( castor3d::Material & parent )
-	{
-		return std::make_shared< ToonSpecularGlossinessPass >( parent );
-	}
-
-	castor::AttributeParsers ToonSpecularGlossinessPass::createParsers()
-	{
-		return ToonPass::createParsers( uint32_t( pbrsg::Section::ePass )
-			, uint32_t( pbrsg::Section::eTextureUnit )
-			, uint32_t( pbrsg::Section::eTextureRemap )
-			, cuT( "toon_pbrsg_texture_remap_config" )
-			, uint32_t( pbrsg::Section::eTextureRemapChannel ) );
-	}
-
-	castor::StrUInt32Map ToonSpecularGlossinessPass::createSections()
-	{
-		return
-		{
-			{ uint32_t( pbrsg::Section::ePass ), pbrsg::PassSectionName },
-			{ uint32_t( pbrsg::Section::eTextureUnit ), pbrsg::TextureSectionName },
-			{ uint32_t( pbrsg::Section::eTextureRemap ), pbrsg::RemapSectionName },
-			{ uint32_t( pbrsg::Section::eTextureRemapChannel ), pbrsg::RemapChannelSectionName },
-		};
-	}
-
-	void ToonSpecularGlossinessPass::fillBuffer( castor3d::PassBuffer & buffer )const
-	{
-		auto data = buffer.getData( getId() );
-
-		data.colourDiv->r = getDiffuse().red();
-		data.colourDiv->g = getDiffuse().green();
-		data.colourDiv->b = getDiffuse().blue();
-		data.colourDiv->a = 1.0f - getGlossiness();
 		data.specDiv->r = getSpecular().red();
 		data.specDiv->g = getSpecular().green();
 		data.specDiv->b = getSpecular().blue();
-		data.specDiv->a = float( castor::point::length( castor::Point3f{ getSpecular().constPtr() } ) );
+		data.specDiv->a = getMetalness();
 
 		ToonPass::fillData( data );
 		doFillData( data );
 	}
 
-	uint32_t ToonSpecularGlossinessPass::getPassSectionID()const
+	uint32_t ToonPbrPass::getPassSectionID()const
 	{
-		return uint32_t( pbrsg::Section::ePass );
+		return uint32_t( pbr::Section::ePass );
 	}
 
-	uint32_t ToonSpecularGlossinessPass::getTextureSectionID()const
+	uint32_t ToonPbrPass::getTextureSectionID()const
 	{
-		return uint32_t( pbrsg::Section::eTextureUnit );
+		return uint32_t( pbr::Section::eTextureUnit );
 	}
 
-	bool ToonSpecularGlossinessPass::writeText( castor::String const & tabs
+	bool ToonPbrPass::writeText( castor::String const & tabs
 		, castor::Path const & folder
 		, castor::String const & subfolder
 		, castor::StringStream & file )const
 	{
-		return castor::TextWriter< ToonSpecularGlossinessPass >{ tabs, folder, subfolder }( *this, file );
+		return castor::TextWriter< ToonPbrPass >{ tabs, folder, subfolder }( *this, file );
 	}
 
 	//*********************************************************************************************

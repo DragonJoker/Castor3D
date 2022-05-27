@@ -53,21 +53,16 @@ namespace castor3d::shader
 			, PbrLightMaterial & pbrLightMat
 			, sdw::Vec3 & emissive )
 		{
-			if ( pbrLightMat.isSpecularGlossiness() )
+			if ( checkFlag( textureFlags, TextureFlag::eMetalness )
+				&& !checkFlag( textureFlags, TextureFlag::eSpecular ) )
 			{
-				if ( !checkFlag( textureFlags, TextureFlag::eMetalness )
-					&& ( checkFlag( textureFlags, TextureFlag::eSpecular ) || checkFlag( textureFlags, TextureFlag::eAlbedo ) ) )
-				{
-					pbrLightMat.metalness = LightMaterial::computeMetalness( pbrLightMat.albedo, pbrLightMat.specular );
-				}
+				pbrLightMat.specular = LightMaterial::computeF0( pbrLightMat.albedo, pbrLightMat.metalness );
 			}
-			else
+
+			if ( checkFlag( textureFlags, TextureFlag::eSpecular )
+				&& !checkFlag( textureFlags, TextureFlag::eMetalness ) )
 			{
-				if ( !checkFlag( textureFlags, TextureFlag::eSpecular  )
-					&& ( checkFlag( textureFlags, TextureFlag::eMetalness ) || checkFlag( textureFlags, TextureFlag::eAlbedo ) ) )
-				{
-					pbrLightMat.specular = LightMaterial::computeF0( pbrLightMat.albedo, pbrLightMat.metalness );
-				}
+				pbrLightMat.metalness = LightMaterial::computeMetalness( pbrLightMat.albedo, pbrLightMat.specular );
 			}
 
 			if ( checkFlag( passFlags, PassFlag::eLighting )
@@ -78,8 +73,7 @@ namespace castor3d::shader
 		}
 	}
 
-	PbrLightingModel::PbrLightingModel( bool isSpecularGlossiness
-		, sdw::ShaderWriter & writer
+	PbrLightingModel::PbrLightingModel( sdw::ShaderWriter & writer
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
@@ -89,10 +83,33 @@ namespace castor3d::shader
 			, std::move( shadowOptions )
 			, sssProfiles
 			, enableVolumetric
-			, isSpecularGlossiness ? std::string{ "c3d_pbrsg_" } : std::string{ "c3d_pbrmr_" } }
-		, m_isSpecularGlossiness{ isSpecularGlossiness }
+			, "c3d_pbr_" }
 		, m_cookTorrance{ writer, utils }
 	{
+	}
+
+	const castor::String PbrLightingModel::getName()
+	{
+		return cuT( "c3d.pbr" );
+	}
+
+	LightingModelPtr PbrLightingModel::create( sdw::ShaderWriter & writer
+		, Utils & utils
+		, ShadowOptions shadowOptions
+		, SssProfiles const * sssProfiles
+		, bool enableVolumetric )
+	{
+		return std::make_unique< PbrLightingModel >( writer
+			, utils
+			, std::move( shadowOptions )
+			, sssProfiles
+			, enableVolumetric );
+	}
+
+	std::unique_ptr< LightMaterial > PbrLightingModel::declMaterial( std::string const & name
+		, bool enabled )
+	{
+		return m_writer.declDerivedLocale< LightMaterial, PbrLightMaterial >( name, enabled );
 	}
 
 	sdw::Vec3 PbrLightingModel::combine( sdw::Vec3 const & directDiffuse
@@ -829,86 +846,6 @@ namespace castor3d::shader
 			, InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
 			, sdw::InInt( m_writer, "receivesShadows" ) );
-	}
-
-	//***********************************************************************************************
-
-	PbrMRLightingModel::PbrMRLightingModel( sdw::ShaderWriter & writer
-		, Utils & utils
-		, ShadowOptions shadowOptions
-		, SssProfiles const * sssProfiles
-		, bool enableVolumetric )
-		: PbrLightingModel{ false
-			, writer
-			, utils
-			, std::move( shadowOptions )
-			, sssProfiles
-			, enableVolumetric }
-	{
-	}
-
-	const castor::String PbrMRLightingModel::getName()
-	{
-		return cuT( "c3d.pbrmr" );
-	}
-
-	LightingModelPtr PbrMRLightingModel::create( sdw::ShaderWriter & writer
-		, Utils & utils
-		, ShadowOptions shadowOptions
-		, SssProfiles const * sssProfiles
-		, bool enableVolumetric )
-	{
-		return std::make_unique< PbrMRLightingModel >( writer
-			, utils
-			, std::move( shadowOptions )
-			, sssProfiles
-			, enableVolumetric );
-	}
-
-	std::unique_ptr< LightMaterial > PbrMRLightingModel::declMaterial( std::string const & name
-		, bool enabled )
-	{
-		return m_writer.declDerivedLocale< LightMaterial, PbrMRLightMaterial >( name, enabled );
-	}
-
-	//***********************************************************************************************
-
-	PbrSGLightingModel::PbrSGLightingModel( sdw::ShaderWriter & writer
-		, Utils & utils
-		, ShadowOptions shadowOptions
-		, SssProfiles const * sssProfiles
-		, bool enableVolumetric )
-		: PbrLightingModel{ true
-			, writer
-			, utils
-			, std::move( shadowOptions )
-			, sssProfiles
-			, enableVolumetric }
-	{
-	}
-
-	const castor::String PbrSGLightingModel::getName()
-	{
-		return cuT( "c3d.pbrsg" );
-	}
-
-	LightingModelPtr PbrSGLightingModel::create( sdw::ShaderWriter & writer
-		, Utils & utils
-		, ShadowOptions shadowOptions
-		, SssProfiles const * sssProfiles
-		, bool enableVolumetric )
-	{
-		return std::make_unique< PbrSGLightingModel >( writer
-			, utils
-			, std::move( shadowOptions )
-			, sssProfiles
-			, enableVolumetric );
-	}
-
-	std::unique_ptr< LightMaterial > PbrSGLightingModel::declMaterial( std::string const & name
-		, bool enabled )
-	{
-		return m_writer.declDerivedLocale< LightMaterial, PbrSGLightMaterial >( name, enabled );
 	}
 
 	//***********************************************************************************************

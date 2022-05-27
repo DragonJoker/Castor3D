@@ -47,24 +47,24 @@ namespace castor
 		 *\name Construction / Destruction.
 		 **/
 		/**@{*/
-		Point();
-		Point( Point const & rhs );
-		Point( Point && rhs )noexcept;
-		explicit Point( T const * rhs );
+		constexpr Point()noexcept;
+		constexpr Point( Point const & rhs )noexcept;
+		constexpr Point( Point && rhs )noexcept;
+		explicit Point( T const * rhs )noexcept;
 		template< typename U, uint32_t UCount >
-		explicit Point( Point< U, UCount > const & rhs );
+		explicit Point( Point< U, UCount > const & rhs )noexcept;
 		template< typename U, uint32_t UCount >
-		explicit Point( Coords< U, UCount > const & rhs );
+		explicit Point( Coords< U, UCount > const & rhs )noexcept;
 		template< typename U >
-		explicit Point( U const * rhs );
+		explicit Point( U const * rhs )noexcept;
 		template< typename ValueA >
-		explicit Point( ValueA a );
+		explicit constexpr Point( ValueA a )noexcept;
 		template< typename ValueA, typename ValueB >
-		Point( ValueA a, ValueB b );
+		constexpr Point( ValueA a, ValueB b )noexcept;
 		template< typename ValueA, typename ValueB, typename ValueC >
-		Point( ValueA a, ValueB b, ValueC c );
+		constexpr Point( ValueA a, ValueB b, ValueC c )noexcept;
 		template< typename ValueA, typename ValueB, typename ValueC, typename ValueD >
-		Point( ValueA a, ValueB b, ValueC c, ValueD d );
+		constexpr Point( ValueA a, ValueB b, ValueC c, ValueD d )noexcept;
 		/**@}*/
 		/**
 		 *\~english
@@ -73,8 +73,8 @@ namespace castor
 		 *\name Opérateurs d'affectation.
 		 **/
 		/**@{*/
-		Point & operator=( Point const & rhs );
-		Point & operator=( Point && rhs )noexcept;
+		constexpr Point & operator=( Point const & rhs )noexcept;
+		constexpr Point & operator=( Point && rhs )noexcept;
 		/**@}*/
 		/**
 		 *\~english

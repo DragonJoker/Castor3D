@@ -346,7 +346,7 @@ namespace castor3d
 			{
 				IF( *getWriter(), isDiffuse() )
 				{
-					diffuse = diffuse * getVec3( sampled, colMask );
+					diffuse *= getVec3( sampled, colMask );
 				}
 				FI;
 			}
@@ -360,7 +360,7 @@ namespace castor3d
 			{
 				IF( *getWriter(), isAlbedo() )
 				{
-					albedo = albedo * getVec3( sampled, colMask );
+					albedo *= getVec3( sampled, colMask );
 				}
 				FI;
 			}
@@ -374,7 +374,7 @@ namespace castor3d
 			{
 				IF( *getWriter(), isEmissive() )
 				{
-					emissive = emissive * getVec3( sampled, emsMask );
+					emissive *= getVec3( sampled, emsMask );
 				}
 				FI;
 			}
@@ -388,7 +388,7 @@ namespace castor3d
 			{
 				IF( *getWriter(), isSpecular() )
 				{
-					specular = specular * getVec3( sampled, spcMask );
+					specular *= getVec3( sampled, spcMask );
 				}
 				FI;
 			}
@@ -402,7 +402,7 @@ namespace castor3d
 			{
 				IF( *getWriter(), isMetalness() )
 				{
-					metalness = metalness * getFloat( sampled, metMask );
+					metalness *= getFloat( sampled, metMask );
 				}
 				FI;
 			}
@@ -416,10 +416,9 @@ namespace castor3d
 			{
 				IF( *getWriter(), isShininess() )
 				{
-					shininess = shininess
-						* clamp( getFloat( sampled, shnMask )
-							, 0.00390625_f // 1 / 256
-							, 1.0_f );
+					shininess *= clamp( getFloat( sampled, shnMask )
+						, 0.00390625_f // 1 / 256
+						, 1.0_f );
 				}
 				FI;
 			}
@@ -433,7 +432,7 @@ namespace castor3d
 			{
 				IF( *getWriter(), isRoughness() )
 				{
-					roughness = roughness * getFloat( sampled, rghMask );
+					roughness *= getFloat( sampled, rghMask );
 				}
 				FI;
 			}
@@ -447,7 +446,7 @@ namespace castor3d
 			{
 				IF( *getWriter(), isOpacity() )
 				{
-					opacity = opacity * getFloat( sampled, opaMask );
+					opacity *= getFloat( sampled, opaMask );
 				}
 				FI;
 			}
