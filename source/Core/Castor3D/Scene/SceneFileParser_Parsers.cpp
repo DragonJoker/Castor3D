@@ -3649,7 +3649,6 @@ namespace castor3d
 				parsingContext.vertexTex.resize( parsingContext.vertexPos.size() );
 			}
 
-			castor::Point3i pt3Indices;
 			auto arrayValues = castor::string::split( strParams, cuT( " " ), 20 );
 
 			if ( arrayValues.size() >= 6 && parsingContext.face1 != -1 )
@@ -3694,7 +3693,6 @@ namespace castor3d
 				parsingContext.vertexTex.resize( parsingContext.vertexPos.size() );
 			}
 
-			castor::Point3i pt3Indices;
 			auto arrayValues = castor::string::split( strParams, cuT( " " ), 20 );
 
 			if ( arrayValues.size() >= 9 && parsingContext.face1 != -1 )
@@ -3745,7 +3743,6 @@ namespace castor3d
 				parsingContext.vertexNml.resize( parsingContext.vertexPos.size() );
 			}
 
-			castor::Point3i pt3Indices;
 			auto arrayValues = castor::string::split( strParams, cuT( " " ), 20 );
 
 			if ( arrayValues.size() >= 9 && parsingContext.face1 != -1 )
@@ -3796,7 +3793,6 @@ namespace castor3d
 				parsingContext.vertexTan.resize( parsingContext.vertexPos.size() );
 			}
 
-			castor::Point3i pt3Indices;
 			auto arrayValues = castor::string::split( strParams, cuT( " " ), 20 );
 
 			if ( arrayValues.size() >= 9 && parsingContext.face1 != -1 )
