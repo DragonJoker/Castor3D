@@ -449,14 +449,6 @@ namespace castor3d
 		}
 	}
 
-	void Submesh::sortByDistance( castor::Point3f const & cameraPosition )
-	{
-		if ( m_indexMapping )
-		{
-			m_indexMapping->sortByDistance( cameraPosition );
-		}
-	}
-
 	ProgramFlags Submesh::getProgramFlags( Material const & material )const
 	{
 		ProgramFlags result{};

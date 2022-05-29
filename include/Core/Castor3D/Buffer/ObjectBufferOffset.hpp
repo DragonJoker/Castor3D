@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_ObjectBufferOffset_HPP___
 
 #include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Buffer/GpuBufferOffset.hpp"
 #include "Castor3D/Buffer/GpuBufferPackedAllocator.hpp"
 #include "Castor3D/Model/Skeleton/VertexBoneData.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
@@ -83,6 +84,74 @@ namespace castor3d
 					, chunk.askedSize
 					, dstAccessFlags
 					, dstPipelineFlags);
+			}
+
+			void createUniformPassBinding( crg::FramePass & pass
+				, uint32_t binding
+				, std::string const & name )const
+			{
+				castor3d::createUniformPassBinding( pass
+					, binding
+					, name
+					, getBuffer()
+					, getOffset()
+					, getSize() );
+			}
+
+			void createInputStoragePassBinding( crg::FramePass & pass
+				, uint32_t binding
+				, std::string const & name )const
+			{
+				castor3d::createInputStoragePassBinding( pass
+					, binding
+					, name
+					, getBuffer()
+					, getOffset()
+					, getSize() );
+			}
+
+			void createInOutStoragePassBinding( crg::FramePass & pass
+				, uint32_t binding
+				, std::string const & name )const
+			{
+				castor3d::createInOutStoragePassBinding( pass
+					, binding
+					, name
+					, getBuffer()
+					, getOffset()
+					, getSize() );
+			}
+
+			void createOutputStoragePassBinding( crg::FramePass & pass
+				, uint32_t binding
+				, std::string const & name )const
+			{
+				castor3d::createOutputStoragePassBinding( pass
+					, binding
+					, name
+					, getBuffer()
+					, getOffset()
+					, getSize() );
+			}
+
+			ashes::WriteDescriptorSet getUniformBinding( uint32_t binding )const
+			{
+				auto result = ashes::WriteDescriptorSet{ binding
+					, 0u
+					, 1u
+					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER };
+				result.bufferInfo.push_back( { getBuffer(), getOffset(), getSize() } );
+				return result;
+			}
+
+			ashes::WriteDescriptorSet getStorageBinding( uint32_t binding )const
+			{
+				auto result = ashes::WriteDescriptorSet{ binding
+					, 0u
+					, 1u
+					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
+				result.bufferInfo.push_back( { getBuffer(), getOffset(), getSize() } );
+				return result;
 			}
 		};
 
@@ -174,6 +243,58 @@ namespace castor3d
 		{
 			getBufferChunk( flag ).markDirty( dstAccessFlags
 				, dstPipelineFlags );
+		}
+
+		void createUniformPassBinding( SubmeshFlag flag
+			, crg::FramePass & pass
+			, uint32_t binding
+			, std::string const & name )const
+		{
+			getBufferChunk( flag ).createUniformPassBinding( pass
+				, binding
+				, name );
+		}
+
+		void createInputStoragePassBinding( SubmeshFlag flag
+			, crg::FramePass & pass
+			, uint32_t binding
+			, std::string const & name )const
+		{
+			getBufferChunk( flag ).createInputStoragePassBinding( pass
+				, binding
+				, name );
+		}
+
+		void createInOutStoragePassBinding( SubmeshFlag flag
+			, crg::FramePass & pass
+			, uint32_t binding
+			, std::string const & name )const
+		{
+			getBufferChunk( flag ).createInOutStoragePassBinding( pass
+				, binding
+				, name );
+		}
+
+		void createOutputStoragePassBinding( SubmeshFlag flag
+			, crg::FramePass & pass
+			, uint32_t binding
+			, std::string const & name )const
+		{
+			getBufferChunk( flag ).createOutputStoragePassBinding( pass
+				, binding
+				, name );
+		}
+
+		ashes::WriteDescriptorSet getUniformBinding( SubmeshFlag flag
+			, uint32_t binding )const
+		{
+			return getBufferChunk( flag ).getUniformBinding( binding );
+		}
+
+		ashes::WriteDescriptorSet getStorageBinding( SubmeshFlag flag
+			, uint32_t binding )const
+		{
+			return getBufferChunk( flag ).getStorageBinding( binding );
 		}
 	};
 }

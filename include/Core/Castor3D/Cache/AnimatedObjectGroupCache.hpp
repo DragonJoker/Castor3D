@@ -147,7 +147,6 @@ namespace castor
 		std::map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedMeshChangeConnection > m_meshRemovedConnections;
 		std::map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedTextureChangeConnection > m_textureRemovedConnections;
 		castor3d::GpuBufferOffsetT< castor3d::MorphingWeightsConfiguration > m_morphingWeights;
-		castor3d::GpuBufferOffsetT< castor::Point4f > m_morphTargets;
 		castor3d::GpuBufferOffsetT< castor3d::SkinningTransformsConfiguration > m_skinningTransformsData;
 		castor3d::FramePassTimerUPtr m_timerAnimations;
 	};

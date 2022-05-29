@@ -80,15 +80,6 @@ namespace castor3d
 		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
-		 *\brief		Sorts the points from farthest to nearest from the camera.
-		 *\param[in]	cameraPosition	The camera position, relative to billboard.
-		 *\~french
-		 *\brief		Trie les points des plus éloignés aux plus proches de la caméra.
-		 *\param[in]	cameraPosition	La position de la caméra, relative au billboard.
-		 */
-		C3D_API void sortByDistance( castor::Point3f const & cameraPosition );
-		/**
-		 *\~english
 		 *\brief			Updates the render pass, GPU wise.
 		 *\param[in, out]	updater	The update data.
 		 *\~french

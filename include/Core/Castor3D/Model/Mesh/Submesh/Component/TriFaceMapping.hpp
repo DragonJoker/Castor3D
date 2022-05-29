@@ -185,10 +185,6 @@ namespace castor3d
 		 */
 		C3D_API uint32_t getComponentsCount()const override;
 		/**
-		 *\copydoc		castor3d::IndexMapping::sortByDistance
-		 */
-		C3D_API void sortByDistance( castor::Point3f const & cameraPosition )override;
-		/**
 		 *\copydoc		castor3d::IndexMapping::computeNormals
 		 */
 		C3D_API void computeNormals( bool reverted = false )override;

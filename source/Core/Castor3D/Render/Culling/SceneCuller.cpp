@@ -282,28 +282,7 @@ namespace castor3d
 				, indirectIdxBuffer
 				, indirectNIdxBuffer
 				, getInstanceCount( node ) );
-			auto submeshFlags = node.data.getProgramFlags( *node.pass->getOwner() );
-
-			auto mesh = checkFlag( submeshFlags, ProgramFlag::eMorphing )
-				? std::static_pointer_cast< AnimatedMesh >( findAnimatedObject( scene, node.instance.getName() + cuT( "_Mesh" ) ) )
-				: nullptr;
-			auto skeleton = checkFlag( submeshFlags, ProgramFlag::eSkinning )
-				? std::static_pointer_cast< AnimatedSkeleton >( findAnimatedObject( scene, node.instance.getName() + cuT( "_Skeleton" ) ) )
-				: nullptr;
-
 			( *pipelinesBuffer )->x = node.instance.getId( *node.pass, node.data );
-
-			if ( mesh )
-			{
-				( *pipelinesBuffer )->y = mesh->getId( node.data ) - 1u;
-				( *pipelinesBuffer )->z = node.data.getMorphTargetsCount();
-			}
-
-			if ( skeleton )
-			{
-				( *pipelinesBuffer )->w = skeleton->getId() - 1u;
-			}
-
 			++pipelinesBuffer;
 		}
 	}

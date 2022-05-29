@@ -139,12 +139,6 @@ namespace castor3d
 		}
 	}
 
-	void BillboardBase::sortByDistance( castor::Point3f const & cameraPosition )
-	{
-		m_needUpdate = m_cameraPosition != cameraPosition;
-		m_cameraPosition = cameraPosition;
-	}
-
 	void BillboardBase::update( GpuUpdater & updater )
 	{
 		if ( m_count )

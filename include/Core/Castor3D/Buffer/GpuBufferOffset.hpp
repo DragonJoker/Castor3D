@@ -13,6 +13,30 @@ namespace castor3d
 	C3D_API void createUniformPassBinding( crg::FramePass & pass
 		, uint32_t binding
 		, std::string const & name
+		, ashes::BufferBase const & buffer
+		, VkDeviceSize offset
+		, VkDeviceSize size );
+	C3D_API void createInputStoragePassBinding( crg::FramePass & pass
+		, uint32_t binding
+		, std::string const & name
+		, ashes::BufferBase const & buffer
+		, VkDeviceSize offset
+		, VkDeviceSize size );
+	C3D_API void createInOutStoragePassBinding( crg::FramePass & pass
+		, uint32_t binding
+		, std::string const & name
+		, ashes::BufferBase const & buffer
+		, VkDeviceSize offset
+		, VkDeviceSize size );
+	C3D_API void createOutputStoragePassBinding( crg::FramePass & pass
+		, uint32_t binding
+		, std::string const & name
+		, ashes::BufferBase const & buffer
+		, VkDeviceSize offset
+		, VkDeviceSize size );
+	C3D_API void createUniformPassBinding( crg::FramePass & pass
+		, uint32_t binding
+		, std::string const & name
 		, ashes::Buffer< uint8_t > const & buffer
 		, VkDeviceSize offset
 		, VkDeviceSize size );

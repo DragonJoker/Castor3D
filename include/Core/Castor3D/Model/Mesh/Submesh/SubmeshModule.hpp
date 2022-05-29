@@ -180,6 +180,7 @@ namespace castor3d
 	*	Liste les types de morphing supportés par un submesh.
 	*/
 	enum class MorphData
+		: uint32_t
 	{
 		//!\~english	The submesh has morphing positions.
 		//!\~french		Le submesh a des positions de morphing.
@@ -242,6 +243,7 @@ namespace castor3d
 	*	Indicateurs pour déterminer le morphing utilisé sur un submesh.
 	*/
 	enum class MorphFlag
+		: uint32_t
 	{
 		eNone,
 		//!\~english	The submesh has morphing positions.

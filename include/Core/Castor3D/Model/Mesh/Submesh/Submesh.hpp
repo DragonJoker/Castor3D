@@ -195,15 +195,6 @@ namespace castor3d
 		C3D_API void computeNormals( bool reverted = false );
 		/**
 		 *\~english
-		 *\brief		Sorts the face from farthest to nearest from the camera
-		 *\param[in]	cameraPosition	The camera position, relative to submesh
-		 *\~french
-		 *\brief		Trie les faces des plus éloignées aux plus proches de la caméra
-		 *\param[in]	cameraPosition	La position de la caméra, relative au sous-maillage
-		 */
-		C3D_API void sortByDistance( castor::Point3f const & cameraPosition );
-		/**
-		 *\~english
 		 *\return		The program flags.
 		 *\~french
 		 *\return		Les indicateurs de programme.
