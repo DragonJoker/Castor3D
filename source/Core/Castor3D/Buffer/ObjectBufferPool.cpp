@@ -225,6 +225,7 @@ namespace castor3d
 
 		if ( indexCount )
 		{
+			static_assert( uint32_t( SubmeshData::eIndex ) == 0u );
 			result.buffers[0u].buffer = it->buffers[0u].get();
 			result.buffers[0u].chunk = it->buffers[0u]->allocate( getSize( SubmeshData::eIndex ) * indexCount );
 		}

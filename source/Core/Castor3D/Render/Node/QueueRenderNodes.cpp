@@ -241,7 +241,6 @@ namespace castor3d
 			GeometryBuffers const & geometryBuffers = node.getGeometryBuffers( nodesPass.getShaderFlags()
 				, pipeline.getFlags().submeshFlags
 				, pipeline.getFlags().programFlags
-				, *node.pass->getOwner()
 				, node.pass->getTexturesMask() );
 			uint32_t currentLayout = 0u;
 
@@ -417,10 +416,9 @@ namespace castor3d
 							, submesh.getTopology()
 							, sidedCulled.second
 							, submesh.getMorphTargets() );
-						auto vertexLayouts = submesh.getGeometryBuffers( renderPass.getShaderFlags()
-							, pipelineFlags.programFlags
+						auto vertexLayouts = culledNode->getGeometryBuffers( renderPass.getShaderFlags()
 							, pipelineFlags.submeshFlags
-							, material
+							, pipelineFlags.programFlags
 							, textures ).layouts;
 						auto & pipeline = sidedCulled.second
 							? renderPass.prepareFrontPipeline( pipelineFlags
@@ -470,10 +468,9 @@ namespace castor3d
 									, submesh.getTopology()
 									, sidedCulled.second
 									, submesh.getMorphTargets() );
-								auto vertexLayouts = submesh.getGeometryBuffers( renderPass.getShaderFlags()
-									, pipelineFlags.programFlags
+								auto vertexLayouts = culledNode->getGeometryBuffers( renderPass.getShaderFlags()
 									, pipelineFlags.submeshFlags
-									, material
+									, pipelineFlags.programFlags
 									, textures ).layouts;
 								auto & pipeline = sidedCulled.second
 									? renderPass.prepareFrontPipeline( pipelineFlags

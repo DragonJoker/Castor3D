@@ -232,75 +232,6 @@ namespace castor3d
 		return 3u;
 	}
 
-	void TriFaceMapping::sortByDistance( castor::Point3f const & cameraPosition )
-	{
-		CU_Require( getOwner()->isInitialised() );
-
-		try
-		{
-			if ( m_cameraPosition != cameraPosition )
-			{
-				if ( getOwner()->isInitialised()
-					&& getOwner()->getBufferOffsets().hasData( SubmeshFlag::ePositions )
-					&& getOwner()->getBufferOffsets().hasData( SubmeshFlag::eIndex ) )
-				{
-					auto offsets = getOwner()->getBufferOffsets();
-					auto & vtxChunk = offsets.getBufferChunk( SubmeshFlag::ePositions );
-					auto & idxChunk = offsets.getBufferChunk( SubmeshFlag::eIndex );
-					auto & indices = idxChunk.getBuffer();
-					auto & vertices = vtxChunk.getBuffer();
-
-					m_cameraPosition = cameraPosition;
-					auto indexSize = uint32_t( idxChunk.getCount< uint32_t >() );
-
-					if ( auto * index = reinterpret_cast< uint32_t * >( indices.lock( idxChunk.getOffset()
-						, idxChunk.chunk.size
-						, 0u ) ) )
-					{
-						smshcomptri::FaceDistArray arraySorted;
-						arraySorted.reserve( indexSize / 3 );
-
-						if ( auto * vertex = reinterpret_cast< castor::Point3f const * >( vertices.lock( vtxChunk.getOffset()
-							, vtxChunk.chunk.size
-							, 0u ) ) )
-						{
-							for ( uint32_t * it = index + 0; it < index + indexSize; it += 3 )
-							{
-								double dDistance = 0.0;
-								auto & vtx1 = vertex[it[0]];
-								dDistance += castor::point::lengthSquared( vtx1 - cameraPosition );
-								auto & vtx2 = vertex[it[1]];
-								dDistance += castor::point::lengthSquared( vtx2 - cameraPosition );
-								auto & vtx3 = vertex[it[2]];
-								dDistance += castor::point::lengthSquared( vtx3 - cameraPosition );
-								arraySorted.push_back( smshcomptri::FaceDistance{ { it[0], it[1], it[2] }, dDistance } );
-							}
-
-							std::sort( arraySorted.begin(), arraySorted.end(), smshcomptri::Compare{} );
-
-							for ( auto & face : arraySorted )
-							{
-								*index++ = face.m_index[0];
-								*index++ = face.m_index[1];
-								*index++ = face.m_index[2];
-							}
-
-							vertices.unlock();
-						}
-
-						indices.flush( idxChunk.getOffset()
-							, idxChunk.chunk.size );
-						indices.unlock();
-					}
-				}
-			}
-		}
-		catch ( castor::Exception const & exc )
-		{
-			log::error << "Submesh::SortFaces - Error: " << exc.what() << std::endl;
-		}
-	}
-
 	void TriFaceMapping::computeNormals( bool reverted )
 	{
 		if ( !m_hasNormals )
@@ -348,7 +279,7 @@ namespace castor3d
 	void TriFaceMapping::doUpload()
 	{
 		auto count = uint32_t( m_faces.size() * 3 );
-		auto & offsets = getOwner()->getBufferOffsets();
+		auto & offsets = getOwner()->getSourceBufferOffsets();
 		auto & buffer = offsets.getBufferChunk( SubmeshFlag::eIndex );
 
 		if ( count && buffer.hasData() )

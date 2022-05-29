@@ -30,10 +30,12 @@ namespace castor3d
 
 		C3D_API uint32_t getId()const;
 		C3D_API uint32_t getInstanceCount()const;
+		C3D_API SubmeshFlags getSubmeshFlags()const;
+		C3D_API MorphFlags getMorphFlags()const;
+		C3D_API ProgramFlags getProgramFlags()const;
 		C3D_API GeometryBuffers const & getGeometryBuffers( ShaderFlags const & shaderFlags
 			, SubmeshFlags const & submeshFlags
 			, ProgramFlags const & programFlags
-			, Material & material
 			, TextureFlagsArray const & texturesMask )const;
 
 		Pass * pass;

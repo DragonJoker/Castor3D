@@ -31,16 +31,35 @@ namespace castor3d
 		return instantiation.getRefCount( pass->getOwner() );
 	}
 
+	MaterialRPtr SubmeshRenderNode::getMaterial()const
+	{
+		return pass->getOwner();
+	}
+
+	SubmeshFlags SubmeshRenderNode::getSubmeshFlags()const
+	{
+		return data.getSubmeshFlags( pass );
+	}
+
+	MorphFlags SubmeshRenderNode::getMorphFlags()const
+	{
+		return data.getMorphFlags();
+	}
+
+	ProgramFlags SubmeshRenderNode::getProgramFlags()const
+	{
+		return data.getProgramFlags( *getMaterial() );
+	}
+
 	GeometryBuffers const & SubmeshRenderNode::getGeometryBuffers( ShaderFlags const & shaderFlags
 		, SubmeshFlags const & submeshFlags
 		, ProgramFlags const & programFlags
-		, Material & material
 		, TextureFlagsArray const & texturesMask )const
 	{
-		return data.getGeometryBuffers( shaderFlags
+		return data.getGeometryBuffers( *this
+			, shaderFlags
 			, programFlags
 			, submeshFlags
-			, &material
 			, texturesMask );
 	}
 }

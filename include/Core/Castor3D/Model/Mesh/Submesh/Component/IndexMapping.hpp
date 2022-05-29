@@ -48,15 +48,6 @@ namespace castor3d
 		C3D_API virtual uint32_t getComponentsCount()const = 0;
 		/**
 		 *\~english
-		 *\brief		Sorts the face from farthest to nearest from the camera
-		 *\param[in]	cameraPosition	The camera position, relative to submesh
-		 *\~french
-		 *\brief		Trie les faces des plus éloignées aux plus proches de la caméra
-		 *\param[in]	cameraPosition	La position de la caméra, relative au sous-maillage
-		 */
-		C3D_API virtual void sortByDistance( castor::Point3f const & cameraPosition ) = 0;
-		/**
-		 *\~english
 		 *\brief		Generates normals and tangents.
 		 *\param[in]	reverted	Tells if normals are inverted.
 		 *\~french

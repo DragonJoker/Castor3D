@@ -28,10 +28,24 @@ namespace castor3d
 		return data.getCount();
 	}
 
+	SubmeshFlags BillboardRenderNode::getSubmeshFlags()const
+	{
+		return data.getSubmeshFlags();
+	}
+
+	MorphFlags BillboardRenderNode::getMorphFlags()const
+	{
+		return MorphFlags{};
+	}
+
+	ProgramFlags BillboardRenderNode::getProgramFlags()const
+	{
+		return data.getProgramFlags();
+	}
+
 	GeometryBuffers const & BillboardRenderNode::getGeometryBuffers( ShaderFlags const & shaderFlags
 		, SubmeshFlags const & submeshFlags
 		, ProgramFlags const & programFlags
-		, Material & material
 		, TextureFlagsArray const & texturesMask )const
 	{
 		return data.getGeometryBuffers();

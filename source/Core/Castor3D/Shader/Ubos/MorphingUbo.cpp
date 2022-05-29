@@ -26,7 +26,7 @@ namespace castor3d
 		{
 		}
 
-		ast::type::StructPtr MorphTargetData::makeType( ast::type::TypesCache & cache
+		ast::type::BaseStructPtr MorphTargetData::makeType( ast::type::TypesCache & cache
 			, MorphFlags morphFlags )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
@@ -144,7 +144,7 @@ namespace castor3d
 		{
 		}
 
-		ast::type::StructPtr MorphTargetsData::makeType( ast::type::TypesCache & cache
+		ast::type::BaseStructPtr MorphTargetsData::makeType( ast::type::TypesCache & cache
 			, MorphFlags morphFlags )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
@@ -176,7 +176,7 @@ namespace castor3d
 		{
 		}
 
-		ast::type::StructPtr MorphingWeightsData::makeType( ast::type::TypesCache & cache )
+		ast::type::BaseStructPtr MorphingWeightsData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
 				, "C3D_MorphingWeightsIndices" );
