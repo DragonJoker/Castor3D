@@ -25,7 +25,7 @@ namespace castor3d
 
 			SDW_DeclStructInstance( C3D_API, MorphTargetData );
 
-			static ast::type::StructPtr makeType( ast::type::TypesCache & cache
+			static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache
 				, MorphFlags morphFlags = MorphFlags{} );
 
 			C3D_API void morph( sdw::Vec4 & pos
@@ -78,7 +78,7 @@ namespace castor3d
 
 			SDW_DeclStructInstance( C3D_API, MorphTargetsData );
 
-			static ast::type::StructPtr makeType( ast::type::TypesCache & cache
+			static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache
 				, MorphFlags morphFlags = MorphFlags{} );
 
 			MorphTargetData operator[]( sdw::UInt const & index )const
@@ -100,7 +100,7 @@ namespace castor3d
 
 			SDW_DeclStructInstance( C3D_API, MorphingWeightsData );
 
-			static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 
 			C3D_API void morph( sdw::Array< shader::MorphTargetsData > const & targets
 				, sdw::UInt vertexId

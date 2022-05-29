@@ -119,9 +119,9 @@ namespace castor3d
 		//!\~english	The pass needs an edge to be drawn.
 		//!\~french		La passe demande qu'une bordure soit dessinée.
 		eDrawEdge = 0x1000,
-		//!\~english	All flags.
-		//\~french		Tous les indicateurs.
-		eAllOptional = 0x1000,
+		//!\~english	All other flags.
+		//\~french		Tous les autres indicateurs.
+		eAllOptional = eDrawEdge,
 		//!\~english	All flags.
 		//\~french		Tous les indicateurs.
 		eAll = eAllBase | eAllOptional,

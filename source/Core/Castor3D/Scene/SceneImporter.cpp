@@ -16,6 +16,7 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/SceneNodeImporter.hpp"
 #include "Castor3D/Scene/Animation/SceneNodeAnimation.hpp"
+#include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/LightImporter.hpp"
 
 namespace castor3d

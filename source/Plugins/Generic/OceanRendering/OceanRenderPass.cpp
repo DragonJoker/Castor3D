@@ -887,10 +887,6 @@ namespace ocean
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
-		auto skinningData = SkinningUbo::declare( writer
-			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
-			, RenderPipeline::eBuffers
-			, flags.programFlags );
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		index++; // lights buffer
 		C3D_Ocean( writer

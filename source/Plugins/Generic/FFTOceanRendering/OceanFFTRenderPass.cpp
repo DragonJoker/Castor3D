@@ -966,10 +966,6 @@ namespace ocean_fft
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
-		auto skinningData = SkinningUbo::declare( writer
-			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
-			, RenderPipeline::eBuffers
-			, flags.programFlags );
 		C3D_FftOcean( writer
 			, OceanFFTIdx::eOceanUbo
 			, RenderPipeline::eBuffers );

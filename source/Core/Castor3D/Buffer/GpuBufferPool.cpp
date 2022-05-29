@@ -18,6 +18,58 @@ namespace castor3d
 	void createUniformPassBinding( crg::FramePass & pass
 		, uint32_t binding
 		, std::string const & name
+		, ashes::BufferBase const & buffer
+		, VkDeviceSize offset
+		, VkDeviceSize size )
+	{
+		pass.addUniformBuffer( { buffer, name }
+			, binding
+			, offset
+			, size );
+	}
+
+	void createInputStoragePassBinding( crg::FramePass & pass
+		, uint32_t binding
+		, std::string const & name
+		, ashes::BufferBase const & buffer
+		, VkDeviceSize offset
+		, VkDeviceSize size )
+	{
+		pass.addInputStorageBuffer( { buffer, name }
+			, binding
+			, offset
+			, size );
+	}
+
+	void createInOutStoragePassBinding( crg::FramePass & pass
+		, uint32_t binding
+		, std::string const & name
+		, ashes::BufferBase const & buffer
+		, VkDeviceSize offset
+		, VkDeviceSize size )
+	{
+		pass.addInOutStorageBuffer( { buffer, name }
+			, binding
+			, offset
+			, size );
+	}
+
+	void createOutputStoragePassBinding( crg::FramePass & pass
+		, uint32_t binding
+		, std::string const & name
+		, ashes::BufferBase const & buffer
+		, VkDeviceSize offset
+		, VkDeviceSize size )
+	{
+		pass.addOutputStorageBuffer( { buffer, name }
+			, binding
+			, offset
+			, size );
+	}
+
+	void createUniformPassBinding( crg::FramePass & pass
+		, uint32_t binding
+		, std::string const & name
 		, ashes::Buffer< uint8_t > const & buffer
 		, VkDeviceSize offset
 		, VkDeviceSize size )

@@ -102,7 +102,7 @@ namespace castor3d::shader
 		, texture2{ this->getMember< sdw::Vec3 >( "texcoord2", true ) }
 		, texture3{ this->getMember< sdw::Vec3 >( "texcoord3", true ) }
 		, colour{ this->getMember< sdw::Vec3 >( "colour", true ) }
-		// Morphing
+		// Skinning
 		, boneIds0{ this->getMember< sdw::UVec4 >( "boneIds0", true ) }
 		, boneIds1{ this->getMember< sdw::UVec4 >( "boneIds1", true ) }
 		, boneWeights0{ this->getMember< sdw::Vec4 >( "boneWeights0", true ) }
