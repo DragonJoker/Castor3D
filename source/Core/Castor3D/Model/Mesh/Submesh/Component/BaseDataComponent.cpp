@@ -17,14 +17,17 @@ namespace castor3d
 {
 	namespace smshbase
 	{
-		static ashes::PipelineVertexInputStateCreateInfo createVertexLayout( uint32_t & currentBinding
+		static ashes::PipelineVertexInputStateCreateInfo createVertexLayout( SubmeshFlag submeshData
+			, uint32_t & currentBinding
 			, uint32_t & currentLocation )
 		{
 			ashes::VkVertexInputBindingDescriptionArray bindings{ { currentBinding
 				, sizeof( castor::Point4f ), VK_VERTEX_INPUT_RATE_VERTEX } };
 			ashes::VkVertexInputAttributeDescriptionArray attributes{ 1u, { currentLocation++
 				, currentBinding
-				, VK_FORMAT_R32G32B32_SFLOAT
+				, ( submeshData == SubmeshFlag::ePositions
+					? VK_FORMAT_R32G32B32A32_SFLOAT
+					: VK_FORMAT_R32G32B32_SFLOAT )
 				, 0u } };
 			++currentBinding;
 			return ashes::PipelineVertexInputStateCreateInfo{ 0u, bindings, attributes };
@@ -37,11 +40,24 @@ namespace castor3d
 				|| submeshData == SubmeshFlag::eTexcoords2
 				|| submeshData == SubmeshFlag::eTexcoords3;
 		}
+
+		static castor::Point4fArray convert( castor::Point3fArray const & src )
+		{
+			castor::Point4fArray result;
+			result.reserve( src.size() );
+
+			for ( auto & value : src )
+			{
+				result.push_back( castor::Point4f{ value->x, value->y, value->z, 1.0f } );
+			}
+
+			return result;
+		}
 	}
 
 	void uploadBaseData( SubmeshFlag submeshData
 		, Submesh const & submesh
-		, castor::Point4fArray const & data )
+		, castor::Point3fArray const & data )
 	{
 		auto count = uint32_t( data.size() );
 		auto & offsets = submesh.getSourceBufferOffsets();
@@ -49,8 +65,9 @@ namespace castor3d
 
 		if ( count && buffer.hasData() )
 		{
-			std::copy( data.begin()
-				, data.end()
+			auto up = smshbase::convert( data );
+			std::copy( up.begin()
+				, up.end()
 				, buffer.getData< castor::Point4f >().begin() );
 			buffer.markDirty();
 		}
@@ -78,7 +95,9 @@ namespace castor3d
 			if ( layoutIt == cache.end() )
 			{
 				layoutIt = cache.emplace( hash
-					, smshbase::createVertexLayout( currentBinding, currentLocation ) ).first;
+					, smshbase::createVertexLayout( submeshData
+						, currentBinding
+						, currentLocation ) ).first;
 			}
 			else
 			{

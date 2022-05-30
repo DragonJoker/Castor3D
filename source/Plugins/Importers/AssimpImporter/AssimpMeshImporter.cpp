@@ -237,18 +237,18 @@ namespace c3d_assimp
 
 		auto positions = submesh.createComponent< castor3d::PositionsComponent >();
 		auto normals = submesh.createComponent< castor3d::NormalsComponent >();
-		castor::Point4fArray tan;
-		castor::Point4fArray tex0;
-		castor::Point4fArray tex1;
-		castor::Point4fArray tex2;
-		castor::Point4fArray tex3;
-		castor::Point4fArray col;
-		castor::Point4fArray * tangents = &tan;
-		castor::Point4fArray * texcoords0 = &tex0;
-		castor::Point4fArray * texcoords1 = &tex1;
-		castor::Point4fArray * texcoords2 = &tex2;
-		castor::Point4fArray * texcoords3 = &tex3;
-		castor::Point4fArray * colours = &col;
+		castor::Point3fArray tan;
+		castor::Point3fArray tex0;
+		castor::Point3fArray tex1;
+		castor::Point3fArray tex2;
+		castor::Point3fArray tex3;
+		castor::Point3fArray col;
+		castor::Point3fArray * tangents = &tan;
+		castor::Point3fArray * texcoords0 = &tex0;
+		castor::Point3fArray * texcoords1 = &tex1;
+		castor::Point3fArray * texcoords2 = &tex2;
+		castor::Point3fArray * texcoords3 = &tex3;
+		castor::Point3fArray * colours = &col;
 
 		if ( aiMesh.HasTextureCoords( 0u ) )
 		{

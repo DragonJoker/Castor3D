@@ -464,10 +464,10 @@ namespace castor3d
 		m_needsNormalsCompute = smsh::fixNml( point.nml );
 		m_needsNormalsCompute = smsh::fixPos( point.pos ) || m_needsNormalsCompute;
 		m_needsNormalsCompute = smsh::fixTex( point.tex ) || m_needsNormalsCompute;
-		smsh::addComponentData< PositionsComponent >( *this, castor::Point4f{ point.pos } );
-		smsh::addComponentData< NormalsComponent >( *this, castor::Point4f{ point.nml } );
-		smsh::addComponentData< TangentsComponent >( *this, castor::Point4f{ point.tan } );
-		smsh::addComponentData< Texcoords0Component >( *this, castor::Point4f{ point.tex } );
+		smsh::addComponentData< PositionsComponent >( *this, point.pos );
+		smsh::addComponentData< NormalsComponent >( *this, point.nml );
+		smsh::addComponentData< TangentsComponent >( *this, point.tan );
+		smsh::addComponentData< Texcoords0Component >( *this, point.tex );
 	}
 
 	void Submesh::addPoints( InterleavedVertex const * const begin
@@ -647,145 +647,153 @@ namespace castor3d
 		return result;
 	}
 
-	castor::Point4fArray const & Submesh::getPositions()const
+	castor::Point3fArray const & Submesh::getPositions()const
 	{
 		if ( auto component = getComponent< PositionsComponent >() )
 		{
 			return component->getData();
 		}
 
-		static castor::Point4fArray const dummy;
+		static castor::Point3fArray const dummy;
 		return dummy;
 	}
 
-	castor::Point4fArray & Submesh::getPositions()
+	castor::Point3fArray & Submesh::getPositions()
 	{
+		m_dirty = true;
 		auto component = getComponent< PositionsComponent >();
 		CU_Require( component );
 		return component->getData();
 	}
 
-	castor::Point4fArray const & Submesh::getNormals()const
+	castor::Point3fArray const & Submesh::getNormals()const
 	{
 		if ( auto component = getComponent< NormalsComponent >() )
 		{
 			return component->getData();
 		}
 
-		static castor::Point4fArray const dummy;
+		static castor::Point3fArray const dummy;
 		return dummy;
 	}
 
-	castor::Point4fArray & Submesh::getNormals()
+	castor::Point3fArray & Submesh::getNormals()
 	{
+		m_dirty = true;
 		auto component = getComponent< NormalsComponent >();
 		CU_Require( component );
 		return component->getData();
 	}
 
-	castor::Point4fArray const & Submesh::getTangents()const
+	castor::Point3fArray const & Submesh::getTangents()const
 	{
 		if ( auto component = getComponent< TangentsComponent >() )
 		{
 			return component->getData();
 		}
 
-		static castor::Point4fArray const dummy;
+		static castor::Point3fArray const dummy;
 		return dummy;
 	}
 
-	castor::Point4fArray & Submesh::getTangents()
+	castor::Point3fArray & Submesh::getTangents()
 	{
+		m_dirty = true;
 		auto component = getComponent< TangentsComponent >();
 		CU_Require( component );
 		return component->getData();
 	}
 
-	castor::Point4fArray const & Submesh::getTexcoords0()const
+	castor::Point3fArray const & Submesh::getTexcoords0()const
 	{
 		if ( auto component = getComponent< Texcoords0Component >() )
 		{
 			return component->getData();
 		}
 
-		static castor::Point4fArray const dummy;
+		static castor::Point3fArray const dummy;
 		return dummy;
 	}
 
-	castor::Point4fArray & Submesh::getTexcoords0()
+	castor::Point3fArray & Submesh::getTexcoords0()
 	{
+		m_dirty = true;
 		auto component = getComponent< Texcoords0Component >();
 		CU_Require( component );
 		return component->getData();
 	}
 
-	castor::Point4fArray const & Submesh::getTexcoords1()const
+	castor::Point3fArray const & Submesh::getTexcoords1()const
 	{
 		if ( auto component = getComponent< Texcoords1Component >() )
 		{
 			return component->getData();
 		}
 
-		static castor::Point4fArray const dummy;
+		static castor::Point3fArray const dummy;
 		return dummy;
 	}
 
-	castor::Point4fArray & Submesh::getTexcoords1()
+	castor::Point3fArray & Submesh::getTexcoords1()
 	{
+		m_dirty = true;
 		auto component = getComponent< Texcoords1Component >();
 		CU_Require( component );
 		return component->getData();
 	}
 
-	castor::Point4fArray const & Submesh::getTexcoords2()const
+	castor::Point3fArray const & Submesh::getTexcoords2()const
 	{
 		if ( auto component = getComponent< Texcoords2Component >() )
 		{
 			return component->getData();
 		}
 
-		static castor::Point4fArray const dummy;
+		static castor::Point3fArray const dummy;
 		return dummy;
 	}
 
-	castor::Point4fArray & Submesh::getTexcoords2()
+	castor::Point3fArray & Submesh::getTexcoords2()
 	{
+		m_dirty = true;
 		auto component = getComponent< Texcoords2Component >();
 		CU_Require( component );
 		return component->getData();
 	}
 
-	castor::Point4fArray const & Submesh::getTexcoords3()const
+	castor::Point3fArray const & Submesh::getTexcoords3()const
 	{
 		if ( auto component = getComponent< Texcoords3Component >() )
 		{
 			return component->getData();
 		}
 
-		static castor::Point4fArray const dummy;
+		static castor::Point3fArray const dummy;
 		return dummy;
 	}
 
-	castor::Point4fArray & Submesh::getTexcoords3()
+	castor::Point3fArray & Submesh::getTexcoords3()
 	{
+		m_dirty = true;
 		auto component = getComponent< Texcoords3Component >();
 		CU_Require( component );
 		return component->getData();
 	}
 
-	castor::Point4fArray const & Submesh::getColours()const
+	castor::Point3fArray const & Submesh::getColours()const
 	{
 		if ( auto component = getComponent< ColoursComponent >() )
 		{
 			return component->getData();
 		}
 
-		static castor::Point4fArray const dummy;
+		static castor::Point3fArray const dummy;
 		return dummy;
 	}
 
-	castor::Point4fArray & Submesh::getColours()
+	castor::Point3fArray & Submesh::getColours()
 	{
+		m_dirty = true;
 		auto component = getComponent< ColoursComponent >();
 		CU_Require( component );
 		return component->getData();

@@ -113,14 +113,14 @@ namespace c3d_assimp
 
 	template< typename aiMeshType >
 	static void createVertexBuffer( aiMeshType const & aiMesh
-		, castor::Point4fArray & positions
-		, castor::Point4fArray & normals
-		, castor::Point4fArray & tangents
-		, castor::Point4fArray & texcoords0
-		, castor::Point4fArray & texcoords1
-		, castor::Point4fArray & texcoords2
-		, castor::Point4fArray & texcoords3
-		, castor::Point4fArray & colours )
+		, castor::Point3fArray & positions
+		, castor::Point3fArray & normals
+		, castor::Point3fArray & tangents
+		, castor::Point3fArray & texcoords0
+		, castor::Point3fArray & texcoords1
+		, castor::Point3fArray & texcoords2
+		, castor::Point3fArray & texcoords3
+		, castor::Point3fArray & colours )
 	{
 		uint32_t index{ 0u };
 
@@ -240,14 +240,14 @@ namespace c3d_assimp
 		}
 	}
 
-	static std::vector< castor3d::SubmeshAnimationBuffer > gatherMeshAnimBuffers( castor::Point4fArray const & positions
-		, castor::Point4fArray const & normals
-		, castor::Point4fArray const & tangents
-		, castor::Point4fArray const & texcoords0
-		, castor::Point4fArray const & texcoords1
-		, castor::Point4fArray const & texcoords2
-		, castor::Point4fArray const & texcoords3
-		, castor::Point4fArray const & colours
+	static std::vector< castor3d::SubmeshAnimationBuffer > gatherMeshAnimBuffers( castor::Point3fArray const & positions
+		, castor::Point3fArray const & normals
+		, castor::Point3fArray const & tangents
+		, castor::Point3fArray const & texcoords0
+		, castor::Point3fArray const & texcoords1
+		, castor::Point3fArray const & texcoords2
+		, castor::Point3fArray const & texcoords3
+		, castor::Point3fArray const & colours
 		, castor::ArrayView< aiAnimMesh * > animMeshes )
 	{
 		std::vector< castor3d::SubmeshAnimationBuffer > result;
