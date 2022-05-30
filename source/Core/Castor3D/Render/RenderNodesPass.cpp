@@ -845,9 +845,12 @@ namespace castor3d
 				auto prvMtxModel = writer.declLocale< Mat4 >( "prvMtxModel"
 					, modelData.getPrvModelMtx( flags.programFlags, curMtxModel ) );
 				auto prvPosition = writer.declLocale( "prvPosition"
-					, c3d_matrixData.worldToPrvProj( prvMtxModel * curPosition ) );
+					, curPosition );
+				prvPosition.xyz() += in.velocity;
+				prvPosition = c3d_matrixData.worldToPrvProj( prvMtxModel * prvPosition );
 				auto worldPos = writer.declLocale( "worldPos"
 					, curMtxModel * curPosition );
+
 				out.worldPosition = worldPos;
 				out.viewPosition = c3d_matrixData.worldToCurView( worldPos );
 				curPosition = c3d_matrixData.worldToCurProj( worldPos );

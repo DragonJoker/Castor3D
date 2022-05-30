@@ -39,6 +39,7 @@ namespace castor3d
 			eOutColour,
 			eInBones,
 			eOutBones,
+			eOutVelocity,
 		};
 
 	public:

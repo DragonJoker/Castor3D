@@ -64,6 +64,7 @@ namespace castor3d
 		bool m_castsShadows{ true };
 		bool m_receivesShadows{ true };
 		bool m_cullable{ true };
+		bool m_firstUpdate{ true };
 	};
 }
 
