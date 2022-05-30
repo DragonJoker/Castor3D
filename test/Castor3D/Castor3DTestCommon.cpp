@@ -305,7 +305,7 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( BonesComponent const & lhs, BonesComponent const & rhs )
+	bool C3DTestCase::compare( SkinComponent const & lhs, SkinComponent const & rhs )
 	{
 		auto lhsData = lhs.getBonesData();
 		auto rhsData = rhs.getBonesData();
@@ -455,10 +455,10 @@ namespace Testing
 				result = CT_EQUAL( static_cast< ColoursComponent const & >( lhs )
 					, static_cast< ColoursComponent const & >( rhs ) );
 			}
-			else if ( lhs.getType() == BonesComponent::Name )
+			else if ( lhs.getType() == SkinComponent::Name )
 			{
-				result = CT_EQUAL( static_cast< BonesComponent const & >( lhs )
-					, static_cast< BonesComponent const & >( rhs ) );
+				result = CT_EQUAL( static_cast< SkinComponent const & >( lhs )
+					, static_cast< SkinComponent const & >( rhs ) );
 			}
 			else if ( lhs.getType() == TriFaceMapping::Name )
 			{

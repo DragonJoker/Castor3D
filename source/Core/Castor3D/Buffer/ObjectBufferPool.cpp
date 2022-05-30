@@ -74,9 +74,9 @@ namespace castor3d
 				result += "C";
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eBones ) )
+			if ( checkFlag( submeshFlags, SubmeshFlag::eSkin ) )
 			{
-				result += "B";
+				result += "S";
 			}
 
 			return result;
@@ -209,7 +209,7 @@ namespace castor3d
 				}
 				else if ( vertexCount )
 				{
-					if ( data == SubmeshData::eBones )
+					if ( data == SubmeshData::eSkin )
 					{
 						modelBuffers.buffers[i] = details::createBuffer< VertexBoneData >( m_device
 							, vertexCount

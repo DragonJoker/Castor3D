@@ -26,7 +26,7 @@
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Animation/MeshAnimation.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/IndexMapping.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp>
@@ -674,7 +674,7 @@ namespace castor3d::exporter
 								dstSubmesh->addComponent( std::static_pointer_cast< castor3d::IndexMapping >( indexMapping->clone( *dstSubmesh ) ) );
 							}
 
-							if ( auto bones = srcSubmesh->getComponent< castor3d::BonesComponent >() )
+							if ( auto bones = srcSubmesh->getComponent< castor3d::SkinComponent >() )
 							{
 								dstSubmesh->addComponent( bones->clone( *dstSubmesh ) );
 							}

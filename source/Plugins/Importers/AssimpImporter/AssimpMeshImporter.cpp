@@ -7,7 +7,7 @@
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp>
 #include <Castor3D/Model/Skeleton/BoneNode.hpp>
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
@@ -343,7 +343,7 @@ namespace c3d_assimp
 					}
 				}
 
-				auto bones = submesh.createComponent< castor3d::BonesComponent >();
+				auto bones = submesh.createComponent< castor3d::SkinComponent >();
 				bones->addBoneDatas( bonesData );
 			}
 		}
@@ -384,7 +384,7 @@ namespace c3d_assimp
 			if ( aiMeshIndex < mesh.getSubmeshCount() )
 			{
 				auto submesh = mesh.getSubmesh( aiMeshIndex );
-				auto transform = ( submesh->hasComponent( castor3d::BonesComponent::Name )
+				auto transform = ( submesh->hasComponent( castor3d::SkinComponent::Name )
 					? meshes::getTranslation( transformAcc )
 					: fromAssimp( transformAcc ) );
 

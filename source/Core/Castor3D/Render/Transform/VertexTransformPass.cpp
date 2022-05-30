@@ -112,10 +112,10 @@ namespace castor3d
 					, VertexTransformPass::eOutColour ) );
 			}
 
-			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eBones ) )
+			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eSkin ) )
 			{
-				writes.push_back( input.getStorageBinding( SubmeshFlag::eBones
-					, VertexTransformPass::eInBones ) );
+				writes.push_back( input.getStorageBinding( SubmeshFlag::eSkin
+					, VertexTransformPass::eInSkin ) );
 			}
 
 			writes.push_back( output.getStorageBinding( SubmeshFlag::eVelocity

@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_BonesComponent_H___
-#define ___C3D_BonesComponent_H___
+#ifndef ___C3D_SkinComponent_H___
+#define ___C3D_SkinComponent_H___
 
 #include "SubmeshComponent.hpp"
 #include "Castor3D/Binary/BinaryModule.hpp"
@@ -12,7 +12,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class BonesComponent
+	class SkinComponent
 		: public SubmeshComponent
 	{
 	public:
@@ -24,7 +24,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	submesh	Le sous-maillage parent.
 		 */
-		C3D_API explicit BonesComponent( Submesh & submesh );
+		C3D_API explicit SkinComponent( Submesh & submesh );
 		/**
 		 *\~english
 		 *\brief		adds bone datas.
@@ -86,19 +86,12 @@ namespace castor3d
 			addBoneDatas( boneData.data(), boneData.data() + boneData.size() );
 		}
 		/**
-		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
-		 */
-		ProgramFlags getProgramFlags( Material const & material )const override
-		{
-			return ProgramFlag::eSkinning;
-		}
-		/**
 		 *\copydoc		castor3d::SubmeshComponent::getSubmeshFlags
 		 */
 		SubmeshFlags getSubmeshFlags( Pass const * pass )const override
 		{
 			return hasBoneData()
-				? SubmeshFlag::eBones
+				? SubmeshFlag::eSkin
 				: SubmeshFlag( 0 );
 		}
 
@@ -119,14 +112,14 @@ namespace castor3d
 
 	public:
 		C3D_API static castor::String const Name;
-		C3D_API static uint32_t constexpr Id = getIndex( SubmeshFlag::eBones ) - 1u;
+		C3D_API static uint32_t constexpr Id = getIndex( SubmeshFlag::eSkin ) - 1u;
 
 	private:
 		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_bonesLayouts;
 		VertexBoneDataArray m_bones;
 
-		friend class BinaryWriter< BonesComponent >;
-		friend class BinaryParser< BonesComponent >;
+		friend class BinaryWriter< SkinComponent >;
+		friend class BinaryParser< SkinComponent >;
 	};
 }
 

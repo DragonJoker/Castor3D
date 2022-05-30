@@ -67,37 +67,9 @@ namespace castor3d
 
 		if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 		{
-			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
-			{
-				return isFrontCulled
-					? RenderNodeType::eFrontInstancedSkinned
-					: RenderNodeType::eBackInstancedSkinned;
-			}
-
 			return isFrontCulled
 				? RenderNodeType::eFrontInstancedStatic
 				: RenderNodeType::eBackInstancedStatic;
-		}
-
-		if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
-		{
-			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
-			{
-				return isFrontCulled
-					? RenderNodeType::eFrontMorphingSkinned
-					: RenderNodeType::eBackMorphingSkinned;
-			}
-
-			return isFrontCulled
-				? RenderNodeType::eFrontSkinned
-				: RenderNodeType::eBackSkinned;
-		}
-
-		if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
-		{
-			return isFrontCulled
-				? RenderNodeType::eFrontMorphing
-				: RenderNodeType::eBackMorphing;
 		}
 
 		if ( checkFlag( programFlags, ProgramFlag::eBillboards ) )
@@ -223,7 +195,7 @@ namespace castor3d
 				static GpuBufferOffsetT< SkinningTransformsConfiguration > const skinTransforms{};
 
 				if ( data.hasComponent( MorphComponent::Name )
-					&& data.hasComponent( BonesComponent::Name ) )
+					&& data.hasComponent( SkinComponent::Name ) )
 				{
 					m_vertexTransform->registerNode( *it.first->second
 						, data.getMorphTargets()
@@ -379,11 +351,10 @@ namespace castor3d
 
 			if ( passIt != newMaterial.end() )
 			{
-				auto submeshFlags = data.getProgramFlags( newMaterial );
-				auto animMesh = checkFlag( submeshFlags, ProgramFlag::eMorphing )
+				auto animMesh = data.hasMorphComponent()
 					? std::static_pointer_cast< AnimatedMesh >( findAnimatedObject( *getOwner(), instance.getName() + cuT( "_Mesh" ) ) )
 					: nullptr;
-				auto animSkeleton = checkFlag( submeshFlags, ProgramFlag::eSkinning )
+				auto animSkeleton = data.hasSkinComponent()
 					? std::static_pointer_cast< AnimatedSkeleton >( findAnimatedObject( *getOwner(), instance.getName() + cuT( "_Skeleton" ) ) )
 					: nullptr;
 
@@ -494,11 +465,10 @@ namespace castor3d
 			{
 				auto & node = nodeIt.second;
 				auto & instantiation = node->data.getInstantiation();
-				auto programFlags = node->getProgramFlags();
-				node->mesh = checkFlag( programFlags, ProgramFlag::eMorphing )
+				node->mesh = node->data.hasMorphComponent()
 					? std::static_pointer_cast< AnimatedMesh >( findAnimatedObject( *getOwner(), node->instance.getName() + cuT( "_Mesh" ) ) ).get()
 					: nullptr;
-				node->skeleton = checkFlag( programFlags, ProgramFlag::eSkinning )
+				node->skeleton = node->data.hasSkinComponent()
 					? std::static_pointer_cast< AnimatedSkeleton >( findAnimatedObject( *getOwner(), node->instance.getName() + cuT( "_Skeleton" ) ) ).get()
 					: nullptr;
 

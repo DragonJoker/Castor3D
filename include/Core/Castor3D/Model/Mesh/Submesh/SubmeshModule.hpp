@@ -61,9 +61,9 @@ namespace castor3d
 		//!\~english	Submesh has colours.
 		//!\~french		Le submesh a des couleurs.
 		eColours,
-		//!\~english	Submesh has bones data.
-		//!\~french		Le submesh a des données d'os.
-		eBones,
+		//!\~english	Submesh has skin data.
+		//!\~french		Le submesh a des données de skin.
+		eSkin,
 		//!\~english	Submesh has velocity data.
 		//!\~french		Le submesh a des données de vélocité.
 		eVelocity,
@@ -92,8 +92,8 @@ namespace castor3d
 			return cuT( "Texcoords3" );
 		case castor3d::SubmeshData::eColours:
 			return cuT( "Colours" );
-		case castor3d::SubmeshData::eBones:
-			return cuT( "Bones" );
+		case castor3d::SubmeshData::eSkin:
+			return cuT( "Skin" );
 		case castor3d::SubmeshData::eVelocity:
 			return cuT( "Velocity" );
 		default:
@@ -113,7 +113,7 @@ namespace castor3d
 			, sizeof( castor::Point4f ) /* SubmeshFlag::eTexcoords2 */
 			, sizeof( castor::Point4f ) /* SubmeshFlag::eTexcoords3 */
 			, sizeof( castor::Point4f ) /* SubmeshFlag::eColours */
-			, sizeof( VertexBoneData ) /* SubmeshFlag::eBones */
+			, sizeof( VertexBoneData ) /* SubmeshFlag::eSkin */
 			, sizeof( castor::Point4f ) /* SubmeshFlag::eVelocity */ };
 		return uint32_t( sizes[size_t( value )] );
 	}
@@ -161,7 +161,7 @@ namespace castor3d
 		ePosNmlTanTex = ePositions | eNormals | eTangents | eTexcoords0,
 		//!\~english	Submesh has bones data.
 		//!\~french		Submesh a des données d'os.
-		eBones = 0x0001 << int( SubmeshData::eBones ),
+		eSkin = 0x0001 << int( SubmeshData::eSkin ),
 		//!\~english	Submesh has velocity data.
 		//!\~french		Le submesh a des données de vélocité.
 		eVelocity = 0x0001 << int( SubmeshData::eVelocity ),

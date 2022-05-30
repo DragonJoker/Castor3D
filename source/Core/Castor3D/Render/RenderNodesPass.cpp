@@ -728,10 +728,6 @@ namespace castor3d
 
 	ShaderPtr RenderNodesPass::doGetVertexShaderSource( PipelineFlags const & flags )const
 	{
-		// Since their vertex attribute locations overlap, we must not have both set at the same time.
-		CU_Require( ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) ? 1 : 0 )
-			+ ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) ? 1 : 0 ) < 2
-			&& "Can't have both instantiation and morphing yet." );
 		using namespace sdw;
 		VertexWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );

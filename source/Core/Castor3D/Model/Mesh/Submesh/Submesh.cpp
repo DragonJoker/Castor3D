@@ -9,7 +9,7 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Miscellaneous/StagingData.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -189,9 +189,9 @@ namespace castor3d
 			createComponent< ColoursComponent >();
 		}
 
-		if ( checkFlag( flags, SubmeshFlag::eBones ) )
+		if ( checkFlag( flags, SubmeshFlag::eSkin ) )
 		{
-			createComponent< BonesComponent >();
+			createComponent< SkinComponent >();
 		}
 	}
 
@@ -250,7 +250,7 @@ namespace castor3d
 				if ( isDynamic() )
 				{
 					flags = m_submeshFlags;
-					remFlag( flags, SubmeshFlag::eBones );
+					remFlag( flags, SubmeshFlag::eSkin );
 					for ( auto & finalBufferOffset : m_finalBufferOffsets )
 					{
 						finalBufferOffset.second = device.geometryPools->getBuffer( getPointsCount()
@@ -560,7 +560,7 @@ namespace castor3d
 				// Initialise only if the submesh itself is already initialised,
 				// because if it is not, the buffers will be initialised by the call to initialise().
 				auto flags = m_submeshFlags;
-				remFlag( flags, SubmeshFlag::eBones );
+				remFlag( flags, SubmeshFlag::eSkin );
 				RenderDevice & device = getOwner()->getOwner()->getRenderSystem()->getRenderDevice();
 				it->second = device.geometryPools->getBuffer( getPointsCount()
 					, 0u // No index on transformed buffers
@@ -826,7 +826,7 @@ namespace castor3d
 
 	bool Submesh::isDynamic()const
 	{
-		return hasComponent( BonesComponent::Name )
+		return hasComponent( SkinComponent::Name )
 			|| hasComponent( MorphComponent::Name );
 	}
 
@@ -854,6 +854,16 @@ namespace castor3d
 	{
 		CU_Require( bool( m_sourceBufferOffset ) );
 		return m_sourceBufferOffset;
+	}
+
+	bool Submesh::hasMorphComponent()const
+	{
+		return hasComponent( MorphComponent::Name );
+	}
+
+	bool Submesh::hasSkinComponent()const
+	{
+		return hasComponent( SkinComponent::Name );
 	}
 
 	//*********************************************************************************************

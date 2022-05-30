@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_BinaryBonesComponent_H___
-#define ___C3D_BinaryBonesComponent_H___
+#ifndef ___C3D_BinarySkinComponent_H___
+#define ___C3D_BinarySkinComponent_H___
 
 #include "Castor3D/Binary/BinaryParser.hpp"
 #include "Castor3D/Binary/BinaryWriter.hpp"
@@ -16,13 +16,13 @@ namespace castor3d
 	\date		09/11/2017
 	\~english
 	\brief		Helper structure to find ChunkType from a type.
-	\remarks	Specialisation for BonesComponent.
+	\remarks	Specialisation for SkinComponent.
 	\~french
 	\brief		Classe d'aide pour récupéer un ChunkType depuis un type.
-	\remarks	Spécialisation pour BonesComponent.
+	\remarks	Spécialisation pour SkinComponent.
 	*/
 	template<>
-	struct ChunkTyper< BonesComponent >
+	struct ChunkTyper< SkinComponent >
 	{
 		static ChunkType const Value = ChunkType::eBonesComponent;
 	};
@@ -30,13 +30,13 @@ namespace castor3d
 	\author		Sylvain DOREMUS
 	\date		09/11/2017
 	\~english
-	\brief		BonesComponent loader.
+	\brief		SkinComponent loader.
 	\~english
-	\brief		Loader de BonesComponent.
+	\brief		Loader de SkinComponent.
 	*/
 	template<>
-	class BinaryWriter< BonesComponent >
-		: public BinaryWriterBase< BonesComponent >
+	class BinaryWriter< SkinComponent >
+		: public BinaryWriterBase< SkinComponent >
 	{
 	private:
 		/**
@@ -49,19 +49,19 @@ namespace castor3d
 		 *\param[in]	obj	L'objet à écrire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool doWrite( BonesComponent const & obj )override;
+		C3D_API bool doWrite( SkinComponent const & obj )override;
 	};
 	/**
 	\author		Sylvain DOREMUS
 	\date		09/11/2017
 	\~english
-	\brief		BonesComponent loader.
+	\brief		SkinComponent loader.
 	\~english
-	\brief		Loader de BonesComponent.
+	\brief		Loader de SkinComponent.
 	*/
 	template<>
-	class BinaryParser< BonesComponent >
-		: public BinaryParserBase< BonesComponent >
+	class BinaryParser< SkinComponent >
+		: public BinaryParserBase< SkinComponent >
 	{
 	private:
 		/**
@@ -74,7 +74,7 @@ namespace castor3d
 		 *\param[out]	obj	L'objet à lire.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API bool doParse( BonesComponent & obj )override;
+		C3D_API bool doParse( SkinComponent & obj )override;
 	};
 }
 

@@ -56,16 +56,16 @@ namespace castor3d
 				{
 					result->declMember( "boneIds0", ast::type::Kind::eVec4U
 						, ast::type::NotArray
-						, checkFlag( submeshFlags, SubmeshFlag::eBones ) );
+						, checkFlag( submeshFlags, SubmeshFlag::eSkin ) );
 					result->declMember( "boneIds1", ast::type::Kind::eVec4U
 						, ast::type::NotArray
-						, checkFlag( submeshFlags, SubmeshFlag::eBones ) );
+						, checkFlag( submeshFlags, SubmeshFlag::eSkin ) );
 					result->declMember( "boneWeights0", ast::type::Kind::eVec4F
 						, ast::type::NotArray
-						, checkFlag( submeshFlags, SubmeshFlag::eBones ) );
+						, checkFlag( submeshFlags, SubmeshFlag::eSkin ) );
 					result->declMember( "boneWeights1", ast::type::Kind::eVec4F
 						, ast::type::NotArray
-						, checkFlag( submeshFlags, SubmeshFlag::eBones ) );
+						, checkFlag( submeshFlags, SubmeshFlag::eSkin ) );
 				}
 
 				return result;
@@ -90,7 +90,7 @@ namespace castor3d
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_COMPUTE_BIT ) );
 
-			if ( checkFlag( pipeline.programFlags, ProgramFlag::eMorphing ) )
+			if ( pipeline.morphFlags != MorphFlag::eNone )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VertexTransformPass::eMorphTargets
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
@@ -100,7 +100,7 @@ namespace castor3d
 					, VK_SHADER_STAGE_COMPUTE_BIT ) );
 			}
 
-			if ( checkFlag( pipeline.programFlags, ProgramFlag::eSkinning ) )
+			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eSkin ) )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VertexTransformPass::eSkinTransforms
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
@@ -187,9 +187,9 @@ namespace castor3d
 					, VK_SHADER_STAGE_COMPUTE_BIT ) );
 			}
 
-			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eBones ) )
+			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eSkin ) )
 			{
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( VertexTransformPass::eInBones
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( VertexTransformPass::eInSkin
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, VK_SHADER_STAGE_COMPUTE_BIT ) );
 			}
@@ -220,7 +220,7 @@ namespace castor3d
 					, *pipeline.pipelineLayout ) );
 		}
 
-		ShaderPtr getShaderSource( RenderDevice const & device
+		static ShaderPtr getShaderSource( RenderDevice const & device
 			, TransformPipeline const & pipeline )
 		{
 			using namespace sdw;
@@ -248,7 +248,7 @@ namespace castor3d
 			auto skinningData = SkinningUbo::declare( writer
 				, uint32_t( VertexTransformPass::eSkinTransforms )
 				, 0u
-				, pipeline.programFlags );
+				, pipeline.submeshFlags );
 
 #define DeclareSsbo( Name, Type, Binding, Enable )\
 	sdw::Ssbo Name##Buffer{ writer\
@@ -305,8 +305,8 @@ namespace castor3d
 				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eColours ) );
 			DeclareSsboEx( c3d_inBones
 				, Skin
-				, VertexTransformPass::eInBones
-				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eBones )
+				, VertexTransformPass::eInSkin
+				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eSkin )
 				, pipeline.submeshFlags );
 
 			// Outputs
@@ -375,22 +375,18 @@ namespace castor3d
 				auto colour = writer.declLocale( "colour"
 					, c3d_inColour[index].xyz() );
 
-				if ( checkFlag( pipeline.programFlags, ProgramFlag::eMorphing ) )
-				{
-					auto morphingWeights = writer.declLocale( "morphingWeights"
-						, c3d_morphingWeights[c3d_objectIDs.morphingId] );
-					morphingWeights.morph( c3d_morphTargets
-						, index
-						, position
-						, normal
-						, tangent
-						, texcoord0
-						, texcoord1
-						, texcoord2
-						, texcoord3
-						, colour );
-				}
-
+				auto morphingWeights = writer.declLocale( "morphingWeights"
+					, c3d_morphingWeights[c3d_objectIDs.morphingId] );
+				morphingWeights.morph( c3d_morphTargets
+					, index
+					, position
+					, normal
+					, tangent
+					, texcoord0
+					, texcoord1
+					, texcoord2
+					, texcoord3
+					, colour );
 				c3d_outTexcoord0[index].xyz() = texcoord0;
 				c3d_outTexcoord1[index].xyz() = texcoord1;
 				c3d_outTexcoord2[index].xyz() = texcoord2;
@@ -402,8 +398,7 @@ namespace castor3d
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[c3d_objectIDs.nodeId] );
 				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
-					, modelData.getCurModelMtx( pipeline.programFlags
-						, skinningData
+					, modelData.getCurModelMtx( skinningData
 						, c3d_objectIDs.skinningId
 						, skin.boneIds0
 						, skin.boneIds1
@@ -414,7 +409,7 @@ namespace castor3d
 				c3d_outVelocity[index].xyz() = oldPosition.xyz() - position.xyz();
 
 				auto curMtxNormal = writer.declLocale< Mat3 >( "curMtxNormal"
-					, modelData.getNormalMtx( pipeline.programFlags, curMtxModel ) );
+					, modelData.getNormalMtx( pipeline.submeshFlags, curMtxModel ) );
 				c3d_outNormal[index].xyz() = normalize( curMtxNormal * normal.xyz() );
 				c3d_outTangent[index].xyz() = normalize( curMtxNormal * tangent.xyz() );
 			} );
@@ -422,31 +417,16 @@ namespace castor3d
 		}
 
 		static uint32_t getIndex( SubmeshFlags const & submeshFlags
-			, MorphFlags const & morphFlags
-			, ProgramFlags const & programFlags )
+			, MorphFlags const & morphFlags )
 		{
-			remFlag( programFlags, ProgramFlag::eAllOptional );
-			remFlag( programFlags, ProgramFlag::eInstantiation );
-			remFlag( programFlags, ProgramFlag::eBillboards );
-			remFlag( programFlags, ProgramFlag::ePicking );
-			remFlag( programFlags, ProgramFlag::eSpherical );
-			remFlag( programFlags, ProgramFlag::eFixedSize );
-			remFlag( programFlags, ProgramFlag::eInvertNormals );
-			remFlag( programFlags, ProgramFlag::eForceTexCoords );
-			remFlag( programFlags, ProgramFlag::eLighting );
-			remFlag( programFlags, ProgramFlag::eVsmShadowMap );
-			remFlag( programFlags, ProgramFlag::eRsmShadowMap );
 			constexpr auto maxSubmeshSize = castor::getBitSize( uint32_t( SubmeshFlag::eAllBase ) );
 			constexpr auto maxMorphSize = castor::getBitSize( uint32_t( MorphFlag::eAllBase ) );
-			constexpr auto maxProgramSize = castor::getBitSize( uint32_t( ProgramFlag::eAllBase ) );
-			static_assert( maxSubmeshSize + maxMorphSize + maxProgramSize <= 32 );
+			static_assert( maxSubmeshSize + maxMorphSize <= 32 );
 			auto offset = 0u;
 			uint32_t result{};
-			result = uint64_t( submeshFlags ) << offset;
+			result = uint32_t( submeshFlags ) << offset;
 			offset += maxSubmeshSize;
-			result |= uint64_t( morphFlags ) << offset;
-			offset += maxMorphSize;
-			result |= uint64_t( programFlags ) << offset;
+			result |= uint32_t( morphFlags ) << offset;
 			return result;
 		}
 	}
@@ -511,9 +491,8 @@ namespace castor3d
 		{
 			auto submeshFlags = node.getSubmeshFlags();
 			auto morphFlags = node.getMorphFlags();
-			auto programFlags = node.getProgramFlags();
 			m_pass->registerNode( node
-				, doGetPipeline( vtxtrsg::getIndex( submeshFlags, morphFlags, programFlags ) )
+				, doGetPipeline( vtxtrsg::getIndex( submeshFlags, morphFlags ) )
 				, morphTargets
 				, morphingWeights
 				, skinTransforms );
