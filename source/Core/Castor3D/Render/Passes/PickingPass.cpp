@@ -131,10 +131,6 @@ namespace castor3d
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
-		auto skinningData = SkinningUbo::declare( writer
-			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
-			, RenderPipeline::eBuffers
-			, flags.programFlags );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
@@ -173,17 +169,10 @@ namespace castor3d
 				out.nodeId = writer.cast< sdw::Int >( ids.nodeId );
 				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 
-				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
-					, modelData.getCurModelMtx( flags.programFlags
-						, skinningData
-						, ids.skinningId
-						, in.boneIds0
-						, in.boneIds1
-						, in.boneWeights0
-						, in.boneWeights1 ) );
-
 				if ( !checkFlag( flags.submeshFlags, SubmeshFlag::eVelocity ) )
 				{
+					auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
+						, modelData.getModelMtx() );
 					curPosition = mtxModel * curPosition;
 				}
 

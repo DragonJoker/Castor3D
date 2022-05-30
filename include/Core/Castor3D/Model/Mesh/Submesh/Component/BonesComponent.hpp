@@ -56,7 +56,9 @@ namespace castor3d
 			, std::vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 			, uint32_t & currentBinding
-			, uint32_t & currentLocation )override;
+			, uint32_t & currentLocation )override
+		{
+		}
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::clone
 		 */

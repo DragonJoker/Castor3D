@@ -143,12 +143,14 @@ namespace castor3d
 
 	bool InstantiationComponent::isInstanced( MaterialRPtr material )const
 	{
-		return doCheckInstanced( getRefCount( material ) );
+		return !getOwner()->isDynamic()
+			&& doCheckInstanced( getRefCount( material ) );
 	}
 
 	bool InstantiationComponent::isInstanced()const
 	{
-		return doCheckInstanced( getMaxRefCount() );
+		return !getOwner()->isDynamic()
+			&& doCheckInstanced( getMaxRefCount() );
 	}
 
 	uint32_t InstantiationComponent::getMaxRefCount()const
@@ -214,7 +216,7 @@ namespace castor3d
 	ProgramFlags InstantiationComponent::getProgramFlags( Material const & material )const
 	{
 		auto it = find( material );
-		return ( it != end() && it->second.buffer )
+		return ( it != end() && it->second.buffer && !getOwner()->isDynamic() )
 			? ProgramFlag::eInstantiation
 			: ProgramFlag{};
 	}

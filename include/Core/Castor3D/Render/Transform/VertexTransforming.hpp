@@ -27,7 +27,8 @@ namespace castor3d
 
 		C3D_API void registerNode( SubmeshRenderNode const & node
 			, GpuBufferOffsetT< castor::Point4f > const & morphTargets
-			, GpuBufferOffsetT< MorphingWeightsConfiguration > const & morphingWeights );
+			, GpuBufferOffsetT< MorphingWeightsConfiguration > const & morphingWeights
+			, GpuBufferOffsetT< SkinningTransformsConfiguration > const & skinTransforms );
 		C3D_API void unregisterNode( ObjectBufferOffset const & input );
 
 	private:
@@ -42,6 +43,7 @@ namespace castor3d
 			SubmeshRenderNode const * node;
 			GpuBufferOffsetT< castor::Point4f > const * morphTargets;
 			GpuBufferOffsetT< MorphingWeightsConfiguration > const * morphingWeights;
+			GpuBufferOffsetT< SkinningTransformsConfiguration > const * skinTransforms;
 		};
 		std::vector< PendingNode > m_pending;
 		VertexTransformingPass * m_pass{};

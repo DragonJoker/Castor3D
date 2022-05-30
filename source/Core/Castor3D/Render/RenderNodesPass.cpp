@@ -474,13 +474,6 @@ namespace castor3d
 				descriptorWrites.push_back( write );
 			}
 
-			auto & animCache = scene.getAnimatedObjectGroupCache();
-
-			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
-			{
-				descriptorWrites.push_back( animCache.getSkinningTransformsBuffer().getStorageBinding( uint32_t( GlobalBuffersIdx::eSkinningTransformData ) ) );
-			}
-
 			doFillAdditionalDescriptor( descriptorWrites
 				, shadowMaps );
 			descriptors.set->setBindings( descriptorWrites );
@@ -613,13 +606,6 @@ namespace castor3d
 		if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
 		{
 			addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eBillboardsData )
-				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, stageFlags ) );
-		}
-
-		if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
-		{
-			addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eSkinningTransformData )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, stageFlags ) );
 		}
@@ -763,10 +749,6 @@ namespace castor3d
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
-		auto skinningData = SkinningUbo::declare( writer
-			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
-			, RenderPipeline::eBuffers
-			, flags.programFlags );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
@@ -796,10 +778,10 @@ namespace castor3d
 					, flags.programFlags );
 				auto curPosition = writer.declLocale( "curPosition"
 					, in.position );
-				auto v4Normal = writer.declLocale( "v4Normal"
-					, vec4( in.normal, 0.0_f ) );
-				auto v4Tangent = writer.declLocale( "v4Tangent"
-					, vec4( in.tangent, 0.0_f ) );
+				auto curNormal = writer.declLocale( "curNormal"
+					, in.normal );
+				auto curTangent = writer.declLocale( "curTangent"
+					, in.tangent );
 				out.texture0 = in.texture0;
 				out.texture1 = in.texture1;
 				out.texture2 = in.texture2;
@@ -811,13 +793,7 @@ namespace castor3d
 				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 
 				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
-					, modelData.getCurModelMtx( flags.programFlags
-						, skinningData
-						, ids.skinningId
-						, in.boneIds0
-						, in.boneIds1
-						, in.boneWeights0
-						, in.boneWeights1 ) );
+					, modelData.getModelMtx() );
 				auto prvPosition = writer.declLocale( "prvPosition"
 					, curPosition );
 				prvPosition.xyz() += in.velocity;
@@ -826,14 +802,29 @@ namespace castor3d
 				{
 					auto worldPos = writer.declLocale( "worldPos"
 						, curPosition );
+					out.computeTangentSpace( flags.submeshFlags
+						, flags.programFlags
+						, c3d_sceneData.cameraPosition
+						, worldPos.xyz()
+						, curNormal
+						, curTangent );
 				}
 				else
 				{
-					auto prvMtxModel = writer.declLocale< Mat4 >( "prvMtxModel"
+					auto prvMtxModel = writer.declLocale( "prvMtxModel"
 						, modelData.getPrvModelMtx( flags.programFlags, curMtxModel ) );
 					prvPosition = c3d_matrixData.worldToPrvProj( prvMtxModel * prvPosition );
 					auto worldPos = writer.declLocale( "worldPos"
 						, curMtxModel * curPosition );
+					auto mtxNormal = writer.declLocale( "mtxNormal"
+						, modelData.getNormalMtx( flags.programFlags, curMtxModel ) );
+					out.computeTangentSpace( flags.submeshFlags
+						, flags.programFlags
+						, c3d_sceneData.cameraPosition
+						, worldPos.xyz()
+						, mtxNormal
+						, curNormal
+						, curTangent );
 				}
 
 				auto worldPos = writer.getVariable< sdw::Vec4 >( "worldPos" );
@@ -844,16 +835,6 @@ namespace castor3d
 					, curPosition
 					, prvPosition );
 				out.vtx.position = curPosition;
-
-				auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
-					, modelData.getNormalMtx( flags.programFlags, curMtxModel ) );
-				out.computeTangentSpace( flags.submeshFlags
-					, flags.programFlags
-					, c3d_sceneData.cameraPosition
-					, worldPos.xyz()
-					, mtxNormal
-					, v4Normal
-					, v4Tangent );
 
 			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
