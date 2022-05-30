@@ -109,7 +109,7 @@ namespace castor3d
 						, *oldMaterial
 						, *material );
 
-					submesh.setMaterial( oldMaterial, material, true );
+					submesh.instantiate( this, oldMaterial, material, true );
 
 					for ( auto & pass : *oldMaterial )
 					{
@@ -133,7 +133,7 @@ namespace castor3d
 				}
 				else
 				{
-					submesh.setMaterial( oldMaterial, material, true );
+					submesh.instantiate( this, oldMaterial, material, true );
 				}
 
 				if ( material->hasEnvironmentMapping() )
@@ -283,7 +283,7 @@ namespace castor3d
 
 				if ( material )
 				{
-					submesh->setMaterial( {}, material, true );
+					submesh->instantiate( this, {}, material, true );
 				}
 			}
 		}

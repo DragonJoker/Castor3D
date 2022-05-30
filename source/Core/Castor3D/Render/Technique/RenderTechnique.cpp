@@ -1013,9 +1013,10 @@ namespace castor3d
 
 	crg::FramePass & RenderTechnique::doCreateDepthPass( ProgressBar * progress )
 	{
+		auto & previous = m_renderTarget.createVertexTransformPass();
 		auto previousPasses = doCreateRenderPasses( progress
 			, TechniquePassEvent::eBeforeDepth
-			, nullptr );
+			, &previous );
 		auto & graph = m_renderTarget.getGraph().createPassGroup( "Base" );
 		stepProgressBar( progress, "Creating depth pass" );
 		auto & result = graph.createPass( "Depth"

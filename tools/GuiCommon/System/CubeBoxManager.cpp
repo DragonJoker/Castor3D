@@ -34,16 +34,16 @@ namespace GuiCommon
 			auto result = scene.addNewMesh( name, scene );
 			result.lock()->setSerialisable( false );
 			auto submesh = result.lock()->createSubmesh();
-			static castor::Point3fArray const vertex
+			static castor::Point4fArray const vertex
 			{
-				castor::Point3f{ -1, -1, -1 },
-				castor::Point3f{ -1, +1, -1 },
-				castor::Point3f{ +1, +1, -1 },
-				castor::Point3f{ +1, -1, -1 },
-				castor::Point3f{ -1, -1, +1 },
-				castor::Point3f{ -1, +1, +1 },
-				castor::Point3f{ +1, +1, +1 },
-				castor::Point3f{ +1, -1, +1 },
+				castor::Point4f{ -1, -1, -1, 0 },
+				castor::Point4f{ -1, +1, -1, 0 },
+				castor::Point4f{ +1, +1, -1, 0 },
+				castor::Point4f{ +1, -1, -1, 0 },
+				castor::Point4f{ -1, -1, +1, 0 },
+				castor::Point4f{ -1, +1, +1, 0 },
+				castor::Point4f{ +1, +1, +1, 0 },
+				castor::Point4f{ +1, -1, +1, 0 },
 			};
 			submesh->setTopology( VK_PRIMITIVE_TOPOLOGY_LINE_LIST );
 			auto positions = submesh->createComponent< castor3d::PositionsComponent >();
@@ -294,14 +294,14 @@ namespace GuiCommon
 			auto aabbMin = aabb.getMin();
 			auto aabbMax = aabb.getMax();
 			auto aabbSubmesh = m_aabbMesh.lock()->getSubmesh( 0u );
-			aabbSubmesh->getPositions()[0u] = castor::Point3f( aabbMin->x, aabbMin->y, aabbMin->z );
-			aabbSubmesh->getPositions()[1u] = castor::Point3f( aabbMin->x, aabbMax->y, aabbMin->z );
-			aabbSubmesh->getPositions()[2u] = castor::Point3f( aabbMax->x, aabbMax->y, aabbMin->z );
-			aabbSubmesh->getPositions()[3u] = castor::Point3f( aabbMax->x, aabbMin->y, aabbMin->z );
-			aabbSubmesh->getPositions()[4u] = castor::Point3f( aabbMin->x, aabbMin->y, aabbMax->z );
-			aabbSubmesh->getPositions()[5u] = castor::Point3f( aabbMin->x, aabbMax->y, aabbMax->z );
-			aabbSubmesh->getPositions()[6u] = castor::Point3f( aabbMax->x, aabbMax->y, aabbMax->z );
-			aabbSubmesh->getPositions()[7u] = castor::Point3f( aabbMax->x, aabbMin->y, aabbMax->z );
+			aabbSubmesh->getPositions()[0u] = castor::Point4f( aabbMin->x, aabbMin->y, aabbMin->z, 1.0f );
+			aabbSubmesh->getPositions()[1u] = castor::Point4f( aabbMin->x, aabbMax->y, aabbMin->z, 1.0f );
+			aabbSubmesh->getPositions()[2u] = castor::Point4f( aabbMax->x, aabbMax->y, aabbMin->z, 1.0f );
+			aabbSubmesh->getPositions()[3u] = castor::Point4f( aabbMax->x, aabbMin->y, aabbMin->z, 1.0f );
+			aabbSubmesh->getPositions()[4u] = castor::Point4f( aabbMin->x, aabbMin->y, aabbMax->z, 1.0f );
+			aabbSubmesh->getPositions()[5u] = castor::Point4f( aabbMin->x, aabbMax->y, aabbMax->z, 1.0f );
+			aabbSubmesh->getPositions()[6u] = castor::Point4f( aabbMax->x, aabbMax->y, aabbMax->z, 1.0f );
+			aabbSubmesh->getPositions()[7u] = castor::Point4f( aabbMax->x, aabbMin->y, aabbMax->z, 1.0f );
 			aabbSubmesh->needsUpdate();
 
 			castor3d::Engine * engine = m_scene.getEngine();

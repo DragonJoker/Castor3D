@@ -103,7 +103,7 @@ namespace castor3d
 	void LinesMapping::doUpload()
 	{
 		auto count = uint32_t( m_lines.size() * 2 );
-		auto & offsets = getOwner()->getBufferOffsets();
+		auto & offsets = getOwner()->getSourceBufferOffsets();
 		auto & buffer = offsets.getBufferChunk( SubmeshFlag::eIndex );
 
 		if ( count && buffer.hasData() )

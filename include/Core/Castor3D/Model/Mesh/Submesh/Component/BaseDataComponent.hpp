@@ -16,7 +16,7 @@ namespace castor3d
 {
 	C3D_API void uploadBaseData( SubmeshFlag submeshData
 		, Submesh const & submesh
-		, castor::Point3fArray const & data );
+		, castor::Point4fArray const & data );
 	C3D_API void gatherBaseDataBuffer( SubmeshFlag submeshData
 		, ProgramFlags const & programFlags
 		, SubmeshFlags const & submeshFlags
@@ -83,17 +83,17 @@ namespace castor3d
 			return SubmeshFlagT;
 		}
 
-		void setData( std::vector< castor::Point3f > const & data )
+		void setData( std::vector< castor::Point4f > const & data )
 		{
 			m_data = data;
 		}
 
-		std::vector< castor::Point3f > & getData()
+		std::vector< castor::Point4f > & getData()
 		{
 			return m_data;
 		}
 
-		std::vector< castor::Point3f > const & getData()const
+		std::vector< castor::Point4f > const & getData()const
 		{
 			return m_data;
 		}
@@ -120,7 +120,7 @@ namespace castor3d
 
 
 	private:
-		castor::Point3fArray m_data;
+		castor::Point4fArray m_data;
 		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_layouts;
 	};
 

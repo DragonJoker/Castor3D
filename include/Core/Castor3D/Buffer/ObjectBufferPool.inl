@@ -14,7 +14,8 @@ namespace castor3d
 			, VkDeviceSize count
 			, VkBufferUsageFlags usage
 			, std::string debugName
-			, bool smallData )
+			, bool smallData
+			, uint32_t alignSize )
 		{
 			VkDeviceSize maxCount = BaseObjectPoolBufferCount;
 
@@ -28,23 +29,7 @@ namespace castor3d
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, debugName
 				, ashes::QueueShare{}
-				, GpuBufferPackedAllocator{ uint32_t( maxCount * sizeof( DataT ) ) }
-				, smallData );
-		}
-
-		template< typename DataT >
-		GpuPackedBufferPtr createRawBuffer( RenderDevice const & device
-			, VkDeviceSize maxCount
-			, VkBufferUsageFlags usage
-			, std::string debugName
-			, bool smallData )
-		{
-			return std::make_unique< GpuPackedBuffer >( device.renderSystem
-				, usage
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, debugName
-				, ashes::QueueShare{}
-				, GpuBufferPackedAllocator{ uint32_t( maxCount * sizeof( DataT ) ) }
+				, GpuBufferPackedAllocator{ uint32_t( maxCount * sizeof( DataT ) ), alignSize }
 				, smallData );
 		}
 	}
@@ -64,7 +49,8 @@ namespace castor3d
 				, size
 				, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, m_debugName + "Vertex" + std::to_string( m_buffers.size() )
-				, true ) };
+				, true
+				, 1u ) };
 			m_buffers.emplace_back( std::move( buffers ) );
 			it = std::next( m_buffers.begin()
 				, ptrdiff_t( m_buffers.size() - 1u ) );

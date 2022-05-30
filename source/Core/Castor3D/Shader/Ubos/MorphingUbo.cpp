@@ -1,6 +1,7 @@
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/CompositeTypes/ArraySsbo.hpp>
 
 namespace castor3d
 {
@@ -294,6 +295,49 @@ namespace castor3d
 			}
 
 			auto & writer = *targets.getWriter();
+			auto morphTargets = writer.declLocale( "morphTargets"
+				, targets[vertexId] );
+			auto morphWeight = writer.declLocale( "morphWeight"
+				, 0.0_f );
+			auto morphIndex = writer.declLocale( "morphIndex"
+				, 0_u );
+
+			FOR( writer, sdw::UInt, mphIndex, 0_u, mphIndex < morphTargetsCount, ++mphIndex )
+			{
+				morphWeight = weight( mphIndex );
+				morphIndex = index( mphIndex );
+				auto target = writer.declLocale( "morphTarget"
+					, morphTargets[morphIndex] );
+				target.morph( pos
+					, nml
+					, tan
+					, uvw0
+					, uvw1
+					, uvw2
+					, uvw3
+					, col
+					, morphWeight );
+			}
+			ROF;
+		}
+
+		void MorphingWeightsData::morph( sdw::ArraySsboT< shader::MorphTargetsData > const & targets
+			, sdw::UInt vertexId
+			, sdw::Vec4 & pos
+			, sdw::Vec4 & nml
+			, sdw::Vec4 & tan
+			, sdw::Vec3 & uvw0
+			, sdw::Vec3 & uvw1
+			, sdw::Vec3 & uvw2
+			, sdw::Vec3 & uvw3
+			, sdw::Vec3 & col )const
+		{
+			if ( !targets.isEnabled() )
+			{
+				return;
+			}
+
+			auto & writer = *getWriter();
 			auto morphTargets = writer.declLocale( "morphTargets"
 				, targets[vertexId] );
 			auto morphWeight = writer.declLocale( "morphWeight"

@@ -28,6 +28,16 @@ namespace castor3d
 		return data.getCount();
 	}
 
+	ObjectBufferOffset const & BillboardRenderNode::getSourceBufferOffsets()const
+	{
+		return data.getBufferOffsets();
+	}
+
+	ObjectBufferOffset const & BillboardRenderNode::getFinalBufferOffsets()const
+	{
+		return data.getBufferOffsets();
+	}
+
 	SubmeshFlags BillboardRenderNode::getSubmeshFlags()const
 	{
 		return data.getSubmeshFlags();

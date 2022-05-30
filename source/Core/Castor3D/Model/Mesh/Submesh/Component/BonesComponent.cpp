@@ -128,7 +128,7 @@ namespace castor3d
 	void BonesComponent::doUpload()
 	{
 		auto count = uint32_t( m_bones.size() );
-		auto & offsets = getOwner()->getBufferOffsets();
+		auto & offsets = getOwner()->getSourceBufferOffsets();
 		auto & buffer = offsets.getBufferChunk( SubmeshFlag::eBones );
 
 		if ( count && buffer.hasData() )

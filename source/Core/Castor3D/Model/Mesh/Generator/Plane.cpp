@@ -145,8 +145,9 @@ namespace castor3d
 			{
 				for ( uint32_t j = 0; j < nbVertexH; j++ )
 				{
-					tiledUV.push_back( castor::Point3f{ float( ( subDivisionsW + 1u )* i ) * gapW / width
+					tiledUV.push_back( castor::Point4f{ float( ( subDivisionsW + 1u )* i ) * gapW / width
 						, float( ( subDivisionsD + 1u ) * j ) * gapH / depth
+						, 0.0f
 						, 0.0f } );
 				}
 			}

@@ -36,6 +36,16 @@ namespace castor3d
 		return pass->getOwner();
 	}
 
+	ObjectBufferOffset const & SubmeshRenderNode::getSourceBufferOffsets()const
+	{
+		return data.getSourceBufferOffsets();
+	}
+
+	ObjectBufferOffset const & SubmeshRenderNode::getFinalBufferOffsets()const
+	{
+		return data.getFinalBufferOffsets( instance );
+	}
+
 	SubmeshFlags SubmeshRenderNode::getSubmeshFlags()const
 	{
 		return data.getSubmeshFlags( pass );

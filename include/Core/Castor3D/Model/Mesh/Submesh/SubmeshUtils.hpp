@@ -29,7 +29,7 @@ namespace castor3d
 		 *\param[in,out]	texcoords	Les coordonnées de texture.
 		 *\param[in,out]	triFace		Le composant qui va recevoir les faces calculées.
 		 */
-		C3D_API static void computeFacesFromPolygonVertex( castor::Point3fArray & texcoords
+		C3D_API static void computeFacesFromPolygonVertex( castor::Point4fArray & texcoords
 			, TriFaceMapping & triFace );
 		/**
 		 *\~english
@@ -43,10 +43,10 @@ namespace castor3d
 		 *\param[in]		reverted	Dit si les normales doivent être inversées.
 		 *\param[in]		triFace		Le composant qui va recevoir les faces calculées.
 		 */
-		C3D_API static void computeNormals( castor::Point3fArray const & positions
-			, castor::Point3fArray const & texcoords
-			, castor::Point3fArray & normals
-			, castor::Point3fArray & tangents
+		C3D_API static void computeNormals( castor::Point4fArray const & positions
+			, castor::Point4fArray const & texcoords
+			, castor::Point4fArray & normals
+			, castor::Point4fArray & tangents
 			, TriFaceMapping const & triFace
 			, bool reverted = false );
 		/**
@@ -61,10 +61,10 @@ namespace castor3d
 		 *\param[in,out]	points	Les points.
 		 *\param[in]		triFace	Le composant qui va recevoir les faces calculées.
 		 */
-		C3D_API static void computeTangentsFromNormals( castor::Point3fArray const & positions
-			, castor::Point3fArray const & texcoords
-			, castor::Point3fArray const & normals
-			, castor::Point3fArray & tangents
+		C3D_API static void computeTangentsFromNormals( castor::Point4fArray const & positions
+			, castor::Point4fArray const & texcoords
+			, castor::Point4fArray const & normals
+			, castor::Point4fArray & tangents
 			, TriFaceMapping const & triFace );
 		/**
 		 *\~english
@@ -76,10 +76,10 @@ namespace castor3d
 		 *\param[in,out]	points	Les points.
 		 *\param[in]		face	La face.
 		 */
-		C3D_API static void computeNormals( castor::Point3fArray const & positions
-			, castor::Point3fArray const & texcoords
-			, castor::Point3fArray & normals
-			, castor::Point3fArray & tangents
+		C3D_API static void computeNormals( castor::Point4fArray const & positions
+			, castor::Point4fArray const & texcoords
+			, castor::Point4fArray & normals
+			, castor::Point4fArray & tangents
 			, Face const & face );
 		/**
 		 *\~english
@@ -91,9 +91,9 @@ namespace castor3d
 		 *\param[in,out]	points	Les points.
 		 *\param[in]		face	La face.
 		 */
-		C3D_API static void computeTangents( castor::Point3fArray const & positions
-			, castor::Point3fArray const & texcoords
-			, castor::Point3fArray & tangents
+		C3D_API static void computeTangents( castor::Point4fArray const & positions
+			, castor::Point4fArray const & texcoords
+			, castor::Point4fArray & tangents
 			, Face const & face );
 	};
 }

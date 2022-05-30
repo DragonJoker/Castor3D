@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
+#include "Castor3D/Render/Transform/TransformModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Render/Node/RenderNodeModule.hpp"
@@ -65,6 +66,8 @@ namespace castor3d
 		C3D_API void update( CpuUpdater & updater );
 		C3D_API void update( GpuUpdater & updater );
 
+		C3D_API crg::FramePass const & createVertexTransformPass( crg::FrameGraph & graph );
+
 		bool hasNodes()const
 		{
 			return !m_submeshNodes.empty()
@@ -105,6 +108,7 @@ namespace castor3d
 		uint32_t m_nodeId{};
 		std::vector< SceneCuller * > m_cullers;
 		bool m_dirty{ true };
+		VertexTransformingUPtr m_vertexTransform;
 	};
 }
 

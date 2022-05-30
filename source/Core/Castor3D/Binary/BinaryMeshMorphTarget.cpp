@@ -47,10 +47,10 @@ namespace castor3d
 	namespace v1_5
 	{
 		inline void dispatchVertices( InterleavedVertexArray const & src
-			, castor::Point3fArray & pos
-			, castor::Point3fArray & nml
-			, castor::Point3fArray & tan
-			, castor::Point3fArray & tex )
+			, castor::Point4fArray & pos
+			, castor::Point4fArray & nml
+			, castor::Point4fArray & tan
+			, castor::Point4fArray & tex )
 		{
 			pos.reserve( src.size() );
 			nml.reserve( src.size() );
@@ -59,10 +59,10 @@ namespace castor3d
 
 			for ( auto & vertex : src )
 			{
-				pos.push_back( vertex.pos );
-				nml.push_back( vertex.nml );
-				tan.push_back( vertex.tan );
-				tex.push_back( vertex.tex );
+				pos.push_back( castor::Point4f{ vertex.pos } );
+				nml.push_back( castor::Point4f{ vertex.nml } );
+				tan.push_back( castor::Point4f{ vertex.tan } );
+				tex.push_back( castor::Point4f{ vertex.tex } );
 			}
 		}
 	}
