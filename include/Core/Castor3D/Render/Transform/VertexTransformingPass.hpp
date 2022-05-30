@@ -22,7 +22,8 @@ namespace castor3d
 		VertexTransformingPass( crg::FramePass const & pass
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
-			, RenderDevice const & device );
+			, RenderDevice const & device
+			, ashes::Buffer< ModelBufferConfiguration > const & modelsBuffer );
 
 		void registerNode( SubmeshRenderNode const & node
 			, TransformPipeline const & pipeline
@@ -40,6 +41,7 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
+		ashes::Buffer< ModelBufferConfiguration > const & m_modelsBuffer;
 		std::unordered_map< size_t, VertexTransformPassUPtr > m_passes;
 	};
 }

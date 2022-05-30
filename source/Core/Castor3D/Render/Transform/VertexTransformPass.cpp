@@ -25,11 +25,16 @@ namespace castor3d
 		static ashes::DescriptorSetPtr createDescriptorSet( TransformPipeline const & pipeline
 			, ObjectBufferOffset const & input
 			, ObjectBufferOffset const & output
+			, ashes::Buffer< ModelBufferConfiguration > const & modelsBuffer
 			, GpuBufferOffsetT< castor::Point4f > const & morphTargets
 			, GpuBufferOffsetT< MorphingWeightsConfiguration > const & morphingWeights )
 		{
 			ashes::WriteDescriptorSetArray writes;
 			CU_Require( morphTargets && morphingWeights );
+			writes.push_back( ashes::WriteDescriptorSet{ VertexTransformPass::eModelsData
+				, 0u
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, { VkDescriptorBufferInfo{ modelsBuffer.getBuffer(), 0u, ashes::WholeSize } } } );
 			writes.push_back( morphTargets.getStorageBinding( VertexTransformPass::eMorphTargets ) );
 			writes.push_back( morphingWeights.getStorageBinding( VertexTransformPass::eMorphingWeights ) );
 
@@ -122,6 +127,7 @@ namespace castor3d
 		, TransformPipeline const & pipeline
 		, ObjectBufferOffset const & input
 		, ObjectBufferOffset const & output
+		, ashes::Buffer< ModelBufferConfiguration > const & modelsBuffer
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets
 		, GpuBufferOffsetT< MorphingWeightsConfiguration > const & morphingWeights )
 		: m_device{ device }
@@ -133,6 +139,7 @@ namespace castor3d
 		, m_descriptorSet{ vtxtrs::createDescriptorSet( pipeline
 			, m_input
 			, m_output
+			, modelsBuffer
 			, morphTargets
 			, morphingWeights ) }
 	{
