@@ -194,10 +194,6 @@ namespace castor3d
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
-		auto skinningData = SkinningUbo::declare( writer
-			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
-			, RenderPipeline::eBuffers
-			, flags.programFlags );
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + 1u;
 		C3D_ShadowMap( writer
 			, index++
@@ -231,10 +227,10 @@ namespace castor3d
 					, flags.programFlags );
 				auto curPosition = writer.declLocale( "curPosition"
 					, in.position );
-				auto v4Normal = writer.declLocale( "v4Normal"
-					, vec4( in.normal, 0.0_f ) );
-				auto v4Tangent = writer.declLocale( "v4Tangent"
-					, vec4( in.tangent, 0.0_f ) );
+				auto curNormal = writer.declLocale( "curNormal"
+					, in.normal );
+				auto curTangent = writer.declLocale( "curTangent"
+					, in.tangent );
 				out.texture0 = in.texture0;
 				out.texture1 = in.texture1;
 				out.texture2 = in.texture2;
@@ -246,39 +242,38 @@ namespace castor3d
 				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 
 				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
-					, modelData.getCurModelMtx( flags.programFlags
-						, skinningData
-						, ids.skinningId
-						, in.boneIds0
-						, in.boneIds1
-						, in.boneWeights0
-						, in.boneWeights1 ) );
+					, modelData.getModelMtx() );
 
 				if ( checkFlag( flags.submeshFlags, SubmeshFlag::eVelocity ) )
 				{
 					auto worldPos = writer.declLocale( "worldPos"
 						, curPosition );
+					out.computeTangentSpace( flags.submeshFlags
+						, flags.programFlags
+						, vec3( 0.0_f )
+						, worldPos.xyz()
+						, curNormal
+						, curTangent );
 				}
 				else
 				{
 					auto worldPos = writer.declLocale( "worldPos"
 						, mtxModel * curPosition );
+					auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
+						, modelData.getNormalMtx( flags.programFlags, mtxModel ) );
+					out.computeTangentSpace( flags.submeshFlags
+						, flags.programFlags
+						, vec3( 0.0_f )
+						, worldPos.xyz()
+						, mtxNormal
+						, curNormal
+						, curTangent );
 				}
 
 				auto worldPos = writer.getVariable< sdw::Vec4 >( "worldPos" );
 				out.worldPosition = worldPos;
 				curPosition = c3d_shadowMapData.worldToView( worldPos );
 				out.vtx.position = c3d_shadowMapData.viewToProj( curPosition );
-
-				auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
-					, modelData.getNormalMtx( flags.programFlags, mtxModel ) );
-				out.computeTangentSpace( flags.submeshFlags
-					, flags.programFlags
-					, vec3( 0.0_f )
-					, worldPos.xyz()
-					, mtxNormal
-					, v4Normal
-					, v4Tangent );
 			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}

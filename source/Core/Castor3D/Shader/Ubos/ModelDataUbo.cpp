@@ -89,26 +89,8 @@ namespace castor3d::shader
 	}
 
 	sdw::Mat4 ModelIndices::getCurModelMtx( ProgramFlags programsFlags
-		, SkinningData const & skinning
-		, sdw::Mat4 const & transform
-		, sdw::UInt const & skinningId
-		, sdw::UVec4 const & boneIds0
-		, sdw::UVec4 const & boneIds1
-		, sdw::Vec4 const & boneWeights0
-		, sdw::Vec4 const & boneWeights1 )const
+		, sdw::Mat4 const & transform )const
 	{
-		if ( checkFlag( programsFlags, ProgramFlag::eSkinning ) )
-		{
-			return SkinningUbo::computeTransform( skinning
-				, transform
-				, *getWriter()
-				, skinningId
-				, boneIds0
-				, boneIds1
-				, boneWeights0
-				, boneWeights1 );
-		}
-
 		if ( checkFlag( programsFlags, ProgramFlag::eInstantiation ) )
 		{
 			return transform;

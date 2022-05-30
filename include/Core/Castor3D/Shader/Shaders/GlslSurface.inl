@@ -104,11 +104,6 @@ namespace castor3d::shader
 		, colour{ this->getMember< sdw::Vec3 >( "colour", true ) }
 		// Velocity
 		, velocity{ this->getMember< sdw::Vec3 >( "velocity", true ) }
-		// Skinning
-		, boneIds0{ this->getMember< sdw::UVec4 >( "boneIds0", true ) }
-		, boneIds1{ this->getMember< sdw::UVec4 >( "boneIds1", true ) }
-		, boneWeights0{ this->getMember< sdw::Vec4 >( "boneWeights0", true ) }
-		, boneWeights1{ this->getMember< sdw::Vec4 >( "boneWeights1", true ) }
 		// Instantiation
 		, objectIds{ this->getMember< sdw::UVec4 >( "objectIds", true ) }
 	{
@@ -177,27 +172,6 @@ namespace castor3d::shader
 				, ast::type::NotArray
 				, ( checkFlag( submeshFlags, SubmeshFlag::eVelocity ) ? index++ : 0 )
 				, checkFlag( submeshFlags, SubmeshFlag::eVelocity ) );
-			//@}
-			/**
-			*	Skinning
-			*/
-			//@{
-			result->declMember( "boneIds0", ast::type::Kind::eVec4U
-				, ast::type::NotArray
-				, ( checkFlag( submeshFlags, SubmeshFlag::eBones ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eBones ) );
-			result->declMember( "boneIds1", ast::type::Kind::eVec4U
-				, ast::type::NotArray
-				, ( checkFlag( submeshFlags, SubmeshFlag::eBones ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eBones ) );
-			result->declMember( "boneWeights0", ast::type::Kind::eVec4F
-				, ast::type::NotArray
-				, ( checkFlag( submeshFlags, SubmeshFlag::eBones ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eBones ) );
-			result->declMember( "boneWeights1", ast::type::Kind::eVec4F
-				, ast::type::NotArray
-				, ( checkFlag( submeshFlags, SubmeshFlag::eBones ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eBones ) );
 			//@}
 			/**
 			*	Instantiation
@@ -361,17 +335,16 @@ namespace castor3d::shader
 		, ProgramFlags programFlags
 		, sdw::Vec3 const & cameraPosition
 		, sdw::Vec3 const & worldPos
-		, sdw::Mat3 const & mtx
-		, sdw::Vec4 const & nml
-		, sdw::Vec4 const & tan )
+		, sdw::Vec3 const & nml
+		, sdw::Vec3 const & tan )
 	{
 		if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) )
 		{
 			CU_Require( !normal.getExpr()->isDummy() );
 			CU_Require( !tangent.getExpr()->isDummy() );
 			CU_Require( !bitangent.getExpr()->isDummy() );
-			normal = normalize( mtx * nml.xyz() );
-			tangent = normalize( mtx * tan.xyz() );
+			normal = nml;
+			tangent = tan;
 			tangent = normalize( sdw::fma( -normal, vec3( dot( tangent, normal ) ), tangent ) );
 			bitangent = cross( normal, tangent );
 
@@ -395,13 +368,30 @@ namespace castor3d::shader
 		else if ( normal.isEnabled() )
 		{
 			CU_Require( !normal.getExpr()->isDummy() );
-			normal = normalize( mtx * nml.xyz() );
+			normal = nml.xyz();
 
 			if ( checkFlag( programFlags, ProgramFlag::eInvertNormals ) )
 			{
 				normal = -normal;
 			}
 		}
+	}
+
+	template< ast::var::Flag FlagT >
+	void FragmentSurfaceT< FlagT >::computeTangentSpace( SubmeshFlags submeshFlags
+		, ProgramFlags programFlags
+		, sdw::Vec3 const & cameraPosition
+		, sdw::Vec3 const & worldPos
+		, sdw::Mat3 const & mtx
+		, sdw::Vec3 const & nml
+		, sdw::Vec3 const & tan )
+	{
+		return computeTangentSpace( submeshFlags
+			, programFlags
+			, cameraPosition
+			, worldPos
+			, normalize( mtx * nml )
+			, normalize( mtx * tan ) );
 	}
 
 	template< ast::var::Flag FlagT >

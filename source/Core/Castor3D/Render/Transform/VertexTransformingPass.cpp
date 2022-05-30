@@ -12,11 +12,16 @@ namespace castor3d
 
 	namespace vtxtrsg
 	{
-		size_t makeHash( ObjectBufferOffset const & value )
+		size_t makeHash( ObjectBufferOffset const & input
+			, ObjectBufferOffset const & output )
 		{
-			auto result = value.hash;
-			castor::hashCombinePtr( result, value.getBuffer( SubmeshFlag::ePositions ) );
-			return castor::hashCombine( result, value.getOffset( SubmeshFlag::ePositions ) );
+			auto result = input.hash;
+			castor::hashCombinePtr( result, input.getBuffer( SubmeshFlag::ePositions ) );
+			castor::hashCombine( result, input.getOffset( SubmeshFlag::ePositions ) );
+			castor::hashCombine( result, output.hash );
+			castor::hashCombinePtr( result, output.getBuffer( SubmeshFlag::ePositions ) );
+			castor::hashCombine( result, output.getOffset( SubmeshFlag::ePositions ) );
+			return result;
 		}
 	}
 
@@ -45,14 +50,15 @@ namespace castor3d
 	void VertexTransformingPass::registerNode( SubmeshRenderNode const & node
 		, TransformPipeline const & pipeline
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets
-		, GpuBufferOffsetT< castor3d::MorphingWeightsConfiguration > const & morphingWeights )
+		, GpuBufferOffsetT< castor3d::MorphingWeightsConfiguration > const & morphingWeights
+		, GpuBufferOffsetT< SkinningTransformsConfiguration > const & skinTransforms )
 	{
 		auto & input = node.getSourceBufferOffsets();
 		auto & output = node.getFinalBufferOffsets();
 		auto submeshFlags = node.getSubmeshFlags();
 		auto morphFlags = node.getMorphFlags();
 		auto programFlags = node.getProgramFlags();
-		auto hash = vtxtrsg::makeHash( input );
+		auto hash = vtxtrsg::makeHash( input, output );
 		auto ires = m_passes.emplace( hash, nullptr );
 
 		if ( ires.second )
@@ -64,14 +70,17 @@ namespace castor3d
 				, output
 				, m_modelsBuffer
 				, morphTargets
-				, morphingWeights );
+				, morphingWeights
+				, skinTransforms );
 			resetCommandBuffer();
 		}
 	}
 
-	void VertexTransformingPass::unregisterNode( ObjectBufferOffset const & input )
+	void VertexTransformingPass::unregisterNode( SubmeshRenderNode const & node )
 	{
-		auto hash = vtxtrsg::makeHash( input );
+		auto & input = node.getSourceBufferOffsets();
+		auto & output = node.getFinalBufferOffsets();
+		auto hash = vtxtrsg::makeHash( input, output );
 		auto it = m_passes.find( hash );
 
 		if ( it != m_passes.end() )

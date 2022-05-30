@@ -22,6 +22,7 @@ namespace castor3d
 			eModelsData,
 			eMorphTargets,
 			eMorphingWeights,
+			eSkinTransforms,
 			eInPosition,
 			eOutPosition,
 			eInNormal,
@@ -39,7 +40,6 @@ namespace castor3d
 			eInColour,
 			eOutColour,
 			eInBones,
-			eOutBones,
 			eOutVelocity,
 		};
 
@@ -51,7 +51,8 @@ namespace castor3d
 			, ObjectBufferOffset const & output
 			, ashes::Buffer< ModelBufferConfiguration > const & modelsBuffer
 			, GpuBufferOffsetT< castor::Point4f > const & morphTargets
-			, GpuBufferOffsetT< MorphingWeightsConfiguration > const & morphingWeights );
+			, GpuBufferOffsetT< MorphingWeightsConfiguration > const & morphingWeights
+			, GpuBufferOffsetT< SkinningTransformsConfiguration > const & skinTransforms );
 
 		void recordInto( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer
@@ -64,6 +65,7 @@ namespace castor3d
 		ObjectBufferOffset const & m_output;
 		GpuBufferOffsetT< castor::Point4f > const & m_morphTargets;
 		GpuBufferOffsetT< MorphingWeightsConfiguration > const & m_morphingWeights;
+		GpuBufferOffsetT< SkinningTransformsConfiguration > const & m_skinTransforms;
 		castor::Point4ui m_objectIds;
 		ashes::DescriptorSetPtr m_descriptorSet;
 	};

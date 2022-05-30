@@ -30,7 +30,7 @@ namespace castor3d
 			, SubmeshFlags const & submeshFlags
 			, TextureFlagsArray const & mask )
 		{
-			size_t result = node.data.hasComponent( MorphComponent::Name )
+			size_t result = node.data.isDynamic()
 				? std::hash< Geometry const * >{}( &node.instance )
 				: std::hash< MaterialRPtr >{}( node.pass->getOwner() );
 
@@ -229,7 +229,7 @@ namespace castor3d
 					indexCount = VkDeviceSize( m_indexMapping->getCount() ) * m_indexMapping->getComponentsCount();
 				}
 
-				if ( hasComponent( MorphComponent::Name )
+				if ( isDynamic()
 					&& !hasComponent( BaseDataComponentT< SubmeshFlag::eVelocity >::Name ) )
 				{
 					createComponent< BaseDataComponentT< SubmeshFlag::eVelocity > >();
@@ -247,13 +247,15 @@ namespace castor3d
 					, flags
 					, false );
 
-				if ( hasComponent( MorphComponent::Name ) )
+				if ( isDynamic() )
 				{
+					flags = m_submeshFlags;
+					remFlag( flags, SubmeshFlag::eBones );
 					for ( auto & finalBufferOffset : m_finalBufferOffsets )
 					{
 						finalBufferOffset.second = device.geometryPools->getBuffer( getPointsCount()
 							, 0u // No index on transformed buffers
-							, m_submeshFlags
+							, flags
 							, true );
 					}
 				}
@@ -548,7 +550,7 @@ namespace castor3d
 			}
 		}
 
-		if ( geometry && hasComponent( MorphComponent::Name ) )
+		if ( geometry && isDynamic() )
 		{
 			auto it = m_finalBufferOffsets.emplace( geometry, ObjectBufferOffset{} ).first;
 
@@ -557,10 +559,12 @@ namespace castor3d
 			{
 				// Initialise only if the submesh itself is already initialised,
 				// because if it is not, the buffers will be initialised by the call to initialise().
+				auto flags = m_submeshFlags;
+				remFlag( flags, SubmeshFlag::eBones );
 				RenderDevice & device = getOwner()->getOwner()->getRenderSystem()->getRenderDevice();
 				it->second = device.geometryPools->getBuffer( getPointsCount()
 					, 0u // No index on transformed buffers
-					, m_submeshFlags
+					, flags
 					, true );
 			}
 		}
@@ -828,7 +832,7 @@ namespace castor3d
 
 	ObjectBufferOffset const & Submesh::getFinalBufferOffsets( Geometry const & instance )const
 	{
-		if ( !hasComponent( MorphComponent::Name ) )
+		if ( !isDynamic() )
 		{
 			CU_Require( bool( m_sourceBufferOffset ) );
 			return m_sourceBufferOffset;

@@ -78,11 +78,6 @@ namespace castor3d::shader
 		sdw::Vec3 colour;
 		// Velocity
 		sdw::Vec3 velocity;
-		// Skinning
-		sdw::UVec4 boneIds0;
-		sdw::UVec4 boneIds1;
-		sdw::Vec4 boneWeights0;
-		sdw::Vec4 boneWeights1;
 		// Instantiation
 		sdw::UVec4 objectIds;
 	};
@@ -116,9 +111,15 @@ namespace castor3d::shader
 			, ProgramFlags programFlags
 			, sdw::Vec3 const & cameraPosition
 			, sdw::Vec3 const & worldPos
+			, sdw::Vec3 const & nml
+			, sdw::Vec3 const & tan );
+		void computeTangentSpace( SubmeshFlags submeshFlags
+			, ProgramFlags programFlags
+			, sdw::Vec3 const & cameraPosition
+			, sdw::Vec3 const & worldPos
 			, sdw::Mat3 const & mtx
-			, sdw::Vec4 const & nml
-			, sdw::Vec4 const & tan );
+			, sdw::Vec3 const & nml
+			, sdw::Vec3 const & tan );
 		void computeTangentSpace( SubmeshFlags submeshFlags
 			, sdw::Vec3 const & cameraPosition
 			, sdw::Vec3 const & worldPos
