@@ -31,13 +31,7 @@ namespace castor3d::shader
 		C3D_API sdw::Vec4 modelToCurWorld( sdw::Vec4 const & pos )const;
 		C3D_API sdw::Vec4 modelToPrvWorld( sdw::Vec4 const & pos )const;
 		C3D_API sdw::Mat4 getCurModelMtx( ProgramFlags programsFlags
-			, SkinningData const & skinning
-			, sdw::Mat4 const & transform
-			, sdw::UInt const & skinningId
-			, sdw::UVec4 const & boneIds0
-			, sdw::UVec4 const & boneIds1
-			, sdw::Vec4 const & boneWeights0
-			, sdw::Vec4 const & boneWeights1 )const;
+			, sdw::Mat4 const & transform )const;
 		C3D_API sdw::Mat4 getCurModelMtx( ProgramFlags programsFlags
 			, SkinningData const & skinning
 			, sdw::UInt const & skinningId

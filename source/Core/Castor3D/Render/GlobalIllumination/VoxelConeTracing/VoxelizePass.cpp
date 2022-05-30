@@ -336,10 +336,6 @@ namespace castor3d
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
-		auto skinningData = SkinningUbo::declare( writer
-			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
-			, RenderPipeline::eBuffers
-			, flags.programFlags );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
@@ -364,8 +360,8 @@ namespace castor3d
 					, flags.programFlags );
 				auto curPosition = writer.declLocale( "curPosition"
 					, in.position );
-				auto v4Normal = writer.declLocale( "v4Normal"
-					, vec4( in.normal, 0.0_f ) );
+				auto curNormal = writer.declLocale( "curNormal"
+					, in.normal );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[ids.nodeId - 1u] );
 				out.nodeId = writer.cast< sdw::Int >( ids.nodeId );
@@ -379,26 +375,21 @@ namespace castor3d
 				}
 
 				auto modelMtx = writer.declLocale< Mat4 >( "modelMtx"
-					, modelData.getCurModelMtx( flags.programFlags
-						, skinningData
-						, ids.skinningId
-						, in.boneIds0
-						, in.boneIds1
-						, in.boneWeights0
-						, in.boneWeights1 ) );
+					, modelData.getModelMtx() );
 
 				if ( checkFlag( flags.submeshFlags, SubmeshFlag::eVelocity ) )
 				{
 					out.vtx.position = curPosition;
+					out.normal = curNormal;
 				}
 				else
 				{
 					out.vtx.position = ( modelMtx * curPosition );
+					out.normal = normalize( mat3( transpose( inverse( modelMtx ) ) ) * curNormal );
 				}
 
 				out.viewPosition = c3d_matrixData.worldToCurView( out.vtx.position ).xyz();
 				out.worldPosition = out.viewPosition;
-				out.normal = normalize( mat3( transpose( inverse( modelMtx ) ) ) * v4Normal.xyz() );
 			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}

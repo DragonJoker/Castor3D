@@ -145,9 +145,6 @@ namespace castor3d
 		eTexConfigs,
 		eTexAnims,
 		eBillboardsData,
-		eMorphTargets,
-		eMorphingWeights,
-		eSkinningTransformData,
 		CU_ScopedEnumBounds( eMatrix ),
 	};
 	/**

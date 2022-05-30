@@ -216,11 +216,34 @@ namespace castor3d
 				, *instance.getParent()
 				, it.first->second->modelData );
 
-			if ( data.hasComponent( MorphComponent::Name ) )
+			if ( data.isDynamic() )
 			{
-				m_vertexTransform->registerNode( *it.first->second
-					, data.getMorphTargets()
-					, getOwner()->getAnimatedObjectGroupCache().getMorphingWeights() );
+				static GpuBufferOffsetT< castor::Point4f > const morphTargets{};
+				static GpuBufferOffsetT< MorphingWeightsConfiguration > const morphingWeights{};
+				static GpuBufferOffsetT< SkinningTransformsConfiguration > const skinTransforms{};
+
+				if ( data.hasComponent( MorphComponent::Name )
+					&& data.hasComponent( BonesComponent::Name ) )
+				{
+					m_vertexTransform->registerNode( *it.first->second
+						, data.getMorphTargets()
+						, getOwner()->getAnimatedObjectGroupCache().getMorphingWeights()
+						, getOwner()->getAnimatedObjectGroupCache().getSkinningTransformsBuffer() );
+				}
+				else if ( data.hasComponent( MorphComponent::Name ) )
+				{
+					m_vertexTransform->registerNode( *it.first->second
+						, data.getMorphTargets()
+						, getOwner()->getAnimatedObjectGroupCache().getMorphingWeights()
+						, skinTransforms );
+				}
+				else
+				{
+					m_vertexTransform->registerNode( *it.first->second
+						, morphTargets
+						, morphingWeights
+						, getOwner()->getAnimatedObjectGroupCache().getSkinningTransformsBuffer() );
+				}
 			}
 
 			m_dirty = true;

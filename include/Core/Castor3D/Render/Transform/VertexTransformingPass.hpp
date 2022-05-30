@@ -28,8 +28,9 @@ namespace castor3d
 		void registerNode( SubmeshRenderNode const & node
 			, TransformPipeline const & pipeline
 			, GpuBufferOffsetT< castor::Point4f > const & morphTargets
-			, GpuBufferOffsetT< MorphingWeightsConfiguration > const & morphingWeights );
-		void unregisterNode( ObjectBufferOffset const & input );
+			, GpuBufferOffsetT< MorphingWeightsConfiguration > const & morphingWeights
+			, GpuBufferOffsetT< SkinningTransformsConfiguration > const & skinTransforms );
+		void unregisterNode( SubmeshRenderNode const & node );
 
 	private:
 		void doInitialise();
