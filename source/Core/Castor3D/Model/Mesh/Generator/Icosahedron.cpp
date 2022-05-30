@@ -125,7 +125,7 @@ namespace castor3d
 		for ( uint32_t i = 0u; i < submesh->getPointsCount(); ++i )
 		{
 			castor::SphericalVertex vsVertex1( castor::Point3f{ normals->getData()[i] } );
-			texcoords->getData()[i] = castor::Point4f{ vsVertex1.m_phi, vsVertex1.m_theta, 0, 0 };
+			texcoords->getData()[i] = castor::Point3f{ vsVertex1.m_phi, vsVertex1.m_theta, 0 };
 		}
 
 		indexMapping->computeTangentsFromNormals();

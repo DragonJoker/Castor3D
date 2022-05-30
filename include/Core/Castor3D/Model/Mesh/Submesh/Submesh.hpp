@@ -369,22 +369,22 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API InterleavedVertex getInterleavedPoint( uint32_t index )const;
-		C3D_API castor::Point4fArray const & getPositions()const;
-		C3D_API castor::Point4fArray & getPositions();
-		C3D_API castor::Point4fArray const & getNormals()const;
-		C3D_API castor::Point4fArray & getNormals();
-		C3D_API castor::Point4fArray const & getTangents()const;
-		C3D_API castor::Point4fArray & getTangents();
-		C3D_API castor::Point4fArray const & getTexcoords0()const;
-		C3D_API castor::Point4fArray & getTexcoords0();
-		C3D_API castor::Point4fArray const & getTexcoords1()const;
-		C3D_API castor::Point4fArray & getTexcoords1();
-		C3D_API castor::Point4fArray const & getTexcoords2()const;
-		C3D_API castor::Point4fArray & getTexcoords2();
-		C3D_API castor::Point4fArray const & getTexcoords3()const;
-		C3D_API castor::Point4fArray & getTexcoords3();
-		C3D_API castor::Point4fArray const & getColours()const;
-		C3D_API castor::Point4fArray & getColours();
+		C3D_API castor::Point3fArray const & getPositions()const;
+		C3D_API castor::Point3fArray & getPositions();
+		C3D_API castor::Point3fArray const & getNormals()const;
+		C3D_API castor::Point3fArray & getNormals();
+		C3D_API castor::Point3fArray const & getTangents()const;
+		C3D_API castor::Point3fArray & getTangents();
+		C3D_API castor::Point3fArray const & getTexcoords0()const;
+		C3D_API castor::Point3fArray & getTexcoords0();
+		C3D_API castor::Point3fArray const & getTexcoords1()const;
+		C3D_API castor::Point3fArray & getTexcoords1();
+		C3D_API castor::Point3fArray const & getTexcoords2()const;
+		C3D_API castor::Point3fArray & getTexcoords2();
+		C3D_API castor::Point3fArray const & getTexcoords3()const;
+		C3D_API castor::Point3fArray & getTexcoords3();
+		C3D_API castor::Point3fArray const & getColours()const;
+		C3D_API castor::Point3fArray & getColours();
 		C3D_API GpuBufferOffsetT< castor::Point4f > const & getMorphTargets()const;
 		C3D_API uint32_t getMorphTargetsCount()const;
 		C3D_API bool isDynamic()const;
