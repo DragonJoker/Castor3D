@@ -72,7 +72,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::BonesComponent">
+	<Type Name="castor3d::SkinComponent">
 		<DisplayString>{m_id} {m_type} data={m_data}</DisplayString>
 		<Expand>
 			<Item Name="id">m_id</Item>

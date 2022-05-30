@@ -1,4 +1,4 @@
-#include "Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
@@ -17,50 +17,50 @@
 
 namespace castor3d
 {
-	castor::String const BonesComponent::Name = cuT( "bones" );
+	castor::String const SkinComponent::Name = cuT( "bones" );
 
-	BonesComponent::BonesComponent( Submesh & submesh )
+	SkinComponent::SkinComponent( Submesh & submesh )
 		: SubmeshComponent{ submesh, Name, Id }
 	{
 	}
 
-	void BonesComponent::addBoneDatas( VertexBoneData const * const begin
+	void SkinComponent::addBoneDatas( VertexBoneData const * const begin
 		, VertexBoneData const * const end )
 	{
 		m_bones.insert( m_bones.end(), begin, end );
 	}
 
-	SkeletonRPtr BonesComponent::getSkeleton()const
+	SkeletonRPtr SkinComponent::getSkeleton()const
 	{
 		return getOwner()->getParent().getSkeleton();
 	}
 
-	SubmeshComponentSPtr BonesComponent::clone( Submesh & submesh )const
+	SubmeshComponentSPtr SkinComponent::clone( Submesh & submesh )const
 	{
-		auto result = std::make_shared< BonesComponent >( submesh );
+		auto result = std::make_shared< SkinComponent >( submesh );
 		result->m_bones = m_bones;
 		return std::static_pointer_cast< SubmeshComponent >( result );
 	}
 
-	void BonesComponent::addBoneDatas( std::vector< VertexBoneData > const & boneData )
+	void SkinComponent::addBoneDatas( std::vector< VertexBoneData > const & boneData )
 	{
 		addBoneDatas( boneData.data(), boneData.data() + boneData.size() );
 	}
 
-	bool BonesComponent::doInitialise( RenderDevice const & device )
+	bool SkinComponent::doInitialise( RenderDevice const & device )
 	{
 		return true;
 	}
 
-	void BonesComponent::doCleanup( RenderDevice const & device )
+	void SkinComponent::doCleanup( RenderDevice const & device )
 	{
 	}
 
-	void BonesComponent::doUpload()
+	void SkinComponent::doUpload()
 	{
 		auto count = uint32_t( m_bones.size() );
 		auto & offsets = getOwner()->getSourceBufferOffsets();
-		auto & buffer = offsets.getBufferChunk( SubmeshFlag::eBones );
+		auto & buffer = offsets.getBufferChunk( SubmeshFlag::eSkin );
 
 		if ( count && buffer.hasData() )
 		{

@@ -20,18 +20,10 @@ namespace castor3d
 		: uint8_t
 	{
 		eFrontStatic,
-		eFrontSkinned,
 		eFrontInstancedStatic,
-		eFrontInstancedSkinned,
-		eFrontMorphing,
-		eFrontMorphingSkinned,
 		eFrontBillboard,
 		eBackStatic,
-		eBackSkinned,
 		eBackInstancedStatic,
-		eBackInstancedSkinned,
-		eBackMorphing,
-		eBackMorphingSkinned,
 		eBackBillboard,
 		CU_ScopedEnumBounds( eFrontStatic )
 	};

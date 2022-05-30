@@ -12,7 +12,7 @@ namespace castor3d
 
 	namespace vtxtrsg
 	{
-		size_t makeHash( ObjectBufferOffset const & input
+		static size_t makeHash( ObjectBufferOffset const & input
 			, ObjectBufferOffset const & output )
 		{
 			auto result = input.hash;
@@ -55,9 +55,6 @@ namespace castor3d
 	{
 		auto & input = node.getSourceBufferOffsets();
 		auto & output = node.getFinalBufferOffsets();
-		auto submeshFlags = node.getSubmeshFlags();
-		auto morphFlags = node.getMorphFlags();
-		auto programFlags = node.getProgramFlags();
 		auto hash = vtxtrsg::makeHash( input, output );
 		auto ires = m_passes.emplace( hash, nullptr );
 

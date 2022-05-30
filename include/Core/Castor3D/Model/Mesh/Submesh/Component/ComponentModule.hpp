@@ -31,7 +31,7 @@ namespace castor3d
 	\~french
 	\brief		Le composant de sous-maillage pour le skinning.
 	*/
-	class BonesComponent;
+	class SkinComponent;
 	/**
 	\~english
 	\brief		Face implementation

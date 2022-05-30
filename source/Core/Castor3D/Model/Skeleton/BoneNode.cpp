@@ -3,7 +3,7 @@
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
 
 CU_ImplementCUSmartPtr( castor3d, BoneNode )
 
@@ -29,9 +29,9 @@ namespace castor3d
 
 		for ( auto & submesh : mesh )
 		{
-			if ( submesh->hasComponent( BonesComponent::Name ) )
+			if ( submesh->hasComponent( SkinComponent::Name ) )
 			{
-				auto component = submesh->getComponent< BonesComponent >();
+				auto component = submesh->getComponent< SkinComponent >();
 				uint32_t i = 0u;
 
 				for ( auto & boneData : component->getBonesData() )

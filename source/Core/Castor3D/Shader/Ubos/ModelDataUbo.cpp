@@ -47,8 +47,7 @@ namespace castor3d::shader
 	sdw::Mat4 ModelIndices::getPrvModelMtx( ProgramFlags programsFlags
 		, sdw::Mat4 const & curModelMatrix )const
 	{
-		if ( checkFlag( programsFlags, ProgramFlag::eSkinning )
-			|| checkFlag( programsFlags, ProgramFlag::eInstantiation ) )
+		if ( checkFlag( programsFlags, ProgramFlag::eInstantiation ) )
 		{
 			return curModelMatrix;
 		}
@@ -56,11 +55,21 @@ namespace castor3d::shader
 		return m_prvMtxModel;
 	}
 
+	sdw::Mat3 ModelIndices::getNormalMtx( SubmeshFlags submeshFlags
+		, sdw::Mat4 const & curModelMatrix )const
+	{
+		if ( checkFlag( submeshFlags, SubmeshFlag::eSkin ) )
+		{
+			return transpose( inverse( mat3( curModelMatrix ) ) );
+		}
+
+		return mat3( m_mtxNormal );
+	}
+
 	sdw::Mat3 ModelIndices::getNormalMtx( ProgramFlags programsFlags
 		, sdw::Mat4 const & curModelMatrix )const
 	{
-		if ( checkFlag( programsFlags, ProgramFlag::eSkinning )
-			|| checkFlag( programsFlags, ProgramFlag::eInstantiation ) )
+		if ( checkFlag( programsFlags, ProgramFlag::eInstantiation ) )
 		{
 			return transpose( inverse( mat3( curModelMatrix ) ) );
 		}
@@ -99,15 +108,14 @@ namespace castor3d::shader
 		return m_curMtxModel;
 	}
 
-	sdw::Mat4 ModelIndices::getCurModelMtx( ProgramFlags programsFlags
-		, SkinningData const & skinning
+	sdw::Mat4 ModelIndices::getCurModelMtx( SkinningData const & skinning
 		, sdw::UInt const & skinningId
 		, sdw::UVec4 const & boneIds0
 		, sdw::UVec4 const & boneIds1
 		, sdw::Vec4 const & boneWeights0
 		, sdw::Vec4 const & boneWeights1 )const
 	{
-		if ( checkFlag( programsFlags, ProgramFlag::eSkinning ) )
+		if ( skinning.transforms )
 		{
 			return SkinningUbo::computeTransform( skinning
 				, m_curMtxModel

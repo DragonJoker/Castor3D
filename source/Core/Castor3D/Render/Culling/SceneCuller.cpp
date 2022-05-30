@@ -224,8 +224,8 @@ namespace castor3d
 			auto colBuffer = nodes.front().first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eColours )
 				? &nodes.front().first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eColours )
 				: nullptr;
-			auto bonBuffer = nodes.front().first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eBones )
-				? &nodes.front().first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eBones )
+			auto bonBuffer = nodes.front().first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eSkin )
+				? &nodes.front().first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eSkin )
 				: nullptr;
 #endif
 
@@ -261,8 +261,8 @@ namespace castor3d
 					CU_Require( colBuffer == ( node.first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eColours )
 						? &node.first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eColours )
 						: nullptr ) );
-					CU_Require( bonBuffer == ( node.first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eBones )
-						? &node.first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eBones )
+					CU_Require( bonBuffer == ( node.first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eSkin )
+						? &node.first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eSkin )
 						: nullptr) );
 				}
 			}
@@ -335,7 +335,6 @@ namespace castor3d
 		, bool isFrontCulled )
 	{
 		auto submeshFlags = data.getSubmeshFlags( &pass );
-		auto morphFlags = data.getMorphFlags();
 		auto programFlags = data.getProgramFlags( *pass.getOwner() );
 
 		if ( isFrontCulled )

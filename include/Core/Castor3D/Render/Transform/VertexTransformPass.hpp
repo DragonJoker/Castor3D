@@ -39,7 +39,7 @@ namespace castor3d
 			eOutTexcoord3,
 			eInColour,
 			eOutColour,
-			eInBones,
+			eInSkin,
 			eOutVelocity,
 		};
 

@@ -165,27 +165,4 @@ namespace castor3d
 	}
 }
 
-#define C3D_MorphTargets( writer, binding, set, morphFlags, programFlags )\
-	sdw::Ssbo morphingBuffer{ writer\
-		, castor3d::shader::MorphTargetData::BufferName\
-		, uint32_t( binding )\
-		, uint32_t( set )\
-		, ast::type::MemoryLayout::eStd430\
-		, checkFlag( programFlags, castor3d::ProgramFlag::eMorphing ) };\
-	auto c3d_morphTargets = morphingBuffer.declMemberArray< castor3d::shader::MorphTargetsData >( castor3d::shader::MorphTargetData::DataName\
-		, checkFlag( programFlags, castor3d::ProgramFlag::eMorphing )\
-		, morphFlags );\
-	morphingBuffer.end()
-
-#define C3D_MorphingWeights( writer, binding, set, flags )\
-	sdw::Ssbo morphingWeights{ writer\
-		, castor3d::shader::MorphingWeightsData::BufferName\
-		, uint32_t( binding )\
-		, uint32_t( set )\
-		, ast::type::MemoryLayout::eStd430\
-		, checkFlag( flags, castor3d::ProgramFlag::eMorphing ) };\
-	auto c3d_morphingWeights = morphingWeights.declMemberArray< castor3d::shader::MorphingWeightsData >( castor3d::shader::MorphingWeightsData::DataName\
-		, checkFlag( flags, castor3d::ProgramFlag::eMorphing ) );\
-	morphingWeights.end()
-
 #endif

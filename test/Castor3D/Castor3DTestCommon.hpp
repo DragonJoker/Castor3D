@@ -11,7 +11,7 @@
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp>
@@ -340,7 +340,7 @@ namespace Testing
 				{ castor3d::SubmeshFlag::eTexcoords2, "eTexcoords2" },
 				{ castor3d::SubmeshFlag::eTexcoords3, "eTexcoords3" },
 				{ castor3d::SubmeshFlag::eColours, "eColours" },
-				{ castor3d::SubmeshFlag::eBones, "eBones" },
+				{ castor3d::SubmeshFlag::eSkin, "eSkin" },
 			};
 			return Names[value];
 		}
@@ -383,8 +383,6 @@ namespace Testing
 				{ castor3d::ProgramFlag::eShadowMapPoint, "eShadowMapPoint" },
 				{ castor3d::ProgramFlag::eShadowMapSpot, "eShadowMapSpot" },
 				{ castor3d::ProgramFlag::eSpherical, "eSpherical" },
-				{ castor3d::ProgramFlag::eMorphing, "eMorphing" },
-				{ castor3d::ProgramFlag::eSkinning, "eSkinning" },
 				{ castor3d::ProgramFlag::eInstantiation, "eInstantiation" },
 				{ castor3d::ProgramFlag::eForceTexCoords, "eForceTexCoords" },
 			};
@@ -663,11 +661,11 @@ namespace Testing
 	};
 
 	template<>
-	struct Stringifier< castor3d::BonesComponent >
+	struct Stringifier< castor3d::SkinComponent >
 	{
-		static std::string get( castor3d::BonesComponent const & value )
+		static std::string get( castor3d::SkinComponent const & value )
 		{
-			return std::string{ "castor3d::BonesComponent" };
+			return std::string{ "castor3d::SkinComponent" };
 		}
 	};
 
@@ -860,7 +858,7 @@ namespace Testing
 		bool compare( castor3d::Mesh const & p_a, castor3d::Mesh const & p_b );
 		bool compare( castor3d::Submesh const & p_a, castor3d::Submesh const & p_b );
 		bool compare( castor3d::SubmeshComponent const & p_a, castor3d::SubmeshComponent const & p_b );
-		bool compare( castor3d::BonesComponent const & p_a, castor3d::BonesComponent const & p_b );
+		bool compare( castor3d::SkinComponent const & p_a, castor3d::SkinComponent const & p_b );
 		bool compare( castor3d::PositionsComponent const & p_a, castor3d::PositionsComponent const & p_b );
 		bool compare( castor3d::NormalsComponent const & p_a, castor3d::NormalsComponent const & p_b );
 		bool compare( castor3d::TangentsComponent const & p_a, castor3d::TangentsComponent const & p_b );
