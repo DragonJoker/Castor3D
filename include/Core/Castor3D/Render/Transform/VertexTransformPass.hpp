@@ -19,6 +19,7 @@ namespace castor3d
 	public:
 		enum Ids
 		{
+			eModelsData,
 			eMorphTargets,
 			eMorphingWeights,
 			eInPosition,
@@ -48,6 +49,7 @@ namespace castor3d
 			, TransformPipeline const & pipeline
 			, ObjectBufferOffset const & input
 			, ObjectBufferOffset const & output
+			, ashes::Buffer< ModelBufferConfiguration > const & modelsBuffer
 			, GpuBufferOffsetT< castor::Point4f > const & morphTargets
 			, GpuBufferOffsetT< MorphingWeightsConfiguration > const & morphingWeights );
 

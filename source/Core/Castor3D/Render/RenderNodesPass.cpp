@@ -186,9 +186,7 @@ namespace castor3d
 
 	ProgramFlags RenderNodesPass::adjustFlags( ProgramFlags flags )const
 	{
-		auto result = doAdjustProgramFlags( flags );
-		remFlag( result, ProgramFlag::eMorphing );
-		return result;
+		return doAdjustProgramFlags( flags );
 	}
 
 	SceneFlags RenderNodesPass::adjustFlags( SceneFlags flags )const
@@ -820,15 +818,25 @@ namespace castor3d
 						, in.boneIds1
 						, in.boneWeights0
 						, in.boneWeights1 ) );
-				auto prvMtxModel = writer.declLocale< Mat4 >( "prvMtxModel"
-					, modelData.getPrvModelMtx( flags.programFlags, curMtxModel ) );
 				auto prvPosition = writer.declLocale( "prvPosition"
 					, curPosition );
 				prvPosition.xyz() += in.velocity;
-				prvPosition = c3d_matrixData.worldToPrvProj( prvMtxModel * prvPosition );
-				auto worldPos = writer.declLocale( "worldPos"
-					, curMtxModel * curPosition );
 
+				if ( checkFlag( flags.submeshFlags, SubmeshFlag::eVelocity ) )
+				{
+					auto worldPos = writer.declLocale( "worldPos"
+						, curPosition );
+				}
+				else
+				{
+					auto prvMtxModel = writer.declLocale< Mat4 >( "prvMtxModel"
+						, modelData.getPrvModelMtx( flags.programFlags, curMtxModel ) );
+					prvPosition = c3d_matrixData.worldToPrvProj( prvMtxModel * prvPosition );
+					auto worldPos = writer.declLocale( "worldPos"
+						, curMtxModel * curPosition );
+				}
+
+				auto worldPos = writer.getVariable< sdw::Vec4 >( "worldPos" );
 				out.worldPosition = worldPos;
 				out.viewPosition = c3d_matrixData.worldToCurView( worldPos );
 				curPosition = c3d_matrixData.worldToCurProj( worldPos );

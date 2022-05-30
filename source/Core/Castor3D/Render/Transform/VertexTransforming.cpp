@@ -86,6 +86,9 @@ namespace castor3d
 		{
 			ashes::VkDescriptorSetLayoutBindingArray bindings;
 
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( VertexTransformPass::eModelsData
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, VK_SHADER_STAGE_COMPUTE_BIT ) );
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( VertexTransformPass::eMorphTargets
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_COMPUTE_BIT ) );
@@ -220,6 +223,9 @@ namespace castor3d
 			auto objectIDs = writer.declPushConstantsBuffer<>( "ObjectIDs" );
 			auto c3d_objectIDs = objectIDs.declMember< shader::ObjectIds >( "c3d_objectIDs" );
 			objectIDs.end();
+			C3D_ModelsData( writer
+				, VertexTransformPass::eModelsData
+				, 0u );
 
 			// Morphing
 			auto c3d_morphTargets = writer.declArrayStorageBuffer< shader::MorphTargetsData >( "c3d_morphTargets"
@@ -376,10 +382,16 @@ namespace castor3d
 				c3d_outTexcoord2[index].xyz() = texcoord2;
 				c3d_outTexcoord3[index].xyz() = texcoord3;
 				c3d_outColour[index].xyz() = colour;
-				c3d_outPosition[index] = vec4( position.xyz(), 1.0_f );
 				c3d_outNormal[index].xyz() = normalize( normal.xyz() );
 				c3d_outTangent[index].xyz() = normalize( tangent.xyz() );
 				c3d_outBones[index] = c3d_inBones[index];
+
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelsData[c3d_objectIDs.nodeId] );
+				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
+					, modelData.getModelMtx() );
+				position = curMtxModel * position;
+				c3d_outPosition[index] = vec4( position.xyz(), 1.0_f );
 				c3d_outVelocity[index].xyz() = oldPosition.xyz() - position.xyz();
 			} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -437,10 +449,12 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
+				auto & modelsBuffer = getOwner()->getModelBuffer();
 				auto res = std::make_unique< VertexTransformingPass >( framePass
 					, context
 					, runnableGraph
-					, m_device );
+					, m_device
+					, modelsBuffer );
 				m_pass = res.get();
 				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );

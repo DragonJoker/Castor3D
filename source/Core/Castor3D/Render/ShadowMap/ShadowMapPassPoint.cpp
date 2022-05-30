@@ -252,8 +252,19 @@ namespace castor3d
 						, in.boneIds1
 						, in.boneWeights0
 						, in.boneWeights1 ) );
-				auto worldPos = writer.declLocale( "worldPos"
-					, mtxModel * curPosition );
+
+				if ( checkFlag( flags.submeshFlags, SubmeshFlag::eVelocity ) )
+				{
+					auto worldPos = writer.declLocale( "worldPos"
+						, curPosition );
+				}
+				else
+				{
+					auto worldPos = writer.declLocale( "worldPos"
+						, mtxModel * curPosition );
+				}
+
+				auto worldPos = writer.getVariable< sdw::Vec4 >( "worldPos" );
 				out.worldPosition = worldPos;
 				out.vtx.position = c3d_matrixData.worldToCurProj( worldPos );
 
