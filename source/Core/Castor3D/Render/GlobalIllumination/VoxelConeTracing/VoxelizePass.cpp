@@ -387,7 +387,15 @@ namespace castor3d
 						, in.boneWeights0
 						, in.boneWeights1 ) );
 
-				out.vtx.position = ( modelMtx * curPosition );
+				if ( checkFlag( flags.submeshFlags, SubmeshFlag::eVelocity ) )
+				{
+					out.vtx.position = curPosition;
+				}
+				else
+				{
+					out.vtx.position = ( modelMtx * curPosition );
+				}
+
 				out.viewPosition = c3d_matrixData.worldToCurView( out.vtx.position ).xyz();
 				out.worldPosition = out.viewPosition;
 				out.normal = normalize( mat3( transpose( inverse( modelMtx ) ) ) * v4Normal.xyz() );

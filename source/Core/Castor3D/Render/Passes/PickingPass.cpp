@@ -181,7 +181,12 @@ namespace castor3d
 						, in.boneIds1
 						, in.boneWeights0
 						, in.boneWeights1 ) );
-				curPosition = mtxModel * curPosition;
+
+				if ( !checkFlag( flags.submeshFlags, SubmeshFlag::eVelocity ) )
+				{
+					curPosition = mtxModel * curPosition;
+				}
+
 				out.vtx.position = c3d_matrixData.worldToCurProj( curPosition );
 			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

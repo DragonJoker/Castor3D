@@ -25,7 +25,8 @@ namespace castor3d
 	VertexTransformingPass::VertexTransformingPass( crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
-		, RenderDevice const & device )
+		, RenderDevice const & device
+		, ashes::Buffer< ModelBufferConfiguration > const & modelsBuffer )
 		: crg::RunnablePass{ pass
 			, context
 			, graph
@@ -37,6 +38,7 @@ namespace castor3d
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
 			, crg::ru::Config{ 1u, true } }
 		, m_device{ device }
+		, m_modelsBuffer{ modelsBuffer }
 	{
 	}
 
@@ -60,6 +62,7 @@ namespace castor3d
 				, pipeline
 				, input
 				, output
+				, m_modelsBuffer
 				, morphTargets
 				, morphingWeights );
 			resetCommandBuffer();
@@ -85,10 +88,26 @@ namespace castor3d
 		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
+		context.memoryBarrier( commandBuffer
+			, m_modelsBuffer.getBuffer()
+			, { 0u, ashes::WholeSize }
+			, VK_ACCESS_HOST_WRITE_BIT
+			, VK_PIPELINE_STAGE_HOST_BIT
+			, { VK_ACCESS_SHADER_READ_BIT
+				, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+
 		for ( auto & passIt : m_passes )
 		{
 			passIt.second->recordInto( context, commandBuffer, index );
 		}
+		
+		context.memoryBarrier( commandBuffer
+			, m_modelsBuffer.getBuffer()
+			, { 0u, ashes::WholeSize }
+			, VK_ACCESS_SHADER_READ_BIT
+			, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
+			, { VK_ACCESS_UNIFORM_READ_BIT
+				, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT } );
 	}
 
 	VkPipelineStageFlags VertexTransformingPass::doGetSemaphoreWaitFlags()const
