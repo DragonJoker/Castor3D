@@ -478,18 +478,6 @@ namespace castor3d
 
 			auto & animCache = scene.getAnimatedObjectGroupCache();
 
-			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
-			{
-				CU_Require( morphTargets );
-				descriptorWrites.push_back( animCache.getMorphingWeights().getStorageBinding( uint32_t( GlobalBuffersIdx::eMorphingWeights ) ) );
-				descriptorWrites.push_back( ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eMorphTargets )
-					, 0u
-					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-					, { VkDescriptorBufferInfo{ morphTargets.buffer->getBuffer().getBuffer()
-						, morphTargets.getOffset()
-						, morphTargets.getSize() } } } );
-			}
-
 			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 			{
 				descriptorWrites.push_back( animCache.getSkinningTransformsBuffer().getStorageBinding( uint32_t( GlobalBuffersIdx::eSkinningTransformData ) ) );
@@ -627,16 +615,6 @@ namespace castor3d
 		if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
 		{
 			addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eBillboardsData )
-				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, stageFlags ) );
-		}
-
-		if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
-		{
-			addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eMorphingWeights )
-				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, stageFlags ) );
-			addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eMorphTargets )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, stageFlags ) );
 		}
