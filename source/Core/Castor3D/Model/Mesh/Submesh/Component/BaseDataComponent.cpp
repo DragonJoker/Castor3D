@@ -21,7 +21,7 @@ namespace castor3d
 			, uint32_t & currentLocation )
 		{
 			ashes::VkVertexInputBindingDescriptionArray bindings{ { currentBinding
-				, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } };
+				, sizeof( castor::Point4f ), VK_VERTEX_INPUT_RATE_VERTEX } };
 			ashes::VkVertexInputAttributeDescriptionArray attributes{ 1u, { currentLocation++
 				, currentBinding
 				, VK_FORMAT_R32G32B32_SFLOAT
@@ -41,17 +41,17 @@ namespace castor3d
 
 	void uploadBaseData( SubmeshFlag submeshData
 		, Submesh const & submesh
-		, castor::Point3fArray const & data )
+		, castor::Point4fArray const & data )
 	{
 		auto count = uint32_t( data.size() );
-		auto & offsets = submesh.getBufferOffsets();
+		auto & offsets = submesh.getSourceBufferOffsets();
 		auto & buffer = offsets.getBufferChunk( submeshData );
 
 		if ( count && buffer.hasData() )
 		{
 			std::copy( data.begin()
 				, data.end()
-				, buffer.getData< castor::Point3f >().begin() );
+				, buffer.getData< castor::Point4f >().begin() );
 			buffer.markDirty();
 		}
 	}

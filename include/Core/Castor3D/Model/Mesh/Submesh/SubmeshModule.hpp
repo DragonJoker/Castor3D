@@ -100,14 +100,14 @@ namespace castor3d
 	inline constexpr uint32_t getSize( SubmeshData value )
 	{
 		constexpr std::array< size_t, size_t( SubmeshData::eCount ) > sizes = { sizeof( uint32_t ) /* SubmeshFlag::eIndex */
-			, sizeof( castor::Point3f ) /* SubmeshFlag::ePositions */
-			, sizeof( castor::Point3f ) /* SubmeshFlag::eNormals */
-			, sizeof( castor::Point3f ) /* SubmeshFlag::eTangents */
-			, sizeof( castor::Point3f ) /* SubmeshFlag::eTexcoords0 */
-			, sizeof( castor::Point3f ) /* SubmeshFlag::eTexcoords1 */
-			, sizeof( castor::Point3f ) /* SubmeshFlag::eTexcoords2 */
-			, sizeof( castor::Point3f ) /* SubmeshFlag::eTexcoords3 */
-			, sizeof( castor::Point3f ) /* SubmeshFlag::eColours */
+			, sizeof( castor::Point4f ) /* SubmeshFlag::ePositions */
+			, sizeof( castor::Point4f ) /* SubmeshFlag::eNormals */
+			, sizeof( castor::Point4f ) /* SubmeshFlag::eTangents */
+			, sizeof( castor::Point4f ) /* SubmeshFlag::eTexcoords0 */
+			, sizeof( castor::Point4f ) /* SubmeshFlag::eTexcoords1 */
+			, sizeof( castor::Point4f ) /* SubmeshFlag::eTexcoords2 */
+			, sizeof( castor::Point4f ) /* SubmeshFlag::eTexcoords3 */
+			, sizeof( castor::Point4f ) /* SubmeshFlag::eColours */
 			, sizeof( VertexBoneData ) /* SubmeshFlag::eBones */ };
 		return uint32_t( sizes[size_t( value )] );
 	}
@@ -293,28 +293,28 @@ namespace castor3d
 	{
 		//!\~english	The positions buffer.
 		//!\~french		Le tampon de positions.
-		castor::Point3fArray positions{};
+		castor::Point4fArray positions{};
 		//!\~english	The normals buffer.
 		//!\~french		Le tampon de normales.
-		castor::Point3fArray normals{};
+		castor::Point4fArray normals{};
 		//!\~english	The tangents buffer.
 		//!\~french		Le tampon de tangentes.
-		castor::Point3fArray tangents{};
+		castor::Point4fArray tangents{};
 		//!\~english	The texture coordinates buffer.
 		//!\~french		Le tampon de coordonnées de texture.
-		castor::Point3fArray texcoords0{};
+		castor::Point4fArray texcoords0{};
 		//!\~english	The 2nd texture coordinates buffer.
 		//!\~french		Le 2e tampon de coordonnées de texture.
-		castor::Point3fArray texcoords1{};
+		castor::Point4fArray texcoords1{};
 		//!\~english	The 3rd texture coordinates buffer.
 		//!\~french		Le 3e tampon de coordonnées de texture.
-		castor::Point3fArray texcoords2{};
+		castor::Point4fArray texcoords2{};
 		//!\~english	The 4th texture coordinates buffer.
 		//!\~french		Le 4e tampon de coordonnées de texture.
-		castor::Point3fArray texcoords3{};
+		castor::Point4fArray texcoords3{};
 		//!\~english	The colours buffer.
 		//!\~french		Le tampon de couleurs.
-		castor::Point3fArray colours{};
+		castor::Point4fArray colours{};
 		//!\~english	The bounding box.
 		//!\~french		La bounding box.
 		castor::BoundingBox boundingBox{};

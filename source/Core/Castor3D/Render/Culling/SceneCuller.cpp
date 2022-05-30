@@ -76,7 +76,7 @@ namespace castor3d
 			auto & node = *culled.node;
 			auto hash = getPipelineHash( renderPass, node, isFrontCulled );
 			auto & pipelineNodes = sortedNodes.emplace( hash, SceneCuller::SidedNodeBufferMapT< NodeT >{} ).first->second;
-			auto buffer = &node.data.getBufferOffsets().getBuffer( SubmeshFlag::ePositions );
+			auto buffer = &node.getFinalBufferOffsets().getBuffer( SubmeshFlag::ePositions );
 			auto bufferIres = pipelineNodes.emplace( buffer, SceneCuller::SidedNodeArrayT< NodeT >{} );
 			bufferIres.first->second.emplace_back( culled, isFrontCulled );
 			registerPipelineNodes( hash, *buffer, nodesIds );
@@ -92,7 +92,7 @@ namespace castor3d
 			auto & node = *culled.node;
 			auto hash = getPipelineHash( renderPass, node, isFrontCulled );
 			auto & pipelineNodes = sortedInstancedSubmeshes.emplace( hash, SceneCuller::SidedObjectNodeBufferMapT< SubmeshRenderNode >{} ).first->second;
-			auto buffer = &node.data.getBufferOffsets().getBuffer( SubmeshFlag::ePositions );
+			auto buffer = &node.getFinalBufferOffsets().getBuffer( SubmeshFlag::ePositions );
 			auto bufferIres = pipelineNodes.emplace( buffer, SceneCuller::SidedObjectNodePassMapT< SubmeshRenderNode >{} );
 			auto & passNodes = bufferIres.first->second.emplace( node.pass, SceneCuller::SidedObjectNodeMapT< SubmeshRenderNode >{} ).first->second;
 			auto & objectNodes = passNodes.emplace( &node.data, SceneCuller::SidedNodeArrayT< SubmeshRenderNode >{} ).first->second;
@@ -143,11 +143,12 @@ namespace castor3d
 			, VkDrawIndexedIndirectCommand *& indirectIndexedCommands
 			, uint32_t instanceCount )
 		{
-			auto & bufferOffsets = culled.data.getBufferOffsets();
-			indirectIndexedCommands->indexCount = bufferOffsets.getCount< uint32_t >( SubmeshFlag::eIndex );
+			auto & indexOffset = culled.getSourceBufferOffsets().getBufferChunk( SubmeshFlag::eIndex );
+			auto & bufferOffsets = culled.getFinalBufferOffsets();
+			indirectIndexedCommands->indexCount = indexOffset.getCount< uint32_t >();
 			indirectIndexedCommands->instanceCount = instanceCount;
-			indirectIndexedCommands->firstIndex = bufferOffsets.getFirstIndex< uint32_t >();
-			indirectIndexedCommands->vertexOffset = int32_t( bufferOffsets.getFirstVertex< castor::Point3f >() );
+			indirectIndexedCommands->firstIndex = indexOffset.getFirst< uint32_t >();
+			indirectIndexedCommands->vertexOffset = int32_t( bufferOffsets.getFirstVertex< castor::Point4f >() );
 			indirectIndexedCommands->firstInstance = 0u;
 			++indirectIndexedCommands;
 		}
@@ -156,8 +157,8 @@ namespace castor3d
 			, VkDrawIndirectCommand *& indirectCommands
 			, uint32_t instanceCount )
 		{
-			auto & bufferOffsets = culled.data.getBufferOffsets();
-			indirectCommands->vertexCount = bufferOffsets.getCount< castor::Point3f >( SubmeshFlag::ePositions );
+			auto & bufferOffsets = culled.getFinalBufferOffsets();
+			indirectCommands->vertexCount = bufferOffsets.getCount< castor::Point4f >( SubmeshFlag::ePositions );
 			indirectCommands->instanceCount = instanceCount;
 			indirectCommands->firstVertex = bufferOffsets.getFirstVertex< castor::Point3f >();
 			indirectCommands->firstInstance = 0u;
@@ -167,7 +168,7 @@ namespace castor3d
 		static void fillIndirectCommand( BillboardRenderNode const & culled
 			, VkDrawIndirectCommand *& indirectCommands )
 		{
-			auto & bufferOffsets = culled.data.getGeometryBuffers().bufferOffset;
+			auto & bufferOffsets = culled.getFinalBufferOffsets();
 			indirectCommands->vertexCount = bufferOffsets.getCount< BillboardVertex >( SubmeshFlag::ePositions );
 			indirectCommands->instanceCount = getInstanceCount( culled );
 			indirectCommands->firstVertex = bufferOffsets.getFirstVertex< BillboardVertex >();
@@ -180,7 +181,7 @@ namespace castor3d
 			, VkDrawIndirectCommand *& indirectNIdxBuffer
 			, uint32_t instanceCount )
 		{
-			if ( node.data.getBufferOffsets().hasData( SubmeshFlag::eIndex ) )
+			if ( node.getSourceBufferOffsets().hasData( SubmeshFlag::eIndex ) )
 			{
 				fillIndirectCommand( node, indirectIdxBuffer, instanceCount );
 			}
@@ -196,35 +197,35 @@ namespace castor3d
 		{
 			uint32_t instanceCount = 0u;
 #ifndef NDEBUG
-			auto posBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::ePositions )
-				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::ePositions )
+			auto idxBuffer = nodes.front().first.node->getSourceBufferOffsets().hasData( SubmeshFlag::eIndex )
+				? &nodes.front().first.node->getSourceBufferOffsets().getBuffer( SubmeshFlag::eIndex )
 				: nullptr;
-			auto nmlBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eNormals )
-				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eNormals )
+			auto posBuffer = nodes.front().first.node->getFinalBufferOffsets().hasData( SubmeshFlag::ePositions )
+				? &nodes.front().first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::ePositions )
 				: nullptr;
-			auto tanBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTangents )
-				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTangents )
+			auto nmlBuffer = nodes.front().first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eNormals )
+				? &nodes.front().first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eNormals )
 				: nullptr;
-			auto tex0Buffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTexcoords0 )
-				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTexcoords0 )
+			auto tanBuffer = nodes.front().first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eTangents )
+				? &nodes.front().first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eTangents )
 				: nullptr;
-			auto tex1Buffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTexcoords1 )
-				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTexcoords1 )
+			auto tex0Buffer = nodes.front().first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords0 )
+				? &nodes.front().first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords0 )
 				: nullptr;
-			auto tex2Buffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTexcoords2 )
-				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTexcoords2 )
+			auto tex1Buffer = nodes.front().first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords1 )
+				? &nodes.front().first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords1 )
 				: nullptr;
-			auto tex3Buffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTexcoords3 )
-				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTexcoords3 )
+			auto tex2Buffer = nodes.front().first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords2 )
+				? &nodes.front().first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords2 )
 				: nullptr;
-			auto colBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eColours )
-				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eColours )
+			auto tex3Buffer = nodes.front().first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords3 )
+				? &nodes.front().first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords3 )
 				: nullptr;
-			auto idxBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eIndex )
-				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eIndex )
+			auto colBuffer = nodes.front().first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eColours )
+				? &nodes.front().first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eColours )
 				: nullptr;
-			auto bonBuffer = nodes.front().first.node->data.getBufferOffsets().hasData( SubmeshFlag::eBones )
-				? &nodes.front().first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eBones )
+			auto bonBuffer = nodes.front().first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eBones )
+				? &nodes.front().first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eBones )
 				: nullptr;
 #endif
 
@@ -233,35 +234,35 @@ namespace castor3d
 				if ( node.first.node->instance.getParent()->isVisible() )
 				{
 					++instanceCount;
-					CU_Require( posBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::ePositions )
-						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::ePositions )
+					CU_Require( idxBuffer == ( node.first.node->getSourceBufferOffsets().hasData( SubmeshFlag::eIndex )
+						? &node.first.node->getSourceBufferOffsets().getBuffer( SubmeshFlag::eIndex )
 						: nullptr ) );
-					CU_Require( nmlBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eNormals )
-						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eNormals )
+					CU_Require( posBuffer == ( node.first.node->getFinalBufferOffsets().hasData( SubmeshFlag::ePositions )
+						? &node.first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::ePositions )
 						: nullptr ) );
-					CU_Require( tanBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTangents )
-						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTangents )
+					CU_Require( nmlBuffer == ( node.first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eNormals )
+						? &node.first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eNormals )
 						: nullptr ) );
-					CU_Require( tex0Buffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTexcoords0 )
-						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTexcoords0 )
+					CU_Require( tanBuffer == ( node.first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eTangents )
+						? &node.first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eTangents )
 						: nullptr ) );
-					CU_Require( tex1Buffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTexcoords1 )
-						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTexcoords1 )
+					CU_Require( tex0Buffer == ( node.first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords0 )
+						? &node.first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords0 )
 						: nullptr ) );
-					CU_Require( tex2Buffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTexcoords2 )
-						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTexcoords2 )
+					CU_Require( tex1Buffer == ( node.first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords1 )
+						? &node.first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords1 )
 						: nullptr ) );
-					CU_Require( tex3Buffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eTexcoords3 )
-						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eTexcoords3 )
+					CU_Require( tex2Buffer == ( node.first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords2 )
+						? &node.first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords2 )
 						: nullptr ) );
-					CU_Require( colBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eColours )
-						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eColours )
+					CU_Require( tex3Buffer == ( node.first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords3 )
+						? &node.first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords3 )
 						: nullptr ) );
-					CU_Require( idxBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eIndex )
-						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eIndex )
+					CU_Require( colBuffer == ( node.first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eColours )
+						? &node.first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eColours )
 						: nullptr ) );
-					CU_Require( bonBuffer == ( node.first.node->data.getBufferOffsets().hasData( SubmeshFlag::eBones )
-						? &node.first.node->data.getBufferOffsets().getBuffer( SubmeshFlag::eBones )
+					CU_Require( bonBuffer == ( node.first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eBones )
+						? &node.first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eBones )
 						: nullptr) );
 				}
 			}
@@ -290,7 +291,6 @@ namespace castor3d
 	//*********************************************************************************************
 
 	PipelineBaseHash getPipelineBaseHash( SubmeshFlags submeshFlags
-		, MorphFlags morphFlags
 		, ProgramFlags programFlags
 		, PassFlags passFlags
 		, uint32_t maxTexcoordSet
@@ -302,7 +302,6 @@ namespace castor3d
 		remFlag( programFlags, ProgramFlag::eAllOptional );
 		remFlag( passFlags, PassFlag::eAllOptional );
 		constexpr auto maxSubmeshSize = castor::getBitSize( uint32_t( SubmeshFlag::eAllBase ) );
-		constexpr auto maxMorphSize = castor::getBitSize( uint32_t( MorphFlag::eAllBase ) );
 		constexpr auto maxProgramSize = castor::getBitSize( uint32_t( ProgramFlag::eAllBase ) );
 		constexpr auto maxPassSize = castor::getBitSize( uint32_t( PassFlag::eAllBase ) );
 		constexpr auto maxTexcoorSetSize = castor::getBitSize( MaxTextureCoordinatesSets );
@@ -314,8 +313,6 @@ namespace castor3d
 		PipelineBaseHash result{};
 		result.a = uint64_t( submeshFlags ) << offset;
 		offset += maxSubmeshSize;
-		result.a |= uint64_t( morphFlags ) << offset;
-		offset += maxMorphSize;
 		result.a |= uint64_t( programFlags ) << offset;
 		offset += maxProgramSize;
 		result.a |= uint64_t( passFlags ) << offset;
@@ -347,7 +344,6 @@ namespace castor3d
 		}
 
 		return getPipelineBaseHash( renderPass.adjustFlags( submeshFlags )
-			, renderPass.adjustFlags( morphFlags )
 			, renderPass.adjustFlags( programFlags )
 			, renderPass.adjustFlags( pass.getPassFlags() )
 			, pass.getMaxTexCoordSet()
@@ -371,7 +367,6 @@ namespace castor3d
 		}
 
 		return getPipelineBaseHash( renderPass.adjustFlags( submeshFlags )
-			, MorphFlags{}
 			, renderPass.adjustFlags( programFlags )
 			, renderPass.adjustFlags( pass.getPassFlags() )
 			, pass.getMaxTexCoordSet()

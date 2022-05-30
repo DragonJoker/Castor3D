@@ -56,6 +56,12 @@ namespace castor3d
 				return chunk.offset;
 			}
 
+			template< typename DataT >
+			uint32_t getFirst()const
+			{
+				return uint32_t( getOffset() / sizeof( DataT ) );
+			}
+
 			void markDirty( VkAccessFlags dstAccessFlags = VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
 				, VkPipelineStageFlags dstPipelineFlags = VK_PIPELINE_STAGE_VERTEX_INPUT_BIT )const
 			{
@@ -225,16 +231,22 @@ namespace castor3d
 			return getBufferChunk( flag ).getOffset();
 		}
 
+		template< typename DataT >
+		uint32_t getFirst( SubmeshFlag flag )const
+		{
+			return getBufferChunk( flag ).getFirst< DataT >();
+		}
+
 		template< typename IndexT >
 		uint32_t getFirstIndex()const
 		{
-			return uint32_t( getOffset( SubmeshFlag::eIndex ) / sizeof( IndexT ) );
+			return getFirst< IndexT >( SubmeshFlag::eIndex );
 		}
 
 		template< typename PositionT >
 		uint32_t getFirstVertex()const
 		{
-			return uint32_t( getOffset( SubmeshFlag::ePositions ) / sizeof( PositionT ) );
+			return getFirst< PositionT >( SubmeshFlag::ePositions );
 		}
 
 		void markDirty( SubmeshFlag flag

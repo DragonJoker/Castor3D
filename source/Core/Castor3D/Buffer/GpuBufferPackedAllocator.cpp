@@ -2,9 +2,10 @@
 
 namespace castor3d
 {
-	GpuBufferPackedAllocator::GpuBufferPackedAllocator( size_t size )
+	GpuBufferPackedAllocator::GpuBufferPackedAllocator( size_t size
+		, size_t alignSize )
 		: m_allocatedSize{ size }
-		, m_alignSize{ 1u }
+		, m_alignSize{ alignSize }
 	{
 	}
 

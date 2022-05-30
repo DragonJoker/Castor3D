@@ -16,6 +16,7 @@
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Render/Node/BillboardRenderNode.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
+#include "Castor3D/Render/Transform/VertexTransforming.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -128,6 +129,7 @@ namespace castor3d
 			, getOwner()->getName() + cuT( "BillboardsDimensions" ) ) }
 		, m_modelsBuffer{ m_modelsData->lock( 0u, ashes::WholeSize, 0u ) }
 		, m_billboardsBuffer{ m_billboardsData->lock( 0u, ashes::WholeSize, 0u ) }
+		, m_vertexTransform{ castor::makeUnique< VertexTransforming >( scene, m_device ) }
 	{
 #if C3D_DebugTimers
 		m_timerRenderNodes = castor::makeUnique< crg::FramePassTimer >( m_device.makeContext(), getOwner()->getName() + "/RenderNodes" );
@@ -213,6 +215,14 @@ namespace castor3d
 			instance.fillEntry( pass
 				, *instance.getParent()
 				, it.first->second->modelData );
+
+			if ( data.hasComponent( MorphComponent::Name ) )
+			{
+				m_vertexTransform->registerNode( *it.first->second
+					, data.getMorphTargets()
+					, getOwner()->getAnimatedObjectGroupCache().getMorphingWeights() );
+			}
+
 			m_dirty = true;
 		}
 
@@ -516,6 +526,11 @@ namespace castor3d
 		{
 			m_billboardsData->flush( 0u, m_nodesData.size() );
 		}
+	}
+
+	crg::FramePass const & SceneRenderNodes::createVertexTransformPass( crg::FrameGraph & graph )
+	{
+		return m_vertexTransform->createPass( graph );
 	}
 
 	//*************************************************************************************************

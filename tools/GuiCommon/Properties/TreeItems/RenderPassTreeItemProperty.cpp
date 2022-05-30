@@ -46,8 +46,7 @@ namespace GuiCommon
 						, VK_COMPARE_OP_ALWAYS
 						, VK_COMPARE_OP_ALWAYS
 						, castor3d::TextureFlagsArray{}
-						, castor3d::SubmeshFlag{}
-						, castor3d::MorphFlag{}
+						, castor3d::SubmeshFlag::ePosNmlTanTex
 						, castor3d::ProgramFlag::eNone
 						, castor3d::SceneFlag::eNone
 						, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST

@@ -38,7 +38,6 @@
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
-#include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 
@@ -180,11 +179,6 @@ namespace castor3d
 		return doAdjustSubmeshFlags( flags );
 	}
 
-	MorphFlags RenderNodesPass::adjustFlags( MorphFlags flags )const
-	{
-		return doAdjustMorphFlags( flags );
-	}
-
 	PassFlags RenderNodesPass::adjustFlags( PassFlags flags )const
 	{
 		return doAdjustPassFlags( flags );
@@ -192,7 +186,9 @@ namespace castor3d
 
 	ProgramFlags RenderNodesPass::adjustFlags( ProgramFlags flags )const
 	{
-		return doAdjustProgramFlags( flags );
+		auto result = doAdjustProgramFlags( flags );
+		remFlag( result, ProgramFlag::eMorphing );
+		return result;
 	}
 
 	SceneFlags RenderNodesPass::adjustFlags( SceneFlags flags )const
@@ -210,7 +206,6 @@ namespace castor3d
 		, VkCompareOp blendAlphaFunc
 		, TextureFlagsArray const & textures
 		, SubmeshFlags const & submeshFlags
-		, MorphFlags const & morphFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, VkPrimitiveTopology topology
@@ -224,7 +219,6 @@ namespace castor3d
 			, passTypeID
 			, heightTextureIndex
 			, submeshFlags
-			, morphFlags
 			, programFlags
 			, sceneFlags
 			, topology
@@ -247,7 +241,6 @@ namespace castor3d
 	PipelineFlags RenderNodesPass::createPipelineFlags( Pass const & pass
 		, TextureFlagsArray const & textures
 		, SubmeshFlags const & submeshFlags
-		, MorphFlags const & morphFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, VkPrimitiveTopology topology
@@ -266,7 +259,6 @@ namespace castor3d
 			, pass.getBlendAlphaFunc()
 			, textures
 			, submeshFlags
-			, morphFlags
 			, programFlags
 			, sceneFlags
 			, topology
@@ -560,11 +552,6 @@ namespace castor3d
 		return flags;
 	}
 
-	MorphFlags RenderNodesPass::doAdjustMorphFlags( MorphFlags flags )const
-	{
-		return flags;
-	}
-
 	PassFlags RenderNodesPass::doAdjustPassFlags( PassFlags flags )const
 	{
 		return flags;
@@ -800,15 +787,6 @@ namespace castor3d
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
-		C3D_MorphTargets( writer
-			, GlobalBuffersIdx::eMorphTargets
-			, RenderPipeline::eBuffers
-			, flags.morphFlags
-			, flags.programFlags );
-		C3D_MorphingWeights( writer
-			, GlobalBuffersIdx::eMorphingWeights
-			, RenderPipeline::eBuffers
-			, flags.programFlags );
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
 			, RenderPipeline::eBuffers
@@ -851,18 +829,6 @@ namespace castor3d
 				out.texture2 = in.texture2;
 				out.texture3 = in.texture3;
 				out.colour = in.colour;
-				auto morphingWeights = writer.declLocale( "morphingWeights"
-					, c3d_morphingWeights[ids.morphingId] );
-				morphingWeights.morph( c3d_morphTargets
-					, writer.cast< UInt >( in.vertexIndex - in.baseVertex )
-					, curPosition
-					, v4Normal
-					, v4Tangent
-					, out.texture0
-					, out.texture1
-					, out.texture2
-					, out.texture3
-					, out.colour );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[ids.nodeId - 1u] );
 				out.nodeId = writer.cast< Int >( ids.nodeId );
