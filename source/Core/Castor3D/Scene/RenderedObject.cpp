@@ -19,7 +19,10 @@ namespace castor3d
 		auto & modelMtx = sceneNode.getDerivedTransformationMatrix();
 		auto normal = castor::Matrix3x3f{ modelMtx };
 
-		modelData.prvModel = modelData.curModel;
+		modelData.prvModel = m_firstUpdate
+			? modelMtx
+			: modelData.curModel;
+		m_firstUpdate = false;
 		modelData.curModel = modelMtx;
 		modelData.normal = castor::Matrix4x4f{ normal.getInverse().getTransposed() };
 

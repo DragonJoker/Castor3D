@@ -76,6 +76,8 @@ namespace castor3d::shader
 		sdw::Vec3 texture2;
 		sdw::Vec3 texture3;
 		sdw::Vec3 colour;
+		// Velocity
+		sdw::Vec3 velocity;
 		// Skinning
 		sdw::UVec4 boneIds0;
 		sdw::UVec4 boneIds1;
