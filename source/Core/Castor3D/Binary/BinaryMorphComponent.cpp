@@ -1,4 +1,5 @@
 #include "Castor3D/Binary/BinaryMorphComponent.hpp"
+#include "Castor3D/Binary/BinarySubmesh.hpp"
 
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 
@@ -88,6 +89,7 @@ namespace castor3d
 		SubmeshAnimationBuffer buffer;
 		uint32_t count{ 0u };
 		std::set< MorphFlag > flags;
+		castor::Point3fArray values;
 		BinaryChunk chunk;
 
 		while ( result && doGetSubChunk( chunk ) )
@@ -101,55 +103,88 @@ namespace castor3d
 					count = 0u;
 				}
 				result = doParseChunk( count, chunk );
+				values.resize( count );
 				checkError( result, "Couldn't parse keyframe buffers size." );
 				break;
 			case ChunkType::eMorphTargetPositions:
 				flags.insert( MorphFlag::ePositions );
-				buffer.positions.resize( count );
-				result = doParseChunk( buffer.positions, chunk );
+				result = doParseChunk( values, chunk );
 				checkError( result, "Couldn't parse keyframe positions." );
+
+				if ( result )
+				{
+					buffer.positions = values;
+				}
 				break;
 			case ChunkType::eMorphTargetNormals:
 				flags.insert( MorphFlag::eNormals );
-				buffer.normals.resize( count );
-				result = doParseChunk( buffer.normals, chunk );
+				result = doParseChunk( values, chunk );
 				checkError( result, "Couldn't parse keyframe normals." );
+
+				if ( result )
+				{
+					buffer.normals = values;
+				}
 				break;
 			case ChunkType::eMorphTargetTangents:
 				flags.insert( MorphFlag::eTangents );
-				buffer.tangents.resize( count );
-				result = doParseChunk( buffer.tangents, chunk );
+				result = doParseChunk( values, chunk );
 				checkError( result, "Couldn't parse keyframe tangents." );
+
+				if ( result )
+				{
+					buffer.tangents = values;
+				}
 				break;
 			case ChunkType::eMorphTargetTexcoords0:
 				flags.insert( MorphFlag::eTexcoords0 );
-				buffer.texcoords0.resize( count );
-				result = doParseChunk( buffer.texcoords0, chunk );
+				result = doParseChunk( values, chunk );
 				checkError( result, "Couldn't parse keyframe texcoords0." );
+
+				if ( result )
+				{
+					buffer.texcoords0 = values;
+				}
 				break;
 			case ChunkType::eMorphTargetTexcoords1:
 				flags.insert( MorphFlag::eTexcoords1 );
-				buffer.texcoords1.resize( count );
-				result = doParseChunk( buffer.texcoords1, chunk );
+				result = doParseChunk( values, chunk );
 				checkError( result, "Couldn't parse keyframe texcoords1." );
+
+				if ( result )
+				{
+					buffer.texcoords1 = values;
+				}
 				break;
 			case ChunkType::eMorphTargetTexcoords2:
 				flags.insert( MorphFlag::eTexcoords2 );
-				buffer.texcoords2.resize( count );
-				result = doParseChunk( buffer.texcoords2, chunk );
+				result = doParseChunk( values, chunk );
 				checkError( result, "Couldn't parse keyframe texcoords2." );
+
+				if ( result )
+				{
+					buffer.texcoords2 = values;
+				}
 				break;
 			case ChunkType::eMorphTargetTexcoords3:
 				flags.insert( MorphFlag::eTexcoords3 );
-				buffer.texcoords3.resize( count );
-				result = doParseChunk( buffer.texcoords3, chunk );
+				result = doParseChunk( values, chunk );
 				checkError( result, "Couldn't parse keyframe texcoords3." );
+
+				if ( result )
+				{
+					buffer.texcoords3 = values;
+				}
 				break;
 			case ChunkType::eMorphTargetColours:
 				flags.insert( MorphFlag::eColours );
-				buffer.colours.resize( count );
-				result = doParseChunk( buffer.colours, chunk );
+				result = doParseChunk( values, chunk );
 				checkError( result, "Couldn't parse keyframe colours." );
+
+				if ( result )
+				{
+					buffer.colours = values;
+				}
 				break;
 			default:
 				result = false;

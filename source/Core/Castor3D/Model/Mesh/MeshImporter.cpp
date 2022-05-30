@@ -23,10 +23,10 @@ namespace castor3d
 					vertex = transform * vertex;
 				}
 
-				static castor::Point4fArray tan;
-				static castor::Point4fArray tex;
-				castor::Point4fArray * tangents = &tan;
-				castor::Point4fArray const * texcoords = &tex;
+				static castor::Point3fArray tan;
+				static castor::Point3fArray tex;
+				castor::Point3fArray * tangents = &tan;
+				castor::Point3fArray const * texcoords = &tex;
 
 				if ( auto tanComp = submesh->getComponent< TangentsComponent >() )
 				{
