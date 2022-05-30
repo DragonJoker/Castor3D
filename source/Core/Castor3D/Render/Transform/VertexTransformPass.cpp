@@ -105,6 +105,9 @@ namespace castor3d
 					, VertexTransformPass::eOutBones ) );
 			}
 
+			writes.push_back( output.getStorageBinding( SubmeshFlag::eVelocity
+				, VertexTransformPass::eOutVelocity ) );
+
 			auto descriptorSet = pipeline.descriptorSetPool->createDescriptorSet( pipeline.getName() );
 			descriptorSet->setBindings( writes );
 			descriptorSet->update();

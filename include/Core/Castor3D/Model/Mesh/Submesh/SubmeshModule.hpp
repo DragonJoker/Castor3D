@@ -64,6 +64,9 @@ namespace castor3d
 		//!\~english	Submesh has bones data.
 		//!\~french		Le submesh a des données d'os.
 		eBones,
+		//!\~english	Submesh has velocity data.
+		//!\~french		Le submesh a des données de vélocité.
+		eVelocity,
 		CU_ScopedEnumBounds( eIndex ),
 	};
 
@@ -91,6 +94,8 @@ namespace castor3d
 			return cuT( "Colours" );
 		case castor3d::SubmeshData::eBones:
 			return cuT( "Bones" );
+		case castor3d::SubmeshData::eVelocity:
+			return cuT( "Velocity" );
 		default:
 			CU_Failure( "Unsupported SubmeshData" );
 			return cuT( "Unknown" );
@@ -108,7 +113,8 @@ namespace castor3d
 			, sizeof( castor::Point4f ) /* SubmeshFlag::eTexcoords2 */
 			, sizeof( castor::Point4f ) /* SubmeshFlag::eTexcoords3 */
 			, sizeof( castor::Point4f ) /* SubmeshFlag::eColours */
-			, sizeof( VertexBoneData ) /* SubmeshFlag::eBones */ };
+			, sizeof( VertexBoneData ) /* SubmeshFlag::eBones */
+			, sizeof( castor::Point4f ) /* SubmeshFlag::eVelocity */ };
 		return uint32_t( sizes[size_t( value )] );
 	}
 	/**
@@ -156,6 +162,9 @@ namespace castor3d
 		//!\~english	Submesh has bones data.
 		//!\~french		Submesh a des données d'os.
 		eBones = 0x0001 << int( SubmeshData::eBones ),
+		//!\~english	Submesh has velocity data.
+		//!\~french		Le submesh a des données de vélocité.
+		eVelocity = 0x0001 << int( SubmeshData::eVelocity ),
 		//!\~english	All flags used in base pipeline flags hashing.
 		//\~french		Tous les indicateurs utilisés dans le hash des indicateurs de pipeline.
 		eAllBase = ( 0x0001 << int( SubmeshData::eCount ) ) - 1,

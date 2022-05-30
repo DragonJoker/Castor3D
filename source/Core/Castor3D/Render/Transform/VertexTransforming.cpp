@@ -183,6 +183,10 @@ namespace castor3d
 					, VK_SHADER_STAGE_COMPUTE_BIT ) );
 			}
 
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( VertexTransformPass::eOutVelocity
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, VK_SHADER_STAGE_COMPUTE_BIT ) );
+
 			return device->createDescriptorSetLayout( pipeline.getName()
 				, std::move( bindings ) );
 		}
@@ -323,6 +327,10 @@ namespace castor3d
 				, VertexTransformPass::eOutBones
 				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eBones )
 				, pipeline.submeshFlags );
+			DeclareSsbo( c3d_outVelocity
+				, sdw::Vec4
+				, VertexTransformPass::eOutVelocity
+				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eVelocity ) );
 
 #undef DeclareSsboEx
 #undef DeclareSsbo
@@ -335,6 +343,8 @@ namespace castor3d
 					, in.globalInvocationID.x() );
 				auto position = writer.declLocale( "position"
 					, c3d_inPosition[index] );
+				auto oldPosition = writer.declLocale( "oldPosition"
+					, c3d_outPosition[index] );
 				auto normal = writer.declLocale( "normal"
 					, c3d_inNormal[index] );
 				auto tangent = writer.declLocale( "tangent"
@@ -370,6 +380,7 @@ namespace castor3d
 				c3d_outNormal[index].xyz() = normalize( normal.xyz() );
 				c3d_outTangent[index].xyz() = normalize( tangent.xyz() );
 				c3d_outBones[index] = c3d_inBones[index];
+				c3d_outVelocity[index].xyz() = oldPosition.xyz() - position.xyz();
 			} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}

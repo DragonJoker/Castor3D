@@ -229,14 +229,22 @@ namespace castor3d
 					indexCount = VkDeviceSize( m_indexMapping->getCount() ) * m_indexMapping->getComponentsCount();
 				}
 
+				if ( hasComponent( MorphComponent::Name )
+					&& !hasComponent( BaseDataComponentT< SubmeshFlag::eVelocity >::Name ) )
+				{
+					createComponent< BaseDataComponentT< SubmeshFlag::eVelocity > >();
+				}
+
 				for ( auto & component : m_components )
 				{
 					m_submeshFlags |= component.second->getSubmeshFlags( nullptr );
 				}
 
+				auto flags = m_submeshFlags;
+				remFlag( flags, SubmeshFlag::eVelocity );
 				m_sourceBufferOffset = device.geometryPools->getBuffer( getPointsCount()
 					, indexCount
-					, m_submeshFlags
+					, flags
 					, false );
 
 				if ( hasComponent( MorphComponent::Name ) )
