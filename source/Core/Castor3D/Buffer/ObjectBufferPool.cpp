@@ -19,10 +19,16 @@ namespace castor3d
 
 	namespace objbuf
 	{
-		static castor::String getName( SubmeshFlags submeshFlags )
+		static castor::String getName( SubmeshFlags submeshFlags
+			, bool isGpuComputed )
 		{
 			castor::String result;
 
+			if ( isGpuComputed )
+			{
+				result += "G";
+			}
+			
 			if ( checkFlag( submeshFlags, SubmeshFlag::eIndex ) )
 			{
 				result += "I";
@@ -161,20 +167,23 @@ namespace castor3d
 
 	ObjectBufferOffset ObjectBufferPool::getBuffer( VkDeviceSize vertexCount
 		, VkDeviceSize indexCount
-		, SubmeshFlags submeshFlags )
+		, SubmeshFlags submeshFlags
+		, bool isGpuComputed )
 	{
 		auto hash = std::hash< SubmeshFlags::BaseType >{}( submeshFlags.value() );
 		hash = castor::hashCombine( hash, indexCount != 0u );
 		hash = castor::hashCombine( hash, vertexCount != 0u );
+		hash = castor::hashCombine( hash, isGpuComputed );
 		ObjectBufferOffset result{ hash };
 		auto & buffers = m_buffers.emplace( hash, BufferArray{} ).first->second;
 		auto it = doFindBuffer( vertexCount
 			, indexCount
 			, buffers );
+		auto align = uint32_t( m_device.properties.limits.nonCoherentAtomSize );
 
 		if ( it == buffers.end() )
 		{
-			auto name = objbuf::getName( submeshFlags );
+			auto name = objbuf::getName( submeshFlags, isGpuComputed );
 			ModelBuffers modelBuffers;
 
 			for ( uint32_t i = 0u; i < uint32_t( SubmeshData::eCount ); ++i )
@@ -192,9 +201,10 @@ namespace castor3d
 					{
 						modelBuffers.buffers[i] = details::createBuffer< uint32_t >( m_device
 							, indexCount
-							, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+							, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 							, m_debugName + name + getName( data ) + std::to_string( buffers.size() )
-							, false );
+							, false
+							, align );
 					}
 				}
 				else if ( vertexCount )
@@ -203,17 +213,19 @@ namespace castor3d
 					{
 						modelBuffers.buffers[i] = details::createBuffer< VertexBoneData >( m_device
 							, vertexCount
-							, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+							, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 							, m_debugName + name + getName( data ) + std::to_string( buffers.size() )
-							, false );
+							, false
+							, align );
 					}
 					else
 					{
-						modelBuffers.buffers[i] = details::createBuffer< castor::Point3f >( m_device
+						modelBuffers.buffers[i] = details::createBuffer< castor::Point4f >( m_device
 							, vertexCount
-							, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+							, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 							, m_debugName + name + getName( data ) + std::to_string( buffers.size() )
-							, false );
+							, false
+							, align );
 					}
 				}
 			}

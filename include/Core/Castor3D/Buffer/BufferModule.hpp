@@ -182,6 +182,7 @@ namespace castor3d
 	using GpuBuddyBuffer = GpuBufferT< GpuBufferBuddyAllocator >;
 	using GpuLinearBuffer = GpuBufferT< GpuBufferLinearAllocator >;
 	using GpuPackedBuffer = GpuBufferT< GpuBufferPackedAllocator >;
+	using GpuLinearBufferPtr = std::unique_ptr< GpuLinearBuffer >;
 	using GpuPackedBufferPtr = std::unique_ptr< GpuPackedBuffer >;
 	/**
 	*\~english

@@ -71,7 +71,8 @@ namespace castor3d
 		static VkDeviceSize compareOffsets( NodeT const & lhs
 			, NodeT const & rhs )
 		{
-			return compareOffsets( lhs.data.getBufferOffsets(), rhs.data.getBufferOffsets() );
+			return compareOffsets( lhs.getFinalBufferOffsets()
+				, rhs.getFinalBufferOffsets() );
 		}
 
 		template< typename NodeT >
@@ -85,7 +86,7 @@ namespace castor3d
 				, *node.pass
 				, checkFlag( flags.programFlags, ProgramFlag::eInvertNormals ) );
 
-			auto & bufferChunk = node.data.getBufferOffsets().getBufferChunk( SubmeshFlag::ePositions );
+			auto & bufferChunk = node.getFinalBufferOffsets().getBufferChunk( SubmeshFlag::ePositions );
 			auto buffer = &bufferChunk.buffer->getBuffer().getBuffer();
 			auto & pipelineMap = nodes.emplace( baseHash, std::make_pair( &pipeline, NodePtrByBufferMapT< NodeT >{} ) ).first->second.second;
 			auto & bufferMap = pipelineMap.emplace( buffer, NodePtrArrayT< NodeT >{} ).first->second;
@@ -110,7 +111,7 @@ namespace castor3d
 				, *node.pass
 				, checkFlag( flags.programFlags, ProgramFlag::eInvertNormals ) );
 
-			auto & bufferChunk = node.data.getBufferOffsets().getBufferChunk( SubmeshFlag::ePositions );
+			auto & bufferChunk = node.getFinalBufferOffsets().getBufferChunk( SubmeshFlag::ePositions );
 			auto buffer = &bufferChunk.buffer->getBuffer().getBuffer();
 			auto & pipelineMap = nodes.emplace( baseHash, std::make_pair( &pipeline, ObjectNodesPtrByBufferMapT< NodeT >{} ) ).first->second.second;
 			auto & bufferMap = pipelineMap.emplace( buffer, ObjectNodesPtrByPassT< NodeT >{} ).first->second;
@@ -264,9 +265,9 @@ namespace castor3d
 				++currentLayout;
 			}
 
-			if ( geometryBuffers.bufferOffset.hasData( SubmeshFlag::eIndex ) )
+			if ( geometryBuffers.indexOffset.hasData() )
 			{
-				commandBuffer.bindIndexBuffer( geometryBuffers.bufferOffset.getBuffer( SubmeshFlag::eIndex )
+				commandBuffer.bindIndexBuffer( geometryBuffers.indexOffset.getBuffer()
 					, 0u
 					, VK_INDEX_TYPE_UINT32 );
 				commandBuffer.drawIndexedIndirect( indirectIndexedCommands.getBuffer()
@@ -403,14 +404,12 @@ namespace castor3d
 						auto & pass = *culledNode->pass;
 						auto material = pass.getOwner();
 						auto submeshFlags = submesh.getSubmeshFlags( &pass );
-						auto morphFlags = submesh.getMorphFlags();
 						auto programFlags = submesh.getProgramFlags( *material );
 						auto sceneFlags = scene.getFlags();
 						auto textures = pass.getTexturesMask();
 						auto pipelineFlags = renderPass.createPipelineFlags( pass
 							, textures
 							, submeshFlags
-							, morphFlags
 							, programFlags
 							, sceneFlags
 							, submesh.getTopology()
@@ -455,14 +454,12 @@ namespace castor3d
 								auto & pass = *culledNode->pass;
 								auto material = pass.getOwner();
 								auto submeshFlags = submesh.getSubmeshFlags( &pass );
-								auto morphFlags = submesh.getMorphFlags();
 								auto programFlags = submesh.getProgramFlags( *material );
 								auto sceneFlags = scene.getFlags();
 								auto textures = pass.getTexturesMask();
 								auto pipelineFlags = renderPass.createPipelineFlags( pass
 									, textures
 									, submeshFlags
-									, morphFlags
 									, programFlags
 									, sceneFlags
 									, submesh.getTopology()
@@ -510,7 +507,6 @@ namespace castor3d
 						auto pipelineFlags = renderPass.createPipelineFlags( pass
 							, textures
 							, submeshFlags
-							, MorphFlags{}
 							, programFlags
 							, sceneFlags
 							, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP

@@ -6,12 +6,14 @@
 #include "Castor3D/Buffer/ObjectBufferPool.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Miscellaneous/StagingData.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
@@ -22,13 +24,15 @@ namespace castor3d
 
 	namespace smsh
 	{
-		static size_t hash( MaterialRPtr material
+		static size_t hash( SubmeshRenderNode const & node
 			, ShaderFlags const & shaderFlags
 			, ProgramFlags const & programFlags
 			, SubmeshFlags const & submeshFlags
 			, TextureFlagsArray const & mask )
 		{
-			auto result = std::hash< Material * >{}( material );
+			size_t result = node.data.hasComponent( MorphComponent::Name )
+				? std::hash< Geometry const * >{}( &node.instance )
+				: std::hash< MaterialRPtr >{}( node.pass->getOwner() );
 
 			for ( auto const & flagId : mask )
 			{
@@ -200,9 +204,24 @@ namespace castor3d
 	{
 		if ( !m_generated )
 		{
-			if ( !m_bufferOffset
-				|| getPointsCount() != m_bufferOffset.getCount< castor::Point3f >( SubmeshFlag::ePositions ) )
+			if ( !m_sourceBufferOffset
+				|| getPointsCount() != m_sourceBufferOffset.getCount< castor::Point4f >( SubmeshFlag::ePositions ) )
 			{
+				for ( auto & finalBufferOffset : m_finalBufferOffsets )
+				{
+					if ( finalBufferOffset.second )
+					{
+						device.geometryPools->putBuffer( finalBufferOffset.second );
+						finalBufferOffset.second = {};
+					}
+				}
+
+				if ( m_sourceBufferOffset )
+				{
+					device.geometryPools->putBuffer( m_sourceBufferOffset );
+					m_sourceBufferOffset = {};
+				}
+
 				VkDeviceSize indexCount = 0u;
 
 				if ( m_indexMapping )
@@ -215,9 +234,21 @@ namespace castor3d
 					m_submeshFlags |= component.second->getSubmeshFlags( nullptr );
 				}
 
-				m_bufferOffset = device.geometryPools->getBuffer( getPointsCount()
+				m_sourceBufferOffset = device.geometryPools->getBuffer( getPointsCount()
 					, indexCount
-					, m_submeshFlags );
+					, m_submeshFlags
+					, false );
+
+				if ( hasComponent( MorphComponent::Name ) )
+				{
+					for ( auto & finalBufferOffset : m_finalBufferOffsets )
+					{
+						finalBufferOffset.second = device.geometryPools->getBuffer( getPointsCount()
+							, 0u // No index on transformed buffers
+							, m_submeshFlags
+							, true );
+					}
+				}
 			}
 
 			m_generated = true;
@@ -253,15 +284,21 @@ namespace castor3d
 			component.second->cleanup( device );
 		}
 
-		if ( m_bufferOffset )
+		for ( auto & finalBufferOffset : m_finalBufferOffsets )
 		{
-			device.geometryPools->putBuffer( m_bufferOffset );
+			device.geometryPools->putBuffer( finalBufferOffset.second );
+			finalBufferOffset.second = {};
+		}
+
+		if ( m_sourceBufferOffset )
+		{
+			device.geometryPools->putBuffer( m_sourceBufferOffset );
 		}
 	}
 
 	void Submesh::update()
 	{
-		if ( m_dirty && m_bufferOffset )
+		if ( m_dirty && m_sourceBufferOffset )
 		{
 			for ( auto & component : m_components )
 			{
@@ -284,13 +321,13 @@ namespace castor3d
 		if ( positions && getPointsCount() )
 		{
 			auto & points = positions->getData();
-			castor::Point3f min = points[0];
-			castor::Point3f max = points[0];
+			castor::Point3f min{ points[0] };
+			castor::Point3f max{ points[0] };
 			uint32_t nbVertex = getPointsCount();
 
 			for ( uint32_t i = 1; i < nbVertex; i++ )
 			{
-				castor::Point3f cur = points[i];
+				castor::Point3f cur{ points[i] };
 				max[0] = std::max( cur[0], max[0] );
 				max[1] = std::max( cur[1], max[1] );
 				max[2] = std::max( cur[2], max[2] );
@@ -367,7 +404,7 @@ namespace castor3d
 			, smsh::getComponentCount< Texcoords2Component >( *this )
 			, smsh::getComponentCount< Texcoords3Component >( *this )
 			, smsh::getComponentCount< ColoursComponent >( *this )
-			, uint32_t( m_bufferOffset ? m_bufferOffset.getCount< castor::Point3f >( SubmeshFlag::ePositions ) : 0u ) } );
+			, uint32_t( m_sourceBufferOffset ? m_sourceBufferOffset.getCount< castor::Point4f >( SubmeshFlag::ePositions ) : 0u ) } );
 	}
 
 	int Submesh::isInMyPoints( castor::Point3f const & vertex
@@ -383,7 +420,7 @@ namespace castor3d
 
 			for ( auto it = points.begin(); it != points.end() && result == -1; ++it )
 			{
-				if ( castor::point::distanceSquared( vertex, *it ) < precision )
+				if ( castor::point::distanceSquared( vertex, castor::Point3f{ *it } ) < precision )
 				{
 					result = index;
 				}
@@ -419,10 +456,10 @@ namespace castor3d
 		m_needsNormalsCompute = smsh::fixNml( point.nml );
 		m_needsNormalsCompute = smsh::fixPos( point.pos ) || m_needsNormalsCompute;
 		m_needsNormalsCompute = smsh::fixTex( point.tex ) || m_needsNormalsCompute;
-		smsh::addComponentData< PositionsComponent >( *this, point.pos );
-		smsh::addComponentData< NormalsComponent >( *this, point.nml );
-		smsh::addComponentData< TangentsComponent >( *this, point.tan );
-		smsh::addComponentData< Texcoords0Component >( *this, point.tex );
+		smsh::addComponentData< PositionsComponent >( *this, castor::Point4f{ point.pos } );
+		smsh::addComponentData< NormalsComponent >( *this, castor::Point4f{ point.nml } );
+		smsh::addComponentData< TangentsComponent >( *this, castor::Point4f{ point.tan } );
+		smsh::addComponentData< Texcoords0Component >( *this, castor::Point4f{ point.tex } );
 	}
 
 	void Submesh::addPoints( InterleavedVertex const * const begin
@@ -485,7 +522,8 @@ namespace castor3d
 		return result;
 	}
 
-	void Submesh::setMaterial( MaterialRPtr oldMaterial
+	void Submesh::instantiate( Geometry const * geometry
+		, MaterialRPtr oldMaterial
 		, MaterialRPtr newMaterial
 		, bool update )
 	{
@@ -501,15 +539,32 @@ namespace castor3d
 				}
 			}
 		}
+
+		if ( geometry && hasComponent( MorphComponent::Name ) )
+		{
+			auto it = m_finalBufferOffsets.emplace( geometry, ObjectBufferOffset{} ).first;
+
+			if ( m_initialised
+				&& !it->second )
+			{
+				// Initialise only if the submesh itself is already initialised,
+				// because if it is not, the buffers will be initialised by the call to initialise().
+				RenderDevice & device = getOwner()->getOwner()->getRenderSystem()->getRenderDevice();
+				it->second = device.geometryPools->getBuffer( getPointsCount()
+					, 0u // No index on transformed buffers
+					, m_submeshFlags
+					, true );
+			}
+		}
 	}
 
-	GeometryBuffers const & Submesh::getGeometryBuffers( ShaderFlags const & shaderFlags
+	GeometryBuffers const & Submesh::getGeometryBuffers( SubmeshRenderNode const & node
+		, ShaderFlags const & shaderFlags
 		, ProgramFlags const & programFlags
 		, SubmeshFlags const & submeshFlags
-		, MaterialRPtr material
 		, TextureFlagsArray const & mask )const
 	{
-		auto key = smsh::hash( material
+		auto key = smsh::hash( node
 			, shaderFlags
 			, programFlags
 			, submeshFlags
@@ -529,7 +584,7 @@ namespace castor3d
 				component.second->gather( shaderFlags
 					, programFlags
 					, submeshFlags
-					, material
+					, node.pass->getOwner()
 					, mask
 					, buffers
 					, offsets
@@ -539,7 +594,8 @@ namespace castor3d
 			}
 
 			GeometryBuffers result;
-			result.bufferOffset = m_bufferOffset;
+			result.indexOffset = getSourceBufferOffsets().getBufferChunk( SubmeshFlag::eIndex );
+			result.bufferOffset = getFinalBufferOffsets( node.instance );
 			result.layouts = layouts;
 			result.other = buffers;
 			result.otherOffsets = offsets;
@@ -562,165 +618,165 @@ namespace castor3d
 
 		if ( auto positions = getComponent< PositionsComponent >() )
 		{
-			result.pos = positions->getData()[index];
+			result.pos = castor::Point3f{ positions->getData()[index] };
 		}
 
 		if ( auto normals = getComponent< NormalsComponent >() )
 		{
-			result.nml = normals->getData()[index];
+			result.nml = castor::Point3f{ normals->getData()[index] };
 		}
 
 		if ( auto tangents = getComponent< TangentsComponent >() )
 		{
-			result.tan = tangents->getData()[index];
+			result.tan = castor::Point3f{ tangents->getData()[index] };
 		}
 
 		if ( auto texcoords0 = getComponent< Texcoords0Component >() )
 		{
-			result.tex = texcoords0->getData()[index];
+			result.tex = castor::Point3f{ texcoords0->getData()[index] };
 		}
 
 		return result;
 	}
 
-	castor::Point3fArray const & Submesh::getPositions()const
+	castor::Point4fArray const & Submesh::getPositions()const
 	{
 		if ( auto component = getComponent< PositionsComponent >() )
 		{
 			return component->getData();
 		}
 
-		static castor::Point3fArray const dummy;
+		static castor::Point4fArray const dummy;
 		return dummy;
 	}
 
-	castor::Point3fArray & Submesh::getPositions()
+	castor::Point4fArray & Submesh::getPositions()
 	{
 		auto component = getComponent< PositionsComponent >();
 		CU_Require( component );
 		return component->getData();
 	}
 
-	castor::Point3fArray const & Submesh::getNormals()const
+	castor::Point4fArray const & Submesh::getNormals()const
 	{
 		if ( auto component = getComponent< NormalsComponent >() )
 		{
 			return component->getData();
 		}
 
-		static castor::Point3fArray const dummy;
+		static castor::Point4fArray const dummy;
 		return dummy;
 	}
 
-	castor::Point3fArray & Submesh::getNormals()
+	castor::Point4fArray & Submesh::getNormals()
 	{
 		auto component = getComponent< NormalsComponent >();
 		CU_Require( component );
 		return component->getData();
 	}
 
-	castor::Point3fArray const & Submesh::getTangents()const
+	castor::Point4fArray const & Submesh::getTangents()const
 	{
 		if ( auto component = getComponent< TangentsComponent >() )
 		{
 			return component->getData();
 		}
 
-		static castor::Point3fArray const dummy;
+		static castor::Point4fArray const dummy;
 		return dummy;
 	}
 
-	castor::Point3fArray & Submesh::getTangents()
+	castor::Point4fArray & Submesh::getTangents()
 	{
 		auto component = getComponent< TangentsComponent >();
 		CU_Require( component );
 		return component->getData();
 	}
 
-	castor::Point3fArray const & Submesh::getTexcoords0()const
+	castor::Point4fArray const & Submesh::getTexcoords0()const
 	{
 		if ( auto component = getComponent< Texcoords0Component >() )
 		{
 			return component->getData();
 		}
 
-		static castor::Point3fArray const dummy;
+		static castor::Point4fArray const dummy;
 		return dummy;
 	}
 
-	castor::Point3fArray & Submesh::getTexcoords0()
+	castor::Point4fArray & Submesh::getTexcoords0()
 	{
 		auto component = getComponent< Texcoords0Component >();
 		CU_Require( component );
 		return component->getData();
 	}
 
-	castor::Point3fArray const & Submesh::getTexcoords1()const
+	castor::Point4fArray const & Submesh::getTexcoords1()const
 	{
 		if ( auto component = getComponent< Texcoords1Component >() )
 		{
 			return component->getData();
 		}
 
-		static castor::Point3fArray const dummy;
+		static castor::Point4fArray const dummy;
 		return dummy;
 	}
 
-	castor::Point3fArray & Submesh::getTexcoords1()
+	castor::Point4fArray & Submesh::getTexcoords1()
 	{
 		auto component = getComponent< Texcoords1Component >();
 		CU_Require( component );
 		return component->getData();
 	}
 
-	castor::Point3fArray const & Submesh::getTexcoords2()const
+	castor::Point4fArray const & Submesh::getTexcoords2()const
 	{
 		if ( auto component = getComponent< Texcoords2Component >() )
 		{
 			return component->getData();
 		}
 
-		static castor::Point3fArray const dummy;
+		static castor::Point4fArray const dummy;
 		return dummy;
 	}
 
-	castor::Point3fArray & Submesh::getTexcoords2()
+	castor::Point4fArray & Submesh::getTexcoords2()
 	{
 		auto component = getComponent< Texcoords2Component >();
 		CU_Require( component );
 		return component->getData();
 	}
 
-	castor::Point3fArray const & Submesh::getTexcoords3()const
+	castor::Point4fArray const & Submesh::getTexcoords3()const
 	{
 		if ( auto component = getComponent< Texcoords3Component >() )
 		{
 			return component->getData();
 		}
 
-		static castor::Point3fArray const dummy;
+		static castor::Point4fArray const dummy;
 		return dummy;
 	}
 
-	castor::Point3fArray & Submesh::getTexcoords3()
+	castor::Point4fArray & Submesh::getTexcoords3()
 	{
 		auto component = getComponent< Texcoords3Component >();
 		CU_Require( component );
 		return component->getData();
 	}
 
-	castor::Point3fArray const & Submesh::getColours()const
+	castor::Point4fArray const & Submesh::getColours()const
 	{
 		if ( auto component = getComponent< ColoursComponent >() )
 		{
 			return component->getData();
 		}
 
-		static castor::Point3fArray const dummy;
+		static castor::Point4fArray const dummy;
 		return dummy;
 	}
 
-	castor::Point3fArray & Submesh::getColours()
+	castor::Point4fArray & Submesh::getColours()
 	{
 		auto component = getComponent< ColoursComponent >();
 		CU_Require( component );
@@ -746,6 +802,38 @@ namespace castor3d
 		}
 
 		return 0u;
+	}
+
+	bool Submesh::isDynamic()const
+	{
+		return hasComponent( BonesComponent::Name )
+			|| hasComponent( MorphComponent::Name );
+	}
+
+	ObjectBufferOffset const & Submesh::getFinalBufferOffsets( Geometry const & instance )const
+	{
+		if ( !hasComponent( MorphComponent::Name ) )
+		{
+			CU_Require( bool( m_sourceBufferOffset ) );
+			return m_sourceBufferOffset;
+		}
+
+		auto it = m_finalBufferOffsets.find( &instance );
+
+		if ( it != m_finalBufferOffsets.end() )
+		{
+			return it->second;
+		}
+
+		log::error << "Couldn't find instance in final buffers" << std::endl;
+		CU_Failure( "Couldn't find instance in final buffers" );
+		return m_sourceBufferOffset;
+	}
+
+	ObjectBufferOffset const & Submesh::getSourceBufferOffsets()const
+	{
+		CU_Require( bool( m_sourceBufferOffset ) );
+		return m_sourceBufferOffset;
 	}
 
 	//*********************************************************************************************

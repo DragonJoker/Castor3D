@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Render/Node/RenderNodeModule.hpp"
 
 #include "Castor3D/Binary/BinaryModule.hpp"
 #include "Castor3D/Buffer/BufferModule.hpp"
@@ -216,17 +217,20 @@ namespace castor3d
 		C3D_API MorphFlags getMorphFlags()const;
 		/**
 		 *\~english
-		 *\brief		Sets the material.
+		 *\brief		Instantiates the submesh with a geometry and its material.
+		 *\param[in]	geometry	The geometry instantiating the submesh.
 		 *\param[in]	oldMaterial	The old material.
 		 *\param[in]	newMaterial	The new material.
 		 *\param[in]	update		Tells if the instantiation component must be updated.
 		 *\~french
-		 *\brief		Définit le materiau.
+		 *\brief		Instancie le submesh avec une géométrie et son matériau.
+		 *\param[in]	geometry	La géométrie instantiant le submesh.
 		 *\param[in]	oldMaterial	Le matériau précédent.
 		 *\param[in]	newMaterial	Le nouveau matériau.
 		 *\param[in]	update		Dit si le composant d'instantiation doit être mis à jour.
 		 */
-		C3D_API void setMaterial( MaterialRPtr oldMaterial
+		C3D_API void instantiate( Geometry const * geometry
+			, MaterialRPtr oldMaterial
 			, MaterialRPtr newMaterial
 			, bool update );
 		/**
@@ -245,10 +249,10 @@ namespace castor3d
 		 *\param[in]	material		Les matériau.
 		 *\param[in]	mask			Le masque de textures.
 		*/
-		C3D_API GeometryBuffers const & getGeometryBuffers( ShaderFlags const & shaderFlags
+		C3D_API GeometryBuffers const & getGeometryBuffers( SubmeshRenderNode const & node
+			, ShaderFlags const & shaderFlags
 			, ProgramFlags const & programFlags
 			, SubmeshFlags const & submeshFlags
-			, MaterialRPtr material
 			, TextureFlagsArray const & mask )const;
 		/**
 		 *\~english
@@ -365,34 +369,34 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API InterleavedVertex getInterleavedPoint( uint32_t index )const;
-		C3D_API castor::Point3fArray const & getPositions()const;
-		C3D_API castor::Point3fArray & getPositions();
-		C3D_API castor::Point3fArray const & getNormals()const;
-		C3D_API castor::Point3fArray & getNormals();
-		C3D_API castor::Point3fArray const & getTangents()const;
-		C3D_API castor::Point3fArray & getTangents();
-		C3D_API castor::Point3fArray const & getTexcoords0()const;
-		C3D_API castor::Point3fArray & getTexcoords0();
-		C3D_API castor::Point3fArray const & getTexcoords1()const;
-		C3D_API castor::Point3fArray & getTexcoords1();
-		C3D_API castor::Point3fArray const & getTexcoords2()const;
-		C3D_API castor::Point3fArray & getTexcoords2();
-		C3D_API castor::Point3fArray const & getTexcoords3()const;
-		C3D_API castor::Point3fArray & getTexcoords3();
-		C3D_API castor::Point3fArray const & getColours()const;
-		C3D_API castor::Point3fArray & getColours();
+		C3D_API castor::Point4fArray const & getPositions()const;
+		C3D_API castor::Point4fArray & getPositions();
+		C3D_API castor::Point4fArray const & getNormals()const;
+		C3D_API castor::Point4fArray & getNormals();
+		C3D_API castor::Point4fArray const & getTangents()const;
+		C3D_API castor::Point4fArray & getTangents();
+		C3D_API castor::Point4fArray const & getTexcoords0()const;
+		C3D_API castor::Point4fArray & getTexcoords0();
+		C3D_API castor::Point4fArray const & getTexcoords1()const;
+		C3D_API castor::Point4fArray & getTexcoords1();
+		C3D_API castor::Point4fArray const & getTexcoords2()const;
+		C3D_API castor::Point4fArray & getTexcoords2();
+		C3D_API castor::Point4fArray const & getTexcoords3()const;
+		C3D_API castor::Point4fArray & getTexcoords3();
+		C3D_API castor::Point4fArray const & getColours()const;
+		C3D_API castor::Point4fArray & getColours();
 		C3D_API GpuBufferOffsetT< castor::Point4f > const & getMorphTargets()const;
 		C3D_API uint32_t getMorphTargetsCount()const;
+		C3D_API bool isDynamic()const;
+		C3D_API ObjectBufferOffset const & getFinalBufferOffsets( Geometry const & instance )const;
+		C3D_API ObjectBufferOffset const & getSourceBufferOffsets()const;
 		inline SkeletonRPtr getSkeleton()const;
 		inline MaterialRPtr getDefaultMaterial()const;
 		inline castor::BoundingBox const & getBoundingBox()const;
 		inline castor::BoundingBox & getBoundingBox();
 		inline castor::BoundingSphere const & getBoundingSphere()const;
 		inline castor::BoundingSphere & getBoundingSphere();
-		inline bool hasBufferOffsets()const;
-		inline ObjectBufferOffset const & getBufferOffsets()const;
 		inline bool isInitialised()const;
-		inline bool isDynamic()const;
 		inline Mesh const & getParent()const;
 		inline Mesh & getParent();
 		inline uint32_t getId()const;
@@ -420,7 +424,8 @@ namespace castor3d
 		bool m_initialised{ false };
 		bool m_dirty{ true };
 		VkPrimitiveTopology m_topology{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST };
-		ObjectBufferOffset m_bufferOffset;
+		ObjectBufferOffset m_sourceBufferOffset;
+		std::unordered_map< Geometry const *, ObjectBufferOffset > m_finalBufferOffsets;
 		mutable std::unordered_map< size_t, GeometryBuffers > m_geometryBuffers;
 		bool m_needsNormalsCompute{ false };
 		bool m_disableSceneUpdate{ false };

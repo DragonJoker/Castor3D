@@ -46,10 +46,10 @@ namespace castor3d
 	namespace v1_5
 	{
 		inline void dispatchVertices( InterleavedVertexArray const & src
-			, castor::Point3fArray & pos
-			, castor::Point3fArray & nml
-			, castor::Point3fArray & tan
-			, castor::Point3fArray & tex )
+			, castor::Point4fArray & pos
+			, castor::Point4fArray & nml
+			, castor::Point4fArray & tan
+			, castor::Point4fArray & tex )
 		{
 			pos.reserve( src.size() );
 			nml.reserve( src.size() );
@@ -58,11 +58,40 @@ namespace castor3d
 
 			for ( auto & vertex : src )
 			{
-				pos.push_back( vertex.pos );
-				nml.push_back( vertex.nml );
-				tan.push_back( vertex.tan );
-				tex.push_back( vertex.tex );
+				pos.push_back( castor::Point4f{ vertex.pos } );
+				nml.push_back( castor::Point4f{ vertex.nml } );
+				tan.push_back( castor::Point4f{ vertex.tan } );
+				tex.push_back( castor::Point4f{ vertex.tex } );
 			}
+		}
+	}
+
+	namespace v1_6
+	{
+		inline castor::Point3fArray convert( castor::Point4fArray const & src )
+		{
+			castor::Point3fArray result;
+			result.reserve( src.size() );
+
+			for ( auto & value : src )
+			{
+				result.push_back( castor::Point3f{ value } );
+			}
+
+			return result;
+		}
+
+		inline castor::Point4fArray convert( castor::Point3fArray const & src )
+		{
+			castor::Point4fArray result;
+			result.reserve( src.size() );
+
+			for ( auto & value : src )
+			{
+				result.push_back( castor::Point4f{ value } );
+			}
+
+			return result;
 		}
 	}
 
@@ -77,56 +106,56 @@ namespace castor3d
 			&& obj.hasComponent( PositionsComponent::Name ) )
 		{
 			auto & values = obj.getComponent< PositionsComponent >()->getData();
-			result = doWriteChunk( values, ChunkType::eSubmeshPositions, m_chunk );
+			result = doWriteChunk( v1_6::convert( values ), ChunkType::eSubmeshPositions, m_chunk );
 		}
 
 		if ( result
 			&& obj.hasComponent( NormalsComponent::Name ) )
 		{
 			auto & values = obj.getComponent< NormalsComponent >()->getData();
-			result = doWriteChunk( values, ChunkType::eSubmeshNormals, m_chunk );
+			result = doWriteChunk( v1_6::convert( values ), ChunkType::eSubmeshNormals, m_chunk );
 		}
 
 		if ( result
 			&& obj.hasComponent( TangentsComponent::Name ) )
 		{
 			auto & values = obj.getComponent< TangentsComponent >()->getData();
-			result = doWriteChunk( values, ChunkType::eSubmeshTangents, m_chunk );
+			result = doWriteChunk( v1_6::convert( values ), ChunkType::eSubmeshTangents, m_chunk );
 		}
 
 		if ( result
 			&& obj.hasComponent( Texcoords0Component::Name ) )
 		{
 			auto & values = obj.getComponent< Texcoords0Component >()->getData();
-			result = doWriteChunk( values, ChunkType::eSubmeshTexcoords0, m_chunk );
+			result = doWriteChunk( v1_6::convert( values ), ChunkType::eSubmeshTexcoords0, m_chunk );
 		}
 
 		if ( result
 			&& obj.hasComponent( Texcoords1Component::Name ) )
 		{
 			auto & values = obj.getComponent< Texcoords1Component >()->getData();
-			result = doWriteChunk( values, ChunkType::eSubmeshTexcoords1, m_chunk );
+			result = doWriteChunk( v1_6::convert( values ), ChunkType::eSubmeshTexcoords1, m_chunk );
 		}
 
 		if ( result
 			&& obj.hasComponent( Texcoords2Component::Name ) )
 		{
 			auto & values = obj.getComponent< Texcoords2Component >()->getData();
-			result = doWriteChunk( values, ChunkType::eSubmeshTexcoords2, m_chunk );
+			result = doWriteChunk( v1_6::convert( values ), ChunkType::eSubmeshTexcoords2, m_chunk );
 		}
 
 		if ( result
 			&& obj.hasComponent( Texcoords3Component::Name ) )
 		{
 			auto & values = obj.getComponent< Texcoords3Component >()->getData();
-			result = doWriteChunk( values, ChunkType::eSubmeshTexcoords3, m_chunk );
+			result = doWriteChunk( v1_6::convert( values ), ChunkType::eSubmeshTexcoords3, m_chunk );
 		}
 
 		if ( result
 			&& obj.hasComponent( ColoursComponent::Name ) )
 		{
 			auto & values = obj.getComponent< ColoursComponent >()->getData();
-			result = doWriteChunk( values, ChunkType::eSubmeshColours, m_chunk );
+			result = doWriteChunk( v1_6::convert( values ), ChunkType::eSubmeshColours, m_chunk );
 		}
 
 		if ( result )
@@ -196,7 +225,7 @@ namespace castor3d
 		castor::String name;
 		std::vector< FaceIndices > faces;
 		std::vector< LineIndices > lines;
-		std::vector< castor::Point3f > values;
+		castor::Point3fArray values;
 		uint32_t count{ 0u };
 		uint32_t components{ 0u };
 		uint32_t faceCount{ 0u };
@@ -234,12 +263,12 @@ namespace castor3d
 			case ChunkType::eSubmeshNormals:
 				if ( auto component = std::make_shared< NormalsComponent >( obj ) )
 				{
-					component->getData().resize( count );
-					result = doParseChunk( component->getData(), chunk );
+					result = doParseChunk( values, chunk );
 					checkError( result, "Couldn't parse vertex normals." );
 
 					if ( result )
 					{
+						component->setData( v1_6::convert( values ) );
 						obj.addComponent( component );
 					}
 				}
@@ -247,12 +276,12 @@ namespace castor3d
 			case ChunkType::eSubmeshTangents:
 				if ( auto component = std::make_shared< TangentsComponent >( obj ) )
 				{
-					component->getData().resize( count );
-					result = doParseChunk( component->getData(), chunk );
+					result = doParseChunk( values, chunk );
 					checkError( result, "Couldn't parse vertex tangents." );
 
 					if ( result )
 					{
+						component->setData( v1_6::convert( values ) );
 						obj.addComponent( component );
 					}
 				}
@@ -260,12 +289,12 @@ namespace castor3d
 			case ChunkType::eSubmeshTexcoords0:
 				if ( auto component = std::make_shared< Texcoords0Component >( obj ) )
 				{
-					component->getData().resize( count );
-					result = doParseChunk( component->getData(), chunk );
+					result = doParseChunk( values, chunk );
 					checkError( result, "Couldn't parse vertex texcoords." );
 
 					if ( result )
 					{
+						component->setData( v1_6::convert( values ) );
 						obj.addComponent( component );
 					}
 				}
@@ -273,12 +302,12 @@ namespace castor3d
 			case ChunkType::eSubmeshTexcoords1:
 				if ( auto component = std::make_shared< Texcoords1Component >( obj ) )
 				{
-					component->getData().resize( count );
-					result = doParseChunk( component->getData(), chunk );
+					result = doParseChunk( values, chunk );
 					checkError( result, "Couldn't parse vertex texcoords." );
 
 					if ( result )
 					{
+						component->setData( v1_6::convert( values ) );
 						obj.addComponent( component );
 					}
 				}
@@ -286,12 +315,12 @@ namespace castor3d
 			case ChunkType::eSubmeshTexcoords2:
 				if ( auto component = std::make_shared< Texcoords2Component >( obj ) )
 				{
-					component->getData().resize( count );
-					result = doParseChunk( component->getData(), chunk );
+					result = doParseChunk( values, chunk );
 					checkError( result, "Couldn't parse vertex texcoords." );
 
 					if ( result )
 					{
+						component->setData( v1_6::convert( values ) );
 						obj.addComponent( component );
 					}
 				}
@@ -299,12 +328,12 @@ namespace castor3d
 			case ChunkType::eSubmeshTexcoords3:
 				if ( auto component = std::make_shared< Texcoords3Component >( obj ) )
 				{
-					component->getData().resize( count );
-					result = doParseChunk( component->getData(), chunk );
+					result = doParseChunk( values, chunk );
 					checkError( result, "Couldn't parse vertex texcoords." );
 
 					if ( result )
 					{
+						component->setData( v1_6::convert( values ) );
 						obj.addComponent( component );
 					}
 				}
@@ -312,12 +341,12 @@ namespace castor3d
 			case ChunkType::eSubmeshColours:
 				if ( auto component = std::make_shared< ColoursComponent >( obj ) )
 				{
-					component->getData().resize( count );
-					result = doParseChunk( component->getData(), chunk );
+					result = doParseChunk( values, chunk );
 					checkError( result, "Couldn't parse vertex colours." );
 
 					if ( result )
 					{
+						component->setData( v1_6::convert( values ) );
 						obj.addComponent( component );
 					}
 				}

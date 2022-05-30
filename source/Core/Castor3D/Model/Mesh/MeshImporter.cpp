@@ -23,10 +23,10 @@ namespace castor3d
 					vertex = transform * vertex;
 				}
 
-				static castor::Point3fArray tan;
-				static castor::Point3fArray tex;
-				castor::Point3fArray * tangents = &tan;
-				castor::Point3fArray const * texcoords = &tex;
+				static castor::Point4fArray tan;
+				static castor::Point4fArray tex;
+				castor::Point4fArray * tangents = &tan;
+				castor::Point4fArray const * texcoords = &tex;
 
 				if ( auto tanComp = submesh->getComponent< TangentsComponent >() )
 				{
@@ -85,6 +85,7 @@ namespace castor3d
 				log::info << "Loaded mesh [" << mesh.getName() << "]"
 					<< " AABB (" << print( mesh.getBoundingBox() ) << ")"
 					<< ", " << mesh.getVertexCount() << " vertices"
+					<< ", " << mesh.getFaceCount() << " faces"
 					<< ", " << mesh.getSubmeshCount() << " submeshes" << std::endl;
 			}
 		}
@@ -92,7 +93,7 @@ namespace castor3d
 		{
 			for ( auto submesh : mesh )
 			{
-				submesh->setMaterial( {}, submesh->getDefaultMaterial(), false );
+				submesh->instantiate( nullptr, {}, submesh->getDefaultMaterial(), false );
 			}
 		}
 

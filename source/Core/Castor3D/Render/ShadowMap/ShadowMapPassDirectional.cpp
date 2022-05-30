@@ -30,7 +30,6 @@
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
-#include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 #include "Castor3D/Shader/Ubos/ShadowMapUbo.hpp"
 
@@ -195,15 +194,6 @@ namespace castor3d
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
-		C3D_MorphTargets( writer
-			, GlobalBuffersIdx::eMorphTargets
-			, RenderPipeline::eBuffers
-			, flags.morphFlags
-			, flags.programFlags );
-		C3D_MorphingWeights( writer
-			, GlobalBuffersIdx::eMorphingWeights
-			, RenderPipeline::eBuffers
-			, flags.programFlags );
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
 			, RenderPipeline::eBuffers
@@ -250,18 +240,6 @@ namespace castor3d
 				out.texture2 = in.texture2;
 				out.texture3 = in.texture3;
 				out.colour = in.colour;
-				auto morphingWeights = writer.declLocale( "morphingWeights"
-					, c3d_morphingWeights[ids.morphingId] );
-				morphingWeights.morph( c3d_morphTargets
-					, writer.cast< UInt >( in.vertexIndex - in.baseVertex )
-					, curPosition
-					, v4Normal
-					, v4Tangent
-					, out.texture0
-					, out.texture1
-					, out.texture2
-					, out.texture3
-					, out.colour );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[ids.nodeId - 1u] );
 				out.nodeId = writer.cast< sdw::Int >( ids.nodeId );

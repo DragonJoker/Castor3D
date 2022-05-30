@@ -343,7 +343,6 @@ namespace castor3d
 			, PassTypeID passType = 0u
 			, uint32_t heightMapIndex = InvalidIndex
 			, SubmeshFlags submeshFlags = SubmeshFlag::eIndex
-			, MorphFlags morphFlags = MorphFlag::eNone
 			, ProgramFlags programFlags = ProgramFlag::eNone
 			, SceneFlags sceneFlags = SceneFlag::eNone
 			, VkPrimitiveTopology topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
@@ -360,7 +359,6 @@ namespace castor3d
 			, passType{ passType }
 			, heightMapIndex{ heightMapIndex }
 			, submeshFlags{ submeshFlags }
-			, morphFlags{ morphFlags }
 			, programFlags{ programFlags }
 			, sceneFlags{ sceneFlags }
 			, topology{ topology }
@@ -381,7 +379,6 @@ namespace castor3d
 		PassTypeID passType;
 		uint32_t heightMapIndex;
 		SubmeshFlags submeshFlags;
-		MorphFlags morphFlags;
 		ProgramFlags programFlags;
 		SceneFlags sceneFlags;
 		VkPrimitiveTopology topology;

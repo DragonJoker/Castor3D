@@ -149,7 +149,8 @@ namespace castor3d
 		 */
 		C3D_API ObjectBufferOffset getBuffer( VkDeviceSize vertexCount
 			, VkDeviceSize indexCount
-			, SubmeshFlags submeshFlags );
+			, SubmeshFlags submeshFlags
+			, bool isGpuComputed );
 		/**
 		 *\~english
 		 *\brief		Releases a GPU buffer.

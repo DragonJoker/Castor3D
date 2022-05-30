@@ -76,7 +76,7 @@ namespace castor3d
 	inline void Submesh::setDefaultMaterial( MaterialRPtr mat )
 	{
 		m_defaultMaterial = mat;
-		setMaterial( {}, mat, false );
+		instantiate( nullptr, {}, mat, false );
 	}
 
 	inline MaterialRPtr Submesh::getDefaultMaterial()const
@@ -104,25 +104,9 @@ namespace castor3d
 		return m_sphere;
 	}
 
-	inline bool Submesh::hasBufferOffsets()const
-	{
-		return bool( m_bufferOffset );
-	}
-
-	inline ObjectBufferOffset const & Submesh::getBufferOffsets()const
-	{
-		CU_Require( hasBufferOffsets() );
-		return m_bufferOffset;
-	}
-
 	inline bool Submesh::isInitialised()const
 	{
 		return m_initialised;
-	}
-
-	inline bool Submesh::isDynamic()const
-	{
-		return m_dynamic;
 	}
 
 	inline Mesh const & Submesh::getParent()const
@@ -142,7 +126,6 @@ namespace castor3d
 
 	inline void Submesh::needsUpdate()
 	{
-		m_dynamic = true;
 		m_dirty = true;
 	}
 

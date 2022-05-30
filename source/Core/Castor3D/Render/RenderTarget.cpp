@@ -16,6 +16,7 @@
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
+#include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 #include "Castor3D/Render/PostEffect/PostEffect.hpp"
 #include "Castor3D/Render/Technique/RenderTechnique.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
@@ -800,6 +801,11 @@ namespace castor3d
 	void RenderTarget::resetSemaphore()
 	{
 		m_signalFinished.clear();
+	}
+
+	crg::FramePass const & RenderTarget::createVertexTransformPass()
+	{
+		return getScene()->getRenderNodes().createVertexTransformPass( m_graph );
 	}
 
 	crg::FramePass & RenderTarget::doCreateCombinePass( ProgressBar * progress )

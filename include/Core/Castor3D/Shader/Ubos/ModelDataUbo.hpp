@@ -89,6 +89,33 @@ namespace castor3d::shader
 		sdw::Int m_shadowReceiver;
 	};
 
+	struct ObjectIds
+		: public sdw::StructInstance
+	{
+		C3D_API ObjectIds( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled );
+		SDW_DeclStructInstance( C3D_API, ObjectIds );
+
+		C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
+
+	private:
+		using sdw::StructInstance::getMember;
+		using sdw::StructInstance::getMemberArray;
+
+	public:
+		C3D_API static castor::String const DataName;
+
+	private:
+		sdw::UVec4 m_data;
+
+	public:
+		sdw::UInt nodeId;
+		sdw::UInt morphingId;
+		sdw::UInt morphTargetsCount;
+		sdw::UInt skinningId;
+	};
+
 	struct ObjectsIds
 		: public sdw::StructInstance
 	{
