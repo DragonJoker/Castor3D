@@ -1,10 +1,10 @@
 #include "Castor3D/Binary/BinarySubmesh.hpp"
 
-#include "Castor3D/Binary/BinaryBonesComponent.hpp"
 #include "Castor3D/Binary/BinaryMorphComponent.hpp"
+#include "Castor3D/Binary/BinarySkinComponent.hpp"
 #include "Castor3D/Buffer/GeometryBuffers.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp"
@@ -168,9 +168,9 @@ namespace castor3d
 
 		if ( result )
 		{
-			if ( auto component = obj.getComponent< BonesComponent >() )
+			if ( auto component = obj.getComponent< SkinComponent >() )
 			{
-				BinaryWriter< BonesComponent >{}.write( *component, m_chunk );
+				BinaryWriter< SkinComponent >{}.write( *component, m_chunk );
 			}
 		}
 
@@ -323,9 +323,9 @@ namespace castor3d
 				}
 				break;
 			case ChunkType::eBonesComponent:
-				if ( auto component = std::make_shared< BonesComponent >( obj ) )
+				if ( auto component = std::make_shared< SkinComponent >( obj ) )
 				{
-					result = createBinaryParser< BonesComponent >().parse( *component, chunk );
+					result = createBinaryParser< SkinComponent >().parse( *component, chunk );
 					checkError( result, "Couldn't parse bones component." );
 
 					if ( result )
@@ -416,7 +416,7 @@ namespace castor3d
 			BinaryChunk chunk;
 			uint32_t boneCount{ 0u };
 			std::vector< VertexBoneData > bones;
-			std::shared_ptr< BonesComponent > bonesComponent;
+			std::shared_ptr< SkinComponent > bonesComponent;
 
 			while ( result && doGetSubChunk( chunk ) )
 			{
@@ -495,7 +495,7 @@ namespace castor3d
 				case ChunkType::eSubmeshBoneCount:
 					if ( !bonesComponent )
 					{
-						bonesComponent = std::make_shared< BonesComponent >( obj );
+						bonesComponent = std::make_shared< SkinComponent >( obj );
 						obj.addComponent( bonesComponent );
 					}
 					result = doParseChunk( count, chunk );

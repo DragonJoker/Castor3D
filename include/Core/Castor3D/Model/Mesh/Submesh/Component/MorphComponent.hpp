@@ -58,13 +58,6 @@ namespace castor3d
 		 */
 		C3D_API void addMorphTarget( SubmeshAnimationBuffer data );
 		/**
-		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
-		 */
-		ProgramFlags getProgramFlags( Material const & material )const override
-		{
-			return ProgramFlag::eMorphing;
-		}
-		/**
 		 *\~english
 		 *\return		The morphing flags.
 		 *\~french

@@ -516,8 +516,6 @@ namespace water
 	castor3d::ProgramFlags WaterRenderPass::doAdjustProgramFlags( castor3d::ProgramFlags flags )const
 	{
 		remFlag( flags, castor3d::ProgramFlag::eInstantiation );
-		remFlag( flags, castor3d::ProgramFlag::eMorphing );
-		remFlag( flags, castor3d::ProgramFlag::eSkinning );
 		addFlag( flags, castor3d::ProgramFlag::eForceTexCoords );
 		addFlag( flags, castor3d::ProgramFlag::eLighting );
 		return flags;

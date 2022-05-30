@@ -9,7 +9,7 @@
 #include "Castor3D/Model/Skeleton/BoneNode.hpp"
 #include "Castor3D/Model/Skeleton/BonedVertex.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp"
@@ -28,14 +28,14 @@ namespace castor3d
 			castor::Point3f min{ rmax, rmax, rmax };
 			castor::Point3f max{ rmin, rmin, rmin };
 
-			if ( !submesh.hasComponent( BonesComponent::Name ) )
+			if ( !submesh.hasComponent( SkinComponent::Name ) )
 			{
 				min = submesh.getBoundingBox().getMin();
 				max = submesh.getBoundingBox().getMax();
 			}
 			else
 			{
-				auto component = submesh.getComponent< BonesComponent >();
+				auto component = submesh.getComponent< SkinComponent >();
 				uint32_t index = 0u;
 
 				for ( auto & boneData : component->getBonesData() )

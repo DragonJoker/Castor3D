@@ -653,8 +653,6 @@ namespace ocean_fft
 	castor3d::ProgramFlags OceanRenderPass::doAdjustProgramFlags( castor3d::ProgramFlags flags )const
 	{
 		remFlag( flags, castor3d::ProgramFlag::eInstantiation );
-		remFlag( flags, castor3d::ProgramFlag::eMorphing );
-		remFlag( flags, castor3d::ProgramFlag::eSkinning );
 		remFlag( flags, castor3d::ProgramFlag::eForceTexCoords );
 		addFlag( flags, castor3d::ProgramFlag::eLighting );
 		addFlag( flags, castor3d::ProgramFlag::eHasTessellation );

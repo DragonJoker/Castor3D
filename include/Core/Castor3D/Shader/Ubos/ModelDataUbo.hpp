@@ -24,6 +24,8 @@ namespace castor3d::shader
 
 		C3D_API sdw::Mat4 getPrvModelMtx( ProgramFlags programsFlags
 			, sdw::Mat4 const & curModelMatrix )const;
+		C3D_API sdw::Mat3 getNormalMtx( SubmeshFlags submeshFlags
+			, sdw::Mat4 const & curModelMatrix )const;
 		C3D_API sdw::Mat3 getNormalMtx( ProgramFlags programsFlags
 			, sdw::Mat4 const & curModelMatrix )const;
 		C3D_API sdw::Vec4 worldToModel( sdw::Vec4 const & pos )const;
@@ -32,8 +34,7 @@ namespace castor3d::shader
 		C3D_API sdw::Vec4 modelToPrvWorld( sdw::Vec4 const & pos )const;
 		C3D_API sdw::Mat4 getCurModelMtx( ProgramFlags programsFlags
 			, sdw::Mat4 const & transform )const;
-		C3D_API sdw::Mat4 getCurModelMtx( ProgramFlags programsFlags
-			, SkinningData const & skinning
+		C3D_API sdw::Mat4 getCurModelMtx( SkinningData const & skinning
 			, sdw::UInt const & skinningId
 			, sdw::UVec4 const & boneIds0
 			, sdw::UVec4 const & boneIds1
@@ -116,9 +117,6 @@ namespace castor3d::shader
 		struct Ids
 		{
 			sdw::UInt nodeId;
-			sdw::UInt morphingId;
-			sdw::UInt morphTargetsCount;
-			sdw::UInt skinningId;
 		};
 
 		C3D_API ObjectsIds( sdw::ShaderWriter & writer
@@ -157,31 +155,13 @@ namespace castor3d::shader
 		if ( checkFlag( flags, ProgramFlag::eInstantiation ) )
 		{
 			return { writer.declLocale( "nodeId"
-					, surface.objectIds.x() )
-				, writer.declLocale( "morphingId"
-					, surface.objectIds.y()
-					, checkFlag( flags, ProgramFlag::eMorphing ) )
-				, writer.declLocale( "morphTargetsCount"
-					, surface.objectIds.z()
-					, checkFlag( flags, ProgramFlag::eMorphing ) )
-				, writer.declLocale( "skinningId"
-					, surface.objectIds.w()
-					, checkFlag( flags, ProgramFlag::eSkinning ) ) };
+					, surface.objectIds.x() ) };
 		}
 
 		auto objectIdsData = writer.declLocale( "objectIdsData"
 			, data[pipelineID][writer.cast< sdw::UInt >( drawID )] );
 		return { writer.declLocale( "nodeId"
-				, objectIdsData.x() )
-			, writer.declLocale( "morphingId"
-				, objectIdsData.y()
-				, checkFlag( flags, ProgramFlag::eMorphing ) )
-			, writer.declLocale( "morphTargetsCount"
-				, objectIdsData.z()
-				, checkFlag( flags, ProgramFlag::eMorphing ) )
-			, writer.declLocale( "skinningId"
-				, objectIdsData.w()
-				, checkFlag( flags, ProgramFlag::eSkinning ) ) };
+				, objectIdsData.x() ) };
 	}
 
 	template< ast::var::Flag FlagT >

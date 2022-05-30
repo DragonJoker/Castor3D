@@ -71,7 +71,6 @@ source_group( "Source Files\\Animation" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinaryAnimation.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinaryBoneNode.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinaryBonesComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinaryChunk.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinaryMesh.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinaryMeshAnimation.cpp
@@ -86,13 +85,13 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinarySkeletonAnimationNode.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinarySkeletonAnimationObject.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinarySkeletonNode.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinarySkinComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinarySubmesh.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/CmshImporter.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinaryAnimation.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinaryBoneNode.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinaryBonesComponent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinaryChunk.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinaryMesh.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinaryMeshAnimation.hpp
@@ -109,6 +108,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinarySkeletonAnimationNode.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinarySkeletonAnimationObject.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinarySkeletonNode.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinarySkinComponent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinarySubmesh.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinaryWriter.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/ChunkData.hpp
@@ -599,19 +599,18 @@ source_group( "Source Files\\Model\\Mesh\\Submesh" FILES ${${PROJECT_NAME}_FOLDE
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/BaseDataComponent.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/BonesComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/Face.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/IndexMapping.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/InstantiationComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/Line.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/LinesMapping.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/MorphComponent.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/SkinComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/SubmeshComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/TriFaceMapping.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/BaseDataComponent.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/BonesComponent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/ComponentModule.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/Face.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/FaceIndices.hpp
@@ -622,6 +621,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/LineIndices.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/LinesMapping.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/MorphComponent.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/SkinComponent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/SubmeshComponent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Submesh/Component/TriFaceMapping.hpp
 )

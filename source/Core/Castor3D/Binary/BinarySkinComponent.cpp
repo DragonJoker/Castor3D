@@ -1,12 +1,12 @@
-#include "Castor3D/Binary/BinaryBonesComponent.hpp"
+#include "Castor3D/Binary/BinarySkinComponent.hpp"
 
-#include "Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
 
 namespace castor3d
 {
 	//*************************************************************************************************
 
-	bool BinaryWriter< BonesComponent >::doWrite( BonesComponent const & obj )
+	bool BinaryWriter< SkinComponent >::doWrite( SkinComponent const & obj )
 	{
 		uint32_t count = uint32_t( obj.m_bones.size() );
 		bool result = doWriteChunk( count, ChunkType::eSubmeshBoneCount, m_chunk );
@@ -25,9 +25,9 @@ namespace castor3d
 	//*************************************************************************************************
 
 	template<>
-	castor::String BinaryParserBase< BonesComponent >::Name = cuT( "BonesComponent" );
+	castor::String BinaryParserBase< SkinComponent >::Name = cuT( "SkinComponent" );
 
-	bool BinaryParser< BonesComponent >::doParse( BonesComponent & obj )
+	bool BinaryParser< SkinComponent >::doParse( SkinComponent & obj )
 	{
 		bool result = true;
 		castor::String name;
