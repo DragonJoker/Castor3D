@@ -95,14 +95,11 @@ namespace castor3d
 		{
 			++m_targetDataCount;
 		}
-
-		m_pointsCount = submesh.getPointsCount();
 	}
 
 	SubmeshComponentSPtr MorphComponent::clone( Submesh & submesh )const
 	{
 		auto result = submesh.createComponent< MorphComponent >( m_flags );
-		result->m_pointsCount = m_pointsCount;
 		result->m_targets = m_targets;
 		return std::static_pointer_cast< SubmeshComponent >( result );
 	}
@@ -115,7 +112,8 @@ namespace castor3d
 
 	bool MorphComponent::doInitialise( RenderDevice const & device )
 	{
-		auto size = m_targetDataCount * m_pointsCount * MaxMorphTargets;
+		auto vertexCount = getOwner()->getPointsCount();
+		auto size = m_targetDataCount * vertexCount * MaxMorphTargets;
 
 		if ( !m_buffer
 			|| size > m_buffer.getCount() )
@@ -145,10 +143,11 @@ namespace castor3d
 		}
 
 		uint32_t index{};
+		auto vertexCount = getOwner()->getPointsCount();
 		auto bufferIt = m_buffer.getData().begin();
 		auto stride = m_targetDataCount * MaxMorphTargets;
 
-		while ( index < m_pointsCount )
+		while ( index < vertexCount )
 		{
 			auto bufIt = bufferIt;
 

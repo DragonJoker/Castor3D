@@ -84,6 +84,7 @@ namespace Testing
 
 			if ( result && File::fileExists( m_testDataFolder / ( name + cuT( ".cskl" ) ) ) )
 			{
+				src->computeContainers();
 				auto skeleton = src->getScene()->addNewSkeleton( name, *src->getScene() );
 				BinaryFile sklfile{ m_testDataFolder / ( name + cuT( ".cskl" ) )
 					, File::OpenMode::eRead };
@@ -136,6 +137,7 @@ namespace Testing
 
 			if ( result && File::fileExists( Path{ path.getFileName() + cuT( ".cskl" ) } ) )
 			{
+				dst->computeContainers();
 				auto skeleton = dst->getScene()->addNewSkeleton( path.getFileName(), *dst->getScene() );
 				BinaryFile sklfile{ Path{ path.getFileName() + cuT( ".cskl" ) }
 					, File::OpenMode::eRead };

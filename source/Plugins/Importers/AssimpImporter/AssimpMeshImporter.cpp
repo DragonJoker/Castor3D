@@ -344,7 +344,7 @@ namespace c3d_assimp
 				}
 
 				auto bones = submesh.createComponent< castor3d::SkinComponent >();
-				bones->addBoneDatas( bonesData );
+				bones->addDatas( bonesData );
 			}
 		}
 

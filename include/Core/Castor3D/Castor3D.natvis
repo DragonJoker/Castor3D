@@ -72,14 +72,17 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::SkinComponent">
-		<DisplayString>{m_id} {m_type} data={m_data}</DisplayString>
+	<Type Name="castor3d::Face">
+		<DisplayString>{m_face}</DisplayString>
 		<Expand>
-			<Item Name="id">m_id</Item>
-			<Item Name="initialised">m_initialised</Item>
-			<Item Name="dirty">m_dirty</Item>
-			<Item Name="bones">m_bones</Item>
-			<Item Name="layouts">m_bonesLayouts</Item>
+			<Item Name="face">m_face</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::FaceIndices">
+		<DisplayString>{m_index[0]}, {m_index[1]}, {m_index[2]}</DisplayString>
+		<Expand>
+			<Item Name="index">m_index</Item>
 		</Expand>
 	</Type>
 
@@ -373,6 +376,17 @@
 		</Expand>
 	</Type>
 
+	<Type Name="castor3d::SkinComponent">
+		<DisplayString>{m_id} {m_type} data={m_data}</DisplayString>
+		<Expand>
+			<Item Name="id">m_id</Item>
+			<Item Name="initialised">m_initialised</Item>
+			<Item Name="dirty">m_dirty</Item>
+			<Item Name="bones">m_bones</Item>
+			<Item Name="layouts">m_bonesLayouts</Item>
+		</Expand>
+	</Type>
+
 	<Type Name="castor3d::Submesh">
 		<DisplayString>{*m_owner}({m_id})</DisplayString>
 		<Expand>
@@ -389,7 +403,8 @@
 			<Item Name="initialised">m_initialised</Item>
 			<Item Name="dirty">m_dirty</Item>
 			<Item Name="topology">m_topology</Item>
-			<Item Name="bufferOffset">m_bufferOffset</Item>
+			<Item Name="sourceBufferOffset">m_sourceBufferOffset</Item>
+			<Item Name="finalBufferOffsets">m_finalBufferOffsets</Item>
 			<Item Name="geometryBuffers">m_geometryBuffers</Item>
 			<Item Name="needsNormalsCompute">m_needsNormalsCompute</Item>
 			<Item Name="disableSceneUpdate">m_disableSceneUpdate</Item>

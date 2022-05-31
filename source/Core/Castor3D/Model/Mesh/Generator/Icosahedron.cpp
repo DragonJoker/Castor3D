@@ -129,6 +129,5 @@ namespace castor3d
 		}
 
 		indexMapping->computeTangentsFromNormals();
-		p_mesh.computeContainers();
 	}
 }

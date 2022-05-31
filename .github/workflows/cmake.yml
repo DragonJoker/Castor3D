@@ -102,6 +102,7 @@ jobs:
         git submodule update --init --recursive -- "external/gli"
         git submodule update --init -- "external/VkFFT"
         git submodule update --init -- "external/cvtt"
+        git submodule update --init -- "external/meshoptimizer"
 
     - name: Checkout dependencies submodule (Windows)
       if: runner.os == 'Windows'

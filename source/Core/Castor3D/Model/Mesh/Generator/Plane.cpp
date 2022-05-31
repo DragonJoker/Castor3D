@@ -151,7 +151,5 @@ namespace castor3d
 				}
 			}
 		}
-
-		mesh.computeContainers();
 	}
 }

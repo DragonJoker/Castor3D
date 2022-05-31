@@ -24,7 +24,7 @@ namespace castor3d
 	{
 	}
 
-	void SkinComponent::addBoneDatas( VertexBoneData const * const begin
+	void SkinComponent::addDatas( VertexBoneData const * const begin
 		, VertexBoneData const * const end )
 	{
 		m_bones.insert( m_bones.end(), begin, end );
@@ -42,9 +42,9 @@ namespace castor3d
 		return std::static_pointer_cast< SubmeshComponent >( result );
 	}
 
-	void SkinComponent::addBoneDatas( std::vector< VertexBoneData > const & boneData )
+	void SkinComponent::addDatas( std::vector< VertexBoneData > const & boneData )
 	{
-		addBoneDatas( boneData.data(), boneData.data() + boneData.size() );
+		addDatas( boneData.data(), boneData.data() + boneData.size() );
 	}
 
 	bool SkinComponent::doInitialise( RenderDevice const & device )

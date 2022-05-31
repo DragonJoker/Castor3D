@@ -58,7 +58,7 @@ namespace castor3d
 
 				if ( result && boneCount > 0 )
 				{
-					obj.addBoneDatas( bones );
+					obj.addDatas( bones );
 				}
 
 				boneCount = 0u;

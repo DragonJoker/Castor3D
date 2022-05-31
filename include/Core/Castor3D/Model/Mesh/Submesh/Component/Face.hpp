@@ -11,29 +11,36 @@ namespace castor3d
 	class Face
 	{
 	public:
-		/**
-		 *\~english
-		 *\brief		Specified constructor
-		 *\param[in]	a, b, c	The three vertices indices
-		 *\~french
-		 *\brief		Constructeur spécifié
-		 *\param[in]	a, b, c	Les indices des 3 vertices
-		 */
-		C3D_API Face( uint32_t a, uint32_t b, uint32_t c );
-		/**
-		 *\~english
-		 *\brief		Retrieves the vertex index
-		 *\param[in]	index	The index of the concerned vertex
-		 *\return		The vertex index
-		 *\~french
-		 *\brief		Récupère l'indice du vertex voulu
-		 *\param[in]	index	L'index du vertex concerné
-		 *\return		L'indice
-		 */
-		inline uint32_t operator[]( uint32_t index )const
+		Face( uint32_t a, uint32_t b, uint32_t c )noexcept
+			: m_face{ { { a, b, c } } }
+		{
+		}
+
+		Face()noexcept
+			: Face{ 0u, 0u, 0u }
+		{
+		}
+
+		uint32_t const & operator[]( uint32_t index )const noexcept
 		{
 			CU_Require( index < 3 );
 			return m_face.m_index[index];
+		}
+
+		uint32_t & operator[]( uint32_t index )noexcept
+		{
+			CU_Require( index < 3 );
+			return m_face.m_index[index];
+		}
+
+		uint32_t const * data()const noexcept
+		{
+			return m_face.m_index.data();
+		}
+
+		uint32_t * data()noexcept
+		{
+			return m_face.m_index.data();
 		}
 
 	private:
