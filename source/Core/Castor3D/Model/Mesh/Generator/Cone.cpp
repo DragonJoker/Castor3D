@@ -126,8 +126,6 @@ namespace castor3d
 			sideNormals->getData()[submeshSide.getPointsCount() - 1] = normal0Base;
 			sideTangents->getData()[submeshSide.getPointsCount() - 2] = tangent0Top;
 			sideTangents->getData()[submeshSide.getPointsCount() - 1] = tangent0Base;
-
-			mesh.computeContainers();
 		}
 	}
 }

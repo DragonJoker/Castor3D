@@ -501,6 +501,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/MeshFactory.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/MeshGenerator.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/MeshImporter.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/MeshPreparer.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/Mesh.hpp
@@ -508,6 +509,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/MeshGenerator.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/MeshImporter.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/MeshModule.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Model/Mesh/MeshPreparer.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
 	${${PROJECT_NAME}_SRC_FILES}
@@ -1759,6 +1761,7 @@ target_link_libraries( ${PROJECT_NAME}
 	PRIVATE
 		sdw::CompilerSpirV
 		${glslang_LIBRARIES}
+		meshoptimizer::meshoptimizer
 )
 if ( CASTOR_DEBUG_TARGETS )
 	target_compile_definitions( ${PROJECT_NAME}

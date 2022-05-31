@@ -319,8 +319,6 @@ namespace C3dPly
 			result = true;
 		}
 
-		submesh->computeContainers();
-
 		if ( iNbProperties < 6 )
 		{
 			mapping->computeNormals( false );

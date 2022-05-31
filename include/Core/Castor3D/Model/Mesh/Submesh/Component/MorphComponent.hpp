@@ -118,7 +118,6 @@ namespace castor3d
 
 	private:
 		MorphFlags m_flags{};
-		uint32_t m_pointsCount{};
 		uint32_t m_targetDataCount{};
 		GpuBufferOffsetT< castor::Point4f > m_buffer;
 		std::vector< SubmeshAnimationBuffer > m_targets;

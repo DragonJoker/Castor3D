@@ -326,6 +326,11 @@ namespace castor3d
 
 	void Submesh::computeContainers()
 	{
+		if ( !m_dirty )
+		{
+			return;
+		}
+
 		auto positions = getComponent< PositionsComponent >();
 
 		if ( positions && getPointsCount() )
@@ -801,6 +806,125 @@ namespace castor3d
 		auto component = getComponent< ColoursComponent >();
 		CU_Require( component );
 		return component->getData();
+	}
+
+	castor::Point3fArray const & Submesh::getBaseData( SubmeshData submeshData )const
+	{
+		switch ( submeshData )
+		{
+		case castor3d::SubmeshData::ePositions:
+			return getPositions();
+		case castor3d::SubmeshData::eNormals:
+			return getNormals();
+		case castor3d::SubmeshData::eTangents:
+			return getTangents();
+		case castor3d::SubmeshData::eTexcoords0:
+			return getTexcoords0();
+		case castor3d::SubmeshData::eTexcoords1:
+			return getTexcoords1();
+		case castor3d::SubmeshData::eTexcoords2:
+			return getTexcoords2();
+		case castor3d::SubmeshData::eTexcoords3:
+			return getTexcoords3();
+		case castor3d::SubmeshData::eColours:
+			return getColours();
+		case castor3d::SubmeshData::eIndex:
+			CU_Failure( "getBaseData: Can't retrieve index data this way" );
+			break;
+		case castor3d::SubmeshData::eSkin:
+			CU_Failure( "getBaseData: Can't retrieve skin data this way" );
+			break;
+		case castor3d::SubmeshData::eVelocity:
+			CU_Failure( "getBaseData: Can't retrieve velocity data this way" );
+			break;
+		default:
+			CU_Failure( "getBaseData: Unsupported SubmeshData type" );
+			break;
+		}
+
+		static castor::Point3fArray const dummy{};
+		return dummy;
+	}
+
+	castor::Point3fArray & Submesh::getBaseData( SubmeshData submeshData )
+	{
+		switch ( submeshData )
+		{
+		case castor3d::SubmeshData::ePositions:
+			return getPositions();
+		case castor3d::SubmeshData::eNormals:
+			return getNormals();
+		case castor3d::SubmeshData::eTangents:
+			return getTangents();
+		case castor3d::SubmeshData::eTexcoords0:
+			return getTexcoords0();
+		case castor3d::SubmeshData::eTexcoords1:
+			return getTexcoords1();
+		case castor3d::SubmeshData::eTexcoords2:
+			return getTexcoords2();
+		case castor3d::SubmeshData::eTexcoords3:
+			return getTexcoords3();
+		case castor3d::SubmeshData::eColours:
+			return getColours();
+		case castor3d::SubmeshData::eIndex:
+			CU_Failure( "getBaseData: Can't retrieve index data this way" );
+			break;
+		case castor3d::SubmeshData::eSkin:
+			CU_Failure( "getBaseData: Can't retrieve skin data this way" );
+			break;
+		case castor3d::SubmeshData::eVelocity:
+			CU_Failure( "getBaseData: Can't retrieve velocity data this way" );
+			break;
+		default:
+			CU_Failure( "getBaseData: Unsupported SubmeshData type" );
+			break;
+		}
+
+		static castor::Point3fArray dummy{};
+		return dummy;
+	}
+
+	void Submesh::setBaseData( SubmeshData submeshData, castor::Point3fArray data )
+	{
+		switch ( submeshData )
+		{
+		case castor3d::SubmeshData::ePositions:
+			getPositions() = std::move( data );
+			break;
+		case castor3d::SubmeshData::eNormals:
+			getNormals() = std::move( data );
+			break;
+		case castor3d::SubmeshData::eTangents:
+			getTangents() = std::move( data );
+			break;
+		case castor3d::SubmeshData::eTexcoords0:
+			getTexcoords0() = std::move( data );
+			break;
+		case castor3d::SubmeshData::eTexcoords1:
+			getTexcoords1() = std::move( data );
+			break;
+		case castor3d::SubmeshData::eTexcoords2:
+			getTexcoords2() = std::move( data );
+			break;
+		case castor3d::SubmeshData::eTexcoords3:
+			getTexcoords3() = std::move( data );
+			break;
+		case castor3d::SubmeshData::eColours:
+			getColours() = std::move( data );
+			break;
+		case castor3d::SubmeshData::eIndex:
+			CU_Failure( "setBaseData: Can't set index data this way" );
+			break;
+		case castor3d::SubmeshData::eSkin:
+			CU_Failure( "setBaseData: Can't set skin data this way" );
+			break;
+		case castor3d::SubmeshData::eVelocity:
+			CU_Failure( "setBaseData: Can't set velocity data this way" );
+			break;
+		default:
+			CU_Failure( "setBaseData: Unsupported SubmeshData type" );
+			break;
+		}
 	}
 
 	GpuBufferOffsetT< castor::Point4f > const & Submesh::getMorphTargets()const

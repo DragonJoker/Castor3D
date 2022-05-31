@@ -307,8 +307,8 @@ namespace Testing
 
 	bool C3DTestCase::compare( SkinComponent const & lhs, SkinComponent const & rhs )
 	{
-		auto lhsData = lhs.getBonesData();
-		auto rhsData = rhs.getBonesData();
+		auto lhsData = lhs.getData();
+		auto rhsData = rhs.getData();
 		auto result = CT_EQUAL( lhsData, rhsData );
 		return result;
 	}

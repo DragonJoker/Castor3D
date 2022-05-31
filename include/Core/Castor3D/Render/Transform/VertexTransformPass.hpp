@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "TransformModule.hpp"
 #include "Castor3D/Buffer/BufferModule.hpp"
+#include "Castor3D/Render/Node/RenderNodeModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include "Castor3D/Buffer/GpuBufferOffset.hpp"

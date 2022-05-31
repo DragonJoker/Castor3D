@@ -144,7 +144,5 @@ namespace castor3d
 
 			sideIndexMapping->computeNormals( true );
 		}
-
-		mesh.computeContainers();
 	}
 }

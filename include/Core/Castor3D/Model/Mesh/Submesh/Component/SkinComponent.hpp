@@ -35,7 +35,7 @@ namespace castor3d
 		 *\param[in]	begin	Le début des données de bones.
 		 *\param[in]	end		La fin des données de bones.
 		 */
-		C3D_API void addBoneDatas( VertexBoneData const * const begin
+		C3D_API void addDatas( VertexBoneData const * const begin
 			, VertexBoneData const * const end );
 		/**
 		 *\~english
@@ -71,7 +71,7 @@ namespace castor3d
 		 *\brief		Ajoute des données de bones.
 		 *\param[in]	boneData	Les données de bones.
 		 */
-		C3D_API void addBoneDatas( std::vector< VertexBoneData > const & boneData );
+		C3D_API void addDatas( std::vector< VertexBoneData > const & boneData );
 		/**
 		 *\~english
 		 *\brief		adds bone datas.
@@ -81,26 +81,31 @@ namespace castor3d
 		 *\param[in]	boneData	Les données de bones.
 		 */
 		template< size_t Count >
-		void addBoneDatas( std::array< VertexBoneData, Count > const & boneData )
+		void addDatas( std::array< VertexBoneData, Count > const & boneData )
 		{
-			addBoneDatas( boneData.data(), boneData.data() + boneData.size() );
+			addDatas( boneData.data(), boneData.data() + boneData.size() );
 		}
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getSubmeshFlags
 		 */
 		SubmeshFlags getSubmeshFlags( Pass const * pass )const override
 		{
-			return hasBoneData()
+			return hasData()
 				? SubmeshFlag::eSkin
 				: SubmeshFlag( 0 );
 		}
 
-		bool hasBoneData()const
+		bool hasData()const
 		{
 			return !m_bones.empty();
 		}
 
-		VertexBoneDataArray const & getBonesData()const
+		VertexBoneDataArray & getData()
+		{
+			return m_bones;
+		}
+
+		VertexBoneDataArray const & getData()const
 		{
 			return m_bones;
 		}

@@ -55,11 +55,6 @@ namespace castor3d
 			}
 		}
 
-		if ( result )
-		{
-			obj.computeContainers();
-		}
-
 		return result;
 	}
 
