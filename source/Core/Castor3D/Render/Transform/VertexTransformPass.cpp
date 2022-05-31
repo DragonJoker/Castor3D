@@ -10,6 +10,8 @@
 #include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 
+#include <RenderGraph/RecordContext.hpp>
+
 #include <ashespp/Descriptor/DescriptorSetPool.hpp>
 #include <ashespp/Pipeline/ComputePipeline.hpp>
 #include <ashespp/Pipeline/PipelineLayout.hpp>

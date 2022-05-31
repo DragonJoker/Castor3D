@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 
 #include "Castor3D/Model/Mesh/Mesh.hpp"
+#include "Castor3D/Model/Mesh/MeshPreparer.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
@@ -58,8 +59,6 @@ namespace castor3d
 		, Parameters const & parameters
 		, bool forceImport )
 	{
-		bool splitSubmeshes = false;
-		m_parameters.get( cuT( "split_mesh" ), splitSubmeshes );
 		m_file = file;
 		m_parameters = parameters;
 		bool result = true;
@@ -79,6 +78,14 @@ namespace castor3d
 					castor::matrix::setRotate( transform, orientation );
 					castor::matrix::scale( transform, scale );
 					meshimp::transformMesh( transform, mesh );
+				}
+
+				bool noOptim = false;
+				auto found = parameters.get( "no_optimisations", noOptim );
+
+				if ( !found || !noOptim )
+				{
+					MeshPreparer::prepare( mesh, parameters );
 				}
 
 				mesh.computeContainers();

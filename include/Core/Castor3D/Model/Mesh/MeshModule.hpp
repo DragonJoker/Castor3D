@@ -69,6 +69,15 @@ namespace castor3d
 	*	La fabrique d'importeurs.
 	*/
 	class MeshImporterFactory;
+	/**
+	*\~english
+	*\brief
+	*	Class used to prepare a mesh for rendering.
+	*\~french
+	*\brief
+	*	Classe de préparation d'un mesh pour le rendu.
+	*/
+	class MeshPreparer;
 
 	CU_DeclareSmartPtr( Mesh );
 	CU_DeclareSmartPtr( MeshGenerator );

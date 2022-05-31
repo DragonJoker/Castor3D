@@ -385,6 +385,9 @@ namespace castor3d
 		C3D_API castor::Point3fArray & getTexcoords3();
 		C3D_API castor::Point3fArray const & getColours()const;
 		C3D_API castor::Point3fArray & getColours();
+		C3D_API castor::Point3fArray const & getBaseData( SubmeshData submeshData )const;
+		C3D_API castor::Point3fArray & getBaseData( SubmeshData submeshData );
+		C3D_API void setBaseData( SubmeshData submeshData, castor::Point3fArray data );
 		C3D_API GpuBufferOffsetT< castor::Point4f > const & getMorphTargets()const;
 		C3D_API uint32_t getMorphTargetsCount()const;
 		C3D_API bool isDynamic()const;
@@ -421,7 +424,6 @@ namespace castor3d
 		InstantiationComponentSPtr m_instantiation;
 		IndexMappingSPtr m_indexMapping;
 		SubmeshFlags m_submeshFlags{ 0u };
-		bool m_dynamic{ false };
 		bool m_generated{ false };
 		bool m_initialised{ false };
 		bool m_dirty{ true };

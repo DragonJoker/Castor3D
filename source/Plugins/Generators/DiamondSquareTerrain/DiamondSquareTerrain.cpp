@@ -223,7 +223,6 @@ namespace diamond_square_terrain
 			}
 
 			mapping->computeNormals( true );
-			p_mesh.computeContainers();
 		}
 	}
 }

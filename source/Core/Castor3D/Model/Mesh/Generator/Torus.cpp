@@ -123,7 +123,5 @@ namespace castor3d
 
 			indexMapping->computeTangentsFromNormals();
 		}
-
-		mesh.computeContainers();
 	}
 }

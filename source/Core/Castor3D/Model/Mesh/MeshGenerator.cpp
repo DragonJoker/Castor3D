@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 
 #include "Castor3D/Model/Mesh/Mesh.hpp"
+#include "Castor3D/Model/Mesh/MeshPreparer.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 
 #include "Castor3D/Event/Frame/FrameListener.hpp"
@@ -28,6 +29,8 @@ namespace castor3d
 	void MeshGenerator::generate( Mesh & mesh, Parameters const & parameters )
 	{
 		doGenerate( mesh, parameters );
+		MeshPreparer::prepare( mesh, parameters );
+		mesh.computeContainers();
 
 		for ( auto submesh : mesh )
 		{

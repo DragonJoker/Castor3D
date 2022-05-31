@@ -511,7 +511,7 @@ namespace castor3d
 					checkError( result, "Couldn't parse bones data." );
 					if ( result && boneCount > 0 )
 					{
-						bonesComponent->addBoneDatas( bones );
+						bonesComponent->addDatas( bones );
 					}
 					boneCount = 0u;
 					break;

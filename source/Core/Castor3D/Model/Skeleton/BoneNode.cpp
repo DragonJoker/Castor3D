@@ -34,7 +34,7 @@ namespace castor3d
 				auto component = submesh->getComponent< SkinComponent >();
 				uint32_t i = 0u;
 
-				for ( auto & boneData : component->getBonesData() )
+				for ( auto & boneData : component->getData() )
 				{
 					auto it = std::find( boneData.m_ids.data.begin()
 						, boneData.m_ids.data.end()

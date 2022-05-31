@@ -167,7 +167,5 @@ namespace castor3d
 		mapping4->computeTangentsFromNormals();
 		mapping5->computeTangentsFromNormals();
 		mapping6->computeTangentsFromNormals();
-
-		p_mesh.computeContainers();
 	}
 }

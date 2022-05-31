@@ -99,7 +99,5 @@ namespace castor3d
 	//			previousUV[0] = currentUV[0];
 	//		}
 	//	}
-
-	//	mesh.computeContainers();
 	}
 }

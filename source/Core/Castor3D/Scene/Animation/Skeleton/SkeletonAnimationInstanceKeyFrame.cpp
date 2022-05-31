@@ -38,7 +38,7 @@ namespace castor3d
 				auto component = submesh.getComponent< SkinComponent >();
 				uint32_t index = 0u;
 
-				for ( auto & boneData : component->getBonesData() )
+				for ( auto & boneData : component->getData() )
 				{
 					castor::Matrix4x4f transform{ 1.0 };
 

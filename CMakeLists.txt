@@ -137,6 +137,7 @@ add_compile_definitions( $<$<CXX_COMPILER_ID:MSVC>:_ENFORCE_MATCHING_ALLOCATORS=
 set( ASHES_DIR external/Ashes )
 set( SHADERWRITER_DIR external/ShaderWriter )
 set( RENDERGRAPH_DIR external/RenderGraph )
+set( MESHOPTIMIZER_DIR external/meshoptimizer )
 
 msg_debug( "CMAKE_BUILD_TYPE : ${CMAKE_BUILD_TYPE}")
 msg_debug( "CMAKE_C_FLAGS    : ${CMAKE_C_FLAGS}" )

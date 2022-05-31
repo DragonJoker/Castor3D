@@ -31,3 +31,6 @@
 [submodule "external/VkFFT"]
 	path = external/VkFFT
 	url = https://github.com/DragonJoker/VkFFT.git
+[submodule "external/meshoptimizer"]
+	path = external/meshoptimizer
+	url = https://github.com/zeux/meshoptimizer.git
