@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Miscellaneous/StagingData.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
@@ -15,7 +16,7 @@ namespace castor3d
 {
 	struct InstantiationData
 	{
-		castor::Point4ui m_objectIDs;
+		ObjectIdsConfiguration objectIDs;
 	};
 
 	class InstantiationComponent

@@ -32,6 +32,8 @@ namespace castor3d
 	static VkDeviceSize constexpr MaxPipelines = 1'000ull;
 	// Maximum nodes per Pipeline Nodes buffer.
 	static VkDeviceSize constexpr MaxNodesPerPipeline = 25'000ull;
+	// Maximum nodes per meshlet indirect commands buffer.
+	static VkDeviceSize constexpr MaxSubmeshMeshletDrawIndirectCommand = MaxNodesPerPipeline;
 	// Maximum nodes per indexed indirect commands buffer.
 	static VkDeviceSize constexpr MaxSubmeshIdxDrawIndirectCommand = MaxNodesPerPipeline;
 	// Maximum nodes per non-indexed indirect commands buffer.
@@ -152,6 +154,14 @@ namespace castor3d
 	static uint32_t constexpr MaxBindlessResources = 16536u;
 	// Max supported texture coordinates sets.
 	static uint32_t constexpr MaxTextureCoordinatesSets = 4u;
+	//@}
+	/**
+	*\name
+	*	Meshlet.
+	*/
+	//@{
+	static uint32_t MaxMeshletVertexCount = 64u;
+	static uint32_t MaxMeshletTriangleCount = 124u;
 	//@}
 }
 

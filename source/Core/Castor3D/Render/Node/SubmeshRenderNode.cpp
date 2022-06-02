@@ -1,8 +1,11 @@
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 
+#include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp"
+#include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 
 CU_ImplementCUSmartPtr( castor3d, SubmeshRenderNode )
@@ -71,5 +74,35 @@ namespace castor3d
 			, programFlags
 			, submeshFlags
 			, texturesMask );
+	}
+
+	void SubmeshRenderNode::createMeshletDescriptorSet()const
+	{
+		if ( auto component = data.getComponent< MeshletComponent >() )
+		{
+			component->createDescriptorSet( instance );
+		}
+	}
+
+	ashes::DescriptorSet const & SubmeshRenderNode::getMeshletDescriptorSet()const
+	{
+		auto component = data.getComponent< MeshletComponent >();
+
+		if ( !component )
+		{
+			CU_Exception( "Can't retrieve MeshletComponent" );
+		}
+
+		return component->getDescriptorSet( instance );
+	}
+
+	ashes::DescriptorSetLayout const * SubmeshRenderNode::getMeshletDescriptorLayout()const
+	{
+		if ( auto component = data.getComponent< MeshletComponent >() )
+		{
+			return &component->getDescriptorLayout();
+		}
+
+		return nullptr;
 	}
 }

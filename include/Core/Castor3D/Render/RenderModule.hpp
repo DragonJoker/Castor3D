@@ -150,6 +150,29 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	The render pass mesh buffers binding index.
+	*\~french
+	*\brief
+	*	L'index de binding des buffers de mesh des passes de rendu.
+	*/
+	enum class MeshBuffersIdx
+		: uint32_t
+	{
+		eMeshlets,
+		ePosition,
+		eNormal,
+		eTangent,
+		eTexcoord0,
+		eTexcoord1,
+		eTexcoord2,
+		eTexcoord3,
+		eColour,
+		eVelocity,
+		CU_ScopedEnumBounds( eMeshlets ),
+	};
+	/**
+	*\~english
+	*\brief
 	*	Frustum corners enumeration
 	*\~french
 	*\brief

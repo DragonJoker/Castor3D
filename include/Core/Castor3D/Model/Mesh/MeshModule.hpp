@@ -78,6 +78,28 @@ namespace castor3d
 	*	Classe de préparation d'un mesh pour le rendu.
 	*/
 	class MeshPreparer;
+	/**
+	*\~english
+	*\brief
+	*	Data for one meshlet.
+	*\~french
+	*\brief
+	*	Données pour un meshlet.
+	*/
+	struct Meshlet
+	{
+		// Meshlets vertices indices.
+		std::array< uint32_t, 64u > vertices;
+		// Meshlets triangles indices.
+		std::array< uint32_t, 124u * 3u > primitives;
+		// Number of vertices used in the meshlet.
+		uint32_t vertexCount;
+		// Number of triangles used in the meshlet.
+		uint32_t triangleCount;
+		// Align to sizeof( vec4 ).
+		uint32_t dummy1;
+		uint32_t dummy2;
+	};
 
 	CU_DeclareSmartPtr( Mesh );
 	CU_DeclareSmartPtr( MeshGenerator );

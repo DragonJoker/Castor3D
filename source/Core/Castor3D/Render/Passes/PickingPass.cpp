@@ -33,7 +33,7 @@
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
-#include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
+#include "Castor3D/Shader/Ubos/ObjectIdsUbo.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
@@ -153,7 +153,7 @@ namespace castor3d
 			, [&]( VertexInT< shader::VertexSurfaceT > in
 			, VertexOutT< shader::FragmentSurfaceT > out )
 			{
-				auto ids = shader::getIds( c3d_objectIdsData
+				auto nodeId = shader::getNodeId( c3d_objectIdsData
 					, in
 					, pipelineID
 					, in.drawID
@@ -165,8 +165,8 @@ namespace castor3d
 				out.texture2 = in.texture2;
 				out.texture3 = in.texture3;
 				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[ids.nodeId - 1u] );
-				out.nodeId = writer.cast< sdw::Int >( ids.nodeId );
+					, c3d_modelsData[nodeId - 1u] );
+				out.nodeId = writer.cast< sdw::Int >( nodeId );
 				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 
 				if ( !checkFlag( flags.submeshFlags, SubmeshFlag::eVelocity ) )

@@ -10,6 +10,8 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -27,7 +29,6 @@
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureAnimationBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
-#include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 #include <CastorUtils/Multithreading/MultithreadingModule.hpp>
@@ -65,13 +66,6 @@ namespace castor3d
 	{
 		bool isFrontCulled = checkFlag( programFlags, ProgramFlag::eInvertNormals );
 
-		if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
-		{
-			return isFrontCulled
-				? RenderNodeType::eFrontInstancedStatic
-				: RenderNodeType::eBackInstancedStatic;
-		}
-
 		if ( checkFlag( programFlags, ProgramFlag::eBillboards ) )
 		{
 			return isFrontCulled
@@ -79,9 +73,23 @@ namespace castor3d
 				: RenderNodeType::eBackBillboard;
 		}
 
+		if ( checkFlag( programFlags, ProgramFlag::eHasMesh ) )
+		{
+			return isFrontCulled
+				? RenderNodeType::eFrontSubmeshMeshlet
+				: RenderNodeType::eBackSubmeshMeshlet;
+		}
+
+		if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
+		{
+			return isFrontCulled
+				? RenderNodeType::eFrontSubmeshInstanced
+				: RenderNodeType::eBackSubmeshInstanced;
+		}
+
 		return isFrontCulled
-			? RenderNodeType::eFrontStatic
-			: RenderNodeType::eBackStatic;
+			? RenderNodeType::eFrontSubmesh
+			: RenderNodeType::eBackSubmesh;
 	}
 
 	//*********************************************************************************************
@@ -177,16 +185,17 @@ namespace castor3d
 				, data
 				, instance
 				, m_modelsBuffer[m_nodeId] );
-			it.first->second->mesh = mesh;
-			it.first->second->skeleton = skeleton;
+			auto & node = *it.first->second;
+			node.mesh = mesh;
+			node.skeleton = skeleton;
 			m_nodesData.push_back( { &pass, instance.getParent(), &instance } );
 			instance.setId( pass
 				, data
-				, it.first->second.get()
+				, &node
 				, ++m_nodeId );
 			instance.fillEntry( pass
 				, *instance.getParent()
-				, it.first->second->modelData );
+				, node.modelData );
 
 			if ( data.isDynamic() )
 			{
@@ -197,21 +206,21 @@ namespace castor3d
 				if ( data.hasComponent( MorphComponent::Name )
 					&& data.hasComponent( SkinComponent::Name ) )
 				{
-					m_vertexTransform->registerNode( *it.first->second
+					m_vertexTransform->registerNode( node
 						, data.getMorphTargets()
 						, getOwner()->getAnimatedObjectGroupCache().getMorphingWeights()
 						, getOwner()->getAnimatedObjectGroupCache().getSkinningTransformsBuffer() );
 				}
 				else if ( data.hasComponent( MorphComponent::Name ) )
 				{
-					m_vertexTransform->registerNode( *it.first->second
+					m_vertexTransform->registerNode( node
 						, data.getMorphTargets()
 						, getOwner()->getAnimatedObjectGroupCache().getMorphingWeights()
 						, skinTransforms );
 				}
 				else
 				{
-					m_vertexTransform->registerNode( *it.first->second
+					m_vertexTransform->registerNode( node
 						, morphTargets
 						, morphingWeights
 						, getOwner()->getAnimatedObjectGroupCache().getSkinningTransformsBuffer() );
@@ -484,19 +493,18 @@ namespace castor3d
 					if ( it->second.data.size() > index )
 					{
 						auto & buffer = it->second.data[index++];
-						buffer.m_objectIDs->x = node->getId();
+						buffer.objectIDs.nodeId = node->getId();
 
 						if ( node->mesh )
 						{
 							CU_Require( node->mesh->getId( node->data ) > 0u );
-							buffer.m_objectIDs->y = node->mesh->getId( node->data ) - 1u;
-							buffer.m_objectIDs->z = node->data.getMorphTargetsCount();
+							buffer.objectIDs.morphingId = node->mesh->getId( node->data ) - 1u;
 						}
 
 						if ( node->skeleton )
 						{
 							CU_Require( node->skeleton->getId() > 0u );
-							buffer.m_objectIDs->w = node->skeleton->getId() - 1u;
+							buffer.objectIDs.skinningId = node->skeleton->getId() - 1u;
 						}
 					}
 				}

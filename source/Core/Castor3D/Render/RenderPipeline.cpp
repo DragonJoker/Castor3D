@@ -71,6 +71,11 @@ namespace castor3d
 			descriptorLayouts.emplace_back( *m_addDescriptorLayout );
 		}
 
+		if ( m_meshletDescriptorLayout )
+		{
+			descriptorLayouts.emplace_back( *m_meshletDescriptorLayout );
+		}
+
 		ashes::VkDynamicStateArray dynamicStates;
 		ashes::VkViewportArray viewports;
 		ashes::VkScissorArray scissors;

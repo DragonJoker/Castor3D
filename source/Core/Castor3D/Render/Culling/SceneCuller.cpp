@@ -191,79 +191,171 @@ namespace castor3d
 			}
 		}
 
+#ifndef NDEBUG
+
+		static void checkBuffers( SubmeshRenderNode const & firstNode
+			, SubmeshRenderNode const & currentNode )
+		{
+			auto idxBuffer = firstNode.getSourceBufferOffsets().hasData( SubmeshFlag::eIndex )
+				? &firstNode.getSourceBufferOffsets().getBuffer( SubmeshFlag::eIndex )
+				: nullptr;
+			auto posBuffer = firstNode.getFinalBufferOffsets().hasData( SubmeshFlag::ePositions )
+				? &firstNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::ePositions )
+				: nullptr;
+			auto nmlBuffer = firstNode.getFinalBufferOffsets().hasData( SubmeshFlag::eNormals )
+				? &firstNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eNormals )
+				: nullptr;
+			auto tanBuffer = firstNode.getFinalBufferOffsets().hasData( SubmeshFlag::eTangents )
+				? &firstNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eTangents )
+				: nullptr;
+			auto tex0Buffer = firstNode.getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords0 )
+				? &firstNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords0 )
+				: nullptr;
+			auto tex1Buffer = firstNode.getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords1 )
+				? &firstNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords1 )
+				: nullptr;
+			auto tex2Buffer = firstNode.getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords2 )
+				? &firstNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords2 )
+				: nullptr;
+			auto tex3Buffer = firstNode.getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords3 )
+				? &firstNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords3 )
+				: nullptr;
+			auto colBuffer = firstNode.getFinalBufferOffsets().hasData( SubmeshFlag::eColours )
+				? &firstNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eColours )
+				: nullptr;
+			auto bonBuffer = firstNode.getFinalBufferOffsets().hasData( SubmeshFlag::eSkin )
+				? &firstNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eSkin )
+				: nullptr;
+
+			CU_Require( idxBuffer == ( currentNode.getSourceBufferOffsets().hasData( SubmeshFlag::eIndex )
+				? &currentNode.getSourceBufferOffsets().getBuffer( SubmeshFlag::eIndex )
+				: nullptr ) );
+			CU_Require( posBuffer == ( currentNode.getFinalBufferOffsets().hasData( SubmeshFlag::ePositions )
+				? &currentNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::ePositions )
+				: nullptr ) );
+			CU_Require( nmlBuffer == ( currentNode.getFinalBufferOffsets().hasData( SubmeshFlag::eNormals )
+				? &currentNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eNormals )
+				: nullptr ) );
+			CU_Require( tanBuffer == ( currentNode.getFinalBufferOffsets().hasData( SubmeshFlag::eTangents )
+				? &currentNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eTangents )
+				: nullptr ) );
+			CU_Require( tex0Buffer == ( currentNode.getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords0 )
+				? &currentNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords0 )
+				: nullptr ) );
+			CU_Require( tex1Buffer == ( currentNode.getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords1 )
+				? &currentNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords1 )
+				: nullptr ) );
+			CU_Require( tex2Buffer == ( currentNode.getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords2 )
+				? &currentNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords2 )
+				: nullptr ) );
+			CU_Require( tex3Buffer == ( currentNode.getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords3 )
+				? &currentNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords3 )
+				: nullptr ) );
+			CU_Require( colBuffer == ( currentNode.getFinalBufferOffsets().hasData( SubmeshFlag::eColours )
+				? &currentNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eColours )
+				: nullptr ) );
+			CU_Require( bonBuffer == ( currentNode.getFinalBufferOffsets().hasData( SubmeshFlag::eSkin )
+				? &currentNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eSkin )
+				: nullptr ) );
+		}
+
+#endif
+
+#if VK_NV_mesh_shader
+
+		static void fillIndirectCommand( SubmeshRenderNode const & culled
+			, VkDrawMeshTasksIndirectCommandNV *& indirectMeshCommands
+			, uint32_t taskCount )
+		{
+			indirectMeshCommands->taskCount = taskCount;
+			indirectMeshCommands->firstTask = 0u;
+			++indirectMeshCommands;
+		}
+
+		static void fillNodeCommands( SubmeshRenderNode const & node
+			, bool meshShading
+			, VkDrawMeshTasksIndirectCommandNV *& indirectMeshBuffer
+			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
+			, VkDrawIndirectCommand *& indirectNIdxBuffer
+			, uint32_t instanceCount )
+		{
+			if ( meshShading
+				&& node.data.getMeshletsCount()
+				&& indirectMeshBuffer )
+			{
+				fillIndirectCommand( node, indirectMeshBuffer, node.data.getMeshletsCount() );
+			}
+			else if ( node.getSourceBufferOffsets().hasData( SubmeshFlag::eIndex ) )
+			{
+				fillIndirectCommand( node, indirectIdxBuffer, instanceCount );
+			}
+			else
+			{
+				fillIndirectCommand( node, indirectNIdxBuffer, instanceCount );
+			}
+		}
+
 		static void fillNodeCommands( SceneCuller::SidedNodeArrayT< SubmeshRenderNode > const & nodes
+			, bool meshShading
+			, VkDrawMeshTasksIndirectCommandNV *& indirectMeshBuffer
 			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
 			, VkDrawIndirectCommand *& indirectNIdxBuffer )
 		{
 			uint32_t instanceCount = 0u;
-#ifndef NDEBUG
-			auto idxBuffer = nodes.front().first.node->getSourceBufferOffsets().hasData( SubmeshFlag::eIndex )
-				? &nodes.front().first.node->getSourceBufferOffsets().getBuffer( SubmeshFlag::eIndex )
-				: nullptr;
-			auto posBuffer = nodes.front().first.node->getFinalBufferOffsets().hasData( SubmeshFlag::ePositions )
-				? &nodes.front().first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::ePositions )
-				: nullptr;
-			auto nmlBuffer = nodes.front().first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eNormals )
-				? &nodes.front().first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eNormals )
-				: nullptr;
-			auto tanBuffer = nodes.front().first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eTangents )
-				? &nodes.front().first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eTangents )
-				: nullptr;
-			auto tex0Buffer = nodes.front().first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords0 )
-				? &nodes.front().first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords0 )
-				: nullptr;
-			auto tex1Buffer = nodes.front().first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords1 )
-				? &nodes.front().first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords1 )
-				: nullptr;
-			auto tex2Buffer = nodes.front().first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords2 )
-				? &nodes.front().first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords2 )
-				: nullptr;
-			auto tex3Buffer = nodes.front().first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords3 )
-				? &nodes.front().first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords3 )
-				: nullptr;
-			auto colBuffer = nodes.front().first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eColours )
-				? &nodes.front().first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eColours )
-				: nullptr;
-			auto bonBuffer = nodes.front().first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eSkin )
-				? &nodes.front().first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eSkin )
-				: nullptr;
-#endif
 
 			for ( auto & node : nodes )
 			{
 				if ( node.first.node->instance.getParent()->isVisible() )
 				{
 					++instanceCount;
-					CU_Require( idxBuffer == ( node.first.node->getSourceBufferOffsets().hasData( SubmeshFlag::eIndex )
-						? &node.first.node->getSourceBufferOffsets().getBuffer( SubmeshFlag::eIndex )
-						: nullptr ) );
-					CU_Require( posBuffer == ( node.first.node->getFinalBufferOffsets().hasData( SubmeshFlag::ePositions )
-						? &node.first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::ePositions )
-						: nullptr ) );
-					CU_Require( nmlBuffer == ( node.first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eNormals )
-						? &node.first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eNormals )
-						: nullptr ) );
-					CU_Require( tanBuffer == ( node.first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eTangents )
-						? &node.first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eTangents )
-						: nullptr ) );
-					CU_Require( tex0Buffer == ( node.first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords0 )
-						? &node.first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords0 )
-						: nullptr ) );
-					CU_Require( tex1Buffer == ( node.first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords1 )
-						? &node.first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords1 )
-						: nullptr ) );
-					CU_Require( tex2Buffer == ( node.first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords2 )
-						? &node.first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords2 )
-						: nullptr ) );
-					CU_Require( tex3Buffer == ( node.first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords3 )
-						? &node.first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords3 )
-						: nullptr ) );
-					CU_Require( colBuffer == ( node.first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eColours )
-						? &node.first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eColours )
-						: nullptr ) );
-					CU_Require( bonBuffer == ( node.first.node->getFinalBufferOffsets().hasData( SubmeshFlag::eSkin )
-						? &node.first.node->getFinalBufferOffsets().getBuffer( SubmeshFlag::eSkin )
-						: nullptr) );
+#	ifndef NDEBUG
+					checkBuffers( *nodes.front().first.node, *node.first.node );
+#	endif
+				}
+			}
+
+			fillNodeCommands( *nodes.front().first.node
+				, meshShading
+				, indirectMeshBuffer
+				, indirectIdxBuffer
+				, indirectNIdxBuffer
+				, instanceCount );
+		}
+
+		static void fillNodeCommands( SubmeshRenderNode const & node
+			, Scene const & scene
+			, bool meshShading
+			, VkDrawMeshTasksIndirectCommandNV *& indirectMeshBuffer
+			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
+			, VkDrawIndirectCommand *& indirectNIdxBuffer
+			, castor::Point4ui *& pipelinesBuffer )
+		{
+			fillNodeCommands( node
+				, meshShading
+				, indirectMeshBuffer
+				, indirectIdxBuffer
+				, indirectNIdxBuffer
+				, getInstanceCount( node ) );
+			( *pipelinesBuffer )->x = node.instance.getId( *node.pass, node.data );
+			++pipelinesBuffer;
+		}
+
+#else
+
+		static void fillNodeCommands( SceneCuller::SidedNodeArrayT< SubmeshRenderNode > const & nodes
+			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
+			, VkDrawIndirectCommand *& indirectNIdxBuffer )
+		{
+			uint32_t instanceCount = 0u;
+
+			for ( auto & node : nodes )
+			{
+				if ( node.first.node->instance.getParent()->isVisible() )
+				{
+					++instanceCount;
+#ifndef NDEBUG
+					checkBuffers( *nodes.front().first.node, *node.first.node );
+#endif
 				}
 			}
 
@@ -286,6 +378,8 @@ namespace castor3d
 			( *pipelinesBuffer )->x = node.instance.getId( *node.pass, node.data );
 			++pipelinesBuffer;
 		}
+
+#endif
 	}
 
 	//*********************************************************************************************
@@ -309,6 +403,7 @@ namespace castor3d
 		constexpr auto maxTexturesSize = castor::getBitSize( uint32_t( maxTextureSize ) );
 		constexpr auto maxPassLayerSize = castor::getBitSize( MaxPassLayers );
 		constexpr auto maxTargetOffsetSize = 64 - maxPassLayerSize;
+		static_assert( 64 >= maxSubmeshSize + maxProgramSize + maxPassSize + maxTexcoorSetSize + maxTextureSize + maxTexturesSize );
 		auto offset = 0u;
 		PipelineBaseHash result{};
 		result.a = uint64_t( submeshFlags ) << offset;
@@ -718,6 +813,13 @@ namespace castor3d
 				&& ( !renderPassIt.second.sortedSubmeshes.empty()
 					|| !renderPassIt.second.sortedInstancedSubmeshes.empty() ) )
 			{
+#if VK_NV_mesh_shader
+				renderPassIt.second.submeshMeshletIndirectCommands = makeBuffer< VkDrawMeshTasksIndirectCommandNV >( device
+					, MaxSubmeshMeshletDrawIndirectCommand
+					, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
+					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+					, renderPassIt.first->getTypeName() + "/SubmeshMeshletIndirectBuffer" );
+#endif
 				renderPassIt.second.submeshIdxIndirectCommands = makeBuffer< VkDrawIndexedIndirectCommand >( device
 					, MaxSubmeshIdxDrawIndirectCommand
 					, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
@@ -749,6 +851,7 @@ namespace castor3d
 #endif
 		for ( auto & renderPassIt : m_renderPasses )
 		{
+			auto & renderPass = *renderPassIt.first;
 			auto & pipelinesNodes = renderPassIt.second.nodesIds;
 
 			if ( !pipelinesNodes.empty() )
@@ -761,10 +864,18 @@ namespace castor3d
 				if ( !sortedSubmeshes.empty()
 					|| !sortedInstancedSubmeshes.empty() )
 				{
+#if VK_NV_mesh_shader
+					auto & indirectMshCommands = renderPassIt.second.submeshMeshletIndirectCommands;
+					auto origIndirectMshBuffer = indirectMshCommands
+						? indirectMshCommands->lock( 0u, ashes::WholeSize, 0u )
+						: nullptr;
+					auto indirectMshBuffer = origIndirectMshBuffer;
+#endif
 					auto & indirectIdxCommands = renderPassIt.second.submeshIdxIndirectCommands;
-					auto & indirectNIdxCommands = renderPassIt.second.submeshNIdxIndirectCommands;
 					auto origIndirectIdxBuffer = indirectIdxCommands->lock( 0u, ashes::WholeSize, 0u );
 					auto indirectIdxBuffer = origIndirectIdxBuffer;
+
+					auto & indirectNIdxCommands = renderPassIt.second.submeshNIdxIndirectCommands;
 					auto origIndirectNIdxBuffer = indirectNIdxCommands->lock( 0u, ashes::WholeSize, 0u );
 					auto indirectNIdxBuffer = origIndirectNIdxBuffer;
 
@@ -782,11 +893,22 @@ namespace castor3d
 							{
 								if ( sidedCulled.first.visible )
 								{
+#if VK_NV_mesh_shader
+									cullscn::fillNodeCommands( *sidedCulled.first.node
+										, m_scene
+										, renderPass.isMeshShading()
+										, indirectMshBuffer
+										, indirectIdxBuffer
+										, indirectNIdxBuffer
+										, pipelinesBuffer );
+									CU_Require( size_t( std::distance( origIndirectMshBuffer, indirectMshBuffer ) ) <= indirectMshCommands->getCount() );
+#else
 									cullscn::fillNodeCommands( *sidedCulled.first.node
 										, m_scene
 										, indirectIdxBuffer
 										, indirectNIdxBuffer
 										, pipelinesBuffer );
+#endif
 									CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= indirectIdxCommands->getCount() );
 									CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= indirectNIdxCommands->getCount() );
 									CU_Require( size_t( std::distance( pipelineNodes.data(), pipelinesBuffer ) ) <= pipelineNodes.size() );
@@ -803,9 +925,18 @@ namespace castor3d
 							{
 								for ( auto & submeshIt : passIt.second )
 								{
+#if VK_NV_mesh_shader
+									cullscn::fillNodeCommands( submeshIt.second
+										, renderPass.isMeshShading()
+										, indirectMshBuffer
+										, indirectIdxBuffer
+										, indirectNIdxBuffer );
+									CU_Require( size_t( std::distance( origIndirectMshBuffer, indirectMshBuffer ) ) <= indirectMshCommands->getCount() );
+#else
 									cullscn::fillNodeCommands( submeshIt.second
 										, indirectIdxBuffer
 										, indirectNIdxBuffer );
+#endif
 									CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= indirectIdxCommands->getCount() );
 									CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= indirectNIdxCommands->getCount() );
 								}
@@ -813,6 +944,15 @@ namespace castor3d
 						}
 					}
 
+#if VK_NV_mesh_shader
+
+					if ( indirectMshCommands )
+					{
+						indirectMshCommands->flush( 0u, ashes::WholeSize );
+						indirectMshCommands->unlock();
+					}
+
+#endif
 					indirectIdxCommands->flush( 0u, ashes::WholeSize );
 					indirectIdxCommands->unlock();
 					indirectNIdxCommands->flush( 0u, ashes::WholeSize );

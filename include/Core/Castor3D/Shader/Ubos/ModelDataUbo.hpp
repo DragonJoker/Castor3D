@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_ModelIndexUbo_H___
 #define ___C3D_ModelIndexUbo_H___
 
-#include "SkinningUbo.hpp"
+#include "UbosModule.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
@@ -83,121 +83,7 @@ namespace castor3d::shader
 		sdw::Int m_envMapId;
 		sdw::Int m_shadowReceiver;
 	};
-
-	struct ObjectIds
-		: public sdw::StructInstance
-	{
-		C3D_API ObjectIds( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled );
-		SDW_DeclStructInstance( C3D_API, ObjectIds );
-
-		C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-
-	private:
-		using sdw::StructInstance::getMember;
-		using sdw::StructInstance::getMemberArray;
-
-	public:
-		C3D_API static castor::String const DataName;
-
-	private:
-		sdw::UVec4 m_data;
-
-	public:
-		sdw::UInt nodeId;
-		sdw::UInt morphingId;
-		sdw::UInt morphTargetsCount;
-		sdw::UInt skinningId;
-	};
-
-	struct ObjectsIds
-		: public sdw::StructInstance
-	{
-		struct Ids
-		{
-			sdw::UInt nodeId;
-		};
-
-		C3D_API ObjectsIds( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled );
-		SDW_DeclStructInstance( C3D_API, ObjectsIds );
-
-		C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-
-		sdw::UVec4 operator[]( sdw::UInt const & index )const
-		{
-			return m_data[index];
-		}
-
-	private:
-		using sdw::StructInstance::getMember;
-		using sdw::StructInstance::getMemberArray;
-
-	public:
-		C3D_API static castor::String const BufferName;
-		C3D_API static castor::String const DataName;
-
-	private:
-		sdw::Array< sdw::UVec4 > m_data;
-	};
-
-	template< ast::var::Flag FlagT >
-	static shader::ObjectsIds::Ids getIds( sdw::Array< shader::ObjectsIds > const & data
-		, shader::VertexSurfaceT< FlagT > const & surface
-		, sdw::UInt pipelineID
-		, sdw::Int drawID
-		, ProgramFlags const & flags )
-	{
-		auto & writer = *data.getWriter();
-
-		if ( checkFlag( flags, ProgramFlag::eInstantiation ) )
-		{
-			return { writer.declLocale( "nodeId"
-					, surface.objectIds.x() ) };
-		}
-
-		auto objectIdsData = writer.declLocale( "objectIdsData"
-			, data[pipelineID][writer.cast< sdw::UInt >( drawID )] );
-		return { writer.declLocale( "nodeId"
-				, objectIdsData.x() ) };
-	}
-
-	template< ast::var::Flag FlagT >
-	static sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
-		, shader::VertexSurfaceT< FlagT > const & surface
-		, sdw::UInt pipelineID
-		, sdw::Int drawID
-		, ProgramFlags const & flags )
-	{
-		auto & writer = *data.getWriter();
-
-		if ( checkFlag( flags, ProgramFlag::eInstantiation ) )
-		{
-			return surface.objectIds.x();
-		}
-
-		auto objectIdsData = writer.declLocale( "objectIdsData"
-			, data[pipelineID][writer.cast< sdw::UInt >( drawID )] );
-		return objectIdsData.x();
-	}
-
-	C3D_API sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
-		, sdw::UInt pipelineID
-		, sdw::Int drawID );
 }
-
-#define C3D_ObjectIdsData( writer, binding, set )\
-	sdw::Ssbo objectIdsDataBuffer{ writer\
-		, castor3d::shader::ObjectsIds::BufferName\
-		, uint32_t( binding )\
-		, uint32_t( set )\
-		, ast::type::MemoryLayout::eStd430\
-		, true };\
-	auto c3d_objectIdsData = objectIdsDataBuffer.declMemberArray< castor3d::shader::ObjectsIds >( castor3d::shader::ObjectsIds::DataName );\
-	objectIdsDataBuffer.end()
-
 
 #define C3D_ModelsData( writer, binding, set )\
 	sdw::Ssbo modelsBufferIndices{ writer\

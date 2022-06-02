@@ -1,13 +1,15 @@
 #include "Castor3D/Model/Mesh/MeshPreparer.hpp"
 
 #include "Castor3D/Engine.hpp"
-
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
+#include "Castor3D/Render/RenderDevice.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 
 #pragma warning( push )
 #pragma warning( disable:4365 )
@@ -261,6 +263,52 @@ namespace castor3d
 				, remap
 				, remapped );
 		}
+
+		static std::vector< Meshlet > buildMeshlets( Remapped const & remapped
+			, RenderDevice const & device )
+		{
+			auto indexCount = remapped.indices.size() * 3u;
+			auto maxMeshlets = meshopt_buildMeshletsBound( indexCount
+				, MaxMeshletVertexCount
+				, MaxMeshletTriangleCount );
+
+			auto vertexCount = remapped.baseBuffers.begin()->second.size();
+			std::vector< meshopt_Meshlet > meshlets( maxMeshlets );
+			std::vector< uint8_t > triangles( maxMeshlets * MaxMeshletTriangleCount * 3 );
+			std::vector< uint32_t > vertices( maxMeshlets * MaxMeshletVertexCount );
+			auto meshletCount = meshopt_buildMeshletsScan( meshlets.data()
+				, vertices.data()
+				, triangles.data()
+				, remapped.indices.data()->data()
+				, indexCount
+				, vertexCount
+				, MaxMeshletVertexCount
+				, MaxMeshletTriangleCount );
+			std::vector< Meshlet > result( meshletCount );
+			auto itSrc = meshlets.begin();
+			auto itDst = result.begin();
+
+			while ( itDst != result.end() )
+			{
+				uint32_t index = 0u;
+
+				for ( auto prim = itSrc->triangle_offset; prim < itSrc->triangle_offset + itSrc->triangle_count * 3u; ++prim )
+				{
+					itDst->primitives[index] = triangles[prim];
+					++index;
+				}
+
+				std::copy( vertices.begin() + itSrc->vertex_offset
+					, vertices.begin() + itSrc->vertex_offset + itSrc->vertex_count
+					, itDst->vertices.begin() );
+				itDst->triangleCount = itSrc->triangle_count;
+				itDst->vertexCount = itSrc->vertex_count;
+				++itSrc;
+				++itDst;
+			}
+
+			return result;
+		}
 	}
 
 	bool MeshPreparer::prepare( Mesh & mesh
@@ -296,6 +344,17 @@ namespace castor3d
 			, newVertexCount );
 		meshopt::optimizeOverdraw( remapped );
 		meshopt::optimizeFetch( remapped );
+		RenderDevice & device = submesh.getOwner()->getOwner()->getRenderSystem()->getRenderDevice();
+
+		if ( device.hasMeshAndTaskShaders() )
+		{
+			if ( auto meshlet = submesh.createComponent< MeshletComponent >() )
+			{
+				auto meshlets = meshopt::buildMeshlets( remapped, device );
+				meshlet->getMeshletsData() = std::move( meshlets );
+			}
+		}
+
 		triangles.getFaces() = std::move( remapped.indices );
 
 		for ( auto & data : remapped.baseBuffers )

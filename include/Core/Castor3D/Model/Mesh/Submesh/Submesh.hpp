@@ -255,101 +255,14 @@ namespace castor3d
 			, SubmeshFlags const & submeshFlags
 			, TextureFlagsArray const & mask )const;
 		/**
-		 *\~english
-		 *\brief		Adds a points list to my list
-		 *\param[in]	vertices	The vertices
-		 *\~french
-		 *\brief		Ajoute des points à la liste
-		 *\param[in]	vertices	Les vertices
-		 */
-		inline void addPoints( std::vector< InterleavedVertex > const & vertices );
-		/**
-		 *\~english
-		 *\brief		Adds a points list to my list
-		 *\param[in]	vertices	The vertices
-		 *\~french
-		 *\brief		Ajoute des points à la liste
-		 *\param[in]	vertices	Les vertices
-		 */
-		template< size_t Count >
-		inline void addPoints( std::array< InterleavedVertex, Count > const & vertices );
-		/**
-		 *\~english
-		 *\brief		Sets the material
-		 *\param[in]	material	The new value
-		 *\~french
-		 *\brief		Définit le material
-		 *\param[in]	material	La nouvelle valeur
-		 */
-		inline void setDefaultMaterial( MaterialRPtr material );
-		/**
-		 *\~english
-		 *\brief		Sets the submesh to be updated.
-		 *\~french
-		 *\brief		Dit que le sous-maillage doit être mis à jour.
-		 */
-		inline void needsUpdate();
-		/**
-		 *\~english
-		 *\brief		Sets the index mapping.
-		 *\param[in]	mapping	The mapping.
-		 *\~french
-		 *\brief		Définit le mappage d'indices.
-		 *\param[in]	mapping	Le mappage.
-		 */
-		inline void setIndexMapping( IndexMappingSPtr mapping );
-		/**
-		 *\~english
-		 *\return		The index mapping.
-		 *\~french
-		 *\return		Le mappage d'indices.
-		 */
-		inline IndexMappingSPtr getIndexMapping()const;
-		/**
-		 *\~english
-		 *\brief		Adds a component.
-		 *\param[in]	component	The component.
-		 *\~french
-		 *\brief		Ajoute un composant.
-		 *\param[in]	component	Le composant.
-		 */
-		template< typename ComponentT, typename ... ParamsT >
-		inline std::shared_ptr< ComponentT > createComponent( ParamsT && ... params );
-		/**
-		 *\~english
-		 *\brief		Adds a component.
-		 *\param[in]	component	The component.
-		 *\~french
-		 *\brief		Ajoute un composant.
-		 *\param[in]	component	Le composant.
-		 */
-		inline void addComponent( SubmeshComponentSPtr component );
-		/**
-		 *\~english
-		 *\brief		Adds a component.
-		 *\param[in]	component	The component.
-		 *\~french
-		 *\brief		Ajoute un composant.
-		 *\param[in]	component	Le composant.
-		 */
-		template< typename ComponentT >
-		inline void addComponent( std::shared_ptr< ComponentT > component );
-		/**
-		 *\~english
-		 *\brief		Sets the topology.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit la topologie.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setTopology( VkPrimitiveTopology value );
-		/**
-		 *\~english
-		 *\brief		Disables scene update on modifications.
-		 *\~french
-		 *\brief		Désactive la mise à jour de la scène en cas de modification.
-		 */
-		inline void disableSceneUpdate();
+		*\~english
+		*name
+		*	Mutators.
+		*\~french
+		*name
+		*	Mutateurs.
+		*/
+		/**@{*/
 		/**
 		 *\~english
 		 *\brief		Enables scene update on modifications.
@@ -359,6 +272,21 @@ namespace castor3d
 		 *\param[in]	updateScene	Dit si cet appel déclenche une mise à jour de la scène.
 		 */
 		C3D_API void enableSceneUpdate( bool updateScene );
+		C3D_API void setBaseData( SubmeshData submeshData, castor::Point3fArray data );
+		inline void disableSceneUpdate();
+		inline void needsUpdate();
+		inline void addPoints( std::vector< InterleavedVertex > const & vertices );
+		template< size_t Count >
+		inline void addPoints( std::array< InterleavedVertex, Count > const & vertices );
+		inline void setDefaultMaterial( MaterialRPtr material );
+		inline void setIndexMapping( IndexMappingSPtr mapping );
+		inline IndexMappingSPtr getIndexMapping()const;
+		template< typename ComponentT, typename ... ParamsT >
+		inline std::shared_ptr< ComponentT > createComponent( ParamsT && ... params );
+		inline void addComponent( SubmeshComponentSPtr component );
+		template< typename ComponentT >
+		inline void addComponent( std::shared_ptr< ComponentT > component );
+		inline void setTopology( VkPrimitiveTopology value );
 		/**
 		*\~english
 		*name
@@ -387,9 +315,11 @@ namespace castor3d
 		C3D_API castor::Point3fArray & getColours();
 		C3D_API castor::Point3fArray const & getBaseData( SubmeshData submeshData )const;
 		C3D_API castor::Point3fArray & getBaseData( SubmeshData submeshData );
-		C3D_API void setBaseData( SubmeshData submeshData, castor::Point3fArray data );
 		C3D_API GpuBufferOffsetT< castor::Point4f > const & getMorphTargets()const;
 		C3D_API uint32_t getMorphTargetsCount()const;
+		C3D_API std::vector< Meshlet > const & getMeshlets()const;
+		C3D_API std::vector< Meshlet > & getMeshlets();
+		C3D_API uint32_t getMeshletsCount()const;
 		C3D_API bool isDynamic()const;
 		C3D_API ObjectBufferOffset const & getFinalBufferOffsets( Geometry const & instance )const;
 		C3D_API ObjectBufferOffset const & getSourceBufferOffsets()const;
@@ -413,6 +343,7 @@ namespace castor3d
 		inline InstantiationComponent const & getInstantiation()const;
 		inline SubmeshComponentIDMap const & getComponents()const;
 		inline VkPrimitiveTopology getTopology()const;
+		inline SubmeshFlags getFinalSubmeshFlags()const;
 		/**@}*/
 
 	private:
