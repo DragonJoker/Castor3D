@@ -156,9 +156,9 @@ namespace castor3d
 			, morphingWeights
 			, skinTransforms ) }
 	{
-		m_objectIds->x = node.instance.getId( *node.pass, node.data ) - 1u;
-		m_objectIds->y = node.mesh ? node.mesh->getId( node.data ) - 1u : 0u;
-		m_objectIds->w = node.skeleton ? node.skeleton->getId() - 1u : 0u;
+		m_objectIds.nodeId = node.instance.getId( *node.pass, node.data ) - 1u;
+		m_objectIds.morphingId = node.mesh ? node.mesh->getId( node.data ) - 1u : 0u;
+		m_objectIds.skinningId = node.skeleton ? node.skeleton->getId() - 1u : 0u;
 	}
 
 	void VertexTransformPass::recordInto( crg::RecordContext & context
@@ -228,8 +228,8 @@ namespace castor3d
 			, *m_pipeline.pipelineLayout
 			, VK_SHADER_STAGE_COMPUTE_BIT
 			, 0u
-			, sizeof( castor::Point4ui )
-			, m_objectIds.constPtr() );
+			, sizeof( ObjectIdsConfiguration )
+			, &m_objectIds );
 		VkDescriptorSet set = *m_descriptorSet;
 		context.getContext().vkCmdBindDescriptorSets( commandBuffer
 			, VK_PIPELINE_BIND_POINT_COMPUTE

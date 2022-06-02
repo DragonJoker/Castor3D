@@ -97,7 +97,14 @@ namespace castor3d
 	//@{
 
 	template< typename NodeT >
-	using NodePtrArrayT = std::vector< NodeT const * >;
+	struct CountedNodeT
+	{
+		NodeT const * node{};
+		uint32_t count{};
+	};
+
+	template< typename NodeT >
+	using NodePtrArrayT = std::vector< CountedNodeT< NodeT > >;
 
 	using SubmeshRenderNodePtrArray = NodePtrArrayT< SubmeshRenderNode >;
 	using BillboardRenderNodePtrArray = NodePtrArrayT< BillboardRenderNode >;

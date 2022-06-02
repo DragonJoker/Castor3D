@@ -18,14 +18,6 @@ namespace castor3d
 
 	AnimatedObjectSPtr findAnimatedObject( Scene const & scene
 		, castor::String const & name );
-	PipelineBaseHash getPipelineBaseHash( SubmeshFlags submeshFlags
-		, ProgramFlags programFlags
-		, PassFlags passFlags
-		, uint32_t maxTexcoordSet
-		, uint32_t texturesCount
-		, TextureFlags texturesFlags
-		, uint32_t passLayerIndex
-		, VkDeviceSize morphTargetsOffset );
 	PipelineBaseHash getPipelineBaseHash( RenderNodesPass const & renderPass
 		, Submesh const & data
 		, Pass const & pass
@@ -53,9 +45,9 @@ namespace castor3d
 		template< typename NodeT >
 		struct CulledNodeT
 		{
-			NodeT const * node;
-			bool visible;
-			uint32_t count;
+			NodeT const * node{};
+			bool visible{};
+			uint32_t count{};
 		};
 
 		template< typename NodeT >

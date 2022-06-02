@@ -176,7 +176,7 @@ namespace castor3d
 		, m_oit{ desc.m_oit }
 		, m_forceTwoSided{ desc.m_forceTwoSided }
 		, m_safeBand{ desc.m_safeBand }
-		, m_meshShading{ desc.m_meshShading }
+		, m_meshShading{ desc.m_meshShading && device.hasMeshAndTaskShaders() }
 		, m_sceneUbo{ m_device }
 		, m_index{ desc.m_index }
 	{
@@ -261,10 +261,13 @@ namespace castor3d
 
 	ProgramFlags RenderNodesPass::adjustFlags( ProgramFlags flags )const
 	{
-		if ( m_meshShading
-			&& !checkFlag( flags, ProgramFlag::eBillboards ) )
+		if ( !m_meshShading )
 		{
-			addFlag( flags, ProgramFlag::eHasMesh );
+			remFlag( flags, ProgramFlag::eHasMesh );
+		}
+		else
+		{
+			remFlag( flags, ProgramFlag::eInstantiation );
 		}
 
 		return doAdjustProgramFlags( flags );

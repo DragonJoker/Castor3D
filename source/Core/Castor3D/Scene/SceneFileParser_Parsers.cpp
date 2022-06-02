@@ -24,6 +24,7 @@
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/MeshFactory.hpp"
 #include "Castor3D/Model/Mesh/MeshGenerator.hpp"
+#include "Castor3D/Model/Mesh/MeshPreparer.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
@@ -3900,6 +3901,8 @@ namespace castor3d
 				}
 			}
 
+			MeshPreparer::prepare( *parsingContext.submesh
+				, Parameters{} );
 			parsingContext.vertexPos.clear();
 			parsingContext.vertexNml.clear();
 			parsingContext.vertexTan.clear();

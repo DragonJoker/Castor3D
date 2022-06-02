@@ -52,6 +52,14 @@ namespace castor3d
 		 *\copydoc		castor3d::SubmeshComponent::clone
 		 */
 		C3D_API SubmeshComponentSPtr clone( Submesh & submesh )const override;
+		/**
+		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
+		 */
+		C3D_API ProgramFlags getProgramFlags( Material const & material )const override
+		{
+			return ProgramFlag::eHasMesh;
+		}
+
 		C3D_API void createDescriptorSet( Geometry const & geometry );
 		C3D_API ashes::DescriptorSet const & getDescriptorSet( Geometry const & geometry )const;
 

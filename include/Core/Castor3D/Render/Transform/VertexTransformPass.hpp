@@ -67,7 +67,7 @@ namespace castor3d
 		GpuBufferOffsetT< castor::Point4f > const & m_morphTargets;
 		GpuBufferOffsetT< MorphingWeightsConfiguration > const & m_morphingWeights;
 		GpuBufferOffsetT< SkinningTransformsConfiguration > const & m_skinTransforms;
-		castor::Point4ui m_objectIds;
+		ObjectIdsConfiguration m_objectIds;
 		ashes::DescriptorSetPtr m_descriptorSet;
 	};
 }
