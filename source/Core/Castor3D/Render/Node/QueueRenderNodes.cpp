@@ -78,6 +78,7 @@ namespace castor3d
 		template< typename NodeT >
 		static void doAddRenderNode( RenderPipeline & pipeline
 			, NodeT const & node
+			, uint32_t count
 			, NodePtrByPipelineMapT< NodeT > & nodes )
 		{
 			auto & flags = pipeline.getFlags();
@@ -88,21 +89,22 @@ namespace castor3d
 
 			auto & bufferChunk = node.getFinalBufferOffsets().getBufferChunk( SubmeshFlag::ePositions );
 			auto buffer = &bufferChunk.buffer->getBuffer().getBuffer();
-			auto & pipelineMap = nodes.emplace( baseHash, std::make_pair( &pipeline, NodePtrByBufferMapT< NodeT >{} ) ).first->second.second;
-			auto & bufferMap = pipelineMap.emplace( buffer, NodePtrArrayT< NodeT >{} ).first->second;
+			NodePtrByBufferMapT< NodeT > & pipelineMap = nodes.emplace( baseHash, std::make_pair( &pipeline, NodePtrByBufferMapT< NodeT >{} ) ).first->second.second;
+			NodePtrArrayT< NodeT > & bufferMap = pipelineMap.emplace( buffer, NodePtrArrayT< NodeT >{} ).first->second;
 			auto it = std::find_if( bufferMap.begin()
 				, bufferMap.end()
-				, [&node]( NodeT const * lookup )
+				, [&node]( CountedNodeT< NodeT > const & lookup )
 				{
-					return compareOffsets( *lookup, node );
+					return compareOffsets( *lookup.node, node );
 				} );
 			CU_Require( buffer );
-			bufferMap.emplace( it, &node );
+			bufferMap.emplace( it, CountedNodeT< NodeT >{ &node, count } );
 		}
 
 		template< typename NodeT >
 		static void doAddRenderNode( RenderPipeline & pipeline
 			, NodeT const & node
+			, uint32_t count
 			, ObjectNodesPtrByPipelineMapT< NodeT > & nodes )
 		{
 			auto & flags = pipeline.getFlags();
@@ -113,18 +115,18 @@ namespace castor3d
 
 			auto & bufferChunk = node.getFinalBufferOffsets().getBufferChunk( SubmeshFlag::ePositions );
 			auto buffer = &bufferChunk.buffer->getBuffer().getBuffer();
-			auto & pipelineMap = nodes.emplace( baseHash, std::make_pair( &pipeline, ObjectNodesPtrByBufferMapT< NodeT >{} ) ).first->second.second;
-			auto & bufferMap = pipelineMap.emplace( buffer, ObjectNodesPtrByPassT< NodeT >{} ).first->second;
-			auto & passMap = bufferMap.emplace( node.pass, ObjectNodesPtrMapT< NodeT >{} ).first->second;
-			auto & objectMap = passMap.emplace( &node.data, NodePtrArrayT< NodeT >{} ).first->second;
+			ObjectNodesPtrByBufferMapT< NodeT > & pipelineMap = nodes.emplace( baseHash, std::make_pair( &pipeline, ObjectNodesPtrByBufferMapT< NodeT >{} ) ).first->second.second;
+			ObjectNodesPtrByPassT< NodeT > & bufferMap = pipelineMap.emplace( buffer, ObjectNodesPtrByPassT< NodeT >{} ).first->second;
+			ObjectNodesPtrMapT< NodeT > & passMap = bufferMap.emplace( node.pass, ObjectNodesPtrMapT< NodeT >{} ).first->second;
+			NodePtrArrayT< NodeT > & objectMap = passMap.emplace( &node.data, NodePtrArrayT< NodeT >{} ).first->second;
 			auto it = std::find_if( objectMap.begin()
 				, objectMap.end()
-				, [&node]( NodeT const * lookup )
+				, [&node]( CountedNodeT< NodeT > const & lookup )
 				{
-					return compareOffsets( *lookup, node );
+					return compareOffsets( *lookup.node, node );
 				} );
 			CU_Require( buffer );
-			objectMap.emplace( it, &node );
+			objectMap.emplace( it, CountedNodeT< NodeT >{ &node, count } );
 		}
 
 		//*****************************************************************************************
@@ -321,11 +323,11 @@ namespace castor3d
 						, culler
 						, pipeline
 						, *buffers.first
-						, *buffers.second.front()
+						, *buffers.second.front().node
 						, viewport
 						, scissor );
 					doAddGeometryNodeCommands( pipeline
-						, *buffers.second.front()
+						, *buffers.second.front().node
 						, commandBuffer
 						, nodesPass
 						, indirectIndexedCommands
@@ -374,40 +376,44 @@ namespace castor3d
 			, uint32_t & idxIndex
 			, uint32_t & nidxIndex )
 		{
-			for ( auto & pipelines : inputNodes )
+			for ( auto & pipelineIt : inputNodes )
 			{
-				RenderPipeline const & pipeline = *pipelines.second.first;
+				RenderPipeline const & pipeline = *pipelineIt.second.first;
 
-				for ( auto & buffers : pipelines.second.second )
+				for ( auto & bufferIt : pipelineIt.second.second )
 				{
 					doBindPipeline( commandBuffer
 						, nodesPass
 						, culler
 						, pipeline
-						, *buffers.first
-						, *buffers.second.front()
+						, *bufferIt.first
+						, *bufferIt.second.front().node
 						, viewport
 						, scissor );
 
-					if ( pipeline.hasMeshletDescriptorSetLayout() )
+					if ( nodesPass.isMeshShading()
+						&& pipeline.hasMeshletDescriptorSetLayout() )
 					{
-						doAddGeometryNodeCommands( pipeline
-							, *buffers.second.front()
-							, commandBuffer
-							, nodesPass
-							, indirectMeshCommands
-							, uint32_t( buffers.second.size() )
-							, mshIndex );
+						for ( auto & nodeIt : bufferIt.second )
+						{
+							doAddGeometryNodeCommands( pipeline
+								, *nodeIt.node
+								, commandBuffer
+								, nodesPass
+								, indirectMeshCommands
+								, nodeIt.count
+								, mshIndex );
+						}
 					}
 					else
 					{
 						doAddGeometryNodeCommands( pipeline
-							, *buffers.second.front()
+							, *bufferIt.second.front().node
 							, commandBuffer
 							, nodesPass
 							, indirectIndexedCommands
 							, indirectCommands
-							, uint32_t( buffers.second.size() )
+							, uint32_t( bufferIt.second.size() )
 							, idxIndex
 							, nidxIndex );
 					}
@@ -444,24 +450,28 @@ namespace castor3d
 								, culler
 								, pipeline
 								, *bufferIt.first
-								, *submeshIt.second.front()
+								, *submeshIt.second.front().node
 								, viewport
 								, scissor );
 
-							if ( pipeline.hasMeshletDescriptorSetLayout() )
+							if ( nodesPass.isMeshShading()
+								&& pipeline.hasMeshletDescriptorSetLayout() )
 							{
-								doAddGeometryNodeCommands( pipeline
-									, *submeshIt.second.front()
-									, commandBuffer
-									, nodesPass
-									, indirectMeshCommands
-									, 1u
-									, mshIndex );
+								for ( auto & nodeIt : submeshIt.second )
+								{
+									doAddGeometryNodeCommands( pipeline
+										, *nodeIt.node
+										, commandBuffer
+										, nodesPass
+										, indirectMeshCommands
+										, nodeIt.count
+										, mshIndex );
+								}
 							}
 							else
 							{
 								doAddGeometryNodeCommands( pipeline
-									, *submeshIt.second.front()
+									, *submeshIt.second.front().node
 									, commandBuffer
 									, nodesPass
 									, indirectIndexedCommands
@@ -583,6 +593,7 @@ namespace castor3d
 								, culledNode->getMeshletDescriptorLayout() );
 						queuerndnd::doAddRenderNode( pipeline
 							, *culledNode
+							, culled.count
 							, submeshNodes );
 						renderPass.initialiseAdditionalDescriptor( pipeline
 							, shadowMaps
@@ -640,6 +651,7 @@ namespace castor3d
 										, culledNode->getMeshletDescriptorLayout() );
 								queuerndnd::doAddRenderNode( pipeline
 									, *culledNode
+									, culled.count
 									, instancedSubmeshNodes );
 								renderPass.initialiseAdditionalDescriptor( pipeline
 									, shadowMaps
@@ -686,6 +698,7 @@ namespace castor3d
 							, nullptr );
 						queuerndnd::doAddRenderNode( pipeline
 							, *culledNode
+							, culled.count
 							, billboardNodes );
 						renderPass.initialiseAdditionalDescriptor( pipeline
 							, shadowMaps

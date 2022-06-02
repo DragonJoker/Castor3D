@@ -97,7 +97,7 @@
 	<Type Name="castor3d::Geometry">
 		<DisplayString>{m_name}({m_meshName})</DisplayString>
 		<Expand>
-			<Item Name="ids">m_id</Item>
+			<Item Name="ids">m_ids</Item>
 			<Item Name="mesh">m_mesh</Item>
 			<Item Name="meshName">m_meshName</Item>
 			<Item Name="listCreated">m_listCreated</Item>
@@ -388,7 +388,7 @@
 	</Type>
 
 	<Type Name="castor3d::SkinComponent">
-		<DisplayString>{m_id} {m_type} data={m_data}</DisplayString>
+		<DisplayString>{m_id} {m_type} data={m_bones}</DisplayString>
 		<Expand>
 			<Item Name="id">m_id</Item>
 			<Item Name="initialised">m_initialised</Item>
