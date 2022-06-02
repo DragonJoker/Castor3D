@@ -922,7 +922,7 @@ namespace castor3d
 
 #undef DeclareSsbo
 
-		writer.implementMainT< VoidT, shader::FragmentSurfaceT, VoidT >( 1u
+		writer.implementMainT< VoidT, shader::FragmentSurfaceT, VoidT >( 32u
 			, sdw::TaskPayloadIn{ writer }
 			, sdw::MeshVertexListOutT< shader::FragmentSurfaceT >{ writer
 				, MaxMeshletVertexCount
@@ -939,6 +939,8 @@ namespace castor3d
 				, sdw::MeshVertexListOutT< shader::FragmentSurfaceT > vtxOut
 				, sdw::TrianglesMeshPrimitiveListOutT< VoidT > primOut )
 			{
+				auto ti = writer.declLocale( "ti"
+					, in.localInvocationID );
 				auto meshletIndex = writer.declLocale( "meshletIndex"
 					, in.workGroupID );
 				auto meshlet = writer.declLocale( "meshlet"
@@ -950,7 +952,7 @@ namespace castor3d
 
 				primOut.setMeshOutputCounts( vertexCount, indexCount );
 
-				FOR( writer, sdw::UInt, i, 0u, i < indexCount, ++i )
+				FOR( writer, sdw::UInt, i, ti, i < indexCount, i += 32u )
 				{
 					primOut[i].primitiveIndex = uvec3( meshlet.getPrimitiveIndex( i * 3u + 0u )
 						, meshlet.getPrimitiveIndex( i * 3u + 1u )
@@ -958,7 +960,7 @@ namespace castor3d
 				}
 				ROF;
 
-				FOR( writer, sdw::UInt, i, 0u, i < vertexCount, ++i )
+				FOR( writer, sdw::UInt, i, ti, i < vertexCount, i += 32u )
 				{
 					auto vertexIndex = writer.declLocale( "vertexIndex", meshlet.getVertexIndex( i ) );
 
