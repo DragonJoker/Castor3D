@@ -10,6 +10,7 @@
 #include "Castor3D/Miscellaneous/StagingData.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -628,6 +629,49 @@ namespace castor3d
 		m_disableSceneUpdate = false;
 	}
 
+	void Submesh::setBaseData( SubmeshData submeshData, castor::Point3fArray data )
+	{
+		switch ( submeshData )
+		{
+		case castor3d::SubmeshData::ePositions:
+			getPositions() = std::move( data );
+			break;
+		case castor3d::SubmeshData::eNormals:
+			getNormals() = std::move( data );
+			break;
+		case castor3d::SubmeshData::eTangents:
+			getTangents() = std::move( data );
+			break;
+		case castor3d::SubmeshData::eTexcoords0:
+			getTexcoords0() = std::move( data );
+			break;
+		case castor3d::SubmeshData::eTexcoords1:
+			getTexcoords1() = std::move( data );
+			break;
+		case castor3d::SubmeshData::eTexcoords2:
+			getTexcoords2() = std::move( data );
+			break;
+		case castor3d::SubmeshData::eTexcoords3:
+			getTexcoords3() = std::move( data );
+			break;
+		case castor3d::SubmeshData::eColours:
+			getColours() = std::move( data );
+			break;
+		case castor3d::SubmeshData::eIndex:
+			CU_Failure( "setBaseData: Can't set index data this way" );
+			break;
+		case castor3d::SubmeshData::eSkin:
+			CU_Failure( "setBaseData: Can't set skin data this way" );
+			break;
+		case castor3d::SubmeshData::eVelocity:
+			CU_Failure( "setBaseData: Can't set velocity data this way" );
+			break;
+		default:
+			CU_Failure( "setBaseData: Unsupported SubmeshData type" );
+			break;
+		}
+	}
+
 	InterleavedVertex Submesh::getInterleavedPoint( uint32_t index )const
 	{
 		CU_Require( index < getPointsCount() );
@@ -884,49 +928,6 @@ namespace castor3d
 		return dummy;
 	}
 
-	void Submesh::setBaseData( SubmeshData submeshData, castor::Point3fArray data )
-	{
-		switch ( submeshData )
-		{
-		case castor3d::SubmeshData::ePositions:
-			getPositions() = std::move( data );
-			break;
-		case castor3d::SubmeshData::eNormals:
-			getNormals() = std::move( data );
-			break;
-		case castor3d::SubmeshData::eTangents:
-			getTangents() = std::move( data );
-			break;
-		case castor3d::SubmeshData::eTexcoords0:
-			getTexcoords0() = std::move( data );
-			break;
-		case castor3d::SubmeshData::eTexcoords1:
-			getTexcoords1() = std::move( data );
-			break;
-		case castor3d::SubmeshData::eTexcoords2:
-			getTexcoords2() = std::move( data );
-			break;
-		case castor3d::SubmeshData::eTexcoords3:
-			getTexcoords3() = std::move( data );
-			break;
-		case castor3d::SubmeshData::eColours:
-			getColours() = std::move( data );
-			break;
-		case castor3d::SubmeshData::eIndex:
-			CU_Failure( "setBaseData: Can't set index data this way" );
-			break;
-		case castor3d::SubmeshData::eSkin:
-			CU_Failure( "setBaseData: Can't set skin data this way" );
-			break;
-		case castor3d::SubmeshData::eVelocity:
-			CU_Failure( "setBaseData: Can't set velocity data this way" );
-			break;
-		default:
-			CU_Failure( "setBaseData: Unsupported SubmeshData type" );
-			break;
-		}
-	}
-
 	GpuBufferOffsetT< castor::Point4f > const & Submesh::getMorphTargets()const
 	{
 		if ( auto component = getComponent< MorphComponent >() )
@@ -943,6 +944,35 @@ namespace castor3d
 		if ( auto component = getComponent< MorphComponent >() )
 		{
 			return component->getMorphTargetsCount();
+		}
+
+		return 0u;
+	}
+
+	std::vector< Meshlet > const & Submesh::getMeshlets()const
+	{
+		if ( auto component = getComponent< MeshletComponent >() )
+		{
+			return component->getMeshletsData();
+		}
+
+		static std::vector< Meshlet > const dummy{};
+		return dummy;
+	}
+
+	std::vector< Meshlet > & Submesh::getMeshlets()
+	{
+		m_dirty = true;
+		auto component = getComponent< MeshletComponent >();
+		CU_Require( component );
+		return component->getMeshletsData();
+	}
+
+	uint32_t Submesh::getMeshletsCount()const
+	{
+		if ( auto component = getComponent< MeshletComponent >() )
+		{
+			return component->getMeshletsCount();
 		}
 
 		return 0u;

@@ -148,6 +148,17 @@ namespace castor3d
 			m_ruConfig.implicitAction( view, action );
 			return *this;
 		}
+		/**
+		 *\~english
+		 *\param[in]	value	The use of mesh shaders status.
+		 *\~french
+		 *\param[in]	value	Le statut d'utilisation des mesh shaders.
+		 */
+		RenderNodesPassDesc & meshShading( bool value )
+		{
+			m_meshShading = value;
+			return *this;
+		}
 
 		VkExtent3D m_size;
 		MatrixUbo & m_matrixUbo;
@@ -156,6 +167,7 @@ namespace castor3d
 		bool m_oit;
 		bool m_forceTwoSided;
 		bool m_safeBand{};
+		bool m_meshShading{};
 		SceneNode const * m_ignored{};
 		uint32_t m_index{ 0u };
 		crg::ru::Config m_ruConfig{ 1u, true };
@@ -215,6 +227,24 @@ namespace castor3d
 		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API virtual void update( CpuUpdater & updater );
+		/**
+		 *\~english
+		 *\brief		Retrieves the task shader source matching the given flags.
+		 *\param[in]	flags	The pipeline flags.
+		 *\~french
+		 *\brief		Récupère le source du task shader qui correspond aux indicateurs donnés.
+		 *\param[in]	flags	Les indicateurs de pipeline.
+		 */
+		C3D_API ShaderPtr getTaskShaderSource( PipelineFlags const & flags )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the mesh shader source matching the given flags.
+		 *\param[in]	flags	The pipeline flags.
+		 *\~french
+		 *\brief		Récupère le source du mesh shader qui correspond aux indicateurs donnés.
+		 *\param[in]	flags	Les indicateurs de pipeline.
+		 */
+		C3D_API ShaderPtr getMeshShaderSource( PipelineFlags const & flags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags.
@@ -384,26 +414,30 @@ namespace castor3d
 		 *\param[in]		vertexLayouts		Les layouts des tampons de sommets.
 		 */
 		C3D_API RenderPipeline & prepareBackPipeline( PipelineFlags pipelineFlags
-			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts );
+			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+			, ashes::DescriptorSetLayout const * meshletDescriptorLayout );
 		/**
 		 *\~english
 		 *\brief			Prepares the pipeline matching the given flags, for front face culling nodes.
-		 *\param[in]		pipelineFlags		The pipeline flags.
-		 *\param[in]		vertexLayouts		The vertex buffers layouts.
+		 *\param[in]		pipelineFlags			The pipeline flags.
+		 *\param[in]		vertexLayouts			The vertex buffers layouts.
+		 *\param[in]		meshletDescriptorLayout	The optional meshlets descriptor layout.
 		 *\~french
 		 *\brief			Prépare le pipeline qui correspond aux indicateurs donnés, pour les noeuds en front face culling.
-		 *\param[in]		pipelineFlags		Les indicateurs de pipeline.
-		 *\param[in]		vertexLayouts		Les layouts des tampons de sommets.
+		 *\param[in]		pipelineFlags			Les indicateurs de pipeline.
+		 *\param[in]		vertexLayouts			Les layouts des tampons de sommets.
+		 *\param[in]		meshletDescriptorLayout	Les layouts optionnels de descripteurs de meshlets.
 		 */
 		C3D_API RenderPipeline & prepareFrontPipeline( PipelineFlags pipelineFlags
-			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts );
+			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+			, ashes::DescriptorSetLayout const * meshletDescriptorLayout );
 		/**
 		 *\~english
-		 *\brief		Initialises the additional descriptor set of a billboard node.
+		 *\brief		Initialises the additional descriptor set.
 		 *\param[in]	pipeline	The render pipeline.
 		 *\param[in]	shadowMaps	The shadow maps.
 		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs additionnels pour un noeud de billboard.
+		 *\brief		Initialise l'ensemble de descripteurs additionnels.
 		 *\param[in]	pipeline	Le render pipeline.
 		 *\param[in]	shadowMaps	Les shadow maps.
 		 */
@@ -513,6 +547,11 @@ namespace castor3d
 			return m_isDirty;
 		}
 
+		bool isMeshShading()const
+		{
+			return m_meshShading;
+		}
+
 		bool forceTwoSided()const
 		{
 			return m_forceTwoSided;
@@ -587,6 +626,7 @@ namespace castor3d
 		std::vector< RenderPipelineUPtr > const & doGetFrontPipelines()const;
 		std::vector< RenderPipelineUPtr > const & doGetBackPipelines()const;
 		RenderPipeline & doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+			, ashes::DescriptorSetLayout const * meshletDescriptorLayout
 			, PipelineFlags flags
 			, VkCullModeFlags cullMode );
 		void doUpdateFlags( PipelineFlags & flags )const;
@@ -610,11 +650,11 @@ namespace castor3d
 		C3D_API virtual ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const = 0;
 		/**
 		 *\~english
-		 *\brief			Initialises the additional descriptor set of a billboard node.
+		 *\brief			Initialises the additional descriptor set
 		 *\param[in,out]	descriptorWrites	Receives the descriptor writes.
 		 *\param[in]		shadowMaps			The shadow maps.
 		 *\~french
-		 *\brief			Initialise l'ensemble de descripteurs additionnels pour un noeud de billboard.
+		 *\brief			Initialise l'ensemble de descripteurs additionnels.
 		 *\param[in,out]	descriptorWrites	Reçoit les descriptor writes.
 		 *\param[in]		shadowMaps			Les shadow maps.
 		 */
@@ -629,6 +669,24 @@ namespace castor3d
 		 *\param[in,out]	flags	Les indicateurs de pipeline.
 		 */
 		C3D_API virtual void doAdjustFlags( PipelineFlags & flags )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the task shader source matching the given flags.
+		 *\param[in]	flags	The pipeline flags.
+		 *\~french
+		 *\brief		Récupère le source du task shader qui correspond aux indicateurs donnés.
+		 *\param[in]	flags	Les indicateurs de pipeline.
+		 */
+		C3D_API virtual ShaderPtr doGetTaskShaderSource( PipelineFlags const & flags )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the mesh shader source matching the given flags.
+		 *\param[in]	flags	The pipeline flags.
+		 *\~french
+		 *\brief		Récupère le source du mesh shader qui correspond aux indicateurs donnés.
+		 *\param[in]	flags	Les indicateurs de pipeline.
+		 */
+		C3D_API virtual ShaderPtr doGetMeshShaderSource( PipelineFlags const & flags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags.
@@ -699,6 +757,7 @@ namespace castor3d
 		bool m_forceTwoSided{ false };
 		bool m_safeBand{ false };
 		bool m_isDirty{ true };
+		bool m_meshShading;
 		SceneUbo m_sceneUbo;
 		uint32_t m_index{ 0u };
 		struct PassDescriptors

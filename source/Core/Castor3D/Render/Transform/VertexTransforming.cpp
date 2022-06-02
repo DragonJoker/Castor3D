@@ -14,6 +14,7 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
+#include "Castor3D/Shader/Ubos/ObjectIdsUbo.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>

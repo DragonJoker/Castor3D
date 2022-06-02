@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "AnimatedObject.hpp"
 
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 namespace castor3d
 {

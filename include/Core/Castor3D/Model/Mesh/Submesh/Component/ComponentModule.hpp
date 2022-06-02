@@ -99,6 +99,13 @@ namespace castor3d
 	class LinesMapping;
 	/**
 	\~english
+	\brief		The submesh component used for meshlets.
+	\~french
+	\brief		Le composant de sous-maillage pour les meshlets.
+	*/
+	class MeshletComponent;
+	/**
+	\~english
 	\brief		The submesh component used for morphing.
 	\~french
 	\brief		Le composant de sous-maillage pour le morphing.

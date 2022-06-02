@@ -1037,6 +1037,7 @@ namespace castor3d
 					, getSsaoConfig()
 					, RenderNodesPassDesc{ m_depth->getExtent(), m_matrixUbo, m_renderTarget.getCuller() }
 						.safeBand( true )
+						.meshShading( true )
 						.implicitAction( depthIt->view(), crg::RecordContext::clearAttachment( *depthIt ) )
 						.implicitAction( depthObjIt->view(), crg::RecordContext::clearAttachment( *depthObjIt ) )
 						.implicitAction( normalIt->view(), crg::RecordContext::clearAttachment( *normalIt ) )
@@ -1140,6 +1141,7 @@ namespace castor3d
 					, name
 					, RenderNodesPassDesc{ m_colour.getExtent(), m_matrixUbo, m_renderTarget.getCuller() }
 						.safeBand( true )
+						.meshShading( true )
 #if C3D_UseDeferredRendering
 						.implicitAction( data2It->view(), crg::RecordContext::clearAttachment( *data2It ) )
 						.implicitAction( data3It->view(), crg::RecordContext::clearAttachment( *data3It ) )

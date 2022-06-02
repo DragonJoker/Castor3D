@@ -31,7 +31,7 @@
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
-#include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
+#include "Castor3D/Shader/Ubos/ObjectIdsUbo.hpp"
 #include "Castor3D/Shader/Ubos/ShadowMapUbo.hpp"
 
 #include <CastorUtils/Graphics/Image.hpp>
@@ -215,7 +215,7 @@ namespace castor3d
 			, [&]( VertexInT< shader::VertexSurfaceT > in
 			, VertexOutT< shader::FragmentSurfaceT > out )
 			{
-				auto ids = shader::getIds( c3d_objectIdsData
+				auto nodeId = shader::getNodeId( c3d_objectIdsData
 					, in
 					, pipelineID
 					, in.drawID
@@ -232,8 +232,8 @@ namespace castor3d
 				out.texture3 = in.texture3;
 				out.colour = in.colour;
 				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[ids.nodeId - 1u] );
-				out.nodeId = writer.cast< sdw::Int >( ids.nodeId );
+					, c3d_modelsData[nodeId - 1u] );
+				out.nodeId = writer.cast< sdw::Int >( nodeId );
 				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 
 				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"

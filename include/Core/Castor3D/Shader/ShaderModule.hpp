@@ -107,33 +107,39 @@ namespace castor3d
 		//!\~english	Writes to Reflective shadow map.
 		//\~french		Ecrit dans la Reflective shadow map.
 		eRsmShadowMap = 0x00200,
+		//!\~english	Render pass uses a mesh shader.
+		//\~french		La passe de rendu utilise un mesh shader.
+		eHasMesh = 0x00400,
 		//!\~english	All flags used in base pipeline flags hashing.
 		//\~french		Tous les indicateurs utilisés dans le hash des indicateurs de pipeline.
-		eAllBase = 0x003FF,
+		eAllBase = 0x007FF,
 		//!\~english	Shader used to render a shadow map for directional light.
 		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière directionnalle.
-		eShadowMapDirectional = 0x00400,
+		eShadowMapDirectional = 0x00800,
 		//!\~english	Shader used to render a shadow map for spot light.
 		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière projecteur.
-		eShadowMapSpot = 0x00800,
+		eShadowMapSpot = 0x01000,
 		//!\~english	Shader used to render a shadow map for point light.
 		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière omnidirectionnelle.
-		eShadowMapPoint = 0x01000,
+		eShadowMapPoint = 0x02000,
 		//!\~english	Shader used to render an environment map.
 		//\~french		Shader utilisé pour dessiner une texture d'environnement.
-		eEnvironmentMapping = 0x02000,
+		eEnvironmentMapping = 0x04000,
 		//!\~english	Shader for the depth pre-pass.
 		//\~french		Shader pour la pré-passe de profondeur.
-		eDepthPass = 0x04000,
-		//!\~english	Vertex shader inverts normals (for front culling).
-		//\~french		Le vertex shader inverse les normales (pour le front culling).
-		eHasGeometry = 0x08000,
-		//!\~english	Vertex shader inverts normals (for front culling).
-		//\~french		Le vertex shader inverse les normales (pour le front culling).
-		eHasTessellation = 0x10000,
+		eDepthPass = 0x08000,
+		//!\~english	Render pass uses a geometry shader.
+		//\~french		La passe de rendu utilise un geometry shader.
+		eHasGeometry = 0x10000,
+		//!\~english	Render pass uses tessellation shaders.
+		//\~french		La passe de rendu utilise des tessellation shaders.
+		eHasTessellation = 0x20000,
+		//!\~english	Render pass uses a task shader.
+		//\~french		La passe de rendu utilise un task shader.
+		eHasTask = 0x40000,
 		//!\~english	All other flags.
 		//\~french		Tous les autres indicateurs.
-		eAllOptional = 0x1FC00,
+		eAllOptional = 0x7F800,
 		//!\~english	All flags.
 		//\~french		Tous les indicateurs.
 		eAll = eAllBase | eAllOptional,
