@@ -99,6 +99,20 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Meshlet draw parameters.
+	*\~french
+	*\brief
+	*	Paramètres de dessin de meshlets.
+	*/
+	struct DrawParamsConfiguration
+	{
+		uint32_t nodeId;
+		uint32_t instanceCount;
+		uint32_t instanceOffset;
+	};
+	/**
+	*\~english
+	*\brief
 	*	Geometry pass UBO.
 	*\~french
 	*\brief
@@ -231,6 +245,19 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Meshlet draw informations.
+	*\~french
+	*\brief
+	*	Informations de dessin de meshlets.
+	*/
+	struct MeshInfoConfiguration
+	{
+		uint32_t meshletCount;
+		uint32_t meshletOffset;
+	};
+	/**
+	*\~english
+	*\brief
 	*	Model data UBO.
 	*\~french
 	*\brief
@@ -278,6 +305,21 @@ namespace castor3d
 		std::array< uint32_t, MaxMorphTargets * 4u > morphTargetsIndices;
 		// x4 because the shader stores a vec4[MaxMorphTargets]
 		std::array< float, MaxMorphTargets * 4u > morphTargetsWeights;
+	};
+	/**
+	*\~english
+	*\brief
+	*	Objects ID data.
+	*\~french
+	*\brief
+	*	Données des ID d'objets.
+	*/
+	struct ObjectIdsConfiguration
+	{
+		uint32_t nodeId;
+		uint32_t morphingId;
+		uint32_t skinningId;
+		uint32_t dummy;
 	};
 	/**
 	*\~english

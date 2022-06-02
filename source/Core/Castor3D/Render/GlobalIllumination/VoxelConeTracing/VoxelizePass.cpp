@@ -32,6 +32,7 @@
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
+#include "Castor3D/Shader/Ubos/ObjectIdsUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
@@ -353,7 +354,7 @@ namespace castor3d
 			, [&]( VertexInT< shader::VertexSurfaceT > in
 				, VertexOutT< vxlpass::SurfaceT > out )
 			{
-				auto ids = shader::getIds( c3d_objectIdsData
+				auto nodeId = shader::getNodeId( c3d_objectIdsData
 					, in
 					, pipelineID
 					, in.drawID
@@ -363,8 +364,8 @@ namespace castor3d
 				auto curNormal = writer.declLocale( "curNormal"
 					, in.normal );
 				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[ids.nodeId - 1u] );
-				out.nodeId = writer.cast< sdw::Int >( ids.nodeId );
+					, c3d_modelsData[nodeId - 1u] );
+				out.nodeId = writer.cast< sdw::Int >( nodeId );
 
 				if ( hasTextures )
 				{

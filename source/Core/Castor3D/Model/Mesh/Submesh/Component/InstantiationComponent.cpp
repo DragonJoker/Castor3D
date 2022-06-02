@@ -62,7 +62,7 @@ namespace castor3d
 			ashes::VkVertexInputAttributeDescriptionArray attributes{ { currentLocation++
 				, currentBinding
 				, VK_FORMAT_R32G32B32A32_UINT
-				, offsetof( InstantiationData, m_objectIDs ) } };
+				, offsetof( InstantiationData, objectIDs ) } };
 			++currentBinding;
 			return ashes::PipelineVertexInputStateCreateInfo{ 0u, bindings, attributes };
 		}

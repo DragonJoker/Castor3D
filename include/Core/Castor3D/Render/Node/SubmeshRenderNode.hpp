@@ -6,13 +6,16 @@ See LICENSE file in root folder
 
 #include "RenderNodeModule.hpp"
 
-#include "Castor3D/Buffer/BufferModule.hpp"
 #include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Model/ModelModule.hpp"
+#include "Castor3D/Model/Mesh/MeshModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
+
+#include "Castor3D/Buffer/GpuBufferOffset.hpp"
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 
@@ -45,6 +48,9 @@ namespace castor3d
 			, SubmeshFlags const & submeshFlags
 			, ProgramFlags const & programFlags
 			, TextureFlagsArray const & texturesMask )const;
+		C3D_API void createMeshletDescriptorSet()const;
+		C3D_API ashes::DescriptorSetLayout const * getMeshletDescriptorLayout()const;
+		C3D_API ashes::DescriptorSet const & getMeshletDescriptorSet()const;
 
 		Pass * pass;
 		DataType & data;

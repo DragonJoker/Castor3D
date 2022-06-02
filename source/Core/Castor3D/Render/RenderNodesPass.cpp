@@ -13,6 +13,7 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderQueue.hpp"
@@ -38,8 +39,10 @@
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
+#include "Castor3D/Shader/Ubos/ObjectIdsUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
-#include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
+
+#include <CastorUtils/Miscellaneous/Hash.hpp>
 
 #include <ashespp/Buffer/Buffer.hpp>
 #include <ashespp/Buffer/VertexBuffer.hpp>
@@ -50,6 +53,69 @@
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
+	namespace shader
+	{
+		struct Meshlet
+			: public sdw::StructInstance
+		{
+			Meshlet( sdw::ShaderWriter & writer
+				, sdw::expr::ExprPtr expr
+				, bool enabled = true )
+				: sdw::StructInstance{ writer, std::move( expr ), enabled }
+				, m_vertices{ getMemberArray< sdw::UVec4 >( "vertices" ) }
+				, m_primitives{ getMemberArray< sdw::UVec4 >( "primitives" ) }
+				, m_counts{ getMember< sdw::UVec4 >( "counts" ) }
+				, vertexCount{ m_counts.x() }
+				, primitiveCount{ m_counts.y() }
+			{
+			}
+
+			SDW_DeclStructInstance( , Meshlet );
+
+			static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache )
+			{
+				auto result = cache.getStruct( sdw::type::MemoryLayout::eStd430
+					, "C3D_Meshlet" );
+
+				if ( result->empty() )
+				{
+					result->declMember( "vertices"
+						, sdw::type::Kind::eVec4U
+						, 64u / 4u );
+					result->declMember( "primitives"
+						, sdw::type::Kind::eVec4U
+						, 124u * 3u / 4u );
+					result->declMember( "counts"
+						, sdw::type::Kind::eVec4U
+						, sdw::type::NotArray );
+				}
+
+				return result;
+			}
+
+			sdw::UInt getVertexIndex( sdw::UInt const & i )
+			{
+				return m_vertices[i / 4u][i % 4u];
+			}
+
+			sdw::UInt getPrimitiveIndex( sdw::UInt const & i )
+			{
+				return m_primitives[i / 4u][i % 4u];
+			}
+
+		private:
+			sdw::Array< sdw::UVec4 > m_vertices;
+			sdw::Array< sdw::UVec4 > m_primitives;
+			sdw::UVec4 m_counts;
+
+		public:
+			sdw::UInt vertexCount;
+			sdw::UInt primitiveCount;
+		};
+	}
+
 	//*********************************************************************************************
 
 	namespace rendndpass
@@ -67,13 +133,11 @@ namespace castor3d
 		}
 
 		static size_t makeHash( ProgramFlags const & programFlags
-			, SceneFlags const & sceneFlags
-			, VkDeviceSize morphTargetsOffset )
+			, SceneFlags const & sceneFlags )
 		{
 			auto nodeType = getRenderNodeType( programFlags );
 			return size_t( nodeType )
-				| ( size_t( sceneFlags ) << 8u )
-				| ( size_t( morphTargetsOffset ) << 24u );
+				| ( size_t( sceneFlags ) << 8u );
 		}
 	}
 
@@ -112,6 +176,7 @@ namespace castor3d
 		, m_oit{ desc.m_oit }
 		, m_forceTwoSided{ desc.m_forceTwoSided }
 		, m_safeBand{ desc.m_safeBand }
+		, m_meshShading{ desc.m_meshShading }
 		, m_sceneUbo{ m_device }
 		, m_index{ desc.m_index }
 	{
@@ -136,6 +201,16 @@ namespace castor3d
 		doUpdate( *updater.queues );
 		doUpdateUbos( updater );
 		m_isDirty = false;
+	}
+
+	ShaderPtr RenderNodesPass::getTaskShaderSource( PipelineFlags const & flags )const
+	{
+		return doGetTaskShaderSource( flags );
+	}
+
+	ShaderPtr RenderNodesPass::getMeshShaderSource( PipelineFlags const & flags )const
+	{
+		return doGetMeshShaderSource( flags );
 	}
 
 	ShaderPtr RenderNodesPass::getVertexShaderSource( PipelineFlags const & flags )const
@@ -186,6 +261,12 @@ namespace castor3d
 
 	ProgramFlags RenderNodesPass::adjustFlags( ProgramFlags flags )const
 	{
+		if ( m_meshShading
+			&& !checkFlag( flags, ProgramFlag::eBillboards ) )
+		{
+			addFlag( flags, ProgramFlag::eHasMesh );
+		}
+
 		return doAdjustProgramFlags( flags );
 	}
 
@@ -265,17 +346,21 @@ namespace castor3d
 	}
 
 	RenderPipeline & RenderNodesPass::prepareBackPipeline( PipelineFlags pipelineFlags
-		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts )
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+		, ashes::DescriptorSetLayout const * meshletDescriptorLayout )
 	{
 		return doPreparePipeline( vertexLayouts
+			, meshletDescriptorLayout
 			, std::move( pipelineFlags )
 			, VK_CULL_MODE_BACK_BIT );
 	}
 
 	RenderPipeline & RenderNodesPass::prepareFrontPipeline( PipelineFlags pipelineFlags
-		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts )
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+		, ashes::DescriptorSetLayout const * meshletDescriptorLayout )
 	{
 		return doPreparePipeline( vertexLayouts
+			, meshletDescriptorLayout
 			, std::move( pipelineFlags )
 			, VK_CULL_MODE_FRONT_BIT );
 	}
@@ -423,7 +508,7 @@ namespace castor3d
 		auto programFlags = pipeline.getFlags().programFlags;
 		programFlags = doAdjustProgramFlags( programFlags );
 		auto sceneFlags = doAdjustSceneFlags( pipeline.getFlags().sceneFlags );
-		auto descLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( programFlags, sceneFlags, morphTargets.getOffset() )
+		auto descLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( programFlags, sceneFlags )
 			, PassDescriptors{} ).first;
 		auto & descriptors = descLayoutIt->second;
 
@@ -571,17 +656,31 @@ namespace castor3d
 
 	ashes::VkDescriptorSetLayoutBindingArray RenderNodesPass::doCreateAdditionalBindings( PipelineFlags const & flags )const
 	{
-		VkShaderStageFlags stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_VERTEX_BIT;
+		VkShaderStageFlags stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 
-		if ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry ) )
+		if ( checkFlag( flags.programFlags, ProgramFlag::eHasMesh ) )
 		{
-			stageFlags |= VK_SHADER_STAGE_GEOMETRY_BIT;
+			stageFlags |= VK_SHADER_STAGE_MESH_BIT_NV;
+
+			if ( checkFlag( flags.programFlags, ProgramFlag::eHasTask ) )
+			{
+				stageFlags |= VK_SHADER_STAGE_TASK_BIT_NV;
+			}
 		}
-
-		if ( checkFlag( flags.programFlags, ProgramFlag::eHasTessellation ) )
+		else
 		{
-			stageFlags |= VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
-			stageFlags |= VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
+			stageFlags |= VK_SHADER_STAGE_VERTEX_BIT;
+
+			if ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry ) )
+			{
+				stageFlags |= VK_SHADER_STAGE_GEOMETRY_BIT;
+			}
+
+			if ( checkFlag( flags.programFlags, ProgramFlag::eHasTessellation ) )
+			{
+				stageFlags |= VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
+				stageFlags |= VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
+			}
 		}
 
 		ashes::VkDescriptorSetLayoutBindingArray addBindings;
@@ -635,24 +734,13 @@ namespace castor3d
 	}
 
 	RenderPipeline & RenderNodesPass::doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+		, ashes::DescriptorSetLayout const * meshletDescriptorLayout
 		, PipelineFlags flags
 		, VkCullModeFlags cullMode )
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = renderSystem.getRenderDevice();
 		RenderPipeline * result{};
-		auto descLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( flags.programFlags, flags.sceneFlags, flags.morphTargetsOffset )
-			, PassDescriptors{} ).first;
-		auto & descriptors = descLayoutIt->second;
-
-		if ( !descriptors.layout )
-		{
-			auto bindings = doCreateAdditionalBindings( flags );
-			descriptors.layout = device->createDescriptorSetLayout( getName() + "Add"
-				, std::move( bindings ) );
-			descriptors.pool = descriptors.layout->createPool( 1u );
-		}
-
 		auto program = doGetProgram( flags, cullMode );
 
 		if ( doAreValidPassFlags( flags.passFlags )
@@ -674,7 +762,6 @@ namespace castor3d
 					, ashes::PipelineMultisampleStateCreateInfo{}
 					, program
 					, flags );
-				pipeline->setVertexLayouts( vertexLayouts );
 				pipeline->setViewport( makeViewport( m_size ) );
 
 				if ( !checkFlag( flags.programFlags, ProgramFlag::ePicking ) )
@@ -682,8 +769,32 @@ namespace castor3d
 					pipeline->setScissor( makeScissor( m_size ) );
 				}
 
-				pipeline->setDescriptorSetLayout( *descriptors.layout );
-				pipeline->setPushConstantRanges( { { VK_SHADER_STAGE_VERTEX_BIT, 0u, 4u } } );
+				auto addDescLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( flags.programFlags, flags.sceneFlags )
+					, PassDescriptors{} ).first;
+				auto & addDescriptors = addDescLayoutIt->second;
+
+				if ( !addDescriptors.layout )
+				{
+					auto bindings = doCreateAdditionalBindings( flags );
+					addDescriptors.layout = device->createDescriptorSetLayout( getName() + "Add"
+						, std::move( bindings ) );
+					addDescriptors.pool = addDescriptors.layout->createPool( 1u );
+				}
+
+				pipeline->setAdditionalDescriptorSetLayout( *addDescriptors.layout );
+
+				if ( checkFlag( flags.programFlags, ProgramFlag::eHasMesh )
+					&& meshletDescriptorLayout )
+				{
+					pipeline->setMeshletDescriptorSetLayout( *meshletDescriptorLayout );
+					pipeline->setPushConstantRanges( { { VK_SHADER_STAGE_MESH_BIT_NV, 0u, 4u } } );
+				}
+				else
+				{
+					pipeline->setVertexLayouts( vertexLayouts );
+					pipeline->setPushConstantRanges( { { VK_SHADER_STAGE_VERTEX_BIT, 0u, 4u } } );
+				}
+
 				pipeline->initialise( device
 					, getRenderPass() );
 				pipelines.emplace_back( std::move( pipeline ) );
@@ -704,10 +815,10 @@ namespace castor3d
 			flags.alphaBlendMode = BlendMode::eNoBlend;
 		}
 
-		flags.submeshFlags = doAdjustSubmeshFlags( flags.submeshFlags );
-		flags.programFlags = doAdjustProgramFlags( flags.programFlags );
-		flags.passFlags = doAdjustPassFlags( flags.passFlags );
-		flags.sceneFlags = doAdjustSceneFlags( flags.sceneFlags );
+		flags.submeshFlags = adjustFlags( flags.submeshFlags );
+		flags.programFlags = adjustFlags( flags.programFlags );
+		flags.passFlags = adjustFlags( flags.passFlags );
+		flags.sceneFlags = adjustFlags( flags.sceneFlags );
 		auto textureFlags = filterTexturesFlags( flags.textures );
 
 		if ( textureFlags.empty()
@@ -724,6 +835,195 @@ namespace castor3d
 
 	void RenderNodesPass::doAdjustFlags( PipelineFlags & flags )const
 	{
+	}
+
+	ShaderPtr RenderNodesPass::doGetTaskShaderSource( PipelineFlags const & flags )const
+	{
+		return nullptr;
+	}
+
+	ShaderPtr RenderNodesPass::doGetMeshShaderSource( PipelineFlags const & flags )const
+	{
+		using namespace sdw;
+		MeshWriter writer;
+		auto textureFlags = filterTexturesFlags( flags.textures );
+		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
+
+		C3D_Matrix( writer
+			, GlobalBuffersIdx::eMatrix
+			, RenderPipeline::eBuffers );
+		C3D_Scene( writer
+			, GlobalBuffersIdx::eScene
+			, RenderPipeline::eBuffers );
+		C3D_ObjectIdsData( writer
+			, GlobalBuffersIdx::eObjectsNodeID
+			, RenderPipeline::eBuffers );
+		C3D_ModelsData( writer
+			, GlobalBuffersIdx::eModelsData
+			, RenderPipeline::eBuffers );
+
+		sdw::Pcb pcb{ writer, "DrawData" };
+		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		pcb.end();
+
+#define DeclareSsbo( Name, Type, Binding, Enable )\
+		sdw::Ssbo Name##Buffer{ writer\
+			, #Name + std::string{ "Buffer" }\
+			, uint32_t( Binding )\
+			, RenderPipeline::eMeshBuffers\
+			, ast::type::MemoryLayout::eStd430\
+			, Enable };\
+		auto Name = Name##Buffer.declMemberArray< Type >( #Name, Enable );\
+		Name##Buffer.end()
+
+		// Inputs
+		auto c3d_meshlets = writer.declArrayStorageBuffer< shader::Meshlet >( "c3d_meshlets"
+			, uint32_t( MeshBuffersIdx::eMeshlets )
+			, RenderPipeline::eMeshBuffers );
+		DeclareSsbo( c3d_position
+			, sdw::Vec4
+			, MeshBuffersIdx::ePosition
+			, checkFlag( flags.submeshFlags, SubmeshFlag::ePositions ) );
+		DeclareSsbo( c3d_normal
+			, sdw::Vec4
+			, MeshBuffersIdx::eNormal
+			, checkFlag( flags.submeshFlags, SubmeshFlag::eNormals ) );
+		DeclareSsbo( c3d_tangent
+			, sdw::Vec4
+			, MeshBuffersIdx::eTangent
+			, checkFlag( flags.submeshFlags, SubmeshFlag::eTangents ) );
+		DeclareSsbo( c3d_texcoord0
+			, sdw::Vec4
+			, MeshBuffersIdx::eTexcoord0
+			, checkFlag( flags.submeshFlags, SubmeshFlag::eTexcoords0 ) );
+		DeclareSsbo( c3d_texcoord1
+			, sdw::Vec4
+			, MeshBuffersIdx::eTexcoord1
+			, checkFlag( flags.submeshFlags, SubmeshFlag::eTexcoords1 ) );
+		DeclareSsbo( c3d_texcoord2
+			, sdw::Vec4
+			, MeshBuffersIdx::eTexcoord2
+			, checkFlag( flags.submeshFlags, SubmeshFlag::eTexcoords2 ) );
+		DeclareSsbo( c3d_texcoord3
+			, sdw::Vec4
+			, MeshBuffersIdx::eTexcoord3
+			, checkFlag( flags.submeshFlags, SubmeshFlag::eTexcoords3 ) );
+		DeclareSsbo( c3d_colour
+			, sdw::Vec4
+			, MeshBuffersIdx::eColour
+			, checkFlag( flags.submeshFlags, SubmeshFlag::eColours ) );
+		DeclareSsbo( c3d_velocity
+			, sdw::Vec4
+			, MeshBuffersIdx::eVelocity
+			, checkFlag( flags.submeshFlags, SubmeshFlag::eVelocity ) );
+
+#undef DeclareSsbo
+
+		writer.implementMainT< VoidT, shader::FragmentSurfaceT, VoidT >( 1u
+			, sdw::TaskPayloadIn{ writer }
+			, sdw::MeshVertexListOutT< shader::FragmentSurfaceT >{ writer
+				, MaxMeshletVertexCount
+				, flags.submeshFlags
+				, flags.programFlags
+				, getShaderFlags()
+				, textureFlags
+				, flags.passFlags
+				, hasTextures }
+			, sdw::TrianglesMeshPrimitiveListOutT< VoidT >{ writer
+				, MaxMeshletTriangleCount }
+			, [&]( sdw::MeshIn in
+				, sdw::TaskPayloadInT< VoidT > payload
+				, sdw::MeshVertexListOutT< shader::FragmentSurfaceT > vtxOut
+				, sdw::TrianglesMeshPrimitiveListOutT< VoidT > primOut )
+			{
+				auto meshletIndex = writer.declLocale( "meshletIndex"
+					, in.workGroupID );
+				auto meshlet = writer.declLocale( "meshlet"
+					, c3d_meshlets[meshletIndex] );
+				auto indexCount = writer.declLocale( "indexCount"
+					, meshlet.primitiveCount );
+				auto vertexCount = writer.declLocale( "vertexCount"
+					, meshlet.vertexCount );
+
+				primOut.setMeshOutputCounts( vertexCount, indexCount );
+
+				FOR( writer, sdw::UInt, i, 0u, i < indexCount, ++i )
+				{
+					primOut[i].primitiveIndex = uvec3( meshlet.getPrimitiveIndex( i * 3u + 0u )
+						, meshlet.getPrimitiveIndex( i * 3u + 1u )
+						, meshlet.getPrimitiveIndex( i * 3u + 2u ) );
+				}
+				ROF;
+
+				FOR( writer, sdw::UInt, i, 0u, i < vertexCount, ++i )
+				{
+					auto vertexIndex = writer.declLocale( "vertexIndex", meshlet.getVertexIndex( i ) );
+
+					auto nodeId = shader::getNodeId( c3d_objectIdsData
+						, pipelineID
+						, in.drawID );
+					auto curPosition = writer.declLocale( "curPosition"
+						, c3d_position[vertexIndex] );
+					auto curNormal = writer.declLocale( "curNormal"
+						, c3d_normal[vertexIndex].xyz() );
+					auto curTangent = writer.declLocale( "curTangent"
+						, c3d_tangent[vertexIndex].xyz() );
+					vtxOut[i].texture0 = c3d_texcoord0[vertexIndex].xyz();
+					vtxOut[i].texture1 = c3d_texcoord1[vertexIndex].xyz();
+					vtxOut[i].texture2 = c3d_texcoord2[vertexIndex].xyz();
+					vtxOut[i].texture3 = c3d_texcoord3[vertexIndex].xyz();
+					vtxOut[i].colour = c3d_colour[vertexIndex].xyz();
+					auto modelData = writer.declLocale( "modelData"
+						, c3d_modelsData[nodeId - 1u] );
+					vtxOut[i].nodeId = writer.cast< Int >( nodeId );
+
+					auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
+						, modelData.getModelMtx() );
+					auto prvPosition = writer.declLocale( "prvPosition"
+						, curPosition );
+					prvPosition.xyz() += c3d_velocity[vertexIndex].xyz();
+
+					if ( checkFlag( flags.submeshFlags, SubmeshFlag::eVelocity ) )
+					{
+						auto worldPos = writer.declLocale( "worldPos"
+							, curPosition );
+						vtxOut[i].computeTangentSpace( flags.submeshFlags
+							, flags.programFlags
+							, c3d_sceneData.cameraPosition
+							, worldPos.xyz()
+							, curNormal
+							, curTangent );
+					}
+					else
+					{
+						auto prvMtxModel = writer.declLocale( "prvMtxModel"
+							, modelData.getPrvModelMtx( flags.programFlags, curMtxModel ) );
+						prvPosition = c3d_matrixData.worldToPrvProj( prvMtxModel * prvPosition );
+						auto worldPos = writer.declLocale( "worldPos"
+							, curMtxModel * curPosition );
+						auto mtxNormal = writer.declLocale( "mtxNormal"
+							, modelData.getNormalMtx( flags.programFlags, curMtxModel ) );
+						vtxOut[i].computeTangentSpace( flags.submeshFlags
+							, flags.programFlags
+							, c3d_sceneData.cameraPosition
+							, worldPos.xyz()
+							, mtxNormal
+							, curNormal
+							, curTangent );
+					}
+
+					auto worldPos = writer.getVariable< sdw::Vec4 >( "worldPos" );
+					vtxOut[i].worldPosition = worldPos;
+					vtxOut[i].viewPosition = c3d_matrixData.worldToCurView( worldPos );
+					curPosition = c3d_matrixData.worldToCurProj( worldPos );
+					vtxOut[i].computeVelocity( c3d_matrixData
+						, curPosition
+						, prvPosition );
+					vtxOut[i].position = curPosition;
+				}
+				ROF;
+			} );
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
 	ShaderPtr RenderNodesPass::doGetVertexShaderSource( PipelineFlags const & flags )const
@@ -767,7 +1067,7 @@ namespace castor3d
 			, [&]( VertexInT< shader::VertexSurfaceT > in
 				, VertexOutT< shader::FragmentSurfaceT > out )
 			{
-				auto ids = shader::getIds( c3d_objectIdsData
+				auto nodeId = shader::getNodeId( c3d_objectIdsData
 					, in
 					, pipelineID
 					, in.drawID
@@ -783,10 +1083,10 @@ namespace castor3d
 				out.texture2 = in.texture2;
 				out.texture3 = in.texture3;
 				out.colour = in.colour;
-				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[ids.nodeId - 1u] );
-				out.nodeId = writer.cast< Int >( ids.nodeId );
+				out.nodeId = writer.cast< Int >( nodeId );
 				out.instanceId = writer.cast< UInt >( in.instanceIndex );
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelsData[nodeId - 1u] );
 
 				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
 					, modelData.getModelMtx() );

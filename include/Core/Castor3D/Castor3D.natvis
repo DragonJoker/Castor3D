@@ -203,6 +203,17 @@
 		</Expand>
 	</Type>
 
+	<Type Name="castor3d::MeshletComponent">
+		<DisplayString>{m_id} {m_type}</DisplayString>
+		<Expand>
+			<Item Name="meshletBuffer">m_meshletBuffer</Item>
+			<Item Name="descriptorLayout">m_descriptorLayout</Item>
+			<Item Name="descriptorPool">m_descriptorPool</Item>
+			<Item Name="descriptorSets">m_descriptorSets</Item>
+			<Item Name="data">m_data</Item>
+		</Expand>
+	</Type>
+
 	<Type Name="castor3d::MorphComponent">
 		<DisplayString>{m_id} {m_type}</DisplayString>
 		<Expand>

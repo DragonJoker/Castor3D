@@ -61,7 +61,9 @@ namespace castor3d
 		template< typename NodeT >
 		using NodeArrayT = std::vector< CulledNodeT< NodeT > >;
 		template< typename NodeT >
-		using SidedNodeArrayT = std::vector< std::pair< CulledNodeT< NodeT >, bool > >;
+		using SidedNodeT = std::pair< CulledNodeT< NodeT >, bool >;
+		template< typename NodeT >
+		using SidedNodeArrayT = std::vector< SidedNodeT< NodeT > >;
 
 		template< typename NodeT >
 		using SidedNodeBufferMapT = std::map< ashes::BufferBase const *, SidedNodeArrayT< NodeT > >;
@@ -77,6 +79,9 @@ namespace castor3d
 		template< typename NodeT >
 		using SidedObjectNodePipelineMapT = std::map< PipelineBaseHash, SidedObjectNodeBufferMapT< NodeT > >;
 
+#if VK_NV_mesh_shader
+		using IndexedMeshDrawCommandsBuffer = ashes::BufferPtr< VkDrawMeshTasksIndirectCommandNV >;
+#endif
 		using IndexedDrawCommandsBuffer = ashes::BufferPtr< VkDrawIndexedIndirectCommand >;
 		using DrawCommandsBuffer = ashes::BufferPtr< VkDrawIndirectCommand >;
 		using PipelineNodesBuffer = ashes::BufferPtr< PipelineNodes >;
@@ -85,6 +90,9 @@ namespace castor3d
 
 		struct RenderPassBuffers
 		{
+#if VK_NV_mesh_shader
+			IndexedMeshDrawCommandsBuffer submeshMeshletIndirectCommands;
+#endif
 			IndexedDrawCommandsBuffer submeshIdxIndirectCommands;
 			DrawCommandsBuffer submeshNIdxIndirectCommands;
 			DrawCommandsBuffer billboardIndirectCommands;
@@ -163,6 +171,17 @@ namespace castor3d
 				|| !it->second.sortedInstancedSubmeshes.empty()
 				|| !it->second.sortedBillboards.empty();
 		}
+
+#if VK_NV_mesh_shader
+
+		ashes::Buffer< VkDrawMeshTasksIndirectCommandNV > const & getSubmeshMeshletCommands( RenderNodesPass const & renderPass )const
+		{
+			auto it = m_renderPasses.find( &renderPass );
+			CU_Require( it != m_renderPasses.end() );
+			return *it->second.submeshMeshletIndirectCommands;
+		}
+
+#endif
 
 		ashes::Buffer< VkDrawIndexedIndirectCommand > const & getSubmeshIdxCommands( RenderNodesPass const & renderPass )const
 		{

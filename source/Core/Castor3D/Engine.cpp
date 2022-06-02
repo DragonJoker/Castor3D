@@ -513,6 +513,11 @@ namespace castor3d
 		return m_materialCache->getDefaultMaterial();
 	}
 
+	bool Engine::hasMeshShaders()const
+	{
+		return m_renderSystem->getGpuInformations().hasShaderType( VK_SHADER_STAGE_MESH_BIT_NV );
+	}
+
 	castor::RgbaColour Engine::getNextRainbowColour()const
 	{
 		static float currentColourHue{ 0.0f };

@@ -74,34 +74,56 @@ namespace castor3d
 		, PipelineFlags const & flags )const
 	{
 		ShaderProgramSPtr result = std::make_shared< ShaderProgram >( renderPass.getName(), *getEngine()->getRenderSystem() );
-		result->setSource( VK_SHADER_STAGE_VERTEX_BIT
-			, renderPass.getVertexShaderSource( flags ) );
+
+		if ( getEngine()->hasMeshShaders()
+			&& checkFlag( flags.programFlags, ProgramFlag::eHasMesh ) )
+		{
+			if ( checkFlag( flags.programFlags, ProgramFlag::eHasTask ) )
+			{
+				auto task = renderPass.getTaskShaderSource( flags );
+
+				if ( task )
+				{
+					result->setSource( VK_SHADER_STAGE_TASK_BIT_NV
+						, std::move( task ) );
+				}
+			}
+
+			result->setSource( VK_SHADER_STAGE_MESH_BIT_NV
+				, renderPass.getMeshShaderSource( flags ) );
+		}
+		else
+		{
+			result->setSource( VK_SHADER_STAGE_VERTEX_BIT
+				, renderPass.getVertexShaderSource( flags ) );
+
+			auto hull = renderPass.getHullShaderSource( flags );
+
+			if ( hull )
+			{
+				result->setSource( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
+					, std::move( hull ) );
+			}
+
+			auto domain = renderPass.getDomainShaderSource( flags );
+
+			if ( domain )
+			{
+				result->setSource( VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
+					, std::move( domain ) );
+			}
+
+			auto geometry = renderPass.getGeometryShaderSource( flags );
+
+			if ( geometry )
+			{
+				result->setSource( VK_SHADER_STAGE_GEOMETRY_BIT
+					, std::move( geometry ) );
+			}
+		}
+
 		result->setSource( VK_SHADER_STAGE_FRAGMENT_BIT
 			, renderPass.getPixelShaderSource( flags ) );
-		auto hull = renderPass.getHullShaderSource( flags );
-
-		if ( hull )
-		{
-			result->setSource( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
-				, std::move( hull ) );
-		}
-
-		auto domain = renderPass.getDomainShaderSource( flags );
-
-		if ( domain )
-		{
-			result->setSource( VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
-				, std::move( domain ) );
-		}
-
-		auto geometry = renderPass.getGeometryShaderSource( flags );
-
-		if ( geometry )
-		{
-			result->setSource( VK_SHADER_STAGE_GEOMETRY_BIT
-				, std::move( geometry ) );
-		}
-
 		return result;
 	}
 

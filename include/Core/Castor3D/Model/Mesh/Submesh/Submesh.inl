@@ -124,6 +124,11 @@ namespace castor3d
 		return m_id;
 	}
 
+	inline void Submesh::disableSceneUpdate()
+	{
+		m_disableSceneUpdate = true;
+	}
+
 	inline void Submesh::needsUpdate()
 	{
 		m_dirty = true;
@@ -223,14 +228,23 @@ namespace castor3d
 		return m_topology;
 	}
 
+	inline SubmeshFlags Submesh::getFinalSubmeshFlags()const
+	{
+		auto result = m_submeshFlags;
+		remFlag( result, SubmeshFlag::eIndex );
+
+		if ( isDynamic() )
+		{
+			remFlag( result, SubmeshFlag::eSkin );
+			addFlag( result, SubmeshFlag::eVelocity );
+		}
+
+		return result;
+	}
+
 	inline void Submesh::setTopology( VkPrimitiveTopology value )
 	{
 		m_topology = value;
-	}
-
-	inline void Submesh::disableSceneUpdate()
-	{
-		m_disableSceneUpdate = true;
 	}
 
 	//*********************************************************************************************

@@ -419,6 +419,7 @@ namespace castor3d
 					, SceneName
 					, pass.getName()
 					, RenderNodesPassDesc{ makeExtent3D( m_camera->getSize() ), m_matrixUbo, *m_culler }
+						.meshShading( true )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
 				m_opaquePass = result.get();
 				return result;

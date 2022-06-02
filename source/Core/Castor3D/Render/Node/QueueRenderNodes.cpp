@@ -151,7 +151,7 @@ namespace castor3d
 				commandBuffer.setScissor( *scissor );
 			}
 
-			if ( pipeline.hasDescriptorSetLayout() )
+			if ( pipeline.hasAdditionalDescriptorSetLayout() )
 			{
 				commandBuffer.bindDescriptorSet( pipeline.getAdditionalDescriptorSet(), pipeline.getPipelineLayout() );
 			}
@@ -166,11 +166,23 @@ namespace castor3d
 					, *node.pass
 					, buffer
 					, checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eInvertNormals ) );
-				commandBuffer.pushConstants( pipeline.getPipelineLayout()
-					, VK_SHADER_STAGE_VERTEX_BIT
-					, 0u
-					, 4u
-					, &pipelineId );
+
+				if ( !pipeline.hasMeshletDescriptorSetLayout() )
+				{
+					commandBuffer.pushConstants( pipeline.getPipelineLayout()
+						, VK_SHADER_STAGE_VERTEX_BIT
+						, 0u
+						, 4u
+						, &pipelineId );
+				}
+				else
+				{
+					commandBuffer.pushConstants( pipeline.getPipelineLayout()
+						, VK_SHADER_STAGE_MESH_BIT_NV
+						, 0u
+						, 4u
+						, &pipelineId );
+				}
 			}
 		}
 
@@ -325,6 +337,147 @@ namespace castor3d
 			}
 		}
 
+#if VK_NV_mesh_shader
+
+		static void doAddGeometryNodeCommands( RenderPipeline const & pipeline
+			, SubmeshRenderNode const & node
+			, ashes::CommandBuffer const & commandBuffer
+			, RenderNodesPass const & nodesPass
+			, ashes::Buffer< VkDrawMeshTasksIndirectCommandNV > const & indirectMeshCommands
+			, uint32_t drawCount
+			, uint32_t & mshIndex )
+		{
+			if ( pipeline.hasMeshletDescriptorSetLayout() )
+			{
+				commandBuffer.bindDescriptorSet( node.getMeshletDescriptorSet()
+					, pipeline.getPipelineLayout() );
+			}
+
+			commandBuffer.drawMeshTasksIndirect( indirectMeshCommands.getBuffer()
+				, mshIndex * sizeof( VkDrawMeshTasksIndirectCommandNV )
+				, drawCount
+				, sizeof( VkDrawMeshTasksIndirectCommandNV ) );
+			mshIndex += drawCount;
+		}
+
+		template< typename NodeT >
+		static void doParseRenderNodesCommands( NodePtrByPipelineMapT< NodeT > & inputNodes
+			, ashes::CommandBuffer const & commandBuffer
+			, RenderNodesPass const & nodesPass
+			, SceneCuller const & culler
+			, ashes::Optional< VkViewport > const & viewport
+			, ashes::Optional< VkRect2D > const & scissor
+			, ashes::Buffer< VkDrawMeshTasksIndirectCommandNV > const & indirectMeshCommands
+			, ashes::Buffer< VkDrawIndexedIndirectCommand > const & indirectIndexedCommands
+			, ashes::Buffer< VkDrawIndirectCommand > const & indirectCommands
+			, uint32_t & mshIndex
+			, uint32_t & idxIndex
+			, uint32_t & nidxIndex )
+		{
+			for ( auto & pipelines : inputNodes )
+			{
+				RenderPipeline const & pipeline = *pipelines.second.first;
+
+				for ( auto & buffers : pipelines.second.second )
+				{
+					doBindPipeline( commandBuffer
+						, nodesPass
+						, culler
+						, pipeline
+						, *buffers.first
+						, *buffers.second.front()
+						, viewport
+						, scissor );
+
+					if ( pipeline.hasMeshletDescriptorSetLayout() )
+					{
+						doAddGeometryNodeCommands( pipeline
+							, *buffers.second.front()
+							, commandBuffer
+							, nodesPass
+							, indirectMeshCommands
+							, uint32_t( buffers.second.size() )
+							, mshIndex );
+					}
+					else
+					{
+						doAddGeometryNodeCommands( pipeline
+							, *buffers.second.front()
+							, commandBuffer
+							, nodesPass
+							, indirectIndexedCommands
+							, indirectCommands
+							, uint32_t( buffers.second.size() )
+							, idxIndex
+							, nidxIndex );
+					}
+				}
+			}
+		}
+
+		template< typename NodeT >
+		static void doParseRenderNodesCommands( ObjectNodesPtrByPipelineMapT< NodeT > & inputNodes
+			, ashes::CommandBuffer const & commandBuffer
+			, RenderNodesPass const & nodesPass
+			, SceneCuller const & culler
+			, ashes::Optional< VkViewport > const & viewport
+			, ashes::Optional< VkRect2D > const & scissor
+			, ashes::Buffer< VkDrawMeshTasksIndirectCommandNV > const & indirectMeshCommands
+			, ashes::Buffer< VkDrawIndexedIndirectCommand > const & indirectIndexedCommands
+			, ashes::Buffer< VkDrawIndirectCommand > const & indirectCommands
+			, uint32_t & mshIndex
+			, uint32_t & idxIndex
+			, uint32_t & nidxIndex )
+		{
+			for ( auto & pipelineIt : inputNodes )
+			{
+				RenderPipeline const & pipeline = *pipelineIt.second.first;
+
+				for ( auto & bufferIt : pipelineIt.second.second )
+				{
+					for ( auto & passIt : bufferIt.second )
+					{
+						for ( auto & submeshIt : passIt.second )
+						{
+							doBindPipeline( commandBuffer
+								, nodesPass
+								, culler
+								, pipeline
+								, *bufferIt.first
+								, *submeshIt.second.front()
+								, viewport
+								, scissor );
+
+							if ( pipeline.hasMeshletDescriptorSetLayout() )
+							{
+								doAddGeometryNodeCommands( pipeline
+									, *submeshIt.second.front()
+									, commandBuffer
+									, nodesPass
+									, indirectMeshCommands
+									, 1u
+									, mshIndex );
+							}
+							else
+							{
+								doAddGeometryNodeCommands( pipeline
+									, *submeshIt.second.front()
+									, commandBuffer
+									, nodesPass
+									, indirectIndexedCommands
+									, indirectCommands
+									, 1u
+									, idxIndex
+									, nidxIndex );
+							}
+						}
+					}
+				}
+			}
+		}
+
+#else
+
 		template< typename NodeT >
 		static void doParseRenderNodesCommands( ObjectNodesPtrByPipelineMapT< NodeT > & inputNodes
 			, ashes::CommandBuffer const & commandBuffer
@@ -369,6 +522,8 @@ namespace castor3d
 				}
 			}
 		}
+
+#endif
 	}
 
 	//*************************************************************************************************
@@ -421,15 +576,22 @@ namespace castor3d
 							, textures ).layouts;
 						auto & pipeline = sidedCulled.second
 							? renderPass.prepareFrontPipeline( pipelineFlags
-								, vertexLayouts )
+								, vertexLayouts
+								, culledNode->getMeshletDescriptorLayout() )
 							: renderPass.prepareBackPipeline( pipelineFlags
-								, vertexLayouts );
+								, vertexLayouts
+								, culledNode->getMeshletDescriptorLayout() );
 						queuerndnd::doAddRenderNode( pipeline
 							, *culledNode
 							, submeshNodes );
 						renderPass.initialiseAdditionalDescriptor( pipeline
 							, shadowMaps
 							, submesh.getMorphTargets() );
+
+						if ( checkFlag( pipelineFlags.programFlags, ProgramFlag::eHasMesh ) )
+						{
+							culledNode->createMeshletDescriptorSet();
+						}
 					}
 				}
 			}
@@ -471,15 +633,22 @@ namespace castor3d
 									, textures ).layouts;
 								auto & pipeline = sidedCulled.second
 									? renderPass.prepareFrontPipeline( pipelineFlags
-										, vertexLayouts )
+										, vertexLayouts
+										, culledNode->getMeshletDescriptorLayout() )
 									: renderPass.prepareBackPipeline( pipelineFlags
-										, vertexLayouts );
+										, vertexLayouts
+										, culledNode->getMeshletDescriptorLayout() );
 								queuerndnd::doAddRenderNode( pipeline
 									, *culledNode
 									, instancedSubmeshNodes );
 								renderPass.initialiseAdditionalDescriptor( pipeline
 									, shadowMaps
 									, submesh.getMorphTargets() );
+
+								if ( checkFlag( pipelineFlags.programFlags, ProgramFlag::eHasMesh ) )
+								{
+									culledNode->createMeshletDescriptorSet();
+								}
 							}
 						}
 					}
@@ -513,7 +682,8 @@ namespace castor3d
 							, sidedCulled.second
 							, {} );
 						auto & pipeline = renderPass.prepareBackPipeline( pipelineFlags
-							, billboard.getGeometryBuffers().layouts );
+							, billboard.getGeometryBuffers().layouts
+							, nullptr );
 						queuerndnd::doAddRenderNode( pipeline
 							, *culledNode
 							, billboardNodes );
@@ -532,9 +702,6 @@ namespace castor3d
 		auto & queue = *getOwner();
 		auto & rp = *queue.getOwner();
 		auto & culler = queue.getCuller();
-		auto & submeshIdxCommands = culler.getSubmeshIdxCommands( rp );
-		auto & submeshNIdxCommands = culler.getSubmeshNIdxCommands( rp );
-		auto & billboardCommands = culler.getBillboardCommands( rp );
 
 		ashes::CommandBuffer const & cb = queue.getCommandBuffer();
 		cb.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
@@ -544,6 +711,44 @@ namespace castor3d
 				, VK_FALSE
 				, 0u
 				, 0u ) );
+
+#if VK_NV_mesh_shader
+
+		auto & submeshMshCommands = culler.getSubmeshMeshletCommands( rp );
+		auto & submeshIdxCommands = culler.getSubmeshIdxCommands( rp );
+		auto & submeshNIdxCommands = culler.getSubmeshNIdxCommands( rp );
+		uint32_t mshIndex{};
+		uint32_t idxIndex{};
+		uint32_t nidxIndex{};
+		queuerndnd::doParseRenderNodesCommands( submeshNodes
+			, cb
+			, rp
+			, culler
+			, viewport
+			, scissors
+			, submeshMshCommands
+			, submeshIdxCommands
+			, submeshNIdxCommands
+			, mshIndex
+			, idxIndex
+			, nidxIndex );
+		queuerndnd::doParseRenderNodesCommands( instancedSubmeshNodes
+			, cb
+			, rp
+			, culler
+			, viewport
+			, scissors
+			, submeshMshCommands
+			, submeshIdxCommands
+			, submeshNIdxCommands
+			, mshIndex
+			, idxIndex
+			, nidxIndex );
+
+#else
+
+		auto & submeshIdxCommands = culler.getSubmeshIdxCommands( rp );
+		auto & submeshNIdxCommands = culler.getSubmeshNIdxCommands( rp );
 		uint32_t idxIndex{};
 		uint32_t nidxIndex{};
 		queuerndnd::doParseRenderNodesCommands( submeshNodes
@@ -567,6 +772,9 @@ namespace castor3d
 			, idxIndex
 			, nidxIndex );
 
+#endif
+
+		auto & billboardCommands = culler.getBillboardCommands( rp );
 		idxIndex = 0u;
 		nidxIndex = 0u;
 		queuerndnd::doParseRenderNodesCommands( billboardNodes

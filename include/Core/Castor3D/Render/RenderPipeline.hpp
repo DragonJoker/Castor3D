@@ -30,6 +30,7 @@ namespace castor3d
 #pragma clang diagnostic ignored "-Wduplicate-enum"
 			eTextures,
 			eBuffers,
+			eMeshBuffers,
 			CU_EnumBounds( Descriptor, eBuffers )
 #pragma clang pop
 		};
@@ -138,7 +139,7 @@ namespace castor3d
 		/**@{*/
 		C3D_API void setVertexLayouts( ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts );
 
-		void setDescriptorSetLayout( ashes::DescriptorSetLayout const & layout )
+		void setAdditionalDescriptorSetLayout( ashes::DescriptorSetLayout const & layout )
 		{
 			CU_Require( !m_pipeline );
 			m_addDescriptorLayout = &layout;
@@ -147,6 +148,12 @@ namespace castor3d
 		void setAdditionalDescriptorSet( ashes::DescriptorSet const & descriptorSet )
 		{
 			m_addDescriptorSet = &descriptorSet;
+		}
+
+		void setMeshletDescriptorSetLayout( ashes::DescriptorSetLayout const & layout )
+		{
+			CU_Require( !m_pipeline );
+			m_meshletDescriptorLayout = &layout;
 		}
 
 		void setVertexLayouts( std::vector< ashes::PipelineVertexInputStateCreateInfo > layouts )
@@ -210,14 +217,26 @@ namespace castor3d
 			return *m_pipelineLayout;
 		}
 
-		ashes::DescriptorSetLayout const & getDescriptorSetLayout()const
+		ashes::DescriptorSetLayout const & getAdditionalDescriptorSetLayout()const
 		{
+			CU_Require( m_addDescriptorLayout );
 			return *m_addDescriptorLayout;
 		}
 
-		bool hasDescriptorSetLayout()const
+		bool hasAdditionalDescriptorSetLayout()const
 		{
 			return m_addDescriptorLayout != nullptr;
+		}
+
+		ashes::DescriptorSetLayout const & getMeshletDescriptorSetLayout()const
+		{
+			CU_Require( m_meshletDescriptorLayout );
+			return *m_meshletDescriptorLayout;
+		}
+
+		bool hasMeshletDescriptorSetLayout()const
+		{
+			return m_meshletDescriptorLayout != nullptr;
 		}
 
 		RenderSystem & getRenderSystem()const
@@ -242,6 +261,7 @@ namespace castor3d
 		ashes::GraphicsPipelinePtr m_pipeline;
 		ashes::DescriptorSetLayout const * m_addDescriptorLayout{};
 		ashes::DescriptorSet const * m_addDescriptorSet{};
+		ashes::DescriptorSetLayout const * m_meshletDescriptorLayout{};
 	};
 }
 
