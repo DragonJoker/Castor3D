@@ -713,7 +713,7 @@ namespace castor3d
 		 *\brief		Récupère le source du geometry shader correspondant aux indicateurs donnés.
 		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
-		C3D_API virtual ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const = 0;
+		C3D_API virtual ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the hull shader source matching the given flags.
@@ -722,7 +722,7 @@ namespace castor3d
 		 *\brief		Récupère le source du hull shader correspondant aux indicateurs donnés.
 		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
-		C3D_API virtual ShaderPtr doGetHullShaderSource( PipelineFlags const & flags )const = 0;
+		C3D_API virtual ShaderPtr doGetHullShaderSource( PipelineFlags const & flags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the domain shader source matching the given flags.
@@ -731,7 +731,7 @@ namespace castor3d
 		 *\brief		Récupère le source du domain shader correspondant aux indicateurs donnés.
 		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
-		C3D_API virtual ShaderPtr doGetDomainShaderSource( PipelineFlags const & flags )const = 0;
+		C3D_API virtual ShaderPtr doGetDomainShaderSource( PipelineFlags const & flags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.

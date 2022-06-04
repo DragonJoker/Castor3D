@@ -1308,6 +1308,21 @@ namespace castor3d
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
+	ShaderPtr RenderNodesPass::doGetHullShaderSource( PipelineFlags const & flags )const
+	{
+		return nullptr;
+	}
+
+	ShaderPtr RenderNodesPass::doGetDomainShaderSource( PipelineFlags const & flags )const
+	{
+		return nullptr;
+	}
+
+	ShaderPtr RenderNodesPass::doGetGeometryShaderSource( PipelineFlags const & flags )const
+	{
+		return nullptr;
+	}
+
 	ShaderPtr RenderNodesPass::doGetBillboardShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;

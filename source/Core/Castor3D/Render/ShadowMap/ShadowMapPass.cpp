@@ -75,19 +75,4 @@ namespace castor3d
 		descriptorWrites.push_back( getCuller().getScene().getLightCache().getBinding( index++ ) );
 		descriptorWrites.push_back( m_shadowMapUbo.getDescriptorWrite( index++ ) );
 	}
-
-	ShaderPtr ShadowMapPass::doGetHullShaderSource( PipelineFlags const & flags )const
-	{
-		return ShaderPtr{};
-	}
-
-	ShaderPtr ShadowMapPass::doGetDomainShaderSource( PipelineFlags const & flags )const
-	{
-		return ShaderPtr{};
-	}
-
-	ShaderPtr ShadowMapPass::doGetGeometryShaderSource( PipelineFlags const & flags )const
-	{
-		return ShaderPtr{};
-	}
 }
