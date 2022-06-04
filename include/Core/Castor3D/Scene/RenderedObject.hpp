@@ -17,6 +17,7 @@ namespace castor3d
 	public:
 		C3D_API void fillEntry( Pass const & pass
 			, SceneNode const & sceneNode
+			, uint32_t meshletCount
 			, ModelBufferConfiguration & modelData );
 
 		void setVisible( bool value )

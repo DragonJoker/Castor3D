@@ -20,10 +20,13 @@ namespace castor3d::shader
 		, m_textures0{ getMember< sdw::UVec4 >( "textures0" ) }
 		, m_textures1{ getMember< sdw::UVec4 >( "textures1" ) }
 		, m_countsIDs{ getMember< sdw::IVec4 >( "countsIDs" ) }
+		, m_meshletsScale{ getMember< sdw::Vec4 >( "meshletsScale" ) }
 		, m_textures{ m_countsIDs.x() }
-		, m_materialId{ m_countsIDs.y() }
+		, m_materialId{ writer.cast< sdw::UInt >( m_countsIDs.y() ) }
 		, m_envMapId{ m_countsIDs.z() }
 		, m_shadowReceiver{ m_countsIDs.w() }
+		, m_scale{ m_meshletsScale.xyz() }
+		, m_meshletCount{ writer.cast< sdw::UInt >( m_meshletsScale.w() ) }
 	{
 	}
 
@@ -40,6 +43,7 @@ namespace castor3d::shader
 			result->declMember( "textures0", ast::type::Kind::eVec4U );
 			result->declMember( "textures1", ast::type::Kind::eVec4U );
 			result->declMember( "countsIDs", ast::type::Kind::eVec4I );
+			result->declMember( "meshletsScale", ast::type::Kind::eVec4F );
 		}
 
 		return result;
@@ -129,26 +133,6 @@ namespace castor3d::shader
 		}
 
 		return m_curMtxModel;
-	}
-
-	sdw::UVec4 ModelIndices::getTextures0()const
-	{
-		return m_textures0;
-	}
-
-	sdw::UVec4 ModelIndices::getTextures1()const
-	{
-		return m_textures1;
-	}
-
-	sdw::Int ModelIndices::getTextures()const
-	{
-		return m_textures;
-	}
-
-	sdw::UInt ModelIndices::getMaterialId()const
-	{
-		return getWriter()->cast< sdw::UInt >( m_materialId );
 	}
 
 	sdw::UInt ModelIndices::getTexture( sdw::UVec4 const & textures0

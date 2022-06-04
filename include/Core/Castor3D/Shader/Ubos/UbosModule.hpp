@@ -280,6 +280,7 @@ namespace castor3d
 		castor::Matrix4x4f normal;
 		castor::Point4ui textures[2];
 		castor::Point4i countsIDs;
+		castor::Point4f meshletScale;
 	};
 	/**
 	*\~english
