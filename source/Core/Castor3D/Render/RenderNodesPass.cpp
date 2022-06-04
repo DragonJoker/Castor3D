@@ -57,6 +57,42 @@ namespace castor3d
 
 	namespace shader
 	{
+		template< sdw::var::Flag FlagT >
+		struct PayloadT
+			: public sdw::StructInstance
+		{
+			PayloadT( sdw::ShaderWriter & writer
+				, sdw::expr::ExprPtr expr
+				, bool enabled = true )
+				: sdw::StructInstance{ writer, std::move( expr ), enabled }
+				, meshletIndices{ getMemberArray< sdw::UInt >( "meshletIndices" ) }
+			{
+			}
+
+			SDW_DeclStructInstance( , PayloadT );
+
+			static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache )
+			{
+				auto result = cache.getIOStruct( sdw::type::MemoryLayout::eStd430
+					, ( FlagT == sdw::var::Flag::eShaderOutput
+						? std::string{ "Output" }
+						: std::string{ "Input" } ) + "Payload"
+					, ast::var::Flag( FlagT | ast::var::Flag::ePerTask ) );
+
+				if ( result->empty() )
+				{
+					result->declMember( "meshletIndices"
+						, sdw::type::Kind::eUInt
+						, 32u
+						, ast::type::Struct::InvalidLocation );
+				}
+
+				return result;
+			}
+
+			sdw::Array< sdw::UInt > meshletIndices;
+		};
+
 		struct Meshlet
 			: public sdw::StructInstance
 		{
@@ -590,6 +626,7 @@ namespace castor3d
 		jitterProjSpace[1] /= float( camera.getHeight() );
 		m_matrixUbo.cpuUpdate( camera.getView()
 			, camera.getProjection( m_safeBand != 0u )
+			, camera.getFrustum()
 			, jitterProjSpace );
 		m_sceneUbo.cpuUpdate( *camera.getScene(), &camera );
 	}
@@ -780,8 +817,12 @@ namespace castor3d
 				if ( checkFlag( flags.programFlags, ProgramFlag::eHasMesh )
 					&& meshletDescriptorLayout )
 				{
+					auto pcflags = VK_SHADER_STAGE_MESH_BIT_NV
+						| ( checkFlag( flags.programFlags, ProgramFlag::eHasTask )
+							? VK_SHADER_STAGE_TASK_BIT_NV
+							: 0u );
 					pipeline->setMeshletDescriptorSetLayout( *meshletDescriptorLayout );
-					pipeline->setPushConstantRanges( { { VK_SHADER_STAGE_MESH_BIT_NV, 0u, 4u } } );
+					pipeline->setPushConstantRanges( { { pcflags, 0u, 4u } } );
 				}
 				else
 				{
@@ -833,7 +874,104 @@ namespace castor3d
 
 	ShaderPtr RenderNodesPass::doGetTaskShaderSource( PipelineFlags const & flags )const
 	{
-		return nullptr;
+		using namespace sdw;
+		TaskWriter writer;
+
+		C3D_Matrix( writer
+			, GlobalBuffersIdx::eMatrix
+			, RenderPipeline::eBuffers );
+		C3D_ObjectIdsData( writer
+			, GlobalBuffersIdx::eObjectsNodeID
+			, RenderPipeline::eBuffers );
+		C3D_ModelsData( writer
+			, GlobalBuffersIdx::eModelsData
+			, RenderPipeline::eBuffers );
+
+		sdw::Pcb pcb{ writer, "DrawData" };
+		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		pcb.end();
+		auto spheresBuffer = writer.declStorageBuffer<>( "c3d_spheresBuffer"
+			, uint32_t( MeshBuffersIdx::eSpheres )
+			, RenderPipeline::eMeshBuffers );
+		auto c3d_spheres = spheresBuffer.declMemberArray< sdw::Vec4 >( "c3d_spheres" );
+		spheresBuffer.end();
+
+		auto checkVisible = writer.implementFunction< sdw::Boolean >( "checkVisible"
+			, [&]( sdw::UInt nodeId
+				, sdw::Vec4 const & sphere )
+			{
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelsData[nodeId - 1u] );
+				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
+					, modelData.getModelMtx() );
+
+				auto xScale = writer.declLocale( "xScale"
+					, length( vec3( curMtxModel[0][0], curMtxModel[0][1], curMtxModel[0][2] ) ) );
+				auto yScale = writer.declLocale( "yScale"
+					, length( vec3( curMtxModel[1][0], curMtxModel[1][1], curMtxModel[1][2] ) ) );
+				auto zScale = writer.declLocale( "zScale"
+					, length( vec3( curMtxModel[2][0], curMtxModel[2][1], curMtxModel[2][2] ) ) );
+
+				auto meanScale = writer.declLocale( "meanScale"
+					, ( xScale + yScale + zScale ) / 3.0f );
+
+				auto sphereCenter = writer.declLocale( "sphereCenter"
+					, vec3( curMtxModel * vec4( sphere.xyz(), 1.0 ) ) );
+				auto sphereRadius = writer.declLocale( "sphereRadius"
+					, sphere.w() * meanScale );
+				auto finalSphere = writer.declLocale( "finalSphere"
+					, vec4( sphereCenter, sphereRadius ) );
+
+				FOR( writer, sdw::UInt, i, 0u, i < 6u, ++i )
+				{
+					IF( writer, dot( c3d_matrixData.getFrustumPlane( i ).xyz(), finalSphere.xyz() ) + c3d_matrixData.getFrustumPlane( i ).w() <= -sphere.w() )
+					{
+						writer.returnStmt( sdw::Boolean{ false } );
+					}
+					FI;
+				}
+				ROF;
+
+				writer.returnStmt( sdw::Boolean{ true } );
+			}
+			, sdw::InUInt{ writer, "nodeId" }
+			, sdw::InVec4{ writer, "sphere" } );
+
+		writer.implementMainT< shader::PayloadT >( 32
+			, sdw::TaskPayloadOutT< shader::PayloadT >{ writer }
+			, [&]( sdw::TaskSubgroupIn in
+				, sdw::TaskPayloadOutT< shader::PayloadT > payload )
+			{
+				auto laneId = writer.declLocale( "laneId"
+					, in.localInvocationID );
+				auto baseId = writer.declLocale( "baseId"
+					, in.workGroupID * 32u );
+				auto nodeId = shader::getNodeId( c3d_objectIdsData
+					, pipelineID
+					, in.drawID );
+				auto render = writer.declLocale( "render"
+					, checkVisible( nodeId, c3d_spheres[baseId + laneId] ) );
+				auto vote = writer.declLocale( "vote"
+					, subgroupBallot( render ) );
+				auto tasks = writer.declLocale( "tasks"
+					, subgroupBallotBitCount( vote ) );
+				auto idxOffset = writer.declLocale( "idxOffset"
+					, subgroupBallotExclusiveBitCount( vote ) );
+
+				IF( writer, render )
+				{
+					payload.meshletIndices[idxOffset] = baseId + laneId;
+				}
+				FI;
+
+				IF( writer, laneId == 0u )
+				{
+					payload.dispatchMesh( tasks );
+				}
+				FI;
+
+			} );
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
 	ShaderPtr RenderNodesPass::doGetMeshShaderSource( PipelineFlags const & flags )const
@@ -913,114 +1051,150 @@ namespace castor3d
 
 #undef DeclareSsbo
 
-		writer.implementMainT< VoidT, shader::FragmentSurfaceT, VoidT >( 32u
-			, sdw::TaskPayloadIn{ writer }
-			, sdw::MeshVertexListOutT< shader::FragmentSurfaceT >{ writer
-				, MaxMeshletVertexCount
-				, flags.submeshFlags
-				, flags.programFlags
-				, getShaderFlags()
-				, textureFlags
-				, flags.passFlags
-				, hasTextures }
-			, sdw::TrianglesMeshPrimitiveListOutT< VoidT >{ writer
-				, MaxMeshletTriangleCount }
-			, [&]( sdw::MeshIn in
-				, sdw::TaskPayloadInT< VoidT > payload
-				, sdw::MeshVertexListOutT< shader::FragmentSurfaceT > vtxOut
-				, sdw::TrianglesMeshPrimitiveListOutT< VoidT > primOut )
+		auto meshShader = [&]( sdw::UInt const & meshletIndex
+			, sdw::MeshSubgroupIn const & in
+			, sdw::MeshVertexListOutT< shader::FragmentSurfaceT > & vtxOut
+			, sdw::TrianglesMeshPrimitiveListOutT< VoidT > & primOut )
+		{
+			auto laneId = writer.declLocale( "laneId"
+				, in.localInvocationID );
+			auto nodeId = shader::getNodeId( c3d_objectIdsData
+				, pipelineID
+				, in.drawID );
+			auto meshlet = writer.declLocale( "meshlet"
+				, c3d_meshlets[meshletIndex] );
+			auto triangleCount = writer.declLocale( "triangleCount"
+				, meshlet.triangleCount );
+			auto vertexCount = writer.declLocale( "vertexCount"
+				, meshlet.vertexCount );
+
+			primOut.setMeshOutputCounts( vertexCount, triangleCount );
+			auto indexCount = writer.declLocale( "indexCount"
+				, triangleCount * 3u );
+			auto indexGroupCount = writer.declLocale( "indexGroupCount"
+				, ( indexCount + 3u ) / 4u );
+
+			FOR( writer, sdw::UInt, i, laneId, i < indexGroupCount, i += 32u )
 			{
-				auto ti = writer.declLocale( "ti"
-					, in.localInvocationID );
-				auto meshletIndex = writer.declLocale( "meshletIndex"
-					, in.workGroupID );
-				auto meshlet = writer.declLocale( "meshlet"
-					, c3d_meshlets[meshletIndex] );
-				auto triangleCount = writer.declLocale( "triangleCount"
-					, meshlet.triangleCount );
-				auto vertexCount = writer.declLocale( "vertexCount"
-					, meshlet.vertexCount );
+				writePackedPrimitiveIndices4x8( i * 4u, meshlet.indices[i] );
+			}
+			ROF;
 
-				primOut.setMeshOutputCounts( vertexCount, triangleCount );
-				auto indexCount = writer.declLocale( "indexCount"
-					, triangleCount * 3u );
-				auto indexGroupCount = writer.declLocale( "indexGroupCount"
-					, ( indexCount + 3u ) / 4u );
+			FOR( writer, sdw::UInt, i, laneId, i < vertexCount, i += 32u )
+			{
+				auto vertexIndex = writer.declLocale( "vertexIndex", meshlet.vertices[i] );
 
-				FOR( writer, sdw::UInt, i, ti, i < indexGroupCount, i += 32u )
+				auto curPosition = writer.declLocale( "curPosition"
+					, c3d_position[vertexIndex] );
+				auto curNormal = writer.declLocale( "curNormal"
+					, c3d_normal[vertexIndex].xyz() );
+				auto curTangent = writer.declLocale( "curTangent"
+					, c3d_tangent[vertexIndex].xyz() );
+				vtxOut[i].texture0 = c3d_texcoord0[vertexIndex].xyz();
+				vtxOut[i].texture1 = c3d_texcoord1[vertexIndex].xyz();
+				vtxOut[i].texture2 = c3d_texcoord2[vertexIndex].xyz();
+				vtxOut[i].texture3 = c3d_texcoord3[vertexIndex].xyz();
+				vtxOut[i].colour = c3d_colour[vertexIndex].xyz();
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelsData[nodeId - 1u] );
+				vtxOut[i].nodeId = writer.cast< Int >( nodeId );
+
+				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
+					, modelData.getModelMtx() );
+				auto prvPosition = writer.declLocale( "prvPosition"
+					, curPosition );
+				prvPosition.xyz() += c3d_velocity[vertexIndex].xyz();
+
+				if ( checkFlag( flags.submeshFlags, SubmeshFlag::eVelocity ) )
 				{
-					writePackedPrimitiveIndices4x8( i * 4u, meshlet.indices[i] );
-				}
-				ROF;
-
-				FOR( writer, sdw::UInt, i, ti, i < vertexCount, i += 32u )
-				{
-					auto vertexIndex = writer.declLocale( "vertexIndex", meshlet.vertices[i] );
-
-					auto nodeId = shader::getNodeId( c3d_objectIdsData
-						, pipelineID
-						, in.drawID );
-					auto curPosition = writer.declLocale( "curPosition"
-						, c3d_position[vertexIndex] );
-					auto curNormal = writer.declLocale( "curNormal"
-						, c3d_normal[vertexIndex].xyz() );
-					auto curTangent = writer.declLocale( "curTangent"
-						, c3d_tangent[vertexIndex].xyz() );
-					vtxOut[i].texture0 = c3d_texcoord0[vertexIndex].xyz();
-					vtxOut[i].texture1 = c3d_texcoord1[vertexIndex].xyz();
-					vtxOut[i].texture2 = c3d_texcoord2[vertexIndex].xyz();
-					vtxOut[i].texture3 = c3d_texcoord3[vertexIndex].xyz();
-					vtxOut[i].colour = c3d_colour[vertexIndex].xyz();
-					auto modelData = writer.declLocale( "modelData"
-						, c3d_modelsData[nodeId - 1u] );
-					vtxOut[i].nodeId = writer.cast< Int >( nodeId );
-
-					auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
-						, modelData.getModelMtx() );
-					auto prvPosition = writer.declLocale( "prvPosition"
+					auto worldPos = writer.declLocale( "worldPos"
 						, curPosition );
-					prvPosition.xyz() += c3d_velocity[vertexIndex].xyz();
-
-					if ( checkFlag( flags.submeshFlags, SubmeshFlag::eVelocity ) )
-					{
-						auto worldPos = writer.declLocale( "worldPos"
-							, curPosition );
-						vtxOut[i].computeTangentSpace( flags.submeshFlags
-							, flags.programFlags
-							, c3d_sceneData.cameraPosition
-							, worldPos.xyz()
-							, curNormal
-							, curTangent );
-					}
-					else
-					{
-						auto prvMtxModel = writer.declLocale( "prvMtxModel"
-							, modelData.getPrvModelMtx( flags.programFlags, curMtxModel ) );
-						prvPosition = c3d_matrixData.worldToPrvProj( prvMtxModel * prvPosition );
-						auto worldPos = writer.declLocale( "worldPos"
-							, curMtxModel * curPosition );
-						auto mtxNormal = writer.declLocale( "mtxNormal"
-							, modelData.getNormalMtx( flags.programFlags, curMtxModel ) );
-						vtxOut[i].computeTangentSpace( flags.submeshFlags
-							, flags.programFlags
-							, c3d_sceneData.cameraPosition
-							, worldPos.xyz()
-							, mtxNormal
-							, curNormal
-							, curTangent );
-					}
-
-					auto worldPos = writer.getVariable< sdw::Vec4 >( "worldPos" );
-					vtxOut[i].worldPosition = worldPos;
-					vtxOut[i].viewPosition = c3d_matrixData.worldToCurView( worldPos );
-					curPosition = c3d_matrixData.worldToCurProj( worldPos );
-					vtxOut[i].computeVelocity( c3d_matrixData
-						, curPosition
-						, prvPosition );
-					vtxOut[i].position = curPosition;
+					vtxOut[i].computeTangentSpace( flags.submeshFlags
+						, flags.programFlags
+						, c3d_sceneData.cameraPosition
+						, worldPos.xyz()
+						, curNormal
+						, curTangent );
 				}
-				ROF;
-			} );
+				else
+				{
+					auto prvMtxModel = writer.declLocale( "prvMtxModel"
+						, modelData.getPrvModelMtx( flags.programFlags, curMtxModel ) );
+					prvPosition = c3d_matrixData.worldToPrvProj( prvMtxModel * prvPosition );
+					auto worldPos = writer.declLocale( "worldPos"
+						, curMtxModel * curPosition );
+					auto mtxNormal = writer.declLocale( "mtxNormal"
+						, modelData.getNormalMtx( flags.programFlags, curMtxModel ) );
+					vtxOut[i].computeTangentSpace( flags.submeshFlags
+						, flags.programFlags
+						, c3d_sceneData.cameraPosition
+						, worldPos.xyz()
+						, mtxNormal
+						, curNormal
+						, curTangent );
+				}
+
+				auto worldPos = writer.getVariable< sdw::Vec4 >( "worldPos" );
+				vtxOut[i].worldPosition = worldPos;
+				vtxOut[i].viewPosition = c3d_matrixData.worldToCurView( worldPos );
+				curPosition = c3d_matrixData.worldToCurProj( worldPos );
+				vtxOut[i].computeVelocity( c3d_matrixData
+					, curPosition
+					, prvPosition );
+				vtxOut[i].position = curPosition;
+			}
+			ROF;
+		};
+
+		if ( checkFlag( flags.programFlags, ProgramFlag::eHasTask ) )
+		{
+			writer.implementMainT< shader::PayloadT, shader::FragmentSurfaceT, VoidT >( 32u
+				, sdw::TaskPayloadInT< shader::PayloadT >{ writer }
+				, sdw::MeshVertexListOutT< shader::FragmentSurfaceT >{ writer
+					, MaxMeshletVertexCount
+					, flags.submeshFlags
+					, flags.programFlags
+					, getShaderFlags()
+					, textureFlags
+					, flags.passFlags
+					, hasTextures }
+				, sdw::TrianglesMeshPrimitiveListOutT< VoidT >{ writer
+					, MaxMeshletTriangleCount }
+				, [&]( sdw::MeshSubgroupIn in
+					, sdw::TaskPayloadInT< shader::PayloadT > payload
+					, sdw::MeshVertexListOutT< shader::FragmentSurfaceT > vtxOut
+					, sdw::TrianglesMeshPrimitiveListOutT< VoidT > primOut )
+				{
+					auto meshletId = writer.declLocale( "meshletId"
+						, payload.meshletIndices[in.workGroupID] );
+					meshShader( meshletId, in, vtxOut, primOut );
+				} );
+		}
+		else
+		{
+			writer.implementMainT< VoidT, shader::FragmentSurfaceT, VoidT >( 32u
+				, sdw::TaskPayloadIn{ writer }
+				, sdw::MeshVertexListOutT< shader::FragmentSurfaceT >{ writer
+					, MaxMeshletVertexCount
+					, flags.submeshFlags
+					, flags.programFlags
+					, getShaderFlags()
+					, textureFlags
+					, flags.passFlags
+					, hasTextures }
+				, sdw::TrianglesMeshPrimitiveListOutT< VoidT >{ writer
+					, MaxMeshletTriangleCount }
+				, [&]( sdw::MeshSubgroupIn in
+					, sdw::TaskPayloadIn payload
+					, sdw::MeshVertexListOutT< shader::FragmentSurfaceT > vtxOut
+					, sdw::TrianglesMeshPrimitiveListOutT< VoidT > primOut )
+				{
+					auto meshletId = writer.declLocale( "meshletId"
+						, in.workGroupID );
+					meshShader( meshletId, in, vtxOut, primOut );
+				} );
+		}
+
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 

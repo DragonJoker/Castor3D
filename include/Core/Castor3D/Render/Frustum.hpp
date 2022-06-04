@@ -97,6 +97,11 @@ namespace castor3d
 			return m_points;
 		}
 
+		Planes const & getPlanes()const
+		{
+			return m_planes;
+		}
+
 	private:
 		Viewport * m_viewport;
 		Planes m_planes;

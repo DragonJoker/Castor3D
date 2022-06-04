@@ -55,10 +55,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
 		 */
-		C3D_API ProgramFlags getProgramFlags( Material const & material )const override
-		{
-			return ProgramFlag::eHasMesh;
-		}
+		C3D_API ProgramFlags getProgramFlags( Material const & material )const override;
 
 		C3D_API void createDescriptorSet( Geometry const & geometry );
 		C3D_API ashes::DescriptorSet const & getDescriptorSet( Geometry const & geometry )const;
@@ -68,24 +65,26 @@ namespace castor3d
 			return *m_descriptorLayout;
 		}
 
-		GpuBufferOffsetT< Meshlet > const & getMeshletsBuffer()const
-		{
-			return m_meshletBuffer;
-		}
-
 		std::vector< Meshlet > const & getMeshletsData()const
 		{
-			return m_data;
+			return m_meshlets;
 		}
 
 		std::vector< Meshlet > & getMeshletsData()
 		{
-			return m_data;
+			needsUpdate();
+			return m_meshlets;
+		}
+
+		std::vector< castor::Point4f > & getSpheres()
+		{
+			needsUpdate();
+			return m_spheres;
 		}
 
 		uint32_t getMeshletsCount()const
 		{
-			return uint32_t( m_data.size() );
+			return uint32_t( m_meshlets.size() );
 		}
 
 	private:
@@ -99,10 +98,12 @@ namespace castor3d
 
 	private:
 		GpuBufferOffsetT< Meshlet > m_meshletBuffer;
+		GpuBufferOffsetT< castor::Point4f > m_sphereBuffer;
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
 		ashes::DescriptorSetPoolPtr m_descriptorPool;
 		std::map< Geometry const *, ashes::DescriptorSetPtr > m_descriptorSets;
-		std::vector< Meshlet > m_data;
+		std::vector< Meshlet > m_meshlets;
+		std::vector< castor::Point4f > m_spheres;
 	};
 }
 

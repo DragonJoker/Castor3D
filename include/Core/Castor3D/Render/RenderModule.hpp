@@ -159,6 +159,7 @@ namespace castor3d
 		: uint32_t
 	{
 		eMeshlets,
+		eSpheres,
 		ePosition,
 		eNormal,
 		eTangent,

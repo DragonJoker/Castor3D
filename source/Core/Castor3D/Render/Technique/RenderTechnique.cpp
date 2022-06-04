@@ -729,6 +729,7 @@ namespace castor3d
 		jitterProjSpace[1] /= float( camera.getHeight() );
 		m_matrixUbo.cpuUpdate( camera.getView()
 			, camera.getProjection( true )
+			, camera.getFrustum()
 			, jitterProjSpace );
 		m_sceneUbo.cpuUpdate( &camera
 			, camera.getScene()->getFog() );

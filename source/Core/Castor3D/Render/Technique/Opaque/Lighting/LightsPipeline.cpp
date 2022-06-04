@@ -96,7 +96,8 @@ namespace castor3d
 		if ( m_config.lightType != LightType::eDirectional )
 		{
 			entry.matrixUbo.cpuUpdate( camera.getView()
-				, camera.getProjection( false ) );
+				, camera.getProjection( false )
+				, camera.getFrustum() );
 			auto model = doComputeModelMatrix( light, camera );
 			auto & data = entry.modelMatrixUbo.getData();
 			data.prvModel = data.curModel;
@@ -105,7 +106,8 @@ namespace castor3d
 		else
 		{
 			entry.matrixUbo.cpuUpdate( camera.getView()
-				, m_viewport.getProjection() );
+				, m_viewport.getProjection()
+				, camera.getFrustum() );
 		}
 
 		m_enabledLights.push_back( &entry );

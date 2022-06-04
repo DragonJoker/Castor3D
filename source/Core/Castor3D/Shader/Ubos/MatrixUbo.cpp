@@ -2,6 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
+#include "Castor3D/Render/Frustum.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
@@ -26,6 +27,7 @@ namespace castor3d
 			, m_curViewProj{ getMember< sdw::Mat4 >( "curViewProj" ) }
 			, m_prvViewProj{ getMember< sdw::Mat4 >( "prvViewProj" ) }
 			, m_jitter{ getMember< sdw::Vec4 >( "jitter" ) }
+			, m_frustumPlanes{ getMemberArray< sdw::Vec4 >( "frustumPlanes" ) }
 		{
 		}
 
@@ -43,6 +45,7 @@ namespace castor3d
 				result->declMember( "curViewProj", ast::type::Kind::eMat4x4F );
 				result->declMember( "prvViewProj", ast::type::Kind::eMat4x4F );
 				result->declMember( "jitter", ast::type::Kind::eVec4F );
+				result->declMember( "frustumPlanes", ast::type::Kind::eVec4F, 6u );
 			}
 
 			return result;
@@ -192,6 +195,7 @@ namespace castor3d
 
 	void MatrixUbo::cpuUpdate( castor::Matrix4x4f const & view
 		, castor::Matrix4x4f const & projection
+		, Frustum const & frustum
 		, castor::Point2f const & jitter )
 	{
 		CU_Require( m_ubo );
@@ -203,6 +207,15 @@ namespace castor3d
 		configuration.curViewProj = projection * view;
 		configuration.invProjection = projection.getInverse();
 		configuration.jitter = { jitter->x, jitter->y, configuration.jitter->x, configuration.jitter->y };
+		auto itSrc = frustum.getPlanes().begin();
+		auto itDst = configuration.frustumPlanes.begin();
+
+		while ( itSrc != frustum.getPlanes().end() )
+		{
+			*itDst = { itSrc->getNormal()->x, itSrc->getNormal()->y, itSrc->getNormal()->z, itSrc->getDistance() };
+			++itSrc;
+			++itDst;
+		}
 	}
 
 	void MatrixUbo::cpuUpdate( castor::Matrix4x4f const & projection )
