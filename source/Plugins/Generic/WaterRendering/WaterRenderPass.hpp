@@ -106,9 +106,6 @@ namespace water
 		castor3d::SubmeshFlags doAdjustSubmeshFlags( castor3d::SubmeshFlags flags )const override;
 		castor3d::PassFlags doAdjustPassFlags( castor3d::PassFlags flags )const override;
 		castor3d::ProgramFlags doAdjustProgramFlags( castor3d::ProgramFlags flags )const override;
-		castor3d::ShaderPtr doGetHullShaderSource( castor3d::PipelineFlags const & flags )const override;
-		castor3d::ShaderPtr doGetDomainShaderSource( castor3d::PipelineFlags const & flags )const override;
-		castor3d::ShaderPtr doGetGeometryShaderSource( castor3d::PipelineFlags const & flags )const override;
 		castor3d::ShaderPtr doGetPixelShaderSource( castor3d::PipelineFlags const & flags )const override;
 
 	private:

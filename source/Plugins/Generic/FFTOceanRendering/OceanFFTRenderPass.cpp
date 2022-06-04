@@ -1066,11 +1066,6 @@ namespace ocean_fft
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
-	castor3d::ShaderPtr OceanRenderPass::doGetGeometryShaderSource( castor3d::PipelineFlags const & flags )const
-	{
-		return nullptr;
-	}
-
 	castor3d::ShaderPtr OceanRenderPass::doGetPixelShaderSource( castor3d::PipelineFlags const & flags )const
 	{
 #if Ocean_Debug

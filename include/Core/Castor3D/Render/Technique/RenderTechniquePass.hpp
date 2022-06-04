@@ -240,9 +240,6 @@ namespace castor3d
 			, uint32_t & index )const;
 
 	private:
-		ShaderPtr doGetHullShaderSource( PipelineFlags const & flags )const override;
-		ShaderPtr doGetDomainShaderSource( PipelineFlags const & flags )const override;
-		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
 		void doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
 		void doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps )override;

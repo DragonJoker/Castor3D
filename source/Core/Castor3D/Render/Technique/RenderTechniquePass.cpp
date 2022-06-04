@@ -196,21 +196,6 @@ namespace castor3d
 		return flags;
 	}
 
-	ShaderPtr RenderTechniquePass::doGetHullShaderSource( PipelineFlags const & flags )const
-	{
-		return nullptr;
-	}
-
-	ShaderPtr RenderTechniquePass::doGetDomainShaderSource( PipelineFlags const & flags )const
-	{
-		return nullptr;
-	}
-
-	ShaderPtr RenderTechniquePass::doGetGeometryShaderSource( PipelineFlags const & flags )const
-	{
-		return nullptr;
-	}
-
 	void RenderTechniquePass::doAddShadowBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{

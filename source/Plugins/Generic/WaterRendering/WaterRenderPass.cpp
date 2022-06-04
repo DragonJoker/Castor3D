@@ -521,21 +521,6 @@ namespace water
 		return flags;
 	}
 
-	castor3d::ShaderPtr WaterRenderPass::doGetHullShaderSource( castor3d::PipelineFlags const & flags )const
-	{
-		return nullptr;
-	}
-
-	castor3d::ShaderPtr WaterRenderPass::doGetDomainShaderSource( castor3d::PipelineFlags const & flags )const
-	{
-		return nullptr;
-	}
-
-	castor3d::ShaderPtr WaterRenderPass::doGetGeometryShaderSource( castor3d::PipelineFlags const & flags )const
-	{
-		return nullptr;
-	}
-
 	castor3d::ShaderPtr WaterRenderPass::doGetPixelShaderSource( castor3d::PipelineFlags const & flags )const
 	{
 #if Water_Debug

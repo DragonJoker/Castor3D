@@ -102,9 +102,6 @@ namespace castor3d
 		void doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
 		void doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps )override;
-		ShaderPtr doGetHullShaderSource( PipelineFlags const & flags )const override;
-		ShaderPtr doGetDomainShaderSource( PipelineFlags const & flags )const override;
-		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
 
 	protected:
 		ShadowMap const & m_shadowMap;

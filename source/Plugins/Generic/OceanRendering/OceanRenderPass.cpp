@@ -1049,11 +1049,6 @@ namespace ocean
 #endif
 	}
 
-	castor3d::ShaderPtr OceanRenderPass::doGetGeometryShaderSource( castor3d::PipelineFlags const & flags )const
-	{
-		return nullptr;
-	}
-
 	castor3d::ShaderPtr OceanRenderPass::doGetPixelShaderSource( castor3d::PipelineFlags const & flags )const
 	{
 #if Ocean_Debug
