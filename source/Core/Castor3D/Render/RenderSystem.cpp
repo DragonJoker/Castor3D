@@ -166,6 +166,8 @@ namespace castor3d
 				result.insert( glsl::EXT_ray_tracing );
 				result.insert( glsl::EXT_ray_query );
 				result.insert( glsl::EXT_scalar_block_layout );
+				result.insert( glsl::KHR_shader_subgroup_basic );
+				result.insert( glsl::KHR_shader_subgroup_ballot );
 			}
 
 			if ( glslVersion >= glsl::v4_5 )
@@ -586,6 +588,11 @@ namespace castor3d
 				&& device.hasRayTracing() )
 			{
 				result.insert( spirv::KHR_ray_tracing );
+			}
+
+			if ( device.gpu.getProperties().apiVersion >= ashes::makeVersion( 1, 2, 0 ) )
+			{
+				result.insert( spirv::KHR_shader_subgroup );
 			}
 
 			return result;

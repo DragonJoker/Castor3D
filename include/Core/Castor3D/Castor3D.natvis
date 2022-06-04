@@ -207,10 +207,12 @@
 		<DisplayString>{m_id} {m_type}</DisplayString>
 		<Expand>
 			<Item Name="meshletBuffer">m_meshletBuffer</Item>
+			<Item Name="sphereBuffer">m_sphereBuffer</Item>
 			<Item Name="descriptorLayout">m_descriptorLayout</Item>
 			<Item Name="descriptorPool">m_descriptorPool</Item>
 			<Item Name="descriptorSets">m_descriptorSets</Item>
-			<Item Name="data">m_data</Item>
+			<Item Name="meshlets">m_meshlets</Item>
+			<Item Name="spheres">m_spheres</Item>
 		</Expand>
 	</Type>
 

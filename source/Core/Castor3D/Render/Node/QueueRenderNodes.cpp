@@ -177,6 +177,14 @@ namespace castor3d
 						, 4u
 						, &pipelineId );
 				}
+				else if ( checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eHasTask ) )
+				{
+					commandBuffer.pushConstants( pipeline.getPipelineLayout()
+						, VK_SHADER_STAGE_MESH_BIT_NV | VK_SHADER_STAGE_TASK_BIT_NV
+						, 0u
+						, 4u
+						, &pipelineId );
+				}
 				else
 				{
 					commandBuffer.pushConstants( pipeline.getPipelineLayout()

@@ -126,7 +126,8 @@ namespace castor3d
 				: 0.1f )
 			, farPlane );
 		m_matrixUbo.cpuUpdate( pointLight.getViewMatrix( CubeMapFace( updater.index ) )
-			, m_projection );
+			, m_projection
+			, updater.camera->getFrustum() );
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo ShadowMapPassPoint::doCreateDepthStencilState( PipelineFlags const & flags )const

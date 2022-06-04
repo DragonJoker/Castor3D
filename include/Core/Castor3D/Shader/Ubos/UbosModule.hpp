@@ -241,6 +241,7 @@ namespace castor3d
 		castor::Matrix4x4f curViewProj;
 		castor::Matrix4x4f prvViewProj;
 		castor::Point4f jitter;
+		std::array< castor::Point4f, 6u > frustumPlanes;
 	};
 	/**
 	*\~english

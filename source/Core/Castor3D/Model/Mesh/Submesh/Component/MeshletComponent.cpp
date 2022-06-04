@@ -39,7 +39,8 @@ namespace castor3d
 	SubmeshComponentSPtr MeshletComponent::clone( Submesh & submesh )const
 	{
 		auto result = submesh.createComponent< MeshletComponent >();
-		result->m_data = m_data;
+		result->m_meshlets = m_meshlets;
+		result->m_spheres = m_spheres;
 		return std::static_pointer_cast< SubmeshComponent >( result );
 	}
 
@@ -55,6 +56,7 @@ namespace castor3d
 			ashes::WriteDescriptorSetArray writes;
 			auto submeshFlags = getOwner()->getFinalSubmeshFlags();
 			writes.push_back( m_meshletBuffer.getStorageBinding( uint32_t( MeshBuffersIdx::eMeshlets ) ) );
+			writes.push_back( m_sphereBuffer.getStorageBinding( uint32_t( MeshBuffersIdx::eSpheres ) ) );
 
 			if ( checkFlag( submeshFlags, SubmeshFlag::ePositions ) )
 			{
@@ -115,6 +117,14 @@ namespace castor3d
 		}
 	}
 
+	ProgramFlags MeshletComponent::getProgramFlags( Material const & material )const
+	{
+		return ProgramFlag::eHasMesh
+			| ( m_spheres.empty() || getOwner()->isDynamic()
+				? ProgramFlag::eNone
+				: ProgramFlag::eHasTask );
+	}
+
 	ashes::DescriptorSet const & MeshletComponent::getDescriptorSet( Geometry const & geometry )const
 	{
 		auto it = m_descriptorSets.find( &geometry );
@@ -124,12 +134,19 @@ namespace castor3d
 
 	bool MeshletComponent::doInitialise( RenderDevice const & device )
 	{
-		if ( !m_data.empty() )
+		if ( !m_meshlets.empty() )
 		{
 			if ( !m_meshletBuffer )
 			{
 				m_meshletBuffer = device.bufferPool->getBuffer< Meshlet >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-					, m_data.size()
+					, m_meshlets.size()
+					, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+			}
+
+			if ( !m_sphereBuffer )
+			{
+				m_sphereBuffer = device.bufferPool->getBuffer< castor::Point4f >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+					, m_meshlets.size()
 					, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 			}
 
@@ -141,6 +158,12 @@ namespace castor3d
 
 	void MeshletComponent::doCleanup( RenderDevice const & device )
 	{
+		if ( m_sphereBuffer )
+		{
+			device.bufferPool->putBuffer( m_sphereBuffer );
+			m_sphereBuffer = {};
+		}
+
 		if ( m_meshletBuffer )
 		{
 			device.bufferPool->putBuffer( m_meshletBuffer );
@@ -155,88 +178,101 @@ namespace castor3d
 			return;
 		}
 
-		auto count = uint32_t( m_data.size() );
+		auto count = uint32_t( m_meshlets.size() );
 
 		if ( count )
 		{
-			std::copy( m_data.begin()
-				, m_data.end()
+			std::copy( m_meshlets.begin()
+				, m_meshlets.end()
 				, m_meshletBuffer.getData().begin() );
 			m_meshletBuffer.markDirty( VK_ACCESS_UNIFORM_READ_BIT
 				, VK_PIPELINE_STAGE_MESH_SHADER_BIT_NV );
+
+			count = uint32_t( m_spheres.size() );
+
+			if ( count )
+			{
+				std::copy( m_spheres.begin()
+					, m_spheres.end()
+					, m_sphereBuffer.getData().begin() );
+				m_sphereBuffer.markDirty( VK_ACCESS_UNIFORM_READ_BIT
+					, VK_PIPELINE_STAGE_TASK_SHADER_BIT_NV );
+			}
 		}
 	}
 
 	void MeshletComponent::doCreateDescriptorLayout( RenderDevice const & device )
 	{
-		VkShaderStageFlags stageFlags = VK_SHADER_STAGE_TASK_BIT_NV | VK_SHADER_STAGE_MESH_BIT_NV;
 		ashes::VkDescriptorSetLayoutBindingArray bindings;
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eMeshlets )
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, stageFlags ) );
+			, VK_SHADER_STAGE_MESH_BIT_NV ) );
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eSpheres )
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+			, VK_SHADER_STAGE_TASK_BIT_NV ) );
 		auto submeshFlags = getOwner()->getFinalSubmeshFlags();
 
 		if ( checkFlag( submeshFlags, SubmeshFlag::ePositions ) )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::ePosition )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, stageFlags ) );
+				, VK_SHADER_STAGE_MESH_BIT_NV ) );
 		}
 
 		if ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eNormal )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, stageFlags ) );
+				, VK_SHADER_STAGE_MESH_BIT_NV ) );
 		}
 
 		if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eTangent )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, stageFlags ) );
+				, VK_SHADER_STAGE_MESH_BIT_NV ) );
 		}
 
 		if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 ) )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eTexcoord0 )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, stageFlags ) );
+				, VK_SHADER_STAGE_MESH_BIT_NV ) );
 		}
 
 		if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords1 ) )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eTexcoord1 )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, stageFlags ) );
+				, VK_SHADER_STAGE_MESH_BIT_NV ) );
 		}
 
 		if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords2 ) )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eTexcoord2 )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, stageFlags ) );
+				, VK_SHADER_STAGE_MESH_BIT_NV ) );
 		}
 
 		if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eTexcoord3 )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, stageFlags ) );
+				, VK_SHADER_STAGE_MESH_BIT_NV ) );
 		}
 
 		if ( checkFlag( submeshFlags, SubmeshFlag::eColours ) )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eColour )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, stageFlags ) );
+				, VK_SHADER_STAGE_MESH_BIT_NV ) );
 		}
 
 		if ( checkFlag( submeshFlags, SubmeshFlag::eVelocity ) )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eVelocity )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, stageFlags ) );
+				, VK_SHADER_STAGE_MESH_BIT_NV ) );
 		}
 
 		m_descriptorLayout = device->createDescriptorSetLayout( mshletcomp::getName( *this )

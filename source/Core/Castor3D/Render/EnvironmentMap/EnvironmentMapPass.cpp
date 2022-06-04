@@ -83,7 +83,8 @@ namespace castor3d
 	{
 		doCreateGenMipmapsPass( m_transparentPassDesc );
 		m_matrixUbo.cpuUpdate( m_camera->getView()
-			, m_camera->getProjection( false ) );
+			, m_camera->getProjection( false )
+			, m_camera->getFrustum() );
 		m_sceneUbo.setWindowSize( m_camera->getSize() );
 		log::trace << "Created EnvironmentMapPass " << getName() << std::endl;
 	}
@@ -116,7 +117,8 @@ namespace castor3d
 		m_opaquePass->update( updater );
 		m_transparentPass->update( updater );
 		m_matrixUbo.cpuUpdate( camera.getView()
-			, camera.getProjection( false ) );
+			, camera.getProjection( false )
+			, camera.getFrustum() );
 		m_hdrConfigUbo.cpuUpdate( camera.getHdrConfig() );
 
 		updater.isSafeBanded = oldSafeBanded;

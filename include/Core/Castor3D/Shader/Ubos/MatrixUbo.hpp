@@ -68,6 +68,11 @@ namespace castor3d
 				return m_invProjection;
 			}
 
+			sdw::Vec4 getFrustumPlane( sdw::UInt index )const
+			{
+				return m_frustumPlanes[index];
+			}
+
 		private:
 			using sdw::StructInstance::getMember;
 			using sdw::StructInstance::getMemberArray;
@@ -80,6 +85,7 @@ namespace castor3d
 			sdw::Mat4 m_curViewProj;
 			sdw::Mat4 m_prvViewProj;
 			sdw::Vec4 m_jitter;
+			sdw::Array< sdw::Vec4 > m_frustumPlanes;
 		};
 	}
 
@@ -107,6 +113,7 @@ namespace castor3d
 		 */
 		C3D_API void cpuUpdate( castor::Matrix4x4f const & view
 			, castor::Matrix4x4f const & projection
+			, Frustum const & frustum
 			, castor::Point2f const & jitter = castor::Point2f{} );
 		/**
 		 *\~english
