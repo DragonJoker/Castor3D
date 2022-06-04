@@ -105,7 +105,6 @@ namespace ocean_fft
 		castor3d::ShaderPtr doGetBillboardShaderSource( castor3d::PipelineFlags const & flags )const override;
 		castor3d::ShaderPtr doGetHullShaderSource( castor3d::PipelineFlags const & flags )const override;
 		castor3d::ShaderPtr doGetDomainShaderSource( castor3d::PipelineFlags const & flags )const override;
-		castor3d::ShaderPtr doGetGeometryShaderSource( castor3d::PipelineFlags const & flags )const override;
 		castor3d::ShaderPtr doGetPixelShaderSource( castor3d::PipelineFlags const & flags )const override;
 
 	private:

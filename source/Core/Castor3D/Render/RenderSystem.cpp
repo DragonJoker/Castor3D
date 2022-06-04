@@ -32,8 +32,6 @@
 
 #include <atomic>
 
-#define C3D_UseAllocationCallbacks 0
-
 #if !defined( NDEBUG )
 #	define C3D_DebugSpirV 0
 #endif

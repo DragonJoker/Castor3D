@@ -92,8 +92,6 @@ namespace castor3d
 		SceneFlags doAdjustSceneFlags( SceneFlags flags )const override;
 		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetBillboardShaderSource( PipelineFlags const & flags )const override;
-		ShaderPtr doGetHullShaderSource( PipelineFlags const & flags )const override;
-		ShaderPtr doGetDomainShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
 
