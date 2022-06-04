@@ -1,5 +1,6 @@
 #include "Castor3D/Model/Mesh/MeshPreparer.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
@@ -264,6 +265,8 @@ namespace castor3d
 				, remapped );
 		}
 
+#if C3D_UseMeshShaders
+
 		static std::vector< Meshlet > buildMeshlets( Remapped const & remapped )
 		{
 			auto indexCount = remapped.indices.size() * 3u;
@@ -304,6 +307,8 @@ namespace castor3d
 			return result;
 		}
 
+#	if C3D_UseTaskShaders
+
 		static std::vector< castor::Point4f > buildBoundingSpheres( std::vector< Meshlet > const & meshlets
 			, Remapped const & remapped )
 		{
@@ -324,6 +329,9 @@ namespace castor3d
 
 			return result;
 		}
+
+#	endif
+#endif
 	}
 
 	bool MeshPreparer::prepare( Mesh & mesh
@@ -359,6 +367,8 @@ namespace castor3d
 			, newVertexCount );
 		meshopt::optimizeOverdraw( remapped );
 		meshopt::optimizeFetch( remapped );
+
+#if C3D_UseMeshShaders
 		RenderDevice & device = submesh.getOwner()->getOwner()->getRenderSystem()->getRenderDevice();
 
 		if ( device.hasMeshAndTaskShaders() )
@@ -366,11 +376,14 @@ namespace castor3d
 			if ( auto meshlet = submesh.createComponent< MeshletComponent >() )
 			{
 				auto meshlets = meshopt::buildMeshlets( remapped );
+#	if C3D_UseTaskShaders
 				auto spheres = meshopt::buildBoundingSpheres( meshlets, remapped );
-				meshlet->getMeshletsData() = std::move( meshlets );
 				meshlet->getSpheres() = std::move( spheres );
+#	endif
+				meshlet->getMeshletsData() = std::move( meshlets );
 			}
 		}
+#endif
 
 		triangles.getFaces() = std::move( remapped.indices );
 

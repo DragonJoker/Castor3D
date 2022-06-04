@@ -897,6 +897,7 @@ namespace castor3d
 				{
 					object->fillEntry( *passIt.first
 						, *object->getParent()
+						, submeshIt.second.second->data.getMeshletsCount()
 						, submeshIt.second.second->modelData );
 					dirty = dirty || passIt.first->getId() == 0;
 				}
@@ -916,6 +917,7 @@ namespace castor3d
 			{
 				object->fillEntry( *billboardIt.first
 					, *object->getNode()
+					, 0u
 					, billboardIt.second.second->modelData );
 				billboardIt.second.second->billboardData.dimensions = object->getDimensions();
 				dirty = dirty || billboardIt.first->getId() == 0;

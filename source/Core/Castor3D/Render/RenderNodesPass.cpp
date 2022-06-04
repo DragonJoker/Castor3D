@@ -93,6 +93,41 @@ namespace castor3d
 			sdw::Array< sdw::UInt > meshletIndices;
 		};
 
+		struct CullData
+			: public sdw::StructInstance
+		{
+			CullData( sdw::ShaderWriter & writer
+				, sdw::expr::ExprPtr expr
+				, bool enabled = true )
+				: sdw::StructInstance{ writer, std::move( expr ), enabled }
+				, sphere{ getMember< sdw::Vec4 >( "sphere" ) }
+			{
+			}
+
+			SDW_DeclStructInstance( , CullData );
+
+			static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache )
+			{
+				auto result = cache.getStruct( sdw::type::MemoryLayout::eStd430
+					, "C3D_CullData" );
+
+				if ( result->empty() )
+				{
+					result->declMember( "sphere"
+						, sdw::type::Kind::eVec4F
+						, sdw::type::NotArray );
+				}
+
+				return result;
+			}
+
+			sdw::Vec4 sphere;
+
+		private:
+			mutable sdw::Function< sdw::Vec4
+				, sdw::InInt > m_unpackCone;
+		};
+
 		struct Meshlet
 			: public sdw::StructInstance
 		{
@@ -890,41 +925,40 @@ namespace castor3d
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
-		auto spheresBuffer = writer.declStorageBuffer<>( "c3d_spheresBuffer"
-			, uint32_t( MeshBuffersIdx::eSpheres )
+		auto c3d_cullData = writer.declArrayStorageBuffer< shader::CullData >( "c3d_cullBuffer"
+			, uint32_t( MeshBuffersIdx::eCullData )
 			, RenderPipeline::eMeshBuffers );
-		auto c3d_spheres = spheresBuffer.declMemberArray< sdw::Vec4 >( "c3d_spheres" );
-		spheresBuffer.end();
 
 		auto checkVisible = writer.implementFunction< sdw::Boolean >( "checkVisible"
 			, [&]( sdw::UInt nodeId
-				, sdw::Vec4 const & sphere )
+				, sdw::UInt meshletId )
 			{
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId - 1u] );
+
+				IF( writer, meshletId >= modelData.getMeshletCount() )
+				{
+					writer.returnStmt( sdw::Boolean{ false } );
+				}
+				FI;
+
+				auto cullData = writer.declLocale( "cullData"
+					, c3d_cullData[meshletId] );
 				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
 					, modelData.getModelMtx() );
-
-				auto xScale = writer.declLocale( "xScale"
-					, length( vec3( curMtxModel[0][0], curMtxModel[0][1], curMtxModel[0][2] ) ) );
-				auto yScale = writer.declLocale( "yScale"
-					, length( vec3( curMtxModel[1][0], curMtxModel[1][1], curMtxModel[1][2] ) ) );
-				auto zScale = writer.declLocale( "zScale"
-					, length( vec3( curMtxModel[2][0], curMtxModel[2][1], curMtxModel[2][2] ) ) );
-
 				auto meanScale = writer.declLocale( "meanScale"
-					, ( xScale + yScale + zScale ) / 3.0f );
+					, ( modelData.getScale().x() + modelData.getScale().y() + modelData.getScale().z() ) / 3.0f );
 
 				auto sphereCenter = writer.declLocale( "sphereCenter"
-					, vec3( curMtxModel * vec4( sphere.xyz(), 1.0 ) ) );
+					, vec3( curMtxModel * vec4( cullData.sphere.xyz(), 0.0 ) ) );
 				auto sphereRadius = writer.declLocale( "sphereRadius"
-					, sphere.w() * meanScale );
+					, cullData.sphere.w() * meanScale );
 				auto finalSphere = writer.declLocale( "finalSphere"
 					, vec4( sphereCenter, sphereRadius ) );
 
 				FOR( writer, sdw::UInt, i, 0u, i < 6u, ++i )
 				{
-					IF( writer, dot( c3d_matrixData.getFrustumPlane( i ).xyz(), finalSphere.xyz() ) + c3d_matrixData.getFrustumPlane( i ).w() <= -sphere.w() )
+					IF( writer, dot( c3d_matrixData.getFrustumPlane( i ).xyz(), finalSphere.xyz() ) + c3d_matrixData.getFrustumPlane( i ).w() <= -cullData.sphere.w() )
 					{
 						writer.returnStmt( sdw::Boolean{ false } );
 					}
@@ -935,9 +969,9 @@ namespace castor3d
 				writer.returnStmt( sdw::Boolean{ true } );
 			}
 			, sdw::InUInt{ writer, "nodeId" }
-			, sdw::InVec4{ writer, "sphere" } );
+			, sdw::InUInt{ writer, "meshletId" } );
 
-		writer.implementMainT< shader::PayloadT >( 32
+		writer.implementMainT< shader::PayloadT >( 32u
 			, sdw::TaskPayloadOutT< shader::PayloadT >{ writer }
 			, [&]( sdw::TaskSubgroupIn in
 				, sdw::TaskPayloadOutT< shader::PayloadT > payload )
@@ -945,12 +979,14 @@ namespace castor3d
 				auto laneId = writer.declLocale( "laneId"
 					, in.localInvocationID );
 				auto baseId = writer.declLocale( "baseId"
-					, in.workGroupID * 32u );
+					, in.workGroupID );
+				auto meshletId = writer.declLocale( "meshletId"
+					, baseId * 32u + laneId );
 				auto nodeId = shader::getNodeId( c3d_objectIdsData
 					, pipelineID
 					, in.drawID );
 				auto render = writer.declLocale( "render"
-					, checkVisible( nodeId, c3d_spheres[baseId + laneId] ) );
+					, checkVisible( nodeId, meshletId ) );
 				auto vote = writer.declLocale( "vote"
 					, subgroupBallot( render ) );
 				auto tasks = writer.declLocale( "tasks"
@@ -960,7 +996,7 @@ namespace castor3d
 
 				IF( writer, render )
 				{
-					payload.meshletIndices[idxOffset] = baseId + laneId;
+					payload.meshletIndices[idxOffset] = meshletId;
 				}
 				FI;
 
@@ -1165,9 +1201,9 @@ namespace castor3d
 					, sdw::MeshVertexListOutT< shader::FragmentSurfaceT > vtxOut
 					, sdw::TrianglesMeshPrimitiveListOutT< VoidT > primOut )
 				{
-					auto meshletId = writer.declLocale( "meshletId"
-						, payload.meshletIndices[in.workGroupID] );
-					meshShader( meshletId, in, vtxOut, primOut );
+					auto baseId = writer.declLocale( "baseId"
+						, in.workGroupID );
+					meshShader( payload.meshletIndices[baseId], in, vtxOut, primOut );
 				} );
 		}
 		else
@@ -1189,9 +1225,9 @@ namespace castor3d
 					, sdw::MeshVertexListOutT< shader::FragmentSurfaceT > vtxOut
 					, sdw::TrianglesMeshPrimitiveListOutT< VoidT > primOut )
 				{
-					auto meshletId = writer.declLocale( "meshletId"
+					auto baseId = writer.declLocale( "baseId"
 						, in.workGroupID );
-					meshShader( meshletId, in, vtxOut, primOut );
+					meshShader( baseId, in, vtxOut, primOut );
 				} );
 		}
 

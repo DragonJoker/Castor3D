@@ -11,6 +11,7 @@
 
 namespace castor3d
 {
+#if VK_NV_mesh_shader
 	namespace mshletcomp
 	{
 		castor::String getName( MeshletComponent const & component )
@@ -28,6 +29,7 @@ namespace castor3d
 			return result;
 		}
 	}
+#endif
 
 	castor::String const MeshletComponent::Name = cuT( "meshlet" );
 
@@ -46,6 +48,7 @@ namespace castor3d
 
 	void MeshletComponent::createDescriptorSet( Geometry const & geometry )
 	{
+#if VK_NV_mesh_shader
 		auto & baseBuffers = getOwner()->getFinalBufferOffsets( geometry );
 		auto descSetIt = m_descriptorSets.emplace( &geometry, nullptr ).first;
 
@@ -56,7 +59,7 @@ namespace castor3d
 			ashes::WriteDescriptorSetArray writes;
 			auto submeshFlags = getOwner()->getFinalSubmeshFlags();
 			writes.push_back( m_meshletBuffer.getStorageBinding( uint32_t( MeshBuffersIdx::eMeshlets ) ) );
-			writes.push_back( m_sphereBuffer.getStorageBinding( uint32_t( MeshBuffersIdx::eSpheres ) ) );
+			writes.push_back( m_sphereBuffer.getStorageBinding( uint32_t( MeshBuffersIdx::eCullData ) ) );
 
 			if ( checkFlag( submeshFlags, SubmeshFlag::ePositions ) )
 			{
@@ -115,14 +118,19 @@ namespace castor3d
 			descSetIt->second->setBindings( std::move( writes ) );
 			descSetIt->second->update();
 		}
+#endif
 	}
 
 	ProgramFlags MeshletComponent::getProgramFlags( Material const & material )const
 	{
+#if VK_NV_mesh_shader
 		return ProgramFlag::eHasMesh
 			| ( m_spheres.empty() || getOwner()->isDynamic()
 				? ProgramFlag::eNone
 				: ProgramFlag::eHasTask );
+#else
+		return ProgramFlag::eNone;
+#endif
 	}
 
 	ashes::DescriptorSet const & MeshletComponent::getDescriptorSet( Geometry const & geometry )const
@@ -134,6 +142,7 @@ namespace castor3d
 
 	bool MeshletComponent::doInitialise( RenderDevice const & device )
 	{
+#if VK_NV_mesh_shader
 		if ( !m_meshlets.empty() )
 		{
 			if ( !m_meshletBuffer )
@@ -152,6 +161,7 @@ namespace castor3d
 
 			doCreateDescriptorLayout( device );
 		}
+#endif
 
 		return true;
 	}
@@ -178,6 +188,7 @@ namespace castor3d
 			return;
 		}
 
+#if VK_NV_mesh_shader
 		auto count = uint32_t( m_meshlets.size() );
 
 		if ( count )
@@ -199,15 +210,17 @@ namespace castor3d
 					, VK_PIPELINE_STAGE_TASK_SHADER_BIT_NV );
 			}
 		}
+#endif
 	}
 
 	void MeshletComponent::doCreateDescriptorLayout( RenderDevice const & device )
 	{
+#if VK_NV_mesh_shader
 		ashes::VkDescriptorSetLayoutBindingArray bindings;
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eMeshlets )
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_MESH_BIT_NV ) );
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eSpheres )
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eCullData )
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_TASK_BIT_NV ) );
 		auto submeshFlags = getOwner()->getFinalSubmeshFlags();
@@ -279,5 +292,6 @@ namespace castor3d
 			, std::move( bindings ) );
 		m_descriptorPool = m_descriptorLayout->createPool( mshletcomp::getName( *this )
 			, MaxNodesPerPipeline );
+#endif
 	}
 }

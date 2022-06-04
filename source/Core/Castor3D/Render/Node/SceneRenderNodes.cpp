@@ -195,6 +195,7 @@ namespace castor3d
 				, ++m_nodeId );
 			instance.fillEntry( pass
 				, *instance.getParent()
+				, data.getMeshletsCount()
 				, node.modelData );
 
 			if ( data.isDynamic() )
@@ -252,6 +253,7 @@ namespace castor3d
 				, ++m_nodeId );
 			instance.fillEntry( pass
 				, *instance.getNode()
+				, 0u
 				, it.first->second->modelData );
 			m_dirty = true;
 		}
