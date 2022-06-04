@@ -9,6 +9,7 @@ namespace castor3d
 {
 	void RenderedObject::fillEntry( Pass const & pass
 		, SceneNode const & sceneNode
+		, uint32_t meshletCount
 		, ModelBufferConfiguration & modelData )
 	{
 		if ( !sceneNode.isVisible() )
@@ -44,5 +45,8 @@ namespace castor3d
 		{
 			modelData.countsIDs->z = int( sceneNode.getScene()->getEnvironmentMapIndex( sceneNode ) + 1u );
 		}
+
+		auto scale = sceneNode.getDerivedScale();
+		modelData.meshletScale = { scale->x, scale->y, scale->z, float( meshletCount ) };
 	}
 }
