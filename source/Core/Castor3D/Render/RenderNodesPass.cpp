@@ -34,8 +34,11 @@
 #include "Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureAnimationBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
+#include "Castor3D/Shader/Shaders/GlslCullData.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslMeshlet.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
+#include "Castor3D/Shader/Shaders/GlslTaskPayload.hpp"
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
@@ -53,131 +56,6 @@
 
 namespace castor3d
 {
-	//*********************************************************************************************
-
-	namespace shader
-	{
-		template< sdw::var::Flag FlagT >
-		struct PayloadT
-			: public sdw::StructInstance
-		{
-			PayloadT( sdw::ShaderWriter & writer
-				, sdw::expr::ExprPtr expr
-				, bool enabled = true )
-				: sdw::StructInstance{ writer, std::move( expr ), enabled }
-				, meshletIndices{ getMemberArray< sdw::UInt >( "meshletIndices" ) }
-			{
-			}
-
-			SDW_DeclStructInstance( , PayloadT );
-
-			static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache )
-			{
-				auto result = cache.getIOStruct( sdw::type::MemoryLayout::eStd430
-					, ( FlagT == sdw::var::Flag::eShaderOutput
-						? std::string{ "Output" }
-						: std::string{ "Input" } ) + "Payload"
-					, ast::var::Flag( FlagT | ast::var::Flag::ePerTask ) );
-
-				if ( result->empty() )
-				{
-					result->declMember( "meshletIndices"
-						, sdw::type::Kind::eUInt
-						, 32u
-						, ast::type::Struct::InvalidLocation );
-				}
-
-				return result;
-			}
-
-			sdw::Array< sdw::UInt > meshletIndices;
-		};
-
-		struct CullData
-			: public sdw::StructInstance
-		{
-			CullData( sdw::ShaderWriter & writer
-				, sdw::expr::ExprPtr expr
-				, bool enabled = true )
-				: sdw::StructInstance{ writer, std::move( expr ), enabled }
-				, sphere{ getMember< sdw::Vec4 >( "sphere" ) }
-			{
-			}
-
-			SDW_DeclStructInstance( , CullData );
-
-			static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache )
-			{
-				auto result = cache.getStruct( sdw::type::MemoryLayout::eStd430
-					, "C3D_CullData" );
-
-				if ( result->empty() )
-				{
-					result->declMember( "sphere"
-						, sdw::type::Kind::eVec4F
-						, sdw::type::NotArray );
-				}
-
-				return result;
-			}
-
-			sdw::Vec4 sphere;
-
-		private:
-			mutable sdw::Function< sdw::Vec4
-				, sdw::InInt > m_unpackCone;
-		};
-
-		struct Meshlet
-			: public sdw::StructInstance
-		{
-			Meshlet( sdw::ShaderWriter & writer
-				, sdw::expr::ExprPtr expr
-				, bool enabled = true )
-				: sdw::StructInstance{ writer, std::move( expr ), enabled }
-				, vertices{ getMemberArray< sdw::UInt >( "vertices" ) }
-				, indices{ getMemberArray< sdw::UInt >( "indices" ) }
-				, m_counts{ getMember< sdw::UVec4 >( "counts" ) }
-				, vertexCount{ m_counts.x() }
-				, triangleCount{ m_counts.y() }
-			{
-			}
-
-			SDW_DeclStructInstance( , Meshlet );
-
-			static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache )
-			{
-				auto result = cache.getStruct( sdw::type::MemoryLayout::eStd430
-					, "C3D_Meshlet" );
-
-				if ( result->empty() )
-				{
-					result->declMember( "vertices"
-						, sdw::type::Kind::eUInt
-						, 64u );
-					result->declMember( "indices"
-						, sdw::type::Kind::eUInt
-						, 128u * 3u / 4u );
-					result->declMember( "counts"
-						, sdw::type::Kind::eVec4U
-						, sdw::type::NotArray );
-				}
-
-				return result;
-			}
-
-			sdw::Array< sdw::UInt > vertices;
-			sdw::Array< sdw::UInt > indices;
-
-		private:
-			sdw::UVec4 m_counts;
-
-		public:
-			sdw::UInt vertexCount;
-			sdw::UInt triangleCount;
-		};
-	}
-
 	//*********************************************************************************************
 
 	namespace rendndpass
