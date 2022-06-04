@@ -91,14 +91,12 @@ namespace castor3d
 		// Meshlets vertices indices.
 		std::array< uint32_t, 64u > vertices;
 		// Meshlets triangles indices.
-		std::array< uint32_t, 124u * 3u > primitives;
+		std::array< uint8_t, 128u * 3u > primitives;
 		// Number of vertices used in the meshlet.
 		uint32_t vertexCount;
 		// Number of triangles used in the meshlet.
 		uint32_t triangleCount;
-		// Align to sizeof( vec4 ).
-		uint32_t dummy1;
-		uint32_t dummy2;
+		uint32_t dummy[2];
 	};
 
 	CU_DeclareSmartPtr( Mesh );

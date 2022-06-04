@@ -290,14 +290,9 @@ namespace castor3d
 
 			while ( itDst != result.end() )
 			{
-				uint32_t index = 0u;
-
-				for ( auto prim = itSrc->triangle_offset; prim < itSrc->triangle_offset + itSrc->triangle_count * 3u; ++prim )
-				{
-					itDst->primitives[index] = triangles[prim];
-					++index;
-				}
-
+				std::copy( triangles.begin() + itSrc->triangle_offset
+					, triangles.begin() + itSrc->triangle_offset + itSrc->triangle_count * 3u
+					, itDst->primitives.begin() );
 				std::copy( vertices.begin() + itSrc->vertex_offset
 					, vertices.begin() + itSrc->vertex_offset + itSrc->vertex_count
 					, itDst->vertices.begin() );

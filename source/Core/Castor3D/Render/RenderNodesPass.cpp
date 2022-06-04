@@ -64,11 +64,11 @@ namespace castor3d
 				, sdw::expr::ExprPtr expr
 				, bool enabled = true )
 				: sdw::StructInstance{ writer, std::move( expr ), enabled }
-				, m_vertices{ getMemberArray< sdw::UVec4 >( "vertices" ) }
-				, m_primitives{ getMemberArray< sdw::UVec4 >( "primitives" ) }
+				, vertices{ getMemberArray< sdw::UInt >( "vertices" ) }
+				, indices{ getMemberArray< sdw::UInt >( "indices" ) }
 				, m_counts{ getMember< sdw::UVec4 >( "counts" ) }
 				, vertexCount{ m_counts.x() }
-				, primitiveCount{ m_counts.y() }
+				, triangleCount{ m_counts.y() }
 			{
 			}
 
@@ -82,11 +82,11 @@ namespace castor3d
 				if ( result->empty() )
 				{
 					result->declMember( "vertices"
-						, sdw::type::Kind::eVec4U
-						, 64u / 4u );
-					result->declMember( "primitives"
-						, sdw::type::Kind::eVec4U
-						, 124u * 3u / 4u );
+						, sdw::type::Kind::eUInt
+						, 64u );
+					result->declMember( "indices"
+						, sdw::type::Kind::eUInt
+						, 128u * 3u / 4u );
 					result->declMember( "counts"
 						, sdw::type::Kind::eVec4U
 						, sdw::type::NotArray );
@@ -95,24 +95,15 @@ namespace castor3d
 				return result;
 			}
 
-			sdw::UInt getVertexIndex( sdw::UInt const & i )
-			{
-				return m_vertices[i / 4u][i % 4u];
-			}
-
-			sdw::UInt getPrimitiveIndex( sdw::UInt const & i )
-			{
-				return m_primitives[i / 4u][i % 4u];
-			}
+			sdw::Array< sdw::UInt > vertices;
+			sdw::Array< sdw::UInt > indices;
 
 		private:
-			sdw::Array< sdw::UVec4 > m_vertices;
-			sdw::Array< sdw::UVec4 > m_primitives;
 			sdw::UVec4 m_counts;
 
 		public:
 			sdw::UInt vertexCount;
-			sdw::UInt primitiveCount;
+			sdw::UInt triangleCount;
 		};
 	}
 
@@ -945,24 +936,26 @@ namespace castor3d
 					, in.workGroupID );
 				auto meshlet = writer.declLocale( "meshlet"
 					, c3d_meshlets[meshletIndex] );
-				auto indexCount = writer.declLocale( "indexCount"
-					, meshlet.primitiveCount );
+				auto triangleCount = writer.declLocale( "triangleCount"
+					, meshlet.triangleCount );
 				auto vertexCount = writer.declLocale( "vertexCount"
 					, meshlet.vertexCount );
 
-				primOut.setMeshOutputCounts( vertexCount, indexCount );
+				primOut.setMeshOutputCounts( vertexCount, triangleCount );
+				auto indexCount = writer.declLocale( "indexCount"
+					, triangleCount * 3u );
+				auto indexGroupCount = writer.declLocale( "indexGroupCount"
+					, ( indexCount + 3u ) / 4u );
 
-				FOR( writer, sdw::UInt, i, ti, i < indexCount, i += 32u )
+				FOR( writer, sdw::UInt, i, ti, i < indexGroupCount, i += 32u )
 				{
-					primOut[i].primitiveIndex = uvec3( meshlet.getPrimitiveIndex( i * 3u + 0u )
-						, meshlet.getPrimitiveIndex( i * 3u + 1u )
-						, meshlet.getPrimitiveIndex( i * 3u + 2u ) );
+					writePackedPrimitiveIndices4x8( i * 4u, meshlet.indices[i] );
 				}
 				ROF;
 
 				FOR( writer, sdw::UInt, i, ti, i < vertexCount, i += 32u )
 				{
-					auto vertexIndex = writer.declLocale( "vertexIndex", meshlet.getVertexIndex( i ) );
+					auto vertexIndex = writer.declLocale( "vertexIndex", meshlet.vertices[i] );
 
 					auto nodeId = shader::getNodeId( c3d_objectIdsData
 						, pipelineID
