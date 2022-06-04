@@ -105,7 +105,8 @@ namespace castor3d
 		m_shadowMapUbo.update( light
 			, updater.index );
 		m_matrixUbo.cpuUpdate( myCamera.getView()
-			, myCamera.getProjection( false ) );
+			, myCamera.getProjection( false )
+			, myCamera.getFrustum() );
 		auto angle = light.getSpotLight()->getOuterCutOff().radians();
 
 		if ( angle != m_angle )

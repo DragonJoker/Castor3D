@@ -205,6 +205,7 @@ namespace castor3d
 			jitterProjSpace[1] /= float( m_camera.getHeight() );
 			m_matrixUbo.cpuUpdate( identity
 				, ortho
+				, m_camera.getFrustum()
 				, jitterProjSpace );
 		}
 	}

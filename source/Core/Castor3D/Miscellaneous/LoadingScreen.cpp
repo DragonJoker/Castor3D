@@ -331,7 +331,8 @@ namespace castor3d
 
 			m_culler->update( updater );
 			m_matrixUbo.cpuUpdate( m_camera->getView()
-				, m_camera->getProjection( false ) );
+				, m_camera->getProjection( false )
+				, m_camera->getFrustum() );
 			m_hdrConfigUbo.cpuUpdate( m_camera->getHdrConfig() );
 			m_sceneUbo.cpuUpdate( *m_scene, m_camera.get() );
 

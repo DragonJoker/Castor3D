@@ -264,8 +264,7 @@ namespace castor3d
 				, remapped );
 		}
 
-		static std::vector< Meshlet > buildMeshlets( Remapped const & remapped
-			, RenderDevice const & device )
+		static std::vector< Meshlet > buildMeshlets( Remapped const & remapped )
 		{
 			auto indexCount = remapped.indices.size() * 3u;
 			auto maxMeshlets = meshopt_buildMeshletsBound( indexCount
@@ -300,6 +299,27 @@ namespace castor3d
 				itDst->vertexCount = itSrc->vertex_count;
 				++itSrc;
 				++itDst;
+			}
+
+			return result;
+		}
+
+		static std::vector< castor::Point4f > buildBoundingSpheres( std::vector< Meshlet > const & meshlets
+			, Remapped const & remapped )
+		{
+			std::vector< castor::Point4f > result;
+			result.reserve( meshlets.size() );
+			auto it = remapped.baseBuffers.find( SubmeshData::ePositions );
+
+			for ( auto & meshlet : meshlets )
+			{
+				meshopt_Bounds bounds = meshopt_computeMeshletBounds( meshlet.vertices.data()
+					, meshlet.primitives.data()
+					, meshlet.triangleCount
+					, it->second.data()->constPtr()
+					, it->second.size()
+					, sizeof( castor::Point3f ) );
+				result.emplace_back( bounds.center[0], bounds.center[1], bounds.center[2], bounds.radius );
 			}
 
 			return result;
@@ -345,8 +365,10 @@ namespace castor3d
 		{
 			if ( auto meshlet = submesh.createComponent< MeshletComponent >() )
 			{
-				auto meshlets = meshopt::buildMeshlets( remapped, device );
+				auto meshlets = meshopt::buildMeshlets( remapped );
+				auto spheres = meshopt::buildBoundingSpheres( meshlets, remapped );
 				meshlet->getMeshletsData() = std::move( meshlets );
+				meshlet->getSpheres() = std::move( spheres );
 			}
 		}
 
