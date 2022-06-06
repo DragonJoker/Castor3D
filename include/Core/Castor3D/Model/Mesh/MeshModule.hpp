@@ -110,6 +110,20 @@ namespace castor3d
 	{
 		castor::Point4f sphere;
 	};
+	/**
+	*\~english
+	*\brief
+	*	Draw constants for one meshlet.
+	*\~french
+	*\brief
+	*	Données de dessin pour un meshlet.
+	*/
+	struct MeshletDrawConstants
+	{
+		uint32_t pipelineId;
+		uint32_t drawOffset;
+		uint32_t instanceCount;
+	};
 
 	CU_DeclareSmartPtr( Mesh );
 	CU_DeclareSmartPtr( MeshGenerator );

@@ -29,7 +29,6 @@ namespace castor3d
 			, GpuBufferOffsetT< castor::Point4f > const & morphTargets
 			, GpuBufferOffsetT< MorphingWeightsConfiguration > const & morphingWeights
 			, GpuBufferOffsetT< SkinningTransformsConfiguration > const & skinTransforms );
-		C3D_API void unregisterNode( ObjectBufferOffset const & input );
 
 	private:
 		TransformPipeline const & doGetPipeline( uint32_t index );
@@ -38,6 +37,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		std::unordered_map< uint32_t, TransformPipeline > m_pipelines;
+		std::unique_ptr< BoundsTransformPipeline > m_boundsPipeline;
 		struct PendingNode
 		{
 			SubmeshRenderNode const * node;
@@ -47,6 +47,7 @@ namespace castor3d
 		};
 		std::vector< PendingNode > m_pending;
 		VertexTransformingPass * m_pass{};
+		MeshletBoundsTransformingPass * m_boundsPass{};
 	};
 }
 

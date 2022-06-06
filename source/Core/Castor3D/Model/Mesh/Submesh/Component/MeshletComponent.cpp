@@ -1,11 +1,13 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
@@ -61,7 +63,7 @@ namespace castor3d
 			auto & material = *geometry.getMaterial( *getOwner() );
 			auto submeshFlags = getOwner()->getFinalSubmeshFlags();
 			writes.push_back( m_meshletBuffer.getStorageBinding( uint32_t( MeshBuffersIdx::eMeshlets ) ) );
-			writes.push_back( m_cullBuffer.getStorageBinding( uint32_t( MeshBuffersIdx::eCullData ) ) );
+			writes.push_back( getFinalCullBuffer( geometry ).getStorageBinding( uint32_t( MeshBuffersIdx::eCullData ) ) );
 
 			if ( checkFlag( submeshFlags, SubmeshFlag::ePositions ) )
 			{
@@ -135,7 +137,7 @@ namespace castor3d
 	{
 #if VK_NV_mesh_shader
 		return ProgramFlag::eHasMesh
-			| ( m_cull.empty() || getOwner()->isDynamic()
+			| ( m_cull.empty()
 				? ProgramFlag::eNone
 				: ProgramFlag::eHasTask );
 #else
@@ -150,11 +152,56 @@ namespace castor3d
 		return *it->second;
 	}
 
+	void MeshletComponent::instantiate( Geometry const & geometry )
+	{
+		auto it = m_finalCullBuffers.emplace( &geometry, GpuBufferOffsetT< MeshletCullData >{} ).first;
+
+		if ( getOwner()->isInitialised()
+			&& !it->second )
+		{
+			// Initialise only if the submesh itself is already initialised,
+			// because if it is not, the buffers will be initialised by the call to initialise().
+			RenderDevice & device = getOwner()->getOwner()->getOwner()->getRenderSystem()->getRenderDevice();
+			it->second = device.bufferPool->getBuffer< MeshletCullData >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+				, m_meshlets.size()
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+		}
+	}
+
+	GpuBufferOffsetT< MeshletCullData > const & MeshletComponent::getFinalCullBuffer( Geometry const & geometry )const
+	{
+		if ( !getOwner()->isDynamic() )
+		{
+			CU_Require( bool( m_sourceCullBuffer ) );
+			return m_sourceCullBuffer;
+		}
+
+		auto it = m_finalCullBuffers.find( &geometry );
+
+		if ( it != m_finalCullBuffers.end() )
+		{
+			return it->second;
+		}
+
+		log::error << "Couldn't find instance in final buffers" << std::endl;
+		CU_Failure( "Couldn't find instance in final buffers" );
+		return m_sourceCullBuffer;
+	}
+
 	bool MeshletComponent::doInitialise( RenderDevice const & device )
 	{
 #if VK_NV_mesh_shader
 		if ( !m_meshlets.empty() )
 		{
+			for ( auto & finalCullBuffer : m_finalCullBuffers )
+			{
+				if ( finalCullBuffer.second )
+				{
+					device.bufferPool->putBuffer( finalCullBuffer.second );
+					finalCullBuffer.second = {};
+				}
+			}
+
 			if ( !m_meshletBuffer )
 			{
 				m_meshletBuffer = device.bufferPool->getBuffer< Meshlet >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
@@ -162,11 +209,21 @@ namespace castor3d
 					, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 			}
 
-			if ( !m_cullBuffer )
+			if ( !m_sourceCullBuffer )
 			{
-				m_cullBuffer = device.bufferPool->getBuffer< MeshletCullData >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+				m_sourceCullBuffer = device.bufferPool->getBuffer< MeshletCullData >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 					, m_meshlets.size()
 					, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+			}
+
+			if ( getOwner()->isDynamic() )
+			{
+				for ( auto & finalCullBuffer : m_finalCullBuffers )
+				{
+					finalCullBuffer.second = device.bufferPool->getBuffer< MeshletCullData >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+						, m_meshlets.size()
+						, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+				}
 			}
 
 			doCreateDescriptorLayout( device );
@@ -178,10 +235,16 @@ namespace castor3d
 
 	void MeshletComponent::doCleanup( RenderDevice const & device )
 	{
-		if ( m_cullBuffer )
+		if ( m_sourceCullBuffer )
 		{
-			device.bufferPool->putBuffer( m_cullBuffer );
-			m_cullBuffer = {};
+			device.bufferPool->putBuffer( m_sourceCullBuffer );
+			m_sourceCullBuffer = {};
+		}
+
+		for ( auto & [geo, cullBuffer] : m_finalCullBuffers )
+		{
+			device.bufferPool->putBuffer( cullBuffer );
+			cullBuffer = {};
 		}
 
 		if ( m_meshletBuffer )
@@ -215,8 +278,8 @@ namespace castor3d
 			{
 				std::copy( m_cull.begin()
 					, m_cull.end()
-					, m_cullBuffer.getData().begin() );
-				m_cullBuffer.markDirty( VK_ACCESS_UNIFORM_READ_BIT
+					, m_sourceCullBuffer.getData().begin() );
+				m_sourceCullBuffer.markDirty( VK_ACCESS_UNIFORM_READ_BIT
 					, VK_PIPELINE_STAGE_TASK_SHADER_BIT_NV );
 			}
 		}

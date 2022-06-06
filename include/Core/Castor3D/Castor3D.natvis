@@ -204,15 +204,16 @@
 	</Type>
 
 	<Type Name="castor3d::MeshletComponent">
-		<DisplayString>{m_id} {m_type}</DisplayString>
+		<DisplayString>{m_id} {m_type} {m_meshlets}</DisplayString>
 		<Expand>
 			<Item Name="meshletBuffer">m_meshletBuffer</Item>
-			<Item Name="sphereBuffer">m_sphereBuffer</Item>
+			<Item Name="sourceCullBuffer">m_sourceCullBuffer</Item>
+			<Item Name="finalCullBuffers">m_finalCullBuffers</Item>
 			<Item Name="descriptorLayout">m_descriptorLayout</Item>
 			<Item Name="descriptorPool">m_descriptorPool</Item>
 			<Item Name="descriptorSets">m_descriptorSets</Item>
 			<Item Name="meshlets">m_meshlets</Item>
-			<Item Name="spheres">m_spheres</Item>
+			<Item Name="cull">m_cull</Item>
 		</Expand>
 	</Type>
 

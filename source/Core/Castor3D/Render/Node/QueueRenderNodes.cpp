@@ -343,6 +343,8 @@ namespace castor3d
 			, RenderNodesPass const & nodesPass
 			, ashes::Buffer< VkDrawMeshTasksIndirectCommandNV > const & indirectMeshCommands
 			, uint32_t pipelineId
+			, uint32_t drawOffset
+			, uint32_t drawCount
 			, uint32_t & mshIndex )
 		{
 			if ( pipeline.hasMeshletDescriptorSetLayout() )
@@ -351,17 +353,17 @@ namespace castor3d
 					, pipeline.getPipelineLayout() );
 			}
 
-			std::array< uint32_t, 2u > constants{ pipelineId, node.getInstanceCount() };
+			MeshletDrawConstants constants{ pipelineId, drawOffset, node.getInstanceCount() };
 			commandBuffer.pushConstants( pipeline.getPipelineLayout()
 				, VK_SHADER_STAGE_MESH_BIT_NV | VK_SHADER_STAGE_TASK_BIT_NV
 				, 0u
-				, 8u
-				, constants.data() );
+				, sizeof( MeshletDrawConstants )
+				, &constants );
 			commandBuffer.drawMeshTasksIndirect( indirectMeshCommands.getBuffer()
 				, mshIndex * sizeof( VkDrawMeshTasksIndirectCommandNV )
-				, node.getInstanceCount()
+				, drawCount
 				, sizeof( VkDrawMeshTasksIndirectCommandNV ) );
-			mshIndex += node.getInstanceCount();
+			mshIndex += drawCount;
 		}
 
 		template< typename NodeT >
@@ -381,21 +383,25 @@ namespace castor3d
 			for ( auto & pipelineIt : inputNodes )
 			{
 				RenderPipeline const & pipeline = *pipelineIt.second.first;
+				NodePtrByBufferMapT< NodeT > & buffers = pipelineIt.second.second;
 
-				for ( auto & bufferIt : pipelineIt.second.second )
+				for ( auto & bufferIt : buffers )
 				{
+					NodePtrArrayT< NodeT > & nodes = bufferIt.second;
 					auto pipelineId = doBindPipeline( commandBuffer
 						, nodesPass
 						, culler
 						, pipeline
 						, *bufferIt.first
-						, *bufferIt.second.front().node
+						, *nodes.front().node
 						, viewport
 						, scissor );
 
 					if ( nodesPass.isMeshShading()
 						&& pipeline.hasMeshletDescriptorSetLayout() )
 					{
+						uint32_t drawOffset{};
+
 						for ( auto & nodeIt : bufferIt.second )
 						{
 							doAddGeometryNodeCommands( pipeline
@@ -404,18 +410,21 @@ namespace castor3d
 								, nodesPass
 								, indirectMeshCommands
 								, pipelineId
+								, drawOffset
+								, nodeIt.drawCount
 								, mshIndex );
+							drawOffset += nodeIt.drawCount;
 						}
 					}
 					else
 					{
 						doAddGeometryNodeCommands( pipeline
-							, *bufferIt.second.front().node
+							, *nodes.front().node
 							, commandBuffer
 							, nodesPass
 							, indirectIndexedCommands
 							, indirectCommands
-							, uint32_t( bufferIt.second.size() )
+							, uint32_t( nodes.size() )
 							, idxIndex
 							, nidxIndex );
 					}
@@ -459,22 +468,25 @@ namespace castor3d
 								, *submeshIt.second.front().node
 								, viewport
 								, scissor );
+							auto & node = *submeshIt.second.front().node;
 
 							if ( nodesPass.isMeshShading()
 								&& pipeline.hasMeshletDescriptorSetLayout() )
 							{
 								doAddGeometryNodeCommands( pipeline
-									, *submeshIt.second.front().node
+									, node
 									, commandBuffer
 									, nodesPass
 									, indirectMeshCommands
 									, pipelineId
+									, 0u
+									, node.getInstanceCount()
 									, mshIndex );
 							}
 							else
 							{
 								doAddGeometryNodeCommands( pipeline
-									, *submeshIt.second.front().node
+									, node
 									, commandBuffer
 									, nodesPass
 									, indirectIndexedCommands

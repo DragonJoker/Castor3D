@@ -5,6 +5,8 @@
 #include "Castor3D/Buffer/ObjectBufferOffset.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Render/Transform/MeshletBoundsTransformPass.hpp"
+#include "Castor3D/Render/Transform/MeshletBoundsTransformingPass.hpp"
 #include "Castor3D/Render/Transform/VertexTransformPass.hpp"
 #include "Castor3D/Render/Transform/VertexTransformingPass.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
@@ -12,6 +14,8 @@
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/Shaders/GlslCullData.hpp"
+#include "Castor3D/Shader/Shaders/GlslMeshlet.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/ObjectIdsUbo.hpp"
@@ -203,6 +207,23 @@ namespace castor3d
 				, std::move( bindings ) );
 		}
 
+		static ashes::DescriptorSetLayoutPtr createDescriptorLayout( RenderDevice const & device
+			, BoundsTransformPipeline const & pipeline )
+		{
+			ashes::VkDescriptorSetLayoutBindingArray bindings;
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( MeshletBoundsTransformPass::ePositions
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, VK_SHADER_STAGE_COMPUTE_BIT ) );
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( MeshletBoundsTransformPass::eMeshlets
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, VK_SHADER_STAGE_COMPUTE_BIT ) );
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( MeshletBoundsTransformPass::eOutCullData
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, VK_SHADER_STAGE_COMPUTE_BIT ) );
+			return device->createDescriptorSetLayout( pipeline.getName()
+				, std::move( bindings ) );
+		}
+
 		static ashes::PipelineLayoutPtr createPipelineLayout( RenderDevice const & device
 			, TransformPipeline const & pipeline )
 		{
@@ -211,8 +232,26 @@ namespace castor3d
 				, VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, sizeof( castor::Point4ui ) } );
 		}
 
+		static ashes::PipelineLayoutPtr createPipelineLayout( RenderDevice const & device
+			, BoundsTransformPipeline const & pipeline )
+		{
+			return device->createPipelineLayout( pipeline.getName()
+				, *pipeline.descriptorSetLayout
+				, VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, sizeof( uint32_t ) } );
+		}
+
 		static ashes::ComputePipelinePtr createPipeline( RenderDevice const & device
 			, TransformPipeline const & pipeline )
+		{
+			// Initialise the pipeline.
+			return device->createPipeline( pipeline.getName()
+				, ashes::ComputePipelineCreateInfo( 0u
+					, makeShaderState( device, pipeline.shader )
+					, *pipeline.pipelineLayout ) );
+		}
+
+		static ashes::ComputePipelinePtr createPipeline( RenderDevice const & device
+			, BoundsTransformPipeline const & pipeline )
 		{
 			// Initialise the pipeline.
 			return device->createPipeline( pipeline.getName()
@@ -417,17 +456,76 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
+		static ShaderPtr getShaderSource( RenderDevice const & device
+			, BoundsTransformPipeline const & pipeline )
+		{
+			using namespace sdw;
+			ComputeWriter writer;
+
+			// Inputs
+			auto meshletsData = writer.declPushConstantsBuffer<>( "meshletsData" );
+			auto c3d_meshletsCount = meshletsData.declMember< sdw::UInt >( "c3d_meshletsCount" );
+			meshletsData.end();
+			sdw::Ssbo positionsBuffer{ writer
+				, std::string{ "positionsBufferBuffer" }
+				, uint32_t( MeshletBoundsTransformPass::ePositions )
+				, 0u
+				, ast::type::MemoryLayout::eStd430 };
+			auto c3d_positions = positionsBuffer.declMemberArray< sdw::Vec4 >( "c3d_positions" );
+			positionsBuffer.end();
+			auto c3d_meshlets = writer.declArrayStorageBuffer< shader::Meshlet >( "c3d_meshlets"
+				, MeshletBoundsTransformPass::eMeshlets
+				, 0u );
+
+			// Inputs
+			auto c3d_outCullData = writer.declArrayStorageBuffer< shader::CullData >( "c3d_outCullData"
+				, MeshletBoundsTransformPass::eOutCullData
+				, 0u );
+
+			auto size = uint32_t( device.properties.limits.nonCoherentAtomSize );
+			writer.implementMainT< sdw::VoidT >( sdw::ComputeInT< sdw::VoidT >{ writer, size, 1u, 1u }
+				, [&]( sdw::ComputeInT< sdw::VoidT > in )
+				{
+					auto meshletId = writer.declLocale( "meshletId"
+						, in.globalInvocationID.x() );
+					auto meshlet = writer.declLocale( "meshlet"
+						, c3d_meshlets[meshletId] );
+					auto minValue = writer.declLocale( "minValue"
+						, c3d_positions[meshlet.vertices[0]] );
+					auto maxValue = writer.declLocale( "maxValue"
+						, c3d_positions[meshlet.vertices[1]] );
+
+					FOR( writer, sdw::UInt, i, 2u, i < meshlet.vertexCount, ++i )
+					{
+						minValue = min( minValue, c3d_positions[meshlet.vertices[i]] );
+						maxValue = max( maxValue, c3d_positions[meshlet.vertices[i]] );
+					}
+					ROF;
+
+					auto center = writer.declLocale( "center"
+						, minValue + ( ( maxValue - minValue ) / vec4( 2.0_f ) ) );
+					auto radius = writer.declLocale( "radius"
+						, sdw::distance( center, maxValue ) );
+					c3d_outCullData[meshletId].sphere = vec4( center.xyz(), radius );
+				} );
+
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+		}
+
 		static uint32_t getIndex( SubmeshFlags const & submeshFlags
-			, MorphFlags const & morphFlags )
+			, MorphFlags const & morphFlags
+			, ProgramFlags const & programFlags )
 		{
 			constexpr auto maxSubmeshSize = castor::getBitSize( uint32_t( SubmeshFlag::eAllBase ) );
 			constexpr auto maxMorphSize = castor::getBitSize( uint32_t( MorphFlag::eAllBase ) );
-			static_assert( maxSubmeshSize + maxMorphSize <= 32 );
+			static_assert( maxSubmeshSize + maxMorphSize + 1u <= 32 );
 			auto offset = 0u;
 			uint32_t result{};
 			result = uint32_t( submeshFlags ) << offset;
 			offset += maxSubmeshSize;
 			result |= uint32_t( morphFlags ) << offset;
+			offset += maxMorphSize;
+			result |= uint32_t( checkFlag( programFlags, ProgramFlag::eHasTask ) ? 1u : 0u ) << offset;
 			return result;
 		}
 	}
@@ -444,12 +542,12 @@ namespace castor3d
 	crg::FramePass const & VertexTransforming::createPass( crg::FrameGraph & graph
 		, crg::FramePass const * previousPass )
 	{
-		if ( m_pass )
+		if ( m_boundsPass )
 		{
-			return m_pass->getPass();
+			return m_boundsPass->getPass();
 		}
 
-		auto & result = graph.createPass( "VertexTransforming"
+		auto & pass = graph.createPass( "VertexTransforming"
 			, [this]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
@@ -463,16 +561,32 @@ namespace castor3d
 				m_pass = res.get();
 				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
-				doProcessPending();
 
 				return res;
 			} );
 
 		if ( previousPass )
 		{
-			result.addDependency( *previousPass );
+			pass.addDependency( *previousPass );
 		}
 
+		auto & result = graph.createPass( "MeshletBoundsTransforming"
+			, [this]( crg::FramePass const & framePass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & runnableGraph )
+			{
+				auto res = std::make_unique< MeshletBoundsTransformingPass >( framePass
+					, context
+					, runnableGraph
+					, m_device );
+				m_boundsPass = res.get();
+				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+					, res->getTimer() );
+				doProcessPending();
+
+				return res;
+			} );
+		result.addDependency( pass );
 		return result;
 	}
 
@@ -490,13 +604,20 @@ namespace castor3d
 		}
 		else
 		{
-			auto submeshFlags = node.getSubmeshFlags();
-			auto morphFlags = node.getMorphFlags();
+			auto & pipeline = doGetPipeline( vtxtrsg::getIndex( node.getSubmeshFlags()
+				, node.getMorphFlags()
+				, node.getProgramFlags() ) );
 			m_pass->registerNode( node
-				, doGetPipeline( vtxtrsg::getIndex( submeshFlags, morphFlags ) )
+				, pipeline
 				, morphTargets
 				, morphingWeights
 				, skinTransforms );
+
+			if ( pipeline.meshletsBounds )
+			{
+				m_boundsPass->registerNode( node
+					, *m_boundsPipeline );
+			}
 		}
 	}
 
@@ -507,6 +628,20 @@ namespace castor3d
 		if ( ires.second )
 		{
 			auto & pipeline = ires.first->second;
+			pipeline.shader = { VK_SHADER_STAGE_COMPUTE_BIT
+				, pipeline.getName()
+				, vtxtrsg::getShaderSource( m_device, pipeline ) };
+			pipeline.descriptorSetLayout = vtxtrsg::createDescriptorLayout( m_device, pipeline );
+			pipeline.pipelineLayout = vtxtrsg::createPipelineLayout( m_device, pipeline );
+			pipeline.pipeline = vtxtrsg::createPipeline( m_device, pipeline );
+			pipeline.descriptorSetPool = pipeline.descriptorSetLayout->createPool( MaxMorphingDataCount );
+		}
+
+		if ( ires.first->second.meshletsBounds
+			&& !m_boundsPipeline )
+		{
+			m_boundsPipeline = std::make_unique< BoundsTransformPipeline >();
+			auto & pipeline = *m_boundsPipeline;
 			pipeline.shader = { VK_SHADER_STAGE_COMPUTE_BIT
 				, pipeline.getName()
 				, vtxtrsg::getShaderSource( m_device, pipeline ) };
