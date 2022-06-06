@@ -43,7 +43,7 @@ namespace castor3d
 	{
 		auto result = submesh.createComponent< MeshletComponent >();
 		result->m_meshlets = m_meshlets;
-		result->m_spheres = m_spheres;
+		result->m_cull = m_cull;
 		return std::static_pointer_cast< SubmeshComponent >( result );
 	}
 
@@ -61,7 +61,7 @@ namespace castor3d
 			auto & material = *geometry.getMaterial( *getOwner() );
 			auto submeshFlags = getOwner()->getFinalSubmeshFlags();
 			writes.push_back( m_meshletBuffer.getStorageBinding( uint32_t( MeshBuffersIdx::eMeshlets ) ) );
-			writes.push_back( m_sphereBuffer.getStorageBinding( uint32_t( MeshBuffersIdx::eCullData ) ) );
+			writes.push_back( m_cullBuffer.getStorageBinding( uint32_t( MeshBuffersIdx::eCullData ) ) );
 
 			if ( checkFlag( submeshFlags, SubmeshFlag::ePositions ) )
 			{
@@ -135,7 +135,7 @@ namespace castor3d
 	{
 #if VK_NV_mesh_shader
 		return ProgramFlag::eHasMesh
-			| ( m_spheres.empty() || getOwner()->isDynamic()
+			| ( m_cull.empty() || getOwner()->isDynamic()
 				? ProgramFlag::eNone
 				: ProgramFlag::eHasTask );
 #else
@@ -162,9 +162,9 @@ namespace castor3d
 					, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 			}
 
-			if ( !m_sphereBuffer )
+			if ( !m_cullBuffer )
 			{
-				m_sphereBuffer = device.bufferPool->getBuffer< castor::Point4f >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+				m_cullBuffer = device.bufferPool->getBuffer< MeshletCullData >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 					, m_meshlets.size()
 					, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 			}
@@ -178,10 +178,10 @@ namespace castor3d
 
 	void MeshletComponent::doCleanup( RenderDevice const & device )
 	{
-		if ( m_sphereBuffer )
+		if ( m_cullBuffer )
 		{
-			device.bufferPool->putBuffer( m_sphereBuffer );
-			m_sphereBuffer = {};
+			device.bufferPool->putBuffer( m_cullBuffer );
+			m_cullBuffer = {};
 		}
 
 		if ( m_meshletBuffer )
@@ -209,14 +209,14 @@ namespace castor3d
 			m_meshletBuffer.markDirty( VK_ACCESS_UNIFORM_READ_BIT
 				, VK_PIPELINE_STAGE_MESH_SHADER_BIT_NV );
 
-			count = uint32_t( m_spheres.size() );
+			count = uint32_t( m_cull.size() );
 
 			if ( count )
 			{
-				std::copy( m_spheres.begin()
-					, m_spheres.end()
-					, m_sphereBuffer.getData().begin() );
-				m_sphereBuffer.markDirty( VK_ACCESS_UNIFORM_READ_BIT
+				std::copy( m_cull.begin()
+					, m_cull.end()
+					, m_cullBuffer.getData().begin() );
+				m_cullBuffer.markDirty( VK_ACCESS_UNIFORM_READ_BIT
 					, VK_PIPELINE_STAGE_TASK_SHADER_BIT_NV );
 			}
 		}

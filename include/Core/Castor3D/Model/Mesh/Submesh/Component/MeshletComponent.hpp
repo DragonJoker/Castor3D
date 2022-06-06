@@ -76,10 +76,10 @@ namespace castor3d
 			return m_meshlets;
 		}
 
-		std::vector< castor::Point4f > & getSpheres()
+		std::vector< MeshletCullData > & getCullData()
 		{
 			needsUpdate();
-			return m_spheres;
+			return m_cull;
 		}
 
 		uint32_t getMeshletsCount()const
@@ -98,12 +98,12 @@ namespace castor3d
 
 	private:
 		GpuBufferOffsetT< Meshlet > m_meshletBuffer;
-		GpuBufferOffsetT< castor::Point4f > m_sphereBuffer;
+		GpuBufferOffsetT< MeshletCullData > m_cullBuffer;
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
 		ashes::DescriptorSetPoolPtr m_descriptorPool;
 		std::map< Geometry const *, ashes::DescriptorSetPtr > m_descriptorSets;
 		std::vector< Meshlet > m_meshlets;
-		std::vector< castor::Point4f > m_spheres;
+		std::vector< MeshletCullData > m_cull;
 	};
 }
 
