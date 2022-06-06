@@ -558,6 +558,11 @@ namespace castor3d
 
 		if ( geometry && isDynamic() )
 		{
+			if ( auto meshletComponent = getComponent< MeshletComponent >() )
+			{
+				meshletComponent->instantiate( *geometry );
+			}
+
 			auto it = m_finalBufferOffsets.emplace( geometry, ObjectBufferOffset{} ).first;
 
 			if ( m_initialised
@@ -1008,6 +1013,27 @@ namespace castor3d
 	{
 		CU_Require( bool( m_sourceBufferOffset ) );
 		return m_sourceBufferOffset;
+	}
+
+	GpuBufferOffsetT< Meshlet > const & Submesh::getMeshletsBuffer()const
+	{
+		auto meshletComponent = getComponent< MeshletComponent >();
+		CU_Require( meshletComponent );
+		return meshletComponent->getMeshletsBuffer();
+	}
+
+	GpuBufferOffsetT< MeshletCullData > const & Submesh::getFinalMeshletsBounds( Geometry const & instance )const
+	{
+		auto meshletComponent = getComponent< MeshletComponent >();
+		CU_Require( meshletComponent );
+		return meshletComponent->getFinalCullBuffer( instance );
+	}
+
+	GpuBufferOffsetT< MeshletCullData > const & Submesh::getSourceMeshletsBounds()const
+	{
+		auto meshletComponent = getComponent< MeshletComponent >();
+		CU_Require( meshletComponent );
+		return meshletComponent->getSourceCullBuffer();
 	}
 
 	bool Submesh::hasMorphComponent()const

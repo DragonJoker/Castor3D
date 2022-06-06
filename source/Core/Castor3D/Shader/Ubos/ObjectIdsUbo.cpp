@@ -68,10 +68,9 @@ namespace castor3d::shader
 
 	sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
 		, sdw::UInt pipelineID
-		, sdw::Int drawID )
+		, sdw::UInt drawID )
 	{
-		auto & writer = *data.getWriter();
-		return data[pipelineID].getNodeId( writer.cast< sdw::UInt >( drawID ) );
+		return data[pipelineID].getNodeId( drawID );
 	}
 
 	//*********************************************************************************************

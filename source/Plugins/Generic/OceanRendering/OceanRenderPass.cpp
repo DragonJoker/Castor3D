@@ -672,7 +672,7 @@ namespace ocean
 				, shader::getNodeId( c3d_objectIdsData
 					, in
 					, pipelineID
-					, in.drawID
+					, writer.cast< sdw::UInt >( in.drawID )
 					, flags.programFlags ) );
 			auto modelData = writer.declLocale( "modelData"
 				, c3d_modelsData[nodeId - 1u] );
@@ -750,7 +750,7 @@ namespace ocean
 				auto nodeId = writer.declLocale( "nodeId"
 					, shader::getNodeId( c3d_objectIdsData
 						, pipelineID
-						, in.drawID ) );
+						, writer.cast< sdw::UInt >( in.drawID ) ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId - 1u] );
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
