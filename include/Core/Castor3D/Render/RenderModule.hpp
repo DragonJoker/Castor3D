@@ -169,6 +169,7 @@ namespace castor3d
 		eTexcoord3,
 		eColour,
 		eVelocity,
+		eInstances,
 		CU_ScopedEnumBounds( eMeshlets ),
 	};
 	/**

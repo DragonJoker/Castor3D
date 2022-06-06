@@ -6,6 +6,7 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Scene/Geometry.hpp"
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
@@ -57,6 +58,7 @@ namespace castor3d
 			descSetIt->second = m_descriptorPool->createDescriptorSet( mshletcomp::getName( *this )
 				, RenderPipeline::eMeshBuffers );
 			ashes::WriteDescriptorSetArray writes;
+			auto & material = *geometry.getMaterial( *getOwner() );
 			auto submeshFlags = getOwner()->getFinalSubmeshFlags();
 			writes.push_back( m_meshletBuffer.getStorageBinding( uint32_t( MeshBuffersIdx::eMeshlets ) ) );
 			writes.push_back( m_sphereBuffer.getStorageBinding( uint32_t( MeshBuffersIdx::eCullData ) ) );
@@ -113,6 +115,14 @@ namespace castor3d
 			{
 				writes.push_back( baseBuffers.getStorageBinding( SubmeshFlag::eVelocity
 					, uint32_t( MeshBuffersIdx::eVelocity ) ) );
+			}
+
+			auto bufferIt = getOwner()->getInstantiation().find( material );
+			CU_Require( bufferIt != getOwner()->getInstantiation().end() );
+
+			if ( bufferIt->second.buffer )
+			{
+				writes.push_back( bufferIt->second.buffer.getStorageBinding( uint32_t( MeshBuffersIdx::eInstances ) ) );
 			}
 
 			descSetIt->second->setBindings( std::move( writes ) );
@@ -287,6 +297,10 @@ namespace castor3d
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_MESH_BIT_NV ) );
 		}
+
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eInstances )
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+			, VK_SHADER_STAGE_TASK_BIT_NV | VK_SHADER_STAGE_MESH_BIT_NV ) );
 
 		m_descriptorLayout = device->createDescriptorSetLayout( mshletcomp::getName( *this )
 			, std::move( bindings ) );

@@ -84,13 +84,28 @@ namespace castor3d::shader
 			return surface.objectIds.x();
 		}
 
-		return writer.declLocale( "objectIdsData"
-			, data[pipelineID].getNodeId( writer.cast< sdw::UInt >( drawID ) ) );
+		return data[pipelineID].getNodeId( writer.cast< sdw::UInt >( drawID ) );
 	}
 
 	C3D_API sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
 		, sdw::UInt pipelineID
 		, sdw::Int drawID );
+
+	static sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
+		, sdw::Array< sdw::UVec4 > const & instances
+		, sdw::UInt pipelineID
+		, sdw::Int drawID
+		, ProgramFlags const & flags )
+	{
+		auto & writer = *data.getWriter();
+
+		if ( checkFlag( flags, ProgramFlag::eInstantiation ) )
+		{
+			return instances[writer.cast< sdw::UInt >( drawID )].x();
+		}
+
+		return getNodeId( data, pipelineID, drawID );
+	}
 }
 
 #define C3D_ObjectIdsData( writer, binding, set )\
@@ -101,6 +116,16 @@ namespace castor3d::shader
 		, ast::type::MemoryLayout::eStd430\
 		, true };\
 	auto c3d_objectIdsData = objectIdsDataBuffer.declMemberArray< castor3d::shader::ObjectsIds >( castor3d::shader::ObjectsIds::DataName );\
+	objectIdsDataBuffer.end()
+
+#define C3D_ObjectIdsDataOpt( writer, binding, set, enable )\
+	sdw::Ssbo objectIdsDataBuffer{ writer\
+		, castor3d::shader::ObjectsIds::BufferName\
+		, uint32_t( binding )\
+		, uint32_t( set )\
+		, ast::type::MemoryLayout::eStd430\
+		, enable };\
+	auto c3d_objectIdsData = objectIdsDataBuffer.declMemberArray< castor3d::shader::ObjectsIds >( castor3d::shader::ObjectsIds::DataName, enable );\
 	objectIdsDataBuffer.end()
 
 #endif

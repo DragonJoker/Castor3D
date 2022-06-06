@@ -47,7 +47,7 @@ namespace castor3d
 		{
 			NodeT const * node{};
 			bool visible{};
-			uint32_t count{};
+			uint32_t instanceCount{};
 		};
 
 		template< typename NodeT >
