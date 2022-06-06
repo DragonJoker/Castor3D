@@ -65,7 +65,8 @@ namespace castor3d
 			, Type
 			, cuT( "Picking" )
 			, cuT( "Picking" )
-			, RenderNodesPassDesc{ { size.getWidth(), size.getHeight(), 1u }, matrixUbo, culler, RenderMode::eBoth, true, false } }
+			, RenderNodesPassDesc{ { size.getWidth(), size.getHeight(), 1u }, matrixUbo, culler, RenderMode::eBoth, true, false }
+				.meshShading( true ) }
 	{
 	}
 
@@ -113,73 +114,6 @@ namespace castor3d
 
 	void PickingPass::doUpdate( RenderQueueArray & CU_UnusedParam( queues ) )
 	{
-	}
-
-	ShaderPtr PickingPass::doGetVertexShaderSource( PipelineFlags const & flags )const
-	{
-		using namespace sdw;
-		VertexWriter writer;
-		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
-
-		C3D_Matrix( writer
-			, GlobalBuffersIdx::eMatrix
-			, RenderPipeline::eBuffers );
-		C3D_ObjectIdsData( writer
-			, GlobalBuffersIdx::eObjectsNodeID
-			, RenderPipeline::eBuffers );
-		C3D_ModelsData( writer
-			, GlobalBuffersIdx::eModelsData
-			, RenderPipeline::eBuffers );
-
-		sdw::Pcb pcb{ writer, "DrawData" };
-		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
-		pcb.end();
-
-		writer.implementMainT< shader::VertexSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
-				, flags.submeshFlags
-				, flags.programFlags
-				, getShaderFlags()
-				, textureFlags
-				, flags.passFlags
-				, hasTextures }
-			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer
-				, flags.submeshFlags
-				, flags.programFlags
-				, getShaderFlags()
-				, textureFlags
-				, flags.passFlags
-				, hasTextures }
-			, [&]( VertexInT< shader::VertexSurfaceT > in
-			, VertexOutT< shader::FragmentSurfaceT > out )
-			{
-				auto nodeId = writer.declLocale( "nodeId"
-					, shader::getNodeId( c3d_objectIdsData
-						, in
-						, pipelineID
-						, in.drawID
-						, flags.programFlags ) );
-				auto curPosition = writer.declLocale( "curPosition"
-					, in.position );
-				out.texture0 = in.texture0;
-				out.texture1 = in.texture1;
-				out.texture2 = in.texture2;
-				out.texture3 = in.texture3;
-				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[nodeId - 1u] );
-				out.nodeId = writer.cast< sdw::Int >( nodeId );
-				out.instanceId = writer.cast< UInt >( in.instanceIndex );
-
-				if ( !checkFlag( flags.submeshFlags, SubmeshFlag::eVelocity ) )
-				{
-					auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
-						, modelData.getModelMtx() );
-					curPosition = mtxModel * curPosition;
-				}
-
-				out.vtx.position = c3d_matrixData.worldToCurProj( curPosition );
-			} );
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
 	ShaderPtr PickingPass::doGetPixelShaderSource( PipelineFlags const & flags )const
