@@ -71,8 +71,7 @@ namespace castor3d::shader
 		, sdw::Int drawID )
 	{
 		auto & writer = *data.getWriter();
-		return writer.declLocale( "objectIdsData"
-			, data[pipelineID].getNodeId( writer.cast< sdw::UInt >( drawID ) ) );
+		return data[pipelineID].getNodeId( writer.cast< sdw::UInt >( drawID ) );
 	}
 
 	//*********************************************************************************************

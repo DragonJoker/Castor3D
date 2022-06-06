@@ -1220,6 +1220,7 @@ namespace castor3d
 					, name
 					, RenderNodesPassDesc{ m_colour.getExtent(), m_matrixUbo, m_renderTarget.getCuller(), isOit }
 						.safeBand( true )
+						.meshShading( true )
 #if C3D_UseWeightedBlendedRendering
 						.implicitAction( accumIt->view(), crg::RecordContext::clearAttachment( *accumIt ) )
 						.implicitAction( revealIt->view(), crg::RecordContext::clearAttachment( *revealIt ) )

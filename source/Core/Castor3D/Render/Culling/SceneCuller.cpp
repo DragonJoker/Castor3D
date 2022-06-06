@@ -100,20 +100,66 @@ namespace castor3d
 
 		static void registerPipelineNodes( PipelineBaseHash hash
 			, ashes::BufferBase const & buffer
-			, std::vector< PipelineBuffer > & cont )
+			, std::vector< PipelineBuffer > & nodesIds )
 		{
-			auto it = std::find_if( cont.begin()
-				, cont.end()
+			auto it = std::find_if( nodesIds.begin()
+				, nodesIds.end()
 				, [&hash, &buffer]( PipelineBuffer const & lookup )
 				{
 					return lookup.first == hash
 						&& lookup.second == &buffer;
 				} );
 
-			if ( it == cont.end() )
+			if ( it == nodesIds.end() )
 			{
-				cont.emplace_back( hash, &buffer );
+				nodesIds.emplace_back( hash, &buffer );
 			}
+		}
+
+		static void registerCulledNodes( PipelineBaseHash hash
+			, SceneCuller::CulledNodeT< BillboardRenderNode > const & culled
+			, RenderNodesPass const & renderPass
+			, bool isFrontCulled
+			, SceneCuller::SidedNodeArrayT< BillboardRenderNode > & nodes
+			, ashes::BufferBase const & buffer
+			, std::vector< PipelineBuffer > & nodesIds )
+		{
+			nodes.emplace_back( culled, isFrontCulled );
+			registerPipelineNodes( hash, buffer, nodesIds );
+		}
+
+		static void registerCulledNodes( PipelineBaseHash hash
+			, SceneCuller::CulledNodeT< SubmeshRenderNode > const & culled
+			, RenderNodesPass const & renderPass
+			, bool isFrontCulled
+			, SceneCuller::SidedNodeArrayT< SubmeshRenderNode > & nodes
+			, ashes::BufferBase const & buffer
+			, std::vector< PipelineBuffer > & nodesIds )
+		{
+			if ( renderPass.isMeshShading() )
+			{
+				// Additional filtering because meshlet count will be different from one node to another.
+				auto sidedNodeIt = std::find_if( nodes.begin()
+					, nodes.end()
+					, [&culled]( SceneCuller::SidedNodeT< SubmeshRenderNode > const & lookup )
+					{
+						return culled.node == lookup.first.node;
+					} );
+
+				if ( sidedNodeIt == nodes.end() )
+				{
+					nodes.emplace_back( culled, isFrontCulled );
+					sidedNodeIt = std::next( nodes.begin(), ptrdiff_t( nodes.size() - 1u ) );
+				}
+
+				++sidedNodeIt->first.instanceCount;
+			}
+			else
+			{
+				nodes.emplace_back( culled, isFrontCulled );
+			}
+
+			registerPipelineNodes( hash, buffer, nodesIds );
 		}
 
 		template< typename NodeT >
@@ -123,77 +169,36 @@ namespace castor3d
 			, SceneCuller::SidedNodePipelineMapT< NodeT > & sortedNodes
 			, SceneCuller::PipelineBufferArray & nodesIds )
 		{
-			NodeT const & node = *culled.node;
-			PipelineBaseHash hash = getPipelineHash( renderPass, node, isFrontCulled );
-			SceneCuller::SidedNodeBufferMapT< NodeT > & pipelineNodes = sortedNodes.emplace( hash, SceneCuller::SidedNodeBufferMapT< NodeT >{} ).first->second;
-			ashes::BufferBase const * buffer = &node.getFinalBufferOffsets().getBuffer( SubmeshFlag::ePositions );
-			SceneCuller::SidedNodeArrayT< NodeT > & bufferNodes = pipelineNodes.emplace( buffer, SceneCuller::SidedNodeArrayT< NodeT >{} ).first->second;
-
-			if ( renderPass.isMeshShading()
-				&& std::is_same_v< NodeT, SubmeshRenderNode > )
-			{
-				auto sidedNodeIt = std::find_if( bufferNodes.begin()
-					, bufferNodes.end()
-					, [&culled]( SceneCuller::SidedNodeT< NodeT > const & lookup )
-					{
-						return culled.node == lookup.first.node;
-					} );
-
-				if ( sidedNodeIt == bufferNodes.end() )
-				{
-					bufferNodes.emplace_back( culled, isFrontCulled );
-					sidedNodeIt = std::next( bufferNodes.begin(), ptrdiff_t( bufferNodes.size() - 1u ) );
-				}
-
-				++sidedNodeIt->first.count;
-				registerPipelineNodes( hash, *buffer, nodesIds );
-			}
-			else
-			{
-				bufferNodes.emplace_back( culled, isFrontCulled );
-				registerPipelineNodes( hash, *buffer, nodesIds );
-			}
+			auto & node = *culled.node;
+			auto & buffer = node.getFinalBufferOffsets().getBuffer( SubmeshFlag::ePositions );
+			auto hash = getPipelineHash( renderPass, node, isFrontCulled );
+			auto & pipelineNodes = sortedNodes.emplace( hash
+				, SceneCuller::SidedNodeBufferMapT< NodeT >{} ).first->second;
+			auto & bufferNodes = pipelineNodes.emplace( &buffer
+				, SceneCuller::SidedNodeArrayT< NodeT >{} ).first->second;
+			registerCulledNodes( hash, culled, renderPass, isFrontCulled, bufferNodes, buffer, nodesIds );
 		}
 
 		template< typename NodeT >
 		static void addRenderNode( SceneCuller::CulledNodeT< NodeT > const & culled
 			, RenderNodesPass const & renderPass
 			, bool isFrontCulled
-			, SceneCuller::SidedObjectNodePipelineMapT< NodeT > & sortedInstancedSubmeshes
+			, SceneCuller::SidedObjectNodePipelineMapT< NodeT > & sortedInstancedNodes
 			, SceneCuller::PipelineBufferArray & nodesIds )
 		{
-			NodeT const & node = *culled.node;
-			PipelineBaseHash hash = getPipelineHash( renderPass, node, isFrontCulled );
-			SceneCuller::SidedObjectNodeBufferMapT< NodeT > & pipelineNodes = sortedInstancedSubmeshes.emplace( hash, SceneCuller::SidedObjectNodeBufferMapT< SubmeshRenderNode >{} ).first->second;
-			ashes::BufferBase const * buffer = &node.getFinalBufferOffsets().getBuffer( SubmeshFlag::ePositions );
-			SceneCuller::SidedObjectNodePassMapT< NodeT > & bufferNodes = pipelineNodes.emplace( buffer, SceneCuller::SidedObjectNodePassMapT< SubmeshRenderNode >{} ).first->second;
-			SceneCuller::SidedObjectNodeMapT< NodeT > & passNodes = bufferNodes.emplace( node.pass, SceneCuller::SidedObjectNodeMapT< SubmeshRenderNode >{} ).first->second;
-			SceneCuller::SidedNodeArrayT< SubmeshRenderNode > & objectNodes = passNodes.emplace( &node.data, SceneCuller::SidedNodeArrayT< SubmeshRenderNode >{} ).first->second;
-
-			if ( renderPass.isMeshShading()
-				&& std::is_same_v< NodeT, SubmeshRenderNode > )
-			{
-				auto sidedNodeIt = std::find_if( objectNodes.begin()
-					, objectNodes.end()
-					, [&culled]( SceneCuller::SidedNodeT< NodeT > const & lookup )
-					{
-						return culled.node == lookup.first.node;
-					} );
-
-				if ( sidedNodeIt == objectNodes.end() )
-				{
-					objectNodes.emplace_back( culled, isFrontCulled );
-					sidedNodeIt = std::next( objectNodes.begin(), ptrdiff_t( objectNodes.size() - 1u ) );
-				}
-
-				++sidedNodeIt->first.count;
-				registerPipelineNodes( hash, *buffer, nodesIds );
-			}
-			else
-			{
-				objectNodes.emplace_back( culled, isFrontCulled );
-				registerPipelineNodes( hash, *buffer, nodesIds );
-			}
+			auto & node = *culled.node;
+			auto & buffer = node.getFinalBufferOffsets().getBuffer( SubmeshFlag::ePositions );
+			auto hash = getPipelineHash( renderPass, node, isFrontCulled );
+			auto & pipelineNodes = sortedInstancedNodes.emplace( hash
+				, SceneCuller::SidedObjectNodeBufferMapT< NodeT >{} ).first->second;
+			auto & bufferNodes = pipelineNodes.emplace( &buffer
+				, SceneCuller::SidedObjectNodePassMapT< NodeT >{} ).first->second;
+			auto & passNodes = bufferNodes.emplace( node.pass
+				, SceneCuller::SidedObjectNodeMapT< NodeT >{} ).first->second;
+			auto & objectNodes = passNodes.emplace( &node.data
+				, SceneCuller::SidedNodeArrayT< NodeT >{} ).first->second;
+			objectNodes.emplace_back( culled, isFrontCulled );
+			registerPipelineNodes( hash, buffer, nodesIds );
 		}
 
 		//*****************************************************************************************
@@ -361,11 +366,15 @@ namespace castor3d
 
 		static void fillIndirectCommand( SubmeshRenderNode const & culled
 			, VkDrawMeshTasksIndirectCommandNV *& indirectMeshCommands
+			, uint32_t instanceCount
 			, uint32_t taskCount )
 		{
-			indirectMeshCommands->taskCount = taskCount;
-			indirectMeshCommands->firstTask = 0u;
-			++indirectMeshCommands;
+			for ( uint32_t i = 0u; i < instanceCount; ++i )
+			{
+				indirectMeshCommands->taskCount = taskCount;
+				indirectMeshCommands->firstTask = 0u;
+				++indirectMeshCommands;
+			}
 		}
 
 		static void fillNodeCommands( SubmeshRenderNode const & node
@@ -379,7 +388,7 @@ namespace castor3d
 				&& node.data.getMeshletsCount()
 				&& indirectMeshBuffer )
 			{
-				fillIndirectCommand( node, indirectMeshBuffer, node.data.getMeshletsCount() );
+				fillIndirectCommand( node, indirectMeshBuffer, instanceCount, node.data.getMeshletsCount() );
 			}
 			else if ( node.getSourceBufferOffsets().hasData( SubmeshFlag::eIndex ) )
 			{
@@ -1121,9 +1130,9 @@ namespace castor3d
 			{
 				m_culledChanged = m_culledChanged
 					|| it->visible != visible
-					|| it->count != count;
+					|| it->instanceCount != count;
 				it->visible = visible;
-				it->count = count;
+				it->instanceCount = count;
 			}
 			else
 			{
@@ -1188,8 +1197,7 @@ namespace castor3d
 				|| node.pass->hasAlphaBlending();
 			auto & instantiation = node.data.getInstantiation();
 
-			if ( !renderPass.isMeshShading()
-				&& instantiation.isInstanced( node.instance.getMaterial( node.data ) ) )
+			if ( instantiation.isInstanced( node.instance.getMaterial( node.data ) ) )
 			{
 				if ( node.instance.getParent()->isVisible() )
 				{

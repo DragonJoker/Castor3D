@@ -100,7 +100,7 @@ namespace castor3d
 	struct CountedNodeT
 	{
 		NodeT const * node{};
-		uint32_t count{};
+		uint32_t drawCount{};
 	};
 
 	template< typename NodeT >
