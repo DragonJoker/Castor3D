@@ -74,34 +74,30 @@ namespace castor3d::shader
 	static sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
 		, shader::VertexSurfaceT< FlagT > const & surface
 		, sdw::UInt pipelineID
-		, sdw::Int drawID
+		, sdw::UInt drawID
 		, ProgramFlags const & flags )
 	{
-		auto & writer = *data.getWriter();
-
 		if ( checkFlag( flags, ProgramFlag::eInstantiation ) )
 		{
 			return surface.objectIds.x();
 		}
 
-		return data[pipelineID].getNodeId( writer.cast< sdw::UInt >( drawID ) );
+		return data[pipelineID].getNodeId( drawID );
 	}
 
 	C3D_API sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
 		, sdw::UInt pipelineID
-		, sdw::Int drawID );
+		, sdw::UInt drawID );
 
 	static sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
 		, sdw::Array< sdw::UVec4 > const & instances
 		, sdw::UInt pipelineID
-		, sdw::Int drawID
+		, sdw::UInt drawID
 		, ProgramFlags const & flags )
 	{
-		auto & writer = *data.getWriter();
-
 		if ( checkFlag( flags, ProgramFlag::eInstantiation ) )
 		{
-			return instances[writer.cast< sdw::UInt >( drawID )].x();
+			return instances[drawID].x();
 		}
 
 		return getNodeId( data, pipelineID, drawID );

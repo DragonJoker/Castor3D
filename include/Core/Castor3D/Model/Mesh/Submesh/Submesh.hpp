@@ -323,6 +323,9 @@ namespace castor3d
 		C3D_API bool isDynamic()const;
 		C3D_API ObjectBufferOffset const & getFinalBufferOffsets( Geometry const & instance )const;
 		C3D_API ObjectBufferOffset const & getSourceBufferOffsets()const;
+		C3D_API GpuBufferOffsetT< Meshlet > const & getMeshletsBuffer()const;
+		C3D_API GpuBufferOffsetT< MeshletCullData > const & getFinalMeshletsBounds( Geometry const & instance )const;
+		C3D_API GpuBufferOffsetT< MeshletCullData > const & getSourceMeshletsBounds()const;
 		C3D_API bool hasMorphComponent()const;
 		C3D_API bool hasSkinComponent()const;
 		inline SkeletonRPtr getSkeleton()const;

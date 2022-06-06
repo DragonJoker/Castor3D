@@ -25,6 +25,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Holds the base pipeline data for meshlets bounds transformations.
+	*\~french
+	*\brief
+	*	Détient les données de pipeline pour la transformation des limites des meshlets.
+	*/
+	struct BoundsTransformPipeline;
+	/**
+	*\~english
+	*\brief
 	*	Holds the vertex transforming compute pass.
 	*\~french
 	*\brief
@@ -43,15 +52,34 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Pass used to transform the vertics of one submesh.
+	*	Pass used to transform the vertices of one submesh.
 	*\~french
 	*\brief
 	*	Passe de transformation des sommets d'un submesh.
 	*/
 	class VertexTransformPass;
+	/**
+	*\~english
+	*\brief
+	*	The meshlets bounds transforming compute pass.
+	*\~french
+	*\brief
+	*	La compute pass de transformation des limites des meshlets.
+	*/
+	class MeshletBoundsTransformingPass;
+	/**
+	*\~english
+	*\brief
+	*	Pass used to transform the meshlets bounds of one submesh.
+	*\~french
+	*\brief
+	*	Passe de transformation des limites des meshlets d'un submesh.
+	*/
+	class MeshletBoundsTransformPass;
 
 	CU_DeclareCUSmartPtr( castor3d, VertexTransforming, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, VertexTransformPass, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, MeshletBoundsTransformPass, C3D_API );
 
 	//@}
 	//@}

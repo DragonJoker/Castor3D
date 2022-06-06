@@ -21,11 +21,24 @@ namespace castor3d
 
 		C3D_API std::string getName()const;
 		C3D_API static std::string getName( SubmeshFlags const & submeshFlags
-			, MorphFlags const & morphFlags );
+			, MorphFlags const & morphFlags
+			, bool meshletsBounds );
 
 		SubmeshFlags submeshFlags;
 		MorphFlags morphFlags;
+		bool meshletsBounds;
 		uint32_t index;
+
+		ShaderModule shader;
+		ashes::DescriptorSetLayoutPtr descriptorSetLayout;
+		ashes::PipelineLayoutPtr pipelineLayout;
+		ashes::ComputePipelinePtr pipeline;
+		ashes::DescriptorSetPoolPtr descriptorSetPool;
+	};
+
+	struct BoundsTransformPipeline
+	{
+		C3D_API static std::string getName();
 
 		ShaderModule shader;
 		ashes::DescriptorSetLayoutPtr descriptorSetLayout;

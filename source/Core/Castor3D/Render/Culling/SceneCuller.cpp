@@ -125,7 +125,6 @@ namespace castor3d
 			, std::vector< PipelineBuffer > & nodesIds )
 		{
 			nodes.emplace_back( culled, isFrontCulled );
-			registerPipelineNodes( hash, buffer, nodesIds );
 		}
 
 		static void registerCulledNodes( PipelineBaseHash hash
@@ -158,8 +157,6 @@ namespace castor3d
 			{
 				nodes.emplace_back( culled, isFrontCulled );
 			}
-
-			registerPipelineNodes( hash, buffer, nodesIds );
 		}
 
 		template< typename NodeT >
@@ -177,6 +174,7 @@ namespace castor3d
 			auto & bufferNodes = pipelineNodes.emplace( &buffer
 				, SceneCuller::SidedNodeArrayT< NodeT >{} ).first->second;
 			registerCulledNodes( hash, culled, renderPass, isFrontCulled, bufferNodes, buffer, nodesIds );
+			registerPipelineNodes( hash, buffer, nodesIds );
 		}
 
 		template< typename NodeT >
@@ -388,15 +386,22 @@ namespace castor3d
 				&& node.data.getMeshletsCount()
 				&& indirectMeshBuffer )
 			{
-				fillIndirectCommand( node, indirectMeshBuffer, instanceCount, node.data.getMeshletsCount() );
+				fillIndirectCommand( node
+					, indirectMeshBuffer
+					, node.data.isDynamic() ? 1u : instanceCount
+					, node.data.getMeshletsCount() );
 			}
 			else if ( node.getSourceBufferOffsets().hasData( SubmeshFlag::eIndex ) )
 			{
-				fillIndirectCommand( node, indirectIdxBuffer, instanceCount );
+				fillIndirectCommand( node
+					, indirectIdxBuffer
+					, instanceCount );
 			}
 			else
 			{
-				fillIndirectCommand( node, indirectNIdxBuffer, instanceCount );
+				fillIndirectCommand( node
+					, indirectNIdxBuffer
+					, instanceCount );
 			}
 		}
 

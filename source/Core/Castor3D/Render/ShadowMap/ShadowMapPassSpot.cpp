@@ -206,7 +206,7 @@ namespace castor3d
 					, shader::getNodeId( c3d_objectIdsData
 						, in
 						, pipelineID
-						, in.drawID
+						, writer.cast< sdw::UInt >( in.drawID )
 						, flags.programFlags ) );
 				auto curPosition = writer.declLocale( "curPosition"
 					, in.position );

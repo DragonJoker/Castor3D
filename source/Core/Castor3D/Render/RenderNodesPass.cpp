@@ -723,7 +723,9 @@ namespace castor3d
 					&& meshletDescriptorLayout )
 				{
 					pipeline->setMeshletDescriptorSetLayout( *meshletDescriptorLayout );
-					pipeline->setPushConstantRanges( { { VK_SHADER_STAGE_MESH_BIT_NV | VK_SHADER_STAGE_TASK_BIT_NV, 0u, 8u } } );
+					pipeline->setPushConstantRanges( { { VK_SHADER_STAGE_MESH_BIT_NV | VK_SHADER_STAGE_TASK_BIT_NV
+						, 0u
+						, sizeof( MeshletDrawConstants ) } } );
 				}
 				else
 				{
@@ -800,6 +802,7 @@ namespace castor3d
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		auto drawOffset = pcb.declMember< sdw::UInt >( "drawOffset" );
 		auto instanceCount = pcb.declMember< sdw::UInt >( "instanceCount" );
 		pcb.end();
 		auto c3d_cullData = writer.declArrayStorageBuffer< shader::CullData >( "c3d_cullBuffer"
@@ -821,15 +824,29 @@ namespace castor3d
 
 				auto cullData = writer.declLocale( "cullData"
 					, c3d_cullData[meshletId] );
-				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
-					, modelData.getModelMtx() );
-				auto meanScale = writer.declLocale( "meanScale"
-					, ( modelData.getScale().x() + modelData.getScale().y() + modelData.getScale().z() ) / 3.0f );
 
-				auto sphereCenter = writer.declLocale( "sphereCenter"
-					, ( curMtxModel * vec4( cullData.sphere.xyz(), 1.0 ) ).xyz() );
-				auto sphereRadius = writer.declLocale( "sphereRadius"
-					, cullData.sphere.w() * meanScale );
+				if ( checkFlag( flags.submeshFlags, SubmeshFlag::eVelocity ) )
+				{
+					auto sphereCenter = writer.declLocale( "sphereCenter"
+						, cullData.sphere.xyz() );
+					auto sphereRadius = writer.declLocale( "sphereRadius"
+						, cullData.sphere.w() );
+				}
+				else
+				{
+					auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
+						, modelData.getModelMtx() );
+					auto meanScale = writer.declLocale( "meanScale"
+						, ( modelData.getScale().x() + modelData.getScale().y() + modelData.getScale().z() ) / 3.0f );
+
+					auto sphereCenter = writer.declLocale( "sphereCenter"
+						, ( curMtxModel * vec4( cullData.sphere.xyz(), 1.0 ) ).xyz() );
+					auto sphereRadius = writer.declLocale( "sphereRadius"
+						, cullData.sphere.w() * meanScale );
+				}
+
+				auto sphereCenter = writer.getVariable< sdw::Vec3 >( "sphereCenter" );
+				auto sphereRadius = writer.getVariable< sdw::Float >( "sphereRadius" );
 
 				FOR( writer, sdw::UInt, i, 0u, i < 6u, ++i )
 				{
@@ -857,11 +874,13 @@ namespace castor3d
 					, in.workGroupID );
 				auto meshletId = writer.declLocale( "meshletId"
 					, ( baseId * 32u + laneId ) );
+				auto drawId = writer.declLocale( "drawId"
+					, writer.cast< sdw::UInt >( in.drawID ) + drawOffset );
 				auto nodeId = writer.declLocale( "nodeId"
 					, shader::getNodeId( c3d_objectIdsData
 						, c3d_instances
 						, pipelineID
-						, in.drawID
+						, drawId
 						, flags.programFlags ) );
 				auto render = writer.declLocale( "render"
 					, checkVisible( nodeId, meshletId ) );
@@ -911,6 +930,7 @@ namespace castor3d
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		auto drawOffset = pcb.declMember< sdw::UInt >( "drawOffset" );
 		auto instanceCount = pcb.declMember< sdw::UInt >( "instanceCount" );
 		pcb.end();
 
@@ -978,11 +998,13 @@ namespace castor3d
 		{
 			auto laneId = writer.declLocale( "laneId"
 				, in.localInvocationID );
+			auto drawId = writer.declLocale( "drawId"
+				, writer.cast< sdw::UInt >( in.drawID ) + drawOffset );
 			auto nodeId = writer.declLocale( "nodeId"
 				, shader::getNodeId( c3d_objectIdsData
 					, c3d_instances
 					, pipelineID
-					, in.drawID
+					, drawId
 					, flags.programFlags ) );
 			auto meshlet = writer.declLocale( "meshlet"
 				, c3d_meshlets[meshletIndex] );
@@ -1166,7 +1188,7 @@ namespace castor3d
 					, shader::getNodeId( c3d_objectIdsData
 						, in
 						, pipelineID
-						, in.drawID
+						, writer.cast< sdw::UInt >( in.drawID )
 						, flags.programFlags ) );
 				auto curPosition = writer.declLocale( "curPosition"
 					, in.position );
@@ -1293,7 +1315,7 @@ namespace castor3d
 				auto nodeId = writer.declLocale( "nodeId"
 					,  shader::getNodeId( c3d_objectIdsData
 						, pipelineID
-						, in.drawID ) );
+						, writer.cast< sdw::UInt >( in.drawID ) ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId - 1u] );
 				out.nodeId = writer.cast< sdw::Int >( nodeId );

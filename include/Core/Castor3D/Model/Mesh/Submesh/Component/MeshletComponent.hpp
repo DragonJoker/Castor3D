@@ -59,6 +59,13 @@ namespace castor3d
 
 		C3D_API void createDescriptorSet( Geometry const & geometry );
 		C3D_API ashes::DescriptorSet const & getDescriptorSet( Geometry const & geometry )const;
+		C3D_API void instantiate( Geometry const & geometry );
+		C3D_API GpuBufferOffsetT< MeshletCullData > const & getFinalCullBuffer( Geometry const & geometry )const;
+
+		GpuBufferOffsetT< Meshlet > const & getMeshletsBuffer()const
+		{
+			return m_meshletBuffer;
+		}
 
 		ashes::DescriptorSetLayout const & getDescriptorLayout()const
 		{
@@ -87,6 +94,11 @@ namespace castor3d
 			return uint32_t( m_meshlets.size() );
 		}
 
+		GpuBufferOffsetT< MeshletCullData > const & getSourceCullBuffer()const
+		{
+			return m_sourceCullBuffer;
+		}
+
 	private:
 		bool doInitialise( RenderDevice const & device )override;
 		void doCleanup( RenderDevice const & device )override;
@@ -98,7 +110,8 @@ namespace castor3d
 
 	private:
 		GpuBufferOffsetT< Meshlet > m_meshletBuffer;
-		GpuBufferOffsetT< MeshletCullData > m_cullBuffer;
+		GpuBufferOffsetT< MeshletCullData > m_sourceCullBuffer;
+		std::map< Geometry const *, GpuBufferOffsetT< MeshletCullData > > m_finalCullBuffers;
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
 		ashes::DescriptorSetPoolPtr m_descriptorPool;
 		std::map< Geometry const *, ashes::DescriptorSetPtr > m_descriptorSets;

@@ -105,4 +105,19 @@ namespace castor3d
 
 		return nullptr;
 	}
+
+	GpuBufferOffsetT< Meshlet > const & SubmeshRenderNode::getMeshletsBuffer()const
+	{
+		return data.getMeshletsBuffer();
+	}
+
+	GpuBufferOffsetT< MeshletCullData > const & SubmeshRenderNode::getSourceMeshletsBounds()const
+	{
+		return data.getSourceMeshletsBounds();
+	}
+
+	GpuBufferOffsetT< MeshletCullData > const & SubmeshRenderNode::getFinalMeshletsBounds()const
+	{
+		return data.getFinalMeshletsBounds( instance );
+	}
 }
