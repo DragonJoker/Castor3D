@@ -309,10 +309,10 @@ namespace castor3d
 
 #	if C3D_UseTaskShaders
 
-		static std::vector< castor::Point4f > buildBoundingSpheres( std::vector< Meshlet > const & meshlets
+		static std::vector< MeshletCullData > buildBoundingData( std::vector< Meshlet > const & meshlets
 			, Remapped const & remapped )
 		{
-			std::vector< castor::Point4f > result;
+			std::vector< MeshletCullData > result;
 			result.reserve( meshlets.size() );
 			auto it = remapped.baseBuffers.find( SubmeshData::ePositions );
 
@@ -324,7 +324,7 @@ namespace castor3d
 					, it->second.data()->constPtr()
 					, it->second.size()
 					, sizeof( castor::Point3f ) );
-				result.emplace_back( bounds.center[0], bounds.center[1], bounds.center[2], bounds.radius );
+				result.emplace_back( castor::Point4f{ bounds.center[0], bounds.center[1], bounds.center[2], bounds.radius } );
 			}
 
 			return result;
@@ -377,8 +377,8 @@ namespace castor3d
 			{
 				auto meshlets = meshopt::buildMeshlets( remapped );
 #	if C3D_UseTaskShaders
-				auto spheres = meshopt::buildBoundingSpheres( meshlets, remapped );
-				meshlet->getSpheres() = std::move( spheres );
+				auto cullData = meshopt::buildBoundingData( meshlets, remapped );
+				meshlet->getCullData() = std::move( cullData );
 #	endif
 				meshlet->getMeshletsData() = std::move( meshlets );
 			}
