@@ -202,6 +202,7 @@ namespace castor3d
 					, cuT( "EnvironmentMap" )
 					, getName() + cuT( "Transparent" )
 					, RenderNodesPassDesc{ getOwner()->getSize(), m_matrixUbo, *m_culler, false }
+						.meshShading( true )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
 				m_node->getScene()->getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
