@@ -98,6 +98,18 @@ namespace castor3d
 		uint32_t triangleCount;
 		uint32_t dummy[2];
 	};
+	/**
+	*\~english
+	*\brief
+	*	Cull data for one meshlet.
+	*\~french
+	*\brief
+	*	Données de culling pour un meshlet.
+	*/
+	struct MeshletCullData
+	{
+		castor::Point4f sphere;
+	};
 
 	CU_DeclareSmartPtr( Mesh );
 	CU_DeclareSmartPtr( MeshGenerator );
