@@ -216,11 +216,12 @@ namespace castor3d
 			, [&]( VertexInT< shader::VertexSurfaceT > in
 			, VertexOutT< shader::FragmentSurfaceT > out )
 			{
-				auto nodeId = shader::getNodeId( c3d_objectIdsData
-					, in
-					, pipelineID
-					, in.drawID
-					, flags.programFlags );
+				auto nodeId = writer.declLocale( "nodeId"
+					, shader::getNodeId( c3d_objectIdsData
+						, in
+						, pipelineID
+						, in.drawID
+						, flags.programFlags ) );
 				auto curPosition = writer.declLocale( "curPosition"
 					, in.position );
 				auto curNormal = writer.declLocale( "curNormal"

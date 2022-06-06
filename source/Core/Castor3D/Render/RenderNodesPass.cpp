@@ -205,10 +205,6 @@ namespace castor3d
 		{
 			remFlag( flags, ProgramFlag::eHasMesh );
 		}
-		else
-		{
-			remFlag( flags, ProgramFlag::eInstantiation );
-		}
 
 		return doAdjustProgramFlags( flags );
 	}
@@ -604,12 +600,8 @@ namespace castor3d
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::eHasMesh ) )
 		{
-			stageFlags |= VK_SHADER_STAGE_MESH_BIT_NV;
-
-			if ( checkFlag( flags.programFlags, ProgramFlag::eHasTask ) )
-			{
-				stageFlags |= VK_SHADER_STAGE_TASK_BIT_NV;
-			}
+			stageFlags |= VK_SHADER_STAGE_MESH_BIT_NV
+				| VK_SHADER_STAGE_TASK_BIT_NV;
 		}
 		else
 		{
@@ -730,12 +722,8 @@ namespace castor3d
 				if ( checkFlag( flags.programFlags, ProgramFlag::eHasMesh )
 					&& meshletDescriptorLayout )
 				{
-					auto pcflags = VK_SHADER_STAGE_MESH_BIT_NV
-						| ( checkFlag( flags.programFlags, ProgramFlag::eHasTask )
-							? VK_SHADER_STAGE_TASK_BIT_NV
-							: 0u );
 					pipeline->setMeshletDescriptorSetLayout( *meshletDescriptorLayout );
-					pipeline->setPushConstantRanges( { { pcflags, 0u, 4u } } );
+					pipeline->setPushConstantRanges( { { VK_SHADER_STAGE_MESH_BIT_NV | VK_SHADER_STAGE_TASK_BIT_NV, 0u, 8u } } );
 				}
 				else
 				{
@@ -793,15 +781,26 @@ namespace castor3d
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
 			, RenderPipeline::eBuffers );
-		C3D_ObjectIdsData( writer
+		C3D_ObjectIdsDataOpt( writer
 			, GlobalBuffersIdx::eObjectsNodeID
-			, RenderPipeline::eBuffers );
+			, RenderPipeline::eBuffers
+			, !checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
+		sdw::Ssbo instancesBuffer{ writer
+			, std::string{ "c3d_instancesBuffer" }
+			, uint32_t( MeshBuffersIdx::eInstances )
+			, RenderPipeline::eMeshBuffers
+			, ast::type::MemoryLayout::eStd430
+			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) };
+		auto c3d_instances = instancesBuffer.declMemberArray< sdw::UVec4 >( "c3d_instances"
+			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
+		instancesBuffer.end();
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		auto instanceCount = pcb.declMember< sdw::UInt >( "instanceCount" );
 		pcb.end();
 		auto c3d_cullData = writer.declArrayStorageBuffer< shader::CullData >( "c3d_cullBuffer"
 			, uint32_t( MeshBuffersIdx::eCullData )
@@ -828,15 +827,13 @@ namespace castor3d
 					, ( modelData.getScale().x() + modelData.getScale().y() + modelData.getScale().z() ) / 3.0f );
 
 				auto sphereCenter = writer.declLocale( "sphereCenter"
-					, vec3( curMtxModel * vec4( cullData.sphere.xyz(), 0.0 ) ) );
+					, ( curMtxModel * vec4( cullData.sphere.xyz(), 1.0 ) ).xyz() );
 				auto sphereRadius = writer.declLocale( "sphereRadius"
 					, cullData.sphere.w() * meanScale );
-				auto finalSphere = writer.declLocale( "finalSphere"
-					, vec4( sphereCenter, sphereRadius ) );
 
 				FOR( writer, sdw::UInt, i, 0u, i < 6u, ++i )
 				{
-					IF( writer, dot( c3d_matrixData.getFrustumPlane( i ).xyz(), finalSphere.xyz() ) + c3d_matrixData.getFrustumPlane( i ).w() <= -cullData.sphere.w() )
+					IF( writer, dot( c3d_matrixData.getFrustumPlane( i ).xyz(), sphereCenter ) + c3d_matrixData.getFrustumPlane( i ).w() <= -sphereRadius )
 					{
 						writer.returnStmt( sdw::Boolean{ false } );
 					}
@@ -859,10 +856,13 @@ namespace castor3d
 				auto baseId = writer.declLocale( "baseId"
 					, in.workGroupID );
 				auto meshletId = writer.declLocale( "meshletId"
-					, baseId * 32u + laneId );
-				auto nodeId = shader::getNodeId( c3d_objectIdsData
-					, pipelineID
-					, in.drawID );
+					, ( baseId * 32u + laneId ) );
+				auto nodeId = writer.declLocale( "nodeId"
+					, shader::getNodeId( c3d_objectIdsData
+						, c3d_instances
+						, pipelineID
+						, in.drawID
+						, flags.programFlags ) );
 				auto render = writer.declLocale( "render"
 					, checkVisible( nodeId, meshletId ) );
 				auto vote = writer.declLocale( "vote"
@@ -901,15 +901,17 @@ namespace castor3d
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
 			, RenderPipeline::eBuffers );
-		C3D_ObjectIdsData( writer
+		C3D_ObjectIdsDataOpt( writer
 			, GlobalBuffersIdx::eObjectsNodeID
-			, RenderPipeline::eBuffers );
+			, RenderPipeline::eBuffers
+			, !checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		auto instanceCount = pcb.declMember< sdw::UInt >( "instanceCount" );
 		pcb.end();
 
 #define DeclareSsbo( Name, Type, Binding, Enable )\
@@ -962,6 +964,10 @@ namespace castor3d
 			, sdw::Vec4
 			, MeshBuffersIdx::eVelocity
 			, checkFlag( flags.submeshFlags, SubmeshFlag::eVelocity ) );
+		DeclareSsbo( c3d_instances
+			, sdw::UVec4
+			, MeshBuffersIdx::eInstances
+			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
 
 #undef DeclareSsbo
 
@@ -972,9 +978,12 @@ namespace castor3d
 		{
 			auto laneId = writer.declLocale( "laneId"
 				, in.localInvocationID );
-			auto nodeId = shader::getNodeId( c3d_objectIdsData
-				, pipelineID
-				, in.drawID );
+			auto nodeId = writer.declLocale( "nodeId"
+				, shader::getNodeId( c3d_objectIdsData
+					, c3d_instances
+					, pipelineID
+					, in.drawID
+					, flags.programFlags ) );
 			auto meshlet = writer.declLocale( "meshlet"
 				, c3d_meshlets[meshletIndex] );
 			auto triangleCount = writer.declLocale( "triangleCount"
@@ -1153,11 +1162,12 @@ namespace castor3d
 			, [&]( VertexInT< shader::VertexSurfaceT > in
 				, VertexOutT< shader::FragmentSurfaceT > out )
 			{
-				auto nodeId = shader::getNodeId( c3d_objectIdsData
-					, in
-					, pipelineID
-					, in.drawID
-					, flags.programFlags );
+				auto nodeId = writer.declLocale( "nodeId"
+					, shader::getNodeId( c3d_objectIdsData
+						, in
+						, pipelineID
+						, in.drawID
+						, flags.programFlags ) );
 				auto curPosition = writer.declLocale( "curPosition"
 					, in.position );
 				auto curNormal = writer.declLocale( "curNormal"
