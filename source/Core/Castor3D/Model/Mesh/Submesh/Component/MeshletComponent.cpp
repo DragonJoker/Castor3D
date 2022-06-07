@@ -17,19 +17,11 @@ namespace castor3d
 #if VK_NV_mesh_shader
 	namespace mshletcomp
 	{
-		castor::String getName( MeshletComponent const & component )
+		static castor::String getName( MeshletComponent const & component )
 		{
 			return component.getOwner()->getOwner()->getName()
 				+ castor::string::toString( component.getOwner()->getId() )
 				+ "Meshlet";
-		}
-
-		static size_t makeHash( ObjectBufferOffset bufferOffsets )
-		{
-			auto result = bufferOffsets.hash;
-			castor::hashCombinePtr( result, bufferOffsets.getBufferChunk( SubmeshFlag::ePositions ).buffer );
-			castor::hashCombine( result, bufferOffsets.getBufferChunk( SubmeshFlag::ePositions ).getOffset() );
-			return result;
 		}
 	}
 #endif

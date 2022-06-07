@@ -37,7 +37,7 @@ namespace castor3d
 			, graph
 			, { [this](){ doInitialise(); }
 				, GetSemaphoreWaitFlagsCallback( [this](){ return doGetSemaphoreWaitFlags(); } )
-				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
+				, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); }
 				, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
 				, crg::RunnablePass::IsEnabledCallback( [this](){ return !m_passes.empty(); } )
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }

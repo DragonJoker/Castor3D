@@ -17,7 +17,7 @@ namespace castor3d
 {
 	struct TransformPipeline
 	{
-		TransformPipeline( uint32_t index );
+		C3D_API explicit TransformPipeline( uint32_t index );
 
 		C3D_API std::string getName()const;
 		C3D_API static std::string getName( SubmeshFlags const & submeshFlags
@@ -38,7 +38,7 @@ namespace castor3d
 
 	struct BoundsTransformPipeline
 	{
-		BoundsTransformPipeline( bool normals );
+		C3D_API explicit BoundsTransformPipeline( bool normals );
 
 		C3D_API std::string getName()const;
 		C3D_API static std::string getName( bool normals );
