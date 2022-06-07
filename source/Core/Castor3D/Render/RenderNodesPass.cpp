@@ -779,8 +779,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		TaskWriter writer;
-		bool checkCones = checkFlag( flags.submeshFlags, SubmeshFlag::eNormals )
-			&& ( ( C3D_UseAnimConeCulling != 0 ) || !checkFlag( flags.submeshFlags, SubmeshFlag::eVelocity ) );
+		bool checkCones = checkFlag( flags.submeshFlags, SubmeshFlag::eNormals );
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix

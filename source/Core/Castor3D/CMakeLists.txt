@@ -9,26 +9,73 @@ set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 13 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
-set( ExternalIncludes )
+if ( NOT DEFINED CASTOR_USE_WEIGHED_BLENDED_OIT )
+	option( CASTOR_USE_WEIGHED_BLENDED_OIT "Use Weighted Blended OIT for translucent objects" ON )
+endif ()
+if ( NOT DEFINED CASTOR_USE_DEFERRED_RENDERING )
+	option( CASTOR_USE_DEFERRED_RENDERING "Use deferred rendering for opaque objects" ON )
+endif ()
+if ( NOT DEFINED CASTOR_USE_ALLOCATION_CALLBACKS )
+	option( CASTOR_USE_ALLOCATION_CALLBACKS "Use Vulkan allocation callbacks" OFF )
+endif ()
+if ( NOT DEFINED CASTOR_USE_MESH_SHADERS )
+	option( CASTOR_USE_MESH_SHADERS "Use mesh shaders" ON )
+endif ()
+if ( NOT DEFINED CASTOR_USE_TASK_SHADERS )
+	option( CASTOR_USE_TASK_SHADERS "Use task shaders along with mesh shaders" ON )
+endif ()
+
+set( C3D_USE_GLSLANG 0 )
+set( C3D_USE_WBOIT 0 )
+set( C3D_USE_DEFERRED 0 )
+set( C3D_USE_ALLOCCB 0 )
+set( C3D_USE_MESH 0 )
+set( C3D_USE_TASK 0 )
 
 if ( CASTOR_USE_GLSLANG )
-	set( Castor3DDefinitions
-		C3D_HasGlslang
-	)
+	set( C3D_USE_GLSLANG 1 )
 endif ()
+
+if ( CASTOR_USE_WEIGHED_BLENDED_OIT )
+	set( C3D_USE_WBOIT 1 )
+endif ()
+
+if ( CASTOR_USE_DEFERRED_RENDERING )
+	set( C3D_USE_DEFERRED 1 )
+endif ()
+
+if ( CASTOR_USE_ALLOCATION_CALLBACKS )
+	set( C3D_USE_ALLOCCB 1 )
+endif ()
+
+if ( CASTOR_USE_MESH_SHADERS )
+	set( C3D_USE_MESH 1 )
+endif ()
+
+if ( CASTOR_USE_TASK_SHADERS )
+	set( C3D_USE_TASK 1 )
+endif ()
+
+set( ExternalIncludes )
 
 configure_file(
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/RequiredVersion.hpp.in
 	${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/RequiredVersion.hpp
 	NEWLINE_STYLE LF
 )
+configure_file(
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Config.hpp.in
+	${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/Config.hpp
+	NEWLINE_STYLE LF
+)
 set( ${PROJECT_NAME}_HDR_FILES
+	${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/Config.hpp
+	${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/RequiredVersion.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Castor3DModule.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Castor3DPrerequisites.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Engine.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/ImporterFile.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Limits.hpp
-	${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/RequiredVersion.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/DebugDefines.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
@@ -1803,9 +1850,11 @@ set_target_properties( ${PROJECT_NAME}
 		FOLDER "Core/${MAIN_PROJECT_NAME}"
 )
 install(
-	FILES ${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/RequiredVersion.hpp
+	FILES
+		${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/RequiredVersion.hpp
+		${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/Config.hpp
 	DESTINATION include/${PROJECT_NAME}
-	COMPONENT Castor3D_dev
+	COMPONENT Castor3D
 	CONFIGURATIONS Release
 )
 target_install_headers( ${PROJECT_NAME}

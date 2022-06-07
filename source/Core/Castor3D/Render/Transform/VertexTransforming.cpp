@@ -469,7 +469,7 @@ namespace castor3d
 		{
 			using namespace sdw;
 			ComputeWriter writer;
-			bool computeCones = ( C3D_UseAnimConeCulling != 0 ) && pipeline.normals;
+			bool computeCones = pipeline.normals;
 
 			// Inputs
 			auto meshletsData = writer.declPushConstantsBuffer<>( "meshletsData" );

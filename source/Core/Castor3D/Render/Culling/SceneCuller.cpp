@@ -275,21 +275,6 @@ namespace castor3d
 			++indirectCommands;
 		}
 
-		static void fillNodeCommands( SubmeshRenderNode const & node
-			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
-			, VkDrawIndirectCommand *& indirectNIdxBuffer
-			, uint32_t instanceCount )
-		{
-			if ( node.getSourceBufferOffsets().hasData( SubmeshFlag::eIndex ) )
-			{
-				fillIndirectCommand( node, indirectIdxBuffer, instanceCount );
-			}
-			else
-			{
-				fillIndirectCommand( node, indirectNIdxBuffer, instanceCount );
-			}
-		}
-
 #ifndef NDEBUG
 
 		static void checkBuffers( SubmeshRenderNode const & firstNode
@@ -451,6 +436,21 @@ namespace castor3d
 		}
 
 #else
+
+		static void fillNodeCommands( SubmeshRenderNode const & node
+			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
+			, VkDrawIndirectCommand *& indirectNIdxBuffer
+			, uint32_t instanceCount )
+		{
+			if ( node.getSourceBufferOffsets().hasData( SubmeshFlag::eIndex ) )
+			{
+				fillIndirectCommand( node, indirectIdxBuffer, instanceCount );
+			}
+			else
+			{
+				fillIndirectCommand( node, indirectNIdxBuffer, instanceCount );
+			}
+		}
 
 		static void fillNodeCommands( SceneCuller::SidedNodeArrayT< SubmeshRenderNode > const & nodes
 			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
