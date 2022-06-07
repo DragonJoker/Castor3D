@@ -85,7 +85,7 @@ namespace castor3d
 			result.a |= uint64_t( texturesFlags ) << offset;
 			CU_Require( passLayerIndex < MaxPassLayers );
 			CU_Require( ( morphTargetsOffset >> maxTargetOffsetSize ) == 0 );
-			auto hash = morphTargetsOffset;
+			auto hash = size_t( morphTargetsOffset );
 
 			if constexpr ( std::is_same_v< DataT, Submesh > )
 			{
@@ -93,7 +93,7 @@ namespace castor3d
 				hash >>= maxPassLayerSize;
 			}
 
-			result.b = hash
+			result.b = uint64_t( hash )
 				| ( uint64_t( passLayerIndex ) << maxTargetOffsetSize );
 			return result;
 		}
