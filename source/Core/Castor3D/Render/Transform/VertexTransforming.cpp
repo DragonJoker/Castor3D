@@ -1,5 +1,6 @@
 #include "Castor3D/Render/Transform/VertexTransforming.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Buffer/ObjectBufferOffset.hpp"
@@ -31,6 +32,28 @@ CU_ImplementCUSmartPtr( castor3d, VertexTransforming )
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
+#define DeclareSsbo( Name, Type, Binding, Enable )\
+	sdw::Ssbo Name##Buffer{ writer\
+		, #Name + std::string{ "Buffer" }\
+		, uint32_t( Binding )\
+		, 0u\
+		, ast::type::MemoryLayout::eStd430\
+		, Enable };\
+	auto Name = Name##Buffer.declMemberArray< Type >( #Name, Enable );\
+	Name##Buffer.end()
+
+#define DeclareSsboEx( Name, Type, Binding, Enable, Flags )\
+	sdw::Ssbo Name##Buffer{ writer\
+		, #Name + std::string{ "Buffer" }\
+		, uint32_t( Binding )\
+		, 0u\
+		, ast::type::MemoryLayout::eStd430\
+		, Enable };\
+	auto Name = Name##Buffer.declMemberArray< Type >( #Name, Enable, Flags );\
+	Name##Buffer.end()
+
 	//*********************************************************************************************
 
 	namespace vtxtrsg
@@ -214,6 +237,14 @@ namespace castor3d
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( MeshletBoundsTransformPass::ePositions
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_COMPUTE_BIT ) );
+
+			if ( pipeline.normals )
+			{
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( MeshletBoundsTransformPass::eNormals
+					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+					, VK_SHADER_STAGE_COMPUTE_BIT ) );
+			}
+
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( MeshletBoundsTransformPass::eMeshlets
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_COMPUTE_BIT ) );
@@ -289,26 +320,6 @@ namespace castor3d
 				, uint32_t( VertexTransformPass::eSkinTransforms )
 				, 0u
 				, pipeline.submeshFlags );
-
-#define DeclareSsbo( Name, Type, Binding, Enable )\
-	sdw::Ssbo Name##Buffer{ writer\
-		, #Name + std::string{ "Buffer" }\
-		, uint32_t( Binding )\
-		, 0u\
-		, ast::type::MemoryLayout::eStd430\
-		, Enable };\
-	auto Name = Name##Buffer.declMemberArray< Type >( #Name, Enable );\
-	Name##Buffer.end()
-
-#define DeclareSsboEx( Name, Type, Binding, Enable, Flags )\
-	sdw::Ssbo Name##Buffer{ writer\
-		, #Name + std::string{ "Buffer" }\
-		, uint32_t( Binding )\
-		, 0u\
-		, ast::type::MemoryLayout::eStd430\
-		, Enable };\
-	auto Name = Name##Buffer.declMemberArray< Type >( #Name, Enable, Flags );\
-	Name##Buffer.end()
 
 			// Inputs
 			DeclareSsbo( c3d_inPosition
@@ -387,9 +398,6 @@ namespace castor3d
 				, VertexTransformPass::eOutVelocity
 				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eVelocity ) );
 
-#undef DeclareSsboEx
-#undef DeclareSsbo
-
 			auto size = uint32_t( device.properties.limits.nonCoherentAtomSize );
 			writer.implementMainT< sdw::VoidT >( sdw::ComputeInT< sdw::VoidT >{ writer, size, 1u, 1u }
 			, [&]( sdw::ComputeInT< sdw::VoidT > in )
@@ -461,18 +469,20 @@ namespace castor3d
 		{
 			using namespace sdw;
 			ComputeWriter writer;
+			bool computeCones = ( C3D_UseAnimConeCulling != 0 ) && pipeline.normals;
 
 			// Inputs
 			auto meshletsData = writer.declPushConstantsBuffer<>( "meshletsData" );
 			auto c3d_meshletsCount = meshletsData.declMember< sdw::UInt >( "c3d_meshletsCount" );
 			meshletsData.end();
-			sdw::Ssbo positionsBuffer{ writer
-				, std::string{ "positionsBufferBuffer" }
-				, uint32_t( MeshletBoundsTransformPass::ePositions )
-				, 0u
-				, ast::type::MemoryLayout::eStd430 };
-			auto c3d_positions = positionsBuffer.declMemberArray< sdw::Vec4 >( "c3d_positions" );
-			positionsBuffer.end();
+			DeclareSsbo( c3d_positions
+				, sdw::Vec4
+				, MeshletBoundsTransformPass::ePositions
+				, true );
+			DeclareSsbo( c3d_normals
+				, sdw::Vec4
+				, MeshletBoundsTransformPass::eNormals
+				, computeCones );
 			auto c3d_meshlets = writer.declArrayStorageBuffer< shader::Meshlet >( "c3d_meshlets"
 				, MeshletBoundsTransformPass::eMeshlets
 				, 0u );
@@ -482,6 +492,91 @@ namespace castor3d
 				, MeshletBoundsTransformPass::eOutCullData
 				, 0u );
 
+			auto computeSphere = writer.implementFunction< sdw::Vec4 >( "computeSphere"
+				, [&]( sdw::Array< sdw::Vec3 > const & points
+					, sdw::UInt const & count )
+				{
+					// find extremum points along all 3 axes; for each axis we get a pair of points with min/max coordinates
+					auto pmin = writer.declLocale( "pmin"
+						, uvec3( 0_u, 0u, 0u ) );
+					auto pmax = writer.declLocale( "pmax"
+						, uvec3( 0_u, 0u, 0u ) );
+
+					FOR( writer, sdw::UInt, i, 0u, i < count, ++i )
+					{
+						auto p = writer.declLocale( "p"
+							, points[i] );
+
+						for( uint32_t axis = 0u; axis < 3u; ++axis )
+						{
+							pmin[axis] = writer.ternary( p[axis] < points[pmin[axis]][axis], i, pmin[axis] );
+							pmax[axis] = writer.ternary( p[axis] > points[pmax[axis]][axis], i, pmax[axis] );
+						}
+					}
+					ROF;
+
+					// find the pair of points with largest distance
+					auto paxisd2 = writer.declLocale( "paxisd2"
+						, 0.0_f );
+					auto paxis = writer.declLocale( "paxis"
+						, 0_i );
+					auto d2 = writer.declLocale( "d2"
+						, 0.0_f );
+
+					for ( int axis = 0; axis < 3; ++axis )
+					{
+						auto p1 = points[pmin[axis]];
+						auto p2 = points[pmax[axis]];
+
+						d2 = ( p2[0] - p1[0] ) * ( p2[0] - p1[0] )
+							+ ( p2[1] - p1[1] ) * ( p2[1] - p1[1] )
+							+ ( p2[2] - p1[2] ) * ( p2[2] - p1[2] );
+
+						IF( writer, d2 > paxisd2 )
+						{
+							paxisd2 = d2;
+							paxis = axis;
+						}
+						FI;
+					}
+
+					// use the longest segment as the initial sphere diameter
+					auto p1 = points[pmin[paxis]];
+					auto p2 = points[pmax[paxis]];
+
+					auto center = writer.declLocale( "center"
+						, ( p1 + p2 ) / vec3( 2.0_f ) );
+					auto radius = writer.declLocale( "radius"
+						, sqrt( paxisd2 ) / 2.0f );
+
+					// iteratively adjust the sphere up until all points fit
+					FOR( writer, sdw::UInt, i, 0u, i < count, ++i )
+					{
+						auto p = points[i];
+						d2 = ( p[0] - center[0] ) * ( p[0] - center[0] )
+							+ ( p[1] - center[1] ) * ( p[1] - center[1] )
+							+ ( p[2] - center[2] ) * ( p[2] - center[2] );
+
+						IF( writer, d2 > radius * radius )
+						{
+							auto d = writer.declLocale( "d"
+								, sqrt( d2 ) );
+
+							auto k = writer.declLocale( "k"
+								, vec3( 0.5f + ( radius / d ) / 2.0f ) );
+
+							center = center * k + p * ( vec3( 1.0_f ) - k );
+							radius = ( radius + d ) / 2.0f;
+						}
+						FI;
+					}
+					ROF;
+
+					writer.returnStmt( vec4( center, radius ) );
+				}
+				, sdw::InVec3Array{ writer, "normals", MaxMeshletVertexCount }
+				, sdw::InUInt{ writer, "count" } );
+
 			auto size = uint32_t( device.properties.limits.nonCoherentAtomSize );
 			writer.implementMainT< sdw::VoidT >( sdw::ComputeInT< sdw::VoidT >{ writer, size, 1u, 1u }
 				, [&]( sdw::ComputeInT< sdw::VoidT > in )
@@ -490,23 +585,65 @@ namespace castor3d
 						, in.globalInvocationID.x() );
 					auto meshlet = writer.declLocale( "meshlet"
 						, c3d_meshlets[meshletId] );
-					auto minValue = writer.declLocale( "minValue"
-						, c3d_positions[meshlet.vertices[0]] );
-					auto maxValue = writer.declLocale( "maxValue"
-						, c3d_positions[meshlet.vertices[1]] );
+					auto minPos = writer.declLocale( "minPos"
+						, c3d_positions[meshlet.vertices[0]].xyz() );
+					auto maxPos = writer.declLocale( "maxPos"
+						, minPos );
+					auto normals = writer.declLocaleArray< sdw::Vec3 >( "normals"
+						, MaxMeshletVertexCount
+						, computeCones );
+					normals[0] = c3d_normals[meshlet.vertices[0]].xyz();
 
-					FOR( writer, sdw::UInt, i, 2u, i < meshlet.vertexCount, ++i )
+					FOR( writer, sdw::UInt, i, 1u, i < meshlet.vertexCount, ++i )
 					{
-						minValue = min( minValue, c3d_positions[meshlet.vertices[i]] );
-						maxValue = max( maxValue, c3d_positions[meshlet.vertices[i]] );
+						auto point = writer.declLocale( "point"
+							, c3d_positions[meshlet.vertices[i]].xyz() );
+						minPos = min( minPos, point );
+						maxPos = max( maxPos, point );
+						normals[i] = c3d_normals[meshlet.vertices[i]].xyz();
 					}
 					ROF;
 
 					auto center = writer.declLocale( "center"
-						, minValue + ( ( maxValue - minValue ) / vec4( 2.0_f ) ) );
+						, minPos + ( ( maxPos - minPos ) / vec3( 2.0_f ) ) );
 					auto radius = writer.declLocale( "radius"
-						, sdw::distance( center, maxValue ) );
-					c3d_outCullData[meshletId].sphere = vec4( center.xyz(), radius );
+						, sdw::distance( center, maxPos ) );
+					c3d_outCullData[meshletId].sphere = vec4( center, radius );
+
+					if ( computeCones )
+					{
+						auto sphere = writer.declLocale( "sphere"
+							, computeSphere( normals, meshlet.vertexCount ) );
+						auto axis = writer.declLocale( "axis"
+							, normalize( sphere.xyz() ) );
+						// compute a tight cone around all normals, mindp = cos(angle/2)
+						auto mindp = writer.declLocale( "mindp"
+							, 1.0_f );
+
+						FOR( writer, sdw::UInt, i, 0u, i < meshlet.vertexCount, ++i )
+						{
+							auto dp = writer.declLocale( "dp"
+								, dot( normals[i], axis ) );
+							mindp = min( dp, mindp );
+						}
+						ROF;
+
+						IF( writer, mindp <= 0.1_f )
+						{
+							// degenerate cluster, normal cone is larger than a hemisphere => trivial accept
+							// note that if mindp is positive but close to 0, the triangle intersection code below gets less stable
+							// we arbitrarily decide that if a normal cone is ~168 degrees wide or more, the cone isn't useful
+							c3d_outCullData[meshletId].cone = vec4( axis, 1.0_f );
+						}
+						ELSE
+						{
+							// cos(a) for normal cone is mindp; we need to add 90 degrees on both sides and invert the cone
+							// which gives us -cos(a+90) = -(-sin(a)) = sin(a) = sqrt(1 - cos^2(a))
+							c3d_outCullData[meshletId].cone = vec4( axis
+								, sqrt( 1.0_f - mindp * mindp ) );
+						}
+						FI;
+					}
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -547,7 +684,7 @@ namespace castor3d
 			return m_boundsPass->getPass();
 		}
 
-		auto & pass = graph.createPass( "VertexTransforming"
+		auto & pass = graph.createPass( "Transform/VertexTransforming"
 			, [this]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
@@ -570,7 +707,7 @@ namespace castor3d
 			pass.addDependency( *previousPass );
 		}
 
-		auto & result = graph.createPass( "MeshletBoundsTransforming"
+		auto & result = graph.createPass( "Transform/MeshletBoundsTransforming"
 			, [this]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
@@ -616,7 +753,7 @@ namespace castor3d
 			if ( pipeline.meshletsBounds )
 			{
 				m_boundsPass->registerNode( node
-					, *m_boundsPipeline );
+					, *m_boundsPipelines[checkFlag( pipeline.submeshFlags, SubmeshFlag::eNormals ) ? 1u : 0u] );
 			}
 		}
 	}
@@ -624,6 +761,7 @@ namespace castor3d
 	TransformPipeline const & VertexTransforming::doGetPipeline( uint32_t index )
 	{
 		auto ires = m_pipelines.emplace( index, TransformPipeline{ index } );
+		bool normals = checkFlag( ires.first->second.submeshFlags, SubmeshFlag::eNormals );
 
 		if ( ires.second )
 		{
@@ -638,10 +776,10 @@ namespace castor3d
 		}
 
 		if ( ires.first->second.meshletsBounds
-			&& !m_boundsPipeline )
+			&& !m_boundsPipelines[normals ? 1u : 0u] )
 		{
-			m_boundsPipeline = std::make_unique< BoundsTransformPipeline >();
-			auto & pipeline = *m_boundsPipeline;
+			m_boundsPipelines[normals ? 1u : 0u] = std::make_unique< BoundsTransformPipeline >( normals );
+			auto & pipeline = *m_boundsPipelines[normals ? 1u : 0u];
 			pipeline.shader = { VK_SHADER_STAGE_COMPUTE_BIT
 				, pipeline.getName()
 				, vtxtrsg::getShaderSource( m_device, pipeline ) };

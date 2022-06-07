@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #define C3D_UseAllocationCallbacks 0
 #define C3D_UseMeshShaders 1
 #define C3D_UseTaskShaders 1
+#define C3D_UseAnimConeCulling 1
 
 #define C3D_DisableSSSTransmittance 1
 #define C3D_GenerateBRDFIntegration 0

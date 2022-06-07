@@ -38,7 +38,12 @@ namespace castor3d
 
 	struct BoundsTransformPipeline
 	{
-		C3D_API static std::string getName();
+		BoundsTransformPipeline( bool normals );
+
+		C3D_API std::string getName()const;
+		C3D_API static std::string getName( bool normals );
+
+		bool normals;
 
 		ShaderModule shader;
 		ashes::DescriptorSetLayoutPtr descriptorSetLayout;

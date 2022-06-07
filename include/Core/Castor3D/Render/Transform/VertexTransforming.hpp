@@ -37,7 +37,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		std::unordered_map< uint32_t, TransformPipeline > m_pipelines;
-		std::unique_ptr< BoundsTransformPipeline > m_boundsPipeline;
+		std::array< std::unique_ptr< BoundsTransformPipeline >, 2u > m_boundsPipelines;
 		struct PendingNode
 		{
 			SubmeshRenderNode const * node;

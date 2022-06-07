@@ -25,7 +25,9 @@ namespace castor3d
 
 			C3D_API static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache );
 
+		public:
 			sdw::Vec4 sphere;
+			sdw::Vec4 cone;
 
 		private:
 			mutable sdw::Function< sdw::Vec4

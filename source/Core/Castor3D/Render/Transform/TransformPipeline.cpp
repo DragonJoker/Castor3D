@@ -50,9 +50,27 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	std::string BoundsTransformPipeline::getName()
+	BoundsTransformPipeline::BoundsTransformPipeline( bool pnormals )
+		: normals{ pnormals }
 	{
-		return  "MeshletBoundsTransformPass";
+	}
+
+	std::string BoundsTransformPipeline::getName()const
+	{
+		return  getName( normals );
+	}
+
+	std::string BoundsTransformPipeline::getName( bool normals )
+	{
+		std::string result =  "MeshletBoundsTransformPass";
+
+		if ( normals )
+		{
+			result += "Nml";
+		}
+
+		return result;
+
 	}
 
 	//*********************************************************************************************

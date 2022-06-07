@@ -324,7 +324,8 @@ namespace castor3d
 					, it->second.data()->constPtr()
 					, it->second.size()
 					, sizeof( castor::Point3f ) );
-				result.emplace_back( castor::Point4f{ bounds.center[0], bounds.center[1], bounds.center[2], bounds.radius } );
+				result.emplace_back( castor::Point4f{ bounds.center[0], bounds.center[1], bounds.center[2], bounds.radius }
+					, castor::Point4f{ bounds.cone_axis[0], bounds.cone_axis[2], bounds.cone_axis[3], bounds.cone_cutoff } );
 			}
 
 			return result;
