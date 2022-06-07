@@ -1,0 +1,25 @@
+/*
+See LICENSE file in root folder
+*/
+#ifndef ___C3D_Config_H___
+#define ___C3D_Config_H___
+
+// Use glslang to import GLSL shaders.
+#define C3D_HasGlslang ${C3D_USE_GLSLANG}
+
+// Use Weighted Blended OIT for translucent objects.
+#define C3D_UseWeightedBlendedRendering ${C3D_USE_WBOIT}
+
+// Use deferred rendering for opaque objects.
+#define C3D_UseDeferredRendering ${C3D_USE_DEFERRED}
+
+// Use Vulkan allocation callbacks.
+#define C3D_UseAllocationCallbacks ${C3D_USE_ALLOCCB}
+
+// Use mesh shaders.
+#define C3D_UseMeshShaders ${C3D_USE_MESH}
+
+// Use task shaders along with mesh shaders.
+#define C3D_UseTaskShaders ${C3D_USE_TASK}
+
+#endif

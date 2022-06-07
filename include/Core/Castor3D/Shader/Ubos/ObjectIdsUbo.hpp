@@ -89,7 +89,7 @@ namespace castor3d::shader
 		, sdw::UInt pipelineID
 		, sdw::UInt drawID );
 
-	static sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
+	inline sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
 		, sdw::Array< sdw::UVec4 > const & instances
 		, sdw::UInt pipelineID
 		, sdw::UInt drawID

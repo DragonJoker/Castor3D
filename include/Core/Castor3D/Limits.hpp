@@ -160,8 +160,8 @@ namespace castor3d
 	*	Meshlet.
 	*/
 	//@{
-	static uint32_t MaxMeshletVertexCount = 64u;
-	static uint32_t MaxMeshletTriangleCount = 124u;
+	static uint32_t constexpr MaxMeshletVertexCount = 64u;
+	static uint32_t constexpr MaxMeshletTriangleCount = 124u;
 	//@}
 }
 
