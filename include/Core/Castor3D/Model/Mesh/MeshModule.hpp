@@ -109,6 +109,7 @@ namespace castor3d
 	struct MeshletCullData
 	{
 		castor::Point4f sphere;
+		castor::Point4f cone;
 	};
 	/**
 	*\~english

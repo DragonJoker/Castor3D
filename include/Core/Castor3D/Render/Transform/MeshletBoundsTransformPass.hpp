@@ -21,6 +21,7 @@ namespace castor3d
 		enum Ids
 		{
 			ePositions,
+			eNormals,
 			eMeshlets,
 			eOutCullData,
 		};

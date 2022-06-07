@@ -779,6 +779,8 @@ namespace castor3d
 	{
 		using namespace sdw;
 		TaskWriter writer;
+		bool checkCones = checkFlag( flags.submeshFlags, SubmeshFlag::eNormals )
+			&& ( ( C3D_UseAnimConeCulling != 0 ) || !checkFlag( flags.submeshFlags, SubmeshFlag::eVelocity ) );
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
@@ -831,6 +833,12 @@ namespace castor3d
 						, cullData.sphere.xyz() );
 					auto sphereRadius = writer.declLocale( "sphereRadius"
 						, cullData.sphere.w() );
+					auto coneNormal = writer.declLocale( "coneNormal"
+						, cullData.cone.xyz()
+						, checkCones );
+					auto coneCutOff = writer.declLocale( "coneCutOff"
+						, cullData.cone.w()
+						, checkCones );
 				}
 				else
 				{
@@ -843,6 +851,13 @@ namespace castor3d
 						, ( curMtxModel * vec4( cullData.sphere.xyz(), 1.0 ) ).xyz() );
 					auto sphereRadius = writer.declLocale( "sphereRadius"
 						, cullData.sphere.w() * meanScale );
+
+					auto coneNormal = writer.declLocale( "coneNormal"
+						, normalize( ( curMtxModel * vec4( cullData.cone.xyz(), 0.0 ) ).xyz() )
+						, checkCones );
+					auto coneCutOff = writer.declLocale( "coneCutOff"
+						, cullData.cone.w() * meanScale
+						, checkCones );
 				}
 
 				auto sphereCenter = writer.getVariable< sdw::Vec3 >( "sphereCenter" );
@@ -857,6 +872,27 @@ namespace castor3d
 					FI;
 				}
 				ROF;
+
+				if ( checkCones )
+				{
+					auto coneNormal = writer.getVariable< sdw::Vec3 >( "coneNormal" );
+					auto coneCutOff = writer.getVariable< sdw::Float >( "coneCutOff" );
+
+					IF( writer, coneCutOff == 1.0_f )
+					{
+						writer.returnStmt( sdw::Boolean{ true } );
+					}
+					FI;
+
+					auto viewPosition = writer.declLocale( "viewPosition"
+						, normalize( c3d_matrixData.worldToCurView( vec4( coneNormal, 1.0_f ) ).xyz() ) );
+
+					IF( writer, dot( viewPosition, coneNormal ) >= ( coneCutOff * length( viewPosition ) + sphereRadius ) )
+					{
+						writer.returnStmt( sdw::Boolean{ false } );
+					}
+					FI;
+				}
 
 				writer.returnStmt( sdw::Boolean{ true } );
 			}
