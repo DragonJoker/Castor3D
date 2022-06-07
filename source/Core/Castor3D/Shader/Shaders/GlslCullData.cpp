@@ -11,6 +11,7 @@ namespace castor3d
 			, bool enabled )
 			: sdw::StructInstance{ writer, std::move( expr ), enabled }
 			, sphere{ getMember< sdw::Vec4 >( "sphere" ) }
+			, cone{ getMember< sdw::Vec4 >( "cone" ) }
 		{
 		}
 
@@ -22,6 +23,9 @@ namespace castor3d
 			if ( result->empty() )
 			{
 				result->declMember( "sphere"
+					, sdw::type::Kind::eVec4F
+					, sdw::type::NotArray );
+				result->declMember( "cone"
 					, sdw::type::Kind::eVec4F
 					, sdw::type::NotArray );
 			}

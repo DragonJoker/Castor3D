@@ -33,6 +33,13 @@ namespace castor3d
 			ashes::WriteDescriptorSetArray writes;
 			writes.push_back( source.getStorageBinding( SubmeshFlag::ePositions
 				, MeshletBoundsTransformPass::ePositions ) );
+
+			if ( pipeline.normals )
+			{
+				writes.push_back( source.getStorageBinding( SubmeshFlag::eNormals
+					, MeshletBoundsTransformPass::eNormals ) );
+			}
+
 			writes.push_back( meshlets.getStorageBinding( MeshletBoundsTransformPass::eMeshlets ) );
 			writes.push_back( output.getStorageBinding( MeshletBoundsTransformPass::eOutCullData ) );
 
