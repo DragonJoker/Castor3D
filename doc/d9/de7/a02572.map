@@ -1,4 +1,4 @@
-<map id="castor3d::ObjectBufferPool" name="castor3d::ObjectBufferPool">
+<map id="castor3d::VertexBufferPool" name="castor3d::VertexBufferPool">
 <area shape="rect" id="node1" title=" " alt="" coords="33,80,210,107"/>
 <area shape="rect" id="node2" title=" " alt="" coords="5,5,237,32"/>
 </map>

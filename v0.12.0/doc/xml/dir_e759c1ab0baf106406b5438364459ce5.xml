@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dir_e759c1ab0baf106406b5438364459ce5" kind="dir">
+    <compoundname>Material/Pass/PBR</compoundname>
+    <innerdir refid="dir_6a018cf39d48eff7e4a2a723631a3de9">Material/Pass/PBR/Shaders</innerdir>
+    <innerfile refid="d0/d39/a00314">MetallicRoughnessPbrPass.hpp</innerfile>
+    <innerfile refid="d8/d23/a00326">SpecularGlossinessPbrPass.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Material/Pass/PBR/"/>
+  </compounddef>
+</doxygen>

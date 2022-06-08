@@ -1,120 +1,49 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="d1/d13/a04714" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::PassBuffer::PassData</compoundname>
-    <includes local="no">PassBuffer.hpp</includes>
+  <compounddef id="d1/d13/a04714" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::SceneImporter::AnimObjects</compoundname>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d1/d13/a04714_1a4a852ac9cb909ef11eaf744f32b89469" prot="public" static="no" mutable="no">
-        <type><ref refid="d0/d51/a04710" kindref="compound">RgbaColour</ref></type>
-        <definition>RgbaColour castor3d::PassBuffer::PassData::colourDiv</definition>
+      <memberdef kind="variable" id="d1/d13/a04714_1a7d46ffa7168ab9f347852809a4e2f383" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; SkeletonRPtr &gt;</type>
+        <definition>std::vector&lt; SkeletonRPtr &gt; castor3d::SceneImporter::AnimObjects::skeletons</definition>
         <argsstring></argsstring>
-        <name>colourDiv</name>
-        <qualifiedname>castor3d::PassBuffer::PassData::colourDiv</qualifiedname>
+        <name>skeletons</name>
+        <qualifiedname>castor3d::SceneImporter::AnimObjects::skeletons</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="72" column="12" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="72" bodyend="-1"/>
+        <location file="Scene/SceneImporter.hpp" line="120" column="13" bodyfile="Scene/SceneImporter.hpp" bodystart="120" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d13/a04714_1a0edd15eb28dc26c67c0a31a084f2c3d0" prot="public" static="no" mutable="no">
-        <type><ref refid="d0/d51/a04710" kindref="compound">RgbaColour</ref></type>
-        <definition>RgbaColour castor3d::PassBuffer::PassData::specDiv</definition>
+      <memberdef kind="variable" id="d1/d13/a04714_1ae9544d4291e1a6961c73a38fdd1267c0" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; MeshRPtr &gt;</type>
+        <definition>std::vector&lt; MeshRPtr &gt; castor3d::SceneImporter::AnimObjects::meshes</definition>
         <argsstring></argsstring>
-        <name>specDiv</name>
-        <qualifiedname>castor3d::PassBuffer::PassData::specDiv</qualifiedname>
+        <name>meshes</name>
+        <qualifiedname>castor3d::SceneImporter::AnimObjects::meshes</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="73" column="12" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="73" bodyend="-1"/>
+        <location file="Scene/SceneImporter.hpp" line="121" column="13" bodyfile="Scene/SceneImporter.hpp" bodystart="121" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d13/a04714_1a47f0d640619b1cca682eace728b89664" prot="public" static="no" mutable="no">
-        <type><ref refid="d0/d51/a04710" kindref="compound">RgbaColour</ref></type>
-        <definition>RgbaColour castor3d::PassBuffer::PassData::edgeFactors</definition>
+      <memberdef kind="variable" id="d1/d13/a04714_1a6a6edecbb1c65d2f3a75268448870bd6" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; SceneNodeRPtr &gt;</type>
+        <definition>std::vector&lt; SceneNodeRPtr &gt; castor3d::SceneImporter::AnimObjects::nodes</definition>
         <argsstring></argsstring>
-        <name>edgeFactors</name>
-        <qualifiedname>castor3d::PassBuffer::PassData::edgeFactors</qualifiedname>
+        <name>nodes</name>
+        <qualifiedname>castor3d::SceneImporter::AnimObjects::nodes</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="74" column="12" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="74" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/d13/a04714_1a24fc4c91a65a8bdacbcfe072747a6e3d" prot="public" static="no" mutable="no">
-        <type><ref refid="d0/d51/a04710" kindref="compound">RgbaColour</ref></type>
-        <definition>RgbaColour castor3d::PassBuffer::PassData::edgeColour</definition>
-        <argsstring></argsstring>
-        <name>edgeColour</name>
-        <qualifiedname>castor3d::PassBuffer::PassData::edgeColour</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="75" column="12" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="75" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/d13/a04714_1ae075c6e5a3bbfa0a3d9dc47d2d547484" prot="public" static="no" mutable="no">
-        <type><ref refid="d0/d51/a04710" kindref="compound">RgbaColour</ref></type>
-        <definition>RgbaColour castor3d::PassBuffer::PassData::specific</definition>
-        <argsstring></argsstring>
-        <name>specific</name>
-        <qualifiedname>castor3d::PassBuffer::PassData::specific</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="76" column="12" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="76" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/d13/a04714_1afcf8d64fc505608dae35f72d87a3faab" prot="public" static="no" mutable="no">
-        <type><ref refid="d0/d51/a04710" kindref="compound">RgbaColour</ref></type>
-        <definition>RgbaColour castor3d::PassBuffer::PassData::common</definition>
-        <argsstring></argsstring>
-        <name>common</name>
-        <qualifiedname>castor3d::PassBuffer::PassData::common</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="77" column="12" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="77" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/d13/a04714_1a24a4015ebfcff465b7cb9310b1a87b6f" prot="public" static="no" mutable="no">
-        <type><ref refid="d0/d51/a04710" kindref="compound">RgbaColour</ref></type>
-        <definition>RgbaColour castor3d::PassBuffer::PassData::opacity</definition>
-        <argsstring></argsstring>
-        <name>opacity</name>
-        <qualifiedname>castor3d::PassBuffer::PassData::opacity</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="78" column="12" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="78" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/d13/a04714_1a1b2ab80f57a51aadc6af394098ed231a" prot="public" static="no" mutable="no">
-        <type><ref refid="d0/d51/a04710" kindref="compound">RgbaColour</ref></type>
-        <definition>RgbaColour castor3d::PassBuffer::PassData::reflRefr</definition>
-        <argsstring></argsstring>
-        <name>reflRefr</name>
-        <qualifiedname>castor3d::PassBuffer::PassData::reflRefr</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="79" column="12" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="79" bodyend="-1"/>
+        <location file="Scene/SceneImporter.hpp" line="122" column="13" bodyfile="Scene/SceneImporter.hpp" bodystart="122" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -122,35 +51,51 @@
     <detaileddescription>
     </detaileddescription>
     <collaborationgraph>
+      <node id="4">
+        <label>T</label>
+      </node>
       <node id="1">
-        <label>castor3d::PassBuffer::PassData</label>
-        <link refid="d1/d13/a04714"/>
+        <label>castor3d::SceneImporter::AnimObjects</label>
         <childnode refid="2" relation="usage">
-          <edgelabel>colourDiv</edgelabel>
-          <edgelabel>common</edgelabel>
-          <edgelabel>edgeColour</edgelabel>
-          <edgelabel>edgeFactors</edgelabel>
-          <edgelabel>opacity</edgelabel>
-          <edgelabel>reflRefr</edgelabel>
-          <edgelabel>specDiv</edgelabel>
-          <edgelabel>specific</edgelabel>
+          <edgelabel>skeletons</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>meshes</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>nodes</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::vector&lt; MeshRPtr &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; MeshRPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::vector&lt; SceneNodeRPtr &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; SceneNodeRPtr &gt;</edgelabel>
         </childnode>
       </node>
       <node id="2">
-        <label>castor3d::PassBuffer::RgbaColour</label>
-        <link refid="d0/d51/a04710"/>
+        <label>std::vector&lt; SkeletonRPtr &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; SkeletonRPtr &gt;</edgelabel>
+        </childnode>
       </node>
     </collaborationgraph>
-    <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="70" column="1" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="71" bodyend="80"/>
+    <location file="Scene/SceneImporter.hpp" line="118" column="1" bodyfile="Scene/SceneImporter.hpp" bodystart="119" bodyend="123"/>
     <listofallmembers>
-      <member refid="d1/d13/a04714_1a4a852ac9cb909ef11eaf744f32b89469" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassData</scope><name>colourDiv</name></member>
-      <member refid="d1/d13/a04714_1afcf8d64fc505608dae35f72d87a3faab" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassData</scope><name>common</name></member>
-      <member refid="d1/d13/a04714_1a24fc4c91a65a8bdacbcfe072747a6e3d" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassData</scope><name>edgeColour</name></member>
-      <member refid="d1/d13/a04714_1a47f0d640619b1cca682eace728b89664" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassData</scope><name>edgeFactors</name></member>
-      <member refid="d1/d13/a04714_1a24a4015ebfcff465b7cb9310b1a87b6f" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassData</scope><name>opacity</name></member>
-      <member refid="d1/d13/a04714_1a1b2ab80f57a51aadc6af394098ed231a" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassData</scope><name>reflRefr</name></member>
-      <member refid="d1/d13/a04714_1a0edd15eb28dc26c67c0a31a084f2c3d0" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassData</scope><name>specDiv</name></member>
-      <member refid="d1/d13/a04714_1ae075c6e5a3bbfa0a3d9dc47d2d547484" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassData</scope><name>specific</name></member>
+      <member refid="d1/d13/a04714_1ae9544d4291e1a6961c73a38fdd1267c0" prot="public" virt="non-virtual"><scope>castor3d::SceneImporter::AnimObjects</scope><name>meshes</name></member>
+      <member refid="d1/d13/a04714_1a6a6edecbb1c65d2f3a75268448870bd6" prot="public" virt="non-virtual"><scope>castor3d::SceneImporter::AnimObjects</scope><name>nodes</name></member>
+      <member refid="d1/d13/a04714_1a7d46ffa7168ab9f347852809a4e2f383" prot="public" virt="non-virtual"><scope>castor3d::SceneImporter::AnimObjects</scope><name>skeletons</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

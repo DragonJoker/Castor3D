@@ -64,6 +64,11 @@ The project itself is compilable on supported platforms using CMake (\ref build)
 - ReinhardToneMapping: Reinhard tone mapping.
 - Uncharted2ToneMapping: Uncharted 2 tone mapping.
 
+## Links
+
+- [Building Castor3D](https://dragonjoker.github.io/Castor3D/v0.11.0/pages/build)
+- [API Documentation](https://dragonjoker.github.io/Castor3D/v0.11.0/doc)
+
 ### Screenshots
 <a href="./img/Sponza-PBR-Bloom.png"><img alt="Sponza" src="./img/Sponza-PBR-Bloom-Small.png"></a>
 <a href="./img/Sponza-PBR-VCT.png"><img alt="Sponza" src="./img/Sponza-PBR-VCT-Small.png"></a>
@@ -73,9 +78,3 @@ The project itself is compilable on supported platforms using CMake (\ref build)
 <a href="./img/Nyra-PBR-MR.png"><img alt="Nyra, PBR" src="./img/Nyra-PBR-MR-Small.png"></a>
 <a href="./img/SanMiguel-PBR-SG.png"><img alt="SanMiguel, PBR" src="./img/SanMiguel-PBR-SG-Small.png"></a>
 <a href="./img/SanMiguel-PBR-SG-LPV.png"><img alt="SanMiguel, PBR" src="./img/SanMiguel-PBR-SG-LPV-Small.png"></a>
-
-## Links
-
-- [Building Castor3D](https://dragonjoker.github.io/Castor3D/pages/build)
-- [API Documentation](https://dragonjoker.github.io/Castor3D/doc)
-- [Playlist on YouTube](https://www.youtube.com/playlist?list=PLKA1SVXuAbMNaFbSJyAN_4yD2bzNlgES3)

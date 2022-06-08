@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::LpvGridConfigUbo Class Reference</title>
+<title>Castor3D: castor3d::shader::Material Struct Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,177 +42,127 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dc/df4/a01401.html">castor3d</a></li><li class="navelem"><a class="el" href="../../df/df6/a04914.html">LpvGridConfigUbo</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../de/d1f/a01364.html">shader</a></li><li class="navelem"><a class="el" href="../../df/df6/a04914.html">Material</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="../../d7/dda/a04911.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">castor3d::LpvGridConfigUbo Class Reference</div></div>
+  <div class="headertitle"><div class="title">castor3d::shader::Material Struct Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;LpvGridConfigUbo.hpp&gt;</code></p>
+<p><code>#include &lt;GlslMaterial.hpp&gt;</code></p>
 <div class="dynheader">
-Collaboration diagram for castor3d::LpvGridConfigUbo:</div>
+Inheritance diagram for castor3d::shader::Material:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../dc/d52/a04912.png" border="0" usemap="#acastor3d_1_1LpvGridConfigUbo_coll__map" alt="Collaboration graph"/></div>
-<map name="acastor3d_1_1LpvGridConfigUbo_coll__map" id="acastor3d_1_1LpvGridConfigUbo_coll__map">
-<area shape="rect" title=" " alt="" coords="5,200,188,227"/>
-<area shape="rect" title=" " alt="" coords="57,96,137,123"/>
-<area shape="rect" title=" " alt="" coords="33,5,160,47"/>
+<div class="center"><img src="../../dd/dcf/a04913.png" border="0" usemap="#acastor3d_1_1shader_1_1Material_inherit__map" alt="Inheritance graph"/></div>
+<map name="acastor3d_1_1shader_1_1Material_inherit__map" id="acastor3d_1_1shader_1_1Material_inherit__map">
+<area shape="rect" title=" " alt="" coords="5,80,179,107"/>
+<area shape="rect" title=" " alt="" coords="23,5,161,32"/>
+</map>
+<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
+<div class="dynheader">
+Collaboration diagram for castor3d::shader::Material:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../dc/d52/a04912.png" border="0" usemap="#acastor3d_1_1shader_1_1Material_coll__map" alt="Collaboration graph"/></div>
+<map name="acastor3d_1_1shader_1_1Material_coll__map" id="acastor3d_1_1shader_1_1Material_coll__map">
+<area shape="rect" title=" " alt="" coords="5,80,179,107"/>
+<area shape="rect" title=" " alt="" coords="23,5,161,32"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:ac6a11f0d4131e5d1fa34a6cafb3c195a"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#ac6a11f0d4131e5d1fa34a6cafb3c195a">Configuration</a> = <a class="el" href="../../d8/d79/a05010.html">LpvGridConfigUboConfiguration</a></td></tr>
-<tr class="separator:ac6a11f0d4131e5d1fa34a6cafb3c195a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a9257d1a1124b7de456fe1548495f2c5c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#a9257d1a1124b7de456fe1548495f2c5c">LpvGridConfigUbo</a> (<a class="el" href="../../df/df6/a04914.html">LpvGridConfigUbo</a> const &amp;rhs)=delete</td></tr>
-<tr class="separator:a9257d1a1124b7de456fe1548495f2c5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a10125aa67f30b18eb95846604602eb7d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../df/df6/a04914.html">LpvGridConfigUbo</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#a10125aa67f30b18eb95846604602eb7d">operator=</a> (<a class="el" href="../../df/df6/a04914.html">LpvGridConfigUbo</a> const &amp;rhs)=delete</td></tr>
-<tr class="separator:a10125aa67f30b18eb95846604602eb7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad788cfa5357b8e5fe16ce33055e84460"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#ad788cfa5357b8e5fe16ce33055e84460">LpvGridConfigUbo</a> (<a class="el" href="../../df/df6/a04914.html">LpvGridConfigUbo</a> &amp;&amp;rhs)=default</td></tr>
-<tr class="separator:ad788cfa5357b8e5fe16ce33055e84460"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4b080b6e71b08d6e66e3bc34506bc78"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../df/df6/a04914.html">LpvGridConfigUbo</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#aa4b080b6e71b08d6e66e3bc34506bc78">operator=</a> (<a class="el" href="../../df/df6/a04914.html">LpvGridConfigUbo</a> &amp;&amp;rhs)=delete</td></tr>
-<tr class="separator:aa4b080b6e71b08d6e66e3bc34506bc78"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0582a1762fbc703f09b2e2da2238ab3f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#a0582a1762fbc703f09b2e2da2238ab3f">LpvGridConfigUbo</a> (<a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const &amp;device)</td></tr>
-<tr class="separator:a0582a1762fbc703f09b2e2da2238ab3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a06cf7b51a2995304d2bdce15d430ac39"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#a06cf7b51a2995304d2bdce15d430ac39">~LpvGridConfigUbo</a> ()</td></tr>
-<tr class="separator:a06cf7b51a2995304d2bdce15d430ac39"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ad70e9feca8f94be574b08d722a818d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor::Grid const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#a9ad70e9feca8f94be574b08d722a818d">cpuUpdate</a> (castor::BoundingBox const &amp;aabb, castor::Point3f const &amp;cameraPos, castor::Point3f const &amp;cameraDir, uint32_t gridDim, float indirectAttenuation)</td></tr>
-<tr class="separator:a9ad70e9feca8f94be574b08d722a818d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad5fdb81e65cdafa4629f4a046351bf88"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor::Grid const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#ad5fdb81e65cdafa4629f4a046351bf88">cpuUpdate</a> (uint32_t gridLevel, float gridLevelScale, castor::Grid const &amp;grid, castor::BoundingBox const &amp;aabb, castor::Point3f const &amp;cameraPos, castor::Point3f const &amp;cameraDir, float indirectAttenuation)</td></tr>
-<tr class="separator:ad5fdb81e65cdafa4629f4a046351bf88"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1ea7fa35094ce00be1e9d8ca84101b6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/d9b/a02514.html">UniformBufferOffsetT</a>&lt; <a class="el" href="../../df/df6/a04914.html#ac6a11f0d4131e5d1fa34a6cafb3c195a">Configuration</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#af1ea7fa35094ce00be1e9d8ca84101b6">getUbo</a> ()</td></tr>
-<tr class="separator:af1ea7fa35094ce00be1e9d8ca84101b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3ece40ecb5b5ee08d55531c0f240cd8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/d9b/a02514.html">UniformBufferOffsetT</a>&lt; <a class="el" href="../../df/df6/a04914.html#ac6a11f0d4131e5d1fa34a6cafb3c195a">Configuration</a> &gt; const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#aa3ece40ecb5b5ee08d55531c0f240cd8">getUbo</a> () const</td></tr>
-<tr class="separator:aa3ece40ecb5b5ee08d55531c0f240cd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a027e6375a7bbe908f844f97396cd8432"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#a027e6375a7bbe908f844f97396cd8432">createPassBinding</a> (crg::FramePass &amp;pass, uint32_t binding) const</td></tr>
-<tr class="separator:a027e6375a7bbe908f844f97396cd8432"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a25c8501fecd9349223a1b66f7a9393e7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#a25c8501fecd9349223a1b66f7a9393e7">createSizedBinding</a> (ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;layoutBinding) const</td></tr>
-<tr class="separator:a25c8501fecd9349223a1b66f7a9393e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5062748475183244f2c4d15e7d42a3f0"><td class="memItemLeft" align="right" valign="top">ashes::WriteDescriptorSet&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#a5062748475183244f2c4d15e7d42a3f0">getDescriptorWrite</a> (uint32_t dstBinding, uint32_t dstArrayElement=0u) const</td></tr>
-<tr class="separator:a5062748475183244f2c4d15e7d42a3f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a5efc64335a77cf3605598f84dcf9d5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#a6a5efc64335a77cf3605598f84dcf9d5">Material</a> (sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</td></tr>
+<tr class="separator:a6a5efc64335a77cf3605598f84dcf9d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5ac7415e674c0e06dfbf6c3c8beb9e3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#ad5ac7415e674c0e06dfbf6c3c8beb9e3">SDW_DeclStructInstance</a> (<a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>, <a class="el" href="../../df/df6/a04914.html">Material</a>)</td></tr>
+<tr class="separator:ad5ac7415e674c0e06dfbf6c3c8beb9e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1244e4815b04f1421d9488e72ffa04f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#ac1244e4815b04f1421d9488e72ffa04f">colour</a> () const</td></tr>
+<tr class="separator:ac1244e4815b04f1421d9488e72ffa04f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
-Static Public Attributes</h2></td></tr>
-<tr class="memitem:ac2acb8dec2368146683b43bb1fbb97dd"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#ac2acb8dec2368146683b43bb1fbb97dd">LpvGridConfig</a></td></tr>
-<tr class="separator:ac2acb8dec2368146683b43bb1fbb97dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0b19053df2332c49330c59dac9a96bf"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#ae0b19053df2332c49330c59dac9a96bf">LpvGridData</a></td></tr>
-<tr class="separator:ae0b19053df2332c49330c59dac9a96bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:abeb2d9980ba8f19e9dd92df60a46a06a"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ast::type::BaseStructPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#abeb2d9980ba8f19e9dd92df60a46a06a">makeType</a> (ast::type::TypesCache &amp;cache)</td></tr>
+<tr class="separator:abeb2d9980ba8f19e9dd92df60a46a06a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a88ed9ba26e49bf2cbffd4cb28feca200"><td class="memItemLeft" align="right" valign="top">sdw::Vec4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#a88ed9ba26e49bf2cbffd4cb28feca200">colourDiv</a></td></tr>
+<tr class="separator:a88ed9ba26e49bf2cbffd4cb28feca200"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00ff6590ac104ed310f820134d95c8db"><td class="memItemLeft" align="right" valign="top">sdw::Vec4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#a00ff6590ac104ed310f820134d95c8db">specDiv</a></td></tr>
+<tr class="separator:a00ff6590ac104ed310f820134d95c8db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85fffa74e82624fe932eec3963c749ba"><td class="memItemLeft" align="right" valign="top">sdw::Vec4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#a85fffa74e82624fe932eec3963c749ba">edgeFactors</a></td></tr>
+<tr class="separator:a85fffa74e82624fe932eec3963c749ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52d5d424c638c9138172f509e7de5318"><td class="memItemLeft" align="right" valign="top">sdw::Vec4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#a52d5d424c638c9138172f509e7de5318">edgeColour</a></td></tr>
+<tr class="separator:a52d5d424c638c9138172f509e7de5318"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accc1e59161d84459ca80223ab10cc291"><td class="memItemLeft" align="right" valign="top">sdw::Vec4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#accc1e59161d84459ca80223ab10cc291">specific</a></td></tr>
+<tr class="separator:accc1e59161d84459ca80223ab10cc291"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6351720983cbc9e655776a2254790ae"><td class="memItemLeft" align="right" valign="top">sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#af6351720983cbc9e655776a2254790ae">opacity</a></td></tr>
+<tr class="separator:af6351720983cbc9e655776a2254790ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d64786341995304e81585f321f5e789"><td class="memItemLeft" align="right" valign="top">sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#a4d64786341995304e81585f321f5e789">transmission</a></td></tr>
+<tr class="separator:a4d64786341995304e81585f321f5e789"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b15ecea84bd1d3195979549fe7790d9"><td class="memItemLeft" align="right" valign="top">sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#a7b15ecea84bd1d3195979549fe7790d9">emissive</a></td></tr>
+<tr class="separator:a7b15ecea84bd1d3195979549fe7790d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54347c786b1d6b9c1eec79baa2cc0aba"><td class="memItemLeft" align="right" valign="top">sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#a54347c786b1d6b9c1eec79baa2cc0aba">alphaRef</a></td></tr>
+<tr class="separator:a54347c786b1d6b9c1eec79baa2cc0aba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25d87a40846aeebccc701ac267ed0159"><td class="memItemLeft" align="right" valign="top">sdw::UInt&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#a25d87a40846aeebccc701ac267ed0159">sssProfileIndex</a></td></tr>
+<tr class="separator:a25d87a40846aeebccc701ac267ed0159"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ef0a98c570845d67e6f2dbdf5dd48f5"><td class="memItemLeft" align="right" valign="top">sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#a9ef0a98c570845d67e6f2dbdf5dd48f5">refractionRatio</a></td></tr>
+<tr class="separator:a9ef0a98c570845d67e6f2dbdf5dd48f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0973e998c9d3cd153ef2b01808e3345"><td class="memItemLeft" align="right" valign="top">sdw::Int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#ab0973e998c9d3cd153ef2b01808e3345">hasRefraction</a></td></tr>
+<tr class="separator:ab0973e998c9d3cd153ef2b01808e3345"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24deb7af70995e08b8b1ea6f3ab4f375"><td class="memItemLeft" align="right" valign="top">sdw::Int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#a24deb7af70995e08b8b1ea6f3ab4f375">hasReflection</a></td></tr>
+<tr class="separator:a24deb7af70995e08b8b1ea6f3ab4f375"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03276226224fc68bbaf9821627b2e017"><td class="memItemLeft" align="right" valign="top">sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#a03276226224fc68bbaf9821627b2e017">bwAccumulationOperator</a></td></tr>
+<tr class="separator:a03276226224fc68bbaf9821627b2e017"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a473a21584895104906f9ff3be215c2d7"><td class="memItemLeft" align="right" valign="top">sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#a473a21584895104906f9ff3be215c2d7">edgeWidth</a></td></tr>
+<tr class="separator:a473a21584895104906f9ff3be215c2d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5690e764f8d483deb0072daccb5937ef"><td class="memItemLeft" align="right" valign="top">sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#a5690e764f8d483deb0072daccb5937ef">depthFactor</a></td></tr>
+<tr class="separator:a5690e764f8d483deb0072daccb5937ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17553258f887272095305edb4030dea4"><td class="memItemLeft" align="right" valign="top">sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#a17553258f887272095305edb4030dea4">normalFactor</a></td></tr>
+<tr class="separator:a17553258f887272095305edb4030dea4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92c48a1a35b2e5aff04d32a47fc2aaf7"><td class="memItemLeft" align="right" valign="top">sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#a92c48a1a35b2e5aff04d32a47fc2aaf7">objectFactor</a></td></tr>
+<tr class="separator:a92c48a1a35b2e5aff04d32a47fc2aaf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a95d87f2fc964dc08b53b1c5665f230f4"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/df6/a04914.html#a95d87f2fc964dc08b53b1c5665f230f4">Materials</a></td></tr>
+<tr class="separator:a95d87f2fc964dc08b53b1c5665f230f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="ac6a11f0d4131e5d1fa34a6cafb3c195a" name="ac6a11f0d4131e5d1fa34a6cafb3c195a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac6a11f0d4131e5d1fa34a6cafb3c195a">&#9670;&nbsp;</a></span>Configuration</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="../../df/df6/a04914.html#ac6a11f0d4131e5d1fa34a6cafb3c195a">castor3d::LpvGridConfigUbo::Configuration</a> =  <a class="el" href="../../d8/d79/a05010.html">LpvGridConfigUboConfiguration</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a9257d1a1124b7de456fe1548495f2c5c" name="a9257d1a1124b7de456fe1548495f2c5c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9257d1a1124b7de456fe1548495f2c5c">&#9670;&nbsp;</a></span>LpvGridConfigUbo() <span class="overload">[1/3]</span></h2>
+<a id="a6a5efc64335a77cf3605598f84dcf9d5" name="a6a5efc64335a77cf3605598f84dcf9d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a5efc64335a77cf3605598f84dcf9d5">&#9670;&nbsp;</a></span>Material()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::LpvGridConfigUbo::LpvGridConfigUbo </td>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::shader::Material::Material </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../df/df6/a04914.html">LpvGridConfigUbo</a> const &amp;&#160;</td>
-          <td class="paramname"><em>rhs</em></td><td>)</td>
-          <td></td>
+          <td class="paramtype">sdw::ShaderWriter &amp;&#160;</td>
+          <td class="paramname"><em>writer</em>, </td>
         </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ad788cfa5357b8e5fe16ce33055e84460" name="ad788cfa5357b8e5fe16ce33055e84460"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad788cfa5357b8e5fe16ce33055e84460">&#9670;&nbsp;</a></span>LpvGridConfigUbo() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::LpvGridConfigUbo::LpvGridConfigUbo </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../df/df6/a04914.html">LpvGridConfigUbo</a> &amp;&amp;&#160;</td>
-          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">ast::expr::ExprPtr&#160;</td>
+          <td class="paramname"><em>expr</em>, </td>
         </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">default</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a0582a1762fbc703f09b2e2da2238ab3f" name="a0582a1762fbc703f09b2e2da2238ab3f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0582a1762fbc703f09b2e2da2238ab3f">&#9670;&nbsp;</a></span>LpvGridConfigUbo() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::LpvGridConfigUbo::LpvGridConfigUbo </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const &amp;&#160;</td>
-          <td class="paramname"><em>device</em></td><td>)</td>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>enabled</em>&#160;</td>
         </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a06cf7b51a2995304d2bdce15d430ac39" name="a06cf7b51a2995304d2bdce15d430ac39"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a06cf7b51a2995304d2bdce15d430ac39">&#9670;&nbsp;</a></span>~LpvGridConfigUbo()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::LpvGridConfigUbo::~LpvGridConfigUbo </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
           <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -220,309 +170,25 @@ Static Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a9ad70e9feca8f94be574b08d722a818d" name="a9ad70e9feca8f94be574b08d722a818d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9ad70e9feca8f94be574b08d722a818d">&#9670;&nbsp;</a></span>cpuUpdate() <span class="overload">[1/2]</span></h2>
+<a id="ac1244e4815b04f1421d9488e72ffa04f" name="ac1244e4815b04f1421d9488e72ffa04f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac1244e4815b04f1421d9488e72ffa04f">&#9670;&nbsp;</a></span>colour()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor::Grid const  &amp; castor3d::LpvGridConfigUbo::cpuUpdate </td>
-          <td>(</td>
-          <td class="paramtype">castor::BoundingBox const &amp;&#160;</td>
-          <td class="paramname"><em>aabb</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">castor::Point3f const &amp;&#160;</td>
-          <td class="paramname"><em>cameraPos</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">castor::Point3f const &amp;&#160;</td>
-          <td class="paramname"><em>cameraDir</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>gridDim</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>indirectAttenuation</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ad5fdb81e65cdafa4629f4a046351bf88" name="ad5fdb81e65cdafa4629f4a046351bf88"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad5fdb81e65cdafa4629f4a046351bf88">&#9670;&nbsp;</a></span>cpuUpdate() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor::Grid const  &amp; castor3d::LpvGridConfigUbo::cpuUpdate </td>
-          <td>(</td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>gridLevel</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>gridLevelScale</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">castor::Grid const &amp;&#160;</td>
-          <td class="paramname"><em>grid</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">castor::BoundingBox const &amp;&#160;</td>
-          <td class="paramname"><em>aabb</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">castor::Point3f const &amp;&#160;</td>
-          <td class="paramname"><em>cameraPos</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">castor::Point3f const &amp;&#160;</td>
-          <td class="paramname"><em>cameraDir</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>indirectAttenuation</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a027e6375a7bbe908f844f97396cd8432" name="a027e6375a7bbe908f844f97396cd8432"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a027e6375a7bbe908f844f97396cd8432">&#9670;&nbsp;</a></span>createPassBinding()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void castor3d::LpvGridConfigUbo::createPassBinding </td>
-          <td>(</td>
-          <td class="paramtype">crg::FramePass &amp;&#160;</td>
-          <td class="paramname"><em>pass</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>binding</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="reference">References <a class="el" href="../../df/d9b/a02514.html#ae2c055477d81767157b9832b18baa027">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createPassBinding()</a>.</p>
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../df/df6/a04914_a027e6375a7bbe908f844f97396cd8432_cgraph.png" border="0" usemap="#adf/df6/a04914_a027e6375a7bbe908f844f97396cd8432_cgraph" alt=""/></div>
-<map name="adf/df6/a04914_a027e6375a7bbe908f844f97396cd8432_cgraph" id="adf/df6/a04914_a027e6375a7bbe908f844f97396cd8432_cgraph">
-<area shape="rect" title=" " alt="" coords="5,71,188,112"/>
-<area shape="rect" href="../../df/d9b/a02514.html#ae2c055477d81767157b9832b18baa027" title=" " alt="" coords="236,71,427,112"/>
-<area shape="rect" href="../../df/d9b/a02514.html#af6031892474c15c1ff806ca0e9842242" title=" " alt="" coords="475,5,665,47"/>
-<area shape="rect" href="../../df/d9b/a02514.html#af1486cfa4c196f82e0cbc2440edea70e" title=" " alt="" coords="475,71,665,112"/>
-<area shape="rect" href="../../df/d9b/a02514.html#a11dc3f75dd4cd054c5ee5fd4e0c1f67f" title=" " alt="" coords="475,136,665,177"/>
-<area shape="rect" href="../../df/d57/a02590.html#a7804d82ef261e90f61fd38589881c900" title=" " alt="" coords="713,71,896,112"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="a25c8501fecd9349223a1b66f7a9393e7" name="a25c8501fecd9349223a1b66f7a9393e7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a25c8501fecd9349223a1b66f7a9393e7">&#9670;&nbsp;</a></span>createSizedBinding()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void castor3d::LpvGridConfigUbo::createSizedBinding </td>
-          <td>(</td>
-          <td class="paramtype">ashes::DescriptorSet &amp;&#160;</td>
-          <td class="paramname"><em>descriptorSet</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">VkDescriptorSetLayoutBinding const &amp;&#160;</td>
-          <td class="paramname"><em>layoutBinding</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="reference">References <a class="el" href="../../df/d9b/a02514.html#a2c6ad146d4910651544564c25ca7dccd">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding()</a>.</p>
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../df/df6/a04914_a25c8501fecd9349223a1b66f7a9393e7_cgraph.png" border="0" usemap="#adf/df6/a04914_a25c8501fecd9349223a1b66f7a9393e7_cgraph" alt=""/></div>
-<map name="adf/df6/a04914_a25c8501fecd9349223a1b66f7a9393e7_cgraph" id="adf/df6/a04914_a25c8501fecd9349223a1b66f7a9393e7_cgraph">
-<area shape="rect" title=" " alt="" coords="5,5,188,47"/>
-<area shape="rect" href="../../df/d9b/a02514.html#a2c6ad146d4910651544564c25ca7dccd" title=" " alt="" coords="236,5,427,47"/>
-<area shape="rect" href="../../df/d57/a02590.html#a7804d82ef261e90f61fd38589881c900" title=" " alt="" coords="475,5,657,47"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="a5062748475183244f2c4d15e7d42a3f0" name="a5062748475183244f2c4d15e7d42a3f0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5062748475183244f2c4d15e7d42a3f0">&#9670;&nbsp;</a></span>getDescriptorWrite()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">ashes::WriteDescriptorSet castor3d::LpvGridConfigUbo::getDescriptorWrite </td>
-          <td>(</td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>dstBinding</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>dstArrayElement</em> = <code>0u</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="reference">References <a class="el" href="../../df/d9b/a02514.html#ad7dcad7c96a620540d10eb85f3d4586b">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getDescriptorWrite()</a>.</p>
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../df/df6/a04914_a5062748475183244f2c4d15e7d42a3f0_cgraph.png" border="0" usemap="#adf/df6/a04914_a5062748475183244f2c4d15e7d42a3f0_cgraph" alt=""/></div>
-<map name="adf/df6/a04914_a5062748475183244f2c4d15e7d42a3f0_cgraph" id="adf/df6/a04914_a5062748475183244f2c4d15e7d42a3f0_cgraph">
-<area shape="rect" title=" " alt="" coords="5,5,188,47"/>
-<area shape="rect" href="../../df/d9b/a02514.html#ad7dcad7c96a620540d10eb85f3d4586b" title=" " alt="" coords="236,5,427,47"/>
-<area shape="rect" href="../../df/d57/a02590.html#a7804d82ef261e90f61fd38589881c900" title=" " alt="" coords="475,5,657,47"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="af1ea7fa35094ce00be1e9d8ca84101b6" name="af1ea7fa35094ce00be1e9d8ca84101b6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af1ea7fa35094ce00be1e9d8ca84101b6">&#9670;&nbsp;</a></span>getUbo() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../df/d9b/a02514.html">UniformBufferOffsetT</a>&lt; <a class="el" href="../../df/df6/a04914.html#ac6a11f0d4131e5d1fa34a6cafb3c195a">Configuration</a> &gt; &amp; castor3d::LpvGridConfigUbo::getUbo </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aa3ece40ecb5b5ee08d55531c0f240cd8" name="aa3ece40ecb5b5ee08d55531c0f240cd8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa3ece40ecb5b5ee08d55531c0f240cd8">&#9670;&nbsp;</a></span>getUbo() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../df/d9b/a02514.html">UniformBufferOffsetT</a>&lt; <a class="el" href="../../df/df6/a04914.html#ac6a11f0d4131e5d1fa34a6cafb3c195a">Configuration</a> &gt; const  &amp; castor3d::LpvGridConfigUbo::getUbo </td>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec3 castor3d::shader::Material::colour </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="aa4b080b6e71b08d6e66e3bc34506bc78" name="aa4b080b6e71b08d6e66e3bc34506bc78"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa4b080b6e71b08d6e66e3bc34506bc78">&#9670;&nbsp;</a></span>operator=() <span class="overload">[1/2]</span></h2>
+<a id="abeb2d9980ba8f19e9dd92df60a46a06a" name="abeb2d9980ba8f19e9dd92df60a46a06a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abeb2d9980ba8f19e9dd92df60a46a06a">&#9670;&nbsp;</a></span>makeType()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -531,24 +197,53 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../df/df6/a04914.html">LpvGridConfigUbo</a> &amp; castor3d::LpvGridConfigUbo::operator= </td>
+          <td class="memname">static <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ast::type::BaseStructPtr castor3d::shader::Material::makeType </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../df/df6/a04914.html">LpvGridConfigUbo</a> &amp;&amp;&#160;</td>
-          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td class="paramtype">ast::type::TypesCache &amp;&#160;</td>
+          <td class="paramname"><em>cache</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a10125aa67f30b18eb95846604602eb7d" name="a10125aa67f30b18eb95846604602eb7d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a10125aa67f30b18eb95846604602eb7d">&#9670;&nbsp;</a></span>operator=() <span class="overload">[2/2]</span></h2>
+<a id="ad5ac7415e674c0e06dfbf6c3c8beb9e3" name="ad5ac7415e674c0e06dfbf6c3c8beb9e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5ac7415e674c0e06dfbf6c3c8beb9e3">&#9670;&nbsp;</a></span>SDW_DeclStructInstance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">castor3d::shader::Material::SDW_DeclStructInstance </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../df/df6/a04914.html">Material</a>&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a id="a95d87f2fc964dc08b53b1c5665f230f4" name="a95d87f2fc964dc08b53b1c5665f230f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95d87f2fc964dc08b53b1c5665f230f4">&#9670;&nbsp;</a></span>Materials</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -557,16 +252,12 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../df/df6/a04914.html">LpvGridConfigUbo</a> &amp; castor3d::LpvGridConfigUbo::operator= </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../df/df6/a04914.html">LpvGridConfigUbo</a> const &amp;&#160;</td>
-          <td class="paramname"><em>rhs</em></td><td>)</td>
-          <td></td>
+          <td class="memname">friend class <a class="el" href="../../d6/d54/a04918.html">Materials</a></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -574,57 +265,265 @@ Here is the call graph for this function:</div>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="ac2acb8dec2368146683b43bb1fbb97dd" name="ac2acb8dec2368146683b43bb1fbb97dd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac2acb8dec2368146683b43bb1fbb97dd">&#9670;&nbsp;</a></span>LpvGridConfig</h2>
+<a id="a54347c786b1d6b9c1eec79baa2cc0aba" name="a54347c786b1d6b9c1eec79baa2cc0aba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54347c786b1d6b9c1eec79baa2cc0aba">&#9670;&nbsp;</a></span>alphaRef</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> const std::string castor3d::LpvGridConfigUbo::LpvGridConfig</td>
+          <td class="memname">sdw::Float castor3d::shader::Material::alphaRef</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="ae0b19053df2332c49330c59dac9a96bf" name="ae0b19053df2332c49330c59dac9a96bf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae0b19053df2332c49330c59dac9a96bf">&#9670;&nbsp;</a></span>LpvGridData</h2>
+<a id="a03276226224fc68bbaf9821627b2e017" name="a03276226224fc68bbaf9821627b2e017"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03276226224fc68bbaf9821627b2e017">&#9670;&nbsp;</a></span>bwAccumulationOperator</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> const std::string castor3d::LpvGridConfigUbo::LpvGridData</td>
+          <td class="memname">sdw::Float castor3d::shader::Material::bwAccumulationOperator</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
-<li>Shader/Ubos/<a class="el" href="../../d4/dd5/a01244.html">LpvGridConfigUbo.hpp</a></li>
+<a id="a88ed9ba26e49bf2cbffd4cb28feca200" name="a88ed9ba26e49bf2cbffd4cb28feca200"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88ed9ba26e49bf2cbffd4cb28feca200">&#9670;&nbsp;</a></span>colourDiv</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sdw::Vec4 castor3d::shader::Material::colourDiv</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5690e764f8d483deb0072daccb5937ef" name="a5690e764f8d483deb0072daccb5937ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5690e764f8d483deb0072daccb5937ef">&#9670;&nbsp;</a></span>depthFactor</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sdw::Float castor3d::shader::Material::depthFactor</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a52d5d424c638c9138172f509e7de5318" name="a52d5d424c638c9138172f509e7de5318"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52d5d424c638c9138172f509e7de5318">&#9670;&nbsp;</a></span>edgeColour</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sdw::Vec4 castor3d::shader::Material::edgeColour</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a85fffa74e82624fe932eec3963c749ba" name="a85fffa74e82624fe932eec3963c749ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85fffa74e82624fe932eec3963c749ba">&#9670;&nbsp;</a></span>edgeFactors</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sdw::Vec4 castor3d::shader::Material::edgeFactors</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a473a21584895104906f9ff3be215c2d7" name="a473a21584895104906f9ff3be215c2d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a473a21584895104906f9ff3be215c2d7">&#9670;&nbsp;</a></span>edgeWidth</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sdw::Float castor3d::shader::Material::edgeWidth</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7b15ecea84bd1d3195979549fe7790d9" name="a7b15ecea84bd1d3195979549fe7790d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b15ecea84bd1d3195979549fe7790d9">&#9670;&nbsp;</a></span>emissive</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sdw::Float castor3d::shader::Material::emissive</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a24deb7af70995e08b8b1ea6f3ab4f375" name="a24deb7af70995e08b8b1ea6f3ab4f375"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24deb7af70995e08b8b1ea6f3ab4f375">&#9670;&nbsp;</a></span>hasReflection</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sdw::Int castor3d::shader::Material::hasReflection</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab0973e998c9d3cd153ef2b01808e3345" name="ab0973e998c9d3cd153ef2b01808e3345"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0973e998c9d3cd153ef2b01808e3345">&#9670;&nbsp;</a></span>hasRefraction</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sdw::Int castor3d::shader::Material::hasRefraction</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a17553258f887272095305edb4030dea4" name="a17553258f887272095305edb4030dea4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a17553258f887272095305edb4030dea4">&#9670;&nbsp;</a></span>normalFactor</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sdw::Float castor3d::shader::Material::normalFactor</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a92c48a1a35b2e5aff04d32a47fc2aaf7" name="a92c48a1a35b2e5aff04d32a47fc2aaf7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92c48a1a35b2e5aff04d32a47fc2aaf7">&#9670;&nbsp;</a></span>objectFactor</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sdw::Float castor3d::shader::Material::objectFactor</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af6351720983cbc9e655776a2254790ae" name="af6351720983cbc9e655776a2254790ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6351720983cbc9e655776a2254790ae">&#9670;&nbsp;</a></span>opacity</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sdw::Float castor3d::shader::Material::opacity</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9ef0a98c570845d67e6f2dbdf5dd48f5" name="a9ef0a98c570845d67e6f2dbdf5dd48f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ef0a98c570845d67e6f2dbdf5dd48f5">&#9670;&nbsp;</a></span>refractionRatio</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sdw::Float castor3d::shader::Material::refractionRatio</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a00ff6590ac104ed310f820134d95c8db" name="a00ff6590ac104ed310f820134d95c8db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00ff6590ac104ed310f820134d95c8db">&#9670;&nbsp;</a></span>specDiv</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sdw::Vec4 castor3d::shader::Material::specDiv</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="accc1e59161d84459ca80223ab10cc291" name="accc1e59161d84459ca80223ab10cc291"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#accc1e59161d84459ca80223ab10cc291">&#9670;&nbsp;</a></span>specific</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sdw::Vec4 castor3d::shader::Material::specific</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a25d87a40846aeebccc701ac267ed0159" name="a25d87a40846aeebccc701ac267ed0159"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25d87a40846aeebccc701ac267ed0159">&#9670;&nbsp;</a></span>sssProfileIndex</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sdw::UInt castor3d::shader::Material::sssProfileIndex</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4d64786341995304e81585f321f5e789" name="a4d64786341995304e81585f321f5e789"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d64786341995304e81585f321f5e789">&#9670;&nbsp;</a></span>transmission</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sdw::Vec3 castor3d::shader::Material::transmission</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
+<li>Shader/Shaders/<a class="el" href="../../da/dd8/a01265.html">GlslMaterial.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 15:34:55 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:53 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::shader::Light Struct Reference</title>
+<title>Castor3D: castor3d::LightBuffer Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,108 +42,127 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dc/df4/a01401.html">castor3d</a></li><li class="navelem"><a class="el" href="../../da/d06/a01403.html">shader</a></li><li class="navelem"><a class="el" href="../../d1/d03/a04778.html">Light</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d1/d03/a04778.html">LightBuffer</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="#friends">Friends</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="../../d9/d61/a04775.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">castor3d::shader::Light Struct Reference</div></div>
+  <div class="headertitle"><div class="title">castor3d::LightBuffer Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;GlslLight.hpp&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for castor3d::shader::Light:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../dd/d6d/a04777.png" border="0" usemap="#acastor3d_1_1shader_1_1Light_inherit__map" alt="Inheritance graph"/></div>
-<map name="acastor3d_1_1shader_1_1Light_inherit__map" id="acastor3d_1_1shader_1_1Light_inherit__map">
-<area shape="rect" title=" " alt="" coords="5,80,160,107"/>
-<area shape="rect" title=" " alt="" coords="14,5,151,32"/>
-</map>
-<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
-<div class="dynheader">
-Collaboration diagram for castor3d::shader::Light:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../db/d2a/a04776.png" border="0" usemap="#acastor3d_1_1shader_1_1Light_coll__map" alt="Collaboration graph"/></div>
-<map name="acastor3d_1_1shader_1_1Light_coll__map" id="acastor3d_1_1shader_1_1Light_coll__map">
-<area shape="rect" title=" " alt="" coords="5,80,160,107"/>
-<area shape="rect" title=" " alt="" coords="14,5,151,32"/>
-</map>
-<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
+<p><code>#include &lt;LightBuffer.hpp&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/da6/a04782.html">Float4</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dec/a04786.html">Float4x4</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d77/a04806.html">LightData</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">union &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d56/a04790.html">SpecLight</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:ad8417364160f8241826e3bf80daa6b47"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#ad8417364160f8241826e3bf80daa6b47">LightsData</a> = castor::ArrayView&lt; <a class="el" href="../../d1/d77/a04806.html">LightData</a> &gt;</td></tr>
+<tr class="separator:ad8417364160f8241826e3bf80daa6b47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ad6eb48e33a1152b852b6c7e859113f3a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#ad6eb48e33a1152b852b6c7e859113f3a">Light</a> (sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</td></tr>
-<tr class="separator:ad6eb48e33a1152b852b6c7e859113f3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a38f314d59c9844e1bd76999266451361"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#a38f314d59c9844e1bd76999266451361">SDW_DeclStructInstance</a> (<a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>, <a class="el" href="../../d1/d03/a04778.html">Light</a>)</td></tr>
-<tr class="separator:a38f314d59c9844e1bd76999266451361"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d4486e9b69993a9b71908eea1ce7b56"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#a9d4486e9b69993a9b71908eea1ce7b56">updateShadowType</a> (<a class="el" href="../../dc/df4/a01401.html#a90275671c44e791e9556c4bed9033935">ShadowType</a> type)</td></tr>
-<tr class="separator:a9d4486e9b69993a9b71908eea1ce7b56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d3dd33e8b837cfb5bc6cb1a1f6c5029"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#a1d3dd33e8b837cfb5bc6cb1a1f6c5029">LightBuffer</a> (<a class="el" href="../../d9/db1/a02718.html">Engine</a> &amp;engine, <a class="el" href="../../df/d75/a04010.html">RenderDevice</a> const &amp;device, uint32_t count)</td></tr>
+<tr class="memdesc:a1d3dd33e8b837cfb5bc6cb1a1f6c5029"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../d1/d03/a04778.html#a1d3dd33e8b837cfb5bc6cb1a1f6c5029">More...</a><br /></td></tr>
+<tr class="separator:a1d3dd33e8b837cfb5bc6cb1a1f6c5029"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04c7dc505c6b18da4066dcecca49d66c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#a04c7dc505c6b18da4066dcecca49d66c">addLight</a> (<a class="el" href="../../d0/d7e/a04594.html">Light</a> &amp;light)</td></tr>
+<tr class="memdesc:a04c7dc505c6b18da4066dcecca49d66c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a light source to the buffer.  <a href="../../d1/d03/a04778.html#a04c7dc505c6b18da4066dcecca49d66c">More...</a><br /></td></tr>
+<tr class="separator:a04c7dc505c6b18da4066dcecca49d66c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83ebc94ef5e293b871155c7a6d342ff0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#a83ebc94ef5e293b871155c7a6d342ff0">removeLight</a> (<a class="el" href="../../d0/d7e/a04594.html">Light</a> &amp;light)</td></tr>
+<tr class="memdesc:a83ebc94ef5e293b871155c7a6d342ff0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes a light source from the buffer.  <a href="../../d1/d03/a04778.html#a83ebc94ef5e293b871155c7a6d342ff0">More...</a><br /></td></tr>
+<tr class="separator:a83ebc94ef5e293b871155c7a6d342ff0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1cf304b6f9cf08a27c160b34f0838c24"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#a1cf304b6f9cf08a27c160b34f0838c24">update</a> (<a class="el" href="../../df/d4e/a04094.html">CpuUpdater</a> &amp;updater)</td></tr>
+<tr class="memdesc:a1cf304b6f9cf08a27c160b34f0838c24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the buffer CPU wise.  <a href="../../d1/d03/a04778.html#a1cf304b6f9cf08a27c160b34f0838c24">More...</a><br /></td></tr>
+<tr class="separator:a1cf304b6f9cf08a27c160b34f0838c24"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f3d4b9e3334e7739b8b5721fb0ff012"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#a2f3d4b9e3334e7739b8b5721fb0ff012">upload</a> (ashes::CommandBuffer const &amp;commandBuffer)</td></tr>
+<tr class="memdesc:a2f3d4b9e3334e7739b8b5721fb0ff012"><td class="mdescLeft">&#160;</td><td class="mdescRight">Uploads the buffer to VRAM.  <a href="../../d1/d03/a04778.html#a2f3d4b9e3334e7739b8b5721fb0ff012">More...</a><br /></td></tr>
+<tr class="separator:a2f3d4b9e3334e7739b8b5721fb0ff012"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa56bc2d140bdc239937373dcb7f9816d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> VkDescriptorSetLayoutBinding&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#aa56bc2d140bdc239937373dcb7f9816d">createLayoutBinding</a> (uint32_t binding) const</td></tr>
+<tr class="memdesc:aa56bc2d140bdc239937373dcb7f9816d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the descriptor set layout binding.  <a href="../../d1/d03/a04778.html#aa56bc2d140bdc239937373dcb7f9816d">More...</a><br /></td></tr>
+<tr class="separator:aa56bc2d140bdc239937373dcb7f9816d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abce17fc73ec8125c7b0c3b02852bf39c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#abce17fc73ec8125c7b0c3b02852bf39c">createPassBinding</a> (crg::FramePass &amp;pass, uint32_t binding) const</td></tr>
+<tr class="memdesc:abce17fc73ec8125c7b0c3b02852bf39c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a frame pass binding.  <a href="../../d1/d03/a04778.html#abce17fc73ec8125c7b0c3b02852bf39c">More...</a><br /></td></tr>
+<tr class="separator:abce17fc73ec8125c7b0c3b02852bf39c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d0b5a3df111bece682b369c33490c2b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ashes::WriteDescriptorSet&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#a4d0b5a3df111bece682b369c33490c2b">getBinding</a> (uint32_t binding) const</td></tr>
+<tr class="memdesc:a4d0b5a3df111bece682b369c33490c2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the descriptor write for this buffer.  <a href="../../d1/d03/a04778.html#a4d0b5a3df111bece682b369c33490c2b">More...</a><br /></td></tr>
+<tr class="separator:a4d0b5a3df111bece682b369c33490c2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8454a20074fb689f1cc4cb444cce4d42"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ashes::WriteDescriptorSet&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#a8454a20074fb689f1cc4cb444cce4d42">getBinding</a> (uint32_t binding, VkDeviceSize offset, VkDeviceSize size) const</td></tr>
+<tr class="memdesc:a8454a20074fb689f1cc4cb444cce4d42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the descriptor write for this buffer.  <a href="../../d1/d03/a04778.html#a8454a20074fb689f1cc4cb444cce4d42">More...</a><br /></td></tr>
+<tr class="separator:a8454a20074fb689f1cc4cb444cce4d42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96de013f726440335de9102d70bdebea"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#a96de013f726440335de9102d70bdebea">createBinding</a> (ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;binding) const</td></tr>
+<tr class="memdesc:a96de013f726440335de9102d70bdebea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the descriptor set binding at given point.  <a href="../../d1/d03/a04778.html#a96de013f726440335de9102d70bdebea">More...</a><br /></td></tr>
+<tr class="separator:a96de013f726440335de9102d70bdebea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace2ed7d968d39025a56fe261cadc1aac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d1/d77/a04806.html">LightData</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#ace2ed7d968d39025a56fe261cadc1aac">getData</a> (<a class="el" href="../../d0/d7e/a04594.html">Light</a> const &amp;light)</td></tr>
+<tr class="separator:ace2ed7d968d39025a56fe261cadc1aac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d3158ce6e5f237bab9e52426d626ad8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#a5d3158ce6e5f237bab9e52426d626ad8">getIndex</a> (<a class="el" href="../../d0/d7e/a04594.html">Light</a> const &amp;light) const</td></tr>
+<tr class="separator:a5d3158ce6e5f237bab9e52426d626ad8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a629c503482fc13878ce7321f2c3f91c8"><td class="memItemLeft" align="right" valign="top">uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#a629c503482fc13878ce7321f2c3f91c8">getPtr</a> ()</td></tr>
+<tr class="separator:a629c503482fc13878ce7321f2c3f91c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c6fa4f311463c34ef0edf72aeb37e72"><td class="memItemLeft" align="right" valign="top">LightsArray&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#a0c6fa4f311463c34ef0edf72aeb37e72">getLights</a> (<a class="el" href="../../da/dab/a01362.html#a381718aa9accc88c20afd97d76c30ed8">LightType</a> type) const</td></tr>
+<tr class="separator:a0c6fa4f311463c34ef0edf72aeb37e72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20c8ccea5b9727c72bba7dc4cbc80d9f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d1/d77/a04806.html">LightData</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#a20c8ccea5b9727c72bba7dc4cbc80d9f">operator[]</a> (size_t index)</td></tr>
+<tr class="separator:a20c8ccea5b9727c72bba7dc4cbc80d9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a026e636789f73ad679aa59f49f604fd9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d1/d77/a04806.html">LightData</a> const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#a026e636789f73ad679aa59f49f604fd9">operator[]</a> (size_t index) const</td></tr>
+<tr class="separator:a026e636789f73ad679aa59f49f604fd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a247a50373a1fe9c8c70d10000bf34095"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ast::type::BaseStructPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#a247a50373a1fe9c8c70d10000bf34095">makeType</a> (ast::type::TypesCache &amp;cache)</td></tr>
-<tr class="separator:a247a50373a1fe9c8c70d10000bf34095"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af70e139f359928d276fe739fc2f6d593"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> std::unique_ptr&lt; sdw::Struct &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#af70e139f359928d276fe739fc2f6d593">declare</a> (sdw::ShaderWriter &amp;writer)</td></tr>
-<tr class="separator:af70e139f359928d276fe739fc2f6d593"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:aeccc0789d4f05d776908c53e22231f32"><td class="memItemLeft" align="right" valign="top">sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#aeccc0789d4f05d776908c53e22231f32">colour</a></td></tr>
-<tr class="separator:aeccc0789d4f05d776908c53e22231f32"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35172927b2a6a1af6e072884ea06137d"><td class="memItemLeft" align="right" valign="top">sdw::Vec2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#a35172927b2a6a1af6e072884ea06137d">intensity</a></td></tr>
-<tr class="separator:a35172927b2a6a1af6e072884ea06137d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6a1466723e2852e6d3a85562d66609a"><td class="memItemLeft" align="right" valign="top">sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#ac6a1466723e2852e6d3a85562d66609a">farPlane</a></td></tr>
-<tr class="separator:ac6a1466723e2852e6d3a85562d66609a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16474038b6598d959151821b73558d00"><td class="memItemLeft" align="right" valign="top">sdw::Int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#a16474038b6598d959151821b73558d00">shadowType</a></td></tr>
-<tr class="separator:a16474038b6598d959151821b73558d00"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a17d803fb3b087e8a4a4563636f5360b6"><td class="memItemLeft" align="right" valign="top">sdw::Int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#a17d803fb3b087e8a4a4563636f5360b6">index</a></td></tr>
-<tr class="separator:a17d803fb3b087e8a4a4563636f5360b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ca4ceb569f8d7d36ca017477870517f"><td class="memItemLeft" align="right" valign="top">sdw::UInt&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#a5ca4ceb569f8d7d36ca017477870517f">volumetricSteps</a></td></tr>
-<tr class="separator:a5ca4ceb569f8d7d36ca017477870517f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3731ac9280f3935711b23a4147583ec6"><td class="memItemLeft" align="right" valign="top">sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#a3731ac9280f3935711b23a4147583ec6">volumetricScattering</a></td></tr>
-<tr class="separator:a3731ac9280f3935711b23a4147583ec6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a365f483f67bf54b8e974a3bb1e5829cd"><td class="memItemLeft" align="right" valign="top">sdw::Vec2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#a365f483f67bf54b8e974a3bb1e5829cd">rawShadowOffsets</a></td></tr>
-<tr class="separator:a365f483f67bf54b8e974a3bb1e5829cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb9ca25dea034d22de9172ed78ca2f3f"><td class="memItemLeft" align="right" valign="top">sdw::Vec2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#abb9ca25dea034d22de9172ed78ca2f3f">pcfShadowOffsets</a></td></tr>
-<tr class="separator:abb9ca25dea034d22de9172ed78ca2f3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7072e152d8cf7d0ce9c79e787281e10b"><td class="memItemLeft" align="right" valign="top">sdw::Vec2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#a7072e152d8cf7d0ce9c79e787281e10b">vsmShadowVariance</a></td></tr>
-<tr class="separator:a7072e152d8cf7d0ce9c79e787281e10b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:ae0ec198d71105a937ac89250db1b9dd9"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#ae0ec198d71105a937ac89250db1b9dd9">LightingModel</a></td></tr>
-<tr class="separator:ae0ec198d71105a937ac89250db1b9dd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:abba8b748b42f01f3eb89f9692410fb92"><td class="memItemLeft" align="right" valign="top">static constexpr uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d03/a04778.html#abba8b748b42f01f3eb89f9692410fb92">DataSize</a> = sizeof( <a class="el" href="../../d1/d77/a04806.html">LightData</a> )</td></tr>
+<tr class="separator:abba8b748b42f01f3eb89f9692410fb92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ad6eb48e33a1152b852b6c7e859113f3a" name="ad6eb48e33a1152b852b6c7e859113f3a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad6eb48e33a1152b852b6c7e859113f3a">&#9670;&nbsp;</a></span>Light()</h2>
+<h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="ad8417364160f8241826e3bf80daa6b47" name="ad8417364160f8241826e3bf80daa6b47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8417364160f8241826e3bf80daa6b47">&#9670;&nbsp;</a></span>LightsData</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::shader::Light::Light </td>
+          <td class="memname">using <a class="el" href="../../d1/d03/a04778.html#ad8417364160f8241826e3bf80daa6b47">castor3d::LightBuffer::LightsData</a> =  castor::ArrayView&lt; <a class="el" href="../../d1/d77/a04806.html">LightData</a> &gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a1d3dd33e8b837cfb5bc6cb1a1f6c5029" name="a1d3dd33e8b837cfb5bc6cb1a1f6c5029"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d3dd33e8b837cfb5bc6cb1a1f6c5029">&#9670;&nbsp;</a></span>LightBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::LightBuffer::LightBuffer </td>
           <td>(</td>
-          <td class="paramtype">sdw::ShaderWriter &amp;&#160;</td>
-          <td class="paramname"><em>writer</em>, </td>
+          <td class="paramtype"><a class="el" href="../../d9/db1/a02718.html">Engine</a> &amp;&#160;</td>
+          <td class="paramname"><em>engine</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">ast::expr::ExprPtr&#160;</td>
-          <td class="paramname"><em>expr</em>, </td>
+          <td class="paramtype"><a class="el" href="../../df/d75/a04010.html">RenderDevice</a> const &amp;&#160;</td>
+          <td class="paramname"><em>device</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>enabled</em>&#160;</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>count</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -152,92 +171,229 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">engine</td><td>The engine. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">device</td><td>The GPU device. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">count</td><td>The max passes count. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="af70e139f359928d276fe739fc2f6d593" name="af70e139f359928d276fe739fc2f6d593"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af70e139f359928d276fe739fc2f6d593">&#9670;&nbsp;</a></span>declare()</h2>
+<a id="a04c7dc505c6b18da4066dcecca49d66c" name="a04c7dc505c6b18da4066dcecca49d66c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a04c7dc505c6b18da4066dcecca49d66c">&#9670;&nbsp;</a></span>addLight()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::Light::declare </td>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::LightBuffer::addLight </td>
           <td>(</td>
-          <td class="paramtype">sdw::ShaderWriter &amp;&#160;</td>
-          <td class="paramname"><em>writer</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="../../d0/d7e/a04594.html">Light</a> &amp;&#160;</td>
+          <td class="paramname"><em>light</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<a id="a247a50373a1fe9c8c70d10000bf34095" name="a247a50373a1fe9c8c70d10000bf34095"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a247a50373a1fe9c8c70d10000bf34095">&#9670;&nbsp;</a></span>makeType()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ast::type::BaseStructPtr castor3d::shader::Light::makeType </td>
-          <td>(</td>
-          <td class="paramtype">ast::type::TypesCache &amp;&#160;</td>
-          <td class="paramname"><em>cache</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
+<p>Adds a light source to the buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">light</td><td>The light source. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
-<a id="a38f314d59c9844e1bd76999266451361" name="a38f314d59c9844e1bd76999266451361"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a38f314d59c9844e1bd76999266451361">&#9670;&nbsp;</a></span>SDW_DeclStructInstance()</h2>
+<a id="a96de013f726440335de9102d70bdebea" name="a96de013f726440335de9102d70bdebea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96de013f726440335de9102d70bdebea">&#9670;&nbsp;</a></span>createBinding()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">castor3d::shader::Light::SDW_DeclStructInstance </td>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::LightBuffer::createBinding </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramtype">ashes::DescriptorSet &amp;&#160;</td>
+          <td class="paramname"><em>descriptorSet</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="../../d1/d03/a04778.html">Light</a>&#160;</td>
-          <td class="paramname">&#160;</td>
+          <td class="paramtype">VkDescriptorSetLayoutBinding const &amp;&#160;</td>
+          <td class="paramname"><em>binding</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td>
+          <td></td><td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
+<p>Creates the descriptor set binding at given point. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">descriptorSet</td><td>The descriptor set that receives the binding. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">binding</td><td>The descriptor set layout binding. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
-<a id="a9d4486e9b69993a9b71908eea1ce7b56" name="a9d4486e9b69993a9b71908eea1ce7b56"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9d4486e9b69993a9b71908eea1ce7b56">&#9670;&nbsp;</a></span>updateShadowType()</h2>
+<a id="aa56bc2d140bdc239937373dcb7f9816d" name="aa56bc2d140bdc239937373dcb7f9816d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa56bc2d140bdc239937373dcb7f9816d">&#9670;&nbsp;</a></span>createLayoutBinding()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> VkDescriptorSetLayoutBinding castor3d::LightBuffer::createLayoutBinding </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>binding</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates the descriptor set layout binding. </p>
+
+</div>
+</div>
+<a id="abce17fc73ec8125c7b0c3b02852bf39c" name="abce17fc73ec8125c7b0c3b02852bf39c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abce17fc73ec8125c7b0c3b02852bf39c">&#9670;&nbsp;</a></span>createPassBinding()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::LightBuffer::createPassBinding </td>
+          <td>(</td>
+          <td class="paramtype">crg::FramePass &amp;&#160;</td>
+          <td class="paramname"><em>pass</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>binding</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a frame pass binding. </p>
+
+</div>
+</div>
+<a id="a4d0b5a3df111bece682b369c33490c2b" name="a4d0b5a3df111bece682b369c33490c2b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d0b5a3df111bece682b369c33490c2b">&#9670;&nbsp;</a></span>getBinding() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ashes::WriteDescriptorSet castor3d::LightBuffer::getBinding </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>binding</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates the descriptor write for this buffer. </p>
+
+</div>
+</div>
+<a id="a8454a20074fb689f1cc4cb444cce4d42" name="a8454a20074fb689f1cc4cb444cce4d42"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8454a20074fb689f1cc4cb444cce4d42">&#9670;&nbsp;</a></span>getBinding() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ashes::WriteDescriptorSet castor3d::LightBuffer::getBinding </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>binding</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VkDeviceSize&#160;</td>
+          <td class="paramname"><em>offset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VkDeviceSize&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates the descriptor write for this buffer. </p>
+
+</div>
+</div>
+<a id="ace2ed7d968d39025a56fe261cadc1aac" name="ace2ed7d968d39025a56fe261cadc1aac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace2ed7d968d39025a56fe261cadc1aac">&#9670;&nbsp;</a></span>getData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d1/d77/a04806.html">LightData</a> &amp; castor3d::LightBuffer::getData </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d0/d7e/a04594.html">Light</a> const &amp;&#160;</td>
+          <td class="paramname"><em>light</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The pointer to the data for given light source. </dd></dl>
+
+</div>
+</div>
+<a id="a5d3158ce6e5f237bab9e52426d626ad8" name="a5d3158ce6e5f237bab9e52426d626ad8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d3158ce6e5f237bab9e52426d626ad8">&#9670;&nbsp;</a></span>getIndex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> uint32_t castor3d::LightBuffer::getIndex </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d0/d7e/a04594.html">Light</a> const &amp;&#160;</td>
+          <td class="paramname"><em>light</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The light source buffer index. </dd></dl>
+
+</div>
+</div>
+<a id="a0c6fa4f311463c34ef0edf72aeb37e72" name="a0c6fa4f311463c34ef0edf72aeb37e72"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c6fa4f311463c34ef0edf72aeb37e72">&#9670;&nbsp;</a></span>getLights()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -246,10 +402,72 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void castor3d::shader::Light::updateShadowType </td>
+          <td class="memname">LightsArray castor3d::LightBuffer::getLights </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../dc/df4/a01401.html#a90275671c44e791e9556c4bed9033935">ShadowType</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="../../da/dab/a01362.html#a381718aa9accc88c20afd97d76c30ed8">LightType</a>&#160;</td>
           <td class="paramname"><em>type</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a629c503482fc13878ce7321f2c3f91c8" name="a629c503482fc13878ce7321f2c3f91c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a629c503482fc13878ce7321f2c3f91c8">&#9670;&nbsp;</a></span>getPtr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t * castor3d::LightBuffer::getPtr </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="../../de/d04/a04774.html#a4fcf4ffabfc41ab525819285b87fdbfe">castor3d::ShaderBuffer::getPtr()</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d1/d03/a04778_a629c503482fc13878ce7321f2c3f91c8_cgraph.png" border="0" usemap="#ad1/d03/a04778_a629c503482fc13878ce7321f2c3f91c8_cgraph" alt=""/></div>
+<map name="ad1/d03/a04778_a629c503482fc13878ce7321f2c3f91c8_cgraph" id="ad1/d03/a04778_a629c503482fc13878ce7321f2c3f91c8_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,147,47"/>
+<area shape="rect" href="../../de/d04/a04774.html#a4fcf4ffabfc41ab525819285b87fdbfe" title=" " alt="" coords="195,5,349,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a20c8ccea5b9727c72bba7dc4cbc80d9f" name="a20c8ccea5b9727c72bba7dc4cbc80d9f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20c8ccea5b9727c72bba7dc4cbc80d9f">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d1/d77/a04806.html">LightData</a> &amp; castor3d::LightBuffer::operator[] </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -262,9 +480,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<h2 class="groupheader">Friends And Related Function Documentation</h2>
-<a id="ae0ec198d71105a937ac89250db1b9dd9" name="ae0ec198d71105a937ac89250db1b9dd9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae0ec198d71105a937ac89250db1b9dd9">&#9670;&nbsp;</a></span>LightingModel</h2>
+<a id="a026e636789f73ad679aa59f49f604fd9" name="a026e636789f73ad679aa59f49f604fd9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a026e636789f73ad679aa59f49f604fd9">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -273,166 +490,130 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">friend class <a class="el" href="../../d3/d1a/a04798.html">LightingModel</a></td>
+          <td class="memname"><a class="el" href="../../d1/d77/a04806.html">LightData</a> const  &amp; castor3d::LightBuffer::operator[] </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 </div>
 </div>
+<a id="a83ebc94ef5e293b871155c7a6d342ff0" name="a83ebc94ef5e293b871155c7a6d342ff0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a83ebc94ef5e293b871155c7a6d342ff0">&#9670;&nbsp;</a></span>removeLight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::LightBuffer::removeLight </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d0/d7e/a04594.html">Light</a> &amp;&#160;</td>
+          <td class="paramname"><em>light</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes a light source from the buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">light</td><td>The light source. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a1cf304b6f9cf08a27c160b34f0838c24" name="a1cf304b6f9cf08a27c160b34f0838c24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1cf304b6f9cf08a27c160b34f0838c24">&#9670;&nbsp;</a></span>update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::LightBuffer::update </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../df/d4e/a04094.html">CpuUpdater</a> &amp;&#160;</td>
+          <td class="paramname"><em>updater</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Updates the buffer CPU wise. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">updater</td><td>The update data. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2f3d4b9e3334e7739b8b5721fb0ff012" name="a2f3d4b9e3334e7739b8b5721fb0ff012"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f3d4b9e3334e7739b8b5721fb0ff012">&#9670;&nbsp;</a></span>upload()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::LightBuffer::upload </td>
+          <td>(</td>
+          <td class="paramtype">ashes::CommandBuffer const &amp;&#160;</td>
+          <td class="paramname"><em>commandBuffer</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Uploads the buffer to VRAM. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">commandBuffer</td><td>Receives the upload commands. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="aeccc0789d4f05d776908c53e22231f32" name="aeccc0789d4f05d776908c53e22231f32"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeccc0789d4f05d776908c53e22231f32">&#9670;&nbsp;</a></span>colour</h2>
+<a id="abba8b748b42f01f3eb89f9692410fb92" name="abba8b748b42f01f3eb89f9692410fb92"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abba8b748b42f01f3eb89f9692410fb92">&#9670;&nbsp;</a></span>DataSize</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">sdw::Vec3 castor3d::shader::Light::colour</td>
+          <td class="memname">constexpr uint32_t castor3d::LightBuffer::DataSize = sizeof( <a class="el" href="../../d1/d77/a04806.html">LightData</a> )</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="ac6a1466723e2852e6d3a85562d66609a" name="ac6a1466723e2852e6d3a85562d66609a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac6a1466723e2852e6d3a85562d66609a">&#9670;&nbsp;</a></span>farPlane</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">sdw::Float castor3d::shader::Light::farPlane</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a17d803fb3b087e8a4a4563636f5360b6" name="a17d803fb3b087e8a4a4563636f5360b6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a17d803fb3b087e8a4a4563636f5360b6">&#9670;&nbsp;</a></span>index</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">sdw::Int castor3d::shader::Light::index</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a35172927b2a6a1af6e072884ea06137d" name="a35172927b2a6a1af6e072884ea06137d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a35172927b2a6a1af6e072884ea06137d">&#9670;&nbsp;</a></span>intensity</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">sdw::Vec2 castor3d::shader::Light::intensity</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="abb9ca25dea034d22de9172ed78ca2f3f" name="abb9ca25dea034d22de9172ed78ca2f3f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abb9ca25dea034d22de9172ed78ca2f3f">&#9670;&nbsp;</a></span>pcfShadowOffsets</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">sdw::Vec2 castor3d::shader::Light::pcfShadowOffsets</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a365f483f67bf54b8e974a3bb1e5829cd" name="a365f483f67bf54b8e974a3bb1e5829cd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a365f483f67bf54b8e974a3bb1e5829cd">&#9670;&nbsp;</a></span>rawShadowOffsets</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">sdw::Vec2 castor3d::shader::Light::rawShadowOffsets</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a16474038b6598d959151821b73558d00" name="a16474038b6598d959151821b73558d00"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a16474038b6598d959151821b73558d00">&#9670;&nbsp;</a></span>shadowType</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">sdw::Int castor3d::shader::Light::shadowType</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a3731ac9280f3935711b23a4147583ec6" name="a3731ac9280f3935711b23a4147583ec6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3731ac9280f3935711b23a4147583ec6">&#9670;&nbsp;</a></span>volumetricScattering</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">sdw::Float castor3d::shader::Light::volumetricScattering</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a5ca4ceb569f8d7d36ca017477870517f" name="a5ca4ceb569f8d7d36ca017477870517f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5ca4ceb569f8d7d36ca017477870517f">&#9670;&nbsp;</a></span>volumetricSteps</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">sdw::UInt castor3d::shader::Light::volumetricSteps</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a7072e152d8cf7d0ce9c79e787281e10b" name="a7072e152d8cf7d0ce9c79e787281e10b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7072e152d8cf7d0ce9c79e787281e10b">&#9670;&nbsp;</a></span>vsmShadowVariance</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">sdw::Vec2 castor3d::shader::Light::vsmShadowVariance</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
-<li>Shader/Shaders/<a class="el" href="../../dc/d19/a01190.html">GlslLight.hpp</a></li>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>Shader/ShaderBuffers/<a class="el" href="../../dd/d9e/a01226.html">LightBuffer.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 15:34:56 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:48 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

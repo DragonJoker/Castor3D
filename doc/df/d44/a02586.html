@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::SkinnedObjectBufferPool::ModelBuffers Struct Reference</title>
+<title>Castor3D: castor3d::ObjectBufferPool::ModelBuffers Struct Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,7 +42,7 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dc/df4/a01401.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d1/d03/a02582.html">SkinnedObjectBufferPool</a></li><li class="navelem"><a class="el" href="../../df/d44/a02586.html">ModelBuffers</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d1/d03/a02582.html">ObjectBufferPool</a></li><li class="navelem"><a class="el" href="../../df/d44/a02586.html">ModelBuffers</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -50,40 +50,37 @@ $(function() {
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="../../dc/d15/a02583.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">castor3d::SkinnedObjectBufferPool::ModelBuffers Struct Reference</div></div>
+  <div class="headertitle"><div class="title">castor3d::ObjectBufferPool::ModelBuffers Struct Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
 <p><code>#include &lt;ObjectBufferPool.hpp&gt;</code></p>
 <div class="dynheader">
-Collaboration diagram for castor3d::SkinnedObjectBufferPool::ModelBuffers:</div>
+Collaboration diagram for castor3d::ObjectBufferPool::ModelBuffers:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../dc/d28/a02584.png" border="0" usemap="#acastor3d_1_1SkinnedObjectBufferPool_1_1ModelBuffers_coll__map" alt="Collaboration graph"/></div>
-<map name="acastor3d_1_1SkinnedObjectBufferPool_1_1ModelBuffers_coll__map" id="acastor3d_1_1SkinnedObjectBufferPool_1_1ModelBuffers_coll__map">
-<area shape="rect" title=" " alt="" coords="5,319,204,360"/>
-<area shape="rect" href="../../db/d09/a02502.html" title=" " alt="" coords="5,185,204,227"/>
-<area shape="rect" href="../../d3/d41/a02530.html" title=" " alt="" coords="35,5,201,32"/>
-<area shape="rect" href="../../db/d09/a02502.html" title="A GPU buffer, that uses a buddy allocator to allocate sub&#45;buffers." alt="" coords="121,81,265,123"/>
+<div class="center"><img src="../../dc/d28/a02584.png" border="0" usemap="#acastor3d_1_1ObjectBufferPool_1_1ModelBuffers_coll__map" alt="Collaboration graph"/></div>
+<map name="acastor3d_1_1ObjectBufferPool_1_1ModelBuffers_coll__map" id="acastor3d_1_1ObjectBufferPool_1_1ModelBuffers_coll__map">
+<area shape="rect" title=" " alt="" coords="45,332,222,373"/>
+<area shape="rect" title=" " alt="" coords="38,213,229,269"/>
+<area shape="rect" title=" " alt="" coords="5,95,144,121"/>
+<area shape="rect" title=" " alt="" coords="141,5,179,32"/>
+<area shape="rect" title=" " alt="" coords="169,95,277,121"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a6709d1ab902cfa1a697085f53d72da97"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d44/a02586.html#a6709d1ab902cfa1a697085f53d72da97">ModelBuffers</a> (<a class="el" href="../../dc/df4/a01401.html#a7616d1d27aba8f61289a44545c397f8d">GpuPackedBuffer</a> vtx, <a class="el" href="../../dc/df4/a01401.html#a7616d1d27aba8f61289a44545c397f8d">GpuPackedBuffer</a> bon, <a class="el" href="../../dc/df4/a01401.html#a7616d1d27aba8f61289a44545c397f8d">GpuPackedBuffer</a> idx)</td></tr>
-<tr class="separator:a6709d1ab902cfa1a697085f53d72da97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8898cecf1d8a159b5fa2e8d537a6c6f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d44/a02586.html#ab8898cecf1d8a159b5fa2e8d537a6c6f">ModelBuffers</a> (std::array&lt; <a class="el" href="../../da/dab/a01362.html#a683bd798faa71e3065a0fb8ccc821927">GpuPackedBufferPtr</a>, size_t(<a class="el" href="../../da/dab/a01362.html#a261ef528a761e7aba9c97e63cc98db53ae558bb69fadec037d9eae46601a4df8e">SubmeshData::eCount</a>) &gt; bufs={})</td></tr>
+<tr class="separator:ab8898cecf1d8a159b5fa2e8d537a6c6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a60cd457f6b509cad3ab7510e69cb3b60"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/df4/a01401.html#a7616d1d27aba8f61289a44545c397f8d">GpuPackedBuffer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d44/a02586.html#a60cd457f6b509cad3ab7510e69cb3b60">vertex</a></td></tr>
-<tr class="separator:a60cd457f6b509cad3ab7510e69cb3b60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4bb02d40d06bc48b0bade8fcbdaaf1f4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/df4/a01401.html#a7616d1d27aba8f61289a44545c397f8d">GpuPackedBuffer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d44/a02586.html#a4bb02d40d06bc48b0bade8fcbdaaf1f4">bones</a></td></tr>
-<tr class="separator:a4bb02d40d06bc48b0bade8fcbdaaf1f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca0618421475aac974c1e7c516e9a9a6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/df4/a01401.html#a7616d1d27aba8f61289a44545c397f8d">GpuPackedBuffer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d44/a02586.html#aca0618421475aac974c1e7c516e9a9a6">index</a></td></tr>
-<tr class="separator:aca0618421475aac974c1e7c516e9a9a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84e0f24e22316d0bc23373fc4f93cefb"><td class="memItemLeft" align="right" valign="top">std::array&lt; <a class="el" href="../../da/dab/a01362.html#a683bd798faa71e3065a0fb8ccc821927">GpuPackedBufferPtr</a>, size_t(<a class="el" href="../../da/dab/a01362.html#a261ef528a761e7aba9c97e63cc98db53ae558bb69fadec037d9eae46601a4df8e">SubmeshData::eCount</a>) &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d44/a02586.html#a84e0f24e22316d0bc23373fc4f93cefb">buffers</a></td></tr>
+<tr class="separator:a84e0f24e22316d0bc23373fc4f93cefb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a6709d1ab902cfa1a697085f53d72da97" name="a6709d1ab902cfa1a697085f53d72da97"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6709d1ab902cfa1a697085f53d72da97">&#9670;&nbsp;</a></span>ModelBuffers()</h2>
+<a id="ab8898cecf1d8a159b5fa2e8d537a6c6f" name="ab8898cecf1d8a159b5fa2e8d537a6c6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8898cecf1d8a159b5fa2e8d537a6c6f">&#9670;&nbsp;</a></span>ModelBuffers()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -92,32 +89,16 @@ Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">castor3d::SkinnedObjectBufferPool::ModelBuffers::ModelBuffers </td>
+          <td class="memname">castor3d::ObjectBufferPool::ModelBuffers::ModelBuffers </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../dc/df4/a01401.html#a7616d1d27aba8f61289a44545c397f8d">GpuPackedBuffer</a>&#160;</td>
-          <td class="paramname"><em>vtx</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">std::array&lt; <a class="el" href="../../da/dab/a01362.html#a683bd798faa71e3065a0fb8ccc821927">GpuPackedBufferPtr</a>, size_t(<a class="el" href="../../da/dab/a01362.html#a261ef528a761e7aba9c97e63cc98db53ae558bb69fadec037d9eae46601a4df8e">SubmeshData::eCount</a>) &gt;&#160;</td>
+          <td class="paramname"><em>bufs</em> = <code>{}</code></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="../../dc/df4/a01401.html#a7616d1d27aba8f61289a44545c397f8d">GpuPackedBuffer</a>&#160;</td>
-          <td class="paramname"><em>bon</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../dc/df4/a01401.html#a7616d1d27aba8f61289a44545c397f8d">GpuPackedBuffer</a>&#160;</td>
-          <td class="paramname"><em>idx</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -125,42 +106,14 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a4bb02d40d06bc48b0bade8fcbdaaf1f4" name="a4bb02d40d06bc48b0bade8fcbdaaf1f4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4bb02d40d06bc48b0bade8fcbdaaf1f4">&#9670;&nbsp;</a></span>bones</h2>
+<a id="a84e0f24e22316d0bc23373fc4f93cefb" name="a84e0f24e22316d0bc23373fc4f93cefb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84e0f24e22316d0bc23373fc4f93cefb">&#9670;&nbsp;</a></span>buffers</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dc/df4/a01401.html#a7616d1d27aba8f61289a44545c397f8d">GpuPackedBuffer</a> castor3d::SkinnedObjectBufferPool::ModelBuffers::bones</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aca0618421475aac974c1e7c516e9a9a6" name="aca0618421475aac974c1e7c516e9a9a6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aca0618421475aac974c1e7c516e9a9a6">&#9670;&nbsp;</a></span>index</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dc/df4/a01401.html#a7616d1d27aba8f61289a44545c397f8d">GpuPackedBuffer</a> castor3d::SkinnedObjectBufferPool::ModelBuffers::index</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a60cd457f6b509cad3ab7510e69cb3b60" name="a60cd457f6b509cad3ab7510e69cb3b60"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a60cd457f6b509cad3ab7510e69cb3b60">&#9670;&nbsp;</a></span>vertex</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dc/df4/a01401.html#a7616d1d27aba8f61289a44545c397f8d">GpuPackedBuffer</a> castor3d::SkinnedObjectBufferPool::ModelBuffers::vertex</td>
+          <td class="memname">std::array&lt; <a class="el" href="../../da/dab/a01362.html#a683bd798faa71e3065a0fb8ccc821927">GpuPackedBufferPtr</a>, size_t( <a class="el" href="../../da/dab/a01362.html#a261ef528a761e7aba9c97e63cc98db53ae558bb69fadec037d9eae46601a4df8e">SubmeshData::eCount</a> ) &gt; castor3d::ObjectBufferPool::ModelBuffers::buffers</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -168,12 +121,12 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>Buffer/<a class="el" href="../../de/df3/a00185.html">ObjectBufferPool.hpp</a></li>
+<li>Buffer/<a class="el" href="../../dc/d57/a00194.html">ObjectBufferPool.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 15:34:56 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:49 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

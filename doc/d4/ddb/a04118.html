@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::ShadowMap::PassData Struct Reference</title>
+<title>Castor3D: castor3d::RenderPipeline Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,103 +42,131 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dc/df4/a01401.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d2/d0e/a04114.html">ShadowMap</a></li><li class="navelem"><a class="el" href="../../d4/ddb/a04118.html">PassData</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d4/ddb/a04118.html">RenderPipeline</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="../../df/d30/a04115.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">castor3d::ShadowMap::PassData Struct Reference</div></div>
+  <div class="headertitle"><div class="title">castor3d::RenderPipeline Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;ShadowMap.hpp&gt;</code></p>
+<p><code>#include &lt;RenderPipeline.hpp&gt;</code></p>
 <div class="dynheader">
-Collaboration diagram for castor3d::ShadowMap::PassData:</div>
+Inheritance diagram for castor3d::RenderPipeline:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../db/da3/a04116.png" border="0" usemap="#acastor3d_1_1ShadowMap_1_1PassData_coll__map" alt="Collaboration graph"/></div>
-<map name="acastor3d_1_1ShadowMap_1_1PassData_coll__map" id="acastor3d_1_1ShadowMap_1_1PassData_coll__map">
-<area shape="rect" title=" " alt="" coords="3564,699,3715,741"/>
-<area shape="rect" title=" " alt="" coords="1449,658,1619,699"/>
-<area shape="rect" href="../../da/d8f/a04930.html" title=" " alt="" coords="1079,555,1217,581"/>
-<area shape="rect" href="../../dc/d64/a04058.html" title=" " alt="" coords="1440,277,1628,304"/>
-<area shape="rect" title=" " alt="" coords="1079,1271,1217,1297"/>
-<area shape="rect" title=" " alt="" coords="1444,1327,1624,1353"/>
-<area shape="rect" title=" " alt="" coords="1465,1261,1603,1302"/>
-<area shape="rect" title=" " alt="" coords="5,1036,44,1063"/>
-<area shape="rect" title=" " alt="" coords="187,1087,300,1113"/>
-<area shape="rect" title=" " alt="" coords="183,169,304,196"/>
-<area shape="rect" title=" " alt="" coords="189,395,297,421"/>
-<area shape="rect" title=" " alt="" coords="383,1041,523,1068"/>
-<area shape="rect" href="../../d7/d60/a04126.html" title=" " alt="" coords="3301,803,3483,829"/>
-<area shape="rect" title=" " alt="" coords="1945,159,2120,230"/>
-<area shape="rect" title=" " alt="" coords="150,628,337,655"/>
-<area shape="rect" href="../../d7/d34/a04078.html" title=" " alt="" coords="608,612,775,639"/>
-<area shape="rect" href="../../d2/d0e/a04114.html" title=" " alt="" coords="2976,917,3127,944"/>
-<area shape="rect" href="../../d6/d71/a04598.html" title=" " alt="" coords="1475,899,1593,925"/>
-<area shape="rect" title=" " alt="" coords="1095,656,1201,683"/>
-<area shape="rect" href="../../d1/d4a/a04530.html" title=" " alt="" coords="2347,456,2512,483"/>
-<area shape="rect" href="../../dd/d6a/a04642.html" title=" " alt="" coords="1959,489,2106,516"/>
-<area shape="rect" href="../../da/d35/a03682.html" title=" " alt="" coords="1457,825,1611,852"/>
-<area shape="rect" title=" " alt="" coords="1089,261,1207,288"/>
-<area shape="rect" href="../../df/de5/a03966.html" title=" " alt="" coords="1069,775,1227,801"/>
-<area shape="rect" title=" " alt="" coords="602,968,781,995"/>
-<area shape="rect" href="../../de/d88/a03958.html" title=" " alt="" coords="167,952,319,979"/>
-<area shape="rect" title=" " alt="" coords="599,264,784,291"/>
-<area shape="rect" title=" " alt="" coords="851,1051,1018,1077"/>
-<area shape="rect" title=" " alt="" coords="1943,1202,2122,1243"/>
-<area shape="rect" title=" " alt="" coords="2148,1121,2323,1162"/>
-<area shape="rect" href="../../d4/d2b/a03662.html" title=" " alt="" coords="2976,277,3127,304"/>
-<area shape="rect" href="../../d7/d2e/a04482.html" title=" " alt="" coords="2694,331,2819,357"/>
-<area shape="rect" title=" " alt="" coords="1941,439,2124,465"/>
-<area shape="rect" title=" " alt="" coords="1447,541,1621,582"/>
-<area shape="rect" href="../../d6/d41/a02222.html" title=" " alt="" coords="1496,431,1572,457"/>
-<area shape="rect" title=" " alt="" coords="1055,605,1241,632"/>
-<area shape="rect" title=" " alt="" coords="608,366,775,407"/>
-<area shape="rect" href="../../d6/d41/a02222.html" title="Animable public interface." alt="" coords="1073,426,1223,467"/>
-<area shape="rect" title=" " alt="" coords="5,436,44,463"/>
-<area shape="rect" title=" " alt="" coords="194,701,293,728"/>
-<area shape="rect" title=" " alt="" coords="597,435,785,477"/>
-<area shape="rect" href="../../d6/de6/a03666.html" title=" " alt="" coords="1265,94,1416,135"/>
-<area shape="rect" href="../../db/db8/a04970.html" title=" " alt="" coords="1078,148,1218,175"/>
-<area shape="rect" title=" " alt="" coords="568,184,815,240"/>
-<area shape="rect" href="../../d4/db6/a04062.html" title=" " alt="" coords="149,221,337,262"/>
-<area shape="rect" title=" " alt="" coords="1077,907,1219,949"/>
-<area shape="rect" href="../../dc/ddd/a04146.html" title=" " alt="" coords="2663,889,2851,916"/>
-<area shape="rect" href="../../d4/d5e/a03686.html" title=" " alt="" coords="2364,875,2495,917"/>
-<area shape="rect" href="../../d4/d5e/a03686.html" title=" " alt="" coords="1967,877,2098,918"/>
-<area shape="rect" title=" " alt="" coords="1652,717,1917,758"/>
-<area shape="rect" href="../../d5/df8/a04978.html" title=" " alt="" coords="2964,968,3139,995"/>
+<div class="center"><img src="../../d5/d37/a04117.png" border="0" usemap="#acastor3d_1_1RenderPipeline_inherit__map" alt="Inheritance graph"/></div>
+<map name="acastor3d_1_1RenderPipeline_inherit__map" id="acastor3d_1_1RenderPipeline_inherit__map">
+<area shape="rect" title=" " alt="" coords="28,95,195,121"/>
+<area shape="rect" title=" " alt="" coords="5,5,217,47"/>
+</map>
+<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
+<div class="dynheader">
+Collaboration diagram for castor3d::RenderPipeline:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../db/da3/a04116.png" border="0" usemap="#acastor3d_1_1RenderPipeline_coll__map" alt="Collaboration graph"/></div>
+<map name="acastor3d_1_1RenderPipeline_coll__map" id="acastor3d_1_1RenderPipeline_coll__map">
+<area shape="rect" title=" " alt="" coords="28,95,195,121"/>
+<area shape="rect" title=" " alt="" coords="5,5,217,47"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a3cabd078aad9276eb347d708ecadcf0c"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#a3cabd078aad9276eb347d708ecadcf0c">Descriptor</a> { <br />
+&#160;&#160;<a class="el" href="../../d4/ddb/a04118.html#a3cabd078aad9276eb347d708ecadcf0ca54630823eb5c2dfd6d8edc25841d11c3">eTextures</a>
+, <a class="el" href="../../d4/ddb/a04118.html#a3cabd078aad9276eb347d708ecadcf0ca4dc1431c2dfe3a7b602cb256a4bf2013">eBuffers</a>
+, <a class="el" href="../../d4/ddb/a04118.html#a3cabd078aad9276eb347d708ecadcf0ca36ef76111962cf76118cdf633f20074b">eMeshBuffers</a>
+, <a class="el" href="../../d4/ddb/a04118.html#a3cabd078aad9276eb347d708ecadcf0caa905f7c2a077e8be8bf249409f153e6b">Descriptor_COUNT</a>
+, <br />
+&#160;&#160;<a class="el" href="../../d4/ddb/a04118.html#a3cabd078aad9276eb347d708ecadcf0ca7c98a435bd4dbb9bf1e8beb62ad2e2a5">Descriptor_MIN</a> = eBuffers
+, <a class="el" href="../../d4/ddb/a04118.html#a3cabd078aad9276eb347d708ecadcf0ca79906ff97c727aef01c6ce8fc86b5949">Descriptor_MAX</a> = Descriptor_COUNT-1
+<br />
+ }</td></tr>
+<tr class="separator:a3cabd078aad9276eb347d708ecadcf0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a1f84586feb55aab13903c6b96f1ee470"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#a1f84586feb55aab13903c6b96f1ee470">PassData</a> (std::unique_ptr&lt; <a class="el" href="../../da/d8f/a04930.html">MatrixUbo</a> &gt; <a class="el" href="../../d4/ddb/a04118.html#a1ffa8e192e90f7b60ec4101177d96352">matrixUbo</a>, CameraSPtr <a class="el" href="../../d4/ddb/a04118.html#a4336e9fa692ced4edf49a884e521dccb">camera</a>, SceneCullerUPtr <a class="el" href="../../d4/ddb/a04118.html#a337ed1e63511a39d4587c17ca0a2ef09">culler</a>)</td></tr>
-<tr class="separator:a1f84586feb55aab13903c6b96f1ee470"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a65c5014a48d963932d281049b89b5697"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#a65c5014a48d963932d281049b89b5697">PassData</a> (std::unique_ptr&lt; <a class="el" href="../../da/d8f/a04930.html">MatrixUbo</a> &gt; <a class="el" href="../../d4/ddb/a04118.html#a1ffa8e192e90f7b60ec4101177d96352">matrixUbo</a>, ViewportUPtr <a class="el" href="../../d4/ddb/a04118.html#a48af5e717f36a0e7052fe11ce4bec62a">viewport</a>, SceneCullerUPtr <a class="el" href="../../d4/ddb/a04118.html#a337ed1e63511a39d4587c17ca0a2ef09">culler</a>)</td></tr>
-<tr class="separator:a65c5014a48d963932d281049b89b5697"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:a1ffa8e192e90f7b60ec4101177d96352"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="../../da/d8f/a04930.html">MatrixUbo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#a1ffa8e192e90f7b60ec4101177d96352">matrixUbo</a></td></tr>
-<tr class="separator:a1ffa8e192e90f7b60ec4101177d96352"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4336e9fa692ced4edf49a884e521dccb"><td class="memItemLeft" align="right" valign="top">CameraSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#a4336e9fa692ced4edf49a884e521dccb">camera</a></td></tr>
-<tr class="separator:a4336e9fa692ced4edf49a884e521dccb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a48af5e717f36a0e7052fe11ce4bec62a"><td class="memItemLeft" align="right" valign="top">ViewportUPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#a48af5e717f36a0e7052fe11ce4bec62a">viewport</a></td></tr>
-<tr class="separator:a48af5e717f36a0e7052fe11ce4bec62a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb7360409821f59bd79f66029f62c654"><td class="memItemLeft" align="right" valign="top">FrustumUPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#acb7360409821f59bd79f66029f62c654">frustum</a></td></tr>
-<tr class="separator:acb7360409821f59bd79f66029f62c654"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a337ed1e63511a39d4587c17ca0a2ef09"><td class="memItemLeft" align="right" valign="top">SceneCullerUPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#a337ed1e63511a39d4587c17ca0a2ef09">culler</a></td></tr>
-<tr class="separator:a337ed1e63511a39d4587c17ca0a2ef09"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af000341727b933062f865b61d8552af6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d60/a04126.html">ShadowMapPass</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#af000341727b933062f865b61d8552af6">pass</a></td></tr>
-<tr class="separator:af000341727b933062f865b61d8552af6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7b4fd4eb08f249e2b22d647c5ec1e34"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#aa7b4fd4eb08f249e2b22d647c5ec1e34">RenderPipeline</a> (<a class="el" href="../../de/d67/a04110.html">RenderNodesPass</a> &amp;owner, <a class="el" href="../../d7/ded/a04130.html">RenderSystem</a> &amp;renderSystem, ashes::PipelineDepthStencilStateCreateInfo dsState, ashes::PipelineRasterizationStateCreateInfo rsState, ashes::PipelineColorBlendStateCreateInfo blState, ashes::PipelineMultisampleStateCreateInfo msState, ShaderProgramSPtr program, <a class="el" href="../../d7/d34/a04078.html">PipelineFlags</a> const &amp;flags)</td></tr>
+<tr class="memdesc:aa7b4fd4eb08f249e2b22d647c5ec1e34"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../d4/ddb/a04118.html#aa7b4fd4eb08f249e2b22d647c5ec1e34">More...</a><br /></td></tr>
+<tr class="separator:aa7b4fd4eb08f249e2b22d647c5ec1e34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4cf7218c68c3d453d2022a775fe44161"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#a4cf7218c68c3d453d2022a775fe44161">~RenderPipeline</a> ()</td></tr>
+<tr class="memdesc:a4cf7218c68c3d453d2022a775fe44161"><td class="mdescLeft">&#160;</td><td class="mdescRight">Denstructor.  <a href="../../d4/ddb/a04118.html#a4cf7218c68c3d453d2022a775fe44161">More...</a><br /></td></tr>
+<tr class="separator:a4cf7218c68c3d453d2022a775fe44161"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0c4d4b4ae7f1dd307ee8d5a409f2730"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#ad0c4d4b4ae7f1dd307ee8d5a409f2730">initialise</a> (<a class="el" href="../../df/d75/a04010.html">RenderDevice</a> const &amp;device, VkRenderPass renderPass)</td></tr>
+<tr class="memdesc:ad0c4d4b4ae7f1dd307ee8d5a409f2730"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialises the pipeline.  <a href="../../d4/ddb/a04118.html#ad0c4d4b4ae7f1dd307ee8d5a409f2730">More...</a><br /></td></tr>
+<tr class="separator:ad0c4d4b4ae7f1dd307ee8d5a409f2730"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a200fe69bdbff144f5ef1170d7adcd4dc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#a200fe69bdbff144f5ef1170d7adcd4dc">cleanup</a> (<a class="el" href="../../df/d75/a04010.html">RenderDevice</a> const &amp;device)</td></tr>
+<tr class="memdesc:a200fe69bdbff144f5ef1170d7adcd4dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleans up the pipeline.  <a href="../../d4/ddb/a04118.html#a200fe69bdbff144f5ef1170d7adcd4dc">More...</a><br /></td></tr>
+<tr class="separator:a200fe69bdbff144f5ef1170d7adcd4dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
+<tr class="memitem:adb6607a8a7343e5c65f06468dd264d31"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#adb6607a8a7343e5c65f06468dd264d31">setVertexLayouts</a> (ashes::PipelineVertexInputStateCreateInfoCRefArray const &amp;layouts)</td></tr>
+<tr class="separator:adb6607a8a7343e5c65f06468dd264d31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ade23790d714de56ca9b59873226184"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#a8ade23790d714de56ca9b59873226184">setAdditionalDescriptorSetLayout</a> (ashes::DescriptorSetLayout const &amp;layout)</td></tr>
+<tr class="separator:a8ade23790d714de56ca9b59873226184"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7620b1f8e1bcfc1ab660d694b9cf1890"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#a7620b1f8e1bcfc1ab660d694b9cf1890">setAdditionalDescriptorSet</a> (ashes::DescriptorSet const &amp;descriptorSet)</td></tr>
+<tr class="separator:a7620b1f8e1bcfc1ab660d694b9cf1890"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f01a9e6e5814368a88c1a72ccda48b6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#a8f01a9e6e5814368a88c1a72ccda48b6">setMeshletDescriptorSetLayout</a> (ashes::DescriptorSetLayout const &amp;layout)</td></tr>
+<tr class="separator:a8f01a9e6e5814368a88c1a72ccda48b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b532ce350871f32251ddaead753f981"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#a0b532ce350871f32251ddaead753f981">setVertexLayouts</a> (std::vector&lt; ashes::PipelineVertexInputStateCreateInfo &gt; layouts)</td></tr>
+<tr class="separator:a0b532ce350871f32251ddaead753f981"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a217df8e359992b946fa999bebf87a900"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#a217df8e359992b946fa999bebf87a900">setPushConstantRanges</a> (ashes::VkPushConstantRangeArray const &amp;pushConstantRanges)</td></tr>
+<tr class="separator:a217df8e359992b946fa999bebf87a900"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdcab9d3c0a07e9142ec098ed9055a1b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#acdcab9d3c0a07e9142ec098ed9055a1b">setViewport</a> (VkViewport const &amp;viewport)</td></tr>
+<tr class="separator:acdcab9d3c0a07e9142ec098ed9055a1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6575bd0a98f07f7b791f8f7bea00a959"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#a6575bd0a98f07f7b791f8f7bea00a959">setScissor</a> (VkRect2D const &amp;scissor)</td></tr>
+<tr class="separator:a6575bd0a98f07f7b791f8f7bea00a959"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
+<tr class="memitem:a1e0cf6f3a4fc998ab1d793eb0bd33819"><td class="memItemLeft" align="right" valign="top">ashes::DescriptorSet const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#a1e0cf6f3a4fc998ab1d793eb0bd33819">getAdditionalDescriptorSet</a> () const</td></tr>
+<tr class="separator:a1e0cf6f3a4fc998ab1d793eb0bd33819"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0915c7216f463dac36888ab428d8fae9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d34/a04078.html">PipelineFlags</a> const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#a0915c7216f463dac36888ab428d8fae9">getFlags</a> () const</td></tr>
+<tr class="separator:a0915c7216f463dac36888ab428d8fae9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa936edd51ea880d50140d64b8294b23c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#aa936edd51ea880d50140d64b8294b23c">hasPipeline</a> () const</td></tr>
+<tr class="separator:aa936edd51ea880d50140d64b8294b23c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97ee029559cbe0d0359b7d119fdd77ee"><td class="memItemLeft" align="right" valign="top">ashes::GraphicsPipeline const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#a97ee029559cbe0d0359b7d119fdd77ee">getPipeline</a> () const</td></tr>
+<tr class="separator:a97ee029559cbe0d0359b7d119fdd77ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e3ad8ac32a292b6654e5897fa4f0c76"><td class="memItemLeft" align="right" valign="top">ashes::PipelineLayout const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#a3e3ad8ac32a292b6654e5897fa4f0c76">getPipelineLayout</a> () const</td></tr>
+<tr class="separator:a3e3ad8ac32a292b6654e5897fa4f0c76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3a1a70f66583ce7f3baa0f4b4957f21"><td class="memItemLeft" align="right" valign="top">ashes::DescriptorSetLayout const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#af3a1a70f66583ce7f3baa0f4b4957f21">getAdditionalDescriptorSetLayout</a> () const</td></tr>
+<tr class="separator:af3a1a70f66583ce7f3baa0f4b4957f21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12484a08514ee866ab60bf73de1d275b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#a12484a08514ee866ab60bf73de1d275b">hasAdditionalDescriptorSetLayout</a> () const</td></tr>
+<tr class="separator:a12484a08514ee866ab60bf73de1d275b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab27fc7e4cbea086559e302816bdf8557"><td class="memItemLeft" align="right" valign="top">ashes::DescriptorSetLayout const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#ab27fc7e4cbea086559e302816bdf8557">getMeshletDescriptorSetLayout</a> () const</td></tr>
+<tr class="separator:ab27fc7e4cbea086559e302816bdf8557"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d2d416ed3d078899e8c4f7112d82338"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#a8d2d416ed3d078899e8c4f7112d82338">hasMeshletDescriptorSetLayout</a> () const</td></tr>
+<tr class="separator:a8d2d416ed3d078899e8c4f7112d82338"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb16ba0255cfab120c88ccdc5fe0a8ee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/ded/a04130.html">RenderSystem</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html#adb16ba0255cfab120c88ccdc5fe0a8ee">getRenderSystem</a> () const</td></tr>
+<tr class="separator:adb16ba0255cfab120c88ccdc5fe0a8ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a3cabd078aad9276eb347d708ecadcf0c" name="a3cabd078aad9276eb347d708ecadcf0c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3cabd078aad9276eb347d708ecadcf0c">&#9670;&nbsp;</a></span>Descriptor</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="../../d4/ddb/a04118.html#a3cabd078aad9276eb347d708ecadcf0c">castor3d::RenderPipeline::Descriptor</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a3cabd078aad9276eb347d708ecadcf0ca54630823eb5c2dfd6d8edc25841d11c3" name="a3cabd078aad9276eb347d708ecadcf0ca54630823eb5c2dfd6d8edc25841d11c3"></a>eTextures&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a3cabd078aad9276eb347d708ecadcf0ca4dc1431c2dfe3a7b602cb256a4bf2013" name="a3cabd078aad9276eb347d708ecadcf0ca4dc1431c2dfe3a7b602cb256a4bf2013"></a>eBuffers&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a3cabd078aad9276eb347d708ecadcf0ca36ef76111962cf76118cdf633f20074b" name="a3cabd078aad9276eb347d708ecadcf0ca36ef76111962cf76118cdf633f20074b"></a>eMeshBuffers&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a3cabd078aad9276eb347d708ecadcf0caa905f7c2a077e8be8bf249409f153e6b" name="a3cabd078aad9276eb347d708ecadcf0caa905f7c2a077e8be8bf249409f153e6b"></a>Descriptor_COUNT&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a3cabd078aad9276eb347d708ecadcf0ca7c98a435bd4dbb9bf1e8beb62ad2e2a5" name="a3cabd078aad9276eb347d708ecadcf0ca7c98a435bd4dbb9bf1e8beb62ad2e2a5"></a>Descriptor_MIN&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a3cabd078aad9276eb347d708ecadcf0ca79906ff97c727aef01c6ce8fc86b5949" name="a3cabd078aad9276eb347d708ecadcf0ca79906ff97c727aef01c6ce8fc86b5949"></a>Descriptor_MAX&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a1f84586feb55aab13903c6b96f1ee470" name="a1f84586feb55aab13903c6b96f1ee470"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1f84586feb55aab13903c6b96f1ee470">&#9670;&nbsp;</a></span>PassData() <span class="overload">[1/2]</span></h2>
+<a id="aa7b4fd4eb08f249e2b22d647c5ec1e34" name="aa7b4fd4eb08f249e2b22d647c5ec1e34"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7b4fd4eb08f249e2b22d647c5ec1e34">&#9670;&nbsp;</a></span>RenderPipeline()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -147,27 +175,169 @@ Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">castor3d::ShadowMap::PassData::PassData </td>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::RenderPipeline::RenderPipeline </td>
           <td>(</td>
-          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="../../da/d8f/a04930.html">MatrixUbo</a> &gt;&#160;</td>
-          <td class="paramname"><em>matrixUbo</em>, </td>
+          <td class="paramtype"><a class="el" href="../../de/d67/a04110.html">RenderNodesPass</a> &amp;&#160;</td>
+          <td class="paramname"><em>owner</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">CameraSPtr&#160;</td>
-          <td class="paramname"><em>camera</em>, </td>
+          <td class="paramtype"><a class="el" href="../../d7/ded/a04130.html">RenderSystem</a> &amp;&#160;</td>
+          <td class="paramname"><em>renderSystem</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">SceneCullerUPtr&#160;</td>
-          <td class="paramname"><em>culler</em>&#160;</td>
+          <td class="paramtype">ashes::PipelineDepthStencilStateCreateInfo&#160;</td>
+          <td class="paramname"><em>dsState</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ashes::PipelineRasterizationStateCreateInfo&#160;</td>
+          <td class="paramname"><em>rsState</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ashes::PipelineColorBlendStateCreateInfo&#160;</td>
+          <td class="paramname"><em>blState</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ashes::PipelineMultisampleStateCreateInfo&#160;</td>
+          <td class="paramname"><em>msState</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ShaderProgramSPtr&#160;</td>
+          <td class="paramname"><em>program</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d7/d34/a04078.html">PipelineFlags</a> const &amp;&#160;</td>
+          <td class="paramname"><em>flags</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
           <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">owner</td><td>The owning render pass. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">renderSystem</td><td>The <a class="el" href="../../d7/ded/a04130.html">RenderSystem</a>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dsState</td><td>The depth stencil state. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">rsState</td><td>The rateriser state. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">blState</td><td>The blend state. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">msState</td><td>The multisample state. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">program</td><td>The shader program. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">flags</td><td>The creation flags. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4cf7218c68c3d453d2022a775fe44161" name="a4cf7218c68c3d453d2022a775fe44161"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4cf7218c68c3d453d2022a775fe44161">&#9670;&nbsp;</a></span>~RenderPipeline()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::RenderPipeline::~RenderPipeline </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Denstructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a200fe69bdbff144f5ef1170d7adcd4dc" name="a200fe69bdbff144f5ef1170d7adcd4dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a200fe69bdbff144f5ef1170d7adcd4dc">&#9670;&nbsp;</a></span>cleanup()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::RenderPipeline::cleanup </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../df/d75/a04010.html">RenderDevice</a> const &amp;&#160;</td>
+          <td class="paramname"><em>device</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Cleans up the pipeline. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">device</td><td>The GPU device. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a1e0cf6f3a4fc998ab1d793eb0bd33819" name="a1e0cf6f3a4fc998ab1d793eb0bd33819"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e0cf6f3a4fc998ab1d793eb0bd33819">&#9670;&nbsp;</a></span>getAdditionalDescriptorSet()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ashes::DescriptorSet const  &amp; castor3d::RenderPipeline::getAdditionalDescriptorSet </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >name Getters. </p>
+
+</div>
+</div>
+<a id="af3a1a70f66583ce7f3baa0f4b4957f21" name="af3a1a70f66583ce7f3baa0f4b4957f21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3a1a70f66583ce7f3baa0f4b4957f21">&#9670;&nbsp;</a></span>getAdditionalDescriptorSetLayout()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ashes::DescriptorSetLayout const  &amp; castor3d::RenderPipeline::getAdditionalDescriptorSetLayout </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
   </td>
@@ -179,8 +349,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a65c5014a48d963932d281049b89b5697" name="a65c5014a48d963932d281049b89b5697"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a65c5014a48d963932d281049b89b5697">&#9670;&nbsp;</a></span>PassData() <span class="overload">[2/2]</span></h2>
+<a id="a0915c7216f463dac36888ab428d8fae9" name="a0915c7216f463dac36888ab428d8fae9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0915c7216f463dac36888ab428d8fae9">&#9670;&nbsp;</a></span>getFlags()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -189,27 +359,10 @@ Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">castor3d::ShadowMap::PassData::PassData </td>
+          <td class="memname"><a class="el" href="../../d7/d34/a04078.html">PipelineFlags</a> const  &amp; castor3d::RenderPipeline::getFlags </td>
           <td>(</td>
-          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="../../da/d8f/a04930.html">MatrixUbo</a> &gt;&#160;</td>
-          <td class="paramname"><em>matrixUbo</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">ViewportUPtr&#160;</td>
-          <td class="paramname"><em>viewport</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">SceneCullerUPtr&#160;</td>
-          <td class="paramname"><em>culler</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
   </td>
@@ -221,98 +374,448 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a4336e9fa692ced4edf49a884e521dccb" name="a4336e9fa692ced4edf49a884e521dccb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4336e9fa692ced4edf49a884e521dccb">&#9670;&nbsp;</a></span>camera</h2>
+<a id="ab27fc7e4cbea086559e302816bdf8557" name="ab27fc7e4cbea086559e302816bdf8557"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab27fc7e4cbea086559e302816bdf8557">&#9670;&nbsp;</a></span>getMeshletDescriptorSetLayout()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ashes::DescriptorSetLayout const  &amp; castor3d::RenderPipeline::getMeshletDescriptorSetLayout </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a97ee029559cbe0d0359b7d119fdd77ee" name="a97ee029559cbe0d0359b7d119fdd77ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97ee029559cbe0d0359b7d119fdd77ee">&#9670;&nbsp;</a></span>getPipeline()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ashes::GraphicsPipeline const  &amp; castor3d::RenderPipeline::getPipeline </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="../../d4/ddb/a04118.html#aa936edd51ea880d50140d64b8294b23c">hasPipeline()</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d4/ddb/a04118_a97ee029559cbe0d0359b7d119fdd77ee_cgraph.png" border="0" usemap="#ad4/ddb/a04118_a97ee029559cbe0d0359b7d119fdd77ee_cgraph" alt=""/></div>
+<map name="ad4/ddb/a04118_a97ee029559cbe0d0359b7d119fdd77ee_cgraph" id="ad4/ddb/a04118_a97ee029559cbe0d0359b7d119fdd77ee_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,172,47"/>
+<area shape="rect" href="../../d4/ddb/a04118.html#aa936edd51ea880d50140d64b8294b23c" title=" " alt="" coords="220,5,387,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a3e3ad8ac32a292b6654e5897fa4f0c76" name="a3e3ad8ac32a292b6654e5897fa4f0c76"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e3ad8ac32a292b6654e5897fa4f0c76">&#9670;&nbsp;</a></span>getPipelineLayout()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ashes::PipelineLayout const  &amp; castor3d::RenderPipeline::getPipelineLayout </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adb16ba0255cfab120c88ccdc5fe0a8ee" name="adb16ba0255cfab120c88ccdc5fe0a8ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb16ba0255cfab120c88ccdc5fe0a8ee">&#9670;&nbsp;</a></span>getRenderSystem()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d7/ded/a04130.html">RenderSystem</a> &amp; castor3d::RenderPipeline::getRenderSystem </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a12484a08514ee866ab60bf73de1d275b" name="a12484a08514ee866ab60bf73de1d275b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12484a08514ee866ab60bf73de1d275b">&#9670;&nbsp;</a></span>hasAdditionalDescriptorSetLayout()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool castor3d::RenderPipeline::hasAdditionalDescriptorSetLayout </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8d2d416ed3d078899e8c4f7112d82338" name="a8d2d416ed3d078899e8c4f7112d82338"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d2d416ed3d078899e8c4f7112d82338">&#9670;&nbsp;</a></span>hasMeshletDescriptorSetLayout()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool castor3d::RenderPipeline::hasMeshletDescriptorSetLayout </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa936edd51ea880d50140d64b8294b23c" name="aa936edd51ea880d50140d64b8294b23c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa936edd51ea880d50140d64b8294b23c">&#9670;&nbsp;</a></span>hasPipeline()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool castor3d::RenderPipeline::hasPipeline </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="../../d4/ddb/a04118.html#a97ee029559cbe0d0359b7d119fdd77ee">getPipeline()</a>.</p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d4/ddb/a04118_aa936edd51ea880d50140d64b8294b23c_icgraph.png" border="0" usemap="#ad4/ddb/a04118_aa936edd51ea880d50140d64b8294b23c_icgraph" alt=""/></div>
+<map name="ad4/ddb/a04118_aa936edd51ea880d50140d64b8294b23c_icgraph" id="ad4/ddb/a04118_aa936edd51ea880d50140d64b8294b23c_icgraph">
+<area shape="rect" title=" " alt="" coords="220,5,387,47"/>
+<area shape="rect" href="../../d4/ddb/a04118.html#a97ee029559cbe0d0359b7d119fdd77ee" title=" " alt="" coords="5,5,172,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ad0c4d4b4ae7f1dd307ee8d5a409f2730" name="ad0c4d4b4ae7f1dd307ee8d5a409f2730"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0c4d4b4ae7f1dd307ee8d5a409f2730">&#9670;&nbsp;</a></span>initialise()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">CameraSPtr castor3d::ShadowMap::PassData::camera</td>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::RenderPipeline::initialise </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../df/d75/a04010.html">RenderDevice</a> const &amp;&#160;</td>
+          <td class="paramname"><em>device</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VkRenderPass&#160;</td>
+          <td class="paramname"><em>renderPass</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
+<p>Initialises the pipeline. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">device</td><td>The GPU device. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">renderPass</td><td>The render pass to which this pipeline is bound. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
-<a id="a337ed1e63511a39d4587c17ca0a2ef09" name="a337ed1e63511a39d4587c17ca0a2ef09"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a337ed1e63511a39d4587c17ca0a2ef09">&#9670;&nbsp;</a></span>culler</h2>
+<a id="a7620b1f8e1bcfc1ab660d694b9cf1890" name="a7620b1f8e1bcfc1ab660d694b9cf1890"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7620b1f8e1bcfc1ab660d694b9cf1890">&#9670;&nbsp;</a></span>setAdditionalDescriptorSet()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void castor3d::RenderPipeline::setAdditionalDescriptorSet </td>
+          <td>(</td>
+          <td class="paramtype">ashes::DescriptorSet const &amp;&#160;</td>
+          <td class="paramname"><em>descriptorSet</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8ade23790d714de56ca9b59873226184" name="a8ade23790d714de56ca9b59873226184"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ade23790d714de56ca9b59873226184">&#9670;&nbsp;</a></span>setAdditionalDescriptorSetLayout()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void castor3d::RenderPipeline::setAdditionalDescriptorSetLayout </td>
+          <td>(</td>
+          <td class="paramtype">ashes::DescriptorSetLayout const &amp;&#160;</td>
+          <td class="paramname"><em>layout</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8f01a9e6e5814368a88c1a72ccda48b6" name="a8f01a9e6e5814368a88c1a72ccda48b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f01a9e6e5814368a88c1a72ccda48b6">&#9670;&nbsp;</a></span>setMeshletDescriptorSetLayout()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void castor3d::RenderPipeline::setMeshletDescriptorSetLayout </td>
+          <td>(</td>
+          <td class="paramtype">ashes::DescriptorSetLayout const &amp;&#160;</td>
+          <td class="paramname"><em>layout</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a217df8e359992b946fa999bebf87a900" name="a217df8e359992b946fa999bebf87a900"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a217df8e359992b946fa999bebf87a900">&#9670;&nbsp;</a></span>setPushConstantRanges()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void castor3d::RenderPipeline::setPushConstantRanges </td>
+          <td>(</td>
+          <td class="paramtype">ashes::VkPushConstantRangeArray const &amp;&#160;</td>
+          <td class="paramname"><em>pushConstantRanges</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6575bd0a98f07f7b791f8f7bea00a959" name="a6575bd0a98f07f7b791f8f7bea00a959"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6575bd0a98f07f7b791f8f7bea00a959">&#9670;&nbsp;</a></span>setScissor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void castor3d::RenderPipeline::setScissor </td>
+          <td>(</td>
+          <td class="paramtype">VkRect2D const &amp;&#160;</td>
+          <td class="paramname"><em>scissor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adb6607a8a7343e5c65f06468dd264d31" name="adb6607a8a7343e5c65f06468dd264d31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb6607a8a7343e5c65f06468dd264d31">&#9670;&nbsp;</a></span>setVertexLayouts() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">SceneCullerUPtr castor3d::ShadowMap::PassData::culler</td>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::RenderPipeline::setVertexLayouts </td>
+          <td>(</td>
+          <td class="paramtype">ashes::PipelineVertexInputStateCreateInfoCRefArray const &amp;&#160;</td>
+          <td class="paramname"><em>layouts</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p >name Mutators. </p><dl class="section remark"><dt>Remarks</dt><dd>They must be called before any call to <a class="el" href="../../d4/ddb/a04118.html#ad0c4d4b4ae7f1dd307ee8d5a409f2730" title="Initialises the pipeline.">initialise()</a>. </dd></dl>
 
 </div>
 </div>
-<a id="acb7360409821f59bd79f66029f62c654" name="acb7360409821f59bd79f66029f62c654"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acb7360409821f59bd79f66029f62c654">&#9670;&nbsp;</a></span>frustum</h2>
+<a id="a0b532ce350871f32251ddaead753f981" name="a0b532ce350871f32251ddaead753f981"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b532ce350871f32251ddaead753f981">&#9670;&nbsp;</a></span>setVertexLayouts() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">FrustumUPtr castor3d::ShadowMap::PassData::frustum</td>
+          <td class="memname">void castor3d::RenderPipeline::setVertexLayouts </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; ashes::PipelineVertexInputStateCreateInfo &gt;&#160;</td>
+          <td class="paramname"><em>layouts</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a1ffa8e192e90f7b60ec4101177d96352" name="a1ffa8e192e90f7b60ec4101177d96352"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1ffa8e192e90f7b60ec4101177d96352">&#9670;&nbsp;</a></span>matrixUbo</h2>
+<a id="acdcab9d3c0a07e9142ec098ed9055a1b" name="acdcab9d3c0a07e9142ec098ed9055a1b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acdcab9d3c0a07e9142ec098ed9055a1b">&#9670;&nbsp;</a></span>setViewport()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::unique_ptr&lt; <a class="el" href="../../da/d8f/a04930.html">MatrixUbo</a> &gt; castor3d::ShadowMap::PassData::matrixUbo</td>
+          <td class="memname">void castor3d::RenderPipeline::setViewport </td>
+          <td>(</td>
+          <td class="paramtype">VkViewport const &amp;&#160;</td>
+          <td class="paramname"><em>viewport</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="af000341727b933062f865b61d8552af6" name="af000341727b933062f865b61d8552af6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af000341727b933062f865b61d8552af6">&#9670;&nbsp;</a></span>pass</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../d7/d60/a04126.html">ShadowMapPass</a>* castor3d::ShadowMap::PassData::pass</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a48af5e717f36a0e7052fe11ce4bec62a" name="a48af5e717f36a0e7052fe11ce4bec62a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a48af5e717f36a0e7052fe11ce4bec62a">&#9670;&nbsp;</a></span>viewport</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ViewportUPtr castor3d::ShadowMap::PassData::viewport</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
-<li>Render/ShadowMap/<a class="el" href="../../d0/d11/a00842.html">ShadowMap.hpp</a></li>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>Render/<a class="el" href="../../d9/d30/a00848.html">RenderPipeline.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 15:34:56 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:50 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

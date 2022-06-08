@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::shader::BillboardData Struct Reference</title>
+<title>Castor3D: castor3d::shader::Fog Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,98 +42,35 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dc/df4/a01401.html">castor3d</a></li><li class="navelem"><a class="el" href="../../da/d06/a01403.html">shader</a></li><li class="navelem"><a class="el" href="../../dd/d60/a04878.html">BillboardData</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../de/d1f/a01364.html">shader</a></li><li class="navelem"><a class="el" href="../../dd/d60/a04878.html">Fog</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="../../d1/d89/a04875.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">castor3d::shader::BillboardData Struct Reference</div></div>
+  <div class="headertitle"><div class="title">castor3d::shader::Fog Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;BillboardUbo.hpp&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for castor3d::shader::BillboardData:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../db/dab/a04877.png" border="0" usemap="#acastor3d_1_1shader_1_1BillboardData_inherit__map" alt="Inheritance graph"/></div>
-<map name="acastor3d_1_1shader_1_1BillboardData_inherit__map" id="acastor3d_1_1shader_1_1BillboardData_inherit__map">
-<area shape="rect" title=" " alt="" coords="5,80,209,107"/>
-<area shape="rect" title=" " alt="" coords="39,5,176,32"/>
-</map>
-<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
-<div class="dynheader">
-Collaboration diagram for castor3d::shader::BillboardData:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../d9/d27/a04876.png" border="0" usemap="#acastor3d_1_1shader_1_1BillboardData_coll__map" alt="Collaboration graph"/></div>
-<map name="acastor3d_1_1shader_1_1BillboardData_coll__map" id="acastor3d_1_1shader_1_1BillboardData_coll__map">
-<area shape="rect" title=" " alt="" coords="5,80,209,107"/>
-<area shape="rect" title=" " alt="" coords="39,5,176,32"/>
-</map>
-<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
+<p><code>#include &lt;GlslFog.hpp&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a92adba4ffc93e6971fccb4e7ebc95f91"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d60/a04878.html#a92adba4ffc93e6971fccb4e7ebc95f91">BillboardData</a> (sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</td></tr>
-<tr class="separator:a92adba4ffc93e6971fccb4e7ebc95f91"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a959d3f3bb00aaad81bbbd7eba6b20ea9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d60/a04878.html#a959d3f3bb00aaad81bbbd7eba6b20ea9">SDW_DeclStructInstance</a> (<a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>, <a class="el" href="../../dd/d60/a04878.html">BillboardData</a>)</td></tr>
-<tr class="separator:a959d3f3bb00aaad81bbbd7eba6b20ea9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f94ac2cd816acd46d56c23fc4cd4280"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d60/a04878.html#a2f94ac2cd816acd46d56c23fc4cd4280">getCameraRight</a> (<a class="el" href="../../dc/df4/a01401.html#ab503144f281345b45ccc3f3a94543dce">ProgramFlags</a> programFlags, <a class="el" href="../../da/d9e/a04926.html">MatrixData</a> const &amp;matrixData) const</td></tr>
-<tr class="separator:a2f94ac2cd816acd46d56c23fc4cd4280"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae737111fa342106df56f57b13fd50d64"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d60/a04878.html#ae737111fa342106df56f57b13fd50d64">getCameraUp</a> (<a class="el" href="../../dc/df4/a01401.html#ab503144f281345b45ccc3f3a94543dce">ProgramFlags</a> programFlags, <a class="el" href="../../da/d9e/a04926.html">MatrixData</a> const &amp;matrixData) const</td></tr>
-<tr class="separator:ae737111fa342106df56f57b13fd50d64"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8dd305f270bfd5a1f29bba35163487e1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d60/a04878.html#a8dd305f270bfd5a1f29bba35163487e1">getWidth</a> (<a class="el" href="../../dc/df4/a01401.html#ab503144f281345b45ccc3f3a94543dce">ProgramFlags</a> programFlags, <a class="el" href="../../d6/d5a/a04966.html">SceneData</a> const &amp;sceneData) const</td></tr>
-<tr class="separator:a8dd305f270bfd5a1f29bba35163487e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f2ef7ebadb849913aae168590343555"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d60/a04878.html#a0f2ef7ebadb849913aae168590343555">getHeight</a> (<a class="el" href="../../dc/df4/a01401.html#ab503144f281345b45ccc3f3a94543dce">ProgramFlags</a> programFlags, <a class="el" href="../../d6/d5a/a04966.html">SceneData</a> const &amp;sceneData) const</td></tr>
-<tr class="separator:a0f2ef7ebadb849913aae168590343555"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7413ef23e75baa5f273030d019702918"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d60/a04878.html#a7413ef23e75baa5f273030d019702918">Fog</a> (sdw::ShaderWriter &amp;writer)</td></tr>
+<tr class="separator:a7413ef23e75baa5f273030d019702918"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a948e9e44f98b28496ea045301de03d04"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d60/a04878.html#a948e9e44f98b28496ea045301de03d04">apply</a> (sdw::Vec4 const &amp;bgColour, sdw::Vec4 const &amp;colour, sdw::Vec3 const &amp;wsPosition, <a class="el" href="../../d8/dc2/a05098.html">SceneData</a> const &amp;sceneData)</td></tr>
+<tr class="separator:a948e9e44f98b28496ea045301de03d04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:adfd65c0774fa18af20b25bc5ff61af04"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ast::type::BaseStructPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d60/a04878.html#adfd65c0774fa18af20b25bc5ff61af04">makeType</a> (ast::type::TypesCache &amp;cache)</td></tr>
-<tr class="separator:adfd65c0774fa18af20b25bc5ff61af04"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab9c876b12792e4188d90261b4e75c6d0"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> std::unique_ptr&lt; sdw::Struct &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d60/a04878.html#ab9c876b12792e4188d90261b4e75c6d0">declare</a> (sdw::ShaderWriter &amp;writer)</td></tr>
-<tr class="separator:ab9c876b12792e4188d90261b4e75c6d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a818ce0c5e2394483e664a8ea9a245220"><td class="memItemLeft" align="right" valign="top">sdw::Function&lt; sdw::Vec4, sdw::InVec4, sdw::InVec4, sdw::InVec3, InSceneData &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d60/a04878.html#a818ce0c5e2394483e664a8ea9a245220">m_fog</a></td></tr>
+<tr class="separator:a818ce0c5e2394483e664a8ea9a245220"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a92adba4ffc93e6971fccb4e7ebc95f91" name="a92adba4ffc93e6971fccb4e7ebc95f91"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a92adba4ffc93e6971fccb4e7ebc95f91">&#9670;&nbsp;</a></span>BillboardData()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::shader::BillboardData::BillboardData </td>
-          <td>(</td>
-          <td class="paramtype">sdw::ShaderWriter &amp;&#160;</td>
-          <td class="paramname"><em>writer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">ast::expr::ExprPtr&#160;</td>
-          <td class="paramname"><em>expr</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>enabled</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="ab9c876b12792e4188d90261b4e75c6d0" name="ab9c876b12792e4188d90261b4e75c6d0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab9c876b12792e4188d90261b4e75c6d0">&#9670;&nbsp;</a></span>declare()</h2>
+<a id="a7413ef23e75baa5f273030d019702918" name="a7413ef23e75baa5f273030d019702918"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7413ef23e75baa5f273030d019702918">&#9670;&nbsp;</a></span>Fog()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -142,7 +79,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::BillboardData::declare </td>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::shader::Fog::Fog </td>
           <td>(</td>
           <td class="paramtype">sdw::ShaderWriter &amp;&#160;</td>
           <td class="paramname"><em>writer</em></td><td>)</td>
@@ -151,168 +88,43 @@ Static Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a2f94ac2cd816acd46d56c23fc4cd4280" name="a2f94ac2cd816acd46d56c23fc4cd4280"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2f94ac2cd816acd46d56c23fc4cd4280">&#9670;&nbsp;</a></span>getCameraRight()</h2>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a948e9e44f98b28496ea045301de03d04" name="a948e9e44f98b28496ea045301de03d04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a948e9e44f98b28496ea045301de03d04">&#9670;&nbsp;</a></span>apply()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec3 castor3d::shader::BillboardData::getCameraRight </td>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec4 castor3d::shader::Fog::apply </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../dc/df4/a01401.html#ab503144f281345b45ccc3f3a94543dce">ProgramFlags</a>&#160;</td>
-          <td class="paramname"><em>programFlags</em>, </td>
+          <td class="paramtype">sdw::Vec4 const &amp;&#160;</td>
+          <td class="paramname"><em>bgColour</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="../../da/d9e/a04926.html">MatrixData</a> const &amp;&#160;</td>
-          <td class="paramname"><em>matrixData</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae737111fa342106df56f57b13fd50d64" name="ae737111fa342106df56f57b13fd50d64"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae737111fa342106df56f57b13fd50d64">&#9670;&nbsp;</a></span>getCameraUp()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec3 castor3d::shader::BillboardData::getCameraUp </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../dc/df4/a01401.html#ab503144f281345b45ccc3f3a94543dce">ProgramFlags</a>&#160;</td>
-          <td class="paramname"><em>programFlags</em>, </td>
+          <td class="paramtype">sdw::Vec4 const &amp;&#160;</td>
+          <td class="paramname"><em>colour</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="../../da/d9e/a04926.html">MatrixData</a> const &amp;&#160;</td>
-          <td class="paramname"><em>matrixData</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a0f2ef7ebadb849913aae168590343555" name="a0f2ef7ebadb849913aae168590343555"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0f2ef7ebadb849913aae168590343555">&#9670;&nbsp;</a></span>getHeight()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Float castor3d::shader::BillboardData::getHeight </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../dc/df4/a01401.html#ab503144f281345b45ccc3f3a94543dce">ProgramFlags</a>&#160;</td>
-          <td class="paramname"><em>programFlags</em>, </td>
+          <td class="paramtype">sdw::Vec3 const &amp;&#160;</td>
+          <td class="paramname"><em>wsPosition</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="../../d6/d5a/a04966.html">SceneData</a> const &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="../../d8/dc2/a05098.html">SceneData</a> const &amp;&#160;</td>
           <td class="paramname"><em>sceneData</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a8dd305f270bfd5a1f29bba35163487e1" name="a8dd305f270bfd5a1f29bba35163487e1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8dd305f270bfd5a1f29bba35163487e1">&#9670;&nbsp;</a></span>getWidth()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Float castor3d::shader::BillboardData::getWidth </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../dc/df4/a01401.html#ab503144f281345b45ccc3f3a94543dce">ProgramFlags</a>&#160;</td>
-          <td class="paramname"><em>programFlags</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d6/d5a/a04966.html">SceneData</a> const &amp;&#160;</td>
-          <td class="paramname"><em>sceneData</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="adfd65c0774fa18af20b25bc5ff61af04" name="adfd65c0774fa18af20b25bc5ff61af04"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adfd65c0774fa18af20b25bc5ff61af04">&#9670;&nbsp;</a></span>makeType()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ast::type::BaseStructPtr castor3d::shader::BillboardData::makeType </td>
-          <td>(</td>
-          <td class="paramtype">ast::type::TypesCache &amp;&#160;</td>
-          <td class="paramname"><em>cache</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a959d3f3bb00aaad81bbbd7eba6b20ea9" name="a959d3f3bb00aaad81bbbd7eba6b20ea9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a959d3f3bb00aaad81bbbd7eba6b20ea9">&#9670;&nbsp;</a></span>SDW_DeclStructInstance()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">castor3d::shader::BillboardData::SDW_DeclStructInstance </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../dd/d60/a04878.html">BillboardData</a>&#160;</td>
-          <td class="paramname">&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -324,13 +136,36 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
-<li>Shader/Ubos/<a class="el" href="../../d0/d67/a01232.html">BillboardUbo.hpp</a></li>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a818ce0c5e2394483e664a8ea9a245220" name="a818ce0c5e2394483e664a8ea9a245220"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a818ce0c5e2394483e664a8ea9a245220">&#9670;&nbsp;</a></span>m_fog</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">sdw::Function&lt; sdw::Vec4 , sdw::InVec4 , sdw::InVec4 , sdw::InVec3 , InSceneData &gt; castor3d::shader::Fog::m_fog</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>Shader/Shaders/<a class="el" href="../../d3/d0b/a01253.html">GlslFog.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 15:34:56 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:52 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

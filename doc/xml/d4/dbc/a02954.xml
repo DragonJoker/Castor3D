@@ -47,7 +47,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Material/Texture/TextureSource.hpp" line="60" column="23" bodyfile="Material/Texture/TextureSource.hpp" bodystart="60" bodyend="63"/>
-        <references refid="dc/df4/a01401_1a5691da845a89609231c90071fccdfc20">castor3d::getName</references>
+        <references refid="da/dab/a01362_1a5691da845a89609231c90071fccdfc20">castor3d::getName</references>
       </memberdef>
       <memberdef kind="function" id="d4/dbc/a02954_1a10f4c8e3dd31efed12fecbf9f32a666b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>uint32_t</type>

@@ -2,12 +2,16 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_ca24dc67bfcd4bb18537c10e2a574357" kind="dir">
     <compoundname>Render/Technique/Opaque/Lighting</compoundname>
-    <innerfile refid="d7/d46/a00890">DirectionalLightPass.hpp</innerfile>
-    <innerfile refid="dc/d2c/a00893">LightingModule.hpp</innerfile>
-    <innerfile refid="da/dd6/a00896">LightPass.hpp</innerfile>
-    <innerfile refid="d3/d8a/a00899">LightPassResult.hpp</innerfile>
-    <innerfile refid="d5/dd3/a00902">MeshLightPass.hpp</innerfile>
-    <innerfile refid="da/d5b/a00905">SubsurfaceScatteringPass.hpp</innerfile>
+    <innerfile refid="d4/ddc/a00917">DirectionalLightPass.hpp</innerfile>
+    <innerfile refid="d6/d82/a00920">LightingModule.hpp</innerfile>
+    <innerfile refid="df/de9/a00923">LightPass.hpp</innerfile>
+    <innerfile refid="d8/d38/a00926">LightPassResult.hpp</innerfile>
+    <innerfile refid="dc/d92/a00929">LightPipeline.hpp</innerfile>
+    <innerfile refid="d8/dbb/a00932">LightsPipeline.hpp</innerfile>
+    <innerfile refid="d8/d19/a00935">MeshLightPass.hpp</innerfile>
+    <innerfile refid="d5/d54/a00938">RunnableLightingPass.hpp</innerfile>
+    <innerfile refid="d6/dad/a00941">StencilPipeline.hpp</innerfile>
+    <innerfile refid="d9/dce/a00944">SubsurfaceScatteringPass.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d2/da6/a04278" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::OpaqueResolvePass::Program</compoundname>
+    <includes local="no">OpaqueResolvePass.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/da6/a04278_1ad5e947282ef5b4e50172d20b6fda44f7" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/d64/a04750" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::OpaqueResolvePass::Program::vertexShader</definition>
+        <argsstring></argsstring>
+        <name>vertexShader</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::Program::vertexShader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="29" column="14" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/da6/a04278_1a667b786d6cfdeb78076e233b421dbd71" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/d64/a04750" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::OpaqueResolvePass::Program::pixelShader</definition>
+        <argsstring></argsstring>
+        <name>pixelShader</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::Program::pixelShader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="30" column="14" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/da6/a04278_1ae3ad00ae6e3f83711775d2f719ea45be" prot="public" static="no" mutable="no">
+        <type>ashes::PipelineShaderStageCreateInfoArray</type>
+        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::OpaqueResolvePass::Program::stages</definition>
+        <argsstring></argsstring>
+        <name>stages</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::Program::stages</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="31" column="43" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="7">
+        <label>T</label>
+      </node>
+      <node id="1">
+        <label>castor3d::OpaqueResolvePass::Program</label>
+        <link refid="d2/da6/a04278"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>pixelShader</edgelabel>
+          <edgelabel>vertexShader</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ShaderModule</label>
+        <link refid="dc/d64/a04750"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>name</edgelabel>
+          <edgelabel>source</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>shader</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="3">
+        <label>std::string</label>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::unique_ptr&lt; ast::Shader &gt;</label>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; ast::Shader &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="27" column="1" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="28" bodyend="32"/>
+    <listofallmembers>
+      <member refid="d2/da6/a04278_1a667b786d6cfdeb78076e233b421dbd71" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::Program</scope><name>pixelShader</name></member>
+      <member refid="d2/da6/a04278_1ae3ad00ae6e3f83711775d2f719ea45be" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::Program</scope><name>stages</name></member>
+      <member refid="d2/da6/a04278_1ad5e947282ef5b4e50172d20b6fda44f7" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::Program</scope><name>vertexShader</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

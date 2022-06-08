@@ -83,7 +83,7 @@
         <location file="Cache/CacheModule.hpp" line="29" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="29" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="dc/ddf/a02622_1a0606136714bd1cb7209313f2ece3f687" prot="public" static="no">
-        <type>castor::ResourceCacheBaseT&lt; <ref refid="dc/ddf/a02622_1a97fc821a6c93a6497ce29ef7ee81d091" kindref="member">ElementT</ref>, <ref refid="dc/ddf/a02622_1a37487aa6a3179e261c465a659e7e232d" kindref="member">ElementKeyT</ref>, <ref refid="d1/dc1/a02706" kindref="compound">PtrCacheTraitsT</ref>&lt; <ref refid="dc/ddf/a02622_1a97fc821a6c93a6497ce29ef7ee81d091" kindref="member">ElementT</ref>, <ref refid="dc/ddf/a02622_1a37487aa6a3179e261c465a659e7e232d" kindref="member">ElementKeyT</ref> &gt; &gt;</type>
+        <type>castor::ResourceCacheBaseT&lt; <ref refid="dc/ddf/a02622_1a97fc821a6c93a6497ce29ef7ee81d091" kindref="member">ElementT</ref>, <ref refid="dc/ddf/a02622_1a37487aa6a3179e261c465a659e7e232d" kindref="member">ElementKeyT</ref>, <ref refid="d9/d6c/a02710" kindref="compound">PtrCacheTraitsT</ref>&lt; <ref refid="dc/ddf/a02622_1a97fc821a6c93a6497ce29ef7ee81d091" kindref="member">ElementT</ref>, <ref refid="dc/ddf/a02622_1a37487aa6a3179e261c465a659e7e232d" kindref="member">ElementKeyT</ref> &gt; &gt;</type>
         <definition>using castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;::ElementCacheT =  castor::ResourceCacheBaseT&lt; ElementT, ElementKeyT, PtrCacheTraitsT&lt; ElementT, ElementKeyT &gt; &gt;</definition>
         <argsstring></argsstring>
         <name>ElementCacheT</name>
@@ -337,25 +337,25 @@
       </node>
       <node id="3">
         <label>castor3d::PtrCacheTraitsT&lt; AnimatedObjectGroup, castor::String &gt;</label>
-        <link refid="d1/db3/a04402"/>
+        <link refid="d4/d22/a04494"/>
         <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
       <node id="5">
         <label>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;</label>
-        <link refid="d6/d87/a02734"/>
+        <link refid="da/d62/a02738"/>
         <childnode refid="4" relation="public-inheritance">
         </childnode>
       </node>
       <node id="7">
         <label>castor3d::PtrCacheTraitsT&lt; Overlay, castor::String &gt;</label>
-        <link refid="d6/d76/a03554"/>
+        <link refid="dd/de9/a03590"/>
         <childnode refid="6" relation="public-inheritance">
         </childnode>
       </node>
       <node id="9">
         <label>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</label>
-        <link refid="dc/dd9/a03642"/>
+        <link refid="d4/db1/a03678"/>
         <childnode refid="8" relation="public-inheritance">
         </childnode>
       </node>

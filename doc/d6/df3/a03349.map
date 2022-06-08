@@ -1,4 +1,5 @@
-<map id="castor3d::ResourceCacheTraitsT&lt; Mesh, castor::String &gt;" name="castor3d::ResourceCacheTraitsT&lt; Mesh, castor::String &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="259,20,463,61"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,211,76"/>
+<map id="castor3d::MeshImporter" name="castor3d::MeshImporter">
+<area shape="rect" id="node1" title=" " alt="" coords="23,80,181,107"/>
+<area shape="rect" id="node3" href="$dc/d28/a02494.html" title=" " alt="" coords="5,155,199,181"/>
+<area shape="rect" id="node2" title=" " alt="" coords="9,5,195,32"/>
 </map>

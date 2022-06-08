@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d7/dfc/a02922" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PassTextureConfig</compoundname>
+    <includes local="no">TextureConfiguration.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/dfc/a02922_1a983d82098084566d7e1fcad725280b7d" prot="public" static="no" mutable="no">
+        <type>ashes::ImageCreateInfo</type>
+        <definition>ashes::ImageCreateInfo castor3d::PassTextureConfig::imageInfo</definition>
+        <argsstring></argsstring>
+        <name>imageInfo</name>
+        <qualifiedname>castor3d::PassTextureConfig::imageInfo</qualifiedname>
+        <initializer>{ {} }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="153" column="24" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="153" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dfc/a02922_1a8dfe8fc397add4ea8eeba10075892f55" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref></type>
+        <definition>TextureConfiguration castor3d::PassTextureConfig::config</definition>
+        <argsstring></argsstring>
+        <name>config</name>
+        <qualifiedname>castor3d::PassTextureConfig::config</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="154" column="22" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="154" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::PassTextureConfig</label>
+        <link refid="d7/dfc/a02922"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>config</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::TextureConfiguration</label>
+        <link refid="d4/db9/a02918"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>transform</edgelabel>
+        </childnode>
+        <childnode refid="2" relation="usage">
+          <edgelabel>AlbedoTexture</edgelabel>
+          <edgelabel>DiffuseTexture</edgelabel>
+          <edgelabel>EmissiveTexture</edgelabel>
+          <edgelabel>GlossinessTexture</edgelabel>
+          <edgelabel>HeightTexture</edgelabel>
+          <edgelabel>MetalnessTexture</edgelabel>
+          <edgelabel>NormalTexture</edgelabel>
+          <edgelabel>OcclusionTexture</edgelabel>
+          <edgelabel>OpacityTexture</edgelabel>
+          <edgelabel>RoughnessTexture</edgelabel>
+          <edgelabel>...</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::TextureTransform</label>
+        <link refid="d7/da7/a02914"/>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Texture/TextureConfiguration.hpp" line="151" column="1" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="152" bodyend="155"/>
+    <listofallmembers>
+      <member refid="d7/dfc/a02922_1a8dfe8fc397add4ea8eeba10075892f55" prot="public" virt="non-virtual"><scope>castor3d::PassTextureConfig</scope><name>config</name></member>
+      <member refid="d7/dfc/a02922_1a983d82098084566d7e1fcad725280b7d" prot="public" virt="non-virtual"><scope>castor3d::PassTextureConfig</scope><name>imageInfo</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

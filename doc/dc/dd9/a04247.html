@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::LightPipeline Class Reference</title>
+<title>Castor3D: Member List</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,204 +42,54 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../da/de3/a01398.html">castor3d</a></li><li class="navelem"><a class="el" href="../../dc/dd9/a04247.html">LightPipeline</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d1/dcc/a04250.html">IndirectLightingPass</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
-  <div class="summary">
-<a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="../../d2/d98/a04244.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">castor3d::LightPipeline Class Reference</div></div>
+  <div class="headertitle"><div class="title">castor3d::IndirectLightingPass Member List</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;LightingPass.hpp&gt;</code></p>
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:a0efbcc133b8527004551fb9acdee096d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/dd9/a04247.html#a0efbcc133b8527004551fb9acdee096d">LightPipeline</a> (crg::FramePass const &amp;pass, crg::GraphContext &amp;context, crg::RunnableGraph &amp;graph, <a class="el" href="../../d7/da1/a04231.html">LightPipelineConfig</a> const &amp;config, std::vector&lt; <a class="el" href="../../de/d93/a04235.html">LightRenderPass</a> &gt; const &amp;renderPasses, ashes::PipelineShaderStageCreateInfoArray stages, VkDescriptorSetLayout descriptorSetLayout)</td></tr>
-<tr class="separator:a0efbcc133b8527004551fb9acdee096d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90733983efb09e318a543ba90686b84b"><td class="memItemLeft" align="right" valign="top">VkPipeline&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/dd9/a04247.html#a90733983efb09e318a543ba90686b84b">getPipeline</a> (uint32_t index)</td></tr>
-<tr class="separator:a90733983efb09e318a543ba90686b84b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab7d6d1909e4972daa836544f93ae85c2"><td class="memItemLeft" align="right" valign="top">VkPipelineLayout&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/dd9/a04247.html#ab7d6d1909e4972daa836544f93ae85c2">getPipelineLayout</a> ()</td></tr>
-<tr class="separator:ab7d6d1909e4972daa836544f93ae85c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8eb60499c745145619df3e4fe1e1bd1"><td class="memItemLeft" align="right" valign="top">VkDescriptorSet&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/dd9/a04247.html#ad8eb60499c745145619df3e4fe1e1bd1">getDescriptorSet</a> ()</td></tr>
-<tr class="separator:ad8eb60499c745145619df3e4fe1e1bd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr class="memitem:a263b8d60f28bda9b79755aa92a8fad4d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/dd9/a04247.html#a263b8d60f28bda9b79755aa92a8fad4d">doCreatePipeline</a> ()</td></tr>
-<tr class="separator:a263b8d60f28bda9b79755aa92a8fad4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a0efbcc133b8527004551fb9acdee096d" name="a0efbcc133b8527004551fb9acdee096d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0efbcc133b8527004551fb9acdee096d">&#9670;&nbsp;</a></span>LightPipeline()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">castor3d::LightPipeline::LightPipeline </td>
-          <td>(</td>
-          <td class="paramtype">crg::FramePass const &amp;&#160;</td>
-          <td class="paramname"><em>pass</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">crg::GraphContext &amp;&#160;</td>
-          <td class="paramname"><em>context</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">crg::RunnableGraph &amp;&#160;</td>
-          <td class="paramname"><em>graph</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d7/da1/a04231.html">LightPipelineConfig</a> const &amp;&#160;</td>
-          <td class="paramname"><em>config</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="../../de/d93/a04235.html">LightRenderPass</a> &gt; const &amp;&#160;</td>
-          <td class="paramname"><em>renderPasses</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">ashes::PipelineShaderStageCreateInfoArray&#160;</td>
-          <td class="paramname"><em>stages</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">VkDescriptorSetLayout&#160;</td>
-          <td class="paramname"><em>descriptorSetLayout</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a263b8d60f28bda9b79755aa92a8fad4d" name="a263b8d60f28bda9b79755aa92a8fad4d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a263b8d60f28bda9b79755aa92a8fad4d">&#9670;&nbsp;</a></span>doCreatePipeline()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void castor3d::LightPipeline::doCreatePipeline </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ad8eb60499c745145619df3e4fe1e1bd1" name="ad8eb60499c745145619df3e4fe1e1bd1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad8eb60499c745145619df3e4fe1e1bd1">&#9670;&nbsp;</a></span>getDescriptorSet()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">VkDescriptorSet castor3d::LightPipeline::getDescriptorSet </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a90733983efb09e318a543ba90686b84b" name="a90733983efb09e318a543ba90686b84b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a90733983efb09e318a543ba90686b84b">&#9670;&nbsp;</a></span>getPipeline()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">VkPipeline castor3d::LightPipeline::getPipeline </td>
-          <td>(</td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>index</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ab7d6d1909e4972daa836544f93ae85c2" name="ab7d6d1909e4972daa836544f93ae85c2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab7d6d1909e4972daa836544f93ae85c2">&#9670;&nbsp;</a></span>getPipelineLayout()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">VkPipelineLayout castor3d::LightPipeline::getPipelineLayout </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following file:<ul>
-<li>Render/Technique/Opaque/<a class="el" href="../../d0/d85/a00908.html">LightingPass.hpp</a></li>
-</ul>
-</div><!-- contents -->
+<p>This is the complete list of members for <a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a>, including all inherited members.</p>
+<table class="directory">
+  <tr class="even"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a57f91afda023a18bddccb05a359b08ff">accept</a>(PipelineVisitorBase &amp;visitor)</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bf">DescriptorIdx</a> enum name</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfac600b43e8006b1658fa1c3939e4821d5">eBrdf</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfab145f4cccd54858728c7843b909b30ca">eData1</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfadfc0b64ce4e1be9285e6f57ed208db8d">eData2</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfaff0880d76f55a9366836a05bd1bb34c0">eData3</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfa14679d2c930b427463c9a88b2d7641e6">eDepth</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfa9601fe5800b88d314310cc55d362525f">eGpInfo</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfa51f3ee4f9d80eb08eca6957130154a9e">eLayeredLpv1B</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfabd7403cbba0ee505d4e3e009b56b4676">eLayeredLpv1G</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfa3886f992add2f373fc0f6d3aaa883482">eLayeredLpv1R</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfa138246f7a8a63718ce575e72004df631">eLayeredLpv2B</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfa2fba8dd51e6fddbc1fe9cce3329a6c6a">eLayeredLpv2G</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfa22f4e463e0cbe32348a12637893f4817">eLayeredLpv2R</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfa811977054b3c55fa1d8e70db5b8569a3">eLayeredLpv3B</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfa8671815c6fe66b23a8e3af3409eab737">eLayeredLpv3G</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfa279d77745cfd5563713259ff4446f3f7">eLayeredLpv3R</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfa7dccccc07391a65907f9c99ddf1745d3">eLayeredLpvGridConfig</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfa74f68ab47632eb3964f3bff17b70efff">eLayeredLpvStart</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfa5b3696dc9a04b3749a192be3b8564272">eLpvB</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfa0267cb2f6395bdbd9504aa29bcb03205">eLpvG</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfa5aa633d9e9cfacf7054eeca39575ddb9">eLpvGridConfig</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfa954a37e64fa8bef71cea2eba9a49f4b2">eLpvR</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfaeaa57ba1b92ffe323feac0535a957aac">eLpvStart</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfaaebd7998ca0c0397eaed2d48383a321b">eModels</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfac1f50d7a93ef1740d30cbe790c3c6a27">eScene</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfac5bdab7f47a2b5dbd49201052f2fbdee">eVctFirstBounce</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfa99a86de9d66e73f716939a739e02564d">eVctSecondBounce</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfa7e95ea185a365f4d3f4fe61b68d155b0">eVctStart</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a9754d8d594e3b8c2fe7ff6690d08c5bfaef992e616d56f8b8b77c8d8b5f87e024">eVoxelData</a> enum value</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#ae3c2d6aa5b85d9f7e4155d4a72317df3">IndirectLightingPass</a>(RenderDevice const &amp;device, ProgressBar *progress, Scene const &amp;scene, crg::FramePassGroup &amp;graph, crg::FramePass const *&amp;previousPass, Texture const &amp;brdf, OpaquePassResult const &amp;gpResult, LightPassResult const &amp;lpResult, LightVolumePassResult const &amp;lpvResult, LightVolumePassResultArray const &amp;llpvResult, Texture const &amp;vctFirstBounce, Texture const &amp;vctSecondaryBounce, SceneUbo const &amp;sceneUbo, GpInfoUbo const &amp;gpInfoUbo, LpvGridConfigUbo const &amp;lpvConfigUbo, LayeredLpvGridConfigUbo const &amp;llpvConfigUbo, VoxelizerUbo const &amp;vctConfigUbo)</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a1a718040b2894e3d38e0e149e7fc6e2c">ProgramPtr</a> typedef</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a042f6bb87837ea819a017ab9c99ee46f">ProgramType</a> enum name</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="../../d1/dcc/a04250.html#a195c6ac71f52295a14f6ce5d5ad2a79b">update</a>(CpuUpdater &amp;updater)</td><td class="entry"><a class="el" href="../../d1/dcc/a04250.html">castor3d::IndirectLightingPass</a></td><td class="entry"></td></tr>
+</table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 21:28:51 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:48 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

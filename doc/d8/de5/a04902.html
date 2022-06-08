@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::shader::LayeredLpvGridData Struct Reference</title>
+<title>Castor3D: castor3d::shader::SpotLight Struct Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,7 +42,7 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dc/df4/a01401.html">castor3d</a></li><li class="navelem"><a class="el" href="../../da/d06/a01403.html">shader</a></li><li class="navelem"><a class="el" href="../../d8/de5/a04902.html">LayeredLpvGridData</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../de/d1f/a01364.html">shader</a></li><li class="navelem"><a class="el" href="../../d8/de5/a04902.html">SpotLight</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -50,67 +50,82 @@ $(function() {
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="../../d0/d0b/a04899.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">castor3d::shader::LayeredLpvGridData Struct Reference</div></div>
+  <div class="headertitle"><div class="title">castor3d::shader::SpotLight Struct Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;LayeredLpvGridConfigUbo.hpp&gt;</code></p>
+<p><code>#include &lt;GlslLight.hpp&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for castor3d::shader::LayeredLpvGridData:</div>
+Inheritance diagram for castor3d::shader::SpotLight:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../db/d24/a04901.png" border="0" usemap="#acastor3d_1_1shader_1_1LayeredLpvGridData_inherit__map" alt="Inheritance graph"/></div>
-<map name="acastor3d_1_1shader_1_1LayeredLpvGridData_inherit__map" id="acastor3d_1_1shader_1_1LayeredLpvGridData_inherit__map">
-<area shape="rect" title=" " alt="" coords="5,80,179,121"/>
-<area shape="rect" title=" " alt="" coords="23,5,161,32"/>
+<div class="center"><img src="../../db/d24/a04901.png" border="0" usemap="#acastor3d_1_1shader_1_1SpotLight_inherit__map" alt="Inheritance graph"/></div>
+<map name="acastor3d_1_1shader_1_1SpotLight_inherit__map" id="acastor3d_1_1shader_1_1SpotLight_inherit__map">
+<area shape="rect" title=" " alt="" coords="5,80,188,107"/>
+<area shape="rect" title=" " alt="" coords="28,5,165,32"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
-Collaboration diagram for castor3d::shader::LayeredLpvGridData:</div>
+Collaboration diagram for castor3d::shader::SpotLight:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../d9/d2e/a04900.png" border="0" usemap="#acastor3d_1_1shader_1_1LayeredLpvGridData_coll__map" alt="Collaboration graph"/></div>
-<map name="acastor3d_1_1shader_1_1LayeredLpvGridData_coll__map" id="acastor3d_1_1shader_1_1LayeredLpvGridData_coll__map">
-<area shape="rect" title=" " alt="" coords="5,80,179,121"/>
-<area shape="rect" title=" " alt="" coords="23,5,161,32"/>
+<div class="center"><img src="../../d9/d2e/a04900.png" border="0" usemap="#acastor3d_1_1shader_1_1SpotLight_coll__map" alt="Collaboration graph"/></div>
+<map name="acastor3d_1_1shader_1_1SpotLight_coll__map" id="acastor3d_1_1shader_1_1SpotLight_coll__map">
+<area shape="rect" title=" " alt="" coords="5,171,188,197"/>
+<area shape="rect" title=" " alt="" coords="43,5,180,32"/>
+<area shape="rect" href="../../d1/d0b/a04890.html" title=" " alt="" coords="113,81,267,108"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a8d94301768152db7b7a0fb120f573404"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de5/a04902.html#a8d94301768152db7b7a0fb120f573404">LayeredLpvGridData</a> (sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</td></tr>
-<tr class="separator:a8d94301768152db7b7a0fb120f573404"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aede5a62185a9f5ae1b23efd4d4c2b927"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de5/a04902.html#aede5a62185a9f5ae1b23efd4d4c2b927">SDW_DeclStructInstance</a> (<a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>, <a class="el" href="../../d8/de5/a04902.html">LayeredLpvGridData</a>)</td></tr>
-<tr class="separator:aede5a62185a9f5ae1b23efd4d4c2b927"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a095cb3462bc1350da119571e3ee53727"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de5/a04902.html#a095cb3462bc1350da119571e3ee53727">SpotLight</a> (sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</td></tr>
+<tr class="separator:a095cb3462bc1350da119571e3ee53727"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5d20d6e83c7d29ccf6ffec738a41713"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de5/a04902.html#aa5d20d6e83c7d29ccf6ffec738a41713">SDW_DeclStructInstance</a> (<a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>, <a class="el" href="../../d8/de5/a04902.html">SpotLight</a>)</td></tr>
+<tr class="separator:aa5d20d6e83c7d29ccf6ffec738a41713"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85a8a38951e2641301111876202e5302"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de5/a04902.html#a85a8a38951e2641301111876202e5302">getAttenuationFactor</a> (sdw::Float const &amp;distance) const</td></tr>
+<tr class="separator:a85a8a38951e2641301111876202e5302"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ad2e47aefbd9b56363e9260e41cf0bc37"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ast::type::BaseStructPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de5/a04902.html#ad2e47aefbd9b56363e9260e41cf0bc37">makeType</a> (ast::type::TypesCache &amp;cache)</td></tr>
-<tr class="separator:ad2e47aefbd9b56363e9260e41cf0bc37"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad6225133c60e87f3d5f41806cfa5401c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> std::unique_ptr&lt; sdw::Struct &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de5/a04902.html#ad6225133c60e87f3d5f41806cfa5401c">declare</a> (sdw::ShaderWriter &amp;writer)</td></tr>
-<tr class="separator:ad6225133c60e87f3d5f41806cfa5401c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac646362a4d204bda1e091bc895b12d19"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ast::type::BaseStructPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de5/a04902.html#ac646362a4d204bda1e091bc895b12d19">makeType</a> (ast::type::TypesCache &amp;cache)</td></tr>
+<tr class="separator:ac646362a4d204bda1e091bc895b12d19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ce0fb875e566ec0157161b878309416"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> std::unique_ptr&lt; sdw::Struct &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de5/a04902.html#a7ce0fb875e566ec0157161b878309416">declare</a> (sdw::ShaderWriter &amp;writer)</td></tr>
+<tr class="separator:a7ce0fb875e566ec0157161b878309416"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a0063c6eeb4ec09e811e7126c4c10e70f"><td class="memItemLeft" align="right" valign="top">sdw::Array&lt; sdw::Vec4 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de5/a04902.html#a0063c6eeb4ec09e811e7126c4c10e70f">allMinVolumeCorners</a></td></tr>
-<tr class="separator:a0063c6eeb4ec09e811e7126c4c10e70f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af313723153e566dde7c4b2e74be1e17c"><td class="memItemLeft" align="right" valign="top">sdw::Vec4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de5/a04902.html#af313723153e566dde7c4b2e74be1e17c">allCellSizes</a></td></tr>
-<tr class="separator:af313723153e566dde7c4b2e74be1e17c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7954951ecddf0d1e6e7a9f6cf16597b6"><td class="memItemLeft" align="right" valign="top">sdw::Vec4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de5/a04902.html#a7954951ecddf0d1e6e7a9f6cf16597b6">gridSizesAtt</a></td></tr>
-<tr class="separator:a7954951ecddf0d1e6e7a9f6cf16597b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa1a7c7aea39641bd98c059b73d605c37"><td class="memItemLeft" align="right" valign="top">sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de5/a04902.html#aa1a7c7aea39641bd98c059b73d605c37">gridSizes</a></td></tr>
-<tr class="separator:aa1a7c7aea39641bd98c059b73d605c37"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ba460245c93bf387a9b2b2834369dc6"><td class="memItemLeft" align="right" valign="top">sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de5/a04902.html#a6ba460245c93bf387a9b2b2834369dc6">indirectAttenuation</a></td></tr>
-<tr class="separator:a6ba460245c93bf387a9b2b2834369dc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfd3757d93c9f30c5399b01723b655b4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d1/d0b/a04890.html">Light</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de5/a04902.html#adfd3757d93c9f30c5399b01723b655b4">base</a></td></tr>
+<tr class="separator:adfd3757d93c9f30c5399b01723b655b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1001c80c9b9cead607b073362897def9"><td class="memItemLeft" align="right" valign="top">sdw::Mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de5/a04902.html#a1001c80c9b9cead607b073362897def9">transform</a></td></tr>
+<tr class="separator:a1001c80c9b9cead607b073362897def9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21194baed6dd071931dfd84451942a58"><td class="memItemLeft" align="right" valign="top">sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de5/a04902.html#a21194baed6dd071931dfd84451942a58">position</a></td></tr>
+<tr class="separator:a21194baed6dd071931dfd84451942a58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae651927a25fd8cb6ed796008ff8b796f"><td class="memItemLeft" align="right" valign="top">sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de5/a04902.html#ae651927a25fd8cb6ed796008ff8b796f">direction</a></td></tr>
+<tr class="separator:ae651927a25fd8cb6ed796008ff8b796f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38422a2722081957852b0d9b291f1fd3"><td class="memItemLeft" align="right" valign="top">sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de5/a04902.html#a38422a2722081957852b0d9b291f1fd3">exponent</a></td></tr>
+<tr class="separator:a38422a2722081957852b0d9b291f1fd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a99a5f0694e40cb1a0c1c0e30c6f4db"><td class="memItemLeft" align="right" valign="top">sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de5/a04902.html#a1a99a5f0694e40cb1a0c1c0e30c6f4db">innerCutOff</a></td></tr>
+<tr class="separator:a1a99a5f0694e40cb1a0c1c0e30c6f4db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab98b825d718f840a1ae2ae700d79fc4f"><td class="memItemLeft" align="right" valign="top">sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de5/a04902.html#ab98b825d718f840a1ae2ae700d79fc4f">outerCutOff</a></td></tr>
+<tr class="separator:ab98b825d718f840a1ae2ae700d79fc4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af56bd4cc8d7faa844df70ccb5abcc57d"><td class="memItemLeft" align="right" valign="top">sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de5/a04902.html#af56bd4cc8d7faa844df70ccb5abcc57d">cutOffsDiff</a></td></tr>
+<tr class="separator:af56bd4cc8d7faa844df70ccb5abcc57d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:ae0ec198d71105a937ac89250db1b9dd9"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de5/a04902.html#ae0ec198d71105a937ac89250db1b9dd9">LightingModel</a></td></tr>
+<tr class="separator:ae0ec198d71105a937ac89250db1b9dd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a8d94301768152db7b7a0fb120f573404" name="a8d94301768152db7b7a0fb120f573404"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d94301768152db7b7a0fb120f573404">&#9670;&nbsp;</a></span>LayeredLpvGridData()</h2>
+<a id="a095cb3462bc1350da119571e3ee53727" name="a095cb3462bc1350da119571e3ee53727"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a095cb3462bc1350da119571e3ee53727">&#9670;&nbsp;</a></span>SpotLight()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::shader::LayeredLpvGridData::LayeredLpvGridData </td>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::shader::SpotLight::SpotLight </td>
           <td>(</td>
           <td class="paramtype">sdw::ShaderWriter &amp;&#160;</td>
           <td class="paramname"><em>writer</em>, </td>
@@ -138,8 +153,8 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ad6225133c60e87f3d5f41806cfa5401c" name="ad6225133c60e87f3d5f41806cfa5401c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad6225133c60e87f3d5f41806cfa5401c">&#9670;&nbsp;</a></span>declare()</h2>
+<a id="a7ce0fb875e566ec0157161b878309416" name="a7ce0fb875e566ec0157161b878309416"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ce0fb875e566ec0157161b878309416">&#9670;&nbsp;</a></span>declare()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -148,7 +163,7 @@ Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::LayeredLpvGridData::declare </td>
+          <td class="memname">static <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::SpotLight::declare </td>
           <td>(</td>
           <td class="paramtype">sdw::ShaderWriter &amp;&#160;</td>
           <td class="paramname"><em>writer</em></td><td>)</td>
@@ -164,8 +179,26 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ad2e47aefbd9b56363e9260e41cf0bc37" name="ad2e47aefbd9b56363e9260e41cf0bc37"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad2e47aefbd9b56363e9260e41cf0bc37">&#9670;&nbsp;</a></span>makeType()</h2>
+<a id="a85a8a38951e2641301111876202e5302" name="a85a8a38951e2641301111876202e5302"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85a8a38951e2641301111876202e5302">&#9670;&nbsp;</a></span>getAttenuationFactor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Float castor3d::shader::SpotLight::getAttenuationFactor </td>
+          <td>(</td>
+          <td class="paramtype">sdw::Float const &amp;&#160;</td>
+          <td class="paramname"><em>distance</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac646362a4d204bda1e091bc895b12d19" name="ac646362a4d204bda1e091bc895b12d19"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac646362a4d204bda1e091bc895b12d19">&#9670;&nbsp;</a></span>makeType()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -174,7 +207,7 @@ Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ast::type::BaseStructPtr castor3d::shader::LayeredLpvGridData::makeType </td>
+          <td class="memname">static <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ast::type::BaseStructPtr castor3d::shader::SpotLight::makeType </td>
           <td>(</td>
           <td class="paramtype">ast::type::TypesCache &amp;&#160;</td>
           <td class="paramname"><em>cache</em></td><td>)</td>
@@ -190,22 +223,22 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aede5a62185a9f5ae1b23efd4d4c2b927" name="aede5a62185a9f5ae1b23efd4d4c2b927"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aede5a62185a9f5ae1b23efd4d4c2b927">&#9670;&nbsp;</a></span>SDW_DeclStructInstance()</h2>
+<a id="aa5d20d6e83c7d29ccf6ffec738a41713" name="aa5d20d6e83c7d29ccf6ffec738a41713"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5d20d6e83c7d29ccf6ffec738a41713">&#9670;&nbsp;</a></span>SDW_DeclStructInstance()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">castor3d::shader::LayeredLpvGridData::SDW_DeclStructInstance </td>
+          <td class="memname">castor3d::shader::SpotLight::SDW_DeclStructInstance </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="../../d8/de5/a04902.html">LayeredLpvGridData</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="../../d8/de5/a04902.html">SpotLight</a>&#160;</td>
           <td class="paramname">&#160;</td>
         </tr>
         <tr>
@@ -218,71 +251,136 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a id="ae0ec198d71105a937ac89250db1b9dd9" name="ae0ec198d71105a937ac89250db1b9dd9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0ec198d71105a937ac89250db1b9dd9">&#9670;&nbsp;</a></span>LightingModel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="../../d5/de6/a04910.html">LightingModel</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="af313723153e566dde7c4b2e74be1e17c" name="af313723153e566dde7c4b2e74be1e17c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af313723153e566dde7c4b2e74be1e17c">&#9670;&nbsp;</a></span>allCellSizes</h2>
+<a id="adfd3757d93c9f30c5399b01723b655b4" name="adfd3757d93c9f30c5399b01723b655b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfd3757d93c9f30c5399b01723b655b4">&#9670;&nbsp;</a></span>base</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">sdw::Vec4 castor3d::shader::LayeredLpvGridData::allCellSizes</td>
+          <td class="memname"><a class="el" href="../../d1/d0b/a04890.html">Light</a> castor3d::shader::SpotLight::base</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a0063c6eeb4ec09e811e7126c4c10e70f" name="a0063c6eeb4ec09e811e7126c4c10e70f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0063c6eeb4ec09e811e7126c4c10e70f">&#9670;&nbsp;</a></span>allMinVolumeCorners</h2>
+<a id="af56bd4cc8d7faa844df70ccb5abcc57d" name="af56bd4cc8d7faa844df70ccb5abcc57d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af56bd4cc8d7faa844df70ccb5abcc57d">&#9670;&nbsp;</a></span>cutOffsDiff</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">sdw::Array&lt; sdw::Vec4 &gt; castor3d::shader::LayeredLpvGridData::allMinVolumeCorners</td>
+          <td class="memname">sdw::Float castor3d::shader::SpotLight::cutOffsDiff</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="aa1a7c7aea39641bd98c059b73d605c37" name="aa1a7c7aea39641bd98c059b73d605c37"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa1a7c7aea39641bd98c059b73d605c37">&#9670;&nbsp;</a></span>gridSizes</h2>
+<a id="ae651927a25fd8cb6ed796008ff8b796f" name="ae651927a25fd8cb6ed796008ff8b796f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae651927a25fd8cb6ed796008ff8b796f">&#9670;&nbsp;</a></span>direction</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">sdw::Vec3 castor3d::shader::LayeredLpvGridData::gridSizes</td>
+          <td class="memname">sdw::Vec3 castor3d::shader::SpotLight::direction</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a7954951ecddf0d1e6e7a9f6cf16597b6" name="a7954951ecddf0d1e6e7a9f6cf16597b6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7954951ecddf0d1e6e7a9f6cf16597b6">&#9670;&nbsp;</a></span>gridSizesAtt</h2>
+<a id="a38422a2722081957852b0d9b291f1fd3" name="a38422a2722081957852b0d9b291f1fd3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38422a2722081957852b0d9b291f1fd3">&#9670;&nbsp;</a></span>exponent</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">sdw::Vec4 castor3d::shader::LayeredLpvGridData::gridSizesAtt</td>
+          <td class="memname">sdw::Float castor3d::shader::SpotLight::exponent</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a6ba460245c93bf387a9b2b2834369dc6" name="a6ba460245c93bf387a9b2b2834369dc6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6ba460245c93bf387a9b2b2834369dc6">&#9670;&nbsp;</a></span>indirectAttenuation</h2>
+<a id="a1a99a5f0694e40cb1a0c1c0e30c6f4db" name="a1a99a5f0694e40cb1a0c1c0e30c6f4db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a99a5f0694e40cb1a0c1c0e30c6f4db">&#9670;&nbsp;</a></span>innerCutOff</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">sdw::Float castor3d::shader::LayeredLpvGridData::indirectAttenuation</td>
+          <td class="memname">sdw::Float castor3d::shader::SpotLight::innerCutOff</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab98b825d718f840a1ae2ae700d79fc4f" name="ab98b825d718f840a1ae2ae700d79fc4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab98b825d718f840a1ae2ae700d79fc4f">&#9670;&nbsp;</a></span>outerCutOff</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sdw::Float castor3d::shader::SpotLight::outerCutOff</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a21194baed6dd071931dfd84451942a58" name="a21194baed6dd071931dfd84451942a58"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21194baed6dd071931dfd84451942a58">&#9670;&nbsp;</a></span>position</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sdw::Vec3 castor3d::shader::SpotLight::position</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1001c80c9b9cead607b073362897def9" name="a1001c80c9b9cead607b073362897def9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1001c80c9b9cead607b073362897def9">&#9670;&nbsp;</a></span>transform</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sdw::Mat4 castor3d::shader::SpotLight::transform</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -290,12 +388,12 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>Shader/Ubos/<a class="el" href="../../d3/d07/a01241.html">LayeredLpvGridConfigUbo.hpp</a></li>
+<li>Shader/Shaders/<a class="el" href="../../dd/d42/a01259.html">GlslLight.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 15:34:56 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:53 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

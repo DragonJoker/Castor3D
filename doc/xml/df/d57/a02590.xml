@@ -5,7 +5,7 @@
     <includes local="no">PoolUniformBuffer.hpp</includes>
       <sectiondef kind="private-attrib">
       <memberdef kind="variable" id="df/d57/a02590_1a41ce37131b470a87b0ae6ab96ce5b3a7" prot="private" static="no" mutable="no">
-        <type><ref refid="d7/d34/a04078" kindref="compound">RenderSystem</ref> const  &amp;</type>
+        <type><ref refid="d7/ded/a04130" kindref="compound">RenderSystem</ref> const  &amp;</type>
         <definition>RenderSystem const&amp; castor3d::PoolUniformBuffer::m_renderSystem</definition>
         <argsstring></argsstring>
         <name>m_renderSystem</name>
@@ -61,7 +61,7 @@
         <location file="Buffer/PoolUniformBuffer.hpp" line="252" column="19" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="252" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="df/d57/a02590_1aab23d4b9089c3943656b943c38c25289" prot="private" static="no" mutable="no">
-        <type>std::set&lt; <ref refid="d7/da8/a02522" kindref="compound">MemChunk</ref> &gt;</type>
+        <type>std::set&lt; <ref refid="d9/d76/a02526" kindref="compound">MemChunk</ref> &gt;</type>
         <definition>std::set&lt; MemChunk &gt; castor3d::PoolUniformBuffer::m_allocated</definition>
         <argsstring></argsstring>
         <name>m_allocated</name>
@@ -119,13 +119,13 @@
       </sectiondef>
       <sectiondef kind="public-func">
       <memberdef kind="function" id="df/d57/a02590_1a2bb9306a9d408dd999bb213a20cfc58e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
         <definition>C3D_API castor3d::PoolUniformBuffer::PoolUniformBuffer</definition>
         <argsstring>(RenderSystem const &amp;renderSystem, castor::ArrayView&lt; uint8_t &gt; data, VkBufferUsageFlags usage, VkMemoryPropertyFlags flags, castor::String debugName, ashes::QueueShare sharingMode={})</argsstring>
         <name>PoolUniformBuffer</name>
         <qualifiedname>castor3d::PoolUniformBuffer::PoolUniformBuffer</qualifiedname>
         <param>
-          <type><ref refid="d7/d34/a04078" kindref="compound">RenderSystem</ref> const &amp;</type>
+          <type><ref refid="d7/ded/a04130" kindref="compound">RenderSystem</ref> const &amp;</type>
           <declname>renderSystem</declname>
         </param>
         <param>
@@ -158,7 +158,7 @@
 <parametername direction="in">renderSystem</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The <ref refid="d7/d34/a04078" kindref="compound">RenderSystem</ref>. </para>
+<para>The <ref refid="d7/ded/a04130" kindref="compound">RenderSystem</ref>. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
@@ -209,13 +209,13 @@
         <location file="Buffer/PoolUniformBuffer.hpp" line="41" column="9"/>
       </memberdef>
       <memberdef kind="function" id="df/d57/a02590_1acb9da7d65165c0ffee76279f21ac9c54" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
         <definition>C3D_API uint32_t castor3d::PoolUniformBuffer::initialise</definition>
         <argsstring>(RenderDevice const &amp;device)</argsstring>
         <name>initialise</name>
         <qualifiedname>castor3d::PoolUniformBuffer::initialise</qualifiedname>
         <param>
-          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <type><ref refid="df/d75/a04010" kindref="compound">RenderDevice</ref> const &amp;</type>
           <declname>device</declname>
         </param>
         <briefdescription>
@@ -238,13 +238,13 @@
         <location file="Buffer/PoolUniformBuffer.hpp" line="55" column="18"/>
       </memberdef>
       <memberdef kind="function" id="df/d57/a02590_1ab2dde565384597c456092f4a8c884c13" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
         <definition>C3D_API void castor3d::PoolUniformBuffer::cleanup</definition>
         <argsstring>(RenderDevice const &amp;device)</argsstring>
         <name>cleanup</name>
         <qualifiedname>castor3d::PoolUniformBuffer::cleanup</qualifiedname>
         <param>
-          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <type><ref refid="df/d75/a04010" kindref="compound">RenderDevice</ref> const &amp;</type>
           <declname>device</declname>
         </param>
         <briefdescription>
@@ -267,7 +267,7 @@
         <location file="Buffer/PoolUniformBuffer.hpp" line="64" column="14"/>
       </memberdef>
       <memberdef kind="function" id="df/d57/a02590_1af825adaf870341eb0810ef0fc70a2811" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
         <definition>C3D_API bool castor3d::PoolUniformBuffer::hasAvailable</definition>
         <argsstring>(VkDeviceSize size) const</argsstring>
         <name>hasAvailable</name>
@@ -297,7 +297,7 @@
         <location file="Buffer/PoolUniformBuffer.hpp" line="73" column="14"/>
       </memberdef>
       <memberdef kind="function" id="df/d57/a02590_1a9b17010f71d69a2733e0e1563ddedd04" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
         <definition>C3D_API bool castor3d::PoolUniformBuffer::hasAllocated</definition>
         <argsstring>() const</argsstring>
         <name>hasAllocated</name>
@@ -314,7 +314,7 @@
         <location file="Buffer/PoolUniformBuffer.hpp" line="80" column="14"/>
       </memberdef>
       <memberdef kind="function" id="df/d57/a02590_1a7cc2d0d50f79a7425983da27baae4147" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/da8/a02522" kindref="compound">MemChunk</ref></type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/d76/a02526" kindref="compound">MemChunk</ref></type>
         <definition>C3D_API MemChunk castor3d::PoolUniformBuffer::allocate</definition>
         <argsstring>(VkDeviceSize size)</argsstring>
         <name>allocate</name>
@@ -345,7 +345,7 @@
         <location file="Buffer/PoolUniformBuffer.hpp" line="91" column="18"/>
       </memberdef>
       <memberdef kind="function" id="df/d57/a02590_1a7b2e62bf5f3fd11e264e8588838adba2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
         <definition>C3D_API void castor3d::PoolUniformBuffer::deallocate</definition>
         <argsstring>(VkDeviceSize offset)</argsstring>
         <name>deallocate</name>
@@ -407,7 +407,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Buffer/PoolUniformBuffer.hpp" line="114" column="14" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="114" bodyend="117"/>
-        <referencedby refid="df/d9b/a02514_1a59505199eb458103512ef51fec723f12" compoundref="de/db1/a00197" startline="51" endline="54">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getData</referencedby>
+        <referencedby refid="d6/de1/a02518_1a59505199eb458103512ef51fec723f12" compoundref="d5/df1/a00206" startline="51" endline="54">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getData</referencedby>
       </memberdef>
       <memberdef kind="function" id="df/d57/a02590_1a1ad0dbe57d8d7cdc4f4bf79b763b60ec" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -494,7 +494,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Buffer/PoolUniformBuffer.hpp" line="167" column="6" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="167" bodyend="170"/>
-        <referencedby refid="df/d9b/a02514_1ad7a4b5aef7f032e598077b111714ad28" compoundref="de/db1/a00197" startline="31" endline="35">castor3d::UniformBufferOffsetT&lt; DataT &gt;::operator bool</referencedby>
+        <referencedby refid="d6/de1/a02518_1ad7a4b5aef7f032e598077b111714ad28" compoundref="d5/df1/a00206" startline="31" endline="35">castor3d::UniformBufferOffsetT&lt; DataT &gt;::operator bool</referencedby>
       </memberdef>
       <memberdef kind="function" id="df/d57/a02590_1a7804d82ef261e90f61fd38589881c900" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>ashes::UniformBuffer const &amp;</type>
@@ -512,13 +512,13 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Buffer/PoolUniformBuffer.hpp" line="179" column="29" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="179" bodyend="182"/>
-        <referencedby refid="df/d9b/a02514_1a2c6ad146d4910651544564c25ca7dccd" compoundref="de/db1/a00197" startline="96" endline="105">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</referencedby>
-        <referencedby refid="df/d57/a02590_1a32a13128eaf15955c1ff544751dcac6a" compoundref="da/d15/a00188" startline="231" endline="234">getAlignedSize</referencedby>
-        <referencedby refid="df/d9b/a02514_1af6031892474c15c1ff806ca0e9842242" compoundref="de/db1/a00197" startline="71" endline="74">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getBuffer</referencedby>
-        <referencedby refid="df/d9b/a02514_1af1486cfa4c196f82e0cbc2440edea70e" compoundref="de/db1/a00197" startline="37" endline="42">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getByteOffset</referencedby>
-        <referencedby refid="df/d9b/a02514_1a11dc3f75dd4cd054c5ee5fd4e0c1f67f" compoundref="de/db1/a00197" startline="44" endline="49">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getByteRange</referencedby>
-        <referencedby refid="df/d9b/a02514_1ad7dcad7c96a620540d10eb85f3d4586b" compoundref="de/db1/a00197" startline="107" endline="120">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getDescriptorWrite</referencedby>
-        <referencedby refid="df/d57/a02590_1ad3de3f47551cdd4bd91f2372e504bd4d" compoundref="da/d15/a00188" startline="211" endline="214">getElementSize</referencedby>
+        <referencedby refid="d6/de1/a02518_1a2c6ad146d4910651544564c25ca7dccd" compoundref="d5/df1/a00206" startline="96" endline="105">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</referencedby>
+        <referencedby refid="df/d57/a02590_1a32a13128eaf15955c1ff544751dcac6a" compoundref="de/db1/a00197" startline="231" endline="234">getAlignedSize</referencedby>
+        <referencedby refid="d6/de1/a02518_1af6031892474c15c1ff806ca0e9842242" compoundref="d5/df1/a00206" startline="71" endline="74">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getBuffer</referencedby>
+        <referencedby refid="d6/de1/a02518_1af1486cfa4c196f82e0cbc2440edea70e" compoundref="d5/df1/a00206" startline="37" endline="42">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getByteOffset</referencedby>
+        <referencedby refid="d6/de1/a02518_1a11dc3f75dd4cd054c5ee5fd4e0c1f67f" compoundref="d5/df1/a00206" startline="44" endline="49">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getByteRange</referencedby>
+        <referencedby refid="d6/de1/a02518_1ad7dcad7c96a620540d10eb85f3d4586b" compoundref="d5/df1/a00206" startline="107" endline="120">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getDescriptorWrite</referencedby>
+        <referencedby refid="df/d57/a02590_1ad3de3f47551cdd4bd91f2372e504bd4d" compoundref="de/db1/a00197" startline="211" endline="214">getElementSize</referencedby>
       </memberdef>
       <memberdef kind="function" id="df/d57/a02590_1a3f8292fb08362bce16522a0e987f6344" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -581,10 +581,10 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Buffer/PoolUniformBuffer.hpp" line="211" column="10" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="211" bodyend="214"/>
-        <references refid="df/d57/a02590_1a7804d82ef261e90f61fd38589881c900" compoundref="da/d15/a00188" startline="179" endline="182">getBuffer</references>
-        <references refid="df/d57/a02590_1ad3de3f47551cdd4bd91f2372e504bd4d" compoundref="da/d15/a00188" startline="211" endline="214">getElementSize</references>
-        <referencedby refid="df/d57/a02590_1ab9520ff65055aeb19c8b5bfca02ae4a3" compoundref="da/d15/a00188" startline="243" endline="246">getAlignedSize</referencedby>
-        <referencedby refid="df/d57/a02590_1ad3de3f47551cdd4bd91f2372e504bd4d" compoundref="da/d15/a00188" startline="211" endline="214">getElementSize</referencedby>
+        <references refid="df/d57/a02590_1a7804d82ef261e90f61fd38589881c900" compoundref="de/db1/a00197" startline="179" endline="182">getBuffer</references>
+        <references refid="df/d57/a02590_1ad3de3f47551cdd4bd91f2372e504bd4d" compoundref="de/db1/a00197" startline="211" endline="214">getElementSize</references>
+        <referencedby refid="df/d57/a02590_1ab9520ff65055aeb19c8b5bfca02ae4a3" compoundref="de/db1/a00197" startline="243" endline="246">getAlignedSize</referencedby>
+        <referencedby refid="df/d57/a02590_1ad3de3f47551cdd4bd91f2372e504bd4d" compoundref="de/db1/a00197" startline="211" endline="214">getElementSize</referencedby>
       </memberdef>
       <memberdef kind="function" id="df/d57/a02590_1a32a13128eaf15955c1ff544751dcac6a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>uint32_t</type>
@@ -616,10 +616,10 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Buffer/PoolUniformBuffer.hpp" line="231" column="10" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="231" bodyend="234"/>
-        <references refid="df/d57/a02590_1ab9520ff65055aeb19c8b5bfca02ae4a3" compoundref="da/d15/a00188" startline="243" endline="246">getAlignedSize</references>
-        <references refid="df/d57/a02590_1a7804d82ef261e90f61fd38589881c900" compoundref="da/d15/a00188" startline="179" endline="182">getBuffer</references>
-        <referencedby refid="df/d9b/a02514_1a27740308743c3e5d9e0a84631b3df4b9" compoundref="de/db1/a00197" startline="81" endline="84">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getAlignedSize</referencedby>
-        <referencedby refid="df/d9b/a02514_1a59505199eb458103512ef51fec723f12" compoundref="de/db1/a00197" startline="51" endline="54">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getData</referencedby>
+        <references refid="df/d57/a02590_1ab9520ff65055aeb19c8b5bfca02ae4a3" compoundref="de/db1/a00197" startline="243" endline="246">getAlignedSize</references>
+        <references refid="df/d57/a02590_1a7804d82ef261e90f61fd38589881c900" compoundref="de/db1/a00197" startline="179" endline="182">getBuffer</references>
+        <referencedby refid="d6/de1/a02518_1a27740308743c3e5d9e0a84631b3df4b9" compoundref="d5/df1/a00206" startline="81" endline="84">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getAlignedSize</referencedby>
+        <referencedby refid="d6/de1/a02518_1a59505199eb458103512ef51fec723f12" compoundref="d5/df1/a00206" startline="51" endline="54">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getData</referencedby>
       </memberdef>
       <memberdef kind="function" id="df/d57/a02590_1ab9520ff65055aeb19c8b5bfca02ae4a3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>uint32_t</type>
@@ -637,9 +637,9 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Buffer/PoolUniformBuffer.hpp" line="243" column="10" bodyfile="Buffer/PoolUniformBuffer.hpp" bodystart="243" bodyend="246"/>
-        <references refid="df/d57/a02590_1ab9520ff65055aeb19c8b5bfca02ae4a3" compoundref="da/d15/a00188" startline="243" endline="246">getAlignedSize</references>
-        <references refid="df/d57/a02590_1ad3de3f47551cdd4bd91f2372e504bd4d" compoundref="da/d15/a00188" startline="211" endline="214">getElementSize</references>
-        <referencedby refid="df/d57/a02590_1a32a13128eaf15955c1ff544751dcac6a" compoundref="da/d15/a00188" startline="231" endline="234">getAlignedSize</referencedby>
+        <references refid="df/d57/a02590_1ab9520ff65055aeb19c8b5bfca02ae4a3" compoundref="de/db1/a00197" startline="243" endline="246">getAlignedSize</references>
+        <references refid="df/d57/a02590_1ad3de3f47551cdd4bd91f2372e504bd4d" compoundref="de/db1/a00197" startline="211" endline="214">getElementSize</references>
+        <referencedby refid="df/d57/a02590_1a32a13128eaf15955c1ff544751dcac6a" compoundref="de/db1/a00197" startline="231" endline="234">getAlignedSize</referencedby>
       </memberdef>
       </sectiondef>
     <briefdescription>

@@ -1,420 +1,166 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="d4/db1/a03678" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::Frustum</compoundname>
-    <includes local="no">Frustum.hpp</includes>
+  <compounddef id="d4/db1/a03678" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</compoundname>
+    <basecompoundref refid="dc/ddf/a02622" prot="public" virt="non-virtual">castor3d::PtrCacheTraitsBaseT&lt; Plugin, castor::String &gt;</basecompoundref>
+    <includes local="no">PluginModule.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
       <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="d4/db1/a03678_1af2b7dc6625287a344d5e4594068b0232" prot="public" static="no">
-        <type>std::array&lt; castor::PlaneEquation, size_t(<ref refid="dc/df4/a01401_1abc8a2e73a4a01c9d2a4575897121259bae558bb69fadec037d9eae46601a4df8e" kindref="member">FrustumPlane::eCount</ref>) &gt;</type>
-        <definition>using castor3d::Frustum::Planes =  std::array&lt; castor::PlaneEquation, size_t( FrustumPlane::eCount ) &gt;</definition>
+      <memberdef kind="typedef" id="d4/db1/a03678_1a3a7ebedca12dc66d4cde1208fa098384" prot="public" static="no">
+        <type><ref refid="d6/d35/a03670" kindref="compound">Plugin</ref></type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::ResT =  Plugin</definition>
         <argsstring></argsstring>
-        <name>Planes</name>
-        <qualifiedname>castor3d::Frustum::Planes</qualifiedname>
+        <name>ResT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::ResT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Frustum.hpp" line="17" column="1" bodyfile="Render/Frustum.hpp" bodystart="17" bodyend="-1"/>
+        <location file="Plugin/PluginModule.hpp" line="176" column="1" bodyfile="Plugin/PluginModule.hpp" bodystart="176" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/db1/a03678_1abd5210a976106167ac5461f5946a2759" prot="public" static="no">
+        <type>castor::String</type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::KeyT =  castor::String</definition>
+        <argsstring></argsstring>
+        <name>KeyT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::KeyT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/PluginModule.hpp" line="177" column="1" bodyfile="Plugin/PluginModule.hpp" bodystart="177" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/db1/a03678_1aef68b46ba183462d32e94a49a4f30dfe" prot="public" static="no">
+        <type><ref refid="dc/ddf/a02622" kindref="compound">PtrCacheTraitsBaseT</ref>&lt; <ref refid="d4/db1/a03678_1a3a7ebedca12dc66d4cde1208fa098384" kindref="member">ResT</ref>, <ref refid="d4/db1/a03678_1abd5210a976106167ac5461f5946a2759" kindref="member">KeyT</ref> &gt;</type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::Base =  PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;</definition>
+        <argsstring></argsstring>
+        <name>Base</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::Base</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/PluginModule.hpp" line="178" column="1" bodyfile="Plugin/PluginModule.hpp" bodystart="178" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/db1/a03678_1a5005be55b3e3371eceb9c3e751401de8" prot="public" static="no">
+        <type>typename <ref refid="dc/ddf/a02622_1a97fc821a6c93a6497ce29ef7ee81d091" kindref="member">Base::ElementT</ref></type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::ElementT =  typename Base::ElementT</definition>
+        <argsstring></argsstring>
+        <name>ElementT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::ElementT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/PluginModule.hpp" line="179" column="1" bodyfile="Plugin/PluginModule.hpp" bodystart="179" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/db1/a03678_1aaacc30ce0b352a7897839640c9bb1fac" prot="public" static="no">
+        <type>typename <ref refid="dc/ddf/a02622_1a1bb78b2e2efba448f1bab3f5714b9943" kindref="member">Base::ElementPtrT</ref></type>
+        <definition>using castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::ElementPtrT =  typename Base::ElementPtrT</definition>
+        <argsstring></argsstring>
+        <name>ElementPtrT</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::ElementPtrT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/PluginModule.hpp" line="180" column="1" bodyfile="Plugin/PluginModule.hpp" bodystart="180" bodyend="-1"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d4/db1/a03678_1ab1a37eb38bc788bb3cc42412b7997856" prot="private" static="no" mutable="no">
-        <type><ref refid="da/dee/a04366" kindref="compound">Viewport</ref> *</type>
-        <definition>Viewport* castor3d::Frustum::m_viewport</definition>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d4/db1/a03678_1a5a4bfb21dc9cc00987e21d8231046cf2" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
+        <definition>C3D_API const castor::String castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::Name</definition>
         <argsstring></argsstring>
-        <name>m_viewport</name>
-        <qualifiedname>castor3d::Frustum::m_viewport</qualifiedname>
+        <name>Name</name>
+        <qualifiedname>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::Name</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Frustum.hpp" line="125" column="11" bodyfile="Render/Frustum.hpp" bodystart="125" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/db1/a03678_1a4505345d6a8071379ebca335efc70915" prot="private" static="no" mutable="no">
-        <type><ref refid="d4/db1/a03678_1af2b7dc6625287a344d5e4594068b0232" kindref="member">Planes</ref></type>
-        <definition>Planes castor3d::Frustum::m_planes</definition>
-        <argsstring></argsstring>
-        <name>m_planes</name>
-        <qualifiedname>castor3d::Frustum::m_planes</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Frustum.hpp" line="126" column="8" bodyfile="Render/Frustum.hpp" bodystart="126" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d4/db1/a03678_1a0d464d15a0b37727c886114a3f5d8795" prot="private" static="no" mutable="no">
-        <type>std::array&lt; <ref refid="df/d5f/a03494" kindref="compound">InterleavedVertex</ref>, 6u *4u &gt;</type>
-        <definition>std::array&lt; InterleavedVertex, 6u * 4u &gt; castor3d::Frustum::m_points</definition>
-        <argsstring></argsstring>
-        <name>m_points</name>
-        <qualifiedname>castor3d::Frustum::m_points</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Frustum.hpp" line="127" column="12" bodyfile="Render/Frustum.hpp" bodystart="127" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d4/db1/a03678_1afa0a8d74d4e457579ab68e7de1ebded6" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::Frustum::Frustum</definition>
-        <argsstring>(Viewport &amp;viewport)</argsstring>
-        <name>Frustum</name>
-        <qualifiedname>castor3d::Frustum::Frustum</qualifiedname>
-        <param>
-          <type><ref refid="da/dee/a04366" kindref="compound">Viewport</ref> &amp;</type>
-          <declname>viewport</declname>
-        </param>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">viewport</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The viewport. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Frustum.hpp" line="28" column="18"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/db1/a03678_1a271f77a18d41523ed05b66cc09943699" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db1/a03678_1af2b7dc6625287a344d5e4594068b0232" kindref="member">Planes</ref></type>
-        <definition>C3D_API Planes castor3d::Frustum::update</definition>
-        <argsstring>(castor::Matrix4x4f const &amp;projection, castor::Matrix4x4f const &amp;view)</argsstring>
-        <name>update</name>
-        <qualifiedname>castor3d::Frustum::update</qualifiedname>
-        <param>
-          <type>castor::Matrix4x4f const &amp;</type>
-          <declname>projection</declname>
-        </param>
-        <param>
-          <type>castor::Matrix4x4f const &amp;</type>
-          <declname>view</declname>
-        </param>
-        <briefdescription>
-<para>Updates the frustum planes. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">projection</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The projection matrix. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">view</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The view matrix. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Frustum.hpp" line="39" column="16"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/db1/a03678_1aba238f43a2a65d53b67d94e54fc44c73" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db1/a03678_1af2b7dc6625287a344d5e4594068b0232" kindref="member">Planes</ref></type>
-        <definition>C3D_API Planes castor3d::Frustum::update</definition>
-        <argsstring>(castor::Point3f const &amp;position, castor::Point3f const &amp;right, castor::Point3f const &amp;up, castor::Point3f const &amp;front)</argsstring>
-        <name>update</name>
-        <qualifiedname>castor3d::Frustum::update</qualifiedname>
-        <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>position</declname>
-        </param>
-        <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>right</declname>
-        </param>
-        <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>up</declname>
-        </param>
-        <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>front</declname>
-        </param>
-        <briefdescription>
-<para>Updates the frustum planes. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">position</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The view position. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">right</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The X vector. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">up</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The Y vector. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">front</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The Z vector. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Frustum.hpp" line="55" column="16"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/db1/a03678_1a6e4569fb4dce16b4d39cc4cc61812e2f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db1/a03678_1af2b7dc6625287a344d5e4594068b0232" kindref="member">Planes</ref></type>
-        <definition>C3D_API Planes castor3d::Frustum::update</definition>
-        <argsstring>(castor::Point3f const &amp;eye, castor::Point3f const &amp;target, castor::Point3f const &amp;up)</argsstring>
-        <name>update</name>
-        <qualifiedname>castor3d::Frustum::update</qualifiedname>
-        <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>eye</declname>
-        </param>
-        <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>target</declname>
-        </param>
-        <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>up</declname>
-        </param>
-        <briefdescription>
-<para>Updates the frustum planes. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">eye</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The view position. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">target</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The view target vector. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">up</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The direction of the up vector according to the orientation of the view. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Frustum.hpp" line="71" column="16"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/db1/a03678_1ae48bac21e01ee4fb795ccbd9c9362def" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::Frustum::isVisible</definition>
-        <argsstring>(castor::BoundingBox const &amp;box, castor::Matrix4x4f const &amp;transformations) const</argsstring>
-        <name>isVisible</name>
-        <qualifiedname>castor3d::Frustum::isVisible</qualifiedname>
-        <param>
-          <type>castor::BoundingBox const &amp;</type>
-          <declname>box</declname>
-        </param>
-        <param>
-          <type>castor::Matrix4x4f const &amp;</type>
-          <declname>transformations</declname>
-        </param>
-        <briefdescription>
-<para>Checks if given BoundingBox is in the view frustum. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">box</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The BoundingBox. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">transformations</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The BoundingBox transformations matrix. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if the BoundingBox is completely out of the view frustum. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Frustum.hpp" line="87" column="14"/>
-        <referencedby refid="d7/d2e/a04482_1a4b024cf5dd96bcf933c8b90a70d2c183" compoundref="d2/d49/a01067" startline="188" endline="193">castor3d::Camera::isVisible</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="d4/db1/a03678_1a16f457e7f704ff5997fd560d24c2c837" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::Frustum::isVisible</definition>
-        <argsstring>(castor::BoundingSphere const &amp;sphere, castor::Matrix4x4f const &amp;transformations, castor::Point3f const &amp;scale) const</argsstring>
-        <name>isVisible</name>
-        <qualifiedname>castor3d::Frustum::isVisible</qualifiedname>
-        <param>
-          <type>castor::BoundingSphere const &amp;</type>
-          <declname>sphere</declname>
-        </param>
-        <param>
-          <type>castor::Matrix4x4f const &amp;</type>
-          <declname>transformations</declname>
-        </param>
-        <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>scale</declname>
-        </param>
-        <briefdescription>
-<para>Checks if given BoundingSphere is in the view frustum. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">sphere</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The BoundingSphere. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">transformations</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The BoundingSphere transformations matrix. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">scale</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The scale for the BoundingSphere. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if the BoundingSphere is completely out of the view frustum. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Frustum.hpp" line="104" column="14"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/db1/a03678_1a07a96b441fa9aed4e07afc234de59951" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::Frustum::isVisible</definition>
-        <argsstring>(castor::Point3f const &amp;point) const</argsstring>
-        <name>isVisible</name>
-        <qualifiedname>castor3d::Frustum::isVisible</qualifiedname>
-        <param>
-          <type>castor::Point3f const &amp;</type>
-          <declname>point</declname>
-        </param>
-        <briefdescription>
-<para>Checks if given point is in the view frustum. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">point</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The point. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-<simplesect kind="return"><para><computeroutput>false</computeroutput> if the point out of the view frustum. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Frustum.hpp" line="117" column="14"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/db1/a03678_1a7b589e4aa2b7e83aabc4fac9406779f8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>std::array&lt; <ref refid="df/d5f/a03494" kindref="compound">InterleavedVertex</ref>, 6u *4u &gt; const &amp;</type>
-        <definition>std::array&lt; InterleavedVertex, 6u *4u &gt; const  &amp; castor3d::Frustum::getPoints</definition>
-        <argsstring>() const</argsstring>
-        <name>getPoints</name>
-        <qualifiedname>castor3d::Frustum::getPoints</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Frustum.hpp" line="119" column="19" bodyfile="Render/Frustum.hpp" bodystart="119" bodyend="122"/>
+        <location file="Plugin/PluginModule.hpp" line="182" column="37" bodyfile="Plugin/PluginModule.hpp" bodystart="182" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
+<para>Helper structure to specialise a cache behaviour. <simplesect kind="remark"><para>Specialisation for <ref refid="d6/d35/a03670" kindref="compound">Plugin</ref>. </para>
+</simplesect>
+</para>
     </detaileddescription>
-    <location file="Render/Frustum.hpp" line="14" column="1" bodyfile="Render/Frustum.hpp" bodystart="15" bodyend="128"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::PtrCacheTraitsBaseT&lt; Plugin, castor::String &gt;</label>
+        <link refid="dc/ddf/a02622"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Plugin, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;</label>
+        <link refid="dc/ddf/a02622"/>
+      </node>
+      <node id="1">
+        <label>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</label>
+        <link refid="d4/db1/a03678"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::PtrCacheTraitsBaseT&lt; Plugin, castor::String &gt;</label>
+        <link refid="dc/ddf/a02622"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Plugin, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;</label>
+        <link refid="dc/ddf/a02622"/>
+      </node>
+      <node id="1">
+        <label>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</label>
+        <link refid="d4/db1/a03678"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Plugin/PluginModule.hpp" line="173" column="1" bodyfile="Plugin/PluginModule.hpp" bodystart="175" bodyend="183"/>
     <listofallmembers>
-      <member refid="d4/db1/a03678_1afa0a8d74d4e457579ab68e7de1ebded6" prot="public" virt="non-virtual"><scope>castor3d::Frustum</scope><name>Frustum</name></member>
-      <member refid="d4/db1/a03678_1a7b589e4aa2b7e83aabc4fac9406779f8" prot="public" virt="non-virtual"><scope>castor3d::Frustum</scope><name>getPoints</name></member>
-      <member refid="d4/db1/a03678_1ae48bac21e01ee4fb795ccbd9c9362def" prot="public" virt="non-virtual"><scope>castor3d::Frustum</scope><name>isVisible</name></member>
-      <member refid="d4/db1/a03678_1a16f457e7f704ff5997fd560d24c2c837" prot="public" virt="non-virtual"><scope>castor3d::Frustum</scope><name>isVisible</name></member>
-      <member refid="d4/db1/a03678_1a07a96b441fa9aed4e07afc234de59951" prot="public" virt="non-virtual"><scope>castor3d::Frustum</scope><name>isVisible</name></member>
-      <member refid="d4/db1/a03678_1a4505345d6a8071379ebca335efc70915" prot="private" virt="non-virtual"><scope>castor3d::Frustum</scope><name>m_planes</name></member>
-      <member refid="d4/db1/a03678_1a0d464d15a0b37727c886114a3f5d8795" prot="private" virt="non-virtual"><scope>castor3d::Frustum</scope><name>m_points</name></member>
-      <member refid="d4/db1/a03678_1ab1a37eb38bc788bb3cc42412b7997856" prot="private" virt="non-virtual"><scope>castor3d::Frustum</scope><name>m_viewport</name></member>
-      <member refid="d4/db1/a03678_1af2b7dc6625287a344d5e4594068b0232" prot="public" virt="non-virtual"><scope>castor3d::Frustum</scope><name>Planes</name></member>
-      <member refid="d4/db1/a03678_1a271f77a18d41523ed05b66cc09943699" prot="public" virt="non-virtual"><scope>castor3d::Frustum</scope><name>update</name></member>
-      <member refid="d4/db1/a03678_1aba238f43a2a65d53b67d94e54fc44c73" prot="public" virt="non-virtual"><scope>castor3d::Frustum</scope><name>update</name></member>
-      <member refid="d4/db1/a03678_1a6e4569fb4dce16b4d39cc4cc61812e2f" prot="public" virt="non-virtual"><scope>castor3d::Frustum</scope><name>update</name></member>
+      <member refid="dc/ddf/a02622_1aad74680d04a777cf6e1a48f5335e5bba" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="dc/ddf/a02622_1acc9650475bb6cfdd4b46f86662ee4d67" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="dc/ddf/a02622_1aace6e188551a79fe4c617062a3987c34" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="dc/ddf/a02622_1a604b98a8324764213e894ac5ff3192e4" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="d4/db1/a03678_1aef68b46ba183462d32e94a49a4f30dfe" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>Base</name></member>
+      <member refid="dc/ddf/a02622_1a0606136714bd1cb7209313f2ece3f687" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ElementCacheT</name></member>
+      <member refid="dc/ddf/a02622_1a021a9d07d6fb3fe77b7ef22b5d9fc7e8" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ElementCleanerT</name></member>
+      <member refid="dc/ddf/a02622_1acbb5da0cf908b54ec0b238b4bf290498" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ElementContT</name></member>
+      <member refid="dc/ddf/a02622_1af3b3d08e4639ccc06cbe81f6cb200a64" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ElementInitialiserT</name></member>
+      <member refid="dc/ddf/a02622_1a37487aa6a3179e261c465a659e7e232d" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ElementKeyT</name></member>
+      <member refid="dc/ddf/a02622_1a54c0975e844a33c1ef48f9284b13e984" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ElementMergerT</name></member>
+      <member refid="dc/ddf/a02622_1aeeb13142ba14f28398dcf1b902e1d7df" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ElementObsT</name></member>
+      <member refid="d4/db1/a03678_1aaacc30ce0b352a7897839640c9bb1fac" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ElementPtrT</name></member>
+      <member refid="d4/db1/a03678_1a5005be55b3e3371eceb9c3e751401de8" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ElementT</name></member>
+      <member refid="dc/ddf/a02622_1a97feed9b72e3c5d21e10571563ec56f5" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>isElementObsNull</name></member>
+      <member refid="d4/db1/a03678_1abd5210a976106167ac5461f5946a2759" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>KeyT</name></member>
+      <member refid="dc/ddf/a02622_1a5f00547170a4e85ac4c706f0ac32f9aa" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>makeElement</name></member>
+      <member refid="dc/ddf/a02622_1aba7dca15362049b6e793f1b99d419bb0" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>makeElementObs</name></member>
+      <member refid="d4/db1/a03678_1a5a4bfb21dc9cc00987e21d8231046cf2" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>Name</name></member>
+      <member refid="d4/db1/a03678_1a3a7ebedca12dc66d4cde1208fa098384" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ResT</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

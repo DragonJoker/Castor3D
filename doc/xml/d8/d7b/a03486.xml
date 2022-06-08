@@ -1,46 +1,757 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="d8/d7b/a03486" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::VertexBoneData::Weights::weights</compoundname>
-    <includes local="no">VertexBoneData.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d8/d7b/a03486_1acf40628e9abc3101fae5e16ea9ab945e" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::VertexBoneData::Weights::weights::weight0</definition>
-        <argsstring></argsstring>
-        <name>weight0</name>
-        <qualifiedname>castor3d::VertexBoneData::Weights::weights::weight0</qualifiedname>
+  <compounddef id="d8/d7b/a03486" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::Skeleton</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::Named</basecompoundref>
+    <basecompoundref refid="d5/db4/a02182" prot="public" virt="non-virtual">castor3d::AnimableT&lt; Engine &gt;</basecompoundref>
+    <includes local="no">Skeleton.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d8/d7b/a03486_1a318de2f3414e61315905e40eac92f3b5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Skeleton::Skeleton</definition>
+        <argsstring>(Skeleton &amp;&amp;rhs)=default</argsstring>
+        <name>Skeleton</name>
+        <qualifiedname>castor3d::Skeleton::Skeleton</qualifiedname>
+        <param>
+          <type><ref refid="d8/d7b/a03486" kindref="compound">Skeleton</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>name Copy / Move. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="107" column="17" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="107" bodyend="-1"/>
+        <location file="Model/Skeleton/Skeleton.hpp" line="32" column="9"/>
       </memberdef>
-      <memberdef kind="variable" id="d8/d7b/a03486_1adc631aa4a11633f4bea00eddec0a4a2c" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::VertexBoneData::Weights::weights::weight1</definition>
-        <argsstring></argsstring>
-        <name>weight1</name>
-        <qualifiedname>castor3d::VertexBoneData::Weights::weights::weight1</qualifiedname>
+      <memberdef kind="function" id="d8/d7b/a03486_1a1611648d985133af640b2d9dfdefb590" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d8/d7b/a03486" kindref="compound">Skeleton</ref> &amp;</type>
+        <definition>C3D_API Skeleton &amp; castor3d::Skeleton::operator=</definition>
+        <argsstring>(Skeleton &amp;&amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::Skeleton::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d8/d7b/a03486" kindref="compound">Skeleton</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Skeleton/VertexBoneData.hpp" line="108" column="17" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="108" bodyend="-1"/>
+        <location file="Model/Skeleton/Skeleton.hpp" line="33" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7b/a03486_1ab740c835437aba44b5728f73b8771b49" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Skeleton::Skeleton</definition>
+        <argsstring>(Skeleton const &amp;rhs)=delete</argsstring>
+        <name>Skeleton</name>
+        <qualifiedname>castor3d::Skeleton::Skeleton</qualifiedname>
+        <param>
+          <type><ref refid="d8/d7b/a03486" kindref="compound">Skeleton</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Skeleton.hpp" line="34" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7b/a03486_1a8f9f7aea869b5e52317d5975b0638189" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d8/d7b/a03486" kindref="compound">Skeleton</ref> &amp;</type>
+        <definition>C3D_API Skeleton &amp; castor3d::Skeleton::operator=</definition>
+        <argsstring>(Skeleton const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::Skeleton::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d8/d7b/a03486" kindref="compound">Skeleton</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Skeleton.hpp" line="35" column="19"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d8/d7b/a03486_1a991a2d42cb8877c7b55ab25fd0919d80" prot="private" static="no" mutable="no">
+        <type>SceneRPtr</type>
+        <definition>SceneRPtr castor3d::Skeleton::m_scene</definition>
+        <argsstring></argsstring>
+        <name>m_scene</name>
+        <qualifiedname>castor3d::Skeleton::m_scene</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Skeleton.hpp" line="181" column="11" bodyfile="Model/Skeleton/Skeleton.hpp" bodystart="181" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d7b/a03486_1af38a3bdd4eb3bfb6228fd49642c13c90" prot="private" static="no" mutable="no">
+        <type>SkeletonNodePtrArray</type>
+        <definition>SkeletonNodePtrArray castor3d::Skeleton::m_nodes</definition>
+        <argsstring></argsstring>
+        <name>m_nodes</name>
+        <qualifiedname>castor3d::Skeleton::m_nodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Skeleton.hpp" line="182" column="22" bodyfile="Model/Skeleton/Skeleton.hpp" bodystart="182" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d7b/a03486_1af467a037528ba565196057f78f5553f6" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d1/d07/a03482" kindref="compound">BoneNode</ref> * &gt;</type>
+        <definition>std::vector&lt; BoneNode * &gt; castor3d::Skeleton::m_bones</definition>
+        <argsstring></argsstring>
+        <name>m_bones</name>
+        <qualifiedname>castor3d::Skeleton::m_bones</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Skeleton.hpp" line="183" column="13" bodyfile="Model/Skeleton/Skeleton.hpp" bodystart="183" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d7b/a03486_1a4e49913373ae71f0a93a6a390644f962" prot="private" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::Skeleton::m_globalInverse</definition>
+        <argsstring></argsstring>
+        <name>m_globalInverse</name>
+        <qualifiedname>castor3d::Skeleton::m_globalInverse</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Skeleton.hpp" line="184" column="20" bodyfile="Model/Skeleton/Skeleton.hpp" bodystart="184" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d7b/a03486_1a86ec1030ff8111c61adea02e26c44901" prot="private" static="no" mutable="no">
+        <type>std::map&lt; <ref refid="db/dee/a03338" kindref="compound">Mesh</ref> *, std::vector&lt; castor::BoundingBox &gt; &gt;</type>
+        <definition>std::map&lt; Mesh *, std::vector&lt; castor::BoundingBox &gt; &gt; castor3d::Skeleton::m_boxes</definition>
+        <argsstring></argsstring>
+        <name>m_boxes</name>
+        <qualifiedname>castor3d::Skeleton::m_boxes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Skeleton.hpp" line="185" column="10" bodyfile="Model/Skeleton/Skeleton.hpp" bodystart="185" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="d8/d7b/a03486_1a23e0728cb45ed49d0530e010a39026a3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class BinaryWriter&lt; Skeleton &gt;</definition>
+        <argsstring></argsstring>
+        <name>BinaryWriter&lt; Skeleton &gt;</name>
+        <qualifiedname>castor3d::Skeleton::BinaryWriter&lt; Skeleton &gt;</qualifiedname>
+        <param>
+          <type><ref refid="d3/d58/a02302" kindref="compound">BinaryWriter</ref>&lt; <ref refid="d8/d7b/a03486" kindref="compound">Skeleton</ref> &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Skeleton.hpp" line="185" column="10" bodyfile="Model/Skeleton/Skeleton.hpp" bodystart="187" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="friend" id="d8/d7b/a03486_1a63e7cee079973561e00ab3eea32f801f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class BinaryParser&lt; Skeleton &gt;</definition>
+        <argsstring></argsstring>
+        <name>BinaryParser&lt; Skeleton &gt;</name>
+        <qualifiedname>castor3d::Skeleton::BinaryParser&lt; Skeleton &gt;</qualifiedname>
+        <param>
+          <type><ref refid="dd/dae/a02294" kindref="compound">BinaryParser</ref>&lt; <ref refid="d8/d7b/a03486" kindref="compound">Skeleton</ref> &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Skeleton.hpp" line="185" column="10" bodyfile="Model/Skeleton/Skeleton.hpp" bodystart="188" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/d7b/a03486_1a2b29415fd7e1fcae6230fa9434bf3926" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Skeleton::Skeleton</definition>
+        <argsstring>(castor::String name, Scene &amp;scene)</argsstring>
+        <name>Skeleton</name>
+        <qualifiedname>castor3d::Skeleton::Skeleton</qualifiedname>
+        <param>
+          <type>castor::String</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d12/a04694" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The skeleton name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Skeleton.hpp" line="47" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7b/a03486_1a9d89019bc8fac053d3a74563a2b3e277" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Skeleton::~Skeleton</definition>
+        <argsstring>() override</argsstring>
+        <name>~Skeleton</name>
+        <qualifiedname>castor3d::Skeleton::~Skeleton</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Skeleton.hpp" line="55" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7b/a03486_1a0c001e2d8a8bfdab3246574183276c55" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/d5e/a03502" kindref="compound">SkeletonNode</ref> *</type>
+        <definition>C3D_API SkeletonNode * castor3d::Skeleton::createNode</definition>
+        <argsstring>(castor::String name)</argsstring>
+        <name>createNode</name>
+        <qualifiedname>castor3d::Skeleton::createNode</qualifiedname>
+        <param>
+          <type>castor::String</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Creates a node. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The node name. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Skeleton.hpp" line="64" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7b/a03486_1ac7d200f273f1c0f283bc5fa98de1e743" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/d07/a03482" kindref="compound">BoneNode</ref> *</type>
+        <definition>C3D_API BoneNode * castor3d::Skeleton::createBone</definition>
+        <argsstring>(castor::String name, castor::Matrix4x4f const &amp;inverseTransform)</argsstring>
+        <name>createBone</name>
+        <qualifiedname>castor3d::Skeleton::createBone</qualifiedname>
+        <param>
+          <type>castor::String</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>inverseTransform</declname>
+        </param>
+        <briefdescription>
+<para>Creates a bone. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The bone name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">inverseTransform</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The transfromation matrix from mesh space to bone space. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Skeleton.hpp" line="75" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7b/a03486_1afa522396c922eaa97e59eeb4b16de094" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/d5e/a03502" kindref="compound">SkeletonNode</ref> *</type>
+        <definition>C3D_API SkeletonNode * castor3d::Skeleton::findNode</definition>
+        <argsstring>(castor::String const &amp;name) const</argsstring>
+        <name>findNode</name>
+        <qualifiedname>castor3d::Skeleton::findNode</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Finds a bone from a name. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The bone name. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Skeleton.hpp" line="85" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7b/a03486_1a7957164a08f508f57c33cea5cf305ccc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/d5e/a03502" kindref="compound">SkeletonNode</ref> *</type>
+        <definition>C3D_API SkeletonNode * castor3d::Skeleton::getRootNode</definition>
+        <argsstring>() const</argsstring>
+        <name>getRootNode</name>
+        <qualifiedname>castor3d::Skeleton::getRootNode</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The root skeleton node. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Skeleton.hpp" line="92" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7b/a03486_1acc71909c03fa2753a6a4c0ba35b9953d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Skeleton::setNodeParent</definition>
+        <argsstring>(SkeletonNode &amp;node, SkeletonNode &amp;parent)</argsstring>
+        <name>setNodeParent</name>
+        <qualifiedname>castor3d::Skeleton::setNodeParent</qualifiedname>
+        <param>
+          <type><ref refid="d1/d5e/a03502" kindref="compound">SkeletonNode</ref> &amp;</type>
+          <declname>node</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d5e/a03502" kindref="compound">SkeletonNode</ref> &amp;</type>
+          <declname>parent</declname>
+        </param>
+        <briefdescription>
+<para>Adds a node to another node&apos;s children. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">node</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The node. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent bone. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Skeleton.hpp" line="103" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7b/a03486_1a597ae2eaa4f24d73b54a252b9c23aa69" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d8/d01/a03458" kindref="compound">SkeletonAnimation</ref> &amp;</type>
+        <definition>C3D_API SkeletonAnimation &amp; castor3d::Skeleton::createAnimation</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>createAnimation</name>
+        <qualifiedname>castor3d::Skeleton::createAnimation</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Creates an animation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation name </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The animation </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Skeleton.hpp" line="114" column="28"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7b/a03486_1ac6b06a555c4ee36a28863007aaa4a632" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Skeleton::removeAnimation</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>removeAnimation</name>
+        <qualifiedname>castor3d::Skeleton::removeAnimation</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Removes an animation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation name </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Skeleton.hpp" line="123" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7b/a03486_1a7e5ef66bafab23fb8fa787e32d8190c9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Skeleton::computeContainers</definition>
+        <argsstring>(Mesh &amp;mesh)</argsstring>
+        <name>computeContainers</name>
+        <qualifiedname>castor3d::Skeleton::computeContainers</qualifiedname>
+        <param>
+          <type><ref refid="db/dee/a03338" kindref="compound">Mesh</ref> &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <briefdescription>
+<para>Computes the bounding box and sphere for each bone, for given mesh. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Skeleton.hpp" line="130" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7b/a03486_1a94b10197a8f1d5fb05d8090c199bcf7c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Matrix4x4f const &amp;</type>
+        <definition>castor::Matrix4x4f const  &amp; castor3d::Skeleton::getGlobalInverseTransform</definition>
+        <argsstring>() const</argsstring>
+        <name>getGlobalInverseTransform</name>
+        <qualifiedname>castor3d::Skeleton::getGlobalInverseTransform</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Skeleton.hpp" line="132" column="27" bodyfile="Model/Skeleton/Skeleton.hpp" bodystart="132" bodyend="135"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7b/a03486_1a064a2adbcdf559b8dcdc32a727fa899f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Skeleton::setGlobalInverseTransform</definition>
+        <argsstring>(castor::Matrix4x4f const &amp;transform)</argsstring>
+        <name>setGlobalInverseTransform</name>
+        <qualifiedname>castor3d::Skeleton::setGlobalInverseTransform</qualifiedname>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>transform</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Skeleton.hpp" line="137" column="6" bodyfile="Model/Skeleton/Skeleton.hpp" bodystart="137" bodyend="140"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7b/a03486_1a962f3d97ad4bbbece56e705f89e49929" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::vector&lt; <ref refid="d1/d07/a03482" kindref="compound">BoneNode</ref> * &gt; const &amp;</type>
+        <definition>std::vector&lt; BoneNode * &gt; const  &amp; castor3d::Skeleton::getBones</definition>
+        <argsstring>() const</argsstring>
+        <name>getBones</name>
+        <qualifiedname>castor3d::Skeleton::getBones</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Skeleton.hpp" line="142" column="20" bodyfile="Model/Skeleton/Skeleton.hpp" bodystart="142" bodyend="145"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7b/a03486_1a97a2d3342926a0f6130857b843ec29d1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>SkeletonNodePtrArray const &amp;</type>
+        <definition>SkeletonNodePtrArray const  &amp; castor3d::Skeleton::getNodes</definition>
+        <argsstring>() const</argsstring>
+        <name>getNodes</name>
+        <qualifiedname>castor3d::Skeleton::getNodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Skeleton.hpp" line="147" column="29" bodyfile="Model/Skeleton/Skeleton.hpp" bodystart="147" bodyend="150"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7b/a03486_1ae0b6dd8d140b163e1017ad98447d1fb8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor3d::Skeleton::getNodesCount</definition>
+        <argsstring>() const</argsstring>
+        <name>getNodesCount</name>
+        <qualifiedname>castor3d::Skeleton::getNodesCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Skeleton.hpp" line="152" column="8" bodyfile="Model/Skeleton/Skeleton.hpp" bodystart="152" bodyend="155"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7b/a03486_1ab5dda6fb48c5faedbda6f4256a3d1975" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor3d::Skeleton::getBonesCount</definition>
+        <argsstring>() const</argsstring>
+        <name>getBonesCount</name>
+        <qualifiedname>castor3d::Skeleton::getBonesCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Skeleton.hpp" line="157" column="8" bodyfile="Model/Skeleton/Skeleton.hpp" bodystart="157" bodyend="160"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7b/a03486_1aab4d5ff6fbd33cb78341bf7189d608a4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::vector&lt; castor::BoundingBox &gt; const &amp;</type>
+        <definition>std::vector&lt; castor::BoundingBox &gt; const  &amp; castor3d::Skeleton::getContainers</definition>
+        <argsstring>(Mesh &amp;mesh) const</argsstring>
+        <name>getContainers</name>
+        <qualifiedname>castor3d::Skeleton::getContainers</qualifiedname>
+        <param>
+          <type><ref refid="db/dee/a03338" kindref="compound">Mesh</ref> &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Skeleton.hpp" line="162" column="20" bodyfile="Model/Skeleton/Skeleton.hpp" bodystart="162" bodyend="173"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7b/a03486_1afdf3e15108d4bff49e823f1d6fab1bee" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>SceneRPtr</type>
+        <definition>SceneRPtr castor3d::Skeleton::getScene</definition>
+        <argsstring>() const</argsstring>
+        <name>getScene</name>
+        <qualifiedname>castor3d::Skeleton::getScene</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Skeleton.hpp" line="175" column="11" bodyfile="Model/Skeleton/Skeleton.hpp" bodystart="175" bodyend="178"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Model/Skeleton/VertexBoneData.hpp" line="105" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="106" bodyend="109"/>
+    <inheritancegraph>
+      <node id="3">
+        <label>Animable</label>
+        <link refid="d5/db4/a02182"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d5/db4/a02182"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::Skeleton</label>
+        <link refid="d8/d7b/a03486"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
+      </node>
+      <node id="6">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>Animable</label>
+        <link refid="d5/db4/a02182"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>K</label>
+      </node>
+      <node id="8">
+        <label>T</label>
+      </node>
+      <node id="9">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d5/db4/a02182"/>
+        <childnode refid="10" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::Skeleton</label>
+        <link refid="d8/d7b/a03486"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
+      </node>
+      <node id="10">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="5">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Skeleton/Skeleton.hpp" line="20" column="1" bodyfile="Model/Skeleton/Skeleton.hpp" bodystart="23" bodyend="189"/>
     <listofallmembers>
-      <member refid="d8/d7b/a03486_1acf40628e9abc3101fae5e16ea9ab945e" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Weights::weights</scope><name>weight0</name></member>
-      <member refid="d8/d7b/a03486_1adc631aa4a11633f4bea00eddec0a4a2c" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Weights::weights</scope><name>weight1</name></member>
+      <member refid="d5/db4/a02182_1af537797cc01d440454c256b7d93134a7" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>addAnimation</name></member>
+      <member refid="d5/db4/a02182_1acce1c5516d8c2b672521f796eca097f6" prot="protected" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>AnimableT</name></member>
+      <member refid="d5/db4/a02182_1afe54e724ce1c5fd9741352a83cc15310" prot="protected" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>AnimableT</name></member>
+      <member refid="d5/db4/a02182_1aa7d1ea320b354786c4d88e06999ce873" prot="protected" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>AnimableT</name></member>
+      <member refid="d5/db4/a02182_1a29ec9b70c2d5c178be151157abb4caa4" prot="protected" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>Animation</name></member>
+      <member refid="d5/db4/a02182_1aca88557443e107614050566026b351d2" prot="protected" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>AnimationPtr</name></member>
+      <member refid="d5/db4/a02182_1af6c9f4d7479c5f8a0431ffe7cc988273" prot="protected" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>AnimationPtrStrMap</name></member>
+      <member refid="d8/d7b/a03486_1a63e7cee079973561e00ab3eea32f801f" prot="private" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>BinaryParser&lt; Skeleton &gt;</name></member>
+      <member refid="d8/d7b/a03486_1a23e0728cb45ed49d0530e010a39026a3" prot="private" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>BinaryWriter&lt; Skeleton &gt;</name></member>
+      <member refid="d5/db4/a02182_1a54363c138d022e02a6da2881e8cfcea2" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>cleanupAnimations</name></member>
+      <member refid="d8/d7b/a03486_1a7e5ef66bafab23fb8fa787e32d8190c9" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>computeContainers</name></member>
+      <member refid="d8/d7b/a03486_1a597ae2eaa4f24d73b54a252b9c23aa69" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>createAnimation</name></member>
+      <member refid="d8/d7b/a03486_1ac7d200f273f1c0f283bc5fa98de1e743" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>createBone</name></member>
+      <member refid="d8/d7b/a03486_1a0c001e2d8a8bfdab3246574183276c55" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>createNode</name></member>
+      <member refid="d5/db4/a02182_1a1bebab2a91849a6d03743a60742855d2" prot="protected" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>doGetAnimation</name></member>
+      <member refid="d5/db4/a02182_1ab0befd7350748e1d432232aef30bf3af" prot="protected" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>doGetAnimation</name></member>
+      <member refid="d5/db4/a02182_1a5c0a28cfebad1a69862d34d5f15f9341" prot="protected" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>doRemoveAnimation</name></member>
+      <member refid="d8/d7b/a03486_1afa522396c922eaa97e59eeb4b16de094" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>findNode</name></member>
+      <member refid="d5/db4/a02182_1ab4eee25a3c5fa4b3ac239c9d94e41aed" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>getAnimation</name></member>
+      <member refid="d5/db4/a02182_1a9a19c79051ae04d61170004d981d72c3" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>getAnimation</name></member>
+      <member refid="d5/db4/a02182_1ac571ecbb144caf52d813ae3c838d8455" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>getAnimations</name></member>
+      <member refid="d8/d7b/a03486_1a962f3d97ad4bbbece56e705f89e49929" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>getBones</name></member>
+      <member refid="d8/d7b/a03486_1ab5dda6fb48c5faedbda6f4256a3d1975" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>getBonesCount</name></member>
+      <member refid="d8/d7b/a03486_1aab4d5ff6fbd33cb78341bf7189d608a4" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>getContainers</name></member>
+      <member refid="d8/d7b/a03486_1a94b10197a8f1d5fb05d8090c199bcf7c" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>getGlobalInverseTransform</name></member>
+      <member refid="d8/d7b/a03486_1a97a2d3342926a0f6130857b843ec29d1" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>getNodes</name></member>
+      <member refid="d8/d7b/a03486_1ae0b6dd8d140b163e1017ad98447d1fb8" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>getNodesCount</name></member>
+      <member refid="d8/d7b/a03486_1a7957164a08f508f57c33cea5cf305ccc" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>getRootNode</name></member>
+      <member refid="d8/d7b/a03486_1afdf3e15108d4bff49e823f1d6fab1bee" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>getScene</name></member>
+      <member refid="d5/db4/a02182_1ab96f3e18b0d1e54dccfa3fa9078f773f" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>hasAnimation</name></member>
+      <member refid="d5/db4/a02182_1ad49b8e50e5ed96d16d9c50c3854e0a22" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>hasAnimation</name></member>
+      <member refid="d5/db4/a02182_1a1fe2cb0e093c4e7a200531a0c6c4f09e" prot="protected" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>m_animations</name></member>
+      <member refid="d8/d7b/a03486_1af467a037528ba565196057f78f5553f6" prot="private" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>m_bones</name></member>
+      <member refid="d8/d7b/a03486_1a86ec1030ff8111c61adea02e26c44901" prot="private" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>m_boxes</name></member>
+      <member refid="d8/d7b/a03486_1a4e49913373ae71f0a93a6a390644f962" prot="private" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>m_globalInverse</name></member>
+      <member refid="d8/d7b/a03486_1af38a3bdd4eb3bfb6228fd49642c13c90" prot="private" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>m_nodes</name></member>
+      <member refid="d8/d7b/a03486_1a991a2d42cb8877c7b55ab25fd0919d80" prot="private" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>m_scene</name></member>
+      <member refid="d8/d7b/a03486_1a1611648d985133af640b2d9dfdefb590" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>operator=</name></member>
+      <member refid="d8/d7b/a03486_1a8f9f7aea869b5e52317d5975b0638189" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>operator=</name></member>
+      <member refid="d5/db4/a02182_1a317d10f31a3f138315e2a18a41f37b80" prot="protected" virt="non-virtual" ambiguityscope="AnimableT&lt; Engine &gt;::"><scope>castor3d::Skeleton</scope><name>operator=</name></member>
+      <member refid="d5/db4/a02182_1a207720462d3a7e48b69b6ae188e4414b" prot="protected" virt="non-virtual" ambiguityscope="AnimableT&lt; Engine &gt;::"><scope>castor3d::Skeleton</scope><name>operator=</name></member>
+      <member refid="d8/d7b/a03486_1ac6b06a555c4ee36a28863007aaa4a632" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>removeAnimation</name></member>
+      <member refid="d8/d7b/a03486_1a064a2adbcdf559b8dcdc32a727fa899f" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>setGlobalInverseTransform</name></member>
+      <member refid="d8/d7b/a03486_1acc71909c03fa2753a6a4c0ba35b9953d" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>setNodeParent</name></member>
+      <member refid="d8/d7b/a03486_1a318de2f3414e61315905e40eac92f3b5" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>Skeleton</name></member>
+      <member refid="d8/d7b/a03486_1ab740c835437aba44b5728f73b8771b49" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>Skeleton</name></member>
+      <member refid="d8/d7b/a03486_1a2b29415fd7e1fcae6230fa9434bf3926" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>Skeleton</name></member>
+      <member refid="d5/db4/a02182_1ad8c43c6eb51ab1fa4bff4b1ade280e71" prot="public" virt="virtual"><scope>castor3d::Skeleton</scope><name>~AnimableT</name></member>
+      <member refid="d8/d7b/a03486_1a9d89019bc8fac053d3a74563a2b3e277" prot="public" virt="non-virtual"><scope>castor3d::Skeleton</scope><name>~Skeleton</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

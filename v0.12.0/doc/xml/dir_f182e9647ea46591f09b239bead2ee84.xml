@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dir_f182e9647ea46591f09b239bead2ee84" kind="dir">
+    <compoundname>Material/Pass/Phong</compoundname>
+    <innerdir refid="dir_a6d39f94f30b7e21e1610ee95d9a533e">Material/Pass/Phong/Shaders</innerdir>
+    <innerfile refid="dd/d4e/a00329">BlinnPhongPass.hpp</innerfile>
+    <innerfile refid="dc/d50/a00332">PhongPass.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Material/Pass/Phong/"/>
+  </compounddef>
+</doxygen>

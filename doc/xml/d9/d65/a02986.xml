@@ -22,7 +22,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="114" column="6" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="114" bodyend="117"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="116" column="6" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="116" bodyend="119"/>
         <references refid="da/deb/a03274_1adaa9491fcdbb041db68a6d07f3a3344d">castor3d::ProgressBar::step</references>
       </memberdef>
       <memberdef kind="function" id="d9/d65/a02986_1a6c0565e5148b5622aa276441c9c56f9a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
@@ -41,8 +41,8 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="119" column="6" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="119" bodyend="122"/>
-        <references refid="da/deb/a03274_1ace55e4bed10c8538dfea0cc5f7ddd826" compoundref="df/d15/a00416" startline="30" endline="33">castor3d::ProgressBar::setRange</references>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="121" column="6" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="121" bodyend="124"/>
+        <references refid="da/deb/a03274_1ace55e4bed10c8538dfea0cc5f7ddd826" compoundref="d1/d7e/a00434" startline="34" endline="37">castor3d::ProgressBar::setRange</references>
       </memberdef>
       <memberdef kind="function" id="d9/d65/a02986_1a26edc01f0d1e686e6c47439ef46148b2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -60,8 +60,8 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="124" column="6" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="124" bodyend="127"/>
-        <references refid="da/deb/a03274_1a85189fe3a0429ed175e29ad98f595da8" compoundref="df/d15/a00416" startline="35" endline="38">castor3d::ProgressBar::incRange</references>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="126" column="6" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="126" bodyend="129"/>
+        <references refid="da/deb/a03274_1a85189fe3a0429ed175e29ad98f595da8" compoundref="d1/d7e/a00434" startline="39" endline="42">castor3d::ProgressBar::incRange</references>
       </memberdef>
       </sectiondef>
       <sectiondef kind="user-defined">
@@ -78,8 +78,8 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="138" column="10" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="138" bodyend="141"/>
-        <references refid="da/deb/a03274_1a9cca7d88d91d201751163c0b3820b50c" compoundref="df/d15/a00416" startline="40" endline="43">castor3d::ProgressBar::getIndex</references>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="140" column="10" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="140" bodyend="143"/>
+        <references refid="da/deb/a03274_1a9cca7d88d91d201751163c0b3820b50c" compoundref="d1/d7e/a00434" startline="44" endline="47">castor3d::ProgressBar::getIndex</references>
       </memberdef>
       <memberdef kind="function" id="d9/d65/a02986_1a23dc728bfd3ea48d84269f79c040b5bb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -93,7 +93,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="143" column="6" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="143" bodyend="146"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="145" column="6" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="145" bodyend="148"/>
       </memberdef>
       <memberdef kind="function" id="d9/d65/a02986_1ad6a151f055e607a3ed95d55c25dcf639" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="da/deb/a03274" kindref="compound">ProgressBar</ref> &amp;</type>
@@ -107,12 +107,12 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="148" column="14" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="148" bodyend="151"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="150" column="14" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="150" bodyend="153"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-static-attrib">
       <memberdef kind="variable" id="d9/d65/a02986_1a95a1a00a914b3faa2d571232a185f148" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
         <definition>C3D_API castor::String const castor3d::LoadingScreen::SceneName</definition>
         <argsstring></argsstring>
         <name>SceneName</name>
@@ -123,12 +123,12 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="161" column="37" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="161" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="163" column="37" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="163" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-attrib">
       <memberdef kind="variable" id="d9/d65/a02986_1a1a01ef371bcf00b8fb536bf4b4436c1e" prot="private" static="no" mutable="no">
-        <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <type><ref refid="df/d75/a04010" kindref="compound">RenderDevice</ref> const  &amp;</type>
         <definition>RenderDevice const&amp; castor3d::LoadingScreen::m_device</definition>
         <argsstring></argsstring>
         <name>m_device</name>
@@ -139,7 +139,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="203" column="21" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="203" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="205" column="21" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="205" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d9/d65/a02986_1abaf1e2eaf70bd3dd76ce4eb0bd878568" prot="private" static="no" mutable="no">
         <type><ref refid="da/deb/a03274" kindref="compound">ProgressBar</ref> &amp;</type>
@@ -153,7 +153,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="204" column="14" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="204" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="206" column="14" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="206" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d9/d65/a02986_1acf11c45c56f7b20ac1ce6584a7eff119" prot="private" static="no" mutable="no">
         <type>crg::FrameGraph</type>
@@ -167,7 +167,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="205" column="17" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="205" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="207" column="17" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="207" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d9/d65/a02986_1a0c3602777e6d8f89fa43fbdc6700f5d0" prot="private" static="no" mutable="no">
         <type>std::atomic_bool</type>
@@ -182,7 +182,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="206" column="18" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="206" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="208" column="18" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="208" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d9/d65/a02986_1ad996b6ed6e18cd63f289ded9f0d4b839" prot="private" static="no" mutable="no">
         <type>SceneRPtr</type>
@@ -196,10 +196,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="207" column="11" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="207" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="209" column="11" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="209" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d9/d65/a02986_1ae316d81fb6ed0830bb4d182a92538d2d" prot="private" static="no" mutable="no">
-        <type><ref refid="d8/d1f/a04450" kindref="compound">SceneBackground</ref> &amp;</type>
+        <type><ref refid="d9/d73/a04542" kindref="compound">SceneBackground</ref> &amp;</type>
         <definition>SceneBackground&amp; castor3d::LoadingScreen::m_background</definition>
         <argsstring></argsstring>
         <name>m_background</name>
@@ -210,7 +210,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="208" column="18" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="208" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="210" column="18" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="210" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d9/d65/a02986_1af7d47703aa15d53cdee613c3021c68d4" prot="private" static="no" mutable="no">
         <type>VkRenderPass</type>
@@ -224,7 +224,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="209" column="14" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="209" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="211" column="14" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="211" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d9/d65/a02986_1a888426eba6ed98189dda4a52004e02f6" prot="private" static="no" mutable="no">
         <type>castor::Size</type>
@@ -238,7 +238,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="210" column="14" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="210" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="212" column="14" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="212" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d9/d65/a02986_1a553fcfa6e37ee813bc9ba2ddf66a260f" prot="private" static="no" mutable="no">
         <type>CameraSPtr</type>
@@ -252,7 +252,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="211" column="12" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="211" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="213" column="12" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="213" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d9/d65/a02986_1a77ed17acb5cc7ed232bf0a558b30537d" prot="private" static="no" mutable="no">
         <type>SceneCullerUPtr</type>
@@ -266,10 +266,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="212" column="17" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="212" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="214" column="17" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="214" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d9/d65/a02986_1a329da09052c3a1fdbc5f017931bd00f2" prot="private" static="no" mutable="no">
-        <type><ref refid="d3/d8c/a04318" kindref="compound">Texture</ref></type>
+        <type><ref refid="db/dc9/a04378" kindref="compound">Texture</ref></type>
         <definition>Texture castor3d::LoadingScreen::m_colour</definition>
         <argsstring></argsstring>
         <name>m_colour</name>
@@ -280,10 +280,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="213" column="9" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="213" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="215" column="9" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="215" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d9/d65/a02986_1a6de273cd7e5929ea975d946bb81bfe3b" prot="private" static="no" mutable="no">
-        <type><ref refid="d3/d8c/a04318" kindref="compound">Texture</ref></type>
+        <type><ref refid="db/dc9/a04378" kindref="compound">Texture</ref></type>
         <definition>Texture castor3d::LoadingScreen::m_depth</definition>
         <argsstring></argsstring>
         <name>m_depth</name>
@@ -294,10 +294,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="214" column="9" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="214" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="216" column="9" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="216" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d9/d65/a02986_1a8976534b2d87b782cfa6f05ae4d66d25" prot="private" static="no" mutable="no">
-        <type><ref refid="da/d8f/a04930" kindref="compound">MatrixUbo</ref></type>
+        <type><ref refid="da/df4/a05050" kindref="compound">MatrixUbo</ref></type>
         <definition>MatrixUbo castor3d::LoadingScreen::m_matrixUbo</definition>
         <argsstring></argsstring>
         <name>m_matrixUbo</name>
@@ -308,10 +308,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="215" column="11" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="215" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="217" column="11" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="217" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d9/d65/a02986_1aed30b196551c0ad9b1fd560171c8ba16" prot="private" static="no" mutable="no">
-        <type><ref refid="da/dd2/a04898" kindref="compound">HdrConfigUbo</ref></type>
+        <type><ref refid="d8/d10/a05018" kindref="compound">HdrConfigUbo</ref></type>
         <definition>HdrConfigUbo castor3d::LoadingScreen::m_hdrConfigUbo</definition>
         <argsstring></argsstring>
         <name>m_hdrConfigUbo</name>
@@ -322,10 +322,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="216" column="14" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="216" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="218" column="14" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="218" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d9/d65/a02986_1a6fa1ffb200f80673f53b0263ff0b09c5" prot="private" static="no" mutable="no">
-        <type><ref refid="db/db8/a04970" kindref="compound">SceneUbo</ref></type>
+        <type><ref refid="dd/d94/a05102" kindref="compound">SceneUbo</ref></type>
         <definition>SceneUbo castor3d::LoadingScreen::m_sceneUbo</definition>
         <argsstring></argsstring>
         <name>m_sceneUbo</name>
@@ -336,7 +336,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="217" column="10" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="217" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="219" column="10" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="219" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d9/d65/a02986_1a3aed02bc15cbd1283aa95436c88acb3b" prot="private" static="no" mutable="no">
         <type>BackgroundRendererUPtr</type>
@@ -350,7 +350,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="218" column="24" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="218" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="220" column="24" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="220" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d9/d65/a02986_1a96090cc1d15706cb3160327111d64882" prot="private" static="no" mutable="no">
         <type>crg::FramePass *</type>
@@ -365,10 +365,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="219" column="17" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="219" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="221" column="17" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="221" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d9/d65/a02986_1aa9dc73fc15d903f4a437f5b1b120d68f" prot="private" static="no" mutable="no">
-        <type><ref refid="de/d3f/a04290" kindref="compound">RenderTechniquePass</ref> *</type>
+        <type><ref refid="dd/d0e/a04350" kindref="compound">RenderTechniquePass</ref> *</type>
         <definition>RenderTechniquePass* castor3d::LoadingScreen::m_opaquePass</definition>
         <argsstring></argsstring>
         <name>m_opaquePass</name>
@@ -380,7 +380,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="220" column="22" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="220" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="222" column="22" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="222" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d9/d65/a02986_1adb08a618e898c924e653dccb6a48c115" prot="private" static="no" mutable="no">
         <type>crg::FramePass *</type>
@@ -395,10 +395,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="221" column="17" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="221" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="223" column="17" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="223" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d9/d65/a02986_1a5edb580367a9c4b38a7cf3f84577149a" prot="private" static="no" mutable="no">
-        <type><ref refid="de/d3f/a04290" kindref="compound">RenderTechniquePass</ref> *</type>
+        <type><ref refid="dd/d0e/a04350" kindref="compound">RenderTechniquePass</ref> *</type>
         <definition>RenderTechniquePass* castor3d::LoadingScreen::m_transparentPass</definition>
         <argsstring></argsstring>
         <name>m_transparentPass</name>
@@ -410,7 +410,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="222" column="22" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="222" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="224" column="22" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="224" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d9/d65/a02986_1ac48d25bcae0e57b4712849c03bf1f108" prot="private" static="no" mutable="no">
         <type>crg::FramePass *</type>
@@ -425,10 +425,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="223" column="17" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="223" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="225" column="17" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="225" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d9/d65/a02986_1acb4fb2b397b1daadeb631522023bac78" prot="private" static="no" mutable="no">
-        <type><ref refid="d7/db3/a03846" kindref="compound">OverlayPass</ref> *</type>
+        <type><ref refid="d6/d94/a03894" kindref="compound">OverlayPass</ref> *</type>
         <definition>OverlayPass* castor3d::LoadingScreen::m_overlayPass</definition>
         <argsstring></argsstring>
         <name>m_overlayPass</name>
@@ -440,7 +440,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="224" column="14" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="224" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="226" column="14" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="226" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d9/d65/a02986_1ad89c39f8a87ee37503542677b756ec59" prot="private" static="no" mutable="no">
         <type>crg::FramePass *</type>
@@ -455,7 +455,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="225" column="17" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="225" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="227" column="17" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="227" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d9/d65/a02986_1a675814667fe4f17fcf372c9167b7c7bb" prot="private" static="no" mutable="no">
         <type>WindowPass *</type>
@@ -470,7 +470,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="226" column="13" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="226" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="228" column="13" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="228" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d9/d65/a02986_1a316c219949d764cc25c67aee00602dda" prot="private" static="no" mutable="no">
         <type>crg::RunnableGraphPtr</type>
@@ -484,12 +484,12 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="227" column="23" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="227" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="229" column="23" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="229" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
       <memberdef kind="function" id="d9/d65/a02986_1ae87672ae8b9a44a189d7fb6ff243ef93" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
         <definition>C3D_API castor3d::LoadingScreen::LoadingScreen</definition>
         <argsstring>(ProgressBar &amp;progressBar, RenderDevice const &amp;device, crg::ResourceHandler &amp;handler, SceneRPtr scene, VkRenderPass renderPass, castor::Size const &amp;size)</argsstring>
         <name>LoadingScreen</name>
@@ -499,7 +499,7 @@
           <declname>progressBar</declname>
         </param>
         <param>
-          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <type><ref refid="df/d75/a04010" kindref="compound">RenderDevice</ref> const &amp;</type>
           <declname>device</declname>
         </param>
         <param>
@@ -524,10 +524,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="36" column="9"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="38" column="9"/>
       </memberdef>
       <memberdef kind="function" id="d9/d65/a02986_1af61d86452a6f060ff55967047ca64405" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
         <definition>C3D_API castor3d::LoadingScreen::~LoadingScreen</definition>
         <argsstring>()</argsstring>
         <name>~LoadingScreen</name>
@@ -538,10 +538,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="42" column="9"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="44" column="9"/>
       </memberdef>
       <memberdef kind="function" id="d9/d65/a02986_1aac914217da82edaa38a5c2fa9ef3c07e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
         <definition>C3D_API void castor3d::LoadingScreen::enable</definition>
         <argsstring>()</argsstring>
         <name>enable</name>
@@ -552,10 +552,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="44" column="14"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="46" column="14"/>
       </memberdef>
       <memberdef kind="function" id="d9/d65/a02986_1ad3fea55f69bf30d23d74ad46cf586536" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
         <definition>C3D_API void castor3d::LoadingScreen::disable</definition>
         <argsstring>()</argsstring>
         <name>disable</name>
@@ -566,16 +566,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="45" column="14"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="47" column="14"/>
       </memberdef>
       <memberdef kind="function" id="d9/d65/a02986_1a4471ffde8b3c96f5652a198f4535096e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
         <definition>C3D_API void castor3d::LoadingScreen::update</definition>
         <argsstring>(CpuUpdater &amp;updater)</argsstring>
         <name>update</name>
         <qualifiedname>castor3d::LoadingScreen::update</qualifiedname>
         <param>
-          <type><ref refid="d3/d14/a04046" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <type><ref refid="df/d4e/a04094" kindref="compound">CpuUpdater</ref> &amp;</type>
           <declname>updater</declname>
         </param>
         <briefdescription>
@@ -584,16 +584,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="46" column="14"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="48" column="14"/>
       </memberdef>
       <memberdef kind="function" id="d9/d65/a02986_1af23e6f7c202d3e7ff349c8ad3a18d339" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
         <definition>C3D_API void castor3d::LoadingScreen::update</definition>
         <argsstring>(GpuUpdater &amp;updater)</argsstring>
         <name>update</name>
         <qualifiedname>castor3d::LoadingScreen::update</qualifiedname>
         <param>
-          <type><ref refid="dd/daf/a04050" kindref="compound">GpuUpdater</ref> &amp;</type>
+          <type><ref refid="d4/da2/a04102" kindref="compound">GpuUpdater</ref> &amp;</type>
           <declname>updater</declname>
         </param>
         <briefdescription>
@@ -602,10 +602,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="47" column="14"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="49" column="14"/>
       </memberdef>
       <memberdef kind="function" id="d9/d65/a02986_1af4a323da9dc3f5319c87b16f812244c5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
         <definition>C3D_API void castor3d::LoadingScreen::setRenderPass</definition>
         <argsstring>(VkRenderPass renderPass, castor::Size const &amp;renderSize)</argsstring>
         <name>setRenderPass</name>
@@ -624,10 +624,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="48" column="14"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="50" column="14"/>
       </memberdef>
       <memberdef kind="function" id="d9/d65/a02986_1a1bed66312bfedd6b542c4ca358f10c3d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
         <definition>C3D_API void castor3d::LoadingScreen::upload</definition>
         <argsstring>(ashes::CommandBuffer const &amp;cb)</argsstring>
         <name>upload</name>
@@ -653,10 +653,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="58" column="14"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="60" column="14"/>
       </memberdef>
       <memberdef kind="function" id="d9/d65/a02986_1ad3e463d75cc62be85675578088e7464f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> crg::SemaphoreWaitArray</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> crg::SemaphoreWaitArray</type>
         <definition>C3D_API crg::SemaphoreWaitArray castor3d::LoadingScreen::render</definition>
         <argsstring>(ashes::Queue const &amp;queue, ashes::FrameBuffer const &amp;framebuffer, crg::SemaphoreWaitArray const &amp;toWait, crg::Fence *&amp;fence)</argsstring>
         <name>render</name>
@@ -720,8 +720,8 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="75" column="33"/>
-        <referencedby refid="d9/d65/a02986_1a72803ebc5f3bc97c25db3e32c525c884" compoundref="db/dbc/a00395" startline="95" endline="104">render</referencedby>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="77" column="33"/>
+        <referencedby refid="d9/d65/a02986_1a72803ebc5f3bc97c25db3e32c525c884" compoundref="da/d9c/a00413" startline="97" endline="106">render</referencedby>
       </memberdef>
       <memberdef kind="function" id="d9/d65/a02986_1a72803ebc5f3bc97c25db3e32c525c884" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>crg::SemaphoreWaitArray</type>
@@ -788,7 +788,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="95" column="25" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="95" bodyend="104"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="97" column="25" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="97" bodyend="106"/>
         <references refid="d9/d65/a02986_1ad3e463d75cc62be85675578088e7464f">render</references>
       </memberdef>
       </sectiondef>
@@ -809,7 +809,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="155" column="17"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="157" column="17"/>
       </memberdef>
       <memberdef kind="function" id="d9/d65/a02986_1a655ca3b0748430dad89aa3b6646a758a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>crg::FramePass &amp;</type>
@@ -827,7 +827,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="156" column="17"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="158" column="17"/>
       </memberdef>
       <memberdef kind="function" id="d9/d65/a02986_1a89340b07db516bf59f552adc3f630ba8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>crg::FramePass &amp;</type>
@@ -845,7 +845,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="157" column="17"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="159" column="17"/>
       </memberdef>
       <memberdef kind="function" id="d9/d65/a02986_1a8ad0b1f2442ee02b32cbf29bf2ba418f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>crg::FramePass &amp;</type>
@@ -863,14 +863,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="158" column="17"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="160" column="17"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/LoadingScreen.hpp" line="33" column="1" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="34" bodyend="228"/>
+    <location file="Miscellaneous/LoadingScreen.hpp" line="35" column="1" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="36" bodyend="230"/>
     <listofallmembers>
       <member refid="d9/d65/a02986_1ad3fea55f69bf30d23d74ad46cf586536" prot="public" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>disable</name></member>
       <member refid="d9/d65/a02986_1aea81718995e11a25d1e6fdfdb9b8fbb1" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen</scope><name>doCreateOpaquePass</name></member>

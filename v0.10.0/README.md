@@ -62,6 +62,14 @@ Implemented Plug-ins
 - ReinhardToneMapping: Reinhard tone mapping.
 - Uncharted2ToneMapping: Uncharted 2 tone mapping.
 
+Links
+-----
+
+- [Building Castor3D](https://dragonjoker.github.io/Castor3D/v0.10.0/pages/build)
+- [API Documentation](https://dragonjoker.github.io/Castor3D/v0.10.0/doc)
+
+Screenshots
+-----------
 
 <a href="./img/Sponza-PBR-Bloom.png"><img alt="Sponza" src="./img/Sponza-PBR-Bloom-Small.png"></a>
 <a href="./img/Cerberus-PBR.png"><img alt="Cerberus" src="./img/Cerberus-PBR-Small.png"></a>
@@ -69,10 +77,3 @@ Implemented Plug-ins
 <a href="./img/Park-PBR.png"><img alt="Park, PBR" src="./img/Park-PBR-Small.png"></a>
 <a href="./img/Nyra-PBR-MR.png"><img alt="Nyra, PBR" src="./img/Nyra-PBR-MR-Small.png"></a>
 <a href="./img/SanMiguel-PBR-SG.png"><img alt="SanMiguel, PBR" src="./img/SanMiguel-PBR-SG-Small.png"></a>
-
-Links
------
-
-- [Building Castor3D](https://dragonjoker.github.io/Castor3D/v0.10.0/pages/build)
-- [API Documentation](https://dragonjoker.github.io/Castor3D/v0.10.0/doc)
-- [Playlist on YouTube](https://www.youtube.com/playlist?list=PLKA1SVXuAbMNaFbSJyAN_4yD2bzNlgES3)

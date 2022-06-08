@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -49,8 +49,8 @@ $(function() {
 <p >Castor3D is a 3D engine written in C++ 17.</p>
 <p >It works on Windows and GNU/Linux.</p>
 <p >It relies on Ashes as a rendering API, allowing Vulkan, Direct3D 11, and OpenGL.</p>
-<p >The project itself is compilable on supported platforms using CMake (cf. <a class="el" href="df/d5f/a10773.html">build</a>).</p>
-<h1><a class="anchor" id="autotoc_md207"></a>
+<p >The project itself is compilable on supported platforms using CMake (cf. <a class="el" href="d7/d67/a11360.html">build</a>).</p>
+<h1><a class="anchor" id="autotoc_md209"></a>
 Features</h1>
 <ul>
 <li>Deferred rendering for opaque objects.</li>
@@ -72,25 +72,26 @@ Features</h1>
 <li>Modular architecture through plug-ins.</li>
 <li>Shaders are generated automatically from pipeline configuration.</li>
 <li>Shaders are writable directly from C++ code.</li>
-<li>Scenes are described using a text format easily comprehensible and extensible. (<a class="el" href="d2/df2/a10776.html">Scene File</a>)</li>
+<li>Scenes are described using a text format easily comprehensible and extensible. (<a class="el" href="d9/d42/a11363.html">Scene File</a>)</li>
 <li>Asynchronous (timers) or synchronour (thread) rendering.</li>
+<li>Using Mesh and Task shaders, if available.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md208"></a>
+<h1><a class="anchor" id="autotoc_md210"></a>
 Implemented Plug-ins</h1>
-<h2><a class="anchor" id="autotoc_md209"></a>
+<h2><a class="anchor" id="autotoc_md211"></a>
 Importers</h2>
 <ul>
 <li>ASSIMP: Multiple format mesh importer.</li>
 <li>PLY: Stanford Polygon library mesh importer.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md210"></a>
+<h2><a class="anchor" id="autotoc_md212"></a>
 Dividers</h2>
 <ul>
 <li>Loop subdivision surfaces.</li>
 <li>Phong tessellation.</li>
 <li>PN-Triangles surfaces.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md211"></a>
+<h2><a class="anchor" id="autotoc_md213"></a>
 PostEffects</h2>
 <ul>
 <li>Bloom : HDR Bloom implementation.</li>
@@ -102,12 +103,12 @@ PostEffects</h2>
 <li>SMAA Antialiasing (1X and T2X so far).</li>
 <li>Linear Motion Blur.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md212"></a>
+<h2><a class="anchor" id="autotoc_md214"></a>
 Generators</h2>
 <ul>
 <li>DiamondSquareTerrain : to generate terrains inside Castor3D scenes, using diamond-quare algorithm.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md213"></a>
+<h2><a class="anchor" id="autotoc_md215"></a>
 Generic</h2>
 <ul>
 <li>DiamondSquareTerrain: to generate terrains inside Castor3D scenes, using diamond-quare algorithm.</li>
@@ -116,7 +117,7 @@ Generic</h2>
 <li>OceanRendering: Basic ocean rendering, specifying waves attributes.</li>
 <li>WaterRendering: Plane water surfaces rendering, using normal maps.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md214"></a>
+<h2><a class="anchor" id="autotoc_md216"></a>
 ToneMappings</h2>
 <ul>
 <li>Linear.</li>
@@ -126,7 +127,7 @@ ToneMappings</h2>
 <li>Uncharted2.</li>
 <li>ACES.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md215"></a>
+<h1><a class="anchor" id="autotoc_md217"></a>
 Other applications</h1>
 <ul>
 <li>CastorViewer: A scene viewer based on Castor3D.</li>
@@ -134,15 +135,15 @@ Other applications</h1>
 <li>CastorMeshUpgrader: Upgrades from earlier versions of Castor3D mesh format to the latest one.</li>
 <li>ImgConverter: Allows you to convert any image file type to XPM or ICO.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md216"></a>
+<h1><a class="anchor" id="autotoc_md218"></a>
 Screenshots</h1>
 <p ><img src="http://dragonjoker.github.io/Castor3D/img/Sponza-PBR-VCT-Small.png" alt="Sponza, VCT" class="inline"/> <img src="http://dragonjoker.github.io/Castor3D/img/Cerberus-PBR-Small.png" alt="Cerberus" class="inline"/> <img src="http://dragonjoker.github.io/Castor3D/img/Park-Small.png" alt="Park, Comparison" class="inline"/> <img src="http://dragonjoker.github.io/Castor3D/img/Nyra-PBR-MR-Small.png" alt="Nyra, PBR" class="inline"/> <img src="http://dragonjoker.github.io/Castor3D/img/SanMiguel-PBR-SG-Small.png" alt="SanMiguel, PBR" class="inline"/> <img src="http://dragonjoker.github.io/Castor3D/img/SanMiguel-PBR-SG-LPV-Small.png" alt="SanMiguel, PBR, LPV" class="inline"/> <img src="http://dragonjoker.github.io/Castor3D/img/Bistro-PBR-VCT-Small.png" alt="Bistro, PBR, VCT" class="inline"/></p>
-<p >See <a class="el" href="d3/d6f/a10774.html#md_Z__Projets_C___Castor3D_doc_Castor3D_ChangeLog_English">full changelog</a> for more details. </p>
+<p >See <a class="el" href="d3/d97/a11361.html#md_Z__Projets_C___Castor3D_doc_Castor3D_ChangeLog_English">full changelog</a> for more details. </p>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 21:28:52 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:53 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

@@ -2,18 +2,17 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_df7b4b6a6777e0391235cce118981005" kind="dir">
     <compoundname>Render/Passes</compoundname>
-    <innerfile refid="df/df7/a00731">BackgroundPass.hpp</innerfile>
-    <innerfile refid="d6/dc0/a00734">CommandsSemaphore.hpp</innerfile>
-    <innerfile refid="dd/db2/a00737">ComputeDepthRange.hpp</innerfile>
-    <innerfile refid="dc/dce/a00740">DepthPass.hpp</innerfile>
-    <innerfile refid="d0/d0a/a00743">DownscalePass.hpp</innerfile>
-    <innerfile refid="d4/dfa/a00746">GaussianBlur.hpp</innerfile>
-    <innerfile refid="d5/de8/a00749">LineariseDepthPass.hpp</innerfile>
-    <innerfile refid="dd/d5c/a00752">OverlayPass.hpp</innerfile>
-    <innerfile refid="d2/ddd/a00755">PassesModule.hpp</innerfile>
-    <innerfile refid="d2/d4a/a00758">PickingPass.hpp</innerfile>
-    <innerfile refid="d3/d4f/a00761">RenderQuad.hpp</innerfile>
-    <innerfile refid="d3/d2c/a00764">StencilPass.hpp</innerfile>
+    <innerfile refid="d3/d4f/a00761">BackgroundPass.hpp</innerfile>
+    <innerfile refid="d3/d2c/a00764">CommandsSemaphore.hpp</innerfile>
+    <innerfile refid="d5/dae/a00767">ComputeDepthRange.hpp</innerfile>
+    <innerfile refid="d0/d7e/a00770">DepthPass.hpp</innerfile>
+    <innerfile refid="d8/dba/a00773">DownscalePass.hpp</innerfile>
+    <innerfile refid="d9/dd4/a00776">GaussianBlur.hpp</innerfile>
+    <innerfile refid="d3/d95/a00779">LineariseDepthPass.hpp</innerfile>
+    <innerfile refid="da/d96/a00782">OverlayPass.hpp</innerfile>
+    <innerfile refid="d3/d00/a00785">PassesModule.hpp</innerfile>
+    <innerfile refid="df/d0c/a00788">PickingPass.hpp</innerfile>
+    <innerfile refid="d4/d45/a00791">RenderQuad.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

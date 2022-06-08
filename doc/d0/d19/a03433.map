@@ -1,6 +1,12 @@
-<map id="castor3d::SkeletonAnimationBone" name="castor3d::SkeletonAnimationBone">
-<area shape="rect" id="node1" title=" " alt="" coords="493,50,712,77"/>
-<area shape="rect" id="node2" href="$d4/d60/a03446.html" title=" " alt="" coords="256,43,445,84"/>
-<area shape="rect" id="node3" title=" " alt="" coords="14,5,199,47"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,71,208,127"/>
+<map id="castor3d::SubmeshComponent" name="castor3d::SubmeshComponent">
+<area shape="rect" id="node1" title=" " alt="" coords="255,147,456,174"/>
+<area shape="rect" id="node3" href="$d4/d6f/a03374.html" title="Submesh component holding base submesh data." alt="" coords="511,5,713,47"/>
+<area shape="rect" id="node4" href="$d0/d2b/a03394.html" title=" " alt="" coords="532,71,692,98"/>
+<area shape="rect" id="node7" href="$df/d96/a03402.html" title=" " alt="" coords="504,122,720,149"/>
+<area shape="rect" id="node8" href="$d3/dff/a03422.html" title=" " alt="" coords="516,173,708,199"/>
+<area shape="rect" id="node9" href="$d8/d75/a03426.html" title=" " alt="" coords="521,223,703,250"/>
+<area shape="rect" id="node10" href="$d7/d46/a03430.html" title=" " alt="" coords="526,274,698,301"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,147,207,174"/>
+<area shape="rect" id="node5" href="$d1/deb/a03418.html" title=" " alt="" coords="774,46,934,73"/>
+<area shape="rect" id="node6" href="$d6/d7f/a03438.html" title=" " alt="" coords="768,97,940,123"/>
 </map>

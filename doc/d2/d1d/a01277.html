@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Shader/Ubos/VoxelizerUbo.hpp File Reference</title>
+<title>Castor3D: Shader/Shaders/GlslShadow.hpp File Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,7 +42,7 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_73b4ff1c0d48677e07219a6e5cbe5dfd.html">Shader</a></li><li class="navelem"><a class="el" href="../../dir_7cb5e4c64a1bf58db52aef2025a37836.html">Ubos</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_73b4ff1c0d48677e07219a6e5cbe5dfd.html">Shader</a></li><li class="navelem"><a class="el" href="../../dir_2b63c8c8a8bc0f17541f0115e68db690.html">Shaders</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -50,86 +50,62 @@ $(function() {
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#define-members">Macros</a>  </div>
-  <div class="headertitle"><div class="title">VoxelizerUbo.hpp File Reference</div></div>
+  <div class="headertitle"><div class="title">GlslShadow.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d32/a05051.html">castor3d::shader::VoxelData</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d7e/a05055.html">castor3d::VoxelizerUboConfiguration</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/de9/a05059.html">castor3d::VoxelizerUbo</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d88/a04942.html">castor3d::shader::Shadow</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:da/de3/a01398"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/de3/a01398.html">castor3d</a></td></tr>
+<tr class="memitem:da/dab/a01362"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html">castor3d</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:dc/d35/a01400"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d35/a01400.html">castor3d::shader</a></td></tr>
+<tr class="memitem:de/d1f/a01364"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d1f/a01364.html">castor3d::shader</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a72fab44034b317d8d93586d613a49435"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d1d/a01277.html#a72fab44034b317d8d93586d613a49435">C3D_Voxelizer</a>(writer,  binding,  set,  enable)</td></tr>
-<tr class="separator:a72fab44034b317d8d93586d613a49435"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53e2bb9e2fa7b0a9d3c9feb4af8b265d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d1d/a01277.html#a53e2bb9e2fa7b0a9d3c9feb4af8b265d">C3D_DebugSpotShadows</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:a53e2bb9e2fa7b0a9d3c9feb4af8b265d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc9f05b6c5de6bd416b0e9125f6026f8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d1d/a01277.html#acc9f05b6c5de6bd416b0e9125f6026f8">C3D_DebugCascades</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:acc9f05b6c5de6bd416b0e9125f6026f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="a72fab44034b317d8d93586d613a49435" name="a72fab44034b317d8d93586d613a49435"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a72fab44034b317d8d93586d613a49435">&#9670;&nbsp;</a></span>C3D_Voxelizer</h2>
+<a id="acc9f05b6c5de6bd416b0e9125f6026f8" name="acc9f05b6c5de6bd416b0e9125f6026f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc9f05b6c5de6bd416b0e9125f6026f8">&#9670;&nbsp;</a></span>C3D_DebugCascades</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define C3D_Voxelizer</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">writer, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">binding, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">set, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">enable&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="memname">#define C3D_DebugCascades&#160;&#160;&#160;0</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">    sdw::Ubo voxelizer{ writer\</div>
-<div class="line">        , <a class="code hl_variable" href="../../d6/de9/a05059.html#a50dfc634e5afa516cf3b14fc277c44af">castor3d::VoxelizerUbo::BufferVoxelizer</a>\</div>
-<div class="line">        , uint32_t( binding )\</div>
-<div class="line">        , uint32_t( set )\</div>
-<div class="line">        , ast::type::MemoryLayout::eStd140\</div>
-<div class="line">        , enable };\</div>
-<div class="line">    auto c3d_voxelData = voxelizer.declMember&lt; shader::VoxelData &gt;( <a class="code hl_variable" href="../../d6/de9/a05059.html#abb57a342f2795869ffedbdb0b767f16d">castor3d::VoxelizerUbo::VoxelData</a> );\</div>
-<div class="line">    voxelizer.end()</div>
-<div class="ttc" id="aa05059_html_a50dfc634e5afa516cf3b14fc277c44af"><div class="ttname"><a href="../../d6/de9/a05059.html#a50dfc634e5afa516cf3b14fc277c44af">castor3d::VoxelizerUbo::BufferVoxelizer</a></div><div class="ttdeci">static C3D_API castor::String const BufferVoxelizer</div><div class="ttdef"><b>Definition:</b> VoxelizerUbo.hpp:132</div></div>
-<div class="ttc" id="aa05059_html_abb57a342f2795869ffedbdb0b767f16d"><div class="ttname"><a href="../../d6/de9/a05059.html#abb57a342f2795869ffedbdb0b767f16d">castor3d::VoxelizerUbo::VoxelData</a></div><div class="ttdeci">static C3D_API castor::String const VoxelData</div><div class="ttdef"><b>Definition:</b> VoxelizerUbo.hpp:133</div></div>
-</div><!-- fragment -->
+
+</div>
+</div>
+<a id="a53e2bb9e2fa7b0a9d3c9feb4af8b265d" name="a53e2bb9e2fa7b0a9d3c9feb4af8b265d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53e2bb9e2fa7b0a9d3c9feb4af8b265d">&#9670;&nbsp;</a></span>C3D_DebugSpotShadows</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define C3D_DebugSpotShadows&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 21:28:50 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:46 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

@@ -1,106 +1,65 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dc/da5/a02790" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::MouseState</compoundname>
+    <compoundname>castor3d::KeyboardState</compoundname>
     <includes local="no">UserInputEventModule.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="dc/da5/a02790_1adbdf5d0b354c06a50c13d2d4528828ef" prot="public" static="no" mutable="no">
-        <type>castor::Position</type>
-        <definition>castor::Position castor3d::MouseState::position</definition>
+      <memberdef kind="variable" id="dc/da5/a02790_1ae40eab00317a2b8e1b5c58545eadc894" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::KeyboardState::ctrl</definition>
         <argsstring></argsstring>
-        <name>position</name>
-        <qualifiedname>castor3d::MouseState::position</qualifiedname>
+        <name>ctrl</name>
+        <qualifiedname>castor3d::KeyboardState::ctrl</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The current position. </para>
+<para>The control key state. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/UserInputEventModule.hpp" line="291" column="18" bodyfile="Event/UserInput/UserInputEventModule.hpp" bodystart="291" bodyend="-1"/>
-        <referencedby refid="d0/dc9/a02794_1ab0a77767ad1a4a323264c7896a80eaf6" compoundref="db/d7b/a00296" startline="72" endline="75">castor3d::UserInputListener::getMousePosition</referencedby>
+        <location file="Event/UserInput/UserInputEventModule.hpp" line="271" column="6" bodyfile="Event/UserInput/UserInputEventModule.hpp" bodystart="271" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dc/da5/a02790_1a2b58db85e725616152a8bbea76a7f806" prot="public" static="no" mutable="no">
-        <type>castor::Position</type>
-        <definition>castor::Position castor3d::MouseState::wheel</definition>
+      <memberdef kind="variable" id="dc/da5/a02790_1a95e453217bc8f3266f3b56e15d0bd8bf" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::KeyboardState::alt</definition>
         <argsstring></argsstring>
-        <name>wheel</name>
-        <qualifiedname>castor3d::MouseState::wheel</qualifiedname>
+        <name>alt</name>
+        <qualifiedname>castor3d::KeyboardState::alt</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The wheel position. </para>
+<para>The alt key state. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/UserInputEventModule.hpp" line="294" column="18" bodyfile="Event/UserInput/UserInputEventModule.hpp" bodystart="294" bodyend="-1"/>
+        <location file="Event/UserInput/UserInputEventModule.hpp" line="274" column="6" bodyfile="Event/UserInput/UserInputEventModule.hpp" bodystart="274" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dc/da5/a02790_1a5ab2e2eba0f976a8bb928ce1a39738cd" prot="public" static="no" mutable="no">
-        <type>std::array&lt; bool, size_t(<ref refid="dc/df4/a01401_1a087f824502cd45431879fc5c96607682ae558bb69fadec037d9eae46601a4df8e" kindref="member">MouseButton::eCount</ref>) &gt;</type>
-        <definition>std::array&lt; bool, size_t( MouseButton::eCount ) &gt; castor3d::MouseState::buttons</definition>
+      <memberdef kind="variable" id="dc/da5/a02790_1a16891fdba713c8a65b4fb2bae045b1f3" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::KeyboardState::shift</definition>
         <argsstring></argsstring>
-        <name>buttons</name>
-        <qualifiedname>castor3d::MouseState::buttons</qualifiedname>
+        <name>shift</name>
+        <qualifiedname>castor3d::KeyboardState::shift</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The buttons state (true = down). </para>
+<para>The shift key state. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/UserInputEventModule.hpp" line="297" column="12" bodyfile="Event/UserInput/UserInputEventModule.hpp" bodystart="297" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dc/da5/a02790_1a81e8749da34a72c7489ae8f6652016b5" prot="public" static="no" mutable="no">
-        <type><ref refid="dc/df4/a01401_1a087f824502cd45431879fc5c96607682" kindref="member">MouseButton</ref></type>
-        <definition>MouseButton castor3d::MouseState::changed</definition>
-        <argsstring></argsstring>
-        <name>changed</name>
-        <qualifiedname>castor3d::MouseState::changed</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The button which had the last change. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/UserInputEventModule.hpp" line="300" column="13" bodyfile="Event/UserInput/UserInputEventModule.hpp" bodystart="300" bodyend="-1"/>
+        <location file="Event/UserInput/UserInputEventModule.hpp" line="277" column="6" bodyfile="Event/UserInput/UserInputEventModule.hpp" bodystart="277" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Mouse state. </para>
+<para>Keyboard state. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="4">
-        <label>T</label>
-      </node>
-      <node id="2">
-        <label>std::array&lt; bool, size_t(MouseButton::eCount) &gt;</label>
-        <childnode refid="3" relation="template-instance">
-          <edgelabel>&lt; bool, size_t(MouseButton::eCount) &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1">
-        <label>castor3d::MouseState</label>
-        <link refid="dc/da5/a02790"/>
-        <childnode refid="2" relation="usage">
-          <edgelabel>buttons</edgelabel>
-        </childnode>
-      </node>
-      <node id="3">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="4" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Event/UserInput/UserInputEventModule.hpp" line="287" column="1" bodyfile="Event/UserInput/UserInputEventModule.hpp" bodystart="288" bodyend="301"/>
+    <location file="Event/UserInput/UserInputEventModule.hpp" line="267" column="1" bodyfile="Event/UserInput/UserInputEventModule.hpp" bodystart="268" bodyend="278"/>
     <listofallmembers>
-      <member refid="dc/da5/a02790_1a5ab2e2eba0f976a8bb928ce1a39738cd" prot="public" virt="non-virtual"><scope>castor3d::MouseState</scope><name>buttons</name></member>
-      <member refid="dc/da5/a02790_1a81e8749da34a72c7489ae8f6652016b5" prot="public" virt="non-virtual"><scope>castor3d::MouseState</scope><name>changed</name></member>
-      <member refid="dc/da5/a02790_1adbdf5d0b354c06a50c13d2d4528828ef" prot="public" virt="non-virtual"><scope>castor3d::MouseState</scope><name>position</name></member>
-      <member refid="dc/da5/a02790_1a2b58db85e725616152a8bbea76a7f806" prot="public" virt="non-virtual"><scope>castor3d::MouseState</scope><name>wheel</name></member>
+      <member refid="dc/da5/a02790_1a95e453217bc8f3266f3b56e15d0bd8bf" prot="public" virt="non-virtual"><scope>castor3d::KeyboardState</scope><name>alt</name></member>
+      <member refid="dc/da5/a02790_1ae40eab00317a2b8e1b5c58545eadc894" prot="public" virt="non-virtual"><scope>castor3d::KeyboardState</scope><name>ctrl</name></member>
+      <member refid="dc/da5/a02790_1a16891fdba713c8a65b4fb2bae045b1f3" prot="public" virt="non-virtual"><scope>castor3d::KeyboardState</scope><name>shift</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

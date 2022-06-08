@@ -1,104 +1,107 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="db/d21/a05186" kind="class" language="C++" prot="public">
-    <compoundname>castor::TextWriter&lt; castor3d::SkyboxBackground &gt;</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::SkyboxBackground &gt;</basecompoundref>
-    <includes local="no">TextSkyboxBackground.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="db/d21/a05186_1a3b51c029da6addc766214c4dcdae634c" prot="private" static="no" mutable="no">
-        <type>Path</type>
-        <definition>Path castor::TextWriter&lt; castor3d::SkyboxBackground &gt;::m_folder</definition>
+  <compounddef id="db/d21/a05186" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SceneUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/d21/a05186_1a4eac3314bee5cc0c1aee06fcecce46ac" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::SceneUboConfiguration::ambientLight</definition>
         <argsstring></argsstring>
-        <name>m_folder</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::SkyboxBackground &gt;::m_folder</qualifiedname>
+        <name>ambientLight</name>
+        <qualifiedname>castor3d::SceneUboConfiguration::ambientLight</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Text/TextSkyboxBackground.hpp" line="24" column="6" bodyfile="Text/TextSkyboxBackground.hpp" bodystart="24" bodyend="-1"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="391" column="17" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="391" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="db/d21/a05186_1a0fb9856d8122e4e87dc081283447faf9" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor::TextWriter&lt; castor3d::SkyboxBackground &gt;::TextWriter</definition>
-        <argsstring>(castor::String const &amp;tabs, Path const &amp;folder)</argsstring>
-        <name>TextWriter</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::SkyboxBackground &gt;::TextWriter</qualifiedname>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>tabs</declname>
-        </param>
-        <param>
-          <type>Path const &amp;</type>
-          <declname>folder</declname>
-        </param>
+      <memberdef kind="variable" id="db/d21/a05186_1a2cdd2054a510e769217d5fc985388136" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::SceneUboConfiguration::backgroundColour</definition>
+        <argsstring></argsstring>
+        <name>backgroundColour</name>
+        <qualifiedname>castor3d::SceneUboConfiguration::backgroundColour</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Text/TextSkyboxBackground.hpp" line="18" column="18"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="392" column="17" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="392" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="db/d21/a05186_1a190cceb477204c3f0803c4960dad6224" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor::TextWriter&lt; castor3d::SkyboxBackground &gt;::operator()</definition>
-        <argsstring>(castor3d::SkyboxBackground const &amp;overlay, castor::StringStream &amp;file) override</argsstring>
-        <name>operator()</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::SkyboxBackground &gt;::operator()</qualifiedname>
-        <param>
-          <type><ref refid="dd/d3c/a04466" kindref="compound">castor3d::SkyboxBackground</ref> const &amp;</type>
-          <declname>overlay</declname>
-        </param>
-        <param>
-          <type>castor::StringStream &amp;</type>
-          <declname>file</declname>
-        </param>
+      <memberdef kind="variable" id="db/d21/a05186_1a371dad5fd69ed93624f8e9f4be758eaf" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::SceneUboConfiguration::lightsCount</definition>
+        <argsstring></argsstring>
+        <name>lightsCount</name>
+        <qualifiedname>castor3d::SceneUboConfiguration::lightsCount</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Text/TextSkyboxBackground.hpp" line="20" column="14"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="393" column="17" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="393" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d21/a05186_1ab560df530dc84ab3bffd3fda9531bbad" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::SceneUboConfiguration::cameraPos</definition>
+        <argsstring></argsstring>
+        <name>cameraPos</name>
+        <qualifiedname>castor3d::SceneUboConfiguration::cameraPos</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="394" column="17" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="394" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d21/a05186_1a0fcb772bf8a6a7cb52c7816a8acc3a36" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::SceneUboConfiguration::clipInfo</definition>
+        <argsstring></argsstring>
+        <name>clipInfo</name>
+        <qualifiedname>castor3d::SceneUboConfiguration::clipInfo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="395" column="17" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="395" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d21/a05186_1aee2e306f2e2142e6de52c0b324c78b98" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::SceneUboConfiguration::fogInfo</definition>
+        <argsstring></argsstring>
+        <name>fogInfo</name>
+        <qualifiedname>castor3d::SceneUboConfiguration::fogInfo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="396" column="17" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="396" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para><ref refid="d8/d12/a04694" kindref="compound">Scene</ref> data. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="2">
-        <label>TextWriterT&lt; castor3d::SkyboxBackground &gt;</label>
-      </node>
-      <node id="1">
-        <label>castor::TextWriter&lt; castor3d::SkyboxBackground &gt;</label>
-        <link refid="db/d21/a05186"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="2">
-        <label>TextWriterT&lt; castor3d::SkyboxBackground &gt;</label>
-      </node>
-      <node id="1">
-        <label>castor::TextWriter&lt; castor3d::SkyboxBackground &gt;</label>
-        <link refid="db/d21/a05186"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Text/TextSkyboxBackground.hpp" line="14" column="1" bodyfile="Text/TextSkyboxBackground.hpp" bodystart="16" bodyend="25"/>
+    <location file="Shader/Ubos/UbosModule.hpp" line="389" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="390" bodyend="397"/>
     <listofallmembers>
-      <member refid="db/d21/a05186_1a3b51c029da6addc766214c4dcdae634c" prot="private" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::SkyboxBackground &gt;</scope><name>m_folder</name></member>
-      <member refid="db/d21/a05186_1a190cceb477204c3f0803c4960dad6224" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::SkyboxBackground &gt;</scope><name>operator()</name></member>
-      <member refid="db/d21/a05186_1a0fb9856d8122e4e87dc081283447faf9" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::SkyboxBackground &gt;</scope><name>TextWriter</name></member>
+      <member refid="db/d21/a05186_1a4eac3314bee5cc0c1aee06fcecce46ac" prot="public" virt="non-virtual"><scope>castor3d::SceneUboConfiguration</scope><name>ambientLight</name></member>
+      <member refid="db/d21/a05186_1a2cdd2054a510e769217d5fc985388136" prot="public" virt="non-virtual"><scope>castor3d::SceneUboConfiguration</scope><name>backgroundColour</name></member>
+      <member refid="db/d21/a05186_1ab560df530dc84ab3bffd3fda9531bbad" prot="public" virt="non-virtual"><scope>castor3d::SceneUboConfiguration</scope><name>cameraPos</name></member>
+      <member refid="db/d21/a05186_1a0fcb772bf8a6a7cb52c7816a8acc3a36" prot="public" virt="non-virtual"><scope>castor3d::SceneUboConfiguration</scope><name>clipInfo</name></member>
+      <member refid="db/d21/a05186_1aee2e306f2e2142e6de52c0b324c78b98" prot="public" virt="non-virtual"><scope>castor3d::SceneUboConfiguration</scope><name>fogInfo</name></member>
+      <member refid="db/d21/a05186_1a371dad5fd69ed93624f8e9f4be758eaf" prot="public" virt="non-virtual"><scope>castor3d::SceneUboConfiguration</scope><name>lightsCount</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,98 +1,63 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="db/d09/a02502" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::GpuBufferT</compoundname>
-    <basecompoundref refid="d3/d41/a02530" prot="public" virt="non-virtual">castor3d::GpuBufferBase</basecompoundref>
-    <includes local="no">GpuBuffer.hpp</includes>
-    <templateparamlist>
-      <param>
-        <type>typename AllocatorT</type>
-      </param>
-    </templateparamlist>
-      <sectiondef kind="friend">
-      <memberdef kind="friend" id="db/d09/a02502_1a01ce6a31562ddfd446c446f4a24ed188" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>class</type>
-        <definition>friend class GpuBufferPool</definition>
+    <compoundname>castor3d::CmshAnimationImporter</compoundname>
+    <basecompoundref refid="dc/dc3/a02190" prot="public" virt="non-virtual">castor3d::AnimationImporter</basecompoundref>
+    <includes local="no">CmshImporter.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="db/d09/a02502_1aa750d0c35520db1934f5197740ce934d" prot="public" static="yes" mutable="no">
+        <type>castor::String const</type>
+        <definition>castor::String const castor3d::CmshAnimationImporter::MeshAnimType</definition>
         <argsstring></argsstring>
-        <name>GpuBufferPool</name>
-        <qualifiedname>castor3d::GpuBufferT::GpuBufferPool</qualifiedname>
-        <param>
-          <type><ref refid="df/d23/a02558" kindref="compound">GpuBufferPool</ref></type>
-        </param>
+        <name>MeshAnimType</name>
+        <qualifiedname>castor3d::CmshAnimationImporter::MeshAnimType</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/GpuBuffer.hpp" line="230" column="14" bodyfile="Buffer/GpuBuffer.hpp" bodystart="230" bodyend="-1"/>
+        <location file="Binary/CmshImporter.hpp" line="156" column="29" bodyfile="Binary/CmshImporter.hpp" bodystart="156" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="db/d09/a02502_1a796ce2a8671963500bc51ca7c5b614e0" prot="private" static="no" mutable="no">
-        <type>std::set&lt; <ref refid="d7/da8/a02522" kindref="compound">MemChunk</ref> &gt;</type>
-        <definition>std::set&lt; MemChunk &gt; castor3d::GpuBufferT&lt; AllocatorT &gt;::m_allocated</definition>
+      <memberdef kind="variable" id="db/d09/a02502_1a311c48c50942d5605ac26d4c6ae477fe" prot="public" static="yes" mutable="no">
+        <type>castor::String const</type>
+        <definition>castor::String const castor3d::CmshAnimationImporter::SkeletonAnimType</definition>
         <argsstring></argsstring>
-        <name>m_allocated</name>
-        <qualifiedname>castor3d::GpuBufferT::m_allocated</qualifiedname>
+        <name>SkeletonAnimType</name>
+        <qualifiedname>castor3d::CmshAnimationImporter::SkeletonAnimType</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/GpuBuffer.hpp" line="298" column="10" bodyfile="Buffer/GpuBuffer.hpp" bodystart="298" bodyend="-1"/>
+        <location file="Binary/CmshImporter.hpp" line="157" column="29" bodyfile="Binary/CmshImporter.hpp" bodystart="157" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="db/d09/a02502_1a6071a35b6da1688c22790fdb61282cc3" prot="private" static="no" mutable="no">
-        <type>AllocatorT</type>
-        <definition>AllocatorT castor3d::GpuBufferT&lt; AllocatorT &gt;::m_allocator</definition>
+      <memberdef kind="variable" id="db/d09/a02502_1a01652af53adef1aec9add69d178966a0" prot="public" static="yes" mutable="no">
+        <type>castor::String const</type>
+        <definition>castor::String const castor3d::CmshAnimationImporter::NodeAnimType</definition>
         <argsstring></argsstring>
-        <name>m_allocator</name>
-        <qualifiedname>castor3d::GpuBufferT::m_allocator</qualifiedname>
+        <name>NodeAnimType</name>
+        <qualifiedname>castor3d::CmshAnimationImporter::NodeAnimType</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/GpuBuffer.hpp" line="299" column="12" bodyfile="Buffer/GpuBuffer.hpp" bodystart="299" bodyend="-1"/>
+        <location file="Binary/CmshImporter.hpp" line="158" column="29" bodyfile="Binary/CmshImporter.hpp" bodystart="158" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="db/d09/a02502_1a6ea904ff84cdb033bb9f1c1b6e03e9a5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::GpuBufferT&lt; AllocatorT &gt;::GpuBufferT</definition>
-        <argsstring>(RenderSystem const &amp;renderSystem, VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryFlags, castor::String debugName, ashes::QueueShare sharingMode, AllocatorT allocator, bool smallData=false)</argsstring>
-        <name>GpuBufferT</name>
-        <qualifiedname>castor3d::GpuBufferT::GpuBufferT</qualifiedname>
+      <memberdef kind="function" id="db/d09/a02502_1a2f215abef897ebc7c760c96b3ebd45d1" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::CmshAnimationImporter::CmshAnimationImporter</definition>
+        <argsstring>(Engine &amp;engine)</argsstring>
+        <name>CmshAnimationImporter</name>
+        <qualifiedname>castor3d::CmshAnimationImporter::CmshAnimationImporter</qualifiedname>
         <param>
-          <type><ref refid="d7/d34/a04078" kindref="compound">RenderSystem</ref> const &amp;</type>
-          <declname>renderSystem</declname>
-        </param>
-        <param>
-          <type>VkBufferUsageFlags</type>
-          <declname>usage</declname>
-        </param>
-        <param>
-          <type>VkMemoryPropertyFlags</type>
-          <declname>memoryFlags</declname>
-        </param>
-        <param>
-          <type>castor::String</type>
-          <declname>debugName</declname>
-        </param>
-        <param>
-          <type>ashes::QueueShare</type>
-          <declname>sharingMode</declname>
-        </param>
-        <param>
-          <type>AllocatorT</type>
-          <declname>allocator</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>smallData</declname>
-          <defval>false</defval>
+          <type><ref refid="d9/db1/a02718" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
         </param>
         <briefdescription>
 <para>Constructor. </para>
@@ -100,58 +65,10 @@
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">renderSystem</parametername>
+<parametername direction="in">engine</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The device on which the storage is allocated. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">usage</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The buffer targets. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">memoryFlags</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The buffer memory properties. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">debugName</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The debug name. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">sharingMode</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The sharing mode. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">allocator</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The allocator. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">smallData</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Tells if the memory chunks allocated through this buffer are less than 65536 bytes. </para>
+<para>The core engine. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -159,175 +76,219 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/GpuBuffer.hpp" line="253" column="1"/>
+        <location file="Binary/CmshImporter.hpp" line="130" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="db/d09/a02502_1a340716243a619af89f3542becf09b775" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::GpuBufferT&lt; AllocatorT &gt;::hasAvailable</definition>
-        <argsstring>(VkDeviceSize size) const</argsstring>
-        <name>hasAvailable</name>
-        <qualifiedname>castor3d::GpuBufferT::hasAvailable</qualifiedname>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="db/d09/a02502_1a0562dfc7da1c7f1ae7fa05c03f776e3f" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>AnimationImporterUPtr</type>
+        <definition>static AnimationImporterUPtr castor3d::CmshAnimationImporter::create</definition>
+        <argsstring>(Engine &amp;engine)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::CmshAnimationImporter::create</qualifiedname>
         <param>
-          <type>VkDeviceSize</type>
-          <declname>size</declname>
+          <type><ref refid="d9/db1/a02718" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
         </param>
         <briefdescription>
+<para>Creator function. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">size</parametername>
+<parametername direction="in">engine</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The requested memory size. </para>
+<para>The core engine. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para><computeroutput>true</computeroutput> if there is enough remaining memory for given size. </para>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/CmshImporter.hpp" line="139" column="30"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="db/d09/a02502_1a38ecadb5c08005c0e88e4074b25384a6" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::CmshAnimationImporter::doImportSkeleton</definition>
+        <argsstring>(SkeletonAnimation &amp;skeleton) override</argsstring>
+        <name>doImportSkeleton</name>
+        <qualifiedname>castor3d::CmshAnimationImporter::doImportSkeleton</qualifiedname>
+        <reimplements refid="dc/dc3/a02190_1a7ad20b0cc0b7204c036b34069b7ad7aa">doImportSkeleton</reimplements>
+        <param>
+          <type><ref refid="d8/d01/a03458" kindref="compound">SkeletonAnimation</ref> &amp;</type>
+          <declname>skeleton</declname>
+        </param>
+        <briefdescription>
+<para><ref refid="d8/d01/a03458" kindref="compound">SkeletonAnimation</ref> import Function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">skeleton</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the imported data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any problem occured. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/GpuBuffer.hpp" line="268" column="6"/>
+        <location file="Binary/CmshImporter.hpp" line="145" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="db/d09/a02502_1a4b6d873e1a9ab433cc2018e1630aef01" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="d7/da8/a02522" kindref="compound">MemChunk</ref></type>
-        <definition>MemChunk castor3d::GpuBufferT&lt; AllocatorT &gt;::allocate</definition>
-        <argsstring>(VkDeviceSize size)</argsstring>
-        <name>allocate</name>
-        <qualifiedname>castor3d::GpuBufferT::allocate</qualifiedname>
+      <memberdef kind="function" id="db/d09/a02502_1a8df544e86224d43fa854e5451704f5ef" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::CmshAnimationImporter::doImportMesh</definition>
+        <argsstring>(MeshAnimation &amp;mesh) override</argsstring>
+        <name>doImportMesh</name>
+        <qualifiedname>castor3d::CmshAnimationImporter::doImportMesh</qualifiedname>
+        <reimplements refid="dc/dc3/a02190_1a3fc43e53d6b6f936ace81f92402237ad">doImportMesh</reimplements>
         <param>
-          <type>VkDeviceSize</type>
-          <declname>size</declname>
+          <type><ref refid="d6/d85/a03290" kindref="compound">MeshAnimation</ref> &amp;</type>
+          <declname>mesh</declname>
         </param>
         <briefdescription>
-<para>Allocates a memory chunk for a CPU buffer. </para>
+<para><ref refid="d6/d85/a03290" kindref="compound">MeshAnimation</ref> import function. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">size</parametername>
+<parametername direction="out">mesh</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The requested memory size. </para>
+<para>Receives the imported data. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>The memory chunk offset. </para>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any problem occured. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/GpuBuffer.hpp" line="279" column="10"/>
+        <location file="Binary/CmshImporter.hpp" line="149" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="db/d09/a02502_1a02e814e19ee7a2a53b6c37b182e6bbdf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::GpuBufferT&lt; AllocatorT &gt;::deallocate</definition>
-        <argsstring>(MemChunk const &amp;mem)</argsstring>
-        <name>deallocate</name>
-        <qualifiedname>castor3d::GpuBufferT::deallocate</qualifiedname>
+      <memberdef kind="function" id="db/d09/a02502_1a224c6c0f693305d97539d60f218c4420" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::CmshAnimationImporter::doImportNode</definition>
+        <argsstring>(SceneNodeAnimation &amp;scene) override</argsstring>
+        <name>doImportNode</name>
+        <qualifiedname>castor3d::CmshAnimationImporter::doImportNode</qualifiedname>
+        <reimplements refid="dc/dc3/a02190_1a754abfa8ff745a5d0e9b086d87774f5b">doImportNode</reimplements>
         <param>
-          <type><ref refid="d7/da8/a02522" kindref="compound">MemChunk</ref> const &amp;</type>
-          <declname>mem</declname>
+          <type><ref refid="d5/dba/a04510" kindref="compound">SceneNodeAnimation</ref> &amp;</type>
+          <declname>scene</declname>
         </param>
         <briefdescription>
-<para>Deallocates memory. </para>
+<para><ref refid="d5/dba/a04510" kindref="compound">SceneNodeAnimation</ref> import Function. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">mem</parametername>
+<parametername direction="out">node</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The memory chunk. </para>
+<para>Receives the imported data. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/GpuBuffer.hpp" line="288" column="6"/>
-      </memberdef>
-      <memberdef kind="function" id="db/d09/a02502_1a63c0f4ad44257645932622a3a4fb39e7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type>size_t</type>
-        <definition>size_t castor3d::GpuBufferT&lt; AllocatorT &gt;::getMinAlignment</definition>
-        <argsstring>() const</argsstring>
-        <name>getMinAlignment</name>
-        <qualifiedname>castor3d::GpuBufferT::getMinAlignment</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The element aligned size. </para>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any problem occured. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/GpuBuffer.hpp" line="295" column="8"/>
+        <location file="Binary/CmshImporter.hpp" line="153" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>A GPU buffer, that uses a buddy allocator to allocate sub-buffers. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="3">
-        <label>castor3d::GpuBufferT&lt; GpuBufferPackedAllocator &gt;</label>
-        <link refid="db/d09/a02502"/>
-        <childnode refid="1" relation="template-instance">
-          <edgelabel>&lt; GpuBufferPackedAllocator &gt;</edgelabel>
+      <node id="2">
+        <label>castor3d::AnimationImporter</label>
+        <link refid="dc/dc3/a02190"/>
+        <childnode refid="3" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="2">
-        <label>castor3d::GpuBufferBase</label>
-        <link refid="d3/d41/a02530"/>
-      </node>
       <node id="1">
-        <label>castor3d::GpuBufferT&lt; AllocatorT &gt;</label>
+        <label>castor3d::CmshAnimationImporter</label>
         <link refid="db/d09/a02502"/>
         <childnode refid="2" relation="public-inheritance">
         </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
+      <node id="5">
+        <label>castor3d::ParametersT&lt; castor::String &gt;</label>
+        <link refid="d5/d08/a03254"/>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
       <node id="2">
-        <label>castor3d::GpuBufferBase</label>
-        <link refid="d3/d41/a02530"/>
+        <label>castor3d::AnimationImporter</label>
+        <link refid="dc/dc3/a02190"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_file</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_parameters</edgelabel>
+        </childnode>
       </node>
       <node id="1">
-        <label>castor3d::GpuBufferT&lt; AllocatorT &gt;</label>
+        <label>castor3d::CmshAnimationImporter</label>
         <link refid="db/d09/a02502"/>
         <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
+      <node id="4">
+        <label>castor3d::ImporterFile</label>
+        <link refid="d5/dd8/a02802"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::ParametersT&lt; KeyT &gt;</label>
+        <link refid="d5/d08/a03254"/>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
     </collaborationgraph>
-    <location file="Buffer/GpuBuffer.hpp" line="227" column="1" bodyfile="Buffer/GpuBuffer.hpp" bodystart="229" bodyend="300"/>
+    <location file="Binary/CmshImporter.hpp" line="118" column="1" bodyfile="Binary/CmshImporter.hpp" bodystart="120" bodyend="159"/>
     <listofallmembers>
-      <member refid="db/d09/a02502_1a4b6d873e1a9ab433cc2018e1630aef01" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>allocate</name></member>
-      <member refid="db/d09/a02502_1a02e814e19ee7a2a53b6c37b182e6bbdf" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>deallocate</name></member>
-      <member refid="d3/d41/a02530_1a2e96ae884d0c9c48a92282e0c9d1b816" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>getBuffer</name></member>
-      <member refid="d3/d41/a02530_1ad5c0c039b286c923f49bfb1e7e6282e8" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>getBuffer</name></member>
-      <member refid="d3/d41/a02530_1aa9ce48ae045bf1f7be2b87315bf56394" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>getData</name></member>
-      <member refid="d3/d41/a02530_1a1c9e4696f89164001d11831b35f15f77" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>getData</name></member>
-      <member refid="d3/d41/a02530_1ae81d18fb4565a12c2d525b775cb4e27f" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>getDatas</name></member>
-      <member refid="d3/d41/a02530_1af3d715f75b94aba18ba8d3a39b5e73d2" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>getDatas</name></member>
-      <member refid="db/d09/a02502_1a63c0f4ad44257645932622a3a4fb39e7" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>getMinAlignment</name></member>
-      <member refid="d3/d41/a02530_1a4f0cb57ba7d81f99e64b3fa0096023fa" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>GpuBufferBase</name></member>
-      <member refid="db/d09/a02502_1a01ce6a31562ddfd446c446f4a24ed188" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>GpuBufferPool</name></member>
-      <member refid="db/d09/a02502_1a6ea904ff84cdb033bb9f1c1b6e03e9a5" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>GpuBufferT</name></member>
-      <member refid="db/d09/a02502_1a340716243a619af89f3542becf09b775" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>hasAvailable</name></member>
-      <member refid="d3/d41/a02530_1a3f399bb8c877bc2155fe02aebd6c0329" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>hasBuffer</name></member>
-      <member refid="db/d09/a02502_1a796ce2a8671963500bc51ca7c5b614e0" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>m_allocated</name></member>
-      <member refid="db/d09/a02502_1a6071a35b6da1688c22790fdb61282cc3" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>m_allocator</name></member>
-      <member refid="d3/d41/a02530_1a06f1c510406ae4dd17d134022e94a497" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>markDirty</name></member>
-      <member refid="d3/d41/a02530_1a91928d1e743ed5edbb8a3af9bd859af1" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>operator ashes::Buffer&lt; uint8_t &gt; &amp;</name></member>
-      <member refid="d3/d41/a02530_1ab0b76b8e65ce793ffd15dc6c5d65a70d" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>operator ashes::Buffer&lt; uint8_t &gt; const &amp;</name></member>
-      <member refid="d3/d41/a02530_1a23305046cd563d8ec97a43b9ab41500f" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>upload</name></member>
-      <member refid="d3/d41/a02530_1adbd7c63833b19b5aeedc5c5ddbe10f6d" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>uploadDirect</name></member>
+      <member refid="dc/dc3/a02190_1ab22bb26ca83542220520dca04e7e6bb3" prot="public" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>AnimationImporter</name></member>
+      <member refid="db/d09/a02502_1a2f215abef897ebc7c760c96b3ebd45d1" prot="public" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>CmshAnimationImporter</name></member>
+      <member refid="db/d09/a02502_1a0562dfc7da1c7f1ae7fa05c03f776e3f" prot="public" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>create</name></member>
+      <member refid="db/d09/a02502_1a8df544e86224d43fa854e5451704f5ef" prot="protected" virt="virtual"><scope>castor3d::CmshAnimationImporter</scope><name>doImportMesh</name></member>
+      <member refid="db/d09/a02502_1a224c6c0f693305d97539d60f218c4420" prot="protected" virt="virtual"><scope>castor3d::CmshAnimationImporter</scope><name>doImportNode</name></member>
+      <member refid="db/d09/a02502_1a38ecadb5c08005c0e88e4074b25384a6" prot="protected" virt="virtual"><scope>castor3d::CmshAnimationImporter</scope><name>doImportSkeleton</name></member>
+      <member refid="dc/dc3/a02190_1a9ad0b88b692cb2324af912528ab3fd19" prot="public" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>import</name></member>
+      <member refid="dc/dc3/a02190_1a626589fde9b16826ab56949b9a7e11df" prot="public" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>import</name></member>
+      <member refid="dc/dc3/a02190_1adcc6f74a352776a1a23a58b0a9ec0265" prot="public" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>import</name></member>
+      <member refid="dc/dc3/a02190_1a66d4da844b5fd8bc6c21344c19f59130" prot="public" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>import</name></member>
+      <member refid="dc/dc3/a02190_1a3185b397d5849a4b6f1348b0484b1a07" prot="public" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>import</name></member>
+      <member refid="dc/dc3/a02190_1a59bcd12bf439d0eae36d65e1f8f570d7" prot="public" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>import</name></member>
+      <member refid="dc/dc3/a02190_1ac05f6472defe8fc407aa97d503b47ded" prot="protected" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>m_file</name></member>
+      <member refid="dc/dc3/a02190_1a82a39c4933b2e056776a64f19b14c0d3" prot="protected" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>m_parameters</name></member>
+      <member refid="db/d09/a02502_1aa750d0c35520db1934f5197740ce934d" prot="public" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>MeshAnimType</name></member>
+      <member refid="db/d09/a02502_1a01652af53adef1aec9add69d178966a0" prot="public" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>NodeAnimType</name></member>
+      <member refid="db/d09/a02502_1a311c48c50942d5605ac26d4c6ae477fe" prot="public" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>SkeletonAnimType</name></member>
+      <member refid="dc/dc3/a02190_1a541b4514f669cd111e11094ccc534836" prot="public" virt="virtual"><scope>castor3d::CmshAnimationImporter</scope><name>~AnimationImporter</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

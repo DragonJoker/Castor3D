@@ -7,7 +7,7 @@
     </templateparamlist>
       <sectiondef kind="public-attrib">
       <memberdef kind="variable" id="dc/dd5/a02614_1a8cfc17145d33ca7fd619bf3996dd6ece" prot="public" static="no" mutable="no">
-        <type><ref refid="db/dc9/a04378" kindref="compound">castor3d::AnimatedObjectGroup</ref> const  &amp;</type>
+        <type><ref refid="dd/de8/a04470" kindref="compound">castor3d::AnimatedObjectGroup</ref> const  &amp;</type>
         <definition>castor3d::AnimatedObjectGroup const&amp; castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;::MeshPoolsEntry::group</definition>
         <argsstring></argsstring>
         <name>group</name>
@@ -21,7 +21,7 @@
         <location file="Cache/AnimatedObjectGroupCache.hpp" line="42" column="38" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="42" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="dc/dd5/a02614_1ac3de6819aef1c5ea76500a15fa5af4c7" prot="public" static="no" mutable="no">
-        <type><ref refid="d7/dc9/a04370" kindref="compound">castor3d::AnimatedMesh</ref> const  &amp;</type>
+        <type><ref refid="dd/dc6/a04462" kindref="compound">castor3d::AnimatedMesh</ref> const  &amp;</type>
         <definition>castor3d::AnimatedMesh const&amp; castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;::MeshPoolsEntry::mesh</definition>
         <argsstring></argsstring>
         <name>mesh</name>
@@ -34,6 +34,20 @@
         </inbodydescription>
         <location file="Cache/AnimatedObjectGroupCache.hpp" line="43" column="31" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="43" bodyend="-1"/>
       </memberdef>
+      <memberdef kind="variable" id="dc/dd5/a02614_1ab4ccb5cc6aeb0cd90ced2d65c0a8af96" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/d60/a03446" kindref="compound">castor3d::Submesh</ref> const  &amp;</type>
+        <definition>castor3d::Submesh const&amp; castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;::MeshPoolsEntry::submesh</definition>
+        <argsstring></argsstring>
+        <name>submesh</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;::MeshPoolsEntry::submesh</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/AnimatedObjectGroupCache.hpp" line="44" column="26" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
@@ -42,7 +56,7 @@
     <collaborationgraph>
       <node id="8">
         <label>Animable</label>
-        <link refid="d6/d41/a02222"/>
+        <link refid="d5/db4/a02182"/>
         <childnode refid="9" relation="public-inheritance">
         </childnode>
         <childnode refid="10" relation="usage">
@@ -60,7 +74,7 @@
       </node>
       <node id="14">
         <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
-        <link refid="d6/d41/a02222"/>
+        <link refid="d5/db4/a02182"/>
         <childnode refid="15" relation="public-inheritance">
         </childnode>
         <childnode refid="10" relation="usage">
@@ -69,7 +83,7 @@
       </node>
       <node id="5">
         <label>castor3d::AnimatedMesh</label>
-        <link refid="d7/dc9/a04370"/>
+        <link refid="dd/dc6/a04462"/>
         <childnode refid="6" relation="public-inheritance">
         </childnode>
         <childnode refid="7" relation="usage">
@@ -78,16 +92,19 @@
         <childnode refid="16" relation="usage">
           <edgelabel>m_geometry</edgelabel>
         </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>m_ids</edgelabel>
+        </childnode>
       </node>
       <node id="6">
         <label>castor3d::AnimatedObject</label>
-        <link refid="db/da9/a04374"/>
+        <link refid="dd/d3c/a04466"/>
         <childnode refid="3" relation="public-inheritance">
         </childnode>
       </node>
       <node id="2">
         <label>castor3d::AnimatedObjectGroup</label>
-        <link refid="db/dc9/a04378"/>
+        <link refid="dd/de8/a04470"/>
         <childnode refid="3" relation="public-inheritance">
         </childnode>
         <childnode refid="4" relation="public-inheritance">
@@ -95,7 +112,7 @@
       </node>
       <node id="16">
         <label>castor3d::Geometry</label>
-        <link refid="d5/d47/a04490"/>
+        <link refid="d5/d03/a04582"/>
         <childnode refid="17" relation="public-inheritance">
         </childnode>
         <childnode refid="20" relation="public-inheritance">
@@ -103,7 +120,7 @@
       </node>
       <node id="7">
         <label>castor3d::Mesh</label>
-        <link refid="dd/dc8/a03342"/>
+        <link refid="db/dee/a03338"/>
         <childnode refid="3" relation="public-inheritance">
         </childnode>
         <childnode refid="8" relation="public-inheritance">
@@ -111,7 +128,7 @@
       </node>
       <node id="17">
         <label>castor3d::MovableObject</label>
-        <link refid="d1/d4a/a04530"/>
+        <link refid="de/da0/a04626"/>
         <childnode refid="4" relation="public-inheritance">
         </childnode>
         <childnode refid="3" relation="public-inheritance">
@@ -122,18 +139,24 @@
       </node>
       <node id="20">
         <label>castor3d::RenderedObject</label>
-        <link refid="d0/d7e/a04594"/>
-        <childnode refid="21" relation="public-inheritance">
-        </childnode>
+        <link refid="d8/d18/a04690"/>
       </node>
       <node id="18">
         <label>castor3d::SceneNode</label>
-        <link refid="dd/d6a/a04642"/>
+        <link refid="d1/d86/a04746"/>
         <childnode refid="19" relation="public-inheritance">
         </childnode>
         <childnode refid="8" relation="public-inheritance">
         </childnode>
         <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="23">
+        <label>castor3d::Submesh</label>
+        <link refid="d4/d60/a03446"/>
+        <childnode refid="24" relation="public-inheritance">
+        </childnode>
+        <childnode refid="25" relation="public-inheritance">
         </childnode>
       </node>
       <node id="3">
@@ -144,6 +167,9 @@
       </node>
       <node id="9">
         <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="24">
+        <label>castor::OwnedBy&lt; Mesh &gt;</label>
       </node>
       <node id="4">
         <label>castor::OwnedBy&lt; Scene &gt;</label>
@@ -157,6 +183,9 @@
         <childnode refid="5" relation="usage">
           <edgelabel>mesh</edgelabel>
         </childnode>
+        <childnode refid="23" relation="usage">
+          <edgelabel>submesh</edgelabel>
+        </childnode>
       </node>
       <node id="10">
         <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
@@ -164,11 +193,11 @@
           <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="21">
-        <label>std::enable_shared_from_this&lt; RenderedObject &gt;</label>
-      </node>
       <node id="19">
         <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
+      </node>
+      <node id="25">
+        <label>std::enable_shared_from_this&lt; Submesh &gt;</label>
       </node>
       <node id="11">
         <label>std::map&lt; K, T &gt;</label>
@@ -179,11 +208,24 @@
           <edgelabel>elements</edgelabel>
         </childnode>
       </node>
+      <node id="22">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="13" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>std::vector&lt; uint32_t &gt;</label>
+        <childnode refid="22" relation="template-instance">
+          <edgelabel>&lt; uint32_t &gt;</edgelabel>
+        </childnode>
+      </node>
     </collaborationgraph>
-    <location file="Cache/AnimatedObjectGroupCache.hpp" line="40" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="41" bodyend="44"/>
+    <location file="Cache/AnimatedObjectGroupCache.hpp" line="40" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="41" bodyend="45"/>
     <listofallmembers>
       <member refid="dc/dd5/a02614_1a8cfc17145d33ca7fd619bf3996dd6ece" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;::MeshPoolsEntry</scope><name>group</name></member>
       <member refid="dc/dd5/a02614_1ac3de6819aef1c5ea76500a15fa5af4c7" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;::MeshPoolsEntry</scope><name>mesh</name></member>
+      <member refid="dc/dd5/a02614_1ab4ccb5cc6aeb0cd90ced2d65c0a8af96" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;::MeshPoolsEntry</scope><name>submesh</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

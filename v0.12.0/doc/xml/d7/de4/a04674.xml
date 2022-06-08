@@ -1,0 +1,172 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d7/de4/a04674" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::LightBuffer::Float4</compoundname>
+    <includes local="no">LightBuffer.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/de4/a04674_1a1e04068e62d3d593791a5cd32aef5b68" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::LightBuffer::Float4::x</definition>
+        <argsstring></argsstring>
+        <name>x</name>
+        <qualifiedname>castor3d::LightBuffer::Float4::x</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="59" column="7" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="59" bodyend="-1"/>
+        <referencedby refid="d7/de4/a04674_1a272411990e7c489b34c5743bbff0b4aa" compoundref="da/d20/a01160" startline="29" endline="33">operator=</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d7/de4/a04674_1ad5fa8ee5d1c60a850cf76b3202418742" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::LightBuffer::Float4::y</definition>
+        <argsstring></argsstring>
+        <name>y</name>
+        <qualifiedname>castor3d::LightBuffer::Float4::y</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="60" column="7" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="60" bodyend="-1"/>
+        <referencedby refid="d7/de4/a04674_1a5382fbc9f3d6466365dcd6e1ea283e57" compoundref="da/d20/a01160" startline="35" endline="40">operator=</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d7/de4/a04674_1afd5cc1025b1355e89a8782b5b389df54" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::LightBuffer::Float4::z</definition>
+        <argsstring></argsstring>
+        <name>z</name>
+        <qualifiedname>castor3d::LightBuffer::Float4::z</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="61" column="7" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="61" bodyend="-1"/>
+        <referencedby refid="d7/de4/a04674_1a4feb5ccf4a78122f87260c004d2c3fae" compoundref="da/d20/a01160" startline="42" endline="48">operator=</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d7/de4/a04674_1a4658b18413f5c1a22db4771bff2375c4" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::LightBuffer::Float4::w</definition>
+        <argsstring></argsstring>
+        <name>w</name>
+        <qualifiedname>castor3d::LightBuffer::Float4::w</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="62" column="7" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="62" bodyend="-1"/>
+        <referencedby refid="d7/de4/a04674_1a2dc364fde5f8847291a147ae4450e306" compoundref="da/d20/a01160" startline="50" endline="57">operator=</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/de4/a04674_1a272411990e7c489b34c5743bbff0b4aa" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d7/de4/a04674" kindref="compound">Float4</ref> &amp;</type>
+        <definition>Float4 &amp; castor3d::LightBuffer::Float4::operator=</definition>
+        <argsstring>(float rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::LightBuffer::Float4::operator=</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="29" column="9" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="29" bodyend="33"/>
+        <references refid="d7/de4/a04674_1a1e04068e62d3d593791a5cd32aef5b68" compoundref="da/d20/a01160" startline="59">x</references>
+      </memberdef>
+      <memberdef kind="function" id="d7/de4/a04674_1a5382fbc9f3d6466365dcd6e1ea283e57" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d7/de4/a04674" kindref="compound">Float4</ref> &amp;</type>
+        <definition>Float4 &amp; castor3d::LightBuffer::Float4::operator=</definition>
+        <argsstring>(castor::Point2f const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::LightBuffer::Float4::operator=</qualifiedname>
+        <param>
+          <type>castor::Point2f const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="35" column="9" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="35" bodyend="40"/>
+        <references refid="d7/de4/a04674_1a1e04068e62d3d593791a5cd32aef5b68" compoundref="da/d20/a01160" startline="59">x</references>
+        <references refid="d7/de4/a04674_1ad5fa8ee5d1c60a850cf76b3202418742" compoundref="da/d20/a01160" startline="60">y</references>
+      </memberdef>
+      <memberdef kind="function" id="d7/de4/a04674_1a4feb5ccf4a78122f87260c004d2c3fae" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d7/de4/a04674" kindref="compound">Float4</ref> &amp;</type>
+        <definition>Float4 &amp; castor3d::LightBuffer::Float4::operator=</definition>
+        <argsstring>(castor::Point3f const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::LightBuffer::Float4::operator=</qualifiedname>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="42" column="9" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="42" bodyend="48"/>
+        <references refid="d7/de4/a04674_1a1e04068e62d3d593791a5cd32aef5b68" compoundref="da/d20/a01160" startline="59">x</references>
+        <references refid="d7/de4/a04674_1ad5fa8ee5d1c60a850cf76b3202418742" compoundref="da/d20/a01160" startline="60">y</references>
+        <references refid="d7/de4/a04674_1afd5cc1025b1355e89a8782b5b389df54" compoundref="da/d20/a01160" startline="61">z</references>
+      </memberdef>
+      <memberdef kind="function" id="d7/de4/a04674_1a2dc364fde5f8847291a147ae4450e306" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d7/de4/a04674" kindref="compound">Float4</ref> &amp;</type>
+        <definition>Float4 &amp; castor3d::LightBuffer::Float4::operator=</definition>
+        <argsstring>(castor::Point4f const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::LightBuffer::Float4::operator=</qualifiedname>
+        <param>
+          <type>castor::Point4f const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="50" column="9" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="50" bodyend="57"/>
+        <references refid="d7/de4/a04674_1a4658b18413f5c1a22db4771bff2375c4" compoundref="da/d20/a01160" startline="62">w</references>
+        <references refid="d7/de4/a04674_1a1e04068e62d3d593791a5cd32aef5b68" compoundref="da/d20/a01160" startline="59">x</references>
+        <references refid="d7/de4/a04674_1ad5fa8ee5d1c60a850cf76b3202418742" compoundref="da/d20/a01160" startline="60">y</references>
+        <references refid="d7/de4/a04674_1afd5cc1025b1355e89a8782b5b389df54" compoundref="da/d20/a01160" startline="61">z</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="27" column="1" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="28" bodyend="63"/>
+    <listofallmembers>
+      <member refid="d7/de4/a04674_1a272411990e7c489b34c5743bbff0b4aa" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::Float4</scope><name>operator=</name></member>
+      <member refid="d7/de4/a04674_1a5382fbc9f3d6466365dcd6e1ea283e57" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::Float4</scope><name>operator=</name></member>
+      <member refid="d7/de4/a04674_1a4feb5ccf4a78122f87260c004d2c3fae" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::Float4</scope><name>operator=</name></member>
+      <member refid="d7/de4/a04674_1a2dc364fde5f8847291a147ae4450e306" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::Float4</scope><name>operator=</name></member>
+      <member refid="d7/de4/a04674_1a4658b18413f5c1a22db4771bff2375c4" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::Float4</scope><name>w</name></member>
+      <member refid="d7/de4/a04674_1a1e04068e62d3d593791a5cd32aef5b68" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::Float4</scope><name>x</name></member>
+      <member refid="d7/de4/a04674_1ad5fa8ee5d1c60a850cf76b3202418742" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::Float4</scope><name>y</name></member>
+      <member refid="d7/de4/a04674_1afd5cc1025b1355e89a8782b5b389df54" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::Float4</scope><name>z</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

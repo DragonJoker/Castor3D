@@ -1,5 +1,15 @@
-<map id="castor3d::LightPropagationVolumesBase" name="castor3d::LightPropagationVolumesBase">
-<area shape="rect" id="node1" title=" " alt="" coords="26,80,203,121"/>
-<area shape="rect" id="node3" href="$dd/d2e/a03734.html" title="Lighting propagation volumes generation pass." alt="" coords="5,169,224,211"/>
-<area shape="rect" id="node2" title=" " alt="" coords="61,5,168,32"/>
+<map id="castor3d::GBufferT&lt; TextureEnumT &gt;" name="castor3d::GBufferT&lt; TextureEnumT &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="364,136,495,177"/>
+<area shape="rect" id="node4" href="$df/d76/a03726.html" title=" " alt="" coords="635,5,765,47"/>
+<area shape="rect" id="node6" href="$df/d76/a03726.html" title=" " alt="" coords="635,71,765,112"/>
+<area shape="rect" id="node8" href="$df/d76/a03726.html" title=" " alt="" coords="635,136,765,177"/>
+<area shape="rect" id="node10" href="$df/d76/a03726.html" title=" " alt="" coords="635,201,765,243"/>
+<area shape="rect" id="node12" href="$df/d76/a03726.html" title=" " alt="" coords="635,267,765,308"/>
+<area shape="rect" id="node2" href="$db/db0/a03722.html" title=" " alt="" coords="161,143,315,170"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,143,112,170"/>
+<area shape="rect" id="node5" href="$dd/ddf/a04270.html" title=" " alt="" coords="823,13,998,39"/>
+<area shape="rect" id="node7" href="$d4/d5f/a03778.html" title=" " alt="" coords="819,71,1002,112"/>
+<area shape="rect" id="node9" href="$db/d6b/a04330.html" title=" " alt="" coords="815,143,1007,170"/>
+<area shape="rect" id="node11" href="$d1/d8f/a04202.html" title=" " alt="" coords="817,209,1005,235"/>
+<area shape="rect" id="node13" href="$d7/dc9/a04370.html" title=" " alt="" coords="821,267,1000,308"/>
 </map>

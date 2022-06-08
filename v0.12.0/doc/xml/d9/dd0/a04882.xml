@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d9/dd0/a04882" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::BillboardUbo</compoundname>
+    <includes local="no">BillboardUbo.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d9/dd0/a04882_1a203da64d01d4e5aa09e86c8ceb28c9cf" prot="public" static="no">
+        <type><ref refid="d7/daf/a05002" kindref="compound">BillboardUboConfiguration</ref></type>
+        <definition>using castor3d::BillboardUbo::Configuration =  BillboardUboConfiguration</definition>
+        <argsstring></argsstring>
+        <name>Configuration</name>
+        <qualifiedname>castor3d::BillboardUbo::Configuration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/BillboardUbo.hpp" line="49" column="1" bodyfile="Shader/Ubos/BillboardUbo.hpp" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d9/dd0/a04882_1a2c5ec3fd6818997c4f658fa72fdeb3c1" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::BillboardUbo::BufferBillboard</definition>
+        <argsstring></argsstring>
+        <name>BufferBillboard</name>
+        <qualifiedname>castor3d::BillboardUbo::BufferBillboard</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/BillboardUbo.hpp" line="52" column="37" bodyfile="Shader/Ubos/BillboardUbo.hpp" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dd0/a04882_1a7cd6f524824c065fbb16996abde6bf47" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::BillboardUbo::BillboardData</definition>
+        <argsstring></argsstring>
+        <name>BillboardData</name>
+        <qualifiedname>castor3d::BillboardUbo::BillboardData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/BillboardUbo.hpp" line="53" column="37" bodyfile="Shader/Ubos/BillboardUbo.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/BillboardUbo.hpp" line="46" column="1" bodyfile="Shader/Ubos/BillboardUbo.hpp" bodystart="47" bodyend="54"/>
+    <listofallmembers>
+      <member refid="d9/dd0/a04882_1a7cd6f524824c065fbb16996abde6bf47" prot="public" virt="non-virtual"><scope>castor3d::BillboardUbo</scope><name>BillboardData</name></member>
+      <member refid="d9/dd0/a04882_1a2c5ec3fd6818997c4f658fa72fdeb3c1" prot="public" virt="non-virtual"><scope>castor3d::BillboardUbo</scope><name>BufferBillboard</name></member>
+      <member refid="d9/dd0/a04882_1a203da64d01d4e5aa09e86c8ceb28c9cf" prot="public" virt="non-virtual"><scope>castor3d::BillboardUbo</scope><name>Configuration</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

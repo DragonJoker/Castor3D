@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Render/RenderNodesPass.hpp File Reference</title>
+<title>Castor3D: Render/PostEffect/PostEffectModule.hpp File Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,35 +42,34 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_ee81606feaed1a7650f95054c2670416.html">Render</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_ee81606feaed1a7650f95054c2670416.html">Render</a></li><li class="navelem"><a class="el" href="../../dir_b66ca58a575fd0a9e8ee9909dd1d567d.html">PostEffect</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a>  </div>
-  <div class="headertitle"><div class="title">RenderNodesPass.hpp File Reference</div></div>
+  <div class="headertitle"><div class="title">PostEffectModule.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dc4/a04051.html">castor3d::RenderNodesPassDesc</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d54/a04055.html">castor3d::RenderNodesPass</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d9e/a04059.html">castor3d::RenderNodesPass::PassDescriptors</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:da/de3/a01398"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/de3/a01398.html">castor3d</a></td></tr>
+<tr class="memitem:da/dab/a01362"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html">castor3d</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader">PostEffect</h2></td></tr>
+<tr class="memitem:a151693e3692aa0feaea11a32fda7a14b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a151693e3692aa0feaea11a32fda7a14b">castor3d::PostEffectFactory</a> = castor::Factory&lt; PostEffect, castor::String, std::shared_ptr&lt; PostEffect &gt;, std::function&lt; std::shared_ptr&lt; PostEffect &gt;(RenderTarget &amp;, RenderSystem &amp;, Parameters const &amp;) &gt; &gt;</td></tr>
+<tr class="memdesc:a151693e3692aa0feaea11a32fda7a14b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Post effect factory.  <a href="../../da/dab/a01362.html#a151693e3692aa0feaea11a32fda7a14b">More...</a><br /></td></tr>
+<tr class="separator:a151693e3692aa0feaea11a32fda7a14b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ec433d5431343a3f91fbfa3d2fdd880"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a4ec433d5431343a3f91fbfa3d2fdd880">castor3d::CU_DeclareSmartPtr</a> (PostEffect)</td></tr>
+<tr class="separator:a4ec433d5431343a3f91fbfa3d2fdd880"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ec722b8487cd488e70b11397e2bf622"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a5ec722b8487cd488e70b11397e2bf622">castor3d::CU_DeclareVector</a> (PostEffectSPtr, PostEffectPtr)</td></tr>
+<tr class="separator:a5ec722b8487cd488e70b11397e2bf622"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 21:28:50 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:46 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

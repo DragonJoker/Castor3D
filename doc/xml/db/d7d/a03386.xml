@@ -1,31 +1,82 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="db/d7d/a03386" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::InstantiationData</compoundname>
-    <includes local="no">InstantiationComponent.hpp</includes>
+    <compoundname>castor3d::FaceInfos</compoundname>
+    <includes local="no">FaceInfos.hpp</includes>
+    <innerclass refid="d9/dc1/a03390" prot="public">castor3d::FaceInfos::Vertex</innerclass>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="db/d7d/a03386_1a0c08893a40240a8e6e66d46e617790f3" prot="public" static="no" mutable="no">
-        <type>castor::Point4ui</type>
-        <definition>castor::Point4ui castor3d::InstantiationData::m_objectIDs</definition>
+      <memberdef kind="variable" id="db/d7d/a03386_1a4a3ac3f4c86c3e2eae6aac994965e162" prot="public" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="d9/dc1/a03390" kindref="compound">Vertex</ref>, 3 &gt;</type>
+        <definition>std::array&lt; Vertex, 3 &gt; castor3d::FaceInfos::m_vertex</definition>
         <argsstring></argsstring>
-        <name>m_objectIDs</name>
-        <qualifiedname>castor3d::InstantiationData::m_objectIDs</qualifiedname>
+        <name>m_vertex</name>
+        <qualifiedname>castor3d::FaceInfos::m_vertex</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The 3 vertex informations. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="18" column="18" bodyfile="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" bodystart="18" bodyend="-1"/>
+        <location file="Model/Mesh/Submesh/Component/FaceInfos.hpp" line="40" column="12" bodyfile="Model/Mesh/Submesh/Component/FaceInfos.hpp" bodystart="40" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="16" column="1" bodyfile="Model/Mesh/Submesh/Component/InstantiationComponent.hpp" bodystart="17" bodyend="19"/>
+    <collaborationgraph>
+      <node id="6">
+        <label>T</label>
+      </node>
+      <node id="2">
+        <label>std::array&lt; castor3d::FaceInfos::Vertex, 3 &gt;</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; castor3d::FaceInfos::Vertex, 3 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::array&lt; float, 2 &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; float, 2 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::array&lt; float, 3 &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; float, 3 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::FaceInfos</label>
+        <link refid="db/d7d/a03386"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_vertex</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::FaceInfos::Vertex</label>
+        <link refid="d9/dc1/a03390"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_fNormal</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_fTexCoords</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Mesh/Submesh/Component/FaceInfos.hpp" line="11" column="1" bodyfile="Model/Mesh/Submesh/Component/FaceInfos.hpp" bodystart="12" bodyend="41"/>
     <listofallmembers>
-      <member refid="db/d7d/a03386_1a0c08893a40240a8e6e66d46e617790f3" prot="public" virt="non-virtual"><scope>castor3d::InstantiationData</scope><name>m_objectIDs</name></member>
+      <member refid="db/d7d/a03386_1a4a3ac3f4c86c3e2eae6aac994965e162" prot="public" virt="non-virtual"><scope>castor3d::FaceInfos</scope><name>m_vertex</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

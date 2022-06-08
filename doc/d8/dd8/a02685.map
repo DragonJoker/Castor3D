@@ -1,4 +1,8 @@
-<map id="castor3d::ShaderProgramCache" name="castor3d::ShaderProgramCache">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,212,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="15,5,202,32"/>
+<map id="castor3d::ObjectCacheT&lt; SceneNode, castor::String, SceneNodeCacheTraits &gt;" name="castor3d::ObjectCacheT&lt; SceneNode, castor::String, SceneNodeCacheTraits &gt;">
+<area shape="rect" id="node1" title="SceneNode cache." alt="" coords="936,45,1127,101"/>
+<area shape="rect" id="node2" href="$d8/dab/a02638.html" title=" " alt="" coords="688,45,887,101"/>
+<area shape="rect" id="node3" title=" " alt="" coords="8,5,191,32"/>
+<area shape="rect" id="node5" href="$d8/dab/a02638.html" title=" " alt="" coords="249,53,435,94"/>
+<area shape="rect" id="node4" title=" " alt="" coords="243,119,441,175"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5,61,193,102"/>
 </map>

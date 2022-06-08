@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="df/d23/a04210" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::LightPass</compoundname>
+    <includes local="no">LightPass.hpp</includes>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="df/d23/a04210_1abe55a05df6386ae05f0443e872921be2" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/df4/a01401_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
+        <definition>static ShaderPtr castor3d::LightPass::getVertexShaderSource</definition>
+        <argsstring>(LightType lightType)</argsstring>
+        <name>getVertexShaderSource</name>
+        <qualifiedname>castor3d::LightPass::getVertexShaderSource</qualifiedname>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>lightType</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves the vertex shader source for a light type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lightType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The light type. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The source. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="26" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d23/a04210_1a79191646f64f6bb80d998c7362dd3fb9" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/df4/a01401_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
+        <definition>static ShaderPtr castor3d::LightPass::getPixelShaderSource</definition>
+        <argsstring>(PassTypeID passType, RenderSystem const &amp;renderSystem, SceneFlags const &amp;sceneFlags, LightType lightType, ShadowType shadowType, bool shadows)</argsstring>
+        <name>getPixelShaderSource</name>
+        <qualifiedname>castor3d::LightPass::getPixelShaderSource</qualifiedname>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a773fcfeb825d3fe54eb4a3dce23bca11" kindref="member">PassTypeID</ref></type>
+          <declname>passType</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d34/a04078" kindref="compound">RenderSystem</ref> const &amp;</type>
+          <declname>renderSystem</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref> const &amp;</type>
+          <declname>sceneFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>lightType</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a90275671c44e791e9556c4bed9033935" kindref="member">ShadowType</ref></type>
+          <declname>shadowType</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>shadows</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves the pixel shader source for a light type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">passType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The material pass type ID. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">renderSystem</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render system. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sceneFlags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene flags. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lightType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The light source type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">shadowType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The shadow type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">shadows</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tells if shadows are used. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The source. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="47" column="18"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="13" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="14" bodyend="53"/>
+    <listofallmembers>
+      <member refid="df/d23/a04210_1a79191646f64f6bb80d998c7362dd3fb9" prot="public" virt="non-virtual"><scope>castor3d::LightPass</scope><name>getPixelShaderSource</name></member>
+      <member refid="df/d23/a04210_1abe55a05df6386ae05f0443e872921be2" prot="public" virt="non-virtual"><scope>castor3d::LightPass</scope><name>getVertexShaderSource</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

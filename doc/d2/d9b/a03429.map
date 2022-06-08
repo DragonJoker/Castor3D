@@ -1,7 +1,5 @@
-<map id="castor3d::SubmeshAnimationBuffer" name="castor3d::SubmeshAnimationBuffer">
-<area shape="rect" id="node1" title=" " alt="" coords="62,288,255,329"/>
-<area shape="rect" id="node2" title=" " alt="" coords="81,184,236,225"/>
-<area shape="rect" id="node3" href="$d0/d17/a03491.html" title=" " alt="" coords="5,95,184,121"/>
-<area shape="rect" id="node4" title=" " alt="" coords="209,95,322,121"/>
-<area shape="rect" id="node5" title=" " alt="" coords="246,5,285,32"/>
+<map id="castor3d::SkinComponent" name="castor3d::SkinComponent">
+<area shape="rect" id="node1" title=" " alt="" coords="20,155,192,181"/>
+<area shape="rect" id="node2" href="$d5/d85/a03434.html" title=" " alt="" coords="5,80,207,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,5,207,32"/>
 </map>

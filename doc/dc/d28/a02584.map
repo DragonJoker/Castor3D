@@ -1,6 +1,7 @@
-<map id="castor3d::SkinnedObjectBufferPool::ModelBuffers" name="castor3d::SkinnedObjectBufferPool::ModelBuffers">
-<area shape="rect" id="node1" title=" " alt="" coords="5,319,204,360"/>
-<area shape="rect" id="node2" href="$db/d09/a02502.html" title=" " alt="" coords="5,185,204,227"/>
-<area shape="rect" id="node3" href="$d3/d41/a02530.html" title=" " alt="" coords="35,5,201,32"/>
-<area shape="rect" id="node4" href="$db/d09/a02502.html" title="A GPU buffer, that uses a buddy allocator to allocate sub&#45;buffers." alt="" coords="121,81,265,123"/>
+<map id="castor3d::ObjectBufferPool::ModelBuffers" name="castor3d::ObjectBufferPool::ModelBuffers">
+<area shape="rect" id="node1" title=" " alt="" coords="45,332,222,373"/>
+<area shape="rect" id="node2" title=" " alt="" coords="38,213,229,269"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,95,144,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="141,5,179,32"/>
+<area shape="rect" id="node5" title=" " alt="" coords="169,95,277,121"/>
 </map>

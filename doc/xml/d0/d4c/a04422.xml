@@ -1,174 +1,97 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="d0/d4c/a04422" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::SceneNodeAnimationKeyFrame</compoundname>
-    <basecompoundref refid="dd/d67/a02230" prot="public" virt="non-virtual">castor3d::AnimationKeyFrame</basecompoundref>
-    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; SceneNodeAnimation &gt;</basecompoundref>
-    <includes local="no">SceneNodeAnimationKeyFrame.hpp</includes>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d0/d4c/a04422_1aa1c98711acdcf3ab679e547febcc5ada" prot="private" static="no" mutable="no">
-        <type>castor::Point3f</type>
-        <definition>castor::Point3f castor3d::SceneNodeAnimationKeyFrame::m_position</definition>
+  <compounddef id="d0/d4c/a04422" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::Texture3DTo2D::Texture3DToScreen</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/d4c/a04422_1a93fd371f4d901c039161cdc3234559ae" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::Texture3DTo2D::Texture3DToScreen::descriptorSet</definition>
         <argsstring></argsstring>
-        <name>m_position</name>
-        <qualifiedname>castor3d::SceneNodeAnimationKeyFrame::m_position</qualifiedname>
+        <name>descriptorSet</name>
+        <qualifiedname>castor3d::Texture3DTo2D::Texture3DToScreen::descriptorSet</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="79" column="17" bodyfile="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" bodystart="79" bodyend="-1"/>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="83" column="25" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="83" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d0/d4c/a04422_1a3926bc1ad7df35f4f6ad9843e2550776" prot="private" static="no" mutable="no">
-        <type>castor::Quaternion</type>
-        <definition>castor::Quaternion castor3d::SceneNodeAnimationKeyFrame::m_rotation</definition>
+      <memberdef kind="variable" id="d0/d4c/a04422_1aea7670a2c520c74f48952e1123d65ec7" prot="public" static="no" mutable="no">
+        <type><ref refid="db/d06/a03866" kindref="compound">CommandsSemaphore</ref></type>
+        <definition>CommandsSemaphore castor3d::Texture3DTo2D::Texture3DToScreen::commands</definition>
         <argsstring></argsstring>
-        <name>m_rotation</name>
-        <qualifiedname>castor3d::SceneNodeAnimationKeyFrame::m_rotation</qualifiedname>
+        <name>commands</name>
+        <qualifiedname>castor3d::Texture3DTo2D::Texture3DToScreen::commands</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="80" column="20" bodyfile="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" bodystart="80" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/d4c/a04422_1a11df29f10297b5171c31db6f16a1fde6" prot="private" static="no" mutable="no">
-        <type>castor::Point3f</type>
-        <definition>castor::Point3f castor3d::SceneNodeAnimationKeyFrame::m_scale</definition>
-        <argsstring></argsstring>
-        <name>m_scale</name>
-        <qualifiedname>castor3d::SceneNodeAnimationKeyFrame::m_scale</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="81" column="17" bodyfile="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" bodystart="81" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="friend">
-      <memberdef kind="friend" id="d0/d4c/a04422_1a5578000839a2146cd5b6836c7e446d7f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>class</type>
-        <definition>friend class BinaryParser&lt; SceneNodeAnimationKeyFrame &gt;</definition>
-        <argsstring></argsstring>
-        <name>BinaryParser&lt; SceneNodeAnimationKeyFrame &gt;</name>
-        <qualifiedname>castor3d::SceneNodeAnimationKeyFrame::BinaryParser&lt; SceneNodeAnimationKeyFrame &gt;</qualifiedname>
-        <param>
-          <type><ref refid="de/dd4/a02338" kindref="compound">BinaryParser</ref>&lt; <ref refid="d0/d4c/a04422" kindref="compound">SceneNodeAnimationKeyFrame</ref> &gt;</type>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="81" column="17" bodyfile="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" bodystart="83" bodyend="-1"/>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="84" column="19" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="84" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d0/d4c/a04422_1a10e117d88a15c13e70cfd6f009196ced" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::SceneNodeAnimationKeyFrame::SceneNodeAnimationKeyFrame</definition>
-        <argsstring>(SceneNodeAnimation &amp;parent, castor::Milliseconds const &amp;timeIndex)</argsstring>
-        <name>SceneNodeAnimationKeyFrame</name>
-        <qualifiedname>castor3d::SceneNodeAnimationKeyFrame::SceneNodeAnimationKeyFrame</qualifiedname>
-        <param>
-          <type><ref refid="d3/d74/a04418" kindref="compound">SceneNodeAnimation</ref> &amp;</type>
-          <declname>parent</declname>
-        </param>
-        <param>
-          <type>castor::Milliseconds const &amp;</type>
-          <declname>timeIndex</declname>
-        </param>
+      <memberdef kind="function" id="d0/d4c/a04422_1ac75528d996f9f865cae2dc90be6321c2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::Texture3DTo2D::Texture3DToScreen::Texture3DToScreen</definition>
+        <argsstring>()</argsstring>
+        <name>Texture3DToScreen</name>
+        <qualifiedname>castor3d::Texture3DTo2D::Texture3DToScreen::Texture3DToScreen</qualifiedname>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">parent</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parent animation. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">timeIndex</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>When the key frame starts. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="30" column="9"/>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="71" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="d0/d4c/a04422_1ae9173cdd28c446da7a480af9cd9686b8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::Point3f const &amp;</type>
-        <definition>castor::Point3f const  &amp; castor3d::SceneNodeAnimationKeyFrame::getPosition</definition>
-        <argsstring>() const</argsstring>
-        <name>getPosition</name>
-        <qualifiedname>castor3d::SceneNodeAnimationKeyFrame::getPosition</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="33" column="24" bodyfile="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" bodystart="33" bodyend="36"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d4c/a04422_1a1debe7fcbf9cee8ba0713b27f734970a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::Quaternion const &amp;</type>
-        <definition>castor::Quaternion const  &amp; castor3d::SceneNodeAnimationKeyFrame::getRotation</definition>
-        <argsstring>() const</argsstring>
-        <name>getRotation</name>
-        <qualifiedname>castor3d::SceneNodeAnimationKeyFrame::getRotation</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="38" column="27" bodyfile="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" bodystart="38" bodyend="41"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d4c/a04422_1ab62268ce64ec8346316157d874391b98" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::Point3f const &amp;</type>
-        <definition>castor::Point3f const  &amp; castor3d::SceneNodeAnimationKeyFrame::getScale</definition>
-        <argsstring>() const</argsstring>
-        <name>getScale</name>
-        <qualifiedname>castor3d::SceneNodeAnimationKeyFrame::getScale</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="43" column="24" bodyfile="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" bodystart="43" bodyend="46"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d4c/a04422_1abf807dbfa0eceda40211a965d04e717c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::SceneNodeAnimationKeyFrame::setTransform</definition>
-        <argsstring>(castor::Point3f translate, castor::Quaternion rotate, castor::Point3f scale)</argsstring>
-        <name>setTransform</name>
-        <qualifiedname>castor3d::SceneNodeAnimationKeyFrame::setTransform</qualifiedname>
+      <memberdef kind="function" id="d0/d4c/a04422_1a26277a3b7330b274f94fd19e5de1d2ec" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::Texture3DTo2D::Texture3DToScreen::Texture3DToScreen</definition>
+        <argsstring>(RenderDevice const &amp;device, QueueData const &amp;queueData, UniformBufferOffsetT&lt; Texture3DTo2DData &gt; const &amp;uniformBuffer, MatrixUbo const &amp;matrixUbo, IntermediateView const &amp;texture3D, ashes::RenderPass const &amp;renderPass, ashes::DescriptorSetPool const &amp;descriptorSetPool, ashes::FrameBuffer const &amp;frameBuffer, ashes::PipelineLayout const &amp;pipelineLayout, ashes::GraphicsPipeline const &amp;pipeline)</argsstring>
+        <name>Texture3DToScreen</name>
+        <qualifiedname>castor3d::Texture3DTo2D::Texture3DToScreen::Texture3DToScreen</qualifiedname>
         <param>
-          <type>castor::Point3f</type>
-          <declname>translate</declname>
+          <type><ref refid="df/d75/a04010" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
         </param>
         <param>
-          <type>castor::Quaternion</type>
-          <declname>rotate</declname>
+          <type><ref refid="d2/dc1/a03994" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
         </param>
         <param>
-          <type>castor::Point3f</type>
-          <declname>scale</declname>
+          <type><ref refid="d6/de1/a02518" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="da/d48/a04414" kindref="compound">Texture3DTo2DData</ref> &gt; const &amp;</type>
+          <declname>uniformBuffer</declname>
+        </param>
+        <param>
+          <type><ref refid="da/df4/a05050" kindref="compound">MatrixUbo</ref> const &amp;</type>
+          <declname>matrixUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d1e/a04382" kindref="compound">IntermediateView</ref> const &amp;</type>
+          <declname>texture3D</declname>
+        </param>
+        <param>
+          <type>ashes::RenderPass const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type>ashes::DescriptorSetPool const &amp;</type>
+          <declname>descriptorSetPool</declname>
+        </param>
+        <param>
+          <type>ashes::FrameBuffer const &amp;</type>
+          <declname>frameBuffer</declname>
+        </param>
+        <param>
+          <type>ashes::PipelineLayout const &amp;</type>
+          <declname>pipelineLayout</declname>
+        </param>
+        <param>
+          <type>ashes::GraphicsPipeline const &amp;</type>
+          <declname>pipeline</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -176,142 +99,31 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="48" column="6" bodyfile="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" bodystart="48" bodyend="55"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d4c/a04422_1a19a6ac55f72fa6c0691795a248dec7de" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::SceneNodeAnimationKeyFrame::setPosition</definition>
-        <argsstring>(castor::Point3f value)</argsstring>
-        <name>setPosition</name>
-        <qualifiedname>castor3d::SceneNodeAnimationKeyFrame::setPosition</qualifiedname>
-        <param>
-          <type>castor::Point3f</type>
-          <declname>value</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="57" column="6" bodyfile="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" bodystart="57" bodyend="60"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d4c/a04422_1a7bfac31a42329bb6689a8b33fc663d0f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::SceneNodeAnimationKeyFrame::setRotation</definition>
-        <argsstring>(castor::Quaternion value)</argsstring>
-        <name>setRotation</name>
-        <qualifiedname>castor3d::SceneNodeAnimationKeyFrame::setRotation</qualifiedname>
-        <param>
-          <type>castor::Quaternion</type>
-          <declname>value</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="62" column="6" bodyfile="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" bodystart="62" bodyend="65"/>
-      </memberdef>
-      <memberdef kind="function" id="d0/d4c/a04422_1a29c612527d2584802de828c0a0b399f8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::SceneNodeAnimationKeyFrame::setScale</definition>
-        <argsstring>(castor::Point3f value)</argsstring>
-        <name>setScale</name>
-        <qualifiedname>castor3d::SceneNodeAnimationKeyFrame::setScale</qualifiedname>
-        <param>
-          <type>castor::Point3f</type>
-          <declname>value</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="67" column="6" bodyfile="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" bodystart="67" bodyend="70"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d0/d4c/a04422_1abd98764b958a1b8185a20e21219f41a4" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::SceneNodeAnimationKeyFrame::doSetTimeIndex</definition>
-        <argsstring>(castor::Milliseconds const &amp;time)</argsstring>
-        <name>doSetTimeIndex</name>
-        <qualifiedname>castor3d::SceneNodeAnimationKeyFrame::doSetTimeIndex</qualifiedname>
-        <param>
-          <type>castor::Milliseconds const &amp;</type>
-          <declname>time</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="73" column="6" bodyfile="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" bodystart="73" bodyend="76"/>
+        <location file="Render/ToTexture/Texture3DTo2D.hpp" line="72" column="1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="2">
-        <label>castor3d::AnimationKeyFrame</label>
-        <link refid="dd/d67/a02230"/>
-      </node>
-      <node id="1">
-        <label>castor3d::SceneNodeAnimationKeyFrame</label>
-        <link refid="d0/d4c/a04422"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-        <childnode refid="3" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3">
-        <label>castor::OwnedBy&lt; SceneNodeAnimation &gt;</label>
-      </node>
-    </inheritancegraph>
     <collaborationgraph>
       <node id="2">
-        <label>castor3d::AnimationKeyFrame</label>
-        <link refid="dd/d67/a02230"/>
+        <label>castor3d::CommandsSemaphore</label>
+        <link refid="db/d06/a03866"/>
       </node>
       <node id="1">
-        <label>castor3d::SceneNodeAnimationKeyFrame</label>
-        <link refid="d0/d4c/a04422"/>
-        <childnode refid="2" relation="public-inheritance">
+        <label>castor3d::Texture3DTo2D::Texture3DToScreen</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>commands</edgelabel>
         </childnode>
-        <childnode refid="3" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3">
-        <label>castor::OwnedBy&lt; SceneNodeAnimation &gt;</label>
       </node>
     </collaborationgraph>
-    <location file="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" line="15" column="1" bodyfile="Scene/Animation/SceneNodeAnimationKeyFrame.hpp" bodystart="18" bodyend="84"/>
+    <location file="Render/ToTexture/Texture3DTo2D.hpp" line="69" column="1" bodyfile="Render/ToTexture/Texture3DTo2D.hpp" bodystart="70" bodyend="85"/>
     <listofallmembers>
-      <member refid="dd/d67/a02230_1a4c0d4b7afbe022ee8f9dcb9dc1ea54f0" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>AnimationKeyFrame</name></member>
-      <member refid="d0/d4c/a04422_1a5578000839a2146cd5b6836c7e446d7f" prot="private" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>BinaryParser&lt; SceneNodeAnimationKeyFrame &gt;</name></member>
-      <member refid="d0/d4c/a04422_1abd98764b958a1b8185a20e21219f41a4" prot="private" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>doSetTimeIndex</name></member>
-      <member refid="d0/d4c/a04422_1ae9173cdd28c446da7a480af9cd9686b8" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>getPosition</name></member>
-      <member refid="d0/d4c/a04422_1a1debe7fcbf9cee8ba0713b27f734970a" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>getRotation</name></member>
-      <member refid="d0/d4c/a04422_1ab62268ce64ec8346316157d874391b98" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>getScale</name></member>
-      <member refid="dd/d67/a02230_1a7b65d0aeb639d12908b9d17335702a17" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>getTimeIndex</name></member>
-      <member refid="dd/d67/a02230_1a14d9b59106f5406a66f2b8af33367991" prot="public" virt="virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>initialise</name></member>
-      <member refid="dd/d67/a02230_1abc9e4e2a76ef5ec53fe3308add665082" prot="protected" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>m_boundingBox</name></member>
-      <member refid="d0/d4c/a04422_1aa1c98711acdcf3ab679e547febcc5ada" prot="private" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>m_position</name></member>
-      <member refid="d0/d4c/a04422_1a3926bc1ad7df35f4f6ad9843e2550776" prot="private" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>m_rotation</name></member>
-      <member refid="d0/d4c/a04422_1a11df29f10297b5171c31db6f16a1fde6" prot="private" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>m_scale</name></member>
-      <member refid="dd/d67/a02230_1a093b74b56f13b6376ea4a51e28893db5" prot="protected" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>m_timeIndex</name></member>
-      <member refid="d0/d4c/a04422_1a10e117d88a15c13e70cfd6f009196ced" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>SceneNodeAnimationKeyFrame</name></member>
-      <member refid="d0/d4c/a04422_1a19a6ac55f72fa6c0691795a248dec7de" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>setPosition</name></member>
-      <member refid="d0/d4c/a04422_1a7bfac31a42329bb6689a8b33fc663d0f" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>setRotation</name></member>
-      <member refid="d0/d4c/a04422_1a29c612527d2584802de828c0a0b399f8" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>setScale</name></member>
-      <member refid="d0/d4c/a04422_1abf807dbfa0eceda40211a965d04e717c" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>setTransform</name></member>
-      <member refid="dd/d67/a02230_1a0e38208bad19dd09708af045818c2f8d" prot="public" virt="virtual"><scope>castor3d::SceneNodeAnimationKeyFrame</scope><name>~AnimationKeyFrame</name></member>
+      <member refid="d0/d4c/a04422_1aea7670a2c520c74f48952e1123d65ec7" prot="public" virt="non-virtual"><scope>castor3d::Texture3DTo2D::Texture3DToScreen</scope><name>commands</name></member>
+      <member refid="d0/d4c/a04422_1a93fd371f4d901c039161cdc3234559ae" prot="public" virt="non-virtual"><scope>castor3d::Texture3DTo2D::Texture3DToScreen</scope><name>descriptorSet</name></member>
+      <member refid="d0/d4c/a04422_1ac75528d996f9f865cae2dc90be6321c2" prot="public" virt="non-virtual"><scope>castor3d::Texture3DTo2D::Texture3DToScreen</scope><name>Texture3DToScreen</name></member>
+      <member refid="d0/d4c/a04422_1a26277a3b7330b274f94fd19e5de1d2ec" prot="public" virt="non-virtual"><scope>castor3d::Texture3DTo2D::Texture3DToScreen</scope><name>Texture3DToScreen</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Material/Texture/TextureConfiguration.hpp File Reference</title>
+<title>Castor3D: Material/Pass/Phong/Shaders/GlslPhongMaterial.hpp File Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,57 +42,33 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_bc92629874efa68fdb2baff2456ea0c1.html">Material</a></li><li class="navelem"><a class="el" href="../../dir_18be4a81ac2698d65b2c41fdfc591567.html">Texture</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_bc92629874efa68fdb2baff2456ea0c1.html">Material</a></li><li class="navelem"><a class="el" href="../../dir_1956ab8499f3d6675d52a03f8658751b.html">Pass</a></li><li class="navelem"><a class="el" href="../../dir_f182e9647ea46591f09b239bead2ee84.html">Phong</a></li><li class="navelem"><a class="el" href="../../dir_a6d39f94f30b7e21e1610ee95d9a533e.html">Shaders</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a> &#124;
-<a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">TextureConfiguration.hpp File Reference</div></div>
+<a href="#namespaces">Namespaces</a>  </div>
+  <div class="headertitle"><div class="title">GlslPhongMaterial.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d08/a02911.html">castor3d::TextureTransform</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/deb/a02915.html">castor3d::TextureConfiguration</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies the usages of a texture, per image component.  <a href="../../d6/deb/a02915.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/da5/a02919.html">castor3d::PassTextureConfig</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d78/a02886.html">castor3d::shader::PhongLightMaterial</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:da/de3/a01398"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/de3/a01398.html">castor3d</a></td></tr>
+<tr class="memitem:da/dab/a01362"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html">castor3d</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:a61eb65c45d41d185fe134f6a08b5fb32"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d6/d22/a00245.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/de3/a01398.html#a61eb65c45d41d185fe134f6a08b5fb32">castor3d::operator==</a> (TextureTransform const &amp;lhs, TextureTransform const &amp;rhs) noexcept</td></tr>
-<tr class="separator:a61eb65c45d41d185fe134f6a08b5fb32"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7660a9f939b5eb1586bd6b221df59cc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/de3/a01398.html#ac7660a9f939b5eb1586bd6b221df59cc">castor3d::operator!=</a> (TextureTransform const &amp;lhs, TextureTransform const &amp;rhs) noexcept</td></tr>
-<tr class="separator:ac7660a9f939b5eb1586bd6b221df59cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a31b8712a8a3b3cd479b3c096daf47692"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d6/d22/a00245.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> TextureFlags&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/de3/a01398.html#a31b8712a8a3b3cd479b3c096daf47692">castor3d::getFlags</a> (TextureConfiguration const &amp;config)</td></tr>
-<tr class="separator:a31b8712a8a3b3cd479b3c096daf47692"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7bd46a89acd766f4a0eb654386937fa9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d6/d22/a00245.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor::PixelComponents&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/de3/a01398.html#a7bd46a89acd766f4a0eb654386937fa9">castor3d::getPixelComponents</a> (uint32_t mask)</td></tr>
-<tr class="separator:a7bd46a89acd766f4a0eb654386937fa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9370df765dab9f980e47dc06dac0cfc1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d6/d22/a00245.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/de3/a01398.html#a9370df765dab9f980e47dc06dac0cfc1">castor3d::updateIndices</a> (castor::PixelFormat format, TextureConfiguration &amp;config)</td></tr>
-<tr class="separator:a9370df765dab9f980e47dc06dac0cfc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
-<tr class="memitem:ada2de4755679c561f9f244e0c0305989"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d6/d22/a00245.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/de3/a01398.html#ada2de4755679c561f9f244e0c0305989">castor3d::shallowEqual</a> (TextureConfiguration const &amp;lhs, TextureConfiguration const &amp;rhs)</td></tr>
-<tr class="separator:ada2de4755679c561f9f244e0c0305989"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aecef3f04669a851895a9254e74ff91fb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d6/d22/a00245.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/de3/a01398.html#aecef3f04669a851895a9254e74ff91fb">castor3d::operator==</a> (TextureConfiguration const &amp;lhs, TextureConfiguration const &amp;rhs)</td></tr>
-<tr class="separator:aecef3f04669a851895a9254e74ff91fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a465798a2305988e318f4c554507bcf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d6/d22/a00245.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/de3/a01398.html#a8a465798a2305988e318f4c554507bcf">castor3d::operator!=</a> (TextureConfiguration const &amp;lhs, TextureConfiguration const &amp;rhs)</td></tr>
-<tr class="separator:a8a465798a2305988e318f4c554507bcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:de/d1f/a01364"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d1f/a01364.html">castor3d::shader</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 21:28:50 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:45 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

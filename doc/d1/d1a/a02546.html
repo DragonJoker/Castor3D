@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::GpuBufferLinearAllocator Struct Reference</title>
+<title>Castor3D: castor3d::GpuBufferBuddyAllocatorTraits::Block Struct Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,215 +42,48 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dc/df4/a01401.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d1/d1a/a02546.html">GpuBufferLinearAllocator</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../de/d01/a02542.html">GpuBufferBuddyAllocatorTraits</a></li><li class="navelem"><a class="el" href="../../d1/d1a/a02546.html">Block</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="../../d1/d57/a02543.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">castor3d::GpuBufferLinearAllocator Struct Reference</div></div>
+  <div class="headertitle"><div class="title">castor3d::GpuBufferBuddyAllocatorTraits::Block Struct Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;GpuBufferLinearAllocator.hpp&gt;</code></p>
+<p><code>#include &lt;GpuBufferBuddyAllocator.hpp&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:aec711e82683606dd049d2b83223f2d8a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d1a/a02546.html#aec711e82683606dd049d2b83223f2d8a">GpuBufferLinearAllocator</a> (size_t count, uint32_t alignment)</td></tr>
-<tr class="memdesc:aec711e82683606dd049d2b83223f2d8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../d1/d1a/a02546.html#aec711e82683606dd049d2b83223f2d8a">More...</a><br /></td></tr>
-<tr class="separator:aec711e82683606dd049d2b83223f2d8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6864d8f358285ef7c9f04731aa50433"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> VkDeviceSize&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d1a/a02546.html#ac6864d8f358285ef7c9f04731aa50433">allocate</a> (size_t size)</td></tr>
-<tr class="memdesc:ac6864d8f358285ef7c9f04731aa50433"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates memory.  <a href="../../d1/d1a/a02546.html#ac6864d8f358285ef7c9f04731aa50433">More...</a><br /></td></tr>
-<tr class="separator:ac6864d8f358285ef7c9f04731aa50433"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22925dc9c260c81b16e7e92cf2c975c8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d1a/a02546.html#a22925dc9c260c81b16e7e92cf2c975c8">deallocate</a> (VkDeviceSize pointer)</td></tr>
-<tr class="memdesc:a22925dc9c260c81b16e7e92cf2c975c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deallocates memory.  <a href="../../d1/d1a/a02546.html#a22925dc9c260c81b16e7e92cf2c975c8">More...</a><br /></td></tr>
-<tr class="separator:a22925dc9c260c81b16e7e92cf2c975c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a271e7a5ac0c5aed27611421969f9da47"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d1a/a02546.html#a271e7a5ac0c5aed27611421969f9da47">getTotalSize</a> () const</td></tr>
-<tr class="separator:a271e7a5ac0c5aed27611421969f9da47"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4f50f4191db9c476b072c989b08afad"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d1a/a02546.html#ab4f50f4191db9c476b072c989b08afad">getAlignSize</a> () const</td></tr>
-<tr class="separator:ab4f50f4191db9c476b072c989b08afad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af0f91c88b34f256fef4eea59c69c0ba2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d1a/a02546.html#af0f91c88b34f256fef4eea59c69c0ba2">hasAvailable</a> (size_t) const</td></tr>
-<tr class="separator:af0f91c88b34f256fef4eea59c69c0ba2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a35b84f4c8e3c9cb893d72247a4c17631"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../de/d01/a02542.html#ad5aca6297e2f1509e1a9195e846f05ff">PointerType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d1a/a02546.html#a35b84f4c8e3c9cb893d72247a4c17631">data</a></td></tr>
+<tr class="separator:a35b84f4c8e3c9cb893d72247a4c17631"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="aec711e82683606dd049d2b83223f2d8a" name="aec711e82683606dd049d2b83223f2d8a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aec711e82683606dd049d2b83223f2d8a">&#9670;&nbsp;</a></span>GpuBufferLinearAllocator()</h2>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a35b84f4c8e3c9cb893d72247a4c17631" name="a35b84f4c8e3c9cb893d72247a4c17631"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35b84f4c8e3c9cb893d72247a4c17631">&#9670;&nbsp;</a></span>data</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::GpuBufferLinearAllocator::GpuBufferLinearAllocator </td>
-          <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>count</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>alignment</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="memname"><a class="el" href="../../de/d01/a02542.html#ad5aca6297e2f1509e1a9195e846f05ff">PointerType</a> castor3d::GpuBufferBuddyAllocatorTraits::Block::data</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Constructor. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">count</td><td>The allocator elements count. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">alignment</td><td>The alignment for one element. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac6864d8f358285ef7c9f04731aa50433" name="ac6864d8f358285ef7c9f04731aa50433"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac6864d8f358285ef7c9f04731aa50433">&#9670;&nbsp;</a></span>allocate()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> VkDeviceSize castor3d::GpuBufferLinearAllocator::allocate </td>
-          <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>size</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Allocates memory. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>The requested memory size. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The memory chunk. </dd></dl>
-
-</div>
-</div>
-<a id="a22925dc9c260c81b16e7e92cf2c975c8" name="a22925dc9c260c81b16e7e92cf2c975c8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a22925dc9c260c81b16e7e92cf2c975c8">&#9670;&nbsp;</a></span>deallocate()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::GpuBufferLinearAllocator::deallocate </td>
-          <td>(</td>
-          <td class="paramtype">VkDeviceSize&#160;</td>
-          <td class="paramname"><em>pointer</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Deallocates memory. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pointer</td><td>The memory chunk. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="ab4f50f4191db9c476b072c989b08afad" name="ab4f50f4191db9c476b072c989b08afad"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab4f50f4191db9c476b072c989b08afad">&#9670;&nbsp;</a></span>getAlignSize()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t castor3d::GpuBufferLinearAllocator::getAlignSize </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The element aligned size. </dd></dl>
-
-</div>
-</div>
-<a id="a271e7a5ac0c5aed27611421969f9da47" name="a271e7a5ac0c5aed27611421969f9da47"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a271e7a5ac0c5aed27611421969f9da47">&#9670;&nbsp;</a></span>getTotalSize()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t castor3d::GpuBufferLinearAllocator::getTotalSize </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The allocator size. </dd></dl>
-
-</div>
-</div>
-<a id="af0f91c88b34f256fef4eea59c69c0ba2" name="af0f91c88b34f256fef4eea59c69c0ba2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af0f91c88b34f256fef4eea59c69c0ba2">&#9670;&nbsp;</a></span>hasAvailable()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool castor3d::GpuBufferLinearAllocator::hasAvailable </td>
-          <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd><code>true</code> if there is enough remaining memory for given size. </dd></dl>
+<p class="reference">Referenced by <a class="el" href="../../de/d01/a02542.html#ad6e226481f38134632f4f82aa5c3aab1">castor3d::GpuBufferBuddyAllocatorTraits::isNull()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>Buffer/<a class="el" href="../../d5/dcb/a00170.html">GpuBufferLinearAllocator.hpp</a></li>
+<li>Buffer/<a class="el" href="../../d5/de9/a00176.html">GpuBufferBuddyAllocator.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 15:34:55 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:48 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

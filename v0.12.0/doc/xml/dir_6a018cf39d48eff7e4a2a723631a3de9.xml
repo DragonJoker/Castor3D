@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dir_6a018cf39d48eff7e4a2a723631a3de9" kind="dir">
+    <compoundname>Material/Pass/PBR/Shaders</compoundname>
+    <innerfile refid="da/de0/a00317">GlslPbrLighting.hpp</innerfile>
+    <innerfile refid="dd/de2/a00320">GlslPbrMaterial.hpp</innerfile>
+    <innerfile refid="de/d55/a00323">GlslPbrReflection.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Material/Pass/PBR/Shaders/"/>
+  </compounddef>
+</doxygen>

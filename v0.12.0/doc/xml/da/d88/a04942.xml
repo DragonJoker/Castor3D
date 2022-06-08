@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="da/d88/a04942" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::ObjectsIds::Ids</compoundname>
+    <includes local="no">ModelDataUbo.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/d88/a04942_1a581c4bd0632318110e2002374f65e008" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::ObjectsIds::Ids::nodeId</definition>
+        <argsstring></argsstring>
+        <name>nodeId</name>
+        <qualifiedname>castor3d::shader::ObjectsIds::Ids::nodeId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="97" column="11" bodyfile="Shader/Ubos/ModelDataUbo.hpp" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d88/a04942_1a7e8621b80c1913e2ee63136d4299b20b" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::ObjectsIds::Ids::morphingId</definition>
+        <argsstring></argsstring>
+        <name>morphingId</name>
+        <qualifiedname>castor3d::shader::ObjectsIds::Ids::morphingId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="98" column="11" bodyfile="Shader/Ubos/ModelDataUbo.hpp" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d88/a04942_1a46c29c160a21e854fe8c09bd2f7430bb" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::ObjectsIds::Ids::skinningId</definition>
+        <argsstring></argsstring>
+        <name>skinningId</name>
+        <qualifiedname>castor3d::shader::ObjectsIds::Ids::skinningId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelDataUbo.hpp" line="99" column="11" bodyfile="Shader/Ubos/ModelDataUbo.hpp" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/ModelDataUbo.hpp" line="95" column="1" bodyfile="Shader/Ubos/ModelDataUbo.hpp" bodystart="96" bodyend="100"/>
+    <listofallmembers>
+      <member refid="da/d88/a04942_1a7e8621b80c1913e2ee63136d4299b20b" prot="public" virt="non-virtual"><scope>castor3d::shader::ObjectsIds::Ids</scope><name>morphingId</name></member>
+      <member refid="da/d88/a04942_1a581c4bd0632318110e2002374f65e008" prot="public" virt="non-virtual"><scope>castor3d::shader::ObjectsIds::Ids</scope><name>nodeId</name></member>
+      <member refid="da/d88/a04942_1a46c29c160a21e854fe8c09bd2f7430bb" prot="public" virt="non-virtual"><scope>castor3d::shader::ObjectsIds::Ids</scope><name>skinningId</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

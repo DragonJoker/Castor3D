@@ -11,7 +11,7 @@
         <name>Engine</name>
         <qualifiedname>castor3d::log::Engine</qualifiedname>
         <param>
-          <type><ref refid="d1/d3c/a02714" kindref="compound">Engine</ref></type>
+          <type><ref refid="d9/db1/a02718" kindref="compound">Engine</ref></type>
         </param>
         <briefdescription>
         </briefdescription>
@@ -40,7 +40,7 @@
       </sectiondef>
       <sectiondef kind="public-static-attrib">
       <memberdef kind="variable" id="d3/dab/a02994_1a3b3afd8086fe06663f1e48fdf08b9520" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::LoggerStreamT&lt; char, castor::TraceLoggerStreambufT &gt;</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::LoggerStreamT&lt; char, castor::TraceLoggerStreambufT &gt;</type>
         <definition>C3D_API castor::LoggerStreamT&lt; char, castor::TraceLoggerStreambufT &gt; castor3d::log::trace</definition>
         <argsstring></argsstring>
         <name>trace</name>
@@ -54,7 +54,7 @@
         <location file="Miscellaneous/Logger.hpp" line="25" column="38" bodyfile="Miscellaneous/Logger.hpp" bodystart="25" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d3/dab/a02994_1a03f1492f319f514a4be4146d255bce73" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::LoggerStreamT&lt; char, castor::DebugLoggerStreambufT &gt;</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::LoggerStreamT&lt; char, castor::DebugLoggerStreambufT &gt;</type>
         <definition>C3D_API castor::LoggerStreamT&lt; char, castor::DebugLoggerStreambufT &gt; castor3d::log::debug</definition>
         <argsstring></argsstring>
         <name>debug</name>
@@ -68,7 +68,7 @@
         <location file="Miscellaneous/Logger.hpp" line="26" column="38" bodyfile="Miscellaneous/Logger.hpp" bodystart="26" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d3/dab/a02994_1a958f02b923786c8ac58726c287316b3b" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::LoggerStreamT&lt; char, castor::InfoLoggerStreambufT &gt;</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::LoggerStreamT&lt; char, castor::InfoLoggerStreambufT &gt;</type>
         <definition>C3D_API castor::LoggerStreamT&lt; char, castor::InfoLoggerStreambufT &gt; castor3d::log::info</definition>
         <argsstring></argsstring>
         <name>info</name>
@@ -82,7 +82,7 @@
         <location file="Miscellaneous/Logger.hpp" line="27" column="38" bodyfile="Miscellaneous/Logger.hpp" bodystart="27" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d3/dab/a02994_1ae0f926a36c8502d923618ac94126bff5" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::LoggerStreamT&lt; char, castor::WarningLoggerStreambufT &gt;</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::LoggerStreamT&lt; char, castor::WarningLoggerStreambufT &gt;</type>
         <definition>C3D_API castor::LoggerStreamT&lt; char, castor::WarningLoggerStreambufT &gt; castor3d::log::warn</definition>
         <argsstring></argsstring>
         <name>warn</name>
@@ -94,10 +94,10 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/Logger.hpp" line="28" column="38" bodyfile="Miscellaneous/Logger.hpp" bodystart="28" bodyend="-1"/>
-        <referencedby refid="d3/d09/a02334_1a035881aba2b64571b30a5efd3faaf3d9" compoundref="d3/d00/a00113" startline="322" endline="385">castor3d::BinaryParserBase&lt; TParsed &gt;::doParseHeader</referencedby>
+        <referencedby refid="d7/da1/a02290_1a035881aba2b64571b30a5efd3faaf3d9" compoundref="d4/d3e/a00116" startline="373" endline="436">castor3d::BinaryParserBase&lt; TParsed &gt;::doParseHeader</referencedby>
       </memberdef>
       <memberdef kind="variable" id="d3/dab/a02994_1aa59b94a4fd876453e5d3d04da799b209" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::LoggerStreamT&lt; char, castor::ErrorLoggerStreambufT &gt;</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::LoggerStreamT&lt; char, castor::ErrorLoggerStreambufT &gt;</type>
         <definition>C3D_API castor::LoggerStreamT&lt; char, castor::ErrorLoggerStreambufT &gt; castor3d::log::error</definition>
         <argsstring></argsstring>
         <name>error</name>
@@ -109,7 +109,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/Logger.hpp" line="29" column="38" bodyfile="Miscellaneous/Logger.hpp" bodystart="29" bodyend="-1"/>
-        <referencedby refid="d3/d09/a02334_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" compoundref="d3/d00/a00113" startline="574" endline="581">castor3d::BinaryParserBase&lt; TParsed &gt;::checkError</referencedby>
+        <referencedby refid="d7/da1/a02290_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" compoundref="d4/d3e/a00116" startline="639" endline="646">castor3d::BinaryParserBase&lt; TParsed &gt;::checkError</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-static-func">

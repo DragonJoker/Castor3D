@@ -1,255 +1,237 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d9/d36/a04430" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::SkeletonAnimationInstanceBone</compoundname>
-    <basecompoundref refid="d9/d8d/a04442" prot="public" virt="non-virtual">castor3d::SkeletonAnimationInstanceObject</basecompoundref>
-    <includes local="no">SkeletonAnimationInstanceBone.hpp</includes>
-      <sectiondef kind="user-defined">
-      <memberdef kind="function" id="d9/d36/a04430_1af4dc9d7e6c3c01c6764647792db6c1b5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::SkeletonAnimationInstanceBone::SkeletonAnimationInstanceBone</definition>
-        <argsstring>(SkeletonAnimationInstanceBone &amp;&amp;rhs)=default</argsstring>
-        <name>SkeletonAnimationInstanceBone</name>
-        <qualifiedname>castor3d::SkeletonAnimationInstanceBone::SkeletonAnimationInstanceBone</qualifiedname>
-        <param>
-          <type><ref refid="d9/d36/a04430" kindref="compound">SkeletonAnimationInstanceBone</ref> &amp;&amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>name Copy / Move. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp" line="22" column="9"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d36/a04430_1ac2b801f637bcfc2f603dd10e4d28108e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/d36/a04430" kindref="compound">SkeletonAnimationInstanceBone</ref> &amp;</type>
-        <definition>C3D_API SkeletonAnimationInstanceBone &amp; castor3d::SkeletonAnimationInstanceBone::operator=</definition>
-        <argsstring>(SkeletonAnimationInstanceBone &amp;&amp;rhs)=delete</argsstring>
-        <name>operator=</name>
-        <qualifiedname>castor3d::SkeletonAnimationInstanceBone::operator=</qualifiedname>
-        <param>
-          <type><ref refid="d9/d36/a04430" kindref="compound">SkeletonAnimationInstanceBone</ref> &amp;&amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp" line="23" column="40"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d36/a04430_1a153761fe1b0d3c09371767b8ceae8372" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::SkeletonAnimationInstanceBone::SkeletonAnimationInstanceBone</definition>
-        <argsstring>(SkeletonAnimationInstanceBone const &amp;rhs)=delete</argsstring>
-        <name>SkeletonAnimationInstanceBone</name>
-        <qualifiedname>castor3d::SkeletonAnimationInstanceBone::SkeletonAnimationInstanceBone</qualifiedname>
-        <param>
-          <type><ref refid="d9/d36/a04430" kindref="compound">SkeletonAnimationInstanceBone</ref> const &amp;</type>
-          <declname>rhs</declname>
-        </param>
+    <compoundname>castor3d::MeshletBoundsTransformPass</compoundname>
+    <includes local="no">MeshletBoundsTransformPass.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="enum" id="d9/d36/a04430_1a91368c03404094accc52b4af8f70679e" prot="public" static="no" strong="no">
+        <type></type>
+        <name>Ids</name>
+        <qualifiedname>castor3d::MeshletBoundsTransformPass::Ids</qualifiedname>
+        <enumvalue id="d9/d36/a04430_1a91368c03404094accc52b4af8f70679eaa14aed91eb84392ec50b411419785613" prot="public">
+          <name>ePositions</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d9/d36/a04430_1a91368c03404094accc52b4af8f70679eaae6937358a0b05de662ea609d6e9542f" prot="public">
+          <name>eNormals</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d9/d36/a04430_1a91368c03404094accc52b4af8f70679eae8c4450588580ebf2e3ac6f1e8a33f60" prot="public">
+          <name>eMeshlets</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d9/d36/a04430_1a91368c03404094accc52b4af8f70679eaf02a04fe7038540d53373b5702b25d3c" prot="public">
+          <name>eOutCullData</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp" line="24" column="9"/>
-      </memberdef>
-      <memberdef kind="function" id="d9/d36/a04430_1a0e758515a35b9e3dee3afc8cddd1b516" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/d36/a04430" kindref="compound">SkeletonAnimationInstanceBone</ref> &amp;</type>
-        <definition>C3D_API SkeletonAnimationInstanceBone &amp; castor3d::SkeletonAnimationInstanceBone::operator=</definition>
-        <argsstring>(SkeletonAnimationInstanceBone const &amp;rhs)=delete</argsstring>
-        <name>operator=</name>
-        <qualifiedname>castor3d::SkeletonAnimationInstanceBone::operator=</qualifiedname>
-        <param>
-          <type><ref refid="d9/d36/a04430" kindref="compound">SkeletonAnimationInstanceBone</ref> const &amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp" line="25" column="40"/>
+        <location file="Render/Transform/MeshletBoundsTransformPass.hpp" line="21" column="1" bodyfile="Render/Transform/MeshletBoundsTransformPass.hpp" bodystart="22" bodyend="27"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d9/d36/a04430_1a007c825d2c12f049c3cf39827c4741dc" prot="private" static="no" mutable="no">
-        <type><ref refid="d4/d60/a03446" kindref="compound">SkeletonAnimationBone</ref> &amp;</type>
-        <definition>SkeletonAnimationBone&amp; castor3d::SkeletonAnimationInstanceBone::m_animationBone</definition>
+      <memberdef kind="variable" id="d9/d36/a04430_1abdb2300527763c94792452438f62cd77" prot="private" static="no" mutable="no">
+        <type><ref refid="df/d75/a04010" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::MeshletBoundsTransformPass::m_device</definition>
         <argsstring></argsstring>
-        <name>m_animationBone</name>
-        <qualifiedname>castor3d::SkeletonAnimationInstanceBone::m_animationBone</qualifiedname>
+        <name>m_device</name>
+        <qualifiedname>castor3d::MeshletBoundsTransformPass::m_device</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The animation bone. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp" line="49" column="24" bodyfile="Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp" bodystart="49" bodyend="-1"/>
+        <location file="Render/Transform/MeshletBoundsTransformPass.hpp" line="42" column="21" bodyfile="Render/Transform/MeshletBoundsTransformPass.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d36/a04430_1acddf84ff082d5a09c5383da0137c5a89" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/dad/a04438" kindref="compound">BoundsTransformPipeline</ref> const  &amp;</type>
+        <definition>BoundsTransformPipeline const&amp; castor3d::MeshletBoundsTransformPass::m_pipeline</definition>
+        <argsstring></argsstring>
+        <name>m_pipeline</name>
+        <qualifiedname>castor3d::MeshletBoundsTransformPass::m_pipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/MeshletBoundsTransformPass.hpp" line="43" column="32" bodyfile="Render/Transform/MeshletBoundsTransformPass.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d36/a04430_1aefcd07a4eae70a8c3e95e1a7434e00ba" prot="private" static="no" mutable="no">
+        <type><ref refid="db/d0b/a02566" kindref="compound">ObjectBufferOffset</ref> const  &amp;</type>
+        <definition>ObjectBufferOffset const&amp; castor3d::MeshletBoundsTransformPass::m_source</definition>
+        <argsstring></argsstring>
+        <name>m_source</name>
+        <qualifiedname>castor3d::MeshletBoundsTransformPass::m_source</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/MeshletBoundsTransformPass.hpp" line="44" column="27" bodyfile="Render/Transform/MeshletBoundsTransformPass.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d36/a04430_1ab12db18d1cb5aa76b7dc056dbcb645d3" prot="private" static="no" mutable="no">
+        <type><ref refid="dd/df4/a02510" kindref="compound">GpuBufferOffsetT</ref>&lt; <ref refid="d3/d67/a03354" kindref="compound">Meshlet</ref> &gt; const  &amp;</type>
+        <definition>GpuBufferOffsetT&lt; Meshlet &gt; const&amp; castor3d::MeshletBoundsTransformPass::m_meshlets</definition>
+        <argsstring></argsstring>
+        <name>m_meshlets</name>
+        <qualifiedname>castor3d::MeshletBoundsTransformPass::m_meshlets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/MeshletBoundsTransformPass.hpp" line="45" column="25" bodyfile="Render/Transform/MeshletBoundsTransformPass.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d36/a04430_1abcf5877ec03bbded623f95292f78df80" prot="private" static="no" mutable="no">
+        <type><ref refid="dd/df4/a02510" kindref="compound">GpuBufferOffsetT</ref>&lt; <ref refid="df/d24/a03358" kindref="compound">MeshletCullData</ref> &gt; const  &amp;</type>
+        <definition>GpuBufferOffsetT&lt; MeshletCullData &gt; const&amp; castor3d::MeshletBoundsTransformPass::m_output</definition>
+        <argsstring></argsstring>
+        <name>m_output</name>
+        <qualifiedname>castor3d::MeshletBoundsTransformPass::m_output</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/MeshletBoundsTransformPass.hpp" line="46" column="25" bodyfile="Render/Transform/MeshletBoundsTransformPass.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d36/a04430_1a607671b0fb749b19b60db14cd1e3ed09" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::MeshletBoundsTransformPass::m_meshletCount</definition>
+        <argsstring></argsstring>
+        <name>m_meshletCount</name>
+        <qualifiedname>castor3d::MeshletBoundsTransformPass::m_meshletCount</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/MeshletBoundsTransformPass.hpp" line="47" column="10" bodyfile="Render/Transform/MeshletBoundsTransformPass.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d36/a04430_1ad8954c7eb3a8f2354f8126fa2f328cbd" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::MeshletBoundsTransformPass::m_descriptorSet</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorSet</name>
+        <qualifiedname>castor3d::MeshletBoundsTransformPass::m_descriptorSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/MeshletBoundsTransformPass.hpp" line="48" column="25" bodyfile="Render/Transform/MeshletBoundsTransformPass.hpp" bodystart="48" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d9/d36/a04430_1a9e701afc471667b01b25f0f68bc283b9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::SkeletonAnimationInstanceBone::SkeletonAnimationInstanceBone</definition>
-        <argsstring>(SkeletonAnimationInstance &amp;animationInstance, SkeletonAnimationBone &amp;animationObject, SkeletonAnimationInstanceObjectPtrArray &amp;allObjects)</argsstring>
-        <name>SkeletonAnimationInstanceBone</name>
-        <qualifiedname>castor3d::SkeletonAnimationInstanceBone::SkeletonAnimationInstanceBone</qualifiedname>
+      <memberdef kind="function" id="d9/d36/a04430_1a79d7b10923e3a1b0ba8c1fe3325406d7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::MeshletBoundsTransformPass::MeshletBoundsTransformPass</definition>
+        <argsstring>(RenderDevice const &amp;device, SubmeshRenderNode const &amp;node, BoundsTransformPipeline const &amp;pipeline, ObjectBufferOffset const &amp;source, GpuBufferOffsetT&lt; Meshlet &gt; const &amp;meshlets, GpuBufferOffsetT&lt; MeshletCullData &gt; const &amp;output)</argsstring>
+        <name>MeshletBoundsTransformPass</name>
+        <qualifiedname>castor3d::MeshletBoundsTransformPass::MeshletBoundsTransformPass</qualifiedname>
         <param>
-          <type><ref refid="df/de5/a04426" kindref="compound">SkeletonAnimationInstance</ref> &amp;</type>
-          <declname>animationInstance</declname>
+          <type><ref refid="df/d75/a04010" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
         </param>
         <param>
-          <type><ref refid="d4/d60/a03446" kindref="compound">SkeletonAnimationBone</ref> &amp;</type>
-          <declname>animationObject</declname>
+          <type><ref refid="dd/d51/a03842" kindref="compound">SubmeshRenderNode</ref> const &amp;</type>
+          <declname>node</declname>
         </param>
         <param>
-          <type>SkeletonAnimationInstanceObjectPtrArray &amp;</type>
-          <declname>allObjects</declname>
+          <type><ref refid="d7/dad/a04438" kindref="compound">BoundsTransformPipeline</ref> const &amp;</type>
+          <declname>pipeline</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d0b/a02566" kindref="compound">ObjectBufferOffset</ref> const &amp;</type>
+          <declname>source</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/df4/a02510" kindref="compound">GpuBufferOffsetT</ref>&lt; <ref refid="d3/d67/a03354" kindref="compound">Meshlet</ref> &gt; const &amp;</type>
+          <declname>meshlets</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/df4/a02510" kindref="compound">GpuBufferOffsetT</ref>&lt; <ref refid="df/d24/a03358" kindref="compound">MeshletCullData</ref> &gt; const &amp;</type>
+          <declname>output</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">animationInstance</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parent skeleton animation instance. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">animationObject</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The animation object. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="out">allObjects</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Receives this object&apos;s children. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp" line="39" column="9"/>
+        <location file="Render/Transform/MeshletBoundsTransformPass.hpp" line="30" column="1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d9/d36/a04430_1ac430b36dedabd49e7444e2535acd0a8d" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+      <memberdef kind="function" id="d9/d36/a04430_1aac683585dd32a719ffa16a0896818561" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
-        <definition>void castor3d::SkeletonAnimationInstanceBone::doApply</definition>
-        <argsstring>() override</argsstring>
-        <name>doApply</name>
-        <qualifiedname>castor3d::SkeletonAnimationInstanceBone::doApply</qualifiedname>
-        <reimplements refid="d9/d8d/a04442_1a8b6da36fc7b2b4cce822a904295e9ed3">doApply</reimplements>
+        <definition>void castor3d::MeshletBoundsTransformPass::recordInto</definition>
+        <argsstring>(crg::RecordContext &amp;context, VkCommandBuffer commandBuffer, uint32_t index)</argsstring>
+        <name>recordInto</name>
+        <qualifiedname>castor3d::MeshletBoundsTransformPass::recordInto</qualifiedname>
+        <param>
+          <type>crg::RecordContext &amp;</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>VkCommandBuffer</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
         <briefdescription>
-<para>Updates the object, applies the transformations matrix. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp" line="44" column="6"/>
+        <location file="Render/Transform/MeshletBoundsTransformPass.hpp" line="37" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="1">
-        <label>castor3d::SkeletonAnimationInstanceBone</label>
-        <link refid="d9/d36/a04430"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2">
-        <label>castor3d::SkeletonAnimationInstanceObject</label>
-        <link refid="d9/d8d/a04442"/>
-        <childnode refid="3" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3">
-        <label>castor::OwnedBy&lt; SkeletonAnimationInstance &gt;</label>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="1">
-        <label>castor3d::SkeletonAnimationInstanceBone</label>
-        <link refid="d9/d36/a04430"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2">
-        <label>castor3d::SkeletonAnimationInstanceObject</label>
-        <link refid="d9/d8d/a04442"/>
-        <childnode refid="3" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4" relation="usage">
-          <edgelabel>m_animationObject</edgelabel>
-        </childnode>
-      </node>
-      <node id="4">
-        <label>castor3d::SkeletonAnimationObject</label>
-        <link refid="d8/d01/a03458"/>
-        <childnode refid="5" relation="public-inheritance">
-        </childnode>
-        <childnode refid="6" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="5">
-        <label>castor::OwnedBy&lt; SkeletonAnimation &gt;</label>
-      </node>
-      <node id="3">
-        <label>castor::OwnedBy&lt; SkeletonAnimationInstance &gt;</label>
-      </node>
-      <node id="6">
-        <label>std::enable_shared_from_this&lt; SkeletonAnimationObject &gt;</label>
-      </node>
-    </collaborationgraph>
-    <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp" line="11" column="1" bodyfile="Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp" bodystart="13" bodyend="50"/>
+    <location file="Render/Transform/MeshletBoundsTransformPass.hpp" line="18" column="1" bodyfile="Render/Transform/MeshletBoundsTransformPass.hpp" bodystart="19" bodyend="49"/>
     <listofallmembers>
-      <member refid="d9/d8d/a04442_1ae25ea4ab7182fe2d1e17bb3f4704dd15" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>addChild</name></member>
-      <member refid="d9/d36/a04430_1ac430b36dedabd49e7444e2535acd0a8d" prot="private" virt="virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>doApply</name></member>
-      <member refid="d9/d8d/a04442_1a458d63c2355114aae4911ffd5717f932" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>getChildren</name></member>
-      <member refid="d9/d8d/a04442_1a6950f74fc6921673b59c051d31815147" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>getFinalTransform</name></member>
-      <member refid="d9/d8d/a04442_1ab86d2ed13a3d39f5281724420ef1bfda" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>getObject</name></member>
-      <member refid="d9/d36/a04430_1a007c825d2c12f049c3cf39827c4741dc" prot="private" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>m_animationBone</name></member>
-      <member refid="d9/d8d/a04442_1a67479ee0d95ec5c3fe0a91bd6ca5e9fc" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>m_animationObject</name></member>
-      <member refid="d9/d8d/a04442_1a0b7b066160d0200aa5a1c5d15aff1519" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>m_children</name></member>
-      <member refid="d9/d8d/a04442_1a23a80350153f06f35acd1e4ed99e902c" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>m_cumulativeTransform</name></member>
-      <member refid="d9/d8d/a04442_1a035cfcc104e26c8c18ea4bc9addcb9ff" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>m_curr</name></member>
-      <member refid="d9/d8d/a04442_1a3c6ae6f668b135b899a69a265d7be067" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>m_finalTransform</name></member>
-      <member refid="d9/d8d/a04442_1ae3c50d44c8843b314a8b1d3ad1f9efc1" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>m_prev</name></member>
-      <member refid="d9/d36/a04430_1ac2b801f637bcfc2f603dd10e4d28108e" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>operator=</name></member>
-      <member refid="d9/d36/a04430_1a0e758515a35b9e3dee3afc8cddd1b516" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>operator=</name></member>
-      <member refid="d9/d8d/a04442_1ae621ac20381e712069eab1b09ef5e87f" prot="protected" virt="non-virtual" ambiguityscope="castor3d::SkeletonAnimationInstanceObject::"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>operator=</name></member>
-      <member refid="d9/d8d/a04442_1a688009d8a6e62baecb85d294674cd259" prot="protected" virt="non-virtual" ambiguityscope="castor3d::SkeletonAnimationInstanceObject::"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>operator=</name></member>
-      <member refid="d9/d36/a04430_1af4dc9d7e6c3c01c6764647792db6c1b5" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>SkeletonAnimationInstanceBone</name></member>
-      <member refid="d9/d36/a04430_1a153761fe1b0d3c09371767b8ceae8372" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>SkeletonAnimationInstanceBone</name></member>
-      <member refid="d9/d36/a04430_1a9e701afc471667b01b25f0f68bc283b9" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>SkeletonAnimationInstanceBone</name></member>
-      <member refid="d9/d8d/a04442_1a6c8967a11da38699640fe64ef3396d23" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>SkeletonAnimationInstanceObject</name></member>
-      <member refid="d9/d8d/a04442_1a71cc6f9c6c4bd87c289f7bf6b519adea" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>SkeletonAnimationInstanceObject</name></member>
-      <member refid="d9/d8d/a04442_1a55918ea389a6daadf869976e51d6fa85" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>SkeletonAnimationInstanceObject</name></member>
-      <member refid="d9/d8d/a04442_1adb8585692c025d1c1756e703da411c40" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>update</name></member>
-      <member refid="d9/d8d/a04442_1a22e37d40f09e2e036be335019f4a26e6" prot="public" virt="virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>~SkeletonAnimationInstanceObject</name></member>
+      <member refid="d9/d36/a04430_1a91368c03404094accc52b4af8f70679eae8c4450588580ebf2e3ac6f1e8a33f60" prot="public" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>eMeshlets</name></member>
+      <member refid="d9/d36/a04430_1a91368c03404094accc52b4af8f70679eaae6937358a0b05de662ea609d6e9542f" prot="public" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>eNormals</name></member>
+      <member refid="d9/d36/a04430_1a91368c03404094accc52b4af8f70679eaf02a04fe7038540d53373b5702b25d3c" prot="public" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>eOutCullData</name></member>
+      <member refid="d9/d36/a04430_1a91368c03404094accc52b4af8f70679eaa14aed91eb84392ec50b411419785613" prot="public" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>ePositions</name></member>
+      <member refid="d9/d36/a04430_1a91368c03404094accc52b4af8f70679e" prot="public" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>Ids</name></member>
+      <member refid="d9/d36/a04430_1ad8954c7eb3a8f2354f8126fa2f328cbd" prot="private" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>m_descriptorSet</name></member>
+      <member refid="d9/d36/a04430_1abdb2300527763c94792452438f62cd77" prot="private" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>m_device</name></member>
+      <member refid="d9/d36/a04430_1a607671b0fb749b19b60db14cd1e3ed09" prot="private" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>m_meshletCount</name></member>
+      <member refid="d9/d36/a04430_1ab12db18d1cb5aa76b7dc056dbcb645d3" prot="private" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>m_meshlets</name></member>
+      <member refid="d9/d36/a04430_1abcf5877ec03bbded623f95292f78df80" prot="private" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>m_output</name></member>
+      <member refid="d9/d36/a04430_1acddf84ff082d5a09c5383da0137c5a89" prot="private" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>m_pipeline</name></member>
+      <member refid="d9/d36/a04430_1aefcd07a4eae70a8c3e95e1a7434e00ba" prot="private" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>m_source</name></member>
+      <member refid="d9/d36/a04430_1a79d7b10923e3a1b0ba8c1fe3325406d7" prot="public" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>MeshletBoundsTransformPass</name></member>
+      <member refid="d9/d36/a04430_1aac683585dd32a719ffa16a0896818561" prot="public" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>recordInto</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

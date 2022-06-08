@@ -1,207 +1,259 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="dd/d10/a04434" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::SkeletonAnimationInstanceKeyFrame</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; SkeletonAnimationInstance &gt;</basecompoundref>
-    <includes local="no">SkeletonAnimationInstanceKeyFrame.hpp</includes>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="dd/d10/a04434_1ae5d764bac8c9a1f42eda4721b9ddf6b2" prot="public" static="no">
-        <type>std::vector&lt; std::pair&lt; <ref refid="d9/d8d/a04442" kindref="compound">SkeletonAnimationInstanceObject</ref> *, castor::Matrix4x4f &gt; &gt;</type>
-        <definition>using castor3d::SkeletonAnimationInstanceKeyFrame::ObjectArray =  std::vector&lt; std::pair&lt; SkeletonAnimationInstanceObject *, castor::Matrix4x4f &gt; &gt;</definition>
+  <compounddef id="dd/d10/a04434" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TransformPipeline</compoundname>
+    <includes local="no">TransformPipeline.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dd/d10/a04434_1abb0f85c44bb4515d7f89ed5cf283f72c" prot="public" static="no" mutable="no">
+        <type><ref refid="da/dab/a01362_1a456f43ef4580c9527b0e71aa45a237ee" kindref="member">SubmeshFlags</ref></type>
+        <definition>SubmeshFlags castor3d::TransformPipeline::submeshFlags</definition>
         <argsstring></argsstring>
-        <name>ObjectArray</name>
-        <qualifiedname>castor3d::SkeletonAnimationInstanceKeyFrame::ObjectArray</qualifiedname>
+        <name>submeshFlags</name>
+        <qualifiedname>castor3d::TransformPipeline::submeshFlags</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" line="17" column="1" bodyfile="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" bodystart="17" bodyend="-1"/>
+        <location file="Render/Transform/TransformPipeline.hpp" line="27" column="14" bodyfile="Render/Transform/TransformPipeline.hpp" bodystart="27" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="dd/d10/a04434_1a7b1c9dd539ca359bb13bb5c08f6265c3" prot="private" static="no" mutable="no">
-        <type><ref refid="d9/dce/a04386" kindref="compound">AnimatedSkeleton</ref> &amp;</type>
-        <definition>AnimatedSkeleton&amp; castor3d::SkeletonAnimationInstanceKeyFrame::m_skeleton</definition>
+      <memberdef kind="variable" id="dd/d10/a04434_1a6797ead8e2e117d9687568950b99d8c4" prot="public" static="no" mutable="no">
+        <type><ref refid="da/dab/a01362_1abbe6548fefe6fd18e7c24e7d6f7b7f14" kindref="member">MorphFlags</ref></type>
+        <definition>MorphFlags castor3d::TransformPipeline::morphFlags</definition>
         <argsstring></argsstring>
-        <name>m_skeleton</name>
-        <qualifiedname>castor3d::SkeletonAnimationInstanceKeyFrame::m_skeleton</qualifiedname>
+        <name>morphFlags</name>
+        <qualifiedname>castor3d::TransformPipeline::morphFlags</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" line="54" column="19" bodyfile="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" bodystart="54" bodyend="-1"/>
+        <location file="Render/Transform/TransformPipeline.hpp" line="28" column="12" bodyfile="Render/Transform/TransformPipeline.hpp" bodystart="28" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dd/d10/a04434_1a0ce94152cf8eacd9c8d432bb03e8589b" prot="private" static="no" mutable="no">
-        <type><ref refid="d1/d82/a03450" kindref="compound">SkeletonAnimationKeyFrame</ref> const  &amp;</type>
-        <definition>SkeletonAnimationKeyFrame const&amp; castor3d::SkeletonAnimationInstanceKeyFrame::m_keyFrame</definition>
+      <memberdef kind="variable" id="dd/d10/a04434_1aeaea0c4b6059f0298e77e54facae3607" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::TransformPipeline::meshletsBounds</definition>
         <argsstring></argsstring>
-        <name>m_keyFrame</name>
-        <qualifiedname>castor3d::SkeletonAnimationInstanceKeyFrame::m_keyFrame</qualifiedname>
+        <name>meshletsBounds</name>
+        <qualifiedname>castor3d::TransformPipeline::meshletsBounds</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" line="55" column="34" bodyfile="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" bodystart="55" bodyend="-1"/>
+        <location file="Render/Transform/TransformPipeline.hpp" line="29" column="6" bodyfile="Render/Transform/TransformPipeline.hpp" bodystart="29" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dd/d10/a04434_1a3483568ca142666d67cf72fecdaa3be9" prot="private" static="no" mutable="no">
-        <type><ref refid="dd/d10/a04434_1ae5d764bac8c9a1f42eda4721b9ddf6b2" kindref="member">ObjectArray</ref></type>
-        <definition>ObjectArray castor3d::SkeletonAnimationInstanceKeyFrame::m_objects</definition>
+      <memberdef kind="variable" id="dd/d10/a04434_1a74ae720b2496009f74e66c873dbece14" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TransformPipeline::index</definition>
         <argsstring></argsstring>
-        <name>m_objects</name>
-        <qualifiedname>castor3d::SkeletonAnimationInstanceKeyFrame::m_objects</qualifiedname>
+        <name>index</name>
+        <qualifiedname>castor3d::TransformPipeline::index</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" line="56" column="13" bodyfile="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" bodystart="56" bodyend="-1"/>
+        <location file="Render/Transform/TransformPipeline.hpp" line="30" column="10" bodyfile="Render/Transform/TransformPipeline.hpp" bodystart="30" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dd/d10/a04434_1a91142f15b740115529bd55018e1d6c6f" prot="private" static="no" mutable="no">
-        <type><ref refid="dc/df4/a01401_1ac45304de9c80b94acff3cef7b03302ba" kindref="member">SubmeshBoundingBoxList</ref></type>
-        <definition>SubmeshBoundingBoxList castor3d::SkeletonAnimationInstanceKeyFrame::m_boxes</definition>
+      <memberdef kind="variable" id="dd/d10/a04434_1a189892c16d6fc266d23396a213f90be6" prot="public" static="no" mutable="no">
+        <type><ref refid="d6/d14/a04858" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::TransformPipeline::shader</definition>
         <argsstring></argsstring>
-        <name>m_boxes</name>
-        <qualifiedname>castor3d::SkeletonAnimationInstanceKeyFrame::m_boxes</qualifiedname>
+        <name>shader</name>
+        <qualifiedname>castor3d::TransformPipeline::shader</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" line="57" column="24" bodyfile="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" bodystart="57" bodyend="-1"/>
+        <location file="Render/Transform/TransformPipeline.hpp" line="32" column="14" bodyfile="Render/Transform/TransformPipeline.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d10/a04434_1abcb500781391d83e1d6dc9e61fe13963" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetLayoutPtr</type>
+        <definition>ashes::DescriptorSetLayoutPtr castor3d::TransformPipeline::descriptorSetLayout</definition>
+        <argsstring></argsstring>
+        <name>descriptorSetLayout</name>
+        <qualifiedname>castor3d::TransformPipeline::descriptorSetLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/TransformPipeline.hpp" line="33" column="31" bodyfile="Render/Transform/TransformPipeline.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d10/a04434_1a3220798999067e46b74a38e3c5613567" prot="public" static="no" mutable="no">
+        <type>ashes::PipelineLayoutPtr</type>
+        <definition>ashes::PipelineLayoutPtr castor3d::TransformPipeline::pipelineLayout</definition>
+        <argsstring></argsstring>
+        <name>pipelineLayout</name>
+        <qualifiedname>castor3d::TransformPipeline::pipelineLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/TransformPipeline.hpp" line="34" column="26" bodyfile="Render/Transform/TransformPipeline.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d10/a04434_1aaab62caa183d6288b3847e5c2bab534d" prot="public" static="no" mutable="no">
+        <type>ashes::ComputePipelinePtr</type>
+        <definition>ashes::ComputePipelinePtr castor3d::TransformPipeline::pipeline</definition>
+        <argsstring></argsstring>
+        <name>pipeline</name>
+        <qualifiedname>castor3d::TransformPipeline::pipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/TransformPipeline.hpp" line="35" column="27" bodyfile="Render/Transform/TransformPipeline.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d10/a04434_1a2c87baa9a1d5a10f97813e461d88a009" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetPoolPtr</type>
+        <definition>ashes::DescriptorSetPoolPtr castor3d::TransformPipeline::descriptorSetPool</definition>
+        <argsstring></argsstring>
+        <name>descriptorSetPool</name>
+        <qualifiedname>castor3d::TransformPipeline::descriptorSetPool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/TransformPipeline.hpp" line="36" column="29" bodyfile="Render/Transform/TransformPipeline.hpp" bodystart="36" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="dd/d10/a04434_1a7fb50da8f0c7e1ebef7ea6503e179297" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::SkeletonAnimationInstanceKeyFrame::SkeletonAnimationInstanceKeyFrame</definition>
-        <argsstring>(SkeletonAnimationInstance &amp;skeletonAnimation, SkeletonAnimationKeyFrame const &amp;keyFrame, AnimatedSkeleton &amp;skeleton)</argsstring>
-        <name>SkeletonAnimationInstanceKeyFrame</name>
-        <qualifiedname>castor3d::SkeletonAnimationInstanceKeyFrame::SkeletonAnimationInstanceKeyFrame</qualifiedname>
+      <memberdef kind="function" id="dd/d10/a04434_1a245c602f294450a465090e276659675d" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::TransformPipeline::TransformPipeline</definition>
+        <argsstring>(uint32_t index)</argsstring>
+        <name>TransformPipeline</name>
+        <qualifiedname>castor3d::TransformPipeline::TransformPipeline</qualifiedname>
         <param>
-          <type><ref refid="df/de5/a04426" kindref="compound">SkeletonAnimationInstance</ref> &amp;</type>
-          <declname>skeletonAnimation</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/d82/a03450" kindref="compound">SkeletonAnimationKeyFrame</ref> const &amp;</type>
-          <declname>keyFrame</declname>
-        </param>
-        <param>
-          <type><ref refid="d9/dce/a04386" kindref="compound">AnimatedSkeleton</ref> &amp;</type>
-          <declname>skeleton</declname>
+          <type>uint32_t</type>
+          <declname>index</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">skeletonAnimation</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The animation instance. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">keyFrame</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The animation keyframe. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">skeleton</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The target animated skeleton. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" line="32" column="9"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d10/a04434_1a7455116789136814666e8e18cd1e4293" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SkeletonAnimationInstanceKeyFrame::apply</definition>
-        <argsstring>()</argsstring>
-        <name>apply</name>
-        <qualifiedname>castor3d::SkeletonAnimationInstanceKeyFrame::apply</qualifiedname>
-        <briefdescription>
-<para>Applies the keyframe. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" line="41" column="14"/>
+        <location file="Render/Transform/TransformPipeline.hpp" line="20" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="dd/d10/a04434_1a12fb6aeff71b5443b275bf0f3e792567" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::Milliseconds const &amp;</type>
-        <definition>castor::Milliseconds const  &amp; castor3d::SkeletonAnimationInstanceKeyFrame::getTimeIndex</definition>
+      <memberdef kind="function" id="dd/d10/a04434_1a356c4386e190fe6311528867710181ea" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::string</type>
+        <definition>C3D_API std::string castor3d::TransformPipeline::getName</definition>
         <argsstring>() const</argsstring>
-        <name>getTimeIndex</name>
-        <qualifiedname>castor3d::SkeletonAnimationInstanceKeyFrame::getTimeIndex</qualifiedname>
+        <name>getName</name>
+        <qualifiedname>castor3d::TransformPipeline::getName</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The start time index. </para>
-</simplesect>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" line="48" column="29" bodyfile="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" bodystart="48" bodyend="51"/>
-        <references refid="dd/d67/a02230_1a7b65d0aeb639d12908b9d17335702a17" compoundref="da/dec/a00080" startline="50" endline="53">castor3d::AnimationKeyFrame::getTimeIndex</references>
+        <location file="Render/Transform/TransformPipeline.hpp" line="22" column="21"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="dd/d10/a04434_1ab89a9f2ff81fc38d4afb6bb146f0168f" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::string</type>
+        <definition>static C3D_API std::string castor3d::TransformPipeline::getName</definition>
+        <argsstring>(SubmeshFlags const &amp;submeshFlags, MorphFlags const &amp;morphFlags, bool meshletsBounds)</argsstring>
+        <name>getName</name>
+        <qualifiedname>castor3d::TransformPipeline::getName</qualifiedname>
+        <param>
+          <type><ref refid="da/dab/a01362_1a456f43ef4580c9527b0e71aa45a237ee" kindref="member">SubmeshFlags</ref> const &amp;</type>
+          <declname>submeshFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dab/a01362_1abbe6548fefe6fd18e7c24e7d6f7b7f14" kindref="member">MorphFlags</ref> const &amp;</type>
+          <declname>morphFlags</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>meshletsBounds</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/TransformPipeline.hpp" line="23" column="28"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="1">
-        <label>castor3d::SkeletonAnimationInstanceKeyFrame</label>
-        <link refid="dd/d10/a04434"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2">
-        <label>castor::OwnedBy&lt; SkeletonAnimationInstance &gt;</label>
-      </node>
-    </inheritancegraph>
     <collaborationgraph>
-      <node id="1">
-        <label>castor3d::SkeletonAnimationInstanceKeyFrame</label>
-        <link refid="dd/d10/a04434"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
+      <node id="7">
+        <label>T</label>
       </node>
       <node id="2">
-        <label>castor::OwnedBy&lt; SkeletonAnimationInstance &gt;</label>
+        <label>castor3d::ShaderModule</label>
+        <link refid="d6/d14/a04858"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>name</edgelabel>
+          <edgelabel>source</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>shader</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::TransformPipeline</label>
+        <link refid="dd/d10/a04434"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>shader</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="3">
+        <label>std::string</label>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::unique_ptr&lt; ast::Shader &gt;</label>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; ast::Shader &gt;</edgelabel>
+        </childnode>
       </node>
     </collaborationgraph>
-    <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" line="13" column="1" bodyfile="Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp" bodystart="15" bodyend="58"/>
+    <location file="Render/Transform/TransformPipeline.hpp" line="18" column="1" bodyfile="Render/Transform/TransformPipeline.hpp" bodystart="19" bodyend="37"/>
     <listofallmembers>
-      <member refid="dd/d10/a04434_1a7455116789136814666e8e18cd1e4293" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceKeyFrame</scope><name>apply</name></member>
-      <member refid="dd/d10/a04434_1a12fb6aeff71b5443b275bf0f3e792567" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceKeyFrame</scope><name>getTimeIndex</name></member>
-      <member refid="dd/d10/a04434_1a91142f15b740115529bd55018e1d6c6f" prot="private" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceKeyFrame</scope><name>m_boxes</name></member>
-      <member refid="dd/d10/a04434_1a0ce94152cf8eacd9c8d432bb03e8589b" prot="private" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceKeyFrame</scope><name>m_keyFrame</name></member>
-      <member refid="dd/d10/a04434_1a3483568ca142666d67cf72fecdaa3be9" prot="private" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceKeyFrame</scope><name>m_objects</name></member>
-      <member refid="dd/d10/a04434_1a7b1c9dd539ca359bb13bb5c08f6265c3" prot="private" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceKeyFrame</scope><name>m_skeleton</name></member>
-      <member refid="dd/d10/a04434_1ae5d764bac8c9a1f42eda4721b9ddf6b2" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceKeyFrame</scope><name>ObjectArray</name></member>
-      <member refid="dd/d10/a04434_1a7fb50da8f0c7e1ebef7ea6503e179297" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceKeyFrame</scope><name>SkeletonAnimationInstanceKeyFrame</name></member>
+      <member refid="dd/d10/a04434_1abcb500781391d83e1d6dc9e61fe13963" prot="public" virt="non-virtual"><scope>castor3d::TransformPipeline</scope><name>descriptorSetLayout</name></member>
+      <member refid="dd/d10/a04434_1a2c87baa9a1d5a10f97813e461d88a009" prot="public" virt="non-virtual"><scope>castor3d::TransformPipeline</scope><name>descriptorSetPool</name></member>
+      <member refid="dd/d10/a04434_1a356c4386e190fe6311528867710181ea" prot="public" virt="non-virtual"><scope>castor3d::TransformPipeline</scope><name>getName</name></member>
+      <member refid="dd/d10/a04434_1ab89a9f2ff81fc38d4afb6bb146f0168f" prot="public" virt="non-virtual"><scope>castor3d::TransformPipeline</scope><name>getName</name></member>
+      <member refid="dd/d10/a04434_1a74ae720b2496009f74e66c873dbece14" prot="public" virt="non-virtual"><scope>castor3d::TransformPipeline</scope><name>index</name></member>
+      <member refid="dd/d10/a04434_1aeaea0c4b6059f0298e77e54facae3607" prot="public" virt="non-virtual"><scope>castor3d::TransformPipeline</scope><name>meshletsBounds</name></member>
+      <member refid="dd/d10/a04434_1a6797ead8e2e117d9687568950b99d8c4" prot="public" virt="non-virtual"><scope>castor3d::TransformPipeline</scope><name>morphFlags</name></member>
+      <member refid="dd/d10/a04434_1aaab62caa183d6288b3847e5c2bab534d" prot="public" virt="non-virtual"><scope>castor3d::TransformPipeline</scope><name>pipeline</name></member>
+      <member refid="dd/d10/a04434_1a3220798999067e46b74a38e3c5613567" prot="public" virt="non-virtual"><scope>castor3d::TransformPipeline</scope><name>pipelineLayout</name></member>
+      <member refid="dd/d10/a04434_1a189892c16d6fc266d23396a213f90be6" prot="public" virt="non-virtual"><scope>castor3d::TransformPipeline</scope><name>shader</name></member>
+      <member refid="dd/d10/a04434_1abb0f85c44bb4515d7f89ed5cf283f72c" prot="public" virt="non-virtual"><scope>castor3d::TransformPipeline</scope><name>submeshFlags</name></member>
+      <member refid="dd/d10/a04434_1a245c602f294450a465090e276659675d" prot="public" virt="non-virtual"><scope>castor3d::TransformPipeline</scope><name>TransformPipeline</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

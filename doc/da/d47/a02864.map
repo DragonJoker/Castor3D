@@ -1,5 +1,5 @@
-<map id="castor3d::SpecularGlossinessPbrPass" name="castor3d::SpecularGlossinessPbrPass">
-<area shape="rect" id="node1" title=" " alt="" coords="5,155,201,196"/>
-<area shape="rect" id="node2" href="$d6/d59/a02810.html" title=" " alt="" coords="48,80,159,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="7,5,199,32"/>
+<map id="castor3d::shader::PbrReflectionModel" name="castor3d::shader::PbrReflectionModel">
+<area shape="rect" id="node1" title=" " alt="" coords="5,185,209,227"/>
+<area shape="rect" id="node2" href="$d4/d47/a04938.html" title=" " alt="" coords="15,95,199,136"/>
+<area shape="rect" id="node3" href="$df/d5e/a04982.html" title=" " alt="" coords="31,5,184,32"/>
 </map>

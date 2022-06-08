@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::BillboardRenderNode Struct Reference</title>
+<title>Castor3D: castor3d::LightPropagationVolumesT&lt; GeometryVolumesT &gt; Class Template Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,207 +42,128 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dc/df4/a01401.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d7/d82/a03774.html">BillboardRenderNode</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d7/d82/a03774.html">LightPropagationVolumesT</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="../../d7/d88/a03771.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">castor3d::BillboardRenderNode Struct Reference</div></div>
+  <div class="headertitle"><div class="title">castor3d::LightPropagationVolumesT&lt; GeometryVolumesT &gt; Class Template Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;BillboardRenderNode.hpp&gt;</code></p>
+<p>Lighting propagation volumes generation pass.  
+ <a href="../../d7/d82/a03774.html#details">More...</a></p>
+
+<p><code>#include &lt;LightPropagationVolumes.hpp&gt;</code></p>
 <div class="dynheader">
-Collaboration diagram for castor3d::BillboardRenderNode:</div>
+Inheritance diagram for castor3d::LightPropagationVolumesT&lt; GeometryVolumesT &gt;:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../d7/d3a/a03772.png" border="0" usemap="#acastor3d_1_1BillboardRenderNode_coll__map" alt="Collaboration graph"/></div>
-<map name="acastor3d_1_1BillboardRenderNode_coll__map" id="acastor3d_1_1BillboardRenderNode_coll__map">
-<area shape="rect" title=" " alt="" coords="2043,533,2244,559"/>
-<area shape="rect" href="../../d6/d59/a02810.html" title=" " alt="" coords="1171,613,1281,639"/>
-<area shape="rect" title=" " alt="" coords="1452,527,1611,583"/>
-<area shape="rect" title=" " alt="" coords="817,613,1009,639"/>
-<area shape="rect" href="../../dc/d50/a04474.html" title=" " alt="" coords="1785,310,1945,337"/>
-<area shape="rect" href="../../d0/d7e/a04594.html" title=" " alt="" coords="1445,127,1618,154"/>
-<area shape="rect" title=" " alt="" coords="1127,71,1325,112"/>
-<area shape="rect" href="../../d6/d71/a04598.html" title=" " alt="" coords="1473,214,1590,241"/>
-<area shape="rect" title=" " alt="" coords="1155,188,1297,229"/>
-<area shape="rect" title=" " alt="" coords="1133,137,1319,163"/>
-<area shape="rect" title=" " alt="" coords="1173,254,1279,281"/>
-<area shape="rect" href="../../dd/d6a/a04642.html" title=" " alt="" coords="1458,310,1605,337"/>
-<area shape="rect" title=" " alt="" coords="1139,305,1313,347"/>
-<area shape="rect" href="../../d6/d41/a02222.html" title=" " alt="" coords="1188,422,1264,449"/>
-<area shape="rect" title=" " alt="" coords="820,346,1007,373"/>
-<area shape="rect" title=" " alt="" coords="507,401,673,443"/>
-<area shape="rect" href="../../d6/d41/a02222.html" title="Animable public interface." alt="" coords="838,460,989,501"/>
-<area shape="rect" title=" " alt="" coords="157,409,279,435"/>
-<area shape="rect" title=" " alt="" coords="5,429,44,455"/>
-<area shape="rect" title=" " alt="" coords="149,535,287,576"/>
-<area shape="rect" title=" " alt="" coords="5,501,44,527"/>
-<area shape="rect" title=" " alt="" coords="496,469,684,511"/>
-<area shape="rect" href="../../d0/dff/a02506.html" title=" " alt="" coords="1141,5,1311,47"/>
-<area shape="rect" href="../../d3/d41/a02530.html" title=" " alt="" coords="507,218,673,245"/>
-<area shape="rect" href="../../d0/dff/a02506.html" title="An offset and range of a GpuBuffer." alt="" coords="828,151,999,192"/>
-<area shape="rect" href="../../db/d09/a02502.html" title="A GPU buffer, that uses a buddy allocator to allocate sub&#45;buffers." alt="" coords="841,280,985,321"/>
-<area shape="rect" href="../../d7/da8/a02522.html" title="A memory range, in bytes." alt="" coords="517,89,663,115"/>
-<area shape="rect" href="../../d9/d66/a02562.html" title=" " alt="" coords="1133,371,1319,398"/>
-<area shape="rect" href="../../d9/d76/a02526.html" title=" " alt="" coords="1443,369,1620,395"/>
+<div class="center"><img src="../../dc/df3/a03773.png" border="0" usemap="#acastor3d_1_1LightPropagationVolumesT_3_01GeometryVolumesT_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="acastor3d_1_1LightPropagationVolumesT_3_01GeometryVolumesT_01_4_inherit__map" id="acastor3d_1_1LightPropagationVolumesT_3_01GeometryVolumesT_01_4_inherit__map">
+<area shape="rect" title="Lighting propagation volumes generation pass." alt="" coords="5,169,224,211"/>
+<area shape="rect" href="../../d1/da4/a03766.html" title=" " alt="" coords="26,80,203,121"/>
+<area shape="rect" title=" " alt="" coords="61,5,168,32"/>
+</map>
+<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
+<div class="dynheader">
+Collaboration diagram for castor3d::LightPropagationVolumesT&lt; GeometryVolumesT &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d7/d3a/a03772.png" border="0" usemap="#acastor3d_1_1LightPropagationVolumesT_3_01GeometryVolumesT_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="acastor3d_1_1LightPropagationVolumesT_3_01GeometryVolumesT_01_4_coll__map" id="acastor3d_1_1LightPropagationVolumesT_3_01GeometryVolumesT_01_4_coll__map">
+<area shape="rect" title="Lighting propagation volumes generation pass." alt="" coords="5,169,224,211"/>
+<area shape="rect" href="../../d1/da4/a03766.html" title=" " alt="" coords="26,80,203,121"/>
+<area shape="rect" title=" " alt="" coords="61,5,168,32"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:ae3f9ebcf47785d41f2ff668692e34e59"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d82/a03774.html#ae3f9ebcf47785d41f2ff668692e34e59">DataType</a> = <a class="el" href="../../dc/d50/a04474.html">BillboardBase</a></td></tr>
-<tr class="separator:ae3f9ebcf47785d41f2ff668692e34e59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac8509a01d5cb9288f9f815bc2e79d431"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d82/a03774.html#ac8509a01d5cb9288f9f815bc2e79d431">InstanceType</a> = <a class="el" href="../../dc/d50/a04474.html">BillboardBase</a></td></tr>
-<tr class="separator:ac8509a01d5cb9288f9f815bc2e79d431"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a975810be61a4ae4db9502b8b954d89d9"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d82/a03774.html#a975810be61a4ae4db9502b8b954d89d9">VertexType</a> = <a class="el" href="../../d2/dc4/a04614.html">BillboardVertex</a></td></tr>
-<tr class="separator:a975810be61a4ae4db9502b8b954d89d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae61d5e19f2b29b00b47b87c94d48448f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d82/a03774.html#ae61d5e19f2b29b00b47b87c94d48448f">BillboardRenderNode</a> (<a class="el" href="../../d7/d82/a03774.html">BillboardRenderNode</a> const &amp;)=delete</td></tr>
-<tr class="separator:ae61d5e19f2b29b00b47b87c94d48448f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7aa06914d100447a3521f7b968282066"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d82/a03774.html#a7aa06914d100447a3521f7b968282066">BillboardRenderNode</a> (<a class="el" href="../../d7/d82/a03774.html">BillboardRenderNode</a> &amp;&amp;)=default</td></tr>
-<tr class="separator:a7aa06914d100447a3521f7b968282066"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad0d91207c413a9edd80d3e572a32623b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d7/d82/a03774.html">BillboardRenderNode</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d82/a03774.html#ad0d91207c413a9edd80d3e572a32623b">operator=</a> (<a class="el" href="../../d7/d82/a03774.html">BillboardRenderNode</a> const &amp;)=delete</td></tr>
-<tr class="separator:ad0d91207c413a9edd80d3e572a32623b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d8a261a0665a79cb30a2405e0e96c5b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d7/d82/a03774.html">BillboardRenderNode</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d82/a03774.html#a5d8a261a0665a79cb30a2405e0e96c5b">operator=</a> (<a class="el" href="../../d7/d82/a03774.html">BillboardRenderNode</a> &amp;&amp;)=delete</td></tr>
-<tr class="separator:a5d8a261a0665a79cb30a2405e0e96c5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb620a16433846ab42e1816d199b101f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d82/a03774.html#acb620a16433846ab42e1816d199b101f">BillboardRenderNode</a> (<a class="el" href="../../d6/d59/a02810.html">Pass</a> &amp;<a class="el" href="../../d7/d82/a03774.html#a148eca0aba7453dfb9e7b59425b94387">pass</a>, <a class="el" href="../../d7/d82/a03774.html#ae3f9ebcf47785d41f2ff668692e34e59">DataType</a> &amp;<a class="el" href="../../d7/d82/a03774.html#afa4b5cab598a2e7e6769454fc41983c2">data</a>)</td></tr>
-<tr class="separator:acb620a16433846ab42e1816d199b101f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5325b7bb33395fe87188198e1063cae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d82/a03774.html#ac5325b7bb33395fe87188198e1063cae">getId</a> () const</td></tr>
-<tr class="separator:ac5325b7bb33395fe87188198e1063cae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a583b84d26b7240f99c74d785427c2c4f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d82/a03774.html#a583b84d26b7240f99c74d785427c2c4f">getInstanceCount</a> () const</td></tr>
-<tr class="separator:a583b84d26b7240f99c74d785427c2c4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a293a97f90d9ee17afea0aa6e74c01e0e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d9/d76/a02526.html">GeometryBuffers</a> const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d82/a03774.html#a293a97f90d9ee17afea0aa6e74c01e0e">getGeometryBuffers</a> (<a class="el" href="../../dc/df4/a01401.html#af8308e78be327186fc4533308ee5cd19">ShaderFlags</a> const &amp;shaderFlags, <a class="el" href="../../dc/df4/a01401.html#ab503144f281345b45ccc3f3a94543dce">ProgramFlags</a> const &amp;programFlags, <a class="el" href="../../d9/da4/a02798.html">Material</a> &amp;material, <a class="el" href="../../dc/df4/a01401.html#afa51b269ca00eaeff4f95f361bf2208f">TextureFlagsArray</a> const &amp;texturesMask, bool forceTexCoords) const</td></tr>
-<tr class="separator:a293a97f90d9ee17afea0aa6e74c01e0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec934d66948d634d0bf0114273f4a5b9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d82/a03774.html#aec934d66948d634d0bf0114273f4a5b9">LightPropagationVolumesT</a> (crg::ResourceHandler &amp;handler, <a class="el" href="../../d8/d12/a04694.html">Scene</a> const &amp;scene, <a class="el" href="../../da/dab/a01362.html#a381718aa9accc88c20afd97d76c30ed8">LightType</a> lightType, <a class="el" href="../../df/d75/a04010.html">RenderDevice</a> const &amp;device, <a class="el" href="../../d1/d8f/a04202.html">ShadowMapResult</a> const &amp;smResult, <a class="el" href="../../d4/d5f/a03778.html">LightVolumePassResult</a> const &amp;lpvResult, <a class="el" href="../../db/d20/a05034.html">LpvGridConfigUbo</a> &amp;lpvGridConfigUbo)</td></tr>
+<tr class="separator:aec934d66948d634d0bf0114273f4a5b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_a03766"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a03766')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../d1/da4/a03766.html">castor3d::LightPropagationVolumesBase</a></td></tr>
+<tr class="memitem:a25bee8be031046faa099ca309cd5d15e inherit pub_methods_a03766"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/da4/a03766.html#a25bee8be031046faa099ca309cd5d15e">initialise</a> ()</td></tr>
+<tr class="separator:a25bee8be031046faa099ca309cd5d15e inherit pub_methods_a03766"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a3d3f70b7aa829a621de1f11d8c82ac inherit pub_methods_a03766"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/da4/a03766.html#a1a3d3f70b7aa829a621de1f11d8c82ac">cleanup</a> ()</td></tr>
+<tr class="separator:a1a3d3f70b7aa829a621de1f11d8c82ac inherit pub_methods_a03766"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5354143f47344d8dab1d42b008d5ec01 inherit pub_methods_a03766"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/da4/a03766.html#a5354143f47344d8dab1d42b008d5ec01">registerLight</a> (<a class="el" href="../../d0/d7e/a04594.html">Light</a> *light)</td></tr>
+<tr class="separator:a5354143f47344d8dab1d42b008d5ec01 inherit pub_methods_a03766"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac104319ef8a406bf2b4b437ae7c9f3cb inherit pub_methods_a03766"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/da4/a03766.html#ac104319ef8a406bf2b4b437ae7c9f3cb">update</a> (<a class="el" href="../../df/d4e/a04094.html">CpuUpdater</a> &amp;updater)</td></tr>
+<tr class="separator:ac104319ef8a406bf2b4b437ae7c9f3cb inherit pub_methods_a03766"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae51a405cdc3013ae166ff7db4fed4deb inherit pub_methods_a03766"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> crg::SemaphoreWaitArray&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/da4/a03766.html#ae51a405cdc3013ae166ff7db4fed4deb">render</a> (crg::SemaphoreWaitArray const &amp;toWait, ashes::Queue const &amp;queue)</td></tr>
+<tr class="separator:ae51a405cdc3013ae166ff7db4fed4deb inherit pub_methods_a03766"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5694caddff9dd42e0bf699ca976856b inherit pub_methods_a03766"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/da4/a03766.html#af5694caddff9dd42e0bf699ca976856b">accept</a> (<a class="el" href="../../dc/dbb/a03262.html">PipelineVisitorBase</a> &amp;visitor)</td></tr>
+<tr class="separator:af5694caddff9dd42e0bf699ca976856b inherit pub_methods_a03766"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:a148eca0aba7453dfb9e7b59425b94387"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d6/d59/a02810.html">Pass</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d82/a03774.html#a148eca0aba7453dfb9e7b59425b94387">pass</a></td></tr>
-<tr class="separator:a148eca0aba7453dfb9e7b59425b94387"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa4b5cab598a2e7e6769454fc41983c2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d82/a03774.html#ae3f9ebcf47785d41f2ff668692e34e59">DataType</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d82/a03774.html#afa4b5cab598a2e7e6769454fc41983c2">data</a></td></tr>
-<tr class="separator:afa4b5cab598a2e7e6769454fc41983c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca1393f2ad046474fe67af2e3f5fdb0e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d82/a03774.html#ac8509a01d5cb9288f9f815bc2e79d431">InstanceType</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d82/a03774.html#aca1393f2ad046474fe67af2e3f5fdb0e">instance</a></td></tr>
-<tr class="separator:aca1393f2ad046474fe67af2e3f5fdb0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a448c84ea48444025d5c0950d01e39742"><td class="memItemLeft" align="right" valign="top">static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d82/a03774.html#a448c84ea48444025d5c0950d01e39742">countInitialisationSteps</a> ()</td></tr>
+<tr class="separator:a448c84ea48444025d5c0950d01e39742"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pro_methods_a03766"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_a03766')"><img src="../../closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="../../d1/da4/a03766.html">castor3d::LightPropagationVolumesBase</a></td></tr>
+<tr class="memitem:a05ab065cec74b356e24daa7e1b98807e inherit pro_methods_a03766"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/da4/a03766.html#a05ab065cec74b356e24daa7e1b98807e">LightPropagationVolumesBase</a> (crg::ResourceHandler &amp;handler, <a class="el" href="../../d8/d12/a04694.html">Scene</a> const &amp;scene, <a class="el" href="../../da/dab/a01362.html#a381718aa9accc88c20afd97d76c30ed8">LightType</a> lightType, <a class="el" href="../../df/d75/a04010.html">RenderDevice</a> const &amp;device, <a class="el" href="../../d1/d8f/a04202.html">ShadowMapResult</a> const &amp;smResult, <a class="el" href="../../d4/d5f/a03778.html">LightVolumePassResult</a> const &amp;lpvResult, <a class="el" href="../../db/d20/a05034.html">LpvGridConfigUbo</a> &amp;lpvGridConfigUbo, bool geometryVolumes)</td></tr>
+<tr class="separator:a05ab065cec74b356e24daa7e1b98807e inherit pro_methods_a03766"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="ae3f9ebcf47785d41f2ff668692e34e59" name="ae3f9ebcf47785d41f2ff668692e34e59"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae3f9ebcf47785d41f2ff668692e34e59">&#9670;&nbsp;</a></span>DataType</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><div class="compoundTemplParams">template&lt;bool GeometryVolumesT&gt;<br />
+class castor3d::LightPropagationVolumesT&lt; GeometryVolumesT &gt;</div><p >Lighting propagation volumes generation pass. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aec934d66948d634d0bf0114273f4a5b9" name="aec934d66948d634d0bf0114273f4a5b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec934d66948d634d0bf0114273f4a5b9">&#9670;&nbsp;</a></span>LightPropagationVolumesT()</h2>
 
 <div class="memitem">
 <div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="../../d7/d82/a03774.html#ae3f9ebcf47785d41f2ff668692e34e59">castor3d::BillboardRenderNode::DataType</a> =  <a class="el" href="../../dc/d50/a04474.html">BillboardBase</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ac8509a01d5cb9288f9f815bc2e79d431" name="ac8509a01d5cb9288f9f815bc2e79d431"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac8509a01d5cb9288f9f815bc2e79d431">&#9670;&nbsp;</a></span>InstanceType</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="../../d7/d82/a03774.html#ac8509a01d5cb9288f9f815bc2e79d431">castor3d::BillboardRenderNode::InstanceType</a> =  <a class="el" href="../../dc/d50/a04474.html">BillboardBase</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a975810be61a4ae4db9502b8b954d89d9" name="a975810be61a4ae4db9502b8b954d89d9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a975810be61a4ae4db9502b8b954d89d9">&#9670;&nbsp;</a></span>VertexType</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="../../d7/d82/a03774.html#a975810be61a4ae4db9502b8b954d89d9">castor3d::BillboardRenderNode::VertexType</a> =  <a class="el" href="../../d2/dc4/a04614.html">BillboardVertex</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ae61d5e19f2b29b00b47b87c94d48448f" name="ae61d5e19f2b29b00b47b87c94d48448f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae61d5e19f2b29b00b47b87c94d48448f">&#9670;&nbsp;</a></span>BillboardRenderNode() <span class="overload">[1/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
+<div class="memtemplate">
+template&lt;bool GeometryVolumesT&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::BillboardRenderNode::BillboardRenderNode </td>
+          <td class="memname"><a class="el" href="../../d7/d82/a03774.html">castor3d::LightPropagationVolumesT</a>&lt; GeometryVolumesT &gt;::LightPropagationVolumesT </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d7/d82/a03774.html">BillboardRenderNode</a> const &amp;&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a7aa06914d100447a3521f7b968282066" name="a7aa06914d100447a3521f7b968282066"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7aa06914d100447a3521f7b968282066">&#9670;&nbsp;</a></span>BillboardRenderNode() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::BillboardRenderNode::BillboardRenderNode </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d7/d82/a03774.html">BillboardRenderNode</a> &amp;&amp;&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">default</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="acb620a16433846ab42e1816d199b101f" name="acb620a16433846ab42e1816d199b101f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acb620a16433846ab42e1816d199b101f">&#9670;&nbsp;</a></span>BillboardRenderNode() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::BillboardRenderNode::BillboardRenderNode </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d6/d59/a02810.html">Pass</a> &amp;&#160;</td>
-          <td class="paramname"><em>pass</em>, </td>
+          <td class="paramtype">crg::ResourceHandler &amp;&#160;</td>
+          <td class="paramname"><em>handler</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="../../d7/d82/a03774.html#ae3f9ebcf47785d41f2ff668692e34e59">DataType</a> &amp;&#160;</td>
-          <td class="paramname"><em>data</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="../../d8/d12/a04694.html">Scene</a> const &amp;&#160;</td>
+          <td class="paramname"><em>scene</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../da/dab/a01362.html#a381718aa9accc88c20afd97d76c30ed8">LightType</a>&#160;</td>
+          <td class="paramname"><em>lightType</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../df/d75/a04010.html">RenderDevice</a> const &amp;&#160;</td>
+          <td class="paramname"><em>device</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d1/d8f/a04202.html">ShadowMapResult</a> const &amp;&#160;</td>
+          <td class="paramname"><em>smResult</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d4/d5f/a03778.html">LightVolumePassResult</a> const &amp;&#160;</td>
+          <td class="paramname"><em>lpvResult</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../db/d20/a05034.html">LpvGridConfigUbo</a> &amp;&#160;</td>
+          <td class="paramname"><em>lpvGridConfigUbo</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -250,193 +171,52 @@ Public Attributes</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a293a97f90d9ee17afea0aa6e74c01e0e" name="a293a97f90d9ee17afea0aa6e74c01e0e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a293a97f90d9ee17afea0aa6e74c01e0e">&#9670;&nbsp;</a></span>getGeometryBuffers()</h2>
+<a id="a448c84ea48444025d5c0950d01e39742" name="a448c84ea48444025d5c0950d01e39742"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a448c84ea48444025d5c0950d01e39742">&#9670;&nbsp;</a></span>countInitialisationSteps()</h2>
 
 <div class="memitem">
 <div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d9/d76/a02526.html">GeometryBuffers</a> const  &amp; castor3d::BillboardRenderNode::getGeometryBuffers </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../dc/df4/a01401.html#af8308e78be327186fc4533308ee5cd19">ShaderFlags</a> const &amp;&#160;</td>
-          <td class="paramname"><em>shaderFlags</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../dc/df4/a01401.html#ab503144f281345b45ccc3f3a94543dce">ProgramFlags</a> const &amp;&#160;</td>
-          <td class="paramname"><em>programFlags</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d9/da4/a02798.html">Material</a> &amp;&#160;</td>
-          <td class="paramname"><em>material</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../dc/df4/a01401.html#afa51b269ca00eaeff4f95f361bf2208f">TextureFlagsArray</a> const &amp;&#160;</td>
-          <td class="paramname"><em>texturesMask</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>forceTexCoords</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ac5325b7bb33395fe87188198e1063cae" name="ac5325b7bb33395fe87188198e1063cae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac5325b7bb33395fe87188198e1063cae">&#9670;&nbsp;</a></span>getId()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> uint32_t castor3d::BillboardRenderNode::getId </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a583b84d26b7240f99c74d785427c2c4f" name="a583b84d26b7240f99c74d785427c2c4f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a583b84d26b7240f99c74d785427c2c4f">&#9670;&nbsp;</a></span>getInstanceCount()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> uint32_t castor3d::BillboardRenderNode::getInstanceCount </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a5d8a261a0665a79cb30a2405e0e96c5b" name="a5d8a261a0665a79cb30a2405e0e96c5b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5d8a261a0665a79cb30a2405e0e96c5b">&#9670;&nbsp;</a></span>operator=() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
+<div class="memtemplate">
+template&lt;bool GeometryVolumesT&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d7/d82/a03774.html">BillboardRenderNode</a> &amp; castor3d::BillboardRenderNode::operator= </td>
+          <td class="memname">static uint32_t <a class="el" href="../../d7/d82/a03774.html">castor3d::LightPropagationVolumesT</a>&lt; GeometryVolumesT &gt;::countInitialisationSteps </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d7/d82/a03774.html">BillboardRenderNode</a> &amp;&amp;&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<a id="ad0d91207c413a9edd80d3e572a32623b" name="ad0d91207c413a9edd80d3e572a32623b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad0d91207c413a9edd80d3e572a32623b">&#9670;&nbsp;</a></span>operator=() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d7/d82/a03774.html">BillboardRenderNode</a> &amp; castor3d::BillboardRenderNode::operator= </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d7/d82/a03774.html">BillboardRenderNode</a> const &amp;&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
+<p class="reference">References <a class="el" href="../../da/dab/a01362.html#a569177dd5bfdc441c123583687d5315e">castor3d::LpvMaxPropagationSteps</a>.</p>
 
 </div>
 </div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="afa4b5cab598a2e7e6769454fc41983c2" name="afa4b5cab598a2e7e6769454fc41983c2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afa4b5cab598a2e7e6769454fc41983c2">&#9670;&nbsp;</a></span>data</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../d7/d82/a03774.html#ae3f9ebcf47785d41f2ff668692e34e59">DataType</a>&amp; castor3d::BillboardRenderNode::data</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aca1393f2ad046474fe67af2e3f5fdb0e" name="aca1393f2ad046474fe67af2e3f5fdb0e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aca1393f2ad046474fe67af2e3f5fdb0e">&#9670;&nbsp;</a></span>instance</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../d7/d82/a03774.html#ac8509a01d5cb9288f9f815bc2e79d431">InstanceType</a>&amp; castor3d::BillboardRenderNode::instance</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a148eca0aba7453dfb9e7b59425b94387" name="a148eca0aba7453dfb9e7b59425b94387"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a148eca0aba7453dfb9e7b59425b94387">&#9670;&nbsp;</a></span>pass</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../d6/d59/a02810.html">Pass</a>&amp; castor3d::BillboardRenderNode::pass</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
-<li>Render/Node/<a class="el" href="../../d2/d94/a00716.html">BillboardRenderNode.hpp</a></li>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>Render/GlobalIllumination/LightPropagationVolumes/<a class="el" href="../../d1/d04/a00713.html">LightPropagationVolumes.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 15:34:55 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:48 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

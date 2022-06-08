@@ -1,232 +1,105 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="d6/d61/a03510" kind="class" language="C++" prot="private">
-    <compoundname>castor3d::DebugOverlays::DebugPanelsT</compoundname>
-    <templateparamlist>
-      <param>
-        <type>typename T</type>
-      </param>
-    </templateparamlist>
-      <sectiondef kind="private-type">
-      <memberdef kind="typedef" id="d6/d61/a03510_1a2eb0f9a39e98b0b4176112e6357587c5" prot="private" static="no">
-        <type>std::vector&lt; DebugPanelT&lt; T &gt; &gt;</type>
-        <definition>using castor3d::DebugOverlays::DebugPanelsT&lt; T &gt;::DebugPanelArray =  std::vector&lt; DebugPanelT&lt; T &gt; &gt;</definition>
+  <compounddef id="d6/d61/a03510" kind="union" language="C++" prot="public">
+    <compoundname>castor3d::VertexBoneData::Ids</compoundname>
+    <includes local="no">VertexBoneData.hpp</includes>
+    <innerclass refid="dd/db6/a03514" prot="public">castor3d::VertexBoneData::Ids::ids</innerclass>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/d61/a03510_1a2bf3acefcc41daac40ff83c31e12592c" prot="public" static="no" mutable="no">
+        <type>std::array&lt; uint32_t, <ref refid="da/dab/a01362_1a646fc2f48009177447cb9476d791b0e8" kindref="member">MaxBonesPerVertex</ref> &gt;</type>
+        <definition>std::array&lt; uint32_t, MaxBonesPerVertex &gt; castor3d::VertexBoneData::Ids::data</definition>
         <argsstring></argsstring>
-        <name>DebugPanelArray</name>
-        <qualifiedname>castor3d::DebugOverlays::DebugPanelsT::DebugPanelArray</qualifiedname>
+        <name>data</name>
+        <qualifiedname>castor3d::VertexBoneData::Ids::data</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="180" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="180" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d6/d61/a03510_1ae70e5a2e8e678cf0a326486c03249d72" prot="private" static="no" mutable="no">
-        <type><ref refid="dc/df4/a01401_1a8087fd7511c4d92773d1fa4feb496eb2" kindref="member">OverlayCache</ref> &amp;</type>
-        <definition>OverlayCache&amp; castor3d::DebugOverlays::DebugPanelsT&lt; T &gt;::m_cache</definition>
-        <argsstring></argsstring>
-        <name>m_cache</name>
-        <qualifiedname>castor3d::DebugOverlays::DebugPanelsT::m_cache</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="198" column="15" bodyfile="Overlay/DebugOverlays.hpp" bodystart="198" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d6/d61/a03510_1aa09b9403592224192db07d41797cd466" prot="private" static="no" mutable="no">
-        <type>PanelOverlaySPtr</type>
-        <definition>PanelOverlaySPtr castor3d::DebugOverlays::DebugPanelsT&lt; T &gt;::m_panel</definition>
-        <argsstring></argsstring>
-        <name>m_panel</name>
-        <qualifiedname>castor3d::DebugOverlays::DebugPanelsT::m_panel</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="199" column="18" bodyfile="Overlay/DebugOverlays.hpp" bodystart="199" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d6/d61/a03510_1abc0f5619e054effc439b26410ff4389e" prot="private" static="no" mutable="no">
-        <type>PanelOverlaySPtr</type>
-        <definition>PanelOverlaySPtr castor3d::DebugOverlays::DebugPanelsT&lt; T &gt;::m_titlePanel</definition>
-        <argsstring></argsstring>
-        <name>m_titlePanel</name>
-        <qualifiedname>castor3d::DebugOverlays::DebugPanelsT::m_titlePanel</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="200" column="18" bodyfile="Overlay/DebugOverlays.hpp" bodystart="200" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d6/d61/a03510_1a3bc706e3b069d4e1e4ebd4455443da58" prot="private" static="no" mutable="no">
-        <type>TextOverlaySPtr</type>
-        <definition>TextOverlaySPtr castor3d::DebugOverlays::DebugPanelsT&lt; T &gt;::m_titleText</definition>
-        <argsstring></argsstring>
-        <name>m_titleText</name>
-        <qualifiedname>castor3d::DebugOverlays::DebugPanelsT::m_titleText</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="201" column="17" bodyfile="Overlay/DebugOverlays.hpp" bodystart="201" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d6/d61/a03510_1a3e4f40bcf7ddf7fb0096ea74f7a180ca" prot="private" static="no" mutable="no">
-        <type>DebugPanelArray</type>
-        <definition>DebugPanelArray castor3d::DebugOverlays::DebugPanelsT&lt; T &gt;::m_panels</definition>
-        <argsstring></argsstring>
-        <name>m_panels</name>
-        <qualifiedname>castor3d::DebugOverlays::DebugPanelsT::m_panels</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="202" column="17" bodyfile="Overlay/DebugOverlays.hpp" bodystart="202" bodyend="-1"/>
+        <location file="Model/Skeleton/VertexBoneData.hpp" line="41" column="12" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="41" bodyend="-1"/>
+        <referencedby refid="d6/d61/a03510_1abcef19830fba133bd04d81e9f895f865" compoundref="d5/d8a/a00599" startline="83" endline="86">begin</referencedby>
+        <referencedby refid="d6/d61/a03510_1acbc47210a6467dc4c0213fa0a80ca48b" compoundref="d5/d8a/a00599" startline="91" endline="94">end</referencedby>
+        <referencedby refid="d6/d61/a03510_1a3b7d99af30e0ac7ad1dfe8b16c962627" compoundref="d5/d8a/a00599" startline="57" endline="61">operator=</referencedby>
+        <referencedby refid="d6/d61/a03510_1a02e80c7308587507681a4934800d0a60" compoundref="d5/d8a/a00599" startline="71" endline="74">operator[]</referencedby>
+        <referencedby refid="da/dab/a01362_1a770ba5e8e6c80ebb02e90284327877d0" compoundref="d3/df8/a00155" startline="1322" endline="1343">castor3d::prepareChunkData</referencedby>
+        <referencedby refid="d6/d61/a03510_1a452e6a25ba58ddc22628d843735b2e54" compoundref="d5/d8a/a00599" startline="79" endline="82">size</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d6/d61/a03510_1a8f6a80856baa67e8d8ba47e397ea9fbe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d6/d61/a03510_1af3819b7bd80ef90bb65997155ad07fee" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
-        <definition>castor3d::DebugOverlays::DebugPanelsT&lt; T &gt;::DebugPanelsT</definition>
-        <argsstring>(DebugPanelsT const &amp;)=delete</argsstring>
-        <name>DebugPanelsT</name>
-        <qualifiedname>castor3d::DebugOverlays::DebugPanelsT::DebugPanelsT</qualifiedname>
-        <param>
-          <type>DebugPanelsT const &amp;</type>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="183" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d6/d61/a03510_1abd4b9e8d7c01cbc132e4508624bbba75" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>DebugPanelsT &amp;</type>
-        <definition>DebugPanelsT &amp; castor3d::DebugOverlays::DebugPanelsT&lt; T &gt;::operator=</definition>
-        <argsstring>(DebugPanelsT const &amp;)=delete</argsstring>
-        <name>operator=</name>
-        <qualifiedname>castor3d::DebugOverlays::DebugPanelsT::operator=</qualifiedname>
-        <param>
-          <type>DebugPanelsT const &amp;</type>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="184" column="15"/>
-      </memberdef>
-      <memberdef kind="function" id="d6/d61/a03510_1af3ece845b4805599176d688b5878a101" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::DebugOverlays::DebugPanelsT&lt; T &gt;::DebugPanelsT</definition>
-        <argsstring>(DebugPanelsT &amp;&amp;)=default</argsstring>
-        <name>DebugPanelsT</name>
-        <qualifiedname>castor3d::DebugOverlays::DebugPanelsT::DebugPanelsT</qualifiedname>
-        <param>
-          <type>DebugPanelsT &amp;&amp;</type>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="185" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d6/d61/a03510_1aaaa738ef119584dfde1ba49c347f050c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>DebugPanelsT &amp;</type>
-        <definition>DebugPanelsT &amp; castor3d::DebugOverlays::DebugPanelsT&lt; T &gt;::operator=</definition>
-        <argsstring>(DebugPanelsT &amp;&amp;)=delete</argsstring>
-        <name>operator=</name>
-        <qualifiedname>castor3d::DebugOverlays::DebugPanelsT::operator=</qualifiedname>
-        <param>
-          <type>DebugPanelsT &amp;&amp;</type>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="186" column="15"/>
-      </memberdef>
-      <memberdef kind="function" id="d6/d61/a03510_1ae6e28f1e6bc7683ffa8eeef44fc4b796" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::DebugOverlays::DebugPanelsT&lt; T &gt;::DebugPanelsT</definition>
-        <argsstring>(castor::String const &amp;title, PanelOverlaySPtr panel, OverlayCache &amp;cache)</argsstring>
-        <name>DebugPanelsT</name>
-        <qualifiedname>castor3d::DebugOverlays::DebugPanelsT::DebugPanelsT</qualifiedname>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>title</declname>
-        </param>
-        <param>
-          <type>PanelOverlaySPtr</type>
-          <declname>panel</declname>
-        </param>
-        <param>
-          <type><ref refid="dc/df4/a01401_1a8087fd7511c4d92773d1fa4feb496eb2" kindref="member">OverlayCache</ref> &amp;</type>
-          <declname>cache</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="187" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d6/d61/a03510_1af7966ac2c41522bc7a06d90bab140c3c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::DebugOverlays::DebugPanelsT&lt; T &gt;::~DebugPanelsT</definition>
+        <definition>castor3d::VertexBoneData::Ids::Ids</definition>
         <argsstring>()</argsstring>
-        <name>~DebugPanelsT</name>
-        <qualifiedname>castor3d::DebugOverlays::DebugPanelsT::~DebugPanelsT</qualifiedname>
+        <name>Ids</name>
+        <qualifiedname>castor3d::VertexBoneData::Ids::Ids</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="190" column="1"/>
+        <location file="Model/Skeleton/VertexBoneData.hpp" line="42" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="42" bodyend="45"/>
       </memberdef>
-      <memberdef kind="function" id="d6/d61/a03510_1a220cf27956bcbb58b591930701659971" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::DebugOverlays::DebugPanelsT&lt; T &gt;::update</definition>
+      <memberdef kind="function" id="d6/d61/a03510_1a22576b74e7dd21fce35996a5bbadd6e3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::VertexBoneData::Ids::Ids</definition>
+        <argsstring>(Ids const &amp;rhs)</argsstring>
+        <name>Ids</name>
+        <qualifiedname>castor3d::VertexBoneData::Ids::Ids</qualifiedname>
+        <param>
+          <type><ref refid="d6/d61/a03510" kindref="compound">Ids</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/VertexBoneData.hpp" line="46" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="46" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d61/a03510_1adc8d2e43813c7897bbfe3c94effb81a4" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::VertexBoneData::Ids::Ids</definition>
+        <argsstring>(Ids &amp;&amp;rhs) noexcept</argsstring>
+        <name>Ids</name>
+        <qualifiedname>castor3d::VertexBoneData::Ids::Ids</qualifiedname>
+        <param>
+          <type><ref refid="d6/d61/a03510" kindref="compound">Ids</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/VertexBoneData.hpp" line="50" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="50" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d61/a03510_1a5e2a5fe9f88bb63a442d0745ce858f84" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::VertexBoneData::Ids::~Ids</definition>
         <argsstring>()</argsstring>
-        <name>update</name>
-        <qualifiedname>castor3d::DebugOverlays::DebugPanelsT::update</qualifiedname>
+        <name>~Ids</name>
+        <qualifiedname>castor3d::VertexBoneData::Ids::~Ids</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="191" column="6"/>
+        <location file="Model/Skeleton/VertexBoneData.hpp" line="54" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="54" bodyend="56"/>
       </memberdef>
-      <memberdef kind="function" id="d6/d61/a03510_1ae6ed41a37352beb894105aad7a40cf33" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>int</type>
-        <definition>int castor3d::DebugOverlays::DebugPanelsT&lt; T &gt;::updatePosition</definition>
-        <argsstring>(int y)</argsstring>
-        <name>updatePosition</name>
-        <qualifiedname>castor3d::DebugOverlays::DebugPanelsT::updatePosition</qualifiedname>
+      <memberdef kind="function" id="d6/d61/a03510_1a3b7d99af30e0ac7ad1dfe8b16c962627" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d6/d61/a03510" kindref="compound">Ids</ref> &amp;</type>
+        <definition>Ids &amp; castor3d::VertexBoneData::Ids::operator=</definition>
+        <argsstring>(Ids const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::VertexBoneData::Ids::operator=</qualifiedname>
         <param>
-          <type>int</type>
-          <declname>y</declname>
+          <type><ref refid="d6/d61/a03510" kindref="compound">Ids</ref> const &amp;</type>
+          <declname>rhs</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -234,25 +107,18 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="192" column="5"/>
+        <location file="Model/Skeleton/VertexBoneData.hpp" line="57" column="6" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="57" bodyend="61"/>
+        <references refid="d6/d61/a03510_1a2bf3acefcc41daac40ff83c31e12592c" compoundref="d5/d8a/a00599" startline="41">data</references>
       </memberdef>
-      <memberdef kind="function" id="d6/d61/a03510_1a64bb721ed75256144508b4c683a19d69" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::DebugOverlays::DebugPanelsT&lt; T &gt;::add</definition>
-        <argsstring>(castor::String const &amp;name, castor::String const &amp;label, T const &amp;value)</argsstring>
-        <name>add</name>
-        <qualifiedname>castor3d::DebugOverlays::DebugPanelsT::add</qualifiedname>
+      <memberdef kind="function" id="d6/d61/a03510_1aeaccb742b3f409ebe05e1d75d689f113" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d6/d61/a03510" kindref="compound">Ids</ref> &amp;</type>
+        <definition>Ids &amp; castor3d::VertexBoneData::Ids::operator=</definition>
+        <argsstring>(Ids &amp;&amp;rhs) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::VertexBoneData::Ids::operator=</qualifiedname>
         <param>
-          <type>castor::String const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>label</declname>
-        </param>
-        <param>
-          <type>T const &amp;</type>
-          <declname>value</declname>
+          <type><ref refid="d6/d61/a03510" kindref="compound">Ids</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -260,30 +126,168 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="193" column="6"/>
+        <location file="Model/Skeleton/VertexBoneData.hpp" line="62" column="6" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="62" bodyend="70"/>
+        <references refid="d6/d61/a03510_1a2bf3acefcc41daac40ff83c31e12592c" compoundref="d5/d8a/a00599" startline="41">data</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d61/a03510_1a02e80c7308587507681a4934800d0a60" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t &amp;</type>
+        <definition>uint32_t &amp; castor3d::VertexBoneData::Ids::operator[]</definition>
+        <argsstring>(size_t index)</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor3d::VertexBoneData::Ids::operator[]</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/VertexBoneData.hpp" line="71" column="11" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="71" bodyend="74"/>
+        <references refid="d6/d61/a03510_1a2bf3acefcc41daac40ff83c31e12592c" compoundref="d5/d8a/a00599" startline="41">data</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d61/a03510_1a669cb3cff2c9e90992cd501c08b2c155" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t const &amp;</type>
+        <definition>uint32_t const  &amp; castor3d::VertexBoneData::Ids::operator[]</definition>
+        <argsstring>(size_t index) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor3d::VertexBoneData::Ids::operator[]</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/VertexBoneData.hpp" line="75" column="17" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="75" bodyend="78"/>
+        <references refid="d6/d61/a03510_1a2bf3acefcc41daac40ff83c31e12592c" compoundref="d5/d8a/a00599" startline="41">data</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d61/a03510_1a452e6a25ba58ddc22628d843735b2e54" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor3d::VertexBoneData::Ids::size</definition>
+        <argsstring>() const</argsstring>
+        <name>size</name>
+        <qualifiedname>castor3d::VertexBoneData::Ids::size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/VertexBoneData.hpp" line="79" column="8" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="79" bodyend="82"/>
+        <references refid="d6/d61/a03510_1a2bf3acefcc41daac40ff83c31e12592c" compoundref="d5/d8a/a00599" startline="41">data</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d61/a03510_1abcef19830fba133bd04d81e9f895f865" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::VertexBoneData::Ids::begin</definition>
+        <argsstring>() const</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor3d::VertexBoneData::Ids::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/VertexBoneData.hpp" line="83" column="6" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="83" bodyend="86"/>
+        <references refid="d6/d61/a03510_1a2bf3acefcc41daac40ff83c31e12592c" compoundref="d5/d8a/a00599" startline="41">data</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d61/a03510_1afe8fe6f84733e278a9f1f4c8d03185ef" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::VertexBoneData::Ids::begin</definition>
+        <argsstring>()</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor3d::VertexBoneData::Ids::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/VertexBoneData.hpp" line="87" column="6" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="87" bodyend="90"/>
+        <references refid="d6/d61/a03510_1a2bf3acefcc41daac40ff83c31e12592c" compoundref="d5/d8a/a00599" startline="41">data</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d61/a03510_1acbc47210a6467dc4c0213fa0a80ca48b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::VertexBoneData::Ids::end</definition>
+        <argsstring>() const</argsstring>
+        <name>end</name>
+        <qualifiedname>castor3d::VertexBoneData::Ids::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/VertexBoneData.hpp" line="91" column="6" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="91" bodyend="94"/>
+        <references refid="d6/d61/a03510_1a2bf3acefcc41daac40ff83c31e12592c" compoundref="d5/d8a/a00599" startline="41">data</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d61/a03510_1a48cdcfe1bf1af8b3584969d52d09535b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::VertexBoneData::Ids::end</definition>
+        <argsstring>()</argsstring>
+        <name>end</name>
+        <qualifiedname>castor3d::VertexBoneData::Ids::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/VertexBoneData.hpp" line="95" column="6" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="95" bodyend="98"/>
+        <references refid="d6/d61/a03510_1a2bf3acefcc41daac40ff83c31e12592c" compoundref="d5/d8a/a00599" startline="41">data</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
+<para>The bones ID. </para>
     </detaileddescription>
-    <location file="Overlay/DebugOverlays.hpp" line="178" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="179" bodyend="203"/>
+    <collaborationgraph>
+      <node id="4">
+        <label>T</label>
+      </node>
+      <node id="2">
+        <label>std::array&lt; uint32_t, MaxBonesPerVertex &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; uint32_t, MaxBonesPerVertex &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::VertexBoneData::Ids</label>
+        <link refid="d6/d61/a03510"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>data</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Skeleton/VertexBoneData.hpp" line="34" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="35" bodyend="99"/>
     <listofallmembers>
-      <member refid="d6/d61/a03510_1a64bb721ed75256144508b4c683a19d69" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::DebugPanelsT</scope><name>add</name></member>
-      <member refid="d6/d61/a03510_1a2eb0f9a39e98b0b4176112e6357587c5" prot="private" virt="non-virtual"><scope>castor3d::DebugOverlays::DebugPanelsT</scope><name>DebugPanelArray</name></member>
-      <member refid="d6/d61/a03510_1a8f6a80856baa67e8d8ba47e397ea9fbe" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::DebugPanelsT</scope><name>DebugPanelsT</name></member>
-      <member refid="d6/d61/a03510_1af3ece845b4805599176d688b5878a101" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::DebugPanelsT</scope><name>DebugPanelsT</name></member>
-      <member refid="d6/d61/a03510_1ae6e28f1e6bc7683ffa8eeef44fc4b796" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::DebugPanelsT</scope><name>DebugPanelsT</name></member>
-      <member refid="d6/d61/a03510_1ae70e5a2e8e678cf0a326486c03249d72" prot="private" virt="non-virtual"><scope>castor3d::DebugOverlays::DebugPanelsT</scope><name>m_cache</name></member>
-      <member refid="d6/d61/a03510_1aa09b9403592224192db07d41797cd466" prot="private" virt="non-virtual"><scope>castor3d::DebugOverlays::DebugPanelsT</scope><name>m_panel</name></member>
-      <member refid="d6/d61/a03510_1a3e4f40bcf7ddf7fb0096ea74f7a180ca" prot="private" virt="non-virtual"><scope>castor3d::DebugOverlays::DebugPanelsT</scope><name>m_panels</name></member>
-      <member refid="d6/d61/a03510_1abc0f5619e054effc439b26410ff4389e" prot="private" virt="non-virtual"><scope>castor3d::DebugOverlays::DebugPanelsT</scope><name>m_titlePanel</name></member>
-      <member refid="d6/d61/a03510_1a3bc706e3b069d4e1e4ebd4455443da58" prot="private" virt="non-virtual"><scope>castor3d::DebugOverlays::DebugPanelsT</scope><name>m_titleText</name></member>
-      <member refid="d6/d61/a03510_1abd4b9e8d7c01cbc132e4508624bbba75" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::DebugPanelsT</scope><name>operator=</name></member>
-      <member refid="d6/d61/a03510_1aaaa738ef119584dfde1ba49c347f050c" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::DebugPanelsT</scope><name>operator=</name></member>
-      <member refid="d6/d61/a03510_1a220cf27956bcbb58b591930701659971" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::DebugPanelsT</scope><name>update</name></member>
-      <member refid="d6/d61/a03510_1ae6ed41a37352beb894105aad7a40cf33" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::DebugPanelsT</scope><name>updatePosition</name></member>
-      <member refid="d6/d61/a03510_1af7966ac2c41522bc7a06d90bab140c3c" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::DebugPanelsT</scope><name>~DebugPanelsT</name></member>
+      <member refid="d6/d61/a03510_1abcef19830fba133bd04d81e9f895f865" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>begin</name></member>
+      <member refid="d6/d61/a03510_1afe8fe6f84733e278a9f1f4c8d03185ef" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>begin</name></member>
+      <member refid="d6/d61/a03510_1a2bf3acefcc41daac40ff83c31e12592c" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>data</name></member>
+      <member refid="d6/d61/a03510_1acbc47210a6467dc4c0213fa0a80ca48b" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>end</name></member>
+      <member refid="d6/d61/a03510_1a48cdcfe1bf1af8b3584969d52d09535b" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>end</name></member>
+      <member refid="d6/d61/a03510_1af3819b7bd80ef90bb65997155ad07fee" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>Ids</name></member>
+      <member refid="d6/d61/a03510_1a22576b74e7dd21fce35996a5bbadd6e3" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>Ids</name></member>
+      <member refid="d6/d61/a03510_1adc8d2e43813c7897bbfe3c94effb81a4" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>Ids</name></member>
+      <member refid="d6/d61/a03510_1a3b7d99af30e0ac7ad1dfe8b16c962627" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>operator=</name></member>
+      <member refid="d6/d61/a03510_1aeaccb742b3f409ebe05e1d75d689f113" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>operator=</name></member>
+      <member refid="d6/d61/a03510_1a02e80c7308587507681a4934800d0a60" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>operator[]</name></member>
+      <member refid="d6/d61/a03510_1a669cb3cff2c9e90992cd501c08b2c155" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>operator[]</name></member>
+      <member refid="d6/d61/a03510_1a452e6a25ba58ddc22628d843735b2e54" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>size</name></member>
+      <member refid="d6/d61/a03510_1a5e2a5fe9f88bb63a442d0745ce858f84" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Ids</scope><name>~Ids</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

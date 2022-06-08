@@ -1,83 +1,107 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="d4/d69/a05166" kind="class" language="C++" prot="public">
-    <compoundname>castor::TextWriter&lt; castor3d::Sampler &gt;</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::Sampler &gt;</basecompoundref>
-    <includes local="no">TextSampler.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d4/d69/a05166_1a49f89d5ba790f5f24ecbcd5bd270bebc" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor::TextWriter&lt; castor3d::Sampler &gt;::TextWriter</definition>
-        <argsstring>(String const &amp;tabs)</argsstring>
-        <name>TextWriter</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::Sampler &gt;::TextWriter</qualifiedname>
-        <param>
-          <type>String const &amp;</type>
-          <declname>tabs</declname>
-        </param>
+  <compounddef id="d4/d69/a05166" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ModelBufferConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/d69/a05166_1afe6add37bd8e3d198f049d5237be71d3" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::ModelBufferConfiguration::prvModel</definition>
+        <argsstring></argsstring>
+        <name>prvModel</name>
+        <qualifiedname>castor3d::ModelBufferConfiguration::prvModel</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Text/TextSampler.hpp" line="18" column="18"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="278" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="278" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="d4/d69/a05166_1aecb2572f1046262393e58ebfb65fbc49" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor::TextWriter&lt; castor3d::Sampler &gt;::operator()</definition>
-        <argsstring>(castor3d::Sampler const &amp;sampler, castor::StringStream &amp;file) override</argsstring>
-        <name>operator()</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::Sampler &gt;::operator()</qualifiedname>
-        <param>
-          <type><ref refid="d3/d3b/a02910" kindref="compound">castor3d::Sampler</ref> const &amp;</type>
-          <declname>sampler</declname>
-        </param>
-        <param>
-          <type>castor::StringStream &amp;</type>
-          <declname>file</declname>
-        </param>
+      <memberdef kind="variable" id="d4/d69/a05166_1a9a2fbadbdb51b0c1815d90612e85422f" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::ModelBufferConfiguration::curModel</definition>
+        <argsstring></argsstring>
+        <name>curModel</name>
+        <qualifiedname>castor3d::ModelBufferConfiguration::curModel</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Text/TextSampler.hpp" line="19" column="14"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="279" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="279" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d69/a05166_1a5292c4f9c5299e18cd6acbfeb9d5839e" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::ModelBufferConfiguration::normal</definition>
+        <argsstring></argsstring>
+        <name>normal</name>
+        <qualifiedname>castor3d::ModelBufferConfiguration::normal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="280" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="280" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d69/a05166_1ae7c82770010bd28e0c9e7d583b546801" prot="public" static="no" mutable="no">
+        <type>castor::Point4ui</type>
+        <definition>castor::Point4ui castor3d::ModelBufferConfiguration::textures[2]</definition>
+        <argsstring>[2]</argsstring>
+        <name>textures</name>
+        <qualifiedname>castor3d::ModelBufferConfiguration::textures</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="281" column="18" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="281" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d69/a05166_1acd243fd7d4bdf219665bd2f007617bea" prot="public" static="no" mutable="no">
+        <type>castor::Point4i</type>
+        <definition>castor::Point4i castor3d::ModelBufferConfiguration::countsIDs</definition>
+        <argsstring></argsstring>
+        <name>countsIDs</name>
+        <qualifiedname>castor3d::ModelBufferConfiguration::countsIDs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="282" column="17" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="282" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d69/a05166_1aba27d63d2984de248021680493d98d8f" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::ModelBufferConfiguration::meshletScale</definition>
+        <argsstring></argsstring>
+        <name>meshletScale</name>
+        <qualifiedname>castor3d::ModelBufferConfiguration::meshletScale</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="283" column="17" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="283" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>Model index data. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="2">
-        <label>TextWriterT&lt; castor3d::Sampler &gt;</label>
-      </node>
-      <node id="1">
-        <label>castor::TextWriter&lt; castor3d::Sampler &gt;</label>
-        <link refid="d4/d69/a05166"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="2">
-        <label>TextWriterT&lt; castor3d::Sampler &gt;</label>
-      </node>
-      <node id="1">
-        <label>castor::TextWriter&lt; castor3d::Sampler &gt;</label>
-        <link refid="d4/d69/a05166"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Text/TextSampler.hpp" line="14" column="1" bodyfile="Text/TextSampler.hpp" bodystart="16" bodyend="21"/>
+    <location file="Shader/Ubos/UbosModule.hpp" line="276" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="277" bodyend="284"/>
     <listofallmembers>
-      <member refid="d4/d69/a05166_1aecb2572f1046262393e58ebfb65fbc49" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Sampler &gt;</scope><name>operator()</name></member>
-      <member refid="d4/d69/a05166_1a49f89d5ba790f5f24ecbcd5bd270bebc" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Sampler &gt;</scope><name>TextWriter</name></member>
+      <member refid="d4/d69/a05166_1acd243fd7d4bdf219665bd2f007617bea" prot="public" virt="non-virtual"><scope>castor3d::ModelBufferConfiguration</scope><name>countsIDs</name></member>
+      <member refid="d4/d69/a05166_1a9a2fbadbdb51b0c1815d90612e85422f" prot="public" virt="non-virtual"><scope>castor3d::ModelBufferConfiguration</scope><name>curModel</name></member>
+      <member refid="d4/d69/a05166_1aba27d63d2984de248021680493d98d8f" prot="public" virt="non-virtual"><scope>castor3d::ModelBufferConfiguration</scope><name>meshletScale</name></member>
+      <member refid="d4/d69/a05166_1a5292c4f9c5299e18cd6acbfeb9d5839e" prot="public" virt="non-virtual"><scope>castor3d::ModelBufferConfiguration</scope><name>normal</name></member>
+      <member refid="d4/d69/a05166_1afe6add37bd8e3d198f049d5237be71d3" prot="public" virt="non-virtual"><scope>castor3d::ModelBufferConfiguration</scope><name>prvModel</name></member>
+      <member refid="d4/d69/a05166_1ae7c82770010bd28e0c9e7d583b546801" prot="public" virt="non-virtual"><scope>castor3d::ModelBufferConfiguration</scope><name>textures</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

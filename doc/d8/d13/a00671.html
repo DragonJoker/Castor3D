@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Render/GlobalIllumination/LightPropagationVolumes/GeometryInjectionPass.hpp File Reference</title>
+<title>Castor3D: Render/Culling/CullingModule.hpp File Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,31 +42,35 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_ee81606feaed1a7650f95054c2670416.html">Render</a></li><li class="navelem"><a class="el" href="../../dir_f6c92a291074146be370fc7e944c054f.html">GlobalIllumination</a></li><li class="navelem"><a class="el" href="../../dir_7108b733bb1fee5c7687037800af29fb.html">LightPropagationVolumes</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_ee81606feaed1a7650f95054c2670416.html">Render</a></li><li class="navelem"><a class="el" href="../../dir_60224d060cc31e4c570b52945980330e.html">Culling</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a>  </div>
-  <div class="headertitle"><div class="title">GeometryInjectionPass.hpp File Reference</div></div>
+  <div class="headertitle"><div class="title">CullingModule.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d4c/a03687.html">castor3d::GeometryInjectionPass</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:da/de3/a01398"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/de3/a01398.html">castor3d</a></td></tr>
+<tr class="memitem:da/dab/a01362"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html">castor3d</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader">Culling</h2></td></tr>
+<tr class="memitem:aa769a1850c3168149a816238e83ccc95"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#aa769a1850c3168149a816238e83ccc95">castor3d::SceneCullerSignalFunction</a> = std::function&lt; void(SceneCuller const &amp;) &gt;</td></tr>
+<tr class="separator:aa769a1850c3168149a816238e83ccc95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af052f073f26317f55103522fcd456256"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#af052f073f26317f55103522fcd456256">castor3d::SceneCullerSignal</a> = castor::SignalT&lt; SceneCullerSignalFunction &gt;</td></tr>
+<tr class="separator:af052f073f26317f55103522fcd456256"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a090fde570a32f1dea93408fc444db64c"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a090fde570a32f1dea93408fc444db64c">castor3d::SceneCullerSignalConnection</a> = castor::ConnectionT&lt; SceneCullerSignal &gt;</td></tr>
+<tr class="separator:a090fde570a32f1dea93408fc444db64c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69723f2f519487c850ab4cc06e45c5d3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a69723f2f519487c850ab4cc06e45c5d3">castor3d::CU_DeclareSmartPtr</a> (SceneCuller)</td></tr>
+<tr class="separator:a69723f2f519487c850ab4cc06e45c5d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 21:28:50 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:46 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

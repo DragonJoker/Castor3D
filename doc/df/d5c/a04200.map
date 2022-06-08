@@ -1,9 +1,16 @@
-<map id="castor3d::IndirectLightingPass::Program" name="castor3d::IndirectLightingPass::Program">
-<area shape="rect" id="node1" title=" " alt="" coords="65,421,232,463"/>
-<area shape="rect" id="node2" href="$dc/d64/a04750.html" title="A non compiled shader module, with its source." alt="" coords="67,317,230,344"/>
-<area shape="rect" id="node3" title=" " alt="" coords="34,206,114,233"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,95,132,136"/>
-<area shape="rect" id="node5" title=" " alt="" coords="141,199,279,240"/>
-<area shape="rect" id="node6" title=" " alt="" coords="157,102,295,129"/>
-<area shape="rect" id="node7" title=" " alt="" coords="207,5,245,32"/>
+<map id="castor3d::ShadowMapResult" name="castor3d::ShadowMapResult">
+<area shape="rect" id="node1" title=" " alt="" coords="339,657,527,684"/>
+<area shape="rect" id="node2" href="$df/d76/a03726.html" title=" " alt="" coords="368,567,499,608"/>
+<area shape="rect" id="node3" href="$db/db0/a03722.html" title=" " alt="" coords="265,387,418,413"/>
+<area shape="rect" id="node14" href="$df/d76/a03726.html" title=" " alt="" coords="377,463,508,504"/>
+<area shape="rect" id="node4" title=" " alt="" coords="139,297,245,324"/>
+<area shape="rect" id="node5" href="$df/d75/a04010.html" title=" " alt="" coords="270,297,429,324"/>
+<area shape="rect" id="node6" href="$d7/ded/a04130.html" title=" " alt="" coords="339,196,506,223"/>
+<area shape="rect" id="node7" title=" " alt="" coords="329,95,516,121"/>
+<area shape="rect" id="node8" title=" " alt="" coords="80,196,259,223"/>
+<area shape="rect" id="node9" href="$d2/dce/a04002.html" title=" " alt="" coords="5,95,157,121"/>
+<area shape="rect" id="node10" title=" " alt="" coords="191,95,305,121"/>
+<area shape="rect" id="node12" title=" " alt="" coords="451,247,618,273"/>
+<area shape="rect" id="node11" title=" " alt="" coords="435,5,474,32"/>
+<area shape="rect" id="node13" title=" " alt="" coords="483,145,623,172"/>
 </map>

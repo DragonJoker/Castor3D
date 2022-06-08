@@ -10,8 +10,8 @@
 <para>Castor3D is a 3D engine written in C++ 17.</para>
 <para>It works on Windows and GNU/Linux.</para>
 <para>It relies on Ashes as a rendering API, allowing Vulkan, Direct3D 11, and OpenGL.</para>
-<para>The project itself is compilable on supported platforms using CMake (cf. <ref refid="df/d5f/a10773" kindref="compound">build</ref>).</para>
-<sect1 id="index_1autotoc_md207">
+<para>The project itself is compilable on supported platforms using CMake (cf. <ref refid="d7/d67/a11360" kindref="compound">build</ref>).</para>
+<sect1 id="index_1autotoc_md209">
 <title>Features</title>
 <para><itemizedlist>
 <listitem><para>Deferred rendering for opaque objects.</para>
@@ -33,14 +33,15 @@
 </listitem><listitem><para>Modular architecture through plug-ins.</para>
 </listitem><listitem><para>Shaders are generated automatically from pipeline configuration.</para>
 </listitem><listitem><para>Shaders are writable directly from C++ code.</para>
-</listitem><listitem><para>Scenes are described using a text format easily comprehensible and extensible. (<ref refid="d2/df2/a10776" kindref="compound">Scene File</ref>)</para>
+</listitem><listitem><para>Scenes are described using a text format easily comprehensible and extensible. (<ref refid="d9/d42/a11363" kindref="compound">Scene File</ref>)</para>
 </listitem><listitem><para>Asynchronous (timers) or synchronour (thread) rendering.</para>
+</listitem><listitem><para>Using Mesh and Task shaders, if available.</para>
 </listitem></itemizedlist>
 </para>
 </sect1>
-<sect1 id="index_1autotoc_md208">
+<sect1 id="index_1autotoc_md210">
 <title>Implemented Plug-ins</title>
-<sect2 id="index_1autotoc_md209">
+<sect2 id="index_1autotoc_md211">
 <title>Importers</title>
 <para><itemizedlist>
 <listitem><para>ASSIMP: Multiple format mesh importer.</para>
@@ -48,7 +49,7 @@
 </listitem></itemizedlist>
 </para>
 </sect2>
-<sect2 id="index_1autotoc_md210">
+<sect2 id="index_1autotoc_md212">
 <title>Dividers</title>
 <para><itemizedlist>
 <listitem><para>Loop subdivision surfaces.</para>
@@ -57,7 +58,7 @@
 </listitem></itemizedlist>
 </para>
 </sect2>
-<sect2 id="index_1autotoc_md211">
+<sect2 id="index_1autotoc_md213">
 <title>PostEffects</title>
 <para><itemizedlist>
 <listitem><para>Bloom : HDR Bloom implementation.</para>
@@ -71,14 +72,14 @@
 </listitem></itemizedlist>
 </para>
 </sect2>
-<sect2 id="index_1autotoc_md212">
+<sect2 id="index_1autotoc_md214">
 <title>Generators</title>
 <para><itemizedlist>
 <listitem><para>DiamondSquareTerrain : to generate terrains inside Castor3D scenes, using diamond-quare algorithm.</para>
 </listitem></itemizedlist>
 </para>
 </sect2>
-<sect2 id="index_1autotoc_md213">
+<sect2 id="index_1autotoc_md215">
 <title>Generic</title>
 <para><itemizedlist>
 <listitem><para>DiamondSquareTerrain: to generate terrains inside Castor3D scenes, using diamond-quare algorithm.</para>
@@ -89,7 +90,7 @@
 </listitem></itemizedlist>
 </para>
 </sect2>
-<sect2 id="index_1autotoc_md214">
+<sect2 id="index_1autotoc_md216">
 <title>ToneMappings</title>
 <para><itemizedlist>
 <listitem><para>Linear.</para>
@@ -102,7 +103,7 @@
 </para>
 </sect2>
 </sect1>
-<sect1 id="index_1autotoc_md215">
+<sect1 id="index_1autotoc_md217">
 <title>Other applications</title>
 <para><itemizedlist>
 <listitem><para>CastorViewer: A scene viewer based on Castor3D.</para>
@@ -112,7 +113,7 @@
 </listitem></itemizedlist>
 </para>
 </sect1>
-<sect1 id="index_1autotoc_md216">
+<sect1 id="index_1autotoc_md218">
 <title>Screenshots</title>
 <para><image type="html" name="http://dragonjoker.github.io/Castor3D/img/Sponza-PBR-VCT-Small.png" alt="Sponza, VCT" inline="yes"></image>
  <image type="html" name="http://dragonjoker.github.io/Castor3D/img/Cerberus-PBR-Small.png" alt="Cerberus" inline="yes"></image>
@@ -122,7 +123,7 @@
  <image type="html" name="http://dragonjoker.github.io/Castor3D/img/SanMiguel-PBR-SG-LPV-Small.png" alt="SanMiguel, PBR, LPV" inline="yes"></image>
  <image type="html" name="http://dragonjoker.github.io/Castor3D/img/Bistro-PBR-VCT-Small.png" alt="Bistro, PBR, VCT" inline="yes"></image>
 </para>
-<para>See <ref refid="d3/d6f/a10774_1md_Z__Projets_C___Castor3D_doc_Castor3D_ChangeLog_English" kindref="member">full changelog</ref> for more details. </para>
+<para>See <ref refid="d3/d97/a11361_1md_Z__Projets_C___Castor3D_doc_Castor3D_ChangeLog_English" kindref="member">full changelog</ref> for more details. </para>
 </sect1>
     </detaileddescription>
     <location file="Z:/Projets/C++/Castor3D/doc/Castor3D/DocMainPage-English.md"/>

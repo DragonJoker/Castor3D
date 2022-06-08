@@ -1,248 +1,78 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="da/daf/a03718" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::LightPropagationPass</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">castor::Named</basecompoundref>
-    <basecompoundref prot="public" virt="non-virtual">crg::RenderPass</basecompoundref>
-    <includes local="no">LightPropagationPass.hpp</includes>
-    <innerclass refid="db/db0/a03722" prot="private">castor3d::LightPropagationPass::PipelineHolder</innerclass>
+    <compoundname>castor3d::Frustum</compoundname>
+    <includes local="no">Frustum.hpp</includes>
       <sectiondef kind="public-type">
-      <memberdef kind="enum" id="da/daf/a03718_1a53be83db9e8c50634d8eb5613db0b934" prot="public" static="no" strong="no">
-        <type></type>
-        <name>InIdx</name>
-        <qualifiedname>castor3d::LightPropagationPass::InIdx</qualifiedname>
-        <enumvalue id="da/daf/a03718_1a53be83db9e8c50634d8eb5613db0b934a3684526808510ed03381ffd7eb6457fd" prot="public">
-          <name>LpvGridUboIdx</name>
-          <briefdescription>
-          </briefdescription>
-          <detaileddescription>
-          </detaileddescription>
-        </enumvalue>
-        <enumvalue id="da/daf/a03718_1a53be83db9e8c50634d8eb5613db0b934a1438928d22d75ab702af19a1818a6d81" prot="public">
-          <name>RLpvGridIdx</name>
-          <briefdescription>
-          </briefdescription>
-          <detaileddescription>
-          </detaileddescription>
-        </enumvalue>
-        <enumvalue id="da/daf/a03718_1a53be83db9e8c50634d8eb5613db0b934a2f8884d27852b3fb2155dce46f286483" prot="public">
-          <name>GLpvGridIdx</name>
-          <briefdescription>
-          </briefdescription>
-          <detaileddescription>
-          </detaileddescription>
-        </enumvalue>
-        <enumvalue id="da/daf/a03718_1a53be83db9e8c50634d8eb5613db0b934a2b5c389f13377dcad4758440bf8f8697" prot="public">
-          <name>BLpvGridIdx</name>
-          <briefdescription>
-          </briefdescription>
-          <detaileddescription>
-          </detaileddescription>
-        </enumvalue>
-        <enumvalue id="da/daf/a03718_1a53be83db9e8c50634d8eb5613db0b934a14ef22466abb8a7942f085afb745b149" prot="public">
-          <name>GpGridIdx</name>
-          <briefdescription>
-          </briefdescription>
-          <detaileddescription>
-          </detaileddescription>
-        </enumvalue>
+      <memberdef kind="typedef" id="da/daf/a03718_1af2b7dc6625287a344d5e4594068b0232" prot="public" static="no">
+        <type>std::array&lt; castor::PlaneEquation, size_t(<ref refid="da/dab/a01362_1abc8a2e73a4a01c9d2a4575897121259bae558bb69fadec037d9eae46601a4df8e" kindref="member">FrustumPlane::eCount</ref>) &gt;</type>
+        <definition>using castor3d::Frustum::Planes =  std::array&lt; castor::PlaneEquation, size_t( FrustumPlane::eCount ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>Planes</name>
+        <qualifiedname>castor3d::Frustum::Planes</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" line="37" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" bodystart="38" bodyend="44"/>
-      </memberdef>
-      <memberdef kind="enum" id="da/daf/a03718_1a55d291bf98255dc2652a68a1ac389db9" prot="public" static="no" strong="no">
-        <type></type>
-        <name>OutIdx</name>
-        <qualifiedname>castor3d::LightPropagationPass::OutIdx</qualifiedname>
-        <enumvalue id="da/daf/a03718_1a55d291bf98255dc2652a68a1ac389db9af8f0b3ec0795ade72fdce78ba0d95fae" prot="public">
-          <name>RLpvAccumulatorIdx</name>
-          <briefdescription>
-          </briefdescription>
-          <detaileddescription>
-          </detaileddescription>
-        </enumvalue>
-        <enumvalue id="da/daf/a03718_1a55d291bf98255dc2652a68a1ac389db9aa38ecee789ff6d714a49649e21bfead8" prot="public">
-          <name>GLpvAccumulatorIdx</name>
-          <briefdescription>
-          </briefdescription>
-          <detaileddescription>
-          </detaileddescription>
-        </enumvalue>
-        <enumvalue id="da/daf/a03718_1a55d291bf98255dc2652a68a1ac389db9a715d1000b68d443570900f2e05c30654" prot="public">
-          <name>BLpvAccumulatorIdx</name>
-          <briefdescription>
-          </briefdescription>
-          <detaileddescription>
-          </detaileddescription>
-        </enumvalue>
-        <enumvalue id="da/daf/a03718_1a55d291bf98255dc2652a68a1ac389db9ae5513eb502f45e2dca1a401693213c1b" prot="public">
-          <name>RLpvNextStepIdx</name>
-          <briefdescription>
-          </briefdescription>
-          <detaileddescription>
-          </detaileddescription>
-        </enumvalue>
-        <enumvalue id="da/daf/a03718_1a55d291bf98255dc2652a68a1ac389db9a4a0b2f82f4a46277a1eb347eecd44167" prot="public">
-          <name>GLpvNextStepIdx</name>
-          <briefdescription>
-          </briefdescription>
-          <detaileddescription>
-          </detaileddescription>
-        </enumvalue>
-        <enumvalue id="da/daf/a03718_1a55d291bf98255dc2652a68a1ac389db9ab9492001d5e84adea0c777f0c418cabc" prot="public">
-          <name>BLpvNextStepIdx</name>
-          <briefdescription>
-          </briefdescription>
-          <detaileddescription>
-          </detaileddescription>
-        </enumvalue>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" line="46" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" bodystart="47" bodyend="54"/>
+        <location file="Render/Frustum.hpp" line="17" column="1" bodyfile="Render/Frustum.hpp" bodystart="17" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="da/daf/a03718_1a02d82acf85fa6f2e65c23a77126ed9f4" prot="private" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::LightPropagationPass::m_gridSize</definition>
+      <memberdef kind="variable" id="da/daf/a03718_1ab1a37eb38bc788bb3cc42412b7997856" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/df5/a04458" kindref="compound">Viewport</ref> *</type>
+        <definition>Viewport* castor3d::Frustum::m_viewport</definition>
         <argsstring></argsstring>
-        <name>m_gridSize</name>
-        <qualifiedname>castor3d::LightPropagationPass::m_gridSize</qualifiedname>
+        <name>m_viewport</name>
+        <qualifiedname>castor3d::Frustum::m_viewport</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" line="122" column="10" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" bodystart="122" bodyend="-1"/>
+        <location file="Render/Frustum.hpp" line="106" column="11" bodyfile="Render/Frustum.hpp" bodystart="106" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="da/daf/a03718_1a1b918243291734673d6e375274a6e27c" prot="private" static="no" mutable="no">
-        <type><ref refid="d0/dff/a02506" kindref="compound">GpuBufferOffsetT</ref>&lt; castor::Point3f &gt;</type>
-        <definition>GpuBufferOffsetT&lt; castor::Point3f &gt; castor3d::LightPropagationPass::m_vertexBuffer</definition>
+      <memberdef kind="variable" id="da/daf/a03718_1a4505345d6a8071379ebca335efc70915" prot="private" static="no" mutable="no">
+        <type><ref refid="da/daf/a03718_1af2b7dc6625287a344d5e4594068b0232" kindref="member">Planes</ref></type>
+        <definition>Planes castor3d::Frustum::m_planes</definition>
         <argsstring></argsstring>
-        <name>m_vertexBuffer</name>
-        <qualifiedname>castor3d::LightPropagationPass::m_vertexBuffer</qualifiedname>
+        <name>m_planes</name>
+        <qualifiedname>castor3d::Frustum::m_planes</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" line="123" column="18" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" bodystart="123" bodyend="-1"/>
+        <location file="Render/Frustum.hpp" line="107" column="8" bodyfile="Render/Frustum.hpp" bodystart="107" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="da/daf/a03718_1a82ec8bbc26f0b504eeb7c306891ef68c" prot="private" static="no" mutable="no">
-        <type><ref refid="dc/d64/a04750" kindref="compound">ShaderModule</ref></type>
-        <definition>ShaderModule castor3d::LightPropagationPass::m_vertexShader</definition>
+      <memberdef kind="variable" id="da/daf/a03718_1acee7f161fa7f413774d5cc1b642a8ecc" prot="private" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="d0/de9/a03530" kindref="compound">InterleavedVertex</ref>, 8u &gt;</type>
+        <definition>std::array&lt; InterleavedVertex, 8u &gt; castor3d::Frustum::m_points</definition>
         <argsstring></argsstring>
-        <name>m_vertexShader</name>
-        <qualifiedname>castor3d::LightPropagationPass::m_vertexShader</qualifiedname>
+        <name>m_points</name>
+        <qualifiedname>castor3d::Frustum::m_points</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" line="124" column="14" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" bodystart="124" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="da/daf/a03718_1a46a1bc64f444c702209cc282be75b9e4" prot="private" static="no" mutable="no">
-        <type><ref refid="dc/d64/a04750" kindref="compound">ShaderModule</ref></type>
-        <definition>ShaderModule castor3d::LightPropagationPass::m_geometryShader</definition>
-        <argsstring></argsstring>
-        <name>m_geometryShader</name>
-        <qualifiedname>castor3d::LightPropagationPass::m_geometryShader</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" line="125" column="14" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" bodystart="125" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="da/daf/a03718_1a909da9cd14e17b994c71af18d4644ced" prot="private" static="no" mutable="no">
-        <type><ref refid="dc/d64/a04750" kindref="compound">ShaderModule</ref></type>
-        <definition>ShaderModule castor3d::LightPropagationPass::m_pixelShader</definition>
-        <argsstring></argsstring>
-        <name>m_pixelShader</name>
-        <qualifiedname>castor3d::LightPropagationPass::m_pixelShader</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" line="126" column="14" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" bodystart="126" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="da/daf/a03718_1a4df984206f9781829926cb7f7cda834e" prot="private" static="no" mutable="no">
-        <type>ashes::PipelineShaderStageCreateInfoArray</type>
-        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::LightPropagationPass::m_stages</definition>
-        <argsstring></argsstring>
-        <name>m_stages</name>
-        <qualifiedname>castor3d::LightPropagationPass::m_stages</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" line="127" column="43" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" bodystart="127" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="da/daf/a03718_1ac3ba1b4096cffb4bb1536a1f062a8909" prot="private" static="no" mutable="no">
-        <type>PipelineHolder</type>
-        <definition>PipelineHolder castor3d::LightPropagationPass::m_holder</definition>
-        <argsstring></argsstring>
-        <name>m_holder</name>
-        <qualifiedname>castor3d::LightPropagationPass::m_holder</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" line="128" column="16" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" bodystart="128" bodyend="-1"/>
+        <location file="Render/Frustum.hpp" line="108" column="12" bodyfile="Render/Frustum.hpp" bodystart="108" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="da/daf/a03718_1a402da8f02937a3654bf4f90d48e19a8a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::LightPropagationPass::LightPropagationPass</definition>
-        <argsstring>(crg::FramePass const &amp;pass, crg::GraphContext &amp;context, crg::RunnableGraph &amp;graph, RenderDevice const &amp;device, bool occlusion, uint32_t gridSize, BlendMode blendMode)</argsstring>
-        <name>LightPropagationPass</name>
-        <qualifiedname>castor3d::LightPropagationPass::LightPropagationPass</qualifiedname>
+      <memberdef kind="function" id="da/daf/a03718_1afa0a8d74d4e457579ab68e7de1ebded6" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Frustum::Frustum</definition>
+        <argsstring>(Viewport &amp;viewport)</argsstring>
+        <name>Frustum</name>
+        <qualifiedname>castor3d::Frustum::Frustum</qualifiedname>
         <param>
-          <type>crg::FramePass const &amp;</type>
-          <declname>pass</declname>
-        </param>
-        <param>
-          <type>crg::GraphContext &amp;</type>
-          <declname>context</declname>
-        </param>
-        <param>
-          <type>crg::RunnableGraph &amp;</type>
-          <declname>graph</declname>
-        </param>
-        <param>
-          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>bool</type>
-          <declname>occlusion</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>gridSize</declname>
-        </param>
-        <param>
-          <type><ref refid="dc/df4/a01401_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
-          <declname>blendMode</declname>
+          <type><ref refid="d8/df5/a04458" kindref="compound">Viewport</ref> &amp;</type>
+          <declname>viewport</declname>
         </param>
         <briefdescription>
 <para>Constructor. </para>
@@ -250,58 +80,10 @@
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">pass</parametername>
+<parametername direction="in">viewport</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The parent frame pass. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">context</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The rendering context. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">graph</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The runnable graph. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">occlusion</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Enable occlusion or not. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">gridSize</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The grid dimensions. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">blendMode</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The blend mode. </para>
+<para>The viewport. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -309,28 +91,28 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" line="77" column="9"/>
+        <location file="Render/Frustum.hpp" line="28" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="da/daf/a03718_1aa33ec684758fbd2ecc51706c5bf44525" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::LightPropagationPass::accept</definition>
-        <argsstring>(PipelineVisitorBase &amp;visitor)</argsstring>
-        <name>accept</name>
-        <qualifiedname>castor3d::LightPropagationPass::accept</qualifiedname>
+      <memberdef kind="function" id="da/daf/a03718_1a0ce9926b79b67a6b9114738b21310f5c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Frustum::update</definition>
+        <argsstring>(castor::Matrix4x4f const &amp;view)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::Frustum::update</qualifiedname>
         <param>
-          <type><ref refid="dc/dbb/a03262" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
-          <declname>visitor</declname>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>view</declname>
         </param>
         <briefdescription>
-<para>Visitor acceptance function. </para>
+<para>Updates the frustum planes. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername>visitor</parametername>
+<parametername direction="in">view</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The ... visitor. </para>
+<para>The view matrix. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -338,113 +120,226 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" line="87" column="14"/>
+        <location file="Render/Frustum.hpp" line="37" column="14"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="protected-func">
-      <memberdef kind="function" id="da/daf/a03718_1acea020bdf2fc7a6b65621d6d46c4052e" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::LightPropagationPass::doSubInitialise</definition>
-        <argsstring>()</argsstring>
-        <name>doSubInitialise</name>
-        <qualifiedname>castor3d::LightPropagationPass::doSubInitialise</qualifiedname>
+      <memberdef kind="function" id="da/daf/a03718_1a9c7db0bdda57dc7b3439563272533f03" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Frustum::update</definition>
+        <argsstring>(castor::Matrix4x4f const &amp;projection, castor::Matrix4x4f const &amp;view)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::Frustum::update</qualifiedname>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>projection</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>view</declname>
+        </param>
+        <briefdescription>
+<para>Updates the frustum planes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">projection</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The projection matrix. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">view</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The view matrix. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Frustum.hpp" line="48" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="da/daf/a03718_1ae48bac21e01ee4fb795ccbd9c9362def" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::Frustum::isVisible</definition>
+        <argsstring>(castor::BoundingBox const &amp;box, castor::Matrix4x4f const &amp;transformations) const</argsstring>
+        <name>isVisible</name>
+        <qualifiedname>castor3d::Frustum::isVisible</qualifiedname>
+        <param>
+          <type>castor::BoundingBox const &amp;</type>
+          <declname>box</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>transformations</declname>
+        </param>
+        <briefdescription>
+<para>Checks if given BoundingBox is in the view frustum. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">box</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The BoundingBox. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">transformations</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The BoundingBox transformations matrix. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if the BoundingBox is completely out of the view frustum. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Frustum.hpp" line="63" column="14"/>
+        <referencedby refid="d0/d15/a04574_1a4b024cf5dd96bcf933c8b90a70d2c183" compoundref="d0/dc8/a01124" startline="179" endline="184">castor3d::Camera::isVisible</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="da/daf/a03718_1a16f457e7f704ff5997fd560d24c2c837" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::Frustum::isVisible</definition>
+        <argsstring>(castor::BoundingSphere const &amp;sphere, castor::Matrix4x4f const &amp;transformations, castor::Point3f const &amp;scale) const</argsstring>
+        <name>isVisible</name>
+        <qualifiedname>castor3d::Frustum::isVisible</qualifiedname>
+        <param>
+          <type>castor::BoundingSphere const &amp;</type>
+          <declname>sphere</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>transformations</declname>
+        </param>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>scale</declname>
+        </param>
+        <briefdescription>
+<para>Checks if given BoundingSphere is in the view frustum. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">sphere</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The BoundingSphere. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">transformations</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The BoundingSphere transformations matrix. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scale for the BoundingSphere. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if the BoundingSphere is completely out of the view frustum. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Frustum.hpp" line="80" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="da/daf/a03718_1a07a96b441fa9aed4e07afc234de59951" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::Frustum::isVisible</definition>
+        <argsstring>(castor::Point3f const &amp;point) const</argsstring>
+        <name>isVisible</name>
+        <qualifiedname>castor3d::Frustum::isVisible</qualifiedname>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Checks if given point is in the view frustum. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The point. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if the point out of the view frustum. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Frustum.hpp" line="93" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="da/daf/a03718_1a87f3376d0295b1f46a592fbd6403f66a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::array&lt; <ref refid="d0/de9/a03530" kindref="compound">InterleavedVertex</ref>, 8u &gt; const &amp;</type>
+        <definition>std::array&lt; InterleavedVertex, 8u &gt; const  &amp; castor3d::Frustum::getPoints</definition>
+        <argsstring>() const</argsstring>
+        <name>getPoints</name>
+        <qualifiedname>castor3d::Frustum::getPoints</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" line="90" column="14"/>
+        <location file="Render/Frustum.hpp" line="95" column="19" bodyfile="Render/Frustum.hpp" bodystart="95" bodyend="98"/>
       </memberdef>
-      <memberdef kind="function" id="da/daf/a03718_1a5c20dc60819d52d8202eefa99c23b128" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::LightPropagationPass::doSubRecordInto</definition>
-        <argsstring>(crg::RecordContext &amp;context, VkCommandBuffer commandBuffer, uint32_t index)</argsstring>
-        <name>doSubRecordInto</name>
-        <qualifiedname>castor3d::LightPropagationPass::doSubRecordInto</qualifiedname>
-        <param>
-          <type>crg::RecordContext &amp;</type>
-          <declname>context</declname>
-        </param>
-        <param>
-          <type>VkCommandBuffer</type>
-          <declname>commandBuffer</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
-        </param>
+      <memberdef kind="function" id="da/daf/a03718_1a259be38634e63e5c722b5f4c78e0275d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/daf/a03718_1af2b7dc6625287a344d5e4594068b0232" kindref="member">Planes</ref> const &amp;</type>
+        <definition>Planes const  &amp; castor3d::Frustum::getPlanes</definition>
+        <argsstring>() const</argsstring>
+        <name>getPlanes</name>
+        <qualifiedname>castor3d::Frustum::getPlanes</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" line="91" column="14"/>
+        <location file="Render/Frustum.hpp" line="100" column="15" bodyfile="Render/Frustum.hpp" bodystart="100" bodyend="103"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="1">
-        <label>castor3d::LightPropagationPass</label>
-        <link refid="da/daf/a03718"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-        <childnode refid="3" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2">
-        <label>castor::Named</label>
-      </node>
-      <node id="3">
-        <label>crg::RenderPass</label>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="1">
-        <label>castor3d::LightPropagationPass</label>
-        <link refid="da/daf/a03718"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-        <childnode refid="3" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2">
-        <label>castor::Named</label>
-      </node>
-      <node id="3">
-        <label>crg::RenderPass</label>
-      </node>
-    </collaborationgraph>
-    <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" line="32" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp" bodystart="35" bodyend="129"/>
+    <location file="Render/Frustum.hpp" line="14" column="1" bodyfile="Render/Frustum.hpp" bodystart="15" bodyend="109"/>
     <listofallmembers>
-      <member refid="da/daf/a03718_1aa33ec684758fbd2ecc51706c5bf44525" prot="public" virt="non-virtual"><scope>castor3d::LightPropagationPass</scope><name>accept</name></member>
-      <member refid="da/daf/a03718_1a55d291bf98255dc2652a68a1ac389db9a715d1000b68d443570900f2e05c30654" prot="public" virt="non-virtual"><scope>castor3d::LightPropagationPass</scope><name>BLpvAccumulatorIdx</name></member>
-      <member refid="da/daf/a03718_1a53be83db9e8c50634d8eb5613db0b934a2b5c389f13377dcad4758440bf8f8697" prot="public" virt="non-virtual"><scope>castor3d::LightPropagationPass</scope><name>BLpvGridIdx</name></member>
-      <member refid="da/daf/a03718_1a55d291bf98255dc2652a68a1ac389db9ab9492001d5e84adea0c777f0c418cabc" prot="public" virt="non-virtual"><scope>castor3d::LightPropagationPass</scope><name>BLpvNextStepIdx</name></member>
-      <member refid="da/daf/a03718_1acea020bdf2fc7a6b65621d6d46c4052e" prot="protected" virt="non-virtual"><scope>castor3d::LightPropagationPass</scope><name>doSubInitialise</name></member>
-      <member refid="da/daf/a03718_1a5c20dc60819d52d8202eefa99c23b128" prot="protected" virt="non-virtual"><scope>castor3d::LightPropagationPass</scope><name>doSubRecordInto</name></member>
-      <member refid="da/daf/a03718_1a55d291bf98255dc2652a68a1ac389db9aa38ecee789ff6d714a49649e21bfead8" prot="public" virt="non-virtual"><scope>castor3d::LightPropagationPass</scope><name>GLpvAccumulatorIdx</name></member>
-      <member refid="da/daf/a03718_1a53be83db9e8c50634d8eb5613db0b934a2f8884d27852b3fb2155dce46f286483" prot="public" virt="non-virtual"><scope>castor3d::LightPropagationPass</scope><name>GLpvGridIdx</name></member>
-      <member refid="da/daf/a03718_1a55d291bf98255dc2652a68a1ac389db9a4a0b2f82f4a46277a1eb347eecd44167" prot="public" virt="non-virtual"><scope>castor3d::LightPropagationPass</scope><name>GLpvNextStepIdx</name></member>
-      <member refid="da/daf/a03718_1a53be83db9e8c50634d8eb5613db0b934a14ef22466abb8a7942f085afb745b149" prot="public" virt="non-virtual"><scope>castor3d::LightPropagationPass</scope><name>GpGridIdx</name></member>
-      <member refid="da/daf/a03718_1a53be83db9e8c50634d8eb5613db0b934" prot="public" virt="non-virtual"><scope>castor3d::LightPropagationPass</scope><name>InIdx</name></member>
-      <member refid="da/daf/a03718_1a402da8f02937a3654bf4f90d48e19a8a" prot="public" virt="non-virtual"><scope>castor3d::LightPropagationPass</scope><name>LightPropagationPass</name></member>
-      <member refid="da/daf/a03718_1a53be83db9e8c50634d8eb5613db0b934a3684526808510ed03381ffd7eb6457fd" prot="public" virt="non-virtual"><scope>castor3d::LightPropagationPass</scope><name>LpvGridUboIdx</name></member>
-      <member refid="da/daf/a03718_1a46a1bc64f444c702209cc282be75b9e4" prot="private" virt="non-virtual"><scope>castor3d::LightPropagationPass</scope><name>m_geometryShader</name></member>
-      <member refid="da/daf/a03718_1a02d82acf85fa6f2e65c23a77126ed9f4" prot="private" virt="non-virtual"><scope>castor3d::LightPropagationPass</scope><name>m_gridSize</name></member>
-      <member refid="da/daf/a03718_1ac3ba1b4096cffb4bb1536a1f062a8909" prot="private" virt="non-virtual"><scope>castor3d::LightPropagationPass</scope><name>m_holder</name></member>
-      <member refid="da/daf/a03718_1a909da9cd14e17b994c71af18d4644ced" prot="private" virt="non-virtual"><scope>castor3d::LightPropagationPass</scope><name>m_pixelShader</name></member>
-      <member refid="da/daf/a03718_1a4df984206f9781829926cb7f7cda834e" prot="private" virt="non-virtual"><scope>castor3d::LightPropagationPass</scope><name>m_stages</name></member>
-      <member refid="da/daf/a03718_1a1b918243291734673d6e375274a6e27c" prot="private" virt="non-virtual"><scope>castor3d::LightPropagationPass</scope><name>m_vertexBuffer</name></member>
-      <member refid="da/daf/a03718_1a82ec8bbc26f0b504eeb7c306891ef68c" prot="private" virt="non-virtual"><scope>castor3d::LightPropagationPass</scope><name>m_vertexShader</name></member>
-      <member refid="da/daf/a03718_1a55d291bf98255dc2652a68a1ac389db9" prot="public" virt="non-virtual"><scope>castor3d::LightPropagationPass</scope><name>OutIdx</name></member>
-      <member refid="da/daf/a03718_1a55d291bf98255dc2652a68a1ac389db9af8f0b3ec0795ade72fdce78ba0d95fae" prot="public" virt="non-virtual"><scope>castor3d::LightPropagationPass</scope><name>RLpvAccumulatorIdx</name></member>
-      <member refid="da/daf/a03718_1a53be83db9e8c50634d8eb5613db0b934a1438928d22d75ab702af19a1818a6d81" prot="public" virt="non-virtual"><scope>castor3d::LightPropagationPass</scope><name>RLpvGridIdx</name></member>
-      <member refid="da/daf/a03718_1a55d291bf98255dc2652a68a1ac389db9ae5513eb502f45e2dca1a401693213c1b" prot="public" virt="non-virtual"><scope>castor3d::LightPropagationPass</scope><name>RLpvNextStepIdx</name></member>
+      <member refid="da/daf/a03718_1afa0a8d74d4e457579ab68e7de1ebded6" prot="public" virt="non-virtual"><scope>castor3d::Frustum</scope><name>Frustum</name></member>
+      <member refid="da/daf/a03718_1a259be38634e63e5c722b5f4c78e0275d" prot="public" virt="non-virtual"><scope>castor3d::Frustum</scope><name>getPlanes</name></member>
+      <member refid="da/daf/a03718_1a87f3376d0295b1f46a592fbd6403f66a" prot="public" virt="non-virtual"><scope>castor3d::Frustum</scope><name>getPoints</name></member>
+      <member refid="da/daf/a03718_1ae48bac21e01ee4fb795ccbd9c9362def" prot="public" virt="non-virtual"><scope>castor3d::Frustum</scope><name>isVisible</name></member>
+      <member refid="da/daf/a03718_1a16f457e7f704ff5997fd560d24c2c837" prot="public" virt="non-virtual"><scope>castor3d::Frustum</scope><name>isVisible</name></member>
+      <member refid="da/daf/a03718_1a07a96b441fa9aed4e07afc234de59951" prot="public" virt="non-virtual"><scope>castor3d::Frustum</scope><name>isVisible</name></member>
+      <member refid="da/daf/a03718_1a4505345d6a8071379ebca335efc70915" prot="private" virt="non-virtual"><scope>castor3d::Frustum</scope><name>m_planes</name></member>
+      <member refid="da/daf/a03718_1acee7f161fa7f413774d5cc1b642a8ecc" prot="private" virt="non-virtual"><scope>castor3d::Frustum</scope><name>m_points</name></member>
+      <member refid="da/daf/a03718_1ab1a37eb38bc788bb3cc42412b7997856" prot="private" virt="non-virtual"><scope>castor3d::Frustum</scope><name>m_viewport</name></member>
+      <member refid="da/daf/a03718_1af2b7dc6625287a344d5e4594068b0232" prot="public" virt="non-virtual"><scope>castor3d::Frustum</scope><name>Planes</name></member>
+      <member refid="da/daf/a03718_1a0ce9926b79b67a6b9114738b21310f5c" prot="public" virt="non-virtual"><scope>castor3d::Frustum</scope><name>update</name></member>
+      <member refid="da/daf/a03718_1a9c7db0bdda57dc7b3439563272533f03" prot="public" virt="non-virtual"><scope>castor3d::Frustum</scope><name>update</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

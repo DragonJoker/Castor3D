@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="df/d0f/a05070" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::SceneBackground &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::SceneBackground &gt;</basecompoundref>
+    <includes local="no">TextBackground.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="df/d0f/a05070_1a4e84f87cd86e2dc3720a7f4073264ae3" prot="private" static="no" mutable="no">
+        <type>Path</type>
+        <definition>Path castor::TextWriter&lt; castor3d::SceneBackground &gt;::m_folder</definition>
+        <argsstring></argsstring>
+        <name>m_folder</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::SceneBackground &gt;::m_folder</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextBackground.hpp" line="24" column="6" bodyfile="Text/TextBackground.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d0f/a05070_1ad57fce506f8d08ce05ea8f15fb6484af" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::SceneBackground &gt;::TextWriter</definition>
+        <argsstring>(String const &amp;tabs, Path const &amp;folder)</argsstring>
+        <name>TextWriter</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::SceneBackground &gt;::TextWriter</qualifiedname>
+        <param>
+          <type>String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <param>
+          <type>Path const &amp;</type>
+          <declname>folder</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextBackground.hpp" line="18" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d0f/a05070_1a4ddd3a5e80fb69df43c65dc9b0843b1e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::SceneBackground &gt;::operator()</definition>
+        <argsstring>(castor3d::SceneBackground const &amp;overlay, castor::StringStream &amp;file) override</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::SceneBackground &gt;::operator()</qualifiedname>
+        <param>
+          <type><ref refid="d8/d1f/a04450" kindref="compound">castor3d::SceneBackground</ref> const &amp;</type>
+          <declname>overlay</declname>
+        </param>
+        <param>
+          <type>castor::StringStream &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextBackground.hpp" line="20" column="14"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::SceneBackground &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::SceneBackground &gt;</label>
+        <link refid="df/d0f/a05070"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::SceneBackground &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::SceneBackground &gt;</label>
+        <link refid="df/d0f/a05070"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Text/TextBackground.hpp" line="14" column="1" bodyfile="Text/TextBackground.hpp" bodystart="16" bodyend="25"/>
+    <listofallmembers>
+      <member refid="df/d0f/a05070_1a4e84f87cd86e2dc3720a7f4073264ae3" prot="private" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::SceneBackground &gt;</scope><name>m_folder</name></member>
+      <member refid="df/d0f/a05070_1a4ddd3a5e80fb69df43c65dc9b0843b1e" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::SceneBackground &gt;</scope><name>operator()</name></member>
+      <member refid="df/d0f/a05070_1ad57fce506f8d08ce05ea8f15fb6484af" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::SceneBackground &gt;</scope><name>TextWriter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

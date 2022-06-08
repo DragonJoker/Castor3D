@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::RunnableLightingPass Class Reference</title>
+<title>Castor3D: castor3d::IndirectLightingPass::Program Struct Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,126 +42,72 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dc/df4/a01401.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d8/de6/a04258.html">RunnableLightingPass</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d1/dcc/a04250.html">IndirectLightingPass</a></li><li class="navelem"><a class="el" href="../../d8/de6/a04258.html">Program</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="../../d5/d34/a04255.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">castor3d::RunnableLightingPass Class Reference</div></div>
+  <div class="headertitle"><div class="title">castor3d::IndirectLightingPass::Program Struct Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;LightingPass.hpp&gt;</code></p>
+<p><code>#include &lt;IndirectLightingPass.hpp&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for castor3d::RunnableLightingPass:</div>
+Collaboration diagram for castor3d::IndirectLightingPass::Program:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../de/dc0/a04257.png" border="0" usemap="#acastor3d_1_1RunnableLightingPass_inherit__map" alt="Inheritance graph"/></div>
-<map name="acastor3d_1_1RunnableLightingPass_inherit__map" id="acastor3d_1_1RunnableLightingPass_inherit__map">
-<area shape="rect" title=" " alt="" coords="5,80,215,107"/>
-<area shape="rect" title=" " alt="" coords="44,5,176,32"/>
-</map>
-<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
-<div class="dynheader">
-Collaboration diagram for castor3d::RunnableLightingPass:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../d8/dc6/a04256.png" border="0" usemap="#acastor3d_1_1RunnableLightingPass_coll__map" alt="Collaboration graph"/></div>
-<map name="acastor3d_1_1RunnableLightingPass_coll__map" id="acastor3d_1_1RunnableLightingPass_coll__map">
-<area shape="rect" title=" " alt="" coords="5,80,215,107"/>
-<area shape="rect" title=" " alt="" coords="44,5,176,32"/>
+<div class="center"><img src="../../d8/dc6/a04256.png" border="0" usemap="#acastor3d_1_1IndirectLightingPass_1_1Program_coll__map" alt="Collaboration graph"/></div>
+<map name="acastor3d_1_1IndirectLightingPass_1_1Program_coll__map" id="acastor3d_1_1IndirectLightingPass_1_1Program_coll__map">
+<area shape="rect" title=" " alt="" coords="65,421,232,463"/>
+<area shape="rect" href="../../d6/d14/a04858.html" title="A non compiled shader module, with its source." alt="" coords="67,317,230,344"/>
+<area shape="rect" title=" " alt="" coords="34,206,114,233"/>
+<area shape="rect" title=" " alt="" coords="5,95,132,136"/>
+<area shape="rect" title=" " alt="" coords="141,199,279,240"/>
+<area shape="rect" title=" " alt="" coords="157,102,295,129"/>
+<area shape="rect" title=" " alt="" coords="207,5,245,32"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ab91a749bf1325fef712e012081a6b24c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de6/a04258.html#ab91a749bf1325fef712e012081a6b24c">RunnableLightingPass</a> (<a class="el" href="../../d1/d7a/a04262.html">LightingPass</a> const &amp;lightingPass, crg::FramePass const &amp;pass, crg::GraphContext &amp;context, crg::RunnableGraph &amp;graph, <a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const &amp;device, <a class="el" href="../../d6/d71/a04598.html">Scene</a> const &amp;scene, <a class="el" href="../../df/dce/a04214.html">LightPassResult</a> const &amp;lpResult, <a class="el" href="../../dc/ddd/a04146.html">ShadowMapResult</a> const &amp;smDirectionalResult, <a class="el" href="../../dc/ddd/a04146.html">ShadowMapResult</a> const &amp;smPointResult, <a class="el" href="../../dc/ddd/a04146.html">ShadowMapResult</a> const &amp;smSpotResult)</td></tr>
-<tr class="separator:ab91a749bf1325fef712e012081a6b24c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3ac7359e7979f44e3b18139ec11aeb2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de6/a04258.html#ae3ac7359e7979f44e3b18139ec11aeb2">clear</a> ()</td></tr>
-<tr class="separator:ae3ac7359e7979f44e3b18139ec11aeb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16b4629e710a42b37b477e40f5b21573"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de6/a04258.html#a16b4629e710a42b37b477e40f5b21573">enableLight</a> (<a class="el" href="../../d7/d2e/a04482.html">Camera</a> const &amp;camera, <a class="el" href="../../d7/dba/a04502.html">Light</a> const &amp;light)</td></tr>
-<tr class="separator:a16b4629e710a42b37b477e40f5b21573"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6e9627e1014736aea9537625424a34b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de6/a04258.html#ae6e9627e1014736aea9537625424a34b">disableLight</a> (<a class="el" href="../../d7/d2e/a04482.html">Camera</a> const &amp;camera, <a class="el" href="../../d7/dba/a04502.html">Light</a> const &amp;light)</td></tr>
-<tr class="separator:ae6e9627e1014736aea9537625424a34b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2986bd02f58f4590c0587c3058d74e18"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de6/a04258.html#a2986bd02f58f4590c0587c3058d74e18">resetCommandBuffer</a> ()</td></tr>
-<tr class="separator:a2986bd02f58f4590c0587c3058d74e18"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac8ff24a8b8067a298e6fa6b69da98266"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de6/a04258.html#ac8ff24a8b8067a298e6fa6b69da98266">hasEnabledLights</a> () const</td></tr>
-<tr class="separator:ac8ff24a8b8067a298e6fa6b69da98266"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e3ce6ba9e5dbc8d7db7e8ba21396cbb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de6/a04258.html#a4e3ce6ba9e5dbc8d7db7e8ba21396cbb">Program</a> (<a class="el" href="../../df/d75/a04010.html">RenderDevice</a> const &amp;device, <a class="el" href="../../d8/d12/a04694.html">Scene</a> const &amp;scene, <a class="el" href="../../de/da8/a04254.html">Config</a> const &amp;config)</td></tr>
+<tr class="separator:a4e3ce6ba9e5dbc8d7db7e8ba21396cbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr class="memitem:a89550e24d056d51d9b89e9945eeaeb8d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de6/a04258.html#a89550e24d056d51d9b89e9945eeaeb8d">doInitialise</a> ()</td></tr>
-<tr class="separator:a89550e24d056d51d9b89e9945eeaeb8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a31b10870dad5e7039903378d99c63ee7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de6/a04258.html#a31b10870dad5e7039903378d99c63ee7">doRecordInto</a> (crg::RecordContext &amp;context, VkCommandBuffer commandBuffer, uint32_t index)</td></tr>
-<tr class="separator:a31b10870dad5e7039903378d99c63ee7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a6a4525c42da79573212732acf61491b9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d6/d14/a04858.html">ShaderModule</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de6/a04258.html#a6a4525c42da79573212732acf61491b9">vertexShader</a></td></tr>
+<tr class="separator:a6a4525c42da79573212732acf61491b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabdd81d48f5d747d56d39492c7f8c746"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d6/d14/a04858.html">ShaderModule</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de6/a04258.html#aabdd81d48f5d747d56d39492c7f8c746">pixelShader</a></td></tr>
+<tr class="separator:aabdd81d48f5d747d56d39492c7f8c746"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c97405cd64c3c36621ac811e2c0afab"><td class="memItemLeft" align="right" valign="top">ashes::PipelineShaderStageCreateInfoArray&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/de6/a04258.html#a4c97405cd64c3c36621ac811e2c0afab">stages</a></td></tr>
+<tr class="separator:a4c97405cd64c3c36621ac811e2c0afab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ab91a749bf1325fef712e012081a6b24c" name="ab91a749bf1325fef712e012081a6b24c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab91a749bf1325fef712e012081a6b24c">&#9670;&nbsp;</a></span>RunnableLightingPass()</h2>
+<a id="a4e3ce6ba9e5dbc8d7db7e8ba21396cbb" name="a4e3ce6ba9e5dbc8d7db7e8ba21396cbb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e3ce6ba9e5dbc8d7db7e8ba21396cbb">&#9670;&nbsp;</a></span>Program()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">castor3d::RunnableLightingPass::RunnableLightingPass </td>
+          <td class="memname">castor3d::IndirectLightingPass::Program::Program </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d1/d7a/a04262.html">LightingPass</a> const &amp;&#160;</td>
-          <td class="paramname"><em>lightingPass</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">crg::FramePass const &amp;&#160;</td>
-          <td class="paramname"><em>pass</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">crg::GraphContext &amp;&#160;</td>
-          <td class="paramname"><em>context</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">crg::RunnableGraph &amp;&#160;</td>
-          <td class="paramname"><em>graph</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="../../df/d75/a04010.html">RenderDevice</a> const &amp;&#160;</td>
           <td class="paramname"><em>device</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="../../d6/d71/a04598.html">Scene</a> const &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="../../d8/d12/a04694.html">Scene</a> const &amp;&#160;</td>
           <td class="paramname"><em>scene</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="../../df/dce/a04214.html">LightPassResult</a> const &amp;&#160;</td>
-          <td class="paramname"><em>lpResult</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../dc/ddd/a04146.html">ShadowMapResult</a> const &amp;&#160;</td>
-          <td class="paramname"><em>smDirectionalResult</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../dc/ddd/a04146.html">ShadowMapResult</a> const &amp;&#160;</td>
-          <td class="paramname"><em>smPointResult</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../dc/ddd/a04146.html">ShadowMapResult</a> const &amp;&#160;</td>
-          <td class="paramname"><em>smSpotResult</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="../../de/da8/a04254.html">Config</a> const &amp;&#160;</td>
+          <td class="paramname"><em>config</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -173,199 +119,56 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="ae3ac7359e7979f44e3b18139ec11aeb2" name="ae3ac7359e7979f44e3b18139ec11aeb2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae3ac7359e7979f44e3b18139ec11aeb2">&#9670;&nbsp;</a></span>clear()</h2>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="aabdd81d48f5d747d56d39492c7f8c746" name="aabdd81d48f5d747d56d39492c7f8c746"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aabdd81d48f5d747d56d39492c7f8c746">&#9670;&nbsp;</a></span>pixelShader</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void castor3d::RunnableLightingPass::clear </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td class="memname"><a class="el" href="../../d6/d14/a04858.html">ShaderModule</a> castor3d::IndirectLightingPass::Program::pixelShader</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="ae6e9627e1014736aea9537625424a34b" name="ae6e9627e1014736aea9537625424a34b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae6e9627e1014736aea9537625424a34b">&#9670;&nbsp;</a></span>disableLight()</h2>
+<a id="a4c97405cd64c3c36621ac811e2c0afab" name="a4c97405cd64c3c36621ac811e2c0afab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c97405cd64c3c36621ac811e2c0afab">&#9670;&nbsp;</a></span>stages</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void castor3d::RunnableLightingPass::disableLight </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d7/d2e/a04482.html">Camera</a> const &amp;&#160;</td>
-          <td class="paramname"><em>camera</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d7/dba/a04502.html">Light</a> const &amp;&#160;</td>
-          <td class="paramname"><em>light</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="memname">ashes::PipelineShaderStageCreateInfoArray castor3d::IndirectLightingPass::Program::stages</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a89550e24d056d51d9b89e9945eeaeb8d" name="a89550e24d056d51d9b89e9945eeaeb8d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a89550e24d056d51d9b89e9945eeaeb8d">&#9670;&nbsp;</a></span>doInitialise()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void castor3d::RunnableLightingPass::doInitialise </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a31b10870dad5e7039903378d99c63ee7" name="a31b10870dad5e7039903378d99c63ee7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a31b10870dad5e7039903378d99c63ee7">&#9670;&nbsp;</a></span>doRecordInto()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void castor3d::RunnableLightingPass::doRecordInto </td>
-          <td>(</td>
-          <td class="paramtype">crg::RecordContext &amp;&#160;</td>
-          <td class="paramname"><em>context</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">VkCommandBuffer&#160;</td>
-          <td class="paramname"><em>commandBuffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>index</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a16b4629e710a42b37b477e40f5b21573" name="a16b4629e710a42b37b477e40f5b21573"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a16b4629e710a42b37b477e40f5b21573">&#9670;&nbsp;</a></span>enableLight()</h2>
+<a id="a6a4525c42da79573212732acf61491b9" name="a6a4525c42da79573212732acf61491b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a4525c42da79573212732acf61491b9">&#9670;&nbsp;</a></span>vertexShader</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void castor3d::RunnableLightingPass::enableLight </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d7/d2e/a04482.html">Camera</a> const &amp;&#160;</td>
-          <td class="paramname"><em>camera</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d7/dba/a04502.html">Light</a> const &amp;&#160;</td>
-          <td class="paramname"><em>light</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="memname"><a class="el" href="../../d6/d14/a04858.html">ShaderModule</a> castor3d::IndirectLightingPass::Program::vertexShader</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="ac8ff24a8b8067a298e6fa6b69da98266" name="ac8ff24a8b8067a298e6fa6b69da98266"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac8ff24a8b8067a298e6fa6b69da98266">&#9670;&nbsp;</a></span>hasEnabledLights()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool castor3d::RunnableLightingPass::hasEnabledLights </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="reference">Referenced by <a class="el" href="../../d1/d7a/a04262.html#a8af7b87d250ce5e6d577ffd8ad6085de">castor3d::LightingPass::isEnabled()</a>.</p>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../d8/de6/a04258_ac8ff24a8b8067a298e6fa6b69da98266_icgraph.png" border="0" usemap="#ad8/de6/a04258_ac8ff24a8b8067a298e6fa6b69da98266_icgraph" alt=""/></div>
-<map name="ad8/de6/a04258_ac8ff24a8b8067a298e6fa6b69da98266_icgraph" id="ad8/de6/a04258_ac8ff24a8b8067a298e6fa6b69da98266_icgraph">
-<area shape="rect" title=" " alt="" coords="208,5,387,47"/>
-<area shape="rect" href="../../d1/d7a/a04262.html#a8af7b87d250ce5e6d577ffd8ad6085de" title=" " alt="" coords="5,5,160,47"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="a2986bd02f58f4590c0587c3058d74e18" name="a2986bd02f58f4590c0587c3058d74e18"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2986bd02f58f4590c0587c3058d74e18">&#9670;&nbsp;</a></span>resetCommandBuffer()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void castor3d::RunnableLightingPass::resetCommandBuffer </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following file:<ul>
-<li>Render/Technique/Opaque/<a class="el" href="../../d7/d12/a00911.html">LightingPass.hpp</a></li>
+<hr/>The documentation for this struct was generated from the following file:<ul>
+<li>Render/Technique/Opaque/<a class="el" href="../../d3/dd1/a00914.html">IndirectLightingPass.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 15:34:56 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:48 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

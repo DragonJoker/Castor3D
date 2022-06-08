@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::BinaryParser&lt; BonesComponent &gt; Class Reference</title>
+<title>Castor3D: castor3d::BinaryParserBase&lt; TParsed &gt; Class Template Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,114 +42,1458 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dc/df4/a01401.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d7/da1/a02290.html">BinaryParser&lt; BonesComponent &gt;</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d7/da1/a02290.html">BinaryParserBase</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#pro-static-attribs">Static Protected Attributes</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="../../df/d04/a02287.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">castor3d::BinaryParser&lt; BonesComponent &gt; Class Reference</div></div>
+  <div class="headertitle"><div class="title">castor3d::BinaryParserBase&lt; TParsed &gt; Class Template Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><a class="el" href="../../de/dce/a03362.html">BonesComponent</a> loader.  
+<p>Binary data chunk reader base class.  
  <a href="../../d7/da1/a02290.html#details">More...</a></p>
 
-<p><code>#include &lt;BinaryBonesComponent.hpp&gt;</code></p>
+<p><code>#include &lt;BinaryParser.hpp&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for castor3d::BinaryParser&lt; BonesComponent &gt;:</div>
+Inheritance diagram for castor3d::BinaryParserBase&lt; TParsed &gt;:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../de/d4e/a02289.png" border="0" usemap="#acastor3d_1_1BinaryParser_3_01BonesComponent_01_4_inherit__map" alt="Inheritance graph"/></div>
-<map name="acastor3d_1_1BinaryParser_3_01BonesComponent_01_4_inherit__map" id="acastor3d_1_1BinaryParser_3_01BonesComponent_01_4_inherit__map">
-<area shape="rect" title="BonesComponent loader." alt="" coords="21,200,175,241"/>
-<area shape="rect" href="../../d3/d09/a02334.html" title=" " alt="" coords="5,109,191,151"/>
-<area shape="rect" href="../../d3/d09/a02334.html" title="Binary data chunk reader base class." alt="" coords="5,5,191,47"/>
+<div class="center"><img src="../../de/d4e/a02289.png" border="0" usemap="#acastor3d_1_1BinaryParserBase_3_01TParsed_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="acastor3d_1_1BinaryParserBase_3_01TParsed_01_4_inherit__map" id="acastor3d_1_1BinaryParserBase_3_01TParsed_01_4_inherit__map">
+<area shape="rect" title="Binary data chunk reader base class." alt="" coords="5,535,191,577"/>
+<area shape="rect" href="../../d7/da1/a02290.html" title=" " alt="" coords="475,13,660,54"/>
+<area shape="rect" href="../../d7/da1/a02290.html" title=" " alt="" coords="475,78,660,119"/>
+<area shape="rect" href="../../d7/da1/a02290.html" title=" " alt="" coords="475,143,660,185"/>
+<area shape="rect" href="../../d7/da1/a02290.html" title=" " alt="" coords="475,209,660,250"/>
+<area shape="rect" href="../../d7/da1/a02290.html" title=" " alt="" coords="475,274,660,315"/>
+<area shape="rect" href="../../d7/da1/a02290.html" title=" " alt="" coords="475,339,660,381"/>
+<area shape="rect" href="../../d7/da1/a02290.html" title=" " alt="" coords="475,405,660,446"/>
+<area shape="rect" href="../../d7/da1/a02290.html" title=" " alt="" coords="452,470,683,511"/>
+<area shape="rect" href="../../d7/da1/a02290.html" title=" " alt="" coords="475,535,660,577"/>
+<area shape="rect" href="../../d7/da1/a02290.html" title=" " alt="" coords="475,601,660,642"/>
+<area shape="rect" href="../../d7/da1/a02290.html" title=" " alt="" coords="475,666,660,707"/>
+<area shape="rect" href="../../d7/da1/a02290.html" title=" " alt="" coords="460,731,675,773"/>
+<area shape="rect" href="../../d7/da1/a02290.html" title=" " alt="" coords="475,797,660,838"/>
+<area shape="rect" href="../../d7/da1/a02290.html" title=" " alt="" coords="471,862,664,903"/>
+<area shape="rect" href="../../d7/da1/a02290.html" title=" " alt="" coords="475,927,660,969"/>
+<area shape="rect" href="../../d7/da1/a02290.html" title=" " alt="" coords="475,993,660,1034"/>
+<area shape="rect" href="../../d7/da1/a02290.html" title=" " alt="" coords="475,1058,660,1099"/>
+<area shape="rect" href="../../d8/d6f/a02234.html" title="Animation binary loader." alt="" coords="770,13,925,54"/>
+<area shape="rect" href="../../de/db2/a02246.html" title="Animable binary loader." alt="" coords="770,78,925,119"/>
+<area shape="rect" href="../../d3/ddb/a02262.html" title="MovableObject loader." alt="" coords="770,143,925,185"/>
+<area shape="rect" href="../../d0/d5f/a02274.html" title="MeshAnimation binary loader." alt="" coords="770,209,925,250"/>
+<area shape="rect" href="../../db/d2d/a02286.html" title="MeshMorphTarget binary loader." alt="" coords="770,274,925,315"/>
+<area shape="rect" href="../../d7/df2/a02322.html" title="MorphComponent loader." alt="" coords="770,339,925,381"/>
+<area shape="rect" href="../../d3/d09/a02334.html" title="SceneNodeAnimation binary loader." alt="" coords="762,405,933,446"/>
+<area shape="rect" href="../../df/d1b/a02346.html" title="SceneNodeAnimationKeyFrame binary loader." alt="" coords="732,470,963,511"/>
+<area shape="rect" href="../../d9/d94/a02358.html" title="Animable binary loader." alt="" coords="770,535,925,577"/>
+<area shape="rect" href="../../dc/dfd/a02370.html" title="SkeletonAnimation binary loader." alt="" coords="770,601,925,642"/>
+<area shape="rect" href="../../dc/d4b/a02382.html" title="MovingBone binary loader." alt="" coords="755,666,940,707"/>
+<area shape="rect" href="../../dd/d4f/a02394.html" title="SkeletonAnimationKeyFrame binary loader." alt="" coords="740,731,955,773"/>
+<area shape="rect" href="../../d5/da6/a02406.html" title="MovingBone binary loader." alt="" coords="755,797,940,838"/>
+<area shape="rect" href="../../da/dc1/a02418.html" title="SkeletonAnimationObject binary loader." alt="" coords="751,862,944,903"/>
+<area shape="rect" href="../../d6/d07/a02430.html" title="Animable binary loader." alt="" coords="770,927,925,969"/>
+<area shape="rect" href="../../d4/d80/a02442.html" title="SkinComponent loader." alt="" coords="770,993,925,1034"/>
+<area shape="rect" href="../../d1/d9a/a02454.html" title="MovableObject loader." alt="" coords="770,1058,925,1099"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
-Collaboration diagram for castor3d::BinaryParser&lt; BonesComponent &gt;:</div>
+Collaboration diagram for castor3d::BinaryParserBase&lt; TParsed &gt;:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../dc/d1a/a02288.png" border="0" usemap="#acastor3d_1_1BinaryParser_3_01BonesComponent_01_4_coll__map" alt="Collaboration graph"/></div>
-<map name="acastor3d_1_1BinaryParser_3_01BonesComponent_01_4_coll__map" id="acastor3d_1_1BinaryParser_3_01BonesComponent_01_4_coll__map">
-<area shape="rect" title="BonesComponent loader." alt="" coords="136,289,291,331"/>
-<area shape="rect" href="../../d3/d09/a02334.html" title=" " alt="" coords="121,199,306,240"/>
-<area shape="rect" href="../../dd/dae/a02294.html" title=" " alt="" coords="5,5,160,32"/>
-<area shape="rect" href="../../d3/d09/a02334.html" title="Binary data chunk reader base class." alt="" coords="131,95,317,136"/>
-<area shape="rect" href="../../d4/d1b/a03282.html" title=" " alt="" coords="218,5,342,32"/>
+<div class="center"><img src="../../dc/d1a/a02288.png" border="0" usemap="#acastor3d_1_1BinaryParserBase_3_01TParsed_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="acastor3d_1_1BinaryParserBase_3_01TParsed_01_4_coll__map" id="acastor3d_1_1BinaryParserBase_3_01TParsed_01_4_coll__map">
+<area shape="rect" title="Binary data chunk reader base class." alt="" coords="71,95,257,136"/>
+<area shape="rect" href="../../d4/d48/a02250.html" title=" " alt="" coords="5,5,160,32"/>
+<area shape="rect" href="../../d4/d1b/a03282.html" title=" " alt="" coords="185,5,309,32"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_methods_a02334"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a02334')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../d3/d09/a02334.html">castor3d::BinaryParserBase&lt; BonesComponent &gt;</a></td></tr>
-<tr class="memitem:afb9e6fdcdc58e65458de7892d2bf8025 inherit pub_methods_a02334"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d09/a02334.html#afb9e6fdcdc58e65458de7892d2bf8025">~BinaryParserBase</a> ()=default</td></tr>
-<tr class="separator:afb9e6fdcdc58e65458de7892d2bf8025 inherit pub_methods_a02334"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6f4694ede819151fe4e30e33235ff07 inherit pub_methods_a02334"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../de/dd4/a02338.html">BinaryParser</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d09/a02334.html#ae6f4694ede819151fe4e30e33235ff07">createBinaryParser</a> ()</td></tr>
-<tr class="memdesc:ae6f4694ede819151fe4e30e33235ff07 inherit pub_methods_a02334"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a binary parser.  <a href="../../d3/d09/a02334.html#ae6f4694ede819151fe4e30e33235ff07">More...</a><br /></td></tr>
-<tr class="separator:ae6f4694ede819151fe4e30e33235ff07 inherit pub_methods_a02334"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5db83668684ca219f67de3a381898e64 inherit pub_methods_a02334"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d09/a02334.html#a5db83668684ca219f67de3a381898e64">parse</a> (<a class="el" href="../../de/dce/a03362.html">BonesComponent</a> &amp;obj, castor::BinaryFile &amp;file)</td></tr>
-<tr class="memdesc:a5db83668684ca219f67de3a381898e64 inherit pub_methods_a02334"><td class="mdescLeft">&#160;</td><td class="mdescRight">From file reader function.  <a href="../../d3/d09/a02334.html#a5db83668684ca219f67de3a381898e64">More...</a><br /></td></tr>
-<tr class="separator:a5db83668684ca219f67de3a381898e64 inherit pub_methods_a02334"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6bbbb529f463085c7d259600ae1b3e99 inherit pub_methods_a02334"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d09/a02334.html#a6bbbb529f463085c7d259600ae1b3e99">parse</a> (<a class="el" href="../../de/dce/a03362.html">BonesComponent</a> &amp;obj, <a class="el" href="../../dd/dae/a02294.html">BinaryChunk</a> &amp;chunk)</td></tr>
-<tr class="memdesc:a6bbbb529f463085c7d259600ae1b3e99 inherit pub_methods_a02334"><td class="mdescLeft">&#160;</td><td class="mdescRight">From chunk reader function.  <a href="../../d3/d09/a02334.html#a6bbbb529f463085c7d259600ae1b3e99">More...</a><br /></td></tr>
-<tr class="separator:a6bbbb529f463085c7d259600ae1b3e99 inherit pub_methods_a02334"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a61b02dbf69d89569eff5be22facd5f07 inherit pub_methods_a02334"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d09/a02334.html#a61b02dbf69d89569eff5be22facd5f07">parse_v1_1</a> (<a class="el" href="../../de/dce/a03362.html">BonesComponent</a> &amp;obj, <a class="el" href="../../dd/dae/a02294.html">BinaryChunk</a> &amp;chunk)</td></tr>
-<tr class="memdesc:a61b02dbf69d89569eff5be22facd5f07 inherit pub_methods_a02334"><td class="mdescLeft">&#160;</td><td class="mdescRight">From chunk reader function.  <a href="../../d3/d09/a02334.html#a61b02dbf69d89569eff5be22facd5f07">More...</a><br /></td></tr>
-<tr class="separator:a61b02dbf69d89569eff5be22facd5f07 inherit pub_methods_a02334"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a95788692ddd6fae91074c299b674aaab inherit pub_methods_a02334"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d09/a02334.html#a95788692ddd6fae91074c299b674aaab">parse_v1_2</a> (<a class="el" href="../../de/dce/a03362.html">BonesComponent</a> &amp;obj, <a class="el" href="../../dd/dae/a02294.html">BinaryChunk</a> &amp;chunk)</td></tr>
-<tr class="memdesc:a95788692ddd6fae91074c299b674aaab inherit pub_methods_a02334"><td class="mdescLeft">&#160;</td><td class="mdescRight">From chunk reader function.  <a href="../../d3/d09/a02334.html#a95788692ddd6fae91074c299b674aaab">More...</a><br /></td></tr>
-<tr class="separator:a95788692ddd6fae91074c299b674aaab inherit pub_methods_a02334"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6f39b66d980e4a65660016f71115a89c inherit pub_methods_a02334"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d09/a02334.html#a6f39b66d980e4a65660016f71115a89c">parse_v1_3</a> (<a class="el" href="../../de/dce/a03362.html">BonesComponent</a> &amp;obj, <a class="el" href="../../dd/dae/a02294.html">BinaryChunk</a> &amp;chunk)</td></tr>
-<tr class="memdesc:a6f39b66d980e4a65660016f71115a89c inherit pub_methods_a02334"><td class="mdescLeft">&#160;</td><td class="mdescRight">From chunk reader function.  <a href="../../d3/d09/a02334.html#a6f39b66d980e4a65660016f71115a89c">More...</a><br /></td></tr>
-<tr class="separator:a6f39b66d980e4a65660016f71115a89c inherit pub_methods_a02334"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aabc068daf8d99718497aa35f7a17c346 inherit pub_methods_a02334"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d09/a02334.html#aabc068daf8d99718497aa35f7a17c346">parse_v1_4</a> (<a class="el" href="../../de/dce/a03362.html">BonesComponent</a> &amp;obj, <a class="el" href="../../dd/dae/a02294.html">BinaryChunk</a> &amp;chunk)</td></tr>
-<tr class="memdesc:aabc068daf8d99718497aa35f7a17c346 inherit pub_methods_a02334"><td class="mdescLeft">&#160;</td><td class="mdescRight">From chunk reader function.  <a href="../../d3/d09/a02334.html#aabc068daf8d99718497aa35f7a17c346">More...</a><br /></td></tr>
-<tr class="separator:aabc068daf8d99718497aa35f7a17c346 inherit pub_methods_a02334"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_methods_a02334"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_a02334')"><img src="../../closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="../../d3/d09/a02334.html">castor3d::BinaryParserBase&lt; BonesComponent &gt;</a></td></tr>
-<tr class="memitem:a035881aba2b64571b30a5efd3faaf3d9 inherit pro_methods_a02334"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d09/a02334.html#a035881aba2b64571b30a5efd3faaf3d9">doParseHeader</a> (<a class="el" href="../../dd/dae/a02294.html">BinaryChunk</a> &amp;chunk) const</td></tr>
-<tr class="memdesc:a035881aba2b64571b30a5efd3faaf3d9 inherit pro_methods_a02334"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses the header chunk.  <a href="../../d3/d09/a02334.html#a035881aba2b64571b30a5efd3faaf3d9">More...</a><br /></td></tr>
-<tr class="separator:a035881aba2b64571b30a5efd3faaf3d9 inherit pro_methods_a02334"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e1aa917e3bf897fab03a32d20890062 inherit pro_methods_a02334"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d09/a02334.html#a0e1aa917e3bf897fab03a32d20890062">doParseChunk</a> (T *values, size_t count, <a class="el" href="../../dd/dae/a02294.html">BinaryChunk</a> &amp;chunk) const</td></tr>
-<tr class="memdesc:a0e1aa917e3bf897fab03a32d20890062 inherit pro_methods_a02334"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value array from a chunk.  <a href="../../d3/d09/a02334.html#a0e1aa917e3bf897fab03a32d20890062">More...</a><br /></td></tr>
-<tr class="separator:a0e1aa917e3bf897fab03a32d20890062 inherit pro_methods_a02334"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22ca62addb3ab167995e18f49267efcf inherit pro_methods_a02334"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d09/a02334.html#a22ca62addb3ab167995e18f49267efcf">doParseChunk</a> (T(&amp;values)[Count], <a class="el" href="../../dd/dae/a02294.html">BinaryChunk</a> &amp;chunk) const</td></tr>
-<tr class="memdesc:a22ca62addb3ab167995e18f49267efcf inherit pro_methods_a02334"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value array from a chunk.  <a href="../../d3/d09/a02334.html#a22ca62addb3ab167995e18f49267efcf">More...</a><br /></td></tr>
-<tr class="separator:a22ca62addb3ab167995e18f49267efcf inherit pro_methods_a02334"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a648553ce168f5bc34adeedc8d169a7 inherit pro_methods_a02334"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d09/a02334.html#a5a648553ce168f5bc34adeedc8d169a7">doParseChunk</a> (std::array&lt; T, Count &gt; &amp;values, <a class="el" href="../../dd/dae/a02294.html">BinaryChunk</a> &amp;chunk) const</td></tr>
-<tr class="memdesc:a5a648553ce168f5bc34adeedc8d169a7 inherit pro_methods_a02334"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value array from a chunk.  <a href="../../d3/d09/a02334.html#a5a648553ce168f5bc34adeedc8d169a7">More...</a><br /></td></tr>
-<tr class="separator:a5a648553ce168f5bc34adeedc8d169a7 inherit pro_methods_a02334"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90df4e46072e5ef14aebebd00cbcc1f5 inherit pro_methods_a02334"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d09/a02334.html#a90df4e46072e5ef14aebebd00cbcc1f5">doParseChunk</a> (std::vector&lt; T &gt; &amp;values, <a class="el" href="../../dd/dae/a02294.html">BinaryChunk</a> &amp;chunk) const</td></tr>
-<tr class="memdesc:a90df4e46072e5ef14aebebd00cbcc1f5 inherit pro_methods_a02334"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value array from a chunk.  <a href="../../d3/d09/a02334.html#a90df4e46072e5ef14aebebd00cbcc1f5">More...</a><br /></td></tr>
-<tr class="separator:a90df4e46072e5ef14aebebd00cbcc1f5 inherit pro_methods_a02334"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5fac84360102001f5e730be1927c024e inherit pro_methods_a02334"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d09/a02334.html#a5fac84360102001f5e730be1927c024e">doParseChunk</a> (T &amp;value, <a class="el" href="../../dd/dae/a02294.html">BinaryChunk</a> &amp;chunk) const</td></tr>
-<tr class="memdesc:a5fac84360102001f5e730be1927c024e inherit pro_methods_a02334"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value from a chunk.  <a href="../../d3/d09/a02334.html#a5fac84360102001f5e730be1927c024e">More...</a><br /></td></tr>
-<tr class="separator:a5fac84360102001f5e730be1927c024e inherit pro_methods_a02334"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab5f9ba53ad5865f967b41e5a27ed73a9 inherit pro_methods_a02334"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d09/a02334.html#ab5f9ba53ad5865f967b41e5a27ed73a9">doGetSubChunk</a> (<a class="el" href="../../dd/dae/a02294.html">BinaryChunk</a> &amp;chunk)</td></tr>
-<tr class="memdesc:ab5f9ba53ad5865f967b41e5a27ed73a9 inherit pro_methods_a02334"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a subchunk.  <a href="../../d3/d09/a02334.html#ab5f9ba53ad5865f967b41e5a27ed73a9">More...</a><br /></td></tr>
-<tr class="separator:ab5f9ba53ad5865f967b41e5a27ed73a9 inherit pro_methods_a02334"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1fbebf70ad5b1caae1a7eb57c2f82e4 inherit pro_methods_a02334"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d09/a02334.html#ad1fbebf70ad5b1caae1a7eb57c2f82e4">checkError</a> (bool result, castor::String const &amp;text) const</td></tr>
-<tr class="separator:ad1fbebf70ad5b1caae1a7eb57c2f82e4 inherit pro_methods_a02334"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_a02334"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_a02334')"><img src="../../closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="../../d3/d09/a02334.html">castor3d::BinaryParserBase&lt; BonesComponent &gt;</a></td></tr>
-<tr class="memitem:ab3df04f9aa2eb1f7a533ed18631f09c4 inherit pro_attribs_a02334"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dae/a02294.html">BinaryChunk</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d09/a02334.html#ab3df04f9aa2eb1f7a533ed18631f09c4">m_chunk</a></td></tr>
-<tr class="separator:ab3df04f9aa2eb1f7a533ed18631f09c4 inherit pro_attribs_a02334"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a455764ca72b659dab2652baf56ce5885 inherit pro_attribs_a02334"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d4/d1b/a03282.html">Version</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d09/a02334.html#a455764ca72b659dab2652baf56ce5885">m_fileVersion</a></td></tr>
-<tr class="separator:a455764ca72b659dab2652baf56ce5885 inherit pro_attribs_a02334"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_static_attribs_a02334"><td colspan="2" onclick="javascript:toggleInherit('pro_static_attribs_a02334')"><img src="../../closed.png" alt="-"/>&#160;Static Protected Attributes inherited from <a class="el" href="../../d3/d09/a02334.html">castor3d::BinaryParserBase&lt; BonesComponent &gt;</a></td></tr>
-<tr class="memitem:ae4820a3ab3e4b282240e5f1b969153c1 inherit pro_static_attribs_a02334"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d09/a02334.html#ae4820a3ab3e4b282240e5f1b969153c1">Name</a></td></tr>
-<tr class="separator:ae4820a3ab3e4b282240e5f1b969153c1 inherit pro_static_attribs_a02334"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a2d2d95dec369d65226919075124a981d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/da1/a02290.html#a2d2d95dec369d65226919075124a981d">BinaryParserBase</a> ()=default</td></tr>
+<tr class="separator:a2d2d95dec369d65226919075124a981d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f7acc850b450a68c319fc9be8bd2188"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/da1/a02290.html#a5f7acc850b450a68c319fc9be8bd2188">BinaryParserBase</a> (<a class="el" href="../../d7/da1/a02290.html">BinaryParserBase</a> const &amp;)=default</td></tr>
+<tr class="separator:a5f7acc850b450a68c319fc9be8bd2188"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2fa711ccc4f76bbb220a6262b0822f3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/da1/a02290.html#ae2fa711ccc4f76bbb220a6262b0822f3">BinaryParserBase</a> (<a class="el" href="../../d7/da1/a02290.html">BinaryParserBase</a> &amp;&amp;)=default</td></tr>
+<tr class="separator:ae2fa711ccc4f76bbb220a6262b0822f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a263c0b5fc09225878cf4f446f9312957"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/da1/a02290.html">BinaryParserBase</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/da1/a02290.html#a263c0b5fc09225878cf4f446f9312957">operator=</a> (<a class="el" href="../../d7/da1/a02290.html">BinaryParserBase</a> const &amp;)=default</td></tr>
+<tr class="separator:a263c0b5fc09225878cf4f446f9312957"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3db52fe83d9d6d3873022171253d698"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/da1/a02290.html">BinaryParserBase</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/da1/a02290.html#ab3db52fe83d9d6d3873022171253d698">operator=</a> (<a class="el" href="../../d7/da1/a02290.html">BinaryParserBase</a> &amp;&amp;)=default</td></tr>
+<tr class="separator:ab3db52fe83d9d6d3873022171253d698"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb9e6fdcdc58e65458de7892d2bf8025"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/da1/a02290.html#afb9e6fdcdc58e65458de7892d2bf8025">~BinaryParserBase</a> ()=default</td></tr>
+<tr class="separator:afb9e6fdcdc58e65458de7892d2bf8025"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6f4694ede819151fe4e30e33235ff07"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ae6f4694ede819151fe4e30e33235ff07"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../dd/dae/a02294.html">BinaryParser</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d7/da1/a02290.html#ae6f4694ede819151fe4e30e33235ff07">createBinaryParser</a> ()</td></tr>
+<tr class="memdesc:ae6f4694ede819151fe4e30e33235ff07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a binary parser.  <a href="../../d7/da1/a02290.html#ae6f4694ede819151fe4e30e33235ff07">More...</a><br /></td></tr>
+<tr class="separator:ae6f4694ede819151fe4e30e33235ff07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5db83668684ca219f67de3a381898e64"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/da1/a02290.html#a5db83668684ca219f67de3a381898e64">parse</a> (TParsed &amp;obj, castor::BinaryFile &amp;file)</td></tr>
+<tr class="memdesc:a5db83668684ca219f67de3a381898e64"><td class="mdescLeft">&#160;</td><td class="mdescRight">From file reader function.  <a href="../../d7/da1/a02290.html#a5db83668684ca219f67de3a381898e64">More...</a><br /></td></tr>
+<tr class="separator:a5db83668684ca219f67de3a381898e64"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6bbbb529f463085c7d259600ae1b3e99"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/da1/a02290.html#a6bbbb529f463085c7d259600ae1b3e99">parse</a> (TParsed &amp;obj, <a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a> &amp;chunk)</td></tr>
+<tr class="memdesc:a6bbbb529f463085c7d259600ae1b3e99"><td class="mdescLeft">&#160;</td><td class="mdescRight">From chunk reader function.  <a href="../../d7/da1/a02290.html#a6bbbb529f463085c7d259600ae1b3e99">More...</a><br /></td></tr>
+<tr class="separator:a6bbbb529f463085c7d259600ae1b3e99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61b02dbf69d89569eff5be22facd5f07"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/da1/a02290.html#a61b02dbf69d89569eff5be22facd5f07">parse_v1_1</a> (TParsed &amp;obj, <a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a> &amp;chunk)</td></tr>
+<tr class="memdesc:a61b02dbf69d89569eff5be22facd5f07"><td class="mdescLeft">&#160;</td><td class="mdescRight">From chunk reader function.  <a href="../../d7/da1/a02290.html#a61b02dbf69d89569eff5be22facd5f07">More...</a><br /></td></tr>
+<tr class="separator:a61b02dbf69d89569eff5be22facd5f07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95788692ddd6fae91074c299b674aaab"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/da1/a02290.html#a95788692ddd6fae91074c299b674aaab">parse_v1_2</a> (TParsed &amp;obj, <a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a> &amp;chunk)</td></tr>
+<tr class="memdesc:a95788692ddd6fae91074c299b674aaab"><td class="mdescLeft">&#160;</td><td class="mdescRight">From chunk reader function.  <a href="../../d7/da1/a02290.html#a95788692ddd6fae91074c299b674aaab">More...</a><br /></td></tr>
+<tr class="separator:a95788692ddd6fae91074c299b674aaab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f39b66d980e4a65660016f71115a89c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/da1/a02290.html#a6f39b66d980e4a65660016f71115a89c">parse_v1_3</a> (TParsed &amp;obj, <a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a> &amp;chunk)</td></tr>
+<tr class="memdesc:a6f39b66d980e4a65660016f71115a89c"><td class="mdescLeft">&#160;</td><td class="mdescRight">From chunk reader function.  <a href="../../d7/da1/a02290.html#a6f39b66d980e4a65660016f71115a89c">More...</a><br /></td></tr>
+<tr class="separator:a6f39b66d980e4a65660016f71115a89c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabc068daf8d99718497aa35f7a17c346"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/da1/a02290.html#aabc068daf8d99718497aa35f7a17c346">parse_v1_4</a> (TParsed &amp;obj, <a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a> &amp;chunk)</td></tr>
+<tr class="memdesc:aabc068daf8d99718497aa35f7a17c346"><td class="mdescLeft">&#160;</td><td class="mdescRight">From chunk reader function.  <a href="../../d7/da1/a02290.html#aabc068daf8d99718497aa35f7a17c346">More...</a><br /></td></tr>
+<tr class="separator:aabc068daf8d99718497aa35f7a17c346"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6974d161e16bd0f9e903b595f406a08"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/da1/a02290.html#ae6974d161e16bd0f9e903b595f406a08">parse_v1_5</a> (TParsed &amp;obj, <a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a> &amp;chunk)</td></tr>
+<tr class="memdesc:ae6974d161e16bd0f9e903b595f406a08"><td class="mdescLeft">&#160;</td><td class="mdescRight">From chunk reader function.  <a href="../../d7/da1/a02290.html#ae6974d161e16bd0f9e903b595f406a08">More...</a><br /></td></tr>
+<tr class="separator:ae6974d161e16bd0f9e903b595f406a08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a035881aba2b64571b30a5efd3faaf3d9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/da1/a02290.html#a035881aba2b64571b30a5efd3faaf3d9">doParseHeader</a> (<a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a> &amp;chunk) const</td></tr>
+<tr class="memdesc:a035881aba2b64571b30a5efd3faaf3d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses the header chunk.  <a href="../../d7/da1/a02290.html#a035881aba2b64571b30a5efd3faaf3d9">More...</a><br /></td></tr>
+<tr class="separator:a035881aba2b64571b30a5efd3faaf3d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e1aa917e3bf897fab03a32d20890062"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a0e1aa917e3bf897fab03a32d20890062"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d7/da1/a02290.html#a0e1aa917e3bf897fab03a32d20890062">doParseChunk</a> (T *values, size_t count, <a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a> &amp;chunk) const</td></tr>
+<tr class="memdesc:a0e1aa917e3bf897fab03a32d20890062"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value array from a chunk.  <a href="../../d7/da1/a02290.html#a0e1aa917e3bf897fab03a32d20890062">More...</a><br /></td></tr>
+<tr class="separator:a0e1aa917e3bf897fab03a32d20890062"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22ca62addb3ab167995e18f49267efcf"><td class="memTemplParams" colspan="2">template&lt;typename T , size_t Count&gt; </td></tr>
+<tr class="memitem:a22ca62addb3ab167995e18f49267efcf"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d7/da1/a02290.html#a22ca62addb3ab167995e18f49267efcf">doParseChunk</a> (T(&amp;values)[Count], <a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a> &amp;chunk) const</td></tr>
+<tr class="memdesc:a22ca62addb3ab167995e18f49267efcf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value array from a chunk.  <a href="../../d7/da1/a02290.html#a22ca62addb3ab167995e18f49267efcf">More...</a><br /></td></tr>
+<tr class="separator:a22ca62addb3ab167995e18f49267efcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a648553ce168f5bc34adeedc8d169a7"><td class="memTemplParams" colspan="2">template&lt;typename T , size_t Count&gt; </td></tr>
+<tr class="memitem:a5a648553ce168f5bc34adeedc8d169a7"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d7/da1/a02290.html#a5a648553ce168f5bc34adeedc8d169a7">doParseChunk</a> (std::array&lt; T, Count &gt; &amp;values, <a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a> &amp;chunk) const</td></tr>
+<tr class="memdesc:a5a648553ce168f5bc34adeedc8d169a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value array from a chunk.  <a href="../../d7/da1/a02290.html#a5a648553ce168f5bc34adeedc8d169a7">More...</a><br /></td></tr>
+<tr class="separator:a5a648553ce168f5bc34adeedc8d169a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90df4e46072e5ef14aebebd00cbcc1f5"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a90df4e46072e5ef14aebebd00cbcc1f5"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d7/da1/a02290.html#a90df4e46072e5ef14aebebd00cbcc1f5">doParseChunk</a> (std::vector&lt; T &gt; &amp;values, <a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a> &amp;chunk) const</td></tr>
+<tr class="memdesc:a90df4e46072e5ef14aebebd00cbcc1f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value array from a chunk.  <a href="../../d7/da1/a02290.html#a90df4e46072e5ef14aebebd00cbcc1f5">More...</a><br /></td></tr>
+<tr class="separator:a90df4e46072e5ef14aebebd00cbcc1f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fac84360102001f5e730be1927c024e"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a5fac84360102001f5e730be1927c024e"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d7/da1/a02290.html#a5fac84360102001f5e730be1927c024e">doParseChunk</a> (T &amp;value, <a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a> &amp;chunk) const</td></tr>
+<tr class="memdesc:a5fac84360102001f5e730be1927c024e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value from a chunk.  <a href="../../d7/da1/a02290.html#a5fac84360102001f5e730be1927c024e">More...</a><br /></td></tr>
+<tr class="separator:a5fac84360102001f5e730be1927c024e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5f9ba53ad5865f967b41e5a27ed73a9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/da1/a02290.html#ab5f9ba53ad5865f967b41e5a27ed73a9">doGetSubChunk</a> (<a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a> &amp;chunk)</td></tr>
+<tr class="memdesc:ab5f9ba53ad5865f967b41e5a27ed73a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a subchunk.  <a href="../../d7/da1/a02290.html#ab5f9ba53ad5865f967b41e5a27ed73a9">More...</a><br /></td></tr>
+<tr class="separator:ab5f9ba53ad5865f967b41e5a27ed73a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1fbebf70ad5b1caae1a7eb57c2f82e4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/da1/a02290.html#ad1fbebf70ad5b1caae1a7eb57c2f82e4">checkError</a> (bool result, castor::String const &amp;text) const</td></tr>
+<tr class="separator:ad1fbebf70ad5b1caae1a7eb57c2f82e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:ab3df04f9aa2eb1f7a533ed18631f09c4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/da1/a02290.html#ab3df04f9aa2eb1f7a533ed18631f09c4">m_chunk</a> { nullptr }</td></tr>
+<tr class="separator:ab3df04f9aa2eb1f7a533ed18631f09c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a455764ca72b659dab2652baf56ce5885"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d4/d1b/a03282.html">Version</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/da1/a02290.html#a455764ca72b659dab2652baf56ce5885">m_fileVersion</a></td></tr>
+<tr class="separator:a455764ca72b659dab2652baf56ce5885"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-static-attribs" name="pro-static-attribs"></a>
+Static Protected Attributes</h2></td></tr>
+<tr class="memitem:ae4820a3ab3e4b282240e5f1b969153c1"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/da1/a02290.html#ae4820a3ab3e4b282240e5f1b969153c1">Name</a></td></tr>
+<tr class="separator:ae4820a3ab3e4b282240e5f1b969153c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:af07e46a537db6181733f95fa289f1d23"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:af07e46a537db6181733f95fa289f1d23"><td class="memTemplItemLeft" align="right" valign="top">class&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d7/da1/a02290.html#af07e46a537db6181733f95fa289f1d23">BinaryParserBase</a></td></tr>
+<tr class="separator:af07e46a537db6181733f95fa289f1d23"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p ><a class="el" href="../../de/dce/a03362.html">BonesComponent</a> loader. </p>
-<dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>09/11/2017</dd></dl>
-<p>Loader de <a class="el" href="../../de/dce/a03362.html">BonesComponent</a>. </p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
-<li>Binary/<a class="el" href="../../d9/d77/a00095.html">BinaryBonesComponent.hpp</a></li>
+<div class="textblock"><div class="compoundTemplParams">template&lt;class TParsed&gt;<br />
+class castor3d::BinaryParserBase&lt; TParsed &gt;</div><p >Binary data chunk reader base class. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a2d2d95dec369d65226919075124a981d" name="a2d2d95dec369d65226919075124a981d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d2d95dec369d65226919075124a981d">&#9670;&nbsp;</a></span>BinaryParserBase() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class TParsed &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d7/da1/a02290.html">castor3d::BinaryParserBase</a>&lt; TParsed &gt;::BinaryParserBase </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5f7acc850b450a68c319fc9be8bd2188" name="a5f7acc850b450a68c319fc9be8bd2188"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f7acc850b450a68c319fc9be8bd2188">&#9670;&nbsp;</a></span>BinaryParserBase() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class TParsed &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d7/da1/a02290.html">castor3d::BinaryParserBase</a>&lt; TParsed &gt;::BinaryParserBase </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/da1/a02290.html">BinaryParserBase</a>&lt; TParsed &gt; const &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae2fa711ccc4f76bbb220a6262b0822f3" name="ae2fa711ccc4f76bbb220a6262b0822f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2fa711ccc4f76bbb220a6262b0822f3">&#9670;&nbsp;</a></span>BinaryParserBase() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class TParsed &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d7/da1/a02290.html">castor3d::BinaryParserBase</a>&lt; TParsed &gt;::BinaryParserBase </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/da1/a02290.html">BinaryParserBase</a>&lt; TParsed &gt; &amp;&amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afb9e6fdcdc58e65458de7892d2bf8025" name="afb9e6fdcdc58e65458de7892d2bf8025"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb9e6fdcdc58e65458de7892d2bf8025">&#9670;&nbsp;</a></span>~BinaryParserBase()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class TParsed &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../d7/da1/a02290.html">castor3d::BinaryParserBase</a>&lt; TParsed &gt;::~<a class="el" href="../../d7/da1/a02290.html">BinaryParserBase</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ad1fbebf70ad5b1caae1a7eb57c2f82e4" name="ad1fbebf70ad5b1caae1a7eb57c2f82e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1fbebf70ad5b1caae1a7eb57c2f82e4">&#9670;&nbsp;</a></span>checkError()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class TParsed &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="../../d7/da1/a02290.html">castor3d::BinaryParserBase</a>&lt; TParsed &gt;::checkError </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>result</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>text</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="../../d3/dab/a02994.html#aa59b94a4fd876453e5d3d04da799b209">castor3d::log::error</a>, and <a class="el" href="../../d7/da1/a02290.html#ae4820a3ab3e4b282240e5f1b969153c1">castor3d::BinaryParserBase&lt; TParsed &gt;::Name</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../d7/da1/a02290.html#a035881aba2b64571b30a5efd3faaf3d9">castor3d::BinaryParserBase&lt; TParsed &gt;::doParseHeader()</a>, <a class="el" href="../../d7/da1/a02290.html#a5db83668684ca219f67de3a381898e64">castor3d::BinaryParserBase&lt; TParsed &gt;::parse()</a>, <a class="el" href="../../d7/da1/a02290.html#a61b02dbf69d89569eff5be22facd5f07">castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_1()</a>, <a class="el" href="../../d7/da1/a02290.html#a95788692ddd6fae91074c299b674aaab">castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_2()</a>, <a class="el" href="../../d7/da1/a02290.html#a6f39b66d980e4a65660016f71115a89c">castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_3()</a>, <a class="el" href="../../d7/da1/a02290.html#aabc068daf8d99718497aa35f7a17c346">castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_4()</a>, and <a class="el" href="../../d7/da1/a02290.html#ae6974d161e16bd0f9e903b595f406a08">castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_5()</a>.</p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d7/da1/a02290_ad1fbebf70ad5b1caae1a7eb57c2f82e4_icgraph.png" border="0" usemap="#ad7/da1/a02290_ad1fbebf70ad5b1caae1a7eb57c2f82e4_icgraph" alt=""/></div>
+<map name="ad7/da1/a02290_ad1fbebf70ad5b1caae1a7eb57c2f82e4_icgraph" id="ad7/da1/a02290_ad1fbebf70ad5b1caae1a7eb57c2f82e4_icgraph">
+<area shape="rect" title=" " alt="" coords="472,188,657,229"/>
+<area shape="rect" href="../../d7/da1/a02290.html#a035881aba2b64571b30a5efd3faaf3d9" title="Parses the header chunk." alt="" coords="239,5,424,47"/>
+<area shape="rect" href="../../d7/da1/a02290.html#a5db83668684ca219f67de3a381898e64" title="From file reader function." alt="" coords="5,35,191,76"/>
+<area shape="rect" href="../../d7/da1/a02290.html#a61b02dbf69d89569eff5be22facd5f07" title="From chunk reader function." alt="" coords="239,123,424,164"/>
+<area shape="rect" href="../../d7/da1/a02290.html#a95788692ddd6fae91074c299b674aaab" title="From chunk reader function." alt="" coords="239,188,424,229"/>
+<area shape="rect" href="../../d7/da1/a02290.html#a6f39b66d980e4a65660016f71115a89c" title="From chunk reader function." alt="" coords="239,253,424,295"/>
+<area shape="rect" href="../../d7/da1/a02290.html#aabc068daf8d99718497aa35f7a17c346" title="From chunk reader function." alt="" coords="239,319,424,360"/>
+<area shape="rect" href="../../d7/da1/a02290.html#ae6974d161e16bd0f9e903b595f406a08" title="From chunk reader function." alt="" coords="239,384,424,425"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ae6f4694ede819151fe4e30e33235ff07" name="ae6f4694ede819151fe4e30e33235ff07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6f4694ede819151fe4e30e33235ff07">&#9670;&nbsp;</a></span>createBinaryParser()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class TParsed &gt; </div>
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dae/a02294.html">BinaryParser</a>&lt; T &gt; <a class="el" href="../../d7/da1/a02290.html">castor3d::BinaryParserBase</a>&lt; TParsed &gt;::createBinaryParser </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates a binary parser. </p>
+
+<p class="reference">References <a class="el" href="../../d7/da1/a02290.html#a455764ca72b659dab2652baf56ce5885">castor3d::BinaryParserBase&lt; TParsed &gt;::m_fileVersion</a>.</p>
+
+</div>
+</div>
+<a id="ab5f9ba53ad5865f967b41e5a27ed73a9" name="ab5f9ba53ad5865f967b41e5a27ed73a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5f9ba53ad5865f967b41e5a27ed73a9">&#9670;&nbsp;</a></span>doGetSubChunk()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class TParsed &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="../../d7/da1/a02290.html">castor3d::BinaryParserBase</a>&lt; TParsed &gt;::doGetSubChunk </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a> &amp;&#160;</td>
+          <td class="paramname"><em>chunk</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves a subchunk. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">chunk</td><td>Receives the subchunk. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any error occured. </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d4/d48/a02250.html#af711032d94753cb2d482fe2bcf3afb17">castor3d::BinaryChunk::checkAvailable()</a>, <a class="el" href="../../d4/d48/a02250.html#ab3148d763e8fca01e746ec01991db22b">castor3d::BinaryChunk::getSubChunk()</a>, and <a class="el" href="../../d7/da1/a02290.html#ab3df04f9aa2eb1f7a533ed18631f09c4">castor3d::BinaryParserBase&lt; TParsed &gt;::m_chunk</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d7/da1/a02290_ab5f9ba53ad5865f967b41e5a27ed73a9_cgraph.png" border="0" usemap="#ad7/da1/a02290_ab5f9ba53ad5865f967b41e5a27ed73a9_cgraph" alt=""/></div>
+<map name="ad7/da1/a02290_ab5f9ba53ad5865f967b41e5a27ed73a9_cgraph" id="ad7/da1/a02290_ab5f9ba53ad5865f967b41e5a27ed73a9_cgraph">
+<area shape="rect" title="Retrieves a subchunk." alt="" coords="5,39,191,80"/>
+<area shape="rect" href="../../d4/d48/a02250.html#af711032d94753cb2d482fe2bcf3afb17" title="Checks that the remaining place can hold the given size." alt="" coords="239,5,393,47"/>
+<area shape="rect" href="../../d4/d48/a02250.html#ab3148d763e8fca01e746ec01991db22b" title="Retrieves a subchunk." alt="" coords="239,71,393,112"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a5a648553ce168f5bc34adeedc8d169a7" name="a5a648553ce168f5bc34adeedc8d169a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a648553ce168f5bc34adeedc8d169a7">&#9670;&nbsp;</a></span>doParseChunk() <span class="overload">[1/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class TParsed &gt; </div>
+<div class="memtemplate">
+template&lt;typename T , size_t Count&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="../../d7/da1/a02290.html">castor3d::BinaryParserBase</a>&lt; TParsed &gt;::doParseChunk </td>
+          <td>(</td>
+          <td class="paramtype">std::array&lt; T, Count &gt; &amp;&#160;</td>
+          <td class="paramname"><em>values</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a> &amp;&#160;</td>
+          <td class="paramname"><em>chunk</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves a value array from a chunk. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">values</td><td>Receives the parsed values </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">chunk</td><td>The chunk containing the values </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any error occured </dd></dl>
+
+<p class="reference">References <a class="el" href="../../df/d89/a02462.html#a51aa9cc211a27e96cdfbdb431808cc8f">castor3d::ChunkParser&lt; T &gt;::parse()</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d7/da1/a02290_a5a648553ce168f5bc34adeedc8d169a7_cgraph.png" border="0" usemap="#ad7/da1/a02290_a5a648553ce168f5bc34adeedc8d169a7_cgraph" alt=""/></div>
+<map name="ad7/da1/a02290_a5a648553ce168f5bc34adeedc8d169a7_cgraph" id="ad7/da1/a02290_a5a648553ce168f5bc34adeedc8d169a7_cgraph">
+<area shape="rect" title="Retrieves a value array from a chunk." alt="" coords="5,64,191,105"/>
+<area shape="rect" href="../../df/d89/a02462.html#a51aa9cc211a27e96cdfbdb431808cc8f" title="Retrieves a value array from a chunk." alt="" coords="239,64,393,105"/>
+<area shape="rect" href="../../de/d91/a02458.html#a062463121032ba679336be2382c508d0" title="Retrieves a value array from a chunk." alt="" coords="442,35,627,76"/>
+<area shape="rect" href="../../da/dab/a01362.html#a430f3de9071e7d03358bb1b39d07c2b8" title="Sets given value to big endian." alt="" coords="441,101,628,127"/>
+<area shape="rect" href="../../d4/d48/a02250.html#af711032d94753cb2d482fe2bcf3afb17" title="Checks that the remaining place can hold the given size." alt="" coords="689,5,843,47"/>
+<area shape="rect" href="../../d4/d48/a02250.html#a7c1bb3cf53d6b4a6856c9964c54fac11" title="Retrieves data from the chunk." alt="" coords="676,71,856,98"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a90df4e46072e5ef14aebebd00cbcc1f5" name="a90df4e46072e5ef14aebebd00cbcc1f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90df4e46072e5ef14aebebd00cbcc1f5">&#9670;&nbsp;</a></span>doParseChunk() <span class="overload">[2/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class TParsed &gt; </div>
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="../../d7/da1/a02290.html">castor3d::BinaryParserBase</a>&lt; TParsed &gt;::doParseChunk </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>values</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a> &amp;&#160;</td>
+          <td class="paramname"><em>chunk</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves a value array from a chunk. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">values</td><td>Receives the parsed values </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">chunk</td><td>The chunk containing the values </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any error occured </dd></dl>
+
+<p class="reference">References <a class="el" href="../../df/d89/a02462.html#a51aa9cc211a27e96cdfbdb431808cc8f">castor3d::ChunkParser&lt; T &gt;::parse()</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d7/da1/a02290_a90df4e46072e5ef14aebebd00cbcc1f5_cgraph.png" border="0" usemap="#ad7/da1/a02290_a90df4e46072e5ef14aebebd00cbcc1f5_cgraph" alt=""/></div>
+<map name="ad7/da1/a02290_a90df4e46072e5ef14aebebd00cbcc1f5_cgraph" id="ad7/da1/a02290_a90df4e46072e5ef14aebebd00cbcc1f5_cgraph">
+<area shape="rect" title="Retrieves a value array from a chunk." alt="" coords="5,64,191,105"/>
+<area shape="rect" href="../../df/d89/a02462.html#a51aa9cc211a27e96cdfbdb431808cc8f" title="Retrieves a value array from a chunk." alt="" coords="239,64,393,105"/>
+<area shape="rect" href="../../de/d91/a02458.html#a062463121032ba679336be2382c508d0" title="Retrieves a value array from a chunk." alt="" coords="442,35,627,76"/>
+<area shape="rect" href="../../da/dab/a01362.html#a430f3de9071e7d03358bb1b39d07c2b8" title="Sets given value to big endian." alt="" coords="441,101,628,127"/>
+<area shape="rect" href="../../d4/d48/a02250.html#af711032d94753cb2d482fe2bcf3afb17" title="Checks that the remaining place can hold the given size." alt="" coords="689,5,843,47"/>
+<area shape="rect" href="../../d4/d48/a02250.html#a7c1bb3cf53d6b4a6856c9964c54fac11" title="Retrieves data from the chunk." alt="" coords="676,71,856,98"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a5fac84360102001f5e730be1927c024e" name="a5fac84360102001f5e730be1927c024e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fac84360102001f5e730be1927c024e">&#9670;&nbsp;</a></span>doParseChunk() <span class="overload">[3/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class TParsed &gt; </div>
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="../../d7/da1/a02290.html">castor3d::BinaryParserBase</a>&lt; TParsed &gt;::doParseChunk </td>
+          <td>(</td>
+          <td class="paramtype">T &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a> &amp;&#160;</td>
+          <td class="paramname"><em>chunk</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves a value from a chunk. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">value</td><td>Receives the parsed value </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">chunk</td><td>The chunk containing the value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any error occured </dd></dl>
+
+<p class="reference">References <a class="el" href="../../df/d89/a02462.html#a51aa9cc211a27e96cdfbdb431808cc8f">castor3d::ChunkParser&lt; T &gt;::parse()</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d7/da1/a02290_a5fac84360102001f5e730be1927c024e_cgraph.png" border="0" usemap="#ad7/da1/a02290_a5fac84360102001f5e730be1927c024e_cgraph" alt=""/></div>
+<map name="ad7/da1/a02290_a5fac84360102001f5e730be1927c024e_cgraph" id="ad7/da1/a02290_a5fac84360102001f5e730be1927c024e_cgraph">
+<area shape="rect" title="Retrieves a value from a chunk." alt="" coords="5,64,191,105"/>
+<area shape="rect" href="../../df/d89/a02462.html#a51aa9cc211a27e96cdfbdb431808cc8f" title="Retrieves a value array from a chunk." alt="" coords="239,64,393,105"/>
+<area shape="rect" href="../../de/d91/a02458.html#a062463121032ba679336be2382c508d0" title="Retrieves a value array from a chunk." alt="" coords="442,35,627,76"/>
+<area shape="rect" href="../../da/dab/a01362.html#a430f3de9071e7d03358bb1b39d07c2b8" title="Sets given value to big endian." alt="" coords="441,101,628,127"/>
+<area shape="rect" href="../../d4/d48/a02250.html#af711032d94753cb2d482fe2bcf3afb17" title="Checks that the remaining place can hold the given size." alt="" coords="689,5,843,47"/>
+<area shape="rect" href="../../d4/d48/a02250.html#a7c1bb3cf53d6b4a6856c9964c54fac11" title="Retrieves data from the chunk." alt="" coords="676,71,856,98"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a0e1aa917e3bf897fab03a32d20890062" name="a0e1aa917e3bf897fab03a32d20890062"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e1aa917e3bf897fab03a32d20890062">&#9670;&nbsp;</a></span>doParseChunk() <span class="overload">[4/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class TParsed &gt; </div>
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="../../d7/da1/a02290.html">castor3d::BinaryParserBase</a>&lt; TParsed &gt;::doParseChunk </td>
+          <td>(</td>
+          <td class="paramtype">T *&#160;</td>
+          <td class="paramname"><em>values</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>count</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a> &amp;&#160;</td>
+          <td class="paramname"><em>chunk</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves a value array from a chunk. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">values</td><td>Receives the parsed values </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">count</td><td>The values count </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">chunk</td><td>The chunk containing the values </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any error occured </dd></dl>
+
+<p class="reference">References <a class="el" href="../../df/d89/a02462.html#a51aa9cc211a27e96cdfbdb431808cc8f">castor3d::ChunkParser&lt; T &gt;::parse()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../d7/da1/a02290.html#a035881aba2b64571b30a5efd3faaf3d9">castor3d::BinaryParserBase&lt; TParsed &gt;::doParseHeader()</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d7/da1/a02290_a0e1aa917e3bf897fab03a32d20890062_cgraph.png" border="0" usemap="#ad7/da1/a02290_a0e1aa917e3bf897fab03a32d20890062_cgraph" alt=""/></div>
+<map name="ad7/da1/a02290_a0e1aa917e3bf897fab03a32d20890062_cgraph" id="ad7/da1/a02290_a0e1aa917e3bf897fab03a32d20890062_cgraph">
+<area shape="rect" title="Retrieves a value array from a chunk." alt="" coords="5,64,191,105"/>
+<area shape="rect" href="../../df/d89/a02462.html#a51aa9cc211a27e96cdfbdb431808cc8f" title="Retrieves a value array from a chunk." alt="" coords="239,64,393,105"/>
+<area shape="rect" href="../../de/d91/a02458.html#a062463121032ba679336be2382c508d0" title="Retrieves a value array from a chunk." alt="" coords="442,35,627,76"/>
+<area shape="rect" href="../../da/dab/a01362.html#a430f3de9071e7d03358bb1b39d07c2b8" title="Sets given value to big endian." alt="" coords="441,101,628,127"/>
+<area shape="rect" href="../../d4/d48/a02250.html#af711032d94753cb2d482fe2bcf3afb17" title="Checks that the remaining place can hold the given size." alt="" coords="689,5,843,47"/>
+<area shape="rect" href="../../d4/d48/a02250.html#a7c1bb3cf53d6b4a6856c9964c54fac11" title="Retrieves data from the chunk." alt="" coords="676,71,856,98"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d7/da1/a02290_a0e1aa917e3bf897fab03a32d20890062_icgraph.png" border="0" usemap="#ad7/da1/a02290_a0e1aa917e3bf897fab03a32d20890062_icgraph" alt=""/></div>
+<map name="ad7/da1/a02290_a0e1aa917e3bf897fab03a32d20890062_icgraph" id="ad7/da1/a02290_a0e1aa917e3bf897fab03a32d20890062_icgraph">
+<area shape="rect" title="Retrieves a value array from a chunk." alt="" coords="472,29,657,71"/>
+<area shape="rect" href="../../d7/da1/a02290.html#a035881aba2b64571b30a5efd3faaf3d9" title="Parses the header chunk." alt="" coords="239,29,424,71"/>
+<area shape="rect" href="../../d7/da1/a02290.html#a5db83668684ca219f67de3a381898e64" title="From file reader function." alt="" coords="5,29,191,71"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a22ca62addb3ab167995e18f49267efcf" name="a22ca62addb3ab167995e18f49267efcf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22ca62addb3ab167995e18f49267efcf">&#9670;&nbsp;</a></span>doParseChunk() <span class="overload">[5/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class TParsed &gt; </div>
+<div class="memtemplate">
+template&lt;typename T , size_t Count&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="../../d7/da1/a02290.html">castor3d::BinaryParserBase</a>&lt; TParsed &gt;::doParseChunk </td>
+          <td>(</td>
+          <td class="paramtype">T(&amp;)&#160;</td>
+          <td class="paramname"><em>values</em>[Count], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a> &amp;&#160;</td>
+          <td class="paramname"><em>chunk</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves a value array from a chunk. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">values</td><td>Receives the parsed values </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">chunk</td><td>The chunk containing the values </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any error occured </dd></dl>
+
+<p class="reference">References <a class="el" href="../../df/d89/a02462.html#a51aa9cc211a27e96cdfbdb431808cc8f">castor3d::ChunkParser&lt; T &gt;::parse()</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d7/da1/a02290_a22ca62addb3ab167995e18f49267efcf_cgraph.png" border="0" usemap="#ad7/da1/a02290_a22ca62addb3ab167995e18f49267efcf_cgraph" alt=""/></div>
+<map name="ad7/da1/a02290_a22ca62addb3ab167995e18f49267efcf_cgraph" id="ad7/da1/a02290_a22ca62addb3ab167995e18f49267efcf_cgraph">
+<area shape="rect" title="Retrieves a value array from a chunk." alt="" coords="5,64,191,105"/>
+<area shape="rect" href="../../df/d89/a02462.html#a51aa9cc211a27e96cdfbdb431808cc8f" title="Retrieves a value array from a chunk." alt="" coords="239,64,393,105"/>
+<area shape="rect" href="../../de/d91/a02458.html#a062463121032ba679336be2382c508d0" title="Retrieves a value array from a chunk." alt="" coords="442,35,627,76"/>
+<area shape="rect" href="../../da/dab/a01362.html#a430f3de9071e7d03358bb1b39d07c2b8" title="Sets given value to big endian." alt="" coords="441,101,628,127"/>
+<area shape="rect" href="../../d4/d48/a02250.html#af711032d94753cb2d482fe2bcf3afb17" title="Checks that the remaining place can hold the given size." alt="" coords="689,5,843,47"/>
+<area shape="rect" href="../../d4/d48/a02250.html#a7c1bb3cf53d6b4a6856c9964c54fac11" title="Retrieves data from the chunk." alt="" coords="676,71,856,98"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a035881aba2b64571b30a5efd3faaf3d9" name="a035881aba2b64571b30a5efd3faaf3d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a035881aba2b64571b30a5efd3faaf3d9">&#9670;&nbsp;</a></span>doParseHeader()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class TParsed &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="../../d7/da1/a02290.html">castor3d::BinaryParserBase</a>&lt; TParsed &gt;::doParseHeader </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a> &amp;&#160;</td>
+          <td class="paramname"><em>chunk</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Parses the header chunk. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">chunk</td><td>The parent chunk. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any error occured. </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d4/d48/a02250.html#af711032d94753cb2d482fe2bcf3afb17">castor3d::BinaryChunk::checkAvailable()</a>, <a class="el" href="../../d7/da1/a02290.html#ad1fbebf70ad5b1caae1a7eb57c2f82e4">castor3d::BinaryParserBase&lt; TParsed &gt;::checkError()</a>, <a class="el" href="../../da/dab/a01362.html#abb378ab1c4b7208b4d80b496f3ad14bc">castor3d::CurrentCmshVersion</a>, <a class="el" href="../../d7/da1/a02290.html#a0e1aa917e3bf897fab03a32d20890062">castor3d::BinaryParserBase&lt; TParsed &gt;::doParseChunk()</a>, <a class="el" href="../../da/dab/a01362.html#a742783d4e4b7354fac3e375ae107414da9e33398324cc27f4d18d60ffe7436294">castor3d::eCmshHeader</a>, <a class="el" href="../../da/dab/a01362.html#a742783d4e4b7354fac3e375ae107414da52eafb299773df06313321e3eca83362">castor3d::eCmshVersion</a>, <a class="el" href="../../da/dab/a01362.html#a742783d4e4b7354fac3e375ae107414daa866af182acab9fffb643ecb752cd9e5">castor3d::eName</a>, <a class="el" href="../../d4/d48/a02250.html#a08e242acd79584a8c061b89c14f68452">castor3d::BinaryChunk::endParse()</a>, <a class="el" href="../../d4/d48/a02250.html#a4b542ea9ab36cf0aaa73e9f1fed8967b">castor3d::BinaryChunk::getChunkType()</a>, <a class="el" href="../../da/dab/a01362.html#a7f5dee29f8589db515b5267b84c9ac5e">castor3d::getCmshMajor()</a>, <a class="el" href="../../da/dab/a01362.html#a55001a89450107aff1d25db30844947e">castor3d::getCmshMinor()</a>, <a class="el" href="../../da/dab/a01362.html#aab8661e5d664e92f493a8f6c8272e264">castor3d::getCmshRevision()</a>, <a class="el" href="../../d4/d48/a02250.html#ab3148d763e8fca01e746ec01991db22b">castor3d::BinaryChunk::getSubChunk()</a>, <a class="el" href="../../d7/da1/a02290.html#a455764ca72b659dab2652baf56ce5885">castor3d::BinaryParserBase&lt; TParsed &gt;::m_fileVersion</a>, and <a class="el" href="../../d3/dab/a02994.html#ae0f926a36c8502d923618ac94126bff5">castor3d::log::warn</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../d7/da1/a02290.html#a5db83668684ca219f67de3a381898e64">castor3d::BinaryParserBase&lt; TParsed &gt;::parse()</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d7/da1/a02290_a035881aba2b64571b30a5efd3faaf3d9_cgraph.png" border="0" usemap="#ad7/da1/a02290_a035881aba2b64571b30a5efd3faaf3d9_cgraph" alt=""/></div>
+<map name="ad7/da1/a02290_a035881aba2b64571b30a5efd3faaf3d9_cgraph" id="ad7/da1/a02290_a035881aba2b64571b30a5efd3faaf3d9_cgraph">
+<area shape="rect" title="Parses the header chunk." alt="" coords="5,296,191,338"/>
+<area shape="rect" href="../../d4/d48/a02250.html#af711032d94753cb2d482fe2bcf3afb17" title="Checks that the remaining place can hold the given size." alt="" coords="922,43,1077,84"/>
+<area shape="rect" href="../../d7/da1/a02290.html#ad1fbebf70ad5b1caae1a7eb57c2f82e4" title=" " alt="" coords="239,100,424,142"/>
+<area shape="rect" href="../../d7/da1/a02290.html#a0e1aa917e3bf897fab03a32d20890062" title="Retrieves a value array from a chunk." alt="" coords="239,166,424,207"/>
+<area shape="rect" href="../../d4/d48/a02250.html#a08e242acd79584a8c061b89c14f68452" title="Retrieves the chunk data size." alt="" coords="254,231,409,272"/>
+<area shape="rect" href="../../d4/d48/a02250.html#a4b542ea9ab36cf0aaa73e9f1fed8967b" title="Retrieves the chunk type." alt="" coords="254,296,409,338"/>
+<area shape="rect" href="../../da/dab/a01362.html#a7f5dee29f8589db515b5267b84c9ac5e" title=" " alt="" coords="249,362,413,389"/>
+<area shape="rect" href="../../da/dab/a01362.html#a55001a89450107aff1d25db30844947e" title=" " alt="" coords="249,413,413,440"/>
+<area shape="rect" href="../../da/dab/a01362.html#aab8661e5d664e92f493a8f6c8272e264" title=" " alt="" coords="241,464,421,490"/>
+<area shape="rect" href="../../d4/d48/a02250.html#ab3148d763e8fca01e746ec01991db22b" title="Retrieves a subchunk." alt="" coords="254,515,409,556"/>
+<area shape="rect" href="../../df/d89/a02462.html#a51aa9cc211a27e96cdfbdb431808cc8f" title="Retrieves a value array from a chunk." alt="" coords="472,164,627,206"/>
+<area shape="rect" href="../../de/d91/a02458.html#a062463121032ba679336be2382c508d0" title="Retrieves a value array from a chunk." alt="" coords="675,103,861,144"/>
+<area shape="rect" href="../../da/dab/a01362.html#a430f3de9071e7d03358bb1b39d07c2b8" title="Sets given value to big endian." alt="" coords="675,172,861,198"/>
+<area shape="rect" href="../../d4/d48/a02250.html#a7c1bb3cf53d6b4a6856c9964c54fac11" title="Retrieves data from the chunk." alt="" coords="909,110,1089,137"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d7/da1/a02290_a035881aba2b64571b30a5efd3faaf3d9_icgraph.png" border="0" usemap="#ad7/da1/a02290_a035881aba2b64571b30a5efd3faaf3d9_icgraph" alt=""/></div>
+<map name="ad7/da1/a02290_a035881aba2b64571b30a5efd3faaf3d9_icgraph" id="ad7/da1/a02290_a035881aba2b64571b30a5efd3faaf3d9_icgraph">
+<area shape="rect" title="Parses the header chunk." alt="" coords="239,29,424,71"/>
+<area shape="rect" href="../../d7/da1/a02290.html#a5db83668684ca219f67de3a381898e64" title="From file reader function." alt="" coords="5,29,191,71"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ab3db52fe83d9d6d3873022171253d698" name="ab3db52fe83d9d6d3873022171253d698"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3db52fe83d9d6d3873022171253d698">&#9670;&nbsp;</a></span>operator=() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class TParsed &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d7/da1/a02290.html">BinaryParserBase</a> &amp; <a class="el" href="../../d7/da1/a02290.html">castor3d::BinaryParserBase</a>&lt; TParsed &gt;::operator= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/da1/a02290.html">BinaryParserBase</a>&lt; TParsed &gt; &amp;&amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a263c0b5fc09225878cf4f446f9312957" name="a263c0b5fc09225878cf4f446f9312957"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a263c0b5fc09225878cf4f446f9312957">&#9670;&nbsp;</a></span>operator=() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class TParsed &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d7/da1/a02290.html">BinaryParserBase</a> &amp; <a class="el" href="../../d7/da1/a02290.html">castor3d::BinaryParserBase</a>&lt; TParsed &gt;::operator= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/da1/a02290.html">BinaryParserBase</a>&lt; TParsed &gt; const &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6bbbb529f463085c7d259600ae1b3e99" name="a6bbbb529f463085c7d259600ae1b3e99"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6bbbb529f463085c7d259600ae1b3e99">&#9670;&nbsp;</a></span>parse() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class TParsed &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="../../d7/da1/a02290.html">castor3d::BinaryParserBase</a>&lt; TParsed &gt;::parse </td>
+          <td>(</td>
+          <td class="paramtype">TParsed &amp;&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a> &amp;&#160;</td>
+          <td class="paramname"><em>chunk</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>From chunk reader function. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">obj</td><td>The object to read </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">chunk</td><td>The chunk </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any error occured </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d7/da1/a02290.html#ad1fbebf70ad5b1caae1a7eb57c2f82e4">castor3d::BinaryParserBase&lt; TParsed &gt;::checkError()</a>, <a class="el" href="../../d4/d48/a02250.html#a08e242acd79584a8c061b89c14f68452">castor3d::BinaryChunk::endParse()</a>, <a class="el" href="../../d4/d48/a02250.html#a4b542ea9ab36cf0aaa73e9f1fed8967b">castor3d::BinaryChunk::getChunkType()</a>, <a class="el" href="../../d7/da1/a02290.html#ab3df04f9aa2eb1f7a533ed18631f09c4">castor3d::BinaryParserBase&lt; TParsed &gt;::m_chunk</a>, and <a class="el" href="../../d4/d48/a02250.html#a7a755e5c70676c80e150d61574442c2c">castor3d::BinaryChunk::resetParse()</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d7/da1/a02290_a6bbbb529f463085c7d259600ae1b3e99_cgraph.png" border="0" usemap="#ad7/da1/a02290_a6bbbb529f463085c7d259600ae1b3e99_cgraph" alt=""/></div>
+<map name="ad7/da1/a02290_a6bbbb529f463085c7d259600ae1b3e99_cgraph" id="ad7/da1/a02290_a6bbbb529f463085c7d259600ae1b3e99_cgraph">
+<area shape="rect" title="From chunk reader function." alt="" coords="5,104,191,145"/>
+<area shape="rect" href="../../d7/da1/a02290.html#ad1fbebf70ad5b1caae1a7eb57c2f82e4" title=" " alt="" coords="239,5,424,47"/>
+<area shape="rect" href="../../d4/d48/a02250.html#a08e242acd79584a8c061b89c14f68452" title="Retrieves the chunk data size." alt="" coords="254,71,409,112"/>
+<area shape="rect" href="../../d4/d48/a02250.html#a4b542ea9ab36cf0aaa73e9f1fed8967b" title="Retrieves the chunk type." alt="" coords="254,136,409,177"/>
+<area shape="rect" href="../../d4/d48/a02250.html#a7a755e5c70676c80e150d61574442c2c" title="Resets the chunk, to be able to reparse it." alt="" coords="254,201,409,243"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a5db83668684ca219f67de3a381898e64" name="a5db83668684ca219f67de3a381898e64"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5db83668684ca219f67de3a381898e64">&#9670;&nbsp;</a></span>parse() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class TParsed &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="../../d7/da1/a02290.html">castor3d::BinaryParserBase</a>&lt; TParsed &gt;::parse </td>
+          <td>(</td>
+          <td class="paramtype">TParsed &amp;&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::BinaryFile &amp;&#160;</td>
+          <td class="paramname"><em>file</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>From file reader function. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">obj</td><td>The object to read </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">file</td><td>The file containing the chunk </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any error occured </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d4/d48/a02250.html#af711032d94753cb2d482fe2bcf3afb17">castor3d::BinaryChunk::checkAvailable()</a>, <a class="el" href="../../d7/da1/a02290.html#ad1fbebf70ad5b1caae1a7eb57c2f82e4">castor3d::BinaryParserBase&lt; TParsed &gt;::checkError()</a>, <a class="el" href="../../d7/da1/a02290.html#a035881aba2b64571b30a5efd3faaf3d9">castor3d::BinaryParserBase&lt; TParsed &gt;::doParseHeader()</a>, <a class="el" href="../../da/dab/a01362.html#a742783d4e4b7354fac3e375ae107414da3af707888e537c6e9dde81b11bf02959">castor3d::eCmshFile</a>, <a class="el" href="../../d4/d48/a02250.html#a4b542ea9ab36cf0aaa73e9f1fed8967b">castor3d::BinaryChunk::getChunkType()</a>, <a class="el" href="../../d4/d48/a02250.html#ab3148d763e8fca01e746ec01991db22b">castor3d::BinaryChunk::getSubChunk()</a>, <a class="el" href="../../d7/da1/a02290.html#a5db83668684ca219f67de3a381898e64">castor3d::BinaryParserBase&lt; TParsed &gt;::parse()</a>, and <a class="el" href="../../d4/d48/a02250.html#aef0d7f6fbdd6f0ace675b5c4784b4089">castor3d::BinaryChunk::read()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../d7/da1/a02290.html#a5db83668684ca219f67de3a381898e64">castor3d::BinaryParserBase&lt; TParsed &gt;::parse()</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d7/da1/a02290_a5db83668684ca219f67de3a381898e64_cgraph.png" border="0" usemap="#ad7/da1/a02290_a5db83668684ca219f67de3a381898e64_cgraph" alt=""/></div>
+<map name="ad7/da1/a02290_a5db83668684ca219f67de3a381898e64_cgraph" id="ad7/da1/a02290_a5db83668684ca219f67de3a381898e64_cgraph">
+<area shape="rect" title="From file reader function." alt="" coords="5,314,191,355"/>
+<area shape="rect" href="../../d4/d48/a02250.html#af711032d94753cb2d482fe2bcf3afb17" title="Checks that the remaining place can hold the given size." alt="" coords="1155,102,1310,143"/>
+<area shape="rect" href="../../d7/da1/a02290.html#ad1fbebf70ad5b1caae1a7eb57c2f82e4" title=" " alt="" coords="472,43,657,85"/>
+<area shape="rect" href="../../d7/da1/a02290.html#a035881aba2b64571b30a5efd3faaf3d9" title="Parses the header chunk." alt="" coords="239,285,424,326"/>
+<area shape="rect" href="../../d4/d48/a02250.html#a4b542ea9ab36cf0aaa73e9f1fed8967b" title="Retrieves the chunk type." alt="" coords="487,445,642,486"/>
+<area shape="rect" href="../../d4/d48/a02250.html#ab3148d763e8fca01e746ec01991db22b" title="Retrieves a subchunk." alt="" coords="487,510,642,551"/>
+<area shape="rect" href="../../d4/d48/a02250.html#aef0d7f6fbdd6f0ace675b5c4784b4089" title="From file reader function." alt="" coords="254,453,409,494"/>
+<area shape="rect" href="../../d7/da1/a02290.html#a0e1aa917e3bf897fab03a32d20890062" title="Retrieves a value array from a chunk." alt="" coords="472,161,657,202"/>
+<area shape="rect" href="../../d4/d48/a02250.html#a08e242acd79584a8c061b89c14f68452" title="Retrieves the chunk data size." alt="" coords="487,226,642,267"/>
+<area shape="rect" href="../../da/dab/a01362.html#a7f5dee29f8589db515b5267b84c9ac5e" title=" " alt="" coords="483,292,647,319"/>
+<area shape="rect" href="../../da/dab/a01362.html#a55001a89450107aff1d25db30844947e" title=" " alt="" coords="483,343,647,369"/>
+<area shape="rect" href="../../da/dab/a01362.html#aab8661e5d664e92f493a8f6c8272e264" title=" " alt="" coords="475,393,655,420"/>
+<area shape="rect" href="../../df/d89/a02462.html#a51aa9cc211a27e96cdfbdb431808cc8f" title="Retrieves a value array from a chunk." alt="" coords="705,161,860,202"/>
+<area shape="rect" href="../../de/d91/a02458.html#a062463121032ba679336be2382c508d0" title="Retrieves a value array from a chunk." alt="" coords="909,161,1094,202"/>
+<area shape="rect" href="../../da/dab/a01362.html#a430f3de9071e7d03358bb1b39d07c2b8" title="Sets given value to big endian." alt="" coords="908,227,1095,253"/>
+<area shape="rect" href="../../d4/d48/a02250.html#a7c1bb3cf53d6b4a6856c9964c54fac11" title="Retrieves data from the chunk." alt="" coords="1143,168,1323,195"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d7/da1/a02290_a5db83668684ca219f67de3a381898e64_icgraph.png" border="0" usemap="#ad7/da1/a02290_a5db83668684ca219f67de3a381898e64_icgraph" alt=""/></div>
+<map name="ad7/da1/a02290_a5db83668684ca219f67de3a381898e64_icgraph" id="ad7/da1/a02290_a5db83668684ca219f67de3a381898e64_icgraph">
+<area shape="rect" title="From file reader function." alt="" coords="5,29,191,71"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a61b02dbf69d89569eff5be22facd5f07" name="a61b02dbf69d89569eff5be22facd5f07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61b02dbf69d89569eff5be22facd5f07">&#9670;&nbsp;</a></span>parse_v1_1()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class TParsed &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="../../d7/da1/a02290.html">castor3d::BinaryParserBase</a>&lt; TParsed &gt;::parse_v1_1 </td>
+          <td>(</td>
+          <td class="paramtype">TParsed &amp;&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a> &amp;&#160;</td>
+          <td class="paramname"><em>chunk</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>From chunk reader function. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">obj</td><td>The object to read </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">chunk</td><td>The chunk </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any error occured </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d7/da1/a02290.html#ad1fbebf70ad5b1caae1a7eb57c2f82e4">castor3d::BinaryParserBase&lt; TParsed &gt;::checkError()</a>, <a class="el" href="../../d4/d48/a02250.html#a08e242acd79584a8c061b89c14f68452">castor3d::BinaryChunk::endParse()</a>, <a class="el" href="../../d4/d48/a02250.html#a4b542ea9ab36cf0aaa73e9f1fed8967b">castor3d::BinaryChunk::getChunkType()</a>, and <a class="el" href="../../d7/da1/a02290.html#ab3df04f9aa2eb1f7a533ed18631f09c4">castor3d::BinaryParserBase&lt; TParsed &gt;::m_chunk</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d7/da1/a02290_a61b02dbf69d89569eff5be22facd5f07_cgraph.png" border="0" usemap="#ad7/da1/a02290_a61b02dbf69d89569eff5be22facd5f07_cgraph" alt=""/></div>
+<map name="ad7/da1/a02290_a61b02dbf69d89569eff5be22facd5f07_cgraph" id="ad7/da1/a02290_a61b02dbf69d89569eff5be22facd5f07_cgraph">
+<area shape="rect" title="From chunk reader function." alt="" coords="5,71,191,112"/>
+<area shape="rect" href="../../d7/da1/a02290.html#ad1fbebf70ad5b1caae1a7eb57c2f82e4" title=" " alt="" coords="239,5,424,47"/>
+<area shape="rect" href="../../d4/d48/a02250.html#a08e242acd79584a8c061b89c14f68452" title="Retrieves the chunk data size." alt="" coords="254,71,409,112"/>
+<area shape="rect" href="../../d4/d48/a02250.html#a4b542ea9ab36cf0aaa73e9f1fed8967b" title="Retrieves the chunk type." alt="" coords="254,136,409,177"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a95788692ddd6fae91074c299b674aaab" name="a95788692ddd6fae91074c299b674aaab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95788692ddd6fae91074c299b674aaab">&#9670;&nbsp;</a></span>parse_v1_2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class TParsed &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="../../d7/da1/a02290.html">castor3d::BinaryParserBase</a>&lt; TParsed &gt;::parse_v1_2 </td>
+          <td>(</td>
+          <td class="paramtype">TParsed &amp;&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a> &amp;&#160;</td>
+          <td class="paramname"><em>chunk</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>From chunk reader function. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">obj</td><td>The object to read </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">chunk</td><td>The chunk </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any error occured </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d7/da1/a02290.html#ad1fbebf70ad5b1caae1a7eb57c2f82e4">castor3d::BinaryParserBase&lt; TParsed &gt;::checkError()</a>, <a class="el" href="../../d4/d48/a02250.html#a08e242acd79584a8c061b89c14f68452">castor3d::BinaryChunk::endParse()</a>, <a class="el" href="../../d4/d48/a02250.html#a4b542ea9ab36cf0aaa73e9f1fed8967b">castor3d::BinaryChunk::getChunkType()</a>, and <a class="el" href="../../d7/da1/a02290.html#ab3df04f9aa2eb1f7a533ed18631f09c4">castor3d::BinaryParserBase&lt; TParsed &gt;::m_chunk</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d7/da1/a02290_a95788692ddd6fae91074c299b674aaab_cgraph.png" border="0" usemap="#ad7/da1/a02290_a95788692ddd6fae91074c299b674aaab_cgraph" alt=""/></div>
+<map name="ad7/da1/a02290_a95788692ddd6fae91074c299b674aaab_cgraph" id="ad7/da1/a02290_a95788692ddd6fae91074c299b674aaab_cgraph">
+<area shape="rect" title="From chunk reader function." alt="" coords="5,71,191,112"/>
+<area shape="rect" href="../../d7/da1/a02290.html#ad1fbebf70ad5b1caae1a7eb57c2f82e4" title=" " alt="" coords="239,5,424,47"/>
+<area shape="rect" href="../../d4/d48/a02250.html#a08e242acd79584a8c061b89c14f68452" title="Retrieves the chunk data size." alt="" coords="254,71,409,112"/>
+<area shape="rect" href="../../d4/d48/a02250.html#a4b542ea9ab36cf0aaa73e9f1fed8967b" title="Retrieves the chunk type." alt="" coords="254,136,409,177"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a6f39b66d980e4a65660016f71115a89c" name="a6f39b66d980e4a65660016f71115a89c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f39b66d980e4a65660016f71115a89c">&#9670;&nbsp;</a></span>parse_v1_3()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class TParsed &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="../../d7/da1/a02290.html">castor3d::BinaryParserBase</a>&lt; TParsed &gt;::parse_v1_3 </td>
+          <td>(</td>
+          <td class="paramtype">TParsed &amp;&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a> &amp;&#160;</td>
+          <td class="paramname"><em>chunk</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>From chunk reader function. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">obj</td><td>The object to read </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">chunk</td><td>The chunk </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any error occured </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d7/da1/a02290.html#ad1fbebf70ad5b1caae1a7eb57c2f82e4">castor3d::BinaryParserBase&lt; TParsed &gt;::checkError()</a>, <a class="el" href="../../d4/d48/a02250.html#a08e242acd79584a8c061b89c14f68452">castor3d::BinaryChunk::endParse()</a>, <a class="el" href="../../d4/d48/a02250.html#a4b542ea9ab36cf0aaa73e9f1fed8967b">castor3d::BinaryChunk::getChunkType()</a>, and <a class="el" href="../../d7/da1/a02290.html#ab3df04f9aa2eb1f7a533ed18631f09c4">castor3d::BinaryParserBase&lt; TParsed &gt;::m_chunk</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d7/da1/a02290_a6f39b66d980e4a65660016f71115a89c_cgraph.png" border="0" usemap="#ad7/da1/a02290_a6f39b66d980e4a65660016f71115a89c_cgraph" alt=""/></div>
+<map name="ad7/da1/a02290_a6f39b66d980e4a65660016f71115a89c_cgraph" id="ad7/da1/a02290_a6f39b66d980e4a65660016f71115a89c_cgraph">
+<area shape="rect" title="From chunk reader function." alt="" coords="5,71,191,112"/>
+<area shape="rect" href="../../d7/da1/a02290.html#ad1fbebf70ad5b1caae1a7eb57c2f82e4" title=" " alt="" coords="239,5,424,47"/>
+<area shape="rect" href="../../d4/d48/a02250.html#a08e242acd79584a8c061b89c14f68452" title="Retrieves the chunk data size." alt="" coords="254,71,409,112"/>
+<area shape="rect" href="../../d4/d48/a02250.html#a4b542ea9ab36cf0aaa73e9f1fed8967b" title="Retrieves the chunk type." alt="" coords="254,136,409,177"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="aabc068daf8d99718497aa35f7a17c346" name="aabc068daf8d99718497aa35f7a17c346"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aabc068daf8d99718497aa35f7a17c346">&#9670;&nbsp;</a></span>parse_v1_4()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class TParsed &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="../../d7/da1/a02290.html">castor3d::BinaryParserBase</a>&lt; TParsed &gt;::parse_v1_4 </td>
+          <td>(</td>
+          <td class="paramtype">TParsed &amp;&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a> &amp;&#160;</td>
+          <td class="paramname"><em>chunk</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>From chunk reader function. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">obj</td><td>The object to read </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">chunk</td><td>The chunk </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any error occured </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d7/da1/a02290.html#ad1fbebf70ad5b1caae1a7eb57c2f82e4">castor3d::BinaryParserBase&lt; TParsed &gt;::checkError()</a>, <a class="el" href="../../d4/d48/a02250.html#a08e242acd79584a8c061b89c14f68452">castor3d::BinaryChunk::endParse()</a>, <a class="el" href="../../d4/d48/a02250.html#a4b542ea9ab36cf0aaa73e9f1fed8967b">castor3d::BinaryChunk::getChunkType()</a>, and <a class="el" href="../../d7/da1/a02290.html#ab3df04f9aa2eb1f7a533ed18631f09c4">castor3d::BinaryParserBase&lt; TParsed &gt;::m_chunk</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d7/da1/a02290_aabc068daf8d99718497aa35f7a17c346_cgraph.png" border="0" usemap="#ad7/da1/a02290_aabc068daf8d99718497aa35f7a17c346_cgraph" alt=""/></div>
+<map name="ad7/da1/a02290_aabc068daf8d99718497aa35f7a17c346_cgraph" id="ad7/da1/a02290_aabc068daf8d99718497aa35f7a17c346_cgraph">
+<area shape="rect" title="From chunk reader function." alt="" coords="5,71,191,112"/>
+<area shape="rect" href="../../d7/da1/a02290.html#ad1fbebf70ad5b1caae1a7eb57c2f82e4" title=" " alt="" coords="239,5,424,47"/>
+<area shape="rect" href="../../d4/d48/a02250.html#a08e242acd79584a8c061b89c14f68452" title="Retrieves the chunk data size." alt="" coords="254,71,409,112"/>
+<area shape="rect" href="../../d4/d48/a02250.html#a4b542ea9ab36cf0aaa73e9f1fed8967b" title="Retrieves the chunk type." alt="" coords="254,136,409,177"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ae6974d161e16bd0f9e903b595f406a08" name="ae6974d161e16bd0f9e903b595f406a08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6974d161e16bd0f9e903b595f406a08">&#9670;&nbsp;</a></span>parse_v1_5()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class TParsed &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="../../d7/da1/a02290.html">castor3d::BinaryParserBase</a>&lt; TParsed &gt;::parse_v1_5 </td>
+          <td>(</td>
+          <td class="paramtype">TParsed &amp;&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a> &amp;&#160;</td>
+          <td class="paramname"><em>chunk</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>From chunk reader function. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">obj</td><td>The object to read </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">chunk</td><td>The chunk </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any error occured </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d7/da1/a02290.html#ad1fbebf70ad5b1caae1a7eb57c2f82e4">castor3d::BinaryParserBase&lt; TParsed &gt;::checkError()</a>, <a class="el" href="../../d4/d48/a02250.html#a08e242acd79584a8c061b89c14f68452">castor3d::BinaryChunk::endParse()</a>, <a class="el" href="../../d4/d48/a02250.html#a4b542ea9ab36cf0aaa73e9f1fed8967b">castor3d::BinaryChunk::getChunkType()</a>, and <a class="el" href="../../d7/da1/a02290.html#ab3df04f9aa2eb1f7a533ed18631f09c4">castor3d::BinaryParserBase&lt; TParsed &gt;::m_chunk</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d7/da1/a02290_ae6974d161e16bd0f9e903b595f406a08_cgraph.png" border="0" usemap="#ad7/da1/a02290_ae6974d161e16bd0f9e903b595f406a08_cgraph" alt=""/></div>
+<map name="ad7/da1/a02290_ae6974d161e16bd0f9e903b595f406a08_cgraph" id="ad7/da1/a02290_ae6974d161e16bd0f9e903b595f406a08_cgraph">
+<area shape="rect" title="From chunk reader function." alt="" coords="5,71,191,112"/>
+<area shape="rect" href="../../d7/da1/a02290.html#ad1fbebf70ad5b1caae1a7eb57c2f82e4" title=" " alt="" coords="239,5,424,47"/>
+<area shape="rect" href="../../d4/d48/a02250.html#a08e242acd79584a8c061b89c14f68452" title="Retrieves the chunk data size." alt="" coords="254,71,409,112"/>
+<area shape="rect" href="../../d4/d48/a02250.html#a4b542ea9ab36cf0aaa73e9f1fed8967b" title="Retrieves the chunk type." alt="" coords="254,136,409,177"/>
+</map>
+</div>
+
+</div>
+</div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a id="af07e46a537db6181733f95fa289f1d23" name="af07e46a537db6181733f95fa289f1d23"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af07e46a537db6181733f95fa289f1d23">&#9670;&nbsp;</a></span>BinaryParserBase</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class TParsed &gt; </div>
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="../../d7/da1/a02290.html">BinaryParserBase</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="ab3df04f9aa2eb1f7a533ed18631f09c4" name="ab3df04f9aa2eb1f7a533ed18631f09c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3df04f9aa2eb1f7a533ed18631f09c4">&#9670;&nbsp;</a></span>m_chunk</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class TParsed &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d4/d48/a02250.html">BinaryChunk</a>* <a class="el" href="../../d7/da1/a02290.html">castor3d::BinaryParserBase</a>&lt; TParsed &gt;::m_chunk { nullptr }</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >The writer's chunk. </p>
+
+<p class="reference">Referenced by <a class="el" href="../../d7/da1/a02290.html#ab5f9ba53ad5865f967b41e5a27ed73a9">castor3d::BinaryParserBase&lt; TParsed &gt;::doGetSubChunk()</a>, <a class="el" href="../../d7/da1/a02290.html#a6bbbb529f463085c7d259600ae1b3e99">castor3d::BinaryParserBase&lt; TParsed &gt;::parse()</a>, <a class="el" href="../../d7/da1/a02290.html#a61b02dbf69d89569eff5be22facd5f07">castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_1()</a>, <a class="el" href="../../d7/da1/a02290.html#a95788692ddd6fae91074c299b674aaab">castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_2()</a>, <a class="el" href="../../d7/da1/a02290.html#a6f39b66d980e4a65660016f71115a89c">castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_3()</a>, <a class="el" href="../../d7/da1/a02290.html#aabc068daf8d99718497aa35f7a17c346">castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_4()</a>, and <a class="el" href="../../d7/da1/a02290.html#ae6974d161e16bd0f9e903b595f406a08">castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_5()</a>.</p>
+
+</div>
+</div>
+<a id="a455764ca72b659dab2652baf56ce5885" name="a455764ca72b659dab2652baf56ce5885"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a455764ca72b659dab2652baf56ce5885">&#9670;&nbsp;</a></span>m_fileVersion</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class TParsed &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d4/d1b/a03282.html">Version</a> <a class="el" href="../../d7/da1/a02290.html">castor3d::BinaryParserBase</a>&lt; TParsed &gt;::m_fileVersion</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >The chunk version from the file. </p>
+
+<p class="reference">Referenced by <a class="el" href="../../d7/da1/a02290.html#ae6f4694ede819151fe4e30e33235ff07">castor3d::BinaryParserBase&lt; TParsed &gt;::createBinaryParser()</a>, and <a class="el" href="../../d7/da1/a02290.html#a035881aba2b64571b30a5efd3faaf3d9">castor3d::BinaryParserBase&lt; TParsed &gt;::doParseHeader()</a>.</p>
+
+</div>
+</div>
+<a id="ae4820a3ab3e4b282240e5f1b969153c1" name="ae4820a3ab3e4b282240e5f1b969153c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4820a3ab3e4b282240e5f1b969153c1">&#9670;&nbsp;</a></span>Name</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class TParsed &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor::String <a class="el" href="../../d7/da1/a02290.html">castor3d::BinaryParserBase</a>&lt; TParsed &gt;::Name</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="../../d7/da1/a02290.html#ad1fbebf70ad5b1caae1a7eb57c2f82e4">castor3d::BinaryParserBase&lt; TParsed &gt;::checkError()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>Binary/<a class="el" href="../../d4/d81/a00110.html">BinaryModule.hpp</a></li>
+<li>Binary/<a class="el" href="../../d4/d3e/a00116.html">BinaryParser.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 15:34:55 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:47 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

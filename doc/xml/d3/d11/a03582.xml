@@ -1,70 +1,71 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d3/d11/a03582" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::OverlayRenderer::OverlayRenderNode</compoundname>
-    <includes local="no">OverlayRenderer.hpp</includes>
+    <compoundname>castor3d::OverlayCategory::Vertex</compoundname>
+    <includes local="no">OverlayCategory.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d3/d11/a03582_1ac84fd2a8829565df64ebb2918bce2e2e" prot="public" static="no" mutable="no">
-        <type>Pipeline &amp;</type>
-        <definition>Pipeline&amp; castor3d::OverlayRenderer::OverlayRenderNode::pipeline</definition>
+      <memberdef kind="variable" id="d3/d11/a03582_1ae8cb56953aef04c695e0900e49c64727" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::OverlayCategory::Vertex::coords</definition>
         <argsstring></argsstring>
-        <name>pipeline</name>
-        <qualifiedname>castor3d::OverlayRenderer::OverlayRenderNode::pipeline</qualifiedname>
+        <name>coords</name>
+        <qualifiedname>castor3d::OverlayCategory::Vertex::coords</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/OverlayRenderer.hpp" line="216" column="11" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="216" bodyend="-1"/>
+        <location file="Overlay/OverlayCategory.hpp" line="30" column="17" bodyfile="Overlay/OverlayCategory.hpp" bodystart="30" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d3/d11/a03582_1ac9ba98f75649718e7f930014fc961a3d" prot="public" static="no" mutable="no">
-        <type><ref refid="d6/d59/a02810" kindref="compound">Pass</ref> const  &amp;</type>
-        <definition>Pass const&amp; castor3d::OverlayRenderer::OverlayRenderNode::pass</definition>
+      <memberdef kind="variable" id="d3/d11/a03582_1a7721675ac35a3dc95552813297f9705f" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::OverlayCategory::Vertex::texture</definition>
         <argsstring></argsstring>
-        <name>pass</name>
-        <qualifiedname>castor3d::OverlayRenderer::OverlayRenderNode::pass</qualifiedname>
+        <name>texture</name>
+        <qualifiedname>castor3d::OverlayCategory::Vertex::texture</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/OverlayRenderer.hpp" line="217" column="13" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="217" bodyend="-1"/>
+        <location file="Overlay/OverlayCategory.hpp" line="31" column="17" bodyfile="Overlay/OverlayCategory.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d11/a03582_1a33ac39d227a3403e2a09559c0ae77aba" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d11/a03582" kindref="compound">Vertex</ref> *</type>
+        <definition>Vertex * castor3d::OverlayCategory::Vertex::data</definition>
+        <argsstring>()</argsstring>
+        <name>data</name>
+        <qualifiedname>castor3d::OverlayCategory::Vertex::data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="33" column="9" bodyfile="Overlay/OverlayCategory.hpp" bodystart="33" bodyend="36"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>Holds specific vertex data for an <ref refid="db/d52/a03574" kindref="compound">Overlay</ref>. </para>
     </briefdescription>
     <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="date"><para>28/11/2014 </para>
+</simplesect>
+<simplesect kind="version"><para>0.7.0 </para>
+</simplesect>
+</para>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="1">
-        <label>castor3d::OverlayRenderer::OverlayRenderNode</label>
-        <link refid="d3/d11/a03582"/>
-        <childnode refid="2" relation="usage">
-          <edgelabel>pipeline</edgelabel>
-        </childnode>
-        <childnode refid="3" relation="usage">
-          <edgelabel>pass</edgelabel>
-        </childnode>
-      </node>
-      <node id="2">
-        <label>castor3d::OverlayRenderer::Pipeline</label>
-      </node>
-      <node id="3">
-        <label>castor3d::Pass</label>
-        <link refid="d6/d59/a02810"/>
-        <childnode refid="4" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4">
-        <label>castor::OwnedBy&lt; Material &gt;</label>
-      </node>
-    </collaborationgraph>
-    <location file="Overlay/OverlayRenderer.hpp" line="214" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="215" bodyend="218"/>
+    <location file="Overlay/OverlayCategory.hpp" line="28" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="29" bodyend="37"/>
     <listofallmembers>
-      <member refid="d3/d11/a03582_1ac9ba98f75649718e7f930014fc961a3d" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::OverlayRenderNode</scope><name>pass</name></member>
-      <member refid="d3/d11/a03582_1ac84fd2a8829565df64ebb2918bce2e2e" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::OverlayRenderNode</scope><name>pipeline</name></member>
+      <member refid="d3/d11/a03582_1ae8cb56953aef04c695e0900e49c64727" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory::Vertex</scope><name>coords</name></member>
+      <member refid="d3/d11/a03582_1a33ac39d227a3403e2a09559c0ae77aba" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory::Vertex</scope><name>data</name></member>
+      <member refid="d3/d11/a03582_1a7721675ac35a3dc95552813297f9705f" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory::Vertex</scope><name>texture</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

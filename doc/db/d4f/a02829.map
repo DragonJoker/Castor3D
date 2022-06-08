@@ -1,5 +1,7 @@
-<map id="castor3d::MetallicRoughnessPbrPass" name="castor3d::MetallicRoughnessPbrPass">
-<area shape="rect" id="node1" title=" " alt="" coords="6,155,197,196"/>
-<area shape="rect" id="node2" href="$d9/daf/a02807.html" title=" " alt="" coords="46,80,157,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,197,32"/>
+<map id="castor3d::Pass" name="castor3d::Pass">
+<area shape="rect" id="node1" title=" " alt="" coords="97,80,207,107"/>
+<area shape="rect" id="node3" href="$dc/d90/a02854.html" title=" " alt="" coords="5,155,136,181"/>
+<area shape="rect" id="node4" href="$d2/d80/a02874.html" title=" " alt="" coords="160,155,307,181"/>
+<area shape="rect" id="node2" title=" " alt="" coords="56,5,248,32"/>
+<area shape="rect" id="node5" href="$d0/dee/a02870.html" title=" " alt="" coords="145,229,321,256"/>
 </map>

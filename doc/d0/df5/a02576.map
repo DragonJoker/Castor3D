@@ -1,6 +1,8 @@
-<map id="castor3d::ObjectBufferPool::ModelBuffers" name="castor3d::ObjectBufferPool::ModelBuffers">
-<area shape="rect" id="node1" title=" " alt="" coords="16,304,193,345"/>
-<area shape="rect" id="node2" href="$db/d09/a02502.html" title=" " alt="" coords="5,185,204,227"/>
-<area shape="rect" id="node3" href="$d3/d41/a02530.html" title=" " alt="" coords="35,5,201,32"/>
-<area shape="rect" id="node4" href="$db/d09/a02502.html" title="A GPU buffer, that uses a buddy allocator to allocate sub&#45;buffers." alt="" coords="121,81,265,123"/>
+<map id="castor3d::VertexBufferPool::ModelBuffers" name="castor3d::VertexBufferPool::ModelBuffers">
+<area shape="rect" id="node1" title=" " alt="" coords="96,303,273,344"/>
+<area shape="rect" id="node2" title=" " alt="" coords="91,199,279,240"/>
+<area shape="rect" id="node3" href="$d0/dff/a02506.html" title="A GPU buffer, that uses a buddy allocator to allocate sub&#45;buffers." alt="" coords="17,95,161,136"/>
+<area shape="rect" id="node4" href="$db/df5/a02534.html" title=" " alt="" coords="5,5,172,32"/>
+<area shape="rect" id="node5" title=" " alt="" coords="185,102,323,129"/>
+<area shape="rect" id="node6" title=" " alt="" coords="235,5,273,32"/>
 </map>

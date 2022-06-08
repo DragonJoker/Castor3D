@@ -1,44 +1,209 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="da/dc1/a02418" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::ChunkTyper&lt; SkeletonAnimationKeyFrame &gt;</compoundname>
-    <includes local="no">BinarySkeletonAnimationKeyFrame.hpp</includes>
+  <compounddef id="da/dc1/a02418" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</compoundname>
+    <basecompoundref refid="d7/da1/a02290" prot="public" virt="non-virtual">castor3d::BinaryParserBase&lt; SkeletonAnimationObject &gt;</basecompoundref>
+    <includes local="no">BinarySkeletonAnimationObject.hpp</includes>
     <templateparamlist>
     </templateparamlist>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="da/dc1/a02418_1aa7cb40d2fd1a1653ad9171877938a372" prot="public" static="yes" mutable="no">
-        <type><ref refid="dc/df4/a01401_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref> const</type>
-        <definition>ChunkType const castor3d::ChunkTyper&lt; SkeletonAnimationKeyFrame &gt;::Value</definition>
-        <argsstring></argsstring>
-        <name>Value</name>
-        <qualifiedname>castor3d::ChunkTyper&lt; SkeletonAnimationKeyFrame &gt;::Value</qualifiedname>
-        <initializer>= <ref refid="dc/df4/a01401_1a742783d4e4b7354fac3e375ae107414dafc2fcad1713bdfa545ca7db604802954" kindref="member">ChunkType::eSkeletonAnimationKeyFrame</ref></initializer>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="da/dc1/a02418_1a76cd8550066e3624426e52870f9a4399" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;::doParse</definition>
+        <argsstring>(SkeletonAnimationObject &amp;obj) override</argsstring>
+        <name>doParse</name>
+        <qualifiedname>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;::doParse</qualifiedname>
+        <reimplements refid="d7/da1/a02290_1a020a66d5fc1b452dc76c82702d72bbb1">doParse</reimplements>
+        <param>
+          <type><ref refid="de/df7/a03478" kindref="compound">SkeletonAnimationObject</ref> &amp;</type>
+          <declname>obj</declname>
+        </param>
         <briefdescription>
+<para>Function used to retrieve specific data from the chunk. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Binary/BinarySkeletonAnimationKeyFrame.hpp" line="28" column="24" bodyfile="Binary/BinarySkeletonAnimationKeyFrame.hpp" bodystart="28" bodyend="-1"/>
+        <location file="Binary/BinarySkeletonAnimationObject.hpp" line="80" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dc1/a02418_1a7ba8a597521230966cbf42b062bb545a" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;::doParse_v1_1</definition>
+        <argsstring>(SkeletonAnimationObject &amp;obj) override</argsstring>
+        <name>doParse_v1_1</name>
+        <qualifiedname>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;::doParse_v1_1</qualifiedname>
+        <reimplements refid="d7/da1/a02290_1aee71b68a40835a10fafe1e1ea5802650">doParse_v1_1</reimplements>
+        <param>
+          <type><ref refid="de/df7/a03478" kindref="compound">SkeletonAnimationObject</ref> &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+<para>Function used to retrieve specific data from the chunk in version 1.1. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinarySkeletonAnimationObject.hpp" line="91" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dc1/a02418_1ad430dff1b594ab4ecf67e8b312beffb8" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;::doParse_v1_5</definition>
+        <argsstring>(SkeletonAnimationObject &amp;obj) override</argsstring>
+        <name>doParse_v1_5</name>
+        <qualifiedname>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;::doParse_v1_5</qualifiedname>
+        <reimplements refid="d7/da1/a02290_1a83b2b7607be5b4e964b4001e26849b41">doParse_v1_5</reimplements>
+        <param>
+          <type><ref refid="de/df7/a03478" kindref="compound">SkeletonAnimationObject</ref> &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+<para>Function used to retrieve specific data from the chunk in version 1.5. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinarySkeletonAnimationObject.hpp" line="102" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Helper structure to find ChunkType from a type. </para>
+<para><ref refid="de/df7/a03478" kindref="compound">SkeletonAnimationObject</ref> binary loader. </para>
     </briefdescription>
     <detaileddescription>
 <para><simplesect kind="author"><para>Sylvain DOREMUS </para>
 </simplesect>
-<simplesect kind="version"><para>0.10.0 </para>
+<simplesect kind="version"><para>0.8.0 </para>
 </simplesect>
-<simplesect kind="date"><para>07/12/2017</para>
+<simplesect kind="date"><para>26/01/2016</para>
 </simplesect>
-<simplesect kind="remark"><para>Specialisation for <ref refid="d1/d82/a03450" kindref="compound">SkeletonAnimationKeyFrame</ref>. </para>
-</simplesect>
-</para>
+Loader binaire de <ref refid="de/df7/a03478" kindref="compound">SkeletonAnimationObject</ref>. </para>
     </detaileddescription>
-    <location file="Binary/BinarySkeletonAnimationKeyFrame.hpp" line="26" column="1" bodyfile="Binary/BinarySkeletonAnimationKeyFrame.hpp" bodystart="27" bodyend="29"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::BinaryParserBase&lt; SkeletonAnimationObject &gt;</label>
+        <link refid="d7/da1/a02290"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationObject &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</label>
+        <link refid="da/dc1/a02418"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
+        <link refid="d7/da1/a02290"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::BinaryParserBase&lt; SkeletonAnimationObject &gt;</label>
+        <link refid="d7/da1/a02290"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_fileVersion</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationObject &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::BinaryChunk</label>
+        <link refid="d4/d48/a02250"/>
+      </node>
+      <node id="1">
+        <label>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</label>
+        <link refid="da/dc1/a02418"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
+        <link refid="d7/da1/a02290"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_fileVersion</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::Version</label>
+        <link refid="d4/d1b/a03282"/>
+      </node>
+    </collaborationgraph>
+    <location file="Binary/BinarySkeletonAnimationObject.hpp" line="66" column="1" bodyfile="Binary/BinarySkeletonAnimationObject.hpp" bodystart="68" bodyend="103"/>
     <listofallmembers>
-      <member refid="da/dc1/a02418_1aa7cb40d2fd1a1653ad9171877938a372" prot="public" virt="non-virtual"><scope>castor3d::ChunkTyper&lt; SkeletonAnimationKeyFrame &gt;</scope><name>Value</name></member>
+      <member refid="d7/da1/a02290_1a2d2d95dec369d65226919075124a981d" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>BinaryParserBase</name></member>
+      <member refid="d7/da1/a02290_1a5f7acc850b450a68c319fc9be8bd2188" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>BinaryParserBase</name></member>
+      <member refid="d7/da1/a02290_1ae2fa711ccc4f76bbb220a6262b0822f3" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>BinaryParserBase</name></member>
+      <member refid="d7/da1/a02290_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>checkError</name></member>
+      <member refid="d7/da1/a02290_1ae6f4694ede819151fe4e30e33235ff07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>createBinaryParser</name></member>
+      <member refid="d7/da1/a02290_1ab5f9ba53ad5865f967b41e5a27ed73a9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>doGetSubChunk</name></member>
+      <member refid="da/dc1/a02418_1a76cd8550066e3624426e52870f9a4399" prot="private" virt="virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>doParse</name></member>
+      <member refid="da/dc1/a02418_1a7ba8a597521230966cbf42b062bb545a" prot="private" virt="virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>doParse_v1_1</name></member>
+      <member refid="da/dc1/a02418_1ad430dff1b594ab4ecf67e8b312beffb8" prot="private" virt="virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>doParse_v1_5</name></member>
+      <member refid="d7/da1/a02290_1a0e1aa917e3bf897fab03a32d20890062" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d7/da1/a02290_1a22ca62addb3ab167995e18f49267efcf" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d7/da1/a02290_1a5a648553ce168f5bc34adeedc8d169a7" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d7/da1/a02290_1a90df4e46072e5ef14aebebd00cbcc1f5" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d7/da1/a02290_1a5fac84360102001f5e730be1927c024e" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d7/da1/a02290_1a035881aba2b64571b30a5efd3faaf3d9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>doParseHeader</name></member>
+      <member refid="d7/da1/a02290_1ab3df04f9aa2eb1f7a533ed18631f09c4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>m_chunk</name></member>
+      <member refid="d7/da1/a02290_1a455764ca72b659dab2652baf56ce5885" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>m_fileVersion</name></member>
+      <member refid="d7/da1/a02290_1ae4820a3ab3e4b282240e5f1b969153c1" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>Name</name></member>
+      <member refid="d7/da1/a02290_1a263c0b5fc09225878cf4f446f9312957" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>operator=</name></member>
+      <member refid="d7/da1/a02290_1ab3db52fe83d9d6d3873022171253d698" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>operator=</name></member>
+      <member refid="d7/da1/a02290_1a5db83668684ca219f67de3a381898e64" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>parse</name></member>
+      <member refid="d7/da1/a02290_1a6bbbb529f463085c7d259600ae1b3e99" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>parse</name></member>
+      <member refid="d7/da1/a02290_1a61b02dbf69d89569eff5be22facd5f07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>parse_v1_1</name></member>
+      <member refid="d7/da1/a02290_1a95788692ddd6fae91074c299b674aaab" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>parse_v1_2</name></member>
+      <member refid="d7/da1/a02290_1a6f39b66d980e4a65660016f71115a89c" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>parse_v1_3</name></member>
+      <member refid="d7/da1/a02290_1aabc068daf8d99718497aa35f7a17c346" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>parse_v1_4</name></member>
+      <member refid="d7/da1/a02290_1ae6974d161e16bd0f9e903b595f406a08" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>parse_v1_5</name></member>
+      <member refid="d7/da1/a02290_1afb9e6fdcdc58e65458de7892d2bf8025" prot="public" virt="virtual"><scope>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</scope><name>~BinaryParserBase</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

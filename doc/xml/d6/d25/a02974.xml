@@ -24,7 +24,7 @@
       </sectiondef>
       <sectiondef kind="private-attrib">
       <memberdef kind="variable" id="d6/d25/a02974_1aa903bcbe525a7d4d8fd2c92eb3f7f450" prot="private" static="no" mutable="no">
-        <type><ref refid="dc/df4/a01401_1a5a9b5f4cf020bb0542dcb66762b8f3ef" kindref="member">GpuFeatures</ref></type>
+        <type><ref refid="da/dab/a01362_1a5a9b5f4cf020bb0542dcb66762b8f3ef" kindref="member">GpuFeatures</ref></type>
         <definition>GpuFeatures castor3d::GpuInformations::m_features</definition>
         <argsstring></argsstring>
         <name>m_features</name>
@@ -53,7 +53,7 @@
         <location file="Miscellaneous/GpuInformations.hpp" line="257" column="10" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="257" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d6/d25/a02974_1ae26c137e306a9a467af46a56838b9d6d" prot="private" static="no" mutable="no">
-        <type>std::map&lt; <ref refid="dc/df4/a01401_1a54c15a5f1454ef2ba12914e0a314d63e" kindref="member">GpuMin</ref>, uint32_t &gt;</type>
+        <type>std::map&lt; <ref refid="da/dab/a01362_1a54c15a5f1454ef2ba12914e0a314d63e" kindref="member">GpuMin</ref>, uint32_t &gt;</type>
         <definition>std::map&lt; GpuMin, uint32_t &gt; castor3d::GpuInformations::m_minValues</definition>
         <argsstring></argsstring>
         <name>m_minValues</name>
@@ -67,7 +67,7 @@
         <location file="Miscellaneous/GpuInformations.hpp" line="258" column="10" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="258" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d6/d25/a02974_1a3d9574edb925df8135a4ed04e3ba3ecb" prot="private" static="no" mutable="no">
-        <type>std::map&lt; <ref refid="dc/df4/a01401_1aa8db7fdfd75692716c162f6d6c1b9cb6" kindref="member">GpuMax</ref>, uint32_t &gt;</type>
+        <type>std::map&lt; <ref refid="da/dab/a01362_1aa8db7fdfd75692716c162f6d6c1b9cb6" kindref="member">GpuMax</ref>, uint32_t &gt;</type>
         <definition>std::map&lt; GpuMax, uint32_t &gt; castor3d::GpuInformations::m_maxValues</definition>
         <argsstring></argsstring>
         <name>m_maxValues</name>
@@ -161,7 +161,7 @@
         <name>addFeature</name>
         <qualifiedname>castor3d::GpuInformations::addFeature</qualifiedname>
         <param>
-          <type><ref refid="dc/df4/a01401_1a592ae630c434fe2af95c3eefcc900698" kindref="member">GpuFeature</ref></type>
+          <type><ref refid="da/dab/a01362_1a592ae630c434fe2af95c3eefcc900698" kindref="member">GpuFeature</ref></type>
           <declname>feature</declname>
         </param>
         <briefdescription>
@@ -172,7 +172,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/GpuInformations.hpp" line="44" column="6" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="44" bodyend="47"/>
-        <referencedby refid="d6/d25/a02974_1a8f6280381240315eb6a1ed5cda23d863" compoundref="dc/dc9/a00389" startline="64" endline="69">updateFeature</referencedby>
+        <referencedby refid="d6/d25/a02974_1a8f6280381240315eb6a1ed5cda23d863" compoundref="d1/d98/a00407" startline="64" endline="69">updateFeature</referencedby>
       </memberdef>
       <memberdef kind="function" id="d6/d25/a02974_1a54e7993e2b67ed913955497e6f0bccd3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -181,7 +181,7 @@
         <name>removeFeature</name>
         <qualifiedname>castor3d::GpuInformations::removeFeature</qualifiedname>
         <param>
-          <type><ref refid="dc/df4/a01401_1a592ae630c434fe2af95c3eefcc900698" kindref="member">GpuFeature</ref></type>
+          <type><ref refid="da/dab/a01362_1a592ae630c434fe2af95c3eefcc900698" kindref="member">GpuFeature</ref></type>
           <declname>feature</declname>
         </param>
         <briefdescription>
@@ -192,7 +192,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/GpuInformations.hpp" line="54" column="6" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="54" bodyend="57"/>
-        <referencedby refid="d6/d25/a02974_1a8f6280381240315eb6a1ed5cda23d863" compoundref="dc/dc9/a00389" startline="64" endline="69">updateFeature</referencedby>
+        <referencedby refid="d6/d25/a02974_1a8f6280381240315eb6a1ed5cda23d863" compoundref="d1/d98/a00407" startline="64" endline="69">updateFeature</referencedby>
       </memberdef>
       <memberdef kind="function" id="d6/d25/a02974_1a8f6280381240315eb6a1ed5cda23d863" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -201,7 +201,7 @@
         <name>updateFeature</name>
         <qualifiedname>castor3d::GpuInformations::updateFeature</qualifiedname>
         <param>
-          <type><ref refid="dc/df4/a01401_1a592ae630c434fe2af95c3eefcc900698" kindref="member">GpuFeature</ref></type>
+          <type><ref refid="da/dab/a01362_1a592ae630c434fe2af95c3eefcc900698" kindref="member">GpuFeature</ref></type>
           <declname>feature</declname>
         </param>
         <param>
@@ -216,8 +216,8 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/GpuInformations.hpp" line="64" column="6" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="64" bodyend="69"/>
-        <references refid="d6/d25/a02974_1a920655b10f814af0305b05da4994567c" compoundref="dc/dc9/a00389" startline="44" endline="47">addFeature</references>
-        <references refid="d6/d25/a02974_1a54e7993e2b67ed913955497e6f0bccd3" compoundref="dc/dc9/a00389" startline="54" endline="57">removeFeature</references>
+        <references refid="d6/d25/a02974_1a920655b10f814af0305b05da4994567c" compoundref="d1/d98/a00407" startline="44" endline="47">addFeature</references>
+        <references refid="d6/d25/a02974_1a54e7993e2b67ed913955497e6f0bccd3" compoundref="d1/d98/a00407" startline="54" endline="57">removeFeature</references>
       </memberdef>
       <memberdef kind="function" id="d6/d25/a02974_1a77ad12ba88030c8938bf7c5a76d8f733" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -226,7 +226,7 @@
         <name>hasFeature</name>
         <qualifiedname>castor3d::GpuInformations::hasFeature</qualifiedname>
         <param>
-          <type><ref refid="dc/df4/a01401_1a592ae630c434fe2af95c3eefcc900698" kindref="member">GpuFeature</ref></type>
+          <type><ref refid="da/dab/a01362_1a592ae630c434fe2af95c3eefcc900698" kindref="member">GpuFeature</ref></type>
           <declname>feature</declname>
         </param>
         <briefdescription>
@@ -237,9 +237,9 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/GpuInformations.hpp" line="76" column="6" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="76" bodyend="79"/>
-        <referencedby refid="d7/d34/a04078_1a5e7bb337b3ae054bad81c4530ce242d8" compoundref="d9/daf/a00830" startline="368" endline="371">castor3d::RenderSystem::hasFeature</referencedby>
-        <referencedby refid="d6/d25/a02974_1ac1dce053c9680a03f15630687fe8ea21" compoundref="dc/dc9/a00389" startline="96" endline="99">hasShaderStorageBuffers</referencedby>
-        <referencedby refid="d6/d25/a02974_1a27fd0413c1d5302ecb4df383919385b1" compoundref="dc/dc9/a00389" startline="86" endline="89">hasStereoRendering</referencedby>
+        <referencedby refid="d7/ded/a04130_1a5e7bb337b3ae054bad81c4530ce242d8" compoundref="d6/d2f/a00854" startline="369" endline="372">castor3d::RenderSystem::hasFeature</referencedby>
+        <referencedby refid="d6/d25/a02974_1ac1dce053c9680a03f15630687fe8ea21" compoundref="d1/d98/a00407" startline="96" endline="99">hasShaderStorageBuffers</referencedby>
+        <referencedby refid="d6/d25/a02974_1a27fd0413c1d5302ecb4df383919385b1" compoundref="d1/d98/a00407" startline="86" endline="89">hasStereoRendering</referencedby>
       </memberdef>
       <memberdef kind="function" id="d6/d25/a02974_1a27fd0413c1d5302ecb4df383919385b1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -257,9 +257,9 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/GpuInformations.hpp" line="86" column="6" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="86" bodyend="89"/>
-        <references refid="dc/df4/a01401_1a592ae630c434fe2af95c3eefcc900698ad427bacfb2917febdb3d7159276612e0">castor3d::eStereoRendering</references>
-        <references refid="d6/d25/a02974_1a77ad12ba88030c8938bf7c5a76d8f733" compoundref="dc/dc9/a00389" startline="76" endline="79">hasFeature</references>
-        <referencedby refid="d7/d34/a04078_1a6f95b21027a131700c8d7fe5d3f9b2fd" compoundref="d9/daf/a00830" startline="373" endline="376">castor3d::RenderSystem::hasStereoRendering</referencedby>
+        <references refid="da/dab/a01362_1a592ae630c434fe2af95c3eefcc900698ad427bacfb2917febdb3d7159276612e0">castor3d::eStereoRendering</references>
+        <references refid="d6/d25/a02974_1a77ad12ba88030c8938bf7c5a76d8f733" compoundref="d1/d98/a00407" startline="76" endline="79">hasFeature</references>
+        <referencedby refid="d7/ded/a04130_1a6f95b21027a131700c8d7fe5d3f9b2fd" compoundref="d6/d2f/a00854" startline="374" endline="377">castor3d::RenderSystem::hasStereoRendering</referencedby>
       </memberdef>
       <memberdef kind="function" id="d6/d25/a02974_1ac1dce053c9680a03f15630687fe8ea21" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -277,9 +277,9 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/GpuInformations.hpp" line="96" column="6" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="96" bodyend="99"/>
-        <references refid="dc/df4/a01401_1a592ae630c434fe2af95c3eefcc900698aceb457852896087c2fd755b19274b164">castor3d::eShaderStorageBuffers</references>
-        <references refid="d6/d25/a02974_1a77ad12ba88030c8938bf7c5a76d8f733" compoundref="dc/dc9/a00389" startline="76" endline="79">hasFeature</references>
-        <referencedby refid="d7/d34/a04078_1aee080c20f74dd4ade431cdc90e42c903" compoundref="d9/daf/a00830" startline="378" endline="381">castor3d::RenderSystem::hasShaderStorageBuffers</referencedby>
+        <references refid="da/dab/a01362_1a592ae630c434fe2af95c3eefcc900698aceb457852896087c2fd755b19274b164">castor3d::eShaderStorageBuffers</references>
+        <references refid="d6/d25/a02974_1a77ad12ba88030c8938bf7c5a76d8f733" compoundref="d1/d98/a00407" startline="76" endline="79">hasFeature</references>
+        <referencedby refid="d7/ded/a04130_1aee080c20f74dd4ade431cdc90e42c903" compoundref="d6/d2f/a00854" startline="379" endline="382">castor3d::RenderSystem::hasShaderStorageBuffers</referencedby>
       </memberdef>
       <memberdef kind="function" id="d6/d25/a02974_1ae1081f130b61e04a81e7b9b5aa875d88" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -310,7 +310,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/GpuInformations.hpp" line="108" column="6" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="108" bodyend="111"/>
-        <referencedby refid="d7/d34/a04078_1a4e8b90faad875514676c226eb4cdb8ef" compoundref="d9/daf/a00830" startline="383" endline="386">castor3d::RenderSystem::hasShaderType</referencedby>
+        <referencedby refid="d7/ded/a04130_1a4e8b90faad875514676c226eb4cdb8ef" compoundref="d6/d2f/a00854" startline="384" endline="387">castor3d::RenderSystem::hasShaderType</referencedby>
       </memberdef>
       <memberdef kind="function" id="d6/d25/a02974_1af5de1bc6a466e517149d968c53a0bd55" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -360,7 +360,7 @@
         <name>getValue</name>
         <qualifiedname>castor3d::GpuInformations::getValue</qualifiedname>
         <param>
-          <type><ref refid="dc/df4/a01401_1a54c15a5f1454ef2ba12914e0a314d63e" kindref="member">GpuMin</ref></type>
+          <type><ref refid="da/dab/a01362_1a54c15a5f1454ef2ba12914e0a314d63e" kindref="member">GpuMin</ref></type>
           <declname>index</declname>
         </param>
         <briefdescription>
@@ -382,7 +382,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/GpuInformations.hpp" line="134" column="10" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="134" bodyend="137"/>
-        <referencedby refid="d7/d34/a04078_1ad4fa518a03cbb0da4e4f9cc8d8adeec1" compoundref="d9/daf/a00830" startline="388" endline="391">castor3d::RenderSystem::getValue</referencedby>
+        <referencedby refid="d7/ded/a04130_1ad4fa518a03cbb0da4e4f9cc8d8adeec1" compoundref="d6/d2f/a00854" startline="389" endline="392">castor3d::RenderSystem::getValue</referencedby>
       </memberdef>
       <memberdef kind="function" id="d6/d25/a02974_1a92fe061bc5fc4f9599517bf5ce36f1e7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -391,7 +391,7 @@
         <name>setValue</name>
         <qualifiedname>castor3d::GpuInformations::setValue</qualifiedname>
         <param>
-          <type><ref refid="dc/df4/a01401_1a54c15a5f1454ef2ba12914e0a314d63e" kindref="member">GpuMin</ref></type>
+          <type><ref refid="da/dab/a01362_1a54c15a5f1454ef2ba12914e0a314d63e" kindref="member">GpuMin</ref></type>
           <declname>index</declname>
         </param>
         <param>
@@ -431,7 +431,7 @@
         <name>getValue</name>
         <qualifiedname>castor3d::GpuInformations::getValue</qualifiedname>
         <param>
-          <type><ref refid="dc/df4/a01401_1aa8db7fdfd75692716c162f6d6c1b9cb6" kindref="member">GpuMax</ref></type>
+          <type><ref refid="da/dab/a01362_1aa8db7fdfd75692716c162f6d6c1b9cb6" kindref="member">GpuMax</ref></type>
           <declname>index</declname>
         </param>
         <briefdescription>
@@ -461,7 +461,7 @@
         <name>setValue</name>
         <qualifiedname>castor3d::GpuInformations::setValue</qualifiedname>
         <param>
-          <type><ref refid="dc/df4/a01401_1aa8db7fdfd75692716c162f6d6c1b9cb6" kindref="member">GpuMax</ref></type>
+          <type><ref refid="da/dab/a01362_1aa8db7fdfd75692716c162f6d6c1b9cb6" kindref="member">GpuMax</ref></type>
           <declname>index</declname>
         </param>
         <param>

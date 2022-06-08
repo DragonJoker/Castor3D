@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::GpuBufferLinearAllocator Struct Reference</title>
+<title>Castor3D: castor3d::GpuBufferBase Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,55 +42,118 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../d0/d95/a01389.html">castor3d</a></li><li class="navelem"><a class="el" href="../../db/df5/a02534.html">GpuBufferLinearAllocator</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../db/df5/a02534.html">GpuBufferBase</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="../../d9/dc8/a02531.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">castor3d::GpuBufferLinearAllocator Struct Reference</div></div>
+  <div class="headertitle"><div class="title">castor3d::GpuBufferBase Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;GpuBufferLinearAllocator.hpp&gt;</code></p>
+<p><code>#include &lt;GpuBuffer.hpp&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for castor3d::GpuBufferBase:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../dc/db6/a02533.png" border="0" usemap="#acastor3d_1_1GpuBufferBase_inherit__map" alt="Inheritance graph"/></div>
+<map name="acastor3d_1_1GpuBufferBase_inherit__map" id="acastor3d_1_1GpuBufferBase_inherit__map">
+<area shape="rect" title=" " alt="" coords="5,5,172,32"/>
+<area shape="rect" href="../../d0/dff/a02506.html" title="A GPU buffer, that uses a buddy allocator to allocate sub&#45;buffers." alt="" coords="17,80,161,121"/>
+</map>
+<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aec711e82683606dd049d2b83223f2d8a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d40/a00236.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/df5/a02534.html#aec711e82683606dd049d2b83223f2d8a">GpuBufferLinearAllocator</a> (size_t count, uint32_t alignment)</td></tr>
-<tr class="memdesc:aec711e82683606dd049d2b83223f2d8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../db/df5/a02534.html#aec711e82683606dd049d2b83223f2d8a">More...</a><br /></td></tr>
-<tr class="separator:aec711e82683606dd049d2b83223f2d8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6864d8f358285ef7c9f04731aa50433"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d40/a00236.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> VkDeviceSize&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/df5/a02534.html#ac6864d8f358285ef7c9f04731aa50433">allocate</a> (size_t size)</td></tr>
-<tr class="memdesc:ac6864d8f358285ef7c9f04731aa50433"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates memory.  <a href="../../db/df5/a02534.html#ac6864d8f358285ef7c9f04731aa50433">More...</a><br /></td></tr>
-<tr class="separator:ac6864d8f358285ef7c9f04731aa50433"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22925dc9c260c81b16e7e92cf2c975c8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d40/a00236.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/df5/a02534.html#a22925dc9c260c81b16e7e92cf2c975c8">deallocate</a> (VkDeviceSize pointer)</td></tr>
-<tr class="memdesc:a22925dc9c260c81b16e7e92cf2c975c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deallocates memory.  <a href="../../db/df5/a02534.html#a22925dc9c260c81b16e7e92cf2c975c8">More...</a><br /></td></tr>
-<tr class="separator:a22925dc9c260c81b16e7e92cf2c975c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a271e7a5ac0c5aed27611421969f9da47"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/df5/a02534.html#a271e7a5ac0c5aed27611421969f9da47">getTotalSize</a> () const</td></tr>
-<tr class="separator:a271e7a5ac0c5aed27611421969f9da47"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4f50f4191db9c476b072c989b08afad"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/df5/a02534.html#ab4f50f4191db9c476b072c989b08afad">getAlignSize</a> () const</td></tr>
-<tr class="separator:ab4f50f4191db9c476b072c989b08afad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af0f91c88b34f256fef4eea59c69c0ba2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/df5/a02534.html#af0f91c88b34f256fef4eea59c69c0ba2">hasAvailable</a> (size_t) const</td></tr>
-<tr class="separator:af0f91c88b34f256fef4eea59c69c0ba2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f0cb57ba7d81f99e64b3fa0096023fa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/df5/a02534.html#a4f0cb57ba7d81f99e64b3fa0096023fa">GpuBufferBase</a> (<a class="el" href="../../d7/ded/a04130.html">RenderSystem</a> const &amp;renderSystem, VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryFlags, castor::String debugName, ashes::QueueShare sharingMode, VkDeviceSize allocatedSize, bool smallData=false)</td></tr>
+<tr class="memdesc:a4f0cb57ba7d81f99e64b3fa0096023fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../db/df5/a02534.html#a4f0cb57ba7d81f99e64b3fa0096023fa">More...</a><br /></td></tr>
+<tr class="separator:a4f0cb57ba7d81f99e64b3fa0096023fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23305046cd563d8ec97a43b9ab41500f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/df5/a02534.html#a23305046cd563d8ec97a43b9ab41500f">upload</a> (ashes::CommandBuffer const &amp;cb)</td></tr>
+<tr class="memdesc:a23305046cd563d8ec97a43b9ab41500f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Uploads all ready memory ranges to VRAM.  <a href="../../db/df5/a02534.html#a23305046cd563d8ec97a43b9ab41500f">More...</a><br /></td></tr>
+<tr class="separator:a23305046cd563d8ec97a43b9ab41500f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbd7c63833b19b5aeedc5c5ddbe10f6d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/df5/a02534.html#adbd7c63833b19b5aeedc5c5ddbe10f6d">uploadDirect</a> (ashes::Queue const &amp;queue, ashes::CommandPool const &amp;commandPool, VkDeviceSize offset, VkDeviceSize size, VkAccessFlags dstAccessFlags, VkPipelineStageFlags dstPipelineFlags)</td></tr>
+<tr class="memdesc:adbd7c63833b19b5aeedc5c5ddbe10f6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Uploads a memory range.  <a href="../../db/df5/a02534.html#adbd7c63833b19b5aeedc5c5ddbe10f6d">More...</a><br /></td></tr>
+<tr class="separator:adbd7c63833b19b5aeedc5c5ddbe10f6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06f1c510406ae4dd17d134022e94a497"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/df5/a02534.html#a06f1c510406ae4dd17d134022e94a497">markDirty</a> (VkDeviceSize offset, VkDeviceSize size, VkAccessFlags dstAccessFlags, VkPipelineStageFlags dstPipelineFlags)</td></tr>
+<tr class="memdesc:a06f1c510406ae4dd17d134022e94a497"><td class="mdescLeft">&#160;</td><td class="mdescRight">Marks a memory range to be ready for upload.  <a href="../../db/df5/a02534.html#a06f1c510406ae4dd17d134022e94a497">More...</a><br /></td></tr>
+<tr class="separator:a06f1c510406ae4dd17d134022e94a497"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f399bb8c877bc2155fe02aebd6c0329"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/df5/a02534.html#a3f399bb8c877bc2155fe02aebd6c0329">hasBuffer</a> () const</td></tr>
+<tr class="separator:a3f399bb8c877bc2155fe02aebd6c0329"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e96ae884d0c9c48a92282e0c9d1b816"><td class="memItemLeft" align="right" valign="top">ashes::Buffer&lt; uint8_t &gt; const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/df5/a02534.html#a2e96ae884d0c9c48a92282e0c9d1b816">getBuffer</a> () const</td></tr>
+<tr class="separator:a2e96ae884d0c9c48a92282e0c9d1b816"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0b76b8e65ce793ffd15dc6c5d65a70d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/df5/a02534.html#ab0b76b8e65ce793ffd15dc6c5d65a70d">operator ashes::Buffer&lt; uint8_t &gt; const &amp;</a> () const</td></tr>
+<tr class="separator:ab0b76b8e65ce793ffd15dc6c5d65a70d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5c0c039b286c923f49bfb1e7e6282e8"><td class="memItemLeft" align="right" valign="top">ashes::Buffer&lt; uint8_t &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/df5/a02534.html#ad5c0c039b286c923f49bfb1e7e6282e8">getBuffer</a> ()</td></tr>
+<tr class="separator:ad5c0c039b286c923f49bfb1e7e6282e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91928d1e743ed5edbb8a3af9bd859af1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/df5/a02534.html#a91928d1e743ed5edbb8a3af9bd859af1">operator ashes::Buffer&lt; uint8_t &gt; &amp;</a> ()</td></tr>
+<tr class="separator:a91928d1e743ed5edbb8a3af9bd859af1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9ce48ae045bf1f7be2b87315bf56394"><td class="memTemplParams" colspan="2">template&lt;typename DataT &gt; </td></tr>
+<tr class="memitem:aa9ce48ae045bf1f7be2b87315bf56394"><td class="memTemplItemLeft" align="right" valign="top">DataT const &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../db/df5/a02534.html#aa9ce48ae045bf1f7be2b87315bf56394">getData</a> (VkDeviceSize offset) const</td></tr>
+<tr class="separator:aa9ce48ae045bf1f7be2b87315bf56394"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c9e4696f89164001d11831b35f15f77"><td class="memTemplParams" colspan="2">template&lt;typename DataT &gt; </td></tr>
+<tr class="memitem:a1c9e4696f89164001d11831b35f15f77"><td class="memTemplItemLeft" align="right" valign="top">DataT &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../db/df5/a02534.html#a1c9e4696f89164001d11831b35f15f77">getData</a> (VkDeviceSize offset)</td></tr>
+<tr class="separator:a1c9e4696f89164001d11831b35f15f77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae81d18fb4565a12c2d525b775cb4e27f"><td class="memItemLeft" align="right" valign="top">castor::ArrayView&lt; uint8_t &gt; const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/df5/a02534.html#ae81d18fb4565a12c2d525b775cb4e27f">getDatas</a> () const</td></tr>
+<tr class="separator:ae81d18fb4565a12c2d525b775cb4e27f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3d715f75b94aba18ba8d3a39b5e73d2"><td class="memItemLeft" align="right" valign="top">castor::ArrayView&lt; uint8_t &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/df5/a02534.html#af3d715f75b94aba18ba8d3a39b5e73d2">getDatas</a> ()</td></tr>
+<tr class="separator:af3d715f75b94aba18ba8d3a39b5e73d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a01ce6a31562ddfd446c446f4a24ed188"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/df5/a02534.html#a01ce6a31562ddfd446c446f4a24ed188">GpuBufferPool</a></td></tr>
+<tr class="separator:a01ce6a31562ddfd446c446f4a24ed188"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="aec711e82683606dd049d2b83223f2d8a" name="aec711e82683606dd049d2b83223f2d8a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aec711e82683606dd049d2b83223f2d8a">&#9670;&nbsp;</a></span>GpuBufferLinearAllocator()</h2>
+<a id="a4f0cb57ba7d81f99e64b3fa0096023fa" name="a4f0cb57ba7d81f99e64b3fa0096023fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f0cb57ba7d81f99e64b3fa0096023fa">&#9670;&nbsp;</a></span>GpuBufferBase()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../d7/d40/a00236.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::GpuBufferLinearAllocator::GpuBufferLinearAllocator </td>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::GpuBufferBase::GpuBufferBase </td>
           <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>count</em>, </td>
+          <td class="paramtype"><a class="el" href="../../d7/ded/a04130.html">RenderSystem</a> const &amp;&#160;</td>
+          <td class="paramname"><em>renderSystem</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>alignment</em>&#160;</td>
+          <td class="paramtype">VkBufferUsageFlags&#160;</td>
+          <td class="paramname"><em>usage</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VkMemoryPropertyFlags&#160;</td>
+          <td class="paramname"><em>memoryFlags</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::String&#160;</td>
+          <td class="paramname"><em>debugName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ashes::QueueShare&#160;</td>
+          <td class="paramname"><em>sharingMode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VkDeviceSize&#160;</td>
+          <td class="paramname"><em>allocatedSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>smallData</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -103,8 +166,13 @@ Public Member Functions</h2></td></tr>
 <p>Constructor. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">count</td><td>The allocator elements count. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">alignment</td><td>The alignment for one element. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">renderSystem</td><td>The device on which the storage is allocated. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">usage</td><td>The buffer targets. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">memoryFlags</td><td>The buffer memory properties. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">debugName</td><td>The debug name. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">sharingMode</td><td>The sharing mode. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">allocatedSize</td><td>The buffer size. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">smallData</td><td>Tells if the memory chunks allocated through this buffer are less than 65536 bytes. </td></tr>
   </table>
   </dd>
 </dl>
@@ -112,61 +180,161 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac6864d8f358285ef7c9f04731aa50433" name="ac6864d8f358285ef7c9f04731aa50433"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac6864d8f358285ef7c9f04731aa50433">&#9670;&nbsp;</a></span>allocate()</h2>
+<a id="ad5c0c039b286c923f49bfb1e7e6282e8" name="ad5c0c039b286c923f49bfb1e7e6282e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5c0c039b286c923f49bfb1e7e6282e8">&#9670;&nbsp;</a></span>getBuffer() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../d7/d40/a00236.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> VkDeviceSize castor3d::GpuBufferLinearAllocator::allocate </td>
+          <td class="memname">ashes::Buffer&lt; uint8_t &gt; &amp; castor3d::GpuBufferBase::getBuffer </td>
           <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>size</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
-
-<p>Allocates memory. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>The requested memory size. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The memory chunk. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The internal buffer. </dd></dl>
 
 </div>
 </div>
-<a id="a22925dc9c260c81b16e7e92cf2c975c8" name="a22925dc9c260c81b16e7e92cf2c975c8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a22925dc9c260c81b16e7e92cf2c975c8">&#9670;&nbsp;</a></span>deallocate()</h2>
+<a id="a2e96ae884d0c9c48a92282e0c9d1b816" name="a2e96ae884d0c9c48a92282e0c9d1b816"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e96ae884d0c9c48a92282e0c9d1b816">&#9670;&nbsp;</a></span>getBuffer() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../d7/d40/a00236.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::GpuBufferLinearAllocator::deallocate </td>
+          <td class="memname">ashes::Buffer&lt; uint8_t &gt; const  &amp; castor3d::GpuBufferBase::getBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The internal buffer. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../dd/df4/a02510.html#aaf498e1f12b8c86de5b613e41e9fb87e">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getBuffer()</a>, and <a class="el" href="../../d1/d0c/a02570.html#ac8e2cc4cf9e8a4531300987d3bd38c07">castor3d::ObjectBufferOffset::GpuBufferChunk::getBuffer()</a>.</p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../db/df5/a02534_a2e96ae884d0c9c48a92282e0c9d1b816_icgraph.png" border="0" usemap="#adb/df5/a02534_a2e96ae884d0c9c48a92282e0c9d1b816_icgraph" alt=""/></div>
+<map name="adb/df5/a02534_a2e96ae884d0c9c48a92282e0c9d1b816_icgraph" id="adb/df5/a02534_a2e96ae884d0c9c48a92282e0c9d1b816_icgraph">
+<area shape="rect" title=" " alt="" coords="809,384,976,425"/>
+<area shape="rect" href="../../dd/df4/a02510.html#aaf498e1f12b8c86de5b613e41e9fb87e" title=" " alt="" coords="583,201,754,243"/>
+<area shape="rect" href="../../d1/d0c/a02570.html#ac8e2cc4cf9e8a4531300987d3bd38c07" title=" " alt="" coords="576,605,761,647"/>
+<area shape="rect" href="../../dd/df4/a02510.html#ad314968c272e7c2ce0b37a784971cea0" title=" " alt="" coords="291,5,513,47"/>
+<area shape="rect" href="../../dd/df4/a02510.html#a56f5ba1ae3c2614f358aacdaeb785a7e" title=" " alt="" coords="293,71,511,112"/>
+<area shape="rect" href="../../dd/df4/a02510.html#a6727c7139446eaa80dfbc46c5907842a" title=" " alt="" coords="287,136,517,177"/>
+<area shape="rect" href="../../dd/df4/a02510.html#a56ee4cb9bb8315919645a8afb555aeb2" title=" " alt="" coords="307,201,497,243"/>
+<area shape="rect" href="../../dd/df4/a02510.html#aad23adbbe095c75faaeb269b7e48fb74" title=" " alt="" coords="317,267,487,308"/>
+<area shape="rect" href="../../dd/df4/a02510.html#a9110fc6d2de03fb35b3bc4ea8e5bbedc" title=" " alt="" coords="317,332,487,373"/>
+<area shape="rect" href="../../d1/d0c/a02570.html#a67401d76353096283f473753a1d2ba84" title=" " alt="" coords="280,398,524,454"/>
+<area shape="rect" href="../../d1/d0c/a02570.html#ad5fc8bf6b71327c8d23211db631eaa77" title=" " alt="" coords="281,478,523,534"/>
+<area shape="rect" href="../../d1/d0c/a02570.html#a5c0bb1d12db7b98b03d726711fb9178c" title=" " alt="" coords="276,558,528,614"/>
+<area shape="rect" href="../../d1/d0c/a02570.html#a0049250cdeea6d42f9fb7dcb38fb7568" title=" " alt="" coords="281,638,523,694"/>
+<area shape="rect" href="../../db/d0b/a02566.html#ae2d5e9acc8e1f1eda85797b74a77de84" title=" " alt="" coords="309,719,495,760"/>
+<area shape="rect" href="../../d1/d0c/a02570.html#a89c8c237e0ce90a0fc34f885ae2e6c2e" title=" " alt="" coords="283,784,521,825"/>
+<area shape="rect" href="../../d1/d0c/a02570.html#a1d92fdc959a8f887830b553a29237eb3" title=" " alt="" coords="283,849,521,891"/>
+<area shape="rect" href="../../db/d0b/a02566.html#a01934a380f3fc1779ece9131ee89f620" title=" " alt="" coords="9,405,224,447"/>
+<area shape="rect" href="../../db/d0b/a02566.html#a80977d93ed10b397b26a1de41405d371" title=" " alt="" coords="11,485,223,527"/>
+<area shape="rect" href="../../db/d0b/a02566.html#a6418b99b44d9d9c8e0bdff889f7bd7ec" title=" " alt="" coords="5,565,228,607"/>
+<area shape="rect" href="../../db/d0b/a02566.html#ae71bed91be2f7b3090dd7178370b0ec4" title=" " alt="" coords="24,645,209,687"/>
+<area shape="rect" href="../../db/d0b/a02566.html#ae11af62243abacb5949b86ace14f27cc" title=" " alt="" coords="24,784,209,825"/>
+<area shape="rect" href="../../db/d0b/a02566.html#a1773d28f94e821fb6d812609f519ae6c" title=" " alt="" coords="24,849,209,891"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a1c9e4696f89164001d11831b35f15f77" name="a1c9e4696f89164001d11831b35f15f77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c9e4696f89164001d11831b35f15f77">&#9670;&nbsp;</a></span>getData() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename DataT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">DataT &amp; castor3d::GpuBufferBase::getData </td>
           <td>(</td>
           <td class="paramtype">VkDeviceSize&#160;</td>
-          <td class="paramname"><em>pointer</em></td><td>)</td>
+          <td class="paramname"><em>offset</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
-
-<p>Deallocates memory. </p>
+<dl class="section return"><dt>Returns</dt><dd>The N-th instance of the data. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pointer</td><td>The memory chunk. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">offset</td><td>The memory chunk offset. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="ab4f50f4191db9c476b072c989b08afad" name="ab4f50f4191db9c476b072c989b08afad"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab4f50f4191db9c476b072c989b08afad">&#9670;&nbsp;</a></span>getAlignSize()</h2>
+<a id="aa9ce48ae045bf1f7be2b87315bf56394" name="aa9ce48ae045bf1f7be2b87315bf56394"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9ce48ae045bf1f7be2b87315bf56394">&#9670;&nbsp;</a></span>getData() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename DataT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">DataT const  &amp; castor3d::GpuBufferBase::getData </td>
+          <td>(</td>
+          <td class="paramtype">VkDeviceSize&#160;</td>
+          <td class="paramname"><em>offset</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The N-th instance of the data. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">offset</td><td>The memory chunk offset. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af3d715f75b94aba18ba8d3a39b5e73d2" name="af3d715f75b94aba18ba8d3a39b5e73d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3d715f75b94aba18ba8d3a39b5e73d2">&#9670;&nbsp;</a></span>getDatas() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -175,7 +343,33 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">size_t castor3d::GpuBufferLinearAllocator::getAlignSize </td>
+          <td class="memname">castor::ArrayView&lt; uint8_t &gt; &amp; castor3d::GpuBufferBase::getDatas </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The data. </dd></dl>
+
+</div>
+</div>
+<a id="ae81d18fb4565a12c2d525b775cb4e27f" name="ae81d18fb4565a12c2d525b775cb4e27f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae81d18fb4565a12c2d525b775cb4e27f">&#9670;&nbsp;</a></span>getDatas() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">castor::ArrayView&lt; uint8_t &gt; const  &amp; castor3d::GpuBufferBase::getDatas </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -187,12 +381,25 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The element aligned size. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The data. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../dd/df4/a02510.html#aab6c41b3e6bd874a2eea4fe95d769f68">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getData()</a>, and <a class="el" href="../../d1/d0c/a02570.html#a6e5b66e1fcf11fd2f1a773ad482c39ca">castor3d::ObjectBufferOffset::GpuBufferChunk::getData()</a>.</p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../db/df5/a02534_ae81d18fb4565a12c2d525b775cb4e27f_icgraph.png" border="0" usemap="#adb/df5/a02534_ae81d18fb4565a12c2d525b775cb4e27f_icgraph" alt=""/></div>
+<map name="adb/df5/a02534_ae81d18fb4565a12c2d525b775cb4e27f_icgraph" id="adb/df5/a02534_ae81d18fb4565a12c2d525b775cb4e27f_icgraph">
+<area shape="rect" title=" " alt="" coords="472,39,639,80"/>
+<area shape="rect" href="../../dd/df4/a02510.html#aab6c41b3e6bd874a2eea4fe95d769f68" title=" " alt="" coords="246,5,417,47"/>
+<area shape="rect" href="../../d1/d0c/a02570.html#a6e5b66e1fcf11fd2f1a773ad482c39ca" title=" " alt="" coords="239,71,424,112"/>
+<area shape="rect" href="../../db/d0b/a02566.html#ae497f41cd30c6c0554ec4017f46fd997" title=" " alt="" coords="5,71,191,112"/>
+</map>
+</div>
 
 </div>
 </div>
-<a id="a271e7a5ac0c5aed27611421969f9da47" name="a271e7a5ac0c5aed27611421969f9da47"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a271e7a5ac0c5aed27611421969f9da47">&#9670;&nbsp;</a></span>getTotalSize()</h2>
+<a id="a3f399bb8c877bc2155fe02aebd6c0329" name="a3f399bb8c877bc2155fe02aebd6c0329"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f399bb8c877bc2155fe02aebd6c0329">&#9670;&nbsp;</a></span>hasBuffer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -201,7 +408,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">size_t castor3d::GpuBufferLinearAllocator::getTotalSize </td>
+          <td class="memname">bool castor3d::GpuBufferBase::hasBuffer </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -213,12 +420,86 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The allocator size. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The internal buffer. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../dd/df4/a02510.html#a661b1a290c461596f62b66adf4502835">castor3d::GpuBufferOffsetT&lt; DataT &gt;::operator bool()</a>.</p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../db/df5/a02534_a3f399bb8c877bc2155fe02aebd6c0329_icgraph.png" border="0" usemap="#adb/df5/a02534_a3f399bb8c877bc2155fe02aebd6c0329_icgraph" alt=""/></div>
+<map name="adb/df5/a02534_a3f399bb8c877bc2155fe02aebd6c0329_icgraph" id="adb/df5/a02534_a3f399bb8c877bc2155fe02aebd6c0329_icgraph">
+<area shape="rect" title=" " alt="" coords="224,5,391,47"/>
+<area shape="rect" href="../../dd/df4/a02510.html#a661b1a290c461596f62b66adf4502835" title=" " alt="" coords="5,5,176,47"/>
+</map>
+</div>
 
 </div>
 </div>
-<a id="af0f91c88b34f256fef4eea59c69c0ba2" name="af0f91c88b34f256fef4eea59c69c0ba2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af0f91c88b34f256fef4eea59c69c0ba2">&#9670;&nbsp;</a></span>hasAvailable()</h2>
+<a id="a06f1c510406ae4dd17d134022e94a497" name="a06f1c510406ae4dd17d134022e94a497"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06f1c510406ae4dd17d134022e94a497">&#9670;&nbsp;</a></span>markDirty()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::GpuBufferBase::markDirty </td>
+          <td>(</td>
+          <td class="paramtype">VkDeviceSize&#160;</td>
+          <td class="paramname"><em>offset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VkDeviceSize&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VkAccessFlags&#160;</td>
+          <td class="paramname"><em>dstAccessFlags</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VkPipelineStageFlags&#160;</td>
+          <td class="paramname"><em>dstPipelineFlags</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Marks a memory range to be ready for upload. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">offset,size</td><td>The memory range. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dstAccessFlags</td><td>The access flags wanted after upload. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dstPipelineFlags</td><td>The pipeline stage flags wanted after upload. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="../../dd/df4/a02510.html#a82d29cdbd10db3d1c4cc8b91f2a3b585">castor3d::GpuBufferOffsetT&lt; DataT &gt;::markDirty()</a>, and <a class="el" href="../../d1/d0c/a02570.html#a33c1c92e85f418affdc40f2486368e08">castor3d::ObjectBufferOffset::GpuBufferChunk::markDirty()</a>.</p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../db/df5/a02534_a06f1c510406ae4dd17d134022e94a497_icgraph.png" border="0" usemap="#adb/df5/a02534_a06f1c510406ae4dd17d134022e94a497_icgraph" alt=""/></div>
+<map name="adb/df5/a02534_a06f1c510406ae4dd17d134022e94a497_icgraph" id="adb/df5/a02534_a06f1c510406ae4dd17d134022e94a497_icgraph">
+<area shape="rect" title="Marks a memory range to be ready for upload." alt="" coords="475,39,641,80"/>
+<area shape="rect" href="../../dd/df4/a02510.html#a82d29cdbd10db3d1c4cc8b91f2a3b585" title=" " alt="" coords="247,5,418,47"/>
+<area shape="rect" href="../../d1/d0c/a02570.html#a33c1c92e85f418affdc40f2486368e08" title=" " alt="" coords="239,71,427,112"/>
+<area shape="rect" href="../../db/d0b/a02566.html#aad523636c57fd4d36563390d5614fd64" title=" " alt="" coords="5,71,191,112"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a91928d1e743ed5edbb8a3af9bd859af1" name="a91928d1e743ed5edbb8a3af9bd859af1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a91928d1e743ed5edbb8a3af9bd859af1">&#9670;&nbsp;</a></span>operator ashes::Buffer&lt; uint8_t &gt; &amp;()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -227,9 +508,33 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool castor3d::GpuBufferLinearAllocator::hasAvailable </td>
+          <td class="memname">castor3d::GpuBufferBase::operator ashes::Buffer&lt; uint8_t &gt; &amp; </td>
           <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab0b76b8e65ce793ffd15dc6c5d65a70d" name="ab0b76b8e65ce793ffd15dc6c5d65a70d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0b76b8e65ce793ffd15dc6c5d65a70d">&#9670;&nbsp;</a></span>operator ashes::Buffer&lt; uint8_t &gt; const &amp;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">castor3d::GpuBufferBase::operator ashes::Buffer&lt; uint8_t &gt; const &amp; </td>
+          <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
@@ -240,17 +545,141 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd><code>true</code> if there is enough remaining memory for given size. </dd></dl>
 
 </div>
 </div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
-<li>Buffer/<a class="el" href="../../d6/db8/a00158.html">GpuBufferLinearAllocator.hpp</a></li>
+<a id="a23305046cd563d8ec97a43b9ab41500f" name="a23305046cd563d8ec97a43b9ab41500f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23305046cd563d8ec97a43b9ab41500f">&#9670;&nbsp;</a></span>upload()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::GpuBufferBase::upload </td>
+          <td>(</td>
+          <td class="paramtype">ashes::CommandBuffer const &amp;&#160;</td>
+          <td class="paramname"><em>cb</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Uploads all ready memory ranges to VRAM. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">cb</td><td>The command buffer on which transfer commands are recorded. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="adbd7c63833b19b5aeedc5c5ddbe10f6d" name="adbd7c63833b19b5aeedc5c5ddbe10f6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adbd7c63833b19b5aeedc5c5ddbe10f6d">&#9670;&nbsp;</a></span>uploadDirect()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::GpuBufferBase::uploadDirect </td>
+          <td>(</td>
+          <td class="paramtype">ashes::Queue const &amp;&#160;</td>
+          <td class="paramname"><em>queue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ashes::CommandPool const &amp;&#160;</td>
+          <td class="paramname"><em>commandPool</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VkDeviceSize&#160;</td>
+          <td class="paramname"><em>offset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VkDeviceSize&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VkAccessFlags&#160;</td>
+          <td class="paramname"><em>dstAccessFlags</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VkPipelineStageFlags&#160;</td>
+          <td class="paramname"><em>dstPipelineFlags</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Uploads a memory range. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">queue</td><td>The queue to which the upload commands will be submitted to. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">commandPool</td><td>The command pool from which the command buffer will be created. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">offset,size</td><td>The memory range. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dstAccessFlags</td><td>The access flags wanted after upload. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dstPipelineFlags</td><td>The pipeline stage flags wanted after upload. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d1/d0c/a02570.html#ab95abd80940cdaef3c701f874c4fdb4e">castor3d::ObjectBufferOffset::GpuBufferChunk::directUpload()</a>.</p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../db/df5/a02534_adbd7c63833b19b5aeedc5c5ddbe10f6d_icgraph.png" border="0" usemap="#adb/df5/a02534_adbd7c63833b19b5aeedc5c5ddbe10f6d_icgraph" alt=""/></div>
+<map name="adb/df5/a02534_adbd7c63833b19b5aeedc5c5ddbe10f6d_icgraph" id="adb/df5/a02534_adbd7c63833b19b5aeedc5c5ddbe10f6d_icgraph">
+<area shape="rect" title="Uploads a memory range." alt="" coords="491,5,657,47"/>
+<area shape="rect" href="../../d1/d0c/a02570.html#ab95abd80940cdaef3c701f874c4fdb4e" title=" " alt="" coords="239,5,443,47"/>
+<area shape="rect" href="../../db/d0b/a02566.html#a895a7d4256a605dc2b6f7847325f4db9" title=" " alt="" coords="5,5,191,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a id="a01ce6a31562ddfd446c446f4a24ed188" name="a01ce6a31562ddfd446c446f4a24ed188"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01ce6a31562ddfd446c446f4a24ed188">&#9670;&nbsp;</a></span>GpuBufferPool</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="../../d9/d66/a02562.html">GpuBufferPool</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>Buffer/<a class="el" href="../../d7/d3f/a00173.html">GpuBuffer.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 02:46:22 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:48 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

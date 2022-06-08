@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::SubsurfaceScatteringPass::BlurWeights Struct Reference</title>
+<title>Castor3D: castor3d::SsaoRawAOPass Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,78 +42,277 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dc/df4/a01401.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d6/d44/a04222.html">SubsurfaceScatteringPass</a></li><li class="navelem"><a class="el" href="../../d7/d0a/a04230.html">BlurWeights</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d7/d0a/a04230.html">SsaoRawAOPass</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="../../d2/db0/a04227.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">castor3d::SubsurfaceScatteringPass::BlurWeights Struct Reference</div></div>
+  <div class="headertitle"><div class="title">castor3d::SsaoRawAOPass Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;SubsurfaceScatteringPass.hpp&gt;</code></p>
+<p><code>#include &lt;SsaoRawAOPass.hpp&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:a9f824803d0628b0dd429b3a58f6dfa69"><td class="memItemLeft" align="right" valign="top">castor::Point4f&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d0a/a04230.html#a9f824803d0628b0dd429b3a58f6dfa69">originalWeight</a></td></tr>
-<tr class="separator:a9f824803d0628b0dd429b3a58f6dfa69"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3229ded5b54533f92a6332f493eced2e"><td class="memItemLeft" align="right" valign="top">castor::Point4f&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d0a/a04230.html#a3229ded5b54533f92a6332f493eced2e">blurWeights</a> [3u]</td></tr>
-<tr class="separator:a3229ded5b54533f92a6332f493eced2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0bf0b2b2456f6fed0218719ac6e99e3e"><td class="memItemLeft" align="right" valign="top">castor::Point4f&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d0a/a04230.html#a0bf0b2b2456f6fed0218719ac6e99e3e">blurVariance</a></td></tr>
-<tr class="separator:a0bf0b2b2456f6fed0218719ac6e99e3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:afbc8481ad9116d9143a00119f187d8bb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d0a/a04230.html#afbc8481ad9116d9143a00119f187d8bb">SsaoRawAOPass</a> (crg::FramePassGroup &amp;graph, <a class="el" href="../../df/d75/a04010.html">RenderDevice</a> const &amp;device, <a class="el" href="../../da/deb/a03274.html">ProgressBar</a> *progress, crg::FramePass const &amp;previousPass, VkExtent2D const &amp;size, <a class="el" href="../../d2/d73/a04226.html">SsaoConfig</a> const &amp;config, <a class="el" href="../../dc/de6/a05126.html">SsaoConfigUbo</a> &amp;ssaoConfigUbo, <a class="el" href="../../d8/d79/a05010.html">GpInfoUbo</a> const &amp;gpInfoUbo, <a class="el" href="../../db/dc9/a04378.html">Texture</a> const &amp;linearisedDepthBuffer, <a class="el" href="../../db/dc9/a04378.html">Texture</a> const &amp;normals, uint32_t const &amp;passIndex)</td></tr>
+<tr class="memdesc:afbc8481ad9116d9143a00119f187d8bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../d7/d0a/a04230.html#afbc8481ad9116d9143a00119f187d8bb">More...</a><br /></td></tr>
+<tr class="separator:afbc8481ad9116d9143a00119f187d8bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6153dccdcc84ff4c438d267f93b0c10"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d0a/a04230.html#af6153dccdcc84ff4c438d267f93b0c10">~SsaoRawAOPass</a> ()</td></tr>
+<tr class="separator:af6153dccdcc84ff4c438d267f93b0c10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9678f811408a3410bc35b975c8fd759f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d0a/a04230.html#a9678f811408a3410bc35b975c8fd759f">accept</a> (<a class="el" href="../../d2/d73/a04226.html">SsaoConfig</a> &amp;config, <a class="el" href="../../dc/dbb/a03262.html">PipelineVisitorBase</a> &amp;visitor)</td></tr>
+<tr class="memdesc:a9678f811408a3410bc35b975c8fd759f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accepts a visitor.  <a href="../../d7/d0a/a04230.html#a9678f811408a3410bc35b975c8fd759f">More...</a><br /></td></tr>
+<tr class="separator:a9678f811408a3410bc35b975c8fd759f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
+<tr class="memitem:a9c2a1e0dbb63ad643d1803b3493e34b4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dc9/a04378.html">Texture</a> const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d0a/a04230.html#a9c2a1e0dbb63ad643d1803b3493e34b4">getResult</a> () const</td></tr>
+<tr class="separator:a9c2a1e0dbb63ad643d1803b3493e34b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a08aa98339dde2b7ab4f47605fe45bf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dc9/a04378.html">Texture</a> const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d0a/a04230.html#a3a08aa98339dde2b7ab4f47605fe45bf">getBentResult</a> () const</td></tr>
+<tr class="separator:a3a08aa98339dde2b7ab4f47605fe45bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e629838dc57e1736ae9dc9c2d82ddf7"><td class="memItemLeft" align="right" valign="top">crg::FramePass const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d0a/a04230.html#a8e629838dc57e1736ae9dc9c2d82ddf7">getLastPass</a> () const</td></tr>
+<tr class="separator:a8e629838dc57e1736ae9dc9c2d82ddf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a0bf0b2b2456f6fed0218719ac6e99e3e" name="a0bf0b2b2456f6fed0218719ac6e99e3e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0bf0b2b2456f6fed0218719ac6e99e3e">&#9670;&nbsp;</a></span>blurVariance</h2>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="afbc8481ad9116d9143a00119f187d8bb" name="afbc8481ad9116d9143a00119f187d8bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbc8481ad9116d9143a00119f187d8bb">&#9670;&nbsp;</a></span>SsaoRawAOPass()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">castor::Point4f castor3d::SubsurfaceScatteringPass::BlurWeights::blurVariance</td>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::SsaoRawAOPass::SsaoRawAOPass </td>
+          <td>(</td>
+          <td class="paramtype">crg::FramePassGroup &amp;&#160;</td>
+          <td class="paramname"><em>graph</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../df/d75/a04010.html">RenderDevice</a> const &amp;&#160;</td>
+          <td class="paramname"><em>device</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../da/deb/a03274.html">ProgressBar</a> *&#160;</td>
+          <td class="paramname"><em>progress</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">crg::FramePass const &amp;&#160;</td>
+          <td class="paramname"><em>previousPass</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VkExtent2D const &amp;&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d2/d73/a04226.html">SsaoConfig</a> const &amp;&#160;</td>
+          <td class="paramname"><em>config</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../dc/de6/a05126.html">SsaoConfigUbo</a> &amp;&#160;</td>
+          <td class="paramname"><em>ssaoConfigUbo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d8/d79/a05010.html">GpInfoUbo</a> const &amp;&#160;</td>
+          <td class="paramname"><em>gpInfoUbo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../db/dc9/a04378.html">Texture</a> const &amp;&#160;</td>
+          <td class="paramname"><em>linearisedDepthBuffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../db/dc9/a04378.html">Texture</a> const &amp;&#160;</td>
+          <td class="paramname"><em>normals</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t const &amp;&#160;</td>
+          <td class="paramname"><em>passIndex</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">graph</td><td>The render graph. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">device</td><td>The GPU device. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">progress</td><td>The progress bar. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">previousPass</td><td>The previous frame pass. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>The render area dimensions. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">config</td><td>The SSAO configuration. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ssaoConfigUbo</td><td>The SSAO configuration UBO. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">gpInfoUbo</td><td>The GBuffer configuration UBO. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">linearisedDepthBuffer</td><td>The linearised depth buffer. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">normals</td><td>The normals buffer. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">passIndex</td><td>The frame pass index. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af6153dccdcc84ff4c438d267f93b0c10" name="af6153dccdcc84ff4c438d267f93b0c10"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6153dccdcc84ff4c438d267f93b0c10">&#9670;&nbsp;</a></span>~SsaoRawAOPass()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::SsaoRawAOPass::~SsaoRawAOPass </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a3229ded5b54533f92a6332f493eced2e" name="a3229ded5b54533f92a6332f493eced2e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3229ded5b54533f92a6332f493eced2e">&#9670;&nbsp;</a></span>blurWeights</h2>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a9678f811408a3410bc35b975c8fd759f" name="a9678f811408a3410bc35b975c8fd759f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9678f811408a3410bc35b975c8fd759f">&#9670;&nbsp;</a></span>accept()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">castor::Point4f castor3d::SubsurfaceScatteringPass::BlurWeights::blurWeights[3u]</td>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::SsaoRawAOPass::accept </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d2/d73/a04226.html">SsaoConfig</a> &amp;&#160;</td>
+          <td class="paramname"><em>config</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../dc/dbb/a03262.html">PipelineVisitorBase</a> &amp;&#160;</td>
+          <td class="paramname"><em>visitor</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
+<p>Accepts a visitor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">config</td><td>The SSAO config. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">visitor</td><td>The visitor. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
-<a id="a9f824803d0628b0dd429b3a58f6dfa69" name="a9f824803d0628b0dd429b3a58f6dfa69"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9f824803d0628b0dd429b3a58f6dfa69">&#9670;&nbsp;</a></span>originalWeight</h2>
+<a id="a3a08aa98339dde2b7ab4f47605fe45bf" name="a3a08aa98339dde2b7ab4f47605fe45bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a08aa98339dde2b7ab4f47605fe45bf">&#9670;&nbsp;</a></span>getBentResult()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">castor::Point4f castor3d::SubsurfaceScatteringPass::BlurWeights::originalWeight</td>
+          <td class="memname"><a class="el" href="../../db/dc9/a04378.html">Texture</a> const  &amp; castor3d::SsaoRawAOPass::getBentResult </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
-<li>Render/Technique/Opaque/Lighting/<a class="el" href="../../d0/d85/a00908.html">SubsurfaceScatteringPass.hpp</a></li>
+<a id="a8e629838dc57e1736ae9dc9c2d82ddf7" name="a8e629838dc57e1736ae9dc9c2d82ddf7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e629838dc57e1736ae9dc9c2d82ddf7">&#9670;&nbsp;</a></span>getLastPass()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">crg::FramePass const  &amp; castor3d::SsaoRawAOPass::getLastPass </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9c2a1e0dbb63ad643d1803b3493e34b4" name="a9c2a1e0dbb63ad643d1803b3493e34b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c2a1e0dbb63ad643d1803b3493e34b4">&#9670;&nbsp;</a></span>getResult()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dc9/a04378.html">Texture</a> const  &amp; castor3d::SsaoRawAOPass::getResult </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >name Getters. </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>Render/Ssao/<a class="el" href="../../da/d5b/a00905.html">SsaoRawAOPass.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 15:34:56 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:51 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

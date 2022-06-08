@@ -1,360 +1,342 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="d2/d95/a04030" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::PipelineFlags</compoundname>
-    <includes local="no">RenderModule.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d2/d95/a04030_1aab051b1ee46ace763681dfea200198d2" prot="public" static="no" mutable="no">
-        <type><ref refid="dc/df4/a01401_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
-        <definition>BlendMode castor3d::PipelineFlags::colourBlendMode</definition>
+  <compounddef id="d2/d95/a04030" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::RenderLoopSync</compoundname>
+    <basecompoundref refid="d7/d1d/a04018" prot="public" virt="non-virtual">castor3d::RenderLoop</basecompoundref>
+    <includes local="no">RenderLoopSync.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/d95/a04030_1af16062cd1f23b0dacd38209aa79ceecb" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderLoopSync::m_active</definition>
         <argsstring></argsstring>
-        <name>colourBlendMode</name>
-        <qualifiedname>castor3d::PipelineFlags::colourBlendMode</qualifiedname>
+        <name>m_active</name>
+        <qualifiedname>castor3d::RenderLoopSync::m_active</qualifiedname>
         <briefdescription>
+<para>Tells if the render loop is active. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="350" column="11" bodyfile="Render/RenderModule.hpp" bodystart="350" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d95/a04030_1a0831b5262611024fcac18f42f7a29f92" prot="public" static="no" mutable="no">
-        <type><ref refid="dc/df4/a01401_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
-        <definition>BlendMode castor3d::PipelineFlags::alphaBlendMode</definition>
-        <argsstring></argsstring>
-        <name>alphaBlendMode</name>
-        <qualifiedname>castor3d::PipelineFlags::alphaBlendMode</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="351" column="11" bodyfile="Render/RenderModule.hpp" bodystart="351" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d95/a04030_1add12a9fda8077540029ee2482cb3dd31" prot="public" static="no" mutable="no">
-        <type><ref refid="dc/df4/a01401_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref></type>
-        <definition>PassFlags castor3d::PipelineFlags::passFlags</definition>
-        <argsstring></argsstring>
-        <name>passFlags</name>
-        <qualifiedname>castor3d::PipelineFlags::passFlags</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="352" column="11" bodyfile="Render/RenderModule.hpp" bodystart="352" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d95/a04030_1a98434d111c8a331f820f9e1366c15ca8" prot="public" static="no" mutable="no">
-        <type><ref refid="dc/df4/a01401_1a567298c1844e69d8252f0b8c14206f60" kindref="member">RenderPassTypeID</ref></type>
-        <definition>RenderPassTypeID castor3d::PipelineFlags::renderPassType</definition>
-        <argsstring></argsstring>
-        <name>renderPassType</name>
-        <qualifiedname>castor3d::PipelineFlags::renderPassType</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="353" column="18" bodyfile="Render/RenderModule.hpp" bodystart="353" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d95/a04030_1a5bd12d6aaf76be33b2d561a02357683b" prot="public" static="no" mutable="no">
-        <type><ref refid="dc/df4/a01401_1a773fcfeb825d3fe54eb4a3dce23bca11" kindref="member">PassTypeID</ref></type>
-        <definition>PassTypeID castor3d::PipelineFlags::passType</definition>
-        <argsstring></argsstring>
-        <name>passType</name>
-        <qualifiedname>castor3d::PipelineFlags::passType</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="354" column="12" bodyfile="Render/RenderModule.hpp" bodystart="354" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d95/a04030_1a84af70d15122942aac813f3e8aecddaa" prot="public" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::PipelineFlags::heightMapIndex</definition>
-        <argsstring></argsstring>
-        <name>heightMapIndex</name>
-        <qualifiedname>castor3d::PipelineFlags::heightMapIndex</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="355" column="10" bodyfile="Render/RenderModule.hpp" bodystart="355" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d95/a04030_1aa3db54fd73e1d41fa2e66989fea924c1" prot="public" static="no" mutable="no">
-        <type><ref refid="dc/df4/a01401_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
-        <definition>ProgramFlags castor3d::PipelineFlags::programFlags</definition>
-        <argsstring></argsstring>
-        <name>programFlags</name>
-        <qualifiedname>castor3d::PipelineFlags::programFlags</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="356" column="14" bodyfile="Render/RenderModule.hpp" bodystart="356" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d95/a04030_1a8572e6b81c50a0a8a39d0104ecdad193" prot="public" static="no" mutable="no">
-        <type><ref refid="dc/df4/a01401_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref></type>
-        <definition>SceneFlags castor3d::PipelineFlags::sceneFlags</definition>
-        <argsstring></argsstring>
-        <name>sceneFlags</name>
-        <qualifiedname>castor3d::PipelineFlags::sceneFlags</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="357" column="12" bodyfile="Render/RenderModule.hpp" bodystart="357" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d95/a04030_1a82e267d99f0d0f3103eb76e4ab1a22b2" prot="public" static="no" mutable="no">
-        <type>VkPrimitiveTopology</type>
-        <definition>VkPrimitiveTopology castor3d::PipelineFlags::topology</definition>
-        <argsstring></argsstring>
-        <name>topology</name>
-        <qualifiedname>castor3d::PipelineFlags::topology</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="358" column="21" bodyfile="Render/RenderModule.hpp" bodystart="358" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d95/a04030_1a0d59a3d9de048c7a8b6a9c6e3b1f49ca" prot="public" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::PipelineFlags::patchVertices</definition>
-        <argsstring></argsstring>
-        <name>patchVertices</name>
-        <qualifiedname>castor3d::PipelineFlags::patchVertices</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="359" column="10" bodyfile="Render/RenderModule.hpp" bodystart="359" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d95/a04030_1a8eaf995825164170240006c2402e4997" prot="public" static="no" mutable="no">
-        <type>VkCompareOp</type>
-        <definition>VkCompareOp castor3d::PipelineFlags::alphaFunc</definition>
-        <argsstring></argsstring>
-        <name>alphaFunc</name>
-        <qualifiedname>castor3d::PipelineFlags::alphaFunc</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="360" column="13" bodyfile="Render/RenderModule.hpp" bodystart="360" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d95/a04030_1acae901eee417fb91f2194403bf759c20" prot="public" static="no" mutable="no">
-        <type>VkCompareOp</type>
-        <definition>VkCompareOp castor3d::PipelineFlags::blendAlphaFunc</definition>
-        <argsstring></argsstring>
-        <name>blendAlphaFunc</name>
-        <qualifiedname>castor3d::PipelineFlags::blendAlphaFunc</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="361" column="13" bodyfile="Render/RenderModule.hpp" bodystart="361" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d95/a04030_1a62246d4d0ff4e40f9c38229b202af418" prot="public" static="no" mutable="no">
-        <type><ref refid="dc/df4/a01401_1afa51b269ca00eaeff4f95f361bf2208f" kindref="member">TextureFlagsArray</ref></type>
-        <definition>TextureFlagsArray castor3d::PipelineFlags::textures</definition>
-        <argsstring></argsstring>
-        <name>textures</name>
-        <qualifiedname>castor3d::PipelineFlags::textures</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="362" column="19" bodyfile="Render/RenderModule.hpp" bodystart="362" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d95/a04030_1a6b531356772b3895871068b0b1d292c4" prot="public" static="no" mutable="no">
-        <type><ref refid="dc/df4/a01401_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref></type>
-        <definition>TextureFlags castor3d::PipelineFlags::texturesFlags</definition>
-        <argsstring></argsstring>
-        <name>texturesFlags</name>
-        <qualifiedname>castor3d::PipelineFlags::texturesFlags</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="363" column="14" bodyfile="Render/RenderModule.hpp" bodystart="363" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d2/d95/a04030_1a5d246fc53a1d1d33294fa5627779e619" prot="public" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::PipelineFlags::layerIndex</definition>
-        <argsstring></argsstring>
-        <name>layerIndex</name>
-        <qualifiedname>castor3d::PipelineFlags::layerIndex</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="364" column="10" bodyfile="Render/RenderModule.hpp" bodystart="364" bodyend="-1"/>
+        <location file="Render/RenderLoopSync.hpp" line="57" column="6" bodyfile="Render/RenderLoopSync.hpp" bodystart="57" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d2/d95/a04030_1aa8c6ce591fe0a647829f86479ed7ba10" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::PipelineFlags::PipelineFlags</definition>
-        <argsstring>(BlendMode colourBlendMode=BlendMode::eNoBlend, BlendMode alphaBlendMode=BlendMode::eNoBlend, PassFlags passFlags=PassFlag::eNone, RenderPassTypeID renderPassType=0u, PassTypeID passType=0u, uint32_t heightMapIndex=InvalidIndex, ProgramFlags programFlags=ProgramFlag::eNone, SceneFlags sceneFlags=SceneFlag::eNone, VkPrimitiveTopology topology=VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, uint32_t patchVertices=3u, VkCompareOp alphaFunc=VK_COMPARE_OP_ALWAYS, VkCompareOp blendAlphaFunc=VK_COMPARE_OP_ALWAYS, TextureFlagsArray textures={}, uint32_t layerIndex={})</argsstring>
-        <name>PipelineFlags</name>
-        <qualifiedname>castor3d::PipelineFlags::PipelineFlags</qualifiedname>
+      <memberdef kind="function" id="d2/d95/a04030_1ac020f68f41bd51da5f2b8e4b3a7aabb2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::RenderLoopSync::RenderLoopSync</definition>
+        <argsstring>(Engine &amp;engine, uint32_t wantedFPS)</argsstring>
+        <name>RenderLoopSync</name>
+        <qualifiedname>castor3d::RenderLoopSync::RenderLoopSync</qualifiedname>
         <param>
-          <type><ref refid="dc/df4/a01401_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
-          <declname>colourBlendMode</declname>
-          <defval><ref refid="dc/df4/a01401_1a840ab6fd50c1a08fcc1b6dc3f98d90faa12c10e6e0388d587340cfbe98b5045ae" kindref="member">BlendMode::eNoBlend</ref></defval>
-        </param>
-        <param>
-          <type><ref refid="dc/df4/a01401_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
-          <declname>alphaBlendMode</declname>
-          <defval><ref refid="dc/df4/a01401_1a840ab6fd50c1a08fcc1b6dc3f98d90faa12c10e6e0388d587340cfbe98b5045ae" kindref="member">BlendMode::eNoBlend</ref></defval>
-        </param>
-        <param>
-          <type><ref refid="dc/df4/a01401_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref></type>
-          <declname>passFlags</declname>
-          <defval><ref refid="dc/df4/a01401_1a043cb84a97fa62d2b78e9f4ec3238f70abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">PassFlag::eNone</ref></defval>
-        </param>
-        <param>
-          <type><ref refid="dc/df4/a01401_1a567298c1844e69d8252f0b8c14206f60" kindref="member">RenderPassTypeID</ref></type>
-          <declname>renderPassType</declname>
-          <defval>0u</defval>
-        </param>
-        <param>
-          <type><ref refid="dc/df4/a01401_1a773fcfeb825d3fe54eb4a3dce23bca11" kindref="member">PassTypeID</ref></type>
-          <declname>passType</declname>
-          <defval>0u</defval>
+          <type><ref refid="d9/db1/a02718" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
         </param>
         <param>
           <type>uint32_t</type>
-          <declname>heightMapIndex</declname>
-          <defval><ref refid="dc/df4/a01401_1a2533c48f44e5f343ab52f930f7fec110" kindref="member">InvalidIndex</ref></defval>
-        </param>
-        <param>
-          <type><ref refid="dc/df4/a01401_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
-          <declname>programFlags</declname>
-          <defval><ref refid="dc/df4/a01401_1a6dbeb5480c4a424e0c24ace65835778babe988781e4e1de1c6a36fb698afbbe1f" kindref="member">ProgramFlag::eNone</ref></defval>
-        </param>
-        <param>
-          <type><ref refid="dc/df4/a01401_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref></type>
-          <declname>sceneFlags</declname>
-          <defval><ref refid="dc/df4/a01401_1a0282168ae87222228c5a154c419deb51abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">SceneFlag::eNone</ref></defval>
-        </param>
-        <param>
-          <type>VkPrimitiveTopology</type>
-          <declname>topology</declname>
-          <defval>VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST</defval>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>patchVertices</declname>
-          <defval>3u</defval>
-        </param>
-        <param>
-          <type>VkCompareOp</type>
-          <declname>alphaFunc</declname>
-          <defval>VK_COMPARE_OP_ALWAYS</defval>
-        </param>
-        <param>
-          <type>VkCompareOp</type>
-          <declname>blendAlphaFunc</declname>
-          <defval>VK_COMPARE_OP_ALWAYS</defval>
-        </param>
-        <param>
-          <type><ref refid="dc/df4/a01401_1afa51b269ca00eaeff4f95f361bf2208f" kindref="member">TextureFlagsArray</ref></type>
-          <declname>textures</declname>
-          <defval>{}</defval>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>layerIndex</declname>
-          <defval>{}</defval>
+          <declname>wantedFPS</declname>
         </param>
         <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">wantedFPS</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The wanted FPS count. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoopSync.hpp" line="25" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d95/a04030_1ad3524cefff4b7ca6e92f4c1475212d24" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::RenderLoopSync::~RenderLoopSync</definition>
+        <argsstring>() override</argsstring>
+        <name>~RenderLoopSync</name>
+        <qualifiedname>castor3d::RenderLoopSync::~RenderLoopSync</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="318" column="1" bodyfile="Render/RenderModule.hpp" bodystart="318" bodyend="348"/>
+        <location file="Render/RenderLoopSync.hpp" line="33" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d95/a04030_1ac849b8aea69ba1e907d697d8d6fec1a9" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderLoopSync::beginRendering</definition>
+        <argsstring>() override</argsstring>
+        <name>beginRendering</name>
+        <qualifiedname>castor3d::RenderLoopSync::beginRendering</qualifiedname>
+        <reimplements refid="d7/d1d/a04018_1a7842a7d67f402edcc24be8fd09973818">beginRendering</reimplements>
+        <briefdescription>
+<para>Starts threaded render loop. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoopSync.hpp" line="37" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d95/a04030_1ae5926ec23f7697887648816bc68ed00c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderLoopSync::renderSyncFrame</definition>
+        <argsstring>(castor::Milliseconds tslf) override</argsstring>
+        <name>renderSyncFrame</name>
+        <qualifiedname>castor3d::RenderLoopSync::renderSyncFrame</qualifiedname>
+        <reimplements refid="d7/d1d/a04018_1aabd4de0429c0e2659058545c6ec1bad2">renderSyncFrame</reimplements>
+        <param>
+          <type>castor::Milliseconds</type>
+          <declname>tslf</declname>
+        </param>
+        <briefdescription>
+<para>Renders one frame, only if not in render loop. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">tslf</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The time elapsed since last frame. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoopSync.hpp" line="41" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d95/a04030_1aa8e92d2a1df7dbd0a8d5881af5d4bc24" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderLoopSync::pause</definition>
+        <argsstring>() override</argsstring>
+        <name>pause</name>
+        <qualifiedname>castor3d::RenderLoopSync::pause</qualifiedname>
+        <reimplements refid="d7/d1d/a04018_1afbc75c36ac22821c05f284e6fee155af">pause</reimplements>
+        <briefdescription>
+<para>Pauses the render loop. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoopSync.hpp" line="45" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d95/a04030_1a59027889dfb53d02becb6189b482fda9" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderLoopSync::resume</definition>
+        <argsstring>() override</argsstring>
+        <name>resume</name>
+        <qualifiedname>castor3d::RenderLoopSync::resume</qualifiedname>
+        <reimplements refid="d7/d1d/a04018_1ae909f2e21ba004087428391048d8db86">resume</reimplements>
+        <briefdescription>
+<para>Resumes the render loop. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoopSync.hpp" line="49" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d95/a04030_1a3976c0787f2b3fd8c413b15f601aae48" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderLoopSync::endRendering</definition>
+        <argsstring>() override</argsstring>
+        <name>endRendering</name>
+        <qualifiedname>castor3d::RenderLoopSync::endRendering</qualifiedname>
+        <reimplements refid="d7/d1d/a04018_1ad9ec6cf47938ab0fb37512d0cf177a51">endRendering</reimplements>
+        <briefdescription>
+<para>Ends the render, cleans up engine. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Ends the threaded render loop, if any. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoopSync.hpp" line="53" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Pipeline flags. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="5">
-        <label>T</label>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::RenderLoop</label>
+        <link refid="d7/d1d/a04018"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
       </node>
       <node id="1">
-        <label>castor3d::PipelineFlags</label>
+        <label>castor3d::RenderLoopSync</label>
         <link refid="d2/d95/a04030"/>
-        <childnode refid="2" relation="usage">
-          <edgelabel>textures</edgelabel>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
       <node id="3">
-        <label>castor3d::TextureFlagsId</label>
-        <link refid="d5/dd8/a02802"/>
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
       </node>
-      <node id="4">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="5" relation="usage">
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="7">
+        <label>T</label>
+      </node>
+      <node id="12">
+        <label>std::array&lt; castor3d::RenderLoop::UploadResources, 2u &gt;</label>
+        <childnode refid="13" relation="usage">
           <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="template-instance">
+          <edgelabel>&lt; castor3d::RenderLoop::UploadResources, 2u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::atomic&lt; castor::Microseconds &gt;</label>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; castor::Microseconds &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::CommandsSemaphore</label>
+        <link refid="db/d06/a03866"/>
+      </node>
+      <node id="9">
+        <label>castor3d::DebugOverlays</label>
+        <link refid="d4/d8b/a03538"/>
+        <childnode refid="3" relation="public-inheritance">
         </childnode>
       </node>
       <node id="2">
-        <label>std::vector&lt; TextureFlagsId &gt;</label>
-        <childnode refid="3" relation="usage">
+        <label>castor3d::RenderLoop</label>
+        <link refid="d7/d1d/a04018"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_lastFrameTime</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>m_debugOverlays</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>m_debugOverlaysMtx</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_uploadResources</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::RenderLoop::UploadResources</label>
+        <link refid="dc/d86/a04022"/>
+        <childnode refid="14" relation="usage">
+          <edgelabel>commands</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::RenderLoopSync</label>
+        <link refid="d2/d95/a04030"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d7/ded/a04130"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="15">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="7" relation="usage">
           <edgelabel>elements</edgelabel>
         </childnode>
-        <childnode refid="4" relation="template-instance">
-          <edgelabel>&lt; TextureFlagsId &gt;</edgelabel>
+      </node>
+      <node id="6">
+        <label>std::atomic&lt; T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>std::mutex</label>
+      </node>
+      <node id="10">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::unique_ptr&lt; castor3d::DebugOverlays &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; castor3d::DebugOverlays &gt;</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Render/RenderModule.hpp" line="316" column="1" bodyfile="Render/RenderModule.hpp" bodystart="317" bodyend="365"/>
+    <location file="Render/RenderLoopSync.hpp" line="11" column="1" bodyfile="Render/RenderLoopSync.hpp" bodystart="13" bodyend="58"/>
     <listofallmembers>
-      <member refid="d2/d95/a04030_1a0831b5262611024fcac18f42f7a29f92" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>alphaBlendMode</name></member>
-      <member refid="d2/d95/a04030_1a8eaf995825164170240006c2402e4997" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>alphaFunc</name></member>
-      <member refid="d2/d95/a04030_1acae901eee417fb91f2194403bf759c20" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>blendAlphaFunc</name></member>
-      <member refid="d2/d95/a04030_1aab051b1ee46ace763681dfea200198d2" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>colourBlendMode</name></member>
-      <member refid="d2/d95/a04030_1a84af70d15122942aac813f3e8aecddaa" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>heightMapIndex</name></member>
-      <member refid="d2/d95/a04030_1a5d246fc53a1d1d33294fa5627779e619" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>layerIndex</name></member>
-      <member refid="d2/d95/a04030_1add12a9fda8077540029ee2482cb3dd31" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>passFlags</name></member>
-      <member refid="d2/d95/a04030_1a5bd12d6aaf76be33b2d561a02357683b" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>passType</name></member>
-      <member refid="d2/d95/a04030_1a0d59a3d9de048c7a8b6a9c6e3b1f49ca" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>patchVertices</name></member>
-      <member refid="d2/d95/a04030_1aa8c6ce591fe0a647829f86479ed7ba10" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>PipelineFlags</name></member>
-      <member refid="d2/d95/a04030_1aa3db54fd73e1d41fa2e66989fea924c1" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>programFlags</name></member>
-      <member refid="d2/d95/a04030_1a98434d111c8a331f820f9e1366c15ca8" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>renderPassType</name></member>
-      <member refid="d2/d95/a04030_1a8572e6b81c50a0a8a39d0104ecdad193" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>sceneFlags</name></member>
-      <member refid="d2/d95/a04030_1a62246d4d0ff4e40f9c38229b202af418" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>textures</name></member>
-      <member refid="d2/d95/a04030_1a6b531356772b3895871068b0b1d292c4" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>texturesFlags</name></member>
-      <member refid="d2/d95/a04030_1a82e267d99f0d0f3103eb76e4ab1a22b2" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>topology</name></member>
+      <member refid="d2/d95/a04030_1ac849b8aea69ba1e907d697d8d6fec1a9" prot="public" virt="virtual"><scope>castor3d::RenderLoopSync</scope><name>beginRendering</name></member>
+      <member refid="d7/d1d/a04018_1ad8988f97407d38c23b3f7ab1c5aa6c91" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>cleanup</name></member>
+      <member refid="d7/d1d/a04018_1adb8cd1592c293d4f956365f0e958e92d" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>doRenderFrame</name></member>
+      <member refid="d7/d1d/a04018_1a04a7351eb46eba5aa6c227512f3903c3" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>dumpFrameTimes</name></member>
+      <member refid="d7/d1d/a04018_1a9920fa7ccc5a06415b08e238e1f4754f" prot="public" virt="virtual"><scope>castor3d::RenderLoopSync</scope><name>enableVSync</name></member>
+      <member refid="d2/d95/a04030_1a3976c0787f2b3fd8c413b15f601aae48" prot="public" virt="virtual"><scope>castor3d::RenderLoopSync</scope><name>endRendering</name></member>
+      <member refid="d7/d1d/a04018_1ab0cce3459fd96396758d47675c0d0f45" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>flushEvents</name></member>
+      <member refid="d7/d1d/a04018_1a60e53e14809ebd66fa6fbfbc92e14d58" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>getAvgFrameTime</name></member>
+      <member refid="d7/d1d/a04018_1abce67ba6a22426d1555dcfb813432242" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>getFrameTime</name></member>
+      <member refid="d7/d1d/a04018_1a74acb481115f9d2c3084bfb81a3dbe3f" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>getLastFrameTime</name></member>
+      <member refid="d7/d1d/a04018_1a4f497f75e762e1308a6d972114f845ac" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>getWantedFps</name></member>
+      <member refid="d7/d1d/a04018_1a60b8176ab5eb5ca6b25663f955780e3e" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>hasDebugOverlays</name></member>
+      <member refid="d2/d95/a04030_1af16062cd1f23b0dacd38209aa79ceecb" prot="private" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_active</name></member>
+      <member refid="d7/d1d/a04018_1a03f6c7a9ec87f3e1e24dfc1bf8868b89" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_currentUpdate</name></member>
+      <member refid="d7/d1d/a04018_1a3df1d0d853b8d30a64f9491ba2b64206" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_debugOverlays</name></member>
+      <member refid="d7/d1d/a04018_1acda37a7285dc00458860bd65822d34a6" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_debugOverlaysMtx</name></member>
+      <member refid="d7/d1d/a04018_1a3fdea4c3d454da13b6874d71d031772a" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_frameTime</name></member>
+      <member refid="d7/d1d/a04018_1aadd20893be5df0f0a8bdfe52b5f4d148" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_lastFrameTime</name></member>
+      <member refid="d7/d1d/a04018_1a12c0e4650d67b30b6d3d8af64a6fdea6" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_renderSystem</name></member>
+      <member refid="d7/d1d/a04018_1a6ff0941180c29396e2176994260c9fd5" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_toWait</name></member>
+      <member refid="d7/d1d/a04018_1a110d978875d737faa37572c0d01417f3" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_uploadResources</name></member>
+      <member refid="d7/d1d/a04018_1aca51dfa60d759d003d2e706b33124933" prot="protected" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>m_wantedFPS</name></member>
+      <member refid="d2/d95/a04030_1aa8e92d2a1df7dbd0a8d5881af5d4bc24" prot="public" virt="virtual"><scope>castor3d::RenderLoopSync</scope><name>pause</name></member>
+      <member refid="d7/d1d/a04018_1a0d67947c5b1193af46bbaf0e0cc7585a" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>registerBuffer</name></member>
+      <member refid="d7/d1d/a04018_1a26a0b1e129f0ee670917a424b133e012" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>registerTimer</name></member>
+      <member refid="d7/d1d/a04018_1a92f9f97a35dd1d47e537f6e6024952b7" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>RenderLoop</name></member>
+      <member refid="d2/d95/a04030_1ac020f68f41bd51da5f2b8e4b3a7aabb2" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>RenderLoopSync</name></member>
+      <member refid="d2/d95/a04030_1ae5926ec23f7697887648816bc68ed00c" prot="public" virt="virtual"><scope>castor3d::RenderLoopSync</scope><name>renderSyncFrame</name></member>
+      <member refid="d2/d95/a04030_1a59027889dfb53d02becb6189b482fda9" prot="public" virt="virtual"><scope>castor3d::RenderLoopSync</scope><name>resume</name></member>
+      <member refid="d7/d1d/a04018_1aebff987d3a1a626374752685dff11c05" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>showDebugOverlays</name></member>
+      <member refid="d7/d1d/a04018_1a886e62492a8383af4e913c392e9c13af" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>UnlimitedFPS</name></member>
+      <member refid="d7/d1d/a04018_1a602c3f0c8a347db8331c9a5926ce0235" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>unregisterBuffer</name></member>
+      <member refid="d7/d1d/a04018_1a32c564fbdef938f9fd21f10834c028ac" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>unregisterTimer</name></member>
+      <member refid="d7/d1d/a04018_1a98370f8e34e7f81f1c9277129c71b718" prot="public" virt="virtual"><scope>castor3d::RenderLoopSync</scope><name>~RenderLoop</name></member>
+      <member refid="d2/d95/a04030_1ad3524cefff4b7ca6e92f4c1475212d24" prot="public" virt="non-virtual"><scope>castor3d::RenderLoopSync</scope><name>~RenderLoopSync</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

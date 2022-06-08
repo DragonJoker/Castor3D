@@ -1,166 +1,174 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="dc/dd9/a03642" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</compoundname>
-    <basecompoundref refid="dc/ddf/a02622" prot="public" virt="non-virtual">castor3d::PtrCacheTraitsBaseT&lt; Plugin, castor::String &gt;</basecompoundref>
-    <includes local="no">PluginModule.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="dc/dd9/a03642_1a3a7ebedca12dc66d4cde1208fa098384" prot="public" static="no">
-        <type><ref refid="dc/d12/a03634" kindref="compound">Plugin</ref></type>
-        <definition>using castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::ResT =  Plugin</definition>
+  <compounddef id="dc/dd9/a03642" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::TextOverlay::DisplayableChar</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dc/dd9/a03642_1a9e4bb5efb7a4edc4df3c4f4fe756a255" prot="public" static="no" mutable="no">
+        <type>castor::Point2d</type>
+        <definition>castor::Point2d castor3d::TextOverlay::DisplayableChar::m_position</definition>
         <argsstring></argsstring>
-        <name>ResT</name>
-        <qualifiedname>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::ResT</qualifiedname>
+        <name>m_position</name>
+        <qualifiedname>castor3d::TextOverlay::DisplayableChar::m_position</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The character position, relative to its line. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/PluginModule.hpp" line="176" column="1" bodyfile="Plugin/PluginModule.hpp" bodystart="176" bodyend="-1"/>
+        <location file="Overlay/TextOverlay.hpp" line="274" column="17" bodyfile="Overlay/TextOverlay.hpp" bodystart="274" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="typedef" id="dc/dd9/a03642_1abd5210a976106167ac5461f5946a2759" prot="public" static="no">
-        <type>castor::String</type>
-        <definition>using castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::KeyT =  castor::String</definition>
+      <memberdef kind="variable" id="dc/dd9/a03642_1af84b833128db6996ffd0ae27d2978640" prot="public" static="no" mutable="no">
+        <type>castor::Point2d</type>
+        <definition>castor::Point2d castor3d::TextOverlay::DisplayableChar::m_size</definition>
         <argsstring></argsstring>
-        <name>KeyT</name>
-        <qualifiedname>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::KeyT</qualifiedname>
+        <name>m_size</name>
+        <qualifiedname>castor3d::TextOverlay::DisplayableChar::m_size</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The character dimensions. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/PluginModule.hpp" line="177" column="1" bodyfile="Plugin/PluginModule.hpp" bodystart="177" bodyend="-1"/>
+        <location file="Overlay/TextOverlay.hpp" line="277" column="17" bodyfile="Overlay/TextOverlay.hpp" bodystart="277" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="typedef" id="dc/dd9/a03642_1aef68b46ba183462d32e94a49a4f30dfe" prot="public" static="no">
-        <type><ref refid="dc/ddf/a02622" kindref="compound">PtrCacheTraitsBaseT</ref>&lt; <ref refid="dc/dd9/a03642_1a3a7ebedca12dc66d4cde1208fa098384" kindref="member">ResT</ref>, <ref refid="dc/dd9/a03642_1abd5210a976106167ac5461f5946a2759" kindref="member">KeyT</ref> &gt;</type>
-        <definition>using castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::Base =  PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;</definition>
+      <memberdef kind="variable" id="dc/dd9/a03642_1aa7c0972fe90e078a4cd5a0d6ce875a9d" prot="public" static="no" mutable="no">
+        <type>castor::Glyph const  &amp;</type>
+        <definition>castor::Glyph const&amp; castor3d::TextOverlay::DisplayableChar::m_glyph</definition>
         <argsstring></argsstring>
-        <name>Base</name>
-        <qualifiedname>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::Base</qualifiedname>
+        <name>m_glyph</name>
+        <qualifiedname>castor3d::TextOverlay::DisplayableChar::m_glyph</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The character to display. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/PluginModule.hpp" line="178" column="1" bodyfile="Plugin/PluginModule.hpp" bodystart="178" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="dc/dd9/a03642_1a5005be55b3e3371eceb9c3e751401de8" prot="public" static="no">
-        <type>typename <ref refid="dc/ddf/a02622_1a97fc821a6c93a6497ce29ef7ee81d091" kindref="member">Base::ElementT</ref></type>
-        <definition>using castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::ElementT =  typename Base::ElementT</definition>
-        <argsstring></argsstring>
-        <name>ElementT</name>
-        <qualifiedname>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::ElementT</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Plugin/PluginModule.hpp" line="179" column="1" bodyfile="Plugin/PluginModule.hpp" bodystart="179" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="dc/dd9/a03642_1aaacc30ce0b352a7897839640c9bb1fac" prot="public" static="no">
-        <type>typename <ref refid="dc/ddf/a02622_1a1bb78b2e2efba448f1bab3f5714b9943" kindref="member">Base::ElementPtrT</ref></type>
-        <definition>using castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::ElementPtrT =  typename Base::ElementPtrT</definition>
-        <argsstring></argsstring>
-        <name>ElementPtrT</name>
-        <qualifiedname>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::ElementPtrT</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Plugin/PluginModule.hpp" line="180" column="1" bodyfile="Plugin/PluginModule.hpp" bodystart="180" bodyend="-1"/>
+        <location file="Overlay/TextOverlay.hpp" line="280" column="22" bodyfile="Overlay/TextOverlay.hpp" bodystart="280" bodyend="-1"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="dc/dd9/a03642_1a5a4bfb21dc9cc00987e21d8231046cf2" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
-        <definition>C3D_API const castor::String castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::Name</definition>
-        <argsstring></argsstring>
-        <name>Name</name>
-        <qualifiedname>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;::Name</qualifiedname>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/dd9/a03642_1ab698c99baf19934b02c2d6021edb2fd3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::TextOverlay::DisplayableChar::DisplayableChar</definition>
+        <argsstring>(castor::Point2d const &amp;position, castor::Point2d const &amp;size, castor::Glyph const &amp;glyph)</argsstring>
+        <name>DisplayableChar</name>
+        <qualifiedname>castor3d::TextOverlay::DisplayableChar::DisplayableChar</qualifiedname>
+        <param>
+          <type>castor::Point2d const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <param>
+          <type>castor::Point2d const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>castor::Glyph const &amp;</type>
+          <declname>glyph</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/PluginModule.hpp" line="182" column="37" bodyfile="Plugin/PluginModule.hpp" bodystart="182" bodyend="-1"/>
+        <location file="Overlay/TextOverlay.hpp" line="282" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="282" bodyend="289"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dd9/a03642_1acfd1f3bd9cf4b469d3fab2c5096eb08a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::TextOverlay::DisplayableChar::DisplayableChar</definition>
+        <argsstring>(DisplayableChar const &amp;rhs)</argsstring>
+        <name>DisplayableChar</name>
+        <qualifiedname>castor3d::TextOverlay::DisplayableChar::DisplayableChar</qualifiedname>
+        <param>
+          <type>DisplayableChar const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="291" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="291" bodyend="296"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dd9/a03642_1aa72bc9794b7d66d99a0d1c9a57f423f8" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::TextOverlay::DisplayableChar::DisplayableChar</definition>
+        <argsstring>(DisplayableChar &amp;&amp;rhs) noexcept</argsstring>
+        <name>DisplayableChar</name>
+        <qualifiedname>castor3d::TextOverlay::DisplayableChar::DisplayableChar</qualifiedname>
+        <param>
+          <type>DisplayableChar &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="298" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="298" bodyend="303"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dd9/a03642_1ae82dca64a7e1b7a5b83df53bb48a9eca" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>DisplayableChar &amp;</type>
+        <definition>DisplayableChar &amp; castor3d::TextOverlay::DisplayableChar::operator=</definition>
+        <argsstring>(DisplayableChar const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::TextOverlay::DisplayableChar::operator=</qualifiedname>
+        <param>
+          <type>DisplayableChar const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="305" column="18" bodyfile="Overlay/TextOverlay.hpp" bodystart="305" bodyend="310"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dd9/a03642_1af1aeb7518323fe5683728b050aeba70f" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>DisplayableChar &amp;</type>
+        <definition>DisplayableChar &amp; castor3d::TextOverlay::DisplayableChar::operator=</definition>
+        <argsstring>(DisplayableChar &amp;&amp;rhs) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::TextOverlay::DisplayableChar::operator=</qualifiedname>
+        <param>
+          <type>DisplayableChar &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="312" column="18" bodyfile="Overlay/TextOverlay.hpp" bodystart="312" bodyend="321"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>A character, along with its size and relative position. </para>
     </briefdescription>
     <detaileddescription>
-<para>Helper structure to specialise a cache behaviour. <simplesect kind="remark"><para>Specialisation for <ref refid="dc/d12/a03634" kindref="compound">Plugin</ref>. </para>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="date"><para>28/01/2016 </para>
 </simplesect>
 </para>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="2">
-        <label>castor3d::PtrCacheTraitsBaseT&lt; Plugin, castor::String &gt;</label>
-        <link refid="dc/ddf/a02622"/>
-        <childnode refid="3" relation="template-instance">
-          <edgelabel>&lt; Plugin, castor::String &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3">
-        <label>castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;</label>
-        <link refid="dc/ddf/a02622"/>
-      </node>
-      <node id="1">
-        <label>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</label>
-        <link refid="dc/dd9/a03642"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="2">
-        <label>castor3d::PtrCacheTraitsBaseT&lt; Plugin, castor::String &gt;</label>
-        <link refid="dc/ddf/a02622"/>
-        <childnode refid="3" relation="template-instance">
-          <edgelabel>&lt; Plugin, castor::String &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3">
-        <label>castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;</label>
-        <link refid="dc/ddf/a02622"/>
-      </node>
-      <node id="1">
-        <label>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</label>
-        <link refid="dc/dd9/a03642"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Plugin/PluginModule.hpp" line="173" column="1" bodyfile="Plugin/PluginModule.hpp" bodystart="175" bodyend="183"/>
+    <location file="Overlay/TextOverlay.hpp" line="270" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="271" bodyend="322"/>
     <listofallmembers>
-      <member refid="dc/ddf/a02622_1aad74680d04a777cf6e1a48f5335e5bba" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>areElementsEqual</name></member>
-      <member refid="dc/ddf/a02622_1acc9650475bb6cfdd4b46f86662ee4d67" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>areElementsEqual</name></member>
-      <member refid="dc/ddf/a02622_1aace6e188551a79fe4c617062a3987c34" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>areElementsEqual</name></member>
-      <member refid="dc/ddf/a02622_1a604b98a8324764213e894ac5ff3192e4" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>areElementsEqual</name></member>
-      <member refid="dc/dd9/a03642_1aef68b46ba183462d32e94a49a4f30dfe" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>Base</name></member>
-      <member refid="dc/ddf/a02622_1a0606136714bd1cb7209313f2ece3f687" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ElementCacheT</name></member>
-      <member refid="dc/ddf/a02622_1a021a9d07d6fb3fe77b7ef22b5d9fc7e8" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ElementCleanerT</name></member>
-      <member refid="dc/ddf/a02622_1acbb5da0cf908b54ec0b238b4bf290498" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ElementContT</name></member>
-      <member refid="dc/ddf/a02622_1af3b3d08e4639ccc06cbe81f6cb200a64" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ElementInitialiserT</name></member>
-      <member refid="dc/ddf/a02622_1a37487aa6a3179e261c465a659e7e232d" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ElementKeyT</name></member>
-      <member refid="dc/ddf/a02622_1a54c0975e844a33c1ef48f9284b13e984" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ElementMergerT</name></member>
-      <member refid="dc/ddf/a02622_1aeeb13142ba14f28398dcf1b902e1d7df" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ElementObsT</name></member>
-      <member refid="dc/dd9/a03642_1aaacc30ce0b352a7897839640c9bb1fac" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ElementPtrT</name></member>
-      <member refid="dc/dd9/a03642_1a5005be55b3e3371eceb9c3e751401de8" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ElementT</name></member>
-      <member refid="dc/ddf/a02622_1a97feed9b72e3c5d21e10571563ec56f5" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>isElementObsNull</name></member>
-      <member refid="dc/dd9/a03642_1abd5210a976106167ac5461f5946a2759" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>KeyT</name></member>
-      <member refid="dc/ddf/a02622_1a5f00547170a4e85ac4c706f0ac32f9aa" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>makeElement</name></member>
-      <member refid="dc/ddf/a02622_1aba7dca15362049b6e793f1b99d419bb0" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>makeElementObs</name></member>
-      <member refid="dc/dd9/a03642_1a5a4bfb21dc9cc00987e21d8231046cf2" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>Name</name></member>
-      <member refid="dc/dd9/a03642_1a3a7ebedca12dc66d4cde1208fa098384" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</scope><name>ResT</name></member>
+      <member refid="dc/dd9/a03642_1ab698c99baf19934b02c2d6021edb2fd3" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>DisplayableChar</name></member>
+      <member refid="dc/dd9/a03642_1acfd1f3bd9cf4b469d3fab2c5096eb08a" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>DisplayableChar</name></member>
+      <member refid="dc/dd9/a03642_1aa72bc9794b7d66d99a0d1c9a57f423f8" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>DisplayableChar</name></member>
+      <member refid="dc/dd9/a03642_1aa7c0972fe90e078a4cd5a0d6ce875a9d" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>m_glyph</name></member>
+      <member refid="dc/dd9/a03642_1a9e4bb5efb7a4edc4df3c4f4fe756a255" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>m_position</name></member>
+      <member refid="dc/dd9/a03642_1af84b833128db6996ffd0ae27d2978640" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>m_size</name></member>
+      <member refid="dc/dd9/a03642_1ae82dca64a7e1b7a5b83df53bb48a9eca" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>operator=</name></member>
+      <member refid="dc/dd9/a03642_1af1aeb7518323fe5683728b050aeba70f" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>operator=</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,26 +42,26 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../d0/d95/a01389.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d1/dfc/a02554.html">VertexBufferPool</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d1/dfc/a02554.html">GpuBufferPackedAllocator</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
-  <div class="headertitle"><div class="title">castor3d::VertexBufferPool Member List</div></div>
+  <div class="headertitle"><div class="title">castor3d::GpuBufferPackedAllocator Member List</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>This is the complete list of members for <a class="el" href="../../d1/dfc/a02554.html">castor3d::VertexBufferPool</a>, including all inherited members.</p>
+<p>This is the complete list of members for <a class="el" href="../../d1/dfc/a02554.html">castor3d::GpuBufferPackedAllocator</a>, including all inherited members.</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="../../d1/dfc/a02554.html#afad282e47ef4ab750068b878c75918a4">BufferArray</a> typedef</td><td class="entry"><a class="el" href="../../d1/dfc/a02554.html">castor3d::VertexBufferPool</a></td><td class="entry"></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="../../d1/dfc/a02554.html#a36f53006ad04358a2bdb417665f0967c">cleanup</a>()</td><td class="entry"><a class="el" href="../../d1/dfc/a02554.html">castor3d::VertexBufferPool</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d1/dfc/a02554.html#afe52952de162c864c29351e3b275be45">getBuffer</a>(VkDeviceSize vertexCount)</td><td class="entry"><a class="el" href="../../d1/dfc/a02554.html">castor3d::VertexBufferPool</a></td><td class="entry"></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="../../d1/dfc/a02554.html#a3c71affbf981e3697491d9f29b001bf3">putBuffer</a>(ObjectBufferOffset const &amp;bufferOffset)</td><td class="entry"><a class="el" href="../../d1/dfc/a02554.html">castor3d::VertexBufferPool</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d1/dfc/a02554.html#a1d6db49873c867956eda7f99b6004878">upload</a>(ashes::CommandBuffer const &amp;cb)</td><td class="entry"><a class="el" href="../../d1/dfc/a02554.html">castor3d::VertexBufferPool</a></td><td class="entry"></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="../../d1/dfc/a02554.html#a2187e5f9d54ce11c516484737be7ab09">VertexBufferPool</a>(RenderDevice const &amp;device, castor::String debugName)</td><td class="entry"><a class="el" href="../../d1/dfc/a02554.html">castor3d::VertexBufferPool</a></td><td class="entry"><span class="mlabel">explicit</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d1/dfc/a02554.html#a8b77bc98a50fcc69fac4b9af0036a388">allocate</a>(size_t size)</td><td class="entry"><a class="el" href="../../d1/dfc/a02554.html">castor3d::GpuBufferPackedAllocator</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="../../d1/dfc/a02554.html#a616402f874bdc44eaa7fae848c852e1d">deallocate</a>(VkDeviceSize pointer)</td><td class="entry"><a class="el" href="../../d1/dfc/a02554.html">castor3d::GpuBufferPackedAllocator</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d1/dfc/a02554.html#aaf4125d6b857856a0a5e5d7bab565e2c">getAlignSize</a>() const</td><td class="entry"><a class="el" href="../../d1/dfc/a02554.html">castor3d::GpuBufferPackedAllocator</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="../../d1/dfc/a02554.html#a8003c09271626dd23edc648d8a1da75a">getTotalSize</a>() const</td><td class="entry"><a class="el" href="../../d1/dfc/a02554.html">castor3d::GpuBufferPackedAllocator</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d1/dfc/a02554.html#aa3825d77751b3f3411f48850f940f143">GpuBufferPackedAllocator</a>(size_t size, size_t alignSize=1u)</td><td class="entry"><a class="el" href="../../d1/dfc/a02554.html">castor3d::GpuBufferPackedAllocator</a></td><td class="entry"><span class="mlabel">explicit</span></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="../../d1/dfc/a02554.html#a633e293007c5919cd9d3c71597a48f56">hasAvailable</a>(size_t size) const</td><td class="entry"><a class="el" href="../../d1/dfc/a02554.html">castor3d::GpuBufferPackedAllocator</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
 </table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 02:46:23 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:48 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

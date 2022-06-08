@@ -1,9 +1,7 @@
-<map id="castor3d::SceneFileContext::SceneImportConfig" name="castor3d::SceneFileContext::SceneImportConfig">
-<area shape="rect" id="node1" title=" " alt="" coords="200,452,383,493"/>
-<area shape="rect" id="node2" title=" " alt="" coords="184,333,399,375"/>
-<area shape="rect" id="node3" href="$d4/db9/a02918.html" title="Specifies the usages of a texture, per image component." alt="" coords="5,162,204,189"/>
-<area shape="rect" id="node4" href="$d7/da7/a02914.html" title=" " alt="" coords="15,5,195,32"/>
-<area shape="rect" id="node5" title=" " alt="" coords="361,162,483,189"/>
-<area shape="rect" id="node6" title=" " alt="" coords="371,5,409,32"/>
-<area shape="rect" id="node7" title=" " alt="" coords="435,5,473,32"/>
+<map id="castor3d::LightImporter" name="castor3d::LightImporter">
+<area shape="rect" id="node1" title=" " alt="" coords="637,39,792,65"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,192,32"/>
+<area shape="rect" id="node3" href="$d5/dd8/a02802.html" title=" " alt="" coords="350,39,498,65"/>
+<area shape="rect" id="node4" href="$d5/d08/a03254.html" title=" " alt="" coords="347,90,501,131"/>
+<area shape="rect" id="node5" href="$d5/d08/a03254.html" title="Configuration parameters." alt="" coords="21,90,176,131"/>
 </map>

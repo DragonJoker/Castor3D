@@ -283,12 +283,12 @@
         <location file="Material/Texture/TextureConfiguration.hpp" line="89" column="10" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="89" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d4/db9/a02918_1ac0a1052e53ea847443579fe431f3396e" prot="public" static="no" mutable="no">
-        <type><ref refid="dc/df4/a01401_1a25bb1f0235e1c248f89ec5430ef066fa" kindref="member">TextureSpace</ref></type>
+        <type><ref refid="da/dab/a01362_1a25bb1f0235e1c248f89ec5430ef066fa" kindref="member">TextureSpace</ref></type>
         <definition>TextureSpace castor3d::TextureConfiguration::textureSpace</definition>
         <argsstring></argsstring>
         <name>textureSpace</name>
         <qualifiedname>castor3d::TextureConfiguration::textureSpace</qualifiedname>
-        <initializer>{ <ref refid="dc/df4/a01401_1a25bb1f0235e1c248f89ec5430ef066faa933e146a34d99e16a319642574089a34" kindref="member">TextureSpace::eColour</ref> }</initializer>
+        <initializer>{ <ref refid="da/dab/a01362_1a25bb1f0235e1c248f89ec5430ef066faa933e146a34d99e16a319642574089a34" kindref="member">TextureSpace::eColour</ref> }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -408,7 +408,7 @@
       </sectiondef>
       <sectiondef kind="user-defined">
       <memberdef kind="variable" id="d4/db9/a02918_1a94725c2e24e117b1cc70f49c3b5b1a72" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref> const</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref> const</type>
         <definition>C3D_API TextureConfiguration const castor3d::TextureConfiguration::DiffuseTexture</definition>
         <argsstring></argsstring>
         <name>DiffuseTexture</name>
@@ -423,7 +423,7 @@
         <location file="Material/Texture/TextureConfiguration.hpp" line="118" column="43" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="118" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d4/db9/a02918_1ae639c36b97bddbc08d8a7d0439b121dc" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref> const</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref> const</type>
         <definition>C3D_API TextureConfiguration const castor3d::TextureConfiguration::AlbedoTexture</definition>
         <argsstring></argsstring>
         <name>AlbedoTexture</name>
@@ -437,7 +437,7 @@
         <location file="Material/Texture/TextureConfiguration.hpp" line="119" column="43" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="119" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d4/db9/a02918_1a5ef695d5bade131658f37e1a14f5f59b" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref> const</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref> const</type>
         <definition>C3D_API TextureConfiguration const castor3d::TextureConfiguration::SpecularTexture</definition>
         <argsstring></argsstring>
         <name>SpecularTexture</name>
@@ -451,7 +451,7 @@
         <location file="Material/Texture/TextureConfiguration.hpp" line="120" column="43" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="120" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d4/db9/a02918_1abf8c99efcca210a3096954b172ad0e30" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref> const</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref> const</type>
         <definition>C3D_API TextureConfiguration const castor3d::TextureConfiguration::MetalnessTexture</definition>
         <argsstring></argsstring>
         <name>MetalnessTexture</name>
@@ -465,7 +465,7 @@
         <location file="Material/Texture/TextureConfiguration.hpp" line="121" column="43" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="121" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d4/db9/a02918_1a5fff4a8b8fcbc6d4722babbf215c75b8" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref> const</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref> const</type>
         <definition>C3D_API TextureConfiguration const castor3d::TextureConfiguration::GlossinessTexture</definition>
         <argsstring></argsstring>
         <name>GlossinessTexture</name>
@@ -479,7 +479,7 @@
         <location file="Material/Texture/TextureConfiguration.hpp" line="122" column="43" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="122" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d4/db9/a02918_1a7415a5c654a52aaea94cb4ee4c086bf9" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref> const</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref> const</type>
         <definition>C3D_API TextureConfiguration const castor3d::TextureConfiguration::ShininessTexture</definition>
         <argsstring></argsstring>
         <name>ShininessTexture</name>
@@ -493,7 +493,7 @@
         <location file="Material/Texture/TextureConfiguration.hpp" line="123" column="43" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="123" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d4/db9/a02918_1a12c5aab14be36b3ec068fdbc81092c75" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref> const</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref> const</type>
         <definition>C3D_API TextureConfiguration const castor3d::TextureConfiguration::RoughnessTexture</definition>
         <argsstring></argsstring>
         <name>RoughnessTexture</name>
@@ -507,7 +507,7 @@
         <location file="Material/Texture/TextureConfiguration.hpp" line="124" column="43" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="124" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d4/db9/a02918_1a012d2bc3ccfc70374032151c7e9e95cd" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref> const</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref> const</type>
         <definition>C3D_API TextureConfiguration const castor3d::TextureConfiguration::OpacityTexture</definition>
         <argsstring></argsstring>
         <name>OpacityTexture</name>
@@ -521,7 +521,7 @@
         <location file="Material/Texture/TextureConfiguration.hpp" line="125" column="43" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="125" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d4/db9/a02918_1aee510ac41b51e559707df72d38736ddd" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref> const</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref> const</type>
         <definition>C3D_API TextureConfiguration const castor3d::TextureConfiguration::EmissiveTexture</definition>
         <argsstring></argsstring>
         <name>EmissiveTexture</name>
@@ -535,7 +535,7 @@
         <location file="Material/Texture/TextureConfiguration.hpp" line="126" column="43" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="126" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d4/db9/a02918_1a1e51a1162a86703d81f7e98c1b4d1cdb" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref> const</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref> const</type>
         <definition>C3D_API TextureConfiguration const castor3d::TextureConfiguration::NormalTexture</definition>
         <argsstring></argsstring>
         <name>NormalTexture</name>
@@ -549,7 +549,7 @@
         <location file="Material/Texture/TextureConfiguration.hpp" line="127" column="43" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="127" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d4/db9/a02918_1abdf1e24f2ebcd26dcee4ab20ff4bddf7" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref> const</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref> const</type>
         <definition>C3D_API TextureConfiguration const castor3d::TextureConfiguration::HeightTexture</definition>
         <argsstring></argsstring>
         <name>HeightTexture</name>
@@ -563,7 +563,7 @@
         <location file="Material/Texture/TextureConfiguration.hpp" line="128" column="43" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="128" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d4/db9/a02918_1a02ffd9c3477eba313f1388d35fcb1dfc" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref> const</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref> const</type>
         <definition>C3D_API TextureConfiguration const castor3d::TextureConfiguration::OcclusionTexture</definition>
         <argsstring></argsstring>
         <name>OcclusionTexture</name>
@@ -577,7 +577,7 @@
         <location file="Material/Texture/TextureConfiguration.hpp" line="129" column="43" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="129" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d4/db9/a02918_1ac5b95bac39bad0142c5c6171e810b61f" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref> const</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref> const</type>
         <definition>C3D_API TextureConfiguration const castor3d::TextureConfiguration::TransmittanceTexture</definition>
         <argsstring></argsstring>
         <name>TransmittanceTexture</name>

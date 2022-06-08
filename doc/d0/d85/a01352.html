@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Text/TextRsmConfig.hpp File Reference</title>
+<title>Castor3D: Shader/Ubos/SsaoConfigUbo.hpp File Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,31 +42,87 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_469969d95af928d15e3c7449be229837.html">Text</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_73b4ff1c0d48677e07219a6e5cbe5dfd.html">Shader</a></li><li class="navelem"><a class="el" href="../../dir_7cb5e4c64a1bf58db52aef2025a37836.html">Ubos</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
-  <div class="headertitle"><div class="title">TextRsmConfig.hpp File Reference</div></div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a>  </div>
+  <div class="headertitle"><div class="title">SsaoConfigUbo.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d90/a05159.html">castor::TextWriter&lt; castor3d::RsmConfig &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d0c/a05122.html">castor3d::shader::SsaoConfigData</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/de6/a05126.html">castor3d::SsaoConfigUbo</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:d6/d64/a01399"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d64/a01399.html">castor</a></td></tr>
+<tr class="memitem:da/dab/a01362"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html">castor3d</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:de/d1f/a01364"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d1f/a01364.html">castor3d::shader</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a74621d9134c1a303d2fcff813b0d4074"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d85/a01352.html#a74621d9134c1a303d2fcff813b0d4074">C3D_SsaoConfig</a>(Writer,  Binding,  Set)</td></tr>
+<tr class="separator:a74621d9134c1a303d2fcff813b0d4074"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a74621d9134c1a303d2fcff813b0d4074" name="a74621d9134c1a303d2fcff813b0d4074"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74621d9134c1a303d2fcff813b0d4074">&#9670;&nbsp;</a></span>C3D_SsaoConfig</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define C3D_SsaoConfig</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">Writer, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">Binding, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">Set&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    sdw::Ubo ssaoConfig{ Writer\</div>
+<div class="line">        , <a class="code hl_variable" href="../../dc/de6/a05126.html#ac1e010f129e6693cfbe0af16f5495fc9">castor3d::SsaoConfigUbo::BufferSsaoConfig</a>\</div>
+<div class="line">        , uint32_t( Binding )\</div>
+<div class="line">        , uint32_t( Set )\</div>
+<div class="line">        , ast::type::MemoryLayout::eStd140\</div>
+<div class="line">        , <span class="keyword">true</span> };\</div>
+<div class="line">    auto c3d_ssaoConfigData = ssaoConfig.declMember&lt; <a class="code hl_struct" href="../../dc/d0c/a05122.html">castor3d::shader::SsaoConfigData</a> &gt;( <a class="code hl_variable" href="../../dc/de6/a05126.html#afd0d9c0fbae7cb81b6d009c50c3e48f3">castor3d::SsaoConfigUbo::SsaoConfigData</a> );\</div>
+<div class="line">    ssaoConfig.end()</div>
+<div class="ttc" id="aa05122_html"><div class="ttname"><a href="../../dc/d0c/a05122.html">castor3d::shader::SsaoConfigData</a></div><div class="ttdef"><b>Definition:</b> SsaoConfigUbo.hpp:23</div></div>
+<div class="ttc" id="aa05126_html_ac1e010f129e6693cfbe0af16f5495fc9"><div class="ttname"><a href="../../dc/de6/a05126.html#ac1e010f129e6693cfbe0af16f5495fc9">castor3d::SsaoConfigUbo::BufferSsaoConfig</a></div><div class="ttdeci">static C3D_API castor::String const BufferSsaoConfig</div><div class="ttdef"><b>Definition:</b> SsaoConfigUbo.hpp:170</div></div>
+<div class="ttc" id="aa05126_html_afd0d9c0fbae7cb81b6d009c50c3e48f3"><div class="ttname"><a href="../../dc/de6/a05126.html#afd0d9c0fbae7cb81b6d009c50c3e48f3">castor3d::SsaoConfigUbo::SsaoConfigData</a></div><div class="ttdeci">static C3D_API castor::String const SsaoConfigData</div><div class="ttdef"><b>Definition:</b> SsaoConfigUbo.hpp:171</div></div>
+</div><!-- fragment -->
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 21:28:50 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:46 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::SceneFileContext::SceneImportConfig Struct Reference</title>
+<title>Castor3D: castor3d::LightImporter Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,172 +42,277 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dc/df4/a01401.html">castor3d</a></li><li class="navelem"><a class="el" href="../../df/dc0/a04602.html">SceneFileContext</a></li><li class="navelem"><a class="el" href="../../d6/d76/a04606.html">SceneImportConfig</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d6/d76/a04606.html">LightImporter</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="../../d6/d55/a04603.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">castor3d::SceneFileContext::SceneImportConfig Struct Reference</div></div>
+  <div class="headertitle"><div class="title">castor3d::LightImporter Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;SceneFileParser.hpp&gt;</code></p>
+<p><code>#include &lt;LightImporter.hpp&gt;</code></p>
 <div class="dynheader">
-Collaboration diagram for castor3d::SceneFileContext::SceneImportConfig:</div>
+Inheritance diagram for castor3d::LightImporter:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../dd/d03/a04604.png" border="0" usemap="#acastor3d_1_1SceneFileContext_1_1SceneImportConfig_coll__map" alt="Collaboration graph"/></div>
-<map name="acastor3d_1_1SceneFileContext_1_1SceneImportConfig_coll__map" id="acastor3d_1_1SceneFileContext_1_1SceneImportConfig_coll__map">
-<area shape="rect" title=" " alt="" coords="200,452,383,493"/>
-<area shape="rect" title=" " alt="" coords="184,333,399,375"/>
-<area shape="rect" href="../../d4/db9/a02918.html" title="Specifies the usages of a texture, per image component." alt="" coords="5,162,204,189"/>
-<area shape="rect" href="../../d7/da7/a02914.html" title=" " alt="" coords="15,5,195,32"/>
-<area shape="rect" title=" " alt="" coords="361,162,483,189"/>
-<area shape="rect" title=" " alt="" coords="371,5,409,32"/>
-<area shape="rect" title=" " alt="" coords="435,5,473,32"/>
+<div class="center"><img src="../../dd/d6c/a04605.png" border="0" usemap="#acastor3d_1_1LightImporter_inherit__map" alt="Inheritance graph"/></div>
+<map name="acastor3d_1_1LightImporter_inherit__map" id="acastor3d_1_1LightImporter_inherit__map">
+<area shape="rect" title=" " alt="" coords="21,80,176,107"/>
+<area shape="rect" title=" " alt="" coords="5,5,192,32"/>
+</map>
+<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
+<div class="dynheader">
+Collaboration diagram for castor3d::LightImporter:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../dd/d03/a04604.png" border="0" usemap="#acastor3d_1_1LightImporter_coll__map" alt="Collaboration graph"/></div>
+<map name="acastor3d_1_1LightImporter_coll__map" id="acastor3d_1_1LightImporter_coll__map">
+<area shape="rect" title=" " alt="" coords="637,39,792,65"/>
+<area shape="rect" title=" " alt="" coords="5,5,192,32"/>
+<area shape="rect" href="../../d5/dd8/a02802.html" title=" " alt="" coords="350,39,498,65"/>
+<area shape="rect" href="../../d5/d08/a03254.html" title=" " alt="" coords="347,90,501,131"/>
+<area shape="rect" href="../../d5/d08/a03254.html" title="Configuration parameters." alt="" coords="21,90,176,131"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:ae3a5a57f3c292b4a02d2fde4e4c866c3"><td class="memItemLeft" align="right" valign="top">castor::Path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d76/a04606.html#ae3a5a57f3c292b4a02d2fde4e4c866c3">file</a></td></tr>
-<tr class="separator:ae3a5a57f3c292b4a02d2fde4e4c866c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaad557c539b6dee11f785e7171f9e47f"><td class="memItemLeft" align="right" valign="top">castor::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d76/a04606.html#aaad557c539b6dee11f785e7171f9e47f">prefix</a></td></tr>
-<tr class="separator:aaad557c539b6dee11f785e7171f9e47f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac48e79d41e37beeecbe91265c9227bb9"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="../../dc/df4/a01401.html#ae3a32e32f3eaa63d0b9886aa3e942742">TextureFlag</a>, <a class="el" href="../../d4/db9/a02918.html">TextureConfiguration</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d76/a04606.html#ac48e79d41e37beeecbe91265c9227bb9">textureRemaps</a></td></tr>
-<tr class="separator:ac48e79d41e37beeecbe91265c9227bb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6cef26615ca379a7acfaac4cd76557f7"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d76/a04606.html#a6cef26615ca379a7acfaac4cd76557f7">rescale</a> { 1.0f }</td></tr>
-<tr class="separator:a6cef26615ca379a7acfaac4cd76557f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae23b93b12411bc43434767899bca3bba"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d76/a04606.html#ae23b93b12411bc43434767899bca3bba">pitch</a> { 0.0f }</td></tr>
-<tr class="separator:ae23b93b12411bc43434767899bca3bba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3d6e8b46d7206716cc1f1c1550c0ffa2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d76/a04606.html#a3d6e8b46d7206716cc1f1c1550c0ffa2">yaw</a> { 0.0f }</td></tr>
-<tr class="separator:a3d6e8b46d7206716cc1f1c1550c0ffa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abed6fccde71e66aac81f943bd1d4e998"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d76/a04606.html#abed6fccde71e66aac81f943bd1d4e998">roll</a> { 0.0f }</td></tr>
-<tr class="separator:abed6fccde71e66aac81f943bd1d4e998"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5c4eccae52c226039278b4d0bfc63b9"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="../../dc/df4/a01401.html#ae3a32e32f3eaa63d0b9886aa3e942742">TextureFlag</a>, <a class="el" href="../../d4/db9/a02918.html">TextureConfiguration</a> &gt;::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d76/a04606.html#ac5c4eccae52c226039278b4d0bfc63b9">textureRemapIt</a></td></tr>
-<tr class="separator:ac5c4eccae52c226039278b4d0bfc63b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a8b297b293b66feb3e1cfbb7065363fef"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d76/a04606.html#a8b297b293b66feb3e1cfbb7065363fef">~LightImporter</a> ()=default</td></tr>
+<tr class="separator:a8b297b293b66feb3e1cfbb7065363fef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6c356a6999992fbb8b255e3a54f5889"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d76/a04606.html#ad6c356a6999992fbb8b255e3a54f5889">LightImporter</a> (<a class="el" href="../../d9/db1/a02718.html">Engine</a> &amp;engine)</td></tr>
+<tr class="memdesc:ad6c356a6999992fbb8b255e3a54f5889"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../d6/d76/a04606.html#ad6c356a6999992fbb8b255e3a54f5889">More...</a><br /></td></tr>
+<tr class="separator:ad6c356a6999992fbb8b255e3a54f5889"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac37902dcc93b7c96f7a90ec25021120"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d76/a04606.html#aac37902dcc93b7c96f7a90ec25021120">import</a> (<a class="el" href="../../d0/d7e/a04594.html">Light</a> &amp;light, <a class="el" href="../../d5/dd8/a02802.html">ImporterFile</a> *file, <a class="el" href="../../da/dab/a01362.html#acd099f112fdafb8d7d06ba8dc9cf4a47">Parameters</a> const &amp;parameters)</td></tr>
+<tr class="memdesc:aac37902dcc93b7c96f7a90ec25021120"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d0/d7e/a04594.html">Light</a> import function.  <a href="../../d6/d76/a04606.html#aac37902dcc93b7c96f7a90ec25021120">More...</a><br /></td></tr>
+<tr class="separator:aac37902dcc93b7c96f7a90ec25021120"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a56a5ce030801629989ee8add2af9863b"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d76/a04606.html#a56a5ce030801629989ee8add2af9863b">import</a> (<a class="el" href="../../d0/d7e/a04594.html">Light</a> &amp;light, castor::Path const &amp;pathFile, <a class="el" href="../../da/dab/a01362.html#acd099f112fdafb8d7d06ba8dc9cf4a47">Parameters</a> const &amp;parameters)</td></tr>
+<tr class="memdesc:a56a5ce030801629989ee8add2af9863b"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d0/d7e/a04594.html">Light</a> import Function.  <a href="../../d6/d76/a04606.html#a56a5ce030801629989ee8add2af9863b">More...</a><br /></td></tr>
+<tr class="separator:a56a5ce030801629989ee8add2af9863b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:ac3543e9896d3e610a862ad912419ea3f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/dd8/a02802.html">ImporterFile</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d76/a04606.html#ac3543e9896d3e610a862ad912419ea3f">m_file</a> {}</td></tr>
+<tr class="separator:ac3543e9896d3e610a862ad912419ea3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc7618d40a844d1b507aa59dd84a3f21"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../da/dab/a01362.html#acd099f112fdafb8d7d06ba8dc9cf4a47">Parameters</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d76/a04606.html#abc7618d40a844d1b507aa59dd84a3f21">m_parameters</a></td></tr>
+<tr class="separator:abc7618d40a844d1b507aa59dd84a3f21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a8b297b293b66feb3e1cfbb7065363fef" name="a8b297b293b66feb3e1cfbb7065363fef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b297b293b66feb3e1cfbb7065363fef">&#9670;&nbsp;</a></span>~LightImporter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual castor3d::LightImporter::~LightImporter </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad6c356a6999992fbb8b255e3a54f5889" name="ad6c356a6999992fbb8b255e3a54f5889"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6c356a6999992fbb8b255e3a54f5889">&#9670;&nbsp;</a></span>LightImporter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::LightImporter::LightImporter </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d9/db1/a02718.html">Engine</a> &amp;&#160;</td>
+          <td class="paramname"><em>engine</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">engine</td><td>The engine. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a56a5ce030801629989ee8add2af9863b" name="a56a5ce030801629989ee8add2af9863b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56a5ce030801629989ee8add2af9863b">&#9670;&nbsp;</a></span>import() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool castor3d::LightImporter::import </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d0/d7e/a04594.html">Light</a> &amp;&#160;</td>
+          <td class="paramname"><em>light</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::Path const &amp;&#160;</td>
+          <td class="paramname"><em>pathFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../da/dab/a01362.html#acd099f112fdafb8d7d06ba8dc9cf4a47">Parameters</a> const &amp;&#160;</td>
+          <td class="paramname"><em>parameters</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="../../d0/d7e/a04594.html">Light</a> import Function. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">light</td><td>Receives the imported data. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pathFile</td><td>The location of the file to import. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">parameters</td><td>Import configuration parameters. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any problem occured. </dd></dl>
+
+</div>
+</div>
+<a id="aac37902dcc93b7c96f7a90ec25021120" name="aac37902dcc93b7c96f7a90ec25021120"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac37902dcc93b7c96f7a90ec25021120">&#9670;&nbsp;</a></span>import() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool castor3d::LightImporter::import </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d0/d7e/a04594.html">Light</a> &amp;&#160;</td>
+          <td class="paramname"><em>light</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d5/dd8/a02802.html">ImporterFile</a> *&#160;</td>
+          <td class="paramname"><em>file</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../da/dab/a01362.html#acd099f112fdafb8d7d06ba8dc9cf4a47">Parameters</a> const &amp;&#160;</td>
+          <td class="paramname"><em>parameters</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="../../d0/d7e/a04594.html">Light</a> import function. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">light</td><td>Receives the imported data. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">file</td><td>The location of the file to import. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">parameters</td><td>Import configuration parameters. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any problem occured. </dd></dl>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="ae3a5a57f3c292b4a02d2fde4e4c866c3" name="ae3a5a57f3c292b4a02d2fde4e4c866c3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae3a5a57f3c292b4a02d2fde4e4c866c3">&#9670;&nbsp;</a></span>file</h2>
+<a id="ac3543e9896d3e610a862ad912419ea3f" name="ac3543e9896d3e610a862ad912419ea3f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3543e9896d3e610a862ad912419ea3f">&#9670;&nbsp;</a></span>m_file</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">castor::Path castor3d::SceneFileContext::SceneImportConfig::file</td>
+          <td class="memname"><a class="el" href="../../d5/dd8/a02802.html">ImporterFile</a>* castor3d::LightImporter::m_file {}</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="ae23b93b12411bc43434767899bca3bba" name="ae23b93b12411bc43434767899bca3bba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae23b93b12411bc43434767899bca3bba">&#9670;&nbsp;</a></span>pitch</h2>
+<a id="abc7618d40a844d1b507aa59dd84a3f21" name="abc7618d40a844d1b507aa59dd84a3f21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc7618d40a844d1b507aa59dd84a3f21">&#9670;&nbsp;</a></span>m_parameters</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float castor3d::SceneFileContext::SceneImportConfig::pitch { 0.0f }</td>
+          <td class="memname"><a class="el" href="../../da/dab/a01362.html#acd099f112fdafb8d7d06ba8dc9cf4a47">Parameters</a> castor3d::LightImporter::m_parameters</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="aaad557c539b6dee11f785e7171f9e47f" name="aaad557c539b6dee11f785e7171f9e47f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaad557c539b6dee11f785e7171f9e47f">&#9670;&nbsp;</a></span>prefix</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">castor::String castor3d::SceneFileContext::SceneImportConfig::prefix</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a6cef26615ca379a7acfaac4cd76557f7" name="a6cef26615ca379a7acfaac4cd76557f7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6cef26615ca379a7acfaac4cd76557f7">&#9670;&nbsp;</a></span>rescale</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float castor3d::SceneFileContext::SceneImportConfig::rescale { 1.0f }</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="abed6fccde71e66aac81f943bd1d4e998" name="abed6fccde71e66aac81f943bd1d4e998"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abed6fccde71e66aac81f943bd1d4e998">&#9670;&nbsp;</a></span>roll</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float castor3d::SceneFileContext::SceneImportConfig::roll { 0.0f }</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ac5c4eccae52c226039278b4d0bfc63b9" name="ac5c4eccae52c226039278b4d0bfc63b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac5c4eccae52c226039278b4d0bfc63b9">&#9670;&nbsp;</a></span>textureRemapIt</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::map&lt;<a class="el" href="../../dc/df4/a01401.html#ae3a32e32f3eaa63d0b9886aa3e942742">TextureFlag</a>,<a class="el" href="../../d4/db9/a02918.html">TextureConfiguration</a>&gt;::iterator castor3d::SceneFileContext::SceneImportConfig::textureRemapIt</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ac48e79d41e37beeecbe91265c9227bb9" name="ac48e79d41e37beeecbe91265c9227bb9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac48e79d41e37beeecbe91265c9227bb9">&#9670;&nbsp;</a></span>textureRemaps</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::map&lt; <a class="el" href="../../dc/df4/a01401.html#ae3a32e32f3eaa63d0b9886aa3e942742">TextureFlag</a>, <a class="el" href="../../d4/db9/a02918.html">TextureConfiguration</a> &gt; castor3d::SceneFileContext::SceneImportConfig::textureRemaps</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a3d6e8b46d7206716cc1f1c1550c0ffa2" name="a3d6e8b46d7206716cc1f1c1550c0ffa2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3d6e8b46d7206716cc1f1c1550c0ffa2">&#9670;&nbsp;</a></span>yaw</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float castor3d::SceneFileContext::SceneImportConfig::yaw { 0.0f }</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
-<li>Scene/<a class="el" href="../../d1/dae/a01136.html">SceneFileParser.hpp</a></li>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>Scene/Light/<a class="el" href="../../d9/d65/a01145.html">LightImporter.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 15:34:56 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:48 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

@@ -1,6 +1,8 @@
-<map id="castor3d::SkyboxBackground" name="castor3d::SkyboxBackground">
-<area shape="rect" id="node1" title=" " alt="" coords="87,155,281,181"/>
-<area shape="rect" id="node2" href="$d8/d1f/a04450.html" title=" " alt="" coords="91,80,277,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,192,32"/>
-<area shape="rect" id="node4" title=" " alt="" coords="216,5,323,32"/>
+<map id="castor3d::AnimatedObject" name="castor3d::AnimatedObject">
+<area shape="rect" id="node1" title=" " alt="" coords="160,81,333,108"/>
+<area shape="rect" id="node3" href="$dd/dc6/a04462.html" title=" " alt="" coords="399,5,566,32"/>
+<area shape="rect" id="node4" href="$dc/d50/a04474.html" title=" " alt="" coords="381,56,584,83"/>
+<area shape="rect" id="node5" href="$d1/d6c/a04478.html" title=" " alt="" coords="389,107,576,133"/>
+<area shape="rect" id="node6" href="$d7/d2e/a04482.html" title=" " alt="" coords="393,157,572,184"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,81,112,108"/>
 </map>

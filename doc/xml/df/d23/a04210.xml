@@ -1,140 +1,535 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="df/d23/a04210" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::LightPass</compoundname>
-    <includes local="no">LightPass.hpp</includes>
-      <sectiondef kind="public-static-func">
-      <memberdef kind="function" id="df/d23/a04210_1abe55a05df6386ae05f0443e872921be2" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dc/df4/a01401_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
-        <definition>static ShaderPtr castor3d::LightPass::getVertexShaderSource</definition>
-        <argsstring>(LightType lightType)</argsstring>
-        <name>getVertexShaderSource</name>
-        <qualifiedname>castor3d::LightPass::getVertexShaderSource</qualifiedname>
+    <compoundname>castor3d::SsaoBlurPass</compoundname>
+    <includes local="no">SsaoBlurPass.hpp</includes>
+    <innerclass refid="d6/d44/a04222" prot="private">castor3d::SsaoBlurPass::Configuration</innerclass>
+    <innerclass refid="d9/d41/a04218" prot="private">castor3d::SsaoBlurPass::Program</innerclass>
+    <innerclass refid="df/dce/a04214" prot="private">castor3d::SsaoBlurPass::RenderQuad</innerclass>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="df/d23/a04210_1afe16371d454d7492f546e3bd6f85164d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/dc9/a04378" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::SsaoBlurPass::getResult</definition>
+        <argsstring>() const</argsstring>
+        <name>getResult</name>
+        <qualifiedname>castor3d::SsaoBlurPass::getResult</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="104" column="16" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="104" bodyend="107"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d23/a04210_1a35a2ab74539d85523a65aea57b8cbe2f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/dc9/a04378" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::SsaoBlurPass::getBentResult</definition>
+        <argsstring>() const</argsstring>
+        <name>getBentResult</name>
+        <qualifiedname>castor3d::SsaoBlurPass::getBentResult</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="109" column="16" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="109" bodyend="112"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d23/a04210_1a22aabd45736fa51821782e34f3837f98" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>crg::FramePass const &amp;</type>
+        <definition>crg::FramePass const  &amp; castor3d::SsaoBlurPass::getLastPass</definition>
+        <argsstring>() const</argsstring>
+        <name>getLastPass</name>
+        <qualifiedname>castor3d::SsaoBlurPass::getLastPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="114" column="23" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="114" bodyend="117"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="df/d23/a04210_1a343a08a767f7be8b47348c683a6f39d7" prot="private" static="no" mutable="no">
+        <type><ref refid="df/d75/a04010" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::SsaoBlurPass::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::SsaoBlurPass::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="157" column="21" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="157" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d23/a04210_1ae91b652bb1ece6605bd28766d272ab9d" prot="private" static="no" mutable="no">
+        <type>crg::FramePassGroup &amp;</type>
+        <definition>crg::FramePassGroup&amp; castor3d::SsaoBlurPass::m_graph</definition>
+        <argsstring></argsstring>
+        <name>m_graph</name>
+        <qualifiedname>castor3d::SsaoBlurPass::m_graph</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="158" column="22" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="158" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d23/a04210_1ae2d5dfad82a7e054e5848a14c00cc729" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/de6/a05126" kindref="compound">SsaoConfigUbo</ref> &amp;</type>
+        <definition>SsaoConfigUbo&amp; castor3d::SsaoBlurPass::m_ssaoConfigUbo</definition>
+        <argsstring></argsstring>
+        <name>m_ssaoConfigUbo</name>
+        <qualifiedname>castor3d::SsaoBlurPass::m_ssaoConfigUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="159" column="16" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="159" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d23/a04210_1a203db8e7065164772b0b22383dde3e1e" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/d79/a05010" kindref="compound">GpInfoUbo</ref> const  &amp;</type>
+        <definition>GpInfoUbo const&amp; castor3d::SsaoBlurPass::m_gpInfoUbo</definition>
+        <argsstring></argsstring>
+        <name>m_gpInfoUbo</name>
+        <qualifiedname>castor3d::SsaoBlurPass::m_gpInfoUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="160" column="18" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="160" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d23/a04210_1afee16f0fe9f34789512c848e86031573" prot="private" static="no" mutable="no">
+        <type><ref refid="db/dc9/a04378" kindref="compound">Texture</ref> const  &amp;</type>
+        <definition>Texture const&amp; castor3d::SsaoBlurPass::m_bentInput</definition>
+        <argsstring></argsstring>
+        <name>m_bentInput</name>
+        <qualifiedname>castor3d::SsaoBlurPass::m_bentInput</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="161" column="16" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="161" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d23/a04210_1a5e5b616c36a9abb4c749233704af8123" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/d73/a04226" kindref="compound">SsaoConfig</ref> const  &amp;</type>
+        <definition>SsaoConfig const&amp; castor3d::SsaoBlurPass::m_config</definition>
+        <argsstring></argsstring>
+        <name>m_config</name>
+        <qualifiedname>castor3d::SsaoBlurPass::m_config</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="162" column="19" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="162" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d23/a04210_1aa0044e0aa9968c20c4f80916f5445ada" prot="private" static="no" mutable="no">
+        <type>VkExtent2D</type>
+        <definition>VkExtent2D castor3d::SsaoBlurPass::m_size</definition>
+        <argsstring></argsstring>
+        <name>m_size</name>
+        <qualifiedname>castor3d::SsaoBlurPass::m_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="163" column="12" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="163" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d23/a04210_1a4ca127f657bfbbfc2217ff34876fff2b" prot="private" static="no" mutable="no">
+        <type><ref refid="db/dc9/a04378" kindref="compound">Texture</ref></type>
+        <definition>Texture castor3d::SsaoBlurPass::m_result</definition>
+        <argsstring></argsstring>
+        <name>m_result</name>
+        <qualifiedname>castor3d::SsaoBlurPass::m_result</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="164" column="9" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="164" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d23/a04210_1a0d67ceb1dbafc89d083d352f255082c4" prot="private" static="no" mutable="no">
+        <type><ref refid="db/dc9/a04378" kindref="compound">Texture</ref></type>
+        <definition>Texture castor3d::SsaoBlurPass::m_bentResult</definition>
+        <argsstring></argsstring>
+        <name>m_bentResult</name>
+        <qualifiedname>castor3d::SsaoBlurPass::m_bentResult</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="165" column="9" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="165" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d23/a04210_1a640ab41322514bbb544f5695ae7caca1" prot="private" static="no" mutable="no">
+        <type><ref refid="d6/de1/a02518" kindref="compound">UniformBufferOffsetT</ref>&lt; Configuration &gt;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::SsaoBlurPass::m_configurationUbo</definition>
+        <argsstring></argsstring>
+        <name>m_configurationUbo</name>
+        <qualifiedname>castor3d::SsaoBlurPass::m_configurationUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="166" column="22" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="166" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d23/a04210_1afbe7a83a41604114414390b34af30919" prot="private" static="no" mutable="no">
+        <type>std::array&lt; Program, 2u &gt;</type>
+        <definition>std::array&lt; Program, 2u &gt; castor3d::SsaoBlurPass::m_programs</definition>
+        <argsstring></argsstring>
+        <name>m_programs</name>
+        <qualifiedname>castor3d::SsaoBlurPass::m_programs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="167" column="12" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="167" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d23/a04210_1a2a2874230cd188d33f777690d205a43b" prot="private" static="no" mutable="no">
+        <type>crg::FramePass const  *</type>
+        <definition>crg::FramePass const* castor3d::SsaoBlurPass::m_lastPass</definition>
+        <argsstring></argsstring>
+        <name>m_lastPass</name>
+        <qualifiedname>castor3d::SsaoBlurPass::m_lastPass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="168" column="23" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="168" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d23/a04210_1af41912b1a426ea8ce0b584c0537257b2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SsaoBlurPass::SsaoBlurPass</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, RenderDevice const &amp;device, ProgressBar *progress, crg::FramePass const &amp;previousPass, castor::String const &amp;prefix, VkExtent2D const &amp;size, SsaoConfig const &amp;config, SsaoConfigUbo &amp;ssaoConfigUbo, GpInfoUbo const &amp;gpInfoUbo, castor::Point2i const &amp;axis, Texture const &amp;input, Texture const &amp;bentInput, Texture const &amp;normals, uint32_t const &amp;passIndex)</argsstring>
+        <name>SsaoBlurPass</name>
+        <qualifiedname>castor3d::SsaoBlurPass::SsaoBlurPass</qualifiedname>
         <param>
-          <type><ref refid="dc/df4/a01401_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
-          <declname>lightType</declname>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d75/a04010" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="da/deb/a03274" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>prefix</declname>
+        </param>
+        <param>
+          <type>VkExtent2D const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d73/a04226" kindref="compound">SsaoConfig</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/de6/a05126" kindref="compound">SsaoConfigUbo</ref> &amp;</type>
+          <declname>ssaoConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d79/a05010" kindref="compound">GpInfoUbo</ref> const &amp;</type>
+          <declname>gpInfoUbo</declname>
+        </param>
+        <param>
+          <type>castor::Point2i const &amp;</type>
+          <declname>axis</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dc9/a04378" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>input</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dc9/a04378" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>bentInput</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dc9/a04378" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>normals</declname>
+        </param>
+        <param>
+          <type>uint32_t const &amp;</type>
+          <declname>passIndex</declname>
         </param>
         <briefdescription>
-<para>Retrieves the vertex shader source for a light type. </para>
+<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">lightType</parametername>
+<parametername direction="in">graph</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The light type. </para>
+<para>The render graph. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">progress</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The progress bar. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">previousPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The previous frame pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">prefix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass name&apos;s prefix. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render area dimensions. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The SSAO configuration. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ssaoConfigUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The SSAO configuration UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">gpInfoUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GBuffer configuration UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">axis</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The axis to which the blur applies ({0, 1} for vertical, {1, 0} for horizontal). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">input</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The texture to blur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bentInput</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The bent normals texture to blur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">normals</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The normals buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">passIndex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The frame pass index. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>The source. </para>
-</simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="26" column="18"/>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="56" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="df/d23/a04210_1a79191646f64f6bb80d998c7362dd3fb9" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dc/df4/a01401_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
-        <definition>static ShaderPtr castor3d::LightPass::getPixelShaderSource</definition>
-        <argsstring>(PassTypeID passType, RenderSystem const &amp;renderSystem, SceneFlags const &amp;sceneFlags, LightType lightType, ShadowType shadowType, bool shadows)</argsstring>
-        <name>getPixelShaderSource</name>
-        <qualifiedname>castor3d::LightPass::getPixelShaderSource</qualifiedname>
+      <memberdef kind="function" id="df/d23/a04210_1a98a0529561bc0bf44979d5337ca52b75" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SsaoBlurPass::~SsaoBlurPass</definition>
+        <argsstring>()</argsstring>
+        <name>~SsaoBlurPass</name>
+        <qualifiedname>castor3d::SsaoBlurPass::~SsaoBlurPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="70" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d23/a04210_1a361258db3cc953e178233549e3f8660a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SsaoBlurPass::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::SsaoBlurPass::update</qualifiedname>
         <param>
-          <type><ref refid="dc/df4/a01401_1a773fcfeb825d3fe54eb4a3dce23bca11" kindref="member">PassTypeID</ref></type>
-          <declname>passType</declname>
+          <type><ref refid="df/d4e/a04094" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
         </param>
-        <param>
-          <type><ref refid="d7/d34/a04078" kindref="compound">RenderSystem</ref> const &amp;</type>
-          <declname>renderSystem</declname>
-        </param>
-        <param>
-          <type><ref refid="dc/df4/a01401_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref> const &amp;</type>
-          <declname>sceneFlags</declname>
-        </param>
-        <param>
-          <type><ref refid="dc/df4/a01401_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
-          <declname>lightType</declname>
-        </param>
-        <param>
-          <type><ref refid="dc/df4/a01401_1a90275671c44e791e9556c4bed9033935" kindref="member">ShadowType</ref></type>
-          <declname>shadowType</declname>
-        </param>
+        <briefdescription>
+<para>Updates the render pass, CPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="79" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d23/a04210_1a50d595f4d8f0b54829d68ea8a4fd6923" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SsaoBlurPass::accept</definition>
+        <argsstring>(bool horizontal, SsaoConfig &amp;config, PipelineVisitorBase &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::SsaoBlurPass::accept</qualifiedname>
         <param>
           <type>bool</type>
-          <declname>shadows</declname>
+          <declname>horizontal</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d73/a04226" kindref="compound">SsaoConfig</ref> &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/dbb/a03262" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
         </param>
         <briefdescription>
-<para>Retrieves the pixel shader source for a light type. </para>
+<para>Accepts a visitor. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">passType</parametername>
+<parametername direction="in">horizontal</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The material pass type ID. </para>
+<para>Tells if the blur is horizontal. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">renderSystem</parametername>
+<parametername direction="in">config</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The render system. </para>
+<para>The SSAO config. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">sceneFlags</parametername>
+<parametername direction="in">visitor</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The scene flags. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">lightType</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The light source type. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">shadowType</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The shadow type. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">shadows</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Tells if shadows are used. </para>
+<para>The visitor. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>The source. </para>
-</simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="47" column="18"/>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="92" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="13" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="14" bodyend="53"/>
+    <location file="Render/Ssao/SsaoBlurPass.hpp" line="19" column="1" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="20" bodyend="170"/>
     <listofallmembers>
-      <member refid="df/d23/a04210_1a79191646f64f6bb80d998c7362dd3fb9" prot="public" virt="non-virtual"><scope>castor3d::LightPass</scope><name>getPixelShaderSource</name></member>
-      <member refid="df/d23/a04210_1abe55a05df6386ae05f0443e872921be2" prot="public" virt="non-virtual"><scope>castor3d::LightPass</scope><name>getVertexShaderSource</name></member>
+      <member refid="df/d23/a04210_1a50d595f4d8f0b54829d68ea8a4fd6923" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>accept</name></member>
+      <member refid="df/d23/a04210_1a35a2ab74539d85523a65aea57b8cbe2f" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>getBentResult</name></member>
+      <member refid="df/d23/a04210_1a22aabd45736fa51821782e34f3837f98" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>getLastPass</name></member>
+      <member refid="df/d23/a04210_1afe16371d454d7492f546e3bd6f85164d" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>getResult</name></member>
+      <member refid="df/d23/a04210_1afee16f0fe9f34789512c848e86031573" prot="private" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>m_bentInput</name></member>
+      <member refid="df/d23/a04210_1a0d67ceb1dbafc89d083d352f255082c4" prot="private" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>m_bentResult</name></member>
+      <member refid="df/d23/a04210_1a5e5b616c36a9abb4c749233704af8123" prot="private" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>m_config</name></member>
+      <member refid="df/d23/a04210_1a640ab41322514bbb544f5695ae7caca1" prot="private" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>m_configurationUbo</name></member>
+      <member refid="df/d23/a04210_1a343a08a767f7be8b47348c683a6f39d7" prot="private" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>m_device</name></member>
+      <member refid="df/d23/a04210_1a203db8e7065164772b0b22383dde3e1e" prot="private" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>m_gpInfoUbo</name></member>
+      <member refid="df/d23/a04210_1ae91b652bb1ece6605bd28766d272ab9d" prot="private" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>m_graph</name></member>
+      <member refid="df/d23/a04210_1a2a2874230cd188d33f777690d205a43b" prot="private" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>m_lastPass</name></member>
+      <member refid="df/d23/a04210_1afbe7a83a41604114414390b34af30919" prot="private" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>m_programs</name></member>
+      <member refid="df/d23/a04210_1a4ca127f657bfbbfc2217ff34876fff2b" prot="private" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>m_result</name></member>
+      <member refid="df/d23/a04210_1aa0044e0aa9968c20c4f80916f5445ada" prot="private" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>m_size</name></member>
+      <member refid="df/d23/a04210_1ae2d5dfad82a7e054e5848a14c00cc729" prot="private" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>m_ssaoConfigUbo</name></member>
+      <member refid="df/d23/a04210_1af41912b1a426ea8ce0b584c0537257b2" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>SsaoBlurPass</name></member>
+      <member refid="df/d23/a04210_1a361258db3cc953e178233549e3f8660a" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>update</name></member>
+      <member refid="df/d23/a04210_1a98a0529561bc0bf44979d5337ca52b75" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass</scope><name>~SsaoBlurPass</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

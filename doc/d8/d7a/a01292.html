@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Text/TextCamera.hpp File Reference</title>
+<title>Castor3D: Shader/Shaders/GlslTextureConfiguration.hpp File Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,31 +42,55 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_469969d95af928d15e3c7449be229837.html">Text</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_73b4ff1c0d48677e07219a6e5cbe5dfd.html">Shader</a></li><li class="navelem"><a class="el" href="../../dir_2b63c8c8a8bc0f17541f0115e68db690.html">Shaders</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
-  <div class="headertitle"><div class="title">TextCamera.hpp File Reference</div></div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
+  <div class="headertitle"><div class="title">GlslTextureConfiguration.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d78/a05079.html">castor::TextWriter&lt; castor3d::Camera &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d64/a04974.html">castor3d::shader::TextureConfigData</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/df8/a04978.html">castor3d::shader::TextureConfigurations</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:d6/d64/a01399"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d64/a01399.html">castor</a></td></tr>
+<tr class="memitem:da/dab/a01362"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html">castor3d</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:de/d1f/a01364"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d1f/a01364.html">castor3d::shader</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ab2c1bfa9d99368968566d3664670934c"><td class="memTemplParams" colspan="2">template&lt;typename LhsT , typename RhsT &gt; </td></tr>
+<tr class="memitem:ab2c1bfa9d99368968566d3664670934c"><td class="memTemplItemLeft" align="right" valign="top">LhsT&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../de/d1f/a01364.html#ab2c1bfa9d99368968566d3664670934c">castor3d::shader::translateUV</a> (LhsT const &amp;translate, RhsT const &amp;uv)</td></tr>
+<tr class="separator:ab2c1bfa9d99368968566d3664670934c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a8f67a9a7852eac15c149339666cc58"><td class="memItemLeft" align="right" valign="top">sdw::Vec2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d1f/a01364.html#a2a8f67a9a7852eac15c149339666cc58">castor3d::shader::rotateUV</a> (sdw::Vec2 const &amp;rotate, sdw::Vec2 const &amp;uv)</td></tr>
+<tr class="separator:a2a8f67a9a7852eac15c149339666cc58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5653f86dba07828b75f2f996a2255a30"><td class="memItemLeft" align="right" valign="top">sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d1f/a01364.html#a5653f86dba07828b75f2f996a2255a30">castor3d::shader::rotateUV</a> (sdw::Vec3 const &amp;rotate, sdw::Vec3 const &amp;uv)</td></tr>
+<tr class="separator:a5653f86dba07828b75f2f996a2255a30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75113c2df26d352e5f67bd9feb3297ee"><td class="memTemplParams" colspan="2">template&lt;typename LhsT , typename RhsT &gt; </td></tr>
+<tr class="memitem:a75113c2df26d352e5f67bd9feb3297ee"><td class="memTemplItemLeft" align="right" valign="top">LhsT&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../de/d1f/a01364.html#a75113c2df26d352e5f67bd9feb3297ee">castor3d::shader::scaleUV</a> (LhsT const &amp;scale, RhsT const &amp;uv)</td></tr>
+<tr class="separator:a75113c2df26d352e5f67bd9feb3297ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a177d7f0497b6a9247795fff3c7b83b74"><td class="memItemLeft" align="right" valign="top">castor::String const&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d1f/a01364.html#a177d7f0497b6a9247795fff3c7b83b74">castor3d::shader::TextureConfigurationBufferName</a> = cuT( &quot;TextureConfigurations&quot; )</td></tr>
+<tr class="separator:a177d7f0497b6a9247795fff3c7b83b74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 21:28:50 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:46 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

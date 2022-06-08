@@ -1,87 +1,126 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="d5/d41/a04946" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::shader::MorphingData</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
-    <includes local="no">MorphingUbo.hpp</includes>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d5/d41/a04946_1abef0ad626027b4a1479190a1cb195c8b" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
-        <definition>C3D_API castor::String const castor3d::shader::MorphingData::BufferName</definition>
-        <argsstring></argsstring>
-        <name>BufferName</name>
-        <qualifiedname>castor3d::shader::MorphingData::BufferName</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/MorphingUbo.hpp" line="64" column="37" bodyfile="Shader/Ubos/MorphingUbo.hpp" bodystart="64" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d5/d41/a04946_1a2d22313db8e893791d6b7313f196b949" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
-        <definition>C3D_API castor::String const castor3d::shader::MorphingData::DataName</definition>
-        <argsstring></argsstring>
-        <name>DataName</name>
-        <qualifiedname>castor3d::shader::MorphingData::DataName</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/MorphingUbo.hpp" line="65" column="37" bodyfile="Shader/Ubos/MorphingUbo.hpp" bodystart="65" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
+  <compounddef id="d5/d41/a04946" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::SssTransmittance</compoundname>
+    <includes local="no">GlslSssTransmittance.hpp</includes>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d5/d41/a04946_1a01759ebe074413cec5314dfddaa817c0" prot="private" static="no" mutable="no">
-        <type>sdw::Vec4</type>
-        <definition>sdw::Vec4 castor3d::shader::MorphingData::m_data</definition>
+      <memberdef kind="variable" id="d5/d41/a04946_1a5b278a43b97ecb5fd36cc2ed4d7e47d4" prot="private" static="no" mutable="no">
+        <type>sdw::ShaderWriter &amp;</type>
+        <definition>sdw::ShaderWriter&amp; castor3d::shader::SssTransmittance::m_writer</definition>
         <argsstring></argsstring>
-        <name>m_data</name>
-        <qualifiedname>castor3d::shader::MorphingData::m_data</qualifiedname>
+        <name>m_writer</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::m_writer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/MorphingUbo.hpp" line="78" column="11" bodyfile="Shader/Ubos/MorphingUbo.hpp" bodystart="78" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="36" column="20" bodyfile="Shader/Shaders/GlslSssTransmittance.hpp" bodystart="36" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d5/d41/a04946_1a51bb7a26224a4e8aa85da49a6db9c45a" prot="private" static="no" mutable="no">
-        <type>sdw::Float</type>
-        <definition>sdw::Float castor3d::shader::MorphingData::m_time</definition>
+      <memberdef kind="variable" id="d5/d41/a04946_1a2dcde58b66991fb45dbe46ddfdbeadbd" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d9e/a04926" kindref="compound">SssProfiles</ref> const  &amp;</type>
+        <definition>SssProfiles const&amp; castor3d::shader::SssTransmittance::m_sssProfiles</definition>
         <argsstring></argsstring>
-        <name>m_time</name>
-        <qualifiedname>castor3d::shader::MorphingData::m_time</qualifiedname>
+        <name>m_sssProfiles</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::m_sssProfiles</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/MorphingUbo.hpp" line="79" column="12" bodyfile="Shader/Ubos/MorphingUbo.hpp" bodystart="79" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="37" column="20" bodyfile="Shader/Shaders/GlslSssTransmittance.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d41/a04946_1ad1873b9cc3d34b21f7a079ee364a096c" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::shader::SssTransmittance::m_shadowMap</definition>
+        <argsstring></argsstring>
+        <name>m_shadowMap</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::m_shadowMap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="39" column="6" bodyfile="Shader/Shaders/GlslSssTransmittance.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d41/a04946_1a047b94b31ab59f197b5ea171818b9359" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InFloat, sdw::InFloat, sdw::InUInt, sdw::InVec3, sdw::InFloat, sdw::InVec3, sdw::InFloat &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InFloat , sdw::InFloat , sdw::InUInt , sdw::InVec3 , sdw::InFloat , sdw::InVec3 , sdw::InFloat &gt; castor3d::shader::SssTransmittance::m_compute</definition>
+        <argsstring></argsstring>
+        <name>m_compute</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::m_compute</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="48" column="2" bodyfile="Shader/Shaders/GlslSssTransmittance.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d41/a04946_1a6ca6b6309b57dc43bdecf1bd0aa1db73" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InUInt, sdw::InFloat, InDirectionalLight, InSurface &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InUInt , sdw::InFloat , InDirectionalLight , InSurface &gt; castor3d::shader::SssTransmittance::m_computeDirectional</definition>
+        <argsstring></argsstring>
+        <name>m_computeDirectional</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::m_computeDirectional</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="53" column="2" bodyfile="Shader/Shaders/GlslSssTransmittance.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d41/a04946_1a54c1f9ca0da73b24de8f24d4b8862b24" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InUInt, sdw::InFloat, InPointLight, InSurface &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InUInt , sdw::InFloat , InPointLight , InSurface &gt; castor3d::shader::SssTransmittance::m_computePoint</definition>
+        <argsstring></argsstring>
+        <name>m_computePoint</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::m_computePoint</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="58" column="2" bodyfile="Shader/Shaders/GlslSssTransmittance.hpp" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d41/a04946_1a13e2eb573d14cb9cf8f6adfa16b5f148" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InUInt, sdw::InFloat, InSpotLight, InSurface &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InUInt , sdw::InFloat , InSpotLight , InSurface &gt; castor3d::shader::SssTransmittance::m_computeSpot</definition>
+        <argsstring></argsstring>
+        <name>m_computeSpot</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::m_computeSpot</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="63" column="2" bodyfile="Shader/Shaders/GlslSssTransmittance.hpp" bodystart="63" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d5/d41/a04946_1acdafdea104e53eef6d4455cd3fac180e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::shader::MorphingData::MorphingData</definition>
-        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
-        <name>MorphingData</name>
-        <qualifiedname>castor3d::shader::MorphingData::MorphingData</qualifiedname>
+      <memberdef kind="function" id="d5/d41/a04946_1a881e43f949336c4bffe8d852644a1b59" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::SssTransmittance::SssTransmittance</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ShadowOptions shadowOptions, SssProfiles const &amp;sssProfiles)</argsstring>
+        <name>SssTransmittance</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::SssTransmittance</qualifiedname>
         <param>
           <type>sdw::ShaderWriter &amp;</type>
           <declname>writer</declname>
         </param>
         <param>
-          <type>ast::expr::ExprPtr</type>
-          <declname>expr</declname>
+          <type><ref refid="d5/de1/a04990" kindref="compound">ShadowOptions</ref></type>
+          <declname>shadowOptions</declname>
         </param>
         <param>
-          <type>bool</type>
-          <declname>enabled</declname>
+          <type><ref refid="da/d9e/a04926" kindref="compound">SssProfiles</ref> const &amp;</type>
+          <declname>sssProfiles</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -89,19 +128,25 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/MorphingUbo.hpp" line="19" column="9"/>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="19" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d5/d41/a04946_1a64049bb45fb68307ddf99e8786aa4b04" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::shader::MorphingData::SDW_DeclStructInstance</definition>
-        <argsstring>(C3D_API, MorphingData)</argsstring>
-        <name>SDW_DeclStructInstance</name>
-        <qualifiedname>castor3d::shader::MorphingData::SDW_DeclStructInstance</qualifiedname>
+      <memberdef kind="function" id="d5/d41/a04946_1af3766868d0e0f7331dacc2b53a417cb0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::SssTransmittance::compute</definition>
+        <argsstring>(shader::LightMaterial const &amp;material, shader::DirectionalLight const &amp;light, Surface const &amp;surface)</argsstring>
+        <name>compute</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::compute</qualifiedname>
         <param>
-          <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+          <type><ref refid="d0/dca/a04906" kindref="compound">shader::LightMaterial</ref> const &amp;</type>
+          <declname>material</declname>
         </param>
         <param>
-          <type><ref refid="d5/d41/a04946" kindref="compound">MorphingData</ref></type>
+          <type><ref refid="d8/dd4/a04894" kindref="compound">shader::DirectionalLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d1f/a01364_1afa7e0e1d1dbce1333aa48253fd404bf4" kindref="member">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -109,29 +154,25 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/MorphingUbo.hpp" line="22" column="1"/>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="23" column="19"/>
       </memberdef>
-      <memberdef kind="function" id="d5/d41/a04946_1a94c1567f7c6f100091c2417fd703275c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::shader::MorphingData::morph</definition>
-        <argsstring>(sdw::Vec4 &amp;pos, sdw::Vec4 const &amp;pos2, sdw::Vec3 &amp;uvw, sdw::Vec3 const &amp;uvw2) const</argsstring>
-        <name>morph</name>
-        <qualifiedname>castor3d::shader::MorphingData::morph</qualifiedname>
+      <memberdef kind="function" id="d5/d41/a04946_1a37d7d8adc10ffe1d95bc55db125decce" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::SssTransmittance::compute</definition>
+        <argsstring>(shader::LightMaterial const &amp;material, shader::PointLight const &amp;light, Surface const &amp;surface)</argsstring>
+        <name>compute</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::compute</qualifiedname>
         <param>
-          <type>sdw::Vec4 &amp;</type>
-          <declname>pos</declname>
+          <type><ref refid="d0/dca/a04906" kindref="compound">shader::LightMaterial</ref> const &amp;</type>
+          <declname>material</declname>
         </param>
         <param>
-          <type>sdw::Vec4 const &amp;</type>
-          <declname>pos2</declname>
+          <type><ref refid="da/dd2/a04898" kindref="compound">shader::PointLight</ref> const &amp;</type>
+          <declname>light</declname>
         </param>
         <param>
-          <type>sdw::Vec3 &amp;</type>
-          <declname>uvw</declname>
-        </param>
-        <param>
-          <type>sdw::Vec3 const &amp;</type>
-          <declname>uvw2</declname>
+          <type><ref refid="de/d1f/a01364_1afa7e0e1d1dbce1333aa48253fd404bf4" kindref="member">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -139,37 +180,25 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/MorphingUbo.hpp" line="26" column="14"/>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="26" column="19"/>
       </memberdef>
-      <memberdef kind="function" id="d5/d41/a04946_1ab5a6324a0c2a374b547c9b60aa10d8db" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::shader::MorphingData::morph</definition>
-        <argsstring>(sdw::Vec4 &amp;pos, sdw::Vec4 const &amp;pos2, sdw::Vec4 &amp;nml, sdw::Vec3 const &amp;nml2, sdw::Vec3 &amp;uvw, sdw::Vec3 const &amp;uvw2) const</argsstring>
-        <name>morph</name>
-        <qualifiedname>castor3d::shader::MorphingData::morph</qualifiedname>
+      <memberdef kind="function" id="d5/d41/a04946_1a0e0aa7ddd15defd89c3d23507cc74170" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::SssTransmittance::compute</definition>
+        <argsstring>(shader::LightMaterial const &amp;material, shader::SpotLight const &amp;light, Surface const &amp;surface)</argsstring>
+        <name>compute</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::compute</qualifiedname>
         <param>
-          <type>sdw::Vec4 &amp;</type>
-          <declname>pos</declname>
+          <type><ref refid="d0/dca/a04906" kindref="compound">shader::LightMaterial</ref> const &amp;</type>
+          <declname>material</declname>
         </param>
         <param>
-          <type>sdw::Vec4 const &amp;</type>
-          <declname>pos2</declname>
+          <type><ref refid="d8/de5/a04902" kindref="compound">shader::SpotLight</ref> const &amp;</type>
+          <declname>light</declname>
         </param>
         <param>
-          <type>sdw::Vec4 &amp;</type>
-          <declname>nml</declname>
-        </param>
-        <param>
-          <type>sdw::Vec3 const &amp;</type>
-          <declname>nml2</declname>
-        </param>
-        <param>
-          <type>sdw::Vec3 &amp;</type>
-          <declname>uvw</declname>
-        </param>
-        <param>
-          <type>sdw::Vec3 const &amp;</type>
-          <declname>uvw2</declname>
+          <type><ref refid="de/d1f/a01364_1afa7e0e1d1dbce1333aa48253fd404bf4" kindref="member">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -177,347 +206,43 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/MorphingUbo.hpp" line="30" column="14"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/d41/a04946_1ab404bd2ec5bf00864d9bd68fa9d18f44" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::shader::MorphingData::morph</definition>
-        <argsstring>(sdw::Vec4 &amp;pos, sdw::Vec4 const &amp;pos2, sdw::Vec4 &amp;nml, sdw::Vec3 const &amp;nml2, sdw::Vec4 &amp;tan, sdw::Vec3 const &amp;tan2, sdw::Vec3 &amp;uvw, sdw::Vec3 const &amp;uvw2) const</argsstring>
-        <name>morph</name>
-        <qualifiedname>castor3d::shader::MorphingData::morph</qualifiedname>
-        <param>
-          <type>sdw::Vec4 &amp;</type>
-          <declname>pos</declname>
-        </param>
-        <param>
-          <type>sdw::Vec4 const &amp;</type>
-          <declname>pos2</declname>
-        </param>
-        <param>
-          <type>sdw::Vec4 &amp;</type>
-          <declname>nml</declname>
-        </param>
-        <param>
-          <type>sdw::Vec3 const &amp;</type>
-          <declname>nml2</declname>
-        </param>
-        <param>
-          <type>sdw::Vec4 &amp;</type>
-          <declname>tan</declname>
-        </param>
-        <param>
-          <type>sdw::Vec3 const &amp;</type>
-          <declname>tan2</declname>
-        </param>
-        <param>
-          <type>sdw::Vec3 &amp;</type>
-          <declname>uvw</declname>
-        </param>
-        <param>
-          <type>sdw::Vec3 const &amp;</type>
-          <declname>uvw2</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/MorphingUbo.hpp" line="36" column="14"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/d41/a04946_1a4e962570b5bc86f87c58b53e1b57d49a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::shader::MorphingData::morph</definition>
-        <argsstring>(sdw::Vec4 &amp;pos, sdw::Vec4 const &amp;pos2, sdw::Vec4 &amp;uvuv, sdw::Vec4 const &amp;uvuv2) const</argsstring>
-        <name>morph</name>
-        <qualifiedname>castor3d::shader::MorphingData::morph</qualifiedname>
-        <param>
-          <type>sdw::Vec4 &amp;</type>
-          <declname>pos</declname>
-        </param>
-        <param>
-          <type>sdw::Vec4 const &amp;</type>
-          <declname>pos2</declname>
-        </param>
-        <param>
-          <type>sdw::Vec4 &amp;</type>
-          <declname>uvuv</declname>
-        </param>
-        <param>
-          <type>sdw::Vec4 const &amp;</type>
-          <declname>uvuv2</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/MorphingUbo.hpp" line="44" column="14"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/d41/a04946_1add7cf4f9cee5add749201e44769abd0d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::shader::MorphingData::morph</definition>
-        <argsstring>(sdw::Vec4 &amp;pos, sdw::Vec4 const &amp;pos2, sdw::Vec4 &amp;nml, sdw::Vec3 const &amp;nml2, sdw::Vec4 &amp;uvuv, sdw::Vec4 const &amp;uvuv2) const</argsstring>
-        <name>morph</name>
-        <qualifiedname>castor3d::shader::MorphingData::morph</qualifiedname>
-        <param>
-          <type>sdw::Vec4 &amp;</type>
-          <declname>pos</declname>
-        </param>
-        <param>
-          <type>sdw::Vec4 const &amp;</type>
-          <declname>pos2</declname>
-        </param>
-        <param>
-          <type>sdw::Vec4 &amp;</type>
-          <declname>nml</declname>
-        </param>
-        <param>
-          <type>sdw::Vec3 const &amp;</type>
-          <declname>nml2</declname>
-        </param>
-        <param>
-          <type>sdw::Vec4 &amp;</type>
-          <declname>uvuv</declname>
-        </param>
-        <param>
-          <type>sdw::Vec4 const &amp;</type>
-          <declname>uvuv2</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/MorphingUbo.hpp" line="48" column="14"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/d41/a04946_1af02770a8354e4a93bf3a69ebc050aea9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::shader::MorphingData::morph</definition>
-        <argsstring>(sdw::Vec4 &amp;pos, sdw::Vec4 const &amp;pos2, sdw::Vec4 &amp;nml, sdw::Vec3 const &amp;nml2, sdw::Vec4 &amp;tan, sdw::Vec3 const &amp;tan2, sdw::Vec4 &amp;uvuv, sdw::Vec4 const &amp;uvuv2) const</argsstring>
-        <name>morph</name>
-        <qualifiedname>castor3d::shader::MorphingData::morph</qualifiedname>
-        <param>
-          <type>sdw::Vec4 &amp;</type>
-          <declname>pos</declname>
-        </param>
-        <param>
-          <type>sdw::Vec4 const &amp;</type>
-          <declname>pos2</declname>
-        </param>
-        <param>
-          <type>sdw::Vec4 &amp;</type>
-          <declname>nml</declname>
-        </param>
-        <param>
-          <type>sdw::Vec3 const &amp;</type>
-          <declname>nml2</declname>
-        </param>
-        <param>
-          <type>sdw::Vec4 &amp;</type>
-          <declname>tan</declname>
-        </param>
-        <param>
-          <type>sdw::Vec3 const &amp;</type>
-          <declname>tan2</declname>
-        </param>
-        <param>
-          <type>sdw::Vec4 &amp;</type>
-          <declname>uvuv</declname>
-        </param>
-        <param>
-          <type>sdw::Vec4 const &amp;</type>
-          <declname>uvuv2</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/MorphingUbo.hpp" line="54" column="14"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-static-func">
-      <memberdef kind="function" id="d5/d41/a04946_1a83e1c0428bf71246bbf57ab8b0c5e7aa" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
-        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::MorphingData::makeType</definition>
-        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
-        <name>makeType</name>
-        <qualifiedname>castor3d::shader::MorphingData::makeType</qualifiedname>
-        <param>
-          <type>ast::type::TypesCache &amp;</type>
-          <declname>cache</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/MorphingUbo.hpp" line="24" column="41"/>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="29" column="19"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-func">
-      <memberdef kind="function" id="d5/d41/a04946_1a41b0970d6edfe290f2d72ed0294ca1be" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type>sdw::Float</type>
-        <definition>sdw::Float castor3d::shader::MorphingData::morph</definition>
-        <argsstring>(sdw::Float &amp;lhs, sdw::Float const &amp;rhs) const</argsstring>
-        <name>morph</name>
-        <qualifiedname>castor3d::shader::MorphingData::morph</qualifiedname>
-        <param>
-          <type>sdw::Float &amp;</type>
-          <declname>lhs</declname>
-        </param>
-        <param>
-          <type>sdw::Float const &amp;</type>
-          <declname>rhs</declname>
-        </param>
+      <memberdef kind="function" id="d5/d41/a04946_1a8d2d0129571dc2d1c3520a6f5bd7b5cf" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::SssTransmittance::doDeclare</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclare</name>
+        <qualifiedname>castor3d::shader::SssTransmittance::doDeclare</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/MorphingUbo.hpp" line="71" column="12"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/d41/a04946_1ab5ca94ebc46c328cd23f3e89da6f52c2" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type>sdw::Vec2</type>
-        <definition>sdw::Vec2 castor3d::shader::MorphingData::morph</definition>
-        <argsstring>(sdw::Vec2 &amp;lhs, sdw::Vec2 const &amp;rhs) const</argsstring>
-        <name>morph</name>
-        <qualifiedname>castor3d::shader::MorphingData::morph</qualifiedname>
-        <param>
-          <type>sdw::Vec2 &amp;</type>
-          <declname>lhs</declname>
-        </param>
-        <param>
-          <type>sdw::Vec2 const &amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/MorphingUbo.hpp" line="72" column="11"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/d41/a04946_1a00b003955371c17f29f59f9261791878" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type>sdw::Vec3</type>
-        <definition>sdw::Vec3 castor3d::shader::MorphingData::morph</definition>
-        <argsstring>(sdw::Vec3 &amp;lhs, sdw::Vec3 const &amp;rhs) const</argsstring>
-        <name>morph</name>
-        <qualifiedname>castor3d::shader::MorphingData::morph</qualifiedname>
-        <param>
-          <type>sdw::Vec3 &amp;</type>
-          <declname>lhs</declname>
-        </param>
-        <param>
-          <type>sdw::Vec3 const &amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/MorphingUbo.hpp" line="73" column="11"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/d41/a04946_1afe50d560376f88be47866cb9d835c0f2" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type>sdw::Vec4</type>
-        <definition>sdw::Vec4 castor3d::shader::MorphingData::morph</definition>
-        <argsstring>(sdw::Vec4 &amp;lhs, sdw::Vec4 const &amp;rhs) const</argsstring>
-        <name>morph</name>
-        <qualifiedname>castor3d::shader::MorphingData::morph</qualifiedname>
-        <param>
-          <type>sdw::Vec4 &amp;</type>
-          <declname>lhs</declname>
-        </param>
-        <param>
-          <type>sdw::Vec4 const &amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/MorphingUbo.hpp" line="74" column="11"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/d41/a04946_1afe44ac88d427cefbf864b03986903f4e" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type>sdw::Vec4</type>
-        <definition>sdw::Vec4 castor3d::shader::MorphingData::morph</definition>
-        <argsstring>(sdw::Vec4 &amp;lhs, sdw::Vec3 const &amp;rhs) const</argsstring>
-        <name>morph</name>
-        <qualifiedname>castor3d::shader::MorphingData::morph</qualifiedname>
-        <param>
-          <type>sdw::Vec4 &amp;</type>
-          <declname>lhs</declname>
-        </param>
-        <param>
-          <type>sdw::Vec3 const &amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/MorphingUbo.hpp" line="75" column="11"/>
+        <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="34" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="1">
-        <label>castor3d::shader::MorphingData</label>
-        <link refid="d5/d41/a04946"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2">
-        <label>sdw::StructInstance</label>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="1">
-        <label>castor3d::shader::MorphingData</label>
-        <link refid="d5/d41/a04946"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2">
-        <label>sdw::StructInstance</label>
-      </node>
-    </collaborationgraph>
-    <location file="Shader/Ubos/MorphingUbo.hpp" line="16" column="1" bodyfile="Shader/Ubos/MorphingUbo.hpp" bodystart="18" bodyend="80"/>
+    <location file="Shader/Shaders/GlslSssTransmittance.hpp" line="16" column="1" bodyfile="Shader/Shaders/GlslSssTransmittance.hpp" bodystart="17" bodyend="64"/>
     <listofallmembers>
-      <member refid="d5/d41/a04946_1abef0ad626027b4a1479190a1cb195c8b" prot="public" virt="non-virtual"><scope>castor3d::shader::MorphingData</scope><name>BufferName</name></member>
-      <member refid="d5/d41/a04946_1a2d22313db8e893791d6b7313f196b949" prot="public" virt="non-virtual"><scope>castor3d::shader::MorphingData</scope><name>DataName</name></member>
-      <member refid="d5/d41/a04946_1a01759ebe074413cec5314dfddaa817c0" prot="private" virt="non-virtual"><scope>castor3d::shader::MorphingData</scope><name>m_data</name></member>
-      <member refid="d5/d41/a04946_1a51bb7a26224a4e8aa85da49a6db9c45a" prot="private" virt="non-virtual"><scope>castor3d::shader::MorphingData</scope><name>m_time</name></member>
-      <member refid="d5/d41/a04946_1a83e1c0428bf71246bbf57ab8b0c5e7aa" prot="public" virt="non-virtual"><scope>castor3d::shader::MorphingData</scope><name>makeType</name></member>
-      <member refid="d5/d41/a04946_1a94c1567f7c6f100091c2417fd703275c" prot="public" virt="non-virtual"><scope>castor3d::shader::MorphingData</scope><name>morph</name></member>
-      <member refid="d5/d41/a04946_1ab5a6324a0c2a374b547c9b60aa10d8db" prot="public" virt="non-virtual"><scope>castor3d::shader::MorphingData</scope><name>morph</name></member>
-      <member refid="d5/d41/a04946_1ab404bd2ec5bf00864d9bd68fa9d18f44" prot="public" virt="non-virtual"><scope>castor3d::shader::MorphingData</scope><name>morph</name></member>
-      <member refid="d5/d41/a04946_1a4e962570b5bc86f87c58b53e1b57d49a" prot="public" virt="non-virtual"><scope>castor3d::shader::MorphingData</scope><name>morph</name></member>
-      <member refid="d5/d41/a04946_1add7cf4f9cee5add749201e44769abd0d" prot="public" virt="non-virtual"><scope>castor3d::shader::MorphingData</scope><name>morph</name></member>
-      <member refid="d5/d41/a04946_1af02770a8354e4a93bf3a69ebc050aea9" prot="public" virt="non-virtual"><scope>castor3d::shader::MorphingData</scope><name>morph</name></member>
-      <member refid="d5/d41/a04946_1a41b0970d6edfe290f2d72ed0294ca1be" prot="private" virt="non-virtual"><scope>castor3d::shader::MorphingData</scope><name>morph</name></member>
-      <member refid="d5/d41/a04946_1ab5ca94ebc46c328cd23f3e89da6f52c2" prot="private" virt="non-virtual"><scope>castor3d::shader::MorphingData</scope><name>morph</name></member>
-      <member refid="d5/d41/a04946_1a00b003955371c17f29f59f9261791878" prot="private" virt="non-virtual"><scope>castor3d::shader::MorphingData</scope><name>morph</name></member>
-      <member refid="d5/d41/a04946_1afe50d560376f88be47866cb9d835c0f2" prot="private" virt="non-virtual"><scope>castor3d::shader::MorphingData</scope><name>morph</name></member>
-      <member refid="d5/d41/a04946_1afe44ac88d427cefbf864b03986903f4e" prot="private" virt="non-virtual"><scope>castor3d::shader::MorphingData</scope><name>morph</name></member>
-      <member refid="d5/d41/a04946_1acdafdea104e53eef6d4455cd3fac180e" prot="public" virt="non-virtual"><scope>castor3d::shader::MorphingData</scope><name>MorphingData</name></member>
-      <member refid="d5/d41/a04946_1a64049bb45fb68307ddf99e8786aa4b04" prot="public" virt="non-virtual"><scope>castor3d::shader::MorphingData</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="d5/d41/a04946_1af3766868d0e0f7331dacc2b53a417cb0" prot="public" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>compute</name></member>
+      <member refid="d5/d41/a04946_1a37d7d8adc10ffe1d95bc55db125decce" prot="public" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>compute</name></member>
+      <member refid="d5/d41/a04946_1a0e0aa7ddd15defd89c3d23507cc74170" prot="public" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>compute</name></member>
+      <member refid="d5/d41/a04946_1a8d2d0129571dc2d1c3520a6f5bd7b5cf" prot="private" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>doDeclare</name></member>
+      <member refid="d5/d41/a04946_1a047b94b31ab59f197b5ea171818b9359" prot="private" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>m_compute</name></member>
+      <member refid="d5/d41/a04946_1a6ca6b6309b57dc43bdecf1bd0aa1db73" prot="private" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>m_computeDirectional</name></member>
+      <member refid="d5/d41/a04946_1a54c1f9ca0da73b24de8f24d4b8862b24" prot="private" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>m_computePoint</name></member>
+      <member refid="d5/d41/a04946_1a13e2eb573d14cb9cf8f6adfa16b5f148" prot="private" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>m_computeSpot</name></member>
+      <member refid="d5/d41/a04946_1ad1873b9cc3d34b21f7a079ee364a096c" prot="private" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>m_shadowMap</name></member>
+      <member refid="d5/d41/a04946_1a2dcde58b66991fb45dbe46ddfdbeadbd" prot="private" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>m_sssProfiles</name></member>
+      <member refid="d5/d41/a04946_1a5b278a43b97ecb5fd36cc2ed4d7e47d4" prot="private" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>m_writer</name></member>
+      <member refid="d5/d41/a04946_1a881e43f949336c4bffe8d852644a1b59" prot="public" virt="non-virtual"><scope>castor3d::shader::SssTransmittance</scope><name>SssTransmittance</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

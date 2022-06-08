@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Text/TextImageBackground.hpp File Reference</title>
+<title>Castor3D: Shader/Ubos/GpInfoUbo.hpp File Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,31 +42,86 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_469969d95af928d15e3c7449be229837.html">Text</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_73b4ff1c0d48677e07219a6e5cbe5dfd.html">Shader</a></li><li class="navelem"><a class="el" href="../../dir_7cb5e4c64a1bf58db52aef2025a37836.html">Ubos</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
-  <div class="headertitle"><div class="title">TextImageBackground.hpp File Reference</div></div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a>  </div>
+  <div class="headertitle"><div class="title">GpInfoUbo.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d5e/a05103.html">castor::TextWriter&lt; castor3d::ImageBackground &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dc0/a05006.html">castor3d::shader::GpInfoData</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d79/a05010.html">castor3d::GpInfoUbo</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:d6/d64/a01399"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d64/a01399.html">castor</a></td></tr>
+<tr class="memitem:da/dab/a01362"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html">castor3d</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:de/d1f/a01364"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d1f/a01364.html">castor3d::shader</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:af45f2307622ff014e626a46f52ad0af8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d79/a01310.html#af45f2307622ff014e626a46f52ad0af8">C3D_GpInfo</a>(writer,  binding,  set)</td></tr>
+<tr class="separator:af45f2307622ff014e626a46f52ad0af8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="af45f2307622ff014e626a46f52ad0af8" name="af45f2307622ff014e626a46f52ad0af8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af45f2307622ff014e626a46f52ad0af8">&#9670;&nbsp;</a></span>C3D_GpInfo</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define C3D_GpInfo</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">writer, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">binding, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">set&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    sdw::Ubo gpInfo{ writer\</div>
+<div class="line">        , <a class="code hl_variable" href="../../d8/d79/a05010.html#a2ef2c83335133c3ecd325223d3df6b9a">castor3d::GpInfoUbo::BufferGPInfo</a>\</div>
+<div class="line">        , uint32_t( binding )\</div>
+<div class="line">        , uint32_t( set )\</div>
+<div class="line">        , ast::type::MemoryLayout::eStd140\</div>
+<div class="line">        , <span class="keyword">true</span> };\</div>
+<div class="line">    auto c3d_gpInfoData = gpInfo.declMember&lt; shader::GpInfoData &gt;( <a class="code hl_variable" href="../../d8/d79/a05010.html#a88e9127de3cce5001220d1fbae7c357e">castor3d::GpInfoUbo::GPInfoData</a> );\</div>
+<div class="line">    gpInfo.end()</div>
+<div class="ttc" id="aa05010_html_a2ef2c83335133c3ecd325223d3df6b9a"><div class="ttname"><a href="../../d8/d79/a05010.html#a2ef2c83335133c3ecd325223d3df6b9a">castor3d::GpInfoUbo::BufferGPInfo</a></div><div class="ttdeci">static C3D_API const castor::String BufferGPInfo</div><div class="ttdef"><b>Definition:</b> GpInfoUbo.hpp:96</div></div>
+<div class="ttc" id="aa05010_html_a88e9127de3cce5001220d1fbae7c357e"><div class="ttname"><a href="../../d8/d79/a05010.html#a88e9127de3cce5001220d1fbae7c357e">castor3d::GpInfoUbo::GPInfoData</a></div><div class="ttdeci">static C3D_API const castor::String GPInfoData</div><div class="ttdef"><b>Definition:</b> GpInfoUbo.hpp:97</div></div>
+</div><!-- fragment -->
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 21:28:50 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:46 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

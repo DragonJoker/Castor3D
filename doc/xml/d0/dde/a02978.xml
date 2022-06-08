@@ -37,7 +37,7 @@
       </sectiondef>
       <sectiondef kind="public-func">
       <memberdef kind="function" id="d0/dde/a02978_1a570d4b2a58acfa15011a438da2ffbc7e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
         <definition>C3D_API bool castor3d::GpuObjectTracker::track</definition>
         <argsstring>(void *object, std::string const &amp;type, std::string const &amp;file, int line, std::string &amp;name)</argsstring>
         <name>track</name>
@@ -71,7 +71,7 @@
         <location file="Miscellaneous/GpuObjectTracker.hpp" line="39" column="14"/>
       </memberdef>
       <memberdef kind="function" id="d0/dde/a02978_1a9aaccd1d5cf3ed6bb3a78ea65649caf9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
         <definition>C3D_API bool castor3d::GpuObjectTracker::track</definition>
         <argsstring>(castor::Named *object, std::string const &amp;type, std::string const &amp;file, int line, std::string &amp;name)</argsstring>
         <name>track</name>
@@ -105,7 +105,7 @@
         <location file="Miscellaneous/GpuObjectTracker.hpp" line="40" column="14"/>
       </memberdef>
       <memberdef kind="function" id="d0/dde/a02978_1ac8f7e2a8f65577fd0e2b4287730b93e4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
         <definition>C3D_API bool castor3d::GpuObjectTracker::untrack</definition>
         <argsstring>(void *object, ObjectDeclaration &amp;declaration)</argsstring>
         <name>untrack</name>
@@ -127,7 +127,7 @@
         <location file="Miscellaneous/GpuObjectTracker.hpp" line="41" column="14"/>
       </memberdef>
       <memberdef kind="function" id="d0/dde/a02978_1a87e5fbb0a7a47b6cd17ba9f03a1ba93b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
         <definition>C3D_API void castor3d::GpuObjectTracker::reportTracked</definition>
         <argsstring>()</argsstring>
         <name>reportTracked</name>

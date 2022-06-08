@@ -2,14 +2,14 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_7108b733bb1fee5c7687037800af29fb" kind="dir">
     <compoundname>Render/GlobalIllumination/LightPropagationVolumes</compoundname>
-    <innerfile refid="d8/d13/a00671">GeometryInjectionPass.hpp</innerfile>
-    <innerfile refid="d8/d73/a00674">LayeredLightPropagationVolumes.hpp</innerfile>
-    <innerfile refid="dc/de4/a00677">LightInjectionPass.hpp</innerfile>
-    <innerfile refid="d4/d9b/a00680">LightPropagationPass.hpp</innerfile>
-    <innerfile refid="db/d77/a00683">LightPropagationVolumes.hpp</innerfile>
-    <innerfile refid="df/d9e/a00686">LightPropagationVolumesModule.hpp</innerfile>
-    <innerfile refid="d1/d87/a00689">LightVolumePassResult.hpp</innerfile>
-    <innerfile refid="d0/db6/a00692">LpvConfig.hpp</innerfile>
+    <innerfile refid="dd/d57/a00701">GeometryInjectionPass.hpp</innerfile>
+    <innerfile refid="d4/d6a/a00704">LayeredLightPropagationVolumes.hpp</innerfile>
+    <innerfile refid="d1/d56/a00707">LightInjectionPass.hpp</innerfile>
+    <innerfile refid="d4/deb/a00710">LightPropagationPass.hpp</innerfile>
+    <innerfile refid="d1/d04/a00713">LightPropagationVolumes.hpp</innerfile>
+    <innerfile refid="d2/d94/a00716">LightPropagationVolumesModule.hpp</innerfile>
+    <innerfile refid="dd/dd8/a00719">LightVolumePassResult.hpp</innerfile>
+    <innerfile refid="db/d7c/a00722">LpvConfig.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

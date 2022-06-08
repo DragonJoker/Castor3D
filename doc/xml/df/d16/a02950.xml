@@ -5,7 +5,7 @@
     <includes local="no">TextureModule.hpp</includes>
       <sectiondef kind="public-func">
       <memberdef kind="function" id="df/d16/a02950_1a13c35ea63a4683b626c9aa08b3664338" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> size_t</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> size_t</type>
         <definition>C3D_API size_t castor3d::TextureSourceInfoHasher::operator()</definition>
         <argsstring>(TextureSourceInfo const &amp;value) const noexcept</argsstring>
         <name>operator()</name>

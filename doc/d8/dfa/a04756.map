@@ -1,9 +1,7 @@
-<map id="castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;" name="castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;">
-<area shape="rect" id="node1" title="Wrapper class to select between SSBO or TBO." alt="" coords="877,91,1064,133"/>
-<area shape="rect" id="node2" href="$d7/d54/a04666.html" title=" " alt="" coords="531,5,686,32"/>
-<area shape="rect" id="node3" title=" " alt="" coords="538,57,679,98"/>
-<area shape="rect" id="node4" title=" " alt="" coords="149,129,263,156"/>
-<area shape="rect" id="node6" title=" " alt="" coords="520,122,697,163"/>
-<area shape="rect" id="node7" title=" " alt="" coords="481,187,736,229"/>
-<area shape="rect" id="node5" title=" " alt="" coords="5,129,44,156"/>
+<map id="castor3d::SceneNodeImporter" name="castor3d::SceneNodeImporter">
+<area shape="rect" id="node1" title=" " alt="" coords="637,39,832,65"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,192,32"/>
+<area shape="rect" id="node3" href="$d5/dd8/a02802.html" title=" " alt="" coords="350,39,498,65"/>
+<area shape="rect" id="node4" href="$d5/d08/a03254.html" title=" " alt="" coords="347,90,501,131"/>
+<area shape="rect" id="node5" href="$d5/d08/a03254.html" title="Configuration parameters." alt="" coords="21,90,176,131"/>
 </map>

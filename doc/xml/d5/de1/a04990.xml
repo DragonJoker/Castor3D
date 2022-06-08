@@ -1,391 +1,144 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d5/de1/a04990" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::shader::SsaoConfigData</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
-    <includes local="no">SsaoConfigUbo.hpp</includes>
+    <compoundname>castor3d::shader::ShadowOptions</compoundname>
+    <includes local="no">SdwModule.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d5/de1/a04990_1a689c835e68f0c16fce5295e198c02b2a" prot="public" static="no" mutable="no">
-        <type>sdw::Vec4</type>
-        <definition>sdw::Vec4 castor3d::shader::SsaoConfigData::projInfo</definition>
+      <memberdef kind="variable" id="d5/de1/a04990_1a492435485188f965bae92189bd0b6ca6" prot="public" static="no" mutable="no">
+        <type><ref refid="da/dab/a01362_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref></type>
+        <definition>SceneFlags castor3d::shader::ShadowOptions::type</definition>
         <argsstring></argsstring>
-        <name>projInfo</name>
-        <qualifiedname>castor3d::shader::SsaoConfigData::projInfo</qualifiedname>
+        <name>type</name>
+        <qualifiedname>castor3d::shader::ShadowOptions::type</qualifiedname>
+        <initializer>= <ref refid="da/dab/a01362_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref>( 0 )</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="32" column="11" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="32" bodyend="-1"/>
+        <location file="Shader/Shaders/SdwModule.hpp" line="35" column="12" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="35" bodyend="-1"/>
+        <referencedby refid="da/d88/a04942_1a3aa6edff6c310180d759361177cb2238" compoundref="d2/d1d/a01277" startline="73" endline="76">castor3d::shader::Shadow::isEnabled</referencedby>
       </memberdef>
-      <memberdef kind="variable" id="d5/de1/a04990_1aaea5c0b813f13a1ed6b4dbf764d9232e" prot="public" static="no" mutable="no">
-        <type>sdw::Int</type>
-        <definition>sdw::Int castor3d::shader::SsaoConfigData::numSamples</definition>
+      <memberdef kind="variable" id="d5/de1/a04990_1a148561e553d3beb8a0337fca0ca52119" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::shader::ShadowOptions::vsm</definition>
         <argsstring></argsstring>
-        <name>numSamples</name>
-        <qualifiedname>castor3d::shader::SsaoConfigData::numSamples</qualifiedname>
+        <name>vsm</name>
+        <qualifiedname>castor3d::shader::ShadowOptions::vsm</qualifiedname>
+        <initializer>{ false }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="33" column="10" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="33" bodyend="-1"/>
+        <location file="Shader/Shaders/SdwModule.hpp" line="37" column="6" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="37" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d5/de1/a04990_1a0b5f712ac99fb7d8151ccdc0c11e877e" prot="public" static="no" mutable="no">
-        <type>sdw::Int</type>
-        <definition>sdw::Int castor3d::shader::SsaoConfigData::numSpiralTurns</definition>
+      <memberdef kind="variable" id="d5/de1/a04990_1aabcb52861512522256fcaf1f9acb9068" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::shader::ShadowOptions::rsm</definition>
         <argsstring></argsstring>
-        <name>numSpiralTurns</name>
-        <qualifiedname>castor3d::shader::SsaoConfigData::numSpiralTurns</qualifiedname>
+        <name>rsm</name>
+        <qualifiedname>castor3d::shader::ShadowOptions::rsm</qualifiedname>
+        <initializer>{ false }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="34" column="10" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="34" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d5/de1/a04990_1a304ec6cecba52bfcd5dbac09bc898ce3" prot="public" static="no" mutable="no">
-        <type>sdw::Float</type>
-        <definition>sdw::Float castor3d::shader::SsaoConfigData::projScale</definition>
-        <argsstring></argsstring>
-        <name>projScale</name>
-        <qualifiedname>castor3d::shader::SsaoConfigData::projScale</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="35" column="12" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="35" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d5/de1/a04990_1ab211f59628b10465b60fcad62b902120" prot="public" static="no" mutable="no">
-        <type>sdw::Float</type>
-        <definition>sdw::Float castor3d::shader::SsaoConfigData::radius</definition>
-        <argsstring></argsstring>
-        <name>radius</name>
-        <qualifiedname>castor3d::shader::SsaoConfigData::radius</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="36" column="12" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="36" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d5/de1/a04990_1a6d060fb6d2cd063c5c341416e5bc337d" prot="public" static="no" mutable="no">
-        <type>sdw::Float</type>
-        <definition>sdw::Float castor3d::shader::SsaoConfigData::invRadius</definition>
-        <argsstring></argsstring>
-        <name>invRadius</name>
-        <qualifiedname>castor3d::shader::SsaoConfigData::invRadius</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="37" column="12" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="37" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d5/de1/a04990_1a9853905151acbf203a1a16e470460e45" prot="public" static="no" mutable="no">
-        <type>sdw::Float</type>
-        <definition>sdw::Float castor3d::shader::SsaoConfigData::radius2</definition>
-        <argsstring></argsstring>
-        <name>radius2</name>
-        <qualifiedname>castor3d::shader::SsaoConfigData::radius2</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="38" column="12" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="38" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d5/de1/a04990_1af9fea021d6eb7ab385a1c9a173c3a8db" prot="public" static="no" mutable="no">
-        <type>sdw::Float</type>
-        <definition>sdw::Float castor3d::shader::SsaoConfigData::invRadius2</definition>
-        <argsstring></argsstring>
-        <name>invRadius2</name>
-        <qualifiedname>castor3d::shader::SsaoConfigData::invRadius2</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="39" column="12" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="39" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d5/de1/a04990_1a9946bedb3f49687277beaa491aac0c81" prot="public" static="no" mutable="no">
-        <type>sdw::Float</type>
-        <definition>sdw::Float castor3d::shader::SsaoConfigData::bias</definition>
-        <argsstring></argsstring>
-        <name>bias</name>
-        <qualifiedname>castor3d::shader::SsaoConfigData::bias</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="40" column="12" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="40" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d5/de1/a04990_1a97fb67c2fd4d51b3fadced7b4b254e03" prot="public" static="no" mutable="no">
-        <type>sdw::Float</type>
-        <definition>sdw::Float castor3d::shader::SsaoConfigData::intensity</definition>
-        <argsstring></argsstring>
-        <name>intensity</name>
-        <qualifiedname>castor3d::shader::SsaoConfigData::intensity</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="41" column="12" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="41" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d5/de1/a04990_1a0a025738b12e24f00befb8b1265ca3f4" prot="public" static="no" mutable="no">
-        <type>sdw::Float</type>
-        <definition>sdw::Float castor3d::shader::SsaoConfigData::intensityDivR6</definition>
-        <argsstring></argsstring>
-        <name>intensityDivR6</name>
-        <qualifiedname>castor3d::shader::SsaoConfigData::intensityDivR6</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="42" column="12" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="42" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d5/de1/a04990_1a72c4ac40f796611339adcd5dba333797" prot="public" static="no" mutable="no">
-        <type>sdw::Float</type>
-        <definition>sdw::Float castor3d::shader::SsaoConfigData::farPlaneZ</definition>
-        <argsstring></argsstring>
-        <name>farPlaneZ</name>
-        <qualifiedname>castor3d::shader::SsaoConfigData::farPlaneZ</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="43" column="12" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="43" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d5/de1/a04990_1a8632b212cf351aac23a3344a71897268" prot="public" static="no" mutable="no">
-        <type>sdw::Float</type>
-        <definition>sdw::Float castor3d::shader::SsaoConfigData::edgeSharpness</definition>
-        <argsstring></argsstring>
-        <name>edgeSharpness</name>
-        <qualifiedname>castor3d::shader::SsaoConfigData::edgeSharpness</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="44" column="12" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="44" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d5/de1/a04990_1af47093835e2ba7ed89d56b8c59a154b4" prot="public" static="no" mutable="no">
-        <type>sdw::Int</type>
-        <definition>sdw::Int castor3d::shader::SsaoConfigData::blurStepSize</definition>
-        <argsstring></argsstring>
-        <name>blurStepSize</name>
-        <qualifiedname>castor3d::shader::SsaoConfigData::blurStepSize</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="45" column="10" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="45" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d5/de1/a04990_1a026e70b4a3ccd7c4e91621610c6ee7eb" prot="public" static="no" mutable="no">
-        <type>sdw::Int</type>
-        <definition>sdw::Int castor3d::shader::SsaoConfigData::blurRadius</definition>
-        <argsstring></argsstring>
-        <name>blurRadius</name>
-        <qualifiedname>castor3d::shader::SsaoConfigData::blurRadius</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="46" column="10" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="46" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d5/de1/a04990_1a60e0c30d99887e175c91452574d255e9" prot="public" static="no" mutable="no">
-        <type>sdw::Int</type>
-        <definition>sdw::Int castor3d::shader::SsaoConfigData::highQuality</definition>
-        <argsstring></argsstring>
-        <name>highQuality</name>
-        <qualifiedname>castor3d::shader::SsaoConfigData::highQuality</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="47" column="10" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="47" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d5/de1/a04990_1a867db4f5aec095ef993a14e4aa6bdd46" prot="public" static="no" mutable="no">
-        <type>sdw::Int</type>
-        <definition>sdw::Int castor3d::shader::SsaoConfigData::blurHighQuality</definition>
-        <argsstring></argsstring>
-        <name>blurHighQuality</name>
-        <qualifiedname>castor3d::shader::SsaoConfigData::blurHighQuality</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="48" column="10" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="48" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d5/de1/a04990_1a43d7b4a2ceadc7b5c57154f8814dc67b" prot="public" static="no" mutable="no">
-        <type>sdw::Int</type>
-        <definition>sdw::Int castor3d::shader::SsaoConfigData::logMaxOffset</definition>
-        <argsstring></argsstring>
-        <name>logMaxOffset</name>
-        <qualifiedname>castor3d::shader::SsaoConfigData::logMaxOffset</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="49" column="10" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="49" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d5/de1/a04990_1a3fae758fca3c8e6fc9c01ac64399fe29" prot="public" static="no" mutable="no">
-        <type>sdw::Int</type>
-        <definition>sdw::Int castor3d::shader::SsaoConfigData::maxMipLevel</definition>
-        <argsstring></argsstring>
-        <name>maxMipLevel</name>
-        <qualifiedname>castor3d::shader::SsaoConfigData::maxMipLevel</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="50" column="10" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="50" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d5/de1/a04990_1a8c9c0620147b526c836528cb1566ee56" prot="public" static="no" mutable="no">
-        <type>sdw::Float</type>
-        <definition>sdw::Float castor3d::shader::SsaoConfigData::minRadius</definition>
-        <argsstring></argsstring>
-        <name>minRadius</name>
-        <qualifiedname>castor3d::shader::SsaoConfigData::minRadius</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="51" column="12" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="51" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d5/de1/a04990_1a50c0505473472bf1bc07f78505be95df" prot="public" static="no" mutable="no">
-        <type>sdw::Int</type>
-        <definition>sdw::Int castor3d::shader::SsaoConfigData::variation</definition>
-        <argsstring></argsstring>
-        <name>variation</name>
-        <qualifiedname>castor3d::shader::SsaoConfigData::variation</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="52" column="10" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="52" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d5/de1/a04990_1a9d8aca9b7039292732fc5c76f2a0e321" prot="public" static="no" mutable="no">
-        <type>sdw::Int</type>
-        <definition>sdw::Int castor3d::shader::SsaoConfigData::bendStepCount</definition>
-        <argsstring></argsstring>
-        <name>bendStepCount</name>
-        <qualifiedname>castor3d::shader::SsaoConfigData::bendStepCount</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="53" column="10" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="53" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d5/de1/a04990_1abb8e98fec4a03246ec2f35c1a8d3a6e4" prot="public" static="no" mutable="no">
-        <type>sdw::Float</type>
-        <definition>sdw::Float castor3d::shader::SsaoConfigData::bendStepSize</definition>
-        <argsstring></argsstring>
-        <name>bendStepSize</name>
-        <qualifiedname>castor3d::shader::SsaoConfigData::bendStepSize</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="54" column="12" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="54" bodyend="-1"/>
+        <location file="Shader/Shaders/SdwModule.hpp" line="39" column="6" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="39" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d5/de1/a04990_1a2f4bea7c9e7d633a7802674b6c4e0065" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::shader::SsaoConfigData::SsaoConfigData</definition>
-        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
-        <name>SsaoConfigData</name>
-        <qualifiedname>castor3d::shader::SsaoConfigData::SsaoConfigData</qualifiedname>
+      <memberdef kind="function" id="d5/de1/a04990_1a8b68f406fe4da58809924e1686f37671" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::ShadowOptions::ShadowOptions</definition>
+        <argsstring>()</argsstring>
+        <name>ShadowOptions</name>
+        <qualifiedname>castor3d::shader::ShadowOptions::ShadowOptions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="41" column="1" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="41" bodyend="46"/>
+        <references refid="da/dab/a01362_1ad372dd0cc65f28ad7f558f07c78becb7abe988781e4e1de1c6a36fb698afbbe1f">castor3d::eNone</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/de1/a04990_1afa4bfb9c9f2632c733d141c2baf9d551" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::ShadowOptions::ShadowOptions</definition>
+        <argsstring>(bool vsm, bool rsm)</argsstring>
+        <name>ShadowOptions</name>
+        <qualifiedname>castor3d::shader::ShadowOptions::ShadowOptions</qualifiedname>
         <param>
-          <type>sdw::ShaderWriter &amp;</type>
-          <declname>writer</declname>
+          <type>bool</type>
+          <declname>vsm</declname>
         </param>
         <param>
-          <type>ast::expr::ExprPtr</type>
-          <declname>expr</declname>
+          <type>bool</type>
+          <declname>rsm</declname>
         </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="48" column="10" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="48" bodyend="54"/>
+        <references refid="da/dab/a01362_1ad372dd0cc65f28ad7f558f07c78becb7abe988781e4e1de1c6a36fb698afbbe1f">castor3d::eNone</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/de1/a04990_1a0c3ce384753a8fc300022ad2d89b5dde" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::ShadowOptions::ShadowOptions</definition>
+        <argsstring>(bool enabled, LightType lightType, bool vsm, bool rsm)</argsstring>
+        <name>ShadowOptions</name>
+        <qualifiedname>castor3d::shader::ShadowOptions::ShadowOptions</qualifiedname>
         <param>
           <type>bool</type>
           <declname>enabled</declname>
         </param>
+        <param>
+          <type><ref refid="da/dab/a01362_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>lightType</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>vsm</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>rsm</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="24" column="9"/>
+        <location file="Shader/Shaders/SdwModule.hpp" line="56" column="1" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="56" bodyend="66"/>
+        <references refid="da/dab/a01362_1ad372dd0cc65f28ad7f558f07c78becb7abe988781e4e1de1c6a36fb698afbbe1f">castor3d::eNone</references>
+        <references refid="da/dab/a01362_1a0282168ae87222228c5a154c419deb51a823430dbaa201567ef07f3033e23586e">castor3d::eShadowBegin</references>
       </memberdef>
-      <memberdef kind="function" id="d5/de1/a04990_1a9348bae40c31e818a280feded94e049a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d5/de1/a04990_1a7a95853fecd3a47999b39025e85a8fd1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
-        <definition>castor3d::shader::SsaoConfigData::SDW_DeclStructInstance</definition>
-        <argsstring>(C3D_API, SsaoConfigData)</argsstring>
-        <name>SDW_DeclStructInstance</name>
-        <qualifiedname>castor3d::shader::SsaoConfigData::SDW_DeclStructInstance</qualifiedname>
+        <definition>castor3d::shader::ShadowOptions::ShadowOptions</definition>
+        <argsstring>(SceneFlags sceneFlags, bool vsm, bool rsm)</argsstring>
+        <name>ShadowOptions</name>
+        <qualifiedname>castor3d::shader::ShadowOptions::ShadowOptions</qualifiedname>
         <param>
-          <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+          <type><ref refid="da/dab/a01362_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref></type>
+          <declname>sceneFlags</declname>
         </param>
         <param>
-          <type><ref refid="d5/de1/a04990" kindref="compound">SsaoConfigData</ref></type>
+          <type>bool</type>
+          <declname>vsm</declname>
         </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="27" column="1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-static-func">
-      <memberdef kind="function" id="d5/de1/a04990_1a1cc0bd580d29b3d11cb15b04ac01f396" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
-        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::SsaoConfigData::makeType</definition>
-        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
-        <name>makeType</name>
-        <qualifiedname>castor3d::shader::SsaoConfigData::makeType</qualifiedname>
         <param>
-          <type>ast::type::TypesCache &amp;</type>
-          <declname>cache</declname>
+          <type>bool</type>
+          <declname>rsm</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -393,82 +146,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="29" column="41"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/de1/a04990_1ab1a611bd467f30d2c85da8ce3505e0ac" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
-        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::SsaoConfigData::declare</definition>
-        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
-        <name>declare</name>
-        <qualifiedname>castor3d::shader::SsaoConfigData::declare</qualifiedname>
-        <param>
-          <type>sdw::ShaderWriter &amp;</type>
-          <declname>writer</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="30" column="32"/>
+        <location file="Shader/Shaders/SdwModule.hpp" line="68" column="1" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="68" bodyend="75"/>
+        <references refid="da/dab/a01362_1a0282168ae87222228c5a154c419deb51afc9a4467a136023d484aa192809023b1">castor3d::eShadowAny</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="1">
-        <label>castor3d::shader::SsaoConfigData</label>
-        <link refid="d5/de1/a04990"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2">
-        <label>sdw::StructInstance</label>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="1">
-        <label>castor3d::shader::SsaoConfigData</label>
-        <link refid="d5/de1/a04990"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2">
-        <label>sdw::StructInstance</label>
-      </node>
-    </collaborationgraph>
-    <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="21" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="23" bodyend="59"/>
+    <location file="Shader/Shaders/SdwModule.hpp" line="33" column="1" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="34" bodyend="76"/>
     <listofallmembers>
-      <member refid="d5/de1/a04990_1a9d8aca9b7039292732fc5c76f2a0e321" prot="public" virt="non-virtual"><scope>castor3d::shader::SsaoConfigData</scope><name>bendStepCount</name></member>
-      <member refid="d5/de1/a04990_1abb8e98fec4a03246ec2f35c1a8d3a6e4" prot="public" virt="non-virtual"><scope>castor3d::shader::SsaoConfigData</scope><name>bendStepSize</name></member>
-      <member refid="d5/de1/a04990_1a9946bedb3f49687277beaa491aac0c81" prot="public" virt="non-virtual"><scope>castor3d::shader::SsaoConfigData</scope><name>bias</name></member>
-      <member refid="d5/de1/a04990_1a867db4f5aec095ef993a14e4aa6bdd46" prot="public" virt="non-virtual"><scope>castor3d::shader::SsaoConfigData</scope><name>blurHighQuality</name></member>
-      <member refid="d5/de1/a04990_1a026e70b4a3ccd7c4e91621610c6ee7eb" prot="public" virt="non-virtual"><scope>castor3d::shader::SsaoConfigData</scope><name>blurRadius</name></member>
-      <member refid="d5/de1/a04990_1af47093835e2ba7ed89d56b8c59a154b4" prot="public" virt="non-virtual"><scope>castor3d::shader::SsaoConfigData</scope><name>blurStepSize</name></member>
-      <member refid="d5/de1/a04990_1ab1a611bd467f30d2c85da8ce3505e0ac" prot="public" virt="non-virtual"><scope>castor3d::shader::SsaoConfigData</scope><name>declare</name></member>
-      <member refid="d5/de1/a04990_1a8632b212cf351aac23a3344a71897268" prot="public" virt="non-virtual"><scope>castor3d::shader::SsaoConfigData</scope><name>edgeSharpness</name></member>
-      <member refid="d5/de1/a04990_1a72c4ac40f796611339adcd5dba333797" prot="public" virt="non-virtual"><scope>castor3d::shader::SsaoConfigData</scope><name>farPlaneZ</name></member>
-      <member refid="d5/de1/a04990_1a60e0c30d99887e175c91452574d255e9" prot="public" virt="non-virtual"><scope>castor3d::shader::SsaoConfigData</scope><name>highQuality</name></member>
-      <member refid="d5/de1/a04990_1a97fb67c2fd4d51b3fadced7b4b254e03" prot="public" virt="non-virtual"><scope>castor3d::shader::SsaoConfigData</scope><name>intensity</name></member>
-      <member refid="d5/de1/a04990_1a0a025738b12e24f00befb8b1265ca3f4" prot="public" virt="non-virtual"><scope>castor3d::shader::SsaoConfigData</scope><name>intensityDivR6</name></member>
-      <member refid="d5/de1/a04990_1a6d060fb6d2cd063c5c341416e5bc337d" prot="public" virt="non-virtual"><scope>castor3d::shader::SsaoConfigData</scope><name>invRadius</name></member>
-      <member refid="d5/de1/a04990_1af9fea021d6eb7ab385a1c9a173c3a8db" prot="public" virt="non-virtual"><scope>castor3d::shader::SsaoConfigData</scope><name>invRadius2</name></member>
-      <member refid="d5/de1/a04990_1a43d7b4a2ceadc7b5c57154f8814dc67b" prot="public" virt="non-virtual"><scope>castor3d::shader::SsaoConfigData</scope><name>logMaxOffset</name></member>
-      <member refid="d5/de1/a04990_1a1cc0bd580d29b3d11cb15b04ac01f396" prot="public" virt="non-virtual"><scope>castor3d::shader::SsaoConfigData</scope><name>makeType</name></member>
-      <member refid="d5/de1/a04990_1a3fae758fca3c8e6fc9c01ac64399fe29" prot="public" virt="non-virtual"><scope>castor3d::shader::SsaoConfigData</scope><name>maxMipLevel</name></member>
-      <member refid="d5/de1/a04990_1a8c9c0620147b526c836528cb1566ee56" prot="public" virt="non-virtual"><scope>castor3d::shader::SsaoConfigData</scope><name>minRadius</name></member>
-      <member refid="d5/de1/a04990_1aaea5c0b813f13a1ed6b4dbf764d9232e" prot="public" virt="non-virtual"><scope>castor3d::shader::SsaoConfigData</scope><name>numSamples</name></member>
-      <member refid="d5/de1/a04990_1a0b5f712ac99fb7d8151ccdc0c11e877e" prot="public" virt="non-virtual"><scope>castor3d::shader::SsaoConfigData</scope><name>numSpiralTurns</name></member>
-      <member refid="d5/de1/a04990_1a689c835e68f0c16fce5295e198c02b2a" prot="public" virt="non-virtual"><scope>castor3d::shader::SsaoConfigData</scope><name>projInfo</name></member>
-      <member refid="d5/de1/a04990_1a304ec6cecba52bfcd5dbac09bc898ce3" prot="public" virt="non-virtual"><scope>castor3d::shader::SsaoConfigData</scope><name>projScale</name></member>
-      <member refid="d5/de1/a04990_1ab211f59628b10465b60fcad62b902120" prot="public" virt="non-virtual"><scope>castor3d::shader::SsaoConfigData</scope><name>radius</name></member>
-      <member refid="d5/de1/a04990_1a9853905151acbf203a1a16e470460e45" prot="public" virt="non-virtual"><scope>castor3d::shader::SsaoConfigData</scope><name>radius2</name></member>
-      <member refid="d5/de1/a04990_1a9348bae40c31e818a280feded94e049a" prot="public" virt="non-virtual"><scope>castor3d::shader::SsaoConfigData</scope><name>SDW_DeclStructInstance</name></member>
-      <member refid="d5/de1/a04990_1a2f4bea7c9e7d633a7802674b6c4e0065" prot="public" virt="non-virtual"><scope>castor3d::shader::SsaoConfigData</scope><name>SsaoConfigData</name></member>
-      <member refid="d5/de1/a04990_1a50c0505473472bf1bc07f78505be95df" prot="public" virt="non-virtual"><scope>castor3d::shader::SsaoConfigData</scope><name>variation</name></member>
+      <member refid="d5/de1/a04990_1aabcb52861512522256fcaf1f9acb9068" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowOptions</scope><name>rsm</name></member>
+      <member refid="d5/de1/a04990_1a8b68f406fe4da58809924e1686f37671" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowOptions</scope><name>ShadowOptions</name></member>
+      <member refid="d5/de1/a04990_1afa4bfb9c9f2632c733d141c2baf9d551" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowOptions</scope><name>ShadowOptions</name></member>
+      <member refid="d5/de1/a04990_1a0c3ce384753a8fc300022ad2d89b5dde" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowOptions</scope><name>ShadowOptions</name></member>
+      <member refid="d5/de1/a04990_1a7a95853fecd3a47999b39025e85a8fd1" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowOptions</scope><name>ShadowOptions</name></member>
+      <member refid="d5/de1/a04990_1a492435485188f965bae92189bd0b6ca6" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowOptions</scope><name>type</name></member>
+      <member refid="d5/de1/a04990_1a148561e553d3beb8a0337fca0ca52119" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowOptions</scope><name>vsm</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

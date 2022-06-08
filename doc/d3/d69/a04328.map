@@ -1,11 +1,16 @@
-<map id="castor3d::ToneMapping" name="castor3d::ToneMapping">
-<area shape="rect" id="node1" title=" " alt="" coords="217,421,375,448"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,317,192,344"/>
-<area shape="rect" id="node3" href="$da/dd2/a04898.html" title=" " alt="" coords="217,317,375,344"/>
-<area shape="rect" id="node4" href="$dc/d64/a04750.html" title="A non compiled shader module, with its source." alt="" coords="400,317,563,344"/>
-<area shape="rect" id="node5" title=" " alt="" coords="365,206,445,233"/>
-<area shape="rect" id="node6" title=" " alt="" coords="337,95,463,136"/>
-<area shape="rect" id="node7" title=" " alt="" coords="472,199,611,240"/>
-<area shape="rect" id="node8" title=" " alt="" coords="488,102,627,129"/>
-<area shape="rect" id="node9" title=" " alt="" coords="538,5,577,32"/>
+<map id="castor3d::OpaquePassResult" name="castor3d::OpaquePassResult">
+<area shape="rect" id="node1" title=" " alt="" coords="341,657,533,684"/>
+<area shape="rect" id="node2" href="$df/d76/a03726.html" title=" " alt="" coords="372,567,503,608"/>
+<area shape="rect" id="node3" href="$db/db0/a03722.html" title=" " alt="" coords="265,387,418,413"/>
+<area shape="rect" id="node14" href="$df/d76/a03726.html" title=" " alt="" coords="377,463,508,504"/>
+<area shape="rect" id="node4" title=" " alt="" coords="139,297,245,324"/>
+<area shape="rect" id="node5" href="$df/d75/a04010.html" title=" " alt="" coords="270,297,429,324"/>
+<area shape="rect" id="node6" href="$d7/ded/a04130.html" title=" " alt="" coords="339,196,506,223"/>
+<area shape="rect" id="node7" title=" " alt="" coords="329,95,516,121"/>
+<area shape="rect" id="node8" title=" " alt="" coords="80,196,259,223"/>
+<area shape="rect" id="node9" href="$d2/dce/a04002.html" title=" " alt="" coords="5,95,157,121"/>
+<area shape="rect" id="node10" title=" " alt="" coords="191,95,305,121"/>
+<area shape="rect" id="node12" title=" " alt="" coords="451,247,618,273"/>
+<area shape="rect" id="node11" title=" " alt="" coords="435,5,474,32"/>
+<area shape="rect" id="node13" title=" " alt="" coords="483,145,623,172"/>
 </map>

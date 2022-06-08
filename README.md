@@ -26,17 +26,13 @@ The project itself is compilable on supported platforms using CMake (\ref build)
 - Shaders are writable directly from C++ code.
 - Scenes are described using a text format easily comprehensible and extensible.
 - Synchronous (user defined) or asynchronous (thread) rendering.
+- Using Mesh and Task shaders, if available.
 
 ## Implemented Plug-ins
 
 ### Importers
 - ASSIMP: Multiple format mesh importer.
 - PLY: Stanford Polygon library mesh importer.
-
-### Dividers
-- Loop subdivision surfaces.
-- Phong tessellation.
-- PN-Triangles surfaces.
 
 ### PostEffects
 - Bloom: HDR Bloom implementation.
@@ -81,6 +77,7 @@ The project itself is compilable on supported platforms using CMake (\ref build)
 <a href="http://dragonjoker.github.io/Castor3D/img/Bistro-PBR-VCT.png"><img alt="Bistro, PBR, VCT" src="./img/Bistro-PBR-VCT-Small.png"></a>
 
 ## Older Versions
+- [v0.12.0](https://dragonjoker.github.io/Castor3D/v0.12.0/)
 - [v0.11.0](https://dragonjoker.github.io/Castor3D/v0.11.0/)
 - [v0.10.0](https://dragonjoker.github.io/Castor3D/v0.10.0/)
 - [v0.9.0](https://dragonjoker.github.io/Castor3D/v0.9.0/)

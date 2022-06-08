@@ -1,64 +1,50 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d1/d5c/a03838" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::GaussianBlur::Configuration</compoundname>
-    <includes local="no">GaussianBlur.hpp</includes>
+    <compoundname>castor3d::SceneRenderNodes::NodeData</compoundname>
+    <includes local="no">SceneRenderNodes.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d1/d5c/a03838_1ac9c17b03167cc405fa7142669239b6c4" prot="public" static="no" mutable="no">
-        <type>castor::Point2f</type>
-        <definition>castor::Point2f castor3d::GaussianBlur::Configuration::textureSize</definition>
+      <memberdef kind="variable" id="d1/d5c/a03838_1a5b247c75e0d353b95971c3e5512a7fb5" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/d8a/a02830" kindref="compound">Pass</ref> const  *</type>
+        <definition>Pass const* castor3d::SceneRenderNodes::NodeData::pass</definition>
         <argsstring></argsstring>
-        <name>textureSize</name>
-        <qualifiedname>castor3d::GaussianBlur::Configuration::textureSize</qualifiedname>
+        <name>pass</name>
+        <qualifiedname>castor3d::SceneRenderNodes::NodeData::pass</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="171" column="17" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="171" bodyend="-1"/>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="37" column="13" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="37" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d5c/a03838_1a50c8573932f8195cfdea8163aafcf041" prot="public" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::GaussianBlur::Configuration::blurCoeffsCount</definition>
+      <memberdef kind="variable" id="d1/d5c/a03838_1adb9544fb53a964c6413318cfb76bbe78" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/d86/a04746" kindref="compound">SceneNode</ref> const  *</type>
+        <definition>SceneNode const* castor3d::SceneRenderNodes::NodeData::node</definition>
         <argsstring></argsstring>
-        <name>blurCoeffsCount</name>
-        <qualifiedname>castor3d::GaussianBlur::Configuration::blurCoeffsCount</qualifiedname>
+        <name>node</name>
+        <qualifiedname>castor3d::SceneRenderNodes::NodeData::node</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="172" column="10" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="172" bodyend="-1"/>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="38" column="18" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="38" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d5c/a03838_1aa675748b11ce22d505c09ac77a9e0200" prot="public" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::GaussianBlur::Configuration::dump</definition>
+      <memberdef kind="variable" id="d1/d5c/a03838_1a1a1d840e81084066e48d7d5410741081" prot="public" static="no" mutable="no">
+        <type><ref refid="d8/d18/a04690" kindref="compound">RenderedObject</ref> const  *</type>
+        <definition>RenderedObject const* castor3d::SceneRenderNodes::NodeData::object</definition>
         <argsstring></argsstring>
-        <name>dump</name>
-        <qualifiedname>castor3d::GaussianBlur::Configuration::dump</qualifiedname>
+        <name>object</name>
+        <qualifiedname>castor3d::SceneRenderNodes::NodeData::object</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="173" column="10" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="173" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/d5c/a03838_1a0229b8b3c8457af2659f43bfcee26663" prot="public" static="no" mutable="no">
-        <type>std::array&lt; castor::Point4f, <ref refid="d1/d69/a03834_1af2348a695a12bfe432775545bf4838d3" kindref="member">GaussianBlur::MaxCoefficients</ref>/4u &gt;</type>
-        <definition>std::array&lt; castor::Point4f, GaussianBlur::MaxCoefficients / 4u &gt; castor3d::GaussianBlur::Configuration::blurCoeffs</definition>
-        <argsstring></argsstring>
-        <name>blurCoeffs</name>
-        <qualifiedname>castor3d::GaussianBlur::Configuration::blurCoeffs</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="174" column="12" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="174" bodyend="-1"/>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="39" column="23" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="39" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -66,35 +52,102 @@
     <detaileddescription>
     </detaileddescription>
     <collaborationgraph>
-      <node id="4">
+      <node id="6">
+        <label>Animable</label>
+        <link refid="d5/db4/a02182"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>K</label>
+      </node>
+      <node id="11">
         <label>T</label>
       </node>
+      <node id="12">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d5/db4/a02182"/>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
       <node id="2">
-        <label>std::array&lt; castor::Point4f, GaussianBlur::MaxCoefficients/4u &gt;</label>
-        <childnode refid="3" relation="template-instance">
-          <edgelabel>&lt; castor::Point4f, GaussianBlur::MaxCoefficients/4u &gt;</edgelabel>
+        <label>castor3d::Pass</label>
+        <link refid="d7/d8a/a02830"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::RenderedObject</label>
+        <link refid="d8/d18/a04690"/>
+      </node>
+      <node id="4">
+        <label>castor3d::SceneNode</label>
+        <link refid="d1/d86/a04746"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="14" relation="public-inheritance">
         </childnode>
       </node>
       <node id="1">
-        <label>castor3d::GaussianBlur::Configuration</label>
+        <label>castor3d::SceneRenderNodes::NodeData</label>
         <link refid="d1/d5c/a03838"/>
         <childnode refid="2" relation="usage">
-          <edgelabel>blurCoeffs</edgelabel>
+          <edgelabel>pass</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>node</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>object</edgelabel>
         </childnode>
       </node>
+      <node id="14">
+        <label>castor::Named</label>
+      </node>
+      <node id="13">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="7">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
       <node id="3">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="4" relation="usage">
+        <label>castor::OwnedBy&lt; Material &gt;</label>
+      </node>
+      <node id="8">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
+      </node>
+      <node id="9">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="10" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
           <edgelabel>elements</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Render/Passes/GaussianBlur.hpp" line="169" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="170" bodyend="175"/>
+    <location file="Render/Node/SceneRenderNodes.hpp" line="35" column="1" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="36" bodyend="40"/>
     <listofallmembers>
-      <member refid="d1/d5c/a03838_1a0229b8b3c8457af2659f43bfcee26663" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::Configuration</scope><name>blurCoeffs</name></member>
-      <member refid="d1/d5c/a03838_1a50c8573932f8195cfdea8163aafcf041" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::Configuration</scope><name>blurCoeffsCount</name></member>
-      <member refid="d1/d5c/a03838_1aa675748b11ce22d505c09ac77a9e0200" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::Configuration</scope><name>dump</name></member>
-      <member refid="d1/d5c/a03838_1ac9c17b03167cc405fa7142669239b6c4" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::Configuration</scope><name>textureSize</name></member>
+      <member refid="d1/d5c/a03838_1adb9544fb53a964c6413318cfb76bbe78" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes::NodeData</scope><name>node</name></member>
+      <member refid="d1/d5c/a03838_1a1a1d840e81084066e48d7d5410741081" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes::NodeData</scope><name>object</name></member>
+      <member refid="d1/d5c/a03838_1a5b247c75e0d353b95971c3e5512a7fb5" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes::NodeData</scope><name>pass</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,5 +1,13 @@
-<map id="castor3d::PassFactory" name="castor3d::PassFactory">
-<area shape="rect" id="node1" title=" " alt="" coords="112,80,267,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,192,32"/>
-<area shape="rect" id="node3" title=" " alt="" coords="217,5,343,32"/>
+<map id="castor3d::MaterialImporter" name="castor3d::MaterialImporter">
+<area shape="rect" id="node1" title=" " alt="" coords="1055,69,1228,96"/>
+<area shape="rect" id="node2" title=" " alt="" coords="298,5,485,32"/>
+<area shape="rect" id="node3" href="$d5/dd8/a02802.html" title=" " alt="" coords="715,37,863,64"/>
+<area shape="rect" id="node4" href="$d5/d08/a03254.html" title=" " alt="" coords="711,89,866,130"/>
+<area shape="rect" id="node5" href="$d5/d08/a03254.html" title="Configuration parameters." alt="" coords="314,75,469,117"/>
+<area shape="rect" id="node6" title=" " alt="" coords="681,314,896,355"/>
+<area shape="rect" id="node7" href="$d4/db9/a02918.html" title="Specifies the usages of a texture, per image component." alt="" coords="292,327,491,353"/>
+<area shape="rect" id="node8" href="$d7/da7/a02914.html" title=" " alt="" coords="5,327,185,353"/>
+<area shape="rect" id="node9" title=" " alt="" coords="331,381,452,408"/>
+<area shape="rect" id="node10" title=" " alt="" coords="76,377,115,404"/>
+<area shape="rect" id="node11" title=" " alt="" coords="76,428,115,455"/>
 </map>

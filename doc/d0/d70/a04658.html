@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::ShaderProgram Class Reference</title>
+<title>Castor3D: castor3d::ParticleDeclaration Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,115 +42,191 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dc/df4/a01401.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d0/d70/a04658.html">ShaderProgram</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d0/d70/a04658.html">ParticleDeclaration</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a> &#124;
-<a href="#friends">Friends</a> &#124;
 <a href="../../d0/d5e/a04655.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">castor3d::ShaderProgram Class Reference</div></div>
+  <div class="headertitle"><div class="title">castor3d::ParticleDeclaration Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;Program.hpp&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for castor3d::ShaderProgram:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../d4/dad/a04657.png" border="0" usemap="#acastor3d_1_1ShaderProgram_inherit__map" alt="Inheritance graph"/></div>
-<map name="acastor3d_1_1ShaderProgram_inherit__map" id="acastor3d_1_1ShaderProgram_inherit__map">
-<area shape="rect" title=" " alt="" coords="285,56,456,83"/>
-<area shape="rect" title=" " alt="" coords="68,5,175,32"/>
-<area shape="rect" title=" " alt="" coords="5,56,237,83"/>
-<area shape="rect" title=" " alt="" coords="23,107,219,149"/>
-</map>
-<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
-<div class="dynheader">
-Collaboration diagram for castor3d::ShaderProgram:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../df/d42/a04656.png" border="0" usemap="#acastor3d_1_1ShaderProgram_coll__map" alt="Collaboration graph"/></div>
-<map name="acastor3d_1_1ShaderProgram_coll__map" id="acastor3d_1_1ShaderProgram_coll__map">
-<area shape="rect" title=" " alt="" coords="1461,140,1632,167"/>
-<area shape="rect" title=" " alt="" coords="1169,5,1276,32"/>
-<area shape="rect" title=" " alt="" coords="1107,56,1339,83"/>
-<area shape="rect" title=" " alt="" coords="1125,107,1321,149"/>
-<area shape="rect" title=" " alt="" coords="1122,238,1323,279"/>
-<area shape="rect" title=" " alt="" coords="753,244,874,271"/>
-<area shape="rect" title=" " alt="" coords="1119,173,1326,214"/>
-<area shape="rect" title=" " alt="" coords="1122,304,1323,360"/>
-<area shape="rect" title=" " alt="" coords="540,312,579,339"/>
-<area shape="rect" title=" " alt="" coords="49,163,88,189"/>
-<area shape="rect" title=" " alt="" coords="200,132,339,159"/>
-<area shape="rect" href="../../dc/d64/a04750.html" title="A non compiled shader module, with its source." alt="" coords="732,125,895,152"/>
-<area shape="rect" title=" " alt="" coords="229,276,309,303"/>
-<area shape="rect" href="../../d2/d6c/a04754.html" title="A SPIR&#45;V shader module, with SPIR&#45;V binary and debug text source." alt="" coords="483,363,636,389"/>
-<area shape="rect" title=" " alt="" coords="5,269,132,310"/>
-<area shape="rect" title=" " alt="" coords="490,118,629,159"/>
-<area shape="rect" href="../../dd/d22/a04662.html" title=" " alt="" coords="728,357,899,398"/>
-<area shape="rect" title=" " alt="" coords="224,363,315,389"/>
-</map>
-<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
+<p><code>#include &lt;ParticleDeclaration.hpp&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d22/a04662.html">CompiledShader</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:ac3605c9497d42815f814501886deff89"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#ac3605c9497d42815f814501886deff89">iterator</a> = ParticleElementDeclarationArrayIt</td></tr>
+<tr class="separator:ac3605c9497d42815f814501886deff89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4218788ea671d00ca5f5b0b6f56db038"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#a4218788ea671d00ca5f5b0b6f56db038">const_iterator</a> = ParticleElementDeclarationArrayConstIt</td></tr>
+<tr class="separator:a4218788ea671d00ca5f5b0b6f56db038"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a0f7b4bcfd855c4de92ef638d5c214087"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#a0f7b4bcfd855c4de92ef638d5c214087">ShaderProgram</a> (castor::String const &amp;name, <a class="el" href="../../d7/d34/a04078.html">RenderSystem</a> &amp;renderSystem)</td></tr>
-<tr class="memdesc:a0f7b4bcfd855c4de92ef638d5c214087"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../d0/d70/a04658.html#a0f7b4bcfd855c4de92ef638d5c214087">More...</a><br /></td></tr>
-<tr class="separator:a0f7b4bcfd855c4de92ef638d5c214087"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a43f33253976803dec37e82212581cb03"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#a43f33253976803dec37e82212581cb03">~ShaderProgram</a> ()</td></tr>
-<tr class="memdesc:a43f33253976803dec37e82212581cb03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="../../d0/d70/a04658.html#a43f33253976803dec37e82212581cb03">More...</a><br /></td></tr>
-<tr class="separator:a43f33253976803dec37e82212581cb03"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a31e3af260b18a88dd443fc0c8b6fd709"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#a31e3af260b18a88dd443fc0c8b6fd709">setFile</a> (VkShaderStageFlagBits target, castor::Path const &amp;pathFile)</td></tr>
-<tr class="memdesc:a31e3af260b18a88dd443fc0c8b6fd709"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the shader file.  <a href="../../d0/d70/a04658.html#a31e3af260b18a88dd443fc0c8b6fd709">More...</a><br /></td></tr>
-<tr class="separator:a31e3af260b18a88dd443fc0c8b6fd709"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a797acebdcbde43fd5e13d9d69feabdd4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor::Path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#a797acebdcbde43fd5e13d9d69feabdd4">getFile</a> (VkShaderStageFlagBits target) const</td></tr>
-<tr class="memdesc:a797acebdcbde43fd5e13d9d69feabdd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the shader file.  <a href="../../d0/d70/a04658.html#a797acebdcbde43fd5e13d9d69feabdd4">More...</a><br /></td></tr>
-<tr class="separator:a797acebdcbde43fd5e13d9d69feabdd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2e2da1a34045c41c39f6b9fde54d0d9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#af2e2da1a34045c41c39f6b9fde54d0d9">hasFile</a> (VkShaderStageFlagBits target) const</td></tr>
-<tr class="memdesc:af2e2da1a34045c41c39f6b9fde54d0d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells if the shader object has a source file.  <a href="../../d0/d70/a04658.html#af2e2da1a34045c41c39f6b9fde54d0d9">More...</a><br /></td></tr>
-<tr class="separator:af2e2da1a34045c41c39f6b9fde54d0d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b3126a96b5f7f4714f259d7caa6f61f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#a0b3126a96b5f7f4714f259d7caa6f61f">setSource</a> (VkShaderStageFlagBits target, castor::String const &amp;source)</td></tr>
-<tr class="memdesc:a0b3126a96b5f7f4714f259d7caa6f61f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the shader source.  <a href="../../d0/d70/a04658.html#a0b3126a96b5f7f4714f259d7caa6f61f">More...</a><br /></td></tr>
-<tr class="separator:a0b3126a96b5f7f4714f259d7caa6f61f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a69a4978980442324f2384b90042b7a9e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#a69a4978980442324f2384b90042b7a9e">setSource</a> (VkShaderStageFlagBits target, <a class="el" href="../../dc/df4/a01401.html#aec4f86dd5fea51ba4c7a8a10c7f503c7">ShaderPtr</a> shader)</td></tr>
-<tr class="memdesc:a69a4978980442324f2384b90042b7a9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the shader source.  <a href="../../d0/d70/a04658.html#a69a4978980442324f2384b90042b7a9e">More...</a><br /></td></tr>
-<tr class="separator:a69a4978980442324f2384b90042b7a9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4cccabdb889f7031c14408aa2ea77601"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../dc/d64/a04750.html">ShaderModule</a> const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#a4cccabdb889f7031c14408aa2ea77601">getSource</a> (VkShaderStageFlagBits target) const</td></tr>
-<tr class="memdesc:a4cccabdb889f7031c14408aa2ea77601"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the shader source.  <a href="../../d0/d70/a04658.html#a4cccabdb889f7031c14408aa2ea77601">More...</a><br /></td></tr>
-<tr class="separator:a4cccabdb889f7031c14408aa2ea77601"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05beaef91a3e4a669b98bd3b33000a37"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#a05beaef91a3e4a669b98bd3b33000a37">hasSource</a> (VkShaderStageFlagBits target) const</td></tr>
-<tr class="memdesc:a05beaef91a3e4a669b98bd3b33000a37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells if the shader object has a source code.  <a href="../../d0/d70/a04658.html#a05beaef91a3e4a669b98bd3b33000a37">More...</a><br /></td></tr>
-<tr class="separator:a05beaef91a3e4a669b98bd3b33000a37"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
-<tr class="memitem:a8c08e85bca76659aad95782a470f31a8"><td class="memItemLeft" align="right" valign="top">ashes::PipelineShaderStageCreateInfoArray const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#a8c08e85bca76659aad95782a470f31a8">getStates</a> () const</td></tr>
-<tr class="separator:a8c08e85bca76659aad95782a470f31a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
-<tr class="memitem:abd75bee7ac2d79dfccaff29b1c8d8d26"><td class="memItemLeft" align="right" valign="top">std::map&lt; VkShaderStageFlagBits, castor::Path &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#abd75bee7ac2d79dfccaff29b1c8d8d26">m_files</a></td></tr>
-<tr class="separator:abd75bee7ac2d79dfccaff29b1c8d8d26"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0666c0854d2b56cc5d4c46f3f999dc86"><td class="memItemLeft" align="right" valign="top">std::map&lt; VkShaderStageFlagBits, <a class="el" href="../../dc/d64/a04750.html">ShaderModule</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#a0666c0854d2b56cc5d4c46f3f999dc86">m_modules</a></td></tr>
-<tr class="separator:a0666c0854d2b56cc5d4c46f3f999dc86"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa5388b10d9afc336ead2abdc76205930"><td class="memItemLeft" align="right" valign="top">std::map&lt; VkShaderStageFlagBits, <a class="el" href="../../dd/d22/a04662.html">CompiledShader</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#aa5388b10d9afc336ead2abdc76205930">m_compiled</a></td></tr>
-<tr class="separator:aa5388b10d9afc336ead2abdc76205930"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae1500e35fcb7fc241b65cec9eeb6a15c"><td class="memItemLeft" align="right" valign="top">ashes::PipelineShaderStageCreateInfoArray&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#ae1500e35fcb7fc241b65cec9eeb6a15c">m_states</a></td></tr>
-<tr class="separator:ae1500e35fcb7fc241b65cec9eeb6a15c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:ae2b61e1c1fdf7dd2eb92cef8f2455dab"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#ae2b61e1c1fdf7dd2eb92cef8f2455dab">castor::TextWriter&lt; castor3d::ShaderProgram &gt;</a></td></tr>
-<tr class="separator:ae2b61e1c1fdf7dd2eb92cef8f2455dab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94906dc420ab54fe789e78978b9afb11"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#a94906dc420ab54fe789e78978b9afb11">CU_DeclareVector</a> (<a class="el" href="../../dd/d22/a04662.html">ParticleElementDeclaration</a>, <a class="el" href="../../dd/d22/a04662.html">ParticleElementDeclaration</a>)</td></tr>
+<tr class="separator:a94906dc420ab54fe789e78978b9afb11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ec38ae51302b43f610e7c25ea18a871"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#a8ec38ae51302b43f610e7c25ea18a871">ParticleDeclaration</a> ()</td></tr>
+<tr class="memdesc:a8ec38ae51302b43f610e7c25ea18a871"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../d0/d70/a04658.html#a8ec38ae51302b43f610e7c25ea18a871">More...</a><br /></td></tr>
+<tr class="separator:a8ec38ae51302b43f610e7c25ea18a871"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4f5720619218210cc6489768d196dc0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#aa4f5720619218210cc6489768d196dc0">ParticleDeclaration</a> (<a class="el" href="../../dd/d22/a04662.html">ParticleElementDeclaration</a> const *elements, uint32_t <a class="el" href="../../d0/d70/a04658.html#a2801ab754c2996e43bf6acf5681aa9d1">count</a>)</td></tr>
+<tr class="memdesc:aa4f5720619218210cc6489768d196dc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../d0/d70/a04658.html#aa4f5720619218210cc6489768d196dc0">More...</a><br /></td></tr>
+<tr class="separator:aa4f5720619218210cc6489768d196dc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0514f25eaec348b564a1b4db6774532d"><td class="memTemplParams" colspan="2">template&lt;uint32_t N&gt; </td></tr>
+<tr class="memitem:a0514f25eaec348b564a1b4db6774532d"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#a0514f25eaec348b564a1b4db6774532d">ParticleDeclaration</a> (<a class="el" href="../../dd/d22/a04662.html">ParticleElementDeclaration</a> const(&amp;elements)[N])</td></tr>
+<tr class="memdesc:a0514f25eaec348b564a1b4db6774532d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../d0/d70/a04658.html#a0514f25eaec348b564a1b4db6774532d">More...</a><br /></td></tr>
+<tr class="separator:a0514f25eaec348b564a1b4db6774532d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa730f3f47157eb4929349ce651695d15"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#aa730f3f47157eb4929349ce651695d15">ParticleDeclaration</a> (std::vector&lt; <a class="el" href="../../dd/d22/a04662.html">ParticleElementDeclaration</a> &gt; const &amp;elements)</td></tr>
+<tr class="memdesc:aa730f3f47157eb4929349ce651695d15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../d0/d70/a04658.html#aa730f3f47157eb4929349ce651695d15">More...</a><br /></td></tr>
+<tr class="separator:aa730f3f47157eb4929349ce651695d15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79f52eef30d7309b4306e332a1f61407"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#a79f52eef30d7309b4306e332a1f61407">~ParticleDeclaration</a> ()</td></tr>
+<tr class="memdesc:a79f52eef30d7309b4306e332a1f61407"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="../../d0/d70/a04658.html#a79f52eef30d7309b4306e332a1f61407">More...</a><br /></td></tr>
+<tr class="separator:a79f52eef30d7309b4306e332a1f61407"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2801ab754c2996e43bf6acf5681aa9d1"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#a2801ab754c2996e43bf6acf5681aa9d1">count</a> () const</td></tr>
+<tr class="separator:a2801ab754c2996e43bf6acf5681aa9d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94c23e4abf0b8bc8e7a4d2804cb66e01"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#a94c23e4abf0b8bc8e7a4d2804cb66e01">stride</a> () const</td></tr>
+<tr class="separator:a94c23e4abf0b8bc8e7a4d2804cb66e01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d90b77b2728db722108628e703c43f7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d0/d70/a04658.html#ac3605c9497d42815f814501886deff89">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#a9d90b77b2728db722108628e703c43f7">begin</a> ()</td></tr>
+<tr class="separator:a9d90b77b2728db722108628e703c43f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e1896a96f323d94c4779f9093304c97"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d0/d70/a04658.html#a4218788ea671d00ca5f5b0b6f56db038">const_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#a3e1896a96f323d94c4779f9093304c97">begin</a> () const</td></tr>
+<tr class="separator:a3e1896a96f323d94c4779f9093304c97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad535a512a6834f843fce3a8cfc553ba8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d0/d70/a04658.html#ac3605c9497d42815f814501886deff89">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#ad535a512a6834f843fce3a8cfc553ba8">end</a> ()</td></tr>
+<tr class="separator:ad535a512a6834f843fce3a8cfc553ba8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a08259686ff389f5e3630736a997b37"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d0/d70/a04658.html#a4218788ea671d00ca5f5b0b6f56db038">const_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#a3a08259686ff389f5e3630736a997b37">end</a> () const</td></tr>
+<tr class="separator:a3a08259686ff389f5e3630736a997b37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0b424404ccc18558bcbd1983dc9810c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#aa0b424404ccc18558bcbd1983dc9810c">push_back</a> (<a class="el" href="../../dd/d22/a04662.html">ParticleElementDeclaration</a> const &amp;element)</td></tr>
+<tr class="memdesc:aa0b424404ccc18558bcbd1983dc9810c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an element to the end of the list.  <a href="../../d0/d70/a04658.html#aa0b424404ccc18558bcbd1983dc9810c">More...</a><br /></td></tr>
+<tr class="separator:aa0b424404ccc18558bcbd1983dc9810c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9fa2c33110f50fdd3c3875d87508624"><td class="memTemplParams" colspan="2">template&lt;typename ... Params&gt; </td></tr>
+<tr class="memitem:ae9fa2c33110f50fdd3c3875d87508624"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d0/d70/a04658.html#ae9fa2c33110f50fdd3c3875d87508624">emplace_back</a> (Params const &amp;... params)</td></tr>
+<tr class="memdesc:ae9fa2c33110f50fdd3c3875d87508624"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an element to the end of the list.  <a href="../../d0/d70/a04658.html#ae9fa2c33110f50fdd3c3875d87508624">More...</a><br /></td></tr>
+<tr class="separator:ae9fa2c33110f50fdd3c3875d87508624"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a4218788ea671d00ca5f5b0b6f56db038" name="a4218788ea671d00ca5f5b0b6f56db038"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4218788ea671d00ca5f5b0b6f56db038">&#9670;&nbsp;</a></span>const_iterator</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="../../d0/d70/a04658.html#a4218788ea671d00ca5f5b0b6f56db038">castor3d::ParticleDeclaration::const_iterator</a> =  ParticleElementDeclarationArrayConstIt</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac3605c9497d42815f814501886deff89" name="ac3605c9497d42815f814501886deff89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3605c9497d42815f814501886deff89">&#9670;&nbsp;</a></span>iterator</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="../../d0/d70/a04658.html#ac3605c9497d42815f814501886deff89">castor3d::ParticleDeclaration::iterator</a> =  ParticleElementDeclarationArrayIt</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a0f7b4bcfd855c4de92ef638d5c214087" name="a0f7b4bcfd855c4de92ef638d5c214087"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0f7b4bcfd855c4de92ef638d5c214087">&#9670;&nbsp;</a></span>ShaderProgram()</h2>
+<a id="a8ec38ae51302b43f610e7c25ea18a871" name="a8ec38ae51302b43f610e7c25ea18a871"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ec38ae51302b43f610e7c25ea18a871">&#9670;&nbsp;</a></span>ParticleDeclaration() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::ParticleDeclaration::ParticleDeclaration </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+
+</div>
+</div>
+<a id="aa4f5720619218210cc6489768d196dc0" name="aa4f5720619218210cc6489768d196dc0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4f5720619218210cc6489768d196dc0">&#9670;&nbsp;</a></span>ParticleDeclaration() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::ParticleDeclaration::ParticleDeclaration </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../dd/d22/a04662.html">ParticleElementDeclaration</a> const *&#160;</td>
+          <td class="paramname"><em>elements</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>count</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">elements</td><td>The elements array </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">count</td><td>Elements array size </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a0514f25eaec348b564a1b4db6774532d" name="a0514f25eaec348b564a1b4db6774532d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0514f25eaec348b564a1b4db6774532d">&#9670;&nbsp;</a></span>ParticleDeclaration() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;uint32_t N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">castor3d::ParticleDeclaration::ParticleDeclaration </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../dd/d22/a04662.html">ParticleElementDeclaration</a> const(&amp;)&#160;</td>
+          <td class="paramname"><em>elements</em>[N]</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">elements</td><td>The elements array </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa730f3f47157eb4929349ce651695d15" name="aa730f3f47157eb4929349ce651695d15"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa730f3f47157eb4929349ce651695d15">&#9670;&nbsp;</a></span>ParticleDeclaration() <span class="overload">[4/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -159,26 +235,16 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::ShaderProgram::ShaderProgram </td>
+          <td class="memname">castor3d::ParticleDeclaration::ParticleDeclaration </td>
           <td>(</td>
-          <td class="paramtype">castor::String const &amp;&#160;</td>
-          <td class="paramname"><em>name</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">std::vector&lt; <a class="el" href="../../dd/d22/a04662.html">ParticleElementDeclaration</a> &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>elements</em></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="../../d7/d34/a04078.html">RenderSystem</a> &amp;&#160;</td>
-          <td class="paramname"><em>renderSystem</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -186,22 +252,21 @@ Friends</h2></td></tr>
 <p>Constructor. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>The program name. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">renderSystem</td><td>The <a class="el" href="../../d7/d34/a04078.html">RenderSystem</a>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">elements</td><td>The elements array </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a43f33253976803dec37e82212581cb03" name="a43f33253976803dec37e82212581cb03"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a43f33253976803dec37e82212581cb03">&#9670;&nbsp;</a></span>~ShaderProgram()</h2>
+<a id="a79f52eef30d7309b4306e332a1f61407" name="a79f52eef30d7309b4306e332a1f61407"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79f52eef30d7309b4306e332a1f61407">&#9670;&nbsp;</a></span>~ParticleDeclaration()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::ShaderProgram::~ShaderProgram </td>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::ParticleDeclaration::~ParticleDeclaration </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -214,62 +279,8 @@ Friends</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a797acebdcbde43fd5e13d9d69feabdd4" name="a797acebdcbde43fd5e13d9d69feabdd4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a797acebdcbde43fd5e13d9d69feabdd4">&#9670;&nbsp;</a></span>getFile()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor::Path castor3d::ShaderProgram::getFile </td>
-          <td>(</td>
-          <td class="paramtype">VkShaderStageFlagBits&#160;</td>
-          <td class="paramname"><em>target</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Retrieves the shader file. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">target</td><td>The shader object concerned. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The file name. </dd></dl>
-
-</div>
-</div>
-<a id="a4cccabdb889f7031c14408aa2ea77601" name="a4cccabdb889f7031c14408aa2ea77601"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4cccabdb889f7031c14408aa2ea77601">&#9670;&nbsp;</a></span>getSource()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../dc/d64/a04750.html">ShaderModule</a> const  &amp; castor3d::ShaderProgram::getSource </td>
-          <td>(</td>
-          <td class="paramtype">VkShaderStageFlagBits&#160;</td>
-          <td class="paramname"><em>target</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Retrieves the shader source. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">target</td><td>The shader object concerned. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The source code. </dd></dl>
-
-</div>
-</div>
-<a id="a8c08e85bca76659aad95782a470f31a8" name="a8c08e85bca76659aad95782a470f31a8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8c08e85bca76659aad95782a470f31a8">&#9670;&nbsp;</a></span>getStates()</h2>
+<a id="a9d90b77b2728db722108628e703c43f7" name="a9d90b77b2728db722108628e703c43f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d90b77b2728db722108628e703c43f7">&#9670;&nbsp;</a></span>begin() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -278,7 +289,33 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">ashes::PipelineShaderStageCreateInfoArray const  &amp; castor3d::ShaderProgram::getStates </td>
+          <td class="memname"><a class="el" href="../../d0/d70/a04658.html#ac3605c9497d42815f814501886deff89">iterator</a> castor3d::ParticleDeclaration::begin </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>An iterator to the beginning of the elements. </dd></dl>
+
+</div>
+</div>
+<a id="a3e1896a96f323d94c4779f9093304c97" name="a3e1896a96f323d94c4779f9093304c97"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e1896a96f323d94c4779f9093304c97">&#9670;&nbsp;</a></span>begin() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d0/d70/a04658.html#a4218788ea671d00ca5f5b0b6f56db038">const_iterator</a> castor3d::ParticleDeclaration::begin </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -290,298 +327,241 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p >name Getters. </p>
-
-<p class="reference">References <a class="el" href="../../d0/d70/a04658.html#ae1500e35fcb7fc241b65cec9eeb6a15c">m_states</a>.</p>
+<dl class="section return"><dt>Returns</dt><dd>An iterator to the beginning of the elements. </dd></dl>
 
 </div>
 </div>
-<a id="af2e2da1a34045c41c39f6b9fde54d0d9" name="af2e2da1a34045c41c39f6b9fde54d0d9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af2e2da1a34045c41c39f6b9fde54d0d9">&#9670;&nbsp;</a></span>hasFile()</h2>
+<a id="a2801ab754c2996e43bf6acf5681aa9d1" name="a2801ab754c2996e43bf6acf5681aa9d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2801ab754c2996e43bf6acf5681aa9d1">&#9670;&nbsp;</a></span>count()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool castor3d::ShaderProgram::hasFile </td>
+          <td class="memname">size_t castor3d::ParticleDeclaration::count </td>
           <td>(</td>
-          <td class="paramtype">VkShaderStageFlagBits&#160;</td>
-          <td class="paramname"><em>target</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
-
-<p>Tells if the shader object has a source file. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">target</td><td>The shader object concerned. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd><code>true</code> if the shader object has a source file. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The elements count. </dd></dl>
 
 </div>
 </div>
-<a id="a05beaef91a3e4a669b98bd3b33000a37" name="a05beaef91a3e4a669b98bd3b33000a37"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a05beaef91a3e4a669b98bd3b33000a37">&#9670;&nbsp;</a></span>hasSource()</h2>
+<a id="a94906dc420ab54fe789e78978b9afb11" name="a94906dc420ab54fe789e78978b9afb11"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a94906dc420ab54fe789e78978b9afb11">&#9670;&nbsp;</a></span>CU_DeclareVector()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool castor3d::ShaderProgram::hasSource </td>
+          <td class="memname">castor3d::ParticleDeclaration::CU_DeclareVector </td>
           <td>(</td>
-          <td class="paramtype">VkShaderStageFlagBits&#160;</td>
-          <td class="paramname"><em>target</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="../../dd/d22/a04662.html">ParticleElementDeclaration</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../dd/d22/a04662.html">ParticleElementDeclaration</a>&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae9fa2c33110f50fdd3c3875d87508624" name="ae9fa2c33110f50fdd3c3875d87508624"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9fa2c33110f50fdd3c3875d87508624">&#9670;&nbsp;</a></span>emplace_back()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ... Params&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void castor3d::ParticleDeclaration::emplace_back </td>
+          <td>(</td>
+          <td class="paramtype">Params const &amp;...&#160;</td>
+          <td class="paramname"><em>params</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an element to the end of the list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">params</td><td>The element construction parameters. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="../../da/dab/a01362.html#ac40a988f841964ae24e1fb7f216f9f89">castor3d::getSize()</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d0/d70/a04658_ae9fa2c33110f50fdd3c3875d87508624_cgraph.png" border="0" usemap="#ad0/d70/a04658_ae9fa2c33110f50fdd3c3875d87508624_cgraph" alt=""/></div>
+<map name="ad0/d70/a04658_ae9fa2c33110f50fdd3c3875d87508624_cgraph" id="ad0/d70/a04658_ae9fa2c33110f50fdd3c3875d87508624_cgraph">
+<area shape="rect" title="Adds an element to the end of the list." alt="" coords="5,5,195,47"/>
+<area shape="rect" href="../../da/dab/a01362.html#ac40a988f841964ae24e1fb7f216f9f89" title=" " alt="" coords="243,13,367,39"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ad535a512a6834f843fce3a8cfc553ba8" name="ad535a512a6834f843fce3a8cfc553ba8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad535a512a6834f843fce3a8cfc553ba8">&#9670;&nbsp;</a></span>end() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d0/d70/a04658.html#ac3605c9497d42815f814501886deff89">iterator</a> castor3d::ParticleDeclaration::end </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>An iterator to the end of the elements. </dd></dl>
+
+</div>
+</div>
+<a id="a3a08259686ff389f5e3630736a997b37" name="a3a08259686ff389f5e3630736a997b37"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a08259686ff389f5e3630736a997b37">&#9670;&nbsp;</a></span>end() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d0/d70/a04658.html#a4218788ea671d00ca5f5b0b6f56db038">const_iterator</a> castor3d::ParticleDeclaration::end </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
-
-<p>Tells if the shader object has a source code. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">target</td><td>The shader object concerned. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd><code>true</code> if the shader object has a source code. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>An iterator to the end of the elements. </dd></dl>
 
 </div>
 </div>
-<a id="a31e3af260b18a88dd443fc0c8b6fd709" name="a31e3af260b18a88dd443fc0c8b6fd709"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a31e3af260b18a88dd443fc0c8b6fd709">&#9670;&nbsp;</a></span>setFile()</h2>
+<a id="aa0b424404ccc18558bcbd1983dc9810c" name="aa0b424404ccc18558bcbd1983dc9810c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0b424404ccc18558bcbd1983dc9810c">&#9670;&nbsp;</a></span>push_back()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::ShaderProgram::setFile </td>
+          <td class="memname">void castor3d::ParticleDeclaration::push_back </td>
           <td>(</td>
-          <td class="paramtype">VkShaderStageFlagBits&#160;</td>
-          <td class="paramname"><em>target</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype"><a class="el" href="../../dd/d22/a04662.html">ParticleElementDeclaration</a> const &amp;&#160;</td>
+          <td class="paramname"><em>element</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">castor::Path const &amp;&#160;</td>
-          <td class="paramname"><em>pathFile</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>Sets the shader file. </p>
+<p>Adds an element to the end of the list. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">target</td><td>The shader module concerned. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pathFile</td><td>The file name. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">element</td><td>The element. </td></tr>
   </table>
   </dd>
 </dl>
 
+<p class="reference">References <a class="el" href="../../da/dab/a01362.html#ac40a988f841964ae24e1fb7f216f9f89">castor3d::getSize()</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d0/d70/a04658_aa0b424404ccc18558bcbd1983dc9810c_cgraph.png" border="0" usemap="#ad0/d70/a04658_aa0b424404ccc18558bcbd1983dc9810c_cgraph" alt=""/></div>
+<map name="ad0/d70/a04658_aa0b424404ccc18558bcbd1983dc9810c_cgraph" id="ad0/d70/a04658_aa0b424404ccc18558bcbd1983dc9810c_cgraph">
+<area shape="rect" title="Adds an element to the end of the list." alt="" coords="5,5,195,47"/>
+<area shape="rect" href="../../da/dab/a01362.html#ac40a988f841964ae24e1fb7f216f9f89" title=" " alt="" coords="243,13,367,39"/>
+</map>
+</div>
+
 </div>
 </div>
-<a id="a0b3126a96b5f7f4714f259d7caa6f61f" name="a0b3126a96b5f7f4714f259d7caa6f61f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0b3126a96b5f7f4714f259d7caa6f61f">&#9670;&nbsp;</a></span>setSource() <span class="overload">[1/2]</span></h2>
+<a id="a94c23e4abf0b8bc8e7a4d2804cb66e01" name="a94c23e4abf0b8bc8e7a4d2804cb66e01"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a94c23e4abf0b8bc8e7a4d2804cb66e01">&#9670;&nbsp;</a></span>stride()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::ShaderProgram::setSource </td>
+          <td class="memname">uint32_t castor3d::ParticleDeclaration::stride </td>
           <td>(</td>
-          <td class="paramtype">VkShaderStageFlagBits&#160;</td>
-          <td class="paramname"><em>target</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">castor::String const &amp;&#160;</td>
-          <td class="paramname"><em>source</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Sets the shader source. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">target</td><td>The shader object concerned. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">source</td><td>The source code. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a69a4978980442324f2384b90042b7a9e" name="a69a4978980442324f2384b90042b7a9e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a69a4978980442324f2384b90042b7a9e">&#9670;&nbsp;</a></span>setSource() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::ShaderProgram::setSource </td>
-          <td>(</td>
-          <td class="paramtype">VkShaderStageFlagBits&#160;</td>
-          <td class="paramname"><em>target</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../dc/df4/a01401.html#aec4f86dd5fea51ba4c7a8a10c7f503c7">ShaderPtr</a>&#160;</td>
-          <td class="paramname"><em>shader</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Sets the shader source. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">target</td><td>The shader object concerned. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">shader</td><td>The source shader. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<h2 class="groupheader">Friends And Related Function Documentation</h2>
-<a id="ae2b61e1c1fdf7dd2eb92cef8f2455dab" name="ae2b61e1c1fdf7dd2eb92cef8f2455dab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae2b61e1c1fdf7dd2eb92cef8f2455dab">&#9670;&nbsp;</a></span>castor::TextWriter&lt; castor3d::ShaderProgram &gt;</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">friend class castor::TextWriter&lt; <a class="el" href="../../d0/d70/a04658.html">castor3d::ShaderProgram</a> &gt;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="aa5388b10d9afc336ead2abdc76205930" name="aa5388b10d9afc336ead2abdc76205930"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa5388b10d9afc336ead2abdc76205930">&#9670;&nbsp;</a></span>m_compiled</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::map&lt; VkShaderStageFlagBits, <a class="el" href="../../dd/d22/a04662.html">CompiledShader</a> &gt; castor3d::ShaderProgram::m_compiled</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="abd75bee7ac2d79dfccaff29b1c8d8d26" name="abd75bee7ac2d79dfccaff29b1c8d8d26"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abd75bee7ac2d79dfccaff29b1c8d8d26">&#9670;&nbsp;</a></span>m_files</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::map&lt; VkShaderStageFlagBits, castor::Path &gt; castor3d::ShaderProgram::m_files</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a0666c0854d2b56cc5d4c46f3f999dc86" name="a0666c0854d2b56cc5d4c46f3f999dc86"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0666c0854d2b56cc5d4c46f3f999dc86">&#9670;&nbsp;</a></span>m_modules</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::map&lt; VkShaderStageFlagBits, <a class="el" href="../../dc/d64/a04750.html">ShaderModule</a> &gt; castor3d::ShaderProgram::m_modules</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae1500e35fcb7fc241b65cec9eeb6a15c" name="ae1500e35fcb7fc241b65cec9eeb6a15c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae1500e35fcb7fc241b65cec9eeb6a15c">&#9670;&nbsp;</a></span>m_states</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">ashes::PipelineShaderStageCreateInfoArray castor3d::ShaderProgram::m_states</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="reference">Referenced by <a class="el" href="../../d0/d70/a04658.html#a8c08e85bca76659aad95782a470f31a8">getStates()</a>.</p>
+<dl class="section return"><dt>Returns</dt><dd>The byte size of the declaration. </dd></dl>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>Shader/<a class="el" href="../../d5/d16/a01154.html">Program.hpp</a></li>
+<li>Scene/ParticleSystem/<a class="el" href="../../d7/daf/a01169.html">ParticleDeclaration.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 15:34:56 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:50 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

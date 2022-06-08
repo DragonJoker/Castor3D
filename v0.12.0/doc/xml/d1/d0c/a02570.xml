@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d1/d0c/a02570" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::VertexBufferPool::ModelBuffers</compoundname>
+    <includes local="no">ObjectBufferPool.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/d0c/a02570_1afc367c22500db7aebdc184ed0cbfb096" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a7616d1d27aba8f61289a44545c397f8d" kindref="member">GpuPackedBuffer</ref></type>
+        <definition>GpuPackedBuffer castor3d::VertexBufferPool::ModelBuffers::vertex</definition>
+        <argsstring></argsstring>
+        <name>vertex</name>
+        <qualifiedname>castor3d::VertexBufferPool::ModelBuffers::vertex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="27" column="17" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d0c/a02570_1ac96ca687ec408f798b64167a064a9bb1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::VertexBufferPool::ModelBuffers::ModelBuffers</definition>
+        <argsstring>(GpuPackedBuffer vtx)</argsstring>
+        <name>ModelBuffers</name>
+        <qualifiedname>castor3d::VertexBufferPool::ModelBuffers::ModelBuffers</qualifiedname>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a7616d1d27aba8f61289a44545c397f8d" kindref="member">GpuPackedBuffer</ref></type>
+          <declname>vtx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="22" column="1" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="22" bodyend="25"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::GpuBufferT&lt; GpuBufferPackedAllocator &gt;</label>
+        <link refid="db/d09/a02502"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; GpuBufferPackedAllocator &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::GpuBufferBase</label>
+        <link refid="d3/d41/a02530"/>
+      </node>
+      <node id="4">
+        <label>castor3d::GpuBufferT&lt; AllocatorT &gt;</label>
+        <link refid="db/d09/a02502"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::VertexBufferPool::ModelBuffers</label>
+        <link refid="d1/d0c/a02570"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>vertex</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Buffer/ObjectBufferPool.hpp" line="20" column="1" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="21" bodyend="28"/>
+    <listofallmembers>
+      <member refid="d1/d0c/a02570_1ac96ca687ec408f798b64167a064a9bb1" prot="public" virt="non-virtual"><scope>castor3d::VertexBufferPool::ModelBuffers</scope><name>ModelBuffers</name></member>
+      <member refid="d1/d0c/a02570_1afc367c22500db7aebdc184ed0cbfb096" prot="public" virt="non-virtual"><scope>castor3d::VertexBufferPool::ModelBuffers</scope><name>vertex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

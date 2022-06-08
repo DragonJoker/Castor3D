@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::BackgroundRenderer Class Reference</title>
+<title>Castor3D: castor3d::BillboardRenderNode Struct Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,51 +42,142 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dc/df4/a01401.html">castor3d</a></li><li class="navelem"><a class="el" href="../../de/de0/a03814.html">BackgroundRenderer</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../de/de0/a03814.html">BillboardRenderNode</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="../../d7/d68/a03811.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">castor3d::BackgroundRenderer Class Reference</div></div>
+  <div class="headertitle"><div class="title">castor3d::BillboardRenderNode Struct Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;BackgroundPass.hpp&gt;</code></p>
+<p><code>#include &lt;BillboardRenderNode.hpp&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for castor3d::BillboardRenderNode:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d0/dd4/a03812.png" border="0" usemap="#acastor3d_1_1BillboardRenderNode_coll__map" alt="Collaboration graph"/></div>
+<map name="acastor3d_1_1BillboardRenderNode_coll__map" id="acastor3d_1_1BillboardRenderNode_coll__map">
+<area shape="rect" title=" " alt="" coords="2293,493,2495,519"/>
+<area shape="rect" href="../../d7/d8a/a02830.html" title=" " alt="" coords="1329,449,1439,475"/>
+<area shape="rect" title=" " alt="" coords="1604,337,1763,393"/>
+<area shape="rect" title=" " alt="" coords="981,450,1173,477"/>
+<area shape="rect" href="../../d1/d2a/a04566.html" title=" " alt="" coords="1971,282,2131,309"/>
+<area shape="rect" href="../../d8/d18/a04690.html" title=" " alt="" coords="1597,181,1770,207"/>
+<area shape="rect" href="../../d8/d12/a04694.html" title=" " alt="" coords="1625,89,1742,115"/>
+<area shape="rect" title=" " alt="" coords="1313,5,1455,47"/>
+<area shape="rect" title=" " alt="" coords="1291,71,1477,98"/>
+<area shape="rect" title=" " alt="" coords="1331,122,1437,149"/>
+<area shape="rect" href="../../d1/d86/a04746.html" title=" " alt="" coords="1610,231,1757,258"/>
+<area shape="rect" title=" " alt="" coords="1297,224,1471,265"/>
+<area shape="rect" href="../../d5/db4/a02182.html" title=" " alt="" coords="1346,173,1422,199"/>
+<area shape="rect" title=" " alt="" coords="984,175,1171,202"/>
+<area shape="rect" title=" " alt="" coords="669,71,836,112"/>
+<area shape="rect" href="../../d5/db4/a02182.html" title="Animable public interface." alt="" coords="1002,109,1153,151"/>
+<area shape="rect" title=" " alt="" coords="302,142,423,169"/>
+<area shape="rect" title=" " alt="" coords="69,162,108,189"/>
+<area shape="rect" title=" " alt="" coords="294,289,431,331"/>
+<area shape="rect" title=" " alt="" coords="69,233,108,259"/>
+<area shape="rect" title=" " alt="" coords="499,238,607,265"/>
+<area shape="rect" title=" " alt="" coords="659,136,847,177"/>
+<area shape="rect" href="../../dd/df4/a02510.html" title=" " alt="" coords="667,512,838,553"/>
+<area shape="rect" href="../../db/df5/a02534.html" title=" " alt="" coords="5,422,172,449"/>
+<area shape="rect" href="../../dd/df4/a02510.html" title="An offset and range of a GpuBuffer." alt="" coords="277,547,448,588"/>
+<area shape="rect" href="../../d0/dff/a02506.html" title="A GPU buffer, that uses a buddy allocator to allocate sub&#45;buffers." alt="" coords="291,355,435,396"/>
+<area shape="rect" href="../../d9/d76/a02526.html" title="A memory range, in bytes." alt="" coords="15,565,162,591"/>
+<area shape="rect" href="../../d1/d0c/a02570.html" title=" " alt="" coords="660,391,845,432"/>
+<area shape="rect" href="../../d3/d41/a02530.html" title=" " alt="" coords="1595,282,1772,309"/>
+<area shape="rect" title=" " alt="" coords="985,227,1169,297"/>
+<area shape="rect" href="../../db/d0b/a02566.html" title=" " alt="" coords="1291,290,1477,317"/>
+<area shape="rect" href="../../d4/d69/a05166.html" title="Model index data." alt="" coords="1940,518,2163,545"/>
+<area shape="rect" href="../../d2/dc4/a05134.html" title="Billboards list data." alt="" coords="1937,569,2165,595"/>
+</map>
+<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:ae3f9ebcf47785d41f2ff668692e34e59"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#ae3f9ebcf47785d41f2ff668692e34e59">DataType</a> = <a class="el" href="../../d1/d2a/a04566.html">BillboardBase</a></td></tr>
+<tr class="separator:ae3f9ebcf47785d41f2ff668692e34e59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8509a01d5cb9288f9f815bc2e79d431"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#ac8509a01d5cb9288f9f815bc2e79d431">InstanceType</a> = <a class="el" href="../../d1/d2a/a04566.html">BillboardBase</a></td></tr>
+<tr class="separator:ac8509a01d5cb9288f9f815bc2e79d431"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a68cad6951cb58e7138bbfc206058070f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#a68cad6951cb58e7138bbfc206058070f">BackgroundRenderer</a> (crg::FramePassGroup &amp;graph, crg::FramePass const *previousPass, <a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const &amp;device, <a class="el" href="../../da/deb/a03274.html">ProgressBar</a> *progress, castor::String const &amp;name, <a class="el" href="../../d8/d1f/a04450.html">SceneBackground</a> &amp;background, <a class="el" href="../../da/dd2/a04898.html">HdrConfigUbo</a> const &amp;hdrConfigUbo, <a class="el" href="../../db/db8/a04970.html">SceneUbo</a> const &amp;sceneUbo, crg::ImageViewId const &amp;colour, bool clearColour=true)</td></tr>
-<tr class="separator:a68cad6951cb58e7138bbfc206058070f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a252e0f9a675ebffbc9125a102c103d43"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#a252e0f9a675ebffbc9125a102c103d43">BackgroundRenderer</a> (crg::FramePassGroup &amp;graph, crg::FramePass const *previousPass, <a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const &amp;device, <a class="el" href="../../da/deb/a03274.html">ProgressBar</a> *progress, castor::String const &amp;name, <a class="el" href="../../d8/d1f/a04450.html">SceneBackground</a> &amp;background, <a class="el" href="../../da/dd2/a04898.html">HdrConfigUbo</a> const &amp;hdrConfigUbo, <a class="el" href="../../db/db8/a04970.html">SceneUbo</a> const &amp;sceneUbo, crg::ImageViewId const &amp;colour, bool clearColour, crg::ImageViewId const &amp;depth)</td></tr>
-<tr class="separator:a252e0f9a675ebffbc9125a102c103d43"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99bd93d494cdba34aa8142461d686f0b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#a99bd93d494cdba34aa8142461d686f0b">BackgroundRenderer</a> (crg::FramePassGroup &amp;graph, crg::FramePass const *previousPass, <a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const &amp;device, castor::String const &amp;name, <a class="el" href="../../d8/d1f/a04450.html">SceneBackground</a> &amp;background, <a class="el" href="../../da/dd2/a04898.html">HdrConfigUbo</a> const &amp;hdrConfigUbo, <a class="el" href="../../db/db8/a04970.html">SceneUbo</a> const &amp;sceneUbo, crg::ImageViewId const &amp;colour, bool clearColour=true)</td></tr>
-<tr class="separator:a99bd93d494cdba34aa8142461d686f0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae58fcffee219aa37bd6fef464826225f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#ae58fcffee219aa37bd6fef464826225f">BackgroundRenderer</a> (crg::FramePassGroup &amp;graph, crg::FramePass const *previousPass, <a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const &amp;device, castor::String const &amp;name, <a class="el" href="../../d8/d1f/a04450.html">SceneBackground</a> &amp;background, <a class="el" href="../../da/dd2/a04898.html">HdrConfigUbo</a> const &amp;hdrConfigUbo, <a class="el" href="../../db/db8/a04970.html">SceneUbo</a> const &amp;sceneUbo, crg::ImageViewId const &amp;colour, bool clearColour, crg::ImageViewId const &amp;depth)</td></tr>
-<tr class="separator:ae58fcffee219aa37bd6fef464826225f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abebbc47ebb14b63738a11b0da1b961df"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#abebbc47ebb14b63738a11b0da1b961df">BackgroundRenderer</a> (crg::FramePassGroup &amp;graph, crg::FramePassArray previousPasses, <a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const &amp;device, <a class="el" href="../../da/deb/a03274.html">ProgressBar</a> *progress, castor::String const &amp;name, <a class="el" href="../../d8/d1f/a04450.html">SceneBackground</a> &amp;background, <a class="el" href="../../da/dd2/a04898.html">HdrConfigUbo</a> const &amp;hdrConfigUbo, <a class="el" href="../../db/db8/a04970.html">SceneUbo</a> const &amp;sceneUbo, crg::ImageViewId const &amp;colour, bool clearColour=true)</td></tr>
-<tr class="separator:abebbc47ebb14b63738a11b0da1b961df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a54d7798db3113208d7b5777ed53e8f4d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#a54d7798db3113208d7b5777ed53e8f4d">BackgroundRenderer</a> (crg::FramePassGroup &amp;graph, crg::FramePassArray previousPasses, <a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const &amp;device, <a class="el" href="../../da/deb/a03274.html">ProgressBar</a> *progress, castor::String const &amp;name, <a class="el" href="../../d8/d1f/a04450.html">SceneBackground</a> &amp;background, <a class="el" href="../../da/dd2/a04898.html">HdrConfigUbo</a> const &amp;hdrConfigUbo, <a class="el" href="../../db/db8/a04970.html">SceneUbo</a> const &amp;sceneUbo, crg::ImageViewId const &amp;colour, bool clearColour, crg::ImageViewId const &amp;depth)</td></tr>
-<tr class="separator:a54d7798db3113208d7b5777ed53e8f4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad11daf4009ff6420fc144638afc816e6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#ad11daf4009ff6420fc144638afc816e6">BackgroundRenderer</a> (crg::FramePassGroup &amp;graph, crg::FramePassArray previousPasses, <a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const &amp;device, castor::String const &amp;name, <a class="el" href="../../d8/d1f/a04450.html">SceneBackground</a> &amp;background, <a class="el" href="../../da/dd2/a04898.html">HdrConfigUbo</a> const &amp;hdrConfigUbo, <a class="el" href="../../db/db8/a04970.html">SceneUbo</a> const &amp;sceneUbo, crg::ImageViewId const &amp;colour, bool clearColour=true)</td></tr>
-<tr class="separator:ad11daf4009ff6420fc144638afc816e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9572e26c0429da92462259b6c69bfb3b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#a9572e26c0429da92462259b6c69bfb3b">BackgroundRenderer</a> (crg::FramePassGroup &amp;graph, crg::FramePassArray previousPasses, <a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const &amp;device, castor::String const &amp;name, <a class="el" href="../../d8/d1f/a04450.html">SceneBackground</a> &amp;background, <a class="el" href="../../da/dd2/a04898.html">HdrConfigUbo</a> const &amp;hdrConfigUbo, <a class="el" href="../../db/db8/a04970.html">SceneUbo</a> const &amp;sceneUbo, crg::ImageViewId const &amp;colour, bool clearColour, crg::ImageViewId const &amp;depth)</td></tr>
-<tr class="separator:a9572e26c0429da92462259b6c69bfb3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f2159c23110f490b4dd8ada5a7470e5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#a7f2159c23110f490b4dd8ada5a7470e5">~BackgroundRenderer</a> ()</td></tr>
-<tr class="separator:a7f2159c23110f490b4dd8ada5a7470e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3541a7297a03c2b940d820ee2e8ed5be"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#a3541a7297a03c2b940d820ee2e8ed5be">update</a> (<a class="el" href="../../d3/d14/a04046.html">CpuUpdater</a> &amp;updater)</td></tr>
-<tr class="memdesc:a3541a7297a03c2b940d820ee2e8ed5be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the render pass, CPU wise.  <a href="../../de/de0/a03814.html#a3541a7297a03c2b940d820ee2e8ed5be">More...</a><br /></td></tr>
-<tr class="separator:a3541a7297a03c2b940d820ee2e8ed5be"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec8523deb3d9dcc6c8d059c2ca366795"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#aec8523deb3d9dcc6c8d059c2ca366795">update</a> (<a class="el" href="../../dd/daf/a04050.html">GpuUpdater</a> &amp;updater)</td></tr>
-<tr class="memdesc:aec8523deb3d9dcc6c8d059c2ca366795"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the render pass, GPU wise.  <a href="../../de/de0/a03814.html#aec8523deb3d9dcc6c8d059c2ca366795">More...</a><br /></td></tr>
-<tr class="separator:aec8523deb3d9dcc6c8d059c2ca366795"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ac7f6c26a6b62981ff73c14ca9e09da"><td class="memItemLeft" align="right" valign="top">crg::FramePass const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#a1ac7f6c26a6b62981ff73c14ca9e09da">getPass</a> () const</td></tr>
-<tr class="separator:a1ac7f6c26a6b62981ff73c14ca9e09da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae61d5e19f2b29b00b47b87c94d48448f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#ae61d5e19f2b29b00b47b87c94d48448f">BillboardRenderNode</a> (<a class="el" href="../../de/de0/a03814.html">BillboardRenderNode</a> const &amp;)=delete</td></tr>
+<tr class="separator:ae61d5e19f2b29b00b47b87c94d48448f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7aa06914d100447a3521f7b968282066"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#a7aa06914d100447a3521f7b968282066">BillboardRenderNode</a> (<a class="el" href="../../de/de0/a03814.html">BillboardRenderNode</a> &amp;&amp;)=default</td></tr>
+<tr class="separator:a7aa06914d100447a3521f7b968282066"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0d91207c413a9edd80d3e572a32623b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../de/de0/a03814.html">BillboardRenderNode</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#ad0d91207c413a9edd80d3e572a32623b">operator=</a> (<a class="el" href="../../de/de0/a03814.html">BillboardRenderNode</a> const &amp;)=delete</td></tr>
+<tr class="separator:ad0d91207c413a9edd80d3e572a32623b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d8a261a0665a79cb30a2405e0e96c5b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../de/de0/a03814.html">BillboardRenderNode</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#a5d8a261a0665a79cb30a2405e0e96c5b">operator=</a> (<a class="el" href="../../de/de0/a03814.html">BillboardRenderNode</a> &amp;&amp;)=delete</td></tr>
+<tr class="separator:a5d8a261a0665a79cb30a2405e0e96c5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf916dc65ea2c653a636518f986dc74d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#aaf916dc65ea2c653a636518f986dc74d">BillboardRenderNode</a> (<a class="el" href="../../d7/d8a/a02830.html">Pass</a> &amp;<a class="el" href="../../de/de0/a03814.html#a0981168dadf17a266a9418a341170fcc">pass</a>, <a class="el" href="../../de/de0/a03814.html#ae3f9ebcf47785d41f2ff668692e34e59">DataType</a> &amp;<a class="el" href="../../de/de0/a03814.html#afa4b5cab598a2e7e6769454fc41983c2">data</a>, <a class="el" href="../../d4/d69/a05166.html">ModelBufferConfiguration</a> &amp;<a class="el" href="../../de/de0/a03814.html#a9fe972c636e978a788a54f89e3b07f97">modelData</a>, <a class="el" href="../../d2/dc4/a05134.html">BillboardUboConfiguration</a> &amp;<a class="el" href="../../de/de0/a03814.html#acf81f2877a4f378dfad993f87ec1fe25">billboardData</a>)</td></tr>
+<tr class="separator:aaf916dc65ea2c653a636518f986dc74d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5325b7bb33395fe87188198e1063cae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#ac5325b7bb33395fe87188198e1063cae">getId</a> () const</td></tr>
+<tr class="separator:ac5325b7bb33395fe87188198e1063cae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a583b84d26b7240f99c74d785427c2c4f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#a583b84d26b7240f99c74d785427c2c4f">getInstanceCount</a> () const</td></tr>
+<tr class="separator:a583b84d26b7240f99c74d785427c2c4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7704d804a3914112a0d321ad221d0eaa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../db/d0b/a02566.html">ObjectBufferOffset</a> const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#a7704d804a3914112a0d321ad221d0eaa">getSourceBufferOffsets</a> () const</td></tr>
+<tr class="separator:a7704d804a3914112a0d321ad221d0eaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58b159c26532c1a8ae21803dbb66e086"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../db/d0b/a02566.html">ObjectBufferOffset</a> const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#a58b159c26532c1a8ae21803dbb66e086">getFinalBufferOffsets</a> () const</td></tr>
+<tr class="separator:a58b159c26532c1a8ae21803dbb66e086"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e3599eba6e380d58e7f3f0787fad018"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../da/dab/a01362.html#a456f43ef4580c9527b0e71aa45a237ee">SubmeshFlags</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#a7e3599eba6e380d58e7f3f0787fad018">getSubmeshFlags</a> () const</td></tr>
+<tr class="separator:a7e3599eba6e380d58e7f3f0787fad018"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc263f8e6054a24b4827f2b9b8ab61c5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../da/dab/a01362.html#abbe6548fefe6fd18e7c24e7d6f7b7f14">MorphFlags</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#afc263f8e6054a24b4827f2b9b8ab61c5">getMorphFlags</a> () const</td></tr>
+<tr class="separator:afc263f8e6054a24b4827f2b9b8ab61c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad69b3cb1c43e95860ff0fe49ebea0be"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../da/dab/a01362.html#ab503144f281345b45ccc3f3a94543dce">ProgramFlags</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#aad69b3cb1c43e95860ff0fe49ebea0be">getProgramFlags</a> () const</td></tr>
+<tr class="separator:aad69b3cb1c43e95860ff0fe49ebea0be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66837e498b4fc60f5ede9363da60fa2e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d3/d41/a02530.html">GeometryBuffers</a> const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#a66837e498b4fc60f5ede9363da60fa2e">getGeometryBuffers</a> (<a class="el" href="../../da/dab/a01362.html#af8308e78be327186fc4533308ee5cd19">ShaderFlags</a> const &amp;shaderFlags, <a class="el" href="../../da/dab/a01362.html#a456f43ef4580c9527b0e71aa45a237ee">SubmeshFlags</a> const &amp;submeshFlags, <a class="el" href="../../da/dab/a01362.html#ab503144f281345b45ccc3f3a94543dce">ProgramFlags</a> const &amp;programFlags, <a class="el" href="../../da/dab/a01362.html#afa51b269ca00eaeff4f95f361bf2208f">TextureFlagsArray</a> const &amp;texturesMask) const</td></tr>
+<tr class="separator:a66837e498b4fc60f5ede9363da60fa2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a0981168dadf17a266a9418a341170fcc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d8a/a02830.html">Pass</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#a0981168dadf17a266a9418a341170fcc">pass</a></td></tr>
+<tr class="separator:a0981168dadf17a266a9418a341170fcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa4b5cab598a2e7e6769454fc41983c2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../de/de0/a03814.html#ae3f9ebcf47785d41f2ff668692e34e59">DataType</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#afa4b5cab598a2e7e6769454fc41983c2">data</a></td></tr>
+<tr class="separator:afa4b5cab598a2e7e6769454fc41983c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca1393f2ad046474fe67af2e3f5fdb0e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../de/de0/a03814.html#ac8509a01d5cb9288f9f815bc2e79d431">InstanceType</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#aca1393f2ad046474fe67af2e3f5fdb0e">instance</a></td></tr>
+<tr class="separator:aca1393f2ad046474fe67af2e3f5fdb0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9fe972c636e978a788a54f89e3b07f97"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d4/d69/a05166.html">ModelBufferConfiguration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#a9fe972c636e978a788a54f89e3b07f97">modelData</a></td></tr>
+<tr class="separator:a9fe972c636e978a788a54f89e3b07f97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf81f2877a4f378dfad993f87ec1fe25"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d2/dc4/a05134.html">BillboardUboConfiguration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de0/a03814.html#acf81f2877a4f378dfad993f87ec1fe25">billboardData</a></td></tr>
+<tr class="separator:acf81f2877a4f378dfad993f87ec1fe25"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="ae3f9ebcf47785d41f2ff668692e34e59" name="ae3f9ebcf47785d41f2ff668692e34e59"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3f9ebcf47785d41f2ff668692e34e59">&#9670;&nbsp;</a></span>DataType</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="../../de/de0/a03814.html#ae3f9ebcf47785d41f2ff668692e34e59">castor3d::BillboardRenderNode::DataType</a> =  <a class="el" href="../../d1/d2a/a04566.html">BillboardBase</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac8509a01d5cb9288f9f815bc2e79d431" name="ac8509a01d5cb9288f9f815bc2e79d431"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8509a01d5cb9288f9f815bc2e79d431">&#9670;&nbsp;</a></span>InstanceType</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="../../de/de0/a03814.html#ac8509a01d5cb9288f9f815bc2e79d431">castor3d::BillboardRenderNode::InstanceType</a> =  <a class="el" href="../../d1/d2a/a04566.html">BillboardBase</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a68cad6951cb58e7138bbfc206058070f" name="a68cad6951cb58e7138bbfc206058070f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a68cad6951cb58e7138bbfc206058070f">&#9670;&nbsp;</a></span>BackgroundRenderer() <span class="overload">[1/8]</span></h2>
+<a id="ae61d5e19f2b29b00b47b87c94d48448f" name="ae61d5e19f2b29b00b47b87c94d48448f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae61d5e19f2b29b00b47b87c94d48448f">&#9670;&nbsp;</a></span>BillboardRenderNode() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -95,679 +186,82 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">castor3d::BackgroundRenderer::BackgroundRenderer </td>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::BillboardRenderNode::BillboardRenderNode </td>
           <td>(</td>
-          <td class="paramtype">crg::FramePassGroup &amp;&#160;</td>
-          <td class="paramname"><em>graph</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">crg::FramePass const *&#160;</td>
-          <td class="paramname"><em>previousPass</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const &amp;&#160;</td>
-          <td class="paramname"><em>device</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../da/deb/a03274.html">ProgressBar</a> *&#160;</td>
-          <td class="paramname"><em>progress</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">castor::String const &amp;&#160;</td>
-          <td class="paramname"><em>name</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d8/d1f/a04450.html">SceneBackground</a> &amp;&#160;</td>
-          <td class="paramname"><em>background</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../da/dd2/a04898.html">HdrConfigUbo</a> const &amp;&#160;</td>
-          <td class="paramname"><em>hdrConfigUbo</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../db/db8/a04970.html">SceneUbo</a> const &amp;&#160;</td>
-          <td class="paramname"><em>sceneUbo</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">crg::ImageViewId const &amp;&#160;</td>
-          <td class="paramname"><em>colour</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>clearColour</em> = <code>true</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a252e0f9a675ebffbc9125a102c103d43" name="a252e0f9a675ebffbc9125a102c103d43"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a252e0f9a675ebffbc9125a102c103d43">&#9670;&nbsp;</a></span>BackgroundRenderer() <span class="overload">[2/8]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">castor3d::BackgroundRenderer::BackgroundRenderer </td>
-          <td>(</td>
-          <td class="paramtype">crg::FramePassGroup &amp;&#160;</td>
-          <td class="paramname"><em>graph</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">crg::FramePass const *&#160;</td>
-          <td class="paramname"><em>previousPass</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const &amp;&#160;</td>
-          <td class="paramname"><em>device</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../da/deb/a03274.html">ProgressBar</a> *&#160;</td>
-          <td class="paramname"><em>progress</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">castor::String const &amp;&#160;</td>
-          <td class="paramname"><em>name</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d8/d1f/a04450.html">SceneBackground</a> &amp;&#160;</td>
-          <td class="paramname"><em>background</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../da/dd2/a04898.html">HdrConfigUbo</a> const &amp;&#160;</td>
-          <td class="paramname"><em>hdrConfigUbo</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../db/db8/a04970.html">SceneUbo</a> const &amp;&#160;</td>
-          <td class="paramname"><em>sceneUbo</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">crg::ImageViewId const &amp;&#160;</td>
-          <td class="paramname"><em>colour</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>clearColour</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">crg::ImageViewId const &amp;&#160;</td>
-          <td class="paramname"><em>depth</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a99bd93d494cdba34aa8142461d686f0b" name="a99bd93d494cdba34aa8142461d686f0b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a99bd93d494cdba34aa8142461d686f0b">&#9670;&nbsp;</a></span>BackgroundRenderer() <span class="overload">[3/8]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">castor3d::BackgroundRenderer::BackgroundRenderer </td>
-          <td>(</td>
-          <td class="paramtype">crg::FramePassGroup &amp;&#160;</td>
-          <td class="paramname"><em>graph</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">crg::FramePass const *&#160;</td>
-          <td class="paramname"><em>previousPass</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const &amp;&#160;</td>
-          <td class="paramname"><em>device</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">castor::String const &amp;&#160;</td>
-          <td class="paramname"><em>name</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d8/d1f/a04450.html">SceneBackground</a> &amp;&#160;</td>
-          <td class="paramname"><em>background</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../da/dd2/a04898.html">HdrConfigUbo</a> const &amp;&#160;</td>
-          <td class="paramname"><em>hdrConfigUbo</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../db/db8/a04970.html">SceneUbo</a> const &amp;&#160;</td>
-          <td class="paramname"><em>sceneUbo</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">crg::ImageViewId const &amp;&#160;</td>
-          <td class="paramname"><em>colour</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>clearColour</em> = <code>true</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae58fcffee219aa37bd6fef464826225f" name="ae58fcffee219aa37bd6fef464826225f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae58fcffee219aa37bd6fef464826225f">&#9670;&nbsp;</a></span>BackgroundRenderer() <span class="overload">[4/8]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">castor3d::BackgroundRenderer::BackgroundRenderer </td>
-          <td>(</td>
-          <td class="paramtype">crg::FramePassGroup &amp;&#160;</td>
-          <td class="paramname"><em>graph</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">crg::FramePass const *&#160;</td>
-          <td class="paramname"><em>previousPass</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const &amp;&#160;</td>
-          <td class="paramname"><em>device</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">castor::String const &amp;&#160;</td>
-          <td class="paramname"><em>name</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d8/d1f/a04450.html">SceneBackground</a> &amp;&#160;</td>
-          <td class="paramname"><em>background</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../da/dd2/a04898.html">HdrConfigUbo</a> const &amp;&#160;</td>
-          <td class="paramname"><em>hdrConfigUbo</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../db/db8/a04970.html">SceneUbo</a> const &amp;&#160;</td>
-          <td class="paramname"><em>sceneUbo</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">crg::ImageViewId const &amp;&#160;</td>
-          <td class="paramname"><em>colour</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>clearColour</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">crg::ImageViewId const &amp;&#160;</td>
-          <td class="paramname"><em>depth</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="abebbc47ebb14b63738a11b0da1b961df" name="abebbc47ebb14b63738a11b0da1b961df"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abebbc47ebb14b63738a11b0da1b961df">&#9670;&nbsp;</a></span>BackgroundRenderer() <span class="overload">[5/8]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">castor3d::BackgroundRenderer::BackgroundRenderer </td>
-          <td>(</td>
-          <td class="paramtype">crg::FramePassGroup &amp;&#160;</td>
-          <td class="paramname"><em>graph</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">crg::FramePassArray&#160;</td>
-          <td class="paramname"><em>previousPasses</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const &amp;&#160;</td>
-          <td class="paramname"><em>device</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../da/deb/a03274.html">ProgressBar</a> *&#160;</td>
-          <td class="paramname"><em>progress</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">castor::String const &amp;&#160;</td>
-          <td class="paramname"><em>name</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d8/d1f/a04450.html">SceneBackground</a> &amp;&#160;</td>
-          <td class="paramname"><em>background</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../da/dd2/a04898.html">HdrConfigUbo</a> const &amp;&#160;</td>
-          <td class="paramname"><em>hdrConfigUbo</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../db/db8/a04970.html">SceneUbo</a> const &amp;&#160;</td>
-          <td class="paramname"><em>sceneUbo</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">crg::ImageViewId const &amp;&#160;</td>
-          <td class="paramname"><em>colour</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>clearColour</em> = <code>true</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a54d7798db3113208d7b5777ed53e8f4d" name="a54d7798db3113208d7b5777ed53e8f4d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a54d7798db3113208d7b5777ed53e8f4d">&#9670;&nbsp;</a></span>BackgroundRenderer() <span class="overload">[6/8]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">castor3d::BackgroundRenderer::BackgroundRenderer </td>
-          <td>(</td>
-          <td class="paramtype">crg::FramePassGroup &amp;&#160;</td>
-          <td class="paramname"><em>graph</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">crg::FramePassArray&#160;</td>
-          <td class="paramname"><em>previousPasses</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const &amp;&#160;</td>
-          <td class="paramname"><em>device</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../da/deb/a03274.html">ProgressBar</a> *&#160;</td>
-          <td class="paramname"><em>progress</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">castor::String const &amp;&#160;</td>
-          <td class="paramname"><em>name</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d8/d1f/a04450.html">SceneBackground</a> &amp;&#160;</td>
-          <td class="paramname"><em>background</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../da/dd2/a04898.html">HdrConfigUbo</a> const &amp;&#160;</td>
-          <td class="paramname"><em>hdrConfigUbo</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../db/db8/a04970.html">SceneUbo</a> const &amp;&#160;</td>
-          <td class="paramname"><em>sceneUbo</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">crg::ImageViewId const &amp;&#160;</td>
-          <td class="paramname"><em>colour</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>clearColour</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">crg::ImageViewId const &amp;&#160;</td>
-          <td class="paramname"><em>depth</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ad11daf4009ff6420fc144638afc816e6" name="ad11daf4009ff6420fc144638afc816e6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad11daf4009ff6420fc144638afc816e6">&#9670;&nbsp;</a></span>BackgroundRenderer() <span class="overload">[7/8]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">castor3d::BackgroundRenderer::BackgroundRenderer </td>
-          <td>(</td>
-          <td class="paramtype">crg::FramePassGroup &amp;&#160;</td>
-          <td class="paramname"><em>graph</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">crg::FramePassArray&#160;</td>
-          <td class="paramname"><em>previousPasses</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const &amp;&#160;</td>
-          <td class="paramname"><em>device</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">castor::String const &amp;&#160;</td>
-          <td class="paramname"><em>name</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d8/d1f/a04450.html">SceneBackground</a> &amp;&#160;</td>
-          <td class="paramname"><em>background</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../da/dd2/a04898.html">HdrConfigUbo</a> const &amp;&#160;</td>
-          <td class="paramname"><em>hdrConfigUbo</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../db/db8/a04970.html">SceneUbo</a> const &amp;&#160;</td>
-          <td class="paramname"><em>sceneUbo</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">crg::ImageViewId const &amp;&#160;</td>
-          <td class="paramname"><em>colour</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>clearColour</em> = <code>true</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a9572e26c0429da92462259b6c69bfb3b" name="a9572e26c0429da92462259b6c69bfb3b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9572e26c0429da92462259b6c69bfb3b">&#9670;&nbsp;</a></span>BackgroundRenderer() <span class="overload">[8/8]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">castor3d::BackgroundRenderer::BackgroundRenderer </td>
-          <td>(</td>
-          <td class="paramtype">crg::FramePassGroup &amp;&#160;</td>
-          <td class="paramname"><em>graph</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">crg::FramePassArray&#160;</td>
-          <td class="paramname"><em>previousPasses</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const &amp;&#160;</td>
-          <td class="paramname"><em>device</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">castor::String const &amp;&#160;</td>
-          <td class="paramname"><em>name</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d8/d1f/a04450.html">SceneBackground</a> &amp;&#160;</td>
-          <td class="paramname"><em>background</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../da/dd2/a04898.html">HdrConfigUbo</a> const &amp;&#160;</td>
-          <td class="paramname"><em>hdrConfigUbo</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../db/db8/a04970.html">SceneUbo</a> const &amp;&#160;</td>
-          <td class="paramname"><em>sceneUbo</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">crg::ImageViewId const &amp;&#160;</td>
-          <td class="paramname"><em>colour</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>clearColour</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">crg::ImageViewId const &amp;&#160;</td>
-          <td class="paramname"><em>depth</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a7f2159c23110f490b4dd8ada5a7470e5" name="a7f2159c23110f490b4dd8ada5a7470e5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7f2159c23110f490b4dd8ada5a7470e5">&#9670;&nbsp;</a></span>~BackgroundRenderer()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::BackgroundRenderer::~BackgroundRenderer </td>
-          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../de/de0/a03814.html">BillboardRenderNode</a> const &amp;&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7aa06914d100447a3521f7b968282066" name="a7aa06914d100447a3521f7b968282066"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7aa06914d100447a3521f7b968282066">&#9670;&nbsp;</a></span>BillboardRenderNode() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::BillboardRenderNode::BillboardRenderNode </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../de/de0/a03814.html">BillboardRenderNode</a> &amp;&amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aaf916dc65ea2c653a636518f986dc74d" name="aaf916dc65ea2c653a636518f986dc74d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf916dc65ea2c653a636518f986dc74d">&#9670;&nbsp;</a></span>BillboardRenderNode() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::BillboardRenderNode::BillboardRenderNode </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/d8a/a02830.html">Pass</a> &amp;&#160;</td>
+          <td class="paramname"><em>pass</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../de/de0/a03814.html#ae3f9ebcf47785d41f2ff668692e34e59">DataType</a> &amp;&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d4/d69/a05166.html">ModelBufferConfiguration</a> &amp;&#160;</td>
+          <td class="paramname"><em>modelData</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d2/dc4/a05134.html">BillboardUboConfiguration</a> &amp;&#160;</td>
+          <td class="paramname"><em>billboardData</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -775,8 +269,167 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a1ac7f6c26a6b62981ff73c14ca9e09da" name="a1ac7f6c26a6b62981ff73c14ca9e09da"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1ac7f6c26a6b62981ff73c14ca9e09da">&#9670;&nbsp;</a></span>getPass()</h2>
+<a id="a58b159c26532c1a8ae21803dbb66e086" name="a58b159c26532c1a8ae21803dbb66e086"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a58b159c26532c1a8ae21803dbb66e086">&#9670;&nbsp;</a></span>getFinalBufferOffsets()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../db/d0b/a02566.html">ObjectBufferOffset</a> const  &amp; castor3d::BillboardRenderNode::getFinalBufferOffsets </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a66837e498b4fc60f5ede9363da60fa2e" name="a66837e498b4fc60f5ede9363da60fa2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66837e498b4fc60f5ede9363da60fa2e">&#9670;&nbsp;</a></span>getGeometryBuffers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d3/d41/a02530.html">GeometryBuffers</a> const  &amp; castor3d::BillboardRenderNode::getGeometryBuffers </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../da/dab/a01362.html#af8308e78be327186fc4533308ee5cd19">ShaderFlags</a> const &amp;&#160;</td>
+          <td class="paramname"><em>shaderFlags</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../da/dab/a01362.html#a456f43ef4580c9527b0e71aa45a237ee">SubmeshFlags</a> const &amp;&#160;</td>
+          <td class="paramname"><em>submeshFlags</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../da/dab/a01362.html#ab503144f281345b45ccc3f3a94543dce">ProgramFlags</a> const &amp;&#160;</td>
+          <td class="paramname"><em>programFlags</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../da/dab/a01362.html#afa51b269ca00eaeff4f95f361bf2208f">TextureFlagsArray</a> const &amp;&#160;</td>
+          <td class="paramname"><em>texturesMask</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac5325b7bb33395fe87188198e1063cae" name="ac5325b7bb33395fe87188198e1063cae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5325b7bb33395fe87188198e1063cae">&#9670;&nbsp;</a></span>getId()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> uint32_t castor3d::BillboardRenderNode::getId </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a583b84d26b7240f99c74d785427c2c4f" name="a583b84d26b7240f99c74d785427c2c4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a583b84d26b7240f99c74d785427c2c4f">&#9670;&nbsp;</a></span>getInstanceCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> uint32_t castor3d::BillboardRenderNode::getInstanceCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afc263f8e6054a24b4827f2b9b8ab61c5" name="afc263f8e6054a24b4827f2b9b8ab61c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc263f8e6054a24b4827f2b9b8ab61c5">&#9670;&nbsp;</a></span>getMorphFlags()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../da/dab/a01362.html#abbe6548fefe6fd18e7c24e7d6f7b7f14">MorphFlags</a> castor3d::BillboardRenderNode::getMorphFlags </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aad69b3cb1c43e95860ff0fe49ebea0be" name="aad69b3cb1c43e95860ff0fe49ebea0be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad69b3cb1c43e95860ff0fe49ebea0be">&#9670;&nbsp;</a></span>getProgramFlags()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../da/dab/a01362.html#ab503144f281345b45ccc3f3a94543dce">ProgramFlags</a> castor3d::BillboardRenderNode::getProgramFlags </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7704d804a3914112a0d321ad221d0eaa" name="a7704d804a3914112a0d321ad221d0eaa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7704d804a3914112a0d321ad221d0eaa">&#9670;&nbsp;</a></span>getSourceBufferOffsets()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../db/d0b/a02566.html">ObjectBufferOffset</a> const  &amp; castor3d::BillboardRenderNode::getSourceBufferOffsets </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7e3599eba6e380d58e7f3f0787fad018" name="a7e3599eba6e380d58e7f3f0787fad018"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e3599eba6e380d58e7f3f0787fad018">&#9670;&nbsp;</a></span>getSubmeshFlags()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../da/dab/a01362.html#a456f43ef4580c9527b0e71aa45a237ee">SubmeshFlags</a> castor3d::BillboardRenderNode::getSubmeshFlags </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5d8a261a0665a79cb30a2405e0e96c5b" name="a5d8a261a0665a79cb30a2405e0e96c5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d8a261a0665a79cb30a2405e0e96c5b">&#9670;&nbsp;</a></span>operator=() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -785,80 +438,126 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">crg::FramePass const  &amp; castor3d::BackgroundRenderer::getPass </td>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../de/de0/a03814.html">BillboardRenderNode</a> &amp; castor3d::BillboardRenderNode::operator= </td>
           <td>(</td>
+          <td class="paramtype"><a class="el" href="../../de/de0/a03814.html">BillboardRenderNode</a> &amp;&amp;&#160;</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a3541a7297a03c2b940d820ee2e8ed5be" name="a3541a7297a03c2b940d820ee2e8ed5be"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3541a7297a03c2b940d820ee2e8ed5be">&#9670;&nbsp;</a></span>update() <span class="overload">[1/2]</span></h2>
+<a id="ad0d91207c413a9edd80d3e572a32623b" name="ad0d91207c413a9edd80d3e572a32623b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0d91207c413a9edd80d3e572a32623b">&#9670;&nbsp;</a></span>operator=() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../de/de0/a03814.html">BillboardRenderNode</a> &amp; castor3d::BillboardRenderNode::operator= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../de/de0/a03814.html">BillboardRenderNode</a> const &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="acf81f2877a4f378dfad993f87ec1fe25" name="acf81f2877a4f378dfad993f87ec1fe25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf81f2877a4f378dfad993f87ec1fe25">&#9670;&nbsp;</a></span>billboardData</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::BackgroundRenderer::update </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d3/d14/a04046.html">CpuUpdater</a> &amp;&#160;</td>
-          <td class="paramname"><em>updater</em></td><td>)</td>
-          <td></td>
+          <td class="memname"><a class="el" href="../../d2/dc4/a05134.html">BillboardUboConfiguration</a>&amp; castor3d::BillboardRenderNode::billboardData</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Updates the render pass, CPU wise. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">updater</td><td>The update data. </td></tr>
-  </table>
-  </dd>
-</dl>
-
 </div>
 </div>
-<a id="aec8523deb3d9dcc6c8d059c2ca366795" name="aec8523deb3d9dcc6c8d059c2ca366795"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aec8523deb3d9dcc6c8d059c2ca366795">&#9670;&nbsp;</a></span>update() <span class="overload">[2/2]</span></h2>
+<a id="afa4b5cab598a2e7e6769454fc41983c2" name="afa4b5cab598a2e7e6769454fc41983c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa4b5cab598a2e7e6769454fc41983c2">&#9670;&nbsp;</a></span>data</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::BackgroundRenderer::update </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../dd/daf/a04050.html">GpuUpdater</a> &amp;&#160;</td>
-          <td class="paramname"><em>updater</em></td><td>)</td>
-          <td></td>
+          <td class="memname"><a class="el" href="../../de/de0/a03814.html#ae3f9ebcf47785d41f2ff668692e34e59">DataType</a>&amp; castor3d::BillboardRenderNode::data</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Updates the render pass, GPU wise. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">updater</td><td>The update data. </td></tr>
-  </table>
-  </dd>
-</dl>
+</div>
+</div>
+<a id="aca1393f2ad046474fe67af2e3f5fdb0e" name="aca1393f2ad046474fe67af2e3f5fdb0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca1393f2ad046474fe67af2e3f5fdb0e">&#9670;&nbsp;</a></span>instance</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../de/de0/a03814.html#ac8509a01d5cb9288f9f815bc2e79d431">InstanceType</a>&amp; castor3d::BillboardRenderNode::instance</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
-<li>Render/Passes/<a class="el" href="../../d6/dc0/a00734.html">BackgroundPass.hpp</a></li>
+<a id="a9fe972c636e978a788a54f89e3b07f97" name="a9fe972c636e978a788a54f89e3b07f97"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9fe972c636e978a788a54f89e3b07f97">&#9670;&nbsp;</a></span>modelData</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d4/d69/a05166.html">ModelBufferConfiguration</a>&amp; castor3d::BillboardRenderNode::modelData</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0981168dadf17a266a9418a341170fcc" name="a0981168dadf17a266a9418a341170fcc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0981168dadf17a266a9418a341170fcc">&#9670;&nbsp;</a></span>pass</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d7/d8a/a02830.html">Pass</a>* castor3d::BillboardRenderNode::pass</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
+<li>Render/Node/<a class="el" href="../../d0/d0a/a00743.html">BillboardRenderNode.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 15:34:55 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:46 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

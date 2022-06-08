@@ -1,7 +1,6 @@
-<map id="castor3d::BinaryParser&lt; Submesh &gt;" name="castor3d::BinaryParser&lt; Submesh &gt;">
-<area shape="rect" id="node1" title="MovableObject loader." alt="" coords="147,289,301,331"/>
-<area shape="rect" id="node2" href="$d5/d1b/a02331.html" title=" " alt="" coords="131,199,317,240"/>
-<area shape="rect" id="node3" href="$dd/d3b/a02291.html" title=" " alt="" coords="5,5,160,32"/>
-<area shape="rect" id="node5" href="$d5/d1b/a02331.html" title="Binary data chunk reader base class." alt="" coords="131,95,317,136"/>
-<area shape="rect" id="node4" href="$d0/de5/a03279.html" title=" " alt="" coords="218,5,342,32"/>
+<map id="castor3d::ChunkParserBase" name="castor3d::ChunkParserBase">
+<area shape="rect" id="node1" title=" " alt="" coords="5,64,191,91"/>
+<area shape="rect" id="node2" href="$df/d89/a02462.html" title="Chunk parser." alt="" coords="239,5,425,32"/>
+<area shape="rect" id="node3" href="$df/ddf/a02470.html" title="ChunkParser specialisation for castor::Path." alt="" coords="255,57,409,98"/>
+<area shape="rect" id="node4" href="$dc/dd2/a02466.html" title="ChunkParser specialisation for castor::String." alt="" coords="255,122,409,163"/>
 </map>

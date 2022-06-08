@@ -1,5 +1,8 @@
-<map id="castor3d::RenderQuadBuilder" name="castor3d::RenderQuadBuilder">
-<area shape="rect" id="node1" title=" " alt="" coords="23,215,215,241"/>
-<area shape="rect" id="node2" href="$d7/db3/a03846.html" title=" " alt="" coords="5,124,233,165"/>
-<area shape="rect" id="node3" href="$d7/db3/a03846.html" title="Used to create a RenderQuad variable." alt="" coords="23,5,215,47"/>
+<map id="castor3d::DepthPass" name="castor3d::DepthPass">
+<area shape="rect" id="node1" title=" " alt="" coords="197,229,341,256"/>
+<area shape="rect" id="node2" href="$dd/d0e/a04350.html" title=" " alt="" coords="164,155,375,181"/>
+<area shape="rect" id="node3" href="$de/d67/a04110.html" title=" " alt="" coords="175,80,363,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,5,192,32"/>
+<area shape="rect" id="node5" title=" " alt="" coords="216,5,323,32"/>
+<area shape="rect" id="node6" title=" " alt="" coords="347,5,466,32"/>
 </map>

@@ -193,7 +193,7 @@
         <name>ObjectCacheT</name>
         <qualifiedname>castor3d::ObjectCacheT::ObjectCacheT</qualifiedname>
         <param>
-          <type><ref refid="d6/d71/a04598" kindref="compound">Scene</ref> &amp;</type>
+          <type><ref refid="d8/d12/a04694" kindref="compound">Scene</ref> &amp;</type>
           <declname>scene</declname>
         </param>
         <param>
@@ -347,7 +347,7 @@
     <collaborationgraph>
       <node id="5">
         <label>castor3d::Engine</label>
-        <link refid="d1/d3c/a02714"/>
+        <link refid="d9/db1/a02718"/>
         <childnode refid="6" relation="public-inheritance">
         </childnode>
       </node>
@@ -409,7 +409,7 @@
       <member refid="d8/dab/a02638_1a53f214ce6eab35501fb5509c504d4df1" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>OnChanged</name></member>
       <member refid="d8/dab/a02638_1a91d72169bf2d52687170aeefc90f3dcd" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>onChanged</name></member>
       <member refid="d8/dab/a02638_1abb32a9817ed3199de78a9e80ee634a44" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>OnChangedFunction</name></member>
-      <member refid="d8/dab/a02638_1aef5cfb8ffd6117cd01ff08475186e5e4" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>~ObjectCacheBaseT</name></member>
+      <member refid="d8/dab/a02638_1a191560dbae86cc9fb8d7f3b3e9ac7d8d" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT</scope><name>~ObjectCacheBaseT</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

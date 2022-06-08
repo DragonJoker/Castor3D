@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::LpvConfig Struct Reference</title>
+<title>Castor3D: castor3d::GeometryInjectionPass Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,50 +42,143 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../d0/d95/a01389.html">castor3d</a></li><li class="navelem"><a class="el" href="../../da/d08/a03730.html">LpvConfig</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../da/d08/a03730.html">GeometryInjectionPass</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="../../d1/df0/a03727.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">castor3d::LpvConfig Struct Reference</div></div>
+  <div class="headertitle"><div class="title">castor3d::GeometryInjectionPass Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;LpvConfig.hpp&gt;</code></p>
+<p><code>#include &lt;GeometryInjectionPass.hpp&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for castor3d::GeometryInjectionPass:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d4/d2d/a03729.png" border="0" usemap="#acastor3d_1_1GeometryInjectionPass_inherit__map" alt="Inheritance graph"/></div>
+<map name="acastor3d_1_1GeometryInjectionPass_inherit__map" id="acastor3d_1_1GeometryInjectionPass_inherit__map">
+<area shape="rect" title=" " alt="" coords="19,80,234,107"/>
+<area shape="rect" title=" " alt="" coords="5,5,112,32"/>
+<area shape="rect" title=" " alt="" coords="137,5,255,32"/>
+</map>
+<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
+<div class="dynheader">
+Collaboration diagram for castor3d::GeometryInjectionPass:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d3/d3b/a03728.png" border="0" usemap="#acastor3d_1_1GeometryInjectionPass_coll__map" alt="Collaboration graph"/></div>
+<map name="acastor3d_1_1GeometryInjectionPass_coll__map" id="acastor3d_1_1GeometryInjectionPass_coll__map">
+<area shape="rect" title=" " alt="" coords="19,80,234,107"/>
+<area shape="rect" title=" " alt="" coords="5,5,112,32"/>
+<area shape="rect" title=" " alt="" coords="137,5,255,32"/>
+</map>
+<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a07513e34c9ff06cea7d9c9a5e6ae2d98"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d08/a03730.html#a07513e34c9ff06cea7d9c9a5e6ae2d98">Idx</a> : uint32_t { <br />
+&#160;&#160;<a class="el" href="../../da/d08/a03730.html#a07513e34c9ff06cea7d9c9a5e6ae2d98a0ae922884699570bbaf21015aa53a9ea">LightsIdx</a>
+, <a class="el" href="../../da/d08/a03730.html#a07513e34c9ff06cea7d9c9a5e6ae2d98a6dd18cc0af4f5c0bf9ded39e3b9b8fa6">RsmNormalsIdx</a>
+, <a class="el" href="../../da/d08/a03730.html#a07513e34c9ff06cea7d9c9a5e6ae2d98ae175d83b3a3122a1bc6d059be8879ac4">RsmPositionIdx</a>
+, <a class="el" href="../../da/d08/a03730.html#a07513e34c9ff06cea7d9c9a5e6ae2d98a507c77e76392c7b4e4afc7afa33e8208">LpvGridUboIdx</a>
+, <br />
+&#160;&#160;<a class="el" href="../../da/d08/a03730.html#a07513e34c9ff06cea7d9c9a5e6ae2d98ab41aca86408b4bb8c03f73467a388c06">LpvLightUboIdx</a>
+<br />
+ }</td></tr>
+<tr class="separator:a07513e34c9ff06cea7d9c9a5e6ae2d98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ad16daa72c18a11425a88e1796bc320f3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d40/a00236.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d08/a03730.html#ad16daa72c18a11425a88e1796bc320f3">accept</a> (castor::String const &amp;name, <a class="el" href="../../dc/d45/a03250.html">PipelineVisitorBase</a> &amp;visitor)</td></tr>
-<tr class="separator:ad16daa72c18a11425a88e1796bc320f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29bedb4b17cdcc9575a342451fdaffe8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d08/a03730.html#a29bedb4b17cdcc9575a342451fdaffe8">GeometryInjectionPass</a> (crg::FramePass const &amp;pass, crg::GraphContext &amp;context, crg::RunnableGraph &amp;graph, <a class="el" href="../../df/d75/a04010.html">RenderDevice</a> const &amp;device, <a class="el" href="../../da/dab/a01362.html#a381718aa9accc88c20afd97d76c30ed8">LightType</a> lightType, uint32_t gridSize, uint32_t rsmSize)</td></tr>
+<tr class="memdesc:a29bedb4b17cdcc9575a342451fdaffe8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../da/d08/a03730.html#a29bedb4b17cdcc9575a342451fdaffe8">More...</a><br /></td></tr>
+<tr class="separator:a29bedb4b17cdcc9575a342451fdaffe8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ece00dbe34a5b223069d9068f3bdd98"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d08/a03730.html#a0ece00dbe34a5b223069d9068f3bdd98">GeometryInjectionPass</a> (crg::FramePass const &amp;pass, crg::GraphContext &amp;context, crg::RunnableGraph &amp;graph, <a class="el" href="../../df/d75/a04010.html">RenderDevice</a> const &amp;device, <a class="el" href="../../da/dab/a01362.html#a13e6b0c4ce255c1deb4c525562111e5b">CubeMapFace</a> face, uint32_t gridSize, uint32_t rsmSize)</td></tr>
+<tr class="memdesc:a0ece00dbe34a5b223069d9068f3bdd98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for point lights.  <a href="../../da/d08/a03730.html#a0ece00dbe34a5b223069d9068f3bdd98">More...</a><br /></td></tr>
+<tr class="separator:a0ece00dbe34a5b223069d9068f3bdd98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91e843b8858f2adde072e51d8a5ebb27"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d08/a03730.html#a91e843b8858f2adde072e51d8a5ebb27">accept</a> (<a class="el" href="../../dc/dbb/a03262.html">PipelineVisitorBase</a> &amp;visitor)</td></tr>
+<tr class="memdesc:a91e843b8858f2adde072e51d8a5ebb27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visitor acceptance function.  <a href="../../da/d08/a03730.html#a91e843b8858f2adde072e51d8a5ebb27">More...</a><br /></td></tr>
+<tr class="separator:a91e843b8858f2adde072e51d8a5ebb27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:a410a4d84ac4b0b9ccc6163d54e369a5a"><td class="memItemLeft" align="right" valign="top">castor::ChangeTracked&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d08/a03730.html#a410a4d84ac4b0b9ccc6163d54e369a5a">indirectAttenuation</a></td></tr>
-<tr class="separator:a410a4d84ac4b0b9ccc6163d54e369a5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a88faddd9e5b6b83cae302fcc9a4efcf5"><td class="memItemLeft" align="right" valign="top">castor::ChangeTracked&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d08/a03730.html#a88faddd9e5b6b83cae302fcc9a4efcf5">texelAreaModifier</a></td></tr>
-<tr class="separator:a88faddd9e5b6b83cae302fcc9a4efcf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a6fb077cc5edca6c7ad3290fdcf5f0541"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../da/dab/a01362.html#a174cedaf5dfc3b47caa264f344279af2">TexturePtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d08/a03730.html#a6fb077cc5edca6c7ad3290fdcf5f0541">createResult</a> (crg::ResourceHandler &amp;handler, <a class="el" href="../../df/d75/a04010.html">RenderDevice</a> const &amp;device, castor::String const &amp;prefix, uint32_t index, uint32_t gridSize)</td></tr>
+<tr class="memdesc:a6fb077cc5edca6c7ad3290fdcf5f0541"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the geometry injection pass result.  <a href="../../da/d08/a03730.html#a6fb077cc5edca6c7ad3290fdcf5f0541">More...</a><br /></td></tr>
+<tr class="separator:a6fb077cc5edca6c7ad3290fdcf5f0541"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="ad16daa72c18a11425a88e1796bc320f3" name="ad16daa72c18a11425a88e1796bc320f3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad16daa72c18a11425a88e1796bc320f3">&#9670;&nbsp;</a></span>accept()</h2>
+<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a07513e34c9ff06cea7d9c9a5e6ae2d98" name="a07513e34c9ff06cea7d9c9a5e6ae2d98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07513e34c9ff06cea7d9c9a5e6ae2d98">&#9670;&nbsp;</a></span>Idx</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../d7/d40/a00236.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::LpvConfig::accept </td>
+          <td class="memname">enum <a class="el" href="../../da/d08/a03730.html#a07513e34c9ff06cea7d9c9a5e6ae2d98">castor3d::GeometryInjectionPass::Idx</a> : uint32_t</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a07513e34c9ff06cea7d9c9a5e6ae2d98a0ae922884699570bbaf21015aa53a9ea" name="a07513e34c9ff06cea7d9c9a5e6ae2d98a0ae922884699570bbaf21015aa53a9ea"></a>LightsIdx&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a07513e34c9ff06cea7d9c9a5e6ae2d98a6dd18cc0af4f5c0bf9ded39e3b9b8fa6" name="a07513e34c9ff06cea7d9c9a5e6ae2d98a6dd18cc0af4f5c0bf9ded39e3b9b8fa6"></a>RsmNormalsIdx&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a07513e34c9ff06cea7d9c9a5e6ae2d98ae175d83b3a3122a1bc6d059be8879ac4" name="a07513e34c9ff06cea7d9c9a5e6ae2d98ae175d83b3a3122a1bc6d059be8879ac4"></a>RsmPositionIdx&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a07513e34c9ff06cea7d9c9a5e6ae2d98a507c77e76392c7b4e4afc7afa33e8208" name="a07513e34c9ff06cea7d9c9a5e6ae2d98a507c77e76392c7b4e4afc7afa33e8208"></a>LpvGridUboIdx&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a07513e34c9ff06cea7d9c9a5e6ae2d98ab41aca86408b4bb8c03f73467a388c06" name="a07513e34c9ff06cea7d9c9a5e6ae2d98ab41aca86408b4bb8c03f73467a388c06"></a>LpvLightUboIdx&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a29bedb4b17cdcc9575a342451fdaffe8" name="a29bedb4b17cdcc9575a342451fdaffe8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29bedb4b17cdcc9575a342451fdaffe8">&#9670;&nbsp;</a></span>GeometryInjectionPass() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::GeometryInjectionPass::GeometryInjectionPass </td>
           <td>(</td>
-          <td class="paramtype">castor::String const &amp;&#160;</td>
-          <td class="paramname"><em>name</em>, </td>
+          <td class="paramtype">crg::FramePass const &amp;&#160;</td>
+          <td class="paramname"><em>pass</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="../../dc/d45/a03250.html">PipelineVisitorBase</a> &amp;&#160;</td>
-          <td class="paramname"><em>visitor</em>&#160;</td>
+          <td class="paramtype">crg::GraphContext &amp;&#160;</td>
+          <td class="paramname"><em>context</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">crg::RunnableGraph &amp;&#160;</td>
+          <td class="paramname"><em>graph</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../df/d75/a04010.html">RenderDevice</a> const &amp;&#160;</td>
+          <td class="paramname"><em>device</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../da/dab/a01362.html#a381718aa9accc88c20afd97d76c30ed8">LightType</a>&#160;</td>
+          <td class="paramname"><em>lightType</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>gridSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>rsmSize</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -95,44 +188,194 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">pass</td><td>The parent frame pass. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">context</td><td>The rendering context. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">graph</td><td>The runnable graph. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">device</td><td>The GPU device. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lightType</td><td>The light source type. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">gridSize</td><td>The grid dimensions. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">rsmSize</td><td>The reflective shadow map dimensions. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a410a4d84ac4b0b9ccc6163d54e369a5a" name="a410a4d84ac4b0b9ccc6163d54e369a5a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a410a4d84ac4b0b9ccc6163d54e369a5a">&#9670;&nbsp;</a></span>indirectAttenuation</h2>
+<a id="a0ece00dbe34a5b223069d9068f3bdd98" name="a0ece00dbe34a5b223069d9068f3bdd98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ece00dbe34a5b223069d9068f3bdd98">&#9670;&nbsp;</a></span>GeometryInjectionPass() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">castor::ChangeTracked&lt; float &gt; castor3d::LpvConfig::indirectAttenuation</td>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::GeometryInjectionPass::GeometryInjectionPass </td>
+          <td>(</td>
+          <td class="paramtype">crg::FramePass const &amp;&#160;</td>
+          <td class="paramname"><em>pass</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">crg::GraphContext &amp;&#160;</td>
+          <td class="paramname"><em>context</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">crg::RunnableGraph &amp;&#160;</td>
+          <td class="paramname"><em>graph</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../df/d75/a04010.html">RenderDevice</a> const &amp;&#160;</td>
+          <td class="paramname"><em>device</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../da/dab/a01362.html#a13e6b0c4ce255c1deb4c525562111e5b">CubeMapFace</a>&#160;</td>
+          <td class="paramname"><em>face</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>gridSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>rsmSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
+<p>Constructor for point lights. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">pass</td><td>The parent frame pass. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">context</td><td>The rendering context. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">graph</td><td>The runnable graph. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">device</td><td>The GPU device. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">face</td><td>The cube shadow map face. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">gridSize</td><td>The grid dimensions. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">rsmSize</td><td>The reflective shadow map dimensions. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
-<a id="a88faddd9e5b6b83cae302fcc9a4efcf5" name="a88faddd9e5b6b83cae302fcc9a4efcf5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a88faddd9e5b6b83cae302fcc9a4efcf5">&#9670;&nbsp;</a></span>texelAreaModifier</h2>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a91e843b8858f2adde072e51d8a5ebb27" name="a91e843b8858f2adde072e51d8a5ebb27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a91e843b8858f2adde072e51d8a5ebb27">&#9670;&nbsp;</a></span>accept()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">castor::ChangeTracked&lt; float &gt; castor3d::LpvConfig::texelAreaModifier</td>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::GeometryInjectionPass::accept </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../dc/dbb/a03262.html">PipelineVisitorBase</a> &amp;&#160;</td>
+          <td class="paramname"><em>visitor</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
+<p>Visitor acceptance function. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">visitor</td><td>The ... visitor. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
-<li>Render/GlobalIllumination/LightPropagationVolumes/<a class="el" href="../../db/d77/a00683.html">LpvConfig.hpp</a></li>
+<a id="a6fb077cc5edca6c7ad3290fdcf5f0541" name="a6fb077cc5edca6c7ad3290fdcf5f0541"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6fb077cc5edca6c7ad3290fdcf5f0541">&#9670;&nbsp;</a></span>createResult()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="../../da/dab/a01362.html#a174cedaf5dfc3b47caa264f344279af2">TexturePtr</a> castor3d::GeometryInjectionPass::createResult </td>
+          <td>(</td>
+          <td class="paramtype">crg::ResourceHandler &amp;&#160;</td>
+          <td class="paramname"><em>handler</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../df/d75/a04010.html">RenderDevice</a> const &amp;&#160;</td>
+          <td class="paramname"><em>device</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>prefix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>gridSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates the geometry injection pass result. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">handler</td><td>The render graph resources handler. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">device</td><td>The GPU device. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">prefix</td><td>The pass name's prefix. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">index</td><td>The layer index. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">gridSize</td><td>The grid dimensions. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>Render/GlobalIllumination/LightPropagationVolumes/<a class="el" href="../../dd/d57/a00701.html">GeometryInjectionPass.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 02:46:22 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:48 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

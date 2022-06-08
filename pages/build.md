@@ -26,11 +26,6 @@ Tested compilers are:
   - ASSIMP: Depends on Castor3D and Assimp.
   - PLY: Depend on Castor3D.
 
-- Dividers
-  - Loop: Depend on Castor3D.
-  - Phong: Depend on Castor3D.
-  - PN-Triangles: Depend on Castor3D.
-
 - PostEffects
   - Bloom: Depend on Castor3D.
   - DrawEdges: Depend on Castor3D.

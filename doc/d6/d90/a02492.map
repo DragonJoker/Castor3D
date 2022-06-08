@@ -1,4 +1,8 @@
-<map id="castor3d::ChunkWriter&lt; castor::Path &gt;" name="castor3d::ChunkWriter&lt; castor::Path &gt;">
-<area shape="rect" id="node1" title="ChunkWriter specialisation for castor::Path." alt="" coords="21,80,173,121"/>
-<area shape="rect" id="node2" href="$d2/df5/a02482.html" title=" " alt="" coords="5,5,188,32"/>
+<map id="castor3d::CmshMeshImporter" name="castor3d::CmshMeshImporter">
+<area shape="rect" id="node1" title=" " alt="" coords="845,39,1039,65"/>
+<area shape="rect" id="node2" href="$d6/d18/a03350.html" title=" " alt="" coords="637,39,796,65"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,5,192,32"/>
+<area shape="rect" id="node4" href="$d5/dd8/a02802.html" title=" " alt="" coords="350,39,498,65"/>
+<area shape="rect" id="node5" href="$d5/d08/a03254.html" title=" " alt="" coords="347,90,501,131"/>
+<area shape="rect" id="node6" href="$d5/d08/a03254.html" title="Configuration parameters." alt="" coords="21,90,176,131"/>
 </map>

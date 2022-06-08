@@ -1,122 +1,204 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="df/dab/a05022" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::MatrixUboConfiguration</compoundname>
-    <includes local="no">UbosModule.hpp</includes>
+    <compoundname>castor3d::shader::LayeredLpvGridData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">LayeredLpvGridConfigUbo.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="df/dab/a05022_1a321345917b9c5f69df988eb7cd43b96c" prot="public" static="no" mutable="no">
-        <type>castor::Matrix4x4f</type>
-        <definition>castor::Matrix4x4f castor3d::MatrixUboConfiguration::projection</definition>
+      <memberdef kind="variable" id="df/dab/a05022_1a0063c6eeb4ec09e811e7126c4c10e70f" prot="public" static="no" mutable="no">
+        <type>sdw::Array&lt; sdw::Vec4 &gt;</type>
+        <definition>sdw::Array&lt; sdw::Vec4 &gt; castor3d::shader::LayeredLpvGridData::allMinVolumeCorners</definition>
         <argsstring></argsstring>
-        <name>projection</name>
-        <qualifiedname>castor3d::MatrixUboConfiguration::projection</qualifiedname>
+        <name>allMinVolumeCorners</name>
+        <qualifiedname>castor3d::shader::LayeredLpvGridData::allMinVolumeCorners</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/UbosModule.hpp" line="217" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="217" bodyend="-1"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="34" column="12" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="34" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="df/dab/a05022_1a20affb2e4440a4e6c3de8a693e39920b" prot="public" static="no" mutable="no">
-        <type>castor::Matrix4x4f</type>
-        <definition>castor::Matrix4x4f castor3d::MatrixUboConfiguration::invProjection</definition>
+      <memberdef kind="variable" id="df/dab/a05022_1af313723153e566dde7c4b2e74be1e17c" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::LayeredLpvGridData::allCellSizes</definition>
         <argsstring></argsstring>
-        <name>invProjection</name>
-        <qualifiedname>castor3d::MatrixUboConfiguration::invProjection</qualifiedname>
+        <name>allCellSizes</name>
+        <qualifiedname>castor3d::shader::LayeredLpvGridData::allCellSizes</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/UbosModule.hpp" line="218" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="218" bodyend="-1"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="35" column="11" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="35" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="df/dab/a05022_1a0701e43cde9aea98d6e2881fa17af17f" prot="public" static="no" mutable="no">
-        <type>castor::Matrix4x4f</type>
-        <definition>castor::Matrix4x4f castor3d::MatrixUboConfiguration::curView</definition>
+      <memberdef kind="variable" id="df/dab/a05022_1a7954951ecddf0d1e6e7a9f6cf16597b6" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::LayeredLpvGridData::gridSizesAtt</definition>
         <argsstring></argsstring>
-        <name>curView</name>
-        <qualifiedname>castor3d::MatrixUboConfiguration::curView</qualifiedname>
+        <name>gridSizesAtt</name>
+        <qualifiedname>castor3d::shader::LayeredLpvGridData::gridSizesAtt</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/UbosModule.hpp" line="219" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="219" bodyend="-1"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="36" column="11" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="36" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="df/dab/a05022_1a548cdfd82b98dfdd841e7651951f95d7" prot="public" static="no" mutable="no">
-        <type>castor::Matrix4x4f</type>
-        <definition>castor::Matrix4x4f castor3d::MatrixUboConfiguration::prvView</definition>
+      <memberdef kind="variable" id="df/dab/a05022_1aa1a7c7aea39641bd98c059b73d605c37" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::LayeredLpvGridData::gridSizes</definition>
         <argsstring></argsstring>
-        <name>prvView</name>
-        <qualifiedname>castor3d::MatrixUboConfiguration::prvView</qualifiedname>
+        <name>gridSizes</name>
+        <qualifiedname>castor3d::shader::LayeredLpvGridData::gridSizes</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/UbosModule.hpp" line="220" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="220" bodyend="-1"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="38" column="11" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="38" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="df/dab/a05022_1a594bac871b9fa0648bf9571e2711ac6e" prot="public" static="no" mutable="no">
-        <type>castor::Matrix4x4f</type>
-        <definition>castor::Matrix4x4f castor3d::MatrixUboConfiguration::curViewProj</definition>
+      <memberdef kind="variable" id="df/dab/a05022_1a6ba460245c93bf387a9b2b2834369dc6" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::LayeredLpvGridData::indirectAttenuation</definition>
         <argsstring></argsstring>
-        <name>curViewProj</name>
-        <qualifiedname>castor3d::MatrixUboConfiguration::curViewProj</qualifiedname>
+        <name>indirectAttenuation</name>
+        <qualifiedname>castor3d::shader::LayeredLpvGridData::indirectAttenuation</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/UbosModule.hpp" line="221" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="221" bodyend="-1"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="39" column="12" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="39" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="df/dab/a05022_1a71d8fc6463ad79080a7073b9a9062149" prot="public" static="no" mutable="no">
-        <type>castor::Matrix4x4f</type>
-        <definition>castor::Matrix4x4f castor3d::MatrixUboConfiguration::prvViewProj</definition>
-        <argsstring></argsstring>
-        <name>prvViewProj</name>
-        <qualifiedname>castor3d::MatrixUboConfiguration::prvViewProj</qualifiedname>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/dab/a05022_1a8d94301768152db7b7a0fb120f573404" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::LayeredLpvGridData::LayeredLpvGridData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>LayeredLpvGridData</name>
+        <qualifiedname>castor3d::shader::LayeredLpvGridData::LayeredLpvGridData</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/UbosModule.hpp" line="222" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="222" bodyend="-1"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="25" column="9"/>
       </memberdef>
-      <memberdef kind="variable" id="df/dab/a05022_1a1d9857af06fafd13a53d8a5470d621b0" prot="public" static="no" mutable="no">
-        <type>castor::Point4f</type>
-        <definition>castor::Point4f castor3d::MatrixUboConfiguration::jitter</definition>
-        <argsstring></argsstring>
-        <name>jitter</name>
-        <qualifiedname>castor3d::MatrixUboConfiguration::jitter</qualifiedname>
+      <memberdef kind="function" id="df/dab/a05022_1aede5a62185a9f5ae1b23efd4d4c2b927" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::LayeredLpvGridData::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, LayeredLpvGridData)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::LayeredLpvGridData::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        </param>
+        <param>
+          <type><ref refid="df/dab/a05022" kindref="compound">LayeredLpvGridData</ref></type>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/UbosModule.hpp" line="223" column="17" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="223" bodyend="-1"/>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="28" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="df/dab/a05022_1ad2e47aefbd9b56363e9260e41cf0bc37" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
+        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::LayeredLpvGridData::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::LayeredLpvGridData::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="30" column="41"/>
+      </memberdef>
+      <memberdef kind="function" id="df/dab/a05022_1ad6225133c60e87f3d5f41806cfa5401c" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::LayeredLpvGridData::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::shader::LayeredLpvGridData::declare</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="31" column="32"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Global matrices data. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Shader/Ubos/UbosModule.hpp" line="215" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="216" bodyend="224"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::LayeredLpvGridData</label>
+        <link refid="df/dab/a05022"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::LayeredLpvGridData</label>
+        <link refid="df/dab/a05022"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="22" column="1" bodyfile="Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="24" bodyend="44"/>
     <listofallmembers>
-      <member refid="df/dab/a05022_1a0701e43cde9aea98d6e2881fa17af17f" prot="public" virt="non-virtual"><scope>castor3d::MatrixUboConfiguration</scope><name>curView</name></member>
-      <member refid="df/dab/a05022_1a594bac871b9fa0648bf9571e2711ac6e" prot="public" virt="non-virtual"><scope>castor3d::MatrixUboConfiguration</scope><name>curViewProj</name></member>
-      <member refid="df/dab/a05022_1a20affb2e4440a4e6c3de8a693e39920b" prot="public" virt="non-virtual"><scope>castor3d::MatrixUboConfiguration</scope><name>invProjection</name></member>
-      <member refid="df/dab/a05022_1a1d9857af06fafd13a53d8a5470d621b0" prot="public" virt="non-virtual"><scope>castor3d::MatrixUboConfiguration</scope><name>jitter</name></member>
-      <member refid="df/dab/a05022_1a321345917b9c5f69df988eb7cd43b96c" prot="public" virt="non-virtual"><scope>castor3d::MatrixUboConfiguration</scope><name>projection</name></member>
-      <member refid="df/dab/a05022_1a548cdfd82b98dfdd841e7651951f95d7" prot="public" virt="non-virtual"><scope>castor3d::MatrixUboConfiguration</scope><name>prvView</name></member>
-      <member refid="df/dab/a05022_1a71d8fc6463ad79080a7073b9a9062149" prot="public" virt="non-virtual"><scope>castor3d::MatrixUboConfiguration</scope><name>prvViewProj</name></member>
+      <member refid="df/dab/a05022_1af313723153e566dde7c4b2e74be1e17c" prot="public" virt="non-virtual"><scope>castor3d::shader::LayeredLpvGridData</scope><name>allCellSizes</name></member>
+      <member refid="df/dab/a05022_1a0063c6eeb4ec09e811e7126c4c10e70f" prot="public" virt="non-virtual"><scope>castor3d::shader::LayeredLpvGridData</scope><name>allMinVolumeCorners</name></member>
+      <member refid="df/dab/a05022_1ad6225133c60e87f3d5f41806cfa5401c" prot="public" virt="non-virtual"><scope>castor3d::shader::LayeredLpvGridData</scope><name>declare</name></member>
+      <member refid="df/dab/a05022_1aa1a7c7aea39641bd98c059b73d605c37" prot="public" virt="non-virtual"><scope>castor3d::shader::LayeredLpvGridData</scope><name>gridSizes</name></member>
+      <member refid="df/dab/a05022_1a7954951ecddf0d1e6e7a9f6cf16597b6" prot="public" virt="non-virtual"><scope>castor3d::shader::LayeredLpvGridData</scope><name>gridSizesAtt</name></member>
+      <member refid="df/dab/a05022_1a6ba460245c93bf387a9b2b2834369dc6" prot="public" virt="non-virtual"><scope>castor3d::shader::LayeredLpvGridData</scope><name>indirectAttenuation</name></member>
+      <member refid="df/dab/a05022_1a8d94301768152db7b7a0fb120f573404" prot="public" virt="non-virtual"><scope>castor3d::shader::LayeredLpvGridData</scope><name>LayeredLpvGridData</name></member>
+      <member refid="df/dab/a05022_1ad2e47aefbd9b56363e9260e41cf0bc37" prot="public" virt="non-virtual"><scope>castor3d::shader::LayeredLpvGridData</scope><name>makeType</name></member>
+      <member refid="df/dab/a05022_1aede5a62185a9f5ae1b23efd4d4c2b927" prot="public" virt="non-virtual"><scope>castor3d::shader::LayeredLpvGridData</scope><name>SDW_DeclStructInstance</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

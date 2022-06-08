@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::shader::PbrMRLightingModel Class Reference</title>
+<title>Castor3D: castor3d::PassVisitorBase Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,277 +42,132 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dc/df4/a01401.html">castor3d</a></li><li class="navelem"><a class="el" href="../../da/d06/a01403.html">shader</a></li><li class="navelem"><a class="el" href="../../dd/dd1/a02842.html">PbrMRLightingModel</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../dd/dd1/a02842.html">PassVisitorBase</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="../../d8/d87/a02839.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">castor3d::shader::PbrMRLightingModel Class Reference</div></div>
+  <div class="headertitle"><div class="title">castor3d::PassVisitorBase Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;GlslPbrLighting.hpp&gt;</code></p>
+<p><code>#include &lt;PassVisitor.hpp&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for castor3d::shader::PbrMRLightingModel:</div>
+Inheritance diagram for castor3d::PassVisitorBase:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../d7/d1c/a02841.png" border="0" usemap="#acastor3d_1_1shader_1_1PbrMRLightingModel_inherit__map" alt="Inheritance graph"/></div>
-<map name="acastor3d_1_1shader_1_1PbrMRLightingModel_inherit__map" id="acastor3d_1_1shader_1_1PbrMRLightingModel_inherit__map">
-<area shape="rect" title=" " alt="" coords="5,184,217,225"/>
-<area shape="rect" href="../../d5/dde/a02838.html" title=" " alt="" coords="15,95,207,136"/>
-<area shape="rect" href="../../d3/d1a/a04798.html" title=" " alt="" coords="25,5,197,47"/>
+<div class="center"><img src="../../d7/d1c/a02841.png" border="0" usemap="#acastor3d_1_1PassVisitorBase_inherit__map" alt="Inheritance graph"/></div>
+<map name="acastor3d_1_1PassVisitorBase_inherit__map" id="acastor3d_1_1PassVisitorBase_inherit__map">
+<area shape="rect" title=" " alt="" coords="5,5,183,32"/>
+<area shape="rect" href="../../d0/d9a/a02850.html" title=" " alt="" coords="21,80,167,107"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
-Collaboration diagram for castor3d::shader::PbrMRLightingModel:</div>
+Collaboration diagram for castor3d::PassVisitorBase:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../d9/d4d/a02840.png" border="0" usemap="#acastor3d_1_1shader_1_1PbrMRLightingModel_coll__map" alt="Collaboration graph"/></div>
-<map name="acastor3d_1_1shader_1_1PbrMRLightingModel_coll__map" id="acastor3d_1_1shader_1_1PbrMRLightingModel_coll__map">
-<area shape="rect" title=" " alt="" coords="1575,223,1787,265"/>
-<area shape="rect" href="../../d5/dde/a02838.html" title=" " alt="" coords="1333,223,1525,265"/>
-<area shape="rect" href="../../d3/d1a/a04798.html" title=" " alt="" coords="977,187,1149,229"/>
-<area shape="rect" href="../../d5/daa/a04862.html" title=" " alt="" coords="594,5,747,32"/>
-<area shape="rect" title=" " alt="" coords="599,187,742,229"/>
-<area shape="rect" title=" " alt="" coords="159,133,297,160"/>
-<area shape="rect" title=" " alt="" coords="599,57,742,98"/>
-<area shape="rect" title=" " alt="" coords="589,122,752,163"/>
-<area shape="rect" title=" " alt="" coords="5,188,44,215"/>
-<area shape="rect" title=" " alt="" coords="158,264,298,291"/>
-<area shape="rect" title=" " alt="" coords="631,419,711,445"/>
-<area shape="rect" title=" " alt="" coords="165,421,291,462"/>
-<area shape="rect" title=" " alt="" coords="585,253,756,294"/>
-<area shape="rect" href="../../d6/df5/a04826.html" title=" " alt="" coords="141,204,315,231"/>
-<area shape="rect" title=" " alt="" coords="573,318,768,359"/>
-<area shape="rect" href="../../d2/da7/a04830.html" title=" " alt="" coords="112,369,344,396"/>
-<area shape="rect" href="../../d9/d08/a04762.html" title=" " alt="" coords="941,253,1184,280"/>
+<div class="center"><img src="../../d9/d4d/a02840.png" border="0" usemap="#acastor3d_1_1PassVisitorBase_coll__map" alt="Collaboration graph"/></div>
+<map name="acastor3d_1_1PassVisitorBase_coll__map" id="acastor3d_1_1PassVisitorBase_coll__map">
+<area shape="rect" title=" " alt="" coords="5,109,183,136"/>
+<area shape="rect" href="../../d5/d4c/a02846.html" title=" " alt="" coords="5,5,183,47"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d4c/a02846.html">Config</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a43bac3ebdfabb0753b8b2d84662651f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#a43bac3ebdfabb0753b8b2d84662651f5">PbrMRLightingModel</a> (sdw::ShaderWriter &amp;writer, <a class="el" href="../../d5/daa/a04862.html">Utils</a> &amp;utils, <a class="el" href="../../d4/db9/a04870.html">ShadowOptions</a> shadowOptions, <a class="el" href="../../d0/de6/a04814.html">SssProfiles</a> const *sssProfiles, bool isOpaqueProgram)</td></tr>
-<tr class="separator:a43bac3ebdfabb0753b8b2d84662651f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a14babdd727eb6f81968f52c160864f65"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> std::unique_ptr&lt; <a class="el" href="../../de/d4c/a04794.html">LightMaterial</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#a14babdd727eb6f81968f52c160864f65">declMaterial</a> (std::string const &amp;name) override</td></tr>
-<tr class="separator:a14babdd727eb6f81968f52c160864f65"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_a02838"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a02838')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../d5/dde/a02838.html">castor3d::shader::PbrLightingModel</a></td></tr>
-<tr class="memitem:ab5b2ed9066d326dae4ce7a5c2ed8822e inherit pub_methods_a02838"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dde/a02838.html#ab5b2ed9066d326dae4ce7a5c2ed8822e">combine</a> (sdw::Vec3 const &amp;directDiffuse, sdw::Vec3 const &amp;indirectDiffuse, sdw::Vec3 const &amp;directSpecular, sdw::Vec3 const &amp;indirectSpecular, sdw::Vec3 const &amp;ambient, sdw::Vec3 const &amp;indirectAmbient, sdw::Float const &amp;ambientOcclusion, sdw::Vec3 const &amp;emissive, sdw::Vec3 const &amp;reflected, sdw::Vec3 const &amp;refracted, sdw::Vec3 const &amp;materialAlbedo) override</td></tr>
-<tr class="separator:ab5b2ed9066d326dae4ce7a5c2ed8822e inherit pub_methods_a02838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c78a9e9eea5eb66a44df19474a0e575 inherit pub_methods_a02838"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../da/d06/a01403.html#ae10c352f0c2ff7850fca0043640a06bb">ReflectionModelPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dde/a02838.html#a6c78a9e9eea5eb66a44df19474a0e575">getReflectionModel</a> (uint32_t &amp;envMapBinding, uint32_t envMapSet) const override</td></tr>
-<tr class="separator:a6c78a9e9eea5eb66a44df19474a0e575 inherit pub_methods_a02838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a870e818802900b2719d99ef43533ce19 inherit pub_methods_a02838"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dde/a02838.html#a870e818802900b2719d99ef43533ce19">compute</a> (<a class="el" href="../../db/da6/a04782.html">DirectionalLight</a> const &amp;light, <a class="el" href="../../de/d4c/a04794.html">LightMaterial</a> const &amp;material, <a class="el" href="../../da/d06/a01403.html#afa7e0e1d1dbce1333aa48253fd404bf4">Surface</a> const &amp;surface, sdw::Vec3 const &amp;worldEye, sdw::Int const &amp;receivesShadows, <a class="el" href="../../d5/dac/a04818.html">OutputComponents</a> &amp;output) const override</td></tr>
-<tr class="separator:a870e818802900b2719d99ef43533ce19 inherit pub_methods_a02838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aebc8117ee19b7c72c7ff1971f45ea8f4 inherit pub_methods_a02838"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dde/a02838.html#aebc8117ee19b7c72c7ff1971f45ea8f4">compute</a> (<a class="el" href="../../dd/dec/a04786.html">PointLight</a> const &amp;light, <a class="el" href="../../de/d4c/a04794.html">LightMaterial</a> const &amp;material, <a class="el" href="../../da/d06/a01403.html#afa7e0e1d1dbce1333aa48253fd404bf4">Surface</a> const &amp;surface, sdw::Vec3 const &amp;worldEye, sdw::Int const &amp;receivesShadows, <a class="el" href="../../d5/dac/a04818.html">OutputComponents</a> &amp;output) const override</td></tr>
-<tr class="separator:aebc8117ee19b7c72c7ff1971f45ea8f4 inherit pub_methods_a02838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c98eb8af0902591dff2503255620790 inherit pub_methods_a02838"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dde/a02838.html#a3c98eb8af0902591dff2503255620790">compute</a> (<a class="el" href="../../d6/d56/a04790.html">SpotLight</a> const &amp;light, <a class="el" href="../../de/d4c/a04794.html">LightMaterial</a> const &amp;material, <a class="el" href="../../da/d06/a01403.html#afa7e0e1d1dbce1333aa48253fd404bf4">Surface</a> const &amp;surface, sdw::Vec3 const &amp;worldEye, sdw::Int const &amp;receivesShadows, <a class="el" href="../../d5/dac/a04818.html">OutputComponents</a> &amp;output) const override</td></tr>
-<tr class="separator:a3c98eb8af0902591dff2503255620790 inherit pub_methods_a02838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b1a2717c7e8a26cde660ba6a87e73e3 inherit pub_methods_a02838"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dde/a02838.html#a8b1a2717c7e8a26cde660ba6a87e73e3">computeMapContributions</a> (<a class="el" href="../../dc/df4/a01401.html#a69e89af11c4c9247dce7ee99a21090fc">PassFlags</a> const &amp;passFlags, <a class="el" href="../../dc/df4/a01401.html#afa51b269ca00eaeff4f95f361bf2208f">TextureFlagsArray</a> const &amp;textures, <a class="el" href="../../d6/d14/a04858.html">TextureConfigurations</a> const &amp;textureConfigs, <a class="el" href="../../d5/dab/a04850.html">TextureAnimations</a> const &amp;textureAnims, sdw::Array&lt; sdw::CombinedImage2DRgba32 &gt; const &amp;maps, sdw::UVec4 const &amp;textures0, sdw::UVec4 const &amp;textures1, sdw::Vec3 &amp;texCoords, sdw::Vec3 &amp;normal, sdw::Vec3 &amp;tangent, sdw::Vec3 &amp;bitangent, sdw::Vec3 &amp;emissive, sdw::Float &amp;opacity, sdw::Float &amp;occlusion, sdw::Float &amp;transmittanc, <a class="el" href="../../de/d4c/a04794.html">LightMaterial</a> &amp;lightMat, sdw::Vec3 &amp;tangentSpaceViewPosition, sdw::Vec3 &amp;tangentSpaceFragPosition) override</td></tr>
-<tr class="separator:a8b1a2717c7e8a26cde660ba6a87e73e3 inherit pub_methods_a02838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a877ba57c0818c503bfd8046c8dc46110 inherit pub_methods_a02838"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dde/a02838.html#a877ba57c0818c503bfd8046c8dc46110">computeDiffuse</a> (<a class="el" href="../../db/da6/a04782.html">DirectionalLight</a> const &amp;light, <a class="el" href="../../de/d4c/a04794.html">LightMaterial</a> const &amp;material, <a class="el" href="../../da/d06/a01403.html#afa7e0e1d1dbce1333aa48253fd404bf4">Surface</a> const &amp;surface, sdw::Vec3 const &amp;worldEye, sdw::Int const &amp;receivesShadows) const override</td></tr>
-<tr class="separator:a877ba57c0818c503bfd8046c8dc46110 inherit pub_methods_a02838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8de6c38cd5606506918bfb85165ee10f inherit pub_methods_a02838"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dde/a02838.html#a8de6c38cd5606506918bfb85165ee10f">computeDiffuse</a> (<a class="el" href="../../dd/dec/a04786.html">PointLight</a> const &amp;light, <a class="el" href="../../de/d4c/a04794.html">LightMaterial</a> const &amp;material, <a class="el" href="../../da/d06/a01403.html#afa7e0e1d1dbce1333aa48253fd404bf4">Surface</a> const &amp;surface, sdw::Vec3 const &amp;worldEye, sdw::Int const &amp;receivesShadows) const override</td></tr>
-<tr class="separator:a8de6c38cd5606506918bfb85165ee10f inherit pub_methods_a02838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90e413355f824103934d4881279b793d inherit pub_methods_a02838"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dde/a02838.html#a90e413355f824103934d4881279b793d">computeDiffuse</a> (<a class="el" href="../../d6/d56/a04790.html">SpotLight</a> const &amp;light, <a class="el" href="../../de/d4c/a04794.html">LightMaterial</a> const &amp;material, <a class="el" href="../../da/d06/a01403.html#afa7e0e1d1dbce1333aa48253fd404bf4">Surface</a> const &amp;surface, sdw::Vec3 const &amp;worldEye, sdw::Int const &amp;receivesShadows) const override</td></tr>
-<tr class="separator:a90e413355f824103934d4881279b793d inherit pub_methods_a02838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb9fd62a481ce64d0163582c0a0e016f inherit pub_methods_a02838"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dde/a02838.html#aeb9fd62a481ce64d0163582c0a0e016f">computeMapDiffuseContributions</a> (<a class="el" href="../../dc/df4/a01401.html#a69e89af11c4c9247dce7ee99a21090fc">PassFlags</a> const &amp;passFlags, <a class="el" href="../../dc/df4/a01401.html#afa51b269ca00eaeff4f95f361bf2208f">TextureFlagsArray</a> const &amp;textures, <a class="el" href="../../d6/d14/a04858.html">TextureConfigurations</a> const &amp;textureConfigs, <a class="el" href="../../d5/dab/a04850.html">TextureAnimations</a> const &amp;textureAnims, sdw::Array&lt; sdw::CombinedImage2DRgba32 &gt; const &amp;maps, sdw::UVec4 const &amp;textures0, sdw::UVec4 const &amp;textures1, sdw::Vec3 const &amp;texCoords, sdw::Vec3 &amp;emissive, sdw::Float &amp;opacity, sdw::Float &amp;occlusion, <a class="el" href="../../de/d4c/a04794.html">LightMaterial</a> &amp;lightMat) override</td></tr>
-<tr class="separator:aeb9fd62a481ce64d0163582c0a0e016f inherit pub_methods_a02838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_a04798"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a04798')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../d3/d1a/a04798.html">castor3d::shader::LightingModel</a></td></tr>
-<tr class="memitem:ad8d414481693a7732022b0679c12a2b9 inherit pub_methods_a04798"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#ad8d414481693a7732022b0679c12a2b9">LightingModel</a> (sdw::ShaderWriter &amp;writer, <a class="el" href="../../d5/daa/a04862.html">Utils</a> &amp;utils, <a class="el" href="../../d4/db9/a04870.html">ShadowOptions</a> shadowOptions, <a class="el" href="../../d0/de6/a04814.html">SssProfiles</a> const *sssProfiles, bool isOpaqueProgram, std::string prefix)</td></tr>
-<tr class="separator:ad8d414481693a7732022b0679c12a2b9 inherit pub_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe10ab0abda22bc960dc51b76be2c739 inherit pub_methods_a04798"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#abe10ab0abda22bc960dc51b76be2c739">~LightingModel</a> ()=default</td></tr>
-<tr class="separator:abe10ab0abda22bc960dc51b76be2c739 inherit pub_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1671dd3b92b8bf79752c0a6e3ad9454 inherit pub_methods_a04798"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#ad1671dd3b92b8bf79752c0a6e3ad9454">combine</a> (sdw::Vec3 const &amp;directDiffuse, sdw::Vec3 const &amp;indirectDiffuse, sdw::Vec3 const &amp;directSpecular, sdw::Vec3 const &amp;indirectSpecular, sdw::Vec3 const &amp;ambient, sdw::Vec3 const &amp;indirectAmbient, sdw::Float const &amp;ambientOcclusion, sdw::Vec3 const &amp;emissive, sdw::Vec3 const &amp;reflected, sdw::Vec3 const &amp;refracted, sdw::Vec3 const &amp;materialAlbedo)=0</td></tr>
-<tr class="separator:ad1671dd3b92b8bf79752c0a6e3ad9454 inherit pub_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb2d2506e4e7e9145199649349ee3bb9 inherit pub_methods_a04798"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> std::unique_ptr&lt; <a class="el" href="../../de/d4c/a04794.html">LightMaterial</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#afb2d2506e4e7e9145199649349ee3bb9">declMaterial</a> (std::string const &amp;name)=0</td></tr>
-<tr class="separator:afb2d2506e4e7e9145199649349ee3bb9 inherit pub_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35846c33000b56f135010af80666af2a inherit pub_methods_a04798"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../da/d06/a01403.html#ae10c352f0c2ff7850fca0043640a06bb">ReflectionModelPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#a35846c33000b56f135010af80666af2a">getReflectionModel</a> (uint32_t &amp;envMapBinding, uint32_t envMapSet) const =0</td></tr>
-<tr class="separator:a35846c33000b56f135010af80666af2a inherit pub_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0cc52dad90b5068bad9d341f2cabb0ea inherit pub_methods_a04798"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#a0cc52dad90b5068bad9d341f2cabb0ea">declareDirectionalModel</a> (bool lightUbo, uint32_t lightBinding, uint32_t lightSet, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet)</td></tr>
-<tr class="separator:a0cc52dad90b5068bad9d341f2cabb0ea inherit pub_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a10744331a5704a42668d96a4fe7ecaa1 inherit pub_methods_a04798"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#a10744331a5704a42668d96a4fe7ecaa1">declarePointModel</a> (bool lightUbo, uint32_t lightBinding, uint32_t lightSet, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet)</td></tr>
-<tr class="separator:a10744331a5704a42668d96a4fe7ecaa1 inherit pub_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d2f3cd6795aa79d0f5a4e31de12e97d inherit pub_methods_a04798"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#a9d2f3cd6795aa79d0f5a4e31de12e97d">declareSpotModel</a> (bool lightUbo, uint32_t lightBinding, uint32_t lightSet, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet)</td></tr>
-<tr class="separator:a9d2f3cd6795aa79d0f5a4e31de12e97d inherit pub_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9dce2a67af8cfaefa176a0c4068bea7b inherit pub_methods_a04798"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../db/da6/a04782.html">DirectionalLight</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#a9dce2a67af8cfaefa176a0c4068bea7b">getDirectionalLight</a> (sdw::UInt const &amp;index) const</td></tr>
-<tr class="separator:a9dce2a67af8cfaefa176a0c4068bea7b inherit pub_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b32c9c9d9666a7e01ac4490b007de09 inherit pub_methods_a04798"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../dd/dec/a04786.html">PointLight</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#a0b32c9c9d9666a7e01ac4490b007de09">getPointLight</a> (sdw::UInt const &amp;index) const</td></tr>
-<tr class="separator:a0b32c9c9d9666a7e01ac4490b007de09 inherit pub_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add93c5e5787f7810a4c9375c27ae96e3 inherit pub_methods_a04798"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d6/d56/a04790.html">SpotLight</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#add93c5e5787f7810a4c9375c27ae96e3">getSpotLight</a> (sdw::UInt const &amp;index) const</td></tr>
-<tr class="separator:add93c5e5787f7810a4c9375c27ae96e3 inherit pub_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab08881a2f6849c79d50c70320d65d82c inherit pub_methods_a04798"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d6/df5/a04826.html">Shadow</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#ab08881a2f6849c79d50c70320d65d82c">getShadowModel</a> () const</td></tr>
-<tr class="separator:ab08881a2f6849c79d50c70320d65d82c inherit pub_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a311bee3a27615b2cb051884164725877 inherit pub_methods_a04798"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#a311bee3a27615b2cb051884164725877">declareModel</a> (uint32_t lightsBufBinding, uint32_t lightsBufSet, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet)</td></tr>
-<tr class="separator:a311bee3a27615b2cb051884164725877 inherit pub_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8db5a659754b8909c8f15040db7dade7 inherit pub_methods_a04798"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#a8db5a659754b8909c8f15040db7dade7">computeCombined</a> (<a class="el" href="../../de/d4c/a04794.html">LightMaterial</a> const &amp;material, <a class="el" href="../../d6/d5a/a04966.html">SceneData</a> const &amp;sceneData, <a class="el" href="../../da/d06/a01403.html#afa7e0e1d1dbce1333aa48253fd404bf4">Surface</a> const &amp;surface, sdw::Vec3 const &amp;worldEye, sdw::Int const &amp;receivesShadows, <a class="el" href="../../d5/dac/a04818.html">OutputComponents</a> &amp;output) const</td></tr>
-<tr class="separator:a8db5a659754b8909c8f15040db7dade7 inherit pub_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa24840058a44d68dc0524f87f7b5b3cb inherit pub_methods_a04798"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#aa24840058a44d68dc0524f87f7b5b3cb">declareDiffuseModel</a> (uint32_t lightsBufBinding, uint32_t lightsBufSet, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet)</td></tr>
-<tr class="separator:aa24840058a44d68dc0524f87f7b5b3cb inherit pub_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add71e7bce8ee328d6f186773ca24e491 inherit pub_methods_a04798"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#add71e7bce8ee328d6f186773ca24e491">computeCombinedDiffuse</a> (<a class="el" href="../../de/d4c/a04794.html">LightMaterial</a> const &amp;material, <a class="el" href="../../d6/d5a/a04966.html">SceneData</a> const &amp;sceneData, <a class="el" href="../../da/d06/a01403.html#afa7e0e1d1dbce1333aa48253fd404bf4">Surface</a> const &amp;surface, sdw::Vec3 const &amp;worldEye, sdw::Int const &amp;receivesShadows) const</td></tr>
-<tr class="separator:add71e7bce8ee328d6f186773ca24e491 inherit pub_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a967afb3f5f352d193a24fd91741c42ee"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#a967afb3f5f352d193a24fd91741c42ee">~PassVisitorBase</a> ()=default</td></tr>
+<tr class="separator:a967afb3f5f352d193a24fd91741c42ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
+<tr class="memitem:a6544497880da7fd36b435ed5ca563975"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#a6544497880da7fd36b435ed5ca563975">visit</a> (castor::String const &amp;name, bool &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:a6544497880da7fd36b435ed5ca563975"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4900236f8c9a7200a6068ba344d2e044"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#a4900236f8c9a7200a6068ba344d2e044">visit</a> (castor::String const &amp;name, int16_t &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:a4900236f8c9a7200a6068ba344d2e044"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc40d4fa446255aeacfdfc2e976c7870"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#abc40d4fa446255aeacfdfc2e976c7870">visit</a> (castor::String const &amp;name, uint16_t &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:abc40d4fa446255aeacfdfc2e976c7870"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60baffa7c01e78e1e6cab9f821851cd3"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#a60baffa7c01e78e1e6cab9f821851cd3">visit</a> (castor::String const &amp;name, int32_t &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:a60baffa7c01e78e1e6cab9f821851cd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8cafb163ec7e20d5a989adabb568b6fd"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#a8cafb163ec7e20d5a989adabb568b6fd">visit</a> (castor::String const &amp;name, uint32_t &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:a8cafb163ec7e20d5a989adabb568b6fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7ec069ac2337b41f896845cc7fcdb9a"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#aa7ec069ac2337b41f896845cc7fcdb9a">visit</a> (castor::String const &amp;name, int64_t &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:aa7ec069ac2337b41f896845cc7fcdb9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d0b10d96f01719b4670708a8f2e0b7e"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#a8d0b10d96f01719b4670708a8f2e0b7e">visit</a> (castor::String const &amp;name, uint64_t &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:a8d0b10d96f01719b4670708a8f2e0b7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a325239e28d199a6e1e758d94c70045c5"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#a325239e28d199a6e1e758d94c70045c5">visit</a> (castor::String const &amp;name, float &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:a325239e28d199a6e1e758d94c70045c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3b538c9635fe2ddb3df2747794e2251"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#ab3b538c9635fe2ddb3df2747794e2251">visit</a> (castor::String const &amp;name, double &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:ab3b538c9635fe2ddb3df2747794e2251"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a136584f763631cad5b1002f921592078"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#a136584f763631cad5b1002f921592078">visit</a> (castor::String const &amp;name, <a class="el" href="../../da/dab/a01362.html#a840ab6fd50c1a08fcc1b6dc3f98d90fa">BlendMode</a> &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:a136584f763631cad5b1002f921592078"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa722d37469875c168cf2e7fb3bb6b5a8"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#aa722d37469875c168cf2e7fb3bb6b5a8">visit</a> (castor::String const &amp;name, <a class="el" href="../../da/dab/a01362.html#a808c81c0da4ffd2515292e95b6b4c124">ParallaxOcclusionMode</a> &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:aa722d37469875c168cf2e7fb3bb6b5a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1706f736e458b9b5e9c3804e05badd74"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#a1706f736e458b9b5e9c3804e05badd74">visit</a> (castor::String const &amp;name, <a class="el" href="../../da/dab/a01362.html#a69e89af11c4c9247dce7ee99a21090fc">PassFlags</a> &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:a1706f736e458b9b5e9c3804e05badd74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7015359759a56e073f405ea7c0807d7"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#ab7015359759a56e073f405ea7c0807d7">visit</a> (castor::String const &amp;name, VkCompareOp &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:ab7015359759a56e073f405ea7c0807d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4b0facac973fb471f084fc8fd8155ed"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#af4b0facac973fb471f084fc8fd8155ed">visit</a> (castor::String const &amp;name, castor::RgbColour &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:af4b0facac973fb471f084fc8fd8155ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e686a904cd9af044be6c424c357eef9"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#a1e686a904cd9af044be6c424c357eef9">visit</a> (castor::String const &amp;name, castor::RgbaColour &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:a1e686a904cd9af044be6c424c357eef9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa689cff91aa4f5bea9937570dddafd1a"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#aa689cff91aa4f5bea9937570dddafd1a">visit</a> (castor::String const &amp;name, castor::HdrRgbColour &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:aa689cff91aa4f5bea9937570dddafd1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d0ae0e2a57b75f4d974640f47477cb9"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#a4d0ae0e2a57b75f4d974640f47477cb9">visit</a> (castor::String const &amp;name, castor::HdrRgbaColour &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:a4d0ae0e2a57b75f4d974640f47477cb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e782592f789963bc89690e91ac290fc"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#a6e782592f789963bc89690e91ac290fc">visit</a> (castor::String const &amp;name, castor::Point2f &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:a6e782592f789963bc89690e91ac290fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7eacdf4ae082cd1fbfba1b4393d72d35"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#a7eacdf4ae082cd1fbfba1b4393d72d35">visit</a> (castor::String const &amp;name, castor::Point2i &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:a7eacdf4ae082cd1fbfba1b4393d72d35"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a316518a9f8bd3ce7152d4dc0ce34d304"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#a316518a9f8bd3ce7152d4dc0ce34d304">visit</a> (castor::String const &amp;name, castor::Point2ui &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:a316518a9f8bd3ce7152d4dc0ce34d304"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae46a7e0430f2087e2d9db754e6ae6de4"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#ae46a7e0430f2087e2d9db754e6ae6de4">visit</a> (castor::String const &amp;name, castor::Point3f &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:ae46a7e0430f2087e2d9db754e6ae6de4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7569d912fed95b96c5354bb1714c5a64"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#a7569d912fed95b96c5354bb1714c5a64">visit</a> (castor::String const &amp;name, castor::Point3i &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:a7569d912fed95b96c5354bb1714c5a64"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac789988f8f5c9a0d7b56bb1b4a9f6749"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#ac789988f8f5c9a0d7b56bb1b4a9f6749">visit</a> (castor::String const &amp;name, castor::Point3ui &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:ac789988f8f5c9a0d7b56bb1b4a9f6749"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0211cab7391e6b9cfa4ec1ddc46f63c6"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#a0211cab7391e6b9cfa4ec1ddc46f63c6">visit</a> (castor::String const &amp;name, castor::Point4f &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:a0211cab7391e6b9cfa4ec1ddc46f63c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61b9a1829464429feb4cb007f7d5c97a"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#a61b9a1829464429feb4cb007f7d5c97a">visit</a> (castor::String const &amp;name, castor::Point4i &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:a61b9a1829464429feb4cb007f7d5c97a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9aecfc3f6600f4335eaf12e745d1389"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#aa9aecfc3f6600f4335eaf12e745d1389">visit</a> (castor::String const &amp;name, castor::Point4ui &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:aa9aecfc3f6600f4335eaf12e745d1389"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd119e176dcb265c2cfec36b5f59161a"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#acd119e176dcb265c2cfec36b5f59161a">visit</a> (castor::String const &amp;name, castor::Matrix4x4f &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:acd119e176dcb265c2cfec36b5f59161a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe8918d682ef830f3d97fe70cafd8195"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#abe8918d682ef830f3d97fe70cafd8195">visit</a> (castor::String const &amp;name, castor::RangedValue&lt; float &gt; &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:abe8918d682ef830f3d97fe70cafd8195"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21360bf55f2b3d14c237d673abb8fae5"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#a21360bf55f2b3d14c237d673abb8fae5">visit</a> (castor::String const &amp;name, castor::RangedValue&lt; int32_t &gt; &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:a21360bf55f2b3d14c237d673abb8fae5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad55d5233d232d4bde68809ca743aa8f8"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#ad55d5233d232d4bde68809ca743aa8f8">visit</a> (castor::String const &amp;name, castor::RangedValue&lt; uint32_t &gt; &amp;value, bool *control=nullptr)=0</td></tr>
+<tr class="separator:ad55d5233d232d4bde68809ca743aa8f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3d5ac5b1a820312db33604dac4d1707"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#af3d5ac5b1a820312db33604dac4d1707">visit</a> (castor::String const &amp;name, <a class="el" href="../../da/dab/a01362.html#ae3a32e32f3eaa63d0b9886aa3e942742">TextureFlag</a> textureFlag, castor::Point2ui &amp;value, uint32_t componentsCount, bool *control=nullptr)=0</td></tr>
+<tr class="separator:af3d5ac5b1a820312db33604dac4d1707"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bcaaf024023c0f8df1b73bfe61d487e"><td class="memTemplParams" colspan="2">template&lt;typename TypeT &gt; </td></tr>
+<tr class="memitem:a0bcaaf024023c0f8df1b73bfe61d487e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#a0bcaaf024023c0f8df1b73bfe61d487e">visit</a> (castor::String const &amp;name, castor::ChangeTracked&lt; TypeT &gt; &amp;value)</td></tr>
+<tr class="separator:a0bcaaf024023c0f8df1b73bfe61d487e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c5ceb194a25defa49f3c9d3265789cb"><td class="memTemplParams" colspan="2">template&lt;typename TypeT &gt; </td></tr>
+<tr class="memitem:a8c5ceb194a25defa49f3c9d3265789cb"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#a8c5ceb194a25defa49f3c9d3265789cb">visit</a> (castor::String const &amp;name, castor::GroupChangeTracked&lt; TypeT &gt; &amp;value)</td></tr>
+<tr class="separator:a8c5ceb194a25defa49f3c9d3265789cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a97037dd2bab8003bfefb1070716661a4"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> const castor::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#a97037dd2bab8003bfefb1070716661a4">getName</a> ()</td></tr>
-<tr class="separator:a97037dd2bab8003bfefb1070716661a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6071a5fd5404f37cca0d1f3d88f77fdb"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../da/d06/a01403.html#a69009a36ab335c9cd7d4eed926a70037">LightingModelPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#a6071a5fd5404f37cca0d1f3d88f77fdb">create</a> (sdw::ShaderWriter &amp;writer, <a class="el" href="../../d5/daa/a04862.html">Utils</a> &amp;utils, <a class="el" href="../../d4/db9/a04870.html">ShadowOptions</a> shadowOptions, <a class="el" href="../../d0/de6/a04814.html">SssProfiles</a> const *sssProfiles, bool isOpaqueProgram)</td></tr>
-<tr class="separator:a6071a5fd5404f37cca0d1f3d88f77fdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_static_methods_a04798"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_a04798')"><img src="../../closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el" href="../../d3/d1a/a04798.html">castor3d::shader::LightingModel</a></td></tr>
-<tr class="memitem:adc48f26a84af1a43c55af62ac182da4f inherit pub_static_methods_a04798"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../da/d06/a01403.html#a69009a36ab335c9cd7d4eed926a70037">LightingModelPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#adc48f26a84af1a43c55af62ac182da4f">createModel</a> (<a class="el" href="../../d5/daa/a04862.html">Utils</a> &amp;utils, castor::String const &amp;name, uint32_t lightsBufBinding, uint32_t lightsBufSet, <a class="el" href="../../d4/db9/a04870.html">ShadowOptions</a> const &amp;shadows, <a class="el" href="../../d0/de6/a04814.html">SssProfiles</a> const *sssProfiles, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet, bool isOpaqueProgram)</td></tr>
-<tr class="separator:adc48f26a84af1a43c55af62ac182da4f inherit pub_static_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a593c6a68891db8cd8254c6a0f6e51ff8 inherit pub_static_methods_a04798"><td class="memTemplParams" colspan="2">template&lt;typename LightsBufBindingT &gt; </td></tr>
-<tr class="memitem:a593c6a68891db8cd8254c6a0f6e51ff8 inherit pub_static_methods_a04798"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="../../da/d06/a01403.html#a69009a36ab335c9cd7d4eed926a70037">LightingModelPtr</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#a593c6a68891db8cd8254c6a0f6e51ff8">createModelT</a> (<a class="el" href="../../d5/daa/a04862.html">Utils</a> &amp;utils, castor::String const &amp;name, LightsBufBindingT lightsBufBinding, uint32_t lightsBufSet, <a class="el" href="../../d4/db9/a04870.html">ShadowOptions</a> const &amp;shadows, <a class="el" href="../../d0/de6/a04814.html">SssProfiles</a> const *sssProfiles, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet, bool isOpaqueProgram)</td></tr>
-<tr class="separator:a593c6a68891db8cd8254c6a0f6e51ff8 inherit pub_static_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8278cfe80352f0661cc4a1e01f962a6b inherit pub_static_methods_a04798"><td class="memTemplParams" colspan="2">template&lt;typename LightBindingT &gt; </td></tr>
-<tr class="memitem:a8278cfe80352f0661cc4a1e01f962a6b inherit pub_static_methods_a04798"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="../../da/d06/a01403.html#a69009a36ab335c9cd7d4eed926a70037">LightingModelPtr</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#a8278cfe80352f0661cc4a1e01f962a6b">createModel</a> (<a class="el" href="../../d5/daa/a04862.html">Utils</a> &amp;utils, castor::String const &amp;name, <a class="el" href="../../dc/df4/a01401.html#a381718aa9accc88c20afd97d76c30ed8">LightType</a> light, LightBindingT lightBinding, uint32_t lightSet, bool lightUbo, <a class="el" href="../../d4/db9/a04870.html">ShadowOptions</a> const &amp;shadows, <a class="el" href="../../d0/de6/a04814.html">SssProfiles</a> const *sssProfiles, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet)</td></tr>
-<tr class="separator:a8278cfe80352f0661cc4a1e01f962a6b inherit pub_static_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab85740393eda5904075078308e87a837 inherit pub_static_methods_a04798"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../da/d06/a01403.html#a69009a36ab335c9cd7d4eed926a70037">LightingModelPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#ab85740393eda5904075078308e87a837">createDiffuseModel</a> (<a class="el" href="../../d5/daa/a04862.html">Utils</a> &amp;utils, castor::String const &amp;name, uint32_t lightsBufBinding, uint32_t lightsBufSet, <a class="el" href="../../d4/db9/a04870.html">ShadowOptions</a> const &amp;shadows, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet, bool isOpaqueProgram)</td></tr>
-<tr class="separator:ab85740393eda5904075078308e87a837 inherit pub_static_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a673382163b59d65d96190c8b48419e8f inherit pub_static_methods_a04798"><td class="memTemplParams" colspan="2">template&lt;typename LightsBufBindingT &gt; </td></tr>
-<tr class="memitem:a673382163b59d65d96190c8b48419e8f inherit pub_static_methods_a04798"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="../../da/d06/a01403.html#a69009a36ab335c9cd7d4eed926a70037">LightingModelPtr</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#a673382163b59d65d96190c8b48419e8f">createDiffuseModelT</a> (<a class="el" href="../../d5/daa/a04862.html">Utils</a> &amp;utils, castor::String const &amp;name, LightsBufBindingT lightsBufBinding, uint32_t lightsBufSet, <a class="el" href="../../d4/db9/a04870.html">ShadowOptions</a> const &amp;shadows, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet, bool isOpaqueProgram)</td></tr>
-<tr class="separator:a673382163b59d65d96190c8b48419e8f inherit pub_static_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a889fbcd7194051729a9a4ae5cb0658db"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d4c/a02846.html">Config</a> const&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#a889fbcd7194051729a9a4ae5cb0658db">config</a></td></tr>
+<tr class="separator:a889fbcd7194051729a9a4ae5cb0658db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_attribs_a02838"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_a02838')"><img src="../../closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="../../d5/dde/a02838.html">castor3d::shader::PbrLightingModel</a></td></tr>
-<tr class="memitem:a7d53b0c128c7eb856dd110edc247a01a inherit pub_attribs_a02838"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dde/a02838.html#a7d53b0c128c7eb856dd110edc247a01a">m_isSpecularGlossiness</a></td></tr>
-<tr class="separator:a7d53b0c128c7eb856dd110edc247a01a inherit pub_attribs_a02838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a11c13c31f49aa23726ef9c81122f0465 inherit pub_attribs_a02838"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d9/d08/a04762.html">CookTorranceBRDF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dde/a02838.html#a11c13c31f49aa23726ef9c81122f0465">m_cookTorrance</a></td></tr>
-<tr class="separator:a11c13c31f49aa23726ef9c81122f0465 inherit pub_attribs_a02838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a33e583d547ae21ec7224acfb2c68c4b9 inherit pub_attribs_a02838"><td class="memItemLeft" align="right" valign="top">sdw::Function&lt; sdw::Void, InDirectionalLight, InPbrLightMaterial, InSurface, sdw::InVec3, sdw::InInt, <a class="el" href="../../d5/dac/a04818.html">OutputComponents</a> &amp; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dde/a02838.html#a33e583d547ae21ec7224acfb2c68c4b9">m_computeDirectional</a></td></tr>
-<tr class="separator:a33e583d547ae21ec7224acfb2c68c4b9 inherit pub_attribs_a02838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7dd9977b62bb101c23521538ea136b2 inherit pub_attribs_a02838"><td class="memItemLeft" align="right" valign="top">sdw::Function&lt; sdw::Void, InPointLight, InPbrLightMaterial, InSurface, sdw::InVec3, sdw::InInt, <a class="el" href="../../d5/dac/a04818.html">OutputComponents</a> &amp; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dde/a02838.html#ac7dd9977b62bb101c23521538ea136b2">m_computePoint</a></td></tr>
-<tr class="separator:ac7dd9977b62bb101c23521538ea136b2 inherit pub_attribs_a02838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae809b53222c8f5e5e644ecb82c6c1e7a inherit pub_attribs_a02838"><td class="memItemLeft" align="right" valign="top">sdw::Function&lt; sdw::Void, InSpotLight, InPbrLightMaterial, InSurface, sdw::InVec3, sdw::InInt, <a class="el" href="../../d5/dac/a04818.html">OutputComponents</a> &amp; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dde/a02838.html#ae809b53222c8f5e5e644ecb82c6c1e7a">m_computeSpot</a></td></tr>
-<tr class="separator:ae809b53222c8f5e5e644ecb82c6c1e7a inherit pub_attribs_a02838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae20f13ad209f36b46e1e553ab3490a0a inherit pub_attribs_a02838"><td class="memItemLeft" align="right" valign="top">sdw::Function&lt; sdw::Vec3, InOutDirectionalLight, InPbrLightMaterial, InSurface, sdw::InVec3, sdw::InInt &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dde/a02838.html#ae20f13ad209f36b46e1e553ab3490a0a">m_computeDirectionalDiffuse</a></td></tr>
-<tr class="separator:ae20f13ad209f36b46e1e553ab3490a0a inherit pub_attribs_a02838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a622adbbd9a5b7480c10d92fc3ba78204 inherit pub_attribs_a02838"><td class="memItemLeft" align="right" valign="top">sdw::Function&lt; sdw::Vec3, InOutPointLight, InPbrLightMaterial, InSurface, sdw::InVec3, sdw::InInt &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dde/a02838.html#a622adbbd9a5b7480c10d92fc3ba78204">m_computePointDiffuse</a></td></tr>
-<tr class="separator:a622adbbd9a5b7480c10d92fc3ba78204 inherit pub_attribs_a02838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0fa45de856a644e988fee15b2ad5794 inherit pub_attribs_a02838"><td class="memItemLeft" align="right" valign="top">sdw::Function&lt; sdw::Vec3, InOutSpotLight, InPbrLightMaterial, InSurface, sdw::InVec3, sdw::InInt &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dde/a02838.html#ab0fa45de856a644e988fee15b2ad5794">m_computeSpotDiffuse</a></td></tr>
-<tr class="separator:ab0fa45de856a644e988fee15b2ad5794 inherit pub_attribs_a02838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_methods_a02838"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_a02838')"><img src="../../closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="../../d5/dde/a02838.html">castor3d::shader::PbrLightingModel</a></td></tr>
-<tr class="memitem:a0cce198fcea9ac9677445a2dc16ef628 inherit pro_methods_a02838"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dde/a02838.html#a0cce198fcea9ac9677445a2dc16ef628">PbrLightingModel</a> (bool isSpecularGlossiness, sdw::ShaderWriter &amp;writer, <a class="el" href="../../d5/daa/a04862.html">Utils</a> &amp;utils, <a class="el" href="../../d4/db9/a04870.html">ShadowOptions</a> shadowOptions, <a class="el" href="../../d0/de6/a04814.html">SssProfiles</a> const *sssProfiles, bool isOpaqueProgram)</td></tr>
-<tr class="separator:a0cce198fcea9ac9677445a2dc16ef628 inherit pro_methods_a02838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae25604e99578333dd65a857db4c24538 inherit pro_methods_a02838"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dde/a02838.html#ae25604e99578333dd65a857db4c24538">doDeclareModel</a> () override</td></tr>
-<tr class="separator:ae25604e99578333dd65a857db4c24538 inherit pro_methods_a02838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0535701cc570da5baf40323c69b6a858 inherit pro_methods_a02838"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dde/a02838.html#a0535701cc570da5baf40323c69b6a858">doDeclareComputeDirectionalLight</a> () override</td></tr>
-<tr class="separator:a0535701cc570da5baf40323c69b6a858 inherit pro_methods_a02838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9dadcda15876dbf6acf3a5dbdc24fc55 inherit pro_methods_a02838"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dde/a02838.html#a9dadcda15876dbf6acf3a5dbdc24fc55">doDeclareComputePointLight</a> () override</td></tr>
-<tr class="separator:a9dadcda15876dbf6acf3a5dbdc24fc55 inherit pro_methods_a02838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9becaebfb17b09191a8720fc6164cfc3 inherit pro_methods_a02838"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dde/a02838.html#a9becaebfb17b09191a8720fc6164cfc3">doDeclareComputeSpotLight</a> () override</td></tr>
-<tr class="separator:a9becaebfb17b09191a8720fc6164cfc3 inherit pro_methods_a02838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ef051b4607ed0cfd30401a03845d965 inherit pro_methods_a02838"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dde/a02838.html#a7ef051b4607ed0cfd30401a03845d965">doDeclareDiffuseModel</a> () override</td></tr>
-<tr class="separator:a7ef051b4607ed0cfd30401a03845d965 inherit pro_methods_a02838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af5a436db70d6763028a05eb7834e3be2 inherit pro_methods_a02838"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dde/a02838.html#af5a436db70d6763028a05eb7834e3be2">doDeclareComputeDirectionalLightDiffuse</a> () override</td></tr>
-<tr class="separator:af5a436db70d6763028a05eb7834e3be2 inherit pro_methods_a02838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab875643f167469cdd5f8eb96d98cbd3 inherit pro_methods_a02838"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dde/a02838.html#aab875643f167469cdd5f8eb96d98cbd3">doDeclareComputePointLightDiffuse</a> () override</td></tr>
-<tr class="separator:aab875643f167469cdd5f8eb96d98cbd3 inherit pro_methods_a02838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad842fc16ddc7ee36237487cf8fd7e2f1 inherit pro_methods_a02838"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dde/a02838.html#ad842fc16ddc7ee36237487cf8fd7e2f1">doDeclareComputeSpotLightDiffuse</a> () override</td></tr>
-<tr class="separator:ad842fc16ddc7ee36237487cf8fd7e2f1 inherit pro_methods_a02838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_methods_a04798"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_a04798')"><img src="../../closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="../../d3/d1a/a04798.html">castor3d::shader::LightingModel</a></td></tr>
-<tr class="memitem:a5b33578c25cb0eb3401590f772e13691 inherit pro_methods_a04798"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d1/d03/a04778.html">Light</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#a5b33578c25cb0eb3401590f772e13691">getBaseLight</a> (sdw::UInt &amp;offset) const</td></tr>
-<tr class="separator:a5b33578c25cb0eb3401590f772e13691 inherit pro_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac2dc1856992461f592d5c2fe6161444d inherit pro_methods_a04798"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#ac2dc1856992461f592d5c2fe6161444d">doDeclareLightsBuffer</a> (uint32_t binding, uint32_t set)</td></tr>
-<tr class="separator:ac2dc1856992461f592d5c2fe6161444d inherit pro_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a078ef33656d17feb0bc301563131dd54 inherit pro_methods_a04798"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#a078ef33656d17feb0bc301563131dd54">doDeclareDirectionalLightUbo</a> (uint32_t binding, uint32_t set)</td></tr>
-<tr class="separator:a078ef33656d17feb0bc301563131dd54 inherit pro_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af4625cc4704620632fb7cc920a18527e inherit pro_methods_a04798"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#af4625cc4704620632fb7cc920a18527e">doDeclarePointLightUbo</a> (uint32_t binding, uint32_t set)</td></tr>
-<tr class="separator:af4625cc4704620632fb7cc920a18527e inherit pro_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afd671443970f1e4798d5707fce08a2a8 inherit pro_methods_a04798"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#afd671443970f1e4798d5707fce08a2a8">doDeclareSpotLightUbo</a> (uint32_t binding, uint32_t set)</td></tr>
-<tr class="separator:afd671443970f1e4798d5707fce08a2a8 inherit pro_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a601b0d6adbf1d1cfe51140debba408a9 inherit pro_methods_a04798"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#a601b0d6adbf1d1cfe51140debba408a9">doDeclareGetBaseLight</a> ()</td></tr>
-<tr class="separator:a601b0d6adbf1d1cfe51140debba408a9 inherit pro_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a47f393ce5b750d7a8132df92ede2eaab inherit pro_methods_a04798"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#a47f393ce5b750d7a8132df92ede2eaab">doDeclareGetDirectionalLight</a> ()</td></tr>
-<tr class="separator:a47f393ce5b750d7a8132df92ede2eaab inherit pro_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa639e3a479f852a8738a962669961f79 inherit pro_methods_a04798"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#aa639e3a479f852a8738a962669961f79">doDeclareGetPointLight</a> ()</td></tr>
-<tr class="separator:aa639e3a479f852a8738a962669961f79 inherit pro_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a14e3657549948e3665c5b7f47bc0e2a2 inherit pro_methods_a04798"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#a14e3657549948e3665c5b7f47bc0e2a2">doDeclareGetSpotLight</a> ()</td></tr>
-<tr class="separator:a14e3657549948e3665c5b7f47bc0e2a2 inherit pro_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a581d0e6a5c217533e521488ae0309d3c inherit pro_methods_a04798"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#a581d0e6a5c217533e521488ae0309d3c">doDeclareGetCascadeFactors</a> ()</td></tr>
-<tr class="separator:a581d0e6a5c217533e521488ae0309d3c inherit pro_methods_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_a04798"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_a04798')"><img src="../../closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="../../d3/d1a/a04798.html">castor3d::shader::LightingModel</a></td></tr>
-<tr class="memitem:a129490d8e4f0ea553f16dcaeb2b2c089 inherit pro_attribs_a04798"><td class="memItemLeft" align="right" valign="top">sdw::ShaderWriter &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#a129490d8e4f0ea553f16dcaeb2b2c089">m_writer</a></td></tr>
-<tr class="separator:a129490d8e4f0ea553f16dcaeb2b2c089 inherit pro_attribs_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e5d3c9e33f06597c63d4c64b62bc564 inherit pro_attribs_a04798"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/daa/a04862.html">Utils</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#a9e5d3c9e33f06597c63d4c64b62bc564">m_utils</a></td></tr>
-<tr class="separator:a9e5d3c9e33f06597c63d4c64b62bc564 inherit pro_attribs_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adff9bdb8fb5bd4f7c6f1d4ce7af4edf1 inherit pro_attribs_a04798"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; sdw::Struct &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#adff9bdb8fb5bd4f7c6f1d4ce7af4edf1">m_type</a></td></tr>
-<tr class="separator:adff9bdb8fb5bd4f7c6f1d4ce7af4edf1 inherit pro_attribs_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a0e87c50e65852b79e0dda88f060757 inherit pro_attribs_a04798"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; sdw::Ssbo &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#a7a0e87c50e65852b79e0dda88f060757">m_ssbo</a></td></tr>
-<tr class="separator:a7a0e87c50e65852b79e0dda88f060757 inherit pro_attribs_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a11c8a808450c5db734fe58007c5ad1 inherit pro_attribs_a04798"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; sdw::RImageBufferRgba32 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#a2a11c8a808450c5db734fe58007c5ad1">m_tbo</a></td></tr>
-<tr class="separator:a2a11c8a808450c5db734fe58007c5ad1 inherit pro_attribs_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8bc492d16fd0eddb81da5af6017f6aa4 inherit pro_attribs_a04798"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#a8bc492d16fd0eddb81da5af6017f6aa4">m_isOpaqueProgram</a></td></tr>
-<tr class="separator:a8bc492d16fd0eddb81da5af6017f6aa4 inherit pro_attribs_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afef4b07d66515b86040b952a529c80a3 inherit pro_attribs_a04798"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#afef4b07d66515b86040b952a529c80a3">m_prefix</a></td></tr>
-<tr class="separator:afef4b07d66515b86040b952a529c80a3 inherit pro_attribs_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e9407685cf7ba55a752a27437c09a74 inherit pro_attribs_a04798"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="../../d6/df5/a04826.html">Shadow</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#a3e9407685cf7ba55a752a27437c09a74">m_shadowModel</a></td></tr>
-<tr class="separator:a3e9407685cf7ba55a752a27437c09a74 inherit pro_attribs_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad7a37427798d2c79b0ee95e8c713dea9 inherit pro_attribs_a04798"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="../../d2/da7/a04830.html">SssTransmittance</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#ad7a37427798d2c79b0ee95e8c713dea9">m_sssTransmittance</a></td></tr>
-<tr class="separator:ad7a37427798d2c79b0ee95e8c713dea9 inherit pro_attribs_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a64689c5bb7ce2682e205cd001b5f6fd8 inherit pro_attribs_a04798"><td class="memItemLeft" align="right" valign="top">sdw::Function&lt; sdw::Vec3, sdw::InVec3, sdw::InVec4, sdw::InUInt &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#a64689c5bb7ce2682e205cd001b5f6fd8">m_getCascadeFactors</a></td></tr>
-<tr class="separator:a64689c5bb7ce2682e205cd001b5f6fd8 inherit pro_attribs_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa640956be672845c769c8127833993d3 inherit pro_attribs_a04798"><td class="memItemLeft" align="right" valign="top">sdw::Function&lt; sdw::Vec3, sdw::InVec3, sdw::InVec4Array, sdw::InUInt &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#aa640956be672845c769c8127833993d3">m_getTileFactors</a></td></tr>
-<tr class="separator:aa640956be672845c769c8127833993d3 inherit pro_attribs_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05823d225d40ae50737469729a128bca inherit pro_attribs_a04798"><td class="memItemLeft" align="right" valign="top">sdw::Function&lt; <a class="el" href="../../d1/d03/a04778.html">shader::Light</a>, sdw::InOutUInt &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#a05823d225d40ae50737469729a128bca">m_getBaseLight</a></td></tr>
-<tr class="separator:a05823d225d40ae50737469729a128bca inherit pro_attribs_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab368de32c7f8f54ef2066cbb18dc199b inherit pro_attribs_a04798"><td class="memItemLeft" align="right" valign="top">sdw::Function&lt; <a class="el" href="../../db/da6/a04782.html">shader::DirectionalLight</a>, sdw::InUInt &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#ab368de32c7f8f54ef2066cbb18dc199b">m_getDirectionalLight</a></td></tr>
-<tr class="separator:ab368de32c7f8f54ef2066cbb18dc199b inherit pro_attribs_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a98044cfa7b6795c534cc0f5382e3b694 inherit pro_attribs_a04798"><td class="memItemLeft" align="right" valign="top">sdw::Function&lt; <a class="el" href="../../dd/dec/a04786.html">shader::PointLight</a>, sdw::InUInt &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#a98044cfa7b6795c534cc0f5382e3b694">m_getPointLight</a></td></tr>
-<tr class="separator:a98044cfa7b6795c534cc0f5382e3b694 inherit pro_attribs_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22c68d438a913ae1437848af29e31e63 inherit pro_attribs_a04798"><td class="memItemLeft" align="right" valign="top">sdw::Function&lt; <a class="el" href="../../d6/d56/a04790.html">shader::SpotLight</a>, sdw::InUInt &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1a/a04798.html#a22c68d438a913ae1437848af29e31e63">m_getSpotLight</a></td></tr>
-<tr class="separator:a22c68d438a913ae1437848af29e31e63 inherit pro_attribs_a04798"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a78fc609c60c96ab10d32bd7ccab3aadf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dd1/a02842.html#a78fc609c60c96ab10d32bd7ccab3aadf">PassVisitorBase</a> (<a class="el" href="../../d5/d4c/a02846.html">Config</a> <a class="el" href="../../dd/dd1/a02842.html#a889fbcd7194051729a9a4ae5cb0658db">config</a>)</td></tr>
+<tr class="separator:a78fc609c60c96ab10d32bd7ccab3aadf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a43bac3ebdfabb0753b8b2d84662651f5" name="a43bac3ebdfabb0753b8b2d84662651f5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a43bac3ebdfabb0753b8b2d84662651f5">&#9670;&nbsp;</a></span>PbrMRLightingModel()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::shader::PbrMRLightingModel::PbrMRLightingModel </td>
-          <td>(</td>
-          <td class="paramtype">sdw::ShaderWriter &amp;&#160;</td>
-          <td class="paramname"><em>writer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d5/daa/a04862.html">Utils</a> &amp;&#160;</td>
-          <td class="paramname"><em>utils</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d4/db9/a04870.html">ShadowOptions</a>&#160;</td>
-          <td class="paramname"><em>shadowOptions</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d0/de6/a04814.html">SssProfiles</a> const *&#160;</td>
-          <td class="paramname"><em>sssProfiles</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>isOpaqueProgram</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a6071a5fd5404f37cca0d1f3d88f77fdb" name="a6071a5fd5404f37cca0d1f3d88f77fdb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6071a5fd5404f37cca0d1f3d88f77fdb">&#9670;&nbsp;</a></span>create()</h2>
+<a id="a78fc609c60c96ab10d32bd7ccab3aadf" name="a78fc609c60c96ab10d32bd7ccab3aadf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78fc609c60c96ab10d32bd7ccab3aadf">&#9670;&nbsp;</a></span>PassVisitorBase()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -321,52 +176,24 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../da/d06/a01403.html#a69009a36ab335c9cd7d4eed926a70037">LightingModelPtr</a> castor3d::shader::PbrMRLightingModel::create </td>
+          <td class="memname">castor3d::PassVisitorBase::PassVisitorBase </td>
           <td>(</td>
-          <td class="paramtype">sdw::ShaderWriter &amp;&#160;</td>
-          <td class="paramname"><em>writer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype"><a class="el" href="../../d5/d4c/a02846.html">Config</a>&#160;</td>
+          <td class="paramname"><em>config</em></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="../../d5/daa/a04862.html">Utils</a> &amp;&#160;</td>
-          <td class="paramname"><em>utils</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d4/db9/a04870.html">ShadowOptions</a>&#160;</td>
-          <td class="paramname"><em>shadowOptions</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d0/de6/a04814.html">SssProfiles</a> const *&#160;</td>
-          <td class="paramname"><em>sssProfiles</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>isOpaqueProgram</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a14babdd727eb6f81968f52c160864f65" name="a14babdd727eb6f81968f52c160864f65"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a14babdd727eb6f81968f52c160864f65">&#9670;&nbsp;</a></span>declMaterial()</h2>
+<a id="a967afb3f5f352d193a24fd91741c42ee" name="a967afb3f5f352d193a24fd91741c42ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a967afb3f5f352d193a24fd91741c42ee">&#9670;&nbsp;</a></span>~PassVisitorBase()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -375,35 +202,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> std::unique_ptr&lt; <a class="el" href="../../de/d4c/a04794.html">LightMaterial</a> &gt; castor3d::shader::PbrMRLightingModel::declMaterial </td>
-          <td>(</td>
-          <td class="paramtype">std::string const &amp;&#160;</td>
-          <td class="paramname"><em>name</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Implements <a class="el" href="../../d3/d1a/a04798.html#afb2d2506e4e7e9145199649349ee3bb9">castor3d::shader::LightingModel</a>.</p>
-
-</div>
-</div>
-<a id="a97037dd2bab8003bfefb1070716661a4" name="a97037dd2bab8003bfefb1070716661a4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a97037dd2bab8003bfefb1070716661a4">&#9670;&nbsp;</a></span>getName()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> const castor::String castor3d::shader::PbrMRLightingModel::getName </td>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::PassVisitorBase::~PassVisitorBase </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -411,20 +210,1522 @@ Additional Inherited Members</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">default</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 </div>
 </div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a136584f763631cad5b1002f921592078" name="a136584f763631cad5b1002f921592078"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a136584f763631cad5b1002f921592078">&#9670;&nbsp;</a></span>visit() <span class="overload">[1/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../da/dab/a01362.html#a840ab6fd50c1a08fcc1b6dc3f98d90fa">BlendMode</a> &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#ad9b02987e293644ecdb2ffb6dedb06b8">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#a136584f763631cad5b1002f921592078">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="a6544497880da7fd36b435ed5ca563975" name="a6544497880da7fd36b435ed5ca563975"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6544497880da7fd36b435ed5ca563975">&#9670;&nbsp;</a></span>visit() <span class="overload">[2/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >name Values. </p>
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#a819d4d77db7bfa2697a751fc00b9e273">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#a6544497880da7fd36b435ed5ca563975">castor3d::PassVisitor</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../dd/dd1/a02842.html#a0bcaaf024023c0f8df1b73bfe61d487e">visit()</a>.</p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../dd/dd1/a02842_a6544497880da7fd36b435ed5ca563975_icgraph.png" border="0" usemap="#add/dd1/a02842_a6544497880da7fd36b435ed5ca563975_icgraph" alt=""/></div>
+<map name="add/dd1/a02842_a6544497880da7fd36b435ed5ca563975_icgraph" id="add/dd1/a02842_a6544497880da7fd36b435ed5ca563975_icgraph">
+<area shape="rect" title=" " alt="" coords="231,5,408,47"/>
+<area shape="rect" href="../../dd/dd1/a02842.html#a0bcaaf024023c0f8df1b73bfe61d487e" title=" " alt="" coords="5,5,183,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a0bcaaf024023c0f8df1b73bfe61d487e" name="a0bcaaf024023c0f8df1b73bfe61d487e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0bcaaf024023c0f8df1b73bfe61d487e">&#9670;&nbsp;</a></span>visit() <span class="overload">[3/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TypeT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::ChangeTracked&lt; TypeT &gt; &amp;&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="../../dd/dd1/a02842.html#a6544497880da7fd36b435ed5ca563975">visit()</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../dd/dd1/a02842_a0bcaaf024023c0f8df1b73bfe61d487e_cgraph.png" border="0" usemap="#add/dd1/a02842_a0bcaaf024023c0f8df1b73bfe61d487e_cgraph" alt=""/></div>
+<map name="add/dd1/a02842_a0bcaaf024023c0f8df1b73bfe61d487e_cgraph" id="add/dd1/a02842_a0bcaaf024023c0f8df1b73bfe61d487e_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,183,47"/>
+<area shape="rect" href="../../dd/dd1/a02842.html#a6544497880da7fd36b435ed5ca563975" title=" " alt="" coords="231,5,408,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a8c5ceb194a25defa49f3c9d3265789cb" name="a8c5ceb194a25defa49f3c9d3265789cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c5ceb194a25defa49f3c9d3265789cb">&#9670;&nbsp;</a></span>visit() <span class="overload">[4/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TypeT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::GroupChangeTracked&lt; TypeT &gt; &amp;&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="../../dd/dd1/a02842.html#a6544497880da7fd36b435ed5ca563975">visit()</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../dd/dd1/a02842_a8c5ceb194a25defa49f3c9d3265789cb_cgraph.png" border="0" usemap="#add/dd1/a02842_a8c5ceb194a25defa49f3c9d3265789cb_cgraph" alt=""/></div>
+<map name="add/dd1/a02842_a8c5ceb194a25defa49f3c9d3265789cb_cgraph" id="add/dd1/a02842_a8c5ceb194a25defa49f3c9d3265789cb_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,183,47"/>
+<area shape="rect" href="../../dd/dd1/a02842.html#a6544497880da7fd36b435ed5ca563975" title=" " alt="" coords="231,5,408,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a4d0ae0e2a57b75f4d974640f47477cb9" name="a4d0ae0e2a57b75f4d974640f47477cb9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d0ae0e2a57b75f4d974640f47477cb9">&#9670;&nbsp;</a></span>visit() <span class="overload">[5/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::HdrRgbaColour &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#a5bbc15c2dae2609f7cccd480f067ce9a">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#a4d0ae0e2a57b75f4d974640f47477cb9">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="aa689cff91aa4f5bea9937570dddafd1a" name="aa689cff91aa4f5bea9937570dddafd1a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa689cff91aa4f5bea9937570dddafd1a">&#9670;&nbsp;</a></span>visit() <span class="overload">[6/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::HdrRgbColour &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#a6929617ace25301a75595dd76d8273a4">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#aa689cff91aa4f5bea9937570dddafd1a">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="acd119e176dcb265c2cfec36b5f59161a" name="acd119e176dcb265c2cfec36b5f59161a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd119e176dcb265c2cfec36b5f59161a">&#9670;&nbsp;</a></span>visit() <span class="overload">[7/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::Matrix4x4f &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#a029d2be67e1a68493e286532cc6a5892">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#acd119e176dcb265c2cfec36b5f59161a">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="a6e782592f789963bc89690e91ac290fc" name="a6e782592f789963bc89690e91ac290fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e782592f789963bc89690e91ac290fc">&#9670;&nbsp;</a></span>visit() <span class="overload">[8/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::Point2f &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#ae0691a12236c5218b27eb70adf24fc23">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#a6e782592f789963bc89690e91ac290fc">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="a7eacdf4ae082cd1fbfba1b4393d72d35" name="a7eacdf4ae082cd1fbfba1b4393d72d35"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7eacdf4ae082cd1fbfba1b4393d72d35">&#9670;&nbsp;</a></span>visit() <span class="overload">[9/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::Point2i &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#ac81af7bd6c18408808f2766e146c2d35">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#a7eacdf4ae082cd1fbfba1b4393d72d35">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="a316518a9f8bd3ce7152d4dc0ce34d304" name="a316518a9f8bd3ce7152d4dc0ce34d304"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a316518a9f8bd3ce7152d4dc0ce34d304">&#9670;&nbsp;</a></span>visit() <span class="overload">[10/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::Point2ui &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#a1668f27de733cd0362dff49823631c9b">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#a316518a9f8bd3ce7152d4dc0ce34d304">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="ae46a7e0430f2087e2d9db754e6ae6de4" name="ae46a7e0430f2087e2d9db754e6ae6de4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae46a7e0430f2087e2d9db754e6ae6de4">&#9670;&nbsp;</a></span>visit() <span class="overload">[11/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::Point3f &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#a0a5e72cf6f7bdf096b9ad876389a6b9b">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#ae46a7e0430f2087e2d9db754e6ae6de4">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="a7569d912fed95b96c5354bb1714c5a64" name="a7569d912fed95b96c5354bb1714c5a64"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7569d912fed95b96c5354bb1714c5a64">&#9670;&nbsp;</a></span>visit() <span class="overload">[12/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::Point3i &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#a5b8411725fbd061e9da1e87be560e7dd">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#a7569d912fed95b96c5354bb1714c5a64">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="ac789988f8f5c9a0d7b56bb1b4a9f6749" name="ac789988f8f5c9a0d7b56bb1b4a9f6749"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac789988f8f5c9a0d7b56bb1b4a9f6749">&#9670;&nbsp;</a></span>visit() <span class="overload">[13/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::Point3ui &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#a81a5fd1fe50a0d85316a0466ff4193d5">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#ac789988f8f5c9a0d7b56bb1b4a9f6749">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="a0211cab7391e6b9cfa4ec1ddc46f63c6" name="a0211cab7391e6b9cfa4ec1ddc46f63c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0211cab7391e6b9cfa4ec1ddc46f63c6">&#9670;&nbsp;</a></span>visit() <span class="overload">[14/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::Point4f &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#a0ee8667994709b5e87dfc77857402af3">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#a0211cab7391e6b9cfa4ec1ddc46f63c6">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="a61b9a1829464429feb4cb007f7d5c97a" name="a61b9a1829464429feb4cb007f7d5c97a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61b9a1829464429feb4cb007f7d5c97a">&#9670;&nbsp;</a></span>visit() <span class="overload">[15/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::Point4i &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#ae22ec4f52572888fded124dc40d56661">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#a61b9a1829464429feb4cb007f7d5c97a">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="aa9aecfc3f6600f4335eaf12e745d1389" name="aa9aecfc3f6600f4335eaf12e745d1389"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9aecfc3f6600f4335eaf12e745d1389">&#9670;&nbsp;</a></span>visit() <span class="overload">[16/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::Point4ui &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#a2575b4ee6176186adcd761a3a7df4d26">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#aa9aecfc3f6600f4335eaf12e745d1389">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="abe8918d682ef830f3d97fe70cafd8195" name="abe8918d682ef830f3d97fe70cafd8195"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe8918d682ef830f3d97fe70cafd8195">&#9670;&nbsp;</a></span>visit() <span class="overload">[17/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::RangedValue&lt; float &gt; &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#a6a387868b505909de1e48bcb5a62d5b4">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#abe8918d682ef830f3d97fe70cafd8195">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="a21360bf55f2b3d14c237d673abb8fae5" name="a21360bf55f2b3d14c237d673abb8fae5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21360bf55f2b3d14c237d673abb8fae5">&#9670;&nbsp;</a></span>visit() <span class="overload">[18/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::RangedValue&lt; int32_t &gt; &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#aace8e5ad19c24834919d1c2d380e0a67">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#a21360bf55f2b3d14c237d673abb8fae5">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="ad55d5233d232d4bde68809ca743aa8f8" name="ad55d5233d232d4bde68809ca743aa8f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad55d5233d232d4bde68809ca743aa8f8">&#9670;&nbsp;</a></span>visit() <span class="overload">[19/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::RangedValue&lt; uint32_t &gt; &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#a1fec830e9cfa9190bfbb6e09a2edd524">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#ad55d5233d232d4bde68809ca743aa8f8">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="a1e686a904cd9af044be6c424c357eef9" name="a1e686a904cd9af044be6c424c357eef9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e686a904cd9af044be6c424c357eef9">&#9670;&nbsp;</a></span>visit() <span class="overload">[20/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::RgbaColour &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#aae55688034b76de42dd686aaf6696767">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#a1e686a904cd9af044be6c424c357eef9">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="af4b0facac973fb471f084fc8fd8155ed" name="af4b0facac973fb471f084fc8fd8155ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4b0facac973fb471f084fc8fd8155ed">&#9670;&nbsp;</a></span>visit() <span class="overload">[21/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::RgbColour &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#a5aefaa6a1b11a004c95850c7367ac5c5">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#af4b0facac973fb471f084fc8fd8155ed">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="ab3b538c9635fe2ddb3df2747794e2251" name="ab3b538c9635fe2ddb3df2747794e2251"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3b538c9635fe2ddb3df2747794e2251">&#9670;&nbsp;</a></span>visit() <span class="overload">[22/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#ae9c32feda9f9537a171a50f3f0fd1218">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#ab3b538c9635fe2ddb3df2747794e2251">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="a325239e28d199a6e1e758d94c70045c5" name="a325239e28d199a6e1e758d94c70045c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a325239e28d199a6e1e758d94c70045c5">&#9670;&nbsp;</a></span>visit() <span class="overload">[23/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#aeab09a6e1705fc33d5bab050c81c5139">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#a325239e28d199a6e1e758d94c70045c5">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="a4900236f8c9a7200a6068ba344d2e044" name="a4900236f8c9a7200a6068ba344d2e044"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4900236f8c9a7200a6068ba344d2e044">&#9670;&nbsp;</a></span>visit() <span class="overload">[24/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#a359aaceb92faaa6acba306ce11e617aa">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#a4900236f8c9a7200a6068ba344d2e044">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="a60baffa7c01e78e1e6cab9f821851cd3" name="a60baffa7c01e78e1e6cab9f821851cd3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60baffa7c01e78e1e6cab9f821851cd3">&#9670;&nbsp;</a></span>visit() <span class="overload">[25/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#a1cfd3196612dbe7b74b5de42cf0da82d">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#a60baffa7c01e78e1e6cab9f821851cd3">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="aa7ec069ac2337b41f896845cc7fcdb9a" name="aa7ec069ac2337b41f896845cc7fcdb9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7ec069ac2337b41f896845cc7fcdb9a">&#9670;&nbsp;</a></span>visit() <span class="overload">[26/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int64_t &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#ac6f0519ab7ac1f35c7518800dcbf6384">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#aa7ec069ac2337b41f896845cc7fcdb9a">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="aa722d37469875c168cf2e7fb3bb6b5a8" name="aa722d37469875c168cf2e7fb3bb6b5a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa722d37469875c168cf2e7fb3bb6b5a8">&#9670;&nbsp;</a></span>visit() <span class="overload">[27/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../da/dab/a01362.html#a808c81c0da4ffd2515292e95b6b4c124">ParallaxOcclusionMode</a> &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#afc308ab6cc296ae79e44e6c795c16d18">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#aa722d37469875c168cf2e7fb3bb6b5a8">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="a1706f736e458b9b5e9c3804e05badd74" name="a1706f736e458b9b5e9c3804e05badd74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1706f736e458b9b5e9c3804e05badd74">&#9670;&nbsp;</a></span>visit() <span class="overload">[28/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../da/dab/a01362.html#a69e89af11c4c9247dce7ee99a21090fc">PassFlags</a> &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#a15a729e60ef3c61e108ae1202236981e">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#a1706f736e458b9b5e9c3804e05badd74">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="af3d5ac5b1a820312db33604dac4d1707" name="af3d5ac5b1a820312db33604dac4d1707"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3d5ac5b1a820312db33604dac4d1707">&#9670;&nbsp;</a></span>visit() <span class="overload">[29/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../da/dab/a01362.html#ae3a32e32f3eaa63d0b9886aa3e942742">TextureFlag</a>&#160;</td>
+          <td class="paramname"><em>textureFlag</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::Point2ui &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>componentsCount</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#ad895039734757d30d9927b22229fdee0">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#af3d5ac5b1a820312db33604dac4d1707">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="abc40d4fa446255aeacfdfc2e976c7870" name="abc40d4fa446255aeacfdfc2e976c7870"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc40d4fa446255aeacfdfc2e976c7870">&#9670;&nbsp;</a></span>visit() <span class="overload">[30/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#aaabad3426ff7559eb3cb8fa1d6791769">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#abc40d4fa446255aeacfdfc2e976c7870">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="a8cafb163ec7e20d5a989adabb568b6fd" name="a8cafb163ec7e20d5a989adabb568b6fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8cafb163ec7e20d5a989adabb568b6fd">&#9670;&nbsp;</a></span>visit() <span class="overload">[31/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#a14241ab827a6ad0d5a20f2d84e22dcaa">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#a8cafb163ec7e20d5a989adabb568b6fd">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="a8d0b10d96f01719b4670708a8f2e0b7e" name="a8d0b10d96f01719b4670708a8f2e0b7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d0b10d96f01719b4670708a8f2e0b7e">&#9670;&nbsp;</a></span>visit() <span class="overload">[32/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#a7a6ebe3282463f39e099e87753846200">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#a8d0b10d96f01719b4670708a8f2e0b7e">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<a id="ab7015359759a56e073f405ea7c0807d7" name="ab7015359759a56e073f405ea7c0807d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7015359759a56e073f405ea7c0807d7">&#9670;&nbsp;</a></span>visit() <span class="overload">[33/33]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::PassVisitorBase::visit </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VkCompareOp &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>control</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="../../d0/d9a/a02850.html#a3e2b1defc25900bdd1687116dc9f8733">castor3d::PassVisitor</a>, and <a class="el" href="../../d0/d9a/a02850.html#ab7015359759a56e073f405ea7c0807d7">castor3d::PassVisitor</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a889fbcd7194051729a9a4ae5cb0658db" name="a889fbcd7194051729a9a4ae5cb0658db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a889fbcd7194051729a9a4ae5cb0658db">&#9670;&nbsp;</a></span>config</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d5/d4c/a02846.html">Config</a> const castor3d::PassVisitorBase::config</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>Material/Pass/PBR/Shaders/<a class="el" href="../../dd/de2/a00320.html">GlslPbrLighting.hpp</a></li>
+<li>Material/Pass/<a class="el" href="../../df/d91/a00335.html">PassVisitor.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 15:34:56 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:50 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

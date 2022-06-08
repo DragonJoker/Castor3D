@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="192" column="12" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="192" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="194" column="12" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="194" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d1/df2/a02990_1a868262f475cf6bb0f62d9915ae2b0730" prot="private" static="no" mutable="no">
         <type>VkRenderPass</type>
@@ -31,10 +31,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="193" column="14" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="193" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="195" column="14" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="195" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d1/df2/a02990_1a2e4f53606bc93fe06f3da2c26f9f0bdb" prot="private" static="no" mutable="no">
-        <type><ref refid="dc/d64/a04750" kindref="compound">ShaderModule</ref></type>
+        <type><ref refid="d6/d14/a04858" kindref="compound">ShaderModule</ref></type>
         <definition>ShaderModule castor3d::LoadingScreen::WindowPass::m_vertexShader</definition>
         <argsstring></argsstring>
         <name>m_vertexShader</name>
@@ -45,10 +45,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="194" column="14" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="194" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="196" column="14" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="196" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d1/df2/a02990_1a35de4d91a894715f6223180487723b3a" prot="private" static="no" mutable="no">
-        <type><ref refid="dc/d64/a04750" kindref="compound">ShaderModule</ref></type>
+        <type><ref refid="d6/d14/a04858" kindref="compound">ShaderModule</ref></type>
         <definition>ShaderModule castor3d::LoadingScreen::WindowPass::m_pixelShader</definition>
         <argsstring></argsstring>
         <name>m_pixelShader</name>
@@ -59,7 +59,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="195" column="14" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="195" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="197" column="14" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="197" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d1/df2/a02990_1a9131049708910d5f497c4c7c1ad43189" prot="private" static="no" mutable="no">
         <type>ashes::PipelineShaderStageCreateInfoArray</type>
@@ -73,7 +73,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="196" column="43" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="196" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="198" column="43" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="198" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d1/df2/a02990_1aa00c700467babd81ecd691ce74112e1f" prot="private" static="no" mutable="no">
         <type>crg::RenderQuadHolder</type>
@@ -87,7 +87,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="197" column="23" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="197" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="199" column="23" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="199" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d1/df2/a02990_1adde0c205db1bcb2b575a91c95a38da3a" prot="private" static="no" mutable="no">
         <type>VkFramebuffer</type>
@@ -102,7 +102,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="198" column="15" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="198" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="200" column="15" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="200" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d1/df2/a02990_1a9c9bec7298e9b1636758606a1cc4575d" prot="private" static="no" mutable="no">
         <type>std::vector&lt; VkClearValue &gt;</type>
@@ -116,7 +116,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="199" column="13" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="199" bodyend="-1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="201" column="13" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="201" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -139,7 +139,7 @@
           <declname>graph</declname>
         </param>
         <param>
-          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <type><ref refid="df/d75/a04010" kindref="compound">RenderDevice</ref> const &amp;</type>
           <declname>device</declname>
         </param>
         <param>
@@ -156,7 +156,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="168" column="1"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="170" column="1"/>
       </memberdef>
       <memberdef kind="function" id="d1/df2/a02990_1a8f39f2e8c60a98af93c165f9c67f8e14" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -178,16 +178,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="175" column="6"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="177" column="6"/>
       </memberdef>
-      <memberdef kind="function" id="d1/df2/a02990_1a08810b9ab8b148ac2765f51131fd0c5a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d1/df2/a02990_1ac9c0ec3f2f7e8149f8e464c736b39c83" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
         <definition>void castor3d::LoadingScreen::WindowPass::setTarget</definition>
-        <argsstring>(VkFramebuffer framebuffer, std::vector&lt; VkClearValue &gt; clearValues)</argsstring>
+        <argsstring>(ashes::FrameBuffer const &amp;framebuffer, std::vector&lt; VkClearValue &gt; clearValues)</argsstring>
         <name>setTarget</name>
         <qualifiedname>castor3d::LoadingScreen::WindowPass::setTarget</qualifiedname>
         <param>
-          <type>VkFramebuffer</type>
+          <type>ashes::FrameBuffer const &amp;</type>
           <declname>framebuffer</declname>
         </param>
         <param>
@@ -200,7 +200,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="177" column="6"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="179" column="6"/>
       </memberdef>
       <memberdef kind="function" id="d1/df2/a02990_1aee9d29003f7e004efae8e7a762bfcd4c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>crg::Fence &amp;</type>
@@ -214,7 +214,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="180" column="13" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="180" bodyend="183"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="182" column="13" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="182" bodyend="185"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-func">
@@ -230,7 +230,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="186" column="6"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="188" column="6"/>
       </memberdef>
       <memberdef kind="function" id="d1/df2/a02990_1a2a4fb2c4e0938a1e9a7c52ac3bc7bd99" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -256,7 +256,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/LoadingScreen.hpp" line="187" column="6"/>
+        <location file="Miscellaneous/LoadingScreen.hpp" line="189" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -283,7 +283,7 @@
         <label>crg::RunnablePass</label>
       </node>
     </collaborationgraph>
-    <location file="Miscellaneous/LoadingScreen.hpp" line="164" column="1" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="166" bodyend="200"/>
+    <location file="Miscellaneous/LoadingScreen.hpp" line="166" column="1" bodyfile="Miscellaneous/LoadingScreen.hpp" bodystart="168" bodyend="202"/>
     <listofallmembers>
       <member refid="d1/df2/a02990_1a391b7b61356d49b418ce663458816bb6" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen::WindowPass</scope><name>doInitialise</name></member>
       <member refid="d1/df2/a02990_1a2a4fb2c4e0938a1e9a7c52ac3bc7bd99" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen::WindowPass</scope><name>doRecordInto</name></member>
@@ -297,7 +297,7 @@
       <member refid="d1/df2/a02990_1a9131049708910d5f497c4c7c1ad43189" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen::WindowPass</scope><name>m_stages</name></member>
       <member refid="d1/df2/a02990_1a2e4f53606bc93fe06f3da2c26f9f0bdb" prot="private" virt="non-virtual"><scope>castor3d::LoadingScreen::WindowPass</scope><name>m_vertexShader</name></member>
       <member refid="d1/df2/a02990_1a8f39f2e8c60a98af93c165f9c67f8e14" prot="public" virt="non-virtual"><scope>castor3d::LoadingScreen::WindowPass</scope><name>setRenderPass</name></member>
-      <member refid="d1/df2/a02990_1a08810b9ab8b148ac2765f51131fd0c5a" prot="public" virt="non-virtual"><scope>castor3d::LoadingScreen::WindowPass</scope><name>setTarget</name></member>
+      <member refid="d1/df2/a02990_1ac9c0ec3f2f7e8149f8e464c736b39c83" prot="public" virt="non-virtual"><scope>castor3d::LoadingScreen::WindowPass</scope><name>setTarget</name></member>
       <member refid="d1/df2/a02990_1a62a5f4b705a13ec432bab7aadb2cac47" prot="public" virt="non-virtual"><scope>castor3d::LoadingScreen::WindowPass</scope><name>WindowPass</name></member>
     </listofallmembers>
   </compounddef>

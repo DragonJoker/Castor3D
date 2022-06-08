@@ -1,46 +1,95 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="df/d1b/a04950" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::shader::OverlayData</compoundname>
+    <compoundname>castor3d::shader::SurfaceT</compoundname>
     <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
-    <includes local="no">OverlayUbo.hpp</includes>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="df/d1b/a04950_1ad9967d754321f997d51cc6d28da3512b" prot="private" static="no" mutable="no">
-        <type>sdw::Vec4</type>
-        <definition>sdw::Vec4 castor3d::shader::OverlayData::m_positionRatio</definition>
+    <includes local="no">GlslSurface.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>ast::var::Flag</type>
+        <declname>FlagT</declname>
+        <defname>FlagT</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/d1b/a04950_1abd8d2801932b0fd4f9d2e12c164025ad" prot="public" static="no" mutable="no">
+        <type>sdw::Vec2</type>
+        <definition>sdw::Vec2 castor3d::shader::SurfaceT&lt; FlagT &gt;::clipPosition</definition>
         <argsstring></argsstring>
-        <name>m_positionRatio</name>
-        <qualifiedname>castor3d::shader::OverlayData::m_positionRatio</qualifiedname>
+        <name>clipPosition</name>
+        <qualifiedname>castor3d::shader::SurfaceT::clipPosition</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/OverlayUbo.hpp" line="38" column="11" bodyfile="Shader/Ubos/OverlayUbo.hpp" bodystart="38" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="41" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="41" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="df/d1b/a04950_1affe8daf215bdea4aa3b0e13c68b1b2d5" prot="private" static="no" mutable="no">
-        <type>sdw::IVec4</type>
-        <definition>sdw::IVec4 castor3d::shader::OverlayData::m_renderSizeIndex</definition>
+      <memberdef kind="variable" id="df/d1b/a04950_1a8092fc47898fa766498922f8eae72833" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::SurfaceT&lt; FlagT &gt;::viewPosition</definition>
         <argsstring></argsstring>
-        <name>m_renderSizeIndex</name>
-        <qualifiedname>castor3d::shader::OverlayData::m_renderSizeIndex</qualifiedname>
+        <name>viewPosition</name>
+        <qualifiedname>castor3d::shader::SurfaceT::viewPosition</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/OverlayUbo.hpp" line="39" column="12" bodyfile="Shader/Ubos/OverlayUbo.hpp" bodystart="39" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="42" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d1b/a04950_1a2e44e494e403dc84d590f4c80a3c0f19" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::SurfaceT&lt; FlagT &gt;::worldPosition</definition>
+        <argsstring></argsstring>
+        <name>worldPosition</name>
+        <qualifiedname>castor3d::shader::SurfaceT::worldPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="43" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d1b/a04950_1aa3b277938602239d951bae72bb2a7262" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::SurfaceT&lt; FlagT &gt;::worldNormal</definition>
+        <argsstring></argsstring>
+        <name>worldNormal</name>
+        <qualifiedname>castor3d::shader::SurfaceT::worldNormal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="44" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d1b/a04950_1a00782153bca6fad9eee77acff0f47173" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::SurfaceT&lt; FlagT &gt;::texCoord</definition>
+        <argsstring></argsstring>
+        <name>texCoord</name>
+        <qualifiedname>castor3d::shader::SurfaceT::texCoord</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="45" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="45" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="df/d1b/a04950_1a7fada12fa272a841f97cf38b07dc41ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::shader::OverlayData::OverlayData</definition>
+      <memberdef kind="function" id="df/d1b/a04950_1a7e3f1e97c5465ee04389b3cf783fa0d5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::SurfaceT&lt; FlagT &gt;::SurfaceT</definition>
         <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
-        <name>OverlayData</name>
-        <qualifiedname>castor3d::shader::OverlayData::OverlayData</qualifiedname>
+        <name>SurfaceT</name>
+        <qualifiedname>castor3d::shader::SurfaceT::SurfaceT</qualifiedname>
         <param>
           <type>sdw::ShaderWriter &amp;</type>
           <declname>writer</declname>
@@ -59,19 +108,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/OverlayUbo.hpp" line="21" column="9"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="21" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="df/d1b/a04950_1a4747ccef18af340fecaedfbf6faf9fd1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="df/d1b/a04950_1ad00df5fdb3a5427dee2ea8d4f67d4261" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
-        <definition>castor3d::shader::OverlayData::SDW_DeclStructInstance</definition>
-        <argsstring>(C3D_API, OverlayData)</argsstring>
+        <definition>castor3d::shader::SurfaceT&lt; FlagT &gt;::SDW_DeclStructInstance</definition>
+        <argsstring>(, SurfaceT)</argsstring>
         <name>SDW_DeclStructInstance</name>
-        <qualifiedname>castor3d::shader::OverlayData::SDW_DeclStructInstance</qualifiedname>
+        <qualifiedname>castor3d::shader::SurfaceT::SDW_DeclStructInstance</qualifiedname>
         <param>
-          <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        </param>
-        <param>
-          <type><ref refid="df/d1b/a04950" kindref="compound">OverlayData</ref></type>
+          <type><ref refid="df/d1b/a04950" kindref="compound">SurfaceT</ref></type>
         </param>
         <briefdescription>
         </briefdescription>
@@ -79,31 +125,29 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/OverlayUbo.hpp" line="24" column="1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="24" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="df/d1b/a04950_1afaffe38eb54fa99c996da05d1c19516b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec2</type>
-        <definition>C3D_API sdw::Vec2 castor3d::shader::OverlayData::getOverlaySize</definition>
-        <argsstring>() const</argsstring>
-        <name>getOverlaySize</name>
-        <qualifiedname>castor3d::shader::OverlayData::getOverlaySize</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/OverlayUbo.hpp" line="29" column="19"/>
-      </memberdef>
-      <memberdef kind="function" id="df/d1b/a04950_1a2d8237b2e05e8e6fe00240238a74edb8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec2</type>
-        <definition>C3D_API sdw::Vec2 castor3d::shader::OverlayData::modelToView</definition>
-        <argsstring>(sdw::Vec2 const &amp;pos) const</argsstring>
-        <name>modelToView</name>
-        <qualifiedname>castor3d::shader::OverlayData::modelToView</qualifiedname>
+      <memberdef kind="function" id="df/d1b/a04950_1a5c18c0e3259887cd511e2bd70a6d4649" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::SurfaceT&lt; FlagT &gt;::create</definition>
+        <argsstring>(sdw::Vec2 clip, sdw::Vec3 view, sdw::Vec3 world, sdw::Vec3 normal)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::shader::SurfaceT::create</qualifiedname>
         <param>
-          <type>sdw::Vec2 const &amp;</type>
-          <declname>pos</declname>
+          <type>sdw::Vec2</type>
+          <declname>clip</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>world</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>normal</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -111,30 +155,72 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/OverlayUbo.hpp" line="30" column="19"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="26" column="6"/>
       </memberdef>
-      <memberdef kind="function" id="df/d1b/a04950_1ae037b1f5fdc0aa59edf6d8b25ba6a0b7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::UInt</type>
-        <definition>C3D_API sdw::UInt castor3d::shader::OverlayData::getMaterialIndex</definition>
-        <argsstring>() const</argsstring>
-        <name>getMaterialIndex</name>
-        <qualifiedname>castor3d::shader::OverlayData::getMaterialIndex</qualifiedname>
+      <memberdef kind="function" id="df/d1b/a04950_1abe17f0709ad86522381e4711b3730a7c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::SurfaceT&lt; FlagT &gt;::create</definition>
+        <argsstring>(sdw::Vec2 clip, sdw::Vec3 view, sdw::Vec3 world, sdw::Vec3 normal, sdw::Vec3 texCoord)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::shader::SurfaceT::create</qualifiedname>
+        <param>
+          <type>sdw::Vec2</type>
+          <declname>clip</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>world</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>normal</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>texCoord</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/OverlayUbo.hpp" line="31" column="19"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="30" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d1b/a04950_1a4c57ec2dce5057c0d4eb17b7c3942d1a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::SurfaceT&lt; FlagT &gt;::create</definition>
+        <argsstring>(sdw::Vec3 world, sdw::Vec3 normal)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::shader::SurfaceT::create</qualifiedname>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>world</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>normal</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="35" column="6"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-static-func">
-      <memberdef kind="function" id="df/d1b/a04950_1ac3ee25a5e4724a7febb67999bb9844d9" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
-        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::OverlayData::makeType</definition>
+      <memberdef kind="function" id="df/d1b/a04950_1adeabc2243ec8a9e6947783bffee16876" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ast::type::BaseStructPtr</type>
+        <definition>static ast::type::BaseStructPtr castor3d::shader::SurfaceT&lt; FlagT &gt;::makeType</definition>
         <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
         <name>makeType</name>
-        <qualifiedname>castor3d::shader::OverlayData::makeType</qualifiedname>
+        <qualifiedname>castor3d::shader::SurfaceT::makeType</qualifiedname>
         <param>
           <type>ast::type::TypesCache &amp;</type>
           <declname>cache</declname>
@@ -145,14 +231,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/OverlayUbo.hpp" line="26" column="41"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="38" column="33"/>
       </memberdef>
-      <memberdef kind="function" id="df/d1b/a04950_1a18559a70abe19ac0d29839d59170ab08" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
-        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::OverlayData::declare</definition>
+      <memberdef kind="function" id="df/d1b/a04950_1a25b7d5e03146b2932b3ab8c9bb3fead0" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::SurfaceT&lt; FlagT &gt;::declare</definition>
         <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
         <name>declare</name>
-        <qualifiedname>castor3d::shader::OverlayData::declare</qualifiedname>
+        <qualifiedname>castor3d::shader::SurfaceT::declare</qualifiedname>
         <param>
           <type>sdw::ShaderWriter &amp;</type>
           <declname>writer</declname>
@@ -163,7 +249,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/OverlayUbo.hpp" line="27" column="32"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="39" column="24"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -172,7 +258,7 @@
     </detaileddescription>
     <inheritancegraph>
       <node id="1">
-        <label>castor3d::shader::OverlayData</label>
+        <label>castor3d::shader::SurfaceT&lt; FlagT &gt;</label>
         <link refid="df/d1b/a04950"/>
         <childnode refid="2" relation="public-inheritance">
         </childnode>
@@ -183,7 +269,7 @@
     </inheritancegraph>
     <collaborationgraph>
       <node id="1">
-        <label>castor3d::shader::OverlayData</label>
+        <label>castor3d::shader::SurfaceT&lt; FlagT &gt;</label>
         <link refid="df/d1b/a04950"/>
         <childnode refid="2" relation="public-inheritance">
         </childnode>
@@ -192,17 +278,20 @@
         <label>sdw::StructInstance</label>
       </node>
     </collaborationgraph>
-    <location file="Shader/Ubos/OverlayUbo.hpp" line="18" column="1" bodyfile="Shader/Ubos/OverlayUbo.hpp" bodystart="20" bodyend="40"/>
+    <location file="Shader/Shaders/GlslSurface.hpp" line="18" column="1" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="20" bodyend="50"/>
     <listofallmembers>
-      <member refid="df/d1b/a04950_1a18559a70abe19ac0d29839d59170ab08" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlayData</scope><name>declare</name></member>
-      <member refid="df/d1b/a04950_1ae037b1f5fdc0aa59edf6d8b25ba6a0b7" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlayData</scope><name>getMaterialIndex</name></member>
-      <member refid="df/d1b/a04950_1afaffe38eb54fa99c996da05d1c19516b" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlayData</scope><name>getOverlaySize</name></member>
-      <member refid="df/d1b/a04950_1ad9967d754321f997d51cc6d28da3512b" prot="private" virt="non-virtual"><scope>castor3d::shader::OverlayData</scope><name>m_positionRatio</name></member>
-      <member refid="df/d1b/a04950_1affe8daf215bdea4aa3b0e13c68b1b2d5" prot="private" virt="non-virtual"><scope>castor3d::shader::OverlayData</scope><name>m_renderSizeIndex</name></member>
-      <member refid="df/d1b/a04950_1ac3ee25a5e4724a7febb67999bb9844d9" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlayData</scope><name>makeType</name></member>
-      <member refid="df/d1b/a04950_1a2d8237b2e05e8e6fe00240238a74edb8" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlayData</scope><name>modelToView</name></member>
-      <member refid="df/d1b/a04950_1a7fada12fa272a841f97cf38b07dc41ad" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlayData</scope><name>OverlayData</name></member>
-      <member refid="df/d1b/a04950_1a4747ccef18af340fecaedfbf6faf9fd1" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlayData</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="df/d1b/a04950_1abd8d2801932b0fd4f9d2e12c164025ad" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>clipPosition</name></member>
+      <member refid="df/d1b/a04950_1a5c18c0e3259887cd511e2bd70a6d4649" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>create</name></member>
+      <member refid="df/d1b/a04950_1abe17f0709ad86522381e4711b3730a7c" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>create</name></member>
+      <member refid="df/d1b/a04950_1a4c57ec2dce5057c0d4eb17b7c3942d1a" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>create</name></member>
+      <member refid="df/d1b/a04950_1a25b7d5e03146b2932b3ab8c9bb3fead0" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>declare</name></member>
+      <member refid="df/d1b/a04950_1adeabc2243ec8a9e6947783bffee16876" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>makeType</name></member>
+      <member refid="df/d1b/a04950_1ad00df5fdb3a5427dee2ea8d4f67d4261" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="df/d1b/a04950_1a7e3f1e97c5465ee04389b3cf783fa0d5" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>SurfaceT</name></member>
+      <member refid="df/d1b/a04950_1a00782153bca6fad9eee77acff0f47173" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>texCoord</name></member>
+      <member refid="df/d1b/a04950_1a8092fc47898fa766498922f8eae72833" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>viewPosition</name></member>
+      <member refid="df/d1b/a04950_1aa3b277938602239d951bae72bb2a7262" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>worldNormal</name></member>
+      <member refid="df/d1b/a04950_1a2e44e494e403dc84d590f4c80a3c0f19" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>worldPosition</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,7 +1,5 @@
-<map id="castor3d::AnimationKeyFrame" name="castor3d::AnimationKeyFrame">
-<area shape="rect" id="node1" title=" " alt="" coords="5,111,204,138"/>
-<area shape="rect" id="node2" href="$df/d2e/a03294.html" title=" " alt="" coords="258,5,451,47"/>
-<area shape="rect" id="node3" href="$d0/d4c/a04422.html" title=" " alt="" coords="252,71,457,112"/>
-<area shape="rect" id="node4" href="$d1/d82/a03450.html" title=" " alt="" coords="260,136,449,177"/>
-<area shape="rect" id="node5" href="$d5/d1c/a02902.html" title=" " alt="" coords="264,201,445,243"/>
+<map id="castor3d::BinaryWriter&lt; Animation &gt;" name="castor3d::BinaryWriter&lt; Animation &gt;">
+<area shape="rect" id="node1" title="Animation binary loader." alt="" coords="21,200,173,241"/>
+<area shape="rect" id="node2" href="$d0/dd4/a02298.html" title=" " alt="" coords="5,109,188,151"/>
+<area shape="rect" id="node3" href="$d0/dd4/a02298.html" title="Binary data chunk writer base class." alt="" coords="5,5,188,47"/>
 </map>

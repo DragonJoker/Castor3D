@@ -1,5 +1,5 @@
-<map id="castor3d::BinaryParserBase&lt; TParsed &gt;" name="castor3d::BinaryParserBase&lt; TParsed &gt;">
-<area shape="rect" id="node1" title="Binary data chunk reader base class." alt="" coords="71,95,257,136"/>
-<area shape="rect" id="node2" href="$dd/d3b/a02291.html" title=" " alt="" coords="5,5,160,32"/>
-<area shape="rect" id="node3" href="$d0/de5/a03279.html" title=" " alt="" coords="185,5,309,32"/>
+<map id="castor3d::BinaryWriter&lt; SceneNodeAnimation &gt;" name="castor3d::BinaryWriter&lt; SceneNodeAnimation &gt;">
+<area shape="rect" id="node1" title="SceneNodeAnimation binary loader." alt="" coords="11,200,182,241"/>
+<area shape="rect" id="node2" href="$d0/dd4/a02298.html" title=" " alt="" coords="5,109,188,151"/>
+<area shape="rect" id="node3" href="$d0/dd4/a02298.html" title="Binary data chunk writer base class." alt="" coords="5,5,188,47"/>
 </map>

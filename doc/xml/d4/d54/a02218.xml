@@ -1,67 +1,60 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d4/d54/a02218" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::AnimationKeyFrame</compoundname>
-    <derivedcompoundref refid="d4/d1b/a03282" prot="public" virt="non-virtual">castor3d::MeshAnimationKeyFrame</derivedcompoundref>
-    <derivedcompoundref refid="d7/d20/a04410" prot="public" virt="non-virtual">castor3d::SceneNodeAnimationKeyFrame</derivedcompoundref>
-    <derivedcompoundref refid="d6/d7f/a03438" prot="public" virt="non-virtual">castor3d::SkeletonAnimationKeyFrame</derivedcompoundref>
-    <derivedcompoundref refid="d6/d92/a02890" prot="public" virt="non-virtual">castor3d::TextureAnimationKeyFrame</derivedcompoundref>
-    <includes local="no">AnimationKeyFrame.hpp</includes>
-      <sectiondef kind="protected-attrib">
-      <memberdef kind="variable" id="d4/d54/a02218_1a093b74b56f13b6376ea4a51e28893db5" prot="protected" static="no" mutable="no">
-        <type>castor::Milliseconds</type>
-        <definition>castor::Milliseconds castor3d::AnimationKeyFrame::m_timeIndex</definition>
-        <argsstring></argsstring>
-        <name>m_timeIndex</name>
-        <qualifiedname>castor3d::AnimationKeyFrame::m_timeIndex</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The start time index. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Animation/AnimationKeyFrame.hpp" line="58" column="22" bodyfile="Animation/AnimationKeyFrame.hpp" bodystart="58" bodyend="-1"/>
-        <referencedby refid="d4/d54/a02218_1a7b65d0aeb639d12908b9d17335702a17" compoundref="da/d24/a00068" startline="50" endline="53">getTimeIndex</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="d4/d54/a02218_1abc9e4e2a76ef5ec53fe3308add665082" prot="protected" static="no" mutable="no">
-        <type>castor::BoundingBox</type>
-        <definition>castor::BoundingBox castor3d::AnimationKeyFrame::m_boundingBox</definition>
-        <argsstring></argsstring>
-        <name>m_boundingBox</name>
-        <qualifiedname>castor3d::AnimationKeyFrame::m_boundingBox</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The bounding box. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Animation/AnimationKeyFrame.hpp" line="61" column="21" bodyfile="Animation/AnimationKeyFrame.hpp" bodystart="61" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
+    <compoundname>castor3d::InterpolatorT&lt; DataT, InterpolatorType::eLinear &gt;</compoundname>
+    <basecompoundref refid="d0/d9d/a02202" prot="public" virt="non-virtual">castor3d::Interpolator&lt; DataT &gt;</basecompoundref>
+    <includes local="no">Interpolator.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class DataT</type>
+      </param>
+    </templateparamlist>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d4/d54/a02218_1a4c0d4b7afbe022ee8f9dcb9dc1ea54f0" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::AnimationKeyFrame::AnimationKeyFrame</definition>
-        <argsstring>(castor::Milliseconds const &amp;timeIndex=0_ms)</argsstring>
-        <name>AnimationKeyFrame</name>
-        <qualifiedname>castor3d::AnimationKeyFrame::AnimationKeyFrame</qualifiedname>
+      <memberdef kind="function" id="d4/d54/a02218_1a92a8a65c746a2f9070fcfb0a48d7cff8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>DataT</type>
+        <definition>DataT castor3d::InterpolatorT&lt; DataT, InterpolatorType::eLinear &gt;::interpolate</definition>
+        <argsstring>(DataT const &amp;src, DataT const &amp;dst, float percent) const override</argsstring>
+        <name>interpolate</name>
+        <qualifiedname>castor3d::InterpolatorT&lt; DataT, InterpolatorType::eLinear &gt;::interpolate</qualifiedname>
+        <reimplements refid="d0/d9d/a02202_1a38c4c864a411f0fbc92d8af20d4ec52f">interpolate</reimplements>
         <param>
-          <type>castor::Milliseconds const &amp;</type>
-          <declname>timeIndex</declname>
-          <defval>0_ms</defval>
+          <type>DataT const &amp;</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type>DataT const &amp;</type>
+          <declname>dst</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>percent</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
+<para>Interpolation function. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">timeIndex</parametername>
+<parametername direction="in">src</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>When the key frame starts. </para>
+<para>The start. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dst</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The end. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">percent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The percentage. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -69,101 +62,49 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Animation/AnimationKeyFrame.hpp" line="24" column="17" bodyfile="Animation/AnimationKeyFrame.hpp" bodystart="24" bodyend="27"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/d54/a02218_1a0e38208bad19dd09708af045818c2f8d" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="d7/d40/a00236_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>virtual C3D_API castor3d::AnimationKeyFrame::~AnimationKeyFrame</definition>
-        <argsstring>()=default</argsstring>
-        <name>~AnimationKeyFrame</name>
-        <qualifiedname>castor3d::AnimationKeyFrame::~AnimationKeyFrame</qualifiedname>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Animation/AnimationKeyFrame.hpp" line="34" column="17"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/d54/a02218_1a14d9b59106f5406a66f2b8af33367991" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
-        <type><ref refid="d7/d40/a00236_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>virtual C3D_API void castor3d::AnimationKeyFrame::initialise</definition>
-        <argsstring>()</argsstring>
-        <name>initialise</name>
-        <qualifiedname>castor3d::AnimationKeyFrame::initialise</qualifiedname>
-        <reimplementedby refid="d6/d7f/a03438_1a6a7d31f9aedb17d0b8c29177e5a14918">initialise</reimplementedby>
-        <briefdescription>
-<para>Initialises the keyframe. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Animation/AnimationKeyFrame.hpp" line="41" column="22" bodyfile="Animation/AnimationKeyFrame.hpp" bodystart="41" bodyend="43"/>
-      </memberdef>
-      <memberdef kind="function" id="d4/d54/a02218_1a7b65d0aeb639d12908b9d17335702a17" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::Milliseconds const &amp;</type>
-        <definition>castor::Milliseconds const  &amp; castor3d::AnimationKeyFrame::getTimeIndex</definition>
-        <argsstring>() const</argsstring>
-        <name>getTimeIndex</name>
-        <qualifiedname>castor3d::AnimationKeyFrame::getTimeIndex</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para>The start time index. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Animation/AnimationKeyFrame.hpp" line="50" column="36" bodyfile="Animation/AnimationKeyFrame.hpp" bodystart="50" bodyend="53"/>
-        <references refid="d4/d54/a02218_1a093b74b56f13b6376ea4a51e28893db5" compoundref="da/d24/a00068" startline="58">m_timeIndex</references>
-        <referencedby refid="d0/d4c/a04422_1a12fb6aeff71b5443b275bf0f3e792567" compoundref="db/daf/a01019" startline="48" endline="51">castor3d::SkeletonAnimationInstanceKeyFrame::getTimeIndex</referencedby>
+        <location file="Animation/Interpolator.hpp" line="89" column="7" bodyfile="Animation/Interpolator.hpp" bodystart="89" bodyend="109"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>Partial specialisation of <ref refid="d5/dfe/a02206" kindref="compound">InterpolatorT</ref>, for <ref refid="da/dab/a01362_1ad38387ab8e17377a42314bc21c171ab0ab4f471e7b4231c34ab95df36681e7a86" kindref="member">InterpolatorType::eLinear</ref>. </para>
     </briefdescription>
     <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="version"><para>0.8.0 </para>
+</simplesect>
+<simplesect kind="date"><para>24/01/2016 </para>
+</simplesect>
+</para>
     </detaileddescription>
     <inheritancegraph>
-      <node id="1">
-        <label>castor3d::AnimationKeyFrame</label>
-        <link refid="d4/d54/a02218"/>
-      </node>
       <node id="2">
-        <label>castor3d::MeshAnimationKeyFrame</label>
-        <link refid="d4/d1b/a03282"/>
-        <childnode refid="1" relation="public-inheritance">
-        </childnode>
+        <label>castor3d::Interpolator&lt; DataT &gt;</label>
+        <link refid="d0/d9d/a02202"/>
       </node>
-      <node id="3">
-        <label>castor3d::SceneNodeAnimationKeyFrame</label>
-        <link refid="d7/d20/a04410"/>
-        <childnode refid="1" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4">
-        <label>castor3d::SkeletonAnimationKeyFrame</label>
-        <link refid="d6/d7f/a03438"/>
-        <childnode refid="1" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="5">
-        <label>castor3d::TextureAnimationKeyFrame</label>
-        <link refid="d6/d92/a02890"/>
-        <childnode refid="1" relation="public-inheritance">
+      <node id="1">
+        <label>castor3d::InterpolatorT&lt; DataT, InterpolatorType::eLinear &gt;</label>
+        <link refid="d4/d54/a02218"/>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
     </inheritancegraph>
-    <location file="Animation/AnimationKeyFrame.hpp" line="13" column="1" bodyfile="Animation/AnimationKeyFrame.hpp" bodystart="14" bodyend="62"/>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::Interpolator&lt; DataT &gt;</label>
+        <link refid="d0/d9d/a02202"/>
+      </node>
+      <node id="1">
+        <label>castor3d::InterpolatorT&lt; DataT, InterpolatorType::eLinear &gt;</label>
+        <link refid="d4/d54/a02218"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Animation/Interpolator.hpp" line="73" column="1" bodyfile="Animation/Interpolator.hpp" bodystart="75" bodyend="110"/>
     <listofallmembers>
-      <member refid="d4/d54/a02218_1a4c0d4b7afbe022ee8f9dcb9dc1ea54f0" prot="public" virt="non-virtual"><scope>castor3d::AnimationKeyFrame</scope><name>AnimationKeyFrame</name></member>
-      <member refid="d4/d54/a02218_1a7b65d0aeb639d12908b9d17335702a17" prot="public" virt="non-virtual"><scope>castor3d::AnimationKeyFrame</scope><name>getTimeIndex</name></member>
-      <member refid="d4/d54/a02218_1a14d9b59106f5406a66f2b8af33367991" prot="public" virt="virtual"><scope>castor3d::AnimationKeyFrame</scope><name>initialise</name></member>
-      <member refid="d4/d54/a02218_1abc9e4e2a76ef5ec53fe3308add665082" prot="protected" virt="non-virtual"><scope>castor3d::AnimationKeyFrame</scope><name>m_boundingBox</name></member>
-      <member refid="d4/d54/a02218_1a093b74b56f13b6376ea4a51e28893db5" prot="protected" virt="non-virtual"><scope>castor3d::AnimationKeyFrame</scope><name>m_timeIndex</name></member>
-      <member refid="d4/d54/a02218_1a0e38208bad19dd09708af045818c2f8d" prot="public" virt="virtual"><scope>castor3d::AnimationKeyFrame</scope><name>~AnimationKeyFrame</name></member>
+      <member refid="d4/d54/a02218_1a92a8a65c746a2f9070fcfb0a48d7cff8" prot="public" virt="virtual"><scope>castor3d::InterpolatorT&lt; DataT, InterpolatorType::eLinear &gt;</scope><name>interpolate</name></member>
+      <member refid="d0/d9d/a02202_1a86511dc9c5cf1b7f36a57452e147cfef" prot="protected" virt="virtual"><scope>castor3d::InterpolatorT&lt; DataT, InterpolatorType::eLinear &gt;</scope><name>~Interpolator</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="da/df4/a05050" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SkinningTransformsConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/df4/a05050_1a29fdaab949933bec358f5822c0cf6a3d" prot="public" static="no" mutable="no">
+        <type>std::array&lt; castor::Matrix4x4f, 400u &gt;</type>
+        <definition>std::array&lt; castor::Matrix4x4f, 400u &gt; castor3d::SkinningTransformsConfiguration::bonesMatrix</definition>
+        <argsstring></argsstring>
+        <name>bonesMatrix</name>
+        <qualifiedname>castor3d::SkinningTransformsConfiguration::bonesMatrix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="387" column="12" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="387" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Skinning data. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4">
+        <label>T</label>
+      </node>
+      <node id="2">
+        <label>std::array&lt; castor::Matrix4x4f, 400u &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; castor::Matrix4x4f, 400u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SkinningTransformsConfiguration</label>
+        <link refid="da/df4/a05050"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>bonesMatrix</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Ubos/UbosModule.hpp" line="385" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="386" bodyend="388"/>
+    <listofallmembers>
+      <member refid="da/df4/a05050_1a29fdaab949933bec358f5822c0cf6a3d" prot="public" virt="non-virtual"><scope>castor3d::SkinningTransformsConfiguration</scope><name>bonesMatrix</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -18,10 +18,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="36" column="8" bodyfile="Cache/GeometryCache.hpp" bodystart="36" bodyend="-1"/>
+        <location file="Cache/GeometryCache.hpp" line="34" column="8" bodyfile="Cache/GeometryCache.hpp" bodystart="34" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d3/dd0/a02662_1a131115e723b61471e4b3429f9c108ebb" prot="public" static="no" mutable="no">
-        <type><ref refid="d5/d47/a04490" kindref="compound">Geometry</ref> const  &amp;</type>
+        <type><ref refid="d5/d03/a04582" kindref="compound">Geometry</ref> const  &amp;</type>
         <definition>Geometry const&amp; castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::PoolsEntry::geometry</definition>
         <argsstring></argsstring>
         <name>geometry</name>
@@ -32,10 +32,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="37" column="17" bodyfile="Cache/GeometryCache.hpp" bodystart="37" bodyend="-1"/>
+        <location file="Cache/GeometryCache.hpp" line="35" column="17" bodyfile="Cache/GeometryCache.hpp" bodystart="35" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d3/dd0/a02662_1ac072f068f8b5ccbe105d3cf7db4f400e" prot="public" static="no" mutable="no">
-        <type><ref refid="d7/d46/a03430" kindref="compound">Submesh</ref> const  &amp;</type>
+        <type><ref refid="d4/d60/a03446" kindref="compound">Submesh</ref> const  &amp;</type>
         <definition>Submesh const&amp; castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::PoolsEntry::submesh</definition>
         <argsstring></argsstring>
         <name>submesh</name>
@@ -46,10 +46,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="38" column="16" bodyfile="Cache/GeometryCache.hpp" bodystart="38" bodyend="-1"/>
+        <location file="Cache/GeometryCache.hpp" line="36" column="16" bodyfile="Cache/GeometryCache.hpp" bodystart="36" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="d3/dd0/a02662_1a0232f4df31b6f4528a3b68841f0aca2e" prot="public" static="no" mutable="no">
-        <type><ref refid="d6/d59/a02810" kindref="compound">Pass</ref> const  &amp;</type>
+        <type><ref refid="d7/d8a/a02830" kindref="compound">Pass</ref> const  &amp;</type>
         <definition>Pass const&amp; castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::PoolsEntry::pass</definition>
         <argsstring></argsstring>
         <name>pass</name>
@@ -60,7 +60,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/GeometryCache.hpp" line="39" column="13" bodyfile="Cache/GeometryCache.hpp" bodystart="39" bodyend="-1"/>
+        <location file="Cache/GeometryCache.hpp" line="37" column="13" bodyfile="Cache/GeometryCache.hpp" bodystart="37" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -70,7 +70,7 @@
     <collaborationgraph>
       <node id="8">
         <label>Animable</label>
-        <link refid="d6/d41/a02222"/>
+        <link refid="d5/db4/a02182"/>
         <childnode refid="9" relation="public-inheritance">
         </childnode>
         <childnode refid="10" relation="usage">
@@ -88,7 +88,7 @@
       </node>
       <node id="14">
         <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
-        <link refid="d6/d41/a02222"/>
+        <link refid="d5/db4/a02182"/>
         <childnode refid="15" relation="public-inheritance">
         </childnode>
         <childnode refid="10" relation="usage">
@@ -97,7 +97,7 @@
       </node>
       <node id="2">
         <label>castor3d::Geometry</label>
-        <link refid="d5/d47/a04490"/>
+        <link refid="d5/d03/a04582"/>
         <childnode refid="3" relation="public-inheritance">
         </childnode>
         <childnode refid="16" relation="public-inheritance">
@@ -105,7 +105,7 @@
       </node>
       <node id="3">
         <label>castor3d::MovableObject</label>
-        <link refid="d1/d4a/a04530"/>
+        <link refid="de/da0/a04626"/>
         <childnode refid="4" relation="public-inheritance">
         </childnode>
         <childnode refid="5" relation="public-inheritance">
@@ -120,28 +120,26 @@
         <childnode refid="2" relation="usage">
           <edgelabel>geometry</edgelabel>
         </childnode>
-        <childnode refid="18" relation="usage">
+        <childnode refid="17" relation="usage">
           <edgelabel>submesh</edgelabel>
         </childnode>
-        <childnode refid="21" relation="usage">
+        <childnode refid="20" relation="usage">
           <edgelabel>pass</edgelabel>
         </childnode>
       </node>
-      <node id="21">
+      <node id="20">
         <label>castor3d::Pass</label>
-        <link refid="d6/d59/a02810"/>
-        <childnode refid="22" relation="public-inheritance">
+        <link refid="d7/d8a/a02830"/>
+        <childnode refid="21" relation="public-inheritance">
         </childnode>
       </node>
       <node id="16">
         <label>castor3d::RenderedObject</label>
-        <link refid="d0/d7e/a04594"/>
-        <childnode refid="17" relation="public-inheritance">
-        </childnode>
+        <link refid="d8/d18/a04690"/>
       </node>
       <node id="6">
         <label>castor3d::SceneNode</label>
-        <link refid="dd/d6a/a04642"/>
+        <link refid="d1/d86/a04746"/>
         <childnode refid="7" relation="public-inheritance">
         </childnode>
         <childnode refid="8" relation="public-inheritance">
@@ -149,12 +147,12 @@
         <childnode refid="5" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="18">
+      <node id="17">
         <label>castor3d::Submesh</label>
-        <link refid="d7/d46/a03430"/>
-        <childnode refid="19" relation="public-inheritance">
+        <link refid="d4/d60/a03446"/>
+        <childnode refid="18" relation="public-inheritance">
         </childnode>
-        <childnode refid="20" relation="public-inheritance">
+        <childnode refid="19" relation="public-inheritance">
         </childnode>
       </node>
       <node id="5">
@@ -166,10 +164,10 @@
       <node id="9">
         <label>castor::OwnedBy&lt; Engine  &gt;</label>
       </node>
-      <node id="22">
+      <node id="21">
         <label>castor::OwnedBy&lt; Material &gt;</label>
       </node>
-      <node id="19">
+      <node id="18">
         <label>castor::OwnedBy&lt; Mesh &gt;</label>
       </node>
       <node id="4">
@@ -181,13 +179,10 @@
           <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="17">
-        <label>std::enable_shared_from_this&lt; RenderedObject &gt;</label>
-      </node>
       <node id="7">
         <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
       </node>
-      <node id="20">
+      <node id="19">
         <label>std::enable_shared_from_this&lt; Submesh &gt;</label>
       </node>
       <node id="11">
@@ -200,7 +195,7 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Cache/GeometryCache.hpp" line="34" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="35" bodyend="40"/>
+    <location file="Cache/GeometryCache.hpp" line="32" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="33" bodyend="38"/>
     <listofallmembers>
       <member refid="d3/dd0/a02662_1a131115e723b61471e4b3429f9c108ebb" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::PoolsEntry</scope><name>geometry</name></member>
       <member refid="d3/dd0/a02662_1a7971aeab92732c20e8aa006a7fda0d1d" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::PoolsEntry</scope><name>hash</name></member>

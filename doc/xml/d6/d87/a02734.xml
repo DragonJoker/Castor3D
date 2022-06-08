@@ -1,166 +1,149 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d6/d87/a02734" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;</compoundname>
-    <basecompoundref refid="dc/ddf/a02622" prot="public" virt="non-virtual">castor3d::PtrCacheTraitsBaseT&lt; FrameListener, castor::String &gt;</basecompoundref>
-    <includes local="no">FrameEventModule.hpp</includes>
+    <compoundname>castor3d::CpuEventCleanerT</compoundname>
+    <includes local="no">CpuFunctorEvent.hpp</includes>
     <templateparamlist>
+      <param>
+        <type>typename CacheT</type>
+      </param>
     </templateparamlist>
       <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="d6/d87/a02734_1ac210863b41a018605e126baa4bb01bed" prot="public" static="no">
-        <type><ref refid="d4/da5/a02746" kindref="compound">FrameListener</ref></type>
-        <definition>using castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;::ResT =  FrameListener</definition>
-        <argsstring></argsstring>
-        <name>ResT</name>
-        <qualifiedname>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;::ResT</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/Frame/FrameEventModule.hpp" line="133" column="1" bodyfile="Event/Frame/FrameEventModule.hpp" bodystart="133" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d6/d87/a02734_1a541cacc5be0c3f4e8b58806c79e5ac1d" prot="public" static="no">
-        <type>castor::String</type>
-        <definition>using castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;::KeyT =  castor::String</definition>
-        <argsstring></argsstring>
-        <name>KeyT</name>
-        <qualifiedname>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;::KeyT</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/Frame/FrameEventModule.hpp" line="134" column="1" bodyfile="Event/Frame/FrameEventModule.hpp" bodystart="134" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d6/d87/a02734_1aeb4adec5b5b18471d43d933a13364d40" prot="public" static="no">
-        <type><ref refid="dc/ddf/a02622" kindref="compound">PtrCacheTraitsBaseT</ref>&lt; <ref refid="d6/d87/a02734_1ac210863b41a018605e126baa4bb01bed" kindref="member">ResT</ref>, <ref refid="d6/d87/a02734_1a541cacc5be0c3f4e8b58806c79e5ac1d" kindref="member">KeyT</ref> &gt;</type>
-        <definition>using castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;::Base =  PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;</definition>
-        <argsstring></argsstring>
-        <name>Base</name>
-        <qualifiedname>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;::Base</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/Frame/FrameEventModule.hpp" line="135" column="1" bodyfile="Event/Frame/FrameEventModule.hpp" bodystart="135" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d6/d87/a02734_1ad36ba608902e54165648e8bac37a745a" prot="public" static="no">
-        <type>typename <ref refid="dc/ddf/a02622_1a97fc821a6c93a6497ce29ef7ee81d091" kindref="member">Base::ElementT</ref></type>
-        <definition>using castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;::ElementT =  typename Base::ElementT</definition>
+      <memberdef kind="typedef" id="d6/d87/a02734_1a5088387ad86315ae525e04b40136e0fb" prot="public" static="no">
+        <type>typename CacheT::ElementT</type>
+        <definition>using castor3d::CpuEventCleanerT&lt; CacheT &gt;::ElementT =  typename CacheT::ElementT</definition>
         <argsstring></argsstring>
         <name>ElementT</name>
-        <qualifiedname>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;::ElementT</qualifiedname>
+        <qualifiedname>castor3d::CpuEventCleanerT::ElementT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/Frame/FrameEventModule.hpp" line="136" column="1" bodyfile="Event/Frame/FrameEventModule.hpp" bodystart="136" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="d6/d87/a02734_1a3e7ba59115d9de1f16880b26366dbbff" prot="public" static="no">
-        <type>typename <ref refid="dc/ddf/a02622_1a1bb78b2e2efba448f1bab3f5714b9943" kindref="member">Base::ElementPtrT</ref></type>
-        <definition>using castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;::ElementPtrT =  typename Base::ElementPtrT</definition>
-        <argsstring></argsstring>
-        <name>ElementPtrT</name>
-        <qualifiedname>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;::ElementPtrT</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/Frame/FrameEventModule.hpp" line="137" column="1" bodyfile="Event/Frame/FrameEventModule.hpp" bodystart="137" bodyend="-1"/>
+        <location file="Event/Frame/CpuFunctorEvent.hpp" line="127" column="1" bodyfile="Event/Frame/CpuFunctorEvent.hpp" bodystart="127" bodyend="-1"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d6/d87/a02734_1aaabbd6d2f48af653a6754c5944b9c7ff" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
-        <definition>C3D_API const castor::String castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;::Name</definition>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/d87/a02734_1aba65326c19f8a70bf7ddb1680a80f522" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/d14/a02750" kindref="compound">FrameListener</ref> *</type>
+        <definition>FrameListener* castor3d::CpuEventCleanerT&lt; CacheT &gt;::listener</definition>
         <argsstring></argsstring>
-        <name>Name</name>
-        <qualifiedname>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;::Name</qualifiedname>
+        <name>listener</name>
+        <qualifiedname>castor3d::CpuEventCleanerT::listener</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/Frame/FrameEventModule.hpp" line="139" column="37" bodyfile="Event/Frame/FrameEventModule.hpp" bodystart="139" bodyend="-1"/>
+        <location file="Event/Frame/CpuFunctorEvent.hpp" line="139" column="16" bodyfile="Event/Frame/CpuFunctorEvent.hpp" bodystart="139" bodyend="-1"/>
+        <referencedby refid="d6/d87/a02734_1afe1d4e1fb082e6ef3ff59a15b84b509b" compoundref="d3/d5e/a00275" startline="134" endline="137">castor3d::CpuEventCleanerT&lt; CacheT &gt;::operator()</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/d87/a02734_1af9f7c734fdf2a6034a66a18bac02d777" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::CpuEventCleanerT&lt; CacheT &gt;::CpuEventCleanerT</definition>
+        <argsstring>(FrameListener &amp;listener)</argsstring>
+        <name>CpuEventCleanerT</name>
+        <qualifiedname>castor3d::CpuEventCleanerT::CpuEventCleanerT</qualifiedname>
+        <param>
+          <type><ref refid="d7/d14/a02750" kindref="compound">FrameListener</ref> &amp;</type>
+          <declname>listener</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/CpuFunctorEvent.hpp" line="129" column="10" bodyfile="Event/Frame/CpuFunctorEvent.hpp" bodystart="129" bodyend="132"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d87/a02734_1afe1d4e1fb082e6ef3ff59a15b84b509b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::CpuEventCleanerT&lt; CacheT &gt;::operator()</definition>
+        <argsstring>(ElementT &amp;res) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor3d::CpuEventCleanerT::operator()</qualifiedname>
+        <param>
+          <type><ref refid="d6/d87/a02734_1a5088387ad86315ae525e04b40136e0fb" kindref="member">ElementT</ref> &amp;</type>
+          <declname>res</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/CpuFunctorEvent.hpp" line="134" column="6" bodyfile="Event/Frame/CpuFunctorEvent.hpp" bodystart="134" bodyend="137"/>
+        <references refid="d6/d87/a02734_1aba65326c19f8a70bf7ddb1680a80f522" compoundref="d3/d5e/a00275" startline="139">castor3d::CpuEventCleanerT&lt; CacheT &gt;::listener</references>
+        <references refid="da/dab/a01362_1a0a328c389f0ad9363871aca64b56a1b3" compoundref="d3/d5e/a00275" startline="72" endline="79">castor3d::makeCpuCleanupEvent</references>
+        <references refid="d7/d14/a02750_1a9486aa6c1d707205ca548dab74be0262">castor3d::FrameListener::postEvent</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
-<para>Helper structure to specialise a cache behaviour. <simplesect kind="remark"><para>Specialisation for <ref refid="d4/da5/a02746" kindref="compound">FrameListener</ref>. </para>
-</simplesect>
-</para>
+<para>Cached resource cleaner, through a CPU frame event. </para>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="2">
-        <label>castor3d::PtrCacheTraitsBaseT&lt; FrameListener, castor::String &gt;</label>
-        <link refid="dc/ddf/a02622"/>
-        <childnode refid="3" relation="template-instance">
-          <edgelabel>&lt; FrameListener, castor::String &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3">
-        <label>castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;</label>
-        <link refid="dc/ddf/a02622"/>
-      </node>
-      <node id="1">
-        <label>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;</label>
-        <link refid="d6/d87/a02734"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
     <collaborationgraph>
+      <node id="6">
+        <label>T</label>
+      </node>
+      <node id="4">
+        <label>std::array&lt; CpuFrameEventPtrArray, size_t(EventType::eCount) &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; CpuFrameEventPtrArray, size_t(EventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::array&lt; GpuFrameEventPtrArray, size_t(EventType::eCount) &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; GpuFrameEventPtrArray, size_t(EventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::CpuEventCleanerT&lt; CacheT &gt;</label>
+        <link refid="d6/d87/a02734"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>listener</edgelabel>
+        </childnode>
+      </node>
       <node id="2">
-        <label>castor3d::PtrCacheTraitsBaseT&lt; FrameListener, castor::String &gt;</label>
-        <link refid="dc/ddf/a02622"/>
-        <childnode refid="3" relation="template-instance">
-          <edgelabel>&lt; FrameListener, castor::String &gt;</edgelabel>
+        <label>castor3d::FrameListener</label>
+        <link refid="d7/d14/a02750"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_cpuEvents</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_gpuEvents</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>m_mutex</edgelabel>
         </childnode>
       </node>
       <node id="3">
-        <label>castor3d::PtrCacheTraitsBaseT&lt; ResT, KeyT &gt;</label>
-        <link refid="dc/ddf/a02622"/>
+        <label>castor::Named</label>
       </node>
-      <node id="1">
-        <label>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;</label>
-        <link refid="d6/d87/a02734"/>
-        <childnode refid="2" relation="public-inheritance">
+      <node id="5">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>elements</edgelabel>
         </childnode>
+      </node>
+      <node id="8">
+        <label>std::recursive_mutex</label>
       </node>
     </collaborationgraph>
-    <location file="Event/Frame/FrameEventModule.hpp" line="130" column="1" bodyfile="Event/Frame/FrameEventModule.hpp" bodystart="132" bodyend="140"/>
+    <location file="Event/Frame/CpuFunctorEvent.hpp" line="125" column="1" bodyfile="Event/Frame/CpuFunctorEvent.hpp" bodystart="126" bodyend="140"/>
     <listofallmembers>
-      <member refid="dc/ddf/a02622_1aad74680d04a777cf6e1a48f5335e5bba" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;</scope><name>areElementsEqual</name></member>
-      <member refid="dc/ddf/a02622_1acc9650475bb6cfdd4b46f86662ee4d67" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;</scope><name>areElementsEqual</name></member>
-      <member refid="dc/ddf/a02622_1aace6e188551a79fe4c617062a3987c34" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;</scope><name>areElementsEqual</name></member>
-      <member refid="dc/ddf/a02622_1a604b98a8324764213e894ac5ff3192e4" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;</scope><name>areElementsEqual</name></member>
-      <member refid="d6/d87/a02734_1aeb4adec5b5b18471d43d933a13364d40" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;</scope><name>Base</name></member>
-      <member refid="dc/ddf/a02622_1a0606136714bd1cb7209313f2ece3f687" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;</scope><name>ElementCacheT</name></member>
-      <member refid="dc/ddf/a02622_1a021a9d07d6fb3fe77b7ef22b5d9fc7e8" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;</scope><name>ElementCleanerT</name></member>
-      <member refid="dc/ddf/a02622_1acbb5da0cf908b54ec0b238b4bf290498" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;</scope><name>ElementContT</name></member>
-      <member refid="dc/ddf/a02622_1af3b3d08e4639ccc06cbe81f6cb200a64" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;</scope><name>ElementInitialiserT</name></member>
-      <member refid="dc/ddf/a02622_1a37487aa6a3179e261c465a659e7e232d" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;</scope><name>ElementKeyT</name></member>
-      <member refid="dc/ddf/a02622_1a54c0975e844a33c1ef48f9284b13e984" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;</scope><name>ElementMergerT</name></member>
-      <member refid="dc/ddf/a02622_1aeeb13142ba14f28398dcf1b902e1d7df" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;</scope><name>ElementObsT</name></member>
-      <member refid="d6/d87/a02734_1a3e7ba59115d9de1f16880b26366dbbff" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;</scope><name>ElementPtrT</name></member>
-      <member refid="d6/d87/a02734_1ad36ba608902e54165648e8bac37a745a" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;</scope><name>ElementT</name></member>
-      <member refid="dc/ddf/a02622_1a97feed9b72e3c5d21e10571563ec56f5" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;</scope><name>isElementObsNull</name></member>
-      <member refid="d6/d87/a02734_1a541cacc5be0c3f4e8b58806c79e5ac1d" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;</scope><name>KeyT</name></member>
-      <member refid="dc/ddf/a02622_1a5f00547170a4e85ac4c706f0ac32f9aa" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;</scope><name>makeElement</name></member>
-      <member refid="dc/ddf/a02622_1aba7dca15362049b6e793f1b99d419bb0" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;</scope><name>makeElementObs</name></member>
-      <member refid="d6/d87/a02734_1aaabbd6d2f48af653a6754c5944b9c7ff" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;</scope><name>Name</name></member>
-      <member refid="d6/d87/a02734_1ac210863b41a018605e126baa4bb01bed" prot="public" virt="non-virtual"><scope>castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;</scope><name>ResT</name></member>
+      <member refid="d6/d87/a02734_1af9f7c734fdf2a6034a66a18bac02d777" prot="public" virt="non-virtual"><scope>castor3d::CpuEventCleanerT</scope><name>CpuEventCleanerT</name></member>
+      <member refid="d6/d87/a02734_1a5088387ad86315ae525e04b40136e0fb" prot="public" virt="non-virtual"><scope>castor3d::CpuEventCleanerT</scope><name>ElementT</name></member>
+      <member refid="d6/d87/a02734_1aba65326c19f8a70bf7ddb1680a80f522" prot="public" virt="non-virtual"><scope>castor3d::CpuEventCleanerT</scope><name>listener</name></member>
+      <member refid="d6/d87/a02734_1afe1d4e1fb082e6ef3ff59a15b84b509b" prot="public" virt="non-virtual"><scope>castor3d::CpuEventCleanerT</scope><name>operator()</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

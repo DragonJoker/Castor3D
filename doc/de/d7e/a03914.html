@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::RadianceComputer Class Reference</title>
+<title>Castor3D: castor3d::rq::Texcoord Struct Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,286 +42,67 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dc/df4/a01401.html">castor3d</a></li><li class="navelem"><a class="el" href="../../de/d7e/a03914.html">RadianceComputer</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d7/d81/a01365.html">rq</a></li><li class="navelem"><a class="el" href="../../de/d7e/a03914.html">Texcoord</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
-<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="../../d4/da4/a03911.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">castor3d::RadianceComputer Class Reference</div></div>
+  <div class="headertitle"><div class="title">castor3d::rq::Texcoord Struct Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;RadianceComputer.hpp&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for castor3d::RadianceComputer:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../d9/d8e/a03913.png" border="0" usemap="#acastor3d_1_1RadianceComputer_inherit__map" alt="Inheritance graph"/></div>
-<map name="acastor3d_1_1RadianceComputer_inherit__map" id="acastor3d_1_1RadianceComputer_inherit__map">
-<area shape="rect" title=" " alt="" coords="5,80,196,107"/>
-<area shape="rect" href="../../d7/d74/a04346.html" title=" " alt="" coords="25,5,176,32"/>
-</map>
-<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
-<div class="dynheader">
-Collaboration diagram for castor3d::RadianceComputer:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../d5/d11/a03912.png" border="0" usemap="#acastor3d_1_1RadianceComputer_coll__map" alt="Collaboration graph"/></div>
-<map name="acastor3d_1_1RadianceComputer_coll__map" id="acastor3d_1_1RadianceComputer_coll__map">
-<area shape="rect" title=" " alt="" coords="111,439,302,465"/>
-<area shape="rect" href="../../d7/d74/a04346.html" title=" " alt="" coords="131,363,282,389"/>
-<area shape="rect" href="../../df/de5/a03966.html" title=" " alt="" coords="127,273,286,300"/>
-<area shape="rect" href="../../d7/d34/a04078.html" title=" " alt="" coords="15,184,182,211"/>
-<area shape="rect" title=" " alt="" coords="5,95,192,121"/>
-<area shape="rect" title=" " alt="" coords="207,184,385,211"/>
-<area shape="rect" href="../../de/d88/a03958.html" title=" " alt="" coords="217,95,369,121"/>
-<area shape="rect" title=" " alt="" coords="394,95,507,121"/>
-<area shape="rect" title=" " alt="" coords="431,5,470,32"/>
-</map>
-<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
+<p>Tells how the texture coordinates from the vertex buffer are built.  
+ <a href="../../de/d7e/a03914.html#details">More...</a></p>
+
+<p><code>#include &lt;RenderQuad.hpp&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:a2e4203598423444ef67c28eca05bbda2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d7e/a03914.html#a2e4203598423444ef67c28eca05bbda2">RadianceComputer</a> (<a class="el" href="../../d1/d3c/a02714.html">Engine</a> &amp;engine, <a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const &amp;device, castor::Size const &amp;size, <a class="el" href="../../d3/d8c/a04318.html">Texture</a> const &amp;srcTexture)</td></tr>
-<tr class="memdesc:a2e4203598423444ef67c28eca05bbda2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../de/d7e/a03914.html#a2e4203598423444ef67c28eca05bbda2">More...</a><br /></td></tr>
-<tr class="separator:a2e4203598423444ef67c28eca05bbda2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f9d602b25b7fa1fef8189eaf94b37e8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d7e/a03914.html#a4f9d602b25b7fa1fef8189eaf94b37e8">~RadianceComputer</a> () override</td></tr>
-<tr class="separator:a4f9d602b25b7fa1fef8189eaf94b37e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af5167f31a229f16dc99f27b24542f425"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d7e/a03914.html#af5167f31a229f16dc99f27b24542f425">render</a> (<a class="el" href="../../dc/d61/a03950.html">QueueData</a> const &amp;queueData)</td></tr>
-<tr class="memdesc:af5167f31a229f16dc99f27b24542f425"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the radiance map.  <a href="../../de/d7e/a03914.html#af5167f31a229f16dc99f27b24542f425">More...</a><br /></td></tr>
-<tr class="separator:af5167f31a229f16dc99f27b24542f425"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a67f0a98b5acb873fecbda1642dc43dd3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ashes::Semaphore const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d7e/a03914.html#a67f0a98b5acb873fecbda1642dc43dd3">render</a> (<a class="el" href="../../dc/d61/a03950.html">QueueData</a> const &amp;queueData, ashes::Semaphore const &amp;toWait)</td></tr>
-<tr class="memdesc:a67f0a98b5acb873fecbda1642dc43dd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the radiance map.  <a href="../../de/d7e/a03914.html#a67f0a98b5acb873fecbda1642dc43dd3">More...</a><br /></td></tr>
-<tr class="separator:a67f0a98b5acb873fecbda1642dc43dd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
-<tr class="memitem:ad1f45bde74c7608a6bbf99e4088f9c11"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ashes::Sampler const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d7e/a03914.html#ad1f45bde74c7608a6bbf99e4088f9c11">getSampler</a> () const</td></tr>
-<tr class="separator:ad1f45bde74c7608a6bbf99e4088f9c11"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4a6e1b4199e798330b540cd53b30453b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d3/d8c/a04318.html">Texture</a> const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d7e/a03914.html#a4a6e1b4199e798330b540cd53b30453b">getResult</a> () const</td></tr>
-<tr class="separator:a4a6e1b4199e798330b540cd53b30453b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a56392a8539ef26615dce5c0ef2abe9a3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d7e/a03914.html#a56392a8539ef26615dce5c0ef2abe9a3">invertU</a> { false }</td></tr>
+<tr class="separator:a56392a8539ef26615dce5c0ef2abe9a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa87e93dc94d8c8eecaf81ba11e7e165e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d7e/a03914.html#aa87e93dc94d8c8eecaf81ba11e7e165e">invertV</a> { false }</td></tr>
+<tr class="separator:aa87e93dc94d8c8eecaf81ba11e7e165e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a2e4203598423444ef67c28eca05bbda2" name="a2e4203598423444ef67c28eca05bbda2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2e4203598423444ef67c28eca05bbda2">&#9670;&nbsp;</a></span>RadianceComputer()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::RadianceComputer::RadianceComputer </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d1/d3c/a02714.html">Engine</a> &amp;&#160;</td>
-          <td class="paramname"><em>engine</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const &amp;&#160;</td>
-          <td class="paramname"><em>device</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">castor::Size const &amp;&#160;</td>
-          <td class="paramname"><em>size</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d3/d8c/a04318.html">Texture</a> const &amp;&#160;</td>
-          <td class="paramname"><em>srcTexture</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Constructor. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">engine</td><td>The engine. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">device</td><td>The GPU device. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>The render size. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">srcTexture</td><td>The cube texture source. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a4f9d602b25b7fa1fef8189eaf94b37e8" name="a4f9d602b25b7fa1fef8189eaf94b37e8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4f9d602b25b7fa1fef8189eaf94b37e8">&#9670;&nbsp;</a></span>~RadianceComputer()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::RadianceComputer::~RadianceComputer </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a4a6e1b4199e798330b540cd53b30453b" name="a4a6e1b4199e798330b540cd53b30453b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4a6e1b4199e798330b540cd53b30453b">&#9670;&nbsp;</a></span>getResult()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../d3/d8c/a04318.html">Texture</a> const  &amp; castor3d::RadianceComputer::getResult </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="reference">Referenced by <a class="el" href="../../d0/d0b/a03910.html#ada1dcd43bcbef41de2017c0bc4c6eeb3">castor3d::IblTextures::getIrradianceTexture()</a>.</p>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../de/d7e/a03914_a4a6e1b4199e798330b540cd53b30453b_icgraph.png" border="0" usemap="#ade/d7e/a03914_a4a6e1b4199e798330b540cd53b30453b_icgraph" alt=""/></div>
-<map name="ade/d7e/a03914_a4a6e1b4199e798330b540cd53b30453b_icgraph" id="ade/d7e/a03914_a4a6e1b4199e798330b540cd53b30453b_icgraph">
-<area shape="rect" title=" " alt="" coords="200,5,391,47"/>
-<area shape="rect" href="../../d0/d0b/a03910.html#ada1dcd43bcbef41de2017c0bc4c6eeb3" title=" " alt="" coords="5,5,152,47"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="ad1f45bde74c7608a6bbf99e4088f9c11" name="ad1f45bde74c7608a6bbf99e4088f9c11"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad1f45bde74c7608a6bbf99e4088f9c11">&#9670;&nbsp;</a></span>getSampler()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p >Tells how the texture coordinates from the vertex buffer are built. </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
+<a id="a56392a8539ef26615dce5c0ef2abe9a3" name="a56392a8539ef26615dce5c0ef2abe9a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56392a8539ef26615dce5c0ef2abe9a3">&#9670;&nbsp;</a></span>invertU</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ashes::Sampler const  &amp; castor3d::RadianceComputer::getSampler </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td class="memname">bool castor3d::rq::Texcoord::invertU { false }</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p >name Getters. </p>
-
-<p class="reference">Referenced by <a class="el" href="../../d0/d0b/a03910.html#a5d45288d46639de661d172598822b5f7">castor3d::IblTextures::getIrradianceSampler()</a>.</p>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../de/d7e/a03914_ad1f45bde74c7608a6bbf99e4088f9c11_icgraph.png" border="0" usemap="#ade/d7e/a03914_ad1f45bde74c7608a6bbf99e4088f9c11_icgraph" alt=""/></div>
-<map name="ade/d7e/a03914_ad1f45bde74c7608a6bbf99e4088f9c11_icgraph" id="ade/d7e/a03914_ad1f45bde74c7608a6bbf99e4088f9c11_icgraph">
-<area shape="rect" title=" " alt="" coords="205,5,396,47"/>
-<area shape="rect" href="../../d0/d0b/a03910.html#a5d45288d46639de661d172598822b5f7" title=" " alt="" coords="5,5,157,47"/>
-</map>
-</div>
 
 </div>
 </div>
-<a id="af5167f31a229f16dc99f27b24542f425" name="af5167f31a229f16dc99f27b24542f425"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af5167f31a229f16dc99f27b24542f425">&#9670;&nbsp;</a></span>render() <span class="overload">[1/2]</span></h2>
+<a id="aa87e93dc94d8c8eecaf81ba11e7e165e" name="aa87e93dc94d8c8eecaf81ba11e7e165e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa87e93dc94d8c8eecaf81ba11e7e165e">&#9670;&nbsp;</a></span>invertV</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::RadianceComputer::render </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../dc/d61/a03950.html">QueueData</a> const &amp;&#160;</td>
-          <td class="paramname"><em>queueData</em></td><td>)</td>
-          <td></td>
+          <td class="memname">bool castor3d::rq::Texcoord::invertV { false }</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Computes the radiance map. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">queueData</td><td>The queue receiving the GPU commands. </td></tr>
-  </table>
-  </dd>
-</dl>
-
 </div>
 </div>
-<a id="a67f0a98b5acb873fecbda1642dc43dd3" name="a67f0a98b5acb873fecbda1642dc43dd3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a67f0a98b5acb873fecbda1642dc43dd3">&#9670;&nbsp;</a></span>render() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ashes::Semaphore const  &amp; castor3d::RadianceComputer::render </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../dc/d61/a03950.html">QueueData</a> const &amp;&#160;</td>
-          <td class="paramname"><em>queueData</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">ashes::Semaphore const &amp;&#160;</td>
-          <td class="paramname"><em>toWait</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Computes the radiance map. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">queueData</td><td>The queue receiving the GPU commands. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">toWait</td><td>The semaphore from the previous render pass. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The semaphores signaled by this render. </dd></dl>
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following file:<ul>
-<li>Render/PBR/<a class="el" href="../../da/d96/a00782.html">RadianceComputer.hpp</a></li>
+<hr/>The documentation for this struct was generated from the following file:<ul>
+<li>Render/Passes/<a class="el" href="../../d4/d45/a00791.html">RenderQuad.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 15:34:55 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:52 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

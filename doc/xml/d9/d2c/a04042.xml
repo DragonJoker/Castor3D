@@ -1,88 +1,46 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d9/d2c/a04042" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::TechniqueQueues</compoundname>
+    <compoundname>castor3d::TexturedQuad</compoundname>
     <includes local="no">RenderModule.hpp</includes>
+    <innerclass refid="d3/d14/a04046" prot="public">castor3d::TexturedQuad::Vertex</innerclass>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d9/d2c/a04042_1abbeec84b824c1839d3ecbd25fb18256b" prot="public" static="no" mutable="no">
-        <type><ref refid="dc/df4/a01401_1a16af0407887759f4b7d74964b4533ec6" kindref="member">RenderQueueArray</ref></type>
-        <definition>RenderQueueArray castor3d::TechniqueQueues::queues</definition>
-        <argsstring></argsstring>
-        <name>queues</name>
-        <qualifiedname>castor3d::TechniqueQueues::queues</qualifiedname>
+      <memberdef kind="variable" id="d9/d2c/a04042_1aff91a561df99650c86eb2d046f4c6919" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/d14/a04046" kindref="compound">Vertex</ref></type>
+        <definition>Vertex castor3d::TexturedQuad::vertex[6]</definition>
+        <argsstring>[6]</argsstring>
+        <name>vertex</name>
+        <qualifiedname>castor3d::TexturedQuad::vertex</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="622" column="18" bodyfile="Render/RenderModule.hpp" bodystart="622" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d9/d2c/a04042_1afa5f02a93cbee3ec79624ca0f2fbd5d3" prot="public" static="no" mutable="no">
-        <type><ref refid="dc/df4/a01401_1ad3137fb4b01f8deea8b1e20522ec8e6c" kindref="member">ShadowMapLightTypeArray</ref></type>
-        <definition>ShadowMapLightTypeArray castor3d::TechniqueQueues::shadowMaps</definition>
-        <argsstring></argsstring>
-        <name>shadowMaps</name>
-        <qualifiedname>castor3d::TechniqueQueues::shadowMaps</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderModule.hpp" line="623" column="25" bodyfile="Render/RenderModule.hpp" bodystart="623" bodyend="-1"/>
+        <location file="Render/RenderModule.hpp" line="60" column="8" bodyfile="Render/RenderModule.hpp" bodystart="60" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>A quad with UV. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
     <collaborationgraph>
-      <node id="4">
-        <label>T</label>
-      </node>
-      <node id="5">
-        <label>std::array&lt; ShadowMapRefArray, size_t(LightType::eCount) &gt;</label>
-        <childnode refid="3" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-        <childnode refid="6" relation="template-instance">
-          <edgelabel>&lt; ShadowMapRefArray, size_t(LightType::eCount) &gt;</edgelabel>
-        </childnode>
-      </node>
       <node id="1">
-        <label>castor3d::TechniqueQueues</label>
+        <label>castor3d::TexturedQuad</label>
         <link refid="d9/d2c/a04042"/>
         <childnode refid="2" relation="usage">
-          <edgelabel>queues</edgelabel>
-        </childnode>
-        <childnode refid="5" relation="usage">
-          <edgelabel>shadowMaps</edgelabel>
-        </childnode>
-      </node>
-      <node id="6">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="4" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="3">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="4" relation="usage">
-          <edgelabel>elements</edgelabel>
+          <edgelabel>vertex</edgelabel>
         </childnode>
       </node>
       <node id="2">
-        <label>std::vector&lt; std::reference_wrapper&lt; RenderQueue &gt; &gt;</label>
-        <childnode refid="3" relation="template-instance">
-          <edgelabel>&lt; std::reference_wrapper&lt; RenderQueue &gt; &gt;</edgelabel>
-        </childnode>
+        <label>castor3d::TexturedQuad::Vertex</label>
+        <link refid="d3/d14/a04046"/>
       </node>
     </collaborationgraph>
-    <location file="Render/RenderModule.hpp" line="620" column="1" bodyfile="Render/RenderModule.hpp" bodystart="621" bodyend="624"/>
+    <location file="Render/RenderModule.hpp" line="52" column="1" bodyfile="Render/RenderModule.hpp" bodystart="53" bodyend="61"/>
     <listofallmembers>
-      <member refid="d9/d2c/a04042_1abbeec84b824c1839d3ecbd25fb18256b" prot="public" virt="non-virtual"><scope>castor3d::TechniqueQueues</scope><name>queues</name></member>
-      <member refid="d9/d2c/a04042_1afa5f02a93cbee3ec79624ca0f2fbd5d3" prot="public" virt="non-virtual"><scope>castor3d::TechniqueQueues</scope><name>shadowMaps</name></member>
+      <member refid="d9/d2c/a04042_1aff91a561df99650c86eb2d046f4c6919" prot="public" virt="non-virtual"><scope>castor3d::TexturedQuad</scope><name>vertex</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

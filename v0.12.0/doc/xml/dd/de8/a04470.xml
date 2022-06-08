@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dd/de8/a04470" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::BackgroundVisitor</compoundname>
+    <derivedcompoundref refid="de/d70/a04454" prot="public" virt="non-virtual">castor3d::BackgroundTextWriter</derivedcompoundref>
+    <includes local="no">Visitor.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/de8/a04470_1af05ce31b5608cdd6b02f87ab1eadae6f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::BackgroundVisitor::BackgroundVisitor</definition>
+        <argsstring>()</argsstring>
+        <name>BackgroundVisitor</name>
+        <qualifiedname>castor3d::BackgroundVisitor::BackgroundVisitor</qualifiedname>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Visitor.hpp" line="20" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/de8/a04470_1a575ad64b4b6f1bf1bd76adc9891ce58d" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::BackgroundVisitor::~BackgroundVisitor</definition>
+        <argsstring>()</argsstring>
+        <name>~BackgroundVisitor</name>
+        <qualifiedname>castor3d::BackgroundVisitor::~BackgroundVisitor</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Visitor.hpp" line="27" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/de8/a04470_1ad29638182ddf77a3a1f8652f12dc5d0c" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::BackgroundVisitor::visit</definition>
+        <argsstring>(ColourBackground &amp;background)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::BackgroundVisitor::visit</qualifiedname>
+        <reimplementedby refid="de/d70/a04454_1aa3a7db97a7795a6197b9fb1ca203069d">visit</reimplementedby>
+        <param>
+          <type><ref refid="d8/df5/a04458" kindref="compound">ColourBackground</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <briefdescription>
+<para>Visits a colour background. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Visitor.hpp" line="36" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/de8/a04470_1a0cf4b81b17c74c49364f0cab18567ef0" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::BackgroundVisitor::visit</definition>
+        <argsstring>(SkyboxBackground &amp;background)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::BackgroundVisitor::visit</qualifiedname>
+        <reimplementedby refid="de/d70/a04454_1a3c7a63e29f8ad50ad597265e458d6c2e">visit</reimplementedby>
+        <param>
+          <type><ref refid="dd/d3c/a04466" kindref="compound">SkyboxBackground</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <briefdescription>
+<para>Visits a skybox background. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Visitor.hpp" line="45" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/de8/a04470_1a3c4bae12afffa3a4f2b08f4733f7c119" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::BackgroundVisitor::visit</definition>
+        <argsstring>(ImageBackground &amp;background)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::BackgroundVisitor::visit</qualifiedname>
+        <reimplementedby refid="de/d70/a04454_1a738cbed54e5babeadea2e891bf67264c">visit</reimplementedby>
+        <param>
+          <type><ref refid="dd/dc6/a04462" kindref="compound">ImageBackground</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <briefdescription>
+<para>Visits an image background. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Visitor.hpp" line="54" column="22"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::BackgroundTextWriter</label>
+        <link refid="de/d70/a04454"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::BackgroundVisitor</label>
+        <link refid="dd/de8/a04470"/>
+      </node>
+    </inheritancegraph>
+    <location file="Scene/Background/Visitor.hpp" line="11" column="1" bodyfile="Scene/Background/Visitor.hpp" bodystart="12" bodyend="55"/>
+    <listofallmembers>
+      <member refid="dd/de8/a04470_1af05ce31b5608cdd6b02f87ab1eadae6f" prot="public" virt="non-virtual"><scope>castor3d::BackgroundVisitor</scope><name>BackgroundVisitor</name></member>
+      <member refid="dd/de8/a04470_1ad29638182ddf77a3a1f8652f12dc5d0c" prot="public" virt="pure-virtual"><scope>castor3d::BackgroundVisitor</scope><name>visit</name></member>
+      <member refid="dd/de8/a04470_1a0cf4b81b17c74c49364f0cab18567ef0" prot="public" virt="pure-virtual"><scope>castor3d::BackgroundVisitor</scope><name>visit</name></member>
+      <member refid="dd/de8/a04470_1a3c4bae12afffa3a4f2b08f4733f7c119" prot="public" virt="pure-virtual"><scope>castor3d::BackgroundVisitor</scope><name>visit</name></member>
+      <member refid="dd/de8/a04470_1a575ad64b4b6f1bf1bd76adc9891ce58d" prot="public" virt="virtual"><scope>castor3d::BackgroundVisitor</scope><name>~BackgroundVisitor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

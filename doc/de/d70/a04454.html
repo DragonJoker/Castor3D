@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::BackgroundTextWriter Class Reference</title>
+<title>Castor3D: castor3d::VertexTransformPass Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,86 +42,160 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dc/df4/a01401.html">castor3d</a></li><li class="navelem"><a class="el" href="../../de/d70/a04454.html">BackgroundTextWriter</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../de/d70/a04454.html">VertexTransformPass</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="../../d0/d73/a04451.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">castor3d::BackgroundTextWriter Class Reference</div></div>
+  <div class="headertitle"><div class="title">castor3d::VertexTransformPass Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;BackgroundTextWriter.hpp&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for castor3d::BackgroundTextWriter:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../dd/de1/a04453.png" border="0" usemap="#acastor3d_1_1BackgroundTextWriter_inherit__map" alt="Inheritance graph"/></div>
-<map name="acastor3d_1_1BackgroundTextWriter_inherit__map" id="acastor3d_1_1BackgroundTextWriter_inherit__map">
-<area shape="rect" title=" " alt="" coords="11,80,186,121"/>
-<area shape="rect" href="../../dd/de8/a04470.html" title=" " alt="" coords="5,5,192,32"/>
-</map>
-<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
-<div class="dynheader">
-Collaboration diagram for castor3d::BackgroundTextWriter:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../d7/d79/a04452.png" border="0" usemap="#acastor3d_1_1BackgroundTextWriter_coll__map" alt="Collaboration graph"/></div>
-<map name="acastor3d_1_1BackgroundTextWriter_coll__map" id="acastor3d_1_1BackgroundTextWriter_coll__map">
-<area shape="rect" title=" " alt="" coords="11,80,186,121"/>
-<area shape="rect" href="../../dd/de8/a04470.html" title=" " alt="" coords="5,5,192,32"/>
-</map>
-<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
+<p><code>#include &lt;VertexTransformPass.hpp&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a39cdac08535faf4b0165ef7fac546f1f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d70/a04454.html#a39cdac08535faf4b0165ef7fac546f1f">Ids</a> { <br />
+&#160;&#160;<a class="el" href="../../de/d70/a04454.html#a39cdac08535faf4b0165ef7fac546f1faebcbc9034474250c40e47ec1aef83760">eModelsData</a>
+, <a class="el" href="../../de/d70/a04454.html#a39cdac08535faf4b0165ef7fac546f1faad725278c195ee2097339a411418d59e">eMorphTargets</a>
+, <a class="el" href="../../de/d70/a04454.html#a39cdac08535faf4b0165ef7fac546f1fafbcd9fed793a041a9949e10c3e6f67f4">eMorphingWeights</a>
+, <a class="el" href="../../de/d70/a04454.html#a39cdac08535faf4b0165ef7fac546f1fa992c9a89f8dee799c1a31dc3c585145e">eSkinTransforms</a>
+, <br />
+&#160;&#160;<a class="el" href="../../de/d70/a04454.html#a39cdac08535faf4b0165ef7fac546f1fae818285b363db2dfbaa9440e52edb8e1">eInPosition</a>
+, <a class="el" href="../../de/d70/a04454.html#a39cdac08535faf4b0165ef7fac546f1fa9a0026f3c467bb9a69c14f4a885f5b57">eOutPosition</a>
+, <a class="el" href="../../de/d70/a04454.html#a39cdac08535faf4b0165ef7fac546f1fada4b50dc59b94af7c6576897b2b800c4">eInNormal</a>
+, <a class="el" href="../../de/d70/a04454.html#a39cdac08535faf4b0165ef7fac546f1fa99e372355b0fe693b75c1d9ee10cc846">eOutNormal</a>
+, <br />
+&#160;&#160;<a class="el" href="../../de/d70/a04454.html#a39cdac08535faf4b0165ef7fac546f1faad853a12e953618a0d4e36ca185920c1">eInTangent</a>
+, <a class="el" href="../../de/d70/a04454.html#a39cdac08535faf4b0165ef7fac546f1faaca6577d66c134874ea519d0989ef124">eOutTangent</a>
+, <a class="el" href="../../de/d70/a04454.html#a39cdac08535faf4b0165ef7fac546f1fa4e957781ce49854f13e38b7d9344bd3d">eInTexcoord0</a>
+, <a class="el" href="../../de/d70/a04454.html#a39cdac08535faf4b0165ef7fac546f1faff7545b8ad0487c1305b175be2935835">eOutTexcoord0</a>
+, <br />
+&#160;&#160;<a class="el" href="../../de/d70/a04454.html#a39cdac08535faf4b0165ef7fac546f1faf204ed7c0ebf3ef1d6ad754881b28ded">eInTexcoord1</a>
+, <a class="el" href="../../de/d70/a04454.html#a39cdac08535faf4b0165ef7fac546f1faa82b00d3efd0dc60b90c95b0fe24713c">eOutTexcoord1</a>
+, <a class="el" href="../../de/d70/a04454.html#a39cdac08535faf4b0165ef7fac546f1fa2f4498c325041cc45e588c85ebbb37b9">eInTexcoord2</a>
+, <a class="el" href="../../de/d70/a04454.html#a39cdac08535faf4b0165ef7fac546f1fadf446e3bcbff2bb99f62284a03223231">eOutTexcoord2</a>
+, <br />
+&#160;&#160;<a class="el" href="../../de/d70/a04454.html#a39cdac08535faf4b0165ef7fac546f1fab22fa285c2f9e8768ab44ed734249872">eInTexcoord3</a>
+, <a class="el" href="../../de/d70/a04454.html#a39cdac08535faf4b0165ef7fac546f1fae829428b7c770d31186c06441798d250">eOutTexcoord3</a>
+, <a class="el" href="../../de/d70/a04454.html#a39cdac08535faf4b0165ef7fac546f1fa163ca41395b4ce6858ab156cddeb8127">eInColour</a>
+, <a class="el" href="../../de/d70/a04454.html#a39cdac08535faf4b0165ef7fac546f1fa938049c8e5ea718a65dd98245c4d33f5">eOutColour</a>
+, <br />
+&#160;&#160;<a class="el" href="../../de/d70/a04454.html#a39cdac08535faf4b0165ef7fac546f1fab9e2d8458ef4f276d9039a03e96c044c">eInSkin</a>
+, <a class="el" href="../../de/d70/a04454.html#a39cdac08535faf4b0165ef7fac546f1fa06c12d6f36e29b1644856515f80024d1">eOutVelocity</a>
+<br />
+ }</td></tr>
+<tr class="separator:a39cdac08535faf4b0165ef7fac546f1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3f6f1d7eb058cf7e67df41c3b9dbe5c1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d70/a04454.html#a3f6f1d7eb058cf7e67df41c3b9dbe5c1">BackgroundTextWriter</a> (castor::TextFile &amp;file, castor::String const &amp;tabs)</td></tr>
-<tr class="memdesc:a3f6f1d7eb058cf7e67df41c3b9dbe5c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../de/d70/a04454.html#a3f6f1d7eb058cf7e67df41c3b9dbe5c1">More...</a><br /></td></tr>
-<tr class="separator:a3f6f1d7eb058cf7e67df41c3b9dbe5c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3a7db97a7795a6197b9fb1ca203069d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d70/a04454.html#aa3a7db97a7795a6197b9fb1ca203069d">visit</a> (<a class="el" href="../../d8/df5/a04458.html">ColourBackground</a> &amp;background) override</td></tr>
-<tr class="memdesc:aa3a7db97a7795a6197b9fb1ca203069d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visits a colour background.  <a href="../../de/d70/a04454.html#aa3a7db97a7795a6197b9fb1ca203069d">More...</a><br /></td></tr>
-<tr class="separator:aa3a7db97a7795a6197b9fb1ca203069d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c7a63e29f8ad50ad597265e458d6c2e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d70/a04454.html#a3c7a63e29f8ad50ad597265e458d6c2e">visit</a> (<a class="el" href="../../dd/d3c/a04466.html">SkyboxBackground</a> &amp;background) override</td></tr>
-<tr class="memdesc:a3c7a63e29f8ad50ad597265e458d6c2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visits a colour background.  <a href="../../de/d70/a04454.html#a3c7a63e29f8ad50ad597265e458d6c2e">More...</a><br /></td></tr>
-<tr class="separator:a3c7a63e29f8ad50ad597265e458d6c2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a738cbed54e5babeadea2e891bf67264c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d70/a04454.html#a738cbed54e5babeadea2e891bf67264c">visit</a> (<a class="el" href="../../dd/dc6/a04462.html">ImageBackground</a> &amp;background) override</td></tr>
-<tr class="memdesc:a738cbed54e5babeadea2e891bf67264c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visits a colour background.  <a href="../../de/d70/a04454.html#a738cbed54e5babeadea2e891bf67264c">More...</a><br /></td></tr>
-<tr class="separator:a738cbed54e5babeadea2e891bf67264c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_a04470"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a04470')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../dd/de8/a04470.html">castor3d::BackgroundVisitor</a></td></tr>
-<tr class="memitem:af05ce31b5608cdd6b02f87ab1eadae6f inherit pub_methods_a04470"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/de8/a04470.html#af05ce31b5608cdd6b02f87ab1eadae6f">BackgroundVisitor</a> ()</td></tr>
-<tr class="memdesc:af05ce31b5608cdd6b02f87ab1eadae6f inherit pub_methods_a04470"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../dd/de8/a04470.html#af05ce31b5608cdd6b02f87ab1eadae6f">More...</a><br /></td></tr>
-<tr class="separator:af05ce31b5608cdd6b02f87ab1eadae6f inherit pub_methods_a04470"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a575ad64b4b6f1bf1bd76adc9891ce58d inherit pub_methods_a04470"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/de8/a04470.html#a575ad64b4b6f1bf1bd76adc9891ce58d">~BackgroundVisitor</a> ()</td></tr>
-<tr class="memdesc:a575ad64b4b6f1bf1bd76adc9891ce58d inherit pub_methods_a04470"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="../../dd/de8/a04470.html#a575ad64b4b6f1bf1bd76adc9891ce58d">More...</a><br /></td></tr>
-<tr class="separator:a575ad64b4b6f1bf1bd76adc9891ce58d inherit pub_methods_a04470"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad29638182ddf77a3a1f8652f12dc5d0c inherit pub_methods_a04470"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/de8/a04470.html#ad29638182ddf77a3a1f8652f12dc5d0c">visit</a> (<a class="el" href="../../d8/df5/a04458.html">ColourBackground</a> &amp;background)=0</td></tr>
-<tr class="memdesc:ad29638182ddf77a3a1f8652f12dc5d0c inherit pub_methods_a04470"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visits a colour background.  <a href="../../dd/de8/a04470.html#ad29638182ddf77a3a1f8652f12dc5d0c">More...</a><br /></td></tr>
-<tr class="separator:ad29638182ddf77a3a1f8652f12dc5d0c inherit pub_methods_a04470"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0cf4b81b17c74c49364f0cab18567ef0 inherit pub_methods_a04470"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/de8/a04470.html#a0cf4b81b17c74c49364f0cab18567ef0">visit</a> (<a class="el" href="../../dd/d3c/a04466.html">SkyboxBackground</a> &amp;background)=0</td></tr>
-<tr class="memdesc:a0cf4b81b17c74c49364f0cab18567ef0 inherit pub_methods_a04470"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visits a skybox background.  <a href="../../dd/de8/a04470.html#a0cf4b81b17c74c49364f0cab18567ef0">More...</a><br /></td></tr>
-<tr class="separator:a0cf4b81b17c74c49364f0cab18567ef0 inherit pub_methods_a04470"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c4bae12afffa3a4f2b08f4733f7c119 inherit pub_methods_a04470"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/de8/a04470.html#a3c4bae12afffa3a4f2b08f4733f7c119">visit</a> (<a class="el" href="../../dd/dc6/a04462.html">ImageBackground</a> &amp;background)=0</td></tr>
-<tr class="memdesc:a3c4bae12afffa3a4f2b08f4733f7c119 inherit pub_methods_a04470"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visits an image background.  <a href="../../dd/de8/a04470.html#a3c4bae12afffa3a4f2b08f4733f7c119">More...</a><br /></td></tr>
-<tr class="separator:a3c4bae12afffa3a4f2b08f4733f7c119 inherit pub_methods_a04470"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adffdfd4a4d1bc1de34b7637d87ffb886"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d70/a04454.html#adffdfd4a4d1bc1de34b7637d87ffb886">VertexTransformPass</a> (<a class="el" href="../../df/d75/a04010.html">RenderDevice</a> const &amp;device, <a class="el" href="../../dd/d51/a03842.html">SubmeshRenderNode</a> const &amp;node, <a class="el" href="../../dd/d10/a04434.html">TransformPipeline</a> const &amp;pipeline, <a class="el" href="../../db/d0b/a02566.html">ObjectBufferOffset</a> const &amp;input, <a class="el" href="../../db/d0b/a02566.html">ObjectBufferOffset</a> const &amp;output, ashes::Buffer&lt; <a class="el" href="../../d4/d69/a05166.html">ModelBufferConfiguration</a> &gt; const &amp;modelsBuffer, <a class="el" href="../../dd/df4/a02510.html">GpuBufferOffsetT</a>&lt; castor::Point4f &gt; const &amp;morphTargets, <a class="el" href="../../dd/df4/a02510.html">GpuBufferOffsetT</a>&lt; <a class="el" href="../../dc/ddd/a05170.html">MorphingWeightsConfiguration</a> &gt; const &amp;morphingWeights, <a class="el" href="../../dd/df4/a02510.html">GpuBufferOffsetT</a>&lt; <a class="el" href="../../d3/d32/a05194.html">SkinningTransformsConfiguration</a> &gt; const &amp;skinTransforms)</td></tr>
+<tr class="separator:adffdfd4a4d1bc1de34b7637d87ffb886"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79522a742d4239f761d69fee68362178"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d70/a04454.html#a79522a742d4239f761d69fee68362178">recordInto</a> (crg::RecordContext &amp;context, VkCommandBuffer commandBuffer, uint32_t index)</td></tr>
+<tr class="separator:a79522a742d4239f761d69fee68362178"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a3f6f1d7eb058cf7e67df41c3b9dbe5c1" name="a3f6f1d7eb058cf7e67df41c3b9dbe5c1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3f6f1d7eb058cf7e67df41c3b9dbe5c1">&#9670;&nbsp;</a></span>BackgroundTextWriter()</h2>
+<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a39cdac08535faf4b0165ef7fac546f1f" name="a39cdac08535faf4b0165ef7fac546f1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39cdac08535faf4b0165ef7fac546f1f">&#9670;&nbsp;</a></span>Ids</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::BackgroundTextWriter::BackgroundTextWriter </td>
+          <td class="memname">enum <a class="el" href="../../de/d70/a04454.html#a39cdac08535faf4b0165ef7fac546f1f">castor3d::VertexTransformPass::Ids</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a39cdac08535faf4b0165ef7fac546f1faebcbc9034474250c40e47ec1aef83760" name="a39cdac08535faf4b0165ef7fac546f1faebcbc9034474250c40e47ec1aef83760"></a>eModelsData&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a39cdac08535faf4b0165ef7fac546f1faad725278c195ee2097339a411418d59e" name="a39cdac08535faf4b0165ef7fac546f1faad725278c195ee2097339a411418d59e"></a>eMorphTargets&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a39cdac08535faf4b0165ef7fac546f1fafbcd9fed793a041a9949e10c3e6f67f4" name="a39cdac08535faf4b0165ef7fac546f1fafbcd9fed793a041a9949e10c3e6f67f4"></a>eMorphingWeights&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a39cdac08535faf4b0165ef7fac546f1fa992c9a89f8dee799c1a31dc3c585145e" name="a39cdac08535faf4b0165ef7fac546f1fa992c9a89f8dee799c1a31dc3c585145e"></a>eSkinTransforms&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a39cdac08535faf4b0165ef7fac546f1fae818285b363db2dfbaa9440e52edb8e1" name="a39cdac08535faf4b0165ef7fac546f1fae818285b363db2dfbaa9440e52edb8e1"></a>eInPosition&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a39cdac08535faf4b0165ef7fac546f1fa9a0026f3c467bb9a69c14f4a885f5b57" name="a39cdac08535faf4b0165ef7fac546f1fa9a0026f3c467bb9a69c14f4a885f5b57"></a>eOutPosition&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a39cdac08535faf4b0165ef7fac546f1fada4b50dc59b94af7c6576897b2b800c4" name="a39cdac08535faf4b0165ef7fac546f1fada4b50dc59b94af7c6576897b2b800c4"></a>eInNormal&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a39cdac08535faf4b0165ef7fac546f1fa99e372355b0fe693b75c1d9ee10cc846" name="a39cdac08535faf4b0165ef7fac546f1fa99e372355b0fe693b75c1d9ee10cc846"></a>eOutNormal&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a39cdac08535faf4b0165ef7fac546f1faad853a12e953618a0d4e36ca185920c1" name="a39cdac08535faf4b0165ef7fac546f1faad853a12e953618a0d4e36ca185920c1"></a>eInTangent&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a39cdac08535faf4b0165ef7fac546f1faaca6577d66c134874ea519d0989ef124" name="a39cdac08535faf4b0165ef7fac546f1faaca6577d66c134874ea519d0989ef124"></a>eOutTangent&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a39cdac08535faf4b0165ef7fac546f1fa4e957781ce49854f13e38b7d9344bd3d" name="a39cdac08535faf4b0165ef7fac546f1fa4e957781ce49854f13e38b7d9344bd3d"></a>eInTexcoord0&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a39cdac08535faf4b0165ef7fac546f1faff7545b8ad0487c1305b175be2935835" name="a39cdac08535faf4b0165ef7fac546f1faff7545b8ad0487c1305b175be2935835"></a>eOutTexcoord0&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a39cdac08535faf4b0165ef7fac546f1faf204ed7c0ebf3ef1d6ad754881b28ded" name="a39cdac08535faf4b0165ef7fac546f1faf204ed7c0ebf3ef1d6ad754881b28ded"></a>eInTexcoord1&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a39cdac08535faf4b0165ef7fac546f1faa82b00d3efd0dc60b90c95b0fe24713c" name="a39cdac08535faf4b0165ef7fac546f1faa82b00d3efd0dc60b90c95b0fe24713c"></a>eOutTexcoord1&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a39cdac08535faf4b0165ef7fac546f1fa2f4498c325041cc45e588c85ebbb37b9" name="a39cdac08535faf4b0165ef7fac546f1fa2f4498c325041cc45e588c85ebbb37b9"></a>eInTexcoord2&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a39cdac08535faf4b0165ef7fac546f1fadf446e3bcbff2bb99f62284a03223231" name="a39cdac08535faf4b0165ef7fac546f1fadf446e3bcbff2bb99f62284a03223231"></a>eOutTexcoord2&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a39cdac08535faf4b0165ef7fac546f1fab22fa285c2f9e8768ab44ed734249872" name="a39cdac08535faf4b0165ef7fac546f1fab22fa285c2f9e8768ab44ed734249872"></a>eInTexcoord3&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a39cdac08535faf4b0165ef7fac546f1fae829428b7c770d31186c06441798d250" name="a39cdac08535faf4b0165ef7fac546f1fae829428b7c770d31186c06441798d250"></a>eOutTexcoord3&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a39cdac08535faf4b0165ef7fac546f1fa163ca41395b4ce6858ab156cddeb8127" name="a39cdac08535faf4b0165ef7fac546f1fa163ca41395b4ce6858ab156cddeb8127"></a>eInColour&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a39cdac08535faf4b0165ef7fac546f1fa938049c8e5ea718a65dd98245c4d33f5" name="a39cdac08535faf4b0165ef7fac546f1fa938049c8e5ea718a65dd98245c4d33f5"></a>eOutColour&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a39cdac08535faf4b0165ef7fac546f1fab9e2d8458ef4f276d9039a03e96c044c" name="a39cdac08535faf4b0165ef7fac546f1fab9e2d8458ef4f276d9039a03e96c044c"></a>eInSkin&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a39cdac08535faf4b0165ef7fac546f1fa06c12d6f36e29b1644856515f80024d1" name="a39cdac08535faf4b0165ef7fac546f1fa06c12d6f36e29b1644856515f80024d1"></a>eOutVelocity&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="adffdfd4a4d1bc1de34b7637d87ffb886" name="adffdfd4a4d1bc1de34b7637d87ffb886"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adffdfd4a4d1bc1de34b7637d87ffb886">&#9670;&nbsp;</a></span>VertexTransformPass()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">castor3d::VertexTransformPass::VertexTransformPass </td>
           <td>(</td>
-          <td class="paramtype">castor::TextFile &amp;&#160;</td>
-          <td class="paramname"><em>file</em>, </td>
+          <td class="paramtype"><a class="el" href="../../df/d75/a04010.html">RenderDevice</a> const &amp;&#160;</td>
+          <td class="paramname"><em>device</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">castor::String const &amp;&#160;</td>
-          <td class="paramname"><em>tabs</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="../../dd/d51/a03842.html">SubmeshRenderNode</a> const &amp;&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../dd/d10/a04434.html">TransformPipeline</a> const &amp;&#160;</td>
+          <td class="paramname"><em>pipeline</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../db/d0b/a02566.html">ObjectBufferOffset</a> const &amp;&#160;</td>
+          <td class="paramname"><em>input</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../db/d0b/a02566.html">ObjectBufferOffset</a> const &amp;&#160;</td>
+          <td class="paramname"><em>output</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ashes::Buffer&lt; <a class="el" href="../../d4/d69/a05166.html">ModelBufferConfiguration</a> &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>modelsBuffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../dd/df4/a02510.html">GpuBufferOffsetT</a>&lt; castor::Point4f &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>morphTargets</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../dd/df4/a02510.html">GpuBufferOffsetT</a>&lt; <a class="el" href="../../dc/ddd/a05170.html">MorphingWeightsConfiguration</a> &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>morphingWeights</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../dd/df4/a02510.html">GpuBufferOffsetT</a>&lt; <a class="el" href="../../d3/d32/a05194.html">SkinningTransformsConfiguration</a> &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>skinTransforms</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -131,108 +205,50 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Constructor. </p>
-
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="aa3a7db97a7795a6197b9fb1ca203069d" name="aa3a7db97a7795a6197b9fb1ca203069d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa3a7db97a7795a6197b9fb1ca203069d">&#9670;&nbsp;</a></span>visit() <span class="overload">[1/3]</span></h2>
+<a id="a79522a742d4239f761d69fee68362178" name="a79522a742d4239f761d69fee68362178"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79522a742d4239f761d69fee68362178">&#9670;&nbsp;</a></span>recordInto()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::BackgroundTextWriter::visit </td>
+          <td class="memname">void castor3d::VertexTransformPass::recordInto </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d8/df5/a04458.html">ColourBackground</a> &amp;&#160;</td>
-          <td class="paramname"><em>background</em></td><td>)</td>
-          <td></td>
+          <td class="paramtype">crg::RecordContext &amp;&#160;</td>
+          <td class="paramname"><em>context</em>, </td>
         </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Visits a colour background. </p>
-
-<p>Implements <a class="el" href="../../dd/de8/a04470.html#ad29638182ddf77a3a1f8652f12dc5d0c">castor3d::BackgroundVisitor</a>.</p>
-
-</div>
-</div>
-<a id="a738cbed54e5babeadea2e891bf67264c" name="a738cbed54e5babeadea2e891bf67264c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a738cbed54e5babeadea2e891bf67264c">&#9670;&nbsp;</a></span>visit() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::BackgroundTextWriter::visit </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../dd/dc6/a04462.html">ImageBackground</a> &amp;&#160;</td>
-          <td class="paramname"><em>background</em></td><td>)</td>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">VkCommandBuffer&#160;</td>
+          <td class="paramname"><em>commandBuffer</em>, </td>
         </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Visits a colour background. </p>
-
-<p>Implements <a class="el" href="../../dd/de8/a04470.html#a3c4bae12afffa3a4f2b08f4733f7c119">castor3d::BackgroundVisitor</a>.</p>
-
-</div>
-</div>
-<a id="a3c7a63e29f8ad50ad597265e458d6c2e" name="a3c7a63e29f8ad50ad597265e458d6c2e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3c7a63e29f8ad50ad597265e458d6c2e">&#9670;&nbsp;</a></span>visit() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::BackgroundTextWriter::visit </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../dd/d3c/a04466.html">SkyboxBackground</a> &amp;&#160;</td>
-          <td class="paramname"><em>background</em></td><td>)</td>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
-
-<p>Visits a colour background. </p>
-
-<p>Implements <a class="el" href="../../dd/de8/a04470.html#a0cf4b81b17c74c49364f0cab18567ef0">castor3d::BackgroundVisitor</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>Scene/Background/<a class="el" href="../../d0/d22/a01049.html">BackgroundTextWriter.hpp</a></li>
+<li>Render/Transform/<a class="el" href="../../d2/d41/a01037.html">VertexTransformPass.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 15:34:55 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:52 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

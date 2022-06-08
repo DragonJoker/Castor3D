@@ -1,80 +1,255 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d1/dd4/a04958" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::shader::RsmConfigData</compoundname>
+    <compoundname>castor3d::shader::FragmentSurfaceT</compoundname>
     <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
-    <includes local="no">RsmConfigUbo.hpp</includes>
+    <includes local="no">GlslSurface.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>ast::var::Flag</type>
+        <declname>FlagT</declname>
+        <defname>FlagT</defname>
+      </param>
+    </templateparamlist>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d1/dd4/a04958_1adaae6164149ff01a442a2975a621e0c2" prot="public" static="no" mutable="no">
-        <type>sdw::Float</type>
-        <definition>sdw::Float castor3d::shader::RsmConfigData::rsmIntensity</definition>
+      <memberdef kind="variable" id="d1/dd4/a04958_1a5b19c3b5337a11c796c547a63c5a4d64" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::worldPosition</definition>
         <argsstring></argsstring>
-        <name>rsmIntensity</name>
-        <qualifiedname>castor3d::shader::RsmConfigData::rsmIntensity</qualifiedname>
+        <name>worldPosition</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::worldPosition</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="33" column="12" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="33" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="134" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="134" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/dd4/a04958_1a5378e4b40341dc589d50594305cac747" prot="public" static="no" mutable="no">
-        <type>sdw::Float</type>
-        <definition>sdw::Float castor3d::shader::RsmConfigData::rsmRMax</definition>
+      <memberdef kind="variable" id="d1/dd4/a04958_1a93a5c6877bccc34fe02a2de8f8eeb8c4" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::viewPosition</definition>
         <argsstring></argsstring>
-        <name>rsmRMax</name>
-        <qualifiedname>castor3d::shader::RsmConfigData::rsmRMax</qualifiedname>
+        <name>viewPosition</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::viewPosition</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="34" column="12" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="34" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="135" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="135" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/dd4/a04958_1a2ef0b869eed5dc41b1e63202220b500f" prot="public" static="no" mutable="no">
+      <memberdef kind="variable" id="d1/dd4/a04958_1a85cbd7adf9d98b169fc902c5f0e84cd7" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::curPosition</definition>
+        <argsstring></argsstring>
+        <name>curPosition</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::curPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="136" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dd4/a04958_1a38989e06df6acb1aaabfc8acd08a084d" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::prvPosition</definition>
+        <argsstring></argsstring>
+        <name>prvPosition</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::prvPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="137" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dd4/a04958_1a0ebc4e507505f10a560739718e7987f5" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::tangentSpaceFragPosition</definition>
+        <argsstring></argsstring>
+        <name>tangentSpaceFragPosition</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::tangentSpaceFragPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="138" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="138" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dd4/a04958_1a1c18269ce39b8e9fe84af651fe628f51" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::tangentSpaceViewPosition</definition>
+        <argsstring></argsstring>
+        <name>tangentSpaceViewPosition</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::tangentSpaceViewPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="139" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="139" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dd4/a04958_1adc28a56d9039a84ab12907386f0ac135" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::normal</definition>
+        <argsstring></argsstring>
+        <name>normal</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::normal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="140" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dd4/a04958_1ad8de92a8c13ebaec3f79c53e885db9ef" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::tangent</definition>
+        <argsstring></argsstring>
+        <name>tangent</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::tangent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="141" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dd4/a04958_1a1ae31ecdd6529ec1298721b36d94f521" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::bitangent</definition>
+        <argsstring></argsstring>
+        <name>bitangent</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::bitangent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="142" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dd4/a04958_1ac94d313073975881adab72f2fd7a1e38" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::texture0</definition>
+        <argsstring></argsstring>
+        <name>texture0</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::texture0</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="143" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="143" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dd4/a04958_1a1a14c10cc98a3aedac1ece848e549915" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::texture1</definition>
+        <argsstring></argsstring>
+        <name>texture1</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::texture1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="144" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="144" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dd4/a04958_1a63ce7f35be8c14cf213ae0585d4426bd" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::texture2</definition>
+        <argsstring></argsstring>
+        <name>texture2</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::texture2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="145" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="145" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dd4/a04958_1a3fd66f133921e3eb2f057761ed88d818" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::texture3</definition>
+        <argsstring></argsstring>
+        <name>texture3</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::texture3</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="146" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="146" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dd4/a04958_1aebaf9636ff9342fdbf18437a01ce56ce" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::colour</definition>
+        <argsstring></argsstring>
+        <name>colour</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::colour</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="147" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="147" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dd4/a04958_1a861f0c5edb7b09ef661a306912965080" prot="public" static="no" mutable="no">
         <type>sdw::UInt</type>
-        <definition>sdw::UInt castor3d::shader::RsmConfigData::rsmSampleCount</definition>
+        <definition>sdw::UInt castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::instanceId</definition>
         <argsstring></argsstring>
-        <name>rsmSampleCount</name>
-        <qualifiedname>castor3d::shader::RsmConfigData::rsmSampleCount</qualifiedname>
+        <name>instanceId</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::instanceId</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="35" column="11" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="35" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="148" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="148" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/dd4/a04958_1ae7e61311101f1bffe630d6c8ec2d579b" prot="public" static="no" mutable="no">
-        <type>sdw::UInt</type>
-        <definition>sdw::UInt castor3d::shader::RsmConfigData::rsmIndex</definition>
+      <memberdef kind="variable" id="d1/dd4/a04958_1ae8f98464d85948e184a60ce59a3462a7" prot="public" static="no" mutable="no">
+        <type>sdw::Int</type>
+        <definition>sdw::Int castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::nodeId</definition>
         <argsstring></argsstring>
-        <name>rsmIndex</name>
-        <qualifiedname>castor3d::shader::RsmConfigData::rsmIndex</qualifiedname>
+        <name>nodeId</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::nodeId</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="36" column="11" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="36" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="149" column="10" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="149" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d1/dd4/a04958_1a1533166fce74bd74f4e0f6597e0a0e75" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::shader::RsmConfigData::RsmConfigData</definition>
-        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
-        <name>RsmConfigData</name>
-        <qualifiedname>castor3d::shader::RsmConfigData::RsmConfigData</qualifiedname>
+      <memberdef kind="function" id="d1/dd4/a04958_1ae920008654b7998f5a182f94ec5fe17a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::FragmentSurfaceT</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>FragmentSurfaceT</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::FragmentSurfaceT</qualifiedname>
         <param>
           <type>sdw::ShaderWriter &amp;</type>
           <declname>writer</declname>
         </param>
         <param>
-          <type>ast::expr::ExprPtr</type>
+          <type>sdw::expr::ExprPtr</type>
           <declname>expr</declname>
         </param>
         <param>
@@ -87,19 +262,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="25" column="9"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="92" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="d1/dd4/a04958_1ad276d9c141bf10db90f3d0a21fc4b95e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d1/dd4/a04958_1a1212b64be1ed116a1fbbd9d5501979a1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
-        <definition>castor3d::shader::RsmConfigData::SDW_DeclStructInstance</definition>
-        <argsstring>(C3D_API, RsmConfigData)</argsstring>
+        <definition>castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::SDW_DeclStructInstance</definition>
+        <argsstring>(, FragmentSurfaceT)</argsstring>
         <name>SDW_DeclStructInstance</name>
-        <qualifiedname>castor3d::shader::RsmConfigData::SDW_DeclStructInstance</qualifiedname>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::SDW_DeclStructInstance</qualifiedname>
         <param>
-          <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        </param>
-        <param>
-          <type><ref refid="d1/dd4/a04958" kindref="compound">RsmConfigData</ref></type>
+          <type><ref refid="d1/dd4/a04958" kindref="compound">FragmentSurfaceT</ref></type>
         </param>
         <briefdescription>
         </briefdescription>
@@ -107,37 +279,201 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="28" column="1"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="96" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dd4/a04958_1a8193140f413de33070733862130c44f9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::computeVelocity</definition>
+        <argsstring>(MatrixData const &amp;matrixData, sdw::Vec4 &amp;curPos, sdw::Vec4 &amp;prvPos)</argsstring>
+        <name>computeVelocity</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::computeVelocity</qualifiedname>
+        <param>
+          <type><ref refid="d8/d5f/a05046" kindref="compound">MatrixData</ref> const &amp;</type>
+          <declname>matrixData</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>curPos</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>prvPos</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="107" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dd4/a04958_1ac7dab7c9f956bd17377a12dc8ec92fcf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::computeTangentSpace</definition>
+        <argsstring>(SubmeshFlags submeshFlags, ProgramFlags programFlags, sdw::Vec3 const &amp;cameraPosition, sdw::Vec3 const &amp;worldPos, sdw::Vec3 const &amp;nml, sdw::Vec3 const &amp;tan)</argsstring>
+        <name>computeTangentSpace</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::computeTangentSpace</qualifiedname>
+        <param>
+          <type><ref refid="da/dab/a01362_1a456f43ef4580c9527b0e71aa45a237ee" kindref="member">SubmeshFlags</ref></type>
+          <declname>submeshFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dab/a01362_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
+          <declname>programFlags</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>cameraPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldPos</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>nml</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>tan</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="110" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dd4/a04958_1ab65b641dcc6d7c4f9451962c07273b64" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::computeTangentSpace</definition>
+        <argsstring>(SubmeshFlags submeshFlags, ProgramFlags programFlags, sdw::Vec3 const &amp;cameraPosition, sdw::Vec3 const &amp;worldPos, sdw::Mat3 const &amp;mtx, sdw::Vec3 const &amp;nml, sdw::Vec3 const &amp;tan)</argsstring>
+        <name>computeTangentSpace</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::computeTangentSpace</qualifiedname>
+        <param>
+          <type><ref refid="da/dab/a01362_1a456f43ef4580c9527b0e71aa45a237ee" kindref="member">SubmeshFlags</ref></type>
+          <declname>submeshFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dab/a01362_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
+          <declname>programFlags</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>cameraPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldPos</declname>
+        </param>
+        <param>
+          <type>sdw::Mat3 const &amp;</type>
+          <declname>mtx</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>nml</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>tan</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="116" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dd4/a04958_1a708dcf101c2ea68514cbc2dbf28b8343" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::computeTangentSpace</definition>
+        <argsstring>(SubmeshFlags submeshFlags, sdw::Vec3 const &amp;cameraPosition, sdw::Vec3 const &amp;worldPos, sdw::Vec3 const &amp;nml, sdw::Vec3 const &amp;tan, sdw::Vec3 const &amp;bin)</argsstring>
+        <name>computeTangentSpace</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::computeTangentSpace</qualifiedname>
+        <param>
+          <type><ref refid="da/dab/a01362_1a456f43ef4580c9527b0e71aa45a237ee" kindref="member">SubmeshFlags</ref></type>
+          <declname>submeshFlags</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>cameraPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldPos</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>nml</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>tan</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>bin</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="123" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dd4/a04958_1a39f9d2d2dd573ef34bac311bf64eff08" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Vec2</type>
+        <definition>sdw::Vec2 castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::getVelocity</definition>
+        <argsstring>() const</argsstring>
+        <name>getVelocity</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::getVelocity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="131" column="11"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-static-func">
-      <memberdef kind="function" id="d1/dd4/a04958_1a5e9fd629c9074786dcde7a70a25a0595" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
-        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::RsmConfigData::makeType</definition>
-        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
-        <name>makeType</name>
-        <qualifiedname>castor3d::shader::RsmConfigData::makeType</qualifiedname>
+      <memberdef kind="function" id="d1/dd4/a04958_1ad6e4f0fd6294848a2a007e9187102d8e" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ast::type::IOStructPtr</type>
+        <definition>static ast::type::IOStructPtr castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;::makeIOType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache, SubmeshFlags submeshFlags, ProgramFlags programFlags, ShaderFlags shaderFlags, FilteredTextureFlags textureFlags, PassFlags passFlags, bool hasTextures)</argsstring>
+        <name>makeIOType</name>
+        <qualifiedname>castor3d::shader::FragmentSurfaceT::makeIOType</qualifiedname>
         <param>
           <type>ast::type::TypesCache &amp;</type>
           <declname>cache</declname>
         </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="30" column="41"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/dd4/a04958_1a61a731d489fda36272a89a42c5cd0d05" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
-        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::RsmConfigData::declare</definition>
-        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
-        <name>declare</name>
-        <qualifiedname>castor3d::shader::RsmConfigData::declare</qualifiedname>
         <param>
-          <type>sdw::ShaderWriter &amp;</type>
-          <declname>writer</declname>
+          <type><ref refid="da/dab/a01362_1a456f43ef4580c9527b0e71aa45a237ee" kindref="member">SubmeshFlags</ref></type>
+          <declname>submeshFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dab/a01362_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
+          <declname>programFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dab/a01362_1af8308e78be327186fc4533308ee5cd19" kindref="member">ShaderFlags</ref></type>
+          <declname>shaderFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dab/a01362_1ab813dd8c4ac91695c9ba9e13a16b89d1" kindref="member">FilteredTextureFlags</ref></type>
+          <declname>textureFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dab/a01362_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref></type>
+          <declname>passFlags</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>hasTextures</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -145,7 +481,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="31" column="32"/>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="98" column="31"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -154,7 +490,7 @@
     </detaileddescription>
     <inheritancegraph>
       <node id="1">
-        <label>castor3d::shader::RsmConfigData</label>
+        <label>castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;</label>
         <link refid="d1/dd4/a04958"/>
         <childnode refid="2" relation="public-inheritance">
         </childnode>
@@ -165,7 +501,7 @@
     </inheritancegraph>
     <collaborationgraph>
       <node id="1">
-        <label>castor3d::shader::RsmConfigData</label>
+        <label>castor3d::shader::FragmentSurfaceT&lt; FlagT &gt;</label>
         <link refid="d1/dd4/a04958"/>
         <childnode refid="2" relation="public-inheritance">
         </childnode>
@@ -174,16 +510,32 @@
         <label>sdw::StructInstance</label>
       </node>
     </collaborationgraph>
-    <location file="Shader/Ubos/RsmConfigUbo.hpp" line="22" column="1" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="24" bodyend="41"/>
+    <location file="Shader/Shaders/GlslSurface.hpp" line="88" column="1" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="90" bodyend="150"/>
     <listofallmembers>
-      <member refid="d1/dd4/a04958_1a61a731d489fda36272a89a42c5cd0d05" prot="public" virt="non-virtual"><scope>castor3d::shader::RsmConfigData</scope><name>declare</name></member>
-      <member refid="d1/dd4/a04958_1a5e9fd629c9074786dcde7a70a25a0595" prot="public" virt="non-virtual"><scope>castor3d::shader::RsmConfigData</scope><name>makeType</name></member>
-      <member refid="d1/dd4/a04958_1a1533166fce74bd74f4e0f6597e0a0e75" prot="public" virt="non-virtual"><scope>castor3d::shader::RsmConfigData</scope><name>RsmConfigData</name></member>
-      <member refid="d1/dd4/a04958_1ae7e61311101f1bffe630d6c8ec2d579b" prot="public" virt="non-virtual"><scope>castor3d::shader::RsmConfigData</scope><name>rsmIndex</name></member>
-      <member refid="d1/dd4/a04958_1adaae6164149ff01a442a2975a621e0c2" prot="public" virt="non-virtual"><scope>castor3d::shader::RsmConfigData</scope><name>rsmIntensity</name></member>
-      <member refid="d1/dd4/a04958_1a5378e4b40341dc589d50594305cac747" prot="public" virt="non-virtual"><scope>castor3d::shader::RsmConfigData</scope><name>rsmRMax</name></member>
-      <member refid="d1/dd4/a04958_1a2ef0b869eed5dc41b1e63202220b500f" prot="public" virt="non-virtual"><scope>castor3d::shader::RsmConfigData</scope><name>rsmSampleCount</name></member>
-      <member refid="d1/dd4/a04958_1ad276d9c141bf10db90f3d0a21fc4b95e" prot="public" virt="non-virtual"><scope>castor3d::shader::RsmConfigData</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="d1/dd4/a04958_1a1ae31ecdd6529ec1298721b36d94f521" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>bitangent</name></member>
+      <member refid="d1/dd4/a04958_1aebaf9636ff9342fdbf18437a01ce56ce" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>colour</name></member>
+      <member refid="d1/dd4/a04958_1ac7dab7c9f956bd17377a12dc8ec92fcf" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>computeTangentSpace</name></member>
+      <member refid="d1/dd4/a04958_1ab65b641dcc6d7c4f9451962c07273b64" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>computeTangentSpace</name></member>
+      <member refid="d1/dd4/a04958_1a708dcf101c2ea68514cbc2dbf28b8343" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>computeTangentSpace</name></member>
+      <member refid="d1/dd4/a04958_1a8193140f413de33070733862130c44f9" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>computeVelocity</name></member>
+      <member refid="d1/dd4/a04958_1a85cbd7adf9d98b169fc902c5f0e84cd7" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>curPosition</name></member>
+      <member refid="d1/dd4/a04958_1ae920008654b7998f5a182f94ec5fe17a" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>FragmentSurfaceT</name></member>
+      <member refid="d1/dd4/a04958_1a39f9d2d2dd573ef34bac311bf64eff08" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>getVelocity</name></member>
+      <member refid="d1/dd4/a04958_1a861f0c5edb7b09ef661a306912965080" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>instanceId</name></member>
+      <member refid="d1/dd4/a04958_1ad6e4f0fd6294848a2a007e9187102d8e" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>makeIOType</name></member>
+      <member refid="d1/dd4/a04958_1ae8f98464d85948e184a60ce59a3462a7" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>nodeId</name></member>
+      <member refid="d1/dd4/a04958_1adc28a56d9039a84ab12907386f0ac135" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>normal</name></member>
+      <member refid="d1/dd4/a04958_1a38989e06df6acb1aaabfc8acd08a084d" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>prvPosition</name></member>
+      <member refid="d1/dd4/a04958_1a1212b64be1ed116a1fbbd9d5501979a1" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="d1/dd4/a04958_1ad8de92a8c13ebaec3f79c53e885db9ef" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>tangent</name></member>
+      <member refid="d1/dd4/a04958_1a0ebc4e507505f10a560739718e7987f5" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>tangentSpaceFragPosition</name></member>
+      <member refid="d1/dd4/a04958_1a1c18269ce39b8e9fe84af651fe628f51" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>tangentSpaceViewPosition</name></member>
+      <member refid="d1/dd4/a04958_1ac94d313073975881adab72f2fd7a1e38" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>texture0</name></member>
+      <member refid="d1/dd4/a04958_1a1a14c10cc98a3aedac1ece848e549915" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>texture1</name></member>
+      <member refid="d1/dd4/a04958_1a63ce7f35be8c14cf213ae0585d4426bd" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>texture2</name></member>
+      <member refid="d1/dd4/a04958_1a3fd66f133921e3eb2f057761ed88d818" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>texture3</name></member>
+      <member refid="d1/dd4/a04958_1a93a5c6877bccc34fe02a2de8f8eeb8c4" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>viewPosition</name></member>
+      <member refid="d1/dd4/a04958_1a5b19c3b5337a11c796c547a63c5a4d64" prot="public" virt="non-virtual"><scope>castor3d::shader::FragmentSurfaceT</scope><name>worldPosition</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

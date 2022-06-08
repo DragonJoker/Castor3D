@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d5/dd8/a02802" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TextureFlagsId</compoundname>
+    <includes local="no">MaterialModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d5/dd8/a02802_1ad57186504176a62f6e78d36337fb9221" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref></type>
+        <definition>TextureFlags castor3d::TextureFlagsId::flags</definition>
+        <argsstring></argsstring>
+        <name>flags</name>
+        <qualifiedname>castor3d::TextureFlagsId::flags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/MaterialModule.hpp" line="94" column="14" bodyfile="Material/MaterialModule.hpp" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dd8/a02802_1add8db50fa1f749d90e7950caa4c691e8" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureFlagsId::id</definition>
+        <argsstring></argsstring>
+        <name>id</name>
+        <qualifiedname>castor3d::TextureFlagsId::id</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/MaterialModule.hpp" line="95" column="10" bodyfile="Material/MaterialModule.hpp" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Material/MaterialModule.hpp" line="92" column="1" bodyfile="Material/MaterialModule.hpp" bodystart="93" bodyend="96"/>
+    <listofallmembers>
+      <member refid="d5/dd8/a02802_1ad57186504176a62f6e78d36337fb9221" prot="public" virt="non-virtual"><scope>castor3d::TextureFlagsId</scope><name>flags</name></member>
+      <member refid="d5/dd8/a02802_1add8db50fa1f749d90e7950caa4c691e8" prot="public" virt="non-virtual"><scope>castor3d::TextureFlagsId</scope><name>id</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

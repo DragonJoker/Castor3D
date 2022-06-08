@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::VkStructure Struct Reference</title>
+<title>Castor3D: castor3d::BrdfPrefilter Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,70 +42,122 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dc/df4/a01401.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d4/dc4/a03938.html">VkStructure</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d4/dc4/a03938.html">BrdfPrefilter</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="../../d0/ddf/a03935.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">castor3d::VkStructure Struct Reference</div></div>
+  <div class="headertitle"><div class="title">castor3d::BrdfPrefilter Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;RenderDevice.hpp&gt;</code></p>
-<div class="dynheader">
-Collaboration diagram for castor3d::VkStructure:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../d0/d60/a03936.png" border="0" usemap="#acastor3d_1_1VkStructure_coll__map" alt="Collaboration graph"/></div>
-<map name="acastor3d_1_1VkStructure_coll__map" id="acastor3d_1_1VkStructure_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,155,32"/>
-</map>
-<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
+<p><code>#include &lt;BrdfPrefilter.hpp&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:acf8f57a16b643a808dbeca0acf8523fb"><td class="memItemLeft" align="right" valign="top">VkStructureType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/dc4/a03938.html#acf8f57a16b643a808dbeca0acf8523fb">sType</a></td></tr>
-<tr class="separator:acf8f57a16b643a808dbeca0acf8523fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac9f55a1f3121add5683fba08e1714611"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d4/dc4/a03938.html">VkStructure</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/dc4/a03938.html#ac9f55a1f3121add5683fba08e1714611">pNext</a></td></tr>
-<tr class="separator:ac9f55a1f3121add5683fba08e1714611"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:aef14839f4241b5e7a0055ef37a76af2f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/dc4/a03938.html#aef14839f4241b5e7a0055ef37a76af2f">BrdfPrefilter</a> (<a class="el" href="../../d9/db1/a02718.html">Engine</a> &amp;engine, <a class="el" href="../../df/d75/a04010.html">RenderDevice</a> const &amp;device, castor::Size const &amp;size, ashes::ImageView const &amp;dstTexture)</td></tr>
+<tr class="memdesc:aef14839f4241b5e7a0055ef37a76af2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../d4/dc4/a03938.html#aef14839f4241b5e7a0055ef37a76af2f">More...</a><br /></td></tr>
+<tr class="separator:aef14839f4241b5e7a0055ef37a76af2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b4b4822a0f66df9fbc8329b644cbb62"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/dc4/a03938.html#a3b4b4822a0f66df9fbc8329b644cbb62">render</a> (<a class="el" href="../../d2/dc1/a03994.html">QueueData</a> const &amp;queueData)</td></tr>
+<tr class="memdesc:a3b4b4822a0f66df9fbc8329b644cbb62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the convoluted BRDF.  <a href="../../d4/dc4/a03938.html#a3b4b4822a0f66df9fbc8329b644cbb62">More...</a><br /></td></tr>
+<tr class="separator:a3b4b4822a0f66df9fbc8329b644cbb62"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="ac9f55a1f3121add5683fba08e1714611" name="ac9f55a1f3121add5683fba08e1714611"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac9f55a1f3121add5683fba08e1714611">&#9670;&nbsp;</a></span>pNext</h2>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aef14839f4241b5e7a0055ef37a76af2f" name="aef14839f4241b5e7a0055ef37a76af2f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef14839f4241b5e7a0055ef37a76af2f">&#9670;&nbsp;</a></span>BrdfPrefilter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::BrdfPrefilter::BrdfPrefilter </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d9/db1/a02718.html">Engine</a> &amp;&#160;</td>
+          <td class="paramname"><em>engine</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../df/d75/a04010.html">RenderDevice</a> const &amp;&#160;</td>
+          <td class="paramname"><em>device</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::Size const &amp;&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ashes::ImageView const &amp;&#160;</td>
+          <td class="paramname"><em>dstTexture</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">engine</td><td>The engine. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">device</td><td>The current device. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>The render dimensions. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dstTexture</td><td>The cube texture destination. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a3b4b4822a0f66df9fbc8329b644cbb62" name="a3b4b4822a0f66df9fbc8329b644cbb62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b4b4822a0f66df9fbc8329b644cbb62">&#9670;&nbsp;</a></span>render()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../d4/dc4/a03938.html">VkStructure</a>* castor3d::VkStructure::pNext</td>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::BrdfPrefilter::render </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d2/dc1/a03994.html">QueueData</a> const &amp;&#160;</td>
+          <td class="paramname"><em>queueData</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<a id="acf8f57a16b643a808dbeca0acf8523fb" name="acf8f57a16b643a808dbeca0acf8523fb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acf8f57a16b643a808dbeca0acf8523fb">&#9670;&nbsp;</a></span>sType</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">VkStructureType castor3d::VkStructure::sType</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
+<p>Computes the convoluted BRDF. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">queueData</td><td>The queue receiving the GPU commands. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
-<li>Render/<a class="el" href="../../d5/d72/a00803.html">RenderDevice.hpp</a></li>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>Render/PBR/<a class="el" href="../../d5/d12/a00794.html">BrdfPrefilter.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 15:34:56 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:47 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

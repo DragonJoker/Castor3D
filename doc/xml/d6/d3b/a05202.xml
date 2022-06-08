@@ -1,83 +1,102 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="d6/d3b/a05202" kind="class" language="C++" prot="public">
-    <compoundname>castor::TextWriter&lt; castor3d::TextOverlay &gt;</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::TextOverlay &gt;</basecompoundref>
-    <includes local="no">TextTextOverlay.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d6/d3b/a05202_1a06e0869ea45c6a670d019ffe9cf35102" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor::TextWriter&lt; castor3d::TextOverlay &gt;::TextWriter</definition>
-        <argsstring>(castor::String const &amp;tabs)</argsstring>
-        <name>TextWriter</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::TextOverlay &gt;::TextWriter</qualifiedname>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>tabs</declname>
-        </param>
+  <compounddef id="d6/d3b/a05202" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::VoxelizerUboConfiguration</compoundname>
+    <includes local="no">VoxelizerUbo.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/d3b/a05202_1a6fff2495e0dfdea307608406ec05eea8" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::VoxelizerUboConfiguration::gridConv</definition>
+        <argsstring></argsstring>
+        <name>gridConv</name>
+        <qualifiedname>castor3d::VoxelizerUboConfiguration::gridConv</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para><itemizedlist>
+<listitem><para>float worldToGrid: Factor from world position to grid position</para>
+</listitem><listitem><para>float gridToWorld: Factor from grid position to world position</para>
+</listitem><listitem><para>float gridToClip: Factor from grid position to clip position</para>
+</listitem><listitem><para>float clipToGrid: Factor from clip position to grid position </para>
+</listitem></itemizedlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Text/TextTextOverlay.hpp" line="18" column="18"/>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="69" column="17" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="69" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="d6/d3b/a05202_1a8e0253104f1fc83c228ee4f1e36c3654" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor::TextWriter&lt; castor3d::TextOverlay &gt;::operator()</definition>
-        <argsstring>(castor3d::TextOverlay const &amp;overlay, castor::StringStream &amp;file) override</argsstring>
-        <name>operator()</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::TextOverlay &gt;::operator()</qualifiedname>
-        <param>
-          <type><ref refid="d9/df0/a03598" kindref="compound">castor3d::TextOverlay</ref> const &amp;</type>
-          <declname>overlay</declname>
-        </param>
-        <param>
-          <type>castor::StringStream &amp;</type>
-          <declname>file</declname>
-        </param>
+      <memberdef kind="variable" id="d6/d3b/a05202_1afefd0def3cb5cbe45e45688e662cad1e" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::VoxelizerUboConfiguration::radiance</definition>
+        <argsstring></argsstring>
+        <name>radiance</name>
+        <qualifiedname>castor3d::VoxelizerUboConfiguration::radiance</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para><itemizedlist>
+<listitem><para>float radianceMaxDistance;</para>
+</listitem><listitem><para>float radianceMips;</para>
+</listitem><listitem><para>uint radianceNumCones;</para>
+</listitem><listitem><para>float radianceNumConesInv; </para>
+</listitem></itemizedlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Text/TextTextOverlay.hpp" line="19" column="14"/>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="76" column="17" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d3b/a05202_1a9dcf742f1b8b5b2080173b5385165654" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::VoxelizerUboConfiguration::other</definition>
+        <argsstring></argsstring>
+        <name>other</name>
+        <qualifiedname>castor3d::VoxelizerUboConfiguration::other</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><itemizedlist>
+<listitem><para>vec3 gridCenter: Center of the voxel grid, in world space units</para>
+</listitem><listitem><para>float rayStepSize; </para>
+</listitem></itemizedlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="81" column="17" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d3b/a05202_1ac19ca18f746ef4eb1227f443b4902ae7" prot="public" static="no" mutable="no">
+        <type>castor::Point4ui</type>
+        <definition>castor::Point4ui castor3d::VoxelizerUboConfiguration::status</definition>
+        <argsstring></argsstring>
+        <name>status</name>
+        <qualifiedname>castor3d::VoxelizerUboConfiguration::status</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><itemizedlist>
+<listitem><para>uint enabled;</para>
+</listitem><listitem><para>uint conservativeRasterization;</para>
+</listitem><listitem><para>uint enableOcclusion;</para>
+</listitem><listitem><para>uint enableSecondaryBounce; </para>
+</listitem></itemizedlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="88" column="18" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="88" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="2">
-        <label>TextWriterT&lt; castor3d::TextOverlay &gt;</label>
-      </node>
-      <node id="1">
-        <label>castor::TextWriter&lt; castor3d::TextOverlay &gt;</label>
-        <link refid="d6/d3b/a05202"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="2">
-        <label>TextWriterT&lt; castor3d::TextOverlay &gt;</label>
-      </node>
-      <node id="1">
-        <label>castor::TextWriter&lt; castor3d::TextOverlay &gt;</label>
-        <link refid="d6/d3b/a05202"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Text/TextTextOverlay.hpp" line="14" column="1" bodyfile="Text/TextTextOverlay.hpp" bodystart="16" bodyend="21"/>
+    <location file="Shader/Ubos/VoxelizerUbo.hpp" line="61" column="1" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="62" bodyend="89"/>
     <listofallmembers>
-      <member refid="d6/d3b/a05202_1a8e0253104f1fc83c228ee4f1e36c3654" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::TextOverlay &gt;</scope><name>operator()</name></member>
-      <member refid="d6/d3b/a05202_1a06e0869ea45c6a670d019ffe9cf35102" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::TextOverlay &gt;</scope><name>TextWriter</name></member>
+      <member refid="d6/d3b/a05202_1a6fff2495e0dfdea307608406ec05eea8" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUboConfiguration</scope><name>gridConv</name></member>
+      <member refid="d6/d3b/a05202_1a9dcf742f1b8b5b2080173b5385165654" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUboConfiguration</scope><name>other</name></member>
+      <member refid="d6/d3b/a05202_1afefd0def3cb5cbe45e45688e662cad1e" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUboConfiguration</scope><name>radiance</name></member>
+      <member refid="d6/d3b/a05202_1ac19ca18f746ef4eb1227f443b4902ae7" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUboConfiguration</scope><name>status</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

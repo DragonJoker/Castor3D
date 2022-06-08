@@ -1,71 +1,100 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="d4/d72/a03886" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::RenderQuadBuilder</compoundname>
-    <basecompoundref refid="d0/d61/a03858" prot="public" virt="non-virtual">castor3d::RenderQuadBuilderT&lt; rq::Config, RenderQuadBuilder &gt;</basecompoundref>
-    <includes local="no">RenderQuad.hpp</includes>
+  <compounddef id="d4/d72/a03886" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::GaussianBlur::Configuration</compoundname>
+    <includes local="no">GaussianBlur.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/d72/a03886_1ac9c17b03167cc405fa7142669239b6c4" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::GaussianBlur::Configuration::textureSize</definition>
+        <argsstring></argsstring>
+        <name>textureSize</name>
+        <qualifiedname>castor3d::GaussianBlur::Configuration::textureSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="171" column="17" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="171" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d72/a03886_1a50c8573932f8195cfdea8163aafcf041" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::GaussianBlur::Configuration::blurCoeffsCount</definition>
+        <argsstring></argsstring>
+        <name>blurCoeffsCount</name>
+        <qualifiedname>castor3d::GaussianBlur::Configuration::blurCoeffsCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="172" column="10" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="172" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d72/a03886_1aa675748b11ce22d505c09ac77a9e0200" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::GaussianBlur::Configuration::dump</definition>
+        <argsstring></argsstring>
+        <name>dump</name>
+        <qualifiedname>castor3d::GaussianBlur::Configuration::dump</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="173" column="10" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="173" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d72/a03886_1a0229b8b3c8457af2659f43bfcee26663" prot="public" static="no" mutable="no">
+        <type>std::array&lt; castor::Point4f, <ref refid="dd/d94/a03882_1af2348a695a12bfe432775545bf4838d3" kindref="member">GaussianBlur::MaxCoefficients</ref>/4u &gt;</type>
+        <definition>std::array&lt; castor::Point4f, GaussianBlur::MaxCoefficients / 4u &gt; castor3d::GaussianBlur::Configuration::blurCoeffs</definition>
+        <argsstring></argsstring>
+        <name>blurCoeffs</name>
+        <qualifiedname>castor3d::GaussianBlur::Configuration::blurCoeffs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="174" column="12" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="174" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="2">
-        <label>castor3d::RenderQuadBuilderT&lt; rq::Config, RenderQuadBuilder &gt;</label>
-        <link refid="d0/d61/a03858"/>
-        <childnode refid="3" relation="template-instance">
-          <edgelabel>&lt; rq::Config, RenderQuadBuilder &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1">
-        <label>castor3d::RenderQuadBuilder</label>
-        <link refid="d4/d72/a03886"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3">
-        <label>castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;</label>
-        <link refid="d0/d61/a03858"/>
-      </node>
-    </inheritancegraph>
     <collaborationgraph>
+      <node id="4">
+        <label>T</label>
+      </node>
       <node id="2">
-        <label>castor3d::RenderQuadBuilderT&lt; rq::Config, RenderQuadBuilder &gt;</label>
-        <link refid="d0/d61/a03858"/>
-        <childnode refid="3" relation="usage">
-          <edgelabel>m_config</edgelabel>
-        </childnode>
-        <childnode refid="4" relation="template-instance">
-          <edgelabel>&lt; rq::Config, RenderQuadBuilder &gt;</edgelabel>
+        <label>std::array&lt; castor::Point4f, GaussianBlur::MaxCoefficients/4u &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; castor::Point4f, GaussianBlur::MaxCoefficients/4u &gt;</edgelabel>
         </childnode>
       </node>
       <node id="1">
-        <label>castor3d::RenderQuadBuilder</label>
+        <label>castor3d::GaussianBlur::Configuration</label>
         <link refid="d4/d72/a03886"/>
-        <childnode refid="2" relation="public-inheritance">
+        <childnode refid="2" relation="usage">
+          <edgelabel>blurCoeffs</edgelabel>
         </childnode>
       </node>
-      <node id="4">
-        <label>castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;</label>
-        <link refid="d0/d61/a03858"/>
-      </node>
       <node id="3">
-        <label>castor3d::rq::ConfigT&lt; WrapperT &gt;</label>
-        <link refid="d0/d34/a03874"/>
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
       </node>
     </collaborationgraph>
-    <location file="Render/Passes/RenderQuad.hpp" line="758" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="760" bodyend="761"/>
+    <location file="Render/Passes/GaussianBlur.hpp" line="169" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="170" bodyend="175"/>
     <listofallmembers>
-      <member refid="d0/d61/a03858_1a2d157c5fa13f40f5fae84a33c6f26365" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>binding</name></member>
-      <member refid="d0/d61/a03858_1a4c77483c0d73db74aae5fe59e03a6d54" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>binding</name></member>
-      <member refid="d0/d61/a03858_1ac1edfedf55abf1b02776b6ee9719482c" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>binding</name></member>
-      <member refid="d0/d61/a03858_1a970a0bf93dfb36ba6f349bd07725e521" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>bindings</name></member>
-      <member refid="d0/d61/a03858_1a062561625f7ff24ed0cfa65f3bfc8688" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>blendMode</name></member>
-      <member refid="d0/d61/a03858_1a4a58abd503ed0bff1600be8605477258" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>build</name></member>
-      <member refid="d0/d61/a03858_1aa7fc146147deb53c51c646122d66eef6" prot="protected" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>m_config</name></member>
-      <member refid="d0/d61/a03858_1a2b7159354bb4ab5f87da28299e2e21da" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>range</name></member>
-      <member refid="d0/d61/a03858_1a13037f2937494dc1ab0f713225aeedd6" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>RenderQuadBuilderT</name></member>
-      <member refid="d0/d61/a03858_1a4a4f339fd319b5c843eb831cbe6ca153" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>tex3DResult</name></member>
-      <member refid="d0/d61/a03858_1a12f59a1dbb62bd1cc2fc3d26db8b1897" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>texcoordConfig</name></member>
+      <member refid="d4/d72/a03886_1a0229b8b3c8457af2659f43bfcee26663" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::Configuration</scope><name>blurCoeffs</name></member>
+      <member refid="d4/d72/a03886_1a50c8573932f8195cfdea8163aafcf041" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::Configuration</scope><name>blurCoeffsCount</name></member>
+      <member refid="d4/d72/a03886_1aa675748b11ce22d505c09ac77a9e0200" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::Configuration</scope><name>dump</name></member>
+      <member refid="d4/d72/a03886_1ac9c17b03167cc405fa7142669239b6c4" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::Configuration</scope><name>textureSize</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

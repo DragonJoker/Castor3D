@@ -1,100 +1,66 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="d6/dd6/a04338" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::EquirectangularToCube</compoundname>
-    <basecompoundref refid="d7/d74/a04346" prot="private" virt="non-virtual">castor3d::RenderCube</basecompoundref>
-    <includes local="no">EquirectangularToCube.hpp</includes>
-    <innerclass refid="d4/dcb/a04342" prot="private">castor3d::EquirectangularToCube::FrameBuffer</innerclass>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d6/dd6/a04338_1a4bf0311628e058cc502b380fbbc1655f" prot="private" static="no" mutable="no">
-        <type>std::array&lt; FrameBuffer, 6u &gt;</type>
-        <definition>std::array&lt; FrameBuffer, 6u &gt; castor3d::EquirectangularToCube::m_frameBuffers</definition>
+  <compounddef id="d6/dd6/a04338" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::OpaqueResolvePass::Program</compoundname>
+    <includes local="no">OpaqueResolvePass.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/dd6/a04338_1ad5e947282ef5b4e50172d20b6fda44f7" prot="public" static="no" mutable="no">
+        <type><ref refid="d6/d14/a04858" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::OpaqueResolvePass::Program::vertexShader</definition>
         <argsstring></argsstring>
-        <name>m_frameBuffers</name>
-        <qualifiedname>castor3d::EquirectangularToCube::m_frameBuffers</qualifiedname>
+        <name>vertexShader</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::Program::vertexShader</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/EquirectangularToCube.hpp" line="31" column="12" bodyfile="Render/ToTexture/EquirectangularToCube.hpp" bodystart="31" bodyend="-1"/>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="36" column="14" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="36" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/dd6/a04338_1ae9cd9a4fb5116e3ac2781cbc89932666" prot="private" static="no" mutable="no">
-        <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const  &amp;</type>
-        <definition>RenderDevice const&amp; castor3d::EquirectangularToCube::m_device</definition>
+      <memberdef kind="variable" id="d6/dd6/a04338_1a667b786d6cfdeb78076e233b421dbd71" prot="public" static="no" mutable="no">
+        <type><ref refid="d6/d14/a04858" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::OpaqueResolvePass::Program::pixelShader</definition>
         <argsstring></argsstring>
-        <name>m_device</name>
-        <qualifiedname>castor3d::EquirectangularToCube::m_device</qualifiedname>
+        <name>pixelShader</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::Program::pixelShader</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/EquirectangularToCube.hpp" line="32" column="21" bodyfile="Render/ToTexture/EquirectangularToCube.hpp" bodystart="32" bodyend="-1"/>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="37" column="14" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="37" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d6/dd6/a04338_1a38157871c0f4e721522f882af12716f9" prot="private" static="no" mutable="no">
-        <type>ashes::CommandBufferPtr</type>
-        <definition>ashes::CommandBufferPtr castor3d::EquirectangularToCube::m_commandBuffer</definition>
+      <memberdef kind="variable" id="d6/dd6/a04338_1ae3ad00ae6e3f83711775d2f719ea45be" prot="public" static="no" mutable="no">
+        <type>ashes::PipelineShaderStageCreateInfoArray</type>
+        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::OpaqueResolvePass::Program::stages</definition>
         <argsstring></argsstring>
-        <name>m_commandBuffer</name>
-        <qualifiedname>castor3d::EquirectangularToCube::m_commandBuffer</qualifiedname>
+        <name>stages</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::Program::stages</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/EquirectangularToCube.hpp" line="33" column="25" bodyfile="Render/ToTexture/EquirectangularToCube.hpp" bodystart="33" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d6/dd6/a04338_1a846628d422e5669c05fc6ace76c4fe82" prot="private" static="no" mutable="no">
-        <type>ashes::ImageView const  &amp;</type>
-        <definition>ashes::ImageView const&amp; castor3d::EquirectangularToCube::m_view</definition>
-        <argsstring></argsstring>
-        <name>m_view</name>
-        <qualifiedname>castor3d::EquirectangularToCube::m_view</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ToTexture/EquirectangularToCube.hpp" line="34" column="25" bodyfile="Render/ToTexture/EquirectangularToCube.hpp" bodystart="34" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d6/dd6/a04338_1a8234017deeff5ab377fc07907362887e" prot="private" static="no" mutable="no">
-        <type>ashes::RenderPassPtr</type>
-        <definition>ashes::RenderPassPtr castor3d::EquirectangularToCube::m_renderPass</definition>
-        <argsstring></argsstring>
-        <name>m_renderPass</name>
-        <qualifiedname>castor3d::EquirectangularToCube::m_renderPass</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ToTexture/EquirectangularToCube.hpp" line="35" column="22" bodyfile="Render/ToTexture/EquirectangularToCube.hpp" bodystart="35" bodyend="-1"/>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="38" column="43" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="38" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d6/dd6/a04338_1a08bb82ddda0e8dd0e0a81216032bee12" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="d6/dd6/a04338_1a5a70852276f7a3e3d1bf7303e844a542" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
-        <definition>castor3d::EquirectangularToCube::EquirectangularToCube</definition>
-        <argsstring>(TextureLayout const &amp;equiRectangular, RenderDevice const &amp;device, TextureLayout const &amp;target)</argsstring>
-        <name>EquirectangularToCube</name>
-        <qualifiedname>castor3d::EquirectangularToCube::EquirectangularToCube</qualifiedname>
+        <definition>castor3d::OpaqueResolvePass::Program::Program</definition>
+        <argsstring>(ShaderModule vtxShader, ShaderModule pxlShader)</argsstring>
+        <name>Program</name>
+        <qualifiedname>castor3d::OpaqueResolvePass::Program::Program</qualifiedname>
         <param>
-          <type><ref refid="d3/d99/a02942" kindref="compound">TextureLayout</ref> const &amp;</type>
-          <declname>equiRectangular</declname>
+          <type><ref refid="d6/d14/a04858" kindref="compound">ShaderModule</ref></type>
+          <declname>vtxShader</declname>
         </param>
         <param>
-          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type><ref refid="d3/d99/a02942" kindref="compound">TextureLayout</ref> const &amp;</type>
-          <declname>target</declname>
+          <type><ref refid="d6/d14/a04858" kindref="compound">ShaderModule</ref></type>
+          <declname>pxlShader</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -102,108 +68,63 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/ToTexture/EquirectangularToCube.hpp" line="20" column="1"/>
-      </memberdef>
-      <memberdef kind="function" id="d6/dd6/a04338_1a2da4513144f02ad4f1814f439dd59622" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::EquirectangularToCube::render</definition>
-        <argsstring>(QueueData const &amp;queueData)</argsstring>
-        <name>render</name>
-        <qualifiedname>castor3d::EquirectangularToCube::render</qualifiedname>
-        <param>
-          <type><ref refid="dc/d61/a03950" kindref="compound">QueueData</ref> const &amp;</type>
-          <declname>queueData</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/ToTexture/EquirectangularToCube.hpp" line="23" column="6"/>
+        <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="29" column="1" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="29" bodyend="34"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="1">
-        <label>castor3d::EquirectangularToCube</label>
-        <link refid="d6/dd6/a04338"/>
-        <childnode refid="2" relation="private-inheritance">
-        </childnode>
-      </node>
-      <node id="2">
-        <label>castor3d::RenderCube</label>
-        <link refid="d7/d74/a04346"/>
-      </node>
-    </inheritancegraph>
     <collaborationgraph>
-      <node id="9">
+      <node id="7">
         <label>T</label>
       </node>
       <node id="1">
-        <label>castor3d::EquirectangularToCube</label>
+        <label>castor3d::OpaqueResolvePass::Program</label>
         <link refid="d6/dd6/a04338"/>
-        <childnode refid="2" relation="private-inheritance">
+        <childnode refid="2" relation="usage">
+          <edgelabel>pixelShader</edgelabel>
+          <edgelabel>vertexShader</edgelabel>
         </childnode>
-      </node>
-      <node id="7">
-        <label>castor3d::QueuesData</label>
-        <link refid="de/d88/a03958"/>
       </node>
       <node id="2">
-        <label>castor3d::RenderCube</label>
-        <link refid="d7/d74/a04346"/>
+        <label>castor3d::ShaderModule</label>
+        <link refid="d6/d14/a04858"/>
         <childnode refid="3" relation="usage">
-          <edgelabel>m_device</edgelabel>
+          <edgelabel>name</edgelabel>
+          <edgelabel>source</edgelabel>
         </childnode>
-      </node>
-      <node id="3">
-        <label>castor3d::RenderDevice</label>
-        <link refid="df/de5/a03966"/>
-        <childnode refid="4" relation="usage">
-          <edgelabel>renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="6" relation="usage">
-          <edgelabel>queueFamilies</edgelabel>
+        <childnode refid="5" relation="usage">
+          <edgelabel>shader</edgelabel>
         </childnode>
       </node>
       <node id="4">
-        <label>castor3d::RenderSystem</label>
-        <link refid="d7/d34/a04078"/>
-        <childnode refid="5" relation="public-inheritance">
-        </childnode>
+        <label>std::basic_string&lt; Char &gt;</label>
       </node>
-      <node id="5">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="8">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="9" relation="usage">
-          <edgelabel>elements</edgelabel>
+      <node id="3">
+        <label>std::string</label>
+        <childnode refid="4" relation="public-inheritance">
         </childnode>
       </node>
       <node id="6">
-        <label>std::vector&lt; QueuesData &gt;</label>
+        <label>std::unique_ptr&lt; T &gt;</label>
         <childnode refid="7" relation="usage">
-          <edgelabel>elements</edgelabel>
+          <edgelabel>ptr</edgelabel>
         </childnode>
-        <childnode refid="8" relation="template-instance">
-          <edgelabel>&lt; QueuesData &gt;</edgelabel>
+      </node>
+      <node id="5">
+        <label>std::unique_ptr&lt; ast::Shader &gt;</label>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; ast::Shader &gt;</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Render/ToTexture/EquirectangularToCube.hpp" line="16" column="1" bodyfile="Render/ToTexture/EquirectangularToCube.hpp" bodystart="18" bodyend="36"/>
+    <location file="Render/Technique/Opaque/OpaqueResolvePass.hpp" line="27" column="1" bodyfile="Render/Technique/Opaque/OpaqueResolvePass.hpp" bodystart="28" bodyend="39"/>
     <listofallmembers>
-      <member refid="d6/dd6/a04338_1a08bb82ddda0e8dd0e0a81216032bee12" prot="public" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>EquirectangularToCube</name></member>
-      <member refid="d6/dd6/a04338_1a38157871c0f4e721522f882af12716f9" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>m_commandBuffer</name></member>
-      <member refid="d6/dd6/a04338_1ae9cd9a4fb5116e3ac2781cbc89932666" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>m_device</name></member>
-      <member refid="d6/dd6/a04338_1a4bf0311628e058cc502b380fbbc1655f" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>m_frameBuffers</name></member>
-      <member refid="d6/dd6/a04338_1a8234017deeff5ab377fc07907362887e" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>m_renderPass</name></member>
-      <member refid="d6/dd6/a04338_1a846628d422e5669c05fc6ace76c4fe82" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>m_view</name></member>
-      <member refid="d6/dd6/a04338_1a2da4513144f02ad4f1814f439dd59622" prot="public" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>render</name></member>
+      <member refid="d6/dd6/a04338_1a667b786d6cfdeb78076e233b421dbd71" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::Program</scope><name>pixelShader</name></member>
+      <member refid="d6/dd6/a04338_1a5a70852276f7a3e3d1bf7303e844a542" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::Program</scope><name>Program</name></member>
+      <member refid="d6/dd6/a04338_1ae3ad00ae6e3f83711775d2f719ea45be" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::Program</scope><name>stages</name></member>
+      <member refid="d6/dd6/a04338_1ad5e947282ef5b4e50172d20b6fda44f7" prot="public" virt="non-virtual"><scope>castor3d::OpaqueResolvePass::Program</scope><name>vertexShader</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

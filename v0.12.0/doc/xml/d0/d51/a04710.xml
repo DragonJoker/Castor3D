@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d0/d51/a04710" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PassBuffer::RgbaColour</compoundname>
+    <includes local="no">PassBuffer.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/d51/a04710_1acdd636da650d4d66e301454ce13ab6d4" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::PassBuffer::RgbaColour::r</definition>
+        <argsstring></argsstring>
+        <name>r</name>
+        <qualifiedname>castor3d::PassBuffer::RgbaColour::r</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="48" column="7" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d51/a04710_1a679eeaa25a662bba6e0634c550750323" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::PassBuffer::RgbaColour::g</definition>
+        <argsstring></argsstring>
+        <name>g</name>
+        <qualifiedname>castor3d::PassBuffer::RgbaColour::g</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="49" column="7" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d51/a04710_1a5e32fac1d4e7a3a69534ae6eb98029b1" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::PassBuffer::RgbaColour::b</definition>
+        <argsstring></argsstring>
+        <name>b</name>
+        <qualifiedname>castor3d::PassBuffer::RgbaColour::b</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="50" column="7" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d51/a04710_1ab81c1e0d9372187cf62778ce92dfca6e" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::PassBuffer::RgbaColour::a</definition>
+        <argsstring></argsstring>
+        <name>a</name>
+        <qualifiedname>castor3d::PassBuffer::RgbaColour::a</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="51" column="7" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>4 components colour. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="46" column="1" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="47" bodyend="52"/>
+    <listofallmembers>
+      <member refid="d0/d51/a04710_1ab81c1e0d9372187cf62778ce92dfca6e" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::RgbaColour</scope><name>a</name></member>
+      <member refid="d0/d51/a04710_1a5e32fac1d4e7a3a69534ae6eb98029b1" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::RgbaColour</scope><name>b</name></member>
+      <member refid="d0/d51/a04710_1a679eeaa25a662bba6e0634c550750323" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::RgbaColour</scope><name>g</name></member>
+      <member refid="d0/d51/a04710_1acdd636da650d4d66e301454ce13ab6d4" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::RgbaColour</scope><name>r</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

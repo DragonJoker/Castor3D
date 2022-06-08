@@ -1,4 +1,5 @@
-<map id="castor3d::TexturedQuad" name="castor3d::TexturedQuad">
-<area shape="rect" id="node1" title="A quad with UV." alt="" coords="5,109,167,136"/>
-<area shape="rect" id="node2" href="$d2/dce/a04002.html" title=" " alt="" coords="5,5,167,47"/>
+<map id="castor3d::QueueDataWrapper" name="castor3d::QueueDataWrapper">
+<area shape="rect" id="node1" title=" " alt="" coords="5,184,200,211"/>
+<area shape="rect" id="node2" href="$d2/dce/a04002.html" title=" " alt="" coords="51,5,203,32"/>
+<area shape="rect" id="node3" href="$d2/dc1/a03994.html" title=" " alt="" coords="147,95,293,121"/>
 </map>

@@ -5,7 +5,7 @@
     <includes local="no">StagingData.hpp</includes>
       <sectiondef kind="private-attrib">
       <memberdef kind="variable" id="d9/d7f/a03278_1a8ad21a3b851bc0617b26076087a1e931" prot="private" static="no" mutable="no">
-        <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <type><ref refid="df/d75/a04010" kindref="compound">RenderDevice</ref> const  &amp;</type>
         <definition>RenderDevice const&amp; castor3d::StagingData::m_device</definition>
         <argsstring></argsstring>
         <name>m_device</name>
@@ -77,13 +77,13 @@
       </sectiondef>
       <sectiondef kind="public-func">
       <memberdef kind="function" id="d9/d7f/a03278_1a52d243d03afda9bf65467169e87eb19f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
         <definition>C3D_API castor3d::StagingData::StagingData</definition>
         <argsstring>(RenderDevice const &amp;device, std::string const &amp;debugName)</argsstring>
         <name>StagingData</name>
         <qualifiedname>castor3d::StagingData::StagingData</qualifiedname>
         <param>
-          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <type><ref refid="df/d75/a04010" kindref="compound">RenderDevice</ref> const &amp;</type>
           <declname>device</declname>
         </param>
         <param>
@@ -99,7 +99,7 @@
         <location file="Miscellaneous/StagingData.hpp" line="19" column="9"/>
       </memberdef>
       <memberdef kind="function" id="d9/d7f/a03278_1a41b600ffee8ceed2a7ee7587dc28ec3b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
         <definition>C3D_API void castor3d::StagingData::upload</definition>
         <argsstring>(void const *data, VkDeviceSize size, VkDeviceSize offset, ashes::BufferBase const &amp;buffer)</argsstring>
         <name>upload</name>
@@ -127,10 +127,10 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/StagingData.hpp" line="22" column="14"/>
-        <referencedby refid="d9/d7f/a03278_1ad0475f1bc41a4850f8bcf093fb542809" compoundref="d3/d29/a00419" startline="31" endline="39">upload</referencedby>
+        <referencedby refid="d9/d7f/a03278_1ad0475f1bc41a4850f8bcf093fb542809" compoundref="d4/da8/a00437" startline="31" endline="39">upload</referencedby>
       </memberdef>
       <memberdef kind="function" id="d9/d7f/a03278_1a26eb18ffc94a0087d3f766d8f1831f25" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
         <definition>C3D_API void castor3d::StagingData::uploadNoWait</definition>
         <argsstring>(void const *data, VkDeviceSize size, VkDeviceSize offset, ashes::BufferBase const &amp;buffer)</argsstring>
         <name>uploadNoWait</name>
@@ -158,7 +158,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/StagingData.hpp" line="26" column="14"/>
-        <referencedby refid="d9/d7f/a03278_1a4967c98fd019eb8e43e9c6aca22a0e37" compoundref="d3/d29/a00419" startline="41" endline="49">uploadNoWait</referencedby>
+        <referencedby refid="d9/d7f/a03278_1a4967c98fd019eb8e43e9c6aca22a0e37" compoundref="d4/da8/a00437" startline="41" endline="49">uploadNoWait</referencedby>
       </memberdef>
       <memberdef kind="function" id="d9/d7f/a03278_1ad0475f1bc41a4850f8bcf093fb542809" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>

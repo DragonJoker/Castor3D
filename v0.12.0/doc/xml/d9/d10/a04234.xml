@@ -1,0 +1,135 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d9/d10/a04234" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::LightPipelineConfig</compoundname>
+    <includes local="no">LightingPass.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/d10/a04234_1a562e34962310db64c33fdc5c69e63da7" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a773fcfeb825d3fe54eb4a3dce23bca11" kindref="member">PassTypeID</ref></type>
+        <definition>PassTypeID castor3d::LightPipelineConfig::passType</definition>
+        <argsstring></argsstring>
+        <name>passType</name>
+        <qualifiedname>castor3d::LightPipelineConfig::passType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightingPass.hpp" line="42" column="12" bodyfile="Render/Technique/Opaque/LightingPass.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d10/a04234_1a238e362f0439d6fa3c20e8f8ff7e9662" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref> const  &amp;</type>
+        <definition>SceneFlags const&amp; castor3d::LightPipelineConfig::sceneFlags</definition>
+        <argsstring></argsstring>
+        <name>sceneFlags</name>
+        <qualifiedname>castor3d::LightPipelineConfig::sceneFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightingPass.hpp" line="43" column="19" bodyfile="Render/Technique/Opaque/LightingPass.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d10/a04234_1a9d7fb29ee5a3f6826baa90138cdb7297" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+        <definition>LightType castor3d::LightPipelineConfig::lightType</definition>
+        <argsstring></argsstring>
+        <name>lightType</name>
+        <qualifiedname>castor3d::LightPipelineConfig::lightType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightingPass.hpp" line="44" column="11" bodyfile="Render/Technique/Opaque/LightingPass.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d10/a04234_1a7d61d58128b6eeb11fef82b386cddbad" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/df4/a01401_1a90275671c44e791e9556c4bed9033935" kindref="member">ShadowType</ref></type>
+        <definition>ShadowType castor3d::LightPipelineConfig::shadowType</definition>
+        <argsstring></argsstring>
+        <name>shadowType</name>
+        <qualifiedname>castor3d::LightPipelineConfig::shadowType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightingPass.hpp" line="45" column="12" bodyfile="Render/Technique/Opaque/LightingPass.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d10/a04234_1a266604eead9472ecd99b76600cf472d1" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::LightPipelineConfig::shadows</definition>
+        <argsstring></argsstring>
+        <name>shadows</name>
+        <qualifiedname>castor3d::LightPipelineConfig::shadows</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightingPass.hpp" line="46" column="6" bodyfile="Render/Technique/Opaque/LightingPass.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/d10/a04234_1a432abcb3f15bb7c85e9fee3d984c4af7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::LightPipelineConfig::LightPipelineConfig</definition>
+        <argsstring>(PassTypeID passType, SceneFlags const &amp;sceneFlags, Light const &amp;light)</argsstring>
+        <name>LightPipelineConfig</name>
+        <qualifiedname>castor3d::LightPipelineConfig::LightPipelineConfig</qualifiedname>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a773fcfeb825d3fe54eb4a3dce23bca11" kindref="member">PassTypeID</ref></type>
+          <declname>passType</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/df4/a01401_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref> const &amp;</type>
+          <declname>sceneFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/dba/a04502" kindref="compound">Light</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightingPass.hpp" line="36" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d10/a04234_1a318c0adba5e3815247db1e48d4802031" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor3d::LightPipelineConfig::makeHash</definition>
+        <argsstring>() const</argsstring>
+        <name>makeHash</name>
+        <qualifiedname>castor3d::LightPipelineConfig::makeHash</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightingPass.hpp" line="40" column="8"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Technique/Opaque/LightingPass.hpp" line="34" column="1" bodyfile="Render/Technique/Opaque/LightingPass.hpp" bodystart="35" bodyend="47"/>
+    <listofallmembers>
+      <member refid="d9/d10/a04234_1a432abcb3f15bb7c85e9fee3d984c4af7" prot="public" virt="non-virtual"><scope>castor3d::LightPipelineConfig</scope><name>LightPipelineConfig</name></member>
+      <member refid="d9/d10/a04234_1a9d7fb29ee5a3f6826baa90138cdb7297" prot="public" virt="non-virtual"><scope>castor3d::LightPipelineConfig</scope><name>lightType</name></member>
+      <member refid="d9/d10/a04234_1a318c0adba5e3815247db1e48d4802031" prot="public" virt="non-virtual"><scope>castor3d::LightPipelineConfig</scope><name>makeHash</name></member>
+      <member refid="d9/d10/a04234_1a562e34962310db64c33fdc5c69e63da7" prot="public" virt="non-virtual"><scope>castor3d::LightPipelineConfig</scope><name>passType</name></member>
+      <member refid="d9/d10/a04234_1a238e362f0439d6fa3c20e8f8ff7e9662" prot="public" virt="non-virtual"><scope>castor3d::LightPipelineConfig</scope><name>sceneFlags</name></member>
+      <member refid="d9/d10/a04234_1a266604eead9472ecd99b76600cf472d1" prot="public" virt="non-virtual"><scope>castor3d::LightPipelineConfig</scope><name>shadows</name></member>
+      <member refid="d9/d10/a04234_1a7d61d58128b6eeb11fef82b386cddbad" prot="public" virt="non-virtual"><scope>castor3d::LightPipelineConfig</scope><name>shadowType</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

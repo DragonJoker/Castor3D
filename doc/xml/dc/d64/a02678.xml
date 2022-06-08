@@ -8,67 +8,25 @@
     </templateparamlist>
       <sectiondef kind="user-defined">
       <header>Iteration.</header>
-      <memberdef kind="function" id="dc/d64/a02678_1ab1a29697f91f11af32fdba3e8af7399c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>auto</type>
-        <definition>auto castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::begin</definition>
-        <argsstring>()</argsstring>
-        <name>begin</name>
-        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::begin</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="128" column="13" bodyfile="Cache/OverlayCache.hpp" bodystart="128" bodyend="131"/>
-      </memberdef>
-      <memberdef kind="function" id="dc/d64/a02678_1af209b43c40d6a2f6fb1bf7b68d94373f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>auto</type>
-        <definition>auto castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::begin</definition>
+      <memberdef kind="function" id="dc/d64/a02678_1a18135521ee7771d7052c0e56b058f1c2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto const &amp;</type>
+        <definition>auto const  &amp; castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::getCategories</definition>
         <argsstring>() const</argsstring>
-        <name>begin</name>
-        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::begin</qualifiedname>
+        <name>getCategories</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::getCategories</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="133" column="13" bodyfile="Cache/OverlayCache.hpp" bodystart="133" bodyend="136"/>
-      </memberdef>
-      <memberdef kind="function" id="dc/d64/a02678_1a2df8fa29b2aa1898466c50a233f65a23" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>auto</type>
-        <definition>auto castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::end</definition>
-        <argsstring>()</argsstring>
-        <name>end</name>
-        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::end</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="138" column="13" bodyfile="Cache/OverlayCache.hpp" bodystart="138" bodyend="141"/>
-      </memberdef>
-      <memberdef kind="function" id="dc/d64/a02678_1ae1b445d647731900ccbde0683f4f0fce" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>auto</type>
-        <definition>auto castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::end</definition>
-        <argsstring>() const</argsstring>
-        <name>end</name>
-        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::end</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="143" column="13" bodyfile="Cache/OverlayCache.hpp" bodystart="143" bodyend="146"/>
+        <location file="Cache/OverlayCache.hpp" line="128" column="20" bodyfile="Cache/OverlayCache.hpp" bodystart="128" bodyend="131"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="user-defined">
       <header>Getters.</header>
       <memberdef kind="function" id="dc/d64/a02678_1a0c1cc280d968798e9145f7de3ae99ffe" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="df/dab/a03550" kindref="compound">castor3d::OverlayFactory</ref> const &amp;</type>
+        <type><ref refid="d2/dcf/a03586" kindref="compound">castor3d::OverlayFactory</ref> const &amp;</type>
         <definition>castor3d::OverlayFactory const  &amp; castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::getOverlayFactory</definition>
         <argsstring>() const</argsstring>
         <name>getOverlayFactory</name>
@@ -79,10 +37,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="155" column="40" bodyfile="Cache/OverlayCache.hpp" bodystart="155" bodyend="158"/>
+        <location file="Cache/OverlayCache.hpp" line="140" column="40" bodyfile="Cache/OverlayCache.hpp" bodystart="140" bodyend="143"/>
       </memberdef>
       <memberdef kind="function" id="dc/d64/a02678_1a1fb24418efc9c1923dcbfba2e7cadcc8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="df/dab/a03550" kindref="compound">castor3d::OverlayFactory</ref> &amp;</type>
+        <type><ref refid="d2/dcf/a03586" kindref="compound">castor3d::OverlayFactory</ref> &amp;</type>
         <definition>castor3d::OverlayFactory &amp; castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::getFactory</definition>
         <argsstring>()</argsstring>
         <name>getFactory</name>
@@ -93,10 +51,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="160" column="34" bodyfile="Cache/OverlayCache.hpp" bodystart="160" bodyend="163"/>
+        <location file="Cache/OverlayCache.hpp" line="145" column="34" bodyfile="Cache/OverlayCache.hpp" bodystart="145" bodyend="148"/>
       </memberdef>
       <memberdef kind="function" id="dc/d64/a02678_1abef6ebb02e3de77383de1d2f258e5e1b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d1/d3c/a02714" kindref="compound">castor3d::Engine</ref> &amp;</type>
+        <type><ref refid="d9/db1/a02718" kindref="compound">castor3d::Engine</ref> &amp;</type>
         <definition>castor3d::Engine &amp; castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::getEngine</definition>
         <argsstring>() const</argsstring>
         <name>getEngine</name>
@@ -107,12 +65,12 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="165" column="19" bodyfile="Cache/OverlayCache.hpp" bodystart="165" bodyend="168"/>
+        <location file="Cache/OverlayCache.hpp" line="150" column="19" bodyfile="Cache/OverlayCache.hpp" bodystart="150" bodyend="153"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-type">
       <memberdef kind="typedef" id="dc/d64/a02678_1aca2e59f30526325a9824dfdc94eb8b85" prot="public" static="no">
-        <type><ref refid="d4/d8b/a03538" kindref="compound">castor3d::Overlay</ref></type>
+        <type><ref refid="db/d52/a03574" kindref="compound">castor3d::Overlay</ref></type>
         <definition>using castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::ElementT =  castor3d::Overlay</definition>
         <argsstring></argsstring>
         <name>ElementT</name>
@@ -140,7 +98,7 @@
         <location file="Cache/OverlayCache.hpp" line="53" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="53" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="dc/d64/a02678_1acdb6aa0aeafef621d08464fefc45faa3" prot="public" static="no">
-        <type><ref refid="dc/df4/a01401_1a31333797732460d50f086c5c5d45d531" kindref="member">castor3d::OverlayCacheTraits</ref></type>
+        <type><ref refid="da/dab/a01362_1a31333797732460d50f086c5c5d45d531" kindref="member">castor3d::OverlayCacheTraits</ref></type>
         <definition>using castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::ElementCacheTraitsT =  castor3d::OverlayCacheTraits</definition>
         <argsstring></argsstring>
         <name>ElementCacheTraitsT</name>
@@ -282,7 +240,7 @@
       </sectiondef>
       <sectiondef kind="private-attrib">
       <memberdef kind="variable" id="dc/d64/a02678_1a364432a48421023b72861e88364915d7" prot="private" static="no" mutable="no">
-        <type><ref refid="d1/d3c/a02714" kindref="compound">castor3d::Engine</ref> &amp;</type>
+        <type><ref refid="d9/db1/a02718" kindref="compound">castor3d::Engine</ref> &amp;</type>
         <definition>castor3d::Engine&amp; castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::m_engine</definition>
         <argsstring></argsstring>
         <name>m_engine</name>
@@ -293,10 +251,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="172" column="19" bodyfile="Cache/OverlayCache.hpp" bodystart="172" bodyend="-1"/>
+        <location file="Cache/OverlayCache.hpp" line="157" column="19" bodyfile="Cache/OverlayCache.hpp" bodystart="157" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="dc/d64/a02678_1a7abf1dbe7e46a7d8c9daa19c02656f7a" prot="private" static="no" mutable="no">
-        <type><ref refid="df/dab/a03550" kindref="compound">castor3d::OverlayFactory</ref></type>
+        <type><ref refid="d2/dcf/a03586" kindref="compound">castor3d::OverlayFactory</ref></type>
         <definition>castor3d::OverlayFactory castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::m_overlayFactory</definition>
         <argsstring></argsstring>
         <name>m_overlayFactory</name>
@@ -307,10 +265,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="173" column="26" bodyfile="Cache/OverlayCache.hpp" bodystart="173" bodyend="-1"/>
+        <location file="Cache/OverlayCache.hpp" line="158" column="26" bodyfile="Cache/OverlayCache.hpp" bodystart="158" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="dc/d64/a02678_1ab78d093d34688b1bb199822507364382" prot="private" static="no" mutable="no">
-        <type><ref refid="d0/dc7/a01402_1a7010f4ef16215727e7d77584cdcbffac" kindref="member">OverlayCategorySet</ref></type>
+        <type><ref refid="dd/d8b/a01363_1a7010f4ef16215727e7d77584cdcbffac" kindref="member">OverlayCategorySet</ref></type>
         <definition>OverlayCategorySet castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::m_overlays</definition>
         <argsstring></argsstring>
         <name>m_overlays</name>
@@ -321,10 +279,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="174" column="20" bodyfile="Cache/OverlayCache.hpp" bodystart="174" bodyend="-1"/>
+        <location file="Cache/OverlayCache.hpp" line="159" column="20" bodyfile="Cache/OverlayCache.hpp" bodystart="159" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="dc/d64/a02678_1a6456faff3a7bae1c9e6e4bede5fefa5e" prot="private" static="no" mutable="no">
-        <type><ref refid="da/dee/a04366" kindref="compound">castor3d::Viewport</ref></type>
+        <type><ref refid="d8/df5/a04458" kindref="compound">castor3d::Viewport</ref></type>
         <definition>castor3d::Viewport castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::m_viewport</definition>
         <argsstring></argsstring>
         <name>m_viewport</name>
@@ -335,7 +293,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="175" column="20" bodyfile="Cache/OverlayCache.hpp" bodystart="175" bodyend="-1"/>
+        <location file="Cache/OverlayCache.hpp" line="160" column="20" bodyfile="Cache/OverlayCache.hpp" bodystart="160" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="dc/d64/a02678_1a26b80e22433dee5ea38faad2ca7c80e3" prot="private" static="no" mutable="no">
         <type>std::vector&lt; int &gt;</type>
@@ -349,7 +307,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="176" column="13" bodyfile="Cache/OverlayCache.hpp" bodystart="176" bodyend="-1"/>
+        <location file="Cache/OverlayCache.hpp" line="161" column="13" bodyfile="Cache/OverlayCache.hpp" bodystart="161" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="dc/d64/a02678_1a2010728fe42967ffbfef4e787eff8ecb" prot="private" static="no" mutable="no">
         <type>Matrix4x4f</type>
@@ -363,7 +321,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="177" column="12" bodyfile="Cache/OverlayCache.hpp" bodystart="177" bodyend="-1"/>
+        <location file="Cache/OverlayCache.hpp" line="162" column="12" bodyfile="Cache/OverlayCache.hpp" bodystart="162" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="dc/d64/a02678_1a7d6ddea227ddbdc0ed85e1defc2299a9" prot="private" static="no" mutable="no">
         <type>FontTextureStrMap</type>
@@ -377,7 +335,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Cache/OverlayCache.hpp" line="178" column="19" bodyfile="Cache/OverlayCache.hpp" bodystart="178" bodyend="-1"/>
+        <location file="Cache/OverlayCache.hpp" line="163" column="19" bodyfile="Cache/OverlayCache.hpp" bodystart="163" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -405,13 +363,13 @@
         <location file="Cache/OverlayCache.hpp" line="64" column="1"/>
       </memberdef>
       <memberdef kind="function" id="dc/d64/a02678_1a5ecd2f5ee9bbacf306e70a89713d8faa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
         <definition>C3D_API castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::ResourceCacheT</definition>
         <argsstring>(castor3d::Engine &amp;engine)</argsstring>
         <name>ResourceCacheT</name>
         <qualifiedname>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::ResourceCacheT</qualifiedname>
         <param>
-          <type><ref refid="d1/d3c/a02714" kindref="compound">castor3d::Engine</ref> &amp;</type>
+          <type><ref refid="d9/db1/a02718" kindref="compound">castor3d::Engine</ref> &amp;</type>
           <declname>engine</declname>
         </param>
         <briefdescription>
@@ -433,10 +391,10 @@
         </inbodydescription>
         <location file="Cache/OverlayCache.hpp" line="75" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="dc/d64/a02678_1aceb4703be813add8d2644686c2c65cb5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+      <memberdef kind="function" id="dc/d64/a02678_1a3033a0d61a413998b38400f65e457e26" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
         <definition>C3D_API castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::~ResourceCacheT</definition>
-        <argsstring>()=default</argsstring>
+        <argsstring>() override=default</argsstring>
         <name>~ResourceCacheT</name>
         <qualifiedname>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::~ResourceCacheT</qualifiedname>
         <briefdescription>
@@ -449,7 +407,7 @@
         <location file="Cache/OverlayCache.hpp" line="82" column="9"/>
       </memberdef>
       <memberdef kind="function" id="dc/d64/a02678_1adb3ef2c6417c8e1c296b3e872e824c87" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
         <definition>C3D_API void castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::clear</definition>
         <argsstring>()</argsstring>
         <name>clear</name>
@@ -464,7 +422,7 @@
         <location file="Cache/OverlayCache.hpp" line="89" column="14"/>
       </memberdef>
       <memberdef kind="function" id="dc/d64/a02678_1aee15a2a399c0881ffe4919838507e507" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
         <definition>C3D_API void castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::cleanup</definition>
         <argsstring>()</argsstring>
         <name>cleanup</name>
@@ -479,13 +437,13 @@
         <location file="Cache/OverlayCache.hpp" line="96" column="14"/>
       </memberdef>
       <memberdef kind="function" id="dc/d64/a02678_1ab4e3422398c8b062788ec6d996546709" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
         <definition>C3D_API void castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::initialise</definition>
         <argsstring>(castor3d::Overlay &amp;overlay)</argsstring>
         <name>initialise</name>
         <qualifiedname>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::initialise</qualifiedname>
         <param>
-          <type><ref refid="d4/d8b/a03538" kindref="compound">castor3d::Overlay</ref> &amp;</type>
+          <type><ref refid="db/d52/a03574" kindref="compound">castor3d::Overlay</ref> &amp;</type>
           <declname>overlay</declname>
         </param>
         <briefdescription>
@@ -497,13 +455,13 @@
         <location file="Cache/OverlayCache.hpp" line="97" column="14"/>
       </memberdef>
       <memberdef kind="function" id="dc/d64/a02678_1abadbf98a5dcf1f0dbbc9e99e885668e4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
         <definition>C3D_API void castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::cleanup</definition>
         <argsstring>(castor3d::Overlay &amp;overlay)</argsstring>
         <name>cleanup</name>
         <qualifiedname>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::cleanup</qualifiedname>
         <param>
-          <type><ref refid="d4/d8b/a03538" kindref="compound">castor3d::Overlay</ref> &amp;</type>
+          <type><ref refid="db/d52/a03574" kindref="compound">castor3d::Overlay</ref> &amp;</type>
           <declname>overlay</declname>
         </param>
         <briefdescription>
@@ -515,7 +473,7 @@
         <location file="Cache/OverlayCache.hpp" line="98" column="14"/>
       </memberdef>
       <memberdef kind="function" id="dc/d64/a02678_1a9aa45bbf39752d71035d67b86f95dc90" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor3d::FontTextureSPtr</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor3d::FontTextureSPtr</type>
         <definition>C3D_API castor3d::FontTextureSPtr castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::getFontTexture</definition>
         <argsstring>(String const &amp;name)</argsstring>
         <name>getFontTexture</name>
@@ -546,7 +504,7 @@
         <location file="Cache/OverlayCache.hpp" line="109" column="35"/>
       </memberdef>
       <memberdef kind="function" id="dc/d64/a02678_1a991fc693376aa8745850805ad047870a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor3d::FontTextureSPtr</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor3d::FontTextureSPtr</type>
         <definition>C3D_API castor3d::FontTextureSPtr castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;::createFontTexture</definition>
         <argsstring>(castor::FontResPtr font)</argsstring>
         <name>createFontTexture</name>
@@ -604,10 +562,8 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="Cache/OverlayCache.hpp" line="48" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="50" bodyend="179"/>
+    <location file="Cache/OverlayCache.hpp" line="48" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="50" bodyend="164"/>
     <listofallmembers>
-      <member refid="dc/d64/a02678_1ab1a29697f91f11af32fdba3e8af7399c" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;</scope><name>begin</name></member>
-      <member refid="dc/d64/a02678_1af209b43c40d6a2f6fb1bf7b68d94373f" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;</scope><name>begin</name></member>
       <member refid="dc/d64/a02678_1aee15a2a399c0881ffe4919838507e507" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;</scope><name>cleanup</name></member>
       <member refid="dc/d64/a02678_1abadbf98a5dcf1f0dbbc9e99e885668e4" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;</scope><name>cleanup</name></member>
       <member refid="dc/d64/a02678_1adb3ef2c6417c8e1c296b3e872e824c87" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;</scope><name>clear</name></member>
@@ -624,8 +580,7 @@
       <member refid="dc/d64/a02678_1a88edc609a880a3eef923ae60929218ef" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;</scope><name>ElementObsT</name></member>
       <member refid="dc/d64/a02678_1a254a0580cd3fb6c2da56841f2b835c75" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;</scope><name>ElementPtrT</name></member>
       <member refid="dc/d64/a02678_1aca2e59f30526325a9824dfdc94eb8b85" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;</scope><name>ElementT</name></member>
-      <member refid="dc/d64/a02678_1a2df8fa29b2aa1898466c50a233f65a23" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;</scope><name>end</name></member>
-      <member refid="dc/d64/a02678_1ae1b445d647731900ccbde0683f4f0fce" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;</scope><name>end</name></member>
+      <member refid="dc/d64/a02678_1a18135521ee7771d7052c0e56b058f1c2" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;</scope><name>getCategories</name></member>
       <member refid="dc/d64/a02678_1abef6ebb02e3de77383de1d2f258e5e1b" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;</scope><name>getEngine</name></member>
       <member refid="dc/d64/a02678_1a1fb24418efc9c1923dcbfba2e7cadcc8" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;</scope><name>getFactory</name></member>
       <member refid="dc/d64/a02678_1a9aa45bbf39752d71035d67b86f95dc90" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;</scope><name>getFontTexture</name></member>
@@ -640,7 +595,7 @@
       <member refid="dc/d64/a02678_1a2010728fe42967ffbfef4e787eff8ecb" prot="private" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;</scope><name>m_projection</name></member>
       <member refid="dc/d64/a02678_1a6456faff3a7bae1c9e6e4bede5fefa5e" prot="private" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;</scope><name>m_viewport</name></member>
       <member refid="dc/d64/a02678_1a5ecd2f5ee9bbacf306e70a89713d8faa" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;</scope><name>ResourceCacheT</name></member>
-      <member refid="dc/d64/a02678_1aceb4703be813add8d2644686c2c65cb5" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;</scope><name>~ResourceCacheT</name></member>
+      <member refid="dc/d64/a02678_1a3033a0d61a413998b38400f65e457e26" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;</scope><name>~ResourceCacheT</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

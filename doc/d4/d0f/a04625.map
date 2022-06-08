@@ -1,5 +1,10 @@
-<map id="castor3d::ObjectCacheTraitsT&lt; Camera, castor::String &gt;" name="castor3d::ObjectCacheTraitsT&lt; Camera, castor::String &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="19,200,206,241"/>
-<area shape="rect" id="node2" href="$de/d22/a04619.html" title=" " alt="" coords="5,109,220,151"/>
-<area shape="rect" id="node3" href="$de/d22/a04619.html" title=" " alt="" coords="19,5,206,47"/>
+<map id="castor3d::MovableObject" name="castor3d::MovableObject">
+<area shape="rect" id="node1" title=" " alt="" coords="236,107,401,133"/>
+<area shape="rect" id="node4" href="$d6/dfd/a04570.html" title=" " alt="" coords="459,5,609,32"/>
+<area shape="rect" id="node5" href="$d0/d15/a04574.html" title=" " alt="" coords="471,56,597,83"/>
+<area shape="rect" id="node6" href="$d5/d03/a04582.html" title=" " alt="" coords="465,107,603,133"/>
+<area shape="rect" id="node7" href="$d0/d7e/a04594.html" title=" " alt="" coords="480,157,588,184"/>
+<area shape="rect" id="node8" href="$d5/d2c/a04678.html" title=" " alt="" coords="449,208,619,235"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,81,188,108"/>
+<area shape="rect" id="node3" title=" " alt="" coords="43,132,150,159"/>
 </map>

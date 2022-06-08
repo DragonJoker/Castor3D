@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d4/d85/a05138" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::ParticleSystem &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::ParticleSystem &gt;</basecompoundref>
+    <includes local="no">TextParticleSystem.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/d85/a05138_1af1724bf559b2d27a403310aa6b7f1d61" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::ParticleSystem &gt;::TextWriter</definition>
+        <argsstring>(castor::String const &amp;tabs)</argsstring>
+        <name>TextWriter</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::ParticleSystem &gt;::TextWriter</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextParticleSystem.hpp" line="18" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d85/a05138_1a4868f1e4a5ab21c709c7d6ca303a729b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::ParticleSystem &gt;::operator()</definition>
+        <argsstring>(castor3d::ParticleSystem const &amp;obj, castor::StringStream &amp;file) override</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::ParticleSystem &gt;::operator()</qualifiedname>
+        <param>
+          <type><ref refid="d5/d03/a04582" kindref="compound">castor3d::ParticleSystem</ref> const &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <param>
+          <type>castor::StringStream &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextParticleSystem.hpp" line="19" column="14"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::ParticleSystem &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::ParticleSystem &gt;</label>
+        <link refid="d4/d85/a05138"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::ParticleSystem &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::ParticleSystem &gt;</label>
+        <link refid="d4/d85/a05138"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Text/TextParticleSystem.hpp" line="14" column="1" bodyfile="Text/TextParticleSystem.hpp" bodystart="16" bodyend="21"/>
+    <listofallmembers>
+      <member refid="d4/d85/a05138_1a4868f1e4a5ab21c709c7d6ca303a729b" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::ParticleSystem &gt;</scope><name>operator()</name></member>
+      <member refid="d4/d85/a05138_1af1724bf559b2d27a403310aa6b7f1d61" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::ParticleSystem &gt;</scope><name>TextWriter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

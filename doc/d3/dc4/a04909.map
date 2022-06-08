@@ -1,5 +1,6 @@
-<map id="castor3d::LpvGridConfigUbo" name="castor3d::LpvGridConfigUbo">
-<area shape="rect" id="node1" title=" " alt="" coords="5,200,188,227"/>
-<area shape="rect" id="node2" title=" " alt="" coords="57,96,137,123"/>
-<area shape="rect" id="node3" title=" " alt="" coords="33,5,160,47"/>
+<map id="castor3d::shader::LightingModel" name="castor3d::shader::LightingModel">
+<area shape="rect" id="node1" title=" " alt="" coords="127,5,299,47"/>
+<area shape="rect" id="node2" href="$d7/de8/a02858.html" title=" " alt="" coords="5,95,197,136"/>
+<area shape="rect" id="node3" href="$da/d61/a02878.html" title=" " alt="" coords="222,95,431,136"/>
+<area shape="rect" id="node4" href="$d4/d57/a02882.html" title=" " alt="" coords="230,184,423,225"/>
 </map>

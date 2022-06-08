@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="db/d62/a04730" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SssProfileBuffer::SssProfileData</compoundname>
+    <includes local="no">SssProfileBuffer.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/d62/a04730_1ab6f630ba7b3fcd04b094bc76f6bf2c22" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/dea/a04726" kindref="compound">Data</ref></type>
+        <definition>Data castor3d::SssProfileBuffer::SssProfileData::sssInfo</definition>
+        <argsstring></argsstring>
+        <name>sssInfo</name>
+        <qualifiedname>castor3d::SssProfileBuffer::SssProfileData::sssInfo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="36" column="6" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d62/a04730_1a1f794e948497fea5cdcf6bd3f55a5f87" prot="public" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="d4/dea/a04726" kindref="compound">Data</ref>, 10u &gt;</type>
+        <definition>std::array&lt; Data, 10u &gt; castor3d::SssProfileBuffer::SssProfileData::transmittanceProfile</definition>
+        <argsstring></argsstring>
+        <name>transmittanceProfile</name>
+        <qualifiedname>castor3d::SssProfileBuffer::SssProfileData::transmittanceProfile</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="37" column="12" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="5">
+        <label>T</label>
+      </node>
+      <node id="3">
+        <label>std::array&lt; castor3d::SssProfileBuffer::Data, 10u &gt;</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; castor3d::SssProfileBuffer::Data, 10u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SssProfileBuffer::Data</label>
+        <link refid="d4/dea/a04726"/>
+      </node>
+      <node id="1">
+        <label>castor3d::SssProfileBuffer::SssProfileData</label>
+        <link refid="db/d62/a04730"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>sssInfo</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>transmittanceProfile</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="5" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="34" column="1" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="35" bodyend="38"/>
+    <listofallmembers>
+      <member refid="db/d62/a04730_1ab6f630ba7b3fcd04b094bc76f6bf2c22" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer::SssProfileData</scope><name>sssInfo</name></member>
+      <member refid="db/d62/a04730_1a1f794e948497fea5cdcf6bd3f55a5f87" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer::SssProfileData</scope><name>transmittanceProfile</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

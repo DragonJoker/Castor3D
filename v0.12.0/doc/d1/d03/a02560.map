@@ -1,0 +1,6 @@
+<map id="castor3d::ObjectBufferOffset" name="castor3d::ObjectBufferOffset">
+<area shape="rect" id="node1" title=" " alt="" coords="120,215,305,241"/>
+<area shape="rect" id="node2" href="$db/d09/a02502.html" title="A GPU buffer, that uses a buddy allocator to allocate sub&#45;buffers." alt="" coords="17,81,161,123"/>
+<area shape="rect" id="node3" href="$d3/d41/a02530.html" title=" " alt="" coords="5,5,172,32"/>
+<area shape="rect" id="node4" href="$d7/da8/a02522.html" title="A memory range, in bytes." alt="" coords="185,89,331,115"/>
+</map>

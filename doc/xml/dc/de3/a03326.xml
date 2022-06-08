@@ -2,7 +2,7 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dc/de3/a03326" kind="class" language="C++" prot="public">
     <compoundname>castor3d::Sphere</compoundname>
-    <basecompoundref refid="d6/d18/a03350" prot="public" virt="non-virtual">castor3d::MeshGenerator</basecompoundref>
+    <basecompoundref refid="d6/d1c/a03346" prot="public" virt="non-virtual">castor3d::MeshGenerator</basecompoundref>
     <includes local="no">Sphere.hpp</includes>
       <sectiondef kind="private-attrib">
       <memberdef kind="variable" id="dc/de3/a03326_1a77e8f3267c6e329d57b8cf79a017948b" prot="private" static="no" mutable="no">
@@ -36,7 +36,7 @@
       </sectiondef>
       <sectiondef kind="public-func">
       <memberdef kind="function" id="dc/de3/a03326_1ad6ab2353e5bd9449d7729f1680d67502" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
         <definition>C3D_API castor3d::Sphere::Sphere</definition>
         <argsstring>()</argsstring>
         <name>Sphere</name>
@@ -53,7 +53,7 @@
       </sectiondef>
       <sectiondef kind="public-static-func">
       <memberdef kind="function" id="dc/de3/a03326_1a67ab721549baf7cdcf68825698b451bb" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> MeshGeneratorSPtr</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> MeshGeneratorSPtr</type>
         <definition>static C3D_API MeshGeneratorSPtr castor3d::Sphere::create</definition>
         <argsstring>()</argsstring>
         <name>create</name>
@@ -73,18 +73,18 @@
       </sectiondef>
       <sectiondef kind="private-func">
       <memberdef kind="function" id="dc/de3/a03326_1ac7b0f8cfc270cf9cf05392efd4b55596" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
         <definition>virtual C3D_API void castor3d::Sphere::doGenerate</definition>
         <argsstring>(Mesh &amp;mesh, Parameters const &amp;parameters) override</argsstring>
         <name>doGenerate</name>
         <qualifiedname>castor3d::Sphere::doGenerate</qualifiedname>
-        <reimplements refid="d6/d18/a03350_1a690745122d7e670b311e317ae86c9b45">doGenerate</reimplements>
+        <reimplements refid="d6/d1c/a03346_1a690745122d7e670b311e317ae86c9b45">doGenerate</reimplements>
         <param>
-          <type><ref refid="dd/dc8/a03342" kindref="compound">Mesh</ref> &amp;</type>
+          <type><ref refid="db/dee/a03338" kindref="compound">Mesh</ref> &amp;</type>
           <declname>mesh</declname>
         </param>
         <param>
-          <type><ref refid="dc/df4/a01401_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
+          <type><ref refid="da/dab/a01362_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
           <declname>parameters</declname>
         </param>
         <briefdescription>
@@ -146,7 +146,7 @@
     <inheritancegraph>
       <node id="2">
         <label>castor3d::MeshGenerator</label>
-        <link refid="d6/d18/a03350"/>
+        <link refid="d6/d1c/a03346"/>
       </node>
       <node id="1">
         <label>castor3d::Sphere</label>
@@ -158,7 +158,7 @@
     <collaborationgraph>
       <node id="2">
         <label>castor3d::MeshGenerator</label>
-        <link refid="d6/d18/a03350"/>
+        <link refid="d6/d1c/a03346"/>
       </node>
       <node id="1">
         <label>castor3d::Sphere</label>
@@ -169,16 +169,16 @@
     </collaborationgraph>
     <location file="Model/Mesh/Generator/Sphere.hpp" line="11" column="1" bodyfile="Model/Mesh/Generator/Sphere.hpp" bodystart="13" bodyend="35"/>
     <listofallmembers>
-      <member refid="d6/d18/a03350_1a3207825be521c851f6fc654751f54cf1" prot="public" virt="virtual"><scope>castor3d::Sphere</scope><name>computeNormals</name></member>
+      <member refid="d6/d1c/a03346_1a3207825be521c851f6fc654751f54cf1" prot="public" virt="virtual"><scope>castor3d::Sphere</scope><name>computeNormals</name></member>
       <member refid="dc/de3/a03326_1a67ab721549baf7cdcf68825698b451bb" prot="public" virt="non-virtual"><scope>castor3d::Sphere</scope><name>create</name></member>
       <member refid="dc/de3/a03326_1ac7b0f8cfc270cf9cf05392efd4b55596" prot="private" virt="virtual"><scope>castor3d::Sphere</scope><name>doGenerate</name></member>
-      <member refid="d6/d18/a03350_1a9fdc140f2d871ca6cb81029250c346ae" prot="public" virt="virtual"><scope>castor3d::Sphere</scope><name>generate</name></member>
+      <member refid="d6/d1c/a03346_1a9fdc140f2d871ca6cb81029250c346ae" prot="public" virt="virtual"><scope>castor3d::Sphere</scope><name>generate</name></member>
       <member refid="dc/de3/a03326_1ad8a69e89e7a3e4dcc6fd23fcd7a9a14b" prot="private" virt="non-virtual"><scope>castor3d::Sphere</scope><name>m_nbFaces</name></member>
       <member refid="dc/de3/a03326_1a77e8f3267c6e329d57b8cf79a017948b" prot="private" virt="non-virtual"><scope>castor3d::Sphere</scope><name>m_radius</name></member>
-      <member refid="d6/d18/a03350_1a3ccec3fd88667bbca33c6e81afdeff19" prot="public" virt="non-virtual"><scope>castor3d::Sphere</scope><name>MeshGenerator</name></member>
+      <member refid="d6/d1c/a03346_1a3ccec3fd88667bbca33c6e81afdeff19" prot="public" virt="non-virtual"><scope>castor3d::Sphere</scope><name>MeshGenerator</name></member>
       <member refid="dc/de3/a03326_1a6c90aad5384e3d7bdea08ed7d238c5fe" prot="private" virt="non-virtual"><scope>castor3d::Sphere</scope><name>operator&lt;&lt;</name></member>
       <member refid="dc/de3/a03326_1ad6ab2353e5bd9449d7729f1680d67502" prot="public" virt="non-virtual"><scope>castor3d::Sphere</scope><name>Sphere</name></member>
-      <member refid="d6/d18/a03350_1adee42c7c921b0dff4cbbc99c29faf31f" prot="public" virt="virtual"><scope>castor3d::Sphere</scope><name>~MeshGenerator</name></member>
+      <member refid="d6/d1c/a03346_1adee42c7c921b0dff4cbbc99c29faf31f" prot="public" virt="virtual"><scope>castor3d::Sphere</scope><name>~MeshGenerator</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

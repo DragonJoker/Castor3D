@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d8/d12/a04694" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PassBuffer::RgbColour</compoundname>
+    <includes local="no">PassBuffer.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/d12/a04694_1ab2558096d1e3edba7e5d167c8b8e4af3" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::PassBuffer::RgbColour::r</definition>
+        <argsstring></argsstring>
+        <name>r</name>
+        <qualifiedname>castor3d::PassBuffer::RgbColour::r</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="36" column="7" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d12/a04694_1aeefdcbe058331833ce0b34f91af9dc0f" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::PassBuffer::RgbColour::g</definition>
+        <argsstring></argsstring>
+        <name>g</name>
+        <qualifiedname>castor3d::PassBuffer::RgbColour::g</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="37" column="7" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d12/a04694_1a629ec52a5516e7a757409c1196b700bb" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::PassBuffer::RgbColour::b</definition>
+        <argsstring></argsstring>
+        <name>b</name>
+        <qualifiedname>castor3d::PassBuffer::RgbColour::b</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="38" column="7" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>3 components colour. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="34" column="1" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="35" bodyend="39"/>
+    <listofallmembers>
+      <member refid="d8/d12/a04694_1a629ec52a5516e7a757409c1196b700bb" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::RgbColour</scope><name>b</name></member>
+      <member refid="d8/d12/a04694_1aeefdcbe058331833ce0b34f91af9dc0f" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::RgbColour</scope><name>g</name></member>
+      <member refid="d8/d12/a04694_1ab2558096d1e3edba7e5d167c8b8e4af3" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::RgbColour</scope><name>r</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

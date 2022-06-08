@@ -1,64 +1,45 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d7/db0/a03962" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::QueuesData::QueueThreadData</compoundname>
+    <compoundname>castor3d::RadianceComputer::RenderPass</compoundname>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d7/db0/a03962_1a7d03278b296fea39b60ac396a1c2db43" prot="public" static="no" mutable="no">
-        <type><ref refid="dc/d61/a03950" kindref="compound">QueueData</ref> const  *</type>
-        <definition>QueueData const* castor3d::QueuesData::QueueThreadData::data</definition>
+      <memberdef kind="variable" id="d7/db0/a03962_1ae6f348857362fa6e06d9f55028f8582f" prot="public" static="no" mutable="no">
+        <type>VkImageView</type>
+        <definition>VkImageView castor3d::RadianceComputer::RenderPass::dstView</definition>
         <argsstring></argsstring>
-        <name>data</name>
-        <qualifiedname>castor3d::QueuesData::QueueThreadData::data</qualifiedname>
+        <name>dstView</name>
+        <qualifiedname>castor3d::RadianceComputer::RenderPass::dstView</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderDevice.hpp" line="255" column="18" bodyfile="Render/RenderDevice.hpp" bodystart="255" bodyend="-1"/>
+        <location file="Render/PBR/RadianceComputer.hpp" line="86" column="13" bodyfile="Render/PBR/RadianceComputer.hpp" bodystart="86" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d7/db0/a03962_1afb7d890355b21508c84bae766c0820c2" prot="public" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::QueuesData::QueueThreadData::count</definition>
+      <memberdef kind="variable" id="d7/db0/a03962_1aed4d3d28b57eeb0bbbe70969869f9a65" prot="public" static="no" mutable="no">
+        <type>ashes::FrameBufferPtr</type>
+        <definition>ashes::FrameBufferPtr castor3d::RadianceComputer::RenderPass::frameBuffer</definition>
         <argsstring></argsstring>
-        <name>count</name>
-        <qualifiedname>castor3d::QueuesData::QueueThreadData::count</qualifiedname>
+        <name>frameBuffer</name>
+        <qualifiedname>castor3d::RadianceComputer::RenderPass::frameBuffer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderDevice.hpp" line="256" column="10" bodyfile="Render/RenderDevice.hpp" bodystart="256" bodyend="-1"/>
+        <location file="Render/PBR/RadianceComputer.hpp" line="87" column="23" bodyfile="Render/PBR/RadianceComputer.hpp" bodystart="87" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="2">
-        <label>castor3d::QueueData</label>
-        <link refid="dc/d61/a03950"/>
-        <childnode refid="3" relation="usage">
-          <edgelabel>parent</edgelabel>
-        </childnode>
-      </node>
-      <node id="3">
-        <label>castor3d::QueuesData</label>
-        <link refid="de/d88/a03958"/>
-      </node>
-      <node id="1">
-        <label>castor3d::QueuesData::QueueThreadData</label>
-        <childnode refid="2" relation="usage">
-          <edgelabel>data</edgelabel>
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Render/RenderDevice.hpp" line="253" column="1" bodyfile="Render/RenderDevice.hpp" bodystart="254" bodyend="257"/>
+    <location file="Render/PBR/RadianceComputer.hpp" line="84" column="1" bodyfile="Render/PBR/RadianceComputer.hpp" bodystart="85" bodyend="88"/>
     <listofallmembers>
-      <member refid="d7/db0/a03962_1afb7d890355b21508c84bae766c0820c2" prot="public" virt="non-virtual"><scope>castor3d::QueuesData::QueueThreadData</scope><name>count</name></member>
-      <member refid="d7/db0/a03962_1a7d03278b296fea39b60ac396a1c2db43" prot="public" virt="non-virtual"><scope>castor3d::QueuesData::QueueThreadData</scope><name>data</name></member>
+      <member refid="d7/db0/a03962_1ae6f348857362fa6e06d9f55028f8582f" prot="public" virt="non-virtual"><scope>castor3d::RadianceComputer::RenderPass</scope><name>dstView</name></member>
+      <member refid="d7/db0/a03962_1aed4d3d28b57eeb0bbbe70969869f9a65" prot="public" virt="non-virtual"><scope>castor3d::RadianceComputer::RenderPass</scope><name>frameBuffer</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

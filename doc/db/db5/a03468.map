@@ -1,9 +1,7 @@
-<map id="castor3d::VertexBoneData" name="castor3d::VertexBoneData">
-<area shape="rect" id="node1" title=" " alt="" coords="141,392,315,419"/>
-<area shape="rect" id="node2" href="$d7/da0/a03474.html" title=" " alt="" coords="5,295,205,322"/>
-<area shape="rect" id="node3" title=" " alt="" coords="13,184,187,225"/>
-<area shape="rect" id="node4" title=" " alt="" coords="151,95,259,121"/>
-<area shape="rect" id="node7" title=" " alt="" coords="242,184,401,225"/>
-<area shape="rect" id="node5" title=" " alt="" coords="186,5,225,32"/>
-<area shape="rect" id="node6" href="$d1/d07/a03482.html" title=" " alt="" coords="230,288,405,329"/>
+<map id="castor3d::ObjectTransform" name="castor3d::ObjectTransform">
+<area shape="rect" id="node1" title=" " alt="" coords="553,83,728,110"/>
+<area shape="rect" id="node2" href="$de/df7/a03478.html" title=" " alt="" coords="257,43,447,84"/>
+<area shape="rect" id="node3" title=" " alt="" coords="14,5,199,47"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,71,208,127"/>
+<area shape="rect" id="node5" href="$d7/d70/a03498.html" title=" " alt="" coords="269,109,435,135"/>
 </map>

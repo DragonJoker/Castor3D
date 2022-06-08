@@ -2,12 +2,12 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_7ae9340dfd2e99071768353d974fafa4" kind="dir">
     <compoundname>Scene/Animation/Skeleton</compoundname>
-    <innerfile refid="d1/dd8/a01022">SkeletonAnimationInstance.hpp</innerfile>
-    <innerfile refid="db/d23/a01025">SkeletonAnimationInstanceBone.hpp</innerfile>
-    <innerfile refid="db/d08/a01028">SkeletonAnimationInstanceKeyFrame.hpp</innerfile>
-    <innerfile refid="d6/dcf/a01031">SkeletonAnimationInstanceNode.hpp</innerfile>
-    <innerfile refid="de/d91/a01034">SkeletonAnimationInstanceObject.hpp</innerfile>
-    <innerfile refid="d3/dee/a10799">SkeletonAnimationModule.hpp</innerfile>
+    <innerfile refid="dd/df1/a01082">SkeletonAnimationInstance.hpp</innerfile>
+    <innerfile refid="d2/df3/a01085">SkeletonAnimationInstanceBone.hpp</innerfile>
+    <innerfile refid="da/db7/a01088">SkeletonAnimationInstanceKeyFrame.hpp</innerfile>
+    <innerfile refid="d6/d0d/a01091">SkeletonAnimationInstanceNode.hpp</innerfile>
+    <innerfile refid="d6/dea/a01094">SkeletonAnimationInstanceObject.hpp</innerfile>
+    <innerfile refid="d4/d18/a11386">SkeletonAnimationModule.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

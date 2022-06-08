@@ -1,83 +1,77 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="da/d1b/a05182" kind="class" language="C++" prot="public">
-    <compoundname>castor::TextWriter&lt; castor3d::ShadowConfig &gt;</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::ShadowConfig &gt;</basecompoundref>
-    <includes local="no">TextShadow.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="da/d1b/a05182_1a25fe251d4b9a5acaaec4bf34665521c9" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor::TextWriter&lt; castor3d::ShadowConfig &gt;::TextWriter</definition>
-        <argsstring>(String const &amp;tabs)</argsstring>
-        <name>TextWriter</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::ShadowConfig &gt;::TextWriter</qualifiedname>
-        <param>
-          <type>String const &amp;</type>
-          <declname>tabs</declname>
-        </param>
+  <compounddef id="da/d1b/a05182" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::RsmUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/d1b/a05182_1ae1fc06af9ab928828582d30fb26826f0" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::RsmUboConfiguration::intensity</definition>
+        <argsstring></argsstring>
+        <name>intensity</name>
+        <qualifiedname>castor3d::RsmUboConfiguration::intensity</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Text/TextShadow.hpp" line="18" column="18"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="367" column="7" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="367" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="da/d1b/a05182_1a6569e91f270157fa4e2e1b587dbce6c1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor::TextWriter&lt; castor3d::ShadowConfig &gt;::operator()</definition>
-        <argsstring>(castor3d::ShadowConfig const &amp;config, StringStream &amp;file) override</argsstring>
-        <name>operator()</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::ShadowConfig &gt;::operator()</qualifiedname>
-        <param>
-          <type><ref refid="d2/d33/a04654" kindref="compound">castor3d::ShadowConfig</ref> const &amp;</type>
-          <declname>config</declname>
-        </param>
-        <param>
-          <type>StringStream &amp;</type>
-          <declname>file</declname>
-        </param>
+      <memberdef kind="variable" id="da/d1b/a05182_1af7b40cc7ac2e28819b1172af12de9919" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::RsmUboConfiguration::maxRadius</definition>
+        <argsstring></argsstring>
+        <name>maxRadius</name>
+        <qualifiedname>castor3d::RsmUboConfiguration::maxRadius</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Text/TextShadow.hpp" line="19" column="14"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="368" column="7" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="368" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d1b/a05182_1a62a2b767edc4777a823fb85f605ad364" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RsmUboConfiguration::sampleCount</definition>
+        <argsstring></argsstring>
+        <name>sampleCount</name>
+        <qualifiedname>castor3d::RsmUboConfiguration::sampleCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="369" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="369" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d1b/a05182_1ae9976fb60e81cb8fdd60d87b5c7e8784" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RsmUboConfiguration::index</definition>
+        <argsstring></argsstring>
+        <name>index</name>
+        <qualifiedname>castor3d::RsmUboConfiguration::index</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="370" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="370" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>Reflective Shadow Maps based GI UBO configuration. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="2">
-        <label>TextWriterT&lt; castor3d::ShadowConfig &gt;</label>
-      </node>
-      <node id="1">
-        <label>castor::TextWriter&lt; castor3d::ShadowConfig &gt;</label>
-        <link refid="da/d1b/a05182"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="2">
-        <label>TextWriterT&lt; castor3d::ShadowConfig &gt;</label>
-      </node>
-      <node id="1">
-        <label>castor::TextWriter&lt; castor3d::ShadowConfig &gt;</label>
-        <link refid="da/d1b/a05182"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Text/TextShadow.hpp" line="14" column="1" bodyfile="Text/TextShadow.hpp" bodystart="16" bodyend="21"/>
+    <location file="Shader/Ubos/UbosModule.hpp" line="365" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="366" bodyend="371"/>
     <listofallmembers>
-      <member refid="da/d1b/a05182_1a6569e91f270157fa4e2e1b587dbce6c1" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::ShadowConfig &gt;</scope><name>operator()</name></member>
-      <member refid="da/d1b/a05182_1a25fe251d4b9a5acaaec4bf34665521c9" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::ShadowConfig &gt;</scope><name>TextWriter</name></member>
+      <member refid="da/d1b/a05182_1ae9976fb60e81cb8fdd60d87b5c7e8784" prot="public" virt="non-virtual"><scope>castor3d::RsmUboConfiguration</scope><name>index</name></member>
+      <member refid="da/d1b/a05182_1ae1fc06af9ab928828582d30fb26826f0" prot="public" virt="non-virtual"><scope>castor3d::RsmUboConfiguration</scope><name>intensity</name></member>
+      <member refid="da/d1b/a05182_1af7b40cc7ac2e28819b1172af12de9919" prot="public" virt="non-virtual"><scope>castor3d::RsmUboConfiguration</scope><name>maxRadius</name></member>
+      <member refid="da/d1b/a05182_1a62a2b767edc4777a823fb85f605ad364" prot="public" virt="non-virtual"><scope>castor3d::RsmUboConfiguration</scope><name>sampleCount</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

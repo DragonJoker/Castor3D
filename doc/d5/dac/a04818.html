@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::shader::OutputComponents Struct Reference</title>
+<title>Castor3D: castor3d::PassBuffer::RgbaColour Struct Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,198 +42,86 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dc/df4/a01401.html">castor3d</a></li><li class="navelem"><a class="el" href="../../da/d06/a01403.html">shader</a></li><li class="navelem"><a class="el" href="../../d5/dac/a04818.html">OutputComponents</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../de/d85/a04810.html">PassBuffer</a></li><li class="navelem"><a class="el" href="../../d5/dac/a04818.html">RgbaColour</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="../../d2/d04/a04815.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">castor3d::shader::OutputComponents Struct Reference</div></div>
+  <div class="headertitle"><div class="title">castor3d::PassBuffer::RgbaColour Struct Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;GlslOutputComponents.hpp&gt;</code></p>
+<p>4 components colour.  
+ <a href="../../d5/dac/a04818.html#details">More...</a></p>
+
+<p><code>#include &lt;PassBuffer.hpp&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:abdc4c22cd0cdf7d5640f1421f700c839"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dac/a04818.html#abdc4c22cd0cdf7d5640f1421f700c839">OutputComponents</a> (sdw::ShaderWriter &amp;writer)</td></tr>
-<tr class="separator:abdc4c22cd0cdf7d5640f1421f700c839"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0c677bdf03fdb8c726117ec79cc7c305"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dac/a04818.html#a0c677bdf03fdb8c726117ec79cc7c305">OutputComponents</a> (sdw::InOutVec3 const &amp;diffuse, sdw::InOutVec3 const &amp;specular)</td></tr>
-<tr class="separator:a0c677bdf03fdb8c726117ec79cc7c305"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae38720bf915c66d9c2b9b39c8a35bb8f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ast::expr::Expr *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dac/a04818.html#ae38720bf915c66d9c2b9b39c8a35bb8f">getExpr</a> () const</td></tr>
-<tr class="separator:ae38720bf915c66d9c2b9b39c8a35bb8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeaa6e55891dcc064142a630b80a2b603"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::ShaderWriter *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dac/a04818.html#aeaa6e55891dcc064142a630b80a2b603">getWriter</a> () const</td></tr>
-<tr class="separator:aeaa6e55891dcc064142a630b80a2b603"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a34792b7f5a9ece038745e91a09a750a0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dac/a04818.html#a34792b7f5a9ece038745e91a09a750a0">setVar</a> (ast::var::VariableList::const_iterator &amp;var)</td></tr>
-<tr class="separator:a34792b7f5a9ece038745e91a09a750a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aacc80ec09e21fe588d551e5810b5fed5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dac/a04818.html#aacc80ec09e21fe588d551e5810b5fed5">isEnabled</a> () const</td></tr>
-<tr class="separator:aacc80ec09e21fe588d551e5810b5fed5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a052a635035966a4aa49e711b7146ebb0"><td class="memItemLeft" align="right" valign="top">sdw::InOutVec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dac/a04818.html#a052a635035966a4aa49e711b7146ebb0">m_diffuse</a></td></tr>
-<tr class="separator:a052a635035966a4aa49e711b7146ebb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4284b72c519ff3cfe28838f95555d32"><td class="memItemLeft" align="right" valign="top">sdw::InOutVec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dac/a04818.html#aa4284b72c519ff3cfe28838f95555d32">m_specular</a></td></tr>
-<tr class="separator:aa4284b72c519ff3cfe28838f95555d32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdd636da650d4d66e301454ce13ab6d4"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dac/a04818.html#acdd636da650d4d66e301454ce13ab6d4">r</a></td></tr>
+<tr class="separator:acdd636da650d4d66e301454ce13ab6d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a679eeaa25a662bba6e0634c550750323"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dac/a04818.html#a679eeaa25a662bba6e0634c550750323">g</a></td></tr>
+<tr class="separator:a679eeaa25a662bba6e0634c550750323"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e32fac1d4e7a3a69534ae6eb98029b1"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dac/a04818.html#a5e32fac1d4e7a3a69534ae6eb98029b1">b</a></td></tr>
+<tr class="separator:a5e32fac1d4e7a3a69534ae6eb98029b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab81c1e0d9372187cf62778ce92dfca6e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dac/a04818.html#ab81c1e0d9372187cf62778ce92dfca6e">a</a></td></tr>
+<tr class="separator:ab81c1e0d9372187cf62778ce92dfca6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="abdc4c22cd0cdf7d5640f1421f700c839" name="abdc4c22cd0cdf7d5640f1421f700c839"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abdc4c22cd0cdf7d5640f1421f700c839">&#9670;&nbsp;</a></span>OutputComponents() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::shader::OutputComponents::OutputComponents </td>
-          <td>(</td>
-          <td class="paramtype">sdw::ShaderWriter &amp;&#160;</td>
-          <td class="paramname"><em>writer</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a0c677bdf03fdb8c726117ec79cc7c305" name="a0c677bdf03fdb8c726117ec79cc7c305"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0c677bdf03fdb8c726117ec79cc7c305">&#9670;&nbsp;</a></span>OutputComponents() <span class="overload">[2/2]</span></h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p >4 components colour. </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
+<a id="ab81c1e0d9372187cf62778ce92dfca6e" name="ab81c1e0d9372187cf62778ce92dfca6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab81c1e0d9372187cf62778ce92dfca6e">&#9670;&nbsp;</a></span>a</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::shader::OutputComponents::OutputComponents </td>
-          <td>(</td>
-          <td class="paramtype">sdw::InOutVec3 const &amp;&#160;</td>
-          <td class="paramname"><em>diffuse</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">sdw::InOutVec3 const &amp;&#160;</td>
-          <td class="paramname"><em>specular</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="memname">float castor3d::PassBuffer::RgbaColour::a</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="ae38720bf915c66d9c2b9b39c8a35bb8f" name="ae38720bf915c66d9c2b9b39c8a35bb8f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae38720bf915c66d9c2b9b39c8a35bb8f">&#9670;&nbsp;</a></span>getExpr()</h2>
+<a id="a5e32fac1d4e7a3a69534ae6eb98029b1" name="a5e32fac1d4e7a3a69534ae6eb98029b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e32fac1d4e7a3a69534ae6eb98029b1">&#9670;&nbsp;</a></span>b</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ast::expr::Expr * castor3d::shader::OutputComponents::getExpr </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td class="memname">float castor3d::PassBuffer::RgbaColour::b</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="aeaa6e55891dcc064142a630b80a2b603" name="aeaa6e55891dcc064142a630b80a2b603"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeaa6e55891dcc064142a630b80a2b603">&#9670;&nbsp;</a></span>getWriter()</h2>
+<a id="a679eeaa25a662bba6e0634c550750323" name="a679eeaa25a662bba6e0634c550750323"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a679eeaa25a662bba6e0634c550750323">&#9670;&nbsp;</a></span>g</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::ShaderWriter * castor3d::shader::OutputComponents::getWriter </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td class="memname">float castor3d::PassBuffer::RgbaColour::g</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="aacc80ec09e21fe588d551e5810b5fed5" name="aacc80ec09e21fe588d551e5810b5fed5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aacc80ec09e21fe588d551e5810b5fed5">&#9670;&nbsp;</a></span>isEnabled()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool castor3d::shader::OutputComponents::isEnabled </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a34792b7f5a9ece038745e91a09a750a0" name="a34792b7f5a9ece038745e91a09a750a0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a34792b7f5a9ece038745e91a09a750a0">&#9670;&nbsp;</a></span>setVar()</h2>
+<a id="acdd636da650d4d66e301454ce13ab6d4" name="acdd636da650d4d66e301454ce13ab6d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acdd636da650d4d66e301454ce13ab6d4">&#9670;&nbsp;</a></span>r</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::shader::OutputComponents::setVar </td>
-          <td>(</td>
-          <td class="paramtype">ast::var::VariableList::const_iterator &amp;&#160;</td>
-          <td class="paramname"><em>var</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a052a635035966a4aa49e711b7146ebb0" name="a052a635035966a4aa49e711b7146ebb0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a052a635035966a4aa49e711b7146ebb0">&#9670;&nbsp;</a></span>m_diffuse</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">sdw::InOutVec3 castor3d::shader::OutputComponents::m_diffuse</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aa4284b72c519ff3cfe28838f95555d32" name="aa4284b72c519ff3cfe28838f95555d32"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa4284b72c519ff3cfe28838f95555d32">&#9670;&nbsp;</a></span>m_specular</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">sdw::InOutVec3 castor3d::shader::OutputComponents::m_specular</td>
+          <td class="memname">float castor3d::PassBuffer::RgbaColour::r</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -241,12 +129,12 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>Shader/Shaders/<a class="el" href="../../d0/d5a/a01199.html">GlslOutputComponents.hpp</a></li>
+<li>Shader/ShaderBuffers/<a class="el" href="../../db/d1c/a01229.html">PassBuffer.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 15:34:56 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:50 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

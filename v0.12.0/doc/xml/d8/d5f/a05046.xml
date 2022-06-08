@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d8/d5f/a05046" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ShadowMapUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/d5f/a05046_1a440ced704c065ffdbf0f29f60e3b971b" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::ShadowMapUboConfiguration::lightProjection</definition>
+        <argsstring></argsstring>
+        <name>lightProjection</name>
+        <qualifiedname>castor3d::ShadowMapUboConfiguration::lightProjection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="363" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="363" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d5f/a05046_1a3b0097393ead8c6396d2fc299b804c97" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::ShadowMapUboConfiguration::lightView</definition>
+        <argsstring></argsstring>
+        <name>lightView</name>
+        <qualifiedname>castor3d::ShadowMapUboConfiguration::lightView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="364" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="364" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d5f/a05046_1aad9a7eddde3a1ac0857212592b858000" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::ShadowMapUboConfiguration::lightPosFarPlane</definition>
+        <argsstring></argsstring>
+        <name>lightPosFarPlane</name>
+        <qualifiedname>castor3d::ShadowMapUboConfiguration::lightPosFarPlane</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="365" column="17" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="365" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d5f/a05046_1aec457c7c31aca4cbdd69e1460d2c9b4e" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ShadowMapUboConfiguration::lightIndex</definition>
+        <argsstring></argsstring>
+        <name>lightIndex</name>
+        <qualifiedname>castor3d::ShadowMapUboConfiguration::lightIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="366" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="366" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Shadow map data. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/UbosModule.hpp" line="361" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="362" bodyend="367"/>
+    <listofallmembers>
+      <member refid="d8/d5f/a05046_1aec457c7c31aca4cbdd69e1460d2c9b4e" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUboConfiguration</scope><name>lightIndex</name></member>
+      <member refid="d8/d5f/a05046_1aad9a7eddde3a1ac0857212592b858000" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUboConfiguration</scope><name>lightPosFarPlane</name></member>
+      <member refid="d8/d5f/a05046_1a440ced704c065ffdbf0f29f60e3b971b" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUboConfiguration</scope><name>lightProjection</name></member>
+      <member refid="d8/d5f/a05046_1a3b0097393ead8c6396d2fc299b804c97" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUboConfiguration</scope><name>lightView</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

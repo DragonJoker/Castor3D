@@ -1,331 +1,227 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="de/d8e/a02762" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::NonClientEventHandler</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">std::enable_shared_from_this&lt; Derived &gt;</basecompoundref>
-    <basecompoundref refid="d2/d93/a02758" prot="public" virt="non-virtual">castor3d::EventHandler</basecompoundref>
+  <compounddef id="de/d8e/a02762" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::EventHandler</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::Named</basecompoundref>
+    <derivedcompoundref refid="d6/d92/a02770" prot="public" virt="non-virtual">castor3d::MouseEventHandler</derivedcompoundref>
+    <derivedcompoundref refid="dd/deb/a02766" prot="public" virt="non-virtual">castor3d::NonClientEventHandler&lt; Derived &gt;</derivedcompoundref>
     <includes local="no">EventHandler.hpp</includes>
-    <templateparamlist>
-      <param>
-        <type>class Derived</type>
-      </param>
-    </templateparamlist>
-      <sectiondef kind="protected-type">
-      <memberdef kind="typedef" id="de/d8e/a02762_1a88c786851d42d7d9c5b4c4bb6fbd205d" prot="protected" static="no">
-        <type><ref refid="d2/d93/a02758_1ad79273cdd0dcc5dfe45dcc6293a72301" kindref="member">EventHandler::EventHandlerFunction</ref></type>
-        <definition>using castor3d::NonClientEventHandler&lt; Derived &gt;::EventHandlerFunction =  EventHandler::EventHandlerFunction</definition>
+      <sectiondef kind="user-defined">
+      <header>Keyboard events</header>
+      <memberdef kind="variable" id="de/d8e/a02762_1a51294359629a2fb1d22cab6d40e785e0" prot="public" static="no" mutable="no">
+        <type><ref refid="de/d8e/a02762_1a762d1e36d01afdb527690a27f6e6645a" kindref="member">OnEnable</ref></type>
+        <definition>OnEnable castor3d::EventHandler::onEnable</definition>
         <argsstring></argsstring>
-        <name>EventHandlerFunction</name>
-        <qualifiedname>castor3d::NonClientEventHandler::EventHandlerFunction</qualifiedname>
+        <name>onEnable</name>
+        <qualifiedname>castor3d::EventHandler::onEnable</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="420" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="420" bodyend="-1"/>
+        <location file="Event/UserInput/EventHandler.hpp" line="236" column="10" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="236" bodyend="-1"/>
+        <referencedby refid="de/d8e/a02762_1ad6eda21ee30aa7316eb1b6796d3f0cb9" compoundref="de/d25/a00290" startline="231" endline="235">disable</referencedby>
+        <referencedby refid="de/d8e/a02762_1a261497f31a8ad918a2315af0efae6e6d" compoundref="de/d25/a00290" startline="222" endline="226">enable</referencedby>
       </memberdef>
-      <memberdef kind="typedef" id="de/d8e/a02762_1ad8d1623d5da2a584967c734fba483d8a" prot="protected" static="no">
-        <type><ref refid="d2/d93/a02758_1a3398c38b57677976456d795fbf36844a" kindref="member">EventHandler::EventQueue</ref></type>
-        <definition>using castor3d::NonClientEventHandler&lt; Derived &gt;::EventQueue =  EventHandler::EventQueue</definition>
+      <memberdef kind="variable" id="de/d8e/a02762_1a187f36449604532ccf230440b8e446c9" prot="protected" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="de/d8e/a02762_1a071f4627b0ab9424a4ea58bff380c291" kindref="member">OnClientMouseEvent</ref>, size_t(<ref refid="da/dab/a01362_1a3c153b6d827714e22164290af1839578ae558bb69fadec037d9eae46601a4df8e" kindref="member">MouseEventType::eCount</ref>) &gt;</type>
+        <definition>std::array&lt; OnClientMouseEvent, size_t( MouseEventType::eCount ) &gt; castor3d::EventHandler::m_mouseSlots</definition>
         <argsstring></argsstring>
-        <name>EventQueue</name>
-        <qualifiedname>castor3d::NonClientEventHandler::EventQueue</qualifiedname>
+        <name>m_mouseSlots</name>
+        <qualifiedname>castor3d::EventHandler::m_mouseSlots</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The mouse events slots. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="421" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="421" bodyend="-1"/>
+        <location file="Event/UserInput/EventHandler.hpp" line="408" column="12" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="408" bodyend="-1"/>
+        <referencedby refid="de/d8e/a02762_1a6f95a70a6d584295f3d3ccfec0cb17fd" compoundref="de/d25/a00290" startline="147" endline="151">connect</referencedby>
+        <referencedby refid="de/d8e/a02762_1a7384ac0af4155b281bc24ec8c2ff4010" compoundref="de/d25/a00290" startline="307" endline="311">processMouseEvent</referencedby>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="de/d8e/a02762_1aea92aaf9b48684355876a7c81409ccf3" prot="public" static="no">
-        <type><ref refid="d2/d93/a02758_1abf8b7cff9d28a78406eeee8b7b6ebd86" kindref="member">EventHandler::ClientMouseFunction</ref></type>
-        <definition>using castor3d::NonClientEventHandler&lt; Derived &gt;::ClientMouseFunction =  EventHandler::ClientMouseFunction</definition>
+      <memberdef kind="variable" id="de/d8e/a02762_1a4f97f319d54b0d877d7b105cca6cc965" prot="protected" static="no" mutable="no">
+        <type>std::array&lt; std::vector&lt; <ref refid="de/d8e/a02762_1a677bb241c46644f4dc5774e5f9951cd1" kindref="member">OnClientMouseEventConnection</ref> &gt;, size_t(<ref refid="da/dab/a01362_1a3c153b6d827714e22164290af1839578ae558bb69fadec037d9eae46601a4df8e" kindref="member">MouseEventType::eCount</ref>) &gt;</type>
+        <definition>std::array&lt; std::vector&lt; OnClientMouseEventConnection &gt;, size_t( MouseEventType::eCount ) &gt; castor3d::EventHandler::m_mouseSlotsConnections</definition>
         <argsstring></argsstring>
-        <name>ClientMouseFunction</name>
-        <qualifiedname>castor3d::NonClientEventHandler::ClientMouseFunction</qualifiedname>
+        <name>m_mouseSlotsConnections</name>
+        <qualifiedname>castor3d::EventHandler::m_mouseSlotsConnections</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The mouse events slots connections. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="425" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="425" bodyend="-1"/>
+        <location file="Event/UserInput/EventHandler.hpp" line="411" column="12" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="411" bodyend="-1"/>
+        <referencedby refid="de/d8e/a02762_1a6f95a70a6d584295f3d3ccfec0cb17fd" compoundref="de/d25/a00290" startline="147" endline="151">connect</referencedby>
       </memberdef>
-      <memberdef kind="typedef" id="de/d8e/a02762_1a45ffbf50f17a665404170fd665624011" prot="public" static="no">
-        <type><ref refid="d2/d93/a02758_1a0d16d006a598b652f004c2541855d916" kindref="member">EventHandler::ClientKeyboardFunction</ref></type>
-        <definition>using castor3d::NonClientEventHandler&lt; Derived &gt;::ClientKeyboardFunction =  EventHandler::ClientKeyboardFunction</definition>
+      <memberdef kind="variable" id="de/d8e/a02762_1aac73eda577b38c43edf34b595cff8b59" prot="protected" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="de/d8e/a02762_1a377a0f15c155e02ba27203acc311e6cf" kindref="member">OnClientKeyboardEvent</ref>, size_t(<ref refid="da/dab/a01362_1a1fb074d51d95c6d176d6227ff879a4dcae558bb69fadec037d9eae46601a4df8e" kindref="member">KeyboardEventType::eCount</ref>) &gt;</type>
+        <definition>std::array&lt; OnClientKeyboardEvent, size_t( KeyboardEventType::eCount ) &gt; castor3d::EventHandler::m_keyboardSlots</definition>
         <argsstring></argsstring>
-        <name>ClientKeyboardFunction</name>
-        <qualifiedname>castor3d::NonClientEventHandler::ClientKeyboardFunction</qualifiedname>
+        <name>m_keyboardSlots</name>
+        <qualifiedname>castor3d::EventHandler::m_keyboardSlots</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The keyboard events slots. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="426" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="426" bodyend="-1"/>
+        <location file="Event/UserInput/EventHandler.hpp" line="414" column="12" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="414" bodyend="-1"/>
+        <referencedby refid="de/d8e/a02762_1a072131ef43a320ea20a8177f64db0199" compoundref="de/d25/a00290" startline="186" endline="190">connect</referencedby>
+        <referencedby refid="de/d8e/a02762_1a7e1a8377cb8e9ef612c4b7a73f189ee7" compoundref="de/d25/a00290" startline="320" endline="324">processKeyboardEvent</referencedby>
       </memberdef>
-      <memberdef kind="typedef" id="de/d8e/a02762_1a703c7cbc98f4fbc25ac04600257c7c0c" prot="public" static="no">
-        <type><ref refid="d2/d93/a02758_1a44a9a40d9e96a4527000479b4702ae79" kindref="member">EventHandler::ClientHandlerFunction</ref></type>
-        <definition>using castor3d::NonClientEventHandler&lt; Derived &gt;::ClientHandlerFunction =  EventHandler::ClientHandlerFunction</definition>
+      <memberdef kind="variable" id="de/d8e/a02762_1a66f89c17f733ba4033afc5771e7a827c" prot="protected" static="no" mutable="no">
+        <type>std::array&lt; std::vector&lt; <ref refid="de/d8e/a02762_1ac4b2cfd7995c7d2d49025aead38eec7b" kindref="member">OnClientKeyboardEventConnection</ref> &gt;, size_t(<ref refid="da/dab/a01362_1a1fb074d51d95c6d176d6227ff879a4dcae558bb69fadec037d9eae46601a4df8e" kindref="member">KeyboardEventType::eCount</ref>) &gt;</type>
+        <definition>std::array&lt; std::vector&lt; OnClientKeyboardEventConnection &gt;, size_t( KeyboardEventType::eCount ) &gt; castor3d::EventHandler::m_keyboardSlotsConnections</definition>
         <argsstring></argsstring>
-        <name>ClientHandlerFunction</name>
-        <qualifiedname>castor3d::NonClientEventHandler::ClientHandlerFunction</qualifiedname>
+        <name>m_keyboardSlotsConnections</name>
+        <qualifiedname>castor3d::EventHandler::m_keyboardSlotsConnections</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The handler events slots connections. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="427" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="427" bodyend="-1"/>
+        <location file="Event/UserInput/EventHandler.hpp" line="417" column="12" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="417" bodyend="-1"/>
+        <referencedby refid="de/d8e/a02762_1a072131ef43a320ea20a8177f64db0199" compoundref="de/d25/a00290" startline="186" endline="190">connect</referencedby>
       </memberdef>
-      <memberdef kind="typedef" id="de/d8e/a02762_1a003d79006969f16bf5a26dac2904a94b" prot="public" static="no">
-        <type>std::function&lt; void(DerivedSPtr, <ref refid="dc/db0/a02778" kindref="compound">MouseEvent</ref> const &amp;) &gt;</type>
-        <definition>using castor3d::NonClientEventHandler&lt; Derived &gt;::NonClientMouseFunction =  std::function&lt; void( DerivedSPtr, MouseEvent const &amp; ) &gt;</definition>
+      <memberdef kind="variable" id="de/d8e/a02762_1a9ed160c89e5f742d420f00215b7c1d7b" prot="protected" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="de/d8e/a02762_1a03b0c5def88fd068283f5de7ddb165ae" kindref="member">OnClientHandlerEvent</ref>, size_t(<ref refid="da/dab/a01362_1ad02e1e0fa1e7f38c3bd24f851e63355bae558bb69fadec037d9eae46601a4df8e" kindref="member">HandlerEventType::eCount</ref>) &gt;</type>
+        <definition>std::array&lt; OnClientHandlerEvent, size_t( HandlerEventType::eCount ) &gt; castor3d::EventHandler::m_handlerSlots</definition>
         <argsstring></argsstring>
-        <name>NonClientMouseFunction</name>
-        <qualifiedname>castor3d::NonClientEventHandler::NonClientMouseFunction</qualifiedname>
+        <name>m_handlerSlots</name>
+        <qualifiedname>castor3d::EventHandler::m_handlerSlots</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>Catcher definition for non client mouse events. </para>
+<para>The keyboard events slots. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="430" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="430" bodyend="-1"/>
+        <location file="Event/UserInput/EventHandler.hpp" line="420" column="12" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="420" bodyend="-1"/>
+        <referencedby refid="de/d8e/a02762_1a27234b5982660ef259a8e869da4e6da0" compoundref="de/d25/a00290" startline="271" endline="274">connect</referencedby>
+        <referencedby refid="de/d8e/a02762_1a6f5e82d7f867ea1c015027b0ea61291d" compoundref="de/d25/a00290" startline="333" endline="337">processHandlerEvent</referencedby>
       </memberdef>
-      <memberdef kind="typedef" id="de/d8e/a02762_1a0adc142a34ed48e195b6f70ac17e5b92" prot="public" static="no">
-        <type>std::function&lt; void(DerivedSPtr, <ref refid="df/d91/a02774" kindref="compound">KeyboardEvent</ref> const &amp;) &gt;</type>
-        <definition>using castor3d::NonClientEventHandler&lt; Derived &gt;::NonClientKeyboardFunction =  std::function&lt; void( DerivedSPtr, KeyboardEvent const &amp; ) &gt;</definition>
+      <memberdef kind="variable" id="de/d8e/a02762_1a5e84dac1e70311d98ec5d815d81e4fe0" prot="protected" static="no" mutable="no">
+        <type>std::array&lt; std::vector&lt; <ref refid="de/d8e/a02762_1a2653d4d0452400e29c14ed60898ca603" kindref="member">OnClientHandlerEventConnection</ref> &gt;, size_t(<ref refid="da/dab/a01362_1ad02e1e0fa1e7f38c3bd24f851e63355bae558bb69fadec037d9eae46601a4df8e" kindref="member">HandlerEventType::eCount</ref>) &gt;</type>
+        <definition>std::array&lt; std::vector&lt; OnClientHandlerEventConnection &gt;, size_t( HandlerEventType::eCount ) &gt; castor3d::EventHandler::m_handlerSlotsConnections</definition>
         <argsstring></argsstring>
-        <name>NonClientKeyboardFunction</name>
-        <qualifiedname>castor3d::NonClientEventHandler::NonClientKeyboardFunction</qualifiedname>
+        <name>m_handlerSlotsConnections</name>
+        <qualifiedname>castor3d::EventHandler::m_handlerSlotsConnections</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>Catcher definition for non client keyboard events. </para>
+<para>The handler events slots connections. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="433" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="433" bodyend="-1"/>
+        <location file="Event/UserInput/EventHandler.hpp" line="423" column="12" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="423" bodyend="-1"/>
+        <referencedby refid="de/d8e/a02762_1a27234b5982660ef259a8e869da4e6da0" compoundref="de/d25/a00290" startline="271" endline="274">connect</referencedby>
       </memberdef>
-      <memberdef kind="typedef" id="de/d8e/a02762_1a22342838eda0d890777efd4ef7671519" prot="public" static="no">
-        <type>std::function&lt; void(DerivedSPtr, <ref refid="d6/d92/a02770" kindref="compound">HandlerEvent</ref> const &amp;) &gt;</type>
-        <definition>using castor3d::NonClientEventHandler&lt; Derived &gt;::NonClientHandlerFunction =  std::function&lt; void( DerivedSPtr, HandlerEvent const &amp; ) &gt;</definition>
+      <memberdef kind="variable" id="de/d8e/a02762_1a9321227ee67ecfcbc3082ccaec399912" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::EventHandler::m_enabled</definition>
         <argsstring></argsstring>
-        <name>NonClientHandlerFunction</name>
-        <qualifiedname>castor3d::NonClientEventHandler::NonClientHandlerFunction</qualifiedname>
+        <name>m_enabled</name>
+        <qualifiedname>castor3d::EventHandler::m_enabled</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>Catcher definition for non client handler events. </para>
+<para>Activation status. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="436" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="436" bodyend="-1"/>
+        <location file="Event/UserInput/EventHandler.hpp" line="428" column="6" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="428" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="typedef" id="de/d8e/a02762_1acf4c10c3d5dd8fbb43d1b238d9b6de36" prot="public" static="no">
-        <type>castor::SignalT&lt; <ref refid="de/d8e/a02762_1a003d79006969f16bf5a26dac2904a94b" kindref="member">NonClientMouseFunction</ref> &gt;</type>
-        <definition>using castor3d::NonClientEventHandler&lt; Derived &gt;::OnNonClientMouseEvent =  castor::SignalT&lt; NonClientMouseFunction &gt;</definition>
+      <memberdef kind="variable" id="de/d8e/a02762_1a82cdb06af1f609827d0f299a7e431021" prot="private" static="no" mutable="no">
+        <type>std::mutex</type>
+        <definition>std::mutex castor3d::EventHandler::m_mutex</definition>
         <argsstring></argsstring>
-        <name>OnNonClientMouseEvent</name>
-        <qualifiedname>castor3d::NonClientEventHandler::OnNonClientMouseEvent</qualifiedname>
+        <name>m_mutex</name>
+        <qualifiedname>castor3d::EventHandler::m_mutex</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>Non client mouse event signal definition. </para>
+<para>The mutex used to protect the events queue. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="439" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="439" bodyend="-1"/>
+        <location file="Event/UserInput/EventHandler.hpp" line="431" column="12" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="431" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="typedef" id="de/d8e/a02762_1ae68352453ba12818f1d870cdaf6eea40" prot="public" static="no">
-        <type>castor::SignalT&lt; <ref refid="de/d8e/a02762_1a0adc142a34ed48e195b6f70ac17e5b92" kindref="member">NonClientKeyboardFunction</ref> &gt;</type>
-        <definition>using castor3d::NonClientEventHandler&lt; Derived &gt;::OnNonClientKeyboardEvent =  castor::SignalT&lt; NonClientKeyboardFunction &gt;</definition>
+      <memberdef kind="variable" id="de/d8e/a02762_1adf9810daefda3e2c5964b7f43e1d75a3" prot="private" static="no" mutable="no">
+        <type><ref refid="de/d8e/a02762_1a3398c38b57677976456d795fbf36844a" kindref="member">EventQueue</ref></type>
+        <definition>EventQueue castor3d::EventHandler::m_queue</definition>
         <argsstring></argsstring>
-        <name>OnNonClientKeyboardEvent</name>
-        <qualifiedname>castor3d::NonClientEventHandler::OnNonClientKeyboardEvent</qualifiedname>
+        <name>m_queue</name>
+        <qualifiedname>castor3d::EventHandler::m_queue</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>Non client keyboard event signal definition. </para>
+<para>The events queue. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="442" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="442" bodyend="-1"/>
+        <location file="Event/UserInput/EventHandler.hpp" line="434" column="12" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="434" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="typedef" id="de/d8e/a02762_1a8cde3553a16b17f2db9b8cb2d0457be6" prot="public" static="no">
-        <type>castor::SignalT&lt; <ref refid="de/d8e/a02762_1a22342838eda0d890777efd4ef7671519" kindref="member">NonClientHandlerFunction</ref> &gt;</type>
-        <definition>using castor3d::NonClientEventHandler&lt; Derived &gt;::OnNonClientHandlerEvent =  castor::SignalT&lt; NonClientHandlerFunction &gt;</definition>
+      <memberdef kind="variable" id="de/d8e/a02762_1aa87f342075c0c7a5ea2b576921802a90" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::EventHandler::m_catchMouseEvents</definition>
         <argsstring></argsstring>
-        <name>OnNonClientHandlerEvent</name>
-        <qualifiedname>castor3d::NonClientEventHandler::OnNonClientHandlerEvent</qualifiedname>
+        <name>m_catchMouseEvents</name>
+        <qualifiedname>castor3d::EventHandler::m_catchMouseEvents</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>Non client handler event signal definition. </para>
+<para>Tells if the control catches mouse events. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="445" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="445" bodyend="-1"/>
+        <location file="Event/UserInput/EventHandler.hpp" line="437" column="6" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="437" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="typedef" id="de/d8e/a02762_1aefea2351ba1c6ea3dfbe9d22ddf311a6" prot="public" static="no">
-        <type>typename OnNonClientMouseEvent::connection</type>
-        <definition>using castor3d::NonClientEventHandler&lt; Derived &gt;::OnNonClientMouseEventConnection =  typename OnNonClientMouseEvent::connection</definition>
+      <memberdef kind="variable" id="de/d8e/a02762_1aaeea593165e1beee83edefcb813b4297" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::EventHandler::m_catchTabKey</definition>
         <argsstring></argsstring>
-        <name>OnNonClientMouseEventConnection</name>
-        <qualifiedname>castor3d::NonClientEventHandler::OnNonClientMouseEventConnection</qualifiedname>
+        <name>m_catchTabKey</name>
+        <qualifiedname>castor3d::EventHandler::m_catchTabKey</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>Non client mouse event signal connection definition. </para>
+<para>Tells if the control catches &apos;tab&apos; key. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="448" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="448" bodyend="-1"/>
+        <location file="Event/UserInput/EventHandler.hpp" line="440" column="6" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="440" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="typedef" id="de/d8e/a02762_1ae5b3c80ac4550412145ed53787b33d86" prot="public" static="no">
-        <type>typename OnNonClientKeyboardEvent::connection</type>
-        <definition>using castor3d::NonClientEventHandler&lt; Derived &gt;::OnNonClientKeyboardEventConnection =  typename OnNonClientKeyboardEvent::connection</definition>
+      <memberdef kind="variable" id="de/d8e/a02762_1a63007be711638997a65a157341eb0bc2" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::EventHandler::m_catchReturnKey</definition>
         <argsstring></argsstring>
-        <name>OnNonClientKeyboardEventConnection</name>
-        <qualifiedname>castor3d::NonClientEventHandler::OnNonClientKeyboardEventConnection</qualifiedname>
+        <name>m_catchReturnKey</name>
+        <qualifiedname>castor3d::EventHandler::m_catchReturnKey</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>Non client keyboard event signal connection definition. </para>
+<para>Tells if the control catches &apos;return&apos; key. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="451" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="451" bodyend="-1"/>
+        <location file="Event/UserInput/EventHandler.hpp" line="443" column="6" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="443" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="typedef" id="de/d8e/a02762_1a3cd3b709106f34e3c628df967ff0d294" prot="public" static="no">
-        <type>typename OnNonClientHandlerEvent::connection</type>
-        <definition>using castor3d::NonClientEventHandler&lt; Derived &gt;::OnNonClientHandlerEventConnection =  typename OnNonClientHandlerEvent::connection</definition>
-        <argsstring></argsstring>
-        <name>OnNonClientHandlerEventConnection</name>
-        <qualifiedname>castor3d::NonClientEventHandler::OnNonClientHandlerEventConnection</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>Non client handler event signal connection definition. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="454" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="454" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="protected-attrib">
-      <memberdef kind="variable" id="de/d8e/a02762_1aed8e1e5a6ecefc8810126ae8c7ddfb0c" prot="protected" static="no" mutable="no">
-        <type>std::array&lt; <ref refid="de/d8e/a02762_1acf4c10c3d5dd8fbb43d1b238d9b6de36" kindref="member">OnNonClientMouseEvent</ref>, size_t(<ref refid="dc/df4/a01401_1a3c153b6d827714e22164290af1839578ae558bb69fadec037d9eae46601a4df8e" kindref="member">MouseEventType::eCount</ref>) &gt;</type>
-        <definition>std::array&lt; OnNonClientMouseEvent, size_t( MouseEventType::eCount ) &gt; castor3d::NonClientEventHandler&lt; Derived &gt;::m_ncMouseSlots</definition>
-        <argsstring></argsstring>
-        <name>m_ncMouseSlots</name>
-        <qualifiedname>castor3d::NonClientEventHandler::m_ncMouseSlots</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The non client mouse events slots. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="536" column="12" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="536" bodyend="-1"/>
-        <referencedby refid="de/d8e/a02762_1a7c772af5b472ac82d7a40ebe4968cfb2" compoundref="dc/d5d/a00278" startline="479" endline="483">castor3d::NonClientEventHandler&lt; Derived &gt;::connectNC</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="de/d8e/a02762_1af7c333a4c75f38cf11d5226e797fc653" prot="protected" static="no" mutable="no">
-        <type>std::array&lt; std::vector&lt; <ref refid="de/d8e/a02762_1aefea2351ba1c6ea3dfbe9d22ddf311a6" kindref="member">OnNonClientMouseEventConnection</ref> &gt;, size_t(<ref refid="dc/df4/a01401_1a3c153b6d827714e22164290af1839578ae558bb69fadec037d9eae46601a4df8e" kindref="member">MouseEventType::eCount</ref>) &gt;</type>
-        <definition>std::array&lt; std::vector&lt; OnNonClientMouseEventConnection &gt;, size_t( MouseEventType::eCount ) &gt; castor3d::NonClientEventHandler&lt; Derived &gt;::m_ncMouseSlotsConnections</definition>
-        <argsstring></argsstring>
-        <name>m_ncMouseSlotsConnections</name>
-        <qualifiedname>castor3d::NonClientEventHandler::m_ncMouseSlotsConnections</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The non client mouse events slots. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="539" column="12" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="539" bodyend="-1"/>
-        <referencedby refid="de/d8e/a02762_1a7c772af5b472ac82d7a40ebe4968cfb2" compoundref="dc/d5d/a00278" startline="479" endline="483">castor3d::NonClientEventHandler&lt; Derived &gt;::connectNC</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="de/d8e/a02762_1a14951b54a3e24fe7b348613f16f50b84" prot="protected" static="no" mutable="no">
-        <type>std::array&lt; <ref refid="de/d8e/a02762_1ae68352453ba12818f1d870cdaf6eea40" kindref="member">OnNonClientKeyboardEvent</ref>, size_t(<ref refid="dc/df4/a01401_1a1fb074d51d95c6d176d6227ff879a4dcae558bb69fadec037d9eae46601a4df8e" kindref="member">KeyboardEventType::eCount</ref>) &gt;</type>
-        <definition>std::array&lt; OnNonClientKeyboardEvent, size_t( KeyboardEventType::eCount ) &gt; castor3d::NonClientEventHandler&lt; Derived &gt;::m_ncKeyboardSlots</definition>
-        <argsstring></argsstring>
-        <name>m_ncKeyboardSlots</name>
-        <qualifiedname>castor3d::NonClientEventHandler::m_ncKeyboardSlots</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The non client keyboard events slots. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="542" column="12" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="542" bodyend="-1"/>
-        <referencedby refid="de/d8e/a02762_1ab5d52b4021d688cc40caeb9fadba5458" compoundref="dc/d5d/a00278" startline="494" endline="498">castor3d::NonClientEventHandler&lt; Derived &gt;::connectNC</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="de/d8e/a02762_1ae1d9ec7ce4715a0a9a2536955cebb60e" prot="protected" static="no" mutable="no">
-        <type>std::array&lt; std::vector&lt; <ref refid="de/d8e/a02762_1ae5b3c80ac4550412145ed53787b33d86" kindref="member">OnNonClientKeyboardEventConnection</ref> &gt;, size_t(<ref refid="dc/df4/a01401_1a1fb074d51d95c6d176d6227ff879a4dcae558bb69fadec037d9eae46601a4df8e" kindref="member">KeyboardEventType::eCount</ref>) &gt;</type>
-        <definition>std::array&lt; std::vector&lt; OnNonClientKeyboardEventConnection &gt;, size_t( KeyboardEventType::eCount ) &gt; castor3d::NonClientEventHandler&lt; Derived &gt;::m_ncKeyboardSlotsConnections</definition>
-        <argsstring></argsstring>
-        <name>m_ncKeyboardSlotsConnections</name>
-        <qualifiedname>castor3d::NonClientEventHandler::m_ncKeyboardSlotsConnections</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The non client keyboard events slots. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="545" column="12" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="545" bodyend="-1"/>
-        <referencedby refid="de/d8e/a02762_1ab5d52b4021d688cc40caeb9fadba5458" compoundref="dc/d5d/a00278" startline="494" endline="498">castor3d::NonClientEventHandler&lt; Derived &gt;::connectNC</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="de/d8e/a02762_1a2a710ba7566a0da8a13156abc0901b11" prot="protected" static="no" mutable="no">
-        <type>std::array&lt; <ref refid="de/d8e/a02762_1a8cde3553a16b17f2db9b8cb2d0457be6" kindref="member">OnNonClientHandlerEvent</ref>, size_t(<ref refid="dc/df4/a01401_1ad02e1e0fa1e7f38c3bd24f851e63355bae558bb69fadec037d9eae46601a4df8e" kindref="member">HandlerEventType::eCount</ref>) &gt;</type>
-        <definition>std::array&lt; OnNonClientHandlerEvent, size_t( HandlerEventType::eCount ) &gt; castor3d::NonClientEventHandler&lt; Derived &gt;::m_ncHandlerSlots</definition>
-        <argsstring></argsstring>
-        <name>m_ncHandlerSlots</name>
-        <qualifiedname>castor3d::NonClientEventHandler::m_ncHandlerSlots</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The non client handler events slots. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="548" column="12" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="548" bodyend="-1"/>
-        <referencedby refid="de/d8e/a02762_1a766759743a229af558fbe4053692bade" compoundref="dc/d5d/a00278" startline="509" endline="513">castor3d::NonClientEventHandler&lt; Derived &gt;::connectNC</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="de/d8e/a02762_1a368dcf33032891e0e56c1a1d8f4103aa" prot="protected" static="no" mutable="no">
-        <type>std::array&lt; std::vector&lt; <ref refid="de/d8e/a02762_1a3cd3b709106f34e3c628df967ff0d294" kindref="member">OnNonClientHandlerEventConnection</ref> &gt;, size_t(<ref refid="dc/df4/a01401_1ad02e1e0fa1e7f38c3bd24f851e63355bae558bb69fadec037d9eae46601a4df8e" kindref="member">HandlerEventType::eCount</ref>) &gt;</type>
-        <definition>std::array&lt; std::vector&lt; OnNonClientHandlerEventConnection &gt;, size_t( HandlerEventType::eCount ) &gt; castor3d::NonClientEventHandler&lt; Derived &gt;::m_ncHandlerSlotsConnections</definition>
-        <argsstring></argsstring>
-        <name>m_ncHandlerSlotsConnections</name>
-        <qualifiedname>castor3d::NonClientEventHandler::m_ncHandlerSlotsConnections</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The non client handler events slots. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="551" column="12" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="551" bodyend="-1"/>
-        <referencedby refid="de/d8e/a02762_1a766759743a229af558fbe4053692bade" compoundref="dc/d5d/a00278" startline="509" endline="513">castor3d::NonClientEventHandler&lt; Derived &gt;::connectNC</referencedby>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="de/d8e/a02762_1a4279fa9420669e19563cd42111f206e4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::NonClientEventHandler&lt; Derived &gt;::CU_DeclareSmartPtr</definition>
-        <argsstring>(Derived)</argsstring>
-        <name>CU_DeclareSmartPtr</name>
-        <qualifiedname>castor3d::NonClientEventHandler::CU_DeclareSmartPtr</qualifiedname>
+      <memberdef kind="function" id="de/d8e/a02762_1afc92e893bf044425b1e80c3113cb3cca" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EventHandler::pushEvent</definition>
+        <argsstring>(KeyboardEvent const &amp;event)</argsstring>
+        <name>pushEvent</name>
+        <qualifiedname>castor3d::EventHandler::pushEvent</qualifiedname>
         <param>
-          <type>Derived</type>
+          <type><ref refid="dc/db0/a02778" kindref="compound">KeyboardEvent</ref> const &amp;</type>
+          <declname>event</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -333,17 +229,57 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="424" column="1"/>
+        <location file="Event/UserInput/EventHandler.hpp" line="165" column="6" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="165" bodyend="175"/>
+        <references refid="de/d8e/a02762_1a7e1a8377cb8e9ef612c4b7a73f189ee7" compoundref="de/d25/a00290" startline="320" endline="324">processKeyboardEvent</references>
       </memberdef>
-      <memberdef kind="function" id="de/d8e/a02762_1af50b1f26ce0a2e046c7f29877fb81c2a" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor3d::NonClientEventHandler&lt; Derived &gt;::NonClientEventHandler</definition>
-        <argsstring>(bool catchMouseEvents)</argsstring>
-        <name>NonClientEventHandler</name>
-        <qualifiedname>castor3d::NonClientEventHandler::NonClientEventHandler</qualifiedname>
+      <memberdef kind="function" id="de/d8e/a02762_1a072131ef43a320ea20a8177f64db0199" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EventHandler::connect</definition>
+        <argsstring>(KeyboardEventType event, ClientKeyboardFunction function)</argsstring>
+        <name>connect</name>
+        <qualifiedname>castor3d::EventHandler::connect</qualifiedname>
+        <param>
+          <type><ref refid="da/dab/a01362_1a1fb074d51d95c6d176d6227ff879a4dc" kindref="member">KeyboardEventType</ref></type>
+          <declname>event</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d8e/a02762_1a0d16d006a598b652f004c2541855d916" kindref="member">ClientKeyboardFunction</ref></type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="186" column="6" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="186" bodyend="190"/>
+        <references refid="de/d8e/a02762_1a6f95a70a6d584295f3d3ccfec0cb17fd" compoundref="de/d25/a00290" startline="147" endline="151">connect</references>
+        <references refid="de/d8e/a02762_1aac73eda577b38c43edf34b595cff8b59" compoundref="de/d25/a00290" startline="414">m_keyboardSlots</references>
+        <references refid="de/d8e/a02762_1a66f89c17f733ba4033afc5771e7a827c" compoundref="de/d25/a00290" startline="417">m_keyboardSlotsConnections</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d8e/a02762_1af9b127733fe059b464db3d7857142075" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::EventHandler::catchesMouseEvents</definition>
+        <argsstring>() const</argsstring>
+        <name>catchesMouseEvents</name>
+        <qualifiedname>castor3d::EventHandler::catchesMouseEvents</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="197" column="6" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="197" bodyend="200"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d8e/a02762_1a4d1cc6560e55cec04ae727c8d2b5f106" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EventHandler::setCatchesMouseEvents</definition>
+        <argsstring>(bool value)</argsstring>
+        <name>setCatchesMouseEvents</name>
+        <qualifiedname>castor3d::EventHandler::setCatchesMouseEvents</qualifiedname>
         <param>
           <type>bool</type>
-          <declname>catchMouseEvents</declname>
+          <declname>value</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -351,20 +287,86 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="465" column="10" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="465" bodyend="468"/>
+        <location file="Event/UserInput/EventHandler.hpp" line="206" column="6" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="206" bodyend="209"/>
       </memberdef>
-      <memberdef kind="function" id="de/d8e/a02762_1a7c772af5b472ac82d7a40ebe4968cfb2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="de/d8e/a02762_1a0c72e92a8514c0959d7ad57b0b971f73" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::EventHandler::isEnabled</definition>
+        <argsstring>() const</argsstring>
+        <name>isEnabled</name>
+        <qualifiedname>castor3d::EventHandler::isEnabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>false</computeroutput> if the control is disabled. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="214" column="6" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="214" bodyend="217"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d8e/a02762_1a261497f31a8ad918a2315af0efae6e6d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
-        <definition>void castor3d::NonClientEventHandler&lt; Derived &gt;::connectNC</definition>
-        <argsstring>(MouseEventType event, NonClientMouseFunction function)</argsstring>
-        <name>connectNC</name>
-        <qualifiedname>castor3d::NonClientEventHandler::connectNC</qualifiedname>
+        <definition>void castor3d::EventHandler::enable</definition>
+        <argsstring>()</argsstring>
+        <name>enable</name>
+        <qualifiedname>castor3d::EventHandler::enable</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="222" column="6" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="222" bodyend="226"/>
+        <references refid="de/d8e/a02762_1a51294359629a2fb1d22cab6d40e785e0" compoundref="de/d25/a00290" startline="236">onEnable</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d8e/a02762_1ad6eda21ee30aa7316eb1b6796d3f0cb9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EventHandler::disable</definition>
+        <argsstring>()</argsstring>
+        <name>disable</name>
+        <qualifiedname>castor3d::EventHandler::disable</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="231" column="6" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="231" bodyend="235"/>
+        <references refid="de/d8e/a02762_1a51294359629a2fb1d22cab6d40e785e0" compoundref="de/d25/a00290" startline="236">onEnable</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d8e/a02762_1a278a37b0923a7b266c684251d37961cb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EventHandler::pushEvent</definition>
+        <argsstring>(HandlerEvent const &amp;event)</argsstring>
+        <name>pushEvent</name>
+        <qualifiedname>castor3d::EventHandler::pushEvent</qualifiedname>
         <param>
-          <type><ref refid="dc/df4/a01401_1a3c153b6d827714e22164290af1839578" kindref="member">MouseEventType</ref></type>
+          <type><ref refid="df/d91/a02774" kindref="compound">HandlerEvent</ref> const &amp;</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="250" column="6" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="250" bodyend="260"/>
+        <references refid="de/d8e/a02762_1a6f5e82d7f867ea1c015027b0ea61291d" compoundref="de/d25/a00290" startline="333" endline="337">processHandlerEvent</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d8e/a02762_1a27234b5982660ef259a8e869da4e6da0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EventHandler::connect</definition>
+        <argsstring>(HandlerEventType event, ClientHandlerFunction function)</argsstring>
+        <name>connect</name>
+        <qualifiedname>castor3d::EventHandler::connect</qualifiedname>
+        <param>
+          <type><ref refid="da/dab/a01362_1ad02e1e0fa1e7f38c3bd24f851e63355b" kindref="member">HandlerEventType</ref></type>
           <declname>event</declname>
         </param>
         <param>
-          <type><ref refid="de/d8e/a02762_1a003d79006969f16bf5a26dac2904a94b" kindref="member">NonClientMouseFunction</ref></type>
+          <type><ref refid="de/d8e/a02762_1a44a9a40d9e96a4527000479b4702ae79" kindref="member">ClientHandlerFunction</ref></type>
           <declname>function</declname>
         </param>
         <briefdescription>
@@ -373,70 +375,45 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="479" column="6" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="479" bodyend="483"/>
-        <references refid="d2/d93/a02758_1a6f95a70a6d584295f3d3ccfec0cb17fd" compoundref="dc/d5d/a00278" startline="134" endline="138">castor3d::EventHandler::connect</references>
-        <references refid="de/d8e/a02762_1aed8e1e5a6ecefc8810126ae8c7ddfb0c" compoundref="dc/d5d/a00278" startline="536">castor3d::NonClientEventHandler&lt; Derived &gt;::m_ncMouseSlots</references>
-        <references refid="de/d8e/a02762_1af7c333a4c75f38cf11d5226e797fc653" compoundref="dc/d5d/a00278" startline="539">castor3d::NonClientEventHandler&lt; Derived &gt;::m_ncMouseSlotsConnections</references>
+        <location file="Event/UserInput/EventHandler.hpp" line="271" column="6" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="271" bodyend="274"/>
+        <references refid="de/d8e/a02762_1a6f95a70a6d584295f3d3ccfec0cb17fd" compoundref="de/d25/a00290" startline="147" endline="151">connect</references>
+        <references refid="de/d8e/a02762_1a9ed160c89e5f742d420f00215b7c1d7b" compoundref="de/d25/a00290" startline="420">m_handlerSlots</references>
+        <references refid="de/d8e/a02762_1a5e84dac1e70311d98ec5d815d81e4fe0" compoundref="de/d25/a00290" startline="423">m_handlerSlotsConnections</references>
       </memberdef>
-      <memberdef kind="function" id="de/d8e/a02762_1ab5d52b4021d688cc40caeb9fadba5458" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::NonClientEventHandler&lt; Derived &gt;::connectNC</definition>
-        <argsstring>(KeyboardEventType event, NonClientKeyboardFunction function)</argsstring>
-        <name>connectNC</name>
-        <qualifiedname>castor3d::NonClientEventHandler::connectNC</qualifiedname>
-        <param>
-          <type><ref refid="dc/df4/a01401_1a1fb074d51d95c6d176d6227ff879a4dc" kindref="member">KeyboardEventType</ref></type>
-          <declname>event</declname>
-        </param>
-        <param>
-          <type><ref refid="de/d8e/a02762_1a0adc142a34ed48e195b6f70ac17e5b92" kindref="member">NonClientKeyboardFunction</ref></type>
-          <declname>function</declname>
-        </param>
+      <memberdef kind="function" id="de/d8e/a02762_1a312bd6454656d77b7906ac620216b84d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::EventHandler::catchesTabKey</definition>
+        <argsstring>() const</argsstring>
+        <name>catchesTabKey</name>
+        <qualifiedname>castor3d::EventHandler::catchesTabKey</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="494" column="6" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="494" bodyend="498"/>
-        <references refid="d2/d93/a02758_1a6f95a70a6d584295f3d3ccfec0cb17fd" compoundref="dc/d5d/a00278" startline="134" endline="138">castor3d::EventHandler::connect</references>
-        <references refid="de/d8e/a02762_1a14951b54a3e24fe7b348613f16f50b84" compoundref="dc/d5d/a00278" startline="542">castor3d::NonClientEventHandler&lt; Derived &gt;::m_ncKeyboardSlots</references>
-        <references refid="de/d8e/a02762_1ae1d9ec7ce4715a0a9a2536955cebb60e" compoundref="dc/d5d/a00278" startline="545">castor3d::NonClientEventHandler&lt; Derived &gt;::m_ncKeyboardSlotsConnections</references>
+        <location file="Event/UserInput/EventHandler.hpp" line="281" column="6" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="281" bodyend="284"/>
       </memberdef>
-      <memberdef kind="function" id="de/d8e/a02762_1a766759743a229af558fbe4053692bade" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::NonClientEventHandler&lt; Derived &gt;::connectNC</definition>
-        <argsstring>(HandlerEventType event, NonClientHandlerFunction function)</argsstring>
-        <name>connectNC</name>
-        <qualifiedname>castor3d::NonClientEventHandler::connectNC</qualifiedname>
-        <param>
-          <type><ref refid="dc/df4/a01401_1ad02e1e0fa1e7f38c3bd24f851e63355b" kindref="member">HandlerEventType</ref></type>
-          <declname>event</declname>
-        </param>
-        <param>
-          <type><ref refid="de/d8e/a02762_1a22342838eda0d890777efd4ef7671519" kindref="member">NonClientHandlerFunction</ref></type>
-          <declname>function</declname>
-        </param>
+      <memberdef kind="function" id="de/d8e/a02762_1a3941edcde2e8ac2ed205548386e1bf46" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::EventHandler::catchesReturnKey</definition>
+        <argsstring>() const</argsstring>
+        <name>catchesReturnKey</name>
+        <qualifiedname>castor3d::EventHandler::catchesReturnKey</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="509" column="6" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="509" bodyend="513"/>
-        <references refid="d2/d93/a02758_1a6f95a70a6d584295f3d3ccfec0cb17fd" compoundref="dc/d5d/a00278" startline="134" endline="138">castor3d::EventHandler::connect</references>
-        <references refid="de/d8e/a02762_1a2a710ba7566a0da8a13156abc0901b11" compoundref="dc/d5d/a00278" startline="548">castor3d::NonClientEventHandler&lt; Derived &gt;::m_ncHandlerSlots</references>
-        <references refid="de/d8e/a02762_1a368dcf33032891e0e56c1a1d8f4103aa" compoundref="dc/d5d/a00278" startline="551">castor3d::NonClientEventHandler&lt; Derived &gt;::m_ncHandlerSlotsConnections</references>
+        <location file="Event/UserInput/EventHandler.hpp" line="291" column="6" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="291" bodyend="294"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="de/d8e/a02762_1a3464bb1fcbf95540b0b7ad4cda680748" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+      <memberdef kind="function" id="de/d8e/a02762_1a7384ac0af4155b281bc24ec8c2ff4010" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
-        <definition>void castor3d::NonClientEventHandler&lt; Derived &gt;::doProcessMouseEvent</definition>
-        <argsstring>(MouseEventSPtr event) override</argsstring>
-        <name>doProcessMouseEvent</name>
-        <qualifiedname>castor3d::NonClientEventHandler::doProcessMouseEvent</qualifiedname>
-        <reimplements refid="d2/d93/a02758_1a08d1276605f56b95cbdc14f4dcd042f2">doProcessMouseEvent</reimplements>
+        <definition>void castor3d::EventHandler::processMouseEvent</definition>
+        <argsstring>(MouseEventSPtr event)</argsstring>
+        <name>processMouseEvent</name>
+        <qualifiedname>castor3d::EventHandler::processMouseEvent</qualifiedname>
         <param>
           <type>MouseEventSPtr</type>
           <declname>event</declname>
@@ -447,15 +424,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="518" column="6" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="518" bodyend="521"/>
+        <location file="Event/UserInput/EventHandler.hpp" line="307" column="6" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="307" bodyend="311"/>
+        <references refid="de/d8e/a02762_1a187f36449604532ccf230440b8e446c9" compoundref="de/d25/a00290" startline="408">m_mouseSlots</references>
+        <referencedby refid="de/d8e/a02762_1a16401c9f0cb928edaab9f56c5ebcbc08" compoundref="de/d25/a00290" startline="126" endline="136">pushEvent</referencedby>
       </memberdef>
-      <memberdef kind="function" id="de/d8e/a02762_1a74bc75324e44f6d322d89c11f16481ed" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+      <memberdef kind="function" id="de/d8e/a02762_1a7e1a8377cb8e9ef612c4b7a73f189ee7" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
-        <definition>void castor3d::NonClientEventHandler&lt; Derived &gt;::doProcessKeyboardEvent</definition>
-        <argsstring>(KeyboardEventSPtr event) override</argsstring>
-        <name>doProcessKeyboardEvent</name>
-        <qualifiedname>castor3d::NonClientEventHandler::doProcessKeyboardEvent</qualifiedname>
-        <reimplements refid="d2/d93/a02758_1aabaa2e1c9db32c58c76df9b5b2cbeefa">doProcessKeyboardEvent</reimplements>
+        <definition>void castor3d::EventHandler::processKeyboardEvent</definition>
+        <argsstring>(KeyboardEventSPtr event)</argsstring>
+        <name>processKeyboardEvent</name>
+        <qualifiedname>castor3d::EventHandler::processKeyboardEvent</qualifiedname>
         <param>
           <type>KeyboardEventSPtr</type>
           <declname>event</declname>
@@ -466,15 +444,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="523" column="6" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="523" bodyend="526"/>
+        <location file="Event/UserInput/EventHandler.hpp" line="320" column="6" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="320" bodyend="324"/>
+        <references refid="de/d8e/a02762_1aac73eda577b38c43edf34b595cff8b59" compoundref="de/d25/a00290" startline="414">m_keyboardSlots</references>
+        <referencedby refid="de/d8e/a02762_1afc92e893bf044425b1e80c3113cb3cca" compoundref="de/d25/a00290" startline="165" endline="175">pushEvent</referencedby>
       </memberdef>
-      <memberdef kind="function" id="de/d8e/a02762_1a3a48ec87f20ba8eef17cdf21647d1ad8" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+      <memberdef kind="function" id="de/d8e/a02762_1a6f5e82d7f867ea1c015027b0ea61291d" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
-        <definition>void castor3d::NonClientEventHandler&lt; Derived &gt;::doProcessHandlerEvent</definition>
-        <argsstring>(HandlerEventSPtr event) override</argsstring>
-        <name>doProcessHandlerEvent</name>
-        <qualifiedname>castor3d::NonClientEventHandler::doProcessHandlerEvent</qualifiedname>
-        <reimplements refid="d2/d93/a02758_1a7ff7191cf1e1628a2b619f4c67cfdf51">doProcessHandlerEvent</reimplements>
+        <definition>void castor3d::EventHandler::processHandlerEvent</definition>
+        <argsstring>(HandlerEventSPtr event)</argsstring>
+        <name>processHandlerEvent</name>
+        <qualifiedname>castor3d::EventHandler::processHandlerEvent</qualifiedname>
         <param>
           <type>HandlerEventSPtr</type>
           <declname>event</declname>
@@ -485,290 +464,639 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Event/UserInput/EventHandler.hpp" line="528" column="6" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="528" bodyend="531"/>
+        <location file="Event/UserInput/EventHandler.hpp" line="333" column="6" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="333" bodyend="337"/>
+        <references refid="de/d8e/a02762_1a9ed160c89e5f742d420f00215b7c1d7b" compoundref="de/d25/a00290" startline="420">m_handlerSlots</references>
+        <referencedby refid="de/d8e/a02762_1a278a37b0923a7b266c684251d37961cb" compoundref="de/d25/a00290" startline="250" endline="260">pushEvent</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="de/d8e/a02762_1ab2e61c954e55d7f9a9699f8cd44aa10a" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="de/d8e/a02762_1a3398c38b57677976456d795fbf36844a" kindref="member">EventQueue</ref></type>
+        <definition>EventQueue castor3d::EventHandler::doSwapQueue</definition>
+        <argsstring>()</argsstring>
+        <name>doSwapQueue</name>
+        <qualifiedname>castor3d::EventHandler::doSwapQueue</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="348" column="12" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="348" bodyend="355"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d8e/a02762_1a08d1276605f56b95cbdc14f4dcd042f2" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::EventHandler::doProcessMouseEvent</definition>
+        <argsstring>(MouseEventSPtr event)=0</argsstring>
+        <name>doProcessMouseEvent</name>
+        <qualifiedname>castor3d::EventHandler::doProcessMouseEvent</qualifiedname>
+        <reimplementedby refid="dd/deb/a02766_1a3464bb1fcbf95540b0b7ad4cda680748">doProcessMouseEvent</reimplementedby>
+        <reimplementedby refid="d2/d68/a04158_1ad44ae02ac3bdcaa80d4c9bf2f8029715">doProcessMouseEvent</reimplementedby>
+        <param>
+          <type>MouseEventSPtr</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="364" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d8e/a02762_1aabaa2e1c9db32c58c76df9b5b2cbeefa" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::EventHandler::doProcessKeyboardEvent</definition>
+        <argsstring>(KeyboardEventSPtr event)=0</argsstring>
+        <name>doProcessKeyboardEvent</name>
+        <qualifiedname>castor3d::EventHandler::doProcessKeyboardEvent</qualifiedname>
+        <reimplementedby refid="d6/d92/a02770_1ad3126b890b110196f01f687f9fad0155">doProcessKeyboardEvent</reimplementedby>
+        <reimplementedby refid="dd/deb/a02766_1a74bc75324e44f6d322d89c11f16481ed">doProcessKeyboardEvent</reimplementedby>
+        <param>
+          <type>KeyboardEventSPtr</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="373" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d8e/a02762_1a7ff7191cf1e1628a2b619f4c67cfdf51" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::EventHandler::doProcessHandlerEvent</definition>
+        <argsstring>(HandlerEventSPtr event)=0</argsstring>
+        <name>doProcessHandlerEvent</name>
+        <qualifiedname>castor3d::EventHandler::doProcessHandlerEvent</qualifiedname>
+        <reimplementedby refid="d6/d92/a02770_1a748cec8279a60f296cc7e7fafe5a1482">doProcessHandlerEvent</reimplementedby>
+        <reimplementedby refid="dd/deb/a02766_1a3a48ec87f20ba8eef17cdf21647d1ad8">doProcessHandlerEvent</reimplementedby>
+        <param>
+          <type>HandlerEventSPtr</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="382" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d8e/a02762_1a88af7cdfa0a1ab72692086e6ab1820d4" prot="private" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::EventHandler::doCatchesMouseEvents</definition>
+        <argsstring>() const =0</argsstring>
+        <name>doCatchesMouseEvents</name>
+        <qualifiedname>castor3d::EventHandler::doCatchesMouseEvents</qualifiedname>
+        <reimplementedby refid="d6/d92/a02770_1a566fb9e57b1538faa16d8f8f2f4996c2">doCatchesMouseEvents</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="389" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d8e/a02762_1af8c7b49268a8b6e10a25dfa34ea2ccca" prot="private" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::EventHandler::doCatchesTabKey</definition>
+        <argsstring>() const =0</argsstring>
+        <name>doCatchesTabKey</name>
+        <qualifiedname>castor3d::EventHandler::doCatchesTabKey</qualifiedname>
+        <reimplementedby refid="d6/d92/a02770_1a8f7b92cfd55dd9d7a8d18f9a8d5003cd">doCatchesTabKey</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="396" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d8e/a02762_1a153fcbcce5041f44f3eae86230ec98fa" prot="private" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::EventHandler::doCatchesReturnKey</definition>
+        <argsstring>() const =0</argsstring>
+        <name>doCatchesReturnKey</name>
+        <qualifiedname>castor3d::EventHandler::doCatchesReturnKey</qualifiedname>
+        <reimplementedby refid="d6/d92/a02770_1aa78c971982a00e52501455b25f66c460">doCatchesReturnKey</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="403" column="22"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>General</header>
+      <memberdef kind="function" id="de/d8e/a02762_1ac52718713f27db870abc7268142083e1" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::EventHandler::EventHandler</definition>
+        <argsstring>(castor::String const &amp;name, bool catchMouseEvents)</argsstring>
+        <name>EventHandler</name>
+        <qualifiedname>castor3d::EventHandler::EventHandler</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>catchMouseEvents</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="79" column="10" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="79" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d8e/a02762_1ad34a3c576978d4afac873aac492d3e03" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type></type>
+        <definition>virtual castor3d::EventHandler::~EventHandler</definition>
+        <argsstring>()</argsstring>
+        <name>~EventHandler</name>
+        <qualifiedname>castor3d::EventHandler::~EventHandler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="94" column="9" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="94" bodyend="97"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d8e/a02762_1a0da445b1ae561fcaf1d226ea46116a29" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EventHandler::processEvents</definition>
+        <argsstring>()</argsstring>
+        <name>processEvents</name>
+        <qualifiedname>castor3d::EventHandler::processEvents</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="104" column="6" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="104" bodyend="112"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>Mouse events</header>
+      <memberdef kind="function" id="de/d8e/a02762_1a16401c9f0cb928edaab9f56c5ebcbc08" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EventHandler::pushEvent</definition>
+        <argsstring>(MouseEvent const &amp;event)</argsstring>
+        <name>pushEvent</name>
+        <qualifiedname>castor3d::EventHandler::pushEvent</qualifiedname>
+        <param>
+          <type><ref refid="da/de9/a02782" kindref="compound">MouseEvent</ref> const &amp;</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="126" column="6" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="126" bodyend="136"/>
+        <references refid="de/d8e/a02762_1a7384ac0af4155b281bc24ec8c2ff4010" compoundref="de/d25/a00290" startline="307" endline="311">processMouseEvent</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d8e/a02762_1a6f95a70a6d584295f3d3ccfec0cb17fd" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EventHandler::connect</definition>
+        <argsstring>(MouseEventType event, ClientMouseFunction function)</argsstring>
+        <name>connect</name>
+        <qualifiedname>castor3d::EventHandler::connect</qualifiedname>
+        <param>
+          <type><ref refid="da/dab/a01362_1a3c153b6d827714e22164290af1839578" kindref="member">MouseEventType</ref></type>
+          <declname>event</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d8e/a02762_1abf8b7cff9d28a78406eeee8b7b6ebd86" kindref="member">ClientMouseFunction</ref></type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="147" column="6" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="147" bodyend="151"/>
+        <references refid="de/d8e/a02762_1a6f95a70a6d584295f3d3ccfec0cb17fd" compoundref="de/d25/a00290" startline="147" endline="151">connect</references>
+        <references refid="de/d8e/a02762_1a187f36449604532ccf230440b8e446c9" compoundref="de/d25/a00290" startline="408">m_mouseSlots</references>
+        <references refid="de/d8e/a02762_1a4f97f319d54b0d877d7b105cca6cc965" compoundref="de/d25/a00290" startline="411">m_mouseSlotsConnections</references>
+        <referencedby refid="de/d8e/a02762_1a6f95a70a6d584295f3d3ccfec0cb17fd" compoundref="de/d25/a00290" startline="147" endline="151">connect</referencedby>
+        <referencedby refid="dd/deb/a02766_1a7c772af5b472ac82d7a40ebe4968cfb2" compoundref="de/d25/a00290" startline="517" endline="521">castor3d::NonClientEventHandler&lt; Derived &gt;::connectNC</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-type">
+      <memberdef kind="typedef" id="de/d8e/a02762_1ad79273cdd0dcc5dfe45dcc6293a72301" prot="protected" static="no">
+        <type>std::function&lt; void() &gt;</type>
+        <definition>using castor3d::EventHandler::EventHandlerFunction =  std::function&lt; void() &gt;</definition>
+        <argsstring></argsstring>
+        <name>EventHandlerFunction</name>
+        <qualifiedname>castor3d::EventHandler::EventHandlerFunction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="27" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d8e/a02762_1a3398c38b57677976456d795fbf36844a" prot="protected" static="no">
+        <type>std::deque&lt; std::pair&lt; UserInputEventSPtr, <ref refid="de/d8e/a02762_1ad79273cdd0dcc5dfe45dcc6293a72301" kindref="member">EventHandlerFunction</ref> &gt; &gt;</type>
+        <definition>using castor3d::EventHandler::EventQueue =  std::deque&lt; std::pair&lt; UserInputEventSPtr, EventHandlerFunction &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>EventQueue</name>
+        <qualifiedname>castor3d::EventHandler::EventQueue</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="28" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="de/d8e/a02762_1abf8b7cff9d28a78406eeee8b7b6ebd86" prot="public" static="no">
+        <type>std::function&lt; void(<ref refid="da/de9/a02782" kindref="compound">MouseEvent</ref> const &amp;) &gt;</type>
+        <definition>using castor3d::EventHandler::ClientMouseFunction =  std::function&lt; void( MouseEvent const &amp; ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>ClientMouseFunction</name>
+        <qualifiedname>castor3d::EventHandler::ClientMouseFunction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Catcher definition for mouse events. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="33" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d8e/a02762_1a0d16d006a598b652f004c2541855d916" prot="public" static="no">
+        <type>std::function&lt; void(<ref refid="dc/db0/a02778" kindref="compound">KeyboardEvent</ref> const &amp;) &gt;</type>
+        <definition>using castor3d::EventHandler::ClientKeyboardFunction =  std::function&lt; void( KeyboardEvent const &amp; ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>ClientKeyboardFunction</name>
+        <qualifiedname>castor3d::EventHandler::ClientKeyboardFunction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Catcher definition for keyboard events. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="36" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d8e/a02762_1a44a9a40d9e96a4527000479b4702ae79" prot="public" static="no">
+        <type>std::function&lt; void(<ref refid="df/d91/a02774" kindref="compound">HandlerEvent</ref> const &amp;) &gt;</type>
+        <definition>using castor3d::EventHandler::ClientHandlerFunction =  std::function&lt; void( HandlerEvent const &amp; ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>ClientHandlerFunction</name>
+        <qualifiedname>castor3d::EventHandler::ClientHandlerFunction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Catcher definition for handler events. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="39" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d8e/a02762_1a916afcd686fc5022c05d6ff2bf18900a" prot="public" static="no">
+        <type>std::function&lt; void(bool) &gt;</type>
+        <definition>using castor3d::EventHandler::EnableFunction =  std::function&lt; void( bool ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>EnableFunction</name>
+        <qualifiedname>castor3d::EventHandler::EnableFunction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Signal function when handler is enabled/disabled. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="42" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d8e/a02762_1a071f4627b0ab9424a4ea58bff380c291" prot="public" static="no">
+        <type>castor::SignalT&lt; <ref refid="de/d8e/a02762_1abf8b7cff9d28a78406eeee8b7b6ebd86" kindref="member">ClientMouseFunction</ref> &gt;</type>
+        <definition>using castor3d::EventHandler::OnClientMouseEvent =  castor::SignalT&lt; ClientMouseFunction &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnClientMouseEvent</name>
+        <qualifiedname>castor3d::EventHandler::OnClientMouseEvent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Mouse event signal definition. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="45" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d8e/a02762_1a377a0f15c155e02ba27203acc311e6cf" prot="public" static="no">
+        <type>castor::SignalT&lt; <ref refid="de/d8e/a02762_1a0d16d006a598b652f004c2541855d916" kindref="member">ClientKeyboardFunction</ref> &gt;</type>
+        <definition>using castor3d::EventHandler::OnClientKeyboardEvent =  castor::SignalT&lt; ClientKeyboardFunction &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnClientKeyboardEvent</name>
+        <qualifiedname>castor3d::EventHandler::OnClientKeyboardEvent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Keyboard event signal definition. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="48" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d8e/a02762_1a03b0c5def88fd068283f5de7ddb165ae" prot="public" static="no">
+        <type>castor::SignalT&lt; <ref refid="de/d8e/a02762_1a44a9a40d9e96a4527000479b4702ae79" kindref="member">ClientHandlerFunction</ref> &gt;</type>
+        <definition>using castor3d::EventHandler::OnClientHandlerEvent =  castor::SignalT&lt; ClientHandlerFunction &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnClientHandlerEvent</name>
+        <qualifiedname>castor3d::EventHandler::OnClientHandlerEvent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Handler event signal definition. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="51" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d8e/a02762_1a762d1e36d01afdb527690a27f6e6645a" prot="public" static="no">
+        <type>castor::SignalT&lt; <ref refid="de/d8e/a02762_1a916afcd686fc5022c05d6ff2bf18900a" kindref="member">EnableFunction</ref> &gt;</type>
+        <definition>using castor3d::EventHandler::OnEnable =  castor::SignalT&lt; EnableFunction &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnEnable</name>
+        <qualifiedname>castor3d::EventHandler::OnEnable</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Signal when handler is enabled/disabled. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="54" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d8e/a02762_1a677bb241c46644f4dc5774e5f9951cd1" prot="public" static="no">
+        <type>OnClientMouseEvent::connection</type>
+        <definition>using castor3d::EventHandler::OnClientMouseEventConnection =  OnClientMouseEvent::connection</definition>
+        <argsstring></argsstring>
+        <name>OnClientMouseEventConnection</name>
+        <qualifiedname>castor3d::EventHandler::OnClientMouseEventConnection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Mouse event signal connection definition. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="57" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d8e/a02762_1ac4b2cfd7995c7d2d49025aead38eec7b" prot="public" static="no">
+        <type>OnClientKeyboardEvent::connection</type>
+        <definition>using castor3d::EventHandler::OnClientKeyboardEventConnection =  OnClientKeyboardEvent::connection</definition>
+        <argsstring></argsstring>
+        <name>OnClientKeyboardEventConnection</name>
+        <qualifiedname>castor3d::EventHandler::OnClientKeyboardEventConnection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Keyboard event signal connection definition. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="60" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d8e/a02762_1a2653d4d0452400e29c14ed60898ca603" prot="public" static="no">
+        <type>OnClientHandlerEvent::connection</type>
+        <definition>using castor3d::EventHandler::OnClientHandlerEventConnection =  OnClientHandlerEvent::connection</definition>
+        <argsstring></argsstring>
+        <name>OnClientHandlerEventConnection</name>
+        <qualifiedname>castor3d::EventHandler::OnClientHandlerEventConnection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Handler event signal connection definition. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="63" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d8e/a02762_1aeeec8bfb3700736547c31cc89e78ea2c" prot="public" static="no">
+        <type>OnEnable::connection</type>
+        <definition>using castor3d::EventHandler::OnEnableConnection =  OnEnable::connection</definition>
+        <argsstring></argsstring>
+        <name>OnEnableConnection</name>
+        <qualifiedname>castor3d::EventHandler::OnEnableConnection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Signal connection when handler is enabled/disabled. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/EventHandler.hpp" line="66" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="66" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Description of an event handler, class that can receive event. </para>
     </briefdescription>
     <detaileddescription>
-<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
-</simplesect>
-<simplesect kind="date"><para>17/04/2016 </para>
-</simplesect>
-<simplesect kind="version"><para>0.9.0 </para>
-</simplesect>
-</para>
     </detaileddescription>
     <inheritancegraph>
-      <node id="3">
-        <label>castor3d::EventHandler</label>
-        <link refid="d2/d93/a02758"/>
-      </node>
       <node id="1">
-        <label>castor3d::NonClientEventHandler&lt; Derived &gt;</label>
+        <label>castor3d::EventHandler</label>
         <link refid="de/d8e/a02762"/>
         <childnode refid="2" relation="public-inheritance">
         </childnode>
-        <childnode refid="3" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2">
-        <label>std::enable_shared_from_this&lt; Derived &gt;</label>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="6">
-        <label>T</label>
-      </node>
-      <node id="13">
-        <label>std::array&lt; OnClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</label>
-        <childnode refid="5" relation="template-instance">
-          <edgelabel>&lt; OnClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="10">
-        <label>std::array&lt; OnClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</label>
-        <childnode refid="5" relation="template-instance">
-          <edgelabel>&lt; OnClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="4">
-        <label>std::array&lt; OnClientMouseEvent, size_t(MouseEventType::eCount) &gt;</label>
-        <childnode refid="5" relation="template-instance">
-          <edgelabel>&lt; OnClientMouseEvent, size_t(MouseEventType::eCount) &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="22">
-        <label>std::array&lt; OnNonClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</label>
-        <childnode refid="5" relation="template-instance">
-          <edgelabel>&lt; OnNonClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="19">
-        <label>std::array&lt; OnNonClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</label>
-        <childnode refid="5" relation="template-instance">
-          <edgelabel>&lt; OnNonClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="16">
-        <label>std::array&lt; OnNonClientMouseEvent, size_t(MouseEventType::eCount) &gt;</label>
-        <childnode refid="5" relation="template-instance">
-          <edgelabel>&lt; OnNonClientMouseEvent, size_t(MouseEventType::eCount) &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="14">
-        <label>std::array&lt; std::vector&lt; OnClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</label>
-        <childnode refid="15" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-        <childnode refid="5" relation="template-instance">
-          <edgelabel>&lt; std::vector&lt; OnClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="11">
-        <label>std::array&lt; std::vector&lt; OnClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</label>
-        <childnode refid="12" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-        <childnode refid="5" relation="template-instance">
-          <edgelabel>&lt; std::vector&lt; OnClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="7">
-        <label>std::array&lt; std::vector&lt; OnClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</label>
-        <childnode refid="8" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-        <childnode refid="5" relation="template-instance">
-          <edgelabel>&lt; std::vector&lt; OnClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="23">
-        <label>std::array&lt; std::vector&lt; OnNonClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</label>
-        <childnode refid="24" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-        <childnode refid="5" relation="template-instance">
-          <edgelabel>&lt; std::vector&lt; OnNonClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="20">
-        <label>std::array&lt; std::vector&lt; OnNonClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</label>
-        <childnode refid="21" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-        <childnode refid="5" relation="template-instance">
-          <edgelabel>&lt; std::vector&lt; OnNonClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="17">
-        <label>std::array&lt; std::vector&lt; OnNonClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</label>
-        <childnode refid="18" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-        <childnode refid="5" relation="template-instance">
-          <edgelabel>&lt; std::vector&lt; OnNonClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</edgelabel>
-        </childnode>
       </node>
       <node id="3">
-        <label>castor3d::EventHandler</label>
-        <link refid="d2/d93/a02758"/>
-        <childnode refid="4" relation="usage">
-          <edgelabel>m_mouseSlots</edgelabel>
-        </childnode>
-        <childnode refid="7" relation="usage">
-          <edgelabel>m_mouseSlotsConnections</edgelabel>
-        </childnode>
-        <childnode refid="10" relation="usage">
-          <edgelabel>m_keyboardSlots</edgelabel>
-        </childnode>
-        <childnode refid="11" relation="usage">
-          <edgelabel>m_keyboardSlotsConnections</edgelabel>
-        </childnode>
-        <childnode refid="13" relation="usage">
-          <edgelabel>m_handlerSlots</edgelabel>
-        </childnode>
-        <childnode refid="14" relation="usage">
-          <edgelabel>m_handlerSlotsConnections</edgelabel>
-        </childnode>
-      </node>
-      <node id="1">
-        <label>castor3d::NonClientEventHandler&lt; Derived &gt;</label>
-        <link refid="de/d8e/a02762"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-        <childnode refid="3" relation="public-inheritance">
-        </childnode>
-        <childnode refid="16" relation="usage">
-          <edgelabel>m_ncMouseSlots</edgelabel>
-        </childnode>
-        <childnode refid="17" relation="usage">
-          <edgelabel>m_ncMouseSlotsConnections</edgelabel>
-        </childnode>
-        <childnode refid="19" relation="usage">
-          <edgelabel>m_ncKeyboardSlots</edgelabel>
-        </childnode>
-        <childnode refid="20" relation="usage">
-          <edgelabel>m_ncKeyboardSlotsConnections</edgelabel>
-        </childnode>
-        <childnode refid="22" relation="usage">
-          <edgelabel>m_ncHandlerSlots</edgelabel>
-        </childnode>
-        <childnode refid="23" relation="usage">
-          <edgelabel>m_ncHandlerSlotsConnections</edgelabel>
+        <label>castor3d::MouseEventHandler</label>
+        <link refid="d6/d92/a02770"/>
+        <childnode refid="1" relation="public-inheritance">
         </childnode>
       </node>
       <node id="5">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="6" relation="usage">
-          <edgelabel>elements</edgelabel>
+        <label>castor3d::NonClientEventHandler&lt; Derived &gt;</label>
+        <link refid="dd/deb/a02766"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::RenderWindow::EvtHandler</label>
+        <link refid="d2/d68/a04158"/>
+        <childnode refid="3" relation="public-inheritance">
         </childnode>
       </node>
       <node id="2">
-        <label>std::enable_shared_from_this&lt; Derived &gt;</label>
+        <label>castor::Named</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="5">
+        <label>T</label>
+      </node>
+      <node id="12">
+        <label>std::array&lt; OnClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; OnClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
       </node>
       <node id="9">
-        <label>std::vector&lt; T &gt;</label>
+        <label>std::array&lt; OnClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; OnClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::array&lt; OnClientMouseEvent, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; OnClientMouseEvent, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>std::array&lt; std::vector&lt; OnClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="14" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::array&lt; std::vector&lt; OnClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="11" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::array&lt; std::vector&lt; OnClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::EventHandler</label>
+        <link refid="de/d8e/a02762"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_mouseSlots</edgelabel>
+        </childnode>
         <childnode refid="6" relation="usage">
+          <edgelabel>m_mouseSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_keyboardSlots</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>m_keyboardSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_handlerSlots</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>m_handlerSlotsConnections</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
+      </node>
+      <node id="4">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="5" relation="usage">
           <edgelabel>elements</edgelabel>
         </childnode>
       </node>
-      <node id="15">
+      <node id="8">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="5" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
         <label>std::vector&lt; OnClientHandlerEventConnection &gt;</label>
-        <childnode refid="9" relation="template-instance">
+        <childnode refid="8" relation="template-instance">
           <edgelabel>&lt; OnClientHandlerEventConnection &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="12">
+      <node id="11">
         <label>std::vector&lt; OnClientKeyboardEventConnection &gt;</label>
-        <childnode refid="9" relation="template-instance">
+        <childnode refid="8" relation="template-instance">
           <edgelabel>&lt; OnClientKeyboardEventConnection &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="8">
+      <node id="7">
         <label>std::vector&lt; OnClientMouseEventConnection &gt;</label>
-        <childnode refid="9" relation="template-instance">
+        <childnode refid="8" relation="template-instance">
           <edgelabel>&lt; OnClientMouseEventConnection &gt;</edgelabel>
         </childnode>
       </node>
-      <node id="24">
-        <label>std::vector&lt; OnNonClientHandlerEventConnection &gt;</label>
-        <childnode refid="9" relation="template-instance">
-          <edgelabel>&lt; OnNonClientHandlerEventConnection &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="21">
-        <label>std::vector&lt; OnNonClientKeyboardEventConnection &gt;</label>
-        <childnode refid="9" relation="template-instance">
-          <edgelabel>&lt; OnNonClientKeyboardEventConnection &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="18">
-        <label>std::vector&lt; OnNonClientMouseEventConnection &gt;</label>
-        <childnode refid="9" relation="template-instance">
-          <edgelabel>&lt; OnNonClientMouseEventConnection &gt;</edgelabel>
-        </childnode>
-      </node>
     </collaborationgraph>
-    <location file="Event/UserInput/EventHandler.hpp" line="415" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="418" bodyend="552"/>
+    <location file="Event/UserInput/EventHandler.hpp" line="23" column="1" bodyfile="Event/UserInput/EventHandler.hpp" bodystart="25" bodyend="444"/>
     <listofallmembers>
-      <member refid="d2/d93/a02758_1af9b127733fe059b464db3d7857142075" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>catchesMouseEvents</name></member>
-      <member refid="d2/d93/a02758_1a3941edcde2e8ac2ed205548386e1bf46" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>catchesReturnKey</name></member>
-      <member refid="d2/d93/a02758_1a312bd6454656d77b7906ac620216b84d" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>catchesTabKey</name></member>
-      <member refid="de/d8e/a02762_1a703c7cbc98f4fbc25ac04600257c7c0c" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>ClientHandlerFunction</name></member>
-      <member refid="de/d8e/a02762_1a45ffbf50f17a665404170fd665624011" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>ClientKeyboardFunction</name></member>
-      <member refid="de/d8e/a02762_1aea92aaf9b48684355876a7c81409ccf3" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>ClientMouseFunction</name></member>
-      <member refid="d2/d93/a02758_1a6f95a70a6d584295f3d3ccfec0cb17fd" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>connect</name></member>
-      <member refid="d2/d93/a02758_1a072131ef43a320ea20a8177f64db0199" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>connect</name></member>
-      <member refid="d2/d93/a02758_1a27234b5982660ef259a8e869da4e6da0" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>connect</name></member>
-      <member refid="de/d8e/a02762_1a7c772af5b472ac82d7a40ebe4968cfb2" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>connectNC</name></member>
-      <member refid="de/d8e/a02762_1ab5d52b4021d688cc40caeb9fadba5458" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>connectNC</name></member>
-      <member refid="de/d8e/a02762_1a766759743a229af558fbe4053692bade" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>connectNC</name></member>
-      <member refid="de/d8e/a02762_1a4279fa9420669e19563cd42111f206e4" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>CU_DeclareSmartPtr</name></member>
-      <member refid="de/d8e/a02762_1a3a48ec87f20ba8eef17cdf21647d1ad8" prot="private" virt="virtual"><scope>castor3d::NonClientEventHandler</scope><name>doProcessHandlerEvent</name></member>
-      <member refid="de/d8e/a02762_1a74bc75324e44f6d322d89c11f16481ed" prot="private" virt="virtual"><scope>castor3d::NonClientEventHandler</scope><name>doProcessKeyboardEvent</name></member>
-      <member refid="de/d8e/a02762_1a3464bb1fcbf95540b0b7ad4cda680748" prot="private" virt="virtual"><scope>castor3d::NonClientEventHandler</scope><name>doProcessMouseEvent</name></member>
-      <member refid="d2/d93/a02758_1ae729a5b9c40a30b16b62817bbc58c63d" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>EventHandler</name></member>
-      <member refid="de/d8e/a02762_1a88c786851d42d7d9c5b4c4bb6fbd205d" prot="protected" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>EventHandlerFunction</name></member>
-      <member refid="de/d8e/a02762_1ad8d1623d5da2a584967c734fba483d8a" prot="protected" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>EventQueue</name></member>
-      <member refid="d2/d93/a02758_1a9ed160c89e5f742d420f00215b7c1d7b" prot="protected" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>m_handlerSlots</name></member>
-      <member refid="d2/d93/a02758_1a5e84dac1e70311d98ec5d815d81e4fe0" prot="protected" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>m_handlerSlotsConnections</name></member>
-      <member refid="d2/d93/a02758_1aac73eda577b38c43edf34b595cff8b59" prot="protected" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>m_keyboardSlots</name></member>
-      <member refid="d2/d93/a02758_1a66f89c17f733ba4033afc5771e7a827c" prot="protected" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>m_keyboardSlotsConnections</name></member>
-      <member refid="d2/d93/a02758_1a187f36449604532ccf230440b8e446c9" prot="protected" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>m_mouseSlots</name></member>
-      <member refid="d2/d93/a02758_1a4f97f319d54b0d877d7b105cca6cc965" prot="protected" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>m_mouseSlotsConnections</name></member>
-      <member refid="de/d8e/a02762_1a2a710ba7566a0da8a13156abc0901b11" prot="protected" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>m_ncHandlerSlots</name></member>
-      <member refid="de/d8e/a02762_1a368dcf33032891e0e56c1a1d8f4103aa" prot="protected" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>m_ncHandlerSlotsConnections</name></member>
-      <member refid="de/d8e/a02762_1a14951b54a3e24fe7b348613f16f50b84" prot="protected" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>m_ncKeyboardSlots</name></member>
-      <member refid="de/d8e/a02762_1ae1d9ec7ce4715a0a9a2536955cebb60e" prot="protected" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>m_ncKeyboardSlotsConnections</name></member>
-      <member refid="de/d8e/a02762_1aed8e1e5a6ecefc8810126ae8c7ddfb0c" prot="protected" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>m_ncMouseSlots</name></member>
-      <member refid="de/d8e/a02762_1af7c333a4c75f38cf11d5226e797fc653" prot="protected" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>m_ncMouseSlotsConnections</name></member>
-      <member refid="de/d8e/a02762_1af50b1f26ce0a2e046c7f29877fb81c2a" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>NonClientEventHandler</name></member>
-      <member refid="de/d8e/a02762_1a22342838eda0d890777efd4ef7671519" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>NonClientHandlerFunction</name></member>
-      <member refid="de/d8e/a02762_1a0adc142a34ed48e195b6f70ac17e5b92" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>NonClientKeyboardFunction</name></member>
-      <member refid="de/d8e/a02762_1a003d79006969f16bf5a26dac2904a94b" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>NonClientMouseFunction</name></member>
-      <member refid="d2/d93/a02758_1a03b0c5def88fd068283f5de7ddb165ae" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>OnClientHandlerEvent</name></member>
-      <member refid="d2/d93/a02758_1a2653d4d0452400e29c14ed60898ca603" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>OnClientHandlerEventConnection</name></member>
-      <member refid="d2/d93/a02758_1a377a0f15c155e02ba27203acc311e6cf" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>OnClientKeyboardEvent</name></member>
-      <member refid="d2/d93/a02758_1ac4b2cfd7995c7d2d49025aead38eec7b" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>OnClientKeyboardEventConnection</name></member>
-      <member refid="d2/d93/a02758_1a071f4627b0ab9424a4ea58bff380c291" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>OnClientMouseEvent</name></member>
-      <member refid="d2/d93/a02758_1a677bb241c46644f4dc5774e5f9951cd1" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>OnClientMouseEventConnection</name></member>
-      <member refid="de/d8e/a02762_1a8cde3553a16b17f2db9b8cb2d0457be6" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>OnNonClientHandlerEvent</name></member>
-      <member refid="de/d8e/a02762_1a3cd3b709106f34e3c628df967ff0d294" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>OnNonClientHandlerEventConnection</name></member>
-      <member refid="de/d8e/a02762_1ae68352453ba12818f1d870cdaf6eea40" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>OnNonClientKeyboardEvent</name></member>
-      <member refid="de/d8e/a02762_1ae5b3c80ac4550412145ed53787b33d86" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>OnNonClientKeyboardEventConnection</name></member>
-      <member refid="de/d8e/a02762_1acf4c10c3d5dd8fbb43d1b238d9b6de36" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>OnNonClientMouseEvent</name></member>
-      <member refid="de/d8e/a02762_1aefea2351ba1c6ea3dfbe9d22ddf311a6" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>OnNonClientMouseEventConnection</name></member>
-      <member refid="d2/d93/a02758_1a0da445b1ae561fcaf1d226ea46116a29" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>processEvents</name></member>
-      <member refid="d2/d93/a02758_1a6f5e82d7f867ea1c015027b0ea61291d" prot="protected" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>processHandlerEvent</name></member>
-      <member refid="d2/d93/a02758_1a7e1a8377cb8e9ef612c4b7a73f189ee7" prot="protected" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>processKeyboardEvent</name></member>
-      <member refid="d2/d93/a02758_1a7384ac0af4155b281bc24ec8c2ff4010" prot="protected" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>processMouseEvent</name></member>
-      <member refid="d2/d93/a02758_1a16401c9f0cb928edaab9f56c5ebcbc08" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>pushEvent</name></member>
-      <member refid="d2/d93/a02758_1afc92e893bf044425b1e80c3113cb3cca" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>pushEvent</name></member>
-      <member refid="d2/d93/a02758_1a278a37b0923a7b266c684251d37961cb" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>pushEvent</name></member>
-      <member refid="d2/d93/a02758_1a4d1cc6560e55cec04ae727c8d2b5f106" prot="public" virt="non-virtual"><scope>castor3d::NonClientEventHandler</scope><name>setCatchesMouseEvents</name></member>
-      <member refid="d2/d93/a02758_1ad34a3c576978d4afac873aac492d3e03" prot="public" virt="virtual"><scope>castor3d::NonClientEventHandler</scope><name>~EventHandler</name></member>
+      <member refid="de/d8e/a02762_1af9b127733fe059b464db3d7857142075" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>catchesMouseEvents</name></member>
+      <member refid="de/d8e/a02762_1a3941edcde2e8ac2ed205548386e1bf46" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>catchesReturnKey</name></member>
+      <member refid="de/d8e/a02762_1a312bd6454656d77b7906ac620216b84d" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>catchesTabKey</name></member>
+      <member refid="de/d8e/a02762_1a44a9a40d9e96a4527000479b4702ae79" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>ClientHandlerFunction</name></member>
+      <member refid="de/d8e/a02762_1a0d16d006a598b652f004c2541855d916" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>ClientKeyboardFunction</name></member>
+      <member refid="de/d8e/a02762_1abf8b7cff9d28a78406eeee8b7b6ebd86" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>ClientMouseFunction</name></member>
+      <member refid="de/d8e/a02762_1a6f95a70a6d584295f3d3ccfec0cb17fd" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>connect</name></member>
+      <member refid="de/d8e/a02762_1a072131ef43a320ea20a8177f64db0199" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>connect</name></member>
+      <member refid="de/d8e/a02762_1a27234b5982660ef259a8e869da4e6da0" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>connect</name></member>
+      <member refid="de/d8e/a02762_1ad6eda21ee30aa7316eb1b6796d3f0cb9" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>disable</name></member>
+      <member refid="de/d8e/a02762_1a88af7cdfa0a1ab72692086e6ab1820d4" prot="private" virt="pure-virtual"><scope>castor3d::EventHandler</scope><name>doCatchesMouseEvents</name></member>
+      <member refid="de/d8e/a02762_1a153fcbcce5041f44f3eae86230ec98fa" prot="private" virt="pure-virtual"><scope>castor3d::EventHandler</scope><name>doCatchesReturnKey</name></member>
+      <member refid="de/d8e/a02762_1af8c7b49268a8b6e10a25dfa34ea2ccca" prot="private" virt="pure-virtual"><scope>castor3d::EventHandler</scope><name>doCatchesTabKey</name></member>
+      <member refid="de/d8e/a02762_1a7ff7191cf1e1628a2b619f4c67cfdf51" prot="private" virt="pure-virtual"><scope>castor3d::EventHandler</scope><name>doProcessHandlerEvent</name></member>
+      <member refid="de/d8e/a02762_1aabaa2e1c9db32c58c76df9b5b2cbeefa" prot="private" virt="pure-virtual"><scope>castor3d::EventHandler</scope><name>doProcessKeyboardEvent</name></member>
+      <member refid="de/d8e/a02762_1a08d1276605f56b95cbdc14f4dcd042f2" prot="private" virt="pure-virtual"><scope>castor3d::EventHandler</scope><name>doProcessMouseEvent</name></member>
+      <member refid="de/d8e/a02762_1ab2e61c954e55d7f9a9699f8cd44aa10a" prot="private" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>doSwapQueue</name></member>
+      <member refid="de/d8e/a02762_1a261497f31a8ad918a2315af0efae6e6d" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>enable</name></member>
+      <member refid="de/d8e/a02762_1a916afcd686fc5022c05d6ff2bf18900a" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>EnableFunction</name></member>
+      <member refid="de/d8e/a02762_1ac52718713f27db870abc7268142083e1" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>EventHandler</name></member>
+      <member refid="de/d8e/a02762_1ad79273cdd0dcc5dfe45dcc6293a72301" prot="protected" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>EventHandlerFunction</name></member>
+      <member refid="de/d8e/a02762_1a3398c38b57677976456d795fbf36844a" prot="protected" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>EventQueue</name></member>
+      <member refid="de/d8e/a02762_1a0c72e92a8514c0959d7ad57b0b971f73" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>isEnabled</name></member>
+      <member refid="de/d8e/a02762_1aa87f342075c0c7a5ea2b576921802a90" prot="private" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>m_catchMouseEvents</name></member>
+      <member refid="de/d8e/a02762_1a63007be711638997a65a157341eb0bc2" prot="private" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>m_catchReturnKey</name></member>
+      <member refid="de/d8e/a02762_1aaeea593165e1beee83edefcb813b4297" prot="private" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>m_catchTabKey</name></member>
+      <member refid="de/d8e/a02762_1a9321227ee67ecfcbc3082ccaec399912" prot="private" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>m_enabled</name></member>
+      <member refid="de/d8e/a02762_1a9ed160c89e5f742d420f00215b7c1d7b" prot="protected" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>m_handlerSlots</name></member>
+      <member refid="de/d8e/a02762_1a5e84dac1e70311d98ec5d815d81e4fe0" prot="protected" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>m_handlerSlotsConnections</name></member>
+      <member refid="de/d8e/a02762_1aac73eda577b38c43edf34b595cff8b59" prot="protected" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>m_keyboardSlots</name></member>
+      <member refid="de/d8e/a02762_1a66f89c17f733ba4033afc5771e7a827c" prot="protected" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>m_keyboardSlotsConnections</name></member>
+      <member refid="de/d8e/a02762_1a187f36449604532ccf230440b8e446c9" prot="protected" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>m_mouseSlots</name></member>
+      <member refid="de/d8e/a02762_1a4f97f319d54b0d877d7b105cca6cc965" prot="protected" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>m_mouseSlotsConnections</name></member>
+      <member refid="de/d8e/a02762_1a82cdb06af1f609827d0f299a7e431021" prot="private" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>m_mutex</name></member>
+      <member refid="de/d8e/a02762_1adf9810daefda3e2c5964b7f43e1d75a3" prot="private" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>m_queue</name></member>
+      <member refid="de/d8e/a02762_1a03b0c5def88fd068283f5de7ddb165ae" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>OnClientHandlerEvent</name></member>
+      <member refid="de/d8e/a02762_1a2653d4d0452400e29c14ed60898ca603" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>OnClientHandlerEventConnection</name></member>
+      <member refid="de/d8e/a02762_1a377a0f15c155e02ba27203acc311e6cf" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>OnClientKeyboardEvent</name></member>
+      <member refid="de/d8e/a02762_1ac4b2cfd7995c7d2d49025aead38eec7b" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>OnClientKeyboardEventConnection</name></member>
+      <member refid="de/d8e/a02762_1a071f4627b0ab9424a4ea58bff380c291" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>OnClientMouseEvent</name></member>
+      <member refid="de/d8e/a02762_1a677bb241c46644f4dc5774e5f9951cd1" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>OnClientMouseEventConnection</name></member>
+      <member refid="de/d8e/a02762_1a51294359629a2fb1d22cab6d40e785e0" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>onEnable</name></member>
+      <member refid="de/d8e/a02762_1a762d1e36d01afdb527690a27f6e6645a" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>OnEnable</name></member>
+      <member refid="de/d8e/a02762_1aeeec8bfb3700736547c31cc89e78ea2c" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>OnEnableConnection</name></member>
+      <member refid="de/d8e/a02762_1a0da445b1ae561fcaf1d226ea46116a29" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>processEvents</name></member>
+      <member refid="de/d8e/a02762_1a6f5e82d7f867ea1c015027b0ea61291d" prot="protected" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>processHandlerEvent</name></member>
+      <member refid="de/d8e/a02762_1a7e1a8377cb8e9ef612c4b7a73f189ee7" prot="protected" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>processKeyboardEvent</name></member>
+      <member refid="de/d8e/a02762_1a7384ac0af4155b281bc24ec8c2ff4010" prot="protected" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>processMouseEvent</name></member>
+      <member refid="de/d8e/a02762_1a16401c9f0cb928edaab9f56c5ebcbc08" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>pushEvent</name></member>
+      <member refid="de/d8e/a02762_1afc92e893bf044425b1e80c3113cb3cca" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>pushEvent</name></member>
+      <member refid="de/d8e/a02762_1a278a37b0923a7b266c684251d37961cb" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>pushEvent</name></member>
+      <member refid="de/d8e/a02762_1a4d1cc6560e55cec04ae727c8d2b5f106" prot="public" virt="non-virtual"><scope>castor3d::EventHandler</scope><name>setCatchesMouseEvents</name></member>
+      <member refid="de/d8e/a02762_1ad34a3c576978d4afac873aac492d3e03" prot="public" virt="virtual"><scope>castor3d::EventHandler</scope><name>~EventHandler</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

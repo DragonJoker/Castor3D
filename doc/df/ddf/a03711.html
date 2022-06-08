@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,28 +42,26 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../d0/d95/a01389.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d1/d78/a03714.html">LightPropagationVolumesBase</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d1/d78/a03714.html">EnvironmentMapPass</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
-  <div class="headertitle"><div class="title">castor3d::LightPropagationVolumesBase Member List</div></div>
+  <div class="headertitle"><div class="title">castor3d::EnvironmentMapPass Member List</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>This is the complete list of members for <a class="el" href="../../d1/d78/a03714.html">castor3d::LightPropagationVolumesBase</a>, including all inherited members.</p>
+<p>This is the complete list of members for <a class="el" href="../../d1/d78/a03714.html">castor3d::EnvironmentMapPass</a>, including all inherited members.</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="../../d1/d78/a03714.html#af5694caddff9dd42e0bf699ca976856b">accept</a>(PipelineVisitorBase &amp;visitor)</td><td class="entry"><a class="el" href="../../d1/d78/a03714.html">castor3d::LightPropagationVolumesBase</a></td><td class="entry"></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="../../d1/d78/a03714.html#a1a3d3f70b7aa829a621de1f11d8c82ac">cleanup</a>()</td><td class="entry"><a class="el" href="../../d1/d78/a03714.html">castor3d::LightPropagationVolumesBase</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d1/d78/a03714.html#a25bee8be031046faa099ca309cd5d15e">initialise</a>()</td><td class="entry"><a class="el" href="../../d1/d78/a03714.html">castor3d::LightPropagationVolumesBase</a></td><td class="entry"></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="../../d1/d78/a03714.html#a05ab065cec74b356e24daa7e1b98807e">LightPropagationVolumesBase</a>(crg::ResourceHandler &amp;handler, Scene const &amp;scene, LightType lightType, RenderDevice const &amp;device, ShadowMapResult const &amp;smResult, LightVolumePassResult const &amp;lpvResult, LpvGridConfigUbo &amp;lpvGridConfigUbo, bool geometryVolumes)</td><td class="entry"><a class="el" href="../../d1/d78/a03714.html">castor3d::LightPropagationVolumesBase</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d1/d78/a03714.html#ac8301a7c2393cb5e7629c732e2d6c385">MaxPropagationSteps</a></td><td class="entry"><a class="el" href="../../d1/d78/a03714.html">castor3d::LightPropagationVolumesBase</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="../../d1/d78/a03714.html#a5354143f47344d8dab1d42b008d5ec01">registerLight</a>(Light *light)</td><td class="entry"><a class="el" href="../../d1/d78/a03714.html">castor3d::LightPropagationVolumesBase</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d1/d78/a03714.html#ae51a405cdc3013ae166ff7db4fed4deb">render</a>(crg::SemaphoreWaitArray const &amp;toWait, ashes::Queue const &amp;queue)</td><td class="entry"><a class="el" href="../../d1/d78/a03714.html">castor3d::LightPropagationVolumesBase</a></td><td class="entry"></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="../../d1/d78/a03714.html#ac104319ef8a406bf2b4b437ae7c9f3cb">update</a>(CpuUpdater &amp;updater)</td><td class="entry"><a class="el" href="../../d1/d78/a03714.html">castor3d::LightPropagationVolumesBase</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d1/d78/a03714.html#aa86d80b4f9930f9ca8ff36d4c7149b50">attachTo</a>(SceneNode &amp;node)</td><td class="entry"><a class="el" href="../../d1/d78/a03714.html">castor3d::EnvironmentMapPass</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="../../d1/d78/a03714.html#a20b95222dc110837235914d71d9bbc30">EnvironmentMapPass</a>(crg::FrameGraph &amp;graph, RenderDevice const &amp;device, EnvironmentMap &amp;environmentMap, SceneNodeSPtr faceNode, uint32_t index, CubeMapFace face, SceneBackground &amp;background)</td><td class="entry"><a class="el" href="../../d1/d78/a03714.html">castor3d::EnvironmentMapPass</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d1/d78/a03714.html#a5ac66f875a5e390d5ed77f8ca714f1fa">getLastPass</a>() const</td><td class="entry"><a class="el" href="../../d1/d78/a03714.html">castor3d::EnvironmentMapPass</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="../../d1/d78/a03714.html#aa4a97a5fdddb9b1498e9f36c09b04f2c">update</a>(CpuUpdater &amp;updater)</td><td class="entry"><a class="el" href="../../d1/d78/a03714.html">castor3d::EnvironmentMapPass</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d1/d78/a03714.html#aca48cad9e2c99338e974a16759edd688">update</a>(GpuUpdater &amp;updater)</td><td class="entry"><a class="el" href="../../d1/d78/a03714.html">castor3d::EnvironmentMapPass</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="../../d1/d78/a03714.html#a44750847397910500a005e2c3c699475">~EnvironmentMapPass</a>()</td><td class="entry"><a class="el" href="../../d1/d78/a03714.html">castor3d::EnvironmentMapPass</a></td><td class="entry"></td></tr>
 </table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 02:46:22 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:48 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

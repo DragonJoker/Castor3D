@@ -17,9 +17,9 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Material/Texture/TextureLayout.hpp" line="70" column="9" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="70" bodyend="-1"/>
-        <referencedby refid="d6/d41/a02930_1a7e60b24dc675dcfe72cc637b0d00b6b9" compoundref="dd/db5/a00365" startline="85" endline="88">forEachFirstMipView</referencedby>
-        <referencedby refid="d6/d41/a02930_1a8a1b9a6114bd1ced90ab0b403237586e" compoundref="dd/db5/a00365" startline="74" endline="82">forEachView</referencedby>
-        <referencedby refid="d3/d99/a02942_1a9313c8cc918bc3ee434cbeaaeb85b94a" compoundref="dd/db5/a00365" startline="539" endline="543">castor3d::TextureLayout::getLayerCubeView</referencedby>
+        <referencedby refid="d6/d41/a02930_1a7e60b24dc675dcfe72cc637b0d00b6b9" compoundref="da/dee/a00383" startline="85" endline="88">forEachFirstMipView</referencedby>
+        <referencedby refid="d6/d41/a02930_1a8a1b9a6114bd1ced90ab0b403237586e" compoundref="da/dee/a00383" startline="74" endline="82">forEachView</referencedby>
+        <referencedby refid="d3/d99/a02942_1a9313c8cc918bc3ee434cbeaaeb85b94a" compoundref="da/dee/a00383" startline="539" endline="543">castor3d::TextureLayout::getLayerCubeView</referencedby>
       </memberdef>
       <memberdef kind="variable" id="d6/d41/a02930_1a0fe245e7abfe95bd67276e81bcc0c059" prot="public" static="no" mutable="no">
         <type>std::vector&lt; <ref refid="d1/d75/a02926" kindref="compound">MipView</ref> &gt;</type>
@@ -34,9 +34,9 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Material/Texture/TextureLayout.hpp" line="71" column="13" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="71" bodyend="-1"/>
-        <referencedby refid="d6/d41/a02930_1a9094e59ad4639ea9b9be66d7288d1432" compoundref="dd/db5/a00365" startline="91" endline="97">forEachLeafView</referencedby>
-        <referencedby refid="d6/d41/a02930_1a8a1b9a6114bd1ced90ab0b403237586e" compoundref="dd/db5/a00365" startline="74" endline="82">forEachView</referencedby>
-        <referencedby refid="d3/d99/a02942_1ad47f2bcbe8671dfd2de4fd16b000c1a5" compoundref="dd/db5/a00365" startline="555" endline="559">castor3d::TextureLayout::getLayerCubeFace</referencedby>
+        <referencedby refid="d6/d41/a02930_1a9094e59ad4639ea9b9be66d7288d1432" compoundref="da/dee/a00383" startline="91" endline="97">forEachLeafView</referencedby>
+        <referencedby refid="d6/d41/a02930_1a8a1b9a6114bd1ced90ab0b403237586e" compoundref="da/dee/a00383" startline="74" endline="82">forEachView</referencedby>
+        <referencedby refid="d3/d99/a02942_1ad47f2bcbe8671dfd2de4fd16b000c1a5" compoundref="da/dee/a00383" startline="555" endline="559">castor3d::TextureLayout::getLayerCubeFace</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -62,9 +62,9 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Material/Texture/TextureLayout.hpp" line="74" column="6" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="74" bodyend="82"/>
-        <references refid="d6/d41/a02930_1a0fe245e7abfe95bd67276e81bcc0c059" compoundref="dd/db5/a00365" startline="71">faces</references>
-        <references refid="d1/d75/a02926_1ac23bed4d978ef4c38473672b09fe4e25" compoundref="dd/db5/a00365" startline="48" endline="52">castor3d::MipView::forEachView</references>
-        <references refid="d6/d41/a02930_1a80994da423e22c00a0e265a66debd84d" compoundref="dd/db5/a00365" startline="70">view</references>
+        <references refid="d6/d41/a02930_1a0fe245e7abfe95bd67276e81bcc0c059" compoundref="da/dee/a00383" startline="71">faces</references>
+        <references refid="d1/d75/a02926_1ac23bed4d978ef4c38473672b09fe4e25" compoundref="da/dee/a00383" startline="48" endline="52">castor3d::MipView::forEachView</references>
+        <references refid="d6/d41/a02930_1a80994da423e22c00a0e265a66debd84d" compoundref="da/dee/a00383" startline="70">view</references>
       </memberdef>
       <memberdef kind="function" id="d6/d41/a02930_1a7e60b24dc675dcfe72cc637b0d00b6b9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -88,8 +88,8 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Material/Texture/TextureLayout.hpp" line="85" column="6" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="85" bodyend="88"/>
-        <references refid="d1/d75/a02926_1a63ac7209185df2c391cab3451317221e" compoundref="dd/db5/a00365" startline="55" endline="65">castor3d::MipView::forEachFirstMipView</references>
-        <references refid="d6/d41/a02930_1a80994da423e22c00a0e265a66debd84d" compoundref="dd/db5/a00365" startline="70">view</references>
+        <references refid="d1/d75/a02926_1a63ac7209185df2c391cab3451317221e" compoundref="da/dee/a00383" startline="55" endline="65">castor3d::MipView::forEachFirstMipView</references>
+        <references refid="d6/d41/a02930_1a80994da423e22c00a0e265a66debd84d" compoundref="da/dee/a00383" startline="70">view</references>
       </memberdef>
       <memberdef kind="function" id="d6/d41/a02930_1a9094e59ad4639ea9b9be66d7288d1432" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -113,7 +113,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Material/Texture/TextureLayout.hpp" line="91" column="6" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="91" bodyend="97"/>
-        <references refid="d6/d41/a02930_1a0fe245e7abfe95bd67276e81bcc0c059" compoundref="dd/db5/a00365" startline="71">faces</references>
+        <references refid="d6/d41/a02930_1a0fe245e7abfe95bd67276e81bcc0c059" compoundref="da/dee/a00383" startline="71">faces</references>
       </memberdef>
       </sectiondef>
     <briefdescription>

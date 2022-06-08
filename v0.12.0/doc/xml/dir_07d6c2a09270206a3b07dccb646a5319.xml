@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dir_07d6c2a09270206a3b07dccb646a5319" kind="dir">
+    <compoundname>Event/Frame</compoundname>
+    <innerfile refid="d9/d39/a00257">CpuFrameEvent.hpp</innerfile>
+    <innerfile refid="dd/dd7/a00260">CpuFunctorEvent.hpp</innerfile>
+    <innerfile refid="df/da9/a00263">FrameEventModule.hpp</innerfile>
+    <innerfile refid="d5/d35/a00266">FrameListener.hpp</innerfile>
+    <innerfile refid="d5/d42/a00269">GpuFrameEvent.hpp</innerfile>
+    <innerfile refid="d9/dd6/a00272">GpuFunctorEvent.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Event/Frame/"/>
+  </compounddef>
+</doxygen>

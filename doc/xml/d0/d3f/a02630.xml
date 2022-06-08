@@ -9,7 +9,7 @@
         <type>typename CacheT</type>
       </param>
       <param>
-        <type><ref refid="dc/df4/a01401_1ad442bf3c1ba8a06ac36f710ba30b2870" kindref="member">EventType</ref></type>
+        <type><ref refid="da/dab/a01362_1ad442bf3c1ba8a06ac36f710ba30b2870" kindref="member">EventType</ref></type>
         <declname>EventT</declname>
         <defname>EventT</defname>
       </param>

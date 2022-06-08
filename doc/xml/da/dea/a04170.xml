@@ -1,294 +1,112 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="da/dea/a04170" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::SsaoConfig</compoundname>
-    <includes local="no">SsaoConfig.hpp</includes>
+    <compoundname>castor3d::ShadowMap::PassData</compoundname>
+    <includes local="no">ShadowMap.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="da/dea/a04170_1a6e7398a8f5b1db7a06abccc148a2ed37" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::SsaoConfig::enabled</definition>
+      <memberdef kind="variable" id="da/dea/a04170_1a1ffa8e192e90f7b60ec4101177d96352" prot="public" static="no" mutable="no">
+        <type>std::unique_ptr&lt; <ref refid="da/df4/a05050" kindref="compound">MatrixUbo</ref> &gt;</type>
+        <definition>std::unique_ptr&lt; MatrixUbo &gt; castor3d::ShadowMap::PassData::matrixUbo</definition>
         <argsstring></argsstring>
-        <name>enabled</name>
-        <qualifiedname>castor3d::SsaoConfig::enabled</qualifiedname>
-        <initializer>{ false }</initializer>
+        <name>matrixUbo</name>
+        <qualifiedname>castor3d::ShadowMap::PassData::matrixUbo</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The effect activation status. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="24" column="6" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="24" bodyend="-1"/>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="48" column="17" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="48" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="da/dea/a04170_1a7fd733973f8fa2f36b123df0b7a3cad8" prot="public" static="no" mutable="no">
-        <type>castor::RangedValue&lt; int32_t &gt;</type>
-        <definition>castor::RangedValue&lt; int32_t &gt; castor3d::SsaoConfig::logMaxOffset</definition>
+      <memberdef kind="variable" id="da/dea/a04170_1a4336e9fa692ced4edf49a884e521dccb" prot="public" static="no" mutable="no">
+        <type>CameraSPtr</type>
+        <definition>CameraSPtr castor3d::ShadowMap::PassData::camera</definition>
         <argsstring></argsstring>
-        <name>logMaxOffset</name>
-        <qualifiedname>castor3d::SsaoConfig::logMaxOffset</qualifiedname>
-        <initializer>{ 3u, castor::makeRange( 2, 6 ) }</initializer>
+        <name>camera</name>
+        <qualifiedname>castor3d::ShadowMap::PassData::camera</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The log of the maximum pixel offset. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="27" column="21" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="27" bodyend="-1"/>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="49" column="12" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="49" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="da/dea/a04170_1a7ae9a14ac80dfb8a2a42013fdfc63398" prot="public" static="no" mutable="no">
-        <type>int32_t</type>
-        <definition>int32_t castor3d::SsaoConfig::maxMipLevel</definition>
+      <memberdef kind="variable" id="da/dea/a04170_1a48af5e717f36a0e7052fe11ce4bec62a" prot="public" static="no" mutable="no">
+        <type>ViewportUPtr</type>
+        <definition>ViewportUPtr castor3d::ShadowMap::PassData::viewport</definition>
         <argsstring></argsstring>
-        <name>maxMipLevel</name>
-        <qualifiedname>castor3d::SsaoConfig::maxMipLevel</qualifiedname>
-        <initializer>{ 5 }</initializer>
+        <name>viewport</name>
+        <qualifiedname>castor3d::ShadowMap::PassData::viewport</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="28" column="9" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="28" bodyend="-1"/>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="50" column="14" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="50" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="da/dea/a04170_1a5c00f100857f71a46adb1dfbc8905ca5" prot="public" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::SsaoConfig::minRadius</definition>
+      <memberdef kind="variable" id="da/dea/a04170_1acb7360409821f59bd79f66029f62c654" prot="public" static="no" mutable="no">
+        <type>FrustumUPtr</type>
+        <definition>FrustumUPtr castor3d::ShadowMap::PassData::frustum</definition>
         <argsstring></argsstring>
-        <name>minRadius</name>
-        <qualifiedname>castor3d::SsaoConfig::minRadius</qualifiedname>
-        <initializer>{ 1.0f }</initializer>
+        <name>frustum</name>
+        <qualifiedname>castor3d::ShadowMap::PassData::frustum</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>Minimal sample radius to compute AO. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="31" column="7" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="31" bodyend="-1"/>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="51" column="13" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="51" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="da/dea/a04170_1ab6c094a6537836b1f6e58497e26bcfd8" prot="public" static="no" mutable="no">
-        <type>int32_t</type>
-        <definition>int32_t castor3d::SsaoConfig::variation</definition>
+      <memberdef kind="variable" id="da/dea/a04170_1a337ed1e63511a39d4587c17ca0a2ef09" prot="public" static="no" mutable="no">
+        <type>SceneCullerUPtr</type>
+        <definition>SceneCullerUPtr castor3d::ShadowMap::PassData::culler</definition>
         <argsstring></argsstring>
-        <name>variation</name>
-        <qualifiedname>castor3d::SsaoConfig::variation</qualifiedname>
-        <initializer>{ 0 }</initializer>
+        <name>culler</name>
+        <qualifiedname>castor3d::ShadowMap::PassData::culler</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="32" column="9" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="32" bodyend="-1"/>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="52" column="17" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="52" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="da/dea/a04170_1af06d7cc7c149df11f4281b7a7bacc9d0" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::SsaoConfig::highQuality</definition>
+      <memberdef kind="variable" id="da/dea/a04170_1af000341727b933062f865b61d8552af6" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/da0/a04182" kindref="compound">ShadowMapPass</ref> *</type>
+        <definition>ShadowMapPass* castor3d::ShadowMap::PassData::pass</definition>
         <argsstring></argsstring>
-        <name>highQuality</name>
-        <qualifiedname>castor3d::SsaoConfig::highQuality</qualifiedname>
-        <initializer>{ false }</initializer>
+        <name>pass</name>
+        <qualifiedname>castor3d::ShadowMap::PassData::pass</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>The high quality activation status. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="35" column="6" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="35" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="da/dea/a04170_1a593d6b80cbeef54b968771f32965b3a8" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::SsaoConfig::useNormalsBuffer</definition>
-        <argsstring></argsstring>
-        <name>useNormalsBuffer</name>
-        <qualifiedname>castor3d::SsaoConfig::useNormalsBuffer</qualifiedname>
-        <initializer>{ false }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The normals buffer usage status. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="38" column="6" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="38" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="da/dea/a04170_1a9c6a7dd2205dc53dda3e935c7b923c85" prot="public" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::SsaoConfig::radius</definition>
-        <argsstring></argsstring>
-        <name>radius</name>
-        <qualifiedname>castor3d::SsaoConfig::radius</qualifiedname>
-        <initializer>{ 0.5f }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The effect radius. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="41" column="7" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="41" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="da/dea/a04170_1a10c74f27ce7ead70ea43df6cc0a2baa4" prot="public" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::SsaoConfig::bias</definition>
-        <argsstring></argsstring>
-        <name>bias</name>
-        <qualifiedname>castor3d::SsaoConfig::bias</qualifiedname>
-        <initializer>{ 0.025f }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The effect bias. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="44" column="7" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="44" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="da/dea/a04170_1a551820443946351a8b2c35d631ff4e44" prot="public" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::SsaoConfig::intensity</definition>
-        <argsstring></argsstring>
-        <name>intensity</name>
-        <qualifiedname>castor3d::SsaoConfig::intensity</qualifiedname>
-        <initializer>{ 1.0f }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The effect intensity. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="47" column="7" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="47" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="da/dea/a04170_1a94c88bfe04532417ccedf6a24b658856" prot="public" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::SsaoConfig::numSamples</definition>
-        <argsstring></argsstring>
-        <name>numSamples</name>
-        <qualifiedname>castor3d::SsaoConfig::numSamples</qualifiedname>
-        <initializer>{ 19u }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The samples count pixel. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="50" column="10" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="50" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="da/dea/a04170_1a656080a608965d5cc362b2d1dbdaa71d" prot="public" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::SsaoConfig::edgeSharpness</definition>
-        <argsstring></argsstring>
-        <name>edgeSharpness</name>
-        <qualifiedname>castor3d::SsaoConfig::edgeSharpness</qualifiedname>
-        <initializer>{ 1.0f }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The edge sharpness, increase to make depth edges crisper, decrease to reduce flicker. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="53" column="7" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="53" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="da/dea/a04170_1a90b5f5c6fdaa124ae3a68d6e2621d5af" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::SsaoConfig::blurHighQuality</definition>
-        <argsstring></argsstring>
-        <name>blurHighQuality</name>
-        <qualifiedname>castor3d::SsaoConfig::blurHighQuality</qualifiedname>
-        <initializer>{ false }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The high quality activation status for the blur. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="56" column="6" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="56" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="da/dea/a04170_1afae83535e7ed32b2e830ac5f1b8ea070" prot="public" static="no" mutable="no">
-        <type>castor::ChangeTracked&lt; castor::RangedValue&lt; uint32_t &gt; &gt;</type>
-        <definition>castor::ChangeTracked&lt; castor::RangedValue&lt; uint32_t &gt; &gt; castor3d::SsaoConfig::blurStepSize</definition>
-        <argsstring></argsstring>
-        <name>blurStepSize</name>
-        <qualifiedname>castor3d::SsaoConfig::blurStepSize</qualifiedname>
-        <initializer>{ { 2u, castor::makeRange( 1u, 60u ) } }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>Step in 2-pixel intervals since we already blurred against neighbors in the first AO pass. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="59" column="23" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="59" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="da/dea/a04170_1a39510aea40f0964299910d74aedbfb0d" prot="public" static="no" mutable="no">
-        <type>castor::ChangeTracked&lt; castor::RangedValue&lt; int32_t &gt; &gt;</type>
-        <definition>castor::ChangeTracked&lt; castor::RangedValue&lt; int32_t &gt; &gt; castor3d::SsaoConfig::blurRadius</definition>
-        <argsstring></argsstring>
-        <name>blurRadius</name>
-        <qualifiedname>castor3d::SsaoConfig::blurRadius</qualifiedname>
-        <initializer>{ { 4, castor::makeRange( 1, 6 ) } }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>VkFilter radius in pixels. This will be multiplied by m_blurStepSize. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="62" column="23" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="62" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="da/dea/a04170_1ae50750d6b0b73142825482e10f0b45e5" prot="public" static="no" mutable="no">
-        <type>castor::RangedValue&lt; int32_t &gt;</type>
-        <definition>castor::RangedValue&lt; int32_t &gt; castor3d::SsaoConfig::bendStepCount</definition>
-        <argsstring></argsstring>
-        <name>bendStepCount</name>
-        <qualifiedname>castor3d::SsaoConfig::bendStepCount</qualifiedname>
-        <initializer>{ 4, castor::makeRange( 1, 60 ) }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The normals bending ray marching steps count. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="65" column="21" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="65" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="da/dea/a04170_1ad65ee5938729989a3b95a870b21d360f" prot="public" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor3d::SsaoConfig::bendStepSize</definition>
-        <argsstring></argsstring>
-        <name>bendStepSize</name>
-        <qualifiedname>castor3d::SsaoConfig::bendStepSize</qualifiedname>
-        <initializer>{ 0.5f }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>The normals bending ray marching step size. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="68" column="7" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="68" bodyend="-1"/>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="53" column="16" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="53" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="da/dea/a04170_1a2f79a962e2ae52b8e7f3ec0e1f3c2b5e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SsaoConfig::accept</definition>
-        <argsstring>(castor::String const &amp;name, PipelineVisitorBase &amp;visitor)</argsstring>
-        <name>accept</name>
-        <qualifiedname>castor3d::SsaoConfig::accept</qualifiedname>
+      <memberdef kind="function" id="da/dea/a04170_1a1f84586feb55aab13903c6b96f1ee470" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ShadowMap::PassData::PassData</definition>
+        <argsstring>(std::unique_ptr&lt; MatrixUbo &gt; matrixUbo, CameraSPtr camera, SceneCullerUPtr culler)</argsstring>
+        <name>PassData</name>
+        <qualifiedname>castor3d::ShadowMap::PassData::PassData</qualifiedname>
         <param>
-          <type>castor::String const &amp;</type>
-          <declname>name</declname>
+          <type>std::unique_ptr&lt; <ref refid="da/df4/a05050" kindref="compound">MatrixUbo</ref> &gt;</type>
+          <declname>matrixUbo</declname>
         </param>
         <param>
-          <type><ref refid="dc/dbb/a03262" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
-          <declname>visitor</declname>
+          <type>CameraSPtr</type>
+          <declname>camera</declname>
+        </param>
+        <param>
+          <type>SceneCullerUPtr</type>
+          <declname>culler</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -296,33 +114,465 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Ssao/SsaoConfig.hpp" line="19" column="14"/>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="28" column="1" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="28" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dea/a04170_1a65c5014a48d963932d281049b89b5697" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ShadowMap::PassData::PassData</definition>
+        <argsstring>(std::unique_ptr&lt; MatrixUbo &gt; matrixUbo, ViewportUPtr viewport, SceneCullerUPtr culler)</argsstring>
+        <name>PassData</name>
+        <qualifiedname>castor3d::ShadowMap::PassData::PassData</qualifiedname>
+        <param>
+          <type>std::unique_ptr&lt; <ref refid="da/df4/a05050" kindref="compound">MatrixUbo</ref> &gt;</type>
+          <declname>matrixUbo</declname>
+        </param>
+        <param>
+          <type>ViewportUPtr</type>
+          <declname>viewport</declname>
+        </param>
+        <param>
+          <type>SceneCullerUPtr</type>
+          <declname>culler</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="38" column="1" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="38" bodyend="46"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Ssao/SsaoConfig.hpp" line="17" column="1" bodyfile="Render/Ssao/SsaoConfig.hpp" bodystart="18" bodyend="69"/>
+    <collaborationgraph>
+      <node id="22">
+        <label>Animable</label>
+        <link refid="d5/db4/a02182"/>
+        <childnode refid="23" relation="public-inheritance">
+        </childnode>
+        <childnode refid="24" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="27" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="39">
+        <label>castor3d::GBufferT&lt; SmTexture &gt;</label>
+        <link refid="df/d76/a03726"/>
+        <childnode refid="40" relation="private-inheritance">
+        </childnode>
+        <childnode refid="41" relation="usage">
+          <edgelabel>m_result</edgelabel>
+        </childnode>
+        <childnode refid="43" relation="template-instance">
+          <edgelabel>&lt; SmTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="26">
+        <label>K</label>
+      </node>
+      <node id="5">
+        <label>T</label>
+      </node>
+      <node id="46">
+        <label>std::array&lt; castor3d::ShadowMap::Passes, 4u &gt;</label>
+        <childnode refid="47" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="53" relation="template-instance">
+          <edgelabel>&lt; castor3d::ShadowMap::Passes, 4u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="27">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d5/db4/a02182"/>
+        <childnode refid="28" relation="public-inheritance">
+        </childnode>
+        <childnode refid="24" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::Camera</label>
+        <link refid="d0/d15/a04574"/>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="40">
+        <label>castor3d::GBufferBase</label>
+        <link refid="db/db0/a03722"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+      </node>
+      <node id="43">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="df/d76/a03726"/>
+        <childnode refid="40" relation="private-inheritance">
+        </childnode>
+        <childnode refid="41" relation="usage">
+          <edgelabel>m_result</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::MatrixUbo</label>
+        <link refid="da/df4/a05050"/>
+      </node>
+      <node id="18">
+        <label>castor3d::MovableObject</label>
+        <link refid="de/da0/a04626"/>
+        <childnode refid="19" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+        <childnode refid="20" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::QueuesData</label>
+        <link refid="d2/dce/a04002"/>
+      </node>
+      <node id="11">
+        <label>castor3d::RenderDevice</label>
+        <link refid="df/d75/a04010"/>
+        <childnode refid="12" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>queueFamilies</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::RenderNodesPass</label>
+        <link refid="de/d67/a04110"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="public-inheritance">
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_matrixUbo</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="usage">
+          <edgelabel>m_culler</edgelabel>
+        </childnode>
+        <childnode refid="32" relation="usage">
+          <edgelabel>m_sceneUbo</edgelabel>
+        </childnode>
+        <childnode refid="33" relation="usage">
+          <edgelabel>m_additionalDescriptors</edgelabel>
+        </childnode>
+      </node>
+      <node id="34">
+        <label>castor3d::RenderNodesPass::PassDescriptors</label>
+        <link refid="d2/d0e/a04114"/>
+      </node>
+      <node id="12">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d7/ded/a04130"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="36">
+        <label>castor3d::Scene</label>
+        <link refid="d8/d12/a04694"/>
+        <childnode refid="37" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor3d::SceneCuller</label>
+        <link refid="d3/d94/a03698"/>
+        <childnode refid="17" relation="usage">
+          <edgelabel>m_camera</edgelabel>
+        </childnode>
+        <childnode refid="29" relation="usage">
+          <edgelabel>m_renderPasses</edgelabel>
+        </childnode>
+      </node>
+      <node id="30">
+        <label>castor3d::SceneCuller::RenderPassBuffers</label>
+        <link refid="d1/d5f/a03706"/>
+        <childnode refid="31" relation="usage">
+          <edgelabel>nodesIds</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor3d::SceneNode</label>
+        <link refid="d1/d86/a04746"/>
+        <childnode refid="21" relation="public-inheritance">
+        </childnode>
+        <childnode refid="22" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="32">
+        <label>castor3d::SceneUbo</label>
+        <link refid="dd/d94/a05102"/>
+      </node>
+      <node id="35">
+        <label>castor3d::ShadowMap</label>
+        <link refid="d2/dbb/a04166"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+        <childnode refid="36" relation="usage">
+          <edgelabel>m_scene</edgelabel>
+        </childnode>
+        <childnode refid="38" relation="usage">
+          <edgelabel>m_result</edgelabel>
+        </childnode>
+        <childnode refid="44" relation="usage">
+          <edgelabel>m_geometryBuffers</edgelabel>
+        </childnode>
+        <childnode refid="46" relation="usage">
+          <edgelabel>m_passes</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ShadowMap::PassData</label>
+        <link refid="da/dea/a04170"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>matrixUbo</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>pass</edgelabel>
+        </childnode>
+      </node>
+      <node id="47">
+        <label>castor3d::ShadowMap::Passes</label>
+        <link refid="d8/d93/a04174"/>
+        <childnode refid="48" relation="usage">
+          <edgelabel>passes</edgelabel>
+        </childnode>
+        <childnode refid="49" relation="usage">
+          <edgelabel>graphs</edgelabel>
+        </childnode>
+        <childnode refid="51" relation="usage">
+          <edgelabel>runnables</edgelabel>
+        </childnode>
+        <childnode refid="52" relation="usage">
+          <edgelabel>blurs</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::ShadowMapPass</label>
+        <link refid="dd/da0/a04182"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="usage">
+          <edgelabel>m_shadowMap</edgelabel>
+        </childnode>
+        <childnode refid="54" relation="usage">
+          <edgelabel>m_shadowMapUbo</edgelabel>
+        </childnode>
+      </node>
+      <node id="38">
+        <label>castor3d::ShadowMapResult</label>
+        <link refid="d1/d8f/a04202"/>
+        <childnode refid="39" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="54">
+        <label>castor3d::ShadowMapUbo</label>
+        <link refid="db/da9/a05110"/>
+      </node>
+      <node id="9">
+        <label>castor::Named</label>
+      </node>
+      <node id="28">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="23">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="8">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="19">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="10">
+        <label>crg::RenderPass</label>
+      </node>
+      <node id="29">
+        <label>std::map&lt; castor3d::RenderNodesPass const *, castor3d::SceneCuller::RenderPassBuffers &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="30" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="25" relation="template-instance">
+          <edgelabel>&lt; castor3d::RenderNodesPass const *, castor3d::SceneCuller::RenderPassBuffers &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="24">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="25" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="33">
+        <label>std::map&lt; size_t, castor3d::RenderNodesPass::PassDescriptors &gt;</label>
+        <childnode refid="34" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="25" relation="template-instance">
+          <edgelabel>&lt; size_t, castor3d::RenderNodesPass::PassDescriptors &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="44">
+        <label>std::set&lt; std::reference_wrapper&lt; castor3d::GeometryBuffers &gt; &gt;</label>
+        <childnode refid="45" relation="template-instance">
+          <edgelabel>&lt; std::reference_wrapper&lt; castor3d::GeometryBuffers &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="53">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="5" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="37">
+        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
+      </node>
+      <node id="21">
+        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
+      </node>
+      <node id="25">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="26" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="45">
+        <label>std::set&lt; K &gt;</label>
+        <childnode refid="26" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+      </node>
+      <node id="42">
+        <label>std::shared_ptr&lt; T &gt;</label>
+        <childnode refid="5" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="5" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="5" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::unique_ptr&lt; castor3d::MatrixUbo &gt;</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; castor3d::MatrixUbo &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="50">
+        <label>std::unique_ptr&lt; crg::FrameGraph &gt;</label>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; crg::FrameGraph &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="52">
+        <label>std::vector&lt; GaussianBlurUPtr &gt;</label>
+        <childnode refid="15" relation="template-instance">
+          <edgelabel>&lt; GaussianBlurUPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="48">
+        <label>std::vector&lt; PassDataPtr &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="template-instance">
+          <edgelabel>&lt; PassDataPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="31">
+        <label>std::vector&lt; PipelineBuffer &gt;</label>
+        <childnode refid="15" relation="template-instance">
+          <edgelabel>&lt; PipelineBuffer &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>std::vector&lt; QueuesData &gt;</label>
+        <childnode refid="14" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="template-instance">
+          <edgelabel>&lt; QueuesData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="41">
+        <label>std::vector&lt; TexturePtr &gt;</label>
+        <childnode refid="42" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="template-instance">
+          <edgelabel>&lt; TexturePtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="51">
+        <label>std::vector&lt; crg::RunnableGraphPtr &gt;</label>
+        <childnode refid="15" relation="template-instance">
+          <edgelabel>&lt; crg::RunnableGraphPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="49">
+        <label>std::vector&lt; std::unique_ptr&lt; crg::FrameGraph &gt; &gt;</label>
+        <childnode refid="50" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="template-instance">
+          <edgelabel>&lt; std::unique_ptr&lt; crg::FrameGraph &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/ShadowMap/ShadowMap.hpp" line="26" column="1" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="27" bodyend="54"/>
     <listofallmembers>
-      <member refid="da/dea/a04170_1a2f79a962e2ae52b8e7f3ec0e1f3c2b5e" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>accept</name></member>
-      <member refid="da/dea/a04170_1ae50750d6b0b73142825482e10f0b45e5" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>bendStepCount</name></member>
-      <member refid="da/dea/a04170_1ad65ee5938729989a3b95a870b21d360f" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>bendStepSize</name></member>
-      <member refid="da/dea/a04170_1a10c74f27ce7ead70ea43df6cc0a2baa4" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>bias</name></member>
-      <member refid="da/dea/a04170_1a90b5f5c6fdaa124ae3a68d6e2621d5af" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>blurHighQuality</name></member>
-      <member refid="da/dea/a04170_1a39510aea40f0964299910d74aedbfb0d" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>blurRadius</name></member>
-      <member refid="da/dea/a04170_1afae83535e7ed32b2e830ac5f1b8ea070" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>blurStepSize</name></member>
-      <member refid="da/dea/a04170_1a656080a608965d5cc362b2d1dbdaa71d" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>edgeSharpness</name></member>
-      <member refid="da/dea/a04170_1a6e7398a8f5b1db7a06abccc148a2ed37" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>enabled</name></member>
-      <member refid="da/dea/a04170_1af06d7cc7c149df11f4281b7a7bacc9d0" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>highQuality</name></member>
-      <member refid="da/dea/a04170_1a551820443946351a8b2c35d631ff4e44" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>intensity</name></member>
-      <member refid="da/dea/a04170_1a7fd733973f8fa2f36b123df0b7a3cad8" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>logMaxOffset</name></member>
-      <member refid="da/dea/a04170_1a7ae9a14ac80dfb8a2a42013fdfc63398" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>maxMipLevel</name></member>
-      <member refid="da/dea/a04170_1a5c00f100857f71a46adb1dfbc8905ca5" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>minRadius</name></member>
-      <member refid="da/dea/a04170_1a94c88bfe04532417ccedf6a24b658856" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>numSamples</name></member>
-      <member refid="da/dea/a04170_1a9c6a7dd2205dc53dda3e935c7b923c85" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>radius</name></member>
-      <member refid="da/dea/a04170_1a593d6b80cbeef54b968771f32965b3a8" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>useNormalsBuffer</name></member>
-      <member refid="da/dea/a04170_1ab6c094a6537836b1f6e58497e26bcfd8" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>variation</name></member>
+      <member refid="da/dea/a04170_1a4336e9fa692ced4edf49a884e521dccb" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::PassData</scope><name>camera</name></member>
+      <member refid="da/dea/a04170_1a337ed1e63511a39d4587c17ca0a2ef09" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::PassData</scope><name>culler</name></member>
+      <member refid="da/dea/a04170_1acb7360409821f59bd79f66029f62c654" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::PassData</scope><name>frustum</name></member>
+      <member refid="da/dea/a04170_1a1ffa8e192e90f7b60ec4101177d96352" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::PassData</scope><name>matrixUbo</name></member>
+      <member refid="da/dea/a04170_1af000341727b933062f865b61d8552af6" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::PassData</scope><name>pass</name></member>
+      <member refid="da/dea/a04170_1a1f84586feb55aab13903c6b96f1ee470" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::PassData</scope><name>PassData</name></member>
+      <member refid="da/dea/a04170_1a65c5014a48d963932d281049b89b5697" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::PassData</scope><name>PassData</name></member>
+      <member refid="da/dea/a04170_1a48af5e717f36a0e7052fe11ce4bec62a" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::PassData</scope><name>viewport</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

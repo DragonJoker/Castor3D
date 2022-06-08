@@ -2,12 +2,12 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_b70b22b959ecebdb1f17b0f917c94768" kind="dir">
     <compoundname>Render/GlobalIllumination/VoxelConeTracing</compoundname>
-    <innerfile refid="d5/d5b/a00695">VoxelBufferToTexture.hpp</innerfile>
-    <innerfile refid="df/dbb/a00698">VoxelizeModule.hpp</innerfile>
-    <innerfile refid="dd/d57/a00701">VoxelizePass.hpp</innerfile>
-    <innerfile refid="d4/d6a/a00704">Voxelizer.hpp</innerfile>
-    <innerfile refid="d1/d56/a00707">VoxelSceneData.hpp</innerfile>
-    <innerfile refid="d4/deb/a00710">VoxelSecondaryBounce.hpp</innerfile>
+    <innerfile refid="d8/db9/a00725">VoxelBufferToTexture.hpp</innerfile>
+    <innerfile refid="df/d3b/a00728">VoxelizeModule.hpp</innerfile>
+    <innerfile refid="df/df7/a00731">VoxelizePass.hpp</innerfile>
+    <innerfile refid="d6/dc0/a00734">Voxelizer.hpp</innerfile>
+    <innerfile refid="dd/db2/a00737">VoxelSceneData.hpp</innerfile>
+    <innerfile refid="dc/dce/a00740">VoxelSecondaryBounce.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

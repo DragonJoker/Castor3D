@@ -103,7 +103,7 @@
         <location file="Cache/ObjectCacheBase.hpp" line="26" column="1" bodyfile="Cache/ObjectCacheBase.hpp" bodystart="26" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="d8/dab/a02638_1ac64abf5d5b1d54b7309db409911089e8" prot="protected" static="no">
-        <type><ref refid="dc/df4/a01401_1a7de7d7e921beac1df049ba4731fbb32e" kindref="member">ObjectPtrT</ref>&lt; <ref refid="d8/dab/a02638_1a94498fe491cc5b80edef5dac5b021376" kindref="member">ElementT</ref>, <ref refid="d8/dab/a02638_1ae1c86204bfd1bdca2c6cfa001a672dc0" kindref="member">ElementKeyT</ref> &gt;</type>
+        <type><ref refid="da/dab/a01362_1a7de7d7e921beac1df049ba4731fbb32e" kindref="member">ObjectPtrT</ref>&lt; <ref refid="d8/dab/a02638_1a94498fe491cc5b80edef5dac5b021376" kindref="member">ElementT</ref>, <ref refid="d8/dab/a02638_1ae1c86204bfd1bdca2c6cfa001a672dc0" kindref="member">ElementKeyT</ref> &gt;</type>
         <definition>using castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::ElementPtrT =  ObjectPtrT&lt; ElementT, ElementKeyT &gt;</definition>
         <argsstring></argsstring>
         <name>ElementPtrT</name>
@@ -117,7 +117,7 @@
         <location file="Cache/ObjectCacheBase.hpp" line="27" column="1" bodyfile="Cache/ObjectCacheBase.hpp" bodystart="27" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="d8/dab/a02638_1a20564c6d1c8d37fa00fe04e267b1b8fa" prot="protected" static="no">
-        <type><ref refid="dc/df4/a01401_1a88ccd33b7e48e3de1ab488330f5d9341" kindref="member">ObjectObsT</ref>&lt; <ref refid="d8/dab/a02638_1a94498fe491cc5b80edef5dac5b021376" kindref="member">ElementT</ref>, <ref refid="d8/dab/a02638_1ae1c86204bfd1bdca2c6cfa001a672dc0" kindref="member">ElementKeyT</ref> &gt;</type>
+        <type><ref refid="da/dab/a01362_1a88ccd33b7e48e3de1ab488330f5d9341" kindref="member">ObjectObsT</ref>&lt; <ref refid="d8/dab/a02638_1a94498fe491cc5b80edef5dac5b021376" kindref="member">ElementT</ref>, <ref refid="d8/dab/a02638_1ae1c86204bfd1bdca2c6cfa001a672dc0" kindref="member">ElementKeyT</ref> &gt;</type>
         <definition>using castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::ElementObsT =  ObjectObsT&lt; ElementT, ElementKeyT &gt;</definition>
         <argsstring></argsstring>
         <name>ElementObsT</name>
@@ -131,7 +131,7 @@
         <location file="Cache/ObjectCacheBase.hpp" line="28" column="1" bodyfile="Cache/ObjectCacheBase.hpp" bodystart="28" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="d8/dab/a02638_1a5f6c89792190f153d2304470edab28b6" prot="protected" static="no">
-        <type><ref refid="dc/df4/a01401_1a6af9e2caeb32886db0b55043a386d206" kindref="member">ObjectContT</ref>&lt; <ref refid="d8/dab/a02638_1a94498fe491cc5b80edef5dac5b021376" kindref="member">ElementT</ref>, <ref refid="d8/dab/a02638_1ae1c86204bfd1bdca2c6cfa001a672dc0" kindref="member">ElementKeyT</ref> &gt;</type>
+        <type><ref refid="da/dab/a01362_1a6af9e2caeb32886db0b55043a386d206" kindref="member">ObjectContT</ref>&lt; <ref refid="d8/dab/a02638_1a94498fe491cc5b80edef5dac5b021376" kindref="member">ElementT</ref>, <ref refid="d8/dab/a02638_1ae1c86204bfd1bdca2c6cfa001a672dc0" kindref="member">ElementKeyT</ref> &gt;</type>
         <definition>using castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::ElementContT =  ObjectContT&lt; ElementT, ElementKeyT &gt;</definition>
         <argsstring></argsstring>
         <name>ElementContT</name>
@@ -145,7 +145,7 @@
         <location file="Cache/ObjectCacheBase.hpp" line="29" column="1" bodyfile="Cache/ObjectCacheBase.hpp" bodystart="29" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="d8/dab/a02638_1ae9dcfec2c1a41e5ac0b9f0cbb0b4254c" prot="protected" static="no">
-        <type><ref refid="dc/df4/a01401_1acf4eda0949d3964f11fb79cc242659e1" kindref="member">ObjectInitialiserT</ref>&lt; <ref refid="d8/dab/a02638_1a94498fe491cc5b80edef5dac5b021376" kindref="member">ElementT</ref>, <ref refid="d8/dab/a02638_1ae1c86204bfd1bdca2c6cfa001a672dc0" kindref="member">ElementKeyT</ref> &gt;</type>
+        <type><ref refid="da/dab/a01362_1acf4eda0949d3964f11fb79cc242659e1" kindref="member">ObjectInitialiserT</ref>&lt; <ref refid="d8/dab/a02638_1a94498fe491cc5b80edef5dac5b021376" kindref="member">ElementT</ref>, <ref refid="d8/dab/a02638_1ae1c86204bfd1bdca2c6cfa001a672dc0" kindref="member">ElementKeyT</ref> &gt;</type>
         <definition>using castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::ElementInitialiserT =  ObjectInitialiserT&lt; ElementT, ElementKeyT &gt;</definition>
         <argsstring></argsstring>
         <name>ElementInitialiserT</name>
@@ -159,7 +159,7 @@
         <location file="Cache/ObjectCacheBase.hpp" line="30" column="1" bodyfile="Cache/ObjectCacheBase.hpp" bodystart="30" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="d8/dab/a02638_1a0b96fa488b8fdd4fbcbc7f144ecbbb7e" prot="protected" static="no">
-        <type><ref refid="dc/df4/a01401_1a5cc7884dc2299cfacad0bf52c423bc02" kindref="member">ObjectCleanerT</ref>&lt; <ref refid="d8/dab/a02638_1a94498fe491cc5b80edef5dac5b021376" kindref="member">ElementT</ref>, <ref refid="d8/dab/a02638_1ae1c86204bfd1bdca2c6cfa001a672dc0" kindref="member">ElementKeyT</ref> &gt;</type>
+        <type><ref refid="da/dab/a01362_1a5cc7884dc2299cfacad0bf52c423bc02" kindref="member">ObjectCleanerT</ref>&lt; <ref refid="d8/dab/a02638_1a94498fe491cc5b80edef5dac5b021376" kindref="member">ElementT</ref>, <ref refid="d8/dab/a02638_1ae1c86204bfd1bdca2c6cfa001a672dc0" kindref="member">ElementKeyT</ref> &gt;</type>
         <definition>using castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::ElementCleanerT =  ObjectCleanerT&lt; ElementT, ElementKeyT &gt;</definition>
         <argsstring></argsstring>
         <name>ElementCleanerT</name>
@@ -173,7 +173,7 @@
         <location file="Cache/ObjectCacheBase.hpp" line="31" column="1" bodyfile="Cache/ObjectCacheBase.hpp" bodystart="31" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="d8/dab/a02638_1a120add2fe6c6efc840f052d926e609d6" prot="protected" static="no">
-        <type><ref refid="dc/df4/a01401_1a704bfeeef6aa6fe20f05e15e99790d95" kindref="member">ObjectMergerT</ref>&lt; <ref refid="d8/dab/a02638_1a94498fe491cc5b80edef5dac5b021376" kindref="member">ElementT</ref>, <ref refid="d8/dab/a02638_1ae1c86204bfd1bdca2c6cfa001a672dc0" kindref="member">ElementKeyT</ref> &gt;</type>
+        <type><ref refid="da/dab/a01362_1a704bfeeef6aa6fe20f05e15e99790d95" kindref="member">ObjectMergerT</ref>&lt; <ref refid="d8/dab/a02638_1a94498fe491cc5b80edef5dac5b021376" kindref="member">ElementT</ref>, <ref refid="d8/dab/a02638_1ae1c86204bfd1bdca2c6cfa001a672dc0" kindref="member">ElementKeyT</ref> &gt;</type>
         <definition>using castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::ElementMergerT =  ObjectMergerT&lt; ElementT, ElementKeyT &gt;</definition>
         <argsstring></argsstring>
         <name>ElementMergerT</name>
@@ -187,7 +187,7 @@
         <location file="Cache/ObjectCacheBase.hpp" line="32" column="1" bodyfile="Cache/ObjectCacheBase.hpp" bodystart="32" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="d8/dab/a02638_1adadbb9ff475d6a6bf903139dad6ccb40" prot="protected" static="no">
-        <type><ref refid="dc/df4/a01401_1a1311a950a34ce9021cc95d87d46cc8cc" kindref="member">ObjectAttacherT</ref>&lt; <ref refid="d8/dab/a02638_1a94498fe491cc5b80edef5dac5b021376" kindref="member">ElementT</ref>, <ref refid="d8/dab/a02638_1ae1c86204bfd1bdca2c6cfa001a672dc0" kindref="member">ElementKeyT</ref> &gt;</type>
+        <type><ref refid="da/dab/a01362_1a1311a950a34ce9021cc95d87d46cc8cc" kindref="member">ObjectAttacherT</ref>&lt; <ref refid="d8/dab/a02638_1a94498fe491cc5b80edef5dac5b021376" kindref="member">ElementT</ref>, <ref refid="d8/dab/a02638_1ae1c86204bfd1bdca2c6cfa001a672dc0" kindref="member">ElementKeyT</ref> &gt;</type>
         <definition>using castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::ElementAttacherT =  ObjectAttacherT&lt; ElementT, ElementKeyT &gt;</definition>
         <argsstring></argsstring>
         <name>ElementAttacherT</name>
@@ -201,7 +201,7 @@
         <location file="Cache/ObjectCacheBase.hpp" line="33" column="1" bodyfile="Cache/ObjectCacheBase.hpp" bodystart="33" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="d8/dab/a02638_1a3df1a58591b34493630c7ddce56d47a4" prot="protected" static="no">
-        <type><ref refid="dc/df4/a01401_1ab57a9e0e5d54b7dad1e9de8f4fa222a5" kindref="member">ObjectDetacherT</ref>&lt; <ref refid="d8/dab/a02638_1a94498fe491cc5b80edef5dac5b021376" kindref="member">ElementT</ref>, <ref refid="d8/dab/a02638_1ae1c86204bfd1bdca2c6cfa001a672dc0" kindref="member">ElementKeyT</ref> &gt;</type>
+        <type><ref refid="da/dab/a01362_1ab57a9e0e5d54b7dad1e9de8f4fa222a5" kindref="member">ObjectDetacherT</ref>&lt; <ref refid="d8/dab/a02638_1a94498fe491cc5b80edef5dac5b021376" kindref="member">ElementT</ref>, <ref refid="d8/dab/a02638_1ae1c86204bfd1bdca2c6cfa001a672dc0" kindref="member">ElementKeyT</ref> &gt;</type>
         <definition>using castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::ElementDetacherT =  ObjectDetacherT&lt; ElementT, ElementKeyT &gt;</definition>
         <argsstring></argsstring>
         <name>ElementDetacherT</name>
@@ -260,12 +260,12 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Cache/ObjectCacheBase.hpp" line="176" column="11" bodyfile="Cache/ObjectCacheBase.hpp" bodystart="176" bodyend="-1"/>
-        <referencedby refid="d8/dab/a02638_1ac2d02c45ec20d264310c39258cf8ce50" compoundref="d1/da8/a00230" startline="129" endline="148">castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::mergeInto</referencedby>
+        <referencedby refid="d8/dab/a02638_1ac2d02c45ec20d264310c39258cf8ce50" compoundref="d0/d27/a00239" startline="129" endline="148">castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::mergeInto</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="protected-attrib">
       <memberdef kind="variable" id="d8/dab/a02638_1ad2d2ec81317e6a6424228ed476c38651" prot="protected" static="no" mutable="no">
-        <type><ref refid="d1/d3c/a02714" kindref="compound">Engine</ref> &amp;</type>
+        <type><ref refid="d9/db1/a02718" kindref="compound">Engine</ref> &amp;</type>
         <definition>Engine&amp; castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::m_engine</definition>
         <argsstring></argsstring>
         <name>m_engine</name>
@@ -278,7 +278,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Cache/ObjectCacheBase.hpp" line="181" column="9" bodyfile="Cache/ObjectCacheBase.hpp" bodystart="181" bodyend="-1"/>
-        <referencedby refid="d8/dab/a02638_1a9880998d44d2a4753ebaa66045f53e40" compoundref="d1/da8/a00230" startline="155" endline="158">castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::getEngine</referencedby>
+        <referencedby refid="d8/dab/a02638_1a9880998d44d2a4753ebaa66045f53e40" compoundref="d0/d27/a00239" startline="155" endline="158">castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::getEngine</referencedby>
       </memberdef>
       <memberdef kind="variable" id="d8/dab/a02638_1aac519a36083c69c42389af5dd3cea99a" prot="protected" static="no" mutable="no">
         <type>SceneNodeWPtr</type>
@@ -309,7 +309,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Cache/ObjectCacheBase.hpp" line="187" column="15" bodyfile="Cache/ObjectCacheBase.hpp" bodystart="187" bodyend="-1"/>
-        <referencedby refid="d8/dab/a02638_1ac2d02c45ec20d264310c39258cf8ce50" compoundref="d1/da8/a00230" startline="129" endline="148">castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::mergeInto</referencedby>
+        <referencedby refid="d8/dab/a02638_1ac2d02c45ec20d264310c39258cf8ce50" compoundref="d0/d27/a00239" startline="129" endline="148">castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::mergeInto</referencedby>
       </memberdef>
       <memberdef kind="variable" id="d8/dab/a02638_1aa98b874ccfd4e9d4e60f2725a1d6cadf" prot="protected" static="no" mutable="no">
         <type>SceneNodeWPtr</type>
@@ -325,7 +325,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Cache/ObjectCacheBase.hpp" line="190" column="15" bodyfile="Cache/ObjectCacheBase.hpp" bodystart="190" bodyend="-1"/>
-        <referencedby refid="d8/dab/a02638_1ac2d02c45ec20d264310c39258cf8ce50" compoundref="d1/da8/a00230" startline="129" endline="148">castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::mergeInto</referencedby>
+        <referencedby refid="d8/dab/a02638_1ac2d02c45ec20d264310c39258cf8ce50" compoundref="d0/d27/a00239" startline="129" endline="148">castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::mergeInto</referencedby>
       </memberdef>
       <memberdef kind="variable" id="d8/dab/a02638_1a4a7fda17cfa540fdf1ef120f49b23478" prot="protected" static="no" mutable="no">
         <type><ref refid="d8/dab/a02638_1a120add2fe6c6efc840f052d926e609d6" kindref="member">ElementMergerT</ref></type>
@@ -341,7 +341,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Cache/ObjectCacheBase.hpp" line="193" column="16" bodyfile="Cache/ObjectCacheBase.hpp" bodystart="193" bodyend="-1"/>
-        <referencedby refid="d8/dab/a02638_1ac2d02c45ec20d264310c39258cf8ce50" compoundref="d1/da8/a00230" startline="129" endline="148">castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::mergeInto</referencedby>
+        <referencedby refid="d8/dab/a02638_1ac2d02c45ec20d264310c39258cf8ce50" compoundref="d0/d27/a00239" startline="129" endline="148">castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::mergeInto</referencedby>
       </memberdef>
       <memberdef kind="variable" id="d8/dab/a02638_1ab163121f8e7748ad2d7bf093dd25e943" prot="protected" static="no" mutable="no">
         <type><ref refid="d8/dab/a02638_1adadbb9ff475d6a6bf903139dad6ccb40" kindref="member">ElementAttacherT</ref></type>
@@ -382,7 +382,7 @@
         <name>Scene</name>
         <qualifiedname>castor3d::ObjectCacheBaseT::Scene</qualifiedname>
         <param>
-          <type><ref refid="d6/d71/a04598" kindref="compound">Scene</ref></type>
+          <type><ref refid="d8/d12/a04694" kindref="compound">Scene</ref></type>
         </param>
         <briefdescription>
         </briefdescription>
@@ -401,7 +401,7 @@
         <name>ObjectCacheBaseT</name>
         <qualifiedname>castor3d::ObjectCacheBaseT::ObjectCacheBaseT</qualifiedname>
         <param>
-          <type><ref refid="d6/d71/a04598" kindref="compound">Scene</ref> &amp;</type>
+          <type><ref refid="d8/d12/a04694" kindref="compound">Scene</ref> &amp;</type>
           <declname>scene</declname>
         </param>
         <param>
@@ -524,10 +524,10 @@
         </inbodydescription>
         <location file="Cache/ObjectCacheBase.hpp" line="65" column="8" bodyfile="Cache/ObjectCacheBase.hpp" bodystart="65" bodyend="109"/>
       </memberdef>
-      <memberdef kind="function" id="d8/dab/a02638_1aef5cfb8ffd6117cd01ff08475186e5e4" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="d8/dab/a02638_1a191560dbae86cc9fb8d7f3b3e9ac7d8d" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
         <definition>castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::~ObjectCacheBaseT</definition>
-        <argsstring>()</argsstring>
+        <argsstring>() override</argsstring>
         <name>~ObjectCacheBaseT</name>
         <qualifiedname>castor3d::ObjectCacheBaseT::~ObjectCacheBaseT</qualifiedname>
         <briefdescription>
@@ -569,13 +569,13 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Cache/ObjectCacheBase.hpp" line="129" column="13" bodyfile="Cache/ObjectCacheBase.hpp" bodystart="129" bodyend="148"/>
-        <references refid="d8/dab/a02638_1a4a7fda17cfa540fdf1ef120f49b23478" compoundref="d1/da8/a00230" startline="193">castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::m_merge</references>
-        <references refid="d8/dab/a02638_1ab67f3f6ddd7d1f04ed5826dc3f21f263" compoundref="d1/da8/a00230" startline="187">castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::m_rootCameraNode</references>
-        <references refid="d8/dab/a02638_1aa98b874ccfd4e9d4e60f2725a1d6cadf" compoundref="d1/da8/a00230" startline="190">castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::m_rootObjectNode</references>
-        <references refid="d8/dab/a02638_1a91d72169bf2d52687170aeefc90f3dcd" compoundref="d1/da8/a00230" startline="176">castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::onChanged</references>
+        <references refid="d8/dab/a02638_1a4a7fda17cfa540fdf1ef120f49b23478" compoundref="d0/d27/a00239" startline="193">castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::m_merge</references>
+        <references refid="d8/dab/a02638_1ab67f3f6ddd7d1f04ed5826dc3f21f263" compoundref="d0/d27/a00239" startline="187">castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::m_rootCameraNode</references>
+        <references refid="d8/dab/a02638_1aa98b874ccfd4e9d4e60f2725a1d6cadf" compoundref="d0/d27/a00239" startline="190">castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::m_rootObjectNode</references>
+        <references refid="d8/dab/a02638_1a91d72169bf2d52687170aeefc90f3dcd" compoundref="d0/d27/a00239" startline="176">castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::onChanged</references>
       </memberdef>
       <memberdef kind="function" id="d8/dab/a02638_1a9880998d44d2a4753ebaa66045f53e40" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d1/d3c/a02714" kindref="compound">Engine</ref> *</type>
+        <type><ref refid="d9/db1/a02718" kindref="compound">Engine</ref> *</type>
         <definition>Engine * castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::getEngine</definition>
         <argsstring>() const</argsstring>
         <name>getEngine</name>
@@ -583,14 +583,14 @@
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><simplesect kind="return"><para>The <ref refid="d1/d3c/a02714" kindref="compound">Engine</ref>. </para>
+<para><simplesect kind="return"><para>The <ref refid="d9/db1/a02718" kindref="compound">Engine</ref>. </para>
 </simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
         <location file="Cache/ObjectCacheBase.hpp" line="155" column="16" bodyfile="Cache/ObjectCacheBase.hpp" bodystart="155" bodyend="158"/>
-        <references refid="d8/dab/a02638_1ad2d2ec81317e6a6424228ed476c38651" compoundref="d1/da8/a00230" startline="181">castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::m_engine</references>
+        <references refid="d8/dab/a02638_1ad2d2ec81317e6a6424228ed476c38651" compoundref="d0/d27/a00239" startline="181">castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;::m_engine</references>
       </memberdef>
       <memberdef kind="function" id="d8/dab/a02638_1a53a7f1aca80a90ee48dbd7f0d2525d5f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>castor::String const &amp;</type>
@@ -637,6 +637,13 @@
           <edgelabel>&lt; Light, castor::String, LightCacheTraits &gt;</edgelabel>
         </childnode>
       </node>
+      <node id="11">
+        <label>castor3d::ObjectCacheBaseT&lt; SceneNode, castor::String, SceneNodeCacheTraits &gt;</label>
+        <link refid="d8/dab/a02638"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SceneNode, castor::String, SceneNodeCacheTraits &gt;</edgelabel>
+        </childnode>
+      </node>
       <node id="1">
         <label>castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;</label>
         <link refid="d8/dab/a02638"/>
@@ -669,6 +676,12 @@
         <childnode refid="1" relation="public-inheritance">
         </childnode>
       </node>
+      <node id="12">
+        <label>castor3d::ObjectCacheT&lt; SceneNode, castor::String, SceneNodeCacheTraits &gt;</label>
+        <link refid="db/d84/a02686"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+      </node>
       <node id="2">
         <label>castor::OwnedBy&lt; Scene &gt;</label>
       </node>
@@ -679,7 +692,7 @@
     <collaborationgraph>
       <node id="4">
         <label>castor3d::Engine</label>
-        <link refid="d1/d3c/a02714"/>
+        <link refid="d9/db1/a02718"/>
         <childnode refid="5" relation="public-inheritance">
         </childnode>
       </node>
@@ -735,7 +748,7 @@
       <member refid="d8/dab/a02638_1a91d72169bf2d52687170aeefc90f3dcd" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheBaseT</scope><name>onChanged</name></member>
       <member refid="d8/dab/a02638_1abb32a9817ed3199de78a9e80ee634a44" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheBaseT</scope><name>OnChangedFunction</name></member>
       <member refid="d8/dab/a02638_1a032858ae1fe02d2d1170981c2af2d67c" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheBaseT</scope><name>Scene</name></member>
-      <member refid="d8/dab/a02638_1aef5cfb8ffd6117cd01ff08475186e5e4" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheBaseT</scope><name>~ObjectCacheBaseT</name></member>
+      <member refid="d8/dab/a02638_1a191560dbae86cc9fb8d7f3b3e9ac7d8d" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheBaseT</scope><name>~ObjectCacheBaseT</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

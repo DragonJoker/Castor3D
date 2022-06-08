@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="da/dac/a05198" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::SubsurfaceScattering &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::SubsurfaceScattering &gt;</basecompoundref>
+    <includes local="no">TextSubsurfaceScattering.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/dac/a05198_1a5505ac3d419482e5533c6ace47fd2f21" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::SubsurfaceScattering &gt;::TextWriter</definition>
+        <argsstring>(castor::String const &amp;tabs)</argsstring>
+        <name>TextWriter</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::SubsurfaceScattering &gt;::TextWriter</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextSubsurfaceScattering.hpp" line="18" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dac/a05198_1a4605b7e6aa3ca79e40f3954672398062" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::SubsurfaceScattering &gt;::operator()</definition>
+        <argsstring>(castor3d::SubsurfaceScattering const &amp;pass, castor::StringStream &amp;file) override</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::SubsurfaceScattering &gt;::operator()</qualifiedname>
+        <param>
+          <type><ref refid="dc/d38/a02894" kindref="compound">castor3d::SubsurfaceScattering</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>castor::StringStream &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextSubsurfaceScattering.hpp" line="19" column="14"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::SubsurfaceScattering &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::SubsurfaceScattering &gt;</label>
+        <link refid="da/dac/a05198"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::SubsurfaceScattering &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::SubsurfaceScattering &gt;</label>
+        <link refid="da/dac/a05198"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Text/TextSubsurfaceScattering.hpp" line="14" column="1" bodyfile="Text/TextSubsurfaceScattering.hpp" bodystart="16" bodyend="21"/>
+    <listofallmembers>
+      <member refid="da/dac/a05198_1a4605b7e6aa3ca79e40f3954672398062" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::SubsurfaceScattering &gt;</scope><name>operator()</name></member>
+      <member refid="da/dac/a05198_1a5505ac3d419482e5533c6ace47fd2f21" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::SubsurfaceScattering &gt;</scope><name>TextWriter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

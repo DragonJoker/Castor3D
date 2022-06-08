@@ -8,7 +8,7 @@
     </templateparamlist>
       <sectiondef kind="public-type">
       <memberdef kind="typedef" id="d7/df0/a02618_1aa5290c2dbe32ad5ada4e002a354d693e" prot="public" static="no">
-        <type><ref refid="d1/d6c/a04478" kindref="compound">BillboardList</ref></type>
+        <type><ref refid="d6/dfd/a04570" kindref="compound">BillboardList</ref></type>
         <definition>using castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ElementT =  BillboardList</definition>
         <argsstring></argsstring>
         <name>ElementT</name>
@@ -36,7 +36,7 @@
         <location file="Cache/BillboardCache.hpp" line="31" column="1" bodyfile="Cache/BillboardCache.hpp" bodystart="31" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="d7/df0/a02618_1aece32d8f96e48ad59585a374e0c623f6" prot="public" static="no">
-        <type><ref refid="dc/df4/a01401_1a7c91c0bfadd9d4e832d5501cb779faa5" kindref="member">BillboardCacheTraits</ref></type>
+        <type><ref refid="da/dab/a01362_1a7c91c0bfadd9d4e832d5501cb779faa5" kindref="member">BillboardCacheTraits</ref></type>
         <definition>using castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ElementCacheTraitsT =  BillboardCacheTraits</definition>
         <argsstring></argsstring>
         <name>ElementCacheTraitsT</name>
@@ -178,13 +178,13 @@
       </sectiondef>
       <sectiondef kind="public-func">
       <memberdef kind="function" id="d7/df0/a02618_1a28582f3a94e99ccb9ad3668ee2ce0db8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
         <definition>C3D_API castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ObjectCacheT</definition>
         <argsstring>(Scene &amp;scene, SceneNodeSPtr rootNode, SceneNodeSPtr rootCameraNode, SceneNodeSPtr rootObjectNode)</argsstring>
         <name>ObjectCacheT</name>
         <qualifiedname>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ObjectCacheT</qualifiedname>
         <param>
-          <type><ref refid="d6/d71/a04598" kindref="compound">Scene</ref> &amp;</type>
+          <type><ref refid="d8/d12/a04694" kindref="compound">Scene</ref> &amp;</type>
           <declname>scene</declname>
         </param>
         <param>
@@ -242,10 +242,10 @@
         </inbodydescription>
         <location file="Cache/BillboardCache.hpp" line="56" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d7/df0/a02618_1ae28cc5c84b162a74c5b62963d40ac660" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+      <memberdef kind="function" id="d7/df0/a02618_1a6422a60523ef0306978ff26385233d08" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
         <definition>C3D_API castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::~ObjectCacheT</definition>
-        <argsstring>()=default</argsstring>
+        <argsstring>() override=default</argsstring>
         <name>~ObjectCacheT</name>
         <qualifiedname>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::~ObjectCacheT</qualifiedname>
         <briefdescription>
@@ -259,7 +259,7 @@
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para><ref refid="d1/d6c/a04478" kindref="compound">BillboardList</ref> cache. </para>
+<para><ref refid="d6/dfd/a04570" kindref="compound">BillboardList</ref> cache. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
@@ -316,7 +316,7 @@
       </node>
       <node id="5">
         <label>castor3d::Engine</label>
-        <link refid="d1/d3c/a02714"/>
+        <link refid="d9/db1/a02718"/>
         <childnode refid="6" relation="public-inheritance">
         </childnode>
       </node>
@@ -381,8 +381,8 @@
       <member refid="d8/dab/a02638_1a53f214ce6eab35501fb5509c504d4df1" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>OnChanged</name></member>
       <member refid="d8/dab/a02638_1a91d72169bf2d52687170aeefc90f3dcd" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>onChanged</name></member>
       <member refid="d8/dab/a02638_1abb32a9817ed3199de78a9e80ee634a44" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>OnChangedFunction</name></member>
-      <member refid="d8/dab/a02638_1aef5cfb8ffd6117cd01ff08475186e5e4" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>~ObjectCacheBaseT</name></member>
-      <member refid="d7/df0/a02618_1ae28cc5c84b162a74c5b62963d40ac660" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>~ObjectCacheT</name></member>
+      <member refid="d8/dab/a02638_1a191560dbae86cc9fb8d7f3b3e9ac7d8d" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>~ObjectCacheBaseT</name></member>
+      <member refid="d7/df0/a02618_1a6422a60523ef0306978ff26385233d08" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>~ObjectCacheT</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

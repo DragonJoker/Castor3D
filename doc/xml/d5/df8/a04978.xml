@@ -1,94 +1,151 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d5/df8/a04978" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::ShadowMapUbo</compoundname>
-    <includes local="no">ShadowMapUbo.hpp</includes>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="d5/df8/a04978_1a1e87d2bd828b4d232e057f9f5d3c0a01" prot="public" static="no">
-        <type><ref refid="d8/d5f/a05046" kindref="compound">ShadowMapUboConfiguration</ref></type>
-        <definition>using castor3d::ShadowMapUbo::Configuration =  ShadowMapUboConfiguration</definition>
-        <argsstring></argsstring>
-        <name>Configuration</name>
-        <qualifiedname>castor3d::ShadowMapUbo::Configuration</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="52" column="1" bodyfile="Shader/Ubos/ShadowMapUbo.hpp" bodystart="52" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d5/df8/a04978_1aed321c1d47b55eeecf8e39b789069a2d" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
-        <definition>C3D_API castor::String const castor3d::ShadowMapUbo::BufferShadowMap</definition>
-        <argsstring></argsstring>
-        <name>BufferShadowMap</name>
-        <qualifiedname>castor3d::ShadowMapUbo::BufferShadowMap</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="92" column="37" bodyfile="Shader/Ubos/ShadowMapUbo.hpp" bodystart="92" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d5/df8/a04978_1a2b46ba45612588c3f2e1f1876dc24052" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
-        <definition>C3D_API castor::String const castor3d::ShadowMapUbo::ShadowMapData</definition>
-        <argsstring></argsstring>
-        <name>ShadowMapData</name>
-        <qualifiedname>castor3d::ShadowMapUbo::ShadowMapData</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="93" column="37" bodyfile="Shader/Ubos/ShadowMapUbo.hpp" bodystart="93" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
+    <compoundname>castor3d::shader::TextureConfigurations</compoundname>
+    <includes local="no">GlslTextureConfiguration.hpp</includes>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d5/df8/a04978_1a0b0e57f2e9f2885720bab2e609a58cc7" prot="private" static="no" mutable="no">
-        <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const  &amp;</type>
-        <definition>RenderDevice const&amp; castor3d::ShadowMapUbo::m_device</definition>
+      <memberdef kind="variable" id="d5/df8/a04978_1a91e0a79e1bc4fa92e6fe34046e0b03f4" prot="private" static="no" mutable="no">
+        <type>sdw::ShaderWriter &amp;</type>
+        <definition>sdw::ShaderWriter&amp; castor3d::shader::TextureConfigurations::m_writer</definition>
         <argsstring></argsstring>
-        <name>m_device</name>
-        <qualifiedname>castor3d::ShadowMapUbo::m_device</qualifiedname>
+        <name>m_writer</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::m_writer</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="96" column="21" bodyfile="Shader/Ubos/ShadowMapUbo.hpp" bodystart="96" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="352" column="20" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="352" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d5/df8/a04978_1aeeebd7aecc2b053d85c91e6e046979b7" prot="private" static="no" mutable="no">
-        <type><ref refid="df/d9b/a02514" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d5/df8/a04978_1a1e87d2bd828b4d232e057f9f5d3c0a01" kindref="member">Configuration</ref> &gt;</type>
-        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::ShadowMapUbo::m_ubo</definition>
+      <memberdef kind="variable" id="d5/df8/a04978_1adcda34a2d06fb6365cc96cc6254421cd" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::shader::TextureConfigurations::m_enable</definition>
         <argsstring></argsstring>
-        <name>m_ubo</name>
-        <qualifiedname>castor3d::ShadowMapUbo::m_ubo</qualifiedname>
+        <name>m_enable</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::m_enable</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="97" column="22" bodyfile="Shader/Ubos/ShadowMapUbo.hpp" bodystart="97" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="353" column="6" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="353" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/df8/a04978_1ab135b60f39133b9055b915a2ea543dde" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; sdw::ArraySsboT&lt; <ref refid="d3/d64/a04974" kindref="compound">TextureConfigData</ref> &gt; &gt;</type>
+        <definition>std::unique_ptr&lt; sdw::ArraySsboT&lt; TextureConfigData &gt; &gt; castor3d::shader::TextureConfigurations::m_ssbo</definition>
+        <argsstring></argsstring>
+        <name>m_ssbo</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::m_ssbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="354" column="17" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="354" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/df8/a04978_1ab279f016137575bb48cd985148ddfaf3" prot="private" static="no" mutable="yes">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InUInt, sdw::InVec3, sdw::InVec3, sdw::InVec3, sdw::InVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InUInt , sdw::InVec3 , sdw::InVec3 , sdw::InVec3 , sdw::InVec3 &gt; castor3d::shader::TextureConfigurations::m_getTexcoord4</definition>
+        <argsstring></argsstring>
+        <name>m_getTexcoord4</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::m_getTexcoord4</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="360" column="2" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="360" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/df8/a04978_1af203d4fcb6d66c5df0b037d70cd2b74d" prot="private" static="no" mutable="yes">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InUInt, sdw::InVec3, sdw::InVec3, sdw::InVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InUInt , sdw::InVec3 , sdw::InVec3 , sdw::InVec3 &gt; castor3d::shader::TextureConfigurations::m_getTexcoord3</definition>
+        <argsstring></argsstring>
+        <name>m_getTexcoord3</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::m_getTexcoord3</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="365" column="2" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="365" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/df8/a04978_1abd116dafb246dc24852cfa9efbfb9679" prot="private" static="no" mutable="yes">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InUInt, sdw::InVec3, sdw::InVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InUInt , sdw::InVec3 , sdw::InVec3 &gt; castor3d::shader::TextureConfigurations::m_getTexcoord2</definition>
+        <argsstring></argsstring>
+        <name>m_getTexcoord2</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::m_getTexcoord2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="369" column="2" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="369" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/df8/a04978_1a3f6d4080bc2e3dde31546025a64344fd" prot="private" static="no" mutable="yes">
+        <type>sdw::Function&lt; sdw::Void, sdw::InUInt, sdw::InVec3, sdw::InOutVec3, sdw::InOutVec3, sdw::InOutVec3, sdw::InOutVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , sdw::InUInt , sdw::InVec3 , sdw::InOutVec3 , sdw::InOutVec3 , sdw::InOutVec3 , sdw::InOutVec3 &gt; castor3d::shader::TextureConfigurations::m_setTexcoord4</definition>
+        <argsstring></argsstring>
+        <name>m_setTexcoord4</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::m_setTexcoord4</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="376" column="2" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="376" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/df8/a04978_1af1aaa79392a4808a8f983e228cc79fa6" prot="private" static="no" mutable="yes">
+        <type>sdw::Function&lt; sdw::Void, sdw::InUInt, sdw::InVec3, sdw::InOutVec3, sdw::InOutVec3, sdw::InOutVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , sdw::InUInt , sdw::InVec3 , sdw::InOutVec3 , sdw::InOutVec3 , sdw::InOutVec3 &gt; castor3d::shader::TextureConfigurations::m_setTexcoord3</definition>
+        <argsstring></argsstring>
+        <name>m_setTexcoord3</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::m_setTexcoord3</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="382" column="2" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="382" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/df8/a04978_1a0bec5cebb1d2742b5e9588477c60439f" prot="private" static="no" mutable="yes">
+        <type>sdw::Function&lt; sdw::Void, sdw::InUInt, sdw::InVec3, sdw::InOutVec3, sdw::InOutVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , sdw::InUInt , sdw::InVec3 , sdw::InOutVec3 , sdw::InOutVec3 &gt; castor3d::shader::TextureConfigurations::m_setTexcoord2</definition>
+        <argsstring></argsstring>
+        <name>m_setTexcoord2</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::m_setTexcoord2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="387" column="2" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="387" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d5/df8/a04978_1a69e89405d80ea31f547389482153b7f3" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::ShadowMapUbo::ShadowMapUbo</definition>
-        <argsstring>(RenderDevice const &amp;device)</argsstring>
-        <name>ShadowMapUbo</name>
-        <qualifiedname>castor3d::ShadowMapUbo::ShadowMapUbo</qualifiedname>
+      <memberdef kind="function" id="d5/df8/a04978_1a98db27f933eaab7f2c5c5c9bf5206610" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::TextureConfigurations::TextureConfigurations</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, bool enable=true)</argsstring>
+        <name>TextureConfigurations</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::TextureConfigurations</qualifiedname>
         <param>
-          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enable</declname>
+          <defval>true</defval>
         </param>
         <briefdescription>
         </briefdescription>
@@ -96,148 +153,140 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="55" column="18"/>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="312" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="d5/df8/a04978_1a9941d5af52ed26b91446e178bd830dc6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::ShadowMapUbo::ShadowMapUbo</definition>
-        <argsstring>(ShadowMapUbo const &amp;rhs)=delete</argsstring>
-        <name>ShadowMapUbo</name>
-        <qualifiedname>castor3d::ShadowMapUbo::ShadowMapUbo</qualifiedname>
+      <memberdef kind="function" id="d5/df8/a04978_1aaaaee2d9f57922f83785453ec3f60bcd" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::TextureConfigurations::TextureConfigurations</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, uint32_t binding, uint32_t set, bool enable=true)</argsstring>
+        <name>TextureConfigurations</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::TextureConfigurations</qualifiedname>
         <param>
-          <type><ref refid="d5/df8/a04978" kindref="compound">ShadowMapUbo</ref> const &amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="56" column="9"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/df8/a04978_1afc8651634286edeb040e2edd326c145c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/df8/a04978" kindref="compound">ShadowMapUbo</ref> &amp;</type>
-        <definition>C3D_API ShadowMapUbo &amp; castor3d::ShadowMapUbo::operator=</definition>
-        <argsstring>(ShadowMapUbo const &amp;rhs)=delete</argsstring>
-        <name>operator=</name>
-        <qualifiedname>castor3d::ShadowMapUbo::operator=</qualifiedname>
-        <param>
-          <type><ref refid="d5/df8/a04978" kindref="compound">ShadowMapUbo</ref> const &amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="57" column="23"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/df8/a04978_1a67e003e92375f9edaca1e732f57e648b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::ShadowMapUbo::ShadowMapUbo</definition>
-        <argsstring>(ShadowMapUbo &amp;&amp;rhs)=default</argsstring>
-        <name>ShadowMapUbo</name>
-        <qualifiedname>castor3d::ShadowMapUbo::ShadowMapUbo</qualifiedname>
-        <param>
-          <type><ref refid="d5/df8/a04978" kindref="compound">ShadowMapUbo</ref> &amp;&amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="58" column="9"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/df8/a04978_1a9533f236daafa9a3855a641deda330f9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/df8/a04978" kindref="compound">ShadowMapUbo</ref> &amp;</type>
-        <definition>C3D_API ShadowMapUbo &amp; castor3d::ShadowMapUbo::operator=</definition>
-        <argsstring>(ShadowMapUbo &amp;&amp;rhs)=delete</argsstring>
-        <name>operator=</name>
-        <qualifiedname>castor3d::ShadowMapUbo::operator=</qualifiedname>
-        <param>
-          <type><ref refid="d5/df8/a04978" kindref="compound">ShadowMapUbo</ref> &amp;&amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="59" column="23"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/df8/a04978_1a966f4ab3785fd596d6ebdea11842ddbf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::ShadowMapUbo::~ShadowMapUbo</definition>
-        <argsstring>()</argsstring>
-        <name>~ShadowMapUbo</name>
-        <qualifiedname>castor3d::ShadowMapUbo::~ShadowMapUbo</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="60" column="9"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/df8/a04978_1a86340d303a05fe01dc2f44b5b61295af" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::ShadowMapUbo::update</definition>
-        <argsstring>(Light const &amp;light, uint32_t index)</argsstring>
-        <name>update</name>
-        <qualifiedname>castor3d::ShadowMapUbo::update</qualifiedname>
-        <param>
-          <type><ref refid="d7/dba/a04502" kindref="compound">Light</ref> const &amp;</type>
-          <declname>light</declname>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
         </param>
         <param>
           <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enable</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="314" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/df8/a04978_1ab3b848b58529111840d27b0667299fad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::TextureConfigurations::declare</definition>
+        <argsstring>(uint32_t binding, uint32_t set)</argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::declare</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="318" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/df8/a04978_1a042521e9d65e8a17762a04bae82f33fd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/d64/a04974" kindref="compound">TextureConfigData</ref></type>
+        <definition>C3D_API TextureConfigData castor3d::shader::TextureConfigurations::getTextureConfiguration</definition>
+        <argsstring>(sdw::UInt const &amp;index) const</argsstring>
+        <name>getTextureConfiguration</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::getTextureConfiguration</qualifiedname>
+        <param>
+          <type>sdw::UInt const &amp;</type>
           <declname>index</declname>
         </param>
         <briefdescription>
-<para>Updates the UBO from given values. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">light</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The light source from which the shadow map is generated. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">index</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The shadow pass index. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="71" column="14"/>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="319" column="27"/>
       </memberdef>
-      <memberdef kind="function" id="d5/df8/a04978_1a33ff803524d407253ea98caeeb038418" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::ShadowMapUbo::createSizedBinding</definition>
-        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;layoutBinding) const</argsstring>
-        <name>createSizedBinding</name>
-        <qualifiedname>castor3d::ShadowMapUbo::createSizedBinding</qualifiedname>
+      <memberdef kind="function" id="d5/df8/a04978_1a8d3d2cdcdb08f48634aaf214b3b9c9b6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::TextureConfigurations::computeGeometryMapContributions</definition>
+        <argsstring>(Utils &amp;utils, PassFlags const &amp;passFlags, TextureFlagsArray const &amp;textures, TextureAnimations const &amp;textureAnims, sdw::Array&lt; sdw::CombinedImage2DRgba32 &gt; const &amp;maps, sdw::UVec4 const &amp;textures0, sdw::UVec4 const &amp;textures1, sdw::Vec3 &amp;texCoords0, sdw::Vec3 &amp;texCoords1, sdw::Vec3 &amp;texCoords2, sdw::Vec3 &amp;texCoords3, sdw::Float &amp;opacity, sdw::Vec3 &amp;tangentSpaceViewPosition, sdw::Vec3 &amp;tangentSpaceFragPosition) const</argsstring>
+        <name>computeGeometryMapContributions</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::computeGeometryMapContributions</qualifiedname>
         <param>
-          <type>ashes::DescriptorSet &amp;</type>
-          <declname>descriptorSet</declname>
+          <type><ref refid="df/d5e/a04982" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
         </param>
         <param>
-          <type>VkDescriptorSetLayoutBinding const &amp;</type>
-          <declname>layoutBinding</declname>
+          <type><ref refid="da/dab/a01362_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref> const &amp;</type>
+          <declname>passFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dab/a01362_1afa51b269ca00eaeff4f95f361bf2208f" kindref="member">TextureFlagsArray</ref> const &amp;</type>
+          <declname>textures</declname>
+        </param>
+        <param>
+          <type><ref refid="db/db8/a04970" kindref="compound">TextureAnimations</ref> const &amp;</type>
+          <declname>textureAnims</declname>
+        </param>
+        <param>
+          <type>sdw::Array&lt; sdw::CombinedImage2DRgba32 &gt; const &amp;</type>
+          <declname>maps</declname>
+        </param>
+        <param>
+          <type>sdw::UVec4 const &amp;</type>
+          <declname>textures0</declname>
+        </param>
+        <param>
+          <type>sdw::UVec4 const &amp;</type>
+          <declname>textures1</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>texCoords0</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>texCoords1</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>texCoords2</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>texCoords3</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>opacity</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>tangentSpaceViewPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>tangentSpaceFragPosition</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -245,23 +294,33 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="74" column="6" bodyfile="Shader/Ubos/ShadowMapUbo.hpp" bodystart="74" bodyend="78"/>
-        <references refid="df/d9b/a02514_1a2c6ad146d4910651544564c25ca7dccd" compoundref="de/db1/a00197" startline="96" endline="105">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</references>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="320" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d5/df8/a04978_1a587585de7c15fb59c8a7f3456dbae3f8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::WriteDescriptorSet</type>
-        <definition>ashes::WriteDescriptorSet castor3d::ShadowMapUbo::getDescriptorWrite</definition>
-        <argsstring>(uint32_t dstBinding, uint32_t dstArrayElement=0u) const</argsstring>
-        <name>getDescriptorWrite</name>
-        <qualifiedname>castor3d::ShadowMapUbo::getDescriptorWrite</qualifiedname>
+      <memberdef kind="function" id="d5/df8/a04978_1a334d0b5c75d788e38e869ec48668b079" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::TextureConfigurations::getTexcoord</definition>
+        <argsstring>(TextureConfigData const &amp;data, sdw::Vec3 const &amp;texCoords0, sdw::Vec3 const &amp;texCoords1, sdw::Vec3 const &amp;texCoords2, sdw::Vec3 const &amp;texCoords3) const</argsstring>
+        <name>getTexcoord</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::getTexcoord</qualifiedname>
         <param>
-          <type>uint32_t</type>
-          <declname>dstBinding</declname>
+          <type><ref refid="d3/d64/a04974" kindref="compound">TextureConfigData</ref> const &amp;</type>
+          <declname>data</declname>
         </param>
         <param>
-          <type>uint32_t</type>
-          <declname>dstArrayElement</declname>
-          <defval>0u</defval>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>texCoords0</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>texCoords1</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>texCoords2</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>texCoords3</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -269,45 +328,84 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="80" column="27" bodyfile="Shader/Ubos/ShadowMapUbo.hpp" bodystart="80" bodyend="84"/>
-        <references refid="df/d9b/a02514_1ad7dcad7c96a620540d10eb85f3d4586b" compoundref="de/db1/a00197" startline="107" endline="120">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getDescriptorWrite</references>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="334" column="19"/>
       </memberdef>
-      <memberdef kind="function" id="d5/df8/a04978_1a080a7459fe8d0e2bdf6180705829dd61" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="df/d9b/a02514" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d5/df8/a04978_1a1e87d2bd828b4d232e057f9f5d3c0a01" kindref="member">Configuration</ref> &gt; const &amp;</type>
-        <definition>UniformBufferOffsetT&lt; Configuration &gt; const  &amp; castor3d::ShadowMapUbo::getUbo</definition>
-        <argsstring>() const</argsstring>
-        <name>getUbo</name>
-        <qualifiedname>castor3d::ShadowMapUbo::getUbo</qualifiedname>
+      <memberdef kind="function" id="d5/df8/a04978_1a5c1b36a304fedd1388c8c19b82283811" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::TextureConfigurations::setTexcoord</definition>
+        <argsstring>(TextureConfigData const &amp;data, sdw::Vec3 const &amp;value, sdw::Vec3 &amp;texCoords0, sdw::Vec3 &amp;texCoords1, sdw::Vec3 &amp;texCoords2, sdw::Vec3 &amp;texCoords3) const</argsstring>
+        <name>setTexcoord</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::setTexcoord</qualifiedname>
+        <param>
+          <type><ref refid="d3/d64/a04974" kindref="compound">TextureConfigData</ref> const &amp;</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>texCoords0</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>texCoords1</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>texCoords2</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>texCoords3</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="86" column="29" bodyfile="Shader/Ubos/ShadowMapUbo.hpp" bodystart="86" bodyend="89"/>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="339" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/df8/a04978_1a1150ab7ff0c7ef93936f5823a3cd85f2" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::shader::TextureConfigurations::isEnabled</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>isEnabled</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::isEnabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="346" column="6" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="346" bodyend="349"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Shader/Ubos/ShadowMapUbo.hpp" line="49" column="1" bodyfile="Shader/Ubos/ShadowMapUbo.hpp" bodystart="50" bodyend="98"/>
+    <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="309" column="1" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="310" bodyend="388"/>
     <listofallmembers>
-      <member refid="d5/df8/a04978_1aed321c1d47b55eeecf8e39b789069a2d" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>BufferShadowMap</name></member>
-      <member refid="d5/df8/a04978_1a1e87d2bd828b4d232e057f9f5d3c0a01" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>Configuration</name></member>
-      <member refid="d5/df8/a04978_1a33ff803524d407253ea98caeeb038418" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>createSizedBinding</name></member>
-      <member refid="d5/df8/a04978_1a587585de7c15fb59c8a7f3456dbae3f8" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>getDescriptorWrite</name></member>
-      <member refid="d5/df8/a04978_1a080a7459fe8d0e2bdf6180705829dd61" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>getUbo</name></member>
-      <member refid="d5/df8/a04978_1a0b0e57f2e9f2885720bab2e609a58cc7" prot="private" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>m_device</name></member>
-      <member refid="d5/df8/a04978_1aeeebd7aecc2b053d85c91e6e046979b7" prot="private" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>m_ubo</name></member>
-      <member refid="d5/df8/a04978_1afc8651634286edeb040e2edd326c145c" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>operator=</name></member>
-      <member refid="d5/df8/a04978_1a9533f236daafa9a3855a641deda330f9" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>operator=</name></member>
-      <member refid="d5/df8/a04978_1a2b46ba45612588c3f2e1f1876dc24052" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>ShadowMapData</name></member>
-      <member refid="d5/df8/a04978_1a69e89405d80ea31f547389482153b7f3" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>ShadowMapUbo</name></member>
-      <member refid="d5/df8/a04978_1a9941d5af52ed26b91446e178bd830dc6" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>ShadowMapUbo</name></member>
-      <member refid="d5/df8/a04978_1a67e003e92375f9edaca1e732f57e648b" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>ShadowMapUbo</name></member>
-      <member refid="d5/df8/a04978_1a86340d303a05fe01dc2f44b5b61295af" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>update</name></member>
-      <member refid="d5/df8/a04978_1a966f4ab3785fd596d6ebdea11842ddbf" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUbo</scope><name>~ShadowMapUbo</name></member>
+      <member refid="d5/df8/a04978_1a8d3d2cdcdb08f48634aaf214b3b9c9b6" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>computeGeometryMapContributions</name></member>
+      <member refid="d5/df8/a04978_1ab3b848b58529111840d27b0667299fad" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>declare</name></member>
+      <member refid="d5/df8/a04978_1a334d0b5c75d788e38e869ec48668b079" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>getTexcoord</name></member>
+      <member refid="d5/df8/a04978_1a042521e9d65e8a17762a04bae82f33fd" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>getTextureConfiguration</name></member>
+      <member refid="d5/df8/a04978_1a1150ab7ff0c7ef93936f5823a3cd85f2" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>isEnabled</name></member>
+      <member refid="d5/df8/a04978_1adcda34a2d06fb6365cc96cc6254421cd" prot="private" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>m_enable</name></member>
+      <member refid="d5/df8/a04978_1abd116dafb246dc24852cfa9efbfb9679" prot="private" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>m_getTexcoord2</name></member>
+      <member refid="d5/df8/a04978_1af203d4fcb6d66c5df0b037d70cd2b74d" prot="private" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>m_getTexcoord3</name></member>
+      <member refid="d5/df8/a04978_1ab279f016137575bb48cd985148ddfaf3" prot="private" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>m_getTexcoord4</name></member>
+      <member refid="d5/df8/a04978_1a0bec5cebb1d2742b5e9588477c60439f" prot="private" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>m_setTexcoord2</name></member>
+      <member refid="d5/df8/a04978_1af1aaa79392a4808a8f983e228cc79fa6" prot="private" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>m_setTexcoord3</name></member>
+      <member refid="d5/df8/a04978_1a3f6d4080bc2e3dde31546025a64344fd" prot="private" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>m_setTexcoord4</name></member>
+      <member refid="d5/df8/a04978_1ab135b60f39133b9055b915a2ea543dde" prot="private" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>m_ssbo</name></member>
+      <member refid="d5/df8/a04978_1a91e0a79e1bc4fa92e6fe34046e0b03f4" prot="private" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>m_writer</name></member>
+      <member refid="d5/df8/a04978_1a5c1b36a304fedd1388c8c19b82283811" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>setTexcoord</name></member>
+      <member refid="d5/df8/a04978_1a98db27f933eaab7f2c5c5c9bf5206610" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>TextureConfigurations</name></member>
+      <member refid="d5/df8/a04978_1aaaaee2d9f57922f83785453ec3f60bcd" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>TextureConfigurations</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

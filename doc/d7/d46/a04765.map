@@ -1,4 +1,6 @@
-<map id="castor3d::shader::Light" name="castor3d::shader::Light">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,160,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="14,5,151,32"/>
+<map id="castor3d::ShaderProgram" name="castor3d::ShaderProgram">
+<area shape="rect" id="node1" title=" " alt="" coords="285,56,456,83"/>
+<area shape="rect" id="node2" title=" " alt="" coords="68,5,175,32"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,56,237,83"/>
+<area shape="rect" id="node4" title=" " alt="" coords="23,107,219,149"/>
 </map>

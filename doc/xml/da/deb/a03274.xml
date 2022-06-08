@@ -5,7 +5,7 @@
     <includes local="no">ProgressBar.hpp</includes>
       <sectiondef kind="private-attrib">
       <memberdef kind="variable" id="da/deb/a03274_1ae588fd36590fb3093b3a7d4957aa3a24" prot="private" static="no" mutable="no">
-        <type><ref refid="dc/df4/a01401_1a4598278ca9b4736b08d37153162ff8fa" kindref="member">FrameListenerRes</ref></type>
+        <type><ref refid="da/dab/a01362_1a4598278ca9b4736b08d37153162ff8fa" kindref="member">FrameListenerRes</ref></type>
         <definition>FrameListenerRes castor3d::ProgressBar::m_listener</definition>
         <argsstring></argsstring>
         <name>m_listener</name>
@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/ProgressBar.hpp" line="56" column="18" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="56" bodyend="-1"/>
+        <location file="Miscellaneous/ProgressBar.hpp" line="60" column="18" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="60" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="da/deb/a03274_1a278b976207489b1b124e3b9b3b542a9a" prot="private" static="no" mutable="no">
         <type>castor::RangedValue&lt; uint32_t &gt;</type>
@@ -30,7 +30,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/ProgressBar.hpp" line="57" column="21" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="57" bodyend="-1"/>
+        <location file="Miscellaneous/ProgressBar.hpp" line="61" column="21" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="61" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="da/deb/a03274_1a8c812ffd728f5451b269d8e0eb6277b6" prot="private" static="no" mutable="no">
         <type>castor::String</type>
@@ -44,7 +44,21 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/ProgressBar.hpp" line="58" column="16" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="58" bodyend="-1"/>
+        <location file="Miscellaneous/ProgressBar.hpp" line="62" column="16" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/deb/a03274_1a775373a88b54a71c7481c5d2ab2f94c2" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::ProgressBar::m_label</definition>
+        <argsstring></argsstring>
+        <name>m_label</name>
+        <qualifiedname>castor3d::ProgressBar::m_label</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/ProgressBar.hpp" line="63" column="16" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="63" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="da/deb/a03274_1a40d9e01c64302ded7ea4e6fb4672c41c" prot="private" static="no" mutable="no">
         <type>OverlayRPtr</type>
@@ -58,7 +72,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/ProgressBar.hpp" line="59" column="13" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="59" bodyend="-1"/>
+        <location file="Miscellaneous/ProgressBar.hpp" line="64" column="13" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="64" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="da/deb/a03274_1a3621adc633fa64511d796d73794a6f43" prot="private" static="no" mutable="no">
         <type>OverlayRPtr</type>
@@ -72,7 +86,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/ProgressBar.hpp" line="60" column="13" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="60" bodyend="-1"/>
+        <location file="Miscellaneous/ProgressBar.hpp" line="65" column="13" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="65" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="da/deb/a03274_1a0329aa10bed838f76275dd7a4f5fd5d6" prot="private" static="no" mutable="no">
         <type>TextOverlaySPtr</type>
@@ -86,7 +100,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/ProgressBar.hpp" line="61" column="17" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="61" bodyend="-1"/>
+        <location file="Miscellaneous/ProgressBar.hpp" line="66" column="17" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="66" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="da/deb/a03274_1aa994f3f6f13849fe14f669467c321804" prot="private" static="no" mutable="no">
         <type>TextOverlaySPtr</type>
@@ -100,7 +114,67 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/ProgressBar.hpp" line="62" column="17" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="62" bodyend="-1"/>
+        <location file="Miscellaneous/ProgressBar.hpp" line="67" column="17" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/deb/a03274_1a09b005b1475019de516541ff29e2db9e" prot="private" static="no" mutable="no">
+        <type><ref refid="df/d84/a02722" kindref="compound">CpuFrameEvent</ref> *</type>
+        <definition>CpuFrameEvent* castor3d::ProgressBar::m_titleEvent</definition>
+        <argsstring></argsstring>
+        <name>m_titleEvent</name>
+        <qualifiedname>castor3d::ProgressBar::m_titleEvent</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/ProgressBar.hpp" line="68" column="16" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/deb/a03274_1adcc52ef5b8189687d7e66ac1320dd1fb" prot="private" static="no" mutable="no">
+        <type><ref refid="df/d84/a02722" kindref="compound">CpuFrameEvent</ref> *</type>
+        <definition>CpuFrameEvent* castor3d::ProgressBar::m_labelEvent</definition>
+        <argsstring></argsstring>
+        <name>m_labelEvent</name>
+        <qualifiedname>castor3d::ProgressBar::m_labelEvent</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/ProgressBar.hpp" line="69" column="16" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/deb/a03274_1adcc5aeaf409fe33e3feaba86dfba6e06" prot="private" static="no" mutable="no">
+        <type><ref refid="df/d84/a02722" kindref="compound">CpuFrameEvent</ref> *</type>
+        <definition>CpuFrameEvent* castor3d::ProgressBar::m_stepLabelEvent</definition>
+        <argsstring></argsstring>
+        <name>m_stepLabelEvent</name>
+        <qualifiedname>castor3d::ProgressBar::m_stepLabelEvent</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/ProgressBar.hpp" line="70" column="16" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/deb/a03274_1a1735129853f4f6565718e4e7197c4e11" prot="private" static="no" mutable="no">
+        <type><ref refid="df/d84/a02722" kindref="compound">CpuFrameEvent</ref> *</type>
+        <definition>CpuFrameEvent* castor3d::ProgressBar::m_stepEvent</definition>
+        <argsstring></argsstring>
+        <name>m_stepEvent</name>
+        <qualifiedname>castor3d::ProgressBar::m_stepEvent</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/ProgressBar.hpp" line="71" column="16" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="71" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="da/deb/a03274_1add198024bd6608496ff8b5918bc8cd46" prot="private" static="no" mutable="no">
         <type>std::mutex</type>
@@ -114,26 +188,26 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/ProgressBar.hpp" line="63" column="12" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="63" bodyend="-1"/>
+        <location file="Miscellaneous/ProgressBar.hpp" line="72" column="12" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="72" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
       <memberdef kind="function" id="da/deb/a03274_1aa3443badfdfa524b037992f85e31e128" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
         <definition>C3D_API castor3d::ProgressBar::ProgressBar</definition>
         <argsstring>(Engine &amp;engine, OverlayResPtr parent, OverlayResPtr bar, TextOverlaySPtr title, TextOverlaySPtr label, uint32_t max)</argsstring>
         <name>ProgressBar</name>
         <qualifiedname>castor3d::ProgressBar::ProgressBar</qualifiedname>
         <param>
-          <type><ref refid="d1/d3c/a02714" kindref="compound">Engine</ref> &amp;</type>
+          <type><ref refid="d9/db1/a02718" kindref="compound">Engine</ref> &amp;</type>
           <declname>engine</declname>
         </param>
         <param>
-          <type><ref refid="dc/df4/a01401_1a9f03059bf436359e70c09fb14b98e7ba" kindref="member">OverlayResPtr</ref></type>
+          <type><ref refid="da/dab/a01362_1a9f03059bf436359e70c09fb14b98e7ba" kindref="member">OverlayResPtr</ref></type>
           <declname>parent</declname>
         </param>
         <param>
-          <type><ref refid="dc/df4/a01401_1a9f03059bf436359e70c09fb14b98e7ba" kindref="member">OverlayResPtr</ref></type>
+          <type><ref refid="da/dab/a01362_1a9f03059bf436359e70c09fb14b98e7ba" kindref="member">OverlayResPtr</ref></type>
           <declname>bar</declname>
         </param>
         <param>
@@ -156,8 +230,38 @@
         </inbodydescription>
         <location file="Miscellaneous/ProgressBar.hpp" line="18" column="9"/>
       </memberdef>
+      <memberdef kind="function" id="da/deb/a03274_1aca4d2a52af2b6e46c2070ac624ef3cca" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ProgressBar::update</definition>
+        <argsstring>(OverlayResPtr parent, OverlayResPtr bar, TextOverlaySPtr title, TextOverlaySPtr label)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::ProgressBar::update</qualifiedname>
+        <param>
+          <type><ref refid="da/dab/a01362_1a9f03059bf436359e70c09fb14b98e7ba" kindref="member">OverlayResPtr</ref></type>
+          <declname>parent</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dab/a01362_1a9f03059bf436359e70c09fb14b98e7ba" kindref="member">OverlayResPtr</ref></type>
+          <declname>bar</declname>
+        </param>
+        <param>
+          <type>TextOverlaySPtr</type>
+          <declname>title</declname>
+        </param>
+        <param>
+          <type>TextOverlaySPtr</type>
+          <declname>label</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/ProgressBar.hpp" line="25" column="14"/>
+      </memberdef>
       <memberdef kind="function" id="da/deb/a03274_1a46ab0122be6959bd631794aabd84514e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
         <definition>C3D_API void castor3d::ProgressBar::setTitle</definition>
         <argsstring>(castor::String const &amp;value)</argsstring>
         <name>setTitle</name>
@@ -172,10 +276,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/ProgressBar.hpp" line="25" column="14"/>
+        <location file="Miscellaneous/ProgressBar.hpp" line="29" column="14"/>
       </memberdef>
       <memberdef kind="function" id="da/deb/a03274_1afd6b4fb3a2a55609faf017921aac7d52" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
         <definition>C3D_API void castor3d::ProgressBar::setLabel</definition>
         <argsstring>(castor::String const &amp;value)</argsstring>
         <name>setLabel</name>
@@ -190,10 +294,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/ProgressBar.hpp" line="26" column="14"/>
+        <location file="Miscellaneous/ProgressBar.hpp" line="30" column="14"/>
       </memberdef>
       <memberdef kind="function" id="da/deb/a03274_1adaa9491fcdbb041db68a6d07f3a3344d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
         <definition>C3D_API void castor3d::ProgressBar::step</definition>
         <argsstring>(castor::String const &amp;label)</argsstring>
         <name>step</name>
@@ -208,11 +312,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/ProgressBar.hpp" line="27" column="14"/>
-        <referencedby refid="d9/d65/a02986_1a1d3087f8da3eaa4200859b30f47f11c2" compoundref="db/dbc/a00395" startline="114" endline="117">castor3d::LoadingScreen::step</referencedby>
+        <location file="Miscellaneous/ProgressBar.hpp" line="31" column="14"/>
+        <referencedby refid="d9/d65/a02986_1a1d3087f8da3eaa4200859b30f47f11c2" compoundref="da/d9c/a00413" startline="116" endline="119">castor3d::LoadingScreen::step</referencedby>
       </memberdef>
       <memberdef kind="function" id="da/deb/a03274_1a2e264c829323263fd5a1b71bfd34fd8c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
         <definition>C3D_API void castor3d::ProgressBar::step</definition>
         <argsstring>()</argsstring>
         <name>step</name>
@@ -223,7 +327,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/ProgressBar.hpp" line="28" column="14"/>
+        <location file="Miscellaneous/ProgressBar.hpp" line="32" column="14"/>
       </memberdef>
       <memberdef kind="function" id="da/deb/a03274_1ace55e4bed10c8538dfea0cc5f7ddd826" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -241,9 +345,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/ProgressBar.hpp" line="30" column="6" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="30" bodyend="33"/>
-        <referencedby refid="da/deb/a03274_1a85189fe3a0429ed175e29ad98f595da8" compoundref="df/d15/a00416" startline="35" endline="38">incRange</referencedby>
-        <referencedby refid="d9/d65/a02986_1a6c0565e5148b5622aa276441c9c56f9a" compoundref="db/dbc/a00395" startline="119" endline="122">castor3d::LoadingScreen::setRange</referencedby>
+        <location file="Miscellaneous/ProgressBar.hpp" line="34" column="6" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="34" bodyend="37"/>
+        <referencedby refid="da/deb/a03274_1a85189fe3a0429ed175e29ad98f595da8" compoundref="d1/d7e/a00434" startline="39" endline="42">incRange</referencedby>
+        <referencedby refid="d9/d65/a02986_1a6c0565e5148b5622aa276441c9c56f9a" compoundref="da/d9c/a00413" startline="121" endline="124">castor3d::LoadingScreen::setRange</referencedby>
       </memberdef>
       <memberdef kind="function" id="da/deb/a03274_1a85189fe3a0429ed175e29ad98f595da8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -261,9 +365,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/ProgressBar.hpp" line="35" column="6" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="35" bodyend="38"/>
-        <references refid="da/deb/a03274_1ace55e4bed10c8538dfea0cc5f7ddd826" compoundref="df/d15/a00416" startline="30" endline="33">setRange</references>
-        <referencedby refid="d9/d65/a02986_1a26edc01f0d1e686e6c47439ef46148b2" compoundref="db/dbc/a00395" startline="124" endline="127">castor3d::LoadingScreen::incRange</referencedby>
+        <location file="Miscellaneous/ProgressBar.hpp" line="39" column="6" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="39" bodyend="42"/>
+        <references refid="da/deb/a03274_1ace55e4bed10c8538dfea0cc5f7ddd826" compoundref="d1/d7e/a00434" startline="34" endline="37">setRange</references>
+        <referencedby refid="d9/d65/a02986_1a26edc01f0d1e686e6c47439ef46148b2" compoundref="da/d9c/a00413" startline="126" endline="129">castor3d::LoadingScreen::incRange</referencedby>
       </memberdef>
       <memberdef kind="function" id="da/deb/a03274_1a9cca7d88d91d201751163c0b3820b50c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>uint32_t</type>
@@ -277,8 +381,8 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/ProgressBar.hpp" line="40" column="10" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="40" bodyend="43"/>
-        <referencedby refid="d9/d65/a02986_1a47c456420c001241b3a37ad1380a7904" compoundref="db/dbc/a00395" startline="138" endline="141">castor3d::LoadingScreen::getIndex</referencedby>
+        <location file="Miscellaneous/ProgressBar.hpp" line="44" column="10" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="44" bodyend="47"/>
+        <referencedby refid="d9/d65/a02986_1a47c456420c001241b3a37ad1380a7904" compoundref="da/d9c/a00413" startline="140" endline="143">castor3d::LoadingScreen::getIndex</referencedby>
       </memberdef>
       <memberdef kind="function" id="da/deb/a03274_1a32fd204d7e061d22407f173d522b2f7c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -292,7 +396,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/ProgressBar.hpp" line="45" column="6" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="45" bodyend="48"/>
+        <location file="Miscellaneous/ProgressBar.hpp" line="49" column="6" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="49" bodyend="52"/>
       </memberdef>
       <memberdef kind="function" id="da/deb/a03274_1a8a562cfbdda467fa310463c8f02e9e49" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -306,26 +410,31 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Miscellaneous/ProgressBar.hpp" line="50" column="6" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="50" bodyend="53"/>
+        <location file="Miscellaneous/ProgressBar.hpp" line="54" column="6" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="54" bodyend="57"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Miscellaneous/ProgressBar.hpp" line="15" column="1" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="16" bodyend="64"/>
+    <location file="Miscellaneous/ProgressBar.hpp" line="15" column="1" bodyfile="Miscellaneous/ProgressBar.hpp" bodystart="16" bodyend="73"/>
     <listofallmembers>
       <member refid="da/deb/a03274_1a9cca7d88d91d201751163c0b3820b50c" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>getIndex</name></member>
       <member refid="da/deb/a03274_1a85189fe3a0429ed175e29ad98f595da8" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>incRange</name></member>
       <member refid="da/deb/a03274_1a32fd204d7e061d22407f173d522b2f7c" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>lock</name></member>
       <member refid="da/deb/a03274_1a278b976207489b1b124e3b9b3b542a9a" prot="private" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>m_index</name></member>
+      <member refid="da/deb/a03274_1a775373a88b54a71c7481c5d2ab2f94c2" prot="private" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>m_label</name></member>
+      <member refid="da/deb/a03274_1adcc52ef5b8189687d7e66ac1320dd1fb" prot="private" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>m_labelEvent</name></member>
       <member refid="da/deb/a03274_1ae588fd36590fb3093b3a7d4957aa3a24" prot="private" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>m_listener</name></member>
       <member refid="da/deb/a03274_1add198024bd6608496ff8b5918bc8cd46" prot="private" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>m_mutex</name></member>
       <member refid="da/deb/a03274_1a40d9e01c64302ded7ea4e6fb4672c41c" prot="private" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>m_progress</name></member>
       <member refid="da/deb/a03274_1a3621adc633fa64511d796d73794a6f43" prot="private" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>m_progressBar</name></member>
       <member refid="da/deb/a03274_1aa994f3f6f13849fe14f669467c321804" prot="private" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>m_progressLabel</name></member>
       <member refid="da/deb/a03274_1a0329aa10bed838f76275dd7a4f5fd5d6" prot="private" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>m_progressTitle</name></member>
+      <member refid="da/deb/a03274_1a1735129853f4f6565718e4e7197c4e11" prot="private" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>m_stepEvent</name></member>
+      <member refid="da/deb/a03274_1adcc5aeaf409fe33e3feaba86dfba6e06" prot="private" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>m_stepLabelEvent</name></member>
       <member refid="da/deb/a03274_1a8c812ffd728f5451b269d8e0eb6277b6" prot="private" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>m_title</name></member>
+      <member refid="da/deb/a03274_1a09b005b1475019de516541ff29e2db9e" prot="private" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>m_titleEvent</name></member>
       <member refid="da/deb/a03274_1aa3443badfdfa524b037992f85e31e128" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>ProgressBar</name></member>
       <member refid="da/deb/a03274_1afd6b4fb3a2a55609faf017921aac7d52" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>setLabel</name></member>
       <member refid="da/deb/a03274_1ace55e4bed10c8538dfea0cc5f7ddd826" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>setRange</name></member>
@@ -333,6 +442,7 @@
       <member refid="da/deb/a03274_1adaa9491fcdbb041db68a6d07f3a3344d" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>step</name></member>
       <member refid="da/deb/a03274_1a2e264c829323263fd5a1b71bfd34fd8c" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>step</name></member>
       <member refid="da/deb/a03274_1a8a562cfbdda467fa310463c8f02e9e49" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>unlock</name></member>
+      <member refid="da/deb/a03274_1aca4d2a52af2b6e46c2070ac624ef3cca" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>update</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

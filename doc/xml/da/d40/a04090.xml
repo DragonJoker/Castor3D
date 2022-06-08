@@ -1,78 +1,88 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="da/d40/a04090" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::RenderWindowDesc</compoundname>
-    <includes local="no">RenderWindow.hpp</includes>
+    <compoundname>castor3d::TechniqueQueues</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="da/d40/a04090_1a7f84f415a603250474656c7a4f1e27b3" prot="public" static="no" mutable="no">
-        <type>castor::String</type>
-        <definition>castor::String castor3d::RenderWindowDesc::name</definition>
+      <memberdef kind="variable" id="da/d40/a04090_1abbeec84b824c1839d3ecbd25fb18256b" prot="public" static="no" mutable="no">
+        <type><ref refid="da/dab/a01362_1a16af0407887759f4b7d74964b4533ec6" kindref="member">RenderQueueArray</ref></type>
+        <definition>RenderQueueArray castor3d::TechniqueQueues::queues</definition>
         <argsstring></argsstring>
-        <name>name</name>
-        <qualifiedname>castor3d::RenderWindowDesc::name</qualifiedname>
+        <name>queues</name>
+        <qualifiedname>castor3d::TechniqueQueues::queues</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderWindow.hpp" line="43" column="16" bodyfile="Render/RenderWindow.hpp" bodystart="43" bodyend="-1"/>
+        <location file="Render/RenderModule.hpp" line="681" column="18" bodyfile="Render/RenderModule.hpp" bodystart="681" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="da/d40/a04090_1a329663d53d382711f8865e01e5646c8e" prot="public" static="no" mutable="no">
-        <type>RenderTargetSPtr</type>
-        <definition>RenderTargetSPtr castor3d::RenderWindowDesc::renderTarget</definition>
+      <memberdef kind="variable" id="da/d40/a04090_1afa5f02a93cbee3ec79624ca0f2fbd5d3" prot="public" static="no" mutable="no">
+        <type><ref refid="da/dab/a01362_1ad3137fb4b01f8deea8b1e20522ec8e6c" kindref="member">ShadowMapLightTypeArray</ref></type>
+        <definition>ShadowMapLightTypeArray castor3d::TechniqueQueues::shadowMaps</definition>
         <argsstring></argsstring>
-        <name>renderTarget</name>
-        <qualifiedname>castor3d::RenderWindowDesc::renderTarget</qualifiedname>
+        <name>shadowMaps</name>
+        <qualifiedname>castor3d::TechniqueQueues::shadowMaps</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderWindow.hpp" line="44" column="18" bodyfile="Render/RenderWindow.hpp" bodystart="44" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="da/d40/a04090_1a962046e9382c5c9eba20c22dae2d56dc" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::RenderWindowDesc::enableVSync</definition>
-        <argsstring></argsstring>
-        <name>enableVSync</name>
-        <qualifiedname>castor3d::RenderWindowDesc::enableVSync</qualifiedname>
-        <initializer>{}</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderWindow.hpp" line="45" column="6" bodyfile="Render/RenderWindow.hpp" bodystart="45" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="da/d40/a04090_1abb366356c5f5de8e057a4738894a5324" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::RenderWindowDesc::fullscreen</definition>
-        <argsstring></argsstring>
-        <name>fullscreen</name>
-        <qualifiedname>castor3d::RenderWindowDesc::fullscreen</qualifiedname>
-        <initializer>{}</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/RenderWindow.hpp" line="46" column="6" bodyfile="Render/RenderWindow.hpp" bodystart="46" bodyend="-1"/>
+        <location file="Render/RenderModule.hpp" line="682" column="25" bodyfile="Render/RenderModule.hpp" bodystart="682" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/RenderWindow.hpp" line="41" column="1" bodyfile="Render/RenderWindow.hpp" bodystart="42" bodyend="47"/>
+    <collaborationgraph>
+      <node id="4">
+        <label>T</label>
+      </node>
+      <node id="5">
+        <label>std::array&lt; ShadowMapRefArray, size_t(LightType::eCount) &gt;</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; ShadowMapRefArray, size_t(LightType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::TechniqueQueues</label>
+        <link refid="da/d40/a04090"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>queues</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>shadowMaps</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::vector&lt; std::reference_wrapper&lt; RenderQueue &gt; &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; std::reference_wrapper&lt; RenderQueue &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/RenderModule.hpp" line="679" column="1" bodyfile="Render/RenderModule.hpp" bodystart="680" bodyend="683"/>
     <listofallmembers>
-      <member refid="da/d40/a04090_1a962046e9382c5c9eba20c22dae2d56dc" prot="public" virt="non-virtual"><scope>castor3d::RenderWindowDesc</scope><name>enableVSync</name></member>
-      <member refid="da/d40/a04090_1abb366356c5f5de8e057a4738894a5324" prot="public" virt="non-virtual"><scope>castor3d::RenderWindowDesc</scope><name>fullscreen</name></member>
-      <member refid="da/d40/a04090_1a7f84f415a603250474656c7a4f1e27b3" prot="public" virt="non-virtual"><scope>castor3d::RenderWindowDesc</scope><name>name</name></member>
-      <member refid="da/d40/a04090_1a329663d53d382711f8865e01e5646c8e" prot="public" virt="non-virtual"><scope>castor3d::RenderWindowDesc</scope><name>renderTarget</name></member>
+      <member refid="da/d40/a04090_1abbeec84b824c1839d3ecbd25fb18256b" prot="public" virt="non-virtual"><scope>castor3d::TechniqueQueues</scope><name>queues</name></member>
+      <member refid="da/d40/a04090_1afa5f02a93cbee3ec79624ca0f2fbd5d3" prot="public" virt="non-virtual"><scope>castor3d::TechniqueQueues</scope><name>shadowMaps</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

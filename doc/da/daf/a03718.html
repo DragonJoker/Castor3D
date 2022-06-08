@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::LightPropagationPass Class Reference</title>
+<title>Castor3D: castor3d::Frustum Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,193 +42,94 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dc/df4/a01401.html">castor3d</a></li><li class="navelem"><a class="el" href="../../da/daf/a03718.html">LightPropagationPass</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../da/daf/a03718.html">Frustum</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="../../da/d91/a03715.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">castor3d::LightPropagationPass Class Reference</div></div>
+  <div class="headertitle"><div class="title">castor3d::Frustum Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;LightPropagationPass.hpp&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for castor3d::LightPropagationPass:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../d3/d23/a03717.png" border="0" usemap="#acastor3d_1_1LightPropagationPass_inherit__map" alt="Inheritance graph"/></div>
-<map name="acastor3d_1_1LightPropagationPass_inherit__map" id="acastor3d_1_1LightPropagationPass_inherit__map">
-<area shape="rect" title=" " alt="" coords="23,80,230,107"/>
-<area shape="rect" title=" " alt="" coords="5,5,112,32"/>
-<area shape="rect" title=" " alt="" coords="137,5,255,32"/>
-</map>
-<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
-<div class="dynheader">
-Collaboration diagram for castor3d::LightPropagationPass:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../d5/d35/a03716.png" border="0" usemap="#acastor3d_1_1LightPropagationPass_coll__map" alt="Collaboration graph"/></div>
-<map name="acastor3d_1_1LightPropagationPass_coll__map" id="acastor3d_1_1LightPropagationPass_coll__map">
-<area shape="rect" title=" " alt="" coords="23,80,230,107"/>
-<area shape="rect" title=" " alt="" coords="5,5,112,32"/>
-<area shape="rect" title=" " alt="" coords="137,5,255,32"/>
-</map>
-<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
+<p><code>#include &lt;Frustum.hpp&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a53be83db9e8c50634d8eb5613db0b934"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/daf/a03718.html#a53be83db9e8c50634d8eb5613db0b934">InIdx</a> { <br />
-&#160;&#160;<a class="el" href="../../da/daf/a03718.html#a53be83db9e8c50634d8eb5613db0b934a3684526808510ed03381ffd7eb6457fd">LpvGridUboIdx</a>
-, <a class="el" href="../../da/daf/a03718.html#a53be83db9e8c50634d8eb5613db0b934a1438928d22d75ab702af19a1818a6d81">RLpvGridIdx</a>
-, <a class="el" href="../../da/daf/a03718.html#a53be83db9e8c50634d8eb5613db0b934a2f8884d27852b3fb2155dce46f286483">GLpvGridIdx</a>
-, <a class="el" href="../../da/daf/a03718.html#a53be83db9e8c50634d8eb5613db0b934a2b5c389f13377dcad4758440bf8f8697">BLpvGridIdx</a>
-, <br />
-&#160;&#160;<a class="el" href="../../da/daf/a03718.html#a53be83db9e8c50634d8eb5613db0b934a14ef22466abb8a7942f085afb745b149">GpGridIdx</a>
-<br />
- }</td></tr>
-<tr class="separator:a53be83db9e8c50634d8eb5613db0b934"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a55d291bf98255dc2652a68a1ac389db9"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/daf/a03718.html#a55d291bf98255dc2652a68a1ac389db9">OutIdx</a> { <br />
-&#160;&#160;<a class="el" href="../../da/daf/a03718.html#a55d291bf98255dc2652a68a1ac389db9af8f0b3ec0795ade72fdce78ba0d95fae">RLpvAccumulatorIdx</a>
-, <a class="el" href="../../da/daf/a03718.html#a55d291bf98255dc2652a68a1ac389db9aa38ecee789ff6d714a49649e21bfead8">GLpvAccumulatorIdx</a>
-, <a class="el" href="../../da/daf/a03718.html#a55d291bf98255dc2652a68a1ac389db9a715d1000b68d443570900f2e05c30654">BLpvAccumulatorIdx</a>
-, <a class="el" href="../../da/daf/a03718.html#a55d291bf98255dc2652a68a1ac389db9ae5513eb502f45e2dca1a401693213c1b">RLpvNextStepIdx</a>
-, <br />
-&#160;&#160;<a class="el" href="../../da/daf/a03718.html#a55d291bf98255dc2652a68a1ac389db9a4a0b2f82f4a46277a1eb347eecd44167">GLpvNextStepIdx</a>
-, <a class="el" href="../../da/daf/a03718.html#a55d291bf98255dc2652a68a1ac389db9ab9492001d5e84adea0c777f0c418cabc">BLpvNextStepIdx</a>
-<br />
- }</td></tr>
-<tr class="separator:a55d291bf98255dc2652a68a1ac389db9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2b7dc6625287a344d5e4594068b0232"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/daf/a03718.html#af2b7dc6625287a344d5e4594068b0232">Planes</a> = std::array&lt; castor::PlaneEquation, size_t(<a class="el" href="../../da/dab/a01362.html#abc8a2e73a4a01c9d2a4575897121259bae558bb69fadec037d9eae46601a4df8e">FrustumPlane::eCount</a>) &gt;</td></tr>
+<tr class="separator:af2b7dc6625287a344d5e4594068b0232"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a402da8f02937a3654bf4f90d48e19a8a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/daf/a03718.html#a402da8f02937a3654bf4f90d48e19a8a">LightPropagationPass</a> (crg::FramePass const &amp;pass, crg::GraphContext &amp;context, crg::RunnableGraph &amp;graph, <a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const &amp;device, bool occlusion, uint32_t gridSize, <a class="el" href="../../dc/df4/a01401.html#a840ab6fd50c1a08fcc1b6dc3f98d90fa">BlendMode</a> blendMode)</td></tr>
-<tr class="memdesc:a402da8f02937a3654bf4f90d48e19a8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../da/daf/a03718.html#a402da8f02937a3654bf4f90d48e19a8a">More...</a><br /></td></tr>
-<tr class="separator:a402da8f02937a3654bf4f90d48e19a8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa33ec684758fbd2ecc51706c5bf44525"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/daf/a03718.html#aa33ec684758fbd2ecc51706c5bf44525">accept</a> (<a class="el" href="../../dc/dbb/a03262.html">PipelineVisitorBase</a> &amp;visitor)</td></tr>
-<tr class="memdesc:aa33ec684758fbd2ecc51706c5bf44525"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visitor acceptance function.  <a href="../../da/daf/a03718.html#aa33ec684758fbd2ecc51706c5bf44525">More...</a><br /></td></tr>
-<tr class="separator:aa33ec684758fbd2ecc51706c5bf44525"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr class="memitem:acea020bdf2fc7a6b65621d6d46c4052e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/daf/a03718.html#acea020bdf2fc7a6b65621d6d46c4052e">doSubInitialise</a> ()</td></tr>
-<tr class="separator:acea020bdf2fc7a6b65621d6d46c4052e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c20dc60819d52d8202eefa99c23b128"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/daf/a03718.html#a5c20dc60819d52d8202eefa99c23b128">doSubRecordInto</a> (crg::RecordContext &amp;context, VkCommandBuffer commandBuffer, uint32_t index)</td></tr>
-<tr class="separator:a5c20dc60819d52d8202eefa99c23b128"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa0a8d74d4e457579ab68e7de1ebded6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/daf/a03718.html#afa0a8d74d4e457579ab68e7de1ebded6">Frustum</a> (<a class="el" href="../../d8/df5/a04458.html">Viewport</a> &amp;viewport)</td></tr>
+<tr class="memdesc:afa0a8d74d4e457579ab68e7de1ebded6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../da/daf/a03718.html#afa0a8d74d4e457579ab68e7de1ebded6">More...</a><br /></td></tr>
+<tr class="separator:afa0a8d74d4e457579ab68e7de1ebded6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ce9926b79b67a6b9114738b21310f5c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/daf/a03718.html#a0ce9926b79b67a6b9114738b21310f5c">update</a> (castor::Matrix4x4f const &amp;view)</td></tr>
+<tr class="memdesc:a0ce9926b79b67a6b9114738b21310f5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the frustum planes.  <a href="../../da/daf/a03718.html#a0ce9926b79b67a6b9114738b21310f5c">More...</a><br /></td></tr>
+<tr class="separator:a0ce9926b79b67a6b9114738b21310f5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c7db0bdda57dc7b3439563272533f03"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/daf/a03718.html#a9c7db0bdda57dc7b3439563272533f03">update</a> (castor::Matrix4x4f const &amp;projection, castor::Matrix4x4f const &amp;view)</td></tr>
+<tr class="memdesc:a9c7db0bdda57dc7b3439563272533f03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the frustum planes.  <a href="../../da/daf/a03718.html#a9c7db0bdda57dc7b3439563272533f03">More...</a><br /></td></tr>
+<tr class="separator:a9c7db0bdda57dc7b3439563272533f03"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae48bac21e01ee4fb795ccbd9c9362def"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/daf/a03718.html#ae48bac21e01ee4fb795ccbd9c9362def">isVisible</a> (castor::BoundingBox const &amp;box, castor::Matrix4x4f const &amp;transformations) const</td></tr>
+<tr class="memdesc:ae48bac21e01ee4fb795ccbd9c9362def"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if given BoundingBox is in the view frustum.  <a href="../../da/daf/a03718.html#ae48bac21e01ee4fb795ccbd9c9362def">More...</a><br /></td></tr>
+<tr class="separator:ae48bac21e01ee4fb795ccbd9c9362def"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16f457e7f704ff5997fd560d24c2c837"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/daf/a03718.html#a16f457e7f704ff5997fd560d24c2c837">isVisible</a> (castor::BoundingSphere const &amp;sphere, castor::Matrix4x4f const &amp;transformations, castor::Point3f const &amp;scale) const</td></tr>
+<tr class="memdesc:a16f457e7f704ff5997fd560d24c2c837"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if given BoundingSphere is in the view frustum.  <a href="../../da/daf/a03718.html#a16f457e7f704ff5997fd560d24c2c837">More...</a><br /></td></tr>
+<tr class="separator:a16f457e7f704ff5997fd560d24c2c837"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07a96b441fa9aed4e07afc234de59951"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/daf/a03718.html#a07a96b441fa9aed4e07afc234de59951">isVisible</a> (castor::Point3f const &amp;point) const</td></tr>
+<tr class="memdesc:a07a96b441fa9aed4e07afc234de59951"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if given point is in the view frustum.  <a href="../../da/daf/a03718.html#a07a96b441fa9aed4e07afc234de59951">More...</a><br /></td></tr>
+<tr class="separator:a07a96b441fa9aed4e07afc234de59951"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87f3376d0295b1f46a592fbd6403f66a"><td class="memItemLeft" align="right" valign="top">std::array&lt; <a class="el" href="../../d0/de9/a03530.html">InterleavedVertex</a>, 8u &gt; const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/daf/a03718.html#a87f3376d0295b1f46a592fbd6403f66a">getPoints</a> () const</td></tr>
+<tr class="separator:a87f3376d0295b1f46a592fbd6403f66a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a259be38634e63e5c722b5f4c78e0275d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../da/daf/a03718.html#af2b7dc6625287a344d5e4594068b0232">Planes</a> const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/daf/a03718.html#a259be38634e63e5c722b5f4c78e0275d">getPlanes</a> () const</td></tr>
+<tr class="separator:a259be38634e63e5c722b5f4c78e0275d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Enumeration Documentation</h2>
-<a id="a53be83db9e8c50634d8eb5613db0b934" name="a53be83db9e8c50634d8eb5613db0b934"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a53be83db9e8c50634d8eb5613db0b934">&#9670;&nbsp;</a></span>InIdx</h2>
+<h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="af2b7dc6625287a344d5e4594068b0232" name="af2b7dc6625287a344d5e4594068b0232"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2b7dc6625287a344d5e4594068b0232">&#9670;&nbsp;</a></span>Planes</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="../../da/daf/a03718.html#a53be83db9e8c50634d8eb5613db0b934">castor3d::LightPropagationPass::InIdx</a></td>
+          <td class="memname">using <a class="el" href="../../da/daf/a03718.html#af2b7dc6625287a344d5e4594068b0232">castor3d::Frustum::Planes</a> =  std::array&lt; castor::PlaneEquation, size_t( <a class="el" href="../../da/dab/a01362.html#abc8a2e73a4a01c9d2a4575897121259bae558bb69fadec037d9eae46601a4df8e">FrustumPlane::eCount</a> ) &gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a53be83db9e8c50634d8eb5613db0b934a3684526808510ed03381ffd7eb6457fd" name="a53be83db9e8c50634d8eb5613db0b934a3684526808510ed03381ffd7eb6457fd"></a>LpvGridUboIdx&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a53be83db9e8c50634d8eb5613db0b934a1438928d22d75ab702af19a1818a6d81" name="a53be83db9e8c50634d8eb5613db0b934a1438928d22d75ab702af19a1818a6d81"></a>RLpvGridIdx&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a53be83db9e8c50634d8eb5613db0b934a2f8884d27852b3fb2155dce46f286483" name="a53be83db9e8c50634d8eb5613db0b934a2f8884d27852b3fb2155dce46f286483"></a>GLpvGridIdx&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a53be83db9e8c50634d8eb5613db0b934a2b5c389f13377dcad4758440bf8f8697" name="a53be83db9e8c50634d8eb5613db0b934a2b5c389f13377dcad4758440bf8f8697"></a>BLpvGridIdx&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a53be83db9e8c50634d8eb5613db0b934a14ef22466abb8a7942f085afb745b149" name="a53be83db9e8c50634d8eb5613db0b934a14ef22466abb8a7942f085afb745b149"></a>GpGridIdx&#160;</td><td class="fielddoc"></td></tr>
-</table>
-
-</div>
-</div>
-<a id="a55d291bf98255dc2652a68a1ac389db9" name="a55d291bf98255dc2652a68a1ac389db9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a55d291bf98255dc2652a68a1ac389db9">&#9670;&nbsp;</a></span>OutIdx</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="../../da/daf/a03718.html#a55d291bf98255dc2652a68a1ac389db9">castor3d::LightPropagationPass::OutIdx</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a55d291bf98255dc2652a68a1ac389db9af8f0b3ec0795ade72fdce78ba0d95fae" name="a55d291bf98255dc2652a68a1ac389db9af8f0b3ec0795ade72fdce78ba0d95fae"></a>RLpvAccumulatorIdx&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a55d291bf98255dc2652a68a1ac389db9aa38ecee789ff6d714a49649e21bfead8" name="a55d291bf98255dc2652a68a1ac389db9aa38ecee789ff6d714a49649e21bfead8"></a>GLpvAccumulatorIdx&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a55d291bf98255dc2652a68a1ac389db9a715d1000b68d443570900f2e05c30654" name="a55d291bf98255dc2652a68a1ac389db9a715d1000b68d443570900f2e05c30654"></a>BLpvAccumulatorIdx&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a55d291bf98255dc2652a68a1ac389db9ae5513eb502f45e2dca1a401693213c1b" name="a55d291bf98255dc2652a68a1ac389db9ae5513eb502f45e2dca1a401693213c1b"></a>RLpvNextStepIdx&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a55d291bf98255dc2652a68a1ac389db9a4a0b2f82f4a46277a1eb347eecd44167" name="a55d291bf98255dc2652a68a1ac389db9a4a0b2f82f4a46277a1eb347eecd44167"></a>GLpvNextStepIdx&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a55d291bf98255dc2652a68a1ac389db9ab9492001d5e84adea0c777f0c418cabc" name="a55d291bf98255dc2652a68a1ac389db9ab9492001d5e84adea0c777f0c418cabc"></a>BLpvNextStepIdx&#160;</td><td class="fielddoc"></td></tr>
-</table>
 
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a402da8f02937a3654bf4f90d48e19a8a" name="a402da8f02937a3654bf4f90d48e19a8a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a402da8f02937a3654bf4f90d48e19a8a">&#9670;&nbsp;</a></span>LightPropagationPass()</h2>
+<a id="afa0a8d74d4e457579ab68e7de1ebded6" name="afa0a8d74d4e457579ab68e7de1ebded6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa0a8d74d4e457579ab68e7de1ebded6">&#9670;&nbsp;</a></span>Frustum()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::LightPropagationPass::LightPropagationPass </td>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::Frustum::Frustum </td>
           <td>(</td>
-          <td class="paramtype">crg::FramePass const &amp;&#160;</td>
-          <td class="paramname"><em>pass</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype"><a class="el" href="../../d8/df5/a04458.html">Viewport</a> &amp;&#160;</td>
+          <td class="paramname"><em>viewport</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">crg::GraphContext &amp;&#160;</td>
-          <td class="paramname"><em>context</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">crg::RunnableGraph &amp;&#160;</td>
-          <td class="paramname"><em>graph</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const &amp;&#160;</td>
-          <td class="paramname"><em>device</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>occlusion</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>gridSize</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../dc/df4/a01401.html#a840ab6fd50c1a08fcc1b6dc3f98d90fa">BlendMode</a>&#160;</td>
-          <td class="paramname"><em>blendMode</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Constructor. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pass</td><td>The parent frame pass. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">context</td><td>The rendering context. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">graph</td><td>The runnable graph. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">device</td><td>The GPU device. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">occlusion</td><td>Enable occlusion or not. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">gridSize</td><td>The grid dimensions. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">blendMode</td><td>The blend mode. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">viewport</td><td>The viewport. </td></tr>
   </table>
   </dd>
 </dl>
@@ -236,34 +137,8 @@ Protected Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="aa33ec684758fbd2ecc51706c5bf44525" name="aa33ec684758fbd2ecc51706c5bf44525"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa33ec684758fbd2ecc51706c5bf44525">&#9670;&nbsp;</a></span>accept()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::LightPropagationPass::accept </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../dc/dbb/a03262.html">PipelineVisitorBase</a> &amp;&#160;</td>
-          <td class="paramname"><em>visitor</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Visitor acceptance function. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">visitor</td><td>The ... visitor. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="acea020bdf2fc7a6b65621d6d46c4052e" name="acea020bdf2fc7a6b65621d6d46c4052e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acea020bdf2fc7a6b65621d6d46c4052e">&#9670;&nbsp;</a></span>doSubInitialise()</h2>
+<a id="a259be38634e63e5c722b5f4c78e0275d" name="a259be38634e63e5c722b5f4c78e0275d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a259be38634e63e5c722b5f4c78e0275d">&#9670;&nbsp;</a></span>getPlanes()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -272,23 +147,23 @@ Protected Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::LightPropagationPass::doSubInitialise </td>
+          <td class="memname"><a class="el" href="../../da/daf/a03718.html#af2b7dc6625287a344d5e4594068b0232">Planes</a> const  &amp; castor3d::Frustum::getPlanes </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a5c20dc60819d52d8202eefa99c23b128" name="a5c20dc60819d52d8202eefa99c23b128"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5c20dc60819d52d8202eefa99c23b128">&#9670;&nbsp;</a></span>doSubRecordInto()</h2>
+<a id="a87f3376d0295b1f46a592fbd6403f66a" name="a87f3376d0295b1f46a592fbd6403f66a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a87f3376d0295b1f46a592fbd6403f66a">&#9670;&nbsp;</a></span>getPoints()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -297,22 +172,159 @@ Protected Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::LightPropagationPass::doSubRecordInto </td>
+          <td class="memname">std::array&lt; <a class="el" href="../../d0/de9/a03530.html">InterleavedVertex</a>, 8u &gt; const  &amp; castor3d::Frustum::getPoints </td>
           <td>(</td>
-          <td class="paramtype">crg::RecordContext &amp;&#160;</td>
-          <td class="paramname"><em>context</em>, </td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae48bac21e01ee4fb795ccbd9c9362def" name="ae48bac21e01ee4fb795ccbd9c9362def"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae48bac21e01ee4fb795ccbd9c9362def">&#9670;&nbsp;</a></span>isVisible() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool castor3d::Frustum::isVisible </td>
+          <td>(</td>
+          <td class="paramtype">castor::BoundingBox const &amp;&#160;</td>
+          <td class="paramname"><em>box</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">VkCommandBuffer&#160;</td>
-          <td class="paramname"><em>commandBuffer</em>, </td>
+          <td class="paramtype">castor::Matrix4x4f const &amp;&#160;</td>
+          <td class="paramname"><em>transformations</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks if given BoundingBox is in the view frustum. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">box</td><td>The BoundingBox. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">transformations</td><td>The BoundingBox transformations matrix. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if the BoundingBox is completely out of the view frustum. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d0/d15/a04574.html#a4b024cf5dd96bcf933c8b90a70d2c183">castor3d::Camera::isVisible()</a>.</p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../da/daf/a03718_ae48bac21e01ee4fb795ccbd9c9362def_icgraph.png" border="0" usemap="#ada/daf/a03718_ae48bac21e01ee4fb795ccbd9c9362def_icgraph" alt=""/></div>
+<map name="ada/daf/a03718_ae48bac21e01ee4fb795ccbd9c9362def_icgraph" id="ada/daf/a03718_ae48bac21e01ee4fb795ccbd9c9362def_icgraph">
+<area shape="rect" title="Checks if given BoundingBox is in the view frustum." alt="" coords="236,5,372,47"/>
+<area shape="rect" href="../../d0/d15/a04574.html#a4b024cf5dd96bcf933c8b90a70d2c183" title=" " alt="" coords="5,13,188,39"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a16f457e7f704ff5997fd560d24c2c837" name="a16f457e7f704ff5997fd560d24c2c837"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16f457e7f704ff5997fd560d24c2c837">&#9670;&nbsp;</a></span>isVisible() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool castor3d::Frustum::isVisible </td>
+          <td>(</td>
+          <td class="paramtype">castor::BoundingSphere const &amp;&#160;</td>
+          <td class="paramname"><em>sphere</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>index</em>&#160;</td>
+          <td class="paramtype">castor::Matrix4x4f const &amp;&#160;</td>
+          <td class="paramname"><em>transformations</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::Point3f const &amp;&#160;</td>
+          <td class="paramname"><em>scale</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks if given BoundingSphere is in the view frustum. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">sphere</td><td>The BoundingSphere. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">transformations</td><td>The BoundingSphere transformations matrix. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">scale</td><td>The scale for the BoundingSphere. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if the BoundingSphere is completely out of the view frustum. </dd></dl>
+
+</div>
+</div>
+<a id="a07a96b441fa9aed4e07afc234de59951" name="a07a96b441fa9aed4e07afc234de59951"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07a96b441fa9aed4e07afc234de59951">&#9670;&nbsp;</a></span>isVisible() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool castor3d::Frustum::isVisible </td>
+          <td>(</td>
+          <td class="paramtype">castor::Point3f const &amp;&#160;</td>
+          <td class="paramname"><em>point</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks if given point is in the view frustum. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">point</td><td>The point. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if the point out of the view frustum. </dd></dl>
+
+</div>
+</div>
+<a id="a9c7db0bdda57dc7b3439563272533f03" name="a9c7db0bdda57dc7b3439563272533f03"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c7db0bdda57dc7b3439563272533f03">&#9670;&nbsp;</a></span>update() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::Frustum::update </td>
+          <td>(</td>
+          <td class="paramtype">castor::Matrix4x4f const &amp;&#160;</td>
+          <td class="paramname"><em>projection</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">castor::Matrix4x4f const &amp;&#160;</td>
+          <td class="paramname"><em>view</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -320,22 +332,52 @@ Protected Member Functions</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
+
+<p>Updates the frustum planes. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">projection</td><td>The projection matrix. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">view</td><td>The view matrix. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a0ce9926b79b67a6b9114738b21310f5c" name="a0ce9926b79b67a6b9114738b21310f5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ce9926b79b67a6b9114738b21310f5c">&#9670;&nbsp;</a></span>update() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::Frustum::update </td>
+          <td>(</td>
+          <td class="paramtype">castor::Matrix4x4f const &amp;&#160;</td>
+          <td class="paramname"><em>view</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Updates the frustum planes. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">view</td><td>The view matrix. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>Render/GlobalIllumination/LightPropagationVolumes/<a class="el" href="../../db/d77/a00683.html">LightPropagationPass.hpp</a></li>
+<li>Render/<a class="el" href="../../d0/db6/a00692.html">Frustum.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 15:34:55 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:48 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

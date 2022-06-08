@@ -1,6 +1,5 @@
-<map id="castor3d::SceneCuller::RenderPassBuffers" name="castor3d::SceneCuller::RenderPassBuffers">
-<area shape="rect" id="node1" title=" " alt="" coords="23,273,173,315"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,184,191,211"/>
-<area shape="rect" id="node3" title=" " alt="" coords="41,95,155,121"/>
-<area shape="rect" id="node4" title=" " alt="" coords="79,5,117,32"/>
+<map id="castor3d::ParticlePlugin" name="castor3d::ParticlePlugin">
+<area shape="rect" id="node1" title=" " alt="" coords="19,155,179,181"/>
+<area shape="rect" id="node2" href="$d6/d35/a03670.html" title=" " alt="" coords="41,80,157,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,5,192,32"/>
 </map>

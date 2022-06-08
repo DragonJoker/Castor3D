@@ -1,5 +1,4 @@
-<map id="castor3d::LayeredLpvGridConfigUbo" name="castor3d::LayeredLpvGridConfigUbo">
-<area shape="rect" id="node1" title=" " alt="" coords="5,200,175,241"/>
-<area shape="rect" id="node2" title=" " alt="" coords="50,96,130,123"/>
-<area shape="rect" id="node3" title=" " alt="" coords="27,5,153,47"/>
+<map id="castor3d::shader::LightMaterial" name="castor3d::shader::LightMaterial">
+<area shape="rect" id="node1" title=" " alt="" coords="5,80,207,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="37,5,175,32"/>
 </map>

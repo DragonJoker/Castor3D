@@ -1,32 +1,70 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d2/da6/a04086" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::DebugConfig</compoundname>
-    <includes local="no">RenderWindow.hpp</includes>
+    <compoundname>castor3d::ShadowMapLightIds</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d2/da6/a04086_1a65f9da86f5db5c8b46be51d7c3ae83c0" prot="public" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::DebugConfig::debugIndex</definition>
+      <memberdef kind="variable" id="d2/da6/a04086_1ad6138080c0e1adc3128d72e38fc52720" prot="public" static="no" mutable="no">
+        <type>std::reference_wrapper&lt; <ref refid="d2/dbb/a04166" kindref="compound">ShadowMap</ref> &gt;</type>
+        <definition>std::reference_wrapper&lt; ShadowMap &gt; castor3d::ShadowMapLightIds::shadowMap</definition>
         <argsstring></argsstring>
-        <name>debugIndex</name>
-        <qualifiedname>castor3d::DebugConfig::debugIndex</qualifiedname>
-        <initializer>{ 0u }</initializer>
+        <name>shadowMap</name>
+        <qualifiedname>castor3d::ShadowMapLightIds::shadowMap</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/RenderWindow.hpp" line="38" column="10" bodyfile="Render/RenderWindow.hpp" bodystart="38" bodyend="-1"/>
+        <location file="Render/RenderModule.hpp" line="673" column="24" bodyfile="Render/RenderModule.hpp" bodystart="673" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/da6/a04086_1a0cb3178cf64569ec52a1d2ddddb26e06" prot="public" static="no" mutable="no">
+        <type><ref refid="da/dab/a01362_1a2563a5635546e66343df0038b6af826a" kindref="member">LightIdArray</ref></type>
+        <definition>LightIdArray castor3d::ShadowMapLightIds::ids</definition>
+        <argsstring></argsstring>
+        <name>ids</name>
+        <qualifiedname>castor3d::ShadowMapLightIds::ids</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="674" column="14" bodyfile="Render/RenderModule.hpp" bodystart="674" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/RenderWindow.hpp" line="36" column="1" bodyfile="Render/RenderWindow.hpp" bodystart="37" bodyend="39"/>
+    <collaborationgraph>
+      <node id="4">
+        <label>T</label>
+      </node>
+      <node id="1">
+        <label>castor3d::ShadowMapLightIds</label>
+        <link refid="d2/da6/a04086"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>ids</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::vector&lt; std::pair&lt; Light *, uint32_t &gt; &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; std::pair&lt; Light *, uint32_t &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/RenderModule.hpp" line="671" column="1" bodyfile="Render/RenderModule.hpp" bodystart="672" bodyend="675"/>
     <listofallmembers>
-      <member refid="d2/da6/a04086_1a65f9da86f5db5c8b46be51d7c3ae83c0" prot="public" virt="non-virtual"><scope>castor3d::DebugConfig</scope><name>debugIndex</name></member>
+      <member refid="d2/da6/a04086_1a0cb3178cf64569ec52a1d2ddddb26e06" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapLightIds</scope><name>ids</name></member>
+      <member refid="d2/da6/a04086_1ad6138080c0e1adc3128d72e38fc52720" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapLightIds</scope><name>shadowMap</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

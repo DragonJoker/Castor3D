@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Event/UserInput/UserInputEvent.hpp File Reference</title>
+<title>Castor3D: Event/Frame/GpuFunctorEvent.hpp File Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,32 +42,50 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_fd1ba99bf4a0b5f690afa549d5d5adac.html">Event</a></li><li class="navelem"><a class="el" href="../../dir_9a30441405913f9d7e90e65e51c023a8.html">UserInput</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_fd1ba99bf4a0b5f690afa549d5d5adac.html">Event</a></li><li class="navelem"><a class="el" href="../../dir_07d6c2a09270206a3b07dccb646a5319.html">Frame</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
-  <div class="headertitle"><div class="title">UserInputEvent.hpp File Reference</div></div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#func-members">Functions</a>  </div>
+  <div class="headertitle"><div class="title">GpuFunctorEvent.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d6a/a02779.html">castor3d::UserInputEvent</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Description of a user input event.  <a href="../../dc/d6a/a02779.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d93/a02758.html">castor3d::GpuFunctorEvent</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/db0/a02742.html">castor3d::GpuEventInitialiserT&lt; CacheT &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/da5/a02746.html">castor3d::GpuEventCleanerT&lt; CacheT &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:da/de3/a01398"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/de3/a01398.html">castor3d</a></td></tr>
+<tr class="memitem:da/dab/a01362"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html">castor3d</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ab48004ef6a881d94d7648338102e05c8"><td class="memItemLeft" align="right" valign="top">GpuFrameEventUPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#ab48004ef6a881d94d7648338102e05c8">castor3d::makeGpuFunctorEvent</a> (EventType type, GpuFunctorEvent::Functor functor)</td></tr>
+<tr class="memdesc:ab48004ef6a881d94d7648338102e05c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to create a functor event.  <a href="../../da/dab/a01362.html#ab48004ef6a881d94d7648338102e05c8">More...</a><br /></td></tr>
+<tr class="separator:ab48004ef6a881d94d7648338102e05c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a424692ba227ad469a00aa18d1fdbd802"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a424692ba227ad469a00aa18d1fdbd802"><td class="memTemplItemLeft" align="right" valign="top">GpuFrameEventUPtr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a424692ba227ad469a00aa18d1fdbd802">castor3d::makeGpuCleanupEvent</a> (T &amp;object)</td></tr>
+<tr class="memdesc:a424692ba227ad469a00aa18d1fdbd802"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to create a cleanup event.  <a href="../../da/dab/a01362.html#a424692ba227ad469a00aa18d1fdbd802">More...</a><br /></td></tr>
+<tr class="separator:a424692ba227ad469a00aa18d1fdbd802"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf67c7f08e12d5b908a8e9d0d95df55e"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:aaf67c7f08e12d5b908a8e9d0d95df55e"><td class="memTemplItemLeft" align="right" valign="top">GpuFrameEventUPtr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#aaf67c7f08e12d5b908a8e9d0d95df55e">castor3d::makeGpuInitialiseEvent</a> (T &amp;object)</td></tr>
+<tr class="memdesc:aaf67c7f08e12d5b908a8e9d0d95df55e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to create an initialise event.  <a href="../../da/dab/a01362.html#aaf67c7f08e12d5b908a8e9d0d95df55e">More...</a><br /></td></tr>
+<tr class="separator:aaf67c7f08e12d5b908a8e9d0d95df55e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 21:28:50 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:45 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

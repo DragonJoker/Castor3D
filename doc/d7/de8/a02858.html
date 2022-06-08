@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::shader::PbrSGLightMaterial Struct Reference</title>
+<title>Castor3D: castor3d::shader::PbrLightingModel Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,143 +42,226 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dc/df4/a01401.html">castor3d</a></li><li class="navelem"><a class="el" href="../../da/d06/a01403.html">shader</a></li><li class="navelem"><a class="el" href="../../d7/de8/a02858.html">PbrSGLightMaterial</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../de/d1f/a01364.html">shader</a></li><li class="navelem"><a class="el" href="../../d7/de8/a02858.html">PbrLightingModel</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="../../dc/d05/a02855.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">castor3d::shader::PbrSGLightMaterial Struct Reference</div></div>
+  <div class="headertitle"><div class="title">castor3d::shader::PbrLightingModel Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;GlslPbrMaterial.hpp&gt;</code></p>
+<p><code>#include &lt;GlslPbrLighting.hpp&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for castor3d::shader::PbrSGLightMaterial:</div>
+Inheritance diagram for castor3d::shader::PbrLightingModel:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../dd/dc1/a02857.png" border="0" usemap="#acastor3d_1_1shader_1_1PbrSGLightMaterial_inherit__map" alt="Inheritance graph"/></div>
-<map name="acastor3d_1_1shader_1_1PbrSGLightMaterial_inherit__map" id="acastor3d_1_1shader_1_1PbrSGLightMaterial_inherit__map">
-<area shape="rect" title=" " alt="" coords="9,244,203,285"/>
-<area shape="rect" href="../../d0/d9a/a02850.html" title=" " alt="" coords="19,155,193,196"/>
-<area shape="rect" href="../../de/d4c/a04794.html" title=" " alt="" coords="5,80,207,107"/>
-<area shape="rect" title=" " alt="" coords="37,5,175,32"/>
+<div class="center"><img src="../../dd/dc1/a02857.png" border="0" usemap="#acastor3d_1_1shader_1_1PbrLightingModel_inherit__map" alt="Inheritance graph"/></div>
+<map name="acastor3d_1_1shader_1_1PbrLightingModel_inherit__map" id="acastor3d_1_1shader_1_1PbrLightingModel_inherit__map">
+<area shape="rect" title=" " alt="" coords="5,95,197,136"/>
+<area shape="rect" href="../../d5/de6/a04910.html" title=" " alt="" coords="15,5,187,47"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
-Collaboration diagram for castor3d::shader::PbrSGLightMaterial:</div>
+Collaboration diagram for castor3d::shader::PbrLightingModel:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../d6/dbc/a02856.png" border="0" usemap="#acastor3d_1_1shader_1_1PbrSGLightMaterial_coll__map" alt="Collaboration graph"/></div>
-<map name="acastor3d_1_1shader_1_1PbrSGLightMaterial_coll__map" id="acastor3d_1_1shader_1_1PbrSGLightMaterial_coll__map">
-<area shape="rect" title=" " alt="" coords="9,244,203,285"/>
-<area shape="rect" href="../../d0/d9a/a02850.html" title=" " alt="" coords="19,155,193,196"/>
-<area shape="rect" href="../../de/d4c/a04794.html" title=" " alt="" coords="5,80,207,107"/>
-<area shape="rect" title=" " alt="" coords="37,5,175,32"/>
+<div class="center"><img src="../../d6/dbc/a02856.png" border="0" usemap="#acastor3d_1_1shader_1_1PbrLightingModel_coll__map" alt="Collaboration graph"/></div>
+<map name="acastor3d_1_1shader_1_1PbrLightingModel_coll__map" id="acastor3d_1_1shader_1_1PbrLightingModel_coll__map">
+<area shape="rect" title=" " alt="" coords="1333,223,1525,265"/>
+<area shape="rect" href="../../d5/de6/a04910.html" title=" " alt="" coords="977,187,1149,229"/>
+<area shape="rect" href="../../df/d5e/a04982.html" title=" " alt="" coords="594,5,747,32"/>
+<area shape="rect" title=" " alt="" coords="599,187,742,229"/>
+<area shape="rect" title=" " alt="" coords="159,133,297,160"/>
+<area shape="rect" title=" " alt="" coords="599,57,742,98"/>
+<area shape="rect" title=" " alt="" coords="589,122,752,163"/>
+<area shape="rect" title=" " alt="" coords="5,188,44,215"/>
+<area shape="rect" title=" " alt="" coords="158,264,298,291"/>
+<area shape="rect" title=" " alt="" coords="631,419,711,445"/>
+<area shape="rect" title=" " alt="" coords="165,421,291,462"/>
+<area shape="rect" title=" " alt="" coords="585,253,756,294"/>
+<area shape="rect" href="../../da/d88/a04942.html" title=" " alt="" coords="141,204,315,231"/>
+<area shape="rect" title=" " alt="" coords="573,318,768,359"/>
+<area shape="rect" href="../../d5/d41/a04946.html" title=" " alt="" coords="112,369,344,396"/>
+<area shape="rect" href="../../d4/db9/a04870.html" title=" " alt="" coords="941,253,1184,280"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae8b534d0580a3964afce794c857857dd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#ae8b534d0580a3964afce794c857857dd">PbrSGLightMaterial</a> (sdw::ShaderWriter &amp;writer, sdw::expr::ExprPtr expr, bool enabled)</td></tr>
-<tr class="separator:ae8b534d0580a3964afce794c857857dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_a02850"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a02850')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../d0/d9a/a02850.html">castor3d::shader::PbrLightMaterial</a></td></tr>
-<tr class="memitem:a30d82c1fda063a455a3719c5fb1bd57b inherit pub_methods_a02850"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d9a/a02850.html#a30d82c1fda063a455a3719c5fb1bd57b">PbrLightMaterial</a> (sdw::ShaderWriter &amp;writer, sdw::expr::ExprPtr expr, bool enabled)</td></tr>
-<tr class="separator:a30d82c1fda063a455a3719c5fb1bd57b inherit pub_methods_a02850"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a12257e8cd5414f2ac918ef1a3bd627f2 inherit pub_methods_a02850"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d9a/a02850.html#a12257e8cd5414f2ac918ef1a3bd627f2">create</a> (sdw::Vec3 const &amp;<a class="el" href="../../de/d4c/a04794.html#ab0628508aeb40fa591094532292373cd">albedo</a>, sdw::Vec4 const &amp;data3, sdw::Vec4 const &amp;data2, <a class="el" href="../../dc/d6d/a04802.html">Material</a> const &amp;material) override</td></tr>
-<tr class="separator:a12257e8cd5414f2ac918ef1a3bd627f2 inherit pub_methods_a02850"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a521e8c1c182cc28a4e4fcfbc316028b4 inherit pub_methods_a02850"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d9a/a02850.html#a521e8c1c182cc28a4e4fcfbc316028b4">create</a> (sdw::Vec3 const &amp;<a class="el" href="../../de/d4c/a04794.html#ab0628508aeb40fa591094532292373cd">albedo</a>, sdw::Vec4 const &amp;data3, sdw::Vec4 const &amp;data2, sdw::Float const &amp;ambient) override</td></tr>
-<tr class="separator:a521e8c1c182cc28a4e4fcfbc316028b4 inherit pub_methods_a02850"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99f1a4cd9e85a573ce8c37c715b5dd24 inherit pub_methods_a02850"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d9a/a02850.html#a99f1a4cd9e85a573ce8c37c715b5dd24">create</a> (<a class="el" href="../../dc/d6d/a04802.html">Material</a> const &amp;material) override</td></tr>
-<tr class="separator:a99f1a4cd9e85a573ce8c37c715b5dd24 inherit pub_methods_a02850"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5e637cf6afb6d5205dc73f8d21ef6d8 inherit pub_methods_a02850"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d9a/a02850.html#ac5e637cf6afb6d5205dc73f8d21ef6d8">output</a> (sdw::Vec4 &amp;outData2, sdw::Vec4 &amp;outData3) const override</td></tr>
-<tr class="separator:ac5e637cf6afb6d5205dc73f8d21ef6d8 inherit pub_methods_a02850"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae0e68b90d09ec39467b682acf84fdc4 inherit pub_methods_a02850"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d9a/a02850.html#aae0e68b90d09ec39467b682acf84fdc4">getAmbient</a> (sdw::Vec3 const &amp;ambientLight) const override</td></tr>
-<tr class="separator:aae0e68b90d09ec39467b682acf84fdc4 inherit pub_methods_a02850"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a733ec1d931070142c86a66fd8014e76d inherit pub_methods_a02850"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d9a/a02850.html#a733ec1d931070142c86a66fd8014e76d">adjustDirectSpecular</a> (sdw::Vec3 &amp;directSpecular) const override</td></tr>
-<tr class="separator:a733ec1d931070142c86a66fd8014e76d inherit pub_methods_a02850"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa95389110d244750cf68002499bfcb90 inherit pub_methods_a02850"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d9a/a02850.html#aa95389110d244750cf68002499bfcb90">getIndirectAmbient</a> (sdw::Vec3 const &amp;indirectAmbient) const override</td></tr>
-<tr class="separator:aa95389110d244750cf68002499bfcb90 inherit pub_methods_a02850"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4c70d7723849412cded567b8e6829c49 inherit pub_methods_a02850"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d9a/a02850.html#a4c70d7723849412cded567b8e6829c49">getMetalness</a> () const override</td></tr>
-<tr class="separator:a4c70d7723849412cded567b8e6829c49 inherit pub_methods_a02850"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a04d763f3e4595f24222c660eb2f7f333 inherit pub_methods_a02850"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d9a/a02850.html#a04d763f3e4595f24222c660eb2f7f333">getRoughness</a> () const override</td></tr>
-<tr class="separator:a04d763f3e4595f24222c660eb2f7f333 inherit pub_methods_a02850"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9af7bf8171cee654c84632bd7c5d52ee inherit pub_methods_a02850"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d9a/a02850.html#a9af7bf8171cee654c84632bd7c5d52ee">isSpecularGlossiness</a> () const</td></tr>
-<tr class="separator:a9af7bf8171cee654c84632bd7c5d52ee inherit pub_methods_a02850"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_a04794"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a04794')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../de/d4c/a04794.html">castor3d::shader::LightMaterial</a></td></tr>
-<tr class="memitem:a75114746bc2685b50cb93da7005dbb02 inherit pub_methods_a04794"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#a75114746bc2685b50cb93da7005dbb02">LightMaterial</a> (sdw::ShaderWriter &amp;writer, sdw::expr::ExprPtr expr, bool enabled)</td></tr>
-<tr class="separator:a75114746bc2685b50cb93da7005dbb02 inherit pub_methods_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0d5fb6417f4043618222377a83818dea inherit pub_methods_a04794"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#a0d5fb6417f4043618222377a83818dea">SDW_DeclStructInstance</a> (<a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>, <a class="el" href="../../de/d4c/a04794.html">LightMaterial</a>)</td></tr>
-<tr class="separator:a0d5fb6417f4043618222377a83818dea inherit pub_methods_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3866732a6e2362a3086777745191ba12 inherit pub_methods_a04794"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#a3866732a6e2362a3086777745191ba12">create</a> (sdw::Vec3 const &amp;<a class="el" href="../../de/d4c/a04794.html#ab0628508aeb40fa591094532292373cd">albedo</a>, sdw::Vec4 const &amp;data3, sdw::Vec4 const &amp;data2, <a class="el" href="../../dc/d6d/a04802.html">Material</a> const &amp;material)=0</td></tr>
-<tr class="separator:a3866732a6e2362a3086777745191ba12 inherit pub_methods_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a965c87258183a6d130e86ed809b80412 inherit pub_methods_a04794"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#a965c87258183a6d130e86ed809b80412">create</a> (sdw::Vec3 const &amp;<a class="el" href="../../de/d4c/a04794.html#ab0628508aeb40fa591094532292373cd">albedo</a>, sdw::Vec4 const &amp;data3, sdw::Vec4 const &amp;data2, sdw::Float const &amp;ambient=0.0_f)=0</td></tr>
-<tr class="separator:a965c87258183a6d130e86ed809b80412 inherit pub_methods_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeae94c2c8b411017c864a60af60462c3 inherit pub_methods_a04794"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#aeae94c2c8b411017c864a60af60462c3">create</a> (<a class="el" href="../../dc/d6d/a04802.html">Material</a> const &amp;material)=0</td></tr>
-<tr class="separator:aeae94c2c8b411017c864a60af60462c3 inherit pub_methods_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af30ae527eed46a2d0ea60780a1c7f1d7 inherit pub_methods_a04794"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#af30ae527eed46a2d0ea60780a1c7f1d7">output</a> (sdw::Vec4 &amp;outData2, sdw::Vec4 &amp;outData3) const =0</td></tr>
-<tr class="separator:af30ae527eed46a2d0ea60780a1c7f1d7 inherit pub_methods_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac841313afa1e0dc74681b628e142f307 inherit pub_methods_a04794"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#ac841313afa1e0dc74681b628e142f307">getAmbient</a> (sdw::Vec3 const &amp;ambientLight) const =0</td></tr>
-<tr class="separator:ac841313afa1e0dc74681b628e142f307 inherit pub_methods_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a57e4a5aa7cf210edb61e35f8e1df7351 inherit pub_methods_a04794"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#a57e4a5aa7cf210edb61e35f8e1df7351">adjustDirectSpecular</a> (sdw::Vec3 &amp;directSpecular) const =0</td></tr>
-<tr class="separator:a57e4a5aa7cf210edb61e35f8e1df7351 inherit pub_methods_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00db46aa7ebdb3192f2d7055c0c5dcf2 inherit pub_methods_a04794"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#a00db46aa7ebdb3192f2d7055c0c5dcf2">getIndirectAmbient</a> (sdw::Vec3 const &amp;indirectAmbient) const =0</td></tr>
-<tr class="separator:a00db46aa7ebdb3192f2d7055c0c5dcf2 inherit pub_methods_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a79098e0d131efbd5962e1cb8a8d36173 inherit pub_methods_a04794"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#a79098e0d131efbd5962e1cb8a8d36173">getMetalness</a> () const =0</td></tr>
-<tr class="separator:a79098e0d131efbd5962e1cb8a8d36173 inherit pub_methods_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed8e4ced1b9892e56c5f41becf49b2ec inherit pub_methods_a04794"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#aed8e4ced1b9892e56c5f41becf49b2ec">getRoughness</a> () const =0</td></tr>
-<tr class="separator:aed8e4ced1b9892e56c5f41becf49b2ec inherit pub_methods_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af114b5c0b2db9e4701f29a5d8fc325a5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#af114b5c0b2db9e4701f29a5d8fc325a5">PbrLightingModel</a> (sdw::ShaderWriter &amp;writer, <a class="el" href="../../df/d5e/a04982.html">Utils</a> &amp;utils, <a class="el" href="../../d5/de1/a04990.html">ShadowOptions</a> shadowOptions, <a class="el" href="../../da/d9e/a04926.html">SssProfiles</a> const *sssProfiles, bool enableVolumetric)</td></tr>
+<tr class="separator:af114b5c0b2db9e4701f29a5d8fc325a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7af39437f7ef415d367df2b79c50c41"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> std::unique_ptr&lt; <a class="el" href="../../d0/dca/a04906.html">LightMaterial</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#ab7af39437f7ef415d367df2b79c50c41">declMaterial</a> (std::string const &amp;name, bool enabled) override</td></tr>
+<tr class="separator:ab7af39437f7ef415d367df2b79c50c41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5b2ed9066d326dae4ce7a5c2ed8822e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#ab5b2ed9066d326dae4ce7a5c2ed8822e">combine</a> (sdw::Vec3 const &amp;directDiffuse, sdw::Vec3 const &amp;indirectDiffuse, sdw::Vec3 const &amp;directSpecular, sdw::Vec3 const &amp;indirectSpecular, sdw::Vec3 const &amp;ambient, sdw::Vec3 const &amp;indirectAmbient, sdw::Float const &amp;ambientOcclusion, sdw::Vec3 const &amp;emissive, sdw::Vec3 const &amp;reflected, sdw::Vec3 const &amp;refracted, sdw::Vec3 const &amp;materialAlbedo) override</td></tr>
+<tr class="separator:ab5b2ed9066d326dae4ce7a5c2ed8822e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c78a9e9eea5eb66a44df19474a0e575"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../de/d1f/a01364.html#ae10c352f0c2ff7850fca0043640a06bb">ReflectionModelPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#a6c78a9e9eea5eb66a44df19474a0e575">getReflectionModel</a> (uint32_t &amp;envMapBinding, uint32_t envMapSet) const override</td></tr>
+<tr class="separator:a6c78a9e9eea5eb66a44df19474a0e575"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
+<tr><td colspan="2"><div class="groupText"><p >Diffuse + Specular </p>
+</div></td></tr>
+<tr class="memitem:a870e818802900b2719d99ef43533ce19"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#a870e818802900b2719d99ef43533ce19">compute</a> (<a class="el" href="../../d8/dd4/a04894.html">DirectionalLight</a> const &amp;light, <a class="el" href="../../d0/dca/a04906.html">LightMaterial</a> const &amp;material, <a class="el" href="../../de/d1f/a01364.html#afa7e0e1d1dbce1333aa48253fd404bf4">Surface</a> const &amp;surface, sdw::Vec3 const &amp;worldEye, sdw::Int const &amp;receivesShadows, <a class="el" href="../../d9/d75/a04934.html">OutputComponents</a> &amp;output) const override</td></tr>
+<tr class="separator:a870e818802900b2719d99ef43533ce19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aebc8117ee19b7c72c7ff1971f45ea8f4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#aebc8117ee19b7c72c7ff1971f45ea8f4">compute</a> (<a class="el" href="../../da/dd2/a04898.html">PointLight</a> const &amp;light, <a class="el" href="../../d0/dca/a04906.html">LightMaterial</a> const &amp;material, <a class="el" href="../../de/d1f/a01364.html#afa7e0e1d1dbce1333aa48253fd404bf4">Surface</a> const &amp;surface, sdw::Vec3 const &amp;worldEye, sdw::Int const &amp;receivesShadows, <a class="el" href="../../d9/d75/a04934.html">OutputComponents</a> &amp;output) const override</td></tr>
+<tr class="separator:aebc8117ee19b7c72c7ff1971f45ea8f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c98eb8af0902591dff2503255620790"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#a3c98eb8af0902591dff2503255620790">compute</a> (<a class="el" href="../../d8/de5/a04902.html">SpotLight</a> const &amp;light, <a class="el" href="../../d0/dca/a04906.html">LightMaterial</a> const &amp;material, <a class="el" href="../../de/d1f/a01364.html#afa7e0e1d1dbce1333aa48253fd404bf4">Surface</a> const &amp;surface, sdw::Vec3 const &amp;worldEye, sdw::Int const &amp;receivesShadows, <a class="el" href="../../d9/d75/a04934.html">OutputComponents</a> &amp;output) const override</td></tr>
+<tr class="separator:a3c98eb8af0902591dff2503255620790"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bf9f47f00cc8c7db21cb0aa542190b2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#a4bf9f47f00cc8c7db21cb0aa542190b2">computeMapContributions</a> (<a class="el" href="../../da/dab/a01362.html#a69e89af11c4c9247dce7ee99a21090fc">PassFlags</a> const &amp;passFlags, <a class="el" href="../../da/dab/a01362.html#afa51b269ca00eaeff4f95f361bf2208f">TextureFlagsArray</a> const &amp;textures, <a class="el" href="../../d5/df8/a04978.html">TextureConfigurations</a> const &amp;textureConfigs, <a class="el" href="../../db/db8/a04970.html">TextureAnimations</a> const &amp;textureAnims, sdw::Array&lt; sdw::CombinedImage2DRgba32 &gt; const &amp;maps, sdw::UVec4 const &amp;textures0, sdw::UVec4 const &amp;textures1, sdw::Vec3 &amp;texCoords0, sdw::Vec3 &amp;texCoords1, sdw::Vec3 &amp;texCoords2, sdw::Vec3 &amp;texCoords3, sdw::Vec3 &amp;normal, sdw::Vec3 &amp;tangent, sdw::Vec3 &amp;bitangent, sdw::Vec3 &amp;emissive, sdw::Float &amp;opacity, sdw::Float &amp;occlusion, sdw::Float &amp;transmittanc, <a class="el" href="../../d0/dca/a04906.html">LightMaterial</a> &amp;lightMat, sdw::Vec3 &amp;tangentSpaceViewPosition, sdw::Vec3 &amp;tangentSpaceFragPosition) override</td></tr>
+<tr class="separator:a4bf9f47f00cc8c7db21cb0aa542190b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_a04910"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a04910')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../d5/de6/a04910.html">castor3d::shader::LightingModel</a></td></tr>
+<tr class="memitem:aab06d37f95a97e05c612756f788e7f74 inherit pub_methods_a04910"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#aab06d37f95a97e05c612756f788e7f74">LightingModel</a> (sdw::ShaderWriter &amp;writer, <a class="el" href="../../df/d5e/a04982.html">Utils</a> &amp;utils, <a class="el" href="../../d5/de1/a04990.html">ShadowOptions</a> shadowOptions, <a class="el" href="../../da/d9e/a04926.html">SssProfiles</a> const *sssProfiles, bool enableVolumetric, std::string prefix)</td></tr>
+<tr class="separator:aab06d37f95a97e05c612756f788e7f74 inherit pub_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe10ab0abda22bc960dc51b76be2c739 inherit pub_methods_a04910"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#abe10ab0abda22bc960dc51b76be2c739">~LightingModel</a> ()=default</td></tr>
+<tr class="separator:abe10ab0abda22bc960dc51b76be2c739 inherit pub_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1671dd3b92b8bf79752c0a6e3ad9454 inherit pub_methods_a04910"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#ad1671dd3b92b8bf79752c0a6e3ad9454">combine</a> (sdw::Vec3 const &amp;directDiffuse, sdw::Vec3 const &amp;indirectDiffuse, sdw::Vec3 const &amp;directSpecular, sdw::Vec3 const &amp;indirectSpecular, sdw::Vec3 const &amp;ambient, sdw::Vec3 const &amp;indirectAmbient, sdw::Float const &amp;ambientOcclusion, sdw::Vec3 const &amp;emissive, sdw::Vec3 const &amp;reflected, sdw::Vec3 const &amp;refracted, sdw::Vec3 const &amp;materialAlbedo)=0</td></tr>
+<tr class="separator:ad1671dd3b92b8bf79752c0a6e3ad9454 inherit pub_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abaa2a0d1da96dde5f4c41a9e6bf38383 inherit pub_methods_a04910"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> std::unique_ptr&lt; <a class="el" href="../../d0/dca/a04906.html">LightMaterial</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#abaa2a0d1da96dde5f4c41a9e6bf38383">declMaterial</a> (std::string const &amp;name, bool enabled=true)=0</td></tr>
+<tr class="separator:abaa2a0d1da96dde5f4c41a9e6bf38383 inherit pub_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35846c33000b56f135010af80666af2a inherit pub_methods_a04910"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../de/d1f/a01364.html#ae10c352f0c2ff7850fca0043640a06bb">ReflectionModelPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#a35846c33000b56f135010af80666af2a">getReflectionModel</a> (uint32_t &amp;envMapBinding, uint32_t envMapSet) const =0</td></tr>
+<tr class="separator:a35846c33000b56f135010af80666af2a inherit pub_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0cc52dad90b5068bad9d341f2cabb0ea inherit pub_methods_a04910"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#a0cc52dad90b5068bad9d341f2cabb0ea">declareDirectionalModel</a> (bool lightUbo, uint32_t lightBinding, uint32_t lightSet, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet)</td></tr>
+<tr class="separator:a0cc52dad90b5068bad9d341f2cabb0ea inherit pub_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10744331a5704a42668d96a4fe7ecaa1 inherit pub_methods_a04910"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#a10744331a5704a42668d96a4fe7ecaa1">declarePointModel</a> (bool lightUbo, uint32_t lightBinding, uint32_t lightSet, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet)</td></tr>
+<tr class="separator:a10744331a5704a42668d96a4fe7ecaa1 inherit pub_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d2f3cd6795aa79d0f5a4e31de12e97d inherit pub_methods_a04910"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#a9d2f3cd6795aa79d0f5a4e31de12e97d">declareSpotModel</a> (bool lightUbo, uint32_t lightBinding, uint32_t lightSet, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet)</td></tr>
+<tr class="separator:a9d2f3cd6795aa79d0f5a4e31de12e97d inherit pub_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9dce2a67af8cfaefa176a0c4068bea7b inherit pub_methods_a04910"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d8/dd4/a04894.html">DirectionalLight</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#a9dce2a67af8cfaefa176a0c4068bea7b">getDirectionalLight</a> (sdw::UInt const &amp;index) const</td></tr>
+<tr class="separator:a9dce2a67af8cfaefa176a0c4068bea7b inherit pub_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b32c9c9d9666a7e01ac4490b007de09 inherit pub_methods_a04910"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../da/dd2/a04898.html">PointLight</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#a0b32c9c9d9666a7e01ac4490b007de09">getPointLight</a> (sdw::UInt const &amp;index) const</td></tr>
+<tr class="separator:a0b32c9c9d9666a7e01ac4490b007de09 inherit pub_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add93c5e5787f7810a4c9375c27ae96e3 inherit pub_methods_a04910"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d8/de5/a04902.html">SpotLight</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#add93c5e5787f7810a4c9375c27ae96e3">getSpotLight</a> (sdw::UInt const &amp;index) const</td></tr>
+<tr class="separator:add93c5e5787f7810a4c9375c27ae96e3 inherit pub_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab08881a2f6849c79d50c70320d65d82c inherit pub_methods_a04910"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../da/d88/a04942.html">Shadow</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#ab08881a2f6849c79d50c70320d65d82c">getShadowModel</a> () const</td></tr>
+<tr class="separator:ab08881a2f6849c79d50c70320d65d82c inherit pub_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a311bee3a27615b2cb051884164725877 inherit pub_methods_a04910"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#a311bee3a27615b2cb051884164725877">declareModel</a> (uint32_t lightsBufBinding, uint32_t lightsBufSet, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet)</td></tr>
+<tr class="separator:a311bee3a27615b2cb051884164725877 inherit pub_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8db5a659754b8909c8f15040db7dade7 inherit pub_methods_a04910"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#a8db5a659754b8909c8f15040db7dade7">computeCombined</a> (<a class="el" href="../../d0/dca/a04906.html">LightMaterial</a> const &amp;material, <a class="el" href="../../d8/dc2/a05098.html">SceneData</a> const &amp;sceneData, <a class="el" href="../../de/d1f/a01364.html#afa7e0e1d1dbce1333aa48253fd404bf4">Surface</a> const &amp;surface, sdw::Vec3 const &amp;worldEye, sdw::Int const &amp;receivesShadows, <a class="el" href="../../d9/d75/a04934.html">OutputComponents</a> &amp;output) const</td></tr>
+<tr class="separator:a8db5a659754b8909c8f15040db7dade7 inherit pub_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa24840058a44d68dc0524f87f7b5b3cb inherit pub_methods_a04910"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#aa24840058a44d68dc0524f87f7b5b3cb">declareDiffuseModel</a> (uint32_t lightsBufBinding, uint32_t lightsBufSet, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet)</td></tr>
+<tr class="separator:aa24840058a44d68dc0524f87f7b5b3cb inherit pub_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add71e7bce8ee328d6f186773ca24e491 inherit pub_methods_a04910"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#add71e7bce8ee328d6f186773ca24e491">computeCombinedDiffuse</a> (<a class="el" href="../../d0/dca/a04906.html">LightMaterial</a> const &amp;material, <a class="el" href="../../d8/dc2/a05098.html">SceneData</a> const &amp;sceneData, <a class="el" href="../../de/d1f/a01364.html#afa7e0e1d1dbce1333aa48253fd404bf4">Surface</a> const &amp;surface, sdw::Vec3 const &amp;worldEye, sdw::Int const &amp;receivesShadows) const</td></tr>
+<tr class="separator:add71e7bce8ee328d6f186773ca24e491 inherit pub_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a16a0de42446fa79aaaff44cabcd9bfc1"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> const castor::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#a16a0de42446fa79aaaff44cabcd9bfc1">getName</a> ()</td></tr>
+<tr class="separator:a16a0de42446fa79aaaff44cabcd9bfc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab82249ef0df6e24add74ab328f5926c3"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../de/d1f/a01364.html#a69009a36ab335c9cd7d4eed926a70037">LightingModelPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#ab82249ef0df6e24add74ab328f5926c3">create</a> (sdw::ShaderWriter &amp;writer, <a class="el" href="../../df/d5e/a04982.html">Utils</a> &amp;utils, <a class="el" href="../../d5/de1/a04990.html">ShadowOptions</a> shadowOptions, <a class="el" href="../../da/d9e/a04926.html">SssProfiles</a> const *sssProfiles, bool enableVolumetric)</td></tr>
+<tr class="separator:ab82249ef0df6e24add74ab328f5926c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_static_methods_a04910"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_a04910')"><img src="../../closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el" href="../../d5/de6/a04910.html">castor3d::shader::LightingModel</a></td></tr>
+<tr class="memitem:a966761e6f0fcab5f77d685b67eea4ff4 inherit pub_static_methods_a04910"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../de/d1f/a01364.html#a69009a36ab335c9cd7d4eed926a70037">LightingModelPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#a966761e6f0fcab5f77d685b67eea4ff4">createModel</a> (<a class="el" href="../../df/d5e/a04982.html">Utils</a> &amp;utils, castor::String const &amp;name, uint32_t lightsBufBinding, uint32_t lightsBufSet, <a class="el" href="../../d5/de1/a04990.html">ShadowOptions</a> const &amp;shadows, <a class="el" href="../../da/d9e/a04926.html">SssProfiles</a> const *sssProfiles, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet, bool enableVolumetric)</td></tr>
+<tr class="separator:a966761e6f0fcab5f77d685b67eea4ff4 inherit pub_static_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6eb693bdc485bc833d006969c2f98381 inherit pub_static_methods_a04910"><td class="memTemplParams" colspan="2">template&lt;typename LightsBufBindingT &gt; </td></tr>
+<tr class="memitem:a6eb693bdc485bc833d006969c2f98381 inherit pub_static_methods_a04910"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="../../de/d1f/a01364.html#a69009a36ab335c9cd7d4eed926a70037">LightingModelPtr</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#a6eb693bdc485bc833d006969c2f98381">createModelT</a> (<a class="el" href="../../df/d5e/a04982.html">Utils</a> &amp;utils, castor::String const &amp;name, LightsBufBindingT lightsBufBinding, uint32_t lightsBufSet, <a class="el" href="../../d5/de1/a04990.html">ShadowOptions</a> const &amp;shadows, <a class="el" href="../../da/d9e/a04926.html">SssProfiles</a> const *sssProfiles, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet, bool enableVolumetric)</td></tr>
+<tr class="separator:a6eb693bdc485bc833d006969c2f98381 inherit pub_static_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8278cfe80352f0661cc4a1e01f962a6b inherit pub_static_methods_a04910"><td class="memTemplParams" colspan="2">template&lt;typename LightBindingT &gt; </td></tr>
+<tr class="memitem:a8278cfe80352f0661cc4a1e01f962a6b inherit pub_static_methods_a04910"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="../../de/d1f/a01364.html#a69009a36ab335c9cd7d4eed926a70037">LightingModelPtr</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#a8278cfe80352f0661cc4a1e01f962a6b">createModel</a> (<a class="el" href="../../df/d5e/a04982.html">Utils</a> &amp;utils, castor::String const &amp;name, <a class="el" href="../../da/dab/a01362.html#a381718aa9accc88c20afd97d76c30ed8">LightType</a> light, LightBindingT lightBinding, uint32_t lightSet, bool lightUbo, <a class="el" href="../../d5/de1/a04990.html">ShadowOptions</a> const &amp;shadows, <a class="el" href="../../da/d9e/a04926.html">SssProfiles</a> const *sssProfiles, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet)</td></tr>
+<tr class="separator:a8278cfe80352f0661cc4a1e01f962a6b inherit pub_static_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c94ee51f6a8759427c8fc79fb94b2f3 inherit pub_static_methods_a04910"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../de/d1f/a01364.html#a69009a36ab335c9cd7d4eed926a70037">LightingModelPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#a3c94ee51f6a8759427c8fc79fb94b2f3">createDiffuseModel</a> (<a class="el" href="../../df/d5e/a04982.html">Utils</a> &amp;utils, castor::String const &amp;name, uint32_t lightsBufBinding, uint32_t lightsBufSet, <a class="el" href="../../d5/de1/a04990.html">ShadowOptions</a> const &amp;shadows, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet, bool enableVolumetric)</td></tr>
+<tr class="separator:a3c94ee51f6a8759427c8fc79fb94b2f3 inherit pub_static_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1287a807dd44af6a8baf67816d92c35 inherit pub_static_methods_a04910"><td class="memTemplParams" colspan="2">template&lt;typename LightsBufBindingT &gt; </td></tr>
+<tr class="memitem:ac1287a807dd44af6a8baf67816d92c35 inherit pub_static_methods_a04910"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="../../de/d1f/a01364.html#a69009a36ab335c9cd7d4eed926a70037">LightingModelPtr</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#ac1287a807dd44af6a8baf67816d92c35">createDiffuseModelT</a> (<a class="el" href="../../df/d5e/a04982.html">Utils</a> &amp;utils, castor::String const &amp;name, LightsBufBindingT lightsBufBinding, uint32_t lightsBufSet, <a class="el" href="../../d5/de1/a04990.html">ShadowOptions</a> const &amp;shadows, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet, bool enableVolumetric)</td></tr>
+<tr class="separator:ac1287a807dd44af6a8baf67816d92c35 inherit pub_static_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td class="ititle" colspan="2"><p ><a class="anchor" id="amgrp01747264fe7bf50731df0522c351974e"></a> Diffuse only </p>
+</td></tr>
+<tr class="memitem:a11c13c31f49aa23726ef9c81122f0465"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d4/db9/a04870.html">CookTorranceBRDF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#a11c13c31f49aa23726ef9c81122f0465">m_cookTorrance</a></td></tr>
+<tr class="separator:a11c13c31f49aa23726ef9c81122f0465"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33e583d547ae21ec7224acfb2c68c4b9"><td class="memItemLeft" align="right" valign="top">sdw::Function&lt; sdw::Void, InDirectionalLight, InPbrLightMaterial, InSurface, sdw::InVec3, sdw::InInt, <a class="el" href="../../d9/d75/a04934.html">OutputComponents</a> &amp; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#a33e583d547ae21ec7224acfb2c68c4b9">m_computeDirectional</a></td></tr>
+<tr class="separator:a33e583d547ae21ec7224acfb2c68c4b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7dd9977b62bb101c23521538ea136b2"><td class="memItemLeft" align="right" valign="top">sdw::Function&lt; sdw::Void, InPointLight, InPbrLightMaterial, InSurface, sdw::InVec3, sdw::InInt, <a class="el" href="../../d9/d75/a04934.html">OutputComponents</a> &amp; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#ac7dd9977b62bb101c23521538ea136b2">m_computePoint</a></td></tr>
+<tr class="separator:ac7dd9977b62bb101c23521538ea136b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae809b53222c8f5e5e644ecb82c6c1e7a"><td class="memItemLeft" align="right" valign="top">sdw::Function&lt; sdw::Void, InSpotLight, InPbrLightMaterial, InSurface, sdw::InVec3, sdw::InInt, <a class="el" href="../../d9/d75/a04934.html">OutputComponents</a> &amp; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#ae809b53222c8f5e5e644ecb82c6c1e7a">m_computeSpot</a></td></tr>
+<tr class="separator:ae809b53222c8f5e5e644ecb82c6c1e7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae20f13ad209f36b46e1e553ab3490a0a"><td class="memItemLeft" align="right" valign="top">sdw::Function&lt; sdw::Vec3, InOutDirectionalLight, InPbrLightMaterial, InSurface, sdw::InVec3, sdw::InInt &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#ae20f13ad209f36b46e1e553ab3490a0a">m_computeDirectionalDiffuse</a></td></tr>
+<tr class="separator:ae20f13ad209f36b46e1e553ab3490a0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a622adbbd9a5b7480c10d92fc3ba78204"><td class="memItemLeft" align="right" valign="top">sdw::Function&lt; sdw::Vec3, InOutPointLight, InPbrLightMaterial, InSurface, sdw::InVec3, sdw::InInt &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#a622adbbd9a5b7480c10d92fc3ba78204">m_computePointDiffuse</a></td></tr>
+<tr class="separator:a622adbbd9a5b7480c10d92fc3ba78204"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0fa45de856a644e988fee15b2ad5794"><td class="memItemLeft" align="right" valign="top">sdw::Function&lt; sdw::Vec3, InOutSpotLight, InPbrLightMaterial, InSurface, sdw::InVec3, sdw::InInt &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#ab0fa45de856a644e988fee15b2ad5794">m_computeSpotDiffuse</a></td></tr>
+<tr class="separator:ab0fa45de856a644e988fee15b2ad5794"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a877ba57c0818c503bfd8046c8dc46110"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#a877ba57c0818c503bfd8046c8dc46110">computeDiffuse</a> (<a class="el" href="../../d8/dd4/a04894.html">DirectionalLight</a> const &amp;light, <a class="el" href="../../d0/dca/a04906.html">LightMaterial</a> const &amp;material, <a class="el" href="../../de/d1f/a01364.html#afa7e0e1d1dbce1333aa48253fd404bf4">Surface</a> const &amp;surface, sdw::Vec3 const &amp;worldEye, sdw::Int const &amp;receivesShadows) const override</td></tr>
+<tr class="separator:a877ba57c0818c503bfd8046c8dc46110"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8de6c38cd5606506918bfb85165ee10f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#a8de6c38cd5606506918bfb85165ee10f">computeDiffuse</a> (<a class="el" href="../../da/dd2/a04898.html">PointLight</a> const &amp;light, <a class="el" href="../../d0/dca/a04906.html">LightMaterial</a> const &amp;material, <a class="el" href="../../de/d1f/a01364.html#afa7e0e1d1dbce1333aa48253fd404bf4">Surface</a> const &amp;surface, sdw::Vec3 const &amp;worldEye, sdw::Int const &amp;receivesShadows) const override</td></tr>
+<tr class="separator:a8de6c38cd5606506918bfb85165ee10f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90e413355f824103934d4881279b793d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#a90e413355f824103934d4881279b793d">computeDiffuse</a> (<a class="el" href="../../d8/de5/a04902.html">SpotLight</a> const &amp;light, <a class="el" href="../../d0/dca/a04906.html">LightMaterial</a> const &amp;material, <a class="el" href="../../de/d1f/a01364.html#afa7e0e1d1dbce1333aa48253fd404bf4">Surface</a> const &amp;surface, sdw::Vec3 const &amp;worldEye, sdw::Int const &amp;receivesShadows) const override</td></tr>
+<tr class="separator:a90e413355f824103934d4881279b793d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a164064d20a8c1cde001136cf6a4acde8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#a164064d20a8c1cde001136cf6a4acde8">computeMapDiffuseContributions</a> (<a class="el" href="../../da/dab/a01362.html#a69e89af11c4c9247dce7ee99a21090fc">PassFlags</a> const &amp;passFlags, <a class="el" href="../../da/dab/a01362.html#afa51b269ca00eaeff4f95f361bf2208f">TextureFlagsArray</a> const &amp;textures, <a class="el" href="../../d5/df8/a04978.html">TextureConfigurations</a> const &amp;textureConfigs, <a class="el" href="../../db/db8/a04970.html">TextureAnimations</a> const &amp;textureAnims, sdw::Array&lt; sdw::CombinedImage2DRgba32 &gt; const &amp;maps, sdw::UVec4 const &amp;textures0, sdw::UVec4 const &amp;textures1, sdw::Vec3 &amp;texCoords0, sdw::Vec3 &amp;texCoords1, sdw::Vec3 &amp;texCoords2, sdw::Vec3 &amp;texCoords3, sdw::Vec3 &amp;emissive, sdw::Float &amp;opacity, sdw::Float &amp;occlusion, <a class="el" href="../../d0/dca/a04906.html">LightMaterial</a> &amp;lightMat) override</td></tr>
+<tr class="separator:a164064d20a8c1cde001136cf6a4acde8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae25604e99578333dd65a857db4c24538"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#ae25604e99578333dd65a857db4c24538">doDeclareModel</a> () override</td></tr>
+<tr class="separator:ae25604e99578333dd65a857db4c24538"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0535701cc570da5baf40323c69b6a858"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#a0535701cc570da5baf40323c69b6a858">doDeclareComputeDirectionalLight</a> () override</td></tr>
+<tr class="separator:a0535701cc570da5baf40323c69b6a858"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9dadcda15876dbf6acf3a5dbdc24fc55"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#a9dadcda15876dbf6acf3a5dbdc24fc55">doDeclareComputePointLight</a> () override</td></tr>
+<tr class="separator:a9dadcda15876dbf6acf3a5dbdc24fc55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9becaebfb17b09191a8720fc6164cfc3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#a9becaebfb17b09191a8720fc6164cfc3">doDeclareComputeSpotLight</a> () override</td></tr>
+<tr class="separator:a9becaebfb17b09191a8720fc6164cfc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ef051b4607ed0cfd30401a03845d965"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#a7ef051b4607ed0cfd30401a03845d965">doDeclareDiffuseModel</a> () override</td></tr>
+<tr class="separator:a7ef051b4607ed0cfd30401a03845d965"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5a436db70d6763028a05eb7834e3be2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#af5a436db70d6763028a05eb7834e3be2">doDeclareComputeDirectionalLightDiffuse</a> () override</td></tr>
+<tr class="separator:af5a436db70d6763028a05eb7834e3be2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab875643f167469cdd5f8eb96d98cbd3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#aab875643f167469cdd5f8eb96d98cbd3">doDeclareComputePointLightDiffuse</a> () override</td></tr>
+<tr class="separator:aab875643f167469cdd5f8eb96d98cbd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad842fc16ddc7ee36237487cf8fd7e2f1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de8/a02858.html#ad842fc16ddc7ee36237487cf8fd7e2f1">doDeclareComputeSpotLightDiffuse</a> () override</td></tr>
+<tr class="separator:ad842fc16ddc7ee36237487cf8fd7e2f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_static_methods_a04794"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_a04794')"><img src="../../closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el" href="../../de/d4c/a04794.html">castor3d::shader::LightMaterial</a></td></tr>
-<tr class="memitem:af17d7ff936ab4089326d040955e6a3e9 inherit pub_static_methods_a04794"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ast::type::BaseStructPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#af17d7ff936ab4089326d040955e6a3e9">makeType</a> (ast::type::TypesCache &amp;cache)</td></tr>
-<tr class="separator:af17d7ff936ab4089326d040955e6a3e9 inherit pub_static_methods_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a37e65565fa7244c4f2dfdb85e9e0f28d inherit pub_static_methods_a04794"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#a37e65565fa7244c4f2dfdb85e9e0f28d">computeF0</a> (sdw::Vec3 const &amp;<a class="el" href="../../de/d4c/a04794.html#ab0628508aeb40fa591094532292373cd">albedo</a>, sdw::Float const &amp;metalness)</td></tr>
-<tr class="separator:a37e65565fa7244c4f2dfdb85e9e0f28d inherit pub_static_methods_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4266b7f9549002e4232c31f969e7fc22 inherit pub_static_methods_a04794"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#a4266b7f9549002e4232c31f969e7fc22">computeMetalness</a> (sdw::Vec3 const &amp;<a class="el" href="../../de/d4c/a04794.html#ab0628508aeb40fa591094532292373cd">albedo</a>, sdw::Vec3 const &amp;<a class="el" href="../../de/d4c/a04794.html#a0a22e22ff9e0ce7414f4b04f5f64e0fa">specular</a>)</td></tr>
-<tr class="separator:a4266b7f9549002e4232c31f969e7fc22 inherit pub_static_methods_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72fe17e6111e0205b650052008a1685e inherit pub_static_methods_a04794"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#a72fe17e6111e0205b650052008a1685e">computeRoughness</a> (sdw::Float const &amp;glossiness)</td></tr>
-<tr class="separator:a72fe17e6111e0205b650052008a1685e inherit pub_static_methods_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_attribs_a02850"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_a02850')"><img src="../../closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="../../d0/d9a/a02850.html">castor3d::shader::PbrLightMaterial</a></td></tr>
-<tr class="memitem:a2f0e75628a9e165f96a53f073f073ebf inherit pub_attribs_a02850"><td class="memItemLeft" align="right" valign="top">sdw::Float &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d9a/a02850.html#a2f0e75628a9e165f96a53f073f073ebf">roughness</a></td></tr>
-<tr class="separator:a2f0e75628a9e165f96a53f073f073ebf inherit pub_attribs_a02850"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd7c77ec6700e6291e693921b41e2c1e inherit pub_attribs_a02850"><td class="memItemLeft" align="right" valign="top">sdw::Float &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d9a/a02850.html#acd7c77ec6700e6291e693921b41e2c1e">metalness</a></td></tr>
-<tr class="separator:acd7c77ec6700e6291e693921b41e2c1e inherit pub_attribs_a02850"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_attribs_a04794"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_a04794')"><img src="../../closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="../../de/d4c/a04794.html">castor3d::shader::LightMaterial</a></td></tr>
-<tr class="memitem:a9ab1383d0a559b82da536f53a6c15cf2 inherit pub_attribs_a04794"><td class="memItemLeft" align="right" valign="top">sdw::Vec4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#a9ab1383d0a559b82da536f53a6c15cf2">edgeFactors</a></td></tr>
-<tr class="separator:a9ab1383d0a559b82da536f53a6c15cf2 inherit pub_attribs_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa1164a70c5a5c2f117fac78413726344 inherit pub_attribs_a04794"><td class="memItemLeft" align="right" valign="top">sdw::Vec4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#aa1164a70c5a5c2f117fac78413726344">edgeColour</a></td></tr>
-<tr class="separator:aa1164a70c5a5c2f117fac78413726344 inherit pub_attribs_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a77a47550f680d30636c630de94327891 inherit pub_attribs_a04794"><td class="memItemLeft" align="right" valign="top">sdw::Vec4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#a77a47550f680d30636c630de94327891">specific</a></td></tr>
-<tr class="separator:a77a47550f680d30636c630de94327891 inherit pub_attribs_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0628508aeb40fa591094532292373cd inherit pub_attribs_a04794"><td class="memItemLeft" align="right" valign="top">sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#ab0628508aeb40fa591094532292373cd">albedo</a></td></tr>
-<tr class="separator:ab0628508aeb40fa591094532292373cd inherit pub_attribs_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a22e22ff9e0ce7414f4b04f5f64e0fa inherit pub_attribs_a04794"><td class="memItemLeft" align="right" valign="top">sdw::Vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#a0a22e22ff9e0ce7414f4b04f5f64e0fa">specular</a></td></tr>
-<tr class="separator:a0a22e22ff9e0ce7414f4b04f5f64e0fa inherit pub_attribs_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc7d101ada57095169fdc71c9b3bb4ac inherit pub_attribs_a04794"><td class="memItemLeft" align="right" valign="top">sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#abc7d101ada57095169fdc71c9b3bb4ac">edgeWidth</a></td></tr>
-<tr class="separator:abc7d101ada57095169fdc71c9b3bb4ac inherit pub_attribs_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58a9a49f4ad1457da7ed77d83121d04f inherit pub_attribs_a04794"><td class="memItemLeft" align="right" valign="top">sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#a58a9a49f4ad1457da7ed77d83121d04f">depthFactor</a></td></tr>
-<tr class="separator:a58a9a49f4ad1457da7ed77d83121d04f inherit pub_attribs_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a017f87c56d41b70c44170dd0ac22e76d inherit pub_attribs_a04794"><td class="memItemLeft" align="right" valign="top">sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#a017f87c56d41b70c44170dd0ac22e76d">normalFactor</a></td></tr>
-<tr class="separator:a017f87c56d41b70c44170dd0ac22e76d inherit pub_attribs_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada9c443a2f21464282ae1e6a581c6aad inherit pub_attribs_a04794"><td class="memItemLeft" align="right" valign="top">sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#ada9c443a2f21464282ae1e6a581c6aad">objectFactor</a></td></tr>
-<tr class="separator:ada9c443a2f21464282ae1e6a581c6aad inherit pub_attribs_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09fe3e2d61feb0944df3317032dbc417 inherit pub_attribs_a04794"><td class="memItemLeft" align="right" valign="top">sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#a09fe3e2d61feb0944df3317032dbc417">sssProfileIndex</a></td></tr>
-<tr class="separator:a09fe3e2d61feb0944df3317032dbc417 inherit pub_attribs_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a70872e7bf6b3cb3d0e792ef65f19321f inherit pub_attribs_a04794"><td class="memItemLeft" align="right" valign="top">sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#a70872e7bf6b3cb3d0e792ef65f19321f">sssTransmittance</a></td></tr>
-<tr class="separator:a70872e7bf6b3cb3d0e792ef65f19321f inherit pub_attribs_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_a02850"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_a02850')"><img src="../../closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="../../d0/d9a/a02850.html">castor3d::shader::PbrLightMaterial</a></td></tr>
-<tr class="memitem:a951274d2fd29933443953b6a1fb1e0aa inherit pro_attribs_a02850"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d9a/a02850.html#a951274d2fd29933443953b6a1fb1e0aa">m_isSpecularGlossiness</a> {}</td></tr>
-<tr class="separator:a951274d2fd29933443953b6a1fb1e0aa inherit pro_attribs_a02850"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_a04794"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_a04794')"><img src="../../closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="../../de/d4c/a04794.html">castor3d::shader::LightMaterial</a></td></tr>
-<tr class="memitem:a982ed6b2c97b9e27a1a392cf9860eb73 inherit pro_attribs_a04794"><td class="memItemLeft" align="right" valign="top">sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#a982ed6b2c97b9e27a1a392cf9860eb73">albDiv</a></td></tr>
-<tr class="separator:a982ed6b2c97b9e27a1a392cf9860eb73 inherit pro_attribs_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac63a186f37b9f956d00f322b90274493 inherit pro_attribs_a04794"><td class="memItemLeft" align="right" valign="top">sdw::Float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4c/a04794.html#ac63a186f37b9f956d00f322b90274493">spcDiv</a></td></tr>
-<tr class="separator:ac63a186f37b9f956d00f322b90274493 inherit pro_attribs_a04794"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_a04910"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_a04910')"><img src="../../closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="../../d5/de6/a04910.html">castor3d::shader::LightingModel</a></td></tr>
+<tr class="memitem:a5b33578c25cb0eb3401590f772e13691 inherit pro_methods_a04910"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d1/d0b/a04890.html">Light</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#a5b33578c25cb0eb3401590f772e13691">getBaseLight</a> (sdw::UInt &amp;offset) const</td></tr>
+<tr class="separator:a5b33578c25cb0eb3401590f772e13691 inherit pro_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2dc1856992461f592d5c2fe6161444d inherit pro_methods_a04910"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#ac2dc1856992461f592d5c2fe6161444d">doDeclareLightsBuffer</a> (uint32_t binding, uint32_t set)</td></tr>
+<tr class="separator:ac2dc1856992461f592d5c2fe6161444d inherit pro_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a078ef33656d17feb0bc301563131dd54 inherit pro_methods_a04910"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#a078ef33656d17feb0bc301563131dd54">doDeclareDirectionalLightUbo</a> (uint32_t binding, uint32_t set)</td></tr>
+<tr class="separator:a078ef33656d17feb0bc301563131dd54 inherit pro_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4625cc4704620632fb7cc920a18527e inherit pro_methods_a04910"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#af4625cc4704620632fb7cc920a18527e">doDeclarePointLightUbo</a> (uint32_t binding, uint32_t set)</td></tr>
+<tr class="separator:af4625cc4704620632fb7cc920a18527e inherit pro_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd671443970f1e4798d5707fce08a2a8 inherit pro_methods_a04910"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#afd671443970f1e4798d5707fce08a2a8">doDeclareSpotLightUbo</a> (uint32_t binding, uint32_t set)</td></tr>
+<tr class="separator:afd671443970f1e4798d5707fce08a2a8 inherit pro_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a601b0d6adbf1d1cfe51140debba408a9 inherit pro_methods_a04910"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#a601b0d6adbf1d1cfe51140debba408a9">doDeclareGetBaseLight</a> ()</td></tr>
+<tr class="separator:a601b0d6adbf1d1cfe51140debba408a9 inherit pro_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47f393ce5b750d7a8132df92ede2eaab inherit pro_methods_a04910"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#a47f393ce5b750d7a8132df92ede2eaab">doDeclareGetDirectionalLight</a> ()</td></tr>
+<tr class="separator:a47f393ce5b750d7a8132df92ede2eaab inherit pro_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa639e3a479f852a8738a962669961f79 inherit pro_methods_a04910"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#aa639e3a479f852a8738a962669961f79">doDeclareGetPointLight</a> ()</td></tr>
+<tr class="separator:aa639e3a479f852a8738a962669961f79 inherit pro_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14e3657549948e3665c5b7f47bc0e2a2 inherit pro_methods_a04910"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#a14e3657549948e3665c5b7f47bc0e2a2">doDeclareGetSpotLight</a> ()</td></tr>
+<tr class="separator:a14e3657549948e3665c5b7f47bc0e2a2 inherit pro_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a581d0e6a5c217533e521488ae0309d3c inherit pro_methods_a04910"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#a581d0e6a5c217533e521488ae0309d3c">doDeclareGetCascadeFactors</a> ()</td></tr>
+<tr class="separator:a581d0e6a5c217533e521488ae0309d3c inherit pro_methods_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_a04910"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_a04910')"><img src="../../closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="../../d5/de6/a04910.html">castor3d::shader::LightingModel</a></td></tr>
+<tr class="memitem:a129490d8e4f0ea553f16dcaeb2b2c089 inherit pro_attribs_a04910"><td class="memItemLeft" align="right" valign="top">sdw::ShaderWriter &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#a129490d8e4f0ea553f16dcaeb2b2c089">m_writer</a></td></tr>
+<tr class="separator:a129490d8e4f0ea553f16dcaeb2b2c089 inherit pro_attribs_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e5d3c9e33f06597c63d4c64b62bc564 inherit pro_attribs_a04910"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/d5e/a04982.html">Utils</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#a9e5d3c9e33f06597c63d4c64b62bc564">m_utils</a></td></tr>
+<tr class="separator:a9e5d3c9e33f06597c63d4c64b62bc564 inherit pro_attribs_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adff9bdb8fb5bd4f7c6f1d4ce7af4edf1 inherit pro_attribs_a04910"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; sdw::Struct &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#adff9bdb8fb5bd4f7c6f1d4ce7af4edf1">m_type</a></td></tr>
+<tr class="separator:adff9bdb8fb5bd4f7c6f1d4ce7af4edf1 inherit pro_attribs_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a0e87c50e65852b79e0dda88f060757 inherit pro_attribs_a04910"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; sdw::Ssbo &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#a7a0e87c50e65852b79e0dda88f060757">m_ssbo</a></td></tr>
+<tr class="separator:a7a0e87c50e65852b79e0dda88f060757 inherit pro_attribs_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a11c8a808450c5db734fe58007c5ad1 inherit pro_attribs_a04910"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; sdw::RImageBufferRgba32 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#a2a11c8a808450c5db734fe58007c5ad1">m_tbo</a></td></tr>
+<tr class="separator:a2a11c8a808450c5db734fe58007c5ad1 inherit pro_attribs_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1d302ee6ef967d87ded305060b82120 inherit pro_attribs_a04910"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#ae1d302ee6ef967d87ded305060b82120">m_enableVolumetric</a></td></tr>
+<tr class="separator:ae1d302ee6ef967d87ded305060b82120 inherit pro_attribs_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afef4b07d66515b86040b952a529c80a3 inherit pro_attribs_a04910"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#afef4b07d66515b86040b952a529c80a3">m_prefix</a></td></tr>
+<tr class="separator:afef4b07d66515b86040b952a529c80a3 inherit pro_attribs_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e9407685cf7ba55a752a27437c09a74 inherit pro_attribs_a04910"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="../../da/d88/a04942.html">Shadow</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#a3e9407685cf7ba55a752a27437c09a74">m_shadowModel</a></td></tr>
+<tr class="separator:a3e9407685cf7ba55a752a27437c09a74 inherit pro_attribs_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7a37427798d2c79b0ee95e8c713dea9 inherit pro_attribs_a04910"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="../../d5/d41/a04946.html">SssTransmittance</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#ad7a37427798d2c79b0ee95e8c713dea9">m_sssTransmittance</a></td></tr>
+<tr class="separator:ad7a37427798d2c79b0ee95e8c713dea9 inherit pro_attribs_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64689c5bb7ce2682e205cd001b5f6fd8 inherit pro_attribs_a04910"><td class="memItemLeft" align="right" valign="top">sdw::Function&lt; sdw::Vec3, sdw::InVec3, sdw::InVec4, sdw::InUInt &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#a64689c5bb7ce2682e205cd001b5f6fd8">m_getCascadeFactors</a></td></tr>
+<tr class="separator:a64689c5bb7ce2682e205cd001b5f6fd8 inherit pro_attribs_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa640956be672845c769c8127833993d3 inherit pro_attribs_a04910"><td class="memItemLeft" align="right" valign="top">sdw::Function&lt; sdw::Vec3, sdw::InVec3, sdw::InVec4Array, sdw::InUInt &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#aa640956be672845c769c8127833993d3">m_getTileFactors</a></td></tr>
+<tr class="separator:aa640956be672845c769c8127833993d3 inherit pro_attribs_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05823d225d40ae50737469729a128bca inherit pro_attribs_a04910"><td class="memItemLeft" align="right" valign="top">sdw::Function&lt; <a class="el" href="../../d1/d0b/a04890.html">shader::Light</a>, sdw::InOutUInt &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#a05823d225d40ae50737469729a128bca">m_getBaseLight</a></td></tr>
+<tr class="separator:a05823d225d40ae50737469729a128bca inherit pro_attribs_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab368de32c7f8f54ef2066cbb18dc199b inherit pro_attribs_a04910"><td class="memItemLeft" align="right" valign="top">sdw::Function&lt; <a class="el" href="../../d8/dd4/a04894.html">shader::DirectionalLight</a>, sdw::InUInt &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#ab368de32c7f8f54ef2066cbb18dc199b">m_getDirectionalLight</a></td></tr>
+<tr class="separator:ab368de32c7f8f54ef2066cbb18dc199b inherit pro_attribs_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98044cfa7b6795c534cc0f5382e3b694 inherit pro_attribs_a04910"><td class="memItemLeft" align="right" valign="top">sdw::Function&lt; <a class="el" href="../../da/dd2/a04898.html">shader::PointLight</a>, sdw::InUInt &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#a98044cfa7b6795c534cc0f5382e3b694">m_getPointLight</a></td></tr>
+<tr class="separator:a98044cfa7b6795c534cc0f5382e3b694 inherit pro_attribs_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22c68d438a913ae1437848af29e31e63 inherit pro_attribs_a04910"><td class="memItemLeft" align="right" valign="top">sdw::Function&lt; <a class="el" href="../../d8/de5/a04902.html">shader::SpotLight</a>, sdw::InUInt &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de6/a04910.html#a22c68d438a913ae1437848af29e31e63">m_getSpotLight</a></td></tr>
+<tr class="separator:a22c68d438a913ae1437848af29e31e63 inherit pro_attribs_a04910"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ae8b534d0580a3964afce794c857857dd" name="ae8b534d0580a3964afce794c857857dd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae8b534d0580a3964afce794c857857dd">&#9670;&nbsp;</a></span>PbrSGLightMaterial()</h2>
+<a id="af114b5c0b2db9e4701f29a5d8fc325a5" name="af114b5c0b2db9e4701f29a5d8fc325a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af114b5c0b2db9e4701f29a5d8fc325a5">&#9670;&nbsp;</a></span>PbrLightingModel()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -187,7 +270,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">castor3d::shader::PbrSGLightMaterial::PbrSGLightMaterial </td>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::shader::PbrLightingModel::PbrLightingModel </td>
           <td>(</td>
           <td class="paramtype">sdw::ShaderWriter &amp;&#160;</td>
           <td class="paramname"><em>writer</em>, </td>
@@ -195,8 +278,825 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">sdw::expr::ExprPtr&#160;</td>
-          <td class="paramname"><em>expr</em>, </td>
+          <td class="paramtype"><a class="el" href="../../df/d5e/a04982.html">Utils</a> &amp;&#160;</td>
+          <td class="paramname"><em>utils</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d5/de1/a04990.html">ShadowOptions</a>&#160;</td>
+          <td class="paramname"><em>shadowOptions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../da/d9e/a04926.html">SssProfiles</a> const *&#160;</td>
+          <td class="paramname"><em>sssProfiles</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>enableVolumetric</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ab5b2ed9066d326dae4ce7a5c2ed8822e" name="ab5b2ed9066d326dae4ce7a5c2ed8822e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5b2ed9066d326dae4ce7a5c2ed8822e">&#9670;&nbsp;</a></span>combine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec3 castor3d::shader::PbrLightingModel::combine </td>
+          <td>(</td>
+          <td class="paramtype">sdw::Vec3 const &amp;&#160;</td>
+          <td class="paramname"><em>directDiffuse</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 const &amp;&#160;</td>
+          <td class="paramname"><em>indirectDiffuse</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 const &amp;&#160;</td>
+          <td class="paramname"><em>directSpecular</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 const &amp;&#160;</td>
+          <td class="paramname"><em>indirectSpecular</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 const &amp;&#160;</td>
+          <td class="paramname"><em>ambient</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 const &amp;&#160;</td>
+          <td class="paramname"><em>indirectAmbient</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Float const &amp;&#160;</td>
+          <td class="paramname"><em>ambientOcclusion</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 const &amp;&#160;</td>
+          <td class="paramname"><em>emissive</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 const &amp;&#160;</td>
+          <td class="paramname"><em>reflected</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 const &amp;&#160;</td>
+          <td class="paramname"><em>refracted</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 const &amp;&#160;</td>
+          <td class="paramname"><em>materialAlbedo</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="../../d5/de6/a04910.html#ad1671dd3b92b8bf79752c0a6e3ad9454">castor3d::shader::LightingModel</a>.</p>
+
+</div>
+</div>
+<a id="a870e818802900b2719d99ef43533ce19" name="a870e818802900b2719d99ef43533ce19"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a870e818802900b2719d99ef43533ce19">&#9670;&nbsp;</a></span>compute() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::shader::PbrLightingModel::compute </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d8/dd4/a04894.html">DirectionalLight</a> const &amp;&#160;</td>
+          <td class="paramname"><em>light</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d0/dca/a04906.html">LightMaterial</a> const &amp;&#160;</td>
+          <td class="paramname"><em>material</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../de/d1f/a01364.html#afa7e0e1d1dbce1333aa48253fd404bf4">Surface</a> const &amp;&#160;</td>
+          <td class="paramname"><em>surface</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 const &amp;&#160;</td>
+          <td class="paramname"><em>worldEye</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Int const &amp;&#160;</td>
+          <td class="paramname"><em>receivesShadows</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d9/d75/a04934.html">OutputComponents</a> &amp;&#160;</td>
+          <td class="paramname"><em>output</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="../../d5/de6/a04910.html#a0f6df71c944324916bed80700ef83962">castor3d::shader::LightingModel</a>.</p>
+
+</div>
+</div>
+<a id="aebc8117ee19b7c72c7ff1971f45ea8f4" name="aebc8117ee19b7c72c7ff1971f45ea8f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aebc8117ee19b7c72c7ff1971f45ea8f4">&#9670;&nbsp;</a></span>compute() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::shader::PbrLightingModel::compute </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../da/dd2/a04898.html">PointLight</a> const &amp;&#160;</td>
+          <td class="paramname"><em>light</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d0/dca/a04906.html">LightMaterial</a> const &amp;&#160;</td>
+          <td class="paramname"><em>material</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../de/d1f/a01364.html#afa7e0e1d1dbce1333aa48253fd404bf4">Surface</a> const &amp;&#160;</td>
+          <td class="paramname"><em>surface</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 const &amp;&#160;</td>
+          <td class="paramname"><em>worldEye</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Int const &amp;&#160;</td>
+          <td class="paramname"><em>receivesShadows</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d9/d75/a04934.html">OutputComponents</a> &amp;&#160;</td>
+          <td class="paramname"><em>output</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="../../d5/de6/a04910.html#a6c7c2e769cd263f06225ddd29ebacea1">castor3d::shader::LightingModel</a>.</p>
+
+</div>
+</div>
+<a id="a3c98eb8af0902591dff2503255620790" name="a3c98eb8af0902591dff2503255620790"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c98eb8af0902591dff2503255620790">&#9670;&nbsp;</a></span>compute() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::shader::PbrLightingModel::compute </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d8/de5/a04902.html">SpotLight</a> const &amp;&#160;</td>
+          <td class="paramname"><em>light</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d0/dca/a04906.html">LightMaterial</a> const &amp;&#160;</td>
+          <td class="paramname"><em>material</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../de/d1f/a01364.html#afa7e0e1d1dbce1333aa48253fd404bf4">Surface</a> const &amp;&#160;</td>
+          <td class="paramname"><em>surface</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 const &amp;&#160;</td>
+          <td class="paramname"><em>worldEye</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Int const &amp;&#160;</td>
+          <td class="paramname"><em>receivesShadows</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d9/d75/a04934.html">OutputComponents</a> &amp;&#160;</td>
+          <td class="paramname"><em>output</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="../../d5/de6/a04910.html#a1c43ea2c73c6d7c08c22caf1b60eaca2">castor3d::shader::LightingModel</a>.</p>
+
+</div>
+</div>
+<a id="a877ba57c0818c503bfd8046c8dc46110" name="a877ba57c0818c503bfd8046c8dc46110"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a877ba57c0818c503bfd8046c8dc46110">&#9670;&nbsp;</a></span>computeDiffuse() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec3 castor3d::shader::PbrLightingModel::computeDiffuse </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d8/dd4/a04894.html">DirectionalLight</a> const &amp;&#160;</td>
+          <td class="paramname"><em>light</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d0/dca/a04906.html">LightMaterial</a> const &amp;&#160;</td>
+          <td class="paramname"><em>material</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../de/d1f/a01364.html#afa7e0e1d1dbce1333aa48253fd404bf4">Surface</a> const &amp;&#160;</td>
+          <td class="paramname"><em>surface</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 const &amp;&#160;</td>
+          <td class="paramname"><em>worldEye</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Int const &amp;&#160;</td>
+          <td class="paramname"><em>receivesShadows</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="../../d5/de6/a04910.html#a4968c0dd4fc7770930dbde5c3e0a5ce6">castor3d::shader::LightingModel</a>.</p>
+
+</div>
+</div>
+<a id="a8de6c38cd5606506918bfb85165ee10f" name="a8de6c38cd5606506918bfb85165ee10f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8de6c38cd5606506918bfb85165ee10f">&#9670;&nbsp;</a></span>computeDiffuse() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec3 castor3d::shader::PbrLightingModel::computeDiffuse </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../da/dd2/a04898.html">PointLight</a> const &amp;&#160;</td>
+          <td class="paramname"><em>light</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d0/dca/a04906.html">LightMaterial</a> const &amp;&#160;</td>
+          <td class="paramname"><em>material</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../de/d1f/a01364.html#afa7e0e1d1dbce1333aa48253fd404bf4">Surface</a> const &amp;&#160;</td>
+          <td class="paramname"><em>surface</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 const &amp;&#160;</td>
+          <td class="paramname"><em>worldEye</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Int const &amp;&#160;</td>
+          <td class="paramname"><em>receivesShadows</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="../../d5/de6/a04910.html#a35cf566d40e1884449c5de33119e3c8c">castor3d::shader::LightingModel</a>.</p>
+
+</div>
+</div>
+<a id="a90e413355f824103934d4881279b793d" name="a90e413355f824103934d4881279b793d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90e413355f824103934d4881279b793d">&#9670;&nbsp;</a></span>computeDiffuse() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::Vec3 castor3d::shader::PbrLightingModel::computeDiffuse </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d8/de5/a04902.html">SpotLight</a> const &amp;&#160;</td>
+          <td class="paramname"><em>light</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d0/dca/a04906.html">LightMaterial</a> const &amp;&#160;</td>
+          <td class="paramname"><em>material</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../de/d1f/a01364.html#afa7e0e1d1dbce1333aa48253fd404bf4">Surface</a> const &amp;&#160;</td>
+          <td class="paramname"><em>surface</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 const &amp;&#160;</td>
+          <td class="paramname"><em>worldEye</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Int const &amp;&#160;</td>
+          <td class="paramname"><em>receivesShadows</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="../../d5/de6/a04910.html#a98de51d89707a5c262c15a5c85ed7003">castor3d::shader::LightingModel</a>.</p>
+
+</div>
+</div>
+<a id="a4bf9f47f00cc8c7db21cb0aa542190b2" name="a4bf9f47f00cc8c7db21cb0aa542190b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bf9f47f00cc8c7db21cb0aa542190b2">&#9670;&nbsp;</a></span>computeMapContributions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::shader::PbrLightingModel::computeMapContributions </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../da/dab/a01362.html#a69e89af11c4c9247dce7ee99a21090fc">PassFlags</a> const &amp;&#160;</td>
+          <td class="paramname"><em>passFlags</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../da/dab/a01362.html#afa51b269ca00eaeff4f95f361bf2208f">TextureFlagsArray</a> const &amp;&#160;</td>
+          <td class="paramname"><em>textures</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d5/df8/a04978.html">TextureConfigurations</a> const &amp;&#160;</td>
+          <td class="paramname"><em>textureConfigs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../db/db8/a04970.html">TextureAnimations</a> const &amp;&#160;</td>
+          <td class="paramname"><em>textureAnims</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Array&lt; sdw::CombinedImage2DRgba32 &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>maps</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::UVec4 const &amp;&#160;</td>
+          <td class="paramname"><em>textures0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::UVec4 const &amp;&#160;</td>
+          <td class="paramname"><em>textures1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 &amp;&#160;</td>
+          <td class="paramname"><em>texCoords0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 &amp;&#160;</td>
+          <td class="paramname"><em>texCoords1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 &amp;&#160;</td>
+          <td class="paramname"><em>texCoords2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 &amp;&#160;</td>
+          <td class="paramname"><em>texCoords3</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 &amp;&#160;</td>
+          <td class="paramname"><em>normal</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 &amp;&#160;</td>
+          <td class="paramname"><em>tangent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 &amp;&#160;</td>
+          <td class="paramname"><em>bitangent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 &amp;&#160;</td>
+          <td class="paramname"><em>emissive</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Float &amp;&#160;</td>
+          <td class="paramname"><em>opacity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Float &amp;&#160;</td>
+          <td class="paramname"><em>occlusion</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Float &amp;&#160;</td>
+          <td class="paramname"><em>transmittanc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d0/dca/a04906.html">LightMaterial</a> &amp;&#160;</td>
+          <td class="paramname"><em>lightMat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 &amp;&#160;</td>
+          <td class="paramname"><em>tangentSpaceViewPosition</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 &amp;&#160;</td>
+          <td class="paramname"><em>tangentSpaceFragPosition</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="../../d5/de6/a04910.html#a4f6335ec1f22f63ffcb560d0a7b070b2">castor3d::shader::LightingModel</a>.</p>
+
+</div>
+</div>
+<a id="a164064d20a8c1cde001136cf6a4acde8" name="a164064d20a8c1cde001136cf6a4acde8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a164064d20a8c1cde001136cf6a4acde8">&#9670;&nbsp;</a></span>computeMapDiffuseContributions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::shader::PbrLightingModel::computeMapDiffuseContributions </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../da/dab/a01362.html#a69e89af11c4c9247dce7ee99a21090fc">PassFlags</a> const &amp;&#160;</td>
+          <td class="paramname"><em>passFlags</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../da/dab/a01362.html#afa51b269ca00eaeff4f95f361bf2208f">TextureFlagsArray</a> const &amp;&#160;</td>
+          <td class="paramname"><em>textures</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d5/df8/a04978.html">TextureConfigurations</a> const &amp;&#160;</td>
+          <td class="paramname"><em>textureConfigs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../db/db8/a04970.html">TextureAnimations</a> const &amp;&#160;</td>
+          <td class="paramname"><em>textureAnims</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Array&lt; sdw::CombinedImage2DRgba32 &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>maps</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::UVec4 const &amp;&#160;</td>
+          <td class="paramname"><em>textures0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::UVec4 const &amp;&#160;</td>
+          <td class="paramname"><em>textures1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 &amp;&#160;</td>
+          <td class="paramname"><em>texCoords0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 &amp;&#160;</td>
+          <td class="paramname"><em>texCoords1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 &amp;&#160;</td>
+          <td class="paramname"><em>texCoords2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 &amp;&#160;</td>
+          <td class="paramname"><em>texCoords3</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Vec3 &amp;&#160;</td>
+          <td class="paramname"><em>emissive</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Float &amp;&#160;</td>
+          <td class="paramname"><em>opacity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sdw::Float &amp;&#160;</td>
+          <td class="paramname"><em>occlusion</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d0/dca/a04906.html">LightMaterial</a> &amp;&#160;</td>
+          <td class="paramname"><em>lightMat</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="../../d5/de6/a04910.html#a68498b70cfcb2dc313fc248a82532538">castor3d::shader::LightingModel</a>.</p>
+
+</div>
+</div>
+<a id="ab82249ef0df6e24add74ab328f5926c3" name="ab82249ef0df6e24add74ab328f5926c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab82249ef0df6e24add74ab328f5926c3">&#9670;&nbsp;</a></span>create()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../de/d1f/a01364.html#a69009a36ab335c9cd7d4eed926a70037">LightingModelPtr</a> castor3d::shader::PbrLightingModel::create </td>
+          <td>(</td>
+          <td class="paramtype">sdw::ShaderWriter &amp;&#160;</td>
+          <td class="paramname"><em>writer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../df/d5e/a04982.html">Utils</a> &amp;&#160;</td>
+          <td class="paramname"><em>utils</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d5/de1/a04990.html">ShadowOptions</a>&#160;</td>
+          <td class="paramname"><em>shadowOptions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../da/d9e/a04926.html">SssProfiles</a> const *&#160;</td>
+          <td class="paramname"><em>sssProfiles</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>enableVolumetric</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab7af39437f7ef415d367df2b79c50c41" name="ab7af39437f7ef415d367df2b79c50c41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7af39437f7ef415d367df2b79c50c41">&#9670;&nbsp;</a></span>declMaterial()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> std::unique_ptr&lt; <a class="el" href="../../d0/dca/a04906.html">LightMaterial</a> &gt; castor3d::shader::PbrLightingModel::declMaterial </td>
+          <td>(</td>
+          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -212,22 +1112,400 @@ Additional Inherited Members</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">References <a class="el" href="../../d0/d9a/a02850.html#a951274d2fd29933443953b6a1fb1e0aa">castor3d::shader::PbrLightMaterial::m_isSpecularGlossiness</a>.</p>
+<p>Implements <a class="el" href="../../d5/de6/a04910.html#abaa2a0d1da96dde5f4c41a9e6bf38383">castor3d::shader::LightingModel</a>.</p>
 
 </div>
 </div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
-<li>Material/Pass/PBR/Shaders/<a class="el" href="../../de/d55/a00323.html">GlslPbrMaterial.hpp</a></li>
+<a id="a0535701cc570da5baf40323c69b6a858" name="a0535701cc570da5baf40323c69b6a858"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0535701cc570da5baf40323c69b6a858">&#9670;&nbsp;</a></span>doDeclareComputeDirectionalLight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void castor3d::shader::PbrLightingModel::doDeclareComputeDirectionalLight </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="../../d5/de6/a04910.html#a9c6a575c7a121556d1fb476bea5d6bf2">castor3d::shader::LightingModel</a>.</p>
+
+</div>
+</div>
+<a id="af5a436db70d6763028a05eb7834e3be2" name="af5a436db70d6763028a05eb7834e3be2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5a436db70d6763028a05eb7834e3be2">&#9670;&nbsp;</a></span>doDeclareComputeDirectionalLightDiffuse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void castor3d::shader::PbrLightingModel::doDeclareComputeDirectionalLightDiffuse </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="../../d5/de6/a04910.html#aad2f92a29681d4b0511973af3a31e276">castor3d::shader::LightingModel</a>.</p>
+
+</div>
+</div>
+<a id="a9dadcda15876dbf6acf3a5dbdc24fc55" name="a9dadcda15876dbf6acf3a5dbdc24fc55"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9dadcda15876dbf6acf3a5dbdc24fc55">&#9670;&nbsp;</a></span>doDeclareComputePointLight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void castor3d::shader::PbrLightingModel::doDeclareComputePointLight </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="../../d5/de6/a04910.html#afa3f59926bb5d7666b9243de69d7a9c2">castor3d::shader::LightingModel</a>.</p>
+
+</div>
+</div>
+<a id="aab875643f167469cdd5f8eb96d98cbd3" name="aab875643f167469cdd5f8eb96d98cbd3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab875643f167469cdd5f8eb96d98cbd3">&#9670;&nbsp;</a></span>doDeclareComputePointLightDiffuse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void castor3d::shader::PbrLightingModel::doDeclareComputePointLightDiffuse </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="../../d5/de6/a04910.html#a7490bf6134ff2b323b10fbaf781a37bc">castor3d::shader::LightingModel</a>.</p>
+
+</div>
+</div>
+<a id="a9becaebfb17b09191a8720fc6164cfc3" name="a9becaebfb17b09191a8720fc6164cfc3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9becaebfb17b09191a8720fc6164cfc3">&#9670;&nbsp;</a></span>doDeclareComputeSpotLight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void castor3d::shader::PbrLightingModel::doDeclareComputeSpotLight </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="../../d5/de6/a04910.html#af34a816a20b6c7d5ec6286f5045f40d2">castor3d::shader::LightingModel</a>.</p>
+
+</div>
+</div>
+<a id="ad842fc16ddc7ee36237487cf8fd7e2f1" name="ad842fc16ddc7ee36237487cf8fd7e2f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad842fc16ddc7ee36237487cf8fd7e2f1">&#9670;&nbsp;</a></span>doDeclareComputeSpotLightDiffuse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void castor3d::shader::PbrLightingModel::doDeclareComputeSpotLightDiffuse </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="../../d5/de6/a04910.html#afd78d88ba2a1d93ec50557dc64993977">castor3d::shader::LightingModel</a>.</p>
+
+</div>
+</div>
+<a id="a7ef051b4607ed0cfd30401a03845d965" name="a7ef051b4607ed0cfd30401a03845d965"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ef051b4607ed0cfd30401a03845d965">&#9670;&nbsp;</a></span>doDeclareDiffuseModel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void castor3d::shader::PbrLightingModel::doDeclareDiffuseModel </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="../../d5/de6/a04910.html#af58895948c91e3f79ff8230e9534a281">castor3d::shader::LightingModel</a>.</p>
+
+</div>
+</div>
+<a id="ae25604e99578333dd65a857db4c24538" name="ae25604e99578333dd65a857db4c24538"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae25604e99578333dd65a857db4c24538">&#9670;&nbsp;</a></span>doDeclareModel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void castor3d::shader::PbrLightingModel::doDeclareModel </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="../../d5/de6/a04910.html#ae2a3ded61a442482f06c85c29ea24b04">castor3d::shader::LightingModel</a>.</p>
+
+</div>
+</div>
+<a id="a16a0de42446fa79aaaff44cabcd9bfc1" name="a16a0de42446fa79aaaff44cabcd9bfc1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16a0de42446fa79aaaff44cabcd9bfc1">&#9670;&nbsp;</a></span>getName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> const castor::String castor3d::shader::PbrLightingModel::getName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6c78a9e9eea5eb66a44df19474a0e575" name="a6c78a9e9eea5eb66a44df19474a0e575"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c78a9e9eea5eb66a44df19474a0e575">&#9670;&nbsp;</a></span>getReflectionModel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../de/d1f/a01364.html#ae10c352f0c2ff7850fca0043640a06bb">ReflectionModelPtr</a> castor3d::shader::PbrLightingModel::getReflectionModel </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t &amp;&#160;</td>
+          <td class="paramname"><em>envMapBinding</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>envMapSet</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="../../d5/de6/a04910.html#a35846c33000b56f135010af80666af2a">castor3d::shader::LightingModel</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a33e583d547ae21ec7224acfb2c68c4b9" name="a33e583d547ae21ec7224acfb2c68c4b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33e583d547ae21ec7224acfb2c68c4b9">&#9670;&nbsp;</a></span>m_computeDirectional</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sdw::Function&lt; sdw::Void , InDirectionalLight , InPbrLightMaterial , InSurface , sdw::InVec3 , sdw::InInt , <a class="el" href="../../d9/d75/a04934.html">OutputComponents</a> &amp; &gt; castor3d::shader::PbrLightingModel::m_computeDirectional</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae20f13ad209f36b46e1e553ab3490a0a" name="ae20f13ad209f36b46e1e553ab3490a0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae20f13ad209f36b46e1e553ab3490a0a">&#9670;&nbsp;</a></span>m_computeDirectionalDiffuse</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sdw::Function&lt; sdw::Vec3 , InOutDirectionalLight , InPbrLightMaterial , InSurface , sdw::InVec3 , sdw::InInt &gt; castor3d::shader::PbrLightingModel::m_computeDirectionalDiffuse</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac7dd9977b62bb101c23521538ea136b2" name="ac7dd9977b62bb101c23521538ea136b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7dd9977b62bb101c23521538ea136b2">&#9670;&nbsp;</a></span>m_computePoint</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sdw::Function&lt; sdw::Void , InPointLight , InPbrLightMaterial , InSurface , sdw::InVec3 , sdw::InInt , <a class="el" href="../../d9/d75/a04934.html">OutputComponents</a> &amp; &gt; castor3d::shader::PbrLightingModel::m_computePoint</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a622adbbd9a5b7480c10d92fc3ba78204" name="a622adbbd9a5b7480c10d92fc3ba78204"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a622adbbd9a5b7480c10d92fc3ba78204">&#9670;&nbsp;</a></span>m_computePointDiffuse</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sdw::Function&lt; sdw::Vec3 , InOutPointLight , InPbrLightMaterial , InSurface , sdw::InVec3 , sdw::InInt &gt; castor3d::shader::PbrLightingModel::m_computePointDiffuse</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae809b53222c8f5e5e644ecb82c6c1e7a" name="ae809b53222c8f5e5e644ecb82c6c1e7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae809b53222c8f5e5e644ecb82c6c1e7a">&#9670;&nbsp;</a></span>m_computeSpot</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sdw::Function&lt; sdw::Void , InSpotLight , InPbrLightMaterial , InSurface , sdw::InVec3 , sdw::InInt , <a class="el" href="../../d9/d75/a04934.html">OutputComponents</a> &amp; &gt; castor3d::shader::PbrLightingModel::m_computeSpot</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab0fa45de856a644e988fee15b2ad5794" name="ab0fa45de856a644e988fee15b2ad5794"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0fa45de856a644e988fee15b2ad5794">&#9670;&nbsp;</a></span>m_computeSpotDiffuse</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sdw::Function&lt; sdw::Vec3 , InOutSpotLight , InPbrLightMaterial , InSurface , sdw::InVec3 , sdw::InInt &gt; castor3d::shader::PbrLightingModel::m_computeSpotDiffuse</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a11c13c31f49aa23726ef9c81122f0465" name="a11c13c31f49aa23726ef9c81122f0465"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11c13c31f49aa23726ef9c81122f0465">&#9670;&nbsp;</a></span>m_cookTorrance</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d4/db9/a04870.html">CookTorranceBRDF</a> castor3d::shader::PbrLightingModel::m_cookTorrance</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>Material/Pass/PBR/Shaders/<a class="el" href="../../d3/d93/a00341.html">GlslPbrLighting.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 15:34:56 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:53 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

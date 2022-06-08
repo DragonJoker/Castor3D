@@ -1,22 +1,45 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="d3/d83/a03854" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::RenderGridBuilderT</compoundname>
-    <templateparamlist>
-      <param>
-        <type>typename ConfigT</type>
-      </param>
-      <param>
-        <type>typename BuilderT</type>
-      </param>
-    </templateparamlist>
+  <compounddef id="d3/d83/a03854" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::BackgroundPass::Cube::Quad</compoundname>
+    <includes local="no">BackgroundPass.hpp</includes>
+    <innerclass refid="d0/d61/a03858" prot="public">castor3d::BackgroundPass::Cube::Quad::Vertex</innerclass>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/d83/a03854_1a3cab46c23d47801de9dc0267123d487b" prot="public" static="no" mutable="no">
+        <type><ref refid="d0/d61/a03858" kindref="compound">Vertex</ref></type>
+        <definition>Vertex castor3d::BackgroundPass::Cube::Quad::vertex[4]</definition>
+        <argsstring>[4]</argsstring>
+        <name>vertex</name>
+        <qualifiedname>castor3d::BackgroundPass::Cube::Quad::vertex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/BackgroundPass.hpp" line="94" column="8" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
     <briefdescription>
-<para>Used to create a RenderGrid variable. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Passes/PassesModule.hpp" line="143" column="1" bodyfile="Render/Passes/PassesModule.hpp" bodystart="143" bodyend="-1"/>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::BackgroundPass::Cube::Quad</label>
+        <link refid="d3/d83/a03854"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>vertex</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::BackgroundPass::Cube::Quad::Vertex</label>
+        <link refid="d0/d61/a03858"/>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Passes/BackgroundPass.hpp" line="87" column="1" bodyfile="Render/Passes/BackgroundPass.hpp" bodystart="88" bodyend="95"/>
     <listofallmembers>
+      <member refid="d3/d83/a03854_1a3cab46c23d47801de9dc0267123d487b" prot="public" virt="non-virtual"><scope>castor3d::BackgroundPass::Cube::Quad</scope><name>vertex</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

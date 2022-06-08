@@ -1,6 +1,12 @@
-<map id="castor3d::LinesMapping" name="castor3d::LinesMapping">
-<area shape="rect" id="node1" title=" " alt="" coords="26,229,186,256"/>
-<area shape="rect" id="node2" href="$de/d83/a03382.html" title=" " alt="" coords="26,155,186,181"/>
-<area shape="rect" id="node3" href="$d1/deb/a03418.html" title=" " alt="" coords="5,80,207,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,5,207,32"/>
+<map id="castor3d::InstantiationComponent::Data" name="castor3d::InstantiationComponent::Data">
+<area shape="rect" id="node1" title=" " alt="" coords="985,126,1201,167"/>
+<area shape="rect" id="node2" href="$dd/df4/a02510.html" title=" " alt="" coords="693,87,901,129"/>
+<area shape="rect" id="node3" href="$db/df5/a02534.html" title=" " alt="" coords="27,19,194,45"/>
+<area shape="rect" id="node5" href="$dd/df4/a02510.html" title="An offset and range of a GpuBuffer." alt="" coords="326,57,497,98"/>
+<area shape="rect" id="node4" href="$d9/d76/a02526.html" title="A memory range, in bytes." alt="" coords="37,88,184,115"/>
+<area shape="rect" id="node6" title=" " alt="" coords="725,174,869,215"/>
+<area shape="rect" id="node7" href="$d1/d35/a03398.html" title=" " alt="" coords="323,185,500,212"/>
+<area shape="rect" id="node8" href="$d3/d14/a05174.html" title="Objects ID data." alt="" coords="5,185,216,212"/>
+<area shape="rect" id="node9" title=" " alt="" coords="355,241,468,268"/>
+<area shape="rect" id="node10" title=" " alt="" coords="91,241,130,268"/>
 </map>

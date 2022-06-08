@@ -1,562 +1,311 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="d0/dff/a02506" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::GpuBufferOffsetT</compoundname>
-    <includes local="no">GpuBufferOffset.hpp</includes>
+  <compounddef id="d0/dff/a02506" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::GpuBufferT</compoundname>
+    <basecompoundref refid="db/df5/a02534" prot="public" virt="non-virtual">castor3d::GpuBufferBase</basecompoundref>
+    <includes local="no">GpuBuffer.hpp</includes>
     <templateparamlist>
       <param>
-        <type>typename DataT</type>
+        <type>typename AllocatorT</type>
       </param>
     </templateparamlist>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d0/dff/a02506_1a77bebe22cf993d84178e6f6bcbedd37d" prot="public" static="no" mutable="no">
-        <type><ref refid="d3/d41/a02530" kindref="compound">GpuBufferBase</ref> *</type>
-        <definition>GpuBufferBase* castor3d::GpuBufferOffsetT&lt; DataT &gt;::buffer</definition>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="d0/dff/a02506_1a01ce6a31562ddfd446c446f4a24ed188" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class GpuBufferPool</definition>
         <argsstring></argsstring>
-        <name>buffer</name>
-        <qualifiedname>castor3d::GpuBufferOffsetT::buffer</qualifiedname>
-        <initializer>{}</initializer>
+        <name>GpuBufferPool</name>
+        <qualifiedname>castor3d::GpuBufferT::GpuBufferPool</qualifiedname>
+        <param>
+          <type><ref refid="d9/d66/a02562" kindref="compound">GpuBufferPool</ref></type>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/GpuBufferOffset.hpp" line="42" column="16" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="42" bodyend="-1"/>
-        <referencedby refid="d0/dff/a02506_1aaf498e1f12b8c86de5b613e41e9fb87e" compoundref="d7/d3f/a00173" startline="68" endline="71">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getBuffer</referencedby>
-        <referencedby refid="d0/dff/a02506_1aab6c41b3e6bd874a2eea4fe95d769f68" compoundref="d7/d3f/a00173" startline="93" endline="97">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getData</referencedby>
-        <referencedby refid="d0/dff/a02506_1a57f6d913d85b367ec0569c55be0576c1" compoundref="d7/d3f/a00173" startline="58" endline="61">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getPool</referencedby>
-        <referencedby refid="d0/dff/a02506_1a82d29cdbd10db3d1c4cc8b91f2a3b585" compoundref="d7/d3f/a00173" startline="99" endline="106">castor3d::GpuBufferOffsetT&lt; DataT &gt;::markDirty</referencedby>
-        <referencedby refid="d0/dff/a02506_1a661b1a290c461596f62b66adf4502835" compoundref="d7/d3f/a00173" startline="52" endline="56">castor3d::GpuBufferOffsetT&lt; DataT &gt;::operator bool</referencedby>
-        <referencedby refid="d0/dff/a02506_1aff7e952e2cdeca241456d22cfea993f4" compoundref="d7/d3f/a00173" startline="47" endline="50">castor3d::GpuBufferOffsetT&lt; DataT &gt;::setPool</referencedby>
+        <location file="Buffer/GpuBuffer.hpp" line="230" column="14" bodyfile="Buffer/GpuBuffer.hpp" bodystart="230" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d0/dff/a02506_1a9f2caf3826a9123e3852143f32edd39a" prot="public" static="no" mutable="no">
-        <type>VkBufferUsageFlags</type>
-        <definition>VkBufferUsageFlags castor3d::GpuBufferOffsetT&lt; DataT &gt;::target</definition>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/dff/a02506_1a6071a35b6da1688c22790fdb61282cc3" prot="private" static="no" mutable="no">
+        <type>AllocatorT</type>
+        <definition>AllocatorT castor3d::GpuBufferT&lt; AllocatorT &gt;::m_allocator</definition>
         <argsstring></argsstring>
-        <name>target</name>
-        <qualifiedname>castor3d::GpuBufferOffsetT::target</qualifiedname>
-        <initializer>{}</initializer>
+        <name>m_allocator</name>
+        <qualifiedname>castor3d::GpuBufferT::m_allocator</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/GpuBufferOffset.hpp" line="43" column="20" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="43" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/dff/a02506_1acb98f24d20ec341a11fe8ded93eb5411" prot="public" static="no" mutable="no">
-        <type>VkMemoryPropertyFlags</type>
-        <definition>VkMemoryPropertyFlags castor3d::GpuBufferOffsetT&lt; DataT &gt;::memory</definition>
-        <argsstring></argsstring>
-        <name>memory</name>
-        <qualifiedname>castor3d::GpuBufferOffsetT::memory</qualifiedname>
-        <initializer>{}</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/GpuBufferOffset.hpp" line="44" column="23" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="44" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d0/dff/a02506_1ab7426d2a0dd4557021fbc0f71eaa5134" prot="public" static="no" mutable="no">
-        <type><ref refid="d7/da8/a02522" kindref="compound">MemChunk</ref></type>
-        <definition>MemChunk castor3d::GpuBufferOffsetT&lt; DataT &gt;::chunk</definition>
-        <argsstring></argsstring>
-        <name>chunk</name>
-        <qualifiedname>castor3d::GpuBufferOffsetT::chunk</qualifiedname>
-        <initializer>{}</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/GpuBufferOffset.hpp" line="45" column="10" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="45" bodyend="-1"/>
-        <referencedby refid="d0/dff/a02506_1a612d2762f73a4ef70cfd450af25ad3ed" compoundref="d7/d3f/a00173" startline="78" endline="81">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getCount</referencedby>
-        <referencedby refid="d0/dff/a02506_1a97b5122f677a123e2bd2c7853927aa94" compoundref="d7/d3f/a00173" startline="88" endline="91">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getOffset</referencedby>
-        <referencedby refid="d0/dff/a02506_1a44e450480561c1253f21a8a3fd548b69" compoundref="d7/d3f/a00173" startline="83" endline="86">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getSize</referencedby>
+        <location file="Buffer/GpuBuffer.hpp" line="298" column="12" bodyfile="Buffer/GpuBuffer.hpp" bodystart="298" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d0/dff/a02506_1aff7e952e2cdeca241456d22cfea993f4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::GpuBufferOffsetT&lt; DataT &gt;::setPool</definition>
-        <argsstring>(GpuBufferBase &amp;pool)</argsstring>
-        <name>setPool</name>
-        <qualifiedname>castor3d::GpuBufferOffsetT::setPool</qualifiedname>
-        <param>
-          <type><ref refid="d3/d41/a02530" kindref="compound">GpuBufferBase</ref> &amp;</type>
-          <declname>pool</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/GpuBufferOffset.hpp" line="47" column="6" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="47" bodyend="50"/>
-        <references refid="d0/dff/a02506_1a77bebe22cf993d84178e6f6bcbedd37d" compoundref="d7/d3f/a00173" startline="42">castor3d::GpuBufferOffsetT&lt; DataT &gt;::buffer</references>
-      </memberdef>
-      <memberdef kind="function" id="d0/dff/a02506_1a661b1a290c461596f62b66adf4502835" prot="public" static="no" const="yes" explicit="yes" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="d0/dff/a02506_1a6ea904ff84cdb033bb9f1c1b6e03e9a5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
-        <definition>castor3d::GpuBufferOffsetT&lt; DataT &gt;::operator bool</definition>
-        <argsstring>() const</argsstring>
-        <name>operator bool</name>
-        <qualifiedname>castor3d::GpuBufferOffsetT::operator bool</qualifiedname>
+        <definition>castor3d::GpuBufferT&lt; AllocatorT &gt;::GpuBufferT</definition>
+        <argsstring>(RenderSystem const &amp;renderSystem, VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryFlags, castor::String debugName, ashes::QueueShare sharingMode, AllocatorT allocator, bool smallData=false)</argsstring>
+        <name>GpuBufferT</name>
+        <qualifiedname>castor3d::GpuBufferT::GpuBufferT</qualifiedname>
+        <param>
+          <type><ref refid="d7/ded/a04130" kindref="compound">RenderSystem</ref> const &amp;</type>
+          <declname>renderSystem</declname>
+        </param>
+        <param>
+          <type>VkBufferUsageFlags</type>
+          <declname>usage</declname>
+        </param>
+        <param>
+          <type>VkMemoryPropertyFlags</type>
+          <declname>memoryFlags</declname>
+        </param>
+        <param>
+          <type>castor::String</type>
+          <declname>debugName</declname>
+        </param>
+        <param>
+          <type>ashes::QueueShare</type>
+          <declname>sharingMode</declname>
+        </param>
+        <param>
+          <type>AllocatorT</type>
+          <declname>allocator</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>smallData</declname>
+          <defval>false</defval>
+        </param>
         <briefdescription>
+<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">renderSystem</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The device on which the storage is allocated. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">usage</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer targets. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">memoryFlags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer memory properties. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">debugName</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The debug name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sharingMode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The sharing mode. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">allocator</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The allocator. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">smallData</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tells if the memory chunks allocated through this buffer are less than 65536 bytes. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/GpuBufferOffset.hpp" line="52" column="10" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="52" bodyend="56"/>
-        <references refid="d0/dff/a02506_1a77bebe22cf993d84178e6f6bcbedd37d" compoundref="d7/d3f/a00173" startline="42">castor3d::GpuBufferOffsetT&lt; DataT &gt;::buffer</references>
-        <references refid="d3/d41/a02530_1a3f399bb8c877bc2155fe02aebd6c0329" compoundref="db/ddf/a00164" startline="110" endline="113">castor3d::GpuBufferBase::hasBuffer</references>
+        <location file="Buffer/GpuBuffer.hpp" line="253" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="d0/dff/a02506_1a57f6d913d85b367ec0569c55be0576c1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d3/d41/a02530" kindref="compound">GpuBufferBase</ref> const &amp;</type>
-        <definition>GpuBufferBase const  &amp; castor3d::GpuBufferOffsetT&lt; DataT &gt;::getPool</definition>
-        <argsstring>() const</argsstring>
-        <name>getPool</name>
-        <qualifiedname>castor3d::GpuBufferOffsetT::getPool</qualifiedname>
+      <memberdef kind="function" id="d0/dff/a02506_1a340716243a619af89f3542becf09b775" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::GpuBufferT&lt; AllocatorT &gt;::hasAvailable</definition>
+        <argsstring>(VkDeviceSize size) const</argsstring>
+        <name>hasAvailable</name>
+        <qualifiedname>castor3d::GpuBufferT::hasAvailable</qualifiedname>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>size</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The requested memory size. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> if there is enough remaining memory for given size. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/GpuBufferOffset.hpp" line="58" column="22" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="58" bodyend="61"/>
-        <references refid="d0/dff/a02506_1a77bebe22cf993d84178e6f6bcbedd37d" compoundref="d7/d3f/a00173" startline="42">castor3d::GpuBufferOffsetT&lt; DataT &gt;::buffer</references>
+        <location file="Buffer/GpuBuffer.hpp" line="268" column="6"/>
       </memberdef>
-      <memberdef kind="function" id="d0/dff/a02506_1afb36ca87aa7b2a93a340880b5c422c6f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d3/d41/a02530" kindref="compound">GpuBufferBase</ref> &amp;</type>
-        <definition>GpuBufferBase &amp; castor3d::GpuBufferOffsetT&lt; DataT &gt;::getPool</definition>
-        <argsstring>()</argsstring>
-        <name>getPool</name>
-        <qualifiedname>castor3d::GpuBufferOffsetT::getPool</qualifiedname>
+      <memberdef kind="function" id="d0/dff/a02506_1a4b6d873e1a9ab433cc2018e1630aef01" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d76/a02526" kindref="compound">MemChunk</ref></type>
+        <definition>MemChunk castor3d::GpuBufferT&lt; AllocatorT &gt;::allocate</definition>
+        <argsstring>(VkDeviceSize size)</argsstring>
+        <name>allocate</name>
+        <qualifiedname>castor3d::GpuBufferT::allocate</qualifiedname>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>size</declname>
+        </param>
         <briefdescription>
+<para>Allocates a memory chunk for a CPU buffer. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The requested memory size. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The memory chunk offset. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/GpuBufferOffset.hpp" line="63" column="16" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="63" bodyend="66"/>
-        <references refid="d0/dff/a02506_1a77bebe22cf993d84178e6f6bcbedd37d" compoundref="d7/d3f/a00173" startline="42">castor3d::GpuBufferOffsetT&lt; DataT &gt;::buffer</references>
+        <location file="Buffer/GpuBuffer.hpp" line="279" column="10"/>
       </memberdef>
-      <memberdef kind="function" id="d0/dff/a02506_1aaf498e1f12b8c86de5b613e41e9fb87e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::Buffer&lt; uint8_t &gt; const &amp;</type>
-        <definition>ashes::Buffer&lt; uint8_t &gt; const  &amp; castor3d::GpuBufferOffsetT&lt; DataT &gt;::getBuffer</definition>
-        <argsstring>() const</argsstring>
-        <name>getBuffer</name>
-        <qualifiedname>castor3d::GpuBufferOffsetT::getBuffer</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/GpuBufferOffset.hpp" line="68" column="22" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="68" bodyend="71"/>
-        <references refid="d0/dff/a02506_1a77bebe22cf993d84178e6f6bcbedd37d" compoundref="d7/d3f/a00173" startline="42">castor3d::GpuBufferOffsetT&lt; DataT &gt;::buffer</references>
-        <references refid="d3/d41/a02530_1a2e96ae884d0c9c48a92282e0c9d1b816" compoundref="db/ddf/a00164" startline="122" endline="125">castor3d::GpuBufferBase::getBuffer</references>
-        <referencedby refid="d0/dff/a02506_1ad314968c272e7c2ce0b37a784971cea0" compoundref="d7/d3f/a00173" startline="132" endline="142">castor3d::GpuBufferOffsetT&lt; DataT &gt;::createInOutStoragePassBinding</referencedby>
-        <referencedby refid="d0/dff/a02506_1a56f5ba1ae3c2614f358aacdaeb785a7e" compoundref="d7/d3f/a00173" startline="120" endline="130">castor3d::GpuBufferOffsetT&lt; DataT &gt;::createInputStoragePassBinding</referencedby>
-        <referencedby refid="d0/dff/a02506_1a6727c7139446eaa80dfbc46c5907842a" compoundref="d7/d3f/a00173" startline="144" endline="154">castor3d::GpuBufferOffsetT&lt; DataT &gt;::createOutputStoragePassBinding</referencedby>
-        <referencedby refid="d0/dff/a02506_1a56ee4cb9bb8315919645a8afb555aeb2" compoundref="d7/d3f/a00173" startline="108" endline="118">castor3d::GpuBufferOffsetT&lt; DataT &gt;::createUniformPassBinding</referencedby>
-        <referencedby refid="d0/dff/a02506_1aad23adbbe095c75faaeb269b7e48fb74" compoundref="d7/d3f/a00173" startline="166" endline="174">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getStorageBinding</referencedby>
-        <referencedby refid="d0/dff/a02506_1a9110fc6d2de03fb35b3bc4ea8e5bbedc" compoundref="d7/d3f/a00173" startline="156" endline="164">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getUniformBinding</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="d0/dff/a02506_1a4da4dcd4dd73b83fb0bc6b02ab0e739c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::Buffer&lt; uint8_t &gt; &amp;</type>
-        <definition>ashes::Buffer&lt; uint8_t &gt; &amp; castor3d::GpuBufferOffsetT&lt; DataT &gt;::getBuffer</definition>
-        <argsstring>()</argsstring>
-        <name>getBuffer</name>
-        <qualifiedname>castor3d::GpuBufferOffsetT::getBuffer</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/GpuBufferOffset.hpp" line="73" column="16" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="73" bodyend="76"/>
-        <references refid="d0/dff/a02506_1a77bebe22cf993d84178e6f6bcbedd37d" compoundref="d7/d3f/a00173" startline="42">castor3d::GpuBufferOffsetT&lt; DataT &gt;::buffer</references>
-        <references refid="d3/d41/a02530_1a2e96ae884d0c9c48a92282e0c9d1b816" compoundref="db/ddf/a00164" startline="122" endline="125">castor3d::GpuBufferBase::getBuffer</references>
-      </memberdef>
-      <memberdef kind="function" id="d0/dff/a02506_1a612d2762f73a4ef70cfd450af25ad3ed" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>VkDeviceSize</type>
-        <definition>VkDeviceSize castor3d::GpuBufferOffsetT&lt; DataT &gt;::getCount</definition>
-        <argsstring>() const</argsstring>
-        <name>getCount</name>
-        <qualifiedname>castor3d::GpuBufferOffsetT::getCount</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/GpuBufferOffset.hpp" line="78" column="14" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="78" bodyend="81"/>
-        <references refid="d7/da8/a02522_1a5f876cf7f1c47c40d002bb5e9f962510" compoundref="d6/db8/a00158" startline="208">castor3d::MemChunk::askedSize</references>
-        <references refid="d0/dff/a02506_1ab7426d2a0dd4557021fbc0f71eaa5134" compoundref="d7/d3f/a00173" startline="45">castor3d::GpuBufferOffsetT&lt; DataT &gt;::chunk</references>
-        <referencedby refid="d0/dff/a02506_1aab6c41b3e6bd874a2eea4fe95d769f68" compoundref="d7/d3f/a00173" startline="93" endline="97">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getData</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="d0/dff/a02506_1a44e450480561c1253f21a8a3fd548b69" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>VkDeviceSize</type>
-        <definition>VkDeviceSize castor3d::GpuBufferOffsetT&lt; DataT &gt;::getSize</definition>
-        <argsstring>() const</argsstring>
-        <name>getSize</name>
-        <qualifiedname>castor3d::GpuBufferOffsetT::getSize</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/GpuBufferOffset.hpp" line="83" column="14" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="83" bodyend="86"/>
-        <references refid="d0/dff/a02506_1ab7426d2a0dd4557021fbc0f71eaa5134" compoundref="d7/d3f/a00173" startline="45">castor3d::GpuBufferOffsetT&lt; DataT &gt;::chunk</references>
-        <references refid="d7/da8/a02522_1a3f23e680ab897700f1cd7a3e09d262f1" compoundref="d6/db8/a00158" startline="207">castor3d::MemChunk::size</references>
-        <referencedby refid="d0/dff/a02506_1ad314968c272e7c2ce0b37a784971cea0" compoundref="d7/d3f/a00173" startline="132" endline="142">castor3d::GpuBufferOffsetT&lt; DataT &gt;::createInOutStoragePassBinding</referencedby>
-        <referencedby refid="d0/dff/a02506_1a56f5ba1ae3c2614f358aacdaeb785a7e" compoundref="d7/d3f/a00173" startline="120" endline="130">castor3d::GpuBufferOffsetT&lt; DataT &gt;::createInputStoragePassBinding</referencedby>
-        <referencedby refid="d0/dff/a02506_1a6727c7139446eaa80dfbc46c5907842a" compoundref="d7/d3f/a00173" startline="144" endline="154">castor3d::GpuBufferOffsetT&lt; DataT &gt;::createOutputStoragePassBinding</referencedby>
-        <referencedby refid="d0/dff/a02506_1a56ee4cb9bb8315919645a8afb555aeb2" compoundref="d7/d3f/a00173" startline="108" endline="118">castor3d::GpuBufferOffsetT&lt; DataT &gt;::createUniformPassBinding</referencedby>
-        <referencedby refid="d0/dff/a02506_1aad23adbbe095c75faaeb269b7e48fb74" compoundref="d7/d3f/a00173" startline="166" endline="174">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getStorageBinding</referencedby>
-        <referencedby refid="d0/dff/a02506_1a9110fc6d2de03fb35b3bc4ea8e5bbedc" compoundref="d7/d3f/a00173" startline="156" endline="164">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getUniformBinding</referencedby>
-        <referencedby refid="d0/dff/a02506_1a82d29cdbd10db3d1c4cc8b91f2a3b585" compoundref="d7/d3f/a00173" startline="99" endline="106">castor3d::GpuBufferOffsetT&lt; DataT &gt;::markDirty</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="d0/dff/a02506_1a97b5122f677a123e2bd2c7853927aa94" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>VkDeviceSize</type>
-        <definition>VkDeviceSize castor3d::GpuBufferOffsetT&lt; DataT &gt;::getOffset</definition>
-        <argsstring>() const</argsstring>
-        <name>getOffset</name>
-        <qualifiedname>castor3d::GpuBufferOffsetT::getOffset</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/GpuBufferOffset.hpp" line="88" column="14" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="88" bodyend="91"/>
-        <references refid="d0/dff/a02506_1ab7426d2a0dd4557021fbc0f71eaa5134" compoundref="d7/d3f/a00173" startline="45">castor3d::GpuBufferOffsetT&lt; DataT &gt;::chunk</references>
-        <references refid="d7/da8/a02522_1ae4819cf2e478269cde2e24ff1e187765" compoundref="d6/db8/a00158" startline="206">castor3d::MemChunk::offset</references>
-        <referencedby refid="d0/dff/a02506_1ad314968c272e7c2ce0b37a784971cea0" compoundref="d7/d3f/a00173" startline="132" endline="142">castor3d::GpuBufferOffsetT&lt; DataT &gt;::createInOutStoragePassBinding</referencedby>
-        <referencedby refid="d0/dff/a02506_1a56f5ba1ae3c2614f358aacdaeb785a7e" compoundref="d7/d3f/a00173" startline="120" endline="130">castor3d::GpuBufferOffsetT&lt; DataT &gt;::createInputStoragePassBinding</referencedby>
-        <referencedby refid="d0/dff/a02506_1a6727c7139446eaa80dfbc46c5907842a" compoundref="d7/d3f/a00173" startline="144" endline="154">castor3d::GpuBufferOffsetT&lt; DataT &gt;::createOutputStoragePassBinding</referencedby>
-        <referencedby refid="d0/dff/a02506_1a56ee4cb9bb8315919645a8afb555aeb2" compoundref="d7/d3f/a00173" startline="108" endline="118">castor3d::GpuBufferOffsetT&lt; DataT &gt;::createUniformPassBinding</referencedby>
-        <referencedby refid="d0/dff/a02506_1aab6c41b3e6bd874a2eea4fe95d769f68" compoundref="d7/d3f/a00173" startline="93" endline="97">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getData</referencedby>
-        <referencedby refid="d0/dff/a02506_1aad23adbbe095c75faaeb269b7e48fb74" compoundref="d7/d3f/a00173" startline="166" endline="174">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getStorageBinding</referencedby>
-        <referencedby refid="d0/dff/a02506_1a9110fc6d2de03fb35b3bc4ea8e5bbedc" compoundref="d7/d3f/a00173" startline="156" endline="164">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getUniformBinding</referencedby>
-        <referencedby refid="d0/dff/a02506_1a82d29cdbd10db3d1c4cc8b91f2a3b585" compoundref="d7/d3f/a00173" startline="99" endline="106">castor3d::GpuBufferOffsetT&lt; DataT &gt;::markDirty</referencedby>
-      </memberdef>
-      <memberdef kind="function" id="d0/dff/a02506_1aab6c41b3e6bd874a2eea4fe95d769f68" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::ArrayView&lt; DataT &gt;</type>
-        <definition>castor::ArrayView&lt; DataT &gt; castor3d::GpuBufferOffsetT&lt; DataT &gt;::getData</definition>
-        <argsstring>()</argsstring>
-        <name>getData</name>
-        <qualifiedname>castor3d::GpuBufferOffsetT::getData</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/GpuBufferOffset.hpp" line="93" column="19" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="93" bodyend="97"/>
-        <references refid="d0/dff/a02506_1a77bebe22cf993d84178e6f6bcbedd37d" compoundref="d7/d3f/a00173" startline="42">castor3d::GpuBufferOffsetT&lt; DataT &gt;::buffer</references>
-        <references refid="d0/dff/a02506_1a612d2762f73a4ef70cfd450af25ad3ed" compoundref="d7/d3f/a00173" startline="78" endline="81">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getCount</references>
-        <references refid="d3/d41/a02530_1ae81d18fb4565a12c2d525b775cb4e27f" compoundref="db/ddf/a00164" startline="188" endline="191">castor3d::GpuBufferBase::getDatas</references>
-        <references refid="d0/dff/a02506_1a97b5122f677a123e2bd2c7853927aa94" compoundref="d7/d3f/a00173" startline="88" endline="91">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getOffset</references>
-      </memberdef>
-      <memberdef kind="function" id="d0/dff/a02506_1a82d29cdbd10db3d1c4cc8b91f2a3b585" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="d0/dff/a02506_1a02e814e19ee7a2a53b6c37b182e6bbdf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
-        <definition>void castor3d::GpuBufferOffsetT&lt; DataT &gt;::markDirty</definition>
-        <argsstring>(VkAccessFlags dstAccessFlags, VkPipelineStageFlags dstPipelineFlags) const</argsstring>
-        <name>markDirty</name>
-        <qualifiedname>castor3d::GpuBufferOffsetT::markDirty</qualifiedname>
+        <definition>void castor3d::GpuBufferT&lt; AllocatorT &gt;::deallocate</definition>
+        <argsstring>(MemChunk const &amp;mem)</argsstring>
+        <name>deallocate</name>
+        <qualifiedname>castor3d::GpuBufferT::deallocate</qualifiedname>
         <param>
-          <type>VkAccessFlags</type>
-          <declname>dstAccessFlags</declname>
-        </param>
-        <param>
-          <type>VkPipelineStageFlags</type>
-          <declname>dstPipelineFlags</declname>
+          <type><ref refid="d9/d76/a02526" kindref="compound">MemChunk</ref> const &amp;</type>
+          <declname>mem</declname>
         </param>
         <briefdescription>
+<para>Deallocates memory. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">mem</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The memory chunk. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/GpuBufferOffset.hpp" line="99" column="6" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="99" bodyend="106"/>
-        <references refid="d0/dff/a02506_1a77bebe22cf993d84178e6f6bcbedd37d" compoundref="d7/d3f/a00173" startline="42">castor3d::GpuBufferOffsetT&lt; DataT &gt;::buffer</references>
-        <references refid="d0/dff/a02506_1a97b5122f677a123e2bd2c7853927aa94" compoundref="d7/d3f/a00173" startline="88" endline="91">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getOffset</references>
-        <references refid="d0/dff/a02506_1a44e450480561c1253f21a8a3fd548b69" compoundref="d7/d3f/a00173" startline="83" endline="86">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getSize</references>
-        <references refid="d3/d41/a02530_1a06f1c510406ae4dd17d134022e94a497">castor3d::GpuBufferBase::markDirty</references>
+        <location file="Buffer/GpuBuffer.hpp" line="288" column="6"/>
       </memberdef>
-      <memberdef kind="function" id="d0/dff/a02506_1a56ee4cb9bb8315919645a8afb555aeb2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::GpuBufferOffsetT&lt; DataT &gt;::createUniformPassBinding</definition>
-        <argsstring>(crg::FramePass &amp;pass, uint32_t binding, std::string const &amp;name) const</argsstring>
-        <name>createUniformPassBinding</name>
-        <qualifiedname>castor3d::GpuBufferOffsetT::createUniformPassBinding</qualifiedname>
-        <param>
-          <type>crg::FramePass &amp;</type>
-          <declname>pass</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>binding</declname>
-        </param>
-        <param>
-          <type>std::string const &amp;</type>
-          <declname>name</declname>
-        </param>
+      <memberdef kind="function" id="d0/dff/a02506_1a63c0f4ad44257645932622a3a4fb39e7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor3d::GpuBufferT&lt; AllocatorT &gt;::getMinAlignment</definition>
+        <argsstring>() const</argsstring>
+        <name>getMinAlignment</name>
+        <qualifiedname>castor3d::GpuBufferT::getMinAlignment</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para><simplesect kind="return"><para>The element aligned size. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/GpuBufferOffset.hpp" line="108" column="6" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="108" bodyend="118"/>
-        <references refid="dc/df4/a01401_1ab9a96cb416ec1fbb7b53091357c306fd">castor3d::createUniformPassBinding</references>
-        <references refid="d0/dff/a02506_1aaf498e1f12b8c86de5b613e41e9fb87e" compoundref="d7/d3f/a00173" startline="68" endline="71">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getBuffer</references>
-        <references refid="d0/dff/a02506_1a97b5122f677a123e2bd2c7853927aa94" compoundref="d7/d3f/a00173" startline="88" endline="91">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getOffset</references>
-        <references refid="d0/dff/a02506_1a44e450480561c1253f21a8a3fd548b69" compoundref="d7/d3f/a00173" startline="83" endline="86">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getSize</references>
-      </memberdef>
-      <memberdef kind="function" id="d0/dff/a02506_1a56f5ba1ae3c2614f358aacdaeb785a7e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::GpuBufferOffsetT&lt; DataT &gt;::createInputStoragePassBinding</definition>
-        <argsstring>(crg::FramePass &amp;pass, uint32_t binding, std::string const &amp;name) const</argsstring>
-        <name>createInputStoragePassBinding</name>
-        <qualifiedname>castor3d::GpuBufferOffsetT::createInputStoragePassBinding</qualifiedname>
-        <param>
-          <type>crg::FramePass &amp;</type>
-          <declname>pass</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>binding</declname>
-        </param>
-        <param>
-          <type>std::string const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/GpuBufferOffset.hpp" line="120" column="6" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="120" bodyend="130"/>
-        <references refid="dc/df4/a01401_1a40ed1236c4e406e4468e6914c3262eba">castor3d::createInputStoragePassBinding</references>
-        <references refid="d0/dff/a02506_1aaf498e1f12b8c86de5b613e41e9fb87e" compoundref="d7/d3f/a00173" startline="68" endline="71">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getBuffer</references>
-        <references refid="d0/dff/a02506_1a97b5122f677a123e2bd2c7853927aa94" compoundref="d7/d3f/a00173" startline="88" endline="91">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getOffset</references>
-        <references refid="d0/dff/a02506_1a44e450480561c1253f21a8a3fd548b69" compoundref="d7/d3f/a00173" startline="83" endline="86">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getSize</references>
-      </memberdef>
-      <memberdef kind="function" id="d0/dff/a02506_1ad314968c272e7c2ce0b37a784971cea0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::GpuBufferOffsetT&lt; DataT &gt;::createInOutStoragePassBinding</definition>
-        <argsstring>(crg::FramePass &amp;pass, uint32_t binding, std::string const &amp;name) const</argsstring>
-        <name>createInOutStoragePassBinding</name>
-        <qualifiedname>castor3d::GpuBufferOffsetT::createInOutStoragePassBinding</qualifiedname>
-        <param>
-          <type>crg::FramePass &amp;</type>
-          <declname>pass</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>binding</declname>
-        </param>
-        <param>
-          <type>std::string const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/GpuBufferOffset.hpp" line="132" column="6" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="132" bodyend="142"/>
-        <references refid="dc/df4/a01401_1ad0b4bb65114f2074be7b8fd66957d411">castor3d::createInOutStoragePassBinding</references>
-        <references refid="d0/dff/a02506_1aaf498e1f12b8c86de5b613e41e9fb87e" compoundref="d7/d3f/a00173" startline="68" endline="71">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getBuffer</references>
-        <references refid="d0/dff/a02506_1a97b5122f677a123e2bd2c7853927aa94" compoundref="d7/d3f/a00173" startline="88" endline="91">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getOffset</references>
-        <references refid="d0/dff/a02506_1a44e450480561c1253f21a8a3fd548b69" compoundref="d7/d3f/a00173" startline="83" endline="86">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getSize</references>
-      </memberdef>
-      <memberdef kind="function" id="d0/dff/a02506_1a6727c7139446eaa80dfbc46c5907842a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::GpuBufferOffsetT&lt; DataT &gt;::createOutputStoragePassBinding</definition>
-        <argsstring>(crg::FramePass &amp;pass, uint32_t binding, std::string const &amp;name) const</argsstring>
-        <name>createOutputStoragePassBinding</name>
-        <qualifiedname>castor3d::GpuBufferOffsetT::createOutputStoragePassBinding</qualifiedname>
-        <param>
-          <type>crg::FramePass &amp;</type>
-          <declname>pass</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>binding</declname>
-        </param>
-        <param>
-          <type>std::string const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/GpuBufferOffset.hpp" line="144" column="6" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="144" bodyend="154"/>
-        <references refid="dc/df4/a01401_1a1b7e423431582607694ee58669493392">castor3d::createOutputStoragePassBinding</references>
-        <references refid="d0/dff/a02506_1aaf498e1f12b8c86de5b613e41e9fb87e" compoundref="d7/d3f/a00173" startline="68" endline="71">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getBuffer</references>
-        <references refid="d0/dff/a02506_1a97b5122f677a123e2bd2c7853927aa94" compoundref="d7/d3f/a00173" startline="88" endline="91">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getOffset</references>
-        <references refid="d0/dff/a02506_1a44e450480561c1253f21a8a3fd548b69" compoundref="d7/d3f/a00173" startline="83" endline="86">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getSize</references>
-      </memberdef>
-      <memberdef kind="function" id="d0/dff/a02506_1a9110fc6d2de03fb35b3bc4ea8e5bbedc" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::WriteDescriptorSet</type>
-        <definition>ashes::WriteDescriptorSet castor3d::GpuBufferOffsetT&lt; DataT &gt;::getUniformBinding</definition>
-        <argsstring>(uint32_t binding) const</argsstring>
-        <name>getUniformBinding</name>
-        <qualifiedname>castor3d::GpuBufferOffsetT::getUniformBinding</qualifiedname>
-        <param>
-          <type>uint32_t</type>
-          <declname>binding</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/GpuBufferOffset.hpp" line="156" column="27" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="156" bodyend="164"/>
-        <references refid="d0/dff/a02506_1aaf498e1f12b8c86de5b613e41e9fb87e" compoundref="d7/d3f/a00173" startline="68" endline="71">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getBuffer</references>
-        <references refid="d0/dff/a02506_1a97b5122f677a123e2bd2c7853927aa94" compoundref="d7/d3f/a00173" startline="88" endline="91">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getOffset</references>
-        <references refid="d0/dff/a02506_1a44e450480561c1253f21a8a3fd548b69" compoundref="d7/d3f/a00173" startline="83" endline="86">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getSize</references>
-      </memberdef>
-      <memberdef kind="function" id="d0/dff/a02506_1aad23adbbe095c75faaeb269b7e48fb74" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>ashes::WriteDescriptorSet</type>
-        <definition>ashes::WriteDescriptorSet castor3d::GpuBufferOffsetT&lt; DataT &gt;::getStorageBinding</definition>
-        <argsstring>(uint32_t binding) const</argsstring>
-        <name>getStorageBinding</name>
-        <qualifiedname>castor3d::GpuBufferOffsetT::getStorageBinding</qualifiedname>
-        <param>
-          <type>uint32_t</type>
-          <declname>binding</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/GpuBufferOffset.hpp" line="166" column="27" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="166" bodyend="174"/>
-        <references refid="d0/dff/a02506_1aaf498e1f12b8c86de5b613e41e9fb87e" compoundref="d7/d3f/a00173" startline="68" endline="71">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getBuffer</references>
-        <references refid="d0/dff/a02506_1a97b5122f677a123e2bd2c7853927aa94" compoundref="d7/d3f/a00173" startline="88" endline="91">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getOffset</references>
-        <references refid="d0/dff/a02506_1a44e450480561c1253f21a8a3fd548b69" compoundref="d7/d3f/a00173" startline="83" endline="86">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getSize</references>
+        <location file="Buffer/GpuBuffer.hpp" line="295" column="8"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>An offset and range of a GpuBuffer. </para>
+<para>A GPU buffer, that uses a buddy allocator to allocate sub-buffers. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="4">
-        <label>castor3d::GpuBufferOffsetT&lt; castor3d::InstantiationData &gt;</label>
-        <link refid="d0/dff/a02506"/>
-        <childnode refid="1" relation="template-instance">
-          <edgelabel>&lt; castor3d::InstantiationData &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="6">
-        <label>castor3d::GpuBufferOffsetT&lt; castor3d::InterleavedVertex &gt;</label>
-        <link refid="d0/dff/a02506"/>
-        <childnode refid="1" relation="template-instance">
-          <edgelabel>&lt; castor3d::InterleavedVertex &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="7">
-        <label>castor3d::GpuBufferOffsetT&lt; castor3d::MorphingBufferConfiguration &gt;</label>
-        <link refid="d0/dff/a02506"/>
-        <childnode refid="1" relation="template-instance">
-          <edgelabel>&lt; castor3d::MorphingBufferConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="3">
-        <label>castor3d::GpuBufferOffsetT&lt; castor3d::NonTexturedQuad::Vertex &gt;</label>
-        <link refid="d0/dff/a02506"/>
-        <childnode refid="1" relation="template-instance">
-          <edgelabel>&lt; castor3d::NonTexturedQuad::Vertex &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="8">
-        <label>castor3d::GpuBufferOffsetT&lt; castor3d::SkinningTransformsConfiguration &gt;</label>
-        <link refid="d0/dff/a02506"/>
-        <childnode refid="1" relation="template-instance">
-          <edgelabel>&lt; castor3d::SkinningTransformsConfiguration &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="5">
-        <label>castor3d::GpuBufferOffsetT&lt; castor::Point3f &gt;</label>
-        <link refid="d0/dff/a02506"/>
-        <childnode refid="1" relation="template-instance">
-          <edgelabel>&lt; castor::Point3f &gt;</edgelabel>
-        </childnode>
-      </node>
       <node id="2">
-        <label>castor3d::GpuBufferOffsetT&lt; uint8_t &gt;</label>
-        <link refid="d0/dff/a02506"/>
-        <childnode refid="1" relation="template-instance">
-          <edgelabel>&lt; uint8_t &gt;</edgelabel>
-        </childnode>
+        <label>castor3d::GpuBufferBase</label>
+        <link refid="db/df5/a02534"/>
       </node>
       <node id="1">
-        <label>castor3d::GpuBufferOffsetT&lt; DataT &gt;</label>
+        <label>castor3d::GpuBufferT&lt; AllocatorT &gt;</label>
         <link refid="d0/dff/a02506"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
       </node>
     </inheritancegraph>
     <collaborationgraph>
       <node id="2">
         <label>castor3d::GpuBufferBase</label>
-        <link refid="d3/d41/a02530"/>
+        <link refid="db/df5/a02534"/>
       </node>
       <node id="1">
-        <label>castor3d::GpuBufferOffsetT&lt; DataT &gt;</label>
+        <label>castor3d::GpuBufferT&lt; AllocatorT &gt;</label>
         <link refid="d0/dff/a02506"/>
-        <childnode refid="2" relation="usage">
-          <edgelabel>buffer</edgelabel>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
-        <childnode refid="3" relation="usage">
-          <edgelabel>chunk</edgelabel>
-        </childnode>
-      </node>
-      <node id="3">
-        <label>castor3d::MemChunk</label>
-        <link refid="d7/da8/a02522"/>
       </node>
     </collaborationgraph>
-    <location file="Buffer/GpuBufferOffset.hpp" line="39" column="1" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="40" bodyend="175"/>
+    <location file="Buffer/GpuBuffer.hpp" line="227" column="1" bodyfile="Buffer/GpuBuffer.hpp" bodystart="229" bodyend="299"/>
     <listofallmembers>
-      <member refid="d0/dff/a02506_1a77bebe22cf993d84178e6f6bcbedd37d" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>buffer</name></member>
-      <member refid="d0/dff/a02506_1ab7426d2a0dd4557021fbc0f71eaa5134" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>chunk</name></member>
-      <member refid="d0/dff/a02506_1ad314968c272e7c2ce0b37a784971cea0" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>createInOutStoragePassBinding</name></member>
-      <member refid="d0/dff/a02506_1a56f5ba1ae3c2614f358aacdaeb785a7e" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>createInputStoragePassBinding</name></member>
-      <member refid="d0/dff/a02506_1a6727c7139446eaa80dfbc46c5907842a" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>createOutputStoragePassBinding</name></member>
-      <member refid="d0/dff/a02506_1a56ee4cb9bb8315919645a8afb555aeb2" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>createUniformPassBinding</name></member>
-      <member refid="d0/dff/a02506_1aaf498e1f12b8c86de5b613e41e9fb87e" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>getBuffer</name></member>
-      <member refid="d0/dff/a02506_1a4da4dcd4dd73b83fb0bc6b02ab0e739c" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>getBuffer</name></member>
-      <member refid="d0/dff/a02506_1a612d2762f73a4ef70cfd450af25ad3ed" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>getCount</name></member>
-      <member refid="d0/dff/a02506_1aab6c41b3e6bd874a2eea4fe95d769f68" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>getData</name></member>
-      <member refid="d0/dff/a02506_1a97b5122f677a123e2bd2c7853927aa94" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>getOffset</name></member>
-      <member refid="d0/dff/a02506_1a57f6d913d85b367ec0569c55be0576c1" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>getPool</name></member>
-      <member refid="d0/dff/a02506_1afb36ca87aa7b2a93a340880b5c422c6f" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>getPool</name></member>
-      <member refid="d0/dff/a02506_1a44e450480561c1253f21a8a3fd548b69" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>getSize</name></member>
-      <member refid="d0/dff/a02506_1aad23adbbe095c75faaeb269b7e48fb74" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>getStorageBinding</name></member>
-      <member refid="d0/dff/a02506_1a9110fc6d2de03fb35b3bc4ea8e5bbedc" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>getUniformBinding</name></member>
-      <member refid="d0/dff/a02506_1a82d29cdbd10db3d1c4cc8b91f2a3b585" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>markDirty</name></member>
-      <member refid="d0/dff/a02506_1acb98f24d20ec341a11fe8ded93eb5411" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>memory</name></member>
-      <member refid="d0/dff/a02506_1a661b1a290c461596f62b66adf4502835" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>operator bool</name></member>
-      <member refid="d0/dff/a02506_1aff7e952e2cdeca241456d22cfea993f4" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>setPool</name></member>
-      <member refid="d0/dff/a02506_1a9f2caf3826a9123e3852143f32edd39a" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>target</name></member>
+      <member refid="d0/dff/a02506_1a4b6d873e1a9ab433cc2018e1630aef01" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>allocate</name></member>
+      <member refid="d0/dff/a02506_1a02e814e19ee7a2a53b6c37b182e6bbdf" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>deallocate</name></member>
+      <member refid="db/df5/a02534_1a2e96ae884d0c9c48a92282e0c9d1b816" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>getBuffer</name></member>
+      <member refid="db/df5/a02534_1ad5c0c039b286c923f49bfb1e7e6282e8" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>getBuffer</name></member>
+      <member refid="db/df5/a02534_1aa9ce48ae045bf1f7be2b87315bf56394" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>getData</name></member>
+      <member refid="db/df5/a02534_1a1c9e4696f89164001d11831b35f15f77" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>getData</name></member>
+      <member refid="db/df5/a02534_1ae81d18fb4565a12c2d525b775cb4e27f" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>getDatas</name></member>
+      <member refid="db/df5/a02534_1af3d715f75b94aba18ba8d3a39b5e73d2" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>getDatas</name></member>
+      <member refid="d0/dff/a02506_1a63c0f4ad44257645932622a3a4fb39e7" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>getMinAlignment</name></member>
+      <member refid="db/df5/a02534_1a4f0cb57ba7d81f99e64b3fa0096023fa" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>GpuBufferBase</name></member>
+      <member refid="d0/dff/a02506_1a01ce6a31562ddfd446c446f4a24ed188" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>GpuBufferPool</name></member>
+      <member refid="d0/dff/a02506_1a6ea904ff84cdb033bb9f1c1b6e03e9a5" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>GpuBufferT</name></member>
+      <member refid="d0/dff/a02506_1a340716243a619af89f3542becf09b775" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>hasAvailable</name></member>
+      <member refid="db/df5/a02534_1a3f399bb8c877bc2155fe02aebd6c0329" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>hasBuffer</name></member>
+      <member refid="d0/dff/a02506_1a6071a35b6da1688c22790fdb61282cc3" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>m_allocator</name></member>
+      <member refid="db/df5/a02534_1a06f1c510406ae4dd17d134022e94a497" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>markDirty</name></member>
+      <member refid="db/df5/a02534_1a91928d1e743ed5edbb8a3af9bd859af1" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>operator ashes::Buffer&lt; uint8_t &gt; &amp;</name></member>
+      <member refid="db/df5/a02534_1ab0b76b8e65ce793ffd15dc6c5d65a70d" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>operator ashes::Buffer&lt; uint8_t &gt; const &amp;</name></member>
+      <member refid="db/df5/a02534_1a23305046cd563d8ec97a43b9ab41500f" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>upload</name></member>
+      <member refid="db/df5/a02534_1adbd7c63833b19b5aeedc5c5ddbe10f6d" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferT</scope><name>uploadDirect</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

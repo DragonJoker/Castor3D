@@ -1,7 +1,15 @@
-<map id="castor3d::SssProfileBuffer::SssProfileData" name="castor3d::SssProfileBuffer::SssProfileData">
-<area shape="rect" id="node1" title=" " alt="" coords="865,16,1037,57"/>
-<area shape="rect" id="node2" href="$dc/d12/a04723.html" title=" " alt="" coords="149,5,321,47"/>
-<area shape="rect" id="node3" title=" " alt="" coords="536,57,697,113"/>
-<area shape="rect" id="node4" title=" " alt="" coords="181,90,289,117"/>
-<area shape="rect" id="node5" title=" " alt="" coords="5,90,44,117"/>
+<map id="castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;" name="castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="5,197,192,238"/>
+<area shape="rect" id="node2" href="$d4/dea/a04726.html" title=" " alt="" coords="414,5,601,61"/>
+<area shape="rect" id="node4" href="$d4/dea/a04726.html" title=" " alt="" coords="400,86,615,127"/>
+<area shape="rect" id="node6" href="$d4/dea/a04726.html" title=" " alt="" coords="414,152,601,208"/>
+<area shape="rect" id="node8" href="$d4/dea/a04726.html" title=" " alt="" coords="409,233,606,274"/>
+<area shape="rect" id="node10" href="$d4/dea/a04726.html" title=" " alt="" coords="405,299,609,355"/>
+<area shape="rect" id="node12" href="$d4/dea/a04726.html" title=" " alt="" coords="414,379,601,435"/>
+<area shape="rect" id="node3" href="$db/d62/a04730.html" title=" " alt="" coords="674,5,861,61"/>
+<area shape="rect" id="node5" href="$de/d41/a04734.html" title=" " alt="" coords="674,86,861,127"/>
+<area shape="rect" id="node7" href="$dc/ddd/a04738.html" title=" " alt="" coords="669,159,865,201"/>
+<area shape="rect" id="node9" href="$d2/dc4/a04614.html" title=" " alt="" coords="674,233,861,274"/>
+<area shape="rect" id="node11" href="$d7/de4/a04674.html" title=" " alt="" coords="674,299,861,355"/>
+<area shape="rect" id="node13" href="$d4/dc9/a04742.html" title=" " alt="" coords="664,386,871,427"/>
 </map>

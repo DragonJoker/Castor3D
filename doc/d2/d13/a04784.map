@@ -1,5 +1,4 @@
-<map id="castor3d::shader::PointLight" name="castor3d::shader::PointLight">
-<area shape="rect" id="node1" title=" " alt="" coords="5,171,191,197"/>
-<area shape="rect" id="node2" title=" " alt="" coords="44,5,181,32"/>
-<area shape="rect" id="node3" href="$d1/d03/a04778.html" title=" " alt="" coords="114,81,269,108"/>
+<map id="castor3d::LightBuffer::Float4x4" name="castor3d::LightBuffer::Float4x4">
+<area shape="rect" id="node1" title=" " alt="" coords="5,153,147,195"/>
+<area shape="rect" id="node2" href="$db/da6/a04782.html" title=" " alt="" coords="5,5,147,47"/>
 </map>

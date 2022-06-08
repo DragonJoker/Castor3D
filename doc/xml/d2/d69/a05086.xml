@@ -1,83 +1,63 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d2/d69/a05086" kind="class" language="C++" prot="public">
-    <compoundname>castor::TextWriter&lt; castor3d::ColourBackground &gt;</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::ColourBackground &gt;</basecompoundref>
-    <includes local="no">TextColourBackground.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d2/d69/a05086_1a498f51d687a32fbbb40d3ab66be80a3e" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor::TextWriter&lt; castor3d::ColourBackground &gt;::TextWriter</definition>
-        <argsstring>(String const &amp;tabs)</argsstring>
-        <name>TextWriter</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::ColourBackground &gt;::TextWriter</qualifiedname>
-        <param>
-          <type>String const &amp;</type>
-          <declname>tabs</declname>
-        </param>
+    <compoundname>castor3d::OverlayUbo</compoundname>
+    <includes local="no">OverlayUbo.hpp</includes>
+      <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="d2/d69/a05086_1a4b4ea2a7032bf4d41fe903e1f7ea10f8" prot="private" static="no">
+        <type><ref refid="d8/d35/a05178" kindref="compound">OverlayUboConfiguration</ref></type>
+        <definition>using castor3d::OverlayUbo::Configuration =  OverlayUboConfiguration</definition>
+        <argsstring></argsstring>
+        <name>Configuration</name>
+        <qualifiedname>castor3d::OverlayUbo::Configuration</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Text/TextColourBackground.hpp" line="18" column="18"/>
+        <location file="Shader/Ubos/OverlayUbo.hpp" line="46" column="1" bodyfile="Shader/Ubos/OverlayUbo.hpp" bodystart="46" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="d2/d69/a05086_1ab792ef4b183bfd95b7f6091743f9efbd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor::TextWriter&lt; castor3d::ColourBackground &gt;::operator()</definition>
-        <argsstring>(castor3d::ColourBackground const &amp;overlay, castor::StringStream &amp;file) override</argsstring>
-        <name>operator()</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::ColourBackground &gt;::operator()</qualifiedname>
-        <param>
-          <type><ref refid="d8/df5/a04458" kindref="compound">castor3d::ColourBackground</ref> const &amp;</type>
-          <declname>overlay</declname>
-        </param>
-        <param>
-          <type>castor::StringStream &amp;</type>
-          <declname>file</declname>
-        </param>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d2/d69/a05086_1ab3eac48b9c579dd3d4c89373872cc6e6" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::OverlayUbo::BufferOverlay</definition>
+        <argsstring></argsstring>
+        <name>BufferOverlay</name>
+        <qualifiedname>castor3d::OverlayUbo::BufferOverlay</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Text/TextColourBackground.hpp" line="19" column="14"/>
+        <location file="Shader/Ubos/OverlayUbo.hpp" line="49" column="37" bodyfile="Shader/Ubos/OverlayUbo.hpp" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d69/a05086_1a7a0d7796a02819f9d411eb3e83083215" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::OverlayUbo::OverlayData</definition>
+        <argsstring></argsstring>
+        <name>OverlayData</name>
+        <qualifiedname>castor3d::OverlayUbo::OverlayData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/OverlayUbo.hpp" line="50" column="37" bodyfile="Shader/Ubos/OverlayUbo.hpp" bodystart="50" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="2">
-        <label>TextWriterT&lt; castor3d::ColourBackground &gt;</label>
-      </node>
-      <node id="1">
-        <label>castor::TextWriter&lt; castor3d::ColourBackground &gt;</label>
-        <link refid="d2/d69/a05086"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="2">
-        <label>TextWriterT&lt; castor3d::ColourBackground &gt;</label>
-      </node>
-      <node id="1">
-        <label>castor::TextWriter&lt; castor3d::ColourBackground &gt;</label>
-        <link refid="d2/d69/a05086"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Text/TextColourBackground.hpp" line="14" column="1" bodyfile="Text/TextColourBackground.hpp" bodystart="16" bodyend="21"/>
+    <location file="Shader/Ubos/OverlayUbo.hpp" line="43" column="1" bodyfile="Shader/Ubos/OverlayUbo.hpp" bodystart="44" bodyend="51"/>
     <listofallmembers>
-      <member refid="d2/d69/a05086_1ab792ef4b183bfd95b7f6091743f9efbd" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::ColourBackground &gt;</scope><name>operator()</name></member>
-      <member refid="d2/d69/a05086_1a498f51d687a32fbbb40d3ab66be80a3e" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::ColourBackground &gt;</scope><name>TextWriter</name></member>
+      <member refid="d2/d69/a05086_1ab3eac48b9c579dd3d4c89373872cc6e6" prot="public" virt="non-virtual"><scope>castor3d::OverlayUbo</scope><name>BufferOverlay</name></member>
+      <member refid="d2/d69/a05086_1a4b4ea2a7032bf4d41fe903e1f7ea10f8" prot="private" virt="non-virtual"><scope>castor3d::OverlayUbo</scope><name>Configuration</name></member>
+      <member refid="d2/d69/a05086_1a7a0d7796a02819f9d411eb3e83083215" prot="public" virt="non-virtual"><scope>castor3d::OverlayUbo</scope><name>OverlayData</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

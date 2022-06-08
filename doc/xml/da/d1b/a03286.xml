@@ -6,7 +6,7 @@
     <includes local="no">VersionException.hpp</includes>
       <sectiondef kind="public-func">
       <memberdef kind="function" id="da/d1b/a03286_1afd9c24e163e939cbaf4dd54ff13d1bf9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
         <definition>C3D_API castor3d::VersionException::VersionException</definition>
         <argsstring>(Version const &amp;given, Version const &amp;expected, char const *file, char const *function, uint32_t line)</argsstring>
         <name>VersionException</name>

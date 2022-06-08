@@ -1,91 +1,71 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="d2/dcf/a03586" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::OverlayRenderer::OverlayGeometryBuffers</compoundname>
-    <includes local="no">OverlayRenderer.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d2/dcf/a03586_1a57455e19b577c00849cea6668f886c95" prot="public" static="no" mutable="no">
-        <type><ref refid="d9/d76/a02526" kindref="compound">GeometryBuffers</ref></type>
-        <definition>GeometryBuffers castor3d::OverlayRenderer::OverlayGeometryBuffers::noTexture</definition>
-        <argsstring></argsstring>
-        <name>noTexture</name>
-        <qualifiedname>castor3d::OverlayRenderer::OverlayGeometryBuffers::noTexture</qualifiedname>
+  <compounddef id="d2/dcf/a03586" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::OverlayFactory</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::Factory&lt; OverlayCategory, OverlayType &gt;</basecompoundref>
+    <includes local="no">OverlayFactory.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/dcf/a03586_1aa44bc6e7bb3bff7b7ea4f7a0477da430" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::OverlayFactory::OverlayFactory</definition>
+        <argsstring>()</argsstring>
+        <name>OverlayFactory</name>
+        <qualifiedname>castor3d::OverlayFactory::OverlayFactory</qualifiedname>
         <briefdescription>
+<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/OverlayRenderer.hpp" line="223" column="17" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="223" bodyend="-1"/>
+        <location file="Overlay/OverlayFactory.hpp" line="23" column="9"/>
       </memberdef>
-      <memberdef kind="variable" id="d2/dcf/a03586_1aea3cf9053350e45b9c797d398217406e" prot="public" static="no" mutable="no">
-        <type><ref refid="d9/d76/a02526" kindref="compound">GeometryBuffers</ref></type>
-        <definition>GeometryBuffers castor3d::OverlayRenderer::OverlayGeometryBuffers::textured</definition>
-        <argsstring></argsstring>
-        <name>textured</name>
-        <qualifiedname>castor3d::OverlayRenderer::OverlayGeometryBuffers::textured</qualifiedname>
+      <memberdef kind="function" id="d2/dcf/a03586_1a1641b6641ed4763a801163c2d38676b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::OverlayFactory::~OverlayFactory</definition>
+        <argsstring>()</argsstring>
+        <name>~OverlayFactory</name>
+        <qualifiedname>castor3d::OverlayFactory::~OverlayFactory</qualifiedname>
         <briefdescription>
+<para>Destructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/OverlayRenderer.hpp" line="224" column="17" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="224" bodyend="-1"/>
+        <location file="Overlay/OverlayFactory.hpp" line="30" column="17"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="2">
-        <label>castor3d::GeometryBuffers</label>
-        <link refid="d9/d76/a02526"/>
-        <childnode refid="3" relation="usage">
-          <edgelabel>bufferOffset</edgelabel>
-        </childnode>
-      </node>
-      <node id="5">
-        <label>castor3d::GpuBufferBase</label>
-        <link refid="d3/d41/a02530"/>
-      </node>
-      <node id="4">
-        <label>castor3d::GpuBufferT&lt; AllocatorT &gt;</label>
-        <link refid="db/d09/a02502"/>
-        <childnode refid="5" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="6">
-        <label>castor3d::MemChunk</label>
-        <link refid="d7/da8/a02522"/>
-      </node>
-      <node id="3">
-        <label>castor3d::ObjectBufferOffset</label>
-        <link refid="d9/d66/a02562"/>
-        <childnode refid="4" relation="usage">
-          <edgelabel>bonBuffer</edgelabel>
-          <edgelabel>idxBuffer</edgelabel>
-          <edgelabel>vtxBuffer</edgelabel>
-        </childnode>
-        <childnode refid="6" relation="usage">
-          <edgelabel>bonChunk</edgelabel>
-          <edgelabel>idxChunk</edgelabel>
-          <edgelabel>vtxChunk</edgelabel>
-        </childnode>
-      </node>
+    <inheritancegraph>
       <node id="1">
-        <label>castor3d::OverlayRenderer::OverlayGeometryBuffers</label>
+        <label>castor3d::OverlayFactory</label>
         <link refid="d2/dcf/a03586"/>
-        <childnode refid="2" relation="usage">
-          <edgelabel>noTexture</edgelabel>
-          <edgelabel>textured</edgelabel>
+        <childnode refid="2" relation="public-inheritance">
         </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Factory&lt; OverlayCategory, OverlayType &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::OverlayFactory</label>
+        <link refid="d2/dcf/a03586"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Factory&lt; OverlayCategory, OverlayType &gt;</label>
       </node>
     </collaborationgraph>
-    <location file="Overlay/OverlayRenderer.hpp" line="221" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="222" bodyend="225"/>
+    <location file="Overlay/OverlayFactory.hpp" line="13" column="1" bodyfile="Overlay/OverlayFactory.hpp" bodystart="15" bodyend="31"/>
     <listofallmembers>
-      <member refid="d2/dcf/a03586_1a57455e19b577c00849cea6668f886c95" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::OverlayGeometryBuffers</scope><name>noTexture</name></member>
-      <member refid="d2/dcf/a03586_1aea3cf9053350e45b9c797d398217406e" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::OverlayGeometryBuffers</scope><name>textured</name></member>
+      <member refid="d2/dcf/a03586_1aa44bc6e7bb3bff7b7ea4f7a0477da430" prot="public" virt="non-virtual"><scope>castor3d::OverlayFactory</scope><name>OverlayFactory</name></member>
+      <member refid="d2/dcf/a03586_1a1641b6641ed4763a801163c2d38676b3" prot="public" virt="virtual"><scope>castor3d::OverlayFactory</scope><name>~OverlayFactory</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d6/d3b/a05202" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::TextOverlay &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::TextOverlay &gt;</basecompoundref>
+    <includes local="no">TextTextOverlay.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/d3b/a05202_1a06e0869ea45c6a670d019ffe9cf35102" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::TextOverlay &gt;::TextWriter</definition>
+        <argsstring>(castor::String const &amp;tabs)</argsstring>
+        <name>TextWriter</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::TextOverlay &gt;::TextWriter</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextTextOverlay.hpp" line="18" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3b/a05202_1a8e0253104f1fc83c228ee4f1e36c3654" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::TextOverlay &gt;::operator()</definition>
+        <argsstring>(castor3d::TextOverlay const &amp;overlay, castor::StringStream &amp;file) override</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::TextWriter&lt; castor3d::TextOverlay &gt;::operator()</qualifiedname>
+        <param>
+          <type><ref refid="d9/df0/a03598" kindref="compound">castor3d::TextOverlay</ref> const &amp;</type>
+          <declname>overlay</declname>
+        </param>
+        <param>
+          <type>castor::StringStream &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextTextOverlay.hpp" line="19" column="14"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::TextOverlay &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::TextOverlay &gt;</label>
+        <link refid="d6/d3b/a05202"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>TextWriterT&lt; castor3d::TextOverlay &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; castor3d::TextOverlay &gt;</label>
+        <link refid="d6/d3b/a05202"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Text/TextTextOverlay.hpp" line="14" column="1" bodyfile="Text/TextTextOverlay.hpp" bodystart="16" bodyend="21"/>
+    <listofallmembers>
+      <member refid="d6/d3b/a05202_1a8e0253104f1fc83c228ee4f1e36c3654" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::TextOverlay &gt;</scope><name>operator()</name></member>
+      <member refid="d6/d3b/a05202_1a06e0869ea45c6a670d019ffe9cf35102" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::TextOverlay &gt;</scope><name>TextWriter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,307 +1,31 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d7/dc9/a04370" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::AnimatedMesh</compoundname>
-    <basecompoundref refid="db/da9/a04374" prot="public" virt="non-virtual">castor3d::AnimatedObject</basecompoundref>
-    <includes local="no">AnimatedMesh.hpp</includes>
-      <sectiondef kind="user-defined">
-      <memberdef kind="function" id="d7/dc9/a04370_1ab43c4fd7966578d79ae34e9f36020d25" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::AnimatedMesh::AnimatedMesh</definition>
-        <argsstring>(AnimatedMesh &amp;&amp;rhs)=default</argsstring>
-        <name>AnimatedMesh</name>
-        <qualifiedname>castor3d::AnimatedMesh::AnimatedMesh</qualifiedname>
-        <param>
-          <type><ref refid="d7/dc9/a04370" kindref="compound">AnimatedMesh</ref> &amp;&amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>name Copy / Move. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimatedMesh.hpp" line="24" column="9"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/dc9/a04370_1ae3d8e093e42ee7022fafcc106ca55e5d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/dc9/a04370" kindref="compound">AnimatedMesh</ref> &amp;</type>
-        <definition>C3D_API AnimatedMesh &amp; castor3d::AnimatedMesh::operator=</definition>
-        <argsstring>(AnimatedMesh &amp;&amp;rhs)=delete</argsstring>
-        <name>operator=</name>
-        <qualifiedname>castor3d::AnimatedMesh::operator=</qualifiedname>
-        <param>
-          <type><ref refid="d7/dc9/a04370" kindref="compound">AnimatedMesh</ref> &amp;&amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimatedMesh.hpp" line="25" column="23"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/dc9/a04370_1a687ea32ac5d1a7d7f8074d46b4d357af" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::AnimatedMesh::AnimatedMesh</definition>
-        <argsstring>(AnimatedMesh const &amp;rhs)=delete</argsstring>
-        <name>AnimatedMesh</name>
-        <qualifiedname>castor3d::AnimatedMesh::AnimatedMesh</qualifiedname>
-        <param>
-          <type><ref refid="d7/dc9/a04370" kindref="compound">AnimatedMesh</ref> const &amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimatedMesh.hpp" line="26" column="9"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/dc9/a04370_1aa25d08bf5dc34f42a070552c1f2ce4ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/dc9/a04370" kindref="compound">AnimatedMesh</ref> &amp;</type>
-        <definition>C3D_API AnimatedMesh &amp; castor3d::AnimatedMesh::operator=</definition>
-        <argsstring>(AnimatedMesh const &amp;rhs)=delete</argsstring>
-        <name>operator=</name>
-        <qualifiedname>castor3d::AnimatedMesh::operator=</qualifiedname>
-        <param>
-          <type><ref refid="d7/dc9/a04370" kindref="compound">AnimatedMesh</ref> const &amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimatedMesh.hpp" line="27" column="23"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="protected-attrib">
-      <memberdef kind="variable" id="d7/dc9/a04370_1afe684e816cef7efeccbfd578eca4f8fd" prot="protected" static="no" mutable="no">
-        <type><ref refid="dd/dc8/a03342" kindref="compound">Mesh</ref> &amp;</type>
-        <definition>Mesh&amp; castor3d::AnimatedMesh::m_mesh</definition>
-        <argsstring></argsstring>
-        <name>m_mesh</name>
-        <qualifiedname>castor3d::AnimatedMesh::m_mesh</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimatedMesh.hpp" line="86" column="7" bodyfile="Scene/Animation/AnimatedMesh.hpp" bodystart="86" bodyend="-1"/>
-        <referencedby refid="d7/dc9/a04370_1a4d9fe7b07b5db7111d3bf5940ce30b8e" compoundref="d3/d7b/a00986" startline="54" endline="57">getMesh</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="d7/dc9/a04370_1ad2566087ff6a78eed85f525d2fad11eb" prot="protected" static="no" mutable="no">
-        <type><ref refid="d5/d47/a04490" kindref="compound">Geometry</ref> &amp;</type>
-        <definition>Geometry&amp; castor3d::AnimatedMesh::m_geometry</definition>
-        <argsstring></argsstring>
-        <name>m_geometry</name>
-        <qualifiedname>castor3d::AnimatedMesh::m_geometry</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimatedMesh.hpp" line="87" column="11" bodyfile="Scene/Animation/AnimatedMesh.hpp" bodystart="87" bodyend="-1"/>
-        <referencedby refid="d7/dc9/a04370_1a7c8ea4f3cd4d4e66eec0495d24f55890" compoundref="d3/d7b/a00986" startline="59" endline="62">getGeometry</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="d7/dc9/a04370_1a1121d41fe385096400a350ee76199915" prot="protected" static="no" mutable="no">
-        <type>MeshAnimationInstanceRPtr</type>
-        <definition>MeshAnimationInstanceRPtr castor3d::AnimatedMesh::m_playingAnimation</definition>
-        <argsstring></argsstring>
-        <name>m_playingAnimation</name>
-        <qualifiedname>castor3d::AnimatedMesh::m_playingAnimation</qualifiedname>
-        <initializer>{ nullptr }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimatedMesh.hpp" line="88" column="27" bodyfile="Scene/Animation/AnimatedMesh.hpp" bodystart="88" bodyend="-1"/>
-        <referencedby refid="d7/dc9/a04370_1a91c95714d485aa76be3bc12938f4d53c" compoundref="d3/d7b/a00986" startline="74" endline="77">getPlayingAnimation</referencedby>
-        <referencedby refid="d7/dc9/a04370_1a0293879e0d8b0282ed8467f1fab683bd" compoundref="d3/d7b/a00986" startline="49" endline="52">isPlayingAnimation</referencedby>
-      </memberdef>
-      <memberdef kind="variable" id="d7/dc9/a04370_1a73d4106acb5e63fa70b56d39fcab4f2f" prot="protected" static="no" mutable="no">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::AnimatedMesh::m_id</definition>
-        <argsstring></argsstring>
-        <name>m_id</name>
-        <qualifiedname>castor3d::AnimatedMesh::m_id</qualifiedname>
-        <initializer>{}</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimatedMesh.hpp" line="89" column="10" bodyfile="Scene/Animation/AnimatedMesh.hpp" bodystart="89" bodyend="-1"/>
-        <referencedby refid="d7/dc9/a04370_1a1be2ca4b2c91ccb0a79f1d38659d985f" compoundref="d3/d7b/a00986" startline="64" endline="67">getId</referencedby>
-        <referencedby refid="d7/dc9/a04370_1a147ca5c82c8edd47dd5fbc4dc05d4958" compoundref="d3/d7b/a00986" startline="69" endline="72">setId</referencedby>
-      </memberdef>
-      </sectiondef>
+    <compoundname>castor3d::TransparentPassResult</compoundname>
+    <basecompoundref refid="df/d76/a03726" prot="public" virt="non-virtual">castor3d::GBufferT&lt; WbTexture &gt;</basecompoundref>
+    <includes local="no">TransparentPassResult.hpp</includes>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d7/dc9/a04370_1a673234c46a64b9d4bf0674da6052efa8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::AnimatedMesh::AnimatedMesh</definition>
-        <argsstring>(castor::String const &amp;name, Mesh &amp;mesh, Geometry &amp;geometry)</argsstring>
-        <name>AnimatedMesh</name>
-        <qualifiedname>castor3d::AnimatedMesh::AnimatedMesh</qualifiedname>
+      <memberdef kind="function" id="d7/dc9/a04370_1ab618b645b72d1ce4c2b02297f5e2a62a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::TransparentPassResult::TransparentPassResult</definition>
+        <argsstring>(crg::ResourceHandler &amp;handler, RenderDevice const &amp;device, TexturePtr depthTexture, TexturePtr velocityTexture)</argsstring>
+        <name>TransparentPassResult</name>
+        <qualifiedname>castor3d::TransparentPassResult::TransparentPassResult</qualifiedname>
         <param>
-          <type>castor::String const &amp;</type>
-          <declname>name</declname>
+          <type>crg::ResourceHandler &amp;</type>
+          <declname>handler</declname>
         </param>
         <param>
-          <type><ref refid="dd/dc8/a03342" kindref="compound">Mesh</ref> &amp;</type>
-          <declname>mesh</declname>
+          <type><ref refid="df/d75/a04010" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
         </param>
         <param>
-          <type><ref refid="d5/d47/a04490" kindref="compound">Geometry</ref> &amp;</type>
-          <declname>geometry</declname>
+          <type><ref refid="da/dab/a01362_1a174cedaf5dfc3b47caa264f344279af2" kindref="member">TexturePtr</ref></type>
+          <declname>depthTexture</declname>
         </param>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The object name. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">mesh</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The mesh. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">geometry</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The geometry instantiating the mesh. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimatedMesh.hpp" line="41" column="9"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/dc9/a04370_1a7c37a1707db9205c7b5e3d84024aba85" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::AnimatedMesh::update</definition>
-        <argsstring>(castor::Milliseconds const &amp;elapsed) override</argsstring>
-        <name>update</name>
-        <qualifiedname>castor3d::AnimatedMesh::update</qualifiedname>
-        <reimplements refid="db/da9/a04374_1aa1ecac49a3faba10459c8089911216df">update</reimplements>
         <param>
-          <type>castor::Milliseconds const &amp;</type>
-          <declname>elapsed</declname>
-        </param>
-        <briefdescription>
-<para>Updates the animations of the object, given the time since the last frame. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">elapsed</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Time elapsed since the last frame </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimatedMesh.hpp" line="47" column="14"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/dc9/a04370_1a0293879e0d8b0282ed8467f1fab683bd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
-        <type>bool</type>
-        <definition>bool castor3d::AnimatedMesh::isPlayingAnimation</definition>
-        <argsstring>() const override</argsstring>
-        <name>isPlayingAnimation</name>
-        <qualifiedname>castor3d::AnimatedMesh::isPlayingAnimation</qualifiedname>
-        <reimplements refid="db/da9/a04374_1a1c375eacf4a34296dca2ca8f490761d0">isPlayingAnimation</reimplements>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if the object is playing an animation. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimatedMesh.hpp" line="49" column="6" bodyfile="Scene/Animation/AnimatedMesh.hpp" bodystart="49" bodyend="52"/>
-        <references refid="d7/dc9/a04370_1a1121d41fe385096400a350ee76199915" compoundref="d3/d7b/a00986" startline="88">m_playingAnimation</references>
-      </memberdef>
-      <memberdef kind="function" id="d7/dc9/a04370_1a4d9fe7b07b5db7111d3bf5940ce30b8e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="dd/dc8/a03342" kindref="compound">Mesh</ref> &amp;</type>
-        <definition>Mesh &amp; castor3d::AnimatedMesh::getMesh</definition>
-        <argsstring>() const</argsstring>
-        <name>getMesh</name>
-        <qualifiedname>castor3d::AnimatedMesh::getMesh</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimatedMesh.hpp" line="54" column="7" bodyfile="Scene/Animation/AnimatedMesh.hpp" bodystart="54" bodyend="57"/>
-        <references refid="d7/dc9/a04370_1afe684e816cef7efeccbfd578eca4f8fd" compoundref="d3/d7b/a00986" startline="86">m_mesh</references>
-      </memberdef>
-      <memberdef kind="function" id="d7/dc9/a04370_1a7c8ea4f3cd4d4e66eec0495d24f55890" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d5/d47/a04490" kindref="compound">Geometry</ref> &amp;</type>
-        <definition>Geometry &amp; castor3d::AnimatedMesh::getGeometry</definition>
-        <argsstring>() const</argsstring>
-        <name>getGeometry</name>
-        <qualifiedname>castor3d::AnimatedMesh::getGeometry</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimatedMesh.hpp" line="59" column="11" bodyfile="Scene/Animation/AnimatedMesh.hpp" bodystart="59" bodyend="62"/>
-        <references refid="d7/dc9/a04370_1ad2566087ff6a78eed85f525d2fad11eb" compoundref="d3/d7b/a00986" startline="87">m_geometry</references>
-      </memberdef>
-      <memberdef kind="function" id="d7/dc9/a04370_1a1be2ca4b2c91ccb0a79f1d38659d985f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>uint32_t</type>
-        <definition>uint32_t castor3d::AnimatedMesh::getId</definition>
-        <argsstring>() const</argsstring>
-        <name>getId</name>
-        <qualifiedname>castor3d::AnimatedMesh::getId</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimatedMesh.hpp" line="64" column="10" bodyfile="Scene/Animation/AnimatedMesh.hpp" bodystart="64" bodyend="67"/>
-        <references refid="d7/dc9/a04370_1a73d4106acb5e63fa70b56d39fcab4f2f" compoundref="d3/d7b/a00986" startline="89">m_id</references>
-      </memberdef>
-      <memberdef kind="function" id="d7/dc9/a04370_1a147ca5c82c8edd47dd5fbc4dc05d4958" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::AnimatedMesh::setId</definition>
-        <argsstring>(uint32_t id)</argsstring>
-        <name>setId</name>
-        <qualifiedname>castor3d::AnimatedMesh::setId</qualifiedname>
-        <param>
-          <type>uint32_t</type>
-          <declname>id</declname>
+          <type><ref refid="da/dab/a01362_1a174cedaf5dfc3b47caa264f344279af2" kindref="member">TexturePtr</ref></type>
+          <declname>velocityTexture</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -309,131 +33,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/AnimatedMesh.hpp" line="69" column="6" bodyfile="Scene/Animation/AnimatedMesh.hpp" bodystart="69" bodyend="72"/>
-        <references refid="d7/dc9/a04370_1a73d4106acb5e63fa70b56d39fcab4f2f" compoundref="d3/d7b/a00986" startline="89">m_id</references>
-      </memberdef>
-      <memberdef kind="function" id="d7/dc9/a04370_1a91c95714d485aa76be3bc12938f4d53c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d4/d61/a04406" kindref="compound">MeshAnimationInstance</ref> &amp;</type>
-        <definition>MeshAnimationInstance &amp; castor3d::AnimatedMesh::getPlayingAnimation</definition>
-        <argsstring>() const</argsstring>
-        <name>getPlayingAnimation</name>
-        <qualifiedname>castor3d::AnimatedMesh::getPlayingAnimation</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimatedMesh.hpp" line="74" column="24" bodyfile="Scene/Animation/AnimatedMesh.hpp" bodystart="74" bodyend="77"/>
-        <references refid="d7/dc9/a04370_1a1121d41fe385096400a350ee76199915" compoundref="d3/d7b/a00986" startline="88">m_playingAnimation</references>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d7/dc9/a04370_1aaedc9c3fe1afce5d7e7e4c6d2c165496" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::AnimatedMesh::doAddAnimation</definition>
-        <argsstring>(castor::String const &amp;name) override</argsstring>
-        <name>doAddAnimation</name>
-        <qualifiedname>castor3d::AnimatedMesh::doAddAnimation</qualifiedname>
-        <reimplements refid="db/da9/a04374_1a2c7ed6f3a0ba8312617894ac212bf88c">doAddAnimation</reimplements>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>name</declname>
-        </param>
-        <briefdescription>
-<para>adds the animation to the list </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The animation to add </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimatedMesh.hpp" line="80" column="6"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/dc9/a04370_1a08b09d2252c8e2373a656e5295f6c9b1" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::AnimatedMesh::doStartAnimation</definition>
-        <argsstring>(AnimationInstance &amp;animation) override</argsstring>
-        <name>doStartAnimation</name>
-        <qualifiedname>castor3d::AnimatedMesh::doStartAnimation</qualifiedname>
-        <reimplements refid="db/da9/a04374_1a596f9c943daffeb70db5a29de2606c7d">doStartAnimation</reimplements>
-        <param>
-          <type><ref refid="d5/d22/a04394" kindref="compound">AnimationInstance</ref> &amp;</type>
-          <declname>animation</declname>
-        </param>
-        <briefdescription>
-<para>Starts the given animation. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">animation</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The animation. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimatedMesh.hpp" line="81" column="6"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/dc9/a04370_1ad74070ebe8cbac4684e39cd8ce04a7c1" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::AnimatedMesh::doStopAnimation</definition>
-        <argsstring>(AnimationInstance &amp;animation) override</argsstring>
-        <name>doStopAnimation</name>
-        <qualifiedname>castor3d::AnimatedMesh::doStopAnimation</qualifiedname>
-        <reimplements refid="db/da9/a04374_1ab4296cdec28662f6241d2bf774f90a20">doStopAnimation</reimplements>
-        <param>
-          <type><ref refid="d5/d22/a04394" kindref="compound">AnimationInstance</ref> &amp;</type>
-          <declname>animation</declname>
-        </param>
-        <briefdescription>
-<para>Stops the given animation. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">animation</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The animation. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimatedMesh.hpp" line="82" column="6"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/dc9/a04370_1ad10f86eacb689f088df387264957703c" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::AnimatedMesh::doClearAnimations</definition>
-        <argsstring>() override</argsstring>
-        <name>doClearAnimations</name>
-        <qualifiedname>castor3d::AnimatedMesh::doClearAnimations</qualifiedname>
-        <reimplements refid="db/da9/a04374_1adc5a40387c363ce020fbd743598c645c">doClearAnimations</reimplements>
-        <briefdescription>
-<para>Stops all animations. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimatedMesh.hpp" line="83" column="6"/>
+        <location file="Render/Technique/Transparent/TransparentPassResult.hpp" line="17" column="9"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -441,185 +41,153 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
+      <node id="2">
+        <label>castor3d::GBufferT&lt; WbTexture &gt;</label>
+        <link refid="df/d76/a03726"/>
+        <childnode refid="3" relation="private-inheritance">
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; WbTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::GBufferBase</label>
+        <link refid="db/db0/a03722"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="df/d76/a03726"/>
+        <childnode refid="3" relation="private-inheritance">
+        </childnode>
+      </node>
       <node id="1">
-        <label>castor3d::AnimatedMesh</label>
+        <label>castor3d::TransparentPassResult</label>
         <link refid="d7/dc9/a04370"/>
         <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="2">
-        <label>castor3d::AnimatedObject</label>
-        <link refid="db/da9/a04374"/>
-        <childnode refid="3" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3">
+      <node id="4">
         <label>castor::Named</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="5">
-        <label>Animable</label>
-        <link refid="d6/d41/a02222"/>
-        <childnode refid="6" relation="public-inheritance">
+      <node id="2">
+        <label>castor3d::GBufferT&lt; WbTexture &gt;</label>
+        <link refid="df/d76/a03726"/>
+        <childnode refid="3" relation="private-inheritance">
         </childnode>
-        <childnode refid="7" relation="usage">
-          <edgelabel>m_animations</edgelabel>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_result</edgelabel>
         </childnode>
-        <childnode refid="11" relation="template-instance">
-          <edgelabel>&lt; Engine &gt;</edgelabel>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; WbTexture &gt;</edgelabel>
         </childnode>
-      </node>
-      <node id="9">
-        <label>K</label>
-      </node>
-      <node id="10">
-        <label>T</label>
       </node>
       <node id="11">
-        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
-        <link refid="d6/d41/a02222"/>
-        <childnode refid="12" relation="public-inheritance">
-        </childnode>
-        <childnode refid="7" relation="usage">
-          <edgelabel>m_animations</edgelabel>
-        </childnode>
+        <label>T</label>
       </node>
-      <node id="1">
-        <label>castor3d::AnimatedMesh</label>
-        <link refid="d7/dc9/a04370"/>
-        <childnode refid="2" relation="public-inheritance">
+      <node id="3">
+        <label>castor3d::GBufferBase</label>
+        <link refid="db/db0/a03722"/>
+        <childnode refid="4" relation="public-inheritance">
         </childnode>
-        <childnode refid="4" relation="usage">
-          <edgelabel>m_mesh</edgelabel>
-        </childnode>
-        <childnode refid="13" relation="usage">
-          <edgelabel>m_geometry</edgelabel>
-        </childnode>
-      </node>
-      <node id="2">
-        <label>castor3d::AnimatedObject</label>
-        <link refid="db/da9/a04374"/>
-        <childnode refid="3" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="13">
-        <label>castor3d::Geometry</label>
-        <link refid="d5/d47/a04490"/>
-        <childnode refid="14" relation="public-inheritance">
-        </childnode>
-        <childnode refid="18" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="4">
-        <label>castor3d::Mesh</label>
-        <link refid="dd/dc8/a03342"/>
-        <childnode refid="3" relation="public-inheritance">
-        </childnode>
-        <childnode refid="5" relation="public-inheritance">
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_device</edgelabel>
         </childnode>
       </node>
       <node id="14">
-        <label>castor3d::MovableObject</label>
-        <link refid="d1/d4a/a04530"/>
-        <childnode refid="15" relation="public-inheritance">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="df/d76/a03726"/>
+        <childnode refid="3" relation="private-inheritance">
         </childnode>
-        <childnode refid="3" relation="public-inheritance">
-        </childnode>
-        <childnode refid="16" relation="usage">
-          <edgelabel>m_sceneNode</edgelabel>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_result</edgelabel>
         </childnode>
       </node>
-      <node id="18">
-        <label>castor3d::RenderedObject</label>
-        <link refid="d0/d7e/a04594"/>
-        <childnode refid="19" relation="public-inheritance">
-        </childnode>
+      <node id="9">
+        <label>castor3d::QueuesData</label>
+        <link refid="d2/dce/a04002"/>
       </node>
-      <node id="16">
-        <label>castor3d::SceneNode</label>
-        <link refid="dd/d6a/a04642"/>
-        <childnode refid="17" relation="public-inheritance">
+      <node id="5">
+        <label>castor3d::RenderDevice</label>
+        <link refid="df/d75/a04010"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
         </childnode>
-        <childnode refid="5" relation="public-inheritance">
+        <childnode refid="8" relation="usage">
+          <edgelabel>queueFamilies</edgelabel>
         </childnode>
-        <childnode refid="3" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3">
-        <label>castor::Named</label>
-      </node>
-      <node id="12">
-        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
       </node>
       <node id="6">
-        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+        <label>castor3d::RenderSystem</label>
+        <link refid="d7/ded/a04130"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
       </node>
-      <node id="15">
-        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      <node id="1">
+        <label>castor3d::TransparentPassResult</label>
+        <link refid="d7/dc9/a04370"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Named</label>
       </node>
       <node id="7">
-        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
-        <childnode refid="8" relation="template-instance">
-          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="13">
+        <label>std::shared_ptr&lt; T &gt;</label>
+        <childnode refid="11" relation="usage">
+          <edgelabel>ptr</edgelabel>
         </childnode>
       </node>
-      <node id="19">
-        <label>std::enable_shared_from_this&lt; RenderedObject &gt;</label>
-      </node>
-      <node id="17">
-        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
-      </node>
-      <node id="8">
-        <label>std::map&lt; K, T &gt;</label>
-        <childnode refid="9" relation="usage">
-          <edgelabel>keys</edgelabel>
-        </childnode>
-        <childnode refid="10" relation="usage">
+      <node id="10">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="11" relation="usage">
           <edgelabel>elements</edgelabel>
         </childnode>
       </node>
+      <node id="8">
+        <label>std::vector&lt; QueuesData &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; QueuesData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>std::vector&lt; TexturePtr &gt;</label>
+        <childnode refid="13" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; TexturePtr &gt;</edgelabel>
+        </childnode>
+      </node>
     </collaborationgraph>
-    <location file="Scene/Animation/AnimatedMesh.hpp" line="13" column="1" bodyfile="Scene/Animation/AnimatedMesh.hpp" bodystart="15" bodyend="90"/>
+    <location file="Render/Technique/Transparent/TransparentPassResult.hpp" line="13" column="1" bodyfile="Render/Technique/Transparent/TransparentPassResult.hpp" bodystart="15" bodyend="21"/>
     <listofallmembers>
-      <member refid="db/da9/a04374_1ac19f279d240afe5d9aaee8ab764eb260" prot="public" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>addAnimation</name></member>
-      <member refid="d7/dc9/a04370_1ab43c4fd7966578d79ae34e9f36020d25" prot="public" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>AnimatedMesh</name></member>
-      <member refid="d7/dc9/a04370_1a687ea32ac5d1a7d7f8074d46b4d357af" prot="public" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>AnimatedMesh</name></member>
-      <member refid="d7/dc9/a04370_1a673234c46a64b9d4bf0674da6052efa8" prot="public" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>AnimatedMesh</name></member>
-      <member refid="db/da9/a04374_1a5fcebbda75e25b1806d1b5c2141a2924" prot="public" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>AnimatedObject</name></member>
-      <member refid="db/da9/a04374_1af2eccff6842dec84ce84d0e0c599f38c" prot="public" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>AnimatedObject</name></member>
-      <member refid="db/da9/a04374_1a1e050f4dc3a1962ca4cf375d9b16b89b" prot="public" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>AnimatedObject</name></member>
-      <member refid="d7/dc9/a04370_1aaedc9c3fe1afce5d7e7e4c6d2c165496" prot="private" virt="virtual"><scope>castor3d::AnimatedMesh</scope><name>doAddAnimation</name></member>
-      <member refid="d7/dc9/a04370_1ad10f86eacb689f088df387264957703c" prot="private" virt="virtual"><scope>castor3d::AnimatedMesh</scope><name>doClearAnimations</name></member>
-      <member refid="d7/dc9/a04370_1a08b09d2252c8e2373a656e5295f6c9b1" prot="private" virt="virtual"><scope>castor3d::AnimatedMesh</scope><name>doStartAnimation</name></member>
-      <member refid="d7/dc9/a04370_1ad74070ebe8cbac4684e39cd8ce04a7c1" prot="private" virt="virtual"><scope>castor3d::AnimatedMesh</scope><name>doStopAnimation</name></member>
-      <member refid="db/da9/a04374_1a779fc1e97feca6c7b48c9148f18901e5" prot="public" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>getAnimation</name></member>
-      <member refid="db/da9/a04374_1a2b7f1dcedebd594dd1f02ce399d06e59" prot="public" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>getAnimations</name></member>
-      <member refid="d7/dc9/a04370_1a7c8ea4f3cd4d4e66eec0495d24f55890" prot="public" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>getGeometry</name></member>
-      <member refid="d7/dc9/a04370_1a1be2ca4b2c91ccb0a79f1d38659d985f" prot="public" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>getId</name></member>
-      <member refid="db/da9/a04374_1aa371efe8253bc63995bf46f238c2a1d8" prot="public" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>getKind</name></member>
-      <member refid="d7/dc9/a04370_1a4d9fe7b07b5db7111d3bf5940ce30b8e" prot="public" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>getMesh</name></member>
-      <member refid="d7/dc9/a04370_1a91c95714d485aa76be3bc12938f4d53c" prot="public" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>getPlayingAnimation</name></member>
-      <member refid="db/da9/a04374_1ab2df0c8e698bcfdb593900ad8c146266" prot="public" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>hasAnimation</name></member>
-      <member refid="d7/dc9/a04370_1a0293879e0d8b0282ed8467f1fab683bd" prot="public" virt="virtual"><scope>castor3d::AnimatedMesh</scope><name>isPlayingAnimation</name></member>
-      <member refid="db/da9/a04374_1a28e41bc599481520db66d3b41ec73a2d" prot="protected" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>m_animations</name></member>
-      <member refid="d7/dc9/a04370_1ad2566087ff6a78eed85f525d2fad11eb" prot="protected" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>m_geometry</name></member>
-      <member refid="d7/dc9/a04370_1a73d4106acb5e63fa70b56d39fcab4f2f" prot="protected" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>m_id</name></member>
-      <member refid="d7/dc9/a04370_1afe684e816cef7efeccbfd578eca4f8fd" prot="protected" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>m_mesh</name></member>
-      <member refid="d7/dc9/a04370_1a1121d41fe385096400a350ee76199915" prot="protected" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>m_playingAnimation</name></member>
-      <member refid="d7/dc9/a04370_1ae3d8e093e42ee7022fafcc106ca55e5d" prot="public" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>operator=</name></member>
-      <member refid="d7/dc9/a04370_1aa25d08bf5dc34f42a070552c1f2ce4ad" prot="public" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>operator=</name></member>
-      <member refid="db/da9/a04374_1a4fae64cf33b1a473e421691f2037f723" prot="public" virt="non-virtual" ambiguityscope="castor3d::AnimatedObject::"><scope>castor3d::AnimatedMesh</scope><name>operator=</name></member>
-      <member refid="db/da9/a04374_1a681a62403a76ff582f254ff7c43d3c10" prot="public" virt="non-virtual" ambiguityscope="castor3d::AnimatedObject::"><scope>castor3d::AnimatedMesh</scope><name>operator=</name></member>
-      <member refid="db/da9/a04374_1abdbb6424aa1619e85ef330dcab9ce2a0" prot="public" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>pauseAllAnimations</name></member>
-      <member refid="db/da9/a04374_1a7660dd415cda3afa98031e4fdc194944" prot="public" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>pauseAnimation</name></member>
-      <member refid="d7/dc9/a04370_1a147ca5c82c8edd47dd5fbc4dc05d4958" prot="public" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>setId</name></member>
-      <member refid="db/da9/a04374_1a21fa4e1c150e3f1829fd698e10dc5d74" prot="public" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>startAllAnimations</name></member>
-      <member refid="db/da9/a04374_1a6ccec881b1147baafaa43c5ee286e0c7" prot="public" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>startAnimation</name></member>
-      <member refid="db/da9/a04374_1af7a31c3fd0ac07fcb49df40e4cbc1f9f" prot="public" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>stopAllAnimations</name></member>
-      <member refid="db/da9/a04374_1af9cdab619fab70599c9568167075b9ac" prot="public" virt="non-virtual"><scope>castor3d::AnimatedMesh</scope><name>stopAnimation</name></member>
-      <member refid="d7/dc9/a04370_1a7c37a1707db9205c7b5e3d84024aba85" prot="public" virt="virtual"><scope>castor3d::AnimatedMesh</scope><name>update</name></member>
-      <member refid="db/da9/a04374_1ab7b23d33b93065511e6eccd2201410f1" prot="public" virt="virtual"><scope>castor3d::AnimatedMesh</scope><name>~AnimatedObject</name></member>
+      <member refid="df/d76/a03726_1a794584976030474106bba3b69f4a7f80" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>begin</name></member>
+      <member refid="df/d76/a03726_1ae8ca53c58a918901635ec3492d4e064d" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>begin</name></member>
+      <member refid="df/d76/a03726_1ad184cb851604a0fdad0f1f8136ea6457" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>cbegin</name></member>
+      <member refid="df/d76/a03726_1a53d2fc5d9e1c83c50823f591a9650095" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>cend</name></member>
+      <member refid="df/d76/a03726_1a8939bb90032a1e4ec33e7840cb71c6c4" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>create</name></member>
+      <member refid="df/d76/a03726_1a54feb2c94b179d3ae6e16284d05a124c" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>end</name></member>
+      <member refid="df/d76/a03726_1a12e053e63b5593edca663b4a01962d6d" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>end</name></member>
+      <member refid="df/d76/a03726_1a67a677fc6cbdb36e74fa6b74a65c5015" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>GBufferT</name></member>
+      <member refid="df/d76/a03726_1a1ab6068973c95bddb3229dc2d9b1cc39" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>GBufferT</name></member>
+      <member refid="df/d76/a03726_1a1bb04fa8833cb8e9df999784c3f4e72d" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>GBufferT</name></member>
+      <member refid="df/d76/a03726_1aad84cb58cfbead8aa670554e5b015e54" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>GBufferT</name></member>
+      <member refid="df/d76/a03726_1ab53983ea6cfcc95da08034abb5e20d6b" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>m_result</name></member>
+      <member refid="df/d76/a03726_1aa803d666fd91abf546fa7bb32507b038" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>operator=</name></member>
+      <member refid="df/d76/a03726_1a8c693c6743416a4b36022e98193e3aa3" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>operator=</name></member>
+      <member refid="df/d76/a03726_1afc570eab10faf45040bd5ecafcc39104" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>operator[]</name></member>
+      <member refid="d7/dc9/a04370_1ab618b645b72d1ce4c2b02297f5e2a62a" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>TransparentPassResult</name></member>
+      <member refid="df/d76/a03726_1a84462bb3e4892ec0bb69d310bf08a7c3" prot="public" virt="non-virtual"><scope>castor3d::TransparentPassResult</scope><name>~GBufferT</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

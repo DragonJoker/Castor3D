@@ -1,45 +1,91 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="d8/d6b/a03918" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::RadianceComputer::RenderPass</compoundname>
+  <compounddef id="d8/d6b/a03918" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::rq::BindingDescription</compoundname>
+    <includes local="no">RenderQuad.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d8/d6b/a03918_1ae6f348857362fa6e06d9f55028f8582f" prot="public" static="no" mutable="no">
-        <type>VkImageView</type>
-        <definition>VkImageView castor3d::RadianceComputer::RenderPass::dstView</definition>
+      <memberdef kind="variable" id="d8/d6b/a03918_1a669b2abbcb1d55eaa4177b9bc8b7b999" prot="public" static="no" mutable="no">
+        <type>VkDescriptorType</type>
+        <definition>VkDescriptorType castor3d::rq::BindingDescription::descriptorType</definition>
         <argsstring></argsstring>
-        <name>dstView</name>
-        <qualifiedname>castor3d::RadianceComputer::RenderPass::dstView</qualifiedname>
+        <name>descriptorType</name>
+        <qualifiedname>castor3d::rq::BindingDescription::descriptorType</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PBR/RadianceComputer.hpp" line="86" column="13" bodyfile="Render/PBR/RadianceComputer.hpp" bodystart="86" bodyend="-1"/>
+        <location file="Render/Passes/RenderQuad.hpp" line="70" column="18" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="70" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d8/d6b/a03918_1aed4d3d28b57eeb0bbbe70969869f9a65" prot="public" static="no" mutable="no">
-        <type>ashes::FrameBufferPtr</type>
-        <definition>ashes::FrameBufferPtr castor3d::RadianceComputer::RenderPass::frameBuffer</definition>
+      <memberdef kind="variable" id="d8/d6b/a03918_1ab331014d7407b22dfb1ce016809c402b" prot="public" static="no" mutable="no">
+        <type>ashes::Optional&lt; VkImageViewType &gt;</type>
+        <definition>ashes::Optional&lt; VkImageViewType &gt; castor3d::rq::BindingDescription::viewType</definition>
         <argsstring></argsstring>
-        <name>frameBuffer</name>
-        <qualifiedname>castor3d::RadianceComputer::RenderPass::frameBuffer</qualifiedname>
+        <name>viewType</name>
+        <qualifiedname>castor3d::rq::BindingDescription::viewType</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/PBR/RadianceComputer.hpp" line="87" column="23" bodyfile="Render/PBR/RadianceComputer.hpp" bodystart="87" bodyend="-1"/>
+        <location file="Render/Passes/RenderQuad.hpp" line="71" column="17" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d6b/a03918_1add6e83c862a05bf15a0c3e83fa1a5349" prot="public" static="no" mutable="no">
+        <type>VkShaderStageFlags</type>
+        <definition>VkShaderStageFlags castor3d::rq::BindingDescription::stageFlags</definition>
+        <argsstring></argsstring>
+        <name>stageFlags</name>
+        <qualifiedname>castor3d::rq::BindingDescription::stageFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderQuad.hpp" line="72" column="20" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/d6b/a03918_1accfe1676d21c4bd23ffbebd0716b371c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::rq::BindingDescription::BindingDescription</definition>
+        <argsstring>(VkDescriptorType descriptorType, ashes::Optional&lt; VkImageViewType &gt; viewType, VkShaderStageFlags stageFlags=VK_SHADER_STAGE_FRAGMENT_BIT)</argsstring>
+        <name>BindingDescription</name>
+        <qualifiedname>castor3d::rq::BindingDescription::BindingDescription</qualifiedname>
+        <param>
+          <type>VkDescriptorType</type>
+          <declname>descriptorType</declname>
+        </param>
+        <param>
+          <type>ashes::Optional&lt; VkImageViewType &gt;</type>
+          <declname>viewType</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>stageFlags</declname>
+          <defval>VK_SHADER_STAGE_FRAGMENT_BIT</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderQuad.hpp" line="61" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="61" bodyend="68"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/PBR/RadianceComputer.hpp" line="84" column="1" bodyfile="Render/PBR/RadianceComputer.hpp" bodystart="85" bodyend="88"/>
+    <location file="Render/Passes/RenderQuad.hpp" line="59" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="60" bodyend="73"/>
     <listofallmembers>
-      <member refid="d8/d6b/a03918_1ae6f348857362fa6e06d9f55028f8582f" prot="public" virt="non-virtual"><scope>castor3d::RadianceComputer::RenderPass</scope><name>dstView</name></member>
-      <member refid="d8/d6b/a03918_1aed4d3d28b57eeb0bbbe70969869f9a65" prot="public" virt="non-virtual"><scope>castor3d::RadianceComputer::RenderPass</scope><name>frameBuffer</name></member>
+      <member refid="d8/d6b/a03918_1accfe1676d21c4bd23ffbebd0716b371c" prot="public" virt="non-virtual"><scope>castor3d::rq::BindingDescription</scope><name>BindingDescription</name></member>
+      <member refid="d8/d6b/a03918_1a669b2abbcb1d55eaa4177b9bc8b7b999" prot="public" virt="non-virtual"><scope>castor3d::rq::BindingDescription</scope><name>descriptorType</name></member>
+      <member refid="d8/d6b/a03918_1add6e83c862a05bf15a0c3e83fa1a5349" prot="public" virt="non-virtual"><scope>castor3d::rq::BindingDescription</scope><name>stageFlags</name></member>
+      <member refid="d8/d6b/a03918_1ab331014d7407b22dfb1ce016809c402b" prot="public" virt="non-virtual"><scope>castor3d::rq::BindingDescription</scope><name>viewType</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

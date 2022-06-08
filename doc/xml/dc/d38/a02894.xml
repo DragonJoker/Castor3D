@@ -81,7 +81,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Material/Pass/SubsurfaceScattering.hpp" line="56" column="6" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="56" bodyend="60"/>
-        <references refid="dc/d38/a02894_1aa2e134491ecfd9a008469de7ab27a2b5" compoundref="d1/dc6/a00347" startline="109">onChanged</references>
+        <references refid="dc/d38/a02894_1aa2e134491ecfd9a008469de7ab27a2b5" compoundref="dd/db5/a00365" startline="109">onChanged</references>
       </memberdef>
       <memberdef kind="function" id="dc/d38/a02894_1ac5bebe58a25426abbd5491ba224e01be" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -100,7 +100,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Material/Pass/SubsurfaceScattering.hpp" line="62" column="6" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="62" bodyend="66"/>
-        <references refid="dc/d38/a02894_1aa2e134491ecfd9a008469de7ab27a2b5" compoundref="d1/dc6/a00347" startline="109">onChanged</references>
+        <references refid="dc/d38/a02894_1aa2e134491ecfd9a008469de7ab27a2b5" compoundref="dd/db5/a00365" startline="109">onChanged</references>
       </memberdef>
       <memberdef kind="function" id="dc/d38/a02894_1a63bb378589f864830f85f5eeadfad396" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -119,7 +119,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Material/Pass/SubsurfaceScattering.hpp" line="68" column="6" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="68" bodyend="72"/>
-        <references refid="dc/d38/a02894_1aa2e134491ecfd9a008469de7ab27a2b5" compoundref="d1/dc6/a00347" startline="109">onChanged</references>
+        <references refid="dc/d38/a02894_1aa2e134491ecfd9a008469de7ab27a2b5" compoundref="dd/db5/a00365" startline="109">onChanged</references>
       </memberdef>
       <memberdef kind="function" id="dc/d38/a02894_1a7b4c580a35c4912961aa822a85b25060" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -138,7 +138,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Material/Pass/SubsurfaceScattering.hpp" line="74" column="6" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="74" bodyend="78"/>
-        <references refid="dc/d38/a02894_1aa2e134491ecfd9a008469de7ab27a2b5" compoundref="d1/dc6/a00347" startline="109">onChanged</references>
+        <references refid="dc/d38/a02894_1aa2e134491ecfd9a008469de7ab27a2b5" compoundref="dd/db5/a00365" startline="109">onChanged</references>
       </memberdef>
       </sectiondef>
       <sectiondef kind="user-defined">
@@ -258,10 +258,10 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Material/Pass/SubsurfaceScattering.hpp" line="109" column="11" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="109" bodyend="-1"/>
-        <referencedby refid="dc/d38/a02894_1a7b4c580a35c4912961aa822a85b25060" compoundref="d1/dc6/a00347" startline="74" endline="78">addProfileFactor</referencedby>
-        <referencedby refid="dc/d38/a02894_1a50850455bb68ac1119b84d168da0f6a4" compoundref="d1/dc6/a00347" startline="56" endline="60">setGaussianWidth</referencedby>
-        <referencedby refid="dc/d38/a02894_1ac5bebe58a25426abbd5491ba224e01be" compoundref="d1/dc6/a00347" startline="62" endline="66">setStrength</referencedby>
-        <referencedby refid="dc/d38/a02894_1a63bb378589f864830f85f5eeadfad396" compoundref="d1/dc6/a00347" startline="68" endline="72">setSubsurfaceRadius</referencedby>
+        <referencedby refid="dc/d38/a02894_1a7b4c580a35c4912961aa822a85b25060" compoundref="dd/db5/a00365" startline="74" endline="78">addProfileFactor</referencedby>
+        <referencedby refid="dc/d38/a02894_1a50850455bb68ac1119b84d168da0f6a4" compoundref="dd/db5/a00365" startline="56" endline="60">setGaussianWidth</referencedby>
+        <referencedby refid="dc/d38/a02894_1ac5bebe58a25426abbd5491ba224e01be" compoundref="dd/db5/a00365" startline="62" endline="66">setStrength</referencedby>
+        <referencedby refid="dc/d38/a02894_1a63bb378589f864830f85f5eeadfad396" compoundref="dd/db5/a00365" startline="68" endline="72">setSubsurfaceRadius</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-attrib">

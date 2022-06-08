@@ -1,215 +1,115 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="de/d78/a03622" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::GenericPlugin</compoundname>
-    <basecompoundref refid="dc/d12/a03634" prot="public" virt="non-virtual">castor3d::Plugin</basecompoundref>
-    <includes local="no">GenericPlugin.hpp</includes>
-      <sectiondef kind="private-type">
-      <memberdef kind="typedef" id="de/d78/a03622_1aef20ad50a976adad51c06efcea5c5b5c" prot="private" static="no">
-        <type>void</type>
-        <definition>typedef void castor3d::GenericPlugin::addOptionalParsersFunction(SceneFileParser *parser)</definition>
-        <argsstring>(SceneFileParser *parser)</argsstring>
-        <name>addOptionalParsersFunction</name>
-        <qualifiedname>castor3d::GenericPlugin::addOptionalParsersFunction</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Plugin/GenericPlugin.hpp" line="19" column="14" bodyfile="Plugin/GenericPlugin.hpp" bodystart="19" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="de/d78/a03622_1a6988e726426f2bb8779ec167fbc8845e" prot="private" static="no">
-        <type>addOptionalParsersFunction *</type>
-        <definition>typedef addOptionalParsersFunction* castor3d::GenericPlugin::PAddOptionalParsersFunction</definition>
+  <compounddef id="de/d78/a03622" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::OverlayRenderer::OverlayGeometryBuffers</compoundname>
+    <includes local="no">OverlayRenderer.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/d78/a03622_1a57455e19b577c00849cea6668f886c95" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/d41/a02530" kindref="compound">GeometryBuffers</ref></type>
+        <definition>GeometryBuffers castor3d::OverlayRenderer::OverlayGeometryBuffers::noTexture</definition>
         <argsstring></argsstring>
-        <name>PAddOptionalParsersFunction</name>
-        <qualifiedname>castor3d::GenericPlugin::PAddOptionalParsersFunction</qualifiedname>
+        <name>noTexture</name>
+        <qualifiedname>castor3d::OverlayRenderer::OverlayGeometryBuffers::noTexture</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/GenericPlugin.hpp" line="21" column="37" bodyfile="Plugin/GenericPlugin.hpp" bodystart="21" bodyend="-1"/>
+        <location file="Overlay/OverlayRenderer.hpp" line="224" column="17" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="224" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="friend">
-      <memberdef kind="friend" id="de/d78/a03622_1a6a6c1cc25d50ed6f67a2dc0fc546c5a3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>class</type>
-        <definition>friend class Plugin</definition>
+      <memberdef kind="variable" id="de/d78/a03622_1aea3cf9053350e45b9c797d398217406e" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/d41/a02530" kindref="compound">GeometryBuffers</ref></type>
+        <definition>GeometryBuffers castor3d::OverlayRenderer::OverlayGeometryBuffers::textured</definition>
         <argsstring></argsstring>
-        <name>Plugin</name>
-        <qualifiedname>castor3d::GenericPlugin::Plugin</qualifiedname>
-        <param>
-          <type><ref refid="dc/d12/a03634" kindref="compound">Plugin</ref></type>
-        </param>
+        <name>textured</name>
+        <qualifiedname>castor3d::OverlayRenderer::OverlayGeometryBuffers::textured</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/GenericPlugin.hpp" line="17" column="14" bodyfile="Plugin/GenericPlugin.hpp" bodystart="17" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="friend" id="de/d78/a03622_1a3e1914489e4bed4f9f23cdeab34a43dc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>class</type>
-        <definition>friend class Engine</definition>
-        <argsstring></argsstring>
-        <name>Engine</name>
-        <qualifiedname>castor3d::GenericPlugin::Engine</qualifiedname>
-        <param>
-          <type><ref refid="d1/d3c/a02714" kindref="compound">Engine</ref></type>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Plugin/GenericPlugin.hpp" line="18" column="14" bodyfile="Plugin/GenericPlugin.hpp" bodystart="18" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="de/d78/a03622_1a05e996f4e093e2a87ed7d51d90304f8d" prot="private" static="no" mutable="no">
-        <type>PAddOptionalParsersFunction</type>
-        <definition>PAddOptionalParsersFunction castor3d::GenericPlugin::m_pfnAddOptionalParsers</definition>
-        <argsstring></argsstring>
-        <name>m_pfnAddOptionalParsers</name>
-        <qualifiedname>castor3d::GenericPlugin::m_pfnAddOptionalParsers</qualifiedname>
-        <initializer>{}</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Plugin/GenericPlugin.hpp" line="45" column="29" bodyfile="Plugin/GenericPlugin.hpp" bodystart="45" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="de/d78/a03622_1ae7ae33a3c1d5c5119f344219de2dee75" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::GenericPlugin::GenericPlugin</definition>
-        <argsstring>(castor::DynamicLibrarySPtr library, Engine *engine)</argsstring>
-        <name>GenericPlugin</name>
-        <qualifiedname>castor3d::GenericPlugin::GenericPlugin</qualifiedname>
-        <param>
-          <type>castor::DynamicLibrarySPtr</type>
-          <declname>library</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/d3c/a02714" kindref="compound">Engine</ref> *</type>
-          <declname>engine</declname>
-        </param>
-        <briefdescription>
-<para>Constructor. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">library</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The shared library holding the plug-in </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">engine</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The engine </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Plugin/GenericPlugin.hpp" line="34" column="9"/>
-      </memberdef>
-      <memberdef kind="function" id="de/d78/a03622_1aeb7a177e5f8912bd7ae45e4365d6aa68" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::GenericPlugin::~GenericPlugin</definition>
-        <argsstring>() override</argsstring>
-        <name>~GenericPlugin</name>
-        <qualifiedname>castor3d::GenericPlugin::~GenericPlugin</qualifiedname>
-        <briefdescription>
-<para>Destructor. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Plugin/GenericPlugin.hpp" line="42" column="9"/>
+        <location file="Overlay/OverlayRenderer.hpp" line="225" column="17" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="225" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="1">
-        <label>castor3d::GenericPlugin</label>
-        <link refid="de/d78/a03622"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2">
-        <label>castor3d::Plugin</label>
-        <link refid="dc/d12/a03634"/>
-        <childnode refid="3" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-    </inheritancegraph>
     <collaborationgraph>
-      <node id="1">
-        <label>castor3d::GenericPlugin</label>
-        <link refid="de/d78/a03622"/>
-        <childnode refid="2" relation="public-inheritance">
+      <node id="10">
+        <label>T</label>
+      </node>
+      <node id="8">
+        <label>std::array&lt; castor3d::ObjectBufferOffset::GpuBufferChunk, size_t(SubmeshData::eCount) &gt;</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; castor3d::ObjectBufferOffset::GpuBufferChunk, size_t(SubmeshData::eCount) &gt;</edgelabel>
         </childnode>
       </node>
       <node id="2">
-        <label>castor3d::Plugin</label>
-        <link refid="dc/d12/a03634"/>
-        <childnode refid="3" relation="public-inheritance">
+        <label>castor3d::GeometryBuffers</label>
+        <link refid="d3/d41/a02530"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>indexOffset</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>bufferOffset</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::GpuBufferBase</label>
+        <link refid="db/df5/a02534"/>
+      </node>
+      <node id="4">
+        <label>castor3d::GpuBufferT&lt; AllocatorT &gt;</label>
+        <link refid="d0/dff/a02506"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::MemChunk</label>
+        <link refid="d9/d76/a02526"/>
+      </node>
+      <node id="7">
+        <label>castor3d::ObjectBufferOffset</label>
+        <link refid="db/d0b/a02566"/>
+        <childnode refid="8" relation="usage">
+          <edgelabel>buffers</edgelabel>
         </childnode>
       </node>
       <node id="3">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <label>castor3d::ObjectBufferOffset::GpuBufferChunk</label>
+        <link refid="d1/d0c/a02570"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>buffer</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>chunk</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::OverlayRenderer::OverlayGeometryBuffers</label>
+        <link refid="de/d78/a03622"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>noTexture</edgelabel>
+          <edgelabel>textured</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="10" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
       </node>
     </collaborationgraph>
-    <location file="Plugin/GenericPlugin.hpp" line="13" column="1" bodyfile="Plugin/GenericPlugin.hpp" bodystart="15" bodyend="46"/>
+    <location file="Overlay/OverlayRenderer.hpp" line="222" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="223" bodyend="226"/>
     <listofallmembers>
-      <member refid="de/d78/a03622_1aef20ad50a976adad51c06efcea5c5b5c" prot="private" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>addOptionalParsersFunction</name></member>
-      <member refid="de/d78/a03622_1a3e1914489e4bed4f9f23cdeab34a43dc" prot="private" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>Engine</name></member>
-      <member refid="de/d78/a03622_1ae7ae33a3c1d5c5119f344219de2dee75" prot="public" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>GenericPlugin</name></member>
-      <member refid="dc/d12/a03634_1a76345cfa813957198ab5a735b3bf2c84" prot="public" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>getName</name></member>
-      <member refid="dc/d12/a03634_1a21c697a5bb64dc09df8604a595ed4ef1" prot="public" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>getRequiredVersion</name></member>
-      <member refid="dc/d12/a03634_1adfce87274549c3458e705ec6f49f2466" prot="public" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>getType</name></member>
-      <member refid="dc/d12/a03634_1a6eee27fad0b4dc406af8dac993816e1e" prot="protected" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>load</name></member>
-      <member refid="dc/d12/a03634_1ac89ef3325c33aebd3c45ff41a3912d25" prot="protected" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>m_library</name></member>
-      <member refid="de/d78/a03622_1a05e996f4e093e2a87ed7d51d90304f8d" prot="private" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>m_pfnAddOptionalParsers</name></member>
-      <member refid="dc/d12/a03634_1a5b06730be035851689f1f52a9d37a839" prot="protected" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>m_pfnGetName</name></member>
-      <member refid="dc/d12/a03634_1a3bbb683c98da8be6cb7eadd5ba677f18" prot="protected" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>m_pfnGetRequiredVersion</name></member>
-      <member refid="dc/d12/a03634_1ae4b1c74ae527aef8847250d27eb3acf0" prot="protected" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>m_pfnOnLoad</name></member>
-      <member refid="dc/d12/a03634_1a5d94afb97a6d885ed7d2885dafeda0dc" prot="protected" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>m_pfnOnUnload</name></member>
-      <member refid="dc/d12/a03634_1ad988a5d361f28b80ba19dd2caac722e1" prot="protected" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>m_type</name></member>
-      <member refid="de/d78/a03622_1a6988e726426f2bb8779ec167fbc8845e" prot="private" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>PAddOptionalParsersFunction</name></member>
-      <member refid="dc/d12/a03634_1af3f82c3bbc1d49880fda39cdc7ea2015" prot="public" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>PGetNameFunction</name></member>
-      <member refid="dc/d12/a03634_1a571d2dbc7a601aca467b1b5d8a62d997" prot="public" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>PGetRequiredVersionFunction</name></member>
-      <member refid="dc/d12/a03634_1aa7caed7d5f2bd1d34409227a1e3b09bf" prot="public" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>PGetTypeFunction</name></member>
-      <member refid="de/d78/a03622_1a6a6c1cc25d50ed6f67a2dc0fc546c5a3" prot="private" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>Plugin</name></member>
-      <member refid="dc/d12/a03634_1ab1d7f300c810facf8bc08fceffff8c2b" prot="protected" virt="non-virtual" ambiguityscope="castor3d::Plugin::"><scope>castor3d::GenericPlugin</scope><name>Plugin</name></member>
-      <member refid="dc/d12/a03634_1a54268afa0fd4a75c485f0ba59f108e65" prot="public" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>POnLoadFunction</name></member>
-      <member refid="dc/d12/a03634_1a186ebd8d8fe1eb8b52b7909347ce0fb4" prot="public" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>POnUnloadFunction</name></member>
-      <member refid="dc/d12/a03634_1a1062d08432032ec7d502e7941b4e0df4" prot="protected" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>unload</name></member>
-      <member refid="de/d78/a03622_1aeb7a177e5f8912bd7ae45e4365d6aa68" prot="public" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>~GenericPlugin</name></member>
-      <member refid="dc/d12/a03634_1af7f881d3d5d32c7044c1b93164754c64" prot="public" virt="pure-virtual"><scope>castor3d::GenericPlugin</scope><name>~Plugin</name></member>
+      <member refid="de/d78/a03622_1a57455e19b577c00849cea6668f886c95" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::OverlayGeometryBuffers</scope><name>noTexture</name></member>
+      <member refid="de/d78/a03622_1aea3cf9053350e45b9c797d398217406e" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::OverlayGeometryBuffers</scope><name>textured</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

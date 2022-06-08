@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dir_adca96594a9f2b1f8e20f892db14748e" kind="dir">
+    <compoundname>Scene/Animation/SceneNode</compoundname>
+    <innerfile refid="d0/d2b/a01010">SceneNodeAnimationInstance.hpp</innerfile>
+    <innerfile refid="d7/d59/a01013">SceneNodeAnimationModule.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Scene/Animation/SceneNode/"/>
+  </compounddef>
+</doxygen>

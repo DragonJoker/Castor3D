@@ -1,123 +1,107 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="d5/d6d/a05142" kind="class" language="C++" prot="public">
-    <compoundname>castor::TextWriter&lt; castor3d::Pass &gt;</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::Pass &gt;</basecompoundref>
-    <includes local="no">TextPass.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d5/d6d/a05142_1a360df3cc8098eb85514ac81cf778f19b" prot="private" static="no" mutable="no">
-        <type>Path</type>
-        <definition>Path castor::TextWriter&lt; castor3d::Pass &gt;::m_folder</definition>
+  <compounddef id="d5/d6d/a05142" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::GpInfoUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d5/d6d/a05142_1a500827de99314429a918fb976dc30a99" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::GpInfoUboConfiguration::invViewProj</definition>
         <argsstring></argsstring>
-        <name>m_folder</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::Pass &gt;::m_folder</qualifiedname>
+        <name>invViewProj</name>
+        <qualifiedname>castor3d::GpInfoUboConfiguration::invViewProj</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Text/TextPass.hpp" line="25" column="6" bodyfile="Text/TextPass.hpp" bodystart="25" bodyend="-1"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="132" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="132" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d5/d6d/a05142_1ad305d78c70b9f08c67783fe0e5b442da" prot="private" static="no" mutable="no">
-        <type>String</type>
-        <definition>String castor::TextWriter&lt; castor3d::Pass &gt;::m_subfolder</definition>
+      <memberdef kind="variable" id="d5/d6d/a05142_1af1f5682d829f3e43db112e79180be5f7" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::GpInfoUboConfiguration::invView</definition>
         <argsstring></argsstring>
-        <name>m_subfolder</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::Pass &gt;::m_subfolder</qualifiedname>
+        <name>invView</name>
+        <qualifiedname>castor3d::GpInfoUboConfiguration::invView</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Text/TextPass.hpp" line="26" column="8" bodyfile="Text/TextPass.hpp" bodystart="26" bodyend="-1"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="133" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="133" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d5/d6d/a05142_1aa4d0f48a0fb484ebc798d28794e34af5" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor::TextWriter&lt; castor3d::Pass &gt;::TextWriter</definition>
-        <argsstring>(String const &amp;tabs, Path const &amp;folder, String const &amp;subfolder)</argsstring>
-        <name>TextWriter</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::Pass &gt;::TextWriter</qualifiedname>
-        <param>
-          <type>String const &amp;</type>
-          <declname>tabs</declname>
-        </param>
-        <param>
-          <type>Path const &amp;</type>
-          <declname>folder</declname>
-        </param>
-        <param>
-          <type>String const &amp;</type>
-          <declname>subfolder</declname>
-        </param>
+      <memberdef kind="variable" id="d5/d6d/a05142_1a4e56d471a2e16a85a94d90e30233af13" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::GpInfoUboConfiguration::invProj</definition>
+        <argsstring></argsstring>
+        <name>invProj</name>
+        <qualifiedname>castor3d::GpInfoUboConfiguration::invProj</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Text/TextPass.hpp" line="18" column="18"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="134" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="134" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="d5/d6d/a05142_1afcfe8007a6e6d29bf44176cef47754b4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor::TextWriter&lt; castor3d::Pass &gt;::operator()</definition>
-        <argsstring>(castor3d::Pass const &amp;pass, castor::StringStream &amp;file) override</argsstring>
-        <name>operator()</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::Pass &gt;::operator()</qualifiedname>
-        <param>
-          <type><ref refid="d6/d59/a02810" kindref="compound">castor3d::Pass</ref> const &amp;</type>
-          <declname>pass</declname>
-        </param>
-        <param>
-          <type>castor::StringStream &amp;</type>
-          <declname>file</declname>
-        </param>
+      <memberdef kind="variable" id="d5/d6d/a05142_1a8385766e6ce0bcefc3ac6ecfadd15f05" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::GpInfoUboConfiguration::gView</definition>
+        <argsstring></argsstring>
+        <name>gView</name>
+        <qualifiedname>castor3d::GpInfoUboConfiguration::gView</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Text/TextPass.hpp" line="21" column="14"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="135" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d6d/a05142_1a57d2a15d2d68944d3e904949c852aa04" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::GpInfoUboConfiguration::gProj</definition>
+        <argsstring></argsstring>
+        <name>gProj</name>
+        <qualifiedname>castor3d::GpInfoUboConfiguration::gProj</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="136" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d6d/a05142_1ac7d5ddde0519cf1d1a71b333ca3e747d" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::GpInfoUboConfiguration::renderSize</definition>
+        <argsstring></argsstring>
+        <name>renderSize</name>
+        <qualifiedname>castor3d::GpInfoUboConfiguration::renderSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="137" column="17" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="137" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para><ref refid="d5/d03/a04582" kindref="compound">Geometry</ref> pass data. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="2">
-        <label>TextWriterT&lt; castor3d::Pass &gt;</label>
-      </node>
-      <node id="1">
-        <label>castor::TextWriter&lt; castor3d::Pass &gt;</label>
-        <link refid="d5/d6d/a05142"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="2">
-        <label>TextWriterT&lt; castor3d::Pass &gt;</label>
-      </node>
-      <node id="1">
-        <label>castor::TextWriter&lt; castor3d::Pass &gt;</label>
-        <link refid="d5/d6d/a05142"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Text/TextPass.hpp" line="14" column="1" bodyfile="Text/TextPass.hpp" bodystart="16" bodyend="27"/>
+    <location file="Shader/Ubos/UbosModule.hpp" line="130" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="131" bodyend="138"/>
     <listofallmembers>
-      <member refid="d5/d6d/a05142_1a360df3cc8098eb85514ac81cf778f19b" prot="private" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Pass &gt;</scope><name>m_folder</name></member>
-      <member refid="d5/d6d/a05142_1ad305d78c70b9f08c67783fe0e5b442da" prot="private" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Pass &gt;</scope><name>m_subfolder</name></member>
-      <member refid="d5/d6d/a05142_1afcfe8007a6e6d29bf44176cef47754b4" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Pass &gt;</scope><name>operator()</name></member>
-      <member refid="d5/d6d/a05142_1aa4d0f48a0fb484ebc798d28794e34af5" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Pass &gt;</scope><name>TextWriter</name></member>
+      <member refid="d5/d6d/a05142_1a57d2a15d2d68944d3e904949c852aa04" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUboConfiguration</scope><name>gProj</name></member>
+      <member refid="d5/d6d/a05142_1a8385766e6ce0bcefc3ac6ecfadd15f05" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUboConfiguration</scope><name>gView</name></member>
+      <member refid="d5/d6d/a05142_1a4e56d471a2e16a85a94d90e30233af13" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUboConfiguration</scope><name>invProj</name></member>
+      <member refid="d5/d6d/a05142_1af1f5682d829f3e43db112e79180be5f7" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUboConfiguration</scope><name>invView</name></member>
+      <member refid="d5/d6d/a05142_1a500827de99314429a918fb976dc30a99" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUboConfiguration</scope><name>invViewProj</name></member>
+      <member refid="d5/d6d/a05142_1ac7d5ddde0519cf1d1a71b333ca3e747d" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUboConfiguration</scope><name>renderSize</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

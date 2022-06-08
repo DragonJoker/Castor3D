@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d9/d6c/a02710" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::ResourceCacheTraitsT</compoundname>
+    <compoundname>castor3d::PtrCacheTraitsT</compoundname>
     <templateparamlist>
       <param>
         <type>typename ResT</type>
@@ -15,7 +15,7 @@
     <detaileddescription>
 <para>Helper structure to specialise a cache behaviour. </para>
     </detaileddescription>
-    <location file="Castor3DModule.hpp" line="80" column="1" bodyfile="Castor3DModule.hpp" bodystart="80" bodyend="-1"/>
+    <location file="Castor3DModule.hpp" line="90" column="1" bodyfile="Castor3DModule.hpp" bodystart="90" bodyend="-1"/>
     <listofallmembers>
     </listofallmembers>
   </compounddef>

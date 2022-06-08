@@ -98,7 +98,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/Parameter.hpp" line="34" column="6" bodyfile="Miscellaneous/Parameter.hpp" bodystart="34" bodyend="59"/>
-        <references refid="d5/d08/a03254_1ad5db1be40b7fb695857dd9e36c1fcbff" compoundref="d1/d98/a00407" startline="77" endline="93">castor3d::ParametersT&lt; KeyT &gt;::add</references>
+        <references refid="d5/d08/a03254_1ad5db1be40b7fb695857dd9e36c1fcbff" compoundref="dc/d2f/a00425" startline="77" endline="93">castor3d::ParametersT&lt; KeyT &gt;::add</references>
       </memberdef>
       <memberdef kind="function" id="d5/d08/a03254_1ad5db1be40b7fb695857dd9e36c1fcbff" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -161,8 +161,8 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/Parameter.hpp" line="77" column="6" bodyfile="Miscellaneous/Parameter.hpp" bodystart="77" bodyend="93"/>
-        <referencedby refid="d5/d08/a03254_1a308156a2a8619c89a52f64b2c391efc3" compoundref="d1/d98/a00407" startline="124" endline="128">castor3d::ParametersT&lt; KeyT &gt;::add</referencedby>
-        <referencedby refid="d5/d08/a03254_1a96cb2145223019c28b190229001f6be5" compoundref="d1/d98/a00407" startline="34" endline="59">castor3d::ParametersT&lt; KeyT &gt;::parse</referencedby>
+        <referencedby refid="d5/d08/a03254_1a308156a2a8619c89a52f64b2c391efc3" compoundref="dc/d2f/a00425" startline="124" endline="128">castor3d::ParametersT&lt; KeyT &gt;::add</referencedby>
+        <referencedby refid="d5/d08/a03254_1a96cb2145223019c28b190229001f6be5" compoundref="dc/d2f/a00425" startline="34" endline="59">castor3d::ParametersT&lt; KeyT &gt;::parse</referencedby>
       </memberdef>
       <memberdef kind="function" id="d5/d08/a03254_1a752ae446e1a04e0bc407260458af0ab8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -248,7 +248,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/Parameter.hpp" line="124" column="6" bodyfile="Miscellaneous/Parameter.hpp" bodystart="124" bodyend="128"/>
-        <references refid="d5/d08/a03254_1ad5db1be40b7fb695857dd9e36c1fcbff" compoundref="d1/d98/a00407" startline="77" endline="93">castor3d::ParametersT&lt; KeyT &gt;::add</references>
+        <references refid="d5/d08/a03254_1ad5db1be40b7fb695857dd9e36c1fcbff" compoundref="dc/d2f/a00425" startline="77" endline="93">castor3d::ParametersT&lt; KeyT &gt;::add</references>
       </memberdef>
       <memberdef kind="function" id="d5/d08/a03254_1ae41f7406dafca84065a61cc27b6fc986" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -299,7 +299,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/Parameter.hpp" line="144" column="6" bodyfile="Miscellaneous/Parameter.hpp" bodystart="144" bodyend="148"/>
-        <references refid="d5/d08/a03254_1ad5db1be40b7fb695857dd9e36c1fcbff" compoundref="d1/d98/a00407" startline="77" endline="93">castor3d::ParametersT&lt; KeyT &gt;::add</references>
+        <references refid="d5/d08/a03254_1ad5db1be40b7fb695857dd9e36c1fcbff" compoundref="dc/d2f/a00425" startline="77" endline="93">castor3d::ParametersT&lt; KeyT &gt;::add</references>
       </memberdef>
       <memberdef kind="function" id="d5/d08/a03254_1aa632d31dbf2ec8449dc4ad022c2fac0c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -345,7 +345,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/Parameter.hpp" line="163" column="6" bodyfile="Miscellaneous/Parameter.hpp" bodystart="163" bodyend="179"/>
-        <references refid="d5/d08/a03254_1a788809b2719ae6bd194e186572157ccb" compoundref="d1/d98/a00407" startline="357" endline="360">castor3d::ParametersT&lt; KeyT &gt;::size</references>
+        <references refid="d5/d08/a03254_1a788809b2719ae6bd194e186572157ccb" compoundref="dc/d2f/a00425" startline="357" endline="360">castor3d::ParametersT&lt; KeyT &gt;::size</references>
       </memberdef>
       <memberdef kind="function" id="d5/d08/a03254_1a66fa9451528ce319135398c8ac239cf8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -391,7 +391,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/Parameter.hpp" line="194" column="6" bodyfile="Miscellaneous/Parameter.hpp" bodystart="194" bodyend="198"/>
-        <references refid="d5/d08/a03254_1ad5db1be40b7fb695857dd9e36c1fcbff" compoundref="d1/d98/a00407" startline="77" endline="93">castor3d::ParametersT&lt; KeyT &gt;::add</references>
+        <references refid="d5/d08/a03254_1ad5db1be40b7fb695857dd9e36c1fcbff" compoundref="dc/d2f/a00425" startline="77" endline="93">castor3d::ParametersT&lt; KeyT &gt;::add</references>
       </memberdef>
       <memberdef kind="function" id="d5/d08/a03254_1a77dfeca82fa204f525df3fd314fbf9a9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -500,7 +500,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/Parameter.hpp" line="241" column="6" bodyfile="Miscellaneous/Parameter.hpp" bodystart="241" bodyend="261"/>
-        <referencedby refid="d5/d08/a03254_1ab2b2cb427182b47fde46cbbec82a2578" compoundref="d1/d98/a00407" startline="275" endline="279">castor3d::ParametersT&lt; KeyT &gt;::get</referencedby>
+        <referencedby refid="d5/d08/a03254_1ab2b2cb427182b47fde46cbbec82a2578" compoundref="dc/d2f/a00425" startline="275" endline="279">castor3d::ParametersT&lt; KeyT &gt;::get</referencedby>
       </memberdef>
       <memberdef kind="function" id="d5/d08/a03254_1ab2b2cb427182b47fde46cbbec82a2578" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -549,7 +549,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/Parameter.hpp" line="275" column="6" bodyfile="Miscellaneous/Parameter.hpp" bodystart="275" bodyend="279"/>
-        <references refid="d5/d08/a03254_1ad96af3a75d355cbb66a288d3c5776117" compoundref="d1/d98/a00407" startline="241" endline="261">castor3d::ParametersT&lt; KeyT &gt;::get</references>
+        <references refid="d5/d08/a03254_1ad96af3a75d355cbb66a288d3c5776117" compoundref="dc/d2f/a00425" startline="241" endline="261">castor3d::ParametersT&lt; KeyT &gt;::get</references>
       </memberdef>
       <memberdef kind="function" id="d5/d08/a03254_1a11ebc07545b4a4c273f4ee8f0c04d661" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -604,7 +604,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/Parameter.hpp" line="293" column="6" bodyfile="Miscellaneous/Parameter.hpp" bodystart="293" bodyend="297"/>
-        <references refid="d5/d08/a03254_1ad96af3a75d355cbb66a288d3c5776117" compoundref="d1/d98/a00407" startline="241" endline="261">castor3d::ParametersT&lt; KeyT &gt;::get</references>
+        <references refid="d5/d08/a03254_1ad96af3a75d355cbb66a288d3c5776117" compoundref="dc/d2f/a00425" startline="241" endline="261">castor3d::ParametersT&lt; KeyT &gt;::get</references>
       </memberdef>
       <memberdef kind="function" id="d5/d08/a03254_1ad29b8a638f6c203ca2198f6efebd990b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -691,7 +691,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/Parameter.hpp" line="336" column="6" bodyfile="Miscellaneous/Parameter.hpp" bodystart="336" bodyend="340"/>
-        <references refid="d5/d08/a03254_1ad96af3a75d355cbb66a288d3c5776117" compoundref="d1/d98/a00407" startline="241" endline="261">castor3d::ParametersT&lt; KeyT &gt;::get</references>
+        <references refid="d5/d08/a03254_1ad96af3a75d355cbb66a288d3c5776117" compoundref="dc/d2f/a00425" startline="241" endline="261">castor3d::ParametersT&lt; KeyT &gt;::get</references>
       </memberdef>
       <memberdef kind="function" id="d5/d08/a03254_1ad57408a3beec0e65cac1ad1076c08e99" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -726,7 +726,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/Parameter.hpp" line="350" column="8" bodyfile="Miscellaneous/Parameter.hpp" bodystart="350" bodyend="355"/>
-        <references refid="d5/d08/a03254_1ad96af3a75d355cbb66a288d3c5776117" compoundref="d1/d98/a00407" startline="241" endline="261">castor3d::ParametersT&lt; KeyT &gt;::get</references>
+        <references refid="d5/d08/a03254_1ad96af3a75d355cbb66a288d3c5776117" compoundref="dc/d2f/a00425" startline="241" endline="261">castor3d::ParametersT&lt; KeyT &gt;::get</references>
       </memberdef>
       <memberdef kind="function" id="d5/d08/a03254_1a788809b2719ae6bd194e186572157ccb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>size_t</type>
@@ -741,7 +741,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/Parameter.hpp" line="357" column="8" bodyfile="Miscellaneous/Parameter.hpp" bodystart="357" bodyend="360"/>
-        <referencedby refid="d5/d08/a03254_1aa632d31dbf2ec8449dc4ad022c2fac0c" compoundref="d1/d98/a00407" startline="163" endline="179">castor3d::ParametersT&lt; KeyT &gt;::add</referencedby>
+        <referencedby refid="d5/d08/a03254_1aa632d31dbf2ec8449dc4ad022c2fac0c" compoundref="dc/d2f/a00425" startline="163" endline="179">castor3d::ParametersT&lt; KeyT &gt;::add</referencedby>
       </memberdef>
       </sectiondef>
     <briefdescription>

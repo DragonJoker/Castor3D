@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="db/d35/a05030" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::MorphingBufferConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/d35/a05030_1ada5099ca68408a2d12c5d1b0bc24c9eb" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::MorphingBufferConfiguration::time</definition>
+        <argsstring></argsstring>
+        <name>time</name>
+        <qualifiedname>castor3d::MorphingBufferConfiguration::time</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="270" column="17" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="270" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Morphing data. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/UbosModule.hpp" line="268" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="269" bodyend="271"/>
+    <listofallmembers>
+      <member refid="db/d35/a05030_1ada5099ca68408a2d12c5d1b0bc24c9eb" prot="public" virt="non-virtual"><scope>castor3d::MorphingBufferConfiguration</scope><name>time</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

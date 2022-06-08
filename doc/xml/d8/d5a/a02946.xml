@@ -36,7 +36,7 @@
         <location file="Material/Texture/TextureModule.hpp" line="218" column="1" bodyfile="Material/Texture/TextureModule.hpp" bodystart="218" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="d8/d5a/a02946_1a88f1de8a82e61dd4f82b7b04bb3a3bc0" prot="public" static="no">
-        <type><ref refid="d9/d6c/a02710" kindref="compound">ResourceCacheTraitsT</ref>&lt; <ref refid="d8/d5a/a02946_1a2b515af7437a8fcadda51f0f0f8db868" kindref="member">ResT</ref>, <ref refid="d8/d5a/a02946_1af4f35fd585923ba05e7682d2c083a3af" kindref="member">KeyT</ref> &gt;</type>
+        <type><ref refid="d1/d3c/a02714" kindref="compound">ResourceCacheTraitsT</ref>&lt; <ref refid="d8/d5a/a02946_1a2b515af7437a8fcadda51f0f0f8db868" kindref="member">ResT</ref>, <ref refid="d8/d5a/a02946_1af4f35fd585923ba05e7682d2c083a3af" kindref="member">KeyT</ref> &gt;</type>
         <definition>using castor3d::ResourceCacheTraitsT&lt; Sampler, castor::String &gt;::TraitsT =  ResourceCacheTraitsT&lt; ResT, KeyT &gt;</definition>
         <argsstring></argsstring>
         <name>TraitsT</name>
@@ -94,7 +94,7 @@
       </sectiondef>
       <sectiondef kind="public-static-attrib">
       <memberdef kind="variable" id="d8/d5a/a02946_1afbe24c9343925ea48a6c25f5eee6c441" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
         <definition>C3D_API const castor::String castor3d::ResourceCacheTraitsT&lt; Sampler, castor::String &gt;::Name</definition>
         <argsstring></argsstring>
         <name>Name</name>

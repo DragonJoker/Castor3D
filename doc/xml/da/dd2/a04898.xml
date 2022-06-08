@@ -1,94 +1,106 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="da/dd2/a04898" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::HdrConfigUbo</compoundname>
-    <includes local="no">HdrConfigUbo.hpp</includes>
-      <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="da/dd2/a04898_1a2440dca559ddaf38cf51bf61b701990b" prot="public" static="no">
-        <type><ref refid="da/d7e/a04326" kindref="compound">HdrConfig</ref></type>
-        <definition>using castor3d::HdrConfigUbo::Configuration =  HdrConfig</definition>
+  <compounddef id="da/dd2/a04898" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::PointLight</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">GlslLight.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/dd2/a04898_1afd01d4df3d5efa01c71e4714172f45dc" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/d0b/a04890" kindref="compound">Light</ref></type>
+        <definition>Light castor3d::shader::PointLight::base</definition>
         <argsstring></argsstring>
-        <name>Configuration</name>
-        <qualifiedname>castor3d::HdrConfigUbo::Configuration</qualifiedname>
+        <name>base</name>
+        <qualifiedname>castor3d::shader::PointLight::base</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="57" column="1" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="57" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslLight.hpp" line="116" column="7" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/dd2/a04898_1a872c7e45684250f7adc5c64d9911fbaa" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::PointLight::position</definition>
+        <argsstring></argsstring>
+        <name>position</name>
+        <qualifiedname>castor3d::shader::PointLight::position</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="126" column="11" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="126" bodyend="-1"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="da/dd2/a04898_1ae3a9a43640e0d9fb106d8eb30f219694" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
-        <definition>C3D_API castor::String const castor3d::HdrConfigUbo::BufferHdrConfig</definition>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="da/dd2/a04898_1ae0ec198d71105a937ac89250db1b9dd9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class LightingModel</definition>
         <argsstring></argsstring>
-        <name>BufferHdrConfig</name>
-        <qualifiedname>castor3d::HdrConfigUbo::BufferHdrConfig</qualifiedname>
+        <name>LightingModel</name>
+        <qualifiedname>castor3d::shader::PointLight::LightingModel</qualifiedname>
+        <param>
+          <type><ref refid="d5/de6/a04910" kindref="compound">LightingModel</ref></type>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="94" column="37" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="94" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="da/dd2/a04898_1a3c13aff3fe08b2b7c48a857790ef290e" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
-        <definition>C3D_API castor::String const castor3d::HdrConfigUbo::HdrConfigData</definition>
-        <argsstring></argsstring>
-        <name>HdrConfigData</name>
-        <qualifiedname>castor3d::HdrConfigUbo::HdrConfigData</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="95" column="37" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="95" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslLight.hpp" line="119" column="14" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="119" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="da/dd2/a04898_1afe900694c284997f4915bd010680ef12" prot="private" static="no" mutable="no">
-        <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const  &amp;</type>
-        <definition>RenderDevice const&amp; castor3d::HdrConfigUbo::m_device</definition>
+      <memberdef kind="variable" id="da/dd2/a04898_1a1acd3c948efd171bcd61a1e021593d69" prot="private" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::PointLight::m_position4</definition>
         <argsstring></argsstring>
-        <name>m_device</name>
-        <qualifiedname>castor3d::HdrConfigUbo::m_device</qualifiedname>
+        <name>m_position4</name>
+        <qualifiedname>castor3d::shader::PointLight::m_position4</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="98" column="21" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="98" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslLight.hpp" line="121" column="11" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="121" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="da/dd2/a04898_1a4aefbb0dc431b0340043788a215eac69" prot="private" static="no" mutable="no">
-        <type><ref refid="df/d9b/a02514" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="da/d7e/a04326" kindref="compound">HdrConfig</ref> &gt;</type>
-        <definition>UniformBufferOffsetT&lt; HdrConfig &gt; castor3d::HdrConfigUbo::m_ubo</definition>
+      <memberdef kind="variable" id="da/dd2/a04898_1ad91f8732e81fa67c724027097b6c1328" prot="private" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::PointLight::m_attenuation4</definition>
         <argsstring></argsstring>
-        <name>m_ubo</name>
-        <qualifiedname>castor3d::HdrConfigUbo::m_ubo</qualifiedname>
+        <name>m_attenuation4</name>
+        <qualifiedname>castor3d::shader::PointLight::m_attenuation4</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="99" column="22" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="99" bodyend="-1"/>
+        <location file="Shader/Shaders/GlslLight.hpp" line="122" column="11" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="122" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="da/dd2/a04898_1ab91fa60d45be47d64d6ae7482a58a564" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::HdrConfigUbo::HdrConfigUbo</definition>
-        <argsstring>(HdrConfigUbo const &amp;rhs)=delete</argsstring>
-        <name>HdrConfigUbo</name>
-        <qualifiedname>castor3d::HdrConfigUbo::HdrConfigUbo</qualifiedname>
+      <memberdef kind="function" id="da/dd2/a04898_1a44a7ded33a2cec7d142256d61fdca141" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::PointLight::PointLight</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>PointLight</name>
+        <qualifiedname>castor3d::shader::PointLight::PointLight</qualifiedname>
         <param>
-          <type><ref refid="da/dd2/a04898" kindref="compound">HdrConfigUbo</ref> const &amp;</type>
-          <declname>rhs</declname>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -96,17 +108,19 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="60" column="9"/>
+        <location file="Shader/Shaders/GlslLight.hpp" line="106" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="da/dd2/a04898_1a3eb4761f8c7b734fa1fa83a1cd1d46e5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="da/dd2/a04898" kindref="compound">HdrConfigUbo</ref> &amp;</type>
-        <definition>C3D_API HdrConfigUbo &amp; castor3d::HdrConfigUbo::operator=</definition>
-        <argsstring>(HdrConfigUbo const &amp;rhs)=delete</argsstring>
-        <name>operator=</name>
-        <qualifiedname>castor3d::HdrConfigUbo::operator=</qualifiedname>
+      <memberdef kind="function" id="da/dd2/a04898_1a009471c908b6e6f082e181bca3d7e0bb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::PointLight::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, PointLight)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::PointLight::SDW_DeclStructInstance</qualifiedname>
         <param>
-          <type><ref refid="da/dd2/a04898" kindref="compound">HdrConfigUbo</ref> const &amp;</type>
-          <declname>rhs</declname>
+          <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        </param>
+        <param>
+          <type><ref refid="da/dd2/a04898" kindref="compound">PointLight</ref></type>
         </param>
         <briefdescription>
         </briefdescription>
@@ -114,17 +128,17 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="61" column="23"/>
+        <location file="Shader/Shaders/GlslLight.hpp" line="109" column="1"/>
       </memberdef>
-      <memberdef kind="function" id="da/dd2/a04898_1a64901695f1fb427d91818dd1aa632fc1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::HdrConfigUbo::HdrConfigUbo</definition>
-        <argsstring>(HdrConfigUbo &amp;&amp;rhs)=default</argsstring>
-        <name>HdrConfigUbo</name>
-        <qualifiedname>castor3d::HdrConfigUbo::HdrConfigUbo</qualifiedname>
+      <memberdef kind="function" id="da/dd2/a04898_1a6fdbdfaaac002828e8a8cb8a810e66ce" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>C3D_API sdw::Float castor3d::shader::PointLight::getAttenuationFactor</definition>
+        <argsstring>(sdw::Float const &amp;distance) const</argsstring>
+        <name>getAttenuationFactor</name>
+        <qualifiedname>castor3d::shader::PointLight::getAttenuationFactor</qualifiedname>
         <param>
-          <type><ref refid="da/dd2/a04898" kindref="compound">HdrConfigUbo</ref> &amp;&amp;</type>
-          <declname>rhs</declname>
+          <type>sdw::Float const &amp;</type>
+          <declname>distance</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -132,17 +146,19 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="62" column="9"/>
+        <location file="Shader/Shaders/GlslLight.hpp" line="111" column="20"/>
       </memberdef>
-      <memberdef kind="function" id="da/dd2/a04898_1af6e3e27f16ad71c0b195b6e88ef29568" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="da/dd2/a04898" kindref="compound">HdrConfigUbo</ref> &amp;</type>
-        <definition>C3D_API HdrConfigUbo &amp; castor3d::HdrConfigUbo::operator=</definition>
-        <argsstring>(HdrConfigUbo &amp;&amp;rhs)=delete</argsstring>
-        <name>operator=</name>
-        <qualifiedname>castor3d::HdrConfigUbo::operator=</qualifiedname>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="da/dd2/a04898_1a46cba29d7dc358cfd9135d484095eae6" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
+        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::PointLight::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::PointLight::makeType</qualifiedname>
         <param>
-          <type><ref refid="da/dd2/a04898" kindref="compound">HdrConfigUbo</ref> &amp;&amp;</type>
-          <declname>rhs</declname>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -150,17 +166,17 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="63" column="23"/>
+        <location file="Shader/Shaders/GlslLight.hpp" line="113" column="41"/>
       </memberdef>
-      <memberdef kind="function" id="da/dd2/a04898_1ac8b31a1a1644a849ffa31cf1b1125294" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::HdrConfigUbo::HdrConfigUbo</definition>
-        <argsstring>(RenderDevice const &amp;device)</argsstring>
-        <name>HdrConfigUbo</name>
-        <qualifiedname>castor3d::HdrConfigUbo::HdrConfigUbo</qualifiedname>
+      <memberdef kind="function" id="da/dd2/a04898_1a2cf1586527cfa9fa9a35dbe069aeae98" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::PointLight::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::shader::PointLight::declare</qualifiedname>
         <param>
-          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -168,131 +184,56 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="64" column="18"/>
-      </memberdef>
-      <memberdef kind="function" id="da/dd2/a04898_1a4b382d91005dd9eaa4a091bf33ca01ca" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::HdrConfigUbo::~HdrConfigUbo</definition>
-        <argsstring>()</argsstring>
-        <name>~HdrConfigUbo</name>
-        <qualifiedname>castor3d::HdrConfigUbo::~HdrConfigUbo</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="65" column="9"/>
-      </memberdef>
-      <memberdef kind="function" id="da/dd2/a04898_1a2f30a1d39e9c5ea861177803e507195b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::HdrConfigUbo::cpuUpdate</definition>
-        <argsstring>(HdrConfig const &amp;config)</argsstring>
-        <name>cpuUpdate</name>
-        <qualifiedname>castor3d::HdrConfigUbo::cpuUpdate</qualifiedname>
-        <param>
-          <type><ref refid="da/d7e/a04326" kindref="compound">HdrConfig</ref> const &amp;</type>
-          <declname>config</declname>
-        </param>
-        <briefdescription>
-<para>Updates the UBO from given values. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">config</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The HDR configuration. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="74" column="14"/>
-      </memberdef>
-      <memberdef kind="function" id="da/dd2/a04898_1acbca94618ea9c25507c9c222b1788abd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::HdrConfigUbo::createPassBinding</definition>
-        <argsstring>(crg::FramePass &amp;pass, uint32_t binding) const</argsstring>
-        <name>createPassBinding</name>
-        <qualifiedname>castor3d::HdrConfigUbo::createPassBinding</qualifiedname>
-        <param>
-          <type>crg::FramePass &amp;</type>
-          <declname>pass</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>binding</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="76" column="6" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="76" bodyend="80"/>
-      </memberdef>
-      <memberdef kind="function" id="da/dd2/a04898_1a22919fcbcf1d1c282e876e99e5e7cabe" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::HdrConfigUbo::createSizedBinding</definition>
-        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;layoutBinding) const</argsstring>
-        <name>createSizedBinding</name>
-        <qualifiedname>castor3d::HdrConfigUbo::createSizedBinding</qualifiedname>
-        <param>
-          <type>ashes::DescriptorSet &amp;</type>
-          <declname>descriptorSet</declname>
-        </param>
-        <param>
-          <type>VkDescriptorSetLayoutBinding const &amp;</type>
-          <declname>layoutBinding</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="82" column="6" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="82" bodyend="86"/>
-      </memberdef>
-      <memberdef kind="function" id="da/dd2/a04898_1aaca05e57743879da97df5a70aa401596" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="df/d9b/a02514" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="da/dd2/a04898_1a2440dca559ddaf38cf51bf61b701990b" kindref="member">Configuration</ref> &gt; const &amp;</type>
-        <definition>UniformBufferOffsetT&lt; Configuration &gt; const  &amp; castor3d::HdrConfigUbo::getUbo</definition>
-        <argsstring>() const</argsstring>
-        <name>getUbo</name>
-        <qualifiedname>castor3d::HdrConfigUbo::getUbo</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Shader/Ubos/HdrConfigUbo.hpp" line="88" column="29" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="88" bodyend="91"/>
+        <location file="Shader/Shaders/GlslLight.hpp" line="114" column="32"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Shader/Ubos/HdrConfigUbo.hpp" line="54" column="1" bodyfile="Shader/Ubos/HdrConfigUbo.hpp" bodystart="55" bodyend="100"/>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::PointLight</label>
+        <link refid="da/dd2/a04898"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>castor3d::shader::Light</label>
+        <link refid="d1/d0b/a04890"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::PointLight</label>
+        <link refid="da/dd2/a04898"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>base</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslLight.hpp" line="103" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="105" bodyend="131"/>
     <listofallmembers>
-      <member refid="da/dd2/a04898_1ae3a9a43640e0d9fb106d8eb30f219694" prot="public" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>BufferHdrConfig</name></member>
-      <member refid="da/dd2/a04898_1a2440dca559ddaf38cf51bf61b701990b" prot="public" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>Configuration</name></member>
-      <member refid="da/dd2/a04898_1a2f30a1d39e9c5ea861177803e507195b" prot="public" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>cpuUpdate</name></member>
-      <member refid="da/dd2/a04898_1acbca94618ea9c25507c9c222b1788abd" prot="public" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>createPassBinding</name></member>
-      <member refid="da/dd2/a04898_1a22919fcbcf1d1c282e876e99e5e7cabe" prot="public" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>createSizedBinding</name></member>
-      <member refid="da/dd2/a04898_1aaca05e57743879da97df5a70aa401596" prot="public" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>getUbo</name></member>
-      <member refid="da/dd2/a04898_1a3c13aff3fe08b2b7c48a857790ef290e" prot="public" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>HdrConfigData</name></member>
-      <member refid="da/dd2/a04898_1ab91fa60d45be47d64d6ae7482a58a564" prot="public" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>HdrConfigUbo</name></member>
-      <member refid="da/dd2/a04898_1a64901695f1fb427d91818dd1aa632fc1" prot="public" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>HdrConfigUbo</name></member>
-      <member refid="da/dd2/a04898_1ac8b31a1a1644a849ffa31cf1b1125294" prot="public" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>HdrConfigUbo</name></member>
-      <member refid="da/dd2/a04898_1afe900694c284997f4915bd010680ef12" prot="private" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>m_device</name></member>
-      <member refid="da/dd2/a04898_1a4aefbb0dc431b0340043788a215eac69" prot="private" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>m_ubo</name></member>
-      <member refid="da/dd2/a04898_1a3eb4761f8c7b734fa1fa83a1cd1d46e5" prot="public" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>operator=</name></member>
-      <member refid="da/dd2/a04898_1af6e3e27f16ad71c0b195b6e88ef29568" prot="public" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>operator=</name></member>
-      <member refid="da/dd2/a04898_1a4b382d91005dd9eaa4a091bf33ca01ca" prot="public" virt="non-virtual"><scope>castor3d::HdrConfigUbo</scope><name>~HdrConfigUbo</name></member>
+      <member refid="da/dd2/a04898_1afd01d4df3d5efa01c71e4714172f45dc" prot="public" virt="non-virtual"><scope>castor3d::shader::PointLight</scope><name>base</name></member>
+      <member refid="da/dd2/a04898_1a2cf1586527cfa9fa9a35dbe069aeae98" prot="public" virt="non-virtual"><scope>castor3d::shader::PointLight</scope><name>declare</name></member>
+      <member refid="da/dd2/a04898_1a6fdbdfaaac002828e8a8cb8a810e66ce" prot="public" virt="non-virtual"><scope>castor3d::shader::PointLight</scope><name>getAttenuationFactor</name></member>
+      <member refid="da/dd2/a04898_1ae0ec198d71105a937ac89250db1b9dd9" prot="private" virt="non-virtual"><scope>castor3d::shader::PointLight</scope><name>LightingModel</name></member>
+      <member refid="da/dd2/a04898_1ad91f8732e81fa67c724027097b6c1328" prot="private" virt="non-virtual"><scope>castor3d::shader::PointLight</scope><name>m_attenuation4</name></member>
+      <member refid="da/dd2/a04898_1a1acd3c948efd171bcd61a1e021593d69" prot="private" virt="non-virtual"><scope>castor3d::shader::PointLight</scope><name>m_position4</name></member>
+      <member refid="da/dd2/a04898_1a46cba29d7dc358cfd9135d484095eae6" prot="public" virt="non-virtual"><scope>castor3d::shader::PointLight</scope><name>makeType</name></member>
+      <member refid="da/dd2/a04898_1a44a7ded33a2cec7d142256d61fdca141" prot="public" virt="non-virtual"><scope>castor3d::shader::PointLight</scope><name>PointLight</name></member>
+      <member refid="da/dd2/a04898_1a872c7e45684250f7adc5c64d9911fbaa" prot="public" virt="non-virtual"><scope>castor3d::shader::PointLight</scope><name>position</name></member>
+      <member refid="da/dd2/a04898_1a009471c908b6e6f082e181bca3d7e0bb" prot="public" virt="non-virtual"><scope>castor3d::shader::PointLight</scope><name>SDW_DeclStructInstance</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,343 +1,127 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d7/d4f/a03746" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::VoxelBufferToTexture</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">crg::RunnablePass</basecompoundref>
-    <includes local="no">VoxelBufferToTexture.hpp</includes>
-    <innerclass refid="d2/d17/a03750" prot="public">castor3d::VoxelBufferToTexture::Pipeline</innerclass>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d7/d4f/a03746_1a8ad08890503e89521bbf40641a00dc23" prot="private" static="no" mutable="no">
-        <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const  &amp;</type>
-        <definition>RenderDevice const&amp; castor3d::VoxelBufferToTexture::m_device</definition>
-        <argsstring></argsstring>
-        <name>m_device</name>
-        <qualifiedname>castor3d::VoxelBufferToTexture::m_device</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" line="66" column="21" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" bodystart="66" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d4f/a03746_1a2bc5676ffe94a69bce964888778d6e93" prot="private" static="no" mutable="no">
-        <type><ref refid="d1/da4/a03766" kindref="compound">VoxelSceneData</ref> const  &amp;</type>
-        <definition>VoxelSceneData const&amp; castor3d::VoxelBufferToTexture::m_vctConfig</definition>
-        <argsstring></argsstring>
-        <name>m_vctConfig</name>
-        <qualifiedname>castor3d::VoxelBufferToTexture::m_vctConfig</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" line="67" column="23" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" bodystart="67" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d4f/a03746_1aa8dac9a90342a90fc470e35d58033b9b" prot="private" static="no" mutable="no">
-        <type>ashes::DescriptorSetLayoutPtr</type>
-        <definition>ashes::DescriptorSetLayoutPtr castor3d::VoxelBufferToTexture::m_descriptorSetLayout</definition>
-        <argsstring></argsstring>
-        <name>m_descriptorSetLayout</name>
-        <qualifiedname>castor3d::VoxelBufferToTexture::m_descriptorSetLayout</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" line="68" column="31" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" bodystart="68" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d4f/a03746_1afea0621a70f6df4a4710862adde88ca9" prot="private" static="no" mutable="no">
-        <type>ashes::PipelineLayoutPtr</type>
-        <definition>ashes::PipelineLayoutPtr castor3d::VoxelBufferToTexture::m_pipelineLayout</definition>
-        <argsstring></argsstring>
-        <name>m_pipelineLayout</name>
-        <qualifiedname>castor3d::VoxelBufferToTexture::m_pipelineLayout</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" line="69" column="26" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" bodystart="69" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d4f/a03746_1afd468680889ca95ff210eb7867caea91" prot="private" static="no" mutable="no">
-        <type>std::array&lt; <ref refid="d2/d17/a03750" kindref="compound">Pipeline</ref>, 4u &gt;</type>
-        <definition>std::array&lt; Pipeline, 4u &gt; castor3d::VoxelBufferToTexture::m_pipelines</definition>
-        <argsstring></argsstring>
-        <name>m_pipelines</name>
-        <qualifiedname>castor3d::VoxelBufferToTexture::m_pipelines</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" line="70" column="12" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" bodystart="70" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d4f/a03746_1a1cb657d0b62b15f6dca24d779b42408b" prot="private" static="no" mutable="no">
-        <type>ashes::DescriptorSetPoolPtr</type>
-        <definition>ashes::DescriptorSetPoolPtr castor3d::VoxelBufferToTexture::m_descriptorSetPool</definition>
-        <argsstring></argsstring>
-        <name>m_descriptorSetPool</name>
-        <qualifiedname>castor3d::VoxelBufferToTexture::m_descriptorSetPool</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" line="71" column="29" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" bodystart="71" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d7/d4f/a03746_1a155f8f083442a2c99eb120bee51d5222" prot="private" static="no" mutable="no">
-        <type>ashes::DescriptorSetPtr</type>
-        <definition>ashes::DescriptorSetPtr castor3d::VoxelBufferToTexture::m_descriptorSet</definition>
-        <argsstring></argsstring>
-        <name>m_descriptorSet</name>
-        <qualifiedname>castor3d::VoxelBufferToTexture::m_descriptorSet</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" line="72" column="25" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" bodystart="72" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
+    <compoundname>castor3d::LayeredLightPropagationVolumesT</compoundname>
+    <basecompoundref refid="dd/ddd/a03738" prot="public" virt="non-virtual">castor3d::LayeredLightPropagationVolumesBase</basecompoundref>
+    <includes local="no">LayeredLightPropagationVolumes.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>bool</type>
+        <declname>GeometryVolumesT</declname>
+        <defname>GeometryVolumesT</defname>
+      </param>
+    </templateparamlist>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d7/d4f/a03746_1a5a7c0eae8d72ee57b55c2fd5d5d34796" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::VoxelBufferToTexture::VoxelBufferToTexture</definition>
-        <argsstring>(crg::FramePass const &amp;pass, crg::GraphContext &amp;context, crg::RunnableGraph &amp;graph, RenderDevice const &amp;device, VoxelSceneData const &amp;vctConfig)</argsstring>
-        <name>VoxelBufferToTexture</name>
-        <qualifiedname>castor3d::VoxelBufferToTexture::VoxelBufferToTexture</qualifiedname>
+      <memberdef kind="function" id="d7/d4f/a03746_1ad8c5f5e44cb781ce1f861e1ebd6c2cdb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::LayeredLightPropagationVolumesT&lt; GeometryVolumesT &gt;::LayeredLightPropagationVolumesT</definition>
+        <argsstring>(crg::ResourceHandler &amp;handler, Scene const &amp;scene, LightType lightType, RenderDevice const &amp;device, ShadowMapResult const &amp;smResult, LightVolumePassResultArray const &amp;lpvResult, LayeredLpvGridConfigUbo &amp;lpvGridConfigUbo)</argsstring>
+        <name>LayeredLightPropagationVolumesT</name>
+        <qualifiedname>castor3d::LayeredLightPropagationVolumesT::LayeredLightPropagationVolumesT</qualifiedname>
         <param>
-          <type>crg::FramePass const &amp;</type>
-          <declname>pass</declname>
+          <type>crg::ResourceHandler &amp;</type>
+          <declname>handler</declname>
         </param>
         <param>
-          <type>crg::GraphContext &amp;</type>
-          <declname>context</declname>
+          <type><ref refid="d8/d12/a04694" kindref="compound">Scene</ref> const &amp;</type>
+          <declname>scene</declname>
         </param>
         <param>
-          <type>crg::RunnableGraph &amp;</type>
-          <declname>graph</declname>
+          <type><ref refid="da/dab/a01362_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>lightType</declname>
         </param>
         <param>
-          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <type><ref refid="df/d75/a04010" kindref="compound">RenderDevice</ref> const &amp;</type>
           <declname>device</declname>
         </param>
         <param>
-          <type><ref refid="d1/da4/a03766" kindref="compound">VoxelSceneData</ref> const &amp;</type>
-          <declname>vctConfig</declname>
+          <type><ref refid="d1/d8f/a04202" kindref="compound">ShadowMapResult</ref> const &amp;</type>
+          <declname>smResult</declname>
         </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">pass</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parent frame pass. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">context</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The rendering context. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">graph</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The runnable graph. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">vctConfig</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The voxelizer configuration. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" line="46" column="9"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d4f/a03746_1ad2422b6aabcfaab9ee8f17ca131d1e3a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::VoxelBufferToTexture::accept</definition>
-        <argsstring>(RenderTechniqueVisitor &amp;visitor)</argsstring>
-        <name>accept</name>
-        <qualifiedname>castor3d::VoxelBufferToTexture::accept</qualifiedname>
         <param>
-          <type><ref refid="de/da2/a04294" kindref="compound">RenderTechniqueVisitor</ref> &amp;</type>
-          <declname>visitor</declname>
+          <type>LightVolumePassResultArray const &amp;</type>
+          <declname>lpvResult</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df7/a05026" kindref="compound">LayeredLpvGridConfigUbo</ref> &amp;</type>
+          <declname>lpvGridConfigUbo</declname>
         </param>
         <briefdescription>
-<para>Visitor acceptance function. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername>visitor</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The ... visitor. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" line="54" column="14"/>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="140" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="140" bodyend="156"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d7/d4f/a03746_1a419eacd0bd7c58d05b39f86d8e634329" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::VoxelBufferToTexture::doInitialise</definition>
-        <argsstring>()</argsstring>
-        <name>doInitialise</name>
-        <qualifiedname>castor3d::VoxelBufferToTexture::doInitialise</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" line="57" column="6"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d4f/a03746_1a1e2f3f10a1f93c4314ac3692434d09d6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::VoxelBufferToTexture::doRecordInto</definition>
-        <argsstring>(crg::RecordContext &amp;context, VkCommandBuffer commandBuffer, uint32_t index)</argsstring>
-        <name>doRecordInto</name>
-        <qualifiedname>castor3d::VoxelBufferToTexture::doRecordInto</qualifiedname>
-        <param>
-          <type>crg::RecordContext &amp;</type>
-          <declname>context</declname>
-        </param>
-        <param>
-          <type>VkCommandBuffer</type>
-          <declname>commandBuffer</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>index</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" line="58" column="6"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d4f/a03746_1afde3759df1757f320934191552128ce9" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type>VkPipelineStageFlags</type>
-        <definition>VkPipelineStageFlags castor3d::VoxelBufferToTexture::doGetSemaphoreWaitFlags</definition>
-        <argsstring>() const</argsstring>
-        <name>doGetSemaphoreWaitFlags</name>
-        <qualifiedname>castor3d::VoxelBufferToTexture::doGetSemaphoreWaitFlags</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" line="61" column="22"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d4f/a03746_1ade4ecde00723681bb3488abea1347324" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d7/d4f/a03746_1a4b7e8426ba2e7dfb7b97a7fc6e923ed8" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>uint32_t</type>
-        <definition>uint32_t castor3d::VoxelBufferToTexture::doGetPassIndex</definition>
-        <argsstring>() const</argsstring>
-        <name>doGetPassIndex</name>
-        <qualifiedname>castor3d::VoxelBufferToTexture::doGetPassIndex</qualifiedname>
+        <definition>static uint32_t castor3d::LayeredLightPropagationVolumesT&lt; GeometryVolumesT &gt;::countInitialisationSteps</definition>
+        <argsstring>()</argsstring>
+        <name>countInitialisationSteps</name>
+        <qualifiedname>castor3d::LayeredLightPropagationVolumesT::countInitialisationSteps</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" line="62" column="10"/>
-      </memberdef>
-      <memberdef kind="function" id="d7/d4f/a03746_1a07b45e84d83390785e723c03494de899" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::VoxelBufferToTexture::doIsComputePass</definition>
-        <argsstring>() const</argsstring>
-        <name>doIsComputePass</name>
-        <qualifiedname>castor3d::VoxelBufferToTexture::doIsComputePass</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" line="63" column="6"/>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="158" column="17" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="158" bodyend="170"/>
+        <references refid="da/dab/a01362_1a569177dd5bfdc441c123583687d5315e" compoundref="d0/d39/a00314" startline="69">castor3d::LpvMaxPropagationSteps</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>Lighting propagation volumes generation pass. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
+      <node id="2">
+        <label>castor3d::LayeredLightPropagationVolumesBase</label>
+        <link refid="dd/ddd/a03738"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
       <node id="1">
-        <label>castor3d::VoxelBufferToTexture</label>
+        <label>castor3d::LayeredLightPropagationVolumesT&lt; GeometryVolumesT &gt;</label>
         <link refid="d7/d4f/a03746"/>
         <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="2">
-        <label>crg::RunnablePass</label>
+      <node id="3">
+        <label>castor::Named</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
+      <node id="2">
+        <label>castor3d::LayeredLightPropagationVolumesBase</label>
+        <link refid="dd/ddd/a03738"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
       <node id="1">
-        <label>castor3d::VoxelBufferToTexture</label>
+        <label>castor3d::LayeredLightPropagationVolumesT&lt; GeometryVolumesT &gt;</label>
         <link refid="d7/d4f/a03746"/>
         <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="2">
-        <label>crg::RunnablePass</label>
+      <node id="3">
+        <label>castor::Named</label>
       </node>
     </collaborationgraph>
-    <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" line="21" column="1" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp" bodystart="23" bodyend="73"/>
+    <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="136" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="138" bodyend="171"/>
     <listofallmembers>
-      <member refid="d7/d4f/a03746_1ad2422b6aabcfaab9ee8f17ca131d1e3a" prot="public" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>accept</name></member>
-      <member refid="d7/d4f/a03746_1ade4ecde00723681bb3488abea1347324" prot="private" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>doGetPassIndex</name></member>
-      <member refid="d7/d4f/a03746_1afde3759df1757f320934191552128ce9" prot="private" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>doGetSemaphoreWaitFlags</name></member>
-      <member refid="d7/d4f/a03746_1a419eacd0bd7c58d05b39f86d8e634329" prot="private" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>doInitialise</name></member>
-      <member refid="d7/d4f/a03746_1a07b45e84d83390785e723c03494de899" prot="private" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>doIsComputePass</name></member>
-      <member refid="d7/d4f/a03746_1a1e2f3f10a1f93c4314ac3692434d09d6" prot="private" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>doRecordInto</name></member>
-      <member refid="d7/d4f/a03746_1a155f8f083442a2c99eb120bee51d5222" prot="private" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>m_descriptorSet</name></member>
-      <member refid="d7/d4f/a03746_1aa8dac9a90342a90fc470e35d58033b9b" prot="private" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>m_descriptorSetLayout</name></member>
-      <member refid="d7/d4f/a03746_1a1cb657d0b62b15f6dca24d779b42408b" prot="private" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>m_descriptorSetPool</name></member>
-      <member refid="d7/d4f/a03746_1a8ad08890503e89521bbf40641a00dc23" prot="private" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>m_device</name></member>
-      <member refid="d7/d4f/a03746_1afea0621a70f6df4a4710862adde88ca9" prot="private" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>m_pipelineLayout</name></member>
-      <member refid="d7/d4f/a03746_1afd468680889ca95ff210eb7867caea91" prot="private" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>m_pipelines</name></member>
-      <member refid="d7/d4f/a03746_1a2bc5676ffe94a69bce964888778d6e93" prot="private" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>m_vctConfig</name></member>
-      <member refid="d7/d4f/a03746_1a5a7c0eae8d72ee57b55c2fd5d5d34796" prot="public" virt="non-virtual"><scope>castor3d::VoxelBufferToTexture</scope><name>VoxelBufferToTexture</name></member>
+      <member refid="dd/ddd/a03738_1a82e95eb228c7ee06f430e9d796a4d972" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesT</scope><name>accept</name></member>
+      <member refid="dd/ddd/a03738_1a37e180379f2be1c7312a4a31f2d7f4a2" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesT</scope><name>cleanup</name></member>
+      <member refid="d7/d4f/a03746_1a4b7e8426ba2e7dfb7b97a7fc6e923ed8" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesT</scope><name>countInitialisationSteps</name></member>
+      <member refid="dd/ddd/a03738_1a7bf255beebc904d215228abae9dbe85b" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesT</scope><name>initialise</name></member>
+      <member refid="dd/ddd/a03738_1a237329d3e5b703732860ac916144c773" prot="protected" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesT</scope><name>LayeredLightPropagationVolumesBase</name></member>
+      <member refid="d7/d4f/a03746_1ad8c5f5e44cb781ce1f861e1ebd6c2cdb" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesT</scope><name>LayeredLightPropagationVolumesT</name></member>
+      <member refid="dd/ddd/a03738_1af37c2625f18ab6ea20303569e42770e9" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesT</scope><name>registerLight</name></member>
+      <member refid="dd/ddd/a03738_1a7da87880b990de1ab7be55be2e5343d2" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesT</scope><name>render</name></member>
+      <member refid="dd/ddd/a03738_1a865d60aba3a9298653d229e54f8d51fb" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesT</scope><name>update</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,0 +1,242 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d1/dcc/a04250" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::LightPipeline</compoundname>
+    <includes local="no">LightingPass.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/dcc/a04250_1a7dfe23300de772fc4ed5435ef96636bc" prot="private" static="no" mutable="no">
+        <type>crg::PipelineHolder</type>
+        <definition>crg::PipelineHolder castor3d::LightPipeline::m_holder</definition>
+        <argsstring></argsstring>
+        <name>m_holder</name>
+        <qualifiedname>castor3d::LightPipeline::m_holder</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightingPass.hpp" line="110" column="21" bodyfile="Render/Technique/Opaque/LightingPass.hpp" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dcc/a04250_1ae90f357376306abd1124d55e80770eb8" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/d10/a04234" kindref="compound">LightPipelineConfig</ref> const  &amp;</type>
+        <definition>LightPipelineConfig const&amp; castor3d::LightPipeline::m_config</definition>
+        <argsstring></argsstring>
+        <name>m_config</name>
+        <qualifiedname>castor3d::LightPipeline::m_config</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightingPass.hpp" line="111" column="28" bodyfile="Render/Technique/Opaque/LightingPass.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dcc/a04250_1abc66164cd351ad830509a46adffb2720" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d0/dd6/a04238" kindref="compound">LightRenderPass</ref> &gt; const  &amp;</type>
+        <definition>std::vector&lt; LightRenderPass &gt; const&amp; castor3d::LightPipeline::m_renderPasses</definition>
+        <argsstring></argsstring>
+        <name>m_renderPasses</name>
+        <qualifiedname>castor3d::LightPipeline::m_renderPasses</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightingPass.hpp" line="112" column="20" bodyfile="Render/Technique/Opaque/LightingPass.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/dcc/a04250_1a0efbcc133b8527004551fb9acdee096d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::LightPipeline::LightPipeline</definition>
+        <argsstring>(crg::FramePass const &amp;pass, crg::GraphContext &amp;context, crg::RunnableGraph &amp;graph, LightPipelineConfig const &amp;config, std::vector&lt; LightRenderPass &gt; const &amp;renderPasses, ashes::PipelineShaderStageCreateInfoArray stages, VkDescriptorSetLayout descriptorSetLayout)</argsstring>
+        <name>LightPipeline</name>
+        <qualifiedname>castor3d::LightPipeline::LightPipeline</qualifiedname>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>crg::GraphContext &amp;</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>crg::RunnableGraph &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d10/a04234" kindref="compound">LightPipelineConfig</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; <ref refid="d0/dd6/a04238" kindref="compound">LightRenderPass</ref> &gt; const &amp;</type>
+          <declname>renderPasses</declname>
+        </param>
+        <param>
+          <type>ashes::PipelineShaderStageCreateInfoArray</type>
+          <declname>stages</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayout</type>
+          <declname>descriptorSetLayout</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightingPass.hpp" line="77" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dcc/a04250_1a90733983efb09e318a543ba90686b84b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkPipeline</type>
+        <definition>VkPipeline castor3d::LightPipeline::getPipeline</definition>
+        <argsstring>(uint32_t index)</argsstring>
+        <name>getPipeline</name>
+        <qualifiedname>castor3d::LightPipeline::getPipeline</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightingPass.hpp" line="85" column="12" bodyfile="Render/Technique/Opaque/LightingPass.hpp" bodystart="85" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dcc/a04250_1ab7d6d1909e4972daa836544f93ae85c2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkPipelineLayout</type>
+        <definition>VkPipelineLayout castor3d::LightPipeline::getPipelineLayout</definition>
+        <argsstring>()</argsstring>
+        <name>getPipelineLayout</name>
+        <qualifiedname>castor3d::LightPipeline::getPipelineLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightingPass.hpp" line="90" column="18" bodyfile="Render/Technique/Opaque/LightingPass.hpp" bodystart="90" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dcc/a04250_1ad8eb60499c745145619df3e4fe1e1bd1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkDescriptorSet</type>
+        <definition>VkDescriptorSet castor3d::LightPipeline::getDescriptorSet</definition>
+        <argsstring>()</argsstring>
+        <name>getDescriptorSet</name>
+        <qualifiedname>castor3d::LightPipeline::getDescriptorSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightingPass.hpp" line="95" column="17" bodyfile="Render/Technique/Opaque/LightingPass.hpp" bodystart="95" bodyend="98"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d1/dcc/a04250_1a263b8d60f28bda9b79755aa92a8fad4d" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LightPipeline::doCreatePipeline</definition>
+        <argsstring>()</argsstring>
+        <name>doCreatePipeline</name>
+        <qualifiedname>castor3d::LightPipeline::doCreatePipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightingPass.hpp" line="101" column="6"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d1/dcc/a04250_1af29cd34c25607154a297d42ea39f49a3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ashes::PipelineVertexInputStateCreateInfo</type>
+        <definition>ashes::PipelineVertexInputStateCreateInfo castor3d::LightPipeline::doCreateVertexLayout</definition>
+        <argsstring>()</argsstring>
+        <name>doCreateVertexLayout</name>
+        <qualifiedname>castor3d::LightPipeline::doCreateVertexLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightingPass.hpp" line="104" column="43"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dcc/a04250_1ab231d97b9d6935a2770410a1c1a80153" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ashes::PipelineViewportStateCreateInfo</type>
+        <definition>ashes::PipelineViewportStateCreateInfo castor3d::LightPipeline::doCreateViewportState</definition>
+        <argsstring>(ashes::FrameBuffer const &amp;framebuffer)</argsstring>
+        <name>doCreateViewportState</name>
+        <qualifiedname>castor3d::LightPipeline::doCreateViewportState</qualifiedname>
+        <param>
+          <type>ashes::FrameBuffer const &amp;</type>
+          <declname>framebuffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightingPass.hpp" line="105" column="40"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dcc/a04250_1a7f61eba6ad3e18991fb2ce8fcc6f22ae" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ashes::PipelineColorBlendStateCreateInfo</type>
+        <definition>ashes::PipelineColorBlendStateCreateInfo castor3d::LightPipeline::doCreateBlendState</definition>
+        <argsstring>(bool blend)</argsstring>
+        <name>doCreateBlendState</name>
+        <qualifiedname>castor3d::LightPipeline::doCreateBlendState</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>blend</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightingPass.hpp" line="106" column="42"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dcc/a04250_1a6f1bed250e8913ec6f9c806c61cb9072" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>VkCullModeFlags</type>
+        <definition>VkCullModeFlags castor3d::LightPipeline::doGetCullMode</definition>
+        <argsstring>() const</argsstring>
+        <name>doGetCullMode</name>
+        <qualifiedname>castor3d::LightPipeline::doGetCullMode</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/LightingPass.hpp" line="107" column="17"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Technique/Opaque/LightingPass.hpp" line="74" column="1" bodyfile="Render/Technique/Opaque/LightingPass.hpp" bodystart="75" bodyend="113"/>
+    <listofallmembers>
+      <member refid="d1/dcc/a04250_1a7f61eba6ad3e18991fb2ce8fcc6f22ae" prot="private" virt="non-virtual"><scope>castor3d::LightPipeline</scope><name>doCreateBlendState</name></member>
+      <member refid="d1/dcc/a04250_1a263b8d60f28bda9b79755aa92a8fad4d" prot="protected" virt="non-virtual"><scope>castor3d::LightPipeline</scope><name>doCreatePipeline</name></member>
+      <member refid="d1/dcc/a04250_1af29cd34c25607154a297d42ea39f49a3" prot="private" virt="non-virtual"><scope>castor3d::LightPipeline</scope><name>doCreateVertexLayout</name></member>
+      <member refid="d1/dcc/a04250_1ab231d97b9d6935a2770410a1c1a80153" prot="private" virt="non-virtual"><scope>castor3d::LightPipeline</scope><name>doCreateViewportState</name></member>
+      <member refid="d1/dcc/a04250_1a6f1bed250e8913ec6f9c806c61cb9072" prot="private" virt="non-virtual"><scope>castor3d::LightPipeline</scope><name>doGetCullMode</name></member>
+      <member refid="d1/dcc/a04250_1ad8eb60499c745145619df3e4fe1e1bd1" prot="public" virt="non-virtual"><scope>castor3d::LightPipeline</scope><name>getDescriptorSet</name></member>
+      <member refid="d1/dcc/a04250_1a90733983efb09e318a543ba90686b84b" prot="public" virt="non-virtual"><scope>castor3d::LightPipeline</scope><name>getPipeline</name></member>
+      <member refid="d1/dcc/a04250_1ab7d6d1909e4972daa836544f93ae85c2" prot="public" virt="non-virtual"><scope>castor3d::LightPipeline</scope><name>getPipelineLayout</name></member>
+      <member refid="d1/dcc/a04250_1a0efbcc133b8527004551fb9acdee096d" prot="public" virt="non-virtual"><scope>castor3d::LightPipeline</scope><name>LightPipeline</name></member>
+      <member refid="d1/dcc/a04250_1ae90f357376306abd1124d55e80770eb8" prot="private" virt="non-virtual"><scope>castor3d::LightPipeline</scope><name>m_config</name></member>
+      <member refid="d1/dcc/a04250_1a7dfe23300de772fc4ed5435ef96636bc" prot="private" virt="non-virtual"><scope>castor3d::LightPipeline</scope><name>m_holder</name></member>
+      <member refid="d1/dcc/a04250_1abc66164cd351ad830509a46adffb2720" prot="private" virt="non-virtual"><scope>castor3d::LightPipeline</scope><name>m_renderPasses</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,61 +1,46 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="d3/d7f/a03522" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::DebugOverlays::PassOverlays::TimeOverlays</compoundname>
+  <compounddef id="d3/d7f/a03522" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::VertexBoneData::Weights::weights</compoundname>
+    <includes local="no">VertexBoneData.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d3/d7f/a03522_1a4583a7d7de39ceaed715397a0d33834d" prot="public" static="no" mutable="no">
-        <type>castor::Nanoseconds</type>
-        <definition>castor::Nanoseconds castor3d::DebugOverlays::PassOverlays::TimeOverlays::time</definition>
+      <memberdef kind="variable" id="d3/d7f/a03522_1acf40628e9abc3101fae5e16ea9ab945e" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::VertexBoneData::Weights::weights::weight0</definition>
         <argsstring></argsstring>
-        <name>time</name>
-        <qualifiedname>castor3d::DebugOverlays::PassOverlays::TimeOverlays::time</qualifiedname>
-        <initializer>{ 0_ns }</initializer>
+        <name>weight0</name>
+        <qualifiedname>castor3d::VertexBoneData::Weights::weights::weight0</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="239" column="21" bodyfile="Overlay/DebugOverlays.hpp" bodystart="239" bodyend="-1"/>
+        <location file="Model/Skeleton/VertexBoneData.hpp" line="107" column="17" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="107" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d3/d7f/a03522_1a6289f9b5dbc09eb9182faae071761949" prot="public" static="no" mutable="no">
-        <type>TextOverlaySPtr</type>
-        <definition>TextOverlaySPtr castor3d::DebugOverlays::PassOverlays::TimeOverlays::name</definition>
+      <memberdef kind="variable" id="d3/d7f/a03522_1adc631aa4a11633f4bea00eddec0a4a2c" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::VertexBoneData::Weights::weights::weight1</definition>
         <argsstring></argsstring>
-        <name>name</name>
-        <qualifiedname>castor3d::DebugOverlays::PassOverlays::TimeOverlays::name</qualifiedname>
+        <name>weight1</name>
+        <qualifiedname>castor3d::VertexBoneData::Weights::weights::weight1</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="240" column="17" bodyfile="Overlay/DebugOverlays.hpp" bodystart="240" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d7f/a03522_1a9bedf4e81f9a555db53181c08a99c869" prot="public" static="no" mutable="no">
-        <type>TextOverlaySPtr</type>
-        <definition>TextOverlaySPtr castor3d::DebugOverlays::PassOverlays::TimeOverlays::value</definition>
-        <argsstring></argsstring>
-        <name>value</name>
-        <qualifiedname>castor3d::DebugOverlays::PassOverlays::TimeOverlays::value</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="241" column="17" bodyfile="Overlay/DebugOverlays.hpp" bodystart="241" bodyend="-1"/>
+        <location file="Model/Skeleton/VertexBoneData.hpp" line="108" column="17" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="108" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Overlay/DebugOverlays.hpp" line="237" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="238" bodyend="242"/>
+    <location file="Model/Skeleton/VertexBoneData.hpp" line="105" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="106" bodyend="109"/>
     <listofallmembers>
-      <member refid="d3/d7f/a03522_1a6289f9b5dbc09eb9182faae071761949" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays::TimeOverlays</scope><name>name</name></member>
-      <member refid="d3/d7f/a03522_1a4583a7d7de39ceaed715397a0d33834d" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays::TimeOverlays</scope><name>time</name></member>
-      <member refid="d3/d7f/a03522_1a9bedf4e81f9a555db53181c08a99c869" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays::TimeOverlays</scope><name>value</name></member>
+      <member refid="d3/d7f/a03522_1acf40628e9abc3101fae5e16ea9ab945e" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Weights::weights</scope><name>weight0</name></member>
+      <member refid="d3/d7f/a03522_1adc631aa4a11633f4bea00eddec0a4a2c" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Weights::weights</scope><name>weight1</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

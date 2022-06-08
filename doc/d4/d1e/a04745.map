@@ -1,8 +1,9 @@
-<map id="castor3d::ShaderModule" name="castor3d::ShaderModule">
-<area shape="rect" id="node1" title="A non compiled shader module, with its source." alt="" coords="67,317,230,344"/>
-<area shape="rect" id="node2" title=" " alt="" coords="34,206,114,233"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,95,132,136"/>
-<area shape="rect" id="node4" title=" " alt="" coords="141,199,279,240"/>
-<area shape="rect" id="node5" title=" " alt="" coords="157,102,295,129"/>
-<area shape="rect" id="node6" title=" " alt="" coords="207,5,245,32"/>
+<map id="castor3d::SceneNode" name="castor3d::SceneNode">
+<area shape="rect" id="node1" title=" " alt="" coords="168,291,315,317"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,200,179,241"/>
+<area shape="rect" id="node3" href="$d5/db4/a02182.html" title=" " alt="" coords="203,207,279,234"/>
+<area shape="rect" id="node4" title=" " alt="" coords="127,103,313,130"/>
+<area shape="rect" id="node5" href="$d5/db4/a02182.html" title="Animable public interface." alt="" coords="338,96,489,137"/>
+<area shape="rect" id="node6" title=" " alt="" coords="319,5,507,47"/>
+<area shape="rect" id="node7" title=" " alt="" coords="304,207,411,234"/>
 </map>

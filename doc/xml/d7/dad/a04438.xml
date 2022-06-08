@@ -1,237 +1,206 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="d7/dad/a04438" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::SkeletonAnimationInstanceNode</compoundname>
-    <basecompoundref refid="d9/d8d/a04442" prot="public" virt="non-virtual">castor3d::SkeletonAnimationInstanceObject</basecompoundref>
-    <includes local="no">SkeletonAnimationInstanceNode.hpp</includes>
-      <sectiondef kind="user-defined">
-      <memberdef kind="function" id="d7/dad/a04438_1a0fbb668b1629c71f6290d9109f694fdf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::SkeletonAnimationInstanceNode::SkeletonAnimationInstanceNode</definition>
-        <argsstring>(SkeletonAnimationInstanceNode &amp;&amp;rhs)=default</argsstring>
-        <name>SkeletonAnimationInstanceNode</name>
-        <qualifiedname>castor3d::SkeletonAnimationInstanceNode::SkeletonAnimationInstanceNode</qualifiedname>
-        <param>
-          <type><ref refid="d7/dad/a04438" kindref="compound">SkeletonAnimationInstanceNode</ref> &amp;&amp;</type>
-          <declname>rhs</declname>
-        </param>
+  <compounddef id="d7/dad/a04438" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::BoundsTransformPipeline</compoundname>
+    <includes local="no">TransformPipeline.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/dad/a04438_1a9674ebfac5ebda3f03d8eb2fc5782d89" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::BoundsTransformPipeline::normals</definition>
+        <argsstring></argsstring>
+        <name>normals</name>
+        <qualifiedname>castor3d::BoundsTransformPipeline::normals</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>name Copy / Move. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceNode.hpp" line="24" column="9"/>
+        <location file="Render/Transform/TransformPipeline.hpp" line="46" column="6" bodyfile="Render/Transform/TransformPipeline.hpp" bodystart="46" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="d7/dad/a04438_1aff41ff1a5f052762c227c297da304064" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/dad/a04438" kindref="compound">SkeletonAnimationInstanceNode</ref> &amp;</type>
-        <definition>C3D_API SkeletonAnimationInstanceNode &amp; castor3d::SkeletonAnimationInstanceNode::operator=</definition>
-        <argsstring>(SkeletonAnimationInstanceNode &amp;&amp;rhs)=delete</argsstring>
-        <name>operator=</name>
-        <qualifiedname>castor3d::SkeletonAnimationInstanceNode::operator=</qualifiedname>
-        <param>
-          <type><ref refid="d7/dad/a04438" kindref="compound">SkeletonAnimationInstanceNode</ref> &amp;&amp;</type>
-          <declname>rhs</declname>
-        </param>
+      <memberdef kind="variable" id="d7/dad/a04438_1a67613f6cd8a6e40818008239e4ea4299" prot="public" static="no" mutable="no">
+        <type><ref refid="d6/d14/a04858" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::BoundsTransformPipeline::shader</definition>
+        <argsstring></argsstring>
+        <name>shader</name>
+        <qualifiedname>castor3d::BoundsTransformPipeline::shader</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceNode.hpp" line="25" column="40"/>
+        <location file="Render/Transform/TransformPipeline.hpp" line="48" column="14" bodyfile="Render/Transform/TransformPipeline.hpp" bodystart="48" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="d7/dad/a04438_1aa388152fa3c58c4f2b0ddbc11dc5617b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::SkeletonAnimationInstanceNode::SkeletonAnimationInstanceNode</definition>
-        <argsstring>(SkeletonAnimationInstanceNode const &amp;rhs)=delete</argsstring>
-        <name>SkeletonAnimationInstanceNode</name>
-        <qualifiedname>castor3d::SkeletonAnimationInstanceNode::SkeletonAnimationInstanceNode</qualifiedname>
-        <param>
-          <type><ref refid="d7/dad/a04438" kindref="compound">SkeletonAnimationInstanceNode</ref> const &amp;</type>
-          <declname>rhs</declname>
-        </param>
+      <memberdef kind="variable" id="d7/dad/a04438_1ae24e4504d101392733bd56efdf92fe61" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetLayoutPtr</type>
+        <definition>ashes::DescriptorSetLayoutPtr castor3d::BoundsTransformPipeline::descriptorSetLayout</definition>
+        <argsstring></argsstring>
+        <name>descriptorSetLayout</name>
+        <qualifiedname>castor3d::BoundsTransformPipeline::descriptorSetLayout</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceNode.hpp" line="26" column="9"/>
+        <location file="Render/Transform/TransformPipeline.hpp" line="49" column="31" bodyfile="Render/Transform/TransformPipeline.hpp" bodystart="49" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="d7/dad/a04438_1aa6fe87d8a473585e9734c6c8355bbe42" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/dad/a04438" kindref="compound">SkeletonAnimationInstanceNode</ref> &amp;</type>
-        <definition>C3D_API SkeletonAnimationInstanceNode &amp; castor3d::SkeletonAnimationInstanceNode::operator=</definition>
-        <argsstring>(SkeletonAnimationInstanceNode const &amp;rhs)=delete</argsstring>
-        <name>operator=</name>
-        <qualifiedname>castor3d::SkeletonAnimationInstanceNode::operator=</qualifiedname>
-        <param>
-          <type><ref refid="d7/dad/a04438" kindref="compound">SkeletonAnimationInstanceNode</ref> const &amp;</type>
-          <declname>rhs</declname>
-        </param>
+      <memberdef kind="variable" id="d7/dad/a04438_1a49df7abd155e0925f5aea031ff96410f" prot="public" static="no" mutable="no">
+        <type>ashes::PipelineLayoutPtr</type>
+        <definition>ashes::PipelineLayoutPtr castor3d::BoundsTransformPipeline::pipelineLayout</definition>
+        <argsstring></argsstring>
+        <name>pipelineLayout</name>
+        <qualifiedname>castor3d::BoundsTransformPipeline::pipelineLayout</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceNode.hpp" line="27" column="40"/>
+        <location file="Render/Transform/TransformPipeline.hpp" line="50" column="26" bodyfile="Render/Transform/TransformPipeline.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dad/a04438_1a919f64569a8ba42578131f53b3249ae4" prot="public" static="no" mutable="no">
+        <type>ashes::ComputePipelinePtr</type>
+        <definition>ashes::ComputePipelinePtr castor3d::BoundsTransformPipeline::pipeline</definition>
+        <argsstring></argsstring>
+        <name>pipeline</name>
+        <qualifiedname>castor3d::BoundsTransformPipeline::pipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/TransformPipeline.hpp" line="51" column="27" bodyfile="Render/Transform/TransformPipeline.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dad/a04438_1a1b525482651fd479a65d97ecc6e87a9f" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetPoolPtr</type>
+        <definition>ashes::DescriptorSetPoolPtr castor3d::BoundsTransformPipeline::descriptorSetPool</definition>
+        <argsstring></argsstring>
+        <name>descriptorSetPool</name>
+        <qualifiedname>castor3d::BoundsTransformPipeline::descriptorSetPool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/TransformPipeline.hpp" line="52" column="29" bodyfile="Render/Transform/TransformPipeline.hpp" bodystart="52" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d7/dad/a04438_1a8dc3a4917bab60bc9a8a9db16629967b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::SkeletonAnimationInstanceNode::SkeletonAnimationInstanceNode</definition>
-        <argsstring>(SkeletonAnimationInstance &amp;animationInstance, SkeletonAnimationNode &amp;animationObject, SkeletonAnimationInstanceObjectPtrArray &amp;allObjects)</argsstring>
-        <name>SkeletonAnimationInstanceNode</name>
-        <qualifiedname>castor3d::SkeletonAnimationInstanceNode::SkeletonAnimationInstanceNode</qualifiedname>
+      <memberdef kind="function" id="d7/dad/a04438_1af07b26e9644b71b67dff22729134eca5" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::BoundsTransformPipeline::BoundsTransformPipeline</definition>
+        <argsstring>(bool normals)</argsstring>
+        <name>BoundsTransformPipeline</name>
+        <qualifiedname>castor3d::BoundsTransformPipeline::BoundsTransformPipeline</qualifiedname>
         <param>
-          <type><ref refid="df/de5/a04426" kindref="compound">SkeletonAnimationInstance</ref> &amp;</type>
-          <declname>animationInstance</declname>
-        </param>
-        <param>
-          <type><ref refid="d5/d35/a03454" kindref="compound">SkeletonAnimationNode</ref> &amp;</type>
-          <declname>animationObject</declname>
-        </param>
-        <param>
-          <type>SkeletonAnimationInstanceObjectPtrArray &amp;</type>
-          <declname>allObjects</declname>
+          <type>bool</type>
+          <declname>normals</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">animationInstance</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The parent skeleton animation instance. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">animationObject</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The animation object. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="out">allObjects</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Receives this object&apos;s children. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceNode.hpp" line="41" column="9"/>
+        <location file="Render/Transform/TransformPipeline.hpp" line="41" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/dad/a04438_1a86a0d93b7a6d951de04df454ce41d406" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::string</type>
+        <definition>C3D_API std::string castor3d::BoundsTransformPipeline::getName</definition>
+        <argsstring>() const</argsstring>
+        <name>getName</name>
+        <qualifiedname>castor3d::BoundsTransformPipeline::getName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/TransformPipeline.hpp" line="43" column="21"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d7/dad/a04438_1a46edf237b7a440b956736b4922261e11" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::SkeletonAnimationInstanceNode::doApply</definition>
-        <argsstring>() override</argsstring>
-        <name>doApply</name>
-        <qualifiedname>castor3d::SkeletonAnimationInstanceNode::doApply</qualifiedname>
-        <reimplements refid="d9/d8d/a04442_1a8b6da36fc7b2b4cce822a904295e9ed3">doApply</reimplements>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d7/dad/a04438_1ab9b59c73a849f476f52236aeaefaceeb" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::string</type>
+        <definition>static C3D_API std::string castor3d::BoundsTransformPipeline::getName</definition>
+        <argsstring>(bool normals)</argsstring>
+        <name>getName</name>
+        <qualifiedname>castor3d::BoundsTransformPipeline::getName</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>normals</declname>
+        </param>
         <briefdescription>
-<para>Updates the object, applies the transformations matrix. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceNode.hpp" line="46" column="6"/>
+        <location file="Render/Transform/TransformPipeline.hpp" line="44" column="28"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="1">
-        <label>castor3d::SkeletonAnimationInstanceNode</label>
-        <link refid="d7/dad/a04438"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="2">
-        <label>castor3d::SkeletonAnimationInstanceObject</label>
-        <link refid="d9/d8d/a04442"/>
-        <childnode refid="3" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3">
-        <label>castor::OwnedBy&lt; SkeletonAnimationInstance &gt;</label>
-      </node>
-    </inheritancegraph>
     <collaborationgraph>
+      <node id="7">
+        <label>T</label>
+      </node>
       <node id="1">
-        <label>castor3d::SkeletonAnimationInstanceNode</label>
+        <label>castor3d::BoundsTransformPipeline</label>
         <link refid="d7/dad/a04438"/>
-        <childnode refid="2" relation="public-inheritance">
+        <childnode refid="2" relation="usage">
+          <edgelabel>shader</edgelabel>
         </childnode>
       </node>
       <node id="2">
-        <label>castor3d::SkeletonAnimationInstanceObject</label>
-        <link refid="d9/d8d/a04442"/>
-        <childnode refid="3" relation="public-inheritance">
+        <label>castor3d::ShaderModule</label>
+        <link refid="d6/d14/a04858"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>name</edgelabel>
+          <edgelabel>source</edgelabel>
         </childnode>
-        <childnode refid="4" relation="usage">
-          <edgelabel>m_animationObject</edgelabel>
+        <childnode refid="5" relation="usage">
+          <edgelabel>shader</edgelabel>
         </childnode>
       </node>
       <node id="4">
-        <label>castor3d::SkeletonAnimationObject</label>
-        <link refid="d8/d01/a03458"/>
-        <childnode refid="5" relation="public-inheritance">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="3">
+        <label>std::string</label>
+        <childnode refid="4" relation="public-inheritance">
         </childnode>
-        <childnode refid="6" relation="public-inheritance">
+      </node>
+      <node id="6">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>ptr</edgelabel>
         </childnode>
       </node>
       <node id="5">
-        <label>castor::OwnedBy&lt; SkeletonAnimation &gt;</label>
-      </node>
-      <node id="3">
-        <label>castor::OwnedBy&lt; SkeletonAnimationInstance &gt;</label>
-      </node>
-      <node id="6">
-        <label>std::enable_shared_from_this&lt; SkeletonAnimationObject &gt;</label>
+        <label>std::unique_ptr&lt; ast::Shader &gt;</label>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; ast::Shader &gt;</edgelabel>
+        </childnode>
       </node>
     </collaborationgraph>
-    <location file="Scene/Animation/Skeleton/SkeletonAnimationInstanceNode.hpp" line="13" column="1" bodyfile="Scene/Animation/Skeleton/SkeletonAnimationInstanceNode.hpp" bodystart="15" bodyend="47"/>
+    <location file="Render/Transform/TransformPipeline.hpp" line="39" column="1" bodyfile="Render/Transform/TransformPipeline.hpp" bodystart="40" bodyend="53"/>
     <listofallmembers>
-      <member refid="d9/d8d/a04442_1ae25ea4ab7182fe2d1e17bb3f4704dd15" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceNode</scope><name>addChild</name></member>
-      <member refid="d7/dad/a04438_1a46edf237b7a440b956736b4922261e11" prot="private" virt="virtual"><scope>castor3d::SkeletonAnimationInstanceNode</scope><name>doApply</name></member>
-      <member refid="d9/d8d/a04442_1a458d63c2355114aae4911ffd5717f932" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceNode</scope><name>getChildren</name></member>
-      <member refid="d9/d8d/a04442_1a6950f74fc6921673b59c051d31815147" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceNode</scope><name>getFinalTransform</name></member>
-      <member refid="d9/d8d/a04442_1ab86d2ed13a3d39f5281724420ef1bfda" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceNode</scope><name>getObject</name></member>
-      <member refid="d9/d8d/a04442_1a67479ee0d95ec5c3fe0a91bd6ca5e9fc" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceNode</scope><name>m_animationObject</name></member>
-      <member refid="d9/d8d/a04442_1a0b7b066160d0200aa5a1c5d15aff1519" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceNode</scope><name>m_children</name></member>
-      <member refid="d9/d8d/a04442_1a23a80350153f06f35acd1e4ed99e902c" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceNode</scope><name>m_cumulativeTransform</name></member>
-      <member refid="d9/d8d/a04442_1a035cfcc104e26c8c18ea4bc9addcb9ff" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceNode</scope><name>m_curr</name></member>
-      <member refid="d9/d8d/a04442_1a3c6ae6f668b135b899a69a265d7be067" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceNode</scope><name>m_finalTransform</name></member>
-      <member refid="d9/d8d/a04442_1ae3c50d44c8843b314a8b1d3ad1f9efc1" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceNode</scope><name>m_prev</name></member>
-      <member refid="d7/dad/a04438_1aff41ff1a5f052762c227c297da304064" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceNode</scope><name>operator=</name></member>
-      <member refid="d7/dad/a04438_1aa6fe87d8a473585e9734c6c8355bbe42" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceNode</scope><name>operator=</name></member>
-      <member refid="d9/d8d/a04442_1ae621ac20381e712069eab1b09ef5e87f" prot="protected" virt="non-virtual" ambiguityscope="castor3d::SkeletonAnimationInstanceObject::"><scope>castor3d::SkeletonAnimationInstanceNode</scope><name>operator=</name></member>
-      <member refid="d9/d8d/a04442_1a688009d8a6e62baecb85d294674cd259" prot="protected" virt="non-virtual" ambiguityscope="castor3d::SkeletonAnimationInstanceObject::"><scope>castor3d::SkeletonAnimationInstanceNode</scope><name>operator=</name></member>
-      <member refid="d7/dad/a04438_1a0fbb668b1629c71f6290d9109f694fdf" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceNode</scope><name>SkeletonAnimationInstanceNode</name></member>
-      <member refid="d7/dad/a04438_1aa388152fa3c58c4f2b0ddbc11dc5617b" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceNode</scope><name>SkeletonAnimationInstanceNode</name></member>
-      <member refid="d7/dad/a04438_1a8dc3a4917bab60bc9a8a9db16629967b" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceNode</scope><name>SkeletonAnimationInstanceNode</name></member>
-      <member refid="d9/d8d/a04442_1a6c8967a11da38699640fe64ef3396d23" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceNode</scope><name>SkeletonAnimationInstanceObject</name></member>
-      <member refid="d9/d8d/a04442_1a71cc6f9c6c4bd87c289f7bf6b519adea" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceNode</scope><name>SkeletonAnimationInstanceObject</name></member>
-      <member refid="d9/d8d/a04442_1a55918ea389a6daadf869976e51d6fa85" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceNode</scope><name>SkeletonAnimationInstanceObject</name></member>
-      <member refid="d9/d8d/a04442_1adb8585692c025d1c1756e703da411c40" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceNode</scope><name>update</name></member>
-      <member refid="d9/d8d/a04442_1a22e37d40f09e2e036be335019f4a26e6" prot="public" virt="virtual"><scope>castor3d::SkeletonAnimationInstanceNode</scope><name>~SkeletonAnimationInstanceObject</name></member>
+      <member refid="d7/dad/a04438_1af07b26e9644b71b67dff22729134eca5" prot="public" virt="non-virtual"><scope>castor3d::BoundsTransformPipeline</scope><name>BoundsTransformPipeline</name></member>
+      <member refid="d7/dad/a04438_1ae24e4504d101392733bd56efdf92fe61" prot="public" virt="non-virtual"><scope>castor3d::BoundsTransformPipeline</scope><name>descriptorSetLayout</name></member>
+      <member refid="d7/dad/a04438_1a1b525482651fd479a65d97ecc6e87a9f" prot="public" virt="non-virtual"><scope>castor3d::BoundsTransformPipeline</scope><name>descriptorSetPool</name></member>
+      <member refid="d7/dad/a04438_1a86a0d93b7a6d951de04df454ce41d406" prot="public" virt="non-virtual"><scope>castor3d::BoundsTransformPipeline</scope><name>getName</name></member>
+      <member refid="d7/dad/a04438_1ab9b59c73a849f476f52236aeaefaceeb" prot="public" virt="non-virtual"><scope>castor3d::BoundsTransformPipeline</scope><name>getName</name></member>
+      <member refid="d7/dad/a04438_1a9674ebfac5ebda3f03d8eb2fc5782d89" prot="public" virt="non-virtual"><scope>castor3d::BoundsTransformPipeline</scope><name>normals</name></member>
+      <member refid="d7/dad/a04438_1a919f64569a8ba42578131f53b3249ae4" prot="public" virt="non-virtual"><scope>castor3d::BoundsTransformPipeline</scope><name>pipeline</name></member>
+      <member refid="d7/dad/a04438_1a49df7abd155e0925f5aea031ff96410f" prot="public" virt="non-virtual"><scope>castor3d::BoundsTransformPipeline</scope><name>pipelineLayout</name></member>
+      <member refid="d7/dad/a04438_1a67613f6cd8a6e40818008239e4ea4299" prot="public" virt="non-virtual"><scope>castor3d::BoundsTransformPipeline</scope><name>shader</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

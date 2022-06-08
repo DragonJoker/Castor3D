@@ -1,83 +1,31 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="d1/d1f/a05078" kind="class" language="C++" prot="public">
-    <compoundname>castor::TextWriter&lt; castor3d::BorderPanelOverlay &gt;</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::BorderPanelOverlay &gt;</basecompoundref>
-    <includes local="no">TextBorderPanelOverlay.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d1/d1f/a05078_1a5f5b8cbfaef024781385d065b08cde14" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor::TextWriter&lt; castor3d::BorderPanelOverlay &gt;::TextWriter</definition>
-        <argsstring>(String const &amp;tabs)</argsstring>
-        <name>TextWriter</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::BorderPanelOverlay &gt;::TextWriter</qualifiedname>
-        <param>
-          <type>String const &amp;</type>
-          <declname>tabs</declname>
-        </param>
+  <compounddef id="d1/d1f/a05078" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::ObjectsIds::Ids</compoundname>
+    <includes local="no">ObjectIdsUbo.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/d1f/a05078_1a581c4bd0632318110e2002374f65e008" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::ObjectsIds::Ids::nodeId</definition>
+        <argsstring></argsstring>
+        <name>nodeId</name>
+        <qualifiedname>castor3d::shader::ObjectsIds::Ids::nodeId</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Text/TextBorderPanelOverlay.hpp" line="18" column="18"/>
-      </memberdef>
-      <memberdef kind="function" id="d1/d1f/a05078_1ae26e8317b7bf6fb6c1bc323c1e131a75" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor::TextWriter&lt; castor3d::BorderPanelOverlay &gt;::operator()</definition>
-        <argsstring>(castor3d::BorderPanelOverlay const &amp;overlay, castor::StringStream &amp;file) override</argsstring>
-        <name>operator()</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::BorderPanelOverlay &gt;::operator()</qualifiedname>
-        <param>
-          <type><ref refid="d7/d70/a03498" kindref="compound">castor3d::BorderPanelOverlay</ref> const &amp;</type>
-          <declname>overlay</declname>
-        </param>
-        <param>
-          <type>castor::StringStream &amp;</type>
-          <declname>file</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Text/TextBorderPanelOverlay.hpp" line="19" column="14"/>
+        <location file="Shader/Ubos/ObjectIdsUbo.hpp" line="46" column="11" bodyfile="Shader/Ubos/ObjectIdsUbo.hpp" bodystart="46" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="2">
-        <label>TextWriterT&lt; castor3d::BorderPanelOverlay &gt;</label>
-      </node>
-      <node id="1">
-        <label>castor::TextWriter&lt; castor3d::BorderPanelOverlay &gt;</label>
-        <link refid="d1/d1f/a05078"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="2">
-        <label>TextWriterT&lt; castor3d::BorderPanelOverlay &gt;</label>
-      </node>
-      <node id="1">
-        <label>castor::TextWriter&lt; castor3d::BorderPanelOverlay &gt;</label>
-        <link refid="d1/d1f/a05078"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Text/TextBorderPanelOverlay.hpp" line="14" column="1" bodyfile="Text/TextBorderPanelOverlay.hpp" bodystart="16" bodyend="21"/>
+    <location file="Shader/Ubos/ObjectIdsUbo.hpp" line="44" column="1" bodyfile="Shader/Ubos/ObjectIdsUbo.hpp" bodystart="45" bodyend="47"/>
     <listofallmembers>
-      <member refid="d1/d1f/a05078_1ae26e8317b7bf6fb6c1bc323c1e131a75" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::BorderPanelOverlay &gt;</scope><name>operator()</name></member>
-      <member refid="d1/d1f/a05078_1a5f5b8cbfaef024781385d065b08cde14" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::BorderPanelOverlay &gt;</scope><name>TextWriter</name></member>
+      <member refid="d1/d1f/a05078_1a581c4bd0632318110e2002374f65e008" prot="public" virt="non-virtual"><scope>castor3d::shader::ObjectsIds::Ids</scope><name>nodeId</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

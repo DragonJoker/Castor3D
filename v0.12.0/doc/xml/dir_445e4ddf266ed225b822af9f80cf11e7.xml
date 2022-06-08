@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dir_445e4ddf266ed225b822af9f80cf11e7" kind="dir">
+    <compoundname>Scene/Animation/Mesh</compoundname>
+    <innerfile refid="df/dbc/a01004">MeshAnimationInstance.hpp</innerfile>
+    <innerfile refid="d6/d8d/a01007">MeshAnimationInstanceSubmesh.hpp</innerfile>
+    <innerfile refid="d8/dce/a10793">MeshAnimationModule.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Scene/Animation/Mesh/"/>
+  </compounddef>
+</doxygen>

@@ -1,91 +1,16 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d5/de5/a04390" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::AnimatedTexture</compoundname>
-    <basecompoundref refid="db/da9/a04374" prot="public" virt="non-virtual">castor3d::AnimatedObject</basecompoundref>
-    <includes local="no">AnimatedTexture.hpp</includes>
+    <compoundname>castor3d::ToneMapping</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <includes local="no">ToneMapping.hpp</includes>
       <sectiondef kind="user-defined">
-      <memberdef kind="function" id="d5/de5/a04390_1a0904e74a0132beaf2e0a0b169ad9f612" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::AnimatedTexture::AnimatedTexture</definition>
-        <argsstring>(AnimatedTexture &amp;&amp;rhs)=default</argsstring>
-        <name>AnimatedTexture</name>
-        <qualifiedname>castor3d::AnimatedTexture::AnimatedTexture</qualifiedname>
-        <param>
-          <type><ref refid="d5/de5/a04390" kindref="compound">AnimatedTexture</ref> &amp;&amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>name Copy / Move. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimatedTexture.hpp" line="27" column="9"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/de5/a04390_1a6546012f07752e8da5fd8817d11cf73f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/de5/a04390" kindref="compound">AnimatedTexture</ref> &amp;</type>
-        <definition>C3D_API AnimatedTexture &amp; castor3d::AnimatedTexture::operator=</definition>
-        <argsstring>(AnimatedTexture &amp;&amp;rhs)=delete</argsstring>
-        <name>operator=</name>
-        <qualifiedname>castor3d::AnimatedTexture::operator=</qualifiedname>
-        <param>
-          <type><ref refid="d5/de5/a04390" kindref="compound">AnimatedTexture</ref> &amp;&amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimatedTexture.hpp" line="28" column="26"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/de5/a04390_1a00e21960e08367c63533d8ffa44a89ec" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::AnimatedTexture::AnimatedTexture</definition>
-        <argsstring>(AnimatedTexture const &amp;rhs)=delete</argsstring>
-        <name>AnimatedTexture</name>
-        <qualifiedname>castor3d::AnimatedTexture::AnimatedTexture</qualifiedname>
-        <param>
-          <type><ref refid="d5/de5/a04390" kindref="compound">AnimatedTexture</ref> const &amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimatedTexture.hpp" line="29" column="9"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/de5/a04390_1ab8b01d0bba7332bdc8bc881968976a86" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/de5/a04390" kindref="compound">AnimatedTexture</ref> &amp;</type>
-        <definition>C3D_API AnimatedTexture &amp; castor3d::AnimatedTexture::operator=</definition>
-        <argsstring>(AnimatedTexture const &amp;rhs)=delete</argsstring>
-        <name>operator=</name>
-        <qualifiedname>castor3d::AnimatedTexture::operator=</qualifiedname>
-        <param>
-          <type><ref refid="d5/de5/a04390" kindref="compound">AnimatedTexture</ref> const &amp;</type>
-          <declname>rhs</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimatedTexture.hpp" line="30" column="26"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="user-defined">
-      <memberdef kind="function" id="d5/de5/a04390_1a33e90b58524104c6994e8b0998c5008e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d6/d0c/a02962" kindref="compound">TextureUnit</ref> &amp;</type>
-        <definition>TextureUnit &amp; castor3d::AnimatedTexture::getTexture</definition>
+      <memberdef kind="function" id="d5/de5/a04390_1a8e356ab5d1add11cadc1f44844ad7a97" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const &amp;</type>
+        <definition>C3D_API castor::String const  &amp; castor3d::ToneMapping::getFullName</definition>
         <argsstring>() const</argsstring>
-        <name>getTexture</name>
-        <qualifiedname>castor3d::AnimatedTexture::getTexture</qualifiedname>
+        <name>getFullName</name>
+        <qualifiedname>castor3d::ToneMapping::getFullName</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -93,65 +18,117 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/AnimatedTexture.hpp" line="63" column="14" bodyfile="Scene/Animation/AnimatedTexture.hpp" bodystart="63" bodyend="67"/>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="103" column="31"/>
       </memberdef>
-      <memberdef kind="function" id="d5/de5/a04390_1a316e9cad230eb742e576e5fe0f3f3a86" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="d6/d59/a02810" kindref="compound">Pass</ref> &amp;</type>
-        <definition>Pass &amp; castor3d::AnimatedTexture::getPass</definition>
+      <memberdef kind="function" id="d5/de5/a04390_1a18ca2f0389b8b42dd0b8a39673ed31fd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>crg::FramePass const &amp;</type>
+        <definition>crg::FramePass const  &amp; castor3d::ToneMapping::getPass</definition>
         <argsstring>() const</argsstring>
         <name>getPass</name>
-        <qualifiedname>castor3d::AnimatedTexture::getPass</qualifiedname>
+        <qualifiedname>castor3d::ToneMapping::getPass</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/AnimatedTexture.hpp" line="69" column="7" bodyfile="Scene/Animation/AnimatedTexture.hpp" bodystart="69" bodyend="72"/>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="105" column="23" bodyfile="Render/ToneMapping/ToneMapping.hpp" bodystart="105" bodyend="108"/>
+        <references refid="d5/de5/a04390_1acc4f0512371286e3e7bd3f59ea821647" compoundref="dd/d48/a00995" startline="131">m_pass</references>
       </memberdef>
-      <memberdef kind="function" id="d5/de5/a04390_1a2b8c41c3b5aeebe8206ac27bba8673e4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type><ref refid="dc/da0/a04446" kindref="compound">TextureAnimationInstance</ref> &amp;</type>
-        <definition>TextureAnimationInstance &amp; castor3d::AnimatedTexture::getPlayingAnimation</definition>
+      <memberdef kind="function" id="d5/de5/a04390_1a54486ed9a7b1212ef8c2af8fffb3ba76" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::String const &amp;</type>
+        <definition>castor::String const  &amp; castor3d::ToneMapping::getName</definition>
         <argsstring>() const</argsstring>
-        <name>getPlayingAnimation</name>
-        <qualifiedname>castor3d::AnimatedTexture::getPlayingAnimation</qualifiedname>
+        <name>getName</name>
+        <qualifiedname>castor3d::ToneMapping::getName</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/AnimatedTexture.hpp" line="74" column="27" bodyfile="Scene/Animation/AnimatedTexture.hpp" bodystart="74" bodyend="78"/>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="110" column="23" bodyfile="Render/ToneMapping/ToneMapping.hpp" bodystart="110" bodyend="113"/>
+        <references refid="d5/de5/a04390_1af28cd1367268943ec173b63376c6bac0" compoundref="dd/d48/a00995" startline="126">m_name</references>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="user-defined">
-      <memberdef kind="function" id="d5/de5/a04390_1a254e45ef692bacf292f73b3d498cb124" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::AnimatedTexture::setTexture</definition>
-        <argsstring>(TextureUnit &amp;texture)</argsstring>
-        <name>setTexture</name>
-        <qualifiedname>castor3d::AnimatedTexture::setTexture</qualifiedname>
-        <param>
-          <type><ref refid="d6/d0c/a02962" kindref="compound">TextureUnit</ref> &amp;</type>
-          <declname>texture</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>name Setters. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimatedTexture.hpp" line="84" column="6" bodyfile="Scene/Animation/AnimatedTexture.hpp" bodystart="84" bodyend="88"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d5/de5/a04390_1ad43c8ff9c5316c8ac117030ba23ea4f0" prot="private" static="no" mutable="no">
-        <type><ref refid="d6/d0c/a02962" kindref="compound">TextureUnit</ref> *</type>
-        <definition>TextureUnit* castor3d::AnimatedTexture::m_texture</definition>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d5/de5/a04390_1af28cd1367268943ec173b63376c6bac0" prot="protected" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::ToneMapping::m_name</definition>
         <argsstring></argsstring>
-        <name>m_texture</name>
-        <qualifiedname>castor3d::AnimatedTexture::m_texture</qualifiedname>
+        <name>m_name</name>
+        <qualifiedname>castor3d::ToneMapping::m_name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="126" column="16" bodyfile="Render/ToneMapping/ToneMapping.hpp" bodystart="126" bodyend="-1"/>
+        <referencedby refid="d5/de5/a04390_1a54486ed9a7b1212ef8c2af8fffb3ba76" compoundref="dd/d48/a00995" startline="110" endline="113">getName</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d5/de5/a04390_1a33733eec74c57ab293ed874b999536f0" prot="protected" static="no" mutable="no">
+        <type><ref refid="d8/d10/a05018" kindref="compound">HdrConfigUbo</ref> &amp;</type>
+        <definition>HdrConfigUbo&amp; castor3d::ToneMapping::m_hdrConfigUbo</definition>
+        <argsstring></argsstring>
+        <name>m_hdrConfigUbo</name>
+        <qualifiedname>castor3d::ToneMapping::m_hdrConfigUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="127" column="15" bodyfile="Render/ToneMapping/ToneMapping.hpp" bodystart="127" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/de5/a04390_1a1dcdb146bb162922519d964027053f16" prot="protected" static="no" mutable="no">
+        <type><ref refid="d6/d14/a04858" kindref="compound">castor3d::ShaderModule</ref></type>
+        <definition>castor3d::ShaderModule castor3d::ToneMapping::m_vertexShader</definition>
+        <argsstring></argsstring>
+        <name>m_vertexShader</name>
+        <qualifiedname>castor3d::ToneMapping::m_vertexShader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="128" column="24" bodyfile="Render/ToneMapping/ToneMapping.hpp" bodystart="128" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/de5/a04390_1a3df5ff521c4cce3c79aa7491dc537fe7" prot="protected" static="no" mutable="no">
+        <type><ref refid="d6/d14/a04858" kindref="compound">castor3d::ShaderModule</ref></type>
+        <definition>castor3d::ShaderModule castor3d::ToneMapping::m_pixelShader</definition>
+        <argsstring></argsstring>
+        <name>m_pixelShader</name>
+        <qualifiedname>castor3d::ToneMapping::m_pixelShader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="129" column="24" bodyfile="Render/ToneMapping/ToneMapping.hpp" bodystart="129" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/de5/a04390_1add60d6dd69ead4886168a3a3fbd77fd7" prot="protected" static="no" mutable="no">
+        <type>ashes::PipelineShaderStageCreateInfoArray</type>
+        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::ToneMapping::m_program</definition>
+        <argsstring></argsstring>
+        <name>m_program</name>
+        <qualifiedname>castor3d::ToneMapping::m_program</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="130" column="43" bodyfile="Render/ToneMapping/ToneMapping.hpp" bodystart="130" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/de5/a04390_1acc4f0512371286e3e7bd3f59ea821647" prot="protected" static="no" mutable="no">
+        <type>crg::FramePass *</type>
+        <definition>crg::FramePass* castor3d::ToneMapping::m_pass</definition>
+        <argsstring></argsstring>
+        <name>m_pass</name>
+        <qualifiedname>castor3d::ToneMapping::m_pass</qualifiedname>
         <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
@@ -159,83 +136,154 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/AnimatedTexture.hpp" line="98" column="14" bodyfile="Scene/Animation/AnimatedTexture.hpp" bodystart="98" bodyend="-1"/>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="131" column="17" bodyfile="Render/ToneMapping/ToneMapping.hpp" bodystart="131" bodyend="-1"/>
+        <referencedby refid="d5/de5/a04390_1a18ca2f0389b8b42dd0b8a39673ed31fd" compoundref="dd/d48/a00995" startline="105" endline="108">getPass</referencedby>
       </memberdef>
-      <memberdef kind="variable" id="d5/de5/a04390_1aceb1cef93c384ef8b0018345674e9809" prot="private" static="no" mutable="no">
-        <type><ref refid="d6/d59/a02810" kindref="compound">Pass</ref> &amp;</type>
-        <definition>Pass&amp; castor3d::AnimatedTexture::m_pass</definition>
+      <memberdef kind="variable" id="d5/de5/a04390_1ac279ef1d4aaf85c8e46ca93310b33349" prot="protected" static="no" mutable="no">
+        <type>crg::RenderQuad *</type>
+        <definition>crg::RenderQuad* castor3d::ToneMapping::m_quad</definition>
         <argsstring></argsstring>
-        <name>m_pass</name>
-        <qualifiedname>castor3d::AnimatedTexture::m_pass</qualifiedname>
+        <name>m_quad</name>
+        <qualifiedname>castor3d::ToneMapping::m_quad</qualifiedname>
+        <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/AnimatedTexture.hpp" line="99" column="7" bodyfile="Scene/Animation/AnimatedTexture.hpp" bodystart="99" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d5/de5/a04390_1afe7ded4d0977700823e4db745a920194" prot="private" static="no" mutable="no">
-        <type>TextureAnimationInstanceRPtr</type>
-        <definition>TextureAnimationInstanceRPtr castor3d::AnimatedTexture::m_playingAnimation</definition>
-        <argsstring></argsstring>
-        <name>m_playingAnimation</name>
-        <qualifiedname>castor3d::AnimatedTexture::m_playingAnimation</qualifiedname>
-        <initializer>{ nullptr }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimatedTexture.hpp" line="100" column="30" bodyfile="Scene/Animation/AnimatedTexture.hpp" bodystart="100" bodyend="-1"/>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="132" column="18" bodyfile="Render/ToneMapping/ToneMapping.hpp" bodystart="132" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d5/de5/a04390_1aa16134090eabb3e666e072aae474482c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::AnimatedTexture::AnimatedTexture</definition>
-        <argsstring>(TextureSourceInfo const &amp;sourceInfo, TextureConfiguration const &amp;config, Pass &amp;pass)</argsstring>
-        <name>AnimatedTexture</name>
-        <qualifiedname>castor3d::AnimatedTexture::AnimatedTexture</qualifiedname>
+      <memberdef kind="function" id="d5/de5/a04390_1a7c3c83e898274a0a3d78e5ab2d548d65" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ToneMapping::ToneMapping</definition>
+        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, castor::Size const &amp;size, crg::FrameGraph &amp;graph, crg::ImageViewId const &amp;source, crg::ImageViewId const &amp;target, crg::FramePass const &amp;previousPass, HdrConfigUbo &amp;hdrConfigUbo, Parameters const &amp;parameters, ProgressBar *progress)</argsstring>
+        <name>ToneMapping</name>
+        <qualifiedname>castor3d::ToneMapping::ToneMapping</qualifiedname>
         <param>
-          <type><ref refid="dd/dde/a02958" kindref="compound">TextureSourceInfo</ref> const &amp;</type>
-          <declname>sourceInfo</declname>
+          <type><ref refid="d9/db1/a02718" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
         </param>
         <param>
-          <type><ref refid="d4/db9/a02918" kindref="compound">TextureConfiguration</ref> const &amp;</type>
-          <declname>config</declname>
+          <type><ref refid="df/d75/a04010" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
         </param>
         <param>
-          <type><ref refid="d6/d59/a02810" kindref="compound">Pass</ref> &amp;</type>
-          <declname>pass</declname>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>crg::FrameGraph &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>source</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>target</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d10/a05018" kindref="compound">HdrConfigUbo</ref> &amp;</type>
+          <declname>hdrConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dab/a01362_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <param>
+          <type><ref refid="da/deb/a03274" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
+<para>Specified constructor. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">sourceInfo</parametername>
+<parametername direction="in">engine</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The texture source informations. </para>
+<para>The engine. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">config</parametername>
+<parametername direction="in">device</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The texture configuration. </para>
+<para>The GPU device. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">pass</parametername>
+<parametername direction="in">size</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The pass using the texture. </para>
+<para>The render area dimensions. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">graph</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render graph. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">source</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;image source. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">target</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;image cible. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">previousPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The previous frame pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">hdrConfigUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The configuration data. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The implementation specific parameters. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">progress</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The progress bar. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -243,89 +291,35 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/AnimatedTexture.hpp" line="44" column="9"/>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="50" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d5/de5/a04390_1afc1b444905e2763e02e4285139577a5a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::AnimatedTexture::update</definition>
-        <argsstring>(castor::Milliseconds const &amp;elapsed) override</argsstring>
-        <name>update</name>
-        <qualifiedname>castor3d::AnimatedTexture::update</qualifiedname>
-        <reimplements refid="db/da9/a04374_1aa1ecac49a3faba10459c8089911216df">update</reimplements>
-        <param>
-          <type>castor::Milliseconds const &amp;</type>
-          <declname>elapsed</declname>
-        </param>
+      <memberdef kind="function" id="d5/de5/a04390_1a79cea96c372c1673191633c34127d3d1" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::ToneMapping::~ToneMapping</definition>
+        <argsstring>()</argsstring>
+        <name>~ToneMapping</name>
+        <qualifiedname>castor3d::ToneMapping::~ToneMapping</qualifiedname>
         <briefdescription>
-<para>Updates the animations of the object, given the time since the last frame. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">elapsed</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>Time elapsed since the last frame </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimatedTexture.hpp" line="50" column="14"/>
-      </memberdef>
-      <memberdef kind="function" id="d5/de5/a04390_1ad0752ac52c1ec6713a2c2d5f0e0286ec" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::AnimatedTexture::fillBuffer</definition>
-        <argsstring>(TextureAnimationData *buffer) const</argsstring>
-        <name>fillBuffer</name>
-        <qualifiedname>castor3d::AnimatedTexture::fillBuffer</qualifiedname>
-        <param>
-          <type><ref refid="d6/d1d/a02906" kindref="compound">TextureAnimationData</ref> *</type>
-          <declname>buffer</declname>
-        </param>
-        <briefdescription>
+<para>Destructor. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/AnimatedTexture.hpp" line="51" column="14"/>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="66" column="17"/>
       </memberdef>
-      <memberdef kind="function" id="d5/de5/a04390_1afdd0b9a478e69d2c1ced312fa33b0b03" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor3d::AnimatedTexture::isPlayingAnimation</definition>
-        <argsstring>() const override</argsstring>
-        <name>isPlayingAnimation</name>
-        <qualifiedname>castor3d::AnimatedTexture::isPlayingAnimation</qualifiedname>
-        <reimplements refid="db/da9/a04374_1a1c375eacf4a34296dca2ca8f490761d0">isPlayingAnimation</reimplements>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if the object is playing an animation. </para>
-</simplesect>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Animation/AnimatedTexture.hpp" line="55" column="14" bodyfile="Scene/Animation/AnimatedTexture.hpp" bodystart="55" bodyend="58"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
-      <memberdef kind="function" id="d5/de5/a04390_1acdc097c0f87ef07efa0f68d7bcc306f9" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::AnimatedTexture::doAddAnimation</definition>
-        <argsstring>(castor::String const &amp;name) override</argsstring>
-        <name>doAddAnimation</name>
-        <qualifiedname>castor3d::AnimatedTexture::doAddAnimation</qualifiedname>
-        <reimplements refid="db/da9/a04374_1a2c7ed6f3a0ba8312617894ac212bf88c">doAddAnimation</reimplements>
+      <memberdef kind="function" id="d5/de5/a04390_1a481c38b0b545843dbbb61f40674e46fd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ToneMapping::initialise</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::ToneMapping::initialise</qualifiedname>
         <param>
           <type>castor::String const &amp;</type>
           <declname>name</declname>
         </param>
         <briefdescription>
-<para>adds the animation to the list </para>
+<para>Initialises tone mapping shader and pipeline. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
@@ -333,7 +327,7 @@
 <parametername direction="in">name</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The animation to add </para>
+<para>The tone mapping name. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -341,29 +335,28 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/AnimatedTexture.hpp" line="92" column="6"/>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="75" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d5/de5/a04390_1aa5c1843b9d6be1dbdc865bcabf2a302e" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::AnimatedTexture::doStartAnimation</definition>
-        <argsstring>(AnimationInstance &amp;animation) override</argsstring>
-        <name>doStartAnimation</name>
-        <qualifiedname>castor3d::AnimatedTexture::doStartAnimation</qualifiedname>
-        <reimplements refid="db/da9/a04374_1a596f9c943daffeb70db5a29de2606c7d">doStartAnimation</reimplements>
+      <memberdef kind="function" id="d5/de5/a04390_1a3b5dc35fd93e4a5c04d91522309f5814" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ToneMapping::updatePipeline</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>updatePipeline</name>
+        <qualifiedname>castor3d::ToneMapping::updatePipeline</qualifiedname>
         <param>
-          <type><ref refid="d5/d22/a04394" kindref="compound">AnimationInstance</ref> &amp;</type>
-          <declname>animation</declname>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
         </param>
         <briefdescription>
-<para>Starts the given animation. </para>
+<para>Initialises tone mapping shader and pipeline. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">animation</parametername>
+<parametername direction="in">name</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The animation. </para>
+<para>The tone mapping name. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -371,29 +364,28 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/AnimatedTexture.hpp" line="93" column="6"/>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="84" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d5/de5/a04390_1a735fefb5e63b0e8037a81f2cc0bdb356" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::AnimatedTexture::doStopAnimation</definition>
-        <argsstring>(AnimationInstance &amp;animation) override</argsstring>
-        <name>doStopAnimation</name>
-        <qualifiedname>castor3d::AnimatedTexture::doStopAnimation</qualifiedname>
-        <reimplements refid="db/da9/a04374_1ab4296cdec28662f6241d2bf774f90a20">doStopAnimation</reimplements>
+      <memberdef kind="function" id="d5/de5/a04390_1a020ff30eb7c6d98c5ebee0a8583922b1" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::ToneMapping::accept</definition>
+        <argsstring>(ToneMappingVisitor &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::ToneMapping::accept</qualifiedname>
         <param>
-          <type><ref refid="d5/d22/a04394" kindref="compound">AnimationInstance</ref> &amp;</type>
-          <declname>animation</declname>
+          <type><ref refid="d5/d22/a04394" kindref="compound">ToneMappingVisitor</ref> &amp;</type>
+          <declname>visitor</declname>
         </param>
         <briefdescription>
-<para>Stops the given animation. </para>
+<para>Visitor acceptance function. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">animation</parametername>
+<parametername direction="inout">visitor</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The animation. </para>
+<para>The visitor. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -401,23 +393,65 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/AnimatedTexture.hpp" line="94" column="6"/>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="93" column="22"/>
       </memberdef>
-      <memberdef kind="function" id="d5/de5/a04390_1ad29418d6b182db8b698e1068671a3567" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>void</type>
-        <definition>void castor3d::AnimatedTexture::doClearAnimations</definition>
-        <argsstring>() override</argsstring>
-        <name>doClearAnimations</name>
-        <qualifiedname>castor3d::AnimatedTexture::doClearAnimations</qualifiedname>
-        <reimplements refid="db/da9/a04374_1adc5a40387c363ce020fbd743598c645c">doClearAnimations</reimplements>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d5/de5/a04390_1a6189f09801b03e028ad46da330d5d0ed" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::ToneMapping::doCreatePass</definition>
+        <argsstring>(castor::Size const &amp;size, crg::FrameGraph &amp;graph, crg::ImageViewId const &amp;source, crg::ImageViewId const &amp;target, crg::FramePass const &amp;previousPass, ProgressBar *progress)</argsstring>
+        <name>doCreatePass</name>
+        <qualifiedname>castor3d::ToneMapping::doCreatePass</qualifiedname>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>crg::FrameGraph &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>source</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>target</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type><ref refid="da/deb/a03274" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
         <briefdescription>
-<para>Stops all animations. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Animation/AnimatedTexture.hpp" line="95" column="6"/>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="117" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de5/a04390_1a8a6df775a55a4b84ea470659c5a4c7ab" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ToneMapping::doCreate</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>doCreate</name>
+        <qualifiedname>castor3d::ToneMapping::doCreate</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="123" column="6"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -425,78 +459,91 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="2">
-        <label>castor3d::AnimatedObject</label>
-        <link refid="db/da9/a04374"/>
-        <childnode refid="3" relation="public-inheritance">
-        </childnode>
-      </node>
       <node id="1">
-        <label>castor3d::AnimatedTexture</label>
+        <label>castor3d::ToneMapping</label>
         <link refid="d5/de5/a04390"/>
         <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="3">
-        <label>castor::Named</label>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="2">
-        <label>castor3d::AnimatedObject</label>
-        <link refid="db/da9/a04374"/>
-        <childnode refid="3" relation="public-inheritance">
+      <node id="9">
+        <label>T</label>
+      </node>
+      <node id="3">
+        <label>castor3d::HdrConfigUbo</label>
+        <link refid="d8/d10/a05018"/>
+      </node>
+      <node id="4">
+        <label>castor3d::ShaderModule</label>
+        <link refid="d6/d14/a04858"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>name</edgelabel>
+          <edgelabel>source</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>shader</edgelabel>
         </childnode>
       </node>
       <node id="1">
-        <label>castor3d::AnimatedTexture</label>
+        <label>castor3d::ToneMapping</label>
         <link refid="d5/de5/a04390"/>
         <childnode refid="2" relation="public-inheritance">
         </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_hdrConfigUbo</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_pixelShader</edgelabel>
+          <edgelabel>m_vertexShader</edgelabel>
+        </childnode>
       </node>
-      <node id="3">
-        <label>castor::Named</label>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="6">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="5">
+        <label>std::string</label>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::unique_ptr&lt; ast::Shader &gt;</label>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; ast::Shader &gt;</edgelabel>
+        </childnode>
       </node>
     </collaborationgraph>
-    <location file="Scene/Animation/AnimatedTexture.hpp" line="16" column="1" bodyfile="Scene/Animation/AnimatedTexture.hpp" bodystart="18" bodyend="101"/>
+    <location file="Render/ToneMapping/ToneMapping.hpp" line="20" column="1" bodyfile="Render/ToneMapping/ToneMapping.hpp" bodystart="22" bodyend="133"/>
     <listofallmembers>
-      <member refid="db/da9/a04374_1ac19f279d240afe5d9aaee8ab764eb260" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>addAnimation</name></member>
-      <member refid="db/da9/a04374_1a5fcebbda75e25b1806d1b5c2141a2924" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>AnimatedObject</name></member>
-      <member refid="db/da9/a04374_1af2eccff6842dec84ce84d0e0c599f38c" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>AnimatedObject</name></member>
-      <member refid="db/da9/a04374_1a1e050f4dc3a1962ca4cf375d9b16b89b" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>AnimatedObject</name></member>
-      <member refid="d5/de5/a04390_1a0904e74a0132beaf2e0a0b169ad9f612" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>AnimatedTexture</name></member>
-      <member refid="d5/de5/a04390_1a00e21960e08367c63533d8ffa44a89ec" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>AnimatedTexture</name></member>
-      <member refid="d5/de5/a04390_1aa16134090eabb3e666e072aae474482c" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>AnimatedTexture</name></member>
-      <member refid="d5/de5/a04390_1acdc097c0f87ef07efa0f68d7bcc306f9" prot="private" virt="virtual"><scope>castor3d::AnimatedTexture</scope><name>doAddAnimation</name></member>
-      <member refid="d5/de5/a04390_1ad29418d6b182db8b698e1068671a3567" prot="private" virt="virtual"><scope>castor3d::AnimatedTexture</scope><name>doClearAnimations</name></member>
-      <member refid="d5/de5/a04390_1aa5c1843b9d6be1dbdc865bcabf2a302e" prot="private" virt="virtual"><scope>castor3d::AnimatedTexture</scope><name>doStartAnimation</name></member>
-      <member refid="d5/de5/a04390_1a735fefb5e63b0e8037a81f2cc0bdb356" prot="private" virt="virtual"><scope>castor3d::AnimatedTexture</scope><name>doStopAnimation</name></member>
-      <member refid="d5/de5/a04390_1ad0752ac52c1ec6713a2c2d5f0e0286ec" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>fillBuffer</name></member>
-      <member refid="db/da9/a04374_1a779fc1e97feca6c7b48c9148f18901e5" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>getAnimation</name></member>
-      <member refid="db/da9/a04374_1a2b7f1dcedebd594dd1f02ce399d06e59" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>getAnimations</name></member>
-      <member refid="db/da9/a04374_1aa371efe8253bc63995bf46f238c2a1d8" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>getKind</name></member>
-      <member refid="d5/de5/a04390_1a316e9cad230eb742e576e5fe0f3f3a86" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>getPass</name></member>
-      <member refid="d5/de5/a04390_1a2b8c41c3b5aeebe8206ac27bba8673e4" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>getPlayingAnimation</name></member>
-      <member refid="d5/de5/a04390_1a33e90b58524104c6994e8b0998c5008e" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>getTexture</name></member>
-      <member refid="db/da9/a04374_1ab2df0c8e698bcfdb593900ad8c146266" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>hasAnimation</name></member>
-      <member refid="d5/de5/a04390_1afdd0b9a478e69d2c1ced312fa33b0b03" prot="public" virt="virtual"><scope>castor3d::AnimatedTexture</scope><name>isPlayingAnimation</name></member>
-      <member refid="db/da9/a04374_1a28e41bc599481520db66d3b41ec73a2d" prot="protected" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>m_animations</name></member>
-      <member refid="d5/de5/a04390_1aceb1cef93c384ef8b0018345674e9809" prot="private" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>m_pass</name></member>
-      <member refid="d5/de5/a04390_1afe7ded4d0977700823e4db745a920194" prot="private" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>m_playingAnimation</name></member>
-      <member refid="d5/de5/a04390_1ad43c8ff9c5316c8ac117030ba23ea4f0" prot="private" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>m_texture</name></member>
-      <member refid="d5/de5/a04390_1a6546012f07752e8da5fd8817d11cf73f" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>operator=</name></member>
-      <member refid="d5/de5/a04390_1ab8b01d0bba7332bdc8bc881968976a86" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>operator=</name></member>
-      <member refid="db/da9/a04374_1a4fae64cf33b1a473e421691f2037f723" prot="public" virt="non-virtual" ambiguityscope="castor3d::AnimatedObject::"><scope>castor3d::AnimatedTexture</scope><name>operator=</name></member>
-      <member refid="db/da9/a04374_1a681a62403a76ff582f254ff7c43d3c10" prot="public" virt="non-virtual" ambiguityscope="castor3d::AnimatedObject::"><scope>castor3d::AnimatedTexture</scope><name>operator=</name></member>
-      <member refid="db/da9/a04374_1abdbb6424aa1619e85ef330dcab9ce2a0" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>pauseAllAnimations</name></member>
-      <member refid="db/da9/a04374_1a7660dd415cda3afa98031e4fdc194944" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>pauseAnimation</name></member>
-      <member refid="d5/de5/a04390_1a254e45ef692bacf292f73b3d498cb124" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>setTexture</name></member>
-      <member refid="db/da9/a04374_1a21fa4e1c150e3f1829fd698e10dc5d74" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>startAllAnimations</name></member>
-      <member refid="db/da9/a04374_1a6ccec881b1147baafaa43c5ee286e0c7" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>startAnimation</name></member>
-      <member refid="db/da9/a04374_1af7a31c3fd0ac07fcb49df40e4cbc1f9f" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>stopAllAnimations</name></member>
-      <member refid="db/da9/a04374_1af9cdab619fab70599c9568167075b9ac" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>stopAnimation</name></member>
-      <member refid="d5/de5/a04390_1afc1b444905e2763e02e4285139577a5a" prot="public" virt="virtual"><scope>castor3d::AnimatedTexture</scope><name>update</name></member>
-      <member refid="db/da9/a04374_1ab7b23d33b93065511e6eccd2201410f1" prot="public" virt="virtual"><scope>castor3d::AnimatedTexture</scope><name>~AnimatedObject</name></member>
+      <member refid="d5/de5/a04390_1a020ff30eb7c6d98c5ebee0a8583922b1" prot="public" virt="virtual"><scope>castor3d::ToneMapping</scope><name>accept</name></member>
+      <member refid="d5/de5/a04390_1a8a6df775a55a4b84ea470659c5a4c7ab" prot="private" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>doCreate</name></member>
+      <member refid="d5/de5/a04390_1a6189f09801b03e028ad46da330d5d0ed" prot="private" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>doCreatePass</name></member>
+      <member refid="d5/de5/a04390_1a8e356ab5d1add11cadc1f44844ad7a97" prot="public" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>getFullName</name></member>
+      <member refid="d5/de5/a04390_1a54486ed9a7b1212ef8c2af8fffb3ba76" prot="public" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>getName</name></member>
+      <member refid="d5/de5/a04390_1a18ca2f0389b8b42dd0b8a39673ed31fd" prot="public" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>getPass</name></member>
+      <member refid="d5/de5/a04390_1a481c38b0b545843dbbb61f40674e46fd" prot="public" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>initialise</name></member>
+      <member refid="d5/de5/a04390_1a33733eec74c57ab293ed874b999536f0" prot="protected" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>m_hdrConfigUbo</name></member>
+      <member refid="d5/de5/a04390_1af28cd1367268943ec173b63376c6bac0" prot="protected" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>m_name</name></member>
+      <member refid="d5/de5/a04390_1acc4f0512371286e3e7bd3f59ea821647" prot="protected" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>m_pass</name></member>
+      <member refid="d5/de5/a04390_1a3df5ff521c4cce3c79aa7491dc537fe7" prot="protected" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>m_pixelShader</name></member>
+      <member refid="d5/de5/a04390_1add60d6dd69ead4886168a3a3fbd77fd7" prot="protected" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>m_program</name></member>
+      <member refid="d5/de5/a04390_1ac279ef1d4aaf85c8e46ca93310b33349" prot="protected" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>m_quad</name></member>
+      <member refid="d5/de5/a04390_1a1dcdb146bb162922519d964027053f16" prot="protected" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>m_vertexShader</name></member>
+      <member refid="d5/de5/a04390_1a7c3c83e898274a0a3d78e5ab2d548d65" prot="public" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>ToneMapping</name></member>
+      <member refid="d5/de5/a04390_1a3b5dc35fd93e4a5c04d91522309f5814" prot="public" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>updatePipeline</name></member>
+      <member refid="d5/de5/a04390_1a79cea96c372c1673191633c34127d3d1" prot="public" virt="virtual"><scope>castor3d::ToneMapping</scope><name>~ToneMapping</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

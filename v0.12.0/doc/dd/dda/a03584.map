@@ -1,0 +1,8 @@
+<map id="castor3d::OverlayRenderer::OverlayGeometryBuffers" name="castor3d::OverlayRenderer::OverlayGeometryBuffers">
+<area shape="rect" id="node1" title=" " alt="" coords="125,408,300,449"/>
+<area shape="rect" id="node2" href="$d9/d76/a02526.html" title=" " alt="" coords="124,304,301,331"/>
+<area shape="rect" id="node3" href="$d9/d66/a02562.html" title=" " alt="" coords="120,215,305,241"/>
+<area shape="rect" id="node4" href="$db/d09/a02502.html" title="A GPU buffer, that uses a buddy allocator to allocate sub&#45;buffers." alt="" coords="17,81,161,123"/>
+<area shape="rect" id="node5" href="$d3/d41/a02530.html" title=" " alt="" coords="5,5,172,32"/>
+<area shape="rect" id="node6" href="$d7/da8/a02522.html" title="A memory range, in bytes." alt="" coords="185,89,331,115"/>
+</map>

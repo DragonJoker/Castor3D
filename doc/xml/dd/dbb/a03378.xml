@@ -1,135 +1,148 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="dd/dbb/a03378" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::FaceInfos::Vertex</compoundname>
-    <includes local="no">FaceInfos.hpp</includes>
-      <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="dd/dbb/a03378_1aa7ab302b9fa37265ddbc2917d203596c" prot="public" static="no" mutable="no">
-        <type>int</type>
-        <definition>int castor3d::FaceInfos::Vertex::m_index</definition>
+  <compounddef id="dd/dbb/a03378" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::Face</compoundname>
+    <includes local="no">Face.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dd/dbb/a03378_1a93076f16a364cd85357482fedf153375" prot="private" static="no" mutable="no">
+        <type><ref refid="de/d83/a03382" kindref="compound">FaceIndices</ref></type>
+        <definition>FaceIndices castor3d::Face::m_face</definition>
         <argsstring></argsstring>
-        <name>m_index</name>
-        <qualifiedname>castor3d::FaceInfos::Vertex::m_index</qualifiedname>
-        <initializer>{ -1 }</initializer>
+        <name>m_face</name>
+        <qualifiedname>castor3d::Face::m_face</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><ref refid="dd/dbb/a03378" kindref="compound">Vertex</ref> index. </para>
+<para>The face vertex indices. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/FaceInfos.hpp" line="24" column="5" bodyfile="Model/Mesh/Submesh/Component/FaceInfos.hpp" bodystart="24" bodyend="-1"/>
+        <location file="Model/Mesh/Submesh/Component/Face.hpp" line="49" column="13" bodyfile="Model/Mesh/Submesh/Component/Face.hpp" bodystart="49" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="dd/dbb/a03378_1a21601dcb31b36ab864c59e361f2b6c66" prot="public" static="no" mutable="no">
-        <type>std::array&lt; float, 3 &gt;</type>
-        <definition>std::array&lt; float, 3 &gt; castor3d::FaceInfos::Vertex::m_fNormal</definition>
-        <argsstring></argsstring>
-        <name>m_fNormal</name>
-        <qualifiedname>castor3d::FaceInfos::Vertex::m_fNormal</qualifiedname>
-        <initializer>{ { 0.0f, 0.0f, 0.0f } }</initializer>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/dbb/a03378_1a2f1c1e4657b63658c027022241172dcf" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::Face::Face</definition>
+        <argsstring>(uint32_t a, uint32_t b, uint32_t c) noexcept</argsstring>
+        <name>Face</name>
+        <qualifiedname>castor3d::Face::Face</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>c</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><ref refid="dd/dbb/a03378" kindref="compound">Vertex</ref> normal. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/FaceInfos.hpp" line="27" column="12" bodyfile="Model/Mesh/Submesh/Component/FaceInfos.hpp" bodystart="27" bodyend="-1"/>
+        <location file="Model/Mesh/Submesh/Component/Face.hpp" line="14" column="1" bodyfile="Model/Mesh/Submesh/Component/Face.hpp" bodystart="14" bodyend="17"/>
       </memberdef>
-      <memberdef kind="variable" id="dd/dbb/a03378_1a470fb07e7bcba0f2e3b798fb8ac055c4" prot="public" static="no" mutable="no">
-        <type>std::array&lt; float, 2 &gt;</type>
-        <definition>std::array&lt; float, 2 &gt; castor3d::FaceInfos::Vertex::m_fTexCoords</definition>
-        <argsstring></argsstring>
-        <name>m_fTexCoords</name>
-        <qualifiedname>castor3d::FaceInfos::Vertex::m_fTexCoords</qualifiedname>
-        <initializer>{ { 0.0f, 0.0f } }</initializer>
+      <memberdef kind="function" id="dd/dbb/a03378_1af6c6f0ef537a29f6df79b36dfec8af1b" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::Face::Face</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>Face</name>
+        <qualifiedname>castor3d::Face::Face</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para><ref refid="dd/dbb/a03378" kindref="compound">Vertex</ref> UV. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/FaceInfos.hpp" line="30" column="12" bodyfile="Model/Mesh/Submesh/Component/FaceInfos.hpp" bodystart="30" bodyend="-1"/>
+        <location file="Model/Mesh/Submesh/Component/Face.hpp" line="19" column="1" bodyfile="Model/Mesh/Submesh/Component/Face.hpp" bodystart="19" bodyend="22"/>
       </memberdef>
-      <memberdef kind="variable" id="dd/dbb/a03378_1a8862ec8be04ba68301685367e0d207d4" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::FaceInfos::Vertex::m_bHasNormal</definition>
-        <argsstring></argsstring>
-        <name>m_bHasNormal</name>
-        <qualifiedname>castor3d::FaceInfos::Vertex::m_bHasNormal</qualifiedname>
-        <initializer>{ false }</initializer>
+      <memberdef kind="function" id="dd/dbb/a03378_1abbea1edaaae27b3a1ce63fb3060aa107" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t const &amp;</type>
+        <definition>uint32_t const  &amp; castor3d::Face::operator[]</definition>
+        <argsstring>(uint32_t index) const noexcept</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor3d::Face::operator[]</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>Tells the vertex has a normal. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/FaceInfos.hpp" line="33" column="6" bodyfile="Model/Mesh/Submesh/Component/FaceInfos.hpp" bodystart="33" bodyend="-1"/>
+        <location file="Model/Mesh/Submesh/Component/Face.hpp" line="24" column="17" bodyfile="Model/Mesh/Submesh/Component/Face.hpp" bodystart="24" bodyend="28"/>
+        <references refid="de/d83/a03382_1adf8426df8bab8f2e89269aad090a1d01" compoundref="dc/d19/a00515" startline="17">castor3d::FaceIndices::m_index</references>
       </memberdef>
-      <memberdef kind="variable" id="dd/dbb/a03378_1a77301de9b2aca3b08642b1a5bc84f7d4" prot="public" static="no" mutable="no">
-        <type>bool</type>
-        <definition>bool castor3d::FaceInfos::Vertex::m_bHasTexCoords</definition>
-        <argsstring></argsstring>
-        <name>m_bHasTexCoords</name>
-        <qualifiedname>castor3d::FaceInfos::Vertex::m_bHasTexCoords</qualifiedname>
-        <initializer>{ false }</initializer>
+      <memberdef kind="function" id="dd/dbb/a03378_1a06530173d875584f566b31e916ee5f4f" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t &amp;</type>
+        <definition>uint32_t &amp; castor3d::Face::operator[]</definition>
+        <argsstring>(uint32_t index) noexcept</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor3d::Face::operator[]</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>Tells the vertex has UV. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Model/Mesh/Submesh/Component/FaceInfos.hpp" line="36" column="6" bodyfile="Model/Mesh/Submesh/Component/FaceInfos.hpp" bodystart="36" bodyend="-1"/>
+        <location file="Model/Mesh/Submesh/Component/Face.hpp" line="30" column="11" bodyfile="Model/Mesh/Submesh/Component/Face.hpp" bodystart="30" bodyend="34"/>
+        <references refid="de/d83/a03382_1adf8426df8bab8f2e89269aad090a1d01" compoundref="dc/d19/a00515" startline="17">castor3d::FaceIndices::m_index</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/dbb/a03378_1a9cb88044b9e6b72a03447be779de0347" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t const *</type>
+        <definition>uint32_t const  * castor3d::Face::data</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>data</name>
+        <qualifiedname>castor3d::Face::data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/Face.hpp" line="36" column="17" bodyfile="Model/Mesh/Submesh/Component/Face.hpp" bodystart="36" bodyend="39"/>
+        <references refid="de/d83/a03382_1adf8426df8bab8f2e89269aad090a1d01" compoundref="dc/d19/a00515" startline="17">castor3d::FaceIndices::m_index</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/dbb/a03378_1a19a8692fb21f47203c9fd501be3c08e7" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t *</type>
+        <definition>uint32_t * castor3d::Face::data</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>data</name>
+        <qualifiedname>castor3d::Face::data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/Face.hpp" line="41" column="11" bodyfile="Model/Mesh/Submesh/Component/Face.hpp" bodystart="41" bodyend="44"/>
+        <references refid="de/d83/a03382_1adf8426df8bab8f2e89269aad090a1d01" compoundref="dc/d19/a00515" startline="17">castor3d::FaceIndices::m_index</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Holds vertex informations. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="4">
-        <label>T</label>
-      </node>
-      <node id="5">
-        <label>std::array&lt; float, 2 &gt;</label>
-        <childnode refid="3" relation="template-instance">
-          <edgelabel>&lt; float, 2 &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="2">
-        <label>std::array&lt; float, 3 &gt;</label>
-        <childnode refid="3" relation="template-instance">
-          <edgelabel>&lt; float, 3 &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="1">
-        <label>castor3d::FaceInfos::Vertex</label>
-        <link refid="dd/dbb/a03378"/>
-        <childnode refid="2" relation="usage">
-          <edgelabel>m_fNormal</edgelabel>
-        </childnode>
-        <childnode refid="5" relation="usage">
-          <edgelabel>m_fTexCoords</edgelabel>
-        </childnode>
-      </node>
-      <node id="3">
-        <label>std::array&lt; T &gt;</label>
-        <childnode refid="4" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Model/Mesh/Submesh/Component/FaceInfos.hpp" line="20" column="1" bodyfile="Model/Mesh/Submesh/Component/FaceInfos.hpp" bodystart="21" bodyend="37"/>
+    <location file="Model/Mesh/Submesh/Component/Face.hpp" line="11" column="1" bodyfile="Model/Mesh/Submesh/Component/Face.hpp" bodystart="12" bodyend="50"/>
     <listofallmembers>
-      <member refid="dd/dbb/a03378_1a8862ec8be04ba68301685367e0d207d4" prot="public" virt="non-virtual"><scope>castor3d::FaceInfos::Vertex</scope><name>m_bHasNormal</name></member>
-      <member refid="dd/dbb/a03378_1a77301de9b2aca3b08642b1a5bc84f7d4" prot="public" virt="non-virtual"><scope>castor3d::FaceInfos::Vertex</scope><name>m_bHasTexCoords</name></member>
-      <member refid="dd/dbb/a03378_1a21601dcb31b36ab864c59e361f2b6c66" prot="public" virt="non-virtual"><scope>castor3d::FaceInfos::Vertex</scope><name>m_fNormal</name></member>
-      <member refid="dd/dbb/a03378_1a470fb07e7bcba0f2e3b798fb8ac055c4" prot="public" virt="non-virtual"><scope>castor3d::FaceInfos::Vertex</scope><name>m_fTexCoords</name></member>
-      <member refid="dd/dbb/a03378_1aa7ab302b9fa37265ddbc2917d203596c" prot="public" virt="non-virtual"><scope>castor3d::FaceInfos::Vertex</scope><name>m_index</name></member>
+      <member refid="dd/dbb/a03378_1a9cb88044b9e6b72a03447be779de0347" prot="public" virt="non-virtual"><scope>castor3d::Face</scope><name>data</name></member>
+      <member refid="dd/dbb/a03378_1a19a8692fb21f47203c9fd501be3c08e7" prot="public" virt="non-virtual"><scope>castor3d::Face</scope><name>data</name></member>
+      <member refid="dd/dbb/a03378_1a2f1c1e4657b63658c027022241172dcf" prot="public" virt="non-virtual"><scope>castor3d::Face</scope><name>Face</name></member>
+      <member refid="dd/dbb/a03378_1af6c6f0ef537a29f6df79b36dfec8af1b" prot="public" virt="non-virtual"><scope>castor3d::Face</scope><name>Face</name></member>
+      <member refid="dd/dbb/a03378_1a93076f16a364cd85357482fedf153375" prot="private" virt="non-virtual"><scope>castor3d::Face</scope><name>m_face</name></member>
+      <member refid="dd/dbb/a03378_1abbea1edaaae27b3a1ce63fb3060aa107" prot="public" virt="non-virtual"><scope>castor3d::Face</scope><name>operator[]</name></member>
+      <member refid="dd/dbb/a03378_1a06530173d875584f566b31e916ee5f4f" prot="public" virt="non-virtual"><scope>castor3d::Face</scope><name>operator[]</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

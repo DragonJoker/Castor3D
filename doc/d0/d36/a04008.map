@@ -1,4 +1,9 @@
-<map id="castor3d::NonTexturedCube::Quad" name="castor3d::NonTexturedCube::Quad">
-<area shape="rect" id="node1" title=" " alt="" coords="5,109,188,151"/>
-<area shape="rect" id="node2" href="$d0/dee/a04014.html" title=" " alt="" coords="5,5,188,47"/>
+<map id="castor3d::RenderDevice" name="castor3d::RenderDevice">
+<area shape="rect" id="node1" title=" " alt="" coords="127,273,286,300"/>
+<area shape="rect" id="node2" href="$d7/ded/a04130.html" title=" " alt="" coords="15,184,182,211"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,95,192,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="207,184,385,211"/>
+<area shape="rect" id="node5" href="$d2/dce/a04002.html" title=" " alt="" coords="217,95,369,121"/>
+<area shape="rect" id="node6" title=" " alt="" coords="394,95,507,121"/>
+<area shape="rect" id="node7" title=" " alt="" coords="431,5,470,32"/>
 </map>

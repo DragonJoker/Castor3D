@@ -83,7 +83,7 @@
         <location file="Cache/CacheModule.hpp" line="89" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="89" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="db/d99/a02626_1aee480eb090c4083e33f92f75d289bb95" prot="public" static="no">
-        <type>castor::ResourceCacheBaseT&lt; <ref refid="db/d99/a02626_1a27c7ed8bc85b003039787a8e5e97ef32" kindref="member">ElementT</ref>, <ref refid="db/d99/a02626_1a1b779d8be385d959ebb4e7e34ad3be01" kindref="member">ElementKeyT</ref>, <ref refid="d1/dc1/a02706" kindref="compound">PtrCacheTraitsT</ref>&lt; <ref refid="db/d99/a02626_1a27c7ed8bc85b003039787a8e5e97ef32" kindref="member">ElementT</ref>, <ref refid="db/d99/a02626_1a1b779d8be385d959ebb4e7e34ad3be01" kindref="member">ElementKeyT</ref> &gt; &gt;</type>
+        <type>castor::ResourceCacheBaseT&lt; <ref refid="db/d99/a02626_1a27c7ed8bc85b003039787a8e5e97ef32" kindref="member">ElementT</ref>, <ref refid="db/d99/a02626_1a1b779d8be385d959ebb4e7e34ad3be01" kindref="member">ElementKeyT</ref>, <ref refid="d9/d6c/a02710" kindref="compound">PtrCacheTraitsT</ref>&lt; <ref refid="db/d99/a02626_1a27c7ed8bc85b003039787a8e5e97ef32" kindref="member">ElementT</ref>, <ref refid="db/d99/a02626_1a1b779d8be385d959ebb4e7e34ad3be01" kindref="member">ElementKeyT</ref> &gt; &gt;</type>
         <definition>using castor3d::CUPtrCacheTraitsBaseT&lt; ResT, KeyT &gt;::ElementCacheT =  castor::ResourceCacheBaseT&lt; ElementT, ElementKeyT, PtrCacheTraitsT&lt; ElementT, ElementKeyT &gt; &gt;</definition>
         <argsstring></argsstring>
         <name>ElementCacheT</name>
@@ -310,14 +310,27 @@
           <edgelabel>&lt; Scene, castor::String &gt;</edgelabel>
         </childnode>
       </node>
+      <node id="4">
+        <label>castor3d::CUPtrCacheTraitsBaseT&lt; Skeleton, castor::String &gt;</label>
+        <link refid="db/d99/a02626"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Skeleton, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
       <node id="1">
         <label>castor3d::CUPtrCacheTraitsBaseT&lt; ResT, KeyT &gt;</label>
         <link refid="db/d99/a02626"/>
       </node>
       <node id="3">
         <label>castor3d::PtrCacheTraitsT&lt; Scene, castor::String &gt;</label>
-        <link refid="d1/d9a/a04618"/>
+        <link refid="de/d18/a04722"/>
         <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::PtrCacheTraitsT&lt; Skeleton, castor::String &gt;</label>
+        <link refid="df/d5f/a03494"/>
+        <childnode refid="4" relation="public-inheritance">
         </childnode>
       </node>
     </inheritancegraph>

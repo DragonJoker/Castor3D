@@ -4,7 +4,7 @@
     <compoundname>Render/GlobalIllumination</compoundname>
     <innerdir refid="dir_7108b733bb1fee5c7687037800af29fb">Render/GlobalIllumination/LightPropagationVolumes</innerdir>
     <innerdir refid="dir_b70b22b959ecebdb1f17b0f917c94768">Render/GlobalIllumination/VoxelConeTracing</innerdir>
-    <innerfile refid="d0/d5c/a00668">GlobalIlluminationModule.hpp</innerfile>
+    <innerfile refid="df/dbb/a00698">GlobalIlluminationModule.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

@@ -1,195 +1,77 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d3/d14/a05174" kind="struct" language="C++" prot="public">
-    <compoundname>castor::TextWriter&lt; castor3d::Scene &gt;::Options</compoundname>
-    <includes local="no">TextScene.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
+    <compoundname>castor3d::ObjectIdsConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d3/d14/a05174_1a7f20d67f9f2ac307d780c0d4cb485dcd" prot="public" static="no" mutable="no">
-        <type>Path</type>
-        <definition>Path castor::TextWriter&lt; castor3d::Scene &gt;::Options::rootFolder</definition>
+      <memberdef kind="variable" id="d3/d14/a05174_1a75b4202ba8f19e611409a8b76f6d85b1" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectIdsConfiguration::nodeId</definition>
         <argsstring></argsstring>
-        <name>rootFolder</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::Scene &gt;::Options::rootFolder</qualifiedname>
+        <name>nodeId</name>
+        <qualifiedname>castor3d::ObjectIdsConfiguration::nodeId</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Text/TextScene.hpp" line="39" column="6" bodyfile="Text/TextScene.hpp" bodystart="39" bodyend="-1"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="321" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="321" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d3/d14/a05174_1a6db6193e538cc32e34d729f6098d5f9f" prot="public" static="no" mutable="no">
-        <type>Path</type>
-        <definition>Path castor::TextWriter&lt; castor3d::Scene &gt;::Options::materialsFile</definition>
+      <memberdef kind="variable" id="d3/d14/a05174_1a0de8356d4250a0164aab3a39d57535ad" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectIdsConfiguration::morphingId</definition>
         <argsstring></argsstring>
-        <name>materialsFile</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::Scene &gt;::Options::materialsFile</qualifiedname>
+        <name>morphingId</name>
+        <qualifiedname>castor3d::ObjectIdsConfiguration::morphingId</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Text/TextScene.hpp" line="40" column="6" bodyfile="Text/TextScene.hpp" bodystart="40" bodyend="-1"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="322" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="322" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d3/d14/a05174_1acabfb1a3546000ce994ca9926e683e2e" prot="public" static="no" mutable="no">
-        <type>Path</type>
-        <definition>Path castor::TextWriter&lt; castor3d::Scene &gt;::Options::meshesFile</definition>
+      <memberdef kind="variable" id="d3/d14/a05174_1ae61d11e2e9cd8addadc357b59630e803" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectIdsConfiguration::skinningId</definition>
         <argsstring></argsstring>
-        <name>meshesFile</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::Scene &gt;::Options::meshesFile</qualifiedname>
+        <name>skinningId</name>
+        <qualifiedname>castor3d::ObjectIdsConfiguration::skinningId</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Text/TextScene.hpp" line="41" column="6" bodyfile="Text/TextScene.hpp" bodystart="41" bodyend="-1"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="323" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="323" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d3/d14/a05174_1a3f2edda51944e5bd726db840da682819" prot="public" static="no" mutable="no">
-        <type>Path</type>
-        <definition>Path castor::TextWriter&lt; castor3d::Scene &gt;::Options::nodesFile</definition>
+      <memberdef kind="variable" id="d3/d14/a05174_1a79f35ba26aebc8ecb12e702d8e65d408" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectIdsConfiguration::dummy</definition>
         <argsstring></argsstring>
-        <name>nodesFile</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::Scene &gt;::Options::nodesFile</qualifiedname>
+        <name>dummy</name>
+        <qualifiedname>castor3d::ObjectIdsConfiguration::dummy</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Text/TextScene.hpp" line="42" column="6" bodyfile="Text/TextScene.hpp" bodystart="42" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d14/a05174_1a11955cb9af1ef1e969c9d74a6845cb9c" prot="public" static="no" mutable="no">
-        <type>Path</type>
-        <definition>Path castor::TextWriter&lt; castor3d::Scene &gt;::Options::objectsFile</definition>
-        <argsstring></argsstring>
-        <name>objectsFile</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::Scene &gt;::Options::objectsFile</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Text/TextScene.hpp" line="43" column="6" bodyfile="Text/TextScene.hpp" bodystart="43" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d14/a05174_1add17ae01db985bc64f801d977612c7d3" prot="public" static="no" mutable="no">
-        <type>Path</type>
-        <definition>Path castor::TextWriter&lt; castor3d::Scene &gt;::Options::lightsFile</definition>
-        <argsstring></argsstring>
-        <name>lightsFile</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::Scene &gt;::Options::lightsFile</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Text/TextScene.hpp" line="44" column="6" bodyfile="Text/TextScene.hpp" bodystart="44" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d14/a05174_1ac1d4dcd4b0af205a1bb9a5083ca43d09" prot="public" static="no" mutable="no">
-        <type>String</type>
-        <definition>String castor::TextWriter&lt; castor3d::Scene &gt;::Options::subfolder</definition>
-        <argsstring></argsstring>
-        <name>subfolder</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::Scene &gt;::Options::subfolder</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Text/TextScene.hpp" line="45" column="8" bodyfile="Text/TextScene.hpp" bodystart="45" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d3/d14/a05174_1a98808dcf93c1c25d8b4eb263855c2dac" prot="public" static="no" mutable="no">
-        <type>float</type>
-        <definition>float castor::TextWriter&lt; castor3d::Scene &gt;::Options::scale</definition>
-        <argsstring></argsstring>
-        <name>scale</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::Scene &gt;::Options::scale</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Text/TextScene.hpp" line="46" column="7" bodyfile="Text/TextScene.hpp" bodystart="46" bodyend="-1"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d3/d14/a05174_1a945035d0a3867f989a84e4b04c881726" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
-        <definition>castor::TextWriter&lt; castor3d::Scene &gt;::Options::Options</definition>
-        <argsstring>(Path prootFolder={}, Path pmaterialsFile={}, Path pmeshesFile={}, Path pnodesFile={}, Path pobjectsFile={}, Path plightsFile={}, String psubfolder={}, float pscale=1.0f)</argsstring>
-        <name>Options</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::Scene &gt;::Options::Options</qualifiedname>
-        <param>
-          <type>Path</type>
-          <declname>prootFolder</declname>
-          <defval>{}</defval>
-        </param>
-        <param>
-          <type>Path</type>
-          <declname>pmaterialsFile</declname>
-          <defval>{}</defval>
-        </param>
-        <param>
-          <type>Path</type>
-          <declname>pmeshesFile</declname>
-          <defval>{}</defval>
-        </param>
-        <param>
-          <type>Path</type>
-          <declname>pnodesFile</declname>
-          <defval>{}</defval>
-        </param>
-        <param>
-          <type>Path</type>
-          <declname>pobjectsFile</declname>
-          <defval>{}</defval>
-        </param>
-        <param>
-          <type>Path</type>
-          <declname>plightsFile</declname>
-          <defval>{}</defval>
-        </param>
-        <param>
-          <type>String</type>
-          <declname>psubfolder</declname>
-          <defval>{}</defval>
-        </param>
-        <param>
-          <type>float</type>
-          <declname>pscale</declname>
-          <defval>1.0f</defval>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Text/TextScene.hpp" line="20" column="1" bodyfile="Text/TextScene.hpp" bodystart="20" bodyend="37"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="324" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="324" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>Objects ID data. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Text/TextScene.hpp" line="18" column="1" bodyfile="Text/TextScene.hpp" bodystart="19" bodyend="47"/>
+    <location file="Shader/Ubos/UbosModule.hpp" line="319" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="320" bodyend="325"/>
     <listofallmembers>
-      <member refid="d3/d14/a05174_1add17ae01db985bc64f801d977612c7d3" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;::Options</scope><name>lightsFile</name></member>
-      <member refid="d3/d14/a05174_1a6db6193e538cc32e34d729f6098d5f9f" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;::Options</scope><name>materialsFile</name></member>
-      <member refid="d3/d14/a05174_1acabfb1a3546000ce994ca9926e683e2e" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;::Options</scope><name>meshesFile</name></member>
-      <member refid="d3/d14/a05174_1a3f2edda51944e5bd726db840da682819" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;::Options</scope><name>nodesFile</name></member>
-      <member refid="d3/d14/a05174_1a11955cb9af1ef1e969c9d74a6845cb9c" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;::Options</scope><name>objectsFile</name></member>
-      <member refid="d3/d14/a05174_1a945035d0a3867f989a84e4b04c881726" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;::Options</scope><name>Options</name></member>
-      <member refid="d3/d14/a05174_1a7f20d67f9f2ac307d780c0d4cb485dcd" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;::Options</scope><name>rootFolder</name></member>
-      <member refid="d3/d14/a05174_1a98808dcf93c1c25d8b4eb263855c2dac" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;::Options</scope><name>scale</name></member>
-      <member refid="d3/d14/a05174_1ac1d4dcd4b0af205a1bb9a5083ca43d09" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;::Options</scope><name>subfolder</name></member>
+      <member refid="d3/d14/a05174_1a79f35ba26aebc8ecb12e702d8e65d408" prot="public" virt="non-virtual"><scope>castor3d::ObjectIdsConfiguration</scope><name>dummy</name></member>
+      <member refid="d3/d14/a05174_1a0de8356d4250a0164aab3a39d57535ad" prot="public" virt="non-virtual"><scope>castor3d::ObjectIdsConfiguration</scope><name>morphingId</name></member>
+      <member refid="d3/d14/a05174_1a75b4202ba8f19e611409a8b76f6d85b1" prot="public" virt="non-virtual"><scope>castor3d::ObjectIdsConfiguration</scope><name>nodeId</name></member>
+      <member refid="d3/d14/a05174_1ae61d11e2e9cd8addadc357b59630e803" prot="public" virt="non-virtual"><scope>castor3d::ObjectIdsConfiguration</scope><name>skinningId</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -1,16 +1,99 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="dd/d3c/a04466" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::SkyboxBackground</compoundname>
-    <basecompoundref refid="d8/d1f/a04450" prot="public" virt="non-virtual">castor3d::SceneBackground</basecompoundref>
-    <includes local="no">Skybox.hpp</includes>
+  <compounddef id="dd/d3c/a04466" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::AnimatedObject</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::Named</basecompoundref>
+    <derivedcompoundref refid="dd/dc6/a04462" prot="public" virt="non-virtual">castor3d::AnimatedMesh</derivedcompoundref>
+    <derivedcompoundref refid="dc/d50/a04474" prot="public" virt="non-virtual">castor3d::AnimatedSceneNode</derivedcompoundref>
+    <derivedcompoundref refid="d1/d6c/a04478" prot="public" virt="non-virtual">castor3d::AnimatedSkeleton</derivedcompoundref>
+    <derivedcompoundref refid="d7/d2e/a04482" prot="public" virt="non-virtual">castor3d::AnimatedTexture</derivedcompoundref>
+    <includes local="no">AnimatedObject.hpp</includes>
       <sectiondef kind="user-defined">
-      <memberdef kind="function" id="dd/d3c/a04466_1a927d97f5e6ce10d1f46bffac7f8f8271" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::Path const &amp;</type>
-        <definition>castor::Path const  &amp; castor3d::SkyboxBackground::getEquiTexturePath</definition>
-        <argsstring>() const</argsstring>
-        <name>getEquiTexturePath</name>
-        <qualifiedname>castor3d::SkyboxBackground::getEquiTexturePath</qualifiedname>
+      <memberdef kind="function" id="dd/d3c/a04466_1a5fcebbda75e25b1806d1b5c2141a2924" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::AnimatedObject::AnimatedObject</definition>
+        <argsstring>(AnimatedObject &amp;&amp;rhs)=default</argsstring>
+        <name>AnimatedObject</name>
+        <qualifiedname>castor3d::AnimatedObject::AnimatedObject</qualifiedname>
+        <param>
+          <type><ref refid="dd/d3c/a04466" kindref="compound">AnimatedObject</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Copy / Move. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="24" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3c/a04466_1a4fae64cf33b1a473e421691f2037f723" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dd/d3c/a04466" kindref="compound">AnimatedObject</ref> &amp;</type>
+        <definition>C3D_API AnimatedObject &amp; castor3d::AnimatedObject::operator=</definition>
+        <argsstring>(AnimatedObject &amp;&amp;rhs)=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::AnimatedObject::operator=</qualifiedname>
+        <param>
+          <type><ref refid="dd/d3c/a04466" kindref="compound">AnimatedObject</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="25" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3c/a04466_1af2eccff6842dec84ce84d0e0c599f38c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::AnimatedObject::AnimatedObject</definition>
+        <argsstring>(AnimatedObject const &amp;rhs)=delete</argsstring>
+        <name>AnimatedObject</name>
+        <qualifiedname>castor3d::AnimatedObject::AnimatedObject</qualifiedname>
+        <param>
+          <type><ref refid="dd/d3c/a04466" kindref="compound">AnimatedObject</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="26" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3c/a04466_1a681a62403a76ff582f254ff7c43d3c10" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dd/d3c/a04466" kindref="compound">AnimatedObject</ref> &amp;</type>
+        <definition>C3D_API AnimatedObject &amp; castor3d::AnimatedObject::operator=</definition>
+        <argsstring>(AnimatedObject const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::AnimatedObject::operator=</qualifiedname>
+        <param>
+          <type><ref refid="dd/d3c/a04466" kindref="compound">AnimatedObject</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="27" column="25"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="dd/d3c/a04466_1ab2df0c8e698bcfdb593900ad8c146266" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::AnimatedObject::hasAnimation</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>hasAnimation</name>
+        <qualifiedname>castor3d::AnimatedObject::hasAnimation</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -18,178 +101,88 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="298" column="21" bodyfile="Scene/Background/Skybox.hpp" bodystart="298" bodyend="301"/>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="141" column="6" bodyfile="Scene/Animation/AnimatedObject.hpp" bodystart="141" bodyend="144"/>
+        <references refid="dd/d3c/a04466_1a28e41bc599481520db66d3b41ec73a2d" compoundref="da/d17/a01046" startline="196">m_animations</references>
       </memberdef>
-      <memberdef kind="function" id="dd/d3c/a04466_1ad606658b6f9246b7ad8a1c9ecb44f934" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::Size const &amp;</type>
-        <definition>castor::Size const  &amp; castor3d::SkyboxBackground::getEquiSize</definition>
+      <memberdef kind="function" id="dd/d3c/a04466_1a2b7f1dcedebd594dd1f02ce399d06e59" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>AnimationInstancePtrStrMap const &amp;</type>
+        <definition>AnimationInstancePtrStrMap const  &amp; castor3d::AnimatedObject::getAnimations</definition>
         <argsstring>() const</argsstring>
-        <name>getEquiSize</name>
-        <qualifiedname>castor3d::SkyboxBackground::getEquiSize</qualifiedname>
+        <name>getAnimations</name>
+        <qualifiedname>castor3d::AnimatedObject::getAnimations</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="303" column="21" bodyfile="Scene/Background/Skybox.hpp" bodystart="303" bodyend="306"/>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="146" column="35" bodyfile="Scene/Animation/AnimatedObject.hpp" bodystart="146" bodyend="149"/>
+        <references refid="dd/d3c/a04466_1a28e41bc599481520db66d3b41ec73a2d" compoundref="da/d17/a01046" startline="196">m_animations</references>
       </memberdef>
-      <memberdef kind="function" id="dd/d3c/a04466_1a4510eab7293b38dea0f66c978e409dd2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>castor::Path const &amp;</type>
-        <definition>castor::Path const  &amp; castor3d::SkyboxBackground::getCrossTexturePath</definition>
+      <memberdef kind="function" id="dd/d3c/a04466_1aa371efe8253bc63995bf46f238c2a1d8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/dab/a01362_1a62712d9ea9e9184dffafc59c48e8e6e5" kindref="member">AnimationType</ref></type>
+        <definition>AnimationType castor3d::AnimatedObject::getKind</definition>
         <argsstring>() const</argsstring>
-        <name>getCrossTexturePath</name>
-        <qualifiedname>castor3d::SkyboxBackground::getCrossTexturePath</qualifiedname>
+        <name>getKind</name>
+        <qualifiedname>castor3d::AnimatedObject::getKind</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="308" column="21" bodyfile="Scene/Background/Skybox.hpp" bodystart="308" bodyend="311"/>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="151" column="15" bodyfile="Scene/Animation/AnimatedObject.hpp" bodystart="151" bodyend="154"/>
       </memberdef>
       </sectiondef>
-      <sectiondef kind="user-defined">
-      <memberdef kind="function" id="dd/d3c/a04466_1a5db10a0e30fea099eeb85c569ded2513" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::SkyboxBackground::setTexture</definition>
-        <argsstring>(TextureLayoutSPtr texture)</argsstring>
-        <name>setTexture</name>
-        <qualifiedname>castor3d::SkyboxBackground::setTexture</qualifiedname>
-        <param>
-          <type>TextureLayoutSPtr</type>
-          <declname>texture</declname>
-        </param>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="dd/d3c/a04466_1a28e41bc599481520db66d3b41ec73a2d" prot="protected" static="no" mutable="no">
+        <type>AnimationInstancePtrStrMap</type>
+        <definition>AnimationInstancePtrStrMap castor3d::AnimatedObject::m_animations</definition>
+        <argsstring></argsstring>
+        <name>m_animations</name>
+        <qualifiedname>castor3d::AnimatedObject::m_animations</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>name Mutators. </para>
+<para>All animations. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="322" column="6" bodyfile="Scene/Background/Skybox.hpp" bodystart="322" bodyend="325"/>
-        <references refid="d8/d1f/a04450_1ad0cdc0509b6d96af3320404feea93dbe" compoundref="d8/d27/a01043" startline="258">castor3d::SceneBackground::m_texture</references>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="196" column="28" bodyfile="Scene/Animation/AnimatedObject.hpp" bodystart="196" bodyend="-1"/>
+        <referencedby refid="dd/d3c/a04466_1a2b7f1dcedebd594dd1f02ce399d06e59" compoundref="da/d17/a01046" startline="146" endline="149">getAnimations</referencedby>
+        <referencedby refid="dd/d3c/a04466_1ab2df0c8e698bcfdb593900ad8c146266" compoundref="da/d17/a01046" startline="141" endline="144">hasAnimation</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="dd/d3c/a04466_1a6bbbbb56e6df0ebd9b71a8423e13080a" prot="private" static="no" mutable="no">
-        <type>std::array&lt; TextureLayoutSPtr, 6u &gt;</type>
-        <definition>std::array&lt; TextureLayoutSPtr, 6u &gt; castor3d::SkyboxBackground::m_layerTexture</definition>
+      <memberdef kind="variable" id="dd/d3c/a04466_1a0137a413dfaf31d48fbb30f72d17a09e" prot="private" static="no" mutable="no">
+        <type><ref refid="da/dab/a01362_1a62712d9ea9e9184dffafc59c48e8e6e5" kindref="member">AnimationType</ref></type>
+        <definition>AnimationType castor3d::AnimatedObject::m_kind</definition>
         <argsstring></argsstring>
-        <name>m_layerTexture</name>
-        <qualifiedname>castor3d::SkyboxBackground::m_layerTexture</qualifiedname>
+        <name>m_kind</name>
+        <qualifiedname>castor3d::AnimatedObject::m_kind</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="342" column="12" bodyfile="Scene/Background/Skybox.hpp" bodystart="342" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dd/d3c/a04466_1a0762328bebf41e781127854c395be43f" prot="private" static="no" mutable="no">
-        <type>std::array&lt; castor::Path, 6u &gt;</type>
-        <definition>std::array&lt; castor::Path, 6u &gt; castor3d::SkyboxBackground::m_layerTexturePath</definition>
-        <argsstring></argsstring>
-        <name>m_layerTexturePath</name>
-        <qualifiedname>castor3d::SkyboxBackground::m_layerTexturePath</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="343" column="12" bodyfile="Scene/Background/Skybox.hpp" bodystart="343" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dd/d3c/a04466_1ac9041e747378cdf57c9b95da64016eaf" prot="private" static="no" mutable="no">
-        <type>TextureLayoutSPtr</type>
-        <definition>TextureLayoutSPtr castor3d::SkyboxBackground::m_equiTexture</definition>
-        <argsstring></argsstring>
-        <name>m_equiTexture</name>
-        <qualifiedname>castor3d::SkyboxBackground::m_equiTexture</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="344" column="19" bodyfile="Scene/Background/Skybox.hpp" bodystart="344" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dd/d3c/a04466_1ad230a112cb88c86742ce273815c94d06" prot="private" static="no" mutable="no">
-        <type>castor::Path</type>
-        <definition>castor::Path castor3d::SkyboxBackground::m_equiTexturePath</definition>
-        <argsstring></argsstring>
-        <name>m_equiTexturePath</name>
-        <qualifiedname>castor3d::SkyboxBackground::m_equiTexturePath</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="345" column="14" bodyfile="Scene/Background/Skybox.hpp" bodystart="345" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dd/d3c/a04466_1a8f17d8f0cffbf1734a6a1e168f18f196" prot="private" static="no" mutable="no">
-        <type>castor::Size</type>
-        <definition>castor::Size castor3d::SkyboxBackground::m_equiSize</definition>
-        <argsstring></argsstring>
-        <name>m_equiSize</name>
-        <qualifiedname>castor3d::SkyboxBackground::m_equiSize</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="346" column="14" bodyfile="Scene/Background/Skybox.hpp" bodystart="346" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dd/d3c/a04466_1a5a1ffef3c68de1071083a21cf0a8f8a4" prot="private" static="no" mutable="no">
-        <type>TextureLayoutSPtr</type>
-        <definition>TextureLayoutSPtr castor3d::SkyboxBackground::m_crossTexture</definition>
-        <argsstring></argsstring>
-        <name>m_crossTexture</name>
-        <qualifiedname>castor3d::SkyboxBackground::m_crossTexture</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="347" column="19" bodyfile="Scene/Background/Skybox.hpp" bodystart="347" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="dd/d3c/a04466_1a32b398f51887d6beb9f523157207ca4f" prot="private" static="no" mutable="no">
-        <type>castor::Path</type>
-        <definition>castor::Path castor3d::SkyboxBackground::m_crossTexturePath</definition>
-        <argsstring></argsstring>
-        <name>m_crossTexturePath</name>
-        <qualifiedname>castor3d::SkyboxBackground::m_crossTexturePath</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="348" column="14" bodyfile="Scene/Background/Skybox.hpp" bodystart="348" bodyend="-1"/>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="199" column="15" bodyfile="Scene/Animation/AnimatedObject.hpp" bodystart="199" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="dd/d3c/a04466_1a840153639cf452411dd2354d2c34c36a" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::SkyboxBackground::SkyboxBackground</definition>
-        <argsstring>(Engine &amp;engine, Scene &amp;scene, castor::String const &amp;name=castor::String{})</argsstring>
-        <name>SkyboxBackground</name>
-        <qualifiedname>castor3d::SkyboxBackground::SkyboxBackground</qualifiedname>
+      <memberdef kind="function" id="dd/d3c/a04466_1a1e050f4dc3a1962ca4cf375d9b16b89b" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::AnimatedObject::AnimatedObject</definition>
+        <argsstring>(AnimationType kind, castor::String const &amp;name)</argsstring>
+        <name>AnimatedObject</name>
+        <qualifiedname>castor3d::AnimatedObject::AnimatedObject</qualifiedname>
         <param>
-          <type><ref refid="d1/d3c/a02714" kindref="compound">Engine</ref> &amp;</type>
-          <declname>engine</declname>
-        </param>
-        <param>
-          <type><ref refid="d6/d71/a04598" kindref="compound">Scene</ref> &amp;</type>
-          <declname>scene</declname>
+          <type><ref refid="da/dab/a01362_1a62712d9ea9e9184dffafc59c48e8e6e5" kindref="member">AnimationType</ref></type>
+          <declname>kind</declname>
         </param>
         <param>
           <type>castor::String const &amp;</type>
           <declname>name</declname>
-          <defval>castor::String{}</defval>
         </param>
         <briefdescription>
 <para>Constructor. </para>
@@ -197,26 +190,18 @@
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">engine</parametername>
+<parametername direction="in">kind</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The engine. </para>
+<para>The animation type. </para>
 </parameterdescription>
 </parameteritem>
 <parameteritem>
 <parameternamelist>
-<parametername direction="in">scene</parametername>
+<parametername direction="in">name</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The parent scene. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername>name</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The background name. </para>
+<para>The object name. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -224,40 +209,43 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="43" column="18"/>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="39" column="18"/>
       </memberdef>
-      <memberdef kind="function" id="dd/d3c/a04466_1a359840cffdcc4559af032a36c1a5f6f4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SkyboxBackground::loadLeftImage</definition>
-        <argsstring>(castor::Path const &amp;folder, castor::Path const &amp;relative)</argsstring>
-        <name>loadLeftImage</name>
-        <qualifiedname>castor3d::SkyboxBackground::loadLeftImage</qualifiedname>
+      <memberdef kind="function" id="dd/d3c/a04466_1ab7b23d33b93065511e6eccd2201410f1" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::AnimatedObject::~AnimatedObject</definition>
+        <argsstring>()=default</argsstring>
+        <name>~AnimatedObject</name>
+        <qualifiedname>castor3d::AnimatedObject::~AnimatedObject</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="47" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3c/a04466_1ac19f279d240afe5d9aaee8ab764eb260" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedObject::addAnimation</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>addAnimation</name>
+        <qualifiedname>castor3d::AnimatedObject::addAnimation</qualifiedname>
         <param>
-          <type>castor::Path const &amp;</type>
-          <declname>folder</declname>
-        </param>
-        <param>
-          <type>castor::Path const &amp;</type>
-          <declname>relative</declname>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
         </param>
         <briefdescription>
-<para>Sets the skybox&apos;s left face texture. </para>
+<para>adds the animation to the list </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">folder</parametername>
+<parametername direction="in">name</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The image folder. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">relative</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The image file path, relative to <computeroutput>folder</computeroutput>. </para>
+<para>The animation to add </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -265,40 +253,28 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="62" column="14"/>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="56" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="dd/d3c/a04466_1af616c594268e7d2cf04dcefdac00627f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SkyboxBackground::loadRightImage</definition>
-        <argsstring>(castor::Path const &amp;folder, castor::Path const &amp;relative)</argsstring>
-        <name>loadRightImage</name>
-        <qualifiedname>castor3d::SkyboxBackground::loadRightImage</qualifiedname>
+      <memberdef kind="function" id="dd/d3c/a04466_1a6ccec881b1147baafaa43c5ee286e0c7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedObject::startAnimation</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>startAnimation</name>
+        <qualifiedname>castor3d::AnimatedObject::startAnimation</qualifiedname>
         <param>
-          <type>castor::Path const &amp;</type>
-          <declname>folder</declname>
-        </param>
-        <param>
-          <type>castor::Path const &amp;</type>
-          <declname>relative</declname>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
         </param>
         <briefdescription>
-<para>Sets the skybox&apos;s right face texture. </para>
+<para>Starts the animation identified by the given name. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">folder</parametername>
+<parametername direction="in">name</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The image folder. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">relative</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The image file path, relative to <computeroutput>folder</computeroutput>. </para>
+<para>The name of the animation </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -306,40 +282,28 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="80" column="14"/>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="65" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="dd/d3c/a04466_1a40f49cde5deaf85ec7b3f3b0de952ae6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SkyboxBackground::loadTopImage</definition>
-        <argsstring>(castor::Path const &amp;folder, castor::Path const &amp;relative)</argsstring>
-        <name>loadTopImage</name>
-        <qualifiedname>castor3d::SkyboxBackground::loadTopImage</qualifiedname>
+      <memberdef kind="function" id="dd/d3c/a04466_1af9cdab619fab70599c9568167075b9ac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedObject::stopAnimation</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>stopAnimation</name>
+        <qualifiedname>castor3d::AnimatedObject::stopAnimation</qualifiedname>
         <param>
-          <type>castor::Path const &amp;</type>
-          <declname>folder</declname>
-        </param>
-        <param>
-          <type>castor::Path const &amp;</type>
-          <declname>relative</declname>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
         </param>
         <briefdescription>
-<para>Sets the skybox&apos;s top face texture. </para>
+<para>Stops the animation identified by the given name. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">folder</parametername>
+<parametername direction="in">name</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The image folder. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">relative</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The image file path, relative to <computeroutput>folder</computeroutput>. </para>
+<para>The name of the animation </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -347,40 +311,28 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="98" column="14"/>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="74" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="dd/d3c/a04466_1a453392f177e82c38409ab0d8da9c9801" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SkyboxBackground::loadBottomImage</definition>
-        <argsstring>(castor::Path const &amp;folder, castor::Path const &amp;relative)</argsstring>
-        <name>loadBottomImage</name>
-        <qualifiedname>castor3d::SkyboxBackground::loadBottomImage</qualifiedname>
+      <memberdef kind="function" id="dd/d3c/a04466_1a7660dd415cda3afa98031e4fdc194944" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedObject::pauseAnimation</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>pauseAnimation</name>
+        <qualifiedname>castor3d::AnimatedObject::pauseAnimation</qualifiedname>
         <param>
-          <type>castor::Path const &amp;</type>
-          <declname>folder</declname>
-        </param>
-        <param>
-          <type>castor::Path const &amp;</type>
-          <declname>relative</declname>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
         </param>
         <briefdescription>
-<para>Sets the skybox&apos;s bottom face texture. </para>
+<para>Pauses the animation identified by the given name. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">folder</parametername>
+<parametername direction="in">name</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The image folder. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">relative</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The image file path, relative to <computeroutput>folder</computeroutput>. </para>
+<para>The name of the animation </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -388,81 +340,108 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="116" column="14"/>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="83" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="dd/d3c/a04466_1a5e432935992e9325f0269c1075efef39" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SkyboxBackground::loadFrontImage</definition>
-        <argsstring>(castor::Path const &amp;folder, castor::Path const &amp;relative)</argsstring>
-        <name>loadFrontImage</name>
-        <qualifiedname>castor3d::SkyboxBackground::loadFrontImage</qualifiedname>
+      <memberdef kind="function" id="dd/d3c/a04466_1a21fa4e1c150e3f1829fd698e10dc5d74" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedObject::startAllAnimations</definition>
+        <argsstring>()</argsstring>
+        <name>startAllAnimations</name>
+        <qualifiedname>castor3d::AnimatedObject::startAllAnimations</qualifiedname>
+        <briefdescription>
+<para>Starts all animations. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="90" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3c/a04466_1af7a31c3fd0ac07fcb49df40e4cbc1f9f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedObject::stopAllAnimations</definition>
+        <argsstring>()</argsstring>
+        <name>stopAllAnimations</name>
+        <qualifiedname>castor3d::AnimatedObject::stopAllAnimations</qualifiedname>
+        <briefdescription>
+<para>Stops all animations. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="97" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3c/a04466_1abdbb6424aa1619e85ef330dcab9ce2a0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedObject::pauseAllAnimations</definition>
+        <argsstring>()</argsstring>
+        <name>pauseAllAnimations</name>
+        <qualifiedname>castor3d::AnimatedObject::pauseAllAnimations</qualifiedname>
+        <briefdescription>
+<para>Pauses all animations. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="104" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3c/a04466_1a779fc1e97feca6c7b48c9148f18901e5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="df/dd2/a04486" kindref="compound">AnimationInstance</ref> &amp;</type>
+        <definition>C3D_API AnimationInstance &amp; castor3d::AnimatedObject::getAnimation</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>getAnimation</name>
+        <qualifiedname>castor3d::AnimatedObject::getAnimation</qualifiedname>
         <param>
-          <type>castor::Path const &amp;</type>
-          <declname>folder</declname>
-        </param>
-        <param>
-          <type>castor::Path const &amp;</type>
-          <declname>relative</declname>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
         </param>
         <briefdescription>
-<para>Sets the skybox&apos;s front face texture. </para>
+<para>Retrieves an animation. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">folder</parametername>
+<parametername direction="in">name</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The image folder. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">relative</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The image file path, relative to <computeroutput>folder</computeroutput>. </para>
+<para>The animation name </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
+<simplesect kind="return"><para>The animation </para>
+</simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="134" column="14"/>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="115" column="28"/>
       </memberdef>
-      <memberdef kind="function" id="dd/d3c/a04466_1a7dd4244522ddf918d54c9274812cf44c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SkyboxBackground::loadBackImage</definition>
-        <argsstring>(castor::Path const &amp;folder, castor::Path const &amp;relative)</argsstring>
-        <name>loadBackImage</name>
-        <qualifiedname>castor3d::SkyboxBackground::loadBackImage</qualifiedname>
+      <memberdef kind="function" id="dd/d3c/a04466_1aa1ecac49a3faba10459c8089911216df" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::AnimatedObject::update</definition>
+        <argsstring>(castor::Milliseconds const &amp;elapsed)=0</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::AnimatedObject::update</qualifiedname>
+        <reimplementedby refid="dd/dc6/a04462_1a7c37a1707db9205c7b5e3d84024aba85">update</reimplementedby>
+        <reimplementedby refid="dc/d50/a04474_1ac9668e42baad1f7648acd922da212429">update</reimplementedby>
+        <reimplementedby refid="d1/d6c/a04478_1adbab6fc37b52041715d727bfc0d0a602">update</reimplementedby>
+        <reimplementedby refid="d7/d2e/a04482_1afc1b444905e2763e02e4285139577a5a">update</reimplementedby>
         <param>
-          <type>castor::Path const &amp;</type>
-          <declname>folder</declname>
-        </param>
-        <param>
-          <type>castor::Path const &amp;</type>
-          <declname>relative</declname>
+          <type>castor::Milliseconds const &amp;</type>
+          <declname>elapsed</declname>
         </param>
         <briefdescription>
-<para>Sets the skybox&apos;s back face texture. </para>
+<para>Updates the animations of the object, given the time since the last frame. </para>
         </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">folder</parametername>
+<parametername direction="in">elapsed</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The image folder. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">relative</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The image file path, relative to <computeroutput>folder</computeroutput>. </para>
+<para>Time elapsed since the last frame </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -470,494 +449,148 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="152" column="14"/>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="124" column="22"/>
       </memberdef>
-      <memberdef kind="function" id="dd/d3c/a04466_1ab75bf4ef922dff465bd14bb69c9b5c77" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SkyboxBackground::loadFaceImage</definition>
-        <argsstring>(castor::Path const &amp;folder, castor::Path const &amp;relative, CubeMapFace face)</argsstring>
-        <name>loadFaceImage</name>
-        <qualifiedname>castor3d::SkyboxBackground::loadFaceImage</qualifiedname>
-        <param>
-          <type>castor::Path const &amp;</type>
-          <declname>folder</declname>
-        </param>
-        <param>
-          <type>castor::Path const &amp;</type>
-          <declname>relative</declname>
-        </param>
-        <param>
-          <type><ref refid="dc/df4/a01401_1a13e6b0c4ce255c1deb4c525562111e5b" kindref="member">CubeMapFace</ref></type>
-          <declname>face</declname>
-        </param>
+      <memberdef kind="function" id="dd/d3c/a04466_1a1c375eacf4a34296dca2ca8f490761d0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::AnimatedObject::isPlayingAnimation</definition>
+        <argsstring>() const =0</argsstring>
+        <name>isPlayingAnimation</name>
+        <qualifiedname>castor3d::AnimatedObject::isPlayingAnimation</qualifiedname>
+        <reimplementedby refid="dd/dc6/a04462_1a0293879e0d8b0282ed8467f1fab683bd">isPlayingAnimation</reimplementedby>
+        <reimplementedby refid="dc/d50/a04474_1a93fc5b3e0474057778a4f7c501da0709">isPlayingAnimation</reimplementedby>
+        <reimplementedby refid="d1/d6c/a04478_1a25cd572ba964740c47b53110261cca3f">isPlayingAnimation</reimplementedby>
+        <reimplementedby refid="d7/d2e/a04482_1afdd0b9a478e69d2c1ced312fa33b0b03">isPlayingAnimation</reimplementedby>
         <briefdescription>
-<para>Sets a skybox&apos;s face texture. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">folder</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The image folder. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">relative</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The image file path, relative to <computeroutput>folder</computeroutput>. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">face</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The face into which the image will be loaded. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if the object is playing an animation. </para>
+</simplesect>
 </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="174" column="14"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d3c/a04466_1ac2e131e6ca04ace8b5211a0e8ee2f70b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SkyboxBackground::setFaceTexture</definition>
-        <argsstring>(castor::Path const &amp;folder, castor::Path const &amp;relative, CubeMapFace face)</argsstring>
-        <name>setFaceTexture</name>
-        <qualifiedname>castor3d::SkyboxBackground::setFaceTexture</qualifiedname>
-        <param>
-          <type>castor::Path const &amp;</type>
-          <declname>folder</declname>
-        </param>
-        <param>
-          <type>castor::Path const &amp;</type>
-          <declname>relative</declname>
-        </param>
-        <param>
-          <type><ref refid="dc/df4/a01401_1a13e6b0c4ce255c1deb4c525562111e5b" kindref="member">CubeMapFace</ref></type>
-          <declname>face</declname>
-        </param>
-        <briefdescription>
-<para>Sets a skybox&apos;s face texture. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">folder</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The image folder. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">relative</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The image file path, relative to <computeroutput>folder</computeroutput>. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">face</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The face into which the image will be loaded. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="197" column="14"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d3c/a04466_1a0f34e232a08a15436633113418c1dcd0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SkyboxBackground::setEquiTexture</definition>
-        <argsstring>(TextureLayoutSPtr texture, uint32_t size)</argsstring>
-        <name>setEquiTexture</name>
-        <qualifiedname>castor3d::SkyboxBackground::setEquiTexture</qualifiedname>
-        <param>
-          <type>TextureLayoutSPtr</type>
-          <declname>texture</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>size</declname>
-        </param>
-        <briefdescription>
-<para>Sets the skybox&apos;s equirectangular texture. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">texture</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The texture. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">size</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The wanted skybox dimensions. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="216" column="14"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d3c/a04466_1a5a1147f61ae300fcc1acaf693a9c237a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SkyboxBackground::loadEquiTexture</definition>
-        <argsstring>(castor::Path const &amp;folder, castor::Path const &amp;relative, uint32_t size)</argsstring>
-        <name>loadEquiTexture</name>
-        <qualifiedname>castor3d::SkyboxBackground::loadEquiTexture</qualifiedname>
-        <param>
-          <type>castor::Path const &amp;</type>
-          <declname>folder</declname>
-        </param>
-        <param>
-          <type>castor::Path const &amp;</type>
-          <declname>relative</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>size</declname>
-        </param>
-        <briefdescription>
-<para>Sets the skybox&apos;s equirectangular texture. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">folder</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The image folder. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">relative</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The image file path, relative to <computeroutput>folder</computeroutput>. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">size</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The wanted skybox dimensions. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="238" column="14"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d3c/a04466_1aec9aa86b3c29841eb1f7b0f15af172fa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SkyboxBackground::setEquiSize</definition>
-        <argsstring>(uint32_t size)</argsstring>
-        <name>setEquiSize</name>
-        <qualifiedname>castor3d::SkyboxBackground::setEquiSize</qualifiedname>
-        <param>
-          <type>uint32_t</type>
-          <declname>size</declname>
-        </param>
-        <briefdescription>
-<para>Sets the size of the skybox generated from the equirectangular texture. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">size</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The wanted skybox dimensions. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="253" column="14"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d3c/a04466_1a375a6feb1e2f9a8f570e50be42e923d1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SkyboxBackground::loadCrossTexture</definition>
-        <argsstring>(castor::Path const &amp;folder, castor::Path const &amp;relative)</argsstring>
-        <name>loadCrossTexture</name>
-        <qualifiedname>castor3d::SkyboxBackground::loadCrossTexture</qualifiedname>
-        <param>
-          <type>castor::Path const &amp;</type>
-          <declname>folder</declname>
-        </param>
-        <param>
-          <type>castor::Path const &amp;</type>
-          <declname>relative</declname>
-        </param>
-        <briefdescription>
-<para>Sets the skybox&apos;s cross texture. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">folder</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The image folder. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">relative</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The image file path, relative to <computeroutput>folder</computeroutput>. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="270" column="14"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d3c/a04466_1a6663a05cd8b229111369cdb05f186380" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SkyboxBackground::setCrossTexture</definition>
-        <argsstring>(TextureLayoutSPtr texture)</argsstring>
-        <name>setCrossTexture</name>
-        <qualifiedname>castor3d::SkyboxBackground::setCrossTexture</qualifiedname>
-        <param>
-          <type>TextureLayoutSPtr</type>
-          <declname>texture</declname>
-        </param>
-        <briefdescription>
-<para>Sets the skybox&apos;s cross texture. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">texture</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The texture. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="284" column="14"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d3c/a04466_1a2bff92f9911368cbbe6f5f6fc132192e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::SkyboxBackground::accept</definition>
-        <argsstring>(BackgroundVisitor &amp;visitor) override</argsstring>
-        <name>accept</name>
-        <qualifiedname>castor3d::SkyboxBackground::accept</qualifiedname>
-        <reimplements refid="d8/d1f/a04450_1abb50a43cc66dc731a9a3a6e6298a412d">accept</reimplements>
-        <param>
-          <type><ref refid="dd/de8/a04470" kindref="compound">BackgroundVisitor</ref> &amp;</type>
-          <declname>visitor</declname>
-        </param>
-        <briefdescription>
-<para>Visitor acceptance function. </para>
-        </briefdescription>
-        <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername>visitor</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The visitor. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="288" column="14"/>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="131" column="22"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-func">
-      <memberdef kind="function" id="dd/d3c/a04466_1afb47ccba5ddc773c8bfc47c11659ac76" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type>bool</type>
-        <definition>bool castor3d::SkyboxBackground::doInitialise</definition>
-        <argsstring>(RenderDevice const &amp;device) override</argsstring>
-        <name>doInitialise</name>
-        <qualifiedname>castor3d::SkyboxBackground::doInitialise</qualifiedname>
-        <reimplements refid="d8/d1f/a04450_1a9d7a8b209f7ff6324c469f276a35bc86">doInitialise</reimplements>
-        <param>
-          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="329" column="6"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d3c/a04466_1a1f897ae0c5b3b480863ccd9e16c6342c" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+      <memberdef kind="function" id="dd/d3c/a04466_1a2c7ed6f3a0ba8312617894ac212bf88c" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
         <type>void</type>
-        <definition>void castor3d::SkyboxBackground::doCleanup</definition>
-        <argsstring>() override</argsstring>
-        <name>doCleanup</name>
-        <qualifiedname>castor3d::SkyboxBackground::doCleanup</qualifiedname>
-        <reimplements refid="d8/d1f/a04450_1a224d34c6944a0dbdd63066e383718fd9">doCleanup</reimplements>
+        <definition>virtual void castor3d::AnimatedObject::doAddAnimation</definition>
+        <argsstring>(castor::String const &amp;name)=0</argsstring>
+        <name>doAddAnimation</name>
+        <qualifiedname>castor3d::AnimatedObject::doAddAnimation</qualifiedname>
+        <reimplementedby refid="dd/dc6/a04462_1aaedc9c3fe1afce5d7e7e4c6d2c165496">doAddAnimation</reimplementedby>
+        <reimplementedby refid="dc/d50/a04474_1a1bc276e05bfa0c449a62d11be31b4d00">doAddAnimation</reimplementedby>
+        <reimplementedby refid="d1/d6c/a04478_1a3e6cb742ae1d185d2385c2b8b908546a">doAddAnimation</reimplementedby>
+        <reimplementedby refid="d7/d2e/a04482_1acdc097c0f87ef07efa0f68d7bcc306f9">doAddAnimation</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
         <briefdescription>
+<para>adds the animation to the list </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation to add </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="330" column="6"/>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="166" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="dd/d3c/a04466_1ad225232965c896d07361195102a55e86" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+      <memberdef kind="function" id="dd/d3c/a04466_1a596f9c943daffeb70db5a29de2606c7d" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
         <type>void</type>
-        <definition>void castor3d::SkyboxBackground::doCpuUpdate</definition>
-        <argsstring>(CpuUpdater &amp;updater) const override</argsstring>
-        <name>doCpuUpdate</name>
-        <qualifiedname>castor3d::SkyboxBackground::doCpuUpdate</qualifiedname>
-        <reimplements refid="d8/d1f/a04450_1a59ff1c0b98d7aea210f10ce4bf3f4dd2">doCpuUpdate</reimplements>
+        <definition>virtual void castor3d::AnimatedObject::doStartAnimation</definition>
+        <argsstring>(AnimationInstance &amp;animation)=0</argsstring>
+        <name>doStartAnimation</name>
+        <qualifiedname>castor3d::AnimatedObject::doStartAnimation</qualifiedname>
+        <reimplementedby refid="dd/dc6/a04462_1a08b09d2252c8e2373a656e5295f6c9b1">doStartAnimation</reimplementedby>
+        <reimplementedby refid="dc/d50/a04474_1aca6222be5566a4a663d28c41231500b4">doStartAnimation</reimplementedby>
+        <reimplementedby refid="d1/d6c/a04478_1aa46820ab994e78786247a1a20192e4df">doStartAnimation</reimplementedby>
+        <reimplementedby refid="d7/d2e/a04482_1aa5c1843b9d6be1dbdc865bcabf2a302e">doStartAnimation</reimplementedby>
         <param>
-          <type><ref refid="d3/d14/a04046" kindref="compound">CpuUpdater</ref> &amp;</type>
-          <declname>updater</declname>
+          <type><ref refid="df/dd2/a04486" kindref="compound">AnimationInstance</ref> &amp;</type>
+          <declname>animation</declname>
         </param>
         <briefdescription>
+<para>Starts the given animation. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">animation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="331" column="6"/>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="175" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="dd/d3c/a04466_1ae682482b2d8fb0519d710ec0935d39f2" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+      <memberdef kind="function" id="dd/d3c/a04466_1ab4296cdec28662f6241d2bf774f90a20" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
         <type>void</type>
-        <definition>void castor3d::SkyboxBackground::doGpuUpdate</definition>
-        <argsstring>(GpuUpdater &amp;updater) const override</argsstring>
-        <name>doGpuUpdate</name>
-        <qualifiedname>castor3d::SkyboxBackground::doGpuUpdate</qualifiedname>
-        <reimplements refid="d8/d1f/a04450_1a62c95edc026ada697aa8b4c3bf6f16ff">doGpuUpdate</reimplements>
+        <definition>virtual void castor3d::AnimatedObject::doStopAnimation</definition>
+        <argsstring>(AnimationInstance &amp;animation)=0</argsstring>
+        <name>doStopAnimation</name>
+        <qualifiedname>castor3d::AnimatedObject::doStopAnimation</qualifiedname>
+        <reimplementedby refid="dd/dc6/a04462_1ad74070ebe8cbac4684e39cd8ce04a7c1">doStopAnimation</reimplementedby>
+        <reimplementedby refid="dc/d50/a04474_1a8c373183a4aef12ccca9543ff0871446">doStopAnimation</reimplementedby>
+        <reimplementedby refid="d1/d6c/a04478_1af2f25831a75645aba46ef700ce11a68a">doStopAnimation</reimplementedby>
+        <reimplementedby refid="d7/d2e/a04482_1a735fefb5e63b0e8037a81f2cc0bdb356">doStopAnimation</reimplementedby>
         <param>
-          <type><ref refid="dd/daf/a04050" kindref="compound">GpuUpdater</ref> &amp;</type>
-          <declname>updater</declname>
+          <type><ref refid="df/dd2/a04486" kindref="compound">AnimationInstance</ref> &amp;</type>
+          <declname>animation</declname>
         </param>
         <briefdescription>
+<para>Stops the given animation. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">animation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="332" column="6"/>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="184" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="dd/d3c/a04466_1ac4fdd56a7b8a639e4f71cb7d76bdee48" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool castor3d::SkyboxBackground::doInitialiseTexture</definition>
-        <argsstring>(RenderDevice const &amp;device)</argsstring>
-        <name>doInitialiseTexture</name>
-        <qualifiedname>castor3d::SkyboxBackground::doInitialiseTexture</qualifiedname>
-        <param>
-          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="333" column="6"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d3c/a04466_1abf65ccadc910ec9efd404f7e6cefe5e9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="dd/d3c/a04466_1adc5a40387c363ce020fbd743598c645c" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
         <type>void</type>
-        <definition>void castor3d::SkyboxBackground::doInitialiseLayerTexture</definition>
-        <argsstring>(RenderDevice const &amp;device, QueueData const &amp;queueData)</argsstring>
-        <name>doInitialiseLayerTexture</name>
-        <qualifiedname>castor3d::SkyboxBackground::doInitialiseLayerTexture</qualifiedname>
-        <param>
-          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type><ref refid="dc/d61/a03950" kindref="compound">QueueData</ref> const &amp;</type>
-          <declname>queueData</declname>
-        </param>
+        <definition>virtual void castor3d::AnimatedObject::doClearAnimations</definition>
+        <argsstring>()=0</argsstring>
+        <name>doClearAnimations</name>
+        <qualifiedname>castor3d::AnimatedObject::doClearAnimations</qualifiedname>
+        <reimplementedby refid="dd/dc6/a04462_1ad10f86eacb689f088df387264957703c">doClearAnimations</reimplementedby>
+        <reimplementedby refid="dc/d50/a04474_1a4319a58f28bfd57022a0c9194087957e">doClearAnimations</reimplementedby>
+        <reimplementedby refid="d1/d6c/a04478_1a5abae22fdd3577ece9b53161838bf622">doClearAnimations</reimplementedby>
+        <reimplementedby refid="d7/d2e/a04482_1ad29418d6b182db8b698e1068671a3567">doClearAnimations</reimplementedby>
         <briefdescription>
+<para>Stops all animations. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="334" column="6"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d3c/a04466_1a3b285404b1f429d897cabf07e08b3afb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::SkyboxBackground::doInitialiseEquiTexture</definition>
-        <argsstring>(RenderDevice const &amp;device, QueueData const &amp;queueData)</argsstring>
-        <name>doInitialiseEquiTexture</name>
-        <qualifiedname>castor3d::SkyboxBackground::doInitialiseEquiTexture</qualifiedname>
-        <param>
-          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type><ref refid="dc/d61/a03950" kindref="compound">QueueData</ref> const &amp;</type>
-          <declname>queueData</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="336" column="6"/>
-      </memberdef>
-      <memberdef kind="function" id="dd/d3c/a04466_1ae0331a1bd8ca0685335c12713934a41e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void castor3d::SkyboxBackground::doInitialiseCrossTexture</definition>
-        <argsstring>(RenderDevice const &amp;device, QueueData const &amp;queueData)</argsstring>
-        <name>doInitialiseCrossTexture</name>
-        <qualifiedname>castor3d::SkyboxBackground::doInitialiseCrossTexture</qualifiedname>
-        <param>
-          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type><ref refid="dc/d61/a03950" kindref="compound">QueueData</ref> const &amp;</type>
-          <declname>queueData</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Scene/Background/Skybox.hpp" line="338" column="6"/>
+        <location file="Scene/Animation/AnimatedObject.hpp" line="191" column="14"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -965,213 +598,78 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="2">
-        <label>castor3d::SceneBackground</label>
-        <link refid="d8/d1f/a04450"/>
-        <childnode refid="3" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4" relation="public-inheritance">
+      <node id="3">
+        <label>castor3d::AnimatedMesh</label>
+        <link refid="dd/dc6/a04462"/>
+        <childnode refid="1" relation="public-inheritance">
         </childnode>
       </node>
       <node id="1">
-        <label>castor3d::SkyboxBackground</label>
+        <label>castor3d::AnimatedObject</label>
         <link refid="dd/d3c/a04466"/>
         <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
       <node id="4">
-        <label>castor::Named</label>
-      </node>
-      <node id="3">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="13">
-        <label>T</label>
-      </node>
-      <node id="15">
-        <label>castor3d::IblTextures</label>
-        <link refid="d0/d0b/a03910"/>
-        <childnode refid="16" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="11">
-        <label>castor3d::QueuesData</label>
-        <link refid="de/d88/a03958"/>
-      </node>
-      <node id="8">
-        <label>castor3d::RenderDevice</label>
-        <link refid="df/de5/a03966"/>
-        <childnode refid="9" relation="usage">
-          <edgelabel>renderSystem</edgelabel>
-        </childnode>
-        <childnode refid="10" relation="usage">
-          <edgelabel>queueFamilies</edgelabel>
-        </childnode>
-      </node>
-      <node id="9">
-        <label>castor3d::RenderSystem</label>
-        <link refid="d7/d34/a04078"/>
-        <childnode refid="3" relation="public-inheritance">
+        <label>castor3d::AnimatedSceneNode</label>
+        <link refid="dc/d50/a04474"/>
+        <childnode refid="1" relation="public-inheritance">
         </childnode>
       </node>
       <node id="5">
-        <label>castor3d::Scene</label>
-        <link refid="d6/d71/a04598"/>
-        <childnode refid="6" relation="public-inheritance">
+        <label>castor3d::AnimatedSkeleton</label>
+        <link refid="d1/d6c/a04478"/>
+        <childnode refid="1" relation="public-inheritance">
         </childnode>
-        <childnode refid="3" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4" relation="public-inheritance">
+      </node>
+      <node id="6">
+        <label>castor3d::AnimatedTexture</label>
+        <link refid="d7/d2e/a04482"/>
+        <childnode refid="1" relation="public-inheritance">
         </childnode>
       </node>
       <node id="2">
-        <label>castor3d::SceneBackground</label>
-        <link refid="d8/d1f/a04450"/>
-        <childnode refid="3" relation="public-inheritance">
-        </childnode>
-        <childnode refid="4" relation="public-inheritance">
-        </childnode>
-        <childnode refid="5" relation="usage">
-          <edgelabel>m_scene</edgelabel>
-        </childnode>
-        <childnode refid="7" relation="usage">
-          <edgelabel>m_textureId</edgelabel>
-        </childnode>
-        <childnode refid="14" relation="usage">
-          <edgelabel>m_ibl</edgelabel>
-        </childnode>
+        <label>castor::Named</label>
       </node>
+    </inheritancegraph>
+    <collaborationgraph>
       <node id="1">
-        <label>castor3d::SkyboxBackground</label>
+        <label>castor3d::AnimatedObject</label>
         <link refid="dd/d3c/a04466"/>
         <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="7">
-        <label>castor3d::Texture</label>
-        <link refid="d3/d8c/a04318"/>
-        <childnode refid="8" relation="usage">
-          <edgelabel>device</edgelabel>
-        </childnode>
-      </node>
-      <node id="4">
+      <node id="2">
         <label>castor::Named</label>
       </node>
-      <node id="3">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-      <node id="16">
-        <label>castor::OwnedBy&lt; Scene &gt;</label>
-      </node>
-      <node id="6">
-        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
-      </node>
-      <node id="17">
-        <label>std::unique_ptr&lt; T &gt;</label>
-        <childnode refid="13" relation="usage">
-          <edgelabel>ptr</edgelabel>
-        </childnode>
-      </node>
-      <node id="12">
-        <label>std::vector&lt; T &gt;</label>
-        <childnode refid="13" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-      </node>
-      <node id="14">
-        <label>std::unique_ptr&lt; castor3d::IblTextures &gt;</label>
-        <childnode refid="15" relation="usage">
-          <edgelabel>ptr</edgelabel>
-        </childnode>
-        <childnode refid="17" relation="template-instance">
-          <edgelabel>&lt; castor3d::IblTextures &gt;</edgelabel>
-        </childnode>
-      </node>
-      <node id="10">
-        <label>std::vector&lt; QueuesData &gt;</label>
-        <childnode refid="11" relation="usage">
-          <edgelabel>elements</edgelabel>
-        </childnode>
-        <childnode refid="12" relation="template-instance">
-          <edgelabel>&lt; QueuesData &gt;</edgelabel>
-        </childnode>
-      </node>
     </collaborationgraph>
-    <location file="Scene/Background/Skybox.hpp" line="19" column="1" bodyfile="Scene/Background/Skybox.hpp" bodystart="21" bodyend="349"/>
+    <location file="Scene/Animation/AnimatedObject.hpp" line="13" column="1" bodyfile="Scene/Animation/AnimatedObject.hpp" bodystart="15" bodyend="200"/>
     <listofallmembers>
-      <member refid="dd/d3c/a04466_1a2bff92f9911368cbbe6f5f6fc132192e" prot="public" virt="virtual"><scope>castor3d::SkyboxBackground</scope><name>accept</name></member>
-      <member refid="d8/d1f/a04450_1a31a64b0a48a9634db8602f3eb6320f5b" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>cleanup</name></member>
-      <member refid="d8/d1f/a04450_1ad18ff3c236416667fdd28f727cc93921" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>DescriptorIdx</name></member>
-      <member refid="dd/d3c/a04466_1a1f897ae0c5b3b480863ccd9e16c6342c" prot="private" virt="virtual"><scope>castor3d::SkyboxBackground</scope><name>doCleanup</name></member>
-      <member refid="dd/d3c/a04466_1ad225232965c896d07361195102a55e86" prot="private" virt="virtual"><scope>castor3d::SkyboxBackground</scope><name>doCpuUpdate</name></member>
-      <member refid="dd/d3c/a04466_1ae682482b2d8fb0519d710ec0935d39f2" prot="private" virt="virtual"><scope>castor3d::SkyboxBackground</scope><name>doGpuUpdate</name></member>
-      <member refid="dd/d3c/a04466_1afb47ccba5ddc773c8bfc47c11659ac76" prot="private" virt="virtual"><scope>castor3d::SkyboxBackground</scope><name>doInitialise</name></member>
-      <member refid="dd/d3c/a04466_1ae0331a1bd8ca0685335c12713934a41e" prot="private" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>doInitialiseCrossTexture</name></member>
-      <member refid="dd/d3c/a04466_1a3b285404b1f429d897cabf07e08b3afb" prot="private" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>doInitialiseEquiTexture</name></member>
-      <member refid="dd/d3c/a04466_1abf65ccadc910ec9efd404f7e6cefe5e9" prot="private" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>doInitialiseLayerTexture</name></member>
-      <member refid="dd/d3c/a04466_1ac4fdd56a7b8a639e4f71cb7d76bdee48" prot="private" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>doInitialiseTexture</name></member>
-      <member refid="dd/d3c/a04466_1a4510eab7293b38dea0f66c978e409dd2" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>getCrossTexturePath</name></member>
-      <member refid="dd/d3c/a04466_1ad606658b6f9246b7ad8a1c9ecb44f934" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>getEquiSize</name></member>
-      <member refid="dd/d3c/a04466_1a927d97f5e6ce10d1f46bffac7f8f8271" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>getEquiTexturePath</name></member>
-      <member refid="d8/d1f/a04450_1ad5be63bcd996ac7b4509c0650154eeb8" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>getIbl</name></member>
-      <member refid="d8/d1f/a04450_1a4999ca35c3d01f835ac40479e31c3152" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>getImage</name></member>
-      <member refid="d8/d1f/a04450_1aab7f6f25e99aae100a34cb05c20110d4" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>getSampler</name></member>
-      <member refid="d8/d1f/a04450_1a94391840bb8ef5f2765c007dd390f851" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>getScene</name></member>
-      <member refid="d8/d1f/a04450_1abf867faba21687fa273ed02866f053f9" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>getScene</name></member>
-      <member refid="d8/d1f/a04450_1a86a3a45d08e6c2ed2496d81f9cec9e0b" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>getTexture</name></member>
-      <member refid="d8/d1f/a04450_1aa6cf231f471e83a106a5ae118c8d99b2" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>getTexture</name></member>
-      <member refid="d8/d1f/a04450_1a8baa7f517ba8d23448a2ba14b685ae9b" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>getTextureId</name></member>
-      <member refid="d8/d1f/a04450_1a4b83ebfc7dccd47b45de5c69dc832c57" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>getType</name></member>
-      <member refid="d8/d1f/a04450_1ae3cbb12d4191bd18acf39e0191b26056" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>getView</name></member>
-      <member refid="d8/d1f/a04450_1a33b01c80a820a9523c7b4a7da69d6f9b" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>hasIbl</name></member>
-      <member refid="d8/d1f/a04450_1ad18ff3c236416667fdd28f727cc93921a59fc8e09fc29eff3fb4c7310f621022d" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>HdrCfgUboIdx</name></member>
-      <member refid="d8/d1f/a04450_1a8aa9ef0444b4e26d44c035bea663ead0" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>initialise</name></member>
-      <member refid="d8/d1f/a04450_1ae6746af3d552e442d8d1e3df05602201" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>isHdr</name></member>
-      <member refid="d8/d1f/a04450_1af779d88ba3b2f2665c0f2cf5f5db2441" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>isInitialised</name></member>
-      <member refid="d8/d1f/a04450_1a53c673b2c5ed9a4f45b59f7a5e5fae24" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>isSRGB</name></member>
-      <member refid="dd/d3c/a04466_1a7dd4244522ddf918d54c9274812cf44c" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>loadBackImage</name></member>
-      <member refid="dd/d3c/a04466_1a453392f177e82c38409ab0d8da9c9801" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>loadBottomImage</name></member>
-      <member refid="dd/d3c/a04466_1a375a6feb1e2f9a8f570e50be42e923d1" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>loadCrossTexture</name></member>
-      <member refid="dd/d3c/a04466_1a5a1147f61ae300fcc1acaf693a9c237a" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>loadEquiTexture</name></member>
-      <member refid="dd/d3c/a04466_1ab75bf4ef922dff465bd14bb69c9b5c77" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>loadFaceImage</name></member>
-      <member refid="dd/d3c/a04466_1a5e432935992e9325f0269c1075efef39" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>loadFrontImage</name></member>
-      <member refid="dd/d3c/a04466_1a359840cffdcc4559af032a36c1a5f6f4" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>loadLeftImage</name></member>
-      <member refid="dd/d3c/a04466_1af616c594268e7d2cf04dcefdac00627f" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>loadRightImage</name></member>
-      <member refid="dd/d3c/a04466_1a40f49cde5deaf85ec7b3f3b0de952ae6" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>loadTopImage</name></member>
-      <member refid="dd/d3c/a04466_1a5a1ffef3c68de1071083a21cf0a8f8a4" prot="private" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>m_crossTexture</name></member>
-      <member refid="dd/d3c/a04466_1a32b398f51887d6beb9f523157207ca4f" prot="private" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>m_crossTexturePath</name></member>
-      <member refid="dd/d3c/a04466_1a8f17d8f0cffbf1734a6a1e168f18f196" prot="private" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>m_equiSize</name></member>
-      <member refid="dd/d3c/a04466_1ac9041e747378cdf57c9b95da64016eaf" prot="private" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>m_equiTexture</name></member>
-      <member refid="dd/d3c/a04466_1ad230a112cb88c86742ce273815c94d06" prot="private" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>m_equiTexturePath</name></member>
-      <member refid="d8/d1f/a04450_1a6976c0fa06338604086b94015fa5c5ef" prot="protected" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>m_hdr</name></member>
-      <member refid="d8/d1f/a04450_1a309f8efbb3e4ec591d7fa63141e6eaa6" prot="protected" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>m_ibl</name></member>
-      <member refid="d8/d1f/a04450_1a205a26001f4ddcb22affe1806df1e9be" prot="protected" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>m_initialised</name></member>
-      <member refid="dd/d3c/a04466_1a6bbbbb56e6df0ebd9b71a8423e13080a" prot="private" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>m_layerTexture</name></member>
-      <member refid="dd/d3c/a04466_1a0762328bebf41e781127854c395be43f" prot="private" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>m_layerTexturePath</name></member>
-      <member refid="d8/d1f/a04450_1a8809ba9d2b7f4956673b2663fa4fee8e" prot="protected" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>m_sampler</name></member>
-      <member refid="d8/d1f/a04450_1a65fdb6af39d291d044c5a0774c1ec61f" prot="protected" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>m_scene</name></member>
-      <member refid="d8/d1f/a04450_1a6f3b48bb5b1d156426d498f16094ed96" prot="protected" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>m_srgb</name></member>
-      <member refid="d8/d1f/a04450_1ad0cdc0509b6d96af3320404feea93dbe" prot="protected" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>m_texture</name></member>
-      <member refid="d8/d1f/a04450_1af1b89856f30d7e64667ccad4976f22be" prot="protected" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>m_textureId</name></member>
-      <member refid="d8/d1f/a04450_1a784d7ed978459602ec6edd9ad62eede4" prot="protected" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>m_type</name></member>
-      <member refid="d8/d1f/a04450_1ad18ff3c236416667fdd28f727cc93921a1a23c910c8354682e03cc78a11ecd0d2" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>MdlMtxUboIdx</name></member>
-      <member refid="d8/d1f/a04450_1ad18ff3c236416667fdd28f727cc93921a3092a1ca38f3384b562544584320dac2" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>MtxUboIdx</name></member>
-      <member refid="d8/d1f/a04450_1afa9be9f8f1c561cb4d63d5c1494b05af" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>notifyChanged</name></member>
-      <member refid="d8/d1f/a04450_1af44b4b2ffcfc43f0e823c1c3fafc7f25" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>onChanged</name></member>
-      <member refid="d8/d1f/a04450_1ab235843e07744ffe6429cbc3abf781ef" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>SceneBackground</name></member>
-      <member refid="d8/d1f/a04450_1ad18ff3c236416667fdd28f727cc93921ab54449d12fbb56b70d2b27d9f709c00e" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>SceneUboIdx</name></member>
-      <member refid="dd/d3c/a04466_1a6663a05cd8b229111369cdb05f186380" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>setCrossTexture</name></member>
-      <member refid="dd/d3c/a04466_1aec9aa86b3c29841eb1f7b0f15af172fa" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>setEquiSize</name></member>
-      <member refid="dd/d3c/a04466_1a0f34e232a08a15436633113418c1dcd0" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>setEquiTexture</name></member>
-      <member refid="dd/d3c/a04466_1ac2e131e6ca04ace8b5211a0e8ee2f70b" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>setFaceTexture</name></member>
-      <member refid="dd/d3c/a04466_1a5db10a0e30fea099eeb85c569ded2513" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>setTexture</name></member>
-      <member refid="dd/d3c/a04466_1a840153639cf452411dd2354d2c34c36a" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>SkyboxBackground</name></member>
-      <member refid="d8/d1f/a04450_1ad18ff3c236416667fdd28f727cc93921ac28ac8ec9930bae6c3736efca69d5def" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>SkyBoxImgIdx</name></member>
-      <member refid="d8/d1f/a04450_1ab51fedd3cda51b70196cf2b62e4caa04" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>update</name></member>
-      <member refid="d8/d1f/a04450_1a397189455798634e6890f80886a19208" prot="public" virt="non-virtual"><scope>castor3d::SkyboxBackground</scope><name>update</name></member>
-      <member refid="d8/d1f/a04450_1aa1884723b97782f2f2eeea86fc44527b" prot="public" virt="virtual"><scope>castor3d::SkyboxBackground</scope><name>~SceneBackground</name></member>
+      <member refid="dd/d3c/a04466_1ac19f279d240afe5d9aaee8ab764eb260" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>addAnimation</name></member>
+      <member refid="dd/d3c/a04466_1a5fcebbda75e25b1806d1b5c2141a2924" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>AnimatedObject</name></member>
+      <member refid="dd/d3c/a04466_1af2eccff6842dec84ce84d0e0c599f38c" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>AnimatedObject</name></member>
+      <member refid="dd/d3c/a04466_1a1e050f4dc3a1962ca4cf375d9b16b89b" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>AnimatedObject</name></member>
+      <member refid="dd/d3c/a04466_1a2c7ed6f3a0ba8312617894ac212bf88c" prot="private" virt="pure-virtual"><scope>castor3d::AnimatedObject</scope><name>doAddAnimation</name></member>
+      <member refid="dd/d3c/a04466_1adc5a40387c363ce020fbd743598c645c" prot="private" virt="pure-virtual"><scope>castor3d::AnimatedObject</scope><name>doClearAnimations</name></member>
+      <member refid="dd/d3c/a04466_1a596f9c943daffeb70db5a29de2606c7d" prot="private" virt="pure-virtual"><scope>castor3d::AnimatedObject</scope><name>doStartAnimation</name></member>
+      <member refid="dd/d3c/a04466_1ab4296cdec28662f6241d2bf774f90a20" prot="private" virt="pure-virtual"><scope>castor3d::AnimatedObject</scope><name>doStopAnimation</name></member>
+      <member refid="dd/d3c/a04466_1a779fc1e97feca6c7b48c9148f18901e5" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>getAnimation</name></member>
+      <member refid="dd/d3c/a04466_1a2b7f1dcedebd594dd1f02ce399d06e59" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>getAnimations</name></member>
+      <member refid="dd/d3c/a04466_1aa371efe8253bc63995bf46f238c2a1d8" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>getKind</name></member>
+      <member refid="dd/d3c/a04466_1ab2df0c8e698bcfdb593900ad8c146266" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>hasAnimation</name></member>
+      <member refid="dd/d3c/a04466_1a1c375eacf4a34296dca2ca8f490761d0" prot="public" virt="pure-virtual"><scope>castor3d::AnimatedObject</scope><name>isPlayingAnimation</name></member>
+      <member refid="dd/d3c/a04466_1a28e41bc599481520db66d3b41ec73a2d" prot="protected" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>m_animations</name></member>
+      <member refid="dd/d3c/a04466_1a0137a413dfaf31d48fbb30f72d17a09e" prot="private" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>m_kind</name></member>
+      <member refid="dd/d3c/a04466_1a4fae64cf33b1a473e421691f2037f723" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>operator=</name></member>
+      <member refid="dd/d3c/a04466_1a681a62403a76ff582f254ff7c43d3c10" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>operator=</name></member>
+      <member refid="dd/d3c/a04466_1abdbb6424aa1619e85ef330dcab9ce2a0" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>pauseAllAnimations</name></member>
+      <member refid="dd/d3c/a04466_1a7660dd415cda3afa98031e4fdc194944" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>pauseAnimation</name></member>
+      <member refid="dd/d3c/a04466_1a21fa4e1c150e3f1829fd698e10dc5d74" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>startAllAnimations</name></member>
+      <member refid="dd/d3c/a04466_1a6ccec881b1147baafaa43c5ee286e0c7" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>startAnimation</name></member>
+      <member refid="dd/d3c/a04466_1af7a31c3fd0ac07fcb49df40e4cbc1f9f" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>stopAllAnimations</name></member>
+      <member refid="dd/d3c/a04466_1af9cdab619fab70599c9568167075b9ac" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObject</scope><name>stopAnimation</name></member>
+      <member refid="dd/d3c/a04466_1aa1ecac49a3faba10459c8089911216df" prot="public" virt="pure-virtual"><scope>castor3d::AnimatedObject</scope><name>update</name></member>
+      <member refid="dd/d3c/a04466_1ab7b23d33b93065511e6eccd2201410f1" prot="public" virt="virtual"><scope>castor3d::AnimatedObject</scope><name>~AnimatedObject</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

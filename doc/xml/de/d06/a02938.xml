@@ -37,9 +37,9 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Material/Texture/TextureLayout.hpp" line="138" column="13" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="138" bodyend="-1"/>
-        <referencedby refid="de/d06/a02938_1aa03b7034a94eb554938dd4f170289ab5" compoundref="dd/db5/a00365" startline="150" endline="156">castor3d::SliceView&lt; ViewT &gt;::forEachFirstMipView</referencedby>
-        <referencedby refid="de/d06/a02938_1a0b4ef2623e5d9eefe8ae9f98a1840c13" compoundref="dd/db5/a00365" startline="159" endline="165">castor3d::SliceView&lt; ViewT &gt;::forEachLeafView</referencedby>
-        <referencedby refid="de/d06/a02938_1aedce33a1c820beac511c393f7fd7f33d" compoundref="dd/db5/a00365" startline="141" endline="147">castor3d::SliceView&lt; ViewT &gt;::forEachView</referencedby>
+        <referencedby refid="de/d06/a02938_1aa03b7034a94eb554938dd4f170289ab5" compoundref="da/dee/a00383" startline="150" endline="156">castor3d::SliceView&lt; ViewT &gt;::forEachFirstMipView</referencedby>
+        <referencedby refid="de/d06/a02938_1a0b4ef2623e5d9eefe8ae9f98a1840c13" compoundref="da/dee/a00383" startline="159" endline="165">castor3d::SliceView&lt; ViewT &gt;::forEachLeafView</referencedby>
+        <referencedby refid="de/d06/a02938_1aedce33a1c820beac511c393f7fd7f33d" compoundref="da/dee/a00383" startline="141" endline="147">castor3d::SliceView&lt; ViewT &gt;::forEachView</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -65,7 +65,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Material/Texture/TextureLayout.hpp" line="141" column="6" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="141" bodyend="147"/>
-        <references refid="de/d06/a02938_1a779bb0b49e0ec670a96f04aacc468acd" compoundref="dd/db5/a00365" startline="138">castor3d::SliceView&lt; ViewT &gt;::slices</references>
+        <references refid="de/d06/a02938_1a779bb0b49e0ec670a96f04aacc468acd" compoundref="da/dee/a00383" startline="138">castor3d::SliceView&lt; ViewT &gt;::slices</references>
       </memberdef>
       <memberdef kind="function" id="de/d06/a02938_1aa03b7034a94eb554938dd4f170289ab5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -89,7 +89,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Material/Texture/TextureLayout.hpp" line="150" column="6" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="150" bodyend="156"/>
-        <references refid="de/d06/a02938_1a779bb0b49e0ec670a96f04aacc468acd" compoundref="dd/db5/a00365" startline="138">castor3d::SliceView&lt; ViewT &gt;::slices</references>
+        <references refid="de/d06/a02938_1a779bb0b49e0ec670a96f04aacc468acd" compoundref="da/dee/a00383" startline="138">castor3d::SliceView&lt; ViewT &gt;::slices</references>
       </memberdef>
       <memberdef kind="function" id="de/d06/a02938_1a0b4ef2623e5d9eefe8ae9f98a1840c13" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -113,7 +113,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Material/Texture/TextureLayout.hpp" line="159" column="6" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="159" bodyend="165"/>
-        <references refid="de/d06/a02938_1a779bb0b49e0ec670a96f04aacc468acd" compoundref="dd/db5/a00365" startline="138">castor3d::SliceView&lt; ViewT &gt;::slices</references>
+        <references refid="de/d06/a02938_1a779bb0b49e0ec670a96f04aacc468acd" compoundref="da/dee/a00383" startline="138">castor3d::SliceView&lt; ViewT &gt;::slices</references>
       </memberdef>
       </sectiondef>
     <briefdescription>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::SceneFileParser Class Reference</title>
+<title>Castor3D: castor3d::RsmConfig Struct Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,993 +42,113 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dc/df4/a01401.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d9/d98/a04610.html">SceneFileParser</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d9/d98/a04610.html">RsmConfig</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="../../de/d76/a04607.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">castor3d::SceneFileParser Class Reference</div></div>
+  <div class="headertitle"><div class="title">castor3d::RsmConfig Struct Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;SceneFileParser.hpp&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for castor3d::SceneFileParser:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../df/d99/a04609.png" border="0" usemap="#acastor3d_1_1SceneFileParser_inherit__map" alt="Inheritance graph"/></div>
-<map name="acastor3d_1_1SceneFileParser_inherit__map" id="acastor3d_1_1SceneFileParser_inherit__map">
-<area shape="rect" title=" " alt="" coords="100,80,276,107"/>
-<area shape="rect" title=" " alt="" coords="5,5,192,32"/>
-<area shape="rect" title=" " alt="" coords="216,5,341,32"/>
-</map>
-<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
-<div class="dynheader">
-Collaboration diagram for castor3d::SceneFileParser:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../d3/dba/a04608.png" border="0" usemap="#acastor3d_1_1SceneFileParser_coll__map" alt="Collaboration graph"/></div>
-<map name="acastor3d_1_1SceneFileParser_coll__map" id="acastor3d_1_1SceneFileParser_coll__map">
-<area shape="rect" title=" " alt="" coords="191,241,367,268"/>
-<area shape="rect" title=" " alt="" coords="5,5,192,32"/>
-<area shape="rect" title=" " alt="" coords="216,5,341,32"/>
-<area shape="rect" title=" " alt="" coords="365,5,467,32"/>
-</map>
-<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
+<p><code>#include &lt;LightModule.hpp&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:abfc9e130fd05a1e8e438ff7f98212bc0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#abfc9e130fd05a1e8e438ff7f98212bc0">SceneFileParser</a> (<a class="el" href="../../d1/d3c/a02714.html">Engine</a> &amp;engine)</td></tr>
-<tr class="memdesc:abfc9e130fd05a1e8e438ff7f98212bc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../d9/d98/a04610.html#abfc9e130fd05a1e8e438ff7f98212bc0">More...</a><br /></td></tr>
-<tr class="separator:abfc9e130fd05a1e8e438ff7f98212bc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d58845b8af96ad71fff3852b41677b2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../da/d40/a04090.html">RenderWindowDesc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#a1d58845b8af96ad71fff3852b41677b2">getRenderWindow</a> ()</td></tr>
-<tr class="separator:a1d58845b8af96ad71fff3852b41677b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a224a4dc8343fa654957920cf8d31ea5d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#a224a4dc8343fa654957920cf8d31ea5d">parseFile</a> (castor::Path const &amp;path)</td></tr>
-<tr class="memdesc:a224a4dc8343fa654957920cf8d31ea5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses the given file (expecting it to be in CSCN file format).  <a href="../../d9/d98/a04610.html#a224a4dc8343fa654957920cf8d31ea5d">More...</a><br /></td></tr>
-<tr class="separator:a224a4dc8343fa654957920cf8d31ea5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a996c08bbc6e0caf3c47a5a57eef8aa2b"><td class="memItemLeft" align="right" valign="top">ScenePtrStrMap::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#a996c08bbc6e0caf3c47a5a57eef8aa2b">scenesBegin</a> ()</td></tr>
-<tr class="separator:a996c08bbc6e0caf3c47a5a57eef8aa2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ad21444affdb09f89b717f810208c3a"><td class="memItemLeft" align="right" valign="top">ScenePtrStrMap::const_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#a2ad21444affdb09f89b717f810208c3a">scenesBegin</a> () const</td></tr>
-<tr class="separator:a2ad21444affdb09f89b717f810208c3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a03e9f73ea25b93b4b35fdb5bace293bd"><td class="memItemLeft" align="right" valign="top">ScenePtrStrMap::const_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#a03e9f73ea25b93b4b35fdb5bace293bd">scenesEnd</a> () const</td></tr>
-<tr class="separator:a03e9f73ea25b93b4b35fdb5bace293bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adabd3e2bd5e3383dc5be814c20b4e5f7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#adabd3e2bd5e3383dc5be814c20b4e5f7">accept</a> (castor::String const &amp;name, <a class="el" href="../../dc/dbb/a03262.html">PipelineVisitorBase</a> &amp;visitor)</td></tr>
+<tr class="separator:adabd3e2bd5e3383dc5be814c20b4e5f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
-Static Public Attributes</h2></td></tr>
-<tr class="memitem:a969f24e7482e2d737e8acfc16741bd8c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#a969f24e7482e2d737e8acfc16741bd8c">blendFactors</a></td></tr>
-<tr class="separator:a969f24e7482e2d737e8acfc16741bd8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8f3bb6a0b89f56429f2bc4099d9aee12"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#a8f3bb6a0b89f56429f2bc4099d9aee12">types</a></td></tr>
-<tr class="separator:a8f3bb6a0b89f56429f2bc4099d9aee12"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab20c4185267219c494ab3183e2a3dc90"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#ab20c4185267219c494ab3183e2a3dc90">comparisonFuncs</a></td></tr>
-<tr class="separator:ab20c4185267219c494ab3183e2a3dc90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4fd7d0bb5dc310b1d56fb562e3d890a8"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#a4fd7d0bb5dc310b1d56fb562e3d890a8">textureArguments</a></td></tr>
-<tr class="separator:a4fd7d0bb5dc310b1d56fb562e3d890a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a84976e277242ff4efc19d1eec174ae68"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#a84976e277242ff4efc19d1eec174ae68">textureBlendModes</a></td></tr>
-<tr class="separator:a84976e277242ff4efc19d1eec174ae68"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0381081b649a468373c8ec73801542c4"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#a0381081b649a468373c8ec73801542c4">lightTypes</a></td></tr>
-<tr class="separator:a0381081b649a468373c8ec73801542c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7dce91c78a7b53024412b8d7011bcd98"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#a7dce91c78a7b53024412b8d7011bcd98">primitiveTypes</a></td></tr>
-<tr class="separator:a7dce91c78a7b53024412b8d7011bcd98"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4dabdfa7d4719012b07e04c212ec64e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#ae4dabdfa7d4719012b07e04c212ec64e">primitiveOutputTypes</a></td></tr>
-<tr class="separator:ae4dabdfa7d4719012b07e04c212ec64e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a406a287e59e8652bada69babfa3f5dcc"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#a406a287e59e8652bada69babfa3f5dcc">models</a></td></tr>
-<tr class="separator:a406a287e59e8652bada69babfa3f5dcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab8cbb515d4f1d96eb6cc0d54e8c1dae2"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#ab8cbb515d4f1d96eb6cc0d54e8c1dae2">viewportModes</a></td></tr>
-<tr class="separator:ab8cbb515d4f1d96eb6cc0d54e8c1dae2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e7b1cbf733fa6c86fb9ff6a0c3649fc"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#a8e7b1cbf733fa6c86fb9ff6a0c3649fc">filters</a></td></tr>
-<tr class="separator:a8e7b1cbf733fa6c86fb9ff6a0c3649fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6da67ce3322ba770deb76a3ad8859376"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#a6da67ce3322ba770deb76a3ad8859376">mipmapModes</a></td></tr>
-<tr class="separator:a6da67ce3322ba770deb76a3ad8859376"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a287abe18fa26aec6a59538506e75d84e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#a287abe18fa26aec6a59538506e75d84e">wrappingModes</a></td></tr>
-<tr class="separator:a287abe18fa26aec6a59538506e75d84e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa63564bcd0c6e6481bd2bf09d3ff8359"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#aa63564bcd0c6e6481bd2bf09d3ff8359">borderColours</a></td></tr>
-<tr class="separator:aa63564bcd0c6e6481bd2bf09d3ff8359"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad43622e62c056d23b98a301069407fb1"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#ad43622e62c056d23b98a301069407fb1">shaderTypes</a></td></tr>
-<tr class="separator:ad43622e62c056d23b98a301069407fb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa49fb51193f6f1da96a3b7fcf07affcb"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#aa49fb51193f6f1da96a3b7fcf07affcb">variableTypes</a></td></tr>
-<tr class="separator:aa49fb51193f6f1da96a3b7fcf07affcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae6e812bfe373cbacf735f54ccdce6db"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#aae6e812bfe373cbacf735f54ccdce6db">elementTypes</a></td></tr>
-<tr class="separator:aae6e812bfe373cbacf735f54ccdce6db"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ea170783926e80cd417e6cce2247950"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#a0ea170783926e80cd417e6cce2247950">movables</a></td></tr>
-<tr class="separator:a0ea170783926e80cd417e6cce2247950"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a91dfad3fc1ece6c041e8d696c0b4aafc"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#a91dfad3fc1ece6c041e8d696c0b4aafc">textWrappingModes</a></td></tr>
-<tr class="separator:a91dfad3fc1ece6c041e8d696c0b4aafc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac25da86c5c4d8af07700e559a9378d4a"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#ac25da86c5c4d8af07700e559a9378d4a">borderPositions</a></td></tr>
-<tr class="separator:ac25da86c5c4d8af07700e559a9378d4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea723d13eebdd887a69a721ecafb042d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#aea723d13eebdd887a69a721ecafb042d">verticalAligns</a></td></tr>
-<tr class="separator:aea723d13eebdd887a69a721ecafb042d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca17cd65a6ca14c1e427617fb7603b51"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#aca17cd65a6ca14c1e427617fb7603b51">horizontalAligns</a></td></tr>
-<tr class="separator:aca17cd65a6ca14c1e427617fb7603b51"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a95a26001074dcd8fe34aa313ef1c67f9"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#a95a26001074dcd8fe34aa313ef1c67f9">toneMappings</a></td></tr>
-<tr class="separator:a95a26001074dcd8fe34aa313ef1c67f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae2f2c1edecccdbede6bd8b6e0684640a"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#ae2f2c1edecccdbede6bd8b6e0684640a">textTexturingModes</a></td></tr>
-<tr class="separator:ae2f2c1edecccdbede6bd8b6e0684640a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af16773d7567b833d6baf6512ce133889"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#af16773d7567b833d6baf6512ce133889">lineSpacingModes</a></td></tr>
-<tr class="separator:af16773d7567b833d6baf6512ce133889"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a282a15169ea3c30804a748c2ec1c1319"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#a282a15169ea3c30804a748c2ec1c1319">fogTypes</a></td></tr>
-<tr class="separator:a282a15169ea3c30804a748c2ec1c1319"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a42692e6e3eda4de5baa1e3eee7190614"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#a42692e6e3eda4de5baa1e3eee7190614">comparisonModes</a></td></tr>
-<tr class="separator:a42692e6e3eda4de5baa1e3eee7190614"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a56e2182a4f830c151d0c7f71fbdbd485"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#a56e2182a4f830c151d0c7f71fbdbd485">billboardTypes</a></td></tr>
-<tr class="separator:a56e2182a4f830c151d0c7f71fbdbd485"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba838dc9e855b4ff421f4c48f4ff1f9a"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#aba838dc9e855b4ff421f4c48f4ff1f9a">billboardSizes</a></td></tr>
-<tr class="separator:aba838dc9e855b4ff421f4c48f4ff1f9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae92114bf0d5594625f41201878cb96d2"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#ae92114bf0d5594625f41201878cb96d2">materialTypes</a></td></tr>
-<tr class="separator:ae92114bf0d5594625f41201878cb96d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a51cc44c2715c75262f2ceae010aa67bd"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#a51cc44c2715c75262f2ceae010aa67bd">shadowFilters</a></td></tr>
-<tr class="separator:a51cc44c2715c75262f2ceae010aa67bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a13e87162d7bbf3f1ca07133ec58ac714"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#a13e87162d7bbf3f1ca07133ec58ac714">globalIlluminations</a></td></tr>
-<tr class="separator:a13e87162d7bbf3f1ca07133ec58ac714"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a508137cf40bcad324c86d581629a273a"><td class="memItemLeft" align="right" valign="top">castor::ChangeTracked&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#a508137cf40bcad324c86d581629a273a">intensity</a></td></tr>
+<tr class="separator:a508137cf40bcad324c86d581629a273a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8032cec156015c1ed788b972fdaea54"><td class="memItemLeft" align="right" valign="top">castor::ChangeTracked&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#ad8032cec156015c1ed788b972fdaea54">maxRadius</a></td></tr>
+<tr class="separator:ad8032cec156015c1ed788b972fdaea54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf7f2dfd8cbf6704433baab1a3eb4da3"><td class="memItemLeft" align="right" valign="top">castor::ChangeTracked&lt; castor::RangedValue&lt; uint32_t &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d98/a04610.html#adf7f2dfd8cbf6704433baab1a3eb4da3">sampleCount</a> { castor::makeRangedValue( 100u, 20u, <a class="el" href="../../da/dab/a01362.html#a9e9c2b8594980fd8e6326f56b5d9e1a9">MaxRsmRange</a> ) }</td></tr>
+<tr class="separator:adf7f2dfd8cbf6704433baab1a3eb4da3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="abfc9e130fd05a1e8e438ff7f98212bc0" name="abfc9e130fd05a1e8e438ff7f98212bc0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abfc9e130fd05a1e8e438ff7f98212bc0">&#9670;&nbsp;</a></span>SceneFileParser()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::SceneFileParser::SceneFileParser </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d1/d3c/a02714.html">Engine</a> &amp;&#160;</td>
-          <td class="paramname"><em>engine</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Constructor. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">engine</td><td>The engine. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a1d58845b8af96ad71fff3852b41677b2" name="a1d58845b8af96ad71fff3852b41677b2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1d58845b8af96ad71fff3852b41677b2">&#9670;&nbsp;</a></span>getRenderWindow()</h2>
+<a id="adabd3e2bd5e3383dc5be814c20b4e5f7" name="adabd3e2bd5e3383dc5be814c20b4e5f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adabd3e2bd5e3383dc5be814c20b4e5f7">&#9670;&nbsp;</a></span>accept()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../da/d40/a04090.html">RenderWindowDesc</a> castor3d::SceneFileParser::getRenderWindow </td>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::RsmConfig::accept </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="../../dc/dbb/a03262.html">PipelineVisitorBase</a> &amp;&#160;</td>
+          <td class="paramname"><em>visitor</em>&#160;</td>
         </tr>
-      </table>
-</div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The render window defined by the scene. </dd></dl>
-
-</div>
-</div>
-<a id="a224a4dc8343fa654957920cf8d31ea5d" name="a224a4dc8343fa654957920cf8d31ea5d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a224a4dc8343fa654957920cf8d31ea5d">&#9670;&nbsp;</a></span>parseFile()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool castor3d::SceneFileParser::parseFile </td>
-          <td>(</td>
-          <td class="paramtype">castor::Path const &amp;&#160;</td>
-          <td class="paramname"><em>path</em></td><td>)</td>
           <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
-</div><div class="memdoc">
-
-<p>Parses the given file (expecting it to be in CSCN file format). </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">path</td><td>The file access path. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any problem occured. </dd></dl>
-
-</div>
-</div>
-<a id="a996c08bbc6e0caf3c47a5a57eef8aa2b" name="a996c08bbc6e0caf3c47a5a57eef8aa2b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a996c08bbc6e0caf3c47a5a57eef8aa2b">&#9670;&nbsp;</a></span>scenesBegin() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">ScenePtrStrMap::iterator castor3d::SceneFileParser::scenesBegin </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a2ad21444affdb09f89b717f810208c3a" name="a2ad21444affdb09f89b717f810208c3a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2ad21444affdb09f89b717f810208c3a">&#9670;&nbsp;</a></span>scenesBegin() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">ScenePtrStrMap::const_iterator castor3d::SceneFileParser::scenesBegin </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a03e9f73ea25b93b4b35fdb5bace293bd" name="a03e9f73ea25b93b4b35fdb5bace293bd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a03e9f73ea25b93b4b35fdb5bace293bd">&#9670;&nbsp;</a></span>scenesEnd()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">ScenePtrStrMap::const_iterator castor3d::SceneFileParser::scenesEnd </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="aba838dc9e855b4ff421f4c48f4ff1f9a" name="aba838dc9e855b4ff421f4c48f4ff1f9a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aba838dc9e855b4ff421f4c48f4ff1f9a">&#9670;&nbsp;</a></span>billboardSizes</h2>
+<a id="a508137cf40bcad324c86d581629a273a" name="a508137cf40bcad324c86d581629a273a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a508137cf40bcad324c86d581629a273a">&#9670;&nbsp;</a></span>intensity</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::billboardSizes</td>
+          <td class="memname">castor::ChangeTracked&lt; float &gt; castor3d::RsmConfig::intensity</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a56e2182a4f830c151d0c7f71fbdbd485" name="a56e2182a4f830c151d0c7f71fbdbd485"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a56e2182a4f830c151d0c7f71fbdbd485">&#9670;&nbsp;</a></span>billboardTypes</h2>
+<a id="ad8032cec156015c1ed788b972fdaea54" name="ad8032cec156015c1ed788b972fdaea54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8032cec156015c1ed788b972fdaea54">&#9670;&nbsp;</a></span>maxRadius</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::billboardTypes</td>
+          <td class="memname">castor::ChangeTracked&lt; float &gt; castor3d::RsmConfig::maxRadius</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a969f24e7482e2d737e8acfc16741bd8c" name="a969f24e7482e2d737e8acfc16741bd8c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a969f24e7482e2d737e8acfc16741bd8c">&#9670;&nbsp;</a></span>blendFactors</h2>
+<a id="adf7f2dfd8cbf6704433baab1a3eb4da3" name="adf7f2dfd8cbf6704433baab1a3eb4da3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf7f2dfd8cbf6704433baab1a3eb4da3">&#9670;&nbsp;</a></span>sampleCount</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::blendFactors</td>
+          <td class="memname">castor::ChangeTracked&lt; castor::RangedValue&lt; uint32_t &gt; &gt; castor3d::RsmConfig::sampleCount { castor::makeRangedValue( 100u, 20u, <a class="el" href="../../da/dab/a01362.html#a9e9c2b8594980fd8e6326f56b5d9e1a9">MaxRsmRange</a> ) }</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="aa63564bcd0c6e6481bd2bf09d3ff8359" name="aa63564bcd0c6e6481bd2bf09d3ff8359"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa63564bcd0c6e6481bd2bf09d3ff8359">&#9670;&nbsp;</a></span>borderColours</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::borderColours</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ac25da86c5c4d8af07700e559a9378d4a" name="ac25da86c5c4d8af07700e559a9378d4a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac25da86c5c4d8af07700e559a9378d4a">&#9670;&nbsp;</a></span>borderPositions</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::borderPositions</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ab20c4185267219c494ab3183e2a3dc90" name="ab20c4185267219c494ab3183e2a3dc90"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab20c4185267219c494ab3183e2a3dc90">&#9670;&nbsp;</a></span>comparisonFuncs</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::comparisonFuncs</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a42692e6e3eda4de5baa1e3eee7190614" name="a42692e6e3eda4de5baa1e3eee7190614"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a42692e6e3eda4de5baa1e3eee7190614">&#9670;&nbsp;</a></span>comparisonModes</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::comparisonModes</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aae6e812bfe373cbacf735f54ccdce6db" name="aae6e812bfe373cbacf735f54ccdce6db"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aae6e812bfe373cbacf735f54ccdce6db">&#9670;&nbsp;</a></span>elementTypes</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::elementTypes</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a8e7b1cbf733fa6c86fb9ff6a0c3649fc" name="a8e7b1cbf733fa6c86fb9ff6a0c3649fc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8e7b1cbf733fa6c86fb9ff6a0c3649fc">&#9670;&nbsp;</a></span>filters</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::filters</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a282a15169ea3c30804a748c2ec1c1319" name="a282a15169ea3c30804a748c2ec1c1319"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a282a15169ea3c30804a748c2ec1c1319">&#9670;&nbsp;</a></span>fogTypes</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::fogTypes</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a13e87162d7bbf3f1ca07133ec58ac714" name="a13e87162d7bbf3f1ca07133ec58ac714"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a13e87162d7bbf3f1ca07133ec58ac714">&#9670;&nbsp;</a></span>globalIlluminations</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::globalIlluminations</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aca17cd65a6ca14c1e427617fb7603b51" name="aca17cd65a6ca14c1e427617fb7603b51"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aca17cd65a6ca14c1e427617fb7603b51">&#9670;&nbsp;</a></span>horizontalAligns</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::horizontalAligns</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a0381081b649a468373c8ec73801542c4" name="a0381081b649a468373c8ec73801542c4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0381081b649a468373c8ec73801542c4">&#9670;&nbsp;</a></span>lightTypes</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::lightTypes</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="af16773d7567b833d6baf6512ce133889" name="af16773d7567b833d6baf6512ce133889"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af16773d7567b833d6baf6512ce133889">&#9670;&nbsp;</a></span>lineSpacingModes</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::lineSpacingModes</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae92114bf0d5594625f41201878cb96d2" name="ae92114bf0d5594625f41201878cb96d2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae92114bf0d5594625f41201878cb96d2">&#9670;&nbsp;</a></span>materialTypes</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::materialTypes</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a6da67ce3322ba770deb76a3ad8859376" name="a6da67ce3322ba770deb76a3ad8859376"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6da67ce3322ba770deb76a3ad8859376">&#9670;&nbsp;</a></span>mipmapModes</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::mipmapModes</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a406a287e59e8652bada69babfa3f5dcc" name="a406a287e59e8652bada69babfa3f5dcc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a406a287e59e8652bada69babfa3f5dcc">&#9670;&nbsp;</a></span>models</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::models</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a0ea170783926e80cd417e6cce2247950" name="a0ea170783926e80cd417e6cce2247950"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0ea170783926e80cd417e6cce2247950">&#9670;&nbsp;</a></span>movables</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::movables</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae4dabdfa7d4719012b07e04c212ec64e" name="ae4dabdfa7d4719012b07e04c212ec64e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae4dabdfa7d4719012b07e04c212ec64e">&#9670;&nbsp;</a></span>primitiveOutputTypes</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::primitiveOutputTypes</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a7dce91c78a7b53024412b8d7011bcd98" name="a7dce91c78a7b53024412b8d7011bcd98"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7dce91c78a7b53024412b8d7011bcd98">&#9670;&nbsp;</a></span>primitiveTypes</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::primitiveTypes</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ad43622e62c056d23b98a301069407fb1" name="ad43622e62c056d23b98a301069407fb1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad43622e62c056d23b98a301069407fb1">&#9670;&nbsp;</a></span>shaderTypes</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::shaderTypes</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a51cc44c2715c75262f2ceae010aa67bd" name="a51cc44c2715c75262f2ceae010aa67bd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a51cc44c2715c75262f2ceae010aa67bd">&#9670;&nbsp;</a></span>shadowFilters</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::shadowFilters</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae2f2c1edecccdbede6bd8b6e0684640a" name="ae2f2c1edecccdbede6bd8b6e0684640a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae2f2c1edecccdbede6bd8b6e0684640a">&#9670;&nbsp;</a></span>textTexturingModes</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::textTexturingModes</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a4fd7d0bb5dc310b1d56fb562e3d890a8" name="a4fd7d0bb5dc310b1d56fb562e3d890a8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4fd7d0bb5dc310b1d56fb562e3d890a8">&#9670;&nbsp;</a></span>textureArguments</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::textureArguments</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a84976e277242ff4efc19d1eec174ae68" name="a84976e277242ff4efc19d1eec174ae68"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a84976e277242ff4efc19d1eec174ae68">&#9670;&nbsp;</a></span>textureBlendModes</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::textureBlendModes</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a91dfad3fc1ece6c041e8d696c0b4aafc" name="a91dfad3fc1ece6c041e8d696c0b4aafc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a91dfad3fc1ece6c041e8d696c0b4aafc">&#9670;&nbsp;</a></span>textWrappingModes</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::textWrappingModes</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a95a26001074dcd8fe34aa313ef1c67f9" name="a95a26001074dcd8fe34aa313ef1c67f9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a95a26001074dcd8fe34aa313ef1c67f9">&#9670;&nbsp;</a></span>toneMappings</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::toneMappings</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a8f3bb6a0b89f56429f2bc4099d9aee12" name="a8f3bb6a0b89f56429f2bc4099d9aee12"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8f3bb6a0b89f56429f2bc4099d9aee12">&#9670;&nbsp;</a></span>types</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::types</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aa49fb51193f6f1da96a3b7fcf07affcb" name="aa49fb51193f6f1da96a3b7fcf07affcb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa49fb51193f6f1da96a3b7fcf07affcb">&#9670;&nbsp;</a></span>variableTypes</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::variableTypes</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aea723d13eebdd887a69a721ecafb042d" name="aea723d13eebdd887a69a721ecafb042d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aea723d13eebdd887a69a721ecafb042d">&#9670;&nbsp;</a></span>verticalAligns</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::verticalAligns</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ab8cbb515d4f1d96eb6cc0d54e8c1dae2" name="ab8cbb515d4f1d96eb6cc0d54e8c1dae2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab8cbb515d4f1d96eb6cc0d54e8c1dae2">&#9670;&nbsp;</a></span>viewportModes</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::viewportModes</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a287abe18fa26aec6a59538506e75d84e" name="a287abe18fa26aec6a59538506e75d84e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a287abe18fa26aec6a59538506e75d84e">&#9670;&nbsp;</a></span>wrappingModes</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> UInt32StrMap castor3d::SceneFileParser::wrappingModes</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following file:<ul>
-<li>Scene/<a class="el" href="../../d1/dae/a01136.html">SceneFileParser.hpp</a></li>
+<hr/>The documentation for this struct was generated from the following file:<ul>
+<li>Scene/Light/<a class="el" href="../../db/d17/a01148.html">LightModule.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 15:34:56 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:51 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

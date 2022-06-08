@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Text/TextPass.hpp File Reference</title>
+<title>Castor3D: Shader/Ubos/ObjectIdsUbo.hpp File Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,31 +42,150 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_469969d95af928d15e3c7449be229837.html">Text</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_73b4ff1c0d48677e07219a6e5cbe5dfd.html">Shader</a></li><li class="navelem"><a class="el" href="../../dir_7cb5e4c64a1bf58db52aef2025a37836.html">Ubos</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
-  <div class="headertitle"><div class="title">TextPass.hpp File Reference</div></div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a> &#124;
+<a href="#func-members">Functions</a>  </div>
+  <div class="headertitle"><div class="title">ObjectIdsUbo.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d6b/a05139.html">castor::TextWriter&lt; castor3d::Pass &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d0f/a05070.html">castor3d::shader::ObjectIds</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d65/a05074.html">castor3d::shader::ObjectsIds</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d1f/a05078.html">castor3d::shader::ObjectsIds::Ids</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:d6/d64/a01399"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d64/a01399.html">castor</a></td></tr>
+<tr class="memitem:da/dab/a01362"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html">castor3d</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:de/d1f/a01364"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d1f/a01364.html">castor3d::shader</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a99bc5d63635cc8ea0b20cb18b41db3ee"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/dd1/a01334.html#a99bc5d63635cc8ea0b20cb18b41db3ee">C3D_ObjectIdsData</a>(writer,  binding,  set)</td></tr>
+<tr class="separator:a99bc5d63635cc8ea0b20cb18b41db3ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6383699ba87c76d7a4d263fc77242dc"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/dd1/a01334.html#ae6383699ba87c76d7a4d263fc77242dc">C3D_ObjectIdsDataOpt</a>(writer,  binding,  set,  enable)</td></tr>
+<tr class="separator:ae6383699ba87c76d7a4d263fc77242dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a8acb169fd67204f1229f15ff3532e215"><td class="memTemplParams" colspan="2">template&lt;ast::var::Flag FlagT&gt; </td></tr>
+<tr class="memitem:a8acb169fd67204f1229f15ff3532e215"><td class="memTemplItemLeft" align="right" valign="top">static sdw::UInt&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../de/d1f/a01364.html#a8acb169fd67204f1229f15ff3532e215">castor3d::shader::getNodeId</a> (sdw::Array&lt; shader::ObjectsIds &gt; const &amp;data, shader::VertexSurfaceT&lt; FlagT &gt; const &amp;surface, sdw::UInt pipelineID, sdw::UInt drawID, ProgramFlags const &amp;flags)</td></tr>
+<tr class="separator:a8acb169fd67204f1229f15ff3532e215"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a833922c16f047cde2cfca743a31056bb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> sdw::UInt&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d1f/a01364.html#a833922c16f047cde2cfca743a31056bb">castor3d::shader::getNodeId</a> (sdw::Array&lt; shader::ObjectsIds &gt; const &amp;data, sdw::UInt pipelineID, sdw::UInt drawID)</td></tr>
+<tr class="separator:a833922c16f047cde2cfca743a31056bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ba2f82daa400771ef47e729f36a4451"><td class="memItemLeft" align="right" valign="top">sdw::UInt&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d1f/a01364.html#a6ba2f82daa400771ef47e729f36a4451">castor3d::shader::getNodeId</a> (sdw::Array&lt; shader::ObjectsIds &gt; const &amp;data, sdw::Array&lt; sdw::UVec4 &gt; const &amp;instances, sdw::UInt pipelineID, sdw::UInt drawID, ProgramFlags const &amp;flags)</td></tr>
+<tr class="separator:a6ba2f82daa400771ef47e729f36a4451"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a99bc5d63635cc8ea0b20cb18b41db3ee" name="a99bc5d63635cc8ea0b20cb18b41db3ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99bc5d63635cc8ea0b20cb18b41db3ee">&#9670;&nbsp;</a></span>C3D_ObjectIdsData</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define C3D_ObjectIdsData</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">writer, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">binding, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">set&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    sdw::Ssbo objectIdsDataBuffer{ writer\</div>
+<div class="line">        , <a class="code hl_variable" href="../../d9/d65/a05074.html#a8ca07a89abf466149e053e6ecd731741">castor3d::shader::ObjectsIds::BufferName</a>\</div>
+<div class="line">        , uint32_t( binding )\</div>
+<div class="line">        , uint32_t( set )\</div>
+<div class="line">        , ast::type::MemoryLayout::eStd430\</div>
+<div class="line">        , <span class="keyword">true</span> };\</div>
+<div class="line">    auto c3d_objectIdsData = objectIdsDataBuffer.declMemberArray&lt; <a class="code hl_struct" href="../../d9/d65/a05074.html">castor3d::shader::ObjectsIds</a> &gt;( <a class="code hl_variable" href="../../d9/d65/a05074.html#a1b3e12a6dd054dc3bf6a012be907d4b2">castor3d::shader::ObjectsIds::DataName</a> );\</div>
+<div class="line">    objectIdsDataBuffer.end()</div>
+<div class="ttc" id="aa05074_html"><div class="ttname"><a href="../../d9/d65/a05074.html">castor3d::shader::ObjectsIds</a></div><div class="ttdef"><b>Definition:</b> ObjectIdsUbo.hpp:43</div></div>
+<div class="ttc" id="aa05074_html_a1b3e12a6dd054dc3bf6a012be907d4b2"><div class="ttname"><a href="../../d9/d65/a05074.html#a1b3e12a6dd054dc3bf6a012be907d4b2">castor3d::shader::ObjectsIds::DataName</a></div><div class="ttdeci">static C3D_API castor::String const DataName</div><div class="ttdef"><b>Definition:</b> ObjectIdsUbo.hpp:67</div></div>
+<div class="ttc" id="aa05074_html_a8ca07a89abf466149e053e6ecd731741"><div class="ttname"><a href="../../d9/d65/a05074.html#a8ca07a89abf466149e053e6ecd731741">castor3d::shader::ObjectsIds::BufferName</a></div><div class="ttdeci">static C3D_API castor::String const BufferName</div><div class="ttdef"><b>Definition:</b> ObjectIdsUbo.hpp:66</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="ae6383699ba87c76d7a4d263fc77242dc" name="ae6383699ba87c76d7a4d263fc77242dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6383699ba87c76d7a4d263fc77242dc">&#9670;&nbsp;</a></span>C3D_ObjectIdsDataOpt</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define C3D_ObjectIdsDataOpt</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">writer, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">binding, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">set, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">enable&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    sdw::Ssbo objectIdsDataBuffer{ writer\</div>
+<div class="line">        , <a class="code hl_variable" href="../../d9/d65/a05074.html#a8ca07a89abf466149e053e6ecd731741">castor3d::shader::ObjectsIds::BufferName</a>\</div>
+<div class="line">        , uint32_t( binding )\</div>
+<div class="line">        , uint32_t( set )\</div>
+<div class="line">        , ast::type::MemoryLayout::eStd430\</div>
+<div class="line">        , enable };\</div>
+<div class="line">    auto c3d_objectIdsData = objectIdsDataBuffer.declMemberArray&lt; <a class="code hl_struct" href="../../d9/d65/a05074.html">castor3d::shader::ObjectsIds</a> &gt;( <a class="code hl_variable" href="../../d9/d65/a05074.html#a1b3e12a6dd054dc3bf6a012be907d4b2">castor3d::shader::ObjectsIds::DataName</a>, enable );\</div>
+<div class="line">    objectIdsDataBuffer.end()</div>
+</div><!-- fragment -->
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 21:28:50 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:46 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

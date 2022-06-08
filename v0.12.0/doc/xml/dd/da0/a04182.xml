@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dd/da0/a04182" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::SsaoRawAOPass::Program</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dd/da0/a04182_1aabbe5d2a1a37eaba8302f0702b1420f9" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/d64/a04750" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::SsaoRawAOPass::Program::vertexShader</definition>
+        <argsstring></argsstring>
+        <name>vertexShader</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::Program::vertexShader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="125" column="14" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="125" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/da0/a04182_1a630e306951eacd2c544eed5b1fe356bc" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/d64/a04750" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::SsaoRawAOPass::Program::pixelShader</definition>
+        <argsstring></argsstring>
+        <name>pixelShader</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::Program::pixelShader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="126" column="14" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="126" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/da0/a04182_1ab8870faee075454285d1f7ba00d16fb3" prot="public" static="no" mutable="no">
+        <type>ashes::PipelineShaderStageCreateInfoArray</type>
+        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::SsaoRawAOPass::Program::stages</definition>
+        <argsstring></argsstring>
+        <name>stages</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::Program::stages</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="127" column="43" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="127" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/da0/a04182_1a75e2a4b919979cc14d8fc5f3444429b5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::SsaoRawAOPass::Program::Program</definition>
+        <argsstring>(RenderDevice const &amp;device, bool useNormalsBuffer, castor::String const &amp;prefix)</argsstring>
+        <name>Program</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::Program::Program</qualifiedname>
+        <param>
+          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>useNormalsBuffer</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>prefix</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="121" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="7">
+        <label>T</label>
+      </node>
+      <node id="2">
+        <label>castor3d::ShaderModule</label>
+        <link refid="dc/d64/a04750"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>name</edgelabel>
+          <edgelabel>source</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>shader</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SsaoRawAOPass::Program</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>pixelShader</edgelabel>
+          <edgelabel>vertexShader</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="3">
+        <label>std::string</label>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::unique_ptr&lt; ast::Shader &gt;</label>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; ast::Shader &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Ssao/SsaoRawAOPass.hpp" line="119" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="120" bodyend="128"/>
+    <listofallmembers>
+      <member refid="dd/da0/a04182_1a630e306951eacd2c544eed5b1fe356bc" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::Program</scope><name>pixelShader</name></member>
+      <member refid="dd/da0/a04182_1a75e2a4b919979cc14d8fc5f3444429b5" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::Program</scope><name>Program</name></member>
+      <member refid="dd/da0/a04182_1ab8870faee075454285d1f7ba00d16fb3" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::Program</scope><name>stages</name></member>
+      <member refid="dd/da0/a04182_1aabbe5d2a1a37eaba8302f0702b1420f9" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::Program</scope><name>vertexShader</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

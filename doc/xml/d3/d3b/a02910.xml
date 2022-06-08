@@ -555,7 +555,7 @@
       </sectiondef>
       <sectiondef kind="public-func">
       <memberdef kind="function" id="d3/d3b/a02910_1a97677fe228063ebe30ea2fa8cd6df0e8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
         <definition>C3D_API castor3d::Sampler::Sampler</definition>
         <argsstring>(castor::String const &amp;name, Engine &amp;engine)</argsstring>
         <name>Sampler</name>
@@ -565,7 +565,7 @@
           <declname>name</declname>
         </param>
         <param>
-          <type><ref refid="d1/d3c/a02714" kindref="compound">Engine</ref> &amp;</type>
+          <type><ref refid="d9/db1/a02718" kindref="compound">Engine</ref> &amp;</type>
           <declname>engine</declname>
         </param>
         <briefdescription>
@@ -596,7 +596,7 @@
         <location file="Material/Texture/Sampler.hpp" line="44" column="9"/>
       </memberdef>
       <memberdef kind="function" id="d3/d3b/a02910_1a8df815ee5a113e2856bf4915bf15766b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
         <definition>C3D_API castor3d::Sampler::Sampler</definition>
         <argsstring>(castor::String const &amp;name, Engine &amp;engine, ashes::SamplerCreateInfo createInfo)</argsstring>
         <name>Sampler</name>
@@ -606,7 +606,7 @@
           <declname>name</declname>
         </param>
         <param>
-          <type><ref refid="d1/d3c/a02714" kindref="compound">Engine</ref> &amp;</type>
+          <type><ref refid="d9/db1/a02718" kindref="compound">Engine</ref> &amp;</type>
           <declname>engine</declname>
         </param>
         <param>
@@ -649,7 +649,7 @@
         <location file="Material/Texture/Sampler.hpp" line="58" column="9"/>
       </memberdef>
       <memberdef kind="function" id="d3/d3b/a02910_1aca052ddfd5735f9f330757bb0f4d2de3" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
         <definition>virtual C3D_API castor3d::Sampler::~Sampler</definition>
         <argsstring>()</argsstring>
         <name>~Sampler</name>
@@ -664,13 +664,13 @@
         <location file="Material/Texture/Sampler.hpp" line="67" column="17"/>
       </memberdef>
       <memberdef kind="function" id="d3/d3b/a02910_1a4bbdbc4be3487b9e35e01022367f0bce" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
         <definition>C3D_API bool castor3d::Sampler::initialise</definition>
         <argsstring>(RenderDevice const &amp;device)</argsstring>
         <name>initialise</name>
         <qualifiedname>castor3d::Sampler::initialise</qualifiedname>
         <param>
-          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <type><ref refid="df/d75/a04010" kindref="compound">RenderDevice</ref> const &amp;</type>
           <declname>device</declname>
         </param>
         <briefdescription>
@@ -695,7 +695,7 @@
         <location file="Material/Texture/Sampler.hpp" line="78" column="14"/>
       </memberdef>
       <memberdef kind="function" id="d3/d3b/a02910_1a551fe619eca5fc22296bee70808166f2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
         <definition>C3D_API void castor3d::Sampler::cleanup</definition>
         <argsstring>()</argsstring>
         <name>cleanup</name>

@@ -1,4 +1,6 @@
-<map id="castor3d::shader::MatrixData" name="castor3d::shader::MatrixData">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,196,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="32,5,169,32"/>
+<map id="castor3d::shader::SssProfiles" name="castor3d::shader::SssProfiles">
+<area shape="rect" id="node1" title=" " alt="" coords="5,317,199,344"/>
+<area shape="rect" id="node2" title=" " alt="" coords="22,199,182,255"/>
+<area shape="rect" id="node3" title=" " alt="" coords="33,95,171,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="83,5,121,32"/>
 </map>

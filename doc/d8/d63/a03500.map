@@ -1,4 +1,4 @@
-<map id="castor3d::DebugOverlays" name="castor3d::DebugOverlays">
-<area shape="rect" id="node1" title=" " alt="" coords="15,80,182,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,192,32"/>
+<map id="castor3d::SkeletonNode" name="castor3d::SkeletonNode">
+<area shape="rect" id="node1" title=" " alt="" coords="5,80,167,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="33,5,139,32"/>
 </map>

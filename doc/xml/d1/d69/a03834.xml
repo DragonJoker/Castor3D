@@ -1,755 +1,620 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="d1/d69/a03834" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::GaussianBlur</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
-    <includes local="no">GaussianBlur.hpp</includes>
-    <innerclass refid="d1/d5c/a03838" prot="public">castor3d::GaussianBlur::Configuration</innerclass>
-      <sectiondef kind="user-defined">
-      <memberdef kind="function" id="d1/d69/a03834_1a68f253e5790c042fdd8e5a00746a68a6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>crg::FramePass const &amp;</type>
-        <definition>crg::FramePass const  &amp; castor3d::GaussianBlur::getLastPass</definition>
-        <argsstring>() const</argsstring>
-        <name>getLastPass</name>
-        <qualifiedname>castor3d::GaussianBlur::getLastPass</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-<para>name Getters. </para>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="155" column="23" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="155" bodyend="159"/>
-      </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="d1/d69/a03834_1ad4e5e92fc3459d70640cdc903ecc179b" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
-        <definition>C3D_API castor::String const castor3d::GaussianBlur::Config</definition>
+  <compounddef id="d1/d69/a03834" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SceneRenderNodes</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Scene const &gt;</basecompoundref>
+    <includes local="no">SceneRenderNodes.hpp</includes>
+    <innerclass refid="d1/d5c/a03838" prot="public">castor3d::SceneRenderNodes::NodeData</innerclass>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d1/d69/a03834_1abacbf267c230bb0cf8b2b6a63c8869c5" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>typename NodeT</type>
+          </param>
+        </templateparamlist>
+        <type>std::unordered_map&lt; size_t, castor::UniquePtr&lt; NodeT &gt; &gt;</type>
+        <definition>using castor3d::SceneRenderNodes::NodesPtrMapT =  std::unordered_map&lt; size_t, castor::UniquePtr&lt; NodeT &gt; &gt;</definition>
         <argsstring></argsstring>
-        <name>Config</name>
-        <qualifiedname>castor3d::GaussianBlur::Config</qualifiedname>
+        <name>NodesPtrMapT</name>
+        <qualifiedname>castor3d::SceneRenderNodes::NodesPtrMapT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="163" column="37" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="163" bodyend="-1"/>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="32" column="1" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="32" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d69/a03834_1a3ea0db3cb529a51262383c2989e1db5b" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
-        <definition>C3D_API castor::String const castor3d::GaussianBlur::Coefficients</definition>
+      <memberdef kind="typedef" id="d1/d69/a03834_1a26fc89cde3c457f34382889d4ea63adb" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>typename NodeT</type>
+          </param>
+        </templateparamlist>
+        <type>std::unordered_map&lt; size_t, <ref refid="d1/d69/a03834_1abacbf267c230bb0cf8b2b6a63c8869c5" kindref="member">NodesPtrMapT</ref>&lt; NodeT &gt; &gt;</type>
+        <definition>using castor3d::SceneRenderNodes::NodesPtrFlagsMapT =  std::unordered_map&lt; size_t, NodesPtrMapT&lt; NodeT &gt; &gt;</definition>
         <argsstring></argsstring>
-        <name>Coefficients</name>
-        <qualifiedname>castor3d::GaussianBlur::Coefficients</qualifiedname>
+        <name>NodesPtrFlagsMapT</name>
+        <qualifiedname>castor3d::SceneRenderNodes::NodesPtrFlagsMapT</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="164" column="37" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="164" bodyend="-1"/>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="34" column="1" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="34" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d69/a03834_1ad4e5e21985b62833eb4f0dbf94a7626d" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
-        <definition>C3D_API castor::String const castor3d::GaussianBlur::CoefficientsCount</definition>
+      <memberdef kind="typedef" id="d1/d69/a03834_1a3daa48602d8a8676a76dbf5fa38c034d" prot="public" static="no">
+        <type>std::vector&lt; <ref refid="d1/d5c/a03838" kindref="compound">NodeData</ref> &gt;</type>
+        <definition>using castor3d::SceneRenderNodes::NodeDataArray =  std::vector&lt; NodeData &gt;</definition>
         <argsstring></argsstring>
-        <name>CoefficientsCount</name>
-        <qualifiedname>castor3d::GaussianBlur::CoefficientsCount</qualifiedname>
+        <name>NodeDataArray</name>
+        <qualifiedname>castor3d::SceneRenderNodes::NodeDataArray</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="165" column="37" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="165" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/d69/a03834_1ab2202e518ace50ccc9e2d3330396db0b" prot="public" static="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
-        <definition>C3D_API castor::String const castor3d::GaussianBlur::TextureSize</definition>
-        <argsstring></argsstring>
-        <name>TextureSize</name>
-        <qualifiedname>castor3d::GaussianBlur::TextureSize</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="166" column="37" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="166" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/d69/a03834_1af2348a695a12bfe432775545bf4838d3" prot="public" static="yes" constexpr="yes" mutable="no">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> constexpr uint32_t</type>
-        <definition>C3D_API constexpr uint32_t castor3d::GaussianBlur::MaxCoefficients</definition>
-        <argsstring></argsstring>
-        <name>MaxCoefficients</name>
-        <qualifiedname>castor3d::GaussianBlur::MaxCoefficients</qualifiedname>
-        <initializer>{ 60u }</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="167" column="35" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="167" bodyend="-1"/>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="41" column="1" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="41" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d1/d69/a03834_1a0d61f67c0385ae9f43ef9e2afa136ae2" prot="private" static="no" mutable="no">
-        <type>crg::ImageViewIdArray</type>
-        <definition>crg::ImageViewIdArray castor3d::GaussianBlur::m_sources</definition>
-        <argsstring></argsstring>
-        <name>m_sources</name>
-        <qualifiedname>castor3d::GaussianBlur::m_sources</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="178" column="23" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="178" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d1/d69/a03834_1ab30654eaf6f1313920c4e73b7f740379" prot="private" static="no" mutable="no">
-        <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const  &amp;</type>
-        <definition>RenderDevice const&amp; castor3d::GaussianBlur::m_device</definition>
+      <memberdef kind="variable" id="d1/d69/a03834_1a2d3398a23e211c94c7a39a7f692799ca" prot="private" static="no" mutable="no">
+        <type><ref refid="df/d75/a04010" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::SceneRenderNodes::m_device</definition>
         <argsstring></argsstring>
         <name>m_device</name>
-        <qualifiedname>castor3d::GaussianBlur::m_device</qualifiedname>
+        <qualifiedname>castor3d::SceneRenderNodes::m_device</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="179" column="21" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="179" bodyend="-1"/>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="98" column="21" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="98" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d69/a03834_1a34f37b843f71759abddfcba257c9256d" prot="private" static="no" mutable="no">
-        <type>crg::FramePass const  *</type>
-        <definition>crg::FramePass const* castor3d::GaussianBlur::m_lastPass</definition>
+      <memberdef kind="variable" id="d1/d69/a03834_1a6eda63edca5905fce9088a21301f27c8" prot="private" static="no" mutable="no">
+        <type>std::mutex</type>
+        <definition>std::mutex castor3d::SceneRenderNodes::m_nodesMutex</definition>
         <argsstring></argsstring>
-        <name>m_lastPass</name>
-        <qualifiedname>castor3d::GaussianBlur::m_lastPass</qualifiedname>
+        <name>m_nodesMutex</name>
+        <qualifiedname>castor3d::SceneRenderNodes::m_nodesMutex</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="180" column="23" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="180" bodyend="-1"/>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="99" column="12" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="99" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d69/a03834_1a1913346dc6541fd391ac9c55610966c1" prot="private" static="no" mutable="no">
-        <type>castor::String</type>
-        <definition>castor::String castor3d::GaussianBlur::m_prefix</definition>
+      <memberdef kind="variable" id="d1/d69/a03834_1a1eb56e65edae02871745ef50a4d3cfa0" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/d69/a03834_1a26fc89cde3c457f34382889d4ea63adb" kindref="member">NodesPtrFlagsMapT</ref>&lt; <ref refid="dd/d51/a03842" kindref="compound">SubmeshRenderNode</ref> &gt;</type>
+        <definition>NodesPtrFlagsMapT&lt; SubmeshRenderNode &gt; castor3d::SceneRenderNodes::m_submeshNodes</definition>
         <argsstring></argsstring>
-        <name>m_prefix</name>
-        <qualifiedname>castor3d::GaussianBlur::m_prefix</qualifiedname>
+        <name>m_submeshNodes</name>
+        <qualifiedname>castor3d::SceneRenderNodes::m_submeshNodes</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="181" column="16" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="181" bodyend="-1"/>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="100" column="19" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="100" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d69/a03834_1a4a3efe193043cbf7963ad5c8de9739e4" prot="private" static="no" mutable="no">
-        <type>VkExtent2D</type>
-        <definition>VkExtent2D castor3d::GaussianBlur::m_size</definition>
+      <memberdef kind="variable" id="d1/d69/a03834_1a7045646362b195e24626bb070ebed3ec" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/d69/a03834_1a26fc89cde3c457f34382889d4ea63adb" kindref="member">NodesPtrFlagsMapT</ref>&lt; <ref refid="de/de0/a03814" kindref="compound">BillboardRenderNode</ref> &gt;</type>
+        <definition>NodesPtrFlagsMapT&lt; BillboardRenderNode &gt; castor3d::SceneRenderNodes::m_billboardNodes</definition>
         <argsstring></argsstring>
-        <name>m_size</name>
-        <qualifiedname>castor3d::GaussianBlur::m_size</qualifiedname>
+        <name>m_billboardNodes</name>
+        <qualifiedname>castor3d::SceneRenderNodes::m_billboardNodes</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="182" column="12" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="182" bodyend="-1"/>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="101" column="19" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="101" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d69/a03834_1a8d2b56bb09601c8fb3697b292ccbe1d0" prot="private" static="no" mutable="no">
-        <type>VkFormat</type>
-        <definition>VkFormat castor3d::GaussianBlur::m_format</definition>
+      <memberdef kind="variable" id="d1/d69/a03834_1aacaa6187aab6ef98265fe241916975f8" prot="private" static="no" mutable="no">
+        <type>ashes::BufferPtr&lt; <ref refid="d4/d69/a05166" kindref="compound">ModelBufferConfiguration</ref> &gt;</type>
+        <definition>ashes::BufferPtr&lt; ModelBufferConfiguration &gt; castor3d::SceneRenderNodes::m_modelsData</definition>
         <argsstring></argsstring>
-        <name>m_format</name>
-        <qualifiedname>castor3d::GaussianBlur::m_format</qualifiedname>
+        <name>m_modelsData</name>
+        <qualifiedname>castor3d::SceneRenderNodes::m_modelsData</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="183" column="10" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="183" bodyend="-1"/>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="102" column="18" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="102" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d69/a03834_1a6253944f00d689355fa2b940e694b0b5" prot="private" static="no" mutable="no">
-        <type>crg::ImageViewId</type>
-        <definition>crg::ImageViewId castor3d::GaussianBlur::m_intermediateView</definition>
+      <memberdef kind="variable" id="d1/d69/a03834_1abf349f1753d5c9a7c1f937c902f97e7d" prot="private" static="no" mutable="no">
+        <type>ashes::BufferPtr&lt; <ref refid="d2/dc4/a05134" kindref="compound">BillboardUboConfiguration</ref> &gt;</type>
+        <definition>ashes::BufferPtr&lt; BillboardUboConfiguration &gt; castor3d::SceneRenderNodes::m_billboardsData</definition>
         <argsstring></argsstring>
-        <name>m_intermediateView</name>
-        <qualifiedname>castor3d::GaussianBlur::m_intermediateView</qualifiedname>
+        <name>m_billboardsData</name>
+        <qualifiedname>castor3d::SceneRenderNodes::m_billboardsData</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="184" column="18" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="184" bodyend="-1"/>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="103" column="18" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="103" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d69/a03834_1a757e0e97a10cd6401ca91bbea7e69973" prot="private" static="no" mutable="no">
-        <type><ref refid="df/d9b/a02514" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d1/d5c/a03838" kindref="compound">Configuration</ref> &gt;</type>
-        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::GaussianBlur::m_blurUbo</definition>
+      <memberdef kind="variable" id="d1/d69/a03834_1a423ff5f7134726007a5ad11b8f821d10" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d69/a05166" kindref="compound">ModelBufferConfiguration</ref> *</type>
+        <definition>ModelBufferConfiguration* castor3d::SceneRenderNodes::m_modelsBuffer</definition>
         <argsstring></argsstring>
-        <name>m_blurUbo</name>
-        <qualifiedname>castor3d::GaussianBlur::m_blurUbo</qualifiedname>
+        <name>m_modelsBuffer</name>
+        <qualifiedname>castor3d::SceneRenderNodes::m_modelsBuffer</qualifiedname>
+        <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="185" column="22" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="185" bodyend="-1"/>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="104" column="27" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="104" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d69/a03834_1a203f1d1f86b229ade84bc64c486dbe78" prot="private" static="no" mutable="no">
-        <type>std::vector&lt; float &gt;</type>
-        <definition>std::vector&lt; float &gt; castor3d::GaussianBlur::m_kernel</definition>
+      <memberdef kind="variable" id="d1/d69/a03834_1a08fd61fbe5df447b392916d882bb8314" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dc4/a05134" kindref="compound">BillboardUboConfiguration</ref> *</type>
+        <definition>BillboardUboConfiguration* castor3d::SceneRenderNodes::m_billboardsBuffer</definition>
         <argsstring></argsstring>
-        <name>m_kernel</name>
-        <qualifiedname>castor3d::GaussianBlur::m_kernel</qualifiedname>
+        <name>m_billboardsBuffer</name>
+        <qualifiedname>castor3d::SceneRenderNodes::m_billboardsBuffer</qualifiedname>
+        <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="186" column="13" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="186" bodyend="-1"/>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="105" column="28" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="105" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d69/a03834_1a418fc9a816389c81981f3a078ed5af09" prot="private" static="no" mutable="no">
-        <type><ref refid="dc/d64/a04750" kindref="compound">ShaderModule</ref></type>
-        <definition>ShaderModule castor3d::GaussianBlur::m_vertexShader</definition>
+      <memberdef kind="variable" id="d1/d69/a03834_1a8f80033be1cc8aae5a7950c523a91409" prot="private" static="no" mutable="no">
+        <type>FramePassTimerUPtr</type>
+        <definition>FramePassTimerUPtr castor3d::SceneRenderNodes::m_timerRenderNodes</definition>
         <argsstring></argsstring>
-        <name>m_vertexShader</name>
-        <qualifiedname>castor3d::GaussianBlur::m_vertexShader</qualifiedname>
+        <name>m_timerRenderNodes</name>
+        <qualifiedname>castor3d::SceneRenderNodes::m_timerRenderNodes</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="187" column="14" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="187" bodyend="-1"/>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="106" column="20" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="106" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d69/a03834_1a76c1c568e11817eab9b28da639250dec" prot="private" static="no" mutable="no">
-        <type><ref refid="dc/d64/a04750" kindref="compound">ShaderModule</ref></type>
-        <definition>ShaderModule castor3d::GaussianBlur::m_pixelShaderX</definition>
+      <memberdef kind="variable" id="d1/d69/a03834_1a30b1f283777483e173bb89097558e0cd" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/d69/a03834_1a3daa48602d8a8676a76dbf5fa38c034d" kindref="member">NodeDataArray</ref></type>
+        <definition>NodeDataArray castor3d::SceneRenderNodes::m_nodesData</definition>
         <argsstring></argsstring>
-        <name>m_pixelShaderX</name>
-        <qualifiedname>castor3d::GaussianBlur::m_pixelShaderX</qualifiedname>
+        <name>m_nodesData</name>
+        <qualifiedname>castor3d::SceneRenderNodes::m_nodesData</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="188" column="14" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="188" bodyend="-1"/>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="107" column="15" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="107" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d69/a03834_1abd15274041d5579021c9097389453a69" prot="private" static="no" mutable="no">
-        <type><ref refid="dc/d64/a04750" kindref="compound">ShaderModule</ref></type>
-        <definition>ShaderModule castor3d::GaussianBlur::m_pixelShaderY</definition>
+      <memberdef kind="variable" id="d1/d69/a03834_1a3aebddcfd1390b0c439005343725358e" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::SceneRenderNodes::m_nodeId</definition>
         <argsstring></argsstring>
-        <name>m_pixelShaderY</name>
-        <qualifiedname>castor3d::GaussianBlur::m_pixelShaderY</qualifiedname>
+        <name>m_nodeId</name>
+        <qualifiedname>castor3d::SceneRenderNodes::m_nodeId</qualifiedname>
+        <initializer>{}</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="189" column="14" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="189" bodyend="-1"/>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="108" column="10" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="108" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d69/a03834_1a9288c9b20182e196f404d6a914fcce22" prot="private" static="no" mutable="no">
-        <type>ashes::PipelineShaderStageCreateInfoArray</type>
-        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::GaussianBlur::m_stagesX</definition>
+      <memberdef kind="variable" id="d1/d69/a03834_1af5536559bb80017a7e870ae41742b2ea" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d3/d94/a03698" kindref="compound">SceneCuller</ref> * &gt;</type>
+        <definition>std::vector&lt; SceneCuller * &gt; castor3d::SceneRenderNodes::m_cullers</definition>
         <argsstring></argsstring>
-        <name>m_stagesX</name>
-        <qualifiedname>castor3d::GaussianBlur::m_stagesX</qualifiedname>
+        <name>m_cullers</name>
+        <qualifiedname>castor3d::SceneRenderNodes::m_cullers</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="190" column="43" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="190" bodyend="-1"/>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="109" column="13" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="109" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d1/d69/a03834_1a6c304dadbb7637d55823a0b6fe1c92f0" prot="private" static="no" mutable="no">
-        <type>ashes::PipelineShaderStageCreateInfoArray</type>
-        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::GaussianBlur::m_stagesY</definition>
+      <memberdef kind="variable" id="d1/d69/a03834_1a3536321271c30ef61799020fe01e9ce2" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SceneRenderNodes::m_dirty</definition>
         <argsstring></argsstring>
-        <name>m_stagesY</name>
-        <qualifiedname>castor3d::GaussianBlur::m_stagesY</qualifiedname>
+        <name>m_dirty</name>
+        <qualifiedname>castor3d::SceneRenderNodes::m_dirty</qualifiedname>
+        <initializer>{ true }</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="191" column="43" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="191" bodyend="-1"/>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="110" column="6" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d69/a03834_1af6eac675c0aedf0a3240e9e50a05957f" prot="private" static="no" mutable="no">
+        <type>VertexTransformingUPtr</type>
+        <definition>VertexTransformingUPtr castor3d::SceneRenderNodes::m_vertexTransform</definition>
+        <argsstring></argsstring>
+        <name>m_vertexTransform</name>
+        <qualifiedname>castor3d::SceneRenderNodes::m_vertexTransform</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="111" column="24" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="111" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d1/d69/a03834_1a1b953d0ef156f450b6814a6d94e852bc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::GaussianBlur::GaussianBlur</definition>
-        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePass const &amp;previousPass, RenderDevice const &amp;device, castor::String const &amp;category, castor::String const &amp;prefix, crg::ImageViewIdArray const &amp;views, crg::ImageViewId const &amp;intermediateView, uint32_t kernelSize)</argsstring>
-        <name>GaussianBlur</name>
-        <qualifiedname>castor3d::GaussianBlur::GaussianBlur</qualifiedname>
+      <memberdef kind="function" id="d1/d69/a03834_1ab1c964fb284696a9647ca8e33d84a312" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SceneRenderNodes::SceneRenderNodes</definition>
+        <argsstring>(Scene const &amp;scene)</argsstring>
+        <name>SceneRenderNodes</name>
+        <qualifiedname>castor3d::SceneRenderNodes::SceneRenderNodes</qualifiedname>
         <param>
-          <type>crg::FramePassGroup &amp;</type>
-          <declname>graph</declname>
+          <type><ref refid="d8/d12/a04694" kindref="compound">Scene</ref> const &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="44" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d69/a03834_1ad5d364548be59446f1a4ae027e080876" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SceneRenderNodes::~SceneRenderNodes</definition>
+        <argsstring>()</argsstring>
+        <name>~SceneRenderNodes</name>
+        <qualifiedname>castor3d::SceneRenderNodes::~SceneRenderNodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="45" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d69/a03834_1a21cd1530f8c6257bcb41ee370f0cb9d0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneRenderNodes::registerCuller</definition>
+        <argsstring>(SceneCuller &amp;culler)</argsstring>
+        <name>registerCuller</name>
+        <qualifiedname>castor3d::SceneRenderNodes::registerCuller</qualifiedname>
+        <param>
+          <type><ref refid="d3/d94/a03698" kindref="compound">SceneCuller</ref> &amp;</type>
+          <declname>culler</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="47" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d69/a03834_1ada6b3fa56c2c09da9cdc67d03b998367" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneRenderNodes::unregisterCuller</definition>
+        <argsstring>(SceneCuller &amp;culler)</argsstring>
+        <name>unregisterCuller</name>
+        <qualifiedname>castor3d::SceneRenderNodes::unregisterCuller</qualifiedname>
+        <param>
+          <type><ref refid="d3/d94/a03698" kindref="compound">SceneCuller</ref> &amp;</type>
+          <declname>culler</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="48" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d69/a03834_1a524ae6b3f2e9a79a6f8c871a43ad80df" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneRenderNodes::clear</definition>
+        <argsstring>()</argsstring>
+        <name>clear</name>
+        <qualifiedname>castor3d::SceneRenderNodes::clear</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="49" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d69/a03834_1ab379f91ba869bcd440c763f27fd11784" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dd/d51/a03842" kindref="compound">SubmeshRenderNode</ref> &amp;</type>
+        <definition>C3D_API SubmeshRenderNode &amp; castor3d::SceneRenderNodes::createNode</definition>
+        <argsstring>(Pass &amp;pass, Submesh &amp;data, Geometry &amp;instance, AnimatedMesh *mesh, AnimatedSkeleton *skeleton)</argsstring>
+        <name>createNode</name>
+        <qualifiedname>castor3d::SceneRenderNodes::createNode</qualifiedname>
+        <param>
+          <type><ref refid="d7/d8a/a02830" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
         </param>
         <param>
-          <type>crg::FramePass const &amp;</type>
-          <declname>previousPass</declname>
+          <type><ref refid="d4/d60/a03446" kindref="compound">Submesh</ref> &amp;</type>
+          <declname>data</declname>
         </param>
         <param>
-          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
+          <type><ref refid="d5/d03/a04582" kindref="compound">Geometry</ref> &amp;</type>
+          <declname>instance</declname>
         </param>
         <param>
-          <type>castor::String const &amp;</type>
-          <declname>category</declname>
+          <type><ref refid="dd/dc6/a04462" kindref="compound">AnimatedMesh</ref> *</type>
+          <declname>mesh</declname>
         </param>
         <param>
-          <type>castor::String const &amp;</type>
-          <declname>prefix</declname>
+          <type><ref refid="d1/d6c/a04478" kindref="compound">AnimatedSkeleton</ref> *</type>
+          <declname>skeleton</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="50" column="28"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d69/a03834_1ae2ef34dab43a2a989112be1f23c81621" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="de/de0/a03814" kindref="compound">BillboardRenderNode</ref> &amp;</type>
+        <definition>C3D_API BillboardRenderNode &amp; castor3d::SceneRenderNodes::createNode</definition>
+        <argsstring>(Pass &amp;pass, BillboardBase &amp;instance)</argsstring>
+        <name>createNode</name>
+        <qualifiedname>castor3d::SceneRenderNodes::createNode</qualifiedname>
+        <param>
+          <type><ref refid="d7/d8a/a02830" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
         </param>
         <param>
-          <type>crg::ImageViewIdArray const &amp;</type>
-          <declname>views</declname>
+          <type><ref refid="d1/d2a/a04566" kindref="compound">BillboardBase</ref> &amp;</type>
+          <declname>instance</declname>
         </param>
-        <param>
-          <type>crg::ImageViewId const &amp;</type>
-          <declname>intermediateView</declname>
-        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="55" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d69/a03834_1a9de88c3f056fa067ba96adf9ffa5a89d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dd/d51/a03842" kindref="compound">SubmeshRenderNode</ref> const *</type>
+        <definition>C3D_API SubmeshRenderNode const  * castor3d::SceneRenderNodes::getSubmeshNode</definition>
+        <argsstring>(uint32_t nodeId)</argsstring>
+        <name>getSubmeshNode</name>
+        <qualifiedname>castor3d::SceneRenderNodes::getSubmeshNode</qualifiedname>
         <param>
           <type>uint32_t</type>
-          <declname>kernelSize</declname>
+          <declname>nodeId</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">graph</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render graph. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">previousPass</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The previous frame pass. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">category</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pass category name. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">prefix</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pass name&apos;s prefix. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">views</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The source and destination textures. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">intermediateView</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The view receiving the intermediate blur. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">kernelSize</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The kernel coefficients count. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="50" column="9"/>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="57" column="34"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d69/a03834_1a58eafbb83c781a99a6f4c90e8dd5090e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::GaussianBlur::GaussianBlur</definition>
-        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePass const &amp;previousPass, RenderDevice const &amp;device, castor::String const &amp;category, castor::String const &amp;prefix, crg::ImageViewIdArray const &amp;views, uint32_t kernelSize)</argsstring>
-        <name>GaussianBlur</name>
-        <qualifiedname>castor3d::GaussianBlur::GaussianBlur</qualifiedname>
-        <param>
-          <type>crg::FramePassGroup &amp;</type>
-          <declname>graph</declname>
-        </param>
-        <param>
-          <type>crg::FramePass const &amp;</type>
-          <declname>previousPass</declname>
-        </param>
-        <param>
-          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>category</declname>
-        </param>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>prefix</declname>
-        </param>
-        <param>
-          <type>crg::ImageViewIdArray const &amp;</type>
-          <declname>views</declname>
-        </param>
+      <memberdef kind="function" id="d1/d69/a03834_1a3e3dd2976367540e3ac13bce74e7d1aa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="de/de0/a03814" kindref="compound">BillboardRenderNode</ref> const *</type>
+        <definition>C3D_API BillboardRenderNode const  * castor3d::SceneRenderNodes::getBillboardNode</definition>
+        <argsstring>(uint32_t nodeId)</argsstring>
+        <name>getBillboardNode</name>
+        <qualifiedname>castor3d::SceneRenderNodes::getBillboardNode</qualifiedname>
         <param>
           <type>uint32_t</type>
-          <declname>kernelSize</declname>
+          <declname>nodeId</declname>
         </param>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">graph</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render graph. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">previousPass</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The previous frame pass. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">category</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pass category name. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">prefix</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pass name&apos;s prefix. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">views</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The source and destination textures. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">kernelSize</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The kernel coefficients count. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="78" column="9"/>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="58" column="36"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d69/a03834_1a58c2cf08533cd3d35b199862b125b38c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::GaussianBlur::GaussianBlur</definition>
-        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePass const &amp;previousPass, RenderDevice const &amp;device, castor::String const &amp;category, castor::String const &amp;prefix, crg::ImageViewId const &amp;view, uint32_t kernelSize)</argsstring>
-        <name>GaussianBlur</name>
-        <qualifiedname>castor3d::GaussianBlur::GaussianBlur</qualifiedname>
+      <memberdef kind="function" id="d1/d69/a03834_1a5da278b03369b92609ee43314826abfe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneRenderNodes::reportPassChange</definition>
+        <argsstring>(Submesh &amp;data, Geometry &amp;instance, Material const &amp;oldMaterial, Material const &amp;newMaterial)</argsstring>
+        <name>reportPassChange</name>
+        <qualifiedname>castor3d::SceneRenderNodes::reportPassChange</qualifiedname>
         <param>
-          <type>crg::FramePassGroup &amp;</type>
+          <type><ref refid="d4/d60/a03446" kindref="compound">Submesh</ref> &amp;</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d03/a04582" kindref="compound">Geometry</ref> &amp;</type>
+          <declname>instance</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d11/a02814" kindref="compound">Material</ref> const &amp;</type>
+          <declname>oldMaterial</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d11/a02814" kindref="compound">Material</ref> const &amp;</type>
+          <declname>newMaterial</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="59" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d69/a03834_1a3b3cde74e1ccae2ddffd7d7759acf7af" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneRenderNodes::reportPassChange</definition>
+        <argsstring>(BillboardBase &amp;billboard, Material const &amp;oldMaterial, Material const &amp;newMaterial)</argsstring>
+        <name>reportPassChange</name>
+        <qualifiedname>castor3d::SceneRenderNodes::reportPassChange</qualifiedname>
+        <param>
+          <type><ref refid="d1/d2a/a04566" kindref="compound">BillboardBase</ref> &amp;</type>
+          <declname>billboard</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d11/a02814" kindref="compound">Material</ref> const &amp;</type>
+          <declname>oldMaterial</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d11/a02814" kindref="compound">Material</ref> const &amp;</type>
+          <declname>newMaterial</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="63" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d69/a03834_1aba7cb7618d0a2dc7481d822eb76441fc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneRenderNodes::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::SceneRenderNodes::update</qualifiedname>
+        <param>
+          <type><ref refid="df/d4e/a04094" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="66" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d69/a03834_1aae15f63631fdd89ca1e06ff84a36f654" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneRenderNodes::update</definition>
+        <argsstring>(GpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::SceneRenderNodes::update</qualifiedname>
+        <param>
+          <type><ref refid="d4/da2/a04102" kindref="compound">GpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="67" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d69/a03834_1abc06ae22c636176c5c40b5a47bf24670" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> crg::FramePass const &amp;</type>
+        <definition>C3D_API crg::FramePass const  &amp; castor3d::SceneRenderNodes::createVertexTransformPass</definition>
+        <argsstring>(crg::FrameGraph &amp;graph)</argsstring>
+        <name>createVertexTransformPass</name>
+        <qualifiedname>castor3d::SceneRenderNodes::createVertexTransformPass</qualifiedname>
+        <param>
+          <type>crg::FrameGraph &amp;</type>
           <declname>graph</declname>
         </param>
-        <param>
-          <type>crg::FramePass const &amp;</type>
-          <declname>previousPass</declname>
-        </param>
-        <param>
-          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>category</declname>
-        </param>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>prefix</declname>
-        </param>
-        <param>
-          <type>crg::ImageViewId const &amp;</type>
-          <declname>view</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>kernelSize</declname>
-        </param>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">graph</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render graph. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">previousPass</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The previous frame pass. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">category</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pass category name. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">prefix</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pass name&apos;s prefix. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">view</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The source and destination texture. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">kernelSize</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The kernel coefficients count. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="105" column="9"/>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="69" column="31"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d69/a03834_1afa81eccee07c6555eed6f32654e9deec" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::GaussianBlur::GaussianBlur</definition>
-        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePass const &amp;previousPass, RenderDevice const &amp;device, castor::String const &amp;category, castor::String const &amp;prefix, crg::ImageViewId const &amp;view, crg::ImageViewId const &amp;intermediateView, uint32_t kernelSize)</argsstring>
-        <name>GaussianBlur</name>
-        <qualifiedname>castor3d::GaussianBlur::GaussianBlur</qualifiedname>
-        <param>
-          <type>crg::FramePassGroup &amp;</type>
-          <declname>graph</declname>
-        </param>
-        <param>
-          <type>crg::FramePass const &amp;</type>
-          <declname>previousPass</declname>
-        </param>
-        <param>
-          <type><ref refid="df/de5/a03966" kindref="compound">RenderDevice</ref> const &amp;</type>
-          <declname>device</declname>
-        </param>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>category</declname>
-        </param>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>prefix</declname>
-        </param>
-        <param>
-          <type>crg::ImageViewId const &amp;</type>
-          <declname>view</declname>
-        </param>
-        <param>
-          <type>crg::ImageViewId const &amp;</type>
-          <declname>intermediateView</declname>
-        </param>
-        <param>
-          <type>uint32_t</type>
-          <declname>kernelSize</declname>
-        </param>
+      <memberdef kind="function" id="d1/d69/a03834_1ace4c873a85b167a87eca23469296709d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::SceneRenderNodes::hasNodes</definition>
+        <argsstring>() const</argsstring>
+        <name>hasNodes</name>
+        <qualifiedname>castor3d::SceneRenderNodes::hasNodes</qualifiedname>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">graph</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The render graph. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">previousPass</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The previous frame pass. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">device</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The GPU device. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">category</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pass category name. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">prefix</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The pass name&apos;s prefix. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">view</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The source and destination texture. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">intermediateView</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The view receiving the intermediate blur. </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">kernelSize</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The kernel coefficients count. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="134" column="9"/>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="71" column="6" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="71" bodyend="75"/>
       </memberdef>
-      <memberdef kind="function" id="d1/d69/a03834_1af2e216aa9efeb3c908b1545ed2579a98" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::GaussianBlur::accept</definition>
-        <argsstring>(PipelineVisitorBase &amp;visitor)</argsstring>
-        <name>accept</name>
-        <qualifiedname>castor3d::GaussianBlur::accept</qualifiedname>
-        <param>
-          <type><ref refid="dc/dbb/a03262" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
-          <declname>visitor</declname>
-        </param>
+      <memberdef kind="function" id="d1/d69/a03834_1a85310421bcca0e96f69b8e375b7e21a6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Buffer&lt; <ref refid="d4/d69/a05166" kindref="compound">ModelBufferConfiguration</ref> &gt; const &amp;</type>
+        <definition>ashes::Buffer&lt; ModelBufferConfiguration &gt; const  &amp; castor3d::SceneRenderNodes::getModelBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>getModelBuffer</name>
+        <qualifiedname>castor3d::SceneRenderNodes::getModelBuffer</qualifiedname>
         <briefdescription>
-<para>Visitor acceptance function. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername>visitor</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The ... visitor. </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Render/Passes/GaussianBlur.hpp" line="145" column="14"/>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="77" column="22" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="77" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d69/a03834_1a400586d1bd292459b8ef9991e9eaa7aa" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Buffer&lt; <ref refid="d2/dc4/a05134" kindref="compound">BillboardUboConfiguration</ref> &gt; const &amp;</type>
+        <definition>ashes::Buffer&lt; BillboardUboConfiguration &gt; const  &amp; castor3d::SceneRenderNodes::getBillboardsBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>getBillboardsBuffer</name>
+        <qualifiedname>castor3d::SceneRenderNodes::getBillboardsBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="82" column="22" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="82" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d69/a03834_1a67d980dd9b3c14e751dbdaa417e163e4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d1/d69/a03834_1a26fc89cde3c457f34382889d4ea63adb" kindref="member">NodesPtrFlagsMapT</ref>&lt; <ref refid="dd/d51/a03842" kindref="compound">SubmeshRenderNode</ref> &gt; const &amp;</type>
+        <definition>NodesPtrFlagsMapT&lt; SubmeshRenderNode &gt; const  &amp; castor3d::SceneRenderNodes::getSubmeshNodes</definition>
+        <argsstring>() const</argsstring>
+        <name>getSubmeshNodes</name>
+        <qualifiedname>castor3d::SceneRenderNodes::getSubmeshNodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="87" column="26" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="87" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d69/a03834_1aa2066d1e24ceb33f09ba096d0bfc7786" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d1/d69/a03834_1a26fc89cde3c457f34382889d4ea63adb" kindref="member">NodesPtrFlagsMapT</ref>&lt; <ref refid="de/de0/a03814" kindref="compound">BillboardRenderNode</ref> &gt; const &amp;</type>
+        <definition>NodesPtrFlagsMapT&lt; BillboardRenderNode &gt; const  &amp; castor3d::SceneRenderNodes::getBillboardNodes</definition>
+        <argsstring>() const</argsstring>
+        <name>getBillboardNodes</name>
+        <qualifiedname>castor3d::SceneRenderNodes::getBillboardNodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="92" column="26" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="92" bodyend="95"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -758,53 +623,64 @@
     </detaileddescription>
     <inheritancegraph>
       <node id="1">
-        <label>castor3d::GaussianBlur</label>
+        <label>castor3d::SceneRenderNodes</label>
         <link refid="d1/d69/a03834"/>
         <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
       <node id="2">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <label>castor::OwnedBy&lt; Scene const &gt;</label>
       </node>
     </inheritancegraph>
     <collaborationgraph>
       <node id="1">
-        <label>castor3d::GaussianBlur</label>
+        <label>castor3d::SceneRenderNodes</label>
         <link refid="d1/d69/a03834"/>
         <childnode refid="2" relation="public-inheritance">
         </childnode>
       </node>
       <node id="2">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <label>castor::OwnedBy&lt; Scene const &gt;</label>
       </node>
     </collaborationgraph>
-    <location file="Render/Passes/GaussianBlur.hpp" line="24" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="26" bodyend="192"/>
+    <location file="Render/Node/SceneRenderNodes.hpp" line="27" column="1" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="29" bodyend="112"/>
     <listofallmembers>
-      <member refid="d1/d69/a03834_1af2e216aa9efeb3c908b1545ed2579a98" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>accept</name></member>
-      <member refid="d1/d69/a03834_1a3ea0db3cb529a51262383c2989e1db5b" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>Coefficients</name></member>
-      <member refid="d1/d69/a03834_1ad4e5e21985b62833eb4f0dbf94a7626d" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>CoefficientsCount</name></member>
-      <member refid="d1/d69/a03834_1ad4e5e92fc3459d70640cdc903ecc179b" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>Config</name></member>
-      <member refid="d1/d69/a03834_1a1b953d0ef156f450b6814a6d94e852bc" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>GaussianBlur</name></member>
-      <member refid="d1/d69/a03834_1a58eafbb83c781a99a6f4c90e8dd5090e" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>GaussianBlur</name></member>
-      <member refid="d1/d69/a03834_1a58c2cf08533cd3d35b199862b125b38c" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>GaussianBlur</name></member>
-      <member refid="d1/d69/a03834_1afa81eccee07c6555eed6f32654e9deec" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>GaussianBlur</name></member>
-      <member refid="d1/d69/a03834_1a68f253e5790c042fdd8e5a00746a68a6" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>getLastPass</name></member>
-      <member refid="d1/d69/a03834_1a757e0e97a10cd6401ca91bbea7e69973" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_blurUbo</name></member>
-      <member refid="d1/d69/a03834_1ab30654eaf6f1313920c4e73b7f740379" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_device</name></member>
-      <member refid="d1/d69/a03834_1a8d2b56bb09601c8fb3697b292ccbe1d0" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_format</name></member>
-      <member refid="d1/d69/a03834_1a6253944f00d689355fa2b940e694b0b5" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_intermediateView</name></member>
-      <member refid="d1/d69/a03834_1a203f1d1f86b229ade84bc64c486dbe78" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_kernel</name></member>
-      <member refid="d1/d69/a03834_1a34f37b843f71759abddfcba257c9256d" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_lastPass</name></member>
-      <member refid="d1/d69/a03834_1a76c1c568e11817eab9b28da639250dec" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_pixelShaderX</name></member>
-      <member refid="d1/d69/a03834_1abd15274041d5579021c9097389453a69" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_pixelShaderY</name></member>
-      <member refid="d1/d69/a03834_1a1913346dc6541fd391ac9c55610966c1" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_prefix</name></member>
-      <member refid="d1/d69/a03834_1a4a3efe193043cbf7963ad5c8de9739e4" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_size</name></member>
-      <member refid="d1/d69/a03834_1a0d61f67c0385ae9f43ef9e2afa136ae2" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_sources</name></member>
-      <member refid="d1/d69/a03834_1a9288c9b20182e196f404d6a914fcce22" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_stagesX</name></member>
-      <member refid="d1/d69/a03834_1a6c304dadbb7637d55823a0b6fe1c92f0" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_stagesY</name></member>
-      <member refid="d1/d69/a03834_1a418fc9a816389c81981f3a078ed5af09" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_vertexShader</name></member>
-      <member refid="d1/d69/a03834_1af2348a695a12bfe432775545bf4838d3" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>MaxCoefficients</name></member>
-      <member refid="d1/d69/a03834_1ab2202e518ace50ccc9e2d3330396db0b" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>TextureSize</name></member>
+      <member refid="d1/d69/a03834_1a524ae6b3f2e9a79a6f8c871a43ad80df" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>clear</name></member>
+      <member refid="d1/d69/a03834_1ab379f91ba869bcd440c763f27fd11784" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>createNode</name></member>
+      <member refid="d1/d69/a03834_1ae2ef34dab43a2a989112be1f23c81621" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>createNode</name></member>
+      <member refid="d1/d69/a03834_1abc06ae22c636176c5c40b5a47bf24670" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>createVertexTransformPass</name></member>
+      <member refid="d1/d69/a03834_1a3e3dd2976367540e3ac13bce74e7d1aa" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>getBillboardNode</name></member>
+      <member refid="d1/d69/a03834_1aa2066d1e24ceb33f09ba096d0bfc7786" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>getBillboardNodes</name></member>
+      <member refid="d1/d69/a03834_1a400586d1bd292459b8ef9991e9eaa7aa" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>getBillboardsBuffer</name></member>
+      <member refid="d1/d69/a03834_1a85310421bcca0e96f69b8e375b7e21a6" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>getModelBuffer</name></member>
+      <member refid="d1/d69/a03834_1a9de88c3f056fa067ba96adf9ffa5a89d" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>getSubmeshNode</name></member>
+      <member refid="d1/d69/a03834_1a67d980dd9b3c14e751dbdaa417e163e4" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>getSubmeshNodes</name></member>
+      <member refid="d1/d69/a03834_1ace4c873a85b167a87eca23469296709d" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>hasNodes</name></member>
+      <member refid="d1/d69/a03834_1a7045646362b195e24626bb070ebed3ec" prot="private" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>m_billboardNodes</name></member>
+      <member refid="d1/d69/a03834_1a08fd61fbe5df447b392916d882bb8314" prot="private" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>m_billboardsBuffer</name></member>
+      <member refid="d1/d69/a03834_1abf349f1753d5c9a7c1f937c902f97e7d" prot="private" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>m_billboardsData</name></member>
+      <member refid="d1/d69/a03834_1af5536559bb80017a7e870ae41742b2ea" prot="private" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>m_cullers</name></member>
+      <member refid="d1/d69/a03834_1a2d3398a23e211c94c7a39a7f692799ca" prot="private" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>m_device</name></member>
+      <member refid="d1/d69/a03834_1a3536321271c30ef61799020fe01e9ce2" prot="private" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>m_dirty</name></member>
+      <member refid="d1/d69/a03834_1a423ff5f7134726007a5ad11b8f821d10" prot="private" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>m_modelsBuffer</name></member>
+      <member refid="d1/d69/a03834_1aacaa6187aab6ef98265fe241916975f8" prot="private" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>m_modelsData</name></member>
+      <member refid="d1/d69/a03834_1a3aebddcfd1390b0c439005343725358e" prot="private" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>m_nodeId</name></member>
+      <member refid="d1/d69/a03834_1a30b1f283777483e173bb89097558e0cd" prot="private" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>m_nodesData</name></member>
+      <member refid="d1/d69/a03834_1a6eda63edca5905fce9088a21301f27c8" prot="private" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>m_nodesMutex</name></member>
+      <member refid="d1/d69/a03834_1a1eb56e65edae02871745ef50a4d3cfa0" prot="private" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>m_submeshNodes</name></member>
+      <member refid="d1/d69/a03834_1a8f80033be1cc8aae5a7950c523a91409" prot="private" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>m_timerRenderNodes</name></member>
+      <member refid="d1/d69/a03834_1af6eac675c0aedf0a3240e9e50a05957f" prot="private" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>m_vertexTransform</name></member>
+      <member refid="d1/d69/a03834_1a3daa48602d8a8676a76dbf5fa38c034d" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>NodeDataArray</name></member>
+      <member refid="d1/d69/a03834_1a26fc89cde3c457f34382889d4ea63adb" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>NodesPtrFlagsMapT</name></member>
+      <member refid="d1/d69/a03834_1abacbf267c230bb0cf8b2b6a63c8869c5" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>NodesPtrMapT</name></member>
+      <member refid="d1/d69/a03834_1a21cd1530f8c6257bcb41ee370f0cb9d0" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>registerCuller</name></member>
+      <member refid="d1/d69/a03834_1a5da278b03369b92609ee43314826abfe" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>reportPassChange</name></member>
+      <member refid="d1/d69/a03834_1a3b3cde74e1ccae2ddffd7d7759acf7af" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>reportPassChange</name></member>
+      <member refid="d1/d69/a03834_1ab1c964fb284696a9647ca8e33d84a312" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>SceneRenderNodes</name></member>
+      <member refid="d1/d69/a03834_1ada6b3fa56c2c09da9cdc67d03b998367" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>unregisterCuller</name></member>
+      <member refid="d1/d69/a03834_1aba7cb7618d0a2dc7481d822eb76441fc" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>update</name></member>
+      <member refid="d1/d69/a03834_1aae15f63631fdd89ca1e06ff84a36f654" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>update</name></member>
+      <member refid="d1/d69/a03834_1ad5d364548be59446f1a4ae027e080876" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes</scope><name>~SceneRenderNodes</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::GBufferBase Class Reference</title>
+<title>Castor3D: castor3d::PostFxPlugin Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,101 +42,122 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dc/df4/a01401.html">castor3d</a></li><li class="navelem"><a class="el" href="../../da/d35/a03682.html">GBufferBase</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../da/d35/a03682.html">PostFxPlugin</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="../../d1/d7a/a03679.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">castor3d::GBufferBase Class Reference</div></div>
+  <div class="headertitle"><div class="title">castor3d::PostFxPlugin Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;GBuffer.hpp&gt;</code></p>
+<p><code>#include &lt;PostFxPlugin.hpp&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for castor3d::GBufferBase:</div>
+Inheritance diagram for castor3d::PostFxPlugin:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../d7/d40/a03681.png" border="0" usemap="#acastor3d_1_1GBufferBase_inherit__map" alt="Inheritance graph"/></div>
-<map name="acastor3d_1_1GBufferBase_inherit__map" id="acastor3d_1_1GBufferBase_inherit__map">
-<area shape="rect" title=" " alt="" coords="161,234,315,261"/>
-<area shape="rect" href="../../d4/d5e/a03686.html" title=" " alt="" coords="635,103,765,144"/>
-<area shape="rect" href="../../d4/d5e/a03686.html" title=" " alt="" coords="635,5,765,47"/>
-<area shape="rect" href="../../d4/d5e/a03686.html" title=" " alt="" coords="635,259,765,300"/>
-<area shape="rect" href="../../d4/d5e/a03686.html" title=" " alt="" coords="635,357,765,399"/>
-<area shape="rect" href="../../d4/d5e/a03686.html" title=" " alt="" coords="635,176,765,217"/>
-<area shape="rect" href="../../d4/d5e/a03686.html" title=" " alt="" coords="364,175,495,216"/>
-<area shape="rect" title=" " alt="" coords="5,234,112,261"/>
-<area shape="rect" href="../../df/dce/a04214.html" title=" " alt="" coords="823,110,998,137"/>
-<area shape="rect" href="../../dd/ddd/a03738.html" title=" " alt="" coords="819,5,1002,47"/>
-<area shape="rect" href="../../dd/ddf/a04270.html" title=" " alt="" coords="815,266,1007,293"/>
-<area shape="rect" href="../../dc/ddd/a04146.html" title=" " alt="" coords="817,365,1005,391"/>
-<area shape="rect" href="../../d2/dfc/a04310.html" title=" " alt="" coords="821,176,1000,217"/>
+<div class="center"><img src="../../d7/d40/a03681.png" border="0" usemap="#acastor3d_1_1PostFxPlugin_inherit__map" alt="Inheritance graph"/></div>
+<map name="acastor3d_1_1PostFxPlugin_inherit__map" id="acastor3d_1_1PostFxPlugin_inherit__map">
+<area shape="rect" title=" " alt="" coords="19,155,178,181"/>
+<area shape="rect" href="../../d6/d35/a03670.html" title=" " alt="" coords="41,80,157,107"/>
+<area shape="rect" title=" " alt="" coords="5,5,192,32"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
-Collaboration diagram for castor3d::GBufferBase:</div>
+Collaboration diagram for castor3d::PostFxPlugin:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../df/d98/a03680.png" border="0" usemap="#acastor3d_1_1GBufferBase_coll__map" alt="Collaboration graph"/></div>
-<map name="acastor3d_1_1GBufferBase_coll__map" id="acastor3d_1_1GBufferBase_coll__map">
-<area shape="rect" title=" " alt="" coords="31,363,185,389"/>
-<area shape="rect" title=" " alt="" coords="5,273,112,300"/>
-<area shape="rect" href="../../df/de5/a03966.html" title=" " alt="" coords="137,273,295,300"/>
-<area shape="rect" href="../../d7/d34/a04078.html" title=" " alt="" coords="25,184,191,211"/>
-<area shape="rect" title=" " alt="" coords="15,95,201,121"/>
-<area shape="rect" title=" " alt="" coords="216,184,395,211"/>
-<area shape="rect" href="../../de/d88/a03958.html" title=" " alt="" coords="227,95,379,121"/>
-<area shape="rect" title=" " alt="" coords="403,95,517,121"/>
-<area shape="rect" title=" " alt="" coords="441,5,479,32"/>
+<div class="center"><img src="../../df/d98/a03680.png" border="0" usemap="#acastor3d_1_1PostFxPlugin_coll__map" alt="Collaboration graph"/></div>
+<map name="acastor3d_1_1PostFxPlugin_coll__map" id="acastor3d_1_1PostFxPlugin_coll__map">
+<area shape="rect" title=" " alt="" coords="19,155,178,181"/>
+<area shape="rect" href="../../d6/d35/a03670.html" title=" " alt="" coords="41,80,157,107"/>
+<area shape="rect" title=" " alt="" coords="5,5,192,32"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac2a0555c9c4435ec570e938862bebed4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d35/a03682.html#ac2a0555c9c4435ec570e938862bebed4">GBufferBase</a> (<a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const &amp;device, castor::String name)</td></tr>
-<tr class="separator:ac2a0555c9c4435ec570e938862bebed4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6c7248eb5e09b8074f4ed61caf7c3cc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d35/a03682.html#ad6c7248eb5e09b8074f4ed61caf7c3cc">PostFxPlugin</a> (castor::DynamicLibrarySPtr library, <a class="el" href="../../d9/db1/a02718.html">Engine</a> *engine)</td></tr>
+<tr class="memdesc:ad6c7248eb5e09b8074f4ed61caf7c3cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../da/d35/a03682.html#ad6c7248eb5e09b8074f4ed61caf7c3cc">More...</a><br /></td></tr>
+<tr class="separator:ad6c7248eb5e09b8074f4ed61caf7c3cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4f0be8edcbed2da3d64cd1524fd35a1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d35/a03682.html#ae4f0be8edcbed2da3d64cd1524fd35a1">~PostFxPlugin</a> () override</td></tr>
+<tr class="memdesc:ae4f0be8edcbed2da3d64cd1524fd35a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="../../da/d35/a03682.html#ae4f0be8edcbed2da3d64cd1524fd35a1">More...</a><br /></td></tr>
+<tr class="separator:ae4f0be8edcbed2da3d64cd1524fd35a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_a03670"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a03670')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../d6/d35/a03670.html">castor3d::Plugin</a></td></tr>
+<tr class="memitem:af7f881d3d5d32c7044c1b93164754c64 inherit pub_methods_a03670"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d35/a03670.html#af7f881d3d5d32c7044c1b93164754c64">~Plugin</a> ()=0</td></tr>
+<tr class="memdesc:af7f881d3d5d32c7044c1b93164754c64 inherit pub_methods_a03670"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="../../d6/d35/a03670.html#af7f881d3d5d32c7044c1b93164754c64">More...</a><br /></td></tr>
+<tr class="separator:af7f881d3d5d32c7044c1b93164754c64 inherit pub_methods_a03670"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21c697a5bb64dc09df8604a595ed4ef1 inherit pub_methods_a03670"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d35/a03670.html#a21c697a5bb64dc09df8604a595ed4ef1">getRequiredVersion</a> (<a class="el" href="../../d4/d1b/a03282.html">Version</a> &amp;version) const</td></tr>
+<tr class="memdesc:a21c697a5bb64dc09df8604a595ed4ef1 inherit pub_methods_a03670"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the required version for the plug-in to work correctly.  <a href="../../d6/d35/a03670.html#a21c697a5bb64dc09df8604a595ed4ef1">More...</a><br /></td></tr>
+<tr class="separator:a21c697a5bb64dc09df8604a595ed4ef1 inherit pub_methods_a03670"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76345cfa813957198ab5a735b3bf2c84 inherit pub_methods_a03670"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d35/a03670.html#a76345cfa813957198ab5a735b3bf2c84">getName</a> () const</td></tr>
+<tr class="memdesc:a76345cfa813957198ab5a735b3bf2c84 inherit pub_methods_a03670"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the plug-in name.  <a href="../../d6/d35/a03670.html#a76345cfa813957198ab5a735b3bf2c84">More...</a><br /></td></tr>
+<tr class="separator:a76345cfa813957198ab5a735b3bf2c84 inherit pub_methods_a03670"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfce87274549c3458e705ec6f49f2466 inherit pub_methods_a03670"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../da/dab/a01362.html#aecf8304db7dd49c874ec216f139e5f67">PluginType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d35/a03670.html#adfce87274549c3458e705ec6f49f2466">getType</a> () const</td></tr>
+<tr class="memdesc:adfce87274549c3458e705ec6f49f2466 inherit pub_methods_a03670"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the plug-in type.  <a href="../../d6/d35/a03670.html#adfce87274549c3458e705ec6f49f2466">More...</a><br /></td></tr>
+<tr class="separator:adfce87274549c3458e705ec6f49f2466 inherit pub_methods_a03670"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr class="memitem:ab6a02e40714688d1b16f73babe193ab0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../dc/df4/a01401.html#a174cedaf5dfc3b47caa264f344279af2">TexturePtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d35/a03682.html#ab6a02e40714688d1b16f73babe193ab0">doCreateTexture</a> (crg::ResourceHandler &amp;handler, castor::String const &amp;name, VkImageCreateFlags createFlags, VkExtent3D const &amp;size, uint32_t layerCount, uint32_t mipLevels, VkFormat format, VkImageUsageFlags usageFlags, VkBorderColor const &amp;borderColor) const</td></tr>
-<tr class="separator:ab6a02e40714688d1b16f73babe193ab0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8f1e00a8f0994e604b5946e0d4290617"><td class="memTemplParams" colspan="2">template&lt;typename TextureEnumT &gt; </td></tr>
-<tr class="memitem:a8f1e00a8f0994e604b5946e0d4290617"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../dc/df4/a01401.html#a6d52e18d7b3bd01ecab19a6f87d7a6ad">TextureArray</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../da/d35/a03682.html#a8f1e00a8f0994e604b5946e0d4290617">doCreateTextures</a> (crg::ResourceHandler &amp;handler, std::array&lt; <a class="el" href="../../dc/df4/a01401.html#a174cedaf5dfc3b47caa264f344279af2">TexturePtr</a>, size_t(TextureEnumT::eCount) &gt; const &amp;inputs, castor::String const &amp;prefix, VkImageCreateFlags createFlags, castor::Size const &amp;size, uint32_t layerCount=1u) const</td></tr>
-<tr class="memdesc:a8f1e00a8f0994e604b5946e0d4290617"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialises 2D or 2D array g-buffer textures.  <a href="../../da/d35/a03682.html#a8f1e00a8f0994e604b5946e0d4290617">More...</a><br /></td></tr>
-<tr class="separator:a8f1e00a8f0994e604b5946e0d4290617"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a414a84d6f30e8e7790b13b2c5c856e10"><td class="memTemplParams" colspan="2">template&lt;typename TextureEnumT &gt; </td></tr>
-<tr class="memitem:a414a84d6f30e8e7790b13b2c5c856e10"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../dc/df4/a01401.html#a6d52e18d7b3bd01ecab19a6f87d7a6ad">TextureArray</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../da/d35/a03682.html#a414a84d6f30e8e7790b13b2c5c856e10">doCreateTextures</a> (crg::ResourceHandler &amp;handler, std::array&lt; <a class="el" href="../../dc/df4/a01401.html#a174cedaf5dfc3b47caa264f344279af2">TexturePtr</a>, size_t(TextureEnumT::eCount) &gt; const &amp;inputs, castor::String const &amp;prefix, VkImageCreateFlags createFlags, VkExtent3D const &amp;size) const</td></tr>
-<tr class="memdesc:a414a84d6f30e8e7790b13b2c5c856e10"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialises 3D g-buffer textures.  <a href="../../da/d35/a03682.html#a414a84d6f30e8e7790b13b2c5c856e10">More...</a><br /></td></tr>
-<tr class="separator:a414a84d6f30e8e7790b13b2c5c856e10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a6a6c1cc25d50ed6f67a2dc0fc546c5a3"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d35/a03682.html#a6a6c1cc25d50ed6f67a2dc0fc546c5a3">Plugin</a></td></tr>
+<tr class="separator:a6a6c1cc25d50ed6f67a2dc0fc546c5a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
-<tr class="memitem:ab731619028fdd98c8aa483c39e1318e0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d35/a03682.html#ab731619028fdd98c8aa483c39e1318e0">m_device</a></td></tr>
-<tr class="separator:ab731619028fdd98c8aa483c39e1318e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pub_types_a03670"><td colspan="2" onclick="javascript:toggleInherit('pub_types_a03670')"><img src="../../closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="../../d6/d35/a03670.html">castor3d::Plugin</a></td></tr>
+<tr class="memitem:a54268afa0fd4a75c485f0ba59f108e65 inherit pub_types_a03670"><td class="memItemLeft" align="right" valign="top">typedef OnLoadFunction *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d35/a03670.html#a54268afa0fd4a75c485f0ba59f108e65">POnLoadFunction</a></td></tr>
+<tr class="separator:a54268afa0fd4a75c485f0ba59f108e65 inherit pub_types_a03670"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a186ebd8d8fe1eb8b52b7909347ce0fb4 inherit pub_types_a03670"><td class="memItemLeft" align="right" valign="top">typedef OnUnloadFunction *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d35/a03670.html#a186ebd8d8fe1eb8b52b7909347ce0fb4">POnUnloadFunction</a></td></tr>
+<tr class="separator:a186ebd8d8fe1eb8b52b7909347ce0fb4 inherit pub_types_a03670"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7caed7d5f2bd1d34409227a1e3b09bf inherit pub_types_a03670"><td class="memItemLeft" align="right" valign="top">typedef GetTypeFunction *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d35/a03670.html#aa7caed7d5f2bd1d34409227a1e3b09bf">PGetTypeFunction</a></td></tr>
+<tr class="separator:aa7caed7d5f2bd1d34409227a1e3b09bf inherit pub_types_a03670"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a571d2dbc7a601aca467b1b5d8a62d997 inherit pub_types_a03670"><td class="memItemLeft" align="right" valign="top">typedef GetRequiredVersionFunction *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d35/a03670.html#a571d2dbc7a601aca467b1b5d8a62d997">PGetRequiredVersionFunction</a></td></tr>
+<tr class="separator:a571d2dbc7a601aca467b1b5d8a62d997 inherit pub_types_a03670"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3f82c3bbc1d49880fda39cdc7ea2015 inherit pub_types_a03670"><td class="memItemLeft" align="right" valign="top">typedef GetNameFunction *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d35/a03670.html#af3f82c3bbc1d49880fda39cdc7ea2015">PGetNameFunction</a></td></tr>
+<tr class="separator:af3f82c3bbc1d49880fda39cdc7ea2015 inherit pub_types_a03670"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_a03670"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_a03670')"><img src="../../closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="../../d6/d35/a03670.html">castor3d::Plugin</a></td></tr>
+<tr class="memitem:ab1d7f300c810facf8bc08fceffff8c2b inherit pro_methods_a03670"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d35/a03670.html#ab1d7f300c810facf8bc08fceffff8c2b">Plugin</a> (<a class="el" href="../../da/dab/a01362.html#aecf8304db7dd49c874ec216f139e5f67">PluginType</a> type, castor::DynamicLibrarySPtr library, <a class="el" href="../../d9/db1/a02718.html">Engine</a> &amp;engine)</td></tr>
+<tr class="memdesc:ab1d7f300c810facf8bc08fceffff8c2b inherit pro_methods_a03670"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../d6/d35/a03670.html#ab1d7f300c810facf8bc08fceffff8c2b">More...</a><br /></td></tr>
+<tr class="separator:ab1d7f300c810facf8bc08fceffff8c2b inherit pro_methods_a03670"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6eee27fad0b4dc406af8dac993816e1e inherit pro_methods_a03670"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d35/a03670.html#a6eee27fad0b4dc406af8dac993816e1e">load</a> ()</td></tr>
+<tr class="memdesc:a6eee27fad0b4dc406af8dac993816e1e inherit pro_methods_a03670"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls load function for the plug-in.  <a href="../../d6/d35/a03670.html#a6eee27fad0b4dc406af8dac993816e1e">More...</a><br /></td></tr>
+<tr class="separator:a6eee27fad0b4dc406af8dac993816e1e inherit pro_methods_a03670"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1062d08432032ec7d502e7941b4e0df4 inherit pro_methods_a03670"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d35/a03670.html#a1062d08432032ec7d502e7941b4e0df4">unload</a> ()</td></tr>
+<tr class="memdesc:a1062d08432032ec7d502e7941b4e0df4 inherit pro_methods_a03670"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls unload function for the plug-in.  <a href="../../d6/d35/a03670.html#a1062d08432032ec7d502e7941b4e0df4">More...</a><br /></td></tr>
+<tr class="separator:a1062d08432032ec7d502e7941b4e0df4 inherit pro_methods_a03670"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_a03670"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_a03670')"><img src="../../closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="../../d6/d35/a03670.html">castor3d::Plugin</a></td></tr>
+<tr class="memitem:a3bbb683c98da8be6cb7eadd5ba677f18 inherit pro_attribs_a03670"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d6/d35/a03670.html#a571d2dbc7a601aca467b1b5d8a62d997">PGetRequiredVersionFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d35/a03670.html#a3bbb683c98da8be6cb7eadd5ba677f18">m_pfnGetRequiredVersion</a></td></tr>
+<tr class="separator:a3bbb683c98da8be6cb7eadd5ba677f18 inherit pro_attribs_a03670"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b06730be035851689f1f52a9d37a839 inherit pro_attribs_a03670"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d6/d35/a03670.html#af3f82c3bbc1d49880fda39cdc7ea2015">PGetNameFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d35/a03670.html#a5b06730be035851689f1f52a9d37a839">m_pfnGetName</a></td></tr>
+<tr class="separator:a5b06730be035851689f1f52a9d37a839 inherit pro_attribs_a03670"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4b1c74ae527aef8847250d27eb3acf0 inherit pro_attribs_a03670"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d6/d35/a03670.html#a54268afa0fd4a75c485f0ba59f108e65">POnLoadFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d35/a03670.html#ae4b1c74ae527aef8847250d27eb3acf0">m_pfnOnLoad</a></td></tr>
+<tr class="separator:ae4b1c74ae527aef8847250d27eb3acf0 inherit pro_attribs_a03670"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d94afb97a6d885ed7d2885dafeda0dc inherit pro_attribs_a03670"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d6/d35/a03670.html#a186ebd8d8fe1eb8b52b7909347ce0fb4">POnUnloadFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d35/a03670.html#a5d94afb97a6d885ed7d2885dafeda0dc">m_pfnOnUnload</a></td></tr>
+<tr class="separator:a5d94afb97a6d885ed7d2885dafeda0dc inherit pro_attribs_a03670"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad988a5d361f28b80ba19dd2caac722e1 inherit pro_attribs_a03670"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../da/dab/a01362.html#aecf8304db7dd49c874ec216f139e5f67">PluginType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d35/a03670.html#ad988a5d361f28b80ba19dd2caac722e1">m_type</a></td></tr>
+<tr class="separator:ad988a5d361f28b80ba19dd2caac722e1 inherit pro_attribs_a03670"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac89ef3325c33aebd3c45ff41a3912d25 inherit pro_attribs_a03670"><td class="memItemLeft" align="right" valign="top">castor::DynamicLibraryWPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d35/a03670.html#ac89ef3325c33aebd3c45ff41a3912d25">m_library</a></td></tr>
+<tr class="separator:ac89ef3325c33aebd3c45ff41a3912d25 inherit pro_attribs_a03670"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ac2a0555c9c4435ec570e938862bebed4" name="ac2a0555c9c4435ec570e938862bebed4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac2a0555c9c4435ec570e938862bebed4">&#9670;&nbsp;</a></span>GBufferBase()</h2>
+<a id="ad6c7248eb5e09b8074f4ed61caf7c3cc" name="ad6c7248eb5e09b8074f4ed61caf7c3cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6c7248eb5e09b8074f4ed61caf7c3cc">&#9670;&nbsp;</a></span>PostFxPlugin()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::GBufferBase::GBufferBase </td>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::PostFxPlugin::PostFxPlugin </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const &amp;&#160;</td>
-          <td class="paramname"><em>device</em>, </td>
+          <td class="paramtype">castor::DynamicLibrarySPtr&#160;</td>
+          <td class="paramname"><em>library</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">castor::String&#160;</td>
-          <td class="paramname"><em>name</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="../../d9/db1/a02718.html">Engine</a> *&#160;</td>
+          <td class="paramname"><em>engine</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -144,283 +165,49 @@ Protected Attributes</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="ab6a02e40714688d1b16f73babe193ab0" name="ab6a02e40714688d1b16f73babe193ab0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab6a02e40714688d1b16f73babe193ab0">&#9670;&nbsp;</a></span>doCreateTexture()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../dc/df4/a01401.html#a174cedaf5dfc3b47caa264f344279af2">TexturePtr</a> castor3d::GBufferBase::doCreateTexture </td>
-          <td>(</td>
-          <td class="paramtype">crg::ResourceHandler &amp;&#160;</td>
-          <td class="paramname"><em>handler</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">castor::String const &amp;&#160;</td>
-          <td class="paramname"><em>name</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">VkImageCreateFlags&#160;</td>
-          <td class="paramname"><em>createFlags</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">VkExtent3D const &amp;&#160;</td>
-          <td class="paramname"><em>size</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>layerCount</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>mipLevels</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">VkFormat&#160;</td>
-          <td class="paramname"><em>format</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">VkImageUsageFlags&#160;</td>
-          <td class="paramname"><em>usageFlags</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">VkBorderColor const &amp;&#160;</td>
-          <td class="paramname"><em>borderColor</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="reference">Referenced by <a class="el" href="../../da/d35/a03682.html#a8f1e00a8f0994e604b5946e0d4290617">doCreateTextures()</a>.</p>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../da/d35/a03682_ab6a02e40714688d1b16f73babe193ab0_icgraph.png" border="0" usemap="#ada/d35/a03682_ab6a02e40714688d1b16f73babe193ab0_icgraph" alt=""/></div>
-<map name="ada/d35/a03682_ab6a02e40714688d1b16f73babe193ab0_icgraph" id="ada/d35/a03682_ab6a02e40714688d1b16f73babe193ab0_icgraph">
-<area shape="rect" title=" " alt="" coords="207,5,360,47"/>
-<area shape="rect" href="../../da/d35/a03682.html#a8f1e00a8f0994e604b5946e0d4290617" title="Initialises 2D or 2D array g&#45;buffer textures." alt="" coords="5,5,159,47"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="a8f1e00a8f0994e604b5946e0d4290617" name="a8f1e00a8f0994e604b5946e0d4290617"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8f1e00a8f0994e604b5946e0d4290617">&#9670;&nbsp;</a></span>doCreateTextures() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename TextureEnumT &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dc/df4/a01401.html#a6d52e18d7b3bd01ecab19a6f87d7a6ad">TextureArray</a> castor3d::GBufferBase::doCreateTextures </td>
-          <td>(</td>
-          <td class="paramtype">crg::ResourceHandler &amp;&#160;</td>
-          <td class="paramname"><em>handler</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::array&lt; <a class="el" href="../../dc/df4/a01401.html#a174cedaf5dfc3b47caa264f344279af2">TexturePtr</a>, size_t(TextureEnumT::eCount) &gt; const &amp;&#160;</td>
-          <td class="paramname"><em>inputs</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">castor::String const &amp;&#160;</td>
-          <td class="paramname"><em>prefix</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">VkImageCreateFlags&#160;</td>
-          <td class="paramname"><em>createFlags</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">castor::Size const &amp;&#160;</td>
-          <td class="paramname"><em>size</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>layerCount</em> = <code>1u</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Initialises 2D or 2D array g-buffer textures. </p>
+<p>Constructor. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">handler</td><td>The render graph resource handler. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">inputs</td><td>The already existing images. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">prefix</td><td>The buffer's textures name's prefix. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">createFlags</td><td>The creation flags for images remaining to create. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>The g-buffer's dimensions. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">layerCount</td><td>The layers count for the g-buffer. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">library</td><td>The shared library holding the plug-in </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">engine</td><td>The engine </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="reference">References <a class="el" href="../../da/d35/a03682.html#ab6a02e40714688d1b16f73babe193ab0">doCreateTexture()</a>, <a class="el" href="../../dc/df4/a01401.html#a310bbc9023bc8ec3b78d94ef23421445">castor3d::getBorderColor()</a>, <a class="el" href="../../dc/df4/a01401.html#aec292e4f7ec2a742db2c935481c3a5c7">castor3d::getFormat()</a>, <a class="el" href="../../dc/df4/a01401.html#aadc934dfad2b989fcd2d304d20cbbe56">castor3d::getMipLevels()</a>, <a class="el" href="../../dc/df4/a01401.html#a5691da845a89609231c90071fccdfc20">castor3d::getName()</a>, and <a class="el" href="../../dc/df4/a01401.html#af90ca5367065ae57592a43200b7c5549">castor3d::getUsageFlags()</a>.</p>
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../da/d35/a03682_a8f1e00a8f0994e604b5946e0d4290617_cgraph.png" border="0" usemap="#ada/d35/a03682_a8f1e00a8f0994e604b5946e0d4290617_cgraph" alt=""/></div>
-<map name="ada/d35/a03682_a8f1e00a8f0994e604b5946e0d4290617_cgraph" id="ada/d35/a03682_a8f1e00a8f0994e604b5946e0d4290617_cgraph">
-<area shape="rect" title="Initialises 2D or 2D array g&#45;buffer textures." alt="" coords="5,140,159,181"/>
-<area shape="rect" href="../../da/d35/a03682.html#ab6a02e40714688d1b16f73babe193ab0" title=" " alt="" coords="213,5,367,47"/>
-<area shape="rect" href="../../dc/df4/a01401.html#a310bbc9023bc8ec3b78d94ef23421445" title=" " alt="" coords="207,71,373,98"/>
-<area shape="rect" href="../../dc/df4/a01401.html#aec292e4f7ec2a742db2c935481c3a5c7" title=" " alt="" coords="221,122,359,149"/>
-<area shape="rect" href="../../dc/df4/a01401.html#aadc934dfad2b989fcd2d304d20cbbe56" title=" " alt="" coords="213,173,367,199"/>
-<area shape="rect" href="../../dc/df4/a01401.html#a5691da845a89609231c90071fccdfc20" title=" " alt="" coords="224,223,356,250"/>
-<area shape="rect" href="../../dc/df4/a01401.html#af90ca5367065ae57592a43200b7c5549" title=" " alt="" coords="207,274,373,301"/>
-</map>
-</div>
-
 </div>
 </div>
-<a id="a414a84d6f30e8e7790b13b2c5c856e10" name="a414a84d6f30e8e7790b13b2c5c856e10"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a414a84d6f30e8e7790b13b2c5c856e10">&#9670;&nbsp;</a></span>doCreateTextures() <span class="overload">[2/2]</span></h2>
+<a id="ae4f0be8edcbed2da3d64cd1524fd35a1" name="ae4f0be8edcbed2da3d64cd1524fd35a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4f0be8edcbed2da3d64cd1524fd35a1">&#9670;&nbsp;</a></span>~PostFxPlugin()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;typename TextureEnumT &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dc/df4/a01401.html#a6d52e18d7b3bd01ecab19a6f87d7a6ad">TextureArray</a> castor3d::GBufferBase::doCreateTextures </td>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::PostFxPlugin::~PostFxPlugin </td>
           <td>(</td>
-          <td class="paramtype">crg::ResourceHandler &amp;&#160;</td>
-          <td class="paramname"><em>handler</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
-          <td class="paramtype">std::array&lt; <a class="el" href="../../dc/df4/a01401.html#a174cedaf5dfc3b47caa264f344279af2">TexturePtr</a>, size_t(TextureEnumT::eCount) &gt; const &amp;&#160;</td>
-          <td class="paramname"><em>inputs</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">castor::String const &amp;&#160;</td>
-          <td class="paramname"><em>prefix</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">VkImageCreateFlags&#160;</td>
-          <td class="paramname"><em>createFlags</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">VkExtent3D const &amp;&#160;</td>
-          <td class="paramname"><em>size</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Initialises 3D g-buffer textures. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">handler</td><td>The render graph resource handler. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">inputs</td><td>The already existing images. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">prefix</td><td>The buffer's textures name's prefix. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">createFlags</td><td>The creation flags for images remaining to create. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>The g-buffer's dimensions. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="reference">References <a class="el" href="../../da/d35/a03682.html#ab6a02e40714688d1b16f73babe193ab0">doCreateTexture()</a>, <a class="el" href="../../dc/df4/a01401.html#a310bbc9023bc8ec3b78d94ef23421445">castor3d::getBorderColor()</a>, <a class="el" href="../../dc/df4/a01401.html#aec292e4f7ec2a742db2c935481c3a5c7">castor3d::getFormat()</a>, <a class="el" href="../../dc/df4/a01401.html#aadc934dfad2b989fcd2d304d20cbbe56">castor3d::getMipLevels()</a>, <a class="el" href="../../dc/df4/a01401.html#a5691da845a89609231c90071fccdfc20">castor3d::getName()</a>, and <a class="el" href="../../dc/df4/a01401.html#af90ca5367065ae57592a43200b7c5549">castor3d::getUsageFlags()</a>.</p>
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../da/d35/a03682_a414a84d6f30e8e7790b13b2c5c856e10_cgraph.png" border="0" usemap="#ada/d35/a03682_a414a84d6f30e8e7790b13b2c5c856e10_cgraph" alt=""/></div>
-<map name="ada/d35/a03682_a414a84d6f30e8e7790b13b2c5c856e10_cgraph" id="ada/d35/a03682_a414a84d6f30e8e7790b13b2c5c856e10_cgraph">
-<area shape="rect" title="Initialises 3D g&#45;buffer textures." alt="" coords="5,140,159,181"/>
-<area shape="rect" href="../../da/d35/a03682.html#ab6a02e40714688d1b16f73babe193ab0" title=" " alt="" coords="213,5,367,47"/>
-<area shape="rect" href="../../dc/df4/a01401.html#a310bbc9023bc8ec3b78d94ef23421445" title=" " alt="" coords="207,71,373,98"/>
-<area shape="rect" href="../../dc/df4/a01401.html#aec292e4f7ec2a742db2c935481c3a5c7" title=" " alt="" coords="221,122,359,149"/>
-<area shape="rect" href="../../dc/df4/a01401.html#aadc934dfad2b989fcd2d304d20cbbe56" title=" " alt="" coords="213,173,367,199"/>
-<area shape="rect" href="../../dc/df4/a01401.html#a5691da845a89609231c90071fccdfc20" title=" " alt="" coords="224,223,356,250"/>
-<area shape="rect" href="../../dc/df4/a01401.html#af90ca5367065ae57592a43200b7c5549" title=" " alt="" coords="207,274,373,301"/>
-</map>
-</div>
+<p>Destructor. </p>
 
 </div>
 </div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="ab731619028fdd98c8aa483c39e1318e0" name="ab731619028fdd98c8aa483c39e1318e0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab731619028fdd98c8aa483c39e1318e0">&#9670;&nbsp;</a></span>m_device</h2>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a id="a6a6c1cc25d50ed6f67a2dc0fc546c5a3" name="a6a6c1cc25d50ed6f67a2dc0fc546c5a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a6c1cc25d50ed6f67a2dc0fc546c5a3">&#9670;&nbsp;</a></span>Plugin</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -429,12 +216,12 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../df/de5/a03966.html">RenderDevice</a> const&amp; castor3d::GBufferBase::m_device</td>
+          <td class="memname">friend class <a class="el" href="../../d6/d35/a03670.html">Plugin</a></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -442,12 +229,12 @@ Here is the call graph for this function:</div>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>Render/<a class="el" href="../../d0/d5c/a00668.html">GBuffer.hpp</a></li>
+<li>Plugin/<a class="el" href="../../da/d46/a00665.html">PostFxPlugin.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 15:34:55 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:50 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

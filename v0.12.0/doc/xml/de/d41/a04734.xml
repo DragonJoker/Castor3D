@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="de/d41/a04734" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SssProfileBuffer::SssProfileDataPtr</compoundname>
+    <includes local="no">SssProfileBuffer.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/d41/a04734_1adb626454d387c63291614191d33efa8b" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/dea/a04726" kindref="compound">Data</ref> *</type>
+        <definition>Data* castor3d::SssProfileBuffer::SssProfileDataPtr::sssInfo</definition>
+        <argsstring></argsstring>
+        <name>sssInfo</name>
+        <qualifiedname>castor3d::SssProfileBuffer::SssProfileDataPtr::sssInfo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="43" column="7" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d41/a04734_1a6cc38f085b0fac9df12dfebbee758a88" prot="public" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="d4/dea/a04726" kindref="compound">Data</ref>, 10u &gt; *</type>
+        <definition>std::array&lt; Data, 10u &gt;* castor3d::SssProfileBuffer::SssProfileDataPtr::transmittanceProfile</definition>
+        <argsstring></argsstring>
+        <name>transmittanceProfile</name>
+        <qualifiedname>castor3d::SssProfileBuffer::SssProfileDataPtr::transmittanceProfile</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="44" column="13" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="5">
+        <label>T</label>
+      </node>
+      <node id="3">
+        <label>std::array&lt; castor3d::SssProfileBuffer::Data, 10u &gt;</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; castor3d::SssProfileBuffer::Data, 10u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SssProfileBuffer::Data</label>
+        <link refid="d4/dea/a04726"/>
+      </node>
+      <node id="1">
+        <label>castor3d::SssProfileBuffer::SssProfileDataPtr</label>
+        <link refid="de/d41/a04734"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>sssInfo</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>transmittanceProfile</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="5" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="41" column="1" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="42" bodyend="45"/>
+    <listofallmembers>
+      <member refid="de/d41/a04734_1adb626454d387c63291614191d33efa8b" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer::SssProfileDataPtr</scope><name>sssInfo</name></member>
+      <member refid="de/d41/a04734_1a6cc38f085b0fac9df12dfebbee758a88" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer::SssProfileDataPtr</scope><name>transmittanceProfile</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

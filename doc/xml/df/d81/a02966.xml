@@ -6,7 +6,7 @@
     <includes local="no">TextureView.hpp</includes>
       <sectiondef kind="user-defined">
       <memberdef kind="function" id="df/d81/a02966_1a23d51aa4ef71376be9d02616c9716ec6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String</type>
         <definition>C3D_API castor::String castor3d::TextureView::toString</definition>
         <argsstring>() const</argsstring>
         <name>toString</name>
@@ -21,7 +21,7 @@
         <location file="Material/Texture/TextureView.hpp" line="107" column="24"/>
       </memberdef>
       <memberdef kind="function" id="df/d81/a02966_1a598069fdcbc8649e43e2a2eacd1abe7b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
         <definition>C3D_API bool castor3d::TextureView::hasBuffer</definition>
         <argsstring>() const</argsstring>
         <name>hasBuffer</name>
@@ -35,7 +35,7 @@
         <location file="Material/Texture/TextureView.hpp" line="108" column="14"/>
       </memberdef>
       <memberdef kind="function" id="df/d81/a02966_1a50625f88a23ebe8a8c34695dd5d536f9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::ImageLayout::ConstBuffer</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::ImageLayout::ConstBuffer</type>
         <definition>C3D_API castor::ImageLayout::ConstBuffer castor3d::TextureView::getBuffer</definition>
         <argsstring>() const</argsstring>
         <name>getBuffer</name>
@@ -49,7 +49,7 @@
         <location file="Material/Texture/TextureView.hpp" line="109" column="42"/>
       </memberdef>
       <memberdef kind="function" id="df/d81/a02966_1ab22dfb3e1ef2ab96d3f89436d4a4c41e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::ImageLayout::Buffer</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::ImageLayout::Buffer</type>
         <definition>C3D_API castor::ImageLayout::Buffer castor3d::TextureView::getBuffer</definition>
         <argsstring>()</argsstring>
         <name>getBuffer</name>
@@ -63,7 +63,7 @@
         <location file="Material/Texture/TextureView.hpp" line="110" column="37"/>
       </memberdef>
       <memberdef kind="function" id="df/d81/a02966_1acb3ace2cd79ad618634855c71e4b648a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
         <definition>C3D_API uint32_t castor3d::TextureView::getLevelCount</definition>
         <argsstring>() const</argsstring>
         <name>getLevelCount</name>
@@ -77,7 +77,7 @@
         <location file="Material/Texture/TextureView.hpp" line="111" column="18"/>
       </memberdef>
       <memberdef kind="function" id="df/d81/a02966_1a2209e17a07363fd590781e4f17cdc34e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::ImageView const &amp;</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::ImageView const &amp;</type>
         <definition>C3D_API ashes::ImageView const  &amp; castor3d::TextureView::getSampledView</definition>
         <argsstring>() const</argsstring>
         <name>getSampledView</name>
@@ -91,7 +91,7 @@
         <location file="Material/Texture/TextureView.hpp" line="112" column="33"/>
       </memberdef>
       <memberdef kind="function" id="df/d81/a02966_1a6f4f7d85c8b684410bb33b450e89355d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::ImageView const &amp;</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::ImageView const &amp;</type>
         <definition>C3D_API ashes::ImageView const  &amp; castor3d::TextureView::getTargetView</definition>
         <argsstring>() const</argsstring>
         <name>getTargetView</name>
@@ -370,7 +370,7 @@
       </sectiondef>
       <sectiondef kind="public-func">
       <memberdef kind="function" id="df/d81/a02966_1a242996dc8acc5f1cced3a7e559e89b4e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
         <definition>C3D_API castor3d::TextureView::TextureView</definition>
         <argsstring>(TextureLayout &amp;layout, ashes::ImageViewCreateInfo info, uint32_t index, castor::String debugName)</argsstring>
         <name>TextureView</name>
@@ -435,7 +435,7 @@
         <location file="Material/Texture/TextureView.hpp" line="39" column="9"/>
       </memberdef>
       <memberdef kind="function" id="df/d81/a02966_1a0d3639e7797b28a1769d0fe4037a4f0c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
         <definition>C3D_API bool castor3d::TextureView::initialise</definition>
         <argsstring>()</argsstring>
         <name>initialise</name>
@@ -453,7 +453,7 @@
         <location file="Material/Texture/TextureView.hpp" line="51" column="14"/>
       </memberdef>
       <memberdef kind="function" id="df/d81/a02966_1a1f63d9840a0ebb4b5cf9af4cbebd70d0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
         <definition>C3D_API void castor3d::TextureView::update</definition>
         <argsstring>(VkImage image, uint32_t baseArrayLayer, uint32_t layerCount, uint32_t baseMipLevel, uint32_t levelCount)</argsstring>
         <name>update</name>
@@ -530,7 +530,7 @@
         <location file="Material/Texture/TextureView.hpp" line="68" column="14"/>
       </memberdef>
       <memberdef kind="function" id="df/d81/a02966_1a09a3274e7fa52b49c3a5d04170994d45" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
         <definition>C3D_API void castor3d::TextureView::update</definition>
         <argsstring>(VkExtent3D const &amp;extent, VkFormat format, uint32_t mipLevels, uint32_t arrayLayers)</argsstring>
         <name>update</name>
@@ -595,7 +595,7 @@
         <location file="Material/Texture/TextureView.hpp" line="87" column="14"/>
       </memberdef>
       <memberdef kind="function" id="df/d81/a02966_1a164958bb211db456e2ed5dd61205008c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
         <definition>C3D_API void castor3d::TextureView::cleanup</definition>
         <argsstring>()</argsstring>
         <name>cleanup</name>
@@ -612,7 +612,7 @@
       </sectiondef>
       <sectiondef kind="private-func">
       <memberdef kind="function" id="df/d81/a02966_1a3ca7d38e15cc6d0f3fdd3dcf58840227" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
         <definition>C3D_API void castor3d::TextureView::doUpdate</definition>
         <argsstring>(ashes::ImageViewCreateInfo info)</argsstring>
         <name>doUpdate</name>

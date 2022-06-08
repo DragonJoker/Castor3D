@@ -1,147 +1,115 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="d2/db1/a03646" kind="class" language="C++" prot="public">
-    <compoundname>castor3d::PostFxPlugin</compoundname>
-    <basecompoundref refid="dc/d12/a03634" prot="public" virt="non-virtual">castor3d::Plugin</basecompoundref>
-    <includes local="no">PostFxPlugin.hpp</includes>
-      <sectiondef kind="friend">
-      <memberdef kind="friend" id="d2/db1/a03646_1a6a6c1cc25d50ed6f67a2dc0fc546c5a3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>class</type>
-        <definition>friend class Plugin</definition>
+  <compounddef id="d2/db1/a03646" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::TextOverlay::DisplayableLine</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/db1/a03646_1a9f2ac2751fca1115467d7854ace59109" prot="public" static="no" mutable="no">
+        <type>castor::Point2d</type>
+        <definition>castor::Point2d castor3d::TextOverlay::DisplayableLine::m_position</definition>
         <argsstring></argsstring>
-        <name>Plugin</name>
-        <qualifiedname>castor3d::PostFxPlugin::Plugin</qualifiedname>
-        <param>
-          <type><ref refid="dc/d12/a03634" kindref="compound">Plugin</ref></type>
-        </param>
+        <name>m_position</name>
+        <qualifiedname>castor3d::TextOverlay::DisplayableLine::m_position</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The line position. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/PostFxPlugin.hpp" line="15" column="14" bodyfile="Plugin/PostFxPlugin.hpp" bodystart="15" bodyend="-1"/>
+        <location file="Overlay/TextOverlay.hpp" line="335" column="17" bodyfile="Overlay/TextOverlay.hpp" bodystart="335" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d2/db1/a03646_1ad6c7248eb5e09b8074f4ed61caf7c3cc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::PostFxPlugin::PostFxPlugin</definition>
-        <argsstring>(castor::DynamicLibrarySPtr library, Engine *engine)</argsstring>
-        <name>PostFxPlugin</name>
-        <qualifiedname>castor3d::PostFxPlugin::PostFxPlugin</qualifiedname>
-        <param>
-          <type>castor::DynamicLibrarySPtr</type>
-          <declname>library</declname>
-        </param>
-        <param>
-          <type><ref refid="d1/d3c/a02714" kindref="compound">Engine</ref> *</type>
-          <declname>engine</declname>
-        </param>
+      <memberdef kind="variable" id="d2/db1/a03646_1a52c971fa4e1dedc9e59f1f5fbc9d7732" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double castor3d::TextOverlay::DisplayableLine::m_width</definition>
+        <argsstring></argsstring>
+        <name>m_width</name>
+        <qualifiedname>castor3d::TextOverlay::DisplayableLine::m_width</qualifiedname>
         <briefdescription>
-<para>Constructor. </para>
         </briefdescription>
         <detaileddescription>
-<para><parameterlist kind="param"><parameteritem>
-<parameternamelist>
-<parametername direction="in">library</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The shared library holding the plug-in </para>
-</parameterdescription>
-</parameteritem>
-<parameteritem>
-<parameternamelist>
-<parametername direction="in">engine</parametername>
-</parameternamelist>
-<parameterdescription>
-<para>The engine </para>
-</parameterdescription>
-</parameteritem>
-</parameterlist>
-</para>
+<para>The line width. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/PostFxPlugin.hpp" line="28" column="9"/>
+        <location file="Overlay/TextOverlay.hpp" line="338" column="8" bodyfile="Overlay/TextOverlay.hpp" bodystart="338" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="d2/db1/a03646_1ae4f0be8edcbed2da3d64cd1524fd35a1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::PostFxPlugin::~PostFxPlugin</definition>
-        <argsstring>() override</argsstring>
-        <name>~PostFxPlugin</name>
-        <qualifiedname>castor3d::PostFxPlugin::~PostFxPlugin</qualifiedname>
+      <memberdef kind="variable" id="d2/db1/a03646_1a585cac610b44ac128b9615b98e774e83" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double castor3d::TextOverlay::DisplayableLine::m_height</definition>
+        <argsstring></argsstring>
+        <name>m_height</name>
+        <qualifiedname>castor3d::TextOverlay::DisplayableLine::m_height</qualifiedname>
         <briefdescription>
-<para>Destructor. </para>
         </briefdescription>
         <detaileddescription>
+<para>The line height. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Plugin/PostFxPlugin.hpp" line="36" column="9"/>
+        <location file="Overlay/TextOverlay.hpp" line="341" column="8" bodyfile="Overlay/TextOverlay.hpp" bodystart="341" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/db1/a03646_1ab266c8d211aa41fabf8e11af0b17f348" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; DisplayableChar &gt;</type>
+        <definition>std::vector&lt; DisplayableChar &gt; castor3d::TextOverlay::DisplayableLine::m_characters</definition>
+        <argsstring></argsstring>
+        <name>m_characters</name>
+        <qualifiedname>castor3d::TextOverlay::DisplayableLine::m_characters</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The displayable characters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="344" column="13" bodyfile="Overlay/TextOverlay.hpp" bodystart="344" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>A text line, along with its size and position. </para>
     </briefdescription>
     <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="date"><para>28/01/2016 </para>
+</simplesect>
+</para>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="2">
-        <label>castor3d::Plugin</label>
-        <link refid="dc/d12/a03634"/>
-        <childnode refid="3" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1">
-        <label>castor3d::PostFxPlugin</label>
-        <link refid="d2/db1/a03646"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
-      </node>
-    </inheritancegraph>
     <collaborationgraph>
-      <node id="2">
-        <label>castor3d::Plugin</label>
-        <link refid="dc/d12/a03634"/>
-        <childnode refid="3" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="1">
-        <label>castor3d::PostFxPlugin</label>
-        <link refid="d2/db1/a03646"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
+      <node id="5">
+        <label>T</label>
       </node>
       <node id="3">
-        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <label>castor3d::TextOverlay::DisplayableChar</label>
+      </node>
+      <node id="1">
+        <label>castor3d::TextOverlay::DisplayableLine</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_characters</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="5" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::vector&lt; DisplayableChar &gt;</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; DisplayableChar &gt;</edgelabel>
+        </childnode>
       </node>
     </collaborationgraph>
-    <location file="Plugin/PostFxPlugin.hpp" line="11" column="1" bodyfile="Plugin/PostFxPlugin.hpp" bodystart="13" bodyend="37"/>
+    <location file="Overlay/TextOverlay.hpp" line="331" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="332" bodyend="345"/>
     <listofallmembers>
-      <member refid="dc/d12/a03634_1a76345cfa813957198ab5a735b3bf2c84" prot="public" virt="non-virtual"><scope>castor3d::PostFxPlugin</scope><name>getName</name></member>
-      <member refid="dc/d12/a03634_1a21c697a5bb64dc09df8604a595ed4ef1" prot="public" virt="non-virtual"><scope>castor3d::PostFxPlugin</scope><name>getRequiredVersion</name></member>
-      <member refid="dc/d12/a03634_1adfce87274549c3458e705ec6f49f2466" prot="public" virt="non-virtual"><scope>castor3d::PostFxPlugin</scope><name>getType</name></member>
-      <member refid="dc/d12/a03634_1a6eee27fad0b4dc406af8dac993816e1e" prot="protected" virt="non-virtual"><scope>castor3d::PostFxPlugin</scope><name>load</name></member>
-      <member refid="dc/d12/a03634_1ac89ef3325c33aebd3c45ff41a3912d25" prot="protected" virt="non-virtual"><scope>castor3d::PostFxPlugin</scope><name>m_library</name></member>
-      <member refid="dc/d12/a03634_1a5b06730be035851689f1f52a9d37a839" prot="protected" virt="non-virtual"><scope>castor3d::PostFxPlugin</scope><name>m_pfnGetName</name></member>
-      <member refid="dc/d12/a03634_1a3bbb683c98da8be6cb7eadd5ba677f18" prot="protected" virt="non-virtual"><scope>castor3d::PostFxPlugin</scope><name>m_pfnGetRequiredVersion</name></member>
-      <member refid="dc/d12/a03634_1ae4b1c74ae527aef8847250d27eb3acf0" prot="protected" virt="non-virtual"><scope>castor3d::PostFxPlugin</scope><name>m_pfnOnLoad</name></member>
-      <member refid="dc/d12/a03634_1a5d94afb97a6d885ed7d2885dafeda0dc" prot="protected" virt="non-virtual"><scope>castor3d::PostFxPlugin</scope><name>m_pfnOnUnload</name></member>
-      <member refid="dc/d12/a03634_1ad988a5d361f28b80ba19dd2caac722e1" prot="protected" virt="non-virtual"><scope>castor3d::PostFxPlugin</scope><name>m_type</name></member>
-      <member refid="dc/d12/a03634_1af3f82c3bbc1d49880fda39cdc7ea2015" prot="public" virt="non-virtual"><scope>castor3d::PostFxPlugin</scope><name>PGetNameFunction</name></member>
-      <member refid="dc/d12/a03634_1a571d2dbc7a601aca467b1b5d8a62d997" prot="public" virt="non-virtual"><scope>castor3d::PostFxPlugin</scope><name>PGetRequiredVersionFunction</name></member>
-      <member refid="dc/d12/a03634_1aa7caed7d5f2bd1d34409227a1e3b09bf" prot="public" virt="non-virtual"><scope>castor3d::PostFxPlugin</scope><name>PGetTypeFunction</name></member>
-      <member refid="d2/db1/a03646_1a6a6c1cc25d50ed6f67a2dc0fc546c5a3" prot="private" virt="non-virtual"><scope>castor3d::PostFxPlugin</scope><name>Plugin</name></member>
-      <member refid="dc/d12/a03634_1ab1d7f300c810facf8bc08fceffff8c2b" prot="protected" virt="non-virtual" ambiguityscope="castor3d::Plugin::"><scope>castor3d::PostFxPlugin</scope><name>Plugin</name></member>
-      <member refid="dc/d12/a03634_1a54268afa0fd4a75c485f0ba59f108e65" prot="public" virt="non-virtual"><scope>castor3d::PostFxPlugin</scope><name>POnLoadFunction</name></member>
-      <member refid="dc/d12/a03634_1a186ebd8d8fe1eb8b52b7909347ce0fb4" prot="public" virt="non-virtual"><scope>castor3d::PostFxPlugin</scope><name>POnUnloadFunction</name></member>
-      <member refid="d2/db1/a03646_1ad6c7248eb5e09b8074f4ed61caf7c3cc" prot="public" virt="non-virtual"><scope>castor3d::PostFxPlugin</scope><name>PostFxPlugin</name></member>
-      <member refid="dc/d12/a03634_1a1062d08432032ec7d502e7941b4e0df4" prot="protected" virt="non-virtual"><scope>castor3d::PostFxPlugin</scope><name>unload</name></member>
-      <member refid="dc/d12/a03634_1af7f881d3d5d32c7044c1b93164754c64" prot="public" virt="pure-virtual"><scope>castor3d::PostFxPlugin</scope><name>~Plugin</name></member>
-      <member refid="d2/db1/a03646_1ae4f0be8edcbed2da3d64cd1524fd35a1" prot="public" virt="non-virtual"><scope>castor3d::PostFxPlugin</scope><name>~PostFxPlugin</name></member>
+      <member refid="d2/db1/a03646_1ab266c8d211aa41fabf8e11af0b17f348" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableLine</scope><name>m_characters</name></member>
+      <member refid="d2/db1/a03646_1a585cac610b44ac128b9615b98e774e83" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableLine</scope><name>m_height</name></member>
+      <member refid="d2/db1/a03646_1a9f2ac2751fca1115467d7854ace59109" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableLine</scope><name>m_position</name></member>
+      <member refid="d2/db1/a03646_1a52c971fa4e1dedc9e59f1f5fbc9d7732" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableLine</scope><name>m_width</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

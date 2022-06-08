@@ -48,7 +48,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/MiscellaneousModule.hpp" line="105" column="24" bodyfile="Miscellaneous/MiscellaneousModule.hpp" bodystart="105" bodyend="-1"/>
-        <referencedby refid="dc/d45/a03250_1a8c8521009541bfab4259af3a20fdab0c" compoundref="d9/de6/a00404" startline="117" endline="122">tex3D</referencedby>
+        <referencedby refid="dc/d45/a03250_1a8c8521009541bfab4259af3a20fdab0c" compoundref="db/d43/a00422" startline="117" endline="122">tex3D</referencedby>
       </memberdef>
       <memberdef kind="variable" id="dc/d45/a03250_1accb710b669eb34ca3bac4a7f46a537fe" prot="public" static="no" mutable="no">
         <type>bool</type>
@@ -64,7 +64,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/MiscellaneousModule.hpp" line="106" column="6" bodyfile="Miscellaneous/MiscellaneousModule.hpp" bodystart="106" bodyend="-1"/>
-        <referencedby refid="dc/d45/a03250_1a739d0bb92428ead96ecb4d7fa92ec4ab" compoundref="d9/de6/a00404" startline="124" endline="128">invert</referencedby>
+        <referencedby refid="dc/d45/a03250_1a739d0bb92428ead96ecb4d7fa92ec4ab" compoundref="db/d43/a00422" startline="124" endline="128">invert</referencedby>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-static-func">
@@ -109,7 +109,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/MiscellaneousModule.hpp" line="117" column="23" bodyfile="Miscellaneous/MiscellaneousModule.hpp" bodystart="117" bodyend="122"/>
-        <references refid="dc/d45/a03250_1a97468a3f18526c0f5968f0f84ee49a67" compoundref="d9/de6/a00404" startline="105">grid</references>
+        <references refid="dc/d45/a03250_1a97468a3f18526c0f5968f0f84ee49a67" compoundref="db/d43/a00422" startline="105">grid</references>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -130,7 +130,7 @@
         <inbodydescription>
         </inbodydescription>
         <location file="Miscellaneous/MiscellaneousModule.hpp" line="124" column="17" bodyfile="Miscellaneous/MiscellaneousModule.hpp" bodystart="124" bodyend="128"/>
-        <references refid="dc/d45/a03250_1accb710b669eb34ca3bac4a7f46a537fe" compoundref="d9/de6/a00404" startline="106">invertY</references>
+        <references refid="dc/d45/a03250_1accb710b669eb34ca3bac4a7f46a537fe" compoundref="db/d43/a00422" startline="106">invertY</references>
       </memberdef>
       </sectiondef>
     <briefdescription>

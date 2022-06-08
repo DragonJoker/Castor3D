@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dd/d0e/a04350" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::RenderCube::FacePipeline</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dd/d0e/a04350_1af01e034cb8e8f29d8acb9c2f1e0fa28f" prot="public" static="no" mutable="no">
+        <type>ashes::GraphicsPipelinePtr</type>
+        <definition>ashes::GraphicsPipelinePtr castor3d::RenderCube::FacePipeline::pipeline</definition>
+        <argsstring></argsstring>
+        <name>pipeline</name>
+        <qualifiedname>castor3d::RenderCube::FacePipeline::pipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/RenderCube.hpp" line="199" column="28" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="199" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d0e/a04350_1adddb10892fc8f084e7b65a9c0d52a3eb" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::RenderCube::FacePipeline::descriptorSet</definition>
+        <argsstring></argsstring>
+        <name>descriptorSet</name>
+        <qualifiedname>castor3d::RenderCube::FacePipeline::descriptorSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/RenderCube.hpp" line="200" column="25" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="200" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/ToTexture/RenderCube.hpp" line="197" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="198" bodyend="201"/>
+    <listofallmembers>
+      <member refid="dd/d0e/a04350_1adddb10892fc8f084e7b65a9c0d52a3eb" prot="public" virt="non-virtual"><scope>castor3d::RenderCube::FacePipeline</scope><name>descriptorSet</name></member>
+      <member refid="dd/d0e/a04350_1af01e034cb8e8f29d8acb9c2f1e0fa28f" prot="public" virt="non-virtual"><scope>castor3d::RenderCube::FacePipeline</scope><name>pipeline</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

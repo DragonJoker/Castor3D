@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d2/d68/a04158" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::SsaoBlurPass::RenderQuad</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">crg::RenderQuad</basecompoundref>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/d68/a04158_1a2327f595405404cd07c66012d44d49dd" prot="private" static="no" mutable="no">
+        <type><ref refid="da/dea/a04170" kindref="compound">SsaoConfig</ref> const  &amp;</type>
+        <definition>SsaoConfig const&amp; castor3d::SsaoBlurPass::RenderQuad::ssaoConfig</definition>
+        <argsstring></argsstring>
+        <name>ssaoConfig</name>
+        <qualifiedname>castor3d::SsaoBlurPass::RenderQuad::ssaoConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="135" column="19" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/d68/a04158_1a0c24a05a47788007779426bc635aacc7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::SsaoBlurPass::RenderQuad::RenderQuad</definition>
+        <argsstring>(crg::FramePass const &amp;pass, crg::GraphContext &amp;context, crg::RunnableGraph &amp;graph, crg::rq::Config rqConfig, crg::ru::Config ruConfig, SsaoConfig const &amp;ssaoConfig)</argsstring>
+        <name>RenderQuad</name>
+        <qualifiedname>castor3d::SsaoBlurPass::RenderQuad::RenderQuad</qualifiedname>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>crg::GraphContext &amp;</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>crg::RunnableGraph &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::rq::Config</type>
+          <declname>rqConfig</declname>
+        </param>
+        <param>
+          <type>crg::ru::Config</type>
+          <declname>ruConfig</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dea/a04170" kindref="compound">SsaoConfig</ref> const &amp;</type>
+          <declname>ssaoConfig</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="124" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d2/d68/a04158_1ae0615ef40b88c42e4279797516670802" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::SsaoBlurPass::RenderQuad::doGetPassIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>doGetPassIndex</name>
+        <qualifiedname>castor3d::SsaoBlurPass::RenderQuad::doGetPassIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="132" column="10"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::SsaoBlurPass::RenderQuad</label>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>crg::RenderQuad</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::SsaoBlurPass::RenderQuad</label>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>crg::RenderQuad</label>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Ssao/SsaoBlurPass.hpp" line="121" column="1" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="123" bodyend="136"/>
+    <listofallmembers>
+      <member refid="d2/d68/a04158_1ae0615ef40b88c42e4279797516670802" prot="protected" virt="non-virtual"><scope>castor3d::SsaoBlurPass::RenderQuad</scope><name>doGetPassIndex</name></member>
+      <member refid="d2/d68/a04158_1a0c24a05a47788007779426bc635aacc7" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass::RenderQuad</scope><name>RenderQuad</name></member>
+      <member refid="d2/d68/a04158_1a2327f595405404cd07c66012d44d49dd" prot="private" virt="non-virtual"><scope>castor3d::SsaoBlurPass::RenderQuad</scope><name>ssaoConfig</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

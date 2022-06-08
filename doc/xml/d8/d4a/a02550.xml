@@ -1,94 +1,66 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="d8/d4a/a02550" kind="struct" language="C++" prot="public">
-    <compoundname>castor3d::GpuBufferPackedAllocator</compoundname>
-    <includes local="no">GpuBufferPackedAllocator.hpp</includes>
-    <innerclass refid="d1/dfc/a02554" prot="private">castor3d::GpuBufferPackedAllocator::MemChunkCompare</innerclass>
+    <compoundname>castor3d::GpuBufferLinearAllocator</compoundname>
+    <includes local="no">GpuBufferLinearAllocator.hpp</includes>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="d8/d4a/a02550_1a698b14c9c43c39c82a3a1ae00a1476f5" prot="private" static="no" mutable="no">
-        <type>size_t</type>
-        <definition>size_t castor3d::GpuBufferPackedAllocator::m_allocatedSize</definition>
-        <argsstring></argsstring>
-        <name>m_allocatedSize</name>
-        <qualifiedname>castor3d::GpuBufferPackedAllocator::m_allocatedSize</qualifiedname>
-        <initializer>{}</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/GpuBufferPackedAllocator.hpp" line="77" column="8" bodyfile="Buffer/GpuBufferPackedAllocator.hpp" bodystart="77" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/d4a/a02550_1a588810cceb3ef6acfc149a9a5c237700" prot="private" static="no" mutable="no">
-        <type>size_t</type>
-        <definition>size_t castor3d::GpuBufferPackedAllocator::m_alignSize</definition>
+      <memberdef kind="variable" id="d8/d4a/a02550_1ac17f4ef74aba189cce377ac6f6194aaf" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::GpuBufferLinearAllocator::m_alignSize</definition>
         <argsstring></argsstring>
         <name>m_alignSize</name>
-        <qualifiedname>castor3d::GpuBufferPackedAllocator::m_alignSize</qualifiedname>
-        <initializer>{}</initializer>
+        <qualifiedname>castor3d::GpuBufferLinearAllocator::m_alignSize</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/GpuBufferPackedAllocator.hpp" line="78" column="8" bodyfile="Buffer/GpuBufferPackedAllocator.hpp" bodystart="78" bodyend="-1"/>
+        <location file="Buffer/GpuBufferLinearAllocator.hpp" line="79" column="10" bodyfile="Buffer/GpuBufferLinearAllocator.hpp" bodystart="79" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d8/d4a/a02550_1aa5fd53202d4534522b9861f20a738c60" prot="private" static="no" mutable="no">
-        <type>std::set&lt; <ref refid="d7/da8/a02522" kindref="compound">MemChunk</ref>, MemChunkCompare &gt;</type>
-        <definition>std::set&lt; MemChunk, MemChunkCompare &gt; castor3d::GpuBufferPackedAllocator::m_allocated</definition>
+      <memberdef kind="variable" id="d8/d4a/a02550_1a69d4de112221b9738ce969b3ef894f7c" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t castor3d::GpuBufferLinearAllocator::m_allocatedSize</definition>
         <argsstring></argsstring>
-        <name>m_allocated</name>
-        <qualifiedname>castor3d::GpuBufferPackedAllocator::m_allocated</qualifiedname>
+        <name>m_allocatedSize</name>
+        <qualifiedname>castor3d::GpuBufferLinearAllocator::m_allocatedSize</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/GpuBufferPackedAllocator.hpp" line="86" column="10" bodyfile="Buffer/GpuBufferPackedAllocator.hpp" bodystart="86" bodyend="-1"/>
+        <location file="Buffer/GpuBufferLinearAllocator.hpp" line="80" column="8" bodyfile="Buffer/GpuBufferLinearAllocator.hpp" bodystart="80" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="d8/d4a/a02550_1a3c4ebf7f340157c1320817674f5ff103" prot="private" static="no" mutable="no">
-        <type>std::vector&lt; <ref refid="d7/da8/a02522" kindref="compound">MemChunk</ref> &gt;</type>
-        <definition>std::vector&lt; MemChunk &gt; castor3d::GpuBufferPackedAllocator::m_deallocated</definition>
+      <memberdef kind="variable" id="d8/d4a/a02550_1a49b4187075c34cc6faabb9698d53ddfb" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; VkDeviceSize &gt;</type>
+        <definition>std::vector&lt; VkDeviceSize &gt; castor3d::GpuBufferLinearAllocator::m_free</definition>
         <argsstring></argsstring>
-        <name>m_deallocated</name>
-        <qualifiedname>castor3d::GpuBufferPackedAllocator::m_deallocated</qualifiedname>
+        <name>m_free</name>
+        <qualifiedname>castor3d::GpuBufferLinearAllocator::m_free</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/GpuBufferPackedAllocator.hpp" line="87" column="13" bodyfile="Buffer/GpuBufferPackedAllocator.hpp" bodystart="87" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="d8/d4a/a02550_1ab55026bebd2002a6380e4231c60d2abf" prot="private" static="no" mutable="no">
-        <type>VkDeviceSize</type>
-        <definition>VkDeviceSize castor3d::GpuBufferPackedAllocator::m_currentAllocated</definition>
-        <argsstring></argsstring>
-        <name>m_currentAllocated</name>
-        <qualifiedname>castor3d::GpuBufferPackedAllocator::m_currentAllocated</qualifiedname>
-        <initializer>{}</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="Buffer/GpuBufferPackedAllocator.hpp" line="88" column="14" bodyfile="Buffer/GpuBufferPackedAllocator.hpp" bodystart="88" bodyend="-1"/>
+        <location file="Buffer/GpuBufferLinearAllocator.hpp" line="81" column="13" bodyfile="Buffer/GpuBufferLinearAllocator.hpp" bodystart="81" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="d8/d4a/a02550_1a2302607af7c095820708242a46e17959" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor3d::GpuBufferPackedAllocator::GpuBufferPackedAllocator</definition>
-        <argsstring>(size_t size)</argsstring>
-        <name>GpuBufferPackedAllocator</name>
-        <qualifiedname>castor3d::GpuBufferPackedAllocator::GpuBufferPackedAllocator</qualifiedname>
+      <memberdef kind="function" id="d8/d4a/a02550_1aec711e82683606dd049d2b83223f2d8a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::GpuBufferLinearAllocator::GpuBufferLinearAllocator</definition>
+        <argsstring>(size_t count, uint32_t alignment)</argsstring>
+        <name>GpuBufferLinearAllocator</name>
+        <qualifiedname>castor3d::GpuBufferLinearAllocator::GpuBufferLinearAllocator</qualifiedname>
         <param>
           <type>size_t</type>
-          <declname>size</declname>
+          <declname>count</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>alignment</declname>
         </param>
         <briefdescription>
 <para>Constructor. </para>
@@ -96,10 +68,18 @@
         <detaileddescription>
 <para><parameterlist kind="param"><parameteritem>
 <parameternamelist>
-<parametername direction="in">size</parametername>
+<parametername direction="in">count</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>The allocated size. </para>
+<para>The allocator elements count. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">alignment</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The alignment for one element. </para>
 </parameterdescription>
 </parameteritem>
 </parameterlist>
@@ -107,14 +87,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/GpuBufferPackedAllocator.hpp" line="23" column="18"/>
+        <location file="Buffer/GpuBufferLinearAllocator.hpp" line="25" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="d8/d4a/a02550_1a8b77bc98a50fcc69fac4b9af0036a388" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkDeviceSize</type>
-        <definition>C3D_API VkDeviceSize castor3d::GpuBufferPackedAllocator::allocate</definition>
+      <memberdef kind="function" id="d8/d4a/a02550_1ac6864d8f358285ef7c9f04731aa50433" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkDeviceSize</type>
+        <definition>C3D_API VkDeviceSize castor3d::GpuBufferLinearAllocator::allocate</definition>
         <argsstring>(size_t size)</argsstring>
         <name>allocate</name>
-        <qualifiedname>castor3d::GpuBufferPackedAllocator::allocate</qualifiedname>
+        <qualifiedname>castor3d::GpuBufferLinearAllocator::allocate</qualifiedname>
         <param>
           <type>size_t</type>
           <declname>size</declname>
@@ -138,14 +118,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/GpuBufferPackedAllocator.hpp" line="34" column="22"/>
+        <location file="Buffer/GpuBufferLinearAllocator.hpp" line="37" column="22"/>
       </memberdef>
-      <memberdef kind="function" id="d8/d4a/a02550_1a616402f874bdc44eaa7fae848c852e1d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
-        <definition>C3D_API void castor3d::GpuBufferPackedAllocator::deallocate</definition>
+      <memberdef kind="function" id="d8/d4a/a02550_1a22925dc9c260c81b16e7e92cf2c975c8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::GpuBufferLinearAllocator::deallocate</definition>
         <argsstring>(VkDeviceSize pointer)</argsstring>
         <name>deallocate</name>
-        <qualifiedname>castor3d::GpuBufferPackedAllocator::deallocate</qualifiedname>
+        <qualifiedname>castor3d::GpuBufferLinearAllocator::deallocate</qualifiedname>
         <param>
           <type>VkDeviceSize</type>
           <declname>pointer</declname>
@@ -167,14 +147,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/GpuBufferPackedAllocator.hpp" line="43" column="14"/>
+        <location file="Buffer/GpuBufferLinearAllocator.hpp" line="46" column="14"/>
       </memberdef>
-      <memberdef kind="function" id="d8/d4a/a02550_1a8003c09271626dd23edc648d8a1da75a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="d8/d4a/a02550_1a271e7a5ac0c5aed27611421969f9da47" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>size_t</type>
-        <definition>size_t castor3d::GpuBufferPackedAllocator::getTotalSize</definition>
+        <definition>size_t castor3d::GpuBufferLinearAllocator::getTotalSize</definition>
         <argsstring>() const</argsstring>
         <name>getTotalSize</name>
-        <qualifiedname>castor3d::GpuBufferPackedAllocator::getTotalSize</qualifiedname>
+        <qualifiedname>castor3d::GpuBufferLinearAllocator::getTotalSize</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -184,14 +164,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/GpuBufferPackedAllocator.hpp" line="50" column="8" bodyfile="Buffer/GpuBufferPackedAllocator.hpp" bodystart="50" bodyend="53"/>
+        <location file="Buffer/GpuBufferLinearAllocator.hpp" line="53" column="8" bodyfile="Buffer/GpuBufferLinearAllocator.hpp" bodystart="53" bodyend="56"/>
       </memberdef>
-      <memberdef kind="function" id="d8/d4a/a02550_1aaf4125d6b857856a0a5e5d7bab565e2c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="d8/d4a/a02550_1ab4f50f4191db9c476b072c989b08afad" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>size_t</type>
-        <definition>size_t castor3d::GpuBufferPackedAllocator::getAlignSize</definition>
+        <definition>size_t castor3d::GpuBufferLinearAllocator::getAlignSize</definition>
         <argsstring>() const</argsstring>
         <name>getAlignSize</name>
-        <qualifiedname>castor3d::GpuBufferPackedAllocator::getAlignSize</qualifiedname>
+        <qualifiedname>castor3d::GpuBufferLinearAllocator::getAlignSize</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -201,17 +181,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/GpuBufferPackedAllocator.hpp" line="60" column="8" bodyfile="Buffer/GpuBufferPackedAllocator.hpp" bodystart="60" bodyend="63"/>
+        <location file="Buffer/GpuBufferLinearAllocator.hpp" line="63" column="8" bodyfile="Buffer/GpuBufferLinearAllocator.hpp" bodystart="63" bodyend="66"/>
       </memberdef>
-      <memberdef kind="function" id="d8/d4a/a02550_1a633e293007c5919cd9d3c71597a48f56" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="d8/d4a/a02550_1af0f91c88b34f256fef4eea59c69c0ba2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
-        <definition>bool castor3d::GpuBufferPackedAllocator::hasAvailable</definition>
-        <argsstring>(size_t size) const</argsstring>
+        <definition>bool castor3d::GpuBufferLinearAllocator::hasAvailable</definition>
+        <argsstring>(size_t) const</argsstring>
         <name>hasAvailable</name>
-        <qualifiedname>castor3d::GpuBufferPackedAllocator::hasAvailable</qualifiedname>
+        <qualifiedname>castor3d::GpuBufferLinearAllocator::hasAvailable</qualifiedname>
         <param>
           <type>size_t</type>
-          <declname>size</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -222,26 +201,24 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Buffer/GpuBufferPackedAllocator.hpp" line="70" column="6" bodyfile="Buffer/GpuBufferPackedAllocator.hpp" bodystart="70" bodyend="74"/>
+        <location file="Buffer/GpuBufferLinearAllocator.hpp" line="73" column="6" bodyfile="Buffer/GpuBufferLinearAllocator.hpp" bodystart="73" bodyend="76"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Buffer/GpuBufferPackedAllocator.hpp" line="13" column="1" bodyfile="Buffer/GpuBufferPackedAllocator.hpp" bodystart="14" bodyend="89"/>
+    <location file="Buffer/GpuBufferLinearAllocator.hpp" line="13" column="1" bodyfile="Buffer/GpuBufferLinearAllocator.hpp" bodystart="14" bodyend="82"/>
     <listofallmembers>
-      <member refid="d8/d4a/a02550_1a8b77bc98a50fcc69fac4b9af0036a388" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferPackedAllocator</scope><name>allocate</name></member>
-      <member refid="d8/d4a/a02550_1a616402f874bdc44eaa7fae848c852e1d" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferPackedAllocator</scope><name>deallocate</name></member>
-      <member refid="d8/d4a/a02550_1aaf4125d6b857856a0a5e5d7bab565e2c" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferPackedAllocator</scope><name>getAlignSize</name></member>
-      <member refid="d8/d4a/a02550_1a8003c09271626dd23edc648d8a1da75a" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferPackedAllocator</scope><name>getTotalSize</name></member>
-      <member refid="d8/d4a/a02550_1a2302607af7c095820708242a46e17959" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferPackedAllocator</scope><name>GpuBufferPackedAllocator</name></member>
-      <member refid="d8/d4a/a02550_1a633e293007c5919cd9d3c71597a48f56" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferPackedAllocator</scope><name>hasAvailable</name></member>
-      <member refid="d8/d4a/a02550_1a588810cceb3ef6acfc149a9a5c237700" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferPackedAllocator</scope><name>m_alignSize</name></member>
-      <member refid="d8/d4a/a02550_1aa5fd53202d4534522b9861f20a738c60" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferPackedAllocator</scope><name>m_allocated</name></member>
-      <member refid="d8/d4a/a02550_1a698b14c9c43c39c82a3a1ae00a1476f5" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferPackedAllocator</scope><name>m_allocatedSize</name></member>
-      <member refid="d8/d4a/a02550_1ab55026bebd2002a6380e4231c60d2abf" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferPackedAllocator</scope><name>m_currentAllocated</name></member>
-      <member refid="d8/d4a/a02550_1a3c4ebf7f340157c1320817674f5ff103" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferPackedAllocator</scope><name>m_deallocated</name></member>
+      <member refid="d8/d4a/a02550_1ac6864d8f358285ef7c9f04731aa50433" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferLinearAllocator</scope><name>allocate</name></member>
+      <member refid="d8/d4a/a02550_1a22925dc9c260c81b16e7e92cf2c975c8" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferLinearAllocator</scope><name>deallocate</name></member>
+      <member refid="d8/d4a/a02550_1ab4f50f4191db9c476b072c989b08afad" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferLinearAllocator</scope><name>getAlignSize</name></member>
+      <member refid="d8/d4a/a02550_1a271e7a5ac0c5aed27611421969f9da47" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferLinearAllocator</scope><name>getTotalSize</name></member>
+      <member refid="d8/d4a/a02550_1aec711e82683606dd049d2b83223f2d8a" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferLinearAllocator</scope><name>GpuBufferLinearAllocator</name></member>
+      <member refid="d8/d4a/a02550_1af0f91c88b34f256fef4eea59c69c0ba2" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferLinearAllocator</scope><name>hasAvailable</name></member>
+      <member refid="d8/d4a/a02550_1ac17f4ef74aba189cce377ac6f6194aaf" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferLinearAllocator</scope><name>m_alignSize</name></member>
+      <member refid="d8/d4a/a02550_1a69d4de112221b9738ce969b3ef894f7c" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferLinearAllocator</scope><name>m_allocatedSize</name></member>
+      <member refid="d8/d4a/a02550_1a49b4187075c34cc6faabb9698d53ddfb" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferLinearAllocator</scope><name>m_free</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

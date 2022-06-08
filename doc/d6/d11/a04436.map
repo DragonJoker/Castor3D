@@ -1,8 +1,9 @@
-<map id="castor3d::SkeletonAnimationInstanceNode" name="castor3d::SkeletonAnimationInstanceNode">
-<area shape="rect" id="node1" title=" " alt="" coords="851,31,1040,72"/>
-<area shape="rect" id="node2" href="$d9/d8d/a04442.html" title=" " alt="" coords="612,31,801,72"/>
-<area shape="rect" id="node3" title=" " alt="" coords="259,5,445,47"/>
-<area shape="rect" id="node4" href="$d8/d01/a03458.html" title=" " alt="" coords="257,71,447,112"/>
-<area shape="rect" id="node5" title=" " alt="" coords="14,33,199,75"/>
-<area shape="rect" id="node6" title=" " alt="" coords="5,99,208,155"/>
+<map id="castor3d::BoundsTransformPipeline" name="castor3d::BoundsTransformPipeline">
+<area shape="rect" id="node1" title=" " alt="" coords="58,407,239,448"/>
+<area shape="rect" id="node2" href="$d6/d14/a04858.html" title="A non compiled shader module, with its source." alt="" coords="67,317,230,344"/>
+<area shape="rect" id="node3" title=" " alt="" coords="34,206,114,233"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,95,132,136"/>
+<area shape="rect" id="node5" title=" " alt="" coords="141,199,279,240"/>
+<area shape="rect" id="node6" title=" " alt="" coords="157,102,295,129"/>
+<area shape="rect" id="node7" title=" " alt="" coords="207,5,245,32"/>
 </map>

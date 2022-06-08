@@ -1,61 +1,169 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="d0/de9/a03530" kind="struct" language="C++" prot="private">
-    <compoundname>castor3d::DebugOverlays::CategoryOverlays::TimeOverlays</compoundname>
+  <compounddef id="d0/de9/a03530" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::InterleavedVertex</compoundname>
+    <includes local="no">VertexGroup.hpp</includes>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="d0/de9/a03530_1a58b8dd4fc3854530938d82b78bebd576" prot="public" static="no" mutable="no">
-        <type>castor::Nanoseconds</type>
-        <definition>castor::Nanoseconds castor3d::DebugOverlays::CategoryOverlays::TimeOverlays::time</definition>
+      <memberdef kind="variable" id="d0/de9/a03530_1a058c6919ba730368b595422840be3dad" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::InterleavedVertex::pos</definition>
         <argsstring></argsstring>
-        <name>time</name>
-        <qualifiedname>castor3d::DebugOverlays::CategoryOverlays::TimeOverlays::time</qualifiedname>
-        <initializer>{ 0_ns }</initializer>
+        <name>pos</name>
+        <qualifiedname>castor3d::InterleavedVertex::pos</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The vertex coordinates. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="295" column="21" bodyfile="Overlay/DebugOverlays.hpp" bodystart="295" bodyend="-1"/>
+        <location file="Model/VertexGroup.hpp" line="39" column="17" bodyfile="Model/VertexGroup.hpp" bodystart="39" bodyend="-1"/>
+        <referencedby refid="d0/de9/a03530_1a674014c40d77765eb85230253e63942d" compoundref="d0/d1c/a00605" startline="13" endline="17">position</referencedby>
+        <referencedby refid="da/dab/a01362_1a58ff625ab28b77d7933ef9517c1b632c" compoundref="d3/df8/a00155" startline="1242" endline="1259">castor3d::prepareChunkData</referencedby>
       </memberdef>
-      <memberdef kind="variable" id="d0/de9/a03530_1a48e25c217413b7bf91a6fdce3b9be12b" prot="public" static="no" mutable="no">
-        <type>TextOverlaySPtr</type>
-        <definition>TextOverlaySPtr castor3d::DebugOverlays::CategoryOverlays::TimeOverlays::name</definition>
+      <memberdef kind="variable" id="d0/de9/a03530_1a2e43c87c53a30c9781d2519d1d59075b" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::InterleavedVertex::nml</definition>
         <argsstring></argsstring>
-        <name>name</name>
-        <qualifiedname>castor3d::DebugOverlays::CategoryOverlays::TimeOverlays::name</qualifiedname>
+        <name>nml</name>
+        <qualifiedname>castor3d::InterleavedVertex::nml</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
+<para>The vertex normal. </para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="296" column="17" bodyfile="Overlay/DebugOverlays.hpp" bodystart="296" bodyend="-1"/>
+        <location file="Model/VertexGroup.hpp" line="42" column="17" bodyfile="Model/VertexGroup.hpp" bodystart="42" bodyend="-1"/>
+        <referencedby refid="d0/de9/a03530_1a9e793156c33a5926210f27a8cbba3549" compoundref="d0/d1c/a00605" startline="19" endline="23">normal</referencedby>
+        <referencedby refid="da/dab/a01362_1a58ff625ab28b77d7933ef9517c1b632c" compoundref="d3/df8/a00155" startline="1242" endline="1259">castor3d::prepareChunkData</referencedby>
       </memberdef>
-      <memberdef kind="variable" id="d0/de9/a03530_1a6f047f75e189c91bf759a3e656407dde" prot="public" static="no" mutable="no">
-        <type>TextOverlaySPtr</type>
-        <definition>TextOverlaySPtr castor3d::DebugOverlays::CategoryOverlays::TimeOverlays::value</definition>
+      <memberdef kind="variable" id="d0/de9/a03530_1a03cd62cf0f3f553c1272751ea8e489b0" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::InterleavedVertex::tan</definition>
         <argsstring></argsstring>
-        <name>value</name>
-        <qualifiedname>castor3d::DebugOverlays::CategoryOverlays::TimeOverlays::value</qualifiedname>
+        <name>tan</name>
+        <qualifiedname>castor3d::InterleavedVertex::tan</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The vertex tangent. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/VertexGroup.hpp" line="45" column="17" bodyfile="Model/VertexGroup.hpp" bodystart="45" bodyend="-1"/>
+        <referencedby refid="da/dab/a01362_1a58ff625ab28b77d7933ef9517c1b632c" compoundref="d3/df8/a00155" startline="1242" endline="1259">castor3d::prepareChunkData</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d0/de9/a03530_1a87c080a75ad69b858fcbf5f8a748c517" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::InterleavedVertex::tex</definition>
+        <argsstring></argsstring>
+        <name>tex</name>
+        <qualifiedname>castor3d::InterleavedVertex::tex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The vertex texture coordinates. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/VertexGroup.hpp" line="48" column="17" bodyfile="Model/VertexGroup.hpp" bodystart="48" bodyend="-1"/>
+        <referencedby refid="da/dab/a01362_1a58ff625ab28b77d7933ef9517c1b632c" compoundref="d3/df8/a00155" startline="1242" endline="1259">castor3d::prepareChunkData</referencedby>
+        <referencedby refid="d0/de9/a03530_1a102d695ffc7c50ffcc6173e94c3597a8" compoundref="d0/d1c/a00605" startline="25" endline="29">texcoord</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/de9/a03530_1a674014c40d77765eb85230253e63942d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d0/de9/a03530" kindref="compound">InterleavedVertex</ref> &amp;</type>
+        <definition>InterleavedVertex &amp; castor3d::InterleavedVertex::position</definition>
+        <argsstring>(castor::Point3f const &amp;val)</argsstring>
+        <name>position</name>
+        <qualifiedname>castor3d::InterleavedVertex::position</qualifiedname>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>val</declname>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Overlay/DebugOverlays.hpp" line="297" column="17" bodyfile="Overlay/DebugOverlays.hpp" bodystart="297" bodyend="-1"/>
+        <location file="Model/VertexGroup.hpp" line="13" column="20" bodyfile="Model/VertexGroup.hpp" bodystart="13" bodyend="17"/>
+        <references refid="d0/de9/a03530_1a058c6919ba730368b595422840be3dad" compoundref="d0/d1c/a00605" startline="39">pos</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/de9/a03530_1a9e793156c33a5926210f27a8cbba3549" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d0/de9/a03530" kindref="compound">InterleavedVertex</ref> &amp;</type>
+        <definition>InterleavedVertex &amp; castor3d::InterleavedVertex::normal</definition>
+        <argsstring>(castor::Point3f const &amp;val)</argsstring>
+        <name>normal</name>
+        <qualifiedname>castor3d::InterleavedVertex::normal</qualifiedname>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/VertexGroup.hpp" line="19" column="20" bodyfile="Model/VertexGroup.hpp" bodystart="19" bodyend="23"/>
+        <references refid="d0/de9/a03530_1a2e43c87c53a30c9781d2519d1d59075b" compoundref="d0/d1c/a00605" startline="42">nml</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/de9/a03530_1a102d695ffc7c50ffcc6173e94c3597a8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d0/de9/a03530" kindref="compound">InterleavedVertex</ref> &amp;</type>
+        <definition>InterleavedVertex &amp; castor3d::InterleavedVertex::texcoord</definition>
+        <argsstring>(castor::Point2f const &amp;val)</argsstring>
+        <name>texcoord</name>
+        <qualifiedname>castor3d::InterleavedVertex::texcoord</qualifiedname>
+        <param>
+          <type>castor::Point2f const &amp;</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/VertexGroup.hpp" line="25" column="20" bodyfile="Model/VertexGroup.hpp" bodystart="25" bodyend="29"/>
+        <references refid="d0/de9/a03530_1a87c080a75ad69b858fcbf5f8a748c517" compoundref="d0/d1c/a00605" startline="48">tex</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/de9/a03530_1a21b75fae76bd4fe6fda4c4b8882ffe2d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d0/de9/a03530" kindref="compound">InterleavedVertex</ref> &amp;</type>
+        <definition>InterleavedVertex &amp; castor3d::InterleavedVertex::texcoord</definition>
+        <argsstring>(castor::Point3f const &amp;val)</argsstring>
+        <name>texcoord</name>
+        <qualifiedname>castor3d::InterleavedVertex::texcoord</qualifiedname>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/VertexGroup.hpp" line="31" column="20" bodyfile="Model/VertexGroup.hpp" bodystart="31" bodyend="35"/>
+        <references refid="d0/de9/a03530_1a87c080a75ad69b858fcbf5f8a748c517" compoundref="d0/d1c/a00605" startline="48">tex</references>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Overlay/DebugOverlays.hpp" line="293" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="294" bodyend="298"/>
+    <location file="Model/VertexGroup.hpp" line="11" column="1" bodyfile="Model/VertexGroup.hpp" bodystart="12" bodyend="49"/>
     <listofallmembers>
-      <member refid="d0/de9/a03530_1a48e25c217413b7bf91a6fdce3b9be12b" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays::TimeOverlays</scope><name>name</name></member>
-      <member refid="d0/de9/a03530_1a58b8dd4fc3854530938d82b78bebd576" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays::TimeOverlays</scope><name>time</name></member>
-      <member refid="d0/de9/a03530_1a6f047f75e189c91bf759a3e656407dde" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays::TimeOverlays</scope><name>value</name></member>
+      <member refid="d0/de9/a03530_1a2e43c87c53a30c9781d2519d1d59075b" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertex</scope><name>nml</name></member>
+      <member refid="d0/de9/a03530_1a9e793156c33a5926210f27a8cbba3549" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertex</scope><name>normal</name></member>
+      <member refid="d0/de9/a03530_1a058c6919ba730368b595422840be3dad" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertex</scope><name>pos</name></member>
+      <member refid="d0/de9/a03530_1a674014c40d77765eb85230253e63942d" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertex</scope><name>position</name></member>
+      <member refid="d0/de9/a03530_1a03cd62cf0f3f553c1272751ea8e489b0" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertex</scope><name>tan</name></member>
+      <member refid="d0/de9/a03530_1a87c080a75ad69b858fcbf5f8a748c517" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertex</scope><name>tex</name></member>
+      <member refid="d0/de9/a03530_1a102d695ffc7c50ffcc6173e94c3597a8" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertex</scope><name>texcoord</name></member>
+      <member refid="d0/de9/a03530_1a21b75fae76bd4fe6fda4c4b8882ffe2d" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertex</scope><name>texcoord</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -4,8 +4,9 @@
     <compoundname>Material</compoundname>
     <innerdir refid="dir_1956ab8499f3d6675d52a03f8658751b">Material/Pass</innerdir>
     <innerdir refid="dir_18be4a81ac2698d65b2c41fdfc591567">Material/Texture</innerdir>
-    <innerfile refid="db/d7b/a00296">Material.hpp</innerfile>
-    <innerfile refid="df/d95/a00299">MaterialModule.hpp</innerfile>
+    <innerfile refid="da/de0/a00317">Material.hpp</innerfile>
+    <innerfile refid="dd/de2/a00320">MaterialImporter.hpp</innerfile>
+    <innerfile refid="de/d55/a00323">MaterialModule.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

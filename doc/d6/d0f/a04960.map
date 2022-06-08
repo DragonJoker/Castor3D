@@ -1,5 +1,4 @@
-<map id="castor3d::RsmConfigUbo" name="castor3d::RsmConfigUbo">
-<area shape="rect" id="node1" title=" " alt="" coords="5,200,172,227"/>
-<area shape="rect" id="node2" title=" " alt="" coords="49,96,129,123"/>
-<area shape="rect" id="node3" title=" " alt="" coords="25,5,152,47"/>
+<map id="castor3d::shader::PayloadT&lt; FlagT &gt;" name="castor3d::shader::PayloadT&lt; FlagT &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="5,80,180,121"/>
+<area shape="rect" id="node2" title=" " alt="" coords="24,5,161,32"/>
 </map>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::shader::TextureAnimData Struct Reference</title>
+<title>Castor3D: castor3d::TextureAnimationBuffer Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.12.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,94 +42,96 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dc/df4/a01401.html">castor3d</a></li><li class="navelem"><a class="el" href="../../da/d06/a01403.html">shader</a></li><li class="navelem"><a class="el" href="../../de/d25/a04846.html">TextureAnimData</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/dab/a01362.html">castor3d</a></li><li class="navelem"><a class="el" href="../../de/d25/a04846.html">TextureAnimationBuffer</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="#friends">Friends</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="../../d4/d06/a04843.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">castor3d::shader::TextureAnimData Struct Reference</div></div>
+  <div class="headertitle"><div class="title">castor3d::TextureAnimationBuffer Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;GlslTextureAnimation.hpp&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for castor3d::shader::TextureAnimData:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../d6/d2e/a04845.png" border="0" usemap="#acastor3d_1_1shader_1_1TextureAnimData_inherit__map" alt="Inheritance graph"/></div>
-<map name="acastor3d_1_1shader_1_1TextureAnimData_inherit__map" id="acastor3d_1_1shader_1_1TextureAnimData_inherit__map">
-<area shape="rect" title=" " alt="" coords="5,80,176,121"/>
-<area shape="rect" title=" " alt="" coords="22,5,159,32"/>
-</map>
-<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
-<div class="dynheader">
-Collaboration diagram for castor3d::shader::TextureAnimData:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../de/df4/a04844.png" border="0" usemap="#acastor3d_1_1shader_1_1TextureAnimData_coll__map" alt="Collaboration graph"/></div>
-<map name="acastor3d_1_1shader_1_1TextureAnimData_coll__map" id="acastor3d_1_1shader_1_1TextureAnimData_coll__map">
-<area shape="rect" title=" " alt="" coords="5,80,176,121"/>
-<area shape="rect" title=" " alt="" coords="22,5,159,32"/>
-</map>
-<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
+<p><code>#include &lt;TextureAnimationBuffer.hpp&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a954fa6f71fb8a53fa54204b9273508a3"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d25/a04846.html#a954fa6f71fb8a53fa54204b9273508a3">TextureAnimationsData</a> = castor::ArrayView&lt; <a class="el" href="../../d6/d1d/a02906.html">TextureAnimationData</a> &gt;</td></tr>
+<tr class="separator:a954fa6f71fb8a53fa54204b9273508a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a60f77eec687e92906624be5721c2a233"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d25/a04846.html#a60f77eec687e92906624be5721c2a233">TextureAnimData</a> (sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</td></tr>
-<tr class="separator:a60f77eec687e92906624be5721c2a233"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a806da9cd39f2a14932bd098f3be7a8a4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d25/a04846.html#a806da9cd39f2a14932bd098f3be7a8a4">SDW_DeclStructInstance</a> (<a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>, <a class="el" href="../../de/d25/a04846.html">TextureAnimData</a>)</td></tr>
-<tr class="separator:a806da9cd39f2a14932bd098f3be7a8a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1cf572f90e90b0316d1fda89e1e2dc75"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d25/a04846.html#a1cf572f90e90b0316d1fda89e1e2dc75">TextureAnimationBuffer</a> (<a class="el" href="../../d9/db1/a02718.html">Engine</a> &amp;engine, <a class="el" href="../../df/d75/a04010.html">RenderDevice</a> const &amp;device, uint32_t count)</td></tr>
+<tr class="memdesc:a1cf572f90e90b0316d1fda89e1e2dc75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../de/d25/a04846.html#a1cf572f90e90b0316d1fda89e1e2dc75">More...</a><br /></td></tr>
+<tr class="separator:a1cf572f90e90b0316d1fda89e1e2dc75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68536e2e385e4a40ba5deb7af186d362"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d25/a04846.html#a68536e2e385e4a40ba5deb7af186d362">addTextureAnimation</a> (<a class="el" href="../../d7/d2e/a04482.html">AnimatedTexture</a> const &amp;texture)</td></tr>
+<tr class="memdesc:a68536e2e385e4a40ba5deb7af186d362"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a configuration to the buffer.  <a href="../../de/d25/a04846.html#a68536e2e385e4a40ba5deb7af186d362">More...</a><br /></td></tr>
+<tr class="separator:a68536e2e385e4a40ba5deb7af186d362"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af87139b24cc30a4b6bed347f744a692b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d25/a04846.html#af87139b24cc30a4b6bed347f744a692b">removeTextureAnimation</a> (<a class="el" href="../../d7/d2e/a04482.html">AnimatedTexture</a> const &amp;texture)</td></tr>
+<tr class="memdesc:af87139b24cc30a4b6bed347f744a692b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes a configuration from the buffer.  <a href="../../de/d25/a04846.html#af87139b24cc30a4b6bed347f744a692b">More...</a><br /></td></tr>
+<tr class="separator:af87139b24cc30a4b6bed347f744a692b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb182b0862fdf57feaaef7dbda28a741"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d25/a04846.html#afb182b0862fdf57feaaef7dbda28a741">update</a> (ashes::CommandBuffer const &amp;commandBuffer)</td></tr>
+<tr class="memdesc:afb182b0862fdf57feaaef7dbda28a741"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the configurations buffer.  <a href="../../de/d25/a04846.html#afb182b0862fdf57feaaef7dbda28a741">More...</a><br /></td></tr>
+<tr class="separator:afb182b0862fdf57feaaef7dbda28a741"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d60e13109bef84d90bf200e433c532b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> VkDescriptorSetLayoutBinding&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d25/a04846.html#a0d60e13109bef84d90bf200e433c532b">createLayoutBinding</a> (uint32_t binding) const</td></tr>
+<tr class="memdesc:a0d60e13109bef84d90bf200e433c532b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the descriptor set layout binding.  <a href="../../de/d25/a04846.html#a0d60e13109bef84d90bf200e433c532b">More...</a><br /></td></tr>
+<tr class="separator:a0d60e13109bef84d90bf200e433c532b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4b748cc374c486e19c50b3f07c558ac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ashes::WriteDescriptorSet&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d25/a04846.html#af4b748cc374c486e19c50b3f07c558ac">getBinding</a> (uint32_t binding) const</td></tr>
+<tr class="memdesc:af4b748cc374c486e19c50b3f07c558ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the descriptor write for this buffer.  <a href="../../de/d25/a04846.html#af4b748cc374c486e19c50b3f07c558ac">More...</a><br /></td></tr>
+<tr class="separator:af4b748cc374c486e19c50b3f07c558ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88494a9a88d014872cd13ae169e21b60"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d25/a04846.html#a88494a9a88d014872cd13ae169e21b60">createBinding</a> (ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;binding) const</td></tr>
+<tr class="memdesc:a88494a9a88d014872cd13ae169e21b60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the descriptor set binding at given point.  <a href="../../de/d25/a04846.html#a88494a9a88d014872cd13ae169e21b60">More...</a><br /></td></tr>
+<tr class="separator:a88494a9a88d014872cd13ae169e21b60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba6cc4fd2d7e29489b14e422fada3669"><td class="memItemLeft" align="right" valign="top">uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d25/a04846.html#aba6cc4fd2d7e29489b14e422fada3669">getPtr</a> ()</td></tr>
+<tr class="separator:aba6cc4fd2d7e29489b14e422fada3669"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ad229617431d807bb823acb354619c28e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> std::unique_ptr&lt; sdw::Struct &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d25/a04846.html#ad229617431d807bb823acb354619c28e">declare</a> (sdw::ShaderWriter &amp;writer)</td></tr>
-<tr class="separator:ad229617431d807bb823acb354619c28e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a105a670d0df7f242b884160735b43f31"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ast::type::BaseStructPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d25/a04846.html#a105a670d0df7f242b884160735b43f31">makeType</a> (ast::type::TypesCache &amp;cache)</td></tr>
-<tr class="separator:a105a670d0df7f242b884160735b43f31"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:affe3d660299dd013a9d113e5a4f24c19"><td class="memItemLeft" align="right" valign="top">sdw::Vec4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d25/a04846.html#affe3d660299dd013a9d113e5a4f24c19">texTrn</a></td></tr>
-<tr class="separator:affe3d660299dd013a9d113e5a4f24c19"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7cab455886186271c137de7a4ef2d6b"><td class="memItemLeft" align="right" valign="top">sdw::Vec4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d25/a04846.html#aa7cab455886186271c137de7a4ef2d6b">texRot</a></td></tr>
-<tr class="separator:aa7cab455886186271c137de7a4ef2d6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a31ad5f97f557474fd8537f5295cd75fc"><td class="memItemLeft" align="right" valign="top">sdw::Vec4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d25/a04846.html#a31ad5f97f557474fd8537f5295cd75fc">texScl</a></td></tr>
-<tr class="separator:a31ad5f97f557474fd8537f5295cd75fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4031296fa4b2de9e568d63c22ab17198"><td class="memItemLeft" align="right" valign="top">sdw::Vec4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d25/a04846.html#a4031296fa4b2de9e568d63c22ab17198">tleSet</a></td></tr>
-<tr class="separator:a4031296fa4b2de9e568d63c22ab17198"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:acdef04b2da9e72180d6572c921abb811"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d25/a04846.html#acdef04b2da9e72180d6572c921abb811">TextureAnimations</a></td></tr>
-<tr class="separator:acdef04b2da9e72180d6572c921abb811"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a43ffda4b8268ee511e82e2f3996aa4b8"><td class="memItemLeft" align="right" valign="top">static uint32_t constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d25/a04846.html#a43ffda4b8268ee511e82e2f3996aa4b8">DataSize</a> = uint32_t( sizeof( <a class="el" href="../../d6/d1d/a02906.html">TextureAnimationData</a> ) )</td></tr>
+<tr class="separator:a43ffda4b8268ee511e82e2f3996aa4b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a60f77eec687e92906624be5721c2a233" name="a60f77eec687e92906624be5721c2a233"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a60f77eec687e92906624be5721c2a233">&#9670;&nbsp;</a></span>TextureAnimData()</h2>
+<h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a954fa6f71fb8a53fa54204b9273508a3" name="a954fa6f71fb8a53fa54204b9273508a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a954fa6f71fb8a53fa54204b9273508a3">&#9670;&nbsp;</a></span>TextureAnimationsData</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::shader::TextureAnimData::TextureAnimData </td>
+          <td class="memname">using <a class="el" href="../../de/d25/a04846.html#a954fa6f71fb8a53fa54204b9273508a3">castor3d::TextureAnimationBuffer::TextureAnimationsData</a> =  castor::ArrayView&lt; <a class="el" href="../../d6/d1d/a02906.html">TextureAnimationData</a> &gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a1cf572f90e90b0316d1fda89e1e2dc75" name="a1cf572f90e90b0316d1fda89e1e2dc75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1cf572f90e90b0316d1fda89e1e2dc75">&#9670;&nbsp;</a></span>TextureAnimationBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::TextureAnimationBuffer::TextureAnimationBuffer </td>
           <td>(</td>
-          <td class="paramtype">sdw::ShaderWriter &amp;&#160;</td>
-          <td class="paramname"><em>writer</em>, </td>
+          <td class="paramtype"><a class="el" href="../../d9/db1/a02718.html">Engine</a> &amp;&#160;</td>
+          <td class="paramname"><em>engine</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">ast::expr::ExprPtr&#160;</td>
-          <td class="paramname"><em>expr</em>, </td>
+          <td class="paramtype"><a class="el" href="../../df/d75/a04010.html">RenderDevice</a> const &amp;&#160;</td>
+          <td class="paramname"><em>device</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>enabled</em>&#160;</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>count</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -138,93 +140,125 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">engine</td><td>The engine. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">device</td><td>The GPU device. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">count</td><td>The max configurations count. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ad229617431d807bb823acb354619c28e" name="ad229617431d807bb823acb354619c28e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad229617431d807bb823acb354619c28e">&#9670;&nbsp;</a></span>declare()</h2>
+<a id="a68536e2e385e4a40ba5deb7af186d362" name="a68536e2e385e4a40ba5deb7af186d362"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68536e2e385e4a40ba5deb7af186d362">&#9670;&nbsp;</a></span>addTextureAnimation()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::TextureAnimData::declare </td>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::TextureAnimationBuffer::addTextureAnimation </td>
           <td>(</td>
-          <td class="paramtype">sdw::ShaderWriter &amp;&#160;</td>
-          <td class="paramname"><em>writer</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="../../d7/d2e/a04482.html">AnimatedTexture</a> const &amp;&#160;</td>
+          <td class="paramname"><em>texture</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<a id="a105a670d0df7f242b884160735b43f31" name="a105a670d0df7f242b884160735b43f31"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a105a670d0df7f242b884160735b43f31">&#9670;&nbsp;</a></span>makeType()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static <a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ast::type::BaseStructPtr castor3d::shader::TextureAnimData::makeType </td>
-          <td>(</td>
-          <td class="paramtype">ast::type::TypesCache &amp;&#160;</td>
-          <td class="paramname"><em>cache</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
+<p>Adds a configuration to the buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">texture</td><td>The texture. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
-<a id="a806da9cd39f2a14932bd098f3be7a8a4" name="a806da9cd39f2a14932bd098f3be7a8a4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a806da9cd39f2a14932bd098f3be7a8a4">&#9670;&nbsp;</a></span>SDW_DeclStructInstance()</h2>
+<a id="a88494a9a88d014872cd13ae169e21b60" name="a88494a9a88d014872cd13ae169e21b60"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88494a9a88d014872cd13ae169e21b60">&#9670;&nbsp;</a></span>createBinding()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">castor3d::shader::TextureAnimData::SDW_DeclStructInstance </td>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::TextureAnimationBuffer::createBinding </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../dd/dd7/a00248.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramtype">ashes::DescriptorSet &amp;&#160;</td>
+          <td class="paramname"><em>descriptorSet</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="../../de/d25/a04846.html">TextureAnimData</a>&#160;</td>
-          <td class="paramname">&#160;</td>
+          <td class="paramtype">VkDescriptorSetLayoutBinding const &amp;&#160;</td>
+          <td class="paramname"><em>binding</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td>
+          <td></td><td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
+<p>Creates the descriptor set binding at given point. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">descriptorSet</td><td>The descriptor set that receives the binding. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">binding</td><td>The descriptor set layout binding. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
-<h2 class="groupheader">Friends And Related Function Documentation</h2>
-<a id="acdef04b2da9e72180d6572c921abb811" name="acdef04b2da9e72180d6572c921abb811"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acdef04b2da9e72180d6572c921abb811">&#9670;&nbsp;</a></span>TextureAnimations</h2>
+<a id="a0d60e13109bef84d90bf200e433c532b" name="a0d60e13109bef84d90bf200e433c532b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d60e13109bef84d90bf200e433c532b">&#9670;&nbsp;</a></span>createLayoutBinding()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> VkDescriptorSetLayoutBinding castor3d::TextureAnimationBuffer::createLayoutBinding </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>binding</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates the descriptor set layout binding. </p>
+
+</div>
+</div>
+<a id="af4b748cc374c486e19c50b3f07c558ac" name="af4b748cc374c486e19c50b3f07c558ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4b748cc374c486e19c50b3f07c558ac">&#9670;&nbsp;</a></span>getBinding()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ashes::WriteDescriptorSet castor3d::TextureAnimationBuffer::getBinding </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>binding</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates the descriptor write for this buffer. </p>
+
+</div>
+</div>
+<a id="aba6cc4fd2d7e29489b14e422fada3669" name="aba6cc4fd2d7e29489b14e422fada3669"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba6cc4fd2d7e29489b14e422fada3669">&#9670;&nbsp;</a></span>getPtr()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -233,82 +267,109 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">friend class <a class="el" href="../../d5/dab/a04850.html">TextureAnimations</a></td>
+          <td class="memname">uint8_t * castor3d::TextureAnimationBuffer::getPtr </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The pointer to the buffer. </dd></dl>
+
+<p class="reference">References <a class="el" href="../../de/d04/a04774.html#a4fcf4ffabfc41ab525819285b87fdbfe">castor3d::ShaderBuffer::getPtr()</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../de/d25/a04846_aba6cc4fd2d7e29489b14e422fada3669_cgraph.png" border="0" usemap="#ade/d25/a04846_aba6cc4fd2d7e29489b14e422fada3669_cgraph" alt=""/></div>
+<map name="ade/d25/a04846_aba6cc4fd2d7e29489b14e422fada3669_cgraph" id="ade/d25/a04846_aba6cc4fd2d7e29489b14e422fada3669_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,187,47"/>
+<area shape="rect" href="../../de/d04/a04774.html#a4fcf4ffabfc41ab525819285b87fdbfe" title=" " alt="" coords="235,5,389,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="af87139b24cc30a4b6bed347f744a692b" name="af87139b24cc30a4b6bed347f744a692b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af87139b24cc30a4b6bed347f744a692b">&#9670;&nbsp;</a></span>removeTextureAnimation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::TextureAnimationBuffer::removeTextureAnimation </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/d2e/a04482.html">AnimatedTexture</a> const &amp;&#160;</td>
+          <td class="paramname"><em>texture</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes a configuration from the buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">texture</td><td>The texture. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="afb182b0862fdf57feaaef7dbda28a741" name="afb182b0862fdf57feaaef7dbda28a741"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb182b0862fdf57feaaef7dbda28a741">&#9670;&nbsp;</a></span>update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::TextureAnimationBuffer::update </td>
+          <td>(</td>
+          <td class="paramtype">ashes::CommandBuffer const &amp;&#160;</td>
+          <td class="paramname"><em>commandBuffer</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Updates the configurations buffer. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a43ffda4b8268ee511e82e2f3996aa4b8" name="a43ffda4b8268ee511e82e2f3996aa4b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43ffda4b8268ee511e82e2f3996aa4b8">&#9670;&nbsp;</a></span>DataSize</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t constexpr castor3d::TextureAnimationBuffer::DataSize = uint32_t( sizeof( <a class="el" href="../../d6/d1d/a02906.html">TextureAnimationData</a> ) )</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="aa7cab455886186271c137de7a4ef2d6b" name="aa7cab455886186271c137de7a4ef2d6b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa7cab455886186271c137de7a4ef2d6b">&#9670;&nbsp;</a></span>texRot</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">sdw::Vec4 castor3d::shader::TextureAnimData::texRot</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a31ad5f97f557474fd8537f5295cd75fc" name="a31ad5f97f557474fd8537f5295cd75fc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a31ad5f97f557474fd8537f5295cd75fc">&#9670;&nbsp;</a></span>texScl</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">sdw::Vec4 castor3d::shader::TextureAnimData::texScl</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="affe3d660299dd013a9d113e5a4f24c19" name="affe3d660299dd013a9d113e5a4f24c19"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#affe3d660299dd013a9d113e5a4f24c19">&#9670;&nbsp;</a></span>texTrn</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">sdw::Vec4 castor3d::shader::TextureAnimData::texTrn</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a4031296fa4b2de9e568d63c22ab17198" name="a4031296fa4b2de9e568d63c22ab17198"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4031296fa4b2de9e568d63c22ab17198">&#9670;&nbsp;</a></span>tleSet</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">sdw::Vec4 castor3d::shader::TextureAnimData::tleSet</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
-<li>Shader/Shaders/<a class="el" href="../../d5/d32/a01214.html">GlslTextureAnimation.hpp</a></li>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>Shader/ShaderBuffers/<a class="el" href="../../d8/ddf/a01238.html">TextureAnimationBuffer.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 18 2022 15:34:56 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jun 8 2022 13:04:51 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

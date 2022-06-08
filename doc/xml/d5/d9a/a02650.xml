@@ -10,7 +10,7 @@
     </templateparamlist>
       <sectiondef kind="public-type">
       <memberdef kind="typedef" id="d5/d9a/a02650_1a4a1c8f9789fad9753fa1b25e0a9ef4f8" prot="public" static="no">
-        <type>std::function&lt; std::shared_ptr&lt; <ref refid="db/d64/a04082" kindref="compound">RenderTarget</ref> &gt;(KeyType const &amp;, <ref refid="dc/df4/a01401_1a4ad78470d8077ac5aaa5443df9894203" kindref="member">TargetType</ref>) &gt;</type>
+        <type>std::function&lt; std::shared_ptr&lt; <ref refid="d4/dec/a04134" kindref="compound">RenderTarget</ref> &gt;(KeyType const &amp;, <ref refid="da/dab/a01362_1a4ad78470d8077ac5aaa5443df9894203" kindref="member">TargetType</ref>) &gt;</type>
         <definition>using castor3d::ElementProducer&lt; RenderTarget, KeyType &gt;::Type =  std::function&lt; std::shared_ptr&lt; RenderTarget &gt;( KeyType const &amp;, TargetType ) &gt;</definition>
         <argsstring></argsstring>
         <name>Type</name>

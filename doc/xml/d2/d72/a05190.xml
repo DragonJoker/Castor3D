@@ -1,83 +1,77 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="d2/d72/a05190" kind="class" language="C++" prot="public">
-    <compoundname>castor::TextWriter&lt; castor3d::SpotLight &gt;</compoundname>
-    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::SpotLight &gt;</basecompoundref>
-    <includes local="no">TextSpotLight.hpp</includes>
-    <templateparamlist>
-    </templateparamlist>
-      <sectiondef kind="public-func">
-      <memberdef kind="function" id="d2/d72/a05190_1a73eecad979fbeb12fd05cc006ebc2145" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
-        <definition>C3D_API castor::TextWriter&lt; castor3d::SpotLight &gt;::TextWriter</definition>
-        <argsstring>(castor::String const &amp;tabs)</argsstring>
-        <name>TextWriter</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::SpotLight &gt;::TextWriter</qualifiedname>
-        <param>
-          <type>castor::String const &amp;</type>
-          <declname>tabs</declname>
-        </param>
+  <compounddef id="d2/d72/a05190" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ShadowMapUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/d72/a05190_1a440ced704c065ffdbf0f29f60e3b971b" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::ShadowMapUboConfiguration::lightProjection</definition>
+        <argsstring></argsstring>
+        <name>lightProjection</name>
+        <qualifiedname>castor3d::ShadowMapUboConfiguration::lightProjection</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Text/TextSpotLight.hpp" line="18" column="18"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="417" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="417" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="function" id="d2/d72/a05190_1afb80226df18e44beed0aa42645f8349e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="dd/dd7/a00248_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
-        <definition>C3D_API bool castor::TextWriter&lt; castor3d::SpotLight &gt;::operator()</definition>
-        <argsstring>(castor3d::SpotLight const &amp;light, castor::StringStream &amp;file) override</argsstring>
-        <name>operator()</name>
-        <qualifiedname>castor::TextWriter&lt; castor3d::SpotLight &gt;::operator()</qualifiedname>
-        <param>
-          <type><ref refid="db/da2/a04526" kindref="compound">castor3d::SpotLight</ref> const &amp;</type>
-          <declname>light</declname>
-        </param>
-        <param>
-          <type>castor::StringStream &amp;</type>
-          <declname>file</declname>
-        </param>
+      <memberdef kind="variable" id="d2/d72/a05190_1a3b0097393ead8c6396d2fc299b804c97" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::ShadowMapUboConfiguration::lightView</definition>
+        <argsstring></argsstring>
+        <name>lightView</name>
+        <qualifiedname>castor3d::ShadowMapUboConfiguration::lightView</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="Text/TextSpotLight.hpp" line="19" column="14"/>
+        <location file="Shader/Ubos/UbosModule.hpp" line="418" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="418" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d72/a05190_1aad9a7eddde3a1ac0857212592b858000" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::ShadowMapUboConfiguration::lightPosFarPlane</definition>
+        <argsstring></argsstring>
+        <name>lightPosFarPlane</name>
+        <qualifiedname>castor3d::ShadowMapUboConfiguration::lightPosFarPlane</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="419" column="17" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="419" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d72/a05190_1aec457c7c31aca4cbdd69e1460d2c9b4e" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ShadowMapUboConfiguration::lightIndex</definition>
+        <argsstring></argsstring>
+        <name>lightIndex</name>
+        <qualifiedname>castor3d::ShadowMapUboConfiguration::lightIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="420" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="420" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
+<para>Shadow map data. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <inheritancegraph>
-      <node id="2">
-        <label>TextWriterT&lt; castor3d::SpotLight &gt;</label>
-      </node>
-      <node id="1">
-        <label>castor::TextWriter&lt; castor3d::SpotLight &gt;</label>
-        <link refid="d2/d72/a05190"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-    </inheritancegraph>
-    <collaborationgraph>
-      <node id="2">
-        <label>TextWriterT&lt; castor3d::SpotLight &gt;</label>
-      </node>
-      <node id="1">
-        <label>castor::TextWriter&lt; castor3d::SpotLight &gt;</label>
-        <link refid="d2/d72/a05190"/>
-        <childnode refid="2" relation="public-inheritance">
-        </childnode>
-      </node>
-    </collaborationgraph>
-    <location file="Text/TextSpotLight.hpp" line="14" column="1" bodyfile="Text/TextSpotLight.hpp" bodystart="16" bodyend="21"/>
+    <location file="Shader/Ubos/UbosModule.hpp" line="415" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="416" bodyend="421"/>
     <listofallmembers>
-      <member refid="d2/d72/a05190_1afb80226df18e44beed0aa42645f8349e" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::SpotLight &gt;</scope><name>operator()</name></member>
-      <member refid="d2/d72/a05190_1a73eecad979fbeb12fd05cc006ebc2145" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::SpotLight &gt;</scope><name>TextWriter</name></member>
+      <member refid="d2/d72/a05190_1aec457c7c31aca4cbdd69e1460d2c9b4e" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUboConfiguration</scope><name>lightIndex</name></member>
+      <member refid="d2/d72/a05190_1aad9a7eddde3a1ac0857212592b858000" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUboConfiguration</scope><name>lightPosFarPlane</name></member>
+      <member refid="d2/d72/a05190_1a440ced704c065ffdbf0f29f60e3b971b" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUboConfiguration</scope><name>lightProjection</name></member>
+      <member refid="d2/d72/a05190_1a3b0097393ead8c6396d2fc299b804c97" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapUboConfiguration</scope><name>lightView</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>
