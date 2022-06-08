@@ -127,7 +127,6 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 
 	if ( VCPKG_BUILD )
 		find_package( ShaderWriter CONFIG REQUIRED ShaderAST ShaderWriter CompilerSpirV )
-		find_package( SdwCompilers CONFIG REQUIRED CompilerSpirV )
 	else ()
 		# ShaderWriter external library
 		set( SDW_BUILD_EXPORTERS ON )
