@@ -104,11 +104,13 @@ namespace castor3d
 		 *\brief		Updates the UBO from given values.
 		 *\param[in]	view		The new view matrix.
 		 *\param[in]	projection	The new projection matrix.
+		 *\param[in]	frustum		The frustum, from which planes are copied.
 		 *\param[in]	jitter		The jittering value.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\param[in]	view		La nouvelle matrice de vue.
 		 *\param[in]	projection	La nouvelle matrice de projection.
+		 *\param[in]	frustum		Le frustum depuis lequel les plans sont copiés.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
 		C3D_API void cpuUpdate( castor::Matrix4x4f const & view

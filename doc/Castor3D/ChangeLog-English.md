@@ -3,6 +3,17 @@ Change log	{#changelog}
 
 This page is here to inform about the changes since the earliest versions of the engine.
 
+## Version 0.13.0
+
+### Important Changes
+- Drastic performance improvement.
+- Implemented mesh and task shader, with frustum culling and backface culling.
+- Full rework of external data import (meshes, skeletons, animations).
+- Implemented morph target animations, replacing the per-vertex animations.
+- Added support for multiple texture coordinates sets (up to 4).
+- Added vertex colour component.
+- Merged the two implemented PBR workflows into an hybrid one, more flexible regarding extern scenes import.
+
 ## Version 0.12.0
 
 ### Important Changes

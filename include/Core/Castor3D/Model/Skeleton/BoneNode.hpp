@@ -23,11 +23,13 @@ namespace castor3d
 		 *\param[in]	name				The bone name.
 		 *\param[in]	skeleton			The parent skeleton.
 		 *\param[in]	inverseTransform	The transformation matrix from mesh space to bone space.
+		 *\param[in]	id					The bone ID.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	name				Le nom de l'os.
 		 *\param[in]	skeleton			Le squelette parent.
 		 *\param[in]	inverseTransform	La matrice de transformation de l'espace objet vers l'espace du noeud.
+		 *\param[in]	id					L'ID de l'os.
 		 */
 		C3D_API BoneNode( castor::String name
 			, Skeleton & skeleton

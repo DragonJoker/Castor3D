@@ -15,10 +15,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	size	The allocated size.
+		 *\param[in]	size		The allocated size.
+		 *\param[in]	alignSize	The alignment used for buffer chunks.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	size	La taille allouée.
+		 *\param[in]	size		La taille allouée.
+		 *\param[in]	alignSize	L'alignement utilisé pour les chunks du buffer.
 		 */
 		C3D_API explicit GpuBufferPackedAllocator( size_t size
 			, size_t alignSize = 1u );
@@ -54,9 +56,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\return		The element aligned size.
+		 *\return		The alignment used for buffer chunks.
 		 *\~french
-		 *\return		La taille  alignée d'un élément.
+		 *\return		L'alignement utilisé pour les chunks du buffer.
 		 */
 		size_t getAlignSize()const
 		{

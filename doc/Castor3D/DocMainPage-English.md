@@ -32,6 +32,7 @@ The project itself is compilable on supported platforms using CMake (cf. [build]
 - Shaders are writable directly from C++ code.
 - Scenes are described using a text format easily comprehensible and extensible. ([Scene File](SceneFile-English.md))
 - Asynchronous (timers) or synchronour (thread) rendering.
+- Using Mesh and Task shaders, if available.
 
 ## Implemented Plug-ins
 

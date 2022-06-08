@@ -32,6 +32,7 @@ Le projet en lui-même est compilable sur les plateformes supportées en utilisa
 - Ecriture du code du shader directement depuis le code C++.
 - Scènes décrites dans un format texte facilement compréhensible et extensible. ([Scene File](SceneFile-French.md))
 - Rendu synchrone (timers) ou asynchrone (thread).
+- Utilisation de Mesh et Task shaders, si disponibles.
 
 ## Plugins implémentés
 
@@ -39,12 +40,6 @@ Le projet en lui-même est compilable sur les plateformes supportées en utilisa
 
 - ASSIMP, utilisant la bibliothèque assimp pour l'import d'une grande variété de formats.
 - PLY, permettant l'import de gros maillage PLY.
-
-### Dividers
-
-- PN-Triangles: Subdivision en utilisant les surfaces PN-Triangles.
-- Phong: Subdivision en utilisant la tessellation de Phong.
-- Loop: Subdivision en utilisant les Loop subdivision surface.
 
 ### PostEffect
 

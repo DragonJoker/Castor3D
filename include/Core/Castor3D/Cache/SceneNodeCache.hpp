@@ -38,12 +38,22 @@ namespace castor3d
 		 *\param[in]	rootNode		The root node.
 		 *\param[in]	rootCameraNode	The cameras root node.
 		 *\param[in]	rootObjectNode	The objects root node.
+		 *\param[in]	initialise		The element initialiser.
+		 *\param[in]	clean			The element cleaner.
+		 *\param[in]	merge			The element collection merger.
+		 *\param[in]	attach			The element attacher (to a scene node).
+		 *\param[in]	detach			The element detacher (from a scene node).
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	scene			La scène.
 		 *\param[in]	rootNode		Le noeud racine.
 		 *\param[in]	rootCameraNode	Le noeud racine des caméras.
 		 *\param[in]	rootObjectNode	Le noeud racine des objets.
+		 *\param[in]	initialise		L'initialiseur d'objet.
+		 *\param[in]	clean			Le nettoyeur d'objet.
+		 *\param[in]	merge			Le fusionneur de collection d'objets.
+		 *\param[in]	attach			L'attacheur d'objet (à un noeud de scène).
+		 *\param[in]	detach			Le détacheur d'objet (d'un noeud de scène).
 		 */
 		C3D_API ObjectCacheT( Scene & scene
 			, SceneNodeSPtr rootNode
@@ -81,13 +91,11 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Logging version of tryAdd.
-		 *\param[in]	name		The element name.
-		 *\param[in]	parameters	The other constructor parameters.
+		 *\param[in]	name	The element name.
 		 *\return		The real element (added or duplicate original ).
 		 *\~french
 		 *\brief		Version journalisante de tryAdd.
-		 *\param[in]	name		Le nom d'élément.
-		 *\param[in]	parameters	Les autres paramètres de construction.
+		 *\param[in]	name	Le nom d'élément.
 		 *\return		L'élément réel (ajouté, ou original du doublon).
 		 */
 		C3D_API ElementObsT add( ElementKeyT const & name );

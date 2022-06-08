@@ -382,16 +382,16 @@ namespace castor3d
 		C3D_API IntermediateViewArray const & listIntermediateViews()const;
 		/**
 		 *\~english
-		 *\return		Destroys the loading scene.
+		 *\brief		Destroys the loading scene.
 		 *\~french
-		 *\return		Détruit la loading scene.
+		 *\brief		Détruit la loading scene.
 		 */
 		C3D_API void destroyLoadingScreen();
 		/**
 		 *\~english
-		 *\return		Creates the loading scene.
+		 *\brief		Creates the loading scene.
 		 *\~french
-		 *\return		Crée la loading scene.
+		 *\brief		Crée la loading scene.
 		 */
 		C3D_API void createLoadingScreen();
 		/**

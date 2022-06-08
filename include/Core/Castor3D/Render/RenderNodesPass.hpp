@@ -343,6 +343,7 @@ namespace castor3d
 		 *\param[in]	sceneFlags			Scene related flags.
 		 *\param[in]	topology			The render topology.
 		 *\param[in]	isFrontCulled		\p true for front face culling, \p false for back face culling.
+		 *\param[in]	morphTargets		The morph targets buffer.
 		 *\~french
 		 *\brief		Crée les indicateurs de pipeline pour la configuration donnée.
 		 *\param[in]	colourBlendMode		Le mode de mélange de couleurs.
@@ -359,6 +360,7 @@ namespace castor3d
 		 *\param[in]	sceneFlags			Les indicateurs relatifs à la scène.
 		 *\param[in]	topology			La topologie de rendu.
 		 *\param[in]	isFrontCulled		\p true pour front face culling, \p false pour back face culling.
+		 *\param[in]	morphTargets		Le buffer de morph targets.
 		 */
 		C3D_API PipelineFlags createPipelineFlags( BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
@@ -385,6 +387,7 @@ namespace castor3d
 		 *\param[in]	sceneFlags		Scene related flags.
 		 *\param[in]	topology		The render topology.
 		 *\param[in]	isFrontCulled	\p true for front face culling, \p false for back face culling.
+		 *\param[in]	morphTargets	The morph targets buffer.
 		 *\~french
 		 *\brief		Crée les indicateurs de pipeline pour la configuration donnée.
 		 *\param[in]	pass			La passe pour laquelle le pipeline est créé.
@@ -394,6 +397,7 @@ namespace castor3d
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	topology		La topologie de rendu.
 		 *\param[in]	isFrontCulled	\p true pour front face culling, \p false pour back face culling.
+		 *\param[in]	morphTargets	Le buffer de morph targets.
 		 */
 		C3D_API PipelineFlags createPipelineFlags( Pass const & pass
 			, TextureFlagsArray const & textures
@@ -406,12 +410,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Prepares the pipeline matching the given flags, for back face culling nodes.
-		 *\param[in]		pipelineFlags		The pipeline flags.
-		 *\param[in]		vertexLayouts		The vertex buffers layouts.
+		 *\param[in]		pipelineFlags			The pipeline flags.
+		 *\param[in]		vertexLayouts			The vertex buffers layouts.
+		 *\param[in]		meshletDescriptorLayout	The optional meshlets descriptor layout.
 		 *\~french
 		 *\brief			Prépare le pipeline qui correspond aux indicateurs donnés, pour les noeuds en back face culling.
-		 *\param[in]		pipelineFlags		Les indicateurs de pipeline.
-		 *\param[in]		vertexLayouts		Les layouts des tampons de sommets.
+		 *\param[in]		pipelineFlags			Les indicateurs de pipeline.
+		 *\param[in]		vertexLayouts			Les layouts des tampons de sommets.
+		 *\param[in]		meshletDescriptorLayout	Les layouts optionnels de descripteurs de meshlets.
 		 */
 		C3D_API RenderPipeline & prepareBackPipeline( PipelineFlags pipelineFlags
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
@@ -434,12 +440,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the additional descriptor set.
-		 *\param[in]	pipeline	The render pipeline.
-		 *\param[in]	shadowMaps	The shadow maps.
+		 *\param[in]	pipeline		The render pipeline.
+		 *\param[in]	shadowMaps		The shadow maps.
+		 *\param[in]	morphTargets	The morph targets buffer.
 		 *\~french
 		 *\brief		Initialise l'ensemble de descripteurs additionnels.
-		 *\param[in]	pipeline	Le render pipeline.
-		 *\param[in]	shadowMaps	Les shadow maps.
+		 *\param[in]	pipeline		Le render pipeline.
+		 *\param[in]	shadowMaps		Les shadow maps.
+		 *\param[in]	morphTargets	Le buffer de morph targets.
 		 */
 		C3D_API void initialiseAdditionalDescriptor( RenderPipeline & pipeline
 			, ShadowMapLightTypeArray const & shadowMaps
