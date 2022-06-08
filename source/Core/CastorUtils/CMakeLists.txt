@@ -1,4 +1,10 @@
-if( EXISTS ${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels.h )
+if ( VCPKG_BUILD )
+	find_package( cvtt CONFIG REQUIRED )
+	add_library( castor::cvtt
+		ALIAS
+		cvtt::cvtt
+	)
+elseif( EXISTS ${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels.h )
 	project( cvtt )
 	set( ${PROJECT_NAME}_SRC_FILES
 		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_API.cpp
@@ -55,7 +61,7 @@ if( EXISTS ${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels.h )
 	)
 	target_include_directories( ${PROJECT_NAME}
 		PUBLIC
-			${EXTERNAL_SOURCE_DIR}/cvtt
+			${EXTERNAL_SOURCE_DIR}
 	)
 	install_target_ex( ${PROJECT_NAME}
 		Castor3D
@@ -762,6 +768,16 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 				CU_NoDelayedInit=1
 		)
 	endif ()
+	if ( VCPKG_BUILD OR ( EXISTS ${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels.h ) )
+		target_compile_definitions( ${PROJECT_NAME}
+			PUBLIC
+				CU_UseCVTT
+		)
+		target_link_libraries( ${PROJECT_NAME}
+			PRIVATE
+				castor::cvtt
+		)
+	endif ()
 	target_compile_definitions( ${PROJECT_NAME}
 		PUBLIC
 			_UNICODE
@@ -798,12 +814,6 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 			${Freetype_LIBRARIES}
 			castor::MiniZip
 	)
-	if( EXISTS ${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels.h )
-		target_link_libraries( ${PROJECT_NAME}
-			PRIVATE
-				castor::cvtt
-		)
-	endif ()
 	if ( WIN32 )
 		target_link_libraries( ${PROJECT_NAME}
 			PUBLIC
