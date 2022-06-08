@@ -23,9 +23,11 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	submesh	The parent submesh.
+		 *\param[in]	flags	The flags for the affected components.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	submesh	Le sous-maillage parent.
+		 *\param[in]	flags	Les indicateurs des composants affectés.
 		 */
 		C3D_API explicit MorphComponent( Submesh & submesh
 			, MorphFlags flags );

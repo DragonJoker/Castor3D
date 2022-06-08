@@ -3,6 +3,17 @@ Suivi de versions	{#changelog}
 
 Cette page sert à informer des évolutions du moteur depuis les premières versions.
 
+## Version 0.13.0
+
+### Important Changes
+- Amélioration drastique des performances.
+- Implémentation des mesh et task shader, avec frustum culling et backface culling.
+- Refonte de l'import des données externes (meshes, skeletons, animations).
+- Implémentation des morph target animations, en remplacement des per-vertex animations.
+- Ajout du support de multiples sets de coordonnées de textures (jusqu'à 4).
+- Ajout des couleurs de sommets.
+- Fusion des deux workflows de PBR implémentés en un hybride, plus flexible par rapport à l'import de scènes externes.
+
 ## Version 0.12.0
 
 ### Important Changes

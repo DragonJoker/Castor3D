@@ -160,14 +160,12 @@ namespace castor3d
 		 *\param[in]	path	The image file path (can be relative or absolute).
 		 *\param[in]	config	The texture unit configuration.
 		 *\param[in]	pass	The pass.
-		 *\return		\p false if any error occured.
 		 *\~french
 		 *\brief		Charge une texture et l'ajoute à la passe donnée.
 		 *\param[in]	sampler	Le sampler utilisé par la texture.
 		 *\param[in]	path	Le chemin vers l'image (peut être relatif ou absolu).
 		 *\param[in]	config	La configuration de la texture.
 		 *\param[in]	pass	La passe.
-		 *\return		\p false en cas d'erreur.
 		 */
 		C3D_API void loadTexture( castor3d::SamplerRes sampler
 			, castor::Path const & path
@@ -182,7 +180,6 @@ namespace castor3d
 		 *\param[in]	data	The image data.
 		 *\param[in]	config	The texture unit configuration.
 		 *\param[in]	pass	The pass.
-		 *\return		\p false if any error occured.
 		 *\~french
 		 *\brief		Charge une texture et l'ajoute à la passe donnée.
 		 *\param[in]	sampler	Le sampler utilisé par la texture.
@@ -191,7 +188,6 @@ namespace castor3d
 		 *\param[in]	data	Les données de l'image.
 		 *\param[in]	config	La configuration de la texture.
 		 *\param[in]	pass	La passe.
-		 *\return		\p false en cas d'erreur.
 		 */
 		C3D_API void loadTexture( castor3d::SamplerRes sampler
 			, castor::String name

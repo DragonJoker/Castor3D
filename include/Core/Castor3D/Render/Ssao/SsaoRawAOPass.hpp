@@ -35,6 +35,7 @@ namespace castor3d
 		 *\param[in]	gpInfoUbo				The GBuffer configuration UBO.
 		 *\param[in]	linearisedDepthBuffer	The linearised depth buffer.
 		 *\param[in]	normals					The normals buffer.
+		 *\param[in]	passIndex				The frame pass index.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	graph					Le render graph.
@@ -47,6 +48,7 @@ namespace castor3d
 		 *\param[in]	gpInfoUbo				L'UBO de configuration du GBuffer.
 		 *\param[in]	linearisedDepthBuffer	Le tampon de profondeur linéarisé.
 		 *\param[in]	normals					Le tampon de normales.
+		 *\param[in]	passIndex				L'index de la passe de frame.
 		 */
 		C3D_API SsaoRawAOPass( crg::FramePassGroup & graph
 			, RenderDevice const & device

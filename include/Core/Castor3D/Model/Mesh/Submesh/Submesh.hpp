@@ -52,10 +52,12 @@ namespace castor3d
 		 *\brief		Constructor.
 		 *\param[in]	mesh	The parent mesh.
 		 *\param[in]	id		The submesh ID.
+		 *\param[in]	flags	The submesh flags.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	mesh	Le mesh parent.
 		 *\param[in]	id		L'ID du sous-maillage.
+		 *\param[in]	flags	Les indicateur du sous-maillage.
 		 */
 		C3D_API explicit Submesh( Mesh & mesh
 			, uint32_t id = 1
@@ -235,18 +237,18 @@ namespace castor3d
 			, bool update );
 		/**
 		*\~english
-		*\return		The geometry buffers for given material.
+		*\return		The geometry buffers for given render node.
+		 *\param[in]	node			The render node using this submesh.
 		 *\param[in]	shaderFlags		The shader flags.
 		 *\param[in]	programFlags	The program flags.
 		 *\param[in]	submeshFlags	The submesh flags.
-		 *\param[in]	material		The material.
 		 *\param[in]	mask			The textures mask.
 		*\~french
-		*\return		Les tampons de géométrie associés au materiau donné.
+		*\return		Les tampons de géométrie associés au noeud de rendu donné.
+		 *\param[in]	node			Le noeud de rendu utilisant ce sous-maillage.
 		 *\param[in]	shaderFlags		Les shader flags.
 		 *\param[in]	programFlags	Les program flags.
 		 *\param[in]	submeshFlags	Les submesh flags.
-		 *\param[in]	material		Les matériau.
 		 *\param[in]	mask			Le masque de textures.
 		*/
 		C3D_API GeometryBuffers const & getGeometryBuffers( SubmeshRenderNode const & node
