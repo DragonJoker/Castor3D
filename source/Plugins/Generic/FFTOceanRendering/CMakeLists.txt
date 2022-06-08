@@ -1,7 +1,11 @@
 set( FOLDER_NAME FFTOceanRendering )
 project( ${FOLDER_NAME} )
 
-set( VkFFT_DIR ${CASTOR_SOURCE_DIR}/external/VkFFT/ )
+if ( VCPKG_BUILD )
+	set( VkFFT_DIR ${VCPKG_INSTALLED_DIR}/include/ )
+else ()
+	set( VkFFT_DIR ${CASTOR_SOURCE_DIR}/external/VkFFT/ )
+endif ()
 
 if ( CASTOR_USE_GLSLANG AND EXISTS ${VkFFT_DIR} )
 	set( VKFFT_BACKEND "0" )
