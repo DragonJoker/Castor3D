@@ -136,36 +136,36 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		SkeletonAnimation import Function.
-		 *\param[out]	animation	Receives the imported data.
+		 *\param[out]	skeleton	Receives the imported data.
 		 *\return		\p false if any problem occured.
 		 *\~french
 		 *\brief		Fonction d'import de SkeletonAnimation.
-		 *\param[out]	animation	Reçoit les données importées.
+		 *\param[out]	skeleton	Reçoit les données importées.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API virtual bool doImportSkeleton( SkeletonAnimation & animation ) = 0;
+		C3D_API virtual bool doImportSkeleton( SkeletonAnimation & skeleton ) = 0;
 		/**
 		 *\~english
 		 *\brief		MeshAnimation import function.
-		 *\param[out]	animation	Receives the imported data.
+		 *\param[out]	mesh	Receives the imported data.
 		 *\return		\p false if any problem occured.
 		 *\~french
 		 *\brief		Fonction d'import de MeshAnimation.
-		 *\param[out]	animation	Reçoit les données importées.
+		 *\param[out]	mesh	Reçoit les données importées.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API virtual bool doImportMesh( MeshAnimation & animation ) = 0;
+		C3D_API virtual bool doImportMesh( MeshAnimation & mesh ) = 0;
 		/**
 		 *\~english
 		 *\brief		SceneNodeAnimation import Function.
-		 *\param[out]	animation	Receives the imported data.
+		 *\param[out]	node	Receives the imported data.
 		 *\return		\p false if any problem occured.
 		 *\~french
 		 *\brief		Fonction d'import de SceneNodeAnimation.
-		 *\param[out]	animation	Reçoit les données importées.
+		 *\param[out]	node	Reçoit les données importées.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API virtual bool doImportNode( SceneNodeAnimation & animation ) = 0;
+		C3D_API virtual bool doImportNode( SceneNodeAnimation & node ) = 0;
 
 	protected:
 		ImporterFile * m_file{};

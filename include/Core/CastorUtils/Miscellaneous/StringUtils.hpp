@@ -348,12 +348,14 @@ namespace castor
 		 *\param[in,out]	str		The String to trim, receives the trimmed string
 		 *\param[in]		left	Tells if we remove the left spaces
 		 *\param[in]		right	Tells if we remove the right spaces
+		 *\param[in]		seps	The characters to trim
 		 *\return			The trimmed String
 		 *\~french
 		 *\brief			Supprime les espaces à gauche et/ou à droite dans la chaîne donnée
 		 *\param[in,out]	str		La chaîne à modifier, reçoit la chaîne modifiée
 		 *\param[in]		left	Dit si on enlève les espaces à gauche
 		 *\param[in]		right	Dit si on enlève les espaces à droite
+		 *\param[in]		seps	Les caractères à supprimer
 		 *\return			La chaîne sans espaces
 		 */
 		CU_API String & trim( String & str, bool left = true, bool right = true, String seps = " \t\r" );

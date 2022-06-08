@@ -35,6 +35,7 @@ namespace castor3d
 		 *\param[in]	input			The texture to blur.
 		 *\param[in]	bentInput		The bent normals texture to blur.
 		 *\param[in]	normals			The normals buffer.
+		 *\param[in]	passIndex		The frame pass index.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	graph			Le render graph.
@@ -50,6 +51,7 @@ namespace castor3d
 		 *\param[in]	input			La texture à flouter.
 		 *\param[in]	bentInput		La texture de bent normals à flouter
 		 *\param[in]	normals			Le tampon de normales.
+		 *\param[in]	passIndex		L'index de la passe de frame.
 		 */
 		C3D_API SsaoBlurPass( crg::FramePassGroup & graph
 			, RenderDevice const & device

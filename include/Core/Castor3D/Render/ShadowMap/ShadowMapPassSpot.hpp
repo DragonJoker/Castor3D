@@ -25,6 +25,8 @@ namespace castor3d
 		 *\param[in]	matrixUbo	The scene matrices UBO.
 		 *\param[in]	culler		The culler for this pass.
 		 *\param[in]	shadowMap	The parent shadow map.
+		 *\param[in]	needsVsm	Tells if the pass needs to generate variance shadow map.
+		 *\param[in]	needsRsm	Tells if the pass needs to generate reflective shadow maps.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	pass		La frame pass parente.
@@ -35,6 +37,8 @@ namespace castor3d
 		 *\param[in]	matrixUbo	L'UBO de matrices de la scène.
 		 *\param[in]	culler		Le culler pour cette passe.
 		 *\param[in]	shadowMap	La shadow map parente.
+		 *\param[in]	needsVsm	Dit si la passe doit générer la variance shadow map.
+		 *\param[in]	needsRsm	Dit si la passe doit générer les reflective shadow maps.
 		 */
 		C3D_API ShadowMapPassSpot( crg::FramePass const & pass
 			, crg::GraphContext & context

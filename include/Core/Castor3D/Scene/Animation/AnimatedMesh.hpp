@@ -45,9 +45,11 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Fills a buffer with this object's morph targets weights transforms.
+		 *\param[out]	submesh	The submesh from which the morph targets are retrieved.
 		 *\param[out]	buffer	Receives the transforms.
 		 *\~french
 		 *\brief		Remplit un buffer avec les poids de cibles de morph de cet objet.
+		 *\param[out]	submesh	Les submesh depuis lequel les morph targets sont récupérées.
 		 *\param[out]	buffer	Reçoit les transformations.
 		 */
 		C3D_API uint32_t fillBuffer( Submesh const & submesh

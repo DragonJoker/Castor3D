@@ -107,7 +107,7 @@ namespace castor3d
 
 	protected:
 		/**
-		 *\copydoc		castor3d::MeshImporter::doImportSkeleton
+		 *\copydoc		castor3d::SkeletonImporter::doImportSkeleton
 		 */
 		C3D_API bool doImportSkeleton( Skeleton & skeleton )override;
 
@@ -140,15 +140,15 @@ namespace castor3d
 
 	protected:
 		/**
-		 *\copydoc		castor3d::MeshImporter::doImportSkeleton
+		 *\copydoc		castor3d::AnimationImporter::doImportSkeleton
 		 */
 		C3D_API bool doImportSkeleton( SkeletonAnimation & skeleton )override;
 		/**
-		 *\copydoc		castor3d::MeshImporter::doImportMesh
+		 *\copydoc		castor3d::AnimationImporter::doImportMesh
 		 */
 		C3D_API bool doImportMesh( MeshAnimation & mesh )override;
 		/**
-		 *\copydoc		castor3d::MeshImporter::doImportScene
+		 *\copydoc		castor3d::AnimationImporter::doImportNode
 		 */
 		C3D_API bool doImportNode( SceneNodeAnimation & scene )override;
 

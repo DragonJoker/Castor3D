@@ -51,11 +51,15 @@ namespace castor3d
 		 *\param[in]	factor	The percentage between \p prv and \p cur.
 		 *\param[in]	prv		The previous animation buffer (factor 0).
 		 *\param[in]	cur		The current animation buffer (factor 1).
+		 *\param[in]	prvbb	The bounding box for the previous animation buffer.
+		 *\param[in]	curbb	The bounding box for the current animation buffer.
 		 *\~french
 		 *\brief		Met à jour les transformations appliquées à l'objet, l'index de temps donné.
 		 *\param[in]	factor	Le pourcentage entre \p prv et \p cur.
 		 *\param[in]	prv		Le tampon d'animation précédent (pourcentage 0).
 		 *\param[in]	cur		Le tampon d'animation courant (pourcentage 1).
+		 *\param[in]	prvbb	La bounding box pour le tampon d'animation précédent.
+		 *\param[in]	curbb	La bounding box pour le tampon d'animation courant.
 		 */
 		C3D_API void update( float factor
 			, std::vector< float > const & prv

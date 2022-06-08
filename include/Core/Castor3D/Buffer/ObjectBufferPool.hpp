@@ -138,13 +138,17 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves a GPU buffer with the given size.
-		 *\param[in]	vertexCount	The wanted vertex count.
-		 *\param[in]	indexCount	The wanted index count.
+		 *\param[in]	vertexCount		The wanted vertex count.
+		 *\param[in]	indexCount		The wanted index count.
+		 *\param[in]	submeshFlags	The components for which the result will have allocated buffers.
+		 *\param[in]	isGpuComputed	Tells if the result is GPU computed (in case of a dynamic submesh).
 		 *\return		The GPU buffer.
 		 *\~french
 		 *\brief		Récupère un tampon GPU avec la taille donnée.
-		 *\param[in]	vertexCount	Le nombre de sommets voulus.
-		 *\param[in]	indexCount	Le nombre d'indices voulus.
+		 *\param[in]	vertexCount		Le nombre de sommets voulus.
+		 *\param[in]	indexCount		Le nombre d'indices voulus.
+		 *\param[in]	submeshFlags	Les composants pour lesquels le résultat aura un buffer alloué.
+		 *\param[in]	isGpuComputed	Dit si le résultat est calculé par le GPU (si le submesh est dynamique).
 		 *\return		Le tampon GPU.
 		 */
 		C3D_API ObjectBufferOffset getBuffer( VkDeviceSize vertexCount
