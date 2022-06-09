@@ -105,8 +105,8 @@ function( InteropSetup )
 			cpack_add_component( PyCastor3D
 				DISPLAY_NAME "PyCastor3D library"
 				DESCRIPTION "Python binding for Castor3D"
-			GROUP Interoperability
-				INSTALL_TYPES Full
+				GROUP Interoperability
+				INSTALL_TYPES Minimal Full
 			)
 		endif()
 
@@ -114,8 +114,8 @@ function( InteropSetup )
 			cpack_add_component( PyGuiCommon
 				DISPLAY_NAME "PyGuiCommon library"
 				DESCRIPTION "Python binding for GuiCommon"
-			GROUP Interoperability
-				INSTALL_TYPES Full
+				GROUP Interoperability
+				INSTALL_TYPES Minimal Full
 			)
 		endif()
 
@@ -123,8 +123,8 @@ function( InteropSetup )
 			cpack_add_component( ComCastor3D
 				DISPLAY_NAME "ComCastor3D library"
 				DESCRIPTION "COM binding for Castor3D"
-			GROUP Interoperability
-				INSTALL_TYPES Full
+				GROUP Interoperability
+				INSTALL_TYPES Minimal Full
 			)
 		endif()
 	endif ()

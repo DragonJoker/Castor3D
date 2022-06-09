@@ -58,6 +58,7 @@ set_target_properties( ${PROJECT_NAME}
 		FOLDER "Plugins/ToneMappings"
 )
 install_target_ex( ${PROJECT_NAME}
+	Castor3D
 	Plugins
 	plugin
 	${CASTOR_SOURCE_DIR}/source/Plugins/ToneMappings/${FOLDER_NAME}

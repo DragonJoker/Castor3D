@@ -56,6 +56,8 @@ add_target_min(
 target_include_directories( ${PROJECT_NAME}
 	PRIVATE
 		${Castor3DIncludeDirs}
+		${wxWidgets_INCLUDE_DIRS}
+		${GTK_INCLUDE_DIRS}
 )
 target_link_libraries( ${PROJECT_NAME}
 	PRIVATE
@@ -67,6 +69,7 @@ set_target_properties( ${PROJECT_NAME}
 		FOLDER "Samples"
 )
 install_target_ex( ${PROJECT_NAME}
+	Castor3D
 	${PROJECT_NAME}
 	bin
 	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}

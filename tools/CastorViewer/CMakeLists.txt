@@ -43,6 +43,7 @@ add_target_min(
 target_include_directories( ${PROJECT_NAME}
 	PRIVATE
 		${Castor3DIncludeDirs}
+		${SystemIncludeDirs}
 )
 target_link_libraries( ${PROJECT_NAME}
 	PRIVATE
@@ -54,7 +55,8 @@ set_target_properties( ${PROJECT_NAME}
 		FOLDER "Tools"
 )
 install_target_ex( ${PROJECT_NAME}
-	${PROJECT_NAME}
+	Castor3D
+	Tools
 	bin
 	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}
 )

@@ -289,16 +289,15 @@ add_library( castor::${PROJECT_NAME}
 )
 target_include_directories( ${PROJECT_NAME}
 	PUBLIC
-		${CASTOR_SOURCE_DIR}/tools
-		${CASTOR_BINARY_DIR}/tools
+		$<BUILD_INTERFACE:${CASTOR_SOURCE_DIR}/tools>
+		$<BUILD_INTERFACE:${CASTOR_BINARY_DIR}/tools>
+		$<INSTALL_INTERFACE:include>
 	PRIVATE
 		${Castor3DIncludeDirs}
 )
 target_include_directories( ${PROJECT_NAME} SYSTEM
-	PUBLIC
-		${wxWidgets_INCLUDE_DIRS}
-		${GTK_INCLUDE_DIRS}
 	PRIVATE
+		${SystemIncludeDirs}
 		${FFMPEG_INCLUDE_DIR}
 )
 target_link_libraries( ${PROJECT_NAME}
@@ -347,6 +346,7 @@ if ( CASTOR_C3D_NEEDS_GLSL )
 endif ()
 install_target_ex( ${PROJECT_NAME}
 	Castor3D
+	Tools
 	lib
 	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}
 )

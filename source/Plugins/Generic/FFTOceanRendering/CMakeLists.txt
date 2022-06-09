@@ -98,6 +98,7 @@ if ( CASTOR_USE_GLSLANG AND EXISTS ${VkFFT_DIR} )
 			FOLDER "Plugins/Generic"
 	)
 	install_target_ex( ${PROJECT_NAME}
+		Castor3D
 		Plugins
 		plugin
 		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}

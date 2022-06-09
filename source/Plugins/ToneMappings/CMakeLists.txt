@@ -106,7 +106,7 @@ function( ToneMappingsSetup )
 		DESCRIPTION "Allows Linear Tone mapping."
 		GROUP Core
 		DEPENDS Castor3D
-		INSTALL_TYPES Minimal Developer Full
+		INSTALL_TYPES Minimal Full
 	)
 	if ( ${CASTOR_BUILDGRP_TONEMAPS} )
 		if( ${CASTOR_BUILD_TONEMAP_HAARM} )
@@ -115,7 +115,7 @@ function( ToneMappingsSetup )
 				DESCRIPTION "Allows Haarm Pieter Duiker Tone mapping."
 				GROUP Plugins
 				DEPENDS Castor3D
-				INSTALL_TYPES Developer Full
+				INSTALL_TYPES Minimal Full
 			)
 		endif()
 		if( ${CASTOR_BUILD_TONEMAP_HEJL} )
@@ -124,7 +124,7 @@ function( ToneMappingsSetup )
 				DESCRIPTION "Allows Haarm Peter Duiker Tone mapping."
 				GROUP Plugins
 				DEPENDS Castor3D
-				INSTALL_TYPES Developer Full
+				INSTALL_TYPES Minimal Full
 			)
 		endif()
 		if( ${CASTOR_BUILD_TONEMAP_REINHARD} )
@@ -133,7 +133,7 @@ function( ToneMappingsSetup )
 				DESCRIPTION "Allows Reinhard Tone mapping."
 				GROUP Plugins
 				DEPENDS Castor3D
-				INSTALL_TYPES Developer Full
+				INSTALL_TYPES Minimal Full
 			)
 		endif()
 		if( ${CASTOR_BUILD_TONEMAP_UNCHARTED2} )
@@ -142,7 +142,7 @@ function( ToneMappingsSetup )
 				DESCRIPTION "Allows Uncharted 2 Tone mapping."
 				GROUP Plugins
 				DEPENDS Castor3D
-				INSTALL_TYPES Developer Full
+				INSTALL_TYPES Minimal Full
 			)
 		endif()
 		if( ${CASTOR_BUILD_TONEMAP_ACES} )
@@ -151,7 +151,7 @@ function( ToneMappingsSetup )
 				DESCRIPTION "Allows ACES Tone mapping."
 				GROUP Plugins
 				DEPENDS Castor3D
-				INSTALL_TYPES Developer Full
+				INSTALL_TYPES Minimal Full
 			)
 		endif()
 	endif ()
