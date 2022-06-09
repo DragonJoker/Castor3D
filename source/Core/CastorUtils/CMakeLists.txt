@@ -61,9 +61,11 @@ elseif( EXISTS ${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels.h )
 	)
 	target_include_directories( ${PROJECT_NAME}
 		PUBLIC
-			${EXTERNAL_SOURCE_DIR}
+			$<BUILD_INTERFACE:${EXTERNAL_SOURCE_DIR}>
+			$<INSTALL_INTERFACE:include>
 	)
 	install_target_ex( ${PROJECT_NAME}
+		Castor3D
 		Castor3D
 		lib
 		${CASTOR_SOURCE_DIR}/include/Core/CastorUtils/${PROJECT_NAME}
@@ -859,6 +861,18 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 				PRIVATE
 					freeimage::FreeImage
 			)
+			if ( WIN32 )
+				get_property( freeimageLibPathRel TARGET freeimage::FreeImage PROPERTY IMPORTED_LOCATION_RELEASE )
+				set( ADDITIONAL_DEPS_REL
+					${ADDITIONAL_DEPS_REL}
+					${freeimageLibPathRel}
+				)
+				get_property( freeimageLibPathDbg TARGET freeimage::FreeImage PROPERTY IMPORTED_LOCATION_DEBUG )
+				set( ADDITIONAL_DEPS_DBG
+					${ADDITIONAL_DEPS_DBG}
+					${freeimageLibPathDbg}
+				)
+			endif ()
 		endif ()
 	endif ()
 
@@ -874,16 +888,17 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	install(
 		FILES ${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/config.hpp
 		DESTINATION include/${PROJECT_NAME}
-		COMPONENT Castor3D_dev
+		COMPONENT Castor3D
 		CONFIGURATIONS Release
 	)
 	install(
 		FILES ${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/PixelFormat.enum
 		DESTINATION include/${PROJECT_NAME}/Graphics
-		COMPONENT Castor3D_dev
+		COMPONENT Castor3D
 		CONFIGURATIONS Release
 	)
 	install_target_ex( ${PROJECT_NAME}
+		Castor3D
 		Castor3D
 		api_dll
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}
@@ -896,7 +911,6 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	if ( WIN32 )
 		set( CMAKE_INSTALL_DEBUG_LIBRARIES TRUE )
 		set( CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION bin/$<$<CONFIG:Debug>:Debug/> )
-		include( InstallRequiredSystemLibraries )
 		if ( VCPKG_TOOLCHAIN )
 			find_dll_config( zlibLibPathRel ${ZLIB_LIBRARY_RELEASE} "1.dll" )
 			get_property( freetypeLibPathRel TARGET freetype PROPERTY IMPORTED_LOCATION_RELEASE )
@@ -904,7 +918,13 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 				${ADDITIONAL_DEPS_REL}
 				${zlibLibPathRel}
 				${freetypeLibPathRel}
-				PARENT_SCOPE
+			)
+			find_dll_config( zlibLibPathDbg ${ZLIB_LIBRARY_DEBUG} "1.dll" )
+			get_property( freetypeLibPathDbg TARGET freetype PROPERTY IMPORTED_LOCATION_DEBUG )
+			set( ADDITIONAL_DEPS_DBG
+				${ADDITIONAL_DEPS_DBG}
+				${zlibLibPathDbg}
+				${freetypeLibPathDbg}
 			)
 		elseif ( CASTOR_USE_SYSTEM_LIBS AND NOT VCPKG_TOOLCHAIN )
 			if ( ${PROJECTS_PLATFORM} STREQUAL "x86" )
@@ -923,6 +943,14 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 				copy_dll( ${PROJECT_NAME} ${ZLIB_LIBRARY} ${ZLIB_LIBRARY} )
 			endif ()
 		endif ()
+		set( ADDITIONAL_DEPS_REL
+			${ADDITIONAL_DEPS_REL}
+			PARENT_SCOPE
+		)
+		set( ADDITIONAL_DEPS_DBG
+			${ADDITIONAL_DEPS_DBG}
+			PARENT_SCOPE
+		)
 	endif ()
 
 	add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )

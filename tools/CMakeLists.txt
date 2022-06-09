@@ -68,6 +68,11 @@ function( ToolsBuild )
 			endif ()
 
 			if( wxWidgets_FOUND AND GTK_FOUND )
+				set( SystemIncludeDirs
+					${SystemIncludeDirs}
+					${wxWidgets_INCLUDE_DIRS}
+					${GTK_INCLUDE_DIRS}
+				)
 				if( CASTOR_BUILD_TOOL_IMG_CONVERTER )
 					set( Build ${ImgConv} )
 					add_subdirectory( ImgConverter )
@@ -206,7 +211,6 @@ function( ToolsSetup )
 				DISPLAY_NAME "ImgConverter application"
 				DESCRIPTION "A small image converter, to convert from any image format to ICO or XPM."
 				GROUP Tools
-				INSTALL_TYPES Full Developer
 			)
 		endif()
 
@@ -215,44 +219,15 @@ function( ToolsSetup )
 				DISPLAY_NAME "HeightMapToNormalMap application"
 				DESCRIPTION "Application used to generate a normal map from a height/bump map."
 				GROUP Tools
-				INSTALL_TYPES Full Developer
 			)
 		endif()
 
 		if( CASTOR_BUILD_CASTOR3D )
-			if( CASTOR_BUILD_TOOL_GUICOMMON )
-				cpack_add_component( GuiCommon
-					DISPLAY_NAME "GuiCommon"
-					DESCRIPTION "Common classes and functions for CastorViewer and CastorShape."
-					GROUP Tools
-					DEPENDS Castor3D
-					INSTALL_TYPES Developer Full
-				)
-				cpack_add_component( GuiCommon_dev
-					DISPLAY_NAME "GuiCommon SDK"
-					DESCRIPTION "Common classes and functions for CastorViewer and CastorShape."
-					GROUP Development
-					DEPENDS GuiCommon
-					INSTALL_TYPES Developer Full
-				)
-
-				if( CASTOR_BUILD_TOOL_CASTOR_VIEWER )
-					cpack_add_component( CastorViewer
-						DISPLAY_NAME "CastorViewer"
-						DESCRIPTION "A simple scene viewer using Castor3D."
-						GROUP Tools
-						DEPENDS GuiCommon
-						INSTALL_TYPES Full
-					)
-				endif ()
-			endif ()
-
 			if( CASTOR_BUILD_TOOL_MESH_UPGRADER )
 				cpack_add_component( CastorMeshUpgrader
 					DISPLAY_NAME "CastorMeshUpgrader application"
 					DESCRIPTION "A mesh upgrader, to convert Castor3D mesh to the latest version."
 					GROUP Tools
-					INSTALL_TYPES Minimal Full Developer
 				)
 			endif()
 
@@ -261,7 +236,6 @@ function( ToolsSetup )
 					DISPLAY_NAME "CastorMeshConverter application"
 					DESCRIPTION "A mesh converter, to convert from any mesh format to Castor3D mesh."
 					GROUP Tools
-					INSTALL_TYPES Minimal Full Developer
 				)
 			endif()
 
@@ -270,9 +244,26 @@ function( ToolsSetup )
 					DISPLAY_NAME "CastorTestLauncher application"
 					DESCRIPTION "An application used to run Castor3D render tests."
 					GROUP Tools
-					INSTALL_TYPES Full Developer
 				)
 			endif()
+
+			if( CASTOR_BUILD_TOOL_GUICOMMON )
+				cpack_add_component( GuiCommon
+					DISPLAY_NAME "GuiCommon"
+					DESCRIPTION "Common classes and functions for CastorViewer and CastorShape."
+					GROUP Tools
+					DEPENDS Castor3D
+				)
+
+				if( CASTOR_BUILD_TOOL_CASTOR_VIEWER )
+					cpack_add_component( CastorViewer
+						DISPLAY_NAME "CastorViewer"
+						DESCRIPTION "A simple scene viewer using Castor3D."
+						GROUP Tools
+						DEPENDS GuiCommon
+					)
+				endif ()
+			endif ()
 		endif()
 	endif ()
 endfunction( ToolsSetup )

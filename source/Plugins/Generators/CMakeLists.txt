@@ -57,7 +57,6 @@ function( GeneratorSetup )
 				DESCRIPTION "Allows terrain generation using diamond-square algorithm in Castor3D."
 				GROUP Plugins
 				DEPENDS Castor3D
-				INSTALL_TYPES Developer Full
 			)
 		endif()
 	endif ()

@@ -122,6 +122,7 @@ if( assimp_FOUND )
 			${assimp_LIBRARIES}
 	)
 	install_target_ex( ${PROJECT_NAME}
+		Castor3D
 		Plugins
 		plugin
 		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}
@@ -146,6 +147,12 @@ if( assimp_FOUND )
 		set( ADDITIONAL_DEPS_REL
 			${ADDITIONAL_DEPS_REL}
 			${LibPathRel}
+			PARENT_SCOPE
+		)
+		get_property( LibPathDbg TARGET assimp::assimp PROPERTY IMPORTED_LOCATION_DEBUG )
+		set( ADDITIONAL_DEPS_DBG
+			${ADDITIONAL_DEPS_DBG}
+			${LibPathDbg}
 			PARENT_SCOPE
 		)
 	elseif ( {${CASTOR_PACKAGE_DEB} )

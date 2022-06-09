@@ -134,7 +134,7 @@ function( PostEffectsSetup )
 				DESCRIPTION "Allows HDR Bloom post effect."
 				GROUP Plugins
 				DEPENDS Castor3D
-				INSTALL_TYPES Developer Full
+				INSTALL_TYPES Minimal Full
 			)
 		endif()
 		if( ${CASTOR_BUILD_POSTFX_GRAYSCALE} )
@@ -143,7 +143,7 @@ function( PostEffectsSetup )
 				DESCRIPTION "Allows GrayScale post effect."
 				GROUP Plugins
 				DEPENDS Castor3D
-				INSTALL_TYPES Developer Full
+				INSTALL_TYPES Minimal Full
 			)
 		endif()
 		if( ${CASTOR_BUILD_POSTFX_FXAA} )
@@ -152,7 +152,7 @@ function( PostEffectsSetup )
 				DESCRIPTION "Allows FXAA post effect."
 				GROUP Plugins
 				DEPENDS Castor3D
-				INSTALL_TYPES Developer Full
+				INSTALL_TYPES Minimal Full
 			)
 		endif()
 		if( ${CASTOR_BUILD_POSTFX_SMAA} )
@@ -161,7 +161,7 @@ function( PostEffectsSetup )
 				DESCRIPTION "Allows SMAA post effect."
 				GROUP Plugins
 				DEPENDS Castor3D
-				INSTALL_TYPES Developer Full
+				INSTALL_TYPES Minimal Full
 			)
 		endif()
 		if( ${CASTOR_BUILD_POSTFX_FILMGRAIN} )
@@ -170,7 +170,7 @@ function( PostEffectsSetup )
 				DESCRIPTION "Allows FilmGrain post effect."
 				GROUP Plugins
 				DEPENDS Castor3D
-				INSTALL_TYPES Developer Full
+				INSTALL_TYPES Minimal Full
 			)
 		endif()
 		if( ${CASTOR_BUILD_POSTFX_LIGHTSTREAKS} )
@@ -179,7 +179,7 @@ function( PostEffectsSetup )
 				DESCRIPTION "Allows Light Streaks post effect."
 				GROUP Plugins
 				DEPENDS Castor3D
-				INSTALL_TYPES Developer Full
+				INSTALL_TYPES Minimal Full
 			)
 		endif()
 		if( ${CASTOR_BUILD_POSTFX_LINEARMOTIONBLUR} )
@@ -188,7 +188,7 @@ function( PostEffectsSetup )
 				DESCRIPTION "Allows Linear Motion Blur post effect."
 				GROUP Plugins
 				DEPENDS Castor3D
-				INSTALL_TYPES Developer Full
+				INSTALL_TYPES Minimal Full
 			)
 		endif()
 		if( ${CASTOR_BUILD_POSTFX_DRAWEDGES} )
@@ -197,7 +197,7 @@ function( PostEffectsSetup )
 				DESCRIPTION "Allows edges drawing post effect."
 				GROUP Plugins
 				DEPENDS Castor3D
-				INSTALL_TYPES Developer Full
+				INSTALL_TYPES Minimal Full
 			)
 		endif()
 	endif ()

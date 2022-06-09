@@ -125,14 +125,6 @@ function( GenericSetup )
 				DESCRIPTION "Allows GUI creation using Castor3D."
 				GROUP Plugins
 				DEPENDS Castor3D
-				INSTALL_TYPES Developer Full
-			)
-			cpack_add_component( CastorGui_dev
-				DISPLAY_NAME "CastorGui SDK"
-				DESCRIPTION "Development files for CastorGui."
-				GROUP Development
-				DEPENDS CastorGui Castor3D_dev
-				INSTALL_TYPES Developer Full
 			)
 		endif()
 		if( ${CASTOR_BUILD_GENERIC_TOONMATERIAL} )
@@ -141,7 +133,6 @@ function( GenericSetup )
 				DESCRIPTION "Defines a toon material in Castor3D."
 				GROUP Plugins
 				DEPENDS Castor3D
-				INSTALL_TYPES Developer Full
 			)
 		endif()
 		if( ${CASTOR_BUILD_GENERIC_WATERRENDERING} )
@@ -150,7 +141,6 @@ function( GenericSetup )
 				DESCRIPTION "Allows water rendering in Castor3D."
 				GROUP Plugins
 				DEPENDS Castor3D
-				INSTALL_TYPES Developer Full
 			)
 		endif()
 		if( ${CASTOR_BUILD_GENERIC_OCEANRENDERING} )
@@ -159,7 +149,6 @@ function( GenericSetup )
 				DESCRIPTION "Allows ocean rendering in Castor3D."
 				GROUP Plugins
 				DEPENDS Castor3D
-				INSTALL_TYPES Developer Full
 			)
 		endif()
 		if( ${CASTOR_BUILD_GENERIC_FFTOCEANRENDERING} )
@@ -168,7 +157,6 @@ function( GenericSetup )
 				DESCRIPTION "Allows FFT ocean rendering in Castor3D."
 				GROUP Plugins
 				DEPENDS Castor3D
-				INSTALL_TYPES Developer Full
 			)
 		endif()
 	endif ()

@@ -1862,6 +1862,7 @@ target_install_headers( ${PROJECT_NAME}
 )
 install_target_ex( ${PROJECT_NAME}
 	Castor3D
+	Castor3D
 	api_dll
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}
 )

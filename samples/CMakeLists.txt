@@ -135,7 +135,6 @@ function( SamplesSetup )
 					DESCRIPTION "A small Tower Defense game, using Castor3D."
 					GROUP Samples
 					DEPENDS GuiCommon
-					INSTALL_TYPES Full
 				)
 			endif ()
 		endif ()
@@ -146,7 +145,6 @@ function( SamplesSetup )
 					DESCRIPTION "A simple scene viewer, using Castor3D and developed in C#/WPF."
 					GROUP Samples
 					DEPENDS Castor3D
-					INSTALL_TYPES Full
 				)
 			endif ()
 		endif ()
@@ -157,4 +155,5 @@ if ( CASTOR_BUILDGRP_SAMPLE AND CASTOR_BUILD_CASTOR3D )
 	SamplesInit()
 	SamplesBuild()
 	SamplesSummary()
+	SamplesSetup()
 endif ()

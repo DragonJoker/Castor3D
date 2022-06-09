@@ -52,6 +52,7 @@ set_target_properties( ${PROJECT_NAME}
 )
 install_target_ex( ${PROJECT_NAME}
 	Castor3D
+	Test
 	lib
 	${CASTOR_SOURCE_DIR}/test/${PROJECT_NAME}
 )

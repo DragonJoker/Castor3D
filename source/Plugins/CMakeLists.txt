@@ -36,6 +36,10 @@ macro( PluginsBuild )
 			${ADDITIONAL_DEPS_REL}
 			PARENT_SCOPE
 		)
+		set( ADDITIONAL_DEPS_DBG
+			${ADDITIONAL_DEPS_DBG}
+			PARENT_SCOPE
+		)
 	endif ()
 endmacro()
 

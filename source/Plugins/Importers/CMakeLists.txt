@@ -25,6 +25,7 @@ function( ImportersBuild )
 			add_subdirectory( Plugins/Importers/AssimpImporter )
 			set( Assimp ${Build} PARENT_SCOPE )
 			set( ADDITIONAL_DEPS_REL ${ADDITIONAL_DEPS_REL} PARENT_SCOPE )
+			set( ADDITIONAL_DEPS_DBG ${ADDITIONAL_DEPS_DBG} PARENT_SCOPE )
 		endif()
 
 		if( ${CASTOR_BUILD_IMPORTER_PLY} )
@@ -73,7 +74,7 @@ function( ImportersSetup )
 				DESCRIPTION "Allows the mesh import using Assimp library in Castor3D."
 				GROUP Plugins
 				DEPENDS Castor3D
-				INSTALL_TYPES Full
+				INSTALL_TYPES Minimal Full
 			)
 		endif ()
 

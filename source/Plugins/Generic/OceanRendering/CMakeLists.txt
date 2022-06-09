@@ -55,6 +55,7 @@ set_target_properties( ${PROJECT_NAME}
 		FOLDER "Plugins/Generic"
 )
 install_target_ex( ${PROJECT_NAME}
+	Castor3D
 	Plugins
 	plugin
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}

@@ -265,25 +265,9 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 		add_subdirectory( test )
 	endif()
 
-	install(
-		TARGETS ${CASTOR_INSTEXP_LIST}
-		COMPONENT Castor3D
-		EXPORT Castor3D
-		RUNTIME DESTINATION bin$<$<CONFIG:Debug>:/Debug>
-		LIBRARY DESTINATION lib$<$<CONFIG:Debug>:/Debug>
-		ARCHIVE DESTINATION lib$<$<CONFIG:Debug>:/Debug>
-	)
-	install(
-		TARGETS ${CASTOR_INSTEXP_PLUGINS}
-		COMPONENT Castor3DPlugins
-		EXPORT Castor3D
-		RUNTIME DESTINATION bin$<$<CONFIG:Debug>:/Debug>/Castor3D
-		LIBRARY DESTINATION lib$<$<CONFIG:Debug>:/Debug>/Castor3D
-		ARCHIVE DESTINATION lib$<$<CONFIG:Debug>:/Debug>/Castor3D
-	)
 	install( EXPORT Castor3D
 		FILE Castor3DConfig.cmake
-		COMPONENT Castor3DPlugins
+		COMPONENT Castor3D
 		NAMESPACE castor::
 		DESTINATION lib/cmake/Castor3D
 	)
@@ -313,7 +297,7 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 				set( CPACK_GENERATOR "WIX" )
 				set( CPACK_PACKAGE_INSTALL_DIRECTORY "Castor3D" )
 				set( CPACK_WIX_UPGRADE_GUID "6138748D-A6CE-4BB9-BE4B-A2E67C405336" )
-				set( CPACK_WIX_PRODUCT_GUID "02ACFE05-CFCE-4E1D-85DA-59A068DDCF70" )
+				set( CPACK_WIX_PRODUCT_GUID "535F9AFD-0717-4730-88A6-C4864DF0B895" )
 				set( CPACK_WIX_PRODUCT_ICON "${CMAKE_CURRENT_SOURCE_DIR}/install/castor.ico" )
 				set( CPACK_WIX_UI_DIALOG "${CMAKE_CURRENT_SOURCE_DIR}/install/dialog.bmp" )
 				set( CPACK_WIX_UI_BANNER "${CMAKE_CURRENT_SOURCE_DIR}/install/banner.bmp" )
@@ -346,7 +330,6 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 		endif ()
 
 		cpack_add_install_type( Minimal )
-		cpack_add_install_type( Developer )
 		cpack_add_install_type( Full )
 
 		cpack_add_component_group( Core
@@ -369,21 +352,14 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			DESCRIPTION "Sample applications and scenes using Castor3D."
 		)
 
-		cpack_add_component_group( Development
-			DISPLAY_NAME "Development"
-			DESCRIPTION "All the tools needed to develop a project using Castor3D."
-		)
-
 		cpack_add_component_group( Test
 			DISPLAY_NAME "Test"
 			DESCRIPTION "Applications used to perform regression and performance tests."
-			PARENT_GROUP Development
 		)
 
 		cpack_add_component_group( Documentation
 			DISPLAY_NAME "Documentation"
 			DESCRIPTION "Projects documentations"
-			PARENT_GROUP Development
 		)
 
 		CoreSetup()

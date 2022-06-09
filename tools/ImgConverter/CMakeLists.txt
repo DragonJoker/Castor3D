@@ -58,7 +58,8 @@ set_target_properties( ${PROJECT_NAME}
 		FOLDER "Tools"
 )
 install_target_ex( ${PROJECT_NAME}
-	${PROJECT_NAME}
+	Castor3D
+	Tools
 	bin
 	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}
 )

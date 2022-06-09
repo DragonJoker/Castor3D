@@ -57,7 +57,7 @@ function( ParticlesSetup )
 				DESCRIPTION "Allows HDR Fireworks particles."
 				GROUP Plugins
 				DEPENDS Castor3D
-				INSTALL_TYPES Developer Full
+				INSTALL_TYPES Minimal Full
 			)
 		endif()
 	endif ()
