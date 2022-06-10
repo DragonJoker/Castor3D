@@ -1,5 +1,6 @@
 option( CASTOR_BUILDGRP_POSTFX "Build Castor3D PostEffect plugins" TRUE )
-option( CASTOR_BUILD_POSTFX_BLOOM "Build Bloom PostEffect plugin" TRUE )
+option( CASTOR_BUILD_POSTFX_BLOOM "Build HDR Bloom PostEffect plugin" TRUE )
+option( CASTOR_BUILD_POSTFX_PBRBLOOM "Build PDR Bloom PostEffect plugin" TRUE )
 option( CASTOR_BUILD_POSTFX_LIGHTSTREAKS "Build LightStreaks PostEffect plugin" TRUE )
 option( CASTOR_BUILD_POSTFX_GRAYSCALE "Build GrayScale PostEffect plugin" TRUE )
 option( CASTOR_BUILD_POSTFX_FXAA "Build FXAA PostEffect plugin" TRUE )
@@ -10,6 +11,7 @@ option( CASTOR_BUILD_POSTFX_DRAWEDGES "Build DrawEdgesPostEffect PostEffect plug
 
 function( PostEffectsInit )
 	set( Bloom "no (Not wanted)" PARENT_SCOPE )
+	set( PbrBm "no (Not wanted)" PARENT_SCOPE )
 	set( Grscl "no (Not wanted)" PARENT_SCOPE )
 	set( Fxaa  "no (Not wanted)" PARENT_SCOPE )
 	set( Smaa  "no (Not wanted)" PARENT_SCOPE )
@@ -32,6 +34,12 @@ function( PostEffectsBuild )
 			set( Build ${Bloom} )
 			add_subdirectory( Plugins/PostEffects/BloomPostEffect )
 			set( Bloom ${Build} PARENT_SCOPE )
+		endif()
+
+		if( ${CASTOR_BUILD_POSTFX_PBRBLOOM} )
+			set( Build ${PbrBm} )
+			add_subdirectory( Plugins/PostEffects/PbrBloomPostEffect )
+			set( PbrBm ${Build} PARENT_SCOPE )
 		endif()
 
 		if( ${CASTOR_BUILD_POSTFX_GRAYSCALE} )
@@ -99,7 +107,10 @@ function( PostEffectsSummary msg )
 	if ( ${CASTOR_BUILDGRP_POSTFX} )
 		set( msg_tmp "\n\n  PostEffect plugins:" )
 		if( ${CASTOR_BUILD_POSTFX_BLOOM} )
-			set( msg_tmp "${msg_tmp}\n    Bloom                ${Bloom}" )
+			set( msg_tmp "${msg_tmp}\n    HDR Bloom            ${Bloom}" )
+		endif ()
+		if( ${CASTOR_BUILD_POSTFX_PBRBLOOM} )
+			set( msg_tmp "${msg_tmp}\n    PBR Bloom            ${PbrBm}" )
 		endif ()
 		if( ${CASTOR_BUILD_POSTFX_GRAYSCALE} )
 			set( msg_tmp "${msg_tmp}\n    GrayScale            ${Grscl}" )
@@ -130,8 +141,17 @@ function( PostEffectsSetup )
 	if ( ${CASTOR_BUILDGRP_POSTFX} )
 		if( ${CASTOR_BUILD_POSTFX_BLOOM} )
 			cpack_add_component( BloomPostEffect
-				DISPLAY_NAME "BloomPostEffect"
+				DISPLAY_NAME "HdrBloomPostEffect"
 				DESCRIPTION "Allows HDR Bloom post effect."
+				GROUP Plugins
+				DEPENDS Castor3D
+				INSTALL_TYPES Minimal Full
+			)
+		endif()
+		if( ${CASTOR_BUILD_POSTFX_BLOOM} )
+			cpack_add_component( PbrBloomPostEffect
+				DISPLAY_NAME "PbrBloomPostEffect"
+				DESCRIPTION "Allows PBR Bloom post effect."
 				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Minimal Full

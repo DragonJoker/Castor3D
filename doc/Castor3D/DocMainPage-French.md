@@ -44,6 +44,7 @@ Le projet en lui-même est compilable sur les plateformes supportées en utilisa
 ### PostEffect
 
 - Bloom : une implémentation de HDR Bloom.
+- PbrBloom : une implémentation de PBR Bloom.
 - DrawEdges : Détecte et dessine les bordures, basé sur les normales, la profondeur, et/ou l'ID d'objet.
 - FilmGrain : Pour afficher un grain sur le rendu.
 - GrayScale.
