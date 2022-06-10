@@ -22,7 +22,7 @@ namespace Bloom
 	//*********************************************************************************************
 
 	castor::String const PostEffect::Type = cuT( "bloom" );
-	castor::String const PostEffect::Name = cuT( "Bloom PostEffect" );
+	castor::String const PostEffect::Name = cuT( "HDR Bloom PostEffect" );
 
 	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
 		, castor3d::RenderSystem & renderSystem

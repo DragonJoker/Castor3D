@@ -47,6 +47,7 @@ The project itself is compilable on supported platforms using CMake (cf. [build]
 
 ### PostEffects
 - Bloom : HDR Bloom implementation.
+- PbrBloom : PBR Bloom implementation.
 - DrawEdges : Detects and renders edges, based on normal, depth, and or object ID.
 - FilmGrain : To display some grain on the render.
 - GrayScale.

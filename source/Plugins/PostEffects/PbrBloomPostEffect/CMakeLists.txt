@@ -1,4 +1,4 @@
-set( FOLDER_NAME BloomPostEffect )
+set( FOLDER_NAME PbrBloomPostEffect )
 project( ${FOLDER_NAME} )
 
 set( Castor3DBinsDependencies 
@@ -7,26 +7,26 @@ set( Castor3DBinsDependencies
 	PARENT_SCOPE
 )
 
-set( ${PROJECT_NAME}_DESCRIPTION "HDR Bloom Post Effect" )
+set( ${PROJECT_NAME}_DESCRIPTION "PBR Bloom Post Effect" )
 set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
-set( ${PROJECT_NAME}_VERSION_MINOR 5 )
+set( ${PROJECT_NAME}_VERSION_MINOR 1 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 set( PROJECT_VERSION "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}" )
 set( PROJECT_SOVERSION "${${PROJECT_NAME}_VERSION_BUILD}" )
 
 set( ${PROJECT_NAME}_HDR_FILES
-	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/BloomPostEffect.hpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/BlurPass.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/PbrBloomPostEffect.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/CombinePass.hpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/HiPass.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/DownsamplePass.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/UpsamplePass.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
-	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/BloomPostEffect.cpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/BloomPostEffectPlugin.cpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/BlurPass.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/PbrBloomPostEffect.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/PbrBloomPostEffectPlugin.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/CombinePass.cpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/HiPass.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/DownsamplePass.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/UpsamplePass.cpp
 )
 source_group( "Header Files"
 	FILES
