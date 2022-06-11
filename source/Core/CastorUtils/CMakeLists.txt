@@ -1,88 +1,8 @@
-if ( VCPKG_BUILD )
-	find_package( cvtt CONFIG REQUIRED )
-	add_library( castor::cvtt
-		ALIAS
-		cvtt::cvtt
-	)
-elseif( EXISTS ${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels.h )
-	project( cvtt )
-	set( ${PROJECT_NAME}_SRC_FILES
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_API.cpp
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC6H_IO.cpp
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC7_PrioData.cpp
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC67.cpp
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BCCommon.cpp
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_ETC.cpp
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_IndexSelector.cpp
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_S3TC.cpp
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_Util.cpp
-	)
-	set( ${PROJECT_NAME}_HDR_FILES
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels.h
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_AggregatedError.h
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC6H_IO.h
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC7_Prio.h
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC7_SingleColor.h
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC67.h
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BCCommon.h
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_EndpointRefiner.h
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_EndpointSelector.h
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_ETC.h
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_ETC1.h
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_ETC2.h
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_ETC2_Rounding.h
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_FakeBT709_Rounding.h
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_IndexSelector.h
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_IndexSelectorHDR.h
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_PackedCovarianceMatrix.h
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_ParallelMath.h
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_S3TC.h
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_S3TC_SingleColor.h
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_UnfinishedEndpoints.h
-		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_Util.h
-	)
-	source_group( "Header Files" FILES ${${PROJECT_NAME}_HDR_FILES} )
-	source_group( "Source Files" FILES ${${PROJECT_NAME}_SRC_FILES} )
-	add_library(
-		${PROJECT_NAME}
-		STATIC
-		${${PROJECT_NAME}_HDR_FILES}
-		${${PROJECT_NAME}_SRC_FILES}
-	)
-	add_library( castor::${PROJECT_NAME}
-		ALIAS
-		${PROJECT_NAME}
-	)
-	target_compile_definitions( ${PROJECT_NAME}
-		PUBLIC
-			CU_UseCVTT
-		PRIVATE
-			${${PROJECT_NAME}_DEFINITIONS}
-	)
-	target_include_directories( ${PROJECT_NAME}
-		PUBLIC
-			$<BUILD_INTERFACE:${EXTERNAL_SOURCE_DIR}>
-			$<INSTALL_INTERFACE:include>
-	)
-	install_target_ex( ${PROJECT_NAME}
-		Castor3D
-		Castor3D
-		lib
-		${CASTOR_SOURCE_DIR}/include/Core/CastorUtils/${PROJECT_NAME}
-	)
-	set( Castor3DInstallTargets
-		${Castor3DInstallTargets}
-		${PROJECT_NAME}
-	)
-	set_target_properties( ${PROJECT_NAME}
-		PROPERTIES
-			CXX_STANDARD 20
-			CXX_EXTENSIONS OFF
-			FOLDER "Core"
-	)
-endif ()
-
 project( CastorUtils )
+
+find_package( unofficial-convectionkernels CONFIG REQUIRED )
+find_package( gli CONFIG REQUIRED )
+find_package( minizip CONFIG REQUIRED )
 
 include( Doxygen )
 include( AndroidNdkModules )
@@ -125,51 +45,6 @@ if ( FreeType_FOUND OR FREETYPE_FOUND )
 	set( FreeType_FOUND FREETYPE_FOUND )
 endif ()
 if ( ZLIB_FOUND AND FreeType_FOUND )
-	if ( NOT TARGET MiniZip )
-		set( MiniZip_SOURCE_DIR
-			${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Data/MiniZip
-		)
-		set( MiniZip_SRC_FILES
-			${MiniZip_SOURCE_DIR}/ioapi.c
-			${MiniZip_SOURCE_DIR}/iowin32.c
-			${MiniZip_SOURCE_DIR}/mztools.c
-			${MiniZip_SOURCE_DIR}/unzip.c
-			${MiniZip_SOURCE_DIR}/zip.c
-		)
-		set( MiniZip_HDR_FILES
-			${MiniZip_SOURCE_DIR}/crypt.h
-			${MiniZip_SOURCE_DIR}/ioapi.h
-			${MiniZip_SOURCE_DIR}/iowin32.h
-			${MiniZip_SOURCE_DIR}/mztools.h
-			${MiniZip_SOURCE_DIR}/unzip.h
-			${MiniZip_SOURCE_DIR}/zip.h
-		)
-		source_group( "Header Files" FILES ${MiniZip_HDR_FILES} )
-		source_group( "Source Files" FILES ${MiniZip_SRC_FILES} )
-		add_library(
-			MiniZip
-			STATIC
-			${MiniZip_HDR_FILES}
-			${MiniZip_SRC_FILES}
-		)
-		target_include_directories( MiniZip
-			PUBLIC
-				${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Data
-		)
-		target_link_libraries( MiniZip
-			PUBLIC
-				ZLIB::ZLIB
-		)
-		set_target_properties( MiniZip
-			PROPERTIES
-				FOLDER "Core"
-		)
-	endif ()
-	add_library( castor::MiniZip
-		ALIAS
-		MiniZip
-	)
-
 	if ( ANDROID )
 		include_directories( ${ANDROID_NDK}/sources )
 		android_ndk_import_module_cpufeatures()
@@ -770,20 +645,11 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 				CU_NoDelayedInit=1
 		)
 	endif ()
-	if ( VCPKG_BUILD OR ( EXISTS ${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels.h ) )
-		target_compile_definitions( ${PROJECT_NAME}
-			PUBLIC
-				CU_UseCVTT
-		)
-		target_link_libraries( ${PROJECT_NAME}
-			PRIVATE
-				castor::cvtt
-		)
-	endif ()
 	target_compile_definitions( ${PROJECT_NAME}
 		PUBLIC
 			_UNICODE
 			UNICODE
+			CU_UseCVTT
 		PRIVATE
 			${${PROJECT_NAME}_DEFINITIONS}
 	)
@@ -805,8 +671,6 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		PRIVATE
 			${FREETYPE_INCLUDE_DIR_ft2build}
 			${FREETYPE_INCLUDE_DIR_freetype2}
-			${EXTERNAL_SOURCE_DIR}/gli
-			${EXTERNAL_SOURCE_DIR}/gli/external
 	)
 	target_link_libraries( ${PROJECT_NAME}
 		PUBLIC
@@ -814,7 +678,9 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		PRIVATE
 			${PLATFORM_LIBRARIES}
 			${Freetype_LIBRARIES}
-			castor::MiniZip
+			minizip::minizip
+			unofficial::convectionkernels::convectionkernels
+			gli
 	)
 	if ( WIN32 )
 		target_link_libraries( ${PROJECT_NAME}

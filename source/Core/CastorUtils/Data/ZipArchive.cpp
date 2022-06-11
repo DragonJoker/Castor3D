@@ -8,12 +8,12 @@
 #	undef HAVE_UNISTD_H
 #endif
 
-#include "MiniZip/unzip.h"
-#include "MiniZip/zip.h"
+#include <minizip/unzip.h>
+#include <minizip/zip.h>
 
 #ifdef WIN32
 #	define USEWIN32IOAPI
-#	include "MiniZip/iowin32.h"
+#	include <minizip/iowin32.h>
 #endif
 
 #if defined( CU_PlatformWindows )
