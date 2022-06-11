@@ -1,13 +1,9 @@
 set( FOLDER_NAME FFTOceanRendering )
 project( ${FOLDER_NAME} )
 
-if ( VCPKG_BUILD )
-	set( VkFFT_DIR ${VCPKG_INSTALLED_DIR}/include/ )
-else ()
-	set( VkFFT_DIR ${CASTOR_SOURCE_DIR}/external/VkFFT/ )
-endif ()
+find_path( VKFFT_INCLUDE_DIRS "VkFFT/vkFFT.h" )
 
-if ( CASTOR_USE_GLSLANG AND EXISTS ${VkFFT_DIR} )
+if ( CASTOR_USE_GLSLANG )
 	set( VKFFT_BACKEND "0" )
 	set( Castor3DBinsDependencies 
 		${Castor3DBinsDependencies}
@@ -76,7 +72,7 @@ if ( CASTOR_USE_GLSLANG AND EXISTS ${VkFFT_DIR} )
 	target_include_directories( ${PROJECT_NAME}
 		PRIVATE
 			${GenericIncludes}
-			${VkFFT_DIR}
+			${VKFFT_INCLUDE_DIRS}
 			${glslang_INCLUDE_DIR}
 			${glslang_CAPI_DIR}
 	)

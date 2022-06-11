@@ -146,20 +146,7 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 		add_subdirectory( ../${SHADERWRITER_DIR} ${CMAKE_BINARY_DIR}/${SHADERWRITER_DIR} )
 	endif ()
 
-	if ( VCPKG_BUILD )
-		find_package( meshoptimizer CONFIG REQUIRED )
-	else ()
-		# meshoptimizer external library
-		add_subdirectory( ../${MESHOPTIMIZER_DIR} ${CMAKE_BINARY_DIR}/${MESHOPTIMIZER_DIR} )
-		add_library( meshoptimizer::meshoptimizer
-			ALIAS
-				meshoptimizer
-		)
-		set_target_properties( meshoptimizer
-			PROPERTIES
-				FOLDER "Core"
-		)
-	endif ()
+	find_package( meshoptimizer CONFIG REQUIRED )
 endif ()
 
 CoreInit()

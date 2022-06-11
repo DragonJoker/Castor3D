@@ -15,7 +15,7 @@ See LICENSE file in root folder
 #	pragma warning( disable: 4365 )
 #	pragma GCC diagnostic push
 #	pragma GCC diagnostic ignored "-Wconversion"
-#	include <cvtt/ConvectionKernels.h>
+#	include <convectionkernels/ConvectionKernels.h>
 #	pragma GCC diagnostic pop
 #	pragma warning( pop )
 #endif

@@ -28,7 +28,7 @@ jobs:
     - name: Setup vcpkg
       uses: lukka/run-vcpkg@v4
       with:
-        vcpkgGitCommitId: '11be87ec561d9d70dc527afad886744fe149c2ce'
+        vcpkgGitCommitId: '8e1f46de11423e5f7d2395458f5252738ffffbbd'
         setupOnly: true
   
     - name: Install necessary G++ version (Linux)
@@ -86,7 +86,7 @@ jobs:
 
     - name: Install necessary packages
       shell: bash
-      run: $VCPKG_ROOT/vcpkg install spirv-cross:${{ matrix.os[1] }} freetype:${{ matrix.os[1] }} zlib:${{ matrix.os[1] }}
+      run: $VCPKG_ROOT/vcpkg install spirv-cross:${{ matrix.os[1] }} freetype:${{ matrix.os[1] }} zlib:${{ matrix.os[1] }} minizip:${{ matrix.os[1] }} vkfft:${{ matrix.os[1] }} convectionkernels:${{ matrix.os[1] }} meshoptimizer:${{ matrix.os[1] }} gli:${{ matrix.os[1] }}
 
     - name: Install necessary packages (Windows)
       if: runner.os == 'Windows'
@@ -99,10 +99,6 @@ jobs:
         git submodule update --init --recursive -- "external/Ashes"
         git submodule update --init --recursive -- "external/ShaderWriter"
         git submodule update --init --recursive -- "external/RenderGraph"
-        git submodule update --init --recursive -- "external/gli"
-        git submodule update --init -- "external/VkFFT"
-        git submodule update --init -- "external/cvtt"
-        git submodule update --init -- "external/meshoptimizer"
 
     - name: Checkout dependencies submodule (Windows)
       if: runner.os == 'Windows'
