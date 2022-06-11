@@ -256,7 +256,11 @@ namespace GuiCommon
 
 		if ( closeButtonState != wxAUI_BUTTON_STATE_HIDDEN )
 		{
+#if wxCHECK_VERSION( 3, 1, 6 )
+			closeButtonWidth = m_activeCloseBmp.GetDefaultSize().GetWidth();
+#else
 			closeButtonWidth = m_activeCloseBmp.GetWidth();
+#endif
 		}
 
 		textOffset = tabX + 8;
@@ -286,7 +290,17 @@ namespace GuiCommon
 
 			if ( pane.bitmap.IsOk() )
 			{
-				focusRectBitmap = wxRect( 0, drawnTabYOffset + ( drawnTabHeight / 2 ) - ( pane.bitmap.GetHeight() / 2 ), pane.bitmap.GetWidth(), pane.bitmap.GetHeight() );
+#if wxCHECK_VERSION( 3, 1, 6 )
+				focusRectBitmap = wxRect( 0
+					, drawnTabYOffset + ( drawnTabHeight / 2 ) - ( pane.bitmap.GetDefaultSize().GetHeight() / 2 )
+					, pane.bitmap.GetDefaultSize().GetWidth()
+					, pane.bitmap.GetDefaultSize().GetHeight() );
+#else
+				focusRectBitmap = wxRect( 0
+					, drawnTabYOffset + ( drawnTabHeight / 2 ) - ( pane.bitmap.GetHeight() / 2 )
+					, pane.bitmap.GetWidth()
+					, pane.bitmap.GetHeight() );
+#endif
 			}
 
 			if ( pane.bitmap.IsOk() && drawText.IsEmpty() )
@@ -310,11 +324,19 @@ namespace GuiCommon
 		// draw close button if necessary
 		if ( closeButtonState != wxAUI_BUTTON_STATE_HIDDEN )
 		{
+#if wxCHECK_VERSION( 3, 1, 6 )
+			wxBitmap bmp = m_disabledCloseBmp.GetBitmap( wxDefaultSize );
+#else
 			wxBitmap bmp = m_disabledCloseBmp;
+#endif
 
 			if ( closeButtonState == wxAUI_BUTTON_STATE_HOVER || closeButtonState == wxAUI_BUTTON_STATE_PRESSED )
 			{
+#if wxCHECK_VERSION( 3, 1, 6 )
+				bmp = m_activeCloseBmp.GetBitmap( wxDefaultSize );
+#else
 				bmp = m_activeCloseBmp;
+#endif
 			}
 
 			int offsetY = tabY - 1;
@@ -363,24 +385,40 @@ namespace GuiCommon
 		case wxAUI_BUTTON_LEFT:
 			if ( buttonState & wxAUI_BUTTON_STATE_DISABLED )
 			{
+#if wxCHECK_VERSION( 3, 1, 6 )
+				bmp = m_disabledLeftBmp.GetBitmap( wxDefaultSize );
+#else
 				bmp = m_disabledLeftBmp;
+#endif
 				dc.SetPen( m_disabledColour );
 			}
 			else
 			{
+#if wxCHECK_VERSION( 3, 1, 6 )
+				bmp = m_activeLeftBmp.GetBitmap( wxDefaultSize );
+#else
 				bmp = m_activeLeftBmp;
+#endif
 				dc.SetPen( m_activeColour );
 			}
 			break;
 		case wxAUI_BUTTON_RIGHT:
 			if ( buttonState & wxAUI_BUTTON_STATE_DISABLED )
 			{
+#if wxCHECK_VERSION( 3, 1, 6 )
+				bmp = m_disabledRightBmp.GetBitmap( wxDefaultSize );
+#else
 				bmp = m_disabledRightBmp;
+#endif
 				dc.SetPen( m_disabledColour );
 			}
 			else
 			{
+#if wxCHECK_VERSION( 3, 1, 6 )
+				bmp = m_activeRightBmp.GetBitmap( wxDefaultSize );
+#else
 				bmp = m_activeRightBmp;
+#endif
 				dc.SetPen( m_activeColour );
 			}
 			break;

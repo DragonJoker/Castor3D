@@ -45,6 +45,7 @@ target_include_directories( ${PROJECT_NAME} SYSTEM
 )
 target_link_libraries( ${PROJECT_NAME} PRIVATE
 	${wxWidgets_LIBRARIES}
+	${Freetype_LIBRARIES}
 	${GTK_LIBRARIES}
 	${X11_LIBRARIES}
 )
