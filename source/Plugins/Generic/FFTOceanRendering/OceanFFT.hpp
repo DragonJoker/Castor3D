@@ -214,7 +214,6 @@ namespace ocean_fft
 		GenerateFFTPassT< GenerateDistributionPass, GenerateNormalPass > m_normal;
 		castor3d::Texture m_normals;
 		crg::FramePass const * m_generateNormalsMips{};
-		float L;
 	};
 }
 

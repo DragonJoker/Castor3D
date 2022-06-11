@@ -14,7 +14,7 @@ See LICENSE file in root folder
 #pragma warning( disable:4456 )
 #pragma warning( disable:4616 )
 #pragma warning( disable:5219 )
-#include <vkFFT/vkFFT.h>
+#include <VkFFT/vkFFT.h>
 #pragma warning( pop )
 
 #include <Castor3D/Render/Technique/TechniqueModule.hpp>

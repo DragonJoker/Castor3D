@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_MeshPreparer_H___
 
 #include "Castor3D/Model/Mesh/MeshModule.hpp"
+#include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 
 namespace castor3d

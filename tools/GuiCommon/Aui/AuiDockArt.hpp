@@ -9,8 +9,13 @@ See LICENSE file in root folder
 #pragma warning( push )
 #pragma warning( disable: 4365 )
 #pragma warning( disable: 5054 )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsuggest-override"
+#pragma GCC diagnostic ignored "-Wsuggest-destructor-override"
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 #include <wx/aui/aui.h>
 #include <wx/aui/dockart.h>
+#pragma GCC diagnostic pop
 #pragma warning( pop )
 
 namespace GuiCommon

@@ -22,12 +22,12 @@ See LICENSE file in root folder
 
 namespace c3d_assimp
 {
-	static castor::String makeString( aiString const & name )
+	inline castor::String makeString( aiString const & name )
 	{
 		return castor::string::stringCast< castor::xchar >( name.C_Str() );
 	}
 
-	static castor::String normalizeName( castor::String name )
+	inline castor::String normalizeName( castor::String name )
 	{
 		castor::string::replace( name, "\\", "-" );
 		castor::string::replace( name, "|", "-" );
@@ -40,7 +40,7 @@ namespace c3d_assimp
 		return castor::string::replace( name, "/", "-" );
 	}
 
-	static castor::Matrix4x4f fromAssimp( aiMatrix4x4 const & aiMatrix )
+	inline castor::Matrix4x4f fromAssimp( aiMatrix4x4 const & aiMatrix )
 	{
 		std::array< float, 16u > data
 			{ aiMatrix.a1, aiMatrix.b1, aiMatrix.c1, aiMatrix.d1
@@ -50,7 +50,7 @@ namespace c3d_assimp
 		return castor::Matrix4x4f{ data.data() };
 	}
 
-	static castor::Matrix4x4f fromAssimp( castor::Point3f const & direction
+	inline castor::Matrix4x4f fromAssimp( castor::Point3f const & direction
 		, castor::Point3f const & up )
 	{
 		castor::Matrix4x4f result;
@@ -65,7 +65,7 @@ namespace c3d_assimp
 		return result;
 	}
 
-	static castor::Milliseconds fromAssimp( double ticks
+	inline castor::Milliseconds fromAssimp( double ticks
 		, int64_t ticksPerSecond )
 	{
 		// Turn ticks to seconds.
@@ -74,12 +74,12 @@ namespace c3d_assimp
 		return castor::Milliseconds{ int64_t( time * 1000.0 ) };
 	}
 
-	static castor::Point3f fromAssimp( aiVector3D const & v )
+	inline castor::Point3f fromAssimp( aiVector3D const & v )
 	{
 		return castor::Point3f{ v.x, v.y, v.z };
 	}
 
-	static castor::Quaternion fromAssimp( aiQuaternion const & v )
+	inline castor::Quaternion fromAssimp( aiQuaternion const & v )
 	{
 		castor::Quaternion result;
 		result.quat.x = v.x;
@@ -89,7 +89,7 @@ namespace c3d_assimp
 		return result;
 	}
 
-	static std::string getLongestCommonSubstring( std::string const & a, std::string const & b )
+	inline std::string getLongestCommonSubstring( std::string const & a, std::string const & b )
 	{
 		auto result = castor::string::getLongestCommonSubstring( a, b );
 		return castor::string::trim( result
@@ -98,7 +98,7 @@ namespace c3d_assimp
 			, " \r\t-_/\\|*$<>[](){}" );
 	}
 
-	static bool isValidMesh( aiMesh const & mesh )
+	inline bool isValidMesh( aiMesh const & mesh )
 	{
 		auto faces = castor::makeArrayView( mesh.mFaces, mesh.mNumFaces );
 		auto count = uint32_t( std::count_if( faces.begin()
@@ -112,7 +112,7 @@ namespace c3d_assimp
 	}
 
 	template< typename aiMeshType >
-	static void createVertexBuffer( aiMeshType const & aiMesh
+	inline void createVertexBuffer( aiMeshType const & aiMesh
 		, castor::Point3fArray & positions
 		, castor::Point3fArray & normals
 		, castor::Point3fArray & tangents
@@ -240,7 +240,7 @@ namespace c3d_assimp
 		}
 	}
 
-	static std::vector< castor3d::SubmeshAnimationBuffer > gatherMeshAnimBuffers( castor::Point3fArray const & positions
+	inline std::vector< castor3d::SubmeshAnimationBuffer > gatherMeshAnimBuffers( castor::Point3fArray const & positions
 		, castor::Point3fArray const & normals
 		, castor::Point3fArray const & tangents
 		, castor::Point3fArray const & texcoords0
@@ -359,7 +359,7 @@ namespace c3d_assimp
 		return result;
 	}
 
-	static std::pair< uint32_t, double > getNodeAnimFrameTicks( aiNodeAnim const & aiNodeAnim )
+	inline std::pair< uint32_t, double > getNodeAnimFrameTicks( aiNodeAnim const & aiNodeAnim )
 	{
 		return { std::max( { aiNodeAnim.mNumPositionKeys
 				, aiNodeAnim.mNumRotationKeys
@@ -375,7 +375,7 @@ namespace c3d_assimp
 					: 0.0 ) } ) };
 	}
 
-	static std::pair< uint32_t, double > getAnimationFrameTicks( aiAnimation const & aiAnimation )
+	inline std::pair< uint32_t, double > getAnimationFrameTicks( aiAnimation const & aiAnimation )
 	{
 		uint32_t count = 0u;
 		double ticks = 0.0;
@@ -401,7 +401,7 @@ namespace c3d_assimp
 		return { count, ticks };
 	}
 
-	static aiNode const * findMeshNode( uint32_t meshIndex
+	inline aiNode const * findMeshNode( uint32_t meshIndex
 		, aiNode const & node )
 	{
 		auto meshes = castor::makeArrayView( node.mMeshes, node.mNumMeshes );
@@ -425,7 +425,7 @@ namespace c3d_assimp
 		return result;
 	}
 
-	static aiNode const * findRootSkeletonNode( aiNode const & sceneRootNode
+	inline aiNode const * findRootSkeletonNode( aiNode const & sceneRootNode
 		, castor::ArrayView< aiBone * > bones
 		, aiNode const * meshNode )
 	{
@@ -476,7 +476,7 @@ namespace c3d_assimp
 		return *bonesRootNodes.begin();
 	}
 
-	static castor::String findSkeletonName( std::map< castor::String, castor::Matrix4x4f > const & bonesNodes
+	inline castor::String findSkeletonName( std::map< castor::String, castor::Matrix4x4f > const & bonesNodes
 		, aiNode const & rootNode )
 	{
 		std::vector< aiNode const * > bones;
@@ -534,7 +534,7 @@ namespace c3d_assimp
 	using KeyDataTypeT = typename KeyDataTyperT< KeyT >::Type;
 
 	template< typename KeyT >
-	static std::map< castor::Milliseconds, KeyDataTypeT< KeyT > > processKeys( castor::ArrayView< KeyT > const & keys
+	inline std::map< castor::Milliseconds, KeyDataTypeT< KeyT > > processKeys( castor::ArrayView< KeyT > const & keys
 		, int64_t ticksPerSecond
 		, std::set< castor::Milliseconds > & times )
 	{
@@ -554,7 +554,7 @@ namespace c3d_assimp
 	}
 
 	template< typename KeyFrameT, typename AnimationT >
-	static KeyFrameT & getKeyFrame( castor::Milliseconds const & time
+	inline KeyFrameT & getKeyFrame( castor::Milliseconds const & time
 		, AnimationT & animation
 		, std::map< castor::Milliseconds, std::unique_ptr< KeyFrameT > > & keyframes )
 	{
@@ -570,7 +570,7 @@ namespace c3d_assimp
 	}
 
 	template< typename T >
-	static void findValue( castor::Milliseconds time
+	inline void findValue( castor::Milliseconds time
 		, typename std::map< castor::Milliseconds, T > const & map
 		, typename std::map< castor::Milliseconds, T >::const_iterator & prv
 		, typename std::map< castor::Milliseconds, T >::const_iterator & cur )
@@ -604,7 +604,7 @@ namespace c3d_assimp
 	}
 
 	template< typename T >
-	static T interpolate( castor::Milliseconds const & time
+	inline T interpolate( castor::Milliseconds const & time
 		, castor3d::Interpolator< T > const & interpolator
 		, std::map< castor::Milliseconds, T > const & values )
 	{
@@ -636,7 +636,7 @@ namespace c3d_assimp
 	}
 
 	template< typename AnimationT, typename KeyFrameT, typename FuncT >
-	static void synchroniseKeys( std::map< castor::Milliseconds, castor::Point3f > const & translates
+	inline void synchroniseKeys( std::map< castor::Milliseconds, castor::Point3f > const & translates
 		, std::map< castor::Milliseconds, castor::Point3f > const & scales
 		, std::map< castor::Milliseconds, castor::Quaternion > const & rotates
 		, std::set< castor::Milliseconds > const & times
@@ -668,7 +668,7 @@ namespace c3d_assimp
 		, typename AnimationT
 		, typename KeyFrameT
 		, typename FuncT >
-	static void processAnimationNodeKeys( aiAnimT const & aiAnim
+	inline void processAnimationNodeKeys( aiAnimT const & aiAnim
 		, uint32_t wantedFps
 		, castor::Milliseconds maxTime
 		, int64_t ticksPerSecond

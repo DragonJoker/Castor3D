@@ -46,7 +46,7 @@
 
 namespace ocean_fft
 {
-	namespace
+	namespace rdpass
 	{
 #if Ocean_DebugFFTGraph
 		class DummyRunnable
@@ -181,7 +181,7 @@ namespace ocean_fft
 			eCount,
 		};
 
-		void bindTexture( VkImageView view
+		static void bindTexture( VkImageView view
 			, VkSampler sampler
 			, ashes::WriteDescriptorSetArray & writes
 			, uint32_t & index )
@@ -194,7 +194,7 @@ namespace ocean_fft
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
 		}
 
-		crg::FramePass const & createCopyPass( castor::String const & name
+		static crg::FramePass const & createCopyPass( castor::String const & name
 			, castor3d::RenderDevice const & device
 			, crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
@@ -225,7 +225,7 @@ namespace ocean_fft
 			return result;
 		}
 
-		crg::FramePassArray createNodesPass( castor::String const & name
+		static crg::FramePassArray createNodesPass( castor::String const & name
 			, castor3d::RenderDevice const & device
 			, crg::FramePassGroup & graph
 			, castor3d::RenderTechnique & technique
@@ -394,7 +394,7 @@ namespace ocean_fft
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT ) );
 		colourInput->create();
 		crg::FramePassArray passes;
-		passes.push_back( &createCopyPass( "Colour"
+		passes.push_back( &rdpass::createCopyPass( "Colour"
 			, device
 			, graph
 			, previousPasses
@@ -412,7 +412,7 @@ namespace ocean_fft
 			, technique.getDepthImg().data->info.format
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT ) );
 		depthInput->create();
-		passes.push_back( &createCopyPass( "Depth"
+		passes.push_back( &rdpass::createCopyPass( "Depth"
 			, device
 			, graph
 			, previousPasses
@@ -444,7 +444,7 @@ namespace ocean_fft
 			, isEnabled );
 #endif
 
-		return createNodesPass( OceanFFT::Name
+		return rdpass::createNodesPass( OceanFFT::Name
 			, device
 			, graph
 			, technique
@@ -528,43 +528,43 @@ namespace ocean_fft
 
 	void OceanRenderPass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
-		bindings.emplace_back( getCuller().getScene().getLightCache().createLayoutBinding( OceanFFTIdx::eLightBuffer ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( OceanFFTIdx::eOceanUbo
+		bindings.emplace_back( getCuller().getScene().getLightCache().createLayoutBinding( rdpass::OceanFFTIdx::eLightBuffer ) );
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( rdpass::OceanFFTIdx::eOceanUbo
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, ( VK_SHADER_STAGE_VERTEX_BIT
 				| VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
 				| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
 				| VK_SHADER_STAGE_FRAGMENT_BIT ) ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( OceanFFTIdx::eHeightDisplacement
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( rdpass::OceanFFTIdx::eHeightDisplacement
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, ( VK_SHADER_STAGE_FRAGMENT_BIT
 				| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT ) ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( OceanFFTIdx::eGradientJacobian
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( rdpass::OceanFFTIdx::eGradientJacobian
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( OceanFFTIdx::eNormals
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( rdpass::OceanFFTIdx::eNormals
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( OceanFFTIdx::eSceneNormals
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( rdpass::OceanFFTIdx::eSceneNormals
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( OceanFFTIdx::eSceneDepth
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( rdpass::OceanFFTIdx::eSceneDepth
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( OceanFFTIdx::eSceneResult
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( rdpass::OceanFFTIdx::eSceneResult
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( OceanFFTIdx::eSceneBaseColour
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( rdpass::OceanFFTIdx::eSceneBaseColour
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( OceanFFTIdx::eSceneDiffuseLighting
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( rdpass::OceanFFTIdx::eSceneDiffuseLighting
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( OceanFFTIdx::eBrdf
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( rdpass::OceanFFTIdx::eBrdf
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
-		auto index = uint32_t( OceanFFTIdx::eCount );
+		auto index = uint32_t( rdpass::OceanFFTIdx::eCount );
 		doAddShadowBindings( bindings, index );
 		doAddEnvBindings( bindings, index );
 		doAddGIBindings( bindings, index );
@@ -608,18 +608,18 @@ namespace ocean_fft
 	void OceanRenderPass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, castor3d::ShadowMapLightTypeArray const & shadowMaps )
 	{
-		descriptorWrites.push_back( m_scene.getLightCache().getBinding( OceanFFTIdx::eLightBuffer ) );
-		descriptorWrites.push_back( m_ubo->getDescriptorWrite( OceanFFTIdx::eOceanUbo ) );
-		auto index = uint32_t( OceanFFTIdx::eHeightDisplacement );
-		bindTexture( m_oceanFFT->getHeightDisplacement().sampledView, *m_linearWrapSampler, descriptorWrites, index );
-		bindTexture( m_oceanFFT->getGradientJacobian().sampledView, *m_linearWrapSampler, descriptorWrites, index );
-		bindTexture( m_oceanFFT->getNormals().sampledView, *m_linearWrapSampler, descriptorWrites, index );
-		bindTexture( m_parent->getNormalTexture().sampledView, *m_pointClampSampler, descriptorWrites, index );
-		bindTexture( m_depthInput->sampledView, *m_pointClampSampler, descriptorWrites, index );
-		bindTexture( m_colourInput->sampledView, *m_pointClampSampler, descriptorWrites, index );
-		bindTexture( m_parent->getBaseColourResult().sampledView, *m_pointClampSampler, descriptorWrites, index );
-		bindTexture( m_parent->getDiffuseLightingResult().sampledView, *m_pointClampSampler, descriptorWrites, index );
-		bindTexture( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampledView
+		descriptorWrites.push_back( m_scene.getLightCache().getBinding( rdpass::OceanFFTIdx::eLightBuffer ) );
+		descriptorWrites.push_back( m_ubo->getDescriptorWrite( rdpass::OceanFFTIdx::eOceanUbo ) );
+		auto index = uint32_t( rdpass::OceanFFTIdx::eHeightDisplacement );
+		rdpass::bindTexture( m_oceanFFT->getHeightDisplacement().sampledView, *m_linearWrapSampler, descriptorWrites, index );
+		rdpass::bindTexture( m_oceanFFT->getGradientJacobian().sampledView, *m_linearWrapSampler, descriptorWrites, index );
+		rdpass::bindTexture( m_oceanFFT->getNormals().sampledView, *m_linearWrapSampler, descriptorWrites, index );
+		rdpass::bindTexture( m_parent->getNormalTexture().sampledView, *m_pointClampSampler, descriptorWrites, index );
+		rdpass::bindTexture( m_depthInput->sampledView, *m_pointClampSampler, descriptorWrites, index );
+		rdpass::bindTexture( m_colourInput->sampledView, *m_pointClampSampler, descriptorWrites, index );
+		rdpass::bindTexture( m_parent->getBaseColourResult().sampledView, *m_pointClampSampler, descriptorWrites, index );
+		rdpass::bindTexture( m_parent->getDiffuseLightingResult().sampledView, *m_pointClampSampler, descriptorWrites, index );
+		rdpass::bindTexture( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampledView
 			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
 			, descriptorWrites
 			, index );
@@ -663,7 +663,7 @@ namespace ocean_fft
 	void OceanRenderPass::doAdjustFlags( castor3d::PipelineFlags & flags )const
 	{
 		flags.topology = VK_PRIMITIVE_TOPOLOGY_PATCH_LIST;
-		flags.patchVertices = OutputVertices;
+		flags.patchVertices = rdpass::OutputVertices;
 	}
 
 	castor3d::ShaderPtr OceanRenderPass::doGetVertexShaderSource( castor3d::PipelineFlags const & flags )const
@@ -687,24 +687,24 @@ namespace ocean_fft
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
 		C3D_FftOcean( writer
-			, OceanFFTIdx::eOceanUbo
+			, rdpass::OceanFFTIdx::eOceanUbo
 			, RenderPipeline::eBuffers );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 
-		writer.implementMainT< castor3d::shader::VertexSurfaceT, PatchT >( sdw::VertexInT< castor3d::shader::VertexSurfaceT >{ writer
+		writer.implementMainT< castor3d::shader::VertexSurfaceT, rdpass::PatchT >( sdw::VertexInT< castor3d::shader::VertexSurfaceT >{ writer
 				, flags.submeshFlags
 				, flags.programFlags
 				, getShaderFlags()
 				, textureFlags
 				, flags.passFlags
 				, false /* force no texcoords*/ }
-			, sdw::VertexOutT< PatchT >{ writer
+			, sdw::VertexOutT< rdpass::PatchT >{ writer
 				, flags.submeshFlags }
 			, [&]( VertexInT< castor3d::shader::VertexSurfaceT > in
-				, VertexOutT< PatchT > out )
+				, VertexOutT< rdpass::PatchT > out )
 			{
 				auto pos = writer.declLocale( "pos"
 					, ( ( in.position.xz() / c3d_oceanData.patchSize ) + c3d_oceanData.blockOffset ) * c3d_oceanData.patchSize );
@@ -752,18 +752,18 @@ namespace ocean_fft
 			, GlobalBuffersIdx::eBillboardsData
 			, RenderPipeline::eBuffers );
 		C3D_FftOcean( writer
-			, OceanFFTIdx::eOceanUbo
+			, rdpass::OceanFFTIdx::eOceanUbo
 			, RenderPipeline::eBuffers );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 
-		writer.implementMainT< VoidT, PatchT >( sdw::VertexInT< sdw::VoidT >{ writer }
-			, sdw::VertexOutT< PatchT >{ writer
+		writer.implementMainT< VoidT, rdpass::PatchT >( sdw::VertexInT< sdw::VoidT >{ writer }
+			, sdw::VertexOutT< rdpass::PatchT >{ writer
 				, flags.submeshFlags }
 			, [&]( VertexInT< VoidT > in
-				, VertexOutT< PatchT > out )
+				, VertexOutT< rdpass::PatchT > out )
 			{
 				auto nodeId = writer.declLocale( "nodeId"
 					, shader::getNodeId( c3d_objectIdsData
@@ -817,7 +817,7 @@ namespace ocean_fft
 			, GlobalBuffersIdx::eScene
 			, RenderPipeline::eBuffers );
 		C3D_FftOcean( writer
-			, OceanFFTIdx::eOceanUbo
+			, rdpass::OceanFFTIdx::eOceanUbo
 			, RenderPipeline::eBuffers );
 
 		auto tessLevel1f = writer.implementFunction< Float >( "tessLevel1f"
@@ -860,15 +860,15 @@ namespace ocean_fft
 			, sdw::InVec2{ writer, "maxTessLevel" }
 			, sdw::InFloat{ writer, "distanceMod" } );
 
-		writer.implementPatchRoutineT< PatchT, OutputVertices, PatchT >( TessControlListInT< PatchT, OutputVertices >{ writer
+		writer.implementPatchRoutineT< rdpass::PatchT, rdpass::OutputVertices, rdpass::PatchT >( TessControlListInT< rdpass::PatchT, rdpass::OutputVertices >{ writer
 				, false
 				, flags.submeshFlags }
-			, sdw::QuadsTessPatchOutT< PatchT >{ writer
+			, sdw::QuadsTessPatchOutT< rdpass::PatchT >{ writer
 				, 9u
 				, flags.submeshFlags }
 			, [&]( sdw::TessControlPatchRoutineIn in
-				, sdw::TessControlListInT< PatchT, OutputVertices > listIn
-				, sdw::QuadsTessPatchOutT< PatchT > patchOut )
+				, sdw::TessControlListInT< rdpass::PatchT, rdpass::OutputVertices > listIn
+				, sdw::QuadsTessPatchOutT<rdpass::PatchT > patchOut )
 			{
 				auto patchSize = writer.declLocale( "patchSize"
 					, vec3( c3d_oceanData.patchSize.x(), 0.0_f, c3d_oceanData.patchSize.y() ) );
@@ -924,16 +924,16 @@ namespace ocean_fft
 				patchOut.tessLevelInner[1] = innerLevel;
 			} );
 
-		writer.implementMainT< PatchT, OutputVertices, VoidT >( TessControlListInT< PatchT, OutputVertices >{ writer
+		writer.implementMainT< rdpass::PatchT, rdpass::OutputVertices, VoidT >( TessControlListInT< rdpass::PatchT, rdpass::OutputVertices >{ writer
 				, true
 				, flags.submeshFlags }
 			, TrianglesTessControlListOut{ writer
 				, ast::type::Partitioning::eFractionalEven
 				, ast::type::OutputTopology::eQuad
 				, ast::type::PrimitiveOrdering::eCW
-				, OutputVertices }
+				, rdpass::OutputVertices }
 			, [&]( TessControlMainIn in
-				, TessControlListInT< PatchT, OutputVertices > listIn
+				, TessControlListInT< rdpass::PatchT, rdpass::OutputVertices > listIn
 				, TrianglesTessControlListOut listOut )
 			{
 				listOut.vtx.position = listIn[in.invocationID].vtx.position;
@@ -961,10 +961,10 @@ namespace ocean_fft
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
 		C3D_FftOcean( writer
-			, OceanFFTIdx::eOceanUbo
+			, rdpass::OceanFFTIdx::eOceanUbo
 			, RenderPipeline::eBuffers );
 		auto c3d_heightDisplacementMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "c3d_heightDisplacementMap"
-			, OceanFFTIdx::eHeightDisplacement
+			, rdpass::OceanFFTIdx::eHeightDisplacement
 			, RenderPipeline::eBuffers );
 
 		auto lerpVertex = writer.implementFunction< Vec2 >( "lerpVertex"
@@ -1010,12 +1010,12 @@ namespace ocean_fft
 			, sdw::InVec2{ writer, "off" }
 			, sdw::InVec2{ writer, "lod" } );
 
-		writer.implementMainT< PatchT, OutputVertices, PatchT, castor3d::shader::FragmentSurfaceT >( TessEvalListInT< PatchT, OutputVertices >{ writer
+		writer.implementMainT< rdpass::PatchT, rdpass::OutputVertices, rdpass::PatchT, castor3d::shader::FragmentSurfaceT >( TessEvalListInT< rdpass::PatchT, rdpass::OutputVertices >{ writer
 				, ast::type::PatchDomain::eQuads
 				, type::Partitioning::eFractionalEven
 				, type::PrimitiveOrdering::eCW
 				, flags.submeshFlags }
-			, QuadsTessPatchInT< PatchT >{ writer
+			, QuadsTessPatchInT< rdpass::PatchT >{ writer
 				, 9u
 				, flags.submeshFlags }
 			, TessEvalDataOutT< castor3d::shader::FragmentSurfaceT >{ writer
@@ -1026,8 +1026,8 @@ namespace ocean_fft
 				, flags.passFlags
 				, false /* force no texcoords*/ }
 			, [&]( TessEvalMainIn mainIn
-				, TessEvalListInT< PatchT, OutputVertices > listIn
-				, QuadsTessPatchInT< PatchT > patchIn
+				, TessEvalListInT< rdpass::PatchT, rdpass::OutputVertices > listIn
+				, QuadsTessPatchInT< rdpass::PatchT > patchIn
 				, TessEvalDataOutT< castor3d::shader::FragmentSurfaceT > out )
 			{
 				auto tessCoord = writer.declLocale( "tessCoord"
