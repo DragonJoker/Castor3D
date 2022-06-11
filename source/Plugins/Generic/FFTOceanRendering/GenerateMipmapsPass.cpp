@@ -208,7 +208,6 @@ namespace ocean_fft
 		range.levelCount = getMipLevels( dstViewId );
 		auto invSizeIt = m_invSizes.begin();
 		auto transition = getTransition( index, viewId );
-		auto dstTransition = getTransition( index, dstViewId );
 		crg::LayoutState shaderRead{ VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, VK_ACCESS_SHADER_READ_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT };
