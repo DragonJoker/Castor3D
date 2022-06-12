@@ -154,7 +154,8 @@ namespace PbrBloom
 
 	bool PostEffect::doWriteInto( castor::StringStream & file, castor::String const & tabs )
 	{
-		file << ( tabs + cuT( "pbr_bloom\n" ) )
+		file << cuT( "\n" )
+			<< ( tabs + cuT( "pbr_bloom\n" ) )
 			<< ( tabs + cuT( "{\n" ) )
 			<< ( tabs + cuT( "\t" ) ) << cuT( "blurRadius " ) << castor::string::toString( m_blurRadius ) << cuT( "\n" )
 			<< ( tabs + cuT( "\t" ) ) << cuT( "bloomStrength " ) << castor::string::toString( m_bloomStrength ) << cuT( "\n" )

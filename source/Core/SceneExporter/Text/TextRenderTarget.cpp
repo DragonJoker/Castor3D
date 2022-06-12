@@ -50,7 +50,7 @@ namespace castor
 				{
 					if ( effect->isEnabled() )
 					{
-						result = effect->writeInto( file, tabs() ) && writeText( file, cuT( "\n" ) );
+						result = effect->writeInto( file, tabs() );
 					}
 				}
 			}
@@ -61,7 +61,7 @@ namespace castor
 				{
 					if ( effect->isEnabled() )
 					{
-						result = effect->writeInto( file, tabs() ) && writeText( file, cuT( "\n" ) );
+						result = effect->writeInto( file, tabs() );
 					}
 				}
 			}

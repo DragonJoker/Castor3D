@@ -188,7 +188,7 @@ namespace light_streaks
 
 	bool PostEffect::doWriteInto( castor::StringStream & file, castor::String const & tabs )
 	{
-		file << ( tabs + cuT( "postfx \"" ) + Type + cuT( "\"" ) );
+		file << ( tabs + cuT( "postfx \"" ) + Type + cuT( "\"\n" ) );
 		return true;
 	}
 }
