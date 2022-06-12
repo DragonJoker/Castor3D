@@ -200,7 +200,8 @@ namespace Bloom
 	bool PostEffect::doWriteInto( castor::StringStream & file, castor::String const & tabs )
 	{
 		file << ( tabs + cuT( "postfx \"" ) + Type + cuT( "\" -Size=" ) + castor::string::toString( m_blurKernelSize )
-			+ cuT( " -Passes=" ) + castor::string::toString( m_blurPassesCount ) );
+			+ cuT( " -Passes=" ) + castor::string::toString( m_blurPassesCount )
+			+ cuT( "\n" ) );
 		return true;
 	}
 }
