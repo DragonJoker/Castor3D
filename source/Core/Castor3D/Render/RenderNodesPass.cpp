@@ -779,10 +779,14 @@ namespace castor3d
 	{
 		using namespace sdw;
 		TaskWriter writer;
-		bool checkCones = checkFlag( flags.submeshFlags, SubmeshFlag::eNormals );
+		bool checkCones = checkFlag( flags.submeshFlags, SubmeshFlag::eNormals )
+			&& !checkFlag( flags.submeshFlags, SubmeshFlag::eVelocity );
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
+			, RenderPipeline::eBuffers );
+		C3D_Scene( writer
+			, GlobalBuffersIdx::eScene
 			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsDataOpt( writer
 			, GlobalBuffersIdx::eObjectsNodeID
@@ -841,7 +845,7 @@ namespace castor3d
 				}
 				else
 				{
-					auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
+					auto curMtxModel = writer.declLocale( "curMtxModel"
 						, modelData.getModelMtx() );
 					auto meanScale = writer.declLocale( "meanScale"
 						, ( modelData.getScale().x() + modelData.getScale().y() + modelData.getScale().z() ) / 3.0f );
@@ -855,7 +859,7 @@ namespace castor3d
 						, normalize( ( curMtxModel * vec4( cullData.cone.xyz(), 0.0 ) ).xyz() )
 						, checkCones );
 					auto coneCutOff = writer.declLocale( "coneCutOff"
-						, cullData.cone.w() * meanScale
+						, cullData.cone.w()
 						, checkCones );
 				}
 
@@ -883,10 +887,10 @@ namespace castor3d
 					}
 					FI;
 
-					auto viewPosition = writer.declLocale( "viewPosition"
-						, normalize( c3d_matrixData.worldToCurView( vec4( coneNormal, 1.0_f ) ).xyz() ) );
+					auto posToCamera = writer.declLocale( "posToCamera"
+						, c3d_sceneData.cameraPosition - sphereCenter );
 
-					IF( writer, dot( viewPosition, coneNormal ) >= ( coneCutOff * length( viewPosition ) + sphereRadius ) )
+					IF( writer, dot( posToCamera, coneNormal ) >= ( coneCutOff * length( posToCamera ) + sphereRadius ) )
 					{
 						writer.returnStmt( sdw::Boolean{ false } );
 					}
