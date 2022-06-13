@@ -211,6 +211,8 @@ namespace castor3d
 		MeshImporterUPtr importer;
 	};
 
+	C3D_API SceneFileContext & getSceneParserContext( castor::FileParserContext & context );
+
 	class SceneFileParser
 		: public castor::OwnedBy< Engine >
 		, public castor::FileParser

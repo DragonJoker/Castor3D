@@ -1,25 +1,44 @@
 #include "Castor3D/Scene/Background/Image.hpp"
 
 #include "Castor3D/Engine.hpp"
-
-#include "Castor3D/Event/Frame/FrameListener.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
-#include "Castor3D/Miscellaneous/makeVkType.hpp"
-#include "Castor3D/Render/RenderModule.hpp"
-#include "Castor3D/Render/RenderPipeline.hpp"
-#include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Scene/Camera.hpp"
-#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Background/Visitor.hpp"
-#include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
-#include <ashespp/RenderPass/FrameBuffer.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
-#include <ashespp/Shader/ShaderModule.hpp>
+#include <CastorUtils/Data/TextWriter.hpp>
+
+namespace castor
+{
+	using namespace castor3d;
+
+	template<>
+	class TextWriter< ImageBackground >
+		: public TextWriterT< ImageBackground >
+	{
+	public:
+		explicit TextWriter( String const & tabs
+			, Path const & folder )
+			: TextWriterT< ImageBackground >{ tabs }
+			, m_folder{ folder }
+		{
+		}
+
+		bool operator()( ImageBackground const & background
+			, StringStream & file )override
+		{
+			log::info << tabs() << cuT( "Writing ImageBackground" ) << std::endl;
+			return writeFile( file
+				, "background_image"
+				, castor::Path{ background.getTexture().getDefaultView().toString() }
+				, m_folder
+				, cuT( "Textures" ) );
+		}
+
+	private:
+		Path const & m_folder;
+	};
+}
 
 namespace castor3d
 {
@@ -56,7 +75,7 @@ namespace castor3d
 	ImageBackground::ImageBackground( Engine & engine
 		, Scene & scene
 		, castor::String const & name )
-		: SceneBackground{ engine, scene, name + cuT( "Image" ), BackgroundType::eImage }
+		: SceneBackground{ engine, scene, name + cuT( "Image" ), cuT( "image" ) }
 	{
 		m_texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
 			, bgimage::doGetImageCreate( VK_FORMAT_R8G8B8A8_UNORM, { 16u, 16u }, false )
@@ -105,6 +124,13 @@ namespace castor3d
 	void ImageBackground::accept( BackgroundVisitor & visitor )
 	{
 		visitor.visit( *this );
+	}
+
+	bool ImageBackground::write( castor::String const & tabs
+		, castor::Path const & folder
+		, castor::StringStream & stream )const
+	{
+		return castor::TextWriter< ImageBackground >{ tabs, folder }( *this, stream );
 	}
 
 	bool ImageBackground::doInitialise( RenderDevice const & device )

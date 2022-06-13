@@ -18,22 +18,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Scene background types enumeration.
-	*\~french
-	*\brief
-	*	Enumération des types de fond de scène.
-	*/
-	enum class BackgroundType
-	{
-		eColour,
-		eImage,
-		eSkybox,
-		CU_ScopedEnumBounds( eColour )
-	};
-	C3D_API castor::String getName( BackgroundType value );
-	/**
-	*\~english
-	*\brief
 	*	Background visitor used to prepare the frame command buffer.
 	*\~french
 	*\brief

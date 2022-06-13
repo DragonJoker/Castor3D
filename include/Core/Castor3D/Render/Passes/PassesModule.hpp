@@ -21,7 +21,7 @@ namespace castor3d
 	*\brief
 	*	La passe de rendu utilisée pour l'affichage du background.
 	*/
-	class BackgroundPass;
+	class BackgroundPassBase;
 	/**
 	*\~english
 	*\brief

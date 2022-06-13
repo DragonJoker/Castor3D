@@ -21,7 +21,7 @@
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
-#include "Castor3D/Render/Passes/BackgroundPass.hpp"
+#include "Castor3D/Render/Passes/BackgroundRenderer.hpp"
 #include "Castor3D/Render/Passes/ComputeDepthRange.hpp"
 #include "Castor3D/Render/Passes/DepthPass.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"

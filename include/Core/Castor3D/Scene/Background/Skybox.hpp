@@ -287,6 +287,12 @@ namespace castor3d
 		*/
 		C3D_API void accept( BackgroundVisitor & visitor )override;
 		/**
+		*\copydoc	castor3d::SceneBackground::write
+		*/
+		C3D_API bool write( castor::String const & tabs
+			, castor::Path const & folder
+			, castor::StringStream & stream )const override;
+		/**
 		*\~english
 		*name
 		*	Getters.

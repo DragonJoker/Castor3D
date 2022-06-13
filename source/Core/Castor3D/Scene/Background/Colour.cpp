@@ -30,7 +30,7 @@ namespace castor3d
 	ColourBackground::ColourBackground( Engine & engine
 		, Scene & scene
 		, castor::String const & name )
-		: SceneBackground{ engine, scene, name + cuT( "Colour" ), BackgroundType::eColour }
+		: SceneBackground{ engine, scene, name + cuT( "Colour" ), cuT( "colour" ) }
 	{
 		m_hdr = false;
 		m_textureId = { engine.getRenderSystem()->getRenderDevice()
@@ -51,6 +51,13 @@ namespace castor3d
 	void ColourBackground::accept( BackgroundVisitor & visitor )
 	{
 		visitor.visit( *this );
+	}
+
+	bool ColourBackground::write( castor::String const & tabs
+		, castor::Path const & folder
+		, castor::StringStream & stream )const
+	{
+		return true;
 	}
 
 	bool ColourBackground::doInitialise( RenderDevice const & device )

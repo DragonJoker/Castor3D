@@ -487,6 +487,13 @@ namespace castor3d
 
 	//****************************************************************************************************
 
+	SceneFileContext & getSceneParserContext( castor::FileParserContext & context )
+	{
+		return *static_cast< SceneFileContext * >( context.getUserContext( "c3d.scene" ) );
+	}
+
+	//****************************************************************************************************
+
 	UInt32StrMap SceneFileParser::blendFactors;
 	UInt32StrMap SceneFileParser::types;
 	UInt32StrMap SceneFileParser::comparisonFuncs;
