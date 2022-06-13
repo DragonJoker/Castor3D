@@ -78,7 +78,7 @@ namespace PbrBloom
 
 		if ( parameters.get( cuT( "blurRadius" ), count ) )
 		{
-			m_blurRadius = castor::string::toULong( count );
+			m_blurRadius = uint32_t( castor::string::toULong( count ) );
 		}
 
 		if ( parameters.get( cuT( "passes" ), count ) )
