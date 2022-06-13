@@ -22,12 +22,11 @@ namespace atmosphere_scattering
 	struct ParserContext
 	{
 		castor3d::Engine * engine{ nullptr };
-		AtmosphereScatteringUboConfiguration config{};
 		castor::Path relImgPath;
 		castor::Point2ui img2dDimensions;
 		castor::Point3ui img3dDimensions;
 		castor::PixelFormat imgFormat;
-		castor3d::Parameters parameters;
+		std::unique_ptr< AtmosphereBackground > atmosphere;
 	};
 
 	enum class AtmosphereSection
@@ -40,6 +39,7 @@ namespace atmosphere_scattering
 	};
 
 	CU_DeclareAttributeParser( parserAtmosphereScattering )
+	CU_DeclareAttributeParser( parserAtmosphereScatteringEnd )
 	CU_DeclareAttributeParser( parserTransmittance )
 	CU_DeclareAttributeParser( parserTransmittanceImage )
 	CU_DeclareAttributeParser( parserTransmittanceDimensions )
@@ -55,7 +55,6 @@ namespace atmosphere_scattering
 	CU_DeclareAttributeParser( parserIrradianceDimensions )
 	CU_DeclareAttributeParser( parserIrradianceFormat )
 	CU_DeclareAttributeParser( parserIrradianceEnd )
-	CU_DeclareAttributeParser( parserAtmosphereScatteringEnd )
 }
 
 #endif

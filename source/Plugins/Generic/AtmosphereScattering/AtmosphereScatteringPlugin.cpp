@@ -111,7 +111,7 @@ namespace atmosphere_scattering
 				, uint32_t( AtmosphereSection::eIrradiance )
 				, cuT( "dimensions" )
 				, &parserIrradianceDimensions
-				, { castor::makeParameter< castor::ParameterType::ePoint3U >() } );
+				, { castor::makeParameter< castor::ParameterType::ePoint2U >() } );
 			addParser( result
 				, uint32_t( AtmosphereSection::eIrradiance )
 				, cuT( "format" )
@@ -130,6 +130,9 @@ namespace atmosphere_scattering
 			return
 			{
 				{ uint32_t( AtmosphereSection::eRoot ), PluginType },
+				{ uint32_t( AtmosphereSection::eTransmittance ), "transmittance" },
+				{ uint32_t( AtmosphereSection::eInscatter ), "inscatter" },
+				{ uint32_t( AtmosphereSection::eIrradiance ), "irradiance" },
 			};
 		}
 

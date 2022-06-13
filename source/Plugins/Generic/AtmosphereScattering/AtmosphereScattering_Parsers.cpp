@@ -1,5 +1,6 @@
 #include "AtmosphereScattering/AtmosphereScattering_Parsers.hpp"
 
+#include "AtmosphereScattering/AtmosphereBackground.hpp"
 #include "AtmosphereScattering/AtmosphereScatteringUbo.hpp"
 
 #include <Castor3D/Engine.hpp>
@@ -9,6 +10,7 @@
 #include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Overlay/BorderPanelOverlay.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
+#include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/SceneFileParser.hpp>
 
 #include <stack>
@@ -22,15 +24,10 @@ namespace atmosphere_scattering
 			return *static_cast< ParserContext * >( context.getUserContext( PluginType ) );
 		}
 
-		template< size_t CountT >
-		static void parseFilePath( castor::FileParserContext & context
-			, castor::Path relative
-			, castor::String const & prefix
-			, castor::Point< uint32_t, CountT > const & dimensions
-			, castor::PixelFormat format )
+		static std::pair< castor::Path, castor::Path > parseFilePath( castor::FileParserContext & context
+			, castor::Path relative )
 		{
 			castor::Path folder;
-			auto & atmosphereContext = getParserContext( context );
 
 			if ( castor::File::fileExists( context.file.getPath() / relative ) )
 			{
@@ -42,25 +39,24 @@ namespace atmosphere_scattering
 				relative.clear();
 			}
 
-			if ( !relative.empty() )
-			{
-				atmosphereContext.parameters.add( prefix + "Folder", folder );
-				atmosphereContext.parameters.add( prefix + "Relative", relative );
-				atmosphereContext.parameters.add( prefix + "Dimensions", dimensions );
-				atmosphereContext.parameters.add( prefix + "Format", format );
-			}
+			return { folder, relative };
 		}
 	}
 
 	CU_ImplementAttributeParser( parserAtmosphereScattering )
 	{
+		auto & parsingContext = castor3d::getSceneParserContext( context );
+		auto & atmosphereContext = parser::getParserContext( context );
+		atmosphereContext.atmosphere = std::make_unique< AtmosphereBackground >( *parsingContext.parser->getEngine()
+			, *parsingContext.scene );
 	}
 	CU_EndAttributePush( AtmosphereSection::eRoot )
 
 	CU_ImplementAttributeParser( parserAtmosphereScatteringEnd )
 	{
+		auto & parsingContext = castor3d::getSceneParserContext( context );
 		auto & atmosphereContext = parser::getParserContext( context );
-		atmosphereContext.parameters.add( PluginType, atmosphereContext.config );
+		parsingContext.scene->setBackground( std::move( atmosphereContext.atmosphere ) );
 	}
 	CU_EndAttributePop()
 
@@ -114,11 +110,16 @@ namespace atmosphere_scattering
 	CU_ImplementAttributeParser( parserTransmittanceEnd )
 	{
 		auto & atmosphereContext = parser::getParserContext( context );
-		parser::parseFilePath( context
-			, atmosphereContext.relImgPath
-			, Transmittance
-			, atmosphereContext.img2dDimensions
-			, atmosphereContext.imgFormat );
+		auto [folder, relative] = parser::parseFilePath( context
+			, atmosphereContext.relImgPath );
+
+		if ( !relative.empty() )
+		{
+			atmosphereContext.atmosphere->loadTransmittance( folder
+				, relative
+				, atmosphereContext.img2dDimensions
+				, atmosphereContext.imgFormat );
+		}
 	}
 	CU_EndAttributePop()
 
@@ -172,11 +173,16 @@ namespace atmosphere_scattering
 	CU_ImplementAttributeParser( parserInscatterEnd )
 	{
 		auto & atmosphereContext = parser::getParserContext( context );
-		parser::parseFilePath( context
-			, atmosphereContext.relImgPath
-			, Inscatter
-			, atmosphereContext.img3dDimensions
-			, atmosphereContext.imgFormat );
+		auto [folder, relative] = parser::parseFilePath( context
+			, atmosphereContext.relImgPath );
+
+		if ( !relative.empty() )
+		{
+			atmosphereContext.atmosphere->loadInscaterring( folder
+				, relative
+				, atmosphereContext.img3dDimensions
+				, atmosphereContext.imgFormat );
+		}
 	}
 	CU_EndAttributePop()
 
@@ -230,11 +236,16 @@ namespace atmosphere_scattering
 	CU_ImplementAttributeParser( parserIrradianceEnd )
 	{
 		auto & atmosphereContext = parser::getParserContext( context );
-		parser::parseFilePath( context
-			, atmosphereContext.relImgPath
-			, Irradiance
-			, atmosphereContext.img2dDimensions
-			, atmosphereContext.imgFormat );
+		auto [folder, relative] = parser::parseFilePath( context
+			, atmosphereContext.relImgPath );
+
+		if ( !relative.empty() )
+		{
+			atmosphereContext.atmosphere->loadIrradiance( folder
+				, relative
+				, atmosphereContext.img2dDimensions
+				, atmosphereContext.imgFormat );
+		}
 	}
 	CU_EndAttributePop()
 }
