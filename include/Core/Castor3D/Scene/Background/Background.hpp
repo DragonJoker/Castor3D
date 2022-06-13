@@ -6,19 +6,10 @@ See LICENSE file in root folder
 
 #include "BackgroundModule.hpp"
 
+#include "Castor3D/Render/Passes/BackgroundPassBase.hpp"
 #include "Castor3D/Render/PBR/IblTextures.hpp"
-#include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
-
-#include <ashespp/Buffer/VertexBuffer.hpp>
-#include <ashespp/Descriptor/DescriptorSet.hpp>
-#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
-#include <ashespp/Descriptor/DescriptorSetPool.hpp>
-#include <ashespp/Pipeline/GraphicsPipeline.hpp>
-#include <ashespp/Pipeline/PipelineLayout.hpp>
-#include <ashespp/Sync/Semaphore.hpp>
 
 namespace castor3d
 {
@@ -64,7 +55,7 @@ namespace castor3d
 		C3D_API explicit SceneBackground( Engine & engine
 			, Scene & scene
 			, castor::String const & name
-			, BackgroundType type );
+			, castor::String type );
 		/**
 		*\~english
 		*\brief
@@ -154,6 +145,67 @@ namespace castor3d
 		C3D_API virtual void accept( BackgroundVisitor & visitor ) = 0;
 		/**
 		*\~english
+		*\brief
+		*	Creates the background render pass.
+		*\param pass
+		*	The parent frame pass.
+		*\param context
+		* The rendering context.
+		*\param graph
+		*	The runnable graph.
+		*\param device
+		*	The GPU device.
+		*\param size
+		*	The render area dimensions.
+		*\param usesDepth
+		*	\p true to account for depth buffer.
+		*\~french
+		*\brief
+		*	Crée la passe de rendu du fond.
+		*\param pass
+		*	La frame pass parente.
+		*\param context
+		*	Le contexte de rendu.
+		*\param graph
+		*	Le runnable graph.
+		*\param device
+		*	Le device GPU.
+		*\param size
+		*	Les dimensions de la zone de rendu.
+		*\param usesDepth
+		*	\p true pour prendre en compte le depth buffer.
+		*/
+		C3D_API virtual std::unique_ptr< BackgroundPassBase > createBackgroundPass( crg::FramePass const & pass
+			, crg::GraphContext & context
+			, crg::RunnableGraph & graph
+			, RenderDevice const & device
+			, VkExtent2D const & size
+			, bool usesDepth );
+		/**
+		*\~english
+		*\brief
+		*	Writes the background to a text stream.
+		*\param	tabs
+		*	The current indentation.
+		*\param	folder
+		*	The working folder.
+		*\param	stream
+		*	The text stream.
+		*\~french
+		*\brief
+		*	Ecrit le fond dans un flux texte.
+		*\param	tabs
+		*	L'indentation actuelle.
+		*\param	folder
+		*	Le dossier de travail.
+		*\param	stream
+		*	Le flux.
+		*/
+		C3D_API virtual bool write( castor::String const & tabs
+			, castor::Path const & folder
+			, castor::StringStream & stream )const = 0;
+		/**
+		*\~english
 		*name
 		*	Getters.
 		*\~french
@@ -171,7 +223,7 @@ namespace castor3d
 			return m_scene;
 		}
 
-		BackgroundType getType()const
+		castor::String const & getType()const
 		{
 			return m_type;
 		}
@@ -250,7 +302,7 @@ namespace castor3d
 
 	protected:
 		Scene & m_scene;
-		BackgroundType m_type;
+		castor::String m_type;
 		std::atomic_bool m_initialised{ false };
 		bool m_hdr{ true };
 		bool m_srgb{ false };

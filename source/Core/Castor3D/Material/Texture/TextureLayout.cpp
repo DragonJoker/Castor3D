@@ -620,6 +620,7 @@ namespace castor3d
 			, ashes::Image const & texture
 			, ashes::ImageViewCreateInfo & viewInfo )
 		{
+			bool is3D = image.getLayout().type == castor::ImageLayout::e3D;
 			auto & layout = image.getLayout();
 			auto buffer = makeBufferBase( device
 				, image.getPxBuffer().getSize()
@@ -641,7 +642,7 @@ namespace castor3d
 			}
 
 			ashes::VkBufferImageCopyArray copies;
-			VkExtent2D baseDimensions{ image.getWidth(), image.getHeight() };
+			VkExtent3D baseDimensions{ image.getWidth(), image.getHeight(), image.getLayout().depthLayers() };
 
 			for ( auto layer = viewInfo->subresourceRange.baseArrayLayer;
 				layer < viewInfo->subresourceRange.baseArrayLayer + viewInfo->subresourceRange.layerCount;
@@ -649,7 +650,7 @@ namespace castor3d
 			{
 				VkImageSubresourceLayers subresourceLayers{ viewInfo->subresourceRange.aspectMask
 					, 0u
-					, layer
+					, ( is3D ? 0u : layer )
 					, 1u };
 
 				for ( auto level = layout.baseLevel;
@@ -663,11 +664,19 @@ namespace castor3d
 						, 0u
 						, 0u
 						, subresourceLayers
-						, VkOffset3D{}
+						, VkOffset3D{ 0
+							, 0
+							, int32_t( is3D ? std::max( 1u, layer >> level ) : 0u ) }
 						, VkExtent3D{ std::max( 1u, baseDimensions.width >> level )
 							, std::max( 1u, baseDimensions.height >> level )
 							, 1u } } );
 				}
+			}
+
+			if ( is3D )
+			{
+				viewInfo->viewType = VK_IMAGE_VIEW_TYPE_3D;
+				viewInfo->subresourceRange.layerCount = 1u;
 			}
 
 			auto commandBuffer = queueData.commandPool->createCommandBuffer( image.getName() + "ImageUpload"
@@ -1426,11 +1435,19 @@ namespace castor3d
 
 	void TextureLayout::doUpdateCreateInfo( castor::ImageLayout const & layout )
 	{
-		m_info->imageType = texlayt::convert( layout.type );
+		auto layersDepth = std::max( layout.extent->z, layout.layers );
+		auto layoutType = ( m_info->imageType == VK_IMAGE_TYPE_3D && layersDepth > 1u )
+			? castor::ImageLayout::e3D
+			: layout.type;
+		m_image.getLayout().type = layoutType;
+		m_image.getLayout().extent->z = ( layoutType == castor::ImageLayout::e3D ? layersDepth : 1u );
+		m_image.getLayout().layers = ( layoutType == castor::ImageLayout::e3D ? 1u : layersDepth );
+
+		m_info->imageType = texlayt::convert( layoutType );
 		m_info->extent.width = layout.extent->x;
 		m_info->extent.height = layout.extent->y;
-		m_info->extent.depth = layout.extent->z;
-		m_info->arrayLayers = layout.layers;
+		m_info->extent.depth = ( m_info->imageType == VK_IMAGE_TYPE_3D ? layersDepth : 1u );
+		m_info->arrayLayers = ( m_info->imageType == VK_IMAGE_TYPE_3D ? 1u : layersDepth );
 		m_info->mipLevels = layout.levels;
 		m_info->format = VkFormat( layout.format );
 

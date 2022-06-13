@@ -185,29 +185,30 @@ namespace GuiCommon
 		static wxString PROPERTY_BACKGROUND_COLOUR = _( "Colour" );
 		static wxString PROPERTY_BACKGROUND_IMAGE = _( "Image" );
 		static wxString PROPERTY_BACKGROUND_SKYBOX = _( "Skybox" );
+		static wxString PROPERTY_BACKGROUND_ATMOSPHERE = _( "Atmosphere" );
 
 		wxString selected;
 		wxPGChoices choices;
 		choices.Add( PROPERTY_BACKGROUND_COLOUR );
 		choices.Add( PROPERTY_BACKGROUND_IMAGE );
 		choices.Add( PROPERTY_BACKGROUND_SKYBOX );
+		choices.Add( PROPERTY_BACKGROUND_ATMOSPHERE );
 
-		switch ( m_background.getType() )
+		if ( m_background.getType() == cuT( "colour" ) )
 		{
-		case castor3d::BackgroundType::eColour:
 			selected = PROPERTY_BACKGROUND_COLOUR;
-			break;
-
-		case castor3d::BackgroundType::eImage:
+		}
+		else if ( m_background.getType() == cuT( "image" ) )
+		{
 			selected = PROPERTY_BACKGROUND_IMAGE;
-			break;
-
-		case castor3d::BackgroundType::eSkybox:
+		}
+		else if ( m_background.getType() == cuT( "skybox" ) )
+		{
 			selected = PROPERTY_BACKGROUND_SKYBOX;
-			break;
-
-		default:
-			break;
+		}
+		else if ( m_background.getType() == cuT( "skybox" ) )
+		{
+			selected = PROPERTY_BACKGROUND_ATMOSPHERE;
 		}
 
 		addProperty( grid, selected + wxT( " " ) + PROPERTY_CATEGORY_BACKGROUND );

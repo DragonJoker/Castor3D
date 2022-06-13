@@ -85,6 +85,7 @@ namespace castor
 			{
 				cuT( "tif" ),
 				cuT( "png" ),
+				cuT( "raw" ),
 			}
 #endif
 			;

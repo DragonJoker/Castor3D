@@ -12,7 +12,7 @@
 #include "Castor3D/Overlay/TextOverlay.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
-#include "Castor3D/Render/Passes/BackgroundPass.hpp"
+#include "Castor3D/Render/Passes/BackgroundRenderer.hpp"
 #include "Castor3D/Render/Passes/OverlayPass.hpp"
 #include "Castor3D/Render/Technique/ForwardRenderTechniquePass.hpp"
 #include "Castor3D/Scene/Camera.hpp"
