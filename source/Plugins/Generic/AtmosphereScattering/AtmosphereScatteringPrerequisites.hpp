@@ -10,6 +10,7 @@ See LICENSE file in root folder
 
 namespace atmosphere_scattering
 {
+	class AtmosphereBackground;
 	class AtmosphereScatteringUbo;
 
 	struct AtmosphereConfig;
