@@ -58,6 +58,7 @@ namespace castor3d
 	{
 		if ( m_backgroundPass )
 		{
+			updater.matrixUbo = &m_matrixUbo;
 			m_backgroundPass->update( updater );
 		}
 
