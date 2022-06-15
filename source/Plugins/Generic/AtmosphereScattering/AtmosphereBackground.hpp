@@ -69,6 +69,11 @@ namespace atmosphere_scattering
 			m_config = std::move( config );
 		}
 
+		auto & getConfiguration()const
+		{
+			return m_config;
+		}
+
 		auto const & getTransmittance()const
 		{
 			return m_transmittance;

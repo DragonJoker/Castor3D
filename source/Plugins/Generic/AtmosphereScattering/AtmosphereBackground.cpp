@@ -39,7 +39,7 @@ namespace castor
 			, StringStream & file )override
 		{
 			log::info << tabs() << cuT( "Writing AtmosphereBackground" ) << std::endl;
-			auto result = true;
+			auto result = false;
 			file << ( cuT( "\n" ) + tabs() + cuT( "//Skybox\n" ) );
 
 			if ( auto block{ beginBlock( file, "atmospheric_scattering" ) } )
@@ -47,9 +47,52 @@ namespace castor
 				auto transmittance = background.getTransmittance().getExtent();
 				auto multiScatter = background.getMultiScatter().getExtent();
 				auto atmosphereVolume = background.getAtmosphereVolume().getExtent();
-				file << tabs() << cuT( "transmittance " ) << transmittance.width << cuT( " " ) << transmittance.height << cuT( "\n" )
-					<< tabs() << cuT( "multiScatter " ) << multiScatter.width << cuT( " " ) << multiScatter.height << cuT( "\n" )
-					<< tabs() << cuT( "atmosphereVolume " ) << atmosphereVolume.width << cuT( " " ) << atmosphereVolume.height << cuT( " " ) << atmosphereVolume.depth << cuT( "\n" );
+				result = write( file, "transmittanceResolution", transmittance.width, transmittance.height );
+				result = result && write( file, "multiScatterResolution", multiScatter.width );
+				result = result && write( file, "atmosphereVolumeResolution", atmosphereVolume.width );
+
+				auto & config = background.getConfiguration();
+				result = result && write( file, "sunIlluminance", config.sunIlluminance );
+				result = result && write( file, "sunIlluminanceScale", config.sunIlluminanceScale );
+				result = result && write( file, "rayMarchMinSPP", uint32_t( config.rayMarchMinMaxSPP->x ) );
+				result = result && write( file, "rayMarchMaxSPP", uint32_t( config.rayMarchMinMaxSPP->y ) );
+				result = result && write( file, "multipleScatteringFactor", config.multipleScatteringFactor );
+				result = result && write( file, "solarIrradiance", config.solarIrradiance );
+				result = result && write( file, "sunAngularRadius", config.sunAngularRadius );
+				result = result && write( file, "absorptionExtinction", config.absorptionExtinction );
+				result = result && write( file, "maxSunZenithAngle", acos( config.muSMin ) );
+				result = result && write( file, "rayleighScattering", config.rayleighScattering );
+				result = result && write( file, "mieScattering", config.mieScattering );
+				result = result && write( file, "miePhaseFunctionG", config.miePhaseFunctionG );
+				result = result && write( file, "mieExtinction", config.mieExtinction );
+				result = result && write( file, "bottomRadius", config.bottomRadius );
+				result = result && write( file, "topRadius", config.topRadius );
+				result = result && write( file, "groundAlbedo", config.groundAlbedo );
+				result = result && writeDensity( file, "minRayleighDensity", config.rayleighDensity[0] );
+				result = result && writeDensity( file, "minRayleighDensity", config.rayleighDensity[1] );
+				result = result && writeDensity( file, "minRayleighDensity", config.mieDensity[0] );
+				result = result && writeDensity( file, "minRayleighDensity", config.mieDensity[1] );
+				result = result && writeDensity( file, "minRayleighDensity", config.absorptionDensity[0] );
+				result = result && writeDensity( file, "minRayleighDensity", config.absorptionDensity[1] );
+			}
+
+			return result;
+		}
+
+	private:
+		bool writeDensity( castor::StringStream & file
+			, castor::String const & name
+			, DensityProfileLayer const & config )
+		{
+			auto result = false;
+
+			if ( auto block{ beginBlock( file, name ) } )
+			{
+				result = write( file, "layerWidth", config.layerWidth );
+				result = result && write( file, "expTerm", config.expTerm );
+				result = result && write( file, "expScale", config.expScale );
+				result = result && write( file, "linearTerm", config.linearTerm );
+				result = result && write( file, "constantTerm", config.constantTerm );
 			}
 
 			return result;
