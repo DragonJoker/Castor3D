@@ -7,11 +7,16 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
 #include <Castor3D/Miscellaneous/Logger.hpp>
+#include <Castor3D/Miscellaneous/ProgressBar.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Scene/Camera.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/SceneNode.hpp>
 #include <Castor3D/Scene/Background/Visitor.hpp>
+
+#include <ashespp/Image/StagingTexture.hpp>
+
+#include <RenderGraph/FramePassGroup.hpp>
 
 namespace castor
 {
@@ -37,57 +42,14 @@ namespace castor
 			auto result = true;
 			file << ( cuT( "\n" ) + tabs() + cuT( "//Skybox\n" ) );
 
-			if ( auto block{ beginBlock( file, "skybox" ) } )
+			if ( auto block{ beginBlock( file, "atmospheric_scattering" ) } )
 			{
-				Path subfolder{ cuT( "Textures" ) };
-
-				if ( auto transmBlock{ beginBlock( file, "transmittance" ) } )
-				{
-					auto & transmittance = background.getTransmittance();
-
-					if ( !transmittance.path.empty() )
-					{
-						String relative = copyFile( transmittance.path
-							, m_folder
-							, subfolder );
-						string::replace( relative, cuT( "\\" ), cuT( "/" ) );
-						file << tabs() << cuT( "image \"" ) << relative << cuT( "\"\n" )
-							<< tabs() << cuT( "dimensions " ) << transmittance.dimensions->x << cuT( " " ) << transmittance.dimensions->y << cuT( "\n" )
-							<< tabs() << cuT( "format " ) << getFormatName( transmittance.format ) << cuT( "\n" );
-					}
-				}
-
-				if ( auto inscBlock{ beginBlock( file, "inscatter" ) } )
-				{
-					auto & inscattering = background.getInscattering();
-
-					if ( !inscattering.path.empty() )
-					{
-						String relative = copyFile( inscattering.path
-							, m_folder
-							, subfolder );
-						string::replace( relative, cuT( "\\" ), cuT( "/" ) );
-						file << tabs() << cuT( "image \"" ) << relative << cuT( "\"\n" )
-							<< tabs() << cuT( "dimensions " ) << inscattering.dimensions->x << cuT( " " ) << inscattering.dimensions->y << cuT( " " ) << inscattering.dimensions->z << cuT( "\n" )
-							<< tabs() << cuT( "format " ) << getFormatName( inscattering.format ) << cuT( "\n" );
-					}
-				}
-
-				if ( auto irradBlock{ beginBlock( file, "irradiance" ) } )
-				{
-					auto & irradiance = background.getIrradiance();
-
-					if ( !irradiance.path.empty() )
-					{
-						String relative = copyFile( irradiance.path
-							, m_folder
-							, subfolder );
-						string::replace( relative, cuT( "\\" ), cuT( "/" ) );
-						file << tabs() << cuT( "image \"" ) << relative << cuT( "\"\n" )
-							<< tabs() << cuT( "dimensions " ) << irradiance.dimensions->x << cuT( " " ) << irradiance.dimensions->y << cuT( "\n" )
-							<< tabs() << cuT( "format " ) << getFormatName( irradiance.format ) << cuT( "\n" );
-					}
-				}
+				auto transmittance = background.getTransmittance().getExtent();
+				auto multiScatter = background.getMultiScatter().getExtent();
+				auto atmosphereVolume = background.getAtmosphereVolume().getExtent();
+				file << tabs() << cuT( "transmittance " ) << transmittance.width << cuT( " " ) << transmittance.height << cuT( "\n" )
+					<< tabs() << cuT( "multiScatter " ) << multiScatter.width << cuT( " " ) << multiScatter.height << cuT( "\n" )
+					<< tabs() << cuT( "atmosphereVolume " ) << atmosphereVolume.width << cuT( " " ) << atmosphereVolume.height << cuT( " " ) << atmosphereVolume.depth << cuT( "\n" );
 			}
 
 			return result;
@@ -121,212 +83,141 @@ namespace atmosphere_scattering
 		return castor::TextWriter< AtmosphereBackground >{ tabs, folder }( *this, stream );
 	}
 
-	std::unique_ptr< castor3d::BackgroundPassBase > AtmosphereBackground::createBackgroundPass( crg::FramePass const & framePass
-		, crg::GraphContext & context
-		, crg::RunnableGraph & graph
+	crg::FramePass & AtmosphereBackground::createBackgroundPass( crg::FramePassGroup & graph
 		, castor3d::RenderDevice const & device
+		, castor3d::ProgressBar * progress
 		, VkExtent2D const & size
-		, bool usesDepth )
+		, bool usesDepth
+		, castor3d::MatrixUbo const & matrixUbo
+		, castor3d::SceneUbo const & sceneUbo
+		, castor3d::BackgroundPassBase *& backgroundPass )
 	{
-		return std::make_unique< AtmosphereBackgroundPass >( framePass
-			, context
-			, graph
-			, device
-			, *this
-			, size
-			, usesDepth );
+		auto ires = m_atmospherePasses.emplace( &matrixUbo, BackgroundPasses{ nullptr, nullptr } );
+		auto it = ires.first;
+
+		if ( ires.second )
+		{
+			it->second.transmittance = std::make_unique< AtmosphereTransmittancePass >( graph
+				, crg::FramePassArray{}
+				, device
+				, matrixUbo
+				, *m_atmosphereUbo
+				, m_transmittance.targetViewId );
+			it->second.multiScattering = std::make_unique< AtmosphereMultiScatteringPass >( graph
+				, crg::FramePassArray{ &it->second.transmittance->getLastPass() }
+				, device
+				, matrixUbo
+				, *m_atmosphereUbo
+				, m_transmittance.sampledViewId
+				, m_multiScatter.targetViewId );
+			it->second.skyView = std::make_unique< AtmosphereVolumePass >( graph
+				, crg::FramePassArray{ &it->second.multiScattering->getLastPass() }
+				, device
+				, matrixUbo
+				, sceneUbo
+				, *m_atmosphereUbo
+				, m_transmittance.sampledViewId
+				, m_multiScatter.sampledViewId
+				, m_atmosphereVolume.targetViewId );
+			auto & pass = graph.createPass( "Background"
+				, [this, &backgroundPass, &device, progress, size, usesDepth]( crg::FramePass const & framePass
+					, crg::GraphContext & context
+					, crg::RunnableGraph & runnableGraph )
+				{
+					stepProgressBar( progress, "Initialising background pass" );
+					auto res = std::make_unique< AtmosphereBackgroundPass >( framePass
+						, context
+						, runnableGraph
+						, device
+						, *this
+						, size
+						, usesDepth );
+					backgroundPass = res.get();
+					device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+						, res->getTimer() );
+					return res;
+				} );
+			pass.addDependency( it->second.skyView->getLastPass() );
+			it->second.lastPass = &pass;
+		}
+
+		return *it->second.lastPass;
 	}
 
-	void AtmosphereBackground::loadTransmittance( castor::Path const & folder
-		, castor::Path const & relative
-		, castor::Point2ui const & dimensions
-		, castor::PixelFormat format )
+	void AtmosphereBackground::loadTransmittance( castor::Point2ui const & dimensions )
 	{
-		ashes::ImageCreateInfo image{ 0u
-			, VK_IMAGE_TYPE_2D
-			, castor3d::convert( format )
+		auto & handler = getScene().getEngine()->getGraphResourceHandler();
+		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
+		m_transmittance = castor3d::Texture{ device
+			, handler
+			, "Transmittance"
+			, 0u
 			, { dimensions->x, dimensions->y, 1u }
 			, 1u
 			, 1u
-			, VK_SAMPLE_COUNT_1_BIT
-			, VK_IMAGE_TILING_OPTIMAL
-			, ( VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) };
-		m_transmittance = { relative
-			, dimensions
-			, format
-			, castor::makeUnique< castor3d::TextureLayout >( *getScene().getEngine()->getRenderSystem()
-				, std::move( image )
-				, VkMemoryPropertyFlags( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT )
-				, cuT( "AtmosphereTransmittance" ) ) };
-
-		if ( relative.getExtension() == "raw" )
-		{
-			FILE * file{};
-
-			if ( castor::fileOpen( file, ( folder / relative ).c_str(), "rb" ) )
-			{
-				castor::ByteArray data;
-				data.resize( ashes::getSize( VkExtent2D{ dimensions->x, dimensions->y }
-				, castor3d::convert( format ) ) );
-				auto read = fread( data.data(), 1, data.size(), file );
-
-				if ( read == data.size() )
-				{
-					auto buffer = castor::PxBufferBase::create( castor::Size{ dimensions->x, dimensions->y }
-						, 1u
-						, 1u
-						, format
-						, data.data()
-						, format );
-					m_transmittance.texture->setSource( std::move( buffer ), true );
-					notifyChanged();
-				}
-				else
-				{
-					castor3d::log::error << "RAW image file binary size doesn't match expected size." << std::endl;
-				}
-			}
-		}
-		else
-		{
-			m_transmittance.texture->setSource( folder, relative, { false, false, false } );
-			notifyChanged();
-		}
+			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT
+			, VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR
+			, VK_SAMPLER_MIPMAP_MODE_NEAREST };
+		notifyChanged();
 	}
 
-	void AtmosphereBackground::loadInscaterring( castor::Path const & folder
-		, castor::Path const & relative
-		, castor::Point3ui const & dimensions
-		, castor::PixelFormat format )
+	void AtmosphereBackground::loadMultiScatter( uint32_t dimension )
 	{
-		ashes::ImageCreateInfo image{ 0u
-			, VK_IMAGE_TYPE_3D
-			, castor3d::convert( format )
-			, { dimensions->x, dimensions->y, dimensions->z }
+		auto & handler = getScene().getEngine()->getGraphResourceHandler();
+		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
+		m_multiScatter = castor3d::Texture{ device
+			, handler
+			, "MultiScatter"
+			, 0u
+			, { dimension, dimension, 1u }
 			, 1u
 			, 1u
-			, VK_SAMPLE_COUNT_1_BIT
-			, VK_IMAGE_TILING_OPTIMAL
-			, ( VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) };
-		m_inscattering = { relative
-			, dimensions
-			, format
-			, castor::makeUnique< castor3d::TextureLayout >( *getScene().getEngine()->getRenderSystem()
-				, std::move( image )
-				, VkMemoryPropertyFlags( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT )
-				, cuT( "AtmosphereInscattering" ) ) };
-
-		if ( relative.getExtension() == "raw" )
-		{
-			FILE * file{};
-
-			if ( castor::fileOpen( file, ( folder / relative ).c_str(), "rb" ) )
-			{
-				castor::ByteArray data;
-				auto vkfmt = castor3d::convert( format );
-				auto extent = VkExtent3D{ dimensions->x, dimensions->y, dimensions->z };
-				data.resize( ashes::getSize( extent, vkfmt ) );
-				auto read = fread( data.data(), 1, data.size(), file );
-
-				if ( read == data.size() )
-				{
-					m_inscattering.texture->setSource( extent, vkfmt );
-					std::memcpy( m_inscattering.texture->getImage().getPixels()->getPtr()
-						, data.data()
-						, data.size() );
-					notifyChanged();
-				}
-				else
-				{
-					castor3d::log::error << "RAW image file binary size doesn't match expected size." << std::endl;
-				}
-			}
-		}
-		else
-		{
-			m_inscattering.texture->setSource( folder, relative, { false, false, false } );
-			notifyChanged();
-		}
+			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_STORAGE_BIT
+			, VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR
+			, VK_SAMPLER_MIPMAP_MODE_NEAREST };
+		notifyChanged();
 	}
 
-	void AtmosphereBackground::loadIrradiance( castor::Path const & folder
-		, castor::Path const & relative
-		, castor::Point2ui const & dimensions
-		, castor::PixelFormat format )
+	void AtmosphereBackground::loadAtmosphereVolume( uint32_t dimension )
 	{
-		ashes::ImageCreateInfo image{ 0u
-			, VK_IMAGE_TYPE_2D
-			, castor3d::convert( format )
-			, { dimensions->x, dimensions->y, 1u }
+		auto & handler = getScene().getEngine()->getGraphResourceHandler();
+		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
+		m_atmosphereVolume = castor3d::Texture{ device
+			, handler
+			, "AtmosphereVolume"
+			, 0u
+			, { dimension, dimension, dimension }
 			, 1u
 			, 1u
-			, VK_SAMPLE_COUNT_1_BIT
-			, VK_IMAGE_TILING_OPTIMAL
-			, ( VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) };
-		m_irradiance = { relative
-			, dimensions
-			, format
-			, castor::makeUnique< castor3d::TextureLayout >( *getScene().getEngine()->getRenderSystem()
-				, std::move( image )
-				, VkMemoryPropertyFlags( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT )
-				, cuT( "AtmosphereIrradiance" ) ) };
-
-		if ( relative.getExtension() == "raw" )
-		{
-			FILE * file{};
-
-			if ( castor::fileOpen( file, ( folder / relative ).c_str(), "rb" ) )
-			{
-				castor::ByteArray data;
-				data.resize( ashes::getSize( VkExtent2D{ dimensions->x, dimensions->y }
-				, castor3d::convert( format ) ) );
-				auto read = fread( data.data(), 1, data.size(), file );
-
-				if ( read == data.size() )
-				{
-					auto buffer = castor::PxBufferBase::create( castor::Size{ dimensions->x, dimensions->y }
-						, 1u
-						, 1u
-						, format
-						, data.data()
-						, format );
-					m_irradiance.texture->setSource( std::move( buffer ), true );
-					notifyChanged();
-				}
-				else
-				{
-					castor3d::log::error << "RAW image file binary size doesn't match expected size." << std::endl;
-				}
-			}
-		}
-		else
-		{
-			m_irradiance.texture->setSource( folder, relative, { false, false, false } );
-			notifyChanged();
-		}
+			, VK_FORMAT_B10G11R11_UFLOAT_PACK32
+			, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT
+			, VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR
+			, VK_SAMPLER_MIPMAP_MODE_NEAREST };
+		notifyChanged();
 	}
 
 	bool AtmosphereBackground::doInitialise( castor3d::RenderDevice const & device )
 	{
 		auto data = device.graphicsData();
-		m_transmittance.texture->initialise( device, *data );
-		m_inscattering.texture->initialise( device, *data );
-		m_irradiance.texture->initialise( device, *data );
 		auto & engine = *getEngine();
 		m_textureId = { device
 			, engine.getGraphResourceHandler()
 			, cuT( "AtmosphereResult" )
-			, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
+			, 0u
 			, { SkyTexSize, SkyTexSize, 1u }
-			, 6u
 			, 1u
-			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, 1u
+			, VK_FORMAT_B10G11R11_UFLOAT_PACK32
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT ) };
+		m_transmittance.create();
+		m_multiScatter.create();
+		m_atmosphereVolume.create();
 		m_textureId.create();
 		m_texture = std::make_shared< castor3d::TextureLayout >( device.renderSystem
 			, m_textureId.image
@@ -338,26 +229,21 @@ namespace atmosphere_scattering
 
 	void AtmosphereBackground::doCleanup()
 	{
+		m_atmosphereVolume.destroy();
+		m_multiScatter.destroy();
+		m_transmittance.destroy();
 	}
 
 	void AtmosphereBackground::doCpuUpdate( castor3d::CpuUpdater & updater )const
 	{
 		auto & viewport = *updater.viewport;
 		viewport.resize( updater.camera->getSize() );
-		viewport.setOrtho( -1.0f
-			, 1.0f
-			, -m_ratio
-			, m_ratio
+		viewport.setPerspective( updater.camera->getViewport().getFovY()
+			, updater.camera->getRatio()
 			, 0.1f
 			, 2.0f );
 		viewport.update();
-		auto node = updater.camera->getParent();
-		castor::Matrix4x4f view;
-		castor::matrix::lookAt( view
-			, node->getDerivedPosition()
-			, node->getDerivedPosition() + castor::Point3f{ 0.0f, 0.0f, 1.0f }
-		, castor::Point3f{ 0.0f, 1.0f, 0.0f } );
-		updater.bgMtxView = view;
+		updater.bgMtxView = updater.camera->getView();
 		updater.bgMtxProj = updater.isSafeBanded
 			? viewport.getSafeBandedProjection()
 			: viewport.getProjection();

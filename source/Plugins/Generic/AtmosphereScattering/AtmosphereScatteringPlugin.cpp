@@ -49,78 +49,150 @@ namespace atmosphere_scattering
 			addParser( result, uint32_t( AtmosphereSection::eRoot )
 				, cuT( "}" )
 				, &parserAtmosphereScatteringEnd );
-
 			addParser( result
 				, uint32_t( AtmosphereSection::eRoot )
-				, cuT( "transmittance" )
-				, &parserTransmittance );
-			addParser( result
-				, uint32_t( AtmosphereSection::eTransmittance )
-				, cuT( "image" )
-				, &parserTransmittanceImage
-				, { castor::makeParameter< castor::ParameterType::ePath >() } );
-			addParser( result
-				, uint32_t( AtmosphereSection::eTransmittance )
-				, cuT( "dimensions" )
-				, &parserTransmittanceDimensions
+				, cuT( "transmittanceResolution" )
+				, &parserTransmittanceResolution
 				, { castor::makeParameter< castor::ParameterType::ePoint2U >() } );
 			addParser( result
-				, uint32_t( AtmosphereSection::eTransmittance )
-				, cuT( "format" )
-				, &parserTransmittanceFormat
-				, { castor::makeParameter< castor::ParameterType::ePixelFormat >() } );
-			addParser( result
-				, uint32_t( AtmosphereSection::eTransmittance )
-				, cuT( "}" )
-				, &parserTransmittanceEnd );
-
+				, uint32_t( AtmosphereSection::eRoot )
+				, cuT( "multiScatterResolution" )
+				, &parserMultiScatterResolution
+				, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 			addParser( result
 				, uint32_t( AtmosphereSection::eRoot )
-				, cuT( "inscatter" )
-				, &parserInscatter );
-			addParser( result
-				, uint32_t( AtmosphereSection::eInscatter )
-				, cuT( "image" )
-				, &parserInscatterImage
-				, { castor::makeParameter< castor::ParameterType::ePath >() } );
-			addParser( result
-				, uint32_t( AtmosphereSection::eInscatter )
-				, cuT( "dimensions" )
-				, &parserInscatterDimensions
-				, { castor::makeParameter< castor::ParameterType::ePoint3U >() } );
-			addParser( result
-				, uint32_t( AtmosphereSection::eInscatter )
-				, cuT( "format" )
-				, &parserInscatterFormat
-				, { castor::makeParameter< castor::ParameterType::ePixelFormat >() } );
-			addParser( result
-				, uint32_t( AtmosphereSection::eInscatter )
-				, cuT( "}" )
-				, &parserInscatterEnd );
-
+				, cuT( "atmosphereVolumeResolution" )
+				, &parserAtmosphereVolumeResolution
+				, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 			addParser( result
 				, uint32_t( AtmosphereSection::eRoot )
-				, cuT( "irradiance" )
-				, &parserIrradiance );
+				, cuT( "sunIlluminance" )
+				, &parserSunIlluminance
+				, { castor::makeParameter< castor::ParameterType::ePoint3F >() } );
 			addParser( result
-				, uint32_t( AtmosphereSection::eIrradiance )
-				, cuT( "image" )
-				, &parserIrradianceImage
-				, { castor::makeParameter< castor::ParameterType::ePath >() } );
+				, uint32_t( AtmosphereSection::eRoot )
+				, cuT( "sunIlluminanceScale" )
+				, &parserSunIlluminanceScale
+				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 			addParser( result
-				, uint32_t( AtmosphereSection::eIrradiance )
-				, cuT( "dimensions" )
-				, &parserIrradianceDimensions
-				, { castor::makeParameter< castor::ParameterType::ePoint2U >() } );
+				, uint32_t( AtmosphereSection::eRoot )
+				, cuT( "rayMarchMinSPP" )
+				, &parserRayMarchMinSPP
+				, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 			addParser( result
-				, uint32_t( AtmosphereSection::eIrradiance )
-				, cuT( "format" )
-				, &parserIrradianceFormat
-				, { castor::makeParameter< castor::ParameterType::ePixelFormat >() } );
+				, uint32_t( AtmosphereSection::eRoot )
+				, cuT( "rayMarchMaxSPP" )
+				, &parserRayMarchMaxSPP
+				, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 			addParser( result
-				, uint32_t( AtmosphereSection::eIrradiance )
-				, cuT( "}" )
-				, &parserIrradianceEnd );
+				, uint32_t( AtmosphereSection::eRoot )
+				, cuT( "multipleScatteringFactor" )
+				, &parserMultipleScatteringFactor
+				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eRoot )
+				, cuT( "solarIrradiance" )
+				, &parserSolarIrradiance
+				, { castor::makeParameter< castor::ParameterType::ePoint3F >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eRoot )
+				, cuT( "sunAngularRadius" )
+				, &parserSunAngularRadius
+				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eRoot )
+				, cuT( "absorptionExtinction" )
+				, &parserAbsorptionExtinction
+				, { castor::makeParameter< castor::ParameterType::ePoint3F >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eRoot )
+				, cuT( "maxSunZenithAngle" )
+				, &parserMaxSunZenithAngle
+				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eRoot )
+				, cuT( "rayleighScattering" )
+				, &parserRayleighScattering
+				, { castor::makeParameter< castor::ParameterType::ePoint3F >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eRoot )
+				, cuT( "mieScattering" )
+				, &parserMieScattering
+				, { castor::makeParameter< castor::ParameterType::ePoint3F >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eRoot )
+				, cuT( "miePhaseFunctionG" )
+				, &parserMiePhaseFunctionG
+				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eRoot )
+				, cuT( "mieExtinction" )
+				, &parserMieExtinction
+				, { castor::makeParameter< castor::ParameterType::ePoint3F >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eRoot )
+				, cuT( "bottomRadius" )
+				, &parserBottomRadius
+				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eRoot )
+				, cuT( "topRadius" )
+				, &parserTopRadius
+				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eRoot )
+				, cuT( "groundAlbedo" )
+				, &parserGroundAlbedo
+				, { castor::makeParameter< castor::ParameterType::ePoint3F >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eRoot )
+				, cuT( "minRayleighDensity" )
+				, &parserMinRayleighDensity );
+			addParser( result
+				, uint32_t( AtmosphereSection::eRoot )
+				, cuT( "maxRayleighDensity" )
+				, &parserMaxRayleighDensity );
+			addParser( result
+				, uint32_t( AtmosphereSection::eRoot )
+				, cuT( "minMieDensity" )
+				, &parserMinMieDensity );
+			addParser( result
+				, uint32_t( AtmosphereSection::eRoot )
+				, cuT( "maxMieDensity" )
+				, &parserMaxMieDensity );
+			addParser( result
+				, uint32_t( AtmosphereSection::eRoot )
+				, cuT( "minAbsorptionDensity" )
+				, &parserMinAbsorptionDensity );
+			addParser( result
+				, uint32_t( AtmosphereSection::eRoot )
+				, cuT( "maxAbsorptionDensity" )
+				, &parserMaxAbsorptionDensity );
+			addParser( result
+				, uint32_t( AtmosphereSection::eDensity )
+				, cuT( "layerWidth" )
+				, &parserDensityLayerWidth
+				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eDensity )
+				, cuT( "expTerm" )
+				, &parserDensityExpTerm
+				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eDensity )
+				, cuT( "expScale" )
+				, &parserDensityExpScale
+				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eDensity )
+				, cuT( "linearTerm" )
+				, &parserDensityLinearTerm
+				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eDensity )
+				, cuT( "constantTerm" )
+				, &parserDensityConstantTerm
+				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 
 			return result;
 		}
@@ -130,9 +202,7 @@ namespace atmosphere_scattering
 			return
 			{
 				{ uint32_t( AtmosphereSection::eRoot ), PluginType },
-				{ uint32_t( AtmosphereSection::eTransmittance ), "transmittance" },
-				{ uint32_t( AtmosphereSection::eInscatter ), "inscatter" },
-				{ uint32_t( AtmosphereSection::eIrradiance ), "irradiance" },
+				{ uint32_t( AtmosphereSection::eDensity ), "density" },
 			};
 		}
 

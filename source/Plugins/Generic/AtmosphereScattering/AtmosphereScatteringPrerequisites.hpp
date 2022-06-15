@@ -6,8 +6,6 @@ See LICENSE file in root folder
 
 #include <Castor3D/Castor3DModule.hpp>
 
-#define AtmosphereScattering_Debug 1
-
 namespace atmosphere_scattering
 {
 	class AtmosphereBackground;
@@ -15,7 +13,7 @@ namespace atmosphere_scattering
 
 	struct AtmosphereConfig;
 	struct AtmosphereData;
-	struct AtmosphereScatteringUboConfiguration;
+	struct AtmosphereScatteringConfig;
 }
 
 #endif
