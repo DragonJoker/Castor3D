@@ -90,23 +90,14 @@ namespace castor3d
 	{
 		stepProgressBar( progress, "Creating background pass" );
 		auto size = makeExtent2D( getExtent( colour ) );
-		auto & result = graph.createPass( "Background"
-			, [this, &background, progress, size, depth]( crg::FramePass const & framePass
-				, crg::GraphContext & context
-				, crg::RunnableGraph & runnableGraph )
-			{
-				stepProgressBar( progress, "Initialising background pass" );
-				auto res = background.createBackgroundPass( framePass
-					, context
-					, runnableGraph
-					, m_device
-					, size
-					, depth != nullptr );
-				m_backgroundPass = res.get();
-				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
-					, res->getTimer() );
-				return res;
-			} );
+		auto & result = background.createBackgroundPass( graph
+			, m_device
+			, progress
+			, size
+			, depth != nullptr
+			, m_matrixUbo
+			, sceneUbo
+			, m_backgroundPass );
 		result.addDependencies( previousPasses );
 		m_matrixUbo.createPassBinding( result
 			, SceneBackground::MtxUboIdx );
@@ -117,9 +108,6 @@ namespace castor3d
 			, SceneBackground::HdrCfgUboIdx );
 		sceneUbo.createPassBinding( result
 			, SceneBackground::SceneUboIdx );
-		result.addSampledView( background.getTextureId().sampledViewId
-			, SceneBackground::SkyBoxImgIdx
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 
 		if ( depth )
 		{
