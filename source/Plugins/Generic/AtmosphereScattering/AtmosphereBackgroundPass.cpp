@@ -28,17 +28,25 @@ namespace atmosphere_scattering
 	{
 		castor::String const Name{ "RenderSky" };
 
-		enum Bindings : uint32_t
-		{
-			eAtmosphereScattering = castor3d::SceneBackground::SkyBoxImgIdx,
-			eTransmittance,
-			eInscatter,
-			eCount,
-		};
-
 		static castor3d::ShaderPtr getVertexProgram()
 		{
 			sdw::VertexWriter writer;
+			sdw::Vec2 position = writer.declInput< sdw::Vec2 >( "position", 0u );
+
+			writer.implementMainT< sdw::VoidT, sdw::VoidT >( sdw::VertexIn{ writer }
+				, sdw::VertexOut{ writer }
+				, [&]( sdw::VertexIn in
+					, sdw::VertexOut out )
+				{
+					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
+				} );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+		}
+
+		static castor3d::ShaderPtr getPixelProgram( VkExtent2D const & renderSize
+			, VkExtent3D const & transmittanceExtent )
+		{
+			sdw::FragmentWriter writer;
 
 			C3D_Matrix( writer
 				, castor3d::SceneBackground::MtxUboIdx
@@ -47,76 +55,98 @@ namespace atmosphere_scattering
 				, castor3d::SceneBackground::SceneUboIdx
 				, 0u );
 			C3D_AtmosphereScattering( writer
-				, Bindings::eAtmosphereScattering
-				, 0u );
-
-			auto inPosition = writer.declInput< sdw::Vec4 >( "inPosition", 0u );
-			auto outViewDir = writer.declOutput< sdw::Vec3 >( "outViewDir", 0u );
-
-			writer.implementMainT< sdw::VoidT, sdw::VoidT >( sdw::VertexIn{ writer }
-				, sdw::VertexOutT< sdw::VoidT >{ writer }
-				, [&]( sdw::VertexIn in
-					, sdw::VertexOutT< sdw::VoidT > out )
-				{
-					outViewDir = c3d_matrixData.curViewToWorld( vec4( c3d_matrixData.projToView( inPosition ).xyz(), 0.0_f ) ).xyz();
-					out.vtx.position = vec4( inPosition.xy(), 0.9999999, 1.0 );
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		static castor3d::ShaderPtr getPixelProgram( castor3d::Engine const & engine )
-		{
-			sdw::FragmentWriter writer;
-
-			castor3d::shader::Utils utils{ writer, engine };
-
-			C3D_Scene( writer
-				, castor3d::SceneBackground::SceneUboIdx
-				, 0u );
-			C3D_AtmosphereScattering( writer
-				, uint32_t( Bindings::eAtmosphereScattering )
+				, uint32_t( AtmosphereBackgroundPass::eAtmosphere )
 				, 0u );
 			auto transmittanceMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "transmittanceMap"
-				, uint32_t( Bindings::eTransmittance )
+				, uint32_t( AtmosphereBackgroundPass::eTransmittance )
 				, 0u );
-			auto inscatterMap = writer.declCombinedImg< sdw::CombinedImage3DRgba32 >( "inscatterMap"
-				, uint32_t( Bindings::eInscatter )
+			auto multiScatterMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "multiScatterMap"
+				, uint32_t( AtmosphereBackgroundPass::eMultiScatter )
 				, 0u );
 
-			auto inViewDir = writer.declInput< sdw::Vec3 >( "inViewDir", 0u );
+			auto  sampleCountIni = writer.declConstant( "sampleCountIni"
+				, 30.0_f );	// Can go a low as 10 sample but energy lost starts to be visible.
+			auto  depthBufferValue = writer.declConstant( "depthBufferValue"
+				, -1.0_f );
+			auto planetRadiusOffset = writer.declConstant( "planetRadiusOffset"
+				, 0.01_f );
 
 			// Fragment Outputs
-			auto pxl_colour( writer.declOutput< sdw::Vec4 >( "pxl_colour", 0 ) );
+			auto pxl_colour( writer.declOutput< sdw::Vec4 >( "pxl_colour", 0u ) );
 			auto const M_PI{ sdw::Float{ castor::Pi< float > } };
 
-			AtmosphereConfig atmosphereConfig{ writer, c3d_atmosphereData };
+			AtmosphereConfig atmosphereConfig{ writer
+				, c3d_atmosphereData
+				, c3d_matrixData
+				, { false, false, true, true }
+				, { transmittanceExtent.width, transmittanceExtent.height }
+				, &transmittanceMap };
 
-			writer.implementMainT< SurfaceT, sdw::VoidT >( sdw::FragmentInT< SurfaceT >{ writer }
+			writer.implementMainT< sdw::VoidT, sdw::VoidT >( sdw::FragmentIn{ writer }
 				, sdw::FragmentOut{ writer }
-				, [&]( sdw::FragmentInT< SurfaceT > in
+				, [&]( sdw::FragmentIn in
 					, sdw::FragmentOut out )
 				{
-					auto pi = writer.declLocale( "pi"
-						, sdw::Float{ castor::Pi< float > } );
+					auto targetSize = writer.declLocale( "targetSize"
+						, vec2( sdw::Float{ float( renderSize.width ) }, float( renderSize.height ) ) );
+					auto pixPos = writer.declLocale( "pixPos"
+						, in.fragCoord.xy() );
+					auto uv = writer.declLocale( "uv"
+						, pixPos / targetSize );
 
-					auto worldSunDir = writer.declLocale( "worldSunDir"
-						, c3d_atmosphereData.getSunDir() );
+					auto clipSpace = writer.declLocale( "clipSpace"
+						, vec3( uv * vec2( 2.0_f, -2.0_f ) - vec2( 1.0_f, -1.0_f ), 1.0_f ) );
+					auto hPos = writer.declLocale( "hPos"
+						, c3d_matrixData.curProjToWorld( vec4( clipSpace, 1.0_f ) ) );
 
-					auto v = writer.declLocale( "v"
-						, normalize( inViewDir ) );
-					auto sunColor = writer.declLocale( "sunColor"
-						, vec3( step( cos( pi / 180.0_f ), dot( v, worldSunDir ) ) ) * vec3( c3d_atmosphereData.sunIntensity ) );
-					auto extinction = writer.declLocale< sdw::Vec3 >( "extinction" );
-					auto inscatter = writer.declLocale( "inscatter"
-						, atmosphereConfig.getSkyRadiance( c3d_sceneData.cameraPosition + c3d_atmosphereData.earthPos
-							, v
-							, worldSunDir
-							, transmittanceMap
-							, inscatterMap
-							, extinction ) );
-					auto finalColor = writer.declLocale( "finalColor"
-						, sunColor * extinction + inscatter );
-					pxl_colour = vec4( finalColor, 1.0_f );
+					auto worldDir = writer.declLocale( "worldDir"
+						, normalize( hPos.xyz() / hPos.w() - c3d_sceneData.cameraPosition ) );
+					auto worldPos = writer.declLocale( "worldPos"
+						, c3d_sceneData.cameraPosition + vec3( 0.0_f, 0.0_f, c3d_atmosphereData.bottomRadius ) );
+
+					auto viewHeight = writer.declLocale( "viewHeight"
+						, length( worldPos ) );
+
+					auto viewZenithCosAngle = writer.declLocale< sdw::Float >( "viewZenithCosAngle" );
+					auto lightViewCosAngle = writer.declLocale< sdw::Float >( "lightViewCosAngle" );
+					atmosphereConfig.uvToSkyViewLutParams( viewZenithCosAngle, lightViewCosAngle, viewHeight, uv, targetSize );
+
+					auto sunDir = writer.declLocale< sdw::Vec3 >( "sunDir" );
+					{
+						auto upVector = writer.declLocale( "upVector"
+							, worldPos / viewHeight );
+						auto sunZenithCosAngle = writer.declLocale( "sunZenithCosAngle"
+							, dot( upVector, c3d_atmosphereData.sunDirection ) );
+						sunDir = normalize( vec3( sqrt( 1.0_f - sunZenithCosAngle * sunZenithCosAngle ), 0.0_f, sunZenithCosAngle ) );
+					}
+
+					worldPos = vec3( 0.0_f, 0.0_f, viewHeight );
+
+					auto viewZenithSinAngle = writer.declLocale( "viewZenithSinAngle"
+						, sqrt( 1.0_f - viewZenithCosAngle * viewZenithCosAngle ) );
+					worldDir = vec3( viewZenithSinAngle * lightViewCosAngle
+						, viewZenithSinAngle * sqrt( 1.0_f - lightViewCosAngle * lightViewCosAngle )
+						, viewZenithCosAngle );
+
+
+					// Move to top atmospehre
+					IF( writer, !atmosphereConfig.moveToTopAtmosphere( worldPos, worldDir ) )
+					{
+						// Ray is not intersecting the atmosphere
+						pxl_colour = vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f );
+					}
+					ELSE
+					{
+						auto ss = writer.declLocale( "ss"
+							, atmosphereConfig.integrateScatteredLuminance( pixPos
+							, worldPos
+							, worldDir
+							, sunDir
+							, sampleCountIni
+							, depthBufferValue ) );
+						pxl_colour = vec4( ss.luminance, 1.0_f );
+					}
+					FI;
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -139,6 +169,7 @@ namespace atmosphere_scattering
 			, background
 			, size
 			, usesDepth }
+		, m_atmosBackground{ background }
 	{
 	}
 
@@ -179,7 +210,7 @@ namespace atmosphere_scattering
 			, sky::getVertexProgram() };
 		m_pixelModule = { VK_SHADER_STAGE_FRAGMENT_BIT
 			, sky::Name
-			, sky::getPixelProgram( *m_device.renderSystem.getEngine() ) };
+			, sky::getPixelProgram( m_size, m_atmosBackground.getTransmittance().getExtent() ) };
 		return ashes::PipelineShaderStageCreateInfoArray
 		{
 			makeShaderState( m_device, m_vertexModule ),
@@ -205,12 +236,12 @@ namespace atmosphere_scattering
 
 		auto & atmosphere = static_cast< AtmosphereBackground const & >( *m_background );
 
-		m_descriptorBindings.push_back( { uint32_t( sky::Bindings::eAtmosphereScattering )
+		m_descriptorBindings.push_back( { uint32_t( AtmosphereBackgroundPass::eAtmosphere )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, 1u
 			, shaderStages
 			, nullptr } );
-		m_descriptorWrites.push_back( crg::WriteDescriptorSet{ uint32_t( sky::Bindings::eAtmosphereScattering )
+		m_descriptorWrites.push_back( crg::WriteDescriptorSet{ uint32_t( AtmosphereBackgroundPass::eAtmosphere )
 			, 0u
 			, 1u
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER } );
@@ -218,28 +249,28 @@ namespace atmosphere_scattering
 				, atmosphere.getAtmosphereUbo().getUbo().getByteOffset()
 				, atmosphere.getAtmosphereUbo().getUbo().getByteRange() } );
 
-		m_descriptorBindings.push_back( { uint32_t( sky::Bindings::eTransmittance )
+		m_descriptorBindings.push_back( { uint32_t( AtmosphereBackgroundPass::eTransmittance )
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, 1u
 			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, nullptr } );
-		m_descriptorWrites.push_back( crg::WriteDescriptorSet{ uint32_t( sky::Bindings::eTransmittance )
+		m_descriptorWrites.push_back( crg::WriteDescriptorSet{ uint32_t( AtmosphereBackgroundPass::eTransmittance )
 			, 0u
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VkDescriptorImageInfo{ m_background->getSampler().getSampler()
-				, atmosphere.getTransmittance().texture->getDefaultView().getSampledView()
+				, atmosphere.getTransmittance().sampledView
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } );
 
-		m_descriptorBindings.push_back( { uint32_t( sky::Bindings::eInscatter )
+		m_descriptorBindings.push_back( { uint32_t( AtmosphereBackgroundPass::eMultiScatter )
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, 1u
 			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, nullptr } );
-		m_descriptorWrites.push_back( crg::WriteDescriptorSet{ uint32_t( sky::Bindings::eInscatter )
+		m_descriptorWrites.push_back( crg::WriteDescriptorSet{ uint32_t( AtmosphereBackgroundPass::eMultiScatter )
 			, 0u
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VkDescriptorImageInfo{ m_background->getSampler().getSampler()
-				, atmosphere.getInscattering().texture->getDefaultView().getSampledView()
+				, atmosphere.getMultiScatter().sampledView
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } );
 	}
 

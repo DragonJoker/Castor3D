@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "AtmosphereScatteringPrerequisites.hpp"
 
 #include <Castor3D/Render/Passes/BackgroundPassBase.hpp>
+#include <Castor3D/Scene/Background/Background.hpp>
 #include <Castor3D/Shader/ShaderModule.hpp>
 
 namespace atmosphere_scattering
@@ -14,6 +15,15 @@ namespace atmosphere_scattering
 	class AtmosphereBackgroundPass
 		: public castor3d::BackgroundPassBase
 	{
+	public:
+		enum Bindings : uint32_t
+		{
+			eTransmittance = castor3d::SceneBackground::SkyBoxImgIdx,
+			eMultiScatter,
+			eAtmosphere,
+			eCount,
+		};
+
 	public:
 		AtmosphereBackgroundPass( crg::FramePass const & pass
 			, crg::GraphContext & context
@@ -30,6 +40,7 @@ namespace atmosphere_scattering
 		void doCreatePipeline()override;
 
 	private:
+		AtmosphereBackground & m_atmosBackground;
 		castor3d::ShaderModule m_vertexModule;
 		castor3d::ShaderModule m_pixelModule;
 	};

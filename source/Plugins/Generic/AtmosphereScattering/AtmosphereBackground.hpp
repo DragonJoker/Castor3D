@@ -4,7 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3DAS_AtmosphereBackground_H___
 #define ___C3DAS_AtmosphereBackground_H___
 
-#include "AtmosphereScatteringUbo.hpp"
+#include "AtmosphereMultiScatteringPass.hpp"
+#include "AtmosphereTransmittancePass.hpp"
+#include "AtmosphereVolumePass.hpp"
 
 #include <Castor3D/Scene/Background/Background.hpp>
 
@@ -43,12 +45,14 @@ namespace atmosphere_scattering
 		/**
 		*\copydoc	castor3d::SceneBackground::createBackgroundPass
 		*/
-		std::unique_ptr< castor3d::BackgroundPassBase > createBackgroundPass( crg::FramePass const & pass
-			, crg::GraphContext & context
-			, crg::RunnableGraph & graph
+		crg::FramePass & createBackgroundPass( crg::FramePassGroup & graph
 			, castor3d::RenderDevice const & device
+			, castor3d::ProgressBar * progress
 			, VkExtent2D const & size
-			, bool usesDepth )override;
+			, bool usesDepth
+			, castor3d::MatrixUbo const & matrixUbo
+			, castor3d::SceneUbo const & sceneUbo
+			, castor3d::BackgroundPassBase *& backgroundPass )override;
 		/**
 		*\copydoc	castor3d::SceneBackground::write
 		*/
@@ -56,32 +60,28 @@ namespace atmosphere_scattering
 			, castor::Path const & folder
 			, castor::StringStream & stream )const override;
 
-		void loadTransmittance( castor::Path const & folder
-			, castor::Path const & relative
-			, castor::Point2ui const & dimensions
-			, castor::PixelFormat format );
-		void loadInscaterring( castor::Path const & folder
-			, castor::Path const & relative
-			, castor::Point3ui const & dimensions
-			, castor::PixelFormat format );
-		void loadIrradiance( castor::Path const & folder
-			, castor::Path const & relative
-			, castor::Point2ui const & dimensions
-			, castor::PixelFormat format );
+		void loadTransmittance( castor::Point2ui const & dimensions );
+		void loadMultiScatter( uint32_t dimension );
+		void loadAtmosphereVolume( uint32_t dimension );
+
+		void setConfiguration( AtmosphereScatteringConfig config )
+		{
+			m_config = std::move( config );
+		}
 
 		auto const & getTransmittance()const
 		{
 			return m_transmittance;
 		}
 
-		auto const & getInscattering()const
+		auto const & getMultiScatter()const
 		{
-			return m_inscattering;
+			return m_multiScatter;
 		}
 
-		auto const & getIrradiance()const
+		auto const & getAtmosphereVolume()const
 		{
-			return m_irradiance;
+			return m_atmosphereVolume;
 		}
 
 		AtmosphereScatteringUbo const & getAtmosphereUbo()const
@@ -96,18 +96,18 @@ namespace atmosphere_scattering
 		void doGpuUpdate( castor3d::GpuUpdater & updater )const override;
 
 	private:
-		AtmosphereScatteringUboConfiguration m_config;
-		template< size_t CountT >
-		struct ImageT
+		AtmosphereScatteringConfig m_config;
+		castor3d::Texture m_transmittance;
+		castor3d::Texture m_multiScatter;
+		castor3d::Texture m_atmosphereVolume;
+		struct BackgroundPasses
 		{
-			castor::Path path;
-			castor::Point< uint32_t, CountT > dimensions;
-			castor::PixelFormat format;
-			castor3d::TextureLayoutUPtr texture;
+			std::unique_ptr< AtmosphereTransmittancePass > transmittance;
+			std::unique_ptr< AtmosphereMultiScatteringPass > multiScattering;
+			std::unique_ptr< AtmosphereVolumePass > skyView;
+			crg::FramePass * lastPass;
 		};
-		ImageT< 2u > m_transmittance;
-		ImageT< 3u > m_inscattering;
-		ImageT< 2u > m_irradiance;
+		std::map< castor3d::MatrixUbo const *, BackgroundPasses > m_atmospherePasses;
 		std::unique_ptr< AtmosphereScatteringUbo > m_atmosphereUbo;
 		float m_ratio;
 	};

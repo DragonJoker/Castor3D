@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3DAS_AtmosphereScatteringUbo_H___
 #define ___C3DAS_AtmosphereScatteringUbo_H___
 
-#include "AtmosphereScatteringPrerequisites.hpp"
+#include "AtmosphereScatteringConfig.hpp"
 
 #include <Castor3D/Castor3DModule.hpp>
 #include <Castor3D/Buffer/UniformBufferOffset.hpp>
@@ -18,75 +18,6 @@ See LICENSE file in root folder
 
 namespace atmosphere_scattering
 {
-#if AtmosphereScattering_Debug
-	enum AtmosphereScatteringDisplayData : uint32_t
-	{
-		eResult,
-		eSunContribution,
-		eSkyContribution,
-		CU_EnumBounds( AtmosphereScatteringDisplayData, eResult )
-	};
-	castor::StringArray const & getDisplayDataNames();
-#endif
-
-	struct AtmosphereScatteringUboConfiguration
-	{
-		castor::Point3f earthPos{ 0.0, 0.0, 6360010.0 };
-		float sunIntensity{ 100.0f };
-
-		// ----------------------------------------------------------------------------
-		// PHYSICAL MODEL PARAMETERS
-		// ----------------------------------------------------------------------------
-
-		float scale{ 1000.0f };
-		float Rg{ 6360.0f * scale };
-		float Rt{ 6420.0f * scale };
-		float RL{ 6421.0f * scale };
-
-		float averageGroundReflectance{ 0.1f };
-		float HR{ 8.0f * scale };
-		float HM{ 1.2f * scale };
-		float betaMSca{ 4e-3f / scale };
-
-		castor::Point3f betaR{ 5.8e-3f / scale, 1.35e-2f / scale, 3.31e-2f / scale };
-		float betaMDiv{ 0.9f };
-
-		float mieG{ 0.8f };
-		float g{ 9.81f };
-		castor::Point2f dummy1{};
-
-		// ----------------------------------------------------------------------------
-		// NUMERICAL INTEGRATION PARAMETERS
-		// ----------------------------------------------------------------------------
-
-		int transmittanceIntegralSamples{ 500 };
-		int inscatterIntegralSamples{ 50 };
-		int irradianceIntegralSamples{ 32 };
-		int inscatterSphericalIntegralSamples{ 16 };
-
-		// ----------------------------------------------------------------------------
-		// PARAMETERIZATION OPTIONS
-		// ----------------------------------------------------------------------------
-
-		int transmittanceW{ 256 };
-		int transmittanceH{ 64 };
-		int skyW{ 64 };
-		int skyH{ 16 };
-
-		int resR{ 32 };
-		int resMu{ 128 };
-		int resMuS{ 32 };
-		int resNu{ 8 };
-
-		castor::Point2ui size{};
-		uint32_t vertexCount{};
-#if AtmosphereScattering_Debug
-		uint32_t debug{ eResult };
-#else
-		uint32_t dummy4{};
-#endif
-	};
-
 	struct AtmosphereData
 		: public sdw::StructInstance
 	{
@@ -98,70 +29,82 @@ namespace atmosphere_scattering
 
 		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 
-		sdw::Vec3 getSunDir();
-
 	private:
 		using sdw::StructInstance::getMember;
 		using sdw::StructInstance::getMemberArray;
 
-	private:
-		sdw::Vec4 m_sunEarth;
-		sdw::Vec4 m_atmos0;
-		sdw::Vec4 m_atmos1;
-		sdw::Vec4 m_atmos2;
-		sdw::Vec4 m_atmos3;
-		sdw::IVec4 m_atmos4;
-		sdw::IVec4 m_atmos5;
-		sdw::IVec4 m_atmos6;
-	private:
-		sdw::UVec4 m_sd;
-
 	public:
-		sdw::Vec3 earthPos;
-		sdw::Float sunIntensity;
+		sdw::Vec3 sunDirection;
+		sdw::Float pad0;
 
-		sdw::Float scale;
-		sdw::Float Rg;
-		sdw::Float Rt;
-		sdw::Float RL;
+		sdw::Vec3 solarIrradiance;
+		sdw::Float sunAngularRadius;
 
-		sdw::Float averageGroundReflectance;
-		sdw::Float HR;
-		sdw::Float HM;
-		sdw::Float betaMSca;
+		sdw::Vec3 sunIlluminance;
+		sdw::Float sunIlluminanceScale;
 
-		sdw::Vec3 betaR;
-		sdw::Float betaMDiv;
+		sdw::Vec2 rayMarchMinMaxSPP;
+		sdw::Vec2 pad1;
 
-		sdw::Float mieG;
-		sdw::Float g;
-		sdw::Int transmittanceIntegralSamples;
-		sdw::Int inscatterIntegralSamples;
+		sdw::Vec3 absorptionExtinction;
+		sdw::Float muSMin;
 
-		sdw::Int irradianceIntegralSamples;
-		sdw::Int inscatterSphericalIntegralSamples;
-		sdw::Int transmittanceW;
-		sdw::Int transmittanceH;
+		sdw::Vec3 rayleighScattering;
+		sdw::Float miePhaseFunctionG;
 
-		sdw::Int skyW;
-		sdw::Int skyH;
-		sdw::Int resR;
-		sdw::Int resMu;
+		sdw::Vec3 mieScattering;
+		sdw::Float bottomRadius;
 
-		sdw::Int resMuS;
-		sdw::Int resNu;
+		sdw::Vec3 mieExtinction;
+		sdw::Float topRadius;
 
-		sdw::UVec2 size;
-		sdw::UInt vertexCount;
-#if AtmosphereScattering_Debug
-		sdw::UInt debug;
-#endif
+		sdw::Vec3 mieAbsorption;
+		sdw::Float multipleScatteringFactor;
+
+		sdw::Vec3 groundAlbedo;
+		sdw::Float multiScatteringLUTRes;
+
+		sdw::Float rayleighDensity0LayerWidth;
+		sdw::Float rayleighDensity0ExpTerm;
+		sdw::Float rayleighDensity0ExpScale;
+		sdw::Float rayleighDensity0LinearTerm;
+		sdw::Float rayleighDensity0ConstantTerm;
+
+		sdw::Float rayleighDensity1LayerWidth;
+		sdw::Float rayleighDensity1ExpTerm;
+		sdw::Float rayleighDensity1ExpScale;
+		sdw::Float rayleighDensity1LinearTerm;
+		sdw::Float rayleighDensity1ConstantTerm;
+
+		sdw::Float mieDensity0LayerWidth;
+		sdw::Float mieDensity0ExpTerm;
+		sdw::Float mieDensity0ExpScale;
+		sdw::Float mieDensity0LinearTerm;
+		sdw::Float mieDensity0ConstantTerm;
+
+		sdw::Float mieDensity1LayerWidth;
+		sdw::Float mieDensity1ExpTerm;
+		sdw::Float mieDensity1ExpScale;
+		sdw::Float mieDensity1LinearTerm;
+		sdw::Float mieDensity1ConstantTerm;
+
+		sdw::Float absorptionDensity0LayerWidth;
+		sdw::Float absorptionDensity0ExpTerm;
+		sdw::Float absorptionDensity0ExpScale;
+		sdw::Float absorptionDensity0LinearTerm;
+		sdw::Float absorptionDensity0ConstantTerm;
+
+		sdw::Float absorptionDensity1LayerWidth;
+		sdw::Float absorptionDensity1ExpTerm;
+		sdw::Float absorptionDensity1ExpScale;
+		sdw::Float absorptionDensity1LinearTerm;
+		sdw::Float absorptionDensity1ConstantTerm;
 	};
 
 	class AtmosphereScatteringUbo
 	{
 	private:
-		using Configuration = AtmosphereScatteringUboConfiguration;
+		using Configuration = AtmosphereScatteringConfig;
 
 	public:
 		explicit AtmosphereScatteringUbo( castor3d::RenderDevice const & device );
