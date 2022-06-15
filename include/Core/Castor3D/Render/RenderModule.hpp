@@ -19,6 +19,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	class MatrixUbo;
 	/**@name Render */
 	//@{
 
@@ -709,6 +710,7 @@ namespace castor3d
 		castor::Matrix4x4f bgMtxView;
 		castor::Matrix4x4f bgMtxProj;
 		bool isSafeBanded{ true };
+		castor3d::MatrixUbo const * matrixUbo{};
 		struct DirtyObjects
 		{
 			bool isEmpty()const
