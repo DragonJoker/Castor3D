@@ -25,6 +25,51 @@ namespace castor
 	}
 
 	template< typename ValueT >
+	bool TextWriterBase::write( StringStream & file, String const & name, castor::Point2< ValueT > const & value )const
+	{
+		auto writer = TextWriter< ValueT >{ tabs() };
+		auto result = writeText( file, tabs() + name + cuT( " " ) )
+			&& writer( value->x, file )
+			&& writeText( file, cuT( " " ) )
+			&& writer( value->y, file )
+			&& writeText( file, cuT( "\n" ) );
+		checkError( result, name.c_str() );
+		return result;
+	}
+
+	template< typename ValueT >
+	bool TextWriterBase::write( StringStream & file, String const & name, castor::Point3< ValueT > const & value )const
+	{
+		auto writer = TextWriter< ValueT >{ tabs() };
+		auto result = writeText( file, tabs() + name + cuT( " " ) )
+			&& writer( value->x, file )
+			&& writeText( file, cuT( " " ) )
+			&& writer( value->y, file )
+			&& writeText( file, cuT( " " ) )
+			&& writer( value->z, file )
+			&& writeText( file, cuT( "\n" ) );
+		checkError( result, name.c_str() );
+		return result;
+	}
+
+	template< typename ValueT >
+	bool TextWriterBase::write( StringStream & file, String const & name, castor::Point4< ValueT > const & value )const
+	{
+		auto writer = TextWriter< ValueT >{ tabs() };
+		auto result = writeText( file, tabs() + name + cuT( " " ) )
+			&& writer( value->x, file )
+			&& writeText( file, cuT( " " ) )
+			&& writer( value->y, file )
+			&& writeText( file, cuT( " " ) )
+			&& writer( value->z, file )
+			&& writeText( file, cuT( " " ) )
+			&& writer( value->w, file )
+			&& writeText( file, cuT( "\n" ) );
+		checkError( result, name.c_str() );
+		return result;
+	}
+
+	template< typename ValueT >
 	bool TextWriterBase::writeOpt( StringStream & file, String const & name, ValueT const & value, ValueT const & comp )const
 	{
 		bool result{ true };

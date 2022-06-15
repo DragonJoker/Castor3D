@@ -134,6 +134,12 @@ namespace castor
 		template< typename ValueT >
 		bool write( StringStream & file, String const & name, castor::ChangeTracked< ValueT > const & value )const;
 		template< typename ValueT >
+		bool write( StringStream & file, String const & name, castor::Point2< ValueT > const & value )const;
+		template< typename ValueT >
+		bool write( StringStream & file, String const & name, castor::Point3< ValueT > const & value )const;
+		template< typename ValueT >
+		bool write( StringStream & file, String const & name, castor::Point4< ValueT > const & value )const;
+		template< typename ValueT >
 		bool writeOpt( StringStream & file, String const & name, ValueT const & value, ValueT const & comp )const;
 		template< typename ValueT, typename ... ParamsT >
 		bool writeSub( StringStream & file, ValueT const & value, ParamsT const & ... params )const;
