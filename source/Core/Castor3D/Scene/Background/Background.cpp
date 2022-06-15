@@ -4,6 +4,7 @@
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -21,6 +22,8 @@
 
 #include <ashespp/Buffer/StagingBuffer.hpp>
 #include <ashespp/Core/Device.hpp>
+
+#include <RenderGraph/FramePassGroup.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
@@ -349,20 +352,37 @@ namespace castor3d
 		}
 	}
 
-	std::unique_ptr< BackgroundPassBase > SceneBackground::createBackgroundPass( crg::FramePass const & framePass
-		, crg::GraphContext & context
-		, crg::RunnableGraph & graph
+	crg::FramePass & SceneBackground::createBackgroundPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
+		, ProgressBar * progress
 		, VkExtent2D const & size
-		, bool usesDepth )
+		, bool usesDepth
+		, MatrixUbo const & matrixUbo
+		, SceneUbo const & sceneUbo
+		, BackgroundPassBase *& backgroundPass )
 	{
-		return std::make_unique< BackgroundPass >( framePass
-			, context
-			, graph
-			, device
-			, *this
-			, size
-			, usesDepth );
+		auto & result = graph.createPass( "Background"
+			, [this, &backgroundPass, &device, progress, size, usesDepth]( crg::FramePass const & framePass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & runnableGraph )
+			{
+				stepProgressBar( progress, "Initialising background pass" );
+				auto res = std::make_unique< BackgroundPass >( framePass
+					, context
+					, runnableGraph
+					, device
+					, *this
+					, size
+					, usesDepth );
+				backgroundPass = res.get();
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+					, res->getTimer() );
+				return res;
+			} );
+		result.addSampledView( m_textureId.sampledViewId
+			, SceneBackground::SkyBoxImgIdx
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		return result;
 	}
 
 	//*********************************************************************************************

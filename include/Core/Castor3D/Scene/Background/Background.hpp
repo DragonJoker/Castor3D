@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_SceneBackground_H___
 
 #include "BackgroundModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include "Castor3D/Render/Passes/BackgroundPassBase.hpp"
 #include "Castor3D/Render/PBR/IblTextures.hpp"
@@ -159,6 +160,8 @@ namespace castor3d
 		*	The render area dimensions.
 		*\param usesDepth
 		*	\p true to account for depth buffer.
+		*\param matrixUbo
+		*	The matrix UBO.
 		*\~french
 		*\brief
 		*	Crée la passe de rendu du fond.
@@ -174,13 +177,17 @@ namespace castor3d
 		*	Les dimensions de la zone de rendu.
 		*\param usesDepth
 		*	\p true pour prendre en compte le depth buffer.
+		*\param matrixUbo
+		*	L'UBO de matrices.
 		*/
-		C3D_API virtual std::unique_ptr< BackgroundPassBase > createBackgroundPass( crg::FramePass const & pass
-			, crg::GraphContext & context
-			, crg::RunnableGraph & graph
+		C3D_API virtual crg::FramePass & createBackgroundPass( crg::FramePassGroup & graph
 			, RenderDevice const & device
+			, ProgressBar * progress
 			, VkExtent2D const & size
-			, bool usesDepth );
+			, bool usesDepth
+			, MatrixUbo const & matrixUbo
+			, SceneUbo const & sceneUbo
+			, BackgroundPassBase *& backgroundPass );
 		/**
 		*\~english
 		*\brief
