@@ -464,7 +464,8 @@ namespace castor3d
 		auto index = uint32_t( dropqrslv::ResolveBind::eBackground );
 		background.addPassBindings( pass, index );
 
-		pass.addInOutColourView( m_result.targetViewId );
+		pass.addOutputColourView( m_result.targetViewId
+			, transparentBlackClearColor );
 		return pass;
 	}
 
