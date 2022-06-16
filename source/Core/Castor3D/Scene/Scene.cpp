@@ -581,6 +581,11 @@ namespace castor3d
 		return m_reflectionMap->getIndex( node );
 	}
 
+	castor::String const & Scene::getBackgroundModel()const
+	{
+		return m_background->getModelName();
+	}
+
 	AnimatedObjectSPtr Scene::addAnimatedTexture( TextureSourceInfo const & sourceInfo
 		, TextureConfiguration const & config
 		, Pass & pass )

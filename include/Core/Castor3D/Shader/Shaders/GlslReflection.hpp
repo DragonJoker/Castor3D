@@ -14,13 +14,16 @@ namespace castor3d::shader
 	public:
 		C3D_API ReflectionModel( sdw::ShaderWriter & writer
 			, Utils & utils
-			, PassFlags const & passFlags );
+			, PassFlags const & passFlags
+			, bool hasIblSupport );
 		C3D_API ReflectionModel( sdw::ShaderWriter & writer
-			, Utils & utils );
+			, Utils & utils
+			, bool hasIblSupport );
 		C3D_API virtual ~ReflectionModel() = default;
-		C3D_API virtual void computeDeferred( LightMaterial & material
+		C3D_API void computeDeferred( LightMaterial & material
 			, Surface const & surface
 			, SceneData const & sceneData
+			, BackgroundModel & background
 			, sdw::Int envMapIndex
 			, sdw::Int const & reflection
 			, sdw::Int const & refraction
@@ -28,23 +31,26 @@ namespace castor3d::shader
 			, sdw::Vec3 const & transmission
 			, sdw::Vec3 & ambient
 			, sdw::Vec3 & reflected
-			, sdw::Vec3 & refracted ) = 0;
-		C3D_API virtual sdw::Vec3 computeForward( LightMaterial & material
-			, Surface const & surface
-			, SceneData const & sceneData ) = 0;
-		C3D_API virtual sdw::Vec3 computeForward( LightMaterial & material
+			, sdw::Vec3 & refracted );
+		C3D_API sdw::Vec3 computeForward( LightMaterial & material
 			, Surface const & surface
 			, SceneData const & sceneData
+			, BackgroundModel & background );
+		C3D_API sdw::Vec3 computeForward( LightMaterial & material
+			, Surface const & surface
+			, SceneData const & sceneData
+			, BackgroundModel & background
 			, sdw::Float const & refractionRatio
-			, sdw::Vec3 const & transmission ) = 0;
-		C3D_API virtual void computeForward( LightMaterial & material
+			, sdw::Vec3 const & transmission );
+		C3D_API void computeForward( LightMaterial & material
 			, Surface const & surface
 			, SceneData const & sceneData
+			, BackgroundModel & background
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
 			, sdw::Vec3 & ambient
 			, sdw::Vec3 & reflected
-			, sdw::Vec3 & refracted ) = 0;
+			, sdw::Vec3 & refracted );
 		C3D_API sdw::Float computeFresnel( LightMaterial & material
 			, Surface const & surface
 			, SceneData const & sceneData
@@ -108,15 +114,91 @@ namespace castor3d::shader
 			, sdw::Vec2 & hitPixel
 			, sdw::Vec3 & csHitPoint );
 
+	private:
+		sdw::Vec3 computeIncident( sdw::Vec3 const & wsPosition
+			, sdw::Vec3 const & wsCamera )const;
+		sdw::Vec3 computeReflEnvMap( sdw::Vec3 const & wsIncident
+			, sdw::Vec3 const & wsNormal
+			, sdw::CombinedImageCubeRgba32 const & envMap
+			, LightMaterial const & material );
+		sdw::Vec3 computeRefrEnvMap( sdw::Vec3 const & wsIncident
+			, sdw::Vec3 const & wsNormal
+			, sdw::CombinedImageCubeRgba32 const & envMap
+			, sdw::Float const & refractionRatio
+			, sdw::Vec3 const & transmission
+			, LightMaterial & material );
+		sdw::Vec3 mergeReflRefrEnvMap( sdw::Vec3 const & wsIncident
+			, sdw::Vec3 const & wsNormal
+			, sdw::CombinedImageCubeRgba32 const & envMap
+			, sdw::Float const & refractionRatio
+			, sdw::Vec3 const & transmission
+			, LightMaterial & material
+			, sdw::Vec3 & reflection
+			, sdw::Vec3 & refraction );
+		sdw::Vec3 computeReflEnvMaps( sdw::Vec3 const & wsIncident
+			, sdw::Vec3 const & wsNormal
+			, sdw::CombinedImageCubeArrayRgba32 const & envMap
+			, sdw::Int const & envMapIndex
+			, LightMaterial const & material );
+		sdw::Vec3 computeRefrEnvMaps( sdw::Vec3 const & wsIncident
+			, sdw::Vec3 const & wsNormal
+			, sdw::CombinedImageCubeArrayRgba32 const & envMap
+			, sdw::Int const & envMapIndex
+			, sdw::Float const & refractionRatio
+			, sdw::Vec3 const & transmission
+			, LightMaterial & material );
+		sdw::Vec3 mergeReflRefrEnvMaps( sdw::Vec3 const & wsIncident
+			, sdw::Vec3 const & wsNormal
+			, sdw::CombinedImageCubeArrayRgba32 const & envMap
+			, sdw::Int const & envMapIndex
+			, sdw::Float const & refractionRatio
+			, sdw::Vec3 const & transmission
+			, LightMaterial & material
+			, sdw::Vec3 & reflection
+			, sdw::Vec3 & refraction );
+
+		virtual void doAdjustAmbient( sdw::Vec3 & ambient )const
+		{
+		}
+
+		virtual void doAdjustAlbedo( sdw::Vec3 & albedo )const
+		{
+		}
+
+		void doDeclareMergeReflRefrEnvMap();
+		void doDeclareMergeReflRefrEnvMaps();
+		virtual void doDeclareComputeReflEnvMap() = 0;
+		virtual void doDeclareComputeRefrEnvMap() = 0;
+		virtual void doDeclareComputeReflEnvMaps() = 0;
+		virtual void doDeclareComputeRefrEnvMaps() = 0;
+
 	protected:
-		void declareTraceScreenSpace();
-		void declareComputeScreenSpace( MatrixData const & matrixData );
-		void declareComputeFresnel();
+		C3D_API void declareTraceScreenSpace();
+		C3D_API void declareComputeScreenSpace( MatrixData const & matrixData );
+		C3D_API void declareComputeFresnel();
+
+		C3D_API sdw::Vec3 doComputeRefrEnvMap( sdw::Vec3 const & wsIncident
+			, sdw::Vec3 const & wsNormal
+			, sdw::CombinedImageCubeRgba32 const & envMap
+			, sdw::Float const & refractionRatio
+			, sdw::Vec3 const & transmission
+			, sdw::Vec3 & albedo
+			, sdw::Float const & roughness );
+		C3D_API sdw::Vec3 doComputeRefrEnvMaps( sdw::Vec3 const & wsIncident
+			, sdw::Vec3 const & wsNormal
+			, sdw::CombinedImageCubeArrayRgba32 const & envMap
+			, sdw::Int const & envMapIndex
+			, sdw::Float const & refractionRatio
+			, sdw::Vec3 const & transmission
+			, sdw::Vec3 & albedo
+			, sdw::Float const & roughness );
 
 	protected:
 		sdw::ShaderWriter & m_writer;
 		Utils & m_utils;
 		PassFlags m_passFlags;
+		bool m_hasIblSupport;
+
 		sdw::Function< sdw::Boolean
 			, sdw::InVec3
 			, sdw::InVec3
@@ -146,6 +228,59 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InVec3
 			, sdw::InFloat > m_computeFresnel;
+
+		sdw::Function< sdw::Vec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InCombinedImageCubeRgba32
+			, sdw::InVec3
+			, sdw::InFloat > m_computeReflEnvMap;
+		sdw::Function< sdw::Vec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InCombinedImageCubeRgba32
+			, sdw::InFloat
+			, sdw::InVec3
+			, sdw::InOutVec3
+			, sdw::InFloat > m_computeRefrEnvMap;
+		sdw::Function< sdw::Vec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InCombinedImageCubeRgba32
+			, sdw::InFloat
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InFloat
+			, sdw::InOutVec3
+			, sdw::OutVec3 > m_mergeReflRefrEnvMap;
+
+		sdw::Function< sdw::Vec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InCombinedImageCubeArrayRgba32
+			, sdw::InInt
+			, sdw::InVec3
+			, sdw::InFloat > m_computeReflEnvMaps;
+		sdw::Function< sdw::Vec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InCombinedImageCubeArrayRgba32
+			, sdw::InInt
+			, sdw::InFloat
+			, sdw::InVec3
+			, sdw::InOutVec3
+			, sdw::InFloat > m_computeRefrEnvMaps;
+		sdw::Function< sdw::Vec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InCombinedImageCubeArrayRgba32
+			, sdw::InInt
+			, sdw::InFloat
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InFloat
+			, sdw::InOutVec3
+			, sdw::OutVec3 > m_mergeReflRefrEnvMaps;
 	};
 }
 

@@ -18,6 +18,7 @@
 #include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
+#include "Castor3D/Shader/Shaders/GlslBackground.hpp"
 #include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
@@ -128,11 +129,12 @@ namespace castor3d
 			eIndirectDiffuse,
 			eIndirectSpecular,
 			eEnvironment,
-			eIrradiance,
-			ePrefiltered,
+			// Last fixed index
+			eBackground,
 		};
 
 		static ShaderPtr createPixelProgram( RenderSystem const & renderSystem
+			, Scene const & scene
 			, ResolveProgramConfig const & config
 			, PassTypeID passType )
 		{
@@ -170,8 +172,13 @@ namespace castor3d
 				, {}
 				, nullptr
 				, true );
-			uint32_t index = uint32_t( ResolveBind::eEnvironment );
+			auto index = uint32_t( ResolveBind::eEnvironment );
 			auto reflections = lightingModel->getReflectionModel( index
+				, 0u );
+			auto backgroundModel = shader::BackgroundModel::createModel( scene
+				, writer
+				, utils
+				, index
 				, 0u );
 			shader::Fog fog{ writer };
 
@@ -260,6 +267,7 @@ namespace castor3d
 						reflections->computeDeferred( *lightMat
 							, surface
 							, c3d_sceneData
+							, *backgroundModel
 							, envMapIndex
 							, material.hasReflection
 							, material.hasRefraction
@@ -364,7 +372,7 @@ namespace castor3d
 					, dropqrslv::createVertexProgram() }
 				, ShaderModule{ VK_SHADER_STAGE_FRAGMENT_BIT
 					, "OpaqueResolve" + std::to_string( programIndex )
-					, dropqrslv::createPixelProgram( m_device.renderSystem, config, m_scene.getPassesType() ) } );
+					, dropqrslv::createPixelProgram( m_device.renderSystem, m_scene, config, m_scene.getPassesType() ) } );
 			m_programs[programIndex]->stages = { makeShaderState( m_device, m_programs[programIndex]->vertexShader )
 				, makeShaderState( m_device, m_programs[programIndex]->pixelShader ) };
 		}
@@ -445,35 +453,16 @@ namespace castor3d
 		pass.addSampledView( m_lightIndirectSpecular.sampledViewId
 			, uint32_t( dropqrslv::ResolveBind::eIndirectSpecular ) );
 
-		auto & background = *m_scene.getBackground();
-		background.initialise( m_device );
-
-		if ( m_scene.getEngine()->getPassFactory().hasIBL( m_scene.getPassesType() ) )
-		{
-			if ( background.hasIbl() )
-			{
-				auto & ibl = background.getIbl();
-				pass.addSampledView( ibl.getIrradianceTexture().sampledViewId
-					, uint32_t( dropqrslv::ResolveBind::eIrradiance )
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-					, crg::SamplerDesc{ VK_FILTER_LINEAR
-					, VK_FILTER_LINEAR
-					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
-				pass.addSampledView( ibl.getPrefilteredEnvironmentTexture().sampledViewId
-					, uint32_t( dropqrslv::ResolveBind::ePrefiltered )
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-					, crg::SamplerDesc{ VK_FILTER_LINEAR
-					, VK_FILTER_LINEAR
-					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
-			}
-		}
-
 		pass.addSampledView( m_scene.getEnvironmentMap().getColourId().sampledViewId
 			, uint32_t( dropqrslv::ResolveBind::eEnvironment )
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, crg::SamplerDesc{ VK_FILTER_LINEAR
 				, VK_FILTER_LINEAR
 				, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+		auto & background = *m_scene.getBackground();
+		background.initialise( m_device );
+		auto index = uint32_t( dropqrslv::ResolveBind::eBackground );
+		background.addPassBindings( pass, index );
 
 		pass.addInOutColourView( m_result.targetViewId );
 		return pass;

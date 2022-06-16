@@ -334,6 +334,34 @@ namespace castor3d
 	{
 	}
 
+	void SkyboxBackground::doAddPassBindings( crg::FramePass & pass
+		, uint32_t & index )const
+	{
+		pass.addSampledView( m_textureId.wholeViewId
+			, index++
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, crg::SamplerDesc{ VK_FILTER_LINEAR
+				, VK_FILTER_LINEAR
+				, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+	}
+
+	void SkyboxBackground::doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, uint32_t & index )const
+	{
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBackground
+	}
+
+	void SkyboxBackground::doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+		, uint32_t & index )const
+	{
+		bindTexture( m_textureId.wholeView
+			, *m_textureId.sampler
+			, descriptorWrites
+			, index );
+	}
+
 	bool SkyboxBackground::doInitialiseTexture( RenderDevice const & device )
 	{
 		auto data = device.graphicsData();

@@ -22,6 +22,9 @@
 #include "Castor3D/Render/Technique/RenderTechnique.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/Background/Background.hpp"
+#include "Castor3D/Scene/Background/Shaders/GlslIblBackground.hpp"
+#include "Castor3D/Scene/Background/Shaders/GlslNoIblBackground.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/FileParser/FileParser.hpp>
@@ -121,6 +124,11 @@ namespace castor3d
 		{
 			castor::File::directoryCreate( getEngineDirectory() );
 		}
+
+		registerBackgroundModel( SceneBackground::WithoutIbl
+			, shader::NoIblBackgroundModel::create );
+		registerBackgroundModel( SceneBackground::WithIbl
+			, shader::IblBackgroundModel::create );
 
 		log::info << cuT( "Castor3D - Core engine version : " ) << Version{} << std::endl;
 		log::info << m_cpuInformations << std::endl;
@@ -560,6 +568,17 @@ namespace castor3d
 	void Engine::unregisterLightingModel( castor::String const & name )
 	{
 		m_lightingModelFactory.unregisterType( name );
+	}
+
+	void Engine::registerBackgroundModel( castor::String const & name
+		, shader::BackgroundModelCreator creator )
+	{
+		m_backgroundModelFactory.registerType( name, creator );
+	}
+
+	void Engine::unregisterBackgroundModel( castor::String const & name )
+	{
+		m_backgroundModelFactory.unregisterType( name );
 	}
 
 	void Engine::registerBuffer( ShaderBuffer const & buffer )

@@ -191,6 +191,69 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
+		*	Adds the background specific bindings to a frame pass.
+		*\param	pass
+		*	Receives the bindings.
+		*\param	index
+		*	The bindings start index.
+		*\~french
+		*\brief
+		*	Ajoute les bindings spécifiques au fond à une passe de frame.
+		*\param	pass
+		*	Reçoit les bindings.
+		*\param	index
+		*	L'indice de départ des bindings.
+		*/
+		C3D_API void addPassBindings( crg::FramePass & pass
+			, uint32_t & index )const;
+		/**
+		*\~english
+		*\brief
+		*	Adds the background specific bindings.
+		*\param	bindings
+		*	Receives the bindings.
+		*\param	index
+		*	The bindings start index.
+		*\~french
+		*\brief
+		*	Ajoute les bindings spécifiques au fond.
+		*\param	bindings
+		*	Reçoit les bindings.
+		*\param	index
+		*	L'indice de départ des bindings.
+		*/
+		C3D_API void addBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, uint32_t & index )const;
+		/**
+		*\~english
+		*\brief
+		*	Adds the background specific descriptors.
+		*\param	bindings
+		*	Receives the descriptors.
+		*\param	index
+		*	The descriptors start index.
+		*\~french
+		*\brief
+		*	Ajoute les descripteurs spécifiques au fond.
+		*\param	bindings
+		*	Reçoit les descripteurs.
+		*\param	index
+		*	L'indice de départ des descripteurs.
+		*/
+		C3D_API void addDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+			, uint32_t & index )const;
+		/**
+		*\~english
+		*\return
+		*	The background model name.
+		*\~french
+		*\return
+		*	Le nom du modèle de fond.
+		*/
+		C3D_API virtual castor::String const & getModelName()const;
+		/**
+		*\~english
+		*\brief
 		*	Writes the background to a text stream.
 		*\param	tabs
 		*	The current indentation.
@@ -233,11 +296,6 @@ namespace castor3d
 		castor::String const & getType()const
 		{
 			return m_type;
-		}
-
-		Texture const & getTextureId()const
-		{
-			return m_textureId;
 		}
 
 		TextureLayout const & getTexture()const
@@ -303,9 +361,66 @@ namespace castor3d
 		virtual void doCleanup() = 0;
 		virtual void doCpuUpdate( CpuUpdater & updater )const = 0;
 		virtual void doGpuUpdate( GpuUpdater & updater )const = 0;
+		/**
+		*\~english
+		*\brief
+		*	Adds the background specific bindings to a frame pass.
+		*\param	pass
+		*	Receives the bindings.
+		*\param	index
+		*	The bindings start index.
+		*\~french
+		*\brief
+		*	Ajoute les bindings spécifiques au fond à une passe de frame.
+		*\param	pass
+		*	Reçoit les bindings.
+		*\param	index
+		*	L'indice de départ des bindings.
+		*/
+		virtual void doAddPassBindings( crg::FramePass & pass
+			, uint32_t & index )const = 0;
+		/**
+		*\~english
+		*\brief
+		*	Adds the background specific bindings.
+		*\param	bindings
+		*	Receives the bindings.
+		*\param	index
+		*	The bindings start index.
+		*\~french
+		*\brief
+		*	Ajoute les bindings spécifiques au fond.
+		*\param	bindings
+		*	Reçoit les bindings.
+		*\param	index
+		*	L'indice de départ des bindings.
+		*/
+		virtual void doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, uint32_t & index )const = 0;
+		/**
+		*\~english
+		*\brief
+		*	Adds the background specific descriptors.
+		*\param	bindings
+		*	Receives the descriptors.
+		*\param	index
+		*	The descriptors start index.
+		*\~french
+		*\brief
+		*	Ajoute les descripteurs spécifiques au fond.
+		*\param	bindings
+		*	Reçoit les descripteurs.
+		*\param	index
+		*	L'indice de départ des descripteurs.
+		*/
+		virtual void doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+			, uint32_t & index )const = 0;
 
 	public:
 		OnBackgroundChanged onChanged;
+
+		static castor::String const WithoutIbl;
+		static castor::String const WithIbl;
 
 	protected:
 		Scene & m_scene;

@@ -214,6 +214,11 @@ namespace castor3d
 		{
 			return m_scene;
 		}
+
+		Scene const & getScene()const
+		{
+			return m_scene;
+		}
 		/**@}*/
 
 	public:
@@ -225,11 +230,16 @@ namespace castor3d
 		C3D_API SceneFlags doAdjustSceneFlags( SceneFlags flags )const override;
 		C3D_API void doAddShadowBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
+		C3D_API void doAddBackgroundBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, uint32_t & index )const;
 		C3D_API void doAddEnvBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
 		C3D_API void doAddGIBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
 		C3D_API void doAddShadowDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+			, ShadowMapLightTypeArray const & shadowMaps
+			, uint32_t & index )const;
+		C3D_API void doAddBackgroundDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps
 			, uint32_t & index )const;
 		C3D_API void doAddEnvDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites

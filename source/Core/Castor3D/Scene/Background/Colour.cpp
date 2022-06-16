@@ -125,6 +125,34 @@ namespace castor3d
 		}
 	}
 
+	void ColourBackground::doAddPassBindings( crg::FramePass & pass
+		, uint32_t & index )const
+	{
+		pass.addSampledView( m_textureId.wholeViewId
+			, index++
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, crg::SamplerDesc{ VK_FILTER_LINEAR
+				, VK_FILTER_LINEAR
+				, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+	}
+
+	void ColourBackground::doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, uint32_t & index )const
+	{
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBackground
+	}
+
+	void ColourBackground::doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+		, uint32_t & index )const
+	{
+		bindTexture( m_textureId.wholeView
+			, *m_textureId.sampler
+			, descriptorWrites
+			, index );
+	}
+
 	void ColourBackground::doUpdateColour( QueueData const & queueData
 		, RenderDevice const & device )const
 	{

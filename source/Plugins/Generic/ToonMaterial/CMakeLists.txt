@@ -29,12 +29,10 @@ source_group( "Source Files" FILES ${${PROJECT_NAME}_SRC_FILES} )
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${PROJECT_NAME}/Shaders/GlslToonLighting.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${PROJECT_NAME}/Shaders/GlslToonMaterial.cpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${PROJECT_NAME}/Shaders/GlslToonReflection.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${PROJECT_NAME}/Shaders/GlslToonLighting.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${PROJECT_NAME}/Shaders/GlslToonMaterial.hpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${PROJECT_NAME}/Shaders/GlslToonReflection.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
 	${${PROJECT_NAME}_SRC_FILES}

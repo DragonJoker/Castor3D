@@ -18,6 +18,7 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
+#include "Castor3D/Shader/Shaders/GlslBackground.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
 #include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
@@ -131,6 +132,11 @@ namespace castor3d
 			, index
 			, RenderPipeline::eBuffers
 			, m_mode != RenderMode::eTransparentOnly );
+		auto backgroundModel = shader::BackgroundModel::createModel( getScene()
+			, writer
+			, utils
+			, index
+			, RenderPipeline::eBuffers );
 		auto reflections = lightingModel->getReflectionModel( index
 			, uint32_t( RenderPipeline::eBuffers ) );
 		shader::GlobalIllumination indirect{ writer, utils };
@@ -258,6 +264,7 @@ namespace castor3d
 					reflections->computeDeferred( *lightMat
 						, surface
 						, c3d_sceneData
+						, *backgroundModel
 						, modelData.getEnvMapIndex()
 						, material.hasReflection
 						, material.hasRefraction
