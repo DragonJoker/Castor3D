@@ -20,7 +20,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, SceneBackground & background
 		, VkExtent2D const & size
-		, bool usesDepth )
+		, crg::ImageViewId const * depth )
 		: crg::RenderPass{ pass
 			, context
 			, graph
@@ -34,7 +34,8 @@ namespace castor3d
 		, m_device{ device }
 		, m_background{ &background }
 		, m_size{ size }
-		, m_usesDepth{ usesDepth }
+		, m_depth{ depth }
+		, m_usesDepth{ m_depth != nullptr }
 		, m_viewport{ *device.renderSystem.getEngine() }
 		, m_onBackgroundChanged{ background.onChanged.connect( [this]( SceneBackground const & background )
 			{

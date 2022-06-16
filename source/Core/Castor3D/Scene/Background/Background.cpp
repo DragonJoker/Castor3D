@@ -41,14 +41,14 @@ namespace castor3d
 			, RenderDevice const & device
 			, SceneBackground & background
 			, VkExtent2D const & size
-			, bool usesDepth )
+			, crg::ImageViewId const * depth )
 			: BackgroundPassBase{ pass
 				, context
 				, graph
 				, device
 				, background
 				, size
-				, usesDepth }
+				, depth }
 		{
 		}
 
@@ -151,7 +151,7 @@ namespace castor3d
 				C3D_Scene( writer, SceneBackground::SceneUboIdx, 0u );
 				C3D_HdrConfig( writer, SceneBackground::HdrCfgUboIdx, 0u );
 				auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture", 0u );
-				auto c3d_mapSkybox = writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapSkybox", SceneBackground::SkyBoxImgIdx, 0u );
+				auto c3d_mapSkybox = writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapSkybox", SceneBackground::Count, 0u );
 				shader::Utils utils{ writer, *m_device.renderSystem.getEngine() };
 
 				// Outputs
@@ -206,12 +206,12 @@ namespace castor3d
 				m_descriptorWrites.push_back( uniform.getBufferWrite() );
 			}
 
-			m_descriptorBindings.push_back( { SceneBackground::SkyBoxImgIdx
+			m_descriptorBindings.push_back( { SceneBackground::Count
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, 1u
 				, shaderStage
 				, nullptr } );
-			m_descriptorWrites.push_back( crg::WriteDescriptorSet{ SceneBackground::SkyBoxImgIdx
+			m_descriptorWrites.push_back( crg::WriteDescriptorSet{ SceneBackground::Count
 				, 0u
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VkDescriptorImageInfo{ m_background->getSampler().getSampler()
@@ -359,13 +359,13 @@ namespace castor3d
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, VkExtent2D const & size
-		, bool usesDepth
+		, crg::ImageViewId const * depth
 		, MatrixUbo const & matrixUbo
 		, SceneUbo const & sceneUbo
 		, BackgroundPassBase *& backgroundPass )
 	{
 		auto & result = graph.createPass( "Background"
-			, [this, &backgroundPass, &device, progress, size, usesDepth]( crg::FramePass const & framePass
+			, [this, &backgroundPass, &device, progress, size, depth]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -376,14 +376,14 @@ namespace castor3d
 					, device
 					, *this
 					, size
-					, usesDepth );
+					, depth );
 				backgroundPass = res.get();
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;
 			} );
 		result.addSampledView( m_textureId.sampledViewId
-			, SceneBackground::SkyBoxImgIdx
+			, SceneBackground::Count
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		return result;
 	}
@@ -400,14 +400,14 @@ namespace castor3d
 				, index++
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, crg::SamplerDesc{ VK_FILTER_LINEAR
-				, VK_FILTER_LINEAR
-				, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+					, VK_FILTER_LINEAR
+					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
 			pass.addSampledView( ibl.getPrefilteredEnvironmentTexture().sampledViewId
 				, index++
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, crg::SamplerDesc{ VK_FILTER_LINEAR
-				, VK_FILTER_LINEAR
-				, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+					, VK_FILTER_LINEAR
+					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
 		}
 	}
 

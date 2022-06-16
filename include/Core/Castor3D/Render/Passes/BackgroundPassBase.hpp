@@ -29,7 +29,7 @@ namespace castor3d
 		 *\param[in]	device		The GPU device.
 		 *\param[in]	background	The scene background.
 		 *\param[in]	size		The render area dimensions.
-		 *\param[in]	usesDepth	\p true to account for depth buffer.
+		 *\param[in]	depth		Optional depth buffer.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	pass		La frame pass parente.
@@ -38,7 +38,7 @@ namespace castor3d
 		 *\param[in]	device		Le device GPU.
 		 *\param[in]	background	Le fond de la scène.
 		 *\param[in]	size		Les dimensions de la zone de rendu.
-		 *\param[in]	usesDepth	\p true pour prendre en compte le depth buffer.
+		 *\param[in]	depth		Depth buffer optionnel.
 		 */
 		C3D_API BackgroundPassBase( crg::FramePass const & pass
 			, crg::GraphContext & context
@@ -46,7 +46,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, SceneBackground & background
 			, VkExtent2D const & size
-			, bool usesDepth );
+			, crg::ImageViewId const * depth );
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -92,6 +92,7 @@ namespace castor3d
 		RenderDevice const & m_device;
 		SceneBackground const * m_background;
 		VkExtent2D m_size;
+		crg::ImageViewId const * m_depth;
 		bool m_usesDepth;
 		Viewport m_viewport;
 		OnBackgroundChangedConnection m_onBackgroundChanged;
