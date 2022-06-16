@@ -483,7 +483,6 @@ namespace castor3d
 		, m_llpvResult{ rendtech::doCreateLLPVResult( getOwner()->getGraphResourceHandler()
 			, m_device
 			, getName() ) }
-		, m_backgroundRenderer{ doCreateBackgroundPass( progress ) }
 #if !C3D_DebugDisableShadowMaps
 		, m_directionalShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapDirectional >( getOwner()->getGraphResourceHandler()
 			, m_device
@@ -533,6 +532,7 @@ namespace castor3d
 #else
 		, m_opaquePassDesc{ &doCreateOpaquePass( progress ) }
 #endif
+		, m_backgroundRenderer{ doCreateBackgroundPass( progress ) }
 #if C3D_UseWeightedBlendedRendering
 		, m_transparentPassResult{ castor::makeUnique< TransparentPassResult >( getOwner()->getGraphResourceHandler()
 			, m_device
@@ -675,12 +675,6 @@ namespace castor3d
 				renderPass.update( updater );
 			} );
 		m_depthPass->update( updater );
-		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeBackground )]
-			, [&updater]( RenderTechniquePass & renderPass )
-			{
-				renderPass.update( updater );
-			} );
-		m_backgroundRenderer->update( updater );
 
 		if ( updater.voxelConeTracing )
 		{
@@ -697,6 +691,13 @@ namespace castor3d
 		{
 			static_cast< rendtech::OpaquePassType & >( *m_opaquePass ).update( updater );
 		}
+
+		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeBackground )]
+			, [&updater]( RenderTechniquePass & renderPass )
+			{
+				renderPass.update( updater );
+			} );
+		m_backgroundRenderer->update( updater );
 
 		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeTransparent )]
 			, [&updater]( RenderTechniquePass & renderPass )
@@ -809,11 +810,6 @@ namespace castor3d
 		m_voxelizer->accept( visitor );
 		m_ssao->accept( visitor );
 
-		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeBackground )]
-			, [&visitor]( RenderTechniquePass & renderPass )
-			{
-				renderPass.accept( visitor );
-			} );
 		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeOpaque )]
 			, [&visitor]( RenderTechniquePass & renderPass )
 			{
@@ -835,6 +831,11 @@ namespace castor3d
 #endif
 		}
 
+		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeBackground )]
+			, [&visitor]( RenderTechniquePass & renderPass )
+			{
+				renderPass.accept( visitor );
+			} );
 		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeTransparent )]
 			, [&visitor]( RenderTechniquePass & renderPass )
 			{
@@ -1088,32 +1089,11 @@ namespace castor3d
 		return result;
 	}
 
-	BackgroundRendererUPtr RenderTechnique::doCreateBackgroundPass( ProgressBar * progress )
-	{
-		auto previousPasses = doCreateRenderPasses( progress
-			, TechniquePassEvent::eBeforeBackground
-			, m_computeDepthRangeDesc );
-		auto & graph = m_renderTarget.getGraph().createPassGroup( "Base" );
-		auto result = castor::makeUnique< BackgroundRenderer >( graph
-			, previousPasses
-			, m_device
-			, progress
-			, getName()
-			, *m_renderTarget.getScene()->getBackground()
-			, m_renderTarget.getHdrConfigUbo()
-			, m_sceneUbo
-			, m_colour.targetViewId
-			, true
-			, m_depth->targetViewId );
-
-		return result;
-	}
-
 	crg::FramePass & RenderTechnique::doCreateOpaquePass( ProgressBar * progress )
 	{
 		auto previousPasses = doCreateRenderPasses( progress
 			, TechniquePassEvent::eBeforeOpaque
-			, &m_backgroundRenderer->getPass() );
+			, m_computeDepthRangeDesc );
 		auto & graph = m_renderTarget.getGraph().createPassGroup( "Opaque" );
 		stepProgressBar( progress, "Creating opaque pass" );
 #if C3D_UseDeferredRendering
@@ -1178,8 +1158,33 @@ namespace castor3d
 		result.addOutputColourView( opaquePassResult[DsTexture::eData5].targetViewId
 			, getClearValue( DsTexture::eData5 ) );
 #else
-		result.addInOutColourView( m_colour.targetViewId );
+		result.addOutColourView( m_colour.targetViewId );
 #endif
+		return result;
+	}
+
+	BackgroundRendererUPtr RenderTechnique::doCreateBackgroundPass( ProgressBar * progress )
+	{
+		auto previousPasses = doCreateRenderPasses( progress
+			, TechniquePassEvent::eBeforeBackground
+#if C3D_UseDeferredRendering
+			, &m_deferredRendering->getLastPass() );
+#else
+			, m_opaquePassDesc );
+#endif
+		auto & graph = m_renderTarget.getGraph().createPassGroup( "Background" );
+		auto result = castor::makeUnique< BackgroundRenderer >( graph
+			, previousPasses
+			, m_device
+			, progress
+			, getName()
+			, *m_renderTarget.getScene()->getBackground()
+			, m_renderTarget.getHdrConfigUbo()
+			, m_sceneUbo
+			, m_colour.targetViewId
+			, false
+			, m_depth->targetViewId );
+
 		return result;
 	}
 
@@ -1187,11 +1192,7 @@ namespace castor3d
 	{
 		auto previousPasses = doCreateRenderPasses( progress
 			, TechniquePassEvent::eBeforeTransparent
-#if C3D_UseDeferredRendering
-			, &m_deferredRendering->getLastPass() );
-#else
-			, m_opaquePassDesc );
-#endif
+			, &m_backgroundRenderer->getPass() );
 		stepProgressBar( progress, "Creating transparent pass" );
 		auto & graph = m_renderTarget.getGraph().createPassGroup( "Transparent" );
 		auto & result = graph.createPass( "NodesPass"

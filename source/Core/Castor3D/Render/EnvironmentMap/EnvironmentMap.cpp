@@ -68,7 +68,8 @@ namespace castor3d
 				, 6u * MaxEnvironmentMapCount
 				, 1u
 				, device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT )
-				, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
+				, ( VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
+					| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
 				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK };
 		}
 

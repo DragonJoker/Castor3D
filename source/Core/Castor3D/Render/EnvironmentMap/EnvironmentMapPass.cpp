@@ -69,17 +69,18 @@ namespace castor3d
 		, m_hdrConfigUbo{ m_device }
 		, m_sceneUbo{ m_device }
 		, m_colourView{ environmentMap.getColourViewId( m_index, m_face ) }
+		, m_opaquePassDesc{ &doCreateOpaquePass( nullptr ) }
 		, m_backgroundRenderer{ castor::makeUnique< BackgroundRenderer >( m_graph
-			, nullptr
+			, m_opaquePassDesc
 			, m_device
 			, getName()
 			, m_background
 			, m_hdrConfigUbo
 			, m_sceneUbo
 			, m_colourView
-			, true ) }
-		, m_opaquePassDesc{ &doCreateOpaquePass( &m_backgroundRenderer->getPass() ) }
-		, m_transparentPassDesc{ &doCreateTransparentPass( m_opaquePassDesc ) }
+			, false
+			, getOwner()->getDepthViewId( m_index, m_face ) ) }
+		, m_transparentPassDesc{ &doCreateTransparentPass( &m_backgroundRenderer->getPass()) }
 	{
 		doCreateGenMipmapsPass( m_transparentPassDesc );
 		m_matrixUbo.cpuUpdate( m_camera->getView()
@@ -158,8 +159,9 @@ namespace castor3d
 
 	crg::FramePass & EnvironmentMapPass::doCreateOpaquePass( crg::FramePass const * previousPass )
 	{
+		auto depthView = getOwner()->getDepthViewId( m_index, m_face );
 		auto & result = m_graph.createPass( "OpaquePass"
-			, [this]( crg::FramePass const & framePass
+			, [this, depthView]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -173,16 +175,26 @@ namespace castor3d
 					, getName() + cuT( "Opaque" )
 					, RenderNodesPassDesc{ getOwner()->getSize(), m_matrixUbo, *m_culler }
 						.meshShading( true )
+						.implicitAction( depthView
+							, crg::RecordContext::clearAttachment( depthView, defaultClearDepthStencil ) )
+						.implicitAction( m_colourView
+							, crg::RecordContext::clearAttachment( m_colourView, transparentBlackClearColor ) )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
 				m_node->getScene()->getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				m_opaquePass = res.get();
 				return res;
 			} );
-		result.addDependency( *previousPass );
-		result.addOutputDepthView( getOwner()->getDepthViewId( m_index, m_face )
+
+		if ( previousPass )
+		{
+			result.addDependency( *previousPass );
+		}
+
+		result.addOutputDepthView( depthView
 			, defaultClearDepthStencil );
-		result.addInOutColourView( m_colourView );
+		result.addOutputColourView( m_colourView
+			, transparentBlackClearColor );
 		return result;
 	}
 
