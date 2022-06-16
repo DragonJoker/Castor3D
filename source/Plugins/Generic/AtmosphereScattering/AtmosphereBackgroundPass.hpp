@@ -18,8 +18,11 @@ namespace atmosphere_scattering
 	public:
 		enum Bindings : uint32_t
 		{
-			eTransmittance = castor3d::SceneBackground::SkyBoxImgIdx,
+			eDepth = castor3d::SceneBackground::Count,
+			eTransmittance,
 			eMultiScatter,
+			eSkyView,
+			eVolume,
 			eAtmosphere,
 			eCount,
 		};
@@ -31,7 +34,7 @@ namespace atmosphere_scattering
 			, castor3d::RenderDevice const & device
 			, AtmosphereBackground & background
 			, VkExtent2D const & size
-			, bool usesDepth );
+			, crg::ImageViewId const * depth );
 
 	private:
 		void doInitialiseVertexBuffer()override;

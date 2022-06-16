@@ -17,18 +17,15 @@
 
 #include <ShaderWriter/Source.hpp>
 
-#include <ashespp/Buffer/Buffer.hpp>
-
 namespace atmosphere_scattering
 {
 	//*********************************************************************************************
 
-	namespace skyview
+	namespace volume
 	{
 		enum Bindings : uint32_t
 		{
-			eMatrix,
-			eScene,
+			eCamera,
 			eAtmosphere,
 			eTransmittance,
 		};
@@ -74,16 +71,6 @@ namespace atmosphere_scattering
 		{
 			sdw::VertexWriter writer;
 
-			C3D_Matrix( writer
-				, Bindings::eMatrix
-				, 0u );
-			C3D_Scene( writer
-				, Bindings::eScene
-				, 0u );
-			C3D_AtmosphereScattering( writer
-				, Bindings::eAtmosphere
-				, 0u );
-
 			auto inPosition = writer.declInput< sdw::Vec4 >( "inPosition", 0u );
 
 			writer.implementMainT< sdw::VoidT, SurfaceT >( sdw::VertexIn{ writer }
@@ -125,11 +112,8 @@ namespace atmosphere_scattering
 		{
 			sdw::FragmentWriter writer;
 
-			C3D_Matrix( writer
-				, Bindings::eMatrix
-				, 0u );
-			C3D_Scene( writer
-				, Bindings::eScene
+			C3D_Camera( writer
+				, Bindings::eCamera
 				, 0u );
 			C3D_AtmosphereScattering( writer
 				, uint32_t( Bindings::eAtmosphere )
@@ -144,8 +128,6 @@ namespace atmosphere_scattering
 				, 0.01_f );
 			auto apSliceCount = writer.declConstant( "apSliceCount"
 				, 32.0_f );
-			auto apKmPerSlice = writer.declConstant( "apKmPerSlice"
-				, 4.0_f );
 
 			auto inViewDir = writer.declInput< sdw::Vec3 >( "inViewDir", 0u );
 
@@ -155,14 +137,15 @@ namespace atmosphere_scattering
 
 			AtmosphereConfig atmosphereConfig{ writer
 				, c3d_atmosphereData
-				, c3d_matrixData
-				, { false, false, false, true }
+				, { false, nullptr, false, true }
 				, { transmittanceExtent.width, transmittanceExtent.height }
 				, &transmittanceMap };
 
 			auto aerialPerspectiveSliceToDepth = writer.implementFunction< sdw::Float >( "aerialPerspectiveSliceToDepth"
 				, [&]( sdw::Float const & slice )
 				{
+					auto apKmPerSlice = writer.declConstant( "apKmPerSlice"
+						, 4.0_f );
 					writer.returnStmt( slice * apKmPerSlice );
 				}
 				, sdw::InFloat{ writer, "slice" } );
@@ -177,15 +160,15 @@ namespace atmosphere_scattering
 					auto clipSpace = writer.declLocale( "clipSpace"
 						, vec3( ( pixPos / vec2( sdw::Float{ float( renderSize.width ) }, float( renderSize.height ) ) ) * vec2( 2.0_f, -2.0_f ) - vec2( 1.0_f, -1.0_f ), 0.5_f ) );
 					auto hPos = writer.declLocale( "hPos"
-						, c3d_matrixData.curProjToWorld( vec4( clipSpace, 1.0_f ) ) );
+						, c3d_cameraData.invViewProj * vec4( clipSpace, 1.0_f ) );
 					auto worldDir = writer.declLocale( "worldDir"
-						, normalize( hPos.xyz() / hPos.w() - c3d_sceneData.cameraPosition ) );
+						, normalize( hPos.xyz() / hPos.w() - c3d_cameraData.position ) );
 					auto earthR = writer.declLocale( "earthR"
 						, c3d_atmosphereData.bottomRadius );
 					auto earthO = writer.declLocale( "earthO"
 						, vec3( 0.0_f, 0.0_f, -earthR ) );
 					auto camPos = writer.declLocale( "camPos"
-						, c3d_sceneData.cameraPosition + vec3( 0.0_f, 0.0_f, earthR ) );
+						, c3d_cameraData.position + vec3( 0.0_f, 0.0_f, earthR ) );
 					auto sunDir = writer.declLocale( "sunDir"
 						, c3d_atmosphereData.sunDirection );
 					auto sunLuminance = writer.declLocale( "sunLuminance"
@@ -284,21 +267,21 @@ namespace atmosphere_scattering
 	AtmosphereVolumePass::AtmosphereVolumePass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
 		, castor3d::RenderDevice const & device
-		, castor3d::MatrixUbo const & matrixUbo
-		, castor3d::SceneUbo const & sceneUbo
+		, castor3d::UniformBufferOffsetT< CameraConfig > const & cameraUbo
 		, AtmosphereScatteringUbo const & atmosphereUbo
 		, crg::ImageViewId const & transmittanceView
-		, crg::ImageViewId const & multiScatterView
-		, crg::ImageViewId const & resultView )
-		: m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "VolumePass", skyview::getVertexProgram() }
-		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, "VolumePass", skyview::getGeometryProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "VolumePass", skyview::getPixelProgram( getExtent( resultView ), getExtent( transmittanceView ) ) }
+		, crg::ImageViewId const & resultView
+		, uint32_t index )
+		: castor::Named{ "VolumePass" + castor::string::toString( index ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), volume::getVertexProgram() }
+		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), volume::getGeometryProgram() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), volume::getPixelProgram( getExtent( resultView ), getExtent( transmittanceView ) ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_geometryShader )
 			, makeShaderState( device, m_pixelShader ) }
 	{
 		auto renderSize = getExtent( resultView );
-		auto & pass = graph.createPass( "VolumePass"
+		auto & pass = graph.createPass( getName()
 			, [this, &device, renderSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -313,16 +296,15 @@ namespace atmosphere_scattering
 				return result;
 			} );
 		pass.addDependencies( previousPasses );
-		matrixUbo.createPassBinding( pass
-			, skyview::eMatrix );
-		sceneUbo.createPassBinding( pass
-			, skyview::eScene );
+		cameraUbo.createPassBinding( pass
+			, "Camera"
+			, volume::eCamera );
 		atmosphereUbo.createPassBinding( pass
-			, skyview::eAtmosphere );
+			, volume::eAtmosphere );
 		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
 			, VK_FILTER_LINEAR };
 		pass.addSampledView( transmittanceView
-			, skyview::eTransmittance
+			, volume::eTransmittance
 			, VK_IMAGE_LAYOUT_UNDEFINED
 			, linearSampler );
 		pass.addOutputColourView( resultView );

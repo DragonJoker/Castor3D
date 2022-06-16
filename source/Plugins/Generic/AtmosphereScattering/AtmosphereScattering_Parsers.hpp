@@ -22,6 +22,7 @@ namespace atmosphere_scattering
 		castor::Point2ui transmittance{ 256u, 64u };
 		uint32_t multiScatter{ 32u };
 		uint32_t atmosphereVolume{ 32u };
+		castor::Point2ui skyView{ 192u, 108u };
 		AtmosphereScatteringConfig config{};
 		DensityProfileLayer * densityLayer{};
 		std::unique_ptr< AtmosphereBackground > atmosphere;
@@ -39,6 +40,7 @@ namespace atmosphere_scattering
 	CU_DeclareAttributeParser( parserTransmittanceResolution )
 	CU_DeclareAttributeParser( parserMultiScatterResolution )
 	CU_DeclareAttributeParser( parserAtmosphereVolumeResolution )
+	CU_DeclareAttributeParser( parserSkyViewResolution )
 	CU_DeclareAttributeParser( parserSunIlluminance )
 	CU_DeclareAttributeParser( parserSunIlluminanceScale )
 	CU_DeclareAttributeParser( parserRayMarchMinSPP )

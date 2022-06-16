@@ -43,6 +43,7 @@ namespace atmosphere_scattering
 		atmosphereContext.atmosphere->loadTransmittance( atmosphereContext.transmittance );
 		atmosphereContext.atmosphere->loadMultiScatter( atmosphereContext.multiScatter );
 		atmosphereContext.atmosphere->loadAtmosphereVolume( atmosphereContext.atmosphereVolume );
+		atmosphereContext.atmosphere->loadSkyView( atmosphereContext.skyView );
 		parsingContext.scene->setBackground( std::move( atmosphereContext.atmosphere ) );
 	}
 	CU_EndAttributePop()
@@ -85,6 +86,20 @@ namespace atmosphere_scattering
 		{
 			auto & atmosphereContext = parser::getParserContext( context );
 			params[0]->get( atmosphereContext.atmosphereVolume );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserSkyViewResolution )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & atmosphereContext = parser::getParserContext( context );
+			params[0]->get( atmosphereContext.skyView );
 		}
 	}
 	CU_EndAttribute()

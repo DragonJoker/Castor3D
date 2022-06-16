@@ -11,6 +11,34 @@ namespace atmosphere_scattering
 {
 	//*********************************************************************************************
 
+	castor::String const CameraData::Buffer = cuT( "Camera" );
+	castor::String const CameraData::Data = cuT( "c3d_cameraData" );
+
+	CameraData::CameraData( sdw::ShaderWriter & writer
+		, ast::expr::ExprPtr expr
+		, bool enabled )
+		: sdw::StructInstance{ writer, std::move( expr ), enabled }
+		, invViewProj{ getMember< sdw::Mat4 >( "invViewProj" ) }
+		, position{ getMember< sdw::Vec3 >( "position" ) }
+	{
+	}
+
+	ast::type::BaseStructPtr CameraData::makeType( ast::type::TypesCache & cache )
+	{
+		auto result = cache.getStruct( sdw::type::MemoryLayout::eStd140
+			, "CameraData" );
+
+		if ( result->empty() )
+		{
+			result->declMember( "invViewProj", sdw::type::Kind::eMat4x4F, sdw::type::NotArray );
+			result->declMember( "position", sdw::type::Kind::eVec3F, sdw::type::NotArray );
+		}
+
+		return result;
+	}
+
+	//*********************************************************************************************
+
 	AtmosphereData::AtmosphereData( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
 		, bool enabled )

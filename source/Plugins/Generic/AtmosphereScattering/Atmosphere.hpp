@@ -84,7 +84,7 @@ namespace atmosphere_scattering
 		struct LuminanceSettings
 		{
 			bool useGround{};
-			bool useDepthBuffer{};
+			castor3d::shader::MatrixData const * matrixData;
 			bool variableSampleCount{};
 			bool mieRayPhase{};
 
@@ -96,11 +96,9 @@ namespace atmosphere_scattering
 
 		AtmosphereConfig( sdw::ShaderWriter & writer
 			, AtmosphereData const & atmosphereData
-			, castor3d::shader::MatrixData const & matrixData
 			, LuminanceSettings luminanceSettings );
 		AtmosphereConfig( sdw::ShaderWriter & writer
 			, AtmosphereData const & atmosphereData
-			, castor3d::shader::MatrixData const & matrixData
 			, LuminanceSettings luminanceSettings
 			, VkExtent2D transmittanceExtent
 			, sdw::CombinedImage2DRgba32 const * transmittanceLut );
@@ -156,11 +154,16 @@ namespace atmosphere_scattering
 			, sdw::Float const & viewHeight
 			, sdw::Vec2 const & uv
 			, sdw::Vec2 const & size );
+		sdw::Void skyViewLutParamsToUv( sdw::Boolean const & intersectGround
+			, sdw::Float const & viewZenithCosAngle
+			, sdw::Float const & lightViewCosAngle
+			, sdw::Float const & viewHeight
+			, sdw::Vec2 & uv
+			, sdw::Vec2 const & size );
 
 	private:
 		sdw::ShaderWriter & writer;
 		AtmosphereData const & atmosphereData;
-		castor3d::shader::MatrixData const & matrixData;
 		LuminanceSettings luminanceSettings{};
 		VkExtent2D transmittanceExtent{};
 		sdw::CombinedImage2DRgba32 const * transmittanceTexture{};
@@ -204,6 +207,13 @@ namespace atmosphere_scattering
 			, sdw::InFloat
 			, sdw::InVec2
 			, sdw::InVec2 > m_uvToSkyViewLutParams;
+		sdw::Function< sdw::Void
+			, sdw::InBoolean
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::OutVec2
+			, sdw::InVec2 > m_skyViewLutParamsToUv;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3

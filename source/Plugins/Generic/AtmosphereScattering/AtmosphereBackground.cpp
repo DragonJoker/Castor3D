@@ -5,6 +5,7 @@
 #include "AtmosphereScattering/AtmosphereScatteringUbo.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Buffer/UniformBufferPool.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
 #include <Castor3D/Miscellaneous/Logger.hpp>
 #include <Castor3D/Miscellaneous/ProgressBar.hpp>
@@ -16,7 +17,12 @@
 
 #include <ashespp/Image/StagingTexture.hpp>
 
+#include <ShaderWriter/BaseTypes/Float.hpp>
+#include <ShaderWriter/Intrinsics/Intrinsics.hpp>
+
 #include <RenderGraph/FramePassGroup.hpp>
+
+//*************************************************************************************************
 
 namespace castor
 {
@@ -45,11 +51,11 @@ namespace castor
 			if ( auto block{ beginBlock( file, "atmospheric_scattering" ) } )
 			{
 				auto transmittance = background.getTransmittance().getExtent();
-				auto multiScatter = background.getMultiScatter().getExtent();
-				auto atmosphereVolume = background.getAtmosphereVolume().getExtent();
+				auto multiScatter = background.getMultiScatter().getExtent().width;
+				auto atmosphereVolume = background.getVolume().getExtent().width;
 				result = write( file, "transmittanceResolution", transmittance.width, transmittance.height );
-				result = result && write( file, "multiScatterResolution", multiScatter.width );
-				result = result && write( file, "atmosphereVolumeResolution", atmosphereVolume.width );
+				result = result && write( file, "multiScatterResolution", multiScatter );
+				result = result && write( file, "atmosphereVolumeResolution", atmosphereVolume );
 
 				auto & config = background.getConfiguration();
 				result = result && write( file, "sunIlluminance", config.sunIlluminance );
@@ -103,9 +109,59 @@ namespace castor
 	};
 }
 
+//*************************************************************************************************
+
 namespace atmosphere_scattering
 {
-	static uint32_t constexpr SkyTexSize = 512u;
+	castor::String const AtmosphereBackgroundModel::Name = cuT( "c3d.atmosphere" );
+
+	AtmosphereBackgroundModel::AtmosphereBackgroundModel( sdw::ShaderWriter & writer
+		, castor3d::shader::Utils & utils
+		, uint32_t & binding
+		, uint32_t set )
+		: castor3d::shader::BackgroundModel{ writer, utils }
+	{
+	}
+
+	castor3d::shader::BackgroundModelPtr AtmosphereBackgroundModel::create( sdw::ShaderWriter & writer
+		, castor3d::shader::Utils & utils
+		, uint32_t & binding
+		, uint32_t set )
+	{
+		return std::make_unique< AtmosphereBackgroundModel >( writer, utils, binding, set );
+	}
+
+	sdw::Vec3 AtmosphereBackgroundModel::computeReflections( sdw::Vec3 const & wsIncident
+		, sdw::Vec3 const & wsNormal
+		, castor3d::shader::LightMaterial const & material
+		, sdw::CombinedImage2DRg32 const & brdf )
+	{
+		return vec3( 0.0_f );
+	}
+
+	sdw::Vec3 AtmosphereBackgroundModel::computeRefractions( sdw::Vec3 const & wsIncident
+		, sdw::Vec3 const & wsNormal
+		, sdw::Float const & refractionRatio
+		, sdw::Vec3 const & transmission
+		, castor3d::shader::LightMaterial const & material )
+	{
+		return vec3( 0.0_f );
+	}
+
+	sdw::Void AtmosphereBackgroundModel::mergeReflRefr( sdw::Vec3 const & wsIncident
+		, sdw::Vec3 const & wsNormal
+		, sdw::Float const & refractionRatio
+		, sdw::Vec3 const & transmission
+		, castor3d::shader::LightMaterial const & material
+		, sdw::Vec3 & reflection
+		, sdw::Vec3 & refraction )
+	{
+		return sdw::Void{};
+	}
+
+	//*********************************************************************************************
+
+	static uint32_t constexpr SkyTexSize = 16u;
 
 	AtmosphereBackground::AtmosphereBackground( castor3d::Engine & engine
 		, castor3d::Scene & scene )
@@ -114,9 +170,89 @@ namespace atmosphere_scattering
 	{
 	}
 
+	AtmosphereBackground::~AtmosphereBackground()
+	{
+		m_transmittance.destroy();
+		m_multiScatter.destroy();
+		m_skyView.destroy();
+		m_volume.destroy();
+	}
+
 	void AtmosphereBackground::accept( castor3d::BackgroundVisitor & visitor )
 	{
 		//visitor.visit( *this );
+	}
+
+	crg::FramePass & AtmosphereBackground::createBackgroundPass( crg::FramePassGroup & graph
+		, castor3d::RenderDevice const & device
+		, castor3d::ProgressBar * progress
+		, VkExtent2D const & size
+		, crg::ImageViewId const * depth
+		, castor3d::MatrixUbo const & matrixUbo
+		, castor3d::SceneUbo const & sceneUbo
+		, castor3d::BackgroundPassBase *& backgroundPass )
+	{
+		if ( !m_transmittancePass )
+		{
+			m_cameraUbo = device.uboPool->getBuffer< CameraConfig >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+			auto & viewData = *depth->data;
+			m_depthView = graph.createView( { "BackgroundDepth"
+				, viewData.image
+				, 0u
+				, VK_IMAGE_VIEW_TYPE_2D
+				, viewData.info.format
+				, { VK_IMAGE_ASPECT_DEPTH_BIT, 0u, 1u, 0u, 1u } } );
+			m_transmittancePass = std::make_unique< AtmosphereTransmittancePass >( graph
+				, crg::FramePassArray{}
+				, device
+				, *m_atmosphereUbo
+				, m_transmittance.targetViewId );
+			m_multiScatteringPass = std::make_unique< AtmosphereMultiScatteringPass >( graph
+				, crg::FramePassArray{ &m_transmittancePass->getLastPass() }
+				, device
+				, *m_atmosphereUbo
+				, m_transmittance.sampledViewId
+				, m_multiScatter.targetViewId );
+			m_skyViewPass = std::make_unique< AtmosphereSkyViewPass >( graph
+				, crg::FramePassArray{ &m_transmittancePass->getLastPass() }
+				, device
+				, m_cameraUbo
+				, *m_atmosphereUbo
+				, m_transmittance.sampledViewId
+				, m_skyView.targetViewId
+				, 0u );
+			m_volumePass = std::make_unique< AtmosphereVolumePass >( graph
+				, crg::FramePassArray{ &m_multiScatteringPass->getLastPass() }
+				, device
+				, m_cameraUbo
+				, *m_atmosphereUbo
+				, m_transmittance.sampledViewId
+				, m_volume.targetViewId
+				, 0u );
+		}
+
+		auto & pass = graph.createPass( "Background"
+			, [this, &backgroundPass, &device, progress, size]( crg::FramePass const & framePass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & runnableGraph )
+			{
+				stepProgressBar( progress, "Initialising background pass" );
+				auto res = std::make_unique< AtmosphereBackgroundPass >( framePass
+					, context
+					, runnableGraph
+					, device
+					, *this
+					, size
+					, &m_depthView );
+				backgroundPass = res.get();
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+					, res->getTimer() );
+				return res;
+			} );
+		pass.addDependency( m_multiScatteringPass->getLastPass() );
+		pass.addDependency( m_skyViewPass->getLastPass() );
+		pass.addDependency( m_volumePass->getLastPass() );
+		return pass;
 	}
 
 	bool AtmosphereBackground::write( castor::String const & tabs
@@ -126,65 +262,9 @@ namespace atmosphere_scattering
 		return castor::TextWriter< AtmosphereBackground >{ tabs, folder }( *this, stream );
 	}
 
-	crg::FramePass & AtmosphereBackground::createBackgroundPass( crg::FramePassGroup & graph
-		, castor3d::RenderDevice const & device
-		, castor3d::ProgressBar * progress
-		, VkExtent2D const & size
-		, bool usesDepth
-		, castor3d::MatrixUbo const & matrixUbo
-		, castor3d::SceneUbo const & sceneUbo
-		, castor3d::BackgroundPassBase *& backgroundPass )
+	castor::String const & AtmosphereBackground::getModelName()const
 	{
-		auto ires = m_atmospherePasses.emplace( &matrixUbo, BackgroundPasses{ nullptr, nullptr } );
-		auto it = ires.first;
-
-		if ( ires.second )
-		{
-			it->second.transmittance = std::make_unique< AtmosphereTransmittancePass >( graph
-				, crg::FramePassArray{}
-				, device
-				, matrixUbo
-				, *m_atmosphereUbo
-				, m_transmittance.targetViewId );
-			it->second.multiScattering = std::make_unique< AtmosphereMultiScatteringPass >( graph
-				, crg::FramePassArray{ &it->second.transmittance->getLastPass() }
-				, device
-				, matrixUbo
-				, *m_atmosphereUbo
-				, m_transmittance.sampledViewId
-				, m_multiScatter.targetViewId );
-			it->second.skyView = std::make_unique< AtmosphereVolumePass >( graph
-				, crg::FramePassArray{ &it->second.multiScattering->getLastPass() }
-				, device
-				, matrixUbo
-				, sceneUbo
-				, *m_atmosphereUbo
-				, m_transmittance.sampledViewId
-				, m_multiScatter.sampledViewId
-				, m_atmosphereVolume.targetViewId );
-			auto & pass = graph.createPass( "Background"
-				, [this, &backgroundPass, &device, progress, size, usesDepth]( crg::FramePass const & framePass
-					, crg::GraphContext & context
-					, crg::RunnableGraph & runnableGraph )
-				{
-					stepProgressBar( progress, "Initialising background pass" );
-					auto res = std::make_unique< AtmosphereBackgroundPass >( framePass
-						, context
-						, runnableGraph
-						, device
-						, *this
-						, size
-						, usesDepth );
-					backgroundPass = res.get();
-					device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
-						, res->getTimer() );
-					return res;
-				} );
-			pass.addDependency( it->second.skyView->getLastPass() );
-			it->second.lastPass = &pass;
-		}
-
-		return *it->second.lastPass;
+		return AtmosphereBackgroundModel::Name;
 	}
 
 	void AtmosphereBackground::loadTransmittance( castor::Point2ui const & dimensions )
@@ -229,11 +309,30 @@ namespace atmosphere_scattering
 	{
 		auto & handler = getScene().getEngine()->getGraphResourceHandler();
 		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
-		m_atmosphereVolume = castor3d::Texture{ device
+		m_volume = castor3d::Texture{ device
 			, handler
-			, "AtmosphereVolume"
+			, "Volume"
 			, 0u
 			, { dimension, dimension, dimension }
+			, 1u
+			, 1u
+			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT
+			, VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR
+			, VK_SAMPLER_MIPMAP_MODE_NEAREST };
+		notifyChanged();
+	}
+
+	void AtmosphereBackground::loadSkyView( castor::Point2ui const & dimensions )
+	{
+		auto & handler = getScene().getEngine()->getGraphResourceHandler();
+		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
+		m_skyView = castor3d::Texture{ device
+			, handler
+			, "SkyView"
+			, 0u
+			, { dimensions->x, dimensions->y, 1u }
 			, 1u
 			, 1u
 			, VK_FORMAT_B10G11R11_UFLOAT_PACK32
@@ -248,33 +347,33 @@ namespace atmosphere_scattering
 	{
 		auto data = device.graphicsData();
 		auto & engine = *getEngine();
-		m_textureId = { device
+		m_textureId = castor3d::Texture{ device
 			, engine.getGraphResourceHandler()
-			, cuT( "AtmosphereResult" )
-			, 0u
+			, "Dummy"
+			, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
 			, { SkyTexSize, SkyTexSize, 1u }
-			, 1u
+			, 6u
 			, 1u
 			, VK_FORMAT_B10G11R11_UFLOAT_PACK32
-			, ( VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT ) };
+			, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT
+			, VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR
+			, VK_SAMPLER_MIPMAP_MODE_NEAREST };
 		m_transmittance.create();
 		m_multiScatter.create();
-		m_atmosphereVolume.create();
+		m_skyView.create();
+		m_volume.create();
 		m_textureId.create();
 		m_texture = std::make_shared< castor3d::TextureLayout >( device.renderSystem
 			, m_textureId.image
 			, m_textureId.wholeViewId );
 		m_hdr = true;
-		m_srgb = isSRGBFormat( castor3d::convert( m_texture->getPixelFormat() ) );
+		m_srgb = false;
 		return m_texture->initialise( device, *data );
 	}
 
 	void AtmosphereBackground::doCleanup()
 	{
-		m_atmosphereVolume.destroy();
-		m_multiScatter.destroy();
-		m_transmittance.destroy();
 	}
 
 	void AtmosphereBackground::doCpuUpdate( castor3d::CpuUpdater & updater )const
@@ -291,9 +390,29 @@ namespace atmosphere_scattering
 			? viewport.getSafeBandedProjection()
 			: viewport.getProjection();
 		m_atmosphereUbo->cpuUpdate( m_config );
+
+		auto viewProj = updater.bgMtxProj * updater.bgMtxView;
+		auto & data = m_cameraUbo.getData();
+		data.invViewProj = viewProj.getInverse();
+		data.position = updater.camera->getParent()->getDerivedPosition();
 	}
 
 	void AtmosphereBackground::doGpuUpdate( castor3d::GpuUpdater & updater )const
+	{
+	}
+
+	void AtmosphereBackground::doAddPassBindings( crg::FramePass & pass
+		, uint32_t & index )const
+	{
+	}
+
+	void AtmosphereBackground::doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, uint32_t & index )const
+	{
+	}
+
+	void AtmosphereBackground::doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+		, uint32_t & index )const
 	{
 	}
 

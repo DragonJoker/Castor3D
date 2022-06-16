@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3DAS_AtmosphereMultiScatteringPass_H___
-#define ___C3DAS_AtmosphereMultiScatteringPass_H___
+#ifndef ___C3DAS_AtmosphereSkyViewPass_H___
+#define ___C3DAS_AtmosphereSkyViewPass_H___
 
 #include "AtmosphereScatteringUbo.hpp"
 
@@ -10,17 +10,22 @@ See LICENSE file in root folder
 #include <Castor3D/Shader/ShaderModule.hpp>
 #include <Castor3D/Shader/Ubos/UbosModule.hpp>
 
+#include <CastorUtils/Design/Named.hpp>
+
 namespace atmosphere_scattering
 {
-	class AtmosphereMultiScatteringPass
+	class AtmosphereSkyViewPass
+		: public castor::Named
 	{
 	public:
-		AtmosphereMultiScatteringPass( crg::FramePassGroup & graph
+		AtmosphereSkyViewPass( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
 			, castor3d::RenderDevice const & device
+			, castor3d::UniformBufferOffsetT< CameraConfig > const & cameraUbo
 			, AtmosphereScatteringUbo const & atmosphereUbo
-			, crg::ImageViewId const & transmittanceLut
-			, crg::ImageViewId const & resultView );
+			, crg::ImageViewId const & transmittanceView
+			, crg::ImageViewId const & resultView
+			, uint32_t index );
 		void accept( castor3d::BackgroundVisitor & visitor );
 
 		crg::FramePass const & getLastPass()const
@@ -29,7 +34,8 @@ namespace atmosphere_scattering
 		}
 
 	private:
-		castor3d::ShaderModule m_computeShader;
+		castor3d::ShaderModule m_vertexShader;
+		castor3d::ShaderModule m_pixelShader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePass const * m_lastPass;
 	};
