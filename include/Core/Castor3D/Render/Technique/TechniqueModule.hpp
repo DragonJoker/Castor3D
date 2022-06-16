@@ -77,15 +77,15 @@ namespace castor3d
 	*\brief
 	*	Ecrit le descripteur de la vue et du sampler dans les writes donnés.
 	*/
-	void bindTexture( VkImageView view
+	C3D_API void bindTexture( VkImageView view
 		, VkSampler sampler
 		, ashes::WriteDescriptorSetArray & writes
 		, uint32_t & index );
-	void bindTexture( ashes::ImageView const & view
+	C3D_API void bindTexture( ashes::ImageView const & view
 		, ashes::Sampler const & sampler
 		, ashes::WriteDescriptorSetArray & writes
 		, uint32_t & index );
-	void bindTexture( crg::RunnableGraph & graph
+	C3D_API void bindTexture( crg::RunnableGraph & graph
 		, crg::ImageViewId const & view
 		, VkSampler const & sampler
 		, ashes::WriteDescriptorSetArray & writes

@@ -95,7 +95,7 @@ namespace castor3d
 			, m_device
 			, progress
 			, size
-			, depth != nullptr
+			, depth
 			, m_matrixUbo
 			, sceneUbo
 			, m_backgroundPass );
@@ -112,7 +112,18 @@ namespace castor3d
 
 		if ( depth )
 		{
-			result.addInOutDepthStencilView( *depth );
+			if ( background.isDepthSampled() )
+			{
+				result.addSampledView( *depth
+					, SceneBackground::Count
+					, VK_IMAGE_LAYOUT_UNDEFINED
+					, crg::SamplerDesc{ VK_FILTER_LINEAR
+						, VK_FILTER_LINEAR } );
+			}
+			else
+			{
+				result.addInOutDepthStencilView( *depth );
+			}
 		}
 
 		if ( clearColour )

@@ -25,7 +25,7 @@ namespace castor3d
 			MdlMtxUboIdx = 1u,
 			HdrCfgUboIdx = 2u,
 			SceneUboIdx = 3u,
-			SkyBoxImgIdx = 4u,
+			Count = 4u,
 		};
 
 	public:
@@ -184,7 +184,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, VkExtent2D const & size
-			, bool usesDepth
+			, crg::ImageViewId const * depth
 			, MatrixUbo const & matrixUbo
 			, SceneUbo const & sceneUbo
 			, BackgroundPassBase *& backgroundPass );
@@ -283,6 +283,11 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		virtual bool isDepthSampled()const
+		{
+			return false;
+		}
+
 		Scene const & getScene()const
 		{
 			return m_scene;
