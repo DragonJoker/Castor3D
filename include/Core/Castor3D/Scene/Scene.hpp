@@ -215,6 +215,13 @@ namespace castor3d
 		C3D_API uint32_t getEnvironmentMapIndex( SceneNode const & node )const;
 		/**
 		 *\~english
+		 *\return		The background model name.
+		 *\~french
+		 *\return		Le nom du modèle de fond.
+		 */
+		C3D_API castor::String const & getBackgroundModel()const;
+		/**
+		 *\~english
 		 *\brief		Creates an animated texture and adds it to animated textures group.
 		 *\param[in]	sourceInfo	The texture source info.
 		 *\param[in]	config		The texture configuration.

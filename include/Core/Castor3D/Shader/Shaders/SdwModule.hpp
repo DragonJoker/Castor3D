@@ -100,6 +100,7 @@ namespace castor3d::shader
 
 	using Surface = SurfaceT< ast::var::Flag::eNone >;
 
+	class BackgroundModel;
 	class Fog;
 	class Materials;
 	class LightingModel;
@@ -126,11 +127,20 @@ namespace castor3d::shader
 		, ShadowOptions shadowsOptions
 		, SssProfiles const * sssProfiles
 		, bool enableVolumetric ) >;
-
 	using LightingModelFactory = castor::Factory< LightingModel
 		, castor::String
 		, LightingModelPtr
 		, LightingModelCreator >;
+
+	using BackgroundModelPtr = std::unique_ptr< BackgroundModel >;
+	using BackgroundModelCreator = std::function< BackgroundModelPtr( sdw::ShaderWriter & writer
+		, Utils & utils
+		, uint32_t & binding
+		, uint32_t set ) >;
+	using BackgroundModelFactory = castor::Factory< BackgroundModel
+		, castor::String
+		, BackgroundModelPtr
+		, BackgroundModelCreator >;
 
 	Writer_Parameter( DirectionalLight );
 	Writer_Parameter( LayeredLpvGridData );

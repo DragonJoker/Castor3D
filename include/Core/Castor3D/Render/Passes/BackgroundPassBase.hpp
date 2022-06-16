@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "PassesModule.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include "Castor3D/Render/Viewport.hpp"
 

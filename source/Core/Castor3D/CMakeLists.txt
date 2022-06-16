@@ -1517,6 +1517,25 @@ source_group( "Header Files\\Scene\\Background" FILES ${${PROJECT_NAME}_FOLDER_H
 source_group( "Source Files\\Scene\\Background" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Background/Shaders/GlslIblBackground.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Background/Shaders/GlslNoIblBackground.cpp
+)
+set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Background/Shaders/GlslIblBackground.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Background/Shaders/GlslNoIblBackground.hpp
+)
+set( ${PROJECT_NAME}_SRC_FILES
+	${${PROJECT_NAME}_SRC_FILES}
+	${${PROJECT_NAME}_FOLDER_SRC_FILES}
+)
+set( ${PROJECT_NAME}_HDR_FILES
+	${${PROJECT_NAME}_HDR_FILES}
+	${${PROJECT_NAME}_FOLDER_HDR_FILES}
+)
+source_group( "Header Files\\Scene\\Background\\Shaders" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
+source_group( "Source Files\\Scene\\Background\\Shaders" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Light/DirectionalLight.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Light/Light.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Light/LightImporter.cpp
@@ -1634,6 +1653,7 @@ source_group( "Header Files\\Shader\\ShaderBuffers" FILES ${${PROJECT_NAME}_FOLD
 source_group( "Source Files\\Shader\\ShaderBuffers" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslBackground.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslCookTorranceBRDF.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslCullData.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslFog.cpp
@@ -1652,6 +1672,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslVoxel.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslBackground.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslCookTorranceBRDF.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslCullData.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslFog.hpp

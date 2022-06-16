@@ -243,6 +243,9 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	castor::String const SceneBackground::WithoutIbl = cuT( "c3d.no_ibl" );
+	castor::String const SceneBackground::WithIbl = cuT( "c3d.ibl" );
+
 	SceneBackground::SceneBackground( Engine & engine
 		, Scene & scene
 		, castor::String const & name
@@ -383,6 +386,74 @@ namespace castor3d
 			, SceneBackground::SkyBoxImgIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		return result;
+	}
+
+	void SceneBackground::addPassBindings( crg::FramePass & pass
+		, uint32_t & index )const
+	{
+		doAddPassBindings( pass, index );
+
+		if ( hasIbl() )
+		{
+			auto & ibl = getIbl();
+			pass.addSampledView( ibl.getIrradianceTexture().sampledViewId
+				, index++
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, crg::SamplerDesc{ VK_FILTER_LINEAR
+				, VK_FILTER_LINEAR
+				, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+			pass.addSampledView( ibl.getPrefilteredEnvironmentTexture().sampledViewId
+				, index++
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, crg::SamplerDesc{ VK_FILTER_LINEAR
+				, VK_FILTER_LINEAR
+				, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+		}
+	}
+
+	void SceneBackground::addBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, uint32_t & index )const
+	{
+		doAddBindings( bindings, index );
+
+		if ( hasIbl() )
+		{
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapIrradiance
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapPrefiltered
+		}
+	}
+
+	void SceneBackground::addDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+		, uint32_t & index )const
+	{
+		doAddDescriptors( descriptorWrites, index );
+
+		if ( hasIbl() )
+		{
+			auto & ibl = getIbl();
+			bindTexture( ibl.getIrradianceTexture().wholeView
+				, ibl.getIrradianceSampler()
+				, descriptorWrites
+				, index );
+			bindTexture( ibl.getPrefilteredEnvironmentTexture().wholeView
+				, ibl.getPrefilteredEnvironmentSampler()
+				, descriptorWrites
+				, index );
+		}
+	}
+
+	castor::String const & SceneBackground::getModelName()const
+	{
+		if ( hasIbl() )
+		{
+			return WithIbl;
+		}
+
+		return WithoutIbl;
 	}
 
 	//*********************************************************************************************

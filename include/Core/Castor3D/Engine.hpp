@@ -321,24 +321,45 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Registers a Lighting Model.
-		 *\param[in]	name	The lighting model name.
+		 *\param[in]	name	The model name.
 		 *\param[in]	creator	The model creation function.
 		 *\~french
 		 *\brief		Enregistre un Lighting Model.
-		 *\param[in]	name	Le nom du lighing model.
-		 *\param[in]	creator	La fonction dde création du lighting model.
+		 *\param[in]	name	Le nom du model.
+		 *\param[in]	creator	La fonction de création du modèle.
 		 */
 		C3D_API void registerLightingModel( castor::String const & name
 			, shader::LightingModelCreator creator );
 		/**
 		 *\~english
 		 *\brief		Unregisters a Lighting Model.
-		 *\param[in]	name	The lighting model name.
+		 *\param[in]	name	The model name.
 		 *\~french
 		 *\brief		Désenregistre un Lighting Model.
-		 *\param[in]	name	Le nom du lighing model.
+		 *\param[in]	name	Le nom du modèle.
 		 */
 		C3D_API void unregisterLightingModel( castor::String const & name );
+		/**
+		 *\~english
+		 *\brief		Registers a Background Model.
+		 *\param[in]	name	The model name.
+		 *\param[in]	creator	The model creation function.
+		 *\~french
+		 *\brief		Enregistre un Background Model.
+		 *\param[in]	name	Le nom du model.
+		 *\param[in]	creator	La fonction dde création du modèle.
+		 */
+		C3D_API void registerBackgroundModel( castor::String const & name
+			, shader::BackgroundModelCreator creator );
+		/**
+		 *\~english
+		 *\brief		Unregisters a Background Model.
+		 *\param[in]	name	The model name.
+		 *\~french
+		 *\brief		Désenregistre un Background Model.
+		 *\param[in]	name	Le nom du modèle.
+		 */
+		C3D_API void unregisterBackgroundModel( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Registers a ShaderBuffer.
@@ -678,6 +699,11 @@ namespace castor3d
 			return m_lightingModelFactory;
 		}
 
+		shader::BackgroundModelFactory const & getBackgroundModelFactory()const
+		{
+			return m_backgroundModelFactory;
+		}
+
 		SceneRPtr getLoadingScene()const
 		{
 			return m_loadingScene.get();
@@ -763,6 +789,7 @@ namespace castor3d
 		castor::AsyncJobQueue m_cpuJobs;
 		crg::ResourceHandler m_resourceHandler;
 		shader::LightingModelFactory m_lightingModelFactory;
+		shader::BackgroundModelFactory m_backgroundModelFactory;
 		SceneUPtr m_loadingScene;
 		std::unordered_map< castor::String, castor::UniquePtr< RenderPassRegisterInfo > > m_passRenderPassTypes;
 		std::unordered_map< castor::String, std::pair< RenderPassTypeID, Parameters > > m_renderPassTypes;

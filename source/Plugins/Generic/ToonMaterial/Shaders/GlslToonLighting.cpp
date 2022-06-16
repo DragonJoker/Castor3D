@@ -1,8 +1,9 @@
 #include "ToonMaterial/Shaders/GlslToonLighting.hpp"
 
 #include "ToonMaterial/Shaders/GlslToonMaterial.hpp"
-#include "ToonMaterial/Shaders/GlslToonReflection.hpp"
 
+#include <Castor3D/Material/Pass/Phong/Shaders/GlslPhongReflection.hpp>
+#include <Castor3D/Material/Pass/PBR/Shaders/GlslPbrReflection.hpp>
 #include <Castor3D/Shader/Shaders/GlslLight.hpp>
 #include <Castor3D/Shader/Shaders/GlslMaterial.hpp>
 #include <Castor3D/Shader/Shaders/GlslOutputComponents.hpp>
@@ -118,7 +119,7 @@ namespace toon::shader
 	c3d::ReflectionModelPtr ToonPhongLightingModel::getReflectionModel( uint32_t & envMapBinding
 		, uint32_t envMapSet )const
 	{
-		return std::make_unique< ToonPhongReflectionModel >( m_writer
+		return std::make_unique< c3d::PhongReflectionModel >( m_writer
 			, m_utils
 			, envMapBinding
 			, envMapSet );
@@ -1049,7 +1050,7 @@ namespace toon::shader
 	c3d::ReflectionModelPtr ToonPbrLightingModel::getReflectionModel( uint32_t & envMapBinding
 		, uint32_t envMapSet )const
 	{
-		return std::make_unique< ToonPbrReflectionModel >( m_writer
+		return std::make_unique< c3d::PbrReflectionModel >( m_writer
 			, m_utils
 			, envMapBinding
 			, envMapSet );

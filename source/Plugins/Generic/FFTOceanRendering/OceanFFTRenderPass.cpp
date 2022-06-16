@@ -19,6 +19,7 @@
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/Background/Background.hpp>
 #include <Castor3D/Shader/Program.hpp>
+#include "Castor3D/Shader/Shaders/GlslBackground.hpp"
 #include <Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp>
 #include <Castor3D/Shader/Shaders/GlslFog.hpp>
 #include <Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp>
@@ -566,6 +567,7 @@ namespace ocean_fft
 
 		auto index = uint32_t( rdpass::OceanFFTIdx::eCount );
 		doAddShadowBindings( bindings, index );
+		doAddBackgroundBindings( bindings, index );
 		doAddEnvBindings( bindings, index );
 		doAddGIBindings( bindings, index );
 	}
@@ -624,6 +626,7 @@ namespace ocean_fft
 			, descriptorWrites
 			, index );
 		doAddShadowDescriptor( descriptorWrites, shadowMaps, index );
+		doAddBackgroundDescriptor( descriptorWrites, shadowMaps, index );
 		doAddEnvDescriptor( descriptorWrites, shadowMaps, index );
 		doAddGIDescriptor( descriptorWrites, shadowMaps, index );
 	}
@@ -1146,6 +1149,11 @@ namespace ocean_fft
 			, index
 			, RenderPipeline::eBuffers
 			, false );
+		auto backgroundModel = shader::BackgroundModel::createModel( getScene()
+			, writer
+			, utils
+			, index
+			, RenderPipeline::eBuffers );
 		auto reflections = lightingModel->getReflectionModel( index
 			, uint32_t( RenderPipeline::eBuffers ) );
 		shader::GlobalIllumination indirect{ writer, utils };
@@ -1300,7 +1308,8 @@ namespace ocean_fft
 					auto reflected = writer.declLocale( "reflected"
 						, reflections->computeForward( *lightMat
 							, surface
-							, c3d_sceneData ) );
+							, c3d_sceneData
+							, *backgroundModel ) );
 					displayDebugData( eRawBackgroundReflection, reflected, 1.0_f );
 					reflected = utils.fresnelSchlick( NdotV, lightMat->specular ) * reflected;
 					displayDebugData( eFresnelBackgroundReflection, reflected, 1.0_f );
