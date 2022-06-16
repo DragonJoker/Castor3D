@@ -1,5 +1,7 @@
 #include "AtmosphereScattering/Atmosphere.hpp"
 
+#include <Castor3D/Shader/Ubos/MatrixUbo.hpp>
+
 #include <ShaderWriter/Source.hpp>
 
 #define NONLINEARSKYVIEWLUT 1
@@ -91,21 +93,18 @@ namespace atmosphere_scattering
 
 	AtmosphereConfig::AtmosphereConfig( sdw::ShaderWriter & pwriter
 		, AtmosphereData const & patmosphereData
-		, castor3d::shader::MatrixData const & pmatrixData
 		, LuminanceSettings pluminanceSettings )
-		: AtmosphereConfig{ pwriter, patmosphereData, pmatrixData, pluminanceSettings, {}, nullptr }
+		: AtmosphereConfig{ pwriter, patmosphereData, pluminanceSettings, {}, nullptr }
 	{
 	}
 
 	AtmosphereConfig::AtmosphereConfig( sdw::ShaderWriter & pwriter
 		, AtmosphereData const & patmosphereData
-		, castor3d::shader::MatrixData const & pmatrixData
 		, LuminanceSettings pluminanceSettings
 		, VkExtent2D ptransmittanceExtent
 		, sdw::CombinedImage2DRgba32 const * transmittanceLut )
 		: writer{ pwriter }
 		, atmosphereData{ patmosphereData }
-		, matrixData{ pmatrixData }
 		, luminanceSettings{ pluminanceSettings }
 		, transmittanceExtent{ std::move( ptransmittanceExtent ) }
 		, transmittanceTexture{ transmittanceLut }
@@ -225,7 +224,7 @@ namespace atmosphere_scattering
 					}
 					FI;
 
-					if ( luminanceSettings.useDepthBuffer )
+					if ( luminanceSettings.matrixData )
 					{
 						IF( writer, depthBufferValue >= 0.0f )
 						{
@@ -236,7 +235,7 @@ namespace atmosphere_scattering
 							IF( writer, clipSpace.z() < 1.0f )
 							{
 								auto depthBufferWorldPos = writer.declLocale( "depthBufferWorldPos"
-									, matrixData.curProjToWorld( vec4( clipSpace, 1.0f ) ) );
+									, luminanceSettings.matrixData->curProjToWorld( vec4( clipSpace, 1.0f ) ) );
 								depthBufferWorldPos /= depthBufferWorldPos.w();
 
 								auto tDepth = writer.declLocale( "tDepth"
@@ -858,6 +857,79 @@ namespace atmosphere_scattering
 		}
 
 		return m_uvToSkyViewLutParams( pviewZenithCosAngle, plightViewCosAngle, pviewHeight, puv, psize );
+	}
+
+	sdw::Void AtmosphereConfig::skyViewLutParamsToUv( sdw::Boolean const & pintersectGround
+		, sdw::Float const & pviewZenithCosAngle
+		, sdw::Float const & plightViewCosAngle
+		, sdw::Float const & pviewHeight
+		, sdw::Vec2 & puv
+		, sdw::Vec2 const & psize )
+	{
+		if ( !m_skyViewLutParamsToUv )
+		{
+			m_skyViewLutParamsToUv = writer.implementFunction< sdw::Void >( "skyViewLutParamsToUv"
+				, [&]( sdw::Boolean const & intersectGround
+					,  sdw::Float const & viewZenithCosAngle
+					, sdw::Float const & lightViewCosAngle
+					, sdw::Float const & viewHeight
+					, sdw::Vec2 uv
+					, sdw::Vec2 const & size )
+				{
+					auto Vhorizon = writer.declLocale( "Vhorizon"
+						, sqrt( viewHeight * viewHeight - atmosphereData.bottomRadius * atmosphereData.bottomRadius ) );
+					auto cosBeta = writer.declLocale( "cosBeta"
+						, Vhorizon / viewHeight );				// GroundToHorizonCos
+					auto beta = writer.declLocale( "beta"
+						, acos( cosBeta ) );
+					auto zenithHorizonAngle = writer.declLocale( "zenithHorizonAngle"
+						, sdw::Float{ castor::Pi< float > } - beta );
+
+					IF( writer, !intersectGround )
+					{
+						auto coord = writer.declLocale( "coord"
+							, acos( viewZenithCosAngle ) / zenithHorizonAngle );
+						coord = 1.0_f - coord;
+#if NONLINEARSKYVIEWLUT
+						coord = sqrt( coord );
+#endif
+						coord = 1.0_f - coord;
+						uv.y() = coord * 0.5_f;
+					}
+					ELSE
+					{
+						auto coord = writer.declLocale( "coord"
+						, ( acos( viewZenithCosAngle ) - zenithHorizonAngle ) / beta );
+#if NONLINEARSKYVIEWLUT
+						coord = sqrt( coord );
+#endif
+						uv.y() = coord * 0.5_f + 0.5_f;
+					}
+					FI;
+					{
+						auto coord = writer.declLocale( "coord"
+							, -lightViewCosAngle * 0.5_f + 0.5_f );
+						coord = sqrt( coord );
+						uv.x() = coord;
+					}
+
+					// Constrain uvs to valid sub texel range (avoid zenith derivative issue making LUT usage visible)
+					uv = vec2( fromUnitToSubUvs( uv.x(), size.x() ), fromUnitToSubUvs( uv.y(), size.y() ) );
+				}
+				, sdw::InBoolean{ writer, "intersectGround" }
+				, sdw::InFloat{ writer, "viewZenithCosAngle" }
+				, sdw::InFloat{ writer, "lightViewCosAngle" }
+				, sdw::InFloat{ writer, "viewHeight" }
+				, sdw::OutVec2{ writer, "uv" }
+				, sdw::InVec2{ writer, "size" } );
+		}
+
+		return m_skyViewLutParamsToUv( pintersectGround
+			, pviewZenithCosAngle
+			, plightViewCosAngle
+			, pviewHeight
+			, puv
+			, psize );
 	}
 
 	//************************************************************************************************

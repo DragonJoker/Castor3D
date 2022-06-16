@@ -18,7 +18,6 @@ namespace atmosphere_scattering
 		AtmosphereTransmittancePass( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
 			, castor3d::RenderDevice const & device
-			, castor3d::MatrixUbo const & matrixUbo
 			, AtmosphereScatteringUbo const & atmosphereUbo
 			, crg::ImageViewId const & resultView );
 		void accept( castor3d::BackgroundVisitor & visitor );

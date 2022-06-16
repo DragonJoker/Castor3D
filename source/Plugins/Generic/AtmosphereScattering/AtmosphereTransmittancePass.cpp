@@ -9,9 +9,6 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/Technique/RenderTechniqueVisitor.hpp>
 #include <Castor3D/Shader/Program.hpp>
-#include <Castor3D/Shader/Shaders/GlslUtils.hpp>
-#include <Castor3D/Shader/Ubos/MatrixUbo.hpp>
-#include <Castor3D/Shader/Ubos/SceneUbo.hpp>
 
 #include <RenderGraph/RunnableGraph.hpp>
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
@@ -28,7 +25,6 @@ namespace atmosphere_scattering
 	{
 		enum Bindings : uint32_t
 		{
-			eMatrix,
 			eAtmosphere,
 		};
 
@@ -51,9 +47,6 @@ namespace atmosphere_scattering
 		{
 			sdw::FragmentWriter writer;
 
-			C3D_Matrix( writer
-				, eMatrix
-				, 0u );
 			C3D_AtmosphereScattering( writer
 				, eAtmosphere
 				, 0u );
@@ -66,8 +59,7 @@ namespace atmosphere_scattering
 
 			AtmosphereConfig atmosphereConfig{ writer
 				, c3d_atmosphereData
-				, c3d_matrixData
-				, { false, false, false, false } };
+				, { false, nullptr, false, false } };
 
 			writer.implementMainT< sdw::VoidT, sdw::VoidT >( sdw::FragmentIn{ writer }
 				, sdw::FragmentOut{ writer }
@@ -111,7 +103,6 @@ namespace atmosphere_scattering
 	AtmosphereTransmittancePass::AtmosphereTransmittancePass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
 		, castor3d::RenderDevice const & device
-		, castor3d::MatrixUbo const & matrixUbo
 		, AtmosphereScatteringUbo const & atmosphereUbo
 		, crg::ImageViewId const & resultView )
 		: m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "TransmittancePass", transmittance::getVertexProgram() }
@@ -134,8 +125,6 @@ namespace atmosphere_scattering
 				return result;
 			} );
 		pass.addDependencies( previousPasses );
-		matrixUbo.createPassBinding( pass
-			, transmittance::eMatrix );
 		atmosphereUbo.createPassBinding( pass
 			, transmittance::eAtmosphere );
 		pass.addOutputColourView( resultView );

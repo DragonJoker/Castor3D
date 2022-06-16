@@ -24,6 +24,7 @@ set( ${PROJECT_NAME}_HDR_FILES
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/AtmosphereScatteringConfig.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/AtmosphereScatteringPrerequisites.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/AtmosphereScatteringUbo.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/AtmosphereSkyViewPass.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/AtmosphereTransmittancePass.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/AtmosphereVolumePass.hpp
 )
@@ -35,6 +36,7 @@ set( ${PROJECT_NAME}_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/AtmosphereScattering_Parsers.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/AtmosphereScatteringPlugin.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/AtmosphereScatteringUbo.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/AtmosphereSkyViewPass.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/AtmosphereTransmittancePass.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/AtmosphereVolumePass.cpp
 )

@@ -8,9 +8,6 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/Technique/RenderTechniqueVisitor.hpp>
 #include <Castor3D/Shader/Program.hpp>
-#include <Castor3D/Shader/Shaders/GlslUtils.hpp>
-#include <Castor3D/Shader/Ubos/MatrixUbo.hpp>
-#include <Castor3D/Shader/Ubos/SceneUbo.hpp>
 
 #include <RenderGraph/RunnableGraph.hpp>
 #include <RenderGraph/RunnablePasses/ComputePass.hpp>
@@ -27,7 +24,6 @@ namespace atmosphere_scattering
 	{
 		enum Bindings : uint32_t
 		{
-			eMatrix,
 			eAtmosphere,
 			eTransmittance,
 			eOutput,
@@ -39,9 +35,6 @@ namespace atmosphere_scattering
 		{
 			sdw::ComputeWriter writer;
 
-			C3D_Matrix( writer
-				, eMatrix
-				, 0u );
 			C3D_AtmosphereScattering( writer
 				, uint32_t( Bindings::eAtmosphere )
 				, 0u );
@@ -71,8 +64,7 @@ namespace atmosphere_scattering
 
 			AtmosphereConfig atmosphereConfig{ writer
 				, c3d_atmosphereData
-				, c3d_matrixData
-				, { true, false, false, false }
+				, { true, nullptr, false, false }
 				, { transmittanceExtent.width, transmittanceExtent.height }
 				, &transmittanceMap };
 
@@ -245,7 +237,6 @@ namespace atmosphere_scattering
 	AtmosphereMultiScatteringPass::AtmosphereMultiScatteringPass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
 		, castor3d::RenderDevice const & device
-		, castor3d::MatrixUbo const & matrixUbo
 		, AtmosphereScatteringUbo const & atmosphereUbo
 		, crg::ImageViewId const & transmittanceLut
 		, crg::ImageViewId const & resultView )
@@ -271,8 +262,6 @@ namespace atmosphere_scattering
 				return result;
 			} );
 		pass.addDependencies( previousPasses );
-		matrixUbo.createPassBinding( pass
-			, multiscatter::eMatrix );
 		atmosphereUbo.createPassBinding( pass
 			, multiscatter::eAtmosphere );
 		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR

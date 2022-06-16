@@ -1,5 +1,6 @@
 #include "AtmosphereScattering/AtmosphereScatteringPrerequisites.hpp"
 
+#include "AtmosphereScattering/AtmosphereBackground.hpp"
 #include "AtmosphereScattering/AtmosphereScattering_Parsers.hpp"
 
 #include <Castor3D/Engine.hpp>
@@ -64,6 +65,11 @@ namespace atmosphere_scattering
 				, cuT( "atmosphereVolumeResolution" )
 				, &parserAtmosphereVolumeResolution
 				, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eRoot )
+				, cuT( "skyViewResolution" )
+				, &parserSkyViewResolution
+				, { castor::makeParameter< castor::ParameterType::ePoint2U >() } );
 			addParser( result
 				, uint32_t( AtmosphereSection::eRoot )
 				, cuT( "sunIlluminance" )
@@ -254,10 +260,13 @@ extern "C"
 			, atmosphere_scattering::parser::createParsers()
 			, atmosphere_scattering::parser::createSections()
 			, &atmosphere_scattering::parser::createContext );
+		engine->registerBackgroundModel( atmosphere_scattering::AtmosphereBackgroundModel::Name
+			, atmosphere_scattering::AtmosphereBackgroundModel::create );
 	}
 
 	C3D_AtmosphereScattering_API void OnUnload( castor3d::Engine * engine )
 	{
+		engine->unregisterBackgroundModel( atmosphere_scattering::AtmosphereBackgroundModel::Name );
 		engine->unregisterParsers( atmosphere_scattering::PluginType );
 	}
 }
