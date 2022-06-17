@@ -1,6 +1,7 @@
 #include "AtmosphereScattering/AtmosphereBackground.hpp"
 
 #include "AtmosphereScattering/Atmosphere.hpp"
+#include "AtmosphereScattering/AtmosphereBackgroundModel.hpp"
 #include "AtmosphereScattering/AtmosphereBackgroundPass.hpp"
 #include "AtmosphereScattering/AtmosphereScatteringUbo.hpp"
 
@@ -113,52 +114,6 @@ namespace castor
 
 namespace atmosphere_scattering
 {
-	castor::String const AtmosphereBackgroundModel::Name = cuT( "c3d.atmosphere" );
-
-	AtmosphereBackgroundModel::AtmosphereBackgroundModel( sdw::ShaderWriter & writer
-		, castor3d::shader::Utils & utils
-		, uint32_t & binding
-		, uint32_t set )
-		: castor3d::shader::BackgroundModel{ writer, utils }
-	{
-	}
-
-	castor3d::shader::BackgroundModelPtr AtmosphereBackgroundModel::create( sdw::ShaderWriter & writer
-		, castor3d::shader::Utils & utils
-		, uint32_t & binding
-		, uint32_t set )
-	{
-		return std::make_unique< AtmosphereBackgroundModel >( writer, utils, binding, set );
-	}
-
-	sdw::Vec3 AtmosphereBackgroundModel::computeReflections( sdw::Vec3 const & wsIncident
-		, sdw::Vec3 const & wsNormal
-		, castor3d::shader::LightMaterial const & material
-		, sdw::CombinedImage2DRg32 const & brdf )
-	{
-		return vec3( 0.0_f );
-	}
-
-	sdw::Vec3 AtmosphereBackgroundModel::computeRefractions( sdw::Vec3 const & wsIncident
-		, sdw::Vec3 const & wsNormal
-		, sdw::Float const & refractionRatio
-		, sdw::Vec3 const & transmission
-		, castor3d::shader::LightMaterial const & material )
-	{
-		return vec3( 0.0_f );
-	}
-
-	sdw::Void AtmosphereBackgroundModel::mergeReflRefr( sdw::Vec3 const & wsIncident
-		, sdw::Vec3 const & wsNormal
-		, sdw::Float const & refractionRatio
-		, sdw::Vec3 const & transmission
-		, castor3d::shader::LightMaterial const & material
-		, sdw::Vec3 & reflection
-		, sdw::Vec3 & refraction )
-	{
-		return sdw::Void{};
-	}
-
 	//*********************************************************************************************
 
 	static uint32_t constexpr SkyTexSize = 16u;
@@ -167,6 +122,7 @@ namespace atmosphere_scattering
 		, castor3d::Scene & scene )
 		: SceneBackground{ engine, scene, cuT( "Atmosphere" ), cuT( "atmosphere" ) }
 		, m_atmosphereUbo{ std::make_unique< AtmosphereScatteringUbo >( engine.getRenderSystem()->getRenderDevice() ) }
+		, m_cameraUbo{ std::make_unique< CameraUbo >( engine.getRenderSystem()->getRenderDevice() ) }
 	{
 	}
 
@@ -198,7 +154,6 @@ namespace atmosphere_scattering
 	{
 		if ( !m_transmittancePass )
 		{
-			m_cameraUbo = device.uboPool->getBuffer< CameraConfig >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 			auto & viewData = *depth->data;
 			m_depthView = graph.createView( { "BackgroundDepth"
 				, viewData.image
@@ -220,7 +175,7 @@ namespace atmosphere_scattering
 			m_skyViewPass = std::make_unique< AtmosphereSkyViewPass >( graph
 				, crg::FramePassArray{ &m_transmittancePass->getLastPass() }
 				, device
-				, m_cameraUbo
+				, *m_cameraUbo
 				, *m_atmosphereUbo
 				, m_transmittance.sampledViewId
 				, m_skyView.targetViewId
@@ -228,7 +183,7 @@ namespace atmosphere_scattering
 			m_volumePass = std::make_unique< AtmosphereVolumePass >( graph
 				, crg::FramePassArray{ &m_multiScatteringPass->getLastPass() }
 				, device
-				, m_cameraUbo
+				, *m_cameraUbo
 				, *m_atmosphereUbo
 				, m_transmittance.sampledViewId
 				, m_volume.targetViewId
@@ -260,8 +215,7 @@ namespace atmosphere_scattering
 			, VK_FILTER_LINEAR };
 		pass.addImplicitDepthStencilView( *depth
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		m_cameraUbo.createPassBinding( pass
-			, "Camera"
+		m_cameraUbo->createPassBinding( pass
 			, AtmosphereBackgroundPass::eCamera );
 		m_atmosphereUbo->createPassBinding( pass
 			, AtmosphereBackgroundPass::eAtmosphere );
@@ -412,24 +366,9 @@ namespace atmosphere_scattering
 
 	void AtmosphereBackground::doCpuUpdate( castor3d::CpuUpdater & updater )const
 	{
-		auto & viewport = *updater.viewport;
-		viewport.resize( updater.camera->getSize() );
-		viewport.setPerspective( updater.camera->getViewport().getFovY()
-			, updater.camera->getRatio()
-			, 0.1f
-			, 2.0f );
-		viewport.update();
-		updater.bgMtxView = updater.camera->getView();
-		updater.bgMtxProj = updater.isSafeBanded
-			? viewport.getSafeBandedProjection()
-			: viewport.getProjection();
 		m_atmosphereUbo->cpuUpdate( m_config );
-
+		m_cameraUbo->cpuUpdate( *updater.camera, updater.isSafeBanded );
 		auto viewProj = updater.bgMtxProj * updater.bgMtxView;
-		auto & data = m_cameraUbo.getData();
-		data.invViewProj = viewProj.getInverse();
-		data.position = updater.camera->getParent()->getDerivedPosition();
-		//std::swap( data.position->y, data.position->z );
 	}
 
 	void AtmosphereBackground::doGpuUpdate( castor3d::GpuUpdater & updater )const
