@@ -18,7 +18,8 @@ namespace atmosphere_scattering
 		, ast::expr::ExprPtr expr
 		, bool enabled )
 		: sdw::StructInstance{ writer, std::move( expr ), enabled }
-		, invViewProj{ getMember< sdw::Mat4 >( "invViewProj" ) }
+		, camInvViewProj{ getMember< sdw::Mat4 >( "camInvViewProj" ) }
+		, objInvViewProj{ getMember< sdw::Mat4 >( "objInvViewProj" ) }
 		, position{ getMember< sdw::Vec3 >( "position" ) }
 	{
 	}
@@ -30,16 +31,22 @@ namespace atmosphere_scattering
 
 		if ( result->empty() )
 		{
-			result->declMember( "invViewProj", sdw::type::Kind::eMat4x4F, sdw::type::NotArray );
+			result->declMember( "camInvViewProj", sdw::type::Kind::eMat4x4F, sdw::type::NotArray );
+			result->declMember( "objInvViewProj", sdw::type::Kind::eMat4x4F, sdw::type::NotArray );
 			result->declMember( "position", sdw::type::Kind::eVec3F, sdw::type::NotArray );
 		}
 
 		return result;
 	}
 
-	sdw::Vec4 CameraData::projToWorld( sdw::Vec4 const & pos )const
+	sdw::Vec4 CameraData::camProjToWorld( sdw::Vec4 const & pos )const
 	{
-		return invViewProj * pos;
+		return camInvViewProj * pos;
+	}
+
+	sdw::Vec4 CameraData::objProjToWorld( sdw::Vec4 const & pos )const
+	{
+		return objInvViewProj * pos;
 	}
 
 	//************************************************************************************************
@@ -77,7 +84,9 @@ namespace atmosphere_scattering
 		auto & proj = camera.getProjection( isSafeBanded );
 		auto viewProj = proj * view;
 		auto & data = m_ubo.getData();
-		data.invViewProj = viewProj.getInverse();
+		data.camInvViewProj = viewProj.getInverse();
+		viewProj = proj * camera.getView();
+		data.objInvViewProj = viewProj.getInverse();
 		data.position = position;
 	}
 

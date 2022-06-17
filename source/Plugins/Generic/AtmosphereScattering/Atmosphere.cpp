@@ -109,6 +109,33 @@ namespace atmosphere_scattering
 	{
 	}
 
+	sdw::Vec3 AtmosphereConfig::getWorldPos( sdw::Float const & pdepth
+		, sdw::Vec2 const & ppixPos
+		, sdw::Vec2 const & ptexSize )
+	{
+		if ( !m_getWorldPos )
+		{
+			m_getWorldPos = writer.implementFunction< sdw::Vec3 >( "getWorldPos"
+				, [&]( sdw::Float const & depth
+					, sdw::Vec2 const & pixPos
+					, sdw::Vec2 const & texSize )
+				{
+					auto clipSpace = writer.declLocale( "clipSpace"
+						, vec3( ( pixPos / texSize ) * vec2( 2.0_f, 2.0_f ) - vec2( 1.0_f, 1.0_f )
+							, depth ) );
+					auto depthBufferWorldPos = writer.declLocale( "depthBufferWorldPos"
+						, luminanceSettings.cameraData->objProjToWorld( vec4( clipSpace, 1.0f ) ) );
+					depthBufferWorldPos /= depthBufferWorldPos.w();
+					writer.returnStmt( depthBufferWorldPos.xyz() / 1000.0_f );
+				}
+				, sdw::InFloat{ writer, "depth" }
+				, sdw::InVec2{ writer, "pixPos" }
+				, sdw::InVec2{ writer, "texSize" } );
+		}
+
+		return m_getWorldPos( pdepth, ppixPos, ptexSize );
+	}
+
 	SingleScatteringResult AtmosphereConfig::integrateScatteredLuminance( sdw::Vec2 const & ppixPos
 		, sdw::Vec3 const & pworldPos
 		, sdw::Vec3 const & pworldDir
@@ -224,20 +251,16 @@ namespace atmosphere_scattering
 
 					if ( luminanceSettings.cameraData )
 					{
-						IF( writer, depthBufferValue >= 0.0f )
+						IF( writer, depthBufferValue >= 0.0_f )
 						{
-							auto clipSpace = writer.declLocale( "clipSpace"
-								, vec3( ( pixPos / transmittanceLutExtent ) * vec2( 2.0_f, -2.0_f ) - vec2( 1.0_f, -1.0_f )
-									, depthBufferValue ) );
-
-							IF( writer, clipSpace.z() < 1.0f )
+							IF( writer, depthBufferValue < 1.0f )
 							{
 								auto depthBufferWorldPos = writer.declLocale( "depthBufferWorldPos"
-									, luminanceSettings.cameraData->projToWorld( vec4( clipSpace, 1.0f ) ) );
-								depthBufferWorldPos /= depthBufferWorldPos.w();
-
+									, getWorldPos( depthBufferValue
+										, pixPos
+										, transmittanceLutExtent ) );
 								auto tDepth = writer.declLocale( "tDepth"
-									, length( depthBufferWorldPos.xyz() - ( worldPos + vec3( 0.0_f, -atmosphereData.bottomRadius, 0.0_f ) ) ) ); // apply earth offset to go back to origin as top of earth mode. 
+									, length( depthBufferWorldPos - ( worldPos + vec3( 0.0_f, -atmosphereData.bottomRadius, 0.0_f ) ) ) ); // apply earth offset to go back to origin as top of earth mode. 
 
 								IF( writer, tDepth < tMax )
 								{
@@ -246,8 +269,6 @@ namespace atmosphere_scattering
 								FI;
 							}
 							FI;
-							//if (VariableSampleCount && clipSpace.z() == 1.0f)
-							//	return result;
 						}
 						FI;
 					}

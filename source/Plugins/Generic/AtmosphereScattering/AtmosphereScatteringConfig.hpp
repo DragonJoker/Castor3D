@@ -11,12 +11,6 @@ See LICENSE file in root folder
 
 namespace atmosphere_scattering
 {
-	struct CameraConfig
-	{
-		castor::Matrix4x4f invViewProj;
-		castor::Point3f position;
-	};
-
 	// An atmosphere layer of width 'width', and whose density is defined as
 	//   'exp_term' * exp('exp_scale' * h) + 'linear_term' * h + 'constant_term',
 	// clamped to [0,1], and where h is the altitude.
