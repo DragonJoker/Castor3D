@@ -132,13 +132,13 @@ namespace castor3d
 			, index
 			, RenderPipeline::eBuffers
 			, m_mode != RenderMode::eTransparentOnly );
+		auto reflections = lightingModel->getReflectionModel( index
+			, uint32_t( RenderPipeline::eBuffers ) );
 		auto backgroundModel = shader::BackgroundModel::createModel( getScene()
 			, writer
 			, utils
 			, index
 			, RenderPipeline::eBuffers );
-		auto reflections = lightingModel->getReflectionModel( index
-			, uint32_t( RenderPipeline::eBuffers ) );
 		shader::GlobalIllumination indirect{ writer, utils };
 		indirect.declare( index
 			, RenderPipeline::eBuffers

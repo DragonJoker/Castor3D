@@ -95,47 +95,15 @@ namespace castor3d
 			, m_device
 			, progress
 			, size
+			, colour
 			, depth
+			, m_modelUbo
 			, m_matrixUbo
+			, hdrConfigUbo
 			, sceneUbo
+			, clearColour
 			, m_backgroundPass );
 		result.addDependencies( previousPasses );
-		m_matrixUbo.createPassBinding( result
-			, SceneBackground::MtxUboIdx );
-		m_modelUbo.createPassBinding( result
-			, "Model"
-			, SceneBackground::MdlMtxUboIdx );
-		hdrConfigUbo.createPassBinding( result
-			, SceneBackground::HdrCfgUboIdx );
-		sceneUbo.createPassBinding( result
-			, SceneBackground::SceneUboIdx );
-
-		if ( depth )
-		{
-			if ( background.isDepthSampled() )
-			{
-				result.addSampledView( *depth
-					, SceneBackground::Count
-					, VK_IMAGE_LAYOUT_UNDEFINED
-					, crg::SamplerDesc{ VK_FILTER_LINEAR
-						, VK_FILTER_LINEAR } );
-			}
-			else
-			{
-				result.addInOutDepthStencilView( *depth );
-			}
-		}
-
-		if ( clearColour )
-		{
-			result.addOutputColourView( colour
-				, transparentBlackClearColor );
-		}
-		else
-		{
-			result.addInOutColourView( colour );
-		}
-
 		return result;
 	}
 

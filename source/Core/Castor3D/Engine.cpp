@@ -24,6 +24,7 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Scene/Background/Shaders/GlslIblBackground.hpp"
+#include "Castor3D/Scene/Background/Shaders/GlslImgBackground.hpp"
 #include "Castor3D/Scene/Background/Shaders/GlslNoIblBackground.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
@@ -125,9 +126,11 @@ namespace castor3d
 			castor::File::directoryCreate( getEngineDirectory() );
 		}
 
-		registerBackgroundModel( SceneBackground::WithoutIbl
+		registerBackgroundModel( shader::ImgBackgroundModel::Name
+			, shader::ImgBackgroundModel::create );
+		registerBackgroundModel( shader::NoIblBackgroundModel::Name
 			, shader::NoIblBackgroundModel::create );
-		registerBackgroundModel( SceneBackground::WithIbl
+		registerBackgroundModel( shader::IblBackgroundModel::Name
 			, shader::IblBackgroundModel::create );
 
 		log::info << cuT( "Castor3D - Core engine version : " ) << Version{} << std::endl;

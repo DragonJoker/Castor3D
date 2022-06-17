@@ -47,6 +47,9 @@ namespace castor3d::shader
 			, sdw::Vec3 const & transmission
 			, sdw::Vec3 const & albedo );
 
+	public:
+		static castor::String const Name;
+
 	private:
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3

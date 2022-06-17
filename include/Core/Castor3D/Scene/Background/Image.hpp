@@ -65,6 +65,10 @@ namespace castor3d
 		C3D_API bool write( castor::String const & tabs
 			, castor::Path const & folder
 			, castor::StringStream & stream )const override;
+		/**
+		*\copydoc	castor3d::SceneBackground::getModelName
+		*/
+		castor::String const & getModelName()const override;
 
 	private:
 		bool doInitialise( RenderDevice const & device )override;

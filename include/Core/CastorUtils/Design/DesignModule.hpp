@@ -122,6 +122,16 @@ namespace castor
 	class ConnectionT;
 	/**
 	\~english
+	*\brief		Some data holder.
+	*\remark	Used to enforce data initialisation order through ineritance
+	\~french
+	*\brief		Conteneur de donnée.
+	*\remark	Utilisé pour forcer l'ordre d'initialisation des données via l'héritage.
+	*/
+	template< class Data >
+	class DataHolderT;
+	/**
+	\~english
 	\brief		Used to delay initialisation of an object to next use of it.
 	\~french
 	\brief		Utilisé pour délayer l'initialisation d'un objet à sa prochaine utilisation.

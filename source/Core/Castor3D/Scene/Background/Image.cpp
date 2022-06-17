@@ -5,6 +5,7 @@
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Background/Visitor.hpp"
+#include "Castor3D/Scene/Background/Shaders/GlslImgBackground.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
@@ -131,6 +132,11 @@ namespace castor3d
 		, castor::StringStream & stream )const
 	{
 		return castor::TextWriter< ImageBackground >{ tabs, folder }( *this, stream );
+	}
+
+	castor::String const & ImageBackground::getModelName()const
+	{
+		return shader::ImgBackgroundModel::Name;
 	}
 
 	bool ImageBackground::doInitialise( RenderDevice const & device )

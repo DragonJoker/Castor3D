@@ -8,6 +8,8 @@
 
 namespace castor3d::shader
 {
+	castor::String const NoIblBackgroundModel::Name = cuT( "c3d.no_ibl" );
+
 	NoIblBackgroundModel::NoIblBackgroundModel( sdw::ShaderWriter & writer
 		, Utils & utils
 		, uint32_t & binding
