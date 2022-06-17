@@ -1518,10 +1518,12 @@ source_group( "Source Files\\Scene\\Background" FILES ${${PROJECT_NAME}_FOLDER_S
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Background/Shaders/GlslIblBackground.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Background/Shaders/GlslImgBackground.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Background/Shaders/GlslNoIblBackground.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Background/Shaders/GlslIblBackground.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Background/Shaders/GlslImgBackground.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Background/Shaders/GlslNoIblBackground.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES

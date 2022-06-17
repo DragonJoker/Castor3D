@@ -19,16 +19,6 @@ namespace castor3d
 		, public castor::Named
 	{
 	public:
-		enum DescriptorIdx : uint32_t
-		{
-			MtxUboIdx = 0u,
-			MdlMtxUboIdx = 1u,
-			HdrCfgUboIdx = 2u,
-			SceneUboIdx = 3u,
-			Count = 4u,
-		};
-
-	public:
 		/**
 		*\~english
 		*\brief
@@ -184,9 +174,13 @@ namespace castor3d
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, VkExtent2D const & size
+			, crg::ImageViewId const & colour
 			, crg::ImageViewId const * depth
+			, UniformBufferOffsetT< ModelBufferConfiguration > const & modelUbo
 			, MatrixUbo const & matrixUbo
+			, HdrConfigUbo const & hdrConfigUbo
 			, SceneUbo const & sceneUbo
+			, bool clearColour
 			, BackgroundPassBase *& backgroundPass );
 		/**
 		*\~english
@@ -423,9 +417,6 @@ namespace castor3d
 
 	public:
 		OnBackgroundChanged onChanged;
-
-		static castor::String const WithoutIbl;
-		static castor::String const WithIbl;
 
 	protected:
 		Scene & m_scene;

@@ -412,8 +412,8 @@ namespace castor3d
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
 
 		doAddShadowBindings( bindings, index );
-		doAddBackgroundBindings( bindings, index );
 		doAddEnvBindings( bindings, index );
+		doAddBackgroundBindings( bindings, index );
 		doAddGIBindings( bindings, index );
 	}
 
@@ -436,8 +436,8 @@ namespace castor3d
 			, descriptorWrites
 			, index );
 		doAddShadowDescriptor( descriptorWrites, shadowMaps, index );
-		doAddBackgroundDescriptor( descriptorWrites, shadowMaps, index );
 		doAddEnvDescriptor( descriptorWrites, shadowMaps, index );
+		doAddBackgroundDescriptor( descriptorWrites, shadowMaps, index );
 		doAddGIDescriptor( descriptorWrites, shadowMaps, index );
 	}
 

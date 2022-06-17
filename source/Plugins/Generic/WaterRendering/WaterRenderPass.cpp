@@ -432,8 +432,8 @@ namespace water
 
 		auto index = uint32_t( WaterIdx::eBrdf ) + 1u;
 		doAddShadowBindings( bindings, index );
-		doAddBackgroundBindings( bindings, index );
 		doAddEnvBindings( bindings, index );
+		doAddBackgroundBindings( bindings, index );
 		doAddGIBindings( bindings, index );
 	}
 
@@ -489,8 +489,8 @@ namespace water
 			, descriptorWrites
 			, index );
 		doAddShadowDescriptor( descriptorWrites, shadowMaps, index );
-		doAddBackgroundDescriptor( descriptorWrites, shadowMaps, index );
 		doAddEnvDescriptor( descriptorWrites, shadowMaps, index );
+		doAddBackgroundDescriptor( descriptorWrites, shadowMaps, index );
 		doAddGIDescriptor( descriptorWrites, shadowMaps, index );
 	}
 
@@ -607,13 +607,13 @@ namespace water
 			, index
 			, RenderPipeline::eBuffers
 			, false );
+		auto reflections = lightingModel->getReflectionModel( index
+			, uint32_t( RenderPipeline::eBuffers ) );
 		auto backgroundModel = shader::BackgroundModel::createModel( getScene()
 			, writer
 			, utils
 			, index
 			, RenderPipeline::eBuffers );
-		auto reflections = lightingModel->getReflectionModel( index
-			, uint32_t( RenderPipeline::eBuffers ) );
 		shader::GlobalIllumination indirect{ writer, utils };
 		indirect.declare( index
 			, RenderPipeline::eBuffers

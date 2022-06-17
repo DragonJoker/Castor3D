@@ -10,14 +10,13 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/Viewport.hpp"
 
-#include <RenderGraph/RunnablePasses/RenderPass.hpp>
+#include <RenderGraph/RunnablePasses/RenderMesh.hpp>
 
 #include <ashespp/Pipeline/GraphicsPipeline.hpp>
 
 namespace castor3d
 {
 	class BackgroundPassBase
-		: public crg::RenderPass
 	{
 	public:
 		/**
@@ -44,9 +43,8 @@ namespace castor3d
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
-			, SceneBackground & background
-			, VkExtent2D const & size
-			, crg::ImageViewId const * depth );
+			, SceneBackground & background );
+		C3D_API virtual ~BackgroundPassBase() = default;
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -68,43 +66,15 @@ namespace castor3d
 
 	protected:
 		C3D_API bool doIsEnabled()const;
-		C3D_API ashes::PipelineViewportStateCreateInfo doCreateViewportState();
 
 	private:
-		void doSubInitialise();
-		void doSubRecordInto( crg::RecordContext & context
-			, VkCommandBuffer commandBuffer
-			, uint32_t index );
-		void doCreateDescriptorSet();
-		void doResetPipeline();
-
-		virtual void doInitialiseVertexBuffer() = 0;
-		virtual ashes::PipelineShaderStageCreateInfoArray doInitialiseShader() = 0;
-		virtual void doFillDescriptorBindings() = 0;
-		virtual void doCreatePipeline() = 0;
+		virtual void doResetPipeline() = 0;
 
 	protected:
-		struct Vertex
-		{
-			castor::Point3f position;
-		};
-
 		RenderDevice const & m_device;
 		SceneBackground const * m_background;
-		VkExtent2D m_size;
-		crg::ImageViewId const * m_depth;
-		bool m_usesDepth;
 		Viewport m_viewport;
 		OnBackgroundChangedConnection m_onBackgroundChanged;
-		ashes::VertexBufferPtr< Vertex > m_vertexBuffer;
-		ashes::BufferPtr< uint16_t > m_indexBuffer;
-		crg::WriteDescriptorSetArray m_descriptorWrites;
-		crg::VkDescriptorSetLayoutBindingArray m_descriptorBindings;
-		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
-		ashes::PipelineLayoutPtr m_pipelineLayout;
-		ashes::GraphicsPipelinePtr m_pipeline;
-		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
-		ashes::DescriptorSetPtr m_descriptorSet;
 	};
 }
 

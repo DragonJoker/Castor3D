@@ -567,8 +567,8 @@ namespace ocean_fft
 
 		auto index = uint32_t( rdpass::OceanFFTIdx::eCount );
 		doAddShadowBindings( bindings, index );
-		doAddBackgroundBindings( bindings, index );
 		doAddEnvBindings( bindings, index );
+		doAddBackgroundBindings( bindings, index );
 		doAddGIBindings( bindings, index );
 	}
 
@@ -626,8 +626,8 @@ namespace ocean_fft
 			, descriptorWrites
 			, index );
 		doAddShadowDescriptor( descriptorWrites, shadowMaps, index );
-		doAddBackgroundDescriptor( descriptorWrites, shadowMaps, index );
 		doAddEnvDescriptor( descriptorWrites, shadowMaps, index );
+		doAddBackgroundDescriptor( descriptorWrites, shadowMaps, index );
 		doAddGIDescriptor( descriptorWrites, shadowMaps, index );
 	}
 
@@ -1149,13 +1149,13 @@ namespace ocean_fft
 			, index
 			, RenderPipeline::eBuffers
 			, false );
+		auto reflections = lightingModel->getReflectionModel( index
+			, uint32_t( RenderPipeline::eBuffers ) );
 		auto backgroundModel = shader::BackgroundModel::createModel( getScene()
 			, writer
 			, utils
 			, index
 			, RenderPipeline::eBuffers );
-		auto reflections = lightingModel->getReflectionModel( index
-			, uint32_t( RenderPipeline::eBuffers ) );
 		shader::GlobalIllumination indirect{ writer, utils };
 		indirect.declare( index
 			, RenderPipeline::eBuffers
