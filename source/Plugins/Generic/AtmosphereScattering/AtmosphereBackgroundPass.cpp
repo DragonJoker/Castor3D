@@ -130,7 +130,7 @@ namespace atmosphere_scattering
 				, [&]( sdw::Vec2 const & pixPos )
 				{
 					auto targetSize = writer.declLocale( "targetSize"
-						, vec2( sdw::Float{ float( renderSize.width ) }, float( renderSize.height ) ) );
+						, vec2( sdw::Float{ float( renderSize.width + 1u ) }, float( renderSize.height + 1u ) ) );
 
 					if ( colorTransmittance )
 					{

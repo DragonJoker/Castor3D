@@ -67,7 +67,7 @@ namespace atmosphere_scattering
 					, sdw::FragmentOut out )
 				{
 					auto targetSize = writer.declLocale( "targetSize"
-						, vec2( sdw::Float{ float( renderSize.width ) }, float( renderSize.height ) ) );
+						, vec2( sdw::Float{ float( renderSize.width + 1u ) }, float( renderSize.height + 1u ) ) );
 					auto pixPos = writer.declLocale( "pixPos"
 						, in.fragCoord.xy() );
 

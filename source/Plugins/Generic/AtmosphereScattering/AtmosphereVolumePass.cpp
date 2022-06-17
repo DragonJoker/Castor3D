@@ -154,7 +154,7 @@ namespace atmosphere_scattering
 					, sdw::Int sliceId )
 				{
 					auto targetSize = writer.declLocale( "targetSize"
-						, vec2( sdw::Float{ float( renderSize.width ) }, float( renderSize.height ) ) );
+						, vec2( sdw::Float{ float( renderSize.width + 1u ) }, float( renderSize.height + 1u ) ) );
 					auto sampleCountIni = writer.declLocale( "sampleCountIni"
 						, max( 1.0_f, writer.cast< sdw::Float >( sliceId + 1_i ) * 2.0_f ) );
 
