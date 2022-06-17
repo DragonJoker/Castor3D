@@ -53,6 +53,11 @@ namespace atmosphere_scattering
 				, &parserAtmosphereScatteringEnd );
 			addParser( result
 				, uint32_t( AtmosphereSection::eRoot )
+				, cuT( "node" )
+				, &parserNode
+				, { castor::makeParameter< castor::ParameterType::eName >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eRoot )
 				, cuT( "transmittanceResolution" )
 				, &parserTransmittanceResolution
 				, { castor::makeParameter< castor::ParameterType::ePoint2U >() } );

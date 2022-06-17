@@ -37,6 +37,7 @@ namespace atmosphere_scattering
 
 	CU_DeclareAttributeParser( parserAtmosphereScattering )
 	CU_DeclareAttributeParser( parserAtmosphereScatteringEnd )
+	CU_DeclareAttributeParser( parserNode )
 	CU_DeclareAttributeParser( parserTransmittanceResolution )
 	CU_DeclareAttributeParser( parserMultiScatterResolution )
 	CU_DeclareAttributeParser( parserAtmosphereVolumeResolution )
