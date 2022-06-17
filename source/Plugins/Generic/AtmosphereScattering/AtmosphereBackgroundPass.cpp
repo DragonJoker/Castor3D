@@ -91,31 +91,39 @@ namespace atmosphere_scattering
 
 			auto getSunLuminance = writer.implementFunction< sdw::Vec3 >( "getSunLuminance"
 				, [&]( sdw::Vec3 const & worldPos
-					, sdw::Vec3 const & worldDir
-					, sdw::Float const & planetRadius )
+					, sdw::Vec3 const & worldDir )
 				{
 					if ( renderSunDisk )
 					{
-						IF( writer, dot( worldDir, c3d_atmosphereData.sunDirection ) > cos( 0.5_f * 0.505_f * 3.14159_f / 180.0_f ) )
+						auto sunSolidAngle = writer.declLocale( "sunSolidAngle"
+							, 0.53_f * sdw::Float{ castor::Pi< float > } / 180.0_f );
+						auto minSunCosTheta = writer.declLocale( "minSunCosTheta"
+							, cos( sunSolidAngle ) );
+
+						auto cosTheta = writer.declLocale( "cosTheta"
+							, dot( worldDir, c3d_atmosphereData.sunDirection ) );
+
+						IF( writer, cosTheta >= minSunCosTheta )
 						{
-							auto t = writer.declLocale( "t"
-								, atmosphereConfig.raySphereIntersectNearest( worldPos, worldDir, vec3( 0.0_f, 0.0_f, 0.0_f ), planetRadius ) );
-							IF( writer, t < 0.0f ) // no intersection
-							{
-								auto sunLuminance = writer.declLocale( "sunLuminance"
-									, vec3( 1000000.0_f ) ); // arbitrary. But fine, not use when comparing the models
-								writer.returnStmt( sunLuminance );
-							}
-							FI;
+							auto sunLuminance = writer.declLocale( "sunLuminance"
+								, vec3( 1000000.0_f ) ); // arbitrary. But fine, not use when comparing the models
+							writer.returnStmt( sunLuminance );
 						}
 						FI;
+
+						auto offset = writer.declLocale( "offset"
+							, minSunCosTheta - cosTheta );
+						auto gaussianBloom = writer.declLocale( "gaussianBloom"
+							, exp( -offset * 50000.0_f ) * 0.5_f );
+						auto invBloom = writer.declLocale( "invBloom"
+							, 1.0_f / ( 0.02_f + offset * 300.0_f ) * 0.01_f );
+						writer.returnStmt( vec3( gaussianBloom + invBloom ) );
 					}
 
 					writer.returnStmt( vec3( 0.0_f ) );
 				}
 				, sdw::InVec3{ writer, "worldPos" }
-				, sdw::InVec3{ writer, "worldDir" }
-				, sdw::InFloat{ writer, "planetRadius" } );
+				, sdw::InVec3{ writer, "worldDir" } );
 
 			auto aerialPerspectiveDepthToSlice = writer.implementFunction< sdw::Float >( "aerialPerspectiveDepthToSlice"
 				, [&]( sdw::Float const & depth )
@@ -182,7 +190,7 @@ namespace atmosphere_scattering
 
 							atmosphereConfig.skyViewLutParamsToUv( intersectGround, viewZenithCosAngle, lightViewCosAngle, viewHeight, uv, targetSize );
 
-							pxl_luminance = vec4( skyViewMap.lod( uv, 0.0_f ).rgb() + getSunLuminance( worldPos, worldDir, c3d_atmosphereData.bottomRadius ), 1.0_f );
+							pxl_luminance = vec4( skyViewMap.lod( uv, 0.0_f ).rgb() + getSunLuminance( worldPos, worldDir ), 1.0_f );
 							writer.returnStmt();
 						}
 						FI;
@@ -191,7 +199,7 @@ namespace atmosphere_scattering
 					{
 						IF( writer, depthBufferValue == 1.0_f )
 						{
-							L += getSunLuminance( worldPos, worldDir, c3d_atmosphereData.bottomRadius );
+							L += getSunLuminance( worldPos, worldDir );
 						}
 						FI;
 					}
@@ -237,7 +245,7 @@ namespace atmosphere_scattering
 						IF( writer, !atmosphereConfig.moveToTopAtmosphere( worldPos, worldDir ) )
 						{
 							// Ray is not intersecting the atmosphere		
-							pxl_luminance = vec4( getSunLuminance( worldPos, worldDir, c3d_atmosphereData.bottomRadius ), 1.0_f );
+							pxl_luminance = vec4( getSunLuminance( worldPos, worldDir ), 1.0_f );
 							writer.returnStmt();
 						}
 						FI;
