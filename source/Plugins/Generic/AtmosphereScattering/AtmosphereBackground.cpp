@@ -239,7 +239,15 @@ namespace atmosphere_scattering
 			, AtmosphereBackgroundPass::eDepth 
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, linearSampler );
-		pass.addInOutColourView( colour );
+		pass.addInOutColourView( colour
+			, VkPipelineColorBlendAttachmentState{ VK_TRUE
+				, VK_BLEND_FACTOR_ONE
+				, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA
+				, VK_BLEND_OP_ADD
+				, VK_BLEND_FACTOR_ZERO
+				, VK_BLEND_FACTOR_ONE
+				, VK_BLEND_OP_ADD
+				, castor3d::defaultColorWriteMask } );
 		return pass;
 	}
 
@@ -340,7 +348,7 @@ namespace atmosphere_scattering
 			, "Dummy"
 			, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
 			, { SkyTexSize, SkyTexSize, 1u }
-			, 6u
+			, 1u
 			, 1u
 			, VK_FORMAT_B10G11R11_UFLOAT_PACK32
 			, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT

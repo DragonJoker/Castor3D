@@ -318,7 +318,7 @@ namespace atmosphere_scattering
 					, sdw::FragmentOut out )
 				{
 					process( in.fragCoord.xy() );
-					pxl_luminance /= pxl_luminance.a();	// Normalise according to sample count when path tracing
+					pxl_luminance.xyz() /= pxl_luminance.a();	// Normalise according to sample count when path tracing
 
 					// Similar setup to the Bruneton demo
 					auto whitePoint = writer.declLocale( "whitePoint"
@@ -326,7 +326,7 @@ namespace atmosphere_scattering
 					auto exposure = writer.declLocale( "exposure"
 						, 10.0_f );
 					auto hdr = vec3( 1.0_f ) - exp( -pxl_luminance.rgb() / whitePoint * exposure );
-					pxl_luminance = vec4( hdr, 1.0_f );
+					pxl_luminance = vec4( hdr, pxl_luminance.a() );
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
