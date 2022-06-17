@@ -130,8 +130,6 @@ namespace atmosphere_scattering
 			auto apSliceCount = writer.declConstant( "apSliceCount"
 				, 32.0_f );
 
-			auto inViewDir = writer.declInput< sdw::Vec3 >( "inViewDir", 0u );
-
 			// Fragment Outputs
 			auto pxl_colour( writer.declOutput< sdw::Vec4 >( "pxl_colour", 0 ) );
 			auto const M_PI{ sdw::Float{ castor::Pi< float > } };
@@ -155,23 +153,21 @@ namespace atmosphere_scattering
 				, [&]( sdw::Vec2 pixPos
 					, sdw::Int sliceId )
 				{
+					auto targetSize = writer.declLocale( "targetSize"
+						, vec2( sdw::Float{ float( renderSize.width ) }, float( renderSize.height ) ) );
 					auto sampleCountIni = writer.declLocale( "sampleCountIni"
 						, max( 1.0_f, writer.cast< sdw::Float >( sliceId + 1_i ) * 2.0_f ) );
 
 					auto clipSpace = writer.declLocale( "clipSpace"
-						, vec3( ( pixPos / vec2( sdw::Float{ float( renderSize.width ) }, float( renderSize.height ) ) ) * vec2( 2.0_f, -2.0_f ) - vec2( 1.0_f, -1.0_f ), 0.5_f ) );
+						, vec3( ( pixPos / targetSize ) * vec2( 2.0_f, -2.0_f ) - vec2( 1.0_f, -1.0_f ), 0.5_f ) );
 					auto hPos = writer.declLocale( "hPos"
 						, c3d_cameraData.projToWorld( vec4( clipSpace, 1.0_f ) ) );
 					auto worldDir = writer.declLocale( "worldDir"
 						, normalize( hPos.xyz() / hPos.w() - c3d_cameraData.position ) );
 					auto earthR = writer.declLocale( "earthR"
 						, c3d_atmosphereData.bottomRadius );
-					auto earthO = writer.declLocale( "earthO"
-						, vec3( 0.0_f, 0.0_f, -earthR ) );
 					auto camPos = writer.declLocale( "camPos"
-						, c3d_cameraData.position + vec3( 0.0_f, 0.0_f, earthR ) );
-					auto sunDir = writer.declLocale( "sunDir"
-						, c3d_atmosphereData.sunDirection );
+						, c3d_cameraData.position + vec3( 0.0_f, earthR, 0.0_f ) );
 					auto sunLuminance = writer.declLocale( "sunLuminance"
 						, 0.0_f );
 
@@ -239,13 +235,13 @@ namespace atmosphere_scattering
 						, atmosphereConfig.integrateScatteredLuminance( pixPos
 							, worldPos
 							, worldDir
-							, sunDir
+							, c3d_atmosphereData.sunDirection
 							, sampleCountIni
 							, depthBufferValue
 							, tMaxMax ) );
 
 					auto transmittance = writer.declLocale( "transmittance"
-						, dot( ss.transmittance, vec3( 1.0_f / 3.0_f, 1.0_f / 3.0_f, 1.0_f / 3.0_f ) ) );
+						, dot( ss.transmittance, vec3( 1.0_f / 3.0_f ) ) );
 					writer.returnStmt( vec4( ss.luminance, 1.0_f - transmittance ) );
 				}
 				, sdw::InVec2{ writer, "pixPos" }

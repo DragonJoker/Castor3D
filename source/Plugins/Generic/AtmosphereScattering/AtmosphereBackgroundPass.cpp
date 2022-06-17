@@ -138,14 +138,14 @@ namespace atmosphere_scattering
 					}
 
 					auto clipSpace = writer.declLocale( "clipSpace"
-						, vec3( ( pixPos / targetSize ) * vec2( 2.0_f, -2.0_f ) - vec2( 1.0_f, -1.0_f ), 1.0_f ) );
+						, vec3( ( pixPos / targetSize ) * vec2( 2.0_f, 2.0_f ) - vec2( 1.0_f, 1.0_f ), 1.0_f ) );
 					auto hPos = writer.declLocale( "hPos"
 						, c3d_cameraData.projToWorld( vec4( clipSpace, 1.0_f ) ) );
 
 					auto worldDir = writer.declLocale( "worldDir"
 						, normalize( hPos.xyz() / hPos.w() - c3d_cameraData.position ) );
 					auto worldPos = writer.declLocale( "worldPos"
-						, c3d_cameraData.position + vec3( 0.0_f, 0.0_f, c3d_atmosphereData.bottomRadius ) );
+						, c3d_cameraData.position + vec3( 0.0_f, c3d_atmosphereData.bottomRadius, 0.0_f ) );
 
 					auto depthBufferValue = writer.declLocale( "depthBufferValue"
 						, -1.0_f );
@@ -200,12 +200,12 @@ namespace atmosphere_scattering
 					{
 						CU_Require( !colorTransmittance
 							&& "The FASTAERIALPERSPECTIVE_ENABLED path does not support COLORED_TRANSMITTANCE_ENABLED." );
-						clipSpace = vec3( ( pixPos / targetSize ) * vec2( 2.0_f, -2.0_f ) - vec2( 1.0_f, -1.0_f ), depthBufferValue );
+						clipSpace.z() = depthBufferValue;
 						auto depthBufferWorldPos = writer.declLocale( "depthBufferWorldPos"
 							, c3d_cameraData.projToWorld( vec4( clipSpace, 1.0_f ) ) );
 						depthBufferWorldPos /= depthBufferWorldPos.w();
 						auto tDepth = writer.declLocale( "tDepth"
-							, length( depthBufferWorldPos.xyz() - ( worldPos + vec3( 0.0_f, 0.0_f, -c3d_atmosphereData.bottomRadius ) ) ) );
+							, length( depthBufferWorldPos.xyz() - ( worldPos + vec3( 0.0_f, -c3d_atmosphereData.bottomRadius, 0.0_f ) ) ) );
 						auto slice = writer.declLocale( "slice"
 							, aerialPerspectiveDepthToSlice( tDepth ) );
 						auto weight = writer.declLocale( "weight"
@@ -262,7 +262,7 @@ namespace atmosphere_scattering
 						else
 						{
 							auto transmittance = writer.declLocale( "transmittance"
-								, dot( throughput, vec3( 1.0_f / 3.0_f, 1.0_f / 3.0_f, 1.0_f / 3.0_f ) ) );
+								, dot( throughput, vec3( 1.0_f / 3.0_f ) ) );
 							pxl_luminance = vec4( L, 1.0_f - transmittance );
 						}
 					}

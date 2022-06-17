@@ -68,6 +68,24 @@ namespace atmosphere_scattering
 				, { transmittanceExtent.width, transmittanceExtent.height }
 				, &transmittanceMap };
 
+			auto getSphericalDir = writer.implementFunction< sdw::Vec3 >( "getSphericalDir"
+				, [&]( sdw::Float const & theta
+					, sdw::Float const & phi )
+				{
+					auto cosPhi = writer.declLocale( "cosPhi"
+						, cos( phi ) );
+					auto sinPhi = writer.declLocale( "sinPhi"
+						, sin( phi ) );
+					auto cosTheta = writer.declLocale( "cosTheta"
+						, cos( theta ) );
+					auto sinTheta = writer.declLocale( "sinTheta"
+						, sin( theta ) );
+					//writer.returnStmt( vec3( cosTheta * sinPhi, sinTheta * sinPhi, cosPhi );
+					writer.returnStmt( vec3( sinTheta * sinPhi, cosPhi, cosTheta * sinPhi ) );
+				}
+				, sdw::InFloat{ writer, "theta" }
+				, sdw::InFloat{ writer, "phi" } );
+
 			writer.implementMainT< sdw::VoidT >( sdw::ComputeIn{ writer, 1u, 1u, 64u }
 				, [&]( sdw::ComputeIn in )
 				{
@@ -81,18 +99,18 @@ namespace atmosphere_scattering
 
 					auto cosSunZenithAngle = writer.declLocale( "cosSunZenithAngle"
 						, fma( uv.x(), 2.0_f, -1.0_f ) );
+					auto sinSunZenithAngle = writer.declLocale( "sinSunZenithAngle"
+						, sqrt( clamp( 1.0_f - cosSunZenithAngle * cosSunZenithAngle, 0.0_f, 1.0_f ) ) );
 					auto sunDir = writer.declLocale( "sunDir"
-						, vec3( 0.0_f
-							, sqrt( clamp( 1.0_f - cosSunZenithAngle * cosSunZenithAngle, 0.0_f, 1.0_f ) )
-							, cosSunZenithAngle ) );
+						, vec3( 0.0_f, cosSunZenithAngle, -sinSunZenithAngle ) );
 					// We adjust again viewHeight according to PLANET_RADIUS_OFFSET to be in a valid range.
 					auto viewHeight = writer.declLocale( "viewHeight"
 						, c3d_atmosphereData.bottomRadius + clamp( uv.y() + planetRadiusOffset, 0.0_f, 1.0_f ) * ( c3d_atmosphereData.topRadius - c3d_atmosphereData.bottomRadius - planetRadiusOffset ) );
 
 					auto worldPos = writer.declLocale( "worldPos"
-						, vec3( 0.0_f, 0.0_f, viewHeight ) );
+						, vec3( 0.0_f, viewHeight, 0.0_f ) );
 					auto worldDir = writer.declLocale( "worldDir"
-						, vec3( 0.0_f, 0.0_f, 1.0_f ) );
+						, vec3( 0.0_f, 1.0_f, 0.0_f ) );
 
 					// Reference. Since there are many sample, it requires MULTI_SCATTERING_POWER_SERIE to be true for accuracy and to avoid divergences (see declaration for explanations)
 					auto sqrtSampleCount = 8_u;
@@ -111,17 +129,7 @@ namespace atmosphere_scattering
 							, 2.0_f * PI * randA );
 						auto phi = writer.declLocale( "phi"
 							, PI * randB );
-						auto cosPhi = writer.declLocale( "cosPhi"
-							, cos( phi ) );
-						auto sinPhi = writer.declLocale( "sinPhi"
-							, sin( phi ) );
-						auto cosTheta = writer.declLocale( "cosTheta"
-							, cos( theta ) );
-						auto sinTheta = writer.declLocale( "sinTheta"
-							, sin( theta ) );
-						worldDir.x() = cosTheta * sinPhi;
-						worldDir.y() = sinTheta * sinPhi;
-						worldDir.z() = cosPhi;
+						worldDir = getSphericalDir( theta, phi );
 						auto result = writer.declLocale( "result"
 							, atmosphereConfig.integrateScatteredLuminance( pixPos
 								, worldPos

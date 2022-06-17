@@ -66,21 +66,25 @@ namespace atmosphere_scattering
 				, [&]( sdw::FragmentIn in
 					, sdw::FragmentOut out )
 				{
+					auto targetSize = writer.declLocale( "targetSize"
+						, vec2( sdw::Float{ float( renderSize.width ) }, float( renderSize.height ) ) );
 					auto pixPos = writer.declLocale( "pixPos"
 						, in.fragCoord.xy() );
 
 					// Compute camera position from LUT coords
 					auto uv = writer.declLocale( "uv"
-						, pixPos / vec2( sdw::Float{ float( renderSize.width ) }, float( renderSize.height ) ) );
+						, pixPos / targetSize );
 					auto viewHeight = writer.declLocale< sdw::Float > ( "viewHeight" );
 					auto viewZenithCosAngle = writer.declLocale< sdw::Float >( "viewZenithCosAngle" );
 					atmosphereConfig.uvToLutTransmittanceParams( viewHeight, viewZenithCosAngle, uv );
+					auto viewZenithSinAngle = writer.declLocale< sdw::Float >( "viewZenithSinAngle"
+						, sqrt( 1.0_f - viewZenithCosAngle * viewZenithCosAngle ) );
 
 					//  A few extra needed constants
 					auto worldPos = writer.declLocale( "worldPos"
-						, vec3( 0.0_f, 0.0_f, viewHeight ) );
+						, vec3( 0.0_f, viewHeight, 0.0_f ) );
 					auto worldDir = writer.declLocale( "worldDir"
-						, vec3( 0.0_f, sqrt( 1.0_f - viewZenithCosAngle * viewZenithCosAngle ), viewZenithCosAngle ) );
+						, vec3( 0.0_f, viewZenithCosAngle, -viewZenithSinAngle ) );
 
 					auto transmittance = writer.declLocale( "transmittance"
 						, exp( -atmosphereConfig.integrateScatteredLuminance( pixPos
@@ -90,7 +94,7 @@ namespace atmosphere_scattering
 							, sampleCountIni
 							, depthBufferValue ).opticalDepth ) );
 
-					// Opetical depth to transmittance
+					// Optical depth to transmittance
 					pxl_colour = vec4( transmittance, 1.0f );
 				} );
 
