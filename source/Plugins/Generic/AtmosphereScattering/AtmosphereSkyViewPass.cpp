@@ -98,7 +98,7 @@ namespace atmosphere_scattering
 					auto worldDir = writer.declLocale( "worldDir"
 						, normalize( hPos.xyz() / hPos.w() - c3d_cameraData.position ) );
 					auto worldPos = writer.declLocale( "worldPos"
-						, c3d_cameraData.position + vec3( 0.0_f, 0.0_f, c3d_atmosphereData.bottomRadius ) );
+						, c3d_cameraData.position + vec3( 0.0_f, c3d_atmosphereData.bottomRadius, 0.0_f ) );
 
 					auto viewHeight = writer.declLocale( "viewHeight"
 						, length( worldPos ) );
@@ -106,6 +106,8 @@ namespace atmosphere_scattering
 					auto viewZenithCosAngle = writer.declLocale< sdw::Float >( "viewZenithCosAngle" );
 					auto lightViewCosAngle = writer.declLocale< sdw::Float >( "lightViewCosAngle" );
 					atmosphereConfig.uvToSkyViewLutParams( viewZenithCosAngle, lightViewCosAngle, viewHeight, uv, targetSize );
+					auto lightViewSinAngle = writer.declLocale( "lightViewSinAngle"
+						, sqrt( 1.0_f - lightViewCosAngle * lightViewCosAngle ) );
 
 					auto sunDir = writer.declLocale< sdw::Vec3 >( "sunDir" );
 					{
@@ -113,17 +115,18 @@ namespace atmosphere_scattering
 							, worldPos / viewHeight );
 						auto sunZenithCosAngle = writer.declLocale( "sunZenithCosAngle"
 							, dot( upVector, c3d_atmosphereData.sunDirection ) );
-						sunDir = normalize( vec3( sqrt( 1.0_f - sunZenithCosAngle * sunZenithCosAngle ), 0.0_f, sunZenithCosAngle ) );
+						auto sunZenithSinAngle = writer.declLocale( "sunZenithSinAngle"
+							, sqrt( 1.0_f - sunZenithCosAngle * sunZenithCosAngle ) );
+						sunDir = normalize( vec3( sunZenithSinAngle, sunZenithCosAngle, 0.0_f ) );
 					}
 
-					worldPos = vec3( 0.0_f, 0.0_f, viewHeight );
+					worldPos = vec3( 0.0_f, viewHeight, 0.0_f );
 
 					auto viewZenithSinAngle = writer.declLocale( "viewZenithSinAngle"
 						, sqrt( 1.0_f - viewZenithCosAngle * viewZenithCosAngle ) );
 					worldDir = vec3( viewZenithSinAngle * lightViewCosAngle
-						, viewZenithSinAngle * sqrt( 1.0_f - lightViewCosAngle * lightViewCosAngle )
-						, viewZenithCosAngle );
-
+						, viewZenithCosAngle
+						, -viewZenithSinAngle * lightViewSinAngle );
 
 					// Move to top atmospehre
 					IF( writer, !atmosphereConfig.moveToTopAtmosphere( worldPos, worldDir ) )

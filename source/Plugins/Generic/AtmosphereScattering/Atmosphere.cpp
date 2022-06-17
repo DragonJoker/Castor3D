@@ -237,7 +237,7 @@ namespace atmosphere_scattering
 								depthBufferWorldPos /= depthBufferWorldPos.w();
 
 								auto tDepth = writer.declLocale( "tDepth"
-									, length( depthBufferWorldPos.xyz() - ( worldPos + vec3( 0.0_f, 0.0_f, -atmosphereData.bottomRadius ) ) ) ); // apply earth offset to go back to origin as top of earth mode. 
+									, length( depthBufferWorldPos.xyz() - ( worldPos + vec3( 0.0_f, -atmosphereData.bottomRadius, 0.0_f ) ) ) ); // apply earth offset to go back to origin as top of earth mode. 
 
 								IF( writer, tDepth < tMax )
 								{

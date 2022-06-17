@@ -368,7 +368,6 @@ namespace atmosphere_scattering
 	{
 		m_atmosphereUbo->cpuUpdate( m_config );
 		m_cameraUbo->cpuUpdate( *updater.camera, updater.isSafeBanded );
-		auto viewProj = updater.bgMtxProj * updater.bgMtxView;
 	}
 
 	void AtmosphereBackground::doGpuUpdate( castor3d::GpuUpdater & updater )const

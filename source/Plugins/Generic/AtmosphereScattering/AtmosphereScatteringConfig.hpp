@@ -38,7 +38,7 @@ namespace atmosphere_scattering
 
 	struct AtmosphereScatteringConfig
 	{
-		castor::Point4f sunDirection{ 1.0f, 0.0f, 0.0f, -70.0_degrees };
+		castor::Point4f sunDirection{ 1.0f, 0.0f, 0.0f, -20.0_degrees };
 
 		// The solar irradiance at the top of the atmosphere.
 		castor::Point3f solarIrradiance{ 1.0f, 1.0f, 1.0f };
