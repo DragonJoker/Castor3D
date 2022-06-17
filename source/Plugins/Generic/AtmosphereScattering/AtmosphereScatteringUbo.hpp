@@ -18,30 +18,6 @@ See LICENSE file in root folder
 
 namespace atmosphere_scattering
 {
-	struct CameraData
-		: public sdw::StructInstance
-	{
-		CameraData( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled );
-
-		SDW_DeclStructInstance( , CameraData );
-
-		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-
-	private:
-		using sdw::StructInstance::getMember;
-		using sdw::StructInstance::getMemberArray;
-
-	public:
-		sdw::Mat4 invViewProj;
-		sdw::Vec3 position;
-
-	public:
-		static const castor::String Buffer;
-		static const castor::String Data;
-	};
-
 	struct AtmosphereData
 		: public sdw::StructInstance
 	{
@@ -172,11 +148,6 @@ namespace atmosphere_scattering
 		castor3d::UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
-
-#define C3D_Camera( writer, binding, set )\
-	auto cameraBuffer = writer.declUniformBuffer<>( atmosphere_scattering::CameraData::Buffer, binding, set );\
-	auto c3d_cameraData = cameraBuffer.declMember< atmosphere_scattering::CameraData >( atmosphere_scattering::CameraData::Data );\
-	cameraBuffer.end()
 
 #define C3D_AtmosphereScattering( writer, binding, set )\
 	auto atmosphereBuffer = writer.declUniformBuffer<>( atmosphere_scattering::AtmosphereScatteringUbo::Buffer, binding, set );\

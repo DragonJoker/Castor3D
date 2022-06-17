@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3DAS_AtmosphereBackground_H___
 #define ___C3DAS_AtmosphereBackground_H___
 
+#include "AtmosphereCameraUbo.hpp"
 #include "AtmosphereMultiScatteringPass.hpp"
 #include "AtmosphereSkyViewPass.hpp"
 #include "AtmosphereTransmittancePass.hpp"
@@ -15,41 +16,6 @@ See LICENSE file in root folder
 
 namespace atmosphere_scattering
 {
-	class AtmosphereBackgroundModel
-		: public castor3d::shader::BackgroundModel
-	{
-	public:
-		AtmosphereBackgroundModel( sdw::ShaderWriter & writer
-			, castor3d::shader::Utils & utils
-			, uint32_t & binding
-			, uint32_t set );
-
-		static castor3d::shader::BackgroundModelPtr create( sdw::ShaderWriter & writer
-			, castor3d::shader::Utils & utils
-			, uint32_t & binding
-			, uint32_t set );
-
-		sdw::Vec3 computeReflections( sdw::Vec3 const & wsIncident
-			, sdw::Vec3 const & wsNormal
-			, castor3d::shader::LightMaterial const & material
-			, sdw::CombinedImage2DRg32 const & brdf )override;
-		sdw::Vec3 computeRefractions( sdw::Vec3 const & wsIncident
-			, sdw::Vec3 const & wsNormal
-			, sdw::Float const & refractionRatio
-			, sdw::Vec3 const & transmission
-			, castor3d::shader::LightMaterial const & material )override;
-		sdw::Void mergeReflRefr( sdw::Vec3 const & wsIncident
-			, sdw::Vec3 const & wsNormal
-			, sdw::Float const & refractionRatio
-			, sdw::Vec3 const & transmission
-			, castor3d::shader::LightMaterial const & material
-			, sdw::Vec3 & reflection
-			, sdw::Vec3 & refraction )override;
-
-	public:
-		static castor::String const Name;
-	};
-
 	class AtmosphereBackground
 		: public castor3d::SceneBackground
 	{
@@ -184,17 +150,17 @@ namespace atmosphere_scattering
 
 	private:
 		AtmosphereScatteringConfig m_config;
-		mutable castor3d::UniformBufferOffsetT< CameraConfig > m_cameraUbo;
 		crg::ImageViewId m_depthView;
 		castor3d::Texture m_transmittance;
 		castor3d::Texture m_multiScatter;
 		castor3d::Texture m_skyView;
 		castor3d::Texture m_volume;
+		std::unique_ptr< AtmosphereScatteringUbo > m_atmosphereUbo;
+		std::unique_ptr< CameraUbo > m_cameraUbo;
 		std::unique_ptr< AtmosphereTransmittancePass > m_transmittancePass;
 		std::unique_ptr< AtmosphereMultiScatteringPass > m_multiScatteringPass;
 		std::unique_ptr< AtmosphereSkyViewPass > m_skyViewPass;
 		std::unique_ptr< AtmosphereVolumePass > m_volumePass;
-		std::unique_ptr< AtmosphereScatteringUbo > m_atmosphereUbo;
 	};
 }
 

@@ -1,6 +1,7 @@
 #include "AtmosphereScattering/AtmosphereScatteringPrerequisites.hpp"
 
 #include "AtmosphereScattering/AtmosphereBackground.hpp"
+#include "AtmosphereScattering/AtmosphereBackgroundModel.hpp"
 #include "AtmosphereScattering/AtmosphereScattering_Parsers.hpp"
 
 #include <Castor3D/Engine.hpp>

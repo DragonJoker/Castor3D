@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3DAS_AtmosphereConfig_H___
 #define ___C3DAS_AtmosphereConfig_H___
 
+#include "AtmosphereCameraUbo.hpp"
 #include "AtmosphereScatteringUbo.hpp"
 
 #include <Castor3D/Shader/Ubos/MatrixUbo.hpp>

@@ -2,6 +2,7 @@
 
 #include "AtmosphereScattering/Atmosphere.hpp"
 #include "AtmosphereScattering/AtmosphereScatteringUbo.hpp"
+#include "AtmosphereScattering/AtmosphereCameraUbo.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Render/RenderDevice.hpp>
@@ -160,7 +161,7 @@ namespace atmosphere_scattering
 					auto clipSpace = writer.declLocale( "clipSpace"
 						, vec3( ( pixPos / vec2( sdw::Float{ float( renderSize.width ) }, float( renderSize.height ) ) ) * vec2( 2.0_f, -2.0_f ) - vec2( 1.0_f, -1.0_f ), 0.5_f ) );
 					auto hPos = writer.declLocale( "hPos"
-						, c3d_cameraData.invViewProj * vec4( clipSpace, 1.0_f ) );
+						, c3d_cameraData.projToWorld( vec4( clipSpace, 1.0_f ) ) );
 					auto worldDir = writer.declLocale( "worldDir"
 						, normalize( hPos.xyz() / hPos.w() - c3d_cameraData.position ) );
 					auto earthR = writer.declLocale( "earthR"
@@ -267,7 +268,7 @@ namespace atmosphere_scattering
 	AtmosphereVolumePass::AtmosphereVolumePass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
 		, castor3d::RenderDevice const & device
-		, castor3d::UniformBufferOffsetT< CameraConfig > const & cameraUbo
+		, CameraUbo const & cameraUbo
 		, AtmosphereScatteringUbo const & atmosphereUbo
 		, crg::ImageViewId const & transmittanceView
 		, crg::ImageViewId const & resultView
@@ -297,7 +298,6 @@ namespace atmosphere_scattering
 			} );
 		pass.addDependencies( previousPasses );
 		cameraUbo.createPassBinding( pass
-			, "Camera"
 			, volume::eCamera );
 		atmosphereUbo.createPassBinding( pass
 			, volume::eAtmosphere );

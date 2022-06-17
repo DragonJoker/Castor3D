@@ -1,7 +1,5 @@
 #include "AtmosphereScattering/Atmosphere.hpp"
 
-#include <Castor3D/Shader/Ubos/MatrixUbo.hpp>
-
 #include <ShaderWriter/Source.hpp>
 
 #define NONLINEARSKYVIEWLUT 1
@@ -235,7 +233,7 @@ namespace atmosphere_scattering
 							IF( writer, clipSpace.z() < 1.0f )
 							{
 								auto depthBufferWorldPos = writer.declLocale( "depthBufferWorldPos"
-									, luminanceSettings.cameraData->invViewProj * vec4( clipSpace, 1.0f ) );
+									, luminanceSettings.cameraData->projToWorld( vec4( clipSpace, 1.0f ) ) );
 								depthBufferWorldPos /= depthBufferWorldPos.w();
 
 								auto tDepth = writer.declLocale( "tDepth"

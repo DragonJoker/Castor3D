@@ -22,7 +22,7 @@ namespace atmosphere_scattering
 		AtmosphereVolumePass( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
 			, castor3d::RenderDevice const & device
-			, castor3d::UniformBufferOffsetT< CameraConfig > const & cameraUbo
+			, CameraUbo const & cameraUbo
 			, AtmosphereScatteringUbo const & atmosphereUbo
 			, crg::ImageViewId const & transmittanceView
 			, crg::ImageViewId const & resultView
