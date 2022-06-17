@@ -148,7 +148,7 @@ namespace atmosphere_scattering
 					auto clipSpace = writer.declLocale( "clipSpace"
 						, vec3( ( pixPos / targetSize ) * vec2( 2.0_f, 2.0_f ) - vec2( 1.0_f, 1.0_f ), 1.0_f ) );
 					auto hPos = writer.declLocale( "hPos"
-						, c3d_cameraData.projToWorld( vec4( clipSpace, 1.0_f ) ) );
+						, c3d_cameraData.camProjToWorld( vec4( clipSpace, 1.0_f ) ) );
 
 					auto worldDir = writer.declLocale( "worldDir"
 						, normalize( hPos.xyz() / hPos.w() - c3d_cameraData.position ) );
@@ -166,7 +166,7 @@ namespace atmosphere_scattering
 
 					if ( fastSky )
 					{
-						IF( writer, viewHeight < c3d_atmosphereData.topRadius && depthBufferValue == 1.0_f )
+						IF( writer, viewHeight < c3d_atmosphereData.topRadius && depthBufferValue >= 1.0_f )
 						{
 							auto uv = writer.declLocale< sdw::Vec2 >( "uv" );
 							auto upVector = writer.declLocale( "upVector"
@@ -197,7 +197,7 @@ namespace atmosphere_scattering
 					}
 					else
 					{
-						IF( writer, depthBufferValue == 1.0_f )
+						IF( writer, depthBufferValue >= 1.0_f )
 						{
 							L += getSunLuminance( worldPos, worldDir );
 						}
@@ -208,12 +208,12 @@ namespace atmosphere_scattering
 					{
 						CU_Require( !colorTransmittance
 							&& "The FASTAERIALPERSPECTIVE_ENABLED path does not support COLORED_TRANSMITTANCE_ENABLED." );
-						clipSpace.z() = depthBufferValue;
 						auto depthBufferWorldPos = writer.declLocale( "depthBufferWorldPos"
-							, c3d_cameraData.projToWorld( vec4( clipSpace, 1.0_f ) ) );
-						depthBufferWorldPos /= depthBufferWorldPos.w();
+							, atmosphereConfig.getWorldPos( depthBufferValue
+								, pixPos
+								, targetSize ) );
 						auto tDepth = writer.declLocale( "tDepth"
-							, length( depthBufferWorldPos.xyz() - ( worldPos + vec3( 0.0_f, -c3d_atmosphereData.bottomRadius, 0.0_f ) ) ) );
+							, length( depthBufferWorldPos - ( worldPos + vec3( 0.0_f, -c3d_atmosphereData.bottomRadius, 0.0_f ) ) ) );
 						auto slice = writer.declLocale( "slice"
 							, aerialPerspectiveDepthToSlice( tDepth ) );
 						auto weight = writer.declLocale( "weight"

@@ -136,6 +136,10 @@ namespace atmosphere_scattering
 		sdw::Float fromUnitToSubUvs( sdw::Float u, sdw::Float resolution );
 		sdw::Float fromSubUvsToUnit( sdw::Float u, sdw::Float resolution );
 
+		sdw::Vec3 getWorldPos( sdw::Float const & depth
+			, sdw::Vec2 const & pixPos
+			, sdw::Vec2 const & texSize );
+
 		////////////////////////////////////////////////////////////
 		// LUT functions
 		////////////////////////////////////////////////////////////
@@ -222,6 +226,10 @@ namespace atmosphere_scattering
 			, sdw::InFloat > m_getMultipleScattering;
 		sdw::Function< sdw::Float
 			, sdw::InVec3 > m_getShadow;
+		sdw::Function< sdw::Vec3
+			, sdw::InFloat
+			, sdw::InVec2
+			, sdw::InVec2 > m_getWorldPos;
 	};
 }
 

@@ -93,7 +93,7 @@ namespace atmosphere_scattering
 					auto clipSpace = writer.declLocale( "clipSpace"
 						, vec3( uv * vec2( 2.0_f, -2.0_f ) - vec2( 1.0_f, -1.0_f ), 1.0_f ) );
 					auto hPos = writer.declLocale( "hPos"
-						, c3d_cameraData.projToWorld( vec4( clipSpace, 1.0_f ) ) );
+						, c3d_cameraData.camProjToWorld( vec4( clipSpace, 1.0_f ) ) );
 
 					auto worldDir = writer.declLocale( "worldDir"
 						, normalize( hPos.xyz() / hPos.w() - c3d_cameraData.position ) );

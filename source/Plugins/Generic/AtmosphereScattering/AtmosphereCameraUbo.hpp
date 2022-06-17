@@ -18,6 +18,13 @@ See LICENSE file in root folder
 
 namespace atmosphere_scattering
 {
+	struct CameraConfig
+	{
+		castor::Matrix4x4f camInvViewProj;
+		castor::Matrix4x4f objInvViewProj;
+		castor::Point3f position;
+	};
+
 	struct CameraData
 		: public sdw::StructInstance
 	{
@@ -29,7 +36,8 @@ namespace atmosphere_scattering
 
 		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 
-		sdw::Vec4 projToWorld( sdw::Vec4 const & pos )const;
+		sdw::Vec4 camProjToWorld( sdw::Vec4 const & pos )const;
+		sdw::Vec4 objProjToWorld( sdw::Vec4 const & pos )const;
 
 	private:
 		using sdw::StructInstance::getMember;
@@ -37,7 +45,8 @@ namespace atmosphere_scattering
 
 	private:
 		mutable uint32_t index{};
-		sdw::Mat4 invViewProj;
+		sdw::Mat4 camInvViewProj;
+		sdw::Mat4 objInvViewProj;
 	public:
 		sdw::Vec3 position;
 	};
