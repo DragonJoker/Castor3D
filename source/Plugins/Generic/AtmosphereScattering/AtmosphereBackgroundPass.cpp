@@ -89,6 +89,24 @@ namespace atmosphere_scattering
 				, { transmittanceExtent.width, transmittanceExtent.height }
 				, &transmittanceMap };
 
+			auto getValFromTLUT = writer.implementFunction< sdw::Vec3 >( "getValFromTLUT"
+				, [&]( sdw::Vec3 const & pos
+					, sdw::Vec3 const & sunDir )
+				{
+					auto height = writer.declLocale( "height"
+						, length( pos ) );
+					auto up = writer.declLocale( "up"
+						, pos / height );
+					auto sunCosZenithAngle = writer.declLocale( "sunCosZenithAngle"
+						, dot( sunDir, up ) );
+					auto uv = writer.declLocale( "uv"
+						, vec2( clamp( 0.5_f + 0.5_f * sunCosZenithAngle, 0.0_f, 1.0_f )
+							, max( 0.0_f, min( 1.0_f, ( height - c3d_atmosphereData.bottomRadius ) / ( c3d_atmosphereData.topRadius - c3d_atmosphereData.bottomRadius ) ) ) ) );
+					writer.returnStmt( transmittanceMap.lod( uv, 0.0_f ).rgb() );
+				}
+				, sdw::InVec3{ writer, "pos" }
+				, sdw::InVec3{ writer, "sunDir" } );
+
 			auto getSunLuminance = writer.implementFunction< sdw::Vec3 >( "getSunLuminance"
 				, [&]( sdw::Vec3 const & worldPos
 					, sdw::Vec3 const & worldDir )
@@ -99,25 +117,42 @@ namespace atmosphere_scattering
 							, 0.53_f * sdw::Float{ castor::Pi< float > } / 180.0_f );
 						auto minSunCosTheta = writer.declLocale( "minSunCosTheta"
 							, cos( sunSolidAngle ) );
-
 						auto cosTheta = writer.declLocale( "cosTheta"
 							, dot( worldDir, c3d_atmosphereData.sunDirection ) );
+						auto sunLuminance = writer.declLocale( "sunLuminance"
+							, vec3( 1000000.0_f ) ); // arbitrary. But fine, not use when comparing the models
 
-						IF( writer, cosTheta >= minSunCosTheta )
+						IF( writer, cosTheta < minSunCosTheta )
 						{
-							auto sunLuminance = writer.declLocale( "sunLuminance"
-								, vec3( 1000000.0_f ) ); // arbitrary. But fine, not use when comparing the models
-							writer.returnStmt( sunLuminance );
+							auto offset = writer.declLocale( "offset"
+								, minSunCosTheta - cosTheta );
+							auto gaussianBloom = writer.declLocale( "gaussianBloom"
+								, exp( -offset * 50000.0_f ) * 0.5_f );
+							auto invBloom = writer.declLocale( "invBloom"
+								, 1.0_f / ( 0.02_f + offset * 300.0_f ) * 0.01_f );
+							sunLuminance = vec3( gaussianBloom + invBloom );
 						}
 						FI;
 
-						auto offset = writer.declLocale( "offset"
-							, minSunCosTheta - cosTheta );
-						auto gaussianBloom = writer.declLocale( "gaussianBloom"
-							, exp( -offset * 50000.0_f ) * 0.5_f );
-						auto invBloom = writer.declLocale( "invBloom"
-							, 1.0_f / ( 0.02_f + offset * 300.0_f ) * 0.01_f );
-						writer.returnStmt( vec3( gaussianBloom + invBloom ) );
+						// Use smoothstep to limit the effect, so it drops off to actual zero.
+						sunLuminance = smoothStep( vec3( 0.002_f ), vec3( 1.0_f ), sunLuminance );
+
+						IF( writer, length( sunLuminance ) > 0.0_f )
+						{
+							IF( writer, atmosphereConfig.raySphereIntersectNearest( worldPos, worldDir, vec3( 0.0_f ), c3d_atmosphereData.bottomRadius ) >= 0.0_f )
+							{
+								sunLuminance *= vec3( 0.0_f );
+							}
+							ELSE
+							{
+								 // If the sun value is applied to this pixel, we need to calculate the transmittance to obscure it.
+								sunLuminance *= getValFromTLUT( worldPos, c3d_atmosphereData.sunDirection );
+							}
+							FI;
+						}
+						FI;
+
+						writer.returnStmt( sunLuminance );
 					}
 
 					writer.returnStmt( vec3( 0.0_f ) );
