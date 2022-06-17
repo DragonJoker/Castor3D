@@ -2,6 +2,7 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Buffer/UniformBufferPool.hpp>
+#include <Castor3D/Scene/SceneNode.hpp>
 
 #include <CastorUtils/Graphics/Size.hpp>
 
@@ -147,18 +148,18 @@ namespace atmosphere_scattering
 		m_device.uboPool->putBuffer( m_ubo );
 	}
 
-	void AtmosphereScatteringUbo::cpuUpdate( Configuration const & config )
+	void AtmosphereScatteringUbo::cpuUpdate( Configuration const & config
+		, castor3d::SceneNode const & node )
 	{
 		auto & data = m_ubo.getData();
 		data = config;
 
-		auto sunOrientation = castor::Quaternion::fromAxisAngle( castor::Point3f{ data.sunDirection }
-			, castor::Angle::fromRadians( data.sunDirection->w ) );
-		auto front = castor::Point3f{ 0.0f, 0.0f, 1.0f };
-		sunOrientation.transform( front, front );
-		data.sunDirection->x = front->x;
-		data.sunDirection->y = front->y;
-		data.sunDirection->z = front->z;
+		auto direction = castor::Point3f{ 0, 0, 1 };
+		node.getDerivedOrientation().transform( direction, direction );
+		castor::point::normalise( direction );
+		data.sunDirection->x = -direction->x;
+		data.sunDirection->y = -direction->y;
+		data.sunDirection->z = -direction->z;
 
 		data.sunIlluminance *= data.sunIlluminanceScale;
 

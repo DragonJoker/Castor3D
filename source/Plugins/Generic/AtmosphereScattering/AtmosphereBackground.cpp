@@ -366,7 +366,8 @@ namespace atmosphere_scattering
 
 	void AtmosphereBackground::doCpuUpdate( castor3d::CpuUpdater & updater )const
 	{
-		m_atmosphereUbo->cpuUpdate( m_config );
+		CU_Require( m_node );
+		m_atmosphereUbo->cpuUpdate( m_config, *m_node );
 		m_cameraUbo->cpuUpdate( *updater.camera, updater.isSafeBanded );
 	}
 

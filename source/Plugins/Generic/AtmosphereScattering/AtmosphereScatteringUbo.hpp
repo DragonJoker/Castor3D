@@ -109,7 +109,8 @@ namespace atmosphere_scattering
 	public:
 		explicit AtmosphereScatteringUbo( castor3d::RenderDevice const & device );
 		~AtmosphereScatteringUbo();
-		void cpuUpdate( Configuration const & config );
+		void cpuUpdate( Configuration const & config
+			, castor3d::SceneNode const & node );
 
 		void createPassBinding( crg::FramePass & pass
 			, uint32_t binding )const

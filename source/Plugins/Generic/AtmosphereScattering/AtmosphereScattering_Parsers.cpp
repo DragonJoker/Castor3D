@@ -38,15 +38,47 @@ namespace atmosphere_scattering
 	{
 		auto & parsingContext = castor3d::getSceneParserContext( context );
 		auto & atmosphereContext = parser::getParserContext( context );
-		atmosphereContext.config.multiScatteringLUTRes = float( atmosphereContext.multiScatter );
-		atmosphereContext.atmosphere->setConfiguration( std::move( atmosphereContext.config ) );
-		atmosphereContext.atmosphere->loadTransmittance( atmosphereContext.transmittance );
-		atmosphereContext.atmosphere->loadMultiScatter( atmosphereContext.multiScatter );
-		atmosphereContext.atmosphere->loadAtmosphereVolume( atmosphereContext.atmosphereVolume );
-		atmosphereContext.atmosphere->loadSkyView( atmosphereContext.skyView );
-		parsingContext.scene->setBackground( std::move( atmosphereContext.atmosphere ) );
+
+		if ( !atmosphereContext.atmosphere->getNode() )
+		{
+			CU_ParsingError( cuT( "No node to attach the sun to..." ) );
+		}
+		else
+		{
+			atmosphereContext.config.multiScatteringLUTRes = float( atmosphereContext.multiScatter );
+			atmosphereContext.atmosphere->setConfiguration( std::move( atmosphereContext.config ) );
+			atmosphereContext.atmosphere->loadTransmittance( atmosphereContext.transmittance );
+			atmosphereContext.atmosphere->loadMultiScatter( atmosphereContext.multiScatter );
+			atmosphereContext.atmosphere->loadAtmosphereVolume( atmosphereContext.atmosphereVolume );
+			atmosphereContext.atmosphere->loadSkyView( atmosphereContext.skyView );
+			parsingContext.scene->setBackground( std::move( atmosphereContext.atmosphere ) );
+		}
 	}
 	CU_EndAttributePop()
+
+	CU_ImplementAttributeParser( parserNode )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & parsingContext = castor3d::getSceneParserContext( context );
+			auto & atmosphereContext = parser::getParserContext( context );
+			castor::String name;
+
+			if ( auto node = parsingContext.scene->findSceneNode( params[0]->get( name ) ).lock() )
+			{
+				atmosphereContext.atmosphere->setNode( *node );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Node [" ) + name + cuT( "] does not exist" ) );
+			}
+		}
+	}
+	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( parserTransmittanceResolution )
 	{

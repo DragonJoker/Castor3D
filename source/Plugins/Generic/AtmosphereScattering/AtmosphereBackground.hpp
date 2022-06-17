@@ -83,6 +83,16 @@ namespace atmosphere_scattering
 			return true;
 		}
 
+		void setNode( castor3d::SceneNode const & node )
+		{
+			m_node = &node;
+		}
+
+		auto getNode()const
+		{
+			return m_node;
+		}
+
 		void setConfiguration( AtmosphereScatteringConfig config )
 		{
 			m_config = std::move( config );
@@ -150,6 +160,7 @@ namespace atmosphere_scattering
 
 	private:
 		AtmosphereScatteringConfig m_config;
+		castor3d::SceneNode const * m_node{};
 		crg::ImageViewId m_depthView;
 		castor3d::Texture m_transmittance;
 		castor3d::Texture m_multiScatter;
