@@ -224,7 +224,7 @@ namespace atmosphere_scattering
 					}
 					FI;
 
-					if ( luminanceSettings.matrixData )
+					if ( luminanceSettings.cameraData )
 					{
 						IF( writer, depthBufferValue >= 0.0f )
 						{
@@ -235,7 +235,7 @@ namespace atmosphere_scattering
 							IF( writer, clipSpace.z() < 1.0f )
 							{
 								auto depthBufferWorldPos = writer.declLocale( "depthBufferWorldPos"
-									, luminanceSettings.matrixData->curProjToWorld( vec4( clipSpace, 1.0f ) ) );
+									, luminanceSettings.cameraData->invViewProj * vec4( clipSpace, 1.0f ) );
 								depthBufferWorldPos /= depthBufferWorldPos.w();
 
 								auto tDepth = writer.declLocale( "tDepth"
