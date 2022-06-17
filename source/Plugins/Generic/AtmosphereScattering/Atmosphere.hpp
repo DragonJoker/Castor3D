@@ -84,7 +84,7 @@ namespace atmosphere_scattering
 		struct LuminanceSettings
 		{
 			bool useGround{};
-			castor3d::shader::MatrixData const * matrixData;
+			CameraData const * cameraData;
 			bool variableSampleCount{};
 			bool mieRayPhase{};
 

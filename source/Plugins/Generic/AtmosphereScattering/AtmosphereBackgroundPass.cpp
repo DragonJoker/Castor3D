@@ -49,11 +49,8 @@ namespace atmosphere_scattering
 		{
 			sdw::FragmentWriter writer;
 
-			C3D_Matrix( writer
-				, castor3d::SceneBackground::MtxUboIdx
-				, 0u );
-			C3D_Scene( writer
-				, castor3d::SceneBackground::SceneUboIdx
+			C3D_Camera( writer
+				, AtmosphereBackgroundPass::eCamera
 				, 0u );
 			C3D_AtmosphereScattering( writer
 				, AtmosphereBackgroundPass::eAtmosphere
@@ -88,7 +85,7 @@ namespace atmosphere_scattering
 
 			AtmosphereConfig atmosphereConfig{ writer
 				, c3d_atmosphereData
-				, { false, &c3d_matrixData, true, true }
+				, { false, &c3d_cameraData, true, true }
 				, { transmittanceExtent.width, transmittanceExtent.height }
 				, &transmittanceMap };
 
@@ -143,12 +140,12 @@ namespace atmosphere_scattering
 					auto clipSpace = writer.declLocale( "clipSpace"
 						, vec3( ( pixPos / targetSize ) * vec2( 2.0_f, -2.0_f ) - vec2( 1.0_f, -1.0_f ), 1.0_f ) );
 					auto hPos = writer.declLocale( "hPos"
-						, c3d_matrixData.curProjToWorld( vec4( clipSpace, 1.0_f ) ) );
+						, c3d_cameraData.invViewProj * vec4( clipSpace, 1.0_f ) );
 
 					auto worldDir = writer.declLocale( "worldDir"
-						, normalize( hPos.xyz() / hPos.w() - c3d_sceneData.cameraPosition ) );
+						, normalize( hPos.xyz() / hPos.w() - c3d_cameraData.position ) );
 					auto worldPos = writer.declLocale( "worldPos"
-						, c3d_sceneData.cameraPosition + vec3( 0.0_f, 0.0_f, c3d_atmosphereData.bottomRadius ) );
+						, c3d_cameraData.position + vec3( 0.0_f, 0.0_f, c3d_atmosphereData.bottomRadius ) );
 
 					auto depthBufferValue = writer.declLocale( "depthBufferValue"
 						, -1.0_f );
@@ -205,7 +202,7 @@ namespace atmosphere_scattering
 							&& "The FASTAERIALPERSPECTIVE_ENABLED path does not support COLORED_TRANSMITTANCE_ENABLED." );
 						clipSpace = vec3( ( pixPos / targetSize ) * vec2( 2.0_f, -2.0_f ) - vec2( 1.0_f, -1.0_f ), depthBufferValue );
 						auto depthBufferWorldPos = writer.declLocale( "depthBufferWorldPos"
-							, c3d_matrixData.curProjToWorld( vec4( clipSpace, 1.0_f ) ) );
+							, c3d_cameraData.invViewProj * vec4( clipSpace, 1.0_f ) );
 						depthBufferWorldPos /= depthBufferWorldPos.w();
 						auto tDepth = writer.declLocale( "tDepth"
 							, length( depthBufferWorldPos.xyz() - ( worldPos + vec3( 0.0_f, 0.0_f, -c3d_atmosphereData.bottomRadius ) ) ) );
@@ -306,170 +303,42 @@ namespace atmosphere_scattering
 			, context
 			, graph
 			, device
-			, background
-			, size
-			, depth }
+			, background }
+		, crg::RenderQuad{ pass
+			, context
+			, graph
+			, crg::ru::Config{ 1u, true }
+			, crg::rq::Config{}
+				.isEnabled( IsEnabledCallback( [this](){ return castor3d::BackgroundPassBase::doIsEnabled(); } ) )
+				.renderSize( size )
+				.program( doInitialiseShader( device, background, size ) ) }
 		, m_atmosBackground{ background }
 	{
 	}
 
-	void AtmosphereBackgroundPass::doInitialiseVertexBuffer()
+	void AtmosphereBackgroundPass::doResetPipeline()
 	{
-		if ( m_vertexBuffer )
-		{
-			return;
-		}
-
-		using castor::Point3f;
-		auto data = m_device.graphicsData();
-		ashes::StagingBuffer stagingBuffer{ *m_device.device, 0u, sizeof( Vertex ) * 3u };
-
-		// Vertex Buffer
-		std::vector< Vertex > vertexData
-		{
-			// Front
-			{ Point3f{ -1.0, -3.0, 0.0 } },
-			{ Point3f{ -1.0, +1.0, 0.0 } },
-			{ Point3f{ +3.0, +1.0, 0.0 } },
-		};
-		m_vertexBuffer = makeVertexBuffer< Vertex >( m_device
-			, 3u
-			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, "Background" );
-		stagingBuffer.uploadVertexData( *data->queue
-			, *data->commandPool
-			, vertexData
-			, *m_vertexBuffer );
+		resetCommandBuffer();
+		resetPipeline( {} );
+		reRecordCurrent();
 	}
 
-	ashes::PipelineShaderStageCreateInfoArray AtmosphereBackgroundPass::doInitialiseShader()
+	crg::VkPipelineShaderStageCreateInfoArray AtmosphereBackgroundPass::doInitialiseShader( castor3d::RenderDevice const & device
+		, AtmosphereBackground & background
+		, VkExtent2D const & size )
 	{
-		m_vertexModule = { VK_SHADER_STAGE_VERTEX_BIT
+		castor::DataHolderT< Shaders >::getData().vertexShader = { VK_SHADER_STAGE_VERTEX_BIT
 			, atmos::Name
 			, atmos::getVertexProgram() };
-		m_pixelModule = { VK_SHADER_STAGE_FRAGMENT_BIT
+		castor::DataHolderT< Shaders >::getData().pixelShader = { VK_SHADER_STAGE_FRAGMENT_BIT
 			, atmos::Name
-			, atmos::getPixelProgram( m_size, m_atmosBackground.getTransmittance().getExtent() ) };
-		return ashes::PipelineShaderStageCreateInfoArray
+			, atmos::getPixelProgram( size, background.getTransmittance().getExtent() ) };
+		castor::DataHolderT< Shaders >::getData().stages =
 		{
-			makeShaderState( m_device, m_vertexModule ),
-			makeShaderState( m_device, m_pixelModule ),
+			makeShaderState( device, castor::DataHolderT< Shaders >::getData().vertexShader ),
+			makeShaderState( device, castor::DataHolderT< Shaders >::getData().pixelShader ),
 		};
-	}
-
-	void AtmosphereBackgroundPass::doFillDescriptorBindings()
-	{
-		VkShaderStageFlags shaderStages = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
-		m_descriptorBindings.clear();
-		m_descriptorWrites.clear();
-
-		for ( auto & uniform : m_pass.buffers )
-		{
-			m_descriptorBindings.push_back( { uniform.binding
-				, uniform.getDescriptorType()
-				, 1u
-				, shaderStages
-				, nullptr } );
-			m_descriptorWrites.push_back( uniform.getBufferWrite() );
-		}
-
-		auto & atmosphere = static_cast< AtmosphereBackground const & >( *m_background );
-
-		m_descriptorBindings.push_back( { uint32_t( AtmosphereBackgroundPass::eDepth )
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, 1u
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, nullptr } );
-		auto depth = m_graph.createImageView( *m_depth );
-		m_descriptorWrites.push_back( crg::WriteDescriptorSet{ uint32_t( AtmosphereBackgroundPass::eDepth )
-			, 0u
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VkDescriptorImageInfo{ m_background->getSampler().getSampler()
-				, depth
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } );
-
-		m_descriptorBindings.push_back( { uint32_t( AtmosphereBackgroundPass::eTransmittance )
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, 1u
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, nullptr } );
-		m_descriptorWrites.push_back( crg::WriteDescriptorSet{ uint32_t( AtmosphereBackgroundPass::eTransmittance )
-			, 0u
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VkDescriptorImageInfo{ m_background->getSampler().getSampler()
-				, atmosphere.getTransmittance().sampledView
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } );
-
-		m_descriptorBindings.push_back( { uint32_t( AtmosphereBackgroundPass::eMultiScatter )
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, 1u
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, nullptr } );
-		m_descriptorWrites.push_back( crg::WriteDescriptorSet{ uint32_t( AtmosphereBackgroundPass::eMultiScatter )
-			, 0u
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VkDescriptorImageInfo{ m_background->getSampler().getSampler()
-				, atmosphere.getMultiScatter().sampledView
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } );
-
-		m_descriptorBindings.push_back( { uint32_t( AtmosphereBackgroundPass::eSkyView )
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, 1u
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, nullptr } );
-		m_descriptorWrites.push_back( crg::WriteDescriptorSet{ uint32_t( AtmosphereBackgroundPass::eSkyView )
-			, 0u
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VkDescriptorImageInfo{ m_background->getSampler().getSampler()
-				, atmosphere.getSkyView().sampledView
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } );
-
-		m_descriptorBindings.push_back( { uint32_t( AtmosphereBackgroundPass::eVolume )
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, 1u
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, nullptr } );
-		m_descriptorWrites.push_back( crg::WriteDescriptorSet{ uint32_t( AtmosphereBackgroundPass::eVolume )
-			, 0u
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VkDescriptorImageInfo{ m_background->getSampler().getSampler()
-				, atmosphere.getVolume().sampledView
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } );
-
-		m_descriptorBindings.push_back( { uint32_t( AtmosphereBackgroundPass::eAtmosphere )
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, 1u
-			, shaderStages
-			, nullptr } );
-		m_descriptorWrites.push_back( crg::WriteDescriptorSet{ uint32_t( AtmosphereBackgroundPass::eAtmosphere )
-			, 0u
-			, 1u
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER } );
-		m_descriptorWrites.back().bufferInfo.push_back( VkDescriptorBufferInfo{ atmosphere.getAtmosphereUbo().getUbo().getBuffer()
-				, atmosphere.getAtmosphereUbo().getUbo().getByteOffset()
-				, atmosphere.getAtmosphereUbo().getUbo().getByteRange() } );
-	}
-
-	void AtmosphereBackgroundPass::doCreatePipeline()
-	{
-		m_pipeline = m_device->createPipeline( ashes::GraphicsPipelineCreateInfo{ 0u
-			, doInitialiseShader()
-			, ashes::PipelineVertexInputStateCreateInfo{ 0u
-			, { 1u, { 0u, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } }
-			, { 1u, { 0u, 0u, VK_FORMAT_R32G32B32_SFLOAT, 0u } } }
-			, ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP, VK_FALSE }
-			, std::nullopt
-			, doCreateViewportState()
-			, ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE }
-			, ashes::PipelineMultisampleStateCreateInfo{}
-			, ( m_usesDepth
-				? std::make_optional( ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_LESS_OR_EQUAL } )
-				: std::nullopt )
-			, ashes::PipelineColorBlendStateCreateInfo{ 0u, VK_FALSE, VK_LOGIC_OP_COPY, doGetBlendAttachs() }
-			, std::nullopt
-			, *m_pipelineLayout
-			, getRenderPass() } );
+		return ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( castor::DataHolderT< Shaders >::getData().stages );
 	}
 
 	//************************************************************************************************

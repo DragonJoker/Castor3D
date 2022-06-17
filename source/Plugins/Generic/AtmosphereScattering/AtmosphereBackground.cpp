@@ -187,9 +187,13 @@ namespace atmosphere_scattering
 		, castor3d::RenderDevice const & device
 		, castor3d::ProgressBar * progress
 		, VkExtent2D const & size
+		, crg::ImageViewId const & colour
 		, crg::ImageViewId const * depth
+		, castor3d::UniformBufferOffsetT< castor3d::ModelBufferConfiguration > const & modelUbo
 		, castor3d::MatrixUbo const & matrixUbo
+		, castor3d::HdrConfigUbo const & hdrConfigUbo
 		, castor3d::SceneUbo const & sceneUbo
+		, bool clearColour
 		, castor3d::BackgroundPassBase *& backgroundPass )
 	{
 		if ( !m_transmittancePass )
@@ -243,7 +247,7 @@ namespace atmosphere_scattering
 					, device
 					, *this
 					, size
-					, &m_depthView );
+					, nullptr );
 				backgroundPass = res.get();
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
@@ -252,6 +256,36 @@ namespace atmosphere_scattering
 		pass.addDependency( m_multiScatteringPass->getLastPass() );
 		pass.addDependency( m_skyViewPass->getLastPass() );
 		pass.addDependency( m_volumePass->getLastPass() );
+		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR };
+		pass.addImplicitDepthStencilView( *depth
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		m_cameraUbo.createPassBinding( pass
+			, "Camera"
+			, AtmosphereBackgroundPass::eCamera );
+		m_atmosphereUbo->createPassBinding( pass
+			, AtmosphereBackgroundPass::eAtmosphere );
+		pass.addSampledView( m_transmittance.sampledViewId
+			, AtmosphereBackgroundPass::eTransmittance
+			, VK_IMAGE_LAYOUT_UNDEFINED
+			, linearSampler );
+		pass.addSampledView( m_multiScatter.sampledViewId
+			, AtmosphereBackgroundPass::eMultiScatter
+			, VK_IMAGE_LAYOUT_UNDEFINED
+			, linearSampler );
+		pass.addSampledView( m_skyView.sampledViewId
+			, AtmosphereBackgroundPass::eSkyView
+			, VK_IMAGE_LAYOUT_UNDEFINED
+			, linearSampler );
+		pass.addSampledView( m_volume.sampledViewId
+			, AtmosphereBackgroundPass::eVolume
+			, VK_IMAGE_LAYOUT_UNDEFINED
+			, linearSampler );
+		pass.addSampledView( m_depthView
+			, AtmosphereBackgroundPass::eDepth 
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, linearSampler );
+		pass.addInOutColourView( colour );
 		return pass;
 	}
 
@@ -395,6 +429,7 @@ namespace atmosphere_scattering
 		auto & data = m_cameraUbo.getData();
 		data.invViewProj = viewProj.getInverse();
 		data.position = updater.camera->getParent()->getDerivedPosition();
+		//std::swap( data.position->y, data.position->z );
 	}
 
 	void AtmosphereBackground::doGpuUpdate( castor3d::GpuUpdater & updater )const

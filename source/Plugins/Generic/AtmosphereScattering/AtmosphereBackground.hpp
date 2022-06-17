@@ -88,9 +88,13 @@ namespace atmosphere_scattering
 			, castor3d::RenderDevice const & device
 			, castor3d::ProgressBar * progress
 			, VkExtent2D const & size
+			, crg::ImageViewId const & colour
 			, crg::ImageViewId const * depth
+			, castor3d::UniformBufferOffsetT< castor3d::ModelBufferConfiguration > const & modelUbo
 			, castor3d::MatrixUbo const & matrixUbo
+			, castor3d::HdrConfigUbo const & hdrConfigUbo
 			, castor3d::SceneUbo const & sceneUbo
+			, bool clearColour
 			, castor3d::BackgroundPassBase *& backgroundPass )override;
 		/**
 		*\copydoc	castor3d::SceneBackground::write

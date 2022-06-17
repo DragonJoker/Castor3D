@@ -10,20 +10,33 @@ See LICENSE file in root folder
 #include <Castor3D/Scene/Background/Background.hpp>
 #include <Castor3D/Shader/ShaderModule.hpp>
 
+#include <CastorUtils/Design/DataHolder.hpp>
+#include <RenderGraph/RunnablePasses/RenderQuad.hpp>
+
 namespace atmosphere_scattering
 {
+	struct Shaders
+	{
+		castor3d::ShaderModule vertexShader;
+		castor3d::ShaderModule pixelShader;
+		ashes::PipelineShaderStageCreateInfoArray stages;
+	};
+
 	class AtmosphereBackgroundPass
-		: public castor3d::BackgroundPassBase
+		: public castor::DataHolderT< Shaders >
+		, public castor3d::BackgroundPassBase
+		, public crg::RenderQuad
 	{
 	public:
 		enum Bindings : uint32_t
 		{
-			eDepth = castor3d::SceneBackground::Count,
+			eCamera,
+			eAtmosphere,
+			eDepth,
 			eTransmittance,
 			eMultiScatter,
 			eSkyView,
 			eVolume,
-			eAtmosphere,
 			eCount,
 		};
 
@@ -37,15 +50,14 @@ namespace atmosphere_scattering
 			, crg::ImageViewId const * depth );
 
 	private:
-		void doInitialiseVertexBuffer()override;
-		ashes::PipelineShaderStageCreateInfoArray doInitialiseShader()override;
-		void doFillDescriptorBindings()override;
-		void doCreatePipeline()override;
+		void doResetPipeline()override;
+
+		crg::VkPipelineShaderStageCreateInfoArray doInitialiseShader( castor3d::RenderDevice const & device
+			, AtmosphereBackground & background
+			, VkExtent2D const & size );
 
 	private:
 		AtmosphereBackground & m_atmosBackground;
-		castor3d::ShaderModule m_vertexModule;
-		castor3d::ShaderModule m_pixelModule;
 	};
 }
 
