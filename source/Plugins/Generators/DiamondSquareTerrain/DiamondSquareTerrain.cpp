@@ -79,6 +79,7 @@ namespace diamond_square_terrain
 		uint32_t size = 0u;
 		float roughness = 0.0f;
 		float scale = 1.0f;
+		float minY = std::numeric_limits< float >::lowest();
 		bool disableRandomSeed = false;
 
 		if ( p_parameters.get( cuT( "roughness" ), param ) )
@@ -99,6 +100,11 @@ namespace diamond_square_terrain
 		if ( p_parameters.get( cuT( "detail" ), param ) )
 		{
 			size = uint32_t( pow( 2, castor::string::toUInt( param ) ) + 1u );
+		}
+
+		if ( p_parameters.get( cuT( "minY" ), param ) )
+		{
+			minY = castor::string::toFloat( param );
 		}
 
 		if ( size )
@@ -186,6 +192,31 @@ namespace diamond_square_terrain
 			};
 
 			divide( size, roughness );
+			auto min = 0.0f;
+
+			if ( minY != std::numeric_limits< float >::lowest() )
+			{
+				for ( auto z = 1u; z < max; z++ )
+				{
+					for ( auto x = 1u; x < max; x++ )
+					{
+						min = std::min( min, map( x, z ) );
+					}
+				}
+
+				if ( min != minY )
+				{
+					auto offset = minY - min;
+
+					for ( auto z = 1u; z < max; z++ )
+					{
+						for ( auto x = 1u; x < max; x++ )
+						{
+							map( x, z ) += offset;
+						}
+					}
+				}
+			}
 
 			auto submesh = p_mesh.createSubmesh();
 			auto positions = submesh->createComponent< castor3d::PositionsComponent >();
