@@ -70,7 +70,6 @@ namespace atmosphere_scattering
 
 			// Fragment Outputs
 			auto pxl_colour( writer.declOutput< sdw::Vec4 >( "pxl_colour", 0u ) );
-			auto const M_PI{ sdw::Float{ castor::Pi< float > } };
 
 			AtmosphereConfig atmosphereConfig{ writer
 				, c3d_atmosphereData

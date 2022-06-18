@@ -38,6 +38,9 @@ namespace castor3d::shader
 			, LightMaterial const & material
 			, sdw::Vec3 & reflection
 			, sdw::Vec3 & refraction )override;
+		C3D_API sdw::Vec4 scatter( sdw::Vec2 const & fragPos
+			, sdw::Vec2 const & fragSize
+			, sdw::Float const & fragDepth )override;
 
 	private:
 		sdw::Vec3 doComputeRefractions( sdw::Vec3 const & wsIncident

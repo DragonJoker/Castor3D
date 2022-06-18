@@ -55,9 +55,6 @@ namespace atmosphere_scattering
 		crg::VkPipelineShaderStageCreateInfoArray doInitialiseShader( castor3d::RenderDevice const & device
 			, AtmosphereBackground & background
 			, VkExtent2D const & size );
-
-	private:
-		AtmosphereBackground & m_atmosBackground;
 	};
 }
 

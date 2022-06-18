@@ -327,6 +327,12 @@ namespace castor3d
 						, in.worldPosition.xyz()
 						, c3d_sceneData );
 				}
+				else
+				{
+					pxl_fragColor += backgroundModel->scatter( in.fragCoord.xy()
+						, vec2( sdw::Float{ float( m_size.getWidth() ) }, float( m_size.getHeight() ) )
+						, in.fragCoord.z() );
+				}
 
 				pxl_velocity.xy() = in.getVelocity();
 			} );

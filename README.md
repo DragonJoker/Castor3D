@@ -59,6 +59,7 @@ The project itself is compilable on supported platforms using CMake (\ref build)
 - FFTOceanRendering: Ocean rendering using FFT generated surfaces.
 - OceanRendering: Basic ocean rendering, specifying waves attributes.
 - WaterRendering: Plane water surfaces rendering, using normal maps.
+- AtmosphereScattering : Sky and atmosphere rendering (using [Scalable and Production Ready Sky and Atmosphere Rendering Technique](https://sebh.github.io/publications/egsr2020.pdf)).
 
 ### ToneMappings
 - LinearToneMapping: Default tone mapping.

@@ -1374,6 +1374,12 @@ namespace ocean
 						, in.worldPosition.xyz()
 						, c3d_sceneData );
 				}
+				else
+				{
+					pxl_colour += backgroundModel->scatter( in.fragCoord.xy()
+						, vec2( sdw::Float{ float( m_size.getWidth() ) }, float( m_size.getHeight() ) )
+						, in.fragCoord.z() );
+				}
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

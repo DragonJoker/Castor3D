@@ -37,6 +37,9 @@ namespace castor3d::shader
 			, LightMaterial const & material
 			, sdw::Vec3 & reflection
 			, sdw::Vec3 & refraction ) = 0;
+		C3D_API virtual sdw::Vec4 scatter( sdw::Vec2 const & fragPos
+			, sdw::Vec2 const & fragSize
+			, sdw::Float const & fragDepth ) = 0;
 
 	protected:
 		sdw::ShaderWriter & m_writer;

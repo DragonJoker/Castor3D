@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "AtmosphereScatteringPrerequisites.hpp"
 
 #include <Castor3D/Castor3DModule.hpp>
-#include <Castor3D/Render/Viewport.hpp>
+#include <Castor3D/Render/RenderModule.hpp>
 
 #include <Castor3D/Buffer/UniformBufferOffset.hpp>
 
@@ -44,7 +44,6 @@ namespace atmosphere_scattering
 		using sdw::StructInstance::getMemberArray;
 
 	private:
-		mutable uint32_t index{};
 		sdw::Mat4 camInvViewProj;
 		sdw::Mat4 objInvViewProj;
 	public:
@@ -96,7 +95,6 @@ namespace atmosphere_scattering
 
 	private:
 		castor3d::RenderDevice const & m_device;
-		castor3d::Viewport m_viewport;
 		castor3d::UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }

@@ -64,6 +64,7 @@ Le projet en lui-même est compilable sur les plateformes supportées en utilisa
 - FFTOceanRendering : Permet le rendu d'océan en se basant sur les transformées de Fourier.
 - OceanRendering : Rendu basique d'océan, en spécifiant les propriétés des vages.
 - WaterRendering : Rendu de surfaces planes d'eau, basé sur l'utilisation de normal maps.
+- AtmosphereScattering : Implémentation de rendu de ciel et d'atmosphère (Implémentation de [Scalable and Production Ready Sky and Atmosphere Rendering Technique](https://sebh.github.io/publications/egsr2020.pdf)).
 
 ### ToneMapping
 

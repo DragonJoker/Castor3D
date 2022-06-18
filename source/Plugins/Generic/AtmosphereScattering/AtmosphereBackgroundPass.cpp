@@ -75,7 +75,6 @@ namespace atmosphere_scattering
 			// Fragment Outputs
 			auto outLuminance( writer.declOutput< sdw::Vec4 >( "outLuminance", 0u ) );
 			auto outTransmittance( writer.declOutput< sdw::Vec4 >( "outTransmittance", 1u, colorTransmittance ) );
-			auto const M_PI{ sdw::Float{ castor::Pi< float > } };
 
 			AtmosphereConfig atmosphereConfig{ writer
 				, c3d_atmosphereData
@@ -151,7 +150,6 @@ namespace atmosphere_scattering
 				.isEnabled( IsEnabledCallback( [this](){ return castor3d::BackgroundPassBase::doIsEnabled(); } ) )
 				.renderSize( size )
 				.program( doInitialiseShader( device, background, size ) ) }
-		, m_atmosBackground{ background }
 	{
 	}
 

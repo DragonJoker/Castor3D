@@ -436,12 +436,46 @@ namespace atmosphere_scattering
 	void AtmosphereBackground::doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// CameraBuffer
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// AtmosphereBuffer
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapTransmittance
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapSkyView
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapVolume
 	}
 
 	void AtmosphereBackground::doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
 		, crg::ImageData const & targetImage
 		, uint32_t & index )const
 	{
+		auto it = m_cameraPasses.find( &targetImage );
+
+		if ( it != m_cameraPasses.end() )
+		{
+			descriptorWrites.push_back( it->second->cameraUbo.getDescriptorWrite( index++ ) );
+			descriptorWrites.push_back( m_atmosphereUbo->getDescriptorWrite( index++ ) );
+			castor3d::bindTexture( m_transmittance.sampledView
+				, *m_transmittance.sampler
+				, descriptorWrites
+				, index );
+			castor3d::bindTexture( it->second->skyView.sampledView
+				, *it->second->skyView.sampler
+				, descriptorWrites
+				, index );
+			castor3d::bindTexture( it->second->volume.sampledView
+				, *it->second->volume.sampler
+				, descriptorWrites
+				, index );
+		}
 	}
 
 	//************************************************************************************************
