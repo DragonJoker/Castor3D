@@ -53,7 +53,7 @@ namespace castor
 			{
 				auto transmittance = background.getTransmittance().getExtent();
 				auto multiScatter = background.getMultiScatter().getExtent().width;
-				auto atmosphereVolume = background.getVolume().getExtent().width;
+				auto atmosphereVolume = background.getVolumeResolution();
 				result = write( file, "transmittanceResolution", transmittance.width, transmittance.height );
 				result = result && write( file, "multiScatterResolution", multiScatter );
 				result = result && write( file, "atmosphereVolumeResolution", atmosphereVolume );
@@ -116,13 +116,109 @@ namespace atmosphere_scattering
 {
 	//*********************************************************************************************
 
+	AtmosphereBackground::CameraPasses::CameraPasses( crg::FramePassGroup & graph
+		, castor3d::RenderDevice const & device
+		, AtmosphereBackground & background
+		, crg::FramePass const & transmittancePass
+		, crg::ImageViewId const & transmittance
+		, AtmosphereScatteringUbo const & atmosphereUbo
+		, VkExtent2D const & size
+		, castor::Point2ui const & skyViewResolution
+		, uint32_t volumeResolution
+		, uint32_t index
+		, castor3d::BackgroundPassBase *& backgroundPass )
+		: skyView{ device
+			, graph.getHandler()
+			, "SkyView" + std::to_string( index )
+			, 0u
+			, { skyViewResolution->x, skyViewResolution->y, 1u }
+			, 1u
+			, 1u
+			, VK_FORMAT_B10G11R11_UFLOAT_PACK32
+			, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT
+			, VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR
+			, VK_SAMPLER_MIPMAP_MODE_NEAREST }
+		, volume{ device
+			, graph.getHandler()
+			, "Volume" + std::to_string( index )
+			, 0u
+			, { volumeResolution, volumeResolution, volumeResolution }
+			, 1u
+			, 1u
+			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT
+			, VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR
+			, VK_SAMPLER_MIPMAP_MODE_NEAREST }
+		, cameraUbo{ device }
+		, skyViewPass{ std::make_unique< AtmosphereSkyViewPass >( graph
+			, crg::FramePassArray{ &transmittancePass }
+			, device
+			, cameraUbo
+			, atmosphereUbo
+			, transmittance
+			, skyView.targetViewId
+			, index ) }
+		, volumePass{ std::make_unique< AtmosphereVolumePass >( graph
+			, crg::FramePassArray{ &transmittancePass }
+			, device
+			, cameraUbo
+			, atmosphereUbo
+			, transmittance
+			, volume.targetViewId
+			, index ) }
+	{
+		skyView.create();
+		volume.create();
+		auto & pass = graph.createPass( "Background"
+			, [&background, &backgroundPass, &device, size]( crg::FramePass const & framePass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & runnableGraph )
+			{
+				auto res = std::make_unique< AtmosphereBackgroundPass >( framePass
+					, context
+					, runnableGraph
+					, device
+					, background
+					, size
+					, nullptr );
+				backgroundPass = res.get();
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+					, res->getTimer() );
+				return res;
+			} );
+		pass.addDependency( skyViewPass->getLastPass() );
+		pass.addDependency( volumePass->getLastPass() );
+		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR };
+		cameraUbo.createPassBinding( pass
+			, AtmosphereBackgroundPass::eCamera );
+		pass.addSampledView( skyView.sampledViewId
+			, AtmosphereBackgroundPass::eSkyView
+			, VK_IMAGE_LAYOUT_UNDEFINED
+			, linearSampler );
+		pass.addSampledView( volume.sampledViewId
+			, AtmosphereBackgroundPass::eVolume
+			, VK_IMAGE_LAYOUT_UNDEFINED
+			, linearSampler );
+		lastPass = &pass;
+	}
+
+	AtmosphereBackground::CameraPasses::~CameraPasses()
+	{
+		skyView.destroy();
+		volume.destroy();
+	}
+
+	//*********************************************************************************************
+
 	static uint32_t constexpr SkyTexSize = 16u;
 
 	AtmosphereBackground::AtmosphereBackground( castor3d::Engine & engine
 		, castor3d::Scene & scene )
 		: SceneBackground{ engine, scene, cuT( "Atmosphere" ), cuT( "atmosphere" ) }
 		, m_atmosphereUbo{ std::make_unique< AtmosphereScatteringUbo >( engine.getRenderSystem()->getRenderDevice() ) }
-		, m_cameraUbo{ std::make_unique< CameraUbo >( engine.getRenderSystem()->getRenderDevice() ) }
 	{
 	}
 
@@ -130,8 +226,6 @@ namespace atmosphere_scattering
 	{
 		m_transmittance.destroy();
 		m_multiScatter.destroy();
-		m_skyView.destroy();
-		m_volume.destroy();
 	}
 
 	void AtmosphereBackground::accept( castor3d::BackgroundVisitor & visitor )
@@ -172,83 +266,56 @@ namespace atmosphere_scattering
 				, *m_atmosphereUbo
 				, m_transmittance.sampledViewId
 				, m_multiScatter.targetViewId );
-			m_skyViewPass = std::make_unique< AtmosphereSkyViewPass >( graph
-				, crg::FramePassArray{ &m_transmittancePass->getLastPass() }
-				, device
-				, *m_cameraUbo
-				, *m_atmosphereUbo
-				, m_transmittance.sampledViewId
-				, m_skyView.targetViewId
-				, 0u );
-			m_volumePass = std::make_unique< AtmosphereVolumePass >( graph
-				, crg::FramePassArray{ &m_multiScatteringPass->getLastPass() }
-				, device
-				, *m_cameraUbo
-				, *m_atmosphereUbo
-				, m_transmittance.sampledViewId
-				, m_volume.targetViewId
-				, 0u );
 		}
 
-		auto & pass = graph.createPass( "Background"
-			, [this, &backgroundPass, &device, progress, size]( crg::FramePass const & framePass
-				, crg::GraphContext & context
-				, crg::RunnableGraph & runnableGraph )
-			{
-				stepProgressBar( progress, "Initialising background pass" );
-				auto res = std::make_unique< AtmosphereBackgroundPass >( framePass
-					, context
-					, runnableGraph
+		auto it = m_cameraPasses.find( &matrixUbo );
+
+		if ( it == m_cameraPasses.end() )
+		{
+			it = m_cameraPasses.emplace( &matrixUbo
+				, std::make_unique< CameraPasses >( graph
 					, device
 					, *this
+					, m_transmittancePass->getLastPass()
+					, m_transmittance.sampledViewId
+					, *m_atmosphereUbo
 					, size
-					, nullptr );
-				backgroundPass = res.get();
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
-					, res->getTimer() );
-				return res;
-			} );
-		pass.addDependency( m_multiScatteringPass->getLastPass() );
-		pass.addDependency( m_skyViewPass->getLastPass() );
-		pass.addDependency( m_volumePass->getLastPass() );
-		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR };
-		pass.addImplicitDepthStencilView( *depth
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		m_cameraUbo->createPassBinding( pass
-			, AtmosphereBackgroundPass::eCamera );
-		m_atmosphereUbo->createPassBinding( pass
-			, AtmosphereBackgroundPass::eAtmosphere );
-		pass.addSampledView( m_transmittance.sampledViewId
-			, AtmosphereBackgroundPass::eTransmittance
-			, VK_IMAGE_LAYOUT_UNDEFINED
-			, linearSampler );
-		pass.addSampledView( m_multiScatter.sampledViewId
-			, AtmosphereBackgroundPass::eMultiScatter
-			, VK_IMAGE_LAYOUT_UNDEFINED
-			, linearSampler );
-		pass.addSampledView( m_skyView.sampledViewId
-			, AtmosphereBackgroundPass::eSkyView
-			, VK_IMAGE_LAYOUT_UNDEFINED
-			, linearSampler );
-		pass.addSampledView( m_volume.sampledViewId
-			, AtmosphereBackgroundPass::eVolume
-			, VK_IMAGE_LAYOUT_UNDEFINED
-			, linearSampler );
-		pass.addSampledView( m_depthView
-			, AtmosphereBackgroundPass::eDepth 
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, linearSampler );
-		pass.addInOutColourView( colour
-			, VkPipelineColorBlendAttachmentState{ VK_TRUE
-				, VK_BLEND_FACTOR_ONE
-				, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA
-				, VK_BLEND_OP_ADD
-				, VK_BLEND_FACTOR_ZERO
-				, VK_BLEND_FACTOR_ONE
-				, VK_BLEND_OP_ADD
-				, castor3d::defaultColorWriteMask } );
-		return pass;
+					, m_skyViewResolution
+					, m_volumeResolution
+					, uint32_t( m_cameraPasses.size() )
+					, backgroundPass ) ).first;
+			auto & pass = *it->second->lastPass;
+			pass.addDependency( m_multiScatteringPass->getLastPass() );
+			crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
+				, VK_FILTER_LINEAR };
+			pass.addImplicitDepthStencilView( *depth
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			m_atmosphereUbo->createPassBinding( pass
+				, AtmosphereBackgroundPass::eAtmosphere );
+			pass.addSampledView( m_transmittance.sampledViewId
+				, AtmosphereBackgroundPass::eTransmittance
+				, VK_IMAGE_LAYOUT_UNDEFINED
+				, linearSampler );
+			pass.addSampledView( m_multiScatter.sampledViewId
+				, AtmosphereBackgroundPass::eMultiScatter
+				, VK_IMAGE_LAYOUT_UNDEFINED
+				, linearSampler );
+			pass.addSampledView( m_depthView
+				, AtmosphereBackgroundPass::eDepth
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, linearSampler );
+			pass.addInOutColourView( colour
+				, VkPipelineColorBlendAttachmentState{ VK_TRUE
+					, VK_BLEND_FACTOR_ONE
+					, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA
+					, VK_BLEND_OP_ADD
+					, VK_BLEND_FACTOR_ZERO
+					, VK_BLEND_FACTOR_ONE
+					, VK_BLEND_OP_ADD
+					, castor3d::defaultColorWriteMask } );
+		}
+
+		return *it->second->lastPass;
 	}
 
 	bool AtmosphereBackground::write( castor::String const & tabs
@@ -303,39 +370,13 @@ namespace atmosphere_scattering
 
 	void AtmosphereBackground::loadAtmosphereVolume( uint32_t dimension )
 	{
-		auto & handler = getScene().getEngine()->getGraphResourceHandler();
-		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
-		m_volume = castor3d::Texture{ device
-			, handler
-			, "Volume"
-			, 0u
-			, { dimension, dimension, dimension }
-			, 1u
-			, 1u
-			, VK_FORMAT_R16G16B16A16_SFLOAT
-			, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT
-			, VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR
-			, VK_SAMPLER_MIPMAP_MODE_NEAREST };
+		m_volumeResolution = dimension;
 		notifyChanged();
 	}
 
 	void AtmosphereBackground::loadSkyView( castor::Point2ui const & dimensions )
 	{
-		auto & handler = getScene().getEngine()->getGraphResourceHandler();
-		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
-		m_skyView = castor3d::Texture{ device
-			, handler
-			, "SkyView"
-			, 0u
-			, { dimensions->x, dimensions->y, 1u }
-			, 1u
-			, 1u
-			, VK_FORMAT_B10G11R11_UFLOAT_PACK32
-			, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT
-			, VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR
-			, VK_SAMPLER_MIPMAP_MODE_NEAREST };
+		m_skyViewResolution = dimensions;
 		notifyChanged();
 	}
 
@@ -346,7 +387,7 @@ namespace atmosphere_scattering
 		m_textureId = castor3d::Texture{ device
 			, engine.getGraphResourceHandler()
 			, "Dummy"
-			, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
+			, 0u
 			, { SkyTexSize, SkyTexSize, 1u }
 			, 1u
 			, 1u
@@ -357,8 +398,6 @@ namespace atmosphere_scattering
 			, VK_SAMPLER_MIPMAP_MODE_NEAREST };
 		m_transmittance.create();
 		m_multiScatter.create();
-		m_skyView.create();
-		m_volume.create();
 		m_textureId.create();
 		m_texture = std::make_shared< castor3d::TextureLayout >( device.renderSystem
 			, m_textureId.image
@@ -376,7 +415,12 @@ namespace atmosphere_scattering
 	{
 		CU_Require( m_node );
 		m_atmosphereUbo->cpuUpdate( m_config, *m_node );
-		m_cameraUbo->cpuUpdate( *updater.camera, updater.isSafeBanded );
+		auto it = m_cameraPasses.find( updater.matrixUbo );
+
+		if ( it != m_cameraPasses.end() )
+		{
+			it->second->cameraUbo.cpuUpdate( *updater.camera, updater.isSafeBanded );
+		}
 	}
 
 	void AtmosphereBackground::doGpuUpdate( castor3d::GpuUpdater & updater )const

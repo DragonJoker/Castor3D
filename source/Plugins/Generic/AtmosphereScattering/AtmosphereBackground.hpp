@@ -113,14 +113,14 @@ namespace atmosphere_scattering
 			return m_multiScatter;
 		}
 
-		auto const & getSkyView()const
+		auto const & getSkyViewResolution()const
 		{
-			return m_skyView;
+			return m_skyViewResolution;
 		}
 
-		auto const & getVolume()const
+		auto const & getVolumeResolution()const
 		{
-			return m_volume;
+			return m_volumeResolution;
 		}
 
 		AtmosphereScatteringUbo const & getAtmosphereUbo()const
@@ -150,11 +150,26 @@ namespace atmosphere_scattering
 			, uint32_t & index )const override;
 
 	private:
-		struct VolumePass
+		struct CameraPasses
 		{
-			mutable castor3d::UniformBufferOffsetT< CameraConfig > cameraUbo;
-			castor3d::Texture atmosphereVolume;
-			std::unique_ptr< AtmosphereVolumePass > atmosphereVolumePass;
+			CameraPasses( crg::FramePassGroup & graph
+				, castor3d::RenderDevice const & device
+				, AtmosphereBackground & background
+				, crg::FramePass const & transmittancePass
+				, crg::ImageViewId const & transmittance
+				, AtmosphereScatteringUbo const & atmosphereUbo
+				, VkExtent2D const & size
+				, castor::Point2ui const & skyViewResolution
+				, uint32_t volumeResolution
+				, uint32_t index
+				, castor3d::BackgroundPassBase *& backgroundPass );
+			~CameraPasses();
+
+			castor3d::Texture skyView;
+			castor3d::Texture volume;
+			mutable CameraUbo cameraUbo;
+			std::unique_ptr< AtmosphereSkyViewPass > skyViewPass;
+			std::unique_ptr< AtmosphereVolumePass > volumePass;
 			crg::FramePass * lastPass;
 		};
 
@@ -164,14 +179,12 @@ namespace atmosphere_scattering
 		crg::ImageViewId m_depthView;
 		castor3d::Texture m_transmittance;
 		castor3d::Texture m_multiScatter;
-		castor3d::Texture m_skyView;
-		castor3d::Texture m_volume;
+		uint32_t m_volumeResolution{ 32u };
+		castor::Point2ui m_skyViewResolution{ 192u, 108u };
 		std::unique_ptr< AtmosphereScatteringUbo > m_atmosphereUbo;
-		std::unique_ptr< CameraUbo > m_cameraUbo;
 		std::unique_ptr< AtmosphereTransmittancePass > m_transmittancePass;
 		std::unique_ptr< AtmosphereMultiScatteringPass > m_multiScatteringPass;
-		std::unique_ptr< AtmosphereSkyViewPass > m_skyViewPass;
-		std::unique_ptr< AtmosphereVolumePass > m_volumePass;
+		std::map< castor3d::MatrixUbo const *, std::unique_ptr< CameraPasses > > m_cameraPasses;
 	};
 }
 

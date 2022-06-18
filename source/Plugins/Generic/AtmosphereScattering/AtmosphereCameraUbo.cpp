@@ -1,12 +1,11 @@
 #include "AtmosphereScattering/AtmosphereCameraUbo.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/Viewport.hpp>
 #include <Castor3D/Scene/Camera.hpp>
 #include <Castor3D/Scene/SceneNode.hpp>
 #include <Castor3D/Buffer/UniformBufferPool.hpp>
-
-#include <CastorUtils/Graphics/Size.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
