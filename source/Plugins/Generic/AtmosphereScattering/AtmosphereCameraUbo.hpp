@@ -4,14 +4,14 @@ See LICENSE file in root folder
 #ifndef ___C3DAS_AtmosphereCameraUbo_H___
 #define ___C3DAS_AtmosphereCameraUbo_H___
 
-#include "AtmosphereScatteringConfig.hpp"
+#include "AtmosphereScatteringPrerequisites.hpp"
 
 #include <Castor3D/Castor3DModule.hpp>
-#include <Castor3D/Buffer/UniformBufferOffset.hpp>
-#include <CastorUtils/Math/RangedValue.hpp>
+#include <Castor3D/Render/RenderModule.hpp>
 
-#include <ShaderWriter/BaseTypes/Array.hpp>
-#include <ShaderWriter/BaseTypes/Int.hpp>
+#include <Castor3D/Buffer/UniformBufferOffset.hpp>
+
+#include <ShaderWriter/BaseTypes/Float.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
