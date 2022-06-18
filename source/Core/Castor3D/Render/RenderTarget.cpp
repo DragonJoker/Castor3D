@@ -443,6 +443,7 @@ namespace castor3d
 				stepProgressBar( progress, "Compiling render graph" );
 				m_combinePass.addDependency( *previousPass );
 				m_runnable = m_graph.compile( device.makeContext() );
+				printGraph( *m_runnable );
 
 				m_objects.create();
 				m_overlays.create();

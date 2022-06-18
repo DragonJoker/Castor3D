@@ -817,6 +817,7 @@ namespace castor3d
 	C3D_API ashes::ImageView makeWholeImageView( ashes::Device const & device
 		, ashes::Image const & image
 		, Texture const & texture );
+	C3D_API void printGraph( crg::RunnableGraph const & graph );
 }
 
 CU_DeclareExportedOwnedBy( C3D_API, castor3d::RenderSystem, RenderSystem )

@@ -14,6 +14,7 @@
 #include <ashespp/Image/Image.hpp>
 
 #include <RenderGraph/RunnableGraph.hpp>
+#include <RenderGraph/DotExport.hpp>
 
 CU_ImplementExportedOwnedBy( castor3d::RenderSystem, RenderSystem )
 CU_ImplementExportedOwnedBy( castor3d::RenderDevice, RenderDevice )
@@ -353,6 +354,47 @@ namespace castor3d
 	{
 		auto bandsSize = double( getSafeBandsSize( size ) );
 		return float( ( aspect * float( size.getHeight() ) + bandsSize ) / ( float( size.getHeight() ) + bandsSize ) );
+	}
+
+	//*********************************************************************************************
+
+	void printGraph( crg::RunnableGraph const & graph )
+	{
+		auto path = Engine::getEngineDirectory();
+		{
+			auto streams = crg::dot::displayTransitions( graph, { true, true, true, false } );
+			std::ofstream file{ path / ( graph.getGraph()->getName() + "_transitions.dot" ) };
+			file << streams.find( std::string{} )->second.str();
+		}
+		{
+			auto streams = crg::dot::displayTransitions( graph, { true, true, true, true } );
+
+			for ( auto & it : streams )
+			{
+				if ( !it.first.empty() )
+				{
+					std::ofstream file{ path / ( graph.getGraph()->getName() + "_transitions_" + it.first + ".dot" ) };
+					file << it.second.str();
+				}
+			}
+		}
+		{
+			auto streams = crg::dot::displayPasses( graph, { true, true, true, false } );
+			std::ofstream file{ path / ( graph.getGraph()->getName() + "_passes.dot" ) };
+			file << streams.find( std::string{} )->second.str();
+		}
+		{
+			auto streams = crg::dot::displayPasses( graph, { true, true, true, true } );
+
+			for ( auto & it : streams )
+			{
+				if ( !it.first.empty() )
+				{
+					std::ofstream file{ path / ( graph.getGraph()->getName() + "_passes_" + it.first + ".dot" ) };
+					file << it.second.str();
+				}
+			}
+		}
 	}
 
 	//*********************************************************************************************

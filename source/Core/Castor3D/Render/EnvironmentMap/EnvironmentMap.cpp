@@ -182,6 +182,7 @@ namespace castor3d
 						, index
 						, *m_scene.getBackground() );
 					m_runnables[index] = graph.compile( m_device.makeContext() );
+					printGraph( *m_runnables[index] );
 					auto runnable = m_runnables[index].get();
 					m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
 						, [runnable]( RenderDevice const &
@@ -405,6 +406,7 @@ namespace castor3d
 			, index
 			, *m_scene.getBackground() ) );
 		m_runnables.emplace_back( graph.compile( m_device.makeContext() ) );
+		printGraph( *m_runnables.back() );
 		m_runnables.back()->record();
 	}
 }

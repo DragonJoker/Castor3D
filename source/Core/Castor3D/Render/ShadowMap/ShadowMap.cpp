@@ -161,6 +161,7 @@ namespace castor3d
 
 			myPasses.runnables.push_back( myPasses.graphs.back()->compile( m_device.makeContext() ) );
 			auto runnable = myPasses.runnables.back().get();
+			printGraph( *runnable );
 			runnable->record();
 		}
 
@@ -204,6 +205,7 @@ namespace castor3d
 		{
 			myPasses.runnables[index] = myPasses.graphs[index]->compile( m_device.makeContext() );
 			auto runnable = myPasses.runnables[index].get();
+			printGraph( *runnable );
 			runnable->record();
 		}
 

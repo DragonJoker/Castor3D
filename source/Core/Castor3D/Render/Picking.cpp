@@ -162,6 +162,7 @@ namespace castor3d
 		, m_transferFence{ m_device->createFence( "PickingPass" ) }
 	{
 		m_runnable = m_graph.compile( device.makeContext() );
+		printGraph( *m_runnable );
 		m_colourTexture = std::make_unique< ashes::Image >( *m_device
 			, m_runnable->createImage( m_colourImage )
 			, m_colourImage.data->info );
