@@ -159,7 +159,7 @@ namespace atmosphere_scattering
 						, max( 1.0_f, writer.cast< sdw::Float >( sliceId + 1_i ) * 2.0_f ) );
 
 					auto clipSpace = writer.declLocale( "clipSpace"
-						, vec3( ( pixPos / targetSize ) * vec2( 2.0_f, -2.0_f ) - vec2( 1.0_f, -1.0_f ), 0.5_f ) );
+						, atmosphereConfig.getClipSpace( pixPos, targetSize, 0.5_f ) );
 					auto hPos = writer.declLocale( "hPos"
 						, c3d_cameraData.camProjToWorld( vec4( clipSpace, 1.0_f ) ) );
 					auto worldDir = writer.declLocale( "worldDir"

@@ -107,6 +107,8 @@ namespace atmosphere_scattering
 		sdw::Vec3 getClipSpace( sdw::Vec2 const & fragPos
 			, sdw::Vec2 const & fragSize
 			, sdw::Float const & fragDepth );
+		sdw::Vec3 getClipSpace( sdw::Vec2 const & uv
+			, sdw::Float const & fragDepth );
 		SingleScatteringResult integrateScatteredLuminance( sdw::Vec2 const & pixPos
 			, sdw::Vec3 const & worldPos
 			, sdw::Vec3 const & worldDir
