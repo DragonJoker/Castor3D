@@ -2,7 +2,6 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
-#include <Castor3D/Render/Viewport.hpp>
 #include <Castor3D/Scene/Camera.hpp>
 #include <Castor3D/Scene/SceneNode.hpp>
 #include <Castor3D/Buffer/UniformBufferPool.hpp>
@@ -55,6 +54,7 @@ namespace atmosphere_scattering
 
 	CameraUbo::CameraUbo( castor3d::RenderDevice const & device )
 		: m_device{ device }
+		, m_viewport{ *device.renderSystem.getEngine() }
 		, m_ubo{ device.uboPool->getBuffer< Configuration >( 0u ) }
 	{
 	}
@@ -68,8 +68,17 @@ namespace atmosphere_scattering
 		, bool isSafeBanded )
 	{
 		auto node = camera.getParent();
+		auto & viewport = camera.getViewport();
+
 		// Convert from meters to kilometers
+		m_viewport.setPerspective( viewport.getFovY()
+			, viewport.getRatio()
+			, viewport.getNear() / 1000.0f
+			, viewport.getFar() / 1000.0f );
+		m_viewport.resize( camera.getSize() );
+		m_viewport.update();
 		auto position = node->getDerivedPosition() / 1000.0f;
+
 		auto orientation = node->getDerivedOrientation();
 		castor::Point3f right{ 1.0, 0.0, 0.0 };
 		castor::Point3f up{ 0.0, 1.0, 0.0 };
@@ -80,11 +89,14 @@ namespace atmosphere_scattering
 		castor::Matrix4x4f view;
 		castor::matrix::lookAt( view, position, position + front, up );
 
-		auto & proj = camera.getProjection( isSafeBanded );
-		auto viewProj = proj * view;
+		auto & camProj = isSafeBanded
+			? m_viewport.getSafeBandedProjection()
+			: m_viewport.getProjection();
+		auto viewProj = camProj * view;
 		auto & data = m_ubo.getData();
 		data.camInvViewProj = viewProj.getInverse();
-		viewProj = proj * camera.getView();
+
+		viewProj = camera.getProjection( isSafeBanded ) * camera.getView();
 		data.objInvViewProj = viewProj.getInverse();
 		data.position = position;
 	}
