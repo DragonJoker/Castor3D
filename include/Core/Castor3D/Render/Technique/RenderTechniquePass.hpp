@@ -174,6 +174,7 @@ namespace castor3d
 			, castor::String const & typeName
 			, castor::String const & category
 			, castor::String const & name
+			, crg::ImageData const * targetImage
 			, RenderNodesPassDesc const & renderPassDesc
 			, RenderTechniquePassDesc const & techniquePassDesc );
 
@@ -240,6 +241,7 @@ namespace castor3d
 			, ShadowMapLightTypeArray const & shadowMaps
 			, uint32_t & index )const;
 		C3D_API void doAddBackgroundDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+			, crg::ImageData const & targetImage
 			, ShadowMapLightTypeArray const & shadowMaps
 			, uint32_t & index )const;
 		C3D_API void doAddEnvDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites

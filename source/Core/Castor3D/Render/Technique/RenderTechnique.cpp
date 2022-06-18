@@ -1219,6 +1219,7 @@ namespace castor3d
 					, m_device
 					, cuT( "Transparent" )
 					, name
+					, m_colour.imageId.data
 					, RenderNodesPassDesc{ m_colour.getExtent(), m_matrixUbo, m_renderTarget.getCuller(), isOit }
 						.safeBand( true )
 						.meshShading( true )

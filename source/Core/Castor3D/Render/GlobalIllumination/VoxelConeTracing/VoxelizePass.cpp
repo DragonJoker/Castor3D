@@ -159,6 +159,7 @@ namespace castor3d
 			, Type
 			, "Voxelize"
 			, "Voxelization"
+			, nullptr
 			, RenderNodesPassDesc{ { voxelConfig.gridSize.value(), voxelConfig.gridSize.value(), 1u }, matrixUbo, culler, RenderMode::eBoth, true, true } }
 		, m_scene{ culler.getScene() }
 		, m_camera{ culler.getCamera() }

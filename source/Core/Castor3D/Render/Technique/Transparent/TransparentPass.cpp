@@ -51,6 +51,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, castor::String const & category
 		, castor::String const & name
+		, crg::ImageData const * targetImage
 		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
 		: castor3d::RenderTechniquePass{ parent
@@ -61,6 +62,7 @@ namespace castor3d
 			, Type
 			, category
 			, name
+			, targetImage
 			, renderPassDesc
 			, techniquePassDesc }
 	{

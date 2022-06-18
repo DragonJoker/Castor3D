@@ -420,6 +420,7 @@ namespace castor3d
 					, ForwardRenderTechniquePass::Type
 					, SceneName
 					, pass.getName()
+					, m_colour.imageId.data
 					, RenderNodesPassDesc{ makeExtent3D( m_camera->getSize() ), m_matrixUbo, *m_culler }
 						.meshShading( true )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
@@ -448,6 +449,7 @@ namespace castor3d
 					, ForwardRenderTechniquePass::Type
 					, SceneName
 					, pass.getName()
+					, m_colour.imageId.data
 					, RenderNodesPassDesc{ makeExtent3D( m_camera->getSize() ), m_matrixUbo, *m_culler, false }
 						.meshShading( true )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );

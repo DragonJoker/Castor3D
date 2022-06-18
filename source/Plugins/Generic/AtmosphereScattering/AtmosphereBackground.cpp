@@ -268,11 +268,11 @@ namespace atmosphere_scattering
 				, m_multiScatter.targetViewId );
 		}
 
-		auto it = m_cameraPasses.find( &matrixUbo );
+		auto it = m_cameraPasses.find( colour.data->image.data );
 
 		if ( it == m_cameraPasses.end() )
 		{
-			it = m_cameraPasses.emplace( &matrixUbo
+			it = m_cameraPasses.emplace( colour.data->image.data
 				, std::make_unique< CameraPasses >( graph
 					, device
 					, *this
@@ -415,7 +415,7 @@ namespace atmosphere_scattering
 	{
 		CU_Require( m_node );
 		m_atmosphereUbo->cpuUpdate( m_config, *m_node );
-		auto it = m_cameraPasses.find( updater.matrixUbo );
+		auto it = m_cameraPasses.find( updater.targetImage );
 
 		if ( it != m_cameraPasses.end() )
 		{
@@ -428,6 +428,7 @@ namespace atmosphere_scattering
 	}
 
 	void AtmosphereBackground::doAddPassBindings( crg::FramePass & pass
+		, crg::ImageData const & targetImage
 		, uint32_t & index )const
 	{
 	}
@@ -438,6 +439,7 @@ namespace atmosphere_scattering
 	}
 
 	void AtmosphereBackground::doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+		, crg::ImageData const & targetImage
 		, uint32_t & index )const
 	{
 	}

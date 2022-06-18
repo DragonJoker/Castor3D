@@ -173,6 +173,7 @@ namespace castor3d
 					, ForwardRenderTechniquePass::Type
 					, cuT( "EnvironmentMap" )
 					, getName() + cuT( "Opaque" )
+					, m_colourView.data->image.data
 					, RenderNodesPassDesc{ getOwner()->getSize(), m_matrixUbo, *m_culler }
 						.meshShading( true )
 						.implicitAction( depthView
@@ -213,6 +214,7 @@ namespace castor3d
 					, ForwardRenderTechniquePass::Type
 					, cuT( "EnvironmentMap" )
 					, getName() + cuT( "Transparent" )
+					, m_colourView.data->image.data
 					, RenderNodesPassDesc{ getOwner()->getSize(), m_matrixUbo, *m_culler, false }
 						.meshShading( true )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );

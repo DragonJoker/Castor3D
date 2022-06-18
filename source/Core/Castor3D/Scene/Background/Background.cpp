@@ -435,9 +435,10 @@ namespace castor3d
 	}
 
 	void SceneBackground::addPassBindings( crg::FramePass & pass
+		, crg::ImageData const & targetImage
 		, uint32_t & index )const
 	{
-		doAddPassBindings( pass, index );
+		doAddPassBindings( pass, targetImage, index );
 
 		if ( hasIbl() )
 		{
@@ -474,9 +475,10 @@ namespace castor3d
 	}
 
 	void SceneBackground::addDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+		, crg::ImageData const & targetImage
 		, uint32_t & index )const
 	{
-		doAddDescriptors( descriptorWrites, index );
+		doAddDescriptors( descriptorWrites, targetImage, index );
 
 		if ( hasIbl() )
 		{

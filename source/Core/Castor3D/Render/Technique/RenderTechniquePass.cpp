@@ -124,9 +124,10 @@ namespace castor3d
 		, castor::String const & typeName
 		, castor::String const & category
 		, castor::String const & name
+		, crg::ImageData const * targetImage
 		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
-		: RenderNodesPass{ pass, context, graph, device, typeName, category, name, renderPassDesc }
+		: RenderNodesPass{ pass, context, graph, device, typeName, category, name, targetImage, renderPassDesc }
 		, m_parent{ parent }
 		, m_scene{ renderPassDesc.m_culler.getScene() }
 		, m_camera{ renderPassDesc.m_culler.hasCamera() ? &renderPassDesc.m_culler.getCamera() : nullptr }
@@ -304,12 +305,13 @@ namespace castor3d
 	}
 
 	void RenderTechniquePass::doAddBackgroundDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+		, crg::ImageData const & targetImage
 		, ShadowMapLightTypeArray const & shadowMaps
 		, uint32_t & index )const
 	{
 		if ( auto background = m_scene.getBackground() )
 		{
-			background->addDescriptors( descriptorWrites, index );
+			background->addDescriptors( descriptorWrites, targetImage, index );
 		}
 	}
 
@@ -437,7 +439,7 @@ namespace castor3d
 			, index );
 		doAddShadowDescriptor( descriptorWrites, shadowMaps, index );
 		doAddEnvDescriptor( descriptorWrites, shadowMaps, index );
-		doAddBackgroundDescriptor( descriptorWrites, shadowMaps, index );
+		doAddBackgroundDescriptor( descriptorWrites, *m_targetImage, shadowMaps, index );
 		doAddGIDescriptor( descriptorWrites, shadowMaps, index );
 	}
 

@@ -137,6 +137,7 @@ namespace atmosphere_scattering
 		*\copydoc	castor3d::SceneBackground::write
 		*/
 		void doAddPassBindings( crg::FramePass & pass
+			, crg::ImageData const & targetImage
 			, uint32_t & index )const override;
 		/**
 		*\copydoc	castor3d::SceneBackground::write
@@ -147,6 +148,7 @@ namespace atmosphere_scattering
 		*\copydoc	castor3d::SceneBackground::write
 		*/
 		void doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+			, crg::ImageData const & targetImage
 			, uint32_t & index )const override;
 
 	private:
@@ -184,7 +186,7 @@ namespace atmosphere_scattering
 		std::unique_ptr< AtmosphereScatteringUbo > m_atmosphereUbo;
 		std::unique_ptr< AtmosphereTransmittancePass > m_transmittancePass;
 		std::unique_ptr< AtmosphereMultiScatteringPass > m_multiScatteringPass;
-		std::map< castor3d::MatrixUbo const *, std::unique_ptr< CameraPasses > > m_cameraPasses;
+		std::map< crg::ImageData const *, std::unique_ptr< CameraPasses > > m_cameraPasses;
 	};
 }
 

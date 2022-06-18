@@ -336,6 +336,7 @@ namespace ocean_fft
 			, Type
 			, category
 			, "OceanFFT"
+			, parent->getResultImg().data
 			, renderPassDesc
 			, techniquePassDesc }
 		, m_isEnabled{ isEnabled }
@@ -627,7 +628,7 @@ namespace ocean_fft
 			, index );
 		doAddShadowDescriptor( descriptorWrites, shadowMaps, index );
 		doAddEnvDescriptor( descriptorWrites, shadowMaps, index );
-		doAddBackgroundDescriptor( descriptorWrites, shadowMaps, index );
+		doAddBackgroundDescriptor( descriptorWrites, *m_targetImage, shadowMaps, index );
 		doAddGIDescriptor( descriptorWrites, shadowMaps, index );
 	}
 
