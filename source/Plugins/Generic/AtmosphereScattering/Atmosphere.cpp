@@ -139,7 +139,13 @@ namespace atmosphere_scattering
 		, sdw::Vec2 const & fragSize
 		, sdw::Float const & fragDepth )
 	{
-		return vec3( ( fragPos / fragSize ) * vec2( 2.0_f ) - vec2( 1.0_f ), fragDepth );
+		return getClipSpace( fragPos / fragSize, fragDepth );
+	}
+
+	sdw::Vec3 AtmosphereConfig::getClipSpace( sdw::Vec2 const & uv
+		, sdw::Float const & fragDepth )
+	{
+		return vec3( uv * vec2( 2.0_f ) - vec2( 1.0_f ), fragDepth );
 	}
 
 	SingleScatteringResult AtmosphereConfig::integrateScatteredLuminance( sdw::Vec2 const & ppixPos
