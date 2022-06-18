@@ -198,6 +198,13 @@ namespace castor3d::shader
 			, prefraction );
 	}
 
+	sdw::Vec4 IblBackgroundModel::scatter( sdw::Vec2 const & fragPos
+		, sdw::Vec2 const & fragSize
+		, sdw::Float const & fragDepth )
+	{
+		return vec4( 0.0_f );
+	}
+
 	sdw::Vec3 IblBackgroundModel::doComputeRefractions( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
 		, sdw::CombinedImageCubeRgba32 const & pprefiltered

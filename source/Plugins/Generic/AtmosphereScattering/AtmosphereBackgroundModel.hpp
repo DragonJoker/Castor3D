@@ -4,9 +4,14 @@ See LICENSE file in root folder
 #ifndef ___C3DAS_AtmosphereBackgroundModel_H___
 #define ___C3DAS_AtmosphereBackgroundModel_H___
 
-#include "AtmosphereScatteringPrerequisites.hpp"
+#include "AtmosphereScattering/Atmosphere.hpp"
+#include "AtmosphereScattering/AtmosphereCameraUbo.hpp"
+#include "AtmosphereScattering/AtmosphereScatteringUbo.hpp"
+#include "AtmosphereScattering/Scattering.hpp"
 
 #include <Castor3D/Shader/Shaders/GlslBackground.hpp>
+
+#include <ShaderWriter/CompositeTypes/Ubo.hpp>
 
 namespace atmosphere_scattering
 {
@@ -40,9 +45,19 @@ namespace atmosphere_scattering
 			, castor3d::shader::LightMaterial const & material
 			, sdw::Vec3 & reflection
 			, sdw::Vec3 & refraction )override;
+		sdw::Vec4 scatter( sdw::Vec2 const & fragPos
+			, sdw::Vec2 const & fragSize
+			, sdw::Float const & fragDepth )override;
 
 	public:
 		static castor::String const Name;
+		sdw::Ubo m_cameraBuffer;
+		CameraData m_cameraData;
+		sdw::Ubo m_atmosphereBuffer;
+		AtmosphereData m_atmosphereData;
+		sdw::CombinedImage2DRgba32 m_transmittanceMap;
+		AtmosphereConfig m_atmosphere;
+		ScatteringConfig m_scattering;
 	};
 }
 

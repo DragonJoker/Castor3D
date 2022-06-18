@@ -85,7 +85,7 @@ namespace atmosphere_scattering
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		castor3d::ShaderPtr getGeometryProgram()
+		static castor3d::ShaderPtr getGeometryProgram()
 		{
 			sdw::GeometryWriter writer;
 			writer.implementMainT< sdw::TriangleListT< SurfaceT >, sdw::TriangleStreamT< SurfaceT > >( sdw::TriangleListT< SurfaceT >{ writer }
@@ -132,7 +132,6 @@ namespace atmosphere_scattering
 
 			// Fragment Outputs
 			auto pxl_colour( writer.declOutput< sdw::Vec4 >( "pxl_colour", 0 ) );
-			auto const M_PI{ sdw::Float{ castor::Pi< float > } };
 
 			AtmosphereConfig atmosphereConfig{ writer
 				, c3d_atmosphereData
