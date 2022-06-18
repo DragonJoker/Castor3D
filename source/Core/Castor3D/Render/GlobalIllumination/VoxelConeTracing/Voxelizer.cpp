@@ -109,6 +109,7 @@ namespace castor3d
 			, progress ) }
 		, m_runnable{ m_graph.compile( m_device.makeContext() ) }
 	{
+		printGraph( *m_runnable );
 		m_firstBounce.create();
 		m_secondaryBounce.create();
 		auto runnable = m_runnable.get();
