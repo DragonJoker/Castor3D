@@ -121,8 +121,7 @@ namespace atmosphere_scattering
 					, sdw::Vec2 const & texSize )
 				{
 					auto clipSpace = writer.declLocale( "clipSpace"
-						, vec3( ( pixPos / texSize ) * vec2( 2.0_f, 2.0_f ) - vec2( 1.0_f, 1.0_f )
-							, depth ) );
+						, getClipSpace( pixPos, texSize, depth ) );
 					auto depthBufferWorldPos = writer.declLocale( "depthBufferWorldPos"
 						, luminanceSettings.cameraData->objProjToWorld( vec4( clipSpace, 1.0f ) ) );
 					depthBufferWorldPos /= depthBufferWorldPos.w();
@@ -134,6 +133,13 @@ namespace atmosphere_scattering
 		}
 
 		return m_getWorldPos( pdepth, ppixPos, ptexSize );
+	}
+
+	sdw::Vec3 AtmosphereConfig::getClipSpace( sdw::Vec2 const & fragPos
+		, sdw::Vec2 const & fragSize
+		, sdw::Float const & fragDepth )
+	{
+		return vec3( ( fragPos / fragSize ) * vec2( 2.0_f ) - vec2( 1.0_f ), fragDepth );
 	}
 
 	SingleScatteringResult AtmosphereConfig::integrateScatteredLuminance( sdw::Vec2 const & ppixPos

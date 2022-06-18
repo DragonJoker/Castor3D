@@ -104,6 +104,9 @@ namespace atmosphere_scattering
 			, VkExtent2D transmittanceExtent
 			, sdw::CombinedImage2DRgba32 const * transmittanceLut );
 
+		sdw::Vec3 getClipSpace( sdw::Vec2 const & fragPos
+			, sdw::Vec2 const & fragSize
+			, sdw::Float const & fragDepth );
 		SingleScatteringResult integrateScatteredLuminance( sdw::Vec2 const & pixPos
 			, sdw::Vec3 const & worldPos
 			, sdw::Vec3 const & worldDir

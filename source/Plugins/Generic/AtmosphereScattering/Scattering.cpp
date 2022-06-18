@@ -155,7 +155,7 @@ namespace atmosphere_scattering
 					auto apSliceCount = 32.0_f;
 
 					auto clipSpace = m_writer.declLocale( "clipSpace"
-						, vec3( ( fragPos / fragSize ) * vec2( 2.0_f, 2.0_f ) - vec2( 1.0_f, 1.0_f ), 1.0_f ) );
+						, m_atmosphereConfig.getClipSpace( fragPos, fragSize, 1.0_f ) );
 
 					auto hPos = m_writer.declLocale( "hPos"
 						, m_cameraData.camProjToWorld( vec4( clipSpace, 1.0_f ) ) );
