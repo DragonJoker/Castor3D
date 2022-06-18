@@ -208,6 +208,7 @@ namespace castor3d
 			, castor::String const & typeName
 			, castor::String const & category
 			, castor::String const & name
+			, crg::ImageData const * targetImage
 			, RenderNodesPassDesc const & desc );
 
 	public:
@@ -755,6 +756,7 @@ namespace castor3d
 		RenderSystem & m_renderSystem;
 		MatrixUbo & m_matrixUbo;
 		SceneCuller & m_culler;
+		crg::ImageData const * m_targetImage;
 		castor::String m_typeName;
 		RenderPassTypeID m_typeID{};
 		RenderQueueUPtr m_renderQueue;

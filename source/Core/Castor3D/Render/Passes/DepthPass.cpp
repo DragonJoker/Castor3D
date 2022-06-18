@@ -52,6 +52,7 @@ namespace castor3d
 			, Type
 			, pass.getName()
 			, "DepthPass"
+			, nullptr
 			, renderPassDesc
 			, { false, ssaoConfig } }
 	{

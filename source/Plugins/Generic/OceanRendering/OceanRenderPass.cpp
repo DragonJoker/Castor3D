@@ -216,6 +216,7 @@ namespace ocean
 			, Type
 			, category
 			, "Wave"
+			, parent->getResultImg().data
 			, renderPassDesc
 			, techniquePassDesc }
 		, m_isEnabled{ std::move( isEnabled ) }
@@ -581,7 +582,7 @@ namespace ocean
 			, index );
 		doAddShadowDescriptor( descriptorWrites, shadowMaps, index );
 		doAddEnvDescriptor( descriptorWrites, shadowMaps, index );
-		doAddBackgroundDescriptor( descriptorWrites, shadowMaps, index );
+		doAddBackgroundDescriptor( descriptorWrites, *m_targetImage, shadowMaps, index );
 		doAddGIDescriptor( descriptorWrites, shadowMaps, index );
 	}
 

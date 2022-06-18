@@ -462,7 +462,7 @@ namespace castor3d
 		auto & background = *m_scene.getBackground();
 		background.initialise( m_device );
 		auto index = uint32_t( dropqrslv::ResolveBind::eBackground );
-		background.addPassBindings( pass, index );
+		background.addPassBindings( pass, *m_result.imageId.data, index );
 
 		pass.addOutputColourView( m_result.targetViewId
 			, transparentBlackClearColor );

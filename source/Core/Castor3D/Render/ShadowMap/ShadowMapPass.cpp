@@ -40,6 +40,7 @@ namespace castor3d
 			, typeName
 			, cuT( "ShadowMap" )
 			, std::move( name )
+			, nullptr
 			, RenderNodesPassDesc{ getExtent( shadowMap.getShadowPassResult()[SmTexture::eDepth].imageId )
 				, matrixUbo
 				, culler

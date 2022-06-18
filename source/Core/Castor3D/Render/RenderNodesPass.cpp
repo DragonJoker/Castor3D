@@ -90,6 +90,7 @@ namespace castor3d
 		, castor::String const & typeName
 		, castor::String const & category
 		, castor::String const & name
+		, crg::ImageData const * targetImage
 		, RenderNodesPassDesc const & desc )
 		: castor::OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, castor::Named{ name }
@@ -107,6 +108,7 @@ namespace castor3d
 		, m_renderSystem{ m_device.renderSystem }
 		, m_matrixUbo{ desc.m_matrixUbo }
 		, m_culler{ desc.m_culler }
+		, m_targetImage{ targetImage }
 		, m_typeName{ typeName }
 		, m_typeID{ getEngine()->getRenderPassTypeID( m_typeName ) }
 		, m_renderQueue{ castor::makeUnique< RenderQueue >( *this, desc.m_mode, desc.m_ignored ) }

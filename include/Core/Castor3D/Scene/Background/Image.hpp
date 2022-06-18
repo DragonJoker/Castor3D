@@ -79,6 +79,7 @@ namespace castor3d
 		*\copydoc	castor3d::SceneBackground::write
 		*/
 		void doAddPassBindings( crg::FramePass & pass
+			, crg::ImageData const & targetImage
 			, uint32_t & index )const override;
 		/**
 		*\copydoc	castor3d::SceneBackground::write
@@ -89,6 +90,7 @@ namespace castor3d
 		*\copydoc	castor3d::SceneBackground::write
 		*/
 		void doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+			, crg::ImageData const & targetImage
 			, uint32_t & index )const override;
 		void doInitialise2DTexture( RenderDevice const & device
 			, QueueData const & queueData );

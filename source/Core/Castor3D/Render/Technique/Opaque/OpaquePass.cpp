@@ -58,6 +58,7 @@ namespace castor3d
 			, Type
 			, category
 			, name
+			, nullptr
 			, renderPassDesc
 			, techniquePassDesc }
 	{

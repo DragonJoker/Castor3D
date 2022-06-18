@@ -34,6 +34,7 @@ namespace castor3d
 		, bool clearColour
 		, crg::ImageViewId const * depth )
 		: m_device{ device }
+		, m_colour{ colour.data->image.data }
 		, m_matrixUbo{ m_device }
 		, m_modelUbo{ m_device.uboPool->getBuffer< ModelBufferConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 		, m_backgroundPassDesc{ &doCreatePass( graph
@@ -58,8 +59,9 @@ namespace castor3d
 	{
 		if ( m_backgroundPass )
 		{
-			updater.matrixUbo = &m_matrixUbo;
+			updater.targetImage = m_colour;
 			m_backgroundPass->update( updater );
+			updater.targetImage = nullptr;
 		}
 
 		m_matrixUbo.cpuUpdate( updater.bgMtxView

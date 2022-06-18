@@ -48,6 +48,7 @@ namespace castor3d
 			, castor::String const & typeName
 			, castor::String const & category
 			, castor::String const & name
+			, crg::ImageData const * targetImage
 			, RenderNodesPassDesc const & renderPassDesc
 			, RenderTechniquePassDesc const & techniquePassDesc );
 		/**
