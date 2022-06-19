@@ -248,13 +248,6 @@ namespace atmosphere_scattering
 	{
 		if ( !m_transmittancePass )
 		{
-			auto & viewData = *depth->data;
-			m_depthView = graph.createView( { "BackgroundDepth"
-				, viewData.image
-				, 0u
-				, VK_IMAGE_VIEW_TYPE_2D
-				, viewData.info.format
-				, { VK_IMAGE_ASPECT_DEPTH_BIT, 0u, 1u, 0u, 1u } } );
 			m_transmittancePass = std::make_unique< AtmosphereTransmittancePass >( graph
 				, crg::FramePassArray{}
 				, device
@@ -300,19 +293,9 @@ namespace atmosphere_scattering
 				, AtmosphereBackgroundPass::eMultiScatter
 				, VK_IMAGE_LAYOUT_UNDEFINED
 				, linearSampler );
-			pass.addSampledView( m_depthView
-				, AtmosphereBackgroundPass::eDepth
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-				, linearSampler );
-			pass.addInOutColourView( colour
-				, VkPipelineColorBlendAttachmentState{ VK_TRUE
-					, VK_BLEND_FACTOR_ONE
-					, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA
-					, VK_BLEND_OP_ADD
-					, VK_BLEND_FACTOR_ZERO
-					, VK_BLEND_FACTOR_ONE
-					, VK_BLEND_OP_ADD
-					, castor3d::defaultColorWriteMask } );
+			pass.addOutputColourView( colour
+				, castor3d::transparentBlackClearColor );
+			pass.addInOutDepthStencilView( *depth );
 		}
 
 		return *it->second->lastPass;
@@ -431,6 +414,33 @@ namespace atmosphere_scattering
 		, crg::ImageData const & targetImage
 		, uint32_t & index )const
 	{
+		auto it = m_cameraPasses.find( &targetImage );
+
+		if ( it != m_cameraPasses.end() )
+		{
+			it->second->cameraUbo.createPassBinding( pass
+				, index++ );
+			m_atmosphereUbo->createPassBinding( pass
+				, index++ );
+			pass.addSampledView( m_transmittance.wholeViewId
+				, index++
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, crg::SamplerDesc{ VK_FILTER_LINEAR
+					, VK_FILTER_LINEAR
+					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+			pass.addSampledView( it->second->skyView.wholeViewId
+				, index++
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, crg::SamplerDesc{ VK_FILTER_LINEAR
+					, VK_FILTER_LINEAR
+					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+			pass.addSampledView( it->second->volume.wholeViewId
+				, index++
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, crg::SamplerDesc{ VK_FILTER_LINEAR
+					, VK_FILTER_LINEAR
+					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+		}
 	}
 
 	void AtmosphereBackground::doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings

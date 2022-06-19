@@ -192,10 +192,11 @@ namespace diamond_square_terrain
 			};
 
 			divide( size, roughness );
-			auto min = 0.0f;
 
 			if ( minY != std::numeric_limits< float >::lowest() )
 			{
+				auto min = 0.0f;
+
 				for ( auto z = 1u; z < max; z++ )
 				{
 					for ( auto x = 1u; x < max; x++ )

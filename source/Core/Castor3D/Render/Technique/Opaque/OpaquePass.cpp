@@ -10,6 +10,7 @@
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Render/Technique/RenderTechnique.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPass.hpp"
 #include "Castor3D/Shader/Program.hpp"
@@ -58,7 +59,7 @@ namespace castor3d
 			, Type
 			, category
 			, name
-			, nullptr
+			, parent->getResultImg().data
 			, renderPassDesc
 			, techniquePassDesc }
 	{
