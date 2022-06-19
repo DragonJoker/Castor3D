@@ -136,7 +136,8 @@ namespace castor3d
 		static ShaderPtr createPixelProgram( RenderSystem const & renderSystem
 			, Scene const & scene
 			, ResolveProgramConfig const & config
-			, PassTypeID passType )
+			, PassTypeID passType
+			, VkExtent3D const & size )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -316,6 +317,12 @@ namespace castor3d
 							, surface.worldPosition
 							, c3d_sceneData );
 					}
+					ELSE
+					{
+						pxl_fragColor += backgroundModel->scatter( in.fragCoord.xy()
+							, vec2( sdw::Float{ float( size.width ) }, float( size.height ) )
+							, depth );
+					}
 					FI;
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -372,7 +379,7 @@ namespace castor3d
 					, dropqrslv::createVertexProgram() }
 				, ShaderModule{ VK_SHADER_STAGE_FRAGMENT_BIT
 					, "OpaqueResolve" + std::to_string( programIndex )
-					, dropqrslv::createPixelProgram( m_device.renderSystem, m_scene, config, m_scene.getPassesType() ) } );
+					, dropqrslv::createPixelProgram( m_device.renderSystem, m_scene, config, m_scene.getPassesType(), m_result.getExtent() ) } );
 			m_programs[programIndex]->stages = { makeShaderState( m_device, m_programs[programIndex]->vertexShader )
 				, makeShaderState( m_device, m_programs[programIndex]->pixelShader ) };
 		}
@@ -464,8 +471,7 @@ namespace castor3d
 		auto index = uint32_t( dropqrslv::ResolveBind::eBackground );
 		background.addPassBindings( pass, *m_result.imageId.data, index );
 
-		pass.addOutputColourView( m_result.targetViewId
-			, transparentBlackClearColor );
+		pass.addInOutColourView( m_result.targetViewId );
 		return pass;
 	}
 

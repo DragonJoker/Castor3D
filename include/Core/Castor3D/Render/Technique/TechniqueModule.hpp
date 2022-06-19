@@ -98,8 +98,8 @@ namespace castor3d
 	enum class TechniquePassEvent
 	{
 		eBeforeDepth,
-		eBeforeOpaque,
 		eBeforeBackground,
+		eBeforeOpaque,
 		eBeforeTransparent,
 		eBeforePostEffects,
 		CU_ScopedEnumBounds( eBeforeDepth )

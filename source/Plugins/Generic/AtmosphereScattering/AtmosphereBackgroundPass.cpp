@@ -36,7 +36,7 @@ namespace atmosphere_scattering
 				, [&]( sdw::VertexIn in
 					, sdw::VertexOut out )
 				{
-					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
+					out.vtx.position = vec4( position, 1.0_f, 1.0_f );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -68,9 +68,6 @@ namespace atmosphere_scattering
 			auto volumeMap = writer.declCombinedImg< sdw::CombinedImage3DRgba32 >( "volumeMap"
 				, uint32_t( AtmosphereBackgroundPass::eVolume )
 				, 0u );
-			auto depthMap = writer.declCombinedImg< sdw::CombinedImage2DR32 >( "depthMap"
-				, uint32_t( AtmosphereBackgroundPass::eDepth )
-				, 0u );
 
 			// Fragment Outputs
 			auto outLuminance( writer.declOutput< sdw::Vec4 >( "outLuminance", 0u ) );
@@ -99,7 +96,7 @@ namespace atmosphere_scattering
 					auto targetSize = writer.declLocale( "targetSize"
 						, vec2( sdw::Float{ float( renderSize.width + 1u ) }, float( renderSize.height + 1u ) ) );
 					auto depthBufferValue = writer.declLocale( "depthBufferValue"
-						, depthMap.fetch( ivec2( in.fragCoord.xy() ), 0_i ) );
+						, 1.0_f );
 					auto luminance = writer.declLocale< sdw::Vec4 >( "luminance" );
 					auto transmittance = writer.declLocale< sdw::Vec4 >( "transmittance" );
 					scatteringConfig.getPixelTransLum( in.fragCoord.xy()
@@ -149,6 +146,7 @@ namespace atmosphere_scattering
 			, crg::rq::Config{}
 				.isEnabled( IsEnabledCallback( [this](){ return castor3d::BackgroundPassBase::doIsEnabled(); } ) )
 				.renderSize( size )
+				.depthStencilState( ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_LESS_OR_EQUAL } )
 				.program( doInitialiseShader( device, background, size ) ) }
 	{
 	}

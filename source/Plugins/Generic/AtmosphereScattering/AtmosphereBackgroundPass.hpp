@@ -32,7 +32,6 @@ namespace atmosphere_scattering
 		{
 			eCamera,
 			eAtmosphere,
-			eDepth,
 			eTransmittance,
 			eMultiScatter,
 			eSkyView,

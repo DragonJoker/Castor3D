@@ -344,8 +344,8 @@ namespace castor3d
 			, crg::FramePass const * previousPass );
 		crg::FramePass & doCreateDepthPass( ProgressBar * progress );
 		crg::FramePass & doCreateComputeDepthRange( ProgressBar * progress );
-		crg::FramePass & doCreateOpaquePass( ProgressBar * progress );
 		BackgroundRendererUPtr doCreateBackgroundPass( ProgressBar * progress );
+		crg::FramePass & doCreateOpaquePass( ProgressBar * progress );
 		crg::FramePass & doCreateTransparentPass( ProgressBar * progress );
 		void doInitialiseLpv();
 		void doUpdateShadowMaps( CpuUpdater & updater );
@@ -391,6 +391,7 @@ namespace castor3d
 		VoxelizerUPtr m_voxelizer;
 		LightVolumePassResultUPtr m_lpvResult;
 		LightVolumePassResultArray m_llpvResult;
+		BackgroundRendererUPtr m_backgroundRenderer{};
 		ShadowMapUPtr m_directionalShadowMap;
 		ShadowMapUPtr m_pointShadowMap;
 		ShadowMapUPtr m_spotShadowMap;
@@ -398,7 +399,6 @@ namespace castor3d
 		crg::FramePass * m_opaquePassDesc{};
 		RenderTechniquePass * m_opaquePass{};
 		DeferredRenderingUPtr m_deferredRendering;
-		BackgroundRendererUPtr m_backgroundRenderer{};
 		TransparentPassResultUPtr m_transparentPassResult;
 		crg::FramePass * m_transparentPassDesc{};
 		RenderTechniquePass * m_transparentPass{};
