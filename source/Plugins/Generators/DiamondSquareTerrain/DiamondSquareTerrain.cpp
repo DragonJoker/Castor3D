@@ -61,11 +61,17 @@ namespace diamond_square_terrain
 
 	castor::String const Generator::Type = cuT( "diamond_square_terrain" );
 	castor::String const Generator::Name = cuT( "Diamond Square Terrain Generator" );
-	castor::String const Generator::ParamRoughness = cuT( "roughness" );
 	castor::String const Generator::ParamRandomSeed = cuT( "disableRandomSeed" );
-	castor::String const Generator::ParamScale = cuT( "scale" );
+	castor::String const Generator::ParamHeightRange = cuT( "heightRange" );
+	castor::String const Generator::ParamYMin = cuT( "yMin" );
+	castor::String const Generator::ParamYMax = cuT( "yMax" );
+	castor::String const Generator::ParamXzScale = cuT( "xzScale" );
+	castor::String const Generator::ParamXScale = cuT( "xScale" );
+	castor::String const Generator::ParamZScale = cuT( "zScale" );
+	castor::String const Generator::ParamUvScale = cuT( "uvScale" );
+	castor::String const Generator::ParamUScale = cuT( "uScale" );
+	castor::String const Generator::ParamVScale = cuT( "vScale" );
 	castor::String const Generator::ParamDetail = cuT( "detail" );
-	castor::String const Generator::ParamMinY = cuT( "minY" );
 
 	Generator::Generator()
 		: MeshGenerator{ cuT( "diamond_square_terrain" ) }
@@ -82,34 +88,51 @@ namespace diamond_square_terrain
 	{
 		castor::String param;
 		uint32_t size = 0u;
-		float roughness = 0.0f;
-		float scale = 1.0f;
-		float minY = std::numeric_limits< float >::lowest();
+		float xScale = 1.0f;
+		float zScale = 1.0f;
+		float uScale = 1.0f;
+		float vScale = 1.0f;
+		castor::Range< float > yRange{ -500.0f, 500.0f };
 		bool disableRandomSeed = false;
-
-		if ( p_parameters.get( ParamRoughness, param ) )
-		{
-			roughness = castor::string::toFloat( param );
-		}
 
 		if ( p_parameters.get( ParamRandomSeed, param ) )
 		{
 			disableRandomSeed = true;
 		}
 
-		if ( p_parameters.get( ParamScale, param ) )
+		if ( p_parameters.get( ParamYMin, param ) )
 		{
-			scale = castor::string::toFloat( param );
+			yRange = castor::makeRange( yRange.getMin(), castor::string::toFloat( param ) );
+		}
+
+		if ( p_parameters.get( ParamYMax, param ) )
+		{
+			yRange = castor::makeRange( castor::string::toFloat( param ), yRange.getMax() );
+		}
+
+		if ( p_parameters.get( ParamXScale, param ) )
+		{
+			xScale = castor::string::toFloat( param );
+		}
+
+		if ( p_parameters.get( ParamZScale, param ) )
+		{
+			zScale = castor::string::toFloat( param );
+		}
+
+		if ( p_parameters.get( ParamUScale, param ) )
+		{
+			uScale = castor::string::toFloat( param );
+		}
+
+		if ( p_parameters.get( ParamVScale, param ) )
+		{
+			vScale = castor::string::toFloat( param );
 		}
 
 		if ( p_parameters.get( ParamDetail, param ) )
 		{
-			size = uint32_t( pow( 2, castor::string::toUInt( param ) ) + 1u );
-		}
-
-		if ( p_parameters.get( ParamMinY, param ) )
-		{
-			minY = castor::string::toFloat( param );
+			size = uint32_t( pow( 2, castor::string::toUInt( param ) ) );
 		}
 
 		if ( size )
@@ -118,120 +141,87 @@ namespace diamond_square_terrain
 			auto max = size - 1;
 			auto engine = createRandomEngine( disableRandomSeed );
 
-			auto average = []( std::vector< float > values )
-			{
-				auto total = std::accumulate( values.begin()
-					, values.end()
-					, 0.0f
-					, []( float accum, float value )
-					{
-						if ( value != -1 )
-						{
-							accum += value;
-						}
-
-						return accum;
-					} );
-				return total / 4.0f;
-			};
-
-			auto diamond = [&average, &map]( uint32_t x
-				, uint32_t y
-				, uint32_t range
-				, float offset )
-			{
-				auto ave = average( { {
-						map( x, y - range ),      // top
-						map( x + range, y ),      // right
-						map( x, y + range ),      // bottom
-						map( x - range, y )       // left
-					} } );
-				map( x, y ) = ave + offset;
-			};
-
-			auto square = [&average, &map]( uint32_t x
-				, uint32_t y
-				, uint32_t range
-				, float offset )
-			{
-				auto ave = average( { {
-						map( x - range, y - range ),   // upper left
-						map( x + range, y - range ),   // upper right
-						map( x + range, y + range ),   // lower right
-						map( x - range, y + range )    // lower left
-					} } );
-				map( x, y ) = ave + offset;
-			};
-
-			std::function< void( uint32_t, float ) > divide = [&max
-				, &square
-				, &diamond
+			std::function< void( uint32_t, uint32_t, uint32_t, uint32_t, float, uint32_t ) > divide = [&map
 				, &engine
-				, &divide]( uint32_t psize
-				, float proughness )
+				, &divide]( uint32_t x1
+					, uint32_t y1
+					, uint32_t x2
+					, uint32_t y2
+					, float range
+					, uint32_t level )
 			{
-				uint32_t half = psize / 2;
-				auto lscale = proughness * float( psize );
-				std::uniform_real_distribution< float > distribution;
+				std::uniform_real_distribution< float > distribution{ -1.0f, 1.0f };
 
-				if ( half < 1 ) return;
+				if ( level < 1 ) return;
 
-				for ( auto y = half; y < max; y += psize )
+				// diamonds
+				for ( unsigned i = x1 + level; i < x2; i += level )
 				{
-					for ( auto x = half; x < max; x += psize )
+					for ( unsigned j = y1 + level; j < y2; j += level )
 					{
-						square( x, y, half, distribution( engine ) * lscale * 2 - lscale );
+						float a = map( i - level, j - level );
+						float b = map( i, j - level );
+						float c = map( i - level, j );
+						float d = map( i, j );
+						map( i - level / 2u, j - level / 2u ) = ( a + b + c + d ) / 4 + distribution( engine ) * range;
 					}
 				}
 
-				for ( auto y = 0u; y <= max; y += half )
+				// squares
+				for ( unsigned i = x1 + 2u * level; i < x2; i += level )
 				{
-					for ( auto x = ( y + half ) % psize; x <= max; x += psize )
+					for ( unsigned j = y1 + 2u * level; j < y2; j += level )
 					{
-						diamond( x, y, half, distribution( engine ) * lscale * 2 - lscale );
+						float a = map( i - level, j - level );
+						float b = map( i, j - level );
+						float c = map( i - level, j );
+						float d = map( i - level / 2, j - level / 2u );
+
+						map( i - level, j - level / 2u ) = ( a + c + d + map( i - 3 * level / 2u, j - level / 2u ) ) / 4 + distribution( engine ) * range;
+						map( i - level / 2u, j - level ) = ( a + b + d + map( i - level / 2u, j - 3 * level / 2u ) ) / 4 + distribution( engine ) * range;
 					}
 				}
 
-				divide( psize / 2, proughness );
+				divide( x1, y1, x2, y2, range / 2.0f, level / 2u );
 			};
 
-			divide( size, roughness );
+			divide( 1u, 1u, max, max, 1.0f, size );
 
-			if ( minY != std::numeric_limits< float >::lowest() )
+			auto rescale = [&map, max]()
 			{
-				auto min = 0.0f;
+				auto yMin = std::numeric_limits< float >::max();
+				auto yMax = std::numeric_limits< float >::lowest();
 
 				for ( auto z = 1u; z < max; z++ )
 				{
 					for ( auto x = 1u; x < max; x++ )
 					{
-						min = std::min( min, map( x, z ) );
+						yMin = std::min( yMin, map( x, z ) );
+						yMax = std::max( yMax, map( x, z ) );
 					}
 				}
 
-				if ( min != minY )
+				auto range = castor::makeRange( yMin, yMax );
+
+				for ( auto z = 1u; z < max; z++ )
 				{
-					auto offset = minY - min;
-
-					for ( auto z = 1u; z < max; z++ )
+					for ( auto x = 1u; x < max; x++ )
 					{
-						for ( auto x = 1u; x < max; x++ )
-						{
-							map( x, z ) += offset;
-						}
+						map( x, z ) = range.percent( map( x, z ) );
 					}
 				}
-			}
+			};
+			rescale();
 
 			auto submesh = p_mesh.createSubmesh();
-			auto positions = submesh->createComponent< castor3d::PositionsComponent >();
-			auto normals = submesh->createComponent< castor3d::NormalsComponent >();
-			auto tangents = submesh->createComponent< castor3d::TangentsComponent >();
-			auto texcoords = submesh->createComponent< castor3d::Texcoords0Component >();
-			auto mapping = submesh->createComponent< castor3d::TriFaceMapping >();
-			auto transform = [&]( uint32_t v )
+			submesh->createComponent< castor3d::PositionsComponent >();
+			submesh->createComponent< castor3d::Texcoords0Component >();
+			submesh->createComponent< castor3d::NormalsComponent >();
+			submesh->createComponent< castor3d::TangentsComponent >();
+
+			auto transform = [&]( uint32_t v, float s )
 			{
-				return scale * ( float( v ) - float( max ) / 2.0f );
+				return s * ( float( v ) - float( max ) / 2.0f );
 			};
 
 			for ( auto z = 1u; z < max; z++ )
@@ -239,12 +229,14 @@ namespace diamond_square_terrain
 				for ( auto x = 1u; x < max; x++ )
 				{
 					submesh->addPoint( castor3d::InterleavedVertex{}
-						.position( castor::Point3f{ transform( x ), scale * map( x, z ), transform( z ) } )
-						.texcoord( castor::Point2f{ float( x ) / scale, float( z ) / scale } ) );
+						.position( castor::Point3f{ transform( x, xScale ), yRange.value( map( x, z ) ), transform( z, zScale ) } )
+						.texcoord( castor::Point2f{ float( x ) / uScale, float( z ) / vScale } ) );
 				}
 			}
 
 			// Generate quads 
+			auto mapping = submesh->createComponent< castor3d::TriFaceMapping >();
+
 			for ( auto y = 0u; y < max - 2; y++ )
 			{
 				for ( auto x = 0u; x < max - 2; x++ )

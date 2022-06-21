@@ -61,29 +61,29 @@ namespace diamond_square_terrain
 				, &parserDiamondSquareTerrainEnd );
 			addParser( result
 				, uint32_t( DiamondSquareSection::eRoot )
-				, Generator::ParamRoughness
-				, &parserRoughness
-				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-			addParser( result
-				, uint32_t( DiamondSquareSection::eRoot )
 				, Generator::ParamRandomSeed
 				, &parserRandomSeed
 				, { castor::makeParameter< castor::ParameterType::eBool >() } );
 			addParser( result
 				, uint32_t( DiamondSquareSection::eRoot )
-				, Generator::ParamScale
-				, &parserScale
-				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+				, Generator::ParamXzScale
+				, &parserXzScale
+				, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
+			addParser( result
+				, uint32_t( DiamondSquareSection::eRoot )
+				, Generator::ParamUvScale
+				, &parserUvScale
+				, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
+			addParser( result
+				, uint32_t( DiamondSquareSection::eRoot )
+				, Generator::ParamHeightRange
+				, &parserHeightRange
+				, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
 			addParser( result
 				, uint32_t( DiamondSquareSection::eRoot )
 				, Generator::ParamDetail
 				, &parserDetail
 				, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-			addParser( result
-				, uint32_t( DiamondSquareSection::eRoot )
-				, Generator::ParamMinY
-				, &parserMinY
-				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 
 			return result;
 		}

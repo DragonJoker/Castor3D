@@ -32,22 +32,6 @@ namespace diamond_square_terrain
 	}
 	CU_EndAttributePop()
 
-	CU_ImplementAttributeParser( parserRoughness )
-	{
-		if ( params.empty() )
-		{
-			CU_ParsingError( "Missing parameter" );
-		}
-		else
-		{
-			float value;
-			params[0]->get( value );
-			auto & pluginContext = parser::getParserContext( context );
-			pluginContext.parameters.add( Generator::ParamRoughness, castor::string::toString( value ) );
-		}
-	}
-	CU_EndAttribute()
-
 	CU_ImplementAttributeParser( parserRandomSeed )
 	{
 		if ( params.empty() )
@@ -64,7 +48,7 @@ namespace diamond_square_terrain
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserScale )
+	CU_ImplementAttributeParser( parserXzScale )
 	{
 		if ( params.empty() )
 		{
@@ -72,10 +56,45 @@ namespace diamond_square_terrain
 		}
 		else
 		{
-			float value;
+			castor::Point2f value;
 			params[0]->get( value );
 			auto & pluginContext = parser::getParserContext( context );
-			pluginContext.parameters.add( Generator::ParamScale, castor::string::toString( value ) );
+			pluginContext.parameters.add( Generator::ParamXScale, castor::string::toString( value->x ) );
+			pluginContext.parameters.add( Generator::ParamZScale, castor::string::toString( value->y ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserUvScale )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			castor::Point2f value;
+			params[0]->get( value );
+			auto & pluginContext = parser::getParserContext( context );
+			pluginContext.parameters.add( Generator::ParamUScale, castor::string::toString( value->x ) );
+			pluginContext.parameters.add( Generator::ParamVScale, castor::string::toString( value->y ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserHeightRange )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			castor::Point2f value;
+			params[0]->get( value );
+			auto & pluginContext = parser::getParserContext( context );
+			pluginContext.parameters.add( Generator::ParamYMin, castor::string::toString( value->x ) );
+			pluginContext.parameters.add( Generator::ParamYMax, castor::string::toString( value->y ) );
 		}
 	}
 	CU_EndAttribute()
@@ -92,22 +111,6 @@ namespace diamond_square_terrain
 			params[0]->get( value );
 			auto & pluginContext = parser::getParserContext( context );
 			pluginContext.parameters.add( Generator::ParamDetail, castor::string::toString( value ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserMinY )
-	{
-		if ( params.empty() )
-		{
-			CU_ParsingError( "Missing parameter" );
-		}
-		else
-		{
-			float value;
-			params[0]->get( value );
-			auto & pluginContext = parser::getParserContext( context );
-			pluginContext.parameters.add( Generator::ParamMinY, castor::string::toString( value ) );
 		}
 	}
 	CU_EndAttribute()

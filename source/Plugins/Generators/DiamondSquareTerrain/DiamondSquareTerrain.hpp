@@ -28,11 +28,17 @@ namespace diamond_square_terrain
 	public:
 		static castor::String const Type;
 		static castor::String const Name;
-		static castor::String const ParamRoughness;
 		static castor::String const ParamRandomSeed;
-		static castor::String const ParamScale;
+		static castor::String const ParamHeightRange;
+		static castor::String const ParamYMin;
+		static castor::String const ParamYMax;
+		static castor::String const ParamXzScale;
+		static castor::String const ParamXScale;
+		static castor::String const ParamZScale;
+		static castor::String const ParamUvScale;
+		static castor::String const ParamUScale;
+		static castor::String const ParamVScale;
 		static castor::String const ParamDetail;
-		static castor::String const ParamMinY;
 	};
 }
 
