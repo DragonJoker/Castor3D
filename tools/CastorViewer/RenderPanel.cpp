@@ -391,6 +391,14 @@ namespace CastorViewer
 		return *it->second;
 	}
 
+	void RenderPanel::doUpdateMaxSpeed( float factor )
+	{
+		for ( auto & nodeState : m_nodesStates )
+		{
+			nodeState.second->multMaxSpeed( factor );
+		}
+	}
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	BEGIN_EVENT_TABLE( RenderPanel, wxPanel )
@@ -408,9 +416,9 @@ namespace CastorViewer
 		EVT_ENTER_WINDOW( RenderPanel::onEnterWindow )
 		EVT_LEAVE_WINDOW( RenderPanel::onLeaveWindow )
 		EVT_ERASE_BACKGROUND( RenderPanel::onEraseBackground )
-		EVT_SET_FOCUS( RenderPanel::onsetFocus )
+		EVT_SET_FOCUS( RenderPanel::onSetFocus )
 		EVT_KILL_FOCUS( RenderPanel::onKillFocus )
-		EVT_KEY_DOWN( RenderPanel::onKeydown )
+		EVT_KEY_DOWN( RenderPanel::onKeyDown )
 		EVT_KEY_UP( RenderPanel::onKeyUp )
 		EVT_CHAR( RenderPanel::onChar )
 		EVT_LEFT_DCLICK( RenderPanel::onMouseLDClick )
@@ -430,7 +438,8 @@ namespace CastorViewer
 	{
 		if ( m_currentState )
 		{
-			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, 0.0f, m_camSpeed.value() } );
+			auto speed = m_camSpeed.value() * ( m_extraSpeed ? 10.0f : 1.0f );
+			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, 0.0f, speed } );
 		}
 
 		p_event.Skip();
@@ -440,7 +449,8 @@ namespace CastorViewer
 	{
 		if ( m_currentState )
 		{
-			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, 0.0f, -m_camSpeed.value() } );
+			auto speed = m_camSpeed.value() * ( m_extraSpeed ? 10.0f : 1.0f );
+			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, 0.0f, -speed } );
 		}
 
 		p_event.Skip();
@@ -450,7 +460,8 @@ namespace CastorViewer
 	{
 		if ( m_currentState )
 		{
-			m_currentState->addScalarVelocity( castor::Point3f{ m_camSpeed.value(), 0.0f, 0.0f } );
+			auto speed = m_camSpeed.value() * ( m_extraSpeed ? 10.0f : 1.0f );
+			m_currentState->addScalarVelocity( castor::Point3f{ speed, 0.0f, 0.0f } );
 		}
 
 		p_event.Skip();
@@ -460,7 +471,8 @@ namespace CastorViewer
 	{
 		if ( m_currentState )
 		{
-			m_currentState->addScalarVelocity( castor::Point3f{ -m_camSpeed.value(), 0.0f, 0.0f } );
+			auto speed = m_camSpeed.value() * ( m_extraSpeed ? 10.0f : 1.0f );
+			m_currentState->addScalarVelocity( castor::Point3f{ -speed, 0.0f, 0.0f } );
 		}
 
 		p_event.Skip();
@@ -470,7 +482,8 @@ namespace CastorViewer
 	{
 		if ( m_currentState )
 		{
-			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, m_camSpeed.value(), 0.0f } );
+			auto speed = m_camSpeed.value() * ( m_extraSpeed ? 10.0f : 1.0f );
+			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, speed, 0.0f } );
 		}
 
 		p_event.Skip();
@@ -480,7 +493,8 @@ namespace CastorViewer
 	{
 		if ( m_currentState )
 		{
-			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, -m_camSpeed.value(), 0.0f } );
+			auto speed = m_camSpeed.value() * ( m_extraSpeed ? 10.0f : 1.0f );
+			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, -speed, 0.0f } );
 		}
 
 		p_event.Skip();
@@ -537,7 +551,7 @@ namespace CastorViewer
 		p_event.Skip();
 	}
 
-	void RenderPanel::onsetFocus( wxFocusEvent & p_event )
+	void RenderPanel::onSetFocus( wxFocusEvent & p_event )
 	{
 		p_event.Skip();
 	}
@@ -548,7 +562,7 @@ namespace CastorViewer
 		p_event.Skip();
 	}
 
-	void RenderPanel::onKeydown( wxKeyEvent & p_event )
+	void RenderPanel::onKeyDown( wxKeyEvent & p_event )
 	{
 		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
@@ -586,6 +600,11 @@ namespace CastorViewer
 
 			case WXK_ALT:
 				m_altdown = true;
+				break;
+
+			case 'E':
+				m_extraSpeed = true;
+				doUpdateMaxSpeed( 10.0f );
 				break;
 
 			case 'L':
@@ -659,6 +678,11 @@ namespace CastorViewer
 
 			case WXK_ALT:
 				m_altdown = false;
+				break;
+
+			case 'E':
+				m_extraSpeed = false;
+				doUpdateMaxSpeed( 0.1f );
 				break;
 
 			case WXK_ESCAPE:
