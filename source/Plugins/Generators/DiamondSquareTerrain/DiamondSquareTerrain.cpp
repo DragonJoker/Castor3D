@@ -61,6 +61,11 @@ namespace diamond_square_terrain
 
 	castor::String const Generator::Type = cuT( "diamond_square_terrain" );
 	castor::String const Generator::Name = cuT( "Diamond Square Terrain Generator" );
+	castor::String const Generator::ParamRoughness = cuT( "roughness" );
+	castor::String const Generator::ParamRandomSeed = cuT( "disableRandomSeed" );
+	castor::String const Generator::ParamScale = cuT( "scale" );
+	castor::String const Generator::ParamDetail = cuT( "detail" );
+	castor::String const Generator::ParamMinY = cuT( "minY" );
 
 	Generator::Generator()
 		: MeshGenerator{ cuT( "diamond_square_terrain" ) }
@@ -82,27 +87,27 @@ namespace diamond_square_terrain
 		float minY = std::numeric_limits< float >::lowest();
 		bool disableRandomSeed = false;
 
-		if ( p_parameters.get( cuT( "roughness" ), param ) )
+		if ( p_parameters.get( ParamRoughness, param ) )
 		{
 			roughness = castor::string::toFloat( param );
 		}
 
-		if ( p_parameters.get( cuT( "disableRandomSeed" ), param ) )
+		if ( p_parameters.get( ParamRandomSeed, param ) )
 		{
 			disableRandomSeed = true;
 		}
 
-		if ( p_parameters.get( cuT( "scale" ), param ) )
+		if ( p_parameters.get( ParamScale, param ) )
 		{
 			scale = castor::string::toFloat( param );
 		}
 
-		if ( p_parameters.get( cuT( "detail" ), param ) )
+		if ( p_parameters.get( ParamDetail, param ) )
 		{
 			size = uint32_t( pow( 2, castor::string::toUInt( param ) ) + 1u );
 		}
 
-		if ( p_parameters.get( cuT( "minY" ), param ) )
+		if ( p_parameters.get( ParamMinY, param ) )
 		{
 			minY = castor::string::toFloat( param );
 		}
@@ -113,68 +118,67 @@ namespace diamond_square_terrain
 			auto max = size - 1;
 			auto engine = createRandomEngine( disableRandomSeed );
 
-			auto average = []( std::vector< float > p_values )
+			auto average = []( std::vector< float > values )
 			{
-				auto total = std::accumulate( p_values.begin()
-					, p_values.end()
+				auto total = std::accumulate( values.begin()
+					, values.end()
 					, 0.0f
-					, []( float p_accum, float p_value )
-				{
-					if ( p_value != -1 )
+					, []( float accum, float value )
 					{
-						p_accum += p_value;
-					}
+						if ( value != -1 )
+						{
+							accum += value;
+						}
 
-					return p_accum;
-				} );
-
-				return total / 4;
+						return accum;
+					} );
+				return total / 4.0f;
 			};
 
-			auto square = [&average, &map]( uint32_t p_x
-				, uint32_t p_y
-				, uint32_t p_size
-				, float p_offset )
+			auto diamond = [&average, &map]( uint32_t x
+				, uint32_t y
+				, uint32_t range
+				, float offset )
 			{
 				auto ave = average( { {
-						map( p_x - p_size, p_y - p_size ),   // upper left
-						map( p_x + p_size, p_y - p_size ),   // upper right
-						map( p_x + p_size, p_y + p_size ),   // lower right
-						map( p_x - p_size, p_y + p_size )    // lower left
+						map( x, y - range ),      // top
+						map( x + range, y ),      // right
+						map( x, y + range ),      // bottom
+						map( x - range, y )       // left
 					} } );
-				map( p_x, p_y ) = ave + p_offset;
+				map( x, y ) = ave + offset;
 			};
 
-			auto diamond = [&average, &map]( uint32_t p_x
-				, uint32_t p_y
-				, uint32_t p_size
-				, float p_offset )
+			auto square = [&average, &map]( uint32_t x
+				, uint32_t y
+				, uint32_t range
+				, float offset )
 			{
 				auto ave = average( { {
-						map( p_x, p_y - p_size ),      // top
-						map( p_x + p_size, p_y ),      // right
-						map( p_x, p_y + p_size ),      // bottom
-						map( p_x - p_size, p_y )       // left
+						map( x - range, y - range ),   // upper left
+						map( x + range, y - range ),   // upper right
+						map( x + range, y + range ),   // lower right
+						map( x - range, y + range )    // lower left
 					} } );
-				map( p_x, p_y ) = ave + p_offset;
+				map( x, y ) = ave + offset;
 			};
 
 			std::function< void( uint32_t, float ) > divide = [&max
 				, &square
 				, &diamond
 				, &engine
-				, &divide]( uint32_t p_size
-				, float p_roughness )
+				, &divide]( uint32_t psize
+				, float proughness )
 			{
-				uint32_t half = p_size / 2;
-				auto lscale = p_roughness * float( p_size );
+				uint32_t half = psize / 2;
+				auto lscale = proughness * float( psize );
 				std::uniform_real_distribution< float > distribution;
 
 				if ( half < 1 ) return;
 
-				for ( auto y = half; y < max; y += p_size )
+				for ( auto y = half; y < max; y += psize )
 				{
-					for ( auto x = half; x < max; x += p_size )
+					for ( auto x = half; x < max; x += psize )
 					{
 						square( x, y, half, distribution( engine ) * lscale * 2 - lscale );
 					}
@@ -182,13 +186,13 @@ namespace diamond_square_terrain
 
 				for ( auto y = 0u; y <= max; y += half )
 				{
-					for ( auto x = ( y + half ) % p_size; x <= max; x += p_size )
+					for ( auto x = ( y + half ) % psize; x <= max; x += psize )
 					{
 						diamond( x, y, half, distribution( engine ) * lscale * 2 - lscale );
 					}
 				}
 
-				divide( p_size / 2, p_roughness );
+				divide( psize / 2, proughness );
 			};
 
 			divide( size, roughness );
