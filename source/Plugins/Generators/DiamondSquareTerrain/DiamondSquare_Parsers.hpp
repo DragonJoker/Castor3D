@@ -25,11 +25,11 @@ namespace diamond_square_terrain
 
 	CU_DeclareAttributeParser( parserDiamondSquareTerrain )
 	CU_DeclareAttributeParser( parserDiamondSquareTerrainEnd )
-	CU_DeclareAttributeParser( parserRoughness )
 	CU_DeclareAttributeParser( parserRandomSeed )
-	CU_DeclareAttributeParser( parserScale )
+	CU_DeclareAttributeParser( parserXzScale )
+	CU_DeclareAttributeParser( parserUvScale )
+	CU_DeclareAttributeParser( parserHeightRange )
 	CU_DeclareAttributeParser( parserDetail )
-	CU_DeclareAttributeParser( parserMinY )
 }
 
 #endif
