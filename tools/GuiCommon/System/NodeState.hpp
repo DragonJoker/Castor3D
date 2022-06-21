@@ -48,6 +48,11 @@ namespace GuiCommon
 		void setMaxSpeed( float speed );
 		/**
 		*\brief
+		*	Multiplie la vitesse maximale par le facteur donné.
+		*/
+		void multMaxSpeed( float factor );
+		/**
+		*\brief
 		*	Met à jour l'angle et le zoom en fonction des vitesses.
 		*\return
 		 * 	\p true s'il y a eu du mouvement.

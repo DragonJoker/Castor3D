@@ -86,6 +86,7 @@ namespace CastorViewer
 			, castor3d::SubmeshSPtr submesh );
 		GuiCommon::NodeState & doAddNodeState( castor3d::SceneNodeRPtr node
 			, bool camera );
+		void doUpdateMaxSpeed( float factor );
 
 		DECLARE_EVENT_TABLE()
 		void onTimerFwd( wxTimerEvent & event );
@@ -102,9 +103,9 @@ namespace CastorViewer
 		void onEnterWindow( wxMouseEvent & event );
 		void onLeaveWindow( wxMouseEvent & event );
 		void onEraseBackground( wxEraseEvent & event );
-		void onsetFocus( wxFocusEvent & event );
+		void onSetFocus( wxFocusEvent & event );
 		void onKillFocus( wxFocusEvent & event );
-		void onKeydown( wxKeyEvent & event );
+		void onKeyDown( wxKeyEvent & event );
 		void onChar( wxKeyEvent & event );
 		void onMouseLDClick( wxMouseEvent & event );
 		void onMouseLdown( wxMouseEvent & event );
@@ -127,6 +128,7 @@ namespace CastorViewer
 		bool m_mouseRightDown{ false };
 		bool m_mouseMiddleDown{ false };
 		bool m_resizeWindow{ true };
+		bool m_extraSpeed{ false };
 		std::atomic_bool m_movementStarted{ false };
 		std::array< wxTimer *, eTIMER_ID_COUNT > m_timers;
 		castor3d::RenderWindowPtr m_renderWindow;
