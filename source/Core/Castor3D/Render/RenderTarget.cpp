@@ -922,7 +922,7 @@ namespace castor3d
 			auto vtx_textureLhs = writer.declOutput< Vec2 >( "vtx_textureLhs", rendtgt::CombineLhsIdx );
 			auto vtx_textureRhs = writer.declOutput< Vec2 >( "vtx_textureRhs", rendtgt::CombineRhsIdx );
 
-			shader::Utils utils{ writer, *getEngine() };
+			shader::Utils utils{ writer };
 
 			auto getSafeBandedCoord = [&]( Vec2 const & texcoord )
 			{

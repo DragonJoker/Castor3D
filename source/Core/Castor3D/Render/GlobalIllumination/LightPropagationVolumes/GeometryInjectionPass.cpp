@@ -127,9 +127,10 @@ namespace castor3d
 				C3D_LpvLightConfig( writer, GeometryInjectionPass::LpvLightUboIdx, 0u );
 
 				// Utility functions
-				shader::Utils utils{ writer, *renderSystem.getEngine() };
+				shader::Utils utils{ writer };
 				uint32_t index = 0;
-				auto lightingModel = shader::LightingModel::createModel( utils
+				auto lightingModel = shader::LightingModel::createModel( *renderSystem.getEngine()
+					, utils
 					, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
 					, LightType::eDirectional
 					, GeometryInjectionPass::LightsIdx
@@ -188,9 +189,10 @@ namespace castor3d
 				C3D_LpvLightConfig( writer, GeometryInjectionPass::LpvLightUboIdx, 0u );
 
 				// Utility functions
-				shader::Utils utils{ writer, *renderSystem.getEngine() };
+				shader::Utils utils{ writer };
 				uint32_t index = 0u;
-				auto lightingModel = shader::LightingModel::createModel( utils
+				auto lightingModel = shader::LightingModel::createModel( *renderSystem.getEngine()
+					, utils
 					, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
 					, LightType::eDirectional
 					, GeometryInjectionPass::LightsIdx
@@ -254,9 +256,10 @@ namespace castor3d
 			C3D_LpvLightConfig( writer, GeometryInjectionPass::LpvLightUboIdx, 0u );
 
 			// Utility functions
-			shader::Utils utils{ writer, *renderSystem.getEngine() };
+			shader::Utils utils{ writer };
 			uint32_t index = 0u;
-			auto lightingModel = shader::LightingModel::createModel( utils
+			auto lightingModel = shader::LightingModel::createModel( *renderSystem.getEngine()
+				, utils
 				, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
 				, LightType::eSpot
 				, GeometryInjectionPass::LightsIdx
@@ -320,9 +323,10 @@ namespace castor3d
 			C3D_LpvLightConfig( writer, GeometryInjectionPass::LpvLightUboIdx, 0u );
 
 			// Utility functions
-			shader::Utils utils{ writer, *renderSystem.getEngine() };
+			shader::Utils utils{ writer };
 			uint32_t index = 0u;
-			auto lightingModel = shader::LightingModel::createModel( utils
+			auto lightingModel = shader::LightingModel::createModel( *renderSystem.getEngine()
+				, utils
 				, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
 				, LightType::ePoint
 				, GeometryInjectionPass::LightsIdx

@@ -166,10 +166,11 @@ namespace castor3d
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
-			shader::Utils utils{ writer, *renderSystem.getEngine() };
+			shader::Utils utils{ writer };
 			shader::CookTorranceBRDF cookTorrance{ writer, utils };
 
-			auto lightingModel = utils.createLightingModel( shader::getLightingModelName( *renderSystem.getEngine(), passType )
+			auto lightingModel = utils.createLightingModel( *renderSystem.getEngine()
+				, shader::getLightingModelName( *renderSystem.getEngine(), passType )
 				, {}
 				, nullptr
 				, true );

@@ -159,8 +159,9 @@ namespace castor3d
 		auto outData4 = writer.declOutput< Vec4 >( dropqpass::Output4, index++ );
 		auto outData5 = writer.declOutput< Vec4 >( dropqpass::Output5, index++ );
 
-		shader::Utils utils{ writer, *renderSystem.getEngine() };
-		auto lightingModel = utils.createLightingModel( shader::getLightingModelName( *getEngine(), flags.passType )
+		shader::Utils utils{ writer };
+		auto lightingModel = utils.createLightingModel( *renderSystem.getEngine()
+			, shader::getLightingModelName( *getEngine(), flags.passType )
 			, {}
 			, nullptr
 			, true );

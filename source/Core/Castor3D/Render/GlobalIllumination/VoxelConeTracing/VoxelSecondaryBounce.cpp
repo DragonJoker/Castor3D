@@ -142,7 +142,7 @@ namespace castor3d
 				, eResult
 				, 0u ) );
 
-			shader::Utils utils{ writer, *renderSystem.getEngine() };
+			shader::Utils utils{ writer };
 			shader::GlobalIllumination indirect{ writer, utils };
 
 			writer.implementMainT< VoidT >( 64u, [&]( ComputeIn in )

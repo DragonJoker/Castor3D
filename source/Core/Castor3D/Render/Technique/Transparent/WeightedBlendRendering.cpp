@@ -53,7 +53,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static ShaderPtr getPixelProgram( RenderSystem const & renderSystem )
+		static ShaderPtr getPixelProgram()
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -69,7 +69,7 @@ namespace castor3d
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0u );
 
-			shader::Utils utils{ writer, *renderSystem.getEngine() };
+			shader::Utils utils{ writer };
 			shader::Fog fog{ writer };
 
 			auto maxComponent = writer.implementFunction< Float >( "maxComponent"
@@ -146,7 +146,7 @@ namespace castor3d
 		, m_depthOnlyView{ m_transparentPassResult[WbTexture::eDepth].sampledViewId }
 		, m_size{ size }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "TransparentCombine", wboit::getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "TransparentCombine", wboit::getPixelProgram( device.renderSystem ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "TransparentCombine", wboit::getPixelProgram() }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_finalCombinePassDesc{ doCreateFinalCombine( graph

@@ -110,7 +110,6 @@ namespace castor3d
 		using namespace sdw;
 		FragmentWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
-		auto & renderSystem = *getEngine()->getRenderSystem();
 		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
 
 		C3D_Scene( writer
@@ -141,7 +140,7 @@ namespace castor3d
 		auto data1 = writer.declOutput< Vec4 >( "data1", 1u );
 		auto velocity = writer.declOutput< Vec4 >( "velocity", 2u );
 
-		shader::Utils utils{ writer, *renderSystem.getEngine() };
+		shader::Utils utils{ writer };
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
 				, flags.submeshFlags

@@ -109,7 +109,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
-		shader::Utils utils{ writer, *scene.getEngine() };
+		shader::Utils utils{ writer};
 
 		// Shader outputs
 		auto pxl_diffuse = writer.declOutput< Vec3 >( "pxl_diffuse", 0 );
@@ -138,7 +138,8 @@ namespace castor3d
 
 		// Utility functions
 		auto index = uint32_t( LightPassLgtIdx::eSmLinear );
-		auto lightingModel = shader::LightingModel::createModel( utils
+		auto lightingModel = shader::LightingModel::createModel( *scene.getEngine() 
+			, utils
 			, scene.getLightingModel( lightType )
 			, lightType
 			, uint32_t( LightPassLgtIdx::eLight )

@@ -54,7 +54,7 @@ namespace castor3d
 		{
 			using namespace sdw;
 			FragmentWriter writer;
-			shader::Utils utils{ writer, *renderSystem.getEngine() };
+			shader::Utils utils{ writer };
 
 			// Shader outputs
 			auto pxl_indirectDiffuse = writer.declOutput< Vec3 >( "pxl_indirectDiffuse", 0 );
@@ -76,7 +76,8 @@ namespace castor3d
 				, llpvIndex
 				, 0u
 				, config.sceneFlags );
-			auto lightingModel = utils.createLightingModel( shader::getLightingModelName( *renderSystem.getEngine(), passType )
+			auto lightingModel = utils.createLightingModel( *renderSystem.getEngine()
+				, shader::getLightingModelName( *renderSystem.getEngine(), passType )
 				, {}
 				, nullptr
 				, true );

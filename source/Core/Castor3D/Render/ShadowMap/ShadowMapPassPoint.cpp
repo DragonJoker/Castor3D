@@ -281,7 +281,7 @@ namespace castor3d
 		auto textureFlags = filterTexturesFlags( flags.textures );
 		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
 
-		shader::Utils utils{ writer, *getEngine() };
+		shader::Utils utils{ writer };
 
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
@@ -305,7 +305,8 @@ namespace castor3d
 		C3D_ShadowMap( writer
 			, index++
 			, RenderPipeline::eBuffers );
-		auto lightingModel = shader::LightingModel::createModel( utils
+		auto lightingModel = shader::LightingModel::createModel( *getEngine()
+			, utils
 			, shader::getLightingModelName( *getEngine(), flags.passType )
 			, LightType::ePoint
 			, lightsIndex

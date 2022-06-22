@@ -180,7 +180,8 @@ namespace castor3d::shader
 		ROF;
 	}
 
-	LightingModelPtr LightingModel::createModel( Utils & utils
+	LightingModelPtr LightingModel::createModel( Engine const & engine
+		, Utils & utils
 		, castor::String const & name
 		, uint32_t lightsBufBinding
 		, uint32_t lightsBufSet
@@ -190,7 +191,8 @@ namespace castor3d::shader
 		, uint32_t shadowMapSet
 		, bool enableVolumetric )
 	{
-		auto result = utils.createLightingModel( name
+		auto result = utils.createLightingModel( engine
+			, name
 			, shadows
 			, sssProfiles
 			, enableVolumetric );
@@ -201,7 +203,8 @@ namespace castor3d::shader
 		return result;
 	}
 
-	LightingModelPtr LightingModel::createModel( Utils & utils
+	LightingModelPtr LightingModel::createModel( Engine const & engine
+		, Utils & utils
 		, castor::String const & name
 		, LightType lightType
 		, bool lightUbo
@@ -212,7 +215,8 @@ namespace castor3d::shader
 		, uint32_t & shadowMapBinding
 		, uint32_t shadowMapSet )
 	{
-		auto result = utils.createLightingModel( name
+		auto result = utils.createLightingModel( engine
+			, name
 			, shadows
 			, sssProfiles
 			, true );
@@ -317,7 +321,8 @@ namespace castor3d::shader
 		return result;
 	}
 
-	LightingModelPtr LightingModel::createDiffuseModel( Utils & utils
+	LightingModelPtr LightingModel::createDiffuseModel( Engine const & engine
+		, Utils & utils
 		, castor::String const & name
 		, uint32_t lightsBufBinding
 		, uint32_t lightsBufSet
@@ -326,7 +331,8 @@ namespace castor3d::shader
 		, uint32_t shadowMapSet
 		, bool enableVolumetric )
 	{
-		auto result = utils.createLightingModel( name
+		auto result = utils.createLightingModel( engine
+			, name
 			, shadows
 			, nullptr
 			, enableVolumetric );
