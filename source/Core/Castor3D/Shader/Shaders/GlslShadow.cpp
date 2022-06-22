@@ -167,9 +167,27 @@ namespace castor3d
 			, sdw::UInt const & cascadeIndex
 			, sdw::UInt const & maxCascade )
 		{
+			return computeDirectional( light
+				, surface.worldPosition
+				, surface.worldNormal
+				, lightMatrix
+				, lightDirection
+				, cascadeIndex
+				, maxCascade );
+		}
+
+		sdw::Float Shadow::computeDirectional( shader::Light const & light
+			, sdw::Vec3 const & wsPosition
+			, sdw::Vec3 const & wsNormal
+			, sdw::Mat4 const & lightMatrix
+			, sdw::Vec3 const & lightDirection
+			, sdw::UInt const & cascadeIndex
+			, sdw::UInt const & maxCascade )
+		{
 			doDeclareComputeDirectionalShadow();
 			return m_computeDirectional( light
-				, surface
+				, wsPosition
+				, wsNormal
 				, lightMatrix
 				, lightDirection
 				, cascadeIndex
@@ -605,7 +623,8 @@ namespace castor3d
 			doDeclareChebyshevUpperBound();
 			m_computeDirectional = m_writer.implementFunction< sdw::Float >( "c3d_shdComputeDirectional"
 				, [this]( shader::Light const & light
-					, Surface const & surface
+					, sdw::Vec3 const & wsPosition
+					, sdw::Vec3 const & wsNormal
 					, sdw::Mat4 const & lightMatrix
 					, sdw::Vec3 const & lightToVertex
 					, sdw::UInt cascadeIndex
@@ -621,7 +640,7 @@ namespace castor3d
 							auto c3d_mapNormalDepthDirectional = m_writer.getVariable< sdw::CombinedImage2DArrayR32 >( Shadow::MapDepthDirectional );
 							auto c3d_mapVarianceDirectional = m_writer.getVariable< sdw::CombinedImage2DArrayRg32 >( Shadow::MapVarianceDirectional );
 							auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
-								, getLightSpacePosition( lightMatrix, surface.worldPosition ) );
+								, getLightSpacePosition( lightMatrix, wsPosition ) );
 
 							IF( m_writer, light.shadowType == sdw::Int( int( ShadowType::eVariance ) ) )
 							{
@@ -640,7 +659,7 @@ namespace castor3d
 								IF( m_writer, light.shadowType == sdw::Int( int( ShadowType::ePCF ) ) )
 								{
 									auto bias = m_writer.declLocale( "bias"
-										, m_getShadowOffset( surface.worldNormal
+										, m_getShadowOffset( wsNormal
 											, normalize( lightToVertex )
 											, light.pcfShadowOffsets.x()
 											, light.pcfShadowOffsets.y() ) );
@@ -653,7 +672,7 @@ namespace castor3d
 								ELSE
 								{
 									auto bias = m_writer.declLocale( "bias"
-										, m_getShadowOffset( surface.worldNormal
+										, m_getShadowOffset( wsNormal
 											, normalize( lightToVertex )
 											, light.rawShadowOffsets.x()
 											, light.rawShadowOffsets.y() ) );
@@ -671,7 +690,7 @@ namespace castor3d
 							auto c3d_mapNormalDepthDirectional = m_writer.getVariable< sdw::CombinedImage2DR32 >( Shadow::MapDepthDirectional );
 							auto c3d_mapVarianceDirectional = m_writer.getVariable< sdw::CombinedImage2DRg32 >( Shadow::MapVarianceDirectional );
 							auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
-								, getLightSpacePosition( lightMatrix, surface.worldPosition ) );
+								, getLightSpacePosition( lightMatrix, wsNormal ) );
 
 							IF( m_writer, light.shadowType == sdw::Int( int( ShadowType::eVariance ) ) )
 							{
@@ -688,7 +707,7 @@ namespace castor3d
 								IF( m_writer, light.shadowType == sdw::Int( int( ShadowType::ePCF ) ) )
 								{
 									auto bias = m_writer.declLocale( "bias"
-										, m_getShadowOffset( surface.worldNormal
+										, m_getShadowOffset( wsNormal
 											, normalize( lightToVertex )
 											, light.pcfShadowOffsets.x()
 											, light.pcfShadowOffsets.y() ) );
@@ -700,7 +719,7 @@ namespace castor3d
 								ELSE
 								{
 									auto bias = m_writer.declLocale( "bias"
-										, m_getShadowOffset( surface.worldNormal
+										, m_getShadowOffset( wsNormal
 											, normalize( lightToVertex )
 											, light.rawShadowOffsets.x()
 											, light.rawShadowOffsets.y() ) );
@@ -721,7 +740,8 @@ namespace castor3d
 					}
 				}
 				, InLight{ m_writer, "light" }
-				, InSurface{ m_writer, "surface" }
+				, sdw::InVec3{ m_writer, "wsPosition" }
+				, sdw::InVec3{ m_writer, "wsNormal" }
 				, sdw::InMat4{ m_writer, "lightMatrix" }
 				, sdw::InVec3{ m_writer, "lightToVertex" }
 				, sdw::InUInt{ m_writer, "cascadeIndex" }

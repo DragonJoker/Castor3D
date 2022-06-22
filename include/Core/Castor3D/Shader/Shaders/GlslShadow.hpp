@@ -52,6 +52,13 @@ namespace castor3d
 				, sdw::Vec3 const & lightDirection
 				, sdw::UInt const & cascadeIndex
 				, sdw::UInt const & maxCascade );
+			C3D_API sdw::Float computeDirectional( shader::Light const & light
+				, sdw::Vec3 const & wsPosition
+				, sdw::Vec3 const & wsNormal
+				, sdw::Mat4 const & lightMatrix
+				, sdw::Vec3 const & lightDirection
+				, sdw::UInt const & cascadeIndex
+				, sdw::UInt const & maxCascade );
 			C3D_API sdw::Float computeSpot( shader::Light const & light
 				, Surface const & surface
 				, sdw::Mat4 const & lightMatrix
@@ -142,7 +149,8 @@ namespace castor3d
 				, sdw::InVec3 > m_getLightSpacePosition;
 			sdw::Function< sdw::Float
 				, InLight
-				, InSurface
+				, sdw::InVec3
+				, sdw::InVec3
 				, sdw::InMat4
 				, sdw::InVec3
 				, sdw::InUInt
