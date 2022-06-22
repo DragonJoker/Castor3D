@@ -12,9 +12,10 @@ namespace castor3d::shader
 
 	NoIblBackgroundModel::NoIblBackgroundModel( sdw::ShaderWriter & writer
 		, Utils & utils
+		, VkExtent2D targetSize
 		, uint32_t & binding
 		, uint32_t set )
-		: BackgroundModel{ writer, utils }
+		: BackgroundModel{ writer, utils, std::move( targetSize ) }
 	{
 		m_writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapBackground"
 			, binding++
@@ -23,11 +24,13 @@ namespace castor3d::shader
 
 	BackgroundModelPtr NoIblBackgroundModel::create( sdw::ShaderWriter & writer
 		, Utils & utils
+		, VkExtent2D targetSize
 		, uint32_t & binding
 		, uint32_t set )
 	{
 		return std::make_unique< NoIblBackgroundModel >( writer
 			, utils
+			, std::move( targetSize )
 			, binding
 			, set );
 	}

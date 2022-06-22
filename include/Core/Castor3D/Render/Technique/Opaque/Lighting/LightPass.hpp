@@ -48,7 +48,8 @@ namespace castor3d
 			, SceneFlags const & sceneFlags
 			, LightType lightType
 			, ShadowType shadowType
-			, bool shadows );
+			, bool shadows
+			, VkExtent2D const & targetSize );
 	};
 }
 

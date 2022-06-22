@@ -105,7 +105,8 @@ namespace castor3d
 		, SceneFlags const & sceneFlags
 		, LightType lightType
 		, ShadowType shadowType
-		, bool shadows )
+		, bool shadows
+		, VkExtent2D const & targetSize )
 	{
 		using namespace sdw;
 		FragmentWriter writer;
@@ -152,6 +153,7 @@ namespace castor3d
 		auto backgroundModel = shader::BackgroundModel::createModel( scene
 			, writer
 			, utils
+			, targetSize
 			, index
 			, 1u );
 

@@ -21,11 +21,13 @@ namespace atmosphere_scattering
 	public:
 		AtmosphereBackgroundModel( sdw::ShaderWriter & writer
 			, castor3d::shader::Utils & utils
+			, VkExtent2D targetSize
 			, uint32_t & binding
 			, uint32_t set );
 
 		static castor3d::shader::BackgroundModelPtr create( sdw::ShaderWriter & writer
 			, castor3d::shader::Utils & utils
+			, VkExtent2D targetSize
 			, uint32_t & binding
 			, uint32_t set );
 

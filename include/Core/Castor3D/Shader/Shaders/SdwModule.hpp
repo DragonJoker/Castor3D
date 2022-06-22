@@ -135,6 +135,7 @@ namespace castor3d::shader
 	using BackgroundModelPtr = std::unique_ptr< BackgroundModel >;
 	using BackgroundModelCreator = std::function< BackgroundModelPtr( sdw::ShaderWriter & writer
 		, Utils & utils
+		, VkExtent2D targetSize
 		, uint32_t & binding
 		, uint32_t set ) >;
 	using BackgroundModelFactory = castor::Factory< BackgroundModel

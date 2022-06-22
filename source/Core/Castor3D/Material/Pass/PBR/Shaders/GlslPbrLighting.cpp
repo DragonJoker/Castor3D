@@ -143,7 +143,7 @@ namespace castor3d::shader
 	void PbrLightingModel::compute( DirectionalLight const & light
 		, LightMaterial const & material
 		, Surface const & surface
-		, BackgroundModel const & background
+		, BackgroundModel & background
 		, sdw::Vec3 const & worldEye
 		, sdw::Int const & receivesShadows
 		, OutputComponents & parentOutput )
