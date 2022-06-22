@@ -66,7 +66,8 @@ namespace castor3d
 				, m_config.sceneFlags
 				, m_config.lightType
 				, m_config.shadowType
-				, m_config.shadows ) }
+				, m_config.shadows
+				, makeExtent2D( getExtent( targetColourResult ) ) ) }
 		, m_stages{ makeShaderState( m_device, m_vertexShader )
 			, makeShaderState( m_device, m_pixelShader ) }
 		, m_descriptorLayout{ doCreateDescriptorLayout() }

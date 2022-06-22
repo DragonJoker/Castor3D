@@ -122,7 +122,7 @@ namespace castor3d::shader
 			, uint32_t shadowMapSet );
 		C3D_API void computeCombined( LightMaterial const & material
 			, SceneData const & sceneData
-			, BackgroundModel const & background
+			, BackgroundModel & background
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows
@@ -260,7 +260,7 @@ namespace castor3d::shader
 		C3D_API virtual void compute( DirectionalLight const & light
 			, LightMaterial const & material
 			, Surface const & surface
-			, BackgroundModel const & background
+			, BackgroundModel & background
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows
 			, OutputComponents & output ) = 0;

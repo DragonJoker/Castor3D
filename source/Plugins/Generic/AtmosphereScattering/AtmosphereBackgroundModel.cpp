@@ -21,9 +21,10 @@ namespace atmosphere_scattering
 
 	AtmosphereBackgroundModel::AtmosphereBackgroundModel( sdw::ShaderWriter & writer
 		, castor3d::shader::Utils & utils
+		, VkExtent2D targetSize
 		, uint32_t & binding
 		, uint32_t set )
-		: castor3d::shader::BackgroundModel{ writer, utils }
+		: castor3d::shader::BackgroundModel{ writer, utils, std::move( targetSize ) }
 		, m_cameraBuffer{ writer.declUniformBuffer<>( CameraUbo::Buffer
 			, binding++
 			, set ) }
@@ -56,10 +57,15 @@ namespace atmosphere_scattering
 
 	castor3d::shader::BackgroundModelPtr AtmosphereBackgroundModel::create( sdw::ShaderWriter & writer
 		, castor3d::shader::Utils & utils
+		, VkExtent2D targetSize
 		, uint32_t & binding
 		, uint32_t set )
 	{
-		return std::make_unique< AtmosphereBackgroundModel >( writer, utils, binding, set );
+		return std::make_unique< AtmosphereBackgroundModel >( writer
+			, utils
+			, std::move( targetSize )
+			, binding
+			, set );
 	}
 
 	sdw::Vec3 AtmosphereBackgroundModel::computeReflections( sdw::Vec3 const & wsIncident

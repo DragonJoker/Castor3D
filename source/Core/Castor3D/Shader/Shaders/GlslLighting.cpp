@@ -128,7 +128,7 @@ namespace castor3d::shader
 
 	void LightingModel::computeCombined( LightMaterial const & material
 		, SceneData const & sceneData
-		, BackgroundModel const & background
+		, BackgroundModel & background
 		, Surface const & surface
 		, sdw::Vec3 const & worldEye
 		, sdw::Int const & receivesShadows

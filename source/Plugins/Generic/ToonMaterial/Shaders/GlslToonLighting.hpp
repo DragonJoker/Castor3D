@@ -55,7 +55,7 @@ namespace toon::shader
 		void compute( c3d::DirectionalLight const & light
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
-			, c3d::BackgroundModel const & background
+			, c3d::BackgroundModel & background
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows
 			, c3d::OutputComponents & output )override;
@@ -259,7 +259,7 @@ namespace toon::shader
 		void compute( c3d::DirectionalLight const & light
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
-			, c3d::BackgroundModel const & background
+			, c3d::BackgroundModel & background
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows
 			, c3d::OutputComponents & output )override;

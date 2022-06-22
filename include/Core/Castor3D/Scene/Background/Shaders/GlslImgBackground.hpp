@@ -14,11 +14,13 @@ namespace castor3d::shader
 	public:
 		C3D_API ImgBackgroundModel( sdw::ShaderWriter & writer
 			, Utils & utils
+			, VkExtent2D targetSize
 			, uint32_t & binding
 			, uint32_t set );
 
 		C3D_API static BackgroundModelPtr create( sdw::ShaderWriter & writer
 			, Utils & utils
+			, VkExtent2D targetSize
 			, uint32_t & binding
 			, uint32_t set );
 

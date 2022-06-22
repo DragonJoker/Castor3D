@@ -1136,6 +1136,7 @@ namespace ocean
 		auto backgroundModel = shader::BackgroundModel::createModel( getScene()
 			, writer
 			, utils
+			, castor3d::makeExtent2D( m_size )
 			, index
 			, RenderPipeline::eBuffers );
 		shader::GlobalIllumination indirect{ writer, utils };

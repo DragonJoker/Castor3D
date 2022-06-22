@@ -193,6 +193,7 @@ namespace castor3d
 		auto backgroundModel = shader::BackgroundModel::createModel( getScene()
 			, writer
 			, utils
+			, makeExtent2D( m_size )
 			, index
 			, RenderPipeline::eBuffers );
 		shader::GlobalIllumination indirect{ writer, utils };

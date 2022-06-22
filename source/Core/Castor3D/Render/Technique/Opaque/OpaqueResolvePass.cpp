@@ -180,6 +180,7 @@ namespace castor3d
 			auto backgroundModel = shader::BackgroundModel::createModel( scene
 				, writer
 				, utils
+				, makeExtent2D( size )
 				, index
 				, 0u );
 			shader::Fog fog{ writer };
