@@ -873,7 +873,7 @@ namespace ocean
 		TessellationEvaluationWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
 
-		castor3d::shader::Utils utils{ writer, *getEngine() };
+		castor3d::shader::Utils utils{ writer };
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
@@ -1076,7 +1076,7 @@ namespace ocean
 			|| checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
 			|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
 
-		shader::Utils utils{ writer, *getEngine() };
+		shader::Utils utils{ writer };
 		shader::CookTorranceBRDF cookTorrance{ writer, utils };
 		shader::Fog fog{ writer };
 
@@ -1121,7 +1121,8 @@ namespace ocean
 		auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRg32 >( "c3d_mapBrdf"
 			, index++
 			, RenderPipeline::eBuffers );
-		auto lightingModel = shader::LightingModel::createModel( utils
+		auto lightingModel = shader::LightingModel::createModel( *getEngine()
+			, utils
 			, getScene().getLightingModel()
 			, lightsIndex
 			, RenderPipeline::eBuffers

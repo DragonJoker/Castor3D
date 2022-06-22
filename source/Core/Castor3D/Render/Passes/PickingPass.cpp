@@ -124,8 +124,7 @@ namespace castor3d
 		auto textureFlags = filterTexturesFlags( flags.textures );
 		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
 
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		shader::Utils utils{ writer, *renderSystem.getEngine() };
+		shader::Utils utils{ writer };
 
 		// UBOs
 		C3D_ModelsData( writer

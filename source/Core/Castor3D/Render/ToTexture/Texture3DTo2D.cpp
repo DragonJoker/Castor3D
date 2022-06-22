@@ -347,7 +347,7 @@ namespace castor3d
 				, eSource
 				, 0u ) );
 
-			shader::Utils utils{ writer, *renderSystem.getEngine() };
+			shader::Utils utils{ writer };
 
 			writer.implementMainT< VoidT, SurfaceT >( [&]( VertexIn in
 				, VertexOutT< SurfaceT > out )

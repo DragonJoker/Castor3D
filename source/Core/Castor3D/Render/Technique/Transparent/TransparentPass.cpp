@@ -146,7 +146,7 @@ namespace castor3d
 			|| checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
 			|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
 
-		shader::Utils utils{ writer, *getEngine() };
+		shader::Utils utils{ writer };
 		shader::CookTorranceBRDF cookTorrance{ writer, utils };
 
 		C3D_Matrix( writer
@@ -178,7 +178,8 @@ namespace castor3d
 		auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRg32 >( "c3d_mapBrdf"
 			, index++
 			, RenderPipeline::eBuffers );
-		auto lightingModel = shader::LightingModel::createModel( utils
+		auto lightingModel = shader::LightingModel::createModel( *getEngine()
+			, utils
 			, getScene().getLightingModel()
 			, lightsIndex
 			, RenderPipeline::eBuffers

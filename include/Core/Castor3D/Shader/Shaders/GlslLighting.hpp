@@ -127,7 +127,8 @@ namespace castor3d::shader
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows
 			, OutputComponents & output );
-		C3D_API static LightingModelPtr createModel( Utils & utils
+		C3D_API static LightingModelPtr createModel( Engine const & engine
+			, Utils & utils
 			, castor::String const & name
 			, uint32_t lightsBufBinding
 			, uint32_t lightsBufSet
@@ -137,7 +138,8 @@ namespace castor3d::shader
 			, uint32_t shadowMapSet
 			, bool enableVolumetric );
 		template< typename LightsBufBindingT >
-		static LightingModelPtr createModelT( Utils & utils
+		static LightingModelPtr createModelT( Engine const & engine
+			, Utils & utils
 			, castor::String const & name
 			, LightsBufBindingT lightsBufBinding
 			, uint32_t lightsBufSet
@@ -147,7 +149,8 @@ namespace castor3d::shader
 			, uint32_t shadowMapSet
 			, bool enableVolumetric )
 		{
-			return createModel( utils
+			return createModel( engine
+				, utils
 				, name
 				, uint32_t( lightsBufBinding )
 				, lightsBufSet
@@ -158,7 +161,8 @@ namespace castor3d::shader
 				, enableVolumetric );
 		}
 		template< typename LightBindingT >
-		static LightingModelPtr createModel( Utils & utils
+		static LightingModelPtr createModel( Engine const & engine
+			, Utils & utils
 			, castor::String const & name
 			, LightType light
 			, LightBindingT lightBinding
@@ -169,7 +173,8 @@ namespace castor3d::shader
 			, uint32_t & shadowMapBinding
 			, uint32_t shadowMapSet )
 		{
-			return createModel( utils
+			return createModel( engine
+				, utils
 				, name
 				, light
 				, lightUbo
@@ -195,7 +200,8 @@ namespace castor3d::shader
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows );
-		C3D_API static LightingModelPtr createDiffuseModel( Utils & utils
+		C3D_API static LightingModelPtr createDiffuseModel( Engine const & engine
+			, Utils & utils
 			, castor::String const & name
 			, uint32_t lightsBufBinding
 			, uint32_t lightsBufSet
@@ -204,7 +210,8 @@ namespace castor3d::shader
 			, uint32_t shadowMapSet
 			, bool enableVolumetric );
 		template< typename LightsBufBindingT >
-		static LightingModelPtr createDiffuseModelT( Utils & utils
+		static LightingModelPtr createDiffuseModelT( Engine const & engine
+			, Utils & utils
 			, castor::String const & name
 			, LightsBufBindingT lightsBufBinding
 			, uint32_t lightsBufSet
@@ -213,7 +220,8 @@ namespace castor3d::shader
 			, uint32_t shadowMapSet
 			, bool enableVolumetric )
 		{
-			return createDiffuseModel( utils
+			return createDiffuseModel( engine
+				, utils
 				, name
 				, uint32_t( lightsBufBinding )
 				, lightsBufSet
@@ -359,7 +367,8 @@ namespace castor3d::shader
 		C3D_API void doDeclareGetCascadeFactors();
 
 	private:
-		C3D_API static LightingModelPtr createModel( Utils & utils
+		C3D_API static LightingModelPtr createModel( Engine const & engine
+			, Utils & utils
 			, castor::String const & name
 			, LightType light
 			, bool lightUbo

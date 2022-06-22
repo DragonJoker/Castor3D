@@ -576,7 +576,7 @@ namespace castor3d
 		FragmentWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
 		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
-		shader::Utils utils{ writer, *getEngine() };
+		shader::Utils utils{ writer };
 
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
@@ -604,7 +604,8 @@ namespace castor3d
 		auto output( writer.declArrayStorageBuffer< shader::Voxel >( "voxels"
 			, addIndex++
 			, RenderPipeline::eBuffers ) );
-		auto lightingModel = shader::LightingModel::createDiffuseModel( utils
+		auto lightingModel = shader::LightingModel::createDiffuseModel( *getEngine()
+			, utils
 			, shader::getLightingModelName( *getEngine(), flags.passType )
 			, lightsIndex
 			, RenderPipeline::eBuffers

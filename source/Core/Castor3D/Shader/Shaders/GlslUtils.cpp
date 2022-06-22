@@ -12,19 +12,18 @@
 
 namespace castor3d::shader
 {
-	Utils::Utils( sdw::ShaderWriter & writer
-		, Engine const & engine )
+	Utils::Utils( sdw::ShaderWriter & writer )
 		: m_writer{ writer }
-		, m_engine{ engine }
 	{
 	}
 
-	LightingModelPtr Utils::createLightingModel( castor::String const & name
+	LightingModelPtr Utils::createLightingModel( Engine const & engine
+		, castor::String const & name
 		, ShadowOptions shadowsOptions
 		, SssProfiles const * sssProfiles
 		, bool enableVolumetric )
 	{
-		return m_engine.getLightingModelFactory().create( name
+		return engine.getLightingModelFactory().create( name
 			, m_writer
 			, *this
 			, std::move( shadowsOptions )

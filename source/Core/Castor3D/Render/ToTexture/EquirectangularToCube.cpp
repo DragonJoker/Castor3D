@@ -66,7 +66,7 @@ namespace castor3d
 				// Outputs
 				auto pxl_colour = writer.declOutput< sdw::Vec4 >( "pxl_colour", 0u );
 
-				shader::Utils utils{ writer, *device.renderSystem.getEngine() };
+				shader::Utils utils{ writer };
 				
 				auto sampleSphericalMap = writer.implementFunction< sdw::Vec2 >( "sampleSphericalMap"
 					, [&]( sdw::Vec3 const & v )

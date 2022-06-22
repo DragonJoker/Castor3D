@@ -15,10 +15,10 @@ namespace castor3d::shader
 	class Utils
 	{
 	public:
-		C3D_API explicit Utils( sdw::ShaderWriter & writer
-			, Engine const & engine );
+		C3D_API explicit Utils( sdw::ShaderWriter & writer );
 
-		C3D_API LightingModelPtr createLightingModel( castor::String const & name
+		C3D_API LightingModelPtr createLightingModel( Engine const & engine
+			, castor::String const & name
 			, ShadowOptions shadowsOptions
 			, SssProfiles const * sssProfiles
 			, bool enableVolumetric );
@@ -170,7 +170,6 @@ namespace castor3d::shader
 
 	private:
 		sdw::ShaderWriter & m_writer;
-		Engine const & m_engine;
 		sdw::Function< sdw::Void
 			, sdw::InOutFloat
 			, sdw::InOutFloat > m_swap1F;

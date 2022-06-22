@@ -83,7 +83,7 @@ namespace castor3d
 					, pipelineLayout ) );
 		}
 
-		static ShaderPtr createShader( RenderSystem const & renderSystem )
+		static ShaderPtr createShader()
 		{
 			using namespace sdw;
 			ComputeWriter writer;
@@ -100,7 +100,7 @@ namespace castor3d
 			auto minmax = output.declMember< sdw::Int >( "minmax", 2u );
 			output.end();
 
-			shader::Utils utils{ writer, *renderSystem.getEngine() };
+			shader::Utils utils{ writer };
 
 			writer.implementMainT< VoidT >( 32u, 32u, [&]( ComputeIn in )
 				{
@@ -148,7 +148,7 @@ namespace castor3d
 		, m_device{ device }
 		, m_descriptorSetLayout{ passcompdr::createDescriptorLayout( m_device ) }
 		, m_pipelineLayout{ passcompdr::createPipelineLayout( m_device, *m_descriptorSetLayout ) }
-		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, "ComputeDepthRange", passcompdr::createShader( device.renderSystem ) }
+		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, "ComputeDepthRange", passcompdr::createShader() }
 		, m_pipeline{ passcompdr::createPipeline( device, *m_pipelineLayout, m_shader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
 		, m_descriptorSet{ passcompdr::createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }

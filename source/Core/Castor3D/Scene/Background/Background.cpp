@@ -216,7 +216,7 @@ namespace castor3d
 						C3D_HdrConfig( writer, Bindings::eHdrConfig, 0u );
 						auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture", 0u );
 						auto c3d_mapSkybox = writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapSkybox", Bindings::eSkybox, 0u );
-						shader::Utils utils{ writer, *m_device.renderSystem.getEngine() };
+						shader::Utils utils{ writer };
 
 						// Outputs
 						auto pxl_FragColor = writer.declOutput< Vec4 >( "pxl_FragColor", 0u );

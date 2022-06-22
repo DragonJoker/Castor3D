@@ -987,7 +987,6 @@ namespace castor3d
 		// Pixel shader
 		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "Overlay" };
 		{
-			auto & renderSystem = *getRenderSystem();
 			FragmentWriter writer;
 
 			auto materials = std::make_unique< shader::Materials >( writer
@@ -1016,7 +1015,7 @@ namespace castor3d
 				, std::max( 1u, texturesCount )
 				, hasTexture ) );
 
-			shader::Utils utils{ writer, *renderSystem.getEngine() };
+			shader::Utils utils{ writer };
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
