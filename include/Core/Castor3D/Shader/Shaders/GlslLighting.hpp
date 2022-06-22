@@ -122,10 +122,11 @@ namespace castor3d::shader
 			, uint32_t shadowMapSet );
 		C3D_API void computeCombined( LightMaterial const & material
 			, SceneData const & sceneData
+			, BackgroundModel const & background
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows
-			, OutputComponents & output )const;
+			, OutputComponents & output );
 		C3D_API static LightingModelPtr createModel( Utils & utils
 			, castor::String const & name
 			, uint32_t lightsBufBinding
@@ -193,7 +194,7 @@ namespace castor3d::shader
 			, SceneData const & sceneData
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows )const;
+			, sdw::Int const & receivesShadows );
 		C3D_API static LightingModelPtr createDiffuseModel( Utils & utils
 			, castor::String const & name
 			, uint32_t lightsBufBinding
@@ -251,21 +252,22 @@ namespace castor3d::shader
 		C3D_API virtual void compute( DirectionalLight const & light
 			, LightMaterial const & material
 			, Surface const & surface
+			, BackgroundModel const & background
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows
-			, OutputComponents & output )const = 0;
+			, OutputComponents & output ) = 0;
 		C3D_API virtual void compute( PointLight const & light
 			, LightMaterial const & material
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows
-			, OutputComponents & output )const = 0;
+			, OutputComponents & output ) = 0;
 		C3D_API virtual void compute( SpotLight const & light
 			, LightMaterial const & material
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows
-			, OutputComponents & output )const = 0;
+			, OutputComponents & output ) = 0;
 		C3D_API virtual void computeMapContributions( PassFlags const & passFlags
 			, TextureFlagsArray const & textures
 			, TextureConfigurations const & textureConfigs
@@ -297,17 +299,17 @@ namespace castor3d::shader
 			, LightMaterial const & material
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows )const = 0;
+			, sdw::Int const & receivesShadows ) = 0;
 		C3D_API virtual sdw::Vec3 computeDiffuse( PointLight const & light
 			, LightMaterial const & material
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows )const = 0;
+			, sdw::Int const & receivesShadows ) = 0;
 		C3D_API virtual sdw::Vec3 computeDiffuse( SpotLight const & light
 			, LightMaterial const & material
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows )const = 0;
+			, sdw::Int const & receivesShadows ) = 0;
 		C3D_API virtual void computeMapDiffuseContributions( PassFlags const & passFlags
 			, TextureFlagsArray const & textures
 			, TextureConfigurations const & textureConfigs
@@ -355,15 +357,6 @@ namespace castor3d::shader
 		C3D_API void doDeclareGetPointLight();
 		C3D_API void doDeclareGetSpotLight();
 		C3D_API void doDeclareGetCascadeFactors();
-
-		virtual void doDeclareModel() = 0;
-		virtual void doDeclareComputeDirectionalLight() = 0;
-		virtual void doDeclareComputePointLight() = 0;
-		virtual void doDeclareComputeSpotLight() = 0;
-		virtual void doDeclareDiffuseModel() = 0;
-		virtual void doDeclareComputeDirectionalLightDiffuse() = 0;
-		virtual void doDeclareComputePointLightDiffuse() = 0;
-		virtual void doDeclareComputeSpotLightDiffuse() = 0;
 
 	private:
 		C3D_API static LightingModelPtr createModel( Utils & utils

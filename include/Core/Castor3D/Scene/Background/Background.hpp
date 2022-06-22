@@ -284,6 +284,11 @@ namespace castor3d
 			return false;
 		}
 
+		virtual bool hasScattering()const
+		{
+			return false;
+		}
+
 		Scene const & getScene()const
 		{
 			return m_scene;

@@ -600,7 +600,7 @@ namespace water
 			, index++
 			, RenderPipeline::eBuffers );
 		auto lightingModel = shader::LightingModel::createModel( utils
-			, shader::getLightingModelName( *getEngine(), flags.passType )
+			, getScene().getLightingModel()
 			, lightsIndex
 			, RenderPipeline::eBuffers
 			, shader::ShadowOptions{ flags.sceneFlags, true, false }
@@ -697,6 +697,7 @@ namespace water
 					surface.create( in.fragCoord.xy(), in.viewPosition.xyz(), in.worldPosition.xyz(), finalNormal );
 					lightingModel->computeCombined( *lightMat
 						, c3d_sceneData
+						, *backgroundModel
 						, surface
 						, worldEye
 						, modelData.isShadowReceiver()

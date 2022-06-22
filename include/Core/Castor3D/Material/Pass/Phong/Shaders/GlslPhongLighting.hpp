@@ -49,21 +49,22 @@ namespace castor3d::shader
 		C3D_API void compute( DirectionalLight const & light
 			, LightMaterial const & material
 			, Surface const & surface
+			, BackgroundModel const & background
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows
-			, OutputComponents & output )const override;
+			, OutputComponents & output )override;
 		C3D_API void compute( PointLight const & light
 			, LightMaterial const & material
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows
-			, OutputComponents & output )const override;
+			, OutputComponents & output )override;
 		C3D_API void compute( SpotLight const & light
 			, LightMaterial const & material
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows
-			, OutputComponents & output )const override;
+			, OutputComponents & output )override;
 		C3D_API void computeMapContributions( PassFlags const & passFlags
 			, TextureFlagsArray const & textures
 			, TextureConfigurations const & textureConfigs
@@ -95,17 +96,17 @@ namespace castor3d::shader
 			, LightMaterial const & material
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows )const override;
+			, sdw::Int const & receivesShadows )override;
 		C3D_API sdw::Vec3 computeDiffuse( PointLight const & light
 			, LightMaterial const & material
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows )const override;
+			, sdw::Int const & receivesShadows )override;
 		C3D_API sdw::Vec3 computeDiffuse( SpotLight const & light
 			, LightMaterial const & material
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows )const override;
+			, sdw::Int const & receivesShadows )override;
 		C3D_API void computeMapDiffuseContributions( PassFlags const & passFlags
 			, TextureFlagsArray const & textures
 			, TextureConfigurations const & textureConfigs
@@ -129,29 +130,17 @@ namespace castor3d::shader
 		}
 
 	protected:
-		void doDeclareModel()override;
-		void doDeclareComputeDirectionalLight()override;
-		void doDeclareComputePointLight()override;
-		void doDeclareComputeSpotLight()override;
-		void doDeclareDiffuseModel()override;
-		void doDeclareComputeDirectionalLightDiffuse()override;
-		void doDeclareComputePointLightDiffuse()override;
-		void doDeclareComputeSpotLightDiffuse()override;
-
-	private:
-		sdw::RetVec3 doComputeLight( Light const & light
+		C3D_API sdw::RetVec3 doComputeLight( Light const & light
 			, PhongLightMaterial const & material
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & lightDirection
 			, OutputComponents & output );
-		void doDeclareComputeLight();
-		sdw::Vec3 doComputeLightDiffuse( Light const & light
+		C3D_API sdw::Vec3 doComputeLightDiffuse( Light const & light
 			, PhongLightMaterial const & material
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & lightDirection );
-		void doDeclareComputeLightDiffuse();
 
 	public:
 		C3D_API static castor::String getName();

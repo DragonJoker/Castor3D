@@ -43,7 +43,6 @@ namespace castor3d
 		eData2,
 		eData3,
 		eData4,
-		eData5,
 	};
 	/**
 	*\~english
@@ -61,6 +60,7 @@ namespace castor3d
 		eModelMatrix,
 		eSmLinear,
 		eSmVariance,
+		eCount,
 	};
 	/**
 	*\~english

@@ -83,8 +83,6 @@ namespace castor3d
 
 	ShaderPtr ForwardRenderTechniquePass::doGetPixelShaderSource( PipelineFlags const & flags )const
 	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
-
 		using namespace sdw;
 		FragmentWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
@@ -93,7 +91,7 @@ namespace castor3d
 			|| checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
 			|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
 
-		shader::Utils utils{ writer, *renderSystem.getEngine() };
+		shader::Utils utils{ writer, *getEngine() };
 		shader::CookTorranceBRDF cookTorrance{ writer, utils };
 
 		C3D_Matrix( writer
@@ -126,7 +124,7 @@ namespace castor3d
 			, index++
 			, RenderPipeline::eBuffers );
 		auto lightingModel = shader::LightingModel::createModel( utils
-			, shader::getLightingModelName( *getEngine(), flags.passType )
+			, getScene().getLightingModel()
 			, lightsIndex
 			, RenderPipeline::eBuffers
 			, shader::ShadowOptions{ flags.sceneFlags, true, false }
@@ -252,6 +250,7 @@ namespace castor3d
 					surface.create( in.fragCoord.xy(), in.viewPosition.xyz(), in.worldPosition.xyz(), normal);
 					lightingModel->computeCombined( *lightMat
 						, c3d_sceneData
+						, *backgroundModel
 						, surface
 						, worldEye
 						, modelData.isShadowReceiver()
