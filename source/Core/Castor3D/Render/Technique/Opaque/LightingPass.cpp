@@ -36,6 +36,7 @@ namespace castor3d
 		, ShadowMapResult const & smPointResult
 		, ShadowMapResult const & smSpotResult
 		, LightPassResult const & lpResult
+		, crg::ImageId const & targetColourResult
 		, SceneUbo const & sceneUbo
 		, GpInfoUbo const & gpInfoUbo )
 		: m_device{ device }
@@ -45,6 +46,7 @@ namespace castor3d
 		, m_smPointResult{ smPointResult }
 		, m_smSpotResult{ smSpotResult }
 		, m_lpResult{ lpResult }
+		, m_targetColourResult{ targetColourResult }
 		, m_sceneUbo{ sceneUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_group{ graph.createPassGroup( "DirectLighting" ) }
@@ -175,7 +177,8 @@ namespace castor3d
 					, m_lpResult
 					, m_smDirectionalResult
 					, m_smPointResult
-					, m_smSpotResult );
+					, m_smSpotResult
+					, m_targetColourResult );
 				engine.registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				m_lightPass = result.get();

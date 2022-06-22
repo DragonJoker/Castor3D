@@ -33,7 +33,30 @@ namespace castor3d::shader
 		, OutputComponents & output )
 	{
 		declareComputeCookTorrance();
-		return m_computeCookTorrance( light
+		return m_computeCookTorrance( light.colour
+			, light.intensity
+			, worldEye
+			, direction
+			, specular
+			, metalness
+			, roughness
+			, surface
+			, output );
+	}
+
+	sdw::RetVec3 CookTorranceBRDF::compute( sdw::Vec3 const & radiance
+		, sdw::Vec2 const & intensity
+		, sdw::Vec3 const & worldEye
+		, sdw::Vec3 const & direction
+		, sdw::Vec3 const & specular
+		, sdw::Float const & metalness
+		, sdw::Float const & roughness
+		, Surface surface
+		, OutputComponents & output )
+	{
+		declareComputeCookTorrance();
+		return m_computeCookTorrance( radiance
+			, intensity
 			, worldEye
 			, direction
 			, specular
@@ -230,7 +253,8 @@ namespace castor3d::shader
 		declareGeometry();
 		OutputComponents outputs{ m_writer };
 		m_computeCookTorrance = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeCookTorrance"
-			, [this]( Light const & light
+			, [this]( sdw::Vec3 const & radiance
+				, sdw::Vec2 const & intensity
 				, sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & direction
 				, sdw::Vec3 const & specular
@@ -248,8 +272,6 @@ namespace castor3d::shader
 					, normalize( L + V ) );
 				auto N = m_writer.declLocale( "N"
 					, normalize( surface.worldNormal ) );
-				auto radiance = m_writer.declLocale( "radiance"
-					, light.colour );
 
 				auto NdotL = m_writer.declLocale( "NdotL"
 					, max( 0.0_f, dot( N, L ) ) );
@@ -285,12 +307,13 @@ namespace castor3d::shader
 				kD *= 1.0_f - metalness;
 
 				auto result = m_writer.declLocale( "result"
-					, max( radiance * light.intensity.r() * kD, vec3( 0.0_f ) ) / sdw::Float{ castor::Pi< float > } );
+					, max( radiance * intensity.r() * kD, vec3( 0.0_f ) ) / sdw::Float{ castor::Pi< float > } );
 				output.m_diffuse = NdotL * result;
-				output.m_specular = max( specReflectance * radiance * light.intensity.g() * NdotL, vec3( 0.0_f ) );
+				output.m_specular = max( specReflectance * radiance * intensity.g() * NdotL, vec3( 0.0_f ) );
 				m_writer.returnStmt( result );
 			}
-			, InLight( m_writer, "light" )
+			, sdw::InVec3( m_writer, "radiance" )
+			, sdw::InVec2( m_writer, "intensity" )
 			, sdw::InVec3( m_writer, "worldEye" )
 			, sdw::InVec3( m_writer, "direction" )
 			, sdw::InVec3{ m_writer, "specular" }

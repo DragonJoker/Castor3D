@@ -222,6 +222,20 @@ namespace castor3d
 		C3D_API castor::String const & getBackgroundModel()const;
 		/**
 		 *\~english
+		 *\return		The lighting model name.
+		 *\~french
+		 *\return		Le nom du modèle d'éclairage.
+		 */
+		C3D_API castor::String getLightingModel( LightType lightType )const;
+		/**
+		 *\~english
+		 *\return		The lighting model name.
+		 *\~french
+		 *\return		Le nom du modèle d'éclairage.
+		 */
+		C3D_API castor::String getLightingModel()const;
+		/**
+		 *\~english
 		 *\brief		Creates an animated texture and adds it to animated textures group.
 		 *\param[in]	sourceInfo	The texture source info.
 		 *\param[in]	config		The texture configuration.

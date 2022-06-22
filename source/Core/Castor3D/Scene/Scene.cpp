@@ -36,7 +36,7 @@
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/LightFactory.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
-#include "Castor3D/Shader/Shaders/SdwModule.hpp"
+#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
@@ -584,6 +584,32 @@ namespace castor3d
 	castor::String const & Scene::getBackgroundModel()const
 	{
 		return m_background->getModelName();
+	}
+
+	castor::String Scene::getLightingModel( LightType lightType )const
+	{
+		auto result = shader::getLightingModelName( *getEngine(), getPassesType() );
+
+		if ( m_background->hasScattering() && lightType == LightType::eDirectional )
+		{
+			result = shader::concatModelNames( result
+				, m_background->getModelName() );
+		}
+
+		return result;
+	}
+
+	castor::String Scene::getLightingModel()const
+	{
+		auto result = shader::getLightingModelName( *getEngine(), getPassesType() );
+
+		if ( m_background->hasScattering() )
+		{
+			result = shader::concatModelNames( result
+				, m_background->getModelName() );
+		}
+
+		return result;
 	}
 
 	AnimatedObjectSPtr Scene::addAnimatedTexture( TextureSourceInfo const & sourceInfo

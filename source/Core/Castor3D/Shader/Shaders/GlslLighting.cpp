@@ -118,30 +118,21 @@ namespace castor3d::shader
 		, uint32_t shadowMapSet )
 	{
 		m_shadowModel->declare( shadowMapBinding, shadowMapSet );
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-		m_writer.inlineComment( "// LIGHTS" );
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 		doDeclareLightsBuffer( lightsBufBinding, lightsBufSet );
 		doDeclareGetCascadeFactors();
 		doDeclareGetBaseLight();
 		doDeclareGetDirectionalLight();
 		doDeclareGetPointLight();
 		doDeclareGetSpotLight();
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-		m_writer.inlineComment( "// LIGHTING" );
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-		doDeclareModel();
-		doDeclareComputeDirectionalLight();
-		doDeclareComputePointLight();
-		doDeclareComputeSpotLight();
 	}
 
 	void LightingModel::computeCombined( LightMaterial const & material
 		, SceneData const & sceneData
+		, BackgroundModel const & background
 		, Surface const & surface
 		, sdw::Vec3 const & worldEye
 		, sdw::Int const & receivesShadows
-		, OutputComponents & parentOutput )const
+		, OutputComponents & parentOutput )
 	{
 		auto begin = m_writer.declLocale( "c3d_begin"
 			, 0_u );
@@ -153,6 +144,7 @@ namespace castor3d::shader
 			compute( getDirectionalLight( dir )
 				, material
 				, surface
+				, background
 				, worldEye
 				, receivesShadows
 				, parentOutput );
@@ -265,29 +257,19 @@ namespace castor3d::shader
 		, uint32_t shadowMapSet )
 	{
 		m_shadowModel->declare( shadowMapBinding, shadowMapSet );
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-		m_writer.inlineComment( "// LIGHTS" );
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 		doDeclareLightsBuffer( lightsBufBinding, lightsBufSet );
 		doDeclareGetCascadeFactors();
 		doDeclareGetBaseLight();
 		doDeclareGetDirectionalLight();
 		doDeclareGetPointLight();
 		doDeclareGetSpotLight();
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-		m_writer.inlineComment( "// DIFFUSE LIGHTING" );
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-		doDeclareDiffuseModel();
-		doDeclareComputeDirectionalLightDiffuse();
-		doDeclareComputePointLightDiffuse();
-		doDeclareComputeSpotLightDiffuse();
 	}
 
 	sdw::Vec3 LightingModel::computeCombinedDiffuse( LightMaterial const & material
 		, SceneData const & sceneData
 		, Surface const & surface
 		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows )const
+		, sdw::Int const & receivesShadows )
 	{
 		auto begin = m_writer.declLocale( "c3d_begin"
 			, 0_u );
@@ -362,9 +344,6 @@ namespace castor3d::shader
 		, uint32_t shadowMapSet )
 	{
 		m_shadowModel->declareDirectional( shadowMapBinding, shadowMapSet );
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-		m_writer.inlineComment( "// LIGHTS" );
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 		doDeclareGetCascadeFactors();
 
 		if ( lightUbo )
@@ -377,12 +356,6 @@ namespace castor3d::shader
 			doDeclareGetBaseLight();
 			doDeclareGetDirectionalLight();
 		}
-
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-		m_writer.inlineComment( "// LIGHTING" );
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-		doDeclareModel();
-		doDeclareComputeDirectionalLight();
 	}
 
 	void LightingModel::declarePointModel( bool lightUbo
@@ -392,9 +365,6 @@ namespace castor3d::shader
 		, uint32_t shadowMapSet )
 	{
 		m_shadowModel->declarePoint( shadowMapBinding, shadowMapSet );
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-		m_writer.inlineComment( "// LIGHTS" );
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 
 		if ( lightUbo )
 		{
@@ -406,12 +376,6 @@ namespace castor3d::shader
 			doDeclareGetBaseLight();
 			doDeclareGetPointLight();
 		}
-
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-		m_writer.inlineComment( "// LIGHTING" );
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-		doDeclareModel();
-		doDeclareComputePointLight();
 	}
 
 	void LightingModel::declareSpotModel( bool lightUbo
@@ -421,9 +385,6 @@ namespace castor3d::shader
 		, uint32_t shadowMapSet )
 	{
 		m_shadowModel->declareSpot( shadowMapBinding, shadowMapSet );
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-		m_writer.inlineComment( "// LIGHTS" );
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 
 		if ( lightUbo )
 		{
@@ -435,12 +396,6 @@ namespace castor3d::shader
 			doDeclareGetBaseLight();
 			doDeclareGetSpotLight();
 		}
-
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-		m_writer.inlineComment( "// LIGHTING" );
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-		doDeclareModel();
-		doDeclareComputeSpotLight();
 	}
 
 	DirectionalLight LightingModel::getDirectionalLight( sdw::UInt const & index )const

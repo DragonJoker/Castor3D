@@ -6,9 +6,11 @@
 #include "Castor3D/Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPassResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/MeshLightPass.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
+#include "Castor3D/Shader/Shaders/GlslBackground.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
@@ -99,8 +101,7 @@ namespace castor3d
 		}
 	}
 
-	ShaderPtr LightPass::getPixelShaderSource( PassTypeID passType
-		, RenderSystem const & renderSystem
+	ShaderPtr LightPass::getPixelShaderSource( Scene const & scene
 		, SceneFlags const & sceneFlags
 		, LightType lightType
 		, ShadowType shadowType
@@ -108,7 +109,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
-		shader::Utils utils{ writer, *renderSystem.getEngine() };
+		shader::Utils utils{ writer, *scene.getEngine() };
 
 		// Shader outputs
 		auto pxl_diffuse = writer.declOutput< Vec3 >( "pxl_diffuse", 0 );
@@ -124,7 +125,6 @@ namespace castor3d
 		C3D_ModelsData( writer, LightPassIdx::eModels, 0u );
 		C3D_GpInfo( writer, LightPassIdx::eGpInfo, 0u );
 		C3D_Scene( writer, LightPassIdx::eScene, 0u );
-		uint32_t index = uint32_t( LightPassIdx::eData5 ) + 1u;
 
 		auto c3d_mapData0 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData0 ), uint32_t( LightPassIdx::eData0 ), 0u );
 		auto c3d_mapData1 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), uint32_t( LightPassIdx::eData1 ), 0u );
@@ -137,15 +137,20 @@ namespace castor3d
 			: ShadowType::eNone;
 
 		// Utility functions
-		index = uint32_t( LightPassLgtIdx::eSmLinear );
+		auto index = uint32_t( LightPassLgtIdx::eSmLinear );
 		auto lightingModel = shader::LightingModel::createModel( utils
-			, shader::getLightingModelName( *renderSystem.getEngine(), passType )
+			, scene.getLightingModel( lightType )
 			, lightType
 			, uint32_t( LightPassLgtIdx::eLight )
 			, 1u
 			, true
 			, shader::ShadowOptions{ shadows, lightType, shadowType == ShadowType::eVariance, false }
 			, &sssProfiles
+			, index
+			, 1u );
+		auto backgroundModel = shader::BackgroundModel::createModel( scene
+			, writer
+			, utils
 			, index
 			, 1u );
 
@@ -224,6 +229,7 @@ namespace castor3d
 						lightingModel->compute( light
 							, *lightMat
 							, surface
+							, *backgroundModel
 							, eye
 							, shadowReceiver
 							, output );

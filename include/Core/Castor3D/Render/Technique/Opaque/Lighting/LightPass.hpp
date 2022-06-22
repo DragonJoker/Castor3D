@@ -44,8 +44,7 @@ namespace castor3d
 		 *\param[in]	shadows			Dit si les ombres sont utilisées.
 		 *\return		Le source.
 		 */
-		static ShaderPtr getPixelShaderSource( PassTypeID passType
-			, RenderSystem const & renderSystem
+		static ShaderPtr getPixelShaderSource( Scene const & scene
 			, SceneFlags const & sceneFlags
 			, LightType lightType
 			, ShadowType shadowType

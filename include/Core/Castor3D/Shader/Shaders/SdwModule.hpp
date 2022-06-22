@@ -171,6 +171,8 @@ namespace castor3d::shader
 	C3D_API uint32_t getPointShadowMapCount();
 	C3D_API uint32_t getBaseLightComponentsCount();
 	C3D_API uint32_t getMaxLightComponentsCount();
+	C3D_API castor::String concatModelNames( castor::String lhs
+		, castor::String rhs );
 
 	//@}
 	//@}

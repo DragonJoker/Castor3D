@@ -21,6 +21,15 @@ namespace castor3d::shader
 			, sdw::Float const & roughness
 			, Surface surface
 			, OutputComponents & output );
+		C3D_API sdw::RetVec3 compute( sdw::Vec3 const & radiance
+			, sdw::Vec2 const & intensity
+			, sdw::Vec3 const & worldEye
+			, sdw::Vec3 const & direction
+			, sdw::Vec3 const & specular
+			, sdw::Float const & metalness
+			, sdw::Float const & roughness
+			, Surface surface
+			, OutputComponents & output );
 		C3D_API void computeAON( Light const & light
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & direction
@@ -84,7 +93,8 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, sdw::InFloat > m_smith;
 		sdw::Function< sdw::Vec3
-			, InLight
+			, sdw::InVec3
+			, sdw::InVec2
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3

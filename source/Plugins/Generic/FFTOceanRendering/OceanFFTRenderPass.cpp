@@ -634,6 +634,8 @@ namespace ocean_fft
 
 	castor3d::SubmeshFlags OceanRenderPass::doAdjustSubmeshFlags( castor3d::SubmeshFlags flags )const
 	{
+		remFlag( flags, castor3d::SubmeshFlag::eNormals );
+		remFlag( flags, castor3d::SubmeshFlag::eTangents );
 		remFlag( flags, castor3d::SubmeshFlag::eTexcoords0 );
 		remFlag( flags, castor3d::SubmeshFlag::eTexcoords1 );
 		remFlag( flags, castor3d::SubmeshFlag::eTexcoords2 );
@@ -1142,7 +1144,7 @@ namespace ocean_fft
 			, index++
 			, RenderPipeline::eBuffers );
 		auto lightingModel = shader::LightingModel::createModel( utils
-			, shader::getLightingModelName( *getEngine(), flags.passType )
+			, getScene().getLightingModel()
 			, lightsIndex
 			, RenderPipeline::eBuffers
 			, shader::ShadowOptions{ flags.sceneFlags, true, false }
@@ -1257,6 +1259,7 @@ namespace ocean_fft
 						, finalNormal );
 					lightingModel->computeCombined( *lightMat
 						, c3d_sceneData
+						, *backgroundModel
 						, surface
 						, worldEye
 						, modelData.isShadowReceiver()

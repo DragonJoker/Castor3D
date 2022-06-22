@@ -11,6 +11,7 @@
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPass.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
@@ -39,7 +40,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	LightsPipeline::LightsPipeline( crg::FramePass const & pass
+	LightsPipeline::LightsPipeline( Scene const & scene
+		, crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
@@ -47,19 +49,20 @@ namespace castor3d
 		, LightPassResult const & lpResult
 		, ShadowMapResult const & smResult
 		, std::vector< LightRenderPass > const & renderPasses
-		, std::vector< LightRenderPass > const & stencilRenderPasses )
+		, std::vector< LightRenderPass > const & stencilRenderPasses
+		, crg::ImageId const & targetColourResult )
 		: m_context{ context }
 		, m_smResult{ smResult }
 		, m_device{ device }
 		, m_renderPasses{ renderPasses }
+		, m_scene{ scene }
 		, m_config{ config }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
 			, castor::string::snakeToCamelCase( getName( m_config.lightType ) )
 			, LightPass::getVertexShaderSource( m_config.lightType ) }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT
 			, castor::string::snakeToCamelCase( getName( m_config.lightType ) )
-			, LightPass::getPixelShaderSource( m_config.passType
-				, m_device.renderSystem
+			, LightPass::getPixelShaderSource( m_scene
 				, m_config.sceneFlags
 				, m_config.lightType
 				, m_config.shadowType
@@ -77,6 +80,7 @@ namespace castor3d
 			? GpuBufferOffsetT< float >{}
 			: doCreateVertexBuffer( nullptr ) }
 		, m_viewport{ *device.renderSystem.getEngine() }
+		, m_targetColourResult{ targetColourResult }
 	{
 		m_viewport.setOrtho( -1, 1, -1, 1, -1, 1 );
 	}
@@ -188,6 +192,9 @@ namespace castor3d
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
+		auto index = uint32_t( LightPassLgtIdx::eCount );
+		m_scene.getBackground()->addBindings( setLayoutBindings, index );
+
 		return m_device->createDescriptorSetLayout( std::move( setLayoutBindings ) );
 	}
 
@@ -225,6 +232,9 @@ namespace castor3d
 				, ashes::VkDescriptorImageInfoArray{ { m_device.renderSystem.getEngine()->getDefaultSampler().lock()->getSampler()
 					, m_smResult[SmTexture::eVariance].wholeView
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } );
+
+			auto index = uint32_t( LightPassLgtIdx::eCount );
+			m_scene.getBackground()->addDescriptors( writes, *m_targetColourResult.data, index );
 
 			result.descriptorSet = m_descriptorPool->createDescriptorSet( 1u );
 			result.descriptorSet->setBindings( writes );

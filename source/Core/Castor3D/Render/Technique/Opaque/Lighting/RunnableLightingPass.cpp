@@ -18,7 +18,8 @@ namespace castor3d
 		, LightPassResult const & lpResult
 		, ShadowMapResult const & smDirectionalResult
 		, ShadowMapResult const & smPointResult
-		, ShadowMapResult const & smSpotResult )
+		, ShadowMapResult const & smSpotResult
+		, crg::ImageId const & targetColourResult )
 		: crg::RunnablePass{ pass
 			, context
 			, graph
@@ -38,6 +39,7 @@ namespace castor3d
 		, m_smDirectionalResult{ smDirectionalResult }
 		, m_smPointResult{ smPointResult }
 		, m_smSpotResult{ smSpotResult }
+		, m_targetColourResult{ targetColourResult }
 	{
 	}
 
@@ -328,7 +330,8 @@ namespace castor3d
 		if ( it == m_pipelines.end() )
 		{
 			it = m_pipelines.emplace( hash
-				, std::make_unique< LightsPipeline >( m_pass
+				, std::make_unique< LightsPipeline >( m_scene
+					, m_pass
 					, m_context
 					, m_graph
 					, m_device
@@ -340,7 +343,8 @@ namespace castor3d
 							? m_smPointResult
 							: m_smSpotResult ) )
 					, m_renderPasses
-					, m_stencilRenderPasses ) ).first;
+					, m_stencilRenderPasses
+					, m_targetColourResult ) ).first;
 		}
 
 		return *it->second;

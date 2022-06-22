@@ -55,21 +55,22 @@ namespace toon::shader
 		void compute( c3d::DirectionalLight const & light
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
+			, c3d::BackgroundModel const & background
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows
-			, c3d::OutputComponents & output )const override;
+			, c3d::OutputComponents & output )override;
 		void compute( c3d::PointLight const & light
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows
-			, c3d::OutputComponents & output )const override;
+			, c3d::OutputComponents & output )override;
 		void compute( c3d::SpotLight const & light
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows
-			, c3d::OutputComponents & output )const override;
+			, c3d::OutputComponents & output )override;
 		void computeMapContributions( castor3d::PassFlags const & passFlags
 			, castor3d::TextureFlagsArray const & textures
 			, c3d::TextureConfigurations const & textureConfigs
@@ -101,17 +102,17 @@ namespace toon::shader
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows )const override;
+			, sdw::Int const & receivesShadows )override;
 		sdw::Vec3 computeDiffuse( c3d::PointLight const & light
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows )const override;
+			, sdw::Int const & receivesShadows )override;
 		sdw::Vec3 computeDiffuse( c3d::SpotLight const & light
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows )const override;
+			, sdw::Int const & receivesShadows )override;
 		void computeMapDiffuseContributions( castor3d::PassFlags const & passFlags
 			, castor3d::TextureFlagsArray const & textures
 			, c3d::TextureConfigurations const & textureConfigs
@@ -129,16 +130,6 @@ namespace toon::shader
 			, c3d::LightMaterial & lightMat )override;
 		//\}
 
-	protected:
-		void doDeclareModel()override;
-		void doDeclareComputeDirectionalLight()override;
-		void doDeclareComputePointLight()override;
-		void doDeclareComputeSpotLight()override;
-		void doDeclareDiffuseModel()override;
-		void doDeclareComputeDirectionalLightDiffuse()override;
-		void doDeclareComputePointLightDiffuse()override;
-		void doDeclareComputeSpotLightDiffuse()override;
-
 	private:
 		void doComputeLight( c3d::Light const & light
 			, ToonPhongLightMaterial const & material
@@ -146,13 +137,11 @@ namespace toon::shader
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & lightDirection
 			, c3d::OutputComponents & output );
-		void doDeclareComputeLight();
 		sdw::Vec3 doComputeLightDiffuse( c3d::Light const & light
 			, ToonPhongLightMaterial const & material
 			, c3d::Surface const & surface
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & lightDirection );
-		void doDeclareComputeLightDiffuse();
 
 	public:
 		static const castor::String getName();
@@ -270,21 +259,22 @@ namespace toon::shader
 		void compute( c3d::DirectionalLight const & light
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
+			, c3d::BackgroundModel const & background
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows
-			, c3d::OutputComponents & output )const override;
+			, c3d::OutputComponents & output )override;
 		void compute( c3d::PointLight const & light
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows
-			, c3d::OutputComponents & output )const override;
+			, c3d::OutputComponents & output )override;
 		void compute( c3d::SpotLight const & light
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows
-			, c3d::OutputComponents & output )const override;
+			, c3d::OutputComponents & output )override;
 		void computeMapContributions( castor3d::PassFlags const & passFlags
 			, castor3d::TextureFlagsArray const & textures
 			, c3d::TextureConfigurations const & textureConfigs
@@ -316,17 +306,17 @@ namespace toon::shader
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows )const override;
+			, sdw::Int const & receivesShadows )override;
 		sdw::Vec3 computeDiffuse( c3d::PointLight const & light
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows )const override;
+			, sdw::Int const & receivesShadows )override;
 		sdw::Vec3 computeDiffuse( c3d::SpotLight const & light
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows )const override;
+			, sdw::Int const & receivesShadows )override;
 		void computeMapDiffuseContributions( castor3d::PassFlags const & passFlags
 			, castor3d::TextureFlagsArray const & textures
 			, c3d::TextureConfigurations const & textureConfigs
@@ -343,16 +333,6 @@ namespace toon::shader
 			, sdw::Float & occlusion
 			, c3d::LightMaterial & lightMat )override;
 		//\}
-
-	protected:
-		void doDeclareModel()override;
-		void doDeclareComputeDirectionalLight()override;
-		void doDeclareComputePointLight()override;
-		void doDeclareComputeSpotLight()override;
-		void doDeclareDiffuseModel()override;
-		void doDeclareComputeDirectionalLightDiffuse()override;
-		void doDeclareComputePointLightDiffuse()override;
-		void doDeclareComputeSpotLightDiffuse()override;
 
 	public:
 		c3d::CookTorranceBRDF m_cookTorrance;

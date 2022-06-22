@@ -68,6 +68,7 @@ namespace castor3d
 			, smPointResult
 			, smSpotResult
 			, m_lightPassResult
+			, resultTexture.imageId
 			, sceneUbo
 			, m_lightingGpInfoUbo ) }
 		, m_indirectLightingPass{ castor::makeUnique< IndirectLightingPass >( m_device

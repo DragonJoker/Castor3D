@@ -98,6 +98,14 @@ namespace castor3d
 		{
 			return std::make_unique< Materials >( writer );
 		}
+
+		castor::String concatModelNames( castor::String lhs
+			, castor::String rhs )
+		{
+			castor::string::replace( lhs, cuT( "c3d." ), castor::cuEmptyString );
+			castor::string::replace( rhs, cuT( "c3d." ), castor::cuEmptyString );
+			return cuT( "c3d." ) + lhs + cuT( "." ) + rhs;
+		}
 	}
 
 	//*************************************************************************
