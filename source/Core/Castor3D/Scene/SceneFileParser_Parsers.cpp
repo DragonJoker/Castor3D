@@ -2653,28 +2653,22 @@ namespace castor3d
 			auto node = parsingContext.scene->addSceneNode( name, parsingContext.sceneNode ).lock();
 			parsingContext.sceneNode.reset();
 
-			castor::PathArray files;
-			castor::File::listDirectoryFiles( context.file.getPath(), files, true );
-
-			for ( auto fileName : files )
+			for ( auto fileName : parsingContext.csnaFiles )
 			{
-				if ( fileName.getExtension() == "csna" )
-				{
-					auto fName = fileName.getFileName();
-					auto pos = fName.find( name );
-					
-					if ( pos == 0u
-						&& fName[name.size()] == '-' )
-					{
-						auto animName = fName.substr( name.size() + 1u );
+				auto fName = fileName.getFileName();
+				auto pos = fName.find( name );
 
-						if ( !animName.empty() )
-						{
-							auto & animation = node->createAnimation( animName );
-							BinaryParser< SceneNodeAnimation > parser;
-							castor::BinaryFile animFile{ fileName, castor::File::OpenMode::eRead };
-							parser.parse( animation, animFile );
-						}
+				if ( pos == 0u
+					&& fName[name.size()] == '-' )
+				{
+					auto animName = fName.substr( name.size() + 1u );
+
+					if ( !animName.empty() )
+					{
+						auto & animation = node->createAnimation( animName );
+						BinaryParser< SceneNodeAnimation > parser;
+						castor::BinaryFile animFile{ fileName, castor::File::OpenMode::eRead };
+						parser.parse( animation, animFile );
 					}
 				}
 			}

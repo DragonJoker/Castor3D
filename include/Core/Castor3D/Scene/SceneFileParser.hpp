@@ -130,6 +130,8 @@ namespace castor3d
 		};
 
 		castor::LoggerInstance * logger{};
+		castor::PathArray files;
+		castor::PathArray csnaFiles;
 		SceneRPtr scene{};
 		SceneUPtr ownScene{};
 		RenderWindowDesc window{};
