@@ -35,6 +35,7 @@ namespace toon::shader
 		sdw::Vec3 combine( sdw::Vec3 const & directDiffuse
 			, sdw::Vec3 const & indirectDiffuse
 			, sdw::Vec3 const & directSpecular
+			, sdw::Vec3 const & directScattering
 			, sdw::Vec3 const & indirectSpecular
 			, sdw::Vec3 const & ambient
 			, sdw::Vec3 const & indirectAmbient
@@ -241,6 +242,7 @@ namespace toon::shader
 		sdw::Vec3 combine( sdw::Vec3 const & directDiffuse
 			, sdw::Vec3 const & indirectDiffuse
 			, sdw::Vec3 const & directSpecular
+			, sdw::Vec3 const & directScattering
 			, sdw::Vec3 const & indirectSpecular
 			, sdw::Vec3 const & ambient
 			, sdw::Vec3 const & indirectAmbient

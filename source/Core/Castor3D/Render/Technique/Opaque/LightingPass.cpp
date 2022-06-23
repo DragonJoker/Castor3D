@@ -96,6 +96,10 @@ namespace castor3d
 			, m_lpResult[LpTexture::eSpecular]
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
+		visitor.visit( "Light Scattering"
+			, m_lpResult[LpTexture::eScattering]
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, TextureFactors{}.invert( true ) );
 	}
 
 	void LightingPass::doUpdateLightPasses( CpuUpdater & updater
@@ -211,6 +215,7 @@ namespace castor3d
 		pass.addInOutDepthStencilView( m_lpResult[LpTexture::eDepth].targetViewId );
 		pass.addOutputColourView( m_lpResult[LpTexture::eDiffuse].targetViewId );
 		pass.addOutputColourView( m_lpResult[LpTexture::eSpecular].targetViewId );
+		pass.addOutputColourView( m_lpResult[LpTexture::eScattering].targetViewId );
 		return pass;
 	}
 }

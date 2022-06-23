@@ -24,6 +24,7 @@ namespace ocean_fft
 			, "MatSpecular"
 			, "LightDiffuse"
 			, "LightSpecular"
+			, "LightScattering"
 			, "IndirectOcclusion"
 			, "LightIndirectDiffuse"
 			, "LightIndirectSpecular"

@@ -1254,7 +1254,9 @@ namespace ocean_fft
 						, vec3( 0.0_f ) );
 					auto lightSpecular = writer.declLocale( "lightSpecular"
 						, vec3( 0.0_f ) );
-					shader::OutputComponents output{ lightDiffuse, lightSpecular };
+					auto lightScattering = writer.declLocale( "lightScattering"
+						, vec3( 0.0_f ) );
+					shader::OutputComponents output{ lightDiffuse, lightSpecular, lightScattering };
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
 					surface.create( in.fragCoord.xyz()
 						, in.viewPosition.xyz()
@@ -1270,6 +1272,7 @@ namespace ocean_fft
 					lightMat->adjustDirectSpecular( lightSpecular );
 					displayDebugData( eLightDiffuse, lightDiffuse, 1.0_f );
 					displayDebugData( eLightSpecular, lightSpecular, 1.0_f );
+					displayDebugData( eLightScattering, lightScattering, 1.0_f );
 
 
 					// Indirect Lighting
@@ -1398,6 +1401,7 @@ namespace ocean_fft
 							+ emissive
 							+ refractionResult * colorMod
 							+ ( reflectionResult * colorMod * indirectAmbient )
+							+ lightScattering
 						, depthSoftenedAlpha );
 				}
 				else
@@ -1411,12 +1415,6 @@ namespace ocean_fft
 						, pxl_colour
 						, in.worldPosition.xyz()
 						, c3d_sceneData );
-				}
-				else
-				{
-					pxl_colour += backgroundModel->scatter( in.fragCoord.xy()
-						, vec2( sdw::Float{ float( m_size.getWidth() ) }, float( m_size.getHeight() ) )
-						, in.fragCoord.z() );
 				}
 			} );
 

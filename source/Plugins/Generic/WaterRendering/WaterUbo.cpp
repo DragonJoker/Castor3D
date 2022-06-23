@@ -17,6 +17,7 @@ namespace water
 			, "MatSpecular"
 			, "LightDiffuse"
 			, "LightSpecular"
+			, "LightScattering"
 			, "NoisedSpecular"
 			, "SpecularNoise"
 			, "IndirectOcclusion"

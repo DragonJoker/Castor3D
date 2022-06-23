@@ -45,13 +45,6 @@ namespace castor3d::shader
 		return vec3( 0.0_f );
 	}
 
-	sdw::Vec4 ImgBackgroundModel::scatter( sdw::Vec2 const & fragPos
-		, sdw::Vec2 const & fragSize
-		, sdw::Float const & fragDepth )
-	{
-		return vec4( 0.0_f );
-	}
-
 	sdw::Vec3 ImgBackgroundModel::computeRefractions( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
 		, sdw::Float const & prefractionRatio

@@ -93,6 +93,7 @@ namespace toon::shader
 	sdw::Vec3 ToonPhongLightingModel::combine( sdw::Vec3 const & directDiffuse
 		, sdw::Vec3 const & indirectDiffuse
 		, sdw::Vec3 const & directSpecular
+		, sdw::Vec3 const & directScattering
 		, sdw::Vec3 const & indirectSpecular
 		, sdw::Vec3 const & ambient
 		, sdw::Vec3 const & indirectAmbient
@@ -107,7 +108,8 @@ namespace toon::shader
 			+ ( ambient * indirectAmbient * ambientOcclusion )
 			+ emissive
 			+ refracted
-			+ reflected * ambientOcclusion;
+			+ reflected * ambientOcclusion
+			+ directScattering;
 	}
 
 	std::unique_ptr< c3d::LightMaterial > ToonPhongLightingModel::declMaterial( std::string const & name
@@ -145,7 +147,8 @@ namespace toon::shader
 					, c3d::OutputComponents & parentOutput )
 				{
 					c3d::OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
-						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) ) };
+						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
+						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( light.direction ) );
 					doComputeLight( light.base
@@ -235,6 +238,7 @@ namespace toon::shader
 
 					parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 					parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
+					parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
 				}
 				, c3d::InDirectionalLight( m_writer, "light" )
 				, InToonPhongLightMaterial{ m_writer, "material" }
@@ -271,7 +275,8 @@ namespace toon::shader
 					, c3d::OutputComponents & parentOutput )
 				{
 					c3d::OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
-						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) ) };
+						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
+						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
 						, surface.worldPosition - light.position );
 					auto distance = m_writer.declLocale( "distance"
@@ -306,8 +311,10 @@ namespace toon::shader
 						, light.getAttenuationFactor( distance ) );
 					output.m_diffuse = output.m_diffuse / attenuation;
 					output.m_specular = output.m_specular / attenuation;
+					output.m_scattering = output.m_scattering / attenuation;
 					parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 					parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
+					parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
 				}
 				, c3d::InPointLight( m_writer, "light" )
 				, InToonPhongLightMaterial{ m_writer, "material" }
@@ -355,7 +362,8 @@ namespace toon::shader
 						auto distance = m_writer.declLocale( "distance"
 							, length( lightToVertex ) );
 						c3d::OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
-							, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) ) };
+							, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
+							, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
 						doComputeLight( light.base
 							, material
 							, surface
@@ -386,8 +394,10 @@ namespace toon::shader
 						spotFactor = ( spotFactor - light.outerCutOff ) / light.cutOffsDiff;
 						output.m_diffuse = spotFactor * output.m_diffuse / attenuation;
 						output.m_specular = spotFactor * output.m_specular / attenuation;
+						output.m_scattering = spotFactor * output.m_scattering / attenuation;
 						parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 						parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
+						parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
 					}
 					FI;
 				}
@@ -1022,6 +1032,7 @@ namespace toon::shader
 	sdw::Vec3 ToonPbrLightingModel::combine( sdw::Vec3 const & directDiffuse
 		, sdw::Vec3 const & indirectDiffuse
 		, sdw::Vec3 const & directSpecular
+		, sdw::Vec3 const & directScattering
 		, sdw::Vec3 const & indirectSpecular
 		, sdw::Vec3 const & ambient
 		, sdw::Vec3 const & indirectAmbient
@@ -1035,7 +1046,8 @@ namespace toon::shader
 			+ directSpecular + ( indirectSpecular * ambientOcclusion )
 			+ emissive
 			+ refracted
-			+ ( reflected * ambient * indirectAmbient * ambientOcclusion );
+			+ ( reflected * ambient * indirectAmbient * ambientOcclusion )
+			+ directScattering;
 	}
 
 	c3d::ReflectionModelPtr ToonPbrLightingModel::getReflectionModel( uint32_t & envMapBinding
@@ -1067,7 +1079,8 @@ namespace toon::shader
 					, c3d::OutputComponents & parentOutput )
 				{
 					c3d::OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
-						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) ) };
+						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
+						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( -light.direction ) );
 					m_cookTorrance.computeAON( light.base
@@ -1184,6 +1197,7 @@ namespace toon::shader
 
 					parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 					parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
+					parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
 				}
 				, c3d::InDirectionalLight( m_writer, "light" )
 				, InToonPbrLightMaterial{ m_writer, "material" }
@@ -1220,7 +1234,8 @@ namespace toon::shader
 					, c3d::OutputComponents & parentOutput )
 				{
 					c3d::OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
-						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) ) };
+						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
+						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
 						, light.position - surface.worldPosition );
 					auto distance = m_writer.declLocale( "distance"
@@ -1258,8 +1273,10 @@ namespace toon::shader
 						, light.getAttenuationFactor( distance ) );
 					output.m_diffuse = output.m_diffuse / attenuation;
 					output.m_specular = output.m_specular / attenuation;
+					output.m_scattering = output.m_scattering / attenuation;
 					parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 					parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
+					parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
 				}
 				, c3d::InPointLight( m_writer, "light" )
 				, InToonPbrLightMaterial{ m_writer, "material" }
@@ -1307,7 +1324,8 @@ namespace toon::shader
 						auto distance = m_writer.declLocale( "distance"
 							, length( lightToVertex ) );
 						c3d::OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
-							, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) ) };
+							, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
+							, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
 						m_cookTorrance.computeAON( light.base
 							, worldEye
 							, lightDirection
@@ -1341,8 +1359,10 @@ namespace toon::shader
 						spotFactor = clamp( ( spotFactor - light.outerCutOff ) / light.cutOffsDiff, 0.0_f, 1.0_f );
 						output.m_diffuse = spotFactor * output.m_diffuse / attenuation;
 						output.m_specular = spotFactor * output.m_specular / attenuation;
+						output.m_scattering = spotFactor * output.m_scattering / attenuation;
 						parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 						parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
+						parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
 					}
 					FI;
 				}

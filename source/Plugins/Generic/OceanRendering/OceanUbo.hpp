@@ -27,6 +27,7 @@ namespace ocean
 		eMatSpecular,
 		eLightDiffuse,
 		eLightSpecular,
+		eLightScattering,
 		eNoisedSpecular,
 		eSpecularNoise,
 		eIndirectOcclusion,

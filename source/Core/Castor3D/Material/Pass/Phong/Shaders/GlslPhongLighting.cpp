@@ -89,6 +89,7 @@ namespace castor3d::shader
 	sdw::Vec3 PhongLightingModel::combine( sdw::Vec3 const & directDiffuse
 		, sdw::Vec3 const & indirectDiffuse
 		, sdw::Vec3 const & directSpecular
+		, sdw::Vec3 const & directScattering
 		, sdw::Vec3 const & indirectSpecular
 		, sdw::Vec3 const & ambient
 		, sdw::Vec3 const & indirectAmbient
@@ -103,7 +104,8 @@ namespace castor3d::shader
 			+ ( ambient * indirectAmbient * ambientOcclusion )
 			+ emissive
 			+ refracted
-			+ reflected * ambientOcclusion;
+			+ reflected * ambientOcclusion
+			+ directScattering;
 	}
 
 	std::unique_ptr< LightMaterial > PhongLightingModel::declMaterial( std::string const & name
@@ -141,7 +143,8 @@ namespace castor3d::shader
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
-						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) ) };
+						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
+						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( light.direction ) );
 					doComputeLight( light.base
@@ -255,6 +258,7 @@ namespace castor3d::shader
 
 					parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 					parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
+					parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
 				}
 				, InDirectionalLight( m_writer, "light" )
 				, InPhongLightMaterial{ m_writer, "material" }
@@ -291,7 +295,8 @@ namespace castor3d::shader
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
-						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) ) };
+						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
+						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
 						, surface.worldPosition - light.position );
 					auto distance = m_writer.declLocale( "distance"
@@ -326,8 +331,10 @@ namespace castor3d::shader
 						, light.getAttenuationFactor( distance ) );
 					output.m_diffuse = output.m_diffuse / attenuation;
 					output.m_specular = output.m_specular / attenuation;
+					output.m_scattering = output.m_scattering / attenuation;
 					parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 					parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
+					parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
 				}
 				, InPointLight( m_writer, "light" )
 				, InPhongLightMaterial{ m_writer, "material" }
@@ -375,7 +382,8 @@ namespace castor3d::shader
 						auto distance = m_writer.declLocale( "distLightToVertex"
 							, length( lightToVertex ) );
 						OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
-							, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) ) };
+							, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
+							, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
 						auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
 							, doComputeLight( light.base
 								, material
@@ -426,8 +434,10 @@ namespace castor3d::shader
 #endif
 
 						output.m_specular = spotFactor * output.m_specular / attenuation;
+						output.m_scattering = spotFactor * output.m_scattering / attenuation;
 						parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 						parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
+						parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
 					}
 					FI;
 				}

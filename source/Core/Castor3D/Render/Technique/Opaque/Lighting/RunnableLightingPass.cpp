@@ -32,7 +32,9 @@ namespace castor3d
 				.implicitAction( lpResult[LpTexture::eDiffuse].targetViewId
 					, crg::RecordContext::clearAttachment( lpResult[LpTexture::eDiffuse].targetViewId, getClearValue( LpTexture::eDiffuse ) ) )
 				.implicitAction( lpResult[LpTexture::eSpecular].targetViewId
-					, crg::RecordContext::clearAttachment( lpResult[LpTexture::eSpecular].targetViewId, getClearValue( LpTexture::eSpecular ) ) ) }
+					, crg::RecordContext::clearAttachment( lpResult[LpTexture::eSpecular].targetViewId, getClearValue( LpTexture::eSpecular ) ) )
+				.implicitAction( lpResult[LpTexture::eScattering].targetViewId
+					, crg::RecordContext::clearAttachment( lpResult[LpTexture::eScattering].targetViewId, getClearValue( LpTexture::eScattering ) ) ) }
 		, m_device{ device }
 		, m_scene{ scene }
 		, m_lpResult{ lpResult }
@@ -125,7 +127,8 @@ namespace castor3d
 		castor::String name = blend
 			? castor::String{ cuT( "Blend" ) }
 			: castor::String{ cuT( "First" ) };
-		std::array< VkImageLayout, 3u > layouts{ ( ( blend || hasStencil ) ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL : VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
+		std::array< VkImageLayout, 4u > layouts{ ( ( blend || hasStencil ) ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL : VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
+			, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED )
 			, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED )
 			, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED ) };
 		VkAttachmentLoadOp loadOp = blend
@@ -162,9 +165,19 @@ namespace castor3d
 				, VK_ATTACHMENT_LOAD_OP_DONT_CARE
 				, VK_ATTACHMENT_STORE_OP_DONT_CARE
 				, layouts[2u]
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL }
+			, { 0u
+				, lpResult[LpTexture::eScattering].getFormat()
+				, VK_SAMPLE_COUNT_1_BIT
+				, loadOp
+				, VK_ATTACHMENT_STORE_OP_STORE
+				, VK_ATTACHMENT_LOAD_OP_DONT_CARE
+				, VK_ATTACHMENT_STORE_OP_DONT_CARE
+				, layouts[3u]
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } };
 		ashes::VkAttachmentReferenceArray references{ { 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }
-			, { 2u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } };
+			, { 2u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }
+			, { 3u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } };
 
 		ashes::SubpassDescriptionArray subpasses;
 		subpasses.emplace_back( ashes::SubpassDescription{ 0u
@@ -203,7 +216,8 @@ namespace castor3d
 
 		std::vector< VkImageView > viewAttaches{ lpResult[LpTexture::eDepth].targetView
 			, lpResult[LpTexture::eDiffuse].targetView
-			, lpResult[LpTexture::eSpecular].targetView };
+			, lpResult[LpTexture::eSpecular].targetView
+			, lpResult[LpTexture::eScattering].targetView };
 		auto fbCreateInfo = makeVkStruct< VkFramebufferCreateInfo >( 0u
 			, VkRenderPass{}
 			, uint32_t{}
@@ -223,6 +237,7 @@ namespace castor3d
 		result.clearValues.push_back( getClearValue( LpTexture::eDepth ) );
 		result.clearValues.push_back( getClearValue( LpTexture::eDiffuse ) );
 		result.clearValues.push_back( getClearValue( LpTexture::eSpecular ) );
+		result.clearValues.push_back( getClearValue( LpTexture::eScattering ) );
 
 		result.attaches.push_back( { lpResult[LpTexture::eDepth].targetViewId
 			, layouts[0]
@@ -232,6 +247,9 @@ namespace castor3d
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
 		result.attaches.push_back( { lpResult[LpTexture::eSpecular].targetViewId
 			, layouts[2]
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
+		result.attaches.push_back( { lpResult[LpTexture::eScattering].targetViewId
+			, layouts[3]
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
 
 		return result;

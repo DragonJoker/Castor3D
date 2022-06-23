@@ -115,6 +115,7 @@ namespace castor3d::shader
 	sdw::Vec3 PbrLightingModel::combine( sdw::Vec3 const & directDiffuse
 		, sdw::Vec3 const & indirectDiffuse
 		, sdw::Vec3 const & directSpecular
+		, sdw::Vec3 const & directScattering
 		, sdw::Vec3 const & indirectSpecular
 		, sdw::Vec3 const & ambient
 		, sdw::Vec3 const & indirectAmbient
@@ -128,7 +129,8 @@ namespace castor3d::shader
 			+ directSpecular + ( indirectSpecular * ambientOcclusion )
 			+ emissive
 			+ refracted
-			+ ( reflected * ambient * indirectAmbient * ambientOcclusion );
+			+ ( reflected * ambient * indirectAmbient * ambientOcclusion )
+			+ directScattering;
 	}
 
 	ReflectionModelPtr PbrLightingModel::getReflectionModel( uint32_t & envMapBinding
@@ -160,7 +162,8 @@ namespace castor3d::shader
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
-						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) ) };
+						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
+						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( -light.direction ) );
 					m_cookTorrance.compute( light.base
@@ -276,6 +279,7 @@ namespace castor3d::shader
 
 					parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 					parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
+					parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
 				}
 				, InDirectionalLight( m_writer, "light" )
 				, InPbrLightMaterial{ m_writer, "material" }
@@ -312,7 +316,8 @@ namespace castor3d::shader
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
-						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) ) };
+						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
+						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
 					auto vertexToLight = m_writer.declLocale( "vertexToLight"
 						, light.position - surface.worldPosition );
 					auto distance = m_writer.declLocale( "distance"
@@ -349,8 +354,10 @@ namespace castor3d::shader
 						, light.getAttenuationFactor( distance ) );
 					output.m_diffuse = output.m_diffuse / attenuation;
 					output.m_specular = output.m_specular / attenuation;
+					output.m_scattering = output.m_scattering / attenuation;
 					parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 					parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
+					parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
 				}
 				, InPointLight( m_writer, "light" )
 				, InPbrLightMaterial{ m_writer, "material" }
@@ -398,7 +405,8 @@ namespace castor3d::shader
 						auto distance = m_writer.declLocale( "distance"
 							, length( vertexToLight ) );
 						OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
-							, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) ) };
+							, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
+							, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
 						auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
 							, m_cookTorrance.compute( light.base
 								, worldEye
@@ -451,8 +459,10 @@ namespace castor3d::shader
 #endif
 
 						output.m_specular = spotFactor * output.m_specular / attenuation;
+						output.m_scattering = spotFactor * output.m_scattering / attenuation;
 						parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 						parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
+						parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
 					}
 					FI;
 				}
