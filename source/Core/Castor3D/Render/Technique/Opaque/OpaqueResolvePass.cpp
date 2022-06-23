@@ -221,9 +221,11 @@ namespace castor3d
 					auto albedo = writer.declLocale( "albedo"
 						, data2.rgb() );
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
-					surface.create( c3d_gpInfoData.projToWorld( utils, vtx_texture, depth )
-						, data1.rgb() );
-					surface.texCoord.xy() = vtx_texture;
+					surface.create( vec3( in.fragCoord.xy(), depth )
+						, vec3( 0.0_f )
+						, c3d_gpInfoData.projToWorld( utils, vtx_texture, depth )
+						, data1.rgb()
+						, vec3( vtx_texture, 0.0_f ) );
 
 					IF( writer, lighting )
 					{

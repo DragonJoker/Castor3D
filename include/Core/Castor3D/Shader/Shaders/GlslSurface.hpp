@@ -23,11 +23,11 @@ namespace castor3d::shader
 			, bool enabled );
 		SDW_DeclStructInstance( , SurfaceT );
 
-		void create( sdw::Vec2 clip
+		void create( sdw::Vec3 clip
 			, sdw::Vec3 view
 			, sdw::Vec3 world
 			, sdw::Vec3 normal );
-		void create( sdw::Vec2 clip
+		void create( sdw::Vec3 clip
 			, sdw::Vec3 view
 			, sdw::Vec3 world
 			, sdw::Vec3 normal
@@ -38,7 +38,7 @@ namespace castor3d::shader
 		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 		static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
-		sdw::Vec2 clipPosition;
+		sdw::Vec3 clipPosition;
 		sdw::Vec3 viewPosition;
 		sdw::Vec3 worldPosition;
 		sdw::Vec3 worldNormal;
