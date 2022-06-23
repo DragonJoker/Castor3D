@@ -685,7 +685,10 @@ namespace castor3d
 						auto worldEye = writer.declLocale( "worldEye"
 							, c3d_sceneData.cameraPosition );
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
-						surface.create( in.fragCoord.xy(), in.viewPosition, in.worldPosition, normal );
+						surface.create( in.fragCoord.xyz()
+							, in.viewPosition
+							, in.worldPosition
+							, normal );
 						color += occlusion
 							* lightMat->albedo
 							* lightingModel->computeCombinedDiffuse( *lightMat

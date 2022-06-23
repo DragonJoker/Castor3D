@@ -132,7 +132,10 @@ namespace castor3d
 						auto wsNormal = writer.declLocale( "wsNormal"
 							, data1.xyz() );
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
-						surface.create( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal );
+						surface.create( vec3( in.fragCoord.xy(), depth )
+							, vsPosition
+							, wsPosition
+							, wsNormal );
 
 						//auto occlusion = indirect.computeOcclusion( sceneFlags
 						//	, lightType

@@ -221,7 +221,11 @@ namespace castor3d
 						, vec3( 0.0_f ) );
 					shader::OutputComponents output{ lightDiffuse, lightSpecular };
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
-					surface.create( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal, vec3( texCoord, 0.0_f ) );
+					surface.create( vec3( in.fragCoord.xy(), data0.x() )
+						, vsPosition
+						, wsPosition
+						, wsNormal
+						, vec3( texCoord, 0.0_f ) );
 
 					switch ( lightType )
 					{

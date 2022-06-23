@@ -249,7 +249,10 @@ namespace castor3d
 						, vec3( 0.0_f ) );
 					shader::OutputComponents output{ lightDiffuse, lightSpecular };
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
-					surface.create( in.fragCoord.xy(), in.viewPosition.xyz(), in.worldPosition.xyz(), normal);
+					surface.create( in.fragCoord.xyz()
+						, in.viewPosition.xyz()
+						, in.worldPosition.xyz()
+						, normal );
 					lightingModel->computeCombined( *lightMat
 						, c3d_sceneData
 						, *backgroundModel

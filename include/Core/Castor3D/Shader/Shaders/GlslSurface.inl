@@ -16,7 +16,7 @@ namespace castor3d::shader
 		, ast::expr::ExprPtr expr
 		, bool enabled )
 		: StructInstance{ writer, std::move( expr ), enabled }
-		, clipPosition{ getMember< sdw::Vec2 >( "clipPosition" ) }
+		, clipPosition{ getMember< sdw::Vec3 >( "clipPosition" ) }
 		, viewPosition{ getMember< sdw::Vec3 >( "viewPosition" ) }
 		, worldPosition{ getMember< sdw::Vec3 >( "worldPosition" ) }
 		, worldNormal{ getMember< sdw::Vec3 >( "worldNormal" ) }
@@ -25,7 +25,7 @@ namespace castor3d::shader
 	}
 
 	template< ast::var::Flag FlagT >
-	void SurfaceT< FlagT >::create( sdw::Vec2 clip
+	void SurfaceT< FlagT >::create( sdw::Vec3 clip
 		, sdw::Vec3 view
 		, sdw::Vec3 world
 		, sdw::Vec3 normal )
@@ -37,7 +37,7 @@ namespace castor3d::shader
 	}
 
 	template< ast::var::Flag FlagT >
-	void SurfaceT< FlagT >::create( sdw::Vec2 clip
+	void SurfaceT< FlagT >::create( sdw::Vec3 clip
 		, sdw::Vec3 view
 		, sdw::Vec3 world
 		, sdw::Vec3 normal
@@ -54,7 +54,7 @@ namespace castor3d::shader
 	void SurfaceT< FlagT >::create( sdw::Vec3 world
 		, sdw::Vec3 normal )
 	{
-		create( sdw::vec2( 0.0_f )
+		create( sdw::vec3( 0.0_f )
 			, sdw::vec3( 0.0_f )
 			, world
 			, normal
@@ -69,7 +69,7 @@ namespace castor3d::shader
 
 		if ( result->empty() )
 		{
-			result->declMember( "clipPosition", ast::type::Kind::eVec2F );
+			result->declMember( "clipPosition", ast::type::Kind::eVec3F );
 			result->declMember( "viewPosition", ast::type::Kind::eVec3F );
 			result->declMember( "worldPosition", ast::type::Kind::eVec3F );
 			result->declMember( "worldNormal", ast::type::Kind::eVec3F );
