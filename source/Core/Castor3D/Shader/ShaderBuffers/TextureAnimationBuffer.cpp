@@ -50,10 +50,13 @@ namespace castor3d
 
 	void TextureAnimationBuffer::removeTextureAnimation( AnimatedTexture const & texture )
 	{
-		auto & unit = texture.getTexture();
-		--m_count;
-		auto lock( castor::makeUniqueLock( m_mutex ) );
-		m_animations[unit.getId()] = nullptr;
+		if ( texture.hasTexture() )
+		{
+			auto & unit = texture.getTexture();
+			--m_count;
+			auto lock( castor::makeUniqueLock( m_mutex ) );
+			m_animations[unit.getId()] = nullptr;
+		}
 	}
 
 	void TextureAnimationBuffer::update( ashes::CommandBuffer const & commandBuffer )
