@@ -108,6 +108,7 @@ namespace castor3d
 			, m_subsurfaceScattering->getResult()
 			, m_lightPassResult[LpTexture::eDiffuse]
 			, m_lightPassResult[LpTexture::eSpecular]
+			, m_lightPassResult[LpTexture::eScattering]
 			, m_lightPassResult[LpTexture::eIndirectDiffuse]
 			, m_lightPassResult[LpTexture::eIndirectSpecular]
 			, resultTexture

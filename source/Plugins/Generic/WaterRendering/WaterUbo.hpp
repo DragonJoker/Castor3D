@@ -27,6 +27,7 @@ namespace water
 		eMatSpecular,
 		eLightDiffuse,
 		eLightSpecular,
+		eLightScattering,
 		eNoisedSpecular,
 		eSpecularNoise,
 		eIndirectOcclusion,

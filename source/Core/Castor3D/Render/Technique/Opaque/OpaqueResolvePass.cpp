@@ -126,6 +126,7 @@ namespace castor3d
 			eBrdf,
 			eDirectDiffuse,
 			eDirectSpecular,
+			eDirectScattering,
 			eIndirectDiffuse,
 			eIndirectSpecular,
 			eEnvironment,
@@ -161,6 +162,7 @@ namespace castor3d
 			auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRg32 >( "c3d_mapBrdf", uint32_t( ResolveBind::eBrdf ), 0u );
 			auto c3d_mapLightDiffuse = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightDiffuse", uint32_t( ResolveBind::eDirectDiffuse ), 0u );
 			auto c3d_mapLightSpecular = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightSpecular", uint32_t( ResolveBind::eDirectSpecular ), 0u );
+			auto c3d_mapLightScattering = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightScattering", uint32_t( ResolveBind::eDirectScattering ), 0u );
 			auto c3d_mapLightIndirectDiffuse = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightIndirectDiffuse", uint32_t( ResolveBind::eIndirectDiffuse ), 0u, config.hasDiffuseGi );
 			auto c3d_mapLightIndirectSpecular = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightIndirectSpecular", uint32_t( ResolveBind::eIndirectSpecular ), 0u, config.hasSpecularGi );
 
@@ -252,6 +254,8 @@ namespace castor3d
 							, c3d_mapLightDiffuse.lod( vtx_texture, 0.0_f ).xyz() );
 						auto lightSpecular = writer.declLocale( "lightSpecular"
 							, c3d_mapLightSpecular.lod( vtx_texture, 0.0_f ).xyz() );
+						auto lightScattering = writer.declLocale( "lightScattering"
+							, c3d_mapLightScattering.lod( vtx_texture, 0.0_f ).xyz() );
 						auto lightIndirectDiffuse = writer.declLocale( "lightIndirectDiffuse"
 							, c3d_mapLightIndirectDiffuse.lod( vtx_texture, 0.0_f ).rgb()
 							, config.hasDiffuseGi );
@@ -295,6 +299,7 @@ namespace castor3d
 						pxl_fragColor = vec4( lightingModel->combine( lightDiffuse
 								, indirectDiffuse
 								, lightSpecular
+								, lightScattering
 								, config.hasSpecularGi ? lightIndirectSpecular : vec3( 0.0_f )
 								, ambient
 								, indirectAmbient
@@ -321,12 +326,6 @@ namespace castor3d
 							, surface.worldPosition
 							, c3d_sceneData );
 					}
-					ELSE
-					{
-						pxl_fragColor += backgroundModel->scatter( in.fragCoord.xy()
-							, vec2( sdw::Float{ float( size.width ) }, float( size.height ) )
-							, depth );
-					}
 					FI;
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -346,6 +345,7 @@ namespace castor3d
 		, Texture const & subsurfaceScattering
 		, Texture const & lightDiffuse
 		, Texture const & lightSpecular
+		, Texture const & lightScattering
 		, Texture const & lightIndirectDiffuse
 		, Texture const & lightIndirectSpecular
 		, Texture const & result
@@ -364,6 +364,7 @@ namespace castor3d
 		, m_ssaoResult{ ssaoResult }
 		, m_subsurfaceScattering{ subsurfaceScattering }
 		, m_lightSpecular{ lightSpecular }
+		, m_lightScattering{ lightScattering }
 		, m_lightIndirectDiffuse{ lightIndirectDiffuse }
 		, m_lightIndirectSpecular{ lightIndirectSpecular }
 	{
@@ -459,6 +460,8 @@ namespace castor3d
 			, uint32_t( dropqrslv::ResolveBind::eDirectDiffuse ) );
 		pass.addSampledView( m_lightSpecular.sampledViewId
 			, uint32_t( dropqrslv::ResolveBind::eDirectSpecular ) );
+		pass.addSampledView( m_lightScattering.sampledViewId
+			, uint32_t( dropqrslv::ResolveBind::eDirectScattering ) );
 		pass.addSampledView( m_lightIndirectDiffuse.sampledViewId
 			, uint32_t( dropqrslv::ResolveBind::eIndirectDiffuse ) );
 		pass.addSampledView( m_lightIndirectSpecular.sampledViewId

@@ -115,6 +115,7 @@ namespace castor3d
 		// Shader outputs
 		auto pxl_diffuse = writer.declOutput< Vec3 >( "pxl_diffuse", 0 );
 		auto pxl_specular = writer.declOutput< Vec3 >( "pxl_specular", 1 );
+		auto pxl_scattering = writer.declOutput< Vec3 >( "pxl_scattering", 2 );
 
 		// Shader inputs
 		shader::Materials materials{ writer
@@ -150,6 +151,7 @@ namespace castor3d
 			, &sssProfiles
 			, index
 			, 1u );
+		index = uint32_t( LightPassLgtIdx::eCount );
 		auto backgroundModel = shader::BackgroundModel::createModel( scene
 			, writer
 			, utils
@@ -219,7 +221,9 @@ namespace castor3d
 						, vec3( 0.0_f ) );
 					auto lightSpecular = writer.declLocale( "lightSpecular"
 						, vec3( 0.0_f ) );
-					shader::OutputComponents output{ lightDiffuse, lightSpecular };
+					auto lightScattering = writer.declLocale( "lightScattering"
+						, vec3( 0.0_f ) );
+					shader::OutputComponents output{ lightDiffuse, lightSpecular, lightScattering };
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
 					surface.create( vec3( in.fragCoord.xy(), data0.x() )
 						, vsPosition
@@ -275,11 +279,13 @@ namespace castor3d
 
 					pxl_diffuse = lightDiffuse;
 					pxl_specular = lightSpecular;
+					pxl_scattering = lightScattering;
 				}
 				ELSE
 				{
 					pxl_diffuse = albedo;
 					pxl_specular = vec3( 0.0_f, 0.0_f, 0.0_f );
+					pxl_scattering = vec3( 0.0_f, 0.0_f, 0.0_f );
 				}
 				FI;
 			} );

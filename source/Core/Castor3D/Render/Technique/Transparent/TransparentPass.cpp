@@ -293,7 +293,9 @@ namespace castor3d
 						, vec3( 0.0_f ) );
 					auto lightSpecular = writer.declLocale( "lightSpecular"
 						, vec3( 0.0_f ) );
-					shader::OutputComponents output{ lightDiffuse, lightSpecular };
+					auto lightScattering = writer.declLocale( "lightScattering"
+						, vec3( 0.0_f ) );
+					shader::OutputComponents output{ lightDiffuse, lightSpecular, lightScattering };
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
 					surface.create( in.fragCoord.xyz()
 						, in.viewPosition.xyz()
@@ -356,6 +358,7 @@ namespace castor3d
 						, lightingModel->combine( lightDiffuse
 							, indirectDiffuse
 							, lightSpecular
+							, lightScattering
 							, lightIndirectSpecular
 							, ambient
 							, indirectAmbient

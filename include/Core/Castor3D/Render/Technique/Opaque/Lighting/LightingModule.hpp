@@ -76,6 +76,7 @@ namespace castor3d
 		eDepth,
 		eDiffuse,
 		eSpecular,
+		eScattering,
 		eIndirectDiffuse,
 		eIndirectSpecular,
 		CU_ScopedEnumBounds( eDepth ),

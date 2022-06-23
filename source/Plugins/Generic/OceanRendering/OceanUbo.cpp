@@ -17,6 +17,7 @@ namespace ocean
 			, "MatSpecular"
 			, "LightDiffuse"
 			, "LightSpecular"
+			, "LightScattering"
 			, "NoisedSpecular"
 			, "SpecularNoise"
 			, "IndirectOcclusion"

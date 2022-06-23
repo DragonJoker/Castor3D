@@ -1212,7 +1212,9 @@ namespace ocean
 						, vec3( 0.0_f ) );
 					auto lightSpecular = writer.declLocale( "lightSpecular"
 						, vec3( 0.0_f ) );
-					shader::OutputComponents output{ lightDiffuse, lightSpecular };
+					auto lightScattering = writer.declLocale( "lightScattering"
+						, vec3( 0.0_f ) );
+					shader::OutputComponents output{ lightDiffuse, lightSpecular, lightScattering };
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
 					surface.create( in.fragCoord.xyz()
 						, in.viewPosition.xyz()
@@ -1228,6 +1230,7 @@ namespace ocean
 					lightMat->adjustDirectSpecular( lightSpecular );
 					displayDebugData( eLightDiffuse, lightDiffuse, 1.0_f );
 					displayDebugData( eLightSpecular, lightSpecular, 1.0_f );
+					displayDebugData( eLightScattering, lightScattering, 1.0_f );
 					// Standard lighting models don't necessarily translate all that well to water.
 					// It can end up looking very glossy and plastic-like, having much more form than it really should.
 					// So here, I'm sampling some noise with three different sets of texture coordinates to try and achieve
@@ -1321,7 +1324,7 @@ namespace ocean
 					auto waterSurfacePosition = writer.declLocale( "waterSurfacePosition"
 						, writer.ternary( distortedPosition.y() < in.worldPosition.y(), distortedPosition, scenePosition ) );
 					auto waterTransmission = writer.declLocale( "waterTransmission"
-						, material.transmission.rgb() * ( indirectAmbient + indirectDiffuse ) );
+						, material.transmission.rgb() * ( indirectAmbient + indirectDiffuse ) * lightDiffuse );
 					auto heightFactor = writer.declLocale( "heightFactor"
 						, c3d_oceanData.refractionHeightFactor * ( c3d_sceneData.farPlane - c3d_sceneData.nearPlane ) );
 					refractionResult = mix( refractionResult
@@ -1344,7 +1347,7 @@ namespace ocean
 						, utils.saturate( ( in.worldPosition.w() - c3d_oceanData.foamHeightStart ) / c3d_oceanData.foamFadeDistance ) * pow( utils.saturate( dot( in.normal.xyz(), vec3( 0.0_f, 1.0_f, 0.0_f ) ) ), c3d_oceanData.foamAngleExponent ) * foamNoise );
 					foamAmount += pow( ( 1.0_f - depthSoftenedAlpha ), 3.0_f );
 					auto foamResult = writer.declLocale( "foamResult"
-						, mix( vec3( 0.0_f )
+						, lightDiffuse * mix( vec3( 0.0_f )
 							, foamColor * c3d_oceanData.foamBrightness
 							, vec3( utils.saturate( foamAmount ) * depthSoftenedAlpha ) ) );
 
@@ -1366,6 +1369,7 @@ namespace ocean
 							+ refractionResult
 							+ ( reflectionResult * indirectAmbient )
 							+ foamResult
+							+ lightScattering
 						, depthSoftenedAlpha );
 				}
 				else
@@ -1379,12 +1383,6 @@ namespace ocean
 						, pxl_colour
 						, in.worldPosition.xyz()
 						, c3d_sceneData );
-				}
-				else
-				{
-					pxl_colour += backgroundModel->scatter( in.fragCoord.xy()
-						, vec2( sdw::Float{ float( m_size.getWidth() ) }, float( m_size.getHeight() ) )
-						, in.fragCoord.z() );
 				}
 			} );
 

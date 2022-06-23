@@ -34,6 +34,7 @@ namespace ocean_fft
 		eMatSpecular,
 		eLightDiffuse,
 		eLightSpecular,
+		eLightScattering,
 		eIndirectOcclusion,
 		eLightIndirectDiffuse,
 		eLightIndirectSpecular,

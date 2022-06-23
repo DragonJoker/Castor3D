@@ -454,11 +454,6 @@ namespace castor3d
 
 				if ( m_needsRsm )
 				{
-					auto lightDiffuse = writer.declLocale( "lightDiffuse"
-						, vec3( 0.0_f ) );
-					auto lightSpecular = writer.declLocale( "lightSpecular"
-						, vec3( 0.0_f ) );
-					shader::OutputComponents output{ lightDiffuse, lightSpecular };
 					auto light = writer.declLocale( "light"
 						, c3d_shadowMapData.getDirectionalLight( *lightingModel ) );
 					pxl_flux.rgb() = lightMat->albedo

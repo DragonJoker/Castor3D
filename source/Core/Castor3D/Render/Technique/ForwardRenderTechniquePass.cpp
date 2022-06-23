@@ -247,7 +247,9 @@ namespace castor3d
 						, vec3( 0.0_f ) );
 					auto lightSpecular = writer.declLocale( "lightSpecular"
 						, vec3( 0.0_f ) );
-					shader::OutputComponents output{ lightDiffuse, lightSpecular };
+					auto lightScattering = writer.declLocale( "lightScattering"
+						, vec3( 0.0_f ) );
+					shader::OutputComponents output{ lightDiffuse, lightSpecular, lightScattering };
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
 					surface.create( in.fragCoord.xyz()
 						, in.viewPosition.xyz()
@@ -309,6 +311,7 @@ namespace castor3d
 					pxl_fragColor = vec4( lightingModel->combine( lightDiffuse
 							, indirectDiffuse
 							, lightSpecular
+							, lightScattering
 							, lightIndirectSpecular
 							, ambient
 							, indirectAmbient
@@ -330,12 +333,6 @@ namespace castor3d
 						, pxl_fragColor
 						, in.worldPosition.xyz()
 						, c3d_sceneData );
-				}
-				else
-				{
-					pxl_fragColor += backgroundModel->scatter( in.fragCoord.xy()
-						, vec2( sdw::Float{ float( m_size.getWidth() ) }, float( m_size.getHeight() ) )
-						, in.fragCoord.z() );
 				}
 
 				pxl_velocity.xy() = in.getVelocity();
