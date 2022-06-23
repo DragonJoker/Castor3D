@@ -460,6 +460,16 @@ namespace castor3d
 		{
 			SceneFileContext * userContext = new SceneFileContext{ *context.logger
 				, static_cast< SceneFileParser * >( context.parser ) };
+			castor::File::listDirectoryFiles( context.file.getPath(), userContext->files, true );
+
+			for ( auto fileName : userContext->files )
+			{
+				if ( fileName.getExtension() == "csna" )
+				{
+					userContext->csnaFiles.push_back( fileName );
+				}
+			}
+
 			return userContext;
 		}
 
