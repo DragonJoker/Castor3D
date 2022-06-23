@@ -46,6 +46,7 @@ namespace atmosphere_scattering
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows
 			, c3d::OutputComponents & output )override;
+		using c3d::PhongLightingModel::compute;
 		//\}
 
 	public:
@@ -105,6 +106,7 @@ namespace atmosphere_scattering
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows
 			, c3d::OutputComponents & output )override;
+		using c3d::PbrLightingModel::compute;
 		//\}
 
 	public:

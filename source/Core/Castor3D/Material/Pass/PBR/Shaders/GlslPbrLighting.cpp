@@ -142,13 +142,13 @@ namespace castor3d::shader
 			, envMapSet );
 	}
 
-	void PbrLightingModel::compute( DirectionalLight const & light
-		, LightMaterial const & material
-		, Surface const & surface
-		, BackgroundModel & background
-		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows
-		, OutputComponents & parentOutput )
+	void PbrLightingModel::compute( DirectionalLight const & plight
+		, LightMaterial const & pmaterial
+		, Surface const & psurface
+		, BackgroundModel & pbackground
+		, sdw::Vec3 const & pworldEye
+		, sdw::Int const & preceivesShadows
+		, OutputComponents & pparentOutput )
 	{
 		if ( !m_computeDirectional )
 		{
@@ -289,20 +289,20 @@ namespace castor3d::shader
 				, outputs );
 		}
 
-		m_computeDirectional( light
-			, static_cast< PbrLightMaterial const & >( material )
-			, surface
-			, worldEye
-			, receivesShadows
-			, parentOutput );
+		m_computeDirectional( plight
+			, static_cast< PbrLightMaterial const & >( pmaterial )
+			, psurface
+			, pworldEye
+			, preceivesShadows
+			, pparentOutput );
 	}
 
-	void PbrLightingModel::compute( PointLight const & light
-		, LightMaterial const & material
-		, Surface const & surface
-		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows
-		, OutputComponents & parentOutput )
+	void PbrLightingModel::compute( PointLight const & plight
+		, LightMaterial const & pmaterial
+		, Surface const & psurface
+		, sdw::Vec3 const & pworldEye
+		, sdw::Int const & preceivesShadows
+		, OutputComponents & pparentOutput )
 	{
 		if ( !m_computePoint )
 		{
@@ -367,20 +367,20 @@ namespace castor3d::shader
 				, outputs );
 		}
 
-		m_computePoint( light
-			, static_cast< PbrLightMaterial const & >( material )
-			, surface
-			, worldEye
-			, receivesShadows
-			, parentOutput );
+		m_computePoint( plight
+			, static_cast< PbrLightMaterial const & >( pmaterial )
+			, psurface
+			, pworldEye
+			, preceivesShadows
+			, pparentOutput );
 	}
 
-	void PbrLightingModel::compute( SpotLight const & light
-		, LightMaterial const & material
-		, Surface const & surface
-		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows
-		, OutputComponents & parentOutput )
+	void PbrLightingModel::compute( SpotLight const & plight
+		, LightMaterial const & pmaterial
+		, Surface const & psurface
+		, sdw::Vec3 const & pworldEye
+		, sdw::Int const & preceivesShadows
+		, OutputComponents & pparentOutput )
 	{
 		if ( !m_computeSpot )
 		{
@@ -474,12 +474,12 @@ namespace castor3d::shader
 				, outputs );
 		}
 
-		m_computeSpot( light
-			, static_cast< PbrLightMaterial const & >( material )
-			, surface
-			, worldEye
-			, receivesShadows
-			, parentOutput );
+		m_computeSpot( plight
+			, static_cast< PbrLightMaterial const & >( pmaterial )
+			, psurface
+			, pworldEye
+			, preceivesShadows
+			, pparentOutput );
 	}
 
 	void PbrLightingModel::computeMapContributions( PassFlags const & passFlags
@@ -570,11 +570,11 @@ namespace castor3d::shader
 			, emissive );
 	}
 
-	sdw::Vec3 PbrLightingModel::computeDiffuse( DirectionalLight const & light
-		, LightMaterial const & material
-		, Surface const & surface
-		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows )
+	sdw::Vec3 PbrLightingModel::computeDiffuse( DirectionalLight const & plight
+		, LightMaterial const & pmaterial
+		, Surface const & psurface
+		, sdw::Vec3 const & pworldEye
+		, sdw::Int const & preceivesShadows )
 	{
 		if ( !m_computeDirectionalDiffuse )
 		{
@@ -628,18 +628,18 @@ namespace castor3d::shader
 				, sdw::InInt( m_writer, "receivesShadows" ) );
 		}
 
-		return m_computeDirectionalDiffuse( light
-			, static_cast< PbrLightMaterial const & >( material )
-			, surface
-			, worldEye
-			, receivesShadows );
+		return m_computeDirectionalDiffuse( plight
+			, static_cast< PbrLightMaterial const & >( pmaterial )
+			, psurface
+			, pworldEye
+			, preceivesShadows );
 	}
 
-	sdw::Vec3 PbrLightingModel::computeDiffuse( PointLight const & light
-		, LightMaterial const & material
-		, Surface const & surface
-		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows )
+	sdw::Vec3 PbrLightingModel::computeDiffuse( PointLight const & plight
+		, LightMaterial const & pmaterial
+		, Surface const & psurface
+		, sdw::Vec3 const & pworldEye
+		, sdw::Int const & preceivesShadows )
 	{
 		if ( !m_computePointDiffuse )
 		{
@@ -693,18 +693,18 @@ namespace castor3d::shader
 				, sdw::InInt( m_writer, "receivesShadows" ) );
 		}
 
-		return m_computePointDiffuse( light
-			, static_cast< PbrLightMaterial const & >( material )
-			, surface
-			, worldEye
-			, receivesShadows );
+		return m_computePointDiffuse( plight
+			, static_cast< PbrLightMaterial const & >( pmaterial )
+			, psurface
+			, pworldEye
+			, preceivesShadows );
 	}
 
-	sdw::Vec3 PbrLightingModel::computeDiffuse( SpotLight const & light
-		, LightMaterial const & material
-		, Surface const & surface
-		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows )
+	sdw::Vec3 PbrLightingModel::computeDiffuse( SpotLight const & plight
+		, LightMaterial const & pmaterial
+		, Surface const & psurface
+		, sdw::Vec3 const & pworldEye
+		, sdw::Int const & preceivesShadows )
 	{
 		if ( !m_computeSpotDiffuse )
 		{
@@ -769,11 +769,11 @@ namespace castor3d::shader
 				, sdw::InInt( m_writer, "receivesShadows" ) );
 		}
 
-		return m_computeSpotDiffuse( light
-			, static_cast< PbrLightMaterial const & >( material )
-			, surface
-			, worldEye
-			, receivesShadows );
+		return m_computeSpotDiffuse( plight
+			, static_cast< PbrLightMaterial const & >( pmaterial )
+			, psurface
+			, pworldEye
+			, preceivesShadows );
 	}
 
 	void PbrLightingModel::computeMapDiffuseContributions( PassFlags const & passFlags

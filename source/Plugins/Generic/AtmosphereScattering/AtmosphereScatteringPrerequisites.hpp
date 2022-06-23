@@ -11,6 +11,7 @@ namespace atmosphere_scattering
 	class AtmosphereBackground;
 	class AtmosphereScatteringUbo;
 	class CameraUbo;
+	class AtmosphereBackgroundModel;
 
 	struct AtmosphereConfig;
 	struct AtmosphereData;
