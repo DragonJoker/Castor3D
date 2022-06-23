@@ -127,13 +127,13 @@ namespace toon::shader
 			, envMapSet );
 	}
 
-	void ToonPhongLightingModel::compute( c3d::DirectionalLight const & light
-		, c3d::LightMaterial const & material
-		, c3d::Surface const & surface
-		, c3d::BackgroundModel & background
-		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows
-		, c3d::OutputComponents & parentOutput )
+	void ToonPhongLightingModel::compute( c3d::DirectionalLight const & plight
+		, c3d::LightMaterial const & pmaterial
+		, c3d::Surface const & psurface
+		, c3d::BackgroundModel & pbackground
+		, sdw::Vec3 const & pworldEye
+		, sdw::Int const & preceivesShadows
+		, c3d::OutputComponents & pparentOutput )
 	{
 		if ( !m_computeDirectional )
 		{
@@ -248,20 +248,20 @@ namespace toon::shader
 				, outputs );
 		}
 
-		m_computeDirectional( light
-			, static_cast< ToonPhongLightMaterial const & >( material )
-			, surface
-			, worldEye
-			, receivesShadows
-			, parentOutput );
+		m_computeDirectional( plight
+			, static_cast< ToonPhongLightMaterial const & >( pmaterial )
+			, psurface
+			, pworldEye
+			, preceivesShadows
+			, pparentOutput );
 	}
 
-	void ToonPhongLightingModel::compute( c3d::PointLight const & light
-		, c3d::LightMaterial const & material
-		, c3d::Surface const & surface
-		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows
-		, c3d::OutputComponents & parentOutput )
+	void ToonPhongLightingModel::compute( c3d::PointLight const & plight
+		, c3d::LightMaterial const & pmaterial
+		, c3d::Surface const & psurface
+		, sdw::Vec3 const & pworldEye
+		, sdw::Int const & preceivesShadows
+		, c3d::OutputComponents & pparentOutput )
 	{
 		if ( !m_computePoint )
 		{
@@ -324,20 +324,20 @@ namespace toon::shader
 				, outputs );
 		}
 
-		m_computePoint( light
-			, static_cast< ToonPhongLightMaterial const & >( material )
-			, surface
-			, worldEye
-			, receivesShadows
-			, parentOutput );
+		m_computePoint( plight
+			, static_cast< ToonPhongLightMaterial const & >( pmaterial )
+			, psurface
+			, pworldEye
+			, preceivesShadows
+			, pparentOutput );
 	}
 
-	void ToonPhongLightingModel::compute( c3d::SpotLight const & light
-		, c3d::LightMaterial const & material
-		, c3d::Surface const & surface
-		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows
-		, c3d::OutputComponents & parentOutput )
+	void ToonPhongLightingModel::compute( c3d::SpotLight const & plight
+		, c3d::LightMaterial const & pmaterial
+		, c3d::Surface const & psurface
+		, sdw::Vec3 const & pworldEye
+		, sdw::Int const & preceivesShadows
+		, c3d::OutputComponents & pparentOutput )
 	{
 		if ( !m_computeSpot )
 		{
@@ -409,12 +409,12 @@ namespace toon::shader
 				, outputs );
 		}
 
-		m_computeSpot( light
-			, static_cast< ToonPhongLightMaterial const & >( material )
-			, surface
-			, worldEye
-			, receivesShadows
-			, parentOutput );
+		m_computeSpot( plight
+			, static_cast< ToonPhongLightMaterial const & >( pmaterial )
+			, psurface
+			, pworldEye
+			, preceivesShadows
+			, pparentOutput );
 	}
 
 	void ToonPhongLightingModel::computeMapContributions( castor3d::PassFlags const & passFlags
@@ -505,11 +505,11 @@ namespace toon::shader
 			, emissive );
 	}
 
-	sdw::Vec3 ToonPhongLightingModel::computeDiffuse( c3d::DirectionalLight const & light
-		, c3d::LightMaterial const & material
-		, c3d::Surface const & surface
-		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows )
+	sdw::Vec3 ToonPhongLightingModel::computeDiffuse( c3d::DirectionalLight const & plight
+		, c3d::LightMaterial const & pmaterial
+		, c3d::Surface const & psurface
+		, sdw::Vec3 const & pworldEye
+		, sdw::Int const & preceivesShadows )
 	{
 		if ( !m_computeDirectionalDiffuse )
 		{
@@ -559,18 +559,18 @@ namespace toon::shader
 				, sdw::InInt( m_writer, "receivesShadows" ) );
 		}
 
-		return m_computeDirectionalDiffuse( light
-			, static_cast< ToonPhongLightMaterial const & >( material )
-			, surface
-			, worldEye
-			, receivesShadows );
+		return m_computeDirectionalDiffuse( plight
+			, static_cast< ToonPhongLightMaterial const & >( pmaterial )
+			, psurface
+			, pworldEye
+			, preceivesShadows );
 	}
 
-	sdw::Vec3 ToonPhongLightingModel::computeDiffuse( c3d::PointLight const & light
-		, c3d::LightMaterial const & material
-		, c3d::Surface const & surface
-		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows )
+	sdw::Vec3 ToonPhongLightingModel::computeDiffuse( c3d::PointLight const & plight
+		, c3d::LightMaterial const & pmaterial
+		, c3d::Surface const & psurface
+		, sdw::Vec3 const & pworldEye
+		, sdw::Int const & preceivesShadows )
 	{
 		if ( !m_computePointDiffuse )
 		{
@@ -622,18 +622,18 @@ namespace toon::shader
 				, sdw::InInt( m_writer, "receivesShadows" ) );
 		}
 
-		return m_computePointDiffuse( light
-			, static_cast< ToonPhongLightMaterial const & >( material )
-			, surface
-			, worldEye
-			, receivesShadows );
+		return m_computePointDiffuse( plight
+			, static_cast< ToonPhongLightMaterial const & >( pmaterial )
+			, psurface
+			, pworldEye
+			, preceivesShadows );
 	}
 
-	sdw::Vec3 ToonPhongLightingModel::computeDiffuse( c3d::SpotLight const & light
-		, c3d::LightMaterial const & material
-		, c3d::Surface const & surface
-		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows )
+	sdw::Vec3 ToonPhongLightingModel::computeDiffuse( c3d::SpotLight const & plight
+		, c3d::LightMaterial const & pmaterial
+		, c3d::Surface const & psurface
+		, sdw::Vec3 const & pworldEye
+		, sdw::Int const & preceivesShadows )
 	{
 		if ( !m_computeSpotDiffuse )
 		{
@@ -697,11 +697,11 @@ namespace toon::shader
 				, sdw::InInt( m_writer, "receivesShadows" ) );
 		}
 
-		return m_computeSpotDiffuse( light
-			, static_cast< ToonPhongLightMaterial const & >( material )
-			, surface
-			, worldEye
-			, receivesShadows );
+		return m_computeSpotDiffuse( plight
+			, static_cast< ToonPhongLightMaterial const & >( pmaterial )
+			, psurface
+			, pworldEye
+			, preceivesShadows );
 	}
 
 	void ToonPhongLightingModel::computeMapDiffuseContributions( castor3d::PassFlags const & passFlags
@@ -779,12 +779,12 @@ namespace toon::shader
 			, emissive );
 	}
 
-	void ToonPhongLightingModel::doComputeLight( c3d::Light const & light
-		, ToonPhongLightMaterial const & material
-		, c3d::Surface const & surface
-		, sdw::Vec3 const & worldEye
-		, sdw::Vec3 const & lightDirection
-		, c3d::OutputComponents & parentOutput )
+	void ToonPhongLightingModel::doComputeLight( c3d::Light const & plight
+		, ToonPhongLightMaterial const & pmaterial
+		, c3d::Surface const & psurface
+		, sdw::Vec3 const & pworldEye
+		, sdw::Vec3 const & plightDirection
+		, c3d::OutputComponents & pparentOutput )
 	{
 		if ( !m_computeLight )
 		{
@@ -841,19 +841,19 @@ namespace toon::shader
 				, outputs );
 		}
 
-		m_computeLight( light
-			, material
-			, surface
-			, worldEye
-			, lightDirection
-			, parentOutput );
+		m_computeLight( plight
+			, pmaterial
+			, psurface
+			, pworldEye
+			, plightDirection
+			, pparentOutput );
 	}
 
-	sdw::Vec3 ToonPhongLightingModel::doComputeLightDiffuse( c3d::Light const & light
-		, ToonPhongLightMaterial const & material
-		, c3d::Surface const & surface
-		, sdw::Vec3 const & worldEye
-		, sdw::Vec3 const & lightDirection )
+	sdw::Vec3 ToonPhongLightingModel::doComputeLightDiffuse( c3d::Light const & plight
+		, ToonPhongLightMaterial const & pmaterial
+		, c3d::Surface const & psurface
+		, sdw::Vec3 const & pworldEye
+		, sdw::Vec3 const & plightDirection )
 	{
 		if ( !m_computeLightDiffuse )
 		{
@@ -881,11 +881,11 @@ namespace toon::shader
 				, sdw::InVec3( m_writer, "lightDirection" ) );
 		}
 
-		return m_computeLightDiffuse( light
-			, material
-			, surface
-			, worldEye
-			, lightDirection );
+		return m_computeLightDiffuse( plight
+			, pmaterial
+			, psurface
+			, pworldEye
+			, plightDirection );
 	}
 
 	//*********************************************************************************************
@@ -1059,13 +1059,13 @@ namespace toon::shader
 			, envMapSet );
 	}
 
-	void ToonPbrLightingModel::compute( c3d::DirectionalLight const & light
-		, c3d::LightMaterial const & material
-		, c3d::Surface const & surface
-		, c3d::BackgroundModel & background
-		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows
-		, c3d::OutputComponents & parentOutput )
+	void ToonPbrLightingModel::compute( c3d::DirectionalLight const & plight
+		, c3d::LightMaterial const & pmaterial
+		, c3d::Surface const & psurface
+		, c3d::BackgroundModel & pbackground
+		, sdw::Vec3 const & pworldEye
+		, sdw::Int const & preceivesShadows
+		, c3d::OutputComponents & pparentOutput )
 	{
 		if ( !m_computeDirectional )
 		{
@@ -1207,20 +1207,20 @@ namespace toon::shader
 				, outputs );
 		}
 
-		m_computeDirectional( light
-			, static_cast< ToonPbrLightMaterial const & >( material )
-			, surface
-			, worldEye
-			, receivesShadows
-			, parentOutput );
+		m_computeDirectional( plight
+			, static_cast< ToonPbrLightMaterial const & >( pmaterial )
+			, psurface
+			, pworldEye
+			, preceivesShadows
+			, pparentOutput );
 	}
 
-	void ToonPbrLightingModel::compute( c3d::PointLight const & light
-		, c3d::LightMaterial const & material
-		, c3d::Surface const & surface
-		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows
-		, c3d::OutputComponents & parentOutput )
+	void ToonPbrLightingModel::compute( c3d::PointLight const & plight
+		, c3d::LightMaterial const & pmaterial
+		, c3d::Surface const & psurface
+		, sdw::Vec3 const & pworldEye
+		, sdw::Int const & preceivesShadows
+		, c3d::OutputComponents & pparentOutput )
 	{
 		if ( !m_computePoint )
 		{
@@ -1286,20 +1286,20 @@ namespace toon::shader
 				, outputs );
 		}
 
-		m_computePoint( light
-			, static_cast< ToonPbrLightMaterial const & >( material )
-			, surface
-			, worldEye
-			, receivesShadows
-			, parentOutput );
+		m_computePoint( plight
+			, static_cast< ToonPbrLightMaterial const & >( pmaterial )
+			, psurface
+			, pworldEye
+			, preceivesShadows
+			, pparentOutput );
 	}
 
-	void ToonPbrLightingModel::compute( c3d::SpotLight const & light
-		, c3d::LightMaterial const & material
-		, c3d::Surface const & surface
-		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows
-		, c3d::OutputComponents & parentOutput )
+	void ToonPbrLightingModel::compute( c3d::SpotLight const & plight
+		, c3d::LightMaterial const & pmaterial
+		, c3d::Surface const & psurface
+		, sdw::Vec3 const & pworldEye
+		, sdw::Int const & preceivesShadows
+		, c3d::OutputComponents & pparentOutput )
 	{
 		if ( !m_computeSpot )
 		{
@@ -1374,12 +1374,12 @@ namespace toon::shader
 				, outputs );
 		}
 
-		m_computeSpot( light
-			, static_cast< ToonPbrLightMaterial const & >( material )
-			, surface
-			, worldEye
-			, receivesShadows
-			, parentOutput );
+		m_computeSpot( plight
+			, static_cast< ToonPbrLightMaterial const & >( pmaterial )
+			, psurface
+			, pworldEye
+			, preceivesShadows
+			, pparentOutput );
 	}
 
 	void ToonPbrLightingModel::computeMapContributions( castor3d::PassFlags const & passFlags
@@ -1474,11 +1474,11 @@ namespace toon::shader
 			, emissive );
 	}
 
-	sdw::Vec3 ToonPbrLightingModel::computeDiffuse( c3d::DirectionalLight const & light
-		, c3d::LightMaterial const & material
-		, c3d::Surface const & surface
-		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows )
+	sdw::Vec3 ToonPbrLightingModel::computeDiffuse( c3d::DirectionalLight const & plight
+		, c3d::LightMaterial const & pmaterial
+		, c3d::Surface const & psurface
+		, sdw::Vec3 const & pworldEye
+		, sdw::Int const & preceivesShadows )
 	{
 		if ( !m_computeDirectionalDiffuse )
 		{
@@ -1532,18 +1532,18 @@ namespace toon::shader
 				, sdw::InInt( m_writer, "receivesShadows" ) );
 		}
 
-		return m_computeDirectionalDiffuse( light
-			, static_cast< ToonPbrLightMaterial const & >( material )
-			, surface
-			, worldEye
-			, receivesShadows );
+		return m_computeDirectionalDiffuse( plight
+			, static_cast< ToonPbrLightMaterial const & >( pmaterial )
+			, psurface
+			, pworldEye
+			, preceivesShadows );
 	}
 
-	sdw::Vec3 ToonPbrLightingModel::computeDiffuse( c3d::PointLight const & light
-		, c3d::LightMaterial const & material
-		, c3d::Surface const & surface
-		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows )
+	sdw::Vec3 ToonPbrLightingModel::computeDiffuse( c3d::PointLight const & plight
+		, c3d::LightMaterial const & pmaterial
+		, c3d::Surface const & psurface
+		, sdw::Vec3 const & pworldEye
+		, sdw::Int const & preceivesShadows )
 	{
 		if (!m_computePointDiffuse )
 		{
@@ -1597,18 +1597,18 @@ namespace toon::shader
 				, sdw::InInt( m_writer, "receivesShadows" ) );
 		}
 
-		return m_computePointDiffuse( light
-			, static_cast< ToonPbrLightMaterial const & >( material )
-			, surface
-			, worldEye
-			, receivesShadows );
+		return m_computePointDiffuse( plight
+			, static_cast< ToonPbrLightMaterial const & >( pmaterial )
+			, psurface
+			, pworldEye
+			, preceivesShadows );
 	}
 
-	sdw::Vec3 ToonPbrLightingModel::computeDiffuse( c3d::SpotLight const & light
-		, c3d::LightMaterial const & material
-		, c3d::Surface const & surface
-		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows )
+	sdw::Vec3 ToonPbrLightingModel::computeDiffuse( c3d::SpotLight const & plight
+		, c3d::LightMaterial const & pmaterial
+		, c3d::Surface const & psurface
+		, sdw::Vec3 const & pworldEye
+		, sdw::Int const & preceivesShadows )
 	{
 		if ( !m_computeSpotDiffuse )
 		{
@@ -1674,11 +1674,11 @@ namespace toon::shader
 				, sdw::InInt( m_writer, "receivesShadows" ) );
 		}
 
-		return m_computeSpotDiffuse( light
-			, static_cast< ToonPbrLightMaterial const & >( material )
-			, surface
-			, worldEye
-			, receivesShadows );
+		return m_computeSpotDiffuse( plight
+			, static_cast< ToonPbrLightMaterial const & >( pmaterial )
+			, psurface
+			, pworldEye
+			, preceivesShadows );
 	}
 
 	void ToonPbrLightingModel::computeMapDiffuseContributions( castor3d::PassFlags const & passFlags

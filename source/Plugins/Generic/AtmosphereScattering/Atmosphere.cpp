@@ -281,7 +281,7 @@ namespace atmosphere_scattering
 						, doInitSampleCount( tMax, sampleCount, sampleCountFloor, tMaxFloor ) );
 
 					// Phase functions
-					auto [miePhaseValue, rayleighPhaseValue] = doInitPhaseFunctions( sunDir, worldDir );
+					auto mieRayleighPhaseValues = doInitPhaseFunctions( sunDir, worldDir );
 
 					if ( luminanceSettings.illuminanceIsOne )
 					{
@@ -327,8 +327,8 @@ namespace atmosphere_scattering
 							, earthO
 							, upVector
 							, sunZenithCosAngle
-							, miePhaseValue
-							, rayleighPhaseValue );
+							, mieRayleighPhaseValues.first
+							, mieRayleighPhaseValues.second );
 						auto shadow = writer.declLocale( "shadow"
 							, 1.0_f );
 
@@ -444,7 +444,7 @@ namespace atmosphere_scattering
 						, doInitSampleCount( tMax, sampleCount, sampleCountFloor, tMaxFloor ) );
 
 					// Phase functions
-					auto [miePhaseValue, rayleighPhaseValue] = doInitPhaseFunctions( sunDir, worldDir );
+					auto mieRayleighPhaseValues = doInitPhaseFunctions( sunDir, worldDir );
 
 					if ( luminanceSettings.illuminanceIsOne )
 					{
@@ -490,8 +490,8 @@ namespace atmosphere_scattering
 							, earthO
 							, upVector
 							, sunZenithCosAngle
-							, miePhaseValue
-							, rayleighPhaseValue );
+							, mieRayleighPhaseValues.first
+							, mieRayleighPhaseValues.second );
 						auto S = writer.declLocale( "S"
 							, globalL * ( earthShadow * transmittanceToSun * phaseTimesScattering + multiScatteredLuminance * medium.scattering ) );
 						doComputeStep( medium

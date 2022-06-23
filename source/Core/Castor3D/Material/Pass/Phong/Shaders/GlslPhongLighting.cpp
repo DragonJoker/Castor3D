@@ -123,13 +123,13 @@ namespace castor3d::shader
 			, envMapSet );
 	}
 
-	void PhongLightingModel::compute( DirectionalLight const & light
-		, LightMaterial const & material
-		, Surface const & surface
-		, BackgroundModel & background
-		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows
-		, OutputComponents & parentOutput )
+	void PhongLightingModel::compute( DirectionalLight const & plight
+		, LightMaterial const & pmaterial
+		, Surface const & psurface
+		, BackgroundModel & pbackground
+		, sdw::Vec3 const & pworldEye
+		, sdw::Int const & preceivesShadows
+		, OutputComponents & pparentOutput )
 	{
 		if ( !m_computeDirectional )
 		{
@@ -268,20 +268,20 @@ namespace castor3d::shader
 				, outputs );
 		}
 
-		m_computeDirectional( light
-			, static_cast< PhongLightMaterial const & >( material )
-			, surface
-			, worldEye
-			, receivesShadows
-			, parentOutput );
+		m_computeDirectional( plight
+			, static_cast< PhongLightMaterial const & >( pmaterial )
+			, psurface
+			, pworldEye
+			, preceivesShadows
+			, pparentOutput );
 	}
 
-	void PhongLightingModel::compute( PointLight const & light
-		, LightMaterial const & material
-		, Surface const & surface
-		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows
-		, OutputComponents & parentOutput )
+	void PhongLightingModel::compute( PointLight const & plight
+		, LightMaterial const & pmaterial
+		, Surface const & psurface
+		, sdw::Vec3 const & pworldEye
+		, sdw::Int const & preceivesShadows
+		, OutputComponents & pparentOutput )
 	{
 		if ( !m_computePoint )
 		{
@@ -344,20 +344,20 @@ namespace castor3d::shader
 				, outputs );
 		}
 
-		m_computePoint( light
-			, static_cast< PhongLightMaterial const & >( material )
-			, surface
-			, worldEye
-			, receivesShadows
-			, parentOutput );
+		m_computePoint( plight
+			, static_cast< PhongLightMaterial const & >( pmaterial )
+			, psurface
+			, pworldEye
+			, preceivesShadows
+			, pparentOutput );
 	}
 
-	void PhongLightingModel::compute( SpotLight const & light
-		, LightMaterial const & material
-		, Surface const & surface
-		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows
-		, OutputComponents & parentOutput )
+	void PhongLightingModel::compute( SpotLight const & plight
+		, LightMaterial const & pmaterial
+		, Surface const & psurface
+		, sdw::Vec3 const & pworldEye
+		, sdw::Int const & preceivesShadows
+		, OutputComponents & pparentOutput )
 	{
 		if ( !m_computeSpot )
 		{
@@ -449,12 +449,12 @@ namespace castor3d::shader
 				, outputs );
 		}
 
-		m_computeSpot( light
-			, static_cast< PhongLightMaterial const & >( material )
-			, surface
-			, worldEye
-			, receivesShadows
-			, parentOutput );
+		m_computeSpot( plight
+			, static_cast< PhongLightMaterial const & >( pmaterial )
+			, psurface
+			, pworldEye
+			, preceivesShadows
+			, pparentOutput );
 	}
 
 	void PhongLightingModel::computeMapContributions( PassFlags const & passFlags
@@ -545,11 +545,11 @@ namespace castor3d::shader
 			, emissive );
 	}
 
-	sdw::Vec3 PhongLightingModel::computeDiffuse( DirectionalLight const & light
-		, LightMaterial const & material
-		, Surface const & surface
-		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows )
+	sdw::Vec3 PhongLightingModel::computeDiffuse( DirectionalLight const & plight
+		, LightMaterial const & pmaterial
+		, Surface const & psurface
+		, sdw::Vec3 const & pworldEye
+		, sdw::Int const & preceivesShadows )
 	{
 		if ( !m_computeDirectionalDiffuse )
 		{
@@ -599,18 +599,18 @@ namespace castor3d::shader
 				, sdw::InInt( m_writer, "receivesShadows" ) );
 		}
 
-		return m_computeDirectionalDiffuse( light
-			, static_cast< PhongLightMaterial const & >( material )
-			, surface
-			, worldEye
-			, receivesShadows );
+		return m_computeDirectionalDiffuse( plight
+			, static_cast< PhongLightMaterial const & >( pmaterial )
+			, psurface
+			, pworldEye
+			, preceivesShadows );
 	}
 
-	sdw::Vec3 PhongLightingModel::computeDiffuse( PointLight const & light
-		, LightMaterial const & material
-		, Surface const & surface
-		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows )
+	sdw::Vec3 PhongLightingModel::computeDiffuse( PointLight const & plight
+		, LightMaterial const & pmaterial
+		, Surface const & psurface
+		, sdw::Vec3 const & pworldEye
+		, sdw::Int const & preceivesShadows )
 	{
 		if ( !m_computePointDiffuse )
 		{
@@ -662,18 +662,18 @@ namespace castor3d::shader
 				, sdw::InInt( m_writer, "receivesShadows" ) );
 		}
 
-		return m_computePointDiffuse( light
-			, static_cast< PhongLightMaterial const & >( material )
-			, surface
-			, worldEye
-			, receivesShadows );
+		return m_computePointDiffuse( plight
+			, static_cast< PhongLightMaterial const & >( pmaterial )
+			, psurface
+			, pworldEye
+			, preceivesShadows );
 	}
 
-	sdw::Vec3 PhongLightingModel::computeDiffuse( SpotLight const & light
-		, LightMaterial const & material
-		, Surface const & surface
-		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows )
+	sdw::Vec3 PhongLightingModel::computeDiffuse( SpotLight const & plight
+		, LightMaterial const & pmaterial
+		, Surface const & psurface
+		, sdw::Vec3 const & pworldEye
+		, sdw::Int const & preceivesShadows )
 	{
 		if ( !m_computeSpotDiffuse )
 		{
@@ -737,11 +737,11 @@ namespace castor3d::shader
 				, sdw::InInt( m_writer, "receivesShadows" ) );
 		}
 
-		return m_computeSpotDiffuse( light
-			, static_cast< PhongLightMaterial const & >( material )
-			, surface
-			, worldEye
-			, receivesShadows );
+		return m_computeSpotDiffuse( plight
+			, static_cast< PhongLightMaterial const & >( pmaterial )
+			, psurface
+			, pworldEye
+			, preceivesShadows );
 	}
 
 	void PhongLightingModel::computeMapDiffuseContributions( PassFlags const & passFlags
@@ -819,12 +819,12 @@ namespace castor3d::shader
 			, emissive );
 	}
 
-	sdw::RetVec3 PhongLightingModel::doComputeLight( Light const & light
-		, PhongLightMaterial const & material
-		, Surface const & surface
-		, sdw::Vec3 const & worldEye
-		, sdw::Vec3 const & lightDirection
-		, OutputComponents & parentOutput )
+	sdw::RetVec3 PhongLightingModel::doComputeLight( Light const & plight
+		, PhongLightMaterial const & pmaterial
+		, Surface const & psurface
+		, sdw::Vec3 const & pworldEye
+		, sdw::Vec3 const & plightDirection
+		, OutputComponents & pparentOutput )
 	{
 		if ( !m_computeLight )
 		{
@@ -884,19 +884,19 @@ namespace castor3d::shader
 				, outputs );
 		}
 
-		return m_computeLight( light
-			, material
-			, surface
-			, worldEye
-			, lightDirection
-			, parentOutput );
+		return m_computeLight( plight
+			, pmaterial
+			, psurface
+			, pworldEye
+			, plightDirection
+			, pparentOutput );
 	}
 
-	sdw::Vec3 PhongLightingModel::doComputeLightDiffuse( Light const & light
-		, PhongLightMaterial const & material
-		, Surface const & surface
-		, sdw::Vec3 const & worldEye
-		, sdw::Vec3 const & lightDirection )
+	sdw::Vec3 PhongLightingModel::doComputeLightDiffuse( Light const & plight
+		, PhongLightMaterial const & pmaterial
+		, Surface const & psurface
+		, sdw::Vec3 const & pworldEye
+		, sdw::Vec3 const & plightDirection )
 	{
 		if ( !m_computeLightDiffuse )
 		{
@@ -924,11 +924,11 @@ namespace castor3d::shader
 				, sdw::InVec3( m_writer, "lightDirection" ) );
 		}
 
-		return m_computeLightDiffuse( light
-			, material
-			, surface
-			, worldEye
-			, lightDirection );
+		return m_computeLightDiffuse( plight
+			, pmaterial
+			, psurface
+			, pworldEye
+			, plightDirection );
 	}
 
 	//*********************************************************************************************

@@ -1,5 +1,6 @@
 #include "AtmosphereScattering/AtmosphereLightingModel.hpp"
 
+#include "AtmosphereScattering/AtmosphereBackground.hpp"
 #include "AtmosphereScattering/AtmosphereBackgroundModel.hpp"
 
 #include <Castor3D/Material/Pass/Phong/Shaders/GlslPhongMaterial.hpp>
@@ -58,17 +59,17 @@ namespace atmosphere_scattering
 			, false );
 	}
 
-	void AtmospherePhongLightingModel::compute( c3d::DirectionalLight const & light
-		, c3d::LightMaterial const & material
-		, c3d::Surface const & surface
-		, c3d::BackgroundModel & background
-		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows
-		, c3d::OutputComponents & parentOutput )
+	void AtmospherePhongLightingModel::compute( c3d::DirectionalLight const & plight
+		, c3d::LightMaterial const & pmaterial
+		, c3d::Surface const & psurface
+		, c3d::BackgroundModel & pbackground
+		, sdw::Vec3 const & pworldEye
+		, sdw::Int const & preceivesShadows
+		, c3d::OutputComponents & pparentOutput )
 	{
 		if ( !m_atmosphereBackground )
 		{
-			m_atmosphereBackground = &static_cast< AtmosphereBackgroundModel & >( background );
+			m_atmosphereBackground = &static_cast< AtmosphereBackgroundModel & >( pbackground );
 			m_atmosphereBackground->m_atmosphere.shadows = m_shadowModel;
 		}
 
@@ -219,12 +220,12 @@ namespace atmosphere_scattering
 				, outputs );
 		}
 
-		m_computeDirectional( light
-			, static_cast< c3d::PhongLightMaterial const & >( material )
-			, surface
-			, worldEye
-			, receivesShadows
-			, parentOutput );
+		m_computeDirectional( plight
+			, static_cast< c3d::PhongLightMaterial const & >( pmaterial )
+			, psurface
+			, pworldEye
+			, preceivesShadows
+			, pparentOutput );
 	}
 
 	//*********************************************************************************************
@@ -295,17 +296,17 @@ namespace atmosphere_scattering
 			, enableVolumetric );
 	}
 
-	void AtmospherePbrLightingModel::compute( c3d::DirectionalLight const & light
-		, c3d::LightMaterial const & material
-		, c3d::Surface const & surface
-		, c3d::BackgroundModel & background
-		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows
-		, c3d::OutputComponents & parentOutput )
+	void AtmospherePbrLightingModel::compute( c3d::DirectionalLight const & plight
+		, c3d::LightMaterial const & pmaterial
+		, c3d::Surface const & psurface
+		, c3d::BackgroundModel & pbackground
+		, sdw::Vec3 const & pworldEye
+		, sdw::Int const & preceivesShadows
+		, c3d::OutputComponents & pparentOutput )
 	{
 		if ( !m_atmosphereBackground )
 		{
-			m_atmosphereBackground = &static_cast< AtmosphereBackgroundModel & >( background );
+			m_atmosphereBackground = &static_cast< AtmosphereBackgroundModel & >( pbackground );
 			m_atmosphereBackground->m_atmosphere.shadows = m_shadowModel;
 		}
 
@@ -432,12 +433,12 @@ namespace atmosphere_scattering
 				, outputs );
 		}
 
-		m_computeDirectional( light
-			, static_cast< c3d::PbrLightMaterial const & >( material )
-			, surface
-			, worldEye
-			, receivesShadows
-			, parentOutput );
+		m_computeDirectional( plight
+			, static_cast< c3d::PbrLightMaterial const & >( pmaterial )
+			, psurface
+			, pworldEye
+			, preceivesShadows
+			, pparentOutput );
 	}
 
 	//*********************************************************************************************
