@@ -10,6 +10,7 @@ See LICENSE file in root folder
 #include "AtmosphereScattering/Scattering.hpp"
 
 #include <Castor3D/Shader/Shaders/GlslBackground.hpp>
+#include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 
 #include <ShaderWriter/CompositeTypes/Ubo.hpp>
 
@@ -47,9 +48,7 @@ namespace atmosphere_scattering
 			, castor3d::shader::LightMaterial const & material
 			, sdw::Vec3 & reflection
 			, sdw::Vec3 & refraction )override;
-		sdw::Vec4 scatter( sdw::Vec2 const & fragPos
-			, sdw::Vec2 const & fragSize
-			, sdw::Float const & fragDepth )override;
+		sdw::Vec3 getSunRadiance( sdw::Vec3 const & sunDir );
 
 	public:
 		static castor::String const Name;

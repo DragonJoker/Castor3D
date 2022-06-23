@@ -17,6 +17,8 @@ See LICENSE file in root folder
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
 
+#include <tuple>
+
 namespace atmosphere_scattering
 {
 	struct SingleScatteringResult
@@ -80,21 +82,21 @@ namespace atmosphere_scattering
 		using sdw::StructInstance::getMemberArray;
 	};
 
+	struct LuminanceSettings
+	{
+		bool useGround{};
+		CameraData const * cameraData;
+		bool variableSampleCount{};
+		bool mieRayPhase{};
+
+		bool illuminanceIsOne{};
+		bool multiScatApproxEnabled{};
+		bool shadowMapEnabled{};
+		uint32_t multiScatteringPowerSerie{ 1u };
+	};
+
 	struct AtmosphereConfig
 	{
-		struct LuminanceSettings
-		{
-			bool useGround{};
-			CameraData const * cameraData;
-			bool variableSampleCount{};
-			bool mieRayPhase{};
-
-			bool illuminanceIsOne{};
-			bool multiScatApproxEnabled{};
-			bool shadowMapEnabled{};
-			uint32_t multiScatteringPowerSerie{ 1u };
-		};
-
 		AtmosphereConfig( sdw::ShaderWriter & writer
 			, AtmosphereData const & atmosphereData
 			, LuminanceSettings luminanceSettings );
@@ -109,7 +111,35 @@ namespace atmosphere_scattering
 			, sdw::Float const & fragDepth );
 		sdw::Vec3 getClipSpace( sdw::Vec2 const & uv
 			, sdw::Float const & fragDepth );
+		sdw::Vec3 getMultipleScattering( sdw::Vec3 const & scattering
+			, sdw::Vec3 const & extinction
+			, sdw::Vec3 const & worldPos
+			, sdw::Float const & viewZenithCosAngle );
 		SingleScatteringResult integrateScatteredLuminance( sdw::Vec2 const & pixPos
+			, sdw::Vec3 const & worldPos
+			, sdw::Vec3 const & worldDir
+			, sdw::Vec3 const & sunDir
+			, sdw::Float const & sampleCountIni
+			, sdw::Float const & depthBufferValue
+			, castor3d::shader::Light const & light
+			, sdw::Vec3 const & surfaceWorldNormal
+			, sdw::Mat4 const & lightMatrix
+			, sdw::UInt const & cascadeIndex
+			, sdw::UInt const & maxCascade
+			, sdw::Float const & tMaxMax = sdw::Float{ 9000000.0_f } );
+		SingleScatteringResult integrateScatteredLuminanceShadow( sdw::Vec2 const & pixPos
+			, sdw::Vec3 const & worldPos
+			, sdw::Vec3 const & worldDir
+			, sdw::Vec3 const & sunDir
+			, sdw::Float const & sampleCountIni
+			, sdw::Float const & depthBufferValue
+			, castor3d::shader::Light const & light
+			, sdw::Vec3 const & surfaceWorldNormal
+			, sdw::Mat4 const & lightMatrix
+			, sdw::UInt const & cascadeIndex
+			, sdw::UInt const & maxCascade
+			, sdw::Float const & tMaxMax = sdw::Float{ 9000000.0_f } );
+		SingleScatteringResult integrateScatteredLuminanceNoShadow( sdw::Vec2 const & pixPos
 			, sdw::Vec3 const & worldPos
 			, sdw::Vec3 const & worldDir
 			, sdw::Vec3 const & sunDir
@@ -118,6 +148,9 @@ namespace atmosphere_scattering
 			, sdw::Float const & tMaxMax = sdw::Float{ 9000000.0_f } );
 		sdw::Boolean moveToTopAtmosphere( sdw::Vec3 & worldPos
 				, sdw::Vec3 const & worldDir );
+		sdw::Vec3 getSunRadiance( sdw::Vec3 const & cameraPosition
+			, sdw::Vec3 const & sunDir
+			, sdw::CombinedImage2DRgba32 const & transmittanceMap );
 
 		// - r0: ray origin
 		// - rd: normalized ray direction
@@ -172,14 +205,73 @@ namespace atmosphere_scattering
 			, sdw::Vec2 const & size );
 
 	private:
+		void doInitRay( sdw::Float const & depthBufferValue
+			, sdw::Vec2 const & pixPos
+			, sdw::Vec3 const & worldPos
+			, sdw::Vec3 const & worldDir
+			, sdw::Float const & tMaxMax
+			, sdw::Vec3 const & earthO
+			, sdw::Float const & tBottom
+			, SingleScatteringResult const & result
+			, sdw::Float & tMax );
+		sdw::Float doInitSampleCount( sdw::Float const & tMax
+			, sdw::Float & sampleCount
+			, sdw::Float & sampleCountFloor
+			, sdw::Float & tMaxFloor );
+		std::pair< sdw::Float, sdw::Float > doInitPhaseFunctions( sdw::Vec3 const & sunDir
+			, sdw::Vec3 const & worldDir );
+		void doStepRay( sdw::Float const & s
+			, sdw::Float const & sampleCount
+			, sdw::Float const & sampleCountFloor
+			, sdw::Float const & tMaxFloor
+			, sdw::Float const & tMax
+			, sdw::Float const & sampleSegmentT
+			, sdw::Float & t
+			, sdw::Float & dt );
+		std::tuple< sdw::Vec3, sdw::Float, sdw::Vec2, sdw::Vec3, sdw::Vec3 > doGetSunTransmittance( sdw::Vec3 const & sunDir
+			, MediumSampleRGB const & medium
+			, sdw::Vec3 const & P
+			, sdw::Float const & dt
+			, sdw::Vec3 & opticalDepth );
+		std::tuple< sdw::Vec3, sdw::Float, sdw::Vec3 > doGetScatteredLuminance( sdw::Vec3 const & sunDir
+			, MediumSampleRGB const & medium
+			, sdw::Vec3 const & P
+			, sdw::Vec3 const & earthO
+			, sdw::Vec3 const & upVector
+			, sdw::Float const & sunZenithCosAngle
+			, sdw::Float const & miePhaseValue
+			, sdw::Float const & rayleighPhaseValue );
+		void doComputeStep( MediumSampleRGB const & medium
+			, sdw::Float const & dt
+			, sdw::Vec3 const & sampleTransmittance
+			, sdw::Float const & earthShadow
+			, sdw::Vec3 const & transmittanceToSun
+			, sdw::Vec3 const & multiScatteredLuminance
+			, sdw::Vec3 const & S
+			, sdw::Float const & t
+			, sdw::Float & tPrev
+			, sdw::Vec3 & throughput
+			, sdw::Vec3 & L
+			, SingleScatteringResult & result );
+		void doProcessGround( sdw::Vec3 const & worldPos
+			, sdw::Vec3 const & worldDir
+			, sdw::Vec3 const & sunDir
+			, sdw::Float const & tMax
+			, sdw::Float const & tBottom
+			, sdw::Vec3 const & globalL
+			, sdw::Vec3 const & throughput
+			, sdw::Vec3 & L );
+
+	private:
 		sdw::ShaderWriter & writer;
+
+	public:
 		AtmosphereData const & atmosphereData;
 		LuminanceSettings luminanceSettings{};
 		VkExtent2D transmittanceExtent{};
 		sdw::CombinedImage2DRgba32 const * transmittanceTexture{};
 		sdw::CombinedImage2DRgba32 const * multiScatTexture{};
-		sdw::CombinedImage2DShadowR32 const * shadowMapTexture{};
-		sdw::Mat4 const * shadowmapViewProjMat;
+		std::shared_ptr< castor3d::shader::Shadow > shadows;
 
 	private:
 		sdw::Function< SingleScatteringResult
@@ -190,6 +282,19 @@ namespace atmosphere_scattering
 			, sdw::InFloat
 			, sdw::InFloat
 			, sdw::InFloat > m_integrateScatteredLuminance;
+		sdw::Function< SingleScatteringResult
+			, sdw::InVec2
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InFloat
+			, sdw::InFloat
+			, castor3d::shader::InLight
+			, sdw::InVec3
+			, sdw::InMat4
+			, sdw::InUInt
+			, sdw::InUInt
+			, sdw::InFloat > m_integrateScatteredLuminanceShadow;
 		sdw::Function< sdw::Boolean
 			, sdw::InOutVec3
 			, sdw::InVec3 > m_moveToTopAtmosphere;
@@ -229,12 +334,14 @@ namespace atmosphere_scattering
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InFloat > m_getMultipleScattering;
-		sdw::Function< sdw::Float
-			, sdw::InVec3 > m_getShadow;
 		sdw::Function< sdw::Vec3
 			, sdw::InFloat
 			, sdw::InVec2
 			, sdw::InVec2 > m_getWorldPos;
+		sdw::Function< sdw::Vec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InCombinedImage2DRgba32 > m_getSunRadiance;
 	};
 }
 

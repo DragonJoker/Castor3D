@@ -78,6 +78,11 @@ namespace atmosphere_scattering
 		void loadAtmosphereVolume( uint32_t dimension );
 		void loadSkyView( castor::Point2ui const & dimensions );
 
+		bool hasScattering()const override
+		{
+			return true;
+		}
+
 		bool isDepthSampled()const override
 		{
 			return true;

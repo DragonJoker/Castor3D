@@ -21,6 +21,7 @@ set( ${PROJECT_NAME}_HDR_FILES
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/AtmosphereBackgroundModel.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/AtmosphereBackgroundPass.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/AtmosphereCameraUbo.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/AtmosphereLightingModel.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/AtmosphereMultiScatteringPass.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/AtmosphereScattering_Parsers.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/AtmosphereScatteringConfig.hpp
@@ -37,6 +38,7 @@ set( ${PROJECT_NAME}_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/AtmosphereBackgroundModel.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/AtmosphereBackgroundPass.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/AtmosphereCameraUbo.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/AtmosphereLightingModel.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/AtmosphereMultiScatteringPass.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/AtmosphereScattering_Parsers.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/AtmosphereScatteringPlugin.cpp

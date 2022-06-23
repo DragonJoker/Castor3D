@@ -45,7 +45,7 @@ namespace atmosphere_scattering
 			, m_atmosphere
 			, m_cameraData
 			, m_atmosphereData
-			, false, true, true, false }
+			, false, true, true, true }
 	{
 		m_writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "c3d_mapSkyView"
 			, binding++
@@ -96,29 +96,10 @@ namespace atmosphere_scattering
 		return sdw::Void{};
 	}
 
-	sdw::Vec4 AtmosphereBackgroundModel::scatter( sdw::Vec2 const & fragPos
-		, sdw::Vec2 const & fragSize
-		, sdw::Float const & fragDepth )
+	sdw::Vec3 AtmosphereBackgroundModel::getSunRadiance( sdw::Vec3 const & psunDir )
 	{
-		auto luminance = m_writer.declLocale< sdw::Vec4 >( "luminance" );
-		auto transmittance = m_writer.declLocale< sdw::Vec4 >( "transmittance" );
-		m_scattering.getPixelTransLum( fragPos
-			, fragSize
-			, fragDepth
-			, m_transmittanceMap
-			, m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapSkyView" )
-			, m_writer.getVariable< sdw::CombinedImage3DRgba32 >( "c3d_mapVolume" )
-			, transmittance
-			, luminance );
-
-		luminance.xyz() /= luminance.a();	// Normalise according to sample count when path tracing
-
-		// Similar setup to the Bruneton demo
-		auto whitePoint = m_writer.declLocale( "whitePoint"
-			, vec3( 1.08241_f, 0.96756_f, 0.95003_f ) );
-		auto exposure = m_writer.declLocale( "exposure"
-			, 10.0_f );
-		auto hdr = vec3( 1.0_f ) - exp( -luminance.rgb() / whitePoint * exposure );
-		return vec4( hdr, luminance.a() );
+		return m_atmosphere.getSunRadiance( m_cameraData.position
+			, psunDir
+			, m_transmittanceMap );
 	}
 }
