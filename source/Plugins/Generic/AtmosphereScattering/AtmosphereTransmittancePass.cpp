@@ -87,7 +87,7 @@ namespace atmosphere_scattering
 						, vec3( 0.0_f, viewZenithCosAngle, -viewZenithSinAngle ) );
 
 					auto transmittance = writer.declLocale( "transmittance"
-						, exp( -atmosphereConfig.integrateScatteredLuminance( pixPos
+						, exp( -atmosphereConfig.integrateScatteredLuminanceNoShadow( pixPos
 							, worldPos
 							, worldDir
 							, c3d_atmosphereData.sunDirection

@@ -107,18 +107,8 @@ namespace atmosphere_scattering
 						, volumeMap
 						, transmittance
 						, luminance );
-					outLuminance = luminance;
+					outLuminance = scatteringConfig.rescaleLuminance( luminance );
 					outTransmittance = transmittance;
-
-					outLuminance.xyz() /= outLuminance.a();	// Normalise according to sample count when path tracing
-
-					// Similar setup to the Bruneton demo
-					auto whitePoint = writer.declLocale( "whitePoint"
-						, vec3( 1.08241_f, 0.96756_f, 0.95003_f ) );
-					auto exposure = writer.declLocale( "exposure"
-						, 10.0_f );
-					auto hdr = vec3( 1.0_f ) - exp( -outLuminance.rgb() / whitePoint * exposure );
-					outLuminance = vec4( hdr, outLuminance.a() );
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

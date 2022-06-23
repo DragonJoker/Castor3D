@@ -2,6 +2,7 @@
 
 #include "AtmosphereScattering/AtmosphereBackground.hpp"
 #include "AtmosphereScattering/AtmosphereBackgroundModel.hpp"
+#include "AtmosphereScattering/AtmosphereLightingModel.hpp"
 #include "AtmosphereScattering/AtmosphereScattering_Parsers.hpp"
 
 #include <Castor3D/Engine.hpp>
@@ -262,6 +263,12 @@ extern "C"
 
 	C3D_AtmosphereScattering_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
 	{
+		engine->registerLightingModel( atmosphere_scattering::AtmospherePhongLightingModel::getName()
+			, &atmosphere_scattering::AtmospherePhongLightingModel::create );
+		engine->registerLightingModel( atmosphere_scattering::AtmosphereBlinnPhongLightingModel::getName()
+			, &atmosphere_scattering::AtmosphereBlinnPhongLightingModel::create );
+		engine->registerLightingModel( atmosphere_scattering::AtmospherePbrLightingModel::getName()
+			, &atmosphere_scattering::AtmospherePbrLightingModel::create );
 		engine->registerParsers( atmosphere_scattering::PluginType
 			, atmosphere_scattering::parser::createParsers()
 			, atmosphere_scattering::parser::createSections()
@@ -274,5 +281,8 @@ extern "C"
 	{
 		engine->unregisterBackgroundModel( atmosphere_scattering::AtmosphereBackgroundModel::Name );
 		engine->unregisterParsers( atmosphere_scattering::PluginType );
+		engine->unregisterLightingModel( atmosphere_scattering::AtmospherePhongLightingModel::getName() );
+		engine->unregisterLightingModel( atmosphere_scattering::AtmosphereBlinnPhongLightingModel::getName() );
+		engine->unregisterLightingModel( atmosphere_scattering::AtmospherePbrLightingModel::getName() );
 	}
 }

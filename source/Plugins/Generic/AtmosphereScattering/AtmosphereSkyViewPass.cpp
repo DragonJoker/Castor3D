@@ -136,7 +136,7 @@ namespace atmosphere_scattering
 					ELSE
 					{
 						auto ss = writer.declLocale( "ss"
-							, atmosphereConfig.integrateScatteredLuminance( pixPos
+							, atmosphereConfig.integrateScatteredLuminanceNoShadow( pixPos
 							, worldPos
 							, worldDir
 							, sunDir
