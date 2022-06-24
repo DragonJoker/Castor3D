@@ -125,6 +125,10 @@ namespace castor3d::shader
 		C3D_API sdw::UVec3 unflatten( sdw::UInt const & p
 			, sdw::UVec3 const & dim );
 
+		C3D_API sdw::Vec4 sampleMap( PassFlags const & passFlags
+			, sdw::CombinedImage2DRgba32 const & map
+			, sdw::Vec2 const & texCoords );
+
 		C3D_API static sdw::Mat3 getTBN( sdw::Vec3 const & normal
 			, sdw::Vec3 const & tangent
 			, sdw::Vec3 const & bitangent );
@@ -167,6 +171,9 @@ namespace castor3d::shader
 		void declareUnflatten();
 		void declareIsSaturatedImg();
 		void declareClipToScreen();
+
+		sdw::Vec4 sampleUntiled( sdw::CombinedImage2DRgba32 const & map
+			, sdw::Vec2 const & texCoords );
 
 	private:
 		sdw::ShaderWriter & m_writer;
@@ -260,6 +267,11 @@ namespace castor3d::shader
 			, sdw::InUVec3 > m_unflatten3D;
 		sdw::Function< sdw::Vec4
 			, sdw::InVec4 > m_clipToScreen;
+		sdw::Function< sdw::Vec4
+			, sdw::InVec2 > m_hash4;
+		sdw::Function< sdw::Vec4
+			, sdw::InCombinedImage2DRgba32
+			, sdw::InVec2 > m_sampleUntiled;
 	};
 }
 

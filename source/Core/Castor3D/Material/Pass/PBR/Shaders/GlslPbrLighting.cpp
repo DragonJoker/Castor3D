@@ -818,7 +818,8 @@ namespace castor3d::shader
 						, texCoords1
 						, texCoords2
 						, texCoords3 ) );
-				auto sampled = config.computeCommonMapVoxelContribution( passFlags
+				auto sampled = config.computeCommonMapVoxelContribution( m_utils
+					, passFlags
 					, textureFlags
 					, name
 					, anim

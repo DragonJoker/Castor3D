@@ -138,7 +138,7 @@ namespace castor3d
 				IF( *getWriter(), isOpacity() )
 				{
 					auto sampled = writer.declLocale( "c3d_sampled" + name
-						, map.sample( texCoord ) );
+						, utils.sampleMap( passFlags, map, texCoord ) );
 					opacity = opacity * getFloat( sampled, opaMask );
 				}
 				FI;
@@ -192,7 +192,7 @@ namespace castor3d
 			}
 
 			auto sampled = writer.declLocale( "c3d_sampled" + name
-				, map.sample( texCoord ) );
+				, utils.sampleMap( passFlags, map, texCoord ) );
 			applyNormal( textureFlags, sampled, normal, tangent, bitangent, normal );
 			applyOpacity( textureFlags, sampled, opacity );
 		}
@@ -247,7 +247,7 @@ namespace castor3d
 
 			transformUV( anim, texCoord );
 			auto result = writer.declLocale( "c3d_result" + name
-				, map.sample( texCoord ) );
+				, utils.sampleMap( passFlags, map, texCoord ) );
 			applyNormal( textureFlags, result, normal, tangent, bitangent, normal );
 			applyOpacity( textureFlags, result, opacity );
 			applyEmissive( textureFlags, result, emissive );
@@ -256,7 +256,8 @@ namespace castor3d
 			return result;
 		}
 
-		sdw::Vec4 TextureConfigData::computeCommonMapVoxelContribution( PassFlags const & passFlags
+		sdw::Vec4 TextureConfigData::computeCommonMapVoxelContribution( Utils & utils
+			, PassFlags const & passFlags
 			, TextureFlags const & textureFlags
 			, std::string const & name
 			, shader::TextureAnimData const & anim
@@ -270,8 +271,8 @@ namespace castor3d
 			auto texCoord = writer.declLocale( "c3d_texCoord" + name
 				, texCoords.xy() );
 			transformUV( anim, texCoord );
-			auto result = writer.declLocale< sdw::Vec4 >( "c3d_result" + name
-				, map.sample( texCoord ) );
+			auto result = writer.declLocale( "c3d_result" + name
+				, utils.sampleMap( passFlags, map, texCoord ) );
 			applyOpacity( textureFlags, result, opacity );
 			applyEmissive( textureFlags, result, emissive );
 			applyOcclusion( textureFlags, result, occlusion );

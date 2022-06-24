@@ -27,6 +27,7 @@ namespace castor3d::shader
 			, bool enabled );
 		SDW_DeclStructInstance( C3D_API, LightMaterial );
 
+		C3D_API void create( Material const & material );
 		C3D_API virtual void create( sdw::Vec3 const & albedo
 			, sdw::Vec4 const & data3
 			, sdw::Vec4 const & data2

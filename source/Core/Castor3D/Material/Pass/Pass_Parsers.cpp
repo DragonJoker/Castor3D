@@ -358,6 +358,27 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
+		CU_ImplementAttributeParser( parserPassUntile )
+		{
+			auto & parsingContext = getParserContext( context );
+
+			if ( !parsingContext.pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				bool value{ false };
+				params[0]->get( value );
+				parsingContext.pass->setUntiling( value );
+			}
+		}
+		CU_EndAttribute()
+
 		CU_ImplementAttributeParser( parserPassEdgeColour )
 		{
 			auto & parsingContext = getParserContext( context );
@@ -1003,6 +1024,7 @@ namespace castor3d
 		Pass::addParser( result, mtlSectionID, cuT( "reflections" ), parserPassReflections, { makeParameter< ParameterType::eBool >() } );
 		Pass::addParser( result, mtlSectionID, cuT( "refractions" ), parserPassRefractions, { makeParameter< ParameterType::eBool >() } );
 		Pass::addParser( result, mtlSectionID, cuT( "transmission" ), parserPassTransmission, { makeParameter< ParameterType::eRgbColour >() } );
+		Pass::addParser( result, mtlSectionID, cuT( "untile" ), parserPassUntile, { makeParameter< ParameterType::eBool >() } );
 		Pass::addParser( result, mtlSectionID, cuT( "edge_colour" ), parserPassEdgeColour, { makeParameter< ParameterType::eRgbaColour >() } );
 		Pass::addParser( result, mtlSectionID, cuT( "edge_width" ), parserPassEdgeWidth, { makeParameter< ParameterType::eFloat >( makeRange( MinMaterialEdgeWidth, MaxMaterialEdgeWidth ) ) } );
 		Pass::addParser( result, mtlSectionID, cuT( "edge_depth_factor" ), parserPassDepthFactor, { makeParameter< ParameterType::eFloat >( makeRange( 0.0f, 1.0f ) ) } );

@@ -113,12 +113,15 @@ namespace castor3d
 		//!\~english	Shader using alpha blending.
 		//\~french		Shader utilisant le mélange alpha.
 		eAlphaBlending = 0x0800,
+		//!\~english	Shader untiles the textures.
+		//\~french		Shader untile les textures.
+		eUntile = 0x1000,
 		//!\~english	All flags used in base pipeline flags hashing.
 		//\~french		Tous les indicateurs utilisés dans le hash des indicateurs de pipeline.
-		eAllBase = 0x0FFF,
+		eAllBase = 0x1FFF,
 		//!\~english	The pass needs an edge to be drawn.
 		//!\~french		La passe demande qu'une bordure soit dessinée.
-		eDrawEdge = 0x1000,
+		eDrawEdge = 0x2000,
 		//!\~english	All other flags.
 		//\~french		Tous les autres indicateurs.
 		eAllOptional = eDrawEdge,

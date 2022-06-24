@@ -1225,6 +1225,15 @@ namespace castor3d::shader
 		return m_unflatten3D( p, dim );
 	}
 
+	sdw::Vec4 Utils::sampleMap( PassFlags const & passFlags
+		, sdw::CombinedImage2DRgba32 const & map
+		, sdw::Vec2 const & texCoords )
+	{
+		return ( checkFlag( passFlags, PassFlag::eUntile )
+			? sampleUntiled( map, texCoords )
+			: map.sample( texCoords ) );
+	}
+
 	sdw::Mat3 Utils::getTBN( sdw::Vec3 const & normal
 		, sdw::Vec3 const & tangent
 		, sdw::Vec3 const & bitangent )
@@ -1249,5 +1258,70 @@ namespace castor3d::shader
 			|| flags == TextureFlag::eNormal
 			|| flags == TextureFlag::eHeight
 			|| flags == ( TextureFlag::eNormal | TextureFlag::eHeight );
+	}
+
+	sdw::Vec4 Utils::sampleUntiled( sdw::CombinedImage2DRgba32 const & pmap
+		, sdw::Vec2 const & ptexCoords )
+	{
+		if ( !m_sampleUntiled )
+		{
+			m_hash4 = m_writer.implementFunction< sdw::Vec4 >( "hash4"
+				, [&]( sdw::Vec2 const & p )
+				{
+					m_writer.returnStmt( fract( sin( vec4( 1.0_f + dot( p, vec2( 37.0_f, 17.0_f ) ),
+						2.0_f + dot( p, vec2( 11.0_f, 47.0_f ) ),
+						3.0_f + dot( p, vec2( 41.0_f, 29.0_f ) ),
+						4.0_f + dot( p, vec2( 23.0_f, 31.0_f ) ) ) ) * 103.0_f ) );
+				}
+				, sdw::InVec2{ m_writer, "p" } );
+
+			m_sampleUntiled = m_writer.implementFunction< sdw::Vec4 >( "sampleUntiled"
+				, [&]( sdw::CombinedImage2DRgba32 const & map
+					, sdw::Vec2 const & texCoords )
+				{
+					auto iuv = m_writer.declLocale( "iuv", floor( texCoords ) );
+					auto fuv = m_writer.declLocale( "fuv", fract( texCoords ) );
+
+					// generate per-tile transform
+					auto ofa = m_writer.declLocale( "ofa", m_hash4( iuv + vec2( 0.0_f, 0.0_f ) ) );
+					auto ofb = m_writer.declLocale( "ofb", m_hash4( iuv + vec2( 1.0_f, 0.0_f ) ) );
+					auto ofc = m_writer.declLocale( "ofc", m_hash4( iuv + vec2( 0.0_f, 1.0_f ) ) );
+					auto ofd = m_writer.declLocale( "ofd", m_hash4( iuv + vec2( 1.0_f, 1.0_f ) ) );
+
+					auto ddx = m_writer.declLocale( "ddx", dFdx( texCoords ) );
+					auto ddy = m_writer.declLocale( "ddy", dFdy( texCoords ) );
+
+					// transform per-tile uvs
+					ofa.zw() = sign( ofa.zw() - 0.5_f );
+					ofb.zw() = sign( ofb.zw() - 0.5_f );
+					ofc.zw() = sign( ofc.zw() - 0.5_f );
+					ofd.zw() = sign( ofd.zw() - 0.5_f );
+
+					// uv's, and derivarives (for correct mipmapping)
+					auto uva = m_writer.declLocale( "uva", texCoords * ofa.zw() + ofa.xy() );
+					auto ddxa = m_writer.declLocale( "ddxa", ddx * ofa.zw() );
+					auto ddya = m_writer.declLocale( "ddya", ddy * ofa.zw() );
+					auto uvb = m_writer.declLocale( "uvb", texCoords * ofb.zw() + ofb.xy() );
+					auto ddxb = m_writer.declLocale( "ddxb", ddx * ofb.zw() );
+					auto ddyb = m_writer.declLocale( "ddyb", ddy * ofb.zw() );
+					auto uvc = m_writer.declLocale( "uvc", texCoords * ofc.zw() + ofc.xy() );
+					auto ddxc = m_writer.declLocale( "ddxc", ddx * ofc.zw() );
+					auto ddyc = m_writer.declLocale( "ddyc", ddy * ofc.zw() );
+					auto uvd = m_writer.declLocale( "uvd", texCoords * ofd.zw() + ofd.xy() );
+					auto ddxd = m_writer.declLocale( "ddxd", ddx * ofd.zw() );
+					auto ddyd = m_writer.declLocale( "ddyd", ddy * ofd.zw() );
+
+					// fetch and blend
+					auto b = m_writer.declLocale( "b", smoothStep( vec2( 0.25_f ), vec2( 0.75_f ), fuv ) );
+
+					m_writer.returnStmt( mix( mix( map.grad( uva, ddxa, ddya ), map.grad( uvb, ddxb, ddyb ), vec4( b.x() ) )
+						, mix( map.grad( uvc, ddxc, ddyc ), map.grad( uvd, ddxd, ddyd ), vec4( b.x() ) )
+						, vec4( b.y() ) ) );
+				}
+				, sdw::InCombinedImage2DRgba32{ m_writer, "map" }
+				, sdw::InVec2{ m_writer, "texCoords" } );
+		}
+
+		return m_sampleUntiled( pmap, ptexCoords );
 	}
 }

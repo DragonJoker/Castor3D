@@ -320,6 +320,11 @@ namespace castor3d
 			return m_twoSided;
 		}
 
+		bool isUntiling()const
+		{
+			return m_untiling;
+		}
+
 		bool hasEnvironmentMapping()const
 		{
 			return checkFlag( m_flags, PassFlag::eReflection )
@@ -531,6 +536,12 @@ namespace castor3d
 			m_twoSided = value;
 		}
 
+		void setUntiling( bool value )
+		{
+			m_untiling = value;
+			updateFlag( PassFlag::eUntile, m_untiling );
+		}
+
 		void setEmissive( float const & value )
 		{
 			m_emissive = value;
@@ -732,6 +743,7 @@ namespace castor3d
 		castor::GroupChangeTracked< float > m_emissive;
 		castor::GroupChangeTracked< float > m_refractionRatio;
 		castor::GroupChangeTracked< bool > m_twoSided;
+		castor::GroupChangeTracked< bool > m_untiling;
 		castor::GroupChangeTracked< BlendMode > m_alphaBlendMode;
 		castor::GroupChangeTracked< BlendMode > m_colourBlendMode;
 		castor::GroupChangeTracked< float > m_alphaValue;
