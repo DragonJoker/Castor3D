@@ -57,6 +57,7 @@ namespace castor3d
 
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
+
 			C3D_API void computeGeometryMapContribution( Utils &  utils
 				, PassFlags const & passFlags
 				, TextureFlags const & textureFlags
@@ -96,7 +97,8 @@ namespace castor3d
 				, sdw::Vec3 & bitangent
 				, sdw::Vec3 & tangentSpaceViewPosition
 				, sdw::Vec3 & tangentSpaceFragPosition );
-			C3D_API sdw::Vec4 computeCommonMapVoxelContribution( PassFlags const & passFlags
+			C3D_API sdw::Vec4 computeCommonMapVoxelContribution( Utils & utils
+				, PassFlags const & passFlags
 				, TextureFlags const & textureFlags
 				, std::string const & name
 				, shader::TextureAnimData const & anim
@@ -247,13 +249,13 @@ namespace castor3d
 			}
 
 		private:
-			C3D_API void convertUV( sdw::Vec2 & uv )const;
-			C3D_API void convertUVW( sdw::Vec3 & uvw )const;
-			C3D_API void convertToTile( sdw::Vec2 & uv )const;
 			sdw::Float getFloat( sdw::Vec4 const & sampled
 				, sdw::Float const & mask )const;
 			sdw::Vec3 getVec3( sdw::Vec4 const & sampled
 				, sdw::Float const & mask )const;
+			void convertUV( sdw::Vec2 & uv )const;
+			void convertUVW( sdw::Vec3 & uvw )const;
+			void convertToTile( sdw::Vec2 & uv )const;
 
 		private:
 			using sdw::StructInstance::getMember;

@@ -72,6 +72,11 @@ namespace castor3d::shader
 		return result;
 	}
 
+	void LightMaterial::create( Material const & material )
+	{
+		create( vec3( 1.0_f ), material );
+	}
+
 	sdw::Vec3 LightMaterial::computeF0( sdw::Vec3 const & albedo
 		, sdw::Float const & metalness )
 	{

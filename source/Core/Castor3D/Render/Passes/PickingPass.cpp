@@ -192,8 +192,8 @@ namespace castor3d
 								auto texCoord = writer.declLocale( "texCoord" + name
 									, in.texture0.xy() );
 								config.transformUV( anim, texCoord );
-								auto sampledOpacity = writer.declLocale< sdw::Vec4 >( "sampled" + name
-									, c3d_maps[id - 1_u].sample( texCoord ) );
+								auto sampledOpacity = writer.declLocale( "sampled" + name
+									, utils.sampleMap( flags.passFlags, c3d_maps[id - 1_u], texCoord ) );
 								opacity = config.getOpacity( sampledOpacity, opacity );
 							}
 							FI;
