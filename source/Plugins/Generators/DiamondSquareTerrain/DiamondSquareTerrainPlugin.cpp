@@ -66,6 +66,11 @@ namespace diamond_square_terrain
 				, { castor::makeParameter< castor::ParameterType::eBool >() } );
 			addParser( result
 				, uint32_t( DiamondSquareSection::eRoot )
+				, Generator::ParamIsland
+				, &parserIsland
+				, { castor::makeParameter< castor::ParameterType::eBool >() } );
+			addParser( result
+				, uint32_t( DiamondSquareSection::eRoot )
 				, Generator::ParamXzScale
 				, &parserXzScale
 				, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
@@ -84,6 +89,30 @@ namespace diamond_square_terrain
 				, Generator::ParamDetail
 				, &parserDetail
 				, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			addParser( result
+				, uint32_t( DiamondSquareSection::eRoot )
+				, Generator::ParamHeatOffset
+				, &parserHeatOffset
+				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			addParser( result
+				, uint32_t( DiamondSquareSection::eRoot )
+				, Generator::Biome
+				, &parserBiome
+				, { castor::makeParameter< castor::ParameterType::eName >() } );
+			addParser( result
+				, uint32_t( DiamondSquareSection::eBiome )
+				, cuT( "}" )
+				, &parserBiomeEnd );
+			addParser( result
+				, uint32_t( DiamondSquareSection::eBiome )
+				, Generator::BiomeRange
+				, &parserBiomeRange
+				, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
+			addParser( result
+				, uint32_t( DiamondSquareSection::eBiome )
+				, Generator::BiomePassIndex
+				, &parserBiomePassIndex
+				, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 
 			return result;
 		}
@@ -93,6 +122,7 @@ namespace diamond_square_terrain
 			return
 			{
 				{ uint32_t( DiamondSquareSection::eRoot ), Generator::Type },
+				{ uint32_t( DiamondSquareSection::eBiome ), Generator::Biome },
 			};
 		}
 
