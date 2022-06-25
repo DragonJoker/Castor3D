@@ -455,6 +455,15 @@ namespace castor3d
 		return m_renderQueue->getIgnoredNode();
 	}
 
+	bool RenderNodesPass::isMeshShading()const
+	{
+#if C3D_UseMeshShaders
+		return m_meshShading;
+#else
+		return false;
+#endif
+	}
+
 	void RenderNodesPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
 		, ShadowMapLightTypeArray const & shadowMaps
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )
