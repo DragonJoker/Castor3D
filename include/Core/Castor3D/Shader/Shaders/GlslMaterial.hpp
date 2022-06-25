@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_GlslMaterials_H___
@@ -23,6 +23,60 @@ namespace castor3d::shader
 		SDW_DeclStructInstance( C3D_API, Material );
 
 		C3D_API sdw::Vec3 colour()const;
+		/**
+		 *\~english
+		 *\brief		Writes the alpha function in GLSL.
+		 *\param		alphaFunc	The alpha function.
+		 *\param[in]	opacity		The alpha TypeEnum.
+		 *\param[in]	passMasks	The subpasses masks.
+		 *\param[in]	opaque		\p true for opaque nodes, \p false for transparent ones.
+		 *\~french
+		 *\brief		Ecrit la fonction d'opacité en GLSL.
+		 *\param		alphaFunc	La fonction d'opacité.
+		 *\param[in]	opacity		La valeur d'opacité.
+		 *\param[in]	passMasks	Les masques de subpasses.
+		 *\param[in]	opaque		\p true pour les noeuds opaques, \p false pour les transparents.
+		 */
+		C3D_API void applyAlphaFunc( VkCompareOp alphaFunc
+			, sdw::Float & opacity
+			, sdw::Float const & passMultiplier
+			, bool opaque = true );
+		/**
+		 *\~english
+		 *\brief		Writes the alpha function in GLSL.
+		 *\param		alphaFunc	The alpha function.
+		 *\param[in]	opacity		The opacity value.
+		 *\param[in]	alphaRef	The alpha comparison reference value.
+		 *\param[in]	passMasks	The subpasses masks.
+		 *\param[in]	opaque		\p true for opaque nodes, \p false for transparent ones.
+		 *\~french
+		 *\brief		Ecrit la fonction d'opacité en GLSL.
+		 *\param		alphaFunc	La fonction d'opacité.
+		 *\param[in]	opacity		La valeur d'opacité.
+		 *\param[in]	alphaRef	La valeur de référence pour la comparaison alpha.
+		 *\param[in]	passMasks	Les masques de subpasses.
+		 *\param[in]	opaque		\p true pour les noeuds opaques, \p false pour les transparents.
+		 */
+		C3D_API void applyAlphaFunc( VkCompareOp alphaFunc
+			, sdw::Float & opacity
+			, sdw::Float const & alphaRef
+			, sdw::Float const & passMultiplier
+			, bool opaque = true );
+		/**
+		 *\~english
+		 *\brief		Writes the alpha function in GLSL.
+		 *\param		alphaFunc	The alpha function.
+		 *\param[in]	opacity		The alpha TypeEnum.
+		 *\param[in]	passMasks	The subpasses masks.
+		 *\param[in]	opaque		\p true for opaque nodes, \p false for transparent ones.
+		 *\~french
+		 *\brief		Ecrit la fonction d'opacité en GLSL.
+		 *\param		alphaFunc	La fonction d'opacité.
+		 *\param[in]	opacity		La valeur d'opacité.
+		 *\param[in]	passMasks	Les masques de subpasses.
+		 *\param[in]	opaque		\p true pour les noeuds opaques, \p false pour les transparents.
+		 */
+		C3D_API sdw::Float getPassMultiplier( sdw::UVec4 const & passMasks );
 
 		C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 

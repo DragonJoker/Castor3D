@@ -189,7 +189,7 @@ namespace castor3d
 					, in.texture2 );
 				auto texCoord3 = writer.declLocale( "texCoord3"
 					, in.texture3 );
-				auto alpha = writer.declLocale( "alpha"
+				auto opacity = writer.declLocale( "opacity"
 					, material.opacity );
 				auto emissive = writer.declLocale( "emissive"
 					, vec3( material.emissive ) );
@@ -222,18 +222,22 @@ namespace castor3d
 					, tangent
 					, bitangent
 					, emissive
-					, alpha
+					, opacity
 					, occlusion
 					, transmittance
 					, *lightMat
 					, in.tangentSpaceViewPosition
 					, in.tangentSpaceFragPosition );
-				utils.applyAlphaFunc( flags.alphaFunc
-					, alpha
-					, material.alphaRef );
+				material.applyAlphaFunc( flags.alphaFunc
+					, opacity
+					, in.passMultiplier );
 				lightMat->output( outData2, outData3 );
 				outData4 = vec4( emissive, transmittance );
 				outData5 = vec4( in.getVelocity(), 0.0_f, occlusion );
+				outData2 *= in.passMultiplier;
+				outData3 *= in.passMultiplier;
+				outData4 *= in.passMultiplier;
+				outData5.w() *= in.passMultiplier;
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

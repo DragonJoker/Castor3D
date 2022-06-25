@@ -8,6 +8,7 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -31,6 +32,7 @@ namespace castor3d
 			std::map< SubmeshData, castor::Point3fArray > baseBuffers;
 			std::vector< SubmeshAnimationBuffer > morphTargets;
 			VertexBoneDataArray skin;
+			std::vector< PassMasks > passMasks;
 		};
 
 		static std::vector< meshopt_Stream > gather( Submesh & submesh
@@ -64,6 +66,11 @@ namespace castor3d
 				remapped.skin = skin->getData();
 			}
 
+			if ( auto passMasks = submesh.getComponent< PassMasksComponent >() )
+			{
+				remapped.passMasks = passMasks->getData();
+			}
+
 			if ( auto morph = submesh.getComponent< MorphComponent >() )
 			{
 				for ( auto & buffers : morph->getMorphTargetsBuffers() )
@@ -93,6 +100,16 @@ namespace castor3d
 		static void const * getConstPtr( VertexBoneDataArray & data )
 		{
 			return data.data();
+		}
+
+		static void * getPtr( std::vector< PassMasks > & data )
+		{
+			return data.data()->data.data();
+		}
+
+		static void const * getConstPtr( std::vector< PassMasks > & data )
+		{
+			return data.data()->data.data();
 		}
 
 		template< typename DataT >
@@ -168,6 +185,10 @@ namespace castor3d
 				, destinationVertexCount
 				, remap
 				, buffers.colours );
+			applyRemap( originalVertexCount
+				, destinationVertexCount
+				, remap
+				, buffers.passMasks );
 		}
 
 		static void applyRemap( size_t originalVertexCount
@@ -194,6 +215,14 @@ namespace castor3d
 					, destinationVertexCount
 					, remap
 					, remapped.skin );
+			}
+
+			if ( !remapped.passMasks.empty() )
+			{
+				applyRemap( originalVertexCount
+					, destinationVertexCount
+					, remap
+					, remapped.passMasks );
 			}
 
 			for ( auto & remappedMorph : remapped.morphTargets )
@@ -396,6 +425,11 @@ namespace castor3d
 		if ( auto skin = submesh.getComponent< SkinComponent >() )
 		{
 			skin->getData() = std::move( remapped.skin );
+		}
+
+		if ( auto passMasks = submesh.getComponent< PassMasksComponent >() )
+		{
+			passMasks->getData() = std::move( remapped.passMasks );
 		}
 
 		if ( auto morph = submesh.getComponent< MorphComponent >() )

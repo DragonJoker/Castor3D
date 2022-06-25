@@ -158,8 +158,6 @@ namespace castor3d
 				auto material = materials.getMaterial( modelData.getMaterialId() );
 				auto opacity = writer.declLocale( "opacity"
 					, material.opacity );
-				auto alphaRef = writer.declLocale( "alphaRef"
-					, material.alphaRef );
 				auto normal = writer.declLocale( "normal"
 					, normalize( in.normal ) );
 				auto tangent = writer.declLocale( "tangent"
@@ -230,9 +228,9 @@ namespace castor3d
 					}
 				}
 
-				utils.applyAlphaFunc( flags.alphaFunc
+				material.applyAlphaFunc( flags.alphaFunc
 					, opacity
-					, alphaRef );
+					, in.passMultiplier );
 				auto matFlags = writer.declLocale( "flags"
 					, 0.0_f );
 				data0 = vec4( in.fragCoord.z()

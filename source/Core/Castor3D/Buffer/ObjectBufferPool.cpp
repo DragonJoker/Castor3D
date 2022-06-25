@@ -79,6 +79,11 @@ namespace castor3d
 				result += "S";
 			}
 
+			if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
+			{
+				result += "M";
+			}
+
 			return result;
 		}
 	}
@@ -209,23 +214,32 @@ namespace castor3d
 				}
 				else if ( vertexCount )
 				{
-					if ( data == SubmeshData::eSkin )
+					switch ( data )
 					{
+					case SubmeshData::eSkin:
 						modelBuffers.buffers[i] = details::createBuffer< VertexBoneData >( m_device
 							, vertexCount
 							, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 							, m_debugName + name + getName( data ) + std::to_string( buffers.size() )
 							, false
 							, align );
-					}
-					else
-					{
+						break;
+					case SubmeshData::ePassMasks:
+						modelBuffers.buffers[i] = details::createBuffer< castor::Point4ui >( m_device
+							, vertexCount
+							, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+							, m_debugName + name + getName( data ) + std::to_string( buffers.size() )
+							, false
+							, align );
+						break;
+					default:
 						modelBuffers.buffers[i] = details::createBuffer< castor::Point4f >( m_device
 							, vertexCount
 							, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 							, m_debugName + name + getName( data ) + std::to_string( buffers.size() )
 							, false
 							, align );
+						break;
 					}
 				}
 			}

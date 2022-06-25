@@ -347,7 +347,7 @@ namespace castor3d
 				auto emissive = writer.declLocale( "emissive"
 					, vec3( material.emissive )
 					, m_needsRsm );
-				auto alpha = writer.declLocale( "alpha"
+				auto opacity = writer.declLocale( "opacity"
 					, material.opacity
 					, ( checkFlag( flags.texturesFlags, TextureFlag::eOpacity )
 						&& flags.alphaFunc != VK_COMPARE_OP_ALWAYS ) );
@@ -391,7 +391,7 @@ namespace castor3d
 							, tangent
 							, bitangent
 							, emissive
-							, alpha
+							, opacity
 							, occlusion
 							, transmittance
 							, *lightMat
@@ -411,15 +411,16 @@ namespace castor3d
 							, texCoord1
 							, texCoord2
 							, texCoord3
-							, alpha
+							, opacity
 							, in.tangentSpaceViewPosition
 							, in.tangentSpaceFragPosition );
 					}
 				}
 
-				utils.applyAlphaFunc( flags.alphaFunc
-					, alpha
-					, alphaRef );
+				material.applyAlphaFunc( flags.alphaFunc
+					, opacity
+					, alphaRef
+					, in.passMultiplier );
 
 				auto depth = writer.declLocale( "depth"
 					, c3d_shadowMapData.getLinearisedDepth( in.worldPosition.xyz() ) );

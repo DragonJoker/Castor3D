@@ -310,6 +310,9 @@ namespace castor3d
 			auto bonBuffer = firstNode.getFinalBufferOffsets().hasData( SubmeshFlag::eSkin )
 				? &firstNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eSkin )
 				: nullptr;
+			auto pmkBuffer = firstNode.getFinalBufferOffsets().hasData( SubmeshFlag::ePassMasks )
+				? &firstNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::ePassMasks )
+				: nullptr;
 
 			CU_Require( idxBuffer == ( currentNode.getSourceBufferOffsets().hasData( SubmeshFlag::eIndex )
 				? &currentNode.getSourceBufferOffsets().getBuffer( SubmeshFlag::eIndex )
@@ -340,6 +343,9 @@ namespace castor3d
 				: nullptr ) );
 			CU_Require( bonBuffer == ( currentNode.getFinalBufferOffsets().hasData( SubmeshFlag::eSkin )
 				? &currentNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eSkin )
+				: nullptr ) );
+			CU_Require( pmkBuffer == ( currentNode.getFinalBufferOffsets().hasData( SubmeshFlag::ePassMasks )
+				? &currentNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::ePassMasks )
 				: nullptr ) );
 		}
 

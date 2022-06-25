@@ -76,6 +76,7 @@ namespace castor3d::shader
 		sdw::Vec3 texture2;
 		sdw::Vec3 texture3;
 		sdw::Vec3 colour;
+		sdw::UVec4 passMasks;
 		// Velocity
 		sdw::Vec3 velocity;
 		// Instantiation
@@ -145,6 +146,7 @@ namespace castor3d::shader
 		sdw::Vec3 texture2;
 		sdw::Vec3 texture3;
 		sdw::Vec3 colour;
+		sdw::Float passMultiplier;
 		sdw::UInt instanceId;
 		sdw::Int nodeId;
 	};

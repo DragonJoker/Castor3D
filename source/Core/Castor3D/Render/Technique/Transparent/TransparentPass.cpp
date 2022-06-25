@@ -282,9 +282,9 @@ namespace castor3d
 					, *lightMat
 					, in.tangentSpaceViewPosition
 					, in.tangentSpaceFragPosition );
-				utils.applyAlphaFunc( flags.blendAlphaFunc
+				material.applyAlphaFunc( flags.blendAlphaFunc
 					, opacity
-					, material.alphaRef
+					, in.passMultiplier
 					, false );
 
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
@@ -382,6 +382,8 @@ namespace castor3d
 					, material.bwAccumulationOperator );
 				pxl_revealage = opacity;
 				pxl_velocity.xy() = in.getVelocity();
+				pxl_accumulation *= in.passMultiplier;
+				pxl_revealage *= in.passMultiplier;
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

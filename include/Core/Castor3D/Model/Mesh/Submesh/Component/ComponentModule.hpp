@@ -27,6 +27,13 @@ namespace castor3d
 	class BaseDataComponentT;
 	/**
 	\~english
+	\brief		Submesh component holding subpasses masks.
+	\~french
+	\brief		Composant de sous-maillage contenant les masques des subpasses.
+	*/
+	class PassMasksComponent;
+	/**
+	\~english
 	\brief		The submesh component used for skinning.
 	\~french
 	\brief		Le composant de sous-maillage pour le skinning.

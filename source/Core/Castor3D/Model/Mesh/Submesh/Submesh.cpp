@@ -12,6 +12,7 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
@@ -193,6 +194,11 @@ namespace castor3d
 		if ( checkFlag( flags, SubmeshFlag::eSkin ) )
 		{
 			createComponent< SkinComponent >();
+		}
+
+		if ( checkFlag( flags, SubmeshFlag::ePassMasks ) )
+		{
+			createComponent< PassMasksComponent >();
 		}
 	}
 
