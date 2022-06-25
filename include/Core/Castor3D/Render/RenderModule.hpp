@@ -333,22 +333,22 @@ namespace castor3d
 
 	struct PipelineBaseHash
 	{
-		uint64_t a;
-		uint64_t b;
+		uint64_t hi;
+		uint64_t lo;
 	};
 
 	inline bool operator<( PipelineBaseHash const & lhs
 		, PipelineBaseHash const & rhs )
 	{
-		return lhs.a < rhs.a
-			|| ( ( lhs.a == rhs.a ) && ( lhs.b < rhs.b ) );
+		return lhs.hi < rhs.hi
+			|| ( ( lhs.hi == rhs.hi ) && ( lhs.lo < rhs.lo ) );
 	}
 
 	inline bool operator==( PipelineBaseHash const & lhs
 		, PipelineBaseHash const & rhs )
 	{
-		return lhs.a == rhs.a
-			&& lhs.b == rhs.b;
+		return lhs.hi == rhs.hi
+			&& lhs.lo == rhs.lo;
 	}
 	/**
 	*\~english

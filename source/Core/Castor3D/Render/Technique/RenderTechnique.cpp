@@ -1138,6 +1138,9 @@ namespace castor3d
 					, context
 					, runnableGraph
 					, m_device
+#if !C3D_UseDeferredRendering
+					, ForwardRenderTechniquePass::Type
+#endif
 					, cuT( "Opaque" )
 					, name
 					, RenderNodesPassDesc{ m_colour.getExtent(), m_matrixUbo, m_renderTarget.getCuller() }
@@ -1216,6 +1219,9 @@ namespace castor3d
 					, context
 					, runnableGraph
 					, m_device
+#if !C3D_UseWeightedBlendedRendering
+					, ForwardRenderTechniquePass::Type
+#endif
 					, cuT( "Transparent" )
 					, name
 					, m_colour.imageId.data

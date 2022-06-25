@@ -126,7 +126,7 @@ namespace castor
 
 #else
 
-#	define CU_Assert( pred, text ) ((void)0)
+#	define CU_Assert( pred, text ) assert( pred && text )
 #	define CU_CheckInvariants() ((void)0)
 
 #endif

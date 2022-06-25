@@ -508,6 +508,8 @@ namespace castor3d
 		C3D_API bool isPassEnabled()const;
 		C3D_API Scene & getScene()const;
 		C3D_API SceneNode const * getIgnoredNode()const;
+		C3D_API bool isMeshShading()const;
+
 
 		C3D_API virtual ShaderFlags getShaderFlags()const
 		{
@@ -554,11 +556,6 @@ namespace castor3d
 		bool isDirty()const
 		{
 			return m_isDirty;
-		}
-
-		bool isMeshShading()const
-		{
-			return m_meshShading;
 		}
 
 		bool forceTwoSided()const

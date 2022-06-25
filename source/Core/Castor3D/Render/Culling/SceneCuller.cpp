@@ -72,17 +72,17 @@ namespace castor3d
 			static_assert( 64 >= maxSubmeshSize + maxProgramSize + maxPassSize + maxTexcoorSetSize + maxTextureSize + maxTexturesSize );
 			auto offset = 0u;
 			PipelineBaseHash result{};
-			result.a = uint64_t( submeshFlags ) << offset;
+			result.lo = uint64_t( submeshFlags ) << offset;
 			offset += maxSubmeshSize;
-			result.a |= uint64_t( programFlags ) << offset;
+			result.lo |= uint64_t( programFlags ) << offset;
 			offset += maxProgramSize;
-			result.a |= uint64_t( passFlags ) << offset;
+			result.lo |= uint64_t( passFlags ) << offset;
 			offset += maxPassSize;
-			result.a |= uint64_t( maxTexcoordSet ) << offset;
+			result.lo |= uint64_t( maxTexcoordSet ) << offset;
 			offset += maxTexcoorSetSize;
-			result.a |= uint64_t( texturesCount ) << offset;
+			result.lo |= uint64_t( texturesCount ) << offset;
 			offset += maxTexturesSize;
-			result.a |= uint64_t( texturesFlags ) << offset;
+			result.lo |= uint64_t( texturesFlags ) << offset;
 			CU_Require( passLayerIndex < MaxPassLayers );
 			CU_Require( ( morphTargetsOffset >> maxTargetOffsetSize ) == 0 );
 			auto hash = size_t( morphTargetsOffset );
@@ -93,7 +93,7 @@ namespace castor3d
 				hash >>= maxPassLayerSize;
 			}
 
-			result.b = uint64_t( hash )
+			result.hi = uint64_t( hash )
 				| ( uint64_t( passLayerIndex ) << maxTargetOffsetSize );
 			return result;
 		}

@@ -975,7 +975,12 @@ namespace castor3d
 	{
 		m_dirty = true;
 		auto component = getComponent< MeshletComponent >();
-		CU_Require( component );
+
+		if ( !component )
+		{
+			CU_Exception( "Couldn't retrieve Meshlets component." );
+		}
+
 		return component->getMeshletsData();
 	}
 
