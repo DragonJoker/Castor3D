@@ -439,13 +439,18 @@ namespace toon::shader
 		, sdw::Vec3 & tangentSpaceViewPosition
 		, sdw::Vec3 & tangentSpaceFragPosition )
 	{
-		if ( !textureConfigs.isEnabled() )
-		{
-			return;
-		}
-
 		auto & phongLightMat = static_cast< ToonPhongLightMaterial & >( lightMat );
 		auto textureFlags = merge( textures );
+
+		if ( !textureConfigs.isEnabled() )
+		{
+			phong::updateMaterial( m_writer
+				, passFlags
+				, textureFlags
+				, phongLightMat
+				, emissive );
+			return;
+		}
 
 		for ( uint32_t index = 0u; index < textures.size(); ++index )
 		{
@@ -720,13 +725,18 @@ namespace toon::shader
 		, sdw::Float & occlusion
 		, c3d::LightMaterial & lightMat )
 	{
-		if ( !textureConfigs.isEnabled() )
-		{
-			return;
-		}
-
 		auto & phongLightMat = static_cast< ToonPhongLightMaterial & >( lightMat );
 		auto textureFlags = merge( textures );
+
+		if ( !textureConfigs.isEnabled() )
+		{
+			phong::updateMaterial( m_writer
+				, passFlags
+				, textureFlags
+				, phongLightMat
+				, emissive );
+			return;
+		}
 
 		for ( uint32_t index = 0u; index < textures.size(); ++index )
 		{
@@ -1405,17 +1415,23 @@ namespace toon::shader
 		, sdw::Vec3 & tangentSpaceViewPosition
 		, sdw::Vec3 & tangentSpaceFragPosition )
 	{
+		auto & pbrLightMat = static_cast< ToonPbrLightMaterial & >( lightMat );
+		auto textureFlags = merge( textures );
+
 		if ( !textureConfigs.isEnabled() )
 		{
+			pbr::updateMaterial( m_writer
+				, passFlags
+				, textureFlags
+				, pbrLightMat
+				, emissive );
 			return;
 		}
 
-		auto & pbrLightMat = static_cast< ToonPbrLightMaterial & >( lightMat );
 		pbr::MaterialTextureMods mods{ m_writer.declLocale( "hasAlbedo", sdw::Boolean{ false } )
 			, m_writer.declLocale( "hasMetalness", sdw::Boolean{ false } )
 			, m_writer.declLocale( "hasSpecular", sdw::Boolean{ false } )
 			, m_writer.declLocale( "hasEmissive", sdw::Boolean{ false } ) };
-		auto textureFlags = merge( textures );
 
 		for ( uint32_t index = 0u; index < textures.size(); ++index )
 		{
@@ -1698,17 +1714,23 @@ namespace toon::shader
 		, sdw::Float & occlusion
 		, c3d::LightMaterial & lightMat )
 	{
+		auto & pbrLightMat = static_cast< ToonPbrLightMaterial & >( lightMat );
+		auto textureFlags = merge( textures );
+
 		if ( !textureConfigs.isEnabled() )
 		{
+			pbr::updateMaterial( m_writer
+				, passFlags
+				, textureFlags
+				, pbrLightMat
+				, emissive );
 			return;
 		}
 
-		auto & pbrLightMat = static_cast< ToonPbrLightMaterial & >( lightMat );
 		pbr::MaterialTextureMods mods{ m_writer.declLocale( "hasAlbedo", sdw::Boolean{ false } )
 			, m_writer.declLocale( "hasMetalness", sdw::Boolean{ false } )
 			, m_writer.declLocale( "hasSpecular", sdw::Boolean{ false } )
 			, m_writer.declLocale( "hasEmissive", sdw::Boolean{ false } ) };
-		auto textureFlags = merge( textures );
 
 		for ( uint32_t index = 0u; index < textures.size(); ++index )
 		{
