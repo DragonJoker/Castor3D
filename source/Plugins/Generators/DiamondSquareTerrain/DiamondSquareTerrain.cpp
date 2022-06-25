@@ -1,22 +1,24 @@
 #include "DiamondSquareTerrain/DiamondSquareTerrain.hpp"
 
+#include <Castor3D/Engine.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 
 #include <random>
 
 namespace diamond_square_terrain
 {
-	namespace
+	namespace gen
 	{
 		struct Matrix
 		{
-			inline explicit Matrix( uint32_t p_size )
-				: m_size{ p_size }
+			inline explicit Matrix( uint32_t size )
+				: m_size{ size }
 			{
-				m_map.resize( size_t( m_size ) * m_size );
+				m_map.resize( size_t( m_size ) * m_size, 0.0f );
 			}
 
 			inline uint32_t getIndex( uint32_t x, uint32_t y, uint32_t size )const
@@ -57,10 +59,82 @@ namespace diamond_square_terrain
 			std::random_device r;
 			return std::default_random_engine{ r() };
 		}
+
+		float getMax( std::pair< float, castor::Point3f > const & value )
+		{
+			return value.first;
+		}
+
+		float getMax( Biome const & value )
+		{
+			return value.range->y;
+		}
+
+		template< typename DataT >
+		std::pair< size_t, float > getIndexWeight( float val
+			, std::vector< DataT > const & values )
+		{
+			size_t idx = 0u;
+
+			while ( getMax( values[idx] ) < val && idx < values.size() )
+			{
+				++idx;
+			}
+
+			if ( idx == 0u || idx == values.size() )
+			{
+				if ( idx )
+				{
+					idx--;
+				}
+
+				return { idx, 1.0f };
+			}
+
+			auto a = std::min( 1.0f
+				, 5.0f * ( val - getMax( values[idx - 1] ) ) / ( getMax( values[idx] )- getMax( values[idx - 1] ) ) );
+			return { idx, a };
+		}
+
+		castor::Point3f getColour( float val
+			, std::vector< std::pair< float, castor::Point3f > > const & colours )
+		{
+			auto [idx, weight] = getIndexWeight( val, colours );
+
+			if ( weight == 1.0f )
+			{
+				return colours[idx].second;
+			}
+
+			return colours[idx].second * weight
+				+ colours[idx - 1u].second * ( 1.0f - weight );
+		}
+
+		castor3d::PassMasks getPassMasks( float val
+			, Biomes const & biomes )
+		{
+			auto [idx, weight] = getIndexWeight( val, biomes );
+			castor3d::PassMasks result{};
+
+			if ( weight == 1.0f )
+			{
+				result.data[idx] = 0xFF;
+			}
+			else
+			{
+				result.data[idx] = uint8_t( weight * 255.0f );
+				result.data[idx - 1u] = uint8_t( ( 1.0f - weight ) * 255.0f );
+			}
+
+			return result;
+		}
 	}
 
 	castor::String const Generator::Type = cuT( "diamond_square_terrain" );
 	castor::String const Generator::Name = cuT( "Diamond Square Terrain Generator" );
+	castor::String const Generator::Biome = cuT( "biome" );
+	castor::String const Generator::BiomeRange = cuT( "range" );
+	castor::String const Generator::BiomePassIndex = cuT( "passIndex" );
 	castor::String const Generator::ParamRandomSeed = cuT( "disableRandomSeed" );
 	castor::String const Generator::ParamHeightRange = cuT( "heightRange" );
 	castor::String const Generator::ParamYMin = cuT( "yMin" );
@@ -72,6 +146,11 @@ namespace diamond_square_terrain
 	castor::String const Generator::ParamUScale = cuT( "uScale" );
 	castor::String const Generator::ParamVScale = cuT( "vScale" );
 	castor::String const Generator::ParamDetail = cuT( "detail" );
+	castor::String const Generator::ParamGradient = cuT( "gradient" );
+	castor::String const Generator::ParamGradientFolder = cuT( "gradientFolder" );
+	castor::String const Generator::ParamGradientRelative = cuT( "gradientRelative" );
+	castor::String const Generator::ParamHeatOffset = cuT( "heatOffset" );
+	castor::String const Generator::ParamIsland = cuT( "island" );
 
 	Generator::Generator()
 		: MeshGenerator{ cuT( "diamond_square_terrain" ) }
@@ -83,8 +162,8 @@ namespace diamond_square_terrain
 		return std::make_shared< Generator >();
 	}
 
-	void Generator::doGenerate( castor3d::Mesh & p_mesh
-		, castor3d::Parameters const & p_parameters )
+	void Generator::doGenerate( castor3d::Mesh & mesh
+		, castor3d::Parameters const & parameters )
 	{
 		castor::String param;
 		uint32_t size = 0u;
@@ -92,54 +171,66 @@ namespace diamond_square_terrain
 		float zScale = 1.0f;
 		float uScale = 1.0f;
 		float vScale = 1.0f;
+		float heatOffset = 0.0f;
 		castor::Range< float > yRange{ -500.0f, 500.0f };
 		bool disableRandomSeed = false;
+		bool island = false;
 
-		if ( p_parameters.get( ParamRandomSeed, param ) )
+		if ( parameters.get( ParamRandomSeed, param ) )
 		{
-			disableRandomSeed = true;
+			disableRandomSeed = ( param == "1" );
 		}
 
-		if ( p_parameters.get( ParamYMin, param ) )
+		if ( parameters.get( ParamIsland, param ) )
+		{
+			island = ( param == "1" );
+		}
+
+		if ( parameters.get( ParamYMin, param ) )
 		{
 			yRange = castor::makeRange( yRange.getMin(), castor::string::toFloat( param ) );
 		}
 
-		if ( p_parameters.get( ParamYMax, param ) )
+		if ( parameters.get( ParamYMax, param ) )
 		{
 			yRange = castor::makeRange( castor::string::toFloat( param ), yRange.getMax() );
 		}
 
-		if ( p_parameters.get( ParamXScale, param ) )
+		if ( parameters.get( ParamXScale, param ) )
 		{
 			xScale = castor::string::toFloat( param );
 		}
 
-		if ( p_parameters.get( ParamZScale, param ) )
+		if ( parameters.get( ParamZScale, param ) )
 		{
 			zScale = castor::string::toFloat( param );
 		}
 
-		if ( p_parameters.get( ParamUScale, param ) )
+		if ( parameters.get( ParamUScale, param ) )
 		{
 			uScale = castor::string::toFloat( param );
 		}
 
-		if ( p_parameters.get( ParamVScale, param ) )
+		if ( parameters.get( ParamVScale, param ) )
 		{
 			vScale = castor::string::toFloat( param );
 		}
 
-		if ( p_parameters.get( ParamDetail, param ) )
+		if ( parameters.get( ParamDetail, param ) )
 		{
 			size = uint32_t( pow( 2, castor::string::toUInt( param ) ) );
 		}
 
+		if ( parameters.get( ParamHeatOffset, param ) )
+		{
+			heatOffset = castor::string::toFloat( param );
+		}
+
 		if ( size )
 		{
-			Matrix map{ size };
+			gen::Matrix map{ size };
 			auto max = size - 1;
-			auto engine = createRandomEngine( disableRandomSeed );
+			auto engine = gen::createRandomEngine( disableRandomSeed );
 
 			std::function< void( uint32_t, uint32_t, uint32_t, uint32_t, float, uint32_t ) > divide = [&map
 				, &engine
@@ -192,9 +283,9 @@ namespace diamond_square_terrain
 				auto yMin = std::numeric_limits< float >::max();
 				auto yMax = std::numeric_limits< float >::lowest();
 
-				for ( auto z = 1u; z < max; z++ )
+				for ( auto z = 0u; z <= max; z++ )
 				{
-					for ( auto x = 1u; x < max; x++ )
+					for ( auto x = 0u; x <= max; x++ )
 					{
 						yMin = std::min( yMin, map( x, z ) );
 						yMax = std::max( yMax, map( x, z ) );
@@ -203,9 +294,9 @@ namespace diamond_square_terrain
 
 				auto range = castor::makeRange( yMin, yMax );
 
-				for ( auto z = 1u; z < max; z++ )
+				for ( auto z = 0u; z <= max; z++ )
 				{
-					for ( auto x = 1u; x < max; x++ )
+					for ( auto x = 0u; x <= max; x++ )
 					{
 						map( x, z ) = range.percent( map( x, z ) );
 					}
@@ -213,7 +304,30 @@ namespace diamond_square_terrain
 			};
 			rescale();
 
-			auto submesh = p_mesh.createSubmesh();
+			if ( island )
+			{
+				auto center = float( max / 2u );
+				auto maxDist = sqrt( center * center + center * center );
+
+				auto distance = [center, maxDist]( uint32_t x, uint32_t z )
+				{
+					float distX = std::abs( float( x ) - center );
+					float distZ = std::abs( float( z ) - center );
+					return 1.0f - sqrt( distX * distX + distZ * distZ ) / maxDist;
+				};
+
+				for ( auto z = 0u; z <= max; z++ )
+				{
+					for ( auto x = 0u; x <= max; x++ )
+					{
+						map( x, z ) = map( x, z ) * distance( x, z );
+					}
+				}
+
+				rescale();
+			}
+
+			auto submesh = mesh.createSubmesh();
 			submesh->createComponent< castor3d::PositionsComponent >();
 			submesh->createComponent< castor3d::Texcoords0Component >();
 			submesh->createComponent< castor3d::NormalsComponent >();
@@ -234,19 +348,53 @@ namespace diamond_square_terrain
 				}
 			}
 
+			if ( m_biomes.empty() )
+			{
+				std::vector< std::pair< float, castor::Point3f > > hmEarth = {
+					{ 0.05f, { 0.0 / 255.0, 0.0 / 255.0, 92.0 / 255.0 } }, //Deep blue
+					{ 0.2f, { 80.0 / 255.0, 110.0 / 255.0, 230.0 / 255.0 } }, //Blue
+					{ 0.25f, { 255.0 / 255.0, 205.0 / 255.0, 75.0 / 255.0 } }, //Yellow
+					{ 0.35f, { 90.0 / 255.0, 160.0 / 255.0, 70.0 / 255.0 } }, //Green
+					{ 0.6f, { 50.0 / 255.0, 90.0 / 255.0, 50.0 / 255.0 } }, //Deep Green
+					{ 0.75f, { 50.0 / 255.0, 50.0 / 255.0, 50.0 / 255.0 } }, //Rock
+					{ 0.9f, { 200.0 / 255.0, 210.0 / 255.0, 190.0 / 255.0 } }, //White
+				};
+				auto & colours = submesh->createComponent< castor3d::ColoursComponent >()->getData();
+
+				for ( auto z = 1u; z < max; z++ )
+				{
+					for ( auto x = 1u; x < max; x++ )
+					{
+						colours.push_back( gen::getColour( map( x, z ) + heatOffset, hmEarth ) );
+					}
+				}
+			}
+			else
+			{
+				auto & passMasks = submesh->createComponent< castor3d::PassMasksComponent >()->getData();
+
+				for ( auto z = 1u; z < max; z++ )
+				{
+					for ( auto x = 1u; x < max; x++ )
+					{
+						passMasks.push_back( gen::getPassMasks( map( x, z ) + heatOffset, m_biomes ) );
+					}
+				}
+			}
+
 			// Generate quads 
 			auto mapping = submesh->createComponent< castor3d::TriFaceMapping >();
 
-			for ( auto y = 0u; y < max - 2; y++ )
+			for ( auto y = 1u; y < max - 2; y++ )
 			{
-				for ( auto x = 0u; x < max - 2; x++ )
+				for ( auto x = 1u; x < max - 2; x++ )
 				{
 					mapping->addFace( map.getIndex( x, y, size - 2 )
-						, map.getIndex( x + 1, y, size - 2 )
-						, map.getIndex( x, y + 1, size - 2 ) );
+						, map.getIndex( x, y + 1, size - 2 )
+						, map.getIndex( x + 1, y, size - 2 ) );
 					mapping->addFace( map.getIndex( x + 1, y, size - 2 )
-						, map.getIndex( x + 1, y + 1, size - 2 )
-						, map.getIndex( x, y + 1, size - 2 ) );
+						, map.getIndex( x, y + 1, size - 2 )
+						, map.getIndex( x + 1, y + 1, size - 2 ) );
 				}
 			}
 
