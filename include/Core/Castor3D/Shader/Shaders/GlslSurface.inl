@@ -102,6 +102,7 @@ namespace castor3d::shader
 		, texture2{ this->getMember< sdw::Vec3 >( "texcoord2", true ) }
 		, texture3{ this->getMember< sdw::Vec3 >( "texcoord3", true ) }
 		, colour{ this->getMember< sdw::Vec3 >( "colour", true ) }
+		, passMasks{ this->getMember< sdw::UVec4 >( "passMasks", true ) }
 		// Velocity
 		, velocity{ this->getMember< sdw::Vec3 >( "velocity", true ) }
 		// Instantiation
@@ -163,6 +164,10 @@ namespace castor3d::shader
 				, ast::type::NotArray
 				, ( checkFlag( submeshFlags, SubmeshFlag::eColours ) ? index++ : 0 )
 				, checkFlag( submeshFlags, SubmeshFlag::eColours ) );
+			result->declMember( "passMasks", ast::type::Kind::eVec4U
+				, ast::type::NotArray
+				, ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) ? index++ : 0 )
+				, checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) );
 			//@}
 			/**
 			*	Velocity
@@ -208,6 +213,7 @@ namespace castor3d::shader
 		, texture2{ this->getMember< sdw::Vec3 >( "texcoord2", true ) }
 		, texture3{ this->getMember< sdw::Vec3 >( "texcoord3", true ) }
 		, colour{ this->getMember< sdw::Vec3 >( "colour", true ) }
+		, passMultiplier{ this->getMember< sdw::Float >( "passMultiplier", true ) }
 		, instanceId{ this->getMember< sdw::UInt >( "instanceId", true ) }
 		, nodeId{ this->getMember< sdw::Int >( "nodeId", true ) }
 	{
@@ -294,6 +300,10 @@ namespace castor3d::shader
 				, ast::type::NotArray
 				, ( checkFlag( submeshFlags, SubmeshFlag::eColours ) ? index++ : 0 )
 				, checkFlag( submeshFlags, SubmeshFlag::eColours ) );
+			result->declMember( "passMultiplier", ast::type::Kind::eFloat
+				, ast::type::NotArray
+				, ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) ? index++ : 0 )
+				, checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) );
 			result->declMember( "instanceId"
 				, ast::type::Kind::eUInt
 				, ast::type::NotArray

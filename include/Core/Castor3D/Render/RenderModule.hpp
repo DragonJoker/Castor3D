@@ -169,6 +169,7 @@ namespace castor3d
 		eTexcoord2,
 		eTexcoord3,
 		eColour,
+		ePassMasks,
 		eVelocity,
 		eInstances,
 		CU_ScopedEnumBounds( eMeshlets ),

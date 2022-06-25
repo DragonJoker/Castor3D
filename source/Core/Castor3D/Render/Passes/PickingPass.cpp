@@ -202,9 +202,9 @@ namespace castor3d
 					}
 				}
 
-				utils.applyAlphaFunc( flags.alphaFunc
+				material.applyAlphaFunc( flags.alphaFunc
 					, opacity
-					, material.alphaRef );
+					, in.passMultiplier );
 				pxl_fragColor = uvec4( ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) ? 2_u : 1_u )
 					, writer.cast< sdw::UInt >( in.nodeId )
 					, writer.cast< sdw::UInt >( in.primitiveID )

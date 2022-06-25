@@ -227,16 +227,16 @@ namespace castor3d
 
 				if ( m_mode == RenderMode::eTransparentOnly )
 				{
-					utils.applyAlphaFunc( flags.blendAlphaFunc
+					material.applyAlphaFunc( flags.blendAlphaFunc
 						, opacity
-						, material.alphaRef
+						, in.passMultiplier
 						, false );
 				}
 				else
 				{
-					utils.applyAlphaFunc( flags.alphaFunc
+					material.applyAlphaFunc( flags.alphaFunc
 						, opacity
-						, material.alphaRef );
+						, in.passMultiplier );
 				}
 
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
@@ -335,6 +335,7 @@ namespace castor3d
 						, c3d_sceneData );
 				}
 
+				pxl_fragColor *= in.passMultiplier;
 				pxl_velocity.xy() = in.getVelocity();
 			} );
 

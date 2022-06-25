@@ -72,24 +72,6 @@ namespace castor3d::shader
 			, sdw::CombinedImage2DRgba32 const & heightMap
 			, TextureConfigData const & textureConfig );
 		C3D_API sdw::Vec4 clipToScreen( sdw::Vec4 const & in );
-		/**
-		 *\~english
-		 *\brief		Writes the alpha function in GLSL.
-		 *\param		alphaFunc	The alpha function.
-		 *\param[in]	alpha		The alpha TypeEnum.
-		 *\param[in]	alphaRef	The alpha comparison reference TypeEnum.
-		 *\param[in]	opaque		\p true for opaque nodes, \p false for transparent ones.
-		 *\~french
-		 *\brief		Ecrit la fonction d'opacité en GLSL.
-		 *\param		alphaFunc	La fonction d'opacité.
-		 *\param[in]	alpha		La valeur d'opacité.
-		 *\param[in]	alphaRef	La valeur de référence pour la comparaison alpha.
-		 *\param[in]	opaque		\p true pour les noeuds opaques, \p false pour les transparents.
-		 */
-		C3D_API void applyAlphaFunc( VkCompareOp alphaFunc
-			, sdw::Float & alpha
-			, sdw::Float const & alphaRef
-			, bool opaque = true );
 
 		C3D_API sdw::Boolean isSaturated( sdw::Vec3 const & p );
 		C3D_API sdw::Boolean isSaturated( sdw::IVec3 const & p

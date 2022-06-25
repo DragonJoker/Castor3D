@@ -23,6 +23,10 @@ namespace castor3d
 	/**@name Submesh */
 	//@{
 
+	struct PassMasks
+	{
+		std::array< uint8_t, 8u > data;
+	};
 	/**
 	*\~english
 	*\brief
@@ -64,6 +68,9 @@ namespace castor3d
 		//!\~english	Submesh has skin data.
 		//!\~french		Le submesh a des données de skin.
 		eSkin,
+		//!\~english	Submesh has subpasses masks.
+		//!\~french		Le submesh a des masques de subpasses.
+		ePassMasks,
 		//!\~english	Submesh has velocity data.
 		//!\~french		Le submesh a des données de vélocité.
 		eVelocity,
@@ -94,6 +101,8 @@ namespace castor3d
 			return cuT( "Colours" );
 		case castor3d::SubmeshData::eSkin:
 			return cuT( "Skin" );
+		case castor3d::SubmeshData::ePassMasks:
+			return cuT( "PassMasks" );
 		case castor3d::SubmeshData::eVelocity:
 			return cuT( "Velocity" );
 		default:
@@ -114,6 +123,7 @@ namespace castor3d
 			, sizeof( castor::Point4f ) /* SubmeshFlag::eTexcoords3 */
 			, sizeof( castor::Point4f ) /* SubmeshFlag::eColours */
 			, sizeof( VertexBoneData ) /* SubmeshFlag::eSkin */
+			, sizeof( castor::Point4ui ) /* SubmeshFlag::ePassMasks */
 			, sizeof( castor::Point4f ) /* SubmeshFlag::eVelocity */ };
 		return uint32_t( sizes[size_t( value )] );
 	}
@@ -162,6 +172,9 @@ namespace castor3d
 		//!\~english	Submesh has bones data.
 		//!\~french		Submesh a des données d'os.
 		eSkin = 0x0001 << int( SubmeshData::eSkin ),
+		//!\~english	Submesh has velocity data.
+		//!\~french		Le submesh a des données de vélocité.
+		ePassMasks = 0x0001 << int( SubmeshData::ePassMasks ),
 		//!\~english	Submesh has velocity data.
 		//!\~french		Le submesh a des données de vélocité.
 		eVelocity = 0x0001 << int( SubmeshData::eVelocity ),
@@ -276,7 +289,7 @@ namespace castor3d
 		//!\~english	The submesh has a 4th set of morphing texture coordinates.
 		//!\~french		Le submesh a un 4e set de coordonnées de texture de morphing.
 		eTexcoords3 = 0x01 << size_t( MorphData::eTexcoords3 ),
-		//!\~english	Submesh has a morphing colours.
+		//!\~english	Submesh has morphing colours.
 		//!\~french		Le submesh a des couleurs de morphing.
 		eColours = 0x01 << size_t( MorphData::eColours ),
 		//!\~english	All flags used in base pipeline flags hashing.
@@ -324,6 +337,9 @@ namespace castor3d
 		//!\~english	The colours buffer.
 		//!\~french		Le tampon de couleurs.
 		castor::Point3fArray colours{};
+		//!\~english	The subpasses masks buffer.
+		//!\~french		Le tampon de masques de subpasses.
+		std::vector< PassMasks > passMasks{};
 		//!\~english	The bounding box.
 		//!\~french		La bounding box.
 		castor::BoundingBox boundingBox{};

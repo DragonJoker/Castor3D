@@ -37,6 +37,117 @@ namespace castor3d::shader
 		return colourDiv.rgb();
 	}
 
+	sdw::Float Material::getPassMultiplier( sdw::UVec4 const & passMasks )
+	{
+		auto mask32 = passMasks[index / 4_u];
+		auto mask8 = ( mask32 >> ( ( index % 4_u ) * 8_u ) ) & 0xFF_u;
+		return ( passMasks.isEnabled()
+			? m_writer->cast< sdw::Float >( mask8 ) / 255.0_f
+			: 1.0_f );
+	}
+
+	void Material::applyAlphaFunc( VkCompareOp alphaFunc
+		, sdw::Float & alpha
+		, sdw::Float const & passMultiplier
+		, bool opaque )
+	{
+		applyAlphaFunc( alphaFunc
+			, alpha
+			, alphaRef
+			, passMultiplier
+			, opaque );
+	}
+
+	void Material::applyAlphaFunc( VkCompareOp alphaFunc
+		, sdw::Float & alpha
+		, sdw::Float const & palphaRef
+		, sdw::Float const & passMultiplier
+		, bool opaque )
+	{
+		alpha *= passMultiplier;
+
+		if ( alphaFunc != VK_COMPARE_OP_ALWAYS )
+		{
+			switch ( alphaFunc )
+			{
+			case VK_COMPARE_OP_NEVER:
+				m_writer->demote();
+				break;
+			case VK_COMPARE_OP_LESS:
+				IF( *m_writer, alpha >= palphaRef )
+				{
+					m_writer->demote();
+				}
+				FI;
+				if ( opaque )
+				{
+					alpha = 1.0_f;
+				}
+				break;
+			case VK_COMPARE_OP_EQUAL:
+				IF( *m_writer, alpha != palphaRef )
+				{
+					m_writer->demote();
+				}
+				FI;
+				if ( opaque )
+				{
+					alpha = 1.0_f;
+				}
+				break;
+			case VK_COMPARE_OP_LESS_OR_EQUAL:
+				IF( *m_writer, alpha > palphaRef )
+				{
+					m_writer->demote();
+				}
+				FI;
+				if ( opaque )
+				{
+					alpha = 1.0_f;
+				}
+				break;
+			case VK_COMPARE_OP_GREATER:
+				IF( *m_writer, alpha <= palphaRef )
+				{
+					m_writer->demote();
+				}
+				FI;
+				if ( opaque )
+				{
+					alpha = 1.0_f;
+				}
+				break;
+			case VK_COMPARE_OP_NOT_EQUAL:
+				IF( *m_writer, alpha == palphaRef )
+				{
+					m_writer->demote();
+				}
+				FI;
+				if ( opaque )
+				{
+					alpha = 1.0_f;
+				}
+				break;
+			case VK_COMPARE_OP_GREATER_OR_EQUAL:
+				IF( *m_writer, alpha < palphaRef )
+				{
+					m_writer->demote();
+				}
+				FI;
+				if ( opaque )
+				{
+					alpha = 1.0_f;
+				}
+				break;
+			case VK_COMPARE_OP_ALWAYS:
+				break;
+
+			default:
+				break;
+			}
+		}
+	}
+
 	ast::type::BaseStructPtr Material::makeType( ast::type::TypesCache & cache )
 	{
 		auto result = cache.getStruct( ast::type::MemoryLayout::eStd140, "C3D_Material" );

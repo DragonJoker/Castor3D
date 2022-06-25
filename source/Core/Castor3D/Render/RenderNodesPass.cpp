@@ -324,6 +324,8 @@ namespace castor3d
 			attach.colorBlendOp = VK_BLEND_OP_ADD;
 			attach.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
 			attach.dstColorBlendFactor = VK_BLEND_FACTOR_ZERO;
+			attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+			attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
 			break;
 
 		case BlendMode::eAdditive:
@@ -331,6 +333,8 @@ namespace castor3d
 			attach.colorBlendOp = VK_BLEND_OP_ADD;
 			attach.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
 			attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE;
+			attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+			attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
 			break;
 
 		case BlendMode::eMultiplicative:
@@ -338,62 +342,71 @@ namespace castor3d
 			attach.colorBlendOp = VK_BLEND_OP_ADD;
 			attach.srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
 			attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
+			attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+			attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
 			break;
 
 		case BlendMode::eInterpolative:
 			attach.blendEnable = VK_TRUE;
 			attach.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_COLOR;
 			attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
+			attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+			attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
 			break;
 
 		default:
 			attach.blendEnable = VK_TRUE;
 			attach.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_COLOR;
 			attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
+			attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+			attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
 			break;
 		}
 
-		switch ( alphaBlendMode )
+		if ( colourBlendMode == BlendMode::eNoBlend )
 		{
-		case BlendMode::eNoBlend:
-			attach.alphaBlendOp = VK_BLEND_OP_ADD;
-			attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-			attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
-			break;
+			switch ( alphaBlendMode )
+			{
+			case BlendMode::eNoBlend:
+				attach.alphaBlendOp = VK_BLEND_OP_ADD;
+				attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+				attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+				break;
 
-		case BlendMode::eAdditive:
-			attach.blendEnable = VK_TRUE;
-			attach.alphaBlendOp = VK_BLEND_OP_ADD;
-			attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-			attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-			break;
+			case BlendMode::eAdditive:
+				attach.blendEnable = VK_TRUE;
+				attach.alphaBlendOp = VK_BLEND_OP_ADD;
+				attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+				attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+				break;
 
-		case BlendMode::eMultiplicative:
-			attach.blendEnable = VK_TRUE;
-			attach.alphaBlendOp = VK_BLEND_OP_ADD;
-			attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
-			attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-			attach.srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
-			attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-			break;
+			case BlendMode::eMultiplicative:
+				attach.blendEnable = VK_TRUE;
+				attach.alphaBlendOp = VK_BLEND_OP_ADD;
+				attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+				attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+				attach.srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
+				attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+				break;
 
-		case BlendMode::eInterpolative:
-			attach.blendEnable = VK_TRUE;
-			attach.alphaBlendOp = VK_BLEND_OP_ADD;
-			attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
-			attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-			attach.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
-			attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-			break;
+			case BlendMode::eInterpolative:
+				attach.blendEnable = VK_TRUE;
+				attach.alphaBlendOp = VK_BLEND_OP_ADD;
+				attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+				attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+				attach.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+				attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+				break;
 
-		default:
-			attach.blendEnable = VK_TRUE;
-			attach.alphaBlendOp = VK_BLEND_OP_ADD;
-			attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
-			attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-			attach.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
-			attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-			break;
+			default:
+				attach.blendEnable = VK_TRUE;
+				attach.alphaBlendOp = VK_BLEND_OP_ADD;
+				attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+				attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+				attach.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+				attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+				break;
+			}
 		}
 
 		attach.colorWriteMask = defaultColorWriteMask;
@@ -770,6 +783,11 @@ namespace castor3d
 			remFlag( flags.submeshFlags, SubmeshFlag::eTexcoords3 );
 		}
 
+		if ( checkFlag( flags.submeshFlags, SubmeshFlag::ePassMasks ) )
+		{
+			flags.alphaFunc = VK_COMPARE_OP_GREATER;
+		}
+
 		doAdjustFlags( flags );
 	}
 
@@ -968,6 +986,9 @@ namespace castor3d
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
+		shader::Materials materials{ writer
+			, uint32_t( GlobalBuffersIdx::eMaterials )
+			, RenderPipeline::eBuffers };
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
@@ -1021,6 +1042,10 @@ namespace castor3d
 			, sdw::Vec4
 			, MeshBuffersIdx::eColour
 			, checkFlag( flags.submeshFlags, SubmeshFlag::eColours ) );
+		DeclareSsbo( c3d_passMasks
+			, sdw::UVec4
+			, MeshBuffersIdx::ePassMasks
+			, checkFlag( flags.submeshFlags, SubmeshFlag::ePassMasks ) );
 		DeclareSsbo( c3d_velocity
 			, sdw::Vec4
 			, MeshBuffersIdx::eVelocity
@@ -1084,6 +1109,9 @@ namespace castor3d
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId - 1u] );
 				vtxOut[i].nodeId = writer.cast< Int >( nodeId );
+				auto material = writer.declLocale( "material"
+					, materials.getMaterial( modelData.getMaterialId() ) );
+				vtxOut[i].passMultiplier = material.getPassMultiplier( c3d_passMasks[vertexIndex] );
 
 				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
 					, modelData.getModelMtx() );
@@ -1203,6 +1231,9 @@ namespace castor3d
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
+		shader::Materials materials{ writer
+			, uint32_t( GlobalBuffersIdx::eMaterials )
+			, RenderPipeline::eBuffers };
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
@@ -1246,6 +1277,9 @@ namespace castor3d
 				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId - 1u] );
+				auto material = writer.declLocale( "material"
+					, materials.getMaterial( modelData.getMaterialId() ) );
+				out.passMultiplier = material.getPassMultiplier( in.passMasks );
 
 				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
 					, modelData.getModelMtx() );
@@ -1359,6 +1393,7 @@ namespace castor3d
 						, writer.cast< sdw::UInt >( in.drawID ) ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId - 1u] );
+				out.passMultiplier = 1.0_f;
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
 				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 
