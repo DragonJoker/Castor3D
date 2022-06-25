@@ -35,15 +35,14 @@ namespace castor3d::shader
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
 		: sdw::StructInstance{ writer, std::move( expr ), enabled }
-		, edgeFactors{ getMember< sdw::Vec4 >( "edgeFactors" ) }
+		, edgeWidth{ getMember< sdw::Float >( "edgeWidth" ) }
+		, depthFactor{ getMember< sdw::Float >( "depthFactor" ) }
+		, normalFactor{ getMember< sdw::Float >( "normalFactor" ) }
+		, objectFactor{ getMember< sdw::Float >( "objectFactor" ) }
 		, edgeColour{ getMember< sdw::Vec4 >( "edgeColour" ) }
 		, specific{ getMember< sdw::Vec4 >( "specific" ) }
 		, albedo{ getMember< sdw::Vec3 >( "albedo" ) }
 		, specular{ getMember< sdw::Vec3 >( "specular" ) }
-		, edgeWidth{ edgeFactors.x() }
-		, depthFactor{ edgeFactors.y() }
-		, normalFactor{ edgeFactors.z() }
-		, objectFactor{ edgeFactors.w() }
 		, albDiv{ getMember< sdw::Float >( "albDiv" ) }
 		, spcDiv{ getMember< sdw::Float >( "spcDiv" ) }
 		, sssProfileIndex{ getMember< sdw::Float >( "sssProfileIndex" ) }
@@ -58,7 +57,10 @@ namespace castor3d::shader
 
 		if ( result->empty() )
 		{
-			result->declMember( "edgeFactors", ast::type::Kind::eVec4F );
+			result->declMember( "edgeWidth", ast::type::Kind::eFloat );
+			result->declMember( "depthFactor", ast::type::Kind::eFloat );
+			result->declMember( "normalFactor", ast::type::Kind::eFloat );
+			result->declMember( "objectFactor", ast::type::Kind::eFloat );
 			result->declMember( "edgeColour", ast::type::Kind::eVec4F );
 			result->declMember( "specific", ast::type::Kind::eVec4F );
 			result->declMember( "albedo", ast::type::Kind::eVec3F );

@@ -26,13 +26,12 @@ namespace castor3d::shader
 				, data3
 				, data2
 				, 0.0_f );
-			edgeFactors = material.edgeFactors;
-			edgeColour = material.edgeColour;
-			specific = material.specific;
 			edgeWidth = material.edgeWidth;
 			depthFactor = material.depthFactor;
 			normalFactor = material.normalFactor;
 			objectFactor = material.objectFactor;
+			edgeColour = material.edgeColour;
+			specific = material.specific;
 		}
 	}
 

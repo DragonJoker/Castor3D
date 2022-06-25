@@ -18,32 +18,19 @@ See LICENSE file in root folder
 #include <mutex>
 #pragma warning( pop )
 
-#define C3D_MaterialsStructOfArrays 0
-
 namespace castor3d
 {
 	class PassBuffer
 	{
 	public:
-		/**
-		\~english
-		\brief		3 components colour.
-		\~french
-		\brief		Couleur à 3 composantes.
-		*/
-		struct RgbColour
+		struct Vec3
 		{
 			float r;
 			float g;
 			float b;
 		};
-		/**
-		\~english
-		\brief		4 components colour.
-		\~french
-		\brief		Couleur à 4 composantes.
-		*/
-		struct RgbaColour
+
+		struct Vec4
 		{
 			float r;
 			float g;
@@ -51,47 +38,49 @@ namespace castor3d
 			float a;
 		};
 
-#if C3D_MaterialsStructOfArrays
-
-		struct PassesData
-		{
-			castor::ArrayView< RgbaColour > colourDiv;
-			castor::ArrayView< RgbaColour > specDiv;
-			castor::ArrayView< RgbaColour > edgeFactors;
-			castor::ArrayView< RgbaColour > edgeColour;
-			castor::ArrayView< RgbaColour > specific;
-			castor::ArrayView< RgbaColour > common;
-			castor::ArrayView< RgbaColour > opacity;
-			castor::ArrayView< RgbaColour > reflRefr;
-		};
-
-#else
-
 		struct PassData
 		{
-			RgbaColour colourDiv;
-			RgbaColour specDiv;
-			RgbaColour edgeFactors;
-			RgbaColour edgeColour;
-			RgbaColour specific;
-			RgbaColour common;
-			RgbaColour opacity;
-			RgbaColour reflRefr;
+			Vec4 colourDiv;
+			Vec4 specDiv;
+			float edgeWidth;
+			float depthFactor;
+			float normalFactor;
+			float objectFactor;
+			Vec4 edgeColour;
+			Vec4 specific;
+			uint32_t index;
+			float emissive;
+			float alphaRef;
+			uint32_t sssProfileIndex;
+			Vec3 transmission;
+			float opacity;
+			float refractionRatio;
+			int hasRefraction;
+			int hasReflection;
+			float bwAccumulationOperator;
 		};
 		using PassesData = castor::ArrayView< PassData >;
 
-#endif
-
 		struct PassDataPtr
 		{
-			RgbaColour * colourDiv;
-			RgbaColour * specDiv;
-			RgbaColour * edgeFactors;
-			RgbaColour * edgeColour;
-			RgbaColour * specific;
-			RgbaColour * common;
-			RgbaColour * opacity;
-			RgbaColour * reflRefr;
+			Vec4 * colourDiv;
+			Vec4 * specDiv;
+			float * edgeWidth;
+			float * depthFactor;
+			float * normalFactor;
+			float * objectFactor;
+			Vec4 * edgeColour;
+			Vec4 * specific;
+			uint32_t * index;
+			float * emissive;
+			float * alphaRef;
+			uint32_t * sssProfileIndex;
+			Vec3 * transmission;
+			float * opacity;
+			float * refractionRatio;
+			int * hasRefraction;
+			int * hasReflection;
+			float * bwAccumulationOperator;
 		};
 
 		static constexpr uint32_t DataSize = sizeof( PassData );
