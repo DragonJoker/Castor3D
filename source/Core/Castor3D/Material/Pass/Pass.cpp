@@ -512,28 +512,28 @@ namespace castor3d
 
 	void Pass::doFillData( PassBuffer::PassDataPtr & data )const
 	{
-		data.edgeFactors->r = getEdgeWidth();
-		data.edgeFactors->g = getDepthFactor();
-		data.edgeFactors->b = getNormalFactor();
-		data.edgeFactors->a = getObjectFactor();
+		*data.edgeWidth = getEdgeWidth();
+		*data.depthFactor = getDepthFactor();
+		*data.normalFactor = getNormalFactor();
+		*data.objectFactor = getObjectFactor();
 		data.edgeColour->r = powf( getEdgeColour().red(), 2.2f );
 		data.edgeColour->g = powf( getEdgeColour().green(), 2.2f );
 		data.edgeColour->b = powf( getEdgeColour().blue(), 2.2f );
 		data.edgeColour->a = ( checkFlag( m_flags, PassFlag::eDrawEdge )
 			? getEdgeColour().alpha()
 			: 0.0f );
-		data.common->r = 0.0f;
-		data.common->g = getEmissive();
-		data.common->b = getAlphaValue();
-		data.common->a = float( getSssProfileId() );
-		data.opacity->r = powf( getTransmission().red(), 2.2f );
-		data.opacity->g = powf( getTransmission().green(), 2.2f );
-		data.opacity->b = powf( getTransmission().blue(), 2.2f );
-		data.opacity->a = getOpacity();
-		data.reflRefr->r = getRefractionRatio();
-		data.reflRefr->g = hasRefraction() ? 1.0f : 0.0f;
-		data.reflRefr->b = hasReflections() ? 1.0f : 0.0f;
-		data.reflRefr->a = float( getBWAccumulationOperator() );
+		*data.index = m_index;
+		*data.emissive = getEmissive();
+		*data.alphaRef = getAlphaValue();
+		*data.sssProfileIndex = getSssProfileId();
+		data.transmission->r = powf( getTransmission().red(), 2.2f );
+		data.transmission->g = powf( getTransmission().green(), 2.2f );
+		data.transmission->b = powf( getTransmission().blue(), 2.2f );
+		*data.opacity = getOpacity();
+		*data.refractionRatio = getRefractionRatio();
+		*data.hasRefraction = hasRefraction() ? 1 : 0;
+		*data.hasReflection = hasReflections() ? 1 : 0;
+		*data.bwAccumulationOperator = float( getBWAccumulationOperator() );
 	}
 
 	void Pass::doMergeImages( TextureFlag lhsFlag

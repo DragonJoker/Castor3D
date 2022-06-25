@@ -13,65 +13,12 @@ namespace castor3d
 
 	namespace passbuf
 	{
-#if C3D_MaterialsStructOfArrays
-
-		static PassBuffer::PassesData doBindData( uint8_t * buffer
-			, uint32_t count )
-		{
-			auto colourDiv = castor::makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
-				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
-			buffer += sizeof( PassBuffer::RgbaColour ) * count;
-			auto specDiv = castor::makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
-				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
-			buffer += sizeof( PassBuffer::RgbaColour ) * count;
-			auto edgeFactors = castor::makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
-				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
-			buffer += sizeof( PassBuffer::RgbaColour ) * count;
-			auto edgeColour = castor::makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
-				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
-			buffer += sizeof( PassBuffer::RgbaColour ) * count;
-			auto specific = castor::makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
-				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
-			buffer += sizeof( PassBuffer::RgbaColour ) * count;
-			auto common = castor::makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
-				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
-			buffer += sizeof( PassBuffer::RgbaColour ) * count;
-			auto opacity = castor::makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
-				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
-			buffer += sizeof( PassBuffer::RgbaColour ) * count;
-			auto reflRefr = castor::makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
-				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
-			buffer += sizeof( PassBuffer::RgbaColour ) * count;
-			auto sssInfo = castor::makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
-				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
-			buffer += sizeof( PassBuffer::RgbaColour ) * count;
-			auto transmittance = castor::makeArrayView( reinterpret_cast< std::array< PassBuffer::RgbaColour, 10u > * >( buffer )
-				, reinterpret_cast< std::array< PassBuffer::RgbaColour, 10u > * >( buffer ) + count );
-			return
-			{
-				colourDiv,
-				specDiv,
-				edgeFactors,
-				edgeColour,
-				specific,
-				common,
-				opacity,
-				reflRefr,
-				sssInfo,
-				transmittance,
-			};
-		}
-
-#else
-
 		static PassBuffer::PassesData doBindData( uint8_t * buffer
 			, uint32_t count )
 		{
 			return castor::makeArrayView( reinterpret_cast< PassBuffer::PassData * >( buffer )
 				, reinterpret_cast< PassBuffer::PassData * >( buffer ) + count );
 		}
-
-#endif
 	}
 
 	//*********************************************************************************************
@@ -171,31 +118,25 @@ namespace castor3d
 		auto index = passID - 1;
 		PassDataPtr result{};
 
-#if C3D_MaterialsStructOfArrays
-
-		result.colourDiv = &m_data.colourDiv[index];
-		result.specDiv = &m_data.specDiv[index];
-		result.edgeFactors = &data.edgeFactors[index];
-		result.edgeColour = &data.edgeColour[index];
-		result.specific = &data.specific[index];
-		result.common = &data.common[index];
-		result.opacity = &data.opacity[index];
-		result.reflRefr = &m_data.reflRefr[index];
-
-
-#else
-
 		auto & data = m_data[index];
 		result.colourDiv = &data.colourDiv;
 		result.specDiv = &data.specDiv;
-		result.edgeFactors = &data.edgeFactors;
+		result.edgeWidth = &data.edgeWidth;
+		result.depthFactor = &data.depthFactor;
+		result.normalFactor = &data.normalFactor;
+		result.objectFactor = &data.objectFactor;
 		result.edgeColour = &data.edgeColour;
 		result.specific = &data.specific;
-		result.common = &data.common;
+		result.index = &data.index;
+		result.emissive = &data.emissive;
+		result.alphaRef = &data.alphaRef;
+		result.sssProfileIndex = &data.sssProfileIndex;
+		result.transmission = &data.transmission;
 		result.opacity = &data.opacity;
-		result.reflRefr = &data.reflRefr;
-
-#endif
+		result.refractionRatio = &data.refractionRatio;
+		result.hasRefraction = &data.hasRefraction;
+		result.hasReflection = &data.hasReflection;
+		result.bwAccumulationOperator = &data.bwAccumulationOperator;
 
 		return result;
 	}

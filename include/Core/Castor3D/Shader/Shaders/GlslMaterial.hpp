@@ -33,29 +33,22 @@ namespace castor3d::shader
 	public:
 		sdw::Vec4 colourDiv;
 		sdw::Vec4 specDiv;
-		sdw::Vec4 edgeFactors;
-		sdw::Vec4 edgeColour;
-		sdw::Vec4 specific;
-
-	private:
-		sdw::Vec4 m_common;
-		sdw::Vec4 m_opacityTransmission;
-		sdw::Vec4 m_reflRefr;
-
-	public:
-		sdw::Float opacity;
-		sdw::Vec3 transmission;
-		sdw::Float emissive;
-		sdw::Float alphaRef;
-		sdw::UInt sssProfileIndex;
-		sdw::Float refractionRatio;
-		sdw::Int hasRefraction;
-		sdw::Int hasReflection;
-		sdw::Float bwAccumulationOperator;
 		sdw::Float edgeWidth;
 		sdw::Float depthFactor;
 		sdw::Float normalFactor;
 		sdw::Float objectFactor;
+		sdw::Vec4 edgeColour;
+		sdw::Vec4 specific;
+		sdw::UInt index;
+		sdw::Float emissive;
+		sdw::Float alphaRef;
+		sdw::UInt sssProfileIndex;
+		sdw::Vec3 transmission;
+		sdw::Float opacity;
+		sdw::Float refractionRatio;
+		sdw::Int hasRefraction;
+		sdw::Int hasReflection;
+		sdw::Float bwAccumulationOperator;
 	};
 
 	CU_DeclareSmartPtr( Material );
@@ -92,14 +85,12 @@ namespace castor3d::shader
 		using sdw::StructInstance::getMember;
 		using sdw::StructInstance::getMemberArray;
 
-	private:
-		sdw::Vec4 m_sssInfo;
-
 	public:
-		sdw::Array< sdw::Vec4 > transmittanceProfile;
 		sdw::Int transmittanceProfileSize;
 		sdw::Float gaussianWidth;
 		sdw::Float subsurfaceScatteringStrength;
+		sdw::Float pad;
+		sdw::Array< sdw::Vec4 > transmittanceProfile;
 	};
 
 	CU_DeclareSmartPtr( SssProfile );

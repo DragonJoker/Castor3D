@@ -253,9 +253,10 @@
 	</Type>
 
 	<Type Name="castor3d::Pass">
-		<DisplayString>{m_id} (material={m_owner->m_name})</DisplayString>
+		<DisplayString>{m_id} ({m_owner->m_name} {m_index})</DisplayString>
 		<Expand>
 			<Item Name="id">m_id</Item>
+			<Item Name="index">m_index</Item>
 			<Item Name="material">m_owner</Item>
 			<Item Name="flags">m_flags</Item>
 			<Item Name="implicit">m_implicit</Item>

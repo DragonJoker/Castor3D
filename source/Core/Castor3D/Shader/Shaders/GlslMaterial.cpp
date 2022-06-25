@@ -13,25 +13,22 @@ namespace castor3d::shader
 		: StructInstance{ writer, std::move( expr ), enabled }
 		, colourDiv{ getMember< sdw::Vec4 >( "colourDiv" ) }
 		, specDiv{ getMember< sdw::Vec4 >( "specDiv" ) }
-		, edgeFactors{ getMember< sdw::Vec4 >( "edgeFactors" ) }
+		, edgeWidth{ getMember< sdw::Float >( "edgeWidth" ) }
+		, depthFactor{ getMember< sdw::Float >( "depthFactor" ) }
+		, normalFactor{ getMember< sdw::Float >( "normalFactor" ) }
+		, objectFactor{ getMember< sdw::Float >( "objectFactor" ) }
 		, edgeColour{ getMember< sdw::Vec4 >( "edgeColour" ) }
 		, specific{ getMember< sdw::Vec4 >( "specific" ) }
-		, m_common{ getMember< sdw::Vec4 >( "common" ) }
-		, m_opacityTransmission{ getMember< sdw::Vec4 >( "opacityTransmission" ) }
-		, m_reflRefr{ getMember< sdw::Vec4 >( "reflRefr" ) }
-		, opacity{ m_opacityTransmission.w() }
-		, transmission{ m_opacityTransmission.xyz() }
-		, emissive{ m_common.y() }
-		, alphaRef{ m_common.z() }
-		, sssProfileIndex{ writer.cast< sdw::UInt >( m_common.w() ) }
-		, refractionRatio{ m_reflRefr.x() }
-		, hasRefraction{ writer.cast< sdw::Int >( m_reflRefr.y() ) }
-		, hasReflection{ writer.cast< sdw::Int >( m_reflRefr.z() ) }
-		, bwAccumulationOperator{ m_reflRefr.w() }
-		, edgeWidth{ edgeFactors.x() }
-		, depthFactor{ edgeFactors.y() }
-		, normalFactor{ edgeFactors.z() }
-		, objectFactor{ edgeFactors.w() }
+		, index{ getMember< sdw::UInt >( "index" ) }
+		, emissive{ getMember< sdw::Float >( "emissive" ) }
+		, alphaRef{ getMember< sdw::Float >( "alphaRef" ) }
+		, sssProfileIndex{ getMember< sdw::UInt >( "sssProfileIndex" ) }
+		, transmission{ getMember< sdw::Vec3 >( "transmission" ) }
+		, opacity{ getMember< sdw::Float >( "opacity" ) }
+		, refractionRatio{ getMember< sdw::Float >( "refractionRatio" ) }
+		, hasRefraction{ getMember< sdw::UInt >( "hasRefraction" ) }
+		, hasReflection{ getMember< sdw::UInt >( "hasReflection" ) }
+		, bwAccumulationOperator{ getMember< sdw::UInt >( "bwAccumulationOperator" ) }
 	{
 	}
 
@@ -48,12 +45,27 @@ namespace castor3d::shader
 		{
 			result->declMember( "colourDiv", ast::type::Kind::eVec4F );
 			result->declMember( "specDiv", ast::type::Kind::eVec4F );
-			result->declMember( "edgeFactors", ast::type::Kind::eVec4F );
+
+			result->declMember( "edgeWidth", ast::type::Kind::eFloat );
+			result->declMember( "depthFactor", ast::type::Kind::eFloat );
+			result->declMember( "normalFactor", ast::type::Kind::eFloat );
+			result->declMember( "objectFactor", ast::type::Kind::eFloat );
+
 			result->declMember( "edgeColour", ast::type::Kind::eVec4F );
 			result->declMember( "specific", ast::type::Kind::eVec4F );
-			result->declMember( "common", ast::type::Kind::eVec4F );
-			result->declMember( "opacityTransmission", ast::type::Kind::eVec4F );
-			result->declMember( "reflRefr", ast::type::Kind::eVec4F );
+
+			result->declMember( "index", ast::type::Kind::eUInt );
+			result->declMember( "emissive", ast::type::Kind::eFloat );
+			result->declMember( "alphaRef", ast::type::Kind::eFloat );
+			result->declMember( "sssProfileIndex", ast::type::Kind::eUInt );
+
+			result->declMember( "transmission", ast::type::Kind::eVec3F );
+			result->declMember( "opacity", ast::type::Kind::eFloat );
+
+			result->declMember( "refractionRatio", ast::type::Kind::eFloat );
+			result->declMember( "hasRefraction", ast::type::Kind::eInt );
+			result->declMember( "hasReflection", ast::type::Kind::eInt );
+			result->declMember( "bwAccumulationOperator", ast::type::Kind::eFloat );
 		}
 
 		return result;
@@ -101,11 +113,11 @@ namespace castor3d::shader
 		, ast::expr::ExprPtr expr
 		, bool enabled )
 		: StructInstance{ writer, std::move( expr ), enabled }
-		, m_sssInfo{ getMember< sdw::Vec4 >( "sssInfo" ) }
+		, transmittanceProfileSize{ getMember< sdw::Int >( "transmittanceProfileSize" ) }
+		, gaussianWidth{ getMember< sdw::Float >( "gaussianWidth" ) }
+		, subsurfaceScatteringStrength{ getMember< sdw::Float >( "subsurfaceScatteringStrength" ) }
+		, pad{ getMember< sdw::Float >( "pad" ) }
 		, transmittanceProfile{ getMemberArray< sdw::Vec4 >( "transmittanceProfile" ) }
-		, transmittanceProfileSize{ writer.cast< sdw::Int >( m_sssInfo.x() ) }
-		, gaussianWidth{ m_sssInfo.y() }
-		, subsurfaceScatteringStrength{ m_sssInfo.z() }
 	{
 	}
 
@@ -115,7 +127,10 @@ namespace castor3d::shader
 
 		if ( result->empty() )
 		{
-			result->declMember( "sssInfo", ast::type::Kind::eVec4F );
+			result->declMember( "transmittanceProfileSize", ast::type::Kind::eInt );
+			result->declMember( "gaussianWidth", ast::type::Kind::eFloat );
+			result->declMember( "subsurfaceScatteringStrength", ast::type::Kind::eFloat );
+			result->declMember( "pad", ast::type::Kind::eFloat );
 			result->declMember( "transmittanceProfile", ast::type::Kind::eVec4F, TransmittanceProfileSize );
 		}
 
