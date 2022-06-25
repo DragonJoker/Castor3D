@@ -479,13 +479,18 @@ namespace castor3d::shader
 		, sdw::Vec3 & tangentSpaceViewPosition
 		, sdw::Vec3 & tangentSpaceFragPosition )
 	{
-		if ( !textureConfigs.isEnabled() )
-		{
-			return;
-		}
-
 		auto & phongLightMat = static_cast< PhongLightMaterial & >( lightMat );
 		auto textureFlags = merge( textures );
+
+		if ( !textureConfigs.isEnabled() )
+		{
+			phglgt::updateMaterial( m_writer
+				, passFlags
+				, textureFlags
+				, phongLightMat
+				, emissive );
+			return;
+		}
 
 		for ( uint32_t index = 0u; index < textures.size(); ++index )
 		{
@@ -760,13 +765,18 @@ namespace castor3d::shader
 		, sdw::Float & occlusion
 		, LightMaterial & lightMat )
 	{
-		if ( !textureConfigs.isEnabled() )
-		{
-			return;
-		}
-
 		auto & phongLightMat = static_cast< PhongLightMaterial & >( lightMat );
 		auto textureFlags = merge( textures );
+
+		if ( !textureConfigs.isEnabled() )
+		{
+			phglgt::updateMaterial( m_writer
+				, passFlags
+				, textureFlags
+				, phongLightMat
+				, emissive );
+			return;
+		}
 
 		for ( uint32_t index = 0u; index < textures.size(); ++index )
 		{
