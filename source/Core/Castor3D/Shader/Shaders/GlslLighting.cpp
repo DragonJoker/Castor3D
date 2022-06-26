@@ -19,6 +19,34 @@
 
 namespace castor3d::shader
 {
+	//*********************************************************************************************
+
+	namespace lighting
+	{
+		static sdw::Float interpolate( sdw::Float const & lhs
+			, sdw::Float const & rhs
+			, sdw::Float const & weight )
+		{
+			return lhs * ( 1.0_f - weight ) + rhs * weight;
+		}
+
+		static sdw::Vec3 interpolate( sdw::Vec3 const & lhs
+			, sdw::Vec3 const & rhs
+			, sdw::Float const & weight )
+		{
+			return lhs * vec3( 1.0_f - weight ) + rhs * vec3( weight );
+		}
+
+		static sdw::Vec4 interpolate( sdw::Vec4 const & lhs
+			, sdw::Vec4 const & rhs
+			, sdw::Float const & weight )
+		{
+			return lhs * vec4( 1.0_f - weight ) + rhs * vec4( weight );
+		}
+	}
+
+	//*********************************************************************************************
+
 	castor::String const LightBufferName = cuT( "C3D_Lights" );
 
 	//*********************************************************************************************
@@ -77,6 +105,21 @@ namespace castor3d::shader
 	void LightMaterial::create( Material const & material )
 	{
 		create( vec3( 1.0_f ), material );
+	}
+
+	void LightMaterial::blendWith( LightMaterial const & material
+		, sdw::Float const & weight )
+	{
+		edgeWidth = lighting::interpolate( edgeWidth, material.edgeWidth, weight );
+		depthFactor = lighting::interpolate( depthFactor, material.depthFactor, weight );
+		normalFactor = lighting::interpolate( normalFactor, material.normalFactor, weight );
+		objectFactor = lighting::interpolate( objectFactor, material.objectFactor, weight );
+		edgeColour = lighting::interpolate( edgeColour, material.edgeColour, weight );
+		specific = lighting::interpolate( specific, material.specific, weight );
+		albedo = lighting::interpolate( albedo, material.albedo, weight );
+		specular = lighting::interpolate( specular, material.specular, weight );
+		albDiv = lighting::interpolate( albDiv, material.albDiv, weight );
+		spcDiv = lighting::interpolate( spcDiv, material.spcDiv, weight );
 	}
 
 	sdw::Vec3 LightMaterial::computeF0( sdw::Vec3 const & albedo

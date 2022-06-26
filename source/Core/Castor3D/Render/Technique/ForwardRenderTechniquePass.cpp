@@ -151,6 +151,11 @@ namespace castor3d
 			, RenderPipeline::eTextures
 			, hasTextures ) );
 
+		sdw::Pcb pcb{ writer, "DrawData" };
+		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		auto passCount = pcb.declMember< sdw::UInt >( "passCount" );
+		pcb.end();
+
 		shader::Fog fog{ writer };
 
 		// Fragment Outputs
@@ -170,73 +175,45 @@ namespace castor3d
 			{
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId ) - 1u] );
-				auto material = writer.declLocale( "material"
-					, materials.getMaterial( modelData.getMaterialId() ) );
-				auto opacity = writer.declLocale( "opacity"
-					, material.opacity );
-				auto emissive = writer.declLocale( "emissive"
-					, vec3( material.emissive ) );
-				auto lightMat = lightingModel->declMaterial( "lightMat" );
-				lightMat->create( in.colour
-					, material );
-				auto normal = writer.declLocale( "normal"
-					, normalize( in.normal ) );
-				auto tangent = writer.declLocale( "tangent"
-					, normalize( in.tangent ) );
-				auto bitangent = writer.declLocale( "bitangent"
-					, normalize( in.bitangent ) );
-				auto occlusion = writer.declLocale( "occlusion"
-					, 1.0_f );
-				auto transmittance = writer.declLocale( "transmittance"
-					, 0.0_f );
-
-				if ( m_ssao )
-				{
-					occlusion *= c3d_mapOcclusion.fetch( ivec2( in.fragCoord.xy() ), 0_i );
-				}
-
-				auto texCoord0 = writer.declLocale( "texCoord0"
-					, in.texture0 );
-				auto texCoord1 = writer.declLocale( "texCoord1"
-					, in.texture1 );
-				auto texCoord2 = writer.declLocale( "texCoord2"
-					, in.texture2 );
-				auto texCoord3 = writer.declLocale( "texCoord3"
-					, in.texture3 );
-				lightingModel->computeMapContributions( flags.passFlags
+				shader::LightingBlendComponents components{ writer.declLocale( "texCoord0", in.texture0 )
+					, writer.declLocale( "texCoord1", in.texture1 )
+					, writer.declLocale( "texCoord2", in.texture2 )
+					, writer.declLocale( "texCoord3", in.texture3 )
+					, writer.declLocale( "opacity", 1.0_f )
+					, writer.declLocale( "occlusion", ( m_ssao
+						? c3d_mapOcclusion.fetch( ivec2( in.fragCoord.xy() ), 0_i )
+						: 1.0_f ) )
+					, writer.declLocale( "transmittance", 1.0_f )
+					, writer.declLocale( "transmission", vec3( 1.0_f ) )
+					, writer.declLocale( "emissive", vec3( 1.0_f ) )
+					, writer.declLocale( "refractionRatio", 1.0_f )
+					, writer.declLocale( "hasRefraction", 0_i )
+					, writer.declLocale( "hasReflection", 0_i )
+					, writer.declLocale( "bwAccumulationOperator", 1.0_f )
+					, writer.declLocale( "normal", normalize( in.normal ) )
+					, writer.declLocale( "tangent", normalize( in.tangent ) )
+					, writer.declLocale( "bitangent", normalize( in.bitangent ) )
+					, writer.declLocale( "tangentSpaceViewPosition", in.tangentSpaceViewPosition )
+					, writer.declLocale( "tangentSpaceFragPosition", in.tangentSpaceFragPosition ) };
+				auto lightMat = materials.blendMaterials( utils
+					, m_mode == RenderMode::eTransparentOnly
+					, ( m_mode == RenderMode::eTransparentOnly
+						? flags.blendAlphaFunc
+						: flags.alphaFunc )
+					, flags.passFlags
+					, flags.submeshFlags
 					, flags.textures
+					, hasTextures
 					, textureConfigs
 					, textureAnims
+					, *lightingModel
 					, c3d_maps
-					, material
-					, texCoord0
-					, texCoord1
-					, texCoord2
-					, texCoord3
-					, normal
-					, tangent
-					, bitangent
-					, emissive
-					, opacity
-					, occlusion
-					, transmittance
-					, *lightMat
-					, in.tangentSpaceViewPosition
-					, in.tangentSpaceFragPosition );
-
-				if ( m_mode == RenderMode::eTransparentOnly )
-				{
-					material.applyAlphaFunc( flags.blendAlphaFunc
-						, opacity
-						, in.passMultiplier
-						, false );
-				}
-				else
-				{
-					material.applyAlphaFunc( flags.alphaFunc
-						, opacity
-						, in.passMultiplier );
-				}
+					, modelData.getMaterialId()
+					, passCount
+					, in.passMultipliers0
+					, in.passMultipliers1
+					, in.colour
+					, components );
 
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
@@ -253,7 +230,7 @@ namespace castor3d
 					surface.create( in.fragCoord.xyz()
 						, in.viewPosition.xyz()
 						, in.worldPosition.xyz()
-						, normal );
+						, components.normal );
 					lightingModel->computeCombined( *lightMat
 						, c3d_sceneData
 						, *backgroundModel
@@ -273,10 +250,10 @@ namespace castor3d
 						, c3d_sceneData
 						, *backgroundModel
 						, modelData.getEnvMapIndex()
-						, material.hasReflection
-						, material.hasRefraction
-						, material.refractionRatio
-						, material.transmission
+						, components.hasReflection
+						, components.hasRefraction
+						, components.refractionRatio
+						, components.transmission
 						, ambient
 						, reflected
 						, refracted );
@@ -314,16 +291,16 @@ namespace castor3d
 							, lightIndirectSpecular
 							, ambient
 							, indirectAmbient
-							, occlusion
-							, emissive
+							, components.occlusion
+							, components.emissive
 							, reflected
 							, refracted
 							, lightMat->albedo )
-						, opacity );
+						, components.opacity );
 				}
 				else
 				{
-					pxl_fragColor = vec4( lightMat->albedo, opacity );
+					pxl_fragColor = vec4( lightMat->albedo, components.opacity );
 				}
 
 				if ( getFogType( flags.sceneFlags ) != FogType::eDisabled )
@@ -334,7 +311,6 @@ namespace castor3d
 						, c3d_sceneData );
 				}
 
-				pxl_fragColor *= in.passMultiplier;
 				pxl_velocity.xy() = in.getVelocity();
 			} );
 

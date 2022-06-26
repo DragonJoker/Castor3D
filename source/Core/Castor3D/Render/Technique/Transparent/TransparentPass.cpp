@@ -206,6 +206,11 @@ namespace castor3d
 			, RenderPipeline::eTextures
 			, hasTextures ) );
 
+		sdw::Pcb pcb{ writer, "DrawData" };
+		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		auto passCount = pcb.declMember< sdw::UInt >( "passCount" );
+		pcb.end();
+
 		// Fragment Outputs
 		auto pxl_accumulation( writer.declOutput< Vec4 >( getTextureName( WbTexture::eAccumulation ), 0 ) );
 		auto pxl_revealage( writer.declOutput< Float >( getTextureName( WbTexture::eRevealage ), 1 ) );
@@ -224,67 +229,45 @@ namespace castor3d
 			{
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId ) - 1u] );
-				auto normal = writer.declLocale( "normal"
-					, normalize( in.normal ) );
-				auto tangent = writer.declLocale( "tangent"
-					, normalize( in.tangent ) );
-				auto bitangent = writer.declLocale( "bitangent"
-					, normalize( in.bitangent ) );
-				auto material = writer.declLocale( "material"
-					, materials.getMaterial( modelData.getMaterialId() ) );
-				auto opacity = writer.declLocale( "opacity"
-					, material.opacity );
-				auto transmission = writer.declLocale( "transmission"
-					, material.transmission );
-				auto lightMat = lightingModel->declMaterial( "lightMat" );
-				lightMat->create( in.colour
-					, material );
-				auto emissive = writer.declLocale( "emissive"
-					, lightMat->albedo * material.emissive );
-				auto worldEye = writer.declLocale( "worldEye"
-					, c3d_sceneData.cameraPosition );
-				auto texCoord0 = writer.declLocale( "texCoord0"
-					, in.texture0 );
-				auto texCoord1 = writer.declLocale( "texCoord1"
-					, in.texture1 );
-				auto texCoord2 = writer.declLocale( "texCoord2"
-					, in.texture2 );
-				auto texCoord3 = writer.declLocale( "texCoord3"
-					, in.texture3 );
-				auto occlusion = writer.declLocale( "occlusion"
-					, 1.0_f );
-				auto transmittance = writer.declLocale( "transmittance"
-					, 1.0_f );
-
-				if ( m_ssao )
-				{
-					occlusion *= c3d_mapOcclusion.fetch( ivec2( in.fragCoord.xy() ), 0_i );
-				}
-
-				lightingModel->computeMapContributions( flags.passFlags
+				shader::LightingBlendComponents components{ writer.declLocale( "texCoord0", in.texture0 )
+					, writer.declLocale( "texCoord1", in.texture1 )
+					, writer.declLocale( "texCoord2", in.texture2 )
+					, writer.declLocale( "texCoord3", in.texture3 )
+					, writer.declLocale( "opacity", 1.0_f )
+					, writer.declLocale( "occlusion", ( m_ssao
+						? c3d_mapOcclusion.fetch( ivec2( in.fragCoord.xy() ), 0_i )
+						: 1.0_f ) )
+					, writer.declLocale( "transmittance", 1.0_f )
+					, writer.declLocale( "transmission", vec3( 1.0_f ) )
+					, writer.declLocale( "emissive", vec3( 1.0_f ) )
+					, writer.declLocale( "refractionRatio", 1.0_f )
+					, writer.declLocale( "hasRefraction", 0_i )
+					, writer.declLocale( "hasReflection", 0_i )
+					, writer.declLocale( "bwAccumulationOperator", 1.0_f )
+					, writer.declLocale( "normal", normalize( in.normal ) )
+					, writer.declLocale( "tangent", normalize( in.tangent ) )
+					, writer.declLocale( "bitangent", normalize( in.bitangent ) )
+					, writer.declLocale( "tangentSpaceViewPosition", in.tangentSpaceViewPosition )
+					, writer.declLocale( "tangentSpaceFragPosition", in.tangentSpaceFragPosition ) };
+				auto lightMat = materials.blendMaterials( utils
+					, false
+					, flags.blendAlphaFunc
+					, flags.passFlags
+					, flags.submeshFlags
 					, flags.textures
+					, hasTextures
 					, textureConfigs
 					, textureAnims
+					, *lightingModel
 					, c3d_maps
-					, material
-					, texCoord0
-					, texCoord1
-					, texCoord2
-					, texCoord3
-					, normal
-					, tangent
-					, bitangent
-					, emissive
-					, opacity
-					, occlusion
-					, transmittance
-					, *lightMat
-					, in.tangentSpaceViewPosition
-					, in.tangentSpaceFragPosition );
-				material.applyAlphaFunc( flags.blendAlphaFunc
-					, opacity
-					, in.passMultiplier
-					, false );
+					, modelData.getMaterialId()
+					, passCount
+					, in.passMultipliers0
+					, in.passMultipliers1
+					, in.colour
+					, components );
+				auto worldEye = writer.declLocale( "worldEye"
+					, c3d_sceneData.cameraPosition );
 
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
@@ -299,7 +282,7 @@ namespace castor3d
 					surface.create( in.fragCoord.xyz()
 						, in.viewPosition.xyz()
 						, in.worldPosition.xyz()
-						, normal );
+						, components.normal );
 					lightingModel->computeCombined( *lightMat
 						, c3d_sceneData
 						, *backgroundModel
@@ -320,10 +303,10 @@ namespace castor3d
 						, c3d_sceneData
 						, *backgroundModel
 						, modelData.getEnvMapIndex()
-						, material.hasReflection
-						, material.hasRefraction
-						, material.refractionRatio
-						, material.transmission
+						, components.hasReflection
+						, components.hasRefraction
+						, components.refractionRatio
+						, components.transmission
 						, ambient
 						, reflected
 						, refracted );
@@ -361,28 +344,26 @@ namespace castor3d
 							, lightIndirectSpecular
 							, ambient
 							, indirectAmbient
-							, occlusion
-							, emissive
+							, components.occlusion
+							, components.emissive
 							, reflected
 							, refracted
-							, lightMat->albedo * transmission ) );
+							, lightMat->albedo * components.transmission ) );
 				}
 				else
 				{
 					auto colour = writer.declLocale( "colour"
-						, lightMat->albedo * transmission );
+						, lightMat->albedo * components.transmission );
 				}
 
 				auto colour = writer.getVariable < Vec3 >( "colour" );
 				pxl_accumulation = c3d_sceneData.computeAccumulation( utils
 					, in.fragCoord.z()
 					, colour
-					, opacity
-					, material.bwAccumulationOperator );
-				pxl_revealage = opacity;
+					, components.opacity
+					, components.bwAccumulationOperator );
+				pxl_revealage = components.opacity;
 				pxl_velocity.xy() = in.getVelocity();
-				pxl_accumulation *= in.passMultiplier;
-				pxl_revealage *= in.passMultiplier;
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

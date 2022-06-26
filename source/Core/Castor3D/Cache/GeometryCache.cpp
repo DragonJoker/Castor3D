@@ -9,6 +9,7 @@
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
@@ -69,13 +70,27 @@ namespace castor3d
 							? std::static_pointer_cast< AnimatedSkeleton >( findAnimatedObject( scene, element.getName() + cuT( "_Skeleton" ) ) )
 							: nullptr;
 
-						for ( auto & pass : *material )
+						if ( auto comp = submesh->getComponent< PassMasksComponent >() )
 						{
-							nodes.createNode( *pass
-								, *submesh
-								, element
-								, animMesh.get()
-								, animSkeleton.get() );
+							if ( auto pass = material->getPass( 0u ) )
+							{
+								nodes.createNode( *pass
+									, *submesh
+									, element
+									, animMesh.get()
+									, animSkeleton.get() );
+							}
+						}
+						else
+						{
+							for ( auto & pass : *material )
+							{
+								nodes.createNode( *pass
+									, *submesh
+									, element
+									, animMesh.get()
+									, animSkeleton.get() );
+							}
 						}
 					}
 				}

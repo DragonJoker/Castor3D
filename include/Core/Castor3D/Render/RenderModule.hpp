@@ -129,6 +129,19 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Draw constants for one render node.
+	*\~french
+	*\brief
+	*	Données de dessin pour un noeud de rendu.
+	*/
+	struct DrawConstants
+	{
+		uint32_t pipelineId;
+		uint32_t passCount;
+	};
+	/**
+	*\~english
+	*\brief
 	*	The render pass UBOs binding index.
 	*\~french
 	*\brief

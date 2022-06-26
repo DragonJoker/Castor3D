@@ -93,6 +93,13 @@ namespace castor3d
 				hash >>= maxPassLayerSize;
 			}
 
+			if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
+			{
+				// When pass masks component is present, only consider first pass,
+				// since blending will occur in shader.
+				passLayerIndex = 0u;
+			}
+
 			result.hi = uint64_t( hash )
 				| ( uint64_t( passLayerIndex ) << maxTargetOffsetSize );
 			return result;
