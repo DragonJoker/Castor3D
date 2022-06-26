@@ -266,8 +266,7 @@ namespace castor3d
 					, textureConfigs
 					, textureAnims
 					, c3d_maps
-					, modelData.getTextures0()
-					, modelData.getTextures1()
+					, material
 					, texCoord0
 					, texCoord1
 					, texCoord2

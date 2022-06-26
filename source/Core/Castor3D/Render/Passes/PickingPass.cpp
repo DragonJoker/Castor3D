@@ -176,9 +176,7 @@ namespace castor3d
 					{
 						auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
 						auto id = writer.declLocale( "id" + name
-							, shader::ModelIndices::getTexture( modelData.getTextures0()
-								, modelData.getTextures1()
-								, index ) );
+							, material.getTexture( index ) );
 
 						IF( writer, id > 0_u )
 						{

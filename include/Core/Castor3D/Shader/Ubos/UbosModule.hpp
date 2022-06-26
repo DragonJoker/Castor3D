@@ -278,9 +278,12 @@ namespace castor3d
 		castor::Matrix4x4f prvModel;
 		castor::Matrix4x4f curModel;
 		castor::Matrix4x4f normal;
-		castor::Point4ui textures[2];
-		castor::Point4i countsIDs;
-		castor::Point4f meshletScale;
+		int32_t materialId;
+		int32_t shadowReceiver;
+		int32_t envMapId;
+		int32_t pad;
+		castor::Point3f scale;
+		uint32_t meshletCount;
 	};
 	/**
 	*\~english

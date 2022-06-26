@@ -29,6 +29,9 @@ namespace castor3d::shader
 		, hasRefraction{ getMember< sdw::UInt >( "hasRefraction" ) }
 		, hasReflection{ getMember< sdw::UInt >( "hasReflection" ) }
 		, bwAccumulationOperator{ getMember< sdw::UInt >( "bwAccumulationOperator" ) }
+		, textures0{ getMember< sdw::UVec4 >( "textures0" ) }
+		, textures1{ getMember< sdw::UVec4 >( "textures1" ) }
+		, textures{ getMember< sdw::Int >( "textures" ) }
 	{
 	}
 
@@ -148,6 +151,15 @@ namespace castor3d::shader
 		}
 	}
 
+	sdw::UInt Material::getTexture( uint32_t idx )const
+	{
+		return ( idx < 4u
+			? textures0[idx]
+			: ( idx < 8u
+				? textures1[idx - 4u]
+				: 0_u ) );
+	}
+
 	ast::type::BaseStructPtr Material::makeType( ast::type::TypesCache & cache )
 	{
 		auto result = cache.getStruct( ast::type::MemoryLayout::eStd140, "C3D_Material" );
@@ -177,6 +189,10 @@ namespace castor3d::shader
 			result->declMember( "hasRefraction", ast::type::Kind::eInt );
 			result->declMember( "hasReflection", ast::type::Kind::eInt );
 			result->declMember( "bwAccumulationOperator", ast::type::Kind::eFloat );
+
+			result->declMember( "textures0", ast::type::Kind::eVec4U );
+			result->declMember( "textures1", ast::type::Kind::eVec4U );
+			result->declMember( "textures", ast::type::Kind::eInt );
 		}
 
 		return result;

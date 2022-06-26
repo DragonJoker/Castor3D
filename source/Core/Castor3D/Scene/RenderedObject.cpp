@@ -27,26 +27,16 @@ namespace castor3d
 		modelData.curModel = modelMtx;
 		modelData.normal = castor::Matrix4x4f{ normal.getInverse().getTransposed() };
 
-		uint32_t index = 0u;
-		modelData.textures[0] = {};
-		modelData.textures[1] = {};
-
-		for ( auto & unit : pass )
-		{
-			modelData.textures[index / 4u][index % 4u] = unit->getId();
-			++index;
-		}
-
-		modelData.countsIDs->x = int32_t( std::min( 8u, pass.getTextureUnitsCount() ) );
-		modelData.countsIDs->y = int( pass.getId() );
-		modelData.countsIDs->w = isShadowReceiver();
+		modelData.materialId = int( pass.getId() );
+		modelData.shadowReceiver = isShadowReceiver() ? 1 : 0;
 
 		if ( pass.hasEnvironmentMapping() )
 		{
-			modelData.countsIDs->z = int( sceneNode.getScene()->getEnvironmentMapIndex( sceneNode ) + 1u );
+			modelData.envMapId = int( sceneNode.getScene()->getEnvironmentMapIndex( sceneNode ) + 1u );
 		}
 
 		auto scale = sceneNode.getDerivedScale();
-		modelData.meshletScale = { scale->x, scale->y, scale->z, float( meshletCount ) };
+		modelData.scale = scale;
+		modelData.meshletCount = meshletCount;
 	}
 }

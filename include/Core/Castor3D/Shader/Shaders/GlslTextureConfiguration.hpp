@@ -324,8 +324,7 @@ namespace castor3d
 				, TextureFlagsArray const & textures
 				, TextureAnimations const & textureAnims
 				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-				, sdw::UVec4 const & textures0
-				, sdw::UVec4 const & textures1
+				, shader::Material const & material
 				, sdw::Vec3 & texCoords0
 				, sdw::Vec3 & texCoords1
 				, sdw::Vec3 & texCoords2

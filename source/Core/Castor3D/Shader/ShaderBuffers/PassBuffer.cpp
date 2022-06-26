@@ -137,6 +137,8 @@ namespace castor3d
 		result.hasRefraction = &data.hasRefraction;
 		result.hasReflection = &data.hasReflection;
 		result.bwAccumulationOperator = &data.bwAccumulationOperator;
+		result.textures = &data.textures;
+		result.textureCount = &data.textureCount;
 
 		return result;
 	}

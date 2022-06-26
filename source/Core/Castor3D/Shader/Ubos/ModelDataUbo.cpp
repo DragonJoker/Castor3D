@@ -17,16 +17,12 @@ namespace castor3d::shader
 		, m_prvMtxModel{ getMember< sdw::Mat4 >( "prvMtxModel" ) }
 		, m_curMtxModel{ getMember< sdw::Mat4 >( "curMtxModel" ) }
 		, m_mtxNormal{ getMember< sdw::Mat4 >( "mtxNormal" ) }
-		, m_textures0{ getMember< sdw::UVec4 >( "textures0" ) }
-		, m_textures1{ getMember< sdw::UVec4 >( "textures1" ) }
-		, m_countsIDs{ getMember< sdw::IVec4 >( "countsIDs" ) }
-		, m_meshletsScale{ getMember< sdw::Vec4 >( "meshletsScale" ) }
-		, m_textures{ m_countsIDs.x() }
-		, m_materialId{ writer.cast< sdw::UInt >( m_countsIDs.y() ) }
-		, m_envMapId{ m_countsIDs.z() }
-		, m_shadowReceiver{ m_countsIDs.w() }
-		, m_scale{ m_meshletsScale.xyz() }
-		, m_meshletCount{ writer.cast< sdw::UInt >( m_meshletsScale.w() ) }
+		, m_materialId{ getMember< sdw::Int >( "materialId" ) }
+		, m_shadowReceiver{ getMember< sdw::Int >( "shadowReceiver" ) }
+		, m_envMapId{ getMember< sdw::Int >( "envMapId" ) }
+		, m_pad{ getMember< sdw::Int >( "pad" ) }
+		, m_scale{ getMember< sdw::Vec3 >( "scale" ) }
+		, m_meshletCount{ getMember< sdw::UInt >( "meshletCount" ) }
 	{
 	}
 
@@ -40,10 +36,12 @@ namespace castor3d::shader
 			result->declMember( "prvMtxModel", ast::type::Kind::eMat4x4F );
 			result->declMember( "curMtxModel", ast::type::Kind::eMat4x4F );
 			result->declMember( "mtxNormal", ast::type::Kind::eMat4x4F );
-			result->declMember( "textures0", ast::type::Kind::eVec4U );
-			result->declMember( "textures1", ast::type::Kind::eVec4U );
-			result->declMember( "countsIDs", ast::type::Kind::eVec4I );
-			result->declMember( "meshletsScale", ast::type::Kind::eVec4F );
+			result->declMember( "materialId", ast::type::Kind::eInt );
+			result->declMember( "shadowReceiver", ast::type::Kind::eInt );
+			result->declMember( "envMapId", ast::type::Kind::eInt );
+			result->declMember( "pad", ast::type::Kind::eInt );
+			result->declMember( "scale", ast::type::Kind::eVec3F );
+			result->declMember( "meshletCount", ast::type::Kind::eUInt );
 		}
 
 		return result;
@@ -133,16 +131,5 @@ namespace castor3d::shader
 		}
 
 		return m_curMtxModel;
-	}
-
-	sdw::UInt ModelIndices::getTexture( sdw::UVec4 const & textures0
-		, sdw::UVec4 const & textures1
-		, uint32_t index )
-	{
-		return ( index < 4u
-			? textures0[index]
-			: ( index < 8u
-				? textures1[index - 4u]
-				: 0_u ) );
 	}
 }
