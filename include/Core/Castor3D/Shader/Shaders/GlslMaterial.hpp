@@ -77,6 +77,7 @@ namespace castor3d::shader
 		 *\param[in]	opaque		\p true pour les noeuds opaques, \p false pour les transparents.
 		 */
 		C3D_API sdw::Float getPassMultiplier( sdw::UVec4 const & passMasks );
+		C3D_API sdw::UInt getTexture( uint32_t index )const;
 
 		C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 
@@ -103,6 +104,9 @@ namespace castor3d::shader
 		sdw::Int hasRefraction;
 		sdw::Int hasReflection;
 		sdw::Float bwAccumulationOperator;
+		sdw::UVec4 textures0;
+		sdw::UVec4 textures1;
+		sdw::Int textures;
 	};
 
 	CU_DeclareSmartPtr( Material );

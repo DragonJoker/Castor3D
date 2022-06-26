@@ -282,8 +282,7 @@ namespace castor3d::shader
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-			, sdw::UVec4 const & textures0
-			, sdw::UVec4 const & textures1
+			, shader::Material const & material
 			, sdw::Vec3 & texCoords0
 			, sdw::Vec3 & texCoords1
 			, sdw::Vec3 & texCoords2
@@ -324,8 +323,7 @@ namespace castor3d::shader
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-			, sdw::UVec4 const & textures0
-			, sdw::UVec4 const & textures1
+			, shader::Material const & material
 			, sdw::Vec3 & texCoords0
 			, sdw::Vec3 & texCoords1
 			, sdw::Vec3 & texCoords2

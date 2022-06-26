@@ -1,5 +1,6 @@
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 
+#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
@@ -612,8 +613,7 @@ namespace castor3d
 			, TextureFlagsArray const & textures
 			, TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-			, sdw::UVec4 const & textures0
-			, sdw::UVec4 const & textures1
+			, shader::Material const & material
 			, sdw::Vec3 & texCoords0
 			, sdw::Vec3 & texCoords1
 			, sdw::Vec3 & texCoords2
@@ -638,7 +638,7 @@ namespace castor3d
 				{
 					auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
 					auto id = m_writer.declLocale( "c3d_id" + name
-						, ModelIndices::getTexture( textures0, textures1, index ) );
+						, material.getTexture( index ) );
 
 					IF( m_writer, id > 0_u )
 					{

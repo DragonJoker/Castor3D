@@ -534,6 +534,18 @@ namespace castor3d
 		*data.hasRefraction = hasRefraction() ? 1 : 0;
 		*data.hasReflection = hasReflections() ? 1 : 0;
 		*data.bwAccumulationOperator = float( getBWAccumulationOperator() );
+
+		uint32_t index = 0u;
+		( *data.textures )[0] = {};
+		( *data.textures )[1] = {};
+
+		for ( auto & unit : *this )
+		{
+			( *data.textures )[index / 4u][index % 4u] = unit->getId();
+			++index;
+		}
+
+		*data.textureCount = int32_t( std::min( 8u, getTextureUnitsCount() ) );
 	}
 
 	void Pass::doMergeImages( TextureFlag lhsFlag

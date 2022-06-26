@@ -40,24 +40,6 @@ namespace castor3d::shader
 			, sdw::UVec4 const & boneIds1
 			, sdw::Vec4 const & boneWeights0
 			, sdw::Vec4 const & boneWeights1 )const;
-		C3D_API static sdw::UInt getTexture( sdw::UVec4 const & textures0
-			, sdw::UVec4 const & textures1
-			, uint32_t index );
-
-		sdw::UVec4 getTextures0()const
-		{
-			return m_textures0;
-		}
-
-		sdw::UVec4 getTextures1()const
-		{
-			return m_textures1;
-		}
-
-		sdw::Int getTextures()const
-		{
-			return m_textures;
-		}
 
 		sdw::UInt getMaterialId()const
 		{
@@ -101,14 +83,10 @@ namespace castor3d::shader
 		sdw::Mat4 m_prvMtxModel;
 		sdw::Mat4 m_curMtxModel;
 		sdw::Mat4 m_mtxNormal;
-		sdw::UVec4 m_textures0;
-		sdw::UVec4 m_textures1;
-		sdw::IVec4 m_countsIDs;
-		sdw::Vec4 m_meshletsScale;
-		sdw::Int m_textures;
 		sdw::UInt m_materialId;
-		sdw::Int m_envMapId;
 		sdw::Int m_shadowReceiver;
+		sdw::Int m_envMapId;
+		sdw::Int m_pad;
 		sdw::Vec3 m_scale;
 		sdw::UInt m_meshletCount;
 	};
