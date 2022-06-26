@@ -135,6 +135,11 @@ namespace castor3d
 			, RenderPipeline::eTextures
 			, hasTextures ) );
 
+		sdw::Pcb pcb{ writer, "DrawData" };
+		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		auto passCount = pcb.declMember< sdw::UInt >( "passCount" );
+		pcb.end();
+
 		// Outputs
 		auto data0 = writer.declOutput< Vec4 >( "data0", 0u );
 		auto data1 = writer.declOutput< Vec4 >( "data1", 1u );
@@ -155,88 +160,35 @@ namespace castor3d
 			{
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId ) - 1u] );
-				auto material = materials.getMaterial( modelData.getMaterialId() );
-				auto opacity = writer.declLocale( "opacity"
-					, material.opacity );
-				auto normal = writer.declLocale( "normal"
-					, normalize( in.normal ) );
-				auto tangent = writer.declLocale( "tangent"
-					, normalize( in.tangent ) );
-				auto bitangent = writer.declLocale( "bitangent"
-					, normalize( in.bitangent ) );
-
-				if ( hasTextures && textureConfigs.isEnabled() )
-				{
-					auto texCoord0 = writer.declLocale( "texCoord0"
-						, in.texture0 );
-					auto texCoord1 = writer.declLocale( "texCoord1"
-						, in.texture1 );
-					auto texCoord2 = writer.declLocale( "texCoord2"
-						, in.texture2 );
-					auto texCoord3 = writer.declLocale( "texCoord3"
-						, in.texture3 );
-					auto textureFlags = merge( flags.textures );
-
-					if ( ( textureFlags & TextureFlag::eGeometry ) != 0 )
-					{
-						for ( uint32_t index = 0u; index < flags.textures.size(); ++index )
-						{
-							auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
-							auto id = writer.declLocale( "c3d_id" + name
-								, material.getTexture( index ) );
-
-							IF( writer, id > 0_u )
-							{
-								auto config = writer.declLocale( "config" + name
-									, textureConfigs.getTextureConfiguration( id ) );
-
-								IF( writer, config.isGeometry() )
-								{
-									auto anim = writer.declLocale( "anim" + name
-										, textureAnims.getTextureAnimation( id ) );
-									auto texcoord = writer.declLocale( "tex" + name
-										, textureConfigs.getTexcoord( config
-											, texCoord0
-											, texCoord1
-											, texCoord2
-											, texCoord3 ) );
-									config.computeGeometryMapContribution( utils
-										, flags.passFlags
-										, textureFlags
-										, name
-										, anim
-										, c3d_maps[id - 1_u]
-										, texcoord
-										, opacity
-										, normal
-										, tangent
-										, bitangent
-										, in.tangentSpaceViewPosition
-										, in.tangentSpaceFragPosition );
-									textureConfigs.setTexcoord( config
-										, texcoord
-										, texCoord0
-										, texCoord1
-										, texCoord2
-										, texCoord3 );
-								}
-								FI;
-							}
-							FI;
-						}
-					}
-				}
-
-				material.applyAlphaFunc( flags.alphaFunc
-					, opacity
-					, in.passMultiplier );
-				auto matFlags = writer.declLocale( "flags"
-					, 0.0_f );
+				shader::GeometryBlendComponents components{ writer.declLocale( "texCoord0", in.texture0 )
+					, writer.declLocale( "texCoord1", in.texture1 )
+					, writer.declLocale( "texCoord2", in.texture2 )
+					, writer.declLocale( "texCoord3", in.texture3 )
+					, writer.declLocale( "opacity", 1.0_f )
+					, writer.declLocale( "normal", normalize( in.normal ) )
+					, writer.declLocale( "tangent", normalize( in.tangent ) )
+					, writer.declLocale( "bitangent", normalize( in.bitangent ) )
+					, writer.declLocale( "tangentSpaceViewPosition", in.tangentSpaceViewPosition )
+					, writer.declLocale( "tangentSpaceFragPosition", in.tangentSpaceFragPosition ) };
+				materials.blendMaterials( utils
+					, flags.alphaFunc
+					, flags.passFlags
+					, flags.submeshFlags
+					, flags.textures
+					, hasTextures
+					, textureConfigs
+					, textureAnims
+					, c3d_maps
+					, modelData.getMaterialId()
+					, passCount
+					, in.passMultipliers0
+					, in.passMultipliers1
+					, components );
 				data0 = vec4( in.fragCoord.z()
 					, length( in.worldPosition.xyz() - c3d_sceneData.cameraPosition )
 					, writer.cast< sdw::Float >( in.nodeId )
 					, ( checkFlag( flags.passFlags, PassFlag::eLighting ) ) ? 1.0_f : 0.0_f );
-				data1 = vec4( normal, 0.0_f );
+				data1 = vec4( components.normal, 0.0_f );
 				velocity = vec4( in.getVelocity(), 0.0_f, 0.0_f );
 			} );
 

@@ -213,7 +213,8 @@ namespace castor3d::shader
 		, texture2{ this->getMember< sdw::Vec3 >( "texcoord2", true ) }
 		, texture3{ this->getMember< sdw::Vec3 >( "texcoord3", true ) }
 		, colour{ this->getMember< sdw::Vec3 >( "colour", true ) }
-		, passMultiplier{ this->getMember< sdw::Float >( "passMultiplier", true ) }
+		, passMultipliers0{ this->getMember< sdw::Vec4 >( "passMultipliers0", true ) }
+		, passMultipliers1{ this->getMember< sdw::Vec4 >( "passMultipliers1", true ) }
 		, instanceId{ this->getMember< sdw::UInt >( "instanceId", true ) }
 		, nodeId{ this->getMember< sdw::Int >( "nodeId", true ) }
 	{
@@ -300,7 +301,11 @@ namespace castor3d::shader
 				, ast::type::NotArray
 				, ( checkFlag( submeshFlags, SubmeshFlag::eColours ) ? index++ : 0 )
 				, checkFlag( submeshFlags, SubmeshFlag::eColours ) );
-			result->declMember( "passMultiplier", ast::type::Kind::eFloat
+			result->declMember( "passMultipliers0", ast::type::Kind::eVec4F
+				, ast::type::NotArray
+				, ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) ? index++ : 0 )
+				, checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) );
+			result->declMember( "passMultipliers1", ast::type::Kind::eVec4F
 				, ast::type::NotArray
 				, ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) ? index++ : 0 )
 				, checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) );

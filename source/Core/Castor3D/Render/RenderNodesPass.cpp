@@ -754,7 +754,9 @@ namespace castor3d
 				else
 				{
 					pipeline->setVertexLayouts( vertexLayouts );
-					pipeline->setPushConstantRanges( { { VK_SHADER_STAGE_VERTEX_BIT, 0u, 4u } } );
+					pipeline->setPushConstantRanges( { { VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
+						, 0u
+						, sizeof( DrawConstants ) } } );
 				}
 
 				pipeline->initialise( device
@@ -836,6 +838,7 @@ namespace castor3d
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		auto passCount = pcb.declMember< sdw::UInt >( "passCount" );
 		auto drawOffset = pcb.declMember< sdw::UInt >( "drawOffset" );
 		auto instanceCount = pcb.declMember< sdw::UInt >( "instanceCount" );
 		pcb.end();
@@ -1001,6 +1004,7 @@ namespace castor3d
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		auto passCount = pcb.declMember< sdw::UInt >( "passCount" );
 		auto drawOffset = pcb.declMember< sdw::UInt >( "drawOffset" );
 		auto instanceCount = pcb.declMember< sdw::UInt >( "instanceCount" );
 		pcb.end();
@@ -1120,7 +1124,17 @@ namespace castor3d
 				vtxOut[i].nodeId = writer.cast< Int >( nodeId );
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( modelData.getMaterialId() ) );
-				vtxOut[i].passMultiplier = material.getPassMultiplier( c3d_passMasks[vertexIndex] );
+				auto passMultipliers0 = writer.declLocale( "passMultipliers0"
+					, vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f ) );
+				auto passMultipliers1 = writer.declLocale( "passMultipliers1"
+					, vec4( 0.0_f ) );
+				material.getPassMultipliers( flags.submeshFlags
+					, passCount
+					, c3d_passMasks[vertexIndex]
+					, passMultipliers0
+					, passMultipliers1 );
+				vtxOut[i].passMultipliers0 = passMultipliers0;
+				vtxOut[i].passMultipliers1 = passMultipliers1;
 
 				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
 					, modelData.getModelMtx() );
@@ -1246,6 +1260,7 @@ namespace castor3d
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		auto passCount = pcb.declMember< sdw::UInt >( "passCount" );
 		pcb.end();
 
 		writer.implementMainT< shader::VertexSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
@@ -1288,7 +1303,11 @@ namespace castor3d
 					, c3d_modelsData[nodeId - 1u] );
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( modelData.getMaterialId() ) );
-				out.passMultiplier = material.getPassMultiplier( in.passMasks );
+				material.getPassMultipliers( flags.submeshFlags
+					, passCount
+					, in.passMasks
+					, out.passMultipliers0
+					, out.passMultipliers1 );
 
 				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
 					, modelData.getModelMtx() );
@@ -1383,6 +1402,7 @@ namespace castor3d
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		auto passCount = pcb.declMember< sdw::UInt >( "passCount" );
 		pcb.end();
 
 		writer.implementMainT< VoidT, shader::FragmentSurfaceT >( sdw::VertexInT< sdw::VoidT >{ writer }
@@ -1402,7 +1422,8 @@ namespace castor3d
 						, writer.cast< sdw::UInt >( in.drawID ) ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId - 1u] );
-				out.passMultiplier = 1.0_f;
+				out.passMultipliers0 = vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f );
+				out.passMultipliers1 = vec4( 0.0_f );
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
 				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 

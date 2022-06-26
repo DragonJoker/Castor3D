@@ -147,6 +147,11 @@ namespace castor3d
 			, RenderPipeline::eTextures
 			, hasTextures ) );
 
+		sdw::Pcb pcb{ writer, "DrawData" };
+		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		auto passCount = pcb.declMember< sdw::UInt >( "passCount" );
+		pcb.end();
+
 		// Fragment Outputs
 		auto pxl_fragColor( writer.declOutput< UVec4 >( "pxl_fragColor", 0 ) );
 
@@ -163,46 +168,22 @@ namespace castor3d
 			{
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId ) - 1u] );
-				auto material = materials.getMaterial( modelData.getMaterialId() );
-				auto opacity = writer.declLocale( "opacity"
-					, material.opacity );
-				auto textureFlags = merge( flags.textures );
-
-				if ( hasTextures
-					&& textureConfigs.isEnabled()
-					&& checkFlag( textureFlags, TextureFlag::eOpacity ) )
-				{
-					for ( uint32_t index = 0u; index < flags.textures.size(); ++index )
-					{
-						auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
-						auto id = writer.declLocale( "id" + name
-							, material.getTexture( index ) );
-
-						IF( writer, id > 0_u )
-						{
-							auto config = writer.declLocale( "config" + name
-								, textureConfigs.getTextureConfiguration( id ) );
-
-							IF( writer, config.isOpacity() )
-							{
-								auto anim = writer.declLocale( "anim" + name
-									, textureAnims.getTextureAnimation( id ) );
-								auto texCoord = writer.declLocale( "texCoord" + name
-									, in.texture0.xy() );
-								config.transformUV( anim, texCoord );
-								auto sampledOpacity = writer.declLocale( "sampled" + name
-									, utils.sampleMap( flags.passFlags, c3d_maps[id - 1_u], texCoord ) );
-								opacity = config.getOpacity( sampledOpacity, opacity );
-							}
-							FI;
-						}
-						FI;
-					}
-				}
-
-				material.applyAlphaFunc( flags.alphaFunc
-					, opacity
-					, in.passMultiplier );
+				shader::OpacityBlendComponents components{ writer.declLocale( "texCoord0", in.texture0 )
+					, writer.declLocale( "opacity", 1.0_f ) };
+				materials.blendMaterials( utils
+					, flags.alphaFunc
+					, flags.passFlags
+					, flags.submeshFlags
+					, flags.textures
+					, hasTextures
+					, textureConfigs
+					, textureAnims
+					, c3d_maps
+					, modelData.getMaterialId()
+					, passCount
+					, in.passMultipliers0
+					, in.passMultipliers1
+					, components );
 				pxl_fragColor = uvec4( ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) ? 2_u : 1_u )
 					, writer.cast< sdw::UInt >( in.nodeId )
 					, writer.cast< sdw::UInt >( in.primitiveID )

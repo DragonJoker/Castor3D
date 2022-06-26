@@ -152,6 +152,11 @@ namespace castor3d
 			, RenderPipeline::eTextures
 			, hasTextures ) );
 
+		sdw::Pcb pcb{ writer, "DrawData" };
+		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		auto passCount = pcb.declMember< sdw::UInt >( "passCount" );
+		pcb.end();
+
 		// Fragment Outputs
 		auto index = 0u;
 		auto outData2 = writer.declOutput< Vec4 >( dropqpass::Output2, index++ );
@@ -179,64 +184,38 @@ namespace castor3d
 			{
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1] );
-				auto material = writer.declLocale( "material"
-					, materials.getMaterial( modelData.getMaterialId() ) );
-				auto texCoord0 = writer.declLocale( "texCoord0"
-					, in.texture0 );
-				auto texCoord1 = writer.declLocale( "texCoord1"
-					, in.texture1 );
-				auto texCoord2 = writer.declLocale( "texCoord2"
-					, in.texture2 );
-				auto texCoord3 = writer.declLocale( "texCoord3"
-					, in.texture3 );
-				auto opacity = writer.declLocale( "opacity"
-					, material.opacity );
-				auto emissive = writer.declLocale( "emissive"
-					, vec3( material.emissive ) );
-				auto lightMat = lightingModel->declMaterial( "lightMat" );
-				lightMat->create( in.colour
-					, material );
-				auto normal = writer.declLocale( "normal"
-					, normalize( in.normal ) );
-				auto tangent = writer.declLocale( "tangent"
-					, normalize( in.tangent ) );
-				auto bitangent = writer.declLocale( "bitangent"
-					, normalize( in.bitangent ) );
-				auto occlusion = writer.declLocale( "occlusion"
-					, 1.0_f );
-				auto transmittance = writer.declLocale( "transmittance"
-					, 0.0_f );
-
-				lightingModel->computeMapContributions( flags.passFlags
+				shader::OpaqueBlendComponents components{ writer.declLocale( "texCoord0", in.texture0 )
+					, writer.declLocale( "texCoord1", in.texture1 )
+					, writer.declLocale( "texCoord2", in.texture2 )
+					, writer.declLocale( "texCoord3", in.texture3 )
+					, writer.declLocale( "opacity", 1.0_f )
+					, writer.declLocale( "occlusion", 1.0_f )
+					, writer.declLocale( "transmittance", 1.0_f )
+					, writer.declLocale( "emissive", vec3( 0.0_f ) )
+					, writer.declLocale( "normal", normalize( in.normal ) )
+					, writer.declLocale( "tangent", normalize( in.tangent ) )
+					, writer.declLocale( "bitangent", normalize( in.bitangent ) )
+					, writer.declLocale( "tangentSpaceViewPosition", in.tangentSpaceViewPosition )
+					, writer.declLocale( "tangentSpaceFragPosition", in.tangentSpaceFragPosition ) };
+				auto lightMat = materials.blendMaterials( utils
+					, flags.alphaFunc
+					, flags.passFlags
+					, flags.submeshFlags
 					, flags.textures
+					, hasTextures
 					, textureConfigs
 					, textureAnims
+					, *lightingModel
 					, c3d_maps
-					, material
-					, texCoord0
-					, texCoord1
-					, texCoord2
-					, texCoord3
-					, normal
-					, tangent
-					, bitangent
-					, emissive
-					, opacity
-					, occlusion
-					, transmittance
-					, *lightMat
-					, in.tangentSpaceViewPosition
-					, in.tangentSpaceFragPosition );
-				material.applyAlphaFunc( flags.alphaFunc
-					, opacity
-					, in.passMultiplier );
+					, modelData.getMaterialId()
+					, passCount
+					, in.passMultipliers0
+					, in.passMultipliers1
+					, in.colour
+					, components );
 				lightMat->output( outData2, outData3 );
-				outData4 = vec4( emissive, transmittance );
-				outData5 = vec4( in.getVelocity(), 0.0_f, occlusion );
-				outData2 *= in.passMultiplier;
-				outData3 *= in.passMultiplier;
-				outData4 *= in.passMultiplier;
-				outData5.w() *= in.passMultiplier;
+				outData4 = vec4( components.emissive, components.transmittance );
+				outData5 = vec4( in.getVelocity(), 0.0_f, components.occlusion );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

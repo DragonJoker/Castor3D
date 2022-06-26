@@ -173,11 +173,12 @@ namespace castor3d
 
 				if ( !pipeline.hasMeshletDescriptorSetLayout() )
 				{
+					DrawConstants constants{ pipelineId, node.pass->getOwner()->getPassCount() };
 					commandBuffer.pushConstants( pipeline.getPipelineLayout()
-						, VK_SHADER_STAGE_VERTEX_BIT
+						, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
 						, 0u
-						, 4u
-						, &pipelineId );
+						, sizeof( DrawConstants )
+						, &constants );
 				}
 			}
 
@@ -353,7 +354,10 @@ namespace castor3d
 					, pipeline.getPipelineLayout() );
 			}
 
-			MeshletDrawConstants constants{ pipelineId, drawOffset, node.getInstanceCount() };
+			MeshletDrawConstants constants{ pipelineId
+				, node.pass->getOwner()->getPassCount()
+				, drawOffset
+				, node.getInstanceCount() };
 			commandBuffer.pushConstants( pipeline.getPipelineLayout()
 				, VK_SHADER_STAGE_MESH_BIT_NV | VK_SHADER_STAGE_TASK_BIT_NV
 				, 0u
