@@ -60,9 +60,19 @@ namespace diamond_square_terrain
 			return std::default_random_engine{ r() };
 		}
 
-		float getMax( std::pair< float, castor::Point3f > const & value )
+		float getMin( std::pair< castor::Point2f, castor::Point3f > const & value )
 		{
-			return value.first;
+			return value.first->x;
+		}
+
+		float getMin( Biome const & value )
+		{
+			return value.range->x;
+		}
+
+		float getMax( std::pair< castor::Point2f, castor::Point3f > const & value )
+		{
+			return value.first->y;
 		}
 
 		float getMax( Biome const & value )
@@ -70,60 +80,125 @@ namespace diamond_square_terrain
 			return value.range->y;
 		}
 
-		template< typename DataT >
-		std::pair< size_t, float > getIndexWeight( float val
-			, std::vector< DataT > const & values )
+		struct BlendRange
 		{
-			size_t idx = 0u;
+			uint32_t beginIndex{};
+			uint32_t endIndex{};
+			castor::Range< float > range;
+		};
+		using BlendRanges = std::vector< BlendRange >;
 
-			while ( getMax( values[idx] ) < val && idx < values.size() )
-			{
-				++idx;
-			}
+		template< typename DataT >
+		BlendRanges buildBlendRanges( std::vector< DataT > const & values )
+		{
+			BlendRanges result;
+			auto cur = values.begin();
+			auto prv = values.end();
+			uint32_t index{};
+			float prvBlendRange{};
 
-			if ( idx == 0u || idx == values.size() )
+			while ( cur != values.end() )
 			{
-				if ( idx )
+				auto curBlendRange = ( getMax( *cur ) - getMin( *cur ) ) / 4.0f;
+
+				if ( index == 0u )
 				{
-					idx--;
+					if ( index == values.size() - 1u )
+					{
+						result.push_back( { 0u
+							, 0u
+							, castor::makeRange( 0.0f, 1.0f ) } );
+					}
+					else
+					{
+						auto rangeHi = getMax( *cur ) - curBlendRange;
+						result.push_back( { 0u
+							, 0u
+							, castor::makeRange( 0.0f, rangeHi ) } );
+					}
+				}
+				else
+				{
+					auto rangeLo = getMax( *prv ) - prvBlendRange;
+					auto rangeHi = getMin( *cur ) + curBlendRange;
+					result.push_back( { index - 1u
+						, index
+						, castor::makeRange( rangeLo, rangeHi ) } );
+					rangeLo = rangeHi;
+
+					if ( index == values.size() - 1u )
+					{
+						rangeHi = 1.0f;
+					}
+					else
+					{
+						rangeHi = getMax( *cur ) - curBlendRange;
+					}
+
+					result.push_back( { index
+						, index
+						, castor::makeRange( rangeLo, rangeHi ) } );
 				}
 
-				return { idx, 1.0f };
+				prvBlendRange = curBlendRange;
+				prv = cur;
+				++cur;
+				++index;
 			}
 
-			auto a = std::min( 1.0f
-				, 5.0f * ( val - getMax( values[idx - 1] ) ) / ( getMax( values[idx] )- getMax( values[idx - 1] ) ) );
-			return { idx, a };
+			return result;
 		}
 
-		castor::Point3f getColour( float val
-			, std::vector< std::pair< float, castor::Point3f > > const & colours )
+		BlendRange const & findBlendRange( float value
+			, BlendRanges const & ranges )
 		{
-			auto [idx, weight] = getIndexWeight( val, colours );
-
-			if ( weight == 1.0f )
-			{
-				return colours[idx].second;
-			}
-
-			return colours[idx].second * weight
-				+ colours[idx - 1u].second * ( 1.0f - weight );
+			auto it = std::find_if( ranges.begin()
+				, ranges.end()
+				, [value]( BlendRange const & lookup )
+				{
+					return lookup.range.clamp( value ) == value;
+				} );
+			CU_Require( it != ranges.end() );
+			return *it;
 		}
 
-		castor3d::PassMasks getPassMasks( float val
-			, Biomes const & biomes )
+		castor::Point3f getColour( float value
+			, BlendRanges const & ranges
+			, std::vector< std::pair< castor::Point2f, castor::Point3f > > const & colours )
 		{
-			auto [idx, weight] = getIndexWeight( val, biomes );
-			castor3d::PassMasks result{};
+			auto & range = findBlendRange( value, ranges );
+			auto weight = range.range.percent( value );
+			castor::Point3f result{};
 
-			if ( weight == 1.0f )
+			if ( range.beginIndex == range.endIndex )
 			{
-				result.data[idx] = 0xFF;
+				result = colours[range.beginIndex].second;
 			}
 			else
 			{
-				result.data[idx] = uint8_t( weight * 255.0f );
-				result.data[idx - 1u] = uint8_t( ( 1.0f - weight ) * 255.0f );
+				result = colours[range.beginIndex].second * ( 1.0f - weight )
+					+ colours[range.endIndex].second * weight;
+			}
+
+			return result;
+		}
+
+		castor3d::PassMasks getPassMasks( float value
+			, BlendRanges const & ranges
+			, Biomes const & biomes )
+		{
+			auto & range = findBlendRange( value, ranges );
+			auto weight = range.range.percent( value );
+			castor3d::PassMasks result{};
+
+			if ( range.beginIndex == range.endIndex )
+			{
+				result.data[range.beginIndex] = 0xFFu;
+			}
+			else
+			{
+				result.data[range.beginIndex] = uint8_t( ( 1.0f - weight ) * 255.0f );
+				result.data[range.endIndex] = uint8_t( weight * 255.0f );
 			}
 
 			return result;
@@ -350,34 +425,37 @@ namespace diamond_square_terrain
 
 			if ( m_biomes.empty() )
 			{
-				std::vector< std::pair< float, castor::Point3f > > hmEarth = {
-					{ 0.05f, { 0.0 / 255.0, 0.0 / 255.0, 92.0 / 255.0 } }, //Deep blue
-					{ 0.2f, { 80.0 / 255.0, 110.0 / 255.0, 230.0 / 255.0 } }, //Blue
-					{ 0.25f, { 255.0 / 255.0, 205.0 / 255.0, 75.0 / 255.0 } }, //Yellow
-					{ 0.35f, { 90.0 / 255.0, 160.0 / 255.0, 70.0 / 255.0 } }, //Green
-					{ 0.6f, { 50.0 / 255.0, 90.0 / 255.0, 50.0 / 255.0 } }, //Deep Green
-					{ 0.75f, { 50.0 / 255.0, 50.0 / 255.0, 50.0 / 255.0 } }, //Rock
-					{ 0.9f, { 200.0 / 255.0, 210.0 / 255.0, 190.0 / 255.0 } }, //White
+				std::vector< std::pair< castor::Point2f, castor::Point3f > > hmEarth = {
+					{ { 0.0f, 0.05f }, { 0.0 / 255.0, 0.0 / 255.0, 32.0 / 255.0 } }, //Abyss
+					{ { 0.05f, 0.2f }, { 0.0 / 255.0, 0.0 / 255.0, 92.0 / 255.0 } }, //Deep blue
+					{ { 0.2f, 0.25f }, { 80.0 / 255.0, 110.0 / 255.0, 230.0 / 255.0 } }, //Blue
+					{ { 0.25f, 0.27f }, { 255.0 / 255.0, 205.0 / 255.0, 75.0 / 255.0 } }, //Yellow
+					{ { 0.27f, 0.6f }, { 90.0 / 255.0, 160.0 / 255.0, 70.0 / 255.0 } }, //Green
+					{ { 0.6f, 0.75f }, { 50.0 / 255.0, 90.0 / 255.0, 50.0 / 255.0 } }, //Deep Green
+					{ { 0.75f, 0.9f }, { 50.0 / 255.0, 50.0 / 255.0, 50.0 / 255.0 } }, //Rock
+					{ { 0.9f, 1.0f }, { 200.0 / 255.0, 210.0 / 255.0, 190.0 / 255.0 } }, //White
 				};
+				auto ranges = gen::buildBlendRanges( hmEarth );
 				auto & colours = submesh->createComponent< castor3d::ColoursComponent >()->getData();
 
 				for ( auto z = 1u; z < max; z++ )
 				{
 					for ( auto x = 1u; x < max; x++ )
 					{
-						colours.push_back( gen::getColour( map( x, z ) + heatOffset, hmEarth ) );
+						colours.push_back( gen::getColour( map( x, z ) + heatOffset, ranges, hmEarth ) );
 					}
 				}
 			}
 			else
 			{
+				auto ranges = gen::buildBlendRanges( m_biomes );
 				auto & passMasks = submesh->createComponent< castor3d::PassMasksComponent >()->getData();
 
 				for ( auto z = 1u; z < max; z++ )
 				{
 					for ( auto x = 1u; x < max; x++ )
 					{
-						passMasks.push_back( gen::getPassMasks( map( x, z ) + heatOffset, m_biomes ) );
+						passMasks.push_back( gen::getPassMasks( map( x, z ) + heatOffset, ranges, m_biomes ) );
 					}
 				}
 			}
