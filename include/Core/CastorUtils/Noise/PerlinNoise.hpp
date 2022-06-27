@@ -15,6 +15,7 @@ namespace castor
 		using TypeT = T;
 
 	public:
+		PerlinNoiseT( std::default_random_engine rndEngine );
 		PerlinNoiseT();
 		TypeT noise( TypeT x, TypeT y, TypeT z );
 
@@ -28,13 +29,12 @@ namespace castor
 	};
 
 	template< typename TypeT >
-	PerlinNoiseT< TypeT >::PerlinNoiseT()
+	PerlinNoiseT< TypeT >::PerlinNoiseT( std::default_random_engine rndEngine )
 	{
 		// Generate random lookup for permutations containing all numbers from 0..255
 		std::vector<uint8_t> plookup;
 		plookup.resize( 256 );
-		std::iota( plookup.begin(), plookup.end(), 0 );
-		std::default_random_engine rndEngine( std::random_device{}( ) );
+		std::iota( plookup.begin(), plookup.end(), uint8_t{} );
 		std::shuffle( plookup.begin(), plookup.end(), rndEngine );
 
 		for ( uint32_t i = 0; i < 256; i++ )
@@ -44,12 +44,18 @@ namespace castor
 	}
 
 	template< typename TypeT >
+	PerlinNoiseT< TypeT >::PerlinNoiseT()
+		: PerlinNoiseT{ std::default_random_engine{ std::random_device{}() } }
+	{
+	}
+
+	template< typename TypeT >
 	TypeT PerlinNoiseT< TypeT >::noise( TypeT x, TypeT y, TypeT z )
 	{
 		// Find unit cube that contains point.
-		int32_t X = ( int )fastfloor( x ) & 255;
-		int32_t Y = ( int )fastfloor( y ) & 255;
-		int32_t Z = ( int )fastfloor( z ) & 255;
+		auto X = int32_t( fastfloor( x ) & 255 );
+		auto Y = int32_t( fastfloor( y ) & 255 );
+		auto Z = int32_t( fastfloor( z ) & 255 );
 		// Find relative x,y,z of point in cube.
 		x -= fastfloor( x );
 		y -= fastfloor( y );
@@ -59,29 +65,29 @@ namespace castor
 		TypeT v = fade( y );
 		TypeT w = fade( z );
 		// Hash coordinates of the 8 cube corners,
-		int32_t A = m_permutations[X] + Y;
-		int32_t AA = m_permutations[A] + Z;
-		int32_t AB = m_permutations[A + 1] + Z;
-		int32_t B = m_permutations[X + 1] + Y;
-		int32_t BA = m_permutations[B] + Z;
-		int32_t BB = m_permutations[B + 1] + Z;
+		auto A = int32_t( m_permutations[X] + Y );
+		auto AA = int32_t( m_permutations[A] + Z );
+		auto AB = int32_t( m_permutations[A + 1] + Z );
+		auto B = int32_t( m_permutations[X + 1] + Y );
+		auto BA = int32_t( m_permutations[B] + Z );
+		auto BB = int32_t( m_permutations[B + 1] + Z );
 		// and add blended results from 8 corners of cube
 		return lerp( w
 			, lerp( v
 				, lerp( u
-					, grad( m_permutations[AA], x, y, z )
-					, grad( m_permutations[BA], x - 1, y, z ) )
+					, grad( int32_t( m_permutations[AA]), x, y, z )
+					, grad( int32_t( m_permutations[BA]), x - 1, y, z ) )
 				, lerp( u
-					, grad( m_permutations[AB], x, y - 1, z )
-					, grad( m_permutations[BB], x - 1, y - 1, z ) )
+					, grad( int32_t( m_permutations[AB] ), x, y - 1, z )
+					, grad( int32_t( m_permutations[BB] ), x - 1, y - 1, z ) )
 			)
 			, lerp( v
 				, lerp( u
-					, grad( m_permutations[AA + 1], x, y, z - 1 )
-					, grad( m_permutations[BA + 1], x - 1, y, z - 1 ) )
+					, grad( int32_t( m_permutations[AA + 1] ), x, y, z - 1 )
+					, grad( int32_t( m_permutations[BA + 1] ), x - 1, y, z - 1 ) )
 				, lerp( u
-					, grad( m_permutations[AB + 1], x, y - 1, z - 1 )
-					, grad( m_permutations[BB + 1], x - 1, y - 1, z - 1 ) )
+					, grad( int32_t( m_permutations[AB + 1] ), x, y - 1, z - 1 )
+					, grad( int32_t( m_permutations[BB + 1] ), x - 1, y - 1, z - 1 ) )
 			)
 		);
 	}
