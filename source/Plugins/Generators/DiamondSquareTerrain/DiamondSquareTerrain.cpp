@@ -1,11 +1,15 @@
 #include "DiamondSquareTerrain/DiamondSquareTerrain.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Material/Texture/TextureLayout.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
+
+#include <CastorUtils/Noise/FractalNoise.hpp>
+#include <CastorUtils/Noise/PerlinNoise.hpp>
 
 #include <random>
 
@@ -32,6 +36,19 @@ namespace diamond_square_terrain
 			}
 
 			inline float & operator()( uint32_t x, uint32_t y )
+			{
+				auto index = getIndex( x, y );
+
+				if ( index >= m_map.size() )
+				{
+					static float dummy = -1;
+					return dummy;
+				}
+
+				return m_map[getIndex( x, y )];
+			}
+
+			inline float const & operator()( uint32_t x, uint32_t y )const
 			{
 				auto index = getIndex( x, y );
 
@@ -149,25 +166,34 @@ namespace diamond_square_terrain
 			return result;
 		}
 
-		BlendRange const & findBlendRange( float value
+		BlendRange const & findBlendRange( float height
 			, BlendRanges const & ranges )
 		{
 			auto it = std::find_if( ranges.begin()
 				, ranges.end()
-				, [value]( BlendRange const & lookup )
+				, [height]( BlendRange const & lookup )
 				{
-					return lookup.range.clamp( value ) == value;
+					return lookup.range.clamp( height ) == height;
 				} );
 			CU_Require( it != ranges.end() );
 			return *it;
 		}
 
-		castor::Point3f getColour( float value
+		float alterHeight( float height
+			, float zeroPoint
+			, uint32_t x
+			, uint32_t z
+			, std::vector< Matrix > const & noiseMaps )
+		{
+			height += noiseMaps[0u]( x, z ) * ( height - zeroPoint );
+			return std::min( 1.0f, std::max( 0.0f, height ) );
+		}
+
+		castor::Point3f getColour( float height
 			, BlendRanges const & ranges
 			, std::vector< std::pair< castor::Point2f, castor::Point3f > > const & colours )
 		{
-			auto & range = findBlendRange( value, ranges );
-			auto weight = range.range.percent( value );
+			auto & range = findBlendRange( height, ranges );
 			castor::Point3f result{};
 
 			if ( range.beginIndex == range.endIndex )
@@ -176,6 +202,7 @@ namespace diamond_square_terrain
 			}
 			else
 			{
+				auto weight = range.range.percent( height );
 				result = colours[range.beginIndex].second * ( 1.0f - weight )
 					+ colours[range.endIndex].second * weight;
 			}
@@ -183,12 +210,11 @@ namespace diamond_square_terrain
 			return result;
 		}
 
-		castor3d::PassMasks getPassMasks( float value
+		castor3d::PassMasks getPassMasks( float height
 			, BlendRanges const & ranges
 			, Biomes const & biomes )
 		{
-			auto & range = findBlendRange( value, ranges );
-			auto weight = range.range.percent( value );
+			auto & range = findBlendRange( height, ranges );
 			castor3d::PassMasks result{};
 
 			if ( range.beginIndex == range.endIndex )
@@ -197,8 +223,58 @@ namespace diamond_square_terrain
 			}
 			else
 			{
+				auto weight = range.range.percent( height );
 				result.data[range.beginIndex] = uint8_t( ( 1.0f - weight ) * 255.0f );
 				result.data[range.endIndex] = uint8_t( weight * 255.0f );
+			}
+
+			return result;
+		}
+
+		Matrix generateNoiseMap( std::default_random_engine engine
+			, uint32_t width )
+		{
+			Matrix result{ width };
+			auto fractal = castor::makeFractalNoise( castor3d::getMipLevels( { width, width, 1u }, VK_FORMAT_R8G8B8A8_UNORM )
+				, castor::PerlinNoiseT< double >{ engine } );
+			auto yMin = std::numeric_limits< float >::max();
+			auto yMax = std::numeric_limits< float >::lowest();
+
+			for ( auto x = 0u; x < width; x++ )
+			{
+				for ( auto y = 0u; y < width; y++ )
+				{
+					auto nx = float( x ) / float( width );
+					auto ny = float( y ) / float( width );
+					auto v = float( fractal.noise( nx, ny, 0.0f ) );
+					result( x, y ) = v;
+					yMin = std::min( v, yMin );
+					yMax = std::max( v, yMax );
+				}
+			}
+
+			auto range = castor::makeRange( yMin, yMax );
+
+			for ( auto x = 0u; x < width; x++ )
+			{
+				for ( auto y = 0u; y < width; y++ )
+				{
+					result( x, y ) = range.percent( result( x, y ) ) - 0.5f;
+				}
+			}
+
+			return result;
+		}
+
+		std::vector< Matrix > generateNoiseMaps( std::default_random_engine engine
+			, size_t count
+			, uint32_t width )
+		{
+			std::vector< Matrix > result;
+
+			for ( size_t i = 0u; i < count; ++i )
+			{
+				result.push_back( generateNoiseMap( engine, width ) );
 			}
 
 			return result;
@@ -303,11 +379,11 @@ namespace diamond_square_terrain
 
 		if ( size )
 		{
-			gen::Matrix map{ size };
+			gen::Matrix heightMap{ size };
 			auto max = size - 1;
 			auto engine = gen::createRandomEngine( disableRandomSeed );
 
-			std::function< void( uint32_t, uint32_t, uint32_t, uint32_t, float, uint32_t ) > divide = [&map
+			std::function< void( uint32_t, uint32_t, uint32_t, uint32_t, float, uint32_t ) > divide = [&heightMap
 				, &engine
 				, &divide]( uint32_t x1
 					, uint32_t y1
@@ -325,11 +401,11 @@ namespace diamond_square_terrain
 				{
 					for ( unsigned j = y1 + level; j < y2; j += level )
 					{
-						float a = map( i - level, j - level );
-						float b = map( i, j - level );
-						float c = map( i - level, j );
-						float d = map( i, j );
-						map( i - level / 2u, j - level / 2u ) = ( a + b + c + d ) / 4 + distribution( engine ) * range;
+						float a = heightMap( i - level, j - level );
+						float b = heightMap( i, j - level );
+						float c = heightMap( i - level, j );
+						float d = heightMap( i, j );
+						heightMap( i - level / 2u, j - level / 2u ) = ( a + b + c + d ) / 4 + distribution( engine ) * range;
 					}
 				}
 
@@ -338,13 +414,13 @@ namespace diamond_square_terrain
 				{
 					for ( unsigned j = y1 + 2u * level; j < y2; j += level )
 					{
-						float a = map( i - level, j - level );
-						float b = map( i, j - level );
-						float c = map( i - level, j );
-						float d = map( i - level / 2, j - level / 2u );
+						float a = heightMap( i - level, j - level );
+						float b = heightMap( i, j - level );
+						float c = heightMap( i - level, j );
+						float d = heightMap( i - level / 2, j - level / 2u );
 
-						map( i - level, j - level / 2u ) = ( a + c + d + map( i - 3 * level / 2u, j - level / 2u ) ) / 4 + distribution( engine ) * range;
-						map( i - level / 2u, j - level ) = ( a + b + d + map( i - level / 2u, j - 3 * level / 2u ) ) / 4 + distribution( engine ) * range;
+						heightMap( i - level, j - level / 2u ) = ( a + c + d + heightMap( i - 3 * level / 2u, j - level / 2u ) ) / 4 + distribution( engine ) * range;
+						heightMap( i - level / 2u, j - level ) = ( a + b + d + heightMap( i - level / 2u, j - 3 * level / 2u ) ) / 4 + distribution( engine ) * range;
 					}
 				}
 
@@ -353,7 +429,7 @@ namespace diamond_square_terrain
 
 			divide( 1u, 1u, max, max, 1.0f, size );
 
-			auto rescale = [&map, max]()
+			auto rescale = [&heightMap, max]()
 			{
 				auto yMin = std::numeric_limits< float >::max();
 				auto yMax = std::numeric_limits< float >::lowest();
@@ -362,8 +438,8 @@ namespace diamond_square_terrain
 				{
 					for ( auto x = 0u; x <= max; x++ )
 					{
-						yMin = std::min( yMin, map( x, z ) );
-						yMax = std::max( yMax, map( x, z ) );
+						yMin = std::min( yMin, heightMap( x, z ) );
+						yMax = std::max( yMax, heightMap( x, z ) );
 					}
 				}
 
@@ -373,7 +449,7 @@ namespace diamond_square_terrain
 				{
 					for ( auto x = 0u; x <= max; x++ )
 					{
-						map( x, z ) = range.percent( map( x, z ) );
+						heightMap( x, z ) = range.percent( heightMap( x, z ) );
 					}
 				}
 			};
@@ -395,13 +471,14 @@ namespace diamond_square_terrain
 				{
 					for ( auto x = 0u; x <= max; x++ )
 					{
-						map( x, z ) = map( x, z ) * distance( x, z );
+						heightMap( x, z ) = heightMap( x, z ) * distance( x, z );
 					}
 				}
 
 				rescale();
 			}
 
+			auto zeroPoint = yRange.percent( 0.0f );
 			auto submesh = mesh.createSubmesh();
 			submesh->createComponent< castor3d::PositionsComponent >();
 			submesh->createComponent< castor3d::Texcoords0Component >();
@@ -418,7 +495,7 @@ namespace diamond_square_terrain
 				for ( auto x = 1u; x < max; x++ )
 				{
 					submesh->addPoint( castor3d::InterleavedVertex{}
-						.position( castor::Point3f{ transform( x, xScale ), yRange.value( map( x, z ) ), transform( z, zScale ) } )
+						.position( castor::Point3f{ transform( x, xScale ), yRange.value( heightMap( x, z ) ), transform( z, zScale ) } )
 						.texcoord( castor::Point2f{ float( x ) / uScale, float( z ) / vScale } ) );
 				}
 			}
@@ -436,26 +513,40 @@ namespace diamond_square_terrain
 					{ { 0.9f, 1.0f }, { 200.0 / 255.0, 210.0 / 255.0, 190.0 / 255.0 } }, //White
 				};
 				auto ranges = gen::buildBlendRanges( hmEarth );
+				auto noiseMaps = gen::generateNoiseMaps( engine, hmEarth.size(), size );
 				auto & colours = submesh->createComponent< castor3d::ColoursComponent >()->getData();
 
 				for ( auto z = 1u; z < max; z++ )
 				{
 					for ( auto x = 1u; x < max; x++ )
 					{
-						colours.push_back( gen::getColour( map( x, z ) + heatOffset, ranges, hmEarth ) );
+						auto height = gen::alterHeight( heightMap( x, z ) + heatOffset
+							, zeroPoint
+							, x, z
+							, noiseMaps );
+						colours.push_back( gen::getColour( height
+							, ranges
+							, hmEarth ) );
 					}
 				}
 			}
 			else
 			{
 				auto ranges = gen::buildBlendRanges( m_biomes );
+				auto noiseMaps = gen::generateNoiseMaps( engine, m_biomes.size(), size );
 				auto & passMasks = submesh->createComponent< castor3d::PassMasksComponent >()->getData();
 
 				for ( auto z = 1u; z < max; z++ )
 				{
 					for ( auto x = 1u; x < max; x++ )
 					{
-						passMasks.push_back( gen::getPassMasks( map( x, z ) + heatOffset, ranges, m_biomes ) );
+						auto height = gen::alterHeight( heightMap( x, z ) + heatOffset
+							, zeroPoint
+							, x, z
+							, noiseMaps );
+						passMasks.push_back( gen::getPassMasks( height
+							, ranges
+							, m_biomes ) );
 					}
 				}
 			}
@@ -467,12 +558,12 @@ namespace diamond_square_terrain
 			{
 				for ( auto x = 1u; x < max - 2; x++ )
 				{
-					mapping->addFace( map.getIndex( x, y, size - 2 )
-						, map.getIndex( x, y + 1, size - 2 )
-						, map.getIndex( x + 1, y, size - 2 ) );
-					mapping->addFace( map.getIndex( x + 1, y, size - 2 )
-						, map.getIndex( x, y + 1, size - 2 )
-						, map.getIndex( x + 1, y + 1, size - 2 ) );
+					mapping->addFace( heightMap.getIndex( x, y, size - 2 )
+						, heightMap.getIndex( x, y + 1, size - 2 )
+						, heightMap.getIndex( x + 1, y, size - 2 ) );
+					mapping->addFace( heightMap.getIndex( x + 1, y, size - 2 )
+						, heightMap.getIndex( x, y + 1, size - 2 )
+						, heightMap.getIndex( x + 1, y + 1, size - 2 ) );
 				}
 			}
 
