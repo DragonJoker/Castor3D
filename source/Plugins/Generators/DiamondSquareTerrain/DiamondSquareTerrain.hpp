@@ -38,7 +38,9 @@ namespace diamond_square_terrain
 		static castor::String const Name;
 		static castor::String const Biome;
 		static castor::String const BiomeRange;
-		static castor::String const BiomePassIndex;
+		static castor::String const BiomeLowSteepness;
+		static castor::String const BiomeMediumSteepness;
+		static castor::String const BiomeHighSteepness;
 		static castor::String const ParamRandomSeed;
 		static castor::String const ParamHeightRange;
 		static castor::String const ParamYMin;

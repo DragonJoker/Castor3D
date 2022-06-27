@@ -12,18 +12,27 @@ See LICENSE file in root folder
 
 namespace diamond_square_terrain
 {
-	struct Biome
+	struct SlopeBiome
 	{
-		castor::String name{};
-		castor::Point2f range{};
+		castor::Range< float > steepnessRange{ 0.0f, 1.0f };
+		bool isMaterial{};
 		uint32_t passIndex{};
+		castor::Point3f colour;
 	};
 
 	struct BlendRange
 	{
 		uint32_t beginIndex{};
 		uint32_t endIndex{};
-		castor::Range< float > range;
+		castor::Range< float > range{ 0.0f, 1.0f };
+	};
+
+	struct Biome
+	{
+		castor::String name{};
+		castor::Range< float > heightRange{ 0.0f, 1.0f };
+		std::vector< SlopeBiome > steepnessBiomes{ 3u, SlopeBiome{} };
+		std::vector< BlendRange > steepnessRanges{};
 	};
 
 	using Biomes = std::vector< Biome >;
@@ -31,46 +40,52 @@ namespace diamond_square_terrain
 
 	struct Matrix
 	{
-		inline explicit Matrix( uint32_t size )
+		explicit Matrix( uint32_t size )
 			: m_size{ size }
 		{
 			m_map.resize( size_t( m_size ) * m_size, 0.0f );
 		}
 
-		inline uint32_t getIndex( uint32_t x, uint32_t y, uint32_t size )const
+		uint32_t getIndex( uint32_t x, uint32_t y, uint32_t size )const
 		{
 			return x * size + y;
 		}
 
-		inline uint32_t getIndex( uint32_t x, uint32_t y )const
+		uint32_t getIndex( uint32_t x, uint32_t y )const
 		{
 			return getIndex( x, y, m_size );
 		}
 
-		inline float & operator()( uint32_t x, uint32_t y )
+		float & operator[]( uint32_t index )
 		{
-			auto index = getIndex( x, y );
-
 			if ( index >= m_map.size() )
 			{
 				static float dummy = -1;
 				return dummy;
 			}
 
-			return m_map[getIndex( x, y )];
+			return m_map[index];
 		}
 
-		inline float const & operator()( uint32_t x, uint32_t y )const
+		float & operator()( uint32_t x, uint32_t y )
 		{
-			auto index = getIndex( x, y );
+			return operator[]( getIndex( x, y ) );
+		}
 
+		float const & operator[]( uint32_t index )const
+		{
 			if ( index >= m_map.size() )
 			{
 				static float dummy = -1;
 				return dummy;
 			}
 
-			return m_map[getIndex( x, y )];
+			return m_map[index];
+		}
+
+		float const & operator()( uint32_t x, uint32_t y )const
+		{
+			return operator[]( getIndex( x, y ) );
 		}
 
 	private:
