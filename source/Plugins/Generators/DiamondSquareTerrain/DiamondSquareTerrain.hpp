@@ -4,19 +4,13 @@ See LICENSE file in root folder
 #ifndef ___C3D_DiamondSquareTerrain_H___
 #define ___C3D_DiamondSquareTerrain_H___
 
+#include "DiamondSquareTerrainPrerequisites.hpp"
+
 #include <Castor3D/Material/MaterialModule.hpp>
 #include <Castor3D/Model/Mesh/MeshGenerator.hpp>
 
 namespace diamond_square_terrain
 {
-	struct Biome
-	{
-		castor::String name{};
-		castor::Point2f range{};
-		uint32_t passIndex{};
-	};
-	using Biomes = std::vector< Biome >;
-
 	class Generator
 		: public castor3d::MeshGenerator
 	{

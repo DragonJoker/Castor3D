@@ -17,12 +17,17 @@ set( PROJECT_SOVERSION "${${PROJECT_NAME}_VERSION_BUILD}" )
 
 set( ${PROJECT_NAME}_HDR_FILES
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generators/${FOLDER_NAME}/DiamondSquareTerrain.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generators/${FOLDER_NAME}/DiamondSquareTerrainPrerequisites.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generators/${FOLDER_NAME}/DiamondSquare_Parsers.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generators/${FOLDER_NAME}/GenerateBiomes.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generators/${FOLDER_NAME}/GenerateHeightMap.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generators/${FOLDER_NAME}/DiamondSquareTerrain.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generators/${FOLDER_NAME}/DiamondSquareTerrainPlugin.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generators/${FOLDER_NAME}/DiamondSquare_Parsers.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generators/${FOLDER_NAME}/GenerateBiomes.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generators/${FOLDER_NAME}/GenerateHeightMap.cpp
 )
 source_group( "Header Files"
 	FILES
