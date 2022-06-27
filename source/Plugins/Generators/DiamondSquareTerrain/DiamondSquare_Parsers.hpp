@@ -41,7 +41,9 @@ namespace diamond_square_terrain
 	CU_DeclareAttributeParser( parserBiome )
 	CU_DeclareAttributeParser( parserBiomeEnd )
 	CU_DeclareAttributeParser( parserBiomeRange )
-	CU_DeclareAttributeParser( parserBiomePassIndex )
+	CU_DeclareAttributeParser( parserBiomeLowSteepness )
+	CU_DeclareAttributeParser( parserBiomeMedSteepness )
+	CU_DeclareAttributeParser( parserBiomeHigSteepness )
 }
 
 #endif

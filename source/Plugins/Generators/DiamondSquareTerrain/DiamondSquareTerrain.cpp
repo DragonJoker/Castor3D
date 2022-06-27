@@ -29,7 +29,9 @@ namespace diamond_square_terrain
 	castor::String const Generator::Name = cuT( "Diamond Square Terrain Generator" );
 	castor::String const Generator::Biome = cuT( "biome" );
 	castor::String const Generator::BiomeRange = cuT( "range" );
-	castor::String const Generator::BiomePassIndex = cuT( "passIndex" );
+	castor::String const Generator::BiomeLowSteepness = cuT( "lowSteepness" );
+	castor::String const Generator::BiomeMediumSteepness = cuT( "mediumSteepness" );
+	castor::String const Generator::BiomeHighSteepness = cuT( "highSteepness" );
 	castor::String const Generator::ParamRandomSeed = cuT( "disableRandomSeed" );
 	castor::String const Generator::ParamHeightRange = cuT( "heightRange" );
 	castor::String const Generator::ParamYMin = cuT( "yMin" );
@@ -67,7 +69,7 @@ namespace diamond_square_terrain
 		float uScale = 1.0f;
 		float vScale = 1.0f;
 		float heatOffset = 0.0f;
-		castor::Range< float > yRange{ -500.0f, 500.0f };
+		castor::Range< float > heightRange{ -500.0f, 500.0f };
 		bool disableRandomSeed = false;
 		bool island = false;
 
@@ -83,12 +85,14 @@ namespace diamond_square_terrain
 
 		if ( parameters.get( ParamYMin, param ) )
 		{
-			yRange = castor::makeRange( yRange.getMin(), castor::string::toFloat( param ) );
+			heightRange = castor::makeRange( heightRange.getMin()
+				, castor::string::toFloat( param ) );
 		}
 
 		if ( parameters.get( ParamYMax, param ) )
 		{
-			yRange = castor::makeRange( castor::string::toFloat( param ), yRange.getMax() );
+			heightRange = castor::makeRange( castor::string::toFloat( param )
+				, heightRange.getMax() );
 		}
 
 		if ( parameters.get( ParamXScale, param ) )
@@ -132,7 +136,7 @@ namespace diamond_square_terrain
 				, size
 				, heightMap );
 
-			auto zeroPoint = yRange.percent( 0.0f );
+			auto zeroPoint = heightRange.percent( 0.0f );
 			// Generate quads 
 			auto submesh = mesh.createSubmesh();
 			submesh->createComponent< castor3d::PositionsComponent >();
@@ -145,12 +149,16 @@ namespace diamond_square_terrain
 				return s * ( float( v ) - float( max ) / 2.0f );
 			};
 
+			std::map< uint32_t, uint32_t > vertexMap;
+			uint32_t index{};
+
 			for ( auto z = 1u; z < max; z++ )
 			{
 				for ( auto x = 1u; x < max; x++ )
 				{
+					vertexMap.emplace( heightMap.getIndex( x, z ), index++ );
 					submesh->addPoint( castor3d::InterleavedVertex{}
-						.position( castor::Point3f{ transform( x, xScale ), yRange.value( heightMap( x, z ) ), transform( z, zScale ) } )
+						.position( castor::Point3f{ transform( x, xScale ), heightRange.value( heightMap( x, z ) ), transform( z, zScale ) } )
 						.texcoord( castor::Point2f{ float( x ) / uScale, float( z ) / vScale } ) );
 				}
 			}
@@ -179,6 +187,7 @@ namespace diamond_square_terrain
 				, heightMap
 				, m_biomes
 				, *mapping
+				, vertexMap
 				, *submesh );
 		}
 	}

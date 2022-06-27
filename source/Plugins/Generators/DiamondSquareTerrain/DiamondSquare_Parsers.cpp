@@ -32,7 +32,7 @@ namespace diamond_square_terrain
 			, pluginContext.biomes.end()
 			, []( Biome const & lhs, Biome const & rhs )
 			{
-				return lhs.range->x < rhs.range->x;
+				return lhs.heightRange.getMin() < rhs.heightRange.getMin();
 			} );
 		generator->setBiomes( pluginContext.biomes );
 		generator->generate( *parsingContext.mesh.lock()
@@ -212,6 +212,12 @@ namespace diamond_square_terrain
 	CU_ImplementAttributeParser( parserBiomeEnd )
 	{
 		auto & pluginContext = parser::getParserContext( context );
+		std::sort( pluginContext.biome.steepnessBiomes.begin()
+			, pluginContext.biome.steepnessBiomes.end()
+			, []( SlopeBiome const & lhs, SlopeBiome const & rhs )
+			{
+				return lhs.steepnessRange.getMin() < rhs.steepnessRange.getMin();
+			} );
 		pluginContext.biomes.push_back( pluginContext.biome );
 		pluginContext.biome = {};
 	}
@@ -225,13 +231,15 @@ namespace diamond_square_terrain
 		}
 		else
 		{
+			castor::Point2f value;
+			params[0]->get( value );
 			auto & pluginContext = parser::getParserContext( context );
-			params[0]->get( pluginContext.biome.range );
+			pluginContext.biome.heightRange = { value->x, value->y };
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserBiomePassIndex )
+	CU_ImplementAttributeParser( parserBiomeLowSteepness )
 	{
 		if ( params.empty() )
 		{
@@ -239,8 +247,51 @@ namespace diamond_square_terrain
 		}
 		else
 		{
+			uint32_t pass;
+			params[0]->get( pass );
+			castor::Point2f range;
+			params[1]->get( range );
 			auto & pluginContext = parser::getParserContext( context );
-			params[0]->get( pluginContext.biome.passIndex );
+			pluginContext.biome.steepnessBiomes[0].passIndex = pass;
+			pluginContext.biome.steepnessBiomes[0].steepnessRange = { range->x, range->y };
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserBiomeMedSteepness )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			uint32_t pass;
+			params[0]->get( pass );
+			castor::Point2f range;
+			params[1]->get( range );
+			auto & pluginContext = parser::getParserContext( context );
+			pluginContext.biome.steepnessBiomes[1].passIndex = pass;
+			pluginContext.biome.steepnessBiomes[1].steepnessRange = { range->x, range->y };
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserBiomeHigSteepness )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			uint32_t pass;
+			params[0]->get( pass );
+			castor::Point2f range;
+			params[1]->get( range );
+			auto & pluginContext = parser::getParserContext( context );
+			pluginContext.biome.steepnessBiomes[2].passIndex = pass;
+			pluginContext.biome.steepnessBiomes[2].steepnessRange = { range->x, range->y };
 		}
 	}
 	CU_EndAttribute()

@@ -110,9 +110,22 @@ namespace diamond_square_terrain
 				, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
 			addParser( result
 				, uint32_t( DiamondSquareSection::eBiome )
-				, Generator::BiomePassIndex
-				, &parserBiomePassIndex
-				, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+				, Generator::BiomeLowSteepness
+				, &parserBiomeLowSteepness
+				, { castor::makeParameter< castor::ParameterType::eUInt32 >()
+					, castor::makeParameter< castor::ParameterType::ePoint2F >() } );
+			addParser( result
+				, uint32_t( DiamondSquareSection::eBiome )
+				, Generator::BiomeMediumSteepness
+				, &parserBiomeMedSteepness
+				, { castor::makeParameter< castor::ParameterType::eUInt32 >()
+					, castor::makeParameter< castor::ParameterType::ePoint2F >() } );
+			addParser( result
+				, uint32_t( DiamondSquareSection::eBiome )
+				, Generator::BiomeHighSteepness
+				, &parserBiomeHigSteepness
+				, { castor::makeParameter< castor::ParameterType::eUInt32 >()
+					, castor::makeParameter< castor::ParameterType::ePoint2F >() } );
 
 			return result;
 		}

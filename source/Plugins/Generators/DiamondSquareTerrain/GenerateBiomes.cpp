@@ -12,150 +12,145 @@ namespace diamond_square_terrain
 {
 	namespace biomes
 	{
-		float getMin( std::pair< castor::Point2f, castor::Point3f > const & value )
-		{
-			return value.first->x;
-		}
-
-		float getMin( Biome const & value )
-		{
-			return value.range->x;
-		}
-
-		float getMax( std::pair< castor::Point2f, castor::Point3f > const & value )
-		{
-			return value.first->y;
-		}
-
-		float getMax( Biome const & value )
-		{
-			return value.range->y;
-		}
-
-		template< typename DataT >
-		BlendRanges buildBlendRanges( std::vector< DataT > const & values )
-		{
-			BlendRanges result;
-			auto cur = values.begin();
-			auto prv = values.end();
-			uint32_t index{};
-			float prvBlendRange{};
-
-			while ( cur != values.end() )
-			{
-				auto curBlendRange = ( getMax( *cur ) - getMin( *cur ) ) / 4.0f;
-
-				if ( index == 0u )
-				{
-					if ( index == values.size() - 1u )
-					{
-						result.push_back( { 0u
-							, 0u
-							, castor::makeRange( 0.0f, 1.0f ) } );
-					}
-					else
-					{
-						auto rangeHi = getMax( *cur ) - curBlendRange;
-						result.push_back( { 0u
-							, 0u
-							, castor::makeRange( 0.0f, rangeHi ) } );
-					}
-				}
-				else
-				{
-					auto rangeLo = getMax( *prv ) - prvBlendRange;
-					auto rangeHi = getMin( *cur ) + curBlendRange;
-					result.push_back( { index - 1u
-						, index
-						, castor::makeRange( rangeLo, rangeHi ) } );
-					rangeLo = rangeHi;
-
-					if ( index == values.size() - 1u )
-					{
-						rangeHi = 1.0f;
-					}
-					else
-					{
-						rangeHi = getMax( *cur ) - curBlendRange;
-					}
-
-					result.push_back( { index
-						, index
-						, castor::makeRange( rangeLo, rangeHi ) } );
-				}
-
-				prvBlendRange = curBlendRange;
-				prv = cur;
-				++cur;
-				++index;
-			}
-
-			return result;
-		}
-
-		BlendRange const & findBlendRange( float height
+		BlendRange const & findBlendRange( float value
 			, BlendRanges const & ranges )
 		{
 			auto it = std::find_if( ranges.begin()
 				, ranges.end()
-				, [height]( BlendRange const & lookup )
+				, [value]( BlendRange const & lookup )
 				{
-					return lookup.range.clamp( height ) == height;
+					return lookup.range.clamp( value ) == value;
 				} );
 			CU_Require( it != ranges.end() );
 			return *it;
 		}
 
-		float alterHeight( float height
-			, float zeroPoint
-			, uint32_t x
-			, uint32_t z
-			, std::vector< Matrix > const & noiseMaps )
+		castor::Point3f getColour( float steepness
+			, Biome const & biome )
 		{
-			height += noiseMaps[0u]( x, z ) * ( height - zeroPoint );
-			return std::min( 1.0f, std::max( 0.0f, height ) );
-		}
-
-		castor::Point3f getColour( float height
-			, BlendRanges const & ranges
-			, std::vector< std::pair< castor::Point2f, castor::Point3f > > const & colours )
-		{
-			auto & range = findBlendRange( height, ranges );
+			auto & steepnessRange = findBlendRange( steepness, biome.steepnessRanges );
 			castor::Point3f result{};
 
-			if ( range.beginIndex == range.endIndex )
+			if ( steepnessRange.beginIndex == steepnessRange.endIndex )
 			{
-				result = colours[range.beginIndex].second;
+				auto & beginBiome = biome.steepnessBiomes[steepnessRange.beginIndex];
+				result = beginBiome.colour;
 			}
 			else
 			{
-				auto weight = range.range.percent( height );
-				result = colours[range.beginIndex].second * ( 1.0f - weight )
-					+ colours[range.endIndex].second * weight;
+				auto weight = steepnessRange.range.percent( steepness );
+				auto & beginBiome = biome.steepnessBiomes[steepnessRange.beginIndex];
+				auto & endBiome = biome.steepnessBiomes[steepnessRange.endIndex];
+				result = beginBiome.colour * ( 1.0f - weight )
+					+ endBiome.colour * weight;
+			}
+
+			return result;
+		}
+
+		castor::Point3f getColour( float height
+			, float steepness
+			, BlendRanges const & ranges
+			, Biomes const & biomes )
+		{
+			auto & heightRange = findBlendRange( height, ranges );
+			castor::Point3f result{};
+
+			if ( heightRange.beginIndex == heightRange.endIndex )
+			{
+				auto & biome = biomes[heightRange.beginIndex];
+				result = getColour( steepness, biome );
+			}
+			else
+			{
+				auto weight = heightRange.range.percent( height );
+				auto & beginBiome = biomes[heightRange.beginIndex];
+				auto & endBiome = biomes[heightRange.endIndex];
+				result = getColour( steepness, beginBiome ) * ( 1.0f - weight )
+					+ getColour( steepness, endBiome ) * weight;
+			}
+
+			return result;
+		}
+
+		std::map< uint32_t, float > getPassWeights( float steepness
+			, Biome const & biome )
+		{
+			auto & steepnessRange = findBlendRange( steepness, biome.steepnessRanges );
+			std::map< uint32_t, float > result{};
+
+			if ( steepnessRange.beginIndex == steepnessRange.endIndex )
+			{
+				result.emplace( biome.steepnessBiomes[steepnessRange.beginIndex].passIndex, 1.0f );
+			}
+			else
+			{
+				auto weight = steepnessRange.range.percent( steepness );
+				result[biome.steepnessBiomes[steepnessRange.beginIndex].passIndex] += 1.0f - weight;
+				result[biome.steepnessBiomes[steepnessRange.endIndex].passIndex] += weight;
+			}
+
+			return result;
+		}
+
+		std::map< uint32_t, float > mergeWeights( std::map< uint32_t, float > const & lhs
+			, std::map< uint32_t, float > const & rhs
+			, float weight )
+		{
+			std::map< uint32_t, float > result;
+
+			for ( auto & pair : lhs )
+			{
+				result[pair.first] = pair.second * ( 1.0f - weight );
+			}
+
+			for ( auto & pair : rhs )
+			{
+				result[pair.first] += pair.second * weight;
 			}
 
 			return result;
 		}
 
 		castor3d::PassMasks getPassMasks( float height
+			, float steepness
 			, BlendRanges const & ranges
 			, Biomes const & biomes )
 		{
-			auto & range = findBlendRange( height, ranges );
-			castor3d::PassMasks result{};
+			auto & heightRange = findBlendRange( height, ranges );
+			std::map< uint32_t, float > weights;
 
-			if ( range.beginIndex == range.endIndex )
+			if ( heightRange.beginIndex == heightRange.endIndex )
 			{
-				result.data[range.beginIndex] = 0xFFu;
+				auto & biome = biomes[heightRange.beginIndex];
+				weights = getPassWeights( steepness, biome );
 			}
 			else
 			{
-				auto weight = range.range.percent( height );
-				result.data[range.beginIndex] = uint8_t( ( 1.0f - weight ) * 255.0f );
-				result.data[range.endIndex] = uint8_t( weight * 255.0f );
+				auto weight = heightRange.range.percent( height );
+				auto beginWeights = getPassWeights( steepness, biomes[heightRange.beginIndex] );
+				auto endWeights = getPassWeights( steepness, biomes[heightRange.endIndex] );
+				weights = mergeWeights( beginWeights, endWeights, weight );
+			}
+
+			castor3d::PassMasks result{};
+
+			for ( auto & pair : weights )
+			{
+				result.data[pair.first] = uint8_t( pair.second * 255.0f );
 			}
 
 			return result;
+		}
+
+		float alterHeight( float height
+			, float zeroPoint
+			, uint32_t x
+			, uint32_t z
+			, Matrix const & noiseMap )
+		{
+			height += noiseMap( x, z ) * ( height - zeroPoint );
+			return std::min( 1.0f, std::max( 0.0f, height ) );
 		}
 
 		Matrix generateNoiseMap( std::default_random_engine engine
@@ -192,20 +187,6 @@ namespace diamond_square_terrain
 
 			return result;
 		}
-
-		std::vector< Matrix > generateNoiseMaps( std::default_random_engine engine
-			, size_t count
-			, uint32_t width )
-		{
-			std::vector< Matrix > result;
-
-			for ( size_t i = 0u; i < count; ++i )
-			{
-				result.push_back( generateNoiseMap( engine, width ) );
-			}
-
-			return result;
-		}
 	}
 
 	void generateBiomes( std::default_random_engine engine
@@ -214,55 +195,133 @@ namespace diamond_square_terrain
 		, float heatOffset
 		, float zeroPoint
 		, Matrix const & heightMap
-		, Biomes const & biomes
+		, Biomes biomes
 		, castor3d::TriFaceMapping const & faces
+		, std::map< uint32_t, uint32_t > const & vertexMap
 		, castor3d::Submesh & submesh )
 	{
+		bool areMaterial = !biomes.empty();
+
 		if ( biomes.empty() )
 		{
-			std::vector< std::pair< castor::Point2f, castor::Point3f > > hmEarth = {
-				{ { 0.0f, 0.05f }, { 0.0 / 255.0, 0.0 / 255.0, 32.0 / 255.0 } }, //Abyss
-				{ { 0.05f, 0.2f }, { 0.0 / 255.0, 0.0 / 255.0, 92.0 / 255.0 } }, //Deep blue
-				{ { 0.2f, 0.25f }, { 80.0 / 255.0, 110.0 / 255.0, 230.0 / 255.0 } }, //Blue
-				{ { 0.25f, 0.27f }, { 255.0 / 255.0, 205.0 / 255.0, 75.0 / 255.0 } }, //Yellow
-				{ { 0.27f, 0.6f }, { 90.0 / 255.0, 160.0 / 255.0, 70.0 / 255.0 } }, //Green
-				{ { 0.6f, 0.75f }, { 50.0 / 255.0, 90.0 / 255.0, 50.0 / 255.0 } }, //Deep Green
-				{ { 0.75f, 0.9f }, { 50.0 / 255.0, 50.0 / 255.0, 50.0 / 255.0 } }, //Rock
-				{ { 0.9f, 1.0f }, { 200.0 / 255.0, 210.0 / 255.0, 190.0 / 255.0 } }, //White
-			};
-			auto ranges = biomes::buildBlendRanges( hmEarth );
-			auto noiseMaps = biomes::generateNoiseMaps( engine, hmEarth.size(), size );
-			auto & colours = submesh.createComponent< castor3d::ColoursComponent >()->getData();
+			float grassLow = 0.0f;
+			float forestLow = 0.4f;
+			float snowLow = 0.7f;
+			SlopeBiome rock{ { 0.7f, 1.0f }
+				, false
+				, {}
+				, { 50.0 / 255.0, 50.0 / 255.0, 50.0 / 255.0 } };
 
-			for ( auto z = 1u; z < max; z++ )
+			if ( zeroPoint > 0.0f )
 			{
-				for ( auto x = 1u; x < max; x++ )
-				{
-					auto height = biomes::alterHeight( heightMap( x, z ) + heatOffset
-						, zeroPoint
-						, x, z
-						, noiseMaps );
-					colours.push_back( biomes::getColour( height
-						, ranges
-						, hmEarth ) );
-				}
+				SlopeBiome sand{ { 0.0f, 0.2f }
+					, false
+					, {}
+					, { 255.0 / 255.0, 205.0 / 255.0, 75.0 / 255.0 } };
+				SlopeBiome sandSea{ { 0.0f, 0.2f }
+					, false
+					, {}
+					, { 0.0 / 255.0, 0.0 / 255.0, 92.0 / 255.0 } };
+				SlopeBiome sandDirt{ { 0.2f, 0.7f }
+					, false
+					, {}
+					, { 200.0 / 255.0, 165.0 / 255.0, 60.0 / 255.0 } };
+				SlopeBiome sandSeaDirt{ { 0.2f, 0.7f }
+					, false
+					, {}
+					, { 0.0 / 255.0, 0/ 255.0, 60.0 / 255.0 } };
+				SlopeBiome rockSea{ { 0.7f, 1.0f }
+					, false
+					, {}
+					, { 20.0 / 255.0, 20.0 / 255.0, 20.0 / 255.0 } };
+				grassLow = 0.27f;
+				forestLow = 0.6f;
+				snowLow = 0.85f;
+				biomes.push_back( { "Sea"
+					, { 0.0f, 0.2f }
+					, { sandSea, sandSeaDirt, rockSea } } );
+				biomes.push_back( { "Sand"
+					, { 0.2f, grassLow }
+					, { sand, sandDirt, rock } } );
 			}
+
+			SlopeBiome grass{ { 0.0f, 0.2f }
+				, false
+				, {}
+				, { 90.0 / 255.0, 160.0 / 255.0, 70.0 / 255.0 } };
+			SlopeBiome forest{ { 0.0f, 0.2f }
+				, false
+				, {}
+				, { 50.0 / 255.0, 90.0 / 255.0, 50.0 / 255.0 } };
+			SlopeBiome snow{ { 0.0f, 0.2f }
+				, false
+				, {}
+				, { 200.0 / 255.0, 210.0 / 255.0, 190.0 / 255.0 } };
+			SlopeBiome dirt{ { 0.2f, 0.7f }
+				, false
+				, {}
+				, { 100.0 / 255.0, 50.0 / 255.0, 20.0 / 255.0 } };
+			SlopeBiome darkDirt{ { 0.2f, 0.7f }
+				, false
+				, {}
+				, { 80.0 / 255.0, 40.0 / 255.0, 16.0 / 255.0 } };
+			biomes.push_back( { "Grass"
+				, { grassLow, forestLow }
+				, { grass, dirt, rock } } );
+			biomes.push_back( { "Forest"
+				, { forestLow, snowLow }
+				, { forest, darkDirt, rock } } );
+			biomes.push_back( { "Snow"
+				, { snowLow, 1.0f }
+				, { snow, snow, rock } } );
 		}
-		else
+
+		for ( auto & biome : biomes )
 		{
-			auto ranges = biomes::buildBlendRanges( biomes );
-			auto noiseMaps = biomes::generateNoiseMaps( engine, biomes.size(), size );
+			biome.steepnessRanges = buildBlendRanges( biome.steepnessBiomes );
+		}
+
+		auto normals = submesh.getComponent< castor3d::NormalsComponent >();
+		auto ranges = buildBlendRanges( biomes );
+		auto noiseMap = biomes::generateNoiseMap( engine, size );
+
+		if ( areMaterial )
+		{
 			auto & passMasks = submesh.createComponent< castor3d::PassMasksComponent >()->getData();
 
 			for ( auto z = 1u; z < max; z++ )
 			{
 				for ( auto x = 1u; x < max; x++ )
 				{
-					auto height = biomes::alterHeight( heightMap( x, z ) + heatOffset
+					auto index = heightMap.getIndex( x, z );
+					auto height = biomes::alterHeight( heightMap[index] + heatOffset
 						, zeroPoint
 						, x, z
-						, noiseMaps );
+						, noiseMap );
+					auto steepness = std::abs( normals->getData()[vertexMap.find( index )->second]->z );
 					passMasks.push_back( biomes::getPassMasks( height
+						, steepness
+						, ranges
+						, biomes ) );
+				}
+			}
+		}
+		else
+		{
+			auto & colours = submesh.createComponent< castor3d::ColoursComponent >()->getData();
+
+			for ( auto z = 1u; z < max; z++ )
+			{
+				for ( auto x = 1u; x < max; x++ )
+				{
+					auto index = heightMap.getIndex( x, z );
+					auto height = biomes::alterHeight( heightMap[index] + heatOffset
+						, zeroPoint
+						, x, z
+						, noiseMap );
+					auto steepness = std::abs( normals->getData()[vertexMap.find( index )->second]->z );
+					colours.push_back( biomes::getColour( height
+						, steepness
 						, ranges
 						, biomes ) );
 				}
