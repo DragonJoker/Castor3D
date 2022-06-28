@@ -181,8 +181,7 @@ namespace castor3d
 					, c3d_maps
 					, modelData.getMaterialId()
 					, passCount
-					, in.passMultipliers0
-					, in.passMultipliers1
+					, in.passMultipliers
 					, components );
 				data0 = vec4( in.fragCoord.z()
 					, length( in.worldPosition.xyz() - c3d_sceneData.cameraPosition )

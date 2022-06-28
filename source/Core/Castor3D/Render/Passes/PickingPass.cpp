@@ -181,8 +181,7 @@ namespace castor3d
 					, c3d_maps
 					, modelData.getMaterialId()
 					, passCount
-					, in.passMultipliers0
-					, in.passMultipliers1
+					, in.passMultipliers
 					, components );
 				pxl_fragColor = uvec4( ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) ? 2_u : 1_u )
 					, writer.cast< sdw::UInt >( in.nodeId )

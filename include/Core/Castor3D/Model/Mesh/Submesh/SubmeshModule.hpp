@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Model/Mesh/MeshModule.hpp"
 
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Model/Skeleton/VertexBoneData.hpp"
 
 #include <CastorUtils/Graphics/BoundingBox.hpp>
@@ -25,7 +26,7 @@ namespace castor3d
 
 	struct PassMasks
 	{
-		std::array< uint8_t, 8u > data;
+		std::array< uint8_t, MaxPassLayers > data;
 	};
 	/**
 	*\~english
