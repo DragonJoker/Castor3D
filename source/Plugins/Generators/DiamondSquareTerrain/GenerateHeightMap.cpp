@@ -96,7 +96,7 @@ namespace diamond_square_terrain
 			{
 				for ( auto x = 0u; x <= max; x++ )
 				{
-					heightMap( x, z ) = heightMap( x, z ) * distance( x, z );
+					heightMap( x, z ) = float( heightMap( x, z ) * distance( x, z ) );
 				}
 			}
 

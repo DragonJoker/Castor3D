@@ -6,14 +6,16 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
+#include <Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 
 namespace diamond_square_terrain
 {
 	namespace gen
 	{
-		std::default_random_engine createRandomEngine( bool disableRandomSeed )
+		static std::default_random_engine createRandomEngine( bool disableRandomSeed )
 		{
 			if ( disableRandomSeed )
 			{
@@ -138,11 +140,7 @@ namespace diamond_square_terrain
 
 			auto zeroPoint = heightRange.percent( 0.0f );
 			// Generate quads 
-			auto submesh = mesh.createSubmesh();
-			submesh->createComponent< castor3d::PositionsComponent >();
-			submesh->createComponent< castor3d::Texcoords0Component >();
-			submesh->createComponent< castor3d::NormalsComponent >();
-			submesh->createComponent< castor3d::TangentsComponent >();
+			castor3d::SubmeshAnimationBuffer submeshBuffers;
 
 			auto transform = [&]( uint32_t v, float s )
 			{
@@ -157,28 +155,34 @@ namespace diamond_square_terrain
 				for ( auto x = 1u; x < max; x++ )
 				{
 					vertexMap.emplace( heightMap.getIndex( x, z ), index++ );
-					submesh->addPoint( castor3d::InterleavedVertex{}
-						.position( castor::Point3f{ transform( x, xScale ), heightRange.value( heightMap( x, z ) ), transform( z, zScale ) } )
-						.texcoord( castor::Point2f{ float( x ) / uScale, float( z ) / vScale } ) );
+					submeshBuffers.positions.emplace_back( transform( x, xScale ), heightRange.value( heightMap( x, z ) ), transform( z, zScale ) );
+					submeshBuffers.texcoords0.emplace_back( float( x ) / uScale, float( z ) / vScale, 0.0f );
 				}
 			}
 
-			auto mapping = submesh->createComponent< castor3d::TriFaceMapping >();
+			castor3d::FaceArray faces;
 
 			for ( auto y = 1u; y < max - 2; y++ )
 			{
 				for ( auto x = 1u; x < max - 2; x++ )
 				{
-					mapping->addFace( heightMap.getIndex( x, y, size - 2 )
+					faces.emplace_back( heightMap.getIndex( x, y, size - 2 )
 						, heightMap.getIndex( x, y + 1, size - 2 )
 						, heightMap.getIndex( x + 1, y, size - 2 ) );
-					mapping->addFace( heightMap.getIndex( x + 1, y, size - 2 )
+					faces.emplace_back( heightMap.getIndex( x + 1, y, size - 2 )
 						, heightMap.getIndex( x, y + 1, size - 2 )
 						, heightMap.getIndex( x + 1, y + 1, size - 2 ) );
 				}
 			}
 
-			mapping->computeNormals( true );
+			submeshBuffers.normals.resize( submeshBuffers.positions.size() );
+			submeshBuffers.tangents.resize( submeshBuffers.positions.size() );
+			castor3d::SubmeshUtils::computeNormals( submeshBuffers.positions
+				, submeshBuffers.texcoords0
+				, submeshBuffers.normals
+				, submeshBuffers.tangents
+				, faces
+				, true );
 			generateBiomes( engine
 				, max
 				, size
@@ -186,9 +190,26 @@ namespace diamond_square_terrain
 				, zeroPoint
 				, heightMap
 				, m_biomes
-				, *mapping
+				, faces
 				, vertexMap
-				, *submesh );
+				, submeshBuffers );
+
+			auto submesh = mesh.createSubmesh();
+			submesh->createComponent< castor3d::PositionsComponent >()->setData( std::move( submeshBuffers.positions ) );
+			submesh->createComponent< castor3d::Texcoords0Component >()->setData( std::move( submeshBuffers.texcoords0 ) );
+			submesh->createComponent< castor3d::NormalsComponent >()->setData( std::move( submeshBuffers.normals ) );
+			submesh->createComponent< castor3d::TangentsComponent >()->setData( std::move( submeshBuffers.tangents ) );
+			submesh->createComponent< castor3d::TriFaceMapping >()->setData( std::move( faces ) );
+
+			if ( !submeshBuffers.colours.empty() )
+			{
+				submesh->createComponent< castor3d::ColoursComponent >()->setData( std::move( submeshBuffers.colours ) );
+			}
+
+			if ( !submeshBuffers.passMasks.empty() )
+			{
+				submesh->createComponent< castor3d::PassMasksComponent >()->setData( std::move( submeshBuffers.passMasks ) );
+			}
 		}
 	}
 }

@@ -15,6 +15,7 @@ namespace castor
 		using TypeT = T;
 
 	public:
+		explicit SimplexNoiseT( std::default_random_engine rndEngine );
 		SimplexNoiseT();
 		TypeT noise( TypeT x, TypeT y, TypeT z );
 
@@ -27,7 +28,7 @@ namespace castor
 	};
 
 	template< typename TypeT >
-	SimplexNoiseT< TypeT >::SimplexNoiseT()
+	SimplexNoiseT< TypeT >::SimplexNoiseT( std::default_random_engine rndEngine )
 	{
 		// Generate random lookup for permutations containing all numbers from 0..255
 		std::vector<uint8_t> plookup;
@@ -40,6 +41,12 @@ namespace castor
 		{
 			m_permutations[i] = m_permutations[256 + i] = plookup[i];
 		}
+	}
+
+	template< typename TypeT >
+	SimplexNoiseT< TypeT >::SimplexNoiseT()
+		: SimplexNoiseT{ std::default_random_engine{ std::random_device{}( ) } }
+	{
 	}
 
 	template< typename TypeT >

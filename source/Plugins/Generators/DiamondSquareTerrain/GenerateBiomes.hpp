@@ -99,9 +99,9 @@ namespace diamond_square_terrain
 		, float zeroPoint
 		, Matrix const & heightMap
 		, Biomes biomes
-		, castor3d::TriFaceMapping const & faces
+		, castor3d::FaceArray const & faces
 		, std::map< uint32_t, uint32_t > const & vertexMap
-		, castor3d::Submesh & submesh );
+		, castor3d::SubmeshAnimationBuffer & submesh );
 }
 
 #endif
