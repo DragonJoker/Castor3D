@@ -15,7 +15,7 @@ namespace castor
 		using TypeT = T;
 
 	public:
-		PerlinNoiseT( std::default_random_engine rndEngine );
+		explicit PerlinNoiseT( std::default_random_engine rndEngine );
 		PerlinNoiseT();
 		TypeT noise( TypeT x, TypeT y, TypeT z );
 

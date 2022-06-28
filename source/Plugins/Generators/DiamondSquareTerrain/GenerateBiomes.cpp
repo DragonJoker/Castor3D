@@ -1,4 +1,4 @@
-#include "DiamondSquareTerrain/GenerateHeightMap.hpp"
+#include "DiamondSquareTerrain/GenerateBiomes.hpp"
 
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
@@ -12,7 +12,7 @@ namespace diamond_square_terrain
 {
 	namespace biomes
 	{
-		BlendRange const & findBlendRange( float value
+		static BlendRange const & findBlendRange( float value
 			, BlendRanges const & ranges )
 		{
 			auto it = std::find_if( ranges.begin()
@@ -25,7 +25,7 @@ namespace diamond_square_terrain
 			return *it;
 		}
 
-		castor::Point3f getColour( float steepness
+		static castor::Point3f getColour( float steepness
 			, Biome const & biome )
 		{
 			auto & steepnessRange = findBlendRange( steepness, biome.steepnessRanges );
@@ -48,7 +48,7 @@ namespace diamond_square_terrain
 			return result;
 		}
 
-		castor::Point3f getColour( float height
+		static castor::Point3f getColour( float height
 			, float steepness
 			, BlendRanges const & ranges
 			, Biomes const & biomes )
@@ -73,7 +73,7 @@ namespace diamond_square_terrain
 			return result;
 		}
 
-		std::map< uint32_t, float > getPassWeights( float steepness
+		static std::map< uint32_t, float > getPassWeights( float steepness
 			, Biome const & biome )
 		{
 			auto & steepnessRange = findBlendRange( steepness, biome.steepnessRanges );
@@ -93,7 +93,7 @@ namespace diamond_square_terrain
 			return result;
 		}
 
-		std::map< uint32_t, float > mergeWeights( std::map< uint32_t, float > const & lhs
+		static std::map< uint32_t, float > mergeWeights( std::map< uint32_t, float > const & lhs
 			, std::map< uint32_t, float > const & rhs
 			, float weight )
 		{
@@ -112,7 +112,7 @@ namespace diamond_square_terrain
 			return result;
 		}
 
-		std::map< uint32_t, float > getPassWeights( float height
+		static std::map< uint32_t, float > getPassWeights( float height
 			, float steepness
 			, BlendRanges const & ranges
 			, Biomes const & biomes )
@@ -136,7 +136,7 @@ namespace diamond_square_terrain
 			return result;
 		}
 
-		castor3d::PassMasks getPassMasks( float height
+		static castor3d::PassMasks getPassMasks( float height
 			, float steepness
 			, BlendRanges const & ranges
 			, Biomes const & biomes )
@@ -152,7 +152,7 @@ namespace diamond_square_terrain
 			return result;
 		}
 
-		float alterHeight( float height
+		static float alterHeight( float height
 			, float zeroPoint
 			, uint32_t x
 			, uint32_t z
@@ -162,7 +162,7 @@ namespace diamond_square_terrain
 			return std::min( 1.0f, std::max( 0.0f, height ) );
 		}
 
-		Matrix generateNoiseMap( std::default_random_engine engine
+		static Matrix generateNoiseMap( std::default_random_engine engine
 			, uint32_t width )
 		{
 			Matrix result{ width };
@@ -205,9 +205,9 @@ namespace diamond_square_terrain
 		, float zeroPoint
 		, Matrix const & heightMap
 		, Biomes biomes
-		, castor3d::TriFaceMapping const & faces
+		, castor3d::FaceArray const & faces
 		, std::map< uint32_t, uint32_t > const & vertexMap
-		, castor3d::Submesh & submesh )
+		, castor3d::SubmeshAnimationBuffer & submesh )
 	{
 		bool areMaterial = !biomes.empty();
 
@@ -290,13 +290,13 @@ namespace diamond_square_terrain
 			biome.steepnessRanges = buildBlendRanges( biome.steepnessBiomes );
 		}
 
-		auto normals = submesh.getComponent< castor3d::NormalsComponent >();
 		auto ranges = buildBlendRanges( biomes );
 		auto noiseMap = biomes::generateNoiseMap( engine, size );
+		auto & normals = submesh.normals;
 
 		if ( areMaterial )
 		{
-			auto & passMasks = submesh.createComponent< castor3d::PassMasksComponent >()->getData();
+			auto & passMasks = submesh.passMasks;
 
 			for ( auto z = 1u; z < max; z++ )
 			{
@@ -307,7 +307,7 @@ namespace diamond_square_terrain
 						, zeroPoint
 						, x, z
 						, noiseMap );
-					auto steepness = std::abs( normals->getData()[vertexMap.find( index )->second]->z );
+					auto steepness = std::abs( normals[vertexMap.find( index )->second]->z );
 					passMasks.push_back( biomes::getPassMasks( height
 						, steepness
 						, ranges
@@ -317,7 +317,7 @@ namespace diamond_square_terrain
 		}
 		else
 		{
-			auto & colours = submesh.createComponent< castor3d::ColoursComponent >()->getData();
+			auto & colours = submesh.colours;
 
 			for ( auto z = 1u; z < max; z++ )
 			{
@@ -328,7 +328,7 @@ namespace diamond_square_terrain
 						, zeroPoint
 						, x, z
 						, noiseMap );
-					auto steepness = std::abs( normals->getData()[vertexMap.find( index )->second]->z );
+					auto steepness = std::abs( normals[vertexMap.find( index )->second]->z );
 					colours.push_back( biomes::getColour( height
 						, steepness
 						, ranges
