@@ -34,10 +34,9 @@ namespace castor3d
 		, castor::Point3fArray const & texcoords
 		, castor::Point3fArray & normals
 		, castor::Point3fArray & tangents
-		, TriFaceMapping const & triFace
+		, FaceArray const & faces
 		, bool reverted )
 	{
-		auto & faces = triFace.getFaces();
 		castor::Point3f pt0;
 
 		// First we flush normals and tangents
@@ -178,14 +177,13 @@ namespace castor3d
 		, castor::Point3fArray const & texcoords
 		, castor::Point3fArray const & normals
 		, castor::Point3fArray & tangents
-		, TriFaceMapping const & triFace )
+		, FaceArray const & faces )
 	{
 		if ( texcoords.empty() )
 		{
 			return;
 		}
 
-		auto & faces = triFace.getFaces();
 		tangents.resize( positions.size() );
 
 		// Pour chaque vertex, on stocke la somme des tangentes qui peuvent lui être affectées

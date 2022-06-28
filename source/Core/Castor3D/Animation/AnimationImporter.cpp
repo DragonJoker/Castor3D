@@ -39,7 +39,7 @@ namespace castor3d
 							, target.texcoords0
 							, target.normals
 							, target.tangents
-							, static_cast< TriFaceMapping const & >( *submesh->getIndexMapping() )
+							, static_cast< TriFaceMapping const & >( *submesh->getIndexMapping() ).getFaces()
 							, true );
 					}
 				}

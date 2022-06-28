@@ -111,7 +111,7 @@ namespace castor3d
 			, texcoords
 			, normals
 			, tangents
-			, *this
+			, getFaces()
 			, reverted );
 	}
 
@@ -207,7 +207,7 @@ namespace castor3d
 			, *texcoords
 			, getOwner()->getNormals()
 			, *tangents
-			, *this );
+			, getFaces() );
 	}
 
 	void TriFaceMapping::computeTangentsFromNormals( castor::Point3fArray const & positions
@@ -219,7 +219,7 @@ namespace castor3d
 			, texcoords
 			, normals
 			, tangents
-			, *this );
+			, getFaces() );
 	}
 
 	uint32_t TriFaceMapping::getCount()const
@@ -256,7 +256,7 @@ namespace castor3d
 				, *texcoords
 				, getOwner()->getNormals()
 				, *tangents
-				, *this
+				, getFaces()
 				, reverted );
 			m_hasNormals = true;
 		}
