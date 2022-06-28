@@ -49,7 +49,9 @@ namespace castor3d
 			{
 				auto a = convert( value.data[0], value.data[1], value.data[2], value.data[3] );
 				auto b = convert( value.data[4], value.data[5], value.data[6], value.data[7] );
-				result.push_back( castor::Point4ui{ a, b, 0u, 0u } );
+				auto c = convert( value.data[8], value.data[9], value.data[10], value.data[11] );
+				auto d = convert( value.data[12], value.data[13], value.data[14], value.data[15] );
+				result.push_back( castor::Point4ui{ a, b, c, d } );
 			}
 
 			return result;

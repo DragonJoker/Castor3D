@@ -368,8 +368,7 @@ namespace castor3d
 					, c3d_maps
 					, modelData.getMaterialId()
 					, passCount
-					, in.passMultipliers0
-					, in.passMultipliers1
+					, in.passMultipliers
 					, in.colour
 					, components );
 

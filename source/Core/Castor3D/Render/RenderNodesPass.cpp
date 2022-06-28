@@ -1124,17 +1124,20 @@ namespace castor3d
 				vtxOut[i].nodeId = writer.cast< Int >( nodeId );
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( modelData.getMaterialId() ) );
-				auto passMultipliers0 = writer.declLocale( "passMultipliers0"
-					, vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f ) );
-				auto passMultipliers1 = writer.declLocale( "passMultipliers1"
-					, vec4( 0.0_f ) );
+				auto passMultipliers = writer.declLocaleArray( "passMultipliers"
+					, 4u
+					, std::vector< sdw::Vec4 >{ vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f )
+						, vec4( 0.0_f )
+						, vec4( 0.0_f )
+						, vec4( 0.0_f ) } );
 				material.getPassMultipliers( flags.submeshFlags
 					, passCount
 					, c3d_passMasks[vertexIndex]
-					, passMultipliers0
-					, passMultipliers1 );
-				vtxOut[i].passMultipliers0 = passMultipliers0;
-				vtxOut[i].passMultipliers1 = passMultipliers1;
+					, passMultipliers );
+				vtxOut[i].passMultipliers[0] = passMultipliers[0];
+				vtxOut[i].passMultipliers[1] = passMultipliers[1];
+				vtxOut[i].passMultipliers[2] = passMultipliers[2];
+				vtxOut[i].passMultipliers[3] = passMultipliers[3];
 
 				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
 					, modelData.getModelMtx() );
@@ -1306,8 +1309,7 @@ namespace castor3d
 				material.getPassMultipliers( flags.submeshFlags
 					, passCount
 					, in.passMasks
-					, out.passMultipliers0
-					, out.passMultipliers1 );
+					, out.passMultipliers );
 
 				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
 					, modelData.getModelMtx() );
@@ -1422,8 +1424,14 @@ namespace castor3d
 						, writer.cast< sdw::UInt >( in.drawID ) ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId - 1u] );
-				out.passMultipliers0 = vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f );
-				out.passMultipliers1 = vec4( 0.0_f );
+				auto passMultipliers = std::vector< sdw::Vec4 >{ vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f )
+					, vec4( 0.0_f )
+					, vec4( 0.0_f )
+					, vec4( 0.0_f ) };
+				out.passMultipliers[0] = passMultipliers[0];
+				out.passMultipliers[1] = passMultipliers[1];
+				out.passMultipliers[2] = passMultipliers[2];
+				out.passMultipliers[3] = passMultipliers[3];
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
 				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 

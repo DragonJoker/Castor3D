@@ -48,8 +48,7 @@ namespace castor3d::shader
 	void Material::getPassMultipliers( SubmeshFlags submeshFlags
 		, sdw::UInt const & passCount
 		, sdw::UVec4 const & passMasks
-		, sdw::Vec4 & passMultipliers0
-		, sdw::Vec4 & passMultipliers1 )const
+		, sdw::Array< sdw::Vec4 > & passMultipliers )const
 	{
 		if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks )
 			&& passMasks.isEnabled() )
@@ -58,16 +57,7 @@ namespace castor3d::shader
 			{
 				auto mask32 = passMasks[passIdx / 4_u];
 				auto mask8 = ( mask32 >> ( ( passIdx % 4_u ) * 8_u ) ) & 0xFF_u;
-
-				IF( *m_writer, passIdx < 4_u )
-				{
-					passMultipliers0[passIdx % 4_u] = m_writer->cast< sdw::Float >( mask8 ) / 255.0_f;
-				}
-				ELSE
-				{
-					passMultipliers1[passIdx % 4_u] = m_writer->cast< sdw::Float >( mask8 ) / 255.0_f;
-				}
-				FI;
+				passMultipliers[passIdx / 4_u][passIdx % 4_u] = m_writer->cast< sdw::Float >( mask8 ) / 255.0_f;
 			}
 			ROF;
 		}
@@ -284,8 +274,7 @@ namespace castor3d::shader
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 		, sdw::UInt const & materialId
 		, sdw::UInt const & passCount
-		, sdw::Vec4 const & passMultipliers0
-		, sdw::Vec4 const & passMultipliers1
+		, sdw::Array< sdw::Vec4 > const & passMultipliers
 		, OpacityBlendComponents & output )const
 	{
 		if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
@@ -297,9 +286,7 @@ namespace castor3d::shader
 			FOR( m_writer, sdw::UInt, passIdx, 0_u, passIdx < passCount, ++passIdx )
 			{
 				auto passMultiplier = m_writer.declLocale( "passMultiplier"
-					, m_writer.ternary( passIdx < 4_u
-						, passMultipliers0[passIdx % 4_u]
-						, passMultipliers1[passIdx % 4_u] ) );
+					, passMultipliers[passIdx / 4_u][passIdx % 4_u] );
 
 				IF( m_writer, passMultiplier != 0.0_f )
 				{
@@ -357,8 +344,7 @@ namespace castor3d::shader
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 		, sdw::UInt const & materialId
 		, sdw::UInt const & passCount
-		, sdw::Vec4 const & passMultipliers0
-		, sdw::Vec4 const & passMultipliers1
+		, sdw::Array< sdw::Vec4 > const & passMultipliers
 		, GeometryBlendComponents & output )const
 	{
 		if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
@@ -385,9 +371,7 @@ namespace castor3d::shader
 			FOR( m_writer, sdw::UInt, passIdx, 0_u, passIdx < passCount, ++passIdx )
 			{
 				auto passMultiplier = m_writer.declLocale( "passMultiplier"
-					, m_writer.ternary( passIdx < 4_u
-						, passMultipliers0[passIdx % 4_u]
-						, passMultipliers1[passIdx % 4_u] ) );
+					, passMultipliers[passIdx / 4_u][passIdx % 4_u] );
 
 				IF( m_writer, passMultiplier != 0.0_f )
 				{
@@ -465,8 +449,7 @@ namespace castor3d::shader
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 		, sdw::UInt const & materialId
 		, sdw::UInt const & passCount
-		, sdw::Vec4 const & passMultipliers0
-		, sdw::Vec4 const & passMultipliers1
+		, sdw::Array< sdw::Vec4 > const & passMultipliers
 		, sdw::Vec3 const & vertexColour
 		, OpaqueBlendComponents & output )const
 	{
@@ -512,9 +495,7 @@ namespace castor3d::shader
 			FOR( m_writer, sdw::UInt, passIdx, 0_u, passIdx < passCount, ++passIdx )
 			{
 				auto passMultiplier = m_writer.declLocale( "passMultiplier"
-					, m_writer.ternary( passIdx < 4_u
-						, passMultipliers0[passIdx % 4_u]
-						, passMultipliers1[passIdx % 4_u] ) );
+					, passMultipliers[passIdx / 4_u][passIdx % 4_u] );
 
 				IF( m_writer, passMultiplier != 0.0_f )
 				{
@@ -609,8 +590,7 @@ namespace castor3d::shader
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 		, sdw::UInt const & materialId
 		, sdw::UInt const & passCount
-		, sdw::Vec4 const & passMultipliers0
-		, sdw::Vec4 const & passMultipliers1
+		, sdw::Array< sdw::Vec4 > const & passMultipliers
 		, sdw::Vec3 const & vertexColour
 		, OpaqueBlendComponents & output )const
 	{
@@ -656,9 +636,7 @@ namespace castor3d::shader
 			FOR( m_writer, sdw::UInt, passIdx, 0_u, passIdx < passCount, ++passIdx )
 			{
 				auto passMultiplier = m_writer.declLocale( "passMultiplier"
-					, m_writer.ternary( passIdx < 4_u
-						, passMultipliers0[passIdx % 4_u]
-						, passMultipliers1[passIdx % 4_u] ) );
+					, passMultipliers[passIdx / 4_u][passIdx % 4_u] );
 
 				IF( m_writer, passMultiplier != 0.0_f )
 				{
@@ -752,8 +730,7 @@ namespace castor3d::shader
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 		, sdw::UInt const & materialId
 		, sdw::UInt const & passCount
-		, sdw::Vec4 const & passMultipliers0
-		, sdw::Vec4 const & passMultipliers1
+		, sdw::Array< sdw::Vec4 > const & passMultipliers
 		, sdw::Vec3 const & vertexColour
 		, LightingBlendComponents & output )const
 	{
@@ -814,9 +791,7 @@ namespace castor3d::shader
 			FOR( m_writer, sdw::UInt, passIdx, 0_u, passIdx < passCount, ++passIdx )
 			{
 				auto passMultiplier = m_writer.declLocale( "passMultiplier"
-					, m_writer.ternary( passIdx < 4_u
-						, passMultipliers0[passIdx % 4_u]
-						, passMultipliers1[passIdx % 4_u] ) );
+					, passMultipliers[passIdx / 4_u][passIdx % 4_u] );
 
 				IF( m_writer, passMultiplier != 0.0_f )
 				{

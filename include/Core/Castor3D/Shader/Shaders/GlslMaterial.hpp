@@ -101,8 +101,7 @@ namespace castor3d::shader
 		C3D_API void getPassMultipliers( SubmeshFlags submeshFlags
 			, sdw::UInt const & passCount
 			, sdw::UVec4 const & passMasks
-			, sdw::Vec4 & passMultipliers0
-			, sdw::Vec4 & passMultipliers1 )const;
+			, sdw::Array< sdw::Vec4 > & passMultipliers )const;
 		C3D_API sdw::UInt getTexture( uint32_t index )const;
 
 		C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
@@ -220,8 +219,7 @@ namespace castor3d::shader
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::UInt const & materialId
 			, sdw::UInt const & passCount
-			, sdw::Vec4 const & passMultipliers0
-			, sdw::Vec4 const & passMultipliers1
+			, sdw::Array< sdw::Vec4 > const & passMultipliers
 			, OpacityBlendComponents & output )const;
 		// Use by depth pass (opacity and tangent space only)
 		C3D_API void blendMaterials( Utils & utils
@@ -235,8 +233,7 @@ namespace castor3d::shader
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::UInt const & materialId
 			, sdw::UInt const & passCount
-			, sdw::Vec4 const & passMultipliers0
-			, sdw::Vec4 const & passMultipliers1
+			, sdw::Array< sdw::Vec4 > const & passMultipliers
 			, GeometryBlendComponents & output )const;
 		// Use by shadow passes
 		C3D_API std::unique_ptr< LightMaterial > blendMaterials( Utils & utils
@@ -252,8 +249,7 @@ namespace castor3d::shader
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::UInt const & materialId
 			, sdw::UInt const & passCount
-			, sdw::Vec4 const & passMultipliers0
-			, sdw::Vec4 const & passMultipliers1
+			, sdw::Array< sdw::Vec4 > const & passMultipliers
 			, sdw::Vec3 const & vertexColour
 			, OpaqueBlendComponents & output )const;
 		// Use by opaque pass
@@ -269,8 +265,7 @@ namespace castor3d::shader
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::UInt const & materialId
 			, sdw::UInt const & passCount
-			, sdw::Vec4 const & passMultipliers0
-			, sdw::Vec4 const & passMultipliers1
+			, sdw::Array< sdw::Vec4 > const & passMultipliers
 			, sdw::Vec3 const & vertexColour
 			, OpaqueBlendComponents & output )const;
 		// Use by forward passes
@@ -287,8 +282,7 @@ namespace castor3d::shader
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::UInt const & materialId
 			, sdw::UInt const & passCount
-			, sdw::Vec4 const & passMultipliers0
-			, sdw::Vec4 const & passMultipliers1
+			, sdw::Array< sdw::Vec4 > const & passMultipliers
 			, sdw::Vec3 const & vertexColour
 			, LightingBlendComponents & output )const;
 
