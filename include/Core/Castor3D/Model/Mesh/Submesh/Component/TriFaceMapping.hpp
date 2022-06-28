@@ -252,40 +252,26 @@ namespace castor3d
 		{
 			addFaceGroup( faces, faces + Count );
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the face at given index.
-		 *\param[in]	index	The index.
-		 *\return		The value.
-		 *\~french
-		 *\brief		Récupère la face à l'index donné.
-		 *\param[in]	index	L'index.
-		 *\return		La valeur.
-		 */
+
 		Face const & operator[]( uint32_t index )const
 		{
 			CU_Require( index < m_faces.size() );
 			return m_faces[index];
 		}
-		/**
-		 *\~english
-		 *\return		The faces array.
-		 *\~french
-		 *\return		Le tableau de faces.
-		 */
+
 		FaceArray const & getFaces()const
 		{
 			return m_faces;
 		}
-		/**
-		 *\~english
-		 *\return		The faces array.
-		 *\~french
-		 *\return		Le tableau de faces.
-		 */
+
 		FaceArray & getFaces()
 		{
 			return m_faces;
+		}
+
+		void setData( FaceArray faces )
+		{
+			m_faces = std::move( faces );
 		}
 
 	private:

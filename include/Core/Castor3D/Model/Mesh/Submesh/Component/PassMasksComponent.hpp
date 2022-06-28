@@ -91,6 +91,11 @@ namespace castor3d
 			return !m_data.empty();
 		}
 
+		void setData( std::vector< PassMasks > data )
+		{
+			m_data = std::move( data );
+		}
+
 		std::vector< PassMasks > & getData()
 		{
 			return m_data;
