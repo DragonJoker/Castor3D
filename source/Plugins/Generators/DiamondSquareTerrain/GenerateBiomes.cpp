@@ -112,27 +112,36 @@ namespace diamond_square_terrain
 			return result;
 		}
 
-		castor3d::PassMasks getPassMasks( float height
+		std::map< uint32_t, float > getPassWeights( float height
 			, float steepness
 			, BlendRanges const & ranges
 			, Biomes const & biomes )
 		{
 			auto & heightRange = findBlendRange( height, ranges );
-			std::map< uint32_t, float > weights;
+			std::map< uint32_t, float > result;
 
 			if ( heightRange.beginIndex == heightRange.endIndex )
 			{
 				auto & biome = biomes[heightRange.beginIndex];
-				weights = getPassWeights( steepness, biome );
+				result = getPassWeights( steepness, biome );
 			}
 			else
 			{
 				auto weight = heightRange.range.percent( height );
 				auto beginWeights = getPassWeights( steepness, biomes[heightRange.beginIndex] );
 				auto endWeights = getPassWeights( steepness, biomes[heightRange.endIndex] );
-				weights = mergeWeights( beginWeights, endWeights, weight );
+				result = mergeWeights( beginWeights, endWeights, weight );
 			}
 
+			return result;
+		}
+
+		castor3d::PassMasks getPassMasks( float height
+			, float steepness
+			, BlendRanges const & ranges
+			, Biomes const & biomes )
+		{
+			auto weights = getPassWeights( height, steepness, ranges, biomes );
 			castor3d::PassMasks result{};
 
 			for ( auto & pair : weights )
