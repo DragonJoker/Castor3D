@@ -892,7 +892,7 @@ namespace smaa
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaBlendingWeight", bwcalc::doBlendingWeightCalculationFP() }
 		, m_stages{ makeShaderState( m_device, m_vertexShader )
 			, makeShaderState( m_device, m_pixelShader ) }
-		, m_pass{ renderTarget.getGraph().createPass( "BlendingWeight"
+		, m_pass{ m_graph.createPass( "BlendingWeight"
 			, [this, &device, enabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )

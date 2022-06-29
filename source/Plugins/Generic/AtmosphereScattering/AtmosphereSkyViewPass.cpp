@@ -197,10 +197,10 @@ namespace atmosphere_scattering
 		m_lastPass = &pass;
 	}
 
-	void AtmosphereSkyViewPass::accept( castor3d::BackgroundVisitor & visitor )
+	void AtmosphereSkyViewPass::accept( castor3d::PipelineVisitor & visitor )
 	{
-		//visitor.visit( m_vertexShader );
-		//visitor.visit( m_pixelShader );
+		visitor.visit( m_vertexShader );
+		visitor.visit( m_pixelShader );
 	}
 
 	//************************************************************************************************

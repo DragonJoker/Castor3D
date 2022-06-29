@@ -283,9 +283,9 @@ namespace atmosphere_scattering
 		m_lastPass = &pass;
 	}
 
-	void AtmosphereMultiScatteringPass::accept( castor3d::BackgroundVisitor & visitor )
+	void AtmosphereMultiScatteringPass::accept( castor3d::PipelineVisitor & visitor )
 	{
-		//visitor.visit( m_computeShader );
+		visitor.visit( m_computeShader );
 	}
 
 	//************************************************************************************************

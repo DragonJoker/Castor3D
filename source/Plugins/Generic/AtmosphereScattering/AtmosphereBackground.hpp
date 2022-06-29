@@ -187,6 +187,7 @@ namespace atmosphere_scattering
 		castor3d::Texture m_multiScatter;
 		uint32_t m_volumeResolution{ 32u };
 		castor::Point2ui m_skyViewResolution{ 192u, 108u };
+		mutable bool m_atmosphereChanged{ true };
 		std::unique_ptr< AtmosphereScatteringUbo > m_atmosphereUbo;
 		std::unique_ptr< AtmosphereTransmittancePass > m_transmittancePass;
 		std::unique_ptr< AtmosphereMultiScatteringPass > m_multiScatteringPass;
