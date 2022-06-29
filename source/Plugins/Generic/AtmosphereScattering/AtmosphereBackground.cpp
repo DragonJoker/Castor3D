@@ -230,7 +230,51 @@ namespace atmosphere_scattering
 
 	void AtmosphereBackground::accept( castor3d::BackgroundVisitor & visitor )
 	{
-		//visitor.visit( *this );
+		visitor.visit( cuT( "Solar Irradiance" )
+			, m_config.solarIrradiance
+			, &m_atmosphereChanged );
+		visitor.visit( cuT( "Sun Angular Radius" )
+			, m_config.sunAngularRadius
+			, &m_atmosphereChanged );
+		visitor.visit( cuT( "Sun Illuminance" )
+			, m_config.sunIlluminance
+			, &m_atmosphereChanged );
+		visitor.visit( cuT( "Sun Illuminance Scale" )
+			, m_config.sunIlluminanceScale
+			, &m_atmosphereChanged );
+		visitor.visit( cuT( "Raymarch Min Max SPP " )
+			, m_config.rayMarchMinMaxSPP
+			, &m_atmosphereChanged );
+		visitor.visit( cuT( "Absorption Extinction" )
+			, m_config.absorptionExtinction
+			, &m_atmosphereChanged );
+		visitor.visit( cuT( "Mu S Min" )
+			, m_config.muSMin
+			, &m_atmosphereChanged );
+		visitor.visit( cuT( "Rayleigh Scattering" )
+			, m_config.rayleighScattering
+			, &m_atmosphereChanged );
+		visitor.visit( cuT( "Mie Phase Function G" )
+			, m_config.miePhaseFunctionG
+			, &m_atmosphereChanged );
+		visitor.visit( cuT( "Mie Scattering" )
+			, m_config.mieScattering
+			, &m_atmosphereChanged );
+		visitor.visit( cuT( "Mie Extinction" )
+			, m_config.mieExtinction
+			, &m_atmosphereChanged );
+		visitor.visit( cuT( "Atmosphere Bottom Radius" )
+			, m_config.bottomRadius
+			, &m_atmosphereChanged );
+		visitor.visit( cuT( "Atmosphere Top Radius" )
+			, m_config.topRadius
+			, &m_atmosphereChanged );
+		visitor.visit( cuT( "Multiple Scattering Factor" )
+			, m_config.multipleScatteringFactor
+			, &m_atmosphereChanged );
+		visitor.visit( cuT( "Ground Albedo" )
+			, m_config.groundAlbedo
+			, &m_atmosphereChanged );
 	}
 
 	crg::FramePass & AtmosphereBackground::createBackgroundPass( crg::FramePassGroup & graph

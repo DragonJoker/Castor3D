@@ -2,6 +2,7 @@
 
 #include "GuiCommon/Properties/AdditionalProperties.hpp"
 #include "GuiCommon/Properties/Math/SizeProperties.hpp"
+#include "GuiCommon/Shader/ShaderSource.hpp"
 
 #include <Castor3D/Render/RenderLoop.hpp>
 #include <Castor3D/Scene/Scene.hpp>
@@ -114,7 +115,6 @@ namespace GuiCommon
 						, background.getTexture()
 						, castor3d::CubeMapFace::eNegativeZ );
 				}
-
 			}
 
 			void visit( castor3d::ImageBackground & background )override
@@ -124,6 +124,118 @@ namespace GuiCommon
 				doCreateTextureImageProperty( background
 					, PROPERTY_BACKGROUND_IMAGE_IMAGE
 					, background.getTexture() );
+			}
+
+			void visit( castor::String const & name
+				, float & value
+				, bool * control )override
+			{
+				m_properties.addPropertyT( &m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, int32_t & value
+				, bool * control )override
+			{
+				m_properties.addPropertyT( &m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, uint32_t & value
+				, bool * control )override
+			{
+				m_properties.addPropertyT( &m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::Point2f & value
+				, bool * control )override
+			{
+				m_properties.addPropertyT( &m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::Point2i & value
+				, bool * control )override
+			{
+				m_properties.addPropertyT( &m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::Point2ui & value
+				, bool * control )override
+			{
+				m_properties.addPropertyT( &m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::Point3f & value
+				, bool * control )override
+			{
+				m_properties.addPropertyT( &m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::Point3i & value
+				, bool * control )override
+			{
+				m_properties.addPropertyT( &m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::Point3ui & value
+				, bool * control )override
+			{
+				m_properties.addPropertyT( &m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::Point4f & value
+				, bool * control )override
+			{
+				m_properties.addPropertyT( &m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::Point4i & value
+				, bool * control )override
+			{
+				m_properties.addPropertyT( &m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::Point4ui & value
+				, bool * control )override
+			{
+				m_properties.addPropertyT( &m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::Matrix4x4f & value
+				, bool * control )override
+			{
+				m_properties.addPropertyT( &m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::RangedValue< float > & value
+				, bool * control )override
+			{
+				m_properties.addPropertyT( &m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::RangedValue< int32_t > & value
+				, bool * control )override
+			{
+				m_properties.addPropertyT( &m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::RangedValue< uint32_t > & value
+				, bool * control )override
+			{
+				m_properties.addPropertyT( &m_grid, name, &value, control );
 			}
 
 			void doCreateTextureImageProperty( castor3d::ImageBackground & background

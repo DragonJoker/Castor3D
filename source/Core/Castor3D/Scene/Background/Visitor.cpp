@@ -2,11 +2,8 @@
 
 namespace castor3d
 {
-	BackgroundVisitor::BackgroundVisitor()
-	{
-	}
-
-	BackgroundVisitor::~BackgroundVisitor()
+	BackgroundVisitor::BackgroundVisitor( Config config )
+		: PipelineVisitor{ std::move( config ) }
 	{
 	}
 }
