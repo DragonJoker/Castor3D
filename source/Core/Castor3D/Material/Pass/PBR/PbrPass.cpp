@@ -92,7 +92,7 @@ namespace castor3d
 			}
 			CU_EndAttribute()
 
-			CU_ImplementAttributeParser( parserPassMetalness )
+				CU_ImplementAttributeParser( parserPassMetalness )
 			{
 				auto & parsingContext = getParserContext( context );
 
@@ -110,7 +110,7 @@ namespace castor3d
 			}
 			CU_EndAttribute()
 
-			CU_ImplementAttributeParser( parserPassRoughness )
+				CU_ImplementAttributeParser( parserPassRoughness )
 			{
 				auto & parsingContext = getParserContext( context );
 
@@ -128,7 +128,7 @@ namespace castor3d
 			}
 			CU_EndAttribute()
 
-			CU_ImplementAttributeParser( parserPassGlossiness )
+				CU_ImplementAttributeParser( parserPassGlossiness )
 			{
 				auto & parsingContext = getParserContext( context );
 
@@ -146,7 +146,7 @@ namespace castor3d
 			}
 			CU_EndAttribute()
 
-			CU_ImplementAttributeParser( parserPassSpecular )
+				CU_ImplementAttributeParser( parserPassSpecular )
 			{
 				auto & parsingContext = getParserContext( context );
 
@@ -164,7 +164,7 @@ namespace castor3d
 			}
 			CU_EndAttribute()
 
-			CU_ImplementAttributeParser( parserUnitChannel )
+				CU_ImplementAttributeParser( parserUnitChannel )
 			{
 				auto & parsingContext = getParserContext( context );
 
@@ -227,7 +227,7 @@ namespace castor3d
 			}
 			CU_EndAttribute()
 
-			CU_ImplementAttributeParser( parserUnitAlbedoMask )
+				CU_ImplementAttributeParser( parserUnitAlbedoMask )
 			{
 				auto & parsingContext = getParserContext( context );
 
@@ -242,7 +242,7 @@ namespace castor3d
 			}
 			CU_EndAttribute()
 
-			CU_ImplementAttributeParser( parserUnitMetalnessMask )
+				CU_ImplementAttributeParser( parserUnitMetalnessMask )
 			{
 				auto & parsingContext = getParserContext( context );
 
@@ -257,7 +257,7 @@ namespace castor3d
 			}
 			CU_EndAttribute()
 
-			CU_ImplementAttributeParser( parserUnitRoughnessMask )
+				CU_ImplementAttributeParser( parserUnitRoughnessMask )
 			{
 				auto & parsingContext = getParserContext( context );
 
@@ -272,7 +272,7 @@ namespace castor3d
 			}
 			CU_EndAttribute()
 
-			CU_ImplementAttributeParser( parserUnitGlossinessMask )
+				CU_ImplementAttributeParser( parserUnitGlossinessMask )
 			{
 				auto & parsingContext = getParserContext( context );
 
@@ -287,7 +287,7 @@ namespace castor3d
 			}
 			CU_EndAttribute()
 
-			CU_ImplementAttributeParser( parserUnitSpecularMask )
+				CU_ImplementAttributeParser( parserUnitSpecularMask )
 			{
 				auto & parsingContext = getParserContext( context );
 
@@ -302,7 +302,7 @@ namespace castor3d
 			}
 			CU_EndAttribute()
 
-			CU_ImplementAttributeParser( parserSceneImportTexRemap )
+				CU_ImplementAttributeParser( parserSceneImportTexRemap )
 			{
 				auto & parsingContext = getParserContext( context );
 				parsingContext.sceneImportConfig.textureRemaps.clear();
@@ -310,7 +310,7 @@ namespace castor3d
 			}
 			CU_EndAttributePush( pbr::Section::eTextureRemap )
 
-			CU_ImplementAttributeParser( parserTexRemapSpecular )
+				CU_ImplementAttributeParser( parserTexRemapSpecular )
 			{
 				auto & parsingContext = getParserContext( context );
 				parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( TextureFlag::eSpecular, TextureConfiguration{} ).first;
@@ -318,7 +318,7 @@ namespace castor3d
 			}
 			CU_EndAttributePush( pbr::Section::eTextureRemapChannel )
 
-			CU_ImplementAttributeParser( parserTexRemapNormal )
+				CU_ImplementAttributeParser( parserTexRemapNormal )
 			{
 				auto & parsingContext = getParserContext( context );
 				parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( TextureFlag::eNormal, TextureConfiguration{} ).first;
@@ -326,7 +326,7 @@ namespace castor3d
 			}
 			CU_EndAttributePush( pbr::Section::eTextureRemapChannel )
 
-			CU_ImplementAttributeParser( parserTexRemapAlbedoMask )
+				CU_ImplementAttributeParser( parserTexRemapAlbedoMask )
 			{
 				auto & parsingContext = getParserContext( context );
 
@@ -341,7 +341,7 @@ namespace castor3d
 			}
 			CU_EndAttribute()
 
-			CU_ImplementAttributeParser( parserTexRemapMetalnessMask )
+				CU_ImplementAttributeParser( parserTexRemapMetalnessMask )
 			{
 				auto & parsingContext = getParserContext( context );
 
@@ -356,7 +356,7 @@ namespace castor3d
 			}
 			CU_EndAttribute()
 
-			CU_ImplementAttributeParser( parserTexRemapRoughnessMask )
+				CU_ImplementAttributeParser( parserTexRemapRoughnessMask )
 			{
 				auto & parsingContext = getParserContext( context );
 
@@ -371,7 +371,7 @@ namespace castor3d
 			}
 			CU_EndAttribute()
 
-			CU_ImplementAttributeParser( parserTexRemapGlossinessMask )
+				CU_ImplementAttributeParser( parserTexRemapGlossinessMask )
 			{
 				auto & parsingContext = getParserContext( context );
 
@@ -386,7 +386,7 @@ namespace castor3d
 			}
 			CU_EndAttribute()
 
-			CU_ImplementAttributeParser( parserTexRemapSpecularMask )
+				CU_ImplementAttributeParser( parserTexRemapSpecularMask )
 			{
 				auto & parsingContext = getParserContext( context );
 
@@ -411,24 +411,24 @@ namespace castor3d
 	PbrPass::PbrPass( Material & parent
 		, PassFlags initialFlags )
 		: PbrPass{ parent
-			, parent.getEngine()->getPassFactory().getNameId( Type )
-			, initialFlags }
+		, parent.getEngine()->getPassFactory().getNameId( Type )
+		, initialFlags }
 	{
 	}
-	
+
 	PbrPass::PbrPass( Material & parent
 		, PassTypeID typeID
 		, PassFlags initialFlags )
 		: Pass{ parent
-			, typeID
-			, initialFlags | PassFlag::eImageBasedLighting }
+		, typeID
+		, initialFlags | PassFlag::eImageBasedLighting }
 		, m_albedo{ m_dirty, castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
 		, m_roughness{ m_dirty, 1.0f }
 		, m_metalness{ m_dirty, pbr::DefaultMetalness }
 		, m_specular{ m_dirty
-			, castor::RgbColour::fromComponents( pbr::DefaultSpecular->x
-				, pbr::DefaultSpecular->y
-				, pbr::DefaultSpecular->z ) }
+		, castor::RgbColour::fromComponents( pbr::DefaultSpecular->x
+			, pbr::DefaultSpecular->y
+			, pbr::DefaultSpecular->z ) }
 	{
 	}
 
@@ -467,7 +467,7 @@ namespace castor3d
 			result[getName( TextureFlag::eGlossiness, true )] = uint32_t( TextureFlag::eGlossiness );
 			result[getName( TextureFlag::eSpecular, true )] = uint32_t( TextureFlag::eSpecular );
 			return result;
-		}();
+		}( );
 
 		castor::AttributeParsers result;
 
@@ -578,6 +578,18 @@ namespace castor3d
 		doJoinDifOpa( result, cuT( "AlbOpa" ) );
 		doJoinMtlRgh( result );
 		doJoinSpcGls( result );
+	}
+
+	PassSPtr PbrPass::doClone( Material & material )const
+	{
+		auto result = std::make_shared< PbrPass >( material );
+		result->m_albedo = m_albedo.value();
+		result->m_roughness = m_roughness.value();
+		result->m_metalness = m_metalness.value();
+		result->m_specular = m_specular.value();
+		result->m_specularSet = m_specularSet;
+		result->m_metalnessSet = m_metalnessSet;
+		return result;
 	}
 
 	void PbrPass::doJoinMtlRgh( TextureUnitPtrArray & result )

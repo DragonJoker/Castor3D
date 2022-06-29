@@ -140,5 +140,15 @@ namespace castor3d
 		return uint32_t( blinn_phong::Section::eTextureUnit );
 	}
 
+	PassSPtr BlinnPhongPass::doClone( Material & material )const
+	{
+		auto result = std::make_shared< BlinnPhongPass >( material );
+		result->setDiffuse( getDiffuse() );
+		result->setSpecular( getSpecular() );
+		result->setAmbient( getAmbient() );
+		result->setShininess( getShininess().value() );
+		return result;
+	}
+
 	//*********************************************************************************************
 }

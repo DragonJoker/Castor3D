@@ -261,6 +261,17 @@ namespace toon
 		return castor::TextWriter< ToonPhongPass >{ tabs, folder, subfolder }( *this, file );
 	}
 
+	castor3d::PassSPtr ToonPhongPass::doClone( castor3d::Material & material )const
+	{
+		auto result = std::make_shared< ToonPhongPass >( material );
+		result->setDiffuse( getDiffuse() );
+		result->setSpecular( getSpecular() );
+		result->setAmbient( getAmbient() );
+		result->setShininess( getShininess().value() );
+		result->setSmoothBandWidth( getSmoothBandWidth() );
+		return result;
+	}
+
 	//*********************************************************************************************
 
 	castor::String const ToonBlinnPhongPass::Type = cuT( "toon_blinn_phong" );
@@ -338,6 +349,17 @@ namespace toon
 		return castor::TextWriter< ToonBlinnPhongPass >{ tabs, folder, subfolder }( *this, file );
 	}
 
+	castor3d::PassSPtr ToonBlinnPhongPass::doClone( castor3d::Material & material )const
+	{
+		auto result = std::make_shared< ToonPhongPass >( material );
+		result->setDiffuse( getDiffuse() );
+		result->setSpecular( getSpecular() );
+		result->setAmbient( getAmbient() );
+		result->setShininess( getShininess().value() );
+		result->setSmoothBandWidth( getSmoothBandWidth() );
+		return result;
+	}
+
 	//*********************************************************************************************
 
 	castor::String const ToonPbrPass::Type = cuT( "toon_pbr" );
@@ -413,6 +435,25 @@ namespace toon
 		, castor::StringStream & file )const
 	{
 		return castor::TextWriter< ToonPbrPass >{ tabs, folder, subfolder }( *this, file );
+	}
+
+	castor3d::PassSPtr ToonPbrPass::doClone( castor3d::Material & material )const
+	{
+		auto result = std::make_shared< ToonPbrPass >( material );
+		result->setAlbedo( getAlbedo() );
+		result->setRoughness( getRoughness() );
+
+		if ( m_specularSet )
+		{
+			result->setSpecular( getSpecular() );
+		}
+
+		if ( m_metalnessSet )
+		{
+			result->setMetalness( getMetalness() );
+		}
+
+		return result;
 	}
 
 	//*********************************************************************************************

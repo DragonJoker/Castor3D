@@ -167,6 +167,7 @@ namespace castor3d
 
 	private:
 		C3D_API void doPrepareTextures( TextureUnitPtrArray & result )override;
+		C3D_API PassSPtr doClone( Material & material )const override;
 		C3D_API void doJoinMtlRgh( TextureUnitPtrArray & result );
 		C3D_API void doJoinSpcGls( TextureUnitPtrArray & result );
 
@@ -175,6 +176,8 @@ namespace castor3d
 		castor::GroupChangeTracked< float > m_roughness;
 		castor::GroupChangeTracked< float > m_metalness;
 		castor::GroupChangeTracked< castor::RgbColour > m_specular;
+
+	protected:
 		bool m_specularSet{ false };
 		bool m_metalnessSet{ false };
 	};

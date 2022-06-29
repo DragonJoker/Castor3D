@@ -52,6 +52,13 @@ namespace castor3d
 		C3D_API PassSPtr createPass();
 		/**
 		 *\~english
+		 *\brief		Adds a pass, cloning the given one.
+		 *\~french
+		 *\brief		Ajoute une passe, en clonant celle donnée.
+		 */
+		C3D_API void addPass( Pass const & pass );
+		/**
+		 *\~english
 		 *\brief		Removes an external pass to rhe material.
 		 *\param[in]	pass	The pass.
 		 *\~french

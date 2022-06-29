@@ -480,6 +480,16 @@ namespace castor3d
 		doJoinSpcShn( result );
 	}
 
+	PassSPtr PhongPass::doClone( Material & material )const
+	{
+		auto result = std::make_shared< PhongPass >( material );
+		result->m_diffuse = m_diffuse.value();
+		result->m_specular = m_specular.value();
+		result->m_ambient = m_ambient.value();
+		result->m_shininess = m_shininess.value();
+		return result;
+	}
+
 	void PhongPass::doJoinSpcShn( TextureUnitPtrArray & result )
 	{
 		doMergeImages( TextureFlag::eSpecular

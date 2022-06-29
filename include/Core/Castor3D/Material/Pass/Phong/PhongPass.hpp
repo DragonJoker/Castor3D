@@ -201,6 +201,7 @@ namespace castor3d
 
 	private:
 		C3D_API void doPrepareTextures( TextureUnitPtrArray & result )override;
+		C3D_API PassSPtr doClone( Material & material )const override;
 		C3D_API void doJoinSpcShn( TextureUnitPtrArray & result );
 
 	public:

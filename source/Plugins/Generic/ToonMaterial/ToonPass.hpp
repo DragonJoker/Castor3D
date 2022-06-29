@@ -86,6 +86,9 @@ namespace toon
 			, castor::String const & subfolder
 			, castor::StringStream & file )const override;
 
+	private:
+		castor3d::PassSPtr doClone( castor3d::Material & material )const override;
+
 	public:
 		C3D_ToonMaterial_API static castor::String const Type;
 	};
@@ -114,6 +117,9 @@ namespace toon
 			, castor::String const & subfolder
 			, castor::StringStream & file )const override;
 
+	private:
+		castor3d::PassSPtr doClone( castor3d::Material & material )const override;
+
 	public:
 		C3D_ToonMaterial_API static castor::String const Type;
 	};
@@ -141,6 +147,9 @@ namespace toon
 			, castor::Path const & folder
 			, castor::String const & subfolder
 			, castor::StringStream & file )const override;
+
+	private:
+		castor3d::PassSPtr doClone( castor3d::Material & material )const override;
 
 	public:
 		C3D_ToonMaterial_API static castor::String const Type;

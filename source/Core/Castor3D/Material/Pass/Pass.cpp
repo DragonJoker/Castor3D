@@ -297,6 +297,75 @@ namespace castor3d
 		}
 	}
 
+	PassSPtr Pass::clone( Material & material )const
+	{
+		auto result = doClone( material );
+		result->m_flags = m_flags;
+		result->m_implicit = m_implicit;
+		result->m_automaticShader = m_automaticShader;
+		result->m_opacity = m_opacity.value();
+		result->m_bwAccumulationOperator = m_bwAccumulationOperator.value();
+		result->m_emissive = m_emissive.value();
+		result->m_refractionRatio = m_refractionRatio.value();
+		result->m_twoSided = m_twoSided.value();
+		result->m_untiling = m_untiling.value();
+		result->m_alphaBlendMode = m_alphaBlendMode.value();
+		result->m_colourBlendMode = m_colourBlendMode.value();
+		result->m_alphaValue = m_alphaValue.value();
+		result->m_transmission = m_transmission.value();
+		result->m_alphaFunc = m_alphaFunc.value();
+		result->m_blendAlphaFunc = m_blendAlphaFunc.value();
+		result->m_parallaxOcclusionMode = m_parallaxOcclusionMode.value();
+		result->m_edgeColour = m_edgeColour.value();
+		result->m_edgeWidth = m_edgeWidth.value();
+		result->m_depthFactor = m_depthFactor.value();
+		result->m_normalFactor = m_normalFactor.value();
+		result->m_objectFactor = m_objectFactor.value();
+		result->m_renderPassInfo = m_renderPassInfo;
+
+		if ( m_subsurfaceScattering )
+		{
+			auto sss = std::make_unique< SubsurfaceScattering >();
+			sss->setGaussianWidth( m_subsurfaceScattering->getGaussianWidth() );
+			sss->setStrength( m_subsurfaceScattering->getStrength() );
+			sss->setSubsurfaceRadius( m_subsurfaceScattering->getSubsurfaceRadius() );
+
+			for ( auto & factor : *m_subsurfaceScattering )
+			{
+				sss->addProfileFactor( factor );
+			}
+
+			result->setSubsurfaceScattering( std::move( sss ) );
+		}
+
+		for ( auto & source : m_sources )
+		{
+			auto it = m_animations.find( source.first );
+
+			if ( it != m_animations.end()
+				&& it->second )
+			{
+				auto & srcAnim = static_cast< TextureAnimation const & >( *it->second );
+				auto clonedAnim = std::make_unique< TextureAnimation >( *srcAnim.getEngine()
+					, srcAnim.getName() );
+				clonedAnim->setRotateSpeed( srcAnim.getRotateSpeed() );
+				clonedAnim->setScaleSpeed( srcAnim.getScaleSpeed() );
+				clonedAnim->setTranslateSpeed( srcAnim.getTranslateSpeed() );
+				result->registerTexture( source.first
+					, source.second
+					, std::move( clonedAnim ) );
+			}
+			else
+			{
+				result->registerTexture( source.first
+					, source.second );
+			}
+		}
+
+		result->prepareTextures();
+		return result;
+	}
+
 	void Pass::fillConfig( TextureConfiguration & configuration
 		, PassVisitorBase & vis )
 	{
