@@ -61,6 +61,9 @@ namespace castor3d
 		 */
 		C3D_API uint32_t getTextureSectionID()const override;
 
+	private:
+		C3D_API PassSPtr doClone( Material & material )const override;
+
 	public:
 		C3D_API static castor::String const Type;
 		C3D_API static castor::String const LightingModel;

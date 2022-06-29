@@ -53,13 +53,34 @@ namespace castor3d
 
 		PassSPtr newPass = getEngine()->getPassFactory().create( getType(), *this );
 		CU_Require( newPass );
-		m_passListeners.emplace( newPass, newPass->onChanged.connect( [this]( Pass const & pass )
+		m_passListeners.emplace( newPass
+			, newPass->onChanged.connect( [this]( Pass const & p )
 			{
-				onPassChanged( pass );
+				onPassChanged( p );
 			} ) );
 		m_passes.push_back( newPass );
 		onChanged( *this );
 		return newPass;
+	}
+
+	void Material::addPass( Pass const & pass )
+	{
+		if ( m_passes.size() == MaxPassLayers )
+		{
+			log::error << cuT( "Can't create a new pass, max pass count reached" ) << std::endl;
+			CU_Failure( "Can't create a new pass, max pass count reached" );
+			return;
+		}
+
+		auto newPass = pass.clone( *this );
+		CU_Require( newPass );
+		m_passListeners.emplace( newPass
+			, newPass->onChanged.connect( [this]( Pass const & p )
+			{
+				onPassChanged( p );
+			} ) );
+		m_passes.push_back( newPass );
+		onChanged( *this );
 	}
 
 	void Material::removePass( PassSPtr pass )

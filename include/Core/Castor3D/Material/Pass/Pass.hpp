@@ -237,6 +237,15 @@ namespace castor3d
 		 */
 		C3D_API void fillSssProfileBuffer( SssProfileBuffer & buffer )const;
 		/**
+		 *\~english
+		 *\brief		Clones this pass.
+		 *\return		The clone.
+		 *\~french
+		 *\brief		Clone cette pass.
+		 *\return		Le clone.
+		 */
+		C3D_API PassSPtr clone( Material & material )const;
+		/**
 		*\~english
 		*\brief
 		*	PassVisitor acceptance function, for a specific texture configuration.
@@ -697,6 +706,7 @@ namespace castor3d
 		void doUpdateAlphaFlags();
 		void doUpdateTextureFlags();
 		virtual void doPrepareTextures( TextureUnitPtrArray & result ) = 0;
+		virtual PassSPtr doClone( Material & material )const = 0;
 
 		void updateFlag( PassFlag flag
 			, bool value )
