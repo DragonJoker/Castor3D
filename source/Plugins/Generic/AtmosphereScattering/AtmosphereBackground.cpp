@@ -151,7 +151,7 @@ namespace atmosphere_scattering
 			, VK_FILTER_LINEAR
 			, VK_FILTER_LINEAR
 			, VK_SAMPLER_MIPMAP_MODE_NEAREST }
-		, cameraUbo{ device }
+		, cameraUbo{ device, changed }
 		, skyViewPass{ std::make_unique< AtmosphereSkyViewPass >( graph
 			, crg::FramePassArray{ &transmittancePass }
 			, device
@@ -159,7 +159,8 @@ namespace atmosphere_scattering
 			, atmosphereUbo
 			, transmittance
 			, skyView.targetViewId
-			, index ) }
+			, index
+			, changed ) }
 		, volumePass{ std::make_unique< AtmosphereVolumePass >( graph
 			, crg::FramePassArray{ &transmittancePass }
 			, device
@@ -167,7 +168,8 @@ namespace atmosphere_scattering
 			, atmosphereUbo
 			, transmittance
 			, volume.targetViewId
-			, index ) }
+			, index
+			, changed ) }
 	{
 		skyView.create();
 		volume.create();
@@ -196,11 +198,11 @@ namespace atmosphere_scattering
 			, AtmosphereBackgroundPass::eCamera );
 		pass.addSampledView( skyView.sampledViewId
 			, AtmosphereBackgroundPass::eSkyView
-			, VK_IMAGE_LAYOUT_UNDEFINED
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, linearSampler );
 		pass.addSampledView( volume.sampledViewId
 			, AtmosphereBackgroundPass::eVolume
-			, VK_IMAGE_LAYOUT_UNDEFINED
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, linearSampler );
 		lastPass = &pass;
 	}
@@ -209,6 +211,11 @@ namespace atmosphere_scattering
 	{
 		skyView.destroy();
 		volume.destroy();
+	}
+
+	void AtmosphereBackground::CameraPasses::update( castor3d::CpuUpdater & updater )const
+	{
+		cameraUbo.cpuUpdate( *updater.camera, updater.isSafeBanded );
 	}
 
 	//*********************************************************************************************
@@ -296,13 +303,15 @@ namespace atmosphere_scattering
 				, crg::FramePassArray{}
 				, device
 				, *m_atmosphereUbo
-				, m_transmittance.targetViewId );
+				, m_transmittance.targetViewId
+				, m_atmosphereChanged );
 			m_multiScatteringPass = std::make_unique< AtmosphereMultiScatteringPass >( graph
 				, crg::FramePassArray{ &m_transmittancePass->getLastPass() }
 				, device
 				, *m_atmosphereUbo
 				, m_transmittance.sampledViewId
-				, m_multiScatter.targetViewId );
+				, m_multiScatter.targetViewId
+				, m_atmosphereChanged );
 		}
 
 		auto it = m_cameraPasses.find( colour.data->image.data );
@@ -331,11 +340,11 @@ namespace atmosphere_scattering
 				, AtmosphereBackgroundPass::eAtmosphere );
 			pass.addSampledView( m_transmittance.sampledViewId
 				, AtmosphereBackgroundPass::eTransmittance
-				, VK_IMAGE_LAYOUT_UNDEFINED
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, linearSampler );
 			pass.addSampledView( m_multiScatter.sampledViewId
 				, AtmosphereBackgroundPass::eMultiScatter
-				, VK_IMAGE_LAYOUT_UNDEFINED
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, linearSampler );
 			pass.addOutputColourView( colour
 				, castor3d::transparentBlackClearColor );
@@ -441,12 +450,15 @@ namespace atmosphere_scattering
 	void AtmosphereBackground::doCpuUpdate( castor3d::CpuUpdater & updater )const
 	{
 		CU_Require( m_node );
-		m_atmosphereUbo->cpuUpdate( m_config, *m_node );
+		m_atmosphereChanged = false;
+		m_atmosphereChanged = m_atmosphereUbo->cpuUpdate( m_config, *m_node )
+			|| m_atmosphereChanged;
 		auto it = m_cameraPasses.find( updater.targetImage );
 
 		if ( it != m_cameraPasses.end() )
 		{
-			it->second->cameraUbo.cpuUpdate( *updater.camera, updater.isSafeBanded );
+			it->second->changed = m_atmosphereChanged;
+			it->second->update( updater );
 		}
 	}
 

@@ -267,7 +267,8 @@ namespace atmosphere_scattering
 		, AtmosphereScatteringUbo const & atmosphereUbo
 		, crg::ImageViewId const & transmittanceView
 		, crg::ImageViewId const & resultView
-		, uint32_t index )
+		, uint32_t index
+		, bool const & enabled )
 		: castor::Named{ "VolumePass" + castor::string::toString( index ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), volume::getVertexProgram() }
 		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), volume::getGeometryProgram() }
@@ -278,7 +279,7 @@ namespace atmosphere_scattering
 	{
 		auto renderSize = getExtent( resultView );
 		auto & pass = graph.createPass( getName()
-			, [this, &device, renderSize]( crg::FramePass const & framePass
+			, [this, &device, &enabled, renderSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -286,6 +287,7 @@ namespace atmosphere_scattering
 					.renderSize( { renderSize.width, renderSize.height } )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.instances( renderSize.depth )
+					.enabled( &enabled )
 					.build( framePass, context, graph );
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
@@ -300,7 +302,7 @@ namespace atmosphere_scattering
 			, VK_FILTER_LINEAR };
 		pass.addSampledView( transmittanceView
 			, volume::eTransmittance
-			, VK_IMAGE_LAYOUT_UNDEFINED
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, linearSampler );
 		pass.addOutputColourView( resultView );
 		m_lastPass = &pass;

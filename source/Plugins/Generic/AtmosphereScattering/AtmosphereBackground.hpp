@@ -172,8 +172,11 @@ namespace atmosphere_scattering
 				, castor3d::BackgroundPassBase *& backgroundPass );
 			~CameraPasses();
 
+			void update( castor3d::CpuUpdater & updater )const;
+
 			castor3d::Texture skyView;
 			castor3d::Texture volume;
+			mutable bool changed{ true };
 			mutable CameraUbo cameraUbo;
 			std::unique_ptr< AtmosphereSkyViewPass > skyViewPass;
 			std::unique_ptr< AtmosphereVolumePass > volumePass;

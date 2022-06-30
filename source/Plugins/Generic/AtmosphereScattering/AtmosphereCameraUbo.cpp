@@ -53,9 +53,12 @@ namespace atmosphere_scattering
 	castor::String const CameraUbo::Buffer = cuT( "Camera" );
 	castor::String const CameraUbo::Data = cuT( "c3d_cameraData" );
 
-	CameraUbo::CameraUbo( castor3d::RenderDevice const & device )
+	CameraUbo::CameraUbo( castor3d::RenderDevice const & device
+		, bool & dirty )
 		: m_device{ device }
 		, m_ubo{ device.uboPool->getBuffer< Configuration >( 0u ) }
+		, m_position{ dirty }
+		, m_orientation{ dirty }
 	{
 	}
 
@@ -68,11 +71,14 @@ namespace atmosphere_scattering
 		, bool isSafeBanded )
 	{
 		auto node = camera.getParent();
+		auto position = node->getDerivedPosition();
+		auto orientation = node->getDerivedOrientation();
+		m_position = position;
+		m_orientation = orientation;
 
 		// Convert from meters to kilometers
-		auto position = node->getDerivedPosition() / 1000.0f;
+		position = position / 1000.0f;
 
-		auto orientation = node->getDerivedOrientation();
 		castor::Point3f right{ 1.0, 0.0, 0.0 };
 		castor::Point3f up{ 0.0, 1.0, 0.0 };
 		orientation.transform( right, right );

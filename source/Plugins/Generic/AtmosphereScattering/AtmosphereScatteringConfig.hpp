@@ -23,6 +23,18 @@ namespace atmosphere_scattering
 		float constantTerm;
 	};
 
+	inline bool operator==( DensityProfileLayer const & lhs
+		, DensityProfileLayer const & rhs )
+	{
+		return lhs.layerWidth == rhs.layerWidth
+			&& lhs.expTerm == rhs.expTerm
+			&& lhs.expScale == rhs.expScale
+			&& lhs.linearTerm == rhs.linearTerm
+			&& lhs.constantTerm == rhs.constantTerm;
+	}
+
+	using DensityProfileLayers = std::array< DensityProfileLayer, 2u >;
+
 	// All units in kilometers
 	static constexpr float EarthBottomRadius = 6360.0f;
 	static constexpr float EarthTopRadius = 6460.0f;   // 100km atmosphere radius, less edge visible and it contain 99.99% of the atmosphere medium https://en.wikipedia.org/wiki/K%C3%A1rm%C3%A1n_line
@@ -30,78 +42,133 @@ namespace atmosphere_scattering
 	static constexpr float EarthMieScaleHeight = 1.2f;
 	static constexpr double MaxSunZenithAngle = castor::Pi< double > * 120.0 / 180.0;
 
-	struct AtmosphereScatteringConfig
+	template< template< typename DataT > typename WrapperT >
+	struct AtmosphereScatteringConfigT
 	{
-		castor::Point4f sunDirection{ 1.0f, 0.0f, 0.0f, -20.0_degrees };
+		template< typename ... ParamsT >
+		AtmosphereScatteringConfigT( ParamsT & ... params )
+			: sunDirection{ 1.0f, 0.0f, 0.0f, -20.0_degrees }
+			, solarIrradiance{ params..., castor::Point3f{ 1.0f, 1.0f, 1.0f } }
+			, sunAngularRadius{ params..., 0.004675f }
+			, sunIlluminance{ params..., castor::Point3f{ 1.0f, 1.0f, 1.0f } }
+			, sunIlluminanceScale{ params..., 1.0f }
+			, rayMarchMinMaxSPP{ params..., castor::Point2f{ 4.0f, 14.0f } }
+			, absorptionExtinction{ params..., castor::Point3f{ 0.000650f, 0.001881f, 0.000085f } }
+			, muSMin{ params..., float( cos( MaxSunZenithAngle ) ) }
+			, rayleighScattering{ params..., castor::Point3f{ 0.005802f, 0.013558f, 0.033100f } }
+			, miePhaseFunctionG{ params..., 0.8f }
+			, mieScattering{ params..., castor::Point3f{ 0.003996f, 0.003996f, 0.003996f } }
+			, bottomRadius{ params..., EarthBottomRadius }
+			, mieExtinction{ params..., castor::Point3f{ 0.004440f, 0.004440f, 0.004440f } }
+			, topRadius{ params..., EarthTopRadius }
+			, mieAbsorption{}
+			, multipleScatteringFactor{ params..., 1.0f }
+			, groundAlbedo{ params..., castor::Point3f{ 0.0f, 0.0f, 0.0f } }
+			, multiScatteringLUTRes{ params..., 32.0f }
+			, rayleighDensity{ params..., DensityProfileLayers{ DensityProfileLayer{ 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }
+				, DensityProfileLayer{ 0.0f, 1.0f, -1.0f / EarthRayleighScaleHeight, 0.0f, 0.0f } } }
+			, mieDensity{ params..., DensityProfileLayers{ DensityProfileLayer{ 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }
+				, DensityProfileLayer{ 0.0f, 1.0f, -1.0f / EarthMieScaleHeight, 0.0f, 0.0f } } }
+			, absorptionDensity{ params..., DensityProfileLayers{ DensityProfileLayer{ 25.0f, 0.0f, 0.0f, 1.0f / 15.0f, -2.0f / 3.0f }
+				, DensityProfileLayer{ 0.0f, 0.0f, 0.0f, -1.0f / 15.0f, 8.0f / 3.0f } } }
+		{
+		}
+
+		template< template< typename DataU > typename WrapperU >
+		AtmosphereScatteringConfigT & operator=( AtmosphereScatteringConfigT< WrapperU > const & rhs )
+		{
+			sunDirection = rhs.sunDirection;
+			solarIrradiance = rhs.solarIrradiance;
+			sunAngularRadius = rhs.sunAngularRadius;
+			sunIlluminance = rhs.sunIlluminance;
+			sunIlluminanceScale = rhs.sunIlluminanceScale;
+			rayMarchMinMaxSPP = rhs.rayMarchMinMaxSPP;
+			absorptionExtinction = rhs.absorptionExtinction;
+			muSMin = rhs.muSMin;
+			rayleighScattering = rhs.rayleighScattering;
+			miePhaseFunctionG = rhs.miePhaseFunctionG;
+			mieScattering = rhs.mieScattering;
+			bottomRadius = rhs.bottomRadius;
+			mieExtinction = rhs.mieExtinction;
+			topRadius = rhs.topRadius;
+			mieAbsorption = rhs.mieAbsorption;
+			multipleScatteringFactor = rhs.multipleScatteringFactor;
+			groundAlbedo = rhs.groundAlbedo;
+			multiScatteringLUTRes = rhs.multiScatteringLUTRes;
+			rayleighDensity = rhs.rayleighDensity;
+			mieDensity = rhs.mieDensity;
+			absorptionDensity = rhs.absorptionDensity;
+
+			return *this;
+		}
+
+		castor::Point4f sunDirection;
 
 		// The solar irradiance at the top of the atmosphere.
-		castor::Point3f solarIrradiance{ 1.0f, 1.0f, 1.0f };
+		WrapperT< castor::Point3f > solarIrradiance;
 		// The sun's angular radius. Warning: the implementation uses approximations
 		// that are valid only if this angle is smaller than 0.1 radians.
-		float sunAngularRadius{ 0.004675f };
+		WrapperT< float > sunAngularRadius;
 
-		castor::Point3f sunIlluminance{ 1.0f, 1.0f, 1.0f };
-		float sunIlluminanceScale{ 1.0f };
+		WrapperT< castor::Point3f > sunIlluminance;
+		WrapperT< float > sunIlluminanceScale;
 
-		castor::Point2f rayMarchMinMaxSPP{ 4.0f, 14.0f };
+		WrapperT< castor::Point2f > rayMarchMinMaxSPP;
 		castor::Point2f pad0;
 
 		// The extinction coefficient of molecules that absorb light (e.g. ozone) at
 		// the altitude where their density is maximum, as a function of wavelength.
 		// The extinction coefficient at altitude h is equal to
 		// 'absorption_extinction' times 'absorption_density' at this altitude.
-		castor::Point3f absorptionExtinction{ 0.000650f, 0.001881f, 0.000085f };
+		WrapperT< castor::Point3f > absorptionExtinction;
 		// The cosine of the maximum Sun zenith angle for which atmospheric scattering
 		// must be precomputed (for maximum precision, use the smallest Sun zenith
 		// angle yielding negligible sky light radiance values. For instance, for the
 		// Earth case, 102 degrees is a good choice - yielding mu_s_min = -0.2).
-		float muSMin{ float( cos( MaxSunZenithAngle ) ) };
+		WrapperT< float > muSMin;
 
 		// The scattering coefficient of air molecules at the altitude where their
 		// density is maximum (usually the bottom of the atmosphere), as a function of
 		// wavelength. The scattering coefficient at altitude h is equal to
 		// 'rayleigh_scattering' times 'rayleigh_density' at this altitude.
-		castor::Point3f rayleighScattering{ 0.005802f, 0.013558f, 0.033100f };
+		WrapperT< castor::Point3f > rayleighScattering;
 		// The asymetry parameter for the Cornette-Shanks phase function for the
 		// aerosols.
-		float miePhaseFunctionG{ 0.8f };
+		WrapperT< float > miePhaseFunctionG;
 
 		// The scattering coefficient of aerosols at the altitude where their density
 		// is maximum (usually the bottom of the atmosphere), as a function of
 		// wavelength. The scattering coefficient at altitude h is equal to
 		// 'mie_scattering' times 'mie_density' at this altitude.
-		castor::Point3f mieScattering{ 0.003996f, 0.003996f, 0.003996f };
+		WrapperT< castor::Point3f > mieScattering;
 		// The distance between the planet center and the bottom of the atmosphere.
-		float bottomRadius{ EarthBottomRadius };
+		WrapperT< float > bottomRadius;
 
 		// The extinction coefficient of aerosols at the altitude where their density
 		// is maximum (usually the bottom of the atmosphere), as a function of
 		// wavelength. The extinction coefficient at altitude h is equal to
 		// 'mie_extinction' times 'mie_density' at this altitude.
-		castor::Point3f mieExtinction{ 0.004440f, 0.004440f, 0.004440f };
+		WrapperT< castor::Point3f > mieExtinction;
 		// The distance between the planet center and the top of the atmosphere.
-		float topRadius{ EarthTopRadius };
+		WrapperT< float > topRadius{ EarthTopRadius };
 
 		castor::Point3f mieAbsorption;
-		float multipleScatteringFactor{ 1.0f };
+		WrapperT< float > multipleScatteringFactor;
 
 		// The average albedo of the ground.
-		castor::Point3f groundAlbedo{ 0.0f, 0.0f, 0.0f };
-		float multiScatteringLUTRes{ 32.0f };
+		WrapperT< castor::Point3f > groundAlbedo;
+		WrapperT< float > multiScatteringLUTRes;
 
 		// The density profile of air molecules, i.e. a function from altitude to
 		// dimensionless values between 0 (null density) and 1 (maximum density).
-		DensityProfileLayer rayleighDensity[2]{ { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }
-			, { 0.0f, 1.0f, -1.0f / EarthRayleighScaleHeight, 0.0f, 0.0f } };
+		WrapperT< DensityProfileLayers > rayleighDensity;
 		// The density profile of aerosols, i.e. a function from altitude to
 		// dimensionless values between 0 (null density) and 1 (maximum density).
-		DensityProfileLayer mieDensity[2]{ { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }
-			, { 0.0f, 1.0f, -1.0f / EarthMieScaleHeight, 0.0f, 0.0f } };
+		WrapperT< DensityProfileLayers > mieDensity;
 		// The density profile of air molecules that absorb light (e.g. ozone), i.e.
 		// a function from altitude to dimensionless values between 0 (null density)
 		// and 1 (maximum density).
-		DensityProfileLayer absorptionDensity[2]{ { 25.0f, 0.0f, 0.0f, 1.0f / 15.0f, -2.0f / 3.0f }
-			, { 0.0f, 0.0f, 0.0f, -1.0f / 15.0f, 8.0f / 3.0f } };
+		WrapperT< DensityProfileLayers > absorptionDensity;
 	};
 }
 

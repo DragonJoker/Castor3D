@@ -109,7 +109,7 @@ namespace atmosphere_scattering
 	public:
 		explicit AtmosphereScatteringUbo( castor3d::RenderDevice const & device );
 		~AtmosphereScatteringUbo();
-		void cpuUpdate( Configuration const & config
+		bool cpuUpdate( Configuration const & config
 			, castor3d::SceneNode const & node );
 
 		void createPassBinding( crg::FramePass & pass
@@ -147,6 +147,10 @@ namespace atmosphere_scattering
 	private:
 		castor3d::RenderDevice const & m_device;
 		castor3d::UniformBufferOffsetT< Configuration > m_ubo;
+		bool m_dirty{ true };
+		CheckedAtmosphereScatteringConfig m_config;
+		castor::GroupChangeTracked< castor::Point3f > m_sunDirection;
+		castor::GroupChangeTracked< castor::Point3f > m_mieAbsorption;
 	};
 }
 
