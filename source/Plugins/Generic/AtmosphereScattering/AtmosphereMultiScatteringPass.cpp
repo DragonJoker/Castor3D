@@ -247,13 +247,14 @@ namespace atmosphere_scattering
 		, castor3d::RenderDevice const & device
 		, AtmosphereScatteringUbo const & atmosphereUbo
 		, crg::ImageViewId const & transmittanceLut
-		, crg::ImageViewId const & resultView )
+		, crg::ImageViewId const & resultView
+		, bool const & enabled )
 		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, "MultiScatteringPass", multiscatter::getProgram( getExtent( resultView ).width, getExtent( transmittanceLut ) ) }
 		, m_stages{ makeShaderState( device, m_computeShader ) }
 	{
 		auto renderSize = getExtent( resultView );
 		auto & pass = graph.createPass( "MultiScatteringPass"
-			, [this, &device, renderSize]( crg::FramePass const & framePass
+			, [this, &device, &enabled, renderSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -264,6 +265,7 @@ namespace atmosphere_scattering
 					, crg::cp::Config{}
 						.groupCountX( renderSize.width )
 						.groupCountY( renderSize.height )
+						.enabled( &enabled )
 						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) ) );
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );

@@ -20,7 +20,8 @@ namespace atmosphere_scattering
 			, castor3d::RenderDevice const & device
 			, AtmosphereScatteringUbo const & atmosphereUbo
 			, crg::ImageViewId const & transmittanceLut
-			, crg::ImageViewId const & resultView );
+			, crg::ImageViewId const & resultView
+			, bool const & enabled );
 		void accept( castor3d::PipelineVisitor & visitor );
 
 		crg::FramePass const & getLastPass()const

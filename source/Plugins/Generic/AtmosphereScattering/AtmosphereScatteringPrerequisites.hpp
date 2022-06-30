@@ -5,6 +5,8 @@ See LICENSE file in root folder
 #define ___C3DAS_AtmosphereScatteringPrerequisites_H___
 
 #include <Castor3D/Castor3DModule.hpp>
+#include <CastorUtils/Design/GroupChangeTracked.hpp>
+#include <RenderGraph/FrameGraphPrerequisites.hpp>
 
 namespace atmosphere_scattering
 {
@@ -15,7 +17,11 @@ namespace atmosphere_scattering
 
 	struct AtmosphereConfig;
 	struct AtmosphereData;
-	struct AtmosphereScatteringConfig;
+
+	template< template< typename DataT > typename WrapperT >
+	struct AtmosphereScatteringConfigT;
+	using AtmosphereScatteringConfig = AtmosphereScatteringConfigT< crg::RawTypeT >;
+	using CheckedAtmosphereScatteringConfig = AtmosphereScatteringConfigT< castor::GroupChangeTracked >;
 }
 
 #endif

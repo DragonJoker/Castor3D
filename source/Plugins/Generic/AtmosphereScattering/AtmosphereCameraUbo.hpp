@@ -56,7 +56,8 @@ namespace atmosphere_scattering
 		using Configuration = CameraConfig;
 
 	public:
-		explicit CameraUbo( castor3d::RenderDevice const & device );
+		explicit CameraUbo( castor3d::RenderDevice const & device
+			, bool & dirty );
 		~CameraUbo();
 		void cpuUpdate( castor3d::Camera const & camera
 			, bool isSafeBanded );
@@ -96,6 +97,8 @@ namespace atmosphere_scattering
 	private:
 		castor3d::RenderDevice const & m_device;
 		castor3d::UniformBufferOffsetT< Configuration > m_ubo;
+		castor::GroupChangeTracked< castor::Point3f > m_position;
+		castor::GroupChangeTracked< castor::Quaternion > m_orientation;
 	};
 }
 
