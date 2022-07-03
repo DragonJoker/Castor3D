@@ -237,6 +237,12 @@ namespace atmosphere_scattering
 
 	void AtmosphereBackground::accept( castor3d::BackgroundVisitor & visitor )
 	{
+		accept( static_cast< castor3d::PipelineVisitor & >( visitor ) );
+	}
+
+	void AtmosphereBackground::accept( castor3d::PipelineVisitor & visitor )
+	{
+		visitor.visit( cuT( "Atmosphere Configuration" ) );
 		visitor.visit( cuT( "Solar Irradiance" )
 			, m_config.solarIrradiance
 			, &m_atmosphereChanged );

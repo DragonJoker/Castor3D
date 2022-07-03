@@ -127,6 +127,10 @@ namespace castor3d
 		visitor.visit( *this );
 	}
 
+	void ImageBackground::accept( PipelineVisitor & visitor )
+	{
+	}
+
 	bool ImageBackground::write( castor::String const & tabs
 		, castor::Path const & folder
 		, castor::StringStream & stream )const

@@ -117,6 +117,11 @@ namespace GuiCommon
 				}
 			}
 
+			void visit( castor::String const & category )override
+			{
+				m_properties.addProperty( &m_grid, category );
+			}
+
 			void visit( castor3d::ImageBackground & background )override
 			{
 				static wxString PROPERTY_BACKGROUND_IMAGE_IMAGE = _( "Image" );
@@ -318,7 +323,7 @@ namespace GuiCommon
 		{
 			selected = PROPERTY_BACKGROUND_SKYBOX;
 		}
-		else if ( m_background.getType() == cuT( "skybox" ) )
+		else if ( m_background.getType() == cuT( "c3d.atmosphere" ) )
 		{
 			selected = PROPERTY_BACKGROUND_ATMOSPHERE;
 		}

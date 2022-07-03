@@ -137,6 +137,19 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
+		*	Visitor acceptance function.
+		*\param	visitor
+		*	The visitor.
+		*\~french
+		*\brief
+		*	Fonction d'acceptation de visiteur.
+		*\param visitor
+		*	Le visiteur.
+		*/
+		C3D_API virtual void accept( PipelineVisitor & visitor ) = 0;
+		/**
+		*\~english
+		*\brief
 		*	Creates the background render pass.
 		*\param pass
 		*	The parent frame pass.

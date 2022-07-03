@@ -48,6 +48,10 @@ namespace atmosphere_scattering
 		*/
 		void accept( castor3d::BackgroundVisitor & visitor )override;
 		/**
+		*\copydoc	castor3d::SceneBackground::accept
+		*/
+		void accept( castor3d::PipelineVisitor & visitor )override;
+		/**
 		*\copydoc	castor3d::SceneBackground::createBackgroundPass
 		*/
 		crg::FramePass & createBackgroundPass( crg::FramePassGroup & graph
