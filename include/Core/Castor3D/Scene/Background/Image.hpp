@@ -60,6 +60,10 @@ namespace castor3d
 		*/
 		C3D_API void accept( BackgroundVisitor & visitor )override;
 		/**
+		*\copydoc	castor3d::SceneBackground::accept
+		*/
+		C3D_API void accept( PipelineVisitor & visitor )override;
+		/**
 		*\copydoc	castor3d::SceneBackground::write
 		*/
 		C3D_API bool write( castor::String const & tabs

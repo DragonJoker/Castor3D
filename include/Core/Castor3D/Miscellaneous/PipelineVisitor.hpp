@@ -91,6 +91,7 @@ namespace castor3d
 		*	Configuration globale du pipeline.
 		**/
 		/**@{*/
+		C3D_API virtual void visit( castor::String const & category ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, bool & value
 			, bool * control = nullptr ) = 0;
@@ -380,6 +381,10 @@ namespace castor3d
 		*	Configuration globale de l'effet.
 		**/
 		/**@{*/
+		void visit( castor::String const & category )override
+		{
+		}
+
 		void visit( castor::String const & name
 			, bool & value
 			, bool * control )override
