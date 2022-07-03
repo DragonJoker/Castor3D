@@ -30,12 +30,7 @@ namespace atmosphere_scattering
 	public:
 		enum Bindings : uint32_t
 		{
-			eCamera,
-			eAtmosphere,
-			eTransmittance,
-			eMultiScatter,
-			eSkyView,
-			eVolume,
+			eClouds,
 			eCount,
 		};
 

@@ -16,36 +16,18 @@ namespace atmosphere_scattering
 	CameraData::CameraData( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
 		, bool enabled )
-		: sdw::StructInstance{ writer, std::move( expr ), enabled }
-		, camInvViewProj{ getMember< sdw::Mat4 >( "camInvViewProj" ) }
-		, objInvViewProj{ getMember< sdw::Mat4 >( "objInvViewProj" ) }
-		, position{ getMember< sdw::Vec3 >( "position" ) }
+		: StructInstanceHelperT{ writer, std::move( expr ), enabled }
 	{
-	}
-
-	ast::type::BaseStructPtr CameraData::makeType( ast::type::TypesCache & cache )
-	{
-		auto result = cache.getStruct( sdw::type::MemoryLayout::eStd140
-			, "CameraData" );
-
-		if ( result->empty() )
-		{
-			result->declMember( "camInvViewProj", sdw::type::Kind::eMat4x4F, sdw::type::NotArray );
-			result->declMember( "objInvViewProj", sdw::type::Kind::eMat4x4F, sdw::type::NotArray );
-			result->declMember( "position", sdw::type::Kind::eVec3F, sdw::type::NotArray );
-		}
-
-		return result;
 	}
 
 	sdw::Vec4 CameraData::camProjToWorld( sdw::Vec4 const & pos )const
 	{
-		return camInvViewProj * pos;
+		return camInvViewProj() * pos;
 	}
 
 	sdw::Vec4 CameraData::objProjToWorld( sdw::Vec4 const & pos )const
 	{
-		return objInvViewProj * pos;
+		return objInvViewProj() * pos;
 	}
 
 	//************************************************************************************************
@@ -68,6 +50,7 @@ namespace atmosphere_scattering
 	}
 
 	void CameraUbo::cpuUpdate( castor3d::Camera const & camera
+		, castor::Point3f const & sunDirection
 		, bool isSafeBanded )
 	{
 		auto node = camera.getParent();
@@ -91,10 +74,16 @@ namespace atmosphere_scattering
 		auto viewProj = camera.getProjection( isSafeBanded ) * view;
 		auto & data = m_ubo.getData();
 		data.camInvViewProj = viewProj.getInverse();
+		data.camInvProj = camera.getProjection( isSafeBanded ).getInverse();
+		data.camInvView = view.getInverse();
 
 		viewProj = camera.getProjection( isSafeBanded ) * camera.getView();
 		data.objInvViewProj = viewProj.getInverse();
 		data.position = position;
+
+		data.lightDotCameraFront = castor::point::dot( sunDirection
+			, castor::point::getNormalised( front ) );
+		data.isLightInFront = data.lightDotCameraFront > 0.2f ? 1 : 0;
 	}
 
 	//************************************************************************************************

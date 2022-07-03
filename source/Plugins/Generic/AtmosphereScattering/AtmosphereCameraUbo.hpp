@@ -11,8 +11,10 @@ See LICENSE file in root folder
 
 #include <Castor3D/Buffer/UniformBufferOffset.hpp>
 
+#include <ShaderWriter/BaseTypes/Int.hpp>
 #include <ShaderWriter/BaseTypes/Float.hpp>
-#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/CompositeTypes/StructHelper.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
 
@@ -21,33 +23,45 @@ namespace atmosphere_scattering
 	struct CameraConfig
 	{
 		castor::Matrix4x4f camInvViewProj;
+		castor::Matrix4x4f camInvProj;
+		castor::Matrix4x4f camInvView;
 		castor::Matrix4x4f objInvViewProj;
 		castor::Point3f position;
+		float lightDotCameraFront;
+		int32_t isLightInFront;
+		castor::Point3i pad;
 	};
 
 	struct CameraData
-		: public sdw::StructInstance
+		: public sdw::StructInstanceHelperT< "CameraData"
+			, sdw::type::MemoryLayout::eStd140
+			, sdw::StructFieldT< sdw::Mat4, "camInvViewProj" >
+			, sdw::StructFieldT< sdw::Mat4, "camInvProj" >
+			, sdw::StructFieldT< sdw::Mat4, "camInvView" >
+			, sdw::StructFieldT< sdw::Mat4, "objInvViewProj" >
+			, sdw::StructFieldT< sdw::Vec3, "position" >
+			, sdw::StructFieldT< sdw::Float, "lightDotCameraFront" >
+			, sdw::StructFieldT< sdw::Int, "isLightInFront" >
+			, sdw::StructFieldT< sdw::Int, "pad0" >
+			, sdw::StructFieldT< sdw::Int, "pad1" >
+			, sdw::StructFieldT< sdw::Int, "pad2" > >
 	{
 		CameraData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled );
 
-		SDW_DeclStructInstance( , CameraData );
-
-		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-
 		sdw::Vec4 camProjToWorld( sdw::Vec4 const & pos )const;
 		sdw::Vec4 objProjToWorld( sdw::Vec4 const & pos )const;
 
-	private:
-		using sdw::StructInstance::getMember;
-		using sdw::StructInstance::getMemberArray;
+		auto position()const { return getMember< "position" >(); }
+		auto isLightInFront()const { return getMember< "isLightInFront" >(); }
+		auto lightDotCameraFront()const { return getMember< "lightDotCameraFront" >(); }
+		auto camInvProj()const { return getMember< "camInvProj" >(); }
+		auto camInvView()const { return getMember< "camInvView" >(); }
 
 	private:
-		sdw::Mat4 camInvViewProj;
-		sdw::Mat4 objInvViewProj;
-	public:
-		sdw::Vec3 position;
+		auto camInvViewProj()const { return getMember< "camInvViewProj" >(); }
+		auto objInvViewProj()const { return getMember< "objInvViewProj" >(); }
 	};
 
 	class CameraUbo
@@ -60,6 +74,7 @@ namespace atmosphere_scattering
 			, bool & dirty );
 		~CameraUbo();
 		void cpuUpdate( castor3d::Camera const & camera
+			, castor::Point3f const & sunDirection
 			, bool isSafeBanded );
 
 		void createPassBinding( crg::FramePass & pass

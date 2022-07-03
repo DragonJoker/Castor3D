@@ -23,6 +23,9 @@ namespace atmosphere_scattering
 		uint32_t multiScatter{ 32u };
 		uint32_t atmosphereVolume{ 32u };
 		castor::Point2ui skyView{ 192u, 108u };
+		uint32_t worley{ 32u };
+		uint32_t perlinWorley{ 128u };
+		uint32_t weather{ 1024u };
 		AtmosphereScatteringConfig config{};
 		DensityProfileLayer * densityLayer{};
 		std::unique_ptr< AtmosphereBackground > atmosphere;

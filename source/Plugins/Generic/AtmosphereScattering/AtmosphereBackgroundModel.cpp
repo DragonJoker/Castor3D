@@ -45,7 +45,7 @@ namespace atmosphere_scattering
 			, m_atmosphere
 			, m_cameraData
 			, m_atmosphereData
-			, false, true, true, true }
+			, false, true, true, true, false }
 	{
 		m_writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "c3d_mapSkyView"
 			, binding++
@@ -98,7 +98,7 @@ namespace atmosphere_scattering
 
 	sdw::Vec3 AtmosphereBackgroundModel::getSunRadiance( sdw::Vec3 const & psunDir )
 	{
-		return m_atmosphere.getSunRadiance( m_cameraData.position
+		return m_atmosphere.getSunRadiance( m_cameraData.position()
 			, psunDir
 			, m_transmittanceMap );
 	}

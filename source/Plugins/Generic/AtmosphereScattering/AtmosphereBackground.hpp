@@ -5,14 +5,21 @@ See LICENSE file in root folder
 #define ___C3DAS_AtmosphereBackground_H___
 
 #include "AtmosphereCameraUbo.hpp"
+#include "AtmosphereCloudsResolvePass.hpp"
 #include "AtmosphereMultiScatteringPass.hpp"
+#include "AtmospherePerlinPass.hpp"
 #include "AtmosphereSkyViewPass.hpp"
 #include "AtmosphereTransmittancePass.hpp"
 #include "AtmosphereVolumePass.hpp"
+#include "AtmosphereVolumetricCloudsPass.hpp"
+#include "AtmosphereWeatherPass.hpp"
+#include "AtmosphereWorleyPass.hpp"
 
 #include <Castor3D/Buffer/UniformBufferOffset.hpp>
 #include <Castor3D/Scene/Background/Background.hpp>
 #include <Castor3D/Shader/Shaders/GlslBackground.hpp>
+
+#include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 
 namespace atmosphere_scattering
 {
@@ -77,6 +84,9 @@ namespace atmosphere_scattering
 		*/
 		castor::String const & getModelName()const override;
 
+		void loadWorley( uint32_t dimension );
+		void loadPerlinWorley( uint32_t dimension );
+		void loadWeather( uint32_t dimension );
 		void loadTransmittance( castor::Point2ui const & dimensions );
 		void loadMultiScatter( uint32_t dimension );
 		void loadAtmosphereVolume( uint32_t dimension );
@@ -102,14 +112,24 @@ namespace atmosphere_scattering
 			return m_node;
 		}
 
-		void setConfiguration( AtmosphereScatteringConfig config )
+		void setAtmosphereCfg( AtmosphereScatteringConfig config )
 		{
-			m_config = std::move( config );
+			m_atmosphereCfg = std::move( config );
 		}
 
-		auto & getConfiguration()const
+		auto & getAtmosphereCfg()const
 		{
-			return m_config;
+			return m_atmosphereCfg;
+		}
+
+		void setWeatherCfg( AtmosphereWeatherConfig config )
+		{
+			m_weatherCfg = std::move( config );
+		}
+
+		auto & getWeatherCfg()const
+		{
+			return m_weatherCfg;
 		}
 
 		auto const & getTransmittance()const
@@ -130,11 +150,6 @@ namespace atmosphere_scattering
 		auto const & getVolumeResolution()const
 		{
 			return m_volumeResolution;
-		}
-
-		AtmosphereScatteringUbo const & getAtmosphereUbo()const
-		{
-			return *m_atmosphereUbo;
 		}
 
 	private:
@@ -167,8 +182,15 @@ namespace atmosphere_scattering
 				, castor3d::RenderDevice const & device
 				, AtmosphereBackground & background
 				, crg::FramePass const & transmittancePass
+				, crg::FramePass const & multiscatterPass
+				, crg::FramePass const & weatherPass
 				, crg::ImageViewId const & transmittance
+				, crg::ImageViewId const & multiscatter
+				, crg::ImageViewId const & worley
+				, crg::ImageViewId const & perlinWorley
+				, crg::ImageViewId const & weather
 				, AtmosphereScatteringUbo const & atmosphereUbo
+				, AtmosphereWeatherUbo const & weatherUbo
 				, VkExtent2D const & size
 				, castor::Point2ui const & skyViewResolution
 				, uint32_t volumeResolution
@@ -176,19 +198,41 @@ namespace atmosphere_scattering
 				, castor3d::BackgroundPassBase *& backgroundPass );
 			~CameraPasses();
 
-			void update( castor3d::CpuUpdater & updater )const;
+			void accept( castor3d::PipelineVisitor & visitor );
+
+			void update( castor3d::CpuUpdater & updater
+				, castor::Point3f const & sunDirection )const;
 
 			castor3d::Texture skyView;
 			castor3d::Texture volume;
-			mutable bool changed{ true };
+			castor3d::Texture cloudsColour;
+			castor3d::Texture cloudsEmission;
+			castor3d::Texture cloudsDistance;
+			castor3d::Texture cloudsResult;
+			mutable bool camAtmoChanged{ true };
 			mutable CameraUbo cameraUbo;
 			std::unique_ptr< AtmosphereSkyViewPass > skyViewPass;
 			std::unique_ptr< AtmosphereVolumePass > volumePass;
+			std::unique_ptr< AtmosphereVolumetricCloudsPass > volumetricCloudsPass;
+			std::unique_ptr< AtmosphereCloudsResolvePass > cloudsResolvePass;
 			crg::FramePass * lastPass;
 		};
 
 	private:
 		castor3d::SceneNode const * m_node{};
+		// Clouds
+		AtmosphereWeatherConfig m_weatherCfg;
+		castor3d::Texture m_worley;
+		castor3d::Texture m_perlinWorley;
+		castor3d::Texture m_weather;
+		bool m_generateWorley{ true };
+		bool m_generatePerlinWorley{ true };
+		mutable bool m_weatherChanged{ true };
+		mutable bool m_weatherPerlinChanged{ true };
+		std::unique_ptr< AtmosphereWeatherUbo > m_weatherUbo;
+		std::unique_ptr< AtmosphereWorleyPass > m_worleyPass;
+		std::unique_ptr< AtmospherePerlinPass > m_perlinWorleyPass;
+		std::unique_ptr< AtmosphereWeatherPass > m_weatherPass;
 		// Atmosphere
 		AtmosphereScatteringConfig m_atmosphereCfg;
 		castor3d::Texture m_transmittance;
@@ -200,6 +244,8 @@ namespace atmosphere_scattering
 		std::unique_ptr< AtmosphereTransmittancePass > m_transmittancePass;
 		std::unique_ptr< AtmosphereMultiScatteringPass > m_multiScatteringPass;
 		std::map< crg::ImageData const *, std::unique_ptr< CameraPasses > > m_cameraPasses;
+		mutable castor::PreciseTimer m_timer;
+		mutable float m_time{};
 	};
 }
 

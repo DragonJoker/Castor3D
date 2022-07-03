@@ -95,9 +95,9 @@ namespace atmosphere_scattering
 						, c3d_cameraData.camProjToWorld( vec4( clipSpace, 1.0_f ) ) );
 
 					auto worldDir = writer.declLocale( "worldDir"
-						, normalize( hPos.xyz() / hPos.w() - c3d_cameraData.position ) );
+						, normalize( hPos.xyz() / hPos.w() - c3d_cameraData.position() ) );
 					auto worldPos = writer.declLocale( "worldPos"
-						, c3d_cameraData.position + vec3( 0.0_f, c3d_atmosphereData.bottomRadius, 0.0_f ) );
+						, c3d_cameraData.position() + vec3( 0.0_f, c3d_atmosphereData.bottomRadius, 0.0_f ) );
 
 					auto viewHeight = writer.declLocale( "viewHeight"
 						, length( worldPos ) );

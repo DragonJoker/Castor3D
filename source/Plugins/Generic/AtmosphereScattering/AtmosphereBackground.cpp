@@ -58,7 +58,7 @@ namespace castor
 				result = result && write( file, "multiScatterResolution", multiScatter );
 				result = result && write( file, "atmosphereVolumeResolution", atmosphereVolume );
 
-				auto & config = background.getConfiguration();
+				auto & config = background.getAtmosphereCfg();
 				result = result && write( file, "sunIlluminance", config.sunIlluminance );
 				result = result && write( file, "sunIlluminanceScale", config.sunIlluminanceScale );
 				result = result && write( file, "rayMarchMinSPP", uint32_t( config.rayMarchMinMaxSPP->x ) );
@@ -120,8 +120,15 @@ namespace atmosphere_scattering
 		, castor3d::RenderDevice const & device
 		, AtmosphereBackground & background
 		, crg::FramePass const & transmittancePass
+		, crg::FramePass const & multiscatterPass
+		, crg::FramePass const & weatherPass
 		, crg::ImageViewId const & transmittance
+		, crg::ImageViewId const & multiscatter
+		, crg::ImageViewId const & worley
+		, crg::ImageViewId const & perlinWorley
+		, crg::ImageViewId const & weather
 		, AtmosphereScatteringUbo const & atmosphereUbo
+		, AtmosphereWeatherUbo const & weatherUbo
 		, VkExtent2D const & size
 		, castor::Point2ui const & skyViewResolution
 		, uint32_t volumeResolution
@@ -129,7 +136,7 @@ namespace atmosphere_scattering
 		, castor3d::BackgroundPassBase *& backgroundPass )
 		: skyView{ device
 			, graph.getHandler()
-			, "SkyView" + std::to_string( index )
+			, "AtmosphereSkyView" + std::to_string( index )
 			, 0u
 			, { skyViewResolution->x, skyViewResolution->y, 1u }
 			, 1u
@@ -141,7 +148,7 @@ namespace atmosphere_scattering
 			, VK_SAMPLER_MIPMAP_MODE_NEAREST }
 		, volume{ device
 			, graph.getHandler()
-			, "Volume" + std::to_string( index )
+			, "AtmosphereVolume" + std::to_string( index )
 			, 0u
 			, { volumeResolution, volumeResolution, volumeResolution }
 			, 1u
@@ -151,7 +158,59 @@ namespace atmosphere_scattering
 			, VK_FILTER_LINEAR
 			, VK_FILTER_LINEAR
 			, VK_SAMPLER_MIPMAP_MODE_NEAREST }
-		, cameraUbo{ device, changed }
+		, cloudsColour{ device
+			, graph.getHandler()
+			, "CloudsColour" + std::to_string( index )
+			, 0u
+			, { size.width, size.height, 1u }
+			, 1u
+			, 1u
+			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+			, VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR
+			, VK_SAMPLER_MIPMAP_MODE_NEAREST
+			, VK_SAMPLER_ADDRESS_MODE_REPEAT }
+		, cloudsEmission{ device
+			, graph.getHandler()
+			, "CloudsEmission" + std::to_string( index )
+			, 0u
+			, { size.width, size.height, 1u }
+			, 1u
+			, 1u
+			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+			, VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR
+			, VK_SAMPLER_MIPMAP_MODE_NEAREST
+			, VK_SAMPLER_ADDRESS_MODE_REPEAT }
+		, cloudsDistance{ device
+			, graph.getHandler()
+			, "CloudsDistance" + std::to_string( index )
+			, 0u
+			, { size.width, size.height, 1u }
+			, 1u
+			, 1u
+			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+			, VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR
+			, VK_SAMPLER_MIPMAP_MODE_NEAREST
+			, VK_SAMPLER_ADDRESS_MODE_REPEAT }
+		, cloudsResult{ device
+			, graph.getHandler()
+			, "CloudsResult" + std::to_string( index )
+			, 0u
+			, { size.width, size.height, 1u }
+			, 1u
+			, 1u
+			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT
+			, VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR
+			, VK_SAMPLER_MIPMAP_MODE_NEAREST
+			, VK_SAMPLER_ADDRESS_MODE_REPEAT }
+		, cameraUbo{ device, camAtmoChanged }
 		, skyViewPass{ std::make_unique< AtmosphereSkyViewPass >( graph
 			, crg::FramePassArray{ &transmittancePass }
 			, device
@@ -160,7 +219,7 @@ namespace atmosphere_scattering
 			, transmittance
 			, skyView.targetViewId
 			, index
-			, changed ) }
+			, camAtmoChanged ) }
 		, volumePass{ std::make_unique< AtmosphereVolumePass >( graph
 			, crg::FramePassArray{ &transmittancePass }
 			, device
@@ -169,10 +228,40 @@ namespace atmosphere_scattering
 			, transmittance
 			, volume.targetViewId
 			, index
-			, changed ) }
+			, camAtmoChanged ) }
+		, volumetricCloudsPass{ std::make_unique< AtmosphereVolumetricCloudsPass >( graph
+			, crg::FramePassArray{ &transmittancePass , &weatherPass, &skyViewPass->getLastPass(), &multiscatterPass }
+			, device
+			, atmosphereUbo
+			, cameraUbo
+			, weatherUbo
+			, transmittance
+			, multiscatter
+			, skyView.sampledViewId
+			, volume.sampledViewId
+			, perlinWorley
+			, worley
+			, weather
+			, cloudsColour.targetViewId
+			, cloudsEmission.targetViewId
+			, cloudsDistance.targetViewId
+			, index ) }
+		, cloudsResolvePass{ std::make_unique< AtmosphereCloudsResolvePass >( graph
+			, crg::FramePassArray{ &volumetricCloudsPass->getLastPass() }
+			, device
+			, cameraUbo
+			, atmosphereUbo
+			, cloudsColour.sampledViewId
+			, cloudsEmission.sampledViewId
+			, cloudsResult.targetViewId
+			, index ) }
 	{
 		skyView.create();
 		volume.create();
+		cloudsColour.create();
+		cloudsEmission.create();
+		cloudsDistance.create();
+		cloudsResult.create();
 		auto & pass = graph.createPass( "Background"
 			, [&background, &backgroundPass, &device, size]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -190,18 +279,11 @@ namespace atmosphere_scattering
 					, res->getTimer() );
 				return res;
 			} );
-		pass.addDependency( skyViewPass->getLastPass() );
-		pass.addDependency( volumePass->getLastPass() );
+		pass.addDependency( cloudsResolvePass->getLastPass() );
 		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
 			, VK_FILTER_LINEAR };
-		cameraUbo.createPassBinding( pass
-			, AtmosphereBackgroundPass::eCamera );
-		pass.addSampledView( skyView.sampledViewId
-			, AtmosphereBackgroundPass::eSkyView
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, linearSampler );
-		pass.addSampledView( volume.sampledViewId
-			, AtmosphereBackgroundPass::eVolume
+		pass.addSampledView( cloudsResult.sampledViewId
+			, AtmosphereBackgroundPass::eClouds
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, linearSampler );
 		lastPass = &pass;
@@ -211,11 +293,40 @@ namespace atmosphere_scattering
 	{
 		skyView.destroy();
 		volume.destroy();
+		cloudsColour.destroy();
+		cloudsEmission.destroy();
+		cloudsDistance.destroy();
+		cloudsResult.destroy();
 	}
 
-	void AtmosphereBackground::CameraPasses::update( castor3d::CpuUpdater & updater )const
+	void AtmosphereBackground::CameraPasses::accept( castor3d::PipelineVisitor & visitor )
 	{
-		cameraUbo.cpuUpdate( *updater.camera, updater.isSafeBanded );
+		visitor.visit( "Atmosphere SkyView"
+			, skyView.sampledViewId
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, castor3d::TextureFactors{}.invert( true ) );
+		visitor.visit( "Clouds Colour"
+			, cloudsColour
+			, VK_IMAGE_LAYOUT_GENERAL
+			, castor3d::TextureFactors{}.invert( true ) );
+		visitor.visit( "Clouds Emission"
+			, cloudsEmission
+			, VK_IMAGE_LAYOUT_GENERAL
+			, castor3d::TextureFactors{}.invert( true ) );
+		visitor.visit( "Clouds Distance"
+			, cloudsDistance
+			, VK_IMAGE_LAYOUT_GENERAL
+			, castor3d::TextureFactors{}.invert( true ) );
+		visitor.visit( "Clouds Result"
+			, cloudsResult
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, castor3d::TextureFactors{}.invert( true ) );
+	}
+
+	void AtmosphereBackground::CameraPasses::update( castor3d::CpuUpdater & updater
+		, castor::Point3f const & sunDirection )const
+	{
+		cameraUbo.cpuUpdate( *updater.camera, sunDirection, updater.isSafeBanded );
 	}
 
 	//*********************************************************************************************
@@ -225,12 +336,18 @@ namespace atmosphere_scattering
 	AtmosphereBackground::AtmosphereBackground( castor3d::Engine & engine
 		, castor3d::Scene & scene )
 		: SceneBackground{ engine, scene, cuT( "Atmosphere" ), cuT( "atmosphere" ) }
-		, m_atmosphereUbo{ std::make_unique< AtmosphereScatteringUbo >( engine.getRenderSystem()->getRenderDevice() ) }
+		, m_weatherUbo{ std::make_unique< AtmosphereWeatherUbo >( engine.getRenderSystem()->getRenderDevice()
+			, m_weatherChanged ) }
+		, m_atmosphereUbo{ std::make_unique< AtmosphereScatteringUbo >( engine.getRenderSystem()->getRenderDevice()
+			, m_atmosphereChanged ) }
 	{
 	}
 
 	AtmosphereBackground::~AtmosphereBackground()
 	{
+		m_worley.destroy();
+		m_perlinWorley.destroy();
+		m_weather.destroy();
 		m_transmittance.destroy();
 		m_multiScatter.destroy();
 	}
@@ -244,50 +361,130 @@ namespace atmosphere_scattering
 	{
 		visitor.visit( cuT( "Atmosphere Configuration" ) );
 		visitor.visit( cuT( "Solar Irradiance" )
-			, m_config.solarIrradiance
+			, m_atmosphereCfg.solarIrradiance
 			, &m_atmosphereChanged );
 		visitor.visit( cuT( "Sun Angular Radius" )
-			, m_config.sunAngularRadius
+			, m_atmosphereCfg.sunAngularRadius
 			, &m_atmosphereChanged );
 		visitor.visit( cuT( "Sun Illuminance" )
-			, m_config.sunIlluminance
+			, m_atmosphereCfg.sunIlluminance
 			, &m_atmosphereChanged );
 		visitor.visit( cuT( "Sun Illuminance Scale" )
-			, m_config.sunIlluminanceScale
+			, m_atmosphereCfg.sunIlluminanceScale
 			, &m_atmosphereChanged );
 		visitor.visit( cuT( "Raymarch Min Max SPP " )
-			, m_config.rayMarchMinMaxSPP
+			, m_atmosphereCfg.rayMarchMinMaxSPP
 			, &m_atmosphereChanged );
 		visitor.visit( cuT( "Absorption Extinction" )
-			, m_config.absorptionExtinction
+			, m_atmosphereCfg.absorptionExtinction
 			, &m_atmosphereChanged );
 		visitor.visit( cuT( "Mu S Min" )
-			, m_config.muSMin
+			, m_atmosphereCfg.muSMin
 			, &m_atmosphereChanged );
 		visitor.visit( cuT( "Rayleigh Scattering" )
-			, m_config.rayleighScattering
+			, m_atmosphereCfg.rayleighScattering
 			, &m_atmosphereChanged );
 		visitor.visit( cuT( "Mie Phase Function G" )
-			, m_config.miePhaseFunctionG
+			, m_atmosphereCfg.miePhaseFunctionG
 			, &m_atmosphereChanged );
 		visitor.visit( cuT( "Mie Scattering" )
-			, m_config.mieScattering
+			, m_atmosphereCfg.mieScattering
 			, &m_atmosphereChanged );
 		visitor.visit( cuT( "Mie Extinction" )
-			, m_config.mieExtinction
+			, m_atmosphereCfg.mieExtinction
 			, &m_atmosphereChanged );
 		visitor.visit( cuT( "Atmosphere Bottom Radius" )
-			, m_config.bottomRadius
+			, m_atmosphereCfg.bottomRadius
 			, &m_atmosphereChanged );
 		visitor.visit( cuT( "Atmosphere Top Radius" )
-			, m_config.topRadius
+			, m_atmosphereCfg.topRadius
 			, &m_atmosphereChanged );
 		visitor.visit( cuT( "Multiple Scattering Factor" )
-			, m_config.multipleScatteringFactor
+			, m_atmosphereCfg.multipleScatteringFactor
 			, &m_atmosphereChanged );
 		visitor.visit( cuT( "Ground Albedo" )
-			, m_config.groundAlbedo
+			, m_atmosphereCfg.groundAlbedo
 			, &m_atmosphereChanged );
+
+		visitor.visit( cuT( "Clouds Configuration" ) );
+		visitor.visit( cuT( "Clouds Speed" )
+			, m_weatherCfg.cloudSpeed
+			, &m_weatherChanged );
+		visitor.visit( cuT( "Clouds Coverage" )
+			, m_weatherCfg.coverage
+			, &m_weatherChanged );
+		visitor.visit( cuT( "Clouds Crispiness" )
+			, m_weatherCfg.crispiness
+			, &m_weatherChanged );
+		visitor.visit( cuT( "Clouds Curliness" )
+			, m_weatherCfg.curliness
+			, &m_weatherChanged );
+		visitor.visit( cuT( "Clouds Density" )
+			, m_weatherCfg.density
+			, &m_weatherChanged );
+		visitor.visit( cuT( "Clouds Absorption" )
+			, m_weatherCfg.absorption
+			, &m_weatherChanged );
+		visitor.visit( cuT( "Clouds Top Colour" )
+			, m_weatherCfg.cloudColorTop
+			, &m_weatherChanged );
+		visitor.visit( cuT( "Clouds Bottom Colour" )
+			, m_weatherCfg.cloudColorBottom
+			, &m_weatherChanged );
+		visitor.visit( cuT( "Clouds Dome Bottom" )
+			, m_weatherCfg.sphereInnerRadius
+			, &m_weatherChanged );
+		visitor.visit( cuT( "Clouds Dome Top" )
+			, m_weatherCfg.sphereOuterRadius
+			, &m_weatherChanged );
+
+		visitor.visit( cuT( "Clouds Noises" ) );
+		visitor.visit( cuT( "Clouds Perlin Amplitude" )
+			, m_weatherCfg.perlinAmplitude
+			, &m_weatherPerlinChanged );
+		visitor.visit( cuT( "Clouds Perlin Frequency" )
+			, m_weatherCfg.perlinFrequency
+			, &m_weatherPerlinChanged );
+		visitor.visit( cuT( "Clouds Perlin Scale" )
+			, m_weatherCfg.perlinScale
+			, &m_weatherPerlinChanged );
+		visitor.visit( cuT( "Clouds Perlin Octaves" )
+			, m_weatherCfg.perlinOctaves
+			, &m_weatherPerlinChanged );
+
+		visitor.visit( "Weather Result"
+			, m_weather
+			, VK_IMAGE_LAYOUT_GENERAL
+			, castor3d::TextureFactors{}.invert( true ) );
+		visitor.visit( "Atmosphere Transmittance"
+			, m_transmittance
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, castor3d::TextureFactors{}.invert( true ) );
+		visitor.visit( "Atmosphere Multiscatter"
+			, m_multiScatter
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, castor3d::TextureFactors{}.invert( true ) );
+
+		for ( auto & cameraPass : m_cameraPasses )
+		{
+			cameraPass.second->accept( visitor );
+		}		
+
+		for ( uint32_t index = 0u; index < m_worley.subViewsId.size(); ++index )
+		{
+			visitor.visit( "Worley Noise Slice " + castor::string::toString( index )
+				, m_worley.sampledViewId
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, castor3d::TextureFactors::tex3DSlice( index ).invert( true ) );
+		}
+
+		for ( uint32_t index = 0u; index < m_perlinWorley.subViewsId.size(); ++index )
+		{
+			visitor.visit( "Perlin Worley Noise Slice " + castor::string::toString( index )
+				, m_perlinWorley.sampledViewId
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, castor3d::TextureFactors::tex3DSlice( index ).invert( true ) );
+		}
 	}
 
 	crg::FramePass & AtmosphereBackground::createBackgroundPass( crg::FramePassGroup & graph
@@ -305,6 +502,22 @@ namespace atmosphere_scattering
 	{
 		if ( !m_transmittancePass )
 		{
+			m_worleyPass = std::make_unique< AtmosphereWorleyPass >( graph
+				, crg::FramePassArray{}
+				, device
+				, m_worley.sampledViewId
+				, m_generateWorley );
+			m_perlinWorleyPass = std::make_unique< AtmospherePerlinPass >( graph
+				, crg::FramePassArray{}
+				, device
+				, m_perlinWorley.sampledViewId
+				, m_generatePerlinWorley );
+			m_weatherPass = std::make_unique< AtmosphereWeatherPass >( graph
+				, crg::FramePassArray{ &m_worleyPass->getLastPass(), &m_perlinWorleyPass->getLastPass() }
+				, device
+				, *m_weatherUbo
+				, m_weather.targetViewId
+				, m_weatherPerlinChanged );
 			m_transmittancePass = std::make_unique< AtmosphereTransmittancePass >( graph
 				, crg::FramePassArray{}
 				, device
@@ -329,8 +542,15 @@ namespace atmosphere_scattering
 					, device
 					, *this
 					, m_transmittancePass->getLastPass()
+					, m_multiScatteringPass->getLastPass()
+					, m_weatherPass->getLastPass()
 					, m_transmittance.sampledViewId
+					, m_multiScatter.sampledViewId
+					, m_worley.sampledViewId
+					, m_perlinWorley.sampledViewId
+					, m_weather.sampledViewId
 					, *m_atmosphereUbo
+					, *m_weatherUbo
 					, size
 					, m_skyViewResolution
 					, m_volumeResolution
@@ -338,20 +558,11 @@ namespace atmosphere_scattering
 					, backgroundPass ) ).first;
 			auto & pass = *it->second->lastPass;
 			pass.addDependency( m_multiScatteringPass->getLastPass() );
+			pass.addDependency( m_weatherPass->getLastPass() );
 			crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
 				, VK_FILTER_LINEAR };
 			pass.addImplicitDepthStencilView( *depth
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-			m_atmosphereUbo->createPassBinding( pass
-				, AtmosphereBackgroundPass::eAtmosphere );
-			pass.addSampledView( m_transmittance.sampledViewId
-				, AtmosphereBackgroundPass::eTransmittance
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-				, linearSampler );
-			pass.addSampledView( m_multiScatter.sampledViewId
-				, AtmosphereBackgroundPass::eMultiScatter
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-				, linearSampler );
 			pass.addOutputColourView( colour
 				, castor3d::transparentBlackClearColor );
 			pass.addInOutDepthStencilView( *depth );
@@ -370,6 +581,66 @@ namespace atmosphere_scattering
 	castor::String const & AtmosphereBackground::getModelName()const
 	{
 		return AtmosphereBackgroundModel::Name;
+	}
+
+	void AtmosphereBackground::loadWorley( uint32_t dimension )
+	{
+		auto & handler = getScene().getEngine()->getGraphResourceHandler();
+		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
+		m_worley = castor3d::Texture{ device
+			, handler
+			, "WorleyNoise"
+			, 0u
+			, { dimension, dimension, dimension }
+			, 1u
+			, castor3d::getMipLevels( VkExtent3D{ dimension, dimension, dimension }, VK_FORMAT_R8G8B8A8_UNORM )
+			, VK_FORMAT_R8G8B8A8_UNORM
+			, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_STORAGE_BIT
+			, VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR
+			, VK_SAMPLER_MIPMAP_MODE_LINEAR
+			, VK_SAMPLER_ADDRESS_MODE_REPEAT };
+		notifyChanged();
+	}
+
+	void AtmosphereBackground::loadPerlinWorley( uint32_t dimension )
+	{
+		auto & handler = getScene().getEngine()->getGraphResourceHandler();
+		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
+		m_perlinWorley = castor3d::Texture{ device
+			, handler
+			, "PerlinWorleyNoise"
+			, 0u
+			, { dimension, dimension, dimension }
+			, 1u
+			, castor3d::getMipLevels( VkExtent3D{ dimension, dimension , dimension }, VK_FORMAT_R8G8B8A8_UNORM )
+			, VK_FORMAT_R8G8B8A8_UNORM
+			, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_STORAGE_BIT
+			, VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR
+			, VK_SAMPLER_MIPMAP_MODE_LINEAR
+			, VK_SAMPLER_ADDRESS_MODE_REPEAT };
+		notifyChanged();
+	}
+
+	void AtmosphereBackground::loadWeather( uint32_t dimension )
+	{
+		auto & handler = getScene().getEngine()->getGraphResourceHandler();
+		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
+		m_weather = castor3d::Texture{ device
+			, handler
+			, "Weather"
+			, 0u
+			, { dimension, dimension, 1u }
+			, 1u
+			, 1u
+			, VK_FORMAT_R32G32_SFLOAT
+			, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_STORAGE_BIT
+			, VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR
+			, VK_SAMPLER_MIPMAP_MODE_NEAREST
+			, VK_SAMPLER_ADDRESS_MODE_REPEAT };
+		notifyChanged();
 	}
 
 	void AtmosphereBackground::loadTransmittance( castor::Point2ui const & dimensions )
@@ -446,6 +717,7 @@ namespace atmosphere_scattering
 			, m_textureId.wholeViewId );
 		m_hdr = true;
 		m_srgb = false;
+		m_timer.getElapsed();
 		return m_texture->initialise( device, *data );
 	}
 
@@ -456,15 +728,21 @@ namespace atmosphere_scattering
 	void AtmosphereBackground::doCpuUpdate( castor3d::CpuUpdater & updater )const
 	{
 		CU_Require( m_node );
-		m_atmosphereChanged = false;
-		m_atmosphereChanged = m_atmosphereUbo->cpuUpdate( m_config, *m_node )
-			|| m_atmosphereChanged;
+		//m_atmosphereChanged = false;
+		auto sunDirection = m_atmosphereUbo->cpuUpdate( m_atmosphereCfg, *m_node );
+		//m_weatherPerlinChanged = false;
+		//m_weatherChanged = false;
+		auto time = updater.tslf > 0_ms
+			? updater.tslf
+			: std::chrono::duration_cast< castor::Milliseconds >( m_timer.getElapsed() );
+		m_time += float( time.count() ) / 1000.0f;
+		m_weatherUbo->cpuUpdate( m_weatherCfg, m_time );
 		auto it = m_cameraPasses.find( updater.targetImage );
 
 		if ( it != m_cameraPasses.end() )
 		{
-			it->second->changed = m_atmosphereChanged;
-			it->second->update( updater );
+			it->second->camAtmoChanged = m_atmosphereChanged;
+			it->second->update( updater, sunDirection );
 		}
 	}
 

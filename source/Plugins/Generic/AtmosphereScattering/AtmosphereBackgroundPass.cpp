@@ -50,65 +50,21 @@ namespace atmosphere_scattering
 		{
 			sdw::FragmentWriter writer;
 
-			C3D_Camera( writer
-				, AtmosphereBackgroundPass::eCamera
-				, 0u );
-			C3D_AtmosphereScattering( writer
-				, AtmosphereBackgroundPass::eAtmosphere
-				, 0u );
-			auto transmittanceMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "transmittanceMap"
-				, uint32_t( AtmosphereBackgroundPass::eTransmittance )
-				, 0u );
-			auto multiScatterMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "multiScatterMap"
-				, uint32_t( AtmosphereBackgroundPass::eMultiScatter )
-				, 0u );
-			auto skyViewMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "skyViewMap"
-				, uint32_t( AtmosphereBackgroundPass::eSkyView )
-				, 0u );
-			auto volumeMap = writer.declCombinedImg< sdw::CombinedImage3DRgba32 >( "volumeMap"
-				, uint32_t( AtmosphereBackgroundPass::eVolume )
+			auto cloudsMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "cloudsMap"
+				, uint32_t( AtmosphereBackgroundPass::eClouds )
 				, 0u );
 
 			// Fragment Outputs
-			auto outLuminance( writer.declOutput< sdw::Vec4 >( "outLuminance", 0u ) );
-			auto outTransmittance( writer.declOutput< sdw::Vec4 >( "outTransmittance", 1u, colorTransmittance ) );
-
-			AtmosphereConfig atmosphereConfig{ writer
-				, c3d_atmosphereData
-				, { false, &c3d_cameraData, true, true }
-				, { transmittanceExtent.width, transmittanceExtent.height }
-				, &transmittanceMap };
-			ScatteringConfig scatteringConfig{ writer
-				, atmosphereConfig
-				, c3d_cameraData
-				, c3d_atmosphereData
-				, colorTransmittance
-				, fastSky
-				, fastAerialPerspective
-				, renderSunDisk };
+			auto outColour( writer.declOutput< sdw::Vec4 >( "outColour", 0u ) );
 
 			writer.implementMainT< sdw::VoidT, sdw::VoidT >( sdw::FragmentIn{ writer }
 				, sdw::FragmentOut{ writer }
 				, [&]( sdw::FragmentIn in
 					, sdw::FragmentOut out )
 				{
-					outTransmittance = vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f );
 					auto targetSize = writer.declLocale( "targetSize"
 						, vec2( sdw::Float{ float( renderSize.width + 1u ) }, float( renderSize.height + 1u ) ) );
-					auto depthBufferValue = writer.declLocale( "depthBufferValue"
-						, 1.0_f );
-					auto luminance = writer.declLocale< sdw::Vec4 >( "luminance" );
-					auto transmittance = writer.declLocale< sdw::Vec4 >( "transmittance" );
-					scatteringConfig.getPixelTransLum( in.fragCoord.xy()
-						, targetSize
-						, depthBufferValue
-						, transmittanceMap
-						, skyViewMap
-						, volumeMap
-						, transmittance
-						, luminance );
-					outLuminance = scatteringConfig.rescaleLuminance( luminance );
-					outTransmittance = transmittance;
+					outColour = cloudsMap.sample( in.fragCoord.xy() / targetSize );
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

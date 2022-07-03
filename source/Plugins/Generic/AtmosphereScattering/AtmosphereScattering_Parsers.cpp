@@ -46,11 +46,14 @@ namespace atmosphere_scattering
 		else
 		{
 			atmosphereContext.config.multiScatteringLUTRes = float( atmosphereContext.multiScatter );
-			atmosphereContext.atmosphere->setConfiguration( std::move( atmosphereContext.config ) );
+			atmosphereContext.atmosphere->setAtmosphereCfg( std::move( atmosphereContext.config ) );
 			atmosphereContext.atmosphere->loadTransmittance( atmosphereContext.transmittance );
 			atmosphereContext.atmosphere->loadMultiScatter( atmosphereContext.multiScatter );
 			atmosphereContext.atmosphere->loadAtmosphereVolume( atmosphereContext.atmosphereVolume );
 			atmosphereContext.atmosphere->loadSkyView( atmosphereContext.skyView );
+			atmosphereContext.atmosphere->loadWorley( atmosphereContext.worley );
+			atmosphereContext.atmosphere->loadPerlinWorley( atmosphereContext.perlinWorley );
+			atmosphereContext.atmosphere->loadWeather( atmosphereContext.weather );
 			parsingContext.scene->setBackground( std::move( atmosphereContext.atmosphere ) );
 		}
 	}
