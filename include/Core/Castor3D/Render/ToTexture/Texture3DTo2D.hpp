@@ -56,15 +56,24 @@ namespace castor3d
 		Texture m_target;
 		Texture m_depthBuffer;
 		UniformBufferOffsetT< Texture3DTo2DData > m_uniformBuffer;
-		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
-		ashes::PipelineLayoutPtr m_pipelineLayout;
 		ashes::RenderPassPtr m_renderPass;
-		ShaderModule m_vertexShader;
-		ShaderModule m_geometryShader;
-		ShaderModule m_pixelShader;
-		ashes::GraphicsPipelinePtr m_pipeline;
-		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
 		ashes::FrameBufferPtr m_frameBuffer;
+		SamplerUPtr m_sampler;
+
+		ashes::DescriptorSetLayoutPtr m_descriptorSetLayoutVolume;
+		ashes::PipelineLayoutPtr m_pipelineLayoutVolume;
+		ShaderModule m_vertexShaderVolume;
+		ShaderModule m_geometryShaderVolume;
+		ShaderModule m_pixelShaderVolume;
+		ashes::GraphicsPipelinePtr m_pipelineVolume;
+		ashes::DescriptorSetPoolPtr m_descriptorSetPoolVolume;
+
+		ashes::DescriptorSetLayoutPtr m_descriptorSetLayoutSlice;
+		ashes::PipelineLayoutPtr m_pipelineLayoutSlice;
+		ShaderModule m_vertexShaderSlice;
+		ShaderModule m_pixelShaderSlice;
+		ashes::GraphicsPipelinePtr m_pipelineSlice;
+		ashes::DescriptorSetPoolPtr m_descriptorSetPoolSlice;
 
 		struct Texture3DToScreen
 		{
@@ -78,7 +87,8 @@ namespace castor3d
 				, ashes::DescriptorSetPool const & descriptorSetPool
 				, ashes::FrameBuffer const & frameBuffer
 				, ashes::PipelineLayout const & pipelineLayout
-				, ashes::GraphicsPipeline const & pipeline );
+				, ashes::GraphicsPipeline const & pipeline
+				, SamplerRPtr sampler );
 
 			ashes::DescriptorSetPtr descriptorSet;
 			CommandsSemaphore commands;

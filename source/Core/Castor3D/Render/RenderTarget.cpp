@@ -24,6 +24,7 @@
 #include "Castor3D/Render/ToTexture/Texture3DTo2D.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -53,59 +54,70 @@ namespace castor3d
 		class IntermediatesLister
 			: public RenderTechniqueVisitor
 		{
-			struct VkImageViewCreateInfoComp
+			struct ImageViewSlice
 			{
-				bool operator()( VkImageViewCreateInfo const & lhs
-					, VkImageViewCreateInfo const & rhs )const
+				VkImageViewCreateInfo info;
+				uint32_t slice;
+			};
+
+			struct ImageViewSliceComp
+			{
+				bool operator()( ImageViewSlice const & lhs
+					, ImageViewSlice const & rhs )const
 				{
-					return ( lhs.image < rhs.image
-						|| ( lhs.image == rhs.image
-							&& ( lhs.subresourceRange.baseArrayLayer < rhs.subresourceRange.baseArrayLayer
-								|| ( lhs.subresourceRange.baseArrayLayer == rhs.subresourceRange.baseArrayLayer
-									&& ( lhs.subresourceRange.baseMipLevel < rhs.subresourceRange.baseMipLevel
-										|| ( lhs.subresourceRange.baseMipLevel == rhs.subresourceRange.baseMipLevel
-											&& ( lhs.subresourceRange.layerCount < rhs.subresourceRange.layerCount
-												|| ( lhs.subresourceRange.layerCount == rhs.subresourceRange.layerCount
-													&& ( lhs.subresourceRange.levelCount < rhs.subresourceRange.levelCount
-														|| ( lhs.subresourceRange.levelCount == rhs.subresourceRange.levelCount
-															&& ( lhs.viewType < rhs.viewType
-																|| ( lhs.viewType == rhs.viewType
-																	&& ( lhs.format < rhs.format ) ) ) ) ) ) ) ) ) ) ) ) );
+					return ( lhs.info.image < rhs.info.image
+						|| ( lhs.info.image == rhs.info.image
+							&& ( lhs.info.subresourceRange.baseArrayLayer < rhs.info.subresourceRange.baseArrayLayer
+								|| ( lhs.info.subresourceRange.baseArrayLayer == rhs.info.subresourceRange.baseArrayLayer
+									&& ( lhs.info.subresourceRange.baseMipLevel < rhs.info.subresourceRange.baseMipLevel
+										|| ( lhs.info.subresourceRange.baseMipLevel == rhs.info.subresourceRange.baseMipLevel
+											&& ( lhs.info.subresourceRange.layerCount < rhs.info.subresourceRange.layerCount
+												|| ( lhs.info.subresourceRange.layerCount == rhs.info.subresourceRange.layerCount
+													&& ( lhs.info.subresourceRange.levelCount < rhs.info.subresourceRange.levelCount
+														|| ( lhs.info.subresourceRange.levelCount == rhs.info.subresourceRange.levelCount
+															&& ( lhs.info.viewType < rhs.info.viewType
+																|| ( lhs.info.viewType == rhs.info.viewType
+																	&& ( lhs.info.format < rhs.info.format
+																		|| ( lhs.info.format == rhs.info.format
+																			&& lhs.slice < rhs.slice ) ) ) ) ) ) ) ) ) ) ) ) ) );
 
 				}
 			};
+			using ImageViewCache = std::set< ImageViewSlice, ImageViewSliceComp >;
 
 		public:
-			static void submit( RenderTechnique & technique
+			static void submit( Scene const & scene
+				, RenderTechnique & technique
 				, IntermediateViewArray & intermediates )
 			{
-				std::set< VkImageViewCreateInfo, VkImageViewCreateInfoComp > cache;
+				ImageViewCache cache;
 
 				PipelineFlags flags{};
 				flags.passType = technique.getEngine()->getPassesType();
-				IntermediatesLister visOpaque{ flags, *technique.getRenderTarget().getScene(), cache, intermediates };
+				IntermediatesLister visOpaque{ flags, scene, cache, intermediates };
 				technique.accept( visOpaque );
 
 				flags.passFlags |= PassFlag::eAlphaBlending;
-				IntermediatesLister visTransparent{ flags, *technique.getRenderTarget().getScene(), cache, intermediates };
+				IntermediatesLister visTransparent{ flags, scene, cache, intermediates };
 				technique.accept( visTransparent );
 			}
 
+			template< typename ValueT >
 			static void submit( Scene const & scene
-				, PostEffect & effect
+				, ValueT & value
 				, IntermediateViewArray & intermediates )
 			{
-				std::set< VkImageViewCreateInfo, VkImageViewCreateInfoComp > cache;
+				ImageViewCache cache;
 
 				PipelineFlags flags{};
 				IntermediatesLister vis{ flags, scene, cache, intermediates };
-				effect.accept( vis );
+				value.accept( vis );
 			}
 
 		private:
 			IntermediatesLister( PipelineFlags const & flags
 				, Scene const & scene
-				, std::set< VkImageViewCreateInfo, VkImageViewCreateInfoComp > & cache
+				, ImageViewCache & cache
 				, IntermediateViewArray & result )
 				: RenderTechniqueVisitor{ flags, scene, { true, false } }
 				, m_handler{ scene.getEngine()->getGraphResourceHandler() }
@@ -114,12 +126,39 @@ namespace castor3d
 			{
 			}
 
-			void doVisitArray( castor::String const & name
+			void doVisit3D( castor::String const & name
 				, crg::ImageViewId viewId
 				, VkImageLayout layout
 				, TextureFactors const & factors )
 			{
-				auto & info = viewId.data->info;
+				auto info = viewId.data->info;
+				info.image = VkImage( uint64_t( viewId.data->image.id ) );
+
+				if ( factors.isSlice )
+				{
+					m_cache.insert( { info, factors.slice } );
+					m_result.emplace_back( name
+						, viewId
+						, layout
+						, factors );
+				}
+				else
+				{
+					m_cache.insert( { info, 0u } );
+					m_result.emplace_back( name
+						, viewId
+						, layout
+						, factors );
+				}
+			}
+
+			void doVisit2DArray( castor::String const & name
+				, crg::ImageViewId viewId
+				, VkImageLayout layout
+				, TextureFactors const & factors )
+			{
+				auto info = viewId.data->info;
+				info.image = VkImage( uint64_t( viewId.data->image.id ) );
 
 				if ( ( info.viewType == VK_IMAGE_VIEW_TYPE_2D_ARRAY
 					|| info.viewType == VK_IMAGE_VIEW_TYPE_1D_ARRAY
@@ -139,7 +178,7 @@ namespace castor3d
 							, layerInfo.format
 							, layerInfo.subresourceRange } );
 
-						if ( doFilter( layerViewId ) )
+						if ( doFilter( layerViewId, {} ) )
 						{
 							doVisit( name + std::to_string( layer )
 								, layerViewId
@@ -159,24 +198,28 @@ namespace castor3d
 			{
 				auto info = viewId.data->info;
 
-				if ( ( info.viewType == VK_IMAGE_VIEW_TYPE_3D )
-					|| ( ( info.viewType == VK_IMAGE_VIEW_TYPE_2D )
-						&& ( info.subresourceRange.layerCount == 1u ) ) )
+				if ( ( info.viewType == VK_IMAGE_VIEW_TYPE_2D )
+					&& ( info.subresourceRange.layerCount == 1u ) )
 				{
 					info.image = VkImage( uint64_t( viewId.data->image.id ) );
-					m_cache.insert( info );
+					m_cache.insert( { info, 0u } );
 					m_result.emplace_back( name
 						, viewId
 						, layout
 						, factors );
 				}
+				else if ( info.viewType == VK_IMAGE_VIEW_TYPE_3D )
+				{
+					doVisit3D( name, viewId, layout, factors );
+				}
 				else
 				{
-					doVisitArray( name, viewId, layout, factors );
+					doVisit2DArray( name, viewId, layout, factors );
 				}
 			}
 
-			bool doFilterArray( crg::ImageViewId const & viewId )const
+			bool doFilterArray( crg::ImageViewId const & viewId
+				, TextureFactors const & factors )const
 			{
 				bool result = false;
 				auto & info = viewId.data->info;
@@ -193,11 +236,12 @@ namespace castor3d
 					{
 						auto layer = layerIdx + info.subresourceRange.baseArrayLayer;
 						result = doFilter( m_handler.createViewId( crg::ImageViewData{ viewId.data->name + std::to_string( layer )
-							, viewId.data->image
-							, layerInfo.flags
-							, layerInfo.viewType
-							, layerInfo.format
-							, layerInfo.subresourceRange } ) ) && result;
+								, viewId.data->image
+								, layerInfo.flags
+								, layerInfo.viewType
+								, layerInfo.format
+								, layerInfo.subresourceRange } )
+							, factors ) && result;
 						layerInfo.subresourceRange.baseArrayLayer++;
 					}
 				}
@@ -205,31 +249,36 @@ namespace castor3d
 				return result;
 			}
 
-			bool doFilter( crg::ImageViewId const & viewId )const override
+			bool doFilter( crg::ImageViewId const & viewId
+				, TextureFactors const & factors )const override
 			{
 				auto info = viewId.data->info;
 
-				if ( info.subresourceRange.levelCount > 1u
-					&& info.viewType != VK_IMAGE_VIEW_TYPE_3D )
+				if ( info.viewType == VK_IMAGE_VIEW_TYPE_3D )
+				{
+					info.image = VkImage( uint64_t( viewId.data->image.id ) );
+					return m_cache.end() == m_cache.find( { info, factors.slice } );
+				}
+
+				if ( info.subresourceRange.levelCount > 1u )
 				{
 					return false;
 				}
 
-				if ( ( info.viewType == VK_IMAGE_VIEW_TYPE_3D )
-					|| ( ( info.viewType == VK_IMAGE_VIEW_TYPE_2D )
-						&& ( info.subresourceRange.layerCount == 1u ) ) )
+				if ( info.viewType == VK_IMAGE_VIEW_TYPE_2D
+					&& info.subresourceRange.layerCount == 1u )
 				{
 					info.image = VkImage( uint64_t( viewId.data->image.id ) );
-					return m_cache.end() == m_cache.find( info );
+					return m_cache.end() == m_cache.find( { info, 0u } );
 				}
 
-				return doFilterArray( viewId );
+				return doFilterArray( viewId, factors );
 			}
 
 		private:
 			crg::ResourceHandler & m_handler;
 			IntermediateViewArray & m_result;
-			std::set< VkImageViewCreateInfo, VkImageViewCreateInfoComp > & m_cache;
+			ImageViewCache & m_cache;
 		};
 	}
 
@@ -795,8 +844,10 @@ namespace castor3d
 
 		if ( m_renderTechnique )
 		{
-			rendtgt::IntermediatesLister::submit( *m_renderTechnique, result );
+			rendtgt::IntermediatesLister::submit( *getScene() , *m_renderTechnique, result );
 		}
+
+		rendtgt::IntermediatesLister::submit( *getScene(), *getScene()->getBackground(), result );
 	}
 
 	void RenderTarget::resetSemaphore()

@@ -62,7 +62,7 @@ namespace castor3d
 			, VkImageLayout layout
 			, TextureFactors const & factors = {} )
 		{
-			if ( doFilter( viewId ) )
+			if ( doFilter( viewId, factors ) )
 			{
 				doVisit( name
 					, viewId
@@ -333,7 +333,8 @@ namespace castor3d
 		/**@}*/
 
 	protected:
-		C3D_API virtual bool doFilter( crg::ImageViewId const & viewId )const = 0;
+		C3D_API virtual bool doFilter( crg::ImageViewId const & viewId
+			, TextureFactors const & factors )const = 0;
 
 	private:
 		C3D_API virtual void doVisit( castor::String const & name
@@ -737,7 +738,8 @@ namespace castor3d
 		using PipelineVisitorBase::visit;
 
 	private:
-		bool doFilter( crg::ImageViewId const & viewId )const override
+		bool doFilter( crg::ImageViewId const & viewId
+			, TextureFactors const & factors )const override
 		{
 			return true;
 		}
