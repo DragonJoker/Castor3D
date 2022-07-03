@@ -1,5 +1,7 @@
 #include "AtmosphereScattering/Scattering.hpp"
 
+#include "AtmosphereScattering/AtmosphereWeatherUbo.hpp"
+
 #include <Castor3D/Miscellaneous/Logger.hpp>
 #include <Castor3D/Shader/Shaders/GlslLight.hpp>
 
@@ -14,7 +16,8 @@ namespace atmosphere_scattering
 		, bool colorTransmittance
 		, bool fastSky
 		, bool fastAerialPerspective
-		, bool renderSunDisk )
+		, bool renderSunDisk
+		, bool bloomSunDisk )
 		: m_writer{ writer }
 		, m_atmosphereConfig{ atmosphereConfig }
 		, m_cameraData{ cameraData }
@@ -23,6 +26,30 @@ namespace atmosphere_scattering
 		, m_fastSky{ fastSky }
 		, m_fastAerialPerspective{ fastAerialPerspective }
 		, m_renderSunDisk{ renderSunDisk }
+		, m_bloomSunDisk{ bloomSunDisk }
+	{
+	}
+
+	ScatteringConfig::ScatteringConfig( sdw::ShaderWriter & writer
+		, AtmosphereConfig & atmosphereConfig
+		, CameraData const & cameraData
+		, AtmosphereData const & atmosphereData
+		, WeatherData const & weatherData
+		, bool colorTransmittance
+		, bool fastSky
+		, bool fastAerialPerspective
+		, bool renderSunDisk
+		, bool bloomSunDisk )
+		: m_writer{ writer }
+		, m_atmosphereConfig{ atmosphereConfig }
+		, m_cameraData{ cameraData }
+		, m_atmosphereData{ atmosphereData }
+		, m_weatherData{ &weatherData }
+		, m_colorTransmittance{ colorTransmittance }
+		, m_fastSky{ fastSky }
+		, m_fastAerialPerspective{ fastAerialPerspective }
+		, m_renderSunDisk{ renderSunDisk }
+		, m_bloomSunDisk{ bloomSunDisk }
 	{
 	}
 
@@ -37,7 +64,7 @@ namespace atmosphere_scattering
 					, sdw::Vec3 const & worldDir
 					, sdw::CombinedImage2DRgba32 const & transmittanceMap )
 				{
-					if ( m_renderSunDisk )
+					if ( m_bloomSunDisk )
 					{
 						auto sunSolidAngle = m_writer.declLocale( "sunSolidAngle"
 							, 0.053_f * sdw::Float{ castor::Pi< float > } / 180.0_f );
@@ -46,7 +73,7 @@ namespace atmosphere_scattering
 						auto cosTheta = m_writer.declLocale( "cosTheta"
 							, dot( worldDir, m_atmosphereData.sunDirection ) );
 						auto sunLuminance = m_writer.declLocale( "sunLuminance"
-							, vec3( 1.0_f ) ); // arbitrary. But fine, not use when comparing the models
+							, vec3( 1.0_f ) );
 
 						IF( m_writer, cosTheta < minSunCosTheta )
 						{
@@ -71,8 +98,8 @@ namespace atmosphere_scattering
 							}
 							ELSE
 							{
-								 // If the sun value is applied to this pixel, we need to calculate the transmittance to obscure it.
-								sunLuminance *= vec3( 2.0_f ) * m_atmosphereConfig.getSunRadiance( m_cameraData.position
+								// If the sun value is applied to this pixel, we need to calculate the transmittance to obscure it.
+								sunLuminance *= vec3( 2.0_f ) * m_atmosphereConfig.getSunRadiance( m_cameraData.position()
 									, m_atmosphereData.sunDirection
 									, transmittanceMap );
 							}
@@ -82,8 +109,31 @@ namespace atmosphere_scattering
 
 						m_writer.returnStmt( sunLuminance );
 					}
+					else
+					{
+						auto sunSolidAngle = m_writer.declLocale( "sunSolidAngle"
+							, 0.5_f * 0.505_f * sdw::Float{ castor::Pi< float > } / 180.0_f );
+						auto minSunCosTheta = m_writer.declLocale( "minSunCosTheta"
+							, cos( sunSolidAngle ) );
+						auto cosTheta = m_writer.declLocale( "cosTheta"
+							, dot( worldDir, m_atmosphereData.sunDirection ) );
+						auto sunLuminance = m_writer.declLocale( "sunLuminance"
+							, vec3( 0.0_f ) );
 
-					m_writer.returnStmt( vec3( 0.0_f ) );
+						IF( m_writer, cosTheta > minSunCosTheta )
+						{
+							IF( m_writer, m_atmosphereConfig.raySphereIntersectNearest( worldPos, worldDir, vec3( 0.0_f ), m_atmosphereData.bottomRadius ) < 0.0_f ) // no intersection
+							{
+								sunLuminance = vec3( 2.0_f ) * m_atmosphereConfig.getSunRadiance( m_cameraData.position()
+									, m_atmosphereData.sunDirection
+									, transmittanceMap );
+							}
+							FI;
+						}
+						FI;
+
+						m_writer.returnStmt( sunLuminance );
+					}
 				}
 				, sdw::InVec3{ m_writer, "worldPos" }
 				, sdw::InVec3{ m_writer, "worldDir" }
@@ -148,9 +198,9 @@ namespace atmosphere_scattering
 					auto hPos = m_writer.declLocale( "hPos"
 						, m_cameraData.camProjToWorld( vec4( clipSpace, 1.0_f ) ) );
 					auto worldDir = m_writer.declLocale( "worldDir"
-						, normalize( hPos.xyz() / hPos.w() - m_cameraData.position ) );
+						, normalize( hPos.xyz() / hPos.w() - m_cameraData.position() ) );
 					auto worldPos = m_writer.declLocale( "worldPos"
-						, m_cameraData.position + vec3( 0.0_f, m_atmosphereData.bottomRadius, 0.0_f ) );
+						, m_cameraData.position() + vec3( 0.0_f, m_atmosphereData.bottomRadius, 0.0_f ) );
 					auto L = m_writer.declLocale( "L"
 						, vec3( 0.0_f ) );
 					doRenderSky( fragSize
@@ -178,8 +228,12 @@ namespace atmosphere_scattering
 						// This is critical to be after the above to not disrupt above atmosphere tests and voxel selection.
 						IF( m_writer, !m_atmosphereConfig.moveToTopAtmosphere( worldPos, worldDir ) )
 						{
-							// Ray is not intersecting the atmosphere		
-							luminance = vec4( getSunLuminance( worldPos, worldDir, transmittanceMap ), 1.0_f );
+							// Ray is not intersecting the atmosphere	
+							if ( m_renderSunDisk )
+							{
+								luminance = vec4( getSunLuminance( worldPos, worldDir, transmittanceMap ), 1.0_f );
+							}
+
 							m_writer.returnStmt();
 						}
 						FI;
@@ -256,9 +310,9 @@ namespace atmosphere_scattering
 					auto hPos = m_writer.declLocale( "hPos"
 						, m_cameraData.camProjToWorld( vec4( clipSpace, 1.0_f ) ) );
 					auto worldDir = m_writer.declLocale( "worldDir"
-						, normalize( hPos.xyz() / hPos.w() - m_cameraData.position ) );
+						, normalize( hPos.xyz() / hPos.w() - m_cameraData.position() ) );
 					auto worldPos = m_writer.declLocale( "worldPos"
-						, m_cameraData.position + vec3( 0.0_f, m_atmosphereData.bottomRadius, 0.0_f ) );
+						, m_cameraData.position() + vec3( 0.0_f, m_atmosphereData.bottomRadius, 0.0_f ) );
 					auto L = m_writer.declLocale( "L"
 						, vec3( 0.0_f ) );
 					doRenderSky( fragSize
@@ -287,7 +341,11 @@ namespace atmosphere_scattering
 						IF( m_writer, !m_atmosphereConfig.moveToTopAtmosphere( worldPos, worldDir ) )
 						{
 							// Ray is not intersecting the atmosphere		
-							luminance = vec4( getSunLuminance( worldPos, worldDir, transmittanceMap ), 1.0_f );
+							if ( m_renderSunDisk )
+							{
+								luminance = vec4( getSunLuminance( worldPos, worldDir, transmittanceMap ), 1.0_f );
+							}
+
 							m_writer.returnStmt();
 						}
 						FI;
@@ -328,10 +386,8 @@ namespace atmosphere_scattering
 		luminance.xyz() /= luminance.a();	// Normalise according to sample count when path tracing
 
 		// Similar setup to the Bruneton demo
-		auto whitePoint = m_writer.declLocale( "whitePoint"
-			, vec3( 1.08241_f, 0.96756_f, 0.95003_f ) );
-		auto exposure = m_writer.declLocale( "exposure"
-			, 10.0_f );
+		auto whitePoint = vec3( 1.08241_f, 0.96756_f, 0.95003_f );
+		auto exposure = 10.0_f;
 		auto hdr = vec3( 1.0_f ) - exp( -luminance.rgb() / whitePoint * exposure );
 		return vec4( hdr, luminance.a() );
 	}
@@ -377,12 +433,18 @@ namespace atmosphere_scattering
 
 				m_atmosphereConfig.skyViewLutParamsToUv( intersectGround, viewZenithCosAngle, lightViewCosAngle, viewHeight, uv, fragSize );
 
-				luminance = vec4( skyViewMap.lod( uv, 0.0_f ).rgb() + getSunLuminance( worldPos, worldDir, transmittanceMap ), 1.0_f );
+				luminance = vec4( skyViewMap.lod( uv, 0.0_f ).rgb(), 1.0_f );
+
+				if ( m_renderSunDisk )
+				{
+					luminance.xyz() += getSunLuminance( worldPos, worldDir, transmittanceMap );
+				}
+
 				m_writer.returnStmt();
 			}
 			FI;
 		}
-		else
+		else if ( m_renderSunDisk )
 		{
 			IF( m_writer, fragDepth >= 1.0_f )
 			{

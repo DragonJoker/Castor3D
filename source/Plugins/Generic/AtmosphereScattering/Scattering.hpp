@@ -16,7 +16,18 @@ namespace atmosphere_scattering
 			, bool colorTransmittance
 			, bool fastSky
 			, bool fastAerialPerspective
-			, bool renderSunDisk );
+			, bool renderSunDisk
+			, bool bloomSunDisk );
+		ScatteringConfig( sdw::ShaderWriter & writer
+			, AtmosphereConfig & atmosphereConfig
+			, CameraData const & cameraData
+			, AtmosphereData const & atmosphereData
+			, WeatherData const & weatherData
+			, bool colorTransmittance
+			, bool fastSky
+			, bool fastAerialPerspective
+			, bool renderSunDisk
+			, bool bloomSunDisk );
 		sdw::Vec3 getSunLuminance( sdw::Vec3 const & worldPos
 			, sdw::Vec3 const & worldDir
 			, sdw::CombinedImage2DRgba32 const & transmittanceMap );
@@ -70,10 +81,12 @@ namespace atmosphere_scattering
 		AtmosphereConfig & m_atmosphereConfig;
 		CameraData const & m_cameraData;
 		AtmosphereData const & m_atmosphereData;
+		WeatherData const * m_weatherData{};
 		bool m_colorTransmittance;
 		bool m_fastSky;
 		bool m_fastAerialPerspective;
 		bool m_renderSunDisk;
+		bool m_bloomSunDisk;
 
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3

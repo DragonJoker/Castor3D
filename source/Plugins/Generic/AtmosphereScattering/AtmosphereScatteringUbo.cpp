@@ -137,9 +137,11 @@ namespace atmosphere_scattering
 	castor::String const AtmosphereScatteringUbo::Buffer = cuT( "Atmosphere" );
 	castor::String const AtmosphereScatteringUbo::Data = cuT( "c3d_atmosphereData" );
 
-	AtmosphereScatteringUbo::AtmosphereScatteringUbo( castor3d::RenderDevice const & device )
+	AtmosphereScatteringUbo::AtmosphereScatteringUbo( castor3d::RenderDevice const & device
+		, bool & dirty )
 		: m_device{ device }
 		, m_ubo{ device.uboPool->getBuffer< Configuration >( 0u ) }
+		, m_dirty{ dirty }
 		, m_config{ m_dirty }
 		, m_sunDirection{ m_dirty }
 		, m_mieAbsorption{ m_dirty }
@@ -151,14 +153,13 @@ namespace atmosphere_scattering
 		m_device.uboPool->putBuffer( m_ubo );
 	}
 
-	bool AtmosphereScatteringUbo::cpuUpdate( Configuration const & config
+	castor::Point3f AtmosphereScatteringUbo::cpuUpdate( Configuration const & config
 		, castor3d::SceneNode const & node )
 	{
-		m_dirty = false;
 		auto direction = castor::Point3f{ 0, 0, 1 };
 		node.getDerivedOrientation().transform( direction, direction );
-		castor::point::normalise( direction );
-		m_sunDirection = { -direction };
+		direction = -castor::point::getNormalised( direction );
+		m_sunDirection = { direction };
 
 		auto mieAbsorption = config.mieExtinction - config.mieScattering;
 		m_mieAbsorption = castor::Point3f{ std::max( 0.0f, mieAbsorption->x )
@@ -181,7 +182,7 @@ namespace atmosphere_scattering
 			data.mieAbsorption->z = std::max( 0.0f, ( *m_mieAbsorption )->z );
 		}
 
-		return m_dirty;
+		return direction;
 	}
 
 	//************************************************************************************************

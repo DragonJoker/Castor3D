@@ -509,7 +509,7 @@ namespace atmosphere_scattering
 					}
 					ROF;
 
-					doProcessGround( worldPos, worldDir, sunDir, tMax , tBottom, globalL, throughput, L );
+					//doProcessGround( worldPos, worldDir, sunDir, tMax , tBottom, globalL, throughput, L );
 					result.luminance = L;
 					result.opticalDepth = opticalDepth;
 					result.transmittance = throughput;
@@ -1088,7 +1088,7 @@ namespace atmosphere_scattering
 	{
 		if ( luminanceSettings.variableSampleCount )
 		{
-		// More expenssive but artefact free
+			// More expensive but artifact free
 			auto t0 = writer.declLocale( "t0"
 				, ( s ) / sampleCountFloor );
 			auto t1 = writer.declLocale( "t1"

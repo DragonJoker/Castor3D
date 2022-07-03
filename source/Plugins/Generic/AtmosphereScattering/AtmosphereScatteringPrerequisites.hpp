@@ -17,11 +17,17 @@ namespace atmosphere_scattering
 
 	struct AtmosphereConfig;
 	struct AtmosphereData;
+	struct WeatherData;
 
 	template< template< typename DataT > typename WrapperT >
 	struct AtmosphereScatteringConfigT;
 	using AtmosphereScatteringConfig = AtmosphereScatteringConfigT< crg::RawTypeT >;
 	using CheckedAtmosphereScatteringConfig = AtmosphereScatteringConfigT< castor::GroupChangeTracked >;
+
+	template< template< typename DataT > typename WrapperT >
+	struct AtmosphereWeatherConfigT;
+	using AtmosphereWeatherConfig = AtmosphereWeatherConfigT< crg::RawTypeT >;
+	using CheckedAtmosphereWeatherConfig = AtmosphereWeatherConfigT< castor::GroupChangeTracked >;
 }
 
 #endif
