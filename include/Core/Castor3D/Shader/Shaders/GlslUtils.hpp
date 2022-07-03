@@ -71,7 +71,21 @@ namespace castor3d::shader
 			, sdw::Vec3 const & viewDir
 			, sdw::CombinedImage2DRgba32 const & heightMap
 			, TextureConfigData const & textureConfig );
+		C3D_API sdw::Float parallaxShadow( sdw::Vec3 const & lightDir
+			, sdw::Vec2 const & initialTexCoord
+			, sdw::Float const & initialHeight
+			, sdw::CombinedImage2DRgba32 const & heightMap
+			, TextureConfigData const & textureConfig );
 		C3D_API sdw::Vec4 clipToScreen( sdw::Vec4 const & in );
+		C3D_API sdw::Float remap( sdw::Float const & originalValue
+			, sdw::Float const & originalMin
+			, sdw::Float const & originalMax
+			, sdw::Float const & newMin
+			, sdw::Float const & newMax );
+		C3D_API sdw::Float threshold( sdw::Float const & v
+			, sdw::Float const & t );
+		C3D_API sdw::Float beer( sdw::Float const & d );
+		C3D_API sdw::Float powder( sdw::Float const & d );
 
 		C3D_API sdw::Boolean isSaturated( sdw::Vec3 const & p );
 		C3D_API sdw::Boolean isSaturated( sdw::IVec3 const & p
@@ -120,40 +134,6 @@ namespace castor3d::shader
 			, PassFlags const & passFlags );
 
 	private:
-		void declareSwap1F();
-		void declareDistanceSquared2F();
-		void declareDistanceSquared3F();
-		void declareCalcTexCoord();
-		void declareCalcVSPosition();
-		void declareCalcWSPosition();
-		void declareApplyGamma();
-		void declareRemoveGamma();
-		void declareRescaleDepth();
-		void declareGetMapNormal();
-		void declareComputeAccumulation();
-		void declareFresnelSchlick();
-		// 1.0 - y
-		void declareInvertVec2Y();
-		void declareInvertVec3Y();
-		void declareInvertVec4Y();
-		// -y
-		void declareNegateVec2Y();
-		void declareNegateVec3Y();
-		void declareNegateVec4Y();
-
-		void declareParallaxMappingFunc();
-		void declareParallaxShadowFunc();
-
-		void declareIsSaturated();
-		void declareEncodeColor();
-		void declareEncodeNormal();
-		void declareDecodeColor();
-		void declareDecodeNormal();
-		void declareFlatten();
-		void declareUnflatten();
-		void declareIsSaturatedImg();
-		void declareClipToScreen();
-
 		sdw::Vec4 sampleUntiled( sdw::CombinedImage2DRgba32 const & map
 			, sdw::Vec2 const & texCoords );
 
@@ -228,6 +208,15 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InCombinedImage2DRgba32
 			, InTextureConfigData > m_parallaxShadow;
+		sdw::Function< sdw::Float
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat > m_remap;
+		sdw::Function< sdw::Float
+			, sdw::InFloat
+			, sdw::InFloat > m_threshold;
 		sdw::Function< sdw::Boolean
 			, sdw::InVec3 > m_isSaturated3D;
 		sdw::Function< sdw::Boolean
