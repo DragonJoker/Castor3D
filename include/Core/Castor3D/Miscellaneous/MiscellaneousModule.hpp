@@ -104,6 +104,8 @@ namespace castor3d
 		castor::Point3f add{};
 		castor::Point4f const * grid{ nullptr };
 		bool invertY{ false };
+		bool isSlice{};
+		uint32_t slice{};
 
 		static TextureFactors tex2D( castor::Point3f multiply = castor::Point3f{ 1.0f, 1.0f, 1.0f }
 			, castor::Point3f add = castor::Point3f{} )
@@ -118,6 +120,14 @@ namespace castor3d
 		{
 			TextureFactors result;
 			result.grid = grid;
+			return result;
+		}
+
+		static TextureFactors tex3DSlice( uint32_t slice )
+		{
+			TextureFactors result;
+			result.isSlice = true;
+			result.slice = slice;
 			return result;
 		}
 

@@ -188,8 +188,9 @@ namespace atmosphere_scattering
 		};
 
 	private:
-		AtmosphereScatteringConfig m_config;
 		castor3d::SceneNode const * m_node{};
+		// Atmosphere
+		AtmosphereScatteringConfig m_atmosphereCfg;
 		castor3d::Texture m_transmittance;
 		castor3d::Texture m_multiScatter;
 		uint32_t m_volumeResolution{ 32u };

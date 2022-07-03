@@ -46,7 +46,9 @@ CU_ImplementCUSmartPtr( castor3d, Texture3DTo2D )
 	auto gridSize = ubo.declMember< sdw::UInt >( "gridSize" );\
 	ubo.end();\
 	auto gridCenter = gridCenterCellSize.xyz();\
-	auto cellSize = gridCenterCellSize.w()
+	auto cellSize = gridCenterCellSize.w();\
+	auto sliceIndex = gridCenterCellSize.z();\
+	auto maxSlice = gridCenterCellSize.w()
 
 namespace castor3d
 {
@@ -171,22 +173,39 @@ namespace castor3d
 					, 1u ) );
 		}
 
-		static ashes::DescriptorSetLayoutPtr createDescriptorLayout( RenderDevice const & device )
+		static ashes::DescriptorSetLayoutPtr createDescriptorLayout( RenderDevice const & device
+			, bool isSlice )
 		{
-			ashes::VkDescriptorSetLayoutBindingArray bindings{ makeDescriptorSetLayoutBinding( eGridUbo
+			ashes::VkDescriptorSetLayoutBindingArray bindings;
+
+			if ( isSlice )
+			{
+				bindings.push_back( makeDescriptorSetLayoutBinding( eGridUbo
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-					, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT )
-				, makeDescriptorSetLayoutBinding( eMatrixUbo
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+				bindings.push_back( makeDescriptorSetLayoutBinding( eSource
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			}
+			else
+			{
+				bindings.push_back( makeDescriptorSetLayoutBinding( eGridUbo
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-					, VK_SHADER_STAGE_GEOMETRY_BIT )
-				, makeDescriptorSetLayoutBinding( eSource
+					, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT ) );
+				bindings.push_back( makeDescriptorSetLayoutBinding( eMatrixUbo
+					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+					, VK_SHADER_STAGE_GEOMETRY_BIT ) );
+				bindings.push_back( makeDescriptorSetLayoutBinding( eSource
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
-					, VK_SHADER_STAGE_VERTEX_BIT ) };
+					, VK_SHADER_STAGE_VERTEX_BIT ) );
+			}
+
 			return device->createDescriptorSetLayout( "Texture3DTo2D"
 				, std::move( bindings ) );
 		}
 
 		static ashes::DescriptorSetPtr createDescriptorSet( RenderDevice const & device
+			, SamplerRPtr sampler
 			, ashes::DescriptorSetPool const & pool
 			, UniformBufferOffsetT< Texture3DTo2DData > const & uniformBuffer
 			, MatrixUbo const & matrixUbo
@@ -196,10 +215,21 @@ namespace castor3d
 			auto descriptorSet = pool.createDescriptorSet( "Texture3DTo2D" );
 			uniformBuffer.createSizedBinding( *descriptorSet
 				, pool.getLayout().getBinding( eGridUbo ) );
-			matrixUbo.createSizedBinding( *descriptorSet
-				, pool.getLayout().getBinding( eMatrixUbo ) );
-			descriptorSet->createBinding( pool.getLayout().getBinding( eSource )
-				, handler.createImageView( device.makeContext(), texture3D.viewId ) );
+
+			if ( !sampler )
+			{
+				matrixUbo.createSizedBinding( *descriptorSet
+					, pool.getLayout().getBinding( eMatrixUbo ) );
+				descriptorSet->createBinding( pool.getLayout().getBinding( eSource )
+					, handler.createImageView( device.makeContext(), texture3D.viewId ) );
+			}
+			else
+			{
+				descriptorSet->createBinding( pool.getLayout().getBinding( eSource )
+					, handler.createImageView( device.makeContext(), texture3D.viewId )
+					, sampler->getSampler() );
+			}
+
 			descriptorSet->update();
 			return descriptorSet;
 		}
@@ -242,6 +272,35 @@ namespace castor3d
 					, static_cast< VkRenderPass const & >( renderPass ) ) );
 		}
 
+		static ashes::GraphicsPipelinePtr createPipeline( RenderDevice const & device
+			, ashes::PipelineLayout const & layout
+			, ashes::RenderPass const & renderPass
+			, ShaderModule const & vertexShader
+			, ShaderModule const & pixelShader
+			, Texture const & target )
+		{
+			ashes::PipelineShaderStageCreateInfoArray program;
+			program.push_back( makeShaderState( device, vertexShader ) );
+			program.push_back( makeShaderState( device, pixelShader ) );
+			// Initialise the pipeline.
+			VkViewport viewport{ 0.0f, 0.0f, float( target.getExtent().width ), float( target.getExtent().height ), 0.0f, 1.0f };
+			VkRect2D scissor{ 0, 0, target.getExtent().width, target.getExtent().height };
+			return device->createPipeline( "Texture3DTo2D"
+				, ashes::GraphicsPipelineCreateInfo( 0u
+					, program
+					, ashes::PipelineVertexInputStateCreateInfo{ 0u, {}, {} }
+					, ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST }
+					, ashes::nullopt
+					, ashes::PipelineViewportStateCreateInfo{ 0u, 1u, ashes::VkViewportArray{ viewport }, 1u, ashes::VkScissorArray{ scissor } }
+					, ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE }
+					, ashes::PipelineMultisampleStateCreateInfo{}
+					, ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE }
+					, RenderNodesPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u )
+					, ashes::nullopt
+					, layout
+					, static_cast< VkRenderPass const & >( renderPass ) ) );
+		}
+
 		static CommandsSemaphore createCommandBuffer( RenderDevice const & device
 			, QueueData const & queueData
 			, ashes::RenderPass const & renderPass
@@ -249,7 +308,8 @@ namespace castor3d
 			, ashes::PipelineLayout const & pipelineLayout
 			, ashes::GraphicsPipeline const & pipeline
 			, ashes::DescriptorSet const & descriptorSet
-			, IntermediateView const & view )
+			, IntermediateView const & view
+			, SamplerRPtr sampler )
 		{
 			auto & handler = device.renderSystem.getEngine()->getGraphResourceHandler();
 			auto textureSize = getExtent( view.viewId ).width;
@@ -259,7 +319,18 @@ namespace castor3d
 			cmd.beginDebugBlock( { "Texture3D To Texture2D"
 				, makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ) } );
 
-			if ( view.layout != VK_IMAGE_LAYOUT_GENERAL )
+			if ( sampler )
+			{
+				cmd.memoryBarrier( ashes::getStageMask( view.layout )
+					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, makeLayoutTransition( handler.createImage( device.makeContext(), view.viewId.data->image )
+						, view.viewId.data->info.subresourceRange
+						, view.layout
+						, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+						, VK_QUEUE_FAMILY_IGNORED
+						, VK_QUEUE_FAMILY_IGNORED ) );
+			}
+			else if ( view.layout != VK_IMAGE_LAYOUT_GENERAL )
 			{
 				cmd.memoryBarrier( ashes::getStageMask( view.layout )
 					, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT
@@ -277,10 +348,34 @@ namespace castor3d
 				, VK_SUBPASS_CONTENTS_INLINE );
 			cmd.bindPipeline( pipeline );
 			cmd.bindDescriptorSet( descriptorSet, pipelineLayout );
-			cmd.draw( textureSize * textureSize * textureSize );
+
+			if ( sampler )
+			{
+				cmd.draw( 3u );
+			}
+			else
+			{
+				cmd.draw( textureSize * textureSize * textureSize );
+			}
+
 			cmd.endRenderPass();
 
-			if ( view.layout != VK_IMAGE_LAYOUT_GENERAL
+			if ( sampler )
+			{
+				if ( view.layout != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+					&& view.layout != VK_IMAGE_LAYOUT_UNDEFINED )
+				{
+					cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+						, ashes::getStageMask( view.layout )
+						, makeLayoutTransition( handler.createImage( device.makeContext(), view.viewId.data->image )
+							, view.viewId.data->info.subresourceRange
+							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+							, view.layout
+							, VK_QUEUE_FAMILY_IGNORED
+							, VK_QUEUE_FAMILY_IGNORED ) );
+				}
+			}
+			else if ( view.layout != VK_IMAGE_LAYOUT_GENERAL
 				&& view.layout != VK_IMAGE_LAYOUT_UNDEFINED )
 			{
 				cmd.memoryBarrier( VK_PIPELINE_STAGE_VERTEX_SHADER_BIT
@@ -336,7 +431,7 @@ namespace castor3d
 			sdw::Vec4 voxelColour;
 		};
 
-		static ShaderPtr getVertexProgram( RenderSystem const & renderSystem )
+		static ShaderPtr getVertexProgramVolume( RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -362,7 +457,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static ShaderPtr getGeometryProgram()
+		static ShaderPtr getGeometryProgramVolume()
 		{
 			using namespace sdw;
 			GeometryWriter writer;
@@ -421,7 +516,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static ShaderPtr getPixelProgram()
+		static ShaderPtr getPixelProgramVolume()
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -444,6 +539,48 @@ namespace castor3d
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
+
+		static ShaderPtr getVertexProgramSlice( RenderSystem const & renderSystem )
+		{
+			using namespace sdw;
+			VertexWriter writer;
+
+			// Shader outputs
+			auto outUV = writer.declOutput< sdw::Vec2 >( "outUV", 0u );
+
+			shader::Utils utils{ writer };
+
+			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+				, VertexOut out )
+				{
+					outUV = vec2( ( in.vertexIndex << 1 ) & 2, in.vertexIndex & 2 );
+					out.vtx.position = vec4( outUV * 2.0f - 1.0f, 0.0f, 1.0f );
+				} );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+		}
+
+		static ShaderPtr getPixelProgramSlice()
+		{
+			using namespace sdw;
+			FragmentWriter writer;
+
+			// Shader inputs
+			UBO_GRID( writer, eGridUbo );
+			auto inSource( writer.declCombinedImg< FImg3DRgba32 >( "inSource"
+				, eSource
+				, 0u ) );
+			auto inUV = writer.declInput< sdw::Vec2 >( "inUV", 0u );
+
+			// Shader outputs
+			auto outFragColor = writer.declOutput< Vec4 >( "outFragColor", 0u );
+
+			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+				, FragmentOut out )
+				{
+					outFragColor = inSource.lod( vec3( inUV, sliceIndex / maxSlice ), 0.0_f );
+				} );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+		}
 	}
 
 	//*********************************************************************************************
@@ -457,9 +594,10 @@ namespace castor3d
 		, ashes::DescriptorSetPool const & descriptorSetPool
 		, ashes::FrameBuffer const & frameBuffer
 		, ashes::PipelineLayout const & pipelineLayout
-		, ashes::GraphicsPipeline const & pipeline )
-		: descriptorSet{ t3dto2d::createDescriptorSet( device, descriptorSetPool, uniformBuffer, matrixUbo, texture3D ) }
-		, commands{ t3dto2d::createCommandBuffer( device, queueData, renderPass, frameBuffer, pipelineLayout, pipeline, *descriptorSet, texture3D ) }
+		, ashes::GraphicsPipeline const & pipeline
+		, SamplerRPtr sampler )
+		: descriptorSet{ t3dto2d::createDescriptorSet( device, sampler, descriptorSetPool, uniformBuffer, matrixUbo, texture3D ) }
+		, commands{ t3dto2d::createCommandBuffer( device, queueData, renderPass, frameBuffer, pipelineLayout, pipeline, *descriptorSet, texture3D, sampler ) }
 	{
 	}
 
@@ -477,19 +615,44 @@ namespace castor3d
 		, m_target{ t3dto2d::createTarget( device, size ) }
 		, m_depthBuffer{ t3dto2d::createDepthBuffer( device, m_target ) }
 		, m_uniformBuffer{ device.uboPool->getBuffer< Texture3DTo2DData >( 0u ) }
-		, m_descriptorSetLayout{ t3dto2d::createDescriptorLayout( device ) }
-		, m_pipelineLayout{ t3dto2d::createPipelineLayout( device, *m_descriptorSetLayout ) }
 		, m_renderPass{ t3dto2d::createRenderPass( device, "Texture3DTo2D", m_target, m_depthBuffer ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "Texture3DTo2D", t3dto2d::getVertexProgram( device.renderSystem ) }
-		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, "Texture3DTo2D", t3dto2d::getGeometryProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "Texture3DTo2D", t3dto2d::getPixelProgram() }
-		, m_pipeline{ t3dto2d::createPipeline( device, *m_pipelineLayout, *m_renderPass, m_vertexShader, m_geometryShader, m_pixelShader, m_target ) }
 		, m_frameBuffer{ t3dto2d::createFramebuffer( *m_renderPass, "Texture3DTo2D", m_target, m_depthBuffer ) }
+		, m_sampler{ castor::makeUnique< Sampler >( "Slice"
+			, *device.renderSystem.getEngine()
+			, ashes::SamplerCreateInfo{ 0u
+				, VK_FILTER_LINEAR
+				, VK_FILTER_LINEAR
+				, VK_SAMPLER_MIPMAP_MODE_NEAREST
+				, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+				, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+				, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+				, 0.0f
+				, VK_FALSE
+				, 0.0f
+				, VK_FALSE
+				, VK_COMPARE_OP_ALWAYS
+				, 0.0f
+				, 1.0f } ) }
+
+		, m_descriptorSetLayoutVolume{ t3dto2d::createDescriptorLayout( device, false ) }
+		, m_pipelineLayoutVolume{ t3dto2d::createPipelineLayout( device, *m_descriptorSetLayoutVolume ) }
+		, m_vertexShaderVolume{ VK_SHADER_STAGE_VERTEX_BIT, "Texture3DTo2D", t3dto2d::getVertexProgramVolume( device.renderSystem ) }
+		, m_geometryShaderVolume{ VK_SHADER_STAGE_GEOMETRY_BIT, "Texture3DTo2D", t3dto2d::getGeometryProgramVolume() }
+		, m_pixelShaderVolume{ VK_SHADER_STAGE_FRAGMENT_BIT, "Texture3DTo2D", t3dto2d::getPixelProgramVolume() }
+		, m_pipelineVolume{ t3dto2d::createPipeline( device, *m_pipelineLayoutVolume, *m_renderPass, m_vertexShaderVolume, m_geometryShaderVolume, m_pixelShaderVolume, m_target ) }
+
+		, m_descriptorSetLayoutSlice{ t3dto2d::createDescriptorLayout( device, true ) }
+		, m_pipelineLayoutSlice{ t3dto2d::createPipelineLayout( device, *m_descriptorSetLayoutSlice ) }
+		, m_vertexShaderSlice{ VK_SHADER_STAGE_VERTEX_BIT, "Texture3DTo2D", t3dto2d::getVertexProgramSlice( device.renderSystem ) }
+		, m_pixelShaderSlice{ VK_SHADER_STAGE_FRAGMENT_BIT, "Texture3DTo2D", t3dto2d::getPixelProgramSlice() }
+		, m_pipelineSlice{ t3dto2d::createPipeline( device, *m_pipelineLayoutSlice, *m_renderPass, m_vertexShaderSlice, m_pixelShaderSlice, m_target ) }
 	{
+		m_sampler->initialise( device );
 	}
 
 	Texture3DTo2D::~Texture3DTo2D()
 	{
+		m_sampler->cleanup();
 		m_depthBuffer.destroy();
 		m_target.destroy();
 		m_device.uboPool->putBuffer( m_uniformBuffer );
@@ -504,22 +667,41 @@ namespace castor3d
 
 	void Texture3DTo2D::initialise( QueueData const & queueData )
 	{
-		m_descriptorSetPool = m_descriptorSetLayout->createPool( uint32_t( m_textures.size() ) );
+		m_descriptorSetPoolVolume = m_descriptorSetLayoutVolume->createPool( uint32_t( m_textures.size() ) );
+		m_descriptorSetPoolSlice = m_descriptorSetLayoutSlice->createPool( uint32_t( m_textures.size() ) );
 
 		for ( auto & intermediate : m_textures )
 		{
 			if ( intermediate.viewId.data->image.data->info.imageType == VK_IMAGE_TYPE_3D )
 			{
-				m_texture3DToScreen.emplace_back( m_device
-					, queueData
-					, m_uniformBuffer
-					, m_matrixUbo
-					, intermediate
-					, *m_renderPass
-					, *m_descriptorSetPool
-					, *m_frameBuffer
-					, *m_pipelineLayout
-					, *m_pipeline );
+				if ( intermediate.factors.isSlice )
+				{
+					m_texture3DToScreen.emplace_back( m_device
+						, queueData
+						, m_uniformBuffer
+						, m_matrixUbo
+						, intermediate
+						, *m_renderPass
+						, *m_descriptorSetPoolSlice
+						, *m_frameBuffer
+						, *m_pipelineLayoutSlice
+						, *m_pipelineSlice
+						, m_sampler.get() );
+				}
+				else
+				{
+					m_texture3DToScreen.emplace_back( m_device
+						, queueData
+						, m_uniformBuffer
+						, m_matrixUbo
+						, intermediate
+						, *m_renderPass
+						, *m_descriptorSetPoolVolume
+						, *m_frameBuffer
+						, *m_pipelineLayoutVolume
+						, *m_pipelineVolume
+						, nullptr );
+				}
 			}
 			else
 			{
@@ -532,7 +714,15 @@ namespace castor3d
 	{
 		m_index = updater.combineIndex;
 
-		if ( updater.cellSize != 0.0f )
+		if ( m_textures[m_index].factors.isSlice )
+		{
+			auto & data = m_uniformBuffer.getData();
+			data.gridCenterCellSize = castor::Point4f{ 0.0f
+				, 0.0f
+				, m_textures[m_index].factors.slice
+				, m_textures[m_index].viewId.data->image.data->info.extent.depth - 1u };
+		}
+		else if ( updater.cellSize != 0.0f )
 		{
 			auto & data = m_uniformBuffer.getData();
 			data.gridCenterCellSize = castor::Point4f{ updater.gridCenter->x
