@@ -25,6 +25,7 @@ namespace atmosphere_scattering
 		castor::Point2ui skyView{ 192u, 108u };
 		uint32_t worley{ 32u };
 		uint32_t perlinWorley{ 128u };
+		uint32_t curl{ 128u };
 		uint32_t weather{ 1024u };
 		AtmosphereScatteringConfig config{};
 		DensityProfileLayer * densityLayer{};

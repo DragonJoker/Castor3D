@@ -53,6 +53,7 @@ namespace atmosphere_scattering
 			atmosphereContext.atmosphere->loadSkyView( atmosphereContext.skyView );
 			atmosphereContext.atmosphere->loadWorley( atmosphereContext.worley );
 			atmosphereContext.atmosphere->loadPerlinWorley( atmosphereContext.perlinWorley );
+			atmosphereContext.atmosphere->loadCurl( atmosphereContext.curl );
 			atmosphereContext.atmosphere->loadWeather( atmosphereContext.weather );
 			parsingContext.scene->setBackground( std::move( atmosphereContext.atmosphere ) );
 		}

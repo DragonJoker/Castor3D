@@ -7,8 +7,9 @@ See LICENSE file in root folder
 #include "AtmosphereCameraUbo.hpp"
 #include "AtmosphereModel.hpp"
 #include "AtmosphereScatteringUbo.hpp"
-#include "AtmosphereWeatherUbo.hpp"
+#include "CloudsUbo.hpp"
 
+#include <Castor3D/Shader/Shaders/SdwModule.hpp>
 #include <Castor3D/Shader/Ubos/MatrixUbo.hpp>
 
 #include <ShaderWriter/BaseTypes/Array.hpp>
@@ -29,7 +30,7 @@ namespace atmosphere_scattering
 			, castor3d::shader::Utils & utils
 			, AtmosphereModel & atmosphere
 			, ScatteringModel & scattering
-			, WeatherData const & weatherData
+			, CloudsData const & cloudsData
 			, uint32_t binding );
 		sdw::Void applyClouds( sdw::IVec2 const & fragCoord
 			, sdw::Vec2 const & targetSize
@@ -40,20 +41,24 @@ namespace atmosphere_scattering
 	private:
 		sdw::Vec2 getUVProjection( sdw::Vec3 const & p );
 		sdw::Float getHeightFraction( sdw::Vec3 const & inPos );
+		sdw::RetFloat getRelativeHeightInAtmosphere( sdw::Vec3 const & pos
+			, sdw::Vec3 const & startPos
+			, Ray const & ray );
 		sdw::RetFloat getDensityHeightGradientForPoint( sdw::Float const & heightFraction
 			, sdw::Float const & cloudType );
 		sdw::RetVec3 skewSamplePointWithWind( sdw::Vec3 const & point
 			, sdw::Float const & heightFraction );
 		sdw::RetFloat sampleLowFrequency( sdw::Vec3 const & skewedSamplePoint
 			, sdw::Vec3 const & unskewedSamplePoint
-			, sdw::Float const & relativeHeight
+			, sdw::Float const & heightFraction
 			, sdw::Float const & lod );
 		sdw::RetFloat erodeWithHighFrequency( sdw::Float const & baseDensity
 			, sdw::Vec3 const & skewedSamplePoint
 			, sdw::Float const & heightFraction
 			, sdw::Float const & lod );
-		sdw::RetFloat sampleCloudDensity( sdw::Vec3 const & p
+		sdw::RetFloat sampleCloudDensity( sdw::Vec3 const & samplePoint
 			, sdw::Boolean const & expensive
+			, sdw::Float const & heightFraction
 			, sdw::Float const & lod );
 		sdw::RetFloat raymarchToLight( sdw::Vec3 const & o
 			, sdw::Float const & stepSize
@@ -82,15 +87,20 @@ namespace atmosphere_scattering
 		castor3d::shader::Utils & utils;
 		AtmosphereModel & atmosphere;
 		ScatteringModel & scattering;
-		WeatherData const & weatherData;
+		CloudsData const & cloudsData;
 		sdw::CombinedImage3DRgba32 perlinWorleyNoiseMap;
 		sdw::CombinedImage3DRgba32 worleyNoiseMap;
+		sdw::CombinedImage2DRg32 curlNoiseMap;
 		sdw::CombinedImage2DRg32 weatherMap;
 		sdw::Float sphereInnerRadius;
 		sdw::Float sphereOuterRadius;
 		sdw::Float sphereDelta;
 
 	private:
+		sdw::Function< sdw::Float
+			, sdw::InVec3
+			, sdw::InVec3
+			, InRay > m_getRelativeHeightInAtmosphere;
 		sdw::Function< sdw::Float
 			, sdw::InFloat
 			, sdw::InFloat > m_getDensityHeightGradientForPoint;
@@ -110,6 +120,7 @@ namespace atmosphere_scattering
 		sdw::Function< sdw::Float
 			, sdw::InVec3
 			, sdw::InBoolean
+			, sdw::InFloat
 			, sdw::InFloat > m_sampleCloudDensity;
 		sdw::Function< sdw::Float
 			, sdw::InVec3

@@ -3,7 +3,7 @@
 #include "AtmosphereScattering/AtmosphereCameraUbo.hpp"
 #include "AtmosphereScattering/AtmosphereModel.hpp"
 #include "AtmosphereScattering/AtmosphereScatteringUbo.hpp"
-#include "AtmosphereScattering/AtmosphereWeatherUbo.hpp"
+#include "AtmosphereScattering/CloudsUbo.hpp"
 #include "AtmosphereScattering/ScatteringModel.hpp"
 
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
@@ -20,25 +20,28 @@ namespace atmosphere_scattering
 		, castor3d::shader::Utils & putils
 		, AtmosphereModel & patmosphere
 		, ScatteringModel & pscattering
-		, WeatherData const & pweatherData
+		, CloudsData const & pcloudsData
 		, uint32_t binding )
 		: writer{ pwriter }
 		, utils{ putils }
 		, atmosphere{ patmosphere }
 		, scattering{ pscattering }
-		, weatherData{ pweatherData }
+		, cloudsData{ pcloudsData }
 		, perlinWorleyNoiseMap{ writer.declCombinedImg< sdw::CombinedImage3DRgba32 >( "perlinWorleyNoiseMap"
-			, binding + 0u
+			, binding++
 			, 0u ) }
 		, worleyNoiseMap{ writer.declCombinedImg< sdw::CombinedImage3DRgba32 >( "worleyNoiseMap"
-			, binding + 1u
+			, binding++
+			, 0u ) }
+		, curlNoiseMap{ writer.declCombinedImg< sdw::CombinedImage2DRg32 >( "curlNoiseMap"
+			, binding++
 			, 0u ) }
 		, weatherMap{ writer.declCombinedImg< sdw::CombinedImage2DRg32 >( "weatherMap"
-			, binding + 2u
+			, binding++
 			, 0u ) }
-		, sphereInnerRadius{ weatherData.sphereInnerRadius() + atmosphere.getEarthRadius() }
-		, sphereOuterRadius{ weatherData.sphereOuterRadius() + atmosphere.getEarthRadius() }
-		, sphereDelta{ weatherData.sphereOuterRadius() - weatherData.sphereInnerRadius() }
+		, sphereInnerRadius{ cloudsData.sphereInnerRadius() + atmosphere.getEarthRadius() }
+		, sphereOuterRadius{ cloudsData.sphereOuterRadius() + atmosphere.getEarthRadius() }
+		, sphereDelta{ cloudsData.sphereOuterRadius() - cloudsData.sphereInnerRadius() }
 	{
 	}
 
@@ -50,6 +53,46 @@ namespace atmosphere_scattering
 	sdw::Float CloudsModel::getHeightFraction( sdw::Vec3 const & inPos )
 	{
 		return ( length( inPos ) - sphereInnerRadius ) / sphereDelta;
+	}
+
+	sdw::RetFloat CloudsModel::getRelativeHeightInAtmosphere( sdw::Vec3 const & ppos
+		, sdw::Vec3 const & pstartPos
+		, Ray const & pray )
+	{
+		if ( !m_getRelativeHeightInAtmosphere )
+		{
+			m_getRelativeHeightInAtmosphere = writer.implementFunction< sdw::Float >( "getRelativeHeightInAtmosphere"
+				, [&]( sdw::Vec3 const & point
+					, sdw::Vec3 const & startPosOnInnerShell
+					, Ray const & ray )
+				{
+					auto lengthOfRayfromCamera = writer.declLocale( "lengthOfRayfromCamera"
+						, length( point - ray.origin ) );
+					auto lengthOfRayToInnerShell = writer.declLocale( "lengthOfRayToInnerShell"
+						, length( startPosOnInnerShell - ray.origin ) );
+					auto pointToEarthDir = writer.declLocale( "pointToEarthDir"
+						, normalize( point ) );
+					// assuming RayDir is normalised
+					auto cosTheta = writer.declLocale( "cosTheta"
+						, dot( ray.direction, pointToEarthDir ) );
+
+					// CosTheta is an approximation whose error gets relatively big near the horizon and could lead to problems.
+					// However, the actual calculationis involve a lot of trig and thats expensive;
+					// No longer drawing clouds that close to the horizon and so the cosTheta Approximation is fine
+
+					auto numerator = writer.declLocale( "numerator"
+						, abs( cosTheta * ( lengthOfRayfromCamera - lengthOfRayToInnerShell ) ) );
+					writer.returnStmt( numerator / sphereDelta );
+					// return clamp( length(point.y - projectedPos.y) / sphereDelta, 0.0, 1.0);
+				}
+				, sdw::InVec3{ writer, "point" }
+				, sdw::InVec3{ writer, "startPosOnInnerShell" }
+				, InRay{ writer, "ray" } );
+		}
+
+		return m_getRelativeHeightInAtmosphere( ppos
+			, pstartPos
+			, pray );
 	}
 
 	sdw::Void CloudsModel::applyClouds( sdw::IVec2 const & pfragCoord
@@ -267,13 +310,11 @@ namespace atmosphere_scattering
 				, [&]( sdw::Vec3 point
 					, sdw::Float const & heightFraction )
 				{
-					auto cloudTopOffset = 0.75_f;
-
 					//skew in wind direction
-					point += heightFraction * weatherData.windDirection() * cloudTopOffset;
+					point += heightFraction * cloudsData.windDirection() * cloudsData.cloudTopOffset();
 
 					//Animate clouds in wind direction and add a small upward bias to the wind direction
-					point += weatherData.windDirection() * weatherData.time() * weatherData.cloudSpeed();
+					point += cloudsData.windDirection() * cloudsData.time() * cloudsData.cloudSpeed();
 					writer.returnStmt( point );
 				}
 				, sdw::InVec3{ writer, "point" }
@@ -286,7 +327,7 @@ namespace atmosphere_scattering
 
 	sdw::RetFloat CloudsModel::sampleLowFrequency( sdw::Vec3 const & pskewedSamplePoint
 		, sdw::Vec3 const & punskewedSamplePoint
-		, sdw::Float const & prelativeHeight
+		, sdw::Float const & pheightFraction
 		, sdw::Float const & plod )
 	{
 		if ( !m_sampleLowFrequency )
@@ -294,14 +335,14 @@ namespace atmosphere_scattering
 			m_sampleLowFrequency = writer.implementFunction< sdw::Float >( "clouds_sampleLowFrequency"
 				, [&]( sdw::Vec3 const & skewedSamplePoint
 					, sdw::Vec3 const & unskewedSamplePoint
-					, sdw::Float const & relativeHeight
+					, sdw::Float const & heightFraction
 					, sdw::Float const & lod )
 				{
 					auto uv = writer.declLocale( "uv"
 						, getUVProjection( unskewedSamplePoint ) );
 					//Read in the low-frequency Perlin-Worley noises and Worley noises
 					auto lowFrequencyNoise = writer.declLocale( "lowFrequencyNoise"
-						, perlinWorleyNoiseMap.lod( vec3( uv * weatherData.crispiness(), relativeHeight ), lod ) );
+						, perlinWorleyNoiseMap.lod( vec3( uv * cloudsData.crispiness(), heightFraction ), lod ) );
 
 					//Build an FBM out of the low-frequency Worley Noises that are used to add detail to the Low-frequency Perlin Worley noise
 					auto lowFrequencyFBM = writer.declLocale( "lowFrequencyFBM"
@@ -316,13 +357,13 @@ namespace atmosphere_scattering
 					auto weather = writer.declLocale( "weatherData"
 						, weatherMap.lod( uv, 0.0_f ) );
 					auto densityHeightGradient = writer.declLocale( "densityHeightGradient"
-						, getDensityHeightGradientForPoint( relativeHeight, weather.g() ) );
+						, getDensityHeightGradientForPoint( heightFraction, 1.0_f ) );
 					// Apply Height function to the base cloud shape
-					baseCloud *= ( densityHeightGradient / relativeHeight );
+					baseCloud *= ( densityHeightGradient / heightFraction );
 
 					// Cloud coverage is stored in weather data’s red channel.
 					auto cloudCoverage = writer.declLocale( "cloudCoverage"
-						, weather.r() * weatherData.coverage() );
+						, weather.r() * cloudsData.coverage() );
 					// Use remap to apply the cloud coverage attribute.
 					auto baseCloudWithCoverage = writer.declLocale( "baseCloudWithCoverage"
 						, utils.remap( baseCloud, cloudCoverage, 1.0_f, 0.0_f, 1.0_f ) );
@@ -335,13 +376,13 @@ namespace atmosphere_scattering
 				}
 				, sdw::InVec3{ writer, "skewedSamplePoint" }
 				, sdw::InVec3{ writer, "unskewedSamplePoint" }
-				, sdw::InFloat{ writer, "relativeHeight" }
+				, sdw::InFloat{ writer, "heightFraction" }
 				, sdw::InFloat{ writer, "lod" } );
 		}
 
 		return m_sampleLowFrequency( pskewedSamplePoint
 			, punskewedSamplePoint
-			, prelativeHeight
+			, pheightFraction
 			, plod );
 	}
 
@@ -354,18 +395,25 @@ namespace atmosphere_scattering
 		{
 			m_erodeWithHighFrequency = writer.implementFunction< sdw::Float >( "clouds_erodeWithHighFrequency"
 				, [&]( sdw::Float const & baseDensity
-					, sdw::Vec3 const & skewedSamplePoint
+					, sdw::Vec3 skewedSamplePoint
 					, sdw::Float const & heightFraction
 					, sdw::Float const & lod )
 				{
+					// Add turbulence to the bottom of the clouds
+					auto curlNoise = writer.declLocale( "curlNoise"
+						, curlNoiseMap.sample( skewedSamplePoint.xy(), 0.0_f ) );
+					skewedSamplePoint.xy() += curlNoise * ( 1.0_f - heightFraction );
 					auto uv = writer.declLocale( "uv"
 						, getUVProjection( skewedSamplePoint ) );
+
 					// Sample High Frequency Noises
 					auto highFrequencyNoise = writer.declLocale( "highFrequencyNoise"
-						, worleyNoiseMap.lod( vec3( uv * weatherData.crispiness(), heightFraction ) * weatherData.curliness(), lod ).rgb() );
+						, worleyNoiseMap.lod( vec3( uv * cloudsData.crispiness(), heightFraction ) * cloudsData.curliness(), lod ).rgb() );
+
 					// Build High Frequency FBM
 					auto highFrequencyFBM = writer.declLocale( "highFrequencyFBM"
 						, dot( highFrequencyNoise.rgb(), vec3( 0.625_f, 0.25_f, 0.125_f ) ) );
+
 					//Erode the base shape of the cloud with the distorted high frequency worley noises
 					auto highFreqNoiseModifier = writer.declLocale( "highFreqNoiseModifier"
 						, clamp( mix( highFrequencyFBM, 1.0_f - highFrequencyFBM, clamp( heightFraction * 10.0_f, 0.0_f, 1.0_f ) ), 0.0_f, 1.0_f ) );
@@ -386,8 +434,9 @@ namespace atmosphere_scattering
 			, plod );
 	}
 
-	sdw::RetFloat CloudsModel::sampleCloudDensity( sdw::Vec3 const & pp
+	sdw::RetFloat CloudsModel::sampleCloudDensity( sdw::Vec3 const & psamplePoint
 		, sdw::Boolean const & pexpensive
+		, sdw::Float const & pheightFraction
 		, sdw::Float const & plod )
 	{
 		if ( !m_sampleCloudDensity )
@@ -395,17 +444,9 @@ namespace atmosphere_scattering
 			m_sampleCloudDensity = writer.implementFunction< sdw::Float >( "clouds_sampleDensity"
 				, [&]( sdw::Vec3 const & samplePoint
 					, sdw::Boolean const & expensive
+					, sdw::Float const & heightFraction
 					, sdw::Float const & lod )
 				{
-					auto heightFraction = writer.declLocale( "heightFraction"
-						, getHeightFraction( samplePoint ) );
-
-					IF( writer, heightFraction < 0.0_f || heightFraction > 1.0_f )
-					{
-						writer.returnStmt( 0.0_f );
-					}
-					FI;
-
 					auto skewedSamplePoint = writer.declLocale( "skewedSamplePoint"
 						, skewSamplePointWithWind( samplePoint, heightFraction ) );
 					auto baseDensity = writer.declLocale( "baseDensity"
@@ -425,13 +466,15 @@ namespace atmosphere_scattering
 
 					writer.returnStmt( clamp( baseDensity, 0.0_f, 1.0_f ) );
 				}
-				, sdw::InVec3{ writer, "p" }
+				, sdw::InVec3{ writer, "samplePoint" }
 				, sdw::InBoolean{ writer, "expensive" }
+				, sdw::InFloat{ writer, "heightFraction" }
 				, sdw::InFloat{ writer, "lod" } );
 		}
 
-		return m_sampleCloudDensity( pp
+		return m_sampleCloudDensity( psamplePoint
 			, pexpensive
+			, pheightFraction
 			, plod );
 	}
 
@@ -474,16 +517,15 @@ namespace atmosphere_scattering
 					auto invDepth = writer.declLocale( "invDepth"
 						, 1.0_f / ds );
 					auto sigmaDs = writer.declLocale( "sigmaDs"
-						, -ds * weatherData.absorption() );
-					auto pos = writer.declLocale( "pos"
-						, vec3( 0.0_f ) );
+						, -ds * cloudsData.absorption() );
 
 					auto T = writer.declLocale( "T"
 						, 1.0_f );
 
 					FOR( writer, sdw::Int, i, 0_i, i < 6_i, ++i )
 					{
-						pos = startPos + coneRadius * noiseKernel[i] * writer.cast< sdw::Float >( i );
+						auto pos = writer.declLocale( "pos"
+							, startPos + noiseKernel[i] * coneRadius * writer.cast< sdw::Float >( i ) );
 						auto heightFraction = writer.declLocale( "heightFraction"
 							, getHeightFraction( pos ) );
 
@@ -492,6 +534,7 @@ namespace atmosphere_scattering
 							auto cloudDensity = writer.declLocale( "cloudDensity"
 								, sampleCloudDensity( pos
 									, density > 0.3_f
+									, heightFraction
 									, writer.cast< sdw::Float >( i ) / 16.0_f ) );
 
 							IF( writer, cloudDensity > 0.0_f )
@@ -582,7 +625,7 @@ namespace atmosphere_scattering
 					auto T = writer.declLocale( "T"
 						, 1.0_f );
 					auto sigmaDs = writer.declLocale( "sigmaDs"
-						, -ds * weatherData.density() );
+						, -ds * cloudsData.density() );
 					auto expensive = writer.declLocale( "expensive"
 						, 1_b );
 					auto entered = writer.declLocale( "entered"
@@ -599,54 +642,60 @@ namespace atmosphere_scattering
 						//}
 						//FI;
 
-						auto densitySample = writer.declLocale( "densitySample"
-							, sampleCloudDensity( pos
-								, 1_b
-								, writer.cast< sdw::Float >( i ) / 16.0_f ) );
+						auto relativeHeight = writer.declLocale( "relativeHeight"
+							, getHeightFraction( pos ) );
 
-						IF( writer, densitySample > 0.0_f )
+						IF( writer, relativeHeight >= 0.0_f && relativeHeight <= 1.0_f )
 						{
-							IF( writer, !entered )
+							auto densitySample = writer.declLocale( "densitySample"
+								, sampleCloudDensity( pos
+									, 1_b
+									, relativeHeight
+									, writer.cast< sdw::Float >( i ) / 16.0_f ) );
+
+							IF( writer, densitySample > 0.0_f )
 							{
-								cloudPos = vec4( pos, 1.0_f );
-								entered = true;
+								IF( writer, !entered )
+								{
+									cloudPos = vec4( pos, 1.0_f );
+									entered = true;
+								}
+								FI;
+
+								auto ambientLight = writer.declLocale( "ambientLight"
+									, cloudsData.cloudColorBottom() ); //mix( CLOUDS_AMBIENT_COLOR_BOTTOM, CLOUDS_AMBIENT_COLOR_TOP, height );
+								auto lightDensity = writer.declLocale( "lightDensity"
+									, raymarchToLight( pos
+										, ds * 0.1_f
+										, atmosphere.getSunDirection()
+										, densitySample
+										, lightDotEye ) );
+								auto scattering = writer.declLocale( "scattering"
+									, mix( henyeyGreenstein( -0.08_f, lightDotEye )
+										, henyeyGreenstein( 0.08_f, lightDotEye )
+										, clamp( sdw::fma( lightDotEye, 0.5_f, 0.5_f ), 0.0_f, 1.0_f ) ) );
+								scattering = max( scattering, 1.0_f );
+								auto powderTerm = writer.declLocale( "powderTerm"
+									, utils.powder( densitySample ) );
+
+								IF( writer, cloudsData.enablePowder() == 0_i )
+								{
+									powderTerm = 1.0_f;
+								}
+								FI;
+
+								auto S = writer.declLocale( "S"
+									, 0.6_f * densitySample * mix( mix( ambientLight * 1.8_f, bg, vec3( 0.2_f ) )
+										, scattering * sunColor
+										, vec3( powderTerm * lightDensity ) ) );
+								auto dTrans = writer.declLocale( "dTrans"
+									, exp( densitySample * sigmaDs ) );
+								auto Sint = writer.declLocale( "Sint"
+									, ( S - S * dTrans ) * ( 1.0_f / densitySample ) );
+								col.rgb() += T * Sint;
+								T *= dTrans;
 							}
 							FI;
-
-							auto relativeHeight = writer.declLocale( "relativeHeight"
-								, getHeightFraction( pos ) );
-							auto ambientLight = writer.declLocale( "ambientLight"
-								, weatherData.cloudColorBottom() ); //mix( CLOUDS_AMBIENT_COLOR_BOTTOM, CLOUDS_AMBIENT_COLOR_TOP, height );
-							auto lightDensity = writer.declLocale( "lightDensity"
-								, raymarchToLight( pos
-									, ds * 0.1_f
-									, atmosphere.getSunDirection()
-									, densitySample
-									, lightDotEye ) );
-							auto scattering = writer.declLocale( "scattering"
-								, mix( henyeyGreenstein( -0.08_f, lightDotEye )
-									, henyeyGreenstein( 0.08_f, lightDotEye )
-									, clamp( sdw::fma( lightDotEye, 0.5_f, 0.5_f ), 0.0_f, 1.0_f ) ) );
-							scattering = max( scattering, 1.0_f );
-							auto powderTerm = writer.declLocale( "powderTerm"
-								, utils.powder( densitySample ) );
-
-							IF( writer, weatherData.enablePowder() == 0_i )
-							{
-								powderTerm = 1.0_f;
-							}
-							FI;
-
-							auto S = writer.declLocale( "S"
-								, 0.6_f * densitySample * mix( mix( ambientLight * 1.8_f, bg, vec3( 0.2_f ) )
-									, scattering * sunColor
-									, vec3( powderTerm * lightDensity ) ) );
-							auto dTrans = writer.declLocale( "dTrans"
-								, exp( densitySample * sigmaDs ) );
-							auto Sint = writer.declLocale( "Sint"
-								, ( S - S * dTrans ) * ( 1.0_f / densitySample ) );
-							col.rgb() += T * Sint;
-							T *= dTrans;
 						}
 						FI;
 

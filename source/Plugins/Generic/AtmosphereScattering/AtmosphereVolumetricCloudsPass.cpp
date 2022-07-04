@@ -70,7 +70,7 @@ namespace atmosphere_scattering
 		enum Bindings : uint32_t
 		{
 			eAtmosphere,
-			eWeather,
+			eClouds,
 			eCamera,
 			eTransmittance,
 			eMultiScatter,
@@ -78,6 +78,7 @@ namespace atmosphere_scattering
 			eVolume,
 			ePerlinWorley,
 			eWorley,
+			eCurl,
 			eWeatherMap,
 			eOutColour,
 			eOutEmission,
@@ -108,8 +109,8 @@ namespace atmosphere_scattering
 			C3D_AtmosphereScattering( writer
 				, uint32_t( Bindings::eAtmosphere )
 				, 0u );
-			C3D_AtmosphereWeather( writer
-				, uint32_t( Bindings::eWeather )
+			C3D_Clouds( writer
+				, uint32_t( Bindings::eClouds )
 				, 0u );
 			C3D_Camera( writer
 				, uint32_t( Bindings::eCamera )
@@ -138,7 +139,7 @@ namespace atmosphere_scattering
 				, utils
 				, atmosphere
 				, scattering
-				, c3d_weatherData
+				, c3d_cloudsData
 				, uint32_t( Bindings::ePerlinWorley ) };
 
 			if constexpr ( useCompute )
@@ -217,13 +218,14 @@ namespace atmosphere_scattering
 		, castor3d::RenderDevice const & device
 		, AtmosphereScatteringUbo const & atmosphereUbo
 		, CameraUbo const & cameraUbo
-		, AtmosphereWeatherUbo const & weatherUbo
+		, CloudsUbo const & cloudsUbo
 		, crg::ImageViewId const & transmittance
 		, crg::ImageViewId const & multiscatter
 		, crg::ImageViewId const & skyview
 		, crg::ImageViewId const & volume
 		, crg::ImageViewId const & perlinWorley
 		, crg::ImageViewId const & worley
+		, crg::ImageViewId const & curl
 		, crg::ImageViewId const & weather
 		, crg::ImageViewId const & colourResult
 		, crg::ImageViewId const & emissionResult
@@ -284,8 +286,8 @@ namespace atmosphere_scattering
 		pass.addDependencies( previousPasses );
 		atmosphereUbo.createPassBinding( pass
 			, weather::eAtmosphere );
-		weatherUbo.createPassBinding( pass
-			, weather::eWeather );
+		cloudsUbo.createPassBinding( pass
+			, weather::eClouds );
 		cameraUbo.createPassBinding( pass
 			, weather::eCamera );
 		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
@@ -320,6 +322,10 @@ namespace atmosphere_scattering
 			, weather::eWorley
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, mipLinearSampler );
+		pass.addSampledView( curl
+			, weather::eCurl
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, linearSampler );
 		pass.addSampledView( weather
 			, weather::eWeatherMap
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
