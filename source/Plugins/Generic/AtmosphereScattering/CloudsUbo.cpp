@@ -1,4 +1,4 @@
-#include "AtmosphereScattering/AtmosphereWeatherUbo.hpp"
+#include "AtmosphereScattering/CloudsUbo.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Buffer/UniformBufferPool.hpp>
@@ -10,10 +10,10 @@
 
 namespace atmosphere_scattering
 {
-	castor::String const AtmosphereWeatherUbo::Buffer = cuT( "Weather" );
-	castor::String const AtmosphereWeatherUbo::Data = cuT( "c3d_weatherData" );
+	castor::String const CloudsUbo::Buffer = cuT( "Clouds" );
+	castor::String const CloudsUbo::Data = cuT( "c3d_cloudsData" );
 
-	AtmosphereWeatherUbo::AtmosphereWeatherUbo( castor3d::RenderDevice const & device
+	CloudsUbo::CloudsUbo( castor3d::RenderDevice const & device
 		, bool & dirty )
 		: m_device{ device }
 		, m_ubo{ device.uboPool->getBuffer< Configuration >( 0u ) }
@@ -21,12 +21,12 @@ namespace atmosphere_scattering
 	{
 	}
 
-	AtmosphereWeatherUbo::~AtmosphereWeatherUbo()
+	CloudsUbo::~CloudsUbo()
 	{
 		m_device.uboPool->putBuffer( m_ubo );
 	}
 
-	void AtmosphereWeatherUbo::cpuUpdate( Configuration const & config
+	void CloudsUbo::cpuUpdate( Configuration const & config
 		, float totalTime )
 	{
 		m_config = config;

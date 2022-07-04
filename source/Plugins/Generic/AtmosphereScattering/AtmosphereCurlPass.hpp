@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3DAS_AtmosphereWorleyPass_H___
-#define ___C3DAS_AtmosphereWorleyPass_H___
+#ifndef ___C3DAS_AtmosphereCurlPass_H___
+#define ___C3DAS_AtmosphereCurlPass_H___
 
 #include "CloudsUbo.hpp"
 
@@ -12,10 +12,10 @@ See LICENSE file in root folder
 
 namespace atmosphere_scattering
 {
-	class AtmosphereWorleyPass
+	class AtmosphereCurlPass
 	{
 	public:
-		AtmosphereWorleyPass( crg::FramePassGroup & graph
+		AtmosphereCurlPass( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewId const & resultView

@@ -6,7 +6,6 @@ See LICENSE file in root folder
 
 #include "AtmosphereCameraUbo.hpp"
 #include "AtmosphereScatteringUbo.hpp"
-#include "AtmosphereWeatherUbo.hpp"
 
 #include <Castor3D/Shader/Shaders/SdwModule.hpp>
 #include <Castor3D/Shader/Ubos/MatrixUbo.hpp>

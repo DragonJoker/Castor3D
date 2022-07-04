@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3DAS_AtmosphereCloudsResolvePass_H___
 #define ___C3DAS_AtmosphereCloudsResolvePass_H___
 
-#include "AtmosphereWeatherUbo.hpp"
+#include "CloudsUbo.hpp"
 
 #include <Castor3D/Scene/Background/BackgroundModule.hpp>
 #include <Castor3D/Shader/ShaderModule.hpp>

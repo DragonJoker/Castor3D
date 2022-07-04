@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3DAS_AtmosphereWeatherConfig_H___
-#define ___C3DAS_AtmosphereWeatherConfig_H___
+#ifndef ___C3DAS_CloudsConfig_H___
+#define ___C3DAS_CloudsConfig_H___
 
 #include "AtmosphereScatteringPrerequisites.hpp"
 
@@ -12,32 +12,29 @@ See LICENSE file in root folder
 namespace atmosphere_scattering
 {
 	template< template< typename DataT > typename WrapperT >
-	struct AtmosphereWeatherConfigT
+	struct CloudsConfigT
 	{
 		template< typename ... ParamsT >
-		AtmosphereWeatherConfigT( ParamsT & ... params )
-			: cloudSpeed{ params..., 0.0f }
+		CloudsConfigT( ParamsT & ... params )
+			: cloudSpeed{ params..., 10.0f }
 			, coverage{ params..., 0.45f }
 			, crispiness{ params..., 40.0f }
 			, curliness{ params..., 0.1f }
-			, density{ params..., 0.02f }
-			, absorption{ params..., 0.35f }
+			, density{ params..., 0.8f }
+			, absorption{ params..., 0.25f }
 			, sphereInnerRadius{ params..., 50.0f }
 			, sphereOuterRadius{ params..., 170.0f }
-			, perlinAmplitude{ 0.5f }
-			, perlinFrequency{ 0.8f }
-			, perlinScale{ 100.0f }
-			, perlinOctaves{ 4u }
 			, cloudColorTop{ params..., castor::Point3f{ 169.0f, 149.0f, 149.0f } * 1.5f / 255.0f }
 			, time{ 0.0f }
 			, cloudColorBottom{ params..., castor::Point3f{ 65.0f, 70.0f, 80.0f } * 1.5f / 255.0f }
 			, enablePowder{ params..., 1 }
 			, windDirection{ params..., castor::Point3f{ 0.5f, 0.0f, 0.1f } }
+			, cloudTopOffset{ params..., 0.75f }
 		{
 		}
 
 		template< template< typename DataU > typename WrapperU >
-		AtmosphereWeatherConfigT & operator=( AtmosphereWeatherConfigT< WrapperU > const & rhs )
+		CloudsConfigT & operator=( CloudsConfigT< WrapperU > const & rhs )
 		{
 			cloudSpeed = rhs.cloudSpeed;
 			coverage = rhs.coverage;
@@ -49,11 +46,6 @@ namespace atmosphere_scattering
 			sphereInnerRadius = rhs.sphereInnerRadius;
 			sphereOuterRadius = rhs.sphereOuterRadius;
 
-			perlinAmplitude = rhs.perlinAmplitude;
-			perlinFrequency = rhs.perlinFrequency;
-			perlinScale = rhs.perlinScale;
-			perlinOctaves = rhs.perlinOctaves;
-
 			cloudColorTop = rhs.cloudColorTop;
 			time = rhs.time;
 
@@ -61,6 +53,7 @@ namespace atmosphere_scattering
 			enablePowder = rhs.enablePowder;
 
 			windDirection = rhs.windDirection;
+			cloudTopOffset = rhs.cloudTopOffset;
 
 			return *this;
 		}
@@ -75,11 +68,6 @@ namespace atmosphere_scattering
 		WrapperT< float > sphereInnerRadius;
 		WrapperT< float > sphereOuterRadius;
 
-		float perlinAmplitude;
-		float perlinFrequency;
-		float perlinScale;
-		uint32_t perlinOctaves;
-
 		WrapperT< castor::Point3f > cloudColorTop;
 		float time{};
 
@@ -87,7 +75,7 @@ namespace atmosphere_scattering
 		WrapperT< int > enablePowder;
 
 		WrapperT< castor::Point3f > windDirection;
-		float pad1{};
+		WrapperT< float > cloudTopOffset;
 	};
 }
 

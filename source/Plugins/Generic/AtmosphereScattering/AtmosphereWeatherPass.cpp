@@ -30,7 +30,7 @@ namespace atmosphere_scattering
 		{
 			sdw::ComputeWriter writer;
 
-			C3D_AtmosphereWeather( writer
+			C3D_Weather( writer
 				, uint32_t( Bindings::eWeather )
 				, 0u );
 			auto outputTexture = writer.declStorageImg< sdw::WImage2DRg32 >("outputTexture"
@@ -148,7 +148,7 @@ namespace atmosphere_scattering
 	AtmosphereWeatherPass::AtmosphereWeatherPass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
 		, castor3d::RenderDevice const & device
-		, AtmosphereWeatherUbo const & weatherUbo
+		, WeatherUbo const & weatherUbo
 		, crg::ImageViewId const & resultView
 		, bool const & enabled )
 		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, "WeatherPass", volclouds::getProgram( getExtent( resultView ).width ) }

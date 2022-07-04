@@ -1,7 +1,5 @@
 #include "AtmosphereScattering/ScatteringModel.hpp"
 
-#include "AtmosphereScattering/AtmosphereWeatherUbo.hpp"
-
 #include <Castor3D/Miscellaneous/Logger.hpp>
 #include <Castor3D/Shader/Shaders/GlslLight.hpp>
 

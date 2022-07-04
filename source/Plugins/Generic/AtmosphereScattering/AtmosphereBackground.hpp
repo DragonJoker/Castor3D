@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "AtmosphereCameraUbo.hpp"
 #include "AtmosphereCloudsResolvePass.hpp"
+#include "AtmosphereCurlPass.hpp"
 #include "AtmosphereMultiScatteringPass.hpp"
 #include "AtmospherePerlinPass.hpp"
 #include "AtmosphereSkyViewPass.hpp"
@@ -86,6 +87,7 @@ namespace atmosphere_scattering
 
 		void loadWorley( uint32_t dimension );
 		void loadPerlinWorley( uint32_t dimension );
+		void loadCurl( uint32_t dimension );
 		void loadWeather( uint32_t dimension );
 		void loadTransmittance( castor::Point2ui const & dimensions );
 		void loadMultiScatter( uint32_t dimension );
@@ -122,7 +124,7 @@ namespace atmosphere_scattering
 			return m_atmosphereCfg;
 		}
 
-		void setWeatherCfg( AtmosphereWeatherConfig config )
+		void setWeatherCfg( WeatherConfig config )
 		{
 			m_weatherCfg = std::move( config );
 		}
@@ -130,6 +132,16 @@ namespace atmosphere_scattering
 		auto & getWeatherCfg()const
 		{
 			return m_weatherCfg;
+		}
+
+		void setCloudsCfg( CloudsConfig config )
+		{
+			m_cloudsCfg = std::move( config );
+		}
+
+		auto & getCloudsCfg()const
+		{
+			return m_cloudsCfg;
 		}
 
 		auto const & getTransmittance()const
@@ -188,9 +200,10 @@ namespace atmosphere_scattering
 				, crg::ImageViewId const & multiscatter
 				, crg::ImageViewId const & worley
 				, crg::ImageViewId const & perlinWorley
+				, crg::ImageViewId const & curl
 				, crg::ImageViewId const & weather
 				, AtmosphereScatteringUbo const & atmosphereUbo
-				, AtmosphereWeatherUbo const & weatherUbo
+				, CloudsUbo const & cloudsUbo
 				, VkExtent2D const & size
 				, castor::Point2ui const & skyViewResolution
 				, uint32_t volumeResolution
@@ -221,18 +234,23 @@ namespace atmosphere_scattering
 	private:
 		castor3d::SceneNode const * m_node{};
 		// Clouds
-		AtmosphereWeatherConfig m_weatherCfg;
+		WeatherConfig m_weatherCfg;
+		CloudsConfig m_cloudsCfg;
 		castor3d::Texture m_worley;
 		castor3d::Texture m_perlinWorley;
+		castor3d::Texture m_curl;
 		castor3d::Texture m_weather;
 		mutable bool m_first{ true };
 		mutable bool m_generateWorley{ true };
 		mutable bool m_generatePerlinWorley{ true };
+		mutable bool m_generateCurl{ true };
+		mutable bool m_cloudsChanged{ true };
 		mutable bool m_weatherChanged{ true };
-		mutable bool m_weatherPerlinChanged{ true };
-		std::unique_ptr< AtmosphereWeatherUbo > m_weatherUbo;
+		std::unique_ptr< WeatherUbo > m_weatherUbo;
+		std::unique_ptr< CloudsUbo > m_cloudsUbo;
 		std::unique_ptr< AtmosphereWorleyPass > m_worleyPass;
 		std::unique_ptr< AtmospherePerlinPass > m_perlinWorleyPass;
+		std::unique_ptr< AtmosphereCurlPass > m_curlPass;
 		std::unique_ptr< AtmosphereWeatherPass > m_weatherPass;
 		// Atmosphere
 		AtmosphereScatteringConfig m_atmosphereCfg;

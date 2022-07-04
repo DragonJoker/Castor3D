@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3DAS_AtmosphereVolumetricCloudsPass_H___
 #define ___C3DAS_AtmosphereVolumetricCloudsPass_H___
 
-#include "AtmosphereWeatherUbo.hpp"
+#include "CloudsUbo.hpp"
 
 #include <Castor3D/Scene/Background/BackgroundModule.hpp>
 #include <Castor3D/Shader/ShaderModule.hpp>
@@ -23,13 +23,14 @@ namespace atmosphere_scattering
 			, castor3d::RenderDevice const & device
 			, AtmosphereScatteringUbo const & atmosphereUbo
 			, CameraUbo const & cameraUbo
-			, AtmosphereWeatherUbo const & weatherUbo
+			, CloudsUbo const & weatherUbo
 			, crg::ImageViewId const & transmittance
 			, crg::ImageViewId const & multiscatter
 			, crg::ImageViewId const & skyview
 			, crg::ImageViewId const & volume
 			, crg::ImageViewId const & perlinWorley
 			, crg::ImageViewId const & worley
+			, crg::ImageViewId const & curl
 			, crg::ImageViewId const & weather
 			, crg::ImageViewId const & colourResult
 			, crg::ImageViewId const & emissionResult
