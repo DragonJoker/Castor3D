@@ -28,6 +28,44 @@ namespace atmosphere_scattering
 	{
 		static constexpr bool useCompute = false;
 
+		template< bool ComputeT >
+		struct ShaderWriter;
+
+		template<>
+		struct ShaderWriter< false >
+		{
+			using Type = sdw::FragmentWriter;
+
+			template< typename FuncT >
+			static void implementMain( Type & writer, FuncT func )
+			{
+				writer.implementMain( [&]( sdw::FragmentIn in
+					, sdw::FragmentOut out )
+					{
+						auto fragCoord = writer.declLocale( "fragCoord"
+							, ivec2( in.fragCoord.xy() ) );
+						func( fragCoord );
+					} );
+			}
+		};
+
+		template<>
+		struct ShaderWriter< true >
+		{
+			using Type = sdw::ComputeWriter;
+
+			template< typename FuncT >
+			static void implementMain( Type & writer, FuncT func )
+			{
+				writer.implementMain( [&]( sdw::ComputeIn in )
+					{
+						auto fragCoord = writer.declLocale( "fragCoord"
+							, ivec2( in.globalInvocationID.xy() ) );
+						func( fragCoord );
+					} );
+			}
+		};
+
 		enum Bindings : uint32_t
 		{
 			eAtmosphere,
@@ -64,8 +102,7 @@ namespace atmosphere_scattering
 		static castor3d::ShaderPtr getProgram( VkExtent3D renderSize
 			, VkExtent3D const & transmittanceExtent )
 		{
-			sdw::FragmentWriter writer;
-			castor3d::shader::Utils utils{ writer };
+			ShaderWriter< useCompute >::Type writer;
 
 			C3D_AtmosphereScattering( writer
 				, uint32_t( Bindings::eAtmosphere )
@@ -107,7 +144,9 @@ namespace atmosphere_scattering
 			auto sphereDelta = sphereOuterRadius - sphereInnerRadius;
 			auto sphereCenter = vec3( 0.0_f, -c3d_atmosphereData.bottomRadius, 0.0_f );
 
+			castor3d::shader::Utils utils{ writer };
 			AtmosphereConfig atmosphere{ writer
+				, utils
 				, c3d_atmosphereData
 				, { false, &c3d_cameraData, true, true }
 				, { transmittanceExtent.width, transmittanceExtent.height }
@@ -512,10 +551,9 @@ namespace atmosphere_scattering
 						auto viewDir = writer.declLocale( "viewDir"
 							, c3d_cameraData.camInvProj() * vec4( clipDir, 1.0_f ) );
 						viewDir = vec4( viewDir.xy(), -1.0_f, 0.0_f );
-						auto worldDir = writer.declLocale( "worldDir"
-							, normalize( ( c3d_cameraData.camInvView() * viewDir ).xyz() ) );
-						auto worldPos = writer.declLocale( "worldPos"
-							, c3d_cameraData.position() + vec3( 0.0_f, c3d_atmosphereData.bottomRadius, 0.0_f ) );
+						auto ray = writer.declLocale< Ray >( "ray" );
+						ray.direction = normalize( ( c3d_cameraData.camInvView() * viewDir ).xyz() );
+						ray.origin = c3d_cameraData.position() + vec3( 0.0_f, c3d_atmosphereData.bottomRadius, 0.0_f );
 						auto startPos = writer.declLocale( "startPos"
 							, vec3( 0.0_f ) );
 						auto endPos = writer.declLocale( "endPos"
@@ -525,12 +563,12 @@ namespace atmosphere_scattering
 						auto v = writer.declLocale( "v"
 							, vec4( 0.0_f ) );
 						auto sunColor = writer.declLocale( "sunColor"
-							, scattering.getSunLuminance( worldPos, worldDir, transmittanceMap ) );
+							, scattering.getSunLuminance( ray, transmittanceMap ) );
 
 						//compute background color
 						auto cubeMapEndPos = writer.declLocale( "cubeMapEndPos"
 							, vec3( 0.0_f ) );
-						raySphereintersectSkyMap( worldDir
+						raySphereintersectSkyMap( ray.direction
 							, 0.5_f
 							, cubeMapEndPos );
 
@@ -542,29 +580,29 @@ namespace atmosphere_scattering
 						auto fogRay = writer.declLocale( "fogRay"
 							, vec3( 0.0_f ) );
 
-						IF( writer, worldPos.y() < sphereInnerRadius )
+						IF( writer, ray.origin.y() < sphereInnerRadius )
 						{
 							raySphereIntersect( c3d_cameraData.position()
-								, worldDir
+								, ray.direction
 								, sphereInnerRadius
 								, startPos );
 							raySphereIntersect( c3d_cameraData.position()
-								, worldDir
+								, ray.direction
 								, sphereOuterRadius
 								, endPos );
 							fogRay = startPos;
 						}
-						ELSEIF( worldPos.y() > sphereInnerRadius
-							&& worldPos.y() < sphereOuterRadius )
+						ELSEIF( ray.origin.y() > sphereInnerRadius
+							&& ray.origin.y() < sphereOuterRadius )
 						{
 							startPos = c3d_cameraData.position();
 							raySphereIntersect( c3d_cameraData.position()
-								, worldDir
+								, ray.direction
 								, sphereOuterRadius
 								, endPos );
 							auto hit = writer.declLocale( "hit"
 								, raySphereIntersect( c3d_cameraData.position()
-									, worldDir
+									, ray.direction
 									, sphereInnerRadius
 									, fogRay ) );
 
@@ -577,15 +615,15 @@ namespace atmosphere_scattering
 						ELSE
 						{
 							raySphereIntersect( c3d_cameraData.position()
-								, worldDir
+								, ray.direction
 								, sphereOuterRadius
 								, startPos );
 							raySphereIntersect( c3d_cameraData.position()
-								, worldDir
+								, ray.direction
 								, sphereInnerRadius
 								, endPos );
 							raySphereIntersect( c3d_cameraData.position()
-								, worldDir
+								, ray.direction
 								, sphereOuterRadius
 								, fogRay );
 						}
@@ -679,16 +717,12 @@ namespace atmosphere_scattering
 					, uint32_t( Bindings::eOutDistance )
 					, 0u );
 
-				writer.implementMainT< sdw::VoidT, sdw::VoidT >( sdw::FragmentIn{ writer }
-					, sdw::FragmentOut{ writer }
-					, [&]( sdw::FragmentIn in
-						, sdw::FragmentOut out )
+				ShaderWriter< useCompute >::implementMain( writer
+					, [&]( sdw::IVec2 const & fragCoord )
 					{
-						auto fragCoord = writer.declLocale( "fragCoord"
-							, ivec2( in.fragCoord.xy() ) );
 						auto luminance = writer.declLocale< sdw::Vec4 >( "luminance" );
 						auto transmittance = writer.declLocale< sdw::Vec4 >( "transmittance" );
-						scattering.getPixelTransLum( vec2( in.fragCoord.xy() )
+						scattering.getPixelTransLum( vec2( fragCoord.xy() )
 							, targetSize
 							, depthBufferValue
 							, transmittanceMap
@@ -714,16 +748,12 @@ namespace atmosphere_scattering
 				auto outEmission = writer.declOutput< sdw::Vec4 >( "outEmission", 1u );
 				auto outDistance = writer.declOutput< sdw::Vec4 >( "outDistance", 2u );
 
-				writer.implementMainT< sdw::VoidT, sdw::VoidT >( sdw::FragmentIn{ writer }
-					, sdw::FragmentOut{ writer }
-					, [&]( sdw::FragmentIn in
-						, sdw::FragmentOut out )
+				ShaderWriter< useCompute >::implementMain( writer
+					, [&]( sdw::IVec2 const & fragCoord )
 					{
-						auto fragCoord = writer.declLocale( "fragCoord"
-							, ivec2( in.fragCoord.xy() ) );
 						auto luminance = writer.declLocale< sdw::Vec4 >( "luminance" );
 						auto transmittance = writer.declLocale< sdw::Vec4 >( "transmittance" );
-						scattering.getPixelTransLum( vec2( in.fragCoord.xy() )
+						scattering.getPixelTransLum( vec2( fragCoord.xy() )
 							, targetSize
 							, depthBufferValue
 							, transmittanceMap

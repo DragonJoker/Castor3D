@@ -9,6 +9,7 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/Technique/RenderTechniqueVisitor.hpp>
 #include <Castor3D/Shader/Program.hpp>
+#include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 
 #include <RenderGraph/RunnableGraph.hpp>
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
@@ -57,7 +58,9 @@ namespace atmosphere_scattering
 			auto depthBufferValue = writer.declConstant( "depthBufferValue"
 				, -1.0_f );
 
+			castor3d::shader::Utils utils{ writer };
 			AtmosphereConfig atmosphereConfig{ writer
+				, utils
 				, c3d_atmosphereData
 				, { false, nullptr, false, false } };
 
@@ -80,19 +83,16 @@ namespace atmosphere_scattering
 					auto viewZenithSinAngle = writer.declLocale< sdw::Float >( "viewZenithSinAngle"
 						, sqrt( 1.0_f - viewZenithCosAngle * viewZenithCosAngle ) );
 
-					//  A few extra needed constants
-					auto worldPos = writer.declLocale( "worldPos"
-						, vec3( 0.0_f, viewHeight, 0.0_f ) );
-					auto worldDir = writer.declLocale( "worldDir"
-						, vec3( 0.0_f, viewZenithCosAngle, -viewZenithSinAngle ) );
+					auto ray = writer.declLocale< Ray >( "ray" );
+					ray.origin = vec3( 0.0_f, viewHeight, 0.0_f );
+					ray.direction = vec3( 0.0_f, viewZenithCosAngle, -viewZenithSinAngle );
 
 					auto transmittance = writer.declLocale( "transmittance"
 						, exp( -atmosphereConfig.integrateScatteredLuminanceNoShadow( pixPos
-							, worldPos
-							, worldDir
+							, ray
 							, c3d_atmosphereData.sunDirection
 							, sampleCountIni
-							, depthBufferValue ).opticalDepth ) );
+							, depthBufferValue ).opticalDepth() ) );
 
 					// Optical depth to transmittance
 					pxl_colour = vec4( transmittance, 1.0f );

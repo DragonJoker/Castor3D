@@ -728,10 +728,12 @@ namespace atmosphere_scattering
 	void AtmosphereBackground::doCpuUpdate( castor3d::CpuUpdater & updater )const
 	{
 		CU_Require( m_node );
-		//m_atmosphereChanged = false;
+		m_atmosphereChanged = false;
 		auto sunDirection = m_atmosphereUbo->cpuUpdate( m_atmosphereCfg, *m_node );
-		//m_weatherPerlinChanged = false;
-		//m_weatherChanged = false;
+		m_generateWorley = m_generateWorley && m_first;
+		m_generatePerlinWorley = m_generatePerlinWorley && m_first;
+		m_weatherPerlinChanged = m_first;
+		m_first = false;
 		auto time = updater.tslf > 0_ms
 			? updater.tslf
 			: std::chrono::duration_cast< castor::Milliseconds >( m_timer.getElapsed() );

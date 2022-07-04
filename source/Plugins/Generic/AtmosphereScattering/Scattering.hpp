@@ -28,8 +28,7 @@ namespace atmosphere_scattering
 			, bool fastAerialPerspective
 			, bool renderSunDisk
 			, bool bloomSunDisk );
-		sdw::Vec3 getSunLuminance( sdw::Vec3 const & worldPos
-			, sdw::Vec3 const & worldDir
+		sdw::Vec3 getSunLuminance( Ray const & ray
 			, sdw::CombinedImage2DRgba32 const & transmittanceMap );
 		sdw::Float aerialPerspectiveDepthToSlice( sdw::Float const & depth );
 		sdw::Void getPixelTransLum( sdw::Vec2 const & fragPos
@@ -58,8 +57,7 @@ namespace atmosphere_scattering
 	private:
 		void doRenderSky( sdw::Vec2 const & fragSize
 			, sdw::Float const & fragDepth
-			, sdw::Vec3 const & worldPos
-			, sdw::Vec3 const & worldDir
+			, Ray const & ray
 			, sdw::CombinedImage2DRgba32 const & transmittanceMap
 			, sdw::CombinedImage2DRgba32 const & skyViewMap
 			, sdw::Vec3 & L
@@ -89,8 +87,7 @@ namespace atmosphere_scattering
 		bool m_bloomSunDisk;
 
 		sdw::Function< sdw::Vec3
-			, sdw::InVec3
-			, sdw::InVec3
+			, InRay
 			, sdw::InCombinedImage2DRgba32 > m_getSunLuminance;
 		sdw::Function< sdw::Float
 			, sdw::InFloat > m_aerialPerspectiveDepthToSlice;

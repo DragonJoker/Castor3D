@@ -156,7 +156,7 @@ namespace atmosphere_scattering
 	{
 		auto renderSize = getExtent( resultView );
 		auto & pass = graph.createPass( "WeatherPass"
-			, [this, &device/*, &enabled*/, renderSize]( crg::FramePass const & framePass
+			, [this, &device, &enabled, renderSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -167,7 +167,7 @@ namespace atmosphere_scattering
 					, crg::cp::Config{}
 						.groupCountX( renderSize.width / 8u )
 						.groupCountY( renderSize.height / 8u )
-						//.enabled( &enabled )
+						.enabled( &enabled )
 						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) ) );
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );

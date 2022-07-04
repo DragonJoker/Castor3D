@@ -53,15 +53,13 @@ namespace atmosphere_scattering
 	{
 	}
 
-	sdw::Vec3 ScatteringConfig::getSunLuminance( sdw::Vec3 const & pworldPos
-		, sdw::Vec3 const & pworldDir
+	sdw::Vec3 ScatteringConfig::getSunLuminance( Ray const & pray
 		, sdw::CombinedImage2DRgba32 const & ptransmittanceMap )
 	{
 		if ( !m_getSunLuminance )
 		{
 			m_getSunLuminance = m_writer.implementFunction< sdw::Vec3 >( "getSunLuminance"
-				, [&]( sdw::Vec3 const & worldPos
-					, sdw::Vec3 const & worldDir
+				, [&]( Ray const & ray
 					, sdw::CombinedImage2DRgba32 const & transmittanceMap )
 				{
 					if ( m_bloomSunDisk )
@@ -71,7 +69,7 @@ namespace atmosphere_scattering
 						auto minSunCosTheta = m_writer.declLocale( "minSunCosTheta"
 							, cos( sunSolidAngle ) );
 						auto cosTheta = m_writer.declLocale( "cosTheta"
-							, dot( worldDir, m_atmosphereData.sunDirection ) );
+							, dot( ray.direction, m_atmosphereData.sunDirection ) );
 						auto sunLuminance = m_writer.declLocale( "sunLuminance"
 							, vec3( 1.0_f ) );
 
@@ -92,7 +90,7 @@ namespace atmosphere_scattering
 
 						IF( m_writer, length( sunLuminance ) > 0.0_f )
 						{
-							IF( m_writer, m_atmosphereConfig.raySphereIntersectNearest( worldPos, worldDir, vec3( 0.0_f ), m_atmosphereData.bottomRadius ) >= 0.0_f )
+							IF( m_writer, m_atmosphereConfig.raySphereIntersectNearest( ray, vec3( 0.0_f ), m_atmosphereData.bottomRadius ).valid() )
 							{
 								sunLuminance *= vec3( 0.0_f );
 							}
@@ -116,13 +114,13 @@ namespace atmosphere_scattering
 						auto minSunCosTheta = m_writer.declLocale( "minSunCosTheta"
 							, cos( sunSolidAngle ) );
 						auto cosTheta = m_writer.declLocale( "cosTheta"
-							, dot( worldDir, m_atmosphereData.sunDirection ) );
+							, dot( ray.direction, m_atmosphereData.sunDirection ) );
 						auto sunLuminance = m_writer.declLocale( "sunLuminance"
 							, vec3( 0.0_f ) );
 
 						IF( m_writer, cosTheta > minSunCosTheta )
 						{
-							IF( m_writer, m_atmosphereConfig.raySphereIntersectNearest( worldPos, worldDir, vec3( 0.0_f ), m_atmosphereData.bottomRadius ) < 0.0_f ) // no intersection
+							IF( m_writer, !m_atmosphereConfig.raySphereIntersectNearest( ray, vec3( 0.0_f ), m_atmosphereData.bottomRadius ).valid() ) // no intersection
 							{
 								sunLuminance = vec3( 2.0_f ) * m_atmosphereConfig.getSunRadiance( m_cameraData.position()
 									, m_atmosphereData.sunDirection
@@ -135,13 +133,11 @@ namespace atmosphere_scattering
 						m_writer.returnStmt( sunLuminance );
 					}
 				}
-				, sdw::InVec3{ m_writer, "worldPos" }
-				, sdw::InVec3{ m_writer, "worldDir" }
+				, InRay{ m_writer, "ray" }
 				, sdw::InCombinedImage2DRgba32{ m_writer, "transmittanceMap" } );
 		}
 
-		return m_getSunLuminance( pworldPos
-			, pworldDir
+		return m_getSunLuminance( pray
 			, ptransmittanceMap );
 	}
 
@@ -160,6 +156,100 @@ namespace atmosphere_scattering
 		}
 
 		return m_aerialPerspectiveDepthToSlice( pdepth );
+	}
+
+	sdw::Void ScatteringConfig::getPixelTransLum( sdw::Vec2 const & pfragPos
+		, sdw::Vec2 const & pfragSize
+		, sdw::Float const & pfragDepth
+		, sdw::CombinedImage2DRgba32 const & ptransmittanceMap
+		, sdw::CombinedImage2DRgba32 const & pskyViewMap
+		, sdw::CombinedImage3DRgba32 const & pvolumeMap
+		, sdw::Vec4 & ptransmittance
+		, sdw::Vec4 & pluminance )
+	{
+		if ( !m_getPixelTransLum )
+		{
+			m_getPixelTransLum = m_writer.implementFunction< sdw::Void >( "getPixelTransLum"
+				, [&]( sdw::Vec2 const & fragPos
+					, sdw::Vec2 const & fragSize
+					, sdw::Float const & fragDepth
+					, sdw::CombinedImage2DRgba32 const & transmittanceMap
+					, sdw::CombinedImage2DRgba32 const & skyViewMap
+					, sdw::CombinedImage3DRgba32 const & volumeMap
+					, sdw::Vec4 transmittance
+					, sdw::Vec4 luminance )
+				{
+					auto clipSpace = m_writer.declLocale( "clipSpace"
+						, m_atmosphereConfig.getClipSpace( fragPos, fragSize, 1.0_f ) );
+					auto hPos = m_writer.declLocale( "hPos"
+						, m_cameraData.camProjToWorld( vec4( clipSpace, 1.0_f ) ) );
+					auto ray = m_writer.declLocale< Ray >( "ray" );
+					ray.origin = m_cameraData.position() + vec3( 0.0_f, m_atmosphereData.bottomRadius, 0.0_f );
+					ray.direction = normalize( hPos.xyz() / hPos.w() - m_cameraData.position() );
+					auto L = m_writer.declLocale( "L"
+						, vec3( 0.0_f ) );
+					doRenderSky( fragSize
+						, fragDepth
+						, ray
+						, transmittanceMap
+						, skyViewMap
+						, L
+						, luminance );
+
+					if ( m_fastAerialPerspective )
+					{
+						doRenderFastAerial( fragPos
+							, fragSize
+							, fragDepth
+							, ray.origin
+							, volumeMap
+							, L
+							, luminance );
+					}
+					else
+					{
+						// Move to top atmosphere as the starting point for ray marching.
+						// This is critical to be after the above to not disrupt above atmosphere tests and voxel selection.
+						IF( m_writer, !m_atmosphereConfig.moveToTopAtmosphere( ray ) )
+						{
+							// Ray is not intersecting the atmosphere
+							if ( m_renderSunDisk )
+							{
+								luminance = vec4( getSunLuminance( ray, transmittanceMap ), 1.0_f );
+							}
+
+							m_writer.returnStmt();
+						}
+						FI;
+
+						auto sampleCountIni = 0.0_f;
+						auto ss = m_writer.declLocale( "ss"
+							, m_atmosphereConfig.integrateScatteredLuminanceNoShadow( fragPos
+								, ray
+								, m_atmosphereData.sunDirection
+								, sampleCountIni
+								, fragDepth ) );
+						doRegisterOutputs( ss, L, luminance, transmittance );
+					}
+				}
+				, sdw::InVec2{ m_writer, "fragPos" }
+				, sdw::InVec2{ m_writer, "fragSize" }
+				, sdw::InFloat{ m_writer, "fragDepth" }
+				, sdw::InCombinedImage2DRgba32{ m_writer, "transmittanceMap" }
+				, sdw::InCombinedImage2DRgba32{ m_writer, "skyViewMap" }
+				, sdw::InCombinedImage3DRgba32{ m_writer, "volumeMap" }
+				, sdw::OutVec4{ m_writer, "transmittance" }
+				, sdw::OutVec4{ m_writer, "luminance" } );
+		}
+
+		return m_getPixelTransLum( pfragPos
+			, pfragSize
+			, pfragDepth
+			, ptransmittanceMap
+			, pskyViewMap
+			, pvolumeMap
+			, ptransmittance
+			, pluminance );
 	}
 
 	sdw::Void ScatteringConfig::getPixelTransLum( sdw::Vec2 const & pfragPos
@@ -197,16 +287,14 @@ namespace atmosphere_scattering
 						, m_atmosphereConfig.getClipSpace( fragPos, fragSize, 1.0_f ) );
 					auto hPos = m_writer.declLocale( "hPos"
 						, m_cameraData.camProjToWorld( vec4( clipSpace, 1.0_f ) ) );
-					auto worldDir = m_writer.declLocale( "worldDir"
-						, normalize( hPos.xyz() / hPos.w() - m_cameraData.position() ) );
-					auto worldPos = m_writer.declLocale( "worldPos"
-						, m_cameraData.position() + vec3( 0.0_f, m_atmosphereData.bottomRadius, 0.0_f ) );
+					auto ray = m_writer.declLocale< Ray >( "ray" );
+					ray.origin = m_cameraData.position() + vec3( 0.0_f, m_atmosphereData.bottomRadius, 0.0_f );
+					ray.direction = normalize( hPos.xyz() / hPos.w() - m_cameraData.position() );
 					auto L = m_writer.declLocale( "L"
 						, vec3( 0.0_f ) );
 					doRenderSky( fragSize
 						, fragDepth
-						, worldPos
-						, worldDir
+						, ray
 						, transmittanceMap
 						, skyViewMap
 						, L
@@ -217,7 +305,7 @@ namespace atmosphere_scattering
 						doRenderFastAerial( fragPos
 							, fragSize
 							, fragDepth
-							, worldPos
+							, ray.origin
 							, volumeMap
 							, L
 							, luminance );
@@ -226,12 +314,12 @@ namespace atmosphere_scattering
 					{
 						// Move to top atmosphere as the starting point for ray marching.
 						// This is critical to be after the above to not disrupt above atmosphere tests and voxel selection.
-						IF( m_writer, !m_atmosphereConfig.moveToTopAtmosphere( worldPos, worldDir ) )
+						IF( m_writer, !m_atmosphereConfig.moveToTopAtmosphere( ray ) )
 						{
 							// Ray is not intersecting the atmosphere	
 							if ( m_renderSunDisk )
 							{
-								luminance = vec4( getSunLuminance( worldPos, worldDir, transmittanceMap ), 1.0_f );
+								luminance = vec4( getSunLuminance( ray, transmittanceMap ), 1.0_f );
 							}
 
 							m_writer.returnStmt();
@@ -241,8 +329,7 @@ namespace atmosphere_scattering
 						auto sampleCountIni = 0.0_f;
 						auto ss = m_writer.declLocale( "ss"
 							, m_atmosphereConfig.integrateScatteredLuminance( fragPos
-								, worldPos
-								, worldDir
+								, ray
 								, m_atmosphereData.sunDirection
 								, sampleCountIni
 								, fragDepth
@@ -284,103 +371,6 @@ namespace atmosphere_scattering
 			, pluminance );
 	}
 
-	sdw::Void ScatteringConfig::getPixelTransLum( sdw::Vec2 const & pfragPos
-		, sdw::Vec2 const & pfragSize
-		, sdw::Float const & pfragDepth
-		, sdw::CombinedImage2DRgba32 const & ptransmittanceMap
-		, sdw::CombinedImage2DRgba32 const & pskyViewMap
-		, sdw::CombinedImage3DRgba32 const & pvolumeMap
-		, sdw::Vec4 & ptransmittance
-		, sdw::Vec4 & pluminance )
-	{
-		if ( !m_getPixelTransLum )
-		{
-			m_getPixelTransLum = m_writer.implementFunction< sdw::Void >( "getPixelTransLum"
-				, [&]( sdw::Vec2 const & fragPos
-					, sdw::Vec2 const & fragSize
-					, sdw::Float const & fragDepth
-					, sdw::CombinedImage2DRgba32 const & transmittanceMap
-					, sdw::CombinedImage2DRgba32 const & skyViewMap
-					, sdw::CombinedImage3DRgba32 const & volumeMap
-					, sdw::Vec4 transmittance
-					, sdw::Vec4 luminance )
-				{
-					auto clipSpace = m_writer.declLocale( "clipSpace"
-						, m_atmosphereConfig.getClipSpace( fragPos, fragSize, 1.0_f ) );
-					auto hPos = m_writer.declLocale( "hPos"
-						, m_cameraData.camProjToWorld( vec4( clipSpace, 1.0_f ) ) );
-					auto worldDir = m_writer.declLocale( "worldDir"
-						, normalize( hPos.xyz() / hPos.w() - m_cameraData.position() ) );
-					auto worldPos = m_writer.declLocale( "worldPos"
-						, m_cameraData.position() + vec3( 0.0_f, m_atmosphereData.bottomRadius, 0.0_f ) );
-					auto L = m_writer.declLocale( "L"
-						, vec3( 0.0_f ) );
-					doRenderSky( fragSize
-						, fragDepth
-						, worldPos
-						, worldDir
-						, transmittanceMap
-						, skyViewMap
-						, L
-						, luminance );
-
-					if ( m_fastAerialPerspective )
-					{
-						doRenderFastAerial( fragPos
-							, fragSize
-							, fragDepth
-							, worldPos
-							, volumeMap
-							, L
-							, luminance );
-					}
-					else
-					{
-						// Move to top atmosphere as the starting point for ray marching.
-						// This is critical to be after the above to not disrupt above atmosphere tests and voxel selection.
-						IF( m_writer, !m_atmosphereConfig.moveToTopAtmosphere( worldPos, worldDir ) )
-						{
-							// Ray is not intersecting the atmosphere		
-							if ( m_renderSunDisk )
-							{
-								luminance = vec4( getSunLuminance( worldPos, worldDir, transmittanceMap ), 1.0_f );
-							}
-
-							m_writer.returnStmt();
-						}
-						FI;
-
-						auto sampleCountIni = 0.0_f;
-						auto ss = m_writer.declLocale( "ss"
-							, m_atmosphereConfig.integrateScatteredLuminanceNoShadow( fragPos
-								, worldPos
-								, worldDir
-								, m_atmosphereData.sunDirection
-								, sampleCountIni
-								, fragDepth ) );
-						doRegisterOutputs( ss, L, luminance, transmittance );
-					}
-				}
-				, sdw::InVec2{ m_writer, "fragPos" }
-				, sdw::InVec2{ m_writer, "fragSize" }
-				, sdw::InFloat{ m_writer, "fragDepth" }
-				, sdw::InCombinedImage2DRgba32{ m_writer, "transmittanceMap" }
-				, sdw::InCombinedImage2DRgba32{ m_writer, "skyViewMap" }
-				, sdw::InCombinedImage3DRgba32{ m_writer, "volumeMap" }
-				, sdw::OutVec4{ m_writer, "transmittance" }
-				, sdw::OutVec4{ m_writer, "luminance" } );
-		}
-
-		return m_getPixelTransLum( pfragPos
-			, pfragSize
-			, pfragDepth
-			, ptransmittanceMap
-			, pskyViewMap
-			, pvolumeMap
-			, ptransmittance
-			, pluminance );
-	}
-
 	sdw::Vec4 ScatteringConfig::rescaleLuminance( sdw::Vec4 const & luminance )
 	{
 		luminance.xyz() /= luminance.a();	// Normalise according to sample count when path tracing
@@ -394,8 +384,7 @@ namespace atmosphere_scattering
 
 	void ScatteringConfig::doRenderSky( sdw::Vec2 const & fragSize
 		, sdw::Float const & fragDepth
-		, sdw::Vec3 const & worldPos
-		, sdw::Vec3 const & worldDir
+		, Ray const & ray
 		, sdw::CombinedImage2DRgba32 const & transmittanceMap
 		, sdw::CombinedImage2DRgba32 const & skyViewMap
 		, sdw::Vec3 & L
@@ -404,18 +393,18 @@ namespace atmosphere_scattering
 		if ( m_fastSky )
 		{
 			auto viewHeight = m_writer.declLocale( "viewHeight"
-				, length( worldPos ) );
+				, length( ray.origin ) );
 
 			IF( m_writer, viewHeight < m_atmosphereData.topRadius && fragDepth >= 1.0_f )
 			{
 				auto uv = m_writer.declLocale< sdw::Vec2 >( "uv" );
 				auto upVector = m_writer.declLocale( "upVector"
-					, normalize( worldPos ) );
+					, normalize( ray.origin ) );
 				auto viewZenithCosAngle = m_writer.declLocale( "viewZenithCosAngle"
-					, dot( worldDir, upVector ) );
+					, dot( ray.direction, upVector ) );
 
 				auto sideVector = m_writer.declLocale( "sideVector"
-					, normalize( cross( upVector, worldDir ) ) );		// assumes non parallel vectors
+					, normalize( cross( upVector, ray.direction ) ) );		// assumes non parallel vectors
 				auto forwardVector = m_writer.declLocale( "forwardVector"
 					, normalize( cross( sideVector, upVector ) ) );	// aligns toward the sun light but perpendicular to up vector
 				auto lightOnPlane = m_writer.declLocale( "lightOnPlane"
@@ -426,10 +415,9 @@ namespace atmosphere_scattering
 					, lightOnPlane.x() );
 
 				auto intersectGround = m_writer.declLocale( "intersectGround"
-					, m_atmosphereConfig.raySphereIntersectNearest( worldPos
-						, worldDir
+					, m_atmosphereConfig.raySphereIntersectNearest( ray
 						, vec3( 0.0_f )
-						, m_atmosphereData.bottomRadius ) >= 0.0_f );
+						, m_atmosphereData.bottomRadius ).valid() );
 
 				m_atmosphereConfig.skyViewLutParamsToUv( intersectGround, viewZenithCosAngle, lightViewCosAngle, viewHeight, uv, fragSize );
 
@@ -437,7 +425,7 @@ namespace atmosphere_scattering
 
 				if ( m_renderSunDisk )
 				{
-					luminance.xyz() += getSunLuminance( worldPos, worldDir, transmittanceMap );
+					luminance.xyz() += getSunLuminance( ray, transmittanceMap );
 				}
 
 				m_writer.returnStmt();
@@ -448,7 +436,7 @@ namespace atmosphere_scattering
 		{
 			IF( m_writer, fragDepth >= 1.0_f )
 			{
-				L += getSunLuminance( worldPos, worldDir, transmittanceMap );
+				L += getSunLuminance( ray, transmittanceMap );
 			}
 			FI;
 		}
@@ -506,9 +494,9 @@ namespace atmosphere_scattering
 		, sdw::Vec4 & luminance
 		, sdw::Vec4 & transmittance )
 	{
-		L += ss.luminance;
+		L += ss.luminance();
 		auto throughput = m_writer.declLocale( "throughput"
-			, ss.transmittance );
+			, ss.transmittance() );
 
 		if ( m_colorTransmittance )
 		{

@@ -71,7 +71,9 @@ namespace atmosphere_scattering
 			// Fragment Outputs
 			auto pxl_colour( writer.declOutput< sdw::Vec4 >( "pxl_colour", 0u ) );
 
+			castor3d::shader::Utils utils{ writer };
 			AtmosphereConfig atmosphereConfig{ writer
+				, utils
 				, c3d_atmosphereData
 				, { false, nullptr, true, true }
 				, { transmittanceExtent.width, transmittanceExtent.height }
@@ -93,14 +95,12 @@ namespace atmosphere_scattering
 						, atmosphereConfig.getClipSpace( uv, 1.0_f ) );
 					auto hPos = writer.declLocale( "hPos"
 						, c3d_cameraData.camProjToWorld( vec4( clipSpace, 1.0_f ) ) );
-
-					auto worldDir = writer.declLocale( "worldDir"
-						, normalize( hPos.xyz() / hPos.w() - c3d_cameraData.position() ) );
-					auto worldPos = writer.declLocale( "worldPos"
-						, c3d_cameraData.position() + vec3( 0.0_f, c3d_atmosphereData.bottomRadius, 0.0_f ) );
+					auto ray = writer.declLocale< Ray >( "ray" );
+					ray.origin = c3d_cameraData.position() + vec3( 0.0_f, c3d_atmosphereData.bottomRadius, 0.0_f );
+					ray.direction = normalize( hPos.xyz() / hPos.w() - c3d_cameraData.position() );
 
 					auto viewHeight = writer.declLocale( "viewHeight"
-						, length( worldPos ) );
+						, length( ray.origin ) );
 
 					auto viewZenithCosAngle = writer.declLocale< sdw::Float >( "viewZenithCosAngle" );
 					auto lightViewCosAngle = writer.declLocale< sdw::Float >( "lightViewCosAngle" );
@@ -111,7 +111,7 @@ namespace atmosphere_scattering
 					auto sunDir = writer.declLocale< sdw::Vec3 >( "sunDir" );
 					{
 						auto upVector = writer.declLocale( "upVector"
-							, worldPos / viewHeight );
+							, ray.origin / viewHeight );
 						auto sunZenithCosAngle = writer.declLocale( "sunZenithCosAngle"
 							, dot( upVector, c3d_atmosphereData.sunDirection ) );
 						auto sunZenithSinAngle = writer.declLocale( "sunZenithSinAngle"
@@ -119,16 +119,16 @@ namespace atmosphere_scattering
 						sunDir = normalize( vec3( sunZenithSinAngle, sunZenithCosAngle, 0.0_f ) );
 					}
 
-					worldPos = vec3( 0.0_f, viewHeight, 0.0_f );
+					ray.origin = vec3( 0.0_f, viewHeight, 0.0_f );
 
 					auto viewZenithSinAngle = writer.declLocale( "viewZenithSinAngle"
 						, sqrt( 1.0_f - viewZenithCosAngle * viewZenithCosAngle ) );
-					worldDir = vec3( viewZenithSinAngle * lightViewCosAngle
+					ray.direction = vec3( viewZenithSinAngle * lightViewCosAngle
 						, viewZenithCosAngle
 						, -viewZenithSinAngle * lightViewSinAngle );
 
 					// Move to top atmospehre
-					IF( writer, !atmosphereConfig.moveToTopAtmosphere( worldPos, worldDir ) )
+					IF( writer, !atmosphereConfig.moveToTopAtmosphere( ray ) )
 					{
 						// Ray is not intersecting the atmosphere
 						pxl_colour = vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f );
@@ -137,12 +137,11 @@ namespace atmosphere_scattering
 					{
 						auto ss = writer.declLocale( "ss"
 							, atmosphereConfig.integrateScatteredLuminanceNoShadow( pixPos
-							, worldPos
-							, worldDir
+							, ray
 							, sunDir
 							, sampleCountIni
 							, depthBufferValue ) );
-						pxl_colour = vec4( ss.luminance, 1.0_f );
+						pxl_colour = vec4( ss.luminance(), 1.0_f );
 					}
 					FI;
 				} );
