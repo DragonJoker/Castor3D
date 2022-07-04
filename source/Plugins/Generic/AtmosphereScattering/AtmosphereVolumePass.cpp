@@ -1,8 +1,8 @@
 #include "AtmosphereScattering/AtmosphereVolumePass.hpp"
 
-#include "AtmosphereScattering/Atmosphere.hpp"
-#include "AtmosphereScattering/AtmosphereScatteringUbo.hpp"
 #include "AtmosphereScattering/AtmosphereCameraUbo.hpp"
+#include "AtmosphereScattering/AtmosphereModel.hpp"
+#include "AtmosphereScattering/AtmosphereScatteringUbo.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Render/RenderDevice.hpp>
@@ -134,7 +134,7 @@ namespace atmosphere_scattering
 			auto pxl_colour( writer.declOutput< sdw::Vec4 >( "pxl_colour", 0 ) );
 
 			castor3d::shader::Utils utils{ writer };
-			AtmosphereConfig atmosphereConfig{ writer
+			AtmosphereModel atmosphere{ writer
 				, utils
 				, c3d_atmosphereData
 				, { false, nullptr, false, true }
@@ -160,7 +160,7 @@ namespace atmosphere_scattering
 						, max( 1.0_f, writer.cast< sdw::Float >( sliceId + 1_i ) * 2.0_f ) );
 
 					auto clipSpace = writer.declLocale( "clipSpace"
-						, atmosphereConfig.getClipSpace( pixPos, targetSize, 0.5_f ) );
+						, atmosphere.getClipSpace( pixPos, targetSize, 0.5_f ) );
 					auto hPos = writer.declLocale( "hPos"
 						, c3d_cameraData.camProjToWorld( vec4( clipSpace, 1.0_f ) ) );
 					auto earthR = writer.declLocale( "earthR"
@@ -209,7 +209,7 @@ namespace atmosphere_scattering
 						auto prevWorlPos = writer.declLocale( "prevWorlPos"
 							, ray.origin );
 
-						IF( writer, !atmosphereConfig.moveToTopAtmosphere( ray ) )
+						IF( writer, !atmosphere.moveToTopAtmosphere( ray ) )
 						{
 							// Ray is not intersecting the atmosphere
 							writer.returnStmt( vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f ) );
@@ -232,7 +232,7 @@ namespace atmosphere_scattering
 					FI;
 
 					SingleScatteringResult ss = writer.declLocale( "ss"
-						, atmosphereConfig.integrateScatteredLuminanceNoShadow( pixPos
+						, atmosphere.integrateScatteredLuminanceNoShadow( pixPos
 							, ray
 							, c3d_atmosphereData.sunDirection
 							, sampleCountIni

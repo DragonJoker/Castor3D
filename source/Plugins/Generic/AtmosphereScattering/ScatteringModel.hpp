@@ -1,16 +1,17 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3DAS_ScatteringConfig_H___
-#define ___C3DAS_ScatteringConfig_H___
+#ifndef ___C3DAS_ScatteringModel_H___
+#define ___C3DAS_ScatteringModel_H___
 
-#include "Atmosphere.hpp"
+#include "AtmosphereModel.hpp"
+
 namespace atmosphere_scattering
 {
-	struct ScatteringConfig
+	struct ScatteringModel
 	{
-		ScatteringConfig( sdw::ShaderWriter & writer
-			, AtmosphereConfig & atmosphereConfig
+		ScatteringModel( sdw::ShaderWriter & writer
+			, AtmosphereModel & atmosphere
 			, CameraData const & cameraData
 			, AtmosphereData const & atmosphereData
 			, bool colorTransmittance
@@ -18,8 +19,8 @@ namespace atmosphere_scattering
 			, bool fastAerialPerspective
 			, bool renderSunDisk
 			, bool bloomSunDisk );
-		ScatteringConfig( sdw::ShaderWriter & writer
-			, AtmosphereConfig & atmosphereConfig
+		ScatteringModel( sdw::ShaderWriter & writer
+			, AtmosphereModel & atmosphere
 			, CameraData const & cameraData
 			, AtmosphereData const & atmosphereData
 			, WeatherData const & weatherData
@@ -28,9 +29,9 @@ namespace atmosphere_scattering
 			, bool fastAerialPerspective
 			, bool renderSunDisk
 			, bool bloomSunDisk );
-		sdw::Vec3 getSunLuminance( Ray const & ray
+		sdw::RetVec3 getSunLuminance( Ray const & ray
 			, sdw::CombinedImage2DRgba32 const & transmittanceMap );
-		sdw::Float aerialPerspectiveDepthToSlice( sdw::Float const & depth );
+		sdw::RetFloat aerialPerspectiveDepthToSlice( sdw::Float const & depth );
 		sdw::Void getPixelTransLum( sdw::Vec2 const & fragPos
 			, sdw::Vec2 const & fragSize
 			, sdw::Float const & fragDepth
@@ -76,7 +77,7 @@ namespace atmosphere_scattering
 
 	private:
 		sdw::ShaderWriter & m_writer;
-		AtmosphereConfig & m_atmosphereConfig;
+		AtmosphereModel & m_atmosphere;
 		CameraData const & m_cameraData;
 		AtmosphereData const & m_atmosphereData;
 		WeatherData const * m_weatherData{};

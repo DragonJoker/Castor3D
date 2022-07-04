@@ -1,6 +1,5 @@
 #include "AtmosphereScattering/AtmosphereBackground.hpp"
 
-#include "AtmosphereScattering/Atmosphere.hpp"
 #include "AtmosphereScattering/AtmosphereBackgroundModel.hpp"
 #include "AtmosphereScattering/AtmosphereBackgroundPass.hpp"
 #include "AtmosphereScattering/AtmosphereScatteringUbo.hpp"

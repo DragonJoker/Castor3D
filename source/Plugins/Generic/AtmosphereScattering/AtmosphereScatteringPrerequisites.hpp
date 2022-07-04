@@ -15,8 +15,12 @@ namespace atmosphere_scattering
 	class CameraUbo;
 	class AtmosphereBackgroundModel;
 
-	struct AtmosphereConfig;
+	struct AtmosphereModel;
+	struct CloudsModel;
+	struct ScatteringModel;
+
 	struct AtmosphereData;
+	struct CameraData;
 	struct WeatherData;
 
 	template< template< typename DataT > typename WrapperT >
