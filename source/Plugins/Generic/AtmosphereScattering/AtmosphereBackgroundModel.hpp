@@ -56,7 +56,6 @@ namespace atmosphere_scattering
 		CameraData m_cameraData;
 		sdw::Ubo m_atmosphereBuffer;
 		AtmosphereData m_atmosphereData;
-		sdw::CombinedImage2DRgba32 m_transmittanceMap;
 		AtmosphereModel m_atmosphere;
 		ScatteringModel m_scattering;
 	};

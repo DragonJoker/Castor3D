@@ -68,8 +68,8 @@ namespace atmosphere_scattering
 				, utils
 				, c3d_atmosphereData
 				, { true, nullptr, false, false }
-				, { transmittanceExtent.width, transmittanceExtent.height }
-				, &transmittanceMap };
+				, { transmittanceExtent.width, transmittanceExtent.height } };
+			atmosphere.setTransmittanceMap( transmittanceMap );
 
 			auto getSphericalDir = writer.implementFunction< sdw::Vec3 >( "getSphericalDir"
 				, [&]( sdw::Float const & theta

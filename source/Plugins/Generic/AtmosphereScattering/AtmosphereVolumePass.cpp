@@ -138,8 +138,8 @@ namespace atmosphere_scattering
 				, utils
 				, c3d_atmosphereData
 				, { false, nullptr, false, true }
-				, { transmittanceExtent.width, transmittanceExtent.height }
-				, &transmittanceMap };
+				, { transmittanceExtent.width, transmittanceExtent.height } };
+			atmosphere.setTransmittanceMap( transmittanceMap );
 
 			auto aerialPerspectiveSliceToDepth = writer.implementFunction< sdw::Float >( "aerialPerspectiveSliceToDepth"
 				, [&]( sdw::Float const & slice )

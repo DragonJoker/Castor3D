@@ -76,8 +76,8 @@ namespace atmosphere_scattering
 				, utils
 				, c3d_atmosphereData
 				, { false, nullptr, true, true }
-				, { transmittanceExtent.width, transmittanceExtent.height }
-				, &transmittanceMap };
+				, { transmittanceExtent.width, transmittanceExtent.height } };
+			atmosphere.setTransmittanceMap( transmittanceMap );
 
 			writer.implementMainT< sdw::VoidT, sdw::VoidT >( sdw::FragmentIn{ writer }
 				, sdw::FragmentOut{ writer }

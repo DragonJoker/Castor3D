@@ -12,40 +12,24 @@ namespace atmosphere_scattering
 	{
 		ScatteringModel( sdw::ShaderWriter & writer
 			, AtmosphereModel & atmosphere
-			, CameraData const & cameraData
-			, AtmosphereData const & atmosphereData
 			, bool colorTransmittance
 			, bool fastSky
 			, bool fastAerialPerspective
 			, bool renderSunDisk
-			, bool bloomSunDisk );
-		ScatteringModel( sdw::ShaderWriter & writer
-			, AtmosphereModel & atmosphere
-			, CameraData const & cameraData
-			, AtmosphereData const & atmosphereData
-			, WeatherData const & weatherData
-			, bool colorTransmittance
-			, bool fastSky
-			, bool fastAerialPerspective
-			, bool renderSunDisk
-			, bool bloomSunDisk );
-		sdw::RetVec3 getSunLuminance( Ray const & ray
-			, sdw::CombinedImage2DRgba32 const & transmittanceMap );
-		sdw::RetFloat aerialPerspectiveDepthToSlice( sdw::Float const & depth );
+			, bool bloomSunDisk
+			, uint32_t binding
+			, bool needsMultiscatter = true );
+		sdw::RetVec3 getSunLuminance( Ray const & ray );
+		sdw::RetVec3 getSunRadiance( sdw::Vec3 const & sunDir );
+		sdw::Float aerialPerspectiveDepthToSlice( sdw::Float const & depth );
 		sdw::Void getPixelTransLum( sdw::Vec2 const & fragPos
 			, sdw::Vec2 const & fragSize
 			, sdw::Float const & fragDepth
-			, sdw::CombinedImage2DRgba32 const & transmittanceMap
-			, sdw::CombinedImage2DRgba32 const & skyViewMap
-			, sdw::CombinedImage3DRgba32 const & volumeMap
 			, sdw::Vec4 & transmittance
 			, sdw::Vec4 & luminance );
 		sdw::Void getPixelTransLum( sdw::Vec2 const & fragPos
 			, sdw::Vec2 const & fragSize
 			, sdw::Float const & fragDepth
-			, sdw::CombinedImage2DRgba32 const & transmittanceMap
-			, sdw::CombinedImage2DRgba32 const & skyViewMap
-			, sdw::CombinedImage3DRgba32 const & volumeMap
 			, castor3d::shader::Light const & light
 			, sdw::Vec3 const & surfaceWorldNormal
 			, sdw::Mat4 const & lightMatrix
@@ -59,15 +43,12 @@ namespace atmosphere_scattering
 		void doRenderSky( sdw::Vec2 const & fragSize
 			, sdw::Float const & fragDepth
 			, Ray const & ray
-			, sdw::CombinedImage2DRgba32 const & transmittanceMap
-			, sdw::CombinedImage2DRgba32 const & skyViewMap
 			, sdw::Vec3 & L
 			, sdw::Vec4 & luminance );
 		void doRenderFastAerial( sdw::Vec2 const & fragPos
 			, sdw::Vec2 const & fragSize
 			, sdw::Float const & fragDepth
 			, sdw::Vec3 const & worldPos
-			, sdw::CombinedImage3DRgba32 const & volumeMap
 			, sdw::Vec3 & L
 			, sdw::Vec4 & luminance );
 		void doRegisterOutputs( SingleScatteringResult const & ss
@@ -78,36 +59,28 @@ namespace atmosphere_scattering
 	private:
 		sdw::ShaderWriter & m_writer;
 		AtmosphereModel & m_atmosphere;
-		CameraData const & m_cameraData;
-		AtmosphereData const & m_atmosphereData;
-		WeatherData const * m_weatherData{};
 		bool m_colorTransmittance;
 		bool m_fastSky;
 		bool m_fastAerialPerspective;
 		bool m_renderSunDisk;
 		bool m_bloomSunDisk;
+		sdw::CombinedImage2DRgba32 transmittanceMap;
+		sdw::CombinedImage2DRgba32 multiScatterMap;
+		sdw::CombinedImage2DRgba32 skyViewMap;
+		sdw::CombinedImage3DRgba32 volumeMap;
 
 		sdw::Function< sdw::Vec3
-			, InRay
-			, sdw::InCombinedImage2DRgba32 > m_getSunLuminance;
-		sdw::Function< sdw::Float
-			, sdw::InFloat > m_aerialPerspectiveDepthToSlice;
+			, InRay > m_getSunLuminance;
 		sdw::Function< sdw::Void
 			, sdw::InVec2
 			, sdw::InVec2
 			, sdw::InFloat
-			, sdw::InCombinedImage2DRgba32
-			, sdw::InCombinedImage2DRgba32
-			, sdw::InCombinedImage3DRgba32
 			, sdw::OutVec4
 			, sdw::OutVec4 > m_getPixelTransLum;
 		sdw::Function< sdw::Void
 			, sdw::InVec2
 			, sdw::InVec2
 			, sdw::InFloat
-			, sdw::InCombinedImage2DRgba32
-			, sdw::InCombinedImage2DRgba32
-			, sdw::InCombinedImage3DRgba32
 			, castor3d::shader::InLight
 			, sdw::InVec3
 			, sdw::InMat4

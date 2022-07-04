@@ -10,29 +10,13 @@
 
 namespace atmosphere_scattering
 {
-	namespace atmosphere
-	{
-		sdw::Vec2 getUVProjection( sdw::Vec3 const & p
-			, sdw::Float const & sphereInnerRadius )
-		{
-			return ( p.xz() / sphereInnerRadius ) + 0.5_f;
-		}
-
-		sdw::Float getHeightFraction( sdw::Vec3 const & inPos
-			, sdw::Float const & sphereInnerRadius
-			, sdw::Float const & sphereDelta )
-		{
-			return ( length( inPos ) - sphereInnerRadius ) / sphereDelta;
-		}
-	}
-
 	//************************************************************************************************
 
 	AtmosphereModel::AtmosphereModel( sdw::ShaderWriter & pwriter
 		, castor3d::shader::Utils & putils
 		, AtmosphereData const & patmosphereData
 		, LuminanceSettings pluminanceSettings )
-		: AtmosphereModel{ pwriter, putils, patmosphereData, pluminanceSettings, {}, nullptr }
+		: AtmosphereModel{ pwriter, putils, patmosphereData, pluminanceSettings, {} }
 	{
 	}
 
@@ -40,14 +24,12 @@ namespace atmosphere_scattering
 		, castor3d::shader::Utils & putils
 		, AtmosphereData const & patmosphereData
 		, LuminanceSettings pluminanceSettings
-		, VkExtent2D ptransmittanceExtent
-		, sdw::CombinedImage2DRgba32 const * transmittanceLut )
+		, VkExtent2D ptransmittanceExtent )
 		: writer{ pwriter }
 		, utils{ putils }
 		, atmosphereData{ patmosphereData }
 		, luminanceSettings{ pluminanceSettings }
 		, transmittanceExtent{ std::move( ptransmittanceExtent ) }
-		, transmittanceTexture{ transmittanceLut }
 	{
 	}
 

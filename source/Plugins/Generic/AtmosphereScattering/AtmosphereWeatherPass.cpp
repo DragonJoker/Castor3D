@@ -40,7 +40,7 @@ namespace atmosphere_scattering
 			auto random2D = writer.implementFunction< sdw::Float >( "random2D"
 				, [&]( sdw::Vec2 const & st )
 				{
-					writer.returnStmt( fract( sin( dot( st.xy(), vec2( 12.9898_f, 78.233_f ) + c3d_weatherData.seed().xy() ) ) * 43758.5453123_f ) );
+					writer.returnStmt( fract( sin( dot( st.xy(), vec2( 12.9898_f, 78.233_f ) ) ) * 43758.5453123_f ) );
 				}
 				, sdw::InVec2{ writer, "coord" } );
 
