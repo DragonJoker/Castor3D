@@ -24,26 +24,26 @@ namespace atmosphere_scattering
 	struct WeatherData
 		: public sdw::StructInstanceHelperT< "WeatherData"
 			, sdw::type::MemoryLayout::eStd140
-			, sdw::StructFieldT< sdw::Float, "cloudSpeed" >
-			, sdw::StructFieldT< sdw::Float, "coverage" >
-			, sdw::StructFieldT< sdw::Float, "crispiness" >
-			, sdw::StructFieldT< sdw::Float, "curliness" >
-			, sdw::StructFieldT< sdw::Float, "density" >
-			, sdw::StructFieldT< sdw::Float, "absorption" >
-			, sdw::StructFieldT< sdw::Float, "sphereInnerRadius" >
-			, sdw::StructFieldT< sdw::Float, "sphereOuterRadius" >
-			, sdw::StructFieldT< sdw::Float, "perlinAmplitude" >
-			, sdw::StructFieldT< sdw::Float, "perlinFrequency" >
-			, sdw::StructFieldT< sdw::Float, "perlinScale" >
-			, sdw::StructFieldT< sdw::UInt, "perlinOctaves" >
-			, sdw::StructFieldT< sdw::Vec3, "cloudColorTop" >
-			, sdw::StructFieldT< sdw::Float, "time" >
-			, sdw::StructFieldT< sdw::Vec3, "cloudColorBottom" >
-			, sdw::StructFieldT< sdw::Int, "enablePowder" >
-			, sdw::StructFieldT< sdw::Vec3, "seed" >
-			, sdw::StructFieldT< sdw::Float, "pad0" >
-			, sdw::StructFieldT< sdw::Vec3, "windDirection" >
-			, sdw::StructFieldT< sdw::Float, "pad1" > >
+			, sdw::FloatField< "cloudSpeed" >
+			, sdw::FloatField< "coverage" >
+			, sdw::FloatField< "crispiness" >
+			, sdw::FloatField< "curliness" >
+			, sdw::FloatField< "density" >
+			, sdw::FloatField< "absorption" >
+			, sdw::FloatField< "sphereInnerRadius" >
+			, sdw::FloatField< "sphereOuterRadius" >
+			, sdw::FloatField< "perlinAmplitude" >
+			, sdw::FloatField< "perlinFrequency" >
+			, sdw::FloatField< "perlinScale" >
+			, sdw::UIntField< "perlinOctaves" >
+			, sdw::Vec3Field< "cloudColorTop" >
+			, sdw::FloatField< "time" >
+			, sdw::Vec3Field< "cloudColorBottom" >
+			, sdw::IntField< "enablePowder" >
+			, sdw::Vec3Field< "seed" >
+			, sdw::FloatField< "pad0" >
+			, sdw::Vec3Field< "windDirection" >
+			, sdw::FloatField< "pad1" > >
 	{
 		WeatherData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -77,6 +77,8 @@ namespace atmosphere_scattering
 
 		auto windDirection()const { return getMember< "windDirection" >(); }
 	};
+
+	Writer_Parameter( WeatherData );
 
 	class AtmosphereWeatherUbo
 	{
@@ -125,7 +127,6 @@ namespace atmosphere_scattering
 	private:
 		castor3d::RenderDevice const & m_device;
 		castor3d::UniformBufferOffsetT< Configuration > m_ubo;
-		bool & m_dirty;
 		CheckedAtmosphereWeatherConfig m_config;
 	};
 }

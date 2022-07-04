@@ -225,8 +225,9 @@ namespace atmosphere_scattering
 		castor3d::Texture m_worley;
 		castor3d::Texture m_perlinWorley;
 		castor3d::Texture m_weather;
-		bool m_generateWorley{ true };
-		bool m_generatePerlinWorley{ true };
+		mutable bool m_first{ true };
+		mutable bool m_generateWorley{ true };
+		mutable bool m_generatePerlinWorley{ true };
 		mutable bool m_weatherChanged{ true };
 		mutable bool m_weatherPerlinChanged{ true };
 		std::unique_ptr< AtmosphereWeatherUbo > m_weatherUbo;

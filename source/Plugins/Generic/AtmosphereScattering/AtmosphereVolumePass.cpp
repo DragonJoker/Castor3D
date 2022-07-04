@@ -133,7 +133,9 @@ namespace atmosphere_scattering
 			// Fragment Outputs
 			auto pxl_colour( writer.declOutput< sdw::Vec4 >( "pxl_colour", 0 ) );
 
+			castor3d::shader::Utils utils{ writer };
 			AtmosphereConfig atmosphereConfig{ writer
+				, utils
 				, c3d_atmosphereData
 				, { false, nullptr, false, true }
 				, { transmittanceExtent.width, transmittanceExtent.height }
@@ -161,29 +163,28 @@ namespace atmosphere_scattering
 						, atmosphereConfig.getClipSpace( pixPos, targetSize, 0.5_f ) );
 					auto hPos = writer.declLocale( "hPos"
 						, c3d_cameraData.camProjToWorld( vec4( clipSpace, 1.0_f ) ) );
-					auto worldDir = writer.declLocale( "worldDir"
-						, normalize( hPos.xyz() / hPos.w() - c3d_cameraData.position() ) );
 					auto earthR = writer.declLocale( "earthR"
 						, c3d_atmosphereData.bottomRadius );
 					auto camPos = writer.declLocale( "camPos"
 						, c3d_cameraData.position() + vec3( 0.0_f, earthR, 0.0_f ) );
 					auto sunLuminance = writer.declLocale( "sunLuminance"
 						, 0.0_f );
+					auto ray = writer.declLocale< Ray >( "ray" );
+					ray.origin = camPos;
+					ray.direction = normalize( hPos.xyz() / hPos.w() - c3d_cameraData.position() );
 
 					auto slice = writer.declLocale( "slice"
 						, ( ( writer.cast< sdw::Float >( sliceId ) + 0.5_f ) / apSliceCount ) );
 					slice *= slice;	// squared distribution
 					slice *= apSliceCount;
 
-					auto worldPos = writer.declLocale( "worldPos"
-						, camPos );
 					auto viewHeight = writer.declLocale< sdw::Float >( "viewHeight" );
 
 					// Compute position from froxel information
 					auto tMax = writer.declLocale( "tMax"
 						, aerialPerspectiveSliceToDepth( slice ) );
 					auto newWorldPos = writer.declLocale( "newWorldPos"
-						, worldPos + tMax * worldDir );
+						, ray.step( tMax ) );
 
 					// If the voxel is under the ground, make sure to offset it out on the ground.
 					viewHeight = length( newWorldPos );
@@ -192,7 +193,7 @@ namespace atmosphere_scattering
 					{
 						// Apply a position offset to make sure no artefact are visible close to the earth boundaries for large voxel.
 						newWorldPos = normalize( newWorldPos ) * ( c3d_atmosphereData.bottomRadius + planetRadiusOffset + 0.001_f );
-						worldDir = normalize( newWorldPos - camPos );
+						ray.direction = normalize( newWorldPos - camPos );
 						tMax = length( newWorldPos - camPos );
 					}
 					FI;
@@ -201,14 +202,14 @@ namespace atmosphere_scattering
 						, tMax );
 
 					// Move ray marching start up to top atmosphere.
-					viewHeight = length( worldPos );
+					viewHeight = length( ray.origin );
 
 					IF( writer, viewHeight >= c3d_atmosphereData.topRadius )
 					{
 						auto prevWorlPos = writer.declLocale( "prevWorlPos"
-							, worldPos );
+							, ray.origin );
 
-						IF( writer, !atmosphereConfig.moveToTopAtmosphere( worldPos, worldDir ) )
+						IF( writer, !atmosphereConfig.moveToTopAtmosphere( ray ) )
 						{
 							// Ray is not intersecting the atmosphere
 							writer.returnStmt( vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f ) );
@@ -216,7 +217,7 @@ namespace atmosphere_scattering
 						FI;
 
 						auto lengthToAtmosphere = writer.declLocale( "lengthToAtmosphere"
-							, length( prevWorlPos - worldPos ) );
+							, length( prevWorlPos - ray.origin ) );
 
 						IF( writer, tMaxMax < lengthToAtmosphere )
 						{
@@ -232,16 +233,15 @@ namespace atmosphere_scattering
 
 					SingleScatteringResult ss = writer.declLocale( "ss"
 						, atmosphereConfig.integrateScatteredLuminanceNoShadow( pixPos
-							, worldPos
-							, worldDir
+							, ray
 							, c3d_atmosphereData.sunDirection
 							, sampleCountIni
 							, depthBufferValue
 							, tMaxMax ) );
 
 					auto transmittance = writer.declLocale( "transmittance"
-						, dot( ss.transmittance, vec3( 1.0_f / 3.0_f ) ) );
-					writer.returnStmt( vec4( ss.luminance, 1.0_f - transmittance ) );
+						, dot( ss.transmittance(), vec3( 1.0_f / 3.0_f ) ) );
+					writer.returnStmt( vec4( ss.luminance(), 1.0_f - transmittance ) );
 				}
 				, sdw::InVec2{ writer, "pixPos" }
 				, sdw::InInt{ writer, "sliceId" } );

@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "AtmosphereCameraUbo.hpp"
 #include "AtmosphereScatteringUbo.hpp"
+#include "AtmosphereWeatherUbo.hpp"
 
 #include <Castor3D/Shader/Ubos/MatrixUbo.hpp>
 
@@ -13,7 +14,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/BaseTypes/Int.hpp>
 #include <ShaderWriter/BaseTypes/CombinedImage.hpp>
 #include <ShaderWriter/CompositeTypes/Function.hpp>
-#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/CompositeTypes/StructHelper.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
 
@@ -22,65 +23,116 @@ See LICENSE file in root folder
 namespace atmosphere_scattering
 {
 	struct SingleScatteringResult
-		: public sdw::StructInstance
+		: public sdw::StructInstanceHelperT< "SingleScatteringResult"
+			, sdw::type::MemoryLayout::eC
+			, sdw::Vec3Field< "luminance" >
+			, sdw::Vec3Field< "opticalDepth" >
+			, sdw::Vec3Field< "transmittance" >
+			, sdw::Vec3Field< "multiScatAs1" >
+			, sdw::Vec3Field< "newMultiScatStep0Out" >
+			, sdw::Vec3Field< "newMultiScatStep1Out" > >
 	{
 		SingleScatteringResult( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
-			, bool enabled );
-
-		SDW_DeclStructInstance( , SingleScatteringResult );
-
-		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
+			, bool enabled )
+			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+		{
+		}
 
 		// Scattered light (luminance)
-		sdw::Vec3 luminance;
+		auto luminance()const { return getMember< "luminance" >(); }
 		// Optical depth (1/m)
-		sdw::Vec3 opticalDepth;
+		auto opticalDepth()const { return getMember< "opticalDepth" >(); }
 		// Transmittance in [0,1] (unitless)
-		sdw::Vec3 transmittance;
-		sdw::Vec3 multiScatAs1;
-
-		sdw::Vec3 newMultiScatStep0Out;
-		sdw::Vec3 newMultiScatStep1Out;
-
-	private:
-		using sdw::StructInstance::getMember;
-		using sdw::StructInstance::getMemberArray;
+		auto transmittance()const { return getMember< "transmittance" >(); }
+		auto multiScatAs1()const { return getMember< "multiScatAs1" >(); }
+		auto newMultiScatStep0Out()const { return getMember< "newMultiScatStep0Out" >(); }
+		auto newMultiScatStep1Out()const { return getMember< "newMultiScatStep1Out" >(); }
 	};
 
 	struct MediumSampleRGB
-		: public sdw::StructInstance
+		: public sdw::StructInstanceHelperT< "MediumSampleRGB"
+			, sdw::type::MemoryLayout::eC
+			, sdw::Vec3Field< "scattering" >
+			, sdw::Vec3Field< "absorption" >
+			, sdw::Vec3Field< "extinction" >
+			, sdw::Vec3Field< "scatteringMie" >
+			, sdw::Vec3Field< "absorptionMie" >
+			, sdw::Vec3Field< "extinctionMie" >
+			, sdw::Vec3Field< "scatteringRay" >
+			, sdw::Vec3Field< "absorptionRay" >
+			, sdw::Vec3Field< "extinctionRay" >
+			, sdw::Vec3Field< "scatteringOzo" >
+			, sdw::Vec3Field< "absorptionOzo" >
+			, sdw::Vec3Field< "extinctionOzo" >
+			, sdw::Vec3Field< "albedo" > >
 	{
 		MediumSampleRGB( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
-			, bool enabled );
+			, bool enabled )
+			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+		{
+		}
 
-		SDW_DeclStructInstance( , MediumSampleRGB );
-
-		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-
-		sdw::Vec3 scattering;
-		sdw::Vec3 absorption;
-		sdw::Vec3 extinction;
-
-		sdw::Vec3 scatteringMie;
-		sdw::Vec3 absorptionMie;
-		sdw::Vec3 extinctionMie;
-
-		sdw::Vec3 scatteringRay;
-		sdw::Vec3 absorptionRay;
-		sdw::Vec3 extinctionRay;
-
-		sdw::Vec3 scatteringOzo;
-		sdw::Vec3 absorptionOzo;
-		sdw::Vec3 extinctionOzo;
-
-		sdw::Vec3 albedo;
-
-	private:
-		using sdw::StructInstance::getMember;
-		using sdw::StructInstance::getMemberArray;
+		auto scattering()const { return getMember< "scattering" >(); }
+		auto absorption()const { return getMember< "absorption" >(); }
+		auto extinction()const { return getMember< "extinction" >(); }
+		auto scatteringMie()const { return getMember< "scatteringMie" >(); }
+		auto absorptionMie()const { return getMember< "absorptionMie" >(); }
+		auto extinctionMie()const { return getMember< "extinctionMie" >(); }
+		auto scatteringRay()const { return getMember< "scatteringRay" >(); }
+		auto absorptionRay()const { return getMember< "absorptionRay" >(); }
+		auto extinctionRay()const { return getMember< "extinctionRay" >(); }
+		auto scatteringOzo()const { return getMember< "scatteringOzo" >(); }
+		auto absorptionOzo()const { return getMember< "absorptionOzo" >(); }
+		auto extinctionOzo()const { return getMember< "extinctionOzo" >(); }
+		auto albedo()const { return getMember< "albedo" >(); }
 	};
+
+	struct Intersection
+		: public sdw::StructInstanceHelperT < "Intersection"
+		, sdw::type::MemoryLayout::eC
+		, sdw::Vec3Field< "point" >
+		, sdw::BooleanField< "valid" >
+		, sdw::FloatField< "t" > >
+	{
+		Intersection( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+		{
+		}
+
+		auto point()const { return getMember< "point" >(); }
+		auto valid()const { return getMember< "valid" >(); }
+		auto t()const { return getMember< "t" >(); }
+	};
+	Writer_Parameter( Intersection );
+
+	struct Ray
+		: public sdw::StructInstanceHelperT < "Ray"
+		, sdw::type::MemoryLayout::eC
+		, sdw::Vec3Field< "origin" >
+		, sdw::Vec3Field< "direction" > >
+	{
+		Ray( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			, origin{ getMember< "origin" >() }
+			, direction{ getMember< "direction" >() }
+		{
+		}
+
+		sdw::Vec3 step( sdw::Float const & t )const
+		{
+			return origin + t * direction;
+		}
+
+		sdw::Vec3 origin;
+		sdw::Vec3 direction;
+	};
+	Writer_Parameter( Ray );
 
 	struct LuminanceSettings
 	{
@@ -98,9 +150,11 @@ namespace atmosphere_scattering
 	struct AtmosphereConfig
 	{
 		AtmosphereConfig( sdw::ShaderWriter & writer
+			, castor3d::shader::Utils & utils
 			, AtmosphereData const & atmosphereData
 			, LuminanceSettings luminanceSettings );
 		AtmosphereConfig( sdw::ShaderWriter & writer
+			, castor3d::shader::Utils & utils
 			, AtmosphereData const & atmosphereData
 			, LuminanceSettings luminanceSettings
 			, VkExtent2D transmittanceExtent
@@ -116,8 +170,7 @@ namespace atmosphere_scattering
 			, sdw::Vec3 const & worldPos
 			, sdw::Float const & viewZenithCosAngle );
 		SingleScatteringResult integrateScatteredLuminance( sdw::Vec2 const & pixPos
-			, sdw::Vec3 const & worldPos
-			, sdw::Vec3 const & worldDir
+			, Ray const & ray
 			, sdw::Vec3 const & sunDir
 			, sdw::Float const & sampleCountIni
 			, sdw::Float const & depthBufferValue
@@ -128,8 +181,7 @@ namespace atmosphere_scattering
 			, sdw::UInt const & maxCascade
 			, sdw::Float const & tMaxMax = sdw::Float{ 9000000.0_f } );
 		SingleScatteringResult integrateScatteredLuminanceShadow( sdw::Vec2 const & pixPos
-			, sdw::Vec3 const & worldPos
-			, sdw::Vec3 const & worldDir
+			, Ray const & ray
 			, sdw::Vec3 const & sunDir
 			, sdw::Float const & sampleCountIni
 			, sdw::Float const & depthBufferValue
@@ -140,28 +192,21 @@ namespace atmosphere_scattering
 			, sdw::UInt const & maxCascade
 			, sdw::Float const & tMaxMax = sdw::Float{ 9000000.0_f } );
 		SingleScatteringResult integrateScatteredLuminanceNoShadow( sdw::Vec2 const & pixPos
-			, sdw::Vec3 const & worldPos
-			, sdw::Vec3 const & worldDir
+			, Ray const & ray
 			, sdw::Vec3 const & sunDir
 			, sdw::Float const & sampleCountIni
 			, sdw::Float const & depthBufferValue
 			, sdw::Float const & tMaxMax = sdw::Float{ 9000000.0_f } );
-		sdw::Boolean moveToTopAtmosphere( sdw::Vec3 & worldPos
-				, sdw::Vec3 const & worldDir );
+		sdw::Boolean moveToTopAtmosphere( Ray & ray );
 		sdw::Vec3 getSunRadiance( sdw::Vec3 const & cameraPosition
 			, sdw::Vec3 const & sunDir
 			, sdw::CombinedImage2DRgba32 const & transmittanceMap );
 
-		// - r0: ray origin
-		// - rd: normalized ray direction
-		// - s0: sphere center
-		// - sR: sphere radius
-		// - Returns distance from r0 to first intersecion with sphere,
+		// - Returns distance from rayOrigin to first intersecion with sphere,
 		//   or -1.0 if no intersection.
-		sdw::Float raySphereIntersectNearest( sdw::Vec3 const & r0
-			, sdw::Vec3 const & rd
-			, sdw::Vec3 const & s0
-			, sdw::Float const & sR );
+		Intersection raySphereIntersectNearest( Ray const & ray
+			, sdw::Vec3 const & sphereCenter
+			, sdw::Float const & sphereRadius );
 
 		// Reference implementation (i.e. not schlick approximation). 
 		// See http://www.pbr-book.org/3ed-2018/Volume_Scattering/Phase_Functions.html
@@ -207,11 +252,10 @@ namespace atmosphere_scattering
 	private:
 		void doInitRay( sdw::Float const & depthBufferValue
 			, sdw::Vec2 const & pixPos
-			, sdw::Vec3 const & worldPos
-			, sdw::Vec3 const & worldDir
+			, Ray const & ray
 			, sdw::Float const & tMaxMax
 			, sdw::Vec3 const & earthO
-			, sdw::Float const & tBottom
+			, Intersection const & tBottom
 			, SingleScatteringResult const & result
 			, sdw::Float & tMax );
 		sdw::Float doInitSampleCount( sdw::Float const & tMax
@@ -228,14 +272,12 @@ namespace atmosphere_scattering
 			, sdw::Float const & sampleSegmentT
 			, sdw::Float & t
 			, sdw::Float & dt );
-		std::tuple< sdw::Vec3, sdw::Float, sdw::Vec2, sdw::Vec3, sdw::Vec3 > doGetSunTransmittance( sdw::Vec3 const & sunDir
+		std::tuple< sdw::Vec3, sdw::Float, sdw::Vec2, sdw::Vec3, sdw::Vec3 > doGetSunTransmittance( Ray const & rayToSun
 			, MediumSampleRGB const & medium
-			, sdw::Vec3 const & P
 			, sdw::Float const & dt
 			, sdw::Vec3 & opticalDepth );
-		std::tuple< sdw::Vec3, sdw::Float, sdw::Vec3 > doGetScatteredLuminance( sdw::Vec3 const & sunDir
+		std::tuple< sdw::Vec3, sdw::Float, sdw::Vec3 > doGetScatteredLuminance( Ray const & rayToSun
 			, MediumSampleRGB const & medium
-			, sdw::Vec3 const & P
 			, sdw::Vec3 const & earthO
 			, sdw::Vec3 const & upVector
 			, sdw::Float const & sunZenithCosAngle
@@ -253,17 +295,16 @@ namespace atmosphere_scattering
 			, sdw::Vec3 & throughput
 			, sdw::Vec3 & L
 			, SingleScatteringResult & result );
-		void doProcessGround( sdw::Vec3 const & worldPos
-			, sdw::Vec3 const & worldDir
-			, sdw::Vec3 const & sunDir
+		void doProcessGround( sdw::Vec3 const & sunDir
 			, sdw::Float const & tMax
-			, sdw::Float const & tBottom
+			, Intersection const & tBottom
 			, sdw::Vec3 const & globalL
 			, sdw::Vec3 const & throughput
 			, sdw::Vec3 & L );
 
 	private:
 		sdw::ShaderWriter & writer;
+		castor3d::shader::Utils & utils;
 
 	public:
 		AtmosphereData const & atmosphereData;
@@ -276,16 +317,14 @@ namespace atmosphere_scattering
 	private:
 		sdw::Function< SingleScatteringResult
 			, sdw::InVec2
-			, sdw::InVec3
-			, sdw::InVec3
+			, InRay
 			, sdw::InVec3
 			, sdw::InFloat
 			, sdw::InFloat
 			, sdw::InFloat > m_integrateScatteredLuminance;
 		sdw::Function< SingleScatteringResult
 			, sdw::InVec2
-			, sdw::InVec3
-			, sdw::InVec3
+			, InRay
 			, sdw::InVec3
 			, sdw::InFloat
 			, sdw::InFloat
@@ -296,11 +335,9 @@ namespace atmosphere_scattering
 			, sdw::InUInt
 			, sdw::InFloat > m_integrateScatteredLuminanceShadow;
 		sdw::Function< sdw::Boolean
-			, sdw::InOutVec3
-			, sdw::InVec3 > m_moveToTopAtmosphere;
-		sdw::Function< sdw::Float
-			, sdw::InVec3
-			, sdw::InVec3
+			, InOutRay > m_moveToTopAtmosphere;
+		sdw::Function< Intersection
+			, InRay
 			, sdw::InVec3
 			, sdw::InFloat > m_raySphereIntersectNearest;
 		sdw::Function< sdw::Float

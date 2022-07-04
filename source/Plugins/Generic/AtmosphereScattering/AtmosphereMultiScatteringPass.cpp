@@ -8,6 +8,7 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/Technique/RenderTechniqueVisitor.hpp>
 #include <Castor3D/Shader/Program.hpp>
+#include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 
 #include <RenderGraph/RunnableGraph.hpp>
 #include <RenderGraph/RunnablePasses/ComputePass.hpp>
@@ -62,7 +63,9 @@ namespace atmosphere_scattering
 			auto isotropicPhase = writer.declConstant( "isotropicPhase"
 				, 1.0_f / sphereSolidAngle );
 
+			castor3d::shader::Utils utils{ writer };
 			AtmosphereConfig atmosphereConfig{ writer
+				, utils
 				, c3d_atmosphereData
 				, { true, nullptr, false, false }
 				, { transmittanceExtent.width, transmittanceExtent.height }
@@ -107,10 +110,9 @@ namespace atmosphere_scattering
 					auto viewHeight = writer.declLocale( "viewHeight"
 						, c3d_atmosphereData.bottomRadius + clamp( uv.y() + planetRadiusOffset, 0.0_f, 1.0_f ) * ( c3d_atmosphereData.topRadius - c3d_atmosphereData.bottomRadius - planetRadiusOffset ) );
 
-					auto worldPos = writer.declLocale( "worldPos"
-						, vec3( 0.0_f, viewHeight, 0.0_f ) );
-					auto worldDir = writer.declLocale( "worldDir"
-						, vec3( 0.0_f, 1.0_f, 0.0_f ) );
+					auto ray = writer.declLocale< Ray >( "ray" );
+					ray.origin = vec3( 0.0_f, viewHeight, 0.0_f );
+					ray.direction = vec3( 0.0_f, 1.0_f, 0.0_f );
 
 					// Reference. Since there are many sample, it requires MULTI_SCATTERING_POWER_SERIE to be true for accuracy and to avoid divergences (see declaration for explanations)
 					auto sqrtSampleCount = 8_u;
@@ -129,17 +131,16 @@ namespace atmosphere_scattering
 							, 2.0_f * PI * randA );
 						auto phi = writer.declLocale( "phi"
 							, PI * randB );
-						worldDir = getSphericalDir( theta, phi );
+						ray.origin = getSphericalDir( theta, phi );
 						auto result = writer.declLocale( "result"
 							, atmosphereConfig.integrateScatteredLuminanceNoShadow( pixPos
-								, worldPos
-								, worldDir
+								, ray
 								, sunDir
 								, sampleCountIni
 								, depthBufferValue ) );
 
-						multiScatAs1SharedMem[in.globalInvocationID.z()] = result.multiScatAs1 * sphereSolidAngle / ( sqrtSample * sqrtSample );
-						lSharedMem[in.globalInvocationID.z()] = result.luminance * sphereSolidAngle / ( sqrtSample * sqrtSample );
+						multiScatAs1SharedMem[in.globalInvocationID.z()] = result.multiScatAs1() * sphereSolidAngle / ( sqrtSample * sqrtSample );
+						lSharedMem[in.globalInvocationID.z()] = result.luminance() * sphereSolidAngle / ( sqrtSample * sqrtSample );
 					}
 
 					sdw::barrier( writer );

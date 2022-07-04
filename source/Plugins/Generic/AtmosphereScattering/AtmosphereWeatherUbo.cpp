@@ -17,8 +17,7 @@ namespace atmosphere_scattering
 		, bool & dirty )
 		: m_device{ device }
 		, m_ubo{ device.uboPool->getBuffer< Configuration >( 0u ) }
-		, m_dirty{ dirty }
-		, m_config{ m_dirty }
+		, m_config{ dirty }
 	{
 	}
 
@@ -31,12 +30,8 @@ namespace atmosphere_scattering
 		, float totalTime )
 	{
 		m_config = config;
-
-		if ( m_dirty )
-		{
-			auto & data = m_ubo.getData();
-			data = config;
-			data.time = totalTime;
-		}
+		auto & data = m_ubo.getData();
+		data = config;
+		data.time = totalTime;
 	}
 }

@@ -16,18 +16,18 @@ namespace atmosphere_scattering
 	{
 		template< typename ... ParamsT >
 		AtmosphereWeatherConfigT( ParamsT & ... params )
-			: cloudSpeed{ params..., 45.0f }
+			: cloudSpeed{ params..., 0.0f }
 			, coverage{ params..., 0.45f }
 			, crispiness{ params..., 40.0f }
 			, curliness{ params..., 0.1f }
 			, density{ params..., 0.02f }
 			, absorption{ params..., 0.35f }
-			, sphereInnerRadius{ params..., 50.0f }
-			, sphereOuterRadius{ params..., 170.0f }
-			, perlinAmplitude{ params..., 0.5f }
-			, perlinFrequency{ params..., 0.8f }
-			, perlinScale{ params..., 100.0f }
-			, perlinOctaves{ params..., 4u }
+			, sphereInnerRadius{ params..., 0.1f }
+			, sphereOuterRadius{ params..., 10.0f }
+			, perlinAmplitude{ 0.5f }
+			, perlinFrequency{ 0.8f }
+			, perlinScale{ 100.0f }
+			, perlinOctaves{ 4u }
 			, cloudColorTop{ params..., castor::Point3f{ 169.0f, 149.0f, 149.0f } * 1.5f / 255.0f }
 			, time{ 0.0f }
 			, cloudColorBottom{ params..., castor::Point3f{ 65.0f, 70.0f, 80.0f } * 1.5f / 255.0f }
@@ -78,10 +78,10 @@ namespace atmosphere_scattering
 		WrapperT< float > sphereInnerRadius;
 		WrapperT< float > sphereOuterRadius;
 
-		WrapperT< float > perlinAmplitude;
-		WrapperT< float > perlinFrequency;
-		WrapperT< float > perlinScale;
-		WrapperT< uint32_t > perlinOctaves;
+		float perlinAmplitude;
+		float perlinFrequency;
+		float perlinScale;
+		uint32_t perlinOctaves;
 
 		WrapperT< castor::Point3f > cloudColorTop;
 		float time{};

@@ -431,7 +431,7 @@ namespace atmosphere_scattering
 	{
 		auto renderSize = getExtent( resultView );
 		auto & computePass = graph.createPass( "PerlinWorleyPass"
-			, [this, &device/*, &enabled*/, renderSize]( crg::FramePass const & framePass
+			, [this, &device, &enabled, renderSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -443,7 +443,7 @@ namespace atmosphere_scattering
 						.groupCountX( renderSize.width / 4u )
 						.groupCountY( renderSize.height / 4u )
 						.groupCountZ( renderSize.depth / 4u )
-						//.enabled( &enabled )
+						.enabled( &enabled )
 						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) ) );
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
@@ -453,7 +453,7 @@ namespace atmosphere_scattering
 		computePass.addOutputStorageView( resultView
 			, perwor::eOutput );
 		auto & mipsPass = graph.createPass( "PerlinWorleyMipsGenPass"
-			, [&device/*, &enabled*/]( crg::FramePass const & framePass
+			, [&device, &enabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -463,12 +463,7 @@ namespace atmosphere_scattering
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 					, crg::ru::Config{}
 					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
-					/*, crg::RunnablePass::IsEnabledCallback( [&enabled]()
-						{
-							auto save = enabled;
-							enabled = false;
-							return save;
-						} )*/ );
+					, crg::RunnablePass::IsEnabledCallback( [&enabled](){ return enabled; } ) );
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
