@@ -160,8 +160,52 @@ namespace atmosphere_scattering
 			, castor3d::shader::Utils & utils
 			, AtmosphereData const & atmosphereData
 			, LuminanceSettings luminanceSettings
-			, VkExtent2D transmittanceExtent
-			, sdw::CombinedImage2DRgba32 const * transmittanceLut );
+			, VkExtent2D transmittanceExtent );
+
+		auto getSunDirection()const
+		{
+			return atmosphereData.sunDirection;
+		}
+
+		auto getEarthRadius()const
+		{
+			return atmosphereData.bottomRadius;
+		}
+
+		auto getAtmosphereRadius()const
+		{
+			return atmosphereData.topRadius;
+		}
+
+		auto getCameraPosition()const
+		{
+			return luminanceSettings.cameraData->position();
+		}
+
+		auto camProjToWorld( sdw::Vec4 const & clipSpace )const
+		{
+			return luminanceSettings.cameraData->camProjToWorld( clipSpace );
+		}
+
+		auto camProjToView( sdw::Vec4 const & clipSpace )const
+		{
+			return luminanceSettings.cameraData->camInvProj() * clipSpace;
+		}
+
+		auto camViewToWorld( sdw::Vec4 const & viewSpace )const
+		{
+			return luminanceSettings.cameraData->camInvView()  * viewSpace;
+		}
+
+		void setTransmittanceMap( sdw::CombinedImage2DRgba32 const & value )
+		{
+			transmittanceTexture = &value;
+		}
+
+		void setMultiscatterMap( sdw::CombinedImage2DRgba32 const & value )
+		{
+			multiScatTexture = &value;
+		}
 
 		sdw::Vec3 getClipSpace( sdw::Vec2 const & fragPos
 			, sdw::Vec2 const & fragSize

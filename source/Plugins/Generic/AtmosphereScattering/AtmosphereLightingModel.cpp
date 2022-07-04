@@ -197,9 +197,6 @@ namespace atmosphere_scattering
 					m_atmosphereBackground->m_scattering.getPixelTransLum( vec2( surface.clipPosition.x(), 1.0_f - surface.clipPosition.y() )
 						, targetSize
 						, surface.clipPosition.z()
-						, m_atmosphereBackground->m_transmittanceMap
-						, m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapSkyView" )
-						, m_writer.getVariable< sdw::CombinedImage3DRgba32 >( "c3d_mapVolume" )
 						//, light.base
 						//, surface.worldNormal
 						//, light.transforms[cascadeIndex - 1u]
@@ -410,9 +407,6 @@ namespace atmosphere_scattering
 					m_atmosphereBackground->m_scattering.getPixelTransLum( vec2( surface.clipPosition.x(), 1.0_f - surface.clipPosition.y() )
 						, targetSize
 						, surface.clipPosition.z()
-						, m_atmosphereBackground->m_transmittanceMap
-						, m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapSkyView" )
-						, m_writer.getVariable< sdw::CombinedImage3DRgba32 >( "c3d_mapVolume" )
 						//, light.base
 						//, surface.worldNormal
 						//, light.transforms[cascadeIndex - 1u]

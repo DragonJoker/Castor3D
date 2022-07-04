@@ -33,27 +33,17 @@ namespace atmosphere_scattering
 			, binding++
 			, set ) }
 		, m_atmosphereData{ model::getData< AtmosphereData >( m_atmosphereBuffer, AtmosphereScatteringUbo::Data ) }
-		, m_transmittanceMap{ m_writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "c3d_mapTransmittance"
-			, binding++
-			, set ) }
 		, m_atmosphere{ m_writer
 			, m_utils
 			, m_atmosphereData
 			, { false, &m_cameraData, true, true }
-			, { 256u, 64u }
-			, &m_transmittanceMap }
+			, { 256u, 64u } }
 		, m_scattering{ m_writer
 			, m_atmosphere
-			, m_cameraData
-			, m_atmosphereData
-			, false, true, true, true, false }
+			, false, true, true, true, false
+			, binding
+			, false }
 	{
-		m_writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "c3d_mapSkyView"
-			, binding++
-			, set );
-		m_writer.declCombinedImg< sdw::CombinedImage3DRgba32 >( "c3d_mapVolume"
-			, binding++
-			, set );
 	}
 
 	castor3d::shader::BackgroundModelPtr AtmosphereBackgroundModel::create( sdw::ShaderWriter & writer
@@ -99,8 +89,6 @@ namespace atmosphere_scattering
 
 	sdw::Vec3 AtmosphereBackgroundModel::getSunRadiance( sdw::Vec3 const & psunDir )
 	{
-		return m_atmosphere.getSunRadiance( m_cameraData.position()
-			, psunDir
-			, m_transmittanceMap );
+		return m_scattering.getSunRadiance( psunDir );
 	}
 }

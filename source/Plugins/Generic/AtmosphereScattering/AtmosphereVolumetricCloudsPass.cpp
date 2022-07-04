@@ -114,18 +114,6 @@ namespace atmosphere_scattering
 			C3D_Camera( writer
 				, uint32_t( Bindings::eCamera )
 				, 0u );
-			auto transmittanceMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "transmittanceMap"
-				, uint32_t( Bindings::eTransmittance )
-				, 0u );
-			auto multiScatterMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "multiScatterMap"
-				, uint32_t( Bindings::eMultiScatter )
-				, 0u );
-			auto skyViewMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "skyViewMap"
-				, uint32_t( Bindings::eSkyView )
-				, 0u );
-			auto volumeMap = writer.declCombinedImg< sdw::CombinedImage3DRgba32 >( "volumeMap"
-				, uint32_t( Bindings::eVolume )
-				, 0u );
 
 			auto targetSize = writer.declConstant( "targetSize"
 				, vec2( sdw::Float{ float( renderSize.width ) }, float( renderSize.height ) ) );
@@ -137,24 +125,19 @@ namespace atmosphere_scattering
 				, utils
 				, c3d_atmosphereData
 				, { false, &c3d_cameraData, true, true }
-				, { transmittanceExtent.width, transmittanceExtent.height }
-				, &transmittanceMap };
+				, { transmittanceExtent.width, transmittanceExtent.height } };
 			ScatteringModel scattering{ writer
 				, atmosphere
-				, c3d_cameraData
-				, c3d_atmosphereData
-				, c3d_weatherData
 				, false /*colorTransmittance*/
 				, true /*fastSky*/
 				, true /*fastAerialPerspective*/
 				, true /*renderSunDisk*/
-				, false /*bloomSunDisk*/ };
+				, false /*bloomSunDisk*/
+				, uint32_t( Bindings::eTransmittance ) };
 			CloudsModel clouds{ writer
 				, utils
 				, atmosphere
 				, scattering
-				, c3d_cameraData
-				, c3d_atmosphereData
 				, c3d_weatherData
 				, uint32_t( Bindings::ePerlinWorley ) };
 
@@ -178,9 +161,6 @@ namespace atmosphere_scattering
 						scattering.getPixelTransLum( vec2( fragCoord.xy() )
 							, targetSize
 							, depthBufferValue
-							, transmittanceMap
-							, skyViewMap
-							, volumeMap
 							, transmittance
 							, luminance );
 						luminance = scattering.rescaleLuminance( luminance );
@@ -188,7 +168,6 @@ namespace atmosphere_scattering
 						auto emission = writer.declLocale( "emission", vec4( 0.0_f ) );
 						clouds.applyClouds( fragCoord
 							, targetSize
-							, transmittanceMap
 							, luminance
 							, emission
 							, distance );
@@ -211,9 +190,6 @@ namespace atmosphere_scattering
 						scattering.getPixelTransLum( vec2( fragCoord.xy() )
 							, targetSize
 							, depthBufferValue
-							, transmittanceMap
-							, skyViewMap
-							, volumeMap
 							, transmittance
 							, luminance );
 						luminance = scattering.rescaleLuminance( luminance );
@@ -221,7 +197,6 @@ namespace atmosphere_scattering
 						auto emission = writer.declLocale( "emission", vec4( 0.0_f ) );
 						clouds.applyClouds( fragCoord
 							, targetSize
-							, transmittanceMap
 							, luminance
 							, emission
 							, distance );

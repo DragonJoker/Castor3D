@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3DAS_AtmosphereConfig_H___
 
 #include "AtmosphereCameraUbo.hpp"
+#include "AtmosphereModel.hpp"
 #include "AtmosphereScatteringUbo.hpp"
 #include "AtmosphereWeatherUbo.hpp"
 
@@ -28,13 +29,10 @@ namespace atmosphere_scattering
 			, castor3d::shader::Utils & utils
 			, AtmosphereModel & atmosphere
 			, ScatteringModel & scattering
-			, CameraData const & cameraData
-			, AtmosphereData const & atmosphereData
 			, WeatherData const & weatherData
 			, uint32_t binding );
 		sdw::Void applyClouds( sdw::IVec2 const & fragCoord
 			, sdw::Vec2 const & targetSize
-			, sdw::CombinedImage2DRgba32 const & transmittance
 			, sdw::Vec4 & bg
 			, sdw::Vec4 & emission
 			, sdw::Vec4 & distance );
@@ -42,8 +40,18 @@ namespace atmosphere_scattering
 	private:
 		sdw::Vec2 getUVProjection( sdw::Vec3 const & p );
 		sdw::Float getHeightFraction( sdw::Vec3 const & inPos );
-		sdw::RetFloat getDensityForCloud( sdw::Float const & heightFraction
+		sdw::RetFloat getDensityHeightGradientForPoint( sdw::Float const & heightFraction
 			, sdw::Float const & cloudType );
+		sdw::RetVec3 skewSamplePointWithWind( sdw::Vec3 const & point
+			, sdw::Float const & heightFraction );
+		sdw::RetFloat sampleLowFrequency( sdw::Vec3 const & skewedSamplePoint
+			, sdw::Vec3 const & unskewedSamplePoint
+			, sdw::Float const & relativeHeight
+			, sdw::Float const & lod );
+		sdw::RetFloat erodeWithHighFrequency( sdw::Float const & baseDensity
+			, sdw::Vec3 const & skewedSamplePoint
+			, sdw::Float const & heightFraction
+			, sdw::Float const & lod );
 		sdw::RetFloat sampleCloudDensity( sdw::Vec3 const & p
 			, sdw::Boolean const & expensive
 			, sdw::Float const & lod );
@@ -59,22 +67,21 @@ namespace atmosphere_scattering
 			, sdw::Vec3 const & sunColor
 			, sdw::Vec4 & cloudPos );
 		sdw::RetFloat computeFogAmount( sdw::Vec3 const & startPos
+			, sdw::Vec3 const & wolrdPos
 			, sdw::Float const & factor );
-		sdw::RetBoolean raySphereintersectSkyMap( sdw::Vec3 const & rd
-			, sdw::Float const & radius
-			, sdw::Vec3 & startPos );
-		sdw::RetBoolean raySphereIntersect( sdw::Vec3 const & r0
-			, sdw::Vec3 const & rd
-			, sdw::Float const & radius
-			, sdw::Vec3 & startPos );
+		RetIntersection raySphereintersectSkyMap( sdw::Vec3 const & rd
+			, sdw::Float const & radius );
+		RetIntersection raySphereIntersect( Ray const & ray
+			, sdw::Float const & radius );
+		sdw::RetFloat henyeyGreenstein( sdw::Float const & g
+			, sdw::Float const & cosTheta );
+
 
 	private:
 		sdw::ShaderWriter & writer;
 		castor3d::shader::Utils & utils;
 		AtmosphereModel & atmosphere;
 		ScatteringModel & scattering;
-		CameraData const & cameraData;
-		AtmosphereData const & atmosphereData;
 		WeatherData const & weatherData;
 		sdw::CombinedImage3DRgba32 perlinWorleyNoiseMap;
 		sdw::CombinedImage3DRgba32 worleyNoiseMap;
@@ -82,12 +89,24 @@ namespace atmosphere_scattering
 		sdw::Float sphereInnerRadius;
 		sdw::Float sphereOuterRadius;
 		sdw::Float sphereDelta;
-		sdw::Vec3 sphereCenter;
 
 	private:
 		sdw::Function< sdw::Float
 			, sdw::InFloat
-			, sdw::InFloat > m_getDensityForCloud;
+			, sdw::InFloat > m_getDensityHeightGradientForPoint;
+		sdw::Function< sdw::Vec3
+			, sdw::InVec3
+			, sdw::InFloat > m_skewSamplePointWithWind;
+		sdw::Function< sdw::Float
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InFloat
+			, sdw::InFloat > m_sampleLowFrequency;
+		sdw::Function< sdw::Float
+			, sdw::InFloat
+			, sdw::InVec3
+			, sdw::InFloat
+			, sdw::InFloat > m_erodeWithHighFrequency;
 		sdw::Function< sdw::Float
 			, sdw::InVec3
 			, sdw::InBoolean
@@ -107,20 +126,20 @@ namespace atmosphere_scattering
 			, sdw::OutVec4 > m_raymarchToCloud;
 		sdw::Function< sdw::Float
 			, sdw::InVec3
+			, sdw::InVec3
 			, sdw::InFloat > m_computeFogAmount;
-		sdw::Function< sdw::Boolean
+		sdw::Function< Intersection
 			, sdw::InVec3
+			, sdw::InFloat > m_raySphereintersectSkyMap;
+		sdw::Function< Intersection
+			, InRay
+			, sdw::InFloat > m_raySphereIntersect;
+		sdw::Function< sdw::Float
 			, sdw::InFloat
-			, sdw::OutVec3 > m_raySphereintersectSkyMap;
-		sdw::Function< sdw::Boolean
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InFloat
-			, sdw::OutVec3 > m_raySphereIntersect;
+			, sdw::InFloat > m_henyeyGreenstein;
 		sdw::Function< sdw::Void
 			, sdw::InIVec2
 			, sdw::InVec2
-			, sdw::InCombinedImage2DRgba32
 			, sdw::InOutVec4
 			, sdw::OutVec4
 			, sdw::OutVec4 > m_applyClouds;

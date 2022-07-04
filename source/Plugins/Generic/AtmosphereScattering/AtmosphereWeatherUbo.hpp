@@ -40,8 +40,6 @@ namespace atmosphere_scattering
 			, sdw::FloatField< "time" >
 			, sdw::Vec3Field< "cloudColorBottom" >
 			, sdw::IntField< "enablePowder" >
-			, sdw::Vec3Field< "seed" >
-			, sdw::FloatField< "pad0" >
 			, sdw::Vec3Field< "windDirection" >
 			, sdw::FloatField< "pad1" > >
 	{
@@ -72,8 +70,6 @@ namespace atmosphere_scattering
 
 		auto cloudColorBottom()const { return getMember< "cloudColorBottom" >(); }
 		auto enablePowder()const { return getMember< "enablePowder" >(); }
-
-		auto seed()const { return getMember< "seed" >(); }
 
 		auto windDirection()const { return getMember< "windDirection" >(); }
 	};

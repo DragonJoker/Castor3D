@@ -22,8 +22,8 @@ namespace atmosphere_scattering
 			, curliness{ params..., 0.1f }
 			, density{ params..., 0.02f }
 			, absorption{ params..., 0.35f }
-			, sphereInnerRadius{ params..., 0.1f }
-			, sphereOuterRadius{ params..., 10.0f }
+			, sphereInnerRadius{ params..., 50.0f }
+			, sphereOuterRadius{ params..., 170.0f }
 			, perlinAmplitude{ 0.5f }
 			, perlinFrequency{ 0.8f }
 			, perlinScale{ 100.0f }
@@ -31,8 +31,7 @@ namespace atmosphere_scattering
 			, cloudColorTop{ params..., castor::Point3f{ 169.0f, 149.0f, 149.0f } * 1.5f / 255.0f }
 			, time{ 0.0f }
 			, cloudColorBottom{ params..., castor::Point3f{ 65.0f, 70.0f, 80.0f } * 1.5f / 255.0f }
-			, enablePowder{ params..., 0 }
-			, seed{ params..., castor::Point3f{} }
+			, enablePowder{ params..., 1 }
 			, windDirection{ params..., castor::Point3f{ 0.5f, 0.0f, 0.1f } }
 		{
 		}
@@ -61,8 +60,6 @@ namespace atmosphere_scattering
 			cloudColorBottom = rhs.cloudColorBottom;
 			enablePowder = rhs.enablePowder;
 
-			seed = rhs.seed;
-
 			windDirection = rhs.windDirection;
 
 			return *this;
@@ -88,9 +85,6 @@ namespace atmosphere_scattering
 
 		WrapperT< castor::Point3f > cloudColorBottom;
 		WrapperT< int > enablePowder;
-
-		WrapperT< castor::Point3f > seed;
-		float pad0{};
 
 		WrapperT< castor::Point3f > windDirection;
 		float pad1{};
