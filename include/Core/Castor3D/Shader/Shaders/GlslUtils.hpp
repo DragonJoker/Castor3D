@@ -109,6 +109,12 @@ namespace castor3d::shader
 		/**
 		*\~english
 		*\brief
+		*	Converts a 32 bit float to store as 4 8 bit floats.
+		*/
+		C3D_API sdw::Vec4 encodeFloatRGBA( sdw::Float const & v );
+		/**
+		*\~english
+		*\brief
 		*	3D array index to flattened 1D array index
 		*/
 		C3D_API sdw::UInt flatten( sdw::UVec3 const & p
@@ -210,12 +216,6 @@ namespace castor3d::shader
 			, InTextureConfigData > m_parallaxShadow;
 		sdw::Function< sdw::Float
 			, sdw::InFloat
-			, sdw::InFloat
-			, sdw::InFloat
-			, sdw::InFloat
-			, sdw::InFloat > m_remap;
-		sdw::Function< sdw::Float
-			, sdw::InFloat
 			, sdw::InFloat > m_threshold;
 		sdw::Function< sdw::Boolean
 			, sdw::InVec3 > m_isSaturated3D;
@@ -230,6 +230,8 @@ namespace castor3d::shader
 			, sdw::InUInt > m_decodeColor;
 		sdw::Function< sdw::Vec3
 			, sdw::InUInt > m_decodeNormal;
+		sdw::Function< sdw::Vec4
+			, sdw::InFloat > m_encodeFloatRGBA;
 		sdw::Function< sdw::UInt
 			, sdw::InUVec3
 			, sdw::InUVec3 > m_flatten3D;
