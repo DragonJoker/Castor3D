@@ -779,35 +779,13 @@ namespace castor3d::shader
 		return m_clipToScreen( pin );
 	}
 
-	sdw::Float Utils::remap( sdw::Float const & poriginalValue
-		, sdw::Float const & poriginalMin
-		, sdw::Float const & poriginalMax
-		, sdw::Float const & pnewMin
-		, sdw::Float const & pnewMax )
+	sdw::Float Utils::remap( sdw::Float const & originalValue
+		, sdw::Float const & originalMin
+		, sdw::Float const & originalMax
+		, sdw::Float const & newMin
+		, sdw::Float const & newMax )
 	{
-		if ( !m_remap )
-		{
-			m_remap = m_writer.implementFunction< sdw::Float >( "c3d_remap"
-				, [&]( sdw::Float const & originalValue
-					, sdw::Float const & originalMin
-					, sdw::Float const & originalMax
-					, sdw::Float const & newMin
-					, sdw::Float const & newMax )
-				{
-					m_writer.returnStmt( newMin + ( ( ( originalValue - originalMin ) / ( originalMax - originalMin ) ) * ( newMax - newMin ) ) );
-				}
-				, sdw::InFloat{ m_writer, "originalValue" }
-				, sdw::InFloat{ m_writer, "originalMin" }
-				, sdw::InFloat{ m_writer, "originalMax" }
-				, sdw::InFloat{ m_writer, "newMin" }
-				, sdw::InFloat{ m_writer, "newMax" } );
-		}
-
-		return m_remap( poriginalValue
-			, poriginalMin
-			, poriginalMax
-			, pnewMin
-			, pnewMax );
+		return newMin + ( ( ( originalValue - originalMin ) / ( originalMax - originalMin ) ) * ( newMax - newMin ) );
 	}
 
 	sdw::Float Utils::threshold( sdw::Float const & pv
@@ -993,6 +971,26 @@ namespace castor3d::shader
 		}
 
 		return m_decodeNormal( pnormalMask );
+	}
+
+	sdw::Vec4 Utils::encodeFloatRGBA( sdw::Float const & pv )
+	{
+		if ( !m_encodeFloatRGBA )
+		{
+			m_encodeFloatRGBA = m_writer.implementFunction< sdw::Vec4 >( "c3d_encodeFloatRGBA"
+				, [&]( sdw::Float const & v )
+			{
+				auto bitEnc = vec4( 1.0_f, 255.0_f, 65025.0_f, 16581375.0_f );
+				auto enc = m_writer.declLocale( "enc"
+					, bitEnc * v );
+				enc = fract( enc );
+				enc -= vec4( enc.yz(), enc.ww() ) * vec4( 1.0_f / 255.0_f, 0.0_f, 0.0_f, 0.0_f );
+				m_writer.returnStmt( enc );
+			}
+			, sdw::InFloat{ m_writer, "v" } );
+		}
+
+		return m_encodeFloatRGBA( pv );
 	}
 
 	sdw::UInt Utils::flatten( sdw::UVec3 const & pp
