@@ -1,9 +1,6 @@
 #include "AtmosphereScattering/AtmosphereBackgroundPass.hpp"
 
-#include "AtmosphereScattering/Atmosphere.hpp"
 #include "AtmosphereScattering/AtmosphereBackground.hpp"
-#include "AtmosphereScattering/AtmosphereScatteringUbo.hpp"
-#include "AtmosphereScattering/Scattering.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Render/RenderDevice.hpp>

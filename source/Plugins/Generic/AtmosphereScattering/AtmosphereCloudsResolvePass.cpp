@@ -115,11 +115,7 @@ namespace atmosphere_scattering
 					IF( writer, c3d_cameraData.lightDotCameraFront() > 0.0_f )
 					{
 						auto lightPos = writer.declLocale( "lightPos"
-							, c3d_cameraData.position() + c3d_atmosphereData.sunDirection );
-						auto lowerLimit = writer.declLocale( "lowerLimit"
-							, greaterThan( lightPos.xy(), vec2( 0.0_f ) ) );
-						auto upperLimit = writer.declLocale( "upperLimit"
-							, lessThan( lightPos.xy(), vec2( 1.0_f ) ) );
+							, c3d_cameraData.position() + c3d_atmosphereData.sunDirection * 1e6_f );
 
 						// Screen coordinates.
 						auto uv = writer.declLocale( "uv"
@@ -150,13 +146,14 @@ namespace atmosphere_scattering
 						auto colRays = writer.declLocale( "colRays"
 							, gaussianBlur( emissionsMap, uv ).rgb() * 0.4_f );
 
-						for ( int i = 0; i < SAMPLES; i++ )
+						FOR( writer, sdw::Int, i, 0, i < SAMPLES, i++ )
 						{
 							uv -= dTuv;
 							//colRays += texture(emissions, uv).rgb *illuminationDecay* weight;
 							colRays += emissionsMap.sample( uv ).rgb() * illuminationDecay * weight;
 							illuminationDecay *= decay;
 						}
+						ROF;
 
 						//FragColor -= 0.2;
 						//FragColor.rgb += (smoothstep(0., 1., colRays)*exposure - 0.2);

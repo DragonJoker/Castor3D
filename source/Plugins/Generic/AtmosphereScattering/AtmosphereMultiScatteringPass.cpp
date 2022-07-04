@@ -1,6 +1,6 @@
 #include "AtmosphereScattering/AtmosphereMultiScatteringPass.hpp"
 
-#include "AtmosphereScattering/Atmosphere.hpp"
+#include "AtmosphereScattering/AtmosphereModel.hpp"
 #include "AtmosphereScattering/AtmosphereScatteringUbo.hpp"
 
 #include <Castor3D/Engine.hpp>
@@ -64,7 +64,7 @@ namespace atmosphere_scattering
 				, 1.0_f / sphereSolidAngle );
 
 			castor3d::shader::Utils utils{ writer };
-			AtmosphereConfig atmosphereConfig{ writer
+			AtmosphereModel atmosphere{ writer
 				, utils
 				, c3d_atmosphereData
 				, { true, nullptr, false, false }
@@ -97,8 +97,8 @@ namespace atmosphere_scattering
 					auto uv = writer.declLocale( "uv"
 						, pixPos / vec2( multiScatteringLUTRes ) );
 
-					uv = vec2( atmosphereConfig.fromSubUvsToUnit( uv.x(), multiScatteringLUTRes )
-						, atmosphereConfig.fromSubUvsToUnit( uv.y(), multiScatteringLUTRes ) );
+					uv = vec2( atmosphere.fromSubUvsToUnit( uv.x(), multiScatteringLUTRes )
+						, atmosphere.fromSubUvsToUnit( uv.y(), multiScatteringLUTRes ) );
 
 					auto cosSunZenithAngle = writer.declLocale( "cosSunZenithAngle"
 						, fma( uv.x(), 2.0_f, -1.0_f ) );
@@ -133,7 +133,7 @@ namespace atmosphere_scattering
 							, PI * randB );
 						ray.origin = getSphericalDir( theta, phi );
 						auto result = writer.declLocale( "result"
-							, atmosphereConfig.integrateScatteredLuminanceNoShadow( pixPos
+							, atmosphere.integrateScatteredLuminanceNoShadow( pixPos
 								, ray
 								, sunDir
 								, sampleCountIni

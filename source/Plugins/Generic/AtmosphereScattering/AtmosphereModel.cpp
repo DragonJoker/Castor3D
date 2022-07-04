@@ -1,4 +1,4 @@
-﻿#include "AtmosphereScattering/Atmosphere.hpp"
+﻿#include "AtmosphereScattering/AtmosphereModel.hpp"
 
 #include <Castor3D/Shader/Shaders/GlslLight.hpp>
 #include <Castor3D/Shader/Shaders/GlslShadow.hpp>
@@ -28,15 +28,15 @@ namespace atmosphere_scattering
 
 	//************************************************************************************************
 
-	AtmosphereConfig::AtmosphereConfig( sdw::ShaderWriter & pwriter
+	AtmosphereModel::AtmosphereModel( sdw::ShaderWriter & pwriter
 		, castor3d::shader::Utils & putils
 		, AtmosphereData const & patmosphereData
 		, LuminanceSettings pluminanceSettings )
-		: AtmosphereConfig{ pwriter, putils, patmosphereData, pluminanceSettings, {}, nullptr }
+		: AtmosphereModel{ pwriter, putils, patmosphereData, pluminanceSettings, {}, nullptr }
 	{
 	}
 
-	AtmosphereConfig::AtmosphereConfig( sdw::ShaderWriter & pwriter
+	AtmosphereModel::AtmosphereModel( sdw::ShaderWriter & pwriter
 		, castor3d::shader::Utils & putils
 		, AtmosphereData const & patmosphereData
 		, LuminanceSettings pluminanceSettings
@@ -51,7 +51,7 @@ namespace atmosphere_scattering
 	{
 	}
 
-	sdw::Vec3 AtmosphereConfig::getWorldPos( sdw::Float const & pdepth
+	sdw::RetVec3 AtmosphereModel::getWorldPos( sdw::Float const & pdepth
 		, sdw::Vec2 const & ppixPos
 		, sdw::Vec2 const & ptexSize )
 	{
@@ -77,20 +77,20 @@ namespace atmosphere_scattering
 		return m_getWorldPos( pdepth, ppixPos, ptexSize );
 	}
 
-	sdw::Vec3 AtmosphereConfig::getClipSpace( sdw::Vec2 const & fragPos
+	sdw::Vec3 AtmosphereModel::getClipSpace( sdw::Vec2 const & fragPos
 		, sdw::Vec2 const & fragSize
 		, sdw::Float const & fragDepth )
 	{
 		return getClipSpace( fragPos / fragSize, fragDepth );
 	}
 
-	sdw::Vec3 AtmosphereConfig::getClipSpace( sdw::Vec2 const & uv
+	sdw::Vec3 AtmosphereModel::getClipSpace( sdw::Vec2 const & uv
 		, sdw::Float const & fragDepth )
 	{
 		return vec3( fma( uv, vec2( 2.0_f ), vec2( -1.0_f ) ), fragDepth );
 	}
 
-	sdw::Vec3 AtmosphereConfig::getMultipleScattering( sdw::Vec3 const & pscattering
+	sdw::RetVec3 AtmosphereModel::getMultipleScattering( sdw::Vec3 const & pscattering
 		, sdw::Vec3 const & pextinction
 		, sdw::Vec3 const & pworldPos
 		, sdw::Float const & pviewZenithCosAngle )
@@ -125,7 +125,7 @@ namespace atmosphere_scattering
 			, pviewZenithCosAngle );
 	}
 
-	SingleScatteringResult AtmosphereConfig::integrateScatteredLuminance( sdw::Vec2 const & ppixPos
+	RetSingleScatteringResult AtmosphereModel::integrateScatteredLuminance( sdw::Vec2 const & ppixPos
 		, Ray const & pray
 		, sdw::Vec3 const & psunDir
 		, sdw::Float const & psampleCountIni
@@ -160,7 +160,7 @@ namespace atmosphere_scattering
 			, ptMaxMax );
 	}
 
-	SingleScatteringResult AtmosphereConfig::integrateScatteredLuminanceShadow( sdw::Vec2 const & ppixPos
+	RetSingleScatteringResult AtmosphereModel::integrateScatteredLuminanceShadow( sdw::Vec2 const & ppixPos
 		, Ray const & pray
 		, sdw::Vec3 const & psunDir
 		, sdw::Float const & psampleCountIni
@@ -327,7 +327,7 @@ namespace atmosphere_scattering
 			, ptMaxMax );
 	}
 
-	SingleScatteringResult AtmosphereConfig::integrateScatteredLuminanceNoShadow( sdw::Vec2 const & ppixPos
+	RetSingleScatteringResult AtmosphereModel::integrateScatteredLuminanceNoShadow( sdw::Vec2 const & ppixPos
 		, Ray const & pray
 		, sdw::Vec3 const & psunDir
 		, sdw::Float const & psampleCountIni
@@ -461,7 +461,7 @@ namespace atmosphere_scattering
 			, ptMaxMax );
 	}
 
-	sdw::Boolean AtmosphereConfig::moveToTopAtmosphere( Ray & pray )
+	sdw::RetBoolean AtmosphereModel::moveToTopAtmosphere( Ray & pray )
 	{
 		if ( !m_moveToTopAtmosphere )
 		{
@@ -504,7 +504,7 @@ namespace atmosphere_scattering
 		return m_moveToTopAtmosphere( pray );
 	}
 
-	sdw::Vec3 AtmosphereConfig::getSunRadiance( sdw::Vec3 const & pcameraPosition
+	sdw::RetVec3 AtmosphereModel::getSunRadiance( sdw::Vec3 const & pcameraPosition
 		, sdw::Vec3 const & psunDir
 		, sdw::CombinedImage2DRgba32 const & ptransmittanceMap )
 	{
@@ -538,7 +538,7 @@ namespace atmosphere_scattering
 			, ptransmittanceMap );
 	}
 
-	Intersection AtmosphereConfig::raySphereIntersectNearest( Ray const & pray
+	RetIntersection AtmosphereModel::raySphereIntersectNearest( Ray const & pray
 		, sdw::Vec3 const & ps0
 		, sdw::Float const & psR )
 	{
@@ -597,7 +597,7 @@ namespace atmosphere_scattering
 		return m_raySphereIntersectNearest( pray, ps0, psR );
 	}
 
-	sdw::Float AtmosphereConfig::hgPhase( sdw::Float const & pg
+	sdw::RetFloat AtmosphereModel::hgPhase( sdw::Float const & pg
 		, sdw::Float const & pcosTheta )
 	{
 		if ( !m_hgPhase )
@@ -619,7 +619,7 @@ namespace atmosphere_scattering
 		return m_hgPhase( pg, pcosTheta );
 	}
 
-	MediumSampleRGB AtmosphereConfig::sampleMediumRGB( sdw::Vec3 const & pworldPos )
+	RetMediumSampleRGB AtmosphereModel::sampleMediumRGB( sdw::Vec3 const & pworldPos )
 	{
 		if ( !m_sampleMediumRGB )
 		{
@@ -667,22 +667,22 @@ namespace atmosphere_scattering
 		return m_sampleMediumRGB( pworldPos );
 	}
 
-	sdw::Float AtmosphereConfig::rayleighPhase( sdw::Float const & cosTheta )
+	sdw::Float AtmosphereModel::rayleighPhase( sdw::Float const & cosTheta )
 	{
 		return 3.0_f / ( 16.0_f * castor::Pi< float > ) * ( 1.0_f + cosTheta * cosTheta );
 	}
 
-	sdw::Float AtmosphereConfig::fromUnitToSubUvs( sdw::Float u, sdw::Float resolution )
+	sdw::Float AtmosphereModel::fromUnitToSubUvs( sdw::Float u, sdw::Float resolution )
 	{
 		return ( u + 0.5f / resolution ) * ( resolution / ( resolution + 1.0f ) );
 	}
 
-	sdw::Float AtmosphereConfig::fromSubUvsToUnit( sdw::Float u, sdw::Float resolution )
+	sdw::Float AtmosphereModel::fromSubUvsToUnit( sdw::Float u, sdw::Float resolution )
 	{
 		return ( u - 0.5f / resolution ) * ( resolution / ( resolution - 1.0f ) );
 	}
 
-	sdw::Void AtmosphereConfig::uvToLutTransmittanceParams( sdw::Float & pviewHeight
+	sdw::Void AtmosphereModel::uvToLutTransmittanceParams( sdw::Float & pviewHeight
 		, sdw::Float & pviewZenithCosAngle
 		, sdw::Vec2 const & puv )
 	{
@@ -723,7 +723,7 @@ namespace atmosphere_scattering
 		return m_uvToLutTransmittanceParams( pviewHeight, pviewZenithCosAngle, puv );
 	}
 
-	sdw::Void AtmosphereConfig::lutTransmittanceParamsToUv( sdw::Float const & pviewHeight
+	sdw::Void AtmosphereModel::lutTransmittanceParamsToUv( sdw::Float const & pviewHeight
 		, sdw::Float const & pviewZenithCosAngle
 		, sdw::Vec2 & puv )
 	{
@@ -763,7 +763,7 @@ namespace atmosphere_scattering
 		return m_lutTransmittanceParamsToUv( pviewHeight, pviewZenithCosAngle, puv );
 	}
 
-	sdw::Void AtmosphereConfig::uvToSkyViewLutParams( sdw::Float & pviewZenithCosAngle
+	sdw::Void AtmosphereModel::uvToSkyViewLutParams( sdw::Float & pviewZenithCosAngle
 		, sdw::Float & plightViewCosAngle
 		, sdw::Float const & pviewHeight
 		, sdw::Vec2 const & puv
@@ -828,7 +828,7 @@ namespace atmosphere_scattering
 		return m_uvToSkyViewLutParams( pviewZenithCosAngle, plightViewCosAngle, pviewHeight, puv, psize );
 	}
 
-	sdw::Void AtmosphereConfig::skyViewLutParamsToUv( sdw::Boolean const & pintersectGround
+	sdw::Void AtmosphereModel::skyViewLutParamsToUv( sdw::Boolean const & pintersectGround
 		, sdw::Float const & pviewZenithCosAngle
 		, sdw::Float const & plightViewCosAngle
 		, sdw::Float const & pviewHeight
@@ -901,7 +901,7 @@ namespace atmosphere_scattering
 			, psize );
 	}
 
-	void AtmosphereConfig::doInitRay( sdw::Float const & depthBufferValue
+	void AtmosphereModel::doInitRay( sdw::Float const & depthBufferValue
 		, sdw::Vec2 const & pixPos
 		, Ray const & ray
 		, sdw::Float const & tMaxMax
@@ -965,7 +965,7 @@ namespace atmosphere_scattering
 		tMax = min( tMax, tMaxMax );
 	}
 
-	sdw::Float AtmosphereConfig::doInitSampleCount( sdw::Float const & tMax
+	sdw::Float AtmosphereModel::doInitSampleCount( sdw::Float const & tMax
 		, sdw::Float & sampleCount
 		, sdw::Float & sampleCountFloor
 		, sdw::Float & tMaxFloor )
@@ -982,7 +982,7 @@ namespace atmosphere_scattering
 		return tMax / sampleCount;
 	}
 
-	std::pair< sdw::Float, sdw::Float > AtmosphereConfig::doInitPhaseFunctions( sdw::Vec3 const & sunDir
+	std::pair< sdw::Float, sdw::Float > AtmosphereModel::doInitPhaseFunctions( sdw::Vec3 const & sunDir
 		, sdw::Vec3 const & worldDir )
 	{
 		auto wi = writer.declLocale( "wi"
@@ -997,7 +997,7 @@ namespace atmosphere_scattering
 				, rayleighPhase( cosTheta ) ) };
 	}
 
-	void AtmosphereConfig::doStepRay( sdw::Float const & s
+	void AtmosphereModel::doStepRay( sdw::Float const & s
 		, sdw::Float const & sampleCount
 		, sdw::Float const & sampleCountFloor
 		, sdw::Float const & tMaxFloor
@@ -1045,7 +1045,7 @@ namespace atmosphere_scattering
 		}
 	}
 
-	std::tuple< sdw::Vec3, sdw::Float, sdw::Vec2, sdw::Vec3, sdw::Vec3 > AtmosphereConfig::doGetSunTransmittance( Ray const & rayToSun
+	std::tuple< sdw::Vec3, sdw::Float, sdw::Vec2, sdw::Vec3, sdw::Vec3 > AtmosphereModel::doGetSunTransmittance( Ray const & rayToSun
 		, MediumSampleRGB const & medium
 		, sdw::Float const & dt
 		, sdw::Vec3 & opticalDepth )
@@ -1075,7 +1075,7 @@ namespace atmosphere_scattering
 		return { upVector, sunZenithCosAngle, uv, sampleTransmittance, transmittanceToSun };
 	}
 
-	std::tuple< sdw::Vec3, sdw::Float, sdw::Vec3 > AtmosphereConfig::doGetScatteredLuminance( Ray const & rayToSun
+	std::tuple< sdw::Vec3, sdw::Float, sdw::Vec3 > AtmosphereModel::doGetScatteredLuminance( Ray const & rayToSun
 		, MediumSampleRGB const & medium
 		, sdw::Vec3 const & earthO
 		, sdw::Vec3 const & upVector
@@ -1115,7 +1115,7 @@ namespace atmosphere_scattering
 		return { phaseTimesScattering, earthShadow, multiScatteredLuminance };
 	}
 
-	void AtmosphereConfig::doComputeStep( MediumSampleRGB const & medium
+	void AtmosphereModel::doComputeStep( MediumSampleRGB const & medium
 		, sdw::Float const & dt
 		, sdw::Vec3 const & sampleTransmittance
 		, sdw::Float const & earthShadow
@@ -1168,7 +1168,7 @@ namespace atmosphere_scattering
 		tPrev = t;
 	}
 
-	void AtmosphereConfig::doProcessGround( sdw::Vec3 const & sunDir
+	void AtmosphereModel::doProcessGround( sdw::Vec3 const & sunDir
 		, sdw::Float const & tMax
 		, Intersection const & tBottom
 		, sdw::Vec3 const & globalL

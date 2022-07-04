@@ -1,7 +1,7 @@
 #include "AtmosphereScattering/AtmosphereTransmittancePass.hpp"
 
-#include "AtmosphereScattering/Atmosphere.hpp"
 #include "AtmosphereScattering/AtmosphereBackground.hpp"
+#include "AtmosphereScattering/AtmosphereModel.hpp"
 #include "AtmosphereScattering/AtmosphereScatteringUbo.hpp"
 
 #include <Castor3D/Engine.hpp>
@@ -59,7 +59,7 @@ namespace atmosphere_scattering
 				, -1.0_f );
 
 			castor3d::shader::Utils utils{ writer };
-			AtmosphereConfig atmosphereConfig{ writer
+			AtmosphereModel atmosphere{ writer
 				, utils
 				, c3d_atmosphereData
 				, { false, nullptr, false, false } };
@@ -79,7 +79,7 @@ namespace atmosphere_scattering
 						, pixPos / targetSize );
 					auto viewHeight = writer.declLocale< sdw::Float > ( "viewHeight" );
 					auto viewZenithCosAngle = writer.declLocale< sdw::Float >( "viewZenithCosAngle" );
-					atmosphereConfig.uvToLutTransmittanceParams( viewHeight, viewZenithCosAngle, uv );
+					atmosphere.uvToLutTransmittanceParams( viewHeight, viewZenithCosAngle, uv );
 					auto viewZenithSinAngle = writer.declLocale< sdw::Float >( "viewZenithSinAngle"
 						, sqrt( 1.0_f - viewZenithCosAngle * viewZenithCosAngle ) );
 
@@ -88,7 +88,7 @@ namespace atmosphere_scattering
 					ray.direction = vec3( 0.0_f, viewZenithCosAngle, -viewZenithSinAngle );
 
 					auto transmittance = writer.declLocale( "transmittance"
-						, exp( -atmosphereConfig.integrateScatteredLuminanceNoShadow( pixPos
+						, exp( -atmosphere.integrateScatteredLuminanceNoShadow( pixPos
 							, ray
 							, c3d_atmosphereData.sunDirection
 							, sampleCountIni

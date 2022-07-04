@@ -1,8 +1,8 @@
 #include "AtmosphereScattering/AtmosphereSkyViewPass.hpp"
 
-#include "AtmosphereScattering/Atmosphere.hpp"
-#include "AtmosphereScattering/AtmosphereScatteringUbo.hpp"
 #include "AtmosphereScattering/AtmosphereCameraUbo.hpp"
+#include "AtmosphereScattering/AtmosphereModel.hpp"
+#include "AtmosphereScattering/AtmosphereScatteringUbo.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Render/RenderDevice.hpp>
@@ -72,7 +72,7 @@ namespace atmosphere_scattering
 			auto pxl_colour( writer.declOutput< sdw::Vec4 >( "pxl_colour", 0u ) );
 
 			castor3d::shader::Utils utils{ writer };
-			AtmosphereConfig atmosphereConfig{ writer
+			AtmosphereModel atmosphere{ writer
 				, utils
 				, c3d_atmosphereData
 				, { false, nullptr, true, true }
@@ -92,7 +92,7 @@ namespace atmosphere_scattering
 						, pixPos / targetSize );
 
 					auto clipSpace = writer.declLocale( "clipSpace"
-						, atmosphereConfig.getClipSpace( uv, 1.0_f ) );
+						, atmosphere.getClipSpace( uv, 1.0_f ) );
 					auto hPos = writer.declLocale( "hPos"
 						, c3d_cameraData.camProjToWorld( vec4( clipSpace, 1.0_f ) ) );
 					auto ray = writer.declLocale< Ray >( "ray" );
@@ -104,7 +104,7 @@ namespace atmosphere_scattering
 
 					auto viewZenithCosAngle = writer.declLocale< sdw::Float >( "viewZenithCosAngle" );
 					auto lightViewCosAngle = writer.declLocale< sdw::Float >( "lightViewCosAngle" );
-					atmosphereConfig.uvToSkyViewLutParams( viewZenithCosAngle, lightViewCosAngle, viewHeight, uv, targetSize );
+					atmosphere.uvToSkyViewLutParams( viewZenithCosAngle, lightViewCosAngle, viewHeight, uv, targetSize );
 					auto lightViewSinAngle = writer.declLocale( "lightViewSinAngle"
 						, sqrt( 1.0_f - lightViewCosAngle * lightViewCosAngle ) );
 
@@ -128,7 +128,7 @@ namespace atmosphere_scattering
 						, -viewZenithSinAngle * lightViewSinAngle );
 
 					// Move to top atmospehre
-					IF( writer, !atmosphereConfig.moveToTopAtmosphere( ray ) )
+					IF( writer, !atmosphere.moveToTopAtmosphere( ray ) )
 					{
 						// Ray is not intersecting the atmosphere
 						pxl_colour = vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f );
@@ -136,7 +136,7 @@ namespace atmosphere_scattering
 					ELSE
 					{
 						auto ss = writer.declLocale( "ss"
-							, atmosphereConfig.integrateScatteredLuminanceNoShadow( pixPos
+							, atmosphere.integrateScatteredLuminanceNoShadow( pixPos
 							, ray
 							, sunDir
 							, sampleCountIni

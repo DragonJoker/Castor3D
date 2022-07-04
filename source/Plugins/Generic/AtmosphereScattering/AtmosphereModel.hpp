@@ -1,13 +1,14 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3DAS_AtmosphereConfig_H___
-#define ___C3DAS_AtmosphereConfig_H___
+#ifndef ___C3DAS_AtmosphereModel_H___
+#define ___C3DAS_AtmosphereModel_H___
 
 #include "AtmosphereCameraUbo.hpp"
 #include "AtmosphereScatteringUbo.hpp"
 #include "AtmosphereWeatherUbo.hpp"
 
+#include <Castor3D/Shader/Shaders/SdwModule.hpp>
 #include <Castor3D/Shader/Ubos/MatrixUbo.hpp>
 
 #include <ShaderWriter/BaseTypes/Array.hpp>
@@ -49,6 +50,7 @@ namespace atmosphere_scattering
 		auto newMultiScatStep0Out()const { return getMember< "newMultiScatStep0Out" >(); }
 		auto newMultiScatStep1Out()const { return getMember< "newMultiScatStep1Out" >(); }
 	};
+	Writer_Parameter( SingleScatteringResult );
 
 	struct MediumSampleRGB
 		: public sdw::StructInstanceHelperT< "MediumSampleRGB"
@@ -88,6 +90,7 @@ namespace atmosphere_scattering
 		auto extinctionOzo()const { return getMember< "extinctionOzo" >(); }
 		auto albedo()const { return getMember< "albedo" >(); }
 	};
+	Writer_Parameter( MediumSampleRGB );
 
 	struct Intersection
 		: public sdw::StructInstanceHelperT < "Intersection"
@@ -147,13 +150,13 @@ namespace atmosphere_scattering
 		uint32_t multiScatteringPowerSerie{ 1u };
 	};
 
-	struct AtmosphereConfig
+	struct AtmosphereModel
 	{
-		AtmosphereConfig( sdw::ShaderWriter & writer
+		AtmosphereModel( sdw::ShaderWriter & writer
 			, castor3d::shader::Utils & utils
 			, AtmosphereData const & atmosphereData
 			, LuminanceSettings luminanceSettings );
-		AtmosphereConfig( sdw::ShaderWriter & writer
+		AtmosphereModel( sdw::ShaderWriter & writer
 			, castor3d::shader::Utils & utils
 			, AtmosphereData const & atmosphereData
 			, LuminanceSettings luminanceSettings
@@ -165,11 +168,11 @@ namespace atmosphere_scattering
 			, sdw::Float const & fragDepth );
 		sdw::Vec3 getClipSpace( sdw::Vec2 const & uv
 			, sdw::Float const & fragDepth );
-		sdw::Vec3 getMultipleScattering( sdw::Vec3 const & scattering
+		sdw::RetVec3 getMultipleScattering( sdw::Vec3 const & scattering
 			, sdw::Vec3 const & extinction
 			, sdw::Vec3 const & worldPos
 			, sdw::Float const & viewZenithCosAngle );
-		SingleScatteringResult integrateScatteredLuminance( sdw::Vec2 const & pixPos
+		RetSingleScatteringResult integrateScatteredLuminance( sdw::Vec2 const & pixPos
 			, Ray const & ray
 			, sdw::Vec3 const & sunDir
 			, sdw::Float const & sampleCountIni
@@ -180,7 +183,7 @@ namespace atmosphere_scattering
 			, sdw::UInt const & cascadeIndex
 			, sdw::UInt const & maxCascade
 			, sdw::Float const & tMaxMax = sdw::Float{ 9000000.0_f } );
-		SingleScatteringResult integrateScatteredLuminanceShadow( sdw::Vec2 const & pixPos
+		RetSingleScatteringResult integrateScatteredLuminanceShadow( sdw::Vec2 const & pixPos
 			, Ray const & ray
 			, sdw::Vec3 const & sunDir
 			, sdw::Float const & sampleCountIni
@@ -191,35 +194,35 @@ namespace atmosphere_scattering
 			, sdw::UInt const & cascadeIndex
 			, sdw::UInt const & maxCascade
 			, sdw::Float const & tMaxMax = sdw::Float{ 9000000.0_f } );
-		SingleScatteringResult integrateScatteredLuminanceNoShadow( sdw::Vec2 const & pixPos
+		RetSingleScatteringResult integrateScatteredLuminanceNoShadow( sdw::Vec2 const & pixPos
 			, Ray const & ray
 			, sdw::Vec3 const & sunDir
 			, sdw::Float const & sampleCountIni
 			, sdw::Float const & depthBufferValue
 			, sdw::Float const & tMaxMax = sdw::Float{ 9000000.0_f } );
-		sdw::Boolean moveToTopAtmosphere( Ray & ray );
-		sdw::Vec3 getSunRadiance( sdw::Vec3 const & cameraPosition
+		sdw::RetBoolean moveToTopAtmosphere( Ray & ray );
+		sdw::RetVec3 getSunRadiance( sdw::Vec3 const & cameraPosition
 			, sdw::Vec3 const & sunDir
 			, sdw::CombinedImage2DRgba32 const & transmittanceMap );
 
 		// - Returns distance from rayOrigin to first intersecion with sphere,
 		//   or -1.0 if no intersection.
-		Intersection raySphereIntersectNearest( Ray const & ray
+		RetIntersection raySphereIntersectNearest( Ray const & ray
 			, sdw::Vec3 const & sphereCenter
 			, sdw::Float const & sphereRadius );
 
 		// Reference implementation (i.e. not schlick approximation). 
 		// See http://www.pbr-book.org/3ed-2018/Volume_Scattering/Phase_Functions.html
-		sdw::Float hgPhase( sdw::Float const & g
+		sdw::RetFloat hgPhase( sdw::Float const & g
 			, sdw::Float const & cosTheta );
 
-		MediumSampleRGB sampleMediumRGB( sdw::Vec3 const & worldPos );
+		RetMediumSampleRGB sampleMediumRGB( sdw::Vec3 const & worldPos );
 		sdw::Float rayleighPhase( sdw::Float const & cosTheta );
 		// We should precompute those terms from resolutions (Or set resolution as #defined constants)
 		sdw::Float fromUnitToSubUvs( sdw::Float u, sdw::Float resolution );
 		sdw::Float fromSubUvsToUnit( sdw::Float u, sdw::Float resolution );
 
-		sdw::Vec3 getWorldPos( sdw::Float const & depth
+		sdw::RetVec3 getWorldPos( sdw::Float const & depth
 			, sdw::Vec2 const & pixPos
 			, sdw::Vec2 const & texSize );
 

@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3DAS_AtmosphereBackgroundModel_H___
 #define ___C3DAS_AtmosphereBackgroundModel_H___
 
-#include "AtmosphereScattering/Atmosphere.hpp"
+#include "AtmosphereScattering/AtmosphereModel.hpp"
 #include "AtmosphereScattering/AtmosphereCameraUbo.hpp"
 #include "AtmosphereScattering/AtmosphereScatteringUbo.hpp"
-#include "AtmosphereScattering/Scattering.hpp"
+#include "AtmosphereScattering/ScatteringModel.hpp"
 
 #include <Castor3D/Shader/Shaders/GlslBackground.hpp>
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
@@ -57,8 +57,8 @@ namespace atmosphere_scattering
 		sdw::Ubo m_atmosphereBuffer;
 		AtmosphereData m_atmosphereData;
 		sdw::CombinedImage2DRgba32 m_transmittanceMap;
-		AtmosphereConfig m_atmosphere;
-		ScatteringConfig m_scattering;
+		AtmosphereModel m_atmosphere;
+		ScatteringModel m_scattering;
 	};
 }
 
