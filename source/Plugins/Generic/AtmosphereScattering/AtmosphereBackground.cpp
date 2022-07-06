@@ -80,6 +80,37 @@ namespace castor
 				result = result && writeDensity( file, "minRayleighDensity", config.mieDensity[1] );
 				result = result && writeDensity( file, "minRayleighDensity", config.absorptionDensity[0] );
 				result = result && writeDensity( file, "minRayleighDensity", config.absorptionDensity[1] );
+
+				if ( auto wblock{ beginBlock( file, "weather" ) } )
+				{
+					auto & weather = background.getWeatherCfg();
+					result = result && write( file, "worleyResolution", background.getWorleyResolution() );
+					result = result && write( file, "perlinWorleyResolution", background.getPerlinWorleyResolution() );
+					result = result && write( file, "curlResolution", background.getCurlResolution() );
+					result = result && write( file, "weatherResolution", background.getWeatherResolution() );
+					result = result && write( file, "amplitude", weather.perlinAmplitude );
+					result = result && write( file, "frequency", weather.perlinFrequency );
+					result = result && write( file, "scale", weather.perlinScale );
+					result = result && write( file, "octaves", weather.perlinOctaves );
+				}
+
+				if ( auto cblock{ beginBlock( file, "clouds" ) } )
+				{
+					auto & clouds = background.getCloudsCfg();
+					result = result && write( file, "windDirection", clouds.windDirection );
+					result = result && write( file, "speed", clouds.cloudSpeed );
+					result = result && write( file, "coverage", clouds.coverage );
+					result = result && write( file, "crispiness", clouds.crispiness );
+					result = result && write( file, "curliness", clouds.curliness );
+					result = result && write( file, "density", clouds.density );
+					result = result && write( file, "absorption", clouds.absorption );
+					result = result && write( file, "innerRadius", clouds.sphereInnerRadius );
+					result = result && write( file, "outerRadius", clouds.sphereOuterRadius );
+					result = result && write( file, "topColour", clouds.cloudColorTop );
+					result = result && write( file, "bottomColour", clouds.cloudColorBottom );
+					result = result && write( file, "enablePowder", clouds.enablePowder != 0 );
+					result = result && write( file, "topOffset", clouds.cloudTopOffset );
+				}
 			}
 
 			return result;
@@ -587,6 +618,7 @@ namespace atmosphere_scattering
 	{
 		auto & handler = getScene().getEngine()->getGraphResourceHandler();
 		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
+		m_worleyResolution = dimension;
 		m_worley = castor3d::Texture{ device
 			, handler
 			, "WorleyNoise"
@@ -607,6 +639,7 @@ namespace atmosphere_scattering
 	{
 		auto & handler = getScene().getEngine()->getGraphResourceHandler();
 		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
+		m_perlinWorleyResolution = dimension;
 		m_perlinWorley = castor3d::Texture{ device
 			, handler
 			, "PerlinWorleyNoise"
@@ -627,6 +660,7 @@ namespace atmosphere_scattering
 	{
 		auto & handler = getScene().getEngine()->getGraphResourceHandler();
 		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
+		m_curlResolution = dimension;
 		m_curl = castor3d::Texture{ device
 			, handler
 			, "CurlNoise"
@@ -647,6 +681,7 @@ namespace atmosphere_scattering
 	{
 		auto & handler = getScene().getEngine()->getGraphResourceHandler();
 		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
+		m_weatherResolution = dimension;
 		m_weather = castor3d::Texture{ device
 			, handler
 			, "Weather"

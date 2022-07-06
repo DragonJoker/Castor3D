@@ -164,6 +164,26 @@ namespace atmosphere_scattering
 			return m_volumeResolution;
 		}
 
+		auto const & getWorleyResolution()const
+		{
+			return m_worleyResolution;
+		}
+
+		auto const & getPerlinWorleyResolution()const
+		{
+			return m_perlinWorleyResolution;
+		}
+
+		auto const & getCurlResolution()const
+		{
+			return m_curlResolution;
+		}
+
+		auto const & getWeatherResolution()const
+		{
+			return m_weatherResolution;
+		}
+
 	private:
 		bool doInitialise( castor3d::RenderDevice const & device )override;
 		void doCleanup()override;
@@ -257,6 +277,10 @@ namespace atmosphere_scattering
 		castor3d::Texture m_multiScatter;
 		uint32_t m_volumeResolution{ 32u };
 		castor::Point2ui m_skyViewResolution{ 192u, 108u };
+		uint32_t m_worleyResolution{ 32u };
+		uint32_t m_perlinWorleyResolution{ 32u };
+		uint32_t m_curlResolution{ 32u };
+		uint32_t m_weatherResolution{ 32u };
 		mutable bool m_atmosphereChanged{ true };
 		std::unique_ptr< AtmosphereScatteringUbo > m_atmosphereUbo;
 		std::unique_ptr< AtmosphereTransmittancePass > m_transmittancePass;

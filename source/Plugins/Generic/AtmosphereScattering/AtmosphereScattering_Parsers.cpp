@@ -29,7 +29,7 @@ namespace atmosphere_scattering
 	{
 		auto & parsingContext = castor3d::getSceneParserContext( context );
 		auto & atmosphereContext = parser::getParserContext( context );
-		atmosphereContext.atmosphere = std::make_unique< AtmosphereBackground >( *parsingContext.parser->getEngine()
+		atmosphereContext.background = std::make_unique< AtmosphereBackground >( *parsingContext.parser->getEngine()
 			, *parsingContext.scene );
 	}
 	CU_EndAttributePush( AtmosphereSection::eRoot )
@@ -39,23 +39,25 @@ namespace atmosphere_scattering
 		auto & parsingContext = castor3d::getSceneParserContext( context );
 		auto & atmosphereContext = parser::getParserContext( context );
 
-		if ( !atmosphereContext.atmosphere->getNode() )
+		if ( !atmosphereContext.background->getNode() )
 		{
 			CU_ParsingError( cuT( "No node to attach the sun to..." ) );
 		}
 		else
 		{
-			atmosphereContext.config.multiScatteringLUTRes = float( atmosphereContext.multiScatter );
-			atmosphereContext.atmosphere->setAtmosphereCfg( std::move( atmosphereContext.config ) );
-			atmosphereContext.atmosphere->loadTransmittance( atmosphereContext.transmittance );
-			atmosphereContext.atmosphere->loadMultiScatter( atmosphereContext.multiScatter );
-			atmosphereContext.atmosphere->loadAtmosphereVolume( atmosphereContext.atmosphereVolume );
-			atmosphereContext.atmosphere->loadSkyView( atmosphereContext.skyView );
-			atmosphereContext.atmosphere->loadWorley( atmosphereContext.worley );
-			atmosphereContext.atmosphere->loadPerlinWorley( atmosphereContext.perlinWorley );
-			atmosphereContext.atmosphere->loadCurl( atmosphereContext.curl );
-			atmosphereContext.atmosphere->loadWeather( atmosphereContext.weather );
-			parsingContext.scene->setBackground( std::move( atmosphereContext.atmosphere ) );
+			atmosphereContext.atmosphere.multiScatteringLUTRes = float( atmosphereContext.multiScatterDim );
+			atmosphereContext.background->setAtmosphereCfg( std::move( atmosphereContext.atmosphere ) );
+			atmosphereContext.background->setCloudsCfg( std::move( atmosphereContext.clouds ) );
+			atmosphereContext.background->setWeatherCfg( std::move( atmosphereContext.weather ) );
+			atmosphereContext.background->loadTransmittance( atmosphereContext.transmittanceDim );
+			atmosphereContext.background->loadMultiScatter( atmosphereContext.multiScatterDim );
+			atmosphereContext.background->loadAtmosphereVolume( atmosphereContext.atmosphereVolumeDim );
+			atmosphereContext.background->loadSkyView( atmosphereContext.skyViewDim );
+			atmosphereContext.background->loadWorley( atmosphereContext.worleyDim );
+			atmosphereContext.background->loadPerlinWorley( atmosphereContext.perlinWorleyDim );
+			atmosphereContext.background->loadCurl( atmosphereContext.curlDim );
+			atmosphereContext.background->loadWeather( atmosphereContext.weatherDim );
+			parsingContext.scene->setBackground( std::move( atmosphereContext.background ) );
 		}
 	}
 	CU_EndAttributePop()
@@ -74,7 +76,7 @@ namespace atmosphere_scattering
 
 			if ( auto node = parsingContext.scene->findSceneNode( params[0]->get( name ) ).lock() )
 			{
-				atmosphereContext.atmosphere->setNode( *node );
+				atmosphereContext.background->setNode( *node );
 			}
 			else
 			{
@@ -93,7 +95,7 @@ namespace atmosphere_scattering
 		else
 		{
 			auto & atmosphereContext = parser::getParserContext( context );
-			params[0]->get( atmosphereContext.transmittance );
+			params[0]->get( atmosphereContext.transmittanceDim );
 		}
 	}
 	CU_EndAttribute()
@@ -107,7 +109,7 @@ namespace atmosphere_scattering
 		else
 		{
 			auto & atmosphereContext = parser::getParserContext( context );
-			params[0]->get( atmosphereContext.multiScatter );
+			params[0]->get( atmosphereContext.multiScatterDim );
 		}
 	}
 	CU_EndAttribute()
@@ -121,7 +123,7 @@ namespace atmosphere_scattering
 		else
 		{
 			auto & atmosphereContext = parser::getParserContext( context );
-			params[0]->get( atmosphereContext.atmosphereVolume );
+			params[0]->get( atmosphereContext.atmosphereVolumeDim );
 		}
 	}
 	CU_EndAttribute()
@@ -135,7 +137,7 @@ namespace atmosphere_scattering
 		else
 		{
 			auto & atmosphereContext = parser::getParserContext( context );
-			params[0]->get( atmosphereContext.skyView );
+			params[0]->get( atmosphereContext.skyViewDim );
 		}
 	}
 	CU_EndAttribute()
@@ -149,7 +151,7 @@ namespace atmosphere_scattering
 		else
 		{
 			auto & atmosphereContext = parser::getParserContext( context );
-			params[0]->get( atmosphereContext.config.sunIlluminance );
+			params[0]->get( atmosphereContext.atmosphere.sunIlluminance );
 		}
 	}
 	CU_EndAttribute()
@@ -163,7 +165,7 @@ namespace atmosphere_scattering
 		else
 		{
 			auto & atmosphereContext = parser::getParserContext( context );
-			params[0]->get( atmosphereContext.config.sunIlluminanceScale );
+			params[0]->get( atmosphereContext.atmosphere.sunIlluminanceScale );
 		}
 	}
 	CU_EndAttribute()
@@ -179,7 +181,7 @@ namespace atmosphere_scattering
 			auto & atmosphereContext = parser::getParserContext( context );
 			uint32_t value;
 			params[0]->get( value );
-			atmosphereContext.config.rayMarchMinMaxSPP[0] = float( value );
+			atmosphereContext.atmosphere.rayMarchMinMaxSPP[0] = float( value );
 		}
 	}
 	CU_EndAttribute()
@@ -195,7 +197,7 @@ namespace atmosphere_scattering
 			auto & atmosphereContext = parser::getParserContext( context );
 			uint32_t value;
 			params[0]->get( value );
-			atmosphereContext.config.rayMarchMinMaxSPP[1] = float( value );
+			atmosphereContext.atmosphere.rayMarchMinMaxSPP[1] = float( value );
 		}
 	}
 	CU_EndAttribute()
@@ -209,7 +211,7 @@ namespace atmosphere_scattering
 		else
 		{
 			auto & atmosphereContext = parser::getParserContext( context );
-			params[0]->get( atmosphereContext.config.multipleScatteringFactor );
+			params[0]->get( atmosphereContext.atmosphere.multipleScatteringFactor );
 		}
 	}
 	CU_EndAttribute()
@@ -223,7 +225,7 @@ namespace atmosphere_scattering
 		else
 		{
 			auto & atmosphereContext = parser::getParserContext( context );
-			params[0]->get( atmosphereContext.config.solarIrradiance );
+			params[0]->get( atmosphereContext.atmosphere.solarIrradiance );
 		}
 	}
 	CU_EndAttribute()
@@ -237,7 +239,7 @@ namespace atmosphere_scattering
 		else
 		{
 			auto & atmosphereContext = parser::getParserContext( context );
-			params[0]->get( atmosphereContext.config.sunAngularRadius );
+			params[0]->get( atmosphereContext.atmosphere.sunAngularRadius );
 		}
 	}
 	CU_EndAttribute()
@@ -251,7 +253,7 @@ namespace atmosphere_scattering
 		else
 		{
 			auto & atmosphereContext = parser::getParserContext( context );
-			params[0]->get( atmosphereContext.config.absorptionExtinction );
+			params[0]->get( atmosphereContext.atmosphere.absorptionExtinction );
 		}
 	}
 	CU_EndAttribute()
@@ -267,7 +269,7 @@ namespace atmosphere_scattering
 			auto & atmosphereContext = parser::getParserContext( context );
 			float value;
 			params[0]->get( value );
-			atmosphereContext.config.muSMin = float( castor::Angle::fromDegrees( value ).cos() );
+			atmosphereContext.atmosphere.muSMin = float( castor::Angle::fromDegrees( value ).cos() );
 		}
 	}
 	CU_EndAttribute()
@@ -281,7 +283,7 @@ namespace atmosphere_scattering
 		else
 		{
 			auto & atmosphereContext = parser::getParserContext( context );
-			params[0]->get( atmosphereContext.config.rayleighScattering );
+			params[0]->get( atmosphereContext.atmosphere.rayleighScattering );
 		}
 	}
 	CU_EndAttribute()
@@ -295,7 +297,7 @@ namespace atmosphere_scattering
 		else
 		{
 			auto & atmosphereContext = parser::getParserContext( context );
-			params[0]->get( atmosphereContext.config.mieScattering );
+			params[0]->get( atmosphereContext.atmosphere.mieScattering );
 		}
 	}
 	CU_EndAttribute()
@@ -309,7 +311,7 @@ namespace atmosphere_scattering
 		else
 		{
 			auto & atmosphereContext = parser::getParserContext( context );
-			params[0]->get( atmosphereContext.config.miePhaseFunctionG );
+			params[0]->get( atmosphereContext.atmosphere.miePhaseFunctionG );
 		}
 	}
 	CU_EndAttribute()
@@ -323,7 +325,7 @@ namespace atmosphere_scattering
 		else
 		{
 			auto & atmosphereContext = parser::getParserContext( context );
-			params[0]->get( atmosphereContext.config.mieExtinction );
+			params[0]->get( atmosphereContext.atmosphere.mieExtinction );
 		}
 	}
 	CU_EndAttribute()
@@ -337,7 +339,7 @@ namespace atmosphere_scattering
 		else
 		{
 			auto & atmosphereContext = parser::getParserContext( context );
-			params[0]->get( atmosphereContext.config.bottomRadius );
+			params[0]->get( atmosphereContext.atmosphere.bottomRadius );
 		}
 	}
 	CU_EndAttribute()
@@ -351,7 +353,7 @@ namespace atmosphere_scattering
 		else
 		{
 			auto & atmosphereContext = parser::getParserContext( context );
-			params[0]->get( atmosphereContext.config.topRadius );
+			params[0]->get( atmosphereContext.atmosphere.topRadius );
 		}
 	}
 	CU_EndAttribute()
@@ -365,7 +367,7 @@ namespace atmosphere_scattering
 		else
 		{
 			auto & atmosphereContext = parser::getParserContext( context );
-			params[0]->get( atmosphereContext.config.groundAlbedo );
+			params[0]->get( atmosphereContext.atmosphere.groundAlbedo );
 		}
 	}
 	CU_EndAttribute()
@@ -373,42 +375,42 @@ namespace atmosphere_scattering
 	CU_ImplementAttributeParser( parserMinRayleighDensity )
 	{
 		auto & atmosphereContext = parser::getParserContext( context );
-		atmosphereContext.densityLayer = &atmosphereContext.config.rayleighDensity[0];
+		atmosphereContext.densityLayer = &atmosphereContext.atmosphere.rayleighDensity[0];
 	}
 	CU_EndAttributePush( AtmosphereSection::eDensity )
 
 	CU_ImplementAttributeParser( parserMaxRayleighDensity )
 	{
 		auto & atmosphereContext = parser::getParserContext( context );
-		atmosphereContext.densityLayer = &atmosphereContext.config.rayleighDensity[1];
+		atmosphereContext.densityLayer = &atmosphereContext.atmosphere.rayleighDensity[1];
 	}
 	CU_EndAttributePush( AtmosphereSection::eDensity )
 
 	CU_ImplementAttributeParser( parserMinMieDensity )
 	{
 		auto & atmosphereContext = parser::getParserContext( context );
-		atmosphereContext.densityLayer = &atmosphereContext.config.mieDensity[0];
+		atmosphereContext.densityLayer = &atmosphereContext.atmosphere.mieDensity[0];
 	}
 	CU_EndAttributePush( AtmosphereSection::eDensity )
 
 	CU_ImplementAttributeParser( parserMaxMieDensity )
 	{
 		auto & atmosphereContext = parser::getParserContext( context );
-		atmosphereContext.densityLayer = &atmosphereContext.config.mieDensity[1];
+		atmosphereContext.densityLayer = &atmosphereContext.atmosphere.mieDensity[1];
 	}
 	CU_EndAttributePush( AtmosphereSection::eDensity )
 
 	CU_ImplementAttributeParser( parserMinAbsorptionDensity )
 	{
 		auto & atmosphereContext = parser::getParserContext( context );
-		atmosphereContext.densityLayer = &atmosphereContext.config.absorptionDensity[0];
+		atmosphereContext.densityLayer = &atmosphereContext.atmosphere.absorptionDensity[0];
 	}
 	CU_EndAttributePush( AtmosphereSection::eDensity )
 
 	CU_ImplementAttributeParser( parserMaxAbsorptionDensity )
 	{
 		auto & atmosphereContext = parser::getParserContext( context );
-		atmosphereContext.densityLayer = &atmosphereContext.config.absorptionDensity[1];
+		atmosphereContext.densityLayer = &atmosphereContext.atmosphere.absorptionDensity[1];
 	}
 	CU_EndAttributePush( AtmosphereSection::eDensity )
 
@@ -488,4 +490,310 @@ namespace atmosphere_scattering
 		atmosphereContext.densityLayer = nullptr;
 	}
 	CU_EndAttributePop()
+
+	CU_ImplementAttributeParser( parserWeather )
+	{
+	}
+	CU_EndAttributePush( AtmosphereSection::eWeather )
+
+	CU_ImplementAttributeParser( parserWeatherAmplitude )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & atmosphereContext = parser::getParserContext( context );
+			params[0]->get( atmosphereContext.weather.perlinAmplitude );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserWeatherFrequency )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & atmosphereContext = parser::getParserContext( context );
+			params[0]->get( atmosphereContext.weather.perlinFrequency );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserWeatherScale )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & atmosphereContext = parser::getParserContext( context );
+			params[0]->get( atmosphereContext.weather.perlinScale );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserWeatherOctaves )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & atmosphereContext = parser::getParserContext( context );
+			params[0]->get( atmosphereContext.weather.perlinOctaves );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserWorleyResolution )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & atmosphereContext = parser::getParserContext( context );
+			params[0]->get( atmosphereContext.worleyDim );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserPerlinWorleyResolution )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & atmosphereContext = parser::getParserContext( context );
+			params[0]->get( atmosphereContext.perlinWorleyDim );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserCurlResolution )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & atmosphereContext = parser::getParserContext( context );
+			params[0]->get( atmosphereContext.curlDim );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserWeatherResolution )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & atmosphereContext = parser::getParserContext( context );
+			params[0]->get( atmosphereContext.weatherDim );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserClouds )
+	{
+	}
+	CU_EndAttributePush( AtmosphereSection::eClouds )
+
+	CU_ImplementAttributeParser( parserCloudsWindDirection )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & atmosphereContext = parser::getParserContext( context );
+			params[0]->get( atmosphereContext.clouds.windDirection );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserCloudsSpeed )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & atmosphereContext = parser::getParserContext( context );
+			params[0]->get( atmosphereContext.clouds.cloudSpeed );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserCloudsCoverage )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & atmosphereContext = parser::getParserContext( context );
+			params[0]->get( atmosphereContext.clouds.coverage );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserCloudsCrispiness )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & atmosphereContext = parser::getParserContext( context );
+			params[0]->get( atmosphereContext.clouds.crispiness );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserCloudsCurliness )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & atmosphereContext = parser::getParserContext( context );
+			params[0]->get( atmosphereContext.clouds.curliness );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserCloudsDensity )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & atmosphereContext = parser::getParserContext( context );
+			params[0]->get( atmosphereContext.clouds.density );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserCloudsAbsorption )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & atmosphereContext = parser::getParserContext( context );
+			params[0]->get( atmosphereContext.clouds.absorption );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserCloudsInnerRadius )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & atmosphereContext = parser::getParserContext( context );
+			params[0]->get( atmosphereContext.clouds.sphereInnerRadius );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserCloudsOuterRadius )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & atmosphereContext = parser::getParserContext( context );
+			params[0]->get( atmosphereContext.clouds.sphereOuterRadius );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserCloudsTopColour )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & atmosphereContext = parser::getParserContext( context );
+			params[0]->get( atmosphereContext.clouds.cloudColorTop );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserCloudsBottomColour )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & atmosphereContext = parser::getParserContext( context );
+			params[0]->get( atmosphereContext.clouds.cloudColorBottom );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserCloudsEnablePowder )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & atmosphereContext = parser::getParserContext( context );
+			bool value{};
+			params[0]->get( value );
+			atmosphereContext.clouds.enablePowder = value ? 1 : 0;;
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserCloudsTopOffset )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & atmosphereContext = parser::getParserContext( context );
+			params[0]->get( atmosphereContext.clouds.cloudTopOffset );
+		}
+	}
+	CU_EndAttribute()
 }
