@@ -121,7 +121,7 @@ namespace atmosphere_scattering
 
 					//compute background color
 					auto isky = writer.declLocale( "isky"
-						, raySphereIntersect( ray, atmosphere.getEarthRadius() ) );
+						, atmosphere.raySphereIntersectNearest( ray, atmosphere.getEarthRadius() ) );
 
 					IF( writer, !isky.valid() )
 					{
@@ -141,8 +141,8 @@ namespace atmosphere_scattering
 					IF( writer, ray.origin.y() < sphereInnerRadius )
 					{
 						// Ray below clouds boundaries.
-						startPos = raySphereIntersect( ray, sphereInnerRadius ).point();
-						endPos = raySphereIntersect( ray, sphereOuterRadius ).point();
+						startPos = atmosphere.raySphereIntersectNearest( ray, sphereInnerRadius ).point();
+						endPos = atmosphere.raySphereIntersectNearest( ray, sphereOuterRadius ).point();
 						fogRay = startPos;
 					}
 					ELSEIF( ray.origin.y() > sphereInnerRadius
@@ -150,9 +150,9 @@ namespace atmosphere_scattering
 					{
 						// Ray inside clouds boundaries.
 						startPos = ray.origin;
-						endPos = raySphereIntersect( ray, sphereOuterRadius ).point();
+						endPos = atmosphere.raySphereIntersectNearest( ray, sphereOuterRadius ).point();
 						auto ifog = writer.declLocale( "ifog"
-							, raySphereIntersect( ray, sphereInnerRadius ) );
+							, atmosphere.raySphereIntersectNearest( ray, sphereInnerRadius ) );
 
 						IF( writer, ifog.valid() )
 						{
@@ -167,9 +167,9 @@ namespace atmosphere_scattering
 					ELSE
 					{
 						// Ray over clouds.
-						startPos = raySphereIntersect( ray, sphereOuterRadius ).point();
-						endPos = raySphereIntersect( ray, sphereInnerRadius ).point();
-						fogRay = raySphereIntersect( ray, sphereOuterRadius ).point();
+						startPos = atmosphere.raySphereIntersectNearest( ray, sphereOuterRadius ).point();
+						endPos = atmosphere.raySphereIntersectNearest( ray, sphereInnerRadius ).point();
+						fogRay = atmosphere.raySphereIntersectNearest( ray, sphereOuterRadius ).point();
 					}
 					FI;
 
@@ -276,8 +276,9 @@ namespace atmosphere_scattering
 					auto baseGradient = writer.declLocale( "baseGradient"
 						, stratusFactor * stratusGradient + stratoCumulusFactor * stratocumulusGradient + cumulusFactor * cumulusGradient );
 
-					// gradicent computation (see Siggraph 2017 Nubis-Decima talk)
-					//return remap(heightFraction, baseGradient.x, baseGradient.y, 0.0, 1.0) * remap(heightFraction, baseGradient.z, baseGradient.w, 1.0, 0.0);
+					// gradient computation (see Siggraph 2017 Nubis-Decima talk)
+					//writer.returnStmt( utils.remap( heightFraction, baseGradient.x(), baseGradient.y(), 0.0_f, 1.0_f )
+					//	* utils.remap( heightFraction, baseGradient.z(), baseGradient.w(), 1.0_f, 0.0_f ) );
 					writer.returnStmt( smoothStep( baseGradient.x(), baseGradient.y(), heightFraction )
 						- smoothStep( baseGradient.z(), baseGradient.w(), heightFraction ) );
 				}
@@ -769,49 +770,6 @@ namespace atmosphere_scattering
 		}
 
 		return m_raySphereintersectSkyMap( prd
-			, pradius );
-	}
-
-	RetIntersection CloudsModel::raySphereIntersect( Ray const & pray
-		, sdw::Float const & pradius )
-	{
-		if ( !m_raySphereIntersect )
-		{
-			m_raySphereIntersect = writer.implementFunction< Intersection >( "clouds_raySphereIntersect"
-				, [&]( Ray const & ray
-					, sdw::Float const & radius )
-				{
-					auto result = writer.declLocale< Intersection >( "result" );
-					result.valid() = 0_b;
-					auto L = writer.declLocale( "L", ray.origin );
-					auto a = writer.declLocale( "a", dot( ray.direction, ray.direction ) );
-					auto b = writer.declLocale( "b", 2.0_f * dot( ray.direction, L ) );
-					auto c = writer.declLocale( "c", dot( L, L ) - ( radius * radius ) );
-					auto delta = writer.declLocale( "delta", b * b - 4.0_f * a * c );
-
-					IF( writer, delta < 0.0_f )
-					{
-						writer.returnStmt( result );
-					}
-					FI;
-
-					auto t = writer.declLocale( "t", max( 0.0_f, ( -b + sqrt( delta ) ) / 2.0_f ) );
-
-					IF( writer, t == 0.0_f )
-					{
-						writer.returnStmt( result );
-					}
-					FI;
-
-					result.point() = ray.step( t );
-					result.valid() = 1_b;
-					writer.returnStmt( result );
-				}
-				, InRay{ writer, "ray" }
-				, sdw::InFloat{ writer, "radius" } );
-		}
-
-		return m_raySphereIntersect( pray
 			, pradius );
 	}
 
