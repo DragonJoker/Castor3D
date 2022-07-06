@@ -182,6 +182,14 @@ namespace atmosphere_scattering
 				, cuT( "maxAbsorptionDensity" )
 				, &parserMaxAbsorptionDensity );
 			addParser( result
+				, uint32_t( AtmosphereSection::eRoot )
+				, cuT( "weather" )
+				, &parserWeather );
+			addParser( result
+				, uint32_t( AtmosphereSection::eRoot )
+				, cuT( "clouds" )
+				, &parserClouds );
+			addParser( result
 				, uint32_t( AtmosphereSection::eDensity )
 				, cuT( "layerWidth" )
 				, &parserDensityLayerWidth
@@ -206,6 +214,111 @@ namespace atmosphere_scattering
 				, cuT( "constantTerm" )
 				, &parserDensityConstantTerm
 				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eWeather )
+				, cuT( "worleyResolution" )
+				, &parserWorleyResolution
+				, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eWeather )
+				, cuT( "perlinWorleyResolution" )
+				, &parserPerlinWorleyResolution
+				, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eWeather )
+				, cuT( "weatherResolution" )
+				, &parserWeatherResolution
+				, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eWeather )
+				, cuT( "curlResolution" )
+				, &parserCurlResolution
+				, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eWeather )
+				, cuT( "amplitude" )
+				, &parserWeatherAmplitude
+				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eWeather )
+				, cuT( "frequency" )
+				, &parserWeatherFrequency
+				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eWeather )
+				, cuT( "scale" )
+				, &parserWeatherScale
+				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eWeather )
+				, cuT( "octaves" )
+				, &parserWeatherOctaves
+				, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eClouds )
+				, cuT( "windDirection" )
+				, &parserCloudsWindDirection
+				, { castor::makeParameter< castor::ParameterType::ePoint3F >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eClouds )
+				, cuT( "speed" )
+				, &parserCloudsSpeed
+				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eClouds )
+				, cuT( "coverage" )
+				, &parserCloudsCoverage
+				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eClouds )
+				, cuT( "cripsiness" )
+				, &parserCloudsCrispiness
+				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eClouds )
+				, cuT( "curliness" )
+				, &parserCloudsCurliness
+				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eClouds )
+				, cuT( "density" )
+				, &parserCloudsDensity
+				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eClouds )
+				, cuT( "absorption" )
+				, &parserCloudsAbsorption
+				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eClouds )
+				, cuT( "innerRadius" )
+				, &parserCloudsInnerRadius
+				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eClouds )
+				, cuT( "outerRadius" )
+				, &parserCloudsOuterRadius
+				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eClouds )
+				, cuT( "topColour" )
+				, &parserCloudsTopColour
+				, { castor::makeParameter< castor::ParameterType::ePoint3F >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eClouds )
+				, cuT( "bottomColour" )
+				, &parserCloudsBottomColour
+				, { castor::makeParameter< castor::ParameterType::ePoint3F >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eClouds )
+				, cuT( "enablePowder" )
+				, &parserCloudsEnablePowder
+				, { castor::makeParameter< castor::ParameterType::eBool >() } );
+			addParser( result
+				, uint32_t( AtmosphereSection::eClouds )
+				, cuT( "topOffset" )
+				, &parserCloudsTopOffset
+				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 
 			return result;
 		}
@@ -216,6 +329,8 @@ namespace atmosphere_scattering
 			{
 				{ uint32_t( AtmosphereSection::eRoot ), PluginType },
 				{ uint32_t( AtmosphereSection::eDensity ), "density" },
+				{ uint32_t( AtmosphereSection::eWeather ), "weather" },
+				{ uint32_t( AtmosphereSection::eClouds ), "clouds" },
 			};
 		}
 
