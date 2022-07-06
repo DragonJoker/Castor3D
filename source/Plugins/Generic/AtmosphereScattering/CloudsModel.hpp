@@ -65,16 +65,13 @@ namespace atmosphere_scattering
 			, sdw::Vec3 const & lightDir
 			, sdw::Float const & originalDensity
 			, sdw::Float const & lightDotEye
-			, sdw::Vec3 & cloudEndPos
 			, sdw::Float & densityAlongLight );
-		sdw::RetVec4 raymarchToCloud( Ray const & ray
+		sdw::RetVec3 raymarchToCloud( Ray const & ray
 			, sdw::Vec3 const & startPos
 			, sdw::Vec3 const & endPos
 			, sdw::Vec3 const & bg
 			, sdw::IVec2 const & fragCoord
 			, sdw::Vec3 const & sunColor
-			, sdw::Vec3 & cloudStartPos
-			, sdw::Vec3 & cloudEndPos
 			, sdw::Float & accumDensity );
 		sdw::RetFloat computeFogAmount( sdw::Vec3 const & startPos
 			, sdw::Vec3 const & wolrdPos
@@ -135,17 +132,14 @@ namespace atmosphere_scattering
 			, sdw::InVec3
 			, sdw::InFloat
 			, sdw::InFloat
-			, sdw::OutVec3
 			, sdw::OutFloat > m_raymarchToLight;
-		sdw::Function< sdw::Vec4
+		sdw::Function< sdw::Vec3
 			, InRay
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InIVec2
 			, sdw::InVec3
-			, sdw::OutVec3
-			, sdw::OutVec3
 			, sdw::OutFloat > m_raymarchToCloud;
 		sdw::Function< sdw::Float
 			, sdw::InVec3
