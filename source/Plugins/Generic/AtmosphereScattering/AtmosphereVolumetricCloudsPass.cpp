@@ -131,8 +131,8 @@ namespace atmosphere_scattering
 				, false /*colorTransmittance*/
 				, true /*fastSky*/
 				, true /*fastAerialPerspective*/
-				, true /*renderSunDisk*/
-				, false /*bloomSunDisk*/
+				, false /*renderSunDisk*/
+				, true /*bloomSunDisk*/
 				, uint32_t( Bindings::eTransmittance ) };
 			CloudsModel clouds{ writer
 				, utils
