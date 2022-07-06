@@ -53,8 +53,12 @@ namespace atmosphere_scattering
 
 					if ( m_bloomSunDisk )
 					{
-						auto sunSolidAngle = m_writer.declLocale( "sunSolidAngle"
+						auto sunMinSolidAngle = m_writer.declLocale( "sunMinSolidAngle"
 							, 0.053_f * sdw::Float{ castor::Pi< float > } / 180.0_f );
+						auto sunMaxSolidAngle = m_writer.declLocale( "sunMaxSolidAngle"
+							, sunMinSolidAngle * 10.0_f );
+						auto sunSolidAngle = m_writer.declLocale( "sunSolidAngle"
+							, doGetSunAngle( sunDir, sunMinSolidAngle, sunMaxSolidAngle ) );
 						auto minSunCosTheta = m_writer.declLocale( "minSunCosTheta"
 							, cos( sunSolidAngle ) );
 						auto cosTheta = m_writer.declLocale( "cosTheta"
@@ -96,8 +100,12 @@ namespace atmosphere_scattering
 					}
 					else
 					{
+						auto sunMinSolidAngle = m_writer.declLocale( "sunMinSolidAngle"
+							, 0.53_f * sdw::Float{ castor::Pi< float > } / 180.0_f );
+						auto sunMaxSolidAngle = m_writer.declLocale( "sunMaxSolidAngle"
+							, sunMinSolidAngle * 2.0_f );
 						auto sunSolidAngle = m_writer.declLocale( "sunSolidAngle"
-							, 0.5_f * 0.505_f * sdw::Float{ castor::Pi< float > } / 180.0_f );
+							, doGetSunAngle( sunDir, sunMinSolidAngle, sunMaxSolidAngle ) );
 						auto minSunCosTheta = m_writer.declLocale( "minSunCosTheta"
 							, cos( sunSolidAngle ) );
 						auto cosTheta = m_writer.declLocale( "cosTheta"
@@ -447,5 +455,15 @@ namespace atmosphere_scattering
 				, dot( throughput, vec3( 1.0_f / 3.0_f ) ) );
 			luminance = vec4( L, 1.0_f - t );
 		}
+	}
+
+	sdw::Float ScatteringModel::doGetSunAngle( sdw::Vec3 const & sunDir
+		, sdw::Float const & minAngle
+		, sdw::Float const & maxAngle )const
+	{
+		auto sunZenithCosAngle = m_writer.declLocale( "sunZenithCosAngle"
+			, dot( sunDir, normalize( m_atmosphere.getCameraPositionFromEarth() ) ) );
+		return minAngle * sunZenithCosAngle
+			+ maxAngle * ( 1.0_f - sunZenithCosAngle );
 	}
 }

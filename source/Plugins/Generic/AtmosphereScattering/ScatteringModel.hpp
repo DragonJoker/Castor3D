@@ -55,6 +55,9 @@ namespace atmosphere_scattering
 			, sdw::Vec3 & L
 			, sdw::Vec4 & luminance
 			, sdw::Vec4 & transmittance );
+		sdw::Float doGetSunAngle( sdw::Vec3 const & sunDir
+			, sdw::Float const & minAngle
+			, sdw::Float const & maxAngle )const;
 
 	private:
 		sdw::ShaderWriter & m_writer;
