@@ -177,6 +177,11 @@ namespace atmosphere_scattering
 			return atmosphereData.topRadius;
 		}
 
+		auto getAtmosphereThickness()const
+		{
+			return getAtmosphereRadius() - getEarthRadius();
+		}
+
 		auto getCameraPosition()const
 		{
 			return luminanceSettings.cameraData->position();
