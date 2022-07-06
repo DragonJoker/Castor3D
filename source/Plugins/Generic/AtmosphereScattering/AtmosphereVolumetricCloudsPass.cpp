@@ -82,7 +82,6 @@ namespace atmosphere_scattering
 			eWeatherMap,
 			eOutColour,
 			eOutEmission,
-			eOutDistance,
 			eCount,
 		};
 
@@ -150,9 +149,6 @@ namespace atmosphere_scattering
 				auto outEmission = writer.declStorageImg< sdw::WImage2DRgba32 >("outEmission"
 					, uint32_t( Bindings::eOutEmission )
 					, 0u );
-				auto outDistance = writer.declStorageImg< sdw::WImage2DRgba32 >("outDistance"
-					, uint32_t( Bindings::eOutDistance )
-					, 0u );
 
 				ShaderWriter< useCompute >::implementMain( writer
 					, [&]( sdw::IVec2 const & fragCoord )
@@ -165,15 +161,12 @@ namespace atmosphere_scattering
 							, transmittance
 							, luminance );
 						luminance = scattering.rescaleLuminance( luminance );
-						auto distance = writer.declLocale( "distance", vec4( 0.0_f ) );
 						auto emission = writer.declLocale( "emission", vec4( 0.0_f ) );
 						clouds.applyClouds( fragCoord
 							, targetSize
 							, luminance
-							, emission
-							, distance );
+							, emission );
 						outColour.store( fragCoord, luminance );
-						outDistance.store( fragCoord, distance );
 						outEmission.store( fragCoord, emission );
 					} );
 			}
@@ -181,7 +174,6 @@ namespace atmosphere_scattering
 			{
 				auto outColour = writer.declOutput< sdw::Vec4 >( "outColour", 0u );
 				auto outEmission = writer.declOutput< sdw::Vec4 >( "outEmission", 1u );
-				auto outDistance = writer.declOutput< sdw::Vec4 >( "outDistance", 2u );
 
 				ShaderWriter< useCompute >::implementMain( writer
 					, [&]( sdw::IVec2 const & fragCoord )
@@ -199,10 +191,8 @@ namespace atmosphere_scattering
 						clouds.applyClouds( fragCoord
 							, targetSize
 							, luminance
-							, emission
-							, distance );
+							, emission );
 						outColour = luminance;
-						outDistance = distance;
 						outEmission = emission;
 					} );
 			}
@@ -229,7 +219,6 @@ namespace atmosphere_scattering
 		, crg::ImageViewId const & weather
 		, crg::ImageViewId const & colourResult
 		, crg::ImageViewId const & emissionResult
-		, crg::ImageViewId const & distanceResult
 		, uint32_t index )
 		: castor::Named{ "VolumetricCloudsPass" + castor::string::toString( index ) }
 		, m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT
@@ -341,14 +330,11 @@ namespace atmosphere_scattering
 				, weather::eOutColour );
 			pass.addOutputStorageView( emissionResult
 				, weather::eOutEmission );
-			pass.addOutputStorageView( distanceResult
-				, weather::eOutDistance );
 		}
 		else
 		{
 			pass.addOutputColourView( colourResult );
 			pass.addOutputColourView( emissionResult );
-			pass.addOutputColourView( distanceResult );
 		}
 
 		m_lastPass = &pass;
