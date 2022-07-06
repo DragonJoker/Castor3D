@@ -137,7 +137,7 @@ namespace atmosphere_scattering
 			AtmosphereModel atmosphere{ writer
 				, utils
 				, c3d_atmosphereData
-				, { false, nullptr, false, true }
+				, { &c3d_cameraData, false, false, false, true }
 				, { transmittanceExtent.width, transmittanceExtent.height } };
 			atmosphere.setTransmittanceMap( transmittanceMap );
 
@@ -158,20 +158,10 @@ namespace atmosphere_scattering
 						, vec2( sdw::Float{ float( renderSize.width + 1u ) }, float( renderSize.height + 1u ) ) );
 					auto sampleCountIni = writer.declLocale( "sampleCountIni"
 						, max( 1.0_f, writer.cast< sdw::Float >( sliceId + 1_i ) * 2.0_f ) );
-
-					auto clipSpace = writer.declLocale( "clipSpace"
-						, atmosphere.getClipSpace( pixPos, targetSize, 0.5_f ) );
-					auto hPos = writer.declLocale( "hPos"
-						, c3d_cameraData.camProjToWorld( vec4( clipSpace, 1.0_f ) ) );
-					auto earthR = writer.declLocale( "earthR"
-						, c3d_atmosphereData.bottomRadius );
-					auto camPos = writer.declLocale( "camPos"
-						, c3d_cameraData.position() + vec3( 0.0_f, earthR, 0.0_f ) );
+					auto ray = writer.declLocale( "ray"
+						, atmosphere.castRay( pixPos, targetSize ) );
 					auto sunLuminance = writer.declLocale( "sunLuminance"
 						, 0.0_f );
-					auto ray = writer.declLocale< Ray >( "ray" );
-					ray.origin = camPos;
-					ray.direction = normalize( hPos.xyz() / hPos.w() - c3d_cameraData.position() );
 
 					auto slice = writer.declLocale( "slice"
 						, ( ( writer.cast< sdw::Float >( sliceId ) + 0.5_f ) / apSliceCount ) );
@@ -193,8 +183,8 @@ namespace atmosphere_scattering
 					{
 						// Apply a position offset to make sure no artefact are visible close to the earth boundaries for large voxel.
 						newWorldPos = normalize( newWorldPos ) * ( c3d_atmosphereData.bottomRadius + planetRadiusOffset + 0.001_f );
-						ray.direction = normalize( newWorldPos - camPos );
-						tMax = length( newWorldPos - camPos );
+						ray.direction = normalize( newWorldPos - ray.origin );
+						tMax = length( newWorldPos - ray.origin );
 					}
 					FI;
 

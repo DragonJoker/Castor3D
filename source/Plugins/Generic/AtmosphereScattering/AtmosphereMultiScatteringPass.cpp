@@ -67,7 +67,7 @@ namespace atmosphere_scattering
 			AtmosphereModel atmosphere{ writer
 				, utils
 				, c3d_atmosphereData
-				, { true, nullptr, false, false }
+				, { nullptr, true, false, false, false }
 				, { transmittanceExtent.width, transmittanceExtent.height } };
 			atmosphere.setTransmittanceMap( transmittanceMap );
 

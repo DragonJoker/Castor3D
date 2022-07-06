@@ -152,13 +152,8 @@ namespace atmosphere_scattering
 					, sdw::Vec4 transmittance
 					, sdw::Vec4 luminance )
 				{
-					auto clipSpace = m_writer.declLocale( "clipSpace"
-						, m_atmosphere.getClipSpace( fragPos, fragSize, 1.0_f ) );
-					auto hPos = m_writer.declLocale( "hPos"
-						, m_atmosphere.camProjToWorld( vec4( clipSpace, 1.0_f ) ) );
-					auto ray = m_writer.declLocale< Ray >( "ray" );
-					ray.origin = m_atmosphere.getCameraPosition() + vec3( 0.0_f, m_atmosphere.getEarthRadius(), 0.0_f );
-					ray.direction = normalize( hPos.xyz() / hPos.w() - m_atmosphere.getCameraPosition() );
+					auto ray = m_writer.declLocale( "ray"
+						, m_atmosphere.castRay( fragPos, fragSize ) );
 					auto L = m_writer.declLocale( "L"
 						, vec3( 0.0_f ) );
 					doRenderSky( fragSize
@@ -241,13 +236,8 @@ namespace atmosphere_scattering
 					, sdw::Vec4 transmittance
 					, sdw::Vec4 luminance )
 				{
-					auto clipSpace = m_writer.declLocale( "clipSpace"
-						, m_atmosphere.getClipSpace( fragPos, fragSize, 1.0_f ) );
-					auto hPos = m_writer.declLocale( "hPos"
-						, m_atmosphere.camProjToWorld( vec4( clipSpace, 1.0_f ) ) );
-					auto ray = m_writer.declLocale< Ray >( "ray" );
-					ray.origin = m_atmosphere.getCameraPosition() + vec3( 0.0_f, m_atmosphere.getEarthRadius(), 0.0_f );
-					ray.direction = normalize( hPos.xyz() / hPos.w() - m_atmosphere.getCameraPosition() );
+					auto ray = m_writer.declLocale( "ray"
+						, m_atmosphere.castRay( fragPos, fragSize ) );
 					auto L = m_writer.declLocale( "L"
 						, vec3( 0.0_f ) );
 					doRenderSky( fragSize

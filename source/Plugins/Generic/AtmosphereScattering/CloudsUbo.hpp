@@ -74,7 +74,7 @@ namespace atmosphere_scattering
 		using Configuration = CloudsConfig;
 
 	public:
-		explicit CloudsUbo( castor3d::RenderDevice const & device
+		CloudsUbo( castor3d::RenderDevice const & device
 			, bool & dirty );
 		~CloudsUbo();
 		void cpuUpdate( Configuration const & config

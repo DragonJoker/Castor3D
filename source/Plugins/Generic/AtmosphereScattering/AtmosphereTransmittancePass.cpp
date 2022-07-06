@@ -62,7 +62,7 @@ namespace atmosphere_scattering
 			AtmosphereModel atmosphere{ writer
 				, utils
 				, c3d_atmosphereData
-				, { false, nullptr, false, false } };
+				, { nullptr, false, false, false, false } };
 
 			writer.implementMainT< sdw::VoidT, sdw::VoidT >( sdw::FragmentIn{ writer }
 				, sdw::FragmentOut{ writer }

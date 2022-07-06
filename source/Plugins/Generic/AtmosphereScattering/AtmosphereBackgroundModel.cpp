@@ -36,7 +36,7 @@ namespace atmosphere_scattering
 		, m_atmosphere{ m_writer
 			, m_utils
 			, m_atmosphereData
-			, { false, &m_cameraData, true, true }
+			, { &m_cameraData, false, true, true, true }
 			, { 256u, 64u } }
 		, m_scattering{ m_writer
 			, m_atmosphere

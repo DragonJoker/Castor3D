@@ -138,8 +138,9 @@ namespace atmosphere_scattering
 
 	struct LuminanceSettings
 	{
+		CameraData const * cameraData{};
 		bool useGround{};
-		CameraData const * cameraData;
+		bool useDepthBuffer{};
 		bool variableSampleCount{};
 		bool mieRayPhase{};
 
@@ -206,11 +207,10 @@ namespace atmosphere_scattering
 			multiScatTexture = &value;
 		}
 
-		sdw::Vec3 getClipSpace( sdw::Vec2 const & fragPos
-			, sdw::Vec2 const & fragSize
-			, sdw::Float const & fragDepth );
-		sdw::Vec3 getClipSpace( sdw::Vec2 const & uv
-			, sdw::Float const & fragDepth );
+		sdw::Vec3 getCameraPositionFromEarth()const;
+		RetRay castRay( sdw::Vec2 const & uv );
+		RetRay castRay( sdw::Vec2 const & screenPoint
+			, sdw::Vec2 const & screenSize );
 		sdw::RetVec3 getMultipleScattering( sdw::Vec3 const & scattering
 			, sdw::Vec3 const & extinction
 			, sdw::Vec3 const & worldPos
@@ -252,6 +252,8 @@ namespace atmosphere_scattering
 		//   or -1.0 if no intersection.
 		RetIntersection raySphereIntersectNearest( Ray const & ray
 			, sdw::Vec3 const & sphereCenter
+			, sdw::Float const & sphereRadius );
+		RetIntersection raySphereIntersectNearest( Ray const & ray
 			, sdw::Float const & sphereRadius );
 
 		// Reference implementation (i.e. not schlick approximation). 
@@ -361,6 +363,8 @@ namespace atmosphere_scattering
 		std::shared_ptr< castor3d::shader::Shadow > shadows;
 
 	private:
+		sdw::Function< Ray
+			, sdw::InVec2 > m_castRay;
 		sdw::Function< SingleScatteringResult
 			, sdw::InVec2
 			, InRay

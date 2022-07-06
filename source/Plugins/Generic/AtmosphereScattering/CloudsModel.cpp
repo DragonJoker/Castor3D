@@ -98,8 +98,7 @@ namespace atmosphere_scattering
 	sdw::Void CloudsModel::applyClouds( sdw::IVec2 const & pfragCoord
 		, sdw::Vec2 const & ptargetSize
 		, sdw::Vec4 & pbg
-		, sdw::Vec4 & pemission
-		, sdw::Vec4 & pdistance )
+		, sdw::Vec4 & pemission )
 	{
 		if ( !m_applyClouds )
 		{
@@ -107,17 +106,10 @@ namespace atmosphere_scattering
 				, [&]( sdw::IVec2 const & fragCoord
 					, sdw::Vec2 const & targetSize
 					, sdw::Vec4 bg
-					, sdw::Vec4 emission
-					, sdw::Vec4 distance )
+					, sdw::Vec4 emission )
 				{
-					auto clipSpace = writer.declLocale( "clipSpace"
-						, atmosphere.getClipSpace( vec2( fragCoord ), targetSize, 1.0_f ) );
-					auto hPos = writer.declLocale( "hPos"
-						, atmosphere.camProjToWorld( vec4( clipSpace, 1.0_f ) ) );
-					auto ray = writer.declLocale< Ray >( "ray" );
-					ray.origin = atmosphere.getCameraPosition() + vec3( 0.0_f, atmosphere.getEarthRadius(), 0.0_f );
-					ray.direction = normalize( hPos.xyz() / hPos.w() - atmosphere.getCameraPosition() );
-
+					auto ray = writer.declLocale( "ray"
+						, atmosphere.castRay( vec2( fragCoord ), targetSize ) );
 					auto startPos = writer.declLocale( "startPos"
 						, vec3( 0.0_f ) );
 					auto endPos = writer.declLocale( "endPos"
@@ -188,7 +180,6 @@ namespace atmosphere_scattering
 					IF( writer, fogAmount > 0.965_f )
 					{
 						emission = bg;
-						distance = vec4( -1.0_f );
 						writer.returnStmt(); //early exit
 					}
 					FI;
@@ -249,20 +240,17 @@ namespace atmosphere_scattering
 
 					bg.a() = alphaness.r();
 					emission = bloom;
-					distance = cloudDistance;
 				}
 				, sdw::InIVec2{ writer, "fragCoord" }
 				, sdw::InVec2{ writer, "targetSize" }
 				, sdw::InOutVec4{ writer, "bg" }
-				, sdw::OutVec4{ writer, "emission" }
-				, sdw::OutVec4{ writer, "distance" } );
+				, sdw::OutVec4{ writer, "emission" } );
 		}
 
 		return m_applyClouds( pfragCoord
 			, ptargetSize
 			, pbg
-			, pemission
-			, pdistance );
+			, pemission );
 	}
 
 	sdw::RetFloat CloudsModel::getDensityHeightGradientForPoint( sdw::Float const & pheightFraction
