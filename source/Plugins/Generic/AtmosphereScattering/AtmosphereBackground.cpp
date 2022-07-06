@@ -184,19 +184,6 @@ namespace atmosphere_scattering
 			, VK_FILTER_LINEAR
 			, VK_SAMPLER_MIPMAP_MODE_NEAREST
 			, VK_SAMPLER_ADDRESS_MODE_REPEAT }
-		, cloudsDistance{ device
-			, graph.getHandler()
-			, "CloudsDistance" + std::to_string( index )
-			, 0u
-			, { size.width, size.height, 1u }
-			, 1u
-			, 1u
-			, VK_FORMAT_R16G16B16A16_SFLOAT
-			, VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-			, VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR
-			, VK_SAMPLER_MIPMAP_MODE_NEAREST
-			, VK_SAMPLER_ADDRESS_MODE_REPEAT }
 		, cloudsResult{ device
 			, graph.getHandler()
 			, "CloudsResult" + std::to_string( index )
@@ -245,7 +232,6 @@ namespace atmosphere_scattering
 			, weather
 			, cloudsColour.targetViewId
 			, cloudsEmission.targetViewId
-			, cloudsDistance.targetViewId
 			, index ) }
 		, cloudsResolvePass{ std::make_unique< AtmosphereCloudsResolvePass >( graph
 			, crg::FramePassArray{ &volumetricCloudsPass->getLastPass() }
@@ -261,7 +247,6 @@ namespace atmosphere_scattering
 		volume.create();
 		cloudsColour.create();
 		cloudsEmission.create();
-		cloudsDistance.create();
 		cloudsResult.create();
 		auto & pass = graph.createPass( "Background"
 			, [&background, &backgroundPass, &device, size]( crg::FramePass const & framePass
@@ -296,7 +281,6 @@ namespace atmosphere_scattering
 		volume.destroy();
 		cloudsColour.destroy();
 		cloudsEmission.destroy();
-		cloudsDistance.destroy();
 		cloudsResult.destroy();
 	}
 
@@ -312,10 +296,6 @@ namespace atmosphere_scattering
 			, castor3d::TextureFactors{}.invert( true ) );
 		visitor.visit( "Clouds Emission"
 			, cloudsEmission
-			, VK_IMAGE_LAYOUT_GENERAL
-			, castor3d::TextureFactors{}.invert( true ) );
-		visitor.visit( "Clouds Distance"
-			, cloudsDistance
 			, VK_IMAGE_LAYOUT_GENERAL
 			, castor3d::TextureFactors{}.invert( true ) );
 		visitor.visit( "Clouds Result"
@@ -475,7 +455,7 @@ namespace atmosphere_scattering
 
 		visitor.visit( "Weather Result"
 			, m_weather
-			, VK_IMAGE_LAYOUT_GENERAL
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, castor3d::TextureFactors{}.invert( true ) );
 		visitor.visit( "Curl Noise"
 			, m_curl
@@ -767,15 +747,16 @@ namespace atmosphere_scattering
 
 	void AtmosphereBackground::doCpuUpdate( castor3d::CpuUpdater & updater )const
 	{
-		CU_Require( m_node );
-		m_atmosphereChanged = false;
-		auto sunDirection = m_atmosphereUbo->cpuUpdate( m_atmosphereCfg, *m_node );
 		m_generateWorley = m_generateWorley && m_first;
 		m_generatePerlinWorley = m_generatePerlinWorley && m_first;
 		m_generateCurl = m_generateCurl && m_first;
+		m_atmosphereChanged = m_first;
 		m_weatherChanged = m_first;
 		m_cloudsChanged = m_first;
 		m_first = false;
+
+		CU_Require( m_node );
+		auto sunDirection = m_atmosphereUbo->cpuUpdate( m_atmosphereCfg, *m_node );
 		auto time = updater.tslf > 0_ms
 			? updater.tslf
 			: std::chrono::duration_cast< castor::Milliseconds >( m_timer.getElapsed() );

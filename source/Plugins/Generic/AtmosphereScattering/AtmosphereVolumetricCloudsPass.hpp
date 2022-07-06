@@ -34,7 +34,6 @@ namespace atmosphere_scattering
 			, crg::ImageViewId const & weather
 			, crg::ImageViewId const & colourResult
 			, crg::ImageViewId const & emissionResult
-			, crg::ImageViewId const & distanceResult
 			, uint32_t index );
 		void accept( castor3d::PipelineVisitor & visitor );
 
