@@ -75,8 +75,6 @@ namespace atmosphere_scattering
 			, sdw::Float const & factor );
 		RetIntersection raySphereintersectSkyMap( sdw::Vec3 const & rd
 			, sdw::Float const & radius );
-		RetIntersection raySphereIntersect( Ray const & ray
-			, sdw::Float const & radius );
 		sdw::RetFloat henyeyGreenstein( sdw::Float const & g
 			, sdw::Float const & cosTheta );
 
@@ -141,9 +139,6 @@ namespace atmosphere_scattering
 		sdw::Function< Intersection
 			, sdw::InVec3
 			, sdw::InFloat > m_raySphereintersectSkyMap;
-		sdw::Function< Intersection
-			, InRay
-			, sdw::InFloat > m_raySphereIntersect;
 		sdw::Function< sdw::Float
 			, sdw::InFloat
 			, sdw::InFloat > m_henyeyGreenstein;
