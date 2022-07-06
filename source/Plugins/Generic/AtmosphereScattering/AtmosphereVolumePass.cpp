@@ -179,10 +179,10 @@ namespace atmosphere_scattering
 					// If the voxel is under the ground, make sure to offset it out on the ground.
 					viewHeight = length( newWorldPos );
 
-					IF( writer, viewHeight <= ( c3d_atmosphereData.bottomRadius + planetRadiusOffset ) )
+					IF( writer, viewHeight <= ( atmosphere.getEarthRadius() + planetRadiusOffset ) )
 					{
 						// Apply a position offset to make sure no artefact are visible close to the earth boundaries for large voxel.
-						newWorldPos = normalize( newWorldPos ) * ( c3d_atmosphereData.bottomRadius + planetRadiusOffset + 0.001_f );
+						newWorldPos = normalize( newWorldPos ) * ( atmosphere.getEarthRadius() + planetRadiusOffset + 0.001_f );
 						ray.direction = normalize( newWorldPos - ray.origin );
 						tMax = length( newWorldPos - ray.origin );
 					}
@@ -194,7 +194,7 @@ namespace atmosphere_scattering
 					// Move ray marching start up to top atmosphere.
 					viewHeight = length( ray.origin );
 
-					IF( writer, viewHeight >= c3d_atmosphereData.topRadius )
+					IF( writer, viewHeight >= atmosphere.getAtmosphereRadius() )
 					{
 						auto prevWorlPos = writer.declLocale( "prevWorlPos"
 							, ray.origin );

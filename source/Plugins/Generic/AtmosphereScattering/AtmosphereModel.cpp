@@ -72,7 +72,7 @@ namespace atmosphere_scattering
 
 	sdw::Vec3 AtmosphereModel::getCameraPositionFromEarth()const
 	{
-		return getCameraPosition() + vec3( 0.0_f, atmosphereData.bottomRadius, 0.0_f );
+		return getCameraPosition() + vec3( 0.0_f, getEarthRadius(), 0.0_f );
 	}
 
 	RetRay AtmosphereModel::castRay( sdw::Vec2 const & puv )
@@ -88,7 +88,7 @@ namespace atmosphere_scattering
 						, camProjToWorld( vec4( clipSpace, 1.0_f ) ) );
 
 					auto result = writer.declLocale< Ray >( "result" );
-					result.origin = getCameraPosition() + vec3( 0.0_f, getEarthRadius(), 0.0_f );
+					result.origin = getCameraPositionFromEarth();
 					result.direction = normalize( hPos.xyz() / hPos.w() - getCameraPosition() );
 
 					writer.returnStmt( result );
@@ -120,7 +120,7 @@ namespace atmosphere_scattering
 				{
 					auto uv = writer.declLocale( "uv"
 						, clamp( vec2( viewZenithCosAngle * 0.5_f + 0.5_f
-								, ( length( worldPos ) - atmosphereData.bottomRadius ) / ( atmosphereData.topRadius - atmosphereData.bottomRadius ) )
+								, ( length( worldPos ) - getEarthRadius() ) / ( getAtmosphereThickness() ) )
 							, vec2( 0.0_f )
 							, vec2( 1.0_f ) ) );
 					uv = vec2( fromUnitToSubUvs( uv.x(), atmosphereData.multiScatteringLUTRes )
@@ -214,7 +214,7 @@ namespace atmosphere_scattering
 					auto earthO = writer.declLocale( "earthO"
 						, vec3( 0.0_f, 0.0f, 0.0f ) );
 					auto tBottom = writer.declLocale( "tBottom"
-						, raySphereIntersectNearest( ray, earthO, atmosphereData.bottomRadius ) );
+						, raySphereIntersectNearest( ray, earthO, getEarthRadius() ) );
 					auto tMax = writer.declLocale( "tMax"
 						, 0.0_f );
 					doInitRay( depthBufferValue, pixPos, ray, tMaxMax, earthO, tBottom, result, tMax );
@@ -373,7 +373,7 @@ namespace atmosphere_scattering
 					auto earthO = writer.declLocale( "earthO"
 						, vec3( 0.0_f, 0.0f, 0.0f ) );
 					auto tBottom = writer.declLocale( "tBottom"
-						, raySphereIntersectNearest( ray, earthO, atmosphereData.bottomRadius ) );
+						, raySphereIntersectNearest( ray, earthO, getEarthRadius() ) );
 					auto tMax = writer.declLocale( "tMax"
 						, 0.0_f );
 					doInitRay( depthBufferValue, pixPos, ray, tMaxMax, earthO, tBottom, result, tMax );
@@ -487,12 +487,12 @@ namespace atmosphere_scattering
 					auto viewHeight = writer.declLocale( "viewHeight"
 						, length( ray.origin ) );
 
-					IF( writer, viewHeight > atmosphereData.topRadius )
+					IF( writer, viewHeight > getAtmosphereRadius() )
 					{
 						auto tTop = writer.declLocale( "tTop"
 							, raySphereIntersectNearest( ray
 								, vec3( 0.0_f, 0.0_f, 0.0_f )
-								, atmosphereData.topRadius ) );
+								, getAtmosphereRadius() ) );
 
 						IF( writer, tTop.valid() )
 						{
@@ -530,17 +530,11 @@ namespace atmosphere_scattering
 					, sdw::Vec3 const & sunDir
 					, sdw::CombinedImage2DRgba32 const & transmittanceMap )
 				{
-					auto worldPos = writer.declLocale( "worldPos"
-						, cameraPosition + vec3( 0.0_f, atmosphereData.bottomRadius, 0.0_f ) );
-					auto pHeight = writer.declLocale( "pHeight"
-						, length( worldPos ) );
-					auto upVector = writer.declLocale( "upVector"
-						, worldPos / pHeight );
 					auto sunZenithCosAngle = writer.declLocale( "sunZenithCosAngle"
-						, dot( sunDir, upVector ) );
+						, dot( sunDir, normalize( getCameraPositionFromEarth() ) ) );
 
 					auto uv = writer.declLocale< sdw::Vec2 >( "uv" );
-					lutTransmittanceParamsToUv( atmosphereData.bottomRadius, sunZenithCosAngle, uv );
+					lutTransmittanceParamsToUv( getEarthRadius(), sunZenithCosAngle, uv );
 					writer.returnStmt( transmittanceMap.lod( uv, 0.0_f ).rgb() );
 				}
 				, sdw::InVec3{ writer, "cameraPosition" }
@@ -648,7 +642,7 @@ namespace atmosphere_scattering
 				, [&]( sdw::Vec3 const & worldPos )
 				{
 					auto viewHeight = writer.declLocale( "viewHeight"
-						, length( worldPos ) - atmosphereData.bottomRadius );
+						, length( worldPos ) - getEarthRadius() );
 
 					auto densityMie = writer.declLocale( "densityMie"
 						, exp( atmosphereData.mieDensity1ExpScale * viewHeight ) );
@@ -720,13 +714,13 @@ namespace atmosphere_scattering
 						, uv.y() );
 
 					auto H = writer.declLocale( "H"
-						, sqrt( atmosphereData.topRadius * atmosphereData.topRadius - atmosphereData.bottomRadius * atmosphereData.bottomRadius ) );
+						, sqrt( getAtmosphereRadius() * getAtmosphereRadius() - getEarthRadius() * getEarthRadius() ) );
 					auto rho = writer.declLocale( "rho"
 						, H * x_r );
-					viewHeight = sqrt( rho * rho + atmosphereData.bottomRadius * atmosphereData.bottomRadius );
+					viewHeight = sqrt( rho * rho + getEarthRadius() * getEarthRadius() );
 
 					auto d_min = writer.declLocale( "d_min"
-						, atmosphereData.topRadius - viewHeight );
+						, getAtmosphereRadius() - viewHeight );
 					auto d_max = writer.declLocale( "d_max"
 						, rho + H );
 					auto d = writer.declLocale( "d"
@@ -756,17 +750,17 @@ namespace atmosphere_scattering
 					, sdw::Vec2 uv )
 				{
 					auto H = writer.declLocale( "H"
-						, sqrt( max( 0.0_f, atmosphereData.topRadius * atmosphereData.topRadius - atmosphereData.bottomRadius * atmosphereData.bottomRadius ) ) );
+						, sqrt( max( 0.0_f, getAtmosphereRadius() * getAtmosphereRadius() - getEarthRadius() * getEarthRadius() ) ) );
 					auto rho = writer.declLocale( "rho"
-						, sqrt( max( 0.0_f, viewHeight * viewHeight - atmosphereData.bottomRadius * atmosphereData.bottomRadius ) ) );
+						, sqrt( max( 0.0_f, viewHeight * viewHeight - getEarthRadius() * getEarthRadius() ) ) );
 
 					auto discriminant = writer.declLocale( "discriminant"
-						, viewHeight * viewHeight * ( viewZenithCosAngle * viewZenithCosAngle - 1.0_f ) + atmosphereData.topRadius * atmosphereData.topRadius );
+						, viewHeight * viewHeight * ( viewZenithCosAngle * viewZenithCosAngle - 1.0_f ) + getAtmosphereRadius() * getAtmosphereRadius() );
 					auto d = writer.declLocale( "d"
 						, max( 0.0_f, ( -viewHeight * viewZenithCosAngle + sqrt( discriminant ) ) ) ); // Distance to atmosphere boundary
 
 					auto d_min = writer.declLocale( "d_min"
-						, atmosphereData.topRadius - viewHeight );
+						, getAtmosphereRadius() - viewHeight );
 					auto d_max = writer.declLocale( "d_max"
 						, rho + H );
 					auto x_mu = writer.declLocale( "x_mu"
@@ -804,7 +798,7 @@ namespace atmosphere_scattering
 						, fromSubUvsToUnit( uv.y(), size.y() ) );
 
 					auto vHorizon = writer.declLocale( "vHorizon"
-						, sqrt( viewHeight * viewHeight - atmosphereData.bottomRadius * atmosphereData.bottomRadius ) );
+						, sqrt( viewHeight * viewHeight - getEarthRadius() * getEarthRadius() ) );
 					auto cosBeta = writer.declLocale( "cosBeta"
 						, vHorizon / viewHeight );				// GroundToHorizonCos
 					auto beta = writer.declLocale( "beta"
@@ -867,7 +861,7 @@ namespace atmosphere_scattering
 					, sdw::Vec2 const & size )
 				{
 					auto Vhorizon = writer.declLocale( "Vhorizon"
-						, sqrt( viewHeight * viewHeight - atmosphereData.bottomRadius * atmosphereData.bottomRadius ) );
+						, sqrt( viewHeight * viewHeight - getEarthRadius() * getEarthRadius() ) );
 					auto cosBeta = writer.declLocale( "cosBeta"
 						, Vhorizon / viewHeight );				// GroundToHorizonCos
 					auto beta = writer.declLocale( "beta"
@@ -932,7 +926,7 @@ namespace atmosphere_scattering
 		, sdw::Float & tMax )
 	{
 		auto tTop = writer.declLocale( "tTop"
-			, raySphereIntersectNearest( ray, earthO, atmosphereData.topRadius ) );
+			, raySphereIntersectNearest( ray, earthO, getAtmosphereRadius() ) );
 
 		IF( writer, !tBottom.valid() )
 		{
@@ -970,7 +964,7 @@ namespace atmosphere_scattering
 							, pixPos
 							, transmittanceLutExtent ) );
 					auto tDepth = writer.declLocale( "tDepth"
-						, length( depthBufferWorldPos - ( ray.origin + vec3( 0.0_f, -atmosphereData.bottomRadius, 0.0_f ) ) ) ); // apply earth offset to go back to origin as top of earth mode. 
+						, length( depthBufferWorldPos - ( ray.origin + vec3( 0.0_f, -getEarthRadius(), 0.0_f ) ) ) ); // apply earth offset to go back to origin as top of earth mode. 
 
 					IF( writer, tDepth < tMax )
 					{
@@ -1120,7 +1114,7 @@ namespace atmosphere_scattering
 
 		// Earth shadow 
 		auto tEarth = writer.declLocale( "tEarth"
-			, raySphereIntersectNearest( rayToSun, earthO + planetRadiusOffset * upVector, atmosphereData.bottomRadius ) );
+			, raySphereIntersectNearest( rayToSun, earthO + planetRadiusOffset * upVector, getEarthRadius() ) );
 		auto earthShadow = writer.declLocale( "earthShadow"
 			, writer.ternary( tEarth.valid(), 0.0_f, 1.0_f ) );
 

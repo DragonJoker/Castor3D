@@ -107,7 +107,9 @@ namespace atmosphere_scattering
 
 						IF( m_writer, cosTheta > minSunCosTheta )
 						{
-							IF( m_writer, !m_atmosphere.raySphereIntersectNearest( ray, vec3( 0.0_f ), m_atmosphere.getEarthRadius() ).valid() ) // no intersection
+							IF( m_writer, !m_atmosphere.raySphereIntersectNearest( ray
+								, vec3( 0.0_f )
+								, m_atmosphere.getEarthRadius() ).valid() ) // no intersection
 							{
 								sunLuminance = vec3( 2.0_f ) * getSunRadiance( sunDir );
 							}

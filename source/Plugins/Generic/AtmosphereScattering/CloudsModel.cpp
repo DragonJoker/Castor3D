@@ -148,7 +148,11 @@ namespace atmosphere_scattering
 							, 1.0_f ) );
 					auto sunGlare = writer.declLocale( "sunGlare"
 						, sunColor * pow( sunIntensity, 256.0_f ) );
-					rayMarchResult += sunGlare * ( 1.0_f - accumDensity );
+					auto sunGlareIntensity = writer.declLocale( "sunGlareIntensity"
+						, ( 1.0_f - accumDensity ) );
+					auto minGlare = 0.5_f;
+					sunGlareIntensity = utils.remap( sunGlareIntensity, 0.0_f, 1.0_f, minGlare, 1.0_f );
+					rayMarchResult += sunGlare * ( sunGlareIntensity - minGlare );
 
 					// Fade out clouds into the horizon.
 					auto cubeMapEndPos = writer.declLocale( "cubeMapEndPos"
