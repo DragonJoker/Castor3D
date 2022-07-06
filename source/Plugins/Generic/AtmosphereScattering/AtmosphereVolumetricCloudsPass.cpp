@@ -25,7 +25,7 @@ namespace atmosphere_scattering
 {
 	//*********************************************************************************************
 
-	namespace weather
+	namespace volclouds
 	{
 		static constexpr bool useCompute = false;
 
@@ -36,6 +36,21 @@ namespace atmosphere_scattering
 		struct ShaderWriter< false >
 		{
 			using Type = sdw::FragmentWriter;
+
+			static castor3d::ShaderPtr getVertexProgram()
+			{
+				sdw::VertexWriter writer;
+				sdw::Vec2 position = writer.declInput< sdw::Vec2 >( "position", 0u );
+
+				writer.implementMainT< sdw::VoidT, sdw::VoidT >( sdw::VertexIn{ writer }
+					, sdw::VertexOut{ writer }
+					, [&]( sdw::VertexIn in
+						, sdw::VertexOut out )
+					{
+						out.vtx.position = vec4( position, 0.0_f, 1.0_f );
+					} );
+				return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			}
 
 			template< typename FuncT >
 			static void implementMain( Type & writer, FuncT func )
@@ -84,21 +99,6 @@ namespace atmosphere_scattering
 			eOutEmission,
 			eCount,
 		};
-
-		static castor3d::ShaderPtr getVertexProgram()
-		{
-			sdw::VertexWriter writer;
-			sdw::Vec2 position = writer.declInput< sdw::Vec2 >( "position", 0u );
-
-			writer.implementMainT< sdw::VoidT, sdw::VoidT >( sdw::VertexIn{ writer }
-				, sdw::VertexOut{ writer }
-				, [&]( sdw::VertexIn in
-					, sdw::VertexOut out )
-				{
-					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
 
 		static castor3d::ShaderPtr getProgram( VkExtent3D renderSize
 			, VkExtent3D const & transmittanceExtent )
@@ -223,20 +223,20 @@ namespace atmosphere_scattering
 		: castor::Named{ "VolumetricCloudsPass" + castor::string::toString( index ) }
 		, m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT
 			, getName()
-			, ( weather::useCompute 
-				? weather::getProgram( getExtent( colourResult ), getExtent( transmittance ) )
+			, ( volclouds::useCompute
+				? volclouds::getProgram( getExtent( colourResult ), getExtent( transmittance ) )
 				: nullptr) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
 			, getName()
-			, ( weather::useCompute 
+			, ( volclouds::useCompute
 				? nullptr
-				: weather::getVertexProgram() ) }
+				: volclouds::ShaderWriter< false >::getVertexProgram() ) }
 		, m_fragmentShader{ VK_SHADER_STAGE_FRAGMENT_BIT
 			, getName()
-			, ( weather::useCompute
+			, ( volclouds::useCompute
 				? nullptr
-				: weather::getProgram( getExtent( colourResult ), getExtent( transmittance ) ) ) }
-		, m_stages{ ( weather::useCompute
+				: volclouds::getProgram( getExtent( colourResult ), getExtent( transmittance ) ) ) }
+		, m_stages{ ( volclouds::useCompute
 			? ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, m_computeShader ) }
 			: ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, m_vertexShader )
 				, makeShaderState( device, m_fragmentShader ) } ) }
@@ -249,7 +249,7 @@ namespace atmosphere_scattering
 			{
 				crg::RunnablePassPtr result;
 
-				if constexpr ( weather::useCompute )
+				if constexpr ( volclouds::useCompute )
 				{
 					result = std::make_unique< crg::ComputePass >( framePass
 						, context
@@ -274,11 +274,11 @@ namespace atmosphere_scattering
 			} );
 		pass.addDependencies( previousPasses );
 		atmosphereUbo.createPassBinding( pass
-			, weather::eAtmosphere );
+			, volclouds::eAtmosphere );
 		cloudsUbo.createPassBinding( pass
-			, weather::eClouds );
+			, volclouds::eClouds );
 		cameraUbo.createPassBinding( pass
-			, weather::eCamera );
+			, volclouds::eCamera );
 		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
 			, VK_FILTER_LINEAR };
 		crg::SamplerDesc mipLinearSampler{ VK_FILTER_LINEAR
@@ -288,35 +288,35 @@ namespace atmosphere_scattering
 			, VK_SAMPLER_ADDRESS_MODE_REPEAT
 			, VK_SAMPLER_ADDRESS_MODE_REPEAT };
 		pass.addSampledView( transmittance
-			, weather::eTransmittance
+			, volclouds::eTransmittance
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, linearSampler );
 		pass.addSampledView( multiscatter
-			, weather::eMultiScatter
+			, volclouds::eMultiScatter
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, linearSampler );
 		pass.addSampledView( skyview
-			, weather::eSkyView
+			, volclouds::eSkyView
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, linearSampler );
 		pass.addSampledView( volume
-			, weather::eVolume
+			, volclouds::eVolume
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, linearSampler );
 		pass.addSampledView( perlinWorley
-			, weather::ePerlinWorley
+			, volclouds::ePerlinWorley
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, mipLinearSampler );
 		pass.addSampledView( worley
-			, weather::eWorley
+			, volclouds::eWorley
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, mipLinearSampler );
 		pass.addSampledView( curl
-			, weather::eCurl
+			, volclouds::eCurl
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, linearSampler );
 		pass.addSampledView( weather
-			, weather::eWeatherMap
+			, volclouds::eWeatherMap
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, crg::SamplerDesc{ VK_FILTER_LINEAR
 				, VK_FILTER_LINEAR
@@ -324,12 +324,12 @@ namespace atmosphere_scattering
 				, VK_SAMPLER_ADDRESS_MODE_REPEAT
 				, VK_SAMPLER_ADDRESS_MODE_REPEAT } );
 
-		if constexpr ( weather::useCompute )
+		if constexpr ( volclouds::useCompute )
 		{
 			pass.addOutputStorageView( colourResult
-				, weather::eOutColour );
+				, volclouds::eOutColour );
 			pass.addOutputStorageView( emissionResult
-				, weather::eOutEmission );
+				, volclouds::eOutEmission );
 		}
 		else
 		{
