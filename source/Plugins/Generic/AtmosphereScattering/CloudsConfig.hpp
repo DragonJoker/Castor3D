@@ -17,7 +17,7 @@ namespace atmosphere_scattering
 		template< typename ... ParamsT >
 		CloudsConfigT( ParamsT & ... params )
 			: cloudSpeed{ params..., 10.0f }
-			, coverage{ params..., 0.25f }
+			, coverage{ params..., 0.45f }
 			, crispiness{ params..., 40.0f }
 			, curliness{ params..., 0.1f }
 			, density{ params..., 0.2f }
