@@ -64,11 +64,10 @@ namespace atmosphere_scattering
 						, vec3( 0.0_f ) );
 					auto endPos = writer.declLocale( "endPos"
 						, vec3( 0.0_f ) );
-
-					//compute raymarching starting and ending point
 					auto fogRay = writer.declLocale( "fogRay"
 						, vec3( 0.0_f ) );
 
+					//compute raymarching starting and ending point
 					IF( writer, ray.origin.y() < sphereInnerRadius )
 					{
 						// Ray below clouds boundaries.
@@ -149,19 +148,28 @@ namespace atmosphere_scattering
 							, 1.0_f ) );
 					auto sunGlare = writer.declLocale( "sunGlare"
 						, sunColor * pow( sunIntensity, 256.0_f ) );
-					rayMarchResult += sunGlare * (1.0_f - accumDensity );
+					rayMarchResult += sunGlare * ( 1.0_f - accumDensity );
 
-					// Blend and fade out clouds into the horizon
+					// Fade out clouds into the horizon.
 					auto cubeMapEndPos = writer.declLocale( "cubeMapEndPos"
 						, raySphereintersectSkyMap( ray.direction, 0.5_f ).point() );
 					rayMarchResult = mix( vec3( 1.0_f )
 						, rayMarchResult
 						, vec3( pow( max( cubeMapEndPos.y() + 0.1_f, 0.0_f ), 0.2_f ) ) );
+
+					// Display sun disk, faded out into the horizon
+					auto sunDisk = writer.declLocale( "sunDisk"
+						, scattering.getSunLuminance( ray ) );
+					sunDisk = mix( vec3( 0.0_f )
+						, sunDisk
+						, vec3( pow( max( cubeMapEndPos.y() + 0.1_f, 0.0_f ), 0.2_f ) ) );
+
+					// Blend background and clouds.
 					auto cloudFadeOutPoint = 0.06_f;
 					accumDensity *= smoothStep( 0.0_f
 						, 1.0_f
 						, min( 1.0_f, utils.remap( ray.direction.y(), cloudFadeOutPoint, 0.2_f, 0.0_f, 1.0_f ) ) );
-					bg = vec4( mix( bg.rgb(), rayMarchResult, vec3( accumDensity ) ), cloudAlphaness );
+					bg = vec4( mix( bg.rgb() + sunDisk, rayMarchResult, vec3( accumDensity ) ), cloudAlphaness );
 
 					auto bloom = writer.declLocale( "bloom"
 						, vec4( sunColor * 1.3_f, 1.0_f ) );
