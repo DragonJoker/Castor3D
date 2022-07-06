@@ -59,17 +59,23 @@ namespace atmosphere_scattering
 			, sdw::Boolean const & expensive
 			, sdw::Float const & heightFraction
 			, sdw::Float const & lod );
-		sdw::RetFloat raymarchToLight( sdw::Vec3 const & o
+		sdw::RetFloat raymarchToLight( Ray const & ray
+			, sdw::Vec3 const & o
 			, sdw::Float const & stepSize
 			, sdw::Vec3 const & lightDir
 			, sdw::Float const & originalDensity
-			, sdw::Float const & lightDotEye );
-		sdw::RetVec4 raymarchToCloud( sdw::Vec3 const & startPos
+			, sdw::Float const & lightDotEye
+			, sdw::Vec3 & cloudEndPos
+			, sdw::Float & densityAlongLight );
+		sdw::RetVec4 raymarchToCloud( Ray const & ray
+			, sdw::Vec3 const & startPos
 			, sdw::Vec3 const & endPos
 			, sdw::Vec3 const & bg
 			, sdw::IVec2 const & fragCoord
 			, sdw::Vec3 const & sunColor
-			, sdw::Vec4 & cloudPos );
+			, sdw::Vec3 & cloudStartPos
+			, sdw::Vec3 & cloudEndPos
+			, sdw::Float & accumDensity );
 		sdw::RetFloat computeFogAmount( sdw::Vec3 const & startPos
 			, sdw::Vec3 const & wolrdPos
 			, sdw::Float const & factor );
@@ -77,7 +83,10 @@ namespace atmosphere_scattering
 			, sdw::Float const & radius );
 		sdw::RetFloat henyeyGreenstein( sdw::Float const & g
 			, sdw::Float const & cosTheta );
-
+		sdw::Float henyeyGreenstein( sdw::Float const & g
+			, sdw::Float const & cosTheta
+			, sdw::Float const & silverIntensity
+			, sdw::Float const & silverSpread );
 
 	private:
 		sdw::ShaderWriter & writer;
@@ -120,18 +129,24 @@ namespace atmosphere_scattering
 			, sdw::InFloat
 			, sdw::InFloat > m_sampleCloudDensity;
 		sdw::Function< sdw::Float
+			, InRay
 			, sdw::InVec3
 			, sdw::InFloat
 			, sdw::InVec3
 			, sdw::InFloat
-			, sdw::InFloat > m_raymarchToLight;
+			, sdw::InFloat
+			, sdw::OutVec3
+			, sdw::OutFloat > m_raymarchToLight;
 		sdw::Function< sdw::Vec4
+			, InRay
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InIVec2
 			, sdw::InVec3
-			, sdw::OutVec4 > m_raymarchToCloud;
+			, sdw::OutVec3
+			, sdw::OutVec3
+			, sdw::OutFloat > m_raymarchToCloud;
 		sdw::Function< sdw::Float
 			, sdw::InVec3
 			, sdw::InVec3
@@ -146,7 +161,6 @@ namespace atmosphere_scattering
 			, sdw::InIVec2
 			, sdw::InVec2
 			, sdw::InOutVec4
-			, sdw::OutVec4
 			, sdw::OutVec4 > m_applyClouds;
 	};
 }
