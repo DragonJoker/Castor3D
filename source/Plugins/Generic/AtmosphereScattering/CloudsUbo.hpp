@@ -24,20 +24,20 @@ namespace atmosphere_scattering
 	struct CloudsData
 		: public sdw::StructInstanceHelperT< "CloudsData"
 			, sdw::type::MemoryLayout::eStd140
-			, sdw::FloatField< "cloudSpeed" >
+			, sdw::FloatField< "speed" >
 			, sdw::FloatField< "coverage" >
 			, sdw::FloatField< "crispiness" >
 			, sdw::FloatField< "curliness" >
 			, sdw::FloatField< "density" >
 			, sdw::FloatField< "absorption" >
-			, sdw::FloatField< "sphereInnerRadius" >
-			, sdw::FloatField< "sphereOuterRadius" >
-			, sdw::Vec3Field< "cloudColorTop" >
+			, sdw::FloatField< "innerRadius" >
+			, sdw::FloatField< "outerRadius" >
+			, sdw::Vec3Field< "topColor" >
 			, sdw::FloatField< "time" >
-			, sdw::Vec3Field< "cloudColorBottom" >
+			, sdw::Vec3Field< "bottomColor" >
 			, sdw::IntField< "enablePowder" >
 			, sdw::Vec3Field< "windDirection" >
-			, sdw::FloatField< "cloudTopOffset" > >
+			, sdw::FloatField< "topOffset" > >
 	{
 		CloudsData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -46,24 +46,24 @@ namespace atmosphere_scattering
 		{
 		}
 
-		auto cloudSpeed()const { return getMember< "cloudSpeed" >(); }
+		auto cloudSpeed()const { return getMember< "speed" >(); }
 		auto coverage()const { return getMember< "coverage" >(); }
 		auto crispiness()const { return getMember< "crispiness" >(); }
 		auto curliness()const { return getMember< "curliness" >(); }
 
 		auto density()const { return getMember< "density" >(); }
 		auto absorption()const { return getMember< "absorption" >(); }
-		auto sphereInnerRadius()const { return getMember< "sphereInnerRadius" >(); }
-		auto sphereOuterRadius()const { return getMember< "sphereOuterRadius" >(); }
+		auto innerRadius()const { return getMember< "innerRadius" >(); }
+		auto outerRadius()const { return getMember< "outerRadius" >(); }
 
-		auto cloudColorTop()const { return getMember< "cloudColorTop" >(); }
+		auto topColor()const { return getMember< "topColor" >(); }
 		auto time()const { return getMember< "time" >(); }
 
-		auto cloudColorBottom()const { return getMember< "cloudColorBottom" >(); }
+		auto bottomColor()const { return getMember< "bottomColor" >(); }
 		auto enablePowder()const { return getMember< "enablePowder" >(); }
 
 		auto windDirection()const { return getMember< "windDirection" >(); }
-		auto cloudTopOffset()const { return getMember< "cloudTopOffset" >(); }
+		auto topOffset()const { return getMember< "topOffset" >(); }
 	};
 
 	Writer_Parameter( CloudsData );

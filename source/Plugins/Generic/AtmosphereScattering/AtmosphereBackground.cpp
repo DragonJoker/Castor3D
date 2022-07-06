@@ -98,18 +98,18 @@ namespace castor
 				{
 					auto & clouds = background.getCloudsCfg();
 					result = result && write( file, "windDirection", clouds.windDirection );
-					result = result && write( file, "speed", clouds.cloudSpeed );
+					result = result && write( file, "speed", clouds.speed );
 					result = result && write( file, "coverage", clouds.coverage );
 					result = result && write( file, "crispiness", clouds.crispiness );
 					result = result && write( file, "curliness", clouds.curliness );
 					result = result && write( file, "density", clouds.density );
 					result = result && write( file, "absorption", clouds.absorption );
-					result = result && write( file, "innerRadius", clouds.sphereInnerRadius );
-					result = result && write( file, "outerRadius", clouds.sphereOuterRadius );
-					result = result && write( file, "topColour", clouds.cloudColorTop );
-					result = result && write( file, "bottomColour", clouds.cloudColorBottom );
+					result = result && write( file, "innerRadius", clouds.innerRadius );
+					result = result && write( file, "outerRadius", clouds.outerRadius );
+					result = result && write( file, "topColour", clouds.colorTop );
+					result = result && write( file, "bottomColour", clouds.colorBottom );
 					result = result && write( file, "enablePowder", clouds.enablePowder != 0 );
-					result = result && write( file, "topOffset", clouds.cloudTopOffset );
+					result = result && write( file, "topOffset", clouds.topOffset );
 				}
 			}
 
@@ -423,7 +423,7 @@ namespace atmosphere_scattering
 
 		visitor.visit( cuT( "Clouds Configuration" ) );
 		visitor.visit( cuT( "Clouds Speed" )
-			, m_cloudsCfg.cloudSpeed
+			, m_cloudsCfg.speed
 			, &m_cloudsChanged );
 		visitor.visit( cuT( "Clouds Coverage" )
 			, m_cloudsCfg.coverage
@@ -441,19 +441,19 @@ namespace atmosphere_scattering
 			, m_cloudsCfg.absorption
 			, &m_cloudsChanged );
 		visitor.visit( cuT( "Clouds Top Offset" )
-			, m_cloudsCfg.cloudTopOffset
+			, m_cloudsCfg.topOffset
 			, &m_cloudsChanged );
 		visitor.visit( cuT( "Clouds Top Colour" )
-			, m_cloudsCfg.cloudColorTop
+			, m_cloudsCfg.colorTop
 			, &m_cloudsChanged );
 		visitor.visit( cuT( "Clouds Bottom Colour" )
-			, m_cloudsCfg.cloudColorBottom
+			, m_cloudsCfg.colorBottom
 			, &m_cloudsChanged );
 		visitor.visit( cuT( "Clouds Dome Bottom" )
-			, m_cloudsCfg.sphereInnerRadius
+			, m_cloudsCfg.innerRadius
 			, &m_cloudsChanged );
 		visitor.visit( cuT( "Clouds Dome Top" )
-			, m_cloudsCfg.sphereOuterRadius
+			, m_cloudsCfg.outerRadius
 			, &m_cloudsChanged );
 
 		visitor.visit( cuT( "Weather Configuration" ) );
