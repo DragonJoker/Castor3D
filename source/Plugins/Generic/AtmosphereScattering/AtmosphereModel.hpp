@@ -252,6 +252,8 @@ namespace atmosphere_scattering
 		sdw::RetVec3 getSunRadiance( sdw::Vec3 const & cameraPosition
 			, sdw::Vec3 const & sunDir
 			, sdw::CombinedImage2DRgba32 const & transmittanceMap );
+		sdw::RetFloat getEarthShadow( sdw::Vec3 const & earthO
+			, sdw::Vec3 const & position );
 
 		// - Returns distance from rayOrigin to first intersecion with sphere,
 		//   or -1.0 if no intersection.
@@ -329,10 +331,8 @@ namespace atmosphere_scattering
 			, MediumSampleRGB const & medium
 			, sdw::Float const & dt
 			, sdw::Vec3 & opticalDepth );
-		std::tuple< sdw::Vec3, sdw::Float, sdw::Vec3 > doGetScatteredLuminance( Ray const & rayToSun
+		std::tuple< sdw::Vec3, sdw::Vec3 > doGetScatteredLuminance( Ray const & rayToSun
 			, MediumSampleRGB const & medium
-			, sdw::Vec3 const & earthO
-			, sdw::Vec3 const & upVector
 			, sdw::Float const & sunZenithCosAngle
 			, sdw::Float const & miePhaseValue
 			, sdw::Float const & rayleighPhaseValue );
@@ -354,6 +354,9 @@ namespace atmosphere_scattering
 			, sdw::Vec3 const & globalL
 			, sdw::Vec3 const & throughput
 			, sdw::Vec3 & L );
+		sdw::Float doGetEarthShadow( Ray const & rayToSun
+			, sdw::Vec3 const & earthO
+			, sdw::Vec3 const & upVector );
 
 	private:
 		sdw::ShaderWriter & writer;
@@ -363,6 +366,7 @@ namespace atmosphere_scattering
 		AtmosphereData const & atmosphereData;
 		LuminanceSettings luminanceSettings{};
 		VkExtent2D transmittanceExtent{};
+		sdw::Float planetRadiusOffset;
 		sdw::CombinedImage2DRgba32 const * transmittanceTexture{};
 		sdw::CombinedImage2DRgba32 const * multiScatTexture{};
 		std::shared_ptr< castor3d::shader::Shadow > shadows;
@@ -434,6 +438,9 @@ namespace atmosphere_scattering
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InCombinedImage2DRgba32 > m_getSunRadiance;
+		sdw::Function< sdw::Float
+			, sdw::InVec3
+			, sdw::InVec3 > m_getEarthShadow;
 	};
 }
 

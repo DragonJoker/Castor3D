@@ -636,7 +636,7 @@ namespace atmosphere_scattering
 		else
 		{
 			auto & atmosphereContext = parser::getParserContext( context );
-			params[0]->get( atmosphereContext.clouds.cloudSpeed );
+			params[0]->get( atmosphereContext.clouds.speed );
 		}
 	}
 	CU_EndAttribute()
@@ -720,7 +720,7 @@ namespace atmosphere_scattering
 		else
 		{
 			auto & atmosphereContext = parser::getParserContext( context );
-			params[0]->get( atmosphereContext.clouds.sphereInnerRadius );
+			params[0]->get( atmosphereContext.clouds.innerRadius );
 		}
 	}
 	CU_EndAttribute()
@@ -734,7 +734,7 @@ namespace atmosphere_scattering
 		else
 		{
 			auto & atmosphereContext = parser::getParserContext( context );
-			params[0]->get( atmosphereContext.clouds.sphereOuterRadius );
+			params[0]->get( atmosphereContext.clouds.outerRadius );
 		}
 	}
 	CU_EndAttribute()
@@ -748,7 +748,7 @@ namespace atmosphere_scattering
 		else
 		{
 			auto & atmosphereContext = parser::getParserContext( context );
-			params[0]->get( atmosphereContext.clouds.cloudColorTop );
+			params[0]->get( atmosphereContext.clouds.colorTop );
 		}
 	}
 	CU_EndAttribute()
@@ -762,7 +762,7 @@ namespace atmosphere_scattering
 		else
 		{
 			auto & atmosphereContext = parser::getParserContext( context );
-			params[0]->get( atmosphereContext.clouds.cloudColorBottom );
+			params[0]->get( atmosphereContext.clouds.colorBottom );
 		}
 	}
 	CU_EndAttribute()
@@ -792,7 +792,7 @@ namespace atmosphere_scattering
 		else
 		{
 			auto & atmosphereContext = parser::getParserContext( context );
-			params[0]->get( atmosphereContext.clouds.cloudTopOffset );
+			params[0]->get( atmosphereContext.clouds.topOffset );
 		}
 	}
 	CU_EndAttribute()

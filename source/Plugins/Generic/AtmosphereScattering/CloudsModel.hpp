@@ -72,7 +72,8 @@ namespace atmosphere_scattering
 			, sdw::Vec3 const & bg
 			, sdw::IVec2 const & fragCoord
 			, sdw::Vec3 const & sunColor
-			, sdw::Float & accumDensity );
+			, sdw::Float & accumDensity
+			, sdw::Float & maxEarthShadow );
 		sdw::RetFloat computeFogAmount( sdw::Vec3 const & startPos
 			, sdw::Vec3 const & wolrdPos
 			, sdw::Float const & factor );
@@ -95,9 +96,9 @@ namespace atmosphere_scattering
 		sdw::CombinedImage3DRgba32 worleyNoiseMap;
 		sdw::CombinedImage2DRg32 curlNoiseMap;
 		sdw::CombinedImage2DRg32 weatherMap;
-		sdw::Float sphereInnerRadius;
-		sdw::Float sphereOuterRadius;
-		sdw::Float sphereDelta;
+		sdw::Float cloudsInnerRadius;
+		sdw::Float cloudsOuterRadius;
+		sdw::Float cloudsThickness;
 
 	private:
 		sdw::Function< sdw::Float
@@ -140,6 +141,7 @@ namespace atmosphere_scattering
 			, sdw::InVec3
 			, sdw::InIVec2
 			, sdw::InVec3
+			, sdw::OutFloat
 			, sdw::OutFloat > m_raymarchToCloud;
 		sdw::Function< sdw::Float
 			, sdw::InVec3

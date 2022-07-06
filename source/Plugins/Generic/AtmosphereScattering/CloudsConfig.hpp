@@ -16,66 +16,66 @@ namespace atmosphere_scattering
 	{
 		template< typename ... ParamsT >
 		CloudsConfigT( ParamsT & ... params )
-			: cloudSpeed{ params..., 10.0f }
+			: speed{ params..., 10.0f }
 			, coverage{ params..., 0.45f }
 			, crispiness{ params..., 40.0f }
 			, curliness{ params..., 0.1f }
 			, density{ params..., 0.2f }
 			, absorption{ params..., 0.25f }
-			, sphereInnerRadius{ params..., 50.0f }
-			, sphereOuterRadius{ params..., 170.0f }
-			, cloudColorTop{ params..., castor::Point3f{ 169.0f, 149.0f, 149.0f } * 1.5f / 255.0f }
+			, innerRadius{ params..., 50.0f }
+			, outerRadius{ params..., 170.0f }
+			, colorTop{ params..., castor::Point3f{ 169.0f, 149.0f, 149.0f } * 1.5f / 255.0f }
 			, time{ 0.0f }
-			, cloudColorBottom{ params..., castor::Point3f{ 65.0f, 70.0f, 80.0f } * 1.5f / 255.0f }
+			, colorBottom{ params..., castor::Point3f{ 65.0f, 70.0f, 80.0f } * 1.5f / 255.0f }
 			, enablePowder{ params..., 1 }
 			, windDirection{ params..., castor::Point3f{ 0.5f, 0.0f, 0.1f } }
-			, cloudTopOffset{ params..., 0.75f }
+			, topOffset{ params..., 0.75f }
 		{
 		}
 
 		template< template< typename DataU > typename WrapperU >
 		CloudsConfigT & operator=( CloudsConfigT< WrapperU > const & rhs )
 		{
-			cloudSpeed = rhs.cloudSpeed;
+			speed = rhs.speed;
 			coverage = rhs.coverage;
 			crispiness = rhs.crispiness;
 			curliness = rhs.curliness;
 
 			density = rhs.density;
 			absorption = rhs.absorption;
-			sphereInnerRadius = rhs.sphereInnerRadius;
-			sphereOuterRadius = rhs.sphereOuterRadius;
+			innerRadius = rhs.innerRadius;
+			outerRadius = rhs.outerRadius;
 
-			cloudColorTop = rhs.cloudColorTop;
+			colorTop = rhs.colorTop;
 			time = rhs.time;
 
-			cloudColorBottom = rhs.cloudColorBottom;
+			colorBottom = rhs.colorBottom;
 			enablePowder = rhs.enablePowder;
 
 			windDirection = rhs.windDirection;
-			cloudTopOffset = rhs.cloudTopOffset;
+			topOffset = rhs.topOffset;
 
 			return *this;
 		}
 
-		WrapperT< float > cloudSpeed;
+		WrapperT< float > speed;
 		WrapperT< float > coverage;
 		WrapperT< float > crispiness;
 		WrapperT< float > curliness;
 
 		WrapperT< float > density;
 		WrapperT< float > absorption;
-		WrapperT< float > sphereInnerRadius;
-		WrapperT< float > sphereOuterRadius;
+		WrapperT< float > innerRadius;
+		WrapperT< float > outerRadius;
 
-		WrapperT< castor::Point3f > cloudColorTop;
+		WrapperT< castor::Point3f > colorTop;
 		float time{};
 
-		WrapperT< castor::Point3f > cloudColorBottom;
+		WrapperT< castor::Point3f > colorBottom;
 		WrapperT< int > enablePowder;
 
 		WrapperT< castor::Point3f > windDirection;
-		WrapperT< float > cloudTopOffset;
+		WrapperT< float > topOffset;
 	};
 }
 
