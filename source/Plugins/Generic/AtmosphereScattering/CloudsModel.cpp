@@ -576,6 +576,9 @@ namespace atmosphere_scattering
 					, sdw::Vec3 const & sunColor
 					, sdw::Vec4 cloudPos )
 				{
+					auto eccentricity = 0.6_f;
+					auto silverIntensity = 0.7_f;
+					auto silverSpread = 0.1_f;
 					auto cloudsMinTransmittance = 1e-1_f;
 					auto bayerFactor = 1.0_f / 16.0_f;
 					auto bayerFilter = writer.declConstantArray( "bayerFilter"
@@ -610,6 +613,9 @@ namespace atmosphere_scattering
 
 					auto lightDotEye = writer.declLocale( "lightDotEye"
 						, dot( normalize( atmosphere.getSunDirection() ), normalize( dir ) ) );
+					auto scattering = writer.declLocale( "scattering"
+						, henyeyGreenstein( eccentricity, lightDotEye, silverIntensity, silverSpread ) );
+					scattering = max( scattering, 1.0_f );
 
 					auto T = writer.declLocale( "T"
 						, 1.0_f );
@@ -659,11 +665,6 @@ namespace atmosphere_scattering
 										, atmosphere.getSunDirection()
 										, densitySample
 										, lightDotEye ) );
-								auto scattering = writer.declLocale( "scattering"
-									, mix( henyeyGreenstein( -0.08_f, lightDotEye )
-										, henyeyGreenstein( 0.08_f, lightDotEye )
-										, clamp( sdw::fma( lightDotEye, 0.5_f, 0.5_f ), 0.0_f, 1.0_f ) ) );
-								scattering = max( scattering, 1.0_f );
 								auto powderTerm = writer.declLocale( "powderTerm"
 									, utils.powder( densitySample ) );
 
@@ -793,6 +794,15 @@ namespace atmosphere_scattering
 		}
 
 		return m_henyeyGreenstein( pg, pcosTheta );
+	}
+
+	sdw::Float CloudsModel::henyeyGreenstein( sdw::Float const & g
+		, sdw::Float const & cosTheta
+		, sdw::Float const & silverIntensity
+		, sdw::Float const & silverSpread )
+	{
+		return max( henyeyGreenstein( g, cosTheta )
+			, silverIntensity * henyeyGreenstein( 0.99_f - silverSpread, cosTheta ) );
 	}
 
 	//************************************************************************************************
