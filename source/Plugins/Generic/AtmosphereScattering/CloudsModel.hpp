@@ -35,8 +35,7 @@ namespace atmosphere_scattering
 		sdw::Void applyClouds( sdw::IVec2 const & fragCoord
 			, sdw::Vec2 const & targetSize
 			, sdw::Vec4 & bg
-			, sdw::Vec4 & emission
-			, sdw::Vec4 & distance );
+			, sdw::Vec4 & emission );
 
 	private:
 		sdw::Vec2 getUVProjection( sdw::Vec3 const & p );

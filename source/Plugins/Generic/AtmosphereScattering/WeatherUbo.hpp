@@ -50,7 +50,7 @@ namespace atmosphere_scattering
 		using Configuration = WeatherConfig;
 
 	public:
-		explicit WeatherUbo( castor3d::RenderDevice const & device
+		WeatherUbo( castor3d::RenderDevice const & device
 			, bool & dirty );
 		~WeatherUbo();
 		void cpuUpdate( Configuration const & config );

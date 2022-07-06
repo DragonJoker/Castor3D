@@ -75,7 +75,7 @@ namespace atmosphere_scattering
 			AtmosphereModel atmosphere{ writer
 				, utils
 				, c3d_atmosphereData
-				, { false, nullptr, true, true }
+				, { &c3d_cameraData, false, false, true, true }
 				, { transmittanceExtent.width, transmittanceExtent.height } };
 			atmosphere.setTransmittanceMap( transmittanceMap );
 
@@ -90,14 +90,8 @@ namespace atmosphere_scattering
 						, in.fragCoord.xy() );
 					auto uv = writer.declLocale( "uv"
 						, pixPos / targetSize );
-
-					auto clipSpace = writer.declLocale( "clipSpace"
-						, atmosphere.getClipSpace( uv, 1.0_f ) );
-					auto hPos = writer.declLocale( "hPos"
-						, c3d_cameraData.camProjToWorld( vec4( clipSpace, 1.0_f ) ) );
-					auto ray = writer.declLocale< Ray >( "ray" );
-					ray.origin = c3d_cameraData.position() + vec3( 0.0_f, c3d_atmosphereData.bottomRadius, 0.0_f );
-					ray.direction = normalize( hPos.xyz() / hPos.w() - c3d_cameraData.position() );
+					auto ray = writer.declLocale( "ray"
+						, atmosphere.castRay( uv ) );
 
 					auto viewHeight = writer.declLocale( "viewHeight"
 						, length( ray.origin ) );

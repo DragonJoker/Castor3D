@@ -107,7 +107,7 @@ namespace atmosphere_scattering
 		using Configuration = AtmosphereScatteringConfig;
 
 	public:
-		explicit AtmosphereScatteringUbo( castor3d::RenderDevice const & device
+		AtmosphereScatteringUbo( castor3d::RenderDevice const & device
 			, bool & dirty );
 		~AtmosphereScatteringUbo();
 		castor::Point3f cpuUpdate( Configuration const & config

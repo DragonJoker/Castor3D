@@ -124,7 +124,7 @@ namespace atmosphere_scattering
 			AtmosphereModel atmosphere{ writer
 				, utils
 				, c3d_atmosphereData
-				, { false, &c3d_cameraData, true, true }
+				, { &c3d_cameraData, false, true, true, true }
 				, { transmittanceExtent.width, transmittanceExtent.height } };
 			ScatteringModel scattering{ writer
 				, atmosphere

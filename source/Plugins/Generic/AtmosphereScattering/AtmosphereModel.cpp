@@ -12,6 +12,17 @@ namespace atmosphere_scattering
 {
 	//************************************************************************************************
 
+	namespace atmodel
+	{
+		sdw::Vec3 getClipSpace( sdw::Vec2 const & uv
+			, sdw::Float const & fragDepth )
+		{
+			return vec3( fma( uv, vec2( 2.0_f ), vec2( -1.0_f ) ), fragDepth );
+		}
+	}
+
+	//************************************************************************************************
+
 	AtmosphereModel::AtmosphereModel( sdw::ShaderWriter & pwriter
 		, castor3d::shader::Utils & putils
 		, AtmosphereData const & patmosphereData
@@ -45,7 +56,7 @@ namespace atmosphere_scattering
 					, sdw::Vec2 const & texSize )
 				{
 					auto clipSpace = writer.declLocale( "clipSpace"
-						, getClipSpace( pixPos, texSize, depth ) );
+						, atmodel::getClipSpace( pixPos / texSize, depth ) );
 					auto depthBufferWorldPos = writer.declLocale( "depthBufferWorldPos"
 						, luminanceSettings.cameraData->objProjToWorld( vec4( clipSpace, 1.0f ) ) );
 					depthBufferWorldPos /= depthBufferWorldPos.w();
@@ -59,17 +70,39 @@ namespace atmosphere_scattering
 		return m_getWorldPos( pdepth, ppixPos, ptexSize );
 	}
 
-	sdw::Vec3 AtmosphereModel::getClipSpace( sdw::Vec2 const & fragPos
-		, sdw::Vec2 const & fragSize
-		, sdw::Float const & fragDepth )
+	sdw::Vec3 AtmosphereModel::getCameraPositionFromEarth()const
 	{
-		return getClipSpace( fragPos / fragSize, fragDepth );
+		return getCameraPosition() + vec3( 0.0_f, atmosphereData.bottomRadius, 0.0_f );
 	}
 
-	sdw::Vec3 AtmosphereModel::getClipSpace( sdw::Vec2 const & uv
-		, sdw::Float const & fragDepth )
+	RetRay AtmosphereModel::castRay( sdw::Vec2 const & puv )
 	{
-		return vec3( fma( uv, vec2( 2.0_f ), vec2( -1.0_f ) ), fragDepth );
+		if ( !m_castRay )
+		{
+			m_castRay = writer.implementFunction< Ray >( "castRay"
+				, [&]( sdw::Vec2 const & uv )
+				{
+					auto clipSpace = writer.declLocale( "clipSpace"
+						, atmodel::getClipSpace( uv, 1.0_f ) );
+					auto hPos = writer.declLocale( "hPos"
+						, camProjToWorld( vec4( clipSpace, 1.0_f ) ) );
+
+					auto result = writer.declLocale< Ray >( "result" );
+					result.origin = getCameraPosition() + vec3( 0.0_f, getEarthRadius(), 0.0_f );
+					result.direction = normalize( hPos.xyz() / hPos.w() - getCameraPosition() );
+
+					writer.returnStmt( result );
+				}
+				, sdw::InVec2{ writer, "uv" } );
+		}
+
+		return m_castRay( puv );
+	}
+
+	RetRay AtmosphereModel::castRay( sdw::Vec2 const & pscreenPoint
+		, sdw::Vec2 const & pscreenSize )
+	{
+		return castRay( pscreenPoint / pscreenSize );
 	}
 
 	sdw::RetVec3 AtmosphereModel::getMultipleScattering( sdw::Vec3 const & pscattering
@@ -577,6 +610,12 @@ namespace atmosphere_scattering
 		}
 
 		return m_raySphereIntersectNearest( pray, ps0, psR );
+	}
+
+	RetIntersection AtmosphereModel::raySphereIntersectNearest( Ray const & ray
+		, sdw::Float const & sphereRadius )
+	{
+		return raySphereIntersectNearest( ray, vec3( 0.0_f ), sphereRadius );
 	}
 
 	sdw::RetFloat AtmosphereModel::hgPhase( sdw::Float const & pg
