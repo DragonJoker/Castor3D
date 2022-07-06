@@ -832,9 +832,7 @@ namespace atmosphere_scattering
 						auto coord = writer.declLocale( "coord"
 							, 2.0_f * uv.y() );
 						coord = 1.0_f - coord;
-#if NONLINEARSKYVIEWLUT
 						coord *= coord;
-#endif
 						coord = 1.0_f - coord;
 						viewZenithCosAngle = cos( zenithHorizonAngle * coord );
 					}
@@ -842,9 +840,7 @@ namespace atmosphere_scattering
 					{
 						auto coord = writer.declLocale( "coord"
 							, uv.y() * 2.0_f - 1.0_f );
-#if NONLINEARSKYVIEWLUT
 						coord *= coord;
-#endif
 						viewZenithCosAngle = cos( zenithHorizonAngle + beta * coord );
 					}
 					FI;
@@ -895,9 +891,7 @@ namespace atmosphere_scattering
 						auto coord = writer.declLocale( "coord"
 							, acos( viewZenithCosAngle ) / zenithHorizonAngle );
 						coord = 1.0_f - coord;
-#if NONLINEARSKYVIEWLUT
 						coord = sqrt( coord );
-#endif
 						coord = 1.0_f - coord;
 						uv.y() = coord * 0.5_f;
 					}
@@ -905,9 +899,7 @@ namespace atmosphere_scattering
 					{
 						auto coord = writer.declLocale( "coord"
 						, ( acos( viewZenithCosAngle ) - zenithHorizonAngle ) / beta );
-#if NONLINEARSKYVIEWLUT
 						coord = sqrt( coord );
-#endif
 						uv.y() = coord * 0.5_f + 0.5_f;
 					}
 					FI;

@@ -30,7 +30,7 @@ namespace atmosphere_scattering
 			, castor3d::shader::Utils & utils
 			, AtmosphereModel & atmosphere
 			, ScatteringModel & scattering
-			, CloudsData const & cloudsData
+			, CloudsData const & clouds
 			, uint32_t binding );
 		sdw::Void applyClouds( sdw::IVec2 const & fragCoord
 			, sdw::Vec2 const & targetSize
@@ -85,13 +85,28 @@ namespace atmosphere_scattering
 			, sdw::Float const & cosTheta
 			, sdw::Float const & silverIntensity
 			, sdw::Float const & silverSpread );
+		sdw::RetVec4 computeLighting( Ray const & ray
+			, sdw::Vec3 const & bg
+			, sdw::Vec3 const & startPos
+			, sdw::Vec3 const & endPos
+			, sdw::Vec3 const & sunColor
+			, sdw::Float const & fogAmount
+			, sdw::Float const & maxEarthShadow
+			, sdw::Float const & cloudAlphaness
+			, sdw::Vec3 const & rayMarchResult
+			, sdw::Float const & accumDensity );
+		sdw::RetVec4 computeEmission( Ray const & ray
+			, sdw::Vec3 const & startPos
+			, sdw::Vec3 const & sunColor
+			, sdw::Float const & cloudAlphaness
+			, sdw::Float const & maxEarthShadow );
 
 	private:
 		sdw::ShaderWriter & writer;
 		castor3d::shader::Utils & utils;
 		AtmosphereModel & atmosphere;
 		ScatteringModel & scattering;
-		CloudsData const & cloudsData;
+		CloudsData const & clouds;
 		sdw::CombinedImage3DRgba32 perlinWorleyNoiseMap;
 		sdw::CombinedImage3DRgba32 worleyNoiseMap;
 		sdw::CombinedImage2DRg32 curlNoiseMap;
@@ -153,6 +168,23 @@ namespace atmosphere_scattering
 		sdw::Function< sdw::Float
 			, sdw::InFloat
 			, sdw::InFloat > m_henyeyGreenstein;
+		sdw::Function< sdw::Vec4
+			, InRay
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InVec3
+			, sdw::InFloat > m_computeLighting;
+		sdw::Function< sdw::Vec4
+			, InRay
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InFloat
+			, sdw::InFloat > m_computeEmission;
 		sdw::Function< sdw::Void
 			, sdw::InIVec2
 			, sdw::InVec2

@@ -10,7 +10,6 @@
 
 #include <ShaderWriter/Source.hpp>
 
-#define NONLINEARSKYVIEWLUT 1
 
 namespace atmosphere_scattering
 {
@@ -20,13 +19,13 @@ namespace atmosphere_scattering
 		, castor3d::shader::Utils & putils
 		, AtmosphereModel & patmosphere
 		, ScatteringModel & pscattering
-		, CloudsData const & pcloudsData
+		, CloudsData const & pclouds
 		, uint32_t binding )
 		: writer{ pwriter }
 		, utils{ putils }
 		, atmosphere{ patmosphere }
 		, scattering{ pscattering }
-		, cloudsData{ pcloudsData }
+		, clouds{ pclouds }
 		, perlinWorleyNoiseMap{ writer.declCombinedImg< sdw::CombinedImage3DRgba32 >( "perlinWorleyNoiseMap"
 			, binding++
 			, 0u ) }
@@ -39,9 +38,9 @@ namespace atmosphere_scattering
 		, weatherMap{ writer.declCombinedImg< sdw::CombinedImage2DRg32 >( "weatherMap"
 			, binding++
 			, 0u ) }
-		, cloudsInnerRadius{ cloudsData.innerRadius() + atmosphere.getEarthRadius() }
-		, cloudsOuterRadius{ cloudsData.outerRadius() + atmosphere.getEarthRadius() }
-		, cloudsThickness{ cloudsData.outerRadius() - cloudsData.innerRadius() }
+		, cloudsInnerRadius{ clouds.innerRadius() + atmosphere.getEarthRadius() }
+		, cloudsOuterRadius{ clouds.outerRadius() + atmosphere.getEarthRadius() }
+		, cloudsThickness{ clouds.outerRadius() - clouds.innerRadius() }
 	{
 	}
 
@@ -117,10 +116,6 @@ namespace atmosphere_scattering
 					}
 					FI;
 
-					auto cloudStartPos = writer.declLocale( "cloudStartPos"
-						, vec3( 0.0_f ) );
-					auto cloudEndPos = writer.declLocale( "cloudEndPos"
-						, vec3( 0.0_f ) );
 					auto accumDensity = writer.declLocale( "accumDensity"
 						, 0.0_f );
 					auto maxEarthShadow = writer.declLocale( "maxEarthShadow"
@@ -134,68 +129,23 @@ namespace atmosphere_scattering
 							, sunColor
 							, accumDensity
 							, maxEarthShadow ) );
-
 					auto cloudAlphaness = writer.declLocale( "cloudAlphaness"
 						, utils.threshold( accumDensity, 0.2_f ) );
-					rayMarchResult = rayMarchResult * 1.8_f - 0.1_f; // contrast-illumination tuning
-
-					// use current position distance to center as action radius
-					rayMarchResult = mix( rayMarchResult
-						, bg.rgb() * accumDensity
-						, vec3( clamp( fogAmount, 0.0_f, 1.0_f ) ) );
-
-					// add sun glare to clouds
-					auto sunIntensity = writer.declLocale( "sunIntensity"
-						, clamp( dot( atmosphere.getSunDirection(), normalize( endPos - startPos ) )
-							, 0.0_f
-							, 1.0_f ) );
-					auto sunGlare = writer.declLocale( "sunGlare"
-						, sunColor * pow( sunIntensity, 256.0_f ) );
-					auto sunGlareIntensity = writer.declLocale( "sunGlareIntensity"
-						, ( 1.0_f - accumDensity ) );
-					auto minGlare = 0.5_f;
-					sunGlareIntensity = utils.remap( sunGlareIntensity, 0.0_f, 1.0_f, minGlare, 1.0_f );
-					rayMarchResult += sunGlare * ( sunGlareIntensity - minGlare );
-
-					// Fade out clouds into the horizon.
-					auto cubeMapEndPos = writer.declLocale( "cubeMapEndPos"
-						, raySphereintersectSkyMap( ray.direction, 0.5_f ).point() );
-					rayMarchResult = mix( vec3( 1.0_f )
+					bg = computeLighting( ray
+						, bg.rgb()
+						, startPos
+						, endPos
+						, sunColor
+						, fogAmount
+						, maxEarthShadow
+						, cloudAlphaness
 						, rayMarchResult
-						, vec3( pow( max( cubeMapEndPos.y() + 0.1_f, 0.0_f ), 0.2_f ) ) );
-
-					// Display sun disk, faded out into the horizon
-					auto sunDisk = writer.declLocale( "sunDisk"
-						, scattering.getSunLuminance( ray ) );
-					sunDisk = mix( vec3( 0.0_f )
-						, sunDisk
-						, vec3( pow( max( cubeMapEndPos.y() + 0.1_f, 0.0_f ), 0.2_f ) ) );
-
-					// Blend background and clouds.
-					auto cloudFadeOutPoint = 0.06_f;
-					accumDensity *= smoothStep( 0.0_f
-						, 1.0_f
-						, min( 1.0_f, utils.remap( ray.direction.y(), cloudFadeOutPoint, 0.2_f, 0.0_f, 1.0_f ) ) );
-					bg = vec4( mix( bg.rgb() + sunDisk
-							, rayMarchResult * maxEarthShadow
-							, vec3( accumDensity ) )
-						, cloudAlphaness );
-
-					auto bloom = writer.declLocale( "bloom"
-						, vec4( sunColor * 1.3_f, 1.0_f ) );
-
-					IF( writer, cloudAlphaness > 0.1_f )
-					{
-						//apply fog to bloom buffer
-						fogAmount = computeFogAmount( startPos, ray.origin, 0.003_f );
-						auto cloud = writer.declLocale( "cloud"
-							, mix( vec3( 0.0_f ), bloom.rgb(), vec3( clamp( fogAmount, 0.0_f, 1.0_f ) ) ) );
-						bloom.rgb() = bloom.rgb() * ( 1.0_f - cloudAlphaness ) + cloud.rgb();
-						bloom.rgb() *= maxEarthShadow;
-					}
-					FI;
-
-					emission = bloom;
+						, accumDensity );
+					emission = computeEmission( ray
+						, startPos
+						, sunColor
+						, cloudAlphaness
+						, maxEarthShadow );
 				}
 				, sdw::InIVec2{ writer, "fragCoord" }
 				, sdw::InVec2{ writer, "targetSize" }
@@ -247,7 +197,6 @@ namespace atmosphere_scattering
 					auto numerator = writer.declLocale( "numerator"
 						, abs( cosTheta * ( lengthOfRayfromCamera - lengthOfRayToInnerShell ) ) );
 					writer.returnStmt( numerator / cloudsThickness );
-					// return clamp( length(point.y - projectedPos.y) / sphereDelta, 0.0, 1.0);
 				}
 				, sdw::InVec3{ writer, "point" }
 				, sdw::InVec3{ writer, "startPosOnInnerShell" }
@@ -306,10 +255,10 @@ namespace atmosphere_scattering
 					, sdw::Float const & heightFraction )
 				{
 					//skew in wind direction
-					point += heightFraction * cloudsData.windDirection() * cloudsData.topOffset();
+					point += heightFraction * clouds.windDirection() * clouds.topOffset();
 
 					//Animate clouds in wind direction and add a small upward bias to the wind direction
-					point += cloudsData.windDirection() * cloudsData.time() * cloudsData.cloudSpeed();
+					point += clouds.windDirection() * clouds.time() * clouds.cloudSpeed();
 					writer.returnStmt( point );
 				}
 				, sdw::InVec3{ writer, "point" }
@@ -337,14 +286,14 @@ namespace atmosphere_scattering
 						, getUVProjection( unskewedSamplePoint ) );
 					//Read in the low-frequency Perlin-Worley noises and Worley noises
 					auto lowFrequencyNoise = writer.declLocale( "lowFrequencyNoise"
-						, perlinWorleyNoiseMap.lod( vec3( uv * cloudsData.crispiness(), heightFraction ), lod ) );
+						, perlinWorleyNoiseMap.lod( vec3( uv * clouds.crispiness(), heightFraction ), lod ) );
 
 					//Build an FBM out of the low-frequency Worley Noises that are used to add detail to the Low-frequency Perlin Worley noise
 					auto lowFrequencyFBM = writer.declLocale( "lowFrequencyFBM"
 						, dot( lowFrequencyNoise.gba(), vec3( 0.625_f, 0.25_f, 0.125_f ) ) );
 
 					// Define the base cloud shape by dilating it with the low-frequency FBM
-					auto baseCloud = writer.declLocale( "baseCloud"
+					auto baseCloudShape = writer.declLocale( "baseCloudShape"
 						, utils.remap( lowFrequencyNoise.r(), ( lowFrequencyFBM - 1.0_f ), 1.0_f, 0.0_f, 1.0_f ) );
 
 					// Use weather map for cloud types and blend between them and their densities
@@ -354,14 +303,14 @@ namespace atmosphere_scattering
 					auto densityHeightGradient = writer.declLocale( "densityHeightGradient"
 						, getDensityHeightGradientForPoint( heightFraction, weather.g() ) );
 					// Apply Height function to the base cloud shape
-					baseCloud *= ( densityHeightGradient / heightFraction );
+					baseCloudShape *= densityHeightGradient / heightFraction;
 
 					// Cloud coverage is stored in weather data’s red channel.
 					auto cloudCoverage = writer.declLocale( "cloudCoverage"
-						, weather.r() * cloudsData.coverage() );
+						, weather.r() * clouds.coverage() );
 					// Use remap to apply the cloud coverage attribute.
 					auto baseCloudWithCoverage = writer.declLocale( "baseCloudWithCoverage"
-						, utils.remap( baseCloud, cloudCoverage, 1.0_f, 0.0_f, 1.0_f ) );
+						, utils.remap( baseCloudShape, cloudCoverage, 1.0_f, 0.0_f, 1.0_f ) );
 					// To ensure that the density increases with coverage in an aesthetically pleasing manner
 					// Multiply the result by the cloud coverage attribute so that smaller clouds are lighter 
 					// and more aesthetically pleasing
@@ -391,7 +340,7 @@ namespace atmosphere_scattering
 			m_erodeWithHighFrequency = writer.implementFunction< sdw::Float >( "clouds_erodeWithHighFrequency"
 				, [&]( sdw::Float const & baseDensity
 					, sdw::Vec3 skewedSamplePoint
-					, sdw::Float const & heightFraction
+					, sdw::Float heightFraction
 					, sdw::Float const & lod )
 				{
 					// Add turbulence to the bottom of the clouds
@@ -403,7 +352,7 @@ namespace atmosphere_scattering
 
 					// Sample High Frequency Noises
 					auto highFrequencyNoise = writer.declLocale( "highFrequencyNoise"
-						, worleyNoiseMap.lod( vec3( uv * cloudsData.crispiness(), heightFraction ) * cloudsData.curliness(), lod ).rgb() );
+						, worleyNoiseMap.lod( vec3( uv * clouds.crispiness(), heightFraction ) * clouds.curliness(), lod ).rgb() );
 
 					// Build High Frequency FBM
 					auto highFrequencyFBM = writer.declLocale( "highFrequencyFBM"
@@ -514,7 +463,7 @@ namespace atmosphere_scattering
 					auto invDepth = writer.declLocale( "invDepth"
 						, 1.0_f / ds );
 					auto sigmaDs = writer.declLocale( "sigmaDs"
-						, -ds * cloudsData.absorption() );
+						, -ds * clouds.absorption() );
 					auto transmittance = writer.declLocale( "transmittance"
 						, 1.0_f );
 					densityAlongLight = 0.0_f;
@@ -628,7 +577,7 @@ namespace atmosphere_scattering
 					auto transmittance = writer.declLocale( "transmittance"
 						, 1.0_f );
 					auto sigmaDs = writer.declLocale( "sigmaDs"
-						, -ds * cloudsData.density() );
+						, -ds * clouds.density() );
 					auto entered = writer.declLocale( "entered"
 						, 0_b );
 					accumDensity = 0.0_f;
@@ -675,14 +624,14 @@ namespace atmosphere_scattering
 									auto powderTerm = writer.declLocale( "powderTerm"
 										, utils.powder( densitySample ) );
 
-									IF( writer, cloudsData.enablePowder() == 0_i )
+									IF( writer, clouds.enablePowder() == 0_i )
 									{
 										powderTerm = 1.0_f;
 									}
 									FI;
 
 									auto ambientLight = writer.declLocale( "ambientLight"
-										, cloudsData.bottomColor() ); //mix( CLOUDS_AMBIENT_COLOR_BOTTOM, CLOUDS_AMBIENT_COLOR_TOP, height );
+										, clouds.bottomColor() ); //mix( CLOUDS_AMBIENT_COLOR_BOTTOM, CLOUDS_AMBIENT_COLOR_TOP, height );
 									auto scattered = writer.declLocale( "scattered"
 										, 0.6_f * densitySample * mix( mix( ambientLight * 1.8_f, bg, vec3( 0.2_f ) )
 											, scattering * sunColor
@@ -818,6 +767,145 @@ namespace atmosphere_scattering
 	{
 		return max( henyeyGreenstein( g, cosTheta )
 			, silverIntensity * henyeyGreenstein( 0.99_f - silverSpread, cosTheta ) );
+	}
+
+	sdw::RetVec4 CloudsModel::computeEmission( Ray const & pray
+		, sdw::Vec3 const & pstartPos
+		, sdw::Vec3 const & psunColor
+		, sdw::Float const & pcloudAlphaness
+		, sdw::Float const & pmaxEarthShadow )
+	{
+		if ( !m_computeEmission )
+		{
+			m_computeEmission = writer.implementFunction< sdw::Vec4 >( "clouds_computeEmission"
+				, [&]( Ray const & ray
+					, sdw::Vec3 const & startPos
+					, sdw::Vec3 const & sunColor
+					, sdw::Float const & cloudAlphaness
+					, sdw::Float const & maxEarthShadow )
+				{
+					auto bloom = writer.declLocale( "bloom"
+						, vec3( sunColor * 1.3_f ) );
+
+					IF( writer, cloudAlphaness > 0.1_f )
+					{
+						//apply fog to bloom buffer
+						auto fogAmount = writer.declLocale( "fogAmount"
+							, computeFogAmount( startPos, ray.origin, 0.006_f ) );
+						auto cloud = writer.declLocale( "cloud"
+							, mix( vec3( 0.0_f ), bloom, vec3( clamp( fogAmount, 0.0_f, 1.0_f ) ) ) );
+						bloom = bloom * ( 1.0_f - cloudAlphaness ) + cloud;
+						bloom *= maxEarthShadow;
+					}
+					FI;
+
+					writer.returnStmt( vec4( bloom, 1.0_f ) );
+				}
+				, InRay{ writer, "ray" }
+				, sdw::InVec3{ writer, "startPos" }
+				, sdw::InVec3{ writer, "sunColor" }
+				, sdw::InFloat{ writer, "cloudAlphaness" }
+				, sdw::InFloat{ writer, "maxEarthShadow" } );
+		}
+
+		return m_computeEmission( pray
+			, pstartPos
+			, psunColor
+			, pcloudAlphaness
+			, pmaxEarthShadow );
+	}
+
+	sdw::RetVec4 CloudsModel::computeLighting( Ray const & pray
+		, sdw::Vec3 const & pbg
+		, sdw::Vec3 const & pstartPos
+		, sdw::Vec3 const & pendPos
+		, sdw::Vec3 const & psunColor
+		, sdw::Float const & pfogAmount
+		, sdw::Float const & pmaxEarthShadow
+		, sdw::Float const & pcloudAlphaness
+		, sdw::Vec3 const & prayMarchResult
+		, sdw::Float const & paccumDensity )
+	{
+		if ( !m_computeLighting )
+		{
+			m_computeLighting = writer.implementFunction< sdw::Vec4 >( "clouds_computeLighting"
+				, [&]( Ray const & ray
+					, sdw::Vec3 const & bg
+					, sdw::Vec3 const & startPos
+					, sdw::Vec3 const & endPos
+					, sdw::Vec3 const & sunColor
+					, sdw::Float const & fogAmount
+					, sdw::Float const & maxEarthShadow
+					, sdw::Float const & cloudAlphaness
+					, sdw::Vec3 rayMarchResult
+					, sdw::Float accumDensity )
+				{
+					rayMarchResult = rayMarchResult * 1.8_f - 0.1_f; // contrast-illumination tuning
+
+					// use current position distance to center as action radius
+					rayMarchResult = mix( rayMarchResult
+						, bg * accumDensity
+						, vec3( clamp( fogAmount, 0.0_f, 1.0_f ) ) );
+
+					// add sun glare to clouds
+					auto sunIntensity = writer.declLocale( "sunIntensity"
+						, clamp( dot( atmosphere.getSunDirection(), normalize( endPos - startPos ) )
+							, 0.0_f
+							, 1.0_f ) );
+					auto sunGlare = writer.declLocale( "sunGlare"
+						, sunColor * pow( sunIntensity, 256.0_f ) );
+					auto sunGlareIntensity = writer.declLocale( "sunGlareIntensity"
+						, ( 1.0_f - accumDensity ) );
+					auto minGlare = 0.5_f;
+					sunGlareIntensity = utils.remap( sunGlareIntensity, 0.0_f, 1.0_f, minGlare, 1.0_f );
+					rayMarchResult += sunGlare * ( sunGlareIntensity - minGlare );
+
+					// Fade out clouds into the horizon.
+					auto cubeMapEndPos = writer.declLocale( "cubeMapEndPos"
+						, raySphereintersectSkyMap( ray.direction, 0.5_f ).point() );
+					rayMarchResult = mix( vec3( 1.0_f )
+						, rayMarchResult
+						, vec3( pow( max( cubeMapEndPos.y() + 0.1_f, 0.0_f ), 0.2_f ) ) );
+
+					// Display sun disk, faded out into the horizon
+					auto sunDisk = writer.declLocale( "sunDisk"
+						, scattering.getSunLuminance( ray ) );
+					sunDisk = mix( vec3( 0.0_f )
+						, sunDisk
+						, vec3( pow( max( cubeMapEndPos.y() + 0.1_f, 0.0_f ), 0.2_f ) ) );
+
+					// Blend background and clouds.
+					auto cloudFadeOutPoint = 0.06_f;
+					accumDensity *= smoothStep( 0.0_f
+						, 1.0_f
+						, min( 1.0_f, utils.remap( ray.direction.y(), cloudFadeOutPoint, 0.2_f, 0.0_f, 1.0_f ) ) );
+					writer.returnStmt( vec4( mix( bg + sunDisk
+						, rayMarchResult * maxEarthShadow
+						, vec3( accumDensity ) )
+						, cloudAlphaness ) );
+				}
+				, InRay{ writer, "ray" }
+				, sdw::InVec3{ writer, "bg" }
+				, sdw::InVec3{ writer, "startPos" }
+				, sdw::InVec3{ writer, "endPos" }
+				, sdw::InVec3{ writer, "sunColor" }
+				, sdw::InFloat{ writer, "fogAmount" }
+				, sdw::InFloat{ writer, "maxEarthShadow" }
+				, sdw::InFloat{ writer, "cloudAlphaness" }
+				, sdw::InVec3{ writer, "rayMarchResult" }
+				, sdw::InFloat{ writer, "accumDensity" } );
+		}
+
+		return m_computeLighting( pray
+			, pbg
+			, pstartPos
+			, pendPos
+			, psunColor
+			, pfogAmount
+			, pmaxEarthShadow
+			, pcloudAlphaness
+			, prayMarchResult
+			, paccumDensity );
 	}
 
 	//************************************************************************************************
