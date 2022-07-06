@@ -148,8 +148,8 @@ namespace atmosphere_scattering
 							, 0.0_f
 							, 1.0_f ) );
 					auto sunGlare = writer.declLocale( "sunGlare"
-						, 0.8_f * sunColor * pow( sunIntensity, 256.0_f ) );
-					rayMarchResult += sunGlare * accumDensity;
+						, sunColor * pow( sunIntensity, 256.0_f ) );
+					rayMarchResult += sunGlare * (1.0_f - accumDensity );
 
 					// Blend and fade out clouds into the horizon
 					auto cubeMapEndPos = writer.declLocale( "cubeMapEndPos"

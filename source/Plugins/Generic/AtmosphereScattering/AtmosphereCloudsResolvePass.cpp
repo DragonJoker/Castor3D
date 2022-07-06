@@ -110,7 +110,7 @@ namespace atmosphere_scattering
 					auto texCoords = writer.declLocale( "texCoords"
 						, vec2( in.fragCoord.xy() ) / targetSize );
 					fragColour = gaussianBlur( cloudsMap, texCoords );
-
+/*
 					// RADIAL BLUR - CREPUSCOLAR RAYS
 					IF( writer, c3d_cameraData.lightDotCameraFront() > 0.0_f )
 					{
@@ -165,6 +165,7 @@ namespace atmosphere_scattering
 						//FragColor.rgb = (smoothstep(0., 1., colRays)*exposure - 0.2);
 					}
 					FI;
+*/
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
