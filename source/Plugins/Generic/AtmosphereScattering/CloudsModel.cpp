@@ -10,6 +10,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
+#define Debug_CloudsRadius 0
 
 namespace atmosphere_scattering
 {
@@ -159,9 +160,9 @@ namespace atmosphere_scattering
 			, pemission );
 	}
 
-	sdw::Vec2 CloudsModel::getUVProjection( sdw::Vec3 const & p )
+	sdw::Vec2 CloudsModel::getSphericalProjection( sdw::Vec3 const & p )
 	{
-		return p.xz() / cloudsInnerRadius + 0.5_f;
+		return normalize( p ).xz() * vec2( 0.5_f );
 	}
 
 	sdw::Float CloudsModel::getHeightFraction( sdw::Vec3 const & inPos )
@@ -283,7 +284,7 @@ namespace atmosphere_scattering
 					, sdw::Float const & lod )
 				{
 					auto uv = writer.declLocale( "uv"
-						, getUVProjection( unskewedSamplePoint ) );
+						, getSphericalProjection( unskewedSamplePoint ) );
 					//Read in the low-frequency Perlin-Worley noises and Worley noises
 					auto lowFrequencyNoise = writer.declLocale( "lowFrequencyNoise"
 						, perlinWorleyNoiseMap.lod( vec3( uv * clouds.crispiness(), heightFraction ), lod ) );
@@ -297,7 +298,7 @@ namespace atmosphere_scattering
 						, utils.remap( lowFrequencyNoise.r(), ( lowFrequencyFBM - 1.0_f ), 1.0_f, 0.0_f, 1.0_f ) );
 
 					// Use weather map for cloud types and blend between them and their densities
-					uv = getUVProjection( skewedSamplePoint );
+					uv = getSphericalProjection( skewedSamplePoint );
 					auto weather = writer.declLocale( "weatherData"
 						, weatherMap.lod( uv, 0.0_f ) );
 					auto densityHeightGradient = writer.declLocale( "densityHeightGradient"
@@ -348,7 +349,7 @@ namespace atmosphere_scattering
 						, curlNoiseMap.sample( skewedSamplePoint.xy(), 0.0_f ) );
 					skewedSamplePoint.xy() += curlNoise * ( 1.0_f - heightFraction );
 					auto uv = writer.declLocale( "uv"
-						, getUVProjection( skewedSamplePoint ) );
+						, getSphericalProjection( skewedSamplePoint ) );
 
 					// Sample High Frequency Noises
 					auto highFrequencyNoise = writer.declLocale( "highFrequencyNoise"
@@ -877,11 +878,14 @@ namespace atmosphere_scattering
 						, sunDisk
 						, vec3( pow( max( cubeMapEndPos.y() + 0.1_f, 0.0_f ), 0.2_f ) ) );
 
+#if !Debug_CloudsRadius
 					// Blend background and clouds.
 					auto cloudFadeOutPoint = 0.06_f;
 					accumDensity *= smoothStep( 0.0_f
 						, 1.0_f
 						, min( 1.0_f, utils.remap( ray.direction.y(), cloudFadeOutPoint, 0.2_f, 0.0_f, 1.0_f ) ) );
+#endif
+
 					writer.returnStmt( vec4( mix( bg + sunDisk
 						, rayMarchResult * maxEarthShadow
 						, vec3( accumDensity ) )
