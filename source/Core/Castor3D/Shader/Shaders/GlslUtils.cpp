@@ -30,6 +30,150 @@ namespace castor3d::shader
 			, sssProfiles
 			, enableVolumetric );
 	}
+	
+	sdw::Float Utils::saturate( sdw::Float const v )
+	{
+		return clamp( v, 0.0_f, 1.0_f );
+	}
+
+	sdw::Vec3 Utils::saturate( sdw::Vec3 const v )
+	{
+		return clamp( v, vec3( 0.0_f ), vec3( 1.0_f ) );
+	}
+	
+	sdw::Vec2 Utils::topDownToBottomUp( sdw::Vec2 const & v )
+	{
+		return vec2( v.x(), 1.0_f - v.y() );
+	}
+
+	sdw::Vec3 Utils::topDownToBottomUp( sdw::Vec3 const & v )
+	{
+		return vec3( v.x(), 1.0_f - v.y(), v.z() );
+	}
+
+	sdw::Vec4 Utils::topDownToBottomUp( sdw::Vec4 const & v )
+	{
+		return vec4( v.x(), 1.0_f - v.y(), v.z(), v.w() );
+	}
+
+	sdw::Vec2 Utils::negateTopDownToBottomUp( sdw::Vec2 const & v )
+	{
+		return vec2( v.x(), -v.y() );
+	}
+
+	sdw::Vec3 Utils::negateTopDownToBottomUp( sdw::Vec3 const & v )
+	{
+		return vec3( v.x(), -v.y(), v.z() );
+	}
+
+	sdw::Vec4 Utils::negateTopDownToBottomUp( sdw::Vec4 const & v )
+	{
+		return vec4( v.x(), -v.y(), v.z(), v.w() );
+	}
+
+	sdw::Vec2 Utils::calcTexCoord( sdw::Vec2 const & renderPos
+			, sdw::Vec2 const & renderSize )
+	{
+		return renderPos / renderSize;
+	}
+	
+	sdw::Vec3 Utils::applyGamma( sdw::Float const & gamma
+		, sdw::Vec3 const & hdr )
+	{
+		return pow( max( hdr, vec3( 0.0_f, 0.0_f, 0.0_f ) ), vec3( 1.0_f / gamma ) );
+	}
+
+	sdw::Vec3 Utils::removeGamma( sdw::Float const & gamma
+		, sdw::Vec3 const & srgb )
+	{
+		return pow( max( srgb, vec3( 0.0_f, 0.0_f, 0.0_f ) ), vec3( gamma ) );
+	}
+
+	void Utils::compute2DMapsContributions( FilteredTextureFlags const & flags
+		, TextureConfigurations const & textureConfigs
+		, TextureAnimations const & textureAnims
+		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, sdw::Vec3 const & texCoords
+		, sdw::Vec3 & colour
+		, sdw::Float & opacity )
+	{
+		if ( !textureConfigs.isEnabled() )
+		{
+			return;
+		}
+
+		for ( auto & textureIt : flags )
+		{
+			if ( checkFlag( textureIt.second.flags, TextureFlag::eColour )
+				|| checkFlag( textureIt.second.flags, TextureFlag::eOpacity ) )
+			{
+				auto i = textureIt.first;
+				auto name = castor::string::stringCast< char >( castor::string::toString( i ) );
+				CU_Require( textureIt.second.id > 0u );
+				auto config = m_writer.declLocale( "c3d_config" + name
+					, textureConfigs.getTextureConfiguration( sdw::UInt( textureIt.second.id ) ) );
+				auto anim = m_writer.declLocale( "c3d_anim" + name
+					, textureAnims.getTextureAnimation( sdw::UInt( textureIt.second.id ) ) );
+				auto texCoord = m_writer.declLocale( "c3d_texCoord" + name
+					, texCoords.xy() );
+				config.transformUV( anim, texCoord );
+				auto sampled = m_writer.declLocale< sdw::Vec4 >( "c3d_sampled" + name
+					, maps[i].sample( texCoord ) );
+
+				if ( checkFlag( textureIt.second.flags, TextureFlag::eColour ) )
+				{
+					colour = config.getColour( sampled, colour );
+				}
+
+				if ( checkFlag( textureIt.second.flags, TextureFlag::eOpacity ) )
+				{
+					opacity = config.getOpacity( sampled, opacity );
+				}
+			}
+		}
+	}
+
+	sdw::Float Utils::remap( sdw::Float const & originalValue
+		, sdw::Float const & originalMin
+		, sdw::Float const & originalMax
+		, sdw::Float const & newMin
+		, sdw::Float const & newMax )
+	{
+		return newMin + ( ( ( originalValue - originalMin ) / ( originalMax - originalMin ) ) * ( newMax - newMin ) );
+	}
+
+	sdw::Float Utils::threshold( sdw::Float const & v
+		, sdw::Float const & t )
+	{
+		return m_writer.ternary( v > t, v, 0.0_f );
+	}
+
+	sdw::Float Utils::beer( sdw::Float const & d )
+	{
+		return exp( -d );
+	}
+
+	sdw::Float Utils::powder( sdw::Float const & d )
+	{
+		return 1.0_f - exp( -2.0_f * d );
+	}
+
+	sdw::Float Utils::powder( sdw::Float const & d
+		, sdw::Float const & cosTheta )
+	{
+		return mix( 1.0_f
+			, powder( d )
+			, clamp( fma( cosTheta, 0.5_f, 0.5_f ), 0.0_f, 1.0_f ) );
+	}
+
+	sdw::Vec4 Utils::sampleMap( PassFlags const & passFlags
+		, sdw::CombinedImage2DRgba32 const & map
+		, sdw::Vec2 const & texCoords )
+	{
+		return ( checkFlag( passFlags, PassFlag::eUntile )
+			? sampleUntiled( map, texCoords )
+			: map.sample( texCoords ) );
+	}
 
 	void Utils::swap( sdw::Float const pA
 		, sdw::Float const & pB )
@@ -51,17 +195,7 @@ namespace castor3d::shader
 		m_swap1F( pA, pB );
 	}
 
-	sdw::Float Utils::saturate( sdw::Float const v )
-	{
-		return clamp( v, 0.0_f, 1.0_f );
-	}
-
-	sdw::Vec3 Utils::saturate( sdw::Vec3 const v )
-	{
-		return clamp( v, vec3( 0.0_f ), vec3( 1.0_f ) );
-	}
-
-	sdw::Float Utils::distanceSquared( sdw::Vec2 const pA
+	sdw::RetFloat Utils::distanceSquared( sdw::Vec2 const pA
 		, sdw::Vec2 const & pB )
 	{
 		if ( !m_distanceSquared2F )
@@ -80,7 +214,7 @@ namespace castor3d::shader
 		return m_distanceSquared2F( pA, pB );
 	}
 
-	sdw::Float Utils::distanceSquared( sdw::Vec3 const pA
+	sdw::RetFloat Utils::distanceSquared( sdw::Vec3 const pA
 		, sdw::Vec3 const & pB )
 	{
 		if ( !m_distanceSquared3F )
@@ -99,115 +233,7 @@ namespace castor3d::shader
 		return m_distanceSquared3F( pA, pB );
 	}
 
-	sdw::Vec2 Utils::topDownToBottomUp( sdw::Vec2 const & ptexCoord )
-	{
-		if ( !m_invertVec2Y )
-		{
-			m_invertVec2Y = m_writer.implementFunction< sdw::Vec2 >( "c3d_invertVec2Y"
-				, [&]( sdw::Vec2 const & v )
-				{
-					m_writer.returnStmt( vec2( v.x(), 1.0_f - v.y() ) );
-				}
-				, sdw::InVec2{ m_writer, "v" } );
-		}
-
-		return m_invertVec2Y( ptexCoord );
-	}
-
-	sdw::Vec3 Utils::topDownToBottomUp( sdw::Vec3 const & ptexCoord )
-	{
-		if ( !m_invertVec3Y )
-		{
-			m_invertVec3Y = m_writer.implementFunction< sdw::Vec3 >( "c3d_invertVec3Y"
-				, [&]( sdw::Vec3 const & v )
-				{
-					m_writer.returnStmt( vec3( v.x(), 1.0_f - v.y(), v.z() ) );
-				}
-				, sdw::InVec3{ m_writer, "v" } );
-		}
-
-		return m_invertVec3Y( ptexCoord );
-	}
-
-	sdw::Vec4 Utils::topDownToBottomUp( sdw::Vec4 const & ptexCoord )
-	{
-		if ( !m_invertVec4Y )
-		{
-			m_invertVec4Y = m_writer.implementFunction< sdw::Vec4 >( "c3d_invertVec4Y"
-				, [&]( sdw::Vec4 const & v )
-				{
-					m_writer.returnStmt( vec3( v.x(), 1.0_f - v.y(), v.z(), v.w() ) );
-				}
-				, sdw::InVec4{ m_writer, "v" } );
-		}
-
-		return m_invertVec4Y( ptexCoord );
-	}
-
-	sdw::Vec2 Utils::negateTopDownToBottomUp( sdw::Vec2 const & ptexCoord )
-	{
-		if ( !m_negateVec2Y )
-		{
-			m_negateVec2Y = m_writer.implementFunction< sdw::Vec2 >( "c3d_negateVec2Y"
-				, [&]( sdw::Vec2 const & v )
-				{
-					m_writer.returnStmt( vec2( v.x(), -v.y() ) );
-				}
-				, sdw::InVec2{ m_writer, "v" } );
-		}
-
-		return m_negateVec2Y( ptexCoord );
-	}
-
-	sdw::Vec3 Utils::negateTopDownToBottomUp( sdw::Vec3 const & ptexCoord )
-	{
-		if ( !m_negateVec3Y )
-		{
-			m_negateVec3Y = m_writer.implementFunction< sdw::Vec3 >( "c3d_negateVec3Y"
-				, [&]( sdw::Vec3 const & v )
-				{
-					m_writer.returnStmt( vec3( v.x(), -v.y(), v.z() ) );
-				}
-				, sdw::InVec3{ m_writer, "v" } );
-		}
-
-		return m_negateVec3Y( ptexCoord );
-	}
-
-	sdw::Vec4 Utils::negateTopDownToBottomUp( sdw::Vec4 const & ptexCoord )
-	{
-		if ( !m_negateVec4Y )
-		{
-			m_negateVec4Y = m_writer.implementFunction< sdw::Vec4 >( "c3d_negateVec4Y"
-				, [&]( sdw::Vec4 const & v )
-				{
-					m_writer.returnStmt( vec3( v.x(), -v.y(), v.z(), v.w() ) );
-				}
-				, sdw::InVec4{ m_writer, "v" } );
-		}
-
-		return m_negateVec4Y( ptexCoord );
-	}
-
-	sdw::Vec2 Utils::calcTexCoord( sdw::Vec2 const & prenderPos
-			, sdw::Vec2 const & prenderSize )
-	{
-		if ( !m_calcTexCoord )
-		{
-			m_calcTexCoord = m_writer.implementFunction< sdw::Vec2 >( "c3d_calcTexCoord"
-				, [&]( sdw::Vec2 const & renderPos
-					, sdw::Vec2 const & renderSize )
-				{
-					m_writer.returnStmt( renderPos / renderSize );
-				}
-				, sdw::InVec2{ m_writer, "renderPos" }
-				, sdw::InVec2{ m_writer, "renderSize" } );
-		}
-
-		return m_calcTexCoord( prenderPos, prenderSize );
-	}
-
-	sdw::Vec3 Utils::calcVSPosition( sdw::Vec2 const & puv
+	sdw::RetVec3 Utils::calcVSPosition( sdw::Vec2 const & puv
 		, sdw::Float const & pdepth
 		, sdw::Mat4 const & pinvProj )
 	{
@@ -234,7 +260,7 @@ namespace castor3d::shader
 			, pinvProj );
 	}
 
-	sdw::Vec3 Utils::calcWSPosition( sdw::Vec2 const & puv
+	sdw::RetVec3 Utils::calcWSPosition( sdw::Vec2 const & puv
 		, sdw::Float const & pdepth
 		, sdw::Mat4 const & pinvViewProj )
 	{
@@ -261,43 +287,7 @@ namespace castor3d::shader
 			, pinvViewProj );
 	}
 
-	sdw::Vec3 Utils::applyGamma( sdw::Float const & pgamma
-		, sdw::Vec3 const & phdr )
-	{
-		if ( !m_applyGamma )
-		{
-			m_applyGamma = m_writer.implementFunction< sdw::Vec3 >( "c3d_applyGamma"
-				, [&]( sdw::Float const & gamma
-					, sdw::Vec3 const & hdr )
-				{
-					m_writer.returnStmt( pow( max( hdr, vec3( 0.0_f, 0.0_f, 0.0_f ) ), vec3( 1.0_f / gamma ) ) );
-				}
-				, sdw::InFloat{ m_writer, "gamma" }
-				, sdw::InVec3{ m_writer, "hdr" } );
-		}
-
-		return m_applyGamma( pgamma, phdr );
-	}
-
-	sdw::Vec3 Utils::removeGamma( sdw::Float const & pgamma
-		, sdw::Vec3 const & psrgb )
-	{
-		if ( !m_removeGamma )
-		{
-			m_removeGamma = m_writer.implementFunction< sdw::Vec3 >( "c3d_removeGamma"
-				, [&]( sdw::Float const & gamma
-					, sdw::Vec3 const & srgb )
-				{
-					m_writer.returnStmt( pow( max( srgb, vec3( 0.0_f, 0.0_f, 0.0_f ) ), vec3( gamma ) ) );
-				}
-				, sdw::InFloat{ m_writer, "gamma" }
-				, sdw::InVec3{ m_writer, "srgb" } );
-		}
-
-		return m_removeGamma( pgamma, psrgb );
-	}
-
-	sdw::Vec3 Utils::getMapNormal( sdw::Vec2 const & puv
+	sdw::RetVec3 Utils::getMapNormal( sdw::Vec2 const & puv
 		, sdw::Vec3 const & pnormal
 		, sdw::Vec3 const & pposition )
 	{
@@ -341,7 +331,7 @@ namespace castor3d::shader
 		return m_getMapNormal( puv, pnormal, pposition );
 	}
 
-	sdw::Float Utils::rescaleDepth( sdw::Float const & pdepth
+	sdw::RetFloat Utils::rescaleDepth( sdw::Float const & pdepth
 		, sdw::Float const & pnearPlane
 		, sdw::Float const & pfarPlane )
 	{
@@ -367,7 +357,7 @@ namespace castor3d::shader
 			, pfarPlane );
 	}
 
-	sdw::Vec4 Utils::computeAccumulation( sdw::Float const & pdepth
+	sdw::RetVec4 Utils::computeAccumulation( sdw::Float const & pdepth
 		, sdw::Vec3 const & pcolour
 		, sdw::Float const & palpha
 		, sdw::Float const & pnearPlane
@@ -479,7 +469,7 @@ namespace castor3d::shader
 			, paccumulationOperator );
 	}
 
-	sdw::Vec3 Utils::fresnelSchlick( sdw::Float const & pproduct
+	sdw::RetVec3 Utils::fresnelSchlick( sdw::Float const & pproduct
 		, sdw::Vec3 const & pf0 )
 	{
 		if ( !m_fresnelSchlick )
@@ -500,51 +490,7 @@ namespace castor3d::shader
 		return m_fresnelSchlick( pproduct, pf0 );
 	}
 
-	void Utils::compute2DMapsContributions( FilteredTextureFlags const & flags
-		, TextureConfigurations const & textureConfigs
-		, TextureAnimations const & textureAnims
-		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, sdw::Vec3 const & texCoords
-		, sdw::Vec3 & colour
-		, sdw::Float & opacity )
-	{
-		if ( !textureConfigs.isEnabled() )
-		{
-			return;
-		}
-
-		for ( auto & textureIt : flags )
-		{
-			if ( checkFlag( textureIt.second.flags, TextureFlag::eColour )
-				|| checkFlag( textureIt.second.flags, TextureFlag::eOpacity ) )
-			{
-				auto i = textureIt.first;
-				auto name = castor::string::stringCast< char >( castor::string::toString( i ) );
-				CU_Require( textureIt.second.id > 0u );
-				auto config = m_writer.declLocale( "c3d_config" + name
-					, textureConfigs.getTextureConfiguration( sdw::UInt( textureIt.second.id ) ) );
-				auto anim = m_writer.declLocale( "c3d_anim" + name
-					, textureAnims.getTextureAnimation( sdw::UInt( textureIt.second.id ) ) );
-				auto texCoord = m_writer.declLocale( "c3d_texCoord" + name
-					, texCoords.xy() );
-				config.transformUV( anim, texCoord );
-				auto sampled = m_writer.declLocale< sdw::Vec4 >( "c3d_sampled" + name
-					, maps[i].sample( texCoord ) );
-
-				if ( checkFlag( textureIt.second.flags, TextureFlag::eColour ) )
-				{
-					colour = config.getColour( sampled, colour );
-				}
-
-				if ( checkFlag( textureIt.second.flags, TextureFlag::eOpacity ) )
-				{
-					opacity = config.getOpacity( sampled, opacity );
-				}
-			}
-		}
-	}
-
-	sdw::Vec2 Utils::parallaxMapping( sdw::Vec2 const & ptexCoords
+	sdw::RetVec2 Utils::parallaxMapping( sdw::Vec2 const & ptexCoords
 		, sdw::Vec3 const & pviewDir
 		, sdw::CombinedImage2DRgba32 const & pheightMap
 		, TextureConfigData const & ptextureConfig )
@@ -642,7 +588,7 @@ namespace castor3d::shader
 			, ptextureConfig );
 	}
 
-	sdw::Float Utils::parallaxShadow( sdw::Vec3 const & plightDir
+	sdw::RetFloat Utils::parallaxShadow( sdw::Vec3 const & plightDir
 		, sdw::Vec2 const & pinitialTexCoord
 		, sdw::Float const & pinitialHeight
 		, sdw::CombinedImage2DRgba32 const & pheightMap
@@ -753,7 +699,7 @@ namespace castor3d::shader
 			, ptextureConfig );
 	}
 
-	sdw::Vec4 Utils::clipToScreen( sdw::Vec4 const & pin )
+	sdw::RetVec4 Utils::clipToScreen( sdw::Vec4 const & pin )
 	{
 		if ( !m_clipToScreen )
 		{
@@ -779,44 +725,7 @@ namespace castor3d::shader
 		return m_clipToScreen( pin );
 	}
 
-	sdw::Float Utils::remap( sdw::Float const & originalValue
-		, sdw::Float const & originalMin
-		, sdw::Float const & originalMax
-		, sdw::Float const & newMin
-		, sdw::Float const & newMax )
-	{
-		return newMin + ( ( ( originalValue - originalMin ) / ( originalMax - originalMin ) ) * ( newMax - newMin ) );
-	}
-
-	sdw::Float Utils::threshold( sdw::Float const & pv
-		, sdw::Float const & pt )
-	{
-		if ( !m_threshold )
-		{
-			m_threshold = m_writer.implementFunction< sdw::Float >( "threshold"
-				, [&]( sdw::Float const & v
-					, sdw::Float const & t )
-			{
-				m_writer.returnStmt( m_writer.ternary( v > t, v, 0.0_f ) );
-			}
-			, sdw::InFloat{ m_writer, "v" }
-			, sdw::InFloat{ m_writer, "t" } );
-		}
-
-		return m_threshold( pv, pt );
-	}
-
-	sdw::Float Utils::beer( sdw::Float const & d )
-	{
-		return exp( -d );
-	}
-
-	sdw::Float Utils::powder( sdw::Float const & d )
-	{
-		return 1.0_f - exp( -2.0_f * d );
-	}
-
-	sdw::Boolean Utils::isSaturated( sdw::Vec3 const & pp )
+	sdw::RetBoolean Utils::isSaturated( sdw::Vec3 const & pp )
 	{
 		if ( !m_isSaturated3D )
 		{
@@ -833,7 +742,7 @@ namespace castor3d::shader
 		return m_isSaturated3D( pp );
 	}
 
-	sdw::Boolean Utils::isSaturated( sdw::IVec3 const & pp
+	sdw::RetBoolean Utils::isSaturated( sdw::IVec3 const & pp
 		, sdw::Int const & pimax )
 	{
 		if ( !m_isSaturated3DImg )
@@ -853,7 +762,7 @@ namespace castor3d::shader
 		return m_isSaturated3DImg( pp, pimax );
 	}
 
-	sdw::UInt Utils::encodeColor( sdw::Vec4 const & pcolor )
+	sdw::RetUInt Utils::encodeColor( sdw::Vec4 const & pcolor )
 	{
 		if ( !m_encodeColor )
 		{
@@ -888,7 +797,7 @@ namespace castor3d::shader
 		return m_encodeColor( pcolor );
 	}
 
-	sdw::UInt Utils::encodeNormal( sdw::Vec3 const & pnormal )
+	sdw::RetUInt Utils::encodeNormal( sdw::Vec3 const & pnormal )
 	{
 		if ( !m_encodeNormal )
 		{
@@ -915,7 +824,7 @@ namespace castor3d::shader
 		return m_encodeNormal( pnormal );
 	}
 
-	sdw::Vec4 Utils::decodeColor( sdw::UInt const & pcolorMask )
+	sdw::RetVec4 Utils::decodeColor( sdw::UInt const & pcolorMask )
 	{
 		if ( !m_decodeColor )
 		{
@@ -946,7 +855,7 @@ namespace castor3d::shader
 		return m_decodeColor( pcolorMask );
 	}
 
-	sdw::Vec3 Utils::decodeNormal( sdw::UInt const & pnormalMask )
+	sdw::RetVec3 Utils::decodeNormal( sdw::UInt const & pnormalMask )
 	{
 		if ( !m_decodeNormal )
 		{
@@ -973,7 +882,7 @@ namespace castor3d::shader
 		return m_decodeNormal( pnormalMask );
 	}
 
-	sdw::Vec4 Utils::encodeFloatRGBA( sdw::Float const & pv )
+	sdw::RetVec4 Utils::encodeFloatRGBA( sdw::Float const & pv )
 	{
 		if ( !m_encodeFloatRGBA )
 		{
@@ -993,7 +902,7 @@ namespace castor3d::shader
 		return m_encodeFloatRGBA( pv );
 	}
 
-	sdw::UInt Utils::flatten( sdw::UVec3 const & pp
+	sdw::RetUInt Utils::flatten( sdw::UVec3 const & pp
 		, sdw::UVec3 const & pdim )
 	{
 		if ( !m_flatten3D )
@@ -1011,7 +920,7 @@ namespace castor3d::shader
 		return m_flatten3D( pp, pdim );
 	}
 
-	sdw::UVec3 Utils::unflatten( sdw::UInt const & pp
+	sdw::RetUVec3 Utils::unflatten( sdw::UInt const & pp
 		, sdw::UVec3 const & pdim )
 	{
 		if ( !m_unflatten3D )
@@ -1034,15 +943,6 @@ namespace castor3d::shader
 		}
 
 		return m_unflatten3D( pp, pdim );
-	}
-
-	sdw::Vec4 Utils::sampleMap( PassFlags const & passFlags
-		, sdw::CombinedImage2DRgba32 const & map
-		, sdw::Vec2 const & texCoords )
-	{
-		return ( checkFlag( passFlags, PassFlag::eUntile )
-			? sampleUntiled( map, texCoords )
-			: map.sample( texCoords ) );
 	}
 
 	sdw::Mat3 Utils::getTBN( sdw::Vec3 const & normal
@@ -1071,7 +971,7 @@ namespace castor3d::shader
 			|| flags == ( TextureFlag::eNormal | TextureFlag::eHeight );
 	}
 
-	sdw::Vec4 Utils::sampleUntiled( sdw::CombinedImage2DRgba32 const & pmap
+	sdw::RetVec4 Utils::sampleUntiled( sdw::CombinedImage2DRgba32 const & pmap
 		, sdw::Vec2 const & ptexCoords )
 	{
 		if ( !m_sampleUntiled )
