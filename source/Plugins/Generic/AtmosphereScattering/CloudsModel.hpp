@@ -59,14 +59,11 @@ namespace atmosphere_scattering
 			, sdw::Boolean const & expensive
 			, sdw::Float const & heightFraction
 			, sdw::Float const & lod );
-		sdw::RetFloat raymarchToLight( Ray const & ray
-			, sdw::Vec3 const & o
+		sdw::RetFloat raymarchToLight( sdw::Vec3 const & viewDir
+			, sdw::Vec3 const & pos
 			, sdw::Float const & stepSize
-			, sdw::Vec3 const & lightDir
-			, sdw::Float const & originalDensity
-			, sdw::Float const & lightDotEye
-			, sdw::Float & densityAlongLight );
-		sdw::RetVec3 raymarchToCloud( Ray const & ray
+			, sdw::Vec3 const & lightDir );
+		sdw::RetVec4 raymarchToCloud( Ray const & ray
 			, sdw::Vec3 const & startPos
 			, sdw::Vec3 const & endPos
 			, sdw::Vec3 const & bg
@@ -85,6 +82,8 @@ namespace atmosphere_scattering
 			, sdw::Float const & cosTheta
 			, sdw::Float const & silverIntensity
 			, sdw::Float const & silverSpread );
+		sdw::RetFloat henyeyGreensteinPhase( sdw::Float const & g
+			, sdw::Float const & cosTheta );
 		sdw::RetVec4 computeLighting( Ray const & ray
 			, sdw::Vec3 const & bg
 			, sdw::Vec3 const & startPos
@@ -93,13 +92,15 @@ namespace atmosphere_scattering
 			, sdw::Float const & fogAmount
 			, sdw::Float const & maxEarthShadow
 			, sdw::Float const & cloudAlphaness
-			, sdw::Vec3 const & rayMarchResult
+			, sdw::Vec4 const & rayMarchResult
 			, sdw::Float const & accumDensity );
 		sdw::RetVec4 computeEmission( Ray const & ray
 			, sdw::Vec3 const & startPos
 			, sdw::Vec3 const & sunColor
 			, sdw::Float const & cloudAlphaness
 			, sdw::Float const & maxEarthShadow );
+		sdw::Float getLightEnergy( sdw::Float cosTheta
+			, sdw::Float const & coneDensity );
 
 	private:
 		sdw::ShaderWriter & writer;
@@ -142,14 +143,11 @@ namespace atmosphere_scattering
 			, sdw::InFloat
 			, sdw::InFloat > m_sampleCloudDensity;
 		sdw::Function< sdw::Float
-			, InRay
+			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InFloat
-			, sdw::InVec3
-			, sdw::InFloat
-			, sdw::InFloat
-			, sdw::OutFloat > m_raymarchToLight;
-		sdw::Function< sdw::Vec3
+			, sdw::InVec3 > m_raymarchToLight;
+		sdw::Function< sdw::Vec4
 			, InRay
 			, sdw::InVec3
 			, sdw::InVec3
@@ -168,6 +166,9 @@ namespace atmosphere_scattering
 		sdw::Function< sdw::Float
 			, sdw::InFloat
 			, sdw::InFloat > m_henyeyGreenstein;
+		sdw::Function< sdw::Float
+			, sdw::InFloat
+			, sdw::InFloat > m_henyeyGreensteinPhase;
 		sdw::Function< sdw::Vec4
 			, InRay
 			, sdw::InVec3
@@ -177,7 +178,7 @@ namespace atmosphere_scattering
 			, sdw::InFloat
 			, sdw::InFloat
 			, sdw::InFloat
-			, sdw::InVec3
+			, sdw::InVec4
 			, sdw::InFloat > m_computeLighting;
 		sdw::Function< sdw::Vec4
 			, InRay
