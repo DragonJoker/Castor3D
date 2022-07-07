@@ -358,6 +358,9 @@ namespace atmosphere_scattering
 					auto highFrequencyFBM = writer.declLocale( "highFrequencyFBM"
 						, dot( highFrequencyNoise.rgb(), vec3( 0.625_f, 0.25_f, 0.125_f ) ) );
 
+					// Recompute height fraction after applying wind and top offset
+					heightFraction = getHeightFraction( skewedSamplePoint );
+
 					//Erode the base shape of the cloud with the distorted high frequency worley noises
 					auto highFreqNoiseModifier = writer.declLocale( "highFreqNoiseModifier"
 						, clamp( mix( highFrequencyFBM, 1.0_f - highFrequencyFBM, clamp( heightFraction * 10.0_f, 0.0_f, 1.0_f ) ), 0.0_f, 1.0_f ) );
@@ -479,7 +482,7 @@ namespace atmosphere_scattering
 						{
 							auto cloudDensity = writer.declLocale( "cloudDensity"
 								, sampleCloudDensity( pos
-									, densityAlongLight > 0.3_f
+									, densityAlongLight < 0.3_f
 									, heightFraction
 									, writer.cast< sdw::Float >( i ) / 16.0_f ) );
 
