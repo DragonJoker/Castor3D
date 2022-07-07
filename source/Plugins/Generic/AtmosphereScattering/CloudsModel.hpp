@@ -38,7 +38,7 @@ namespace atmosphere_scattering
 			, sdw::Vec4 & emission );
 
 	private:
-		sdw::Vec2 getUVProjection( sdw::Vec3 const & p );
+		sdw::Vec2 getSphericalProjection( sdw::Vec3 const & p );
 		sdw::Float getHeightFraction( sdw::Vec3 const & inPos );
 		sdw::RetFloat getRelativeHeightInAtmosphere( sdw::Vec3 const & pos
 			, sdw::Vec3 const & startPos
