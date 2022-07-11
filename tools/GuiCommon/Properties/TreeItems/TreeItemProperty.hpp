@@ -157,6 +157,13 @@ namespace GuiCommon
 		wxPGProperty * addProperty( ParentT * parent
 			, wxString const & name
 			, ValueT const & value
+			, castor::Range< ValueT > const & range
+			, PropertyChangeHandler handler
+			, bool * control = nullptr );
+		template< typename ParentT, typename ValueT >
+		wxPGProperty * addProperty( ParentT * parent
+			, wxString const & name
+			, ValueT const & value
 			, ValueT const & step
 			, PropertyChangeHandler handler
 			, bool * control = nullptr );
@@ -176,6 +183,12 @@ namespace GuiCommon
 			, wxString const & name
 			, castor::RangedValue< ValueT > * value
 			, bool * control = nullptr );
+		template< typename ParentT, typename ValueT >
+		wxPGProperty * addPropertyT( ParentT * parent
+			, wxString const & name
+			, ValueT * value
+			, castor::Range< ValueT > const & range
+			, bool * control );
 		template< typename ParentT, typename ValueT >
 		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name

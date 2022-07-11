@@ -352,6 +352,28 @@ namespace GuiCommon
 	wxPGProperty * TreeItemProperty::addProperty( ParentT * parent
 		, wxString const & name
 		, ValueT const & value
+		, castor::Range< ValueT > const & range
+		, PropertyChangeHandler handler
+		, bool * control )
+	{
+		wxPGProperty * prop = createProperty( parent
+			, name
+			, value
+			, handler
+			, control );
+		prop->SetAttribute( wxPG_ATTR_MIN, getVariant< ValueT >( range.getMin() ) );
+		prop->SetAttribute( wxPG_ATTR_MAX, getVariant< ValueT >( range.getMax() ) );
+		prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
+#if wxCHECK_VERSION( 3, 1, 0 )
+		prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
+#endif
+		return prop;
+	}
+
+	template< typename ParentT, typename ValueT >
+	wxPGProperty * TreeItemProperty::addProperty( ParentT * parent
+		, wxString const & name
+		, ValueT const & value
 		, ValueT const & step
 		, PropertyChangeHandler handler
 		, bool * control )
@@ -370,6 +392,24 @@ namespace GuiCommon
 		return addProperty( parent
 			, name
 			, *value
+			, [value]( wxVariant const & var )
+			{
+				*value = variantCast< ValueT >( var );
+			}
+			, control );
+	}
+
+	template< typename ParentT, typename ValueT >
+	wxPGProperty * TreeItemProperty::addPropertyT( ParentT * parent
+		, wxString const & name
+		, ValueT * value
+		, castor::Range< ValueT > const & range
+		, bool * control )
+	{
+		return addProperty( parent
+			, name
+			, *value
+			, range
 			, [value]( wxVariant const & var )
 			{
 				*value = variantCast< ValueT >( var );

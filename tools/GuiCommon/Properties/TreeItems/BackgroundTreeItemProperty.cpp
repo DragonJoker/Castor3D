@@ -243,6 +243,30 @@ namespace GuiCommon
 				m_properties.addPropertyT( &m_grid, name, &value, control );
 			}
 
+			void visit( castor::String const & name
+				, float & value
+				, castor::Range< float > const & range
+				, bool * control )override
+			{
+				m_properties.addPropertyT( &m_grid, name, &value, range, control );
+			}
+
+			void visit( castor::String const & name
+				, int32_t & value
+				, castor::Range< int32_t > const & range
+				, bool * control )override
+			{
+				m_properties.addPropertyT( &m_grid, name, &value, range, control );
+			}
+
+			void visit( castor::String const & name
+				, uint32_t & value
+				, castor::Range< uint32_t > const & range
+				, bool * control )override
+			{
+				m_properties.addPropertyT( &m_grid, name, &value, range, control );
+			}
+
 			void doCreateTextureImageProperty( castor3d::ImageBackground & background
 				, wxString const & name
 				, castor3d::TextureLayout const & texture )

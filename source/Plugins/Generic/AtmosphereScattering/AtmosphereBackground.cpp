@@ -427,6 +427,7 @@ namespace atmosphere_scattering
 			, &m_cloudsChanged );
 		visitor.visit( cuT( "Clouds Coverage" )
 			, m_cloudsCfg.coverage
+			, castor::makeRange( 0.0f, 1.0f )
 			, &m_cloudsChanged );
 		visitor.visit( cuT( "Clouds Crispiness" )
 			, m_cloudsCfg.crispiness
@@ -436,9 +437,11 @@ namespace atmosphere_scattering
 			, &m_cloudsChanged );
 		visitor.visit( cuT( "Clouds Density" )
 			, m_cloudsCfg.density
+			, castor::makeRange( 0.0f, 1.0f )
 			, &m_cloudsChanged );
 		visitor.visit( cuT( "Clouds Absorption" )
 			, m_cloudsCfg.absorption
+			, castor::makeRange( 0.0f, 1.0f )
 			, &m_cloudsChanged );
 		visitor.visit( cuT( "Clouds Top Offset" )
 			, m_cloudsCfg.topOffset

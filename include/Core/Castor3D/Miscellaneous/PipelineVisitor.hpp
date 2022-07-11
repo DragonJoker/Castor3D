@@ -182,13 +182,25 @@ namespace castor3d
 			, castor::Matrix4x4f & value
 			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
-			, castor::RangedValue< float > & value
+			, castor::RangedValue< float > & range
 			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
-			, castor::RangedValue< int32_t > & value
+			, castor::RangedValue< int32_t > & range
 			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
-			, castor::RangedValue< uint32_t > & value
+			, castor::RangedValue< uint32_t > & range
+			, bool * control = nullptr ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, float & value
+			, castor::Range< float > const & range
+			, bool * control = nullptr ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, int32_t & value
+			, castor::Range< int32_t > const & range
+			, bool * control = nullptr ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, uint32_t & value
+			, castor::Range< uint32_t > const & range
 			, bool * control = nullptr ) = 0;
 
 		template< typename TypeT >
@@ -577,6 +589,27 @@ namespace castor3d
 		void visit( castor::String const & name
 			, castor::RangedValue< uint32_t > & value
 			, bool * control )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, float & value
+			, castor::Range< float > const & range
+			, bool * control = nullptr )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, int32_t & value
+			, castor::Range< int32_t > const & range
+			, bool * control = nullptr )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, uint32_t & value
+			, castor::Range< uint32_t > const & range
+			, bool * control = nullptr )override
 		{
 		}
 		/**@}*/
