@@ -21,7 +21,8 @@ namespace atmosphere_scattering
 		, AtmosphereModel & patmosphere
 		, ScatteringModel & pscattering
 		, CloudsData const & pclouds
-		, uint32_t binding )
+		, uint32_t & binding
+		, uint32_t set )
 		: writer{ pwriter }
 		, utils{ putils }
 		, atmosphere{ patmosphere }
@@ -29,16 +30,16 @@ namespace atmosphere_scattering
 		, clouds{ pclouds }
 		, perlinWorleyNoiseMap{ writer.declCombinedImg< sdw::CombinedImage3DRgba32 >( "perlinWorleyNoiseMap"
 			, binding++
-			, 0u ) }
+			, set ) }
 		, worleyNoiseMap{ writer.declCombinedImg< sdw::CombinedImage3DRgba32 >( "worleyNoiseMap"
 			, binding++
-			, 0u ) }
+			, set ) }
 		, curlNoiseMap{ writer.declCombinedImg< sdw::CombinedImage2DRg32 >( "curlNoiseMap"
 			, binding++
-			, 0u ) }
+			, set ) }
 		, weatherMap{ writer.declCombinedImg< sdw::CombinedImage2DRg32 >( "weatherMap"
 			, binding++
-			, 0u ) }
+			, set ) }
 		, cloudsInnerRadius{ clouds.innerRadius() + atmosphere.getEarthRadius() }
 		, cloudsOuterRadius{ clouds.outerRadius() + atmosphere.getEarthRadius() }
 		, cloudsThickness{ clouds.outerRadius() - clouds.innerRadius() }
