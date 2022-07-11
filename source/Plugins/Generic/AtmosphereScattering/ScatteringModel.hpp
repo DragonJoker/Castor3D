@@ -17,7 +17,8 @@ namespace atmosphere_scattering
 			, bool fastAerialPerspective
 			, bool renderSunDisk
 			, bool bloomSunDisk
-			, uint32_t binding
+			, uint32_t & binding
+			, uint32_t set
 			, bool needsMultiscatter = true );
 		sdw::RetVec3 getSunLuminance( Ray const & ray );
 		sdw::RetVec3 getSunRadiance( sdw::Vec3 const & sunDir );

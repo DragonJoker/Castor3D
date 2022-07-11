@@ -14,7 +14,8 @@ namespace atmosphere_scattering
 		, bool fastAerialPerspective
 		, bool renderSunDisk
 		, bool bloomSunDisk
-		, uint32_t binding
+		, uint32_t & binding
+		, uint32_t set
 		, bool needsMultiscatter )
 		: m_writer{ writer }
 		, m_atmosphere{ atmosphere }
@@ -25,17 +26,17 @@ namespace atmosphere_scattering
 		, m_bloomSunDisk{ bloomSunDisk }
 		, transmittanceMap{ writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "transmittanceMap"
 			, binding++
-			, 0u ) }
+			, set ) }
 		, multiScatterMap{ writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "multiScatterMap"
 			, ( needsMultiscatter ? binding++ : 0u )
-			, 0u
+			, set
 			, needsMultiscatter ) }
 		, skyViewMap{ writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "skyViewMap"
 			, binding++
-			, 0u ) }
+			, set ) }
 		, volumeMap{ writer.declCombinedImg< sdw::CombinedImage3DRgba32 >( "volumeMap"
 			, binding++
-			, 0u ) }
+			, set ) }
 	{
 		m_atmosphere.setTransmittanceMap( transmittanceMap );
 		m_atmosphere.setMultiscatterMap( multiScatterMap );

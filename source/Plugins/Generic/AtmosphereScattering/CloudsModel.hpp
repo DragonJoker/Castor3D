@@ -31,7 +31,8 @@ namespace atmosphere_scattering
 			, AtmosphereModel & atmosphere
 			, ScatteringModel & scattering
 			, CloudsData const & clouds
-			, uint32_t binding );
+			, uint32_t & binding
+			, uint32_t set );
 		sdw::Void applyClouds( sdw::IVec2 const & fragCoord
 			, sdw::Vec2 const & targetSize
 			, sdw::Vec4 & bg

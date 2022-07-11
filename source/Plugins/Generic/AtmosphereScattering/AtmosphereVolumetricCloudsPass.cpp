@@ -126,6 +126,7 @@ namespace atmosphere_scattering
 				, c3d_atmosphereData
 				, { &c3d_cameraData, false, true, true, true }
 				, { transmittanceExtent.width, transmittanceExtent.height } };
+			auto binding = uint32_t( Bindings::eTransmittance );
 			ScatteringModel scattering{ writer
 				, atmosphere
 				, false /*colorTransmittance*/
@@ -133,13 +134,16 @@ namespace atmosphere_scattering
 				, true /*fastAerialPerspective*/
 				, false /*renderSunDisk*/
 				, true /*bloomSunDisk*/
-				, uint32_t( Bindings::eTransmittance ) };
+				, binding
+				, 0u };
+			binding = uint32_t( Bindings::ePerlinWorley );
 			CloudsModel clouds{ writer
 				, utils
 				, atmosphere
 				, scattering
 				, c3d_cloudsData
-				, uint32_t( Bindings::ePerlinWorley ) };
+				, binding
+				, 0u };
 
 			if constexpr ( useCompute )
 			{
@@ -279,8 +283,14 @@ namespace atmosphere_scattering
 			, volclouds::eClouds );
 		cameraUbo.createPassBinding( pass
 			, volclouds::eCamera );
-		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
+		crg::SamplerDesc linearClampSampler{ VK_FILTER_LINEAR
 			, VK_FILTER_LINEAR };
+		crg::SamplerDesc linearRepeatSampler{ VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR
+			, VK_SAMPLER_MIPMAP_MODE_NEAREST
+			, VK_SAMPLER_ADDRESS_MODE_REPEAT
+			, VK_SAMPLER_ADDRESS_MODE_REPEAT
+			, VK_SAMPLER_ADDRESS_MODE_REPEAT };
 		crg::SamplerDesc mipLinearSampler{ VK_FILTER_LINEAR
 			, VK_FILTER_LINEAR
 			, VK_SAMPLER_MIPMAP_MODE_LINEAR
@@ -290,19 +300,19 @@ namespace atmosphere_scattering
 		pass.addSampledView( transmittance
 			, volclouds::eTransmittance
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, linearSampler );
+			, linearClampSampler );
 		pass.addSampledView( multiscatter
 			, volclouds::eMultiScatter
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, linearSampler );
+			, linearClampSampler );
 		pass.addSampledView( skyview
 			, volclouds::eSkyView
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, linearSampler );
+			, linearClampSampler );
 		pass.addSampledView( volume
 			, volclouds::eVolume
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, linearSampler );
+			, linearClampSampler );
 		pass.addSampledView( perlinWorley
 			, volclouds::ePerlinWorley
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
@@ -314,15 +324,11 @@ namespace atmosphere_scattering
 		pass.addSampledView( curl
 			, volclouds::eCurl
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, linearSampler );
+			, linearRepeatSampler );
 		pass.addSampledView( weather
 			, volclouds::eWeatherMap
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, crg::SamplerDesc{ VK_FILTER_LINEAR
-				, VK_FILTER_LINEAR
-				, VK_SAMPLER_MIPMAP_MODE_NEAREST
-				, VK_SAMPLER_ADDRESS_MODE_REPEAT
-				, VK_SAMPLER_ADDRESS_MODE_REPEAT } );
+			, linearRepeatSampler );
 
 		if constexpr ( volclouds::useCompute )
 		{

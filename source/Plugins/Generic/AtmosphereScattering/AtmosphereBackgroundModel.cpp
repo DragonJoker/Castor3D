@@ -42,6 +42,7 @@ namespace atmosphere_scattering
 			, m_atmosphere
 			, false, true, true, true, false
 			, binding
+			, set
 			, false }
 	{
 	}
