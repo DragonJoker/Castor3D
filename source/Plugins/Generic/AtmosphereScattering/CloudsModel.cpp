@@ -481,7 +481,7 @@ namespace atmosphere_scattering
 							{
 								density += cloudDensity;
 								auto transmittance = writer.declLocale( "transmittance"
-									, 1.0_f - ( density * invDepth ) );
+									, 1.0_f - ( density * invDepth * clouds.absorption() ) );
 								coneDensity += ( cloudDensity * transmittance );
 							}
 							FI;
@@ -507,7 +507,7 @@ namespace atmosphere_scattering
 					{
 						density += cloudDensity;
 						auto transmittance = writer.declLocale( "transmittance"
-							, 1.0_f - ( density * invDepth ) );
+							, 1.0_f - ( density * invDepth * clouds.absorption() ) );
 						coneDensity += ( cloudDensity * transmittance );
 					}
 					FI;
@@ -609,6 +609,7 @@ namespace atmosphere_scattering
 									, 1_b
 									, relativeHeight
 									, writer.cast< sdw::Float >( i ) / 16.0_f ) );
+							cloudDensity *= clouds.density();
 
 							IF( writer, cloudDensity > 0.0_f )
 							{
