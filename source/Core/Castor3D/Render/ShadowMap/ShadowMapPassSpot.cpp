@@ -180,9 +180,13 @@ namespace castor3d
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
+		shader::Materials materials{ writer
+			, uint32_t( GlobalBuffersIdx::eMaterials )
+			, RenderPipeline::eBuffers };
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		auto passCount = pcb.declMember< sdw::UInt >( "passCount" );
 		pcb.end();
 
 		writer.implementMainT< shader::VertexSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
@@ -221,6 +225,12 @@ namespace castor3d
 				out.colour = in.colour;
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId - 1u] );
+				auto material = writer.declLocale( "material"
+					, materials.getMaterial( modelData.getMaterialId() ) );
+				material.getPassMultipliers( flags.submeshFlags
+					, passCount
+					, in.passMasks
+					, out.passMultipliers );
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
 				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 
