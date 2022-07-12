@@ -51,13 +51,15 @@ namespace atmosphere_scattering
 				{
 					auto sunDir = m_writer.declLocale( "sunDir"
 						, m_atmosphere.getSunDirection() );
+					auto sunLuminance = m_writer.declLocale( "sunLuminance"
+						, vec3( 0.0_f ) );
 
 					if ( m_bloomSunDisk )
 					{
 						auto sunMinAngularDiameter = m_writer.declLocale( "sunMinAngularDiameter"
 							, sdw::Float{ ( 0.053_degrees ).radians() } );
 						auto sunMaxAngularDiameter = m_writer.declLocale( "sunMaxSolidAngle"
-							, sunMinAngularDiameter * 15.0_f );
+							, sunMinAngularDiameter * 10.0_f );
 						auto sunAngularDiameter = m_writer.declLocale( "sunAngularDiameter"
 							, doGetSunAngle( sunDir, sunMinAngularDiameter, sunMaxAngularDiameter ) );
 						auto sunCosTheta = m_writer.declLocale( "sunCosTheta"
@@ -72,17 +74,15 @@ namespace atmosphere_scattering
 						IF( m_writer, cosTheta < sunCosTheta )
 						{
 							auto gaussianBloom = m_writer.declLocale( "gaussianBloom"
-								, exp( centerToEdge * 50000.0_f ) * 0.5_f );
+								, exp( centerToEdge * 5000.0_f ) * 0.5_f );
 							auto invBloom = m_writer.declLocale( "invBloom"
-								, 1.0_f / ( 0.02_f - centerToEdge * 300.0_f ) * 0.01_f );
+								, 1.0_f / ( 0.02_f - centerToEdge * 30.0_f ) * 0.01_f );
 							intensity = gaussianBloom + invBloom;
 						}
 						FI;
 
 						// Use smoothstep to limit the effect, so it drops off to actual zero.
 						intensity = smoothStep( 0.002_f, 1.0_f, intensity );
-						auto sunLuminance = m_writer.declLocale( "sunLuminance"
-							, vec3( 0.0_f ) );
 
 						IF( m_writer, intensity > 0.0_f )
 						{
@@ -92,8 +92,6 @@ namespace atmosphere_scattering
 							{
 								sunLuminance = 2.0_f * getSunRadiance( ray.direction );
 
-								auto centerToEdge = m_writer.declLocale( "centerToEdge"
-									, cosTheta - sunCosTheta );
 								auto u = vec3( 1.0_f, 1.0_f, 1.0_f );
 								auto a = vec3( 0.397_f, 0.503_f, 0.652_f );
 								centerToEdge = 1.0_f - centerToEdge;
@@ -107,8 +105,6 @@ namespace atmosphere_scattering
 							FI;
 						}
 						FI;
-
-						m_writer.returnStmt( sunLuminance );
 					}
 					else
 					{
@@ -122,8 +118,6 @@ namespace atmosphere_scattering
 							, cos( sunAngularDiameter ) );
 						auto cosTheta = m_writer.declLocale( "cosTheta"
 							, dot( ray.direction, sunDir ) );
-						auto sunLuminance = m_writer.declLocale( "sunLuminance"
-							, vec3( 0.0_f ) );
 
 						IF( m_writer, cosTheta > sunCosTheta )
 						{
@@ -155,9 +149,9 @@ namespace atmosphere_scattering
 							FI;
 						}
 						FI;
-
-						m_writer.returnStmt( sunLuminance );
 					}
+
+					m_writer.returnStmt( sunLuminance );
 				}
 				, InRay{ m_writer, "ray" } );
 		}
