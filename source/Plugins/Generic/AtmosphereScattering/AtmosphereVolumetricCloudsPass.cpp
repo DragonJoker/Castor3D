@@ -122,7 +122,6 @@ namespace atmosphere_scattering
 
 			castor3d::shader::Utils utils{ writer };
 			AtmosphereModel atmosphere{ writer
-				, utils
 				, c3d_atmosphereData
 				, { &c3d_cameraData, false, true, true, true }
 				, { transmittanceExtent.width, transmittanceExtent.height } };

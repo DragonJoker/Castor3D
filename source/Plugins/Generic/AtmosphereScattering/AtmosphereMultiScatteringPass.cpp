@@ -63,9 +63,7 @@ namespace atmosphere_scattering
 			auto isotropicPhase = writer.declConstant( "isotropicPhase"
 				, 1.0_f / sphereSolidAngle );
 
-			castor3d::shader::Utils utils{ writer };
 			AtmosphereModel atmosphere{ writer
-				, utils
 				, c3d_atmosphereData
 				, { nullptr, true, false, false, false }
 				, { transmittanceExtent.width, transmittanceExtent.height } };

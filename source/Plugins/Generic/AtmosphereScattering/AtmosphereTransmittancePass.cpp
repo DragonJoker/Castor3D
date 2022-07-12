@@ -58,9 +58,7 @@ namespace atmosphere_scattering
 			auto depthBufferValue = writer.declConstant( "depthBufferValue"
 				, -1.0_f );
 
-			castor3d::shader::Utils utils{ writer };
 			AtmosphereModel atmosphere{ writer
-				, utils
 				, c3d_atmosphereData
 				, { nullptr, false, false, false, false } };
 

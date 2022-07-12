@@ -133,9 +133,7 @@ namespace atmosphere_scattering
 			// Fragment Outputs
 			auto pxl_colour( writer.declOutput< sdw::Vec4 >( "pxl_colour", 0 ) );
 
-			castor3d::shader::Utils utils{ writer };
 			AtmosphereModel atmosphere{ writer
-				, utils
 				, c3d_atmosphereData
 				, { &c3d_cameraData, false, false, false, true }
 				, { transmittanceExtent.width, transmittanceExtent.height } };

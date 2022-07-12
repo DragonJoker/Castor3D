@@ -34,7 +34,6 @@ namespace atmosphere_scattering
 			, set ) }
 		, m_atmosphereData{ model::getData< AtmosphereData >( m_atmosphereBuffer, AtmosphereScatteringUbo::Data ) }
 		, m_atmosphere{ m_writer
-			, m_utils
 			, m_atmosphereData
 			, { &m_cameraData, false, true, true, true }
 			, { 256u, 64u } }

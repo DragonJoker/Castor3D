@@ -21,13 +21,6 @@ namespace castor3d
 		 */
 		C3D_API explicit BackgroundVisitor( Config config = {} );
 		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API virtual ~BackgroundVisitor() = default;
-		/**
 		*\~english
 		*\brief
 		*	Visits a colour background.
