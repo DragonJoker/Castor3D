@@ -36,6 +36,8 @@ namespace castor3d
 		*\copydoc	castor3d::BackgroundVisitor::visit
 		*/
 		C3D_API void visit( ImageBackground & background )override;
+
+		using PipelineVisitor::visit;
 	};
 }
 

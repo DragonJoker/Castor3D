@@ -153,11 +153,9 @@ namespace atmosphere_scattering
 	struct AtmosphereModel
 	{
 		AtmosphereModel( sdw::ShaderWriter & writer
-			, castor3d::shader::Utils & utils
 			, AtmosphereData const & atmosphereData
 			, LuminanceSettings luminanceSettings );
 		AtmosphereModel( sdw::ShaderWriter & writer
-			, castor3d::shader::Utils & utils
 			, AtmosphereData const & atmosphereData
 			, LuminanceSettings luminanceSettings
 			, VkExtent2D transmittanceExtent );
@@ -365,7 +363,6 @@ namespace atmosphere_scattering
 
 	private:
 		sdw::ShaderWriter & writer;
-		castor3d::shader::Utils & utils;
 
 	public:
 		AtmosphereData const & atmosphereData;

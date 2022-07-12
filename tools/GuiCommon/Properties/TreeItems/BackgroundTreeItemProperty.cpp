@@ -304,6 +304,8 @@ namespace GuiCommon
 					} );
 			}
 
+			using PipelineVisitor::visit;
+
 		private:
 			TreeItemProperty & m_properties;
 			wxPropertyGrid & m_grid;

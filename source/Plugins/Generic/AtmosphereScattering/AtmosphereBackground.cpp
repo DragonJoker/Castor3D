@@ -593,8 +593,6 @@ namespace atmosphere_scattering
 			auto & pass = *it->second->lastPass;
 			pass.addDependency( m_multiScatteringPass->getLastPass() );
 			pass.addDependency( m_weatherPass->getLastPass() );
-			crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
-				, VK_FILTER_LINEAR };
 			pass.addImplicitDepthStencilView( *depth
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			pass.addOutputColourView( colour

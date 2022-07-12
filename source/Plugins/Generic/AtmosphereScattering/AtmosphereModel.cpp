@@ -6,15 +6,13 @@
 
 #include <ShaderWriter/Source.hpp>
 
-#define NONLINEARSKYVIEWLUT 1
-
 namespace atmosphere_scattering
 {
 	//************************************************************************************************
 
 	namespace atmodel
 	{
-		sdw::Vec3 getClipSpace( sdw::Vec2 const & uv
+		static sdw::Vec3 getClipSpace( sdw::Vec2 const & uv
 			, sdw::Float const & fragDepth )
 		{
 			return vec3( fma( uv, vec2( 2.0_f ), vec2( -1.0_f ) ), fragDepth );
@@ -24,20 +22,17 @@ namespace atmosphere_scattering
 	//************************************************************************************************
 
 	AtmosphereModel::AtmosphereModel( sdw::ShaderWriter & pwriter
-		, castor3d::shader::Utils & putils
 		, AtmosphereData const & patmosphereData
 		, LuminanceSettings pluminanceSettings )
-		: AtmosphereModel{ pwriter, putils, patmosphereData, pluminanceSettings, {} }
+		: AtmosphereModel{ pwriter, patmosphereData, pluminanceSettings, {} }
 	{
 	}
 
 	AtmosphereModel::AtmosphereModel( sdw::ShaderWriter & pwriter
-		, castor3d::shader::Utils & putils
 		, AtmosphereData const & patmosphereData
 		, LuminanceSettings pluminanceSettings
 		, VkExtent2D ptransmittanceExtent )
 		: writer{ pwriter }
-		, utils{ putils }
 		, atmosphereData{ patmosphereData }
 		, luminanceSettings{ pluminanceSettings }
 		, transmittanceExtent{ std::move( ptransmittanceExtent ) }
