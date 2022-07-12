@@ -785,6 +785,13 @@ namespace atmosphere_scattering
 						, skyColor * density
 						, vec3( clamp( fogAmount, 0.0_f, 1.0_f ) ) );
 
+#if !Debug_CloudsRadius
+					auto cloudFadeOutPoint = 0.06_f;
+					density *= smoothStep( 0.0_f
+						, 1.0_f
+						, min( 1.0_f, utils.remap( ray.direction.y(), cloudFadeOutPoint, 0.2_f, 0.0_f, 1.0_f ) ) );
+#endif
+
 					// add sun glare to clouds
 					auto sunIntensity = writer.declLocale( "sunIntensity"
 						, clamp( dot( atmosphere.getSunDirection(), normalize( endPos - startPos ) )
@@ -805,24 +812,26 @@ namespace atmosphere_scattering
 						, cloudColor
 						, vec3( pow( max( cubeMapEndPos.y() + 0.1_f, 0.0_f ), 0.2_f ) ) );
 
-					// Display sun disk, faded out into the horizon
+					// Display sun disk
 					auto sunDisk = writer.declLocale( "sunDisk"
 						, scattering.getSunLuminance( ray ) );
-					sunDisk = mix( vec3( 0.0_f )
-						, sunDisk
-						, vec3( pow( max( cubeMapEndPos.y() + 0.1_f, 0.0_f ), 0.2_f ) ) );
+					auto finalSkyColor = writer.declLocale( "finalSkyColor"
+						, skyColor + sunDisk * ( sunGlareIntensity - minGlare ) );
 
 #if !Debug_CloudsRadius
 					// Blend background and clouds.
-					auto cloudFadeOutPoint = 0.06_f;
-					density *= smoothStep( 0.0_f
-						, 1.0_f
-						, min( 1.0_f, utils.remap( ray.direction.y(), cloudFadeOutPoint, 0.2_f, 0.0_f, 1.0_f ) ) );
+					auto fadeOut = writer.declLocale( "fadeOut"
+						, smoothStep( 0.0_f
+							, 1.0_f
+							, min( 1.0_f, utils.remap( ray.direction.y(), cloudFadeOutPoint, 0.4_f, 0.0_f, 1.0_f ) ) ) );
+					finalSkyColor = mix( mix( finalSkyColor, length( finalSkyColor ) * clouds.bottomColor(), vec3( clouds.coverage() ) )
+						, finalSkyColor
+						, vec3( fadeOut ) );
 #endif
 
-					writer.returnStmt( vec4( mix( skyColor + sunDisk
-						, cloudColor * earthShadowRange.x()
-						, vec3( density ) )
+					writer.returnStmt( vec4( mix( finalSkyColor
+							, min( 1.0_f, length( finalSkyColor ) ) * cloudColor * earthShadowRange.x()
+							, vec3( density ) )
 						, rayMarchResult.a() ) );
 				}
 				, InRay{ writer, "ray" }
