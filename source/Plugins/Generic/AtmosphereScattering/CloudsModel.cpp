@@ -72,6 +72,13 @@ namespace atmosphere_scattering
 					IF( writer, ray.origin.y() < cloudsInnerRadius )
 					{
 						// Ray below clouds boundaries.
+						IF( writer, atmosphere.raySphereIntersectNearest( ray, atmosphere.getEarthRadius() ).valid() )
+						{
+							emission = skyColor;
+							writer.returnStmt();
+						}
+						FI;
+
 						startPos = atmosphere.raySphereIntersectNearest( ray, cloudsInnerRadius ).point();
 						endPos = atmosphere.raySphereIntersectNearest( ray, cloudsOuterRadius ).point();
 						fogRay = startPos;
@@ -100,7 +107,7 @@ namespace atmosphere_scattering
 						// Ray over clouds.
 						startPos = atmosphere.raySphereIntersectNearest( ray, cloudsOuterRadius ).point();
 						endPos = atmosphere.raySphereIntersectNearest( ray, cloudsInnerRadius ).point();
-						fogRay = atmosphere.raySphereIntersectNearest( ray, cloudsOuterRadius ).point();
+						fogRay = startPos;
 					}
 					FI;
 
@@ -114,7 +121,7 @@ namespace atmosphere_scattering
 					IF( writer, fogAmount > 0.965_f )
 					{
 						emission = skyColor;
-						writer.returnStmt(); //early exit
+						writer.returnStmt();
 					}
 					FI;
 
