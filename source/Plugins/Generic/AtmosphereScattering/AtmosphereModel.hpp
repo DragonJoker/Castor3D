@@ -177,6 +177,11 @@ namespace atmosphere_scattering
 			return atmosphereData.topRadius;
 		}
 
+		auto getSunIlluminance()const
+		{
+			return atmosphereData.sunIlluminance;
+		}
+
 		auto getAtmosphereThickness()const
 		{
 			return getAtmosphereRadius() - getEarthRadius();
