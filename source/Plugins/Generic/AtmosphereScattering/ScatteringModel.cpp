@@ -54,44 +54,55 @@ namespace atmosphere_scattering
 
 					if ( m_bloomSunDisk )
 					{
-						auto sunMinSolidAngle = m_writer.declLocale( "sunMinSolidAngle"
-							, 0.053_f * sdw::Float{ castor::Pi< float > } / 180.0_f );
-						auto sunMaxSolidAngle = m_writer.declLocale( "sunMaxSolidAngle"
-							, sunMinSolidAngle * 10.0_f );
-						auto sunSolidAngle = m_writer.declLocale( "sunSolidAngle"
-							, doGetSunAngle( sunDir, sunMinSolidAngle, sunMaxSolidAngle ) );
-						auto minSunCosTheta = m_writer.declLocale( "minSunCosTheta"
-							, cos( sunSolidAngle ) );
+						auto sunMinAngularDiameter = m_writer.declLocale( "sunMinAngularDiameter"
+							, sdw::Float{ ( 0.053_degrees ).radians() } );
+						auto sunMaxAngularDiameter = m_writer.declLocale( "sunMaxSolidAngle"
+							, sunMinAngularDiameter * 15.0_f );
+						auto sunAngularDiameter = m_writer.declLocale( "sunAngularDiameter"
+							, doGetSunAngle( sunDir, sunMinAngularDiameter, sunMaxAngularDiameter ) );
+						auto sunCosTheta = m_writer.declLocale( "sunCosTheta"
+							, cos( sunAngularDiameter ) );
 						auto cosTheta = m_writer.declLocale( "cosTheta"
 							, dot( ray.direction, sunDir ) );
-						auto sunLuminance = m_writer.declLocale( "sunLuminance"
-							, vec3( 1.0_f ) );
+						auto intensity = m_writer.declLocale( "intensity"
+							, 1.0_f );
+						auto centerToEdge = m_writer.declLocale( "centerToEdge"
+							, cosTheta - sunCosTheta );
 
-						IF( m_writer, cosTheta < minSunCosTheta )
+						IF( m_writer, cosTheta < sunCosTheta )
 						{
-							auto offset = m_writer.declLocale( "offset"
-								, minSunCosTheta - cosTheta );
 							auto gaussianBloom = m_writer.declLocale( "gaussianBloom"
-								, exp( -offset * 50000.0_f ) * 0.5_f );
+								, exp( centerToEdge * 50000.0_f ) * 0.5_f );
 							auto invBloom = m_writer.declLocale( "invBloom"
-								, 1.0_f / ( 0.02_f + offset * 300.0_f ) * 0.01_f );
-							sunLuminance = vec3( gaussianBloom + invBloom );
+								, 1.0_f / ( 0.02_f - centerToEdge * 300.0_f ) * 0.01_f );
+							intensity = gaussianBloom + invBloom;
 						}
 						FI;
 
 						// Use smoothstep to limit the effect, so it drops off to actual zero.
-						sunLuminance = smoothStep( vec3( 0.002_f ), vec3( 1.0_f ), sunLuminance );
+						intensity = smoothStep( 0.002_f, 1.0_f, intensity );
+						auto sunLuminance = m_writer.declLocale( "sunLuminance"
+							, vec3( 0.0_f ) );
 
-						IF( m_writer, length( sunLuminance ) > 0.0_f )
+						IF( m_writer, intensity > 0.0_f )
 						{
-							IF( m_writer, m_atmosphere.raySphereIntersectNearest( ray, vec3( 0.0_f ), m_atmosphere.getEarthRadius() ).valid() )
+							IF( m_writer, !m_atmosphere.raySphereIntersectNearest( ray
+								, vec3( 0.0_f )
+								, m_atmosphere.getEarthRadius() ).valid() )
 							{
-								sunLuminance *= vec3( 0.0_f );
-							}
-							ELSE
-							{
-								// If the sun value is applied to this pixel, we need to calculate the transmittance to obscure it.
-								sunLuminance *= vec3( 2.0_f ) * getSunRadiance( sunDir );
+								sunLuminance = 2.0_f * getSunRadiance( ray.direction );
+
+								auto centerToEdge = m_writer.declLocale( "centerToEdge"
+									, cosTheta - sunCosTheta );
+								auto u = vec3( 1.0_f, 1.0_f, 1.0_f );
+								auto a = vec3( 0.397_f, 0.503_f, 0.652_f );
+								centerToEdge = 1.0_f - centerToEdge;
+								auto mu = m_writer.declLocale( "mu"
+									, sqrt( 1.0_f - centerToEdge * centerToEdge ) );
+								auto factor = m_writer.declLocale( "factor"
+									, 1.0_f - u * ( 1.0_f - pow( vec3( mu ), a ) ) );
+
+								sunLuminance *= max( vec3( intensity ), factor );
 							}
 							FI;
 						}
@@ -101,26 +112,45 @@ namespace atmosphere_scattering
 					}
 					else
 					{
-						auto sunMinSolidAngle = m_writer.declLocale( "sunMinSolidAngle"
-							, 0.53_f * sdw::Float{ castor::Pi< float > } / 180.0_f );
-						auto sunMaxSolidAngle = m_writer.declLocale( "sunMaxSolidAngle"
-							, sunMinSolidAngle * 2.0_f );
-						auto sunSolidAngle = m_writer.declLocale( "sunSolidAngle"
-							, doGetSunAngle( sunDir, sunMinSolidAngle, sunMaxSolidAngle ) );
-						auto minSunCosTheta = m_writer.declLocale( "minSunCosTheta"
-							, cos( sunSolidAngle ) );
+						auto sunMinAngularDiameter = m_writer.declLocale( "sunMinAngularDiameter"
+							, sdw::Float{ ( 0.53_degrees ).radians() } );
+						auto sunMaxAngularDiameter = m_writer.declLocale( "sunMaxAngularDiameter"
+							, sunMinAngularDiameter * 2.0_f );
+						auto sunAngularDiameter = m_writer.declLocale( "sunAngularDiameter"
+							, doGetSunAngle( sunDir, sunMinAngularDiameter, sunMaxAngularDiameter ) );
+						auto sunCosTheta = m_writer.declLocale( "sunCosTheta"
+							, cos( sunAngularDiameter ) );
 						auto cosTheta = m_writer.declLocale( "cosTheta"
 							, dot( ray.direction, sunDir ) );
 						auto sunLuminance = m_writer.declLocale( "sunLuminance"
 							, vec3( 0.0_f ) );
 
-						IF( m_writer, cosTheta > minSunCosTheta )
+						IF( m_writer, cosTheta > sunCosTheta )
 						{
 							IF( m_writer, !m_atmosphere.raySphereIntersectNearest( ray
 								, vec3( 0.0_f )
 								, m_atmosphere.getEarthRadius() ).valid() ) // no intersection
 							{
-								sunLuminance = vec3( 2.0_f ) * getSunRadiance( sunDir );
+								auto sunSolidAngle = m_writer.declLocale( "sunSolidAngle"
+									, castor::PiMult2< float > * ( 1.0_f - cos( sunAngularDiameter * 0.5_f ) ) );
+								auto zenithSunLuminance = m_writer.declLocale( "zenithSunLuminance"
+									, m_atmosphere.getSunIlluminance() / sunSolidAngle );
+								auto outerspaceLuminance = m_writer.declLocale( "outerspaceLuminance"
+									, zenithSunLuminance / getSunRadiance( vec3( 0.0_f, 1.0_f, 0.0_f ) ) );
+
+								sunLuminance = outerspaceLuminance * getSunRadiance( ray.direction ) / 1000.0f;
+
+								auto centerToEdge = m_writer.declLocale( "centerToEdge"
+									, cosTheta - sunCosTheta );
+								auto u = vec3( 1.0_f, 1.0_f, 1.0_f );
+								auto a = vec3( 0.397_f, 0.503_f, 0.652_f );
+								centerToEdge = 1.0_f - centerToEdge;
+								auto mu = m_writer.declLocale( "mu"
+									, sqrt( 1.0_f - centerToEdge * centerToEdge ) );
+								auto factor = m_writer.declLocale( "factor"
+									, 1.0_f - u * ( 1.0_f - pow( vec3( mu ), a ) ) );
+
+								sunLuminance *= factor;
 							}
 							FI;
 						}
