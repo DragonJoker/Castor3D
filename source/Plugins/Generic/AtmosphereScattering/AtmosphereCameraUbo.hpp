@@ -22,6 +22,7 @@ namespace atmosphere_scattering
 {
 	struct CameraConfig
 	{
+		castor::Matrix4x4f camViewProj;
 		castor::Matrix4x4f camInvViewProj;
 		castor::Matrix4x4f camInvProj;
 		castor::Matrix4x4f camInvView;
@@ -35,6 +36,7 @@ namespace atmosphere_scattering
 	struct CameraData
 		: public sdw::StructInstanceHelperT< "CameraData"
 			, sdw::type::MemoryLayout::eStd140
+			, sdw::StructFieldT< sdw::Mat4, "camViewProj" >
 			, sdw::StructFieldT< sdw::Mat4, "camInvViewProj" >
 			, sdw::StructFieldT< sdw::Mat4, "camInvProj" >
 			, sdw::StructFieldT< sdw::Mat4, "camInvView" >
@@ -51,6 +53,7 @@ namespace atmosphere_scattering
 			, bool enabled );
 
 		sdw::Vec4 camProjToWorld( sdw::Vec4 const & pos )const;
+		sdw::Vec4 camWorldToProj( sdw::Vec4 const & pos )const;
 		sdw::Vec4 objProjToWorld( sdw::Vec4 const & pos )const;
 
 		auto position()const { return getMember< "position" >(); }
@@ -60,6 +63,7 @@ namespace atmosphere_scattering
 		auto camInvView()const { return getMember< "camInvView" >(); }
 
 	private:
+		auto camViewProj()const { return getMember< "camViewProj" >(); }
 		auto camInvViewProj()const { return getMember< "camInvViewProj" >(); }
 		auto objInvViewProj()const { return getMember< "objInvViewProj" >(); }
 	};
