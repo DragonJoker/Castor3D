@@ -553,7 +553,7 @@ namespace atmosphere_scattering
 					rayToSun.direction = getSunDirection();
 					rayToSun.origin = position;
 					writer.returnStmt( doGetEarthShadow( rayToSun
-						, vec3( 0.0_f )
+						, earthO
 						, normalize( rayToSun.origin ) ) );
 				}
 				, sdw::InVec3{ writer, "earthO" }
@@ -564,8 +564,8 @@ namespace atmosphere_scattering
 	}
 
 	RetIntersection AtmosphereModel::raySphereIntersectNearest( Ray const & pray
-		, sdw::Vec3 const & ps0
-		, sdw::Float const & psR )
+		, sdw::Vec3 const & psphereCenter
+		, sdw::Float const & psphereRadius )
 	{
 		if ( !m_raySphereIntersectNearest )
 		{
@@ -619,7 +619,9 @@ namespace atmosphere_scattering
 				, sdw::InFloat{ writer, "sphereRadius" } );
 		}
 
-		return m_raySphereIntersectNearest( pray, ps0, psR );
+		return m_raySphereIntersectNearest( pray
+			, psphereCenter
+			, psphereRadius );
 	}
 
 	RetIntersection AtmosphereModel::raySphereIntersectNearest( Ray const & ray

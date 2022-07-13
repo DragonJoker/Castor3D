@@ -63,15 +63,14 @@ namespace atmosphere_scattering
 		sdw::RetFloat raymarchToLight( sdw::Vec3 const & viewDir
 			, sdw::Vec3 const & pos
 			, sdw::Float const & stepSize
-			, sdw::Vec3 const & lightDir
-			, sdw::Vec2 & earthShadowRange );
+			, sdw::Vec3 const & lightDir );
 		sdw::RetVec4 raymarchToCloud( Ray const & ray
 			, sdw::Vec3 const & startPos
 			, sdw::Vec3 const & endPos
 			, sdw::Vec3 const & skyColor
 			, sdw::IVec2 const & fragCoord
 			, sdw::Vec3 const & sunColor
-			, sdw::Vec2 & earthShadowRange );
+			, sdw::Float & earthShadow );
 		sdw::RetFloat computeFogAmount( sdw::Vec3 const & startPos
 			, sdw::Vec3 const & wolrdPos
 			, sdw::Float const & factor );
@@ -91,12 +90,12 @@ namespace atmosphere_scattering
 			, sdw::Vec3 const & endPos
 			, sdw::Vec3 const & sunColor
 			, sdw::Float const & fogAmount
-			, sdw::Vec2 const & earthShadowRange
+			, sdw::Float const & earthShadow
 			, sdw::Vec4 const & rayMarchResult );
 		sdw::RetVec4 computeEmission( Ray const & ray
 			, sdw::Vec3 const & startPos
 			, sdw::Vec3 const & sunColor
-			, sdw::Vec2 const & earthShadowRange
+			, sdw::Float const & earthShadow
 			, sdw::Vec4 const & rayMarchResult );
 		sdw::Float getLightEnergy( sdw::Float cosTheta
 			, sdw::Float const & coneDensity );
@@ -145,8 +144,7 @@ namespace atmosphere_scattering
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InFloat
-			, sdw::InVec3
-			, sdw::OutVec2 > m_raymarchToLight;
+			, sdw::InVec3 > m_raymarchToLight;
 		sdw::Function< sdw::Vec4
 			, InRay
 			, sdw::InVec3
@@ -154,7 +152,7 @@ namespace atmosphere_scattering
 			, sdw::InVec3
 			, sdw::InIVec2
 			, sdw::InVec3
-			, sdw::OutVec2 > m_raymarchToCloud;
+			, sdw::OutFloat > m_raymarchToCloud;
 		sdw::Function< sdw::Float
 			, sdw::InVec3
 			, sdw::InVec3
@@ -175,13 +173,13 @@ namespace atmosphere_scattering
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InFloat
-			, sdw::InVec2
+			, sdw::InFloat
 			, sdw::InVec4 > m_computeLighting;
 		sdw::Function< sdw::Vec4
 			, InRay
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InVec2
+			, sdw::InFloat
 			, sdw::InVec4 > m_computeEmission;
 		sdw::Function< sdw::Void
 			, sdw::InIVec2

@@ -15,7 +15,7 @@ namespace atmosphere_scattering
 	struct CloudsConfigT
 	{
 		template< typename ... ParamsT >
-		CloudsConfigT( ParamsT & ... params )
+		explicit CloudsConfigT( ParamsT & ... params )
 			: speed{ params..., 10.0f }
 			, coverage{ params..., 0.45f }
 			, crispiness{ params..., 40.0f }
