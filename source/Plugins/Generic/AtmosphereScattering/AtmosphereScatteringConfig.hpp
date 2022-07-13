@@ -46,7 +46,7 @@ namespace atmosphere_scattering
 	struct AtmosphereScatteringConfigT
 	{
 		template< typename ... ParamsT >
-		AtmosphereScatteringConfigT( ParamsT & ... params )
+		explicit AtmosphereScatteringConfigT( ParamsT & ... params )
 			: sunDirection{ 1.0f, 0.0f, 0.0f, -20.0_degrees }
 			, solarIrradiance{ params..., castor::Point3f{ 1.0f, 1.0f, 1.0f } }
 			, sunAngularRadius{ params..., 0.004675f }
