@@ -164,7 +164,7 @@ namespace atmosphere_scattering
 
 					//compute fog amount and early exit if over a certain value
 					auto fogAmount = writer.declLocale( "fogAmount"
-						, computeFogAmount( fogRay0, ray.origin, 0.006_f ) );
+						, computeFogAmount( fogRay0, ray.origin, 0.01_f ) );
 
 					IF( writer, fogAmount > 0.965_f )
 					{
@@ -759,7 +759,7 @@ namespace atmosphere_scattering
 					auto alpha = writer.declLocale( "alpha"
 						, ( dist / radius ) );
 
-					writer.returnStmt( ( 1.0_f - exp( -dist * alpha * factor ) ) );
+					writer.returnStmt( clamp( 1.0_f - exp( -dist * alpha * factor ), 0.0_f, 1.0_f ) );
 				}
 				, sdw::InVec3{ writer, "startPos" }
 				, sdw::InVec3{ writer, "worldPos" }
@@ -850,18 +850,6 @@ namespace atmosphere_scattering
 					auto cloudColor = writer.declLocale( "cloudColor"
 						, rayMarchResult.rgb() );
 
-					// use current position distance to center as action radius
-					cloudColor = mix( cloudColor
-						, skyColor * density
-						, vec3( clamp( fogAmount, 0.0_f, 1.0_f ) ) );
-
-#if !Debug_CloudsRadius
-					auto cloudFadeOutPoint = 0.06_f;
-					density *= smoothStep( 0.0_f
-						, 1.0_f
-						, min( 1.0_f, utils.remap( ray.direction.y(), cloudFadeOutPoint, 0.2_f, 0.0_f, 1.0_f ) ) );
-#endif
-
 					// add sun glare to clouds
 					auto sunIntensity = writer.declLocale( "sunIntensity"
 						, clamp( dot( atmosphere.getSunDirection(), ray.direction )
@@ -887,16 +875,13 @@ namespace atmosphere_scattering
 						, scattering.getSunLuminance( ray ) );
 					auto finalSkyColor = writer.declLocale( "finalSkyColor"
 						, skyColor + sunDisk * ( sunGlareIntensity - minGlare ) );
-					auto fadeOut = writer.declLocale( "fadeOut"
-						, 1.0_f );
 					auto lightFactor = writer.declLocale( "lightFactor"
 						, min( 1.0_f, earthShadow ) );
+					auto fadeOut = writer.declLocale( "fadeOut"
+						, 1.0_f - fogAmount );
 
 #if !Debug_CloudsRadius
 					// Blend background and clouds.
-					fadeOut = smoothStep( 0.0_f
-						, 1.0_f
-						, min( 1.0_f, utils.remap( ray.direction.y(), cloudFadeOutPoint, 0.4_f, 0.0_f, 1.0_f ) ) );
 					cloudColor = mix( mix( finalSkyColor, clouds.bottomColor(), vec3( clouds.coverage() ) )
 						, cloudColor
 						, vec3( fadeOut ) );
@@ -946,7 +931,7 @@ namespace atmosphere_scattering
 					{
 						//apply fog to bloom buffer
 						auto fogAmount = writer.declLocale( "fogAmount"
-							, computeFogAmount( startPos, ray.origin, 0.006_f ) );
+							, computeFogAmount( startPos, ray.origin, 0.01_f ) );
 						auto cloud = writer.declLocale( "cloud"
 							, mix( vec3( 0.0_f ), bloom, vec3( clamp( fogAmount, 0.0_f, 1.0_f ) ) ) );
 						bloom = bloom * ( 1.0_f - rayMarchResult.a() ) + cloud;
