@@ -86,8 +86,6 @@ namespace atmosphere_scattering
 			, sdw::Float const & cosTheta );
 		sdw::RetVec4 computeLighting( Ray const & ray
 			, sdw::Vec3 const & skyColor
-			, sdw::Vec3 const & startPos
-			, sdw::Vec3 const & endPos
 			, sdw::Vec3 const & sunColor
 			, sdw::Float const & fogAmount
 			, sdw::Float const & earthShadow
@@ -99,6 +97,11 @@ namespace atmosphere_scattering
 			, sdw::Vec4 const & rayMarchResult );
 		sdw::Float getLightEnergy( sdw::Float cosTheta
 			, sdw::Float const & coneDensity );
+		sdw::RetInt raySphereIntersect( Ray const & ray
+			, sdw::Float const & sphereRadius
+			, Intersection const & ground
+			, Intersection & nearest
+			, Intersection & farthest );
 
 	private:
 		sdw::ShaderWriter & writer;
@@ -170,8 +173,6 @@ namespace atmosphere_scattering
 			, InRay
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InVec3
 			, sdw::InFloat
 			, sdw::InFloat
 			, sdw::InVec4 > m_computeLighting;
@@ -186,6 +187,12 @@ namespace atmosphere_scattering
 			, sdw::InVec2
 			, sdw::InOutVec4
 			, sdw::OutVec4 > m_applyClouds;
+		sdw::Function< sdw::Int
+			, InRay
+			, sdw::InFloat
+			, InIntersection
+			, OutIntersection
+			, OutIntersection > m_raySphereIntersect;
 	};
 }
 
