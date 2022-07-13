@@ -194,6 +194,7 @@ namespace atmosphere_scattering
 						, sunColor
 						, earthShadow
 						, rayMarchResult );
+					emission.rgb() *= skyColor.a();
 
 					IF( writer, secondRay )
 					{
@@ -223,6 +224,7 @@ namespace atmosphere_scattering
 									, sunColor
 									, earthShadow
 									, rayMarchResult ) );
+							emissionResult.rgb() *= lightingResult.a();
 							skyColor = max( skyColor, lightingResult );
 							emission = max( emission, emissionResult );
 						}
@@ -938,7 +940,7 @@ namespace atmosphere_scattering
 					, sdw::Vec4 const & rayMarchResult )
 				{
 					auto bloom = writer.declLocale( "bloom"
-						, vec3( sunColor * 1.3_f ) );
+						, vec3( sunColor ) );
 
 					IF( writer, rayMarchResult.a() > 0.1_f )
 					{
@@ -952,7 +954,7 @@ namespace atmosphere_scattering
 					}
 					FI;
 
-					writer.returnStmt( vec4( bloom, 1.0_f ) );
+					writer.returnStmt( vec4( bloom, clouds.coverage() ) );
 				}
 				, InRay{ writer, "ray" }
 				, sdw::InVec3{ writer, "startPos" }

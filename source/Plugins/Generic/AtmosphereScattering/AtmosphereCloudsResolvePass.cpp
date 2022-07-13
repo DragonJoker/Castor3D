@@ -102,6 +102,17 @@ namespace atmosphere_scattering
 				, sdw::InCombinedImage2DRgba32{ writer, "tex" }
 				, sdw::InVec2{ writer, "uv" } );
 
+			auto getSunUVPos = writer.implementFunction< sdw::Vec2 >( "getSunUVPos"
+				, [&]()
+				{
+					auto worldPos = writer.declLocale( "worldPos"
+						, vec4( c3d_cameraData.position() + vec3( 0.0_f, c3d_atmosphereData.bottomRadius, 0.0_f ) + c3d_atmosphereData.sunDirection * 1e6_f, 1.0_f ) );
+					auto ndcPos = writer.declLocale( "ndcPos"
+						, c3d_cameraData.camWorldToProj( worldPos ) );
+					ndcPos /= ndcPos.w();
+					writer.returnStmt( fma( ndcPos.xy(), vec2( 0.5_f ), vec2( 0.5_f ) ) );
+				} );
+
 			writer.implementMainT< sdw::VoidT, sdw::VoidT >( sdw::FragmentIn{ writer }
 				, sdw::FragmentOut{ writer }
 				, [&]( sdw::FragmentIn in
@@ -114,55 +125,55 @@ namespace atmosphere_scattering
 					// RADIAL BLUR - CREPUSCOLAR RAYS
 					IF( writer, c3d_cameraData.lightDotCameraFront() > 0.0_f )
 					{
-						auto lightPos = writer.declLocale( "lightPos"
-							, c3d_cameraData.position() + c3d_atmosphereData.sunDirection * 1e6_f );
+						auto lightUV = writer.declLocale( "lightPos"
+							, getSunUVPos() );
 
 						// Screen coordinates.
 						auto uv = writer.declLocale( "uv"
 							, vec2( in.fragCoord.xy() ) / targetSize );
 
-						// Radial blur factors.
-						//
-						auto decay = 0.98_f;
-						auto density = 0.9_f;
-						auto weight = 0.07_f;
-						auto exposure = 0.45_f;
-						const int SAMPLES = 64;
+						auto colResult = writer.declLocale( "colResult"
+							, emissionsMap.sample( uv ) );
 
-						// Light offset. 
-						auto l = writer.declLocale( "l"
-							, vec3( lightPos.xy(), 0.5_f ) );
-
-						auto illuminationDecay = writer.declLocale( "illuminationDecay"
-							, 1.0_f );
-
-						auto tc = writer.declLocale( "tc"
-							, uv );
-						auto dTuv = writer.declLocale( "dTuv"
-							, tc - lightPos.xy() );
-						dTuv *= density / float( SAMPLES );
-
-						//vec3 colRays = texture(emissions, uv.xy).rgb*0.4;
-						auto colRays = writer.declLocale( "colRays"
-							, gaussianBlur( emissionsMap, uv ).rgb() * 0.4_f );
-
-						FOR( writer, sdw::Int, i, 0, i < SAMPLES, i++ )
+						IF( writer, colResult.a() > 0.0_f )
 						{
-							uv -= dTuv;
-							//colRays += texture(emissions, uv).rgb *illuminationDecay* weight;
-							colRays += emissionsMap.sample( uv ).rgb() * illuminationDecay * weight;
-							illuminationDecay *= decay;
-						}
-						ROF;
+							// Radial blur factors.
+							//
+							auto decay = 0.98_f;
+							auto density = 0.9_f;
+							auto weight = 0.07_f;
+							auto exposure = 0.15_f;
+							const int SAMPLES = 64;
 
-						//FragColor -= 0.2;
-						//FragColor.rgb += (smoothstep(0., 1., colRays)*exposure - 0.2);
-						auto colorWithRays = writer.declLocale( "colorWithRays"
-							, fragColour.rgb() + ( smoothStep( vec3( 0.0_f ), vec3( 1.0_f ), colRays ) * exposure ) );
-						fragColour.rgb() = mix( fragColour.rgb()
-							, colorWithRays * 0.9_f
-							, vec3( c3d_cameraData.lightDotCameraFront() * c3d_cameraData.lightDotCameraFront() ) );
-						//FragColor.rgb = (smoothstep(0., 1., colRays)*exposure - 0.2);
+							// Light offset. 
+							auto l = writer.declLocale( "l"
+								, vec3( lightUV, 0.5_f ) );
+
+							auto illuminationDecay = writer.declLocale( "illuminationDecay"
+								, 1.0_f );
+
+							auto dTuv = writer.declLocale( "dTuv"
+								, uv - lightUV );
+							dTuv *= density / float( SAMPLES );
+
+							auto colRays = writer.declLocale( "colRays"
+								, colResult.rgb() * 0.4_f );
+
+							FOR( writer, sdw::Int, i, 0, i < SAMPLES, i++ )
+							{
+								uv -= dTuv;
+								colRays += emissionsMap.sample( uv ).rgb() * illuminationDecay * weight;
+								illuminationDecay *= decay;
+							}
+							ROF;
+
+							auto colorWithRays = writer.declLocale( "colorWithRays"
+								, fragColour.rgb() + ( smoothStep( vec3( 0.0_f ), vec3( 1.0_f ), colRays ) * exposure ) );
+							fragColour.rgb() = mix( fragColour.rgb()
+								, colorWithRays * 0.9_f
+								, vec3( c3d_cameraData.lightDotCameraFront() * c3d_cameraData.lightDotCameraFront() ) );
+						}
+						FI;
 					}
 					FI;
 */

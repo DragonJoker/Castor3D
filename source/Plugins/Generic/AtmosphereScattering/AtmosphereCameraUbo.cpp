@@ -25,6 +25,11 @@ namespace atmosphere_scattering
 		return camInvViewProj() * pos;
 	}
 
+	sdw::Vec4 CameraData::camWorldToProj( sdw::Vec4 const & pos )const
+	{
+		return camViewProj() * pos;
+	}
+
 	sdw::Vec4 CameraData::objProjToWorld( sdw::Vec4 const & pos )const
 	{
 		return objInvViewProj() * pos;
@@ -73,6 +78,7 @@ namespace atmosphere_scattering
 
 		auto viewProj = camera.getProjection( isSafeBanded ) * view;
 		auto & data = m_ubo.getData();
+		data.camViewProj = viewProj;
 		data.camInvViewProj = viewProj.getInverse();
 		data.camInvProj = camera.getProjection( isSafeBanded ).getInverse();
 		data.camInvView = view.getInverse();
