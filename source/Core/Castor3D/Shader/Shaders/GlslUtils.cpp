@@ -41,50 +41,50 @@ namespace castor3d::shader
 		return clamp( v, vec3( 0.0_f ), vec3( 1.0_f ) );
 	}
 	
-	sdw::Vec2 Utils::topDownToBottomUp( sdw::Vec2 const & v )
+	sdw::Vec2 Utils::topDownToBottomUp( sdw::Vec2 const v )
 	{
 		return vec2( v.x(), 1.0_f - v.y() );
 	}
 
-	sdw::Vec3 Utils::topDownToBottomUp( sdw::Vec3 const & v )
+	sdw::Vec3 Utils::topDownToBottomUp( sdw::Vec3 const v )
 	{
 		return vec3( v.x(), 1.0_f - v.y(), v.z() );
 	}
 
-	sdw::Vec4 Utils::topDownToBottomUp( sdw::Vec4 const & v )
+	sdw::Vec4 Utils::topDownToBottomUp( sdw::Vec4 const v )
 	{
 		return vec4( v.x(), 1.0_f - v.y(), v.z(), v.w() );
 	}
 
-	sdw::Vec2 Utils::negateTopDownToBottomUp( sdw::Vec2 const & v )
+	sdw::Vec2 Utils::negateTopDownToBottomUp( sdw::Vec2 const v )
 	{
 		return vec2( v.x(), -v.y() );
 	}
 
-	sdw::Vec3 Utils::negateTopDownToBottomUp( sdw::Vec3 const & v )
+	sdw::Vec3 Utils::negateTopDownToBottomUp( sdw::Vec3 const v )
 	{
 		return vec3( v.x(), -v.y(), v.z() );
 	}
 
-	sdw::Vec4 Utils::negateTopDownToBottomUp( sdw::Vec4 const & v )
+	sdw::Vec4 Utils::negateTopDownToBottomUp( sdw::Vec4 const v )
 	{
 		return vec4( v.x(), -v.y(), v.z(), v.w() );
 	}
 
-	sdw::Vec2 Utils::calcTexCoord( sdw::Vec2 const & renderPos
-			, sdw::Vec2 const & renderSize )
+	sdw::Vec2 Utils::calcTexCoord( sdw::Vec2 const renderPos
+			, sdw::Vec2 const renderSize )
 	{
 		return renderPos / renderSize;
 	}
 	
-	sdw::Vec3 Utils::applyGamma( sdw::Float const & gamma
-		, sdw::Vec3 const & hdr )
+	sdw::Vec3 Utils::applyGamma( sdw::Float const gamma
+		, sdw::Vec3 const hdr )
 	{
 		return pow( max( hdr, vec3( 0.0_f, 0.0_f, 0.0_f ) ), vec3( 1.0_f / gamma ) );
 	}
 
-	sdw::Vec3 Utils::removeGamma( sdw::Float const & gamma
-		, sdw::Vec3 const & srgb )
+	sdw::Vec3 Utils::removeGamma( sdw::Float const gamma
+		, sdw::Vec3 const srgb )
 	{
 		return pow( max( srgb, vec3( 0.0_f, 0.0_f, 0.0_f ) ), vec3( gamma ) );
 	}
@@ -92,8 +92,8 @@ namespace castor3d::shader
 	void Utils::compute2DMapsContributions( FilteredTextureFlags const & flags
 		, TextureConfigurations const & textureConfigs
 		, TextureAnimations const & textureAnims
-		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, sdw::Vec3 const & texCoords
+		, sdw::Array< sdw::CombinedImage2DRgba32 > const maps
+		, sdw::Vec3 const texCoords
 		, sdw::Vec3 & colour
 		, sdw::Float & opacity )
 	{
@@ -133,33 +133,33 @@ namespace castor3d::shader
 		}
 	}
 
-	sdw::Float Utils::remap( sdw::Float const & originalValue
-		, sdw::Float const & originalMin
-		, sdw::Float const & originalMax
-		, sdw::Float const & newMin
-		, sdw::Float const & newMax )
+	sdw::Float Utils::remap( sdw::Float const originalValue
+		, sdw::Float const originalMin
+		, sdw::Float const originalMax
+		, sdw::Float const newMin
+		, sdw::Float const newMax )
 	{
 		return newMin + ( ( ( originalValue - originalMin ) / ( originalMax - originalMin ) ) * ( newMax - newMin ) );
 	}
 
-	sdw::Float Utils::threshold( sdw::Float const & v
-		, sdw::Float const & t )
+	sdw::Float Utils::threshold( sdw::Float const v
+		, sdw::Float const t )
 	{
 		return m_writer.ternary( v > t, v, 0.0_f );
 	}
 
-	sdw::Float Utils::beer( sdw::Float const & d )
+	sdw::Float Utils::beer( sdw::Float const d )
 	{
 		return exp( -d );
 	}
 
-	sdw::Float Utils::powder( sdw::Float const & d )
+	sdw::Float Utils::powder( sdw::Float const d )
 	{
 		return 1.0_f - exp( -2.0_f * d );
 	}
 
-	sdw::Float Utils::powder( sdw::Float const & d
-		, sdw::Float const & cosTheta )
+	sdw::Float Utils::powder( sdw::Float const d
+		, sdw::Float const cosTheta )
 	{
 		return mix( 1.0_f
 			, powder( d )
@@ -167,8 +167,8 @@ namespace castor3d::shader
 	}
 
 	sdw::Vec4 Utils::sampleMap( PassFlags const & passFlags
-		, sdw::CombinedImage2DRgba32 const & map
-		, sdw::Vec2 const & texCoords )
+		, sdw::CombinedImage2DRgba32 const map
+		, sdw::Vec2 const texCoords )
 	{
 		return ( checkFlag( passFlags, PassFlag::eUntile )
 			? sampleUntiled( map, texCoords )
