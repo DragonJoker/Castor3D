@@ -25,39 +25,39 @@ namespace castor3d::shader
 
 		C3D_API sdw::Float saturate( sdw::Float const v );
 		C3D_API sdw::Vec3 saturate( sdw::Vec3 const v );
-		C3D_API sdw::Vec2 topDownToBottomUp( sdw::Vec2 const & texCoord );
-		C3D_API sdw::Vec3 topDownToBottomUp( sdw::Vec3 const & texCoord );
-		C3D_API sdw::Vec4 topDownToBottomUp( sdw::Vec4 const & texCoord );
-		C3D_API sdw::Vec2 negateTopDownToBottomUp( sdw::Vec2 const & texCoord );
-		C3D_API sdw::Vec3 negateTopDownToBottomUp( sdw::Vec3 const & texCoord );
-		C3D_API sdw::Vec4 negateTopDownToBottomUp( sdw::Vec4 const & texCoord );
-		C3D_API sdw::Vec2 calcTexCoord( sdw::Vec2 const & renderPos
-			, sdw::Vec2 const & renderSize );
-		C3D_API sdw::Vec3 applyGamma( sdw::Float const & gamma
-			, sdw::Vec3 const & HDR );
-		C3D_API sdw::Vec3 removeGamma( sdw::Float const & gamma
-			, sdw::Vec3 const & sRGB );
+		C3D_API sdw::Vec2 topDownToBottomUp( sdw::Vec2 const texCoord );
+		C3D_API sdw::Vec3 topDownToBottomUp( sdw::Vec3 const texCoord );
+		C3D_API sdw::Vec4 topDownToBottomUp( sdw::Vec4 const texCoord );
+		C3D_API sdw::Vec2 negateTopDownToBottomUp( sdw::Vec2 const texCoord );
+		C3D_API sdw::Vec3 negateTopDownToBottomUp( sdw::Vec3 const texCoord );
+		C3D_API sdw::Vec4 negateTopDownToBottomUp( sdw::Vec4 const texCoord );
+		C3D_API sdw::Vec2 calcTexCoord( sdw::Vec2 const renderPos
+			, sdw::Vec2 const renderSize );
+		C3D_API sdw::Vec3 applyGamma( sdw::Float const gamma
+			, sdw::Vec3 const HDR );
+		C3D_API sdw::Vec3 removeGamma( sdw::Float const gamma
+			, sdw::Vec3 const sRGB );
 		C3D_API void compute2DMapsContributions( FilteredTextureFlags const & flags
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
-			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-			, sdw::Vec3 const & texCoords
+			, sdw::Array< sdw::CombinedImage2DRgba32 > const maps
+			, sdw::Vec3 const texCoords
 			, sdw::Vec3 & colour
 			, sdw::Float & opacity );
-		C3D_API sdw::Float remap( sdw::Float const & originalValue
-			, sdw::Float const & originalMin
-			, sdw::Float const & originalMax
-			, sdw::Float const & newMin
-			, sdw::Float const & newMax );
-		C3D_API sdw::Float threshold( sdw::Float const & v
-			, sdw::Float const & t );
-		C3D_API sdw::Float beer( sdw::Float const & d );
-		C3D_API sdw::Float powder( sdw::Float const & d );
-		C3D_API sdw::Float powder( sdw::Float const & d
-			, sdw::Float const & cosTheta );
+		C3D_API sdw::Float remap( sdw::Float const originalValue
+			, sdw::Float const originalMin
+			, sdw::Float const originalMax
+			, sdw::Float const newMin
+			, sdw::Float const newMax );
+		C3D_API sdw::Float threshold( sdw::Float const v
+			, sdw::Float const t );
+		C3D_API sdw::Float beer( sdw::Float const d );
+		C3D_API sdw::Float powder( sdw::Float const d );
+		C3D_API sdw::Float powder( sdw::Float const d
+			, sdw::Float const cosTheta );
 		C3D_API sdw::Vec4 sampleMap( PassFlags const & passFlags
-			, sdw::CombinedImage2DRgba32 const & map
-			, sdw::Vec2 const & texCoords );
+			, sdw::CombinedImage2DRgba32 const map
+			, sdw::Vec2 const texCoords );
 
 		C3D_API void swap( sdw::Float const A, sdw::Float const & B );
 		C3D_API sdw::RetFloat distanceSquared( sdw::Vec2 const A, sdw::Vec2 const & B );
