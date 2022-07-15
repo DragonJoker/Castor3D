@@ -74,9 +74,9 @@ namespace atmosphere_scattering
 						IF( m_writer, cosTheta < sunCosTheta )
 						{
 							auto gaussianBloom = m_writer.declLocale( "gaussianBloom"
-								, exp( centerToEdge * 5000.0_f ) * 0.5_f );
+								, exp( centerToEdge * 50000.0_f ) * 0.5_f );
 							auto invBloom = m_writer.declLocale( "invBloom"
-								, 1.0_f / ( 0.02_f - centerToEdge * 30.0_f ) * 0.01_f );
+								, 1.0_f / ( 0.02_f - centerToEdge * 300.0_f ) * 0.01_f );
 							intensity = gaussianBloom + invBloom;
 						}
 						FI;
