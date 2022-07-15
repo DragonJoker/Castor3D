@@ -61,6 +61,16 @@ namespace atmosphere_scattering
 				{
 					auto ray = writer.declLocale( "ray"
 						, atmosphere.castRay( vec2( fragCoord ), targetSize ) );
+
+					IF( writer, clouds.coverage() == 0.0_f )
+					{
+						auto sunDisk = writer.declLocale( "sunDisk"
+							, scattering.getSunLuminance( ray ) );
+						skyColor.rgb() += sunDisk;
+						writer.returnStmt();
+					}
+					FI;
+
 					auto startPos0 = writer.declLocale( "startPos0"
 						, vec3( 0.0_f ) );
 					auto endPos0 = writer.declLocale( "endPos0"
