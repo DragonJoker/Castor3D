@@ -175,14 +175,6 @@ namespace atmosphere_scattering
 					//compute fog amount and early exit if over a certain value
 					auto fogAmount = writer.declLocale( "fogAmount"
 						, computeFogAmount( fogRay0, ray.origin, 0.01_f ) );
-
-					IF( writer, fogAmount > 0.965_f )
-					{
-						emission = skyColor;
-						writer.returnStmt();
-					}
-					FI;
-
 					auto earthShadow = writer.declLocale( "earthShadow"
 						, 0.0_f );
 					auto rayMarchResult = writer.declLocale( "rayMarchResult"
