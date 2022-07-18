@@ -1,4 +1,4 @@
-#include "AtmosphereScattering/AtmosphereVolumetricCloudsPass.hpp"
+#include "AtmosphereScattering/CloudsVolumePass.hpp"
 
 #include "AtmosphereScattering/AtmosphereCameraUbo.hpp"
 #include "AtmosphereScattering/AtmosphereModel.hpp"
@@ -206,7 +206,7 @@ namespace atmosphere_scattering
 
 	//************************************************************************************************
 
-	AtmosphereVolumetricCloudsPass::AtmosphereVolumetricCloudsPass( crg::FramePassGroup & graph
+	CloudsVolumePass::CloudsVolumePass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
 		, castor3d::RenderDevice const & device
 		, AtmosphereScatteringUbo const & atmosphereUbo
@@ -223,7 +223,7 @@ namespace atmosphere_scattering
 		, crg::ImageViewId const & colourResult
 		, crg::ImageViewId const & emissionResult
 		, uint32_t index )
-		: castor::Named{ "VolumetricCloudsPass" + castor::string::toString( index ) }
+		: castor::Named{ "Clouds/VolumePass" + castor::string::toString( index ) }
 		, m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT
 			, getName()
 			, ( volclouds::useCompute
@@ -345,7 +345,7 @@ namespace atmosphere_scattering
 		m_lastPass = &pass;
 	}
 
-	void AtmosphereVolumetricCloudsPass::accept( castor3d::PipelineVisitor & visitor )
+	void CloudsVolumePass::accept( castor3d::PipelineVisitor & visitor )
 	{
 		visitor.visit( m_computeShader );
 	}

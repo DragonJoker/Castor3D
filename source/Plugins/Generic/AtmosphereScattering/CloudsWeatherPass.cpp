@@ -1,4 +1,4 @@
-#include "AtmosphereScattering/AtmosphereWeatherPass.hpp"
+#include "AtmosphereScattering/CloudsWeatherPass.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Render/RenderDevice.hpp>
@@ -218,24 +218,24 @@ namespace atmosphere_scattering
 
 	//************************************************************************************************
 
-	AtmosphereWeatherPass::AtmosphereWeatherPass( crg::FramePassGroup & graph
+	CloudsWeatherPass::CloudsWeatherPass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
 		, castor3d::RenderDevice const & device
 		, WeatherUbo const & weatherUbo
 		, crg::ImageViewId const & resultView
 		, bool const & enabled )
 		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT
-			, "WeatherPass"
+			, "Clouds/WeatherPass"
 			, ( weather::useCompute
 				? weather::getProgram( getExtent( resultView ).width )
 				: nullptr ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
-			, "WeatherPass"
+			, "Clouds/WeatherPass"
 			, ( weather::useCompute
 				? nullptr
 				: weather::ShaderWriter< false >::getVertexProgram() ) }
 		, m_fragmentShader{ VK_SHADER_STAGE_FRAGMENT_BIT
-			, "WeatherPass"
+			, "Clouds/WeatherPass"
 			, ( weather::useCompute
 				? nullptr
 				: weather::getProgram( getExtent( resultView ).width ) ) }
@@ -245,7 +245,7 @@ namespace atmosphere_scattering
 				, makeShaderState( device, m_fragmentShader ) } ) }
 	{
 		auto renderSize = getExtent( resultView );
-		auto & pass = graph.createPass( "WeatherPass"
+		auto & pass = graph.createPass( "Clouds/WeatherPass"
 			, [this, &device, &enabled, renderSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -294,7 +294,7 @@ namespace atmosphere_scattering
 		m_lastPass = &pass;
 	}
 
-	void AtmosphereWeatherPass::accept( castor3d::PipelineVisitor & visitor )
+	void CloudsWeatherPass::accept( castor3d::PipelineVisitor & visitor )
 	{
 		visitor.visit( m_computeShader );
 	}

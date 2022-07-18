@@ -1,26 +1,32 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3DAS_AtmosphereWeatherPass_H___
-#define ___C3DAS_AtmosphereWeatherPass_H___
+#ifndef ___C3DAS_CloudsResolvePass_H___
+#define ___C3DAS_CloudsResolvePass_H___
 
-#include "WeatherUbo.hpp"
+#include "CloudsUbo.hpp"
 
 #include <Castor3D/Scene/Background/BackgroundModule.hpp>
 #include <Castor3D/Shader/ShaderModule.hpp>
 #include <Castor3D/Shader/Ubos/UbosModule.hpp>
 
+#include <CastorUtils/Design/Named.hpp>
+
 namespace atmosphere_scattering
 {
-	class AtmosphereWeatherPass
+	class CloudsResolvePass
+		: public castor::Named
 	{
 	public:
-		AtmosphereWeatherPass( crg::FramePassGroup & graph
+		CloudsResolvePass( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
 			, castor3d::RenderDevice const & device
-			, WeatherUbo const & weatherUbo
+			, CameraUbo const & cameraUbo
+			, AtmosphereScatteringUbo const & atmosphereUbo
+			, crg::ImageViewId const & clouds
+			, crg::ImageViewId const & emission
 			, crg::ImageViewId const & resultView
-			, bool const & enabled );
+			, uint32_t index );
 		void accept( castor3d::PipelineVisitor & visitor );
 
 		crg::FramePass const & getLastPass()const
@@ -29,9 +35,8 @@ namespace atmosphere_scattering
 		}
 
 	private:
-		castor3d::ShaderModule m_computeShader;
 		castor3d::ShaderModule m_vertexShader;
-		castor3d::ShaderModule m_fragmentShader;
+		castor3d::ShaderModule m_pixelShader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePass const * m_lastPass;
 	};

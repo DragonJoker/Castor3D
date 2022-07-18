@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3DAS_AtmosphereConfig_H___
-#define ___C3DAS_AtmosphereConfig_H___
+#ifndef ___C3DAS_CloudsModel_H___
+#define ___C3DAS_CloudsModel_H___
 
 #include "AtmosphereCameraUbo.hpp"
 #include "AtmosphereModel.hpp"

@@ -247,7 +247,7 @@ namespace atmosphere_scattering
 			, volume.targetViewId
 			, index
 			, camAtmoChanged ) }
-		, volumetricCloudsPass{ std::make_unique< AtmosphereVolumetricCloudsPass >( graph
+		, volumetricCloudsPass{ std::make_unique< CloudsVolumePass >( graph
 			, crg::FramePassArray{ &transmittancePass , &weatherPass, &skyViewPass->getLastPass(), &multiscatterPass }
 			, device
 			, atmosphereUbo
@@ -264,7 +264,7 @@ namespace atmosphere_scattering
 			, cloudsColour.targetViewId
 			, cloudsEmission.targetViewId
 			, index ) }
-		, cloudsResolvePass{ std::make_unique< AtmosphereCloudsResolvePass >( graph
+		, cloudsResolvePass{ std::make_unique< CloudsResolvePass >( graph
 			, crg::FramePassArray{ &volumetricCloudsPass->getLastPass() }
 			, device
 			, cameraUbo
@@ -528,22 +528,22 @@ namespace atmosphere_scattering
 	{
 		if ( !m_transmittancePass )
 		{
-			m_worleyPass = std::make_unique< AtmosphereWorleyPass >( graph
+			m_worleyPass = std::make_unique< CloudsWorleyPass >( graph
 				, crg::FramePassArray{}
 				, device
 				, m_worley.sampledViewId
 				, m_generateWorley );
-			m_perlinWorleyPass = std::make_unique< AtmospherePerlinPass >( graph
+			m_perlinWorleyPass = std::make_unique< CloudsPerlinPass >( graph
 				, crg::FramePassArray{}
 				, device
 				, m_perlinWorley.sampledViewId
 				, m_generatePerlinWorley );
-			m_curlPass = std::make_unique< AtmosphereCurlPass >( graph
+			m_curlPass = std::make_unique< CloudsCurlPass >( graph
 				, crg::FramePassArray{}
 				, device
 				, m_curl.targetViewId
 				, m_generateCurl );
-			m_weatherPass = std::make_unique< AtmosphereWeatherPass >( graph
+			m_weatherPass = std::make_unique< CloudsWeatherPass >( graph
 				, crg::FramePassArray{ &m_worleyPass->getLastPass()
 					, &m_perlinWorleyPass->getLastPass()
 					, &m_curlPass->getLastPass() }

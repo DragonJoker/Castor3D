@@ -1,4 +1,4 @@
-#include "AtmosphereScattering/AtmosphereCloudsResolvePass.hpp"
+#include "AtmosphereScattering/CloudsResolvePass.hpp"
 
 #include "AtmosphereScattering/AtmosphereCameraUbo.hpp"
 #include "AtmosphereScattering/AtmosphereScatteringUbo.hpp"
@@ -185,7 +185,7 @@ namespace atmosphere_scattering
 
 	//************************************************************************************************
 
-	AtmosphereCloudsResolvePass::AtmosphereCloudsResolvePass( crg::FramePassGroup & graph
+	CloudsResolvePass::CloudsResolvePass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
 		, castor3d::RenderDevice const & device
 		, CameraUbo const & cameraUbo
@@ -194,7 +194,7 @@ namespace atmosphere_scattering
 		, crg::ImageViewId const & emission
 		, crg::ImageViewId const & resultView
 		, uint32_t index )
-		: castor::Named{ "CloudsResolvePass" + castor::string::toString( index ) }
+		: castor::Named{ "Clouds/ResolvePass" + castor::string::toString( index ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), cloudsres::getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), cloudsres::getPixelProgram( getExtent( resultView ) ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
@@ -227,7 +227,7 @@ namespace atmosphere_scattering
 		m_lastPass = &pass;
 	}
 
-	void AtmosphereCloudsResolvePass::accept( castor3d::PipelineVisitor & visitor )
+	void CloudsResolvePass::accept( castor3d::PipelineVisitor & visitor )
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
