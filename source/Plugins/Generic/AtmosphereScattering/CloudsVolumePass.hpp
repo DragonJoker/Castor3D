@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3DAS_AtmosphereVolumetricCloudsPass_H___
-#define ___C3DAS_AtmosphereVolumetricCloudsPass_H___
+#ifndef ___C3DAS_CloudsVolumePass_H___
+#define ___C3DAS_CloudsVolumePass_H___
 
 #include "CloudsUbo.hpp"
 
@@ -14,11 +14,11 @@ See LICENSE file in root folder
 
 namespace atmosphere_scattering
 {
-	class AtmosphereVolumetricCloudsPass
+	class CloudsVolumePass
 		: public castor::Named
 	{
 	public:
-		AtmosphereVolumetricCloudsPass( crg::FramePassGroup & graph
+		CloudsVolumePass( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
 			, castor3d::RenderDevice const & device
 			, AtmosphereScatteringUbo const & atmosphereUbo

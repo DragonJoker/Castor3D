@@ -1,10 +1,10 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3DAS_AtmosphereWorleyPass_H___
-#define ___C3DAS_AtmosphereWorleyPass_H___
+#ifndef ___C3DAS_CloudsWeatherPass_H___
+#define ___C3DAS_CloudsWeatherPass_H___
 
-#include "CloudsUbo.hpp"
+#include "WeatherUbo.hpp"
 
 #include <Castor3D/Scene/Background/BackgroundModule.hpp>
 #include <Castor3D/Shader/ShaderModule.hpp>
@@ -12,14 +12,15 @@ See LICENSE file in root folder
 
 namespace atmosphere_scattering
 {
-	class AtmosphereWorleyPass
+	class CloudsWeatherPass
 	{
 	public:
-		AtmosphereWorleyPass( crg::FramePassGroup & graph
+		CloudsWeatherPass( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
 			, castor3d::RenderDevice const & device
+			, WeatherUbo const & weatherUbo
 			, crg::ImageViewId const & resultView
-			, bool & enabled );
+			, bool const & enabled );
 		void accept( castor3d::PipelineVisitor & visitor );
 
 		crg::FramePass const & getLastPass()const
@@ -29,6 +30,8 @@ namespace atmosphere_scattering
 
 	private:
 		castor3d::ShaderModule m_computeShader;
+		castor3d::ShaderModule m_vertexShader;
+		castor3d::ShaderModule m_fragmentShader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePass const * m_lastPass;
 	};

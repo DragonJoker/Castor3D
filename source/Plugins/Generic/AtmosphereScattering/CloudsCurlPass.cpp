@@ -1,4 +1,4 @@
-﻿#include "AtmosphereScattering/AtmosphereCurlPass.hpp"
+﻿#include "AtmosphereScattering/CloudsCurlPass.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Render/RenderDevice.hpp>
@@ -105,16 +105,16 @@ namespace atmosphere_scattering
 
 	//************************************************************************************************
 
-	AtmosphereCurlPass::AtmosphereCurlPass( crg::FramePassGroup & graph
+	CloudsCurlPass::CloudsCurlPass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewId const & resultView
 		, bool & enabled )
-		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, "CurlPass", curl::getProgram( getExtent( resultView ).width ) }
+		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, "Clouds/CurlPass", curl::getProgram( getExtent( resultView ).width ) }
 		, m_stages{ makeShaderState( device, m_computeShader ) }
 	{
 		auto renderSize = getExtent( resultView );
-		auto & computePass = graph.createPass( "CurlPass"
+		auto & computePass = graph.createPass( "Clouds/CurlPass"
 			, [this, &device, &enabled, renderSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -138,7 +138,7 @@ namespace atmosphere_scattering
 		m_lastPass = &computePass;
 	}
 
-	void AtmosphereCurlPass::accept( castor3d::PipelineVisitor & visitor )
+	void CloudsCurlPass::accept( castor3d::PipelineVisitor & visitor )
 	{
 		visitor.visit( m_computeShader );
 	}

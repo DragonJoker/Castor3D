@@ -1,4 +1,4 @@
-#include "AtmosphereScattering/AtmosphereWorleyPass.hpp"
+#include "AtmosphereScattering/CloudsPerlinPass.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Render/RenderDevice.hpp>
@@ -18,7 +18,7 @@ namespace atmosphere_scattering
 {
 	//*********************************************************************************************
 
-	namespace worley
+	namespace perwor
 	{
 		enum Bindings : uint32_t
 		{
@@ -281,6 +281,21 @@ namespace atmosphere_scattering
 				, sdw::InVec4{ writer, "position" }
 				, sdw::InVec4{ writer, "rep" } );
 
+			auto remap = writer.implementFunction< sdw::Float >( "remap"
+				, [&]( sdw::Float const & originalValue
+					, sdw::Float const & originalMin
+					, sdw::Float const & originalMax
+					, sdw::Float const & newMin
+					, sdw::Float const & newMax )
+				{
+					writer.returnStmt( newMin + ( ( ( originalValue - originalMin ) / ( originalMax - originalMin ) ) * ( newMax - newMin ) ) );
+				}
+				, sdw::InFloat{ writer, "originalValue" }
+				, sdw::InFloat{ writer, "originalMin" }
+				, sdw::InFloat{ writer, "originalMax" }
+				, sdw::InFloat{ writer, "newMin" }
+				, sdw::InFloat{ writer, "newMax" } );
+
 			// ======================================================================
 
 			auto worleyNoise3D = writer.implementFunction< sdw::Float >( "worleyNoise3D"
@@ -329,7 +344,7 @@ namespace atmosphere_scattering
 					ROF;
 
 					auto noise = writer.declLocale( "pCell"
-						, ( sum / weightSum ) * 0.5_f + 0.5_f );
+						, ( sum / weightSum ) );// *0.5 + 0.5;;
 					noise = min( noise, 1.0_f );
 					noise = max( noise, 0.0_f );
 					writer.returnStmt( noise );
@@ -346,26 +361,48 @@ namespace atmosphere_scattering
 							, writer.cast< sdw::Float >( pixel.y() ) / float( dimension )
 							, writer.cast< sdw::Float >( pixel.z() ) / float( dimension ) ) );
 
-					// 3 octaves
-					auto cellCount = writer.declLocale( "cellCount"
-						, 2.0_f );
-					auto worleyNoise0 = writer.declLocale( "worleyNoise0"
-						, ( 1.0_f - worleyNoise3D( coord, cellCount * 1.0_f ) ) );
-					auto worleyNoise1 = writer.declLocale( "worleyNoise1"
-						, ( 1.0_f - worleyNoise3D( coord, cellCount * 2.0_f ) ) );
-					auto worleyNoise2 = writer.declLocale( "worleyNoise2"
-						, ( 1.0_f - worleyNoise3D( coord, cellCount * 4.0_f ) ) );
-					auto worleyNoise3 = writer.declLocale( "worleyNoise3"
-						, ( 1.0_f - worleyNoise3D( coord, cellCount * 8.0_f ) ) );
-					auto worleyFBM0 = writer.declLocale( "worleyFBM0"
-						, worleyNoise0 * 0.625_f + worleyNoise1 * 0.25_f + worleyNoise2 * 0.125_f );
-					auto worleyFBM1 = writer.declLocale( "worleyFBM1"
-						, worleyNoise1 * 0.625_f + worleyNoise2 * 0.25_f + worleyNoise3 * 0.125_f );
-					auto worleyFBM2 = writer.declLocale( "worleyFBM2"
-						, worleyNoise2 * 0.75_f + worleyNoise3 * 0.25_f );
-					// cellCount=4 -> worleyNoise4 is just noise due to sampling frequency=texel freque. So only take into account 2 frequencies for FBM
+					// Perlin FBM noise
+					auto octaveCount = writer.declLocale( "octaveCount"
+						, 3_u );
+					auto frequency = writer.declLocale( "frequency"
+						, 8.0_f );
+					auto perlinNoise = writer.declLocale( "perlinNoise"
+						, perlinNoise3D( coord, frequency, octaveCount ) );
 
-					writer.returnStmt( vec4( worleyFBM0, worleyFBM1, worleyFBM2, 1.0_f ) );
+					auto PerlinWorleyNoise = writer.declLocale( "PerlinWorleyNoise"
+						, 0.0_f );
+					{
+						auto cellCount = writer.declLocale( "icellCount", 4.0_f );
+						auto worleyNoise0 = writer.declLocale( "iworleyNoise0", ( 1.0_f - worleyNoise3D( coord, cellCount * frequenceMul[0] ) ) );
+						auto worleyNoise1 = writer.declLocale( "iworleyNoise1", ( 1.0_f - worleyNoise3D( coord, cellCount * frequenceMul[1] ) ) );
+						auto worleyNoise2 = writer.declLocale( "iworleyNoise2", ( 1.0_f - worleyNoise3D( coord, cellCount * frequenceMul[2] ) ) );
+						auto worleyNoise3 = writer.declLocale( "iworleyNoise3", ( 1.0_f - worleyNoise3D( coord, cellCount * frequenceMul[3] ) ) );
+						auto worleyNoise4 = writer.declLocale( "iworleyNoise4", ( 1.0_f - worleyNoise3D( coord, cellCount * frequenceMul[4] ) ) );
+						auto worleyNoise5 = writer.declLocale( "iworleyNoise5", ( 1.0_f - worleyNoise3D( coord, cellCount * frequenceMul[5] ) ) );	// half the frequency of texel, we should not go further (with cellCount = 32 and texture size = 64)
+
+						// PerlinWorley noise as described p.101 of GPU Pro 7
+						auto worleyFBM = writer.declLocale( "worleyFBM", worleyNoise0 * 0.625_f + worleyNoise1 * 0.25_f + worleyNoise2 * 0.125_f );
+
+						PerlinWorleyNoise = remap( perlinNoise, 0.0_f, 1.0_f, worleyFBM, 1.0_f );
+					}
+
+					auto cellCount = writer.declLocale( "cellCount", 4.0_f );
+					auto worleyNoise0 = writer.declLocale( "worleyNoise0", ( 1.0_f - worleyNoise3D( coord, cellCount * 1.0_f ) ) );
+					auto worleyNoise1 = writer.declLocale( "worleyNoise1", ( 1.0_f - worleyNoise3D( coord, cellCount * 2.0_f ) ) );
+					auto worleyNoise2 = writer.declLocale( "worleyNoise2", ( 1.0_f - worleyNoise3D( coord, cellCount * 4.0_f ) ) );
+					auto worleyNoise3 = writer.declLocale( "worleyNoise3", ( 1.0_f - worleyNoise3D( coord, cellCount * 8.0_f ) ) );
+					auto worleyNoise4 = writer.declLocale( "worleyNoise4", ( 1.0_f - worleyNoise3D( coord, cellCount * 16.0_f ) ) );
+					//float worleyNoise5 = (1.0f - Tileable3dNoise::WorleyNoise(coord, cellCount * 32));	
+					//cellCount=2 -> half the frequency of texel, we should not go further (with cellCount = 32 and texture size = 64)
+
+					// Three frequency of Worley FBM noise
+					auto worleyFBM0 = writer.declLocale( "worleyFBM0", worleyNoise1 * 0.625_f + worleyNoise2 * 0.25_f + worleyNoise3 * 0.125_f );
+					auto worleyFBM1 = writer.declLocale( "worleyFBM1", worleyNoise2 * 0.625_f + worleyNoise3 * 0.25_f + worleyNoise4 * 0.125_f );
+					//float worleyFBM2 = worleyNoise3*0.625f + worleyNoise4*0.25f + worleyNoise5*0.125f;
+					auto worleyFBM2 = writer.declLocale( "worleyFBM2", worleyNoise3 * 0.75_f + worleyNoise4 * 0.25_f );
+					// cellCount=4 -> worleyNoise5 is just noise due to sampling frequency=texel frequency. So only take into account 2 frequencies for FBM
+
+					writer.returnStmt( vec4( PerlinWorleyNoise * PerlinWorleyNoise, worleyFBM0, worleyFBM1, worleyFBM2 ) );
 				}
 				, sdw::InIVec3{ writer, "pixel" } );
 
@@ -384,16 +421,16 @@ namespace atmosphere_scattering
 
 	//************************************************************************************************
 
-	AtmosphereWorleyPass::AtmosphereWorleyPass( crg::FramePassGroup & graph
+	CloudsPerlinPass::CloudsPerlinPass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewId const & resultView
 		, bool & enabled )
-		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, "WorleyPass", worley::getProgram( getExtent( resultView ).width ) }
+		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, "Clouds/PerlinWorleyPass", perwor::getProgram( getExtent( resultView ).width ) }
 		, m_stages{ makeShaderState( device, m_computeShader ) }
 	{
 		auto renderSize = getExtent( resultView );
-		auto & computePass = graph.createPass( "WorleyPass"
+		auto & computePass = graph.createPass( "Clouds/PerlinWorleyPass"
 			, [this, &device, &enabled, renderSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -414,8 +451,8 @@ namespace atmosphere_scattering
 			} );
 		computePass.addDependencies( previousPasses );
 		computePass.addOutputStorageView( resultView
-			, worley::eOutput );
-		auto & mipsPass = graph.createPass( "WorleyMipsGenPass"
+			, perwor::eOutput );
+		auto & mipsPass = graph.createPass( "Clouds/PerlinWorleyMipsGenPass"
 			, [&device, &enabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -436,7 +473,7 @@ namespace atmosphere_scattering
 		m_lastPass = &mipsPass;
 	}
 
-	void AtmosphereWorleyPass::accept( castor3d::PipelineVisitor & visitor )
+	void CloudsPerlinPass::accept( castor3d::PipelineVisitor & visitor )
 	{
 		visitor.visit( m_computeShader );
 	}

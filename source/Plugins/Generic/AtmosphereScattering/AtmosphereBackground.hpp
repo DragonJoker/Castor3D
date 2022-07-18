@@ -5,16 +5,16 @@ See LICENSE file in root folder
 #define ___C3DAS_AtmosphereBackground_H___
 
 #include "AtmosphereCameraUbo.hpp"
-#include "AtmosphereCloudsResolvePass.hpp"
-#include "AtmosphereCurlPass.hpp"
 #include "AtmosphereMultiScatteringPass.hpp"
-#include "AtmospherePerlinPass.hpp"
+#include "CloudsPerlinPass.hpp"
 #include "AtmosphereSkyViewPass.hpp"
 #include "AtmosphereTransmittancePass.hpp"
 #include "AtmosphereVolumePass.hpp"
-#include "AtmosphereVolumetricCloudsPass.hpp"
-#include "AtmosphereWeatherPass.hpp"
-#include "AtmosphereWorleyPass.hpp"
+#include "CloudsCurlPass.hpp"
+#include "CloudsResolvePass.hpp"
+#include "CloudsVolumePass.hpp"
+#include "CloudsWeatherPass.hpp"
+#include "CloudsWorleyPass.hpp"
 
 #include <Castor3D/Buffer/UniformBufferOffset.hpp>
 #include <Castor3D/Scene/Background/Background.hpp>
@@ -245,8 +245,8 @@ namespace atmosphere_scattering
 			mutable CameraUbo cameraUbo;
 			std::unique_ptr< AtmosphereSkyViewPass > skyViewPass;
 			std::unique_ptr< AtmosphereVolumePass > volumePass;
-			std::unique_ptr< AtmosphereVolumetricCloudsPass > volumetricCloudsPass;
-			std::unique_ptr< AtmosphereCloudsResolvePass > cloudsResolvePass;
+			std::unique_ptr< CloudsVolumePass > volumetricCloudsPass;
+			std::unique_ptr< CloudsResolvePass > cloudsResolvePass;
 			crg::FramePass * lastPass;
 		};
 
@@ -267,10 +267,10 @@ namespace atmosphere_scattering
 		mutable bool m_weatherChanged{ true };
 		std::unique_ptr< WeatherUbo > m_weatherUbo;
 		std::unique_ptr< CloudsUbo > m_cloudsUbo;
-		std::unique_ptr< AtmosphereWorleyPass > m_worleyPass;
-		std::unique_ptr< AtmospherePerlinPass > m_perlinWorleyPass;
-		std::unique_ptr< AtmosphereCurlPass > m_curlPass;
-		std::unique_ptr< AtmosphereWeatherPass > m_weatherPass;
+		std::unique_ptr< CloudsWorleyPass > m_worleyPass;
+		std::unique_ptr< CloudsPerlinPass > m_perlinWorleyPass;
+		std::unique_ptr< CloudsCurlPass > m_curlPass;
+		std::unique_ptr< CloudsWeatherPass > m_weatherPass;
 		// Atmosphere
 		AtmosphereScatteringConfig m_atmosphereCfg;
 		castor3d::Texture m_transmittance;

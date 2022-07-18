@@ -1,22 +1,21 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3DAS_AtmospherePerlinPass_H___
-#define ___C3DAS_AtmospherePerlinPass_H___
+#ifndef ___C3DAS_CloudsWorleyPass_H___
+#define ___C3DAS_CloudsWorleyPass_H___
 
-#include "AtmosphereScatteringPrerequisites.hpp"
+#include "CloudsUbo.hpp"
 
-#include <Castor3D/Miscellaneous/MiscellaneousModule.hpp>
+#include <Castor3D/Scene/Background/BackgroundModule.hpp>
 #include <Castor3D/Shader/ShaderModule.hpp>
-
-#include <ashespp/Pipeline/PipelineShaderStageCreateInfo.hpp>
+#include <Castor3D/Shader/Ubos/UbosModule.hpp>
 
 namespace atmosphere_scattering
 {
-	class AtmospherePerlinPass
+	class CloudsWorleyPass
 	{
 	public:
-		AtmospherePerlinPass( crg::FramePassGroup & graph
+		CloudsWorleyPass( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewId const & resultView
