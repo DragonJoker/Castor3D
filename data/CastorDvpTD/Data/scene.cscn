@@ -1,4 +1,4 @@
-materials specular_glossiness
+materials pbr
 
 scene "Scene"
 {
