@@ -56,8 +56,7 @@ namespace castor3d
 				, sdw::expr::ExprPtr expr
 				, bool enabled = true )
 				: sdw::StructInstance{ writer, std::move( expr ), enabled }
-				, volumeCellIndex{ getMember< sdw::IVec3 >( "volumeCellIndex" ) }
-				, rsmPosition{ getMember< sdw::Vec3 >( "rsmPosition" ) }
+				, layer{ getMember< sdw::Int >( "layer" ) }
 				, rsmNormal{ getMember< sdw::Vec3 >( "rsmNormal" ) }
 				, rsmFlux{ getMember< sdw::Vec3 >( "rsmFlux" ) }
 			{
@@ -80,12 +79,8 @@ namespace castor3d
 
 					if ( !isFragment )
 					{
-						result->declMember( "volumeCellIndex"
-							, sdw::type::Kind::eVec3I
-							, sdw::type::NotArray
-							, index++ );
-						result->declMember( "rsmPosition"
-							, sdw::type::Kind::eVec3F
+						result->declMember( "layer"
+							, sdw::type::Kind::eInt
 							, sdw::type::NotArray
 							, index++ );
 					}
@@ -103,8 +98,7 @@ namespace castor3d
 				return result;
 			}
 
-			sdw::IVec3 volumeCellIndex;
-			sdw::Vec3 rsmPosition;
+			sdw::Int layer;
 			sdw::Vec3 rsmNormal;
 			sdw::Vec3 rsmFlux;
 		};
@@ -156,14 +150,16 @@ namespace castor3d
 								, in.vertexIndex / int32_t( rsmTexSize )
 								, cascadeIndex ) );
 
-						out.rsmPosition = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
+						auto rsmPosition = writer.declLocale( "rsmPosition"
+							, c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb() );
 						out.rsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
 						out.rsmFlux = c3d_rsmFluxMap.fetch( rsmCoords, 0_i ).rgb();
-						out.volumeCellIndex = c3d_lpvGridData.worldToGrid( out.rsmPosition
-							, out.rsmNormal );
+						auto volumeCellIndex = writer.declLocale( "volumeCellIndex"
+							, c3d_lpvGridData.worldToGrid( rsmPosition, out.rsmNormal ) );
+						out.layer = volumeCellIndex.z();
 
 						auto screenPos = writer.declLocale( "screenPos"
-							, c3d_lpvGridData.gridToScreen( out.volumeCellIndex.xy() ) );
+							, c3d_lpvGridData.gridToScreen( volumeCellIndex.xy() ) );
 
 						out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 						out.vtx.pointSize = 1.0f;
@@ -205,13 +201,16 @@ namespace castor3d
 							, ivec2( in.vertexIndex % int32_t( rsmTexSize )
 								, in.vertexIndex / int32_t( rsmTexSize ) ) );
 
-						out.rsmPosition = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
+						auto rsmPosition = writer.declLocale( "rsmPosition"
+							, c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb() );
 						out.rsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
 						out.rsmFlux = c3d_rsmFluxMap.fetch( rsmCoords, 0_i ).rgb();
-						out.volumeCellIndex = c3d_lpvGridData.worldToGrid( out.rsmPosition, out.rsmNormal );
+						auto volumeCellIndex = writer.declLocale( "volumeCellIndex"
+							, c3d_lpvGridData.worldToGrid( rsmPosition, out.rsmNormal ) );
+						out.layer = volumeCellIndex.z();
 
 						auto screenPos = writer.declLocale( "screenPos"
-							, c3d_lpvGridData.gridToScreen( out.volumeCellIndex.xy() ) );
+							, c3d_lpvGridData.gridToScreen( volumeCellIndex.xy() ) );
 
 						out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 						out.vtx.pointSize = 1.0f;
@@ -265,13 +264,16 @@ namespace castor3d
 							, in.vertexIndex / int32_t( rsmTexSize )
 							, light.base.index * 6_i + int32_t( face ) ) );
 
-					out.rsmPosition = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
+					auto rsmPosition = writer.declLocale( "rsmPosition"
+						, c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb() );
 					out.rsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
 					out.rsmFlux = c3d_rsmFluxMap.fetch( rsmCoords, 0_i ).rgb();
-					out.volumeCellIndex = c3d_lpvGridData.worldToGrid( out.rsmPosition, out.rsmNormal );
+					auto volumeCellIndex = writer.declLocale( "volumeCellIndex"
+						, c3d_lpvGridData.worldToGrid( rsmPosition, out.rsmNormal ) );
+					out.layer = volumeCellIndex.z();
 
 					auto screenPos = writer.declLocale( "screenPos"
-						, c3d_lpvGridData.gridToScreen( out.volumeCellIndex.xy() ) );
+						, c3d_lpvGridData.gridToScreen( volumeCellIndex.xy() ) );
 					out.vtx.position = vec4( screenPos, 0.0_f, 1.0_f );
 					out.vtx.pointSize = 1.0f;
 				} );
@@ -321,13 +323,16 @@ namespace castor3d
 							, in.vertexIndex / int32_t( rsmTexSize )
 							, light.base.index ) );
 
-					out.rsmPosition = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
+					auto rsmPosition = writer.declLocale( "rsmPosition"
+						, c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb() );
 					out.rsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
 					out.rsmFlux = c3d_rsmFluxMap.fetch( rsmCoords, 0_i ).rgb();
-					out.volumeCellIndex = c3d_lpvGridData.worldToGrid( out.rsmPosition, out.rsmNormal );
+					auto volumeCellIndex = writer.declLocale( "volumeCellIndex"
+						, c3d_lpvGridData.worldToGrid( rsmPosition, out.rsmNormal ) );
+					out.layer = volumeCellIndex.z();
 
 					auto screenPos = writer.declLocale( "screenPos"
-						, c3d_lpvGridData.gridToScreen( out.volumeCellIndex.xy() ) );
+						, c3d_lpvGridData.gridToScreen( volumeCellIndex.xy() ) );
 					out.vtx.position = vec4( screenPos, 0.0_f, 1.0_f );
 					out.vtx.pointSize = 1.0f;
 				} );
@@ -362,7 +367,7 @@ namespace castor3d
 					, PointStreamT< lpvlgt::SurfaceT > out )
 				{
 					out.vtx.position = list[0].vtx.position;
-					out.layer = list[0].volumeCellIndex.z();
+					out.layer = list[0].layer;
 					out.vtx.pointSize = 1.0f;
 
 					out.rsmNormal = list[0].rsmNormal;
@@ -484,13 +489,8 @@ namespace castor3d
 	void LightInjectionPass::PipelineHolder::doCreatePipeline( uint32_t index )
 	{
 		ashes::PipelineVertexInputStateCreateInfo vertexState{ 0u
-			, ashes::VkVertexInputBindingDescriptionArray{ { 0u
-				, sizeof( NonTexturedQuad::Vertex )
-				, VK_VERTEX_INPUT_RATE_VERTEX } }
-			, ashes::VkVertexInputAttributeDescriptionArray{ { 0u
-				, 0u
-				, VK_FORMAT_R32G32_SFLOAT
-				, offsetof( NonTexturedQuad::Vertex, position ) } } };
+			, ashes::VkVertexInputBindingDescriptionArray{}
+			, ashes::VkVertexInputAttributeDescriptionArray{} };
 		VkViewport viewport{ 0.0f, 0.0f, float( m_lpvSize ), float( m_lpvSize ), 0.0f, 1.0f };
 		VkRect2D scissor{ 0, 0, m_lpvSize, m_lpvSize };
 		ashes::PipelineViewportStateCreateInfo viewportState{ 0u

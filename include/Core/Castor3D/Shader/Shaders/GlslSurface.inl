@@ -175,8 +175,8 @@ namespace castor3d::shader
 			//@{
 			result->declMember( "velocity", ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( checkFlag( submeshFlags, SubmeshFlag::eVelocity ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eVelocity ) );
+				, ( ( checkFlag( submeshFlags, SubmeshFlag::eVelocity ) && checkFlag( shaderFlags, ShaderFlag::eVelocity ) ) ? index++ : 0 )
+				, checkFlag( submeshFlags, SubmeshFlag::eVelocity ) && checkFlag( shaderFlags, ShaderFlag::eVelocity ) );
 			//@}
 			/**
 			*	Instantiation
@@ -214,7 +214,6 @@ namespace castor3d::shader
 		, texture3{ this->getMember< sdw::Vec3 >( "texcoord3", true ) }
 		, colour{ this->getMember< sdw::Vec3 >( "colour", true ) }
 		, passMultipliers{ this->getMemberArray< sdw::Vec4 >( "passMultipliers", true ) }
-		, instanceId{ this->getMember< sdw::UInt >( "instanceId", true ) }
 		, nodeId{ this->getMember< sdw::Int >( "nodeId", true ) }
 	{
 	}
@@ -308,11 +307,6 @@ namespace castor3d::shader
 			{
 				index += 4u;
 			}
-			result->declMember( "instanceId"
-				, ast::type::Kind::eUInt
-				, ast::type::NotArray
-				, ( checkFlag( programFlags, ProgramFlag::ePicking ) ? index++ : 0 )
-				, checkFlag( programFlags, ProgramFlag::ePicking ) );
 			result->declMember( "nodeId", ast::type::Kind::eInt
 				, ast::type::NotArray
 				, index++ );
@@ -354,9 +348,6 @@ namespace castor3d::shader
 	{
 		if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) )
 		{
-			CU_Require( !normal.getExpr()->isDummy() );
-			CU_Require( !tangent.getExpr()->isDummy() );
-			CU_Require( !bitangent.getExpr()->isDummy() );
 			normal = nml;
 			tangent = tan;
 			tangent = normalize( sdw::fma( -normal, vec3( dot( tangent, normal ) ), tangent ) );
@@ -381,7 +372,6 @@ namespace castor3d::shader
 		}
 		else if ( normal.isEnabled() )
 		{
-			CU_Require( !normal.getExpr()->isDummy() );
 			normal = nml.xyz();
 
 			if ( checkFlag( programFlags, ProgramFlag::eInvertNormals ) )
@@ -418,9 +408,6 @@ namespace castor3d::shader
 	{
 		if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) )
 		{
-			CU_Require( !normal.getExpr()->isDummy() );
-			CU_Require( !tangent.getExpr()->isDummy() );
-			CU_Require( !bitangent.getExpr()->isDummy() );
 			normal = nml;
 			tangent = tan;
 			bitangent = bin;
@@ -437,7 +424,6 @@ namespace castor3d::shader
 		}
 		else
 		{
-			CU_Require( !normal.getExpr()->isDummy() );
 			normal = nml;
 		}
 	}

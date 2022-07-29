@@ -1301,7 +1301,6 @@ namespace castor3d
 				out.texture3 = in.texture3;
 				out.colour = in.colour;
 				out.nodeId = writer.cast< Int >( nodeId );
-				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId - 1u] );
 				auto material = writer.declLocale( "material"
@@ -1433,7 +1432,6 @@ namespace castor3d
 				out.passMultipliers[2] = passMultipliers[2];
 				out.passMultipliers[3] = passMultipliers[3];
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
-				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 
 				auto curBbcenter = writer.declLocale( "curBbcenter"
 					, modelData.modelToCurWorld( vec4( center, 1.0_f ) ).xyz() );

@@ -59,6 +59,17 @@ namespace castor3d
 		return object.isShadowCaster();
 	}
 
+	SubmeshFlags ShadowMapPass::doAdjustSubmeshFlags( SubmeshFlags flags )const
+	{
+		if ( !m_needsRsm )
+		{
+			remFlag( flags, SubmeshFlag::eNormals );
+			remFlag( flags, SubmeshFlag::eTangents );
+		}
+
+		return flags;
+	}
+
 	void ShadowMapPass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount );

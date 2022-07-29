@@ -53,6 +53,22 @@ namespace castor3d
 
 			return result;
 		}
+
+		static bool hasMatchingFlag( SubmeshFlag submeshFlag
+			, ShaderFlags const & shaderFlags )
+		{
+			switch ( submeshFlag )
+			{
+			case castor3d::SubmeshFlag::eNormals:
+				return checkFlag( shaderFlags, ShaderFlag::eNormal );
+			case castor3d::SubmeshFlag::eTangents:
+				return checkFlag( shaderFlags, ShaderFlag::eTangentSpace );
+			case castor3d::SubmeshFlag::eVelocity:
+				return checkFlag( shaderFlags, ShaderFlag::eVelocity );
+			default:
+				return true;
+			}
+		}
 	}
 
 	void uploadBaseData( SubmeshFlag submeshData
@@ -76,6 +92,7 @@ namespace castor3d
 	void gatherBaseDataBuffer( SubmeshFlag submeshData
 		, ProgramFlags const & programFlags
 		, SubmeshFlags const & submeshFlags
+		, ShaderFlags const & shaderFlags
 		, bool hasTextures
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 		, uint32_t & currentBinding
@@ -86,7 +103,8 @@ namespace castor3d
 				&& ( checkFlag( programFlags, ProgramFlag::eForceTexCoords )
 					|| ( checkFlag( submeshFlags, submeshData ) && hasTextures ) ) )
 			|| ( !smshbase::isTexcoordComponent( submeshData )
-				&& checkFlag( submeshFlags, submeshData ) ) )
+				&& checkFlag( submeshFlags, submeshData )
+				&& smshbase::hasMatchingFlag( submeshData, shaderFlags ) ) )
 		{
 			auto hash = std::hash< uint32_t >{}( currentBinding );
 			hash = castor::hashCombine( hash, currentLocation );

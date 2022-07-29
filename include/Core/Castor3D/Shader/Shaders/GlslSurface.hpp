@@ -148,7 +148,6 @@ namespace castor3d::shader
 		sdw::Vec3 texture3;
 		sdw::Vec3 colour;
 		sdw::Array< sdw::Vec4 > passMultipliers;
-		sdw::UInt instanceId;
 		sdw::Int nodeId;
 	};
 

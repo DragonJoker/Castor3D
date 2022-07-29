@@ -246,7 +246,6 @@ namespace castor3d
 					, in.passMasks
 					, out.passMultipliers );
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
-				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 
 				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
 					, modelData.getModelMtx() );
