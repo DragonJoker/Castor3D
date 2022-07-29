@@ -55,7 +55,7 @@ namespace castor3d
 				, sdw::expr::ExprPtr expr
 				, bool enabled = true )
 				: sdw::StructInstance{ writer, std::move( expr ), enabled }
-				, volumeCellIndex{ getMember< sdw::IVec3 >( "volumeCellIndex" ) }
+				, layer{ getMember< sdw::Int >( "layer" ) }
 				, rsmPosition{ getMember< sdw::Vec3 >( "rsmPosition" ) }
 				, rsmNormal{ getMember< sdw::Vec3 >( "rsmNormal" ) }
 				, surfelArea{ getMember< sdw::Vec3 >( "surfelArea" ) }
@@ -76,8 +76,8 @@ namespace castor3d
 				if ( result->empty() )
 				{
 					uint32_t index = 0u;
-					result->declMember( "volumeCellIndex"
-						, sdw::type::Kind::eVec3I
+					result->declMember( "layer"
+						, sdw::type::Kind::eInt
 						, sdw::type::NotArray
 						, index++ );
 					result->declMember( "rsmPosition"
@@ -101,7 +101,7 @@ namespace castor3d
 				return result;
 			}
 
-			sdw::IVec3 volumeCellIndex;
+			sdw::Int layer;
 			sdw::Vec3 rsmPosition;
 			sdw::Vec3 rsmNormal;
 			sdw::Float surfelArea;
@@ -116,7 +116,6 @@ namespace castor3d
 
 			if constexpr ( DirectionalMaxCascadesCount > 1u )
 			{
-				auto inPosition = writer.declInput< Vec2 >( "inPosition", 0u );
 				auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormal )
 					, GeometryInjectionPass::RsmNormalsIdx
 					, 0u );
@@ -168,17 +167,18 @@ namespace castor3d
 						out.surfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvLightData.texelAreaModifier;
 						out.lightPosition = out.rsmPosition - light.direction;
 
-						out.volumeCellIndex = c3d_lpvGridData.worldToGrid( out.rsmPosition );
+						auto volumeCellIndex = writer.declLocale( "volumeCellIndex"
+							, c3d_lpvGridData.worldToGrid( out.rsmPosition ) );
+						out.layer = volumeCellIndex.z();
 
 						auto screenPos = writer.declLocale( "screenPos"
-							, c3d_lpvGridData.gridToScreen( out.volumeCellIndex.xy() ) );
+							, c3d_lpvGridData.gridToScreen( volumeCellIndex.xy() ) );
 
 						out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 					} );
 			}
 			else
 			{
-				auto inPosition = writer.declInput< Vec2 >( "inPosition", 0u );
 				auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormal )
 					, GeometryInjectionPass::RsmNormalsIdx
 					, 0u );
@@ -227,10 +227,12 @@ namespace castor3d
 						out.surfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvLightData.texelAreaModifier;
 						out.lightPosition = out.rsmPosition - light.direction;
 
-						out.volumeCellIndex = c3d_lpvGridData.worldToGrid( out.rsmPosition );
+						auto volumeCellIndex = writer.declLocale( "volumeCellIndex"
+							, c3d_lpvGridData.worldToGrid( out.rsmPosition ) );
+						out.layer = volumeCellIndex.z();
 
 						auto screenPos = writer.declLocale( "screenPos"
-							, c3d_lpvGridData.gridToScreen( out.volumeCellIndex.xy() ) );
+							, c3d_lpvGridData.gridToScreen( volumeCellIndex.xy() ) );
 
 						out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 					} );
@@ -245,7 +247,6 @@ namespace castor3d
 			using namespace sdw;
 			VertexWriter writer;
 
-			auto inPosition = writer.declInput< Vec2 >( "inPosition", 0u );
 			auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::eNormal )
 				, GeometryInjectionPass::RsmNormalsIdx
 				, 0u );
@@ -295,10 +296,12 @@ namespace castor3d
 					out.surfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvLightData.texelAreaModifier;
 					out.lightPosition = light.position;
 
-					out.volumeCellIndex = c3d_lpvGridData.worldToGrid( out.rsmPosition );
+					auto volumeCellIndex = writer.declLocale( "volumeCellIndex"
+						, c3d_lpvGridData.worldToGrid( out.rsmPosition ) );
+					out.layer = volumeCellIndex.z();
 
 					auto screenPos = writer.declLocale( "screenPos"
-						, c3d_lpvGridData.gridToScreen( out.volumeCellIndex.xy() ) );
+						, c3d_lpvGridData.gridToScreen( volumeCellIndex.xy() ) );
 
 					out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 				} );
@@ -312,7 +315,6 @@ namespace castor3d
 			using namespace sdw;
 			VertexWriter writer;
 
-			auto inPosition = writer.declInput< Vec2 >( "inPosition", 0u );
 			auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::ePoint, SmTexture::eNormal )
 				, GeometryInjectionPass::RsmNormalsIdx
 				, 0u );
@@ -362,10 +364,12 @@ namespace castor3d
 					out.surfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvLightData.texelAreaModifier;
 					out.lightPosition = light.position;
 
-					out.volumeCellIndex = c3d_lpvGridData.worldToGrid( out.rsmPosition );
+					auto volumeCellIndex = writer.declLocale( "volumeCellIndex"
+						, c3d_lpvGridData.worldToGrid( out.rsmPosition ) );
+					out.layer = volumeCellIndex.z();
 
 					auto screenPos = writer.declLocale( "screenPos"
-						, c3d_lpvGridData.gridToScreen( out.volumeCellIndex.xy() ) );
+						, c3d_lpvGridData.gridToScreen( volumeCellIndex.xy() ) );
 
 					out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 				} );
@@ -398,10 +402,9 @@ namespace castor3d
 				, PointStreamT< lpvgeom::SurfaceT > out )
 				{
 					out.vtx.position = list[0].vtx.position;
-					out.layer = list[0].volumeCellIndex.z();
+					out.layer = list[0].layer;
 					out.vtx.pointSize = 1.0f;
 
-					out.volumeCellIndex = list[0].volumeCellIndex;
 					out.rsmPosition = list[0].rsmPosition;
 					out.rsmNormal = list[0].rsmNormal;
 					out.surfelArea = list[0].surfelArea;
@@ -535,13 +538,8 @@ namespace castor3d
 	void GeometryInjectionPass::PipelineHolder::doCreatePipeline()
 	{
 		ashes::PipelineVertexInputStateCreateInfo vertexState{ 0u
-			, ashes::VkVertexInputBindingDescriptionArray{ { 0u
-				, sizeof( NonTexturedQuad::Vertex )
-				, VK_VERTEX_INPUT_RATE_VERTEX } }
-			, ashes::VkVertexInputAttributeDescriptionArray{ { 0u
-				, 0u
-				, VK_FORMAT_R32G32_SFLOAT
-				, offsetof( NonTexturedQuad::Vertex, position ) } } };
+			, ashes::VkVertexInputBindingDescriptionArray{}
+			, ashes::VkVertexInputAttributeDescriptionArray{} };
 		VkViewport viewport{ 0.0f, 0.0f, float( m_lpvSize ), float( m_lpvSize ), 0.0f, 1.0f };
 		VkRect2D scissor{ 0, 0, m_lpvSize, m_lpvSize };
 		ashes::PipelineViewportStateCreateInfo viewportState{ 0u

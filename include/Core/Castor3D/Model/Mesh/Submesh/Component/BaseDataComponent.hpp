@@ -20,6 +20,7 @@ namespace castor3d
 	C3D_API void gatherBaseDataBuffer( SubmeshFlag submeshData
 		, ProgramFlags const & programFlags
 		, SubmeshFlags const & submeshFlags
+		, ShaderFlags const & shaderFlags
 		, bool hasTextures
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 		, uint32_t & currentBinding
@@ -60,6 +61,7 @@ namespace castor3d
 			gatherBaseDataBuffer( SubmeshFlagT
 				, programFlags
 				, submeshFlags
+				, shaderFlags
 				, !mask.empty()
 				, layouts
 				, currentBinding

@@ -196,12 +196,14 @@ namespace castor3d
 
 			if ( submeshFlagIndex == getIndex( SubmeshFlag::eNormals ) )
 			{
-				return checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eNormals );
+				return checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eNormals )
+					&& checkFlag( shaderFlags, ShaderFlag::eNormal );
 			}
 
 			if ( submeshFlagIndex == getIndex( SubmeshFlag::eTangents ) )
 			{
-				return checkFlag( shaderFlags, ShaderFlag::eTangentSpace );
+				return checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eTangents )
+					&& checkFlag( shaderFlags, ShaderFlag::eTangentSpace );
 			}
 
 			bool hasTextures = !pipelineFlags.textures.empty()
@@ -234,6 +236,12 @@ namespace castor3d
 			if ( submeshFlagIndex == getIndex( SubmeshFlag::eColours ) )
 			{
 				return checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eColours );
+			}
+
+			if ( submeshFlagIndex == getIndex( SubmeshFlag::eVelocity ) )
+			{
+				return checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eVelocity )
+					&& checkFlag( shaderFlags, ShaderFlag::eVelocity );
 			}
 
 			return true;
