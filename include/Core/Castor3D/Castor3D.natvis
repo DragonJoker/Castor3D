@@ -252,6 +252,26 @@
 		</Expand>
 	</Type>
 
+	<Type Name="castor3d::OverlayCategory">
+		<DisplayString>{*m_pOverlay}</DisplayString>
+		<Expand>
+			<Item Name="position">m_position</Item>
+			<Item Name="ptSize">m_ptSize</Item>
+			<Item Name="pxPosition">m_pxPosition</Item>
+			<Item Name="size">m_size</Item>
+			<Item Name="computeSize">m_computeSize</Item>
+			<Item Name="visible">m_visible</Item>
+			<Item Name="material">m_pMaterial</Item>
+			<Item Name="index">m_index</Item>
+			<Item Name="level">m_level</Item>
+			<Item Name="matName">m_strMatName</Item>
+			<Item Name="type">m_type</Item>
+			<Item Name="sizeChanged">m_sizeChanged</Item>
+			<Item Name="positionChanged">m_positionChanged</Item>
+			<Item Name="uv">m_uv</Item>
+		</Expand>
+	</Type>
+
 	<Type Name="castor3d::Pass">
 		<DisplayString>{m_id} ({m_owner->m_name} {m_index})</DisplayString>
 		<Expand>
