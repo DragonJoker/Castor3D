@@ -256,6 +256,30 @@ namespace atmosphere_scattering
 		return ( length( inPos ) - cloudsInnerRadius ) / cloudsThickness;
 	}
 
+	sdw::RetVec3 CloudsModel::skewSamplePointWithWind( sdw::Vec3 const & ppoint
+		, sdw::Float const & pheightFraction )
+	{
+		if ( !m_skewSamplePointWithWind )
+		{
+			m_skewSamplePointWithWind = writer.implementFunction< sdw::Vec3 >( "clouds_skewSamplePointWithWind"
+				, [&]( sdw::Vec3 point
+					, sdw::Float const & heightFraction )
+				{
+					//skew in wind direction
+					point += heightFraction * clouds.windDirection() * clouds.topOffset();
+
+					//Animate clouds in wind direction and add a small upward bias to the wind direction
+					point += clouds.windDirection() * clouds.time() * clouds.cloudSpeed();
+					writer.returnStmt( point );
+				}
+				, sdw::InVec3{ writer, "point" }
+				, sdw::InFloat{ writer, "heightFraction" } );
+		}
+
+		return m_skewSamplePointWithWind( ppoint
+			, pheightFraction );
+	}
+
 	sdw::RetFloat CloudsModel::getRelativeHeightInAtmosphere( sdw::Vec3 const & ppos
 		, sdw::Vec3 const & pstartPos
 		, Ray const & pray )
@@ -330,30 +354,6 @@ namespace atmosphere_scattering
 
 		return m_getDensityHeightGradientForPoint( pheightFraction
 			, pcloudType );
-	}
-
-	sdw::RetVec3 CloudsModel::skewSamplePointWithWind( sdw::Vec3 const & ppoint
-		, sdw::Float const & pheightFraction )
-	{
-		if ( !m_skewSamplePointWithWind )
-		{
-			m_skewSamplePointWithWind = writer.implementFunction< sdw::Vec3 >( "clouds_skewSamplePointWithWind"
-				, [&]( sdw::Vec3 point
-					, sdw::Float const & heightFraction )
-				{
-					//skew in wind direction
-					point += heightFraction * clouds.windDirection() * clouds.topOffset();
-
-					//Animate clouds in wind direction and add a small upward bias to the wind direction
-					point += clouds.windDirection() * clouds.time() * clouds.cloudSpeed();
-					writer.returnStmt( point );
-				}
-				, sdw::InVec3{ writer, "point" }
-				, sdw::InFloat{ writer, "heightFraction" } );
-		}
-
-		return m_skewSamplePointWithWind( ppoint
-			, pheightFraction );
 	}
 
 	sdw::RetFloat CloudsModel::sampleLowFrequency( sdw::Vec3 const & pskewedSamplePoint

@@ -21,6 +21,17 @@ namespace atmosphere_scattering
 
 	//************************************************************************************************
 
+	Intersection Intersection::create( std::string const & name
+		, sdw::ShaderWriter & writer )
+	{
+		auto result = writer.declLocale< Intersection >( name );
+		result.valid() = 0_b;
+		result.point() = vec3( 0.0_f );
+		return result;
+	}
+
+	//************************************************************************************************
+
 	AtmosphereModel::AtmosphereModel( sdw::ShaderWriter & pwriter
 		, AtmosphereData const & patmosphereData
 		, LuminanceSettings pluminanceSettings )
@@ -66,9 +77,14 @@ namespace atmosphere_scattering
 		return m_getWorldPos( pdepth, ppixPos, ptexSize );
 	}
 
+	sdw::Vec3 AtmosphereModel::getPositionFromEarth( sdw::Vec3 const & position )const
+	{
+		return position + vec3( 0.0_f, getEarthRadius(), 0.0_f );
+	}
+
 	sdw::Vec3 AtmosphereModel::getCameraPositionFromEarth()const
 	{
-		return getCameraPosition() + vec3( 0.0_f, getEarthRadius(), 0.0_f );
+		return getPositionFromEarth( getCameraPosition() );
 	}
 
 	RetRay AtmosphereModel::castRay( sdw::Vec2 const & puv )

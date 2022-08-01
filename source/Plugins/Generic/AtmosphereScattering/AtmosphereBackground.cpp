@@ -323,11 +323,11 @@ namespace atmosphere_scattering
 			, castor3d::TextureFactors{}.invert( true ) );
 		visitor.visit( "Clouds Colour"
 			, cloudsColour
-			, VK_IMAGE_LAYOUT_GENERAL
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, castor3d::TextureFactors{}.invert( true ) );
 		visitor.visit( "Clouds Emission"
 			, cloudsEmission
-			, VK_IMAGE_LAYOUT_GENERAL
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, castor3d::TextureFactors{}.invert( true ) );
 		visitor.visit( "Clouds Result"
 			, cloudsResult
