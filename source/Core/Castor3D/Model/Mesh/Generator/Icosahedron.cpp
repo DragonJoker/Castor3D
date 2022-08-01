@@ -128,6 +128,6 @@ namespace castor3d
 			texcoords->getData()[i] = castor::Point3f{ vsVertex1.m_phi, vsVertex1.m_theta, 0 };
 		}
 
-		indexMapping->computeTangentsFromNormals();
+		indexMapping->computeTangents();
 	}
 }

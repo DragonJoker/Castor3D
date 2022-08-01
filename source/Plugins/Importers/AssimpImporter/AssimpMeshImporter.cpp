@@ -369,7 +369,7 @@ namespace c3d_assimp
 		}
 		else if ( !aiMesh.HasTangentsAndBitangents() )
 		{
-			mapping->computeTangentsFromNormals();
+			mapping->computeTangents();
 		}
 	}
 

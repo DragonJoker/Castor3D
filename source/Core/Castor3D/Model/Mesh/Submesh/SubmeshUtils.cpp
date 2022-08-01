@@ -184,7 +184,13 @@ namespace castor3d
 			return;
 		}
 
+		castor::Point3f pt0;
 		tangents.resize( positions.size() );
+
+		for ( auto & pt : tangents )
+		{
+			pt = pt0;
+		}
 
 		// Pour chaque vertex, on stocke la somme des tangentes qui peuvent lui être affectées
 		for ( auto const & face : faces )

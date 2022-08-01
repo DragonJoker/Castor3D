@@ -173,15 +173,6 @@ namespace castor3d
 		 *\~english
 		 *\brief		Computes tangent for each vertex of the submesh.
 		 *\remarks		This function supposes the normals are defined.
-		 *\~french
-		 *\brief		Calcule la tangente pour chaque vertex du sous-maillage.
-		 *\remarks		Cette fonction suppose que les normales sont définies.
-		 */
-		C3D_API void computeTangentsFromNormals();
-		/**
-		 *\~english
-		 *\brief		Computes tangent for each vertex of the submesh.
-		 *\remarks		This function supposes the normals are defined.
 		 *\param[in]	positions	The vertices positions.
 		 *\param[in]	texcoords	The vertices texture coordinates.
 		 *\param[in]	normals		The vertices normals.
@@ -210,6 +201,10 @@ namespace castor3d
 		 *\copydoc		castor3d::IndexMapping::computeNormals
 		 */
 		C3D_API void computeNormals( bool reverted = false )override;
+		/**
+		 *\copydoc		castor3d::IndexMapping::computeTangents
+		 */
+		C3D_API void computeTangents()override;
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::clone
 		 */
