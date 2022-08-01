@@ -379,7 +379,8 @@ namespace castor3d
 		pass.addSampledView( m_gpResult[DsTexture::eData3].sampledViewId
 			, uint32_t( IndirectLightingPass::eData3 ) );
 		pass.addSampledView( m_brdf.sampledViewId
-			, uint32_t( IndirectLightingPass::eBrdf ) );
+			, uint32_t( IndirectLightingPass::eBrdf )
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
 			, VK_FILTER_LINEAR
 			, VK_SAMPLER_MIPMAP_MODE_LINEAR };
