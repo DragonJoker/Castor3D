@@ -34,11 +34,12 @@ namespace castor3d
 				return;
 			}
 
-			auto valid = true;
 			auto tanComp = submesh.getComponent< TangentsComponent >();
 
 			if ( tanComp )
 			{
+				auto valid = true;
+
 				for ( auto & tan : tanComp->getData() )
 				{
 					valid = valid && check( tan );
