@@ -105,8 +105,8 @@ namespace castor3d
 				indexMappingSide->addFace( i + 1, i + 0, i + 2 );
 			}
 
-			indexMappingBase->computeNormals( true );
-			indexMappingSide->computeNormals( true );
+			indexMappingBase->computeNormals();
+			indexMappingSide->computeNormals();
 
 			auto sideNormals = submeshSide.getComponent< NormalsComponent >();
 			auto sideTangents = submeshSide.getComponent< TangentsComponent >();

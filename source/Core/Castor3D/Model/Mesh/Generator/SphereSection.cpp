@@ -142,7 +142,7 @@ namespace castor3d
 				sideIndexMapping->addFace( i + 1, i + 0, i + 2 );
 			}
 
-			sideIndexMapping->computeNormals( true );
+			sideIndexMapping->computeNormals();
 		}
 	}
 }

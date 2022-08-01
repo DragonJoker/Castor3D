@@ -67,7 +67,7 @@ namespace castor3d
 					auto & nml3 = normals[face[1]];
 					auto const vec2m1 = pos2 - pos1;
 					auto const vec3m1 = pos3 - pos1;
-					auto const faceNormal = -castor::point::cross( vec3m1, vec2m1 );
+					auto const faceNormal = castor::point::cross( vec3m1, vec2m1 );
 					nml1 += faceNormal;
 					nml2 += faceNormal;
 					nml3 += faceNormal;
@@ -85,7 +85,7 @@ namespace castor3d
 					auto & nml3 = normals[face[1]];
 					auto const vec2m1 = pos2 - pos1;
 					auto const vec3m1 = pos3 - pos1;
-					auto const faceNormal = -castor::point::cross( vec3m1, vec2m1 );
+					auto const faceNormal = castor::point::cross( vec3m1, vec2m1 );
 					nml1 += faceNormal;
 					nml2 += faceNormal;
 					nml3 += faceNormal;
@@ -119,7 +119,7 @@ namespace castor3d
 					auto & nml3 = normals[face[2]];
 					auto const vec2m1 = pos2 - pos1;
 					auto const vec3m1 = pos3 - pos1;
-					auto const faceNormal = -castor::point::cross( vec3m1, vec2m1 );
+					auto const faceNormal = castor::point::cross( vec3m1, vec2m1 );
 					nml1 += faceNormal;
 					nml2 += faceNormal;
 					nml3 += faceNormal;
@@ -137,7 +137,7 @@ namespace castor3d
 					auto & nml3 = normals[face[2]];
 					auto const vec2m1 = pos2 - pos1;
 					auto const vec3m1 = pos3 - pos1;
-					auto const faceNormal = -castor::point::cross( vec3m1, vec2m1 );
+					auto const faceNormal = castor::point::cross( vec3m1, vec2m1 );
 					nml1 += faceNormal;
 					nml2 += faceNormal;
 					nml3 += faceNormal;
@@ -244,7 +244,7 @@ namespace castor3d
 		auto & nml3 = normals[face[2]];
 		auto const vec2m1 = vtx2 - vtx1;
 		auto const vec3m1 = vtx3 - vtx1;
-		auto const faceNormal = castor::point::getNormalised( -castor::point::cross( vec3m1, vec2m1 ) );
+		auto const faceNormal = castor::point::getNormalised( castor::point::cross( vec3m1, vec2m1 ) );
 		nml1 += faceNormal;
 		nml2 += faceNormal;
 		nml3 += faceNormal;
