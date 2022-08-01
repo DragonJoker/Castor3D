@@ -41,13 +41,13 @@ namespace atmosphere_scattering
 	private:
 		sdw::Vec2 getSphericalProjection( sdw::Vec3 const & p );
 		sdw::Float getHeightFraction( sdw::Vec3 const & inPos );
+		sdw::RetVec3 skewSamplePointWithWind( sdw::Vec3 const & point
+			, sdw::Float const & heightFraction );
 		sdw::RetFloat getRelativeHeightInAtmosphere( sdw::Vec3 const & pos
 			, sdw::Vec3 const & startPos
 			, Ray const & ray );
 		sdw::RetFloat getDensityHeightGradientForPoint( sdw::Float const & heightFraction
 			, sdw::Float const & cloudType );
-		sdw::RetVec3 skewSamplePointWithWind( sdw::Vec3 const & point
-			, sdw::Float const & heightFraction );
 		sdw::RetFloat sampleLowFrequency( sdw::Vec3 const & skewedSamplePoint
 			, sdw::Vec3 const & unskewedSamplePoint
 			, sdw::Float const & heightFraction
@@ -113,6 +113,8 @@ namespace atmosphere_scattering
 		sdw::CombinedImage3DRgba32 worleyNoiseMap;
 		sdw::CombinedImage2DRg32 curlNoiseMap;
 		sdw::CombinedImage2DRg32 weatherMap;
+
+	public:
 		sdw::Float cloudsInnerRadius;
 		sdw::Float cloudsOuterRadius;
 		sdw::Float cloudsThickness;

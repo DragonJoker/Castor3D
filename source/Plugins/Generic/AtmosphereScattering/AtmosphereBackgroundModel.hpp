@@ -50,14 +50,50 @@ namespace atmosphere_scattering
 			, sdw::Vec3 & refraction )override;
 		sdw::Vec3 getSunRadiance( sdw::Vec3 const & sunDir );
 
+		sdw::Void getPixelTransLum( sdw::Vec2 const & fragPos
+			, sdw::Vec2 const & fragSize
+			, sdw::Float const & fragDepth
+			, sdw::Vec4 & transmittance
+			, sdw::Vec4 & luminance )
+		{
+			return scattering.getPixelTransLum( fragPos
+				, fragSize
+				, fragDepth
+				, transmittance
+				, luminance );
+		}
+
+		sdw::Void getPixelTransLum( sdw::Vec2 const & fragPos
+			, sdw::Vec2 const & fragSize
+			, sdw::Float const & fragDepth
+			, castor3d::shader::Light const & light
+			, sdw::Vec3 const & surfaceWorldNormal
+			, sdw::Mat4 const & lightMatrix
+			, sdw::UInt const & cascadeIndex
+			, sdw::UInt const & maxCascade
+			, sdw::Vec4 & transmittance
+			, sdw::Vec4 & luminance )
+		{
+			return scattering.getPixelTransLum( fragPos
+				, fragSize
+				, fragDepth
+				//, light
+				//, surfaceWorldNormal
+				//, lightMatrix
+				//, cascadeIndex
+				//, maxCascade
+				, transmittance
+				, luminance );
+		}
+
 	public:
 		static castor::String const Name;
-		sdw::Ubo m_cameraBuffer;
-		CameraData m_cameraData;
-		sdw::Ubo m_atmosphereBuffer;
-		AtmosphereData m_atmosphereData;
-		AtmosphereModel m_atmosphere;
-		ScatteringModel m_scattering;
+		sdw::Ubo cameraBuffer;
+		CameraData cameraData;
+		sdw::Ubo atmosphereBuffer;
+		AtmosphereData atmosphereData;
+		AtmosphereModel atmosphere;
+		ScatteringModel scattering;
 	};
 }
 

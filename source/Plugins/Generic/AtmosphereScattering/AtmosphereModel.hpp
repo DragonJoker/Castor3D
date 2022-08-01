@@ -105,6 +105,9 @@ namespace atmosphere_scattering
 		{
 		}
 
+		static Intersection create( std::string const & name
+			, sdw::ShaderWriter & writer );
+
 		auto point()const { return getMember< "point" >(); }
 		auto valid()const { return getMember< "valid" >(); }
 		auto t()const { return getMember< "t" >(); }
@@ -215,6 +218,7 @@ namespace atmosphere_scattering
 			multiScatTexture = &value;
 		}
 
+		sdw::Vec3 getPositionFromEarth( sdw::Vec3 const & position )const;
 		sdw::Vec3 getCameraPositionFromEarth()const;
 		RetRay castRay( sdw::Vec2 const & uv );
 		RetRay castRay( sdw::Vec2 const & screenPoint

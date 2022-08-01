@@ -25,20 +25,20 @@ namespace atmosphere_scattering
 		, uint32_t & binding
 		, uint32_t set )
 		: castor3d::shader::BackgroundModel{ writer, utils, std::move( targetSize ) }
-		, m_cameraBuffer{ writer.declUniformBuffer<>( CameraUbo::Buffer
+		, cameraBuffer{ writer.declUniformBuffer<>( CameraUbo::Buffer
 			, binding++
 			, set ) }
-		, m_cameraData{ model::getData< CameraData >( m_cameraBuffer, CameraUbo::Data ) }
-		, m_atmosphereBuffer{ writer.declUniformBuffer<>( AtmosphereScatteringUbo::Buffer
+		, cameraData{ model::getData< CameraData >( cameraBuffer, CameraUbo::Data ) }
+		, atmosphereBuffer{ writer.declUniformBuffer<>( AtmosphereScatteringUbo::Buffer
 			, binding++
 			, set ) }
-		, m_atmosphereData{ model::getData< AtmosphereData >( m_atmosphereBuffer, AtmosphereScatteringUbo::Data ) }
-		, m_atmosphere{ m_writer
-			, m_atmosphereData
-			, { &m_cameraData, false, true, true, true }
+		, atmosphereData{ model::getData< AtmosphereData >( atmosphereBuffer, AtmosphereScatteringUbo::Data ) }
+		, atmosphere{ m_writer
+			, atmosphereData
+			, { &cameraData, false, true, true, true }
 			, { 256u, 64u } }
-		, m_scattering{ m_writer
-			, m_atmosphere
+		, scattering{ m_writer
+			, atmosphere
 			, false, true, true, true, false
 			, binding
 			, set
@@ -89,6 +89,6 @@ namespace atmosphere_scattering
 
 	sdw::Vec3 AtmosphereBackgroundModel::getSunRadiance( sdw::Vec3 const & psunDir )
 	{
-		return m_scattering.getSunRadiance( psunDir );
+		return scattering.getSunRadiance( psunDir );
 	}
 }

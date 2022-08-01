@@ -70,7 +70,7 @@ namespace atmosphere_scattering
 		if ( !m_atmosphereBackground )
 		{
 			m_atmosphereBackground = &static_cast< AtmosphereBackgroundModel & >( pbackground );
-			m_atmosphereBackground->m_atmosphere.shadows = m_shadowModel;
+			m_atmosphereBackground->atmosphere.shadows = m_shadowModel;
 		}
 
 		if ( !m_computeDirectional )
@@ -190,18 +190,18 @@ namespace atmosphere_scattering
 						FI;
 					}
 
+					auto targetSize = vec2( sdw::Float{ float( m_atmosphereBackground->getTargetSize().width ) }
+						, float( m_atmosphereBackground->getTargetSize().height ) );
 					auto luminance = m_writer.declLocale< sdw::Vec4 >( "luminance" );
 					auto transmittance = m_writer.declLocale< sdw::Vec4 >( "transmittance" );
-					auto targetSize = vec2( sdw::Float{ float( m_atmosphereBackground->getTargetSize().width ) }
-					, float( m_atmosphereBackground->getTargetSize().height ) );
-					m_atmosphereBackground->m_scattering.getPixelTransLum( vec2( surface.clipPosition.x(), 1.0_f - surface.clipPosition.y() )
+					m_atmosphereBackground->getPixelTransLum( vec2( surface.clipPosition.x(), 1.0_f - surface.clipPosition.y() )
 						, targetSize
 						, surface.clipPosition.z()
-						//, light.base
-						//, surface.worldNormal
-						//, light.transforms[cascadeIndex - 1u]
-						//, cascadeIndex
-						//, maxCount
+						, light.base
+						, surface.worldNormal
+						, light.transforms[cascadeIndex - 1u]
+						, cascadeIndex
+						, maxCount
 						, transmittance
 						, luminance );
 					output.m_scattering = luminance.xyz() / luminance.a();// m_atmosphereBackground->m_scattering.rescaleLuminance( luminance ).xyz();
@@ -304,7 +304,7 @@ namespace atmosphere_scattering
 		if ( !m_atmosphereBackground )
 		{
 			m_atmosphereBackground = &static_cast< AtmosphereBackgroundModel & >( pbackground );
-			m_atmosphereBackground->m_atmosphere.shadows = m_shadowModel;
+			m_atmosphereBackground->atmosphere.shadows = m_shadowModel;
 		}
 
 		if ( !m_computeDirectional )
@@ -399,19 +399,19 @@ namespace atmosphere_scattering
 						}
 						FI;
 					}
-
-					auto luminance = m_writer.declLocale< sdw::Vec4 >( "luminance" );
-					auto transmittance = m_writer.declLocale< sdw::Vec4 >( "transmittance" );
+					
 					auto targetSize = vec2( sdw::Float{ float( m_atmosphereBackground->getTargetSize().width ) }
 						, float( m_atmosphereBackground->getTargetSize().height ) );
-					m_atmosphereBackground->m_scattering.getPixelTransLum( vec2( surface.clipPosition.x(), 1.0_f - surface.clipPosition.y() )
+					auto luminance = m_writer.declLocale< sdw::Vec4 >( "luminance" );
+					auto transmittance = m_writer.declLocale< sdw::Vec4 >( "transmittance" );
+					m_atmosphereBackground->getPixelTransLum( vec2( surface.clipPosition.x(), 1.0_f - surface.clipPosition.y() )
 						, targetSize
 						, surface.clipPosition.z()
-						//, light.base
-						//, surface.worldNormal
-						//, light.transforms[cascadeIndex - 1u]
-						//, cascadeIndex
-						//, maxCount
+						, light.base
+						, surface.worldNormal
+						, light.transforms[cascadeIndex - 1u]
+						, cascadeIndex
+						, maxCount
 						, transmittance
 						, luminance );
 					output.m_scattering = luminance.xyz() / luminance.a();// m_atmosphereBackground->m_scattering.rescaleLuminance( luminance ).xyz();
