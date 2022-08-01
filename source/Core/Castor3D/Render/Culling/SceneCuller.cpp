@@ -12,6 +12,7 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/Culling/PipelineNodes.hpp"
 #include "Castor3D/Render/Node/BillboardRenderNode.hpp"
 #include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
@@ -46,81 +47,6 @@ namespace castor3d
 			, bool isFrontCulled )
 		{
 			return getPipelineBaseHash( renderPass, culled.data, *culled.pass, isFrontCulled );
-		}
-
-		template< typename DataT >
-		static PipelineBaseHash getPipelineBaseHash( SubmeshFlags submeshFlags
-			, ProgramFlags programFlags
-			, PassFlags passFlags
-			, uint32_t maxTexcoordSet
-			, uint32_t texturesCount
-			, TextureFlags texturesFlags
-			, uint32_t passLayerIndex
-			, VkDeviceSize morphTargetsOffset
-			, DataT const * dataPtr )
-		{
-			remFlag( programFlags, ProgramFlag::eAllOptional );
-			remFlag( passFlags, PassFlag::eAllOptional );
-			constexpr auto maxSubmeshSize = castor::getBitSize( uint32_t( SubmeshFlag::eAllBase ) );
-			constexpr auto maxProgramSize = castor::getBitSize( uint32_t( ProgramFlag::eAllBase ) );
-			constexpr auto maxPassSize = castor::getBitSize( uint32_t( PassFlag::eAllBase ) );
-			constexpr auto maxTexcoorSetSize = castor::getBitSize( MaxTextureCoordinatesSets );
-			constexpr auto maxTextureSize = castor::getBitSize( uint32_t( TextureFlag::eAll ) );
-			constexpr auto maxTexturesSize = castor::getBitSize( uint32_t( maxTextureSize ) );
-			constexpr auto maxPassLayerSize = castor::getBitSize( MaxPassLayers );
-			constexpr auto maxTargetOffsetSize = 64 - maxPassLayerSize;
-			static_assert( 64 >= maxSubmeshSize + maxProgramSize + maxPassSize + maxTexcoorSetSize + maxTextureSize + maxTexturesSize );
-			auto offset = 0u;
-			PipelineBaseHash result{};
-			result.lo = uint64_t( submeshFlags ) << offset;
-			offset += maxSubmeshSize;
-			result.lo |= uint64_t( programFlags ) << offset;
-			offset += maxProgramSize;
-			result.lo |= uint64_t( passFlags ) << offset;
-			offset += maxPassSize;
-			result.lo |= uint64_t( maxTexcoordSet ) << offset;
-			offset += maxTexcoorSetSize;
-			result.lo |= uint64_t( texturesCount ) << offset;
-			offset += maxTexturesSize;
-			result.lo |= uint64_t( texturesFlags ) << offset;
-			CU_Require( passLayerIndex < MaxPassLayers );
-			CU_Require( ( morphTargetsOffset >> maxTargetOffsetSize ) == 0 );
-			auto hash = size_t( morphTargetsOffset );
-
-			if constexpr ( std::is_same_v< DataT, Submesh > )
-			{
-				castor::hashCombinePtr( hash, *dataPtr );
-				hash >>= maxPassLayerSize;
-			}
-
-			if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
-			{
-				// When pass masks component is present, only consider first pass,
-				// since blending will occur in shader.
-				passLayerIndex = 0u;
-			}
-
-			result.hi = uint64_t( hash )
-				| ( uint64_t( passLayerIndex ) << maxTargetOffsetSize );
-			return result;
-		}
-
-		static void registerPipelineNodes( PipelineBaseHash hash
-			, ashes::BufferBase const & buffer
-			, std::vector< PipelineBuffer > & nodesIds )
-		{
-			auto it = std::find_if( nodesIds.begin()
-				, nodesIds.end()
-				, [&hash, &buffer]( PipelineBuffer const & lookup )
-				{
-					return lookup.first == hash
-						&& lookup.second == &buffer;
-				} );
-
-			if ( it == nodesIds.end() )
-			{
-				nodesIds.emplace_back( hash, &buffer );
-			}
 		}
 
 		static void registerCulledNodes( PipelineBaseHash hash
@@ -204,32 +130,6 @@ namespace castor3d
 				, SceneCuller::SidedNodeArrayT< NodeT >{} ).first->second;
 			objectNodes.emplace_back( culled, isFrontCulled );
 			registerPipelineNodes( hash, buffer, nodesIds );
-		}
-
-		//*****************************************************************************************
-
-		static uint32_t getPipelineNodeIndex( PipelineBaseHash hash
-			, ashes::BufferBase const & buffer
-			, std::vector< PipelineBuffer > const & cont )
-		{
-			auto it = std::find_if( cont.begin()
-				, cont.end()
-				, [&hash, &buffer]( PipelineBuffer const & lookup )
-				{
-					return lookup.first == hash
-						&& lookup.second == &buffer;
-				} );
-			CU_Require( it != cont.end() );
-			return uint32_t( std::distance( cont.begin(), it ) );
-		}
-
-		static PipelineNodes & getPipelineNodes( PipelineBaseHash hash
-			, ashes::BufferBase const & buffer
-			, std::vector< PipelineBuffer > const & cont
-			, PipelineNodes * nodes )
-		{
-			auto index = getPipelineNodeIndex( hash, buffer, cont );
-			return nodes[index];
 		}
 
 		//*****************************************************************************************
@@ -436,7 +336,7 @@ namespace castor3d
 			, VkDrawMeshTasksIndirectCommandNV *& indirectMeshBuffer
 			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
 			, VkDrawIndirectCommand *& indirectNIdxBuffer
-			, castor::Point4ui *& pipelinesBuffer )
+			, uint32_t *& pipelinesBuffer )
 		{
 			fillNodeCommands( node
 				, meshShading
@@ -444,7 +344,7 @@ namespace castor3d
 				, indirectIdxBuffer
 				, indirectNIdxBuffer
 				, getInstanceCount( node ) );
-			( *pipelinesBuffer )->x = node.instance.getId( *node.pass, node.data );
+			( *pipelinesBuffer ) = node.instance.getId( *node.pass, node.data );
 			++pipelinesBuffer;
 		}
 
@@ -492,13 +392,13 @@ namespace castor3d
 			, Scene const & scene
 			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
 			, VkDrawIndirectCommand *& indirectNIdxBuffer
-			, castor::Point4ui *& pipelinesBuffer )
+			, uint32_t *& pipelinesBuffer )
 		{
 			fillNodeCommands( node
 				, indirectIdxBuffer
 				, indirectNIdxBuffer
 				, getInstanceCount( node ) );
-			( *pipelinesBuffer )->x = node.instance.getId( *node.pass, node.data );
+			( *pipelinesBuffer ) = node.instance.getId( *node.pass, node.data );
 			++pipelinesBuffer;
 		}
 
@@ -506,54 +406,6 @@ namespace castor3d
 	}
 
 	//*********************************************************************************************
-
-	PipelineBaseHash getPipelineBaseHash( RenderNodesPass const & renderPass
-		, Submesh const & data
-		, Pass const & pass
-		, bool isFrontCulled )
-	{
-		auto submeshFlags = data.getSubmeshFlags( &pass );
-		auto programFlags = data.getProgramFlags( *pass.getOwner() );
-
-		if ( isFrontCulled )
-		{
-			addFlag( programFlags, ProgramFlag::eInvertNormals );
-		}
-
-		return cullscn::getPipelineBaseHash( renderPass.adjustFlags( submeshFlags )
-			, renderPass.adjustFlags( programFlags )
-			, renderPass.adjustFlags( pass.getPassFlags() )
-			, pass.getMaxTexCoordSet()
-			, pass.getTextureUnitsCount()
-			, pass.getTextures()
-			, pass.getIndex()
-			, data.getMorphTargets().getOffset()
-			, &data );
-	}
-
-	PipelineBaseHash getPipelineBaseHash( RenderNodesPass const & renderPass
-		, BillboardBase const & data
-		, Pass const & pass
-		, bool isFrontCulled )
-	{
-		auto submeshFlags = data.getSubmeshFlags();
-		auto programFlags = data.getProgramFlags();
-
-		if ( isFrontCulled )
-		{
-			addFlag( programFlags, ProgramFlag::eInvertNormals );
-		}
-
-		return cullscn::getPipelineBaseHash( renderPass.adjustFlags( submeshFlags )
-			, renderPass.adjustFlags( programFlags )
-			, renderPass.adjustFlags( pass.getPassFlags() )
-			, pass.getMaxTexCoordSet()
-			, pass.getTextureUnitsCount()
-			, pass.getTextures()
-			, pass.getIndex()
-			, 0u
-			, &data );
-	}
 
 	AnimatedObjectSPtr findAnimatedObject( Scene const & scene
 		, castor::String const & name )
@@ -711,7 +563,7 @@ namespace castor3d
 	{
 		auto it = m_renderPasses.find( &renderPass );
 		CU_Require( it != m_renderPasses.end() );
-		return cullscn::getPipelineNodeIndex( getPipelineBaseHash( renderPass, submesh, pass, isFrontCulled )
+		return getPipelineNodeIndex( getPipelineBaseHash( renderPass, submesh, pass, isFrontCulled )
 			, buffer
 			, it->second.nodesIds );
 	}
@@ -724,7 +576,7 @@ namespace castor3d
 	{
 		auto it = m_renderPasses.find( &renderPass );
 		CU_Require( it != m_renderPasses.end() );
-		return cullscn::getPipelineNodeIndex( getPipelineBaseHash( renderPass, billboard, pass, isFrontCulled )
+		return getPipelineNodeIndex( getPipelineBaseHash( renderPass, billboard, pass, isFrontCulled )
 			, buffer
 			, it->second.nodesIds );
 	}
@@ -943,6 +795,7 @@ namespace castor3d
 			{
 				auto & nodesIds = renderPassIt.second.pipelinesNodes;
 				auto nodesIdsBuffer = nodesIds->lock( 0u, ashes::WholeSize, 0u );
+				auto maxNodesCount = nodesIds->getCount();
 				auto & sortedSubmeshes = renderPassIt.second.sortedSubmeshes;
 				auto & sortedInstancedSubmeshes = renderPassIt.second.sortedInstancedSubmeshes;
 
@@ -968,10 +821,11 @@ namespace castor3d
 					{
 						for ( auto & bufferIt : pipelineIt.second )
 						{
-							auto & pipelineNodes = cullscn::getPipelineNodes( pipelineIt.first
+							auto & pipelineNodes = getPipelineNodes( pipelineIt.first
 								, *bufferIt.first
 								, pipelinesNodes
-								, nodesIdsBuffer );
+								, nodesIdsBuffer
+								, maxNodesCount );
 							auto pipelinesBuffer = pipelineNodes.data();
 
 							for ( auto & sidedCulled : bufferIt.second )
@@ -1056,10 +910,11 @@ namespace castor3d
 					{
 						for ( auto & perBuffer : perPipeline.second )
 						{
-							auto & pipelineNodes = cullscn::getPipelineNodes( perPipeline.first
+							auto & pipelineNodes = getPipelineNodes( perPipeline.first
 								, *perBuffer.first
 								, pipelinesNodes
-								, nodesIdsBuffer );
+								, nodesIdsBuffer
+								, maxNodesCount );
 							auto pipelinesBuffer = pipelineNodes.data();
 
 							for ( auto & sidedCulled : perBuffer.second )
@@ -1069,7 +924,7 @@ namespace castor3d
 								if ( culled.visible )
 								{
 									cullscn::fillIndirectCommand( *culled.node, indirectBuffer );
-									( *pipelinesBuffer )->x = culled.node->instance.getId( *culled.node->pass );
+									( *pipelinesBuffer ) = culled.node->instance.getId( *culled.node->pass );
 									++pipelinesBuffer;
 									CU_Require( size_t( std::distance( origIndirectBuffer, indirectBuffer ) ) <= indirectCommands->getCount() );
 									CU_Require( size_t( std::distance( pipelineNodes.data(), pipelinesBuffer ) ) <= pipelineNodes.size() );

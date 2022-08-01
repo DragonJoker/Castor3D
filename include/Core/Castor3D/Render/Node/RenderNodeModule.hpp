@@ -72,6 +72,8 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, QueueRenderNodes, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, SceneRenderNodes, C3D_API );
 
+	using PipelineBuffer = std::pair< PipelineBaseHash, ashes::BufferBase const * >;
+
 	/**@name Traits */
 	//@{
 

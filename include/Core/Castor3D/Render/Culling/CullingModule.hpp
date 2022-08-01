@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderCullingModule_H___
 #define ___C3D_RenderCullingModule_H___
 
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 
 #include <CastorUtils/Design/Signal.hpp>
@@ -48,6 +49,8 @@ namespace castor3d
 	using SceneCullerSignalFunction = std::function< void( SceneCuller const & ) >;
 	using SceneCullerSignal = castor::SignalT< SceneCullerSignalFunction >;
 	using SceneCullerSignalConnection = castor::ConnectionT< SceneCullerSignal >;
+
+	using PipelineNodes = std::array< uint32_t, MaxNodesPerPipeline >;
 
 	//@}
 	//@}
