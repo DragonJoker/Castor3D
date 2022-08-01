@@ -168,7 +168,14 @@ namespace castor3d
 		{
 			for ( auto & tan : tangents )
 			{
-				castor::point::normalise( tan );
+				if ( tan == pt0 )
+				{
+					tan = { 1.0f, 0.0f, 0.0f };
+				}
+				else
+				{
+					castor::point::normalise( tan );
+				}
 			}
 		}
 	}
@@ -231,7 +238,16 @@ namespace castor3d
 			auto & nml = normals[i];
 			castor::Point3f tangent = castor::point::getNormalised( castor::Point3f{ value } );
 			tangent -= nml * castor::point::dot( tangent, nml );
-			value = tangent;
+
+			if ( tangent == pt0 )
+			{
+				value = { 1.0f, 0.0f, 0.0f };
+			}
+			else
+			{
+				value = tangent;
+			}
+
 			i++;
 		}
 	}

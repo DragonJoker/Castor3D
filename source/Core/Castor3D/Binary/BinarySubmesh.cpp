@@ -4,6 +4,7 @@
 #include "Castor3D/Binary/BinarySkinComponent.hpp"
 #include "Castor3D/Buffer/GeometryBuffers.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
@@ -12,6 +13,45 @@
 
 namespace castor3d
 {
+	//*************************************************************************************************
+
+	namespace binsmsh
+	{
+		static bool check( castor::Point3f & value )
+		{
+			return !std::isnan( value->x )
+				&& !std::isnan( value->y )
+				&& !std::isnan( value->z )
+				&& value != castor::Point3f{};
+		}
+
+		static void validate( Submesh & submesh )
+		{
+			auto indexMapping = submesh.getIndexMapping();
+
+			if ( !indexMapping )
+			{
+				return;
+			}
+
+			auto valid = true;
+			auto tanComp = submesh.getComponent< TangentsComponent >();
+
+			if ( tanComp )
+			{
+				for ( auto & tan : tanComp->getData() )
+				{
+					valid = valid && check( tan );
+				}
+
+				if ( !valid )
+				{
+					indexMapping->computeTangents();
+				}
+			}
+		}
+	}
+
 	//*************************************************************************************************
 
 	namespace v1_3
@@ -400,6 +440,7 @@ namespace castor3d
 			}
 		}
 
+		binsmsh::validate( obj );
 		return result;
 	}
 
@@ -519,6 +560,8 @@ namespace castor3d
 					break;
 				}
 			}
+
+			binsmsh::validate( obj );
 		}
 
 		return result;
