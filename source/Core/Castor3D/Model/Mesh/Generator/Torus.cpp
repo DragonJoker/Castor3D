@@ -121,7 +121,7 @@ namespace castor3d
 			indexMapping->addFace( uiPrv + 0, uiPCr + 0, uiPPr + 0 );
 			indexMapping->addFace( uiPrv + 0, uiCur + 0, uiPCr + 0 );
 
-			indexMapping->computeTangentsFromNormals();
+			indexMapping->computeTangents();
 		}
 	}
 }

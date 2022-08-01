@@ -181,8 +181,7 @@ namespace diamond_square_terrain
 				, submeshBuffers.texcoords0
 				, submeshBuffers.normals
 				, submeshBuffers.tangents
-				, faces
-				, true );
+				, faces );
 			generateBiomes( engine
 				, max
 				, size

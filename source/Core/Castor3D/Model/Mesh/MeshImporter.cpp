@@ -43,8 +43,7 @@ namespace castor3d
 					, *texcoords
 					, submesh->getNormals()
 					, *tangents
-					, static_cast< TriFaceMapping const & >( *submesh->getIndexMapping() ).getFaces()
-					, true );
+					, static_cast< TriFaceMapping const & >( *submesh->getIndexMapping() ).getFaces() );
 			}
 		}
 	}

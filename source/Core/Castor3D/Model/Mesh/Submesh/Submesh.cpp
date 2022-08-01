@@ -363,7 +363,7 @@ namespace castor3d
 
 			if ( m_needsNormalsCompute )
 			{
-				computeNormals( false );
+				computeNormals();
 			}
 		}
 	}
