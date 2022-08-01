@@ -28,18 +28,18 @@ namespace castor3d
 	*	Render nodes.
 	*/
 	//@{
-	// Maximum pipelines count.
-	static VkDeviceSize constexpr MaxPipelines = 1'000ull;
+	// Maximum pipelines and buffer count.
+	static VkDeviceSize constexpr MaxPipelines = 25'000ull;
 	// Maximum nodes per Pipeline Nodes buffer.
-	static VkDeviceSize constexpr MaxNodesPerPipeline = 25'000ull;
+	static VkDeviceSize constexpr MaxNodesPerPipeline = 1'000ull;
 	// Maximum nodes per meshlet indirect commands buffer.
-	static VkDeviceSize constexpr MaxSubmeshMeshletDrawIndirectCommand = MaxNodesPerPipeline;
+	static VkDeviceSize constexpr MaxSubmeshMeshletDrawIndirectCommand = MaxPipelines;
 	// Maximum nodes per indexed indirect commands buffer.
-	static VkDeviceSize constexpr MaxSubmeshIdxDrawIndirectCommand = MaxNodesPerPipeline;
+	static VkDeviceSize constexpr MaxSubmeshIdxDrawIndirectCommand = MaxPipelines;
 	// Maximum nodes per non-indexed indirect commands buffer.
-	static VkDeviceSize constexpr MaxSubmeshNIdxDrawIndirectCommand = MaxNodesPerPipeline;
+	static VkDeviceSize constexpr MaxSubmeshNIdxDrawIndirectCommand = MaxPipelines;
 	// Maximum billboard nodes per indirect commands buffer.
-	static VkDeviceSize constexpr MaxBillboardDrawIndirectCommand = MaxNodesPerPipeline;
+	static VkDeviceSize constexpr MaxBillboardDrawIndirectCommand = MaxPipelines;
 	// Maximum objects nodes count in a scene (submesh or billboards).
 	static VkDeviceSize constexpr MaxObjectNodesCount = 250'000ull;
 	//@}

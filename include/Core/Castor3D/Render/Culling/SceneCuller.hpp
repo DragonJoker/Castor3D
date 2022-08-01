@@ -13,19 +13,8 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	using PipelineNodes = std::array< castor::Point4ui, MaxNodesPerPipeline >;
-	using PipelineBuffer = std::pair< PipelineBaseHash, ashes::BufferBase const * >;
-
 	AnimatedObjectSPtr findAnimatedObject( Scene const & scene
 		, castor::String const & name );
-	PipelineBaseHash getPipelineBaseHash( RenderNodesPass const & renderPass
-		, Submesh const & data
-		, Pass const & pass
-		, bool isFrontCulled );
-	PipelineBaseHash getPipelineBaseHash( RenderNodesPass const & renderPass
-		, BillboardBase const & data
-		, Pass const & pass
-		, bool isFrontCulled );
 
 	size_t hash( SubmeshRenderNode const & culled );
 	bool isVisible( Camera const & camera

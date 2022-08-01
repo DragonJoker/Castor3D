@@ -41,11 +41,6 @@ namespace castor3d::shader
 	struct ObjectsIds
 		: public sdw::StructInstance
 	{
-		struct Ids
-		{
-			sdw::UInt nodeId;
-		};
-
 		C3D_API ObjectsIds( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled );
@@ -55,7 +50,7 @@ namespace castor3d::shader
 
 		sdw::UInt getNodeId( sdw::UInt const & index )const
 		{
-			return m_data[index].x();
+			return m_data[index / 4_u][index % 4_u];
 		}
 
 	private:
