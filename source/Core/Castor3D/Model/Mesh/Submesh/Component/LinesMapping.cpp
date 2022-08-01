@@ -77,6 +77,10 @@ namespace castor3d
 	{
 	}
 
+	void LinesMapping::computeTangents()
+	{
+	}
+
 	SubmeshComponentSPtr LinesMapping::clone( Submesh & submesh )const
 	{
 		auto result = std::make_shared< LinesMapping >( submesh );

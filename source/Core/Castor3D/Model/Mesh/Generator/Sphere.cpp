@@ -104,7 +104,7 @@ namespace castor3d
 				iCur++;
 			}
 
-			indexMapping->computeTangentsFromNormals();
+			indexMapping->computeTangents();
 		}
 	}
 }

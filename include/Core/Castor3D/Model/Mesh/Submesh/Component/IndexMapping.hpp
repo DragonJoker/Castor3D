@@ -56,6 +56,15 @@ namespace castor3d
 		 */
 		C3D_API virtual void computeNormals( bool reverted = false ) = 0;
 		/**
+		 *\~english
+		 *\brief		Generates tangents.
+		 *\remarks		This function supposes the normals are defined.
+		 *\~french
+		 *\brief		Génère les tangentes.
+		 *\remarks		Cette fonction suppose que les normales sont définies.
+		 */
+		C3D_API virtual void computeTangents() = 0;
+		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
 		void gather( ShaderFlags const & shaderFlags

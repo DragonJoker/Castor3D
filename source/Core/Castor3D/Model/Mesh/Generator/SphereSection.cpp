@@ -113,7 +113,7 @@ namespace castor3d
 				iCur++;
 			}
 
-			baseIndexMapping->computeTangentsFromNormals();
+			baseIndexMapping->computeTangents();
 
 			// Constitution des côtés
 			Submesh & sideSubmesh = *mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );

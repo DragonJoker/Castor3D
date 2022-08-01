@@ -133,9 +133,9 @@ namespace castor3d
 				indexMappingSide->addFace( i + 3, i + 1, i + 2 );
 			}
 
-			indexMappingBase->computeTangentsFromNormals();
-			indexMappingTop->computeTangentsFromNormals();
-			indexMappingSide->computeTangentsFromNormals();
+			indexMappingBase->computeTangents();
+			indexMappingTop->computeTangents();
+			indexMappingSide->computeTangents();
 		}
 	}
 }

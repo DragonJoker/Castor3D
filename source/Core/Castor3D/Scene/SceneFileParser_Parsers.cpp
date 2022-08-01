@@ -3886,7 +3886,7 @@ namespace castor3d
 					if ( !parsingContext.vertexTex.empty()
 						&& parsingContext.vertexTan.empty() )
 					{
-						mapping->computeTangentsFromNormals();
+						mapping->computeTangents();
 					}
 				}
 				else

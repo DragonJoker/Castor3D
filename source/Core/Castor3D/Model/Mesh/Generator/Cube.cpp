@@ -161,11 +161,11 @@ namespace castor3d
 			mapping6->addFace( 1, 3, 0 );
 		}
 
-		mapping1->computeTangentsFromNormals();
-		mapping2->computeTangentsFromNormals();
-		mapping3->computeTangentsFromNormals();
-		mapping4->computeTangentsFromNormals();
-		mapping5->computeTangentsFromNormals();
-		mapping6->computeTangentsFromNormals();
+		mapping1->computeTangents();
+		mapping2->computeTangents();
+		mapping3->computeTangents();
+		mapping4->computeTangents();
+		mapping5->computeTangents();
+		mapping6->computeTangents();
 	}
 }

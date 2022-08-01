@@ -132,7 +132,7 @@ namespace castor3d
 				}
 			}
 
-			indexMapping->computeTangentsFromNormals();
+			indexMapping->computeTangents();
 		}
 
 		if ( tileUV )

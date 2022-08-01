@@ -186,30 +186,6 @@ namespace castor3d
 			, face );
 	}
 
-	void TriFaceMapping::computeTangentsFromNormals()
-	{
-		static castor::Point3fArray tan;
-		static castor::Point3fArray tex;
-		castor::Point3fArray * tangents = &tan;
-		castor::Point3fArray const * texcoords = &tex;
-
-		if ( auto tanComp = getOwner()->getComponent< TangentsComponent >() )
-		{
-			tangents = &tanComp->getData();
-		}
-
-		if ( auto texComp = getOwner()->getComponent< Texcoords0Component >() )
-		{
-			texcoords = &texComp->getData();
-		}
-
-		SubmeshUtils::computeTangentsFromNormals( getOwner()->getPositions()
-			, *texcoords
-			, getOwner()->getNormals()
-			, *tangents
-			, getFaces() );
-	}
-
 	void TriFaceMapping::computeTangentsFromNormals( castor::Point3fArray const & positions
 		, castor::Point3fArray const & texcoords
 		, castor::Point3fArray const & normals
@@ -252,14 +228,36 @@ namespace castor3d
 			}
 
 			getOwner()->getNormals().resize( getOwner()->getPositions().size() );
-			SubmeshUtils::computeNormals( getOwner()->getPositions()
+			computeNormals( getOwner()->getPositions()
 				, *texcoords
 				, getOwner()->getNormals()
 				, *tangents
-				, getFaces()
 				, reverted );
 			m_hasNormals = true;
 		}
+	}
+
+	void TriFaceMapping::computeTangents()
+	{
+		static castor::Point3fArray tan;
+		static castor::Point3fArray tex;
+		castor::Point3fArray * tangents = &tan;
+		castor::Point3fArray const * texcoords = &tex;
+
+		if ( auto tanComp = getOwner()->getComponent< TangentsComponent >() )
+		{
+			tangents = &tanComp->getData();
+		}
+
+		if ( auto texComp = getOwner()->getComponent< Texcoords0Component >() )
+		{
+			texcoords = &texComp->getData();
+		}
+
+		computeTangentsFromNormals( getOwner()->getPositions()
+			, *texcoords
+			, getOwner()->getNormals()
+			, *tangents );
 	}
 
 	SubmeshComponentSPtr TriFaceMapping::clone( Submesh & submesh )const
