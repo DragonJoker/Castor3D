@@ -1,5 +1,6 @@
 #include "Castor3D/Render/RenderNodesPass.hpp"
 
+#include "Castor3D/Config.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
@@ -657,10 +658,14 @@ namespace castor3d
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, stageFlags ) );
 		auto & matCache = getOwner()->getMaterialCache();
-		addBindings.emplace_back( matCache.getPassBuffer().createLayoutBinding( uint32_t( GlobalBuffersIdx::eMaterials ) ) );
-		addBindings.emplace_back( matCache.getSssProfileBuffer().createLayoutBinding( uint32_t( GlobalBuffersIdx::eSssProfiles ) ) );
-		addBindings.emplace_back( matCache.getTexConfigBuffer().createLayoutBinding( uint32_t( GlobalBuffersIdx::eTexConfigs ) ) );
-		addBindings.emplace_back( matCache.getTexAnimBuffer().createLayoutBinding( uint32_t( GlobalBuffersIdx::eTexAnims ) ) );
+		addBindings.emplace_back( matCache.getPassBuffer().createLayoutBinding( uint32_t( GlobalBuffersIdx::eMaterials )
+			, stageFlags ) );
+		addBindings.emplace_back( matCache.getSssProfileBuffer().createLayoutBinding( uint32_t( GlobalBuffersIdx::eSssProfiles )
+			, stageFlags ) );
+		addBindings.emplace_back( matCache.getTexConfigBuffer().createLayoutBinding( uint32_t( GlobalBuffersIdx::eTexConfigs )
+			, stageFlags ) );
+		addBindings.emplace_back( matCache.getTexAnimBuffer().createLayoutBinding( uint32_t( GlobalBuffersIdx::eTexAnims )
+			, stageFlags ) );
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
 		{
@@ -747,7 +752,7 @@ namespace castor3d
 					&& meshletDescriptorLayout )
 				{
 					pipeline->setMeshletDescriptorSetLayout( *meshletDescriptorLayout );
-					pipeline->setPushConstantRanges( { { VK_SHADER_STAGE_MESH_BIT_NV | VK_SHADER_STAGE_TASK_BIT_NV
+					pipeline->setPushConstantRanges( { { VK_SHADER_STAGE_MESH_BIT_NV | VK_SHADER_STAGE_TASK_BIT_NV | VK_SHADER_STAGE_FRAGMENT_BIT
 						, 0u
 						, sizeof( MeshletDrawConstants ) } } );
 				}

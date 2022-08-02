@@ -368,7 +368,7 @@ namespace castor3d
 				, drawOffset
 				, node.getInstanceCount() };
 			commandBuffer.pushConstants( pipeline.getPipelineLayout()
-				, VK_SHADER_STAGE_MESH_BIT_NV | VK_SHADER_STAGE_TASK_BIT_NV
+				, VK_SHADER_STAGE_MESH_BIT_NV | VK_SHADER_STAGE_TASK_BIT_NV |  VK_SHADER_STAGE_FRAGMENT_BIT
 				, 0u
 				, sizeof( MeshletDrawConstants )
 				, &constants );

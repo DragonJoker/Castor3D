@@ -70,7 +70,12 @@ namespace castor3d
 		 *\~french
 		 *\brief		Crée une attache de layout de set de descripteurs.
 		 */
-		C3D_API VkDescriptorSetLayoutBinding createLayoutBinding( uint32_t binding )const;
+		C3D_API VkDescriptorSetLayoutBinding createLayoutBinding( uint32_t binding
+			, VkShaderStageFlags stages = ( VK_SHADER_STAGE_FRAGMENT_BIT
+				| VK_SHADER_STAGE_GEOMETRY_BIT
+				| VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
+				| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
+				| VK_SHADER_STAGE_VERTEX_BIT ) )const;
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor write for this buffer.

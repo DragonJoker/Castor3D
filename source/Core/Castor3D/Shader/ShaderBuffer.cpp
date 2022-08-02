@@ -56,15 +56,12 @@ namespace castor3d
 					, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) ) );
 	}
 
-	VkDescriptorSetLayoutBinding ShaderBuffer::createLayoutBinding( uint32_t index )const
+	VkDescriptorSetLayoutBinding ShaderBuffer::createLayoutBinding( uint32_t index
+		, VkShaderStageFlags stages )const
 	{
 		return makeDescriptorSetLayoutBinding( index
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, ( VK_SHADER_STAGE_FRAGMENT_BIT
-				| VK_SHADER_STAGE_GEOMETRY_BIT
-				| VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
-				| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
-				| VK_SHADER_STAGE_VERTEX_BIT ) );
+			, stages );
 	}
 
 	void ShaderBuffer::createPassBinding( crg::FramePass & pass

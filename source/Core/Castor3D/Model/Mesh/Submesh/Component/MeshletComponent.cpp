@@ -105,6 +105,12 @@ namespace castor3d
 					, uint32_t( MeshBuffersIdx::eColour ) ) );
 			}
 
+			if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
+			{
+				writes.push_back( baseBuffers.getStorageBinding( SubmeshFlag::ePassMasks
+					, uint32_t( MeshBuffersIdx::ePassMasks ) ) );
+			}
+
 			if ( checkFlag( submeshFlags, SubmeshFlag::eVelocity ) )
 			{
 				writes.push_back( baseBuffers.getStorageBinding( SubmeshFlag::eVelocity
@@ -342,6 +348,13 @@ namespace castor3d
 		if ( checkFlag( submeshFlags, SubmeshFlag::eColours ) )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eColour )
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, VK_SHADER_STAGE_MESH_BIT_NV ) );
+		}
+
+		if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
+		{
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::ePassMasks )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_MESH_BIT_NV ) );
 		}

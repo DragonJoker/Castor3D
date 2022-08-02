@@ -91,9 +91,10 @@ namespace castor3d
 		}
 	}
 
-	VkDescriptorSetLayoutBinding PassBuffer::createLayoutBinding( uint32_t binding )const
+	VkDescriptorSetLayoutBinding PassBuffer::createLayoutBinding( uint32_t binding
+		, VkShaderStageFlags stages )const
 	{
-		return m_buffer.createLayoutBinding( binding );
+		return m_buffer.createLayoutBinding( binding, stages );
 	}
 
 	void PassBuffer::createPassBinding( crg::FramePass & pass, uint32_t binding )const

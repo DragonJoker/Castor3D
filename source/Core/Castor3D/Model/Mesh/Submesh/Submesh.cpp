@@ -674,6 +674,9 @@ namespace castor3d
 		case castor3d::SubmeshData::eSkin:
 			CU_Failure( "setBaseData: Can't set skin data this way" );
 			break;
+		case castor3d::SubmeshData::ePassMasks:
+			CU_Failure( "setBaseData: Can't set skin data this way" );
+			break;
 		case castor3d::SubmeshData::eVelocity:
 			CU_Failure( "setBaseData: Can't set velocity data this way" );
 			break;
