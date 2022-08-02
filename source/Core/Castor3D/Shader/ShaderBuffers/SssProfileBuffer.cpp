@@ -91,9 +91,10 @@ namespace castor3d
 		}
 	}
 
-	VkDescriptorSetLayoutBinding SssProfileBuffer::createLayoutBinding( uint32_t binding )const
+	VkDescriptorSetLayoutBinding SssProfileBuffer::createLayoutBinding( uint32_t binding
+		, VkShaderStageFlags stages )const
 	{
-		return m_buffer.createLayoutBinding( binding );
+		return m_buffer.createLayoutBinding( binding, stages );
 	}
 
 	void SssProfileBuffer::createPassBinding( crg::FramePass & pass, uint32_t binding )const
