@@ -224,7 +224,7 @@ namespace atmosphere_scattering
 
 						auto sampleCountIni = 0.0_f;
 						auto ss = m_writer.declLocale( "ss"
-							, m_atmosphere.integrateScatteredLuminanceNoShadow( fragPos
+							, m_atmosphere.integrateScatteredLuminance( fragPos
 								, ray
 								, m_atmosphere.getSunDirection()
 								, sampleCountIni
@@ -242,105 +242,6 @@ namespace atmosphere_scattering
 		return m_getPixelTransLum( pfragPos
 			, pfragSize
 			, pfragDepth
-			, ptransmittance
-			, pluminance );
-	}
-
-	sdw::Void ScatteringModel::getPixelTransLum( sdw::Vec2 const & pfragPos
-		, sdw::Vec2 const & pfragSize
-		, sdw::Float const & pfragDepth
-		, castor3d::shader::Light const & plight
-		, sdw::Vec3 const & psurfaceWorldNormal
-		, sdw::Mat4 const & plightMatrix
-		, sdw::UInt const & pcascadeIndex
-		, sdw::UInt const & pmaxCascade
-		, sdw::Vec4 & ptransmittance
-		, sdw::Vec4 & pluminance )
-	{
-		if ( !m_getPixelTransLumShadow )
-		{
-			m_getPixelTransLumShadow = m_writer.implementFunction< sdw::Void >( "scatter_getPixelTransLumShadow"
-				, [&]( sdw::Vec2 const & fragPos
-					, sdw::Vec2 const & fragSize
-					, sdw::Float const & fragDepth
-					, castor3d::shader::Light const & light
-					, sdw::Vec3 const & surfaceWorldNormal
-					, sdw::Mat4 const & lightMatrix
-					, sdw::UInt const & cascadeIndex
-					, sdw::UInt const & maxCascade
-					, sdw::Vec4 transmittance
-					, sdw::Vec4 luminance )
-				{
-					auto ray = m_writer.declLocale( "ray"
-						, m_atmosphere.castRay( fragPos, fragSize ) );
-					auto L = m_writer.declLocale( "L"
-						, vec3( 0.0_f ) );
-					doRenderSky( fragSize
-						, fragDepth
-						, ray
-						, L
-						, luminance );
-
-					if ( m_fastAerialPerspective )
-					{
-						doRenderFastAerial( fragPos
-							, fragSize
-							, fragDepth
-							, ray.origin
-							, L
-							, luminance );
-					}
-					else
-					{
-						// Move to top atmosphere as the starting point for ray marching.
-						// This is critical to be after the above to not disrupt above atmosphere tests and voxel selection.
-						IF( m_writer, !m_atmosphere.moveToTopAtmosphere( ray ) )
-						{
-							// Ray is not intersecting the atmosphere	
-							if ( m_renderSunDisk )
-							{
-								luminance = vec4( getSunLuminance( ray ), 1.0_f );
-							}
-
-							m_writer.returnStmt();
-						}
-						FI;
-
-						auto sampleCountIni = 0.0_f;
-						auto ss = m_writer.declLocale( "ss"
-							, m_atmosphere.integrateScatteredLuminance( fragPos
-								, ray
-								, m_atmosphere.getSunDirection()
-								, sampleCountIni
-								, fragDepth
-								, light
-								, surfaceWorldNormal
-								, lightMatrix
-								, cascadeIndex
-								, maxCascade ) );
-						doRegisterOutputs( ss, L, luminance, transmittance );
-					}
-				}
-				, sdw::InVec2{ m_writer, "fragPos" }
-				, sdw::InVec2{ m_writer, "fragSize" }
-				, sdw::InFloat{ m_writer, "fragDepth" }
-				, castor3d::shader::InLight{ m_writer, "light" }
-				, sdw::InVec3{ m_writer, "surfaceWorldNormal" }
-				, sdw::InMat4{ m_writer, "lightMatrix" }
-				, sdw::InUInt{ m_writer, "cascadeIndex" }
-				, sdw::InUInt{ m_writer, "maxCascade" }
-				, sdw::OutVec4{ m_writer, "transmittance" }
-				, sdw::OutVec4{ m_writer, "luminance" } );
-		}
-
-		return m_getPixelTransLumShadow( pfragPos
-			, pfragSize
-			, pfragDepth
-			, plight
-			, psurfaceWorldNormal
-			, plightMatrix
-			, pcascadeIndex
-			, pmaxCascade
 			, ptransmittance
 			, pluminance );
 	}

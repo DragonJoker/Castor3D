@@ -128,7 +128,7 @@ namespace atmosphere_scattering
 					ELSE
 					{
 						auto ss = writer.declLocale( "ss"
-							, atmosphere.integrateScatteredLuminanceNoShadow( pixPos
+							, atmosphere.integrateScatteredLuminance( pixPos
 							, ray
 							, sunDir
 							, sampleCountIni

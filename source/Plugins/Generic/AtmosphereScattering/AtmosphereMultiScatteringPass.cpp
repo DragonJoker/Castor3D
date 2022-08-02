@@ -131,7 +131,7 @@ namespace atmosphere_scattering
 							, PI * randB );
 						ray.origin = getSphericalDir( theta, phi );
 						auto result = writer.declLocale( "result"
-							, atmosphere.integrateScatteredLuminanceNoShadow( pixPos
+							, atmosphere.integrateScatteredLuminance( pixPos
 								, ray
 								, sunDir
 								, sampleCountIni
