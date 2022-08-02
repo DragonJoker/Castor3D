@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "AtmosphereCameraUbo.hpp"
 #include "AtmosphereScatteringUbo.hpp"
 
-#include <Castor3D/Shader/Shaders/SdwModule.hpp>
+#include <Castor3D/Shader/Shaders/GlslRay.hpp>
 #include <Castor3D/Shader/Ubos/MatrixUbo.hpp>
 
 #include <ShaderWriter/BaseTypes/Array.hpp>
@@ -22,6 +22,17 @@ See LICENSE file in root folder
 
 namespace atmosphere_scattering
 {
+	using castor3d::shader::Intersection;
+	using castor3d::shader::RetIntersection;
+	using castor3d::shader::InIntersection;
+	using castor3d::shader::InOutIntersection;
+	using castor3d::shader::OutIntersection;
+	using castor3d::shader::Ray;
+	using castor3d::shader::RetRay;
+	using castor3d::shader::InRay;
+	using castor3d::shader::InOutRay;
+	using castor3d::shader::OutRay;
+
 	struct SingleScatteringResult
 		: public sdw::StructInstanceHelperT< "SingleScatteringResult"
 			, sdw::type::MemoryLayout::eC
@@ -90,54 +101,6 @@ namespace atmosphere_scattering
 		auto albedo()const { return getMember< "albedo" >(); }
 	};
 	Writer_Parameter( MediumSampleRGB );
-
-	struct Intersection
-		: public sdw::StructInstanceHelperT < "Intersection"
-		, sdw::type::MemoryLayout::eC
-		, sdw::Vec3Field< "point" >
-		, sdw::BooleanField< "valid" >
-		, sdw::FloatField< "t" > >
-	{
-		Intersection( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled )
-			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
-		{
-		}
-
-		static Intersection create( std::string const & name
-			, sdw::ShaderWriter & writer );
-
-		auto point()const { return getMember< "point" >(); }
-		auto valid()const { return getMember< "valid" >(); }
-		auto t()const { return getMember< "t" >(); }
-	};
-	Writer_Parameter( Intersection );
-
-	struct Ray
-		: public sdw::StructInstanceHelperT < "Ray"
-		, sdw::type::MemoryLayout::eC
-		, sdw::Vec3Field< "origin" >
-		, sdw::Vec3Field< "direction" > >
-	{
-		Ray( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled )
-			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
-			, origin{ getMember< "origin" >() }
-			, direction{ getMember< "direction" >() }
-		{
-		}
-
-		sdw::Vec3 step( sdw::Float const & t )const
-		{
-			return origin + t * direction;
-		}
-
-		sdw::Vec3 origin;
-		sdw::Vec3 direction;
-	};
-	Writer_Parameter( Ray );
 
 	struct LuminanceSettings
 	{
