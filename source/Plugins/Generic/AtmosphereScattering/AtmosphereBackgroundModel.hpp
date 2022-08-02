@@ -63,29 +63,6 @@ namespace atmosphere_scattering
 				, luminance );
 		}
 
-		sdw::Void getPixelTransLum( sdw::Vec2 const & fragPos
-			, sdw::Vec2 const & fragSize
-			, sdw::Float const & fragDepth
-			, castor3d::shader::Light const & light
-			, sdw::Vec3 const & surfaceWorldNormal
-			, sdw::Mat4 const & lightMatrix
-			, sdw::UInt const & cascadeIndex
-			, sdw::UInt const & maxCascade
-			, sdw::Vec4 & transmittance
-			, sdw::Vec4 & luminance )
-		{
-			return scattering.getPixelTransLum( fragPos
-				, fragSize
-				, fragDepth
-				//, light
-				//, surfaceWorldNormal
-				//, lightMatrix
-				//, cascadeIndex
-				//, maxCascade
-				, transmittance
-				, luminance );
-		}
-
 	public:
 		static castor::String const Name;
 		sdw::Ubo cameraBuffer;

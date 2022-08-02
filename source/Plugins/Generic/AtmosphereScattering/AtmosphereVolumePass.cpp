@@ -220,7 +220,7 @@ namespace atmosphere_scattering
 					FI;
 
 					SingleScatteringResult ss = writer.declLocale( "ss"
-						, atmosphere.integrateScatteredLuminanceNoShadow( pixPos
+						, atmosphere.integrateScatteredLuminance( pixPos
 							, ray
 							, c3d_atmosphereData.sunDirection
 							, sampleCountIni

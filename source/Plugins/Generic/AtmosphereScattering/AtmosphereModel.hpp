@@ -195,28 +195,6 @@ namespace atmosphere_scattering
 			, sdw::Vec3 const & sunDir
 			, sdw::Float const & sampleCountIni
 			, sdw::Float const & depthBufferValue
-			, castor3d::shader::Light const & light
-			, sdw::Vec3 const & surfaceWorldNormal
-			, sdw::Mat4 const & lightMatrix
-			, sdw::UInt const & cascadeIndex
-			, sdw::UInt const & maxCascade
-			, sdw::Float const & tMaxMax = sdw::Float{ 9000000.0_f } );
-		RetSingleScatteringResult integrateScatteredLuminanceShadow( sdw::Vec2 const & pixPos
-			, Ray const & ray
-			, sdw::Vec3 const & sunDir
-			, sdw::Float const & sampleCountIni
-			, sdw::Float const & depthBufferValue
-			, castor3d::shader::Light const & light
-			, sdw::Vec3 const & surfaceWorldNormal
-			, sdw::Mat4 const & lightMatrix
-			, sdw::UInt const & cascadeIndex
-			, sdw::UInt const & maxCascade
-			, sdw::Float const & tMaxMax = sdw::Float{ 9000000.0_f } );
-		RetSingleScatteringResult integrateScatteredLuminanceNoShadow( sdw::Vec2 const & pixPos
-			, Ray const & ray
-			, sdw::Vec3 const & sunDir
-			, sdw::Float const & sampleCountIni
-			, sdw::Float const & depthBufferValue
 			, sdw::Float const & tMaxMax = sdw::Float{ 9000000.0_f } );
 		sdw::RetBoolean moveToTopAtmosphere( Ray & ray );
 		sdw::RetVec3 getSunRadiance( sdw::Vec3 const & cameraPosition
@@ -350,18 +328,6 @@ namespace atmosphere_scattering
 			, sdw::InFloat
 			, sdw::InFloat
 			, sdw::InFloat > m_integrateScatteredLuminance;
-		sdw::Function< SingleScatteringResult
-			, sdw::InVec2
-			, InRay
-			, sdw::InVec3
-			, sdw::InFloat
-			, sdw::InFloat
-			, castor3d::shader::InLight
-			, sdw::InVec3
-			, sdw::InMat4
-			, sdw::InUInt
-			, sdw::InUInt
-			, sdw::InFloat > m_integrateScatteredLuminanceShadow;
 		sdw::Function< sdw::Boolean
 			, InOutRay > m_moveToTopAtmosphere;
 		sdw::Function< Intersection
