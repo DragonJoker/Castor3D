@@ -66,14 +66,13 @@ namespace castor3d
 			C3D_API sdw::Float computePoint( shader::Light const & light
 				, Surface const & surface
 				, sdw::Vec3 const & lightDirection );
-			C3D_API void computeVolumetric( shader::Light const & light
+			C3D_API sdw::Float computeVolumetric( shader::Light const & light
 				, Surface const & surface
 				, sdw::Vec3 const & eyePosition
 				, sdw::Mat4 const & lightMatrix
 				, sdw::Vec3 const & lightDirection
 				, sdw::UInt const & cascadeIndex
-				, sdw::UInt const & maxCascade
-				, OutputComponents & parentOutput );
+				, sdw::UInt const & maxCascade );
 			C3D_API sdw::Vec4 getLightSpacePosition( sdw::Mat4 const & lightMatrix
 				, sdw::Vec3 const & worldSpacePosition );
 
@@ -83,25 +82,45 @@ namespace castor3d
 			}
 
 		private:
-			void doDeclareGetRandom();
-			void doDeclareGetShadowOffset();
-			void doDeclareChebyshevUpperBound();
-			void doDeclareFilterPCF();
-			void doDeclareFilterPCFNoCascade();
-			void doDeclareFilterPCFCascade();
-			void doDeclareFilterPCFCube();
-			void doDeclareFilterVSMCube();
-			void doDeclareGetLightSpacePosition();
-			void doDeclareComputeDirectionalShadow();
-			void doDeclareComputeSpotShadow();
-			void doDeclareComputePointShadow();
-			void doDeclareComputeVolumetric();
+			sdw::RetFloat getShadowOffset( sdw::Vec3 const & pnormal
+				, sdw::Vec3 const & lightDirection
+				, sdw::Float const & minOffset
+				, sdw::Float const & maxSlopeOffset );
+			sdw::RetFloat filterPCF( sdw::Vec4 const & lightSpacePosition
+				, sdw::CombinedImage2DR32 const & shadowMap
+				, sdw::Vec2 const & invTexDim
+				, sdw::Float const & bias );
+			sdw::RetFloat filterPCF( sdw::Vec4 const & lightSpacePosition
+				, sdw::CombinedImage2DArrayR32 const & shadowMap
+				, sdw::Vec2 const & invTexDim
+				, sdw::UInt const & cascadeIndex
+				, sdw::Float const & bias );
+			sdw::RetFloat filterPCF( sdw::Vec4 const & lightSpacePosition
+				, sdw::CombinedImage2DArrayR32 const & shadowMap
+				, sdw::Vec2 const & invTexDim
+				, sdw::Int const & index
+				, sdw::Float const & depth
+				, sdw::Float const & bias );
+			sdw::RetFloat filterPCF( sdw::Vec3 const & lightToVertex
+				, sdw::CombinedImageCubeArrayR32 const & shadowMap
+				, sdw::Vec2 const & invTexDim
+				, sdw::Int const & index
+				, sdw::Float const & depth
+				, sdw::Float const & bias );
+			sdw::RetFloat chebyshevUpperBound( sdw::Vec2 const & moments
+				, sdw::Float const & depth
+				, sdw::Float const & minVariance
+				, sdw::Float const & varianceBias );
+			sdw::RetFloat filterVSM( sdw::Vec3 const & lightToVertex
+				, sdw::CombinedImageCubeArrayRg32 const & shadowMap
+				, sdw::Int const & index
+				, sdw::Float const & depth
+				, sdw::Float const & minVariance
+				, sdw::Float const & varianceBias );
 
 		private:
 			sdw::ShaderWriter & m_writer;
 			ShadowOptions m_shadowOptions;
-			sdw::Function< sdw::Float
-				, sdw::InVec4 > m_getRandom;
 			sdw::Function< sdw::Float
 				, sdw::InVec3
 				, sdw::InVec3
@@ -164,15 +183,14 @@ namespace castor3d
 				, InLight
 				, InSurface
 				, sdw::InVec3 > m_computePoint;
-			sdw::Function< sdw::Void
+			sdw::Function< sdw::Float
 				, InLight
 				, InSurface
 				, sdw::InVec3
 				, sdw::InMat4
 				, sdw::InVec3
 				, sdw::InUInt
-				, sdw::InUInt
-				, OutputComponents & > m_computeVolumetric;
+				, sdw::InUInt > m_computeVolumetric;
 		};
 	}
 }
