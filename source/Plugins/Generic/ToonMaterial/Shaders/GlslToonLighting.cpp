@@ -221,14 +221,16 @@ namespace toon::shader
 							{
 								IF( m_writer, light.base.volumetricSteps != 0_u )
 								{
-									m_shadowModel->computeVolumetric( light.base
-										, surface
-										, worldEye
-										, light.transforms[cascadeIndex]
-										, light.direction
-										, cascadeIndex
-										, light.cascadeCount
-										, output );
+									auto volumetric = m_writer.declLocale( "volumetric"
+										, m_shadowModel->computeVolumetric( light.base
+											, surface
+											, worldEye
+											, light.transforms[cascadeIndex]
+											, light.direction
+											, cascadeIndex
+											, light.cascadeCount ) );
+									output.m_diffuse += volumetric * light.base.intensity.x() * light.base.colour;
+									output.m_specular += volumetric * light.base.intensity.y() * light.base.colour;
 								}
 								FI;
 							}
@@ -1165,14 +1167,16 @@ namespace toon::shader
 							{
 								IF( m_writer, light.base.volumetricSteps != 0_u )
 								{
-									m_shadowModel->computeVolumetric( light.base
-										, surface
-										, worldEye
-										, light.transforms[cascadeIndex]
-										, light.direction
-										, cascadeIndex
-										, light.cascadeCount
-										, output );
+									auto volumetric = m_writer.declLocale( "volumetric"
+										, m_shadowModel->computeVolumetric( light.base
+											, surface
+											, worldEye
+											, light.transforms[cascadeIndex]
+											, light.direction
+											, cascadeIndex
+											, light.cascadeCount ) );
+									output.m_diffuse += volumetric * light.base.intensity.x() * light.base.colour;
+									output.m_specular += volumetric * light.base.intensity.y() * light.base.colour;
 								}
 								FI;
 							}
