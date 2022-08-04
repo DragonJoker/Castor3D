@@ -76,6 +76,7 @@ namespace castor3d::shader
 	};
 
 	struct DirectionalLight;
+	struct Intersection;
 	struct Light;
 	struct LightData;
 	struct LightMaterial;
@@ -85,6 +86,7 @@ namespace castor3d::shader
 	struct Material;
 	struct OutputComponents;
 	struct PointLight;
+	struct Ray;
 	struct SpotLight;
 	struct SssProfile;
 	struct TextureAnimData;
@@ -144,6 +146,7 @@ namespace castor3d::shader
 		, BackgroundModelCreator >;
 
 	Writer_Parameter( DirectionalLight );
+	Writer_Parameter( Intersection );
 	Writer_Parameter( LayeredLpvGridData );
 	Writer_Parameter( Light );
 	Writer_Parameter( LightMaterial );
@@ -152,6 +155,7 @@ namespace castor3d::shader
 	Writer_Parameter( PbrLightMaterial );
 	Writer_Parameter( PhongLightMaterial );
 	Writer_Parameter( PointLight );
+	Writer_Parameter( Ray );
 	Writer_Parameter( SpotLight );
 	Writer_Parameter( Surface );
 	Writer_Parameter( TextureConfigData );

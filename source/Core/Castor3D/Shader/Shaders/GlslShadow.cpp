@@ -6,6 +6,7 @@
 #include "Castor3D/Render/ShadowMap/ShadowMapPassSpot.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslRay.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
@@ -489,69 +490,136 @@ namespace castor3d
 				, lightDirection );
 		}
 
+		sdw::Float Shadow::computeVolumetric( shader::Light const & light
+			, Surface const & surface
+			, sdw::Vec3 const & eyePosition
+			, sdw::Mat4 const & lightMatrix
+			, sdw::Vec3 const & lightDirection
+			, sdw::UInt const & cascadeIndex
+			, sdw::UInt const & maxCascade )
+		{
+			auto c3d_volumetricDither = m_writer.getVariableArray< sdw::Vec4 >( "c3d_volumetricDither" );
+
+			// Prepare ray
+			auto rayVector = m_writer.declLocale( "rayVector"
+				, surface.worldPosition - eyePosition );
+			auto rayLength = m_writer.declLocale( "rayLength"
+				, length( rayVector ) );
+			auto rayDirection = m_writer.declLocale( "rayDirection"
+				, rayVector / rayLength );
+			auto stepLength = m_writer.declLocale( "stepLength"
+				, rayLength / m_writer.cast< sdw::Float >( light.volumetricSteps ) );
+			auto screenUV = m_writer.declLocale( "screenUV"
+				, uvec2( m_writer.cast< sdw::UInt >( surface.clipPosition.x() )
+					, m_writer.cast< sdw::UInt >( surface.clipPosition.y() ) ) );
+			auto ditherValue = m_writer.declLocale( "ditherValue"
+				, c3d_volumetricDither[screenUV.x() % 4_u][screenUV.y() % 4_u] );
+			auto ray = Ray::create( "ray"
+				, m_writer
+				, eyePosition + rayDirection * stepLength * ditherValue
+				, rayDirection );
+
+			// Compute scattering value
+			auto RdotL = m_writer.declLocale( "RdotL"
+				, dot( rayDirection, lightDirection ) );
+			auto sqVolumetricScattering = m_writer.declLocale( "sqVolumetricScattering"
+				, light.volumetricScattering * light.volumetricScattering );
+			auto dblVolumetricScattering = m_writer.declLocale( "dblVolumetricScattering"
+				, 2.0_f * light.volumetricScattering );
+			auto oneMinusVolumeScattering = m_writer.declLocale( "oneMinusVolumeScattering"
+				, 1.0_f - sqVolumetricScattering );
+
+			return computeVolumetric( light
+				, surface
+				, ray
+				, stepLength
+				, lightMatrix
+				, lightDirection
+				, cascadeIndex
+				, maxCascade
+				, oneMinusVolumeScattering / ( 4.0_f
+					* sdw::Float{ castor::Pi< float > }
+					* pow( max( 1.0_f + sqVolumetricScattering - dblVolumetricScattering * -RdotL, 0.0_f ), 1.5_f ) ) );
+		}
+
+		sdw::Float Shadow::computeVolumetric( shader::Light const & light
+			, Surface const & surface
+			, sdw::Vec3 const & eyePosition
+			, sdw::Mat4 const & lightMatrix
+			, sdw::Vec3 const & lightDirection
+			, sdw::UInt const & cascadeIndex
+			, sdw::UInt const & maxCascade
+			, sdw::Float const & scattering )
+		{
+			auto c3d_volumetricDither = m_writer.getVariableArray< sdw::Vec4 >( "c3d_volumetricDither" );
+
+			// Prepare ray
+			auto rayVector = m_writer.declLocale( "rayVector"
+				, surface.worldPosition - eyePosition );
+			auto rayLength = m_writer.declLocale( "rayLength"
+				, length( rayVector ) );
+			auto rayDirection = m_writer.declLocale( "rayDirection"
+				, rayVector / rayLength );
+			auto stepLength = m_writer.declLocale( "stepLength"
+				, rayLength / m_writer.cast< sdw::Float >( light.volumetricSteps ) );
+			auto screenUV = m_writer.declLocale( "screenUV"
+				, uvec2( m_writer.cast< sdw::UInt >( surface.clipPosition.x() )
+					, m_writer.cast< sdw::UInt >( surface.clipPosition.y() ) ) );
+			auto ditherValue = m_writer.declLocale( "ditherValue"
+				, c3d_volumetricDither[screenUV.x() % 4_u][screenUV.y() % 4_u] );
+			auto ray = Ray::create( "ray"
+				, m_writer
+				, eyePosition + rayDirection * stepLength * ditherValue
+				, rayDirection );
+
+			return computeVolumetric( light
+				, surface
+				, ray
+				, stepLength
+				, lightMatrix
+				, lightDirection
+				, cascadeIndex
+				, maxCascade
+				, scattering );
+		}
+
 		sdw::Float Shadow::computeVolumetric( shader::Light const & plight
 			, Surface const & psurface
-			, sdw::Vec3 const & peyePosition
+			, Ray const & pray
+			, sdw::Float const & pstepLength
 			, sdw::Mat4 const & plightMatrix
 			, sdw::Vec3 const & plightDirection
 			, sdw::UInt const & pcascadeIndex
-			, sdw::UInt const & pmaxCascade )
+			, sdw::UInt const & pmaxCascade
+			, sdw::Float const & pscattering )
 		{
 			if ( !m_computeVolumetric )
 			{
 				m_computeVolumetric = m_writer.implementFunction< sdw::Float >( "c3d_shdComputeVolumetric"
 					, [this]( shader::Light const & light
 						, Surface surface
-						, sdw::Vec3 const & eyePosition
+						, Ray const & ray
+						, sdw::Float const & stepLength
 						, sdw::Mat4 const & lightMatrix
 						, sdw::Vec3 const & lightDirection
 						, sdw::UInt const & cascadeIndex
-						, sdw::UInt const & maxCascade )
+						, sdw::UInt const & maxCascade
+						, sdw::Float const & scattering )
 					{
 						if ( checkFlag( m_shadowOptions.type, SceneFlag::eShadowDirectional ) )
 						{
-							auto c3d_volumetricDither = m_writer.getVariableArray< sdw::Vec4 >( "c3d_volumetricDither" );
-
-							auto rayVector = m_writer.declLocale( "rayVector"
-								, surface.worldPosition - eyePosition );
-							auto rayLength = m_writer.declLocale( "rayLength"
-								, length( rayVector ) );
-							auto rayDirection = m_writer.declLocale( "rayDirection"
-								, rayVector / rayLength );
-							auto stepLength = m_writer.declLocale( "stepLength"
-								, rayLength / m_writer.cast< sdw::Float >( light.volumetricSteps ) );
-							auto step = m_writer.declLocale( "step"
-								, rayDirection * stepLength );
-							auto screenUV = m_writer.declLocale( "screenUV"
-								, uvec2( m_writer.cast< sdw::UInt >( surface.clipPosition.x() )
-									, m_writer.cast< sdw::UInt >( surface.clipPosition.y() ) ) );
-							auto ditherValue = m_writer.declLocale( "ditherValue"
-								, c3d_volumetricDither[screenUV.x() % 4_u][screenUV.y() % 4_u] );
-
-							surface.worldPosition = eyePosition + step * ditherValue;
 							auto volumetric = m_writer.declLocale( "volumetric"
 								, 0.0_f );
-
-							auto RdotL = m_writer.declLocale( "RdotL"
-								, dot( rayDirection, lightDirection ) );
-							auto sqVolumetricScattering = m_writer.declLocale( "sqVolumetricScattering"
-								, light.volumetricScattering * light.volumetricScattering );
-							auto dblVolumetricScattering = m_writer.declLocale( "dblVolumetricScattering"
-								, 2.0_f * light.volumetricScattering );
-							auto oneMinusVolumeScattering = m_writer.declLocale( "oneMinusVolumeScattering"
-								, 1.0_f - sqVolumetricScattering );
-							auto scattering = m_writer.declLocale( "scattering"
-								, oneMinusVolumeScattering / ( 4.0_f
-									* sdw::Float{ castor::Pi< float > }
-									* pow( max( 1.0_f + sqVolumetricScattering - dblVolumetricScattering * -RdotL, 0.0_f ), 1.5_f ) ) );
 							auto maxCount = m_writer.declLocale( "maxCount"
 								, m_writer.cast< sdw::Int >( light.volumetricSteps ) );
+							auto t = m_writer.declLocale( "t", 0.0_f );
 
 							FOR( m_writer, sdw::Int, i, 0, i < maxCount, ++i )
 							{
 								IF( m_writer
 									, computeDirectional( light
-										, surface
+										, ray.step( t )
+										, surface.worldNormal
 										, lightMatrix
 										, lightDirection
 										, cascadeIndex
@@ -561,7 +629,7 @@ namespace castor3d
 								}
 								FI;
 
-								surface.worldPosition += step;
+								t += stepLength;
 							}
 							ROF;
 
@@ -575,20 +643,24 @@ namespace castor3d
 					}
 					, InLight{ m_writer, "light" }
 					, InSurface{ m_writer, "surface" }
-					, sdw::InVec3{ m_writer, "eyePosition" }
+					, InRay{ m_writer, "ray" }
+					, sdw::InFloat{ m_writer, "stepLength" }
 					, sdw::InMat4{ m_writer, "lightMatrix" }
 					, sdw::InVec3{ m_writer, "lightDirection" }
 					, sdw::InUInt{ m_writer, "cascadeIndex" }
-					, sdw::InUInt{ m_writer, "maxCascade" } );
+					, sdw::InUInt{ m_writer, "maxCascade" }
+					, sdw::InFloat{ m_writer, "scattering" } );
 			}
 
 			return m_computeVolumetric( plight
 				, psurface
-				, peyePosition
+				, pray
+				, pstepLength
 				, plightMatrix
 				, plightDirection
 				, pcascadeIndex
-				, pmaxCascade );
+				, pmaxCascade
+				, pscattering );
 		}
 
 		sdw::Vec4 Shadow::getLightSpacePosition( sdw::Mat4 const & lightMatrix
@@ -934,7 +1006,7 @@ namespace castor3d
 			, sdw::Float const & pminVariance
 			, sdw::Float const & pvarianceBias )
 		{
-			if ( m_filterVSMCube )
+			if ( !m_filterVSMCube )
 			{
 				m_filterVSMCube = m_writer.implementFunction< sdw::Float >( "c3d_shdFilterVSMCube"
 					, [this]( sdw::Vec3 const & lightToVertex
