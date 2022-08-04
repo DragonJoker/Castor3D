@@ -73,6 +73,23 @@ namespace castor3d
 				, sdw::Vec3 const & lightDirection
 				, sdw::UInt const & cascadeIndex
 				, sdw::UInt const & maxCascade );
+			C3D_API sdw::Float computeVolumetric( shader::Light const & light
+				, Surface const & surface
+				, sdw::Vec3 const & eyePosition
+				, sdw::Mat4 const & lightMatrix
+				, sdw::Vec3 const & lightDirection
+				, sdw::UInt const & cascadeIndex
+				, sdw::UInt const & maxCascade
+				, sdw::Float const & scattering );
+			C3D_API sdw::Float computeVolumetric( shader::Light const & light
+				, Surface const & surface
+				, Ray const & ray
+				, sdw::Float const & stepLength
+				, sdw::Mat4 const & lightMatrix
+				, sdw::Vec3 const & lightDirection
+				, sdw::UInt const & cascadeIndex
+				, sdw::UInt const & maxCascade
+				, sdw::Float const & scattering );
 			C3D_API sdw::Vec4 getLightSpacePosition( sdw::Mat4 const & lightMatrix
 				, sdw::Vec3 const & worldSpacePosition );
 
@@ -183,14 +200,16 @@ namespace castor3d
 				, InLight
 				, InSurface
 				, sdw::InVec3 > m_computePoint;
-			sdw::Function< sdw::Float
+			sdw::Function < sdw::Float
 				, InLight
 				, InSurface
-				, sdw::InVec3
+				, InRay
+				, sdw::InFloat
 				, sdw::InMat4
 				, sdw::InVec3
 				, sdw::InUInt
-				, sdw::InUInt > m_computeVolumetric;
+				, sdw::InUInt
+				, sdw::InFloat > m_computeVolumetric;
 		};
 	}
 }
