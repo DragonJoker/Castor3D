@@ -410,9 +410,9 @@ namespace castor3d
 				, plightDirection );
 		}
 
-		sdw::Float Shadow::computePoint( shader::Light const & light
-			, Surface const & surface
-			, sdw::Vec3 const & lightDirection )
+		sdw::Float Shadow::computePoint( shader::Light const & plight
+			, Surface const & psurface
+			, sdw::Vec3 const & plightDirection )
 		{
 			if ( !m_computePoint )
 			{
@@ -485,9 +485,9 @@ namespace castor3d
 					, sdw::InVec3( m_writer, "lightPosition" ) );
 			}
 
-			return m_computePoint( light
-				, surface
-				, lightDirection );
+			return m_computePoint( plight
+				, psurface
+				, plightDirection );
 		}
 
 		sdw::Float Shadow::computeVolumetric( shader::Light const & light
@@ -663,8 +663,8 @@ namespace castor3d
 				, pscattering );
 		}
 
-		sdw::Vec4 Shadow::getLightSpacePosition( sdw::Mat4 const & lightMatrix
-			, sdw::Vec3 const & worldSpacePosition )
+		sdw::Vec4 Shadow::getLightSpacePosition( sdw::Mat4 const & plightMatrix
+			, sdw::Vec3 const & pworldSpacePosition )
 		{
 			if ( !m_getLightSpacePosition )
 			{
@@ -684,8 +684,8 @@ namespace castor3d
 					, sdw::InVec3( m_writer, "worldSpacePosition" ) );
 			}
 
-			return m_getLightSpacePosition( lightMatrix
-				, worldSpacePosition );
+			return m_getLightSpacePosition( plightMatrix
+				, pworldSpacePosition );
 		}
 
 		sdw::RetFloat Shadow::getShadowOffset( sdw::Vec3 const & pnormal

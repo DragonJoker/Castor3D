@@ -132,6 +132,17 @@ namespace atmosphere_scattering
 					auto maxCount = m_writer.declLocale( "maxCount"
 						, 1_u );
 
+					auto targetSize = vec2( sdw::Float{ float( m_atmosphereBackground->getTargetSize().width ) }
+					, float( m_atmosphereBackground->getTargetSize().height ) );
+					auto luminance = m_writer.declLocale< sdw::Vec4 >( "luminance" );
+					auto transmittance = m_writer.declLocale< sdw::Vec4 >( "transmittance" );
+					m_atmosphereBackground->getPixelTransLum( vec2( surface.clipPosition.x(), 1.0_f - surface.clipPosition.y() )
+						, targetSize
+						, surface.clipPosition.z()
+						, transmittance
+						, luminance );
+					output.m_scattering = luminance.xyz() / luminance.a();
+
 					if ( m_shadowModel->isEnabled() )
 					{
 						IF( m_writer
@@ -189,32 +200,25 @@ namespace atmosphere_scattering
 							FI;
 						}
 						FI;
-					}
 
-					auto targetSize = vec2( sdw::Float{ float( m_atmosphereBackground->getTargetSize().width ) }
-						, float( m_atmosphereBackground->getTargetSize().height ) );
-					auto luminance = m_writer.declLocale< sdw::Vec4 >( "luminance" );
-					auto transmittance = m_writer.declLocale< sdw::Vec4 >( "transmittance" );
-					m_atmosphereBackground->getPixelTransLum( vec2( surface.clipPosition.x(), 1.0_f - surface.clipPosition.y() )
-						, targetSize
-						, surface.clipPosition.z()
-						, transmittance
-						, luminance );
-					output.m_scattering = luminance.xyz() / luminance.a();
-
-					IF( m_writer, light.base.volumetricSteps != 0_u )
-					{
-						auto volumetric = m_writer.declLocale( "volumetric"
-							, m_shadowModel->computeVolumetric( light.base
-								, surface
-								, worldEye
-								, light.transforms[cascadeIndex]
-								, light.direction
-								, cascadeIndex
-								, light.cascadeCount ) );
-						output.m_scattering *= volumetric;
+						if ( m_enableVolumetric )
+						{
+							IF( m_writer, light.base.volumetricSteps != 0_u )
+							{
+								auto volumetric = m_writer.declLocale( "volumetric"
+									, m_shadowModel->computeVolumetric( light.base
+										, surface
+										, worldEye
+										, light.transforms[cascadeIndex]
+										, light.direction
+										, cascadeIndex
+										, light.cascadeCount
+										, 1.0_f ) );
+								output.m_scattering *= volumetric;
+							}
+							FI;
+						}
 					}
-					FI;
 
 					parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 					parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
@@ -353,6 +357,17 @@ namespace atmosphere_scattering
 					auto maxCount = m_writer.declLocale( "maxCount"
 						, 1_u );
 
+					auto targetSize = vec2( sdw::Float{ float( m_atmosphereBackground->getTargetSize().width ) }
+					, float( m_atmosphereBackground->getTargetSize().height ) );
+					auto luminance = m_writer.declLocale< sdw::Vec4 >( "luminance" );
+					auto transmittance = m_writer.declLocale< sdw::Vec4 >( "transmittance" );
+					m_atmosphereBackground->getPixelTransLum( vec2( surface.clipPosition.x(), 1.0_f - surface.clipPosition.y() )
+						, targetSize
+						, surface.clipPosition.z()
+						, transmittance
+						, luminance );
+					output.m_scattering = luminance.xyz() / luminance.a();
+
 					if ( m_shadowModel->isEnabled() )
 					{
 						IF( m_writer
@@ -410,32 +425,25 @@ namespace atmosphere_scattering
 							FI;
 						}
 						FI;
-					}
 
-					auto targetSize = vec2( sdw::Float{ float( m_atmosphereBackground->getTargetSize().width ) }
-						, float( m_atmosphereBackground->getTargetSize().height ) );
-					auto luminance = m_writer.declLocale< sdw::Vec4 >( "luminance" );
-					auto transmittance = m_writer.declLocale< sdw::Vec4 >( "transmittance" );
-					m_atmosphereBackground->getPixelTransLum( vec2( surface.clipPosition.x(), 1.0_f - surface.clipPosition.y() )
-						, targetSize
-						, surface.clipPosition.z()
-						, transmittance
-						, luminance );
-					output.m_scattering = luminance.xyz() / luminance.a();
-
-					IF( m_writer, light.base.volumetricSteps != 0_u )
-					{
-						auto volumetric = m_writer.declLocale( "volumetric"
-							, m_shadowModel->computeVolumetric( light.base
-								, surface
-								, worldEye
-								, light.transforms[cascadeIndex]
-								, light.direction
-								, cascadeIndex
-								, light.cascadeCount ) );
-						output.m_scattering *= volumetric;
+						if ( m_enableVolumetric )
+						{
+							IF( m_writer, light.base.volumetricSteps != 0_u )
+							{
+								auto volumetric = m_writer.declLocale( "volumetric"
+									, m_shadowModel->computeVolumetric( light.base
+										, surface
+										, worldEye
+										, light.transforms[cascadeIndex]
+										, light.direction
+										, cascadeIndex
+										, light.cascadeCount
+										, 1.0_f ) );
+								output.m_scattering *= volumetric;
+							}
+							FI;
+						}
 					}
-					FI;
 
 					parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 					parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
