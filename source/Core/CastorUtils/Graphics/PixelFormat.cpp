@@ -341,7 +341,7 @@ namespace castor
 		case castor::PixelFormat::eA8B8G8R8_SINT:
 			return "abgr32si";
 		case castor::PixelFormat::eA8B8G8R8_SRGB:
-			return "abgr32_stgb";
+			return "abgr32srgb";
 		case castor::PixelFormat::eA2R10G10B10_UNORM:
 			return "argb2101010";
 		case castor::PixelFormat::eA2R10G10B10_SNORM:

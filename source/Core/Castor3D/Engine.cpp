@@ -30,6 +30,7 @@
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Graphics/Image.hpp>
+#include <CastorUtils/Graphics/DataImageLoader.hpp>
 #include <CastorUtils/Graphics/ExrImageLoader.hpp>
 #include <CastorUtils/Graphics/FreeImageLoader.hpp>
 #include <CastorUtils/Graphics/GliImageLoader.hpp>
@@ -94,6 +95,7 @@ namespace castor3d
 			element.flush();
 		};
 		initialiseGlslang();
+		castor::DataImageLoader::registerLoader( m_imageLoader );
 		castor::GliImageLoader::registerLoader( m_imageLoader );
 		castor::StbImageLoader::registerLoader( m_imageLoader );
 		castor::ExrImageLoader::registerLoader( m_imageLoader );

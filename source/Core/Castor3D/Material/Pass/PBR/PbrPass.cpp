@@ -420,8 +420,8 @@ namespace castor3d
 		, PassTypeID typeID
 		, PassFlags initialFlags )
 		: Pass{ parent
-		, typeID
-		, initialFlags | PassFlag::eImageBasedLighting }
+			, typeID
+			, initialFlags | PassFlag::eImageBasedLighting }
 		, m_albedo{ m_dirty, castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
 		, m_roughness{ m_dirty, 1.0f }
 		, m_metalness{ m_dirty, pbr::DefaultMetalness }
