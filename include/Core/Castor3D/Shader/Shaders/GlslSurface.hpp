@@ -149,6 +149,7 @@ namespace castor3d::shader
 		sdw::Vec3 colour;
 		sdw::Array< sdw::Vec4 > passMultipliers;
 		sdw::Int nodeId;
+		sdw::Int vertexId;
 	};
 
 	using OutVertexSurface = FragmentSurfaceT< ast::var::Flag::eShaderOutput >;

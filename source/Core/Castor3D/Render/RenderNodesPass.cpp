@@ -1183,6 +1183,7 @@ namespace castor3d
 				vtxOut[i].worldPosition = worldPos;
 				vtxOut[i].viewPosition = c3d_matrixData.worldToCurView( worldPos );
 				curPosition = c3d_matrixData.worldToCurProj( worldPos );
+				vtxOut[i].vertexId = vertexIndex;
 				vtxOut[i].computeVelocity( c3d_matrixData
 					, curPosition
 					, prvPosition );
@@ -1354,6 +1355,7 @@ namespace castor3d
 				out.worldPosition = worldPos;
 				out.viewPosition = c3d_matrixData.worldToCurView( worldPos );
 				curPosition = c3d_matrixData.worldToCurProj( worldPos );
+				out.vertexId = in.vertexIndex;
 				out.computeVelocity( c3d_matrixData
 					, curPosition
 					, prvPosition );
@@ -1479,7 +1481,7 @@ namespace castor3d
 					, curPosition
 					, prvPosition );
 				out.vtx.position = curPosition;
-
+				out.vertexId = in.vertexIndex;
 				out.computeTangentSpace( flags.submeshFlags
 					, c3d_sceneData.cameraPosition
 					, worldPos.xyz()

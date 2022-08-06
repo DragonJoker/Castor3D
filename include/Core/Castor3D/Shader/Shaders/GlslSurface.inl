@@ -215,6 +215,7 @@ namespace castor3d::shader
 		, colour{ this->getMember< sdw::Vec3 >( "colour", true ) }
 		, passMultipliers{ this->getMemberArray< sdw::Vec4 >( "passMultipliers", true ) }
 		, nodeId{ this->getMember< sdw::Int >( "nodeId", true ) }
+		, vertexId{ this->getMember< sdw::Int >( "vertexId", true ) }
 	{
 	}
 
@@ -310,6 +311,10 @@ namespace castor3d::shader
 			result->declMember( "nodeId", ast::type::Kind::eInt
 				, ast::type::NotArray
 				, index++ );
+			result->declMember( "vertexId", ast::type::Kind::eInt
+				, ast::type::NotArray
+				, ( checkFlag( programFlags, ProgramFlag::eDepthPass ) ? index++ : 0 )
+				, checkFlag( programFlags, ProgramFlag::eDepthPass ) );
 		}
 
 		return result;
