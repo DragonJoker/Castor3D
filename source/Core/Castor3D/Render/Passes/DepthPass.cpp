@@ -187,7 +187,7 @@ namespace castor3d
 					, length( in.worldPosition.xyz() - c3d_sceneData.cameraPosition )
 					, writer.cast< sdw::Float >( in.nodeId )
 					, ( checkFlag( flags.passFlags, PassFlag::eLighting ) ) ? 1.0_f : 0.0_f );
-				data1 = vec4( components.normal, 0.0_f );
+				data1 = vec4( components.normal, in.vertexId );
 				velocity = vec4( in.getVelocity(), 0.0_f, 0.0_f );
 			} );
 

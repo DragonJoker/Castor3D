@@ -110,24 +110,24 @@ namespace castor3d
 		//!\~english	Render pass uses a mesh shader.
 		//\~french		La passe de rendu utilise un mesh shader.
 		eHasMesh = 0x00400,
-		//!\~english	All flags used in base pipeline flags hashing.
-		//\~french		Tous les indicateurs utilisés dans le hash des indicateurs de pipeline.
-		eAllBase = 0x007FF,
-		//!\~english	Shader used to render a shadow map for directional light.
-		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière directionnalle.
-		eShadowMapDirectional = 0x00800,
-		//!\~english	Shader used to render a shadow map for spot light.
-		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière projecteur.
-		eShadowMapSpot = 0x01000,
-		//!\~english	Shader used to render a shadow map for point light.
-		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière omnidirectionnelle.
-		eShadowMapPoint = 0x02000,
-		//!\~english	Shader used to render an environment map.
-		//\~french		Shader utilisé pour dessiner une texture d'environnement.
-		eEnvironmentMapping = 0x04000,
 		//!\~english	Shader for the depth pre-pass.
 		//\~french		Shader pour la pré-passe de profondeur.
-		eDepthPass = 0x08000,
+		eDepthPass = 0x00800,
+		//!\~english	All flags used in base pipeline flags hashing.
+		//\~french		Tous les indicateurs utilisés dans le hash des indicateurs de pipeline.
+		eAllBase = 0x00FFF,
+		//!\~english	Shader used to render a shadow map for directional light.
+		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière directionnalle.
+		eShadowMapDirectional = 0x01000,
+		//!\~english	Shader used to render a shadow map for spot light.
+		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière projecteur.
+		eShadowMapSpot = 0x02000,
+		//!\~english	Shader used to render a shadow map for point light.
+		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière omnidirectionnelle.
+		eShadowMapPoint = 0x04000,
+		//!\~english	Shader used to render an environment map.
+		//\~french		Shader utilisé pour dessiner une texture d'environnement.
+		eEnvironmentMapping = 0x08000,
 		//!\~english	Render pass uses a geometry shader.
 		//\~french		La passe de rendu utilise un geometry shader.
 		eHasGeometry = 0x10000,
@@ -139,7 +139,7 @@ namespace castor3d
 		eHasTask = 0x40000,
 		//!\~english	All other flags.
 		//\~french		Tous les autres indicateurs.
-		eAllOptional = 0x7F800,
+		eAllOptional = 0x7F000,
 		//!\~english	All flags.
 		//\~french		Tous les indicateurs.
 		eAll = eAllBase | eAllOptional,
