@@ -644,9 +644,9 @@ namespace castor3d
 					lightMat->create( in.colour
 						, material );
 					auto emissive = writer.declLocale( "emissive"
-						, vec3( material.emissive ) );
+						, vec3( material.emissive() ) );
 					auto alpha = writer.declLocale( "alpha"
-						, material.opacity );
+						, material.opacity() );
 					auto occlusion = writer.declLocale( "occlusion"
 						, 1.0_f );
 

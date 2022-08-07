@@ -12,37 +12,9 @@ namespace castor3d::shader
 {
 	//*****************************************************************************************
 
-	Material::Material( sdw::ShaderWriter & writer
-		, ast::expr::ExprPtr expr
-		, bool enabled )
-		: StructInstance{ writer, std::move( expr ), enabled }
-		, colourDiv{ getMember< sdw::Vec4 >( "colourDiv" ) }
-		, specDiv{ getMember< sdw::Vec4 >( "specDiv" ) }
-		, edgeWidth{ getMember< sdw::Float >( "edgeWidth" ) }
-		, depthFactor{ getMember< sdw::Float >( "depthFactor" ) }
-		, normalFactor{ getMember< sdw::Float >( "normalFactor" ) }
-		, objectFactor{ getMember< sdw::Float >( "objectFactor" ) }
-		, edgeColour{ getMember< sdw::Vec4 >( "edgeColour" ) }
-		, specific{ getMember< sdw::Vec4 >( "specific" ) }
-		, index{ getMember< sdw::UInt >( "index" ) }
-		, emissive{ getMember< sdw::Float >( "emissive" ) }
-		, alphaRef{ getMember< sdw::Float >( "alphaRef" ) }
-		, sssProfileIndex{ getMember< sdw::UInt >( "sssProfileIndex" ) }
-		, transmission{ getMember< sdw::Vec3 >( "transmission" ) }
-		, opacity{ getMember< sdw::Float >( "opacity" ) }
-		, refractionRatio{ getMember< sdw::Float >( "refractionRatio" ) }
-		, hasRefraction{ getMember< sdw::UInt >( "hasRefraction" ) }
-		, hasReflection{ getMember< sdw::UInt >( "hasReflection" ) }
-		, bwAccumulationOperator{ getMember< sdw::UInt >( "bwAccumulationOperator" ) }
-		, textures0{ getMember< sdw::UVec4 >( "textures0" ) }
-		, textures1{ getMember< sdw::UVec4 >( "textures1" ) }
-		, textures{ getMember< sdw::Int >( "textures" ) }
-	{
-	}
-
 	sdw::Vec3 Material::colour()const
 	{
-		return colourDiv.rgb();
+		return colourDiv().rgb();
 	}
 
 	void Material::getPassMultipliers( SubmeshFlags submeshFlags
@@ -70,7 +42,7 @@ namespace castor3d::shader
 	{
 		applyAlphaFunc( alphaFunc
 			, alpha
-			, alphaRef
+			, alphaRef()
 			, passMultiplier
 			, opaque );
 	}
@@ -84,7 +56,7 @@ namespace castor3d::shader
 		applyAlphaFunc( *m_writer
 			, alphaFunc
 			, alpha
-			, alphaRef
+			, alphaRef()
 			, passMultiplier
 			, opaque );
 	}
@@ -183,48 +155,10 @@ namespace castor3d::shader
 	sdw::UInt Material::getTexture( uint32_t idx )const
 	{
 		return ( idx < 4u
-			? textures0[idx]
+			? textures0()[idx]
 			: ( idx < 8u
-				? textures1[idx - 4u]
+				? textures1()[idx - 4u]
 				: 0_u ) );
-	}
-
-	ast::type::BaseStructPtr Material::makeType( ast::type::TypesCache & cache )
-	{
-		auto result = cache.getStruct( ast::type::MemoryLayout::eStd140, "C3D_Material" );
-
-		if ( result->empty() )
-		{
-			result->declMember( "colourDiv", ast::type::Kind::eVec4F );
-			result->declMember( "specDiv", ast::type::Kind::eVec4F );
-
-			result->declMember( "edgeWidth", ast::type::Kind::eFloat );
-			result->declMember( "depthFactor", ast::type::Kind::eFloat );
-			result->declMember( "normalFactor", ast::type::Kind::eFloat );
-			result->declMember( "objectFactor", ast::type::Kind::eFloat );
-
-			result->declMember( "edgeColour", ast::type::Kind::eVec4F );
-			result->declMember( "specific", ast::type::Kind::eVec4F );
-
-			result->declMember( "index", ast::type::Kind::eUInt );
-			result->declMember( "emissive", ast::type::Kind::eFloat );
-			result->declMember( "alphaRef", ast::type::Kind::eFloat );
-			result->declMember( "sssProfileIndex", ast::type::Kind::eUInt );
-
-			result->declMember( "transmission", ast::type::Kind::eVec3F );
-			result->declMember( "opacity", ast::type::Kind::eFloat );
-
-			result->declMember( "refractionRatio", ast::type::Kind::eFloat );
-			result->declMember( "hasRefraction", ast::type::Kind::eInt );
-			result->declMember( "hasReflection", ast::type::Kind::eInt );
-			result->declMember( "bwAccumulationOperator", ast::type::Kind::eFloat );
-
-			result->declMember( "textures0", ast::type::Kind::eVec4U );
-			result->declMember( "textures1", ast::type::Kind::eVec4U );
-			result->declMember( "textures", ast::type::Kind::eInt );
-		}
-
-		return result;
 	}
 
 	//*********************************************************************************************
@@ -902,7 +836,7 @@ namespace castor3d::shader
 	{
 		auto material = m_writer.declLocale( "passMaterial"
 			, getMaterial( materialId ) );
-		output.opacity = material.opacity;
+		output.opacity = material.opacity();
 		auto textureFlags = merge( textures );
 
 		if ( hasTextures
@@ -953,7 +887,7 @@ namespace castor3d::shader
 	{
 		auto material = m_writer.declLocale( "passMaterial"
 			, getMaterial( materialId ) );
-		output.opacity = material.opacity;
+		output.opacity = material.opacity();
 
 		if ( hasTextures && textureConfigs.isEnabled() )
 		{
@@ -1044,8 +978,8 @@ namespace castor3d::shader
 
 		auto material = m_writer.declLocale( "passMaterial"
 			, getMaterial( materialId ) );
-		output.emissive = vec3( material.emissive );
-		output.opacity = material.opacity;
+		output.emissive = vec3( material.emissive() );
+		output.opacity = material.opacity();
 		auto lightMat = lightingModel.declMaterial( "passLightMat"
 			, needsRsm );
 		lightMat->create( vertexColour
@@ -1086,8 +1020,8 @@ namespace castor3d::shader
 	{
 		auto material = m_writer.declLocale( "passMaterial"
 			, getMaterial( materialId ) );
-		output.emissive = vec3( material.emissive );
-		output.opacity = material.opacity;
+		output.emissive = vec3( material.emissive() );
+		output.opacity = material.opacity();
 		auto lightMat = lightingModel.declMaterial( "passLightMat" );
 		lightMat->create( vertexColour
 			, material );
@@ -1137,13 +1071,13 @@ namespace castor3d::shader
 		auto lightMat = lightingModel.declMaterial( "passLightMat" );
 		lightMat->create( vertexColour
 			, material );
-		output.emissive = lightMat->albedo * material.emissive;
-		output.transmission = material.transmission;
-		output.refractionRatio = material.refractionRatio;
-		output.hasRefraction = material.hasRefraction;
-		output.hasReflection = material.hasReflection;
-		output.bwAccumulationOperator = material.bwAccumulationOperator;
-		output.opacity = material.opacity;
+		output.emissive = lightMat->albedo * material.emissive();
+		output.transmission = material.transmission();
+		output.refractionRatio = material.refractionRatio();
+		output.hasRefraction = material.hasRefraction();
+		output.hasReflection = material.hasReflection();
+		output.bwAccumulationOperator = material.bwAccumulationOperator();
+		output.opacity = material.opacity();
 
 		lightingModel.computeMapContributions( passFlags
 			, textures

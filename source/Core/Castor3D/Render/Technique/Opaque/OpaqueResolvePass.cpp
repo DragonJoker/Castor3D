@@ -278,10 +278,10 @@ namespace castor3d
 							, c3d_sceneData
 							, *backgroundModel
 							, envMapIndex
-							, material.hasReflection
-							, material.hasRefraction
-							, material.refractionRatio
-							, material.transmission
+							, material.hasReflection()
+							, material.hasRefraction()
+							, material.refractionRatio()
+							, material.transmission()
 							, ambient
 							, reflected
 							, refracted );

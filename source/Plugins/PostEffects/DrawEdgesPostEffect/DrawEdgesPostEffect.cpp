@@ -132,7 +132,7 @@ namespace draw_edges
 						auto material = writer.declLocale( "material"
 							, materials.getMaterial( modelData.getMaterialId() ) );
 
-						IF( writer, material.edgeColour.a() != 0.0_f )
+						IF( writer, material.edgeColour().a() != 0.0_f )
 						{
 							auto edgeDN = writer.declLocale( "edgeDN"
 								, writer.ternary( c3d_drawEdgesData.normalDepthWidth > 0_i
@@ -144,11 +144,11 @@ namespace draw_edges
 									, 0.0_f ) );
 
 							auto edge = writer.declLocale( "edge"
-								, mix( colour.rgb(), material.edgeColour.rgb(), vec3( edgeDN ) ) );
+								, mix( colour.rgb(), material.edgeColour().rgb(), vec3( edgeDN ) ) );
 							// outline contour over inline
-							edge = mix( edge, material.edgeColour.rgb(), vec3( edgeO ) );
+							edge = mix( edge, material.edgeColour().rgb(), vec3( edgeO ) );
 
-							colour.rgb() = mix( colour.rgb(), edge, vec3( material.edgeColour.a() ) );
+							colour.rgb() = mix( colour.rgb(), edge, vec3( material.edgeColour().a() ) );
 						}
 						FI;
 					}

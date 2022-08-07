@@ -1197,7 +1197,7 @@ namespace ocean
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( modelData.getMaterialId() ) );
 				auto emissive = writer.declLocale( "emissive"
-					, vec3( material.emissive ) );
+					, vec3( material.emissive() ) );
 				auto worldEye = writer.declLocale( "worldEye"
 					, c3d_sceneData.cameraPosition );
 				auto lightMat = lightingModel->declMaterial( "lightMat" );
@@ -1310,7 +1310,7 @@ namespace ocean
 					auto refractionTexCoord = writer.declLocale( "refractionTexCoord"
 						, writer.ternary( distortedPosition.y() < in.worldPosition.y(), distortedTexCoord, hdrCoords ) );
 					auto refractionResult = writer.declLocale( "refractionResult"
-						, c3d_colour.sample( refractionTexCoord ).rgb() * material.transmission );
+						, c3d_colour.sample( refractionTexCoord ).rgb() * material.transmission() );
 					displayDebugData( eRefraction, refractionResult, 1.0_f );
 					//  Retrieve non distorted scene colour.
 					auto sceneDepth = writer.declLocale( "sceneDepth"
@@ -1324,7 +1324,7 @@ namespace ocean
 					auto waterSurfacePosition = writer.declLocale( "waterSurfacePosition"
 						, writer.ternary( distortedPosition.y() < in.worldPosition.y(), distortedPosition, scenePosition ) );
 					auto waterTransmission = writer.declLocale( "waterTransmission"
-						, material.transmission.rgb() * ( indirectAmbient + indirectDiffuse ) * lightDiffuse );
+						, material.transmission().rgb() * ( indirectAmbient + indirectDiffuse ) * lightDiffuse );
 					auto heightFactor = writer.declLocale( "heightFactor"
 						, c3d_oceanData.refractionHeightFactor * ( c3d_sceneData.farPlane - c3d_sceneData.nearPlane ) );
 					refractionResult = mix( refractionResult

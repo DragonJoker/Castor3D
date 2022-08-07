@@ -1029,7 +1029,7 @@ namespace castor3d
 					auto diffuse = writer.declLocale( "diffuse"
 						, material.colour() );
 					auto alpha = writer.declLocale( "alpha"
-						, material.opacity );
+						, material.opacity() );
 
 					if ( textOverlay )
 					{

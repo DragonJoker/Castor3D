@@ -30,14 +30,14 @@ namespace toon::shader
 			create( palbedo
 				, data3
 				, data2
-				, material.colourDiv.a() );
-			edgeWidth = material.edgeWidth;
-			depthFactor = material.depthFactor;
-			normalFactor = material.normalFactor;
-			objectFactor = material.objectFactor;
-			edgeColour = material.edgeColour;
-			specific = material.specific;
-			smoothBand = material.specific.r();
+				, material.colourDiv().a() );
+			edgeWidth = material.edgeWidth();
+			depthFactor = material.depthFactor();
+			normalFactor = material.normalFactor();
+			objectFactor = material.objectFactor();
+			edgeColour = material.edgeColour();
+			specific = material.specific();
+			smoothBand = specific.r();
 		}
 	}
 
@@ -60,16 +60,16 @@ namespace toon::shader
 	{
 		if ( vtxColour.isEnabled() )
 		{
-			create( material.colourDiv.rgb() * vtxColour
-				, material.specDiv
-				, material.specDiv
+			create( material.colour() * vtxColour
+				, material.specDiv()
+				, material.specDiv()
 				, material );
 		}
 		else
 		{
-			create( material.colourDiv.rgb()
-				, material.specDiv
-				, material.specDiv
+			create( material.colour()
+				, material.specDiv()
+				, material.specDiv()
 				, material );
 		}
 	}
@@ -138,13 +138,13 @@ namespace toon::shader
 				, data3
 				, data2
 				, 0.0_f );
-			edgeWidth = material.edgeWidth;
-			depthFactor = material.depthFactor;
-			normalFactor = material.normalFactor;
-			objectFactor = material.objectFactor;
-			edgeColour = material.edgeColour;
-			specific = material.specific;
-			smoothBand = material.specific.r();
+			edgeWidth = material.edgeWidth();
+			depthFactor = material.depthFactor();
+			normalFactor = material.normalFactor();
+			objectFactor = material.objectFactor();
+			edgeColour = material.edgeColour();
+			specific = material.specific();
+			smoothBand = specific.r();
 		}
 	}
 
@@ -167,16 +167,16 @@ namespace toon::shader
 	{
 		if ( vtxColour.isEnabled() )
 		{
-			create( material.colourDiv.rgb() * vtxColour
-				, material.specDiv
-				, material.colourDiv
+			create( material.colour() * vtxColour
+				, material.specDiv()
+				, material.colourDiv()
 				, material );
 		}
 		else
 		{
-			create( material.colourDiv.rgb()
-				, material.specDiv
-				, material.colourDiv
+			create( material.colour()
+				, material.specDiv()
+				, material.colourDiv()
 				, material );
 		}
 	}
