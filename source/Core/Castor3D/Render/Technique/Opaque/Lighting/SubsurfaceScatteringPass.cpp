@@ -100,8 +100,7 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			auto materials = shader::createMaterials( writer, PassFlag( 0u ) );
-			materials->declare( BlurMaterialsUboId, 0u );
+			shader::Materials materials{ writer, BlurMaterialsUboId, 0u };
 			shader::SssProfiles sssProfiles{ writer, BlurSssProfilesUboId, 0u };
 			C3D_ModelsData( writer, BlurModelsUboId, 0u );
 			C3D_GpInfo( writer, BlurGpInfoUboId, 0u );
@@ -138,7 +137,7 @@ namespace castor3d
 						, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
 					auto materialId = writer.declLocale( "materialId"
 						, modelData.getMaterialId() );
-					auto material = materials->getMaterial( materialId );
+					auto material = materials.getMaterial( materialId );
 
 					IF( writer, material.sssProfileIndex() == 0_u )
 					{
@@ -227,8 +226,7 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			auto materials = shader::createMaterials( writer, PassFlag( 0u ) );
-			materials->declare( CombMaterialsUboId, 0u );
+			shader::Materials materials{ writer, CombMaterialsUboId, 0u };
 			C3D_ModelsData( writer, CombModelsUboId, 0u );
 
 			auto c3d_mapData0 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData0 ), CombData0ImgId, 0u );
@@ -265,7 +263,7 @@ namespace castor3d
 						, c3d_mapLightDiffuse.lod( vtx_texture, 0.0_f ) );
 					auto materialId = writer.declLocale( "materialId"
 						, modelData.getMaterialId() );
-					auto material = materials->getMaterial( materialId );
+					auto material = materials.getMaterial( materialId );
 
 					IF( writer, material.sssProfileIndex() == 0_u )
 					{

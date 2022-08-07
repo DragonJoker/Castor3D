@@ -152,7 +152,7 @@ namespace castor3d
 		, VkDeviceSize size )const
 	{
 		CU_Require( m_lightBuffer );
-		return m_lightBuffer->getBinding( binding, offset, size );
+		return m_lightBuffer->getSingleBinding( binding, offset, size );
 	}
 
 	bool ObjectCacheT< Light, castor::String, LightCacheTraits >::doCheckUniqueDirectionalLight( LightType toAdd )

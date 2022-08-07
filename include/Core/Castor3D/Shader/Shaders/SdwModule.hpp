@@ -160,18 +160,7 @@ namespace castor3d::shader
 	Writer_Parameter( Surface );
 	Writer_Parameter( TextureConfigData );
 	Writer_Parameter( VoxelData );
-	/**
-		*\~english
-		*\brief		Creates the appropriate GLSL materials buffer.
-		*\param[in]	writer		The GLSL writer.
-		*\param		passFlags	The pass flags.
-		*\~french
-		*\brief		Crée le tampon de matériaux GLSL approprié.
-		*\param[in]	writer		Le writer GLSL.
-		*\param		passFlags	Les indicateurs de passe.
-		*/
-	C3D_API std::unique_ptr< Materials > createMaterials( sdw::ShaderWriter & writer
-		, PassFlags const & passFlags );
+
 	C3D_API uint32_t getSpotShadowMapCount();
 	C3D_API uint32_t getPointShadowMapCount();
 	C3D_API uint32_t getBaseLightComponentsCount();

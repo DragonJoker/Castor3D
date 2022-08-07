@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___GLSL_TextureAnimation_H___
 #define ___GLSL_TextureAnimation_H___
 
-#include "SdwModule.hpp"
+#include "GlslBuffer.hpp"
 
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
@@ -41,20 +41,18 @@ namespace castor3d
 		};
 
 		class TextureAnimations
+			: public BufferT< TextureAnimData >
 		{
 		public:
-			C3D_API explicit TextureAnimations( sdw::ShaderWriter & writer );
-			C3D_API explicit TextureAnimations( sdw::ShaderWriter & writer
+			C3D_API TextureAnimations( sdw::ShaderWriter & writer
 				, uint32_t binding
 				, uint32_t set 
 				, bool enable = true );
-			C3D_API void declare( uint32_t binding
-				, uint32_t set );
-			C3D_API TextureAnimData getTextureAnimation( sdw::UInt const & index )const;
 
-		private:
-			sdw::ShaderWriter & m_writer;
-			std::unique_ptr< sdw::ArraySsboT< TextureAnimData > > m_ssbo;
+			TextureAnimData getTextureAnimation( sdw::UInt const & index )const
+			{
+				return BufferT< TextureAnimData >::getData( index );
+			}
 		};
 	}
 }

@@ -76,6 +76,7 @@ namespace castor3d
 				++buffer;
 			}
 
+			m_buffer.setCount( uint32_t( m_animations.size() ) );
 			m_buffer.upload( commandBuffer );
 		}
 	}

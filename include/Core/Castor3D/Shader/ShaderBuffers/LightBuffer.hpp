@@ -194,7 +194,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Crée le descriptor write pour ce tampon.
 		 */
-		C3D_API ashes::WriteDescriptorSet getBinding( uint32_t binding
+		C3D_API ashes::WriteDescriptorSet getSingleBinding( uint32_t binding
 			, VkDeviceSize offset
 			, VkDeviceSize size )const;
 		/**

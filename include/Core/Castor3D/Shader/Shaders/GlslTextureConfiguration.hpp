@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___GLSL_TextureConfiguration_H___
 #define ___GLSL_TextureConfiguration_H___
 
-#include "SdwModule.hpp"
+#include "GlslBuffer.hpp"
 
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
@@ -309,16 +309,13 @@ namespace castor3d
 		};
 
 		class TextureConfigurations
+			: public BufferT< TextureConfigData >
 		{
 		public:
-			C3D_API explicit TextureConfigurations( sdw::ShaderWriter & writer
-				, bool enable = true );
-			C3D_API explicit TextureConfigurations( sdw::ShaderWriter & writer
+			C3D_API TextureConfigurations( sdw::ShaderWriter & writer
 				, uint32_t binding
 				, uint32_t set
 				, bool enable = true );
-			C3D_API void declare( uint32_t binding, uint32_t set );
-			C3D_API TextureConfigData getTextureConfiguration( sdw::UInt const & index )const;
 			C3D_API void computeGeometryMapContributions( Utils & utils
 				, PassFlags const & passFlags
 				, TextureFlagsArray const & textures
@@ -344,15 +341,12 @@ namespace castor3d
 				, sdw::Vec3 & texCoords2
 				, sdw::Vec3 & texCoords3 )const;
 
-			bool isEnabled()const noexcept
+			TextureConfigData getTextureConfiguration( sdw::UInt const & index )const
 			{
-				return m_enable;
+				return BufferT< TextureConfigData >::getData( index );
 			}
 
 		private:
-			sdw::ShaderWriter & m_writer;
-			bool m_enable;
-			std::unique_ptr< sdw::ArraySsboT< TextureConfigData > > m_ssbo;
 			mutable sdw::Function< sdw::Vec3
 				, sdw::InUInt
 				, sdw::InVec3

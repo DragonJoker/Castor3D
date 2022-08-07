@@ -93,12 +93,6 @@ namespace castor3d
 			return LightBuffer::DataSize / ( 4u * uint32_t( sizeof( float ) ) );
 		}
 
-		std::unique_ptr< Materials > createMaterials( sdw::ShaderWriter & writer
-			, PassFlags const & passFlags )
-		{
-			return std::make_unique< Materials >( writer );
-		}
-
 		castor::String concatModelNames( castor::String lhs
 			, castor::String rhs )
 		{

@@ -576,36 +576,16 @@ namespace castor3d
 		//*********************************************************************************************
 
 		TextureConfigurations::TextureConfigurations( sdw::ShaderWriter & writer
-			, bool enable )
-			: m_writer{ writer }
-			, m_enable{ enable }
-		{
-		}
-
-		TextureConfigurations::TextureConfigurations( sdw::ShaderWriter & writer
 			, uint32_t binding
 			, uint32_t set
 			, bool enable )
-			: TextureConfigurations{ writer, enable }
-		{
-			if ( m_enable )
-			{
-				declare( binding, set );
-			}
-		}
-
-		void TextureConfigurations::declare( uint32_t binding, uint32_t set )
-		{
-			m_ssbo = std::make_unique< sdw::ArraySsboT< TextureConfigData > >( m_writer
-				, TextureConfigurationBufferName
+			: BufferT< TextureConfigData >{ TextureConfigurationBufferName
+				, "texConfigs"
+				, writer
 				, binding
 				, set
-				, true );
-		}
-
-		TextureConfigData TextureConfigurations::getTextureConfiguration( sdw::UInt const & index )const
+				, enable }
 		{
-			return ( *m_ssbo )[index - 1_u];
 		}
 
 		void TextureConfigurations::computeGeometryMapContributions( Utils & utils

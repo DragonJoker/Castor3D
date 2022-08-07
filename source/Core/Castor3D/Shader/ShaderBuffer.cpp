@@ -19,7 +19,7 @@ namespace castor3d
 		, uint32_t size
 		, castor::String name )
 		: m_device{ device }
-		, m_size{ ashes::getAlignedSize( size
+		, m_size{ ashes::getAlignedSize( size + 4 * sizeof( uint32_t )
 			, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) }
 		, m_buffer{ makeBufferBase( m_device
 			, m_size
@@ -33,9 +33,12 @@ namespace castor3d
 			, ashes::QueueShare{ { m_device.getGraphicsQueueFamilyIndex()
 				, m_device.getComputeQueueFamilyIndex()
 				, m_device.getTransferQueueFamilyIndex() } } ) }
-		, m_data( m_staging->getBuffer().lock( 0u, m_size, 0u ) )
+		, m_rawData( m_staging->getBuffer().lock( 0u, m_size, 0u ) )
+		, m_data{ ( m_rawData + 4u * sizeof( uint32_t ) ) }
+		, m_counts{ castor::makeArrayView( reinterpret_cast< uint32_t * >( m_rawData )
+			, reinterpret_cast< uint32_t * >( m_data ) ) }
 	{
-		assert( m_data );
+		CU_Require( m_rawData );
 	}
 
 	void ShaderBuffer::upload( ashes::CommandBuffer const & commandBuffer )const
@@ -74,7 +77,7 @@ namespace castor3d
 			, uint32_t( m_size ) );
 	}
 
-	ashes::WriteDescriptorSet ShaderBuffer::getBinding( uint32_t binding
+	ashes::WriteDescriptorSet ShaderBuffer::getSingleBinding( uint32_t binding
 		, VkDeviceSize offset
 		, VkDeviceSize size )const
 	{
@@ -82,13 +85,22 @@ namespace castor3d
 			, 0u
 			, 1u
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-		result.bufferInfo.push_back( VkDescriptorBufferInfo{ *m_buffer, offset, size } );
+		result.bufferInfo.push_back( VkDescriptorBufferInfo{ *m_buffer
+			, offset + sizeof( uint32_t ) * 4u
+			, size } );
 		return result;
 	}
 
 	ashes::WriteDescriptorSet ShaderBuffer::getBinding( uint32_t binding )const
 	{
-		return getBinding( binding, 0u, m_size );
+		auto result = ashes::WriteDescriptorSet{ binding
+			, 0u
+			, 1u
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
+		result.bufferInfo.push_back( VkDescriptorBufferInfo{ *m_buffer
+			, 0u
+			, m_size } );
+		return result;
 	}
 
 	void ShaderBuffer::createBinding( ashes::DescriptorSet & descriptorSet
