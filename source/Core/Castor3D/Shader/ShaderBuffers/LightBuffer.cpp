@@ -118,11 +118,11 @@ namespace castor3d
 		return m_buffer.getBinding( binding );
 	}
 
-	ashes::WriteDescriptorSet LightBuffer::getBinding( uint32_t binding
+	ashes::WriteDescriptorSet LightBuffer::getSingleBinding( uint32_t binding
 		, VkDeviceSize offset
 		, VkDeviceSize size )const
 	{
-		return m_buffer.getBinding( binding, offset, size );
+		return m_buffer.getSingleBinding( binding, offset, size );
 	}
 
 	LightBuffer::LightData & LightBuffer::getData( Light const & light )

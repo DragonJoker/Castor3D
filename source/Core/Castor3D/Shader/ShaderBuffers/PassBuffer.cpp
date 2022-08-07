@@ -103,6 +103,8 @@ namespace castor3d
 						, uint16_t( m_passTypeIndices.size() ) ).first;
 					pass->fillBuffer( *this, it->second );
 				} );
+			m_buffer.setCount( uint32_t( m_passes.size() ) );
+			m_buffer.setSecondaryCount( uint32_t( m_passTypeIndices.size() ) );
 			m_buffer.upload( commandBuffer );
 		}
 	}

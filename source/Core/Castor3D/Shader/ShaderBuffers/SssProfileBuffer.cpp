@@ -87,6 +87,7 @@ namespace castor3d
 				p_pass->fillSssProfileBuffer( *this );
 			} );
 
+			m_buffer.setCount( uint32_t( m_passes.size() ) );
 			m_buffer.upload( commandBuffer );
 		}
 	}

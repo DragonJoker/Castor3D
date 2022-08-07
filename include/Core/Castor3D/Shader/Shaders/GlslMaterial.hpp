@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_GlslMaterials_H___
 #define ___C3D_GlslMaterials_H___
 
-#include "SdwModule.hpp"
+#include "GlslBuffer.hpp"
 
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
@@ -217,16 +217,23 @@ namespace castor3d::shader
 	CU_DeclareSmartPtr( Material );
 
 	class Materials
+		: public BufferT< Material >
 	{
 	public:
-		C3D_API explicit Materials( sdw::ShaderWriter & writer );
 		C3D_API explicit Materials( sdw::ShaderWriter & writer
 			, uint32_t binding
 			, uint32_t set
 			, bool enable = true );
-		C3D_API void declare( uint32_t binding
-			, uint32_t set );
-		C3D_API Material getMaterial( sdw::UInt const & index )const;
+
+		sdw::UInt getPassTypesCount()const
+		{
+			return this->getSecondaryCount();
+		}
+
+		Material getMaterial( sdw::UInt const & index )const
+		{
+			return this->getData( index );
+		}
 
 		// Use by picking pass (opacity only)
 		C3D_API void blendMaterials( Utils & utils
@@ -365,10 +372,6 @@ namespace castor3d::shader
 			, sdw::UInt const & materialId
 			, sdw::Vec3 const & vertexColour
 			, LightingBlendComponents & output )const;
-
-	private:
-		sdw::ShaderWriter & m_writer;
-		std::unique_ptr< sdw::ArraySsboT< Material > > m_ssbo;
 	};
 
 	struct SssProfile
@@ -397,20 +400,18 @@ namespace castor3d::shader
 	CU_DeclareSmartPtr( SssProfile );
 
 	class SssProfiles
+		: public BufferT< SssProfile >
 	{
 	public:
-		C3D_API explicit SssProfiles( sdw::ShaderWriter & writer );
 		C3D_API explicit SssProfiles( sdw::ShaderWriter & writer
 			, uint32_t binding
 			, uint32_t set
 			, bool enable = true );
-		C3D_API void declare( uint32_t binding
-			, uint32_t set );
-		C3D_API SssProfile getProfile( sdw::UInt const & index )const;
 
-	protected:
-		sdw::ShaderWriter & m_writer;
-		std::unique_ptr< sdw::ArraySsboT< SssProfile > > m_ssbo;
+		SssProfile getProfile( sdw::UInt const & index )const
+		{
+			return BufferT< SssProfile >::getData( index );
+		}
 	};
 }
 

@@ -44,36 +44,17 @@ namespace castor3d
 
 		//*********************************************************************************************
 
-		TextureAnimations::TextureAnimations( sdw::ShaderWriter & writer )
-			: m_writer{ writer }
-		{
-		}
-
 		TextureAnimations::TextureAnimations( sdw::ShaderWriter & writer
 			, uint32_t binding
 			, uint32_t set
 			, bool enable )
-			: TextureAnimations{ writer }
-		{
-			if ( enable )
-			{
-				declare( binding, set );
-			}
-		}
-
-		void TextureAnimations::declare( uint32_t binding
-			, uint32_t set )
-		{
-			m_ssbo = std::make_unique< sdw::ArraySsboT< TextureAnimData > >( m_writer
-				, TextureAnimationBufferName
+			: BufferT< TextureAnimData >{ TextureAnimationBufferName
+				, "texAnims"
+				, writer
 				, binding
 				, set
-				, true );
-		}
-
-		TextureAnimData TextureAnimations::getTextureAnimation( sdw::UInt const & index )const
+				, enable }
 		{
-			return ( *m_ssbo )[index - 1_u];
 		}
 
 		//*********************************************************************************************

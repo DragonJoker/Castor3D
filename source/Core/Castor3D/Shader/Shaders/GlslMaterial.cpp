@@ -163,38 +163,17 @@ namespace castor3d::shader
 
 	//*********************************************************************************************
 
-	Materials::Materials( sdw::ShaderWriter & writer )
-		: m_writer{ writer }
-	{
-	}
-
 	Materials::Materials( sdw::ShaderWriter & writer
 		, uint32_t binding
 		, uint32_t set
 		, bool enable )
-		: Materials{ writer }
-	{
-		if ( enable )
-		{
-			declare( binding, set );
-		}
-	}
-
-	void Materials::declare( uint32_t binding
-		, uint32_t set )
-	{
-		m_ssbo = std::make_unique< sdw::ArraySsboT< Material > >( m_writer
-			, PassBufferName
+		: BufferT< Material >{ PassBufferName
+			, "materials"
+			, writer
 			, binding
 			, set
-			, true );
-	}
-
-	Material Materials::getMaterial( sdw::UInt const & index )const
+			, enable }
 	{
-		return ( m_ssbo
-			? ( *m_ssbo )[index - 1_u]
-			: m_writer.declLocale< Material >( "mat", false ) );
 	}
 
 	void Materials::blendMaterials( Utils & utils
@@ -1134,37 +1113,17 @@ namespace castor3d::shader
 
 	//*********************************************************************************************
 
-	SssProfiles::SssProfiles( sdw::ShaderWriter & writer )
-		: m_writer{ writer }
-	{
-	}
-
 	SssProfiles::SssProfiles( sdw::ShaderWriter & writer
 		, uint32_t binding
 		, uint32_t set
 		, bool enable )
-		: SssProfiles{ writer }
-	{
-		if ( enable )
-		{
-			declare( binding, set );
-		}
-	}
-
-	void SssProfiles::declare( uint32_t binding
-		, uint32_t set )
-	{
-		castor::String const SssProfilesBufferName = cuT( "SssProfilesBuffer" );
-		m_ssbo = std::make_unique< sdw::ArraySsboT< SssProfile > >( m_writer
-			, SssProfilesBufferName
+		: BufferT< SssProfile >{ "SssProfilesBuffer"
+			, "profiles"
+			, writer
 			, binding
 			, set
-			, true );
-	}
-
-	SssProfile SssProfiles::getProfile( sdw::UInt const & index )const
+			, enable }
 	{
-		return ( *m_ssbo )[index - 1_u];
 	}
 
 	//*********************************************************************************************

@@ -7,6 +7,8 @@ See LICENSE file in root folder
 #include "ShaderModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 
+#include <CastorUtils/Design/ArrayView.hpp>
+
 #include <ashespp/Buffer/Buffer.hpp>
 #include <ashespp/Buffer/BufferView.hpp>
 #include <ashespp/Buffer/StagingBuffer.hpp>
@@ -89,7 +91,7 @@ namespace castor3d
 		 *\param[in]	binding			L'attache de layout de set de descripteurs.
 		 *\param[in]	offset, size	L'intervalle à mettre à jour.
 		 */
-		C3D_API ashes::WriteDescriptorSet getBinding( uint32_t binding
+		C3D_API ashes::WriteDescriptorSet getSingleBinding( uint32_t binding
 			, VkDeviceSize offset
 			, VkDeviceSize size )const;
 		/**
@@ -137,6 +139,30 @@ namespace castor3d
 			return m_device;
 		}
 		/**@}*/
+		/**
+		*\~english
+		*name
+		*	Mutators.
+		*\~french
+		*name
+		*	Mutateurs.
+		*/
+		/**@{*/
+		void setCount( uint32_t value )
+		{
+			m_counts[0] = value;
+		}
+
+		void setSecondaryCount( uint32_t value )
+		{
+			m_counts[1] = value;
+		}
+
+		void setTertiaryCount( uint32_t value )
+		{
+			m_counts[2] = value;
+		}
+		/**@}*/
 
 	private:
 		void doUpload( ashes::CommandBuffer const & commandBuffer
@@ -148,7 +174,9 @@ namespace castor3d
 		VkDeviceSize m_size;
 		ashes::BufferBasePtr m_buffer;
 		ashes::StagingBufferPtr m_staging;
+		uint8_t * m_rawData;
 		uint8_t * m_data;
+		castor::ArrayView< uint32_t > m_counts;
 	};
 }
 

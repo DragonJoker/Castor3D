@@ -481,6 +481,7 @@ namespace castor3d::shader
 			, LightBufferName
 			, binding
 			, set );
+		m_ssbo->declMember< sdw::UVec4 >( "counts" );
 		m_ssbo->declMemberArray< sdw::Vec4 >( "data" );
 		m_ssbo->end();
 	}

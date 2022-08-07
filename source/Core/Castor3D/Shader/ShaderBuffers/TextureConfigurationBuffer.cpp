@@ -250,6 +250,7 @@ namespace castor3d
 #endif
 				} );
 
+			m_buffer.setCount( uint32_t( m_configurations.size() ) );
 			m_buffer.upload( commandBuffer );
 		}
 	}
