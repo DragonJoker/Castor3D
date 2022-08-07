@@ -13,11 +13,24 @@ namespace castor3d
 
 	namespace passbuf
 	{
-		static PassBuffer::PassesData doBindData( uint8_t * buffer
+		static PassBuffer::PassesData bindData( uint8_t * buffer
 			, uint32_t count )
 		{
 			return castor::makeArrayView( reinterpret_cast< PassBuffer::PassData * >( buffer )
 				, reinterpret_cast< PassBuffer::PassData * >( buffer ) + count );
+		}
+
+		static uint64_t getHash( Pass const & pass )
+		{
+			constexpr auto maxTexturesSize = castor::getBitSize( MaxPassTextures );
+			constexpr auto maxChannelsSize = castor::getBitSize( uint32_t( TextureFlag::eAll ) );
+			auto offset = 0u;
+			uint64_t result = uint64_t( pass.getTextures() ) << offset;
+			offset += maxChannelsSize;
+			result |= uint64_t( pass.getTextureUnitsCount() ) << offset;
+			offset += maxTexturesSize;
+			result |= uint64_t( pass.getTypeID() ) << offset;
+			return result;
 		}
 	}
 
@@ -27,7 +40,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, uint32_t count )
 		: m_buffer{ engine, device, count * DataSize, cuT( "PassBuffer" ) }
-		, m_data{ passbuf::doBindData( m_buffer.getPtr(), count ) }
+		, m_data{ passbuf::bindData( m_buffer.getPtr(), count ) }
 	{
 	}
 
@@ -82,11 +95,14 @@ namespace castor3d
 			std::swap( m_dirty, dirty );
 			auto end = std::unique( dirty.begin(), dirty.end() );
 
-			std::for_each( dirty.begin(), end, [this]( Pass const * p_pass )
-			{
-				p_pass->fillBuffer( *this );
-			} );
-
+			std::for_each( dirty.begin()
+				, end
+				, [this]( Pass const * pass )
+				{
+					auto it = m_passTypeIndices.emplace( passbuf::getHash( *pass )
+						, uint16_t( m_passTypeIndices.size() ) ).first;
+					pass->fillBuffer( *this, it->second );
+				} );
 			m_buffer.upload( commandBuffer );
 		}
 	}
@@ -140,6 +156,7 @@ namespace castor3d
 		result.bwAccumulationOperator = &data.bwAccumulationOperator;
 		result.textures = &data.textures;
 		result.textureCount = &data.textureCount;
+		result.passTypeIndex = &data.passTypeIndex;
 
 		return result;
 	}

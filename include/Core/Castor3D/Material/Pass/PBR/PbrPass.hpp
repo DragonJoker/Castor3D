@@ -55,7 +55,8 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::Pass::fillBuffer
 		 */
-		C3D_API void fillBuffer( PassBuffer & buffer )const override;
+		C3D_API void fillBuffer( PassBuffer & buffer
+			, uint16_t passTypeIndex )const override;
 		/**
 		 *\copydoc		castor3d::Pass::getPassSectionID
 		 */

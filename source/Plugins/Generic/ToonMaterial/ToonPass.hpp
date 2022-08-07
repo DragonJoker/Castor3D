@@ -78,7 +78,8 @@ namespace toon
 		static castor::AttributeParsers createParsers();
 		static castor::StrUInt32Map createSections();
 
-		void fillBuffer( castor3d::PassBuffer & buffer )const override;
+		void fillBuffer( castor3d::PassBuffer & buffer
+			, uint16_t passTypeIndex )const override;
 		uint32_t getPassSectionID()const override;
 		uint32_t getTextureSectionID()const override;
 		bool writeText( castor::String const & tabs
@@ -109,7 +110,8 @@ namespace toon
 		static castor::AttributeParsers createParsers();
 		static castor::StrUInt32Map createSections();
 
-		void fillBuffer( castor3d::PassBuffer & buffer )const override;
+		void fillBuffer( castor3d::PassBuffer & buffer
+			, uint16_t passTypeIndex )const override;
 		uint32_t getPassSectionID()const override;
 		uint32_t getTextureSectionID()const override;
 		bool writeText( castor::String const & tabs
@@ -140,7 +142,8 @@ namespace toon
 		static castor::AttributeParsers createParsers();
 		static castor::StrUInt32Map createSections();
 
-		void fillBuffer( castor3d::PassBuffer & buffer )const override;
+		void fillBuffer( castor3d::PassBuffer & buffer
+			, uint16_t passTypeIndex )const override;
 		uint32_t getPassSectionID()const override;
 		uint32_t getTextureSectionID()const override;
 		bool writeText( castor::String const & tabs

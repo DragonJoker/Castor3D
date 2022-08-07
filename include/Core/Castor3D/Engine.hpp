@@ -523,6 +523,7 @@ namespace castor3d
 		C3D_API uint32_t getWantedFps()const;
 		C3D_API castor3d::MaterialRPtr getDefaultMaterial()const;
 		C3D_API bool hasMeshShaders()const;
+		C3D_API uint32_t getMaxPassTypeCount()const;
 
 		castor::String const & getAppName()const
 		{

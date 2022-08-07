@@ -579,7 +579,8 @@ namespace castor3d
 		return uint32_t( matpass::getTextureUnits( m_textureUnits, mask ).size() );
 	}
 
-	void Pass::doFillData( PassBuffer::PassDataPtr & data )const
+	void Pass::doFillData( PassBuffer::PassDataPtr & data
+		, uint16_t passTypeIndex )const
 	{
 		*data.edgeWidth = getEdgeWidth();
 		*data.depthFactor = getDepthFactor();
@@ -614,7 +615,8 @@ namespace castor3d
 			++index;
 		}
 
-		*data.textureCount = int32_t( std::min( 8u, getTextureUnitsCount() ) );
+		*data.textureCount = int32_t( std::min( MaxPassTextures, getTextureUnitsCount() ) );
+		*data.passTypeIndex = passTypeIndex;
 	}
 
 	void Pass::doMergeImages( TextureFlag lhsFlag

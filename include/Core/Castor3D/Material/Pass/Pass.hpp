@@ -221,12 +221,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Fills the pass buffer with this pass data.
-		 *\param[in,out]	buffer	The pass buffer.
+		 *\param[in,out]	buffer			The pass buffer.
+		 *\param[in]		passTypeIndex	The pass type index.
 		 *\~french
 		 *\brief			Remplit le pass buffer aves les données de cette passe.
-		 *\param[in,out]	buffer	Le pass buffer.
+		 *\param[in,out]	buffer			Le pass buffer.
+		 *\param[in]		passTypeIndex	L'indice du type de passe.
 		 */
-		C3D_API virtual void fillBuffer( PassBuffer & buffer )const = 0;
+		C3D_API virtual void fillBuffer( PassBuffer & buffer
+			, uint16_t passTypeIndex )const = 0;
 		/**
 		 *\~english
 		 *\brief			Fills the pass buffer with this pass data.
@@ -685,7 +688,8 @@ namespace castor3d
 			, TextureUnitPtrArray & result );
 		C3D_API void doJoinDifOpa( TextureUnitPtrArray & result
 			, castor::String const & name );
-		C3D_API void doFillData( PassBuffer::PassDataPtr & data )const;
+		C3D_API void doFillData( PassBuffer::PassDataPtr & data
+			, uint16_t passTypeIndex )const;
 		C3D_API static void parseError( castor::String const & error );
 		C3D_API static void addCommonParsers( uint32_t mtlSectionID
 			, uint32_t texSectionID

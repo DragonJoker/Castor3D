@@ -279,4 +279,12 @@ namespace castor
 			m_pendingTextures.erase( it );
 		}
 	}
+
+	uint32_t ResourceCacheT< Material, String, MaterialCacheTraits >::getMaxPassTypeCount()const
+	{
+		constexpr auto maxPassTypeSize = castor::getBitSize( MaxPassTypes );
+		constexpr auto maxTexturesSize = castor::getBitSize( MaxPassTextures );
+		constexpr auto maxChannelsSize = castor::getBitSize( uint32_t( TextureFlag::eAll ) );
+		return maxPassTypeSize * maxTexturesSize * maxChannelsSize;
+	}
 }

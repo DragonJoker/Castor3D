@@ -67,7 +67,8 @@ namespace castor3d
 			std::array< castor::Point4ui, 2u > textures;
 
 			int32_t textureCount;
-			int32_t pad[3];
+			int32_t passTypeIndex;
+			int32_t pad[2];
 		};
 		using PassesData = castor::ArrayView< PassData >;
 
@@ -93,6 +94,7 @@ namespace castor3d
 			float * bwAccumulationOperator;
 			std::array< castor::Point4ui, 2u > * textures;
 			int32_t * textureCount;
+			int32_t * passTypeIndex;
 		};
 
 		static constexpr uint32_t DataSize = sizeof( PassData );
@@ -202,6 +204,7 @@ namespace castor3d
 		std::vector< Pass const * > m_dirty;
 		std::vector< OnPassChangedConnection > m_connections;
 		uint32_t m_passID{ 1u };
+		std::unordered_map< uint64_t, uint16_t > m_passTypeIndices;
 		PassesData m_data;
 		std::mutex m_mutex;
 	};

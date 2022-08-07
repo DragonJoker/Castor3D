@@ -226,7 +226,8 @@ namespace toon
 		};
 	}
 
-	void ToonPhongPass::fillBuffer( castor3d::PassBuffer & buffer )const
+	void ToonPhongPass::fillBuffer( castor3d::PassBuffer & buffer
+		, uint16_t passTypeIndex )const
 	{
 		auto data = buffer.getData( getId() );
 
@@ -240,7 +241,7 @@ namespace toon
 		data.specDiv->a = getShininess().value();
 
 		ToonPass::fillData( data );
-		doFillData( data );
+		doFillData( data, passTypeIndex );
 	}
 
 	uint32_t ToonPhongPass::getPassSectionID()const
@@ -314,7 +315,8 @@ namespace toon
 		};
 	}
 
-	void ToonBlinnPhongPass::fillBuffer( castor3d::PassBuffer & buffer )const
+	void ToonBlinnPhongPass::fillBuffer( castor3d::PassBuffer & buffer
+		, uint16_t passTypeIndex )const
 	{
 		auto data = buffer.getData( getId() );
 
@@ -328,7 +330,7 @@ namespace toon
 		data.specDiv->a = getShininess().value();
 
 		ToonPass::fillData( data );
-		doFillData( data );
+		doFillData( data, passTypeIndex );
 	}
 
 	uint32_t ToonBlinnPhongPass::getPassSectionID()const
@@ -402,7 +404,8 @@ namespace toon
 		};
 	}
 
-	void ToonPbrPass::fillBuffer( castor3d::PassBuffer & buffer )const
+	void ToonPbrPass::fillBuffer( castor3d::PassBuffer & buffer
+		, uint16_t passTypeIndex )const
 	{
 		auto data = buffer.getData( getId() );
 
@@ -416,7 +419,7 @@ namespace toon
 		data.specDiv->a = getMetalness();
 
 		ToonPass::fillData( data );
-		doFillData( data );
+		doFillData( data, passTypeIndex );
 	}
 
 	uint32_t ToonPbrPass::getPassSectionID()const
