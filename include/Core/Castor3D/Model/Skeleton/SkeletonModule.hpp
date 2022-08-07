@@ -16,7 +16,6 @@ namespace castor3d
 	/**@name Skeleton */
 	//@{
 
-	static const uint32_t MaxBonesPerVertex = 8;
 	/**
 	\~english
 	\brief		Skeleton node types enumeration.

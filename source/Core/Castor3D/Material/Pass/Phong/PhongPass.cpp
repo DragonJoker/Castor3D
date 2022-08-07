@@ -415,7 +415,8 @@ namespace castor3d
 		};
 	}
 
-	void PhongPass::fillBuffer( PassBuffer & buffer )const
+	void PhongPass::fillBuffer( PassBuffer & buffer
+		, uint16_t passTypeIndex )const
 	{
 		if ( !getId() )
 		{
@@ -433,7 +434,7 @@ namespace castor3d
 		data.specDiv->b = getSpecular().blue();
 		data.specDiv->a = getShininess().value();
 
-		doFillData( data );
+		doFillData( data, passTypeIndex );
 	}
 
 	uint32_t PhongPass::getPassSectionID()const

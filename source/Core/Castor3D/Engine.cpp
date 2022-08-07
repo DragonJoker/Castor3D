@@ -531,6 +531,11 @@ namespace castor3d
 		return m_renderSystem->getGpuInformations().hasShaderType( VK_SHADER_STAGE_MESH_BIT_NV );
 	}
 
+	uint32_t Engine::getMaxPassTypeCount()const
+	{
+		return m_materialCache->getMaxPassTypeCount();
+	}
+
 	castor::RgbaColour Engine::getNextRainbowColour()const
 	{
 		static float currentColourHue{ 0.0f };

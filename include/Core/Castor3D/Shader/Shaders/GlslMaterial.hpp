@@ -37,6 +37,7 @@ namespace castor3d::shader
 			, sdw::UVec4Field< "textures0" >
 			, sdw::UVec4Field< "textures1" >
 			, sdw::IntField< "textures" >
+			, sdw::UIntField< "passTypeIndex" > >
 	{
 		friend class Materials;
 
@@ -151,6 +152,7 @@ namespace castor3d::shader
 		auto textures0()const { return getMember< "textures0" >(); }
 		auto textures1()const { return getMember< "textures1" >(); }
 		auto textures()const { return getMember< "textures" >(); }
+		auto passTypeIndex()const { return getMember< "passTypeIndex" >(); }
 	};
 
 	struct OpacityBlendComponents

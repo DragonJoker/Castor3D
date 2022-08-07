@@ -509,7 +509,8 @@ namespace castor3d
 		};
 	}
 
-	void PbrPass::fillBuffer( PassBuffer & buffer )const
+	void PbrPass::fillBuffer( PassBuffer & buffer
+		, uint16_t passTypeIndex )const
 	{
 		auto metalness = m_metalnessSet
 			? getMetalness()
@@ -530,7 +531,7 @@ namespace castor3d
 		data.specDiv->b = specular.blue();
 		data.specDiv->a = metalness;
 
-		doFillData( data );
+		doFillData( data, passTypeIndex );
 	}
 
 	uint32_t PbrPass::getPassSectionID()const

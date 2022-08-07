@@ -13,7 +13,11 @@ namespace castor3d
 	*	Materials.
 	*/
 	//@{
-	// Phong/Blinn-Phong
+	// Maximum different pass type IDs.
+	static uint32_t constexpr MaxPassTypes = 256u;
+	// Maximum textures in a pass.
+	static uint32_t constexpr MaxPassTextures = 8u;
+	// Maximum passes in a material.
 	static uint32_t constexpr MaxPassLayers = 16u;
 	// Phong/Blinn-Phong
 	static float constexpr MaxPhongShininess = 256.0f;
@@ -142,6 +146,8 @@ namespace castor3d
 	static uint32_t constexpr MaxOverlayPanelsPerBuffer = 100u;
 	// Base count for objects buffers pool
 	static uint32_t constexpr BaseObjectPoolBufferCount = 1'000'000u;
+	// Max bones affecting a vertex
+	static uint32_t constexpr MaxBonesPerVertex = 8;
 	// Max bones in a skeleton
 	static uint32_t constexpr MaxBonesCount = 400u;
 	// Max morph target in a mesh

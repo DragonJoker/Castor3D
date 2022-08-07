@@ -17,6 +17,63 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Texture channels.
+	*\~french
+	*\brief
+	*	Les canaux de texture.
+	*/
+	enum class TextureChannel
+		: uint16_t
+	{
+		//!\~english	Height map.
+		//!\~french		Map de hauteur.
+		eHeight,
+		//!\~english	Opacity map.
+		//!\~french		Map d'opacité.
+		eOpacity,
+		//!\~english	Normal map.
+		//!\~french		Map de normales.
+		eNormal,
+		//!\~english	Emissive map.
+		//!\~french		Map d'émissive.
+		eEmissive,
+		//!\~english	Occlusion map.
+		//!\~french		Map d'occlusion.
+		eOcclusion,
+		//!\~english	Light transmittance map.
+		//!\~french		Map de transmission de lumière.
+		eTransmittance,
+		//!\~english	Basic colour map.
+		//!\~french		Map de couleur basique.
+		eColour,
+		//!\~english	Diffuse map.
+		//!\~french		Map de diffuse.
+		eDiffuse = eColour,
+		//!\~english	Albedo map.
+		//!\~french		Map d'albedo.
+		eAlbedo = eColour,
+		//!\~english	Specular map.
+		//!\~french		Map de spéculaire.
+		eSpecular,
+		//!\~english	Metalness map.
+		//!\~french		Map de metalness.
+		eMetalness,
+		//!\~english	Glossiness map.
+		//!\~french		Map de glossiness.
+		eGlossiness,
+		//!\~english	Shininess map.
+		//!\~french		Map de shininess.
+		eShininess = eGlossiness,
+		//!\~english	Roughness map.
+		//!\~french		Map de roughness.
+		eRoughness,
+		//!\~english	Count.
+		//!\~french		Compte.
+		eCount,
+	};
+	/**
+	*\~english
+	*\brief
 	*	Texture channels flags.
 	*\~french
 	*\brief
@@ -30,49 +87,52 @@ namespace castor3d
 		eNone = 0x0000,
 		//!\~english	Height map.
 		//!\~french		Map de hauteur.
-		eHeight = 0x0001,
+		eHeight = 0x0001 << uint16_t( TextureChannel::eHeight ),
 		//!\~english	Opacity map.
 		//!\~french		Map d'opacité.
-		eOpacity = 0x0002,
+		eOpacity = 0x0001 << uint16_t( TextureChannel::eOpacity ),
 		//!\~english	Normal map.
 		//!\~french		Map de normales.
-		eNormal = 0x0004,
+		eNormal = 0x0001 << uint16_t( TextureChannel::eNormal ),
 		//!\~english	Emissive map.
 		//!\~french		Map d'émissive.
-		eEmissive = 0x0008,
+		eEmissive = 0x0001 << uint16_t( TextureChannel::eEmissive ),
 		//!\~english	Occlusion map.
 		//!\~french		Map d'occlusion.
-		eOcclusion = 0x0010,
+		eOcclusion = 0x0001 << uint16_t( TextureChannel::eOcclusion ),
 		//!\~english	Light transmittance map.
 		//!\~french		Map de transmission de lumière.
-		eTransmittance = 0x0020,
+		eTransmittance = 0x0001 << uint16_t( TextureChannel::eTransmittance ),
 		//!\~english	Basic colour map.
 		//!\~french		Map de couleur basique.
-		eColour = 0x0040,
+		eColour = 0x0001 << uint16_t( TextureChannel::eColour ),
 		//!\~english	Diffuse map.
 		//!\~french		Map de diffuse.
-		eDiffuse = eColour,
+		eDiffuse = 0x0001 << uint16_t( TextureChannel::eDiffuse ),
 		//!\~english	Albedo map.
 		//!\~french		Map d'albedo.
-		eAlbedo = eColour,
+		eAlbedo = 0x0001 << uint16_t( TextureChannel::eAlbedo ),
 		//!\~english	Specular map.
 		//!\~french		Map de spéculaire.
-		eSpecular = 0x0080,
+		eSpecular = 0x0001 << uint16_t( TextureChannel::eSpecular ),
 		//!\~english	Metalness map.
 		//!\~french		Map de metalness.
-		eMetalness = 0x0100,
+		eMetalness = 0x0001 << uint16_t( TextureChannel::eMetalness ),
 		//!\~english	Glossiness map.
 		//!\~french		Map de glossiness.
-		eGlossiness = 0x0200,
+		eGlossiness = 0x0001 << uint16_t( TextureChannel::eGlossiness ),
 		//!\~english	Shininess map.
 		//!\~french		Map de shininess.
-		eShininess = eGlossiness,
+		eShininess = 0x0001 << uint16_t( TextureChannel::eShininess ),
 		//!\~english	Roughness map.
 		//!\~french		Map de roughness.
-		eRoughness = 0x0400,
+		eRoughness = 0x0001 << uint16_t( TextureChannel::eRoughness ),
+		//!\~english	Mask for all the texture channels affecting geometry.
+		//!\~french		Masque pour les canaux de texture affectant la géométrie.
+		eGeometry = eNormal | eOpacity | eHeight,
 		//!\~english	Mask for all the texture channels.
 		//!\~french		Masque pour les canaux de texture.
-		eAll = 0x07FF,
+		eAll = ( 0x0001 << uint16_t( TextureChannel::eCount ) ) - 1u,
 		//!\~english	Mask for all the texture channels except for opacity.
 		//!\~french		Masque pour les canaux de texture sauf l'opacité.
 		eAllButOpacity = eAll & ~( eOpacity ),
@@ -82,9 +142,6 @@ namespace castor3d
 		//!\~english	Mask for all the texture channels except for opacity and normal.
 		//!\~french		Masque pour les canaux de texture sauf l'opacité et la normale.
 		eAllButNormalAndOpacity = eAllButOpacity & ~( eNormal ),
-		//!\~english	Mask for all the texture channels affecting geometry.
-		//!\~french		Masque pour les canaux de texture affectant la géométrie.
-		eGeometry = eNormal | eOpacity | eHeight,
 	};
 	CU_ImplementFlags( TextureFlag )
 	C3D_API castor::String getName( TextureFlag value
