@@ -164,7 +164,7 @@ namespace draw_edges
 					auto material = writer.declLocale( "material"
 						, materials.getMaterial( modelData.getMaterialId() ) );
 
-					IF( writer, material.edgeColour.w() == 0.0_f )
+					IF( writer, material.edgeColour().w() == 0.0_f )
 					{
 						writer.demote();
 					}
@@ -180,9 +180,9 @@ namespace draw_edges
 						, X
 						, Xn.xyz()
 						, depthRange
-						, material.edgeWidth
-						, material.depthFactor
-						, material.normalFactor );
+						, material.edgeWidth()
+						, material.depthFactor()
+						, material.normalFactor() );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}

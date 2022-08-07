@@ -205,7 +205,7 @@ namespace castor3d
 						, data3
 						, data2
 						, material );
-					lightMat->sssProfileIndex = writer.cast< sdw::Float >( material.sssProfileIndex );
+					lightMat->sssProfileIndex = writer.cast< sdw::Float >( material.sssProfileIndex() );
 					lightMat->sssTransmittance = data4.w();
 
 					auto eye = writer.declLocale( "eye"

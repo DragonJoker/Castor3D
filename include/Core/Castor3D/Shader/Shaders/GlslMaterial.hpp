@@ -7,20 +7,45 @@ See LICENSE file in root folder
 #include "SdwModule.hpp"
 
 #include <ShaderWriter/MatTypes/Mat4.hpp>
-#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 
 namespace castor3d::shader
 {
 	castor::String const PassBufferName = cuT( "Materials" );
 
 	struct Material
-		: public sdw::StructInstance
+		: public sdw::StructInstanceHelperT< "C3D_Material"
+			, sdw::type::MemoryLayout::eStd140
+			, sdw::Vec4Field< "colourDiv" >
+			, sdw::Vec4Field< "specDiv" >
+			, sdw::FloatField< "edgeWidth" >
+			, sdw::FloatField< "depthFactor" >
+			, sdw::FloatField< "normalFactor" >
+			, sdw::FloatField< "objectFactor" >
+			, sdw::Vec4Field< "edgeColour" >
+			, sdw::Vec4Field< "specific" >
+			, sdw::UIntField< "index" >
+			, sdw::FloatField< "emissive" >
+			, sdw::FloatField< "alphaRef" >
+			, sdw::UIntField< "sssProfileIndex" >
+			, sdw::Vec3Field< "transmission" >
+			, sdw::FloatField< "opacity" >
+			, sdw::FloatField< "refractionRatio" >
+			, sdw::IntField< "hasRefraction" >
+			, sdw::IntField< "hasReflection" >
+			, sdw::FloatField< "bwAccumulationOperator" >
+			, sdw::UVec4Field< "textures0" >
+			, sdw::UVec4Field< "textures1" >
+			, sdw::IntField< "textures" >
 	{
 		friend class Materials;
+
 		C3D_API Material( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
-			, bool enabled );
-		SDW_DeclStructInstance( C3D_API, Material );
+			, bool enabled )
+			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+		{
+		}
 
 		C3D_API sdw::Vec3 colour()const;
 		/**
@@ -104,34 +129,28 @@ namespace castor3d::shader
 			, sdw::Array< sdw::Vec4 > & passMultipliers )const;
 		C3D_API sdw::UInt getTexture( uint32_t index )const;
 
-		C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-
-	protected:
-		using sdw::StructInstance::getMember;
-		using sdw::StructInstance::getMemberArray;
-
 	public:
-		sdw::Vec4 colourDiv;
-		sdw::Vec4 specDiv;
-		sdw::Float edgeWidth;
-		sdw::Float depthFactor;
-		sdw::Float normalFactor;
-		sdw::Float objectFactor;
-		sdw::Vec4 edgeColour;
-		sdw::Vec4 specific;
-		sdw::UInt index;
-		sdw::Float emissive;
-		sdw::Float alphaRef;
-		sdw::UInt sssProfileIndex;
-		sdw::Vec3 transmission;
-		sdw::Float opacity;
-		sdw::Float refractionRatio;
-		sdw::Int hasRefraction;
-		sdw::Int hasReflection;
-		sdw::Float bwAccumulationOperator;
-		sdw::UVec4 textures0;
-		sdw::UVec4 textures1;
-		sdw::Int textures;
+		auto colourDiv()const { return getMember< "colourDiv" >(); }
+		auto specDiv()const { return getMember< "specDiv" >(); }
+		auto edgeWidth()const { return getMember< "edgeWidth" >(); }
+		auto depthFactor()const { return getMember< "depthFactor" >(); }
+		auto normalFactor()const { return getMember< "normalFactor" >(); }
+		auto objectFactor()const { return getMember< "objectFactor" >(); }
+		auto edgeColour()const { return getMember< "edgeColour" >(); }
+		auto specific()const { return getMember< "specific" >(); }
+		auto index()const { return getMember< "index" >(); }
+		auto emissive()const { return getMember< "emissive" >(); }
+		auto alphaRef()const { return getMember< "alphaRef" >(); }
+		auto sssProfileIndex()const { return getMember< "sssProfileIndex" >(); }
+		auto transmission()const { return getMember< "transmission" >(); }
+		auto opacity()const { return getMember< "opacity" >(); }
+		auto refractionRatio()const { return getMember< "refractionRatio" >(); }
+		auto hasRefraction()const { return getMember< "hasRefraction" >(); }
+		auto hasReflection()const { return getMember< "hasReflection" >(); }
+		auto bwAccumulationOperator()const { return getMember< "bwAccumulationOperator" >(); }
+		auto textures0()const { return getMember< "textures0" >(); }
+		auto textures1()const { return getMember< "textures1" >(); }
+		auto textures()const { return getMember< "textures" >(); }
 	};
 
 	struct OpacityBlendComponents

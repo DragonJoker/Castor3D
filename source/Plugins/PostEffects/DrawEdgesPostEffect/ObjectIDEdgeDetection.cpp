@@ -154,15 +154,15 @@ namespace draw_edges
 					auto material = writer.declLocale( "material"
 						, materials.getMaterial( modelData.getMaterialId() ) );
 
-					IF( writer, material.edgeColour.w() == 0.0_f )
+					IF( writer, material.edgeColour().w() == 0.0_f )
 					{
 						writer.demote();
 					}
 					FI;
 
-					fragColour = material.objectFactor * computeContour( texelCoord
+					fragColour = material.objectFactor() * computeContour( texelCoord
 						, writer.cast< sdw::Int >( X.z() )
-						, material.edgeWidth );
+						, material.edgeWidth() );
 
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

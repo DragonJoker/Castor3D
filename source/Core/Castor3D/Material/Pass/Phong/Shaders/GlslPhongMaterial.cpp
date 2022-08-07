@@ -28,13 +28,13 @@ namespace castor3d::shader
 			create( newAlbedo
 				, data3
 				, data2
-				, material.colourDiv.a() );
-			edgeWidth = material.edgeWidth;
-			depthFactor = material.depthFactor;
-			normalFactor = material.normalFactor;
-			objectFactor = material.objectFactor;
-			edgeColour = material.edgeColour;
-			specific = material.specific;
+				, material.colourDiv().a() );
+			edgeWidth = material.edgeWidth();
+			depthFactor = material.depthFactor();
+			normalFactor = material.normalFactor();
+			objectFactor = material.objectFactor();
+			edgeColour = material.edgeColour();
+			specific = material.specific();
 		}
 	}
 
@@ -57,16 +57,16 @@ namespace castor3d::shader
 	{
 		if ( vtxColour.isEnabled() )
 		{
-			create( material.colourDiv.rgb() * vtxColour
-				, material.specDiv
-				, material.specDiv
+			create( material.colour() * vtxColour
+				, material.specDiv()
+				, material.specDiv()
 				, material );
 		}
 		else
 		{
-			create( material.colourDiv.rgb()
-				, material.specDiv
-				, material.specDiv
+			create( material.colour()
+				, material.specDiv()
+				, material.specDiv()
 				, material );
 		}
 	}

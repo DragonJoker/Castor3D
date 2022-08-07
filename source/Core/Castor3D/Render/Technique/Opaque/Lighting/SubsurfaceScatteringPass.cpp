@@ -140,14 +140,14 @@ namespace castor3d
 						, modelData.getMaterialId() );
 					auto material = materials->getMaterial( materialId );
 
-					IF( writer, material.sssProfileIndex == 0_u )
+					IF( writer, material.sssProfileIndex() == 0_u )
 					{
 						writer.demote();
 					}
 					FI;
 
 					auto sssProfile = writer.declLocale( "sssProfile"
-						, sssProfiles.getProfile( material.sssProfileIndex ) );
+						, sssProfiles.getProfile( material.sssProfileIndex() ) );
 
 					// Fetch color and linear depth for current pixel:
 					auto colorM = writer.declLocale( "colorM"
@@ -267,7 +267,7 @@ namespace castor3d
 						, modelData.getMaterialId() );
 					auto material = materials->getMaterial( materialId );
 
-					IF( writer, material.sssProfileIndex == 0_u )
+					IF( writer, material.sssProfileIndex() == 0_u )
 					{
 						pxl_fragColor = original;
 					}

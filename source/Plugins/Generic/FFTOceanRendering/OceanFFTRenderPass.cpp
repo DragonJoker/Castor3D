@@ -1239,7 +1239,7 @@ namespace ocean_fft
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( modelData.getMaterialId() ) );
 				auto emissive = writer.declLocale( "emissive"
-					, vec3( material.emissive ) );
+					, vec3( material.emissive() ) );
 				auto worldEye = writer.declLocale( "worldEye"
 					, c3d_sceneData.cameraPosition );
 				auto lightMat = lightingModel->declMaterial( "lightMat" );
@@ -1366,7 +1366,7 @@ namespace ocean_fft
 							, refractionResult ) );
 					displayDebugData( eLightAbsorbtion, lightAbsorbtion, 1.0_f );
 					auto waterTransmission = writer.declLocale( "waterTransmission"
-						, material.transmission * lightAbsorbtion * ( indirectAmbient + indirectDiffuse ) );
+						, material.transmission() * lightAbsorbtion * ( indirectAmbient + indirectDiffuse ) );
 					displayDebugData( eWaterTransmission, waterTransmission, 1.0_f );
 					refractionResult *= waterTransmission;
 					displayDebugData( eRefractionResult, refractionResult, 1.0_f );
