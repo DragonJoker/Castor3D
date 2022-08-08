@@ -59,6 +59,7 @@ namespace GuiCommon
 			castor::String rendererName;
 			uint32_t gpuIndex{ 0u };
 			bool disableUpdateOptimisations{ false };
+			uint32_t maxImageSize{ 0u };
 			castor::String fileName;
 		};
 
