@@ -313,12 +313,6 @@ namespace castor3d
 			return m_allShadowMaps;
 		}
 
-		ashes::Semaphore const & getSemaphore()const
-		{
-			CU_Require( m_signalFinished );
-			return *m_signalFinished;
-		}
-
 		RenderTarget const & getRenderTarget()const
 		{
 			return m_renderTarget;
@@ -403,7 +397,6 @@ namespace castor3d
 		crg::FramePass * m_transparentPassDesc{};
 		RenderTechniqueNodesPass * m_transparentPass{};
 		WeightedBlendRenderingUPtr m_weightedBlendRendering;
-		ashes::SemaphorePtr m_signalFinished;
 		crg::FrameGraph m_clearLpvGraph;
 		crg::RunnableGraphPtr m_clearLpvRunnable;
 		ShadowMapLightTypeArray m_allShadowMaps;

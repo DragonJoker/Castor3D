@@ -189,11 +189,6 @@ namespace castor3d
 		{
 			return Preparer{ *this, device };
 		}
-
-		ashes::Semaphore const & getSemaphore()
-		{
-			return *m_commands.semaphore;
-		}
 		/**@}*/
 
 	private:

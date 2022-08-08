@@ -156,11 +156,10 @@ namespace castor3d
 		, m_llpvResult{ techniquePassDesc.m_llpvResult }
 		, m_vctFirstBounce{ techniquePassDesc.m_vctFirstBounce }
 		, m_vctSecondaryBounce{ techniquePassDesc.m_vctSecondaryBounce }
-		, m_finished{ m_device->createSemaphore( name ) }
 	{
 	}
 
-	void RenderTechniquePass::accept( RenderTechniqueVisitor & visitor )
+	void RenderTechniqueNodesPass::accept( RenderTechniqueVisitor & visitor )
 	{
 	}
 
