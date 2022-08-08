@@ -148,6 +148,7 @@ namespace castor3d
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, MatrixUbo & matrixUbo
+		, SceneUbo & sceneUbo
 		, SceneCuller & culler
 		, VoxelizerUbo const & voxelizerUbo
 		, ashes::Buffer< Voxel > const & voxels
@@ -160,7 +161,7 @@ namespace castor3d
 			, "Voxelize"
 			, "Voxelization"
 			, nullptr
-			, RenderNodesPassDesc{ { voxelConfig.gridSize.value(), voxelConfig.gridSize.value(), 1u }, matrixUbo, culler, RenderMode::eBoth, true, true } }
+			, RenderNodesPassDesc{ { voxelConfig.gridSize.value(), voxelConfig.gridSize.value(), 1u }, matrixUbo, sceneUbo, culler, RenderMode::eBoth, true, true } }
 		, m_scene{ culler.getScene() }
 		, m_camera{ culler.getCamera() }
 		, m_voxels{ voxels }
@@ -187,27 +188,6 @@ namespace castor3d
 		{
 			getCuller().update( updater );
 			RenderNodesPass::update( updater );
-			static const castor::Matrix4x4f identity{ []()
-				{
-					castor::Matrix4x4f res;
-					res.setIdentity();
-					return res;
-				}() };
-			//Orthograhic projection
-			auto sceneBoundingBox = m_scene.getBoundingBox();
-			auto ortho = castor::matrix::ortho( sceneBoundingBox.getMin()->x
-				, sceneBoundingBox.getMax()->x
-				, sceneBoundingBox.getMin()->y
-				, sceneBoundingBox.getMax()->y
-				, -1.0f * sceneBoundingBox.getMin()->z
-				, -1.0f * sceneBoundingBox.getMax()->z );
-			auto jitterProjSpace = updater.jitter * 2.0f;
-			jitterProjSpace[0] /= float( m_camera.getWidth() );
-			jitterProjSpace[1] /= float( m_camera.getHeight() );
-			m_matrixUbo.cpuUpdate( identity
-				, ortho
-				, m_camera.getFrustum()
-				, jitterProjSpace );
 		}
 	}
 
@@ -661,7 +641,7 @@ namespace castor3d
 						auto texCoord3 = writer.declLocale( "texCoord3"
 							, in.texture3 );
 						lightingModel->computeMapDiffuseContributions( flags.passFlags
-							, flags.textures
+							, flags.texturesFlags
 							, textureConfigs
 							, textureAnims
 							, c3d_maps

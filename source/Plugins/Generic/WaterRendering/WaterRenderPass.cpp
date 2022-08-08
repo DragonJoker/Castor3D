@@ -302,6 +302,7 @@ namespace water
 				, std::move( depthInput )
 				, castor3d::RenderNodesPassDesc{ extent
 					, technique.getMatrixUbo()
+					, technique.getSceneUbo()
 					, technique.getRenderTarget().getCuller() }.safeBand( true )
 				, castor3d::RenderTechniquePassDesc{ false, technique.getSsaoConfig() }
 					.lpvConfigUbo( technique.getLpvConfigUbo() )
@@ -390,7 +391,6 @@ namespace water
 			: std::chrono::duration_cast< castor::Milliseconds >( m_timer.getElapsed() );
 		m_configuration.time += float( tslf.count() ) / 100.0f;
 		m_ubo.cpuUpdate( m_configuration );
-		RenderTechniquePass::doUpdateUbos( updater );
 	}
 
 	bool WaterRenderPass::doIsValidPass( castor3d::Pass const & pass )const

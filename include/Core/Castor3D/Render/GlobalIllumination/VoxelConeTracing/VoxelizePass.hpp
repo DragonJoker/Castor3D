@@ -45,6 +45,7 @@ namespace castor3d
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, MatrixUbo & matrixUbo
+			, SceneUbo & sceneUbo
 			, SceneCuller & culler
 			, VoxelizerUbo const & voxelizerUbo
 			, ashes::Buffer< Voxel > const & voxels

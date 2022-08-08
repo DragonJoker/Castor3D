@@ -47,6 +47,7 @@ namespace castor3d
 			, QueueData const & queueData
 			, castor::Size const & size
 			, MatrixUbo & matrixUbo
+			, SceneUbo & sceneUbo
 			, SceneCuller & culler );
 		/**
 		 *\~english
@@ -136,6 +137,7 @@ namespace castor3d
 
 	private:
 		crg::FramePass & doCreatePickingPass( MatrixUbo & matrixUbo
+			, SceneUbo & sceneUbo
 			, SceneCuller & culler );
 		castor::Point4ui doFboPick( castor::Position const & position );
 		PickNodeType doPick( castor::Point4ui const & pixel

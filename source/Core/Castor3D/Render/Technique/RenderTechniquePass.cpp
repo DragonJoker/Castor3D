@@ -150,12 +150,6 @@ namespace castor3d
 	{
 	}
 
-	void RenderTechniquePass::doUpdateUbos( CpuUpdater & updater )
-	{
-		m_sceneUbo.cpuUpdate( *updater.camera->getScene()
-			, updater.camera );
-	}
-
 	ProgramFlags RenderTechniquePass::doAdjustProgramFlags( ProgramFlags flags )const
 	{
 		addFlag( flags, ProgramFlag::eLighting );

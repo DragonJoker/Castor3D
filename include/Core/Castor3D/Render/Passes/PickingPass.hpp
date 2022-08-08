@@ -47,6 +47,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, castor::Size const & size
 			, MatrixUbo & matrixUbo
+			, SceneUbo & sceneUbo
 			, SceneCuller & culler );
 		/**
 		 *\~english
@@ -91,7 +92,6 @@ namespace castor3d
 		void doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
 		void doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps )override;
-		void doUpdate( RenderQueueArray & queues )override;
 		SubmeshFlags doAdjustSubmeshFlags( SubmeshFlags flags )const override;
 		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
 		PassFlags doAdjustPassFlags( PassFlags flags )const override;

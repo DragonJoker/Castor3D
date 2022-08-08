@@ -48,7 +48,6 @@ namespace castor3d
 			, castor::String const & prefix
 			, Scene & scene
 			, Camera & camera
-			, MatrixUbo & matrixUbo
 			, VoxelizerUbo & voxelizerUbo
 			, VoxelSceneData const & voxelConfig );
 		C3D_API ~Voxelizer();
@@ -135,6 +134,7 @@ namespace castor3d
 		crg::FrameGraph m_graph;
 		DummyCuller m_culler;
 		MatrixUbo m_matrixUbo;
+		SceneUbo m_sceneUbo;
 		Texture m_firstBounce;
 		Texture m_secondaryBounce;
 		ashes::BufferPtr< Voxel > m_voxels;

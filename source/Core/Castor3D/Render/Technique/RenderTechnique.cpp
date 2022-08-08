@@ -320,7 +320,6 @@ namespace castor3d
 		static void countNodes( RenderNodesPass const & renderPass
 			, RenderInfo & info )
 		{
-
 			for ( auto & pipelineNodes : renderPass.getCuller().getSubmeshNodes( renderPass ) )
 			{
 				for ( auto & bufferNodes : pipelineNodes.second )
@@ -473,7 +472,6 @@ namespace castor3d
 			, getName()
 			, *m_renderTarget.getScene()
 			, *m_renderTarget.getCamera()
-			, m_matrixUbo
 			, m_vctConfigUbo
 			, m_renderTarget.getScene()->getVoxelConeTracingConfig() ) }
 		, m_lpvResult{ castor::makeUnique< LightVolumePassResult >( getOwner()->getGraphResourceHandler()
@@ -731,8 +729,7 @@ namespace castor3d
 			, camera.getProjection( true )
 			, camera.getFrustum()
 			, jitterProjSpace );
-		m_sceneUbo.cpuUpdate( &camera
-			, camera.getScene()->getFog() );
+		m_sceneUbo.cpuUpdate( scene, &camera );
 		m_gpInfoUbo.cpuUpdate( makeSize( m_colour.getExtent() )
 			, camera );
 	}
@@ -1036,7 +1033,7 @@ namespace castor3d
 					, runnableGraph
 					, m_device
 					, getSsaoConfig()
-					, RenderNodesPassDesc{ m_depth->getExtent(), m_matrixUbo, m_renderTarget.getCuller() }
+					, RenderNodesPassDesc{ m_depth->getExtent(), m_matrixUbo, m_sceneUbo, m_renderTarget.getCuller() }
 						.safeBand( true )
 						.meshShading( true )
 						.implicitAction( depthIt->view(), crg::RecordContext::clearAttachment( *depthIt ) )
@@ -1143,7 +1140,7 @@ namespace castor3d
 #endif
 					, cuT( "Opaque" )
 					, name
-					, RenderNodesPassDesc{ m_colour.getExtent(), m_matrixUbo, m_renderTarget.getCuller() }
+					, RenderNodesPassDesc{ m_colour.getExtent(), m_matrixUbo, m_sceneUbo, m_renderTarget.getCuller() }
 						.safeBand( true )
 						.meshShading( true )
 #if C3D_UseDeferredRendering
@@ -1225,7 +1222,7 @@ namespace castor3d
 					, cuT( "Transparent" )
 					, name
 					, m_colour.imageId.data
-					, RenderNodesPassDesc{ m_colour.getExtent(), m_matrixUbo, m_renderTarget.getCuller(), isOit }
+					, RenderNodesPassDesc{ m_colour.getExtent(), m_matrixUbo, m_sceneUbo, m_renderTarget.getCuller(), isOit }
 						.safeBand( true )
 						.meshShading( true )
 #if C3D_UseWeightedBlendedRendering

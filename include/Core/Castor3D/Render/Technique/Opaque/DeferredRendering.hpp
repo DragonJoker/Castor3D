@@ -150,7 +150,6 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
-		crg::FramePass const & m_opaquePass;
 		crg::FramePass const * m_lastPass{};
 		OpaquePassResult const & m_opaquePassResult;
 		GpInfoUbo m_lightingGpInfoUbo;

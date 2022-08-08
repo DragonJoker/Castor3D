@@ -28,10 +28,10 @@ namespace castor3d
 	enum class DsTexture
 		: uint8_t
 	{
-		eData0, // R => Depth, G => Linearised Depth, G => Object ID, A => Unused
-		eData1, // RGB => Normal, A => Unused
-		eData2, // RGB => Diffuse/Albedo - SSR: A => Shininess - PBR: A => Roughness
-		eData3, // RGB => Specular - PBR: A => Metalness - SSR: A => Unused
+		eData0, // R => Depth, G => Linearised Depth, G => Object ID, A => Lighting
+		eData1, // RGB => Normal, A => VertexID
+		eData2, // RGB => Diffuse/Albedo - Phong: A => Shininess - PBR: A => Roughness
+		eData3, // RGB => Specular - PBR: A => Metalness - Phong: A => Unused
 		eData4, // RGB => Emissive, A => Transmittance
 		eData5, // RG => Velocity, B => Unused, A => AO
 		CU_ScopedEnumBounds( eData0 ),

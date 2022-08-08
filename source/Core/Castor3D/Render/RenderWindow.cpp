@@ -1233,6 +1233,7 @@ namespace castor3d
 				, queueData
 				, target->getSize()
 				, target->getTechnique().getMatrixUbo()
+				, target->getTechnique().getSceneUbo()
 				, target->getCuller() );
 		}
 	}

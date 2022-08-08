@@ -51,8 +51,7 @@ namespace castor3d
 		, VoxelizerUbo const & vctConfigUbo
 		, SsaoConfig & ssaoConfig )
 		: m_device{ device }
-		, m_opaquePass{ opaquePass }
-		, m_lastPass{ &m_opaquePass }
+		, m_lastPass{ &opaquePass }
 		, m_opaquePassResult{ opaquePassResult }
 		, m_lightingGpInfoUbo{ device }
 		, m_size{ size }
