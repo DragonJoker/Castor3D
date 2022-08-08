@@ -590,7 +590,7 @@ namespace castor3d
 
 		void TextureConfigurations::computeGeometryMapContributions( Utils & utils
 			, PassFlags const & passFlags
-			, TextureFlagsArray const & textures
+			, TextureFlags const & textureFlags
 			, TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, shader::Material const & material
@@ -607,14 +607,12 @@ namespace castor3d
 				return;
 			}
 
-			auto textureFlags = merge( textures );
-
 			if ( ( checkFlag( textureFlags, TextureFlag::eHeight )
 				&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
 					|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
 				|| checkFlag( textureFlags, TextureFlag::eOpacity ) )
 			{
-				for ( uint32_t index = 0u; index < textures.size(); ++index )
+				for ( uint32_t index = 0u; index < textureFlags.size(); ++index )
 				{
 					auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
 					auto id = m_writer.declLocale( "c3d_id" + name
