@@ -51,7 +51,7 @@ namespace castor3d
 		, castor::String const & name
 		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
-		: RenderTechniquePass{ parent
+		: RenderTechniqueNodesPass{ parent
 			, pass
 			, context
 			, graph

@@ -137,7 +137,75 @@ namespace castor3d
 	};
 
 	class RenderTechniquePass
+	{
+	protected:
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	parent	The parent technique.
+		 *\param[in]	scene	The scene.
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	parent	La technique parente.
+		 *\param[in]	scene	La scène.
+		 */
+		C3D_API RenderTechniquePass( RenderTechnique * parent
+			, Scene const & scene );
+
+	public:
+		C3D_API virtual ~RenderTechniquePass() = default;
+		/**
+		 *\~english
+		 *\brief		Visitor acceptance function.
+		 *\param		visitor	The ... visitor.
+		 *\~french
+		 *\brief		Fonction d'acceptation de visiteur.
+		 *\param		visitor	Le ... visiteur.
+		 */
+		virtual void accept( RenderTechniqueVisitor & visitor )
+		{
+		}
+		/**
+		 *\~english
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
+		 *\~french
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
+		 */
+		virtual void update( CpuUpdater & updater )
+		{
+		}
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		C3D_API Engine * getEngine()const;
+
+		Scene const & getScene()
+		{
+			return m_scene;
+		}
+
+		Scene const & getScene()const
+		{
+			return m_scene;
+		}
+		/**@}*/
+
+	protected:
+		RenderTechnique * m_parent{};
+		Scene const & m_scene;
+	};
+
+	class RenderTechniqueNodesPass
 		: public RenderNodesPass
+		, public RenderTechniquePass
 	{
 	protected:
 		/**
@@ -166,7 +234,7 @@ namespace castor3d
 		 *\param[in]	renderPassDesc		Les données de construction de passe de rendu de scène.
 		 *\param[in]	techniquePassDesc	Les données de construction de passe de rendu de technique.
 		 */
-		C3D_API RenderTechniquePass( RenderTechnique * parent
+		C3D_API RenderTechniqueNodesPass( RenderTechnique * parent
 			, crg::FramePass const & pass
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
@@ -187,7 +255,16 @@ namespace castor3d
 		 *\brief		Fonction d'acceptation de visiteur.
 		 *\param		visitor	Le ... visiteur.
 		 */
-		C3D_API virtual void accept( RenderTechniqueVisitor & visitor );
+		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
+		/**
+		 *\~english
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
+		 *\~french
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
+		 */
+		C3D_API void update( CpuUpdater & updater )override;
 		/**
 		*\~english
 		*name
@@ -211,19 +288,16 @@ namespace castor3d
 				| ShaderFlag::eViewSpace;
 		}
 
-		Scene const & getScene()
+		Engine * getEngine()const
 		{
-			return m_scene;
+			return RenderTechniquePass::getEngine();
 		}
 
 		Scene const & getScene()const
 		{
-			return m_scene;
+			return RenderTechniquePass::getScene();
 		}
 		/**@}*/
-
-	public:
-		using RenderNodesPass::update;
 
 	protected:
 		C3D_API ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;
@@ -251,6 +325,8 @@ namespace castor3d
 			, uint32_t & index )const;
 
 	private:
+		using RenderNodesPass::update;
+
 		void doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
 		void doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps )override;
@@ -258,8 +334,6 @@ namespace castor3d
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 
 	protected:
-		RenderTechnique * m_parent{};
-		Scene const & m_scene;
 		Camera * m_camera{ nullptr };
 		bool m_environment{ false };
 		bool m_hasVelocity{ false };

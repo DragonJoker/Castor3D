@@ -401,7 +401,7 @@ namespace castor3d
 		DeferredRenderingUPtr m_deferredRendering;
 		TransparentPassResultUPtr m_transparentPassResult;
 		crg::FramePass * m_transparentPassDesc{};
-		RenderTechniquePass * m_transparentPass{};
+		RenderTechniqueNodesPass * m_transparentPass{};
 		WeightedBlendRenderingUPtr m_weightedBlendRendering;
 		ashes::SemaphorePtr m_signalFinished;
 		crg::FrameGraph m_clearLpvGraph;

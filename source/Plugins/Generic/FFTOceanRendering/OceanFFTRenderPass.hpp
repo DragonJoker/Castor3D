@@ -19,7 +19,7 @@ See LICENSE file in root folder
 namespace ocean_fft
 {
 	class OceanRenderPass
-		: public castor3d::RenderTechniquePass
+		: public castor3d::RenderTechniqueNodesPass
 	{
 	public:
 		/**

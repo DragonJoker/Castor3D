@@ -19,6 +19,7 @@
 #include "Castor3D/Render/Node/BillboardRenderNode.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
+#include "Castor3D/Render/Technique/RenderTechnique.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
@@ -117,6 +118,20 @@ namespace castor3d
 	//*************************************************************************************************
 
 	RenderTechniquePass::RenderTechniquePass( RenderTechnique * parent
+		, Scene const & scene )
+		: m_parent{ parent }
+		, m_scene{ scene }
+	{
+	}
+
+	Engine * RenderTechniquePass::getEngine()const
+	{
+		return m_scene.getOwner();
+	}
+
+	//*************************************************************************************************
+
+	RenderTechniqueNodesPass::RenderTechniqueNodesPass( RenderTechnique * parent
 		, crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
@@ -128,8 +143,7 @@ namespace castor3d
 		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
 		: RenderNodesPass{ pass, context, graph, device, typeName, category, name, targetImage, renderPassDesc }
-		, m_parent{ parent }
-		, m_scene{ renderPassDesc.m_culler.getScene() }
+		, RenderTechniquePass{ parent, renderPassDesc.m_culler.getScene() }
 		, m_camera{ renderPassDesc.m_culler.hasCamera() ? &renderPassDesc.m_culler.getCamera() : nullptr }
 		, m_environment{ techniquePassDesc.m_environment }
 		, m_hasVelocity{ techniquePassDesc.m_hasVelocity }
@@ -150,7 +164,12 @@ namespace castor3d
 	{
 	}
 
-	ProgramFlags RenderTechniquePass::doAdjustProgramFlags( ProgramFlags flags )const
+	void RenderTechniqueNodesPass::update( CpuUpdater & updater )
+	{
+		RenderNodesPass::update( updater );
+	}
+
+	ProgramFlags RenderTechniqueNodesPass::doAdjustProgramFlags( ProgramFlags flags )const
 	{
 		addFlag( flags, ProgramFlag::eLighting );
 
@@ -162,7 +181,7 @@ namespace castor3d
 		return flags;
 	}
 
-	SceneFlags RenderTechniquePass::doAdjustSceneFlags( SceneFlags flags )const
+	SceneFlags RenderTechniqueNodesPass::doAdjustSceneFlags( SceneFlags flags )const
 	{
 		if ( !m_vctConfigUbo || !m_vctFirstBounce || !m_vctSecondaryBounce )
 		{
@@ -182,7 +201,7 @@ namespace castor3d
 		return flags;
 	}
 
-	void RenderTechniquePass::doAddShadowBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+	void RenderTechniqueNodesPass::doAddShadowBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
 		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
@@ -203,7 +222,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderTechniquePass::doAddBackgroundBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+	void RenderTechniqueNodesPass::doAddBackgroundBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
 		if ( auto background = m_scene.getBackground() )
@@ -212,7 +231,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderTechniquePass::doAddEnvBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+	void RenderTechniqueNodesPass::doAddEnvBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++ // c3d_mapEnvironment
@@ -220,7 +239,7 @@ namespace castor3d
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 	}
 
-	void RenderTechniquePass::doAddGIBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+	void RenderTechniqueNodesPass::doAddGIBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
 		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
@@ -286,7 +305,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderTechniquePass::doAddShadowDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+	void RenderTechniqueNodesPass::doAddShadowDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps
 		, uint32_t & index )const
 	{
@@ -298,7 +317,7 @@ namespace castor3d
 			, index );
 	}
 
-	void RenderTechniquePass::doAddBackgroundDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+	void RenderTechniqueNodesPass::doAddBackgroundDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, crg::ImageData const & targetImage
 		, ShadowMapLightTypeArray const & shadowMaps
 		, uint32_t & index )const
@@ -309,7 +328,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderTechniquePass::doAddEnvDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+	void RenderTechniqueNodesPass::doAddEnvDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps
 		, uint32_t & index )const
 	{
@@ -319,7 +338,7 @@ namespace castor3d
 			, index );
 	}
 
-	void RenderTechniquePass::doAddGIDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+	void RenderTechniqueNodesPass::doAddGIDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps
 		, uint32_t & index )const
 	{
@@ -396,7 +415,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderTechniquePass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
+	void RenderTechniqueNodesPass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( index++ ) );
@@ -413,7 +432,7 @@ namespace castor3d
 		doAddGIBindings( bindings, index );
 	}
 
-	void RenderTechniquePass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+	void RenderTechniqueNodesPass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
@@ -437,7 +456,7 @@ namespace castor3d
 		doAddGIDescriptor( descriptorWrites, shadowMaps, index );
 	}
 
-	ashes::PipelineDepthStencilStateCreateInfo RenderTechniquePass::doCreateDepthStencilState( PipelineFlags const & flags )const
+	ashes::PipelineDepthStencilStateCreateInfo RenderTechniqueNodesPass::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
 		if ( m_environment )
 		{
@@ -456,7 +475,7 @@ namespace castor3d
 		}
 	}
 
-	ashes::PipelineColorBlendStateCreateInfo RenderTechniquePass::doCreateBlendState( PipelineFlags const & flags )const
+	ashes::PipelineColorBlendStateCreateInfo RenderTechniqueNodesPass::doCreateBlendState( PipelineFlags const & flags )const
 	{
 		return RenderNodesPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u );
 	}

@@ -34,7 +34,7 @@ namespace GuiCommon
 		public:
 			static void submit( wxPropertyGrid * grid
 				, TreeItemProperty & prop
-				, castor3d::RenderTechniquePass & renderPass )
+				, castor3d::RenderTechniqueNodesPass & renderPass )
 			{
 				auto & engine = *renderPass.getEngine();
 				RenderPassConfigurationBuilder vis{ renderPass.createPipelineFlags( castor3d::BlendMode::eNoBlend
@@ -199,7 +199,7 @@ namespace GuiCommon
 
 	void fillRenderPassConfiguration( wxPropertyGrid * grid
 		, TreeItemProperty & properties
-		, castor3d::RenderTechniquePass & renderPass )
+		, castor3d::RenderTechniqueNodesPass & renderPass )
 	{
 		RenderPassConfigurationBuilder::submit( grid, properties, renderPass );
 	}

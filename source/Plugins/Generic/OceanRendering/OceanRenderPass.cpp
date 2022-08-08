@@ -208,7 +208,7 @@ namespace ocean
 		, castor3d::RenderNodesPassDesc const & renderPassDesc
 		, castor3d::RenderTechniquePassDesc const & techniquePassDesc
 		, std::shared_ptr< IsRenderPassEnabled > isEnabled )
-		: castor3d::RenderTechniquePass{ parent
+		: castor3d::RenderTechniqueNodesPass{ parent
 			, pass
 			, context
 			, graph
