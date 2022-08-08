@@ -104,6 +104,7 @@ namespace castor3d::shader
 			, FilteredTextureFlags textureFlags
 			, PassFlags passFlags
 			, bool hasTextures );
+		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 
 		// Vertex shader side
 		void computeVelocity( MatrixData const & matrixData
@@ -154,6 +155,7 @@ namespace castor3d::shader
 
 	using OutVertexSurface = FragmentSurfaceT< ast::var::Flag::eShaderOutput >;
 	using InFragmentSurface = FragmentSurfaceT< ast::var::Flag::eShaderInput >;
+	using FragmentSurface = FragmentSurfaceT< ast::var::Flag::eNone >;
 }
 
 #include "GlslSurface.inl"

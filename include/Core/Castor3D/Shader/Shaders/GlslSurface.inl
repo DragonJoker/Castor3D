@@ -321,6 +321,52 @@ namespace castor3d::shader
 	}
 
 	template< ast::var::Flag FlagT >
+	ast::type::BaseStructPtr FragmentSurfaceT< FlagT >::makeType( ast::type::TypesCache & cache )
+	{
+		auto result = cache.getStruct( ast::type::MemoryLayout::eC, "C3D_FragSurface" );
+
+		if ( result->empty() )
+		{
+			result->declMember( "worldPosition", ast::type::Kind::eVec4F
+				, ast::type::NotArray );
+			result->declMember( "viewPosition", ast::type::Kind::eVec4F
+				, ast::type::NotArray );
+			result->declMember( "curPosition", ast::type::Kind::eVec4F
+				, ast::type::NotArray );
+			result->declMember( "prvPosition", ast::type::Kind::eVec4F
+				, ast::type::NotArray );
+			result->declMember( "tangentSpaceFragPosition", ast::type::Kind::eVec3F
+				, ast::type::NotArray );
+			result->declMember( "tangentSpaceViewPosition", ast::type::Kind::eVec3F
+				, ast::type::NotArray );
+			result->declMember( "normal", ast::type::Kind::eVec3F
+				, ast::type::NotArray );
+			result->declMember( "tangent", ast::type::Kind::eVec3F
+				, ast::type::NotArray );
+			result->declMember( "bitangent", ast::type::Kind::eVec3F
+				, ast::type::NotArray );
+			result->declMember( "texcoord0", ast::type::Kind::eVec3F
+				, ast::type::NotArray );
+			result->declMember( "texcoord1", ast::type::Kind::eVec3F
+				, ast::type::NotArray );
+			result->declMember( "texcoord2", ast::type::Kind::eVec3F
+				, ast::type::NotArray );
+			result->declMember( "texcoord3", ast::type::Kind::eVec3F
+				, ast::type::NotArray );
+			result->declMember( "colour", ast::type::Kind::eVec3F
+				, ast::type::NotArray );
+			result->declMember( "passMultipliers", ast::type::Kind::eVec4F
+				, 4u );
+			result->declMember( "nodeId", ast::type::Kind::eInt
+				, ast::type::NotArray );
+			result->declMember( "vertexId", ast::type::Kind::eInt
+				, ast::type::NotArray );
+		}
+
+		return result;
+	}
+
+	template< ast::var::Flag FlagT >
 	void FragmentSurfaceT< FlagT >::computeVelocity( MatrixData const & matrixData
 		, sdw::Vec4 & csCurPos
 		, sdw::Vec4 & csPrvPos )
