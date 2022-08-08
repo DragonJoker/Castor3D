@@ -14,7 +14,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class TransparentPass
-		: public RenderTechniquePass
+		: public RenderTechniqueNodesPass
 	{
 	public:
 		/**

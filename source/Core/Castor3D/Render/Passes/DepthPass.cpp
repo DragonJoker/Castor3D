@@ -44,7 +44,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, SsaoConfig const & ssaoConfig
 		, RenderNodesPassDesc const & renderPassDesc )
-		: RenderTechniquePass{ parent
+		: RenderTechniqueNodesPass{ parent
 			, pass
 			, context
 			, graph

@@ -52,6 +52,13 @@ namespace castor3d
 	*/
 	class RenderTechniquePass;
 	/**
+	\~english
+	\brief		Render technique nodes pass base class.
+	\~french
+	\brief		Classe de base d'une passe de technique de rendu de noeuds.
+	*/
+	class RenderTechniqueNodesPass;
+	/**
 	*\~english
 	*\brief
 	*	Render technique effect visitor base class.
@@ -104,7 +111,7 @@ namespace castor3d
 		eBeforePostEffects,
 		CU_ScopedEnumBounds( eBeforeDepth )
 	};
-	using TechniquePassVector = std::vector< RenderTechniquePass * >;
+	using TechniquePassVector = std::vector< RenderTechniqueNodesPass * >;
 	using TechniquePasses = std::array< TechniquePassVector, size_t( TechniquePassEvent::eCount ) >;
 
 	struct RenderPassRegisterInfo

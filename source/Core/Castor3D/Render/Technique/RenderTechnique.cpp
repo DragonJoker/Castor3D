@@ -763,7 +763,7 @@ namespace castor3d
 #if C3D_UseDeferredRendering
 		m_deferredRendering->update( updater );
 #endif
-		rendtech::countNodes( *m_opaquePass, updater.info );
+		rendtech::countNodes( *m_depthPass, updater.info );
 		rendtech::countNodes( *m_transparentPass, updater.info );
 	}
 

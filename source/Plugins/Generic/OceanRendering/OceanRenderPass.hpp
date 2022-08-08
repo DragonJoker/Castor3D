@@ -41,7 +41,7 @@ namespace ocean
 	};
 
 	class OceanRenderPass
-		: public castor3d::RenderTechniquePass
+		: public castor3d::RenderTechniqueNodesPass
 	{
 	public:
 		/**

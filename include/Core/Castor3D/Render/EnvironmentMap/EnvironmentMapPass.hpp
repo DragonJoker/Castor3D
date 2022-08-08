@@ -121,10 +121,10 @@ namespace castor3d
 		SceneUbo m_sceneUbo;
 		crg::ImageViewId m_colourView;
 		crg::FramePass * m_opaquePassDesc{};
-		RenderTechniquePass * m_opaquePass{};
+		RenderTechniqueNodesPass * m_opaquePass{};
 		BackgroundRendererUPtr m_backgroundRenderer;
 		crg::FramePass * m_transparentPassDesc{};
-		RenderTechniquePass * m_transparentPass{};
+		RenderTechniqueNodesPass * m_transparentPass{};
 	};
 }
 

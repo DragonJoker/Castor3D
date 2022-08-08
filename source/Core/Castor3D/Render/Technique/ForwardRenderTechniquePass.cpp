@@ -56,7 +56,7 @@ namespace castor3d
 		, crg::ImageData const * targetImage
 		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
-		: RenderTechniquePass{ parent
+		: RenderTechniqueNodesPass{ parent
 			, pass
 			, context
 			, graph
