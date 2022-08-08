@@ -460,7 +460,7 @@ namespace castor3d::shader
 	}
 
 	void PhongLightingModel::computeMapContributions( PassFlags const & passFlags
-		, TextureFlagsArray const & textures
+		, TextureFlags const & textureFlags
 		, TextureConfigurations const & textureConfigs
 		, TextureAnimations const & textureAnims
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
@@ -481,7 +481,6 @@ namespace castor3d::shader
 		, sdw::Vec3 & tangentSpaceFragPosition )
 	{
 		auto & phongLightMat = static_cast< PhongLightMaterial & >( lightMat );
-		auto textureFlags = merge( textures );
 
 		if ( !textureConfigs.isEnabled() )
 		{
@@ -493,7 +492,7 @@ namespace castor3d::shader
 			return;
 		}
 
-		for ( uint32_t index = 0u; index < textures.size(); ++index )
+		for ( uint32_t index = 0u; index < textureFlags.size(); ++index )
 		{
 			auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
 			auto id = m_writer.declLocale( "c3d_id" + name
@@ -751,7 +750,7 @@ namespace castor3d::shader
 	}
 
 	void PhongLightingModel::computeMapDiffuseContributions( PassFlags const & passFlags
-		, TextureFlagsArray const & textures
+		, TextureFlags const & textureFlags
 		, TextureConfigurations const & textureConfigs
 		, TextureAnimations const & textureAnims
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
@@ -766,7 +765,6 @@ namespace castor3d::shader
 		, LightMaterial & lightMat )
 	{
 		auto & phongLightMat = static_cast< PhongLightMaterial & >( lightMat );
-		auto textureFlags = merge( textures );
 
 		if ( !textureConfigs.isEnabled() )
 		{
@@ -778,7 +776,7 @@ namespace castor3d::shader
 			return;
 		}
 
-		for ( uint32_t index = 0u; index < textures.size(); ++index )
+		for ( uint32_t index = 0u; index < textureFlags.size(); ++index )
 		{
 			auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
 			auto id = m_writer.declLocale( "c3d_id" + name

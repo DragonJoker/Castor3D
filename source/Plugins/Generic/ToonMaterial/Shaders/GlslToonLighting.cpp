@@ -420,7 +420,7 @@ namespace toon::shader
 	}
 
 	void ToonPhongLightingModel::computeMapContributions( castor3d::PassFlags const & passFlags
-		, castor3d::TextureFlagsArray const & textures
+		, castor3d::TextureFlags const & textureFlags
 		, c3d::TextureConfigurations const & textureConfigs
 		, c3d::TextureAnimations const & textureAnims
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
@@ -441,7 +441,6 @@ namespace toon::shader
 		, sdw::Vec3 & tangentSpaceFragPosition )
 	{
 		auto & phongLightMat = static_cast< ToonPhongLightMaterial & >( lightMat );
-		auto textureFlags = merge( textures );
 
 		if ( !textureConfigs.isEnabled() )
 		{
@@ -453,7 +452,7 @@ namespace toon::shader
 			return;
 		}
 
-		for ( uint32_t index = 0u; index < textures.size(); ++index )
+		for ( uint32_t index = 0u; index < textureFlags.size(); ++index )
 		{
 			auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
 			auto id = m_writer.declLocale( "c3d_id" + name
@@ -711,7 +710,7 @@ namespace toon::shader
 	}
 
 	void ToonPhongLightingModel::computeMapDiffuseContributions( castor3d::PassFlags const & passFlags
-		, castor3d::TextureFlagsArray const & textures
+		, castor3d::TextureFlags const & textureFlags
 		, c3d::TextureConfigurations const & textureConfigs
 		, c3d::TextureAnimations const & textureAnims
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
@@ -726,7 +725,6 @@ namespace toon::shader
 		, c3d::LightMaterial & lightMat )
 	{
 		auto & phongLightMat = static_cast< ToonPhongLightMaterial & >( lightMat );
-		auto textureFlags = merge( textures );
 
 		if ( !textureConfigs.isEnabled() )
 		{
@@ -738,7 +736,7 @@ namespace toon::shader
 			return;
 		}
 
-		for ( uint32_t index = 0u; index < textures.size(); ++index )
+		for ( uint32_t index = 0u; index < textureFlags.size(); ++index )
 		{
 			auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
 			auto id = m_writer.declLocale( "c3d_id" + name
@@ -1396,7 +1394,7 @@ namespace toon::shader
 	}
 
 	void ToonPbrLightingModel::computeMapContributions( castor3d::PassFlags const & passFlags
-		, castor3d::TextureFlagsArray const & textures
+		, castor3d::TextureFlags const & textureFlags
 		, c3d::TextureConfigurations const & textureConfigs
 		, c3d::TextureAnimations const & textureAnims
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
@@ -1417,7 +1415,6 @@ namespace toon::shader
 		, sdw::Vec3 & tangentSpaceFragPosition )
 	{
 		auto & pbrLightMat = static_cast< ToonPbrLightMaterial & >( lightMat );
-		auto textureFlags = merge( textures );
 
 		if ( !textureConfigs.isEnabled() )
 		{
@@ -1434,7 +1431,7 @@ namespace toon::shader
 			, m_writer.declLocale( "hasSpecular", sdw::Boolean{ false } )
 			, m_writer.declLocale( "hasEmissive", sdw::Boolean{ false } ) };
 
-		for ( uint32_t index = 0u; index < textures.size(); ++index )
+		for ( uint32_t index = 0u; index < textureFlags.size(); ++index )
 		{
 			auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
 			auto id = m_writer.declLocale( "c3d_id" + name
@@ -1700,7 +1697,7 @@ namespace toon::shader
 	}
 
 	void ToonPbrLightingModel::computeMapDiffuseContributions( castor3d::PassFlags const & passFlags
-		, castor3d::TextureFlagsArray const & textures
+		, castor3d::TextureFlags const & textureFlags
 		, c3d::TextureConfigurations const & textureConfigs
 		, c3d::TextureAnimations const & textureAnims
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
@@ -1715,7 +1712,6 @@ namespace toon::shader
 		, c3d::LightMaterial & lightMat )
 	{
 		auto & pbrLightMat = static_cast< ToonPbrLightMaterial & >( lightMat );
-		auto textureFlags = merge( textures );
 
 		if ( !textureConfigs.isEnabled() )
 		{
@@ -1732,7 +1728,7 @@ namespace toon::shader
 			, m_writer.declLocale( "hasSpecular", sdw::Boolean{ false } )
 			, m_writer.declLocale( "hasEmissive", sdw::Boolean{ false } ) };
 
-		for ( uint32_t index = 0u; index < textures.size(); ++index )
+		for ( uint32_t index = 0u; index < textureFlags.size(); ++index )
 		{
 			auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
 			auto id = m_writer.declLocale( "c3d_id" + name

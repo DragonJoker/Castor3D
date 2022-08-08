@@ -235,7 +235,20 @@ namespace castor3d::shader
 			return this->getData( index );
 		}
 
-		// Use by picking pass (opacity only)
+		// Used by picking pass (opacity only)
+		C3D_API void blendMaterials( Utils & utils
+			, VkCompareOp alphaFunc
+			, PassFlags const & passFlags
+			, SubmeshFlags const & submeshFlags
+			, TextureFlags const & textures
+			, bool hasTextures
+			, shader::TextureConfigurations const & textureConfigs
+			, shader::TextureAnimations const & textureAnims
+			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			, sdw::UInt const & materialId
+			, sdw::UInt const & passCount
+			, sdw::Array< sdw::Vec4 > const & passMultipliers
+			, OpacityBlendComponents & output )const;
 		C3D_API void blendMaterials( Utils & utils
 			, VkCompareOp alphaFunc
 			, PassFlags const & passFlags
@@ -249,7 +262,20 @@ namespace castor3d::shader
 			, sdw::UInt const & passCount
 			, sdw::Array< sdw::Vec4 > const & passMultipliers
 			, OpacityBlendComponents & output )const;
-		// Use by depth pass (opacity and tangent space only)
+		// Used by depth pass (opacity and tangent space only)
+		C3D_API void blendMaterials( Utils & utils
+			, VkCompareOp alphaFunc
+			, PassFlags const & passFlags
+			, SubmeshFlags const & submeshFlags
+			, TextureFlags const & textures
+			, bool hasTextures
+			, shader::TextureConfigurations const & textureConfigs
+			, shader::TextureAnimations const & textureAnims
+			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			, sdw::UInt const & materialId
+			, sdw::UInt const & passCount
+			, sdw::Array< sdw::Vec4 > const & passMultipliers
+			, GeometryBlendComponents & output )const;
 		C3D_API void blendMaterials( Utils & utils
 			, VkCompareOp alphaFunc
 			, PassFlags const & passFlags
@@ -263,7 +289,23 @@ namespace castor3d::shader
 			, sdw::UInt const & passCount
 			, sdw::Array< sdw::Vec4 > const & passMultipliers
 			, GeometryBlendComponents & output )const;
-		// Use by shadow passes
+		// Used by shadow passes
+		C3D_API std::unique_ptr< LightMaterial > blendMaterials( Utils & utils
+			, bool needsRsm
+			, VkCompareOp alphaFunc
+			, PassFlags const & passFlags
+			, SubmeshFlags const & submeshFlags
+			, TextureFlags const & textures
+			, bool hasTextures
+			, shader::TextureConfigurations const & textureConfigs
+			, shader::TextureAnimations const & textureAnims
+			, shader::LightingModel & lightingModel
+			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			, sdw::UInt const & materialId
+			, sdw::UInt const & passCount
+			, sdw::Array< sdw::Vec4 > const & passMultipliers
+			, sdw::Vec3 const & vertexColour
+			, OpaqueBlendComponents & output )const;
 		C3D_API std::unique_ptr< LightMaterial > blendMaterials( Utils & utils
 			, bool needsRsm
 			, VkCompareOp alphaFunc
@@ -280,7 +322,37 @@ namespace castor3d::shader
 			, sdw::Array< sdw::Vec4 > const & passMultipliers
 			, sdw::Vec3 const & vertexColour
 			, OpaqueBlendComponents & output )const;
-		// Use by opaque pass
+		// Used by visibility resolve pass
+		C3D_API std::unique_ptr< LightMaterial > blendMaterials( Utils & utils
+			, PassFlags const & passFlags
+			, SubmeshFlags const & submeshFlags
+			, TextureFlags const & textures
+			, bool hasTextures
+			, shader::TextureConfigurations const & textureConfigs
+			, shader::TextureAnimations const & textureAnims
+			, shader::LightingModel & lightingModel
+			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			, sdw::UInt const & materialId
+			, sdw::UInt const & passCount
+			, sdw::Array< sdw::Vec4 > const & passMultipliers
+			, sdw::Vec3 const & vertexColour
+			, OpaqueBlendComponents & output )const;
+		// Used by opaque pass
+		C3D_API std::unique_ptr< LightMaterial > blendMaterials( Utils & utils
+			, VkCompareOp alphaFunc
+			, PassFlags const & passFlags
+			, SubmeshFlags const & submeshFlags
+			, TextureFlags const & textures
+			, bool hasTextures
+			, shader::TextureConfigurations const & textureConfigs
+			, shader::TextureAnimations const & textureAnims
+			, shader::LightingModel & lightingModel
+			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			, sdw::UInt const & materialId
+			, sdw::UInt const & passCount
+			, sdw::Array< sdw::Vec4 > const & passMultipliers
+			, sdw::Vec3 const & vertexColour
+			, OpaqueBlendComponents & output )const;
 		C3D_API std::unique_ptr< LightMaterial > blendMaterials( Utils & utils
 			, VkCompareOp alphaFunc
 			, PassFlags const & passFlags
@@ -296,7 +368,23 @@ namespace castor3d::shader
 			, sdw::Array< sdw::Vec4 > const & passMultipliers
 			, sdw::Vec3 const & vertexColour
 			, OpaqueBlendComponents & output )const;
-		// Use by forward passes
+		// Used by forward passes
+		C3D_API std::unique_ptr< LightMaterial > blendMaterials( Utils & utils
+			, bool opaque
+			, VkCompareOp alphaFunc
+			, PassFlags const & passFlags
+			, SubmeshFlags const & submeshFlags
+			, TextureFlags const & textures
+			, bool hasTextures
+			, shader::TextureConfigurations const & textureConfigs
+			, shader::TextureAnimations const & textureAnims
+			, shader::LightingModel & lightingModel
+			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			, sdw::UInt const & materialId
+			, sdw::UInt const & passCount
+			, sdw::Array< sdw::Vec4 > const & passMultipliers
+			, sdw::Vec3 const & vertexColour
+			, LightingBlendComponents & output )const;
 		C3D_API std::unique_ptr< LightMaterial > blendMaterials( Utils & utils
 			, bool opaque
 			, VkCompareOp alphaFunc
@@ -316,9 +404,8 @@ namespace castor3d::shader
 
 	private:
 		Material applyMaterial( Utils & utils
-			, VkCompareOp alphaFunc
 			, PassFlags const & passFlags
-			, TextureFlagsArray const & textures
+			, TextureFlags const & textures
 			, bool hasTextures
 			, shader::TextureConfigurations const & textureConfigs
 			, shader::TextureAnimations const & textureAnims
@@ -326,9 +413,8 @@ namespace castor3d::shader
 			, sdw::UInt const & materialId
 			, OpacityBlendComponents & output )const;
 		Material applyMaterial( Utils & utils
-			, VkCompareOp alphaFunc
 			, PassFlags const & passFlags
-			, TextureFlagsArray const & textures
+			, TextureFlags const & textures
 			, bool hasTextures
 			, shader::TextureConfigurations const & textureConfigs
 			, shader::TextureAnimations const & textureAnims
@@ -337,9 +423,18 @@ namespace castor3d::shader
 			, GeometryBlendComponents & output )const;
 		std::pair< Material, std::unique_ptr< LightMaterial > > applyMaterial( Utils & utils
 			, bool needsRsm
-			, VkCompareOp alphaFunc
 			, PassFlags const & passFlags
-			, TextureFlagsArray const & textures
+			, TextureFlags const & textures
+			, bool hasTextures
+			, shader::TextureConfigurations const & textureConfigs
+			, shader::TextureAnimations const & textureAnims
+			, shader::LightingModel & lightingModel
+			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			, sdw::UInt const & materialId
+			, sdw::Vec3 const & vertexColour
+			, OpaqueBlendComponents & output )const;
+		std::pair< Material, std::unique_ptr< LightMaterial > > applyMaterial( PassFlags const & passFlags
+			, TextureFlags const & textures
 			, bool hasTextures
 			, shader::TextureConfigurations const & textureConfigs
 			, shader::TextureAnimations const & textureAnims
@@ -349,21 +444,8 @@ namespace castor3d::shader
 			, sdw::Vec3 const & vertexColour
 			, OpaqueBlendComponents & output )const;
 		std::pair< Material, std::unique_ptr< LightMaterial > > applyMaterial( Utils & utils
-			, VkCompareOp alphaFunc
 			, PassFlags const & passFlags
-			, TextureFlagsArray const & textures
-			, bool hasTextures
-			, shader::TextureConfigurations const & textureConfigs
-			, shader::TextureAnimations const & textureAnims
-			, shader::LightingModel & lightingModel
-			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-			, sdw::UInt const & materialId
-			, sdw::Vec3 const & vertexColour
-			, OpaqueBlendComponents & output )const;
-		std::pair< Material, std::unique_ptr< LightMaterial > > applyMaterial( Utils & utils
-			, VkCompareOp alphaFunc
-			, PassFlags const & passFlags
-			, TextureFlagsArray const & textures
+			, TextureFlags const & textures
 			, bool hasTextures
 			, shader::TextureConfigurations const & textureConfigs
 			, shader::TextureAnimations const & textureAnims

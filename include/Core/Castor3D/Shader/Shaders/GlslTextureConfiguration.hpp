@@ -318,7 +318,7 @@ namespace castor3d
 				, bool enable = true );
 			C3D_API void computeGeometryMapContributions( Utils & utils
 				, PassFlags const & passFlags
-				, TextureFlagsArray const & textures
+				, TextureFlags const & textureFlags
 				, TextureAnimations const & textureAnims
 				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 				, shader::Material const & material

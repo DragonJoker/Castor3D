@@ -73,7 +73,7 @@ namespace toon::shader
 			, sdw::Int const & receivesShadows
 			, c3d::OutputComponents & output )override;
 		void computeMapContributions( castor3d::PassFlags const & passFlags
-			, castor3d::TextureFlagsArray const & textures
+			, castor3d::TextureFlags const & textureFlags
 			, c3d::TextureConfigurations const & textureConfigs
 			, c3d::TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
@@ -114,7 +114,7 @@ namespace toon::shader
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows )override;
 		void computeMapDiffuseContributions( castor3d::PassFlags const & passFlags
-			, castor3d::TextureFlagsArray const & textures
+			, castor3d::TextureFlags const & textureFlags
 			, c3d::TextureConfigurations const & textureConfigs
 			, c3d::TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
@@ -276,7 +276,7 @@ namespace toon::shader
 			, sdw::Int const & receivesShadows
 			, c3d::OutputComponents & output )override;
 		void computeMapContributions( castor3d::PassFlags const & passFlags
-			, castor3d::TextureFlagsArray const & textures
+			, castor3d::TextureFlags const & textureFlags
 			, c3d::TextureConfigurations const & textureConfigs
 			, c3d::TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
@@ -317,7 +317,7 @@ namespace toon::shader
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows )override;
 		void computeMapDiffuseContributions( castor3d::PassFlags const & passFlags
-			, castor3d::TextureFlagsArray const & textures
+			, castor3d::TextureFlags const & textureFlags
 			, c3d::TextureConfigurations const & textureConfigs
 			, c3d::TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps

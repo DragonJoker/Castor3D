@@ -67,7 +67,7 @@ namespace castor3d::shader
 			, sdw::Int const & receivesShadows
 			, OutputComponents & output )override;
 		C3D_API void computeMapContributions( PassFlags const & passFlags
-			, TextureFlagsArray const & textures
+			, TextureFlags const & textureFlags
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
@@ -108,7 +108,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows )override;
 		C3D_API void computeMapDiffuseContributions( PassFlags const & passFlags
-			, TextureFlagsArray const & textures
+			, TextureFlags const & textureFlags
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
