@@ -137,7 +137,7 @@ namespace castor3d
 	*	Indicateurs pour déterminer ce qu'un submesh utilise.
 	*/
 	enum class SubmeshFlag
-		: uint32_t
+		: uint16_t
 	{
 		eNone = 0x0000,
 		//!\~english	The submesh has indices (always).

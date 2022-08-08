@@ -14,7 +14,7 @@ namespace castor3d
 	*/
 	//@{
 	// Maximum different pass type IDs.
-	static uint32_t constexpr MaxPassTypes = 256u;
+	static uint32_t constexpr MaxPassTypes = 64u;
 	// Maximum textures in a pass.
 	static uint32_t constexpr MaxPassTextures = 8u;
 	// Maximum passes in a material.

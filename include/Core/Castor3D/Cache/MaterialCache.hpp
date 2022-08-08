@@ -125,6 +125,8 @@ namespace castor
 		C3D_API bool registerTexture( castor3d::AnimatedTexture const & texture );
 		C3D_API void unregisterTexture( castor3d::AnimatedTexture const & texture );
 		C3D_API uint32_t getMaxPassTypeCount()const;
+		C3D_API uint32_t getCurrentPassTypeCount()const;
+		C3D_API std::tuple< castor3d::PassTypeID, castor3d::PassFlags, castor3d::TextureFlags, uint32_t > getPassTypeDetails( uint32_t passTypeIndex )const;
 
 		castor3d::MaterialRPtr getDefaultMaterial()const
 		{
