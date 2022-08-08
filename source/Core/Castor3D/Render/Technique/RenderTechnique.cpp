@@ -550,7 +550,6 @@ namespace castor3d
 #else
 		, m_transparentPassDesc{ &doCreateTransparentPass( progress ) }
 #endif
-		, m_signalFinished{ m_device->createSemaphore( "RenderTechnique" ) }
 		, m_clearLpvGraph{ rendtech::doCreateClearLpvCommands( getOwner()->getGraphResourceHandler(), device, progress, getName(), *m_lpvResult, m_llpvResult ) }
 		, m_clearLpvRunnable{ m_clearLpvGraph.compile( m_device.makeContext() ) }
 	{
@@ -608,7 +607,6 @@ namespace castor3d
 		m_colourTexture->cleanup();
 		getEngine()->removeSampler( cuT( "RenderTechnique_Colour" ) );
 		getEngine()->removeSampler( cuT( "RenderTechnique_Depth" ) );
-		m_signalFinished.reset();
 
 		for ( auto & array : m_activeShadowMaps )
 		{

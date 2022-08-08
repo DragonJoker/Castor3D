@@ -274,12 +274,6 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline ashes::Semaphore const & getSemaphore()const
-		{
-			CU_Require( m_finished );
-			return *m_finished;
-		}
-
 		C3D_API ShaderFlags getShaderFlags()const override
 		{
 			return ShaderFlag::eWorldSpace
@@ -346,7 +340,6 @@ namespace castor3d
 		LightVolumePassResultArray const * m_llpvResult;
 		Texture const * m_vctFirstBounce;
 		Texture const * m_vctSecondaryBounce;
-		ashes::SemaphorePtr m_finished;
 	};
 }
 
