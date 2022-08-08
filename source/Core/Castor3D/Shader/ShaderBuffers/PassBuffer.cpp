@@ -20,17 +20,41 @@ namespace castor3d
 				, reinterpret_cast< PassBuffer::PassData * >( buffer ) + count );
 		}
 
-		static uint64_t getHash( Pass const & pass )
+		static uint64_t hash( Pass const & pass )
 		{
+			constexpr auto maxPassFlagsSize = castor::getBitSize( uint32_t( PassFlag::eAllVisibility ) );
 			constexpr auto maxTexturesSize = castor::getBitSize( MaxPassTextures );
-			constexpr auto maxChannelsSize = castor::getBitSize( uint32_t( TextureFlag::eAll ) );
+			constexpr auto maxChannelsSize = uint32_t( TextureChannel::eCount );
 			auto offset = 0u;
 			uint64_t result = uint64_t( pass.getTextures() ) << offset;
 			offset += maxChannelsSize;
 			result |= uint64_t( pass.getTextureUnitsCount() ) << offset;
 			offset += maxTexturesSize;
+			result |= uint64_t( pass.getPassFlags() & PassFlag::eAllVisibility ) << offset;
+			offset += maxPassFlagsSize;
 			result |= uint64_t( pass.getTypeID() ) << offset;
 			return result;
+		}
+
+		static std::tuple< PassTypeID, PassFlags, TextureFlags, uint32_t > unhash( uint64_t hash )
+		{
+			constexpr auto maxPassTypeSize = castor::getBitSize( MaxPassTypes );
+			constexpr auto maxPassTypeMask = ( 0x1u << uint32_t( maxPassTypeSize ) ) - 1u;
+			constexpr auto maxPassFlagsSize = castor::getBitSize( uint32_t( PassFlag::eAllVisibility ) );
+			constexpr auto maxPassFlagsMask = ( 0x1u << uint32_t( maxPassFlagsSize ) ) - 1u;
+			constexpr auto maxTexturesSize = castor::getBitSize( MaxPassTextures );
+			constexpr auto maxTexturesMask = ( 0x1u << uint32_t( maxTexturesSize ) ) - 1u;
+			constexpr auto maxChannelsSize = uint32_t( TextureChannel::eCount );
+			constexpr auto maxChannelsMask = ( 0x1u << uint32_t( maxChannelsSize ) ) - 1u;
+			auto offset = 0u;
+			auto texturesCount = uint32_t( ( hash >> offset ) & maxTexturesMask );
+			offset += maxTexturesSize;
+			auto textureFlags = TextureFlags( uint16_t( ( hash >> offset ) & maxChannelsMask ) );
+			offset += maxChannelsSize;
+			auto passFlags = PassFlags( uint16_t( ( hash >> offset ) & maxPassFlagsMask ) );
+			offset += maxPassFlagsSize;
+			auto passTypeID = PassTypeID( uint16_t( ( hash >> offset ) & maxPassTypeMask ) );
+			return { passTypeID, passFlags, textureFlags, texturesCount };
 		}
 	}
 
@@ -99,7 +123,7 @@ namespace castor3d
 				, end
 				, [this]( Pass const * pass )
 				{
-					auto it = m_passTypeIndices.emplace( passbuf::getHash( *pass )
+					auto it = m_passTypeIndices.emplace( passbuf::hash( *pass )
 						, uint16_t( m_passTypeIndices.size() ) ).first;
 					pass->fillBuffer( *this, it->second );
 				} );
@@ -161,5 +185,22 @@ namespace castor3d
 		result.passTypeIndex = &data.passTypeIndex;
 
 		return result;
+	}
+
+	std::tuple< PassTypeID, PassFlags, TextureFlags, uint32_t > PassBuffer::getPassTypeDetails( uint32_t passTypeIndex )const
+	{
+		auto it = std::find_if( m_passTypeIndices.begin()
+			, m_passTypeIndices.end()
+			, [&passTypeIndex]( std::unordered_map< uint64_t, uint16_t >::value_type const & lookup )
+			{
+				return lookup.second == passTypeIndex;
+			} );
+
+		if ( it == m_passTypeIndices.end() )
+		{
+			CU_Exception( "Pass type index not found in registered ones." );
+		}
+
+		return passbuf::unhash( it->first );
 	}
 }

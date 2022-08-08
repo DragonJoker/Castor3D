@@ -33,7 +33,7 @@ namespace castor3d
 		eData2, // RGB => Diffuse/Albedo - Phong: A => Shininess - PBR: A => Roughness
 		eData3, // RGB => Specular - PBR: A => Metalness - Phong: A => Unused
 		eData4, // RGB => Emissive, A => Transmittance
-		eData5, // RG => Velocity, B => Unused, A => AO
+		eData5, // RG => Velocity, B => PrimitiveID, A => Occlusion
 		CU_ScopedEnumBounds( eData0 ),
 	};
 	C3D_API castor::String getTextureName( DsTexture texture );

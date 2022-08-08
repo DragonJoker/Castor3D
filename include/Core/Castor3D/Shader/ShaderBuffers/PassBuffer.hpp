@@ -189,6 +189,13 @@ namespace castor3d
 		C3D_API PassDataPtr getData( uint32_t passID );
 		/**
 		 *\~english
+		 *\return		The pass type details for given pass type index.
+		 *\~french
+		 *\brief		Les détails du type de passe pour l'index donné.
+		 */
+		C3D_API std::tuple< PassTypeID, PassFlags, TextureFlags, uint32_t > getPassTypeDetails( uint32_t passTypeIndex )const;
+		/**
+		 *\~english
 		 *\return		The pointer to the buffer.
 		 *\~french
 		 *\brief		Le pointeur sur le tampon.
@@ -196,6 +203,11 @@ namespace castor3d
 		uint8_t * getPtr()
 		{
 			return m_buffer.getPtr();
+		}
+
+		uint32_t getCurrentPassTypeCount()const
+		{
+			return uint32_t( m_passTypeIndices.size() );
 		}
 
 	private:
