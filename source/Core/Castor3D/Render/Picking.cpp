@@ -109,6 +109,7 @@ namespace castor3d
 		, QueueData const & queueData
 		, castor::Size const & size
 		, MatrixUbo & matrixUbo
+		, SceneUbo & sceneUbo
 		, SceneCuller & culler )
 		: castor::OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, m_device{ device }
@@ -143,7 +144,7 @@ namespace castor3d
 			, VK_IMAGE_VIEW_TYPE_2D
 			, m_depthImage.data->info.format
 			, { VK_IMAGE_ASPECT_DEPTH_BIT, 0u, 1u, 0u, 1u } } ) }
-		, m_pickingPassDesc{ &doCreatePickingPass( matrixUbo, culler ) }
+		, m_pickingPassDesc{ &doCreatePickingPass( matrixUbo, sceneUbo, culler ) }
 		, m_copyRegion{ 0u
 			, 0u
 			, 0u
@@ -223,10 +224,11 @@ namespace castor3d
 	}
 
 	crg::FramePass & Picking::doCreatePickingPass( MatrixUbo & matrixUbo
+		, SceneUbo & sceneUbo
 		, SceneCuller & culler )
 	{
 		auto & result = m_graph.createPass( "PickingPass"
-			, [this, &matrixUbo, &culler]( crg::FramePass const & pass
+			, [this, &matrixUbo, &sceneUbo, &culler]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -236,6 +238,7 @@ namespace castor3d
 					, m_device
 					, m_realSize
 					, matrixUbo
+					, sceneUbo
 					, culler );
 				m_pickingPass = res.get();
 				return res;

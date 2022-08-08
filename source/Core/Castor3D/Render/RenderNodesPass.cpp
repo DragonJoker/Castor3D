@@ -120,10 +120,14 @@ namespace castor3d
 		, m_forceTwoSided{ desc.m_forceTwoSided }
 		, m_safeBand{ desc.m_safeBand }
 		, m_meshShading{ desc.m_meshShading && device.hasMeshAndTaskShaders() }
-		, m_sceneUbo{ m_device }
+		, m_sceneUbo{ desc.m_sceneUbo }
 		, m_index{ desc.m_index }
 	{
-		m_sceneUbo.setWindowSize( m_size );
+		if ( m_sceneUbo )
+		{
+			m_sceneUbo->setWindowSize( m_size );
+		}
+
 		m_culler.registerRenderPass( *this );
 	}
 
@@ -141,7 +145,7 @@ namespace castor3d
 
 	void RenderNodesPass::update( CpuUpdater & updater )
 	{
-		doUpdate( *updater.queues );
+		updater.queues->emplace_back( *m_renderQueue );
 		doUpdateUbos( updater );
 		m_isDirty = false;
 	}
@@ -483,7 +487,11 @@ namespace castor3d
 				, RenderPipeline::eBuffers );
 			ashes::WriteDescriptorSetArray descriptorWrites;
 			descriptorWrites.push_back( m_matrixUbo.getDescriptorWrite( uint32_t( GlobalBuffersIdx::eMatrix ) ) );
-			descriptorWrites.push_back( m_sceneUbo.getDescriptorWrite( uint32_t( GlobalBuffersIdx::eScene ) ) );
+
+			if ( m_sceneUbo )
+			{
+				descriptorWrites.push_back( m_sceneUbo->getDescriptorWrite( uint32_t( GlobalBuffersIdx::eScene ) ) );
+			}
 
 			auto & nodesIds = getCuller().getNodesIds( *this );
 			auto nodesIdsWrite = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eObjectsNodeID )
@@ -547,22 +555,8 @@ namespace castor3d
 			, &secondary );
 	}
 
-	void RenderNodesPass::doUpdate( RenderQueueArray & queues )
-	{
-		queues.emplace_back( *m_renderQueue );
-	}
-
 	void RenderNodesPass::doUpdateUbos( CpuUpdater & updater )
 	{
-		auto & camera = *updater.camera;
-		auto jitterProjSpace = updater.jitter * 2.0f;
-		jitterProjSpace[0] /= float( camera.getWidth() );
-		jitterProjSpace[1] /= float( camera.getHeight() );
-		m_matrixUbo.cpuUpdate( camera.getView()
-			, camera.getProjection( m_safeBand != 0u )
-			, camera.getFrustum()
-			, jitterProjSpace );
-		m_sceneUbo.cpuUpdate( *camera.getScene(), &camera );
 	}
 
 	bool RenderNodesPass::doIsValidPass( Pass const & pass )const
@@ -648,9 +642,14 @@ namespace castor3d
 		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eMatrix )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, stageFlags ) );
-		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eScene )
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, stageFlags ) );
+
+		if ( m_sceneUbo )
+		{
+			addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eScene )
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, stageFlags ) );
+		}
+
 		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eObjectsNodeID )
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, stageFlags ) );

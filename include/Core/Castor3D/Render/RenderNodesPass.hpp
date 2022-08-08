@@ -27,28 +27,49 @@ namespace castor3d
 {
 	struct RenderNodesPassDesc
 	{
+	private:
 		RenderNodesPassDesc( VkExtent3D size
 			, MatrixUbo & matrixUbo
+			, SceneUbo * sceneUbo
 			, SceneCuller & culler
 			, RenderMode mode
 			, bool oit
 			, bool forceTwoSided )
 			: m_size{ std::move( size ) }
 			, m_matrixUbo{ matrixUbo }
+			, m_sceneUbo{ sceneUbo }
 			, m_culler{ culler }
 			, m_mode{ mode }
 			, m_oit{ oit }
 			, m_forceTwoSided{ forceTwoSided }
 		{
 		}
+
+	public:
+		RenderNodesPassDesc( VkExtent3D size
+			, MatrixUbo & matrixUbo
+			, SceneUbo & sceneUbo
+			, SceneCuller & culler
+			, RenderMode mode
+			, bool oit
+			, bool forceTwoSided )
+			: RenderNodesPassDesc{ std::move( size )
+				, matrixUbo
+				, & sceneUbo
+				, culler
+				, mode
+				, oit
+				, forceTwoSided }
+		{
+		}
 		/**
 		 *\~english
-		 *\brief		Constructor for opaque passes.
+		 *\brief		Constructor for shadow passes.
 		 *\param[in]	size		The render area dimensions.
 		 *\param[in]	matrixUbo	The scene matrices UBO.
 		 *\param[in]	culler		The scene culler for this pass.
 		 *\~french
-		 *\brief		Constructeur pour les passes opaques.
+		 *\brief		Constructeur pour les passes d'ombres.
 		 *\param[in]	size		Les dimensions de la zone de rendu.
 		 *\param[in]	matrixUbo	L'UBO des matrices de la scène.
 		 *\param[in]	culler		Le culler pour cette passe.
@@ -58,6 +79,34 @@ namespace castor3d
 			, SceneCuller & culler )
 			: RenderNodesPassDesc{ std::move( size )
 				, matrixUbo
+				, nullptr
+				, culler
+				, RenderMode::eBoth
+				, true
+				, false }
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Constructor for opaque passes.
+		 *\param[in]	size		The render area dimensions.
+		 *\param[in]	matrixUbo	The scene matrices UBO.
+		 *\param[in]	sceneUbo	The scene UBO.
+		 *\param[in]	culler		The scene culler for this pass.
+		 *\~french
+		 *\brief		Constructeur pour les passes opaques.
+		 *\param[in]	size		Les dimensions de la zone de rendu.
+		 *\param[in]	matrixUbo	L'UBO des matrices de la scène.
+		 *\param[in]	sceneUbo	L'UBO de scène.
+		 *\param[in]	culler		Le culler pour cette passe.
+		 */
+		RenderNodesPassDesc( VkExtent3D size
+			, MatrixUbo & matrixUbo
+			, SceneUbo & sceneUbo
+			, SceneCuller & culler )
+			: RenderNodesPassDesc{ std::move( size )
+				, matrixUbo
+				, sceneUbo
 				, culler
 				, RenderMode::eOpaqueOnly
 				, true
@@ -80,10 +129,12 @@ namespace castor3d
 		 */
 		RenderNodesPassDesc( VkExtent3D size
 			, MatrixUbo & matrixUbo
+			, SceneUbo & sceneUbo
 			, SceneCuller & culler
 			, bool oit )
 			: RenderNodesPassDesc{ std::move( size )
 				, matrixUbo
+				, sceneUbo
 				, culler
 				, RenderMode::eTransparentOnly
 				, oit
@@ -162,6 +213,7 @@ namespace castor3d
 
 		VkExtent3D m_size;
 		MatrixUbo & m_matrixUbo;
+		SceneUbo * m_sceneUbo{};
 		SceneCuller & m_culler;
 		RenderMode m_mode;
 		bool m_oit;
@@ -532,16 +584,6 @@ namespace castor3d
 			return m_culler;
 		}
 
-		SceneUbo & getSceneUbo()
-		{
-			return m_sceneUbo;
-		}
-
-		SceneUbo const & getSceneUbo()const
-		{
-			return m_sceneUbo;
-		}
-
 		MatrixUbo & getMatrixUbo()const
 		{
 			return m_matrixUbo;
@@ -586,17 +628,6 @@ namespace castor3d
 			, uint32_t index );
 
 	protected:
-		/**
-		 *\~english
-		 *\brief		Updates the specific data.
-		 *\remarks		Gather the render queues, for further update.
-		 *\param[out]	queues	Receives the render queues needed for the rendering of the frame.
-		 *\~french
-		 *\brief		Met les données spécifiques.
-		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
-		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
-		 */
-		C3D_API virtual void doUpdate( RenderQueueArray & queues );
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -765,7 +796,7 @@ namespace castor3d
 		bool m_safeBand{ false };
 		bool m_isDirty{ true };
 		bool m_meshShading;
-		SceneUbo m_sceneUbo;
+		SceneUbo * m_sceneUbo;
 		uint32_t m_index{ 0u };
 		struct PassDescriptors
 		{

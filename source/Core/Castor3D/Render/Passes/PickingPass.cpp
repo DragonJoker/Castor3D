@@ -57,6 +57,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, castor::Size const & size
 		, MatrixUbo & matrixUbo
+		, SceneUbo & sceneUbo
 		, SceneCuller & culler )
 		: RenderNodesPass{ pass
 			, context
@@ -66,7 +67,7 @@ namespace castor3d
 			, cuT( "Picking" )
 			, cuT( "Picking" )
 			, nullptr
-			, RenderNodesPassDesc{ { size.getWidth(), size.getHeight(), 1u }, matrixUbo, culler, RenderMode::eBoth, true, false }
+			, RenderNodesPassDesc{ { size.getWidth(), size.getHeight(), 1u }, matrixUbo, sceneUbo, culler, RenderMode::eBoth, true, false }
 				.meshShading( true ) }
 	{
 	}
@@ -110,10 +111,6 @@ namespace castor3d
 
 	void PickingPass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-	}
-
-	void PickingPass::doUpdate( RenderQueueArray & CU_UnusedParam( queues ) )
 	{
 	}
 

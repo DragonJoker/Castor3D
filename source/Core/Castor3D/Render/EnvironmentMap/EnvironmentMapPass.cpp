@@ -121,6 +121,7 @@ namespace castor3d
 			, camera.getProjection( false )
 			, camera.getFrustum() );
 		m_hdrConfigUbo.cpuUpdate( camera.getHdrConfig() );
+		m_sceneUbo.cpuUpdate( *camera.getScene(), &camera );
 
 		updater.isSafeBanded = oldSafeBanded;
 		updater.camera = oldCamera;
@@ -137,7 +138,6 @@ namespace castor3d
 		auto oldCamera = updater.camera;
 		updater.camera = &camera;
 
-		m_sceneUbo.cpuUpdate( *updater.scene, updater.camera );
 		m_backgroundRenderer->update( updater );
 		updater.camera = oldCamera;
 	}
@@ -174,7 +174,7 @@ namespace castor3d
 					, cuT( "EnvironmentMap" )
 					, getName() + cuT( "Opaque" )
 					, m_colourView.data->image.data
-					, RenderNodesPassDesc{ getOwner()->getSize(), m_matrixUbo, *m_culler }
+					, RenderNodesPassDesc{ getOwner()->getSize(), m_matrixUbo, m_sceneUbo, *m_culler }
 						.meshShading( true )
 						.implicitAction( depthView
 							, crg::RecordContext::clearAttachment( depthView, defaultClearDepthStencil ) )
@@ -215,7 +215,7 @@ namespace castor3d
 					, cuT( "EnvironmentMap" )
 					, getName() + cuT( "Transparent" )
 					, m_colourView.data->image.data
-					, RenderNodesPassDesc{ getOwner()->getSize(), m_matrixUbo, *m_culler, false }
+					, RenderNodesPassDesc{ getOwner()->getSize(), m_matrixUbo, m_sceneUbo, *m_culler, false }
 						.meshShading( true )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
 				m_node->getScene()->getEngine()->registerTimer( framePass.getFullName()

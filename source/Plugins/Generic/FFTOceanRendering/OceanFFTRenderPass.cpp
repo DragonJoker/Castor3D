@@ -256,6 +256,7 @@ namespace ocean_fft
 						, std::move( depthInput )
 						, castor3d::RenderNodesPassDesc{ extent
 							, technique.getMatrixUbo()
+							, technique.getSceneUbo()
 							, technique.getRenderTarget().getCuller() }.safeBand( true )
 						, castor3d::RenderTechniquePassDesc{ false, technique.getSsaoConfig() }
 							.ssao( technique.getSsaoResult() )
@@ -518,7 +519,6 @@ namespace ocean_fft
 		m_ubo->cpuUpdate( m_configuration
 			, m_oceanFFT->getConfig()
 			, updater.camera->getParent()->getDerivedPosition() );
-		RenderTechniquePass::doUpdateUbos( updater );
 	}
 
 	bool OceanRenderPass::doIsValidPass( castor3d::Pass const & pass )const

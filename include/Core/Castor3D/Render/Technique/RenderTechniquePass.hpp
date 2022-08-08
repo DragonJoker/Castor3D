@@ -226,7 +226,6 @@ namespace castor3d
 		using RenderNodesPass::update;
 
 	protected:
-		C3D_API void doUpdateUbos( CpuUpdater & updater )override;
 		C3D_API ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;
 		C3D_API SceneFlags doAdjustSceneFlags( SceneFlags flags )const override;
 		C3D_API void doAddShadowBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings

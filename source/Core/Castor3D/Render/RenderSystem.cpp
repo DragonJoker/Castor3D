@@ -1001,14 +1001,17 @@ namespace castor3d
 		, castor::String const & name
 		, ast::Shader const & shader )const
 	{
+		log::debug << "Compiling " << ashes::getName( stage ) << " shader [" << name << "] ...";
 		SpirVShader result;
 		auto availableExtensions = rendsys::listSpirVExtensions( *m_device );
 		spirv::SpirVConfig spirvConfig{ rendsys::getSpirVVersion( m_properties.apiVersion )
 			, &availableExtensions };
+		log::debug << " SPV ...";
 		result.spirv = spirv::serialiseSpirv( shader, spirvConfig );
 
 #if !defined( NDEBUG )
 #	if C3D_HasGLSL
+		log::debug << " GLSL ...";
 		glsl::GlslConfig config{ shader.getType()
 			, glsl::v4_6
 			, rendsys::getGLSLExtensions( glsl::v4_6 )
@@ -1033,6 +1036,7 @@ namespace castor3d
 
 		try
 		{
+			log::debug << " Validation ...";
 			auto glslFromSpv = rendsys::compileSpvToGlsl( getRenderDevice()
 				, result.spirv
 				, stage );
@@ -1040,8 +1044,8 @@ namespace castor3d
 		}
 		catch ( std::exception & exc )
 		{
-			std::cerr << result.text << std::endl;
-			std::cerr << exc.what() << std::endl;
+			log::error << result.text << std::endl;
+			log::error << exc.what() << std::endl;
 			{
 				castor::BinaryFile file{ castor::File::getExecutableDirectory() / ( name + "_sdw.spv" )
 					, castor::File::OpenMode::eWrite };
@@ -1063,6 +1067,7 @@ namespace castor3d
 #	endif
 #endif
 
+		log::debug << " Done." << std::endl;
 		return result;
 	}
 

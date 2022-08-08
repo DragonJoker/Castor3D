@@ -43,10 +43,7 @@ namespace castor3d
 			, nullptr
 			, RenderNodesPassDesc{ getExtent( shadowMap.getShadowPassResult()[SmTexture::eDepth].imageId )
 				, matrixUbo
-				, culler
-				, RenderMode::eBoth
-				, true
-				, false } }
+				, culler } }
 		, m_shadowMap{ shadowMap }
 		, m_needsVsm{ needsVsm }
 		, m_needsRsm{ needsRsm }

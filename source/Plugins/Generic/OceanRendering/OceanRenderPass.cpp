@@ -346,6 +346,7 @@ namespace ocean
 				, std::move( depthInput )
 				, castor3d::RenderNodesPassDesc{ extent
 					, technique.getMatrixUbo()
+					, technique.getSceneUbo()
 					, technique.getRenderTarget().getCuller() }.safeBand( true )
 				, castor3d::RenderTechniquePassDesc{ false, technique.getSsaoConfig() }
 					.ssao( technique.getSsaoResult() )
@@ -477,7 +478,6 @@ namespace ocean
 			: std::chrono::duration_cast< castor::Milliseconds >( m_timer.getElapsed() );
 		m_configuration.time += float( tslf.count() ) / 1000.0f;
 		m_ubo.cpuUpdate( m_configuration );
-		RenderTechniquePass::doUpdateUbos( updater );
 	}
 
 	bool OceanRenderPass::doIsValidPass( castor3d::Pass const & pass )const

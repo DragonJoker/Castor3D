@@ -80,7 +80,6 @@ namespace castor3d
 		, castor::String const & prefix
 		, Scene & scene
 		, Camera & camera
-		, MatrixUbo & matrixUbo
 		, VoxelizerUbo & voxelizerUbo
 		, VoxelSceneData const & voxelConfig )
 		: m_engine{ *device.renderSystem.getEngine() }
@@ -90,6 +89,7 @@ namespace castor3d
 		, m_graph{ handler, "Voxelizer" }
 		, m_culler{ scene, &camera }
 		, m_matrixUbo{ device }
+		, m_sceneUbo{ device }
 		, m_firstBounce{ vxlsr::createTexture( device, handler, "VoxelizedSceneFirstBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
 		, m_secondaryBounce{ vxlsr::createTexture( device, handler, "VoxelizedSceneSecondaryBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
 		, m_voxels{ vxlsr::createSsbo( m_engine, device, "VoxelizedSceneBuffer", m_voxelConfig.gridSize.value() ) }
@@ -136,7 +136,8 @@ namespace castor3d
 		if ( m_voxelizePass )
 		{
 			auto & camera = *updater.camera;
-			auto & aabb = camera.getScene()->getBoundingBox();
+			auto & scene = *updater.scene;
+			auto & aabb = scene.getBoundingBox();
 			auto max = std::max( aabb.getDimensions()->x, std::max( aabb.getDimensions()->y, aabb.getDimensions()->z ) );
 			auto cellSize = float( m_voxelConfig.gridSize.value() ) / max;
 			auto voxelSize = ( cellSize * m_voxelConfig.voxelSizeFactor );
@@ -144,6 +145,28 @@ namespace castor3d
 				, 0.0f
 				, 0.0f
 				, voxelSize };
+			static const castor::Matrix4x4f identity{ []()
+				{
+					castor::Matrix4x4f res;
+					res.setIdentity();
+					return res;
+				}() };
+			//Orthograhic projection
+			auto sceneBoundingBox = scene.getBoundingBox();
+			auto ortho = castor::matrix::ortho( sceneBoundingBox.getMin()->x
+				, sceneBoundingBox.getMax()->x
+				, sceneBoundingBox.getMin()->y
+				, sceneBoundingBox.getMax()->y
+				, -1.0f * sceneBoundingBox.getMin()->z
+				, -1.0f * sceneBoundingBox.getMax()->z );
+			auto jitterProjSpace = updater.jitter * 2.0f;
+			jitterProjSpace[0] /= float( camera.getWidth() );
+			jitterProjSpace[1] /= float( camera.getHeight() );
+			m_matrixUbo.cpuUpdate( identity
+				, ortho
+				, camera.getFrustum()
+				, jitterProjSpace );
+			m_sceneUbo.cpuUpdate( scene, &camera );
 			m_voxelizePass->update( updater );
 			m_voxelizerUbo.cpuUpdate( m_voxelConfig
 				, voxelSize
@@ -186,6 +209,7 @@ namespace castor3d
 					, runnableGraph
 					, m_device
 					, m_matrixUbo
+					, m_sceneUbo
 					, m_culler
 					, m_voxelizerUbo
 					, *m_voxels
