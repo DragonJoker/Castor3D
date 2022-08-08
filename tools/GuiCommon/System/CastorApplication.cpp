@@ -115,6 +115,7 @@ namespace GuiCommon
 				static const wxString FixedFPS{ wxT( "fps" ) };
 				static const wxString GpuIndex{ wxT( "gpu" ) };
 				static const wxString DisUpdOptim{ wxT( "disable_update_optim" ) };
+				static const wxString MaxImgSize{ wxT( "max_image_size" ) };
 			}
 
 			namespace st
@@ -128,6 +129,7 @@ namespace GuiCommon
 				static const wxString FixedFPS{ wxT( "f" ) };
 				static const wxString GpuIndex{ wxT( "g" ) };
 				static const wxString DisUpdOptim{ wxT( "d" ) };
+				static const wxString MaxImgSize{ wxT( "i" ) };
 			}
 		}
 
@@ -150,6 +152,7 @@ namespace GuiCommon
 				static const wxString FixedFPS{ _( "Defines wanted FPS (has no effect if '" ) + option::lg::UnlimFPS + _( "' option is specified)." ) };
 				static const wxString GpuIndex{ _( "The index of the wanted Vulkan physical device." ) };
 				static const wxString DisUpdOptim{ _( "Disable update optimisations." ) };
+				static const wxString MaxImgSize{ _( "The maximum material images size." ) };
 				static const wxString SceneFile{ _( "The initial scene file." ) };
 
 				parser.AddSwitch( option::st::Help, option::lg::Help, Help, wxCMD_LINE_OPTION_HELP );
@@ -161,6 +164,7 @@ namespace GuiCommon
 				parser.AddOption( option::st::FixedFPS, option::lg::FixedFPS, FixedFPS, wxCMD_LINE_VAL_NUMBER );
 				parser.AddOption( option::st::GpuIndex, option::lg::GpuIndex, GpuIndex, wxCMD_LINE_VAL_NUMBER );
 				parser.AddSwitch( option::st::DisUpdOptim, option::lg::DisUpdOptim, DisUpdOptim );
+				parser.AddOption( option::st::MaxImgSize, option::lg::MaxImgSize, MaxImgSize, wxCMD_LINE_VAL_NUMBER );
 				parser.AddParam( SceneFile, wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL );
 
 				for ( auto & plugin : list )
@@ -246,6 +250,7 @@ namespace GuiCommon
 				}
 
 				config.gpuIndex = getLong( option::st::GpuIndex, DefaultGpuIndex );
+				config.maxImageSize = getLong( option::st::MaxImgSize, 0u );
 
 				wxString strFileName;
 
@@ -512,6 +517,11 @@ namespace GuiCommon
 		else
 		{
 			m_castor->initialise( 0xFFFFFFFFu, !m_config.syncRender );
+		}
+
+		if ( m_config.maxImageSize > 0u )
+		{
+			m_castor->setMaxImageSize( m_config.maxImageSize );
 		}
 
 		castor::Logger::logInfo( cuT( "Castor3D Initialised." ) );
