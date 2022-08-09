@@ -18,6 +18,7 @@ namespace castor3d
 		template< typename DataT >
 		static PipelineBaseHash getPipelineBaseHash( SubmeshFlags submeshFlags
 			, ProgramFlags programFlags
+			, PassTypeID passType
 			, PassFlags passFlags
 			, uint32_t maxTexcoordSet
 			, uint32_t texturesCount
@@ -30,23 +31,27 @@ namespace castor3d
 			remFlag( passFlags, PassFlag::eAllOptional );
 			constexpr auto maxSubmeshSize = castor::getBitSize( uint32_t( SubmeshFlag::eAllBase ) );
 			constexpr auto maxProgramSize = castor::getBitSize( uint32_t( ProgramFlag::eAllBase ) );
+			constexpr auto maxPassIDSize = castor::getBitSize( MaxPassTypes );
 			constexpr auto maxPassSize = castor::getBitSize( uint32_t( PassFlag::eAllBase ) );
-			constexpr auto maxTexcoorSetSize = castor::getBitSize( MaxTextureCoordinatesSets );
+			constexpr auto maxTexcoordSetSize = castor::getBitSize( MaxTextureCoordinatesSets );
+			constexpr auto maxTexturesSize = castor::getBitSize( MaxPassTextures );
 			constexpr auto maxTextureSize = castor::getBitSize( uint32_t( TextureFlag::eAll ) );
-			constexpr auto maxTexturesSize = castor::getBitSize( uint32_t( maxTextureSize ) );
 			constexpr auto maxPassLayerSize = castor::getBitSize( MaxPassLayers );
 			constexpr auto maxTargetOffsetSize = 64 - maxPassLayerSize;
-			static_assert( 64 >= maxSubmeshSize + maxProgramSize + maxPassSize + maxTexcoorSetSize + maxTextureSize + maxTexturesSize );
+			constexpr auto maxLoSize = maxSubmeshSize + maxProgramSize + maxPassIDSize + maxPassSize + maxTexcoordSetSize + maxTextureSize + maxTexturesSize;
+			static_assert( 64 >= maxLoSize );
 			auto offset = 0u;
 			PipelineBaseHash result{};
 			result.lo = uint64_t( submeshFlags ) << offset;
 			offset += maxSubmeshSize;
 			result.lo |= uint64_t( programFlags ) << offset;
 			offset += maxProgramSize;
+			result.lo |= uint64_t( passType ) << offset;
+			offset += maxPassIDSize;
 			result.lo |= uint64_t( passFlags ) << offset;
 			offset += maxPassSize;
 			result.lo |= uint64_t( maxTexcoordSet ) << offset;
-			offset += maxTexcoorSetSize;
+			offset += maxTexcoordSetSize;
 			result.lo |= uint64_t( texturesCount ) << offset;
 			offset += maxTexturesSize;
 			result.lo |= uint64_t( texturesFlags ) << offset;
@@ -90,6 +95,7 @@ namespace castor3d
 
 		return pipnodes::getPipelineBaseHash( renderPass.adjustFlags( submeshFlags )
 			, renderPass.adjustFlags( programFlags )
+			, pass.getTypeID()
 			, renderPass.adjustFlags( pass.getPassFlags() )
 			, pass.getMaxTexCoordSet()
 			, pass.getTextureUnitsCount()
@@ -114,6 +120,7 @@ namespace castor3d
 
 		return pipnodes::getPipelineBaseHash( renderPass.adjustFlags( submeshFlags )
 			, renderPass.adjustFlags( programFlags )
+			, pass.getTypeID()
 			, renderPass.adjustFlags( pass.getPassFlags() )
 			, pass.getMaxTexCoordSet()
 			, pass.getTextureUnitsCount()
@@ -121,6 +128,47 @@ namespace castor3d
 			, pass.getIndex()
 			, 0u
 			, &data );
+	}
+
+	PipelineHashDetails getPipelineHashDetails( PipelineBaseHash const & hash )
+	{
+		constexpr auto maxSubmeshSize = castor::getBitSize( uint32_t( SubmeshFlag::eAllBase ) );
+		constexpr auto maxSubmeshMask = ( 0x1u << uint32_t( maxSubmeshSize ) ) - 1u;
+		constexpr auto maxProgramSize = castor::getBitSize( uint32_t( ProgramFlag::eAllBase ) );
+		constexpr auto maxProgramMask = ( 0x1u << uint32_t( maxProgramSize ) ) - 1u;
+		constexpr auto maxPassIDSize = castor::getBitSize( MaxPassTypes );
+		constexpr auto maxPassIDMask = ( 0x1u << uint32_t( maxPassIDSize ) ) - 1u;
+		constexpr auto maxPassSize = castor::getBitSize( uint32_t( PassFlag::eAllBase ) );
+		constexpr auto maxPassMask = ( 0x1u << uint32_t( maxPassSize ) ) - 1u;
+		constexpr auto maxTexcoordSetSize = castor::getBitSize( MaxTextureCoordinatesSets );
+		constexpr auto maxTexcoordSetMask = ( 0x1u << uint32_t( maxTexcoordSetSize ) ) - 1u;
+		constexpr auto maxTexturesSize = castor::getBitSize( MaxPassTextures );
+		constexpr auto maxTexturesMask = ( 0x1u << uint32_t( maxTexturesSize ) ) - 1u;
+		constexpr auto maxTextureSize = castor::getBitSize( uint32_t( TextureFlag::eAll ) );
+		constexpr auto maxTextureMask = ( 0x1u << uint32_t( maxTextureSize ) ) - 1u;
+
+		auto offset = 0u;
+		auto submeshFlags = SubmeshFlags( ( hash.lo >> offset ) & maxSubmeshMask );
+		offset += maxSubmeshSize;
+		auto programFlags = ProgramFlags( ( hash.lo >> offset ) & maxProgramMask );
+		offset += maxProgramSize;
+		auto passType = PassFlags( ( hash.lo >> offset ) & maxPassIDMask );
+		offset += maxPassIDSize;
+		auto passFlags = PassFlags( ( hash.lo >> offset ) & maxPassMask );
+		offset += maxPassSize;
+		auto maxTexcoordSet = uint32_t( ( hash.lo >> offset ) & maxTexcoordSetMask );
+		offset += maxTexcoordSetSize;
+		auto texturesCount = uint32_t( ( hash.lo >> offset ) & maxTexturesMask );
+		offset += maxTexturesSize;
+		auto texturesFlags = TextureFlags( ( hash.lo >> offset ) & maxTextureMask );
+
+		return { submeshFlags
+			, programFlags
+			, passType
+			, passFlags
+			, maxTexcoordSet
+			, texturesCount
+			, texturesFlags };
 	}
 
 	//*********************************************************************************************
