@@ -7,20 +7,33 @@ See LICENSE file in root folder
 #include "UbosModule.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 
-#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 
 namespace castor3d::shader
 {
 	struct ModelIndices
-		: public sdw::StructInstance
+		: public sdw::StructInstanceHelperT< "C3D_BufferName"
+			, sdw::type::MemoryLayout::eStd140
+			, sdw::Mat4Field< "prvMtxModel" >
+			, sdw::Mat4Field< "curMtxModel" >
+			, sdw::Mat4Field< "mtxNormal" >
+			, sdw::UIntField< "materialId" >
+			, sdw::UIntField< "shadowReceiver" >
+			, sdw::UIntField< "envMapId" >
+			, sdw::UIntField< "vertexOffset" >
+			, sdw::Vec3Field< "scale" >
+			, sdw::UIntField< "meshletCount" >
+			, sdw::UIntField< "indexOffset" >
+			, sdw::UIntField< "meshletOffset" >
+			, sdw::UVec2Field< "pad" > >
 	{
-		C3D_API ModelIndices( sdw::ShaderWriter & writer
+		ModelIndices( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
-			, bool enabled );
-		SDW_DeclStructInstance( C3D_API, ModelIndices );
-
-		C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
+			, bool enabled )
+			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+		{
+		}
 
 		C3D_API sdw::Mat4 getPrvModelMtx( ProgramFlags programsFlags
 			, sdw::Mat4 const & curModelMatrix )const;
@@ -43,32 +56,42 @@ namespace castor3d::shader
 
 		sdw::UInt getMaterialId()const
 		{
-			return m_materialId;
+			return getMember< "materialId" >();
 		}
 
-		sdw::Int const & isShadowReceiver()const
+		sdw::UInt isShadowReceiver()const
 		{
-			return m_shadowReceiver;
+			return getMember< "shadowReceiver" >();
 		}
 
-		sdw::Int const & getEnvMapIndex()const
+		sdw::UInt getEnvMapIndex()const
 		{
-			return m_envMapId;
+			return getMember< "envMapId" >();
 		}
 
-		sdw::Mat4 const & getModelMtx()const
+		sdw::Mat4 getModelMtx()const
 		{
-			return m_curMtxModel;
+			return getMember< "curMtxModel" >();
 		}
 
-		sdw::Vec3 const & getScale()const
+		sdw::Vec3 getScale()const
 		{
-			return m_scale;
+			return getMember< "scale" >();
 		}
 
-		sdw::UInt const & getMeshletCount()const
+		sdw::UInt getMeshletCount()const
 		{
-			return m_meshletCount;
+			return getMember< "meshletCount" >();
+		}
+
+		sdw::UInt getVertexOffset()const
+		{
+			return getMember< "vertexOffset" >();
+		}
+
+		sdw::UInt getIndexOffset()const
+		{
+			return getMember< "indexOffset" >();
 		}
 
 	public:
@@ -76,19 +99,15 @@ namespace castor3d::shader
 		C3D_API static castor::String const DataName;
 
 	private:
-		using sdw::StructInstance::getMember;
-		using sdw::StructInstance::getMemberArray;
+		sdw::Mat4 prvMtxModel()const
+		{
+			return getMember< "prvMtxModel" >();
+		}
 
-	private:
-		sdw::Mat4 m_prvMtxModel;
-		sdw::Mat4 m_curMtxModel;
-		sdw::Mat4 m_mtxNormal;
-		sdw::UInt m_materialId;
-		sdw::Int m_shadowReceiver;
-		sdw::Int m_envMapId;
-		sdw::Int m_pad;
-		sdw::Vec3 m_scale;
-		sdw::UInt m_meshletCount;
+		sdw::Mat4 mtxNormal()const
+		{
+			return getMember< "mtxNormal" >();
+		}
 	};
 }
 

@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "SkeletonModule.hpp"
 
+#include "Castor3D/Limits.hpp"
+
 namespace castor3d
 {
 	struct VertexBoneData

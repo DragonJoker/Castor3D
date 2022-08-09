@@ -295,6 +295,7 @@ namespace GuiCommon
 			, rendererType
 			, {}
 			, {}
+			, {}
 			, {} }
 	{
 		wxSetAssertHandler( assertHandler );

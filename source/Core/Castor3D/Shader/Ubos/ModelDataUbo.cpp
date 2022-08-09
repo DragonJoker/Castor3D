@@ -10,43 +10,6 @@ namespace castor3d::shader
 	castor::String const ModelIndices::BufferName = cuT( "ModelsIndices" );
 	castor::String const ModelIndices::DataName = cuT( "c3d_modelsData" );
 
-	ModelIndices::ModelIndices( sdw::ShaderWriter & writer
-		, ast::expr::ExprPtr expr
-		, bool enabled )
-		: StructInstance{ writer, std::move( expr ), enabled }
-		, m_prvMtxModel{ getMember< sdw::Mat4 >( "prvMtxModel" ) }
-		, m_curMtxModel{ getMember< sdw::Mat4 >( "curMtxModel" ) }
-		, m_mtxNormal{ getMember< sdw::Mat4 >( "mtxNormal" ) }
-		, m_materialId{ getMember< sdw::Int >( "materialId" ) }
-		, m_shadowReceiver{ getMember< sdw::Int >( "shadowReceiver" ) }
-		, m_envMapId{ getMember< sdw::Int >( "envMapId" ) }
-		, m_pad{ getMember< sdw::Int >( "pad" ) }
-		, m_scale{ getMember< sdw::Vec3 >( "scale" ) }
-		, m_meshletCount{ getMember< sdw::UInt >( "meshletCount" ) }
-	{
-	}
-
-	ast::type::BaseStructPtr ModelIndices::makeType( ast::type::TypesCache & cache )
-	{
-		auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-			, "C3D_" + BufferName );
-
-		if ( result->empty() )
-		{
-			result->declMember( "prvMtxModel", ast::type::Kind::eMat4x4F );
-			result->declMember( "curMtxModel", ast::type::Kind::eMat4x4F );
-			result->declMember( "mtxNormal", ast::type::Kind::eMat4x4F );
-			result->declMember( "materialId", ast::type::Kind::eInt );
-			result->declMember( "shadowReceiver", ast::type::Kind::eInt );
-			result->declMember( "envMapId", ast::type::Kind::eInt );
-			result->declMember( "pad", ast::type::Kind::eInt );
-			result->declMember( "scale", ast::type::Kind::eVec3F );
-			result->declMember( "meshletCount", ast::type::Kind::eUInt );
-		}
-
-		return result;
-	}
-
 	sdw::Mat4 ModelIndices::getPrvModelMtx( ProgramFlags programsFlags
 		, sdw::Mat4 const & curModelMatrix )const
 	{
@@ -55,7 +18,7 @@ namespace castor3d::shader
 			return curModelMatrix;
 		}
 
-		return m_prvMtxModel;
+		return prvMtxModel();
 	}
 
 	sdw::Mat3 ModelIndices::getNormalMtx( SubmeshFlags submeshFlags
@@ -66,7 +29,7 @@ namespace castor3d::shader
 			return transpose( inverse( mat3( curModelMatrix ) ) );
 		}
 
-		return mat3( m_mtxNormal );
+		return mat3( mtxNormal() );
 	}
 
 	sdw::Mat3 ModelIndices::getNormalMtx( ProgramFlags programsFlags
@@ -77,27 +40,27 @@ namespace castor3d::shader
 			return transpose( inverse( mat3( curModelMatrix ) ) );
 		}
 
-		return mat3( m_mtxNormal );
+		return mat3( mtxNormal() );
 	}
 
 	sdw::Vec4 ModelIndices::worldToModel( sdw::Vec4 const & pos )const
 	{
-		return inverse( m_curMtxModel ) * pos;
+		return inverse( getModelMtx() ) * pos;
 	}
 
 	sdw::Vec4 ModelIndices::modelToWorld( sdw::Vec4 const & pos )const
 	{
-		return m_curMtxModel * pos;
+		return getModelMtx() * pos;
 	}
 
 	sdw::Vec4 ModelIndices::modelToCurWorld( sdw::Vec4 const & pos )const
 	{
-		return m_curMtxModel * pos;
+		return getModelMtx() * pos;
 	}
 
 	sdw::Vec4 ModelIndices::modelToPrvWorld( sdw::Vec4 const & pos )const
 	{
-		return m_prvMtxModel * pos;
+		return prvMtxModel() * pos;
 	}
 
 	sdw::Mat4 ModelIndices::getCurModelMtx( ProgramFlags programsFlags
@@ -108,7 +71,7 @@ namespace castor3d::shader
 			return transform;
 		}
 
-		return m_curMtxModel;
+		return getModelMtx();
 	}
 
 	sdw::Mat4 ModelIndices::getCurModelMtx( SkinningData const & skinning
@@ -121,7 +84,7 @@ namespace castor3d::shader
 		if ( skinning.transforms )
 		{
 			return SkinningUbo::computeTransform( skinning
-				, m_curMtxModel
+				, getModelMtx()
 				, *getWriter()
 				, skinningId
 				, boneIds0
@@ -130,6 +93,6 @@ namespace castor3d::shader
 				, boneWeights1 );
 		}
 
-		return m_curMtxModel;
+		return getModelMtx();
 	}
 }

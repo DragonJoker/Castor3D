@@ -104,7 +104,7 @@ namespace castor3d::shader
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::CombinedImageCubeArrayRgba32 const & envMap
-				, sdw::Int const & envMapIndex
+				, sdw::UInt const & envMapIndex
 				, sdw::Vec3 const & specular
 				, sdw::Float const & roughness )
 			{
@@ -117,7 +117,7 @@ namespace castor3d::shader
 			, sdw::InVec3{ m_writer, "wsIncident" }
 			, sdw::InVec3{ m_writer, "wsNormal" }
 			, sdw::InCombinedImageCubeArrayRgba32{ m_writer, "envMap" }
-			, sdw::InInt{ m_writer, "envMapIndex" }
+			, sdw::InUInt{ m_writer, "envMapIndex" }
 			, sdw::InVec3{ m_writer, "specular" }
 			, sdw::InFloat{ m_writer, "roughness" } );
 	}
@@ -133,7 +133,7 @@ namespace castor3d::shader
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::CombinedImageCubeArrayRgba32 const & envMap
-				, sdw::Int const & envMapIndex
+				, sdw::UInt const & envMapIndex
 				, sdw::Float const & refractionRatio
 				, sdw::Vec3 const & transmission
 				, sdw::Vec3 albedo
@@ -152,7 +152,7 @@ namespace castor3d::shader
 			, sdw::InVec3{ m_writer, "wsIncident" }
 			, sdw::InVec3{ m_writer, "wsNormal" }
 			, sdw::InCombinedImageCubeArrayRgba32{ m_writer, "envMap" }
-			, sdw::InInt{ m_writer, "envMapIndex" }
+			, sdw::InUInt{ m_writer, "envMapIndex" }
 			, sdw::InFloat{ m_writer, "refractionRatio" }
 			, sdw::InVec3{ m_writer, "transmission" }
 			, sdw::InOutVec3{ m_writer, "albedo" }

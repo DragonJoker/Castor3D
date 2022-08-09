@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/Culling/DummyCuller.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/RunnableGraph.hpp>

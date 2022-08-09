@@ -27,12 +27,12 @@ namespace castor3d
 		modelData.curModel = modelMtx;
 		modelData.normal = castor::Matrix4x4f{ normal.getInverse().getTransposed() };
 
-		modelData.materialId = int( pass.getId() );
-		modelData.shadowReceiver = isShadowReceiver() ? 1 : 0;
+		modelData.materialId = pass.getId();
+		modelData.shadowReceiver = isShadowReceiver() ? 1u : 0u;
 
 		if ( pass.hasEnvironmentMapping() )
 		{
-			modelData.envMapId = int( sceneNode.getScene()->getEnvironmentMapIndex( sceneNode ) + 1u );
+			modelData.envMapId = sceneNode.getScene()->getEnvironmentMapIndex( sceneNode ) + 1u;
 		}
 
 		auto scale = sceneNode.getDerivedScale();

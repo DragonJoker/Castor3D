@@ -64,7 +64,7 @@ namespace atmosphere_scattering
 		, c3d::Surface const & psurface
 		, c3d::BackgroundModel & pbackground
 		, sdw::Vec3 const & pworldEye
-		, sdw::Int const & preceivesShadows
+		, sdw::UInt const & preceivesShadows
 		, c3d::OutputComponents & pparentOutput )
 	{
 		if ( !m_atmosphereBackground )
@@ -82,7 +82,7 @@ namespace atmosphere_scattering
 					, c3d::PhongLightMaterial const & material
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
-					, sdw::Int const & receivesShadows
+					, sdw::UInt const & receivesShadows
 					, c3d::OutputComponents & parentOutput )
 				{
 					c3d::OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
@@ -171,7 +171,7 @@ namespace atmosphere_scattering
 
 							cascadeIndex = m_writer.cast< sdw::UInt >( cascadeFactors.x() );
 
-							IF( m_writer, receivesShadows != 0_i )
+							IF( m_writer, receivesShadows != 0_u )
 							{
 								auto shadowFactor = m_writer.declLocale( "shadowFactor"
 									, cascadeFactors.y()
@@ -228,7 +228,7 @@ namespace atmosphere_scattering
 				, c3d::InPhongLightMaterial{ m_writer, "material" }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
-				, sdw::InInt( m_writer, "receivesShadows" )
+				, sdw::InUInt( m_writer, "receivesShadows" )
 				, outputs );
 		}
 
@@ -313,7 +313,7 @@ namespace atmosphere_scattering
 		, c3d::Surface const & psurface
 		, c3d::BackgroundModel & pbackground
 		, sdw::Vec3 const & pworldEye
-		, sdw::Int const & preceivesShadows
+		, sdw::UInt const & preceivesShadows
 		, c3d::OutputComponents & pparentOutput )
 	{
 		if ( !m_atmosphereBackground )
@@ -331,7 +331,7 @@ namespace atmosphere_scattering
 					, c3d::PbrLightMaterial const & material
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
-					, sdw::Int const & receivesShadows
+					, sdw::UInt const & receivesShadows
 					, c3d::OutputComponents & parentOutput )
 				{
 					c3d::OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
@@ -396,7 +396,7 @@ namespace atmosphere_scattering
 
 							cascadeIndex = m_writer.cast< sdw::UInt >( cascadeFactors.x() );
 
-							IF( m_writer, receivesShadows != 0_i )
+							IF( m_writer, receivesShadows != 0_u )
 							{
 								auto shadowFactor = m_writer.declLocale( "shadowFactor"
 									, cascadeFactors.y()
@@ -453,7 +453,7 @@ namespace atmosphere_scattering
 				, c3d::InPbrLightMaterial{ m_writer, "material" }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
-				, sdw::InInt( m_writer, "receivesShadows" )
+				, sdw::InUInt( m_writer, "receivesShadows" )
 				, outputs );
 		}
 

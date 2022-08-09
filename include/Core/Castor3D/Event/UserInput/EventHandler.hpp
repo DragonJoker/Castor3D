@@ -593,7 +593,7 @@ namespace castor3d
 		: public EventHandler
 	{
 	public:
-		MouseEventHandler( castor::String const & name )
+		explicit MouseEventHandler( castor::String const & name )
 			: EventHandler{ name, true }
 		{
 		}

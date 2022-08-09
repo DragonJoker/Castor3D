@@ -58,19 +58,19 @@ namespace toon::shader
 			, c3d::Surface const & surface
 			, c3d::BackgroundModel & background
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows
+			, sdw::UInt const & receivesShadows
 			, c3d::OutputComponents & output )override;
 		void compute( c3d::PointLight const & light
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows
+			, sdw::UInt const & receivesShadows
 			, c3d::OutputComponents & output )override;
 		void compute( c3d::SpotLight const & light
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows
+			, sdw::UInt const & receivesShadows
 			, c3d::OutputComponents & output )override;
 		void computeMapContributions( castor3d::PassFlags const & passFlags
 			, castor3d::TextureFlags const & textureFlags
@@ -102,17 +102,17 @@ namespace toon::shader
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows )override;
+			, sdw::UInt const & receivesShadows )override;
 		sdw::Vec3 computeDiffuse( c3d::PointLight const & light
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows )override;
+			, sdw::UInt const & receivesShadows )override;
 		sdw::Vec3 computeDiffuse( c3d::SpotLight const & light
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows )override;
+			, sdw::UInt const & receivesShadows )override;
 		void computeMapDiffuseContributions( castor3d::PassFlags const & passFlags
 			, castor3d::TextureFlags const & textureFlags
 			, c3d::TextureConfigurations const & textureConfigs
@@ -157,21 +157,21 @@ namespace toon::shader
 			, InToonPhongLightMaterial
 			, c3d::InSurface
 			, sdw::InVec3
-			, sdw::InInt
+			, sdw::InUInt
 			, c3d::OutputComponents & > m_computeDirectional;
 		sdw::Function< sdw::Void
 			, c3d::InPointLight
 			, InToonPhongLightMaterial
 			, c3d::InSurface
 			, sdw::InVec3
-			, sdw::InInt
+			, sdw::InUInt
 			, c3d::OutputComponents & > m_computePoint;
 		sdw::Function< sdw::Void
 			, c3d::InSpotLight
 			, InToonPhongLightMaterial
 			, c3d::InSurface
 			, sdw::InVec3
-			, sdw::InInt
+			, sdw::InUInt
 			, c3d::OutputComponents & > m_computeSpot;
 		sdw::Function< sdw::Vec3
 			, c3d::InLight
@@ -184,19 +184,19 @@ namespace toon::shader
 			, InToonPhongLightMaterial
 			, c3d::InSurface
 			, sdw::InVec3
-			, sdw::InInt > m_computeDirectionalDiffuse;
+			, sdw::InUInt > m_computeDirectionalDiffuse;
 		sdw::Function< sdw::Vec3
 			, c3d::InOutPointLight
 			, InToonPhongLightMaterial
 			, c3d::InSurface
 			, sdw::InVec3
-			, sdw::InInt > m_computePointDiffuse;
+			, sdw::InUInt > m_computePointDiffuse;
 		sdw::Function< sdw::Vec3
 			, c3d::InOutSpotLight
 			, InToonPhongLightMaterial
 			, c3d::InSurface
 			, sdw::InVec3
-			, sdw::InInt > m_computeSpotDiffuse;
+			, sdw::InUInt > m_computeSpotDiffuse;
 	};
 
 	class ToonBlinnPhongLightingModel
@@ -261,19 +261,19 @@ namespace toon::shader
 			, c3d::Surface const & surface
 			, c3d::BackgroundModel & background
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows
+			, sdw::UInt const & receivesShadows
 			, c3d::OutputComponents & output )override;
 		void compute( c3d::PointLight const & light
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows
+			, sdw::UInt const & receivesShadows
 			, c3d::OutputComponents & output )override;
 		void compute( c3d::SpotLight const & light
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows
+			, sdw::UInt const & receivesShadows
 			, c3d::OutputComponents & output )override;
 		void computeMapContributions( castor3d::PassFlags const & passFlags
 			, castor3d::TextureFlags const & textureFlags
@@ -305,17 +305,17 @@ namespace toon::shader
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows )override;
+			, sdw::UInt const & receivesShadows )override;
 		sdw::Vec3 computeDiffuse( c3d::PointLight const & light
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows )override;
+			, sdw::UInt const & receivesShadows )override;
 		sdw::Vec3 computeDiffuse( c3d::SpotLight const & light
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows )override;
+			, sdw::UInt const & receivesShadows )override;
 		void computeMapDiffuseContributions( castor3d::PassFlags const & passFlags
 			, castor3d::TextureFlags const & textureFlags
 			, c3d::TextureConfigurations const & textureConfigs
@@ -339,40 +339,40 @@ namespace toon::shader
 			, InToonPbrLightMaterial
 			, c3d::InSurface
 			, sdw::InVec3
-			, sdw::InInt
+			, sdw::InUInt
 			, c3d::OutputComponents & > m_computeDirectional;
 		sdw::Function< sdw::Void
 			, c3d::InPointLight
 			, InToonPbrLightMaterial
 			, c3d::InSurface
 			, sdw::InVec3
-			, sdw::InInt
+			, sdw::InUInt
 			, c3d::OutputComponents & > m_computePoint;
 		sdw::Function< sdw::Void
 			, c3d::InSpotLight
 			, InToonPbrLightMaterial
 			, c3d::InSurface
 			, sdw::InVec3
-			, sdw::InInt
+			, sdw::InUInt
 			, c3d::OutputComponents & > m_computeSpot;
 		sdw::Function< sdw::Vec3
 			, c3d::InOutDirectionalLight
 			, InToonPbrLightMaterial
 			, c3d::InSurface
 			, sdw::InVec3
-			, sdw::InInt > m_computeDirectionalDiffuse;
+			, sdw::InUInt > m_computeDirectionalDiffuse;
 		sdw::Function< sdw::Vec3
 			, c3d::InOutPointLight
 			, InToonPbrLightMaterial
 			, c3d::InSurface
 			, sdw::InVec3
-			, sdw::InInt > m_computePointDiffuse;
+			, sdw::InUInt > m_computePointDiffuse;
 		sdw::Function< sdw::Vec3
 			, c3d::InOutSpotLight
 			, InToonPbrLightMaterial
 			, c3d::InSurface
 			, sdw::InVec3
-			, sdw::InInt > m_computeSpotDiffuse;
+			, sdw::InUInt > m_computeSpotDiffuse;
 	};
  }
 

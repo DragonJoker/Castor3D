@@ -181,7 +181,7 @@ namespace castor3d::shader
 		, BackgroundModel & background
 		, Surface const & surface
 		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows
+		, sdw::UInt const & receivesShadows
 		, OutputComponents & parentOutput )
 	{
 		auto begin = m_writer.declLocale( "c3d_begin"
@@ -323,7 +323,7 @@ namespace castor3d::shader
 		, SceneData const & sceneData
 		, Surface const & surface
 		, sdw::Vec3 const & worldEye
-		, sdw::Int const & receivesShadows )
+		, sdw::UInt const & receivesShadows )
 	{
 		auto begin = m_writer.declLocale( "c3d_begin"
 			, 0_u );

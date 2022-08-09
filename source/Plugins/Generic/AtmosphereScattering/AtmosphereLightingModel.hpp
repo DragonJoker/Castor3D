@@ -44,7 +44,7 @@ namespace atmosphere_scattering
 			, c3d::Surface const & surface
 			, c3d::BackgroundModel & background
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows
+			, sdw::UInt const & receivesShadows
 			, c3d::OutputComponents & output )override;
 		using c3d::PhongLightingModel::compute;
 		//\}
@@ -56,7 +56,7 @@ namespace atmosphere_scattering
 			, c3d::InPhongLightMaterial
 			, c3d::InSurface
 			, sdw::InVec3
-			, sdw::InInt
+			, sdw::InUInt
 			, c3d::OutputComponents & > m_computeDirectional;
 	};
 
@@ -104,7 +104,7 @@ namespace atmosphere_scattering
 			, c3d::Surface const & surface
 			, c3d::BackgroundModel & background
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows
+			, sdw::UInt const & receivesShadows
 			, c3d::OutputComponents & output )override;
 		using c3d::PbrLightingModel::compute;
 		//\}
@@ -116,7 +116,7 @@ namespace atmosphere_scattering
 			, c3d::InPbrLightMaterial
 			, c3d::InSurface
 			, sdw::InVec3
-			, sdw::InInt
+			, sdw::InUInt
 			, c3d::OutputComponents & > m_computeDirectional;
 	};
  }
