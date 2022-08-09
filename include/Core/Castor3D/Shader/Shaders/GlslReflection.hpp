@@ -24,7 +24,7 @@ namespace castor3d::shader
 			, Surface const & surface
 			, SceneData const & sceneData
 			, BackgroundModel & background
-			, sdw::Int envMapIndex
+			, sdw::UInt envMapIndex
 			, sdw::Int const & reflection
 			, sdw::Int const & refraction
 			, sdw::Float const & refractionRatio
@@ -138,19 +138,19 @@ namespace castor3d::shader
 		sdw::Vec3 computeReflEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::CombinedImageCubeArrayRgba32 const & envMap
-			, sdw::Int const & envMapIndex
+			, sdw::UInt const & envMapIndex
 			, LightMaterial const & material );
 		sdw::Vec3 computeRefrEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::CombinedImageCubeArrayRgba32 const & envMap
-			, sdw::Int const & envMapIndex
+			, sdw::UInt const & envMapIndex
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
 			, LightMaterial & material );
 		sdw::Vec3 mergeReflRefrEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::CombinedImageCubeArrayRgba32 const & envMap
-			, sdw::Int const & envMapIndex
+			, sdw::UInt const & envMapIndex
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
 			, LightMaterial & material
@@ -187,7 +187,7 @@ namespace castor3d::shader
 		C3D_API sdw::Vec3 doComputeRefrEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::CombinedImageCubeArrayRgba32 const & envMap
-			, sdw::Int const & envMapIndex
+			, sdw::UInt const & envMapIndex
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
 			, sdw::Vec3 & albedo
@@ -258,14 +258,14 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InCombinedImageCubeArrayRgba32
-			, sdw::InInt
+			, sdw::InUInt
 			, sdw::InVec3
 			, sdw::InFloat > m_computeReflEnvMaps;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InCombinedImageCubeArrayRgba32
-			, sdw::InInt
+			, sdw::InUInt
 			, sdw::InFloat
 			, sdw::InVec3
 			, sdw::InOutVec3
@@ -274,7 +274,7 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InCombinedImageCubeArrayRgba32
-			, sdw::InInt
+			, sdw::InUInt
 			, sdw::InFloat
 			, sdw::InVec3
 			, sdw::InVec3

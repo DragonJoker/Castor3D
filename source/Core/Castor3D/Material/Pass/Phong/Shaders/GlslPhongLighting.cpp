@@ -128,7 +128,7 @@ namespace castor3d::shader
 		, Surface const & psurface
 		, BackgroundModel & pbackground
 		, sdw::Vec3 const & pworldEye
-		, sdw::Int const & preceivesShadows
+		, sdw::UInt const & preceivesShadows
 		, OutputComponents & pparentOutput )
 	{
 		if ( !m_computeDirectional )
@@ -139,7 +139,7 @@ namespace castor3d::shader
 					, PhongLightMaterial const & material
 					, Surface const & surface
 					, sdw::Vec3 const & worldEye
-					, sdw::Int const & receivesShadows
+					, sdw::UInt const & receivesShadows
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
@@ -185,7 +185,7 @@ namespace castor3d::shader
 
 							cascadeIndex = m_writer.cast< sdw::UInt >( cascadeFactors.x() );
 
-							IF( m_writer, receivesShadows != 0_i )
+							IF( m_writer, receivesShadows != 0_u )
 							{
 								auto shadowFactor = m_writer.declLocale( "shadowFactor"
 									, cascadeFactors.y()
@@ -266,7 +266,7 @@ namespace castor3d::shader
 				, InPhongLightMaterial{ m_writer, "material" }
 				, InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
-				, sdw::InInt( m_writer, "receivesShadows" )
+				, sdw::InUInt( m_writer, "receivesShadows" )
 				, outputs );
 		}
 
@@ -282,7 +282,7 @@ namespace castor3d::shader
 		, LightMaterial const & pmaterial
 		, Surface const & psurface
 		, sdw::Vec3 const & pworldEye
-		, sdw::Int const & preceivesShadows
+		, sdw::UInt const & preceivesShadows
 		, OutputComponents & pparentOutput )
 	{
 		if ( !m_computePoint )
@@ -293,7 +293,7 @@ namespace castor3d::shader
 					, PhongLightMaterial const & material
 					, Surface const & surface
 					, sdw::Vec3 const & worldEye
-					, sdw::Int const & receivesShadows
+					, sdw::UInt const & receivesShadows
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
@@ -317,7 +317,7 @@ namespace castor3d::shader
 						IF( m_writer
 							, light.base.shadowType != sdw::Int( int( ShadowType::eNone ) )
 								&& light.base.index >= 0_i
-								&& receivesShadows != 0_i )
+								&& receivesShadows != 0_u )
 						{
 							auto shadowFactor = m_writer.declLocale( "shadowFactor"
 								, m_shadowModel->computePoint( light.base
@@ -342,7 +342,7 @@ namespace castor3d::shader
 				, InPhongLightMaterial{ m_writer, "material" }
 				, InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
-				, sdw::InInt( m_writer, "receivesShadows" )
+				, sdw::InUInt( m_writer, "receivesShadows" )
 				, outputs );
 		}
 
@@ -358,7 +358,7 @@ namespace castor3d::shader
 		, LightMaterial const & pmaterial
 		, Surface const & psurface
 		, sdw::Vec3 const & pworldEye
-		, sdw::Int const & preceivesShadows
+		, sdw::UInt const & preceivesShadows
 		, OutputComponents & pparentOutput )
 	{
 		if ( !m_computeSpot )
@@ -369,7 +369,7 @@ namespace castor3d::shader
 					, PhongLightMaterial const & material
 					, Surface const & surface
 					, sdw::Vec3 const & worldEye
-					, sdw::Int const & receivesShadows
+					, sdw::UInt const & receivesShadows
 					, OutputComponents & parentOutput )
 				{
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
@@ -399,7 +399,7 @@ namespace castor3d::shader
 							IF( m_writer
 								, light.base.shadowType != sdw::Int( int( ShadowType::eNone ) )
 									&& light.base.index >= 0_i
-									&& receivesShadows != 0_i )
+									&& receivesShadows != 0_u )
 							{
 								auto shadowFactor = m_writer.declLocale( "shadowFactor"
 									, m_shadowModel->computeSpot( light.base
@@ -423,7 +423,7 @@ namespace castor3d::shader
 							IF( m_writer
 								, ( light.base.shadowType != sdw::Int( int( ShadowType::eNone ) ) )
 								&& ( light.base.index >= 0_i )
-								&& ( receivesShadows != 0_i )
+								&& ( receivesShadows != 0_u )
 								&& ( material.sssProfileIndex != 0.0_f ) )
 							{
 								output.m_diffuse += ( spotFactor * rawDiffuse / attenuation )
@@ -447,7 +447,7 @@ namespace castor3d::shader
 				, InPhongLightMaterial{ m_writer, "material" }
 				, InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
-				, sdw::InInt( m_writer, "receivesShadows" )
+				, sdw::InUInt( m_writer, "receivesShadows" )
 				, outputs );
 		}
 
@@ -554,7 +554,7 @@ namespace castor3d::shader
 		, LightMaterial const & pmaterial
 		, Surface const & psurface
 		, sdw::Vec3 const & pworldEye
-		, sdw::Int const & preceivesShadows )
+		, sdw::UInt const & preceivesShadows )
 	{
 		if ( !m_computeDirectionalDiffuse )
 		{
@@ -563,7 +563,7 @@ namespace castor3d::shader
 					, PhongLightMaterial const & material
 					, Surface const & surface
 					, sdw::Vec3 const & worldEye
-					, sdw::Int const & receivesShadows )
+					, sdw::UInt const & receivesShadows )
 				{
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( light.direction ) );
@@ -578,7 +578,7 @@ namespace castor3d::shader
 					{
 						IF( m_writer
 							, light.base.shadowType != sdw::Int( int( ShadowType::eNone ) )
-								&& receivesShadows != 0_i )
+								&& receivesShadows != 0_u )
 						{
 							light.base.updateShadowType( castor3d::ShadowType::eRaw );
 							auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
@@ -601,7 +601,7 @@ namespace castor3d::shader
 				, InPhongLightMaterial{ m_writer, "material" }
 				, InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
-				, sdw::InInt( m_writer, "receivesShadows" ) );
+				, sdw::InUInt( m_writer, "receivesShadows" ) );
 		}
 
 		return m_computeDirectionalDiffuse( plight
@@ -615,7 +615,7 @@ namespace castor3d::shader
 		, LightMaterial const & pmaterial
 		, Surface const & psurface
 		, sdw::Vec3 const & pworldEye
-		, sdw::Int const & preceivesShadows )
+		, sdw::UInt const & preceivesShadows )
 	{
 		if ( !m_computePointDiffuse )
 		{
@@ -624,7 +624,7 @@ namespace castor3d::shader
 					, PhongLightMaterial const & material
 					, Surface const & surface
 					, sdw::Vec3 const & worldEye
-					, sdw::Int const & receivesShadows )
+					, sdw::UInt const & receivesShadows )
 				{
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
 						, surface.worldPosition - light.position );
@@ -644,7 +644,7 @@ namespace castor3d::shader
 						IF( m_writer
 							, light.base.shadowType != sdw::Int( int( ShadowType::eNone ) )
 								&& light.base.index >= 0_i
-								&& receivesShadows != 0_i )
+								&& receivesShadows != 0_u )
 						{
 							light.base.updateShadowType( castor3d::ShadowType::eRaw );
 							auto shadowFactor = m_writer.declLocale( "shadowFactor"
@@ -664,7 +664,7 @@ namespace castor3d::shader
 				, InPhongLightMaterial{ m_writer, "material" }
 				, InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
-				, sdw::InInt( m_writer, "receivesShadows" ) );
+				, sdw::InUInt( m_writer, "receivesShadows" ) );
 		}
 
 		return m_computePointDiffuse( plight
@@ -678,7 +678,7 @@ namespace castor3d::shader
 		, LightMaterial const & pmaterial
 		, Surface const & psurface
 		, sdw::Vec3 const & pworldEye
-		, sdw::Int const & preceivesShadows )
+		, sdw::UInt const & preceivesShadows )
 	{
 		if ( !m_computeSpotDiffuse )
 		{
@@ -687,7 +687,7 @@ namespace castor3d::shader
 					, PhongLightMaterial const & material
 					, Surface const & surface
 					, sdw::Vec3 const & worldEye
-					, sdw::Int const & receivesShadows )
+					, sdw::UInt const & receivesShadows )
 				{
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
 						, surface.worldPosition - light.position );
@@ -713,7 +713,7 @@ namespace castor3d::shader
 							IF( m_writer
 								, light.base.shadowType != sdw::Int( int( ShadowType::eNone ) )
 									&& light.base.index >= 0_i
-									&& receivesShadows != 0_i )
+									&& receivesShadows != 0_u )
 							{
 								light.base.updateShadowType( castor3d::ShadowType::eRaw );
 								auto shadowFactor = m_writer.declLocale( "shadowFactor"
@@ -739,7 +739,7 @@ namespace castor3d::shader
 				, InPhongLightMaterial{ m_writer, "material" }
 				, InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
-				, sdw::InInt( m_writer, "receivesShadows" ) );
+				, sdw::InUInt( m_writer, "receivesShadows" ) );
 		}
 
 		return m_computeSpotDiffuse( plight

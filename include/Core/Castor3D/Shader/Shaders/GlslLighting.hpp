@@ -129,7 +129,7 @@ namespace castor3d::shader
 			, BackgroundModel & background
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows
+			, sdw::UInt const & receivesShadows
 			, OutputComponents & output );
 		C3D_API static LightingModelPtr createModel( Engine const & engine
 			, Utils & utils
@@ -203,7 +203,7 @@ namespace castor3d::shader
 			, SceneData const & sceneData
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows );
+			, sdw::UInt const & receivesShadows );
 		C3D_API static LightingModelPtr createDiffuseModel( Engine const & engine
 			, Utils & utils
 			, castor::String const & name
@@ -266,19 +266,19 @@ namespace castor3d::shader
 			, Surface const & surface
 			, BackgroundModel & background
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows
+			, sdw::UInt const & receivesShadows
 			, OutputComponents & output ) = 0;
 		C3D_API virtual void compute( PointLight const & light
 			, LightMaterial const & material
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows
+			, sdw::UInt const & receivesShadows
 			, OutputComponents & output ) = 0;
 		C3D_API virtual void compute( SpotLight const & light
 			, LightMaterial const & material
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows
+			, sdw::UInt const & receivesShadows
 			, OutputComponents & output ) = 0;
 		C3D_API virtual void computeMapContributions( PassFlags const & passFlags
 			, TextureFlags const & textureFlags
@@ -310,17 +310,17 @@ namespace castor3d::shader
 			, LightMaterial const & material
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows ) = 0;
+			, sdw::UInt const & receivesShadows ) = 0;
 		C3D_API virtual sdw::Vec3 computeDiffuse( PointLight const & light
 			, LightMaterial const & material
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows ) = 0;
+			, sdw::UInt const & receivesShadows ) = 0;
 		C3D_API virtual sdw::Vec3 computeDiffuse( SpotLight const & light
 			, LightMaterial const & material
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows ) = 0;
+			, sdw::UInt const & receivesShadows ) = 0;
 		C3D_API virtual void computeMapDiffuseContributions( PassFlags const & passFlags
 			, TextureFlags const & textureFlags
 			, TextureConfigurations const & textureConfigs

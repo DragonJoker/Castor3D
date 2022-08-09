@@ -94,7 +94,7 @@ namespace castor3d
 		bool result = true;
 		BinaryChunk chunk;
 
-		while ( result && doGetSubChunk( chunk ) )
+		while ( doGetSubChunk( chunk ) )
 		{
 			switch ( chunk.getChunkType() )
 			{

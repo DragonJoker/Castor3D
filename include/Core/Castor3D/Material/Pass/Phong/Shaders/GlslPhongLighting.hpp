@@ -52,19 +52,19 @@ namespace castor3d::shader
 			, Surface const & surface
 			, BackgroundModel & background
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows
+			, sdw::UInt const & receivesShadows
 			, OutputComponents & output )override;
 		C3D_API void compute( PointLight const & light
 			, LightMaterial const & material
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows
+			, sdw::UInt const & receivesShadows
 			, OutputComponents & output )override;
 		C3D_API void compute( SpotLight const & light
 			, LightMaterial const & material
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows
+			, sdw::UInt const & receivesShadows
 			, OutputComponents & output )override;
 		C3D_API void computeMapContributions( PassFlags const & passFlags
 			, TextureFlags const & textureFlags
@@ -96,17 +96,17 @@ namespace castor3d::shader
 			, LightMaterial const & material
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows )override;
+			, sdw::UInt const & receivesShadows )override;
 		C3D_API sdw::Vec3 computeDiffuse( PointLight const & light
 			, LightMaterial const & material
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows )override;
+			, sdw::UInt const & receivesShadows )override;
 		C3D_API sdw::Vec3 computeDiffuse( SpotLight const & light
 			, LightMaterial const & material
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows )override;
+			, sdw::UInt const & receivesShadows )override;
 		C3D_API void computeMapDiffuseContributions( PassFlags const & passFlags
 			, TextureFlags const & textureFlags
 			, TextureConfigurations const & textureConfigs
@@ -157,21 +157,21 @@ namespace castor3d::shader
 			, InPhongLightMaterial
 			, InSurface
 			, sdw::InVec3
-			, sdw::InInt
+			, sdw::InUInt
 			, OutputComponents & > m_computeDirectional;
 		sdw::Function< sdw::Void
 			, InPointLight
 			, InPhongLightMaterial
 			, InSurface
 			, sdw::InVec3
-			, sdw::InInt
+			, sdw::InUInt
 			, OutputComponents & > m_computePoint;
 		sdw::Function< sdw::Void
 			, InSpotLight
 			, InPhongLightMaterial
 			, InSurface
 			, sdw::InVec3
-			, sdw::InInt
+			, sdw::InUInt
 			, OutputComponents & > m_computeSpot;
 		sdw::Function< sdw::Vec3
 			, InLight
@@ -184,19 +184,19 @@ namespace castor3d::shader
 			, InPhongLightMaterial
 			, InSurface
 			, sdw::InVec3
-			, sdw::InInt > m_computeDirectionalDiffuse;
+			, sdw::InUInt > m_computeDirectionalDiffuse;
 		sdw::Function< sdw::Vec3
 			, InOutPointLight
 			, InPhongLightMaterial
 			, InSurface
 			, sdw::InVec3
-			, sdw::InInt > m_computePointDiffuse;
+			, sdw::InUInt > m_computePointDiffuse;
 		sdw::Function< sdw::Vec3
 			, InOutSpotLight
 			, InPhongLightMaterial
 			, InSurface
 			, sdw::InVec3
-			, sdw::InInt > m_computeSpotDiffuse;
+			, sdw::InUInt > m_computeSpotDiffuse;
 	};
 
 	class BlinnPhongLightingModel

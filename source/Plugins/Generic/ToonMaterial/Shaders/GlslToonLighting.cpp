@@ -132,7 +132,7 @@ namespace toon::shader
 		, c3d::Surface const & psurface
 		, c3d::BackgroundModel & pbackground
 		, sdw::Vec3 const & pworldEye
-		, sdw::Int const & preceivesShadows
+		, sdw::UInt const & preceivesShadows
 		, c3d::OutputComponents & pparentOutput )
 	{
 		if ( !m_computeDirectional )
@@ -143,7 +143,7 @@ namespace toon::shader
 					, ToonPhongLightMaterial const & material
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
-					, sdw::Int const & receivesShadows
+					, sdw::UInt const & receivesShadows
 					, c3d::OutputComponents & parentOutput )
 				{
 					c3d::OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
@@ -189,7 +189,7 @@ namespace toon::shader
 
 							cascadeIndex = m_writer.cast< sdw::UInt >( cascadeFactors.x() );
 
-							IF( m_writer, receivesShadows != 0_i )
+							IF( m_writer, receivesShadows != 0_u )
 							{
 								auto shadowFactor = m_writer.declLocale( "shadowFactor"
 									, cascadeFactors.y()
@@ -246,7 +246,7 @@ namespace toon::shader
 				, InToonPhongLightMaterial{ m_writer, "material" }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
-				, sdw::InInt( m_writer, "receivesShadows" )
+				, sdw::InUInt( m_writer, "receivesShadows" )
 				, outputs );
 		}
 
@@ -262,7 +262,7 @@ namespace toon::shader
 		, c3d::LightMaterial const & pmaterial
 		, c3d::Surface const & psurface
 		, sdw::Vec3 const & pworldEye
-		, sdw::Int const & preceivesShadows
+		, sdw::UInt const & preceivesShadows
 		, c3d::OutputComponents & pparentOutput )
 	{
 		if ( !m_computePoint )
@@ -273,7 +273,7 @@ namespace toon::shader
 					, ToonPhongLightMaterial const & material
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
-					, sdw::Int const & receivesShadows
+					, sdw::UInt const & receivesShadows
 					, c3d::OutputComponents & parentOutput )
 				{
 					c3d::OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
@@ -297,7 +297,7 @@ namespace toon::shader
 						IF( m_writer
 							, light.base.shadowType != sdw::Int( int( castor3d::ShadowType::eNone ) )
 								&& light.base.index >= 0_i
-								&& receivesShadows != 0_i )
+								&& receivesShadows != 0_u )
 						{
 							auto shadowFactor = m_writer.declLocale( "shadowFactor"
 								, m_shadowModel->computePoint( light.base
@@ -322,7 +322,7 @@ namespace toon::shader
 				, InToonPhongLightMaterial{ m_writer, "material" }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
-				, sdw::InInt( m_writer, "receivesShadows" )
+				, sdw::InUInt( m_writer, "receivesShadows" )
 				, outputs );
 		}
 
@@ -338,7 +338,7 @@ namespace toon::shader
 		, c3d::LightMaterial const & pmaterial
 		, c3d::Surface const & psurface
 		, sdw::Vec3 const & pworldEye
-		, sdw::Int const & preceivesShadows
+		, sdw::UInt const & preceivesShadows
 		, c3d::OutputComponents & pparentOutput )
 	{
 		if ( !m_computeSpot )
@@ -349,7 +349,7 @@ namespace toon::shader
 					, ToonPhongLightMaterial const & material
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
-					, sdw::Int const & receivesShadows
+					, sdw::UInt const & receivesShadows
 					, c3d::OutputComponents & parentOutput )
 				{
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
@@ -378,7 +378,7 @@ namespace toon::shader
 							IF( m_writer
 								, light.base.shadowType != sdw::Int( int( castor3d::ShadowType::eNone ) )
 									&& light.base.index >= 0_i
-									&& receivesShadows != 0_i )
+									&& receivesShadows != 0_u )
 							{
 								auto shadowFactor = m_writer.declLocale( "shadowFactor"
 									, m_shadowModel->computeSpot( light.base
@@ -407,7 +407,7 @@ namespace toon::shader
 				, InToonPhongLightMaterial{ m_writer, "material" }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
-				, sdw::InInt( m_writer, "receivesShadows" )
+				, sdw::InUInt( m_writer, "receivesShadows" )
 				, outputs );
 		}
 
@@ -514,7 +514,7 @@ namespace toon::shader
 		, c3d::LightMaterial const & pmaterial
 		, c3d::Surface const & psurface
 		, sdw::Vec3 const & pworldEye
-		, sdw::Int const & preceivesShadows )
+		, sdw::UInt const & preceivesShadows )
 	{
 		if ( !m_computeDirectionalDiffuse )
 		{
@@ -523,7 +523,7 @@ namespace toon::shader
 					, ToonPhongLightMaterial const & material
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
-					, sdw::Int const & receivesShadows )
+					, sdw::UInt const & receivesShadows )
 				{
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( light.direction ) );
@@ -538,7 +538,7 @@ namespace toon::shader
 					{
 						IF( m_writer
 							, light.base.shadowType != sdw::Int( int( castor3d::ShadowType::eNone ) )
-								&& receivesShadows != 0_i )
+								&& receivesShadows != 0_u )
 						{
 							light.base.updateShadowType( castor3d::ShadowType::eRaw );
 							auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
@@ -561,7 +561,7 @@ namespace toon::shader
 				, InToonPhongLightMaterial{ m_writer, "material" }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
-				, sdw::InInt( m_writer, "receivesShadows" ) );
+				, sdw::InUInt( m_writer, "receivesShadows" ) );
 		}
 
 		return m_computeDirectionalDiffuse( plight
@@ -575,7 +575,7 @@ namespace toon::shader
 		, c3d::LightMaterial const & pmaterial
 		, c3d::Surface const & psurface
 		, sdw::Vec3 const & pworldEye
-		, sdw::Int const & preceivesShadows )
+		, sdw::UInt const & preceivesShadows )
 	{
 		if ( !m_computePointDiffuse )
 		{
@@ -584,7 +584,7 @@ namespace toon::shader
 					, ToonPhongLightMaterial const & material
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
-					, sdw::Int const & receivesShadows )
+					, sdw::UInt const & receivesShadows )
 				{
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
 						, surface.worldPosition - light.position );
@@ -604,7 +604,7 @@ namespace toon::shader
 						IF( m_writer
 							, light.base.shadowType != sdw::Int( int( castor3d::ShadowType::eNone ) )
 								&& light.base.index >= 0_i
-								&& receivesShadows != 0_i )
+								&& receivesShadows != 0_u )
 						{
 							light.base.updateShadowType( castor3d::ShadowType::eRaw );
 							auto shadowFactor = m_writer.declLocale( "shadowFactor"
@@ -624,7 +624,7 @@ namespace toon::shader
 				, InToonPhongLightMaterial{ m_writer, "material" }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
-				, sdw::InInt( m_writer, "receivesShadows" ) );
+				, sdw::InUInt( m_writer, "receivesShadows" ) );
 		}
 
 		return m_computePointDiffuse( plight
@@ -638,7 +638,7 @@ namespace toon::shader
 		, c3d::LightMaterial const & pmaterial
 		, c3d::Surface const & psurface
 		, sdw::Vec3 const & pworldEye
-		, sdw::Int const & preceivesShadows )
+		, sdw::UInt const & preceivesShadows )
 	{
 		if ( !m_computeSpotDiffuse )
 		{
@@ -647,7 +647,7 @@ namespace toon::shader
 					, ToonPhongLightMaterial const & material
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
-					, sdw::Int const & receivesShadows )
+					, sdw::UInt const & receivesShadows )
 				{
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
 						, surface.worldPosition - light.position );
@@ -673,7 +673,7 @@ namespace toon::shader
 							IF( m_writer
 								, light.base.shadowType != sdw::Int( int( castor3d::ShadowType::eNone ) )
 									&& light.base.index >= 0_i
-									&& receivesShadows != 0_i )
+									&& receivesShadows != 0_u )
 							{
 								light.base.updateShadowType( castor3d::ShadowType::eRaw );
 								auto shadowFactor = m_writer.declLocale( "shadowFactor"
@@ -699,7 +699,7 @@ namespace toon::shader
 				, InToonPhongLightMaterial{ m_writer, "material" }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
-				, sdw::InInt( m_writer, "receivesShadows" ) );
+				, sdw::InUInt( m_writer, "receivesShadows" ) );
 		}
 
 		return m_computeSpotDiffuse( plight
@@ -1073,7 +1073,7 @@ namespace toon::shader
 		, c3d::Surface const & psurface
 		, c3d::BackgroundModel & pbackground
 		, sdw::Vec3 const & pworldEye
-		, sdw::Int const & preceivesShadows
+		, sdw::UInt const & preceivesShadows
 		, c3d::OutputComponents & pparentOutput )
 	{
 		if ( !m_computeDirectional )
@@ -1084,7 +1084,7 @@ namespace toon::shader
 					, ToonPbrLightMaterial const & material
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
-					, sdw::Int const & receivesShadows
+					, sdw::UInt const & receivesShadows
 					, c3d::OutputComponents & parentOutput )
 				{
 					c3d::OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
@@ -1133,7 +1133,7 @@ namespace toon::shader
 
 							cascadeIndex = m_writer.cast< sdw::UInt >( cascadeFactors.x() );
 
-							IF( m_writer, receivesShadows != 0_i )
+							IF( m_writer, receivesShadows != 0_u )
 							{
 								auto shadowFactor = m_writer.declLocale( "shadowFactor"
 									, cascadeFactors.y()
@@ -1214,7 +1214,7 @@ namespace toon::shader
 				, InToonPbrLightMaterial{ m_writer, "material" }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
-				, sdw::InInt( m_writer, "receivesShadows" )
+				, sdw::InUInt( m_writer, "receivesShadows" )
 				, outputs );
 		}
 
@@ -1230,7 +1230,7 @@ namespace toon::shader
 		, c3d::LightMaterial const & pmaterial
 		, c3d::Surface const & psurface
 		, sdw::Vec3 const & pworldEye
-		, sdw::Int const & preceivesShadows
+		, sdw::UInt const & preceivesShadows
 		, c3d::OutputComponents & pparentOutput )
 	{
 		if ( !m_computePoint )
@@ -1241,7 +1241,7 @@ namespace toon::shader
 					, ToonPbrLightMaterial const & material
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
-					, sdw::Int const & receivesShadows
+					, sdw::UInt const & receivesShadows
 					, c3d::OutputComponents & parentOutput )
 				{
 					c3d::OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
@@ -1268,7 +1268,7 @@ namespace toon::shader
 						IF( m_writer
 							, light.base.shadowType != sdw::Int( int( castor3d::ShadowType::eNone ) )
 							&& light.base.index >= 0_i
-							&& receivesShadows != 0_i )
+							&& receivesShadows != 0_u )
 						{
 							auto shadowFactor = m_writer.declLocale( "shadowFactor"
 								, m_shadowModel->computePoint( light.base
@@ -1293,7 +1293,7 @@ namespace toon::shader
 				, InToonPbrLightMaterial{ m_writer, "material" }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
-				, sdw::InInt( m_writer, "receivesShadows" )
+				, sdw::InUInt( m_writer, "receivesShadows" )
 				, outputs );
 		}
 
@@ -1309,7 +1309,7 @@ namespace toon::shader
 		, c3d::LightMaterial const & pmaterial
 		, c3d::Surface const & psurface
 		, sdw::Vec3 const & pworldEye
-		, sdw::Int const & preceivesShadows
+		, sdw::UInt const & preceivesShadows
 		, c3d::OutputComponents & pparentOutput )
 	{
 		if ( !m_computeSpot )
@@ -1320,7 +1320,7 @@ namespace toon::shader
 					, ToonPbrLightMaterial const & material
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
-					, sdw::Int const & receivesShadows
+					, sdw::UInt const & receivesShadows
 					, c3d::OutputComponents & parentOutput )
 				{
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
@@ -1352,7 +1352,7 @@ namespace toon::shader
 							IF( m_writer
 								, light.base.shadowType != sdw::Int( int( castor3d::ShadowType::eNone ) )
 								&& light.base.index >= 0_i
-								&& receivesShadows != 0_i )
+								&& receivesShadows != 0_u )
 							{
 								auto shadowFactor = m_writer.declLocale( "shadowFactor"
 									, m_shadowModel->computeSpot( light.base
@@ -1381,7 +1381,7 @@ namespace toon::shader
 				, InToonPbrLightMaterial{ m_writer, "material" }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
-				, sdw::InInt( m_writer, "receivesShadows" )
+				, sdw::InUInt( m_writer, "receivesShadows" )
 				, outputs );
 		}
 
@@ -1493,7 +1493,7 @@ namespace toon::shader
 		, c3d::LightMaterial const & pmaterial
 		, c3d::Surface const & psurface
 		, sdw::Vec3 const & pworldEye
-		, sdw::Int const & preceivesShadows )
+		, sdw::UInt const & preceivesShadows )
 	{
 		if ( !m_computeDirectionalDiffuse )
 		{
@@ -1502,7 +1502,7 @@ namespace toon::shader
 					, ToonPbrLightMaterial const & material
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
-					, sdw::Int const & receivesShadows )
+					, sdw::UInt const & receivesShadows )
 				{
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( -light.direction ) );
@@ -1519,7 +1519,7 @@ namespace toon::shader
 					{
 						IF( m_writer
 							, light.base.shadowType != sdw::Int( int( castor3d::ShadowType::eNone ) )
-							&& receivesShadows != 0_i )
+							&& receivesShadows != 0_u )
 						{
 							light.base.updateShadowType( castor3d::ShadowType::eRaw );
 							auto cascadeFactors = m_writer.declLocale( "cascadeFactors"
@@ -1544,7 +1544,7 @@ namespace toon::shader
 				, InToonPbrLightMaterial{ m_writer, "material" }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
-				, sdw::InInt( m_writer, "receivesShadows" ) );
+				, sdw::InUInt( m_writer, "receivesShadows" ) );
 		}
 
 		return m_computeDirectionalDiffuse( plight
@@ -1558,7 +1558,7 @@ namespace toon::shader
 		, c3d::LightMaterial const & pmaterial
 		, c3d::Surface const & psurface
 		, sdw::Vec3 const & pworldEye
-		, sdw::Int const & preceivesShadows )
+		, sdw::UInt const & preceivesShadows )
 	{
 		if (!m_computePointDiffuse )
 		{
@@ -1567,7 +1567,7 @@ namespace toon::shader
 					, ToonPbrLightMaterial const & material
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
-					, sdw::Int const & receivesShadows )
+					, sdw::UInt const & receivesShadows )
 				{
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
 						, light.position - surface.worldPosition );
@@ -1589,7 +1589,7 @@ namespace toon::shader
 						IF( m_writer
 							, light.base.shadowType != sdw::Int( int( castor3d::ShadowType::eNone ) )
 							&& light.base.index >= 0_i
-							&& receivesShadows != 0_i )
+							&& receivesShadows != 0_u )
 						{
 							light.base.updateShadowType( castor3d::ShadowType::eRaw );
 							auto shadowFactor = m_writer.declLocale( "shadowFactor"
@@ -1609,7 +1609,7 @@ namespace toon::shader
 				, InToonPbrLightMaterial{ m_writer, "material" }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
-				, sdw::InInt( m_writer, "receivesShadows" ) );
+				, sdw::InUInt( m_writer, "receivesShadows" ) );
 		}
 
 		return m_computePointDiffuse( plight
@@ -1623,7 +1623,7 @@ namespace toon::shader
 		, c3d::LightMaterial const & pmaterial
 		, c3d::Surface const & psurface
 		, sdw::Vec3 const & pworldEye
-		, sdw::Int const & preceivesShadows )
+		, sdw::UInt const & preceivesShadows )
 	{
 		if ( !m_computeSpotDiffuse )
 		{
@@ -1632,7 +1632,7 @@ namespace toon::shader
 					, ToonPbrLightMaterial const & material
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
-					, sdw::Int const & receivesShadows )
+					, sdw::UInt const & receivesShadows )
 				{
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
 						, light.position - surface.worldPosition );
@@ -1660,7 +1660,7 @@ namespace toon::shader
 							IF( m_writer
 								, light.base.shadowType != sdw::Int( int( castor3d::ShadowType::eNone ) )
 								&& light.base.index >= 0_i
-								&& receivesShadows != 0_i )
+								&& receivesShadows != 0_u )
 							{
 								light.base.updateShadowType( castor3d::ShadowType::eRaw );
 								auto shadowFactor = m_writer.declLocale( "shadowFactor"
@@ -1686,7 +1686,7 @@ namespace toon::shader
 				, InToonPbrLightMaterial{ m_writer, "material" }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
-				, sdw::InInt( m_writer, "receivesShadows" ) );
+				, sdw::InUInt( m_writer, "receivesShadows" ) );
 		}
 
 		return m_computeSpotDiffuse( plight
