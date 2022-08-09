@@ -189,9 +189,16 @@ namespace castor3d
 		C3D_API PassDataPtr getData( uint32_t passID );
 		/**
 		 *\~english
-		 *\return		The pass type details for given pass type index.
+		 *\return		The maximum pass types count (for visibility buffer use).
 		 *\~french
-		 *\brief		Les détails du type de passe pour l'index donné.
+		 *\brief		Le nombre maximum de types de passes (pour l'utilisation de vibility buffer).
+		 */
+		C3D_API uint32_t getMaxPassTypeCount()const;
+		/**
+		 *\~english
+		 *\return		The pass type details for given pass type index (for visibility buffer use).
+		 *\~french
+		 *\brief		Les détails du type de passe pour l'index donné (pour l'utilisation de vibility buffer).
 		 */
 		C3D_API std::tuple< PassTypeID, PassFlags, TextureFlags, uint32_t > getPassTypeDetails( uint32_t passTypeIndex )const;
 		/**

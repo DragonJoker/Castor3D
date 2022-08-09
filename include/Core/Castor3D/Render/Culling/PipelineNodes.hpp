@@ -13,6 +13,14 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	using PipelineHashDetails = std::tuple< SubmeshFlags
+		, ProgramFlags
+		, PassTypeID
+		, PassFlags
+		, uint32_t // maxTexcoordSet
+		, uint32_t // texturesCount
+		, TextureFlags >;
+
 	PipelineBaseHash getPipelineBaseHash( RenderNodesPass const & renderPass
 		, Submesh const & data
 		, Pass const & pass
@@ -21,6 +29,7 @@ namespace castor3d
 		, BillboardBase const & data
 		, Pass const & pass
 		, bool isFrontCulled );
+	PipelineHashDetails getPipelineHashDetails( PipelineBaseHash const & hash );
 	void registerPipelineNodes( PipelineBaseHash hash
 		, ashes::BufferBase const & buffer
 		, std::vector< PipelineBuffer > & nodesIds );

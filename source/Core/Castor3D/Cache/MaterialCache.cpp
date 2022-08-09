@@ -282,14 +282,7 @@ namespace castor
 
 	uint32_t ResourceCacheT< Material, String, MaterialCacheTraits >::getMaxPassTypeCount()const
 	{
-		constexpr auto maxPassTypeSize = getBitSize( MaxPassTypes );
-		constexpr auto maxPassFlagsSize = getBitSize( uint32_t( PassFlag::eAllVisibility ) );
-		constexpr auto maxTexturesSize = getBitSize( MaxPassTextures );
-		constexpr auto maxChannelsSize = uint32_t( TextureChannel::eCount );
-		constexpr auto offset = maxPassTypeSize + maxPassFlagsSize + maxTexturesSize + maxChannelsSize;
-		static_assert( offset < 31u );
-		constexpr auto result = 0x000000001u << offset;
-		return result;
+		return m_passBuffer->getMaxPassTypeCount();
 	}
 
 	uint32_t ResourceCacheT< Material, String, MaterialCacheTraits >::getCurrentPassTypeCount()const
