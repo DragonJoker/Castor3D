@@ -122,11 +122,11 @@ namespace draw_edges
 
 					auto data0 = writer.declLocale( "data0"
 						, c3d_data0.fetch( texelCoord, 0_i ) );
+					auto nodeId = writer.declLocale( "nodeId"
+						, writer.cast< sdw::UInt >( data0.z() ) );
 
-					IF( writer, data0.w() != 0.0_f  )
+					IF( writer, nodeId != 0_u )
 					{
-						auto nodeId = writer.declLocale( "nodeId"
-							, writer.cast< sdw::UInt >( data0.z() ) );
 						auto modelData = writer.declLocale( "modelData"
 							, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
 						auto material = writer.declLocale( "material"
