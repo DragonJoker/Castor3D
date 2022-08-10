@@ -645,8 +645,6 @@ namespace ocean_fft
 
 	castor3d::PassFlags OceanRenderPass::doAdjustPassFlags( castor3d::PassFlags flags )const
 	{
-		remFlag( flags, castor3d::PassFlag::eReflection );
-		remFlag( flags, castor3d::PassFlag::eRefraction );
 		remFlag( flags, castor3d::PassFlag::eParallaxOcclusionMappingOne );
 		remFlag( flags, castor3d::PassFlag::eParallaxOcclusionMappingRepeat );
 		remFlag( flags, castor3d::PassFlag::eDistanceBasedTransmittance );
@@ -1315,11 +1313,11 @@ namespace ocean_fft
 
 
 					// Reflection
-					auto reflected = writer.declLocale( "reflected"
-						, reflections->computeForward( *lightMat
-							, surface
-							, c3d_sceneData
-							, *backgroundModel ) );
+					auto reflected = reflections->computeForward( *lightMat
+						, surface
+						, c3d_sceneData
+						, *backgroundModel
+						, material.hasReflection() );
 					displayDebugData( eRawBackgroundReflection, reflected, 1.0_f );
 					reflected = utils.fresnelSchlick( NdotV, lightMat->specular ) * reflected;
 					displayDebugData( eFresnelBackgroundReflection, reflected, 1.0_f );

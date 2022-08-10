@@ -49,24 +49,28 @@ namespace castor3d
 		{
 		case PassFlag::eNone:
 			return cuT( "none" );
-		case PassFlag::eAlphaBlending:
-			return cuT( "alpha_blending" );
+		case PassFlag::eParallaxOcclusionMappingOne:
+			return cuT( "parallax_occlusion_mapping_one" );
+		case PassFlag::eParallaxOcclusionMappingRepeat:
+			return cuT( "parallax_occlusion_mapping_repeat" );
+		case PassFlag::eUntile:
+			return cuT( "untile" );
 		case PassFlag::eAlphaTest:
 			return cuT( "alpha_test" );
+		case PassFlag::eBlendAlphaTest:
+			return cuT( "blend_alpha_test" );
 		case PassFlag::eImageBasedLighting:
 			return cuT( "image_based_lighing" );
 		case PassFlag::eSubsurfaceScattering:
 			return cuT( "subsurface_scattering" );
 		case PassFlag::eDistanceBasedTransmittance:
 			return cuT( "distance_based_transmittance" );
-		case PassFlag::eParallaxOcclusionMappingOne:
-			return cuT( "parallax_occlusion_mapping_one" );
-		case PassFlag::eParallaxOcclusionMappingRepeat:
-			return cuT( "parallax_occlusion_mapping_repeat" );
-		case PassFlag::eReflection:
-			return cuT( "reflection" );
-		case PassFlag::eRefraction:
-			return cuT( "refraction" );
+		case PassFlag::ePickable:
+			return cuT( "pickable" );
+		case PassFlag::eAlphaBlending:
+			return cuT( "alpha_blending" );
+		case PassFlag::eDrawEdge:
+			return cuT( "draw_edge" );
 		default:
 			CU_Failure( "Unsupported PassFlag" );
 			return castor::cuEmptyString;

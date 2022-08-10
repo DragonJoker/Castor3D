@@ -199,8 +199,6 @@ namespace castor3d
 
 	PassFlags VoxelizePass::doAdjustPassFlags( PassFlags flags )const
 	{
-		remFlag( flags, PassFlag::eReflection );
-		remFlag( flags, PassFlag::eRefraction );
 		remFlag( flags, PassFlag::eParallaxOcclusionMappingOne );
 		remFlag( flags, PassFlag::eParallaxOcclusionMappingRepeat );
 		remFlag( flags, PassFlag::eDistanceBasedTransmittance );

@@ -339,8 +339,8 @@ namespace castor3d
 
 		bool hasEnvironmentMapping()const
 		{
-			return checkFlag( m_flags, PassFlag::eReflection )
-				|| checkFlag( m_flags, PassFlag::eRefraction );
+			return m_reflection
+				|| m_refraction;
 		}
 
 		float getOpacity()const
@@ -432,12 +432,12 @@ namespace castor3d
 
 		bool hasReflections()const
 		{
-			return checkFlag( m_flags, PassFlag::eReflection );
+			return m_reflection;
 		}
 
 		bool hasRefraction()const
 		{
-			return checkFlag( m_flags, PassFlag::eRefraction );
+			return m_refraction;
 		}
 
 		bool hasEdges()const
@@ -623,12 +623,12 @@ namespace castor3d
 
 		void enableReflections( bool value = true )
 		{
-			updateFlag( PassFlag::eReflection, value );
+			m_reflection = value;
 		}
 
 		void enableRefractions( bool value = true )
 		{
-			updateFlag( PassFlag::eRefraction, value );
+			m_refraction = value;
 		}
 
 		void setImplicit( bool value = true )
@@ -759,6 +759,8 @@ namespace castor3d
 		castor::GroupChangeTracked< bool > m_twoSided;
 		castor::GroupChangeTracked< bool > m_untiling;
 		castor::GroupChangeTracked< bool > m_lighting;
+		castor::GroupChangeTracked< bool > m_reflection;
+		castor::GroupChangeTracked< bool > m_refraction;
 		castor::GroupChangeTracked< BlendMode > m_alphaBlendMode;
 		castor::GroupChangeTracked< BlendMode > m_colourBlendMode;
 		castor::GroupChangeTracked< float > m_alphaValue;
