@@ -195,6 +195,8 @@ namespace castor3d
 		result.textures = &data.textures;
 		result.textureCount = &data.textureCount;
 		result.passTypeIndex = &data.passTypeIndex;
+		result.lighting = &data.lighting;
+		result.passCount = &data.passCount;
 
 		return result;
 	}

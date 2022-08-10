@@ -154,7 +154,6 @@ namespace castor3d
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
-		auto passCount = pcb.declMember< sdw::UInt >( "passCount" );
 		pcb.end();
 
 		// Fragment Outputs
@@ -208,7 +207,6 @@ namespace castor3d
 					, *lightingModel
 					, c3d_maps
 					, modelData.getMaterialId()
-					, passCount
 					, in.passMultipliers
 					, in.colour
 					, components );

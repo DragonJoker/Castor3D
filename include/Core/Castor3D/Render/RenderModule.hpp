@@ -137,7 +137,6 @@ namespace castor3d
 	struct DrawConstants
 	{
 		uint32_t pipelineId;
-		uint32_t passCount;
 	};
 	/**
 	*\~english

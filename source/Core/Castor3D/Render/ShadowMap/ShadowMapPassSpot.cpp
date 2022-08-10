@@ -186,7 +186,6 @@ namespace castor3d
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
-		auto passCount = pcb.declMember< sdw::UInt >( "passCount" );
 		pcb.end();
 
 		writer.implementMainT< shader::VertexSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
@@ -228,7 +227,6 @@ namespace castor3d
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( modelData.getMaterialId() ) );
 				material.getPassMultipliers( flags.submeshFlags
-					, passCount
 					, in.passMasks
 					, out.passMultipliers );
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
@@ -321,7 +319,6 @@ namespace castor3d
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
-		auto passCount = pcb.declMember< sdw::UInt >( "passCount" );
 		pcb.end();
 
 		// Fragment Outputs
@@ -376,7 +373,6 @@ namespace castor3d
 					, *lightingModel
 					, c3d_maps
 					, modelData.getMaterialId()
-					, passCount
 					, in.passMultipliers
 					, in.colour
 					, components );

@@ -208,7 +208,6 @@ namespace castor3d
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
-		auto passCount = pcb.declMember< sdw::UInt >( "passCount" );
 		pcb.end();
 
 		// Fragment Outputs
@@ -241,8 +240,8 @@ namespace castor3d
 					, writer.declLocale( "transmission", vec3( 1.0_f ) )
 					, writer.declLocale( "emissive", vec3( 1.0_f ) )
 					, writer.declLocale( "refractionRatio", 1.0_f )
-					, writer.declLocale( "hasRefraction", 0_i )
-					, writer.declLocale( "hasReflection", 0_i )
+					, writer.declLocale( "hasRefraction", 0_u )
+					, writer.declLocale( "hasReflection", 0_u )
 					, writer.declLocale( "bwAccumulationOperator", 1.0_f )
 					, writer.declLocale( "normal", normalize( in.normal ) )
 					, writer.declLocale( "tangent", normalize( in.tangent ) )
@@ -261,7 +260,6 @@ namespace castor3d
 					, *lightingModel
 					, c3d_maps
 					, modelData.getMaterialId()
-					, passCount
 					, in.passMultipliers
 					, in.colour
 					, components );

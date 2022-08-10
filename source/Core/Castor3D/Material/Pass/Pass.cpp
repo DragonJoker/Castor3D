@@ -601,8 +601,8 @@ namespace castor3d
 		data.transmission->b = powf( getTransmission().blue(), 2.2f );
 		*data.opacity = getOpacity();
 		*data.refractionRatio = getRefractionRatio();
-		*data.hasRefraction = hasRefraction() ? 1 : 0;
-		*data.hasReflection = hasReflections() ? 1 : 0;
+		*data.hasRefraction = hasRefraction() ? 1u : 0u;
+		*data.hasReflection = hasReflections() ? 1u : 0u;
 		*data.bwAccumulationOperator = float( getBWAccumulationOperator() );
 
 		uint32_t index = 0u;
@@ -615,8 +615,10 @@ namespace castor3d
 			++index;
 		}
 
-		*data.textureCount = int32_t( std::min( MaxPassTextures, getTextureUnitsCount() ) );
+		*data.textureCount = std::min( MaxPassTextures, getTextureUnitsCount() );
 		*data.passTypeIndex = passTypeIndex;
+		*data.lighting = hasLighting() ? 1u : 0u;
+		*data.passCount = getOwner()->getPassCount();
 	}
 
 	void Pass::doMergeImages( TextureFlag lhsFlag

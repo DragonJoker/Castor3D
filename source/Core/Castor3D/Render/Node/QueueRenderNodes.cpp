@@ -174,7 +174,7 @@ namespace castor3d
 
 				if ( !pipeline.hasMeshletDescriptorSetLayout() )
 				{
-					DrawConstants constants{ pipelineId, node.pass->getOwner()->getPassCount() };
+					DrawConstants constants{ pipelineId };
 					commandBuffer.pushConstants( pipeline.getPipelineLayout()
 						, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
 						, 0u
@@ -364,7 +364,6 @@ namespace castor3d
 			}
 
 			MeshletDrawConstants constants{ pipelineId
-				, node.pass->getOwner()->getPassCount()
 				, drawOffset
 				, node.getInstanceCount() };
 			commandBuffer.pushConstants( pipeline.getPipelineLayout()

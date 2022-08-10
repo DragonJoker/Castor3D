@@ -31,8 +31,8 @@ namespace castor3d::shader
 		, SceneData const & sceneData
 		, BackgroundModel & background
 		, sdw::UInt envMapIndex
-		, sdw::Int const & reflection
-		, sdw::Int const & refraction
+		, sdw::UInt const & reflection
+		, sdw::UInt const & refraction
 		, sdw::Float const & refractionRatio
 		, sdw::Vec3 const & transmission
 		, sdw::Vec3 & ambient
@@ -49,7 +49,7 @@ namespace castor3d::shader
 			envMapIndex = envMapIndex - 1_u;
 			doAdjustAmbient( ambient );
 
-			IF( m_writer, reflection != 0_i )
+			IF( m_writer, reflection != 0_u )
 			{
 				// Reflection from environment map.
 				reflected = computeReflEnvMaps( incident
@@ -58,7 +58,7 @@ namespace castor3d::shader
 					, envMapIndex
 					, material );
 
-				IF( m_writer, refraction != 0_i )
+				IF( m_writer, refraction != 0_u )
 				{
 					// Refraction from environment map.
 					material.albedo = mergeReflRefrEnvMaps( incident
@@ -99,7 +99,7 @@ namespace castor3d::shader
 						, brdf );
 				}
 
-				IF( m_writer, refraction != 0_i )
+				IF( m_writer, refraction != 0_u )
 				{
 					// Refraction from environment map.
 					material.albedo = mergeReflRefrEnvMaps( incident
