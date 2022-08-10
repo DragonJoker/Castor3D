@@ -31,13 +31,15 @@ namespace castor3d::shader
 			, sdw::Vec3Field< "transmission" >
 			, sdw::FloatField< "opacity" >
 			, sdw::FloatField< "refractionRatio" >
-			, sdw::IntField< "hasRefraction" >
-			, sdw::IntField< "hasReflection" >
+			, sdw::UIntField< "hasRefraction" >
+			, sdw::UIntField< "hasReflection" >
 			, sdw::FloatField< "bwAccumulationOperator" >
 			, sdw::UVec4Field< "textures0" >
 			, sdw::UVec4Field< "textures1" >
-			, sdw::IntField< "textures" >
-			, sdw::UIntField< "passTypeIndex" > >
+			, sdw::UIntField< "textures" >
+			, sdw::UIntField< "passTypeIndex" >
+			, sdw::UIntField< "lighting" >
+			, sdw::UIntField< "passCount" > >
 	{
 		friend class Materials;
 
@@ -110,22 +112,8 @@ namespace castor3d::shader
 			, sdw::Float const & alphaRef
 			, sdw::Float const & passMultiplier
 			, bool opaque = true );
-		/**
-		 *\~english
-		 *\brief		Writes the alpha function in GLSL.
-		 *\param		alphaFunc	The alpha function.
-		 *\param[in]	opacity		The alpha TypeEnum.
-		 *\param[in]	passMasks	The subpasses masks.
-		 *\param[in]	opaque		\p true for opaque nodes, \p false for transparent ones.
-		 *\~french
-		 *\brief		Ecrit la fonction d'opacité en GLSL.
-		 *\param		alphaFunc	La fonction d'opacité.
-		 *\param[in]	opacity		La valeur d'opacité.
-		 *\param[in]	passMasks	Les masques de subpasses.
-		 *\param[in]	opaque		\p true pour les noeuds opaques, \p false pour les transparents.
-		 */
+
 		C3D_API void getPassMultipliers( SubmeshFlags submeshFlags
-			, sdw::UInt const & passCount
 			, sdw::UVec4 const & passMasks
 			, sdw::Array< sdw::Vec4 > & passMultipliers )const;
 		C3D_API sdw::UInt getTexture( uint32_t index )const;
@@ -153,6 +141,8 @@ namespace castor3d::shader
 		auto textures1()const { return getMember< "textures1" >(); }
 		auto textures()const { return getMember< "textures" >(); }
 		auto passTypeIndex()const { return getMember< "passTypeIndex" >(); }
+		auto lighting()const { return getMember< "lighting" >(); }
+		auto passCount()const { return getMember< "passCount" >(); }
 	};
 
 	struct OpacityBlendComponents
@@ -204,8 +194,8 @@ namespace castor3d::shader
 		sdw::Vec3 transmission;
 		sdw::Vec3 emissive;
 		sdw::Float refractionRatio;
-		sdw::Int hasRefraction;
-		sdw::Int hasReflection;
+		sdw::UInt hasRefraction;
+		sdw::UInt hasReflection;
 		sdw::Float bwAccumulationOperator;
 		sdw::Vec3 normal;
 		sdw::Vec3 tangent;
@@ -246,7 +236,6 @@ namespace castor3d::shader
 			, shader::TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::UInt const & materialId
-			, sdw::UInt const & passCount
 			, sdw::Array< sdw::Vec4 > const & passMultipliers
 			, OpacityBlendComponents & output )const;
 		C3D_API void blendMaterials( Utils & utils
@@ -259,7 +248,6 @@ namespace castor3d::shader
 			, shader::TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::UInt const & materialId
-			, sdw::UInt const & passCount
 			, sdw::Array< sdw::Vec4 > const & passMultipliers
 			, OpacityBlendComponents & output )const;
 		// Used by depth pass (opacity and tangent space only)
@@ -273,7 +261,6 @@ namespace castor3d::shader
 			, shader::TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::UInt const & materialId
-			, sdw::UInt const & passCount
 			, sdw::Array< sdw::Vec4 > const & passMultipliers
 			, GeometryBlendComponents & output )const;
 		C3D_API void blendMaterials( Utils & utils
@@ -286,7 +273,6 @@ namespace castor3d::shader
 			, shader::TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::UInt const & materialId
-			, sdw::UInt const & passCount
 			, sdw::Array< sdw::Vec4 > const & passMultipliers
 			, GeometryBlendComponents & output )const;
 		// Used by shadow passes
@@ -302,7 +288,6 @@ namespace castor3d::shader
 			, shader::LightingModel & lightingModel
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::UInt const & materialId
-			, sdw::UInt const & passCount
 			, sdw::Array< sdw::Vec4 > const & passMultipliers
 			, sdw::Vec3 const & vertexColour
 			, OpaqueBlendComponents & output )const;
@@ -318,7 +303,6 @@ namespace castor3d::shader
 			, shader::LightingModel & lightingModel
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::UInt const & materialId
-			, sdw::UInt const & passCount
 			, sdw::Array< sdw::Vec4 > const & passMultipliers
 			, sdw::Vec3 const & vertexColour
 			, OpaqueBlendComponents & output )const;
@@ -333,7 +317,6 @@ namespace castor3d::shader
 			, shader::LightingModel & lightingModel
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::UInt const & materialId
-			, sdw::UInt const & passCount
 			, sdw::Array< sdw::Vec4 > const & passMultipliers
 			, sdw::Vec3 const & vertexColour
 			, OpaqueBlendComponents & output )const;
@@ -349,7 +332,6 @@ namespace castor3d::shader
 			, shader::LightingModel & lightingModel
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::UInt const & materialId
-			, sdw::UInt const & passCount
 			, sdw::Array< sdw::Vec4 > const & passMultipliers
 			, sdw::Vec3 const & vertexColour
 			, OpaqueBlendComponents & output )const;
@@ -364,12 +346,11 @@ namespace castor3d::shader
 			, shader::LightingModel & lightingModel
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::UInt const & materialId
-			, sdw::UInt const & passCount
 			, sdw::Array< sdw::Vec4 > const & passMultipliers
 			, sdw::Vec3 const & vertexColour
 			, OpaqueBlendComponents & output )const;
 		// Used by forward passes
-		C3D_API std::unique_ptr< LightMaterial > blendMaterials( Utils & utils
+		C3D_API std::pair< Material, std::unique_ptr< LightMaterial > > blendMaterials( Utils & utils
 			, bool opaque
 			, VkCompareOp alphaFunc
 			, PassFlags const & passFlags
@@ -381,11 +362,10 @@ namespace castor3d::shader
 			, shader::LightingModel & lightingModel
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::UInt const & materialId
-			, sdw::UInt const & passCount
 			, sdw::Array< sdw::Vec4 > const & passMultipliers
 			, sdw::Vec3 const & vertexColour
 			, LightingBlendComponents & output )const;
-		C3D_API std::unique_ptr< LightMaterial > blendMaterials( Utils & utils
+		C3D_API std::pair< Material, std::unique_ptr< LightMaterial > > blendMaterials( Utils & utils
 			, bool opaque
 			, VkCompareOp alphaFunc
 			, PassFlags const & passFlags
@@ -397,13 +377,13 @@ namespace castor3d::shader
 			, shader::LightingModel & lightingModel
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::UInt const & materialId
-			, sdw::UInt const & passCount
 			, sdw::Array< sdw::Vec4 > const & passMultipliers
 			, sdw::Vec3 const & vertexColour
 			, LightingBlendComponents & output )const;
 
 	private:
-		Material applyMaterial( Utils & utils
+		Material applyMaterial( std::string const & matName
+			, Utils & utils
 			, PassFlags const & passFlags
 			, TextureFlags const & textures
 			, bool hasTextures
@@ -412,7 +392,8 @@ namespace castor3d::shader
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::UInt const & materialId
 			, OpacityBlendComponents & output )const;
-		Material applyMaterial( Utils & utils
+		Material applyMaterial( std::string const & matName
+			, Utils & utils
 			, PassFlags const & passFlags
 			, TextureFlags const & textures
 			, bool hasTextures
@@ -421,7 +402,9 @@ namespace castor3d::shader
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::UInt const & materialId
 			, GeometryBlendComponents & output )const;
-		std::pair< Material, std::unique_ptr< LightMaterial > > applyMaterial( Utils & utils
+		std::pair< Material, std::unique_ptr< LightMaterial > > applyMaterial( std::string const & matName
+			, std::string const & lgtMatName
+			, Utils & utils
 			, bool needsRsm
 			, PassFlags const & passFlags
 			, TextureFlags const & textures
@@ -433,7 +416,9 @@ namespace castor3d::shader
 			, sdw::UInt const & materialId
 			, sdw::Vec3 const & vertexColour
 			, OpaqueBlendComponents & output )const;
-		std::pair< Material, std::unique_ptr< LightMaterial > > applyMaterial( PassFlags const & passFlags
+		std::pair< Material, std::unique_ptr< LightMaterial > > applyMaterial( std::string const & matName
+			, std::string const & lgtMatName
+			, PassFlags const & passFlags
 			, TextureFlags const & textures
 			, bool hasTextures
 			, shader::TextureConfigurations const & textureConfigs
@@ -443,7 +428,9 @@ namespace castor3d::shader
 			, sdw::UInt const & materialId
 			, sdw::Vec3 const & vertexColour
 			, OpaqueBlendComponents & output )const;
-		std::pair< Material, std::unique_ptr< LightMaterial > > applyMaterial( Utils & utils
+		std::pair< Material, std::unique_ptr< LightMaterial > > applyMaterial( std::string const & matName
+			, std::string const & lgtMatName
+			, Utils & utils
 			, PassFlags const & passFlags
 			, TextureFlags const & textures
 			, bool hasTextures

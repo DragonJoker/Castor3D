@@ -60,15 +60,16 @@ namespace castor3d
 			float opacity;
 
 			float refractionRatio;
-			int hasRefraction;
-			int hasReflection;
+			uint32_t hasRefraction;
+			uint32_t hasReflection;
 			float bwAccumulationOperator;
 
 			std::array< castor::Point4ui, 2u > textures;
 
-			int32_t textureCount;
-			int32_t passTypeIndex;
-			int32_t pad[2];
+			uint32_t textureCount;
+			uint32_t passTypeIndex;
+			uint32_t lighting;
+			uint32_t passCount;
 		};
 		using PassesData = castor::ArrayView< PassData >;
 
@@ -89,12 +90,14 @@ namespace castor3d
 			Vec3 * transmission;
 			float * opacity;
 			float * refractionRatio;
-			int * hasRefraction;
-			int * hasReflection;
+			uint32_t * hasRefraction;
+			uint32_t * hasReflection;
 			float * bwAccumulationOperator;
 			std::array< castor::Point4ui, 2u > * textures;
-			int32_t * textureCount;
-			int32_t * passTypeIndex;
+			uint32_t * textureCount;
+			uint32_t * passTypeIndex;
+			uint32_t * lighting;
+			uint32_t * passCount;
 		};
 
 		static constexpr uint32_t DataSize = sizeof( PassData );

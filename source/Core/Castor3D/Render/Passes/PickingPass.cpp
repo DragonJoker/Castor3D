@@ -146,7 +146,6 @@ namespace castor3d
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
-		auto passCount = pcb.declMember< sdw::UInt >( "passCount" );
 		pcb.end();
 
 		// Fragment Outputs
@@ -177,7 +176,6 @@ namespace castor3d
 					, textureAnims
 					, c3d_maps
 					, modelData.getMaterialId()
-					, passCount
 					, in.passMultipliers
 					, components );
 				pxl_fragColor = uvec4( ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) ? 2_u : 1_u )

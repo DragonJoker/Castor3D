@@ -122,7 +122,6 @@ namespace castor3d
 	struct MeshletDrawConstants
 	{
 		uint32_t pipelineId;
-		uint32_t passCount;
 		uint32_t drawOffset;
 		uint32_t instanceCount;
 	};

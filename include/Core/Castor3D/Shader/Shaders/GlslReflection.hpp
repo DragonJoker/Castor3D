@@ -25,8 +25,8 @@ namespace castor3d::shader
 			, SceneData const & sceneData
 			, BackgroundModel & background
 			, sdw::UInt envMapIndex
-			, sdw::Int const & reflection
-			, sdw::Int const & refraction
+			, sdw::UInt const & reflection
+			, sdw::UInt const & refraction
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
 			, sdw::Vec3 & ambient

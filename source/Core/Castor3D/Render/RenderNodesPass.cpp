@@ -842,7 +842,6 @@ namespace castor3d
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
-		auto passCount = pcb.declMember< sdw::UInt >( "passCount" );
 		auto drawOffset = pcb.declMember< sdw::UInt >( "drawOffset" );
 		auto instanceCount = pcb.declMember< sdw::UInt >( "instanceCount" );
 		pcb.end();
@@ -1008,7 +1007,6 @@ namespace castor3d
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
-		auto passCount = pcb.declMember< sdw::UInt >( "passCount" );
 		auto drawOffset = pcb.declMember< sdw::UInt >( "drawOffset" );
 		auto instanceCount = pcb.declMember< sdw::UInt >( "instanceCount" );
 		pcb.end();
@@ -1135,7 +1133,6 @@ namespace castor3d
 						, vec4( 0.0_f )
 						, vec4( 0.0_f ) } );
 				material.getPassMultipliers( flags.submeshFlags
-					, passCount
 					, c3d_passMasks[vertexIndex]
 					, passMultipliers );
 				vtxOut[i].passMultipliers[0] = passMultipliers[0];
@@ -1268,7 +1265,6 @@ namespace castor3d
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
-		auto passCount = pcb.declMember< sdw::UInt >( "passCount" );
 		pcb.end();
 
 		writer.implementMainT< shader::VertexSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
@@ -1311,7 +1307,6 @@ namespace castor3d
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( modelData.getMaterialId() ) );
 				material.getPassMultipliers( flags.submeshFlags
-					, passCount
 					, in.passMasks
 					, out.passMultipliers );
 
@@ -1409,7 +1404,6 @@ namespace castor3d
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
-		auto passCount = pcb.declMember< sdw::UInt >( "passCount" );
 		pcb.end();
 
 		writer.implementMainT< VoidT, shader::FragmentSurfaceT >( sdw::VertexInT< sdw::VoidT >{ writer }
