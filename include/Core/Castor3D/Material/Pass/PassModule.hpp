@@ -110,21 +110,18 @@ namespace castor3d
 		//!\~english	Refraction map.
 		//!\~french		Map de réfraction.
 		eRefraction = 0x0200,
-		//!\~english	The pass receives lighting.
-		//!\~french		La passe reçoit l'éclairage.
-		eLighting = 0x0400,
 		//!\~english	The pass sets an object as pickable.
 		//!\~french		La passe rend l'objet sélectionnable.
-		ePickable = 0x0800,
+		ePickable = 0x0400,
 		//!\~english	Shader using alpha blending.
 		//\~french		Shader utilisant le mélange alpha.
-		eAlphaBlending = 0x1000,
+		eAlphaBlending = 0x0800,
 		//!\~english	All flags used in base pipeline flags hashing.
 		//\~french		Tous les indicateurs utilisés dans le hash des indicateurs de pipeline.
-		eAllBase = 0x1FFF,
+		eAllBase = 0x0FFF,
 		//!\~english	The pass needs an edge to be drawn.
 		//!\~french		La passe demande qu'une bordure soit dessinée.
-		eDrawEdge = 0x2000,
+		eDrawEdge = 0x1000,
 		//!\~english	All other flags.
 		//\~french		Tous les autres indicateurs.
 		eAllOptional = eDrawEdge,

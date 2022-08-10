@@ -248,7 +248,7 @@ namespace castor3d
 					, writer.declLocale( "bitangent", normalize( in.bitangent ) )
 					, writer.declLocale( "tangentSpaceViewPosition", in.tangentSpaceViewPosition )
 					, writer.declLocale( "tangentSpaceFragPosition", in.tangentSpaceFragPosition ) };
-				auto lightMat = materials.blendMaterials( utils
+				auto [material, lightMat] = materials.blendMaterials( utils
 					, false
 					, flags.blendAlphaFunc
 					, flags.passFlags
@@ -265,8 +265,10 @@ namespace castor3d
 					, components );
 				auto worldEye = writer.declLocale( "worldEye"
 					, c3d_sceneData.cameraPosition );
+				auto colour = writer.declLocale( "colour"
+					, vec3( 0.0_f ) );
 
-				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
+				IF( writer, material.lighting() != 0_u )
 				{
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
 						, vec3( 0.0_f ) );
@@ -333,27 +335,25 @@ namespace castor3d
 								, surface )
 							: vec3( 0.0_f ) ) );
 
-					auto colour = writer.declLocale( "colour"
-						, lightingModel->combine( lightDiffuse
-							, indirectDiffuse
-							, lightSpecular
-							, lightScattering
-							, lightIndirectSpecular
-							, ambient
-							, indirectAmbient
-							, components.occlusion
-							, components.emissive
-							, reflected
-							, refracted
-							, lightMat->albedo * components.transmission ) );
-				}
-				else
-				{
-					auto colour = writer.declLocale( "colour"
+					colour = lightingModel->combine( lightDiffuse
+						, indirectDiffuse
+						, lightSpecular
+						, lightScattering
+						, lightIndirectSpecular
+						, ambient
+						, indirectAmbient
+						, components.occlusion
+						, components.emissive
+						, reflected
+						, refracted
 						, lightMat->albedo * components.transmission );
 				}
+				ELSE
+				{
+					colour = lightMat->albedo * components.transmission;
+				}
+				FI;
 
-				auto colour = writer.getVariable < Vec3 >( "colour" );
 				pxl_accumulation = c3d_sceneData.computeAccumulation( utils
 					, in.fragCoord.z()
 					, colour

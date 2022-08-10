@@ -65,8 +65,7 @@ namespace castor3d::shader
 				pbrLightMat.metalness = LightMaterial::computeMetalness( pbrLightMat.albedo, pbrLightMat.specular );
 			}
 
-			if ( checkFlag( passFlags, PassFlag::eLighting )
-				&& !checkFlag( textureFlags, castor3d::TextureFlag::eEmissive ) )
+			if ( !checkFlag( textureFlags, castor3d::TextureFlag::eEmissive ) )
 			{
 				emissive *= pbrLightMat.albedo;
 			}

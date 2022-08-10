@@ -41,8 +41,7 @@ namespace castor3d::shader
 			, PhongLightMaterial & phongLightMat
 			, sdw::Vec3 & emissive )
 		{
-			if ( checkFlag( passFlags, PassFlag::eLighting )
-				&& !checkFlag( textureFlags, castor3d::TextureFlag::eEmissive ) )
+			if ( !checkFlag( textureFlags, castor3d::TextureFlag::eEmissive ) )
 			{
 				emissive *= phongLightMat.albedo;
 			}

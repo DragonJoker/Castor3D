@@ -194,7 +194,7 @@ namespace castor3d
 					, writer.declLocale( "bitangent", normalize( in.bitangent ) )
 					, writer.declLocale( "tangentSpaceViewPosition", in.tangentSpaceViewPosition )
 					, writer.declLocale( "tangentSpaceFragPosition", in.tangentSpaceFragPosition ) };
-				auto lightMat = materials.blendMaterials( utils
+				auto [material, lightMat] = materials.blendMaterials( utils
 					, m_mode == RenderMode::eTransparentOnly
 					, ( m_mode == RenderMode::eTransparentOnly
 						? flags.blendAlphaFunc
@@ -212,7 +212,7 @@ namespace castor3d
 					, in.colour
 					, components );
 
-				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
+				IF( writer, material.lighting() != 0_u )
 				{
 					auto worldEye = writer.declLocale( "worldEye"
 						, c3d_sceneData.cameraPosition );
@@ -295,10 +295,11 @@ namespace castor3d
 							, lightMat->albedo )
 						, components.opacity );
 				}
-				else
+				ELSE
 				{
 					pxl_fragColor = vec4( lightMat->albedo, components.opacity );
 				}
+				FI;
 
 				if ( getFogType( flags.sceneFlags ) != FogType::eDisabled )
 				{

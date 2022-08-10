@@ -178,16 +178,18 @@ namespace castor3d
 
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
+				auto materialId = writer.declLocale( "materialId"
+					, modelData.getMaterialId() );
+				auto material = writer.declLocale( "material"
+					, materials.getMaterial( materialId ) );
 				auto data2 = writer.declLocale( "data2"
 					, c3d_mapData2.lod( texCoord, 0.0_f ) );
 				auto shadowReceiver = writer.declLocale( "shadowReceiver"
 					, modelData.isShadowReceiver() );
-				auto lightingReceiver = writer.declLocale( "lightingReceiver"
-					, data0.w() );
 				auto albedo = writer.declLocale( "albedo"
 					, data2.xyz() );
 
-				IF( writer, lightingReceiver )
+				IF( writer, material.lighting() != 0_u )
 				{
 					auto data1 = writer.declLocale( "data1"
 						, c3d_mapData1.lod( texCoord, 0.0_f ) );
@@ -196,10 +198,6 @@ namespace castor3d
 					auto data4 = writer.declLocale( "data4"
 						, c3d_mapData4.lod( texCoord, 0.0_f ) );
 
-					auto materialId = writer.declLocale( "materialId"
-						, modelData.getMaterialId() );
-					auto material = writer.declLocale( "material"
-						, materials.getMaterial( materialId ) );
 					auto lightMat = lightingModel->declMaterial( "lightMat" );
 					lightMat->create( albedo
 						, data3

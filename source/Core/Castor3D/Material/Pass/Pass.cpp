@@ -156,7 +156,6 @@ namespace castor3d
 		, m_typeID{ typeID }
 		, m_index{ parent.getPassCount() }
 		, m_flags{ PassFlag::ePickable
-			| PassFlag::eLighting
 			| initialFlags }
 		, m_opacity{ m_dirty, 1.0f }
 		, m_bwAccumulationOperator{ m_dirty, castor::makeRangedValue( 1u, 0u, 8u ) }
@@ -164,6 +163,7 @@ namespace castor3d
 		, m_refractionRatio{ m_dirty, 0.0f }
 		, m_twoSided{ m_dirty, false }
 		, m_untiling{ m_dirty, false }
+		, m_lighting{ m_dirty, true }
 		, m_alphaBlendMode{ m_dirty, BlendMode::eNoBlend }
 		, m_colourBlendMode{ m_dirty, BlendMode::eNoBlend }
 		, m_alphaValue{ m_dirty, 0.0f }
