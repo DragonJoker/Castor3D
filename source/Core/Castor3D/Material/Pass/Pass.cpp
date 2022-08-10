@@ -164,6 +164,8 @@ namespace castor3d
 		, m_twoSided{ m_dirty, false }
 		, m_untiling{ m_dirty, false }
 		, m_lighting{ m_dirty, true }
+		, m_reflection{ m_dirty, false }
+		, m_refraction{ m_dirty, false }
 		, m_alphaBlendMode{ m_dirty, BlendMode::eNoBlend }
 		, m_colourBlendMode{ m_dirty, BlendMode::eNoBlend }
 		, m_alphaValue{ m_dirty, 0.0f }

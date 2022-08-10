@@ -104,24 +104,18 @@ namespace castor3d
 		//!\~english	Shader using distance based transmittance when computing Subsurface Scattering.
 		//\~french		Shader utilisant la transmission basée sur la distance, lors du calcul du Subsurface Scattering.
 		eDistanceBasedTransmittance = 0x0080,
-		//!\~english	Reflection map.
-		//!\~french		Map de réflexion.
-		eReflection = 0x0100,
-		//!\~english	Refraction map.
-		//!\~french		Map de réfraction.
-		eRefraction = 0x0200,
 		//!\~english	The pass sets an object as pickable.
 		//!\~french		La passe rend l'objet sélectionnable.
-		ePickable = 0x0400,
+		ePickable = 0x0100,
 		//!\~english	Shader using alpha blending.
 		//\~french		Shader utilisant le mélange alpha.
-		eAlphaBlending = 0x0800,
+		eAlphaBlending = 0x0200,
 		//!\~english	All flags used in base pipeline flags hashing.
 		//\~french		Tous les indicateurs utilisés dans le hash des indicateurs de pipeline.
-		eAllBase = 0x0FFF,
+		eAllBase = 0x03FF,
 		//!\~english	The pass needs an edge to be drawn.
 		//!\~french		La passe demande qu'une bordure soit dessinée.
-		eDrawEdge = 0x1000,
+		eDrawEdge = 0x0400,
 		//!\~english	All other flags.
 		//\~french		Tous les autres indicateurs.
 		eAllOptional = eDrawEdge,

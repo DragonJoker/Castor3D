@@ -505,8 +505,6 @@ namespace water
 
 	castor3d::PassFlags WaterRenderPass::doAdjustPassFlags( castor3d::PassFlags flags )const
 	{
-		remFlag( flags, castor3d::PassFlag::eReflection );
-		remFlag( flags, castor3d::PassFlag::eRefraction );
 		remFlag( flags, castor3d::PassFlag::eParallaxOcclusionMappingOne );
 		remFlag( flags, castor3d::PassFlag::eParallaxOcclusionMappingRepeat );
 		remFlag( flags, castor3d::PassFlag::eDistanceBasedTransmittance );
@@ -758,11 +756,11 @@ namespace water
 					displayDebugData( eIndirectDiffuse, indirectDiffuse, 1.0_f );
 
 					// Reflection
-					auto backgroundReflection = writer.declLocale( "backgroundReflection"
-						, reflections->computeForward( *lightMat
-							, surface
-							, c3d_sceneData
-							, *backgroundModel ) );
+					auto backgroundReflection = reflections->computeForward( *lightMat
+						, surface
+						, c3d_sceneData
+						, *backgroundModel
+						, material.hasReflection() );
 					displayDebugData( eBackgroundReflection, backgroundReflection, 1.0_f );
 					auto ssrResult = writer.declLocale( "ssrResult"
 						, reflections->computeScreenSpace( c3d_matrixData
