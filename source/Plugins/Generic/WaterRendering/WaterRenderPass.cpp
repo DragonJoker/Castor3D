@@ -687,7 +687,7 @@ namespace water
 					, material );
 				displayDebugData( eMatSpecular, lightMat->specular, 1.0_f );
 
-				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
+				IF( writer, material.lighting() != 0_u )
 				{
 					// Direct Lighting
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
@@ -841,10 +841,11 @@ namespace water
 						, depthSoftenedAlpha );
 
 				}
-				else
+				ELSE
 				{
 					pxl_colour = vec4( lightMat->albedo, 1.0_f );
 				}
+				FI;
 
 				if ( getFogType( flags.sceneFlags ) != FogType::eDisabled )
 				{

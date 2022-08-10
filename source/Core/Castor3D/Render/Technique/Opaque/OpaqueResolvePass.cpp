@@ -208,14 +208,14 @@ namespace castor3d
 						, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
 					auto materialId = writer.declLocale( "materialId"
 						, writer.cast< UInt >( modelData.getMaterialId() ) );
+					auto material = writer.declLocale( "material"
+						, materials.getMaterial( materialId ) );
 					auto data1 = writer.declLocale( "data1"
 						, c3d_mapData1.lod( vtx_texture, 0.0_f ) );
 					auto data2 = writer.declLocale( "data2"
 						, c3d_mapData2.lod( vtx_texture, 0.0_f ) );
 					auto data5 = writer.declLocale( "data5"
 						, c3d_mapData5.lod( vtx_texture, 0.0_f ) );
-					auto lighting = writer.declLocale( "lighting"
-						, data0.w() );
 					auto envMapIndex = writer.declLocale( "envMapIndex"
 						, modelData.getEnvMapIndex() );
 					auto depth = writer.declLocale( "depth"
@@ -229,15 +229,13 @@ namespace castor3d
 						, data1.rgb()
 						, vec3( vtx_texture, 0.0_f ) );
 
-					IF( writer, lighting )
+					IF( writer, material.lighting() != 0_u )
 					{
 						auto data3 = writer.declLocale( "data3"
 							, c3d_mapData3.lod( vtx_texture, 0.0_f ) );
 						auto data4 = writer.declLocale( "data4"
 							, c3d_mapData4.lod( vtx_texture, 0.0_f ) );
 
-						auto material = writer.declLocale( "material"
-							, materials.getMaterial( materialId ) );
 						auto occlusion = writer.declLocale( "occlusion"
 							, data5.a() );
 						auto emissive = writer.declLocale( "emissive"

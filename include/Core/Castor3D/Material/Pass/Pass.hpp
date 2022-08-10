@@ -452,7 +452,7 @@ namespace castor3d
 
 		bool hasLighting()const
 		{
-			return checkFlag( m_flags, PassFlag::eLighting );
+			return m_lighting;
 		}
 
 		bool hasIBL()const
@@ -638,7 +638,7 @@ namespace castor3d
 
 		void enableLighting( bool value )
 		{
-			updateFlag( PassFlag::eLighting, value );
+			m_lighting = value;
 		}
 
 		void enablePicking( bool value )
@@ -758,6 +758,7 @@ namespace castor3d
 		castor::GroupChangeTracked< float > m_refractionRatio;
 		castor::GroupChangeTracked< bool > m_twoSided;
 		castor::GroupChangeTracked< bool > m_untiling;
+		castor::GroupChangeTracked< bool > m_lighting;
 		castor::GroupChangeTracked< BlendMode > m_alphaBlendMode;
 		castor::GroupChangeTracked< BlendMode > m_colourBlendMode;
 		castor::GroupChangeTracked< float > m_alphaValue;

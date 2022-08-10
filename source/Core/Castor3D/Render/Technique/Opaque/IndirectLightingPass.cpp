@@ -1,6 +1,7 @@
 #include "Castor3D/Render/Technique/Opaque/IndirectLightingPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
@@ -12,6 +13,7 @@
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
@@ -64,6 +66,9 @@ namespace castor3d
 			C3D_ModelsData( writer, IndirectLightingPass::eModels, 0u );
 			C3D_GpInfo( writer, IndirectLightingPass::eGpInfo, 0u );
 			C3D_Scene( writer, IndirectLightingPass::eScene, 0u );
+			shader::Materials materials{ writer
+				, IndirectLightingPass::eMaterials
+				, 0u };
 			shader::GlobalIllumination indirect{ writer, utils, true };
 			uint32_t vctIndex = uint32_t( IndirectLightingPass::eVctStart );
 			uint32_t lpvIndex = uint32_t( IndirectLightingPass::eLpvStart );
@@ -81,7 +86,7 @@ namespace castor3d
 				, {}
 				, nullptr
 				, true );
-			auto c3d_mapData0 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData0 ), uint32_t( IndirectLightingPass::eDepth ), 0u );
+			auto c3d_mapData0 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData0 ), uint32_t( IndirectLightingPass::eData0 ), 0u );
 			auto c3d_mapData1 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), uint32_t( IndirectLightingPass::eData1 ), 0u );
 			auto c3d_mapData2 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), uint32_t( IndirectLightingPass::eData2 ), 0u );
 			auto c3d_mapData3 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), uint32_t( IndirectLightingPass::eData3 ), 0u );
@@ -106,12 +111,12 @@ namespace castor3d
 
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
+					auto material = writer.declLocale( "material"
+						, materials.getMaterial( modelData.getMaterialId() ) );
 					auto shadowReceiver = writer.declLocale( "shadowReceiver"
 						, modelData.isShadowReceiver() );
-					auto lightingReceiver = writer.declLocale( "lightingReceiver"
-						, data0.w() );
 
-					IF( writer, lightingReceiver )
+					IF( writer, material.lighting() != 0_u )
 					{
 						auto data1 = writer.declLocale( "data1"
 							, c3d_mapData1.lod( texCoord, 0.0_f ) );
@@ -359,6 +364,8 @@ namespace castor3d
 			, uint32_t( IndirectLightingPass::eGpInfo ) );
 		m_sceneUbo.createPassBinding( pass
 			, uint32_t( IndirectLightingPass::eScene ) );
+		engine.getMaterialCache().getPassBuffer().createPassBinding( pass
+			, uint32_t( IndirectLightingPass::eMaterials ) );
 		m_lpvConfigUbo.createPassBinding( pass
 			, uint32_t( IndirectLightingPass::eLpvGridConfig ) );
 
@@ -371,7 +378,7 @@ namespace castor3d
 		m_vctConfigUbo.createPassBinding( pass
 			, uint32_t( IndirectLightingPass::eVoxelData ) );
 		pass.addSampledView( m_gpResult[DsTexture::eData0].sampledViewId
-			, uint32_t( IndirectLightingPass::eDepth ) );
+			, uint32_t( IndirectLightingPass::eData0 ) );
 		pass.addSampledView( m_gpResult[DsTexture::eData1].sampledViewId
 			, uint32_t( IndirectLightingPass::eData1 ) );
 		pass.addSampledView( m_gpResult[DsTexture::eData2].sampledViewId

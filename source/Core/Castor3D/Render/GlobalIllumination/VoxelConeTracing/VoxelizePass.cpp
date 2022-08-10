@@ -659,7 +659,7 @@ namespace castor3d
 					auto color = writer.declLocale( "color"
 						, emissive );
 
-					if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
+					IF( writer, material.lighting() != 0_u )
 					{
 						auto worldEye = writer.declLocale( "worldEye"
 							, c3d_sceneData.cameraPosition );
@@ -676,6 +676,7 @@ namespace castor3d
 								, worldEye
 								, modelData.isShadowReceiver() );
 					}
+					FI;
 
 					auto encodedColor = writer.declLocale( "encodedColor"
 						, utils.encodeColor( vec4( color, alpha ) ) );

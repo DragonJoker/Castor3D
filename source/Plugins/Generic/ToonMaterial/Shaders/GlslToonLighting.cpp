@@ -44,8 +44,7 @@ namespace toon::shader
 				, ToonPhongLightMaterial & phongLightMat
 				, sdw::Vec3 & emissive )
 			{
-				if ( checkFlag( passFlags, castor3d::PassFlag::eLighting )
-					&& !checkFlag( textureFlags, castor3d::TextureFlag::eEmissive ) )
+				if ( !checkFlag( textureFlags, castor3d::TextureFlag::eEmissive ) )
 				{
 					emissive *= phongLightMat.albedo;
 				}
@@ -990,8 +989,7 @@ namespace toon::shader
 					pbrLightMat.specular = castor3d::shader::LightMaterial::computeF0( pbrLightMat.albedo, pbrLightMat.metalness );
 				}
 
-				if ( checkFlag( passFlags, castor3d::PassFlag::eLighting )
-					&& !checkFlag( textureFlags, castor3d::TextureFlag::eEmissive ) )
+				if ( !checkFlag( textureFlags, castor3d::TextureFlag::eEmissive ) )
 				{
 					emissive *= pbrLightMat.albedo;
 				}
