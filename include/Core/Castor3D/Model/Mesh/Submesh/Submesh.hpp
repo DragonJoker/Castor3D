@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/Node/RenderNodeModule.hpp"
+#include "Castor3D/Scene/SceneModule.hpp"
 
 #include "Castor3D/Binary/BinaryModule.hpp"
 #include "Castor3D/Buffer/BufferModule.hpp"
@@ -330,6 +331,9 @@ namespace castor3d
 		C3D_API GpuBufferOffsetT< MeshletCullData > const & getSourceMeshletsBounds()const;
 		C3D_API bool hasMorphComponent()const;
 		C3D_API bool hasSkinComponent()const;
+		C3D_API VkDeviceSize getVertexOffset( Geometry const & geometry )const;
+		C3D_API VkDeviceSize getIndexOffset()const;
+		C3D_API VkDeviceSize getMeshletOffset()const;
 		inline SkeletonRPtr getSkeleton()const;
 		inline MaterialRPtr getDefaultMaterial()const;
 		inline castor::BoundingBox const & getBoundingBox()const;

@@ -16,6 +16,7 @@
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
+#include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
@@ -258,6 +259,7 @@ namespace castor3d
 				{
 					flags = m_submeshFlags;
 					remFlag( flags, SubmeshFlag::eSkin );
+
 					for ( auto & finalBufferOffset : m_finalBufferOffsets )
 					{
 						finalBufferOffset.second = device.geometryPools->getBuffer( getPointsCount()
@@ -290,6 +292,31 @@ namespace castor3d
 
 			m_dirty = !m_initialised;
 		}
+	}
+
+	VkDeviceSize Submesh::getVertexOffset( Geometry const & geometry )const
+	{
+		return getFinalBufferOffsets( geometry ).getFirstVertex< castor::Point4f >();
+	}
+
+	VkDeviceSize Submesh::getIndexOffset()const
+	{
+		return m_sourceBufferOffset
+			? m_sourceBufferOffset.getFirstIndex< uint32_t >()
+			: 0u;
+	}
+
+	VkDeviceSize Submesh::getMeshletOffset()const
+	{
+		auto meshletComponent = getComponent< MeshletComponent >();
+		VkDeviceSize result{};
+
+		if ( meshletComponent )
+		{
+			result = meshletComponent->getMeshletsBuffer().getOffset();
+		}
+
+		return result;
 	}
 
 	void Submesh::cleanup( RenderDevice const & device )
