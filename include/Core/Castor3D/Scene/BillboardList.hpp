@@ -172,6 +172,11 @@ namespace castor3d
 			return getGeometryBuffers().bufferOffset;
 		}
 
+		VkDeviceSize getVertexOffset()const
+		{
+			return getBufferOffsets().getFirstVertex< castor::Point3f >();
+		}
+
 		Scene const & getParentScene()const
 		{
 			return m_scene;

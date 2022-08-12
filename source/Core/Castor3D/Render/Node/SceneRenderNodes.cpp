@@ -193,7 +193,8 @@ namespace castor3d
 				, data
 				, &node
 				, ++m_nodeId );
-			instance.fillEntry( pass
+			instance.fillEntry( m_nodeId
+				, pass
 				, *instance.getParent()
 				, data.getMeshletsCount()
 				, node.modelData );
@@ -251,7 +252,8 @@ namespace castor3d
 			instance.setId( pass
 				, it.first->second.get()
 				, ++m_nodeId );
-			instance.fillEntry( pass
+			instance.fillEntry( m_nodeId
+				, pass
 				, *instance.getNode()
 				, 0u
 				, it.first->second->modelData );

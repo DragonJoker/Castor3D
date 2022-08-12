@@ -921,15 +921,22 @@ namespace castor3d
 		for ( auto object : sceneObjs.dirtyGeometries )
 		{
 			bool dirty = false;
+			auto & geometry = *object;
 
 			for ( auto & passIt : object->getIds() )
 			{
 				for ( auto & submeshIt : passIt.second )
 				{
-					object->fillEntry( *passIt.first
+					auto & submesh = submeshIt.second.second->data;
+					object->fillEntry( submeshIt.second.first
+						, *passIt.first
 						, *object->getParent()
-						, submeshIt.second.second->data.getMeshletsCount()
+						, submesh.getMeshletsCount()
 						, submeshIt.second.second->modelData );
+					object->fillEntryOffsets( submeshIt.second.first
+						, submesh.getVertexOffset( geometry )
+						, submesh.getIndexOffset()
+						, submesh.getMeshletOffset() );
 					dirty = dirty || passIt.first->getId() == 0;
 				}
 			}
@@ -943,13 +950,19 @@ namespace castor3d
 		for ( auto object : sceneObjs.dirtyBillboards )
 		{
 			bool dirty = false;
+			auto & billboard = *object;
 
 			for ( auto & billboardIt : object->getIds() )
 			{
-				object->fillEntry( *billboardIt.first
+				object->fillEntry( billboardIt.second.first
+					, *billboardIt.first
 					, *object->getNode()
 					, 0u
 					, billboardIt.second.second->modelData );
+				object->fillEntryOffsets( billboardIt.second.first
+					, billboard.getVertexOffset()
+					, 0u
+					, 0u );
 				billboardIt.second.second->billboardData.dimensions = object->getDimensions();
 				dirty = dirty || billboardIt.first->getId() == 0;
 			}

@@ -15,10 +15,15 @@ namespace castor3d
 	class RenderedObject
 	{
 	public:
-		C3D_API void fillEntry( Pass const & pass
+		C3D_API void fillEntry( uint32_t nodeId
+			, Pass const & pass
 			, SceneNode const & sceneNode
 			, uint32_t meshletCount
 			, ModelBufferConfiguration & modelData );
+		C3D_API void fillEntryOffsets( uint32_t nodeId
+			, VkDeviceSize vertexOffset
+			, VkDeviceSize indexOffset
+			, VkDeviceSize meshletOffset );
 
 		void setVisible( bool value )
 		{
@@ -61,11 +66,20 @@ namespace castor3d
 		}
 
 	private:
+		struct Offsets
+		{
+			VkDeviceSize vertexOffset{};
+			VkDeviceSize indexOffset{};
+			VkDeviceSize meshletOffset{};
+		};
+
+	private:
 		bool m_visible{ true };
 		bool m_castsShadows{ true };
 		bool m_receivesShadows{ true };
 		bool m_cullable{ true };
 		bool m_firstUpdate{ true };
+		std::unordered_map< uint32_t, std::pair< ModelBufferConfiguration *, Offsets > > m_modelsDataOffsets{};
 	};
 }
 
