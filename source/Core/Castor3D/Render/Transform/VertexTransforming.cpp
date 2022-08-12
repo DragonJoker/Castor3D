@@ -35,7 +35,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 #define DeclareSsbo( Name, Type, Binding, Enable )\
-	sdw::Ssbo Name##Buffer{ writer\
+	sdw::StorageBuffer Name##Buffer{ writer\
 		, #Name + std::string{ "Buffer" }\
 		, uint32_t( Binding )\
 		, 0u\
@@ -45,7 +45,7 @@ namespace castor3d
 	Name##Buffer.end()
 
 #define DeclareSsboEx( Name, Type, Binding, Enable, Flags )\
-	sdw::Ssbo Name##Buffer{ writer\
+	sdw::StorageBuffer Name##Buffer{ writer\
 		, #Name + std::string{ "Buffer" }\
 		, uint32_t( Binding )\
 		, 0u\

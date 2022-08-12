@@ -75,7 +75,7 @@ namespace motion_blur
 			FragmentWriter writer;
 
 			// Shader inputs
-			Ubo configuration{ writer, "Configuration", BlurCfgUboIdx, 0u };
+			UniformBuffer configuration{ writer, "Configuration", BlurCfgUboIdx, 0u };
 			auto c3d_samplesCount = configuration.declMember< UInt >( "c3d_samplesCount" );
 			auto c3d_vectorDivider = configuration.declMember< Float >( "c3d_vectorDivider" );
 			auto c3d_blurScale = configuration.declMember< Float >( "c3d_blurScale" );

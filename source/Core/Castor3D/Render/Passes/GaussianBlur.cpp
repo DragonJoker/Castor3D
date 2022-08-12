@@ -60,7 +60,7 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			Ubo config{ writer, GaussianBlur::Config, GaussCfgIdx, 0u };
+			UniformBuffer config{ writer, GaussianBlur::Config, GaussCfgIdx, 0u };
 			auto c3d_textureSize = config.declMember< Vec2 >( GaussianBlur::TextureSize );
 			auto c3d_coefficientsCount = config.declMember< UInt >( GaussianBlur::CoefficientsCount );
 			auto c3d_dump = config.declMember< UInt >( "c3d_dump" ); // to keep a 16 byte alignment.
@@ -101,7 +101,7 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			Ubo config{ writer, GaussianBlur::Config, GaussCfgIdx, 0u };
+			UniformBuffer config{ writer, GaussianBlur::Config, GaussCfgIdx, 0u };
 			auto c3d_textureSize = config.declMember< Vec2 >( GaussianBlur::TextureSize );
 			auto c3d_coefficientsCount = config.declMember< UInt >( GaussianBlur::CoefficientsCount );
 			auto c3d_dump = config.declMember< UInt >( cuT( "c3d_dump" ) ); // to keep a 16 byte alignment.

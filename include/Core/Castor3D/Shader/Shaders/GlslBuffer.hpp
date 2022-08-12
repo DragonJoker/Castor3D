@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <ShaderWriter/Writer.hpp>
 #include <ShaderWriter/BaseTypes/UInt.hpp>
-#include <ShaderWriter/CompositeTypes/Ssbo.hpp>
+#include <ShaderWriter/CompositeTypes/StorageBuffer.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
 
 namespace castor3d::shader
@@ -28,7 +28,7 @@ namespace castor3d::shader
 		{
 			if ( enable )
 			{
-				m_ssbo = std::make_unique< sdw::Ssbo >( m_writer
+				m_ssbo = std::make_unique< sdw::StorageBuffer >( m_writer
 					, bufferName
 					, binding
 					, set );
@@ -69,7 +69,7 @@ namespace castor3d::shader
 
 	private:
 		std::string m_arrayName;
-		std::unique_ptr< sdw::Ssbo > m_ssbo;
+		std::unique_ptr< sdw::StorageBuffer > m_ssbo;
 	};
 }
 

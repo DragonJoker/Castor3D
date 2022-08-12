@@ -6,7 +6,7 @@
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
-#include <ShaderWriter/CompositeTypes/ArraySsbo.hpp>
+#include <ShaderWriter/CompositeTypes/ArrayStorageBuffer.hpp>
 
 namespace castor3d
 {

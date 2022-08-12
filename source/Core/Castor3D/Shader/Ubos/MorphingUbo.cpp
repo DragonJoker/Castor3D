@@ -1,7 +1,7 @@
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
-#include <ShaderWriter/CompositeTypes/ArraySsbo.hpp>
+#include <ShaderWriter/CompositeTypes/ArrayStorageBuffer.hpp>
 
 namespace castor3d
 {
@@ -321,7 +321,7 @@ namespace castor3d
 			ROF;
 		}
 
-		void MorphingWeightsData::morph( sdw::ArraySsboT< shader::MorphTargetsData > const & targets
+		void MorphingWeightsData::morph( sdw::ArrayStorageBufferT< shader::MorphTargetsData > const & targets
 			, sdw::UInt vertexId
 			, sdw::Vec4 & pos
 			, sdw::Vec4 & nml

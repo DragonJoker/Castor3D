@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include <Castor3D/Shader/Shaders/GlslBackground.hpp>
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 
-#include <ShaderWriter/CompositeTypes/Ubo.hpp>
+#include <ShaderWriter/CompositeTypes/UniformBuffer.hpp>
 
 namespace atmosphere_scattering
 {
@@ -65,9 +65,9 @@ namespace atmosphere_scattering
 
 	public:
 		static castor::String const Name;
-		sdw::Ubo cameraBuffer;
+		sdw::UniformBuffer cameraBuffer;
 		CameraData cameraData;
-		sdw::Ubo atmosphereBuffer;
+		sdw::UniformBuffer atmosphereBuffer;
 		AtmosphereData atmosphereData;
 		AtmosphereModel atmosphere;
 		ScatteringModel scattering;

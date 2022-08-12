@@ -39,7 +39,7 @@ namespace castor3d
 
 				// Inputs
 				auto position = writer.declInput< sdw::Vec4 >( "position", 0u );
-				auto matrixUbo = sdw::Ubo{ writer, "Matrix", 0u, 0u };
+				auto matrixUbo = sdw::UniformBuffer{ writer, "Matrix", 0u, 0u };
 				auto mtxViewProjection = matrixUbo.declMember< sdw::Mat4 >( "mtxViewProjection" );
 				matrixUbo.end();
 

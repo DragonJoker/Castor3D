@@ -100,7 +100,7 @@ namespace castor3d::shader
 }
 
 #define C3D_ObjectIdsData( writer, binding, set )\
-	sdw::Ssbo objectIdsDataBuffer{ writer\
+	sdw::StorageBuffer objectIdsDataBuffer{ writer\
 		, castor3d::shader::ObjectsIds::BufferName\
 		, uint32_t( binding )\
 		, uint32_t( set )\
@@ -110,7 +110,7 @@ namespace castor3d::shader
 	objectIdsDataBuffer.end()
 
 #define C3D_ObjectIdsDataOpt( writer, binding, set, enable )\
-	sdw::Ssbo objectIdsDataBuffer{ writer\
+	sdw::StorageBuffer objectIdsDataBuffer{ writer\
 		, castor3d::shader::ObjectsIds::BufferName\
 		, uint32_t( binding )\
 		, uint32_t( set )\

@@ -129,7 +129,7 @@ namespace castor3d
 				, sdw::Vec3 & uvw2
 				, sdw::Vec3 & uvw3
 				, sdw::Vec3 & col )const;
-			C3D_API void morph( sdw::ArraySsboT< shader::MorphTargetsData > const & targets
+			C3D_API void morph( sdw::ArrayStorageBufferT< shader::MorphTargetsData > const & targets
 				, sdw::UInt vertexId
 				, sdw::Vec4 & pos
 				, sdw::Vec4 & nml

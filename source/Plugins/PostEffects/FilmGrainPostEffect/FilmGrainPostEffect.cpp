@@ -81,7 +81,7 @@ namespace film_grain
 			FragmentWriter writer;
 
 			// Shader inputs
-			sdw::Ubo filmGrain{ writer, FilmGrainUbo, FilmCfgUboIdx, 0u };
+			sdw::UniformBuffer filmGrain{ writer, FilmGrainUbo, FilmCfgUboIdx, 0u };
 			auto c3d_pixelSize = filmGrain.declMember< Vec2 >( PixelSize );
 			auto c3d_noiseIntensity = filmGrain.declMember< Float >( NoiseIntensity );
 			auto c3d_exposure = filmGrain.declMember< Float >( Exposure );

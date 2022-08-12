@@ -163,7 +163,7 @@ namespace castor3d
 }
 
 #define C3D_Matrix( writer, binding, set )\
-	sdw::Ubo matrices{ writer\
+	sdw::UniformBuffer matrices{ writer\
 		, castor3d::MatrixUbo::BufferMatrix\
 		, uint32_t( binding )\
 		, uint32_t( set )\

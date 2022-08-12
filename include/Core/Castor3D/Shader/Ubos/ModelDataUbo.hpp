@@ -112,7 +112,7 @@ namespace castor3d::shader
 }
 
 #define C3D_ModelsData( writer, binding, set )\
-	sdw::Ssbo modelsBufferIndices{ writer\
+	sdw::StorageBuffer modelsBufferIndices{ writer\
 		, castor3d::shader::ModelIndices::BufferName\
 		, uint32_t( binding )\
 		, uint32_t( set )\
@@ -122,7 +122,7 @@ namespace castor3d::shader
 	modelsBufferIndices.end()
 
 #define C3D_ModelData( writer, binding, set )\
-	sdw::Ubo modelBufferIndices{ writer\
+	sdw::UniformBuffer modelBufferIndices{ writer\
 		, castor3d::shader::ModelIndices::BufferName\
 		, uint32_t( binding )\
 		, uint32_t( set )\

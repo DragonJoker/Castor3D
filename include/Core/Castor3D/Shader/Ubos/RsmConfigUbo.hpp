@@ -85,7 +85,7 @@ namespace castor3d
 }
 
 #define C3D_RsmConfig( writer, binding, set )\
-	sdw::Ubo rsmConfig{ writer\
+	sdw::UniformBuffer rsmConfig{ writer\
 		, castor3d::RsmConfigUbo::BufferRsmConfig\
 		, uint32_t( binding )\
 		, uint32_t( set )\

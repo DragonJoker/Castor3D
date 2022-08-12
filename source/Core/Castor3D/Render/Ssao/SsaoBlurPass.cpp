@@ -68,7 +68,7 @@ namespace castor3d
 
 			C3D_SsaoConfig( writer, SsaoCfgUboIdx, 0u );
 			C3D_GpInfo( writer, GpInfoUboIdx, 0u );
-			Ubo configuration{ writer, "BlurConfiguration", BlurCfgUboIdx, 0u };
+			UniformBuffer configuration{ writer, "BlurConfiguration", BlurCfgUboIdx, 0u };
 			/** (1, 0) or (0, 1)*/
 			auto c3d_axis = configuration.declMember< IVec2 >( "c3d_axis" );
 			auto c3d_dummy = configuration.declMember< IVec2 >( "c3d_dummy" );

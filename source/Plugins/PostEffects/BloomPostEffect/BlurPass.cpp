@@ -50,7 +50,7 @@ namespace Bloom
 			FragmentWriter writer;
 
 			// Shader inputs
-			Ubo config{ writer, castor3d::GaussianBlur::Config, GaussCfgUboIdx, 0u };
+			UniformBuffer config{ writer, castor3d::GaussianBlur::Config, GaussCfgUboIdx, 0u };
 			auto c3d_pixelSize = config.declMember< Vec2 >( castor3d::GaussianBlur::TextureSize );
 			auto c3d_coefficientsCount = config.declMember< UInt >( castor3d::GaussianBlur::CoefficientsCount );
 			auto c3d_dump = config.declMember< UInt >( "c3d_dump" ); // to keep a 16 byte alignment.

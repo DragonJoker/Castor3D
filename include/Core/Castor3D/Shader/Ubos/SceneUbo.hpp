@@ -162,7 +162,7 @@ namespace castor3d
 }
 
 #define C3D_Scene( writer, binding, set )\
-	sdw::Ubo sceneBuffer{ writer\
+	sdw::UniformBuffer sceneBuffer{ writer\
 		, castor3d::SceneUbo::BufferScene\
 		, uint32_t( binding )\
 		, uint32_t( set )\
