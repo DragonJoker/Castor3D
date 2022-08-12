@@ -32,16 +32,16 @@ namespace atmosphere_scattering
 			, uint32_t & binding
 			, uint32_t set );
 
-		sdw::Vec3 computeReflections( sdw::Vec3 const & wsIncident
+		sdw::RetVec3 computeReflections( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, castor3d::shader::LightMaterial const & material
 			, sdw::CombinedImage2DRg32 const & brdf )override;
-		sdw::Vec3 computeRefractions( sdw::Vec3 const & wsIncident
+		sdw::RetVec3 computeRefractions( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
 			, castor3d::shader::LightMaterial const & material )override;
-		sdw::Void mergeReflRefr( sdw::Vec3 const & wsIncident
+		sdw::RetVoid mergeReflRefr( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
@@ -71,6 +71,11 @@ namespace atmosphere_scattering
 		AtmosphereData atmosphereData;
 		AtmosphereModel atmosphere;
 		ScatteringModel scattering;
+
+	private:
+		sdw::Function< sdw::Vec3 > m_computeReflections;
+		sdw::Function< sdw::Vec3 > m_computeRefractions;
+		sdw::Function< sdw::Void > m_mergeReflRefr;
 	};
 }
 

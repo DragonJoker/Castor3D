@@ -1275,10 +1275,11 @@ namespace ocean
 
 
 					// Reflection
-					auto backgroundReflection = reflections->computeForward( *lightMat
+					auto backgroundReflection = reflections->computeReflections( *lightMat
 						, surface
 						, c3d_sceneData
 						, *backgroundModel
+						, modelData.getEnvMapIndex()
 						, material.hasReflection() );
 					displayDebugData( eBackgroundReflection, backgroundReflection, 1.0_f );
 					auto ssrResult = writer.declLocale( "ssrResult"

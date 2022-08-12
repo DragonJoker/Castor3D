@@ -297,7 +297,7 @@ namespace castor3d
 						, vec3( 0.0_f ) );
 					auto refracted = writer.declLocale( "refracted"
 						, vec3( 0.0_f ) );
-					reflections->computeDeferred( *lightMat
+					reflections->computeCombined( *lightMat
 						, surface
 						, c3d_sceneData
 						, *backgroundModel

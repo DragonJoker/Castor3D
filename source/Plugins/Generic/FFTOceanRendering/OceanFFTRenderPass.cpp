@@ -1313,10 +1313,11 @@ namespace ocean_fft
 
 
 					// Reflection
-					auto reflected = reflections->computeForward( *lightMat
+					auto reflected = reflections->computeReflections( *lightMat
 						, surface
 						, c3d_sceneData
 						, *backgroundModel
+						, modelData.getEnvMapIndex()
 						, material.hasReflection() );
 					displayDebugData( eRawBackgroundReflection, reflected, 1.0_f );
 					reflected = utils.fresnelSchlick( NdotV, lightMat->specular ) * reflected;

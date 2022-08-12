@@ -41,7 +41,7 @@ namespace castor3d::shader
 			, set );
 	}
 
-	sdw::Vec3 IblBackgroundModel::computeReflections( sdw::Vec3 const & pwsIncident
+	sdw::RetVec3 IblBackgroundModel::computeReflections( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
 		, LightMaterial const & pmaterial
 		, sdw::CombinedImage2DRg32 const & pbrdfMap )
@@ -117,7 +117,7 @@ namespace castor3d::shader
 			, pbrdfMap );
 	}
 
-	sdw::Vec3 IblBackgroundModel::computeRefractions( sdw::Vec3 const & wsIncident
+	sdw::RetVec3 IblBackgroundModel::computeRefractions( sdw::Vec3 const & wsIncident
 		, sdw::Vec3 const & wsNormal
 		, sdw::Float const & refractionRatio
 		, sdw::Vec3 const & transmission
@@ -132,7 +132,7 @@ namespace castor3d::shader
 			, material.albedo );
 	}
 
-	sdw::Void IblBackgroundModel::mergeReflRefr( sdw::Vec3 const & pwsIncident
+	sdw::RetVoid IblBackgroundModel::mergeReflRefr( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
 		, sdw::Float const & prefractionRatio
 		, sdw::Vec3 const & ptransmission
@@ -201,7 +201,7 @@ namespace castor3d::shader
 			, prefraction );
 	}
 
-	sdw::Vec3 IblBackgroundModel::doComputeRefractions( sdw::Vec3 const & pwsIncident
+	sdw::RetVec3 IblBackgroundModel::doComputeRefractions( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
 		, sdw::CombinedImageCubeRgba32 const & pprefiltered
 		, sdw::Float const & prefractionRatio

@@ -37,24 +37,42 @@ namespace castor3d::shader
 			, set );
 	}
 
-	sdw::Vec3 ImgBackgroundModel::computeReflections( sdw::Vec3 const & pwsIncident
+	sdw::RetVec3 ImgBackgroundModel::computeReflections( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
 		, LightMaterial const & pmaterial
 		, sdw::CombinedImage2DRg32 const & pbrdf )
 	{
-		return vec3( 0.0_f );
+		if ( !m_computeReflections )
+		{
+			m_computeReflections = m_writer.implementFunction< sdw::Vec3 >( "c3d_imgbg_computeReflections"
+				, [&]()
+				{
+					m_writer.returnStmt( vec3( 0.0_f ) );
+				} );
+		}
+
+		return m_computeReflections();
 	}
 
-	sdw::Vec3 ImgBackgroundModel::computeRefractions( sdw::Vec3 const & pwsIncident
+	sdw::RetVec3 ImgBackgroundModel::computeRefractions( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
 		, sdw::Float const & prefractionRatio
 		, sdw::Vec3 const & ptransmission
 		, LightMaterial const & pmaterial )
 	{
-		return vec3( 0.0_f );
+		if ( !m_computeRefractions )
+		{
+			m_computeRefractions = m_writer.implementFunction< sdw::Vec3 >( "c3d_imgbg_computeRefractions"
+				, [&]()
+				{
+					m_writer.returnStmt( vec3( 0.0_f ) );
+				} );
+		}
+
+		return m_computeRefractions();
 	}
 
-	sdw::Void ImgBackgroundModel::mergeReflRefr( sdw::Vec3 const & pwsIncident
+	sdw::RetVoid ImgBackgroundModel::mergeReflRefr( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
 		, sdw::Float const & prefractionRatio
 		, sdw::Vec3 const & ptransmission
@@ -62,6 +80,14 @@ namespace castor3d::shader
 		, sdw::Vec3 & preflection
 		, sdw::Vec3 & prefraction )
 	{
-		return sdw::Void{};
+		if ( !m_mergeReflRefr )
+		{
+			m_mergeReflRefr = m_writer.implementFunction< sdw::Void >( "c3d_imgbg_mergeReflRefr"
+				, [&]()
+				{
+				} );
+		}
+
+		return m_mergeReflRefr();
 	}
 }

@@ -21,8 +21,6 @@ namespace castor3d::shader
 			, uint32_t envMapSet );
 
 	private:
-		void doDeclareComputeReflEnvMap()override;
-		void doDeclareComputeRefrEnvMap()override;
 		void doDeclareComputeReflEnvMaps()override;
 		void doDeclareComputeRefrEnvMaps()override;
 	};
