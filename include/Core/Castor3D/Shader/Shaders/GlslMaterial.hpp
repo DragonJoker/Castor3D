@@ -145,63 +145,202 @@ namespace castor3d::shader
 		auto passCount()const { return getMember< "passCount" >(); }
 	};
 
+	template< typename T >
+	struct BlendComponentT
+	{
+		BlendComponentT( T v, bool e = true )
+			: value{ std::move( v ) }
+			, enabled{ e }
+		{
+		}
+
+		T value;
+		bool enabled;
+	};
+
+	struct OpaResult
+	{
+		sdw::Float opa;
+	};
+
 	struct OpacityBlendComponents
 	{
-		sdw::Vec3 texCoord0;
-		sdw::Float opacity;
+		C3D_API OpacityBlendComponents( sdw::ShaderWriter & writer
+			, std::string const & prefix
+			, BlendComponentT< sdw::Vec3 > t0
+			, BlendComponentT< sdw::Float > opa );
+		C3D_API OpacityBlendComponents( sdw::ShaderWriter & writer
+			, std::string const & prefix
+			, OpacityBlendComponents const & rhs );
+
+		C3D_API OpaResult createResult( sdw::ShaderWriter & writer
+			, OpacityBlendComponents const & rhs )const;
+		C3D_API void apply( sdw::Float const & passMultiplier
+			, OpaResult & res )const;
+		C3D_API void set( OpaResult const & rhs );
+
+		sdw::Vec3 & texCoord0() { return m_texCoord0; }
+		sdw::Float & opacity() { return m_opacity; }
+
+		sdw::Vec3 const & texCoord0()const { return m_texCoord0; }
+		sdw::Float const & opacity()const { return m_opacity; }
+
+	private:
+		sdw::Vec3 m_texCoord0;
+		sdw::Float m_opacity;
+	};
+
+	struct GeoResult
+	{
+		OpaResult opa;
+		sdw::Vec3 nml;
+		sdw::Vec3 tan;
+		sdw::Vec3 bit;
+		sdw::Vec3 tvp;
+		sdw::Vec3 tfp;
 	};
 
 	struct GeometryBlendComponents
+		: public OpacityBlendComponents
 	{
-		sdw::Vec3 texCoord0;
-		sdw::Vec3 texCoord1;
-		sdw::Vec3 texCoord2;
-		sdw::Vec3 texCoord3;
-		sdw::Float opacity;
-		sdw::Vec3 normal;
-		sdw::Vec3 tangent;
-		sdw::Vec3 bitangent;
-		sdw::Vec3 tangentSpaceViewPosition;
-		sdw::Vec3 tangentSpaceFragPosition;
+		C3D_API GeometryBlendComponents( sdw::ShaderWriter & writer
+			, std::string const & prefix
+			, BlendComponentT< sdw::Vec3 > t0, BlendComponentT< sdw::Vec3 > t1, BlendComponentT< sdw::Vec3 > t2, BlendComponentT< sdw::Vec3 > t3
+			, BlendComponentT< sdw::Float > opa
+			, BlendComponentT< sdw::Vec3 > nml, BlendComponentT< sdw::Vec3 > tan, BlendComponentT< sdw::Vec3 > bit
+			, BlendComponentT< sdw::Vec3 > tvp, BlendComponentT< sdw::Vec3 > tfp );
+		C3D_API GeometryBlendComponents( sdw::ShaderWriter & writer
+			, std::string const & prefix
+			, GeometryBlendComponents const & rhs );
+
+		C3D_API GeoResult createResult( sdw::ShaderWriter & writer
+			, GeometryBlendComponents const & rhs )const;
+		C3D_API void apply( sdw::Float const & passMultiplier
+			, GeoResult & res )const;
+		C3D_API void set( GeoResult const & rhs );
+
+		sdw::Vec3 & texCoord1() { return m_texCoord1; }
+		sdw::Vec3 & texCoord2() { return m_texCoord2; }
+		sdw::Vec3 & texCoord3() { return m_texCoord3; }
+		sdw::Vec3 & normal() { return m_normal; }
+		sdw::Vec3 & tangent() { return m_tangent; }
+		sdw::Vec3 & bitangent() { return m_bitangent; }
+		sdw::Vec3 & tangentSpaceViewPosition() { return m_tangentSpaceViewPosition; }
+		sdw::Vec3 & tangentSpaceFragPosition() { return m_tangentSpaceFragPosition; }
+
+		sdw::Vec3 const & texCoord1()const { return m_texCoord1; }
+		sdw::Vec3 const & texCoord2()const { return m_texCoord2; }
+		sdw::Vec3 const & texCoord3()const { return m_texCoord3; }
+		sdw::Vec3 const & normal()const { return m_normal; }
+		sdw::Vec3 const & tangent()const { return m_tangent; }
+		sdw::Vec3 const & bitangent()const { return m_bitangent; }
+		sdw::Vec3 const & tangentSpaceViewPosition()const { return m_tangentSpaceViewPosition; }
+		sdw::Vec3 const & tangentSpaceFragPosition()const { return m_tangentSpaceFragPosition; }
+
+	private:
+		sdw::Vec3 m_texCoord1;
+		sdw::Vec3 m_texCoord2;
+		sdw::Vec3 m_texCoord3;
+		sdw::Vec3 m_normal;
+		sdw::Vec3 m_tangent;
+		sdw::Vec3 m_bitangent;
+		sdw::Vec3 m_tangentSpaceViewPosition;
+		sdw::Vec3 m_tangentSpaceFragPosition;
+	};
+
+	struct OpqResult
+	{
+		GeoResult geo;
+		sdw::Float occ;
+		sdw::Float trn;
+		sdw::Vec3 ems;
 	};
 
 	struct OpaqueBlendComponents
+		: public GeometryBlendComponents
 	{
-		sdw::Vec3 texCoord0;
-		sdw::Vec3 texCoord1;
-		sdw::Vec3 texCoord2;
-		sdw::Vec3 texCoord3;
-		sdw::Float opacity;
-		sdw::Float occlusion;
-		sdw::Float transmittance;
-		sdw::Vec3 emissive;
-		sdw::Vec3 normal;
-		sdw::Vec3 tangent;
-		sdw::Vec3 bitangent;
-		sdw::Vec3 tangentSpaceViewPosition;
-		sdw::Vec3 tangentSpaceFragPosition;
+		C3D_API OpaqueBlendComponents( sdw::ShaderWriter & writer
+			, std::string const & prefix
+			, BlendComponentT< sdw::Vec3 > t0, BlendComponentT< sdw::Vec3 > t1, BlendComponentT< sdw::Vec3 > t2, BlendComponentT< sdw::Vec3 > t3
+			, BlendComponentT< sdw::Float > opa
+			, BlendComponentT< sdw::Vec3 > nml, BlendComponentT< sdw::Vec3 > tan, BlendComponentT< sdw::Vec3 > bit
+			, BlendComponentT< sdw::Vec3 > tvp, BlendComponentT< sdw::Vec3 > tfp
+			, BlendComponentT< sdw::Float > occ, BlendComponentT< sdw::Float > trn, BlendComponentT< sdw::Vec3 > ems );
+		C3D_API OpaqueBlendComponents( sdw::ShaderWriter & writer
+			, std::string const & prefix
+			, OpaqueBlendComponents const & rhs );
+
+		C3D_API OpqResult createResult( sdw::ShaderWriter & writer
+			, OpaqueBlendComponents const & rhs )const;
+		C3D_API void apply( sdw::Float const & passMultiplier
+			, OpqResult & res )const;
+		C3D_API void set( OpqResult const & rhs );
+
+		sdw::Float & occlusion() { return m_occlusion; }
+		sdw::Float & transmittance() { return m_transmittance; }
+		sdw::Vec3 & emissive() { return m_emissive; }
+
+		sdw::Float const & occlusion()const { return m_occlusion; }
+		sdw::Float const & transmittance()const { return m_transmittance; }
+		sdw::Vec3 const & emissive()const { return m_emissive; }
+
+	private:
+		sdw::Float m_occlusion;
+		sdw::Float m_transmittance;
+		sdw::Vec3 m_emissive;
+	};
+
+	struct LgtResult
+	{
+		OpqResult opq;
+		sdw::Vec3 trs;
+		sdw::Float rfr;
+		sdw::UInt hrr;
+		sdw::UInt hrl;
+		sdw::Float acc;
 	};
 
 	struct LightingBlendComponents
+		: public OpaqueBlendComponents
 	{
-		sdw::Vec3 texCoord0;
-		sdw::Vec3 texCoord1;
-		sdw::Vec3 texCoord2;
-		sdw::Vec3 texCoord3;
-		sdw::Float opacity;
-		sdw::Float occlusion;
-		sdw::Float transmittance;
-		sdw::Vec3 transmission;
-		sdw::Vec3 emissive;
-		sdw::Float refractionRatio;
-		sdw::UInt hasRefraction;
-		sdw::UInt hasReflection;
-		sdw::Float bwAccumulationOperator;
-		sdw::Vec3 normal;
-		sdw::Vec3 tangent;
-		sdw::Vec3 bitangent;
-		sdw::Vec3 tangentSpaceViewPosition;
-		sdw::Vec3 tangentSpaceFragPosition;
+		C3D_API LightingBlendComponents( sdw::ShaderWriter & writer
+			, std::string const & prefix
+			, BlendComponentT< sdw::Vec3 > t0, BlendComponentT< sdw::Vec3 > t1, BlendComponentT< sdw::Vec3 > t2, BlendComponentT< sdw::Vec3 > t3
+			, BlendComponentT< sdw::Float > opa
+			, BlendComponentT< sdw::Vec3 > nml, BlendComponentT< sdw::Vec3 > tan, BlendComponentT< sdw::Vec3 > bit
+			, BlendComponentT< sdw::Vec3 > tvp, BlendComponentT< sdw::Vec3 > tfp
+			, BlendComponentT< sdw::Float > occ, BlendComponentT< sdw::Float > trn, BlendComponentT< sdw::Vec3 > ems
+			, BlendComponentT< sdw::Vec3 > trs
+			, BlendComponentT< sdw::Float > rfr, BlendComponentT< sdw::UInt > hrr, BlendComponentT< sdw::UInt > hrl
+			, BlendComponentT< sdw::Float > acc );
+		C3D_API LightingBlendComponents( sdw::ShaderWriter & writer
+			, std::string const & prefix
+			, LightingBlendComponents const & rhs );
+
+		C3D_API LgtResult createResult( sdw::ShaderWriter & writer
+			, LightingBlendComponents const & rhs )const;
+		C3D_API void apply( sdw::Float const & passMultiplier
+			, LgtResult & res )const;
+		C3D_API void set( LgtResult const & rhs );
+
+		sdw::Vec3 & transmission() { return m_transmission; }
+		sdw::Float & refractionRatio() { return m_refractionRatio; }
+		sdw::UInt & hasRefraction() { return m_hasRefraction; }
+		sdw::UInt & hasReflection() { return m_hasReflection; }
+		sdw::Float & bwAccumulationOperator() { return m_bwAccumulationOperator; }
+
+		sdw::Vec3 const & transmission()const { return m_transmission; }
+		sdw::Float const & refractionRatio()const { return m_refractionRatio; }
+		sdw::UInt const & hasRefraction()const { return m_hasRefraction; }
+		sdw::UInt const & hasReflection()const { return m_hasReflection; }
+		sdw::Float const & bwAccumulationOperator()const { return m_bwAccumulationOperator; }
+
+	private:
+		sdw::Vec3 m_transmission;
+		sdw::Float m_refractionRatio;
+		sdw::UInt m_hasRefraction;
+		sdw::UInt m_hasReflection;
+		sdw::Float m_bwAccumulationOperator;
 	};
 
 	CU_DeclareSmartPtr( Material );
@@ -381,9 +520,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & vertexColour
 			, LightingBlendComponents & output )const;
 
-	private:
-		Material applyMaterial( std::string const & matName
-			, Utils & utils
+		C3D_API Material applyMaterial( std::string const & matName
 			, PassFlags const & passFlags
 			, TextureFlags const & textures
 			, bool hasTextures
@@ -391,9 +528,9 @@ namespace castor3d::shader
 			, shader::TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::UInt const & materialId
-			, OpacityBlendComponents & output )const;
-		Material applyMaterial( std::string const & matName
-			, Utils & utils
+			, OpacityBlendComponents & output
+			, Utils & utils )const;
+		C3D_API Material applyMaterial( std::string const & matName
 			, PassFlags const & passFlags
 			, TextureFlags const & textures
 			, bool hasTextures
@@ -401,22 +538,9 @@ namespace castor3d::shader
 			, shader::TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::UInt const & materialId
-			, GeometryBlendComponents & output )const;
-		std::pair< Material, std::unique_ptr< LightMaterial > > applyMaterial( std::string const & matName
-			, std::string const & lgtMatName
-			, Utils & utils
-			, bool needsRsm
-			, PassFlags const & passFlags
-			, TextureFlags const & textures
-			, bool hasTextures
-			, shader::TextureConfigurations const & textureConfigs
-			, shader::TextureAnimations const & textureAnims
-			, shader::LightingModel & lightingModel
-			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-			, sdw::UInt const & materialId
-			, sdw::Vec3 const & vertexColour
-			, OpaqueBlendComponents & output )const;
-		std::pair< Material, std::unique_ptr< LightMaterial > > applyMaterial( std::string const & matName
+			, GeometryBlendComponents & output
+			, Utils & utils )const;
+		C3D_API std::pair< Material, std::unique_ptr< LightMaterial > > applyMaterial( std::string const & matName
 			, std::string const & lgtMatName
 			, PassFlags const & passFlags
 			, TextureFlags const & textures
@@ -427,10 +551,23 @@ namespace castor3d::shader
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::UInt const & materialId
 			, sdw::Vec3 const & vertexColour
-			, OpaqueBlendComponents & output )const;
-		std::pair< Material, std::unique_ptr< LightMaterial > > applyMaterial( std::string const & matName
-			, std::string const & lgtMatName
+			, OpaqueBlendComponents & output
 			, Utils & utils
+			, bool needsRsm )const;
+		C3D_API std::pair< Material, std::unique_ptr< LightMaterial > > applyMaterial( std::string const & matName
+			, std::string const & lgtMatName
+			, PassFlags const & passFlags
+			, TextureFlags const & textures
+			, bool hasTextures
+			, shader::TextureConfigurations const & textureConfigs
+			, shader::TextureAnimations const & textureAnims
+			, shader::LightingModel & lightingModel
+			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			, sdw::UInt const & materialId
+			, sdw::Vec3 const & vertexColour
+			, OpaqueBlendComponents & output )const;
+		C3D_API std::pair< Material, std::unique_ptr< LightMaterial > > applyMaterial( std::string const & matName
+			, std::string const & lgtMatName
 			, PassFlags const & passFlags
 			, TextureFlags const & textures
 			, bool hasTextures

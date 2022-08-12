@@ -162,6 +162,465 @@ namespace castor3d::shader
 
 	//*********************************************************************************************
 
+	OpacityBlendComponents::OpacityBlendComponents( sdw::ShaderWriter & writer
+		, std::string const & prefix
+		, BlendComponentT< sdw::Vec3 > t0
+		, BlendComponentT< sdw::Float > opa )
+		: m_texCoord0{ writer.declLocale( prefix + "Texcoord0", std::move( t0.value ), t0.enabled ) }
+		, m_opacity{ writer.declLocale( prefix + "Opacity", std::move( opa.value ), opa.enabled ) }
+	{
+	}
+
+	OpacityBlendComponents::OpacityBlendComponents( sdw::ShaderWriter & writer
+		, std::string const & prefix
+		, OpacityBlendComponents const & rhs )
+		: OpacityBlendComponents{ writer
+			, prefix
+			, { rhs.texCoord0(), rhs.texCoord0().isEnabled() }
+			, { rhs.opacity(), rhs.opacity().isEnabled() } }
+	{
+	}
+
+	OpaResult OpacityBlendComponents::createResult( sdw::ShaderWriter & writer
+		, OpacityBlendComponents const & rhs )const
+	{
+		return OpaResult{ writer.declLocale( "rOpa", 0.0_f, rhs.opacity().isEnabled() ) };
+	}
+
+	void OpacityBlendComponents::apply( sdw::Float const & passMultiplier
+		, OpaResult & res )const
+	{
+		res.opa += opacity() * passMultiplier;
+	}
+
+	void OpacityBlendComponents::set( OpaResult const & rhs )
+	{
+		opacity() = rhs.opa;
+	}
+
+	//*********************************************************************************************
+
+	GeometryBlendComponents::GeometryBlendComponents( sdw::ShaderWriter & writer
+		, std::string const & prefix
+		, BlendComponentT< sdw::Vec3 > t0
+		, BlendComponentT< sdw::Vec3 > t1
+		, BlendComponentT< sdw::Vec3 > t2
+		, BlendComponentT< sdw::Vec3 > t3
+		, BlendComponentT< sdw::Float > opa
+		, BlendComponentT< sdw::Vec3 > nml
+		, BlendComponentT< sdw::Vec3 > tan
+		, BlendComponentT< sdw::Vec3 > bit
+		, BlendComponentT< sdw::Vec3 > tvp
+		, BlendComponentT< sdw::Vec3 > tfp )
+		: OpacityBlendComponents{ writer, prefix
+			, std::move( t0 )
+			, std::move( opa ) }
+		, m_texCoord1{ writer.declLocale( prefix + "TexCoord1", std::move( t1.value ), t1.enabled ) }
+		, m_texCoord2{ writer.declLocale( prefix + "TexCoord2", std::move( t2.value ), t2.enabled ) }
+		, m_texCoord3{ writer.declLocale( prefix + "TexCoord3", std::move( t3.value ), t3.enabled ) }
+		, m_normal{ writer.declLocale( prefix + "Normal", std::move( nml.value ), nml.enabled ) }
+		, m_tangent{ writer.declLocale( prefix + "Tangent", std::move( tan.value ), tan.enabled ) }
+		, m_bitangent{ writer.declLocale( prefix + "Bitangent", std::move( bit.value ), bit.enabled ) }
+		, m_tangentSpaceViewPosition{ writer.declLocale( prefix + "TangentSpaceViewPosition", std::move( tvp.value ), tvp.enabled ) }
+		, m_tangentSpaceFragPosition{ writer.declLocale( prefix + "TangentSpaceFragPosition", std::move( tfp.value ), tfp.enabled ) }
+	{
+	}
+
+	GeometryBlendComponents::GeometryBlendComponents( sdw::ShaderWriter & writer
+		, std::string const & prefix
+		, GeometryBlendComponents const & rhs )
+		: GeometryBlendComponents{ writer
+			, prefix
+			, { rhs.texCoord0(), rhs.texCoord0().isEnabled() }
+			, { rhs.texCoord1(), rhs.texCoord1().isEnabled() }
+			, { rhs.texCoord2(), rhs.texCoord2().isEnabled() }
+			, { rhs.texCoord3(), rhs.texCoord3().isEnabled() }
+			, { rhs.opacity(), rhs.opacity().isEnabled() }
+			, { rhs.normal(), rhs.normal().isEnabled() }
+			, { rhs.tangent(), rhs.tangent().isEnabled() }
+			, { rhs.bitangent(), rhs.bitangent().isEnabled() }
+			, { rhs.tangentSpaceViewPosition(), rhs.tangentSpaceViewPosition().isEnabled() }
+			, { rhs.tangentSpaceFragPosition(), rhs.tangentSpaceFragPosition().isEnabled() } }
+	{
+	}
+
+	GeoResult GeometryBlendComponents::createResult( sdw::ShaderWriter & writer
+		, GeometryBlendComponents const & rhs )const
+	{
+		return GeoResult{ OpacityBlendComponents::createResult( writer, rhs )
+			, writer.declLocale( "rNml", vec3( 0.0_f ), rhs.normal().isEnabled() )
+			, writer.declLocale( "rTan", vec3( 0.0_f ), rhs.tangent().isEnabled() )
+			, writer.declLocale( "rBit", vec3( 0.0_f ), rhs.bitangent().isEnabled() )
+			, writer.declLocale( "rTvp", vec3( 0.0_f ), rhs.tangentSpaceViewPosition().isEnabled() )
+			, writer.declLocale( "rTfp", vec3( 0.0_f ), rhs.tangentSpaceFragPosition().isEnabled() ) };
+	}
+
+	void GeometryBlendComponents::apply( sdw::Float const & passMultiplier
+		, GeoResult & res )const
+	{
+		OpacityBlendComponents::apply( passMultiplier, res.opa );
+		res.nml += normal() * passMultiplier;
+		res.tan += tangent() * passMultiplier;
+		res.bit += bitangent() * passMultiplier;
+		res.tvp += tangentSpaceViewPosition() * passMultiplier;
+		res.tfp += tangentSpaceFragPosition() * passMultiplier;
+	}
+
+	void GeometryBlendComponents::set( GeoResult const & rhs )
+	{
+		OpacityBlendComponents::set( rhs.opa );
+		normal() = normalize( rhs.nml );
+		tangent() = normalize( rhs.tan );
+		bitangent() = normalize( rhs.bit );
+		tangentSpaceViewPosition() = rhs.tvp;
+		tangentSpaceFragPosition() = rhs.tfp;
+	}
+
+	//*********************************************************************************************
+
+	OpaqueBlendComponents::OpaqueBlendComponents( sdw::ShaderWriter & writer
+		, std::string const & prefix
+		, BlendComponentT< sdw::Vec3 > t0
+		, BlendComponentT< sdw::Vec3 > t1
+		, BlendComponentT< sdw::Vec3 > t2
+		, BlendComponentT< sdw::Vec3 > t3
+		, BlendComponentT< sdw::Float > opa
+		, BlendComponentT< sdw::Vec3 > nml
+		, BlendComponentT< sdw::Vec3 > tan
+		, BlendComponentT< sdw::Vec3 > bit
+		, BlendComponentT< sdw::Vec3 > tvp
+		, BlendComponentT< sdw::Vec3 > tfp
+		, BlendComponentT< sdw::Float > occ
+		, BlendComponentT< sdw::Float > trn
+		, BlendComponentT< sdw::Vec3 > ems )
+		: GeometryBlendComponents{ writer, prefix
+			, std::move( t0 ), std::move( t1 ), std::move( t2 ), std::move( t3 )
+			, std::move( opa )
+			, std::move( nml ), std::move( tan ), std::move( bit )
+			, std::move( tvp ), std::move( tfp ) }
+		, m_occlusion{ writer.declLocale( prefix + "Occlusion", std::move( occ.value ), occ.enabled ) }
+		, m_transmittance{ writer.declLocale( prefix + "Transmittance", std::move( trn.value ), trn.enabled ) }
+		, m_emissive{ writer.declLocale( prefix + "Emissive", std::move( ems.value ), ems.enabled ) }
+	{
+	}
+
+	OpaqueBlendComponents::OpaqueBlendComponents( sdw::ShaderWriter & writer
+		, std::string const & prefix
+		, OpaqueBlendComponents const & rhs )
+		: OpaqueBlendComponents{ writer
+			, prefix
+			, { rhs.texCoord0(), rhs.texCoord0().isEnabled() }
+			, { rhs.texCoord1(), rhs.texCoord1().isEnabled() }
+			, { rhs.texCoord2(), rhs.texCoord2().isEnabled() }
+			, { rhs.texCoord3(), rhs.texCoord3().isEnabled() }
+			, { rhs.opacity(), rhs.opacity().isEnabled() }
+			, { rhs.normal(), rhs.normal().isEnabled() }
+			, { rhs.tangent(), rhs.tangent().isEnabled() }
+			, { rhs.bitangent(), rhs.bitangent().isEnabled() }
+			, { rhs.tangentSpaceViewPosition(), rhs.tangentSpaceViewPosition().isEnabled() }
+			, { rhs.tangentSpaceFragPosition(), rhs.tangentSpaceFragPosition().isEnabled() }
+			, { rhs.occlusion(), rhs.occlusion().isEnabled() }
+			, { rhs.transmittance(), rhs.transmittance().isEnabled() }
+			, { rhs.emissive(), rhs.emissive().isEnabled() } }
+	{
+	}
+
+	OpqResult OpaqueBlendComponents::createResult( sdw::ShaderWriter & writer
+		, OpaqueBlendComponents const & rhs )const
+	{
+		return OpqResult{ GeometryBlendComponents::createResult( writer, rhs )
+			, writer.declLocale( "rOcc", 0.0_f, rhs.occlusion().isEnabled() )
+			, writer.declLocale( "rTrn", 0.0_f, rhs.transmittance().isEnabled() )
+			, writer.declLocale( "eRms", vec3( 0.0_f ), rhs.emissive().isEnabled() ) };
+	}
+
+	void OpaqueBlendComponents::apply( sdw::Float const & passMultiplier
+		, OpqResult & res )const
+	{
+		GeometryBlendComponents::apply( passMultiplier, res.geo );
+		res.occ += occlusion() * passMultiplier;
+		res.trn += transmittance() * passMultiplier;
+		res.ems += emissive() * passMultiplier;
+	}
+
+	void OpaqueBlendComponents::set( OpqResult const & rhs )
+	{
+		GeometryBlendComponents::set( rhs.geo );
+		occlusion() = rhs.occ;
+		transmittance() = rhs.trn;
+		emissive() = rhs.ems;
+	}
+
+	//*********************************************************************************************
+
+	LightingBlendComponents::LightingBlendComponents( sdw::ShaderWriter & writer
+		, std::string const & prefix
+		, BlendComponentT< sdw::Vec3 > t0
+		, BlendComponentT< sdw::Vec3 > t1
+		, BlendComponentT< sdw::Vec3 > t2
+		, BlendComponentT< sdw::Vec3 > t3
+		, BlendComponentT< sdw::Float > opa
+		, BlendComponentT< sdw::Vec3 > nml
+		, BlendComponentT< sdw::Vec3 > tan
+		, BlendComponentT< sdw::Vec3 > bit
+		, BlendComponentT< sdw::Vec3 > tvp
+		, BlendComponentT< sdw::Vec3 > tfp
+		, BlendComponentT< sdw::Float > occ
+		, BlendComponentT< sdw::Float > trn
+		, BlendComponentT< sdw::Vec3 > ems
+		, BlendComponentT< sdw::Vec3 > trs
+		, BlendComponentT< sdw::Float > rfr
+		, BlendComponentT< sdw::UInt > hrr
+		, BlendComponentT< sdw::UInt > hrl
+		, BlendComponentT< sdw::Float > acc )
+		: OpaqueBlendComponents{ writer, prefix
+			, std::move( t0 ), std::move( t1 ), std::move( t2 ), std::move( t3 )
+			, std::move( opa )
+			, std::move( nml ), std::move( tan ), std::move( bit )
+			, std::move( tvp ), std::move( tfp )
+			, std::move( occ ), std::move( trn ), std::move( ems ) }
+		, m_transmission{ writer.declLocale( prefix + "Transmission", std::move( trs.value ), trs.enabled ) }
+		, m_refractionRatio{ writer.declLocale( prefix + "RefractionRatio", std::move( rfr.value ), rfr.enabled ) }
+		, m_hasRefraction{ writer.declLocale( prefix + "HasRefraction", std::move( hrr.value ), hrr.enabled ) }
+		, m_hasReflection{ writer.declLocale( prefix + "HasReflection", std::move( hrl.value ), hrl.enabled ) }
+		, m_bwAccumulationOperator{ writer.declLocale( prefix + "BwAccumulationOperator", std::move( acc.value ), acc.enabled ) }
+	{
+	}
+
+	LightingBlendComponents::LightingBlendComponents( sdw::ShaderWriter & writer
+		, std::string const & prefix
+		, LightingBlendComponents const & rhs )
+		: LightingBlendComponents{ writer
+			, prefix
+			, { rhs.texCoord0(), rhs.texCoord0().isEnabled() }
+			, { rhs.texCoord1(), rhs.texCoord1().isEnabled() }
+			, { rhs.texCoord2(), rhs.texCoord2().isEnabled() }
+			, { rhs.texCoord3(), rhs.texCoord3().isEnabled() }
+			, { rhs.opacity(), rhs.opacity().isEnabled() }
+			, { rhs.normal(), rhs.normal().isEnabled() }
+			, { rhs.tangent(), rhs.tangent().isEnabled() }
+			, { rhs.bitangent(), rhs.bitangent().isEnabled() }
+			, { rhs.tangentSpaceViewPosition(), rhs.tangentSpaceViewPosition().isEnabled() }
+			, { rhs.tangentSpaceFragPosition(), rhs.tangentSpaceFragPosition().isEnabled() }
+			, { rhs.occlusion(), rhs.occlusion().isEnabled() }
+			, { rhs.transmittance(), rhs.transmittance().isEnabled() }
+			, { rhs.emissive(), rhs.emissive().isEnabled() }
+			, { rhs.transmission(), rhs.transmission().isEnabled() }
+			, { rhs.refractionRatio(), rhs.refractionRatio().isEnabled() }
+			, { rhs.hasRefraction(), rhs.hasRefraction().isEnabled() }
+			, { rhs.hasReflection(), rhs.hasReflection().isEnabled() }
+			, { rhs.bwAccumulationOperator(), rhs.bwAccumulationOperator().isEnabled() } }
+	{
+	}
+
+	LgtResult LightingBlendComponents::createResult( sdw::ShaderWriter & writer
+		, LightingBlendComponents const & rhs )const
+	{
+		return LgtResult{ OpaqueBlendComponents::createResult( writer, rhs )
+			, writer.declLocale( "rTrs", vec3( 0.0_f ), rhs.transmission().isEnabled() )
+			, writer.declLocale( "rRfr", 0.0_f, rhs.refractionRatio().isEnabled() )
+			, writer.declLocale( "rHrr", 0_u, rhs.hasRefraction().isEnabled() )
+			, writer.declLocale( "rHrl", 0_u, rhs.hasReflection().isEnabled() )
+			, writer.declLocale( "rAcc", 0.0_f, rhs.bwAccumulationOperator().isEnabled() ) };
+	}
+
+	void LightingBlendComponents::apply( sdw::Float const & passMultiplier
+		, LgtResult & res )const
+	{
+		OpaqueBlendComponents::apply( passMultiplier, res.opq );
+		res.trs += transmission() * passMultiplier;
+		res.rfr += refractionRatio() * passMultiplier;
+		res.hrr += hasRefraction();
+		res.hrl += hasReflection();
+		res.acc = max( res.acc, bwAccumulationOperator() );
+	}
+
+	void LightingBlendComponents::set( LgtResult const & rhs )
+	{
+		OpaqueBlendComponents::set( rhs.opq );
+		transmission() = rhs.trs;
+		refractionRatio() = rhs.rfr;
+		hasRefraction() = min( 1_u, rhs.hrr );
+		hasReflection() = min( 1_u, rhs.hrl );
+		bwAccumulationOperator() = rhs.acc;
+	}
+
+	//*****************************************************************************************
+
+	namespace mats
+	{
+		template< typename ComponentT >
+		static void blendMaterialsT( sdw::ShaderWriter & writer
+			, Materials const & materials
+			, Utils & utils
+			, VkCompareOp alphaFunc
+			, PassFlags const & passFlags
+			, SubmeshFlags const & submeshFlags
+			, TextureFlags const & textureFlags
+			, bool hasTextures
+			, shader::TextureConfigurations const & textureConfigs
+			, shader::TextureAnimations const & textureAnims
+			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			, sdw::UInt const & materialId
+			, sdw::Array< sdw::Vec4 > const & passMultipliers
+			, ComponentT & output )
+		{
+			if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
+			{
+				ComponentT firstComponents{ writer, "first", output };
+				auto result = firstComponents.createResult( writer, output );
+				auto material = materials.applyMaterial( "firstMaterial"
+					, passFlags, textureFlags, hasTextures
+					, textureConfigs, textureAnims, maps
+					, materialId
+					, firstComponents
+					, utils );
+				auto passMultiplier = writer.declLocale( "passMultiplier"
+					, passMultipliers[0_u][0_u] );
+
+				IF( writer, passMultiplier != 0.0_f )
+				{
+					firstComponents.apply( passMultiplier, result );
+				}
+				FI;
+
+				FOR( writer, sdw::UInt, passIdx, 1_u, passIdx < material.passCount(), ++passIdx )
+				{
+					passMultiplier = passMultipliers[passIdx / 4_u][passIdx % 4_u];
+
+					IF( writer, passMultiplier != 0.0_f )
+					{
+						ComponentT passComponents{ writer, "pass", output };
+						materials.applyMaterial( "passMaterial"
+							, passFlags, textureFlags, hasTextures
+							, textureConfigs, textureAnims, maps
+							, materialId + passIdx
+							, passComponents
+							, utils );
+						passComponents.apply( passMultiplier, result );
+					}
+					FI;
+				}
+				ROF;
+
+				output.set( result );
+				Material::applyAlphaFunc( writer
+					, alphaFunc
+					, output.opacity()
+					, 0.0_f
+					, 1.0_f );
+			}
+			else
+			{
+				auto material = materials.applyMaterial( "passMaterial"
+					, passFlags, textureFlags, hasTextures
+					, textureConfigs, textureAnims, maps
+					, materialId
+					, output
+					, utils );
+				material.applyAlphaFunc( alphaFunc
+					, output.opacity()
+					, 1.0_f );
+			}
+		}
+
+		template< typename ComponentT, typename ... ParamsT >
+		std::pair< Material, std::unique_ptr< LightMaterial > > blendMaterialsT( sdw::ShaderWriter & writer
+			, Materials const & materials
+			, VkCompareOp alphaFunc
+			, bool opaque
+			, PassFlags const & passFlags
+			, SubmeshFlags const & submeshFlags
+			, TextureFlags const & textureFlags
+			, bool hasTextures
+			, shader::TextureConfigurations const & textureConfigs
+			, shader::TextureAnimations const & textureAnims
+			, shader::LightingModel & lightingModel
+			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			, sdw::UInt const & materialId
+			, sdw::Array< sdw::Vec4 > const & passMultipliers
+			, sdw::Vec3 const & vertexColour
+			, ComponentT & output
+			, ParamsT && ... params )
+		{
+			if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
+			{
+				auto lightMat = lightingModel.declMaterial( "lightMat" );
+				lightMat->create( vec3( 0.0_f )
+					, vec4( 0.0_f )
+					, vec4( 0.0_f ) );
+				lightMat->depthFactor = 0.0_f;
+				lightMat->normalFactor = 0.0_f;
+				lightMat->objectFactor = 0.0_f;
+				lightMat->edgeColour = vec4( 0.0_f );
+				lightMat->specific = vec4( 0.0_f );
+				ComponentT firstComponents{ writer, "first", output };
+				auto result = firstComponents.createResult( writer, output );
+				auto [material, firstLightMat] = materials.applyMaterial( "firstMaterial", "firstLightMat"
+					, passFlags, textureFlags, hasTextures
+					, textureConfigs, textureAnims, lightingModel, maps
+					, materialId, vertexColour
+					, firstComponents
+					, std::forward< ParamsT >( params )... );
+				auto passMultiplier = writer.declLocale( "passMultiplier"
+					, passMultipliers[0_u][0_u] );
+
+				IF( writer, passMultiplier != 0.0_f )
+				{
+					lightMat->blendWith( *firstLightMat, passMultiplier );
+					firstComponents.apply( passMultiplier, result );
+				}
+				FI;
+
+				FOR( writer, sdw::UInt, passIdx, 1_u, passIdx < material.passCount(), ++passIdx )
+				{
+					passMultiplier = passMultipliers[passIdx / 4_u][passIdx % 4_u];
+
+					IF( writer, passMultiplier != 0.0_f )
+					{
+						ComponentT passComponents{ writer, "pass", output };
+						auto [curMaterial, curLightMat] = materials.applyMaterial( "passMaterial", "passLightMat"
+							, passFlags, textureFlags, hasTextures
+							, textureConfigs, textureAnims, lightingModel, maps
+							, materialId + passIdx, vertexColour
+							, passComponents
+							, std::forward< ParamsT >( params )... );
+
+						lightMat->blendWith( *curLightMat, passMultiplier );
+						material.lighting() += curMaterial.lighting();
+						passComponents.apply( passMultiplier, result );
+					}
+					FI;
+				}
+				ROF;
+
+				output.set( result );
+				Material::applyAlphaFunc( writer
+					, alphaFunc
+					, output.opacity()
+					, 0.0_f
+					, 1.0_f
+					, opaque );
+				lightMat->albedo *= vertexColour;
+				return { material, std::move( lightMat ) };
+			}
+
+			auto [material, result] = materials.applyMaterial( "passMaterial", "passLightMat"
+				, passFlags, textureFlags, hasTextures
+				, textureConfigs, textureAnims, lightingModel, maps
+				, materialId, vertexColour
+				, output
+				, std::forward< ParamsT >( params )... );
+			material.applyAlphaFunc( alphaFunc
+				, output.opacity()
+				, 1.0_f
+				, opaque );
+			return { material, std::move( result ) };
+		}
+	}
+
+	//*********************************************************************************************
+
 	Materials::Materials( sdw::ShaderWriter & writer
 		, uint32_t binding
 		, uint32_t set
@@ -188,77 +647,11 @@ namespace castor3d::shader
 		, sdw::Array< sdw::Vec4 > const & passMultipliers
 		, OpacityBlendComponents & output )const
 	{
-		if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
-		{
-			auto resOpacity = m_writer.declLocale( "resOpacity"
-				, 0.0_f
-				, output.opacity.isEnabled() );
-			OpacityBlendComponents components{ m_writer.declLocale( "passTexCoord0", output.texCoord0 )
-				, m_writer.declLocale( "passOpacity", output.opacity ) };
-			auto material = applyMaterial( "firstMaterial"
-				, utils
-				, passFlags
-				, textureFlags
-				, hasTextures
-				, textureConfigs
-				, textureAnims
-				, maps
-				, materialId
-				, components );
-			auto passMultiplier = m_writer.declLocale( "passMultiplier"
-				, passMultipliers[0_u][0_u] );
-
-			IF( m_writer, passMultiplier != 0.0_f )
-			{
-				resOpacity += components.opacity * passMultiplier;
-			}
-			FI;
-
-			FOR( m_writer, sdw::UInt, passIdx, 1_u, passIdx < material.passCount(), ++passIdx )
-			{
-				passMultiplier = passMultipliers[passIdx / 4_u][passIdx % 4_u];
-
-				IF( m_writer, passMultiplier != 0.0_f )
-				{
-					applyMaterial( "passMaterial"
-						, utils
-						, passFlags
-						, textureFlags
-						, hasTextures
-						, textureConfigs
-						, textureAnims
-						, maps
-						, materialId + passIdx
-						, components );
-					resOpacity += components.opacity * passMultiplier;
-				}
-				FI;
-			}
-			ROF;
-
-			output.opacity = resOpacity;
-			Material::applyAlphaFunc( m_writer
-				, alphaFunc
-				, output.opacity
-				, 0.0_f
-				, 1.0_f );
-		}
-		else
-		{
-			auto material = applyMaterial( "passMaterial"
-				, utils
-				, passFlags
-				, textureFlags
-				, hasTextures
-				, textureConfigs
-				, textureAnims
-				, maps
-				, materialId
-				, output );
-			material.applyAlphaFunc( alphaFunc
-				, output.opacity
-				, 1.0_f );
-		}
+		mats::blendMaterialsT( m_writer, *this, utils
+			, alphaFunc, passFlags, submeshFlags, textureFlags, hasTextures
+			, textureConfigs, textureAnims, maps
+			, materialId, passMultipliers
+			, output );
 	}
 
 	void Materials::blendMaterials( Utils & utils
@@ -275,16 +668,9 @@ namespace castor3d::shader
 		, OpacityBlendComponents & output )const
 	{
 		blendMaterials( utils
-			, alphaFunc
-			, passFlags
-			, submeshFlags
-			, merge( textures )
-			, hasTextures
-			, textureConfigs
-			, textureAnims
-			, maps
-			, materialId
-			, passMultipliers
+			, alphaFunc, passFlags, submeshFlags, merge( textures ), hasTextures
+			, textureConfigs, textureAnims, maps
+			, materialId, passMultipliers
 			, output );
 	}
 
@@ -301,115 +687,11 @@ namespace castor3d::shader
 		, sdw::Array< sdw::Vec4 > const & passMultipliers
 		, GeometryBlendComponents & output )const
 	{
-		if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
-		{
-			auto resOpacity = m_writer.declLocale( "resOpacity"
-				, 0.0_f
-				, output.opacity.isEnabled() );
-			auto resNormal = m_writer.declLocale( "resNormal"
-				, vec3( 0.0_f )
-				, output.normal.isEnabled() );
-			auto resTangent = m_writer.declLocale( "resTangent"
-				, vec3( 0.0_f )
-				, output.tangent.isEnabled() );
-			auto resBitangent = m_writer.declLocale( "resBitangent"
-				, vec3( 0.0_f )
-				, output.bitangent.isEnabled() );
-			auto resTangentSpaceViewPosition = m_writer.declLocale( "resTangentSpaceViewPosition"
-				, vec3( 0.0_f )
-				, output.tangentSpaceViewPosition.isEnabled() );
-			auto resTangentSpaceFragPosition = m_writer.declLocale( "resTangentSpaceFragPosition"
-				, vec3( 0.0_f )
-				, output.tangentSpaceFragPosition.isEnabled() );
-			GeometryBlendComponents components{ m_writer.declLocale( "passTexCoord0", output.texCoord0 )
-				, m_writer.declLocale( "passTexCoord1", output.texCoord1 )
-				, m_writer.declLocale( "passTexCoord2", output.texCoord2 )
-				, m_writer.declLocale( "passTexCoord3", output.texCoord3 )
-				, m_writer.declLocale( "passOpacity", output.opacity )
-				, m_writer.declLocale( "passNormal", output.normal )
-				, m_writer.declLocale( "passTangent", output.tangent )
-				, m_writer.declLocale( "passBitangent", output.bitangent )
-				, m_writer.declLocale( "passTangentSpaceViewPosition", output.tangentSpaceViewPosition )
-				, m_writer.declLocale( "passTangentSpaceFragPosition", output.tangentSpaceFragPosition ) };
-			auto material = applyMaterial( "firstMaterial"
-				, utils
-				, passFlags
-				, textureFlags
-				, hasTextures
-				, textureConfigs
-				, textureAnims
-				, maps
-				, materialId
-				, components );
-			auto passMultiplier = m_writer.declLocale( "passMultiplier"
-				, passMultipliers[0_u][0_u] );
-
-			IF( m_writer, passMultiplier != 0.0_f )
-			{
-				resOpacity += components.opacity * passMultiplier;
-				resNormal += components.normal * passMultiplier;
-				resTangent += components.tangent * passMultiplier;
-				resBitangent += components.bitangent * passMultiplier;
-				resTangentSpaceViewPosition += components.tangentSpaceViewPosition * passMultiplier;
-				resTangentSpaceFragPosition += components.tangentSpaceFragPosition * passMultiplier;
-			}
-			FI;
-
-			FOR( m_writer, sdw::UInt, passIdx, 1_u, passIdx < material.passCount(), ++passIdx )
-			{
-				passMultiplier = passMultipliers[passIdx / 4_u][passIdx % 4_u];
-
-				IF( m_writer, passMultiplier != 0.0_f )
-				{
-					applyMaterial( "passMaterial"
-						, utils
-						, passFlags
-						, textureFlags
-						, hasTextures
-						, textureConfigs
-						, textureAnims
-						, maps
-						, materialId + passIdx
-						, components );
-					resOpacity += components.opacity * passMultiplier;
-					resNormal += components.normal * passMultiplier;
-					resTangent += components.tangent * passMultiplier;
-					resBitangent += components.bitangent * passMultiplier;
-					resTangentSpaceViewPosition += components.tangentSpaceViewPosition * passMultiplier;
-					resTangentSpaceFragPosition += components.tangentSpaceFragPosition * passMultiplier;
-				}
-				FI;
-			}
-			ROF;
-
-			output.opacity = resOpacity;
-			output.normal = normalize( resNormal );
-			output.tangent = normalize( resTangent );
-			output.bitangent = normalize( resBitangent );
-			output.tangentSpaceViewPosition = resTangentSpaceViewPosition;
-			output.tangentSpaceFragPosition = resTangentSpaceFragPosition;
-			Material::applyAlphaFunc( m_writer
-				, alphaFunc
-				, output.opacity
-				, 0.0_f
-				, 1.0_f );
-		}
-		else
-		{
-			auto material = applyMaterial( "passMaterial"
-				, utils
-				, passFlags
-				, textureFlags
-				, hasTextures
-				, textureConfigs
-				, textureAnims
-				, maps
-				, materialId
-				, output );
-			material.applyAlphaFunc( alphaFunc
-				, output.opacity
-				, 1.0_f );
-		}
+		mats::blendMaterialsT( m_writer, *this, utils
+			, alphaFunc, passFlags, submeshFlags, textureFlags, hasTextures
+			, textureConfigs, textureAnims, maps
+			, materialId, passMultipliers
+			, output );
 	}
 		
 	void Materials::blendMaterials( Utils & utils
@@ -426,16 +708,9 @@ namespace castor3d::shader
 		, GeometryBlendComponents & output )const
 	{
 		blendMaterials( utils
-			, alphaFunc
-			, passFlags
-			, submeshFlags
-			, merge( textures )
-			, hasTextures
-			, textureConfigs
-			, textureAnims
-			, maps
-			, materialId
-			, passMultipliers
+			, alphaFunc, passFlags, submeshFlags, merge( textures ), hasTextures
+			, textureConfigs, textureAnims, maps
+			, materialId, passMultipliers
 			, output );
 	}
 
@@ -455,161 +730,13 @@ namespace castor3d::shader
 		, sdw::Vec3 const & vertexColour
 		, OpaqueBlendComponents & output )const
 	{
-		if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
-		{
-			auto resOpacity = m_writer.declLocale( "resOpacity"
-				, 0.0_f
-				, output.opacity.isEnabled() );
-			auto resOcclusion = m_writer.declLocale( "resOcclusion"
-				, 0.0_f
-				, output.occlusion.isEnabled() );
-			auto resTransmittance = m_writer.declLocale( "resTransmittance"
-				, 0.0_f
-				, output.transmittance.isEnabled() );
-			auto resEmissive = m_writer.declLocale( "resEmissive"
-				, vec3( 0.0_f )
-				, output.emissive.isEnabled() );
-			auto resNormal = m_writer.declLocale( "resNormal"
-				, vec3( 0.0_f )
-				, output.normal.isEnabled() );
-			auto resTangent = m_writer.declLocale( "resTangent"
-				, vec3( 0.0_f )
-				, output.tangent.isEnabled() );
-			auto resBitangent = m_writer.declLocale( "resBitangent"
-				, vec3( 0.0_f )
-				, output.bitangent.isEnabled() );
-			auto resTangentSpaceViewPosition = m_writer.declLocale( "resTangentSpaceViewPosition"
-				, vec3( 0.0_f )
-				, output.tangentSpaceViewPosition.isEnabled() );
-			auto resTangentSpaceFragPosition = m_writer.declLocale( "resTangentSpaceFragPosition"
-				, vec3( 0.0_f )
-				, output.tangentSpaceFragPosition.isEnabled() );
-			auto result = lightingModel.declMaterial( "lightMat" );
-			result->create( vec3( 0.0_f )
-				, vec4( 0.0_f )
-				, vec4( 0.0_f ) );
-			result->depthFactor = 0.0_f;
-			result->normalFactor = 0.0_f;
-			result->objectFactor = 0.0_f;
-			result->edgeColour = vec4( 0.0_f );
-			result->specific = vec4( 0.0_f );
-			OpaqueBlendComponents components{ m_writer.declLocale( "passTexCoord0", output.texCoord0 )
-				, m_writer.declLocale( "passTexCoord1", output.texCoord1 )
-				, m_writer.declLocale( "passTexCoord2", output.texCoord2 )
-				, m_writer.declLocale( "passTexCoord3", output.texCoord3 )
-				, m_writer.declLocale( "passOpacity", output.opacity )
-				, m_writer.declLocale( "passOcclusion", output.occlusion )
-				, m_writer.declLocale( "passTransmittance", output.transmittance )
-				, m_writer.declLocale( "passEmissive", output.emissive )
-				, m_writer.declLocale( "passNormal", output.normal )
-				, m_writer.declLocale( "passTangent", output.tangent )
-				, m_writer.declLocale( "passBitangent", output.bitangent )
-				, m_writer.declLocale( "passTangentSpaceViewPosition", output.tangentSpaceViewPosition )
-				, m_writer.declLocale( "passTangentSpaceFragPosition", output.tangentSpaceFragPosition ) };
-			auto [material, lightMat] = applyMaterial( "firstMaterial"
-				, "firstLightMat"
-				, utils
-				, needsRsm
-				, passFlags
-				, textureFlags
-				, hasTextures
-				, textureConfigs
-				, textureAnims
-				, lightingModel
-				, maps
-				, materialId
-				, vertexColour
-				, components );
-			auto passMultiplier = m_writer.declLocale( "passMultiplier"
-				, passMultipliers[0_u][0_u] );
-
-			IF( m_writer, passMultiplier != 0.0_f )
-			{
-				result->blendWith( *lightMat, passMultiplier );
-				resOpacity += components.opacity * passMultiplier;
-				resOcclusion += components.occlusion * passMultiplier;
-				resTransmittance += components.transmittance * passMultiplier;
-				resEmissive += components.emissive * passMultiplier;
-				resNormal += components.normal * passMultiplier;
-				resTangent += components.tangent * passMultiplier;
-				resBitangent += components.bitangent * passMultiplier;
-				resTangentSpaceViewPosition += components.tangentSpaceViewPosition * passMultiplier;
-				resTangentSpaceFragPosition += components.tangentSpaceFragPosition * passMultiplier;
-			}
-			FI;
-
-			FOR( m_writer, sdw::UInt, passIdx, 1_u, passIdx < material.passCount(), ++passIdx )
-			{
-				passMultiplier = passMultipliers[passIdx / 4_u][passIdx % 4_u];
-
-				IF( m_writer, passMultiplier != 0.0_f )
-				{
-					auto [material, lightMat] = applyMaterial( "passMaterial"
-						, "passLightMat"
-						, utils
-						, needsRsm
-						, passFlags
-						, textureFlags
-						, hasTextures
-						, textureConfigs
-						, textureAnims
-						, lightingModel
-						, maps
-						, materialId + passIdx
-						, vertexColour
-						, components );
-
-					result->blendWith( *lightMat, passMultiplier );
-					resOpacity += components.opacity * passMultiplier;
-					resOcclusion += components.occlusion * passMultiplier;
-					resTransmittance += components.transmittance * passMultiplier;
-					resEmissive += components.emissive * passMultiplier;
-					resNormal += components.normal * passMultiplier;
-					resTangent += components.tangent * passMultiplier;
-					resBitangent += components.bitangent * passMultiplier;
-					resTangentSpaceViewPosition += components.tangentSpaceViewPosition * passMultiplier;
-					resTangentSpaceFragPosition += components.tangentSpaceFragPosition * passMultiplier;
-				}
-				FI;
-			}
-			ROF;
-
-			output.opacity = resOpacity;
-			output.occlusion = resOpacity;
-			output.transmittance = resTransmittance;
-			output.emissive = resEmissive;
-			output.normal = normalize( resNormal );
-			output.tangent = normalize( resTangent );
-			output.bitangent = normalize( resBitangent );
-			output.tangentSpaceViewPosition = resTangentSpaceViewPosition;
-			output.tangentSpaceFragPosition = resTangentSpaceFragPosition;
-			Material::applyAlphaFunc( m_writer
-				, alphaFunc
-				, output.opacity
-				, 0.0_f
-				, 1.0_f );
-			result->albedo *= vertexColour;
-			return result;
-		}
-
-		auto [material, result] = applyMaterial( "passMaterial"
-			, "passLightMat"
-			, utils
-			, needsRsm
-			, passFlags
-			, textureFlags
-			, hasTextures
-			, textureConfigs
-			, textureAnims
-			, lightingModel
-			, maps
-			, materialId
-			, vertexColour
-			, output );
-		material.applyAlphaFunc( alphaFunc
-			, output.opacity
-			, 1.0_f );
-		return std::move( result );
+		return mats::blendMaterialsT( m_writer, *this
+			, alphaFunc, true
+			, passFlags, submeshFlags, textureFlags, hasTextures
+			, textureConfigs, textureAnims, lightingModel, maps
+			, materialId, passMultipliers, vertexColour
+			, output
+			, utils, needsRsm ).second;
 	}
 
 	std::unique_ptr< LightMaterial > Materials::blendMaterials( Utils & utils
@@ -628,20 +755,10 @@ namespace castor3d::shader
 		, sdw::Vec3 const & vertexColour
 		, OpaqueBlendComponents & output )const
 	{
-		return blendMaterials( utils
-			, needsRsm
-			, alphaFunc
-			, passFlags
-			, submeshFlags
-			, merge( textures )
-			, hasTextures
-			, textureConfigs
-			, textureAnims
-			, lightingModel
-			, maps
-			, materialId
-			, passMultipliers
-			, vertexColour
+		return blendMaterials( utils, needsRsm
+			, alphaFunc, passFlags, submeshFlags, merge( textures ), hasTextures
+			, textureConfigs, textureAnims, lightingModel, maps
+			, materialId, passMultipliers, vertexColour
 			, output );
 	}
 
@@ -659,147 +776,12 @@ namespace castor3d::shader
 		, sdw::Vec3 const & vertexColour
 		, OpaqueBlendComponents & output )const
 	{
-		if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
-		{
-			auto resOpacity = m_writer.declLocale( "resOpacity"
-				, 0.0_f
-				, output.opacity.isEnabled() );
-			auto resOcclusion = m_writer.declLocale( "resOcclusion"
-				, 0.0_f
-				, output.occlusion.isEnabled() );
-			auto resTransmittance = m_writer.declLocale( "resTransmittance"
-				, 0.0_f
-				, output.transmittance.isEnabled() );
-			auto resEmissive = m_writer.declLocale( "resEmissive"
-				, vec3( 0.0_f )
-				, output.emissive.isEnabled() );
-			auto resNormal = m_writer.declLocale( "resNormal"
-				, vec3( 0.0_f )
-				, output.normal.isEnabled() );
-			auto resTangent = m_writer.declLocale( "resTangent"
-				, vec3( 0.0_f )
-				, output.tangent.isEnabled() );
-			auto resBitangent = m_writer.declLocale( "resBitangent"
-				, vec3( 0.0_f )
-				, output.bitangent.isEnabled() );
-			auto resTangentSpaceViewPosition = m_writer.declLocale( "resTangentSpaceViewPosition"
-				, vec3( 0.0_f )
-				, output.tangentSpaceViewPosition.isEnabled() );
-			auto resTangentSpaceFragPosition = m_writer.declLocale( "resTangentSpaceFragPosition"
-				, vec3( 0.0_f )
-				, output.tangentSpaceFragPosition.isEnabled() );
-			auto result = lightingModel.declMaterial( "lightMat" );
-			result->create( vec3( 0.0_f )
-				, vec4( 0.0_f )
-				, vec4( 0.0_f ) );
-			result->depthFactor = 0.0_f;
-			result->normalFactor = 0.0_f;
-			result->objectFactor = 0.0_f;
-			result->edgeColour = vec4( 0.0_f );
-			result->specific = vec4( 0.0_f );
-			OpaqueBlendComponents components{ m_writer.declLocale( "passTexCoord0", output.texCoord0 )
-				, m_writer.declLocale( "passTexCoord1", output.texCoord1 )
-				, m_writer.declLocale( "passTexCoord2", output.texCoord2 )
-				, m_writer.declLocale( "passTexCoord3", output.texCoord3 )
-				, m_writer.declLocale( "passOpacity", output.opacity )
-				, m_writer.declLocale( "passOcclusion", output.occlusion )
-				, m_writer.declLocale( "passTransmittance", output.transmittance )
-				, m_writer.declLocale( "passEmissive", output.emissive )
-				, m_writer.declLocale( "passNormal", output.normal )
-				, m_writer.declLocale( "passTangent", output.tangent )
-				, m_writer.declLocale( "passBitangent", output.bitangent )
-				, m_writer.declLocale( "passTangentSpaceViewPosition", output.tangentSpaceViewPosition )
-				, m_writer.declLocale( "passTangentSpaceFragPosition", output.tangentSpaceFragPosition ) };
-			auto [material, lightMat] = applyMaterial( "firstMaterial"
-				, "firstLightMat"
-				, passFlags
-				, textureFlags
-				, hasTextures
-				, textureConfigs
-				, textureAnims
-				, lightingModel
-				, maps
-				, materialId
-				, vertexColour
-				, components );
-			auto passMultiplier = m_writer.declLocale( "passMultiplier"
-				, passMultipliers[0_u][0_u] );
-
-			IF( m_writer, passMultiplier != 0.0_f )
-			{
-				result->blendWith( *lightMat, passMultiplier );
-				resOpacity += components.opacity * passMultiplier;
-				resOcclusion += components.occlusion * passMultiplier;
-				resTransmittance += components.transmittance * passMultiplier;
-				resEmissive += components.emissive * passMultiplier;
-				resNormal += components.normal * passMultiplier;
-				resTangent += components.tangent * passMultiplier;
-				resBitangent += components.bitangent * passMultiplier;
-				resTangentSpaceViewPosition += components.tangentSpaceViewPosition * passMultiplier;
-				resTangentSpaceFragPosition += components.tangentSpaceFragPosition * passMultiplier;
-			}
-			FI;
-
-			FOR( m_writer, sdw::UInt, passIdx, 1_u, passIdx < material.passCount(), ++passIdx )
-			{
-				passMultiplier = passMultipliers[passIdx / 4_u][passIdx % 4_u];
-
-				IF( m_writer, passMultiplier != 0.0_f )
-				{
-					auto [material, lightMat] = applyMaterial( "passMaterial"
-						, "passLightMat"
-						, passFlags
-						, textureFlags
-						, hasTextures
-						, textureConfigs
-						, textureAnims
-						, lightingModel
-						, maps
-						, materialId + passIdx
-						, vertexColour
-						, components );
-
-					result->blendWith( *lightMat, passMultiplier );
-					resOpacity += components.opacity * passMultiplier;
-					resOcclusion += components.occlusion * passMultiplier;
-					resTransmittance += components.transmittance * passMultiplier;
-					resEmissive += components.emissive * passMultiplier;
-					resNormal += components.normal * passMultiplier;
-					resTangent += components.tangent * passMultiplier;
-					resBitangent += components.bitangent * passMultiplier;
-					resTangentSpaceViewPosition += components.tangentSpaceViewPosition * passMultiplier;
-					resTangentSpaceFragPosition += components.tangentSpaceFragPosition * passMultiplier;
-				}
-				FI;
-			}
-			ROF;
-
-			output.opacity = resOpacity;
-			output.occlusion = resOpacity;
-			output.transmittance = resTransmittance;
-			output.emissive = resEmissive;
-			output.normal = normalize( resNormal );
-			output.tangent = normalize( resTangent );
-			output.bitangent = normalize( resBitangent );
-			output.tangentSpaceViewPosition = resTangentSpaceViewPosition;
-			output.tangentSpaceFragPosition = resTangentSpaceFragPosition;
-			result->albedo *= vertexColour;
-			return result;
-		}
-
-		auto [material, result] = applyMaterial( "passMaterial"
-			, "passLightMat"
-			, passFlags
-			, textureFlags
-			, hasTextures
-			, textureConfigs
-			, textureAnims
-			, lightingModel
-			, maps
-			, materialId
-			, vertexColour
-			, output );
-		return std::move( result );
+		return mats::blendMaterialsT( m_writer, *this
+			, VK_COMPARE_OP_ALWAYS, true
+			, passFlags, submeshFlags, textureFlags, hasTextures
+			, textureConfigs, textureAnims, lightingModel, maps
+			, materialId, passMultipliers, vertexColour
+			, output ).second;
 	}
 
 	std::unique_ptr< LightMaterial > Materials::blendMaterials( Utils & utils
@@ -817,155 +799,12 @@ namespace castor3d::shader
 		, sdw::Vec3 const & vertexColour
 		, OpaqueBlendComponents & output )const
 	{
-		if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
-		{
-			auto resOpacity = m_writer.declLocale( "resOpacity"
-				, 0.0_f
-				, output.opacity.isEnabled() );
-			auto resOcclusion = m_writer.declLocale( "resOcclusion"
-				, 0.0_f
-				, output.occlusion.isEnabled() );
-			auto resTransmittance = m_writer.declLocale( "resTransmittance"
-				, 0.0_f
-				, output.transmittance.isEnabled() );
-			auto resEmissive = m_writer.declLocale( "resEmissive"
-				, vec3( 0.0_f )
-				, output.emissive.isEnabled() );
-			auto resNormal = m_writer.declLocale( "resNormal"
-				, vec3( 0.0_f )
-				, output.normal.isEnabled() );
-			auto resTangent = m_writer.declLocale( "resTangent"
-				, vec3( 0.0_f )
-				, output.tangent.isEnabled() );
-			auto resBitangent = m_writer.declLocale( "resBitangent"
-				, vec3( 0.0_f )
-				, output.bitangent.isEnabled() );
-			auto resTangentSpaceViewPosition = m_writer.declLocale( "resTangentSpaceViewPosition"
-				, vec3( 0.0_f )
-				, output.tangentSpaceViewPosition.isEnabled() );
-			auto resTangentSpaceFragPosition = m_writer.declLocale( "resTangentSpaceFragPosition"
-				, vec3( 0.0_f )
-				, output.tangentSpaceFragPosition.isEnabled() );
-			auto result = lightingModel.declMaterial( "lightMat" );
-			result->create( vec3( 0.0_f )
-				, vec4( 0.0_f )
-				, vec4( 0.0_f ) );
-			result->depthFactor = 0.0_f;
-			result->normalFactor = 0.0_f;
-			result->objectFactor = 0.0_f;
-			result->edgeColour = vec4( 0.0_f );
-			result->specific = vec4( 0.0_f );
-			OpaqueBlendComponents components{ m_writer.declLocale( "passTexCoord0", output.texCoord0 )
-				, m_writer.declLocale( "passTexCoord1", output.texCoord1 )
-				, m_writer.declLocale( "passTexCoord2", output.texCoord2 )
-				, m_writer.declLocale( "passTexCoord3", output.texCoord3 )
-				, m_writer.declLocale( "passOpacity", output.opacity )
-				, m_writer.declLocale( "passOcclusion", output.occlusion )
-				, m_writer.declLocale( "passTransmittance", output.transmittance )
-				, m_writer.declLocale( "passEmissive", output.emissive )
-				, m_writer.declLocale( "passNormal", output.normal )
-				, m_writer.declLocale( "passTangent", output.tangent )
-				, m_writer.declLocale( "passBitangent", output.bitangent )
-				, m_writer.declLocale( "passTangentSpaceViewPosition", output.tangentSpaceViewPosition )
-				, m_writer.declLocale( "passTangentSpaceFragPosition", output.tangentSpaceFragPosition ) };
-			auto [material, lightMat] = applyMaterial( "firstMaterial"
-				, "firstLightMat"
-				, passFlags
-				, textureFlags
-				, hasTextures
-				, textureConfigs
-				, textureAnims
-				, lightingModel
-				, maps
-				, materialId
-				, vertexColour
-				, components );
-			auto passMultiplier = m_writer.declLocale( "passMultiplier"
-				, passMultipliers[0_u][0_u] );
-
-			IF( m_writer, passMultiplier != 0.0_f )
-			{
-				result->blendWith( *lightMat, passMultiplier );
-				resOpacity += components.opacity * passMultiplier;
-				resOcclusion += components.occlusion * passMultiplier;
-				resTransmittance += components.transmittance * passMultiplier;
-				resEmissive += components.emissive * passMultiplier;
-				resNormal += components.normal * passMultiplier;
-				resTangent += components.tangent * passMultiplier;
-				resBitangent += components.bitangent * passMultiplier;
-				resTangentSpaceViewPosition += components.tangentSpaceViewPosition * passMultiplier;
-				resTangentSpaceFragPosition += components.tangentSpaceFragPosition * passMultiplier;
-			}
-			FI;
-
-			FOR( m_writer, sdw::UInt, passIdx, 1_u, passIdx < material.passCount(), ++passIdx )
-			{
-				passMultiplier = passMultipliers[passIdx / 4_u][passIdx % 4_u];
-
-				IF( m_writer, passMultiplier != 0.0_f )
-				{
-					auto [material, lightMat] = applyMaterial( "passMaterial"
-						, "passLightMat"
-						, passFlags
-						, textureFlags
-						, hasTextures
-						, textureConfigs
-						, textureAnims
-						, lightingModel
-						, maps
-						, materialId + passIdx
-						, vertexColour
-						, components );
-
-					result->blendWith( *lightMat, passMultiplier );
-					resOpacity += components.opacity * passMultiplier;
-					resOcclusion += components.occlusion * passMultiplier;
-					resTransmittance += components.transmittance * passMultiplier;
-					resEmissive += components.emissive * passMultiplier;
-					resNormal += components.normal * passMultiplier;
-					resTangent += components.tangent * passMultiplier;
-					resBitangent += components.bitangent * passMultiplier;
-					resTangentSpaceViewPosition += components.tangentSpaceViewPosition * passMultiplier;
-					resTangentSpaceFragPosition += components.tangentSpaceFragPosition * passMultiplier;
-				}
-				FI;
-			}
-			ROF;
-
-			output.opacity = resOpacity;
-			output.occlusion = resOpacity;
-			output.transmittance = resTransmittance;
-			output.emissive = resEmissive;
-			output.normal = normalize( resNormal );
-			output.tangent = normalize( resTangent );
-			output.bitangent = normalize( resBitangent );
-			output.tangentSpaceViewPosition = resTangentSpaceViewPosition;
-			output.tangentSpaceFragPosition = resTangentSpaceFragPosition;
-			Material::applyAlphaFunc( m_writer
-				, alphaFunc
-				, output.opacity
-				, 0.0_f
-				, 1.0_f );
-			result->albedo *= vertexColour;
-			return result;
-		}
-
-		auto [material, result] = applyMaterial( "passMaterial"
-			, "passLightMat"
-			, passFlags
-			, textureFlags
-			, hasTextures
-			, textureConfigs
-			, textureAnims
-			, lightingModel
-			, maps
-			, materialId
-			, vertexColour
-			, output );
-		material.applyAlphaFunc( alphaFunc
-			, output.opacity
-			, 1.0_f );
-		return std::move( result );
+		return mats::blendMaterialsT( m_writer, *this
+			, alphaFunc, true
+			, passFlags, submeshFlags, textureFlags, hasTextures
+			, textureConfigs, textureAnims, lightingModel, maps
+			, materialId, passMultipliers, vertexColour
+			, output ).second;
 	}
 
 	std::unique_ptr< LightMaterial > Materials::blendMaterials( Utils & utils
@@ -984,18 +823,9 @@ namespace castor3d::shader
 		, OpaqueBlendComponents & output )const
 	{
 		return blendMaterials( utils
-			, alphaFunc
-			, passFlags
-			, submeshFlags
-			, merge( textures )
-			, hasTextures
-			, textureConfigs
-			, textureAnims
-			, lightingModel
-			, maps
-			, materialId
-			, passMultipliers
-			, vertexColour
+			, alphaFunc, passFlags, submeshFlags, merge( textures ), hasTextures
+			, textureConfigs, textureAnims, lightingModel, maps
+			, materialId, passMultipliers, vertexColour
 			, output );
 	}
 
@@ -1015,196 +845,12 @@ namespace castor3d::shader
 		, sdw::Vec3 const & vertexColour
 		, LightingBlendComponents & output )const
 	{
-		if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
-		{
-			auto resOpacity = m_writer.declLocale( "resOpacity"
-				, 0.0_f
-				, output.opacity.isEnabled() );
-			auto resOcclusion = m_writer.declLocale( "resOcclusion"
-				, 0.0_f
-				, output.occlusion.isEnabled() );
-			auto resTransmittance = m_writer.declLocale( "resTransmittance"
-				, 0.0_f
-				, output.transmittance.isEnabled() );
-			auto resTransmission = m_writer.declLocale( "resTransmission"
-				, vec3( 0.0_f )
-				, output.transmission.isEnabled() );
-			auto resEmissive = m_writer.declLocale( "resEmissive"
-				, vec3( 0.0_f )
-				, output.emissive.isEnabled() );
-			auto resRefractionRatio = m_writer.declLocale( "resRefractionRatio"
-				, 0.0_f
-				, output.refractionRatio.isEnabled() );
-			auto resHasRefraction = m_writer.declLocale( "resHasRefraction"
-				, 0_i
-				, output.hasRefraction.isEnabled() );
-			auto resHasReflection = m_writer.declLocale( "resHasReflection"
-				, 0_i
-				, output.hasReflection.isEnabled() );
-			auto resBwAccumulationOperator = m_writer.declLocale( "resBwAccumulationOperator"
-				, 0.0_f
-				, output.bwAccumulationOperator.isEnabled() );
-			auto resNormal = m_writer.declLocale( "resNormal"
-				, vec3( 0.0_f )
-				, output.normal.isEnabled() );
-			auto resTangent = m_writer.declLocale( "resTangent"
-				, vec3( 0.0_f )
-				, output.tangent.isEnabled() );
-			auto resBitangent = m_writer.declLocale( "resBitangent"
-				, vec3( 0.0_f )
-				, output.bitangent.isEnabled() );
-			auto resTangentSpaceViewPosition = m_writer.declLocale( "resTangentSpaceViewPosition"
-				, vec3( 0.0_f )
-				, output.tangentSpaceViewPosition.isEnabled() );
-			auto resTangentSpaceFragPosition = m_writer.declLocale( "resTangentSpaceFragPosition"
-				, vec3( 0.0_f )
-				, output.tangentSpaceFragPosition.isEnabled() );
-			auto result = lightingModel.declMaterial( "lightMat" );
-			result->create( vec3( 0.0_f )
-				, vec4( 0.0_f )
-				, vec4( 0.0_f ) );
-			result->depthFactor = 0.0_f;
-			result->normalFactor = 0.0_f;
-			result->objectFactor = 0.0_f;
-			result->edgeColour = vec4( 0.0_f );
-			result->specific = vec4( 0.0_f );
-			LightingBlendComponents components{ m_writer.declLocale( "passTexCoord0", output.texCoord0 )
-				, m_writer.declLocale( "passTexCoord1", output.texCoord1 )
-				, m_writer.declLocale( "passTexCoord2", output.texCoord2 )
-				, m_writer.declLocale( "passTexCoord3", output.texCoord3 )
-				, m_writer.declLocale( "passOpacity", output.opacity )
-				, m_writer.declLocale( "passOcclusion", output.occlusion )
-				, m_writer.declLocale( "passTransmittance", output.transmittance )
-				, m_writer.declLocale( "passTransmission", output.transmission )
-				, m_writer.declLocale( "passEmissive", output.emissive )
-				, m_writer.declLocale( "passRefractionRatio", output.refractionRatio )
-				, m_writer.declLocale( "passHasRefraction", output.hasRefraction )
-				, m_writer.declLocale( "passHasReflection", output.hasReflection )
-				, m_writer.declLocale( "passBwAccumulationOperator", output.bwAccumulationOperator )
-				, m_writer.declLocale( "passNormal", output.normal )
-				, m_writer.declLocale( "passTangent", output.tangent )
-				, m_writer.declLocale( "passBitangent", output.bitangent )
-				, m_writer.declLocale( "passTangentSpaceViewPosition", output.tangentSpaceViewPosition )
-				, m_writer.declLocale( "passTangentSpaceFragPosition", output.tangentSpaceFragPosition ) };
-			auto [material, lightMat] = applyMaterial( "firstMaterial"
-				, "firstLightMat"
-				, utils
-				, passFlags
-				, textureFlags
-				, hasTextures
-				, textureConfigs
-				, textureAnims
-				, lightingModel
-				, maps
-				, materialId
-				, vertexColour
-				, components );
-			auto passMultiplier = m_writer.declLocale( "passMultiplier"
-				, passMultipliers[0_u][0_u] );
-
-			IF( m_writer, passMultiplier != 0.0_f )
-			{
-				result->blendWith( *lightMat, passMultiplier );
-				resOpacity += components.opacity * passMultiplier;
-				resOcclusion += components.occlusion * passMultiplier;
-				resTransmittance += components.transmittance * passMultiplier;
-				resTransmission += components.transmission * passMultiplier;
-				resEmissive += components.emissive * passMultiplier;
-				resRefractionRatio += components.refractionRatio * passMultiplier;
-				resHasRefraction += components.hasRefraction;
-				resHasReflection += components.hasReflection;
-				resBwAccumulationOperator = max( resBwAccumulationOperator, components.bwAccumulationOperator );
-				resNormal += components.normal * passMultiplier;
-				resTangent += components.tangent * passMultiplier;
-				resBitangent += components.bitangent * passMultiplier;
-				resTangentSpaceViewPosition += components.tangentSpaceViewPosition * passMultiplier;
-				resTangentSpaceFragPosition += components.tangentSpaceFragPosition * passMultiplier;
-			}
-			FI;
-
-			FOR( m_writer, sdw::UInt, passIdx, 1_u, passIdx < material.passCount(), ++passIdx )
-			{
-				passMultiplier = passMultipliers[passIdx / 4_u][passIdx % 4_u];
-
-				IF( m_writer, passMultiplier != 0.0_f )
-				{
-					auto [curMaterial, lightMat] = applyMaterial( "passMaterial"
-						, "passLightMat"
-						, utils
-						, passFlags
-						, textureFlags
-						, hasTextures
-						, textureConfigs
-						, textureAnims
-						, lightingModel
-						, maps
-						, materialId + passIdx
-						, vertexColour
-						, components );
-
-					result->blendWith( *lightMat, passMultiplier );
-					material.lighting() += curMaterial.lighting();
-					resOpacity += components.opacity * passMultiplier;
-					resOcclusion += components.occlusion * passMultiplier;
-					resTransmittance += components.transmittance * passMultiplier;
-					resTransmission += components.transmission * passMultiplier;
-					resEmissive += components.emissive * passMultiplier;
-					resRefractionRatio += components.refractionRatio * passMultiplier;
-					resHasRefraction += components.hasRefraction;
-					resHasReflection += components.hasReflection;
-					resBwAccumulationOperator = max( resBwAccumulationOperator, components.bwAccumulationOperator );
-					resNormal += components.normal * passMultiplier;
-					resTangent += components.tangent * passMultiplier;
-					resBitangent += components.bitangent * passMultiplier;
-					resTangentSpaceViewPosition += components.tangentSpaceViewPosition * passMultiplier;
-					resTangentSpaceFragPosition += components.tangentSpaceFragPosition * passMultiplier;
-				}
-				FI;
-			}
-			ROF;
-
-			output.opacity = resOpacity;
-			output.occlusion = resOcclusion;
-			output.transmittance = resTransmittance;
-			output.transmission = resTransmission;
-			output.emissive = resEmissive;
-			output.refractionRatio = resRefractionRatio;
-			output.hasRefraction = min( 1_i, resHasRefraction );
-			output.hasReflection = min( 1_i, resHasReflection );
-			output.bwAccumulationOperator = resBwAccumulationOperator;
-			output.normal = normalize( resNormal );
-			output.tangent = normalize( resTangent );
-			output.bitangent = normalize( resBitangent );
-			output.tangentSpaceViewPosition = resTangentSpaceViewPosition;
-			output.tangentSpaceFragPosition = resTangentSpaceFragPosition;
-			Material::applyAlphaFunc( m_writer
-				, alphaFunc
-				, output.opacity
-				, 0.0_f
-				, 1.0_f
-				, opaque );
-			result->albedo *= vertexColour;
-			return { material, std::move( result ) };
-		}
-
-		auto [material, result] = applyMaterial( "passMaterial"
-			, "passLightMat"
-			, utils
-			, passFlags
-			, textureFlags
-			, hasTextures
-			, textureConfigs
-			, textureAnims
-			, lightingModel
-			, maps
-			, materialId
-			, vertexColour
+		return mats::blendMaterialsT( m_writer, *this
+			, alphaFunc, opaque
+			, passFlags, submeshFlags, textureFlags, hasTextures
+			, textureConfigs, textureAnims, lightingModel, maps
+			, materialId, passMultipliers, vertexColour
 			, output );
-		material.applyAlphaFunc( alphaFunc
-			, output.opacity
-			, 1.0_f
-			, opaque );
-		return { material, std::move( result ) };
 	}
 
 	std::pair< Material, std::unique_ptr< LightMaterial > > Materials::blendMaterials( Utils & utils
@@ -1224,24 +870,13 @@ namespace castor3d::shader
 		, LightingBlendComponents & output )const
 	{
 		return blendMaterials( utils
-			, opaque
-			, alphaFunc
-			, passFlags
-			, submeshFlags
-			, merge( textures )
-			, hasTextures
-			, textureConfigs
-			, textureAnims
-			, lightingModel
-			, maps
-			, materialId
-			, passMultipliers
-			, vertexColour
+			, opaque, alphaFunc, passFlags, submeshFlags, merge( textures ), hasTextures
+			, textureConfigs, textureAnims, lightingModel, maps
+			, materialId, passMultipliers, vertexColour
 			, output );
 	}
 
 	Material Materials::applyMaterial( std::string const & matName
-		, Utils & utils
 		, PassFlags const & passFlags
 		, TextureFlags const & textureFlags
 		, bool hasTextures
@@ -1249,11 +884,12 @@ namespace castor3d::shader
 		, shader::TextureAnimations const & textureAnims
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 		, sdw::UInt const & materialId
-		, OpacityBlendComponents & output )const
+		, OpacityBlendComponents & output
+		, Utils & utils )const
 	{
 		auto material = m_writer.declLocale( matName
 			, getMaterial( materialId ) );
-		output.opacity = material.opacity();
+		output.opacity() = material.opacity();
 
 		if ( hasTextures
 			&& textureConfigs.isEnabled()
@@ -1275,11 +911,11 @@ namespace castor3d::shader
 						auto anim = m_writer.declLocale( "anim" + name
 							, textureAnims.getTextureAnimation( id ) );
 						auto texCoord = m_writer.declLocale( "texCoord" + name
-							, output.texCoord0.xy() );
+							, output.texCoord0().xy() );
 						config.transformUV( anim, texCoord );
 						auto sampledOpacity = m_writer.declLocale( "sampled" + name
 							, utils.sampleMap( passFlags, maps[id - 1_u], texCoord ) );
-						output.opacity = config.getOpacity( sampledOpacity, output.opacity );
+						output.opacity() = config.getOpacity( sampledOpacity, output.opacity() );
 					}
 					FI;
 				}
@@ -1291,7 +927,6 @@ namespace castor3d::shader
 	}
 
 	Material Materials::applyMaterial( std::string const & matName
-		, Utils & utils
 		, PassFlags const & passFlags
 		, TextureFlags const & textureFlags
 		, bool hasTextures
@@ -1299,11 +934,12 @@ namespace castor3d::shader
 		, shader::TextureAnimations const & textureAnims
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 		, sdw::UInt const & materialId
-		, GeometryBlendComponents & output )const
+		, GeometryBlendComponents & output
+		, Utils & utils )const
 	{
 		auto material = m_writer.declLocale( matName
 			, getMaterial( materialId ) );
-		output.opacity = material.opacity();
+		output.opacity() = material.opacity();
 
 		if ( hasTextures && textureConfigs.isEnabled() )
 		{
@@ -1326,10 +962,10 @@ namespace castor3d::shader
 								, textureAnims.getTextureAnimation( id ) );
 							auto texcoord = m_writer.declLocale( "tex" + name
 								, textureConfigs.getTexcoord( config
-									, output.texCoord0
-									, output.texCoord1
-									, output.texCoord2
-									, output.texCoord3 ) );
+									, output.texCoord0()
+									, output.texCoord1()
+									, output.texCoord2()
+									, output.texCoord3() ) );
 							config.computeGeometryMapContribution( utils
 								, passFlags
 								, textureFlags
@@ -1337,18 +973,18 @@ namespace castor3d::shader
 								, anim
 								, maps[id - 1_u]
 								, texcoord
-								, output.opacity
-								, output.normal
-								, output.tangent
-								, output.bitangent
-								, output.tangentSpaceViewPosition
-								, output.tangentSpaceFragPosition );
+								, output.opacity()
+								, output.normal()
+								, output.tangent()
+								, output.bitangent()
+								, output.tangentSpaceViewPosition()
+								, output.tangentSpaceFragPosition() );
 							textureConfigs.setTexcoord( config
 								, texcoord
-								, output.texCoord0
-								, output.texCoord1
-								, output.texCoord2
-								, output.texCoord3 );
+								, output.texCoord0()
+								, output.texCoord1()
+								, output.texCoord2()
+								, output.texCoord3() );
 						}
 						FI;
 					}
@@ -1362,8 +998,6 @@ namespace castor3d::shader
 
 	std::pair< Material, std::unique_ptr< LightMaterial > > Materials::applyMaterial( std::string const & matName
 		, std::string const & lgtMatName
-		, Utils & utils
-		, bool needsRsm
 		, PassFlags const & passFlags
 		, TextureFlags const & textureFlags
 		, bool hasTextures
@@ -1373,7 +1007,9 @@ namespace castor3d::shader
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 		, sdw::UInt const & materialId
 		, sdw::Vec3 const & vertexColour
-		, OpaqueBlendComponents & output )const
+		, OpaqueBlendComponents & output
+		, Utils & utils
+		, bool needsRsm )const
 	{
 		if ( needsRsm )
 		{
@@ -1393,8 +1029,8 @@ namespace castor3d::shader
 
 		auto material = m_writer.declLocale( matName
 			, getMaterial( materialId ) );
-		output.emissive = vec3( material.emissive() );
-		output.opacity = material.opacity();
+		output.emissive() = vec3( material.emissive() );
+		output.opacity() = material.opacity();
 		auto lightMat = lightingModel.declMaterial( lgtMatName
 			, needsRsm );
 		lightMat->create( vertexColour
@@ -1408,13 +1044,13 @@ namespace castor3d::shader
 				, textureAnims
 				, maps
 				, material
-				, output.texCoord0
-				, output.texCoord1
-				, output.texCoord2
-				, output.texCoord3
-				, output.opacity
-				, output.tangentSpaceViewPosition
-				, output.tangentSpaceFragPosition );
+				, output.texCoord0()
+				, output.texCoord1()
+				, output.texCoord2()
+				, output.texCoord3()
+				, output.opacity()
+				, output.tangentSpaceViewPosition()
+				, output.tangentSpaceFragPosition() );
 		}
 
 		return std::make_pair( material, std::move( lightMat ) );
@@ -1435,11 +1071,11 @@ namespace castor3d::shader
 	{
 		auto material = m_writer.declLocale( matName
 			, getMaterial( materialId ) );
-		output.emissive = vec3( material.emissive() );
-		output.opacity = material.opacity();
 		auto lightMat = lightingModel.declMaterial( lgtMatName );
 		lightMat->create( vertexColour
 			, material );
+		output.emissive() = vec3( material.emissive() );
+		output.opacity() = material.opacity();
 
 		if ( hasTextures )
 		{
@@ -1449,20 +1085,20 @@ namespace castor3d::shader
 				, textureAnims
 				, maps
 				, material
-				, output.texCoord0
-				, output.texCoord1
-				, output.texCoord2
-				, output.texCoord3
-				, output.normal
-				, output.tangent
-				, output.bitangent
-				, output.emissive
-				, output.opacity
-				, output.occlusion
-				, output.transmittance
+				, output.texCoord0()
+				, output.texCoord1()
+				, output.texCoord2()
+				, output.texCoord3()
+				, output.normal()
+				, output.tangent()
+				, output.bitangent()
+				, output.emissive()
+				, output.opacity()
+				, output.occlusion()
+				, output.transmittance()
 				, *lightMat
-				, output.tangentSpaceViewPosition
-				, output.tangentSpaceFragPosition );
+				, output.tangentSpaceViewPosition()
+				, output.tangentSpaceFragPosition() );
 		}
 
 		return std::make_pair( material, std::move( lightMat ) );
@@ -1470,7 +1106,6 @@ namespace castor3d::shader
 
 	std::pair< Material, std::unique_ptr< LightMaterial > > Materials::applyMaterial( std::string const & matName
 		, std::string const & lgtMatName
-		, Utils & utils
 		, PassFlags const & passFlags
 		, TextureFlags const & textureFlags
 		, bool hasTextures
@@ -1487,34 +1122,38 @@ namespace castor3d::shader
 		auto lightMat = lightingModel.declMaterial( lgtMatName );
 		lightMat->create( vertexColour
 			, material );
-		output.emissive = lightMat->albedo * material.emissive();
-		output.transmission = material.transmission();
-		output.refractionRatio = material.refractionRatio();
-		output.hasRefraction = material.hasRefraction();
-		output.hasReflection = material.hasReflection();
-		output.bwAccumulationOperator = material.bwAccumulationOperator();
-		output.opacity = material.opacity();
+		output.emissive() = lightMat->albedo * material.emissive();
+		output.opacity() = material.opacity();
+		output.transmission() = material.transmission();
+		output.refractionRatio() = material.refractionRatio();
+		output.hasRefraction() = material.hasRefraction();
+		output.hasReflection() = material.hasReflection();
+		output.bwAccumulationOperator() = material.bwAccumulationOperator();
 
-		lightingModel.computeMapContributions( passFlags
-			, textureFlags
-			, textureConfigs
-			, textureAnims
-			, maps
-			, material
-			, output.texCoord0
-			, output.texCoord1
-			, output.texCoord2
-			, output.texCoord3
-			, output.normal
-			, output.tangent
-			, output.bitangent
-			, output.emissive
-			, output.opacity
-			, output.occlusion
-			, output.transmittance
-			, *lightMat
-			, output.tangentSpaceViewPosition
-			, output.tangentSpaceFragPosition );
+		if ( hasTextures )
+		{
+			lightingModel.computeMapContributions( passFlags
+				, textureFlags
+				, textureConfigs
+				, textureAnims
+				, maps
+				, material
+				, output.texCoord0()
+				, output.texCoord1()
+				, output.texCoord2()
+				, output.texCoord3()
+				, output.normal()
+				, output.tangent()
+				, output.bitangent()
+				, output.emissive()
+				, output.opacity()
+				, output.occlusion()
+				, output.transmittance()
+				, *lightMat
+				, output.tangentSpaceViewPosition()
+				, output.tangentSpaceFragPosition() );
+		}
+
 		return std::make_pair( material, std::move( lightMat ) );
 	}
 

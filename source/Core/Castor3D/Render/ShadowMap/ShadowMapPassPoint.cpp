@@ -360,19 +360,21 @@ namespace castor3d
 
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1] );
-				shader::OpaqueBlendComponents components{ writer.declLocale( "texCoord0", in.texture0 )
-					, writer.declLocale( "texCoord1", in.texture1 )
-					, writer.declLocale( "texCoord2", in.texture2 )
-					, writer.declLocale( "texCoord3", in.texture3 )
-					, writer.declLocale( "opacity", 1.0_f, ( checkFlag( flags.texturesFlags, TextureFlag::eOpacity ) && flags.alphaFunc != VK_COMPARE_OP_ALWAYS ) )
-					, writer.declLocale( "occlusion", 1.0_f, false )
-					, writer.declLocale( "transmittance", 1.0_f, false )
-					, writer.declLocale( "emissive", vec3( 0.0_f ), m_needsRsm )
-					, writer.declLocale( "normal", normalize( in.normal ), m_needsRsm )
-					, writer.declLocale( "tangent", normalize( in.tangent ) )
-					, writer.declLocale( "bitangent", normalize( in.bitangent ) )
-					, writer.declLocale( "tangentSpaceViewPosition", in.tangentSpaceViewPosition )
-					, writer.declLocale( "tangentSpaceFragPosition", in.tangentSpaceFragPosition ) };
+				shader::OpaqueBlendComponents components{ writer
+					, "out"
+					, in.texture0
+					, in.texture1
+					, in.texture2
+					, in.texture3
+					, { 1.0_f, ( checkFlag( flags.texturesFlags, TextureFlag::eOpacity ) && flags.alphaFunc != VK_COMPARE_OP_ALWAYS ) }
+					, { normalize( in.normal ), m_needsRsm }
+					, normalize( in.tangent )
+					, normalize( in.bitangent )
+					, in.tangentSpaceViewPosition
+					, in.tangentSpaceFragPosition
+					, { 1.0_f, false }
+					, { 1.0_f, false }
+					, { vec3( 0.0_f ), m_needsRsm } };
 				auto lightMat = materials.blendMaterials( utils
 					, m_needsRsm
 					, flags.alphaFunc
@@ -417,9 +419,9 @@ namespace castor3d
 					pxl_flux.rgb() = ( lightMat->albedo
 							* light.base.colour
 							* light.base.intensity.x()
-							* clamp( dot( lightToVertex / distance, components.normal ), 0.0_f, 1.0_f ) )
+							* clamp( dot( lightToVertex / distance, components.normal() ), 0.0_f, 1.0_f ) )
 						/ attenuation;
-					pxl_normal.xyz() = components.normal;
+					pxl_normal.xyz() = components.normal();
 					pxl_position.xyz() = in.worldPosition.xyz();
 				}
 			} );

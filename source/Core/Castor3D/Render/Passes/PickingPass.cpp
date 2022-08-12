@@ -164,8 +164,10 @@ namespace castor3d
 			{
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId ) - 1u] );
-				shader::OpacityBlendComponents components{ writer.declLocale( "texCoord0", in.texture0 )
-					, writer.declLocale( "opacity", 1.0_f ) };
+				shader::OpacityBlendComponents components{ writer
+					, "out"
+					, in.texture0
+					, 1.0_f };
 				materials.blendMaterials( utils
 					, flags.alphaFunc
 					, flags.passFlags
