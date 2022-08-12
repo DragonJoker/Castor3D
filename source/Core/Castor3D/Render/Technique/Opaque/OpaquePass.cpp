@@ -183,19 +183,21 @@ namespace castor3d
 			{
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1] );
-				shader::OpaqueBlendComponents components{ writer.declLocale( "texCoord0", in.texture0 )
-					, writer.declLocale( "texCoord1", in.texture1 )
-					, writer.declLocale( "texCoord2", in.texture2 )
-					, writer.declLocale( "texCoord3", in.texture3 )
-					, writer.declLocale( "opacity", 1.0_f )
-					, writer.declLocale( "occlusion", 1.0_f )
-					, writer.declLocale( "transmittance", 1.0_f )
-					, writer.declLocale( "emissive", vec3( 0.0_f ) )
-					, writer.declLocale( "normal", normalize( in.normal ) )
-					, writer.declLocale( "tangent", normalize( in.tangent ) )
-					, writer.declLocale( "bitangent", normalize( in.bitangent ) )
-					, writer.declLocale( "tangentSpaceViewPosition", in.tangentSpaceViewPosition )
-					, writer.declLocale( "tangentSpaceFragPosition", in.tangentSpaceFragPosition ) };
+				shader::OpaqueBlendComponents components{ writer
+					, "out"
+					, in.texture0
+					, in.texture1
+					, in.texture2
+					, in.texture3
+					, 1.0_f
+					, normalize( in.normal )
+					, normalize( in.tangent )
+					, normalize( in.bitangent )
+					, in.tangentSpaceViewPosition
+					, in.tangentSpaceFragPosition
+					, 1.0_f
+					, 1.0_f
+					, vec3( 0.0_f ) };
 				auto lightMat = materials.blendMaterials( utils
 					, flags.alphaFunc
 					, flags.passFlags
@@ -211,8 +213,8 @@ namespace castor3d
 					, in.colour
 					, components );
 				lightMat->output( outData2, outData3 );
-				outData4 = vec4( components.emissive, components.transmittance );
-				outData5 = vec4( in.getVelocity(), 0.0_f, components.occlusion );
+				outData4 = vec4( components.emissive(), components.transmittance() );
+				outData5 = vec4( in.getVelocity(), 0.0_f, components.occlusion() );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

@@ -228,26 +228,28 @@ namespace castor3d
 			{
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId ) - 1u] );
-				shader::LightingBlendComponents components{ writer.declLocale( "texCoord0", in.texture0 )
-					, writer.declLocale( "texCoord1", in.texture1 )
-					, writer.declLocale( "texCoord2", in.texture2 )
-					, writer.declLocale( "texCoord3", in.texture3 )
-					, writer.declLocale( "opacity", 1.0_f )
-					, writer.declLocale( "occlusion", ( m_ssao
+				shader::LightingBlendComponents components{ writer
+					, "out"
+					, in.texture0
+					, in.texture1
+					, in.texture2
+					, in.texture3
+					, 1.0_f
+					, normalize( in.normal )
+					, normalize( in.tangent )
+					, normalize( in.bitangent )
+					, in.tangentSpaceViewPosition
+					, in.tangentSpaceFragPosition
+					, ( m_ssao
 						? c3d_mapOcclusion.fetch( ivec2( in.fragCoord.xy() ), 0_i )
-						: 1.0_f ) )
-					, writer.declLocale( "transmittance", 1.0_f )
-					, writer.declLocale( "transmission", vec3( 1.0_f ) )
-					, writer.declLocale( "emissive", vec3( 1.0_f ) )
-					, writer.declLocale( "refractionRatio", 1.0_f )
-					, writer.declLocale( "hasRefraction", 0_u )
-					, writer.declLocale( "hasReflection", 0_u )
-					, writer.declLocale( "bwAccumulationOperator", 1.0_f )
-					, writer.declLocale( "normal", normalize( in.normal ) )
-					, writer.declLocale( "tangent", normalize( in.tangent ) )
-					, writer.declLocale( "bitangent", normalize( in.bitangent ) )
-					, writer.declLocale( "tangentSpaceViewPosition", in.tangentSpaceViewPosition )
-					, writer.declLocale( "tangentSpaceFragPosition", in.tangentSpaceFragPosition ) };
+						: 1.0_f )
+					, 1.0_f
+					, vec3( 1.0_f )
+					, vec3( 1.0_f )
+					, 1.0_f
+					, 0_u
+					, 0_u
+					, 1.0_f };
 				auto [material, lightMat] = materials.blendMaterials( utils
 					, false
 					, flags.blendAlphaFunc
@@ -281,7 +283,7 @@ namespace castor3d
 					surface.create( in.fragCoord.xyz()
 						, in.viewPosition.xyz()
 						, in.worldPosition.xyz()
-						, components.normal );
+						, components.normal() );
 					lightingModel->computeCombined( *lightMat
 						, c3d_sceneData
 						, *backgroundModel
@@ -302,10 +304,10 @@ namespace castor3d
 						, c3d_sceneData
 						, *backgroundModel
 						, modelData.getEnvMapIndex()
-						, components.hasReflection
-						, components.hasRefraction
-						, components.refractionRatio
-						, components.transmission
+						, components.hasReflection()
+						, components.hasRefraction()
+						, components.refractionRatio()
+						, components.transmission()
 						, ambient
 						, reflected
 						, refracted );
@@ -342,24 +344,24 @@ namespace castor3d
 						, lightIndirectSpecular
 						, ambient
 						, indirectAmbient
-						, components.occlusion
-						, components.emissive
+						, components.occlusion()
+						, components.emissive()
 						, reflected
 						, refracted
-						, lightMat->albedo * components.transmission );
+						, lightMat->albedo * components.transmission() );
 				}
 				ELSE
 				{
-					colour = lightMat->albedo * components.transmission;
+					colour = lightMat->albedo * components.transmission();
 				}
 				FI;
 
 				pxl_accumulation = c3d_sceneData.computeAccumulation( utils
 					, in.fragCoord.z()
 					, colour
-					, components.opacity
-					, components.bwAccumulationOperator );
-				pxl_revealage = components.opacity;
+					, components.opacity()
+					, components.bwAccumulationOperator() );
+				pxl_revealage = components.opacity();
 				pxl_velocity.xy() = in.getVelocity();
 			} );
 
