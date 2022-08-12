@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
 
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
-#include <ShaderWriter/CompositeTypes/Ssbo.hpp>
+#include <ShaderWriter/CompositeTypes/StorageBuffer.hpp>
 #include <ShaderWriter/CompositeTypes/Struct.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 
@@ -385,7 +385,7 @@ namespace castor3d::shader
 		sdw::ShaderWriter & m_writer;
 		Utils & m_utils;
 		std::unique_ptr< sdw::Struct > m_type;
-		std::unique_ptr< sdw::Ssbo > m_ssbo;
+		std::unique_ptr< sdw::StorageBuffer > m_ssbo;
 		std::unique_ptr < sdw::RImageBufferRgba32 > m_tbo;
 		bool m_enableVolumetric;
 		std::string m_prefix;

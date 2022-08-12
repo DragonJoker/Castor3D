@@ -85,7 +85,7 @@ namespace castor3d
 
 				// Inputs
 				auto position = writer.declInput< Vec3 >( "position", 0u );
-				Ubo matrix{ writer, "Matrix", 0u, 0u };
+				UniformBuffer matrix{ writer, "Matrix", 0u, 0u };
 				auto c3d_viewProjection = matrix.declMember< Mat4 >( "c3d_viewProjection" );
 				matrix.end();
 

@@ -101,7 +101,7 @@ namespace castor3d
 }
 
 #define C3D_HdrConfig( writer, binding, set )\
-	sdw::Ubo hdrConfig{ writer\
+	sdw::UniformBuffer hdrConfig{ writer\
 		, castor3d::HdrConfigUbo::BufferHdrConfig\
 		, uint32_t( binding )\
 		, uint32_t( set )\

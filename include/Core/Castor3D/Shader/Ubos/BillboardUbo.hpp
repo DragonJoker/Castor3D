@@ -55,7 +55,7 @@ namespace castor3d
 }
 
 #define C3D_Billboard( writer, binding, set )\
-	sdw::Ssbo billboard{ writer\
+	sdw::StorageBuffer billboard{ writer\
 		, castor3d::BillboardUbo::BufferBillboard\
 		, uint32_t( binding )\
 		, uint32_t( set )\

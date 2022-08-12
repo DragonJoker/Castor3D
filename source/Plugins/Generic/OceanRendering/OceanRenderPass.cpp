@@ -645,7 +645,7 @@ namespace ocean
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
 
-		sdw::Pcb pcb{ writer, "DrawData" };
+		sdw::PushConstantBuffer pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 
@@ -734,7 +734,7 @@ namespace ocean
 			, GlobalBuffersIdx::eBillboardsData
 			, RenderPipeline::eBuffers );
 
-		sdw::Pcb pcb{ writer, "DrawData" };
+		sdw::PushConstantBuffer pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 

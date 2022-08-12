@@ -177,7 +177,7 @@ namespace castor3d
 }
 
 #define C3D_SsaoConfig( Writer, Binding, Set )\
-	sdw::Ubo ssaoConfig{ Writer\
+	sdw::UniformBuffer ssaoConfig{ Writer\
 		, castor3d::SsaoConfigUbo::BufferSsaoConfig\
 		, uint32_t( Binding )\
 		, uint32_t( Set )\

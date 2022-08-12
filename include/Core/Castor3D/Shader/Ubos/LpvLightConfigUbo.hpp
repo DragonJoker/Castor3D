@@ -97,7 +97,7 @@ namespace castor3d
 }
 
 #define C3D_LpvLightConfig( writer, binding, set )\
-	sdw::Ubo lpvLightConfig{ writer\
+	sdw::UniformBuffer lpvLightConfig{ writer\
 		, castor3d::LpvLightConfigUbo::LpvLightConfig\
 		, uint32_t( binding )\
 		, uint32_t( set )\

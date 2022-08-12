@@ -83,7 +83,7 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			Ubo clipInfo{ writer, "ClipInfo", ClipInfoUboIdx, 0u, ast::type::MemoryLayout::eStd140 };
+			UniformBuffer clipInfo{ writer, "ClipInfo", ClipInfoUboIdx, 0u, ast::type::MemoryLayout::eStd140 };
 			auto c3d_clipInfo = clipInfo.declMember< Vec3 >( "c3d_clipInfo" );
 			clipInfo.end();
 			auto c3d_mapDepth = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepth", DepthImgIdx, 0u );
@@ -115,7 +115,7 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			Ubo previousLevel{ writer, "PreviousLevel", PrevLvlUboIdx, 0u, ast::type::MemoryLayout::eStd140 };
+			UniformBuffer previousLevel{ writer, "PreviousLevel", PrevLvlUboIdx, 0u, ast::type::MemoryLayout::eStd140 };
 			auto c3d_textureSize = previousLevel.declMember< IVec2 >( "c3d_textureSize" );
 			previousLevel.end();
 			auto c3d_mapDepth = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepth", DepthImgIdx, 0u );

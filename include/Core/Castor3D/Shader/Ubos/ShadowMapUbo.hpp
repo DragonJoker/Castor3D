@@ -99,7 +99,7 @@ namespace castor3d
 }
 
 #define C3D_ShadowMap( writer, binding, set )\
-	sdw::Ubo shadowMapCfg{ writer\
+	sdw::UniformBuffer shadowMapCfg{ writer\
 		, castor3d::ShadowMapUbo::BufferShadowMap\
 		, uint32_t( binding )\
 		, uint32_t( set )\

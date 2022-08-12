@@ -830,7 +830,7 @@ namespace castor3d
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
-		sdw::Ssbo instancesBuffer{ writer
+		sdw::StorageBuffer instancesBuffer{ writer
 			, std::string{ "c3d_instancesBuffer" }
 			, uint32_t( MeshBuffersIdx::eInstances )
 			, RenderPipeline::eMeshBuffers
@@ -840,7 +840,7 @@ namespace castor3d
 			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
 		instancesBuffer.end();
 
-		sdw::Pcb pcb{ writer, "DrawData" };
+		sdw::PushConstantBuffer pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		auto drawOffset = pcb.declMember< sdw::UInt >( "drawOffset" );
 		auto instanceCount = pcb.declMember< sdw::UInt >( "instanceCount" );
@@ -1005,14 +1005,14 @@ namespace castor3d
 			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::eBuffers };
 
-		sdw::Pcb pcb{ writer, "DrawData" };
+		sdw::PushConstantBuffer pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		auto drawOffset = pcb.declMember< sdw::UInt >( "drawOffset" );
 		auto instanceCount = pcb.declMember< sdw::UInt >( "instanceCount" );
 		pcb.end();
 
 #define DeclareSsbo( Name, Type, Binding, Enable )\
-		sdw::Ssbo Name##Buffer{ writer\
+		sdw::StorageBuffer Name##Buffer{ writer\
 			, #Name + std::string{ "Buffer" }\
 			, uint32_t( Binding )\
 			, RenderPipeline::eMeshBuffers\
@@ -1263,7 +1263,7 @@ namespace castor3d
 			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::eBuffers };
 
-		sdw::Pcb pcb{ writer, "DrawData" };
+		sdw::PushConstantBuffer pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 
@@ -1402,7 +1402,7 @@ namespace castor3d
 			, GlobalBuffersIdx::eBillboardsData
 			, RenderPipeline::eBuffers );
 
-		sdw::Pcb pcb{ writer, "DrawData" };
+		sdw::PushConstantBuffer pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 

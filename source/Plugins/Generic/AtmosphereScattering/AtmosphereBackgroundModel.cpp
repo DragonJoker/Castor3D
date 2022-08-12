@@ -9,7 +9,7 @@ namespace atmosphere_scattering
 	namespace model
 	{
 		template< typename DataT >
-		DataT getData( sdw::Ubo & ubo, std::string const & name )
+		DataT getData( sdw::UniformBuffer & ubo, std::string const & name )
 		{
 			auto result = ubo.declMember< DataT >( name );
 			ubo.end();

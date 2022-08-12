@@ -18,7 +18,7 @@ namespace castor3d
 	{
 		struct SkinningData
 		{
-			std::unique_ptr< sdw::ArraySsboT< sdw::Mat4 > > transforms;
+			std::unique_ptr< sdw::ArrayStorageBufferT< sdw::Mat4 > > transforms;
 		};
 	}
 

@@ -101,7 +101,7 @@ namespace light_streaks
 }
 
 #define C3D_Kawase( writer, binding, set )\
-	sdw::Ubo kawase{ writer, KawaseUbo::Buffer, binding, set };\
+	sdw::UniformBuffer kawase{ writer, KawaseUbo::Buffer, binding, set };\
 	auto c3d_kawaseData = kawase.declMember< KawaseData >( KawaseUbo::Data );\
 	kawase.end()
 

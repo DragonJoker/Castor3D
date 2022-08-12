@@ -109,7 +109,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/BaseTypes/SampledImage.hpp>
 #include <ShaderWriter/BaseTypes/Sampler.hpp>
 #include <ShaderWriter/BaseTypes/UInt.hpp>
-#include <ShaderWriter/CompositeTypes/ArraySsbo.hpp>
+#include <ShaderWriter/CompositeTypes/ArrayStorageBuffer.hpp>
 #include <ShaderWriter/CompositeTypes/Function.hpp>
 #include <ShaderWriter/CompositeTypes/Struct.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>

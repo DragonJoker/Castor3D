@@ -104,7 +104,7 @@ namespace castor3d
 			shader::SssProfiles sssProfiles{ writer, BlurSssProfilesUboId, 0u };
 			C3D_ModelsData( writer, BlurModelsUboId, 0u );
 			C3D_GpInfo( writer, BlurGpInfoUboId, 0u );
-			Ubo config{ writer, SubsurfaceScatteringPass::Config, BlurSssUboId, 0u };
+			UniformBuffer config{ writer, SubsurfaceScatteringPass::Config, BlurSssUboId, 0u };
 			auto c3d_pixelSize = config.declMember< Vec2 >( SubsurfaceScatteringPass::PixelSize );
 			auto c3d_correction = config.declMember< Float >( SubsurfaceScatteringPass::Correction );
 			config.end();

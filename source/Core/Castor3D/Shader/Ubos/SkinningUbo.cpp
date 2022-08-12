@@ -23,7 +23,7 @@ namespace castor3d
 
 		if ( checkFlag( flags, SubmeshFlag::eSkin ) )
 		{
-			result.transforms = std::make_unique< sdw::ArraySsboT< sdw::Mat4 > >( writer
+			result.transforms = std::make_unique< sdw::ArrayStorageBufferT< sdw::Mat4 > >( writer
 				, SkinningUbo::BufferSkinning
 				, writer.getTypesCache().getMat4x4F()
 				, ast::type::MemoryLayout::eStd430

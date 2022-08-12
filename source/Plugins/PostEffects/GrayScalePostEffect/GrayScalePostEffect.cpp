@@ -71,7 +71,7 @@ namespace grayscale
 			FragmentWriter writer;
 
 			// Shader inputs
-			auto configUbo = Ubo{ writer, "Configuration", GrayCfgUboIdx, 0u };
+			auto configUbo = UniformBuffer{ writer, "Configuration", GrayCfgUboIdx, 0u };
 			auto c3d_factors = configUbo.declMember< Vec3 >( "c3d_factors" );
 			configUbo.end();
 			auto c3d_mapColor = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapColor", ColorTexIdx, 0u );

@@ -29,8 +29,8 @@ namespace castor3d
 		struct LpvGridData;
 		struct LpvLightData;
 		struct MatrixData;
+		struct ModelIndices;
 		struct ModelInstancesData;
-		struct ModelData;
 		struct MorphTargetData;
 		struct MorphTargetsData;
 		struct MorphingWeightsData;
@@ -51,8 +51,8 @@ namespace castor3d
 		Writer_Parameter( LpvGridData );
 		Writer_Parameter( LpvLightData );
 		Writer_Parameter( MatrixData );
+		Writer_Parameter( ModelIndices );
 		Writer_Parameter( ModelInstancesData );
-		Writer_Parameter( ModelData );
 		Writer_Parameter( MorphTargetData );
 		Writer_Parameter( MorphTargetsData );
 		Writer_Parameter( MorphingWeightsData );

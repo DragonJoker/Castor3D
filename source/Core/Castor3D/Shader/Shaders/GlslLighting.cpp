@@ -477,7 +477,7 @@ namespace castor3d::shader
 	void LightingModel::doDeclareLightsBuffer( uint32_t binding
 		, uint32_t set )
 	{
-		m_ssbo = std::make_unique< sdw::Ssbo >( m_writer
+		m_ssbo = std::make_unique< sdw::StorageBuffer >( m_writer
 			, LightBufferName
 			, binding
 			, set );
@@ -489,7 +489,7 @@ namespace castor3d::shader
 	void LightingModel::doDeclareDirectionalLightUbo( uint32_t binding
 		, uint32_t set )
 	{
-		sdw::Ssbo lightUbo{ m_writer, "LightSsbo", binding, set };
+		sdw::StorageBuffer lightUbo{ m_writer, "LightSsbo", binding, set };
 		lightUbo.declMember< DirectionalLight >( "c3d_light" );
 		lightUbo.end();
 	}
@@ -497,7 +497,7 @@ namespace castor3d::shader
 	void LightingModel::doDeclarePointLightUbo( uint32_t binding
 		, uint32_t set )
 	{
-		sdw::Ssbo lightUbo{ m_writer, "LightSsbo", binding, set };
+		sdw::StorageBuffer lightUbo{ m_writer, "LightSsbo", binding, set };
 		lightUbo.declMember< PointLight >( "c3d_light" );
 		lightUbo.end();
 	}
@@ -505,7 +505,7 @@ namespace castor3d::shader
 	void LightingModel::doDeclareSpotLightUbo( uint32_t binding
 		, uint32_t set )
 	{
-		sdw::Ssbo lightUbo{ m_writer, "LightSsbo", binding, set };
+		sdw::StorageBuffer lightUbo{ m_writer, "LightSsbo", binding, set };
 		lightUbo.declMember< SpotLight >( "c3d_light" );
 		lightUbo.end();
 	}

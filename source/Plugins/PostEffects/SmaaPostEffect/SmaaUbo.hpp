@@ -128,7 +128,7 @@ namespace smaa
 }
 
 #define C3D_Smaa( writer, binding, set )\
-	sdw::Ubo smaaBuffer{ writer\
+	sdw::UniformBuffer smaaBuffer{ writer\
 		, smaa::SmaaUbo::Buffer\
 		, binding\
 		, set\

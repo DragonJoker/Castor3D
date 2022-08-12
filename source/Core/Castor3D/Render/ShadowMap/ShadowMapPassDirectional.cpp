@@ -198,7 +198,7 @@ namespace castor3d
 			, index++
 			, RenderPipeline::eBuffers );
 
-		sdw::Pcb pcb{ writer, "DrawData" };
+		sdw::PushConstantBuffer pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 
@@ -332,7 +332,7 @@ namespace castor3d
 			, RenderPipeline::eTextures
 			, hasTextures ) );
 
-		sdw::Pcb pcb{ writer, "DrawData" };
+		sdw::PushConstantBuffer pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 

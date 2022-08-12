@@ -694,7 +694,7 @@ namespace ocean_fft
 			, rdpass::OceanFFTIdx::eOceanUbo
 			, RenderPipeline::eBuffers );
 
-		sdw::Pcb pcb{ writer, "DrawData" };
+		sdw::PushConstantBuffer pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 
@@ -759,7 +759,7 @@ namespace ocean_fft
 			, rdpass::OceanFFTIdx::eOceanUbo
 			, RenderPipeline::eBuffers );
 
-		sdw::Pcb pcb{ writer, "DrawData" };
+		sdw::PushConstantBuffer pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 

@@ -91,7 +91,7 @@ namespace Uncharted2
 }
 
 #define C3D_Uncharted2( writer, binding, set )\
-	sdw::Ubo uncharted2{ writer\
+	sdw::UniformBuffer uncharted2{ writer\
 		, Uncharted2::Uncharted2Ubo::Name\
 		, binding\
 		, set\
