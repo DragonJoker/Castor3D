@@ -24,16 +24,16 @@ namespace castor3d::shader
 			, uint32_t & binding
 			, uint32_t set );
 
-		C3D_API sdw::Vec3 computeReflections( sdw::Vec3 const & wsIncident
+		C3D_API sdw::RetVec3 computeReflections( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, LightMaterial const & material
 			, sdw::CombinedImage2DRg32 const & brdf )override;
-		C3D_API sdw::Vec3 computeRefractions( sdw::Vec3 const & wsIncident
+		C3D_API sdw::RetVec3 computeRefractions( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
 			, LightMaterial const & material )override;
-		C3D_API sdw::Void mergeReflRefr( sdw::Vec3 const & wsIncident
+		C3D_API sdw::RetVoid mergeReflRefr( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
@@ -42,7 +42,7 @@ namespace castor3d::shader
 			, sdw::Vec3 & refraction )override;
 
 	private:
-		sdw::Vec3 doComputeRefractions( sdw::Vec3 const & wsIncident
+		sdw::RetVec3 doComputeRefractions( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::CombinedImageCubeRgba32 const & backgroundMap
 			, sdw::Float const & refractionRatio

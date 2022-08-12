@@ -27,66 +27,6 @@ namespace castor3d::shader
 		m_writer.declCombinedImg< FImgCubeArrayRgba32 >( "c3d_mapEnvironment", envMapBinding++, envMapSet );
 	}
 
-	void PbrReflectionModel::doDeclareComputeReflEnvMap()
-	{
-		if ( m_computeReflEnvMap )
-		{
-			return;
-		}
-
-		m_computeReflEnvMap = m_writer.implementFunction< sdw::Vec3 >( "c3d_pbr_computeReflEnvMap"
-			, [&]( sdw::Vec3 const & wsIncident
-				, sdw::Vec3 const & wsNormal
-				, sdw::CombinedImageCubeRgba32 const & envMap
-				, sdw::Vec3 const & specular
-				, sdw::Float const & roughness )
-			{
-				auto reflected = m_writer.declLocale( "reflected"
-					, reflect( wsIncident, wsNormal ) );
-				auto radiance = m_writer.declLocale( "radiance"
-					, envMap.lod( reflected
-						, roughness * sdw::Float( float( castor::getBitSize( EnvironmentMapSize ) ) ) ).xyz() );
-				m_writer.returnStmt( radiance * specular );
-			}
-			, sdw::InVec3{ m_writer, "wsIncident" }
-			, sdw::InVec3{ m_writer, "wsNormal" }
-			, sdw::InCombinedImageCubeRgba32{ m_writer, "envMap" }
-			, sdw::InVec3{ m_writer, "specular" }
-			, sdw::InFloat{ m_writer, "roughness" } );
-	}
-
-	void PbrReflectionModel::doDeclareComputeRefrEnvMap()
-	{
-		if ( m_computeRefrEnvMap )
-		{
-			return;
-		}
-
-		m_computeRefrEnvMap = m_writer.implementFunction< sdw::Vec3 >( "c3d_pbr_computeRefrEnvMap"
-			, [&]( sdw::Vec3 const & wsIncident
-				, sdw::Vec3 const & wsNormal
-				, sdw::CombinedImageCubeRgba32 const & envMap
-				, sdw::Float const & refractionRatio
-				, sdw::Vec3 const & transmission
-				, sdw::Vec3 albedo
-				, sdw::Float const & roughness )
-			{
-				auto refracted = m_writer.declLocale( "refracted"
-					, refract( wsIncident, wsNormal, refractionRatio ) );
-				m_writer.returnStmt( envMap.lod( refracted
-						, roughness * sdw::Float( float( castor::getBitSize( EnvironmentMapSize ) ) ) ).xyz()
-					* transmission
-					* albedo );
-			}
-			, sdw::InVec3{ m_writer, "wsIncident" }
-			, sdw::InVec3{ m_writer, "wsNormal" }
-			, sdw::InCombinedImageCubeRgba32{ m_writer, "envMap" }
-			, sdw::InFloat{ m_writer, "refractionRatio" }
-			, sdw::InVec3{ m_writer, "transmission" }
-			, sdw::InOutVec3{ m_writer, "albedo" }
-			, sdw::InFloat{ m_writer, "roughness" } );
-	}
-
 	void PbrReflectionModel::doDeclareComputeReflEnvMaps()
 	{
 		if ( m_computeReflEnvMaps )

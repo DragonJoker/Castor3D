@@ -35,7 +35,7 @@ namespace castor3d::shader
 			, set );
 	}
 
-	sdw::Vec3 NoIblBackgroundModel::computeReflections( sdw::Vec3 const & pwsIncident
+	sdw::RetVec3 NoIblBackgroundModel::computeReflections( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
 		, LightMaterial const & pmaterial
 		, sdw::CombinedImage2DRg32 const & pbrdf )
@@ -68,7 +68,7 @@ namespace castor3d::shader
 			, pmaterial.getRoughness() );
 	}
 
-	sdw::Vec3 NoIblBackgroundModel::computeRefractions( sdw::Vec3 const & pwsIncident
+	sdw::RetVec3 NoIblBackgroundModel::computeRefractions( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
 		, sdw::Float const & prefractionRatio
 		, sdw::Vec3 const & ptransmission
@@ -84,7 +84,7 @@ namespace castor3d::shader
 			, pmaterial.getRoughness() );
 	}
 
-	sdw::Void NoIblBackgroundModel::mergeReflRefr( sdw::Vec3 const & pwsIncident
+	sdw::RetVoid NoIblBackgroundModel::mergeReflRefr( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
 		, sdw::Float const & prefractionRatio
 		, sdw::Vec3 const & ptransmission
@@ -154,7 +154,7 @@ namespace castor3d::shader
 			, prefraction );
 	}
 
-	sdw::Vec3 NoIblBackgroundModel::doComputeRefractions( sdw::Vec3 const & pwsIncident
+	sdw::RetVec3 NoIblBackgroundModel::doComputeRefractions( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
 		, sdw::CombinedImageCubeRgba32 const & pbackgroundMap
 		, sdw::Float const & prefractionRatio

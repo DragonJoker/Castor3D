@@ -59,24 +59,42 @@ namespace atmosphere_scattering
 			, set );
 	}
 
-	sdw::Vec3 AtmosphereBackgroundModel::computeReflections( sdw::Vec3 const & wsIncident
+	sdw::RetVec3 AtmosphereBackgroundModel::computeReflections( sdw::Vec3 const & wsIncident
 		, sdw::Vec3 const & wsNormal
 		, castor3d::shader::LightMaterial const & material
 		, sdw::CombinedImage2DRg32 const & brdf )
 	{
-		return vec3( 0.0_f );
+		if ( !m_computeReflections )
+		{
+			m_computeReflections = m_writer.implementFunction< sdw::Vec3 >( "c3d_atmbg_computeReflections"
+				, [&]()
+				{
+					m_writer.returnStmt( vec3( 0.0_f ) );
+				} );
+		}
+
+		return m_computeReflections();
 	}
 
-	sdw::Vec3 AtmosphereBackgroundModel::computeRefractions( sdw::Vec3 const & wsIncident
+	sdw::RetVec3 AtmosphereBackgroundModel::computeRefractions( sdw::Vec3 const & wsIncident
 		, sdw::Vec3 const & wsNormal
 		, sdw::Float const & refractionRatio
 		, sdw::Vec3 const & transmission
 		, castor3d::shader::LightMaterial const & material )
 	{
-		return vec3( 0.0_f );
+		if ( !m_computeRefractions )
+		{
+			m_computeRefractions = m_writer.implementFunction< sdw::Vec3 >( "c3d_atmbg_computeRefractions"
+				, [&]()
+				{
+					m_writer.returnStmt( vec3( 0.0_f ) );
+				} );
+		}
+
+		return m_computeRefractions();
 	}
 
-	sdw::Void AtmosphereBackgroundModel::mergeReflRefr( sdw::Vec3 const & wsIncident
+	sdw::RetVoid AtmosphereBackgroundModel::mergeReflRefr( sdw::Vec3 const & wsIncident
 		, sdw::Vec3 const & wsNormal
 		, sdw::Float const & refractionRatio
 		, sdw::Vec3 const & transmission
@@ -84,7 +102,15 @@ namespace atmosphere_scattering
 		, sdw::Vec3 & reflection
 		, sdw::Vec3 & refraction )
 	{
-		return sdw::Void{};
+		if ( !m_mergeReflRefr )
+		{
+			m_mergeReflRefr = m_writer.implementFunction< sdw::Void >( "c3d_atmbg_mergeReflRefr"
+				, [&]()
+				{
+				} );
+		}
+
+		return m_mergeReflRefr();
 	}
 
 	sdw::Vec3 AtmosphereBackgroundModel::getSunRadiance( sdw::Vec3 const & psunDir )

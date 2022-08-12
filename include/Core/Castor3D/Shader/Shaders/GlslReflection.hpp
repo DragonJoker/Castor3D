@@ -20,7 +20,8 @@ namespace castor3d::shader
 			, Utils & utils
 			, bool hasIblSupport );
 		C3D_API virtual ~ReflectionModel() = default;
-		C3D_API void computeDeferred( LightMaterial & material
+
+		C3D_API void computeCombined( LightMaterial & material
 			, Surface const & surface
 			, SceneData const & sceneData
 			, BackgroundModel & background
@@ -32,34 +33,25 @@ namespace castor3d::shader
 			, sdw::Vec3 & ambient
 			, sdw::Vec3 & reflected
 			, sdw::Vec3 & refracted );
-		C3D_API sdw::Vec3 computeForward( LightMaterial & material
+		C3D_API sdw::Vec3 computeReflections( LightMaterial & material
 			, Surface const & surface
 			, SceneData const & sceneData
 			, BackgroundModel & background
+			, sdw::UInt envMapIndex
 			, sdw::UInt const & reflection );
-		C3D_API sdw::Vec3 computeForward( LightMaterial & material
+		C3D_API sdw::Vec3 computeRefractions( LightMaterial & material
 			, Surface const & surface
 			, SceneData const & sceneData
 			, BackgroundModel & background
+			, sdw::UInt envMapIndex
 			, sdw::UInt const & refraction
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission );
-		C3D_API void computeForward( LightMaterial & material
-			, Surface const & surface
-			, SceneData const & sceneData
-			, BackgroundModel & background
-			, sdw::UInt const & reflection
-			, sdw::UInt const & refraction
-			, sdw::Float const & refractionRatio
-			, sdw::Vec3 const & transmission
-			, sdw::Vec3 & ambient
-			, sdw::Vec3 & reflected
-			, sdw::Vec3 & refracted );
-		C3D_API sdw::Float computeFresnel( LightMaterial & material
+		C3D_API sdw::RetFloat computeFresnel( LightMaterial & material
 			, Surface const & surface
 			, SceneData const & sceneData
 			, sdw::Float const & refractionRatio );
-		C3D_API sdw::Vec4 computeScreenSpace( MatrixData const & matrixData
+		C3D_API sdw::RetVec4 computeScreenSpace( MatrixData const & matrixData
 			, sdw::Vec3 const & viewPosition
 			, sdw::Vec3 const & worldNormal
 			, sdw::Vec2 const & texcoord
@@ -102,7 +94,7 @@ namespace castor3d::shader
 		*\param csHitPoint
 		*	Camera space location of the ray hit.
 		*/
-		sdw::Boolean traceScreenSpace( sdw::Vec3 csOrigin
+		sdw::RetBoolean traceScreenSpace( sdw::Vec3 csOrigin
 			, sdw::Vec3 csDirection
 			, sdw::Mat4 projectToPixelMatrix
 			, sdw::CombinedImage2DR32 csZBuffer
@@ -119,39 +111,21 @@ namespace castor3d::shader
 			, sdw::Vec3 & csHitPoint );
 
 	private:
-		sdw::Vec3 computeIncident( sdw::Vec3 const & wsPosition
+		sdw::RetVec3 computeIncident( sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & wsCamera )const;
-		sdw::Vec3 computeReflEnvMap( sdw::Vec3 const & wsIncident
-			, sdw::Vec3 const & wsNormal
-			, sdw::CombinedImageCubeRgba32 const & envMap
-			, LightMaterial const & material );
-		sdw::Vec3 computeRefrEnvMap( sdw::Vec3 const & wsIncident
-			, sdw::Vec3 const & wsNormal
-			, sdw::CombinedImageCubeRgba32 const & envMap
-			, sdw::Float const & refractionRatio
-			, sdw::Vec3 const & transmission
-			, LightMaterial & material );
-		sdw::Vec3 mergeReflRefrEnvMap( sdw::Vec3 const & wsIncident
-			, sdw::Vec3 const & wsNormal
-			, sdw::CombinedImageCubeRgba32 const & envMap
-			, sdw::Float const & refractionRatio
-			, sdw::Vec3 const & transmission
-			, LightMaterial & material
-			, sdw::Vec3 & reflection
-			, sdw::Vec3 & refraction );
-		sdw::Vec3 computeReflEnvMaps( sdw::Vec3 const & wsIncident
+		sdw::RetVec3 computeReflEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::UInt const & envMapIndex
 			, LightMaterial const & material );
-		sdw::Vec3 computeRefrEnvMaps( sdw::Vec3 const & wsIncident
+		sdw::RetVec3 computeRefrEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::UInt const & envMapIndex
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
 			, LightMaterial & material );
-		sdw::Vec3 mergeReflRefrEnvMaps( sdw::Vec3 const & wsIncident
+		sdw::RetVec3 mergeReflRefrEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::UInt const & envMapIndex
@@ -169,10 +143,7 @@ namespace castor3d::shader
 		{
 		}
 
-		void doDeclareMergeReflRefrEnvMap();
 		void doDeclareMergeReflRefrEnvMaps();
-		virtual void doDeclareComputeReflEnvMap() = 0;
-		virtual void doDeclareComputeRefrEnvMap() = 0;
 		virtual void doDeclareComputeReflEnvMaps() = 0;
 		virtual void doDeclareComputeRefrEnvMaps() = 0;
 
@@ -181,14 +152,7 @@ namespace castor3d::shader
 		C3D_API void declareComputeScreenSpace( MatrixData const & matrixData );
 		C3D_API void declareComputeFresnel();
 
-		C3D_API sdw::Vec3 doComputeRefrEnvMap( sdw::Vec3 const & wsIncident
-			, sdw::Vec3 const & wsNormal
-			, sdw::CombinedImageCubeRgba32 const & envMap
-			, sdw::Float const & refractionRatio
-			, sdw::Vec3 const & transmission
-			, sdw::Vec3 & albedo
-			, sdw::Float const & roughness );
-		C3D_API sdw::Vec3 doComputeRefrEnvMaps( sdw::Vec3 const & wsIncident
+		C3D_API sdw::RetVec3 doComputeRefrEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::UInt const & envMapIndex
@@ -232,31 +196,6 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InVec3
 			, sdw::InFloat > m_computeFresnel;
-
-		sdw::Function< sdw::Vec3
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InCombinedImageCubeRgba32
-			, sdw::InVec3
-			, sdw::InFloat > m_computeReflEnvMap;
-		sdw::Function< sdw::Vec3
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InCombinedImageCubeRgba32
-			, sdw::InFloat
-			, sdw::InVec3
-			, sdw::InOutVec3
-			, sdw::InFloat > m_computeRefrEnvMap;
-		sdw::Function< sdw::Vec3
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InCombinedImageCubeRgba32
-			, sdw::InFloat
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InFloat
-			, sdw::InOutVec3
-			, sdw::OutVec3 > m_mergeReflRefrEnvMap;
 
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
