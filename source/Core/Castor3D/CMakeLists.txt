@@ -15,6 +15,9 @@ endif ()
 if ( NOT DEFINED CASTOR_USE_DEFERRED_RENDERING )
 	option( CASTOR_USE_DEFERRED_RENDERING "Use deferred rendering for opaque objects" ON )
 endif ()
+if ( NOT DEFINED CASTOR_USE_VISIBILITY )
+	option( CASTOR_USE_VISIBILITY "Use visibility buffer when rendering opaque objects" ON )
+endif ()
 if ( NOT DEFINED CASTOR_USE_ALLOCATION_CALLBACKS )
 	option( CASTOR_USE_ALLOCATION_CALLBACKS "Use Vulkan allocation callbacks" OFF )
 endif ()
@@ -31,6 +34,7 @@ set( C3D_USE_DEFERRED 0 )
 set( C3D_USE_ALLOCCB 0 )
 set( C3D_USE_MESH 0 )
 set( C3D_USE_TASK 0 )
+set( C3D_USE_VISIBILITY 0 )
 
 if ( CASTOR_USE_GLSLANG )
 	set( C3D_USE_GLSLANG 1 )
@@ -42,6 +46,10 @@ endif ()
 
 if ( CASTOR_USE_DEFERRED_RENDERING )
 	set( C3D_USE_DEFERRED 1 )
+endif ()
+
+if ( CASTOR_USE_VISIBILITY )
+	set( C3D_USE_VISIBILITY 1 )
 endif ()
 
 if ( CASTOR_USE_ALLOCATION_CALLBACKS )
@@ -1203,6 +1211,26 @@ set( ${PROJECT_NAME}_HDR_FILES
 )
 source_group( "Header Files\\Render\\Technique\\Opaque" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
 source_group( "Source Files\\Render\\Technique\\Opaque" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Visibility/VisibilityReorderPass.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Visibility/VisibilityResolvePass.cpp
+)
+set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Visibility/VisibilityModule.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Visibility/VisibilityReorderPass.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Visibility/VisibilityResolvePass.hpp
+)
+set( ${PROJECT_NAME}_SRC_FILES
+	${${PROJECT_NAME}_SRC_FILES}
+	${${PROJECT_NAME}_FOLDER_SRC_FILES}
+)
+set( ${PROJECT_NAME}_HDR_FILES
+	${${PROJECT_NAME}_HDR_FILES}
+	${${PROJECT_NAME}_FOLDER_HDR_FILES}
+)
+source_group( "Header Files\\Render\\Technique\\Visibility" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
+source_group( "Source Files\\Render\\Technique\\Visibility" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Opaque/Lighting/DirectionalLightPass.cpp

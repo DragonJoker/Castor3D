@@ -30,6 +30,8 @@
 #include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/DeferredRendering.hpp"
+#include "Castor3D/Render/Technique/Visibility/VisibilityReorderPass.hpp"
+#include "Castor3D/Render/Technique/Visibility/VisibilityResolvePass.hpp"
 #include "Castor3D/Render/Technique/Transparent/TransparentPass.hpp"
 #include "Castor3D/Render/Technique/Transparent/TransparentPassResult.hpp"
 #include "Castor3D/Render/Technique/Transparent/WeightedBlendRendering.hpp"
@@ -59,7 +61,11 @@ namespace castor3d
 		using TransparentPassType = ForwardRenderTechniquePass;
 #endif
 #if C3D_UseDeferredRendering
+#	if C3D_UseVisibilityBuffer
+		using OpaquePassType = VisibilityResolvePass;
+#	else
 		using OpaquePassType = OpaquePass;
+#	endif
 #else
 		using OpaquePassType = ForwardRenderTechniquePass;
 #endif
@@ -446,6 +452,28 @@ namespace castor3d
 		, m_lpvConfigUbo{ m_device }
 		, m_llpvConfigUbo{ m_device }
 		, m_vctConfigUbo{ m_device }
+#if C3D_UseVisibilityBuffer
+		, m_materialsCounts1{ makeBuffer< uint32_t >( m_device
+			, getOwner()->getMaxPassTypeCount()
+			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, "MaterialsCounts1" ) }
+		, m_materialsCounts2{ makeBuffer< uint32_t >( m_device
+			, getOwner()->getMaxPassTypeCount()
+			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, "MaterialsCounts2" ) }
+		, m_materialsStarts{ makeBuffer< uint32_t >( m_device
+			, getOwner()->getMaxPassTypeCount()
+			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, "MaterialsStarts" ) }
+		, m_pixelsXY{ makeBuffer< castor::Point2ui >( m_device
+			, m_depth->getExtent().width * m_depth->getExtent().height
+			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, "PixelsXY" ) }
+#endif
 		, m_depthPassDecl{ &doCreateDepthPass( progress ) }
 		, m_depthRange{ makeBuffer< int32_t >( m_device
 			, 2u
@@ -497,6 +525,19 @@ namespace castor3d
 			, progress ) }
 #endif
 #if C3D_UseDeferredRendering
+#	if C3D_UseVisibilityBuffer
+		, m_visibilityReorder{ ( m_device.hasBindless()
+			? castor::makeUnique< VisibilityReorderPass >( m_renderTarget.getGraph().createPassGroup( "Opaque" )
+				, *m_depthPassDecl
+				, m_device
+				, *m_renderTarget.getScene()
+				, m_depthObj->sampledViewId
+				, *m_materialsCounts1
+				, *m_materialsCounts2
+				, *m_materialsStarts
+				, *m_pixelsXY )
+			: nullptr ) }
+#	endif
 		, m_opaquePassResult{ castor::makeUnique< OpaquePassResult >( getOwner()->getGraphResourceHandler()
 			, m_device
 			, m_depthObj
@@ -597,6 +638,9 @@ namespace castor3d
 #if C3D_UseDeferredRendering
 		m_deferredRendering.reset();
 		m_opaquePassResult.reset();
+#	if C3D_UseVisibilityBuffer
+		m_visibilityReorder.reset();
+#	endif
 #endif
 		m_llpvResult.clear();
 		m_lpvResult.reset();
@@ -1109,10 +1153,20 @@ namespace castor3d
 		auto previousPasses = doCreateRenderPasses( progress
 			, TechniquePassEvent::eBeforeOpaque
 			, &m_backgroundRenderer->getPass() );
+#if C3D_UseVisibilityBuffer
+		previousPasses.push_back( &m_visibilityReorder->getLastPass() );
+#endif
 		auto & graph = m_renderTarget.getGraph().createPassGroup( "Opaque" );
 		stepProgressBar( progress, "Creating opaque pass" );
 #if C3D_UseDeferredRendering
 		castor::String name = cuT( "Geometry" );
+#	if C3D_UseVisibilityBuffer
+		if ( m_device.hasBindless() )
+		{
+			name = cuT( "VisibilityResolve" );
+		}
+#	else
+#	endif
 #else
 		castor::String name = cuT( "Forward" );
 #endif
@@ -1122,11 +1176,32 @@ namespace castor3d
 				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBar( progress, "Initialising opaque pass" );
+				RenderNodesPassDesc renderPassDesc{ m_colour.getExtent(), m_matrixUbo, m_sceneUbo, m_renderTarget.getCuller() };
+				renderPassDesc.safeBand( true )
+					.meshShading( true );
 #if C3D_UseDeferredRendering
-				auto data2It = std::next( framePass.images.begin(), 2u );
+#	if C3D_UseVisibilityBuffer
+				if ( !VisibilityResolvePass::useCompute )
+				{
+					auto data2It = std::next( framePass.images.begin(), 1u );
+					auto data3It = std::next( data2It );
+					auto data4It = std::next( data3It );
+					auto data5It = std::next( data4It );
+					renderPassDesc.implicitAction( data2It->view(), crg::RecordContext::clearAttachment( *data2It ) )
+						.implicitAction( data3It->view(), crg::RecordContext::clearAttachment( *data3It ) )
+						.implicitAction( data4It->view(), crg::RecordContext::clearAttachment( *data4It ) )
+						.implicitAction( data5It->view(), crg::RecordContext::clearAttachment( *data5It ) );
+				}
+#	else
+				auto data2It = std::next( framePass.images.begin(), 1u );
 				auto data3It = std::next( data2It );
 				auto data4It = std::next( data3It );
 				auto data5It = std::next( data4It );
+				renderPassDesc.implicitAction( data2It->view(), crg::RecordContext::clearAttachment( *data2It ) )
+					.implicitAction( data3It->view(), crg::RecordContext::clearAttachment( *data3It ) )
+					.implicitAction( data4It->view(), crg::RecordContext::clearAttachment( *data4It ) )
+					.implicitAction( data5It->view(), crg::RecordContext::clearAttachment( *data5It ) );
+#	endif
 #endif
 				auto res = std::make_unique< rendtech::OpaquePassType >( this
 					, framePass
@@ -1138,16 +1213,10 @@ namespace castor3d
 #endif
 					, cuT( "Opaque" )
 					, name
-					, RenderNodesPassDesc{ m_colour.getExtent(), m_matrixUbo, m_sceneUbo, m_renderTarget.getCuller() }
-						.safeBand( true )
-						.meshShading( true )
 #if C3D_UseDeferredRendering
-						.implicitAction( data2It->view(), crg::RecordContext::clearAttachment( *data2It ) )
-						.implicitAction( data3It->view(), crg::RecordContext::clearAttachment( *data3It ) )
-						.implicitAction( data4It->view(), crg::RecordContext::clearAttachment( *data4It ) )
-						.implicitAction( data5It->view(), crg::RecordContext::clearAttachment( *data5It ) )
 					, *m_depthPass
 #endif
+					, std::move( renderPassDesc )
 					, RenderTechniquePassDesc{ false, getSsaoConfig() }
 						.ssao( m_ssao->getResult() )
 						.lpvConfigUbo( m_lpvConfigUbo )
@@ -1163,20 +1232,68 @@ namespace castor3d
 				return res;
 			} );
 		result.addDependencies( previousPasses );
+#if C3D_UseDeferredRendering
+		auto & opaquePassResult = *m_opaquePassResult;
+#	if C3D_UseVisibilityBuffer
+		if ( m_device.hasBindless() )
+		{
+			uint32_t index = 0u;
+			result.addInputStorageView( opaquePassResult[DsTexture::eData0].targetViewId
+				, index++ );
+			result.addInputStorageBuffer( { m_materialsCounts1->getBuffer(), "MaterialsCount" }
+				, index++
+				, 0u
+				, uint32_t( m_materialsCounts1->getBuffer().getSize() ) );
+			result.addInputStorageBuffer( { m_materialsStarts->getBuffer(), "MaterialsCount" }
+				, index++
+				, 0u
+				, uint32_t( m_materialsStarts->getBuffer().getSize() ) );
+			result.addInputStorageBuffer( { m_pixelsXY->getBuffer(), "MaterialsCount" }
+				, index++
+				, 0u
+				, uint32_t( m_pixelsXY->getBuffer().getSize() ) );
+
+			if constexpr ( VisibilityResolvePass::useCompute )
+			{
+				result.addOutputStorageView( opaquePassResult[DsTexture::eData2].targetViewId
+					, index++ );
+				result.addOutputStorageView( opaquePassResult[DsTexture::eData3].targetViewId
+					, index++ );
+				result.addOutputStorageView( opaquePassResult[DsTexture::eData4].targetViewId
+					, index++ );
+				result.addOutputStorageView( opaquePassResult[DsTexture::eData5].targetViewId
+					, index++ );
+			}
+			else
+			{
+				result.addInOutDepthStencilView( m_depth->targetViewId );
+				result.addOutputColourView( opaquePassResult[DsTexture::eData2].targetViewId
+					, getClearValue( DsTexture::eData2 ) );
+				result.addOutputColourView( opaquePassResult[DsTexture::eData3].targetViewId
+					, getClearValue( DsTexture::eData3 ) );
+				result.addOutputColourView( opaquePassResult[DsTexture::eData4].targetViewId
+					, getClearValue( DsTexture::eData4 ) );
+				result.addOutputColourView( opaquePassResult[DsTexture::eData5].targetViewId
+					, getClearValue( DsTexture::eData5 ) );
+			}
+		}
+		else
+#	endif
+		{
+			result.addInOutDepthStencilView( m_depth->targetViewId );
+			result.addOutputColourView( opaquePassResult[DsTexture::eData2].targetViewId
+				, getClearValue( DsTexture::eData2 ) );
+			result.addOutputColourView( opaquePassResult[DsTexture::eData3].targetViewId
+				, getClearValue( DsTexture::eData3 ) );
+			result.addOutputColourView( opaquePassResult[DsTexture::eData4].targetViewId
+				, getClearValue( DsTexture::eData4 ) );
+			result.addOutputColourView( opaquePassResult[DsTexture::eData5].targetViewId
+				, getClearValue( DsTexture::eData5 ) );
+		}
+#else
 		result.addDependency( m_ssao->getLastPass() );
 		result.addSampledView( m_ssao->getResult().sampledViewId, 0u );
 		result.addInOutDepthStencilView( m_depth->targetViewId );
-#if C3D_UseDeferredRendering
-		auto & opaquePassResult = *m_opaquePassResult;
-		result.addOutputColourView( opaquePassResult[DsTexture::eData2].targetViewId
-			, getClearValue( DsTexture::eData2 ) );
-		result.addOutputColourView( opaquePassResult[DsTexture::eData3].targetViewId
-			, getClearValue( DsTexture::eData3 ) );
-		result.addOutputColourView( opaquePassResult[DsTexture::eData4].targetViewId
-			, getClearValue( DsTexture::eData4 ) );
-		result.addOutputColourView( opaquePassResult[DsTexture::eData5].targetViewId
-			, getClearValue( DsTexture::eData5 ) );
-#else
 		result.addInOutColourView( m_colour.targetViewId );
 #endif
 		return result;
