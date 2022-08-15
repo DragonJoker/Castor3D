@@ -49,6 +49,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, castor::String const & category
 		, castor::String const & name
+		, RenderNodesPass const & depthPass
 		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
 		: RenderTechniqueNodesPass{ parent

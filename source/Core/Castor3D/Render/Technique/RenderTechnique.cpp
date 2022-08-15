@@ -1146,6 +1146,7 @@ namespace castor3d
 						.implicitAction( data3It->view(), crg::RecordContext::clearAttachment( *data3It ) )
 						.implicitAction( data4It->view(), crg::RecordContext::clearAttachment( *data4It ) )
 						.implicitAction( data5It->view(), crg::RecordContext::clearAttachment( *data5It ) )
+					, *m_depthPass
 #endif
 					, RenderTechniquePassDesc{ false, getSsaoConfig() }
 						.ssao( m_ssao->getResult() )
