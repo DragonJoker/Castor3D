@@ -88,16 +88,16 @@ namespace castor3d::shader
 	using InVertexSurface = VertexSurfaceT< ast::var::Flag::eShaderInput >;
 	using VertexSurface = VertexSurfaceT< ast::var::Flag::eNone >;
 
-	template< ast::var::Flag FlagT >
-	struct FragmentSurfaceT
+	template< typename TexcoordT, ast::var::Flag FlagT >
+	struct FragmentSurfaceUvT
 		: public sdw::StructInstance
 	{
 	public:
-		FragmentSurfaceT( sdw::ShaderWriter & writer
+		FragmentSurfaceUvT( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled );
 
-		SDW_DeclStructInstance( , FragmentSurfaceT );
+		SDW_DeclStructInstance( , FragmentSurfaceUvT );
 
 		static ast::type::IOStructPtr makeIOType( ast::type::TypesCache & cache
 			, SubmeshFlags submeshFlags
@@ -145,19 +145,21 @@ namespace castor3d::shader
 		sdw::Vec3 normal;
 		sdw::Vec3 tangent;
 		sdw::Vec3 bitangent;
-		sdw::Vec3 texture0;
-		sdw::Vec3 texture1;
-		sdw::Vec3 texture2;
-		sdw::Vec3 texture3;
+		TexcoordT texture0;
+		TexcoordT texture1;
+		TexcoordT texture2;
+		TexcoordT texture3;
 		sdw::Vec3 colour;
 		sdw::Array< sdw::Vec4 > passMultipliers;
 		sdw::Int nodeId;
 		sdw::Int vertexId;
 	};
 
+	template< ast::var::Flag FlagT >
+	using FragmentSurfaceT = FragmentSurfaceUvT< sdw::Vec3, FlagT >;
 	using OutVertexSurface = FragmentSurfaceT< ast::var::Flag::eShaderOutput >;
 	using InFragmentSurface = FragmentSurfaceT< ast::var::Flag::eShaderInput >;
-	using FragmentSurface = FragmentSurfaceT< ast::var::Flag::eNone >;
+	using DerivFragmentSurface = FragmentSurfaceUvT< DerivTex, ast::var::Flag::eNone >;
 }
 
 #include "GlslSurface.inl"
