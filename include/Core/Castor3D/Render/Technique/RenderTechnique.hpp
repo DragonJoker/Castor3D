@@ -15,6 +15,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Technique/SsaoPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaqueModule.hpp"
 #include "Castor3D/Render/Technique/Transparent/TransparentModule.hpp"
+#include "Castor3D/Render/Technique/Visibility/VisibilityModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelizeModule.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
@@ -327,6 +328,26 @@ namespace castor3d
 		{
 			return false;
 		}
+
+		ashes::Buffer< uint32_t > const & getMaterialsCounts()const
+		{
+			return *m_materialsCounts1;
+		}
+
+		ashes::Buffer< uint32_t > const & getMaterialsStarts()const
+		{
+			return *m_materialsStarts;
+		}
+
+		ashes::Buffer< castor::Point2ui > const & getPixelXY()const
+		{
+			return *m_pixelsXY;
+		}
+
+		OpaquePassResult const & getOpaqueResult()const
+		{
+			return *m_opaquePassResult;
+		}
 		/**@}*/
 
 	public:
@@ -377,6 +398,10 @@ namespace castor3d
 		LpvGridConfigUbo m_lpvConfigUbo;
 		LayeredLpvGridConfigUbo m_llpvConfigUbo;
 		VoxelizerUbo m_vctConfigUbo;
+		ashes::BufferPtr< uint32_t > m_materialsCounts1;
+		ashes::BufferPtr< uint32_t > m_materialsCounts2;
+		ashes::BufferPtr< uint32_t > m_materialsStarts;
+		ashes::BufferPtr< castor::Point2ui > m_pixelsXY;
 		crg::FramePass * m_depthPassDecl{};
 		DepthPass * m_depthPass{};
 		ashes::BufferPtr< int32_t > m_depthRange;
@@ -389,6 +414,7 @@ namespace castor3d
 		ShadowMapUPtr m_directionalShadowMap;
 		ShadowMapUPtr m_pointShadowMap;
 		ShadowMapUPtr m_spotShadowMap;
+		VisibilityReorderPassUPtr m_visibilityReorder;
 		OpaquePassResultUPtr m_opaquePassResult;
 		crg::FramePass * m_opaquePassDesc{};
 		RenderTechniquePass * m_opaquePass{};
