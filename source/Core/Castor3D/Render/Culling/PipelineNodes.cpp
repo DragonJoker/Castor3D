@@ -27,37 +27,19 @@ namespace castor3d
 			, VkDeviceSize morphTargetsOffset
 			, DataT const * dataPtr )
 		{
-			remFlag( programFlags, ProgramFlag::eAllOptional );
-			remFlag( passFlags, PassFlag::eAllOptional );
-			constexpr auto maxSubmeshSize = castor::getBitSize( uint32_t( SubmeshFlag::eAllBase ) );
-			constexpr auto maxProgramSize = castor::getBitSize( uint32_t( ProgramFlag::eAllBase ) );
-			constexpr auto maxPassIDSize = castor::getBitSize( MaxPassTypes );
-			constexpr auto maxPassSize = castor::getBitSize( uint32_t( PassFlag::eAllBase ) );
-			constexpr auto maxTexcoordSetSize = castor::getBitSize( MaxTextureCoordinatesSets );
-			constexpr auto maxTexturesSize = castor::getBitSize( MaxPassTextures );
-			constexpr auto maxTextureSize = castor::getBitSize( uint32_t( TextureFlag::eAll ) );
 			constexpr auto maxPassLayerSize = castor::getBitSize( MaxPassLayers );
 			constexpr auto maxTargetOffsetSize = 64 - maxPassLayerSize;
-			constexpr auto maxLoSize = maxSubmeshSize + maxProgramSize + maxPassIDSize + maxPassSize + maxTexcoordSetSize + maxTextureSize + maxTexturesSize;
-			static_assert( 64 >= maxLoSize );
-			auto offset = 0u;
-			PipelineBaseHash result{};
-			result.lo = uint64_t( submeshFlags ) << offset;
-			offset += maxSubmeshSize;
-			result.lo |= uint64_t( programFlags ) << offset;
-			offset += maxProgramSize;
-			result.lo |= uint64_t( passType ) << offset;
-			offset += maxPassIDSize;
-			result.lo |= uint64_t( passFlags ) << offset;
-			offset += maxPassSize;
-			result.lo |= uint64_t( maxTexcoordSet ) << offset;
-			offset += maxTexcoordSetSize;
-			result.lo |= uint64_t( texturesCount ) << offset;
-			offset += maxTexturesSize;
-			result.lo |= uint64_t( texturesFlags ) << offset;
 			CU_Require( passLayerIndex < MaxPassLayers );
 			CU_Require( ( morphTargetsOffset >> maxTargetOffsetSize ) == 0 );
 			auto hash = size_t( morphTargetsOffset );
+			PipelineBaseHash result{};
+			result.lo = getHash( submeshFlags
+				, programFlags
+				, passType
+				, passFlags
+				, maxTexcoordSet
+				, texturesCount
+				, texturesFlags );
 
 			if constexpr ( std::is_same_v< DataT, Submesh > )
 			{
@@ -79,6 +61,44 @@ namespace castor3d
 	}
 
 	//*********************************************************************************************
+
+	uint64_t getHash( SubmeshFlags submeshFlags
+		, ProgramFlags programFlags
+		, PassTypeID passType
+		, PassFlags passFlags
+		, uint32_t maxTexcoordSet
+		, uint32_t texturesCount
+		, TextureFlags texturesFlags )
+	{
+		constexpr auto maxSubmeshSize = castor::getBitSize( uint32_t( SubmeshFlag::eAllBase ) );
+		constexpr auto maxProgramSize = castor::getBitSize( uint32_t( ProgramFlag::eAllBase ) );
+		constexpr auto maxPassIDSize = castor::getBitSize( MaxPassTypes );
+		constexpr auto maxPassSize = castor::getBitSize( uint32_t( PassFlag::eAllBase ) );
+		constexpr auto maxTexcoordSetSize = castor::getBitSize( MaxTextureCoordinatesSets );
+		constexpr auto maxTexturesSize = castor::getBitSize( MaxPassTextures );
+		constexpr auto maxTextureSize = castor::getBitSize( uint32_t( TextureFlag::eAll ) );
+		constexpr auto maxSize = maxSubmeshSize + maxProgramSize + maxPassIDSize + maxPassSize + maxTexcoordSetSize + maxTextureSize + maxTexturesSize;
+		static_assert( 64 >= maxSize );
+
+		remFlag( programFlags, ProgramFlag::eAllOptional );
+		remFlag( passFlags, PassFlag::eAllOptional );
+		auto offset = 0u;
+		uint64_t result{};
+		result = uint64_t( submeshFlags ) << offset;
+		offset += maxSubmeshSize;
+		result |= uint64_t( programFlags ) << offset;
+		offset += maxProgramSize;
+		result |= uint64_t( passType ) << offset;
+		offset += maxPassIDSize;
+		result |= uint64_t( passFlags ) << offset;
+		offset += maxPassSize;
+		result |= uint64_t( maxTexcoordSet ) << offset;
+		offset += maxTexcoordSetSize;
+		result |= uint64_t( texturesCount ) << offset;
+		offset += maxTexturesSize;
+		result |= uint64_t( texturesFlags ) << offset;
+		return result;
+	}
 
 	PipelineBaseHash getPipelineBaseHash( RenderNodesPass const & renderPass
 		, Submesh const & data
