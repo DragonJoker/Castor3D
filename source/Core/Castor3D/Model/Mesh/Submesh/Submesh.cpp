@@ -252,20 +252,25 @@ namespace castor3d
 				remFlag( flags, SubmeshFlag::eVelocity );
 				m_sourceBufferOffset = device.geometryPools->getBuffer( getPointsCount()
 					, indexCount
-					, flags
-					, false );
+					, flags );
 
 				if ( isDynamic() )
 				{
+					ashes::BufferBase const * indexBuffer{};
+
+					if ( m_indexMapping )
+					{
+						indexBuffer = &m_sourceBufferOffset.getBuffer( SubmeshFlag::eIndex );
+					}
+
 					flags = m_submeshFlags;
 					remFlag( flags, SubmeshFlag::eSkin );
 
 					for ( auto & finalBufferOffset : m_finalBufferOffsets )
 					{
 						finalBufferOffset.second = device.geometryPools->getBuffer( getPointsCount()
-							, 0u // No index on transformed buffers
-							, flags
-							, true );
+							, indexBuffer
+							, flags );
 					}
 				}
 			}
@@ -296,7 +301,9 @@ namespace castor3d
 
 	VkDeviceSize Submesh::getVertexOffset( Geometry const & geometry )const
 	{
-		return getFinalBufferOffsets( geometry ).getFirstVertex< castor::Point4f >();
+		return m_sourceBufferOffset
+			? getFinalBufferOffsets( geometry ).getFirstVertex< castor::Point4f >()
+			: 0u;
 	}
 
 	VkDeviceSize Submesh::getIndexOffset()const
@@ -603,13 +610,19 @@ namespace castor3d
 			{
 				// Initialise only if the submesh itself is already initialised,
 				// because if it is not, the buffers will be initialised by the call to initialise().
+				ashes::BufferBase const * indexBuffer{};
+
+				if ( m_indexMapping )
+				{
+					indexBuffer = &m_sourceBufferOffset.getBuffer( SubmeshFlag::eIndex );
+				}
+
 				auto flags = m_submeshFlags;
 				remFlag( flags, SubmeshFlag::eSkin );
 				RenderDevice & device = getOwner()->getOwner()->getRenderSystem()->getRenderDevice();
 				it->second = device.geometryPools->getBuffer( getPointsCount()
-					, 0u // No index on transformed buffers
-					, flags
-					, true );
+					, indexBuffer
+					, flags );
 			}
 		}
 	}
