@@ -172,6 +172,111 @@ namespace castor3d
 
 	ObjectBufferOffset ObjectBufferPool::getBuffer( VkDeviceSize vertexCount
 		, VkDeviceSize indexCount
+		, SubmeshFlags submeshFlags )
+	{
+		auto result = doGetBuffer( vertexCount, indexCount, submeshFlags, false );
+
+		if ( indexCount && vertexCount )
+		{
+			m_indexBuffers.emplace( &result.getBuffer( SubmeshFlag::ePositions )
+				, &result.getBuffer( SubmeshFlag::eIndex ) );
+		}
+
+		return result;
+	}
+
+	ObjectBufferOffset ObjectBufferPool::getBuffer( VkDeviceSize vertexCount
+		, ashes::BufferBase const * indexBuffer
+		, SubmeshFlags submeshFlags )
+	{
+		auto result = doGetBuffer( vertexCount, 0u, submeshFlags, true );
+
+		if ( indexBuffer )
+		{
+			m_indexBuffers.emplace( &result.getBuffer( SubmeshFlag::ePositions )
+				, indexBuffer );
+		}
+
+		return result;
+	}
+
+	ObjectBufferPool::ModelBuffers const & ObjectBufferPool::getBuffers( ashes::BufferBase const & buffer )
+	{
+		ObjectBufferPool::ModelBuffers const * result{};
+		auto mit = std::find_if( m_buffers.begin()
+			, m_buffers.end()
+			, [&buffer, &result]( std::unordered_map< size_t, BufferArray >::value_type const & mapLookup )
+			{
+				auto bit = std::find_if( mapLookup.second.begin()
+					, mapLookup.second.end()
+					, [&buffer]( ModelBuffers const & lookup )
+					{
+						return &lookup.buffers[size_t( SubmeshData::ePositions )]->getBuffer().getBuffer() == &buffer;
+					} );
+
+				if ( bit != mapLookup.second.end() )
+				{
+					result = &( *bit );
+				}
+
+				return result != nullptr;
+			} );
+
+		if ( mit == m_buffers.end() )
+		{
+			CU_Exception( "Couldn't find buffer in pool" );
+		}
+
+		return *result;
+	}
+
+	ashes::BufferBase const & ObjectBufferPool::getIndexBuffer( ashes::BufferBase const & buffer )
+	{
+		auto it = m_indexBuffers.find( &buffer );
+
+		if ( it == m_indexBuffers.end() )
+		{
+			CU_Exception( "Couldn't find the index buffer linked to positions buffer." );
+		}
+
+		return *it->second;
+	}
+
+	void ObjectBufferPool::putBuffer( ObjectBufferOffset const & bufferOffset )
+	{
+		auto buffersIt = m_buffers.find( bufferOffset.hash );
+		CU_Require( buffersIt  != m_buffers.end() );
+		auto & buffers = buffersIt->second;
+		auto it = std::find_if( buffers.begin()
+			, buffers.end()
+			, [&bufferOffset]( ModelBuffers const & lookup )
+			{
+				bool result = true;
+
+				for ( uint32_t i = 0u; i < uint32_t( SubmeshData::eCount ); ++i )
+				{
+					if ( result && lookup.buffers[i] && bufferOffset.buffers[i].buffer )
+					{
+						result = &lookup.buffers[i]->getBuffer().getBuffer() == &bufferOffset.buffers[i].getBuffer();
+					}
+				}
+
+				return result;
+			} );
+		CU_Require( it != buffers.end() );
+
+		for ( uint32_t i = 0u; i < uint32_t( SubmeshData::eCount ); ++i )
+		{
+			if ( bufferOffset.buffers[i].buffer )
+			{
+				CU_Require( it->buffers[i] );
+				it->buffers[i]->deallocate( bufferOffset.buffers[i].chunk );
+			}
+		}
+	}
+
+	ObjectBufferOffset ObjectBufferPool::doGetBuffer( VkDeviceSize vertexCount
+		, VkDeviceSize indexCount
 		, SubmeshFlags submeshFlags
 		, bool isGpuComputed )
 	{
@@ -269,39 +374,6 @@ namespace castor3d
 		}
 
 		return result;
-	}
-
-	void ObjectBufferPool::putBuffer( ObjectBufferOffset const & bufferOffset )
-	{
-		auto buffersIt = m_buffers.find( bufferOffset.hash );
-		CU_Require( buffersIt  != m_buffers.end() );
-		auto & buffers = buffersIt->second;
-		auto it = std::find_if( buffers.begin()
-			, buffers.end()
-			, [&bufferOffset]( ModelBuffers const & lookup )
-			{
-				bool result = true;
-
-				for ( uint32_t i = 0u; i < uint32_t( SubmeshData::eCount ); ++i )
-				{
-					if ( result && lookup.buffers[i] && bufferOffset.buffers[i].buffer )
-					{
-						result = &lookup.buffers[i]->getBuffer().getBuffer() == &bufferOffset.buffers[i].getBuffer();
-					}
-				}
-
-				return result;
-			} );
-		CU_Require( it != buffers.end() );
-
-		for ( uint32_t i = 0u; i < uint32_t( SubmeshData::eCount ); ++i )
-		{
-			if ( bufferOffset.buffers[i].buffer )
-			{
-				CU_Require( it->buffers[i] );
-				it->buffers[i]->deallocate( bufferOffset.buffers[i].chunk );
-			}
-		}
 	}
 
 	ObjectBufferPool::BufferArray::iterator ObjectBufferPool::doFindBuffer( VkDeviceSize vertexCount

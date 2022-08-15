@@ -153,8 +153,44 @@ namespace castor3d
 		 */
 		C3D_API ObjectBufferOffset getBuffer( VkDeviceSize vertexCount
 			, VkDeviceSize indexCount
-			, SubmeshFlags submeshFlags
-			, bool isGpuComputed );
+			, SubmeshFlags submeshFlags );
+		/**
+		 *\~english
+		 *\brief		Retrieves a GPU buffer with the given size.
+		 *\param[in]	vertexCount		The wanted vertex count.
+		 *\param[in]	indexBuffer		The index buffer to link to the result.
+		 *\param[in]	submeshFlags	The components for which the result will have allocated buffers.
+		 *\param[in]	isGpuComputed	Tells if the result is GPU computed (in case of a dynamic submesh).
+		 *\return		The GPU buffer.
+		 *\~french
+		 *\brief		Récupère un tampon GPU avec la taille donnée.
+		 *\param[in]	vertexCount		Le nombre de sommets voulus.
+		 *\param[in]	indexBuffer		Le buffer d'indices à lier au résultat.
+		 *\param[in]	submeshFlags	Les composants pour lesquels le résultat aura un buffer alloué.
+		 *\param[in]	isGpuComputed	Dit si le résultat est calculé par le GPU (si le submesh est dynamique).
+		 *\return		Le tampon GPU.
+		 */
+		C3D_API ObjectBufferOffset getBuffer( VkDeviceSize vertexCount
+			, ashes::BufferBase const * indexBuffer
+			, SubmeshFlags submeshFlags );
+		/**
+		 *\~english
+		 *\param[in]	buffer	The positions buffer.
+		 *\return		The model buffers for the given positions buffer.
+		 *\~french
+		 *\param[in]	buffer	Le buffer de positions.
+		 *\return		Les buffers de modèle liés au buffer de positions donné.
+		 */
+		C3D_API ModelBuffers const & getBuffers( ashes::BufferBase const & buffer );
+		/**
+		 *\~english
+		 *\param[in]	buffer	The positions buffer.
+		 *\return		The index buffer linked to the given positions buffer.
+		 *\~french
+		 *\param[in]	buffer	Le buffer de positions.
+		 *\return		Le buffer d'indices lié buffer de positions donné.
+		 */
+		C3D_API ashes::BufferBase const & getIndexBuffer( ashes::BufferBase const & buffer );
 		/**
 		 *\~english
 		 *\brief		Releases a GPU buffer.
@@ -166,6 +202,10 @@ namespace castor3d
 		C3D_API void putBuffer( ObjectBufferOffset const & bufferOffset );
 
 	private:
+		C3D_API ObjectBufferOffset doGetBuffer( VkDeviceSize vertexCount
+			, VkDeviceSize indexCount
+			, SubmeshFlags submeshFlags
+			, bool isGpuComputed );
 		C3D_API BufferArray::iterator doFindBuffer( VkDeviceSize vertexCount
 			, VkDeviceSize indexCount
 			, BufferArray & array );
@@ -174,6 +214,7 @@ namespace castor3d
 		RenderDevice const & m_device;
 		castor::String m_debugName;
 		std::unordered_map< size_t, BufferArray > m_buffers;
+		std::unordered_map< ashes::BufferBase const * , ashes::BufferBase const * > m_indexBuffers;
 	};
 }
 
