@@ -62,10 +62,16 @@ namespace castor3d
 			C3D_API sdw::Vec3 getCurViewCenter()const;
 			C3D_API sdw::Vec3 getPrvViewCenter()const;
 			C3D_API void jitter( sdw::Vec4 & csPosition )const;
+			C3D_API sdw::Mat4 getInvViewProjMtx()const;
 
 			sdw::Mat4 const & getInvProjMtx()const
 			{
 				return m_invProjection;
+			}
+
+			sdw::Mat4 const & getProjMtx()const
+			{
+				return m_projection;
 			}
 
 			sdw::Vec4 getFrustumPlane( sdw::UInt index )const
