@@ -108,6 +108,15 @@ namespace castor3d::shader
 			, sdw::Vec3 const & materialAlbedo ) = 0;
 		C3D_API virtual std::unique_ptr< LightMaterial > declMaterial( std::string const & name
 			, bool enabled = true ) = 0;
+		C3D_API virtual void modifyMaterial( PassFlags const & passFlags
+			, TextureFlags const & textureFlags
+			, sdw::Vec4 const & sampled
+			, TextureConfigData const & config
+			, LightMaterial & lightMat )const = 0;
+		C3D_API virtual void updateMaterial( PassFlags const & passFlags
+			, TextureFlags const & textureFlags
+			, LightMaterial & lightMat
+			, sdw::Vec3 & emissive )const = 0;
 		C3D_API virtual ReflectionModelPtr getReflectionModel( uint32_t & envMapBinding
 			, uint32_t envMapSet )const = 0;
 		/**
@@ -280,7 +289,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & worldEye
 			, sdw::UInt const & receivesShadows
 			, OutputComponents & output ) = 0;
-		C3D_API virtual void computeMapContributions( PassFlags const & passFlags
+		C3D_API void computeMapContributions( PassFlags const & passFlags
 			, TextureFlags const & textureFlags
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
@@ -299,7 +308,7 @@ namespace castor3d::shader
 			, sdw::Float & transmittance
 			, LightMaterial & lightMat
 			, sdw::Vec3 & tangentSpaceViewPosition
-			, sdw::Vec3 & tangentSpaceFragPosition ) = 0;
+			, sdw::Vec3 & tangentSpaceFragPosition );
 		//\}
 		/**
 		*\name
@@ -321,7 +330,7 @@ namespace castor3d::shader
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
 			, sdw::UInt const & receivesShadows ) = 0;
-		C3D_API virtual void computeMapDiffuseContributions( PassFlags const & passFlags
+		C3D_API void computeMapDiffuseContributions( PassFlags const & passFlags
 			, TextureFlags const & textureFlags
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
@@ -334,7 +343,7 @@ namespace castor3d::shader
 			, sdw::Vec3 & emissive
 			, sdw::Float & opacity
 			, sdw::Float & occlusion
-			, LightMaterial & lightMat ) = 0;
+			, LightMaterial & lightMat );
 		//\}
 		//\}
 		/**

@@ -32,20 +32,10 @@ namespace toon::shader
 			, c3d::ShadowOptions shadowOptions
 			, c3d::SssProfiles const * sssProfiles
 			, bool enableVolumetric );
-		sdw::Vec3 combine( sdw::Vec3 const & directDiffuse
-			, sdw::Vec3 const & indirectDiffuse
-			, sdw::Vec3 const & directSpecular
-			, sdw::Vec3 const & directScattering
-			, sdw::Vec3 const & indirectSpecular
-			, sdw::Vec3 const & ambient
-			, sdw::Vec3 const & indirectAmbient
-			, sdw::Float const & ambientOcclusion
-			, sdw::Vec3 const & emissive
-			, sdw::Vec3 const & reflected
-			, sdw::Vec3 const & refracted
-			, sdw::Vec3 const & materialAlbedo )override;
+
 		std::unique_ptr< c3d::LightMaterial > declMaterial( std::string const & name
 			, bool enabled )override;
+
 		c3d::ReflectionModelPtr getReflectionModel( uint32_t & envMapBinding
 			, uint32_t envMapSet )const override;
 		/**
@@ -72,26 +62,6 @@ namespace toon::shader
 			, sdw::Vec3 const & worldEye
 			, sdw::UInt const & receivesShadows
 			, c3d::OutputComponents & output )override;
-		void computeMapContributions( castor3d::PassFlags const & passFlags
-			, castor3d::TextureFlags const & textureFlags
-			, c3d::TextureConfigurations const & textureConfigs
-			, c3d::TextureAnimations const & textureAnims
-			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-			, c3d::Material const & material
-			, sdw::Vec3 & texCoords0
-			, sdw::Vec3 & texCoords1
-			, sdw::Vec3 & texCoords2
-			, sdw::Vec3 & texCoords3
-			, sdw::Vec3 & normal
-			, sdw::Vec3 & tangent
-			, sdw::Vec3 & bitangent
-			, sdw::Vec3 & emissive
-			, sdw::Float & opacity
-			, sdw::Float & occlusion
-			, sdw::Float & transmittance
-			, c3d::LightMaterial & lightMat
-			, sdw::Vec3 & tangentSpaceViewPosition
-			, sdw::Vec3 & tangentSpaceFragPosition )override;
 		//\}
 		/**
 		*\name
@@ -113,20 +83,6 @@ namespace toon::shader
 			, c3d::Surface const & surface
 			, sdw::Vec3 const & worldEye
 			, sdw::UInt const & receivesShadows )override;
-		void computeMapDiffuseContributions( castor3d::PassFlags const & passFlags
-			, castor3d::TextureFlags const & textureFlags
-			, c3d::TextureConfigurations const & textureConfigs
-			, c3d::TextureAnimations const & textureAnims
-			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-			, c3d::Material const & material
-			, sdw::Vec3 & texCoords0
-			, sdw::Vec3 & texCoords1
-			, sdw::Vec3 & texCoords2
-			, sdw::Vec3 & texCoords3
-			, sdw::Vec3 & emissive
-			, sdw::Float & opacity
-			, sdw::Float & occlusion
-			, c3d::LightMaterial & lightMat )override;
 		//\}
 
 	private:
@@ -218,7 +174,7 @@ namespace toon::shader
 	};
 
 	class ToonPbrLightingModel
-		: public c3d::LightingModel
+		: public c3d::PbrLightingModel
 	{
 	public:
 		explicit ToonPbrLightingModel( sdw::ShaderWriter & writer
@@ -237,18 +193,6 @@ namespace toon::shader
 		std::unique_ptr< c3d::LightMaterial > declMaterial( std::string const & name
 			, bool enabled )override;
 
-		sdw::Vec3 combine( sdw::Vec3 const & directDiffuse
-			, sdw::Vec3 const & indirectDiffuse
-			, sdw::Vec3 const & directSpecular
-			, sdw::Vec3 const & directScattering
-			, sdw::Vec3 const & indirectSpecular
-			, sdw::Vec3 const & ambient
-			, sdw::Vec3 const & indirectAmbient
-			, sdw::Float const & ambientOcclusion
-			, sdw::Vec3 const & emissive
-			, sdw::Vec3 const & reflected
-			, sdw::Vec3 const & refracted
-			, sdw::Vec3 const & materialAlbedo )override;
 		c3d::ReflectionModelPtr getReflectionModel( uint32_t & envMapBinding
 			, uint32_t envMapSet )const override;
 		/**
@@ -275,26 +219,6 @@ namespace toon::shader
 			, sdw::Vec3 const & worldEye
 			, sdw::UInt const & receivesShadows
 			, c3d::OutputComponents & output )override;
-		void computeMapContributions( castor3d::PassFlags const & passFlags
-			, castor3d::TextureFlags const & textureFlags
-			, c3d::TextureConfigurations const & textureConfigs
-			, c3d::TextureAnimations const & textureAnims
-			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-			, c3d::Material const & material
-			, sdw::Vec3 & texCoords0
-			, sdw::Vec3 & texCoords1
-			, sdw::Vec3 & texCoords2
-			, sdw::Vec3 & texCoords3
-			, sdw::Vec3 & normal
-			, sdw::Vec3 & tangent
-			, sdw::Vec3 & bitangent
-			, sdw::Vec3 & emissive
-			, sdw::Float & opacity
-			, sdw::Float & occlusion
-			, sdw::Float & transmittanc
-			, c3d::LightMaterial & lightMat
-			, sdw::Vec3 & tangentSpaceViewPosition
-			, sdw::Vec3 & tangentSpaceFragPosition )override;
 		//\}
 		/**
 		*\name
@@ -316,24 +240,9 @@ namespace toon::shader
 			, c3d::Surface const & surface
 			, sdw::Vec3 const & worldEye
 			, sdw::UInt const & receivesShadows )override;
-		void computeMapDiffuseContributions( castor3d::PassFlags const & passFlags
-			, castor3d::TextureFlags const & textureFlags
-			, c3d::TextureConfigurations const & textureConfigs
-			, c3d::TextureAnimations const & textureAnims
-			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-			, c3d::Material const & material
-			, sdw::Vec3 & texCoords0
-			, sdw::Vec3 & texCoords1
-			, sdw::Vec3 & texCoords2
-			, sdw::Vec3 & texCoords3
-			, sdw::Vec3 & emissive
-			, sdw::Float & opacity
-			, sdw::Float & occlusion
-			, c3d::LightMaterial & lightMat )override;
 		//\}
 
 	public:
-		c3d::CookTorranceBRDF m_cookTorrance;
 		sdw::Function< sdw::Void
 			, c3d::InDirectionalLight
 			, InToonPbrLightMaterial

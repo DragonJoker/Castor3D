@@ -153,11 +153,12 @@ namespace castor3d::shader
 
 	sdw::UInt Material::getTexture( uint32_t idx )const
 	{
-		return ( idx < 4u
-			? textures0()[idx]
-			: ( idx < 8u
-				? textures1()[idx - 4u]
-				: 0_u ) );
+		return textures()[idx / 4u][idx % 4u];
+	}
+
+	sdw::UInt Material::getTexture( sdw::UInt const & idx )const
+	{
+		return textures()[idx / 4u][idx % 4u];
 	}
 
 	//*********************************************************************************************
@@ -912,9 +913,9 @@ namespace castor3d::shader
 							, textureAnims.getTextureAnimation( id ) );
 						auto texCoord = m_writer.declLocale( "texCoord" + name
 							, output.texCoord0().xy() );
-						config.transformUV( anim, texCoord );
+						texCoord = utils.transformUV( config, anim, texCoord );
 						auto sampledOpacity = m_writer.declLocale( "sampled" + name
-							, utils.sampleMap( passFlags, maps[id - 1_u], texCoord ) );
+							, utils.sampleMap( passFlags, maps[id - 1_u], texCoord, nullptr ) );
 						output.opacity() = config.getOpacity( sampledOpacity, output.opacity() );
 					}
 					FI;
@@ -945,22 +946,21 @@ namespace castor3d::shader
 		{
 			if ( ( textureFlags & TextureFlag::eGeometry ) != 0 )
 			{
-				for ( uint32_t index = 0u; index < textureFlags.size(); ++index )
+				FOR( m_writer, sdw::UInt, index, 0u, index < material.texturesCount(), ++index )
 				{
-					auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
-					auto id = m_writer.declLocale( "c3d_id" + name
+					auto id = m_writer.declLocale( "c3d_id"
 						, material.getTexture( index ) );
 
 					IF( m_writer, id > 0_u )
 					{
-						auto config = m_writer.declLocale( "config" + name
+						auto config = m_writer.declLocale( "config"
 							, textureConfigs.getTextureConfiguration( id ) );
 
 						IF( m_writer, config.isGeometry() )
 						{
-							auto anim = m_writer.declLocale( "anim" + name
+							auto anim = m_writer.declLocale( "anim"
 								, textureAnims.getTextureAnimation( id ) );
-							auto texcoord = m_writer.declLocale( "tex" + name
+							auto texcoord = m_writer.declLocale( "tex"
 								, textureConfigs.getTexcoord( config
 									, output.texCoord0()
 									, output.texCoord1()
@@ -969,7 +969,6 @@ namespace castor3d::shader
 							config.computeGeometryMapContribution( utils
 								, passFlags
 								, textureFlags
-								, name
 								, anim
 								, maps[id - 1_u]
 								, texcoord
@@ -990,6 +989,7 @@ namespace castor3d::shader
 					}
 					FI;
 				}
+				ROF;
 			}
 		}
 

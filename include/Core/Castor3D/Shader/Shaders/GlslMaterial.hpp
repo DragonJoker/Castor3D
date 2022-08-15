@@ -34,9 +34,8 @@ namespace castor3d::shader
 			, sdw::UIntField< "hasRefraction" >
 			, sdw::UIntField< "hasReflection" >
 			, sdw::FloatField< "bwAccumulationOperator" >
-			, sdw::UVec4Field< "textures0" >
-			, sdw::UVec4Field< "textures1" >
-			, sdw::UIntField< "textures" >
+			, sdw::UVec4ArrayField< "textures", 2u >
+			, sdw::UIntField< "texturesCount" >
 			, sdw::UIntField< "passTypeIndex" >
 			, sdw::UIntField< "lighting" >
 			, sdw::UIntField< "passCount" > >
@@ -117,6 +116,7 @@ namespace castor3d::shader
 			, sdw::UVec4 const & passMasks
 			, sdw::Array< sdw::Vec4 > & passMultipliers )const;
 		C3D_API sdw::UInt getTexture( uint32_t index )const;
+		C3D_API sdw::UInt getTexture( sdw::UInt const & index )const;
 
 	public:
 		auto colourDiv()const { return getMember< "colourDiv" >(); }
@@ -137,9 +137,8 @@ namespace castor3d::shader
 		auto hasRefraction()const { return getMember< "hasRefraction" >(); }
 		auto hasReflection()const { return getMember< "hasReflection" >(); }
 		auto bwAccumulationOperator()const { return getMember< "bwAccumulationOperator" >(); }
-		auto textures0()const { return getMember< "textures0" >(); }
-		auto textures1()const { return getMember< "textures1" >(); }
 		auto textures()const { return getMember< "textures" >(); }
+		auto texturesCount()const { return getMember< "texturesCount" >(); }
 		auto passTypeIndex()const { return getMember< "passTypeIndex" >(); }
 		auto lighting()const { return getMember< "lighting" >(); }
 		auto passCount()const { return getMember< "passCount" >(); }

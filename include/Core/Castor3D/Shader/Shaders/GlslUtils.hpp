@@ -57,7 +57,14 @@ namespace castor3d::shader
 			, sdw::Float const cosTheta );
 		C3D_API sdw::Vec4 sampleMap( PassFlags const & passFlags
 			, sdw::CombinedImage2DRgba32 const map
-			, sdw::Vec2 const texCoords );
+			, sdw::Vec2 const texCoords
+			, sdw::Float const * lod );
+		C3D_API sdw::RetVec2 transformUV( TextureConfigData const & config
+			, TextureAnimData const & anim
+			, sdw::Vec2 const uv );
+		C3D_API sdw::RetVec3 transformUVW( TextureConfigData const & config
+			, TextureAnimData const & anim
+			, sdw::Vec3 const uv );
 
 		C3D_API void swap( sdw::Float const A, sdw::Float const & B );
 		C3D_API sdw::RetFloat distanceSquared( sdw::Vec2 const A, sdw::Vec2 const & B );
@@ -223,6 +230,14 @@ namespace castor3d::shader
 		sdw::Function< sdw::Vec4
 			, sdw::InCombinedImage2DRgba32
 			, sdw::InVec2 > m_sampleUntiled;
+		sdw::Function< sdw::Vec2
+			, InTextureConfigData
+			, InTextureAnimData
+			, sdw::InVec2 > m_transformUV;
+		sdw::Function< sdw::Vec3
+			, InTextureConfigData
+			, InTextureAnimData
+			, sdw::InVec3 > m_transformUVW;
 	};
 }
 

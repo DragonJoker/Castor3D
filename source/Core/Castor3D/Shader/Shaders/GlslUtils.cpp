@@ -116,7 +116,7 @@ namespace castor3d::shader
 					, textureAnims.getTextureAnimation( sdw::UInt( textureIt.second.id ) ) );
 				auto texCoord = m_writer.declLocale( "c3d_texCoord" + name
 					, texCoords.xy() );
-				config.transformUV( anim, texCoord );
+				texCoord = transformUV( config, anim, texCoord );
 				auto sampled = m_writer.declLocale< sdw::Vec4 >( "c3d_sampled" + name
 					, maps[i].sample( texCoord ) );
 
@@ -168,11 +168,100 @@ namespace castor3d::shader
 
 	sdw::Vec4 Utils::sampleMap( PassFlags const & passFlags
 		, sdw::CombinedImage2DRgba32 const map
-		, sdw::Vec2 const texCoords )
+		, sdw::Vec2 const texCoords
+		, sdw::Float const * lod )
 	{
 		return ( checkFlag( passFlags, PassFlag::eUntile )
 			? sampleUntiled( map, texCoords )
-			: map.sample( texCoords ) );
+			: ( lod
+				? map.sample( texCoords, *lod )
+				: map.sample( texCoords ) ) );
+	}
+
+	sdw::RetVec2 Utils::transformUV( TextureConfigData const & pconfig
+		, TextureAnimData const & panim
+		, sdw::Vec2 const puv )
+	{
+		if ( !m_transformUV )
+		{
+			m_transformUV = m_writer.implementFunction< sdw::Vec2 >( "transformUV"
+				, [&]( TextureConfigData const & config
+					, TextureAnimData const & anim
+					, sdw::Vec2 uv )
+				{
+					uv = vec2( uv.x()
+						, mix( uv.y(), 1.0_f - uv.y(), config.fneedYI ) );
+					uv = scaleUV( config.texScl.xy(), uv );
+					uv = rotateUV( config.texRot.xy(), uv );
+					uv = translateUV( config.texTrn.xy(), uv );
+
+					IF( m_writer, config.isTrnfAnim )
+					{
+						uv = vec2( uv.x()
+							, mix( uv.y(), 1.0_f - uv.y(), config.fneedYI ) );
+						uv = scaleUV( anim.texScl.xy(), uv );
+						uv = rotateUV( anim.texRot.xy(), uv );
+						uv = translateUV( anim.texTrn.xy(), uv );
+					}
+					FI;
+
+					uv.x() = ( uv.x() + config.tleSet.x() ) / config.tleSet.z();
+					uv.y() = ( uv.y() + config.tleSet.y() ) / config.tleSet.w();
+
+					IF( m_writer, config.isTileAnim )
+					{
+						uv.x() += anim.tleSet.x() / anim.tleSet.z();
+						uv.y() += anim.tleSet.y() / anim.tleSet.w();
+					}
+					FI;
+
+					m_writer.returnStmt( uv );
+				}
+				, InTextureConfigData{ m_writer, "config" }
+				, InTextureAnimData{ m_writer, "anim" }
+				, sdw::InVec2{ m_writer, "uv" } );
+		}
+
+		return m_transformUV( pconfig, panim, puv );
+	}
+
+	sdw::RetVec3 Utils::transformUVW( TextureConfigData const & pconfig
+		, TextureAnimData const & panim
+		, sdw::Vec3 const puvw )
+	{
+		if ( !m_transformUVW )
+		{
+			m_transformUVW = m_writer.implementFunction< sdw::Vec3 >( "transformUVW"
+				, [&]( TextureConfigData const & config
+					, TextureAnimData const & anim
+					, sdw::Vec3 uvw )
+				{
+					uvw = vec3( uvw.x()
+						, mix( uvw.y(), 1.0_f - uvw.y(), config.fneedYI )
+						, uvw.z() );
+					uvw = scaleUV( config.texScl.xyz(), uvw );
+					uvw = rotateUV( config.texRot.xyz(), uvw );
+					uvw = translateUV( config.texTrn.xyz(), uvw );
+
+					IF( m_writer, config.isTrnfAnim )
+					{
+						uvw = vec3( uvw.x()
+							, mix( uvw.y(), 1.0_f - uvw.y(), config.fneedYI )
+							, uvw.z() );
+						uvw = scaleUV( anim.texScl.xyz(), uvw );
+						uvw = rotateUV( anim.texRot.xyz(), uvw );
+						uvw = translateUV( anim.texTrn.xyz(), uvw );
+					}
+					FI;
+
+					m_writer.returnStmt( uvw );
+				}
+				, InTextureConfigData{ m_writer, "config" }
+				, InTextureAnimData{ m_writer, "anim" }
+				, sdw::InVec3{ m_writer, "uvw" } );
+		}
+
+		return m_transformUVW( pconfig, panim, puvw );
 	}
 
 	void Utils::swap( sdw::Float const pA

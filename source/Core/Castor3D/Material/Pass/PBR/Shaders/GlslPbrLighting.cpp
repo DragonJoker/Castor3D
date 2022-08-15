@@ -18,60 +18,6 @@
 
 namespace castor3d::shader
 {
-	namespace pbrlgt
-	{
-		static void modifyMaterial( sdw::ShaderWriter & writer
-			, castor::String const & configName
-			, PassFlags const & passFlags
-			, TextureFlags const & textureFlags
-			, sdw::Vec4 const & sampled
-			, TextureConfigData const & config
-			, PbrLightMaterial & pbrLightMat )
-		{
-			config.applyAlbedo( textureFlags, sampled, pbrLightMat.albedo );
-			config.applySpecular( textureFlags, sampled, pbrLightMat.specular );
-
-			if ( checkFlag( textureFlags, TextureFlag::eGlossiness ) )
-			{
-				IF( writer, config.isGlossiness() )
-				{
-					auto gloss = writer.declLocale( "gloss" + configName
-						, LightMaterial::computeRoughness( pbrLightMat.roughness ) );
-					gloss = config.getGlossiness( sampled, gloss );
-					pbrLightMat.roughness = LightMaterial::computeRoughness( gloss );
-				}
-				FI;
-			}
-
-			config.applyMetalness( textureFlags, sampled, pbrLightMat.metalness );
-			config.applyRoughness( textureFlags, sampled, pbrLightMat.roughness );
-		}
-
-		static void updateMaterial( sdw::ShaderWriter & writer
-			, PassFlags const & passFlags
-			, TextureFlags const & textureFlags
-			, PbrLightMaterial & pbrLightMat
-			, sdw::Vec3 & emissive )
-		{
-			if ( checkFlag( textureFlags, TextureFlag::eMetalness )
-				&& !checkFlag( textureFlags, TextureFlag::eSpecular ) )
-			{
-				pbrLightMat.specular = LightMaterial::computeF0( pbrLightMat.albedo, pbrLightMat.metalness );
-			}
-
-			if ( checkFlag( textureFlags, TextureFlag::eSpecular )
-				&& !checkFlag( textureFlags, TextureFlag::eMetalness ) )
-			{
-				pbrLightMat.metalness = LightMaterial::computeMetalness( pbrLightMat.albedo, pbrLightMat.specular );
-			}
-
-			if ( !checkFlag( textureFlags, castor3d::TextureFlag::eEmissive ) )
-			{
-				emissive *= pbrLightMat.albedo;
-			}
-		}
-	}
-
 	PbrLightingModel::PbrLightingModel( sdw::ShaderWriter & writer
 		, Utils & utils
 		, ShadowOptions shadowOptions
@@ -109,6 +55,57 @@ namespace castor3d::shader
 		, bool enabled )
 	{
 		return m_writer.declDerivedLocale< LightMaterial, PbrLightMaterial >( name, enabled );
+	}
+
+	void PbrLightingModel::modifyMaterial( PassFlags const & passFlags
+		, TextureFlags const & textureFlags
+		, sdw::Vec4 const & sampled
+		, TextureConfigData const & config
+		, LightMaterial & lightMat )const
+	{
+		auto & pbrLightMat = static_cast< PbrLightMaterial & >( lightMat );
+		config.applyAlbedo( textureFlags, sampled, pbrLightMat.albedo );
+		config.applySpecular( textureFlags, sampled, pbrLightMat.specular );
+
+		if ( checkFlag( textureFlags, TextureFlag::eGlossiness ) )
+		{
+			IF( m_writer, config.isGlossiness() )
+			{
+				auto gloss = m_writer.declLocale( "gloss"
+					, LightMaterial::computeRoughness( pbrLightMat.roughness ) );
+				gloss = config.getGlossiness( sampled, gloss );
+				pbrLightMat.roughness = LightMaterial::computeRoughness( gloss );
+			}
+			FI;
+		}
+
+		config.applyMetalness( textureFlags, sampled, pbrLightMat.metalness );
+		config.applyRoughness( textureFlags, sampled, pbrLightMat.roughness );
+	}
+
+	void PbrLightingModel::updateMaterial( PassFlags const & passFlags
+		, TextureFlags const & textureFlags
+		, LightMaterial & lightMat
+		, sdw::Vec3 & emissive )const
+	{
+		auto & pbrLightMat = static_cast< PbrLightMaterial & >( lightMat );
+
+		if ( checkFlag( textureFlags, TextureFlag::eMetalness )
+			&& !checkFlag( textureFlags, TextureFlag::eSpecular ) )
+		{
+			pbrLightMat.specular = LightMaterial::computeF0( pbrLightMat.albedo, pbrLightMat.metalness );
+		}
+
+		if ( checkFlag( textureFlags, TextureFlag::eSpecular )
+			&& !checkFlag( textureFlags, TextureFlag::eMetalness ) )
+		{
+			pbrLightMat.metalness = LightMaterial::computeMetalness( pbrLightMat.albedo, pbrLightMat.specular );
+		}
+
+		if ( !checkFlag( textureFlags, castor3d::TextureFlag::eEmissive ) )
+		{
+			emissive *= pbrLightMat.albedo;
+		}
 	}
 
 	sdw::Vec3 PbrLightingModel::combine( sdw::Vec3 const & directDiffuse
@@ -483,97 +480,6 @@ namespace castor3d::shader
 			, pparentOutput );
 	}
 
-	void PbrLightingModel::computeMapContributions( PassFlags const & passFlags
-		, TextureFlags const & textureFlags
-		, TextureConfigurations const & textureConfigs
-		, TextureAnimations const & textureAnims
-		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, shader::Material const & material
-		, sdw::Vec3 & texCoords0
-		, sdw::Vec3 & texCoords1
-		, sdw::Vec3 & texCoords2
-		, sdw::Vec3 & texCoords3
-		, sdw::Vec3 & normal
-		, sdw::Vec3 & tangent
-		, sdw::Vec3 & bitangent
-		, sdw::Vec3 & emissive
-		, sdw::Float & opacity
-		, sdw::Float & occlusion
-		, sdw::Float & transmittance
-		, LightMaterial & lightMat
-		, sdw::Vec3 & tangentSpaceViewPosition
-		, sdw::Vec3 & tangentSpaceFragPosition )
-	{
-		auto & pbrLightMat = static_cast< PbrLightMaterial & >( lightMat );
-
-		if ( !textureConfigs.isEnabled() )
-		{
-			pbrlgt::updateMaterial( m_writer
-				, passFlags
-				, textureFlags
-				, pbrLightMat
-				, emissive );
-			return;
-		}
-
-		for ( uint32_t index = 0u; index < textureFlags.size(); ++index )
-		{
-			auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
-			auto id = m_writer.declLocale( "c3d_id" + name
-				, material.getTexture( index ) );
-
-			IF( m_writer, id > 0_u )
-			{
-				auto config = m_writer.declLocale( "config" + name
-					, textureConfigs.getTextureConfiguration( id ) );
-				auto anim = m_writer.declLocale( "anim" + name
-					, textureAnims.getTextureAnimation( id ) );
-				auto texcoord = m_writer.declLocale( "tex" + name
-					, textureConfigs.getTexcoord( config
-						, texCoords0
-						, texCoords1
-						, texCoords2
-						, texCoords3 ) );
-				auto sampled = config.computeCommonMapContribution( m_utils
-					, passFlags
-					, textureFlags
-					, name
-					, anim
-					, maps[id - 1_u]
-					, texcoord
-					, emissive
-					, opacity
-					, occlusion
-					, transmittance
-					, normal
-					, tangent
-					, bitangent
-					, tangentSpaceViewPosition
-					, tangentSpaceFragPosition );
-				textureConfigs.setTexcoord( config
-					, texcoord
-					, texCoords0
-					, texCoords1
-					, texCoords2
-					, texCoords3 );
-				pbrlgt::modifyMaterial( m_writer
-					, name
-					, passFlags
-					, textureFlags
-					, sampled
-					, config
-					, pbrLightMat );
-			}
-			FI;
-		}
-
-		pbrlgt::updateMaterial( m_writer
-			, passFlags
-			, textureFlags
-			, pbrLightMat
-			, emissive );
-	}
-
 	sdw::Vec3 PbrLightingModel::computeDiffuse( DirectionalLight const & plight
 		, LightMaterial const & pmaterial
 		, Surface const & psurface
@@ -778,85 +684,6 @@ namespace castor3d::shader
 			, psurface
 			, pworldEye
 			, preceivesShadows );
-	}
-
-	void PbrLightingModel::computeMapDiffuseContributions( PassFlags const & passFlags
-		, TextureFlags const & textureFlags
-		, TextureConfigurations const & textureConfigs
-		, TextureAnimations const & textureAnims
-		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, shader::Material const & material
-		, sdw::Vec3 & texCoords0
-		, sdw::Vec3 & texCoords1
-		, sdw::Vec3 & texCoords2
-		, sdw::Vec3 & texCoords3
-		, sdw::Vec3 & emissive
-		, sdw::Float & opacity
-		, sdw::Float & occlusion
-		, LightMaterial & lightMat )
-	{
-		auto & pbrLightMat = static_cast< PbrLightMaterial & >( lightMat );
-
-		if ( !textureConfigs.isEnabled() )
-		{
-			pbrlgt::updateMaterial( m_writer
-				, passFlags
-				, textureFlags
-				, pbrLightMat
-				, emissive );
-			return;
-		}
-
-		for ( uint32_t index = 0u; index < textureFlags.size(); ++index )
-		{
-			auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
-			auto id = m_writer.declLocale( "c3d_id" + name
-				, material.getTexture( index ) );
-
-			IF( m_writer, id > 0_u )
-			{
-				auto config = m_writer.declLocale( "config" + name
-					, textureConfigs.getTextureConfiguration( id ) );
-				auto anim = m_writer.declLocale( "anim" + name
-					, textureAnims.getTextureAnimation( id ) );
-				auto texcoord = m_writer.declLocale( "tex" + name
-					, textureConfigs.getTexcoord( config
-						, texCoords0
-						, texCoords1
-						, texCoords2
-						, texCoords3 ) );
-				auto sampled = config.computeCommonMapVoxelContribution( m_utils
-					, passFlags
-					, textureFlags
-					, name
-					, anim
-					, maps[id - 1_u]
-					, texcoord
-					, emissive
-					, opacity
-					, occlusion );
-				textureConfigs.setTexcoord( config
-					, texcoord
-					, texCoords0
-					, texCoords1
-					, texCoords2
-					, texCoords3 );
-				pbrlgt::modifyMaterial( m_writer
-					, name
-					, passFlags
-					, textureFlags
-					, sampled
-					, config
-					, pbrLightMat );
-			}
-			FI;
-		}
-
-		pbrlgt::updateMaterial( m_writer
-			, passFlags
-			, textureFlags
-			, pbrLightMat
-			, emissive );
 	}
 
 	//***********************************************************************************************
