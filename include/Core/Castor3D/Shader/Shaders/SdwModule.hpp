@@ -96,8 +96,8 @@ namespace castor3d::shader
 
 	template< ast::var::Flag FlagT >
 	struct SurfaceT;
-	template< ast::var::Flag FlagT >
-	struct FragmentSurfaceT;
+	template< typename TexcoordT, ast::var::Flag FlagT >
+	struct FragmentSurfaceUvT;
 	template< ast::var::Flag FlagT >
 	struct VertexSurfaceT;
 
