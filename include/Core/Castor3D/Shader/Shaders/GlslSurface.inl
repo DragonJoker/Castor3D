@@ -192,6 +192,55 @@ namespace castor3d::shader
 		return result;
 	}
 
+	template< ast::var::Flag FlagT >
+	ast::type::BaseStructPtr VertexSurfaceT< FlagT >::makeType( ast::type::TypesCache & cache )
+	{
+		auto result = cache.getStruct( ast::type::MemoryLayout::eC, "C3D_VertSurface" );
+
+		if ( result->empty() )
+		{
+			/**
+			*	Base
+			*/
+			//@{
+			result->declMember( "position", ast::type::Kind::eVec4F
+				, ast::type::NotArray );
+			result->declMember( "normal", ast::type::Kind::eVec3F
+				, ast::type::NotArray );
+			result->declMember( "tangent", ast::type::Kind::eVec3F
+				, ast::type::NotArray );
+			result->declMember( "texcoord0", ast::type::Kind::eVec3F
+				, ast::type::NotArray );
+			result->declMember( "texcoord1", ast::type::Kind::eVec3F
+				, ast::type::NotArray );
+			result->declMember( "texcoord2", ast::type::Kind::eVec3F
+				, ast::type::NotArray );
+			result->declMember( "texcoord3", ast::type::Kind::eVec3F
+				, ast::type::NotArray );
+			result->declMember( "colour", ast::type::Kind::eVec3F
+				, ast::type::NotArray );
+			result->declMember( "passMasks", ast::type::Kind::eVec4U
+				, ast::type::NotArray );
+			//@}
+			/**
+			*	Velocity
+			*/
+			//@{
+			result->declMember( "velocity", ast::type::Kind::eVec3F
+				, ast::type::NotArray );
+			//@}
+			/**
+			*	Instantiation
+			*/
+			//@{
+			result->declMember( "objectIds", ast::type::Kind::eVec4U
+				, ast::type::NotArray );
+			//@}
+		}
+
+		return result;
+	}
+
 	//*****************************************************************************************
 
 	template< ast::var::Flag FlagT >

@@ -180,7 +180,7 @@ namespace castor3d
 					, in.texture1
 					, in.texture2
 					, in.texture3
-					, 1.0_f
+					, 1.0_f // opa
 					, normalize( in.normal )
 					, normalize( in.tangent )
 					, normalize( in.bitangent )
@@ -189,13 +189,13 @@ namespace castor3d
 					, ( m_ssao
 						? c3d_mapOcclusion.fetch( ivec2( in.fragCoord.xy() ), 0_i )
 						: 1.0_f )
-					, 1.0_f
-					, vec3( 1.0_f )
-					, vec3( 1.0_f )
-					, 1.0_f
-					, 0_u
-					, 0_u
-					, 1.0_f };
+					, 1.0_f // trn
+					, vec3( 1.0_f ) // ems
+					, vec3( 1.0_f ) // trs
+					, 1.0_f // rfr
+					, 0_u // hrr 
+					, 0_u // hrl
+					, 1.0_f }; // acc
 				auto [material, lightMat] = materials.blendMaterials( utils
 					, m_mode == RenderMode::eTransparentOnly
 					, ( m_mode == RenderMode::eTransparentOnly

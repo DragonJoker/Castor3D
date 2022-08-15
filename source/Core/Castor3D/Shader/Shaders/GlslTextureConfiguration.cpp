@@ -103,7 +103,13 @@ namespace castor3d
 			, sdw::Vec3 & uvw )const
 		{
 			uvw = utils.transformUVW( *this, anim, uvw );
+		}
 
+		void TextureConfigData::transformUV( Utils & utils
+			, TextureAnimData const & anim
+			, DerivTex & uv )const
+		{
+			uv.uv() = utils.transformUV( *this, anim, uv.uv() );
 		}
 
 		sdw::Float TextureConfigData::getGlossiness( sdw::Vec4 const & sampled
