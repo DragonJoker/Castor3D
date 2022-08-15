@@ -58,36 +58,38 @@ namespace castor3d
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 
-			C3D_API void computeGeometryMapContribution( Utils &  utils
+			template< typename TexcoordT >
+			void computeGeometryMapContribution( Utils &  utils
 				, PassFlags const & passFlags
 				, TextureFlags const & textureFlags
-				, std::string const & name
 				, shader::TextureAnimData const & anim
 				, sdw::CombinedImage2DRgba32 const & map
-				, sdw::Vec3 & texCoords
+				, TexcoordT & texCoords
 				, sdw::Float & opacity
 				, sdw::Vec3 & tangentSpaceViewPosition
-				, sdw::Vec3 & tangentSpaceFragPosition );
-			C3D_API void computeGeometryMapContribution( Utils &  utils
+				, sdw::Vec3 & tangentSpaceFragPosition
+				, sdw::Float const * lod = nullptr );
+			template< typename TexcoordT >
+			void computeGeometryMapContribution( Utils &  utils
 				, PassFlags const & passFlags
 				, TextureFlags const & textureFlags
-				, std::string const & name
 				, shader::TextureAnimData const & anim
 				, sdw::CombinedImage2DRgba32 const & map
-				, sdw::Vec3 & texCoords
+				, TexcoordT & texCoords
 				, sdw::Float & opacity
 				, sdw::Vec3 & normal
 				, sdw::Vec3 & tangent
 				, sdw::Vec3 & bitangent
 				, sdw::Vec3 & tangentSpaceViewPosition
-				, sdw::Vec3 & tangentSpaceFragPosition );
-			C3D_API sdw::Vec4 computeCommonMapContribution( Utils & utils
+				, sdw::Vec3 & tangentSpaceFragPosition
+				, sdw::Float const * lod = nullptr );
+			template< typename TexcoordT >
+			sdw::Vec4 computeCommonMapContribution( Utils & utils
 				, PassFlags const & passFlags
 				, TextureFlags const & textureFlags
-				, std::string const & name
 				, shader::TextureAnimData const & anim
 				, sdw::CombinedImage2DRgba32 const & map
-				, sdw::Vec3 const & texCoords
+				, TexcoordT & texCoords
 				, sdw::Vec3 & emissive
 				, sdw::Float & opacity
 				, sdw::Float & occlusion
@@ -96,21 +98,25 @@ namespace castor3d
 				, sdw::Vec3 & tangent
 				, sdw::Vec3 & bitangent
 				, sdw::Vec3 & tangentSpaceViewPosition
-				, sdw::Vec3 & tangentSpaceFragPosition );
-			C3D_API sdw::Vec4 computeCommonMapVoxelContribution( Utils & utils
+				, sdw::Vec3 & tangentSpaceFragPosition
+				, sdw::Float const * lod = nullptr );
+			template< typename TexcoordT >
+			sdw::Vec4 computeCommonMapVoxelContribution( Utils & utils
 				, PassFlags const & passFlags
 				, TextureFlags const & textureFlags
-				, std::string const & name
 				, shader::TextureAnimData const & anim
 				, sdw::CombinedImage2DRgba32 const & map
-				, sdw::Vec3 const & texCoords
+				, TexcoordT & texCoords
 				, sdw::Vec3 & emissive
 				, sdw::Float & opacity
-				, sdw::Float & occlusion );
+				, sdw::Float & occlusion
+				, sdw::Float const * lod = nullptr );
 
-			C3D_API void transformUV( TextureAnimData const & config
+			C3D_API void transformUV( Utils & utils
+				, TextureAnimData const & anim
 				, sdw::Vec2 & uv )const;
-			C3D_API void transformUVW( TextureAnimData const & config
+			C3D_API void transformUVW( Utils & utils
+				, TextureAnimData const & anim
 				, sdw::Vec3 & uvw )const;
 
 			C3D_API sdw::Float getGlossiness( sdw::Vec4 const & sampled
@@ -248,14 +254,27 @@ namespace castor3d
 					&& trsEnbl == 0.0_f;
 			}
 
+			sdw::Vec2 getUv( sdw::Vec3 const & uvw )const
+			{
+				return uvw.xy();
+			}
+
+			sdw::Vec2 toUv( sdw::Vec3 const & uvw )const
+			{
+				return uvw.xy();
+			}
+
+			void setUv( sdw::Vec3 & lhs
+				, sdw::Vec2 const & rhs )const
+			{
+				lhs.xy() = rhs;
+			}
+
 		private:
 			sdw::Float getFloat( sdw::Vec4 const & sampled
 				, sdw::Float const & mask )const;
 			sdw::Vec3 getVec3( sdw::Vec4 const & sampled
 				, sdw::Float const & mask )const;
-			void convertUV( sdw::Vec2 & uv )const;
-			void convertUVW( sdw::Vec3 & uvw )const;
-			void convertToTile( sdw::Vec2 & uv )const;
 
 		private:
 			using sdw::StructInstance::getMember;
@@ -316,52 +335,46 @@ namespace castor3d
 				, uint32_t binding
 				, uint32_t set
 				, bool enable = true );
-			C3D_API void computeGeometryMapContributions( Utils & utils
+			template< typename TexcoordT >
+			void computeGeometryMapContributions( Utils & utils
 				, PassFlags const & passFlags
 				, TextureFlags const & textureFlags
 				, TextureAnimations const & textureAnims
 				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 				, shader::Material const & material
-				, sdw::Vec3 & texCoords0
-				, sdw::Vec3 & texCoords1
-				, sdw::Vec3 & texCoords2
-				, sdw::Vec3 & texCoords3
+				, TexcoordT & texCoords0
+				, TexcoordT & texCoords1
+				, TexcoordT & texCoords2
+				, TexcoordT & texCoords3
 				, sdw::Float & opacity
 				, sdw::Vec3 & tangentSpaceViewPosition
 				, sdw::Vec3 & tangentSpaceFragPosition )const;
-			C3D_API sdw::Vec3 getTexcoord( TextureConfigData const & data
-				, sdw::Vec3 const & texCoords0
-				, sdw::Vec3 const & texCoords1
-				, sdw::Vec3 const & texCoords2
-				, sdw::Vec3 const & texCoords3 )const;
-			C3D_API void setTexcoord( TextureConfigData const & data
-				, sdw::Vec3 const & value
-				, sdw::Vec3 & texCoords0
-				, sdw::Vec3 & texCoords1
-				, sdw::Vec3 & texCoords2
-				, sdw::Vec3 & texCoords3 )const;
+			template< typename TexcoordT >
+			TexcoordT getTexcoord( TextureConfigData const & data
+				, TexcoordT const & texCoords0
+				, TexcoordT const & texCoords1
+				, TexcoordT const & texCoords2
+				, TexcoordT const & texCoords3 )const;
+			template< typename TexcoordT >
+			void setTexcoord( TextureConfigData const & data
+				, TexcoordT const & value
+				, TexcoordT & texCoords0
+				, TexcoordT & texCoords1
+				, TexcoordT & texCoords2
+				, TexcoordT & texCoords3 )const;
 
 			TextureConfigData getTextureConfiguration( sdw::UInt const & index )const
 			{
 				return BufferT< TextureConfigData >::getData( index );
 			}
 
+			void setLod( sdw::Float const & lod )
+			{
+				m_lod = &lod;
+			}
+
 		private:
-			mutable sdw::Function< sdw::Vec3
-				, sdw::InUInt
-				, sdw::InVec3
-				, sdw::InVec3
-				, sdw::InVec3
-				, sdw::InVec3 > m_getTexcoord4;
-			mutable sdw::Function< sdw::Vec3
-				, sdw::InUInt
-				, sdw::InVec3
-				, sdw::InVec3
-				, sdw::InVec3 > m_getTexcoord3;
-			mutable sdw::Function< sdw::Vec3
-				, sdw::InUInt
-				, sdw::InVec3
-				, sdw::InVec3 > m_getTexcoord2;
+			sdw::Float const * m_lod{};
 			mutable sdw::Function< sdw::Void
 				, sdw::InUInt
 				, sdw::InVec3
@@ -383,5 +396,7 @@ namespace castor3d
 		};
 	}
 }
+
+#include "GlslTextureConfiguration.inl"
 
 #endif

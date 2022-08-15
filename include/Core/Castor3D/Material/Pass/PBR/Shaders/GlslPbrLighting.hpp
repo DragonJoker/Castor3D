@@ -31,6 +31,15 @@ namespace castor3d::shader
 
 		C3D_API std::unique_ptr< LightMaterial > declMaterial( std::string const & name
 			, bool enabled )override;
+		C3D_API void modifyMaterial( PassFlags const & passFlags
+			, TextureFlags const & textureFlags
+			, sdw::Vec4 const & sampled
+			, TextureConfigData const & config
+			, LightMaterial & lightMat )const override;
+		C3D_API void updateMaterial( PassFlags const & passFlags
+			, TextureFlags const & textureFlags
+			, LightMaterial & lightMat
+			, sdw::Vec3 & emissive )const override;
 
 		C3D_API sdw::Vec3 combine( sdw::Vec3 const & directDiffuse
 			, sdw::Vec3 const & indirectDiffuse
@@ -70,26 +79,6 @@ namespace castor3d::shader
 			, sdw::Vec3 const & worldEye
 			, sdw::UInt const & receivesShadows
 			, OutputComponents & output )override;
-		C3D_API void computeMapContributions( PassFlags const & passFlags
-			, TextureFlags const & textureFlags
-			, TextureConfigurations const & textureConfigs
-			, TextureAnimations const & textureAnims
-			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-			, shader::Material const & material
-			, sdw::Vec3 & texCoords0
-			, sdw::Vec3 & texCoords1
-			, sdw::Vec3 & texCoords2
-			, sdw::Vec3 & texCoords3
-			, sdw::Vec3 & normal
-			, sdw::Vec3 & tangent
-			, sdw::Vec3 & bitangent
-			, sdw::Vec3 & emissive
-			, sdw::Float & opacity
-			, sdw::Float & occlusion
-			, sdw::Float & transmittanc
-			, LightMaterial & lightMat
-			, sdw::Vec3 & tangentSpaceViewPosition
-			, sdw::Vec3 & tangentSpaceFragPosition )override;
 		//\}
 		/**
 		*\name
@@ -111,20 +100,6 @@ namespace castor3d::shader
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
 			, sdw::UInt const & receivesShadows )override;
-		C3D_API void computeMapDiffuseContributions( PassFlags const & passFlags
-			, TextureFlags const & textureFlags
-			, TextureConfigurations const & textureConfigs
-			, TextureAnimations const & textureAnims
-			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-			, shader::Material const & material
-			, sdw::Vec3 & texCoords0
-			, sdw::Vec3 & texCoords1
-			, sdw::Vec3 & texCoords2
-			, sdw::Vec3 & texCoords3
-			, sdw::Vec3 & emissive
-			, sdw::Float & opacity
-			, sdw::Float & occlusion
-			, LightMaterial & lightMat )override;
 		//\}
 
 	public:

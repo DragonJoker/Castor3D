@@ -8,6 +8,7 @@
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
+#include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
@@ -452,6 +453,162 @@ namespace castor3d::shader
 			doDeclareGetBaseLight();
 			doDeclareGetSpotLight();
 		}
+	}
+
+	void LightingModel::computeMapContributions( PassFlags const & passFlags
+		, TextureFlags const & textureFlags
+		, TextureConfigurations const & textureConfigs
+		, TextureAnimations const & textureAnims
+		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, shader::Material const & material
+		, sdw::Vec3 & texCoords0
+		, sdw::Vec3 & texCoords1
+		, sdw::Vec3 & texCoords2
+		, sdw::Vec3 & texCoords3
+		, sdw::Vec3 & normal
+		, sdw::Vec3 & tangent
+		, sdw::Vec3 & bitangent
+		, sdw::Vec3 & emissive
+		, sdw::Float & opacity
+		, sdw::Float & occlusion
+		, sdw::Float & transmittance
+		, LightMaterial & lightMat
+		, sdw::Vec3 & tangentSpaceViewPosition
+		, sdw::Vec3 & tangentSpaceFragPosition )
+	{
+		if ( !textureConfigs.isEnabled() )
+		{
+			updateMaterial( passFlags
+				, textureFlags
+				, lightMat
+				, emissive );
+			return;
+		}
+
+		FOR( m_writer, sdw::UInt, index, 0u, index < material.texturesCount(), ++index )
+		{
+			auto id = m_writer.declLocale( "c3d_id"
+				, material.getTexture( index ) );
+
+			IF( m_writer, id > 0_u )
+			{
+				auto config = m_writer.declLocale( "config"
+					, textureConfigs.getTextureConfiguration( id ) );
+				auto anim = m_writer.declLocale( "anim"
+					, textureAnims.getTextureAnimation( id ) );
+				auto texcoord = m_writer.declLocale( "tex"
+					, textureConfigs.getTexcoord( config
+						, texCoords0
+						, texCoords1
+						, texCoords2
+						, texCoords3 ) );
+				auto sampled = config.computeCommonMapContribution( m_utils
+					, passFlags
+					, textureFlags
+					, anim
+					, maps[id - 1_u]
+					, texcoord
+					, emissive
+					, opacity
+					, occlusion
+					, transmittance
+					, normal
+					, tangent
+					, bitangent
+					, tangentSpaceViewPosition
+					, tangentSpaceFragPosition );
+				textureConfigs.setTexcoord( config
+					, texcoord
+					, texCoords0
+					, texCoords1
+					, texCoords2
+					, texCoords3 );
+				modifyMaterial( passFlags
+					, textureFlags
+					, sampled
+					, config
+					, lightMat );
+			}
+			FI;
+		}
+		ROF;
+
+		updateMaterial( passFlags
+			, textureFlags
+			, lightMat
+			, emissive );
+	}
+
+	void LightingModel::computeMapDiffuseContributions( PassFlags const & passFlags
+		, TextureFlags const & textureFlags
+		, TextureConfigurations const & textureConfigs
+		, TextureAnimations const & textureAnims
+		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, shader::Material const & material
+		, sdw::Vec3 & texCoords0
+		, sdw::Vec3 & texCoords1
+		, sdw::Vec3 & texCoords2
+		, sdw::Vec3 & texCoords3
+		, sdw::Vec3 & emissive
+		, sdw::Float & opacity
+		, sdw::Float & occlusion
+		, LightMaterial & lightMat )
+	{
+		if ( !textureConfigs.isEnabled() )
+		{
+			updateMaterial( passFlags
+				, textureFlags
+				, lightMat
+				, emissive );
+			return;
+		}
+
+		FOR( m_writer, sdw::UInt, index, 0u, index < material.texturesCount(), ++index )
+		{
+			auto id = m_writer.declLocale( "c3d_id"
+				, material.getTexture( index ) );
+
+			IF( m_writer, id > 0_u )
+			{
+				auto config = m_writer.declLocale( "config"
+					, textureConfigs.getTextureConfiguration( id ) );
+				auto anim = m_writer.declLocale( "anim"
+					, textureAnims.getTextureAnimation( id ) );
+				auto texcoord = m_writer.declLocale( "tex"
+					, textureConfigs.getTexcoord( config
+						, texCoords0
+						, texCoords1
+						, texCoords2
+						, texCoords3 ) );
+				auto sampled = config.computeCommonMapVoxelContribution( m_utils
+					, passFlags
+					, textureFlags
+					, anim
+					, maps[id - 1_u]
+					, texcoord
+					, emissive
+					, opacity
+					, occlusion );
+				textureConfigs.setTexcoord( config
+					, texcoord
+					, texCoords0
+					, texCoords1
+					, texCoords2
+					, texCoords3 );
+				modifyMaterial( passFlags
+					, textureFlags
+					, sampled
+					, config
+					, lightMat );
+			}
+			FI;
+		}
+		ROF;
+
+		updateMaterial( passFlags
+			, textureFlags
+			, lightMat
+			, emissive );
 	}
 
 	DirectionalLight LightingModel::getDirectionalLight( sdw::UInt const & index )const

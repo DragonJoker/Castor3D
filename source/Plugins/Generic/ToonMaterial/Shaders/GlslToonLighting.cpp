@@ -21,39 +21,6 @@ namespace toon::shader
 {
 	//*********************************************************************************************
 
-	namespace phong
-	{
-		namespace
-		{
-			void modifyMaterial( sdw::ShaderWriter & writer
-				, castor::String const & configName
-				, castor3d::PassFlags const & passFlags
-				, castor3d::TextureFlags const & textureFlags
-				, sdw::Vec4 const & sampled
-				, c3d::TextureConfigData const & config
-				, ToonPhongLightMaterial & phongLightMat )
-			{
-				config.applyAlbedo( textureFlags, sampled, phongLightMat.albedo );
-				config.applySpecular( textureFlags, sampled, phongLightMat.specular );
-				config.applyShininess( textureFlags, sampled, phongLightMat.shininess );
-			}
-
-			void updateMaterial( sdw::ShaderWriter & writer
-				, castor3d::PassFlags const & passFlags
-				, castor3d::TextureFlags const & textureFlags
-				, ToonPhongLightMaterial & phongLightMat
-				, sdw::Vec3 & emissive )
-			{
-				if ( !checkFlag( textureFlags, castor3d::TextureFlag::eEmissive ) )
-				{
-					emissive *= phongLightMat.albedo;
-				}
-			}
-		}
-	}
-
-	//*********************************************************************************************
-
 	const castor::String ToonPhongLightingModel::getName()
 	{
 		return cuT( "c3d.toon.phong" );
@@ -87,28 +54,6 @@ namespace toon::shader
 			, sssProfiles
 			, enableVolumetric
 			, false );
-	}
-
-	sdw::Vec3 ToonPhongLightingModel::combine( sdw::Vec3 const & directDiffuse
-		, sdw::Vec3 const & indirectDiffuse
-		, sdw::Vec3 const & directSpecular
-		, sdw::Vec3 const & directScattering
-		, sdw::Vec3 const & indirectSpecular
-		, sdw::Vec3 const & ambient
-		, sdw::Vec3 const & indirectAmbient
-		, sdw::Float const & ambientOcclusion
-		, sdw::Vec3 const & emissive
-		, sdw::Vec3 const & reflected
-		, sdw::Vec3 const & refracted
-		, sdw::Vec3 const & materialAlbedo )
-	{
-		return materialAlbedo * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) )
-			+ ( directSpecular + ( indirectSpecular * ambientOcclusion ) )
-			+ ( ambient * indirectAmbient * ambientOcclusion )
-			+ emissive
-			+ refracted
-			+ reflected * ambientOcclusion
-			+ directScattering;
 	}
 
 	std::unique_ptr< c3d::LightMaterial > ToonPhongLightingModel::declMaterial( std::string const & name
@@ -418,97 +363,6 @@ namespace toon::shader
 			, pparentOutput );
 	}
 
-	void ToonPhongLightingModel::computeMapContributions( castor3d::PassFlags const & passFlags
-		, castor3d::TextureFlags const & textureFlags
-		, c3d::TextureConfigurations const & textureConfigs
-		, c3d::TextureAnimations const & textureAnims
-		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, c3d::Material const & material
-		, sdw::Vec3 & texCoords0
-		, sdw::Vec3 & texCoords1
-		, sdw::Vec3 & texCoords2
-		, sdw::Vec3 & texCoords3
-		, sdw::Vec3 & normal
-		, sdw::Vec3 & tangent
-		, sdw::Vec3 & bitangent
-		, sdw::Vec3 & emissive
-		, sdw::Float & opacity
-		, sdw::Float & occlusion
-		, sdw::Float & transmittance
-		, c3d::LightMaterial & lightMat
-		, sdw::Vec3 & tangentSpaceViewPosition
-		, sdw::Vec3 & tangentSpaceFragPosition )
-	{
-		auto & phongLightMat = static_cast< ToonPhongLightMaterial & >( lightMat );
-
-		if ( !textureConfigs.isEnabled() )
-		{
-			phong::updateMaterial( m_writer
-				, passFlags
-				, textureFlags
-				, phongLightMat
-				, emissive );
-			return;
-		}
-
-		for ( uint32_t index = 0u; index < textureFlags.size(); ++index )
-		{
-			auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
-			auto id = m_writer.declLocale( "c3d_id" + name
-				, material.getTexture( index ) );
-
-			IF( m_writer, id > 0_u )
-			{
-				auto config = m_writer.declLocale( "config" + name
-					, textureConfigs.getTextureConfiguration( id ) );
-				auto anim = m_writer.declLocale( "anim" + name
-					, textureAnims.getTextureAnimation( id ) );
-				auto texcoord = m_writer.declLocale( "tex" + name
-					, textureConfigs.getTexcoord( config
-						, texCoords0
-						, texCoords1
-						, texCoords2
-						, texCoords3 ) );
-				auto sampled = config.computeCommonMapContribution( m_utils
-					, passFlags
-					, textureFlags
-					, name
-					, anim
-					, maps[id - 1_u]
-					, texcoord
-					, emissive
-					, opacity
-					, occlusion
-					, transmittance
-					, normal
-					, tangent
-					, bitangent
-					, tangentSpaceViewPosition
-					, tangentSpaceFragPosition );
-				textureConfigs.setTexcoord( config
-					, texcoord
-					, texCoords0
-					, texCoords1
-					, texCoords2
-					, texCoords3 );
-				phong::modifyMaterial( m_writer
-					, name
-					, passFlags
-					, textureFlags
-					, sampled
-					, config
-					, phongLightMat );
-			}
-			FI;
-		}
-
-		phong::updateMaterial( m_writer
-			, passFlags
-			, textureFlags
-			, phongLightMat
-			, emissive );
-	}
-
 	sdw::Vec3 ToonPhongLightingModel::computeDiffuse( c3d::DirectionalLight const & plight
 		, c3d::LightMaterial const & pmaterial
 		, c3d::Surface const & psurface
@@ -708,85 +562,6 @@ namespace toon::shader
 			, preceivesShadows );
 	}
 
-	void ToonPhongLightingModel::computeMapDiffuseContributions( castor3d::PassFlags const & passFlags
-		, castor3d::TextureFlags const & textureFlags
-		, c3d::TextureConfigurations const & textureConfigs
-		, c3d::TextureAnimations const & textureAnims
-		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, c3d::Material const & material
-		, sdw::Vec3 & texCoords0
-		, sdw::Vec3 & texCoords1
-		, sdw::Vec3 & texCoords2
-		, sdw::Vec3 & texCoords3
-		, sdw::Vec3 & emissive
-		, sdw::Float & opacity
-		, sdw::Float & occlusion
-		, c3d::LightMaterial & lightMat )
-	{
-		auto & phongLightMat = static_cast< ToonPhongLightMaterial & >( lightMat );
-
-		if ( !textureConfigs.isEnabled() )
-		{
-			phong::updateMaterial( m_writer
-				, passFlags
-				, textureFlags
-				, phongLightMat
-				, emissive );
-			return;
-		}
-
-		for ( uint32_t index = 0u; index < textureFlags.size(); ++index )
-		{
-			auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
-			auto id = m_writer.declLocale( "c3d_id" + name
-				, material.getTexture( index ) );
-
-			IF( m_writer, id > 0_u )
-			{
-				auto config = m_writer.declLocale( "config" + name
-					, textureConfigs.getTextureConfiguration( id ) );
-				auto anim = m_writer.declLocale( "anim" + name
-					, textureAnims.getTextureAnimation( id ) );
-				auto texcoord = m_writer.declLocale( "tex" + name
-					, textureConfigs.getTexcoord( config
-						, texCoords0
-						, texCoords1
-						, texCoords2
-						, texCoords3 ) );
-				auto sampled = config.computeCommonMapVoxelContribution( m_utils
-					, passFlags
-					, textureFlags
-					, name
-					, anim
-					, maps[id - 1_u]
-					, texcoord
-					, emissive
-					, opacity
-					, occlusion );
-				textureConfigs.setTexcoord( config
-					, texcoord
-					, texCoords0
-					, texCoords1
-					, texCoords2
-					, texCoords3 );
-				phong::modifyMaterial( m_writer
-					, name
-					, passFlags
-					, textureFlags
-					, sampled
-					, config
-					, phongLightMat );
-			}
-			FI;
-		}
-
-		phong::updateMaterial( m_writer
-			, passFlags
-			, textureFlags
-			, phongLightMat
-			, emissive );
-	}
-
 	void ToonPhongLightingModel::doComputeLight( c3d::Light const & plight
 		, ToonPhongLightMaterial const & pmaterial
 		, c3d::Surface const & psurface
@@ -932,84 +707,18 @@ namespace toon::shader
 
 	//*********************************************************************************************
 
-	namespace pbr
-	{
-		namespace
-		{
-			struct MaterialTextureMods
-			{
-				sdw::Boolean hasAlbedo;
-				sdw::Boolean hasMetalness;
-				sdw::Boolean hasSpecular;
-				sdw::Boolean hasEmissive;
-			};
-
-			void modifyMaterial( sdw::ShaderWriter & writer
-				, castor::String const & configName
-				, castor3d::PassFlags const & passFlags
-				, castor3d::TextureFlags const & textureFlags
-				, sdw::Vec4 const & sampled
-				, c3d::TextureConfigData const & config
-				, ToonPbrLightMaterial & pbrLightMat )
-			{
-				config.applyAlbedo( textureFlags, sampled, pbrLightMat.albedo );
-				config.applySpecular( textureFlags, sampled, pbrLightMat.specular );
-
-				if ( checkFlag( textureFlags, castor3d::TextureFlag::eGlossiness ) )
-				{
-					IF( writer, config.isGlossiness() )
-					{
-						auto gloss = writer.declLocale( "gloss" + configName
-							, castor3d::shader::LightMaterial::computeRoughness( pbrLightMat.roughness ) );
-						gloss = config.getGlossiness( sampled, gloss );
-						pbrLightMat.roughness = castor3d::shader::LightMaterial::computeRoughness( gloss );
-					}
-					FI;
-				}
-
-				config.applyMetalness( textureFlags, sampled, pbrLightMat.metalness );
-				config.applyRoughness( textureFlags, sampled, pbrLightMat.roughness );
-			}
-
-			void updateMaterial( sdw::ShaderWriter & writer
-				, castor3d::PassFlags const & passFlags
-				, castor3d::TextureFlags const & textureFlags
-				, ToonPbrLightMaterial & pbrLightMat
-				, sdw::Vec3 & emissive )
-			{
-				if ( !checkFlag( textureFlags, castor3d::TextureFlag::eMetalness )
-					&& ( checkFlag( textureFlags, castor3d::TextureFlag::eSpecular ) || checkFlag( textureFlags, castor3d::TextureFlag::eAlbedo ) ) )
-				{
-					pbrLightMat.metalness = castor3d::shader::LightMaterial::computeMetalness( pbrLightMat.albedo, pbrLightMat.specular );
-				}
-
-				if ( !checkFlag( textureFlags, castor3d::TextureFlag::eSpecular )
-					&& ( checkFlag( textureFlags, castor3d::TextureFlag::eMetalness ) || checkFlag( textureFlags, castor3d::TextureFlag::eAlbedo ) ) )
-				{
-					pbrLightMat.specular = castor3d::shader::LightMaterial::computeF0( pbrLightMat.albedo, pbrLightMat.metalness );
-				}
-
-				if ( !checkFlag( textureFlags, castor3d::TextureFlag::eEmissive ) )
-				{
-					emissive *= pbrLightMat.albedo;
-				}
-			}
-		}
-	}
-
 	ToonPbrLightingModel::ToonPbrLightingModel( sdw::ShaderWriter & writer
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
 		, bool enableVolumetric )
-		: c3d::LightingModel{ writer
+		: c3d::PbrLightingModel{ writer
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
-			, enableVolumetric
-			, std::string{ "c3d_pbr_toon_" } }
-		, m_cookTorrance{ writer, utils }
+			, enableVolumetric }
 	{
+		m_prefix = m_prefix + "toon_";
 	}
 
 	const castor::String ToonPbrLightingModel::getName()
@@ -1034,27 +743,6 @@ namespace toon::shader
 		, bool enabled )
 	{
 		return m_writer.declDerivedLocale< c3d::LightMaterial, ToonPbrLightMaterial >( name, enabled );
-	}
-
-	sdw::Vec3 ToonPbrLightingModel::combine( sdw::Vec3 const & directDiffuse
-		, sdw::Vec3 const & indirectDiffuse
-		, sdw::Vec3 const & directSpecular
-		, sdw::Vec3 const & directScattering
-		, sdw::Vec3 const & indirectSpecular
-		, sdw::Vec3 const & ambient
-		, sdw::Vec3 const & indirectAmbient
-		, sdw::Float const & ambientOcclusion
-		, sdw::Vec3 const & emissive
-		, sdw::Vec3 const & reflected
-		, sdw::Vec3 const & refracted
-		, sdw::Vec3 const & materialAlbedo )
-	{
-		return materialAlbedo * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) )
-			+ directSpecular + ( indirectSpecular * ambientOcclusion )
-			+ emissive
-			+ refracted
-			+ ( reflected * ambient * indirectAmbient * ambientOcclusion )
-			+ directScattering;
 	}
 
 	c3d::ReflectionModelPtr ToonPbrLightingModel::getReflectionModel( uint32_t & envMapBinding
@@ -1391,102 +1079,6 @@ namespace toon::shader
 			, pparentOutput );
 	}
 
-	void ToonPbrLightingModel::computeMapContributions( castor3d::PassFlags const & passFlags
-		, castor3d::TextureFlags const & textureFlags
-		, c3d::TextureConfigurations const & textureConfigs
-		, c3d::TextureAnimations const & textureAnims
-		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, c3d::Material const & material
-		, sdw::Vec3 & texCoords0
-		, sdw::Vec3 & texCoords1
-		, sdw::Vec3 & texCoords2
-		, sdw::Vec3 & texCoords3
-		, sdw::Vec3 & normal
-		, sdw::Vec3 & tangent
-		, sdw::Vec3 & bitangent
-		, sdw::Vec3 & emissive
-		, sdw::Float & opacity
-		, sdw::Float & occlusion
-		, sdw::Float & transmittance
-		, c3d::LightMaterial & lightMat
-		, sdw::Vec3 & tangentSpaceViewPosition
-		, sdw::Vec3 & tangentSpaceFragPosition )
-	{
-		auto & pbrLightMat = static_cast< ToonPbrLightMaterial & >( lightMat );
-
-		if ( !textureConfigs.isEnabled() )
-		{
-			pbr::updateMaterial( m_writer
-				, passFlags
-				, textureFlags
-				, pbrLightMat
-				, emissive );
-			return;
-		}
-
-		pbr::MaterialTextureMods mods{ m_writer.declLocale( "hasAlbedo", sdw::Boolean{ false } )
-			, m_writer.declLocale( "hasMetalness", sdw::Boolean{ false } )
-			, m_writer.declLocale( "hasSpecular", sdw::Boolean{ false } )
-			, m_writer.declLocale( "hasEmissive", sdw::Boolean{ false } ) };
-
-		for ( uint32_t index = 0u; index < textureFlags.size(); ++index )
-		{
-			auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
-			auto id = m_writer.declLocale( "c3d_id" + name
-				, material.getTexture( index ) );
-
-			IF( m_writer, id > 0_u )
-			{
-				auto config = m_writer.declLocale( "config" + name
-					, textureConfigs.getTextureConfiguration( id ) );
-				auto anim = m_writer.declLocale( "anim" + name
-					, textureAnims.getTextureAnimation( id ) );
-				auto texcoord = m_writer.declLocale( "tex" + name
-					, textureConfigs.getTexcoord( config
-						, texCoords0
-						, texCoords1
-						, texCoords2
-						, texCoords3 ) );
-				auto sampled = config.computeCommonMapContribution( m_utils
-					, passFlags
-					, textureFlags
-					, name
-					, anim
-					, maps[id - 1_u]
-					, texcoord
-					, emissive
-					, opacity
-					, occlusion
-					, transmittance
-					, normal
-					, tangent
-					, bitangent
-					, tangentSpaceViewPosition
-					, tangentSpaceFragPosition );
-				textureConfigs.setTexcoord( config
-					, texcoord
-					, texCoords0
-					, texCoords1
-					, texCoords2
-					, texCoords3 );
-				pbr::modifyMaterial( m_writer
-					, name
-					, passFlags
-					, textureFlags
-					, sampled
-					, config
-					, pbrLightMat );
-			}
-			FI;
-		}
-
-		pbr::updateMaterial( m_writer
-			, passFlags
-			, textureFlags
-			, pbrLightMat
-			, emissive );
-	}
-
 	sdw::Vec3 ToonPbrLightingModel::computeDiffuse( c3d::DirectionalLight const & plight
 		, c3d::LightMaterial const & pmaterial
 		, c3d::Surface const & psurface
@@ -1692,90 +1284,6 @@ namespace toon::shader
 			, psurface
 			, pworldEye
 			, preceivesShadows );
-	}
-
-	void ToonPbrLightingModel::computeMapDiffuseContributions( castor3d::PassFlags const & passFlags
-		, castor3d::TextureFlags const & textureFlags
-		, c3d::TextureConfigurations const & textureConfigs
-		, c3d::TextureAnimations const & textureAnims
-		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, c3d::Material const & material
-		, sdw::Vec3 & texCoords0
-		, sdw::Vec3 & texCoords1
-		, sdw::Vec3 & texCoords2
-		, sdw::Vec3 & texCoords3
-		, sdw::Vec3 & emissive
-		, sdw::Float & opacity
-		, sdw::Float & occlusion
-		, c3d::LightMaterial & lightMat )
-	{
-		auto & pbrLightMat = static_cast< ToonPbrLightMaterial & >( lightMat );
-
-		if ( !textureConfigs.isEnabled() )
-		{
-			pbr::updateMaterial( m_writer
-				, passFlags
-				, textureFlags
-				, pbrLightMat
-				, emissive );
-			return;
-		}
-
-		pbr::MaterialTextureMods mods{ m_writer.declLocale( "hasAlbedo", sdw::Boolean{ false } )
-			, m_writer.declLocale( "hasMetalness", sdw::Boolean{ false } )
-			, m_writer.declLocale( "hasSpecular", sdw::Boolean{ false } )
-			, m_writer.declLocale( "hasEmissive", sdw::Boolean{ false } ) };
-
-		for ( uint32_t index = 0u; index < textureFlags.size(); ++index )
-		{
-			auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
-			auto id = m_writer.declLocale( "c3d_id" + name
-				, material.getTexture( index ) );
-
-			IF( m_writer, id > 0_u )
-			{
-				auto config = m_writer.declLocale( "config" + name
-					, textureConfigs.getTextureConfiguration( id ) );
-				auto anim = m_writer.declLocale( "anim" + name
-					, textureAnims.getTextureAnimation( id ) );
-				auto texcoord = m_writer.declLocale( "tex" + name
-					, textureConfigs.getTexcoord( config
-						, texCoords0
-						, texCoords1
-						, texCoords2
-						, texCoords3 ) );
-				auto sampled = config.computeCommonMapVoxelContribution( m_utils
-					, passFlags
-					, textureFlags
-					, name
-					, anim
-					, maps[id - 1_u]
-					, texcoord
-					, emissive
-					, opacity
-					, occlusion );
-				textureConfigs.setTexcoord( config
-					, texcoord
-					, texCoords0
-					, texCoords1
-					, texCoords2
-					, texCoords3 );
-				pbr::modifyMaterial( m_writer
-					, name
-					, passFlags
-					, textureFlags
-					, sampled
-					, config
-					, pbrLightMat );
-			}
-			FI;
-		}
-
-		pbr::updateMaterial( m_writer
-			, passFlags
-			, textureFlags
-			, pbrLightMat
-			, emissive );
 	}
 
 	//*********************************************************************************************

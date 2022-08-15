@@ -20,36 +20,6 @@ namespace castor3d::shader
 {
 	//*********************************************************************************************
 
-	namespace phglgt
-	{
-		static void modifyMaterial( sdw::ShaderWriter & writer
-			, castor::String const & configName
-			, PassFlags const & passFlags
-			, TextureFlags const & textureFlags
-			, sdw::Vec4 const & sampled
-			, TextureConfigData const & config
-			, PhongLightMaterial & phongLightMat )
-		{
-			config.applyAlbedo( textureFlags, sampled, phongLightMat.albedo );
-			config.applySpecular( textureFlags, sampled, phongLightMat.specular );
-			config.applyShininess( textureFlags, sampled, phongLightMat.shininess );
-		}
-
-		static void updateMaterial( sdw::ShaderWriter & writer
-			, PassFlags const & passFlags
-			, TextureFlags const & textureFlags
-			, PhongLightMaterial & phongLightMat
-			, sdw::Vec3 & emissive )
-		{
-			if ( !checkFlag( textureFlags, castor3d::TextureFlag::eEmissive ) )
-			{
-				emissive *= phongLightMat.albedo;
-			}
-		}
-	}
-
-	//*********************************************************************************************
-
 	castor::String PhongLightingModel::getName()
 	{
 		return cuT( "c3d.phong" );
@@ -85,6 +55,36 @@ namespace castor3d::shader
 			, false );
 	}
 
+	std::unique_ptr< LightMaterial > PhongLightingModel::declMaterial( std::string const & name
+		, bool enabled )
+	{
+		return m_writer.declDerivedLocale< LightMaterial, PhongLightMaterial >( name, enabled );
+	}
+
+	void PhongLightingModel::modifyMaterial( PassFlags const & passFlags
+		, TextureFlags const & textureFlags
+		, sdw::Vec4 const & sampled
+		, TextureConfigData const & config
+		, LightMaterial & lightMat )const
+	{
+		auto & phongLightMat = static_cast< PhongLightMaterial & >( lightMat );
+		config.applyAlbedo( textureFlags, sampled, phongLightMat.albedo );
+		config.applySpecular( textureFlags, sampled, phongLightMat.specular );
+		config.applyShininess( textureFlags, sampled, phongLightMat.shininess );
+	}
+
+	void PhongLightingModel::updateMaterial( PassFlags const & passFlags
+		, TextureFlags const & textureFlags
+		, LightMaterial & lightMat
+		, sdw::Vec3 & emissive )const
+	{
+		if ( !checkFlag( textureFlags, castor3d::TextureFlag::eEmissive ) )
+		{
+			auto & phongLightMat = static_cast< PhongLightMaterial & >( lightMat );
+			emissive *= phongLightMat.albedo;
+		}
+	}
+
 	sdw::Vec3 PhongLightingModel::combine( sdw::Vec3 const & directDiffuse
 		, sdw::Vec3 const & indirectDiffuse
 		, sdw::Vec3 const & directSpecular
@@ -105,12 +105,6 @@ namespace castor3d::shader
 			+ refracted
 			+ reflected * ambientOcclusion
 			+ directScattering;
-	}
-
-	std::unique_ptr< LightMaterial > PhongLightingModel::declMaterial( std::string const & name
-		, bool enabled )
-	{
-		return m_writer.declDerivedLocale< LightMaterial, PhongLightMaterial >( name, enabled );
 	}
 
 	ReflectionModelPtr PhongLightingModel::getReflectionModel( uint32_t & envMapBinding
@@ -458,97 +452,6 @@ namespace castor3d::shader
 			, pparentOutput );
 	}
 
-	void PhongLightingModel::computeMapContributions( PassFlags const & passFlags
-		, TextureFlags const & textureFlags
-		, TextureConfigurations const & textureConfigs
-		, TextureAnimations const & textureAnims
-		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, shader::Material const & material
-		, sdw::Vec3 & texCoords0
-		, sdw::Vec3 & texCoords1
-		, sdw::Vec3 & texCoords2
-		, sdw::Vec3 & texCoords3
-		, sdw::Vec3 & normal
-		, sdw::Vec3 & tangent
-		, sdw::Vec3 & bitangent
-		, sdw::Vec3 & emissive
-		, sdw::Float & opacity
-		, sdw::Float & occlusion
-		, sdw::Float & transmittance
-		, LightMaterial & lightMat
-		, sdw::Vec3 & tangentSpaceViewPosition
-		, sdw::Vec3 & tangentSpaceFragPosition )
-	{
-		auto & phongLightMat = static_cast< PhongLightMaterial & >( lightMat );
-
-		if ( !textureConfigs.isEnabled() )
-		{
-			phglgt::updateMaterial( m_writer
-				, passFlags
-				, textureFlags
-				, phongLightMat
-				, emissive );
-			return;
-		}
-
-		for ( uint32_t index = 0u; index < textureFlags.size(); ++index )
-		{
-			auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
-			auto id = m_writer.declLocale( "c3d_id" + name
-				, material.getTexture( index ) );
-
-			IF( m_writer, id > 0_u )
-			{
-				auto config = m_writer.declLocale( "config" + name
-					, textureConfigs.getTextureConfiguration( id ) );
-				auto anim = m_writer.declLocale( "anim" + name
-					, textureAnims.getTextureAnimation( id ) );
-				auto texcoord = m_writer.declLocale( "tex" + name
-					, textureConfigs.getTexcoord( config
-						, texCoords0
-						, texCoords1
-						, texCoords2
-						, texCoords3 ) );
-				auto sampled = config.computeCommonMapContribution( m_utils
-					, passFlags
-					, textureFlags
-					, name
-					, anim
-					, maps[id - 1_u]
-					, texcoord
-					, emissive
-					, opacity
-					, occlusion
-					, transmittance
-					, normal
-					, tangent
-					, bitangent
-					, tangentSpaceViewPosition
-					, tangentSpaceFragPosition );
-				textureConfigs.setTexcoord( config
-					, texcoord
-					, texCoords0
-					, texCoords1
-					, texCoords2
-					, texCoords3 );
-				phglgt::modifyMaterial( m_writer
-					, name
-					, passFlags
-					, textureFlags
-					, sampled
-					, config
-					, phongLightMat );
-			}
-			FI;
-		}
-
-		phglgt::updateMaterial( m_writer
-			, passFlags
-			, textureFlags
-			, phongLightMat
-			, emissive );
-	}
-
 	sdw::Vec3 PhongLightingModel::computeDiffuse( DirectionalLight const & plight
 		, LightMaterial const & pmaterial
 		, Surface const & psurface
@@ -746,85 +649,6 @@ namespace castor3d::shader
 			, psurface
 			, pworldEye
 			, preceivesShadows );
-	}
-
-	void PhongLightingModel::computeMapDiffuseContributions( PassFlags const & passFlags
-		, TextureFlags const & textureFlags
-		, TextureConfigurations const & textureConfigs
-		, TextureAnimations const & textureAnims
-		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, shader::Material const & material
-		, sdw::Vec3 & texCoords0
-		, sdw::Vec3 & texCoords1
-		, sdw::Vec3 & texCoords2
-		, sdw::Vec3 & texCoords3
-		, sdw::Vec3 & emissive
-		, sdw::Float & opacity
-		, sdw::Float & occlusion
-		, LightMaterial & lightMat )
-	{
-		auto & phongLightMat = static_cast< PhongLightMaterial & >( lightMat );
-
-		if ( !textureConfigs.isEnabled() )
-		{
-			phglgt::updateMaterial( m_writer
-				, passFlags
-				, textureFlags
-				, phongLightMat
-				, emissive );
-			return;
-		}
-
-		for ( uint32_t index = 0u; index < textureFlags.size(); ++index )
-		{
-			auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
-			auto id = m_writer.declLocale( "c3d_id" + name
-				, material.getTexture( index ) );
-
-			IF( m_writer, id > 0_u )
-			{
-				auto config = m_writer.declLocale( "config" + name
-					, textureConfigs.getTextureConfiguration( id ) );
-				auto anim = m_writer.declLocale( "anim" + name
-					, textureAnims.getTextureAnimation( id ) );
-				auto texcoord = m_writer.declLocale( "tex" + name
-					, textureConfigs.getTexcoord( config
-						, texCoords0
-						, texCoords1
-						, texCoords2
-						, texCoords3 ) );
-				auto sampled = config.computeCommonMapVoxelContribution( m_utils
-					, passFlags
-					, textureFlags
-					, name
-					, anim
-					, maps[id - 1_u]
-					, texcoord
-					, emissive
-					, opacity
-					, occlusion );
-				textureConfigs.setTexcoord( config
-					, texcoord
-					, texCoords0
-					, texCoords1
-					, texCoords2
-					, texCoords3 );
-				phglgt::modifyMaterial( m_writer
-					, name
-					, passFlags
-					, textureFlags
-					, sampled
-					, config
-					, phongLightMat );
-			}
-			FI;
-		}
-
-		phglgt::updateMaterial( m_writer
-			, passFlags
-			, textureFlags
-			, phongLightMat
-			, emissive );
 	}
 
 	sdw::RetVec3 PhongLightingModel::doComputeLight( Light const & plight
