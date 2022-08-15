@@ -354,6 +354,70 @@ namespace castor3d::shader
 
 	//*********************************************************************************************
 
+	VisibilityBlendComponents::VisibilityBlendComponents( sdw::ShaderWriter & writer
+		, std::string const & prefix
+		, BlendComponentT< DerivTex > t0
+		, BlendComponentT< DerivTex > t1
+		, BlendComponentT< DerivTex > t2
+		, BlendComponentT< DerivTex > t3
+		, BlendComponentT< sdw::Float > opa
+		, BlendComponentT< sdw::Float > occ
+		, BlendComponentT< sdw::Float > trn
+		, BlendComponentT< sdw::Vec3 > ems )
+		: m_texCoord0{ writer.declLocale( prefix + "TexCoord0", std::move( t0.value ), t0.enabled ) }
+		, m_texCoord1{ writer.declLocale( prefix + "TexCoord1", std::move( t1.value ), t1.enabled ) }
+		, m_texCoord2{ writer.declLocale( prefix + "TexCoord2", std::move( t2.value ), t2.enabled ) }
+		, m_texCoord3{ writer.declLocale( prefix + "TexCoord3", std::move( t3.value ), t3.enabled ) }
+		, m_opacity{ writer.declLocale( prefix + "Opacity", std::move( opa.value ), opa.enabled ) }
+		, m_occlusion{ writer.declLocale( prefix + "Occlusion", std::move( occ.value ), occ.enabled ) }
+		, m_transmittance{ writer.declLocale( prefix + "Transmittance", std::move( trn.value ), trn.enabled ) }
+		, m_emissive{ writer.declLocale( prefix + "Emissive", std::move( ems.value ), ems.enabled ) }
+	{
+	}
+
+	VisibilityBlendComponents::VisibilityBlendComponents( sdw::ShaderWriter & writer
+		, std::string const & prefix
+		, VisibilityBlendComponents const & rhs )
+		: VisibilityBlendComponents{ writer
+			, prefix
+			, { rhs.texCoord0(), rhs.texCoord0().isEnabled() }
+			, { rhs.texCoord1(), rhs.texCoord1().isEnabled() }
+			, { rhs.texCoord2(), rhs.texCoord2().isEnabled() }
+			, { rhs.texCoord3(), rhs.texCoord3().isEnabled() }
+			, { rhs.opacity(), rhs.opacity().isEnabled() }
+			, { rhs.occlusion(), rhs.occlusion().isEnabled() }
+			, { rhs.transmittance(), rhs.transmittance().isEnabled() }
+			, { rhs.emissive(), rhs.emissive().isEnabled() } }
+	{
+	}
+
+	VisResult VisibilityBlendComponents::createResult( sdw::ShaderWriter & writer
+		, VisibilityBlendComponents const & rhs )const
+	{
+		return VisResult{ writer.declLocale( "rOpa", 0.0_f, rhs.opacity().isEnabled() )
+			, writer.declLocale( "rOcc", 0.0_f, rhs.occlusion().isEnabled() )
+			, writer.declLocale( "rTrn", 0.0_f, rhs.transmittance().isEnabled() )
+			, writer.declLocale( "eRms", vec3( 0.0_f ), rhs.emissive().isEnabled() ) };
+	}
+
+	void VisibilityBlendComponents::apply( sdw::Float const & passMultiplier
+		, VisResult & res )const
+	{
+		res.opa += opacity() * passMultiplier;
+		res.occ += occlusion() * passMultiplier;
+		res.trn += transmittance() * passMultiplier;
+		res.ems += emissive() * passMultiplier;
+	}
+
+	void VisibilityBlendComponents::set( VisResult const & rhs )
+	{
+		occlusion() = rhs.occ;
+		transmittance() = rhs.trn;
+		emissive() = rhs.ems;
+	}
+
+	//*********************************************************************************************
+
 	LightingBlendComponents::LightingBlendComponents( sdw::ShaderWriter & writer
 		, std::string const & prefix
 		, BlendComponentT< sdw::Vec3 > t0
@@ -775,7 +839,7 @@ namespace castor3d::shader
 		, sdw::UInt const & materialId
 		, sdw::Array< sdw::Vec4 > const & passMultipliers
 		, sdw::Vec3 const & vertexColour
-		, OpaqueBlendComponents & output )const
+		, VisibilityBlendComponents & output )const
 	{
 		return mats::blendMaterialsT( m_writer, *this
 			, VK_COMPARE_OP_ALWAYS, true
@@ -1051,6 +1115,48 @@ namespace castor3d::shader
 				, output.opacity()
 				, output.tangentSpaceViewPosition()
 				, output.tangentSpaceFragPosition() );
+		}
+
+		return std::make_pair( material, std::move( lightMat ) );
+	}
+
+	std::pair< Material, std::unique_ptr< LightMaterial > > Materials::applyMaterial( std::string const & matName
+		, std::string const & lgtMatName
+		, PassFlags const & passFlags
+		, TextureFlags const & textureFlags
+		, bool hasTextures
+		, shader::TextureConfigurations const & textureConfigs
+		, shader::TextureAnimations const & textureAnims
+		, shader::LightingModel & lightingModel
+		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, sdw::UInt const & materialId
+		, sdw::Vec3 const & vertexColour
+		, VisibilityBlendComponents & output )const
+	{
+		auto material = m_writer.declLocale( matName
+			, getMaterial( materialId ) );
+		auto lightMat = lightingModel.declMaterial( lgtMatName );
+		lightMat->create( vertexColour
+			, material );
+		output.emissive() = vec3( material.emissive() );
+		output.opacity() = material.opacity();
+
+		if ( hasTextures )
+		{
+			lightingModel.computeMapContributions( passFlags
+				, textureFlags
+				, textureConfigs
+				, textureAnims
+				, maps
+				, material
+				, output.texCoord0()
+				, output.texCoord1()
+				, output.texCoord2()
+				, output.texCoord3()
+				, output.emissive()
+				, output.occlusion()
+				, output.transmittance()
+				, *lightMat );
 		}
 
 		return std::make_pair( material, std::move( lightMat ) );

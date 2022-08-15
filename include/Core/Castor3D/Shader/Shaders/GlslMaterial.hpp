@@ -289,6 +289,60 @@ namespace castor3d::shader
 		sdw::Vec3 m_emissive;
 	};
 
+	struct VisResult
+	{
+		sdw::Float opa;
+		sdw::Float occ;
+		sdw::Float trn;
+		sdw::Vec3 ems;
+	};
+
+	struct VisibilityBlendComponents
+	{
+		C3D_API VisibilityBlendComponents( sdw::ShaderWriter & writer
+			, std::string const & prefix
+			, BlendComponentT< DerivTex > t0, BlendComponentT< DerivTex > t1, BlendComponentT< DerivTex > t2, BlendComponentT< DerivTex > t3
+			, BlendComponentT< sdw::Float > opa
+			, BlendComponentT< sdw::Float > occ, BlendComponentT< sdw::Float > trn, BlendComponentT< sdw::Vec3 > ems );
+		C3D_API VisibilityBlendComponents( sdw::ShaderWriter & writer
+			, std::string const & prefix
+			, VisibilityBlendComponents const & rhs );
+
+		C3D_API VisResult createResult( sdw::ShaderWriter & writer
+			, VisibilityBlendComponents const & rhs )const;
+		C3D_API void apply( sdw::Float const & passMultiplier
+			, VisResult & res )const;
+		C3D_API void set( VisResult const & rhs );
+		
+		DerivTex & texCoord0() { return m_texCoord0; }
+		DerivTex & texCoord1() { return m_texCoord1; }
+		DerivTex & texCoord2() { return m_texCoord2; }
+		DerivTex & texCoord3() { return m_texCoord3; }
+		sdw::Float & opacity() { return m_opacity; }
+		sdw::Float & occlusion() { return m_occlusion; }
+		sdw::Float & transmittance() { return m_transmittance; }
+		sdw::Vec3 & emissive() { return m_emissive; }
+
+		DerivTex const & texCoord0()const { return m_texCoord0; }
+		DerivTex const & texCoord1()const { return m_texCoord1; }
+		DerivTex const & texCoord2()const { return m_texCoord2; }
+		DerivTex const & texCoord3()const { return m_texCoord3; }
+		sdw::Float const & opacity()const { return m_opacity; }
+		sdw::Float const & occlusion()const { return m_occlusion; }
+		sdw::Float const & transmittance()const { return m_transmittance; }
+		sdw::Vec3 const & emissive()const { return m_emissive; }
+
+	private:
+		DerivTex m_texCoord0;
+		DerivTex m_texCoord1;
+		DerivTex m_texCoord2;
+		DerivTex m_texCoord3;
+		sdw::Float m_opacity;
+		sdw::Float m_occlusion;
+		sdw::Float m_transmittance;
+		sdw::Vec3 m_emissive;
+	};
+
 	struct LgtResult
 	{
 		OpqResult opq;
@@ -457,7 +511,7 @@ namespace castor3d::shader
 			, sdw::UInt const & materialId
 			, sdw::Array< sdw::Vec4 > const & passMultipliers
 			, sdw::Vec3 const & vertexColour
-			, OpaqueBlendComponents & output )const;
+			, VisibilityBlendComponents & output )const;
 		// Used by opaque pass
 		C3D_API std::unique_ptr< LightMaterial > blendMaterials( Utils & utils
 			, VkCompareOp alphaFunc
@@ -553,6 +607,18 @@ namespace castor3d::shader
 			, OpaqueBlendComponents & output
 			, Utils & utils
 			, bool needsRsm )const;
+		C3D_API std::pair< Material, std::unique_ptr< LightMaterial > > applyMaterial( std::string const & matName
+			, std::string const & lgtMatName
+			, PassFlags const & passFlags
+			, TextureFlags const & textures
+			, bool hasTextures
+			, shader::TextureConfigurations const & textureConfigs
+			, shader::TextureAnimations const & textureAnims
+			, shader::LightingModel & lightingModel
+			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			, sdw::UInt const & materialId
+			, sdw::Vec3 const & vertexColour
+			, VisibilityBlendComponents & output )const;
 		C3D_API std::pair< Material, std::unique_ptr< LightMaterial > > applyMaterial( std::string const & matName
 			, std::string const & lgtMatName
 			, PassFlags const & passFlags
