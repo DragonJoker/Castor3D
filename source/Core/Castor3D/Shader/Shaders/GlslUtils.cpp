@@ -178,6 +178,16 @@ namespace castor3d::shader
 				: map.sample( texCoords ) ) );
 	}
 
+	sdw::Vec4 Utils::sampleMap( PassFlags const & passFlags
+		, sdw::CombinedImage2DRgba32 const map
+		, DerivTex const texCoords
+		, sdw::Float const * lod )
+	{
+		return ( checkFlag( passFlags, PassFlag::eUntile )
+			? sampleUntiled( map, texCoords )
+			: map.grad( texCoords.uv(), texCoords.dx(), texCoords.dy() ) );
+	}
+
 	sdw::RetVec2 Utils::transformUV( TextureConfigData const & pconfig
 		, TextureAnimData const & panim
 		, sdw::Vec2 const puv )
@@ -431,10 +441,7 @@ namespace castor3d::shader
 					, sdw::Float const & nearPlane
 					, sdw::Float const & farPlane )
 				{
-					auto z = m_writer.declLocale( "z"
-						, depth );
-					z *= ( farPlane - nearPlane );
-					m_writer.returnStmt( 2.0_f * farPlane * nearPlane / ( farPlane + nearPlane - z ) );
+					m_writer.returnStmt( 2.0_f * nearPlane / ( farPlane + nearPlane - depth * ( farPlane - nearPlane ) ) );
 				}
 				, sdw::InFloat{ m_writer, "depth" }
 				, sdw::InFloat{ m_writer, "nearPlane" }
@@ -579,7 +586,35 @@ namespace castor3d::shader
 		return m_fresnelSchlick( pproduct, pf0 );
 	}
 
-	sdw::RetVec2 Utils::parallaxMapping( sdw::Vec2 const & ptexCoords
+	void Utils::parallaxMapping( sdw::Vec2 & texCoords
+		, sdw::Vec3 const & viewDir
+		, sdw::CombinedImage2DRgba32 const & heightMap
+		, TextureConfigData const & textureConfig )
+	{
+		return parallaxMapping( texCoords
+			, dFdxCoarse( texCoords )
+			, dFdyCoarse( texCoords )
+			, viewDir
+			, heightMap
+			, textureConfig );
+	}
+
+	void Utils::parallaxMapping( DerivTex & texCoords
+		, sdw::Vec3 const & viewDir
+		, sdw::CombinedImage2DRgba32 const & heightMap
+		, TextureConfigData const & textureConfig )
+	{
+		parallaxMapping( texCoords.uv()
+			, texCoords.dx()
+			, texCoords.dy()
+			, viewDir
+			, heightMap
+			, textureConfig );
+	}
+
+	void Utils::parallaxMapping( sdw::Vec2 ptexCoords
+		, sdw::Vec2 const & pdx
+		, sdw::Vec2 const & pdy
 		, sdw::Vec3 const & pviewDir
 		, sdw::CombinedImage2DRgba32 const & pheightMap
 		, TextureConfigData const & ptextureConfig )
@@ -588,6 +623,8 @@ namespace castor3d::shader
 		{
 			m_parallaxMapping = m_writer.implementFunction< sdw::Vec2 >( "c3d_parallaxMapping",
 				[&]( sdw::Vec2 const & texCoords
+					, sdw::Vec2 const & dx
+					, sdw::Vec2 const & dy
 					, sdw::Vec3 const & viewDir
 					, sdw::CombinedImage2DRgba32 const & heightMap
 					, TextureConfigData const & textureConfig )
@@ -621,10 +658,6 @@ namespace castor3d::shader
 
 					auto currentTexCoords = m_writer.declLocale( "currentTexCoords"
 						, texCoords );
-					auto dx = m_writer.declLocale( "dx"
-						, dFdxCoarse( currentTexCoords ) );
-					auto dy = m_writer.declLocale( "dy"
-						, dFdxCoarse( currentTexCoords ) );
 					auto heightIndex = m_writer.declLocale( "heightIndex"
 						, m_writer.cast< sdw::UInt >( textureConfig.hgtMask ) );
 					auto sampled = m_writer.declLocale( "sampled"
@@ -666,12 +699,16 @@ namespace castor3d::shader
 					m_writer.returnStmt( finalTexCoords );
 				}
 				, sdw::InVec2{ m_writer, "texCoords" }
+				, sdw::InVec2{ m_writer, "dx" }
+				, sdw::InVec2{ m_writer, "dy" }
 				, sdw::InVec3{ m_writer, "viewDir" }
 				, sdw::InCombinedImage2DRgba32{ m_writer, "heightMap" }
 				, InTextureConfigData{ m_writer, "textureConfig" } );
 		}
 
-		return m_parallaxMapping( ptexCoords.xy()
+		ptexCoords = m_parallaxMapping( ptexCoords
+			, pdx
+			, pdy
 			, pviewDir
 			, pheightMap
 			, ptextureConfig );
@@ -1061,23 +1098,30 @@ namespace castor3d::shader
 	}
 
 	sdw::RetVec4 Utils::sampleUntiled( sdw::CombinedImage2DRgba32 const & pmap
-		, sdw::Vec2 const & ptexCoords )
+		, sdw::Vec2 const & ptexCoords
+		, sdw::Vec2 const & pddx
+		, sdw::Vec2 const & pddy )
 	{
-		if ( !m_sampleUntiled )
+		if ( !m_hash4 )
 		{
 			m_hash4 = m_writer.implementFunction< sdw::Vec4 >( "hash4"
 				, [&]( sdw::Vec2 const & p )
 				{
-					m_writer.returnStmt( fract( sin( vec4( 1.0_f + dot( p, vec2( 37.0_f, 17.0_f ) ),
-						2.0_f + dot( p, vec2( 11.0_f, 47.0_f ) ),
-						3.0_f + dot( p, vec2( 41.0_f, 29.0_f ) ),
-						4.0_f + dot( p, vec2( 23.0_f, 31.0_f ) ) ) ) * 103.0_f ) );
+					m_writer.returnStmt( fract( sin( vec4( 1.0_f + dot( p, vec2( 37.0_f, 17.0_f ) )
+						, 2.0_f + dot( p, vec2( 11.0_f, 47.0_f ) )
+						, 3.0_f + dot( p, vec2( 41.0_f, 29.0_f ) )
+						, 4.0_f + dot( p, vec2( 23.0_f, 31.0_f ) ) ) ) * 103.0_f ) );
 				}
 				, sdw::InVec2{ m_writer, "p" } );
+		}
 
+		if ( !m_sampleUntiled )
+		{
 			m_sampleUntiled = m_writer.implementFunction< sdw::Vec4 >( "sampleUntiled"
 				, [&]( sdw::CombinedImage2DRgba32 const & map
-					, sdw::Vec2 const & texCoords )
+					, sdw::Vec2 const & texCoords
+					, sdw::Vec2 const & ddx
+					, sdw::Vec2 const & ddy )
 				{
 					auto iuv = m_writer.declLocale( "iuv", floor( texCoords ) );
 					auto fuv = m_writer.declLocale( "fuv", fract( texCoords ) );
@@ -1087,9 +1131,6 @@ namespace castor3d::shader
 					auto ofb = m_writer.declLocale( "ofb", m_hash4( iuv + vec2( 1.0_f, 0.0_f ) ) );
 					auto ofc = m_writer.declLocale( "ofc", m_hash4( iuv + vec2( 0.0_f, 1.0_f ) ) );
 					auto ofd = m_writer.declLocale( "ofd", m_hash4( iuv + vec2( 1.0_f, 1.0_f ) ) );
-
-					auto ddx = m_writer.declLocale( "ddx", dFdx( texCoords ) );
-					auto ddy = m_writer.declLocale( "ddy", dFdy( texCoords ) );
 
 					// transform per-tile uvs
 					ofa.zw() = sign( ofa.zw() - 0.5_f );
@@ -1119,9 +1160,29 @@ namespace castor3d::shader
 						, vec4( b.y() ) ) );
 				}
 				, sdw::InCombinedImage2DRgba32{ m_writer, "map" }
-				, sdw::InVec2{ m_writer, "texCoords" } );
+				, sdw::InVec2{ m_writer, "texCoords" }
+				, sdw::InVec2{ m_writer, "ddx" }
+				, sdw::InVec2{ m_writer, "ddy" } );
 		}
 
-		return m_sampleUntiled( pmap, ptexCoords );
+		return m_sampleUntiled( pmap, ptexCoords, pddx, pddy );
+	}
+
+	sdw::RetVec4 Utils::sampleUntiled( sdw::CombinedImage2DRgba32 const & map
+		, sdw::Vec2 const & texCoords )
+	{
+		return sampleUntiled( map
+			, texCoords
+			, dFdx( texCoords )
+			, dFdy( texCoords ) );
+	}
+
+	sdw::RetVec4 Utils::sampleUntiled( sdw::CombinedImage2DRgba32 const & map
+		, DerivTex const & texCoords )
+	{
+		return sampleUntiled( map
+			, texCoords.uv()
+			, texCoords.dx()
+			, texCoords.dy() );
 	}
 }

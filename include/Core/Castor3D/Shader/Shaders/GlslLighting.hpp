@@ -295,6 +295,20 @@ namespace castor3d::shader
 			, TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, shader::Material const & material
+			, DerivTex & texCoords0
+			, DerivTex & texCoords1
+			, DerivTex & texCoords2
+			, DerivTex & texCoords3
+			, sdw::Vec3 & emissive
+			, sdw::Float & occlusion
+			, sdw::Float & transmittance
+			, LightMaterial & lightMat );
+		C3D_API void computeMapContributions( PassFlags const & passFlags
+			, TextureFlags const & textureFlags
+			, TextureConfigurations const & textureConfigs
+			, TextureAnimations const & textureAnims
+			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			, shader::Material const & material
 			, sdw::Vec3 & texCoords0
 			, sdw::Vec3 & texCoords1
 			, sdw::Vec3 & texCoords2

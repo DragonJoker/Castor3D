@@ -67,6 +67,7 @@ namespace castor3d::shader
 			, FilteredTextureFlags textureFlags
 			, PassFlags passFlags
 			, bool hasTextures );
+		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 
 		// Base
 		sdw::Vec4 position;
@@ -85,6 +86,7 @@ namespace castor3d::shader
 	};
 
 	using InVertexSurface = VertexSurfaceT< ast::var::Flag::eShaderInput >;
+	using VertexSurface = VertexSurfaceT< ast::var::Flag::eNone >;
 
 	template< ast::var::Flag FlagT >
 	struct FragmentSurfaceT

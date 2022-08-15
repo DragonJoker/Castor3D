@@ -118,6 +118,9 @@ namespace castor3d
 			C3D_API void transformUVW( Utils & utils
 				, TextureAnimData const & anim
 				, sdw::Vec3 & uvw )const;
+			C3D_API void transformUV( Utils & utils
+				, TextureAnimData const & anim
+				, DerivTex & uv )const;
 
 			C3D_API sdw::Float getGlossiness( sdw::Vec4 const & sampled
 				, sdw::Float const & glossiness )const;
@@ -268,6 +271,22 @@ namespace castor3d
 				, sdw::Vec2 const & rhs )const
 			{
 				lhs.xy() = rhs;
+			}
+
+			sdw::Vec2 getUv( DerivTex const & uvw )const
+			{
+				return uvw.uv();
+			}
+
+			DerivTex toUv( DerivTex const & uvw )const
+			{
+				return uvw;
+			}
+
+			void setUv( DerivTex & lhs
+				, DerivTex const & rhs )const
+			{
+				lhs.uv() = rhs.uv();
 			}
 
 		private:

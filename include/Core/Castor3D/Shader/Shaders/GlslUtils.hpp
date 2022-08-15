@@ -59,6 +59,10 @@ namespace castor3d::shader
 			, sdw::CombinedImage2DRgba32 const map
 			, sdw::Vec2 const texCoords
 			, sdw::Float const * lod );
+		C3D_API sdw::Vec4 sampleMap( PassFlags const & passFlags
+			, sdw::CombinedImage2DRgba32 const map
+			, DerivTex const texCoords
+			, sdw::Float const * lod );
 		C3D_API sdw::RetVec2 transformUV( TextureConfigData const & config
 			, TextureAnimData const & anim
 			, sdw::Vec2 const uv );
@@ -89,7 +93,17 @@ namespace castor3d::shader
 			, sdw::Float const & accumulationOperator );
 		C3D_API sdw::RetVec3 fresnelSchlick( sdw::Float const & product
 			, sdw::Vec3 const & f0 );
-		C3D_API sdw::RetVec2 parallaxMapping( sdw::Vec2 const & texCoords
+		C3D_API void parallaxMapping( sdw::Vec2 & texCoords
+			, sdw::Vec3 const & viewDir
+			, sdw::CombinedImage2DRgba32 const & heightMap
+			, TextureConfigData const & textureConfig );
+		C3D_API void parallaxMapping( DerivTex & texCoords
+			, sdw::Vec3 const & viewDir
+			, sdw::CombinedImage2DRgba32 const & heightMap
+			, TextureConfigData const & textureConfig );
+		C3D_API void parallaxMapping( sdw::Vec2 texCoords
+			, sdw::Vec2 const & dx
+			, sdw::Vec2 const & dy
 			, sdw::Vec3 const & viewDir
 			, sdw::CombinedImage2DRgba32 const & heightMap
 			, TextureConfigData const & textureConfig );
@@ -150,7 +164,13 @@ namespace castor3d::shader
 
 	private:
 		sdw::RetVec4 sampleUntiled( sdw::CombinedImage2DRgba32 const & map
+			, sdw::Vec2 const & texCoords
+			, sdw::Vec2 const & ddx
+			, sdw::Vec2 const & ddy );
+		sdw::RetVec4 sampleUntiled( sdw::CombinedImage2DRgba32 const & map
 			, sdw::Vec2 const & texCoords );
+		sdw::RetVec4 sampleUntiled( sdw::CombinedImage2DRgba32 const & map
+			, DerivTex const & texCoords );
 
 	private:
 		sdw::ShaderWriter & m_writer;
@@ -193,6 +213,8 @@ namespace castor3d::shader
 			, sdw::InVec3 > m_invertNormal;
 		sdw::Function< sdw::Vec2
 			, sdw::InVec2
+			, sdw::InVec2
+			, sdw::InVec2
 			, sdw::InVec3
 			, sdw::InCombinedImage2DRgba32
 			, InTextureConfigData > m_parallaxMapping;
@@ -229,6 +251,8 @@ namespace castor3d::shader
 			, sdw::InVec2 > m_hash4;
 		sdw::Function< sdw::Vec4
 			, sdw::InCombinedImage2DRgba32
+			, sdw::InVec2
+			, sdw::InVec2
 			, sdw::InVec2 > m_sampleUntiled;
 		sdw::Function< sdw::Vec2
 			, InTextureConfigData

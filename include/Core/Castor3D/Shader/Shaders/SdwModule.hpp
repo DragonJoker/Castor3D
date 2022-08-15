@@ -22,6 +22,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/BaseTypes/StorageImage.hpp>
 #include <ShaderWriter/BaseTypes/UInt.hpp>
 #include <ShaderWriter/CompositeTypes/Function.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 
 namespace castor3d::shader
 {
@@ -158,6 +159,7 @@ namespace castor3d::shader
 	Writer_Parameter( Ray );
 	Writer_Parameter( SpotLight );
 	Writer_Parameter( Surface );
+	Writer_Parameter( TextureAnimData );
 	Writer_Parameter( TextureConfigData );
 	Writer_Parameter( VoxelData );
 
@@ -167,6 +169,27 @@ namespace castor3d::shader
 	C3D_API uint32_t getMaxLightComponentsCount();
 	C3D_API castor::String concatModelNames( castor::String lhs
 		, castor::String rhs );
+
+	struct DerivTex
+		: public sdw::StructInstanceHelperT< "DerivTex"
+		, sdw::type::MemoryLayout::eC
+		, sdw::Vec2Field< "uv" >
+		, sdw::Vec2Field< "dx" >
+		, sdw::Vec2Field< "dy" > >
+	{
+		DerivTex( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+		{
+		}
+
+		auto uv()const { return getMember< "uv" >(); }
+		auto dx()const { return getMember< "dx" >(); }
+		auto dy()const { return getMember< "dy" >(); }
+	};
+
+	Writer_Parameter( DerivTex );
 
 	//@}
 	//@}
