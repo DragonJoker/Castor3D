@@ -15,11 +15,14 @@ See LICENSE file in root folder
 
 #include <RenderGraph/FrameGraphPrerequisites.hpp>
 
+#include <ashespp/Descriptor/WriteDescriptorSet.hpp>
+
 #include <functional>
 
 namespace castor3d
 {
 	class MatrixUbo;
+
 	/**@name Render */
 	//@{
 
@@ -831,6 +834,278 @@ namespace castor3d
 		, ashes::Image const & image
 		, Texture const & texture );
 	C3D_API void printGraph( crg::RunnableGraph const & graph );
+	/**
+	*\~english
+	*\brief
+	*	Creates a descriptor write for storage image.
+	*\param[in] view
+	*	The image view.
+	*\param[in] dstBinding
+	*	The binding inside the descriptor set.
+	*\param[in] dstArrayElement
+	*	The array element index.
+	*\~french
+	*\brief
+	*	Crée un descriptor write pour une storage image.
+	*\param[in] view
+	*	La vue sur l'image.
+	*\param[in] dstBinding
+	*	Le binding dans le descriptor set.
+	*\param[in] dstArrayElement
+	*	L'indice dans le tableau d'éléments.
+	*/
+	C3D_API ashes::WriteDescriptorSet makeDescriptorWrite( VkImageView const & view
+		, uint32_t dstBinding
+		, uint32_t dstArrayElement = 0u );
+	/**
+	*\~english
+	*\brief
+	*	Creates a descriptor write for storage image.
+	*\param[in] view
+	*	The image view.
+	*\param[in] dstBinding
+	*	The binding inside the descriptor set.
+	*\param[in] dstArrayElement
+	*	The array element index.
+	*\~french
+	*\brief
+	*	Crée un descriptor write pour une storage image.
+	*\param[in] view
+	*	La vue sur l'image.
+	*\param[in] dstBinding
+	*	Le binding dans le descriptor set.
+	*\param[in] dstArrayElement
+	*	L'indice dans le tableau d'éléments.
+	*/
+	C3D_API ashes::WriteDescriptorSet makeDescriptorWrite( ashes::ImageView const & view
+		, uint32_t dstBinding
+		, uint32_t dstArrayElement = 0u );
+	/**
+	*\~english
+	*\brief
+	*	Creates a descriptor write for combined image sampler.
+	*\param[in] view
+	*	The image view.
+	*\param[in] sampler
+	*	The sampler.
+	*\param[in] dstBinding
+	*	The binding inside the descriptor set.
+	*\param[in] dstArrayElement
+	*	The array element index.
+	*\~french
+	*\brief
+	*	Crée un descriptor write pour un sampler et une image combinés.
+	*\param[in] view
+	*	La vue sur l'image.
+	*\param[in] sampler
+	*	Le sampler.
+	*\param[in] dstBinding
+	*	Le binding dans le descriptor set.
+	*\param[in] dstArrayElement
+	*	L'indice dans le tableau d'éléments.
+	*/
+	C3D_API ashes::WriteDescriptorSet makeDescriptorWrite( VkImageView const & view
+		, VkSampler const & sampler
+		, uint32_t dstBinding
+		, uint32_t dstArrayElement = 0u );
+	/**
+	*\~english
+	*\brief
+	*	Creates a descriptor write for combined image sampler.
+	*\param[in] view
+	*	The image view.
+	*\param[in] sampler
+	*	The sampler.
+	*\param[in] dstBinding
+	*	The binding inside the descriptor set.
+	*\param[in] dstArrayElement
+	*	The array element index.
+	*\~french
+	*\brief
+	*	Crée un descriptor write pour un sampler et une image combinés.
+	*\param[in] view
+	*	La vue sur l'image.
+	*\param[in] sampler
+	*	Le sampler.
+	*\param[in] dstBinding
+	*	Le binding dans le descriptor set.
+	*\param[in] dstArrayElement
+	*	L'indice dans le tableau d'éléments.
+	*/
+	C3D_API ashes::WriteDescriptorSet makeDescriptorWrite( ashes::ImageView const & view
+		, ashes::Sampler const & sampler
+		, uint32_t dstBinding
+		, uint32_t dstArrayElement = 0u );
+	/**
+	*\~english
+	*\brief
+	*	Creates a descriptor write for uniform buffer.
+	*\param[in] buffer
+	*	The uniform buffer.
+	*\param[in] dstBinding
+	*	The binding inside the descriptor set.
+	*\param[in] elemOffset
+	*	The offset, expressed in element count.
+	*\param[in] elemRange
+	*	The range, expressed in element count.
+	*\param[in] dstArrayElement
+	*	The array element index.
+	*\~french
+	*\brief
+	*	Crée un descriptor write pour un uniform buffer.
+	*\param[in] buffer
+	*	L'uniform buffer.
+	*\param[in] dstBinding
+	*	Le binding dans le descriptor set.
+	*\param[in] elemOffset
+	*	L'offset, exprimé en nombre d'éléments.
+	*\param[in] elemRange
+	*	L'intervalle, exprimé en nombre d'éléments.
+	*\param[in] dstArrayElement
+	*	L'indice dans le tableau d'éléments.
+	*/
+	C3D_API ashes::WriteDescriptorSet makeDescriptorWrite( ashes::UniformBuffer const & buffer
+		, uint32_t dstBinding
+		, VkDeviceSize elemOffset
+		, VkDeviceSize elemRange
+		, uint32_t dstArrayElement = 0u );
+	/**
+	*\~english
+	*\brief
+	*	Creates a descriptor write for storage buffer.
+	*\param[in] storageBuffer
+	*	The storage buffer.
+	*\param[in] dstBinding
+	*	The binding inside the descriptor set.
+	*\param[in] byteOffset
+	*	The offset, expressed in bytes.
+	*\param[in] byteRange
+	*	The range, expressed in bytes.
+	*\param[in] dstArrayElement
+	*	The array element index.
+	*\~french
+	*\brief
+	*	Crée un descriptor write pour un storage buffer.
+	*\param[in] storageBuffer
+	*	Le storage buffer.
+	*\param[in] dstBinding
+	*	Le binding dans le descriptor set.
+	*\param[in] byteOffset
+	*	L'offset, exprimé en octets.
+	*\param[in] byteRange
+	*	L'intervalle, exprimé en octets.
+	*\param[in] dstArrayElement
+	*	L'indice dans le tableau d'éléments.
+	*/
+	C3D_API ashes::WriteDescriptorSet makeDescriptorWrite( ashes::BufferBase const & storageBuffer
+		, uint32_t dstBinding
+		, VkDeviceSize byteOffset
+		, VkDeviceSize byteRange
+		, uint32_t dstArrayElement = 0u );
+	/**
+	*\~english
+	*\brief
+	*	Creates a descriptor write for storage buffer.
+	*\param[in] storageBuffer
+	*	The storage buffer.
+	*\param[in] dstBinding
+	*	The binding inside the descriptor set.
+	*\param[in] elemOffset
+	*	The offset, expressed in element count.
+	*\param[in] elemRange
+	*	The range, expressed in element count.
+	*\param[in] dstArrayElement
+	*	The array element index.
+	*\~french
+	*\brief
+	*	Crée un descriptor write pour un storage buffer.
+	*\param[in] storageBuffer
+	*	Le storage buffer.
+	*\param[in] dstBinding
+	*	Le binding dans le descriptor set.
+	*\param[in] elemOffset
+	*	L'offset, exprimé en nombre d'éléments.
+	*\param[in] elemRange
+	*	L'intervalle, exprimé en nombre d'éléments.
+	*\param[in] dstArrayElement
+	*	L'indice dans le tableau d'éléments.
+	*/
+	template< typename DataT >
+	ashes::WriteDescriptorSet makeDescriptorWrite( ashes::Buffer< DataT > const & storageBuffer
+		, uint32_t dstBinding
+		, VkDeviceSize elemOffset
+		, VkDeviceSize elemRange
+		, uint32_t dstArrayElement = 0u )
+	{
+		return makeDescriptorWrite( storageBuffer.getBuffer()
+			, dstBinding
+			, elemOffset * sizeof( DataT )
+			, elemRange * sizeof( DataT )
+			, dstArrayElement );
+	}
+	/**
+	*\~english
+	*\brief
+	*	Creates a descriptor write for buffer texel view.
+	*\param[in] buffer
+	*	The buffer.
+	*\param[in] view
+	*	The texel view.
+	*\param[in] dstBinding
+	*	The binding inside the descriptor set.
+	*\param[in] dstArrayElement
+	*	The array element index.
+	*\~french
+	*\brief
+	*	Crée un descriptor write pour une texel view sur un buffer.
+	*\param[in] buffer
+	*	Le buffer.
+	*\param[in] view
+	*	La texel view.
+	*\param[in] dstBinding
+	*	Le binding dans le descriptor set.
+	*\param[in] dstArrayElement
+	*	L'indice dans le tableau d'éléments.
+	*/
+	C3D_API ashes::WriteDescriptorSet makeDescriptorWrite( ashes::BufferBase const & buffer
+		, ashes::BufferView const & view
+		, uint32_t dstBinding
+		, uint32_t dstArrayElement = 0u );
+	/**
+	*\~english
+	*\brief
+	*	Creates a descriptor write for buffer texel view.
+	*\param[in] buffer
+	*	The buffer.
+	*\param[in] view
+	*	The texel view.
+	*\param[in] dstBinding
+	*	The binding inside the descriptor set.
+	*\param[in] dstArrayElement
+	*	The array element index.
+	*\~french
+	*\brief
+	*	Crée un descriptor write pour une texel view sur un buffer.
+	*\param[in] buffer
+	*	Le buffer.
+	*\param[in] view
+	*	La texel view.
+	*\param[in] dstBinding
+	*	Le binding dans le descriptor set.
+	*\param[in] dstArrayElement
+	*	L'indice dans le tableau d'éléments.
+	*/
+	template< typename DataT >
+	ashes::WriteDescriptorSet makeDescriptorWrite( ashes::Buffer< DataT > const & buffer
+		, ashes::BufferView const & view
+		, uint32_t dstBinding
+		, uint32_t dstArrayElement = 0u )
+	{
+		return makeDescriptorWrite( buffer.getBuffer()
+			, view
+			, dstBinding
+			, dstArrayElement );
+	}
 }
 
 CU_DeclareExportedOwnedBy( C3D_API, castor3d::RenderSystem, RenderSystem )

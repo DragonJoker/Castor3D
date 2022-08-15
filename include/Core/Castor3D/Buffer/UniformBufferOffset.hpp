@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_UniformBufferOffset_HPP___
@@ -119,6 +119,34 @@ namespace castor3d
 			return result;
 		}
 	};
+	/**
+	*\~english
+	*\brief
+	*	Creates a descriptor write for uniform buffer range.
+	*\param[in] buffer
+	*	The uniform buffer range.
+	*\param[in] dstBinding
+	*	The binding inside the descriptor set.
+	*\param[in] dstArrayElement
+	*	The array element index.
+	*\~french
+	*\brief
+	*	Crée un descriptor write pour un intervalle d'uniform buffer.
+	*\param[in] buffer
+	*	L'intervalle d'uniform buffer.
+	*\param[in] dstBinding
+	*	Le binding dans le descriptor set.
+	*\param[in] dstArrayElement
+	*	L'indice dans le tableau d'éléments.
+	*/
+	template< typename DataT >
+	ashes::WriteDescriptorSet makeDescriptorWrite( UniformBufferOffsetT< DataT > const & buffer
+		, uint32_t dstBinding
+		, uint32_t dstArrayElement = 0u )
+	{
+		return buffer.getDescriptorWrite( dstBinding
+			, dstArrayElement );
+	}
 }
 
 #endif

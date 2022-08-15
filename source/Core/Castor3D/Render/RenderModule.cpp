@@ -398,4 +398,106 @@ namespace castor3d
 	}
 
 	//*********************************************************************************************
+
+	ashes::WriteDescriptorSet makeDescriptorWrite( VkImageView const & view
+		, uint32_t dstBinding
+		, uint32_t dstArrayElement )
+	{
+		auto result = ashes::WriteDescriptorSet{ dstBinding
+			, dstArrayElement
+			, 1u
+			, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE };
+		result.imageInfo.push_back( { nullptr, view, VK_IMAGE_LAYOUT_GENERAL } );
+		return result;
+	}
+
+	ashes::WriteDescriptorSet makeDescriptorWrite( ashes::ImageView const & view
+		, uint32_t dstBinding
+		, uint32_t dstArrayElement )
+	{
+		auto result = ashes::WriteDescriptorSet{ dstBinding
+			, dstArrayElement
+			, 1u
+			, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE };
+		result.imageInfo.push_back( { nullptr, view, VK_IMAGE_LAYOUT_GENERAL } );
+		return result;
+	}
+
+	ashes::WriteDescriptorSet makeDescriptorWrite( VkImageView const & view
+		, VkSampler const & sampler
+		, uint32_t dstBinding
+		, uint32_t dstArrayElement )
+	{
+		auto result = ashes::WriteDescriptorSet{ dstBinding
+			, dstArrayElement
+			, 1u
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER };
+		result.imageInfo.push_back( { sampler, view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
+		return result;
+	}
+
+	ashes::WriteDescriptorSet makeDescriptorWrite( ashes::ImageView const & view
+		, ashes::Sampler const & sampler
+		, uint32_t dstBinding
+		, uint32_t dstArrayElement )
+	{
+		auto result = ashes::WriteDescriptorSet{ dstBinding
+			, dstArrayElement
+			, 1u
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER };
+		result.imageInfo.push_back( { sampler, view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
+		return result;
+	}
+
+	ashes::WriteDescriptorSet makeDescriptorWrite( ashes::UniformBuffer const & buffer
+		, uint32_t dstBinding
+		, VkDeviceSize elemOffset
+		, VkDeviceSize elemRange
+		, uint32_t dstArrayElement )
+	{
+		auto result = ashes::WriteDescriptorSet{ dstBinding
+			, dstArrayElement
+			, 1u
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER };
+		result.bufferInfo.push_back( { buffer.getBuffer()
+			, buffer.getAlignedSize() * elemOffset
+			, buffer.getAlignedSize() * elemRange } );
+		return result;
+	}
+
+	ashes::WriteDescriptorSet makeDescriptorWrite( ashes::BufferBase const & storageBuffer
+		, uint32_t dstBinding
+		, VkDeviceSize byteOffset
+		, VkDeviceSize byteRange
+		, uint32_t dstArrayElement )
+	{
+		auto result = ashes::WriteDescriptorSet{ dstBinding
+			, dstArrayElement
+			, 1u
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
+		result.bufferInfo.push_back( { storageBuffer
+			, byteOffset
+			, byteRange } );
+		return result;
+	}
+
+	ashes::WriteDescriptorSet makeDescriptorWrite( ashes::BufferBase const & buffer
+		, ashes::BufferView const & view
+		, uint32_t dstBinding
+		, uint32_t dstArrayElement )
+	{
+		auto result = ashes::WriteDescriptorSet{ dstBinding
+			, dstArrayElement
+			, 1u
+			, ( ( buffer.getUsage() & VkBufferUsageFlagBits::VK_BUFFER_USAGE_STORAGE_BUFFER_BIT )
+				? VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER
+				: VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER ), };
+		result.bufferInfo.push_back( { buffer
+			, view.getOffset()
+			, view.getRange() } );
+		result.texelBufferView.push_back( view );
+		return result;
+	}
+
+	//*********************************************************************************************
 }

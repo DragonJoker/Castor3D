@@ -1270,7 +1270,7 @@ namespace castor3d
 
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 
-			m_renderQuad->registerPassInputs( { RenderQuad::makeDescriptorWrite( handler.createImageView( context, m_picking->getImageView() )
+			m_renderQuad->registerPassInputs( { makeDescriptorWrite( handler.createImageView( context, m_picking->getImageView() )
 					, m_renderQuad->getSampler().getSampler(), 0u )
 				, RenderQuad::makeDescriptorWrite( m_configUbo, 1u ) }
 				, true );
@@ -1279,8 +1279,8 @@ namespace castor3d
 
 			for ( auto & intermediate : m_intermediateSampledViews )
 			{
-				m_renderQuad->registerPassInputs( { RenderQuad::makeDescriptorWrite( handler.createImageView( context, intermediate.viewId ), m_renderQuad->getSampler().getSampler(), 0u )
-						, RenderQuad::makeDescriptorWrite( m_configUbo, 1u ) }
+				m_renderQuad->registerPassInputs( { makeDescriptorWrite( handler.createImageView( context, intermediate.viewId ), m_renderQuad->getSampler().getSampler(), 0u )
+						, makeDescriptorWrite( m_configUbo, 1u ) }
 					, intermediate.factors.invertY );
 			}
 
