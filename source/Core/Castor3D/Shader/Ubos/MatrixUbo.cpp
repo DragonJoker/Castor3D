@@ -171,6 +171,11 @@ namespace castor3d
 			return m_prvView[3].xyz();
 		}
 
+		sdw::Mat4 MatrixData::getInvViewProjMtx()const
+		{
+			return inverse( m_curViewProj );
+		}
+
 		void MatrixData::jitter( sdw::Vec4 & csPosition )const
 		{
 			csPosition.xy() -= m_jitter.xy() * csPosition.w();
