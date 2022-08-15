@@ -21,6 +21,13 @@ namespace castor3d
 		, uint32_t // texturesCount
 		, TextureFlags >;
 
+	uint64_t getHash( SubmeshFlags submeshFlags
+		, ProgramFlags programFlags
+		, PassTypeID passType
+		, PassFlags passFlags
+		, uint32_t maxTexcoordSet
+		, uint32_t texturesCount
+		, TextureFlags texturesFlags );
 	PipelineBaseHash getPipelineBaseHash( RenderNodesPass const & renderPass
 		, Submesh const & data
 		, Pass const & pass

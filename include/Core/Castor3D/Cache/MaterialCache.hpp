@@ -118,15 +118,35 @@ namespace castor
 		 *\param[out]	names	La liste de noms
 		 */
 		C3D_API void getNames( StringArray & names );
+		/**
+		 *\~english
+		 *\return		The maximum pass types count (for visibility buffer use).
+		 *\~french
+		 *\brief		Le nombre maximum de types de passes (pour l'utilisation de vibility buffer).
+		 */
+		C3D_API uint32_t getMaxPassTypeCount()const;
+		/**
+		 *\~english
+		 *\return		The pass type details for given pass type index (for visibility buffer use).
+		 *\~french
+		 *\brief		Les détails du type de passe pour l'index donné (pour l'utilisation de vibility buffer).
+		 */
+		C3D_API std::tuple< castor3d::PassTypeID, castor3d::PassFlags > getPassTypeDetails( uint32_t passTypeIndex )const;
+		/**
+		 *\~english
+		 *\return		The pass type index (for visibility buffer use).
+		 *\~french
+		 *\brief		L'indice de type de passe (pour l'utilisation de vibility buffer).
+		 */
+		C3D_API uint32_t getPassTypeIndex( castor3d::PassTypeID passType
+			, castor3d::PassFlags passFlags )const;
 		C3D_API bool registerPass( castor3d::Pass & pass );
 		C3D_API void unregisterPass( castor3d::Pass & pass );
 		C3D_API bool registerUnit( castor3d::TextureUnit & unit );
 		C3D_API void unregisterUnit( castor3d::TextureUnit & unit );
 		C3D_API bool registerTexture( castor3d::AnimatedTexture const & texture );
 		C3D_API void unregisterTexture( castor3d::AnimatedTexture const & texture );
-		C3D_API uint32_t getMaxPassTypeCount()const;
 		C3D_API uint32_t getCurrentPassTypeCount()const;
-		C3D_API std::tuple< castor3d::PassTypeID, castor3d::PassFlags, castor3d::TextureFlags, uint32_t > getPassTypeDetails( uint32_t passTypeIndex )const;
 
 		castor3d::MaterialRPtr getDefaultMaterial()const
 		{

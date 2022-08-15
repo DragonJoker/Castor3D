@@ -114,7 +114,7 @@ namespace castor3d
 			return imageId.data->info.format;
 		}
 
-		VkExtent3D getExtent()const
+		VkExtent3D const & getExtent()const
 		{
 			return imageId.data->info.extent;
 		}

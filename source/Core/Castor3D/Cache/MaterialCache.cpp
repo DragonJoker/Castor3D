@@ -173,6 +173,22 @@ namespace castor
 		}
 	}
 
+	uint32_t ResourceCacheT< Material, String, MaterialCacheTraits >::getMaxPassTypeCount()const
+	{
+		return m_passBuffer->getMaxPassTypeCount();
+	}
+
+	std::tuple< PassTypeID, PassFlags > ResourceCacheT< Material, String, MaterialCacheTraits >::getPassTypeDetails( uint32_t passTypeIndex )const
+	{
+		return m_passBuffer->getPassTypeDetails( passTypeIndex );
+	}
+
+	uint32_t ResourceCacheT< Material, String, MaterialCacheTraits >::getPassTypeIndex( castor3d::PassTypeID passType
+		, castor3d::PassFlags passFlags )const
+	{
+		return m_passBuffer->getPassTypeIndex( passType, passFlags );
+	}
+
 	bool ResourceCacheT< Material, String, MaterialCacheTraits >::registerPass( Pass & pass )
 	{
 		if ( m_passBuffer )
@@ -280,18 +296,8 @@ namespace castor
 		}
 	}
 
-	uint32_t ResourceCacheT< Material, String, MaterialCacheTraits >::getMaxPassTypeCount()const
-	{
-		return m_passBuffer->getMaxPassTypeCount();
-	}
-
 	uint32_t ResourceCacheT< Material, String, MaterialCacheTraits >::getCurrentPassTypeCount()const
 	{
 		return m_passBuffer->getCurrentPassTypeCount();
-	}
-
-	std::tuple< PassTypeID, PassFlags, TextureFlags, uint32_t > ResourceCacheT< Material, String, MaterialCacheTraits >::getPassTypeDetails( uint32_t passTypeIndex )const
-	{
-		return m_passBuffer->getPassTypeDetails( passTypeIndex );
 	}
 }
