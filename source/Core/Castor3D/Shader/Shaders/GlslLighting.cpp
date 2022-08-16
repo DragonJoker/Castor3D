@@ -465,10 +465,15 @@ namespace castor3d::shader
 		, DerivTex & texCoords1
 		, DerivTex & texCoords2
 		, DerivTex & texCoords3
+		, sdw::Vec3 & normal
+		, sdw::Vec3 & tangent
+		, sdw::Vec3 & bitangent
 		, sdw::Vec3 & emissive
 		, sdw::Float & occlusion
 		, sdw::Float & transmittance
-		, LightMaterial & lightMat )
+		, LightMaterial & lightMat
+		, sdw::Vec3 & tangentSpaceViewPosition
+		, sdw::Vec3 & tangentSpaceFragPosition )
 	{
 		if ( !textureConfigs.isEnabled() )
 		{
@@ -482,22 +487,6 @@ namespace castor3d::shader
 		auto opacity = m_writer.declLocale( "c3d_opa"
 			, 0.0_f
 			, false );
-		auto normal = m_writer.declLocale( "c3d_nml"
-			, vec3( 0.0_f )
-			, false );
-		auto tangent = m_writer.declLocale( "c3d_tan"
-			, vec3( 0.0_f )
-			, false );
-		auto bitangent = m_writer.declLocale( "c3d_bit"
-			, vec3( 0.0_f )
-			, false );
-		auto tangentSpaceViewPosition = m_writer.declLocale( "c3d_tvp"
-			, vec3( 0.0_f )
-			, false );
-		auto tangentSpaceFragPosition = m_writer.declLocale( "c3d_tfp"
-			, vec3( 0.0_f )
-			, false );
-
 		FOR( m_writer, sdw::UInt, index, 0u, index < material.texturesCount(), ++index )
 		{
 			auto id = m_writer.declLocale( "c3d_id"

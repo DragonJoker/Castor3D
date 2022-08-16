@@ -182,9 +182,6 @@ namespace castor3d
 		//!\~english	All flags used in base pipeline flags hashing.
 		//\~french		Tous les indicateurs utilisés dans le hash des indicateurs de pipeline.
 		eAllBase = ( 0x0001 << int( SubmeshData::eCount ) ) - 1,
-		//!\~english	All flags but normals and tangents.
-		//\~french		Tous les indicateurs sauf normales et tangentes.
-		eAllButNmlTan = ( eAllBase & ~( eNormals | eTangents ) ),
 	};
 	CU_ImplementFlags( SubmeshFlag )
 

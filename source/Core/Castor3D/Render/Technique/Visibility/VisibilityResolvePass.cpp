@@ -89,6 +89,8 @@ namespace castor3d
 		{
 			eInIndices,
 			eInPosition,
+			eInNormal,
+			eInTangent,
 			eInTexcoord0,
 			eInTexcoord1,
 			eInTexcoord2,
@@ -314,6 +316,14 @@ namespace castor3d
 				, checkFlag( submeshFlags, SubmeshFlag::ePositions )
 				, stride );
 			c3d_inPositionBuffer.end();
+			DeclareSsbo( c3d_inNormal
+				, sdw::Vec4
+				, VtxBindings::eInNormal
+				, checkFlag( submeshFlags, SubmeshFlag::eNormals ) );
+			DeclareSsbo( c3d_inTangent
+				, sdw::Vec4
+				, VtxBindings::eInTangent
+				, checkFlag( submeshFlags, SubmeshFlag::eTangents ) );
 			DeclareSsbo( c3d_inTexcoord0
 				, sdw::Vec4
 				, VtxBindings::eInTexcoord0
@@ -734,7 +744,25 @@ namespace castor3d
 						}
 					}
 
+					if ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) )
 					{
+						result.normal = derivatives.interpolate( v0.normal.xyz()
+							, v1.normal.xyz()
+							, v2.normal.xyz() );
+
+						if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) )
+						{
+							result.tangent = derivatives.interpolate( v0.tangent.xyz()
+								, v1.tangent.xyz()
+								, v2.tangent.xyz() );
+
+							result.computeTangentSpace( submeshFlags
+								, ProgramFlag::eNone
+								, c3d_sceneData.cameraPosition
+								, result.curPosition.xyz()
+								, result.normal
+								, result.tangent );
+						}
 					}
 
 					result.prvPosition = c3d_matrixData.worldToPrvProj( result.prvPosition );
@@ -795,6 +823,11 @@ namespace castor3d
 						, { surface.texture2, checkFlag( submeshFlags, SubmeshFlag::eTexcoords2 ) }
 						, { surface.texture3, checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) }
 						, 1.0_f
+						, { normalize( surface.normal ), checkFlag( submeshFlags, SubmeshFlag::eNormals ) }
+						, { normalize( surface.tangent ), checkFlag( submeshFlags, SubmeshFlag::eTangents ) }
+						, { normalize( surface.bitangent ), checkFlag( submeshFlags, SubmeshFlag::eTangents ) }
+						, { surface.tangentSpaceViewPosition, checkFlag( submeshFlags, SubmeshFlag::eTangents ) }
+						, { surface.tangentSpaceFragPosition, checkFlag( submeshFlags, SubmeshFlag::eTangents ) }
 						, 1.0_f
 						, 1.0_f
 						, vec3( 0.0_f ) };
@@ -1047,6 +1080,20 @@ namespace castor3d
 					, stages ) );
 			}
 
+			if ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) )
+			{
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInNormal
+					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+					, stages ) );
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) )
+			{
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInTangent
+					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+					, stages ) );
+			}
+
 			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 ) )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInTexcoord0
@@ -1131,6 +1178,18 @@ namespace castor3d
 			{
 				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::ePositions )]->getBuffer().getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInPosition, 0u, buffer.getSize() ) );
+			}
+
+			if ( modelBuffers.buffers[size_t( SubmeshData::eNormals )] )
+			{
+				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eNormals )]->getBuffer().getBuffer();
+				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInNormal, 0u, buffer.getSize() ) );
+			}
+
+			if ( modelBuffers.buffers[size_t( SubmeshData::eTangents )] )
+			{
+				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eTangents )]->getBuffer().getBuffer();
+				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInTangent, 0u, buffer.getSize() ) );
 			}
 
 			if ( modelBuffers.buffers[size_t( SubmeshData::eTexcoords0 )] )
