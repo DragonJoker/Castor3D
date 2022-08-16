@@ -299,10 +299,15 @@ namespace castor3d::shader
 			, DerivTex & texCoords1
 			, DerivTex & texCoords2
 			, DerivTex & texCoords3
+			, sdw::Vec3 & normal
+			, sdw::Vec3 & tangent
+			, sdw::Vec3 & bitangent
 			, sdw::Vec3 & emissive
 			, sdw::Float & occlusion
 			, sdw::Float & transmittance
-			, LightMaterial & lightMat );
+			, LightMaterial & lightMat
+			, sdw::Vec3 & tangentSpaceViewPosition
+			, sdw::Vec3 & tangentSpaceFragPosition );
 		C3D_API void computeMapContributions( PassFlags const & passFlags
 			, TextureFlags const & textureFlags
 			, TextureConfigurations const & textureConfigs

@@ -292,6 +292,11 @@ namespace castor3d::shader
 	struct VisResult
 	{
 		sdw::Float opa;
+		sdw::Vec3 nml;
+		sdw::Vec3 tan;
+		sdw::Vec3 bit;
+		sdw::Vec3 tvp;
+		sdw::Vec3 tfp;
 		sdw::Float occ;
 		sdw::Float trn;
 		sdw::Vec3 ems;
@@ -303,6 +308,8 @@ namespace castor3d::shader
 			, std::string const & prefix
 			, BlendComponentT< DerivTex > t0, BlendComponentT< DerivTex > t1, BlendComponentT< DerivTex > t2, BlendComponentT< DerivTex > t3
 			, BlendComponentT< sdw::Float > opa
+			, BlendComponentT< sdw::Vec3 > nml, BlendComponentT< sdw::Vec3 > tan, BlendComponentT< sdw::Vec3 > bit
+			, BlendComponentT< sdw::Vec3 > tvp, BlendComponentT< sdw::Vec3 > tfp
 			, BlendComponentT< sdw::Float > occ, BlendComponentT< sdw::Float > trn, BlendComponentT< sdw::Vec3 > ems );
 		C3D_API VisibilityBlendComponents( sdw::ShaderWriter & writer
 			, std::string const & prefix
@@ -319,6 +326,11 @@ namespace castor3d::shader
 		DerivTex & texCoord2() { return m_texCoord2; }
 		DerivTex & texCoord3() { return m_texCoord3; }
 		sdw::Float & opacity() { return m_opacity; }
+		sdw::Vec3 & normal() { return m_normal; }
+		sdw::Vec3 & tangent() { return m_tangent; }
+		sdw::Vec3 & bitangent() { return m_bitangent; }
+		sdw::Vec3 & tangentSpaceViewPosition() { return m_tangentSpaceViewPosition; }
+		sdw::Vec3 & tangentSpaceFragPosition() { return m_tangentSpaceFragPosition; }
 		sdw::Float & occlusion() { return m_occlusion; }
 		sdw::Float & transmittance() { return m_transmittance; }
 		sdw::Vec3 & emissive() { return m_emissive; }
@@ -328,6 +340,11 @@ namespace castor3d::shader
 		DerivTex const & texCoord2()const { return m_texCoord2; }
 		DerivTex const & texCoord3()const { return m_texCoord3; }
 		sdw::Float const & opacity()const { return m_opacity; }
+		sdw::Vec3 const & normal()const { return m_normal; }
+		sdw::Vec3 const & tangent()const { return m_tangent; }
+		sdw::Vec3 const & bitangent()const { return m_bitangent; }
+		sdw::Vec3 const & tangentSpaceViewPosition()const { return m_tangentSpaceViewPosition; }
+		sdw::Vec3 const & tangentSpaceFragPosition()const { return m_tangentSpaceFragPosition; }
 		sdw::Float const & occlusion()const { return m_occlusion; }
 		sdw::Float const & transmittance()const { return m_transmittance; }
 		sdw::Vec3 const & emissive()const { return m_emissive; }
@@ -338,6 +355,11 @@ namespace castor3d::shader
 		DerivTex m_texCoord2;
 		DerivTex m_texCoord3;
 		sdw::Float m_opacity;
+		sdw::Vec3 m_normal;
+		sdw::Vec3 m_tangent;
+		sdw::Vec3 m_bitangent;
+		sdw::Vec3 m_tangentSpaceViewPosition;
+		sdw::Vec3 m_tangentSpaceFragPosition;
 		sdw::Float m_occlusion;
 		sdw::Float m_transmittance;
 		sdw::Vec3 m_emissive;

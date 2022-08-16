@@ -361,6 +361,11 @@ namespace castor3d::shader
 		, BlendComponentT< DerivTex > t2
 		, BlendComponentT< DerivTex > t3
 		, BlendComponentT< sdw::Float > opa
+		, BlendComponentT< sdw::Vec3 > nml
+		, BlendComponentT< sdw::Vec3 > tan
+		, BlendComponentT< sdw::Vec3 > bit
+		, BlendComponentT< sdw::Vec3 > tvp
+		, BlendComponentT< sdw::Vec3 > tfp
 		, BlendComponentT< sdw::Float > occ
 		, BlendComponentT< sdw::Float > trn
 		, BlendComponentT< sdw::Vec3 > ems )
@@ -369,6 +374,11 @@ namespace castor3d::shader
 		, m_texCoord2{ writer.declLocale( prefix + "TexCoord2", std::move( t2.value ), t2.enabled ) }
 		, m_texCoord3{ writer.declLocale( prefix + "TexCoord3", std::move( t3.value ), t3.enabled ) }
 		, m_opacity{ writer.declLocale( prefix + "Opacity", std::move( opa.value ), opa.enabled ) }
+		, m_normal{ writer.declLocale( prefix + "Normal", std::move( nml.value ), nml.enabled ) }
+		, m_tangent{ writer.declLocale( prefix + "Tangent", std::move( tan.value ), tan.enabled ) }
+		, m_bitangent{ writer.declLocale( prefix + "Bitangent", std::move( bit.value ), bit.enabled ) }
+		, m_tangentSpaceViewPosition{ writer.declLocale( prefix + "TangentSpaceViewPosition", std::move( tvp.value ), tvp.enabled ) }
+		, m_tangentSpaceFragPosition{ writer.declLocale( prefix + "TangentSpaceFragPosition", std::move( tfp.value ), tfp.enabled ) }
 		, m_occlusion{ writer.declLocale( prefix + "Occlusion", std::move( occ.value ), occ.enabled ) }
 		, m_transmittance{ writer.declLocale( prefix + "Transmittance", std::move( trn.value ), trn.enabled ) }
 		, m_emissive{ writer.declLocale( prefix + "Emissive", std::move( ems.value ), ems.enabled ) }
@@ -385,6 +395,11 @@ namespace castor3d::shader
 			, { rhs.texCoord2(), rhs.texCoord2().isEnabled() }
 			, { rhs.texCoord3(), rhs.texCoord3().isEnabled() }
 			, { rhs.opacity(), rhs.opacity().isEnabled() }
+			, { rhs.normal(), rhs.normal().isEnabled() }
+			, { rhs.tangent(), rhs.tangent().isEnabled() }
+			, { rhs.bitangent(), rhs.bitangent().isEnabled() }
+			, { rhs.tangentSpaceViewPosition(), rhs.tangentSpaceViewPosition().isEnabled() }
+			, { rhs.tangentSpaceFragPosition(), rhs.tangentSpaceFragPosition().isEnabled() }
 			, { rhs.occlusion(), rhs.occlusion().isEnabled() }
 			, { rhs.transmittance(), rhs.transmittance().isEnabled() }
 			, { rhs.emissive(), rhs.emissive().isEnabled() } }
@@ -395,6 +410,11 @@ namespace castor3d::shader
 		, VisibilityBlendComponents const & rhs )const
 	{
 		return VisResult{ writer.declLocale( "rOpa", 0.0_f, rhs.opacity().isEnabled() )
+			, writer.declLocale( "rNml", vec3( 0.0_f ), rhs.normal().isEnabled() )
+			, writer.declLocale( "rTan", vec3( 0.0_f ), rhs.tangent().isEnabled() )
+			, writer.declLocale( "rBit", vec3( 0.0_f ), rhs.bitangent().isEnabled() )
+			, writer.declLocale( "rTvp", vec3( 0.0_f ), rhs.tangentSpaceViewPosition().isEnabled() )
+			, writer.declLocale( "rTfp", vec3( 0.0_f ), rhs.tangentSpaceFragPosition().isEnabled() )
 			, writer.declLocale( "rOcc", 0.0_f, rhs.occlusion().isEnabled() )
 			, writer.declLocale( "rTrn", 0.0_f, rhs.transmittance().isEnabled() )
 			, writer.declLocale( "eRms", vec3( 0.0_f ), rhs.emissive().isEnabled() ) };
@@ -404,6 +424,11 @@ namespace castor3d::shader
 		, VisResult & res )const
 	{
 		res.opa += opacity() * passMultiplier;
+		res.nml += normal() * passMultiplier;
+		res.tan += tangent() * passMultiplier;
+		res.bit += bitangent() * passMultiplier;
+		res.tvp += tangentSpaceViewPosition() * passMultiplier;
+		res.tfp += tangentSpaceFragPosition() * passMultiplier;
 		res.occ += occlusion() * passMultiplier;
 		res.trn += transmittance() * passMultiplier;
 		res.ems += emissive() * passMultiplier;
@@ -1153,10 +1178,15 @@ namespace castor3d::shader
 				, output.texCoord1()
 				, output.texCoord2()
 				, output.texCoord3()
+				, output.normal()
+				, output.tangent()
+				, output.bitangent()
 				, output.emissive()
 				, output.occlusion()
 				, output.transmittance()
-				, *lightMat );
+				, *lightMat
+				, output.tangentSpaceViewPosition()
+				, output.tangentSpaceFragPosition() );
 		}
 
 		return std::make_pair( material, std::move( lightMat ) );
