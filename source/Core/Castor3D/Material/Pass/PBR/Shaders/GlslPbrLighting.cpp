@@ -90,14 +90,14 @@ namespace castor3d::shader
 	{
 		auto & pbrLightMat = static_cast< PbrLightMaterial & >( lightMat );
 
-		if ( checkFlag( textureFlags, TextureFlag::eMetalness )
-			&& !checkFlag( textureFlags, TextureFlag::eSpecular ) )
+		if ( !checkFlag( textureFlags, TextureFlag::eSpecular )
+			&& ( checkFlag( textureFlags, TextureFlag::eMetalness ) || checkFlag( textureFlags, castor3d::TextureFlag::eAlbedo ) ) )
 		{
 			pbrLightMat.specular = LightMaterial::computeF0( pbrLightMat.albedo, pbrLightMat.metalness );
 		}
 
-		if ( checkFlag( textureFlags, TextureFlag::eSpecular )
-			&& !checkFlag( textureFlags, TextureFlag::eMetalness ) )
+		if ( !checkFlag( textureFlags, TextureFlag::eMetalness )
+			&& ( checkFlag( textureFlags, TextureFlag::eSpecular ) || checkFlag( textureFlags, castor3d::TextureFlag::eAlbedo ) ) )
 		{
 			pbrLightMat.metalness = LightMaterial::computeMetalness( pbrLightMat.albedo, pbrLightMat.specular );
 		}
