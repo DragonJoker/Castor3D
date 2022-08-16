@@ -27,7 +27,7 @@ namespace castor3d
 	{
 		enum Bindings : uint32_t
 		{
-			eData0,
+			eData,
 			eMaterials,
 			eModelsData,
 			eMaterialsCounts,
@@ -37,7 +37,7 @@ namespace castor3d
 		{
 			sdw::ComputeWriter writer;
 
-			auto data0Map = writer.declStorageImg< sdw::RImage2DRgba32 >( "data0Map", Bindings::eData0, 0u );
+			auto dataMap = writer.declStorageImg< sdw::RUImage2DRgba32 >( "dataMap", Bindings::eData, 0u );
 			shader::Materials materials{ writer, Bindings::eMaterials, 0u };
 			C3D_ModelsData( writer, Bindings::eModelsData, 0u );
 
@@ -50,9 +50,9 @@ namespace castor3d
 				{
 					auto pixel = writer.declLocale( "pixel"
 						, in.globalInvocationID.xy() );
-					auto data0 = data0Map.load( ivec2( pixel ) );
+					auto data = dataMap.load( ivec2( pixel ) );
 					auto nodeId = writer.declLocale( "nodeId"
-						, writer.cast< sdw::UInt >( data0.z() ) );
+						, data.x() );
 
 					IF( writer, nodeId > 0_u )
 					{
@@ -73,13 +73,13 @@ namespace castor3d
 			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, Scene const & scene
-			, crg::ImageViewId const & data0
+			, crg::ImageViewId const & data
 			, ashes::Buffer< uint32_t > const & counts
 			, ashes::PipelineShaderStageCreateInfoArray const & stages )
 		{
 			auto & modelBuffer = scene.getModelBuffer().getBuffer();
 			auto & matCache = scene.getOwner()->getMaterialCache();
-			auto renderSize = getExtent( data0 );
+			auto renderSize = getExtent( data );
 			auto & pass = graph.createPass( name + "/MaterialsCount"
 				, [&stages, &device, renderSize]( crg::FramePass const & framePass
 					, crg::GraphContext & context
@@ -98,7 +98,7 @@ namespace castor3d
 					return result;
 				} );
 			pass.addDependency( *previousPass );
-			pass.addInputStorageView( data0, Bindings::eData0 );
+			pass.addInputStorageView( data, Bindings::eData );
 			matCache.getPassBuffer().createPassBinding( pass, Bindings::eMaterials );
 			pass.addInputStorageBuffer( { modelBuffer, "Models" }
 				, uint32_t( Bindings::eModelsData )
@@ -209,7 +209,7 @@ namespace castor3d
 	{
 		enum Bindings : uint32_t
 		{
-			eData0,
+			eData,
 			eMaterials,
 			eModelsData,
 			eMaterialsCounts,
@@ -221,7 +221,7 @@ namespace castor3d
 		{
 			sdw::ComputeWriter writer;
 
-			auto data0Map = writer.declStorageImg< sdw::RImage2DRgba32 >( "data0Map", Bindings::eData0, 0u );
+			auto dataMap = writer.declStorageImg< sdw::RUImage2DRgba32 >( "dataMap", Bindings::eData, 0u );
 			shader::Materials materials{ writer, Bindings::eMaterials, 0u };
 			C3D_ModelsData( writer, Bindings::eModelsData, 0u );
 
@@ -242,9 +242,9 @@ namespace castor3d
 				{
 					auto pixel = writer.declLocale( "pixel"
 						, in.globalInvocationID.xy() );
-					auto data0 = data0Map.load( ivec2( pixel ) );
+					auto data = dataMap.load( ivec2( pixel ) );
 					auto nodeId = writer.declLocale( "nodeId"
-						, writer.cast< sdw::UInt >( data0.z() ) );
+						, data.x() );
 
 					IF( writer, nodeId > 0_u )
 					{
@@ -267,7 +267,7 @@ namespace castor3d
 			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, Scene const & scene
-			, crg::ImageViewId const & data0
+			, crg::ImageViewId const & data
 			, ashes::Buffer< uint32_t > const & counts
 			, ashes::Buffer< uint32_t > const & starts
 			, ashes::Buffer< castor::Point2ui > const & pixels
@@ -275,7 +275,7 @@ namespace castor3d
 		{
 			auto & modelBuffer = scene.getModelBuffer().getBuffer();
 			auto & matCache = scene.getOwner()->getMaterialCache();
-			auto renderSize = getExtent( data0 );
+			auto renderSize = getExtent( data );
 			auto & pass = graph.createPass( name + "/PixelsXY"
 				, [&stages, &device, renderSize]( crg::FramePass const & framePass
 					, crg::GraphContext & context
@@ -294,7 +294,7 @@ namespace castor3d
 					return result;
 				} );
 			pass.addDependency( *previousPass );
-			pass.addInputStorageView( data0, Bindings::eData0 );
+			pass.addInputStorageView( data, Bindings::eData );
 			matCache.getPassBuffer().createPassBinding( pass, Bindings::eMaterials );
 			pass.addInputStorageBuffer( { modelBuffer, "Models" }
 				, uint32_t( Bindings::eModelsData )
@@ -358,7 +358,7 @@ namespace castor3d
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
 		, Scene const & scene
-		, crg::ImageViewId const & data0
+		, crg::ImageViewId const & data
 		, ashes::Buffer< uint32_t > const & counts1
 		, ashes::Buffer< uint32_t > const & counts2
 		, ashes::Buffer< uint32_t > const & starts
@@ -366,7 +366,7 @@ namespace castor3d
 		: castor::Named{ "VisibilityPass" }
 		, m_computeCountsShader{ VK_SHADER_STAGE_COMPUTE_BIT
 			, getName()
-			, matcount::getProgram( getExtent( data0 ) ) }
+			, matcount::getProgram( getExtent( data ) ) }
 		, m_countsStages{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, m_computeCountsShader ) } }
 		, m_computeStartsShader{ VK_SHADER_STAGE_COMPUTE_BIT
 			, getName() + cuT( "Starts" )
@@ -374,7 +374,7 @@ namespace castor3d
 		, m_startsStages{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, m_computeStartsShader ) } }
 		, m_computePixelsShader{ VK_SHADER_STAGE_COMPUTE_BIT
 			, getName() + cuT( "PixelsXY" )
-			, pixelxy::getProgram( getExtent( data0 ) ) }
+			, pixelxy::getProgram( getExtent( data ) ) }
 		, m_pixelsStages{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, m_computePixelsShader ) } }
 	{
 		auto & clear = graph.createPass( getName() + "/Clear"
@@ -409,7 +409,7 @@ namespace castor3d
 			, ppreviousPass
 			, device
 			, scene
-			, data0
+			, data
 			, counts1
 			, m_countsStages );
 		m_lastPass = &matstart::createPass( getName()
@@ -425,18 +425,11 @@ namespace castor3d
 			, ppreviousPass
 			, device
 			, scene
-			, data0
+			, data
 			, counts2
 			, starts
 			, pixels
 			, m_pixelsStages );
-
-		//auto & matCache = scene.getOwner()->getMaterialCache();
-
-		//for ( uint32_t passTypeIndex = 0u; passTypeIndex < matCache.getCurrentPassTypeCount(); ++passTypeIndex )
-		//{
-		//	auto [passTypeID, passFlags, textureFlags, textureCount] = matCache.getPassTypeDetails( passTypeIndex );
-		//}
 	}
 
 	void VisibilityReorderPass::accept( PipelineVisitor & visitor )

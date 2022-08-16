@@ -23,7 +23,7 @@ namespace castor3d
 			, crg::FramePass const & previousPass
 			, RenderDevice const & device
 			, Scene const & scene
-			, crg::ImageViewId const & data0
+			, crg::ImageViewId const & data
 			, ashes::Buffer< uint32_t > const & counts1
 			, ashes::Buffer< uint32_t > const & counts2
 			, ashes::Buffer< uint32_t > const & starts

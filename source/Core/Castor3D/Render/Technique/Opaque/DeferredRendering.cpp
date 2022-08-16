@@ -136,6 +136,10 @@ namespace castor3d
 
 	void DeferredRendering::accept( RenderTechniqueVisitor & visitor )
 	{
+		visitor.visit( "Opaque Data0"
+			, m_opaquePassResult[DsTexture::eData0].sampledViewId
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Opaque Data1"
 			, m_opaquePassResult[DsTexture::eData1].sampledViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL

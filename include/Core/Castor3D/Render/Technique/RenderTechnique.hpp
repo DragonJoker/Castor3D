@@ -344,9 +344,19 @@ namespace castor3d
 			return *m_pixelsXY;
 		}
 
+		bool hasVisibility()const
+		{
+			return m_visibilityPassDesc != nullptr;
+		}
+
 		OpaquePassResult const & getOpaqueResult()const
 		{
 			return *m_opaquePassResult;
+		}
+
+		VisibilityPassResult const & getVisibilityResult()const
+		{
+			return *m_visibilityPassResult;
 		}
 		/**@}*/
 
@@ -357,6 +367,8 @@ namespace castor3d
 		crg::FramePassArray doCreateRenderPasses( ProgressBar * progress
 			, TechniquePassEvent event
 			, crg::FramePass const * previousPass );
+		crg::FramePass & doCreateVisibilityPass( ProgressBar * progress );
+		crg::FramePass & doCreateVisibilityResolve( ProgressBar * progress );
 		crg::FramePass & doCreateDepthPass( ProgressBar * progress );
 		crg::FramePass & doCreateComputeDepthRange( ProgressBar * progress );
 		BackgroundRendererUPtr doCreateBackgroundPass( ProgressBar * progress );
@@ -398,11 +410,17 @@ namespace castor3d
 		LpvGridConfigUbo m_lpvConfigUbo;
 		LayeredLpvGridConfigUbo m_llpvConfigUbo;
 		VoxelizerUbo m_vctConfigUbo;
+		OpaquePassResultUPtr m_opaquePassResult;
 		ashes::BufferPtr< uint32_t > m_materialsCounts1;
 		ashes::BufferPtr< uint32_t > m_materialsCounts2;
 		ashes::BufferPtr< uint32_t > m_materialsStarts;
 		ashes::BufferPtr< castor::Point2ui > m_pixelsXY;
-		crg::FramePass * m_depthPassDecl{};
+		VisibilityPassResultUPtr m_visibilityPassResult;
+		crg::FramePass * m_visibilityPassDesc{};
+		VisibilityPass * m_visibilityPass{};
+		VisibilityReorderPassUPtr m_visibilityReorder;
+		crg::FramePass * m_visibilityResolveDesc{};
+		crg::FramePass * m_depthPassDesc{};
 		DepthPass * m_depthPass{};
 		ashes::BufferPtr< int32_t > m_depthRange;
 		crg::FramePass * m_computeDepthRangeDesc{};
@@ -414,8 +432,6 @@ namespace castor3d
 		ShadowMapUPtr m_directionalShadowMap;
 		ShadowMapUPtr m_pointShadowMap;
 		ShadowMapUPtr m_spotShadowMap;
-		VisibilityReorderPassUPtr m_visibilityReorder;
-		OpaquePassResultUPtr m_opaquePassResult;
 		crg::FramePass * m_opaquePassDesc{};
 		RenderTechniquePass * m_opaquePass{};
 		DeferredRenderingUPtr m_deferredRendering;

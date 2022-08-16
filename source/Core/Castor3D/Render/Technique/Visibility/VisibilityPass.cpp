@@ -1,4 +1,4 @@
-#include "Castor3D/Render/Passes/DepthPass.hpp"
+#include "Castor3D/Render/Technique/Visibility/VisibilityPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -7,7 +7,6 @@
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
-#include "Castor3D/Render/Technique/RenderTechnique.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
@@ -30,81 +29,100 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, DepthPass )
+CU_ImplementCUSmartPtr( castor3d, VisibilityPass )
 
 namespace castor3d
 {
 	//*********************************************************************************************
 
-	castor::String const DepthPass::Type = "c3d.depth";
+	castor::String const VisibilityPass::Type = "c3d.visibility";
 
-	DepthPass::DepthPass( RenderTechnique * parent
+	VisibilityPass::VisibilityPass( RenderTechnique * parent
 		, crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
-		, SsaoConfig const & ssaoConfig
-		, RenderNodesPassDesc const & renderPassDesc )
+		, castor::String const & category
+		, castor::String const & name
+		, RenderNodesPassDesc const & renderPassDesc
+		, RenderTechniquePassDesc const & techniquePassDesc )
 		: RenderTechniqueNodesPass{ parent
 			, pass
 			, context
 			, graph
 			, device
 			, Type
-			, pass.getName()
-			, "DepthPass"
+			, category
+			, name
 			, nullptr
 			, renderPassDesc
-			, { false, ssaoConfig } }
+			, techniquePassDesc }
 	{
 	}
 
-	TextureFlags DepthPass::getTexturesMask()const
+	void VisibilityPass::accept( RenderTechniqueVisitor & visitor )
+	{
+		if ( visitor.getFlags().renderPassType == m_typeID )
+		{
+			auto flags = visitor.getFlags();
+			doUpdateFlags( flags );
+			auto shaderProgram = doGetProgram( flags );
+			visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ) );
+			visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		}
+	}
+
+	TextureFlags VisibilityPass::getTexturesMask()const
 	{
 		return TextureFlags{ TextureFlag::eAll };
 	}
 
-	PassFlags DepthPass::doAdjustPassFlags( PassFlags flags )const
+	ShaderFlags VisibilityPass::getShaderFlags()const
 	{
-		remFlag( flags, PassFlag::eAlphaBlending );
-		return flags;
+		return ShaderFlag::eTangentSpace;
 	}
 
-	ProgramFlags DepthPass::doAdjustProgramFlags( ProgramFlags flags )const
+	PassFlags VisibilityPass::doAdjustPassFlags( PassFlags flags )const
+	{
+		return flags & PassFlag::eAllVisibility;
+	}
+
+	ProgramFlags VisibilityPass::doAdjustProgramFlags( ProgramFlags flags )const
 	{
 		remFlag( flags, ProgramFlag::eLighting );
-		addFlag( flags, ProgramFlag::eDepthPass );
+		addFlag( flags, ProgramFlag::eVisibilityPass );
 		return flags;
 	}
 
-	SceneFlags DepthPass::doAdjustSceneFlags( SceneFlags flags )const
+	SceneFlags VisibilityPass::doAdjustSceneFlags( SceneFlags flags )const
 	{
-		remFlag( flags, SceneFlag::eLpvGI );
-		remFlag( flags, SceneFlag::eLayeredLpvGI );
-		remFlag( flags, SceneFlag::eVoxelConeTracing );
-		return flags;
+		return SceneFlag::eNone;
 	}
 
-	ashes::PipelineDepthStencilStateCreateInfo DepthPass::doCreateDepthStencilState( PipelineFlags const & flags )const
+	void VisibilityPass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
-		return ( getTechnique().hasVisibility()
-			? ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_EQUAL }
-			: ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_TRUE } );
 	}
 
-	ashes::PipelineColorBlendStateCreateInfo DepthPass::doCreateBlendState( PipelineFlags const & flags )const
+	void VisibilityPass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+		, ShadowMapLightTypeArray const & shadowMaps )
+	{
+	}
+
+	ashes::PipelineDepthStencilStateCreateInfo VisibilityPass::doCreateDepthStencilState( PipelineFlags const & flags )const
+	{
+		return ashes::PipelineDepthStencilStateCreateInfo{ 0u
+			, VK_TRUE
+			, VK_TRUE };
+	}
+
+	ashes::PipelineColorBlendStateCreateInfo VisibilityPass::doCreateBlendState( PipelineFlags const & flags )const
 	{
 		return RenderNodesPass::createBlendState( BlendMode::eNoBlend
 			, BlendMode::eNoBlend
-			, 3u );
+			, 1u );
 	}
 
-	ShaderPtr DepthPass::doGetGeometryShaderSource( PipelineFlags const & flags )const
-	{
-		return ShaderPtr{};
-	}
-
-	ShaderPtr DepthPass::doGetPixelShaderSource( PipelineFlags const & flags )const
+	ShaderPtr VisibilityPass::doGetPixelShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;
 		FragmentWriter writer;
@@ -139,9 +157,7 @@ namespace castor3d
 		pcb.end();
 
 		// Outputs
-		auto data0 = writer.declOutput< Vec4 >( "data0", 0u );
-		auto data1 = writer.declOutput< Vec4 >( "data1", 1u );
-		auto velocity = writer.declOutput< Vec4 >( "velocity", 2u );
+		auto data = writer.declOutput< UVec4 >( "data", 0u );
 
 		shader::Utils utils{ writer };
 
@@ -182,12 +198,12 @@ namespace castor3d
 					, modelData.getMaterialId()
 					, in.passMultipliers
 					, components );
-				data0 = vec4( in.fragCoord.z()
-					, length( in.worldPosition.xyz() - c3d_sceneData.cameraPosition )
-					, writer.cast< sdw::Float >( in.nodeId )
-					, 0.0_f );
-				data1 = vec4( components.normal(), 0.0_f );
-				velocity = vec4( in.getVelocity(), 0.0_f, 0.0_f );
+				data = uvec4( in.nodeId
+					, in.drawId
+					, ( checkFlag( flags.programFlags, ProgramFlag::eBillboards )
+						? writer.cast< sdw::Float >( in.vertexId * 2_u + writer.cast< sdw::UInt >( in.primitiveID ) )
+						: writer.cast< sdw::Float >( in.primitiveID ) )
+					, 0_u );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

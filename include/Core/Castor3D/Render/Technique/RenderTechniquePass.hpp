@@ -196,6 +196,11 @@ namespace castor3d
 		{
 			return m_scene;
 		}
+
+		RenderTechnique const & getTechnique()const
+		{
+			return *m_parent;
+		}
 		/**@}*/
 
 	protected:
@@ -290,6 +295,11 @@ namespace castor3d
 		Scene const & getScene()const
 		{
 			return RenderTechniquePass::getScene();
+		}
+
+		RenderTechnique const & getTechnique()const
+		{
+			return RenderTechniquePass::getTechnique();
 		}
 		/**@}*/
 
