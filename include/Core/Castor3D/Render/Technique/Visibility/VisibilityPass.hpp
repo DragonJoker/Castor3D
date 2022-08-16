@@ -1,16 +1,16 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_DeferredOpaquePass_H___
-#define ___C3D_DeferredOpaquePass_H___
+#ifndef ___C3D_VisibilityPass_H___
+#define ___C3D_VisibilityPass_H___
 
-#include "OpaqueModule.hpp"
+#include "VisibilityModule.hpp"
 
 #include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
 
 namespace castor3d
 {
-	class OpaquePass
+	class VisibilityPass
 		: public RenderTechniqueNodesPass
 	{
 	public:
@@ -38,7 +38,7 @@ namespace castor3d
 		 *\param[in]	renderPassDesc		Les données de construction de passe de rendu de scène.
 		 *\param[in]	techniquePassDesc	Les données de construction de passe de rendu de technique.
 		 */
-		C3D_API OpaquePass( RenderTechnique * parent
+		C3D_API VisibilityPass( RenderTechnique * parent
 			, crg::FramePass const & pass
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
@@ -61,11 +61,13 @@ namespace castor3d
 		C3D_API ShaderFlags getShaderFlags()const override;
 
 	private:
+		PassFlags doAdjustPassFlags( PassFlags flags )const override;
 		ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;
 		SceneFlags doAdjustSceneFlags( SceneFlags flags )const override;
 		void doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
 		void doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps )override;
+		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
 

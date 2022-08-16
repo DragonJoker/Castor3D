@@ -49,7 +49,6 @@ namespace castor3d
 		, RenderDevice const & device
 		, castor::String const & category
 		, castor::String const & name
-		, RenderNodesPass const & depthPass
 		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
 		: RenderTechniqueNodesPass{ parent
@@ -115,11 +114,6 @@ namespace castor3d
 	ashes::PipelineColorBlendStateCreateInfo OpaquePass::doCreateBlendState( PipelineFlags const & flags )const
 	{
 		return RenderNodesPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 4u );
-	}
-
-	ShaderPtr OpaquePass::doGetGeometryShaderSource( PipelineFlags const & flags )const
-	{
-		return nullptr;
 	}
 
 	ShaderPtr OpaquePass::doGetPixelShaderSource( PipelineFlags const & flags )const
