@@ -204,7 +204,8 @@ namespace castor3d
 		 *\brief		L'indice de type de passe (pour l'utilisation de vibility buffer).
 		 */
 		C3D_API uint32_t getPassTypeIndex( PassTypeID passType
-			, PassFlags passFlags )const;
+			, PassFlags passFlags
+			, TextureFlags textureFlags )const;
 		/**
 		 *\~english
 		 *\return		The pass type details for given pass type index (for visibility buffer use).

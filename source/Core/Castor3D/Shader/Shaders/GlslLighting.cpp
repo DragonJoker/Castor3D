@@ -469,6 +469,7 @@ namespace castor3d::shader
 		, sdw::Vec3 & tangent
 		, sdw::Vec3 & bitangent
 		, sdw::Vec3 & emissive
+		, sdw::Float & opacity
 		, sdw::Float & occlusion
 		, sdw::Float & transmittance
 		, LightMaterial & lightMat
@@ -484,9 +485,6 @@ namespace castor3d::shader
 			return;
 		}
 
-		auto opacity = m_writer.declLocale( "c3d_opa"
-			, 0.0_f
-			, false );
 		FOR( m_writer, sdw::UInt, index, 0u, index < material.texturesCount(), ++index )
 		{
 			auto id = m_writer.declLocale( "c3d_id"

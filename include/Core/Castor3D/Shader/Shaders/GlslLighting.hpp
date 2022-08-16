@@ -303,6 +303,7 @@ namespace castor3d::shader
 			, sdw::Vec3 & tangent
 			, sdw::Vec3 & bitangent
 			, sdw::Vec3 & emissive
+			, sdw::Float & opacity
 			, sdw::Float & occlusion
 			, sdw::Float & transmittance
 			, LightMaterial & lightMat

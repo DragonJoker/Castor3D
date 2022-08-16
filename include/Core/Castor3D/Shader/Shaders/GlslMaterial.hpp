@@ -530,6 +530,7 @@ namespace castor3d::shader
 			, shader::TextureAnimations const & textureAnims
 			, shader::LightingModel & lightingModel
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			, Material & material
 			, sdw::UInt const & materialId
 			, sdw::Array< sdw::Vec4 > const & passMultipliers
 			, sdw::Vec3 const & vertexColour
@@ -629,8 +630,7 @@ namespace castor3d::shader
 			, OpaqueBlendComponents & output
 			, Utils & utils
 			, bool needsRsm )const;
-		C3D_API std::pair< Material, std::unique_ptr< LightMaterial > > applyMaterial( std::string const & matName
-			, std::string const & lgtMatName
+		C3D_API std::unique_ptr< LightMaterial > applyMaterial( std::string const & lgtMatName
 			, PassFlags const & passFlags
 			, TextureFlags const & textures
 			, bool hasTextures
@@ -638,7 +638,7 @@ namespace castor3d::shader
 			, shader::TextureAnimations const & textureAnims
 			, shader::LightingModel & lightingModel
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-			, sdw::UInt const & materialId
+			, Material const & material
 			, sdw::Vec3 const & vertexColour
 			, VisibilityBlendComponents & output )const;
 		C3D_API std::pair< Material, std::unique_ptr< LightMaterial > > applyMaterial( std::string const & matName

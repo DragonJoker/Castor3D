@@ -85,8 +85,8 @@ namespace castor3d::shader
 		sdw::UVec4 objectIds;
 	};
 
-	using InVertexSurface = VertexSurfaceT< ast::var::Flag::eShaderInput >;
 	using VertexSurface = VertexSurfaceT< ast::var::Flag::eNone >;
+	Writer_Parameter( VertexSurface );
 
 	template< typename TexcoordT, ast::var::Flag FlagT >
 	struct FragmentSurfaceUvT
@@ -157,8 +157,6 @@ namespace castor3d::shader
 
 	template< ast::var::Flag FlagT >
 	using FragmentSurfaceT = FragmentSurfaceUvT< sdw::Vec3, FlagT >;
-	using OutVertexSurface = FragmentSurfaceT< ast::var::Flag::eShaderOutput >;
-	using InFragmentSurface = FragmentSurfaceT< ast::var::Flag::eShaderInput >;
 	using DerivFragmentSurface = FragmentSurfaceUvT< DerivTex, ast::var::Flag::eNone >;
 }
 

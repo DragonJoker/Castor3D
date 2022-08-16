@@ -184,9 +184,10 @@ namespace castor
 	}
 
 	uint32_t ResourceCacheT< Material, String, MaterialCacheTraits >::getPassTypeIndex( castor3d::PassTypeID passType
-		, castor3d::PassFlags passFlags )const
+		, castor3d::PassFlags passFlags
+		, castor3d::TextureFlags textureFlags )const
 	{
-		return m_passBuffer->getPassTypeIndex( passType, passFlags );
+		return m_passBuffer->getPassTypeIndex( passType, passFlags, textureFlags );
 	}
 
 	bool ResourceCacheT< Material, String, MaterialCacheTraits >::registerPass( Pass & pass )

@@ -139,7 +139,8 @@ namespace castor
 		 *\brief		L'indice de type de passe (pour l'utilisation de vibility buffer).
 		 */
 		C3D_API uint32_t getPassTypeIndex( castor3d::PassTypeID passType
-			, castor3d::PassFlags passFlags )const;
+			, castor3d::PassFlags passFlags
+			, castor3d::TextureFlags textureFlags )const;
 		C3D_API bool registerPass( castor3d::Pass & pass );
 		C3D_API void unregisterPass( castor3d::Pass & pass );
 		C3D_API bool registerUnit( castor3d::TextureUnit & unit );

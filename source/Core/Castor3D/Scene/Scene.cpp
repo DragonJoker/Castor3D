@@ -950,7 +950,6 @@ namespace castor3d
 		for ( auto object : sceneObjs.dirtyBillboards )
 		{
 			bool dirty = false;
-			auto & billboard = *object;
 
 			for ( auto & billboardIt : object->getIds() )
 			{
@@ -960,7 +959,7 @@ namespace castor3d
 					, 0u
 					, billboardIt.second.second->modelData );
 				object->fillEntryOffsets( billboardIt.second.first
-					, billboard.getVertexOffset()
+					, 0u
 					, 0u
 					, 0u );
 				object->fillData( billboardIt.second.second->billboardData );

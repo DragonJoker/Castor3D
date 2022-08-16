@@ -60,9 +60,7 @@ namespace castor3d
 
 	TextureFlags DepthPass::getTexturesMask()const
 	{
-		return TextureFlags{ TextureFlag::eOpacity
-			| TextureFlag::eNormal
-			| TextureFlag::eHeight };
+		return TextureFlags{ TextureFlag::eAll };
 	}
 
 	PassFlags DepthPass::doAdjustPassFlags( PassFlags flags )const
