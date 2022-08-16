@@ -655,6 +655,7 @@ namespace castor3d
 		C3D_API virtual SceneFlags doAdjustSceneFlags( SceneFlags flags )const;
 		C3D_API ShaderProgramSPtr doGetProgram( PipelineFlags const & flags
 			, VkCullModeFlags cullMode = VK_CULL_MODE_NONE );
+		C3D_API void doUpdateFlags( PipelineFlags & flags )const;
 
 	private:
 		ashes::VkDescriptorSetLayoutBindingArray doCreateAdditionalBindings( PipelineFlags const & flags )const;
@@ -666,7 +667,6 @@ namespace castor3d
 			, ashes::DescriptorSetLayout const * meshletDescriptorLayout
 			, PipelineFlags flags
 			, VkCullModeFlags cullMode );
-		void doUpdateFlags( PipelineFlags & flags )const;
 		/**
 		 *\~english
 		 *\brief		Creates the depth stencil state.

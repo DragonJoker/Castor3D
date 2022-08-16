@@ -175,6 +175,7 @@ namespace castor3d
 		if ( visitor.getFlags().renderPassType == m_typeID )
 		{
 			auto flags = visitor.getFlags();
+			doUpdateFlags( flags );
 			auto shaderProgram = doGetProgram( flags );
 			visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ) );
 			visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_GEOMETRY_BIT ) );

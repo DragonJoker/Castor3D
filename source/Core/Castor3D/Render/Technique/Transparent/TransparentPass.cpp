@@ -77,8 +77,9 @@ namespace castor3d
 	{
 		if ( visitor.getFlags().renderPassType == m_typeID )
 		{
-			auto shaderProgram = getEngine()->getShaderProgramCache().getAutomaticProgram( *this
-				, visitor.getFlags() );
+			auto flags = visitor.getFlags();
+			doUpdateFlags( flags );
+			auto shaderProgram = doGetProgram( flags );
 			visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ) );
 			visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		}
