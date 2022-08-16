@@ -152,136 +152,101 @@ namespace castor3d
 			}
 		};
 
-		struct BarycentricDerivatives
-			: public sdw::StructInstanceHelperT< "BarycentricDerivatives"
+		struct BarycentricFullDerivatives;
+		Writer_Parameter( BarycentricFullDerivatives );
+
+		struct BarycentricFullDerivatives
+			: public sdw::StructInstanceHelperT< "BarycentricFullDerivatives"
 			, sdw::type::MemoryLayout::eC
-			, sdw::Vec2Field< "interp" >
-			, sdw::Vec2Field< "dx" >
-			, sdw::Vec2Field< "dy" > >
+			, sdw::Vec3Field< "lambda" >
+			, sdw::Vec3Field< "dx" >
+			, sdw::Vec3Field< "dy" > >
 		{
-			BarycentricDerivatives( sdw::ShaderWriter & writer
+			BarycentricFullDerivatives( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled )
 				: StructInstanceHelperT{ writer, std::move( expr ), enabled }
 			{
 			}
 
-			auto interp()const { return getMember< "interp" >(); }
+			auto lambda()const { return getMember< "lambda" >(); }
 			auto dx()const { return getMember< "dx" >(); }
 			auto dy()const { return getMember< "dy" >(); }
 
-			void computeGradient( shader::DerivTex & result
-				, sdw::Float const & w
-				, sdw::Float const & mip )
+			sdw::Float interpolate( sdw::Vec3 const & attributes )const
 			{
-				result.dx() = dx() * w * mip;
-				result.dy() = dy() * w * mip;
-				result.uv() = interp() * w;
-			}
-		};
-
-		Writer_Parameter( BarycentricDerivatives );
-
-		struct PartialDerivatives
-			: public sdw::StructInstanceHelperT< "PartialDerivatives"
-			, sdw::type::MemoryLayout::eC
-			, sdw::Vec3Field< "db_dx" >
-			, sdw::Vec3Field< "db_dy" > >
-		{
-			PartialDerivatives( sdw::ShaderWriter & writer
-				, ast::expr::ExprPtr expr
-				, bool enabled )
-				: StructInstanceHelperT{ writer, std::move( expr ), enabled }
-			{
+				return dot( attributes, lambda() );
 			}
 
-			auto db_dx()const { return getMember< "db_dx" >(); }
-			auto db_dy()const { return getMember< "db_dy" >(); }
-
-			static PartialDerivatives create( sdw::ShaderWriter & writer
-				, std::string name
-				, sdw::Vec2 const & p0
-				, sdw::Vec2 const & p1
-				, sdw::Vec2 const & p2 )
+			sdw::Vec3 interpolate( sdw::Vec3 const & v0
+				, sdw::Vec3 const & v1
+				, sdw::Vec3 const & v2 )
 			{
-				auto output = writer.declLocale< PartialDerivatives >( std::move( name ) );
-				auto det = writer.declLocale( "det"
-					, 1.0_f / determinant( mat2( p2 - p1, p0 - p1 ) ) );
-				output.db_dx() = vec3( p1.y() - p2.y(), p2.y() - p0.y(), p0.y() - p1.y() ) * det;
-				output.db_dy() = vec3( p2.x() - p1.x(), p0.x() - p2.x(), p1.x() - p0.x() ) * det;
-
-				return output;
+				return vec3( interpolate( vec3( v0.x(), v1.x(), v2.x() ) )
+					, interpolate( vec3( v0.y(), v1.y(), v2.y() ) )
+					, interpolate( vec3( v0.z(), v1.z(), v2.z() ) ) );
 			}
 
-			// Helper functions to interpolate vertex attributes at point 'd' using the partial derivatives
-			sdw::Vec3 interpolate( sdw::Mat3 const & attributes
-				, sdw::Vec2 const & d )
+			sdw::Vec4 interpolate( sdw::Vec4 const & v0
+				, sdw::Vec4 const & v1
+				, sdw::Vec4 const & v2 )
 			{
-				return ( vec3( attributes[0][0], attributes[1][0], attributes[2][0] )
-					+ d.x() * ( attributes * db_dx() )
-					+ d.y() * ( attributes * db_dy() ) );
+				return vec4( interpolate( vec3( v0.x(), v1.x(), v2.x() ) )
+					, interpolate( vec3( v0.y(), v1.y(), v2.y() ) )
+					, interpolate( vec3( v0.z(), v1.z(), v2.z() ) )
+					, interpolate( vec3( v0.w(), v1.w(), v2.w() ) ) );
 			}
 
-			sdw::Float interpolate( sdw::Vec3 const & attributes
-				, sdw::Vec2 const & d )
+			sdw::Vec3 computeGradient( sdw::Vec3 const & mergedV )const
 			{
-				return ( attributes[0]
-					+ d.x() * dot( attributes, db_dx() )
-					+ d.y() * dot( attributes, db_dy() ) );
+				return vec3( dot( mergedV, lambda() )
+					, dot( mergedV, dx() )
+					, dot( mergedV, dy() ) );
 			}
 
-			// Interpolate 2D attributes using the partial derivatives and generates dx and dy for texture sampling.
-			BarycentricDerivatives calcBarycentric( sdw::Mat3x2 const & pattributes
-				, sdw::Vec2 const & pd
-				, sdw::Vec2 const & ptwoOverRes )
+			shader::DerivTex computeGradient( sdw::Vec3 const & pv0tex
+				, sdw::Vec3 const & pv1tex
+				, sdw::Vec3 const & pv2tex )
 			{
-				if ( !m_calcBarycentric )
+				if ( !m_computeGradient )
 				{
 					auto & writer = *getWriter();
-					m_calcBarycentric = writer.implementFunction< BarycentricDerivatives >( "calcBarycentric"
-						, [&]( sdw::Mat3x2 const & attributes
-							, sdw::Vec3 const & db_dx
-							, sdw::Vec3 const & db_dy
-							, sdw::Vec2 const & d
-							, sdw::Vec2 const & twoOverRes )
+					m_computeGradient = writer.implementFunction< shader::DerivTex >( "computeGradient"
+						, [&]( BarycentricFullDerivatives const & derivatives
+							, sdw::Vec2 const & v0tex
+							, sdw::Vec2 const & v1tex
+							, sdw::Vec2 const & v2tex )
 						{
-							auto attr0 = writer.declLocale( "attr0"
-								, vec3( attributes[0][0], attributes[1][0], attributes[2][0] ) );
-							auto attr1 = writer.declLocale( "attr1"
-								, vec3( attributes[0][1], attributes[1][1], attributes[2][1] ) );
-							auto attribute_x = writer.declLocale( "attribute_x"
-								, vec2( dot( db_dx, attr0 ), dot( db_dx, attr1 ) ) );
-							auto attribute_y = writer.declLocale( "attribute_y"
-								, vec2( dot( db_dy, attr0 ), dot( db_dy, attr1 ) ) );
-							auto attribute_s = writer.declLocale( "attribute_s"
-								, attributes[0] );
-
-							auto result = writer.declLocale< BarycentricDerivatives >( "result" );
-							result.dx() = attribute_x * twoOverRes.x();
-							result.dy() = attribute_y * twoOverRes.y();
-							result.interp() = ( attribute_s + d.x() * attribute_x + d.y() * attribute_y );
+							auto mergedX = writer.declLocale( "merged0X"
+								, vec3( v0tex.x(), v1tex.x(), v2tex.x() ) );
+							auto mergedY = writer.declLocale( "merged0Y"
+								, vec3( v0tex.y(), v1tex.y(), v2tex.y() ) );
+							auto resultsX = writer.declLocale( "results0X"
+								, derivatives.computeGradient( mergedX ) );
+							auto resultsY = writer.declLocale( "results0Y"
+								, derivatives.computeGradient( mergedY ) );
+							auto result = writer.declLocale< shader::DerivTex >( "result" );
+							result.uv() = vec2( resultsX.x(), resultsY.x() );
+							result.dx() = vec2( resultsX.y(), resultsY.y() );
+							result.dy() = vec2( resultsX.z(), resultsY.z() );
 							writer.returnStmt( result );
 						}
-						, sdw::InMat3x2{ writer, "attributes" }
-						, sdw::InVec3{ writer, "db_dx" }
-						, sdw::InVec3{ writer, "db_dy" }
-						, sdw::InVec2{ writer, "d" }
-						, sdw::InVec2{ writer, "twoOverRes" } );
+						, InBarycentricFullDerivatives{ writer, "derivatives" }
+						, sdw::InVec2{ writer, "v0tex" }
+						, sdw::InVec2{ writer, "v1tex" }
+						, sdw::InVec2{ writer, "v2tex" } );
 				}
 
-				return m_calcBarycentric( pattributes, db_dx(), db_dy(), pd, ptwoOverRes );
+				return m_computeGradient( *this, pv0tex.xy(), pv1tex.xy(), pv2tex.xy() );
 			}
 
 		private:
-			sdw::Function< BarycentricDerivatives
-				, sdw::InMat3x2
-				, sdw::InVec3
-				, sdw::InVec3
+			sdw::Function< shader::DerivTex
+				, InBarycentricFullDerivatives
 				, sdw::InVec2
-				, sdw::InVec2 > m_calcBarycentric;
+				, sdw::InVec2
+				, sdw::InVec2 > m_computeGradient;
 		};
-
-		Writer_Parameter( PartialDerivatives );
 
 		struct Position
 			: public sdw::StructInstance
@@ -435,6 +400,70 @@ namespace castor3d
 			{
 				return ( 2.0_f * n ) / ( f + n - d * ( f - n ) );
 			};
+
+			auto calcFullBarycentric = writer.implementFunction< BarycentricFullDerivatives >( "calcFullBarycentric"
+				, [&]( sdw::Vec4 const & pt0
+					, sdw::Vec4 const & pt1
+					, sdw::Vec4 const & pt2
+					, sdw::Vec2 const & pixelNdc
+					, sdw::Vec2 const & winSize
+					, sdw::Float interpW )
+				{
+					auto result = writer.declLocale< BarycentricFullDerivatives >( "result" );
+
+					auto invW = writer.declLocale( "invW"
+						, vec3( 1.0_f ) / vec3( pt0.w(), pt1.w(), pt2.w() ) );
+
+					auto ndc0 = writer.declLocale( "ndc0"
+						, pt0.xy() * invW.x() );
+					auto ndc1 = writer.declLocale( "ndc1"
+						, pt1.xy() * invW.y() );
+					auto ndc2 = writer.declLocale( "ndc2"
+						, pt2.xy() * invW.z() );
+
+					auto invDet = writer.declLocale( "invDet"
+						, 1.0_f / determinant( mat2( ndc2 - ndc1, ndc0 - ndc1 ) ) );
+					result.dx() = vec3( ndc1.y() - ndc2.y(), ndc2.y() - ndc0.y(), ndc0.y() - ndc1.y() ) * invDet * invW;
+					result.dy() = vec3( ndc2.x() - ndc1.x(), ndc0.x() - ndc2.x(), ndc1.x() - ndc0.x() ) * invDet * invW;
+					auto ddxSum = writer.declLocale( "ddxSum"
+						, dot( result.dx(), vec3( 1.0_f ) ) );
+					auto ddySum = writer.declLocale( "ddySum"
+						, dot( result.dy(), vec3( 1.0_f ) ) );
+
+					auto deltaVec = writer.declLocale( "deltaVec"
+						, pixelNdc - ndc0 );
+					auto interpInvW = writer.declLocale( "interpInvW"
+						, invW.x() + deltaVec.x() * ddxSum + deltaVec.y() * ddySum );
+					interpW = 1.0_f / interpInvW;
+
+					result.lambda() = vec3( interpW * ( invW[0] + deltaVec.x() * result.dx().x() + deltaVec.y() * result.dy().x() )
+						, interpW * ( 0.0_f + deltaVec.x() * result.dx().y() + deltaVec.y() * result.dy().y() )
+						, interpW * ( 0.0_f + deltaVec.x() * result.dx().z() + deltaVec.y() * result.dy().z() ) );
+
+					result.dx() *= ( 2.0_f / winSize.x() );
+					result.dy() *= ( 2.0_f / winSize.y() );
+					ddxSum *= ( 2.0_f / winSize.x() );
+					ddySum *= ( 2.0_f / winSize.y() );
+
+					result.dy() *= -1.0_f;
+					ddySum *= -1.0_f;
+
+					auto interpW_ddx = writer.declLocale( "interpW_ddx"
+						, 1.0_f / ( interpInvW + ddxSum ) );
+					auto interpW_ddy = writer.declLocale( "interpW_ddy"
+						, 1.0_f / ( interpInvW + ddySum ) );
+
+					result.dx() = interpW_ddx * ( result.lambda() * interpInvW + result.dx() ) - result.lambda();
+					result.dy() = interpW_ddy * ( result.lambda() * interpInvW + result.dy() ) - result.lambda();
+
+					writer.returnStmt( result );
+				}
+				, sdw::InVec4{ writer, "pt0" }
+				, sdw::InVec4{ writer, "pt1" }
+				, sdw::InVec4{ writer, "pt2" }
+				, sdw::InVec2{ writer, "pixelNdc" }
+				, sdw::InVec2{ writer, "winSize" }
+				, sdw::OutFloat{ writer, "interpW" } );
 
 			auto loadVertices = writer.implementFunction< sdw::Void >( "loadVertices"
 				, [&]( sdw::UInt const & nodeId
@@ -604,28 +633,10 @@ namespace castor3d
 							? v2.position
 							: modelData.modelToCurWorld( v2.position ) ) );
 
-					// Calculate the inverse of w, since it's going to be used several times
-					auto oneOverW = writer.declLocale( "oneOverW"
-						,vec3( 1.0_f ) / vec3( p0.w(), p1.w(), p2.w() ) );
-
-					// Project vertex positions to calculate 2D post-perspective positions
-					p0.xyz() *= oneOverW.x();
-					p1.xyz() *= oneOverW.y();
-					p2.xyz() *= oneOverW.z();
-
-					// Compute partial derivatives. This is necessary to interpolate triangle attributes per pixel.
-					auto derivativesOut = PartialDerivatives::create( writer
-						, "derivativesOut"
-						, p0.xy(), p1.xy(), p2.xy() );
-
-					// Calculate delta vector (d) that points from the projected vertex 0 to the current screen point
-					auto d = writer.declLocale( "d"
-						, screenCoords - p0.xy() );
-
-					// Interpolate the 1/w (oneOverW) for all three vertices of the triangle
-					// using the barycentric coordinates and the delta vector
 					auto w = writer.declLocale( "w"
-						, 1.0_f / derivativesOut.interpolate( oneOverW, d ) );
+						, 0.0_f );
+					auto derivatives = writer.declLocale( "derivatives"
+						, calcFullBarycentric( p0, p1, p2, screenCoords, c3d_sceneData.renderSize, w ) );
 
 					// Reconstruct the Z value at this screen point performing only the necessary matrix * vector multiplication
 					// operations that involve computing Z
@@ -641,57 +652,37 @@ namespace castor3d
 					// Interpolate texture coordinates and calculate the gradients for texture sampling with mipmapping support
 					if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 ) )
 					{
-						// Apply perspective correction to texture coordinates
-						auto texCoords = writer.declLocale( "texCoords0"
-							, mat3x2( v0.texture0.xy() * oneOverW.x()
-								, v1.texture0.xy() * oneOverW.y()
-								, v2.texture0.xy() * oneOverW.z() ) );
-						auto results0 = writer.declLocale( "results0"
-							, derivativesOut.calcBarycentric( texCoords, d, twoOverRes ) );
-						results0.computeGradient( result.texture0, w, mip );
+						result.texture0 = derivatives.computeGradient( v0.texture0
+							, v1.texture0
+							, v2.texture0 );
 					}
 
 					if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords1 ) )
 					{
-						// Apply perspective correction to texture coordinates
-						auto texCoords = writer.declLocale( "texCoords1"
-							, mat3x2( v0.texture0.xy() * oneOverW.x()
-								, v1.texture0.xy() * oneOverW.y()
-								, v2.texture0.xy() * oneOverW.z() ) );
-						auto results1 = writer.declLocale( "results1"
-							, derivativesOut.calcBarycentric( texCoords, d, twoOverRes ) );
-						results1.computeGradient( result.texture1, w, mip );
+						result.texture1 = derivatives.computeGradient( v0.texture1
+							, v1.texture1
+							, v2.texture1 );
 					}
 
 					if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords2 ) )
 					{
-						// Apply perspective correction to texture coordinates
-						auto texCoords = writer.declLocale( "texCoords2"
-							, mat3x2( v0.texture0.xy() * oneOverW.x()
-								, v1.texture0.xy() * oneOverW.y()
-								, v2.texture0.xy() * oneOverW.z() ) );
-						auto results2 = writer.declLocale( "results2"
-							, derivativesOut.calcBarycentric( texCoords, d, twoOverRes ) );
-						results2.computeGradient( result.texture2, w, mip );
+						result.texture2 = derivatives.computeGradient( v0.texture2
+							, v1.texture2
+							, v2.texture2 );
 					}
 
 					if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) )
 					{
-						// Apply perspective correction to texture coordinates
-						auto texCoords = writer.declLocale( "texCoords3"
-							, mat3x2( v0.texture0.xy() * oneOverW.x()
-								, v1.texture0.xy() * oneOverW.y()
-								, v2.texture0.xy() * oneOverW.z() ) );
-						auto results3 = writer.declLocale( "results3"
-							, derivativesOut.calcBarycentric( texCoords, d, twoOverRes ) );
-						results3.computeGradient( result.texture3, w, mip );
+						result.texture3 = derivatives.computeGradient( v0.texture3
+							, v1.texture3
+							, v2.texture3 );
 					}
 
 					if ( checkFlag( submeshFlags, SubmeshFlag::eColours ) )
 					{
-						auto colours = writer.declLocale( "colours"
-							, mat3( v0.colour.xyz(), v1.colour.xyz(), v2.colour.xyz() ) );
-						result.colour = derivativesOut.interpolate( colours, d );
+						result.colour = derivatives.interpolate( v0.colour.xyz()
+							, v1.colour.xyz()
+							, v2.colour.xyz() );
 					}
 
 					if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
@@ -710,36 +701,40 @@ namespace castor3d
 						material.getPassMultipliers( submeshFlags
 							, v2.passMasks
 							, passMultipliers2 );
-						auto passMultipliersXYZ = writer.declLocale< sdw::Mat3 >( "passMultipliersXYZ" );
-						auto passMultipliersW = writer.declLocale< sdw::Vec3 >( "passMultipliersW" );
 
 						for ( uint32_t i = 0u; i < 4u; ++i )
 						{
-							passMultipliersXYZ = mat3( passMultipliers0[i].xyz(), passMultipliers1[i].xyz(), passMultipliers2[i].xyz() );
-							passMultipliersW = vec3( passMultipliers0[i].w(), passMultipliers1[i].w(), passMultipliers2[i].w() );
-							result.passMultipliers[i] = vec4( derivativesOut.interpolate( passMultipliersXYZ, d )
-								, derivativesOut.interpolate( passMultipliersW, d ) );
+							result.passMultipliers[i] = derivatives.interpolate( passMultipliers0[i]
+								, passMultipliers1[i]
+								, passMultipliers2[i] );
 						}
 					}
 
-					auto positions = writer.declLocale( "positions"
-						, mat3( v0.position.xyz(), v1.position.xyz(), v2.position.xyz() ) );
-					result.curPosition = vec4( derivativesOut.interpolate( positions, d ), 1.0_f );
+					result.curPosition = vec4( derivatives.interpolate( v0.position.xyz()
+							, v1.position.xyz()
+							, v2.position.xyz() )
+						, 1.0_f );
 					result.prvPosition = result.curPosition;
 
-					if ( checkFlag( submeshFlags, SubmeshFlag::eVelocity ) )
+					if ( stride > 0u )
 					{
-						auto velocities = writer.declLocale( "velocities"
-							, mat3( v0.velocity.xyz(), v1.velocity.xyz(), v2.velocity.xyz() ) );
-						auto velocity = writer.declLocale( "velocity"
-							, derivativesOut.interpolate( velocities, d ) );
-						result.prvPosition.xyz() += velocity;
-						result.prvPosition = c3d_matrixData.worldToPrvProj( result.prvPosition );
+						if ( checkFlag( submeshFlags, SubmeshFlag::eVelocity ) )
+						{
+							auto velocity = writer.declLocale( "velocity"
+								, derivatives.interpolate( v0.velocity.xyz()
+									, v1.velocity.xyz()
+									, v2.velocity.xyz() ) );
+							result.prvPosition.xyz() += velocity;
+							result.prvPosition = c3d_matrixData.worldToPrvProj( result.prvPosition );
+						}
+						else
+						{
+							result.curPosition = modelData.modelToCurWorld( result.curPosition );
+							result.prvPosition = modelData.modelToPrvWorld( result.prvPosition );
+						}
 					}
-					else
+
 					{
-						result.curPosition = modelData.modelToCurWorld( result.curPosition );
-						result.prvPosition = modelData.modelToPrvWorld( result.prvPosition );
 					}
 
 					result.prvPosition = c3d_matrixData.worldToPrvProj( result.prvPosition );
