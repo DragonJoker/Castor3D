@@ -613,6 +613,36 @@ namespace castor3d
 		return getEngine()->getShaderProgramCache().getAutomaticProgram( *this, flags );
 	}
 
+	void RenderNodesPass::doUpdateFlags( PipelineFlags & flags )const
+	{
+		if ( m_mode != RenderMode::eTransparentOnly )
+		{
+			flags.alphaBlendMode = BlendMode::eNoBlend;
+		}
+
+		flags.submeshFlags = adjustFlags( flags.submeshFlags );
+		flags.programFlags = adjustFlags( flags.programFlags );
+		flags.passFlags = adjustFlags( flags.passFlags );
+		flags.sceneFlags = adjustFlags( flags.sceneFlags );
+		auto textureFlags = filterTexturesFlags( flags.textures );
+
+		if ( textureFlags.empty()
+			&& !checkFlag( flags.programFlags, ProgramFlag::eForceTexCoords ) )
+		{
+			remFlag( flags.submeshFlags, SubmeshFlag::eTexcoords0 );
+			remFlag( flags.submeshFlags, SubmeshFlag::eTexcoords1 );
+			remFlag( flags.submeshFlags, SubmeshFlag::eTexcoords2 );
+			remFlag( flags.submeshFlags, SubmeshFlag::eTexcoords3 );
+		}
+
+		if ( checkFlag( flags.submeshFlags, SubmeshFlag::ePassMasks ) )
+		{
+			flags.alphaFunc = VK_COMPARE_OP_GREATER;
+		}
+
+		doAdjustFlags( flags );
+	}
+
 	ashes::VkDescriptorSetLayoutBindingArray RenderNodesPass::doCreateAdditionalBindings( PipelineFlags const & flags )const
 	{
 		VkShaderStageFlags stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
@@ -774,36 +804,6 @@ namespace castor3d
 		}
 
 		return *result;
-	}
-
-	void RenderNodesPass::doUpdateFlags( PipelineFlags & flags )const
-	{
-		if ( m_mode != RenderMode::eTransparentOnly )
-		{
-			flags.alphaBlendMode = BlendMode::eNoBlend;
-		}
-
-		flags.submeshFlags = adjustFlags( flags.submeshFlags );
-		flags.programFlags = adjustFlags( flags.programFlags );
-		flags.passFlags = adjustFlags( flags.passFlags );
-		flags.sceneFlags = adjustFlags( flags.sceneFlags );
-		auto textureFlags = filterTexturesFlags( flags.textures );
-
-		if ( textureFlags.empty()
-			&& !checkFlag( flags.programFlags, ProgramFlag::eForceTexCoords ) )
-		{
-			remFlag( flags.submeshFlags, SubmeshFlag::eTexcoords0 );
-			remFlag( flags.submeshFlags, SubmeshFlag::eTexcoords1 );
-			remFlag( flags.submeshFlags, SubmeshFlag::eTexcoords2 );
-			remFlag( flags.submeshFlags, SubmeshFlag::eTexcoords3 );
-		}
-
-		if ( checkFlag( flags.submeshFlags, SubmeshFlag::ePassMasks ) )
-		{
-			flags.alphaFunc = VK_COMPARE_OP_GREATER;
-		}
-
-		doAdjustFlags( flags );
 	}
 
 	void RenderNodesPass::doAdjustFlags( PipelineFlags & flags )const
