@@ -295,6 +295,7 @@ namespace castor3d
 		static ShaderPtr getProgram( RenderDevice const & device
 			, VkExtent3D const & imageSize
 			, PassTypeID passType
+			, TextureFlags textureFlags
 			, SubmeshFlags submeshFlags
 			, PassFlags passFlags
 			, uint32_t stride )
@@ -587,8 +588,8 @@ namespace castor3d
 				, [&]( sdw::UInt const & nodeId
 					, sdw::UInt const & primitiveId
 					, sdw::Vec2 const & pixelCoord
-					, sdw::Float const & depth
-					, shader::ModelIndices const & modelData )
+					, shader::ModelIndices const & modelData
+					, shader::Material const & material )
 				{
 					auto result = writer.declLocale< shader::DerivFragmentSurface >( "result" );
 					result.worldPosition = vec4( 0.0_f );
@@ -700,8 +701,6 @@ namespace castor3d
 						auto passMultipliers0 = writer.declLocaleArray< sdw::Vec4 >( "passMultipliers0", 4u );
 						auto passMultipliers1 = writer.declLocaleArray< sdw::Vec4 >( "passMultipliers1", 4u );
 						auto passMultipliers2 = writer.declLocaleArray< sdw::Vec4 >( "passMultipliers2", 4u );
-						auto material = writer.declLocale( "material"
-							, materials.getMaterial( modelData.getMaterialId() ) );
 						material.getPassMultipliers( submeshFlags
 							, v0.passMasks
 							, passMultipliers0 );
@@ -776,8 +775,8 @@ namespace castor3d
 				, sdw::InUInt{ writer, "nodeId" }
 				, sdw::InUInt{ writer, "primitiveId" }
 				, sdw::InVec2{ writer, "pixelCoord" }
-				, sdw::InFloat{ writer, "depth" }
-				, shader::InModelIndices{ writer, "modelData" } );
+				, shader::InModelIndices{ writer, "modelData" }
+				, shader::InMaterial{ writer, "material" } );
 
 			auto shade = writer.implementFunction< sdw::Boolean >( "shade"
 				, [&]( sdw::IVec2 const & ipixel
@@ -808,14 +807,37 @@ namespace castor3d
 
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[nodeId - 1u] );
+					auto material = writer.declLocale( "material"
+						, materials.getMaterial( modelData.getMaterialId() ) );
+
+					IF( writer, material.passCount() > 1u )
+					{
+						auto i = writer.declLocale( "i", 1_u );
+
+						WHILE( writer, material.passTypeIndex() != passTypeIndex
+							&& i < material.passCount() )
+						{
+							material = materials.getMaterial( modelData.getMaterialId() + i );
+							++i;
+						}
+						ELIHW;
+					}
+					FI;
+
+					IF( writer, material.passTypeIndex() != passTypeIndex )
+					{
+						writer.returnStmt( 0_b );
+					}
+					FI;
+
 					auto primitiveId = writer.declLocale( "primitiveId"
 						, writer.cast< sdw::UInt >( data0.w() ) );
 					auto surface = writer.declLocale( "surface"
 						, loadSurface( nodeId
 							, primitiveId
 							, vec2( ipixel )
-							, data0.x()
-							, modelData ) );
+							, modelData
+							, material ) );
 					shader::VisibilityBlendComponents components{ writer
 						, "out"
 						, { surface.texture0, checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 ) }
@@ -834,12 +856,13 @@ namespace castor3d
 					auto lightMat = materials.blendMaterials( utils
 						, passFlags
 						, submeshFlags
-						, TextureFlag::eAllButGeometry
+						, textureFlags
 						, checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 )
 						, textureConfigs
 						, textureAnims
 						, *lightingModel
 						, c3d_maps
+						, material
 						, modelData.getMaterialId()
 						, surface.passMultipliers
 						, surface.colour
@@ -1455,6 +1478,7 @@ namespace castor3d
 				PipelineBaseHash const & pipelineHash = itPipeline.first;
 				auto [submeshFlags, programFlags, passType, passFlags, maxTexcoordSet, texturesCount, textureFlags] = getPipelineHashDetails( pipelineHash );
 				auto & pipeline = doCreatePipeline( passType
+					, textureFlags
 					, submeshFlags
 					, passFlags & PassFlag::eAllVisibility );
 				auto it = m_activePipelines.emplace( &pipeline
@@ -1497,6 +1521,7 @@ namespace castor3d
 						auto & culled = sidedCulled.first;
 						auto & positionsBuffer = culled.node->data.getVertexBuffer();
 						auto & pipeline = doCreatePipeline( passType
+							, textureFlags
 							, passFlags & PassFlag::eAllVisibility
 							, culled.node->data.getVertexStride() );
 						auto it = m_activeBillboardPipelines.emplace( &pipeline
@@ -1805,10 +1830,12 @@ namespace castor3d
 	}
 
 	VisibilityResolvePass::Pipeline & VisibilityResolvePass::doCreatePipeline( PassTypeID passType
+		, TextureFlags textureFlags
 		, PassFlags passFlags
 		, uint32_t stride )
 	{
 		return doCreatePipeline( passType
+			, textureFlags
 			, SubmeshFlag::ePositions | SubmeshFlag::eTexcoords0
 			, passFlags
 			, stride
@@ -1816,10 +1843,12 @@ namespace castor3d
 	}
 
 	VisibilityResolvePass::Pipeline & VisibilityResolvePass::doCreatePipeline( PassTypeID passType
+		, TextureFlags textureFlags
 		, SubmeshFlags submeshFlags
 		, PassFlags passFlags )
 	{
 		return doCreatePipeline( passType
+			, textureFlags
 			, submeshFlags
 			, passFlags
 			, 0u
@@ -1827,6 +1856,7 @@ namespace castor3d
 	}
 
 	VisibilityResolvePass::Pipeline & VisibilityResolvePass::doCreatePipeline( PassTypeID passType
+		, TextureFlags textureFlags
 		, SubmeshFlags submeshFlags
 		, PassFlags passFlags
 		, uint32_t stride
@@ -1838,7 +1868,7 @@ namespace castor3d
 			, passFlags
 			, 0u
 			, 0u
-			, TextureFlag::eNone );
+			, textureFlags );
 
 		if ( stride )
 		{
@@ -1857,8 +1887,8 @@ namespace castor3d
 			auto & matCache = getScene().getEngine()->getMaterialCache();
 			auto result = std::make_unique< Pipeline >( ShaderModule{ stage
 				, getName()
-				, visres::getProgram( m_device, extent, passType, submeshFlags, passFlags, stride ) } );
-			result->passTypeIndex = matCache.getPassTypeIndex( passType, passFlags );
+				, visres::getProgram( m_device, extent, passType, textureFlags, submeshFlags, passFlags, stride ) } );
+			result->passTypeIndex = matCache.getPassTypeIndex( passType, passFlags, textureFlags );
 
 			if constexpr ( !useCompute )
 			{

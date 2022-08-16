@@ -83,12 +83,15 @@ namespace castor3d
 		void doRecordGraphics( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer );
 		Pipeline & doCreatePipeline( PassTypeID passType
+			, TextureFlags textureFlags
 			, SubmeshFlags submeshFlags
 			, PassFlags passFlags );
 		Pipeline & doCreatePipeline( PassTypeID passType
+			, TextureFlags textureFlags
 			, PassFlags passFlags
 			, uint32_t stride );
 		Pipeline & doCreatePipeline( PassTypeID passType
+			, TextureFlags textureFlags
 			, SubmeshFlags submeshFlags
 			, PassFlags passFlags
 			, uint32_t stride

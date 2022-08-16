@@ -182,7 +182,7 @@ namespace castor3d
 			, TextureFactors::tex3D( &m_grid ) );
 		visitor.visit( "Voxelisation Secondary Bounce"
 			, m_secondaryBounce
-			, m_graph.getFinalLayoutState( m_secondaryBounce.wholeViewId ).layout
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors::tex3D( &m_grid ) );
 		m_voxelizePass->accept( visitor );
 		m_voxelToTexture->accept( visitor );

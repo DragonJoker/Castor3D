@@ -153,6 +153,7 @@ namespace castor3d::shader
 	Writer_Parameter( LightMaterial );
 	Writer_Parameter( LpvGridData );
 	Writer_Parameter( LpvLightData );
+	Writer_Parameter( Material );
 	Writer_Parameter( PbrLightMaterial );
 	Writer_Parameter( PhongLightMaterial );
 	Writer_Parameter( PointLight );

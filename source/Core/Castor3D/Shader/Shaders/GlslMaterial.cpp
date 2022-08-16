@@ -861,17 +861,72 @@ namespace castor3d::shader
 		, shader::TextureAnimations const & textureAnims
 		, shader::LightingModel & lightingModel
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, Material & material
 		, sdw::UInt const & materialId
 		, sdw::Array< sdw::Vec4 > const & passMultipliers
 		, sdw::Vec3 const & vertexColour
 		, VisibilityBlendComponents & output )const
 	{
-		return mats::blendMaterialsT( m_writer, *this
-			, VK_COMPARE_OP_ALWAYS, true
-			, passFlags, submeshFlags, textureFlags, hasTextures
+		if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
+		{
+			auto lightMat = lightingModel.declMaterial( "lightMat" );
+			lightMat->create( vec3( 0.0_f )
+				, vec4( 0.0_f )
+				, vec4( 0.0_f ) );
+			lightMat->depthFactor = 0.0_f;
+			lightMat->normalFactor = 0.0_f;
+			lightMat->objectFactor = 0.0_f;
+			lightMat->edgeColour = vec4( 0.0_f );
+			lightMat->specific = vec4( 0.0_f );
+			VisibilityBlendComponents firstComponents{ m_writer, "first", output };
+			auto result = firstComponents.createResult( m_writer, output );
+			auto firstLightMat = applyMaterial( "firstLightMat"
+				, passFlags, textureFlags, hasTextures
+				, textureConfigs, textureAnims, lightingModel, maps
+				, material, vertexColour
+				, firstComponents );
+			auto passMultiplier = m_writer.declLocale( "passMultiplier"
+				, passMultipliers[0_u][0_u] );
+
+			IF( m_writer, passMultiplier != 0.0_f )
+			{
+				lightMat->blendWith( *firstLightMat, passMultiplier );
+				firstComponents.apply( passMultiplier, result );
+			}
+			FI;
+
+			FOR( m_writer, sdw::UInt, passIdx, 1_u, passIdx < material.passCount(), ++passIdx )
+			{
+				passMultiplier = passMultipliers[passIdx / 4_u][passIdx % 4_u];
+
+				IF( m_writer, passMultiplier != 0.0_f )
+				{
+					VisibilityBlendComponents passComponents{ m_writer, "pass", output };
+					auto curMaterial = m_writer.declLocale( "passMaterial"
+						, getMaterial( materialId + passIdx ) );
+					auto curLightMat = applyMaterial( "passLightMat"
+						, passFlags, textureFlags, hasTextures
+						, textureConfigs, textureAnims, lightingModel, maps
+						, curMaterial, vertexColour
+						, passComponents );
+
+					lightMat->blendWith( *curLightMat, passMultiplier );
+					material.lighting() += curMaterial.lighting();
+					passComponents.apply( passMultiplier, result );
+				}
+				FI;
+			}
+			ROF;
+
+			output.set( result );
+			return std::move( lightMat );
+		}
+
+		return applyMaterial( "passLightMat"
+			, passFlags, textureFlags, hasTextures
 			, textureConfigs, textureAnims, lightingModel, maps
-			, materialId, passMultipliers, vertexColour
-			, output ).second;
+			, material, vertexColour
+			, output );
 	}
 
 	std::unique_ptr< LightMaterial > Materials::blendMaterials( Utils & utils
@@ -1145,8 +1200,7 @@ namespace castor3d::shader
 		return std::make_pair( material, std::move( lightMat ) );
 	}
 
-	std::pair< Material, std::unique_ptr< LightMaterial > > Materials::applyMaterial( std::string const & matName
-		, std::string const & lgtMatName
+	std::unique_ptr< LightMaterial > Materials::applyMaterial( std::string const & lgtMatName
 		, PassFlags const & passFlags
 		, TextureFlags const & textureFlags
 		, bool hasTextures
@@ -1154,12 +1208,10 @@ namespace castor3d::shader
 		, shader::TextureAnimations const & textureAnims
 		, shader::LightingModel & lightingModel
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, sdw::UInt const & materialId
+		, Material const & material
 		, sdw::Vec3 const & vertexColour
 		, VisibilityBlendComponents & output )const
 	{
-		auto material = m_writer.declLocale( matName
-			, getMaterial( materialId ) );
 		auto lightMat = lightingModel.declMaterial( lgtMatName );
 		lightMat->create( vertexColour
 			, material );
@@ -1182,6 +1234,7 @@ namespace castor3d::shader
 				, output.tangent()
 				, output.bitangent()
 				, output.emissive()
+				, output.opacity()
 				, output.occlusion()
 				, output.transmittance()
 				, *lightMat
@@ -1189,7 +1242,7 @@ namespace castor3d::shader
 				, output.tangentSpaceFragPosition() );
 		}
 
-		return std::make_pair( material, std::move( lightMat ) );
+		return std::move( lightMat );
 	}
 
 	std::pair< Material, std::unique_ptr< LightMaterial > > Materials::applyMaterial( std::string const & matName
