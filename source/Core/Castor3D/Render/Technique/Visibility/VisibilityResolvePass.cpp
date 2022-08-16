@@ -1509,6 +1509,42 @@ namespace castor3d
 				}
 			}
 
+			for ( auto & itPipeline : m_culler.getInstancedSubmeshNodes( m_depthPass ) )
+			{
+				PipelineBaseHash const & pipelineHash = itPipeline.first;
+				auto [submeshFlags, programFlags, passType, passFlags, maxTexcoordSet, texturesCount, textureFlags] = getPipelineHashDetails( pipelineHash );
+				auto & pipeline = doCreatePipeline( passType
+					, textureFlags
+					, submeshFlags
+					, passFlags & PassFlag::eAllVisibility );
+				auto it = m_activePipelines.emplace( &pipeline
+					, std::set< ashes::DescriptorSet const * >{} ).first;
+
+				for ( auto & itBuffer : itPipeline.second )
+				{
+					uint64_t hash = 0u;
+					hash = castor::hashCombinePtr( hash, *itBuffer.first );
+					auto ires = pipeline.descriptorSets.emplace( hash, ashes::DescriptorSetPtr{} );
+
+					if ( ires.second )
+					{
+						auto & modelBuffers = m_device.geometryPools->getBuffers( *itBuffer.first );
+						ashes::BufferBase const * indexBuffer{};
+
+						if ( checkFlag( submeshFlags, SubmeshFlag::eIndex ) )
+						{
+							indexBuffer = &m_device.geometryPools->getIndexBuffer( *itBuffer.first );
+						}
+
+						ires.first->second = visres::createVtxDescriptorSet( getName(), *pipeline.descriptorPool
+							, modelBuffers
+							, indexBuffer );
+					}
+
+					it->second.emplace( ires.first->second.get() );
+				}
+			}
+
 			for ( auto & itPipeline : m_culler.getBillboardNodes( m_depthPass ) )
 			{
 				PipelineBaseHash const & pipelineHash = itPipeline.first;
