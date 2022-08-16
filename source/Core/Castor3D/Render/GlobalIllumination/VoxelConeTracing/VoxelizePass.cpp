@@ -432,13 +432,13 @@ namespace castor3d
 				auto billboardData = writer.declLocale( "billboardData"
 					, c3d_billboardData[nodeId - 1u] );
 				auto right = writer.declLocale( "right"
-					, billboardData.getCameraRight( flags.programFlags, c3d_matrixData ) );
+					, billboardData.getCameraRight( c3d_matrixData ) );
 				auto up = writer.declLocale( "up"
-					, billboardData.getCameraUp( flags.programFlags, c3d_matrixData ) );
+					, billboardData.getCameraUp( c3d_matrixData ) );
 				auto width = writer.declLocale( "width"
-					, billboardData.getWidth( flags.programFlags, c3d_sceneData ) );
+					, billboardData.getWidth( c3d_sceneData ) );
 				auto height = writer.declLocale( "height"
-					, billboardData.getHeight( flags.programFlags, c3d_sceneData ) );
+					, billboardData.getHeight( c3d_sceneData ) );
 
 				if ( hasTextures )
 				{

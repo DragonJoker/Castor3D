@@ -107,6 +107,15 @@ namespace castor3d
 		C3D_API BillboardRenderNode const * getRenderNode( Pass const & pass )const;
 		/**
 		 *\~english
+		 *\brief		Fills the given data with this billboard's properties.
+		 *\param[out]	data	The data to fill.
+		 *\~french
+		 *\brief		Remplit les données données avec les propriétés de ce billboard.
+		 *\param[out]	data	Les données à remplir.
+		 */
+		C3D_API void fillData( BillboardUboConfiguration & data )const;
+		/**
+		 *\~english
 		 *\brief		Sets the object render node and ID in models buffer.
 		 *\param[in]	pass		The material pass.
 		 *\param[in]	renderNode	The render node.
@@ -162,6 +171,11 @@ namespace castor3d
 			return m_vertexBuffer;
 		}
 
+		uint32_t getVertexStride()
+		{
+			return m_vertexStride;
+		}
+
 		GeometryBuffers const & getGeometryBuffers()const
 		{
 			return m_geometryBuffers;
@@ -170,11 +184,6 @@ namespace castor3d
 		ObjectBufferOffset const & getBufferOffsets()const
 		{
 			return getGeometryBuffers().bufferOffset;
-		}
-
-		VkDeviceSize getVertexOffset()const
-		{
-			return getBufferOffsets().getFirstVertex< castor::Point3f >();
 		}
 
 		Scene const & getParentScene()const

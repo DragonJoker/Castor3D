@@ -375,14 +375,12 @@ namespace Testing
 			{
 				{ castor3d::ProgramFlag::eBillboards, "eBillboards" },
 				{ castor3d::ProgramFlag::eEnvironmentMapping, "eEnvironmentMapping" },
-				{ castor3d::ProgramFlag::eFixedSize, "eFixedSize" },
 				{ castor3d::ProgramFlag::eLighting, "eLighting" },
 				{ castor3d::ProgramFlag::eDepthPass, "eDepthPass" },
 				{ castor3d::ProgramFlag::ePicking, "ePicking" },
 				{ castor3d::ProgramFlag::eShadowMapDirectional, "eShadowMapDirectional" },
 				{ castor3d::ProgramFlag::eShadowMapPoint, "eShadowMapPoint" },
 				{ castor3d::ProgramFlag::eShadowMapSpot, "eShadowMapSpot" },
-				{ castor3d::ProgramFlag::eSpherical, "eSpherical" },
 				{ castor3d::ProgramFlag::eInstantiation, "eInstantiation" },
 				{ castor3d::ProgramFlag::eForceTexCoords, "eForceTexCoords" },
 			};

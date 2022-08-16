@@ -963,7 +963,7 @@ namespace castor3d
 					, billboard.getVertexOffset()
 					, 0u
 					, 0u );
-				billboardIt.second.second->billboardData.dimensions = object->getDimensions();
+				object->fillData( billboardIt.second.second->billboardData );
 				dirty = dirty || billboardIt.first->getId() == 0;
 			}
 

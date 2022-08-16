@@ -86,60 +86,54 @@ namespace castor3d
 		//!\~english	Picking pass program.
 		//\~french		Programme de passe de picking.
 		ePicking = 0x00004,
-		//!\~english	Shader for spherical billboards.
-		//\~french		Shader pour les billboards sphériques.
-		eSpherical = 0x00008,
-		//!\~english	Shader for fixed size billboards.
-		//\~french		Shader pour les billboards à dimensions fixes.
-		eFixedSize = 0x00010,
 		//!\~english	Vertex shader inverts normals (for front culling).
 		//\~french		Le vertex shader inverse les normales (pour le front culling).
-		eInvertNormals = 0x00020,
+		eInvertNormals = 0x00008,
 		//!\~english	Forces texcoords binding.
 		//\~french		Force le binding des UV.
-		eForceTexCoords = 0x00040,
+		eForceTexCoords = 0x00010,
 		//!\~english	Shader supporting lighting.
 		//\~french		Shader supportant les éclairages.
-		eLighting = 0x00080,
+		eLighting = 0x00020,
 		//!\~english	Writes to Variance shadow map.
 		//\~french		Ecrit dans la Variance shadow map.
-		eVsmShadowMap = 0x00100,
+		eVsmShadowMap = 0x00040,
 		//!\~english	Writes to Reflective shadow map.
 		//\~french		Ecrit dans la Reflective shadow map.
-		eRsmShadowMap = 0x00200,
+		eRsmShadowMap = 0x00080,
 		//!\~english	Render pass uses a mesh shader.
 		//\~french		La passe de rendu utilise un mesh shader.
-		eHasMesh = 0x00400,
+		eHasMesh = 0x00100,
 		//!\~english	Shader for the depth pre-pass.
 		//\~french		Shader pour la pré-passe de profondeur.
-		eDepthPass = 0x00800,
+		eDepthPass = 0x00200,
 		//!\~english	All flags used in base pipeline flags hashing.
 		//\~french		Tous les indicateurs utilisés dans le hash des indicateurs de pipeline.
-		eAllBase = 0x00FFF,
+		eAllBase = 0x003FF,
 		//!\~english	Shader used to render a shadow map for directional light.
 		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière directionnalle.
-		eShadowMapDirectional = 0x01000,
+		eShadowMapDirectional = 0x00400,
 		//!\~english	Shader used to render a shadow map for spot light.
 		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière projecteur.
-		eShadowMapSpot = 0x02000,
+		eShadowMapSpot = 0x00800,
 		//!\~english	Shader used to render a shadow map for point light.
 		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière omnidirectionnelle.
-		eShadowMapPoint = 0x04000,
+		eShadowMapPoint = 0x01000,
 		//!\~english	Shader used to render an environment map.
 		//\~french		Shader utilisé pour dessiner une texture d'environnement.
-		eEnvironmentMapping = 0x08000,
+		eEnvironmentMapping = 0x02000,
 		//!\~english	Render pass uses a geometry shader.
 		//\~french		La passe de rendu utilise un geometry shader.
-		eHasGeometry = 0x10000,
+		eHasGeometry = 0x04000,
 		//!\~english	Render pass uses tessellation shaders.
 		//\~french		La passe de rendu utilise des tessellation shaders.
-		eHasTessellation = 0x20000,
+		eHasTessellation = 0x08000,
 		//!\~english	Render pass uses a task shader.
 		//\~french		La passe de rendu utilise un task shader.
-		eHasTask = 0x40000,
+		eHasTask = 0x10000,
 		//!\~english	All other flags.
 		//\~french		Tous les autres indicateurs.
-		eAllOptional = 0x7F000,
+		eAllOptional = 0x1F000,
 		//!\~english	All flags.
 		//\~french		Tous les indicateurs.
 		eAll = eAllBase | eAllOptional,

@@ -14,54 +14,52 @@ namespace castor3d
 	namespace shader
 	{
 		struct BillboardData
-			: public sdw::StructInstance
+			: public sdw::StructInstanceHelperT< "C3D_BillboardData"
+				, sdw::type::MemoryLayout::eStd430
+				, sdw::Vec2Field< "dimensions" >
+				, sdw::UIntField< "isSpherical" >
+				, sdw::UIntField< "isFixedSize" > >
 		{
-			C3D_API BillboardData( sdw::ShaderWriter & writer
+			BillboardData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
-				, bool enabled );
-			SDW_DeclStructInstance( C3D_API, BillboardData );
+				, bool enabled )
+				: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			{
+			}
 
-			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+			C3D_API sdw::Vec3 getCameraRight( MatrixData const & matrixData )const;
+			C3D_API sdw::Vec3 getCameraUp( MatrixData const & matrixData )const;
+			C3D_API sdw::Float getWidth( SceneData const & sceneData )const;
+			C3D_API sdw::Float getHeight( SceneData const & sceneData )const;
 
-			C3D_API sdw::Vec3 getCameraRight( ProgramFlags programFlags
-				, MatrixData const & matrixData )const;
-			C3D_API sdw::Vec3 getCameraUp( ProgramFlags programFlags
-				, MatrixData const & matrixData )const;
-			C3D_API sdw::Float getWidth( ProgramFlags programFlags
-				, SceneData const & sceneData )const;
-			C3D_API sdw::Float getHeight( ProgramFlags programFlags
-				, SceneData const & sceneData )const;
+			auto dimensions()const { return getMember< "dimensions" >(); }
+			auto isSpherical()const { return getMember< "isSpherical" >(); }
+			auto isFixedSize()const { return getMember< "isFixedSize" >(); }
 
-		private:
-			using sdw::StructInstance::getMember;
-			using sdw::StructInstance::getMemberArray;
-
-		private:
-			sdw::Vec2 m_dimensions;
-			sdw::Vec2 m_dummy;
+			C3D_API static castor::String const BufferName;
+			C3D_API static castor::String const MemberName;
 		};
 	}
-
-	class BillboardUbo
-	{
-	public:
-		using Configuration = BillboardUboConfiguration;
-
-	public:
-		C3D_API static castor::String const BufferBillboard;
-		C3D_API static castor::String const BillboardData;
-	};
 }
 
 #define C3D_Billboard( writer, binding, set )\
 	sdw::StorageBuffer billboard{ writer\
-		, castor3d::BillboardUbo::BufferBillboard\
+		, castor3d::shader::BillboardData::BufferName\
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd430\
 		, true };\
-	auto c3d_billboardData = billboard.declMemberArray< castor3d::shader::BillboardData >( castor3d::BillboardUbo::BillboardData );\
+	auto c3d_billboardData = billboard.declMemberArray< castor3d::shader::BillboardData >( castor3d::shader::BillboardData::MemberName );\
+	billboard.end()
+
+#define C3D_BillboardOpt( writer, binding, set, enable )\
+	sdw::StorageBuffer billboard{ writer\
+		, castor3d::shader::BillboardData::BufferName\
+		, uint32_t( binding )\
+		, uint32_t( set )\
+		, ast::type::MemoryLayout::eStd430\
+		, enable };\
+	auto c3d_billboardData = billboard.declMemberArray< castor3d::shader::BillboardData >( castor3d::shader::BillboardData::MemberName, enable );\
 	billboard.end()
 
 #endif
