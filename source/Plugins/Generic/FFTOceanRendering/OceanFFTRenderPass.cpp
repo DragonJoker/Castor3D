@@ -1192,7 +1192,7 @@ namespace ocean_fft
 				, FragmentOut out )
 			{
 				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId ) - 1u] );
+					, c3d_modelsData[in.nodeId - 1u] );
 				auto hdrCoords = writer.declLocale( "hdrCoords"
 					, in.fragCoord.xy() / c3d_sceneData.renderSize );
 				auto gradJacobian = writer.declLocale( "gradJacobian"

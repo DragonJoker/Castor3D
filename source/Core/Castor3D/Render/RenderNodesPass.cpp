@@ -1301,7 +1301,7 @@ namespace castor3d
 				out.texture2 = in.texture2;
 				out.texture3 = in.texture3;
 				out.colour = in.colour;
-				out.nodeId = writer.cast< Int >( nodeId );
+				out.nodeId = nodeId;
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId - 1u] );
 				auto material = writer.declLocale( "material"
@@ -1349,6 +1349,7 @@ namespace castor3d
 				out.worldPosition = worldPos;
 				out.viewPosition = c3d_matrixData.worldToCurView( worldPos );
 				curPosition = c3d_matrixData.worldToCurProj( worldPos );
+				out.drawId = in.drawID;
 				out.vertexId = in.vertexIndex - in.baseVertex;
 				out.computeVelocity( c3d_matrixData
 					, curPosition
@@ -1431,7 +1432,7 @@ namespace castor3d
 				out.passMultipliers[1] = passMultipliers[1];
 				out.passMultipliers[2] = passMultipliers[2];
 				out.passMultipliers[3] = passMultipliers[3];
-				out.nodeId = writer.cast< sdw::Int >( nodeId );
+				out.nodeId = nodeId;
 
 				auto curBbcenter = writer.declLocale( "curBbcenter"
 					, modelData.modelToCurWorld( vec4( center, 1.0_f ) ).xyz() );
@@ -1474,6 +1475,7 @@ namespace castor3d
 					, curPosition
 					, prvPosition );
 				out.vtx.position = curPosition;
+				out.drawId = in.drawID;
 				out.vertexId = in.instanceIndex - in.baseInstance;
 				out.computeTangentSpace( flags.submeshFlags
 					, c3d_sceneData.cameraPosition

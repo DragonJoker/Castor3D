@@ -184,7 +184,7 @@ namespace castor3d
 				, FragmentOut out )
 			{
 				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[in.nodeId - 1] );
+					, c3d_modelsData[in.nodeId - 1u] );
 				shader::OpaqueBlendComponents components{ writer
 					, "out"
 					, in.texture0

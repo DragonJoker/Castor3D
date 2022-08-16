@@ -362,7 +362,7 @@ namespace castor3d
 				pxl_flux = vec4( 0.0_f );
 
 				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[in.nodeId - 1] );
+					, c3d_modelsData[in.nodeId - 1u] );
 				shader::OpaqueBlendComponents components{ writer
 					, "out"
 					, in.texture0

@@ -64,7 +64,7 @@ namespace castor3d
 				, texture2{ getMember< sdw::Vec3 >( "texcoord2" ) }
 				, texture3{ getMember< sdw::Vec3 >( "texcoord3" ) }
 				, colour{ getMember< sdw::Vec3 >( "colour" ) }
-				, nodeId{ getMember< sdw::Int >( "nodeId" ) }
+				, nodeId{ getMember< sdw::UInt >( "nodeId" ) }
 			{
 			}
 
@@ -119,7 +119,7 @@ namespace castor3d
 						, ( checkFlag( submeshFlags, SubmeshFlag::eColours ) ? index++ : 0u )
 						, checkFlag( submeshFlags, SubmeshFlag::eColours ) );
 					result->declMember( "nodeId"
-						, sdw::type::Kind::eInt
+						, sdw::type::Kind::eUInt
 						, sdw::type::NotArray
 						, index++ );
 				}
@@ -135,7 +135,7 @@ namespace castor3d
 			sdw::Vec3 texture2;
 			sdw::Vec3 texture3;
 			sdw::Vec3 colour;
-			sdw::Int nodeId;
+			sdw::UInt nodeId;
 		};
 	}
 
@@ -614,7 +614,7 @@ namespace castor3d
 				IF( writer, utils.isSaturated( uvw ) )
 				{
 					auto modelData = writer.declLocale( "modelData"
-						, c3d_modelsData[in.nodeId - 1] );
+						, c3d_modelsData[in.nodeId - 1u] );
 					auto material = writer.declLocale( "material"
 						, materials.getMaterial( modelData.getMaterialId() ) );
 					auto normal = writer.declLocale( "normal"
