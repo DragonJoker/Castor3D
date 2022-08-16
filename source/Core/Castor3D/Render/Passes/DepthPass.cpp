@@ -156,7 +156,7 @@ namespace castor3d
 				, FragmentOut out )
 			{
 				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId ) - 1u] );
+					, c3d_modelsData[in.nodeId - 1u] );
 				shader::GeometryBlendComponents components{ writer
 					, "out"
 					, in.texture0

@@ -263,8 +263,9 @@ namespace castor3d::shader
 		, texture3{ this->getMember< TexcoordT >( "texcoord3", true ) }
 		, colour{ this->getMember< sdw::Vec3 >( "colour", true ) }
 		, passMultipliers{ this->getMemberArray< sdw::Vec4 >( "passMultipliers", true ) }
-		, nodeId{ this->getMember< sdw::Int >( "nodeId", true ) }
-		, vertexId{ this->getMember< sdw::Int >( "vertexId", true ) }
+		, nodeId{ this->getMember< sdw::UInt >( "nodeId", true ) }
+		, drawId{ this->getMember< sdw::UInt >( "drawId", true ) }
+		, vertexId{ this->getMember< sdw::UInt >( "vertexId", true ) }
 	{
 	}
 
@@ -358,13 +359,17 @@ namespace castor3d::shader
 			{
 				index += 4u;
 			}
-			result->declMember( "nodeId", ast::type::Kind::eInt
+			result->declMember( "nodeId", ast::type::Kind::eUInt
 				, ast::type::NotArray
 				, index++ );
-			result->declMember( "vertexId", ast::type::Kind::eInt
+			result->declMember( "drawId", ast::type::Kind::eUInt
 				, ast::type::NotArray
-				, ( checkFlag( programFlags, ProgramFlag::eDepthPass ) ? index++ : 0 )
-				, checkFlag( programFlags, ProgramFlag::eDepthPass ) );
+				, ( checkFlag( programFlags, ProgramFlag::eVisibilityPass ) ? index++ : 0 )
+				, checkFlag( programFlags, ProgramFlag::eVisibilityPass ) );
+			result->declMember( "vertexId", ast::type::Kind::eUInt
+				, ast::type::NotArray
+				, ( ( checkFlag( programFlags, ProgramFlag::eBillboards ) && checkFlag( programFlags, ProgramFlag::eVisibilityPass ) ) ? index++ : 0 )
+				, checkFlag( programFlags, ProgramFlag::eBillboards ) && checkFlag( programFlags, ProgramFlag::eVisibilityPass ) );
 		}
 
 		return result;
@@ -474,7 +479,7 @@ namespace castor3d::shader
 		}
 		else if ( normal.isEnabled() )
 		{
-			normal = nml.xyz();
+			normal = nml;
 
 			if ( checkFlag( programFlags, ProgramFlag::eInvertNormals ) )
 			{

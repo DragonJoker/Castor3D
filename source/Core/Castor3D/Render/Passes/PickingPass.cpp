@@ -163,7 +163,7 @@ namespace castor3d
 				, FragmentOut out )
 			{
 				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId ) - 1u] );
+					, c3d_modelsData[in.nodeId - 1u] );
 				shader::OpacityBlendComponents components{ writer
 					, "out"
 					, in.texture0
@@ -181,7 +181,7 @@ namespace castor3d
 					, in.passMultipliers
 					, components );
 				pxl_fragColor = uvec4( ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) ? 2_u : 1_u )
-					, writer.cast< sdw::UInt >( in.nodeId )
+					, in.nodeId
 					, writer.cast< sdw::UInt >( in.primitiveID )
 					, 0_u );
 			} );

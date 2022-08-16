@@ -151,8 +151,9 @@ namespace castor3d::shader
 		TexcoordT texture3;
 		sdw::Vec3 colour;
 		sdw::Array< sdw::Vec4 > passMultipliers;
-		sdw::Int nodeId;
-		sdw::Int vertexId;
+		sdw::UInt nodeId;
+		sdw::UInt drawId;
+		sdw::UInt vertexId;
 	};
 
 	template< ast::var::Flag FlagT >

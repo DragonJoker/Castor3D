@@ -86,12 +86,12 @@ namespace castor3d
 		//!\~english	Shader untiles the textures.
 		//\~french		Shader untile les textures.
 		eUntile = 0x0004,
-		//!\~english	All flags used in visibility pipelines.
-		//\~french		Tous les indicateurs utilisés dans les pipelines de visibilité.
-		eAllVisibility = 0x0007,
 		//!\~english	Shader using alpha test.
 		//\~french		Shader utilisant un test alpha.
 		eAlphaTest = 0x0008,
+		//!\~english	All flags used in visibility pipelines.
+		//\~french		Tous les indicateurs utilisés dans les pipelines de visibilité.
+		eAllVisibility = 0x000F,
 		//!\~english	Shader using alpha test.
 		//\~french		Shader utilisant un test alpha.
 		eBlendAlphaTest = 0x0010,
