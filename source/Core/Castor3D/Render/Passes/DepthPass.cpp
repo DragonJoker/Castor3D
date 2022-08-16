@@ -186,9 +186,10 @@ namespace castor3d
 				data0 = vec4( in.fragCoord.z()
 					, length( in.worldPosition.xyz() - c3d_sceneData.cameraPosition )
 					, writer.cast< sdw::Float >( in.nodeId )
-					, writer.cast< sdw::Float >( in.primitiveID ) );
-				data1 = vec4( components.normal()
-					, writer.cast< sdw::Float >( in.vertexId ) );
+					, ( checkFlag( flags.programFlags, ProgramFlag::eBillboards )
+						? writer.cast< sdw::Float >( in.vertexId * 2_i + in.primitiveID )
+						: writer.cast< sdw::Float >( in.primitiveID ) ) );
+				data1 = vec4( components.normal(), 0.0_f );
 				velocity = vec4( in.getVelocity(), 0.0_f, 0.0_f );
 			} );
 

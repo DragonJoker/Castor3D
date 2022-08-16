@@ -68,7 +68,7 @@ namespace castor3d
 			ashes::PipelinePtr blendPipeline{};
 			ashes::DescriptorSetPoolPtr descriptorPool{};
 			uint32_t passTypeIndex{};
-			std::unordered_map< ashes::BufferBase const *, ashes::DescriptorSetPtr > descriptorSets{};
+			std::unordered_map< uint64_t, ashes::DescriptorSetPtr > descriptorSets{};
 		};
 		using PipelinePtr = std::unique_ptr< Pipeline >;
 
@@ -114,7 +114,7 @@ namespace castor3d
 		std::unordered_map< uint64_t, PipelinePtr > m_pipelines;
 		std::unordered_map< uint64_t, PipelinePtr > m_billboardPipelines;
 		std::map< Pipeline const *, std::set< ashes::DescriptorSet const * > > m_activePipelines;
-		std::map< Pipeline const *, std::set< ashes::DescriptorSet const * > > m_activeBillboardPipelines;
+		std::map< Pipeline const *, std::map< uint32_t, ashes::DescriptorSet const * > > m_activeBillboardPipelines;
 	};
 }
 

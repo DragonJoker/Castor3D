@@ -13,6 +13,9 @@ See LICENSE file in root folder
 // Use deferred rendering for opaque objects.
 #define C3D_UseDeferredRendering ${C3D_USE_DEFERRED}
 
+// Use visibility buffer when rendering opaque objects.
+#define C3D_UseVisibilityBuffer ${C3D_USE_VISIBILITY}
+
 // Use Vulkan allocation callbacks.
 #define C3D_UseAllocationCallbacks ${C3D_USE_ALLOCCB}
 

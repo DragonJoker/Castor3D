@@ -63,6 +63,19 @@ namespace castor3d
 				return *this;
 			}
 		};
+
+		static castor::Point4fArray convert( castor::Point3fArray const & src )
+		{
+			castor::Point4fArray result;
+			result.reserve( src.size() );
+
+			for ( auto & value : src )
+			{
+				result.push_back( castor::Point4f{ value->x, value->y, value->z, 1.0f } );
+			}
+
+			return result;
+		}
 	}
 
 	//*************************************************************************************************
@@ -193,19 +206,7 @@ namespace castor3d
 
 	ProgramFlags BillboardBase::getProgramFlags()const
 	{
-		ProgramFlags result = ProgramFlag::eBillboards;
-
-		if ( m_billboardType == BillboardType::eSpherical )
-		{
-			addFlag( result, ProgramFlag::eSpherical );
-		}
-
-		if ( m_billboardSize == BillboardSize::eFixed )
-		{
-			addFlag( result, ProgramFlag::eFixedSize );
-		}
-
-		return result;
+		return ProgramFlag::eBillboards;
 	}
 
 	uint32_t BillboardBase::getId( Pass const & pass )const
@@ -218,6 +219,13 @@ namespace castor3d
 	{
 		auto it = m_ids.find( &pass );
 		return it == m_ids.end() ? nullptr : it->second.second;
+	}
+
+	void BillboardBase::fillData( BillboardUboConfiguration & data )const
+	{
+		data.dimensions = getDimensions();
+		data.isSpherical = getBillboardType() == BillboardType::eSpherical ? 1u : 0u;
+		data.isFixedSize = getBillboardSize() == BillboardSize::eFixed ? 1u : 0u;
 	}
 
 	void BillboardBase::setId( Pass const & pass
@@ -290,9 +298,9 @@ namespace castor3d
 		, BillboardBase{ scene
 			, &node
 			, std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
-				, ashes::VkVertexInputBindingDescriptionArray{ { 1u, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_INSTANCE } }
+				, ashes::VkVertexInputBindingDescriptionArray{ { 1u, sizeof( castor::Point4f ), VK_VERTEX_INPUT_RATE_INSTANCE } }
 				, ashes::VkVertexInputAttributeDescriptionArray{ { 2u, 1u, VK_FORMAT_R32G32B32_SFLOAT, 0u } } )
-			, sizeof( castor::Point3f ) }
+			, sizeof( castor::Point4f ) }
 	{
 	}
 	
@@ -304,9 +312,9 @@ namespace castor3d
 		, BillboardBase{ scene
 			, nullptr
 			, std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
-				, ashes::VkVertexInputBindingDescriptionArray{ { 1u, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_INSTANCE } }
+				, ashes::VkVertexInputBindingDescriptionArray{ { 1u, sizeof( castor::Point4f ), VK_VERTEX_INPUT_RATE_INSTANCE } }
 				, ashes::VkVertexInputAttributeDescriptionArray{ { 2u, 1u, VK_FORMAT_R32G32B32_SFLOAT, 0u } } )
-			, sizeof( castor::Point3f ) }
+			, sizeof( castor::Point4f ) }
 	{
 	}
 
@@ -321,16 +329,15 @@ namespace castor3d
 				device.bufferPool->putBuffer( m_vertexBuffer );
 			}
 
-			m_vertexBuffer = device.bufferPool->getBuffer< uint8_t >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
+			m_vertexBuffer = device.bufferPool->getBuffer< uint8_t >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 				, uint32_t( m_arrayPositions.size() ) * m_vertexStride
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
-			auto * buffer = m_vertexBuffer.getData().data();
 
-			for ( auto & pos : m_arrayPositions )
-			{
-				std::memcpy( buffer, pos.constPtr(), m_vertexStride );
-				buffer += m_vertexStride;
-			}
+			auto * buffer = reinterpret_cast< castor::Point4f * >( m_vertexBuffer.getData().data() );
+			auto up = billboard::convert( m_arrayPositions );
+			std::copy( up.begin()
+				, up.end()
+				, buffer );
 
 			m_vertexBuffer.markDirty( VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
 				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );

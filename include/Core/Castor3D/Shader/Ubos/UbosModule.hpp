@@ -85,7 +85,8 @@ namespace castor3d
 	struct BillboardUboConfiguration
 	{
 		castor::Point2f dimensions;
-		castor::Point2f dummy;
+		uint32_t isSpherical;
+		uint32_t isFixedSize;
 	};
 	/**
 	*\~english
