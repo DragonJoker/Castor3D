@@ -555,6 +555,33 @@ namespace castor3d
 		}
 	}
 
+	std::pair< uint32_t, uint32_t > SceneCuller::fillPipelinesIds( RenderNodesPass const & renderPass
+		, castor::ArrayView< uint32_t > nodesPipelinesIds )const
+	{
+		auto it = m_renderPasses.find( &renderPass );
+		CU_Require( it != m_renderPasses.end() );
+		uint32_t maxId{};
+		uint32_t count{};
+
+		for ( auto & nodeIt : it->second.nodesPipelinesIds )
+		{
+			nodesPipelinesIds[nodeIt.first] = nodeIt.second;
+			maxId = std::max( nodeIt.second, maxId );
+			++count;
+		}
+
+		return { count, maxId };
+	}
+
+	void SceneCuller::registerNodePipeline( RenderNodesPass const & renderPass
+		, uint32_t nodeId
+		, uint32_t pipelineId )
+	{
+		auto it = m_renderPasses.find( &renderPass );
+		CU_Require( it != m_renderPasses.end() );
+		it->second.nodesPipelinesIds.emplace( nodeId, pipelineId );
+	}
+
 	SceneCuller::PipelineBufferArray const & SceneCuller::getPassPipelineNodes( RenderNodesPass const & renderPass )const
 	{
 		auto it = m_renderPasses.find( &renderPass );

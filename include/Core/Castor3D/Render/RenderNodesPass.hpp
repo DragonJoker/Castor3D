@@ -575,12 +575,7 @@ namespace castor3d
 			return m_oit;
 		}
 
-		SceneCuller const & getCuller()const
-		{
-			return m_culler;
-		}
-
-		SceneCuller & getCuller()
+		SceneCuller & getCuller()const
 		{
 			return m_culler;
 		}

@@ -23,13 +23,37 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
+	namespace vissort
+	{
+		class NodesPipelines
+			: public shader::BufferT< sdw::UVec4 >
+		{
+		public:
+			NodesPipelines( sdw::ShaderWriter & writer
+				, uint32_t binding
+				, uint32_t set )
+				: BufferT{ "NodesPipelines", "nodesPipelines", writer, binding, set }
+			{
+			}
+
+			sdw::UInt getPipelinesCount()const
+			{
+				return this->getSecondaryCount();
+			}
+
+			sdw::UInt operator[]( sdw::UInt const & index )const
+			{
+				return getData( index / 4u )[index % 4u];
+			}
+		};
+	}
+
 	namespace matcount
 	{
 		enum Bindings : uint32_t
 		{
 			eData,
 			eMaterials,
-			eModelsData,
 			eMaterialsCounts,
 		};
 
@@ -39,7 +63,6 @@ namespace castor3d
 
 			auto dataMap = writer.declStorageImg< sdw::RUImage2DRgba32 >( "dataMap", Bindings::eData, 0u );
 			shader::Materials materials{ writer, Bindings::eMaterials, 0u };
-			C3D_ModelsData( writer, Bindings::eModelsData, 0u );
 
 			auto MaterialsCounts = writer.declStorageBuffer<>( "MaterialsCounts", Bindings::eMaterialsCounts, 0u );
 			auto materialsCounts = MaterialsCounts.declMemberArray< sdw::UInt >( "materialsCounts" );
@@ -50,14 +73,13 @@ namespace castor3d
 				{
 					auto pixel = writer.declLocale( "pixel"
 						, in.globalInvocationID.xy() );
-					auto data = dataMap.load( ivec2( pixel ) );
+					auto data = writer.declLocale( "data"
+						, dataMap.load( ivec2( pixel ) ) );
 					auto nodeId = writer.declLocale( "nodeId"
 						, data.x() );
 
 					IF( writer, nodeId > 0_u )
 					{
-						auto modelData = writer.declLocale( "modelData"
-							, c3d_modelsData[nodeId - 1_u] );
 						auto pipelineId = writer.declLocale( "pipelineId"
 							, data.w() );
 						sdw::atomicAdd( materialsCounts[pipelineId], 1_u );
@@ -77,7 +99,6 @@ namespace castor3d
 			, ashes::Buffer< uint32_t > const & counts
 			, ashes::PipelineShaderStageCreateInfoArray const & stages )
 		{
-			auto & modelBuffer = scene.getModelBuffer().getBuffer();
 			auto & matCache = scene.getOwner()->getMaterialCache();
 			auto renderSize = getExtent( data );
 			auto & pass = graph.createPass( name + "/MaterialsCount"
@@ -100,10 +121,6 @@ namespace castor3d
 			pass.addDependency( *previousPass );
 			pass.addInputStorageView( data, Bindings::eData );
 			matCache.getPassBuffer().createPassBinding( pass, Bindings::eMaterials );
-			pass.addInputStorageBuffer( { modelBuffer, "Models" }
-				, uint32_t( Bindings::eModelsData )
-				, 0u
-				, uint32_t( modelBuffer.getSize() ) );
 			pass.addOutputStorageBuffer( { counts, "MaterialsCount" }
 				, uint32_t( Bindings::eMaterialsCounts )
 				, 0u
@@ -120,6 +137,7 @@ namespace castor3d
 		enum Bindings : uint32_t
 		{
 			eMaterials,
+			eNodesPipelines,
 			eMaterialsCounts,
 			eMaterialsStarts,
 		};
@@ -129,6 +147,7 @@ namespace castor3d
 			sdw::ComputeWriter writer;
 
 			shader::Materials materials{ writer, Bindings::eMaterials, 0u };
+			vissort::NodesPipelines nodesPipelines{ writer, Bindings::eNodesPipelines, 0u };
 
 			auto MaterialsCounts = writer.declStorageBuffer<>( "MaterialsCounts", Bindings::eMaterialsCounts, 0u );
 			auto materialsCounts = MaterialsCounts.declMemberArray< sdw::UInt >( "materialsCounts" );
@@ -141,20 +160,20 @@ namespace castor3d
 			writer.implementMain( 64u
 				, [&]( sdw::ComputeIn in )
 				{
-					auto passTypeIndex = writer.declLocale( "passTypeIndex"
+					auto pipelineId = writer.declLocale( "pipelineId"
 						, in.globalInvocationID.x() );
 
-					IF( writer, passTypeIndex < materials.getPassTypesCount() )
+					IF( writer, pipelineId < nodesPipelines.getPipelinesCount() )
 					{
 						auto result = writer.declLocale( "result", 0_u );
 
-						FOR( writer, sdw::UInt, i, 0_u, i < passTypeIndex, ++i )
+						FOR( writer, sdw::UInt, i, 0_u, i < pipelineId, ++i )
 						{
 							result += materialsCounts[i];
 						}
 						ROF;
 
-						materialStarts[passTypeIndex] = result;
+						materialStarts[pipelineId] = result;
 					}
 					FI;
 				} );
@@ -167,6 +186,7 @@ namespace castor3d
 			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, Scene const & scene
+			, ShaderBuffer const & pipelinesIds
 			, ashes::Buffer< uint32_t > const & counts
 			, ashes::Buffer< uint32_t > const & starts
 			, ashes::PipelineShaderStageCreateInfoArray const & stages )
@@ -190,6 +210,7 @@ namespace castor3d
 				} );
 			pass.addDependency( *previousPass );
 			matCache.getPassBuffer().createPassBinding( pass, Bindings::eMaterials );
+			pipelinesIds.createPassBinding( pass, "NodesPipelines", Bindings::eNodesPipelines );
 			pass.addInputStorageBuffer( { counts, "MaterialsCounts" }
 				, uint32_t( Bindings::eMaterialsCounts )
 				, 0u
@@ -211,7 +232,7 @@ namespace castor3d
 		{
 			eData,
 			eMaterials,
-			eModelsData,
+			eNodesPipelines,
 			eMaterialsCounts,
 			eMaterialsStarts,
 			ePixelsXY,
@@ -223,7 +244,7 @@ namespace castor3d
 
 			auto dataMap = writer.declStorageImg< sdw::RUImage2DRgba32 >( "dataMap", Bindings::eData, 0u );
 			shader::Materials materials{ writer, Bindings::eMaterials, 0u };
-			C3D_ModelsData( writer, Bindings::eModelsData, 0u );
+			vissort::NodesPipelines nodesPipelines{ writer, Bindings::eNodesPipelines, 0u };
 
 			auto MaterialsCounts = writer.declStorageBuffer<>( "MaterialsCounts", Bindings::eMaterialsCounts, 0u );
 			auto materialsCounts = MaterialsCounts.declMemberArray< sdw::UInt >( "materialsCounts" );
@@ -242,18 +263,17 @@ namespace castor3d
 				{
 					auto pixel = writer.declLocale( "pixel"
 						, in.globalInvocationID.xy() );
-					auto data = dataMap.load( ivec2( pixel ) );
+					auto data = writer.declLocale( "data"
+						, dataMap.load( ivec2( pixel ) ) );
 					auto nodeId = writer.declLocale( "nodeId"
 						, data.x() );
 
 					IF( writer, nodeId > 0_u )
 					{
-						auto modelData = writer.declLocale( "modelData"
-							, c3d_modelsData[nodeId - 1_u] );
-						auto passTypeIndex = writer.declLocale( "passTypeIndex"
-							, materials.getMaterial( modelData.getMaterialId() - 1_u ).passTypeIndex() );
+						auto pipelineId = writer.declLocale( "pipelineId"
+							, nodesPipelines[nodeId - 1_u] );
 						auto pixelIndex = writer.declLocale( "pixelIndex"
-							, materialsStarts[passTypeIndex] + sdw::atomicAdd( materialsCounts[passTypeIndex], 1_u ) );
+							, materialsStarts[pipelineId] + sdw::atomicAdd( materialsCounts[pipelineId], 1_u ) );
 						pixelsXY[pixelIndex] = pixel;
 					}
 					FI;
@@ -268,12 +288,12 @@ namespace castor3d
 			, RenderDevice const & device
 			, Scene const & scene
 			, crg::ImageViewId const & data
+			, ShaderBuffer const & pipelinesIds
 			, ashes::Buffer< uint32_t > const & counts
 			, ashes::Buffer< uint32_t > const & starts
 			, ashes::Buffer< castor::Point2ui > const & pixels
 			, ashes::PipelineShaderStageCreateInfoArray const & stages )
 		{
-			auto & modelBuffer = scene.getModelBuffer().getBuffer();
 			auto & matCache = scene.getOwner()->getMaterialCache();
 			auto renderSize = getExtent( data );
 			auto & pass = graph.createPass( name + "/PixelsXY"
@@ -296,10 +316,7 @@ namespace castor3d
 			pass.addDependency( *previousPass );
 			pass.addInputStorageView( data, Bindings::eData );
 			matCache.getPassBuffer().createPassBinding( pass, Bindings::eMaterials );
-			pass.addInputStorageBuffer( { modelBuffer, "Models" }
-				, uint32_t( Bindings::eModelsData )
-				, 0u
-				, uint32_t( modelBuffer.getSize() ) );
+			pipelinesIds.createPassBinding( pass, "NodesPipelines", Bindings::eNodesPipelines );
 			pass.addOutputStorageBuffer( { counts, "MaterialsCounts" }
 				, uint32_t( Bindings::eMaterialsCounts )
 				, 0u
@@ -359,6 +376,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, Scene const & scene
 		, crg::ImageViewId const & data
+		, ShaderBuffer const & pipelinesIds
 		, ashes::Buffer< uint32_t > const & counts1
 		, ashes::Buffer< uint32_t > const & counts2
 		, ashes::Buffer< uint32_t > const & starts
@@ -417,6 +435,7 @@ namespace castor3d
 			, ppreviousPass
 			, device
 			, scene
+			, pipelinesIds
 			, counts1
 			, starts
 			, m_startsStages );
@@ -426,6 +445,7 @@ namespace castor3d
 			, device
 			, scene
 			, data
+			, pipelinesIds
 			, counts2
 			, starts
 			, pixels

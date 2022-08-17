@@ -415,6 +415,7 @@ namespace castor3d
 		ashes::BufferPtr< uint32_t > m_materialsCounts2;
 		ashes::BufferPtr< uint32_t > m_materialsStarts;
 		ashes::BufferPtr< castor::Point2ui > m_pixelsXY;
+		ShaderBufferUPtr m_visibilityPipelinesIds;
 		VisibilityPassResultUPtr m_visibilityPassResult;
 		crg::FramePass * m_visibilityPassDesc{};
 		VisibilityPass * m_visibilityPass{};

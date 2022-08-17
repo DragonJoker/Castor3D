@@ -79,6 +79,7 @@ namespace castor3d
 			DrawCommandsBuffer billboardIndirectCommands;
 			PipelineNodesBuffer pipelinesNodes;
 			PipelineBufferArray nodesIds;
+			std::map< uint32_t, uint32_t > nodesPipelinesIds;
 			SidedNodePipelineMapT< SubmeshRenderNode > sortedSubmeshes;
 			SidedObjectNodePipelineMapT< SubmeshRenderNode > sortedInstancedSubmeshes;
 			SidedNodePipelineMapT< BillboardRenderNode > sortedBillboards;
@@ -91,6 +92,11 @@ namespace castor3d
 		C3D_API void registerRenderPass( RenderNodesPass const & renderPass );
 		C3D_API void unregisterRenderPass( RenderNodesPass const & renderPass );
 		C3D_API void update( CpuUpdater & updater );
+		C3D_API std::pair< uint32_t, uint32_t > fillPipelinesIds( RenderNodesPass const & renderPass
+			, castor::ArrayView< uint32_t > nodesPipelinesIds )const;
+		C3D_API void registerNodePipeline( RenderNodesPass const & renderPass
+			, uint32_t nodeId
+			, uint32_t pipelineId );
 		C3D_API PipelineBufferArray const & getPassPipelineNodes( RenderNodesPass const & renderPass )const;
 		C3D_API uint32_t getPipelineNodesIndex( RenderNodesPass const & renderPass
 			, PipelineBaseHash const & hash

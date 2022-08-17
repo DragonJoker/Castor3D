@@ -387,7 +387,6 @@ namespace castor3d
 			auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps", TexBindings::eTextures, Sets::eTex ) );
 
 			sdw::PushConstantBuffer pcb{ writer, "DrawData" };
-			auto passTypeIndex = pcb.declMember< sdw::UInt >( "passTypeIndex" );
 			auto pipelineId = pcb.declMember< sdw::UInt >( "pipelineId" );
 			auto billboardNodeId = pcb.declMember< sdw::UInt >( "billboardNodeId", stride != 0u );
 			pcb.end();
@@ -398,13 +397,6 @@ namespace castor3d
 				, {}
 				, nullptr
 				, true );
-
-			auto depthLinearization = []( sdw::Float const & d
-				, sdw::Float const & n
-				, sdw::Float const & f )
-			{
-				return ( 2.0_f * n ) / ( f + n - d * ( f - n ) );
-			};
 
 			auto calcFullBarycentric = writer.implementFunction< BarycentricFullDerivatives >( "calcFullBarycentric"
 				, [&]( sdw::Vec4 const & pt0
@@ -814,27 +806,6 @@ namespace castor3d
 						, c3d_modelsData[nodeId - 1u] );
 					auto material = writer.declLocale( "material"
 						, materials.getMaterial( modelData.getMaterialId() ) );
-
-					IF( writer, material.passCount() > 1u )
-					{
-						auto i = writer.declLocale( "i", 1_u );
-
-						WHILE( writer, material.passTypeIndex() != passTypeIndex
-							&& i < material.passCount() )
-						{
-							material = materials.getMaterial( modelData.getMaterialId() + i );
-							++i;
-						}
-						ELIHW;
-					}
-					FI;
-
-					IF( writer, material.passTypeIndex() != passTypeIndex )
-					{
-						writer.returnStmt( 0_b );
-					}
-					FI;
-
 					auto primitiveId = writer.declLocale( "primitiveId"
 						, inData.z() );
 					auto depth = writer.declLocale( "depth"
@@ -923,13 +894,15 @@ namespace castor3d
 					, [&]( sdw::UVec2 const & pos )
 					{
 						auto pixelID = writer.declLocale( "pixelID"
-							, materialsStarts[passTypeIndex] + pos.x() );
+							, materialsStarts[pipelineId] + pos.x() );
 						auto pixel = writer.declLocale( "pixel"
 							, pixelsXY[pixelID] );
 						auto ipixel = writer.declLocale( "ipixel"
 							, ivec2( pixel ) );
 						auto data = writer.declLocale( "data"
 							, imgData.load( ipixel ) );
+						auto nodeId = writer.declLocale( "nodeId"
+							, data.x() );
 						auto data0 = writer.declLocale( "data0", vec4( 0.0_f ) );
 						auto data1 = writer.declLocale( "data1", vec4( 0.0_f ) );
 						auto data2 = writer.declLocale( "data2", vec4( 0.0_f ) );
@@ -937,7 +910,8 @@ namespace castor3d
 						auto data4 = writer.declLocale( "data4", vec4( 0.0_f ) );
 						auto data5 = writer.declLocale( "data5", vec4( 0.0_f ) );
 
-						IF( writer, shade( ipixel, data, data0, data1, data2, data3, data4, data5 ) )
+						IF( writer, ( stride != 0u ? ( nodeId == billboardNodeId ) : nodeId != 0_u )
+							&& shade( ipixel, data, data0, data1, data2, data3, data4, data5 ) )
 						{
 							imgData0.store( ipixel, data0 );
 							imgData1.store( ipixel, data1 );
@@ -1348,7 +1322,7 @@ namespace castor3d
 			return result;
 		}
 
-		ashes::RenderPassPtr createRenderPass( RenderDevice const & device
+		static ashes::RenderPassPtr createRenderPass( RenderDevice const & device
 			, std::string const & name
 			, bool blend )
 		{
@@ -1447,7 +1421,7 @@ namespace castor3d
 				, std::move( createInfo ) );
 		}
 
-		ashes::FrameBufferPtr createFrameBuffer( ashes::RenderPass const & renderPass
+		static ashes::FrameBufferPtr createFrameBuffer( ashes::RenderPass const & renderPass
 			, std::string const & name
 			, RenderTechnique const & technique )
 		{
@@ -1515,7 +1489,6 @@ namespace castor3d
 
 		struct PushData
 		{
-			uint32_t passTypeIndex;
 			uint32_t pipelineId;
 			uint32_t billboardNodeId;
 		};
@@ -1529,6 +1502,7 @@ namespace castor3d
 		, castor::String const & category
 		, castor::String const & name
 		, RenderNodesPass const & nodesPass
+		, ShaderBuffer * pipelinesIds
 		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
 		: castor::Named{ category + cuT( "/" ) + name }
@@ -1545,6 +1519,7 @@ namespace castor3d
 			, renderPassDesc.m_ruConfig }
 		, m_device{ device }
 		, m_nodesPass{ nodesPass }
+		, m_pipelinesIds{ pipelinesIds }
 		, m_matrixUbo{ renderPassDesc.m_matrixUbo }
 		, m_sceneUbo{ *renderPassDesc.m_sceneUbo }
 		, m_culler{ renderPassDesc.m_culler }
@@ -1582,6 +1557,15 @@ namespace castor3d
 		{
 			m_activePipelines.clear();
 			m_activeBillboardPipelines.clear();
+
+			if ( m_pipelinesIds )
+			{
+				auto [count, maxPipelineId] = m_culler.fillPipelinesIds( m_nodesPass
+					, castor::makeArrayView( reinterpret_cast< uint32_t * >( m_pipelinesIds->getPtr() ), MaxObjectNodesCount ) );
+				m_pipelinesIds->setCount( count );
+				m_pipelinesIds->setSecondaryCount( maxPipelineId );
+			}
+
 			uint32_t index = 0u;
 
 			for ( auto & bufferIt : m_culler.getPassPipelineNodes( m_nodesPass ) )
@@ -1691,54 +1675,53 @@ namespace castor3d
 			, nullptr
 			, *getScene().getBindlessTexDescriptorSet() };
 		visres::PushData pushData{ 0u, 0u };
+		static std::array< VkClearValue, 6u > clearValues{ getClearValue( DsTexture::eData0 )
+			, getClearValue( DsTexture::eData1 )
+			, getClearValue( DsTexture::eData2 )
+			, getClearValue( DsTexture::eData3 )
+			, getClearValue( DsTexture::eData4 )
+			, getClearValue( DsTexture::eData5 ) };
 
 		context.getContext().vkCmdClearColorImage( commandBuffer
 			, opaqueResult[DsTexture::eData0].image
 			, VK_IMAGE_LAYOUT_GENERAL
-			, &transparentBlackClearColor.color
+			, &clearValues[0u].color
 			, 1u
 			, &opaqueResult[DsTexture::eData0].targetViewId.data->info.subresourceRange );
 		context.getContext().vkCmdClearColorImage( commandBuffer
 			, opaqueResult[DsTexture::eData1].image
 			, VK_IMAGE_LAYOUT_GENERAL
-			, &transparentBlackClearColor.color
+			, &clearValues[1u].color
 			, 1u
 			, &opaqueResult[DsTexture::eData1].targetViewId.data->info.subresourceRange );
 		context.getContext().vkCmdClearColorImage( commandBuffer
 			, opaqueResult[DsTexture::eData2].image
 			, VK_IMAGE_LAYOUT_GENERAL
-			, &transparentBlackClearColor.color
-			, 1u
-			, &opaqueResult[DsTexture::eData2].targetViewId.data->info.subresourceRange );
-		context.getContext().vkCmdClearColorImage( commandBuffer
-			, opaqueResult[DsTexture::eData2].image
-			, VK_IMAGE_LAYOUT_GENERAL
-			, &transparentBlackClearColor.color
+			, &clearValues[2u].color
 			, 1u
 			, &opaqueResult[DsTexture::eData2].targetViewId.data->info.subresourceRange );
 		context.getContext().vkCmdClearColorImage( commandBuffer
 			, opaqueResult[DsTexture::eData3].image
 			, VK_IMAGE_LAYOUT_GENERAL
-			, &transparentBlackClearColor.color
+			, &clearValues[3u].color
 			, 1u
 			, &opaqueResult[DsTexture::eData3].targetViewId.data->info.subresourceRange );
 		context.getContext().vkCmdClearColorImage( commandBuffer
 			, opaqueResult[DsTexture::eData4].image
 			, VK_IMAGE_LAYOUT_GENERAL
-			, &transparentBlackClearColor.color
+			, &clearValues[4u].color
 			, 1u
 			, &opaqueResult[DsTexture::eData4].targetViewId.data->info.subresourceRange );
 		context.getContext().vkCmdClearColorImage( commandBuffer
 			, opaqueResult[DsTexture::eData5].image
 			, VK_IMAGE_LAYOUT_GENERAL
-			, &transparentBlackClearColor.color
+			, &clearValues[5u].color
 			, 1u
 			, &opaqueResult[DsTexture::eData5].targetViewId.data->info.subresourceRange );
 		bool first = true;
 
 		for ( auto & pipelineIt : m_activePipelines )
 		{
-			pushData.passTypeIndex = pipelineIt.first->passTypeIndex;
 			context.getContext().vkCmdBindPipeline( commandBuffer
 				, VK_PIPELINE_BIND_POINT_COMPUTE
 				, ( first
@@ -1770,7 +1753,6 @@ namespace castor3d
 
 		for ( auto & pipelineIt : m_activeBillboardPipelines )
 		{
-			pushData.passTypeIndex = pipelineIt.first->passTypeIndex;
 			context.getContext().vkCmdBindPipeline( commandBuffer
 				, VK_PIPELINE_BIND_POINT_COMPUTE
 				, ( first
@@ -1884,8 +1866,6 @@ namespace castor3d
 
 		for ( auto & pipelineIt : m_activePipelines )
 		{
-			pushData.passTypeIndex = pipelineIt.first->passTypeIndex;
-
 			for ( auto & descriptorSetIt : pipelineIt.second )
 			{
 				descriptorSets[1] = *descriptorSetIt.first;
@@ -1915,8 +1895,6 @@ namespace castor3d
 
 		for ( auto & pipelineIt : m_activeBillboardPipelines )
 		{
-			pushData.passTypeIndex = pipelineIt.first->passTypeIndex;
-
 			for ( auto & descriptorSetIt : pipelineIt.second )
 			{
 				descriptorSets[1] = *descriptorSetIt.second.descriptorSet;
@@ -2000,7 +1978,6 @@ namespace castor3d
 				: VK_SHADER_STAGE_FRAGMENT_BIT;
 			auto stages = VkShaderStageFlags( stage );
 			auto extent = m_parent->getNormalTexture().getExtent();
-			auto & matCache = getScene().getEngine()->getMaterialCache();
 			auto result = std::make_unique< Pipeline >();
 			result->descriptorLayout = stride == 0u
 				? visres::createVtxDescriptorLayout( m_device, getName(), submeshFlags )
@@ -2015,7 +1992,6 @@ namespace castor3d
 			result->shaders[1].shader = ShaderModule{ stage
 				, getName()
 				, visres::getProgram( m_device, extent, passType, textureFlags, submeshFlags, passFlags, programFlags, stride, true ) };
-			result->passTypeIndex = matCache.getPassTypeIndex( passType, passFlags, textureFlags );
 
 			if constexpr ( useCompute )
 			{

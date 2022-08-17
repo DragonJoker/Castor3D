@@ -44,6 +44,7 @@ namespace castor3d
 			, castor::String const & category
 			, castor::String const & name
 			, RenderNodesPass const & nodesPass
+			, ShaderBuffer * pipelinesIds
 			, RenderNodesPassDesc const & renderPassDesc
 			, RenderTechniquePassDesc const & techniquePassDesc );
 		/**
@@ -70,7 +71,6 @@ namespace castor3d
 			ashes::PipelineLayoutPtr pipelineLayout{};
 			ashes::DescriptorSetPoolPtr descriptorPool{};
 			std::array< ShaderStages, 2u > shaders;
-			uint32_t passTypeIndex{};
 			std::unordered_map< uint64_t, ashes::DescriptorSetPtr > descriptorSets{};
 		};
 		struct PipelineNodesDescriptors
@@ -106,6 +106,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		RenderNodesPass const & m_nodesPass;
+		ShaderBuffer * m_pipelinesIds;
 		MatrixUbo & m_matrixUbo;
 		SceneUbo & m_sceneUbo;
 		SceneCuller & m_culler;

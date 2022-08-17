@@ -402,7 +402,7 @@ namespace castor3d
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
-			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_colourTexture{ rendtech::doCreateTextureUnit( m_device
 			, queueData
 			, m_colour.imageId ) }
@@ -486,6 +486,12 @@ namespace castor3d
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, "PixelsXY" )
 			: nullptr ) }
+		, m_visibilityPipelinesIds{ ( ( m_device.hasBindless() && VisibilityResolvePass::useCompute )
+			? castor::makeUnique< ShaderBuffer >( *getEngine()
+				, m_device
+				, MaxObjectNodesCount * sizeof( uint32_t )
+				, "MaterialsPipelinesIds" )
+			: nullptr ) }
 		, m_visibilityPassResult{ ( m_device.hasBindless()
 			? castor::makeUnique< VisibilityPassResult >( getOwner()->getGraphResourceHandler()
 				, m_device
@@ -500,6 +506,7 @@ namespace castor3d
 				, m_device
 				, *m_renderTarget.getScene()
 				, ( *m_visibilityPassResult )[VbTexture::eData].sampledViewId
+				, *m_visibilityPipelinesIds.get()
 				, *m_materialsCounts1
 				, *m_materialsCounts2
 				, *m_materialsStarts
@@ -648,10 +655,20 @@ namespace castor3d
 		m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( std::ref( *m_pointShadowMap ), UInt32Array{} );
 		doInitialiseLpv();
 #endif
+
+		if ( m_visibilityPipelinesIds )
+		{
+			getEngine()->registerBuffer( *m_visibilityPipelinesIds );
+		}
 	}
 
 	RenderTechnique::~RenderTechnique()
 	{
+		if ( m_visibilityPipelinesIds )
+		{
+			getEngine()->unregisterBuffer( *m_visibilityPipelinesIds );
+		}
+
 #if C3D_UseWeightedBlendedRendering
 		m_weightedBlendRendering.reset();
 		m_transparentPassResult.reset();
@@ -1180,6 +1197,7 @@ namespace castor3d
 					, cuT( "Visibility" )
 					, cuT( "Resolve" )
 					, *m_visibilityPass
+					, m_visibilityPipelinesIds.get()
 					, std::move( renderPassDesc )
 					, RenderTechniquePassDesc{ false, getSsaoConfig() } );
 				m_opaquePass = res.get();

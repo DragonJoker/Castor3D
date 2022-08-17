@@ -16,7 +16,7 @@ namespace castor3d
 
 	ShaderBuffer::ShaderBuffer( Engine & engine
 		, RenderDevice const & device
-		, uint32_t size
+		, VkDeviceSize size
 		, castor::String name )
 		: m_device{ device }
 		, m_size{ ashes::getAlignedSize( size + 4 * sizeof( uint32_t )
