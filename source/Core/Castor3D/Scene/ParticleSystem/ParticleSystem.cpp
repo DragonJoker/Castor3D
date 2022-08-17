@@ -150,7 +150,7 @@ namespace castor3d
 				, bindings
 				, attributes )
 			, stride
-			, device.bufferPool->getBuffer< uint8_t >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
+			, device.bufferPool->getBuffer< uint8_t >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 				, VkDeviceSize( stride ) * m_particlesCount
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) );
 		m_particlesBillboard->setBillboardType( BillboardType::eSpherical );
