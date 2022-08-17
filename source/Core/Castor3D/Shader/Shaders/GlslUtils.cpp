@@ -181,7 +181,7 @@ namespace castor3d::shader
 	{
 		return ( checkFlag( passFlags, PassFlag::eUntile )
 			? sampleUntiled( map, texCoords )
-			: map.sample( texCoords.uv(), texCoords.mip() ) );
+			: map.lod( texCoords.uv(), texCoords.mip() ) );
 	}
 
 	sdw::RetVec2 Utils::transformUV( TextureConfigData const & pconfig
