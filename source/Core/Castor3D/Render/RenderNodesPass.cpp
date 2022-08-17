@@ -235,6 +235,7 @@ namespace castor3d
 		, SceneFlags const & sceneFlags
 		, VkPrimitiveTopology topology
 		, bool isFrontCulled
+		, uint32_t passLayerIndex
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )
 	{
 		auto result = PipelineFlags{ colourBlendMode
@@ -251,7 +252,7 @@ namespace castor3d
 			, alphaFunc
 			, blendAlphaFunc
 			, textures
-			, {}
+			, checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) ? 0u : passLayerIndex
 			, morphTargets.getOffset() };
 
 		if ( isFrontCulled )
@@ -288,6 +289,7 @@ namespace castor3d
 			, sceneFlags
 			, topology
 			, isFrontCulled
+			, pass.getIndex()
 			, morphTargets );
 	}
 

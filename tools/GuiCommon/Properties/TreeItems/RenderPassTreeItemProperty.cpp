@@ -51,6 +51,7 @@ namespace GuiCommon
 						, castor3d::SceneFlag::eNone
 						, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
 						, false
+						, 0u
 						, {} )
 					, renderPass.getScene()
 					, grid
