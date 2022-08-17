@@ -197,7 +197,7 @@ namespace castor3d
 					, 0_u // hrr 
 					, 0_u // hrl
 					, 1.0_f }; // acc
-				auto [material, lightMat] = materials.blendMaterials( utils
+				auto mats = materials.blendMaterials( utils
 					, m_mode == RenderMode::eTransparentOnly
 					, ( m_mode == RenderMode::eTransparentOnly
 						? flags.blendAlphaFunc
@@ -214,6 +214,8 @@ namespace castor3d
 					, in.passMultipliers
 					, in.colour
 					, components );
+				auto material = std::move( mats.first );
+				auto lightMat = std::move( mats.second );
 
 				IF( writer, material.lighting() != 0_u )
 				{

@@ -967,8 +967,11 @@ namespace castor3d
 						{
 							IF( writer, ( stride != 0u ? ( nodeId != billboardNodeId ) : nodeId == 0_u ) )
 							{
-								auto clearValue = getClearValue( DsTexture::eData0 ).color.float32;
-								imgData0 = vec4( sdw::Float{ clearValue[0] }, clearValue[1], clearValue[2], clearValue[3] );
+								auto clearValue = getClearValue( DsTexture::eData0 ).color;
+								imgData0 = vec4( sdw::Float{ clearValue.float32[0] }
+									, clearValue.float32[1]
+									, clearValue.float32[2]
+									, clearValue.float32[3] );
 								imgData1 = vec4( 0.0_f );
 								imgData2 = vec4( 0.0_f );
 								imgData3 = vec4( 0.0_f );
@@ -1443,7 +1446,7 @@ namespace castor3d
 					, 1u ) );
 		}
 
-		ashes::PipelinePtr createPipeline( RenderDevice const & device
+		static ashes::PipelinePtr createPipeline( RenderDevice const & device
 			, VkExtent3D const & extent
 			, ashes::PipelineShaderStageCreateInfoArray const & stages
 			, ashes::PipelineLayout const & pipelineLayout

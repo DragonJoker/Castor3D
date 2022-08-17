@@ -178,7 +178,7 @@ namespace castor
 		return m_passBuffer->getMaxPassTypeCount();
 	}
 
-	std::tuple< PassTypeID, PassFlags > ResourceCacheT< Material, String, MaterialCacheTraits >::getPassTypeDetails( uint32_t passTypeIndex )const
+	std::tuple< PassTypeID, PassFlags, TextureFlags > ResourceCacheT< Material, String, MaterialCacheTraits >::getPassTypeDetails( uint32_t passTypeIndex )const
 	{
 		return m_passBuffer->getPassTypeDetails( passTypeIndex );
 	}

@@ -646,12 +646,14 @@ namespace castor3d::shader
 				lightMat->specific = vec4( 0.0_f );
 				ComponentT firstComponents{ writer, "first", output };
 				auto result = firstComponents.createResult( writer, output );
-				auto [material, firstLightMat] = materials.applyMaterial( "firstMaterial", "firstLightMat"
+				auto firstMats = materials.applyMaterial( "firstMaterial", "firstLightMat"
 					, passFlags, textureFlags, hasTextures
 					, textureConfigs, textureAnims, lightingModel, maps
 					, materialId, vertexColour
 					, firstComponents
 					, std::forward< ParamsT >( params )... );
+				auto material = std::move( firstMats.first );
+				auto firstLightMat = std::move( firstMats.second );
 				auto passMultiplier = writer.declLocale( "passMultiplier"
 					, passMultipliers[0_u][0_u] );
 
@@ -669,12 +671,14 @@ namespace castor3d::shader
 					IF( writer, passMultiplier != 0.0_f )
 					{
 						ComponentT passComponents{ writer, "pass", output };
-						auto [curMaterial, curLightMat] = materials.applyMaterial( "passMaterial", "passLightMat"
+						auto curMats = materials.applyMaterial( "passMaterial", "passLightMat"
 							, passFlags, textureFlags, hasTextures
 							, textureConfigs, textureAnims, lightingModel, maps
 							, materialId + passIdx, vertexColour
 							, passComponents
 							, std::forward< ParamsT >( params )... );
+						auto curMaterial = std::move( curMats.first );
+						auto curLightMat = std::move( curMats.second );
 
 						lightMat->blendWith( *curLightMat, passMultiplier );
 						material.lighting() += curMaterial.lighting();
@@ -919,7 +923,7 @@ namespace castor3d::shader
 			ROF;
 
 			output.set( result );
-			return std::move( lightMat );
+			return lightMat;
 		}
 
 		return applyMaterial( "passLightMat"
@@ -1242,7 +1246,7 @@ namespace castor3d::shader
 				, output.tangentSpaceFragPosition() );
 		}
 
-		return std::move( lightMat );
+		return lightMat;
 	}
 
 	std::pair< Material, std::unique_ptr< LightMaterial > > Materials::applyMaterial( std::string const & matName

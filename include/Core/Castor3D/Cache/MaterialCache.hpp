@@ -131,7 +131,7 @@ namespace castor
 		 *\~french
 		 *\brief		Les détails du type de passe pour l'index donné (pour l'utilisation de vibility buffer).
 		 */
-		C3D_API std::tuple< castor3d::PassTypeID, castor3d::PassFlags > getPassTypeDetails( uint32_t passTypeIndex )const;
+		C3D_API std::tuple< castor3d::PassTypeID, castor3d::PassFlags, castor3d::TextureFlags > getPassTypeDetails( uint32_t passTypeIndex )const;
 		/**
 		 *\~english
 		 *\return		The pass type index (for visibility buffer use).
