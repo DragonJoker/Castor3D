@@ -458,28 +458,28 @@ namespace castor3d
 			, m_renderTarget.getVelocity() ) }
 #endif
 #if C3D_UseDeferredRendering && C3D_UseVisibilityBuffer
-		, m_materialsCounts1{ ( m_device.hasBindless()
+		, m_materialsCounts1{ ( ( m_device.hasBindless() && VisibilityResolvePass::useCompute )
 			? makeBuffer< uint32_t >( m_device
 				, getOwner()->getMaxPassTypeCount()
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, "MaterialsCounts1" )
 			: nullptr ) }
-		, m_materialsCounts2{ ( m_device.hasBindless()
+		, m_materialsCounts2{ ( ( m_device.hasBindless() && VisibilityResolvePass::useCompute )
 			? makeBuffer< uint32_t >( m_device
 				, getOwner()->getMaxPassTypeCount()
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, "MaterialsCounts2" )
 			: nullptr ) }
-		, m_materialsStarts{ ( m_device.hasBindless()
+		, m_materialsStarts{ ( ( m_device.hasBindless() && VisibilityResolvePass::useCompute )
 			? makeBuffer< uint32_t >( m_device
 				, getOwner()->getMaxPassTypeCount()
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, "MaterialsStarts" )
 			: nullptr ) }
-		, m_pixelsXY{ ( m_device.hasBindless()
+		, m_pixelsXY{ ( ( m_device.hasBindless() && VisibilityResolvePass::useCompute )
 			? makeBuffer< castor::Point2ui >( m_device
 				, m_depth->getExtent().width * m_depth->getExtent().height
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
@@ -494,7 +494,7 @@ namespace castor3d
 		, m_visibilityPassDesc{ ( m_device.hasBindless()
 			? &doCreateVisibilityPass( progress )
 			: nullptr ) }
-		, m_visibilityReorder{ ( m_device.hasBindless()
+		, m_visibilityReorder{ ( ( m_device.hasBindless() && VisibilityResolvePass::useCompute )
 			? castor::makeUnique< VisibilityReorderPass >( m_renderTarget.getGraph().createPassGroup( "Visibility" )
 				, *m_visibilityPassDesc
 				, m_device
@@ -1188,30 +1188,31 @@ namespace castor3d
 				return res;
 			} );
 		result.addDependency( *m_visibilityPassDesc );
-		result.addDependency( m_visibilityReorder->getLastPass() );
 
 		auto & visibilityPassResult = *m_visibilityPassResult;
 		visibilityPassResult.create();
 		uint32_t index = 0u;
 		result.addInputStorageView( visibilityPassResult[VbTexture::eData].targetViewId
 			, index++ );
-		result.addInputStorageBuffer( { m_materialsCounts1->getBuffer(), "MaterialsCount" }
-			, index++
-			, 0u
-			, uint32_t( m_materialsCounts1->getBuffer().getSize() ) );
-		result.addInputStorageBuffer( { m_materialsStarts->getBuffer(), "MaterialsStarts" }
-			, index++
-			, 0u
-			, uint32_t( m_materialsStarts->getBuffer().getSize() ) );
-		result.addInputStorageBuffer( { m_pixelsXY->getBuffer(), "PixelsXY" }
-			, index++
-			, 0u
-			, uint32_t( m_pixelsXY->getBuffer().getSize() ) );
+
 		auto & opaquePassResult = *m_opaquePassResult;
 		opaquePassResult.create();
 
 		if constexpr ( VisibilityResolvePass::useCompute )
 		{
+			result.addDependency( m_visibilityReorder->getLastPass() );
+			result.addInputStorageBuffer( { m_materialsCounts1->getBuffer(), "MaterialsCount" }
+				, index++
+				, 0u
+				, uint32_t( m_materialsCounts1->getBuffer().getSize() ) );
+			result.addInputStorageBuffer( { m_materialsStarts->getBuffer(), "MaterialsStarts" }
+				, index++
+				, 0u
+				, uint32_t( m_materialsStarts->getBuffer().getSize() ) );
+			result.addInputStorageBuffer( { m_pixelsXY->getBuffer(), "PixelsXY" }
+				, index++
+				, 0u
+				, uint32_t( m_pixelsXY->getBuffer().getSize() ) );
 			result.addOutputStorageView( opaquePassResult[DsTexture::eData0].targetViewId
 				, index++ );
 			result.addOutputStorageView( opaquePassResult[DsTexture::eData1].targetViewId
@@ -1227,8 +1228,7 @@ namespace castor3d
 		}
 		else
 		{
-			result.addInOutDepthStencilView( m_depth->targetViewId );
-			result.addOutputColourView( opaquePassResult[DsTexture::eData0].targetViewId
+			result.addOutputColourView( opaquePassResult[DsTexture::eData1].targetViewId
 				, getClearValue( DsTexture::eData0 ) );
 			result.addOutputColourView( opaquePassResult[DsTexture::eData1].targetViewId
 				, getClearValue( DsTexture::eData1 ) );

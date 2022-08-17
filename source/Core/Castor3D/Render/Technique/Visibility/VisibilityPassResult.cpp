@@ -44,12 +44,12 @@ namespace castor3d
 
 	VkClearValue getClearValue( VbTexture texture )
 	{
-		static float constexpr component = std::numeric_limits< float >::max();
+		static uint32_t constexpr component = std::numeric_limits< uint32_t >::max();
 		static std::array< VkClearValue, size_t( VbTexture::eCount ) > Values
 		{
 			{
 				makeClearValue( 1.0f, 0u ),
-				transparentBlackClearColor,
+				makeClearValue( 0u, component, component, component ),
 			}
 		};
 		return Values[size_t( texture )];

@@ -555,17 +555,31 @@ namespace castor3d
 		}
 	}
 
+	SceneCuller::PipelineBufferArray const & SceneCuller::getPassPipelineNodes( RenderNodesPass const & renderPass )const
+	{
+		auto it = m_renderPasses.find( &renderPass );
+		CU_Require( it != m_renderPasses.end() );
+		return it->second.nodesIds;
+	}
+
+	uint32_t SceneCuller::getPipelineNodesIndex( RenderNodesPass const & renderPass
+		, PipelineBaseHash const & hash
+		, ashes::BufferBase const & buffer )const
+	{
+		return getPipelineNodeIndex( hash
+			, buffer
+			, getPassPipelineNodes( renderPass ) );
+	}
+
 	uint32_t SceneCuller::getPipelineNodesIndex( RenderNodesPass const & renderPass
 		, Submesh const & submesh
 		, Pass const & pass
 		, ashes::BufferBase const & buffer
 		, bool isFrontCulled )const
 	{
-		auto it = m_renderPasses.find( &renderPass );
-		CU_Require( it != m_renderPasses.end() );
-		return getPipelineNodeIndex( getPipelineBaseHash( renderPass, submesh, pass, isFrontCulled )
-			, buffer
-			, it->second.nodesIds );
+		return getPipelineNodesIndex( renderPass
+			, getPipelineBaseHash( renderPass, submesh, pass, isFrontCulled )
+			, buffer );
 	}
 
 	uint32_t SceneCuller::getPipelineNodesIndex( RenderNodesPass const & renderPass
@@ -574,11 +588,9 @@ namespace castor3d
 		, ashes::BufferBase const & buffer
 		, bool isFrontCulled )const
 	{
-		auto it = m_renderPasses.find( &renderPass );
-		CU_Require( it != m_renderPasses.end() );
-		return getPipelineNodeIndex( getPipelineBaseHash( renderPass, billboard, pass, isFrontCulled )
-			, buffer
-			, it->second.nodesIds );
+		return getPipelineNodesIndex( renderPass
+			, getPipelineBaseHash( renderPass, billboard, pass, isFrontCulled )
+			, buffer );
 	}
 
 	void SceneCuller::removeCulled( SubmeshRenderNode const & node )

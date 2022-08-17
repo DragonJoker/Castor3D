@@ -67,8 +67,7 @@ namespace castor3d
 				, TexcoordT & texCoords
 				, sdw::Float & opacity
 				, sdw::Vec3 & tangentSpaceViewPosition
-				, sdw::Vec3 & tangentSpaceFragPosition
-				, sdw::Float const * lod = nullptr );
+				, sdw::Vec3 & tangentSpaceFragPosition );
 			template< typename TexcoordT >
 			void computeGeometryMapContribution( Utils &  utils
 				, PassFlags const & passFlags
@@ -81,8 +80,7 @@ namespace castor3d
 				, sdw::Vec3 & tangent
 				, sdw::Vec3 & bitangent
 				, sdw::Vec3 & tangentSpaceViewPosition
-				, sdw::Vec3 & tangentSpaceFragPosition
-				, sdw::Float const * lod = nullptr );
+				, sdw::Vec3 & tangentSpaceFragPosition );
 			template< typename TexcoordT >
 			sdw::Vec4 computeCommonMapContribution( Utils & utils
 				, PassFlags const & passFlags
@@ -98,8 +96,7 @@ namespace castor3d
 				, sdw::Vec3 & tangent
 				, sdw::Vec3 & bitangent
 				, sdw::Vec3 & tangentSpaceViewPosition
-				, sdw::Vec3 & tangentSpaceFragPosition
-				, sdw::Float const * lod = nullptr );
+				, sdw::Vec3 & tangentSpaceFragPosition );
 			template< typename TexcoordT >
 			sdw::Vec4 computeCommonMapVoxelContribution( Utils & utils
 				, PassFlags const & passFlags
@@ -109,8 +106,7 @@ namespace castor3d
 				, TexcoordT & texCoords
 				, sdw::Vec3 & emissive
 				, sdw::Float & opacity
-				, sdw::Float & occlusion
-				, sdw::Float const * lod = nullptr );
+				, sdw::Float & occlusion );
 
 			C3D_API void transformUV( Utils & utils
 				, TextureAnimData const & anim
@@ -387,13 +383,7 @@ namespace castor3d
 				return BufferT< TextureConfigData >::getData( index );
 			}
 
-			void setLod( sdw::Float const & lod )
-			{
-				m_lod = &lod;
-			}
-
 		private:
-			sdw::Float const * m_lod{};
 			mutable sdw::Function< sdw::Void
 				, sdw::InUInt
 				, sdw::InVec3

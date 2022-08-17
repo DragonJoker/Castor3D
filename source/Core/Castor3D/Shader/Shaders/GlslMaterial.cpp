@@ -1059,7 +1059,7 @@ namespace castor3d::shader
 							, output.texCoord0().xy() );
 						texCoord = utils.transformUV( config, anim, texCoord );
 						auto sampledOpacity = m_writer.declLocale( "sampled" + name
-							, utils.sampleMap( passFlags, maps[id - 1_u], texCoord, nullptr ) );
+							, utils.sampleMap( passFlags, maps[id - 1_u], texCoord ) );
 						output.opacity() = config.getOpacity( sampledOpacity, output.opacity() );
 					}
 					FI;

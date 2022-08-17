@@ -168,24 +168,20 @@ namespace castor3d::shader
 
 	sdw::Vec4 Utils::sampleMap( PassFlags const & passFlags
 		, sdw::CombinedImage2DRgba32 const map
-		, sdw::Vec2 const texCoords
-		, sdw::Float const * lod )
+		, sdw::Vec2 const texCoords )
 	{
 		return ( checkFlag( passFlags, PassFlag::eUntile )
 			? sampleUntiled( map, texCoords )
-			: ( lod
-				? map.sample( texCoords, *lod )
-				: map.sample( texCoords ) ) );
+			: map.sample( texCoords ) );
 	}
 
 	sdw::Vec4 Utils::sampleMap( PassFlags const & passFlags
 		, sdw::CombinedImage2DRgba32 const map
-		, DerivTex const texCoords
-		, sdw::Float const * lod )
+		, DerivTex const texCoords )
 	{
 		return ( checkFlag( passFlags, PassFlag::eUntile )
 			? sampleUntiled( map, texCoords )
-			: map.grad( texCoords.uv(), texCoords.dx(), texCoords.dy() ) );
+			: map.sample( texCoords.uv(), texCoords.mip() ) );
 	}
 
 	sdw::RetVec2 Utils::transformUV( TextureConfigData const & pconfig
@@ -833,17 +829,17 @@ namespace castor3d::shader
 				, [&]( sdw::Vec4 const & in )
 				{
 					auto epsilon = m_writer.declConstant( "epsilon", 0.00001_f );
-					auto out = m_writer.declLocale( "out", in );
+					auto result = m_writer.declLocale( "result", in );
 
-					IF( m_writer, abs( out.w() ) < epsilon )
+					IF( m_writer, abs( result.w() ) < epsilon )
 					{
-						out.w() = epsilon;
+						result.w() = epsilon;
 					}
 					FI;
 
-					out.xyz() /= out.w();
-					out.xyz() = fma( out.xyz(), vec3( 0.5_f ), vec3( 0.5_f ) );
-					m_writer.returnStmt( out );
+					result.xyz() /= result.w();
+					result.xyz() = fma( result.xyz(), vec3( 0.5_f ), vec3( 0.5_f ) );
+					m_writer.returnStmt( result );
 				}
 				, sdw::InVec4{ m_writer, "in" } );
 		}

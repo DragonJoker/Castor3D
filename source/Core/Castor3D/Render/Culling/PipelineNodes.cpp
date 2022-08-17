@@ -41,12 +41,6 @@ namespace castor3d
 				, texturesCount
 				, texturesFlags );
 
-			if constexpr ( std::is_same_v< DataT, Submesh > )
-			{
-				castor::hashCombinePtr( hash, *dataPtr );
-				hash >>= maxPassLayerSize;
-			}
-
 			if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
 			{
 				// When pass masks component is present, only consider first pass,

@@ -29,7 +29,7 @@ namespace castor3d
 		: uint8_t
 	{
 		eDepth, // D => Depth
-		eData, // R => NodeID, G => DrawID, B => PrimitiveID, A => Unused
+		eData, // R => NodeID, G => DrawID, B => PrimitiveID, A => PipelineID
 		CU_ScopedEnumBounds( eData ),
 	};
 	C3D_API castor::String getTextureName( VbTexture texture );

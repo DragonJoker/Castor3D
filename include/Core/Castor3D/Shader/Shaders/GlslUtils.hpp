@@ -57,12 +57,10 @@ namespace castor3d::shader
 			, sdw::Float const cosTheta );
 		C3D_API sdw::Vec4 sampleMap( PassFlags const & passFlags
 			, sdw::CombinedImage2DRgba32 const map
-			, sdw::Vec2 const texCoords
-			, sdw::Float const * lod );
+			, sdw::Vec2 const texCoords );
 		C3D_API sdw::Vec4 sampleMap( PassFlags const & passFlags
 			, sdw::CombinedImage2DRgba32 const map
-			, DerivTex const texCoords
-			, sdw::Float const * lod );
+			, DerivTex const texCoords );
 		C3D_API sdw::RetVec2 transformUV( TextureConfigData const & config
 			, TextureAnimData const & anim
 			, sdw::Vec2 const uv );

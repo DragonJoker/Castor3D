@@ -60,17 +60,30 @@ namespace castor3d
 	private:
 		struct Pipeline
 		{
-			ShaderModule shader;
-			ashes::PipelineShaderStageCreateInfoArray stages{};
+			struct ShaderStages
+			{
+				ShaderModule shader;
+				ashes::PipelineShaderStageCreateInfoArray stages{};
+				ashes::PipelinePtr pipeline{};
+			};
 			ashes::DescriptorSetLayoutPtr descriptorLayout{};
 			ashes::PipelineLayoutPtr pipelineLayout{};
-			ashes::PipelinePtr firstPipeline{};
-			ashes::PipelinePtr blendPipeline{};
 			ashes::DescriptorSetPoolPtr descriptorPool{};
+			std::array< ShaderStages, 2u > shaders;
 			uint32_t passTypeIndex{};
 			std::unordered_map< uint64_t, ashes::DescriptorSetPtr > descriptorSets{};
 		};
+		struct PipelineNodesDescriptors
+		{
+			uint32_t pipelineId{};
+			ashes::DescriptorSet const * descriptorSet{};
+		};
 		using PipelinePtr = std::unique_ptr< Pipeline >;
+		using SubmeshPipelinesNodesDescriptors = std::map< ashes::DescriptorSet const *, uint32_t >;
+		using SubmeshPipelinesMap = std::map< Pipeline const *, SubmeshPipelinesNodesDescriptors >;
+		using BillboardPipelinesNodesDescriptors = std::map< uint32_t, PipelineNodesDescriptors >;
+		using BillboardPipelinesMap = std::map< Pipeline const *, BillboardPipelinesNodesDescriptors >;
+		using PipelineContainer = std::map< PipelineBaseHash, PipelinePtr >;
 
 	private:
 		void doInitialise();
@@ -82,25 +95,17 @@ namespace castor3d
 			, VkCommandBuffer commandBuffer );
 		void doRecordGraphics( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer );
-		Pipeline & doCreatePipeline( PassTypeID passType
-			, TextureFlags textureFlags
-			, SubmeshFlags submeshFlags
-			, PassFlags passFlags );
-		Pipeline & doCreatePipeline( PassTypeID passType
-			, TextureFlags textureFlags
-			, PassFlags passFlags
+		Pipeline & doCreatePipeline( PipelineBaseHash const & hash );
+		Pipeline & doCreatePipeline( PipelineBaseHash const & hash
 			, uint32_t stride );
-		Pipeline & doCreatePipeline( PassTypeID passType
-			, TextureFlags textureFlags
-			, SubmeshFlags submeshFlags
-			, PassFlags passFlags
+		Pipeline & doCreatePipeline( PipelineBaseHash const & hash
 			, uint32_t stride
-			, std::unordered_map< uint64_t, PipelinePtr > & pipelines );
+			, PipelineContainer & pipelines );
 		void doOnCullerCompute( SceneCuller const & culler );
 
 	private:
 		RenderDevice const & m_device;
-		RenderNodesPass const & m_depthPass;
+		RenderNodesPass const & m_nodesPass;
 		MatrixUbo & m_matrixUbo;
 		SceneUbo & m_sceneUbo;
 		SceneCuller & m_culler;
@@ -114,10 +119,10 @@ namespace castor3d
 		ashes::FrameBufferPtr m_firstFramebuffer;
 		ashes::RenderPassPtr m_blendRenderPass;
 		ashes::FrameBufferPtr m_blendFramebuffer;
-		std::unordered_map< uint64_t, PipelinePtr > m_pipelines;
-		std::unordered_map< uint64_t, PipelinePtr > m_billboardPipelines;
-		std::map< Pipeline const *, std::set< ashes::DescriptorSet const * > > m_activePipelines;
-		std::map< Pipeline const *, std::map< uint32_t, ashes::DescriptorSet const * > > m_activeBillboardPipelines;
+		PipelineContainer m_pipelines;
+		PipelineContainer m_billboardPipelines;
+		SubmeshPipelinesMap m_activePipelines;
+		BillboardPipelinesMap m_activeBillboardPipelines;
 	};
 }
 
