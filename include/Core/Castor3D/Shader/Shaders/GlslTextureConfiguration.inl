@@ -17,8 +17,7 @@ namespace castor3d
 			, TexcoordT & texCoords
 			, sdw::Float & opacity
 			, sdw::Vec3 & tangentSpaceViewPosition
-			, sdw::Vec3 & tangentSpaceFragPosition
-			, sdw::Float const * lod )
+			, sdw::Vec3 & tangentSpaceFragPosition )
 		{
 			auto & writer = findWriterMandat( *this );
 			auto texCoord = writer.declLocale( "c3d_texCoord"
@@ -57,7 +56,7 @@ namespace castor3d
 				IF( *getWriter(), isOpacity() )
 				{
 					auto sampled = writer.declLocale( "c3d_sampled"
-						, utils.sampleMap( passFlags, map, texCoord, lod ) );
+						, utils.sampleMap( passFlags, map, texCoord ) );
 					opacity = opacity * getFloat( sampled, opaMask );
 				}
 				FI;
@@ -76,8 +75,7 @@ namespace castor3d
 			, sdw::Vec3 & tangent
 			, sdw::Vec3 & bitangent
 			, sdw::Vec3 & tangentSpaceViewPosition
-			, sdw::Vec3 & tangentSpaceFragPosition
-			, sdw::Float const * lod )
+			, sdw::Vec3 & tangentSpaceFragPosition )
 		{
 			auto & writer = findWriterMandat( *this );
 			auto texCoord = writer.declLocale( "c3d_texCoord"
@@ -112,7 +110,7 @@ namespace castor3d
 			}
 
 			auto sampled = writer.declLocale( "c3d_sampled"
-				, utils.sampleMap( passFlags, map, texCoord, lod ) );
+				, utils.sampleMap( passFlags, map, texCoord ) );
 			applyNormal( textureFlags, sampled, normal, tangent, bitangent, normal );
 			applyOpacity( textureFlags, sampled, opacity );
 		}
@@ -132,8 +130,7 @@ namespace castor3d
 			, sdw::Vec3 & tangent
 			, sdw::Vec3 & bitangent
 			, sdw::Vec3 & tangentSpaceViewPosition
-			, sdw::Vec3 & tangentSpaceFragPosition
-			, sdw::Float const * lod )
+			, sdw::Vec3 & tangentSpaceFragPosition )
 		{
 			auto & writer = findWriterMandat( *this );
 			auto texCoord = writer.declLocale( "c3d_texCoord"
@@ -168,7 +165,7 @@ namespace castor3d
 			}
 
 			auto result = writer.declLocale( "c3d_sampled"
-				, utils.sampleMap( passFlags, map, texCoord, lod ) );
+				, utils.sampleMap( passFlags, map, texCoord ) );
 			applyNormal( textureFlags, result, normal, tangent, bitangent, normal );
 			applyOpacity( textureFlags, result, opacity );
 			applyEmissive( textureFlags, result, emissive );
@@ -186,15 +183,14 @@ namespace castor3d
 			, TexcoordT & texCoords
 			, sdw::Vec3 & emissive
 			, sdw::Float & opacity
-			, sdw::Float & occlusion
-			, sdw::Float const * lod )
+			, sdw::Float & occlusion )
 		{
 			auto & writer = findWriterMandat( *this );
 			auto texCoord = writer.declLocale( "c3d_texCoord"
 				, toUv( texCoords ) );
 			transformUV( utils, anim, texCoord );
 			auto result = writer.declLocale( "c3d_sampled"
-				, utils.sampleMap( passFlags, map, texCoord, lod ) );
+				, utils.sampleMap( passFlags, map, texCoord ) );
 			applyOpacity( textureFlags, result, opacity );
 			applyEmissive( textureFlags, result, emissive );
 			applyOcclusion( textureFlags, result, occlusion );

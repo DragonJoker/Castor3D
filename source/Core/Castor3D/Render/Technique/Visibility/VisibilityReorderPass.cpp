@@ -58,9 +58,9 @@ namespace castor3d
 					{
 						auto modelData = writer.declLocale( "modelData"
 							, c3d_modelsData[nodeId - 1_u] );
-						auto passTypeIndex = writer.declLocale( "passTypeIndex"
-							, materials.getMaterial( modelData.getMaterialId() - 1_u ).passTypeIndex() );
-						sdw::atomicAdd( materialsCounts[passTypeIndex], 1_u );
+						auto pipelineId = writer.declLocale( "pipelineId"
+							, data.w() );
+						sdw::atomicAdd( materialsCounts[pipelineId], 1_u );
 					}
 					FI;
 				} );

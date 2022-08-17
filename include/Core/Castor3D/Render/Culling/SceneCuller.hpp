@@ -91,6 +91,10 @@ namespace castor3d
 		C3D_API void registerRenderPass( RenderNodesPass const & renderPass );
 		C3D_API void unregisterRenderPass( RenderNodesPass const & renderPass );
 		C3D_API void update( CpuUpdater & updater );
+		C3D_API PipelineBufferArray const & getPassPipelineNodes( RenderNodesPass const & renderPass )const;
+		C3D_API uint32_t getPipelineNodesIndex( RenderNodesPass const & renderPass
+			, PipelineBaseHash const & hash
+			, ashes::BufferBase const & buffer )const;
 		C3D_API uint32_t getPipelineNodesIndex( RenderNodesPass const & renderPass
 			, Submesh const & submesh
 			, Pass const & pass

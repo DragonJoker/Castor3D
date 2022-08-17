@@ -140,6 +140,9 @@ namespace castor3d
 		//!\~english	All flags.
 		//\~french		Tous les indicateurs.
 		eAll = eAllBase | eAllOptional,
+		//!\~english	All flags related to visibility buffer resolve.
+		//\~french		Tous les indicateurs liés à la resolution du visibility buffer.
+		eAllVisibility = eInvertNormals | eBillboards,
 	};
 	CU_ImplementFlags( ProgramFlag )
 	/**

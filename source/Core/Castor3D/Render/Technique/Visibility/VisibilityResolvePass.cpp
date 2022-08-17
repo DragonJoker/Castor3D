@@ -75,11 +75,10 @@ namespace castor3d
 			eMaterials,
 			eTexConfigs,
 			eTexAnims,
+			eInData,
 			eMaterialsCounts,
 			eMaterialsStarts,
 			ePixelsXY,
-			eSsao,
-			eInData,
 			eOutData0,
 			eOutData1,
 			eOutData2,
@@ -234,6 +233,7 @@ namespace castor3d
 							result.uv() = vec2( resultsX.x(), resultsY.x() );
 							result.dx() = vec2( resultsX.y(), resultsY.y() );
 							result.dy() = vec2( resultsX.z(), resultsY.z() );
+							result.mip() = 0.5f * log2( max( dot( result.dx(), result.dx() ), dot( result.dy(), result.dy() ) ) );
 							writer.returnStmt( result );
 						}
 						, InBarycentricFullDerivatives{ writer, "derivatives" }
@@ -301,7 +301,9 @@ namespace castor3d
 			, TextureFlags textureFlags
 			, SubmeshFlags submeshFlags
 			, PassFlags passFlags
-			, uint32_t stride )
+			, ProgramFlags programFlags
+			, uint32_t stride
+			, bool blend )
 		{
 			auto & engine = *device.renderSystem.getEngine();
 			ShaderWriter< VisibilityResolvePass::useCompute >::Type writer;
@@ -380,24 +382,13 @@ namespace castor3d
 				, InOutBindings::eTexAnims
 				, Sets::eInOuts };
 
-			auto MaterialsCounts = writer.declStorageBuffer<>( "MaterialsCounts", InOutBindings::eMaterialsCounts, Sets::eInOuts );
-			auto materialsCounts = MaterialsCounts.declMemberArray< sdw::UInt >( "materialsCounts" );
-			MaterialsCounts.end();
-
-			auto MaterialsStarts = writer.declStorageBuffer<>( "MaterialsStarts", InOutBindings::eMaterialsStarts, Sets::eInOuts );
-			auto materialsStarts = MaterialsStarts.declMemberArray< sdw::UInt >( "materialsStarts" );
-			MaterialsStarts.end();
-
-			auto PixelsXY = writer.declStorageBuffer<>( "PixelsXY", InOutBindings::ePixelsXY, Sets::eInOuts );
-			auto pixelsXY = PixelsXY.declMemberArray< sdw::UVec2 >( "pixelsXY" );
-			PixelsXY.end();
-
 			auto imgData = writer.declStorageImg< sdw::RUImage2DRgba32 >( "imgData", InOutBindings::eInData, Sets::eInOuts );
 
 			auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps", TexBindings::eTextures, Sets::eTex ) );
 
 			sdw::PushConstantBuffer pcb{ writer, "DrawData" };
 			auto passTypeIndex = pcb.declMember< sdw::UInt >( "passTypeIndex" );
+			auto pipelineId = pcb.declMember< sdw::UInt >( "pipelineId" );
 			auto billboardNodeId = pcb.declMember< sdw::UInt >( "billboardNodeId", stride != 0u );
 			pcb.end();
 
@@ -458,9 +449,6 @@ namespace castor3d
 					result.dy() *= ( 2.0_f / winSize.y() );
 					ddxSum *= ( 2.0_f / winSize.x() );
 					ddySum *= ( 2.0_f / winSize.y() );
-
-					result.dy() *= -1.0_f;
-					ddySum *= -1.0_f;
 
 					auto interpW_ddx = writer.declLocale( "interpW_ddx"
 						, 1.0_f / ( interpInvW + ddxSum ) );
@@ -567,16 +555,22 @@ namespace castor3d
 						scaledUp = up * bbPositions[vertexId.x()].y() * height;
 						v0.position = vec4( ( bbcenter + scaledRight + scaledUp ), 1.0_f );
 						v0.texture0 = vec3( bbTexcoords[vertexId.x()], 0.0_f );
+						v0.normal = centerToCamera;
+						v0.tangent = up;
 
 						scaledRight = right * bbPositions[vertexId.y()].x() * width;
 						scaledUp = up * bbPositions[vertexId.y()].y() * height;
 						v1.position = vec4( ( bbcenter + scaledRight + scaledUp ), 1.0_f );
 						v1.texture0 = vec3( bbTexcoords[vertexId.y()], 0.0_f );
+						v1.normal = centerToCamera;
+						v1.tangent = up;
 
 						scaledRight = right * bbPositions[vertexId.z()].x() * width;
 						scaledUp = up * bbPositions[vertexId.z()].y() * height;
 						v2.position = vec4( ( bbcenter + scaledRight + scaledUp ), 1.0_f );
 						v2.texture0 = vec3( bbTexcoords[vertexId.z()], 0.0_f );
+						v2.normal = centerToCamera;
+						v2.tangent = up;
 					}
 				}
 				, sdw::InUInt{ writer, "nodeId" }
@@ -591,7 +585,8 @@ namespace castor3d
 					, sdw::UInt const & primitiveId
 					, sdw::Vec2 const & pixelCoord
 					, shader::ModelIndices const & modelData
-					, shader::Material const & material )
+					, shader::Material const & material
+					, sdw::Float depth )
 				{
 					auto result = writer.declLocale< shader::DerivFragmentSurface >( "result" );
 					result.worldPosition = vec4( 0.0_f );
@@ -604,17 +599,21 @@ namespace castor3d
 					result.tangent = vec3( 0.0_f );
 					result.bitangent = vec3( 0.0_f );
 					result.texture0.uv() = vec2( 0.0_f );
-					result.texture0.dx() = vec2( 0.0_f );
-					result.texture0.dy() = vec2( 0.0_f );
 					result.texture1.uv() = vec2( 0.0_f );
-					result.texture1.dx() = vec2( 0.0_f );
-					result.texture1.dy() = vec2( 0.0_f );
 					result.texture2.uv() = vec2( 0.0_f );
-					result.texture2.dx() = vec2( 0.0_f );
-					result.texture2.dy() = vec2( 0.0_f );
 					result.texture3.uv() = vec2( 0.0_f );
+					result.texture0.dx() = vec2( 0.0_f );
+					result.texture1.dx() = vec2( 0.0_f );
+					result.texture2.dx() = vec2( 0.0_f );
 					result.texture3.dx() = vec2( 0.0_f );
+					result.texture0.dy() = vec2( 0.0_f );
+					result.texture1.dy() = vec2( 0.0_f );
+					result.texture2.dy() = vec2( 0.0_f );
 					result.texture3.dy() = vec2( 0.0_f );
+					result.texture0.mip() = 0.0_f;
+					result.texture1.mip() = 0.0_f;
+					result.texture2.mip() = 0.0_f;
+					result.texture3.mip() = 0.0_f;
 					result.colour = vec3( 1.0_f );
 
 					auto hdrCoords = writer.declLocale( "hdrCoords"
@@ -728,15 +727,20 @@ namespace castor3d
 						}
 					}
 
+					auto curProjPosition = writer.declLocale( "curProjPosition"
+						, derivatives.interpolate( p0, p1, p2 ) );
+					depth = ( curProjPosition.z() / curProjPosition.w() );
 					auto curPosition = writer.declLocale( "curPosition"
-						, vec4( derivatives.interpolate( v0.position.xyz()
-								, v1.position.xyz()
-								, v2.position.xyz() )
-							, 1.0_f ) );
+						, c3d_matrixData.projToView( curProjPosition ) );
+					result.viewPosition = curPosition;
+					curPosition = c3d_matrixData.curViewToWorld( curPosition );
+					result.worldPosition = curPosition;
+
+					curPosition = modelData.worldToModel( curPosition );
 					auto prvPosition = writer.declLocale( "prvPosition"
 						, curPosition );
 
-					if ( stride > 0u )
+					if ( stride == 0u )
 					{
 						if ( checkFlag( submeshFlags, SubmeshFlag::eVelocity ) )
 						{
@@ -745,44 +749,36 @@ namespace castor3d
 									, v1.velocity.xyz()
 									, v2.velocity.xyz() ) );
 							prvPosition.xyz() += velocity;
-							prvPosition = c3d_matrixData.worldToPrvProj( prvPosition );
-
-							if ( checkFlag( submeshFlags, SubmeshFlag::eNormals )
-								&& checkFlag( submeshFlags, SubmeshFlag::eTangents ) )
-							{
-								auto curMtxModel = writer.declLocale( "curMtxModel"
-									, modelData.getModelMtx() );
-								auto mtxNormal = writer.declLocale( "mtxNormal"
-									, modelData.getNormalMtx( ProgramFlag::eNone, curMtxModel ) );
-								normal = normalize( mtxNormal * normal );
-								tangent = normalize( mtxNormal * tangent );
-							}
 						}
-						else
+						else if ( checkFlag( submeshFlags, SubmeshFlag::eNormals )
+							&& checkFlag( submeshFlags, SubmeshFlag::eTangents ) )
 						{
-							curPosition = modelData.modelToCurWorld( curPosition );
-							prvPosition = modelData.modelToPrvWorld( prvPosition );
+							auto curMtxModel = writer.declLocale( "curMtxModel"
+								, modelData.getModelMtx() );
+							auto prvMtxModel = writer.declLocale( "prvMtxModel"
+								, modelData.getPrvModelMtx( programFlags, curMtxModel ) );
+							prvPosition = prvMtxModel * prvPosition;
+							auto mtxNormal = writer.declLocale( "mtxNormal"
+								, modelData.getNormalMtx( programFlags, curMtxModel ) );
+							normal = normalize( mtxNormal * normal );
+							tangent = normalize( mtxNormal * tangent );
 						}
 					}
+
+					prvPosition = c3d_matrixData.worldToPrvProj( prvPosition );
+					result.computeVelocity( c3d_matrixData
+						, curProjPosition
+						, prvPosition );
 
 					if ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) )
 					{
 						result.computeTangentSpace( submeshFlags
-							, ProgramFlag::eNone
+							, programFlags
 							, c3d_sceneData.cameraPosition
-							, curPosition.xyz()
+							, result.worldPosition.xyz()
 							, normal
 							, tangent );
 					}
-
-					result.worldPosition = curPosition;
-					curPosition = c3d_matrixData.worldToCurProj( curPosition );
-					prvPosition = c3d_matrixData.worldToPrvProj( prvPosition );
-					result.viewPosition = utils.clipToScreen( curPosition );
-
-					result.computeVelocity( c3d_matrixData
-						, curPosition
-						, prvPosition );
 
 					writer.returnStmt( result );
 				}
@@ -790,10 +786,12 @@ namespace castor3d
 				, sdw::InUInt{ writer, "primitiveId" }
 				, sdw::InVec2{ writer, "pixelCoord" }
 				, shader::InModelIndices{ writer, "modelData" }
-				, shader::InMaterial{ writer, "material" } );
+				, shader::InMaterial{ writer, "material" }
+				, sdw::OutFloat{ writer, "depth" } );
 
 			auto shade = writer.implementFunction< sdw::Boolean >( "shade"
 				, [&]( sdw::IVec2 const & ipixel
+					, sdw::UVec4 inData
 					, sdw::Vec4 outData0
 					, sdw::Vec4 outData1
 					, sdw::Vec4 outData2
@@ -801,26 +799,17 @@ namespace castor3d
 					, sdw::Vec4 outData4
 					, sdw::Vec4 outData5 )
 				{
-					auto data = writer.declLocale( "data"
-						, imgData.load( ipixel ) );
-					auto nodeId = writer.declLocale( "nodeId"
-						, data.x() );
+					auto pipeline = writer.declLocale( "pipeline"
+						, inData.w() );
 
-					IF( writer, nodeId == 0_u )
+					IF( writer, pipelineId != pipeline )
 					{
 						writer.returnStmt( 0_b );
 					}
 					FI;
 
-					if ( stride != 0u )
-					{
-						IF( writer, nodeId != billboardNodeId )
-						{
-							writer.returnStmt( 0_b );
-						}
-						FI;
-					}
-
+					auto nodeId = writer.declLocale( "nodeId"
+						, inData.x() );
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[nodeId - 1u] );
 					auto material = writer.declLocale( "material"
@@ -847,13 +836,16 @@ namespace castor3d
 					FI;
 
 					auto primitiveId = writer.declLocale( "primitiveId"
-						, data.z() );
+						, inData.z() );
+					auto depth = writer.declLocale( "depth"
+						, 0.0_f );
 					auto surface = writer.declLocale( "surface"
 						, loadSurface( nodeId
 							, primitiveId
 							, vec2( ipixel )
 							, modelData
-							, material ) );
+							, material
+							, depth ) );
 					shader::VisibilityBlendComponents components{ writer
 						, "out"
 						, { surface.texture0, checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 ) }
@@ -883,7 +875,7 @@ namespace castor3d
 						, surface.passMultipliers
 						, surface.colour
 						, components );
-					outData0 = vec4( surface.viewPosition.z()
+					outData0 = vec4( depth
 						, length( surface.worldPosition.xyz() - c3d_sceneData.cameraPosition )
 						, writer.cast< sdw::Float >( nodeId )
 						, 0.0_f );
@@ -898,6 +890,7 @@ namespace castor3d
 					writer.returnStmt( 1_b );
 				}
 				, sdw::InIVec2{ writer, "ipixel" }
+				, sdw::InUVec4{ writer, "inData" }
 				, sdw::OutVec4{ writer, "outData0" }
 				, sdw::OutVec4{ writer, "outData1" }
 				, sdw::OutVec4{ writer, "outData2" }
@@ -907,6 +900,18 @@ namespace castor3d
 
 			if constexpr ( VisibilityResolvePass::useCompute )
 			{
+				auto MaterialsCounts = writer.declStorageBuffer<>( "MaterialsCounts", InOutBindings::eMaterialsCounts, Sets::eInOuts );
+				auto materialsCounts = MaterialsCounts.declMemberArray< sdw::UInt >( "materialsCounts" );
+				MaterialsCounts.end();
+
+				auto MaterialsStarts = writer.declStorageBuffer<>( "MaterialsStarts", InOutBindings::eMaterialsStarts, Sets::eInOuts );
+				auto materialsStarts = MaterialsStarts.declMemberArray< sdw::UInt >( "materialsStarts" );
+				MaterialsStarts.end();
+
+				auto PixelsXY = writer.declStorageBuffer<>( "PixelsXY", InOutBindings::ePixelsXY, Sets::eInOuts );
+				auto pixelsXY = PixelsXY.declMemberArray< sdw::UVec2 >( "pixelsXY" );
+				PixelsXY.end();
+
 				auto imgData0 = writer.declStorageImg< sdw::WImage2DRgba32 >( "imgData0", InOutBindings::eOutData0, Sets::eInOuts );
 				auto imgData1 = writer.declStorageImg< sdw::WImage2DRgba32 >( "imgData1", InOutBindings::eOutData1, Sets::eInOuts );
 				auto imgData2 = writer.declStorageImg< sdw::WImage2DRgba32 >( "imgData2", InOutBindings::eOutData2, Sets::eInOuts );
@@ -923,6 +928,8 @@ namespace castor3d
 							, pixelsXY[pixelID] );
 						auto ipixel = writer.declLocale( "ipixel"
 							, ivec2( pixel ) );
+						auto data = writer.declLocale( "data"
+							, imgData.load( ipixel ) );
 						auto data0 = writer.declLocale( "data0", vec4( 0.0_f ) );
 						auto data1 = writer.declLocale( "data1", vec4( 0.0_f ) );
 						auto data2 = writer.declLocale( "data2", vec4( 0.0_f ) );
@@ -930,7 +937,7 @@ namespace castor3d
 						auto data4 = writer.declLocale( "data4", vec4( 0.0_f ) );
 						auto data5 = writer.declLocale( "data5", vec4( 0.0_f ) );
 
-						IF( writer, shade( ipixel, data0, data1, data2, data3, data4, data5 ) )
+						IF( writer, shade( ipixel, data, data0, data1, data2, data3, data4, data5 ) )
 						{
 							imgData0.store( ipixel, data0 );
 							imgData1.store( ipixel, data1 );
@@ -961,9 +968,20 @@ namespace castor3d
 						auto data3 = writer.declLocale( "data3", vec4( 0.0_f ) );
 						auto data4 = writer.declLocale( "data4", vec4( 0.0_f ) );
 						auto data5 = writer.declLocale( "data5", vec4( 0.0_f ) );
+						auto data = writer.declLocale( "data"
+							, imgData.load( pos ) );
+						auto nodeId = writer.declLocale( "nodeId"
+							, data.x() );
 
-						IF( writer, shade( pos, data0, data1, data2, data3, data4, data5 ) )
+						if ( blend )
 						{
+							IF( writer, ( stride != 0u ? ( nodeId != billboardNodeId ) : nodeId == 0_u )
+								|| !shade( pos, data, data0, data1, data2, data3, data4, data5 ) )
+							{
+								writer.demote();
+							}
+							FI;
+
 							imgData0 = data0;
 							imgData1 = data1;
 							imgData2 = data2;
@@ -971,16 +989,33 @@ namespace castor3d
 							imgData4 = data4;
 							imgData5 = data5;
 						}
-						ELSE
+						else
 						{
-							imgData0 = vec4( 0.0_f );
-							imgData1 = vec4( 0.0_f );
-							imgData2 = vec4( 0.0_f );
-							imgData3 = vec4( 0.0_f );
-							imgData4 = vec4( 0.0_f );
-							imgData5 = vec4( 0.0_f );
+							IF( writer, ( stride != 0u ? ( nodeId != billboardNodeId ) : nodeId == 0_u ) )
+							{
+								auto clearValue = getClearValue( DsTexture::eData0 ).color.float32;
+								imgData0 = vec4( sdw::Float{ clearValue[0] }, clearValue[1], clearValue[2], clearValue[3] );
+								imgData1 = vec4( 0.0_f );
+								imgData2 = vec4( 0.0_f );
+								imgData3 = vec4( 0.0_f );
+								imgData4 = vec4( 0.0_f );
+								imgData5 = vec4( 0.0_f );
+							}
+							ELSEIF( !shade( pos, data, data0, data1, data2, data3, data4, data5 ) )
+							{
+								writer.demote();
+							}
+							ELSE
+							{
+								imgData0 = data0;
+								imgData1 = data1;
+								imgData2 = data2;
+								imgData3 = data3;
+								imgData4 = data4;
+								imgData5 = data5;
+							}
+							FI;
 						}
-						FI;
 					} );
 			}
 
@@ -1013,21 +1048,21 @@ namespace castor3d
 				, stages ) );
 			bindings.emplace_back( matCache.getTexAnimBuffer().createLayoutBinding( InOutBindings::eTexAnims
 				, stages ) );
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eMaterialsCounts
-				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, stages ) );
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eMaterialsStarts
-				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, stages ) );
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::ePixelsXY
-				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, stages ) );
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eInData
 				, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 				, stages ) );
 
 			if constexpr ( VisibilityResolvePass::useCompute )
 			{
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eMaterialsCounts
+					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+					, stages ) );
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eMaterialsStarts
+					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+					, stages ) );
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::ePixelsXY
+					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+					, stages ) );
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eOutData0
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 					, stages ) );
@@ -1074,24 +1109,25 @@ namespace castor3d
 			writes.push_back( matCache.getPassBuffer().getBinding( InOutBindings::eMaterials ) );
 			writes.push_back( matCache.getTexConfigBuffer().getBinding( InOutBindings::eTexConfigs ) );
 			writes.push_back( matCache.getTexAnimBuffer().getBinding( InOutBindings::eTexAnims ) );
-			writes.push_back( makeDescriptorWrite( technique.getMaterialsCounts()
-				, InOutBindings::eMaterialsCounts
-				, 0u
-				, technique.getMaterialsCounts().getCount() ) );
-			writes.push_back( makeDescriptorWrite( technique.getMaterialsStarts()
-				, InOutBindings::eMaterialsStarts
-				, 0u
-				, technique.getMaterialsStarts().getCount() ) );
-			writes.push_back( makeDescriptorWrite( technique.getPixelXY()
-				, InOutBindings::ePixelsXY
-				, 0u
-				, technique.getPixelXY().getCount() ) );
 			auto & visibilityPassResult = technique.getVisibilityResult();
 			writes.push_back( makeDescriptorWrite( visibilityPassResult[VbTexture::eData].targetView
 				, InOutBindings::eInData ) );
 
 			if constexpr ( VisibilityResolvePass::useCompute )
 			{
+				writes.push_back( makeDescriptorWrite( technique.getMaterialsCounts()
+					, InOutBindings::eMaterialsCounts
+					, 0u
+					, technique.getMaterialsCounts().getCount() ) );
+				writes.push_back( makeDescriptorWrite( technique.getMaterialsStarts()
+					, InOutBindings::eMaterialsStarts
+					, 0u
+					, technique.getMaterialsStarts().getCount() ) );
+				writes.push_back( makeDescriptorWrite( technique.getPixelXY()
+					, InOutBindings::ePixelsXY
+					, 0u
+					, technique.getPixelXY().getCount() ) );
+
 				auto & opaquePassResult = technique.getOpaqueResult();
 				writes.push_back( makeDescriptorWrite( opaquePassResult[DsTexture::eData0].targetView
 					, InOutBindings::eOutData0 ) );
@@ -1480,6 +1516,7 @@ namespace castor3d
 		struct PushData
 		{
 			uint32_t passTypeIndex;
+			uint32_t pipelineId;
 			uint32_t billboardNodeId;
 		};
 	}
@@ -1491,7 +1528,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, castor::String const & category
 		, castor::String const & name
-		, RenderNodesPass const & depthPass
+		, RenderNodesPass const & nodesPass
 		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
 		: castor::Named{ category + cuT( "/" ) + name }
@@ -1507,7 +1544,7 @@ namespace castor3d
 				, IsComputePassCallback( [](){ return VisibilityResolvePass::useCompute; } ) }
 			, renderPassDesc.m_ruConfig }
 		, m_device{ device }
-		, m_depthPass{ depthPass }
+		, m_nodesPass{ nodesPass }
 		, m_matrixUbo{ renderPassDesc.m_matrixUbo }
 		, m_sceneUbo{ *renderPassDesc.m_sceneUbo }
 		, m_culler{ renderPassDesc.m_culler }
@@ -1544,32 +1581,34 @@ namespace castor3d
 		if ( m_commandsChanged )
 		{
 			m_activePipelines.clear();
+			m_activeBillboardPipelines.clear();
+			uint32_t index = 0u;
 
-			for ( auto & itPipeline : m_culler.getSubmeshNodes( m_depthPass ) )
+			for ( auto & bufferIt : m_culler.getPassPipelineNodes( m_nodesPass ) )
 			{
-				PipelineBaseHash const & pipelineHash = itPipeline.first;
+				auto buffer = bufferIt.second;
+				auto pipelineHash = bufferIt.first;
+				auto pipelineId = index++;
 				auto [submeshFlags, programFlags, passType, passFlags, maxTexcoordSet, texturesCount, textureFlags] = getPipelineHashDetails( pipelineHash );
-				auto & pipeline = doCreatePipeline( passType
-					, textureFlags
-					, submeshFlags
-					, passFlags & PassFlag::eAllVisibility );
-				auto it = m_activePipelines.emplace( &pipeline
-					, std::set< ashes::DescriptorSet const * >{} ).first;
 
-				for ( auto & itBuffer : itPipeline.second )
+				if ( !checkFlag( programFlags, ProgramFlag::eBillboards ) )
 				{
+					auto & pipeline = doCreatePipeline( pipelineHash );
+					auto it = m_activePipelines.emplace( &pipeline
+						, SubmeshPipelinesNodesDescriptors{} ).first;
+
 					uint64_t hash = 0u;
-					hash = castor::hashCombinePtr( hash, *itBuffer.first );
+					hash = castor::hashCombinePtr( hash, *buffer );
 					auto ires = pipeline.descriptorSets.emplace( hash, ashes::DescriptorSetPtr{} );
 
 					if ( ires.second )
 					{
-						auto & modelBuffers = m_device.geometryPools->getBuffers( *itBuffer.first );
+						auto & modelBuffers = m_device.geometryPools->getBuffers( *buffer );
 						ashes::BufferBase const * indexBuffer{};
 
 						if ( checkFlag( submeshFlags, SubmeshFlag::eIndex ) )
 						{
-							indexBuffer = &m_device.geometryPools->getIndexBuffer( *itBuffer.first );
+							indexBuffer = &m_device.geometryPools->getIndexBuffer( *buffer );
 						}
 
 						ires.first->second = visres::createVtxDescriptorSet( getName(), *pipeline.descriptorPool
@@ -1577,50 +1616,13 @@ namespace castor3d
 							, indexBuffer );
 					}
 
-					it->second.emplace( ires.first->second.get() );
+					it->second.emplace( ires.first->second.get(), pipelineId );
 				}
 			}
 
-			for ( auto & itPipeline : m_culler.getInstancedSubmeshNodes( m_depthPass ) )
+			for ( auto & itPipeline : m_culler.getBillboardNodes( m_nodesPass ) )
 			{
 				PipelineBaseHash const & pipelineHash = itPipeline.first;
-				auto [submeshFlags, programFlags, passType, passFlags, maxTexcoordSet, texturesCount, textureFlags] = getPipelineHashDetails( pipelineHash );
-				auto & pipeline = doCreatePipeline( passType
-					, textureFlags
-					, submeshFlags
-					, passFlags & PassFlag::eAllVisibility );
-				auto it = m_activePipelines.emplace( &pipeline
-					, std::set< ashes::DescriptorSet const * >{} ).first;
-
-				for ( auto & itBuffer : itPipeline.second )
-				{
-					uint64_t hash = 0u;
-					hash = castor::hashCombinePtr( hash, *itBuffer.first );
-					auto ires = pipeline.descriptorSets.emplace( hash, ashes::DescriptorSetPtr{} );
-
-					if ( ires.second )
-					{
-						auto & modelBuffers = m_device.geometryPools->getBuffers( *itBuffer.first );
-						ashes::BufferBase const * indexBuffer{};
-
-						if ( checkFlag( submeshFlags, SubmeshFlag::eIndex ) )
-						{
-							indexBuffer = &m_device.geometryPools->getIndexBuffer( *itBuffer.first );
-						}
-
-						ires.first->second = visres::createVtxDescriptorSet( getName(), *pipeline.descriptorPool
-							, modelBuffers
-							, indexBuffer );
-					}
-
-					it->second.emplace( ires.first->second.get() );
-				}
-			}
-
-			for ( auto & itPipeline : m_culler.getBillboardNodes( m_depthPass ) )
-			{
-				PipelineBaseHash const & pipelineHash = itPipeline.first;
-				auto [submeshFlags, programFlags, passType, passFlags, maxTexcoordSet, texturesCount, textureFlags] = getPipelineHashDetails( pipelineHash );
 
 				for ( auto & itBuffer : itPipeline.second )
 				{
@@ -1628,15 +1630,16 @@ namespace castor3d
 					{
 						auto & culled = sidedCulled.first;
 						auto & positionsBuffer = culled.node->data.getVertexBuffer();
-						auto & pipeline = doCreatePipeline( passType
-							, textureFlags
-							, passFlags & PassFlag::eAllVisibility
+						auto & pipeline = doCreatePipeline( pipelineHash
 							, culled.node->data.getVertexStride() );
 						auto it = m_activeBillboardPipelines.emplace( &pipeline
-							, std::map< uint32_t, ashes::DescriptorSet const * >{} ).first;
+							, BillboardPipelinesNodesDescriptors{} ).first;
 						uint64_t hash = positionsBuffer.getOffset();
 						hash = castor::hashCombinePtr( hash, positionsBuffer.getBuffer().getBuffer() );
 						auto ires = pipeline.descriptorSets.emplace( hash, ashes::DescriptorSetPtr{} );
+						auto pipelineId = m_culler.getPipelineNodesIndex( m_nodesPass
+							, pipelineHash
+							, *itBuffer.first );
 
 						if ( ires.second )
 						{
@@ -1647,7 +1650,8 @@ namespace castor3d
 								, positionsBuffer.getSize() );
 						}
 
-						it->second.emplace( culled.node->getId(), ires.first->second.get() );
+						it->second.emplace( culled.node->getId()
+							, PipelineNodesDescriptors{ pipelineId, ires.first->second.get() } );
 					}
 				}
 			}
@@ -1730,23 +1734,27 @@ namespace castor3d
 			, &transparentBlackClearColor.color
 			, 1u
 			, &opaqueResult[DsTexture::eData5].targetViewId.data->info.subresourceRange );
+		bool first = true;
 
 		for ( auto & pipelineIt : m_activePipelines )
 		{
 			pushData.passTypeIndex = pipelineIt.first->passTypeIndex;
 			context.getContext().vkCmdBindPipeline( commandBuffer
 				, VK_PIPELINE_BIND_POINT_COMPUTE
-				, *pipelineIt.first->firstPipeline );
-			context.getContext().vkCmdPushConstants( commandBuffer
-				, *pipelineIt.first->pipelineLayout
-				, VK_SHADER_STAGE_COMPUTE_BIT
-				, 0u
-				, sizeof( visres::PushData )
-				, &pushData );
+				, ( first
+					? *pipelineIt.first->shaders[0].pipeline
+					: *pipelineIt.first->shaders[1].pipeline ) );
 
-			for ( auto & descriptorSet : pipelineIt.second )
+			for ( auto & descriptorSetIt : pipelineIt.second )
 			{
-				descriptorSets[1] = *descriptorSet;
+				descriptorSets[1] = *descriptorSetIt.first;
+				pushData.pipelineId = descriptorSetIt.second;
+				context.getContext().vkCmdPushConstants( commandBuffer
+					, *pipelineIt.first->pipelineLayout
+					, VK_SHADER_STAGE_COMPUTE_BIT
+					, 0u
+					, sizeof( visres::PushData )
+					, &pushData );
 				context.getContext().vkCmdBindDescriptorSets( commandBuffer
 					, VK_PIPELINE_BIND_POINT_COMPUTE
 					, *pipelineIt.first->pipelineLayout
@@ -1756,6 +1764,7 @@ namespace castor3d
 					, 0u
 					, nullptr );
 				context.getContext().vkCmdDispatch( commandBuffer, size / 64u, 1u, 1u );
+				first = false;
 			}
 		}
 
@@ -1764,11 +1773,14 @@ namespace castor3d
 			pushData.passTypeIndex = pipelineIt.first->passTypeIndex;
 			context.getContext().vkCmdBindPipeline( commandBuffer
 				, VK_PIPELINE_BIND_POINT_COMPUTE
-				, *pipelineIt.first->firstPipeline );
+				, ( first
+					? *pipelineIt.first->shaders[0].pipeline
+					: *pipelineIt.first->shaders[1].pipeline ) );
 
 			for ( auto & descriptorSetIt : pipelineIt.second )
 			{
-				descriptorSets[1] = *descriptorSetIt.second;
+				descriptorSets[1] = *descriptorSetIt.second.descriptorSet;
+				pushData.pipelineId = descriptorSetIt.second.pipelineId;
 				pushData.billboardNodeId = descriptorSetIt.first;
 				context.getContext().vkCmdPushConstants( commandBuffer
 					, *pipelineIt.first->pipelineLayout
@@ -1785,6 +1797,7 @@ namespace castor3d
 					, 0u
 					, nullptr );
 				context.getContext().vkCmdDispatch( commandBuffer, size / 64u, 1u, 1u );
+				first = false;
 			}
 		}
 
@@ -1818,7 +1831,7 @@ namespace castor3d
 		{
 			if ( !renderPassBound )
 			{
-				static std::array< VkClearValue, 6u > clearValues{ getClearValue( DsTexture::eData0 )
+				static std::array< VkClearValue, 6u > clearValues{ getClearValue( DsTexture::eData1 )// Specifically don't use Data0 clear value
 					, getClearValue( DsTexture::eData1 )
 					, getClearValue( DsTexture::eData2 )
 					, getClearValue( DsTexture::eData3 )
@@ -1856,42 +1869,28 @@ namespace castor3d
 				context.getContext().vkCmdBindPipeline( commandBuffer
 					, VK_PIPELINE_BIND_POINT_GRAPHICS
 					, ( first
-						? *pipeline.firstPipeline
-						: *pipeline.blendPipeline ) );
-
-				if ( !billboards )
-				{
-					context.getContext().vkCmdPushConstants( commandBuffer
-						, *pipeline.pipelineLayout
-						, VK_SHADER_STAGE_FRAGMENT_BIT
-						, 0u
-						, sizeof( visres::PushData )
-						, &pushData );
-				}
-
+						? *pipeline.shaders[0].pipeline
+						: *pipeline.shaders[1].pipeline ) );
 				pipelineBound = true;
 			}
 
-			if ( billboards )
-			{
-				context.getContext().vkCmdPushConstants( commandBuffer
-					, *pipeline.pipelineLayout
-					, VK_SHADER_STAGE_FRAGMENT_BIT
-					, 0u
-					, sizeof( visres::PushData )
-					, &pushData );
-			}
+			context.getContext().vkCmdPushConstants( commandBuffer
+				, *pipeline.pipelineLayout
+				, VK_SHADER_STAGE_FRAGMENT_BIT
+				, 0u
+				, sizeof( visres::PushData )
+				, &pushData );
 		};
 
 		for ( auto & pipelineIt : m_activePipelines )
 		{
 			pushData.passTypeIndex = pipelineIt.first->passTypeIndex;
 
-			for ( auto & descriptorSet : pipelineIt.second )
+			for ( auto & descriptorSetIt : pipelineIt.second )
 			{
+				descriptorSets[1] = *descriptorSetIt.first;
+				pushData.pipelineId = descriptorSetIt.second;
 				bind( *pipelineIt.first, false );
-
-				descriptorSets[1] = *descriptorSet;
 				context.getContext().vkCmdBindDescriptorSets( commandBuffer
 					, VK_PIPELINE_BIND_POINT_GRAPHICS
 					, *pipelineIt.first->pipelineLayout
@@ -1920,10 +1919,10 @@ namespace castor3d
 
 			for ( auto & descriptorSetIt : pipelineIt.second )
 			{
+				descriptorSets[1] = *descriptorSetIt.second.descriptorSet;
+				pushData.pipelineId = descriptorSetIt.second.pipelineId;
 				pushData.billboardNodeId = descriptorSetIt.first;
 				bind( *pipelineIt.first, true );
-
-				descriptorSets[1] = *descriptorSetIt.second;
 				context.getContext().vkCmdBindDescriptorSets( commandBuffer
 					, VK_PIPELINE_BIND_POINT_GRAPHICS
 					, *pipelineIt.first->pipelineLayout
@@ -1965,73 +1964,44 @@ namespace castor3d
 			, crg::makeLayoutState( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
 	}
 
-	VisibilityResolvePass::Pipeline & VisibilityResolvePass::doCreatePipeline( PassTypeID passType
-		, TextureFlags textureFlags
-		, PassFlags passFlags
+	VisibilityResolvePass::Pipeline & VisibilityResolvePass::doCreatePipeline( PipelineBaseHash const & hash
 		, uint32_t stride )
 	{
-		return doCreatePipeline( passType
-			, textureFlags
-			, SubmeshFlag::ePositions | SubmeshFlag::eTexcoords0
-			, passFlags
+		auto real = hash;
+
+		if ( stride )
+		{
+			real.hi = castor::hashCombine( real.hi, stride );
+		}
+
+		return doCreatePipeline( real
 			, stride
 			, m_billboardPipelines );
 	}
 
-	VisibilityResolvePass::Pipeline & VisibilityResolvePass::doCreatePipeline( PassTypeID passType
-		, TextureFlags textureFlags
-		, SubmeshFlags submeshFlags
-		, PassFlags passFlags )
+	VisibilityResolvePass::Pipeline & VisibilityResolvePass::doCreatePipeline( PipelineBaseHash const & hash )
 	{
-		return doCreatePipeline( passType
-			, textureFlags
-			, submeshFlags
-			, passFlags
+		return doCreatePipeline( hash
 			, 0u
 			, m_pipelines );
 	}
 
-	VisibilityResolvePass::Pipeline & VisibilityResolvePass::doCreatePipeline( PassTypeID passType
-		, TextureFlags textureFlags
-		, SubmeshFlags submeshFlags
-		, PassFlags passFlags
+	VisibilityResolvePass::Pipeline & VisibilityResolvePass::doCreatePipeline( PipelineBaseHash const & hash
 		, uint32_t stride
-		, std::unordered_map< uint64_t, PipelinePtr > & pipelines )
+		, PipelineContainer & pipelines )
 	{
-		auto hash = getHash( submeshFlags
-			, ProgramFlag::eNone
-			, passType
-			, passFlags
-			, 0u
-			, 0u
-			, textureFlags );
-
-		if ( stride )
-		{
-			hash = castor::hashCombine( hash, stride );
-		}
-
 		auto it = pipelines.find( hash );
 
 		if ( it == pipelines.end() )
 		{
+			auto [submeshFlags, programFlags, passType, passFlags, maxTexcoordSet, texturesCount, textureFlags] = getPipelineHashDetails( hash );
 			auto stage = VisibilityResolvePass::useCompute
 				? VK_SHADER_STAGE_COMPUTE_BIT
 				: VK_SHADER_STAGE_FRAGMENT_BIT;
 			auto stages = VkShaderStageFlags( stage );
 			auto extent = m_parent->getNormalTexture().getExtent();
 			auto & matCache = getScene().getEngine()->getMaterialCache();
-			auto result = std::make_unique< Pipeline >( ShaderModule{ stage
-				, getName()
-				, visres::getProgram( m_device, extent, passType, textureFlags, submeshFlags, passFlags, stride ) } );
-			result->passTypeIndex = matCache.getPassTypeIndex( passType, passFlags, textureFlags );
-
-			if constexpr ( !useCompute )
-			{
-				result->stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( m_device, m_vertexShader ) };
-			}
-
-			result->stages.push_back( makeShaderState( m_device, result->shader ) );
+			auto result = std::make_unique< Pipeline >();
 			result->descriptorLayout = stride == 0u
 				? visres::createVtxDescriptorLayout( m_device, getName(), submeshFlags )
 				: visres::createVtxDescriptorLayout( m_device, getName() );
@@ -2039,23 +2009,40 @@ namespace castor3d
 				, { *m_inOutsDescriptorLayout, *result->descriptorLayout, *getScene().getBindlessTexDescriptorLayout() }
 				, { { stages, 0u, sizeof( visres::PushData ) } } );
 
+			result->shaders[0].shader = ShaderModule{ stage
+				, getName()
+				, visres::getProgram( m_device, extent, passType, textureFlags, submeshFlags, passFlags, programFlags, stride, false ) };
+			result->shaders[1].shader = ShaderModule{ stage
+				, getName()
+				, visres::getProgram( m_device, extent, passType, textureFlags, submeshFlags, passFlags, programFlags, stride, true ) };
+			result->passTypeIndex = matCache.getPassTypeIndex( passType, passFlags, textureFlags );
+
 			if constexpr ( useCompute )
 			{
-				result->firstPipeline = m_device->createPipeline( ashes::ComputePipelineCreateInfo{ 0u
-					, result->stages.front()
+				result->shaders[0].stages.push_back( makeShaderState( m_device, result->shaders[0].shader ) );
+				result->shaders[1].stages.push_back( makeShaderState( m_device, result->shaders[1].shader ) );
+				result->shaders[0].pipeline = m_device->createPipeline( ashes::ComputePipelineCreateInfo{ 0u
+					, result->shaders[0].stages.front()
+					, *result->pipelineLayout } );
+				result->shaders[1].pipeline = m_device->createPipeline( ashes::ComputePipelineCreateInfo{ 0u
+					, result->shaders[1].stages.front()
 					, *result->pipelineLayout } );
 			}
 			else
 			{
-				result->firstPipeline = visres::createPipeline( m_device
+				result->shaders[0].stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( m_device, m_vertexShader ) };
+				result->shaders[1].stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( m_device, m_vertexShader ) };
+				result->shaders[0].stages.push_back( makeShaderState( m_device, result->shaders[0].shader ) );
+				result->shaders[1].stages.push_back( makeShaderState( m_device, result->shaders[1].shader ) );
+				result->shaders[0].pipeline = visres::createPipeline( m_device
 					, extent
-					, result->stages
+					, result->shaders[0].stages
 					, *result->pipelineLayout
 					, *m_firstRenderPass
 					, false );
-				result->blendPipeline = visres::createPipeline( m_device
+				result->shaders[1].pipeline = visres::createPipeline( m_device
 					, extent
-					, result->stages
+					, result->shaders[1].stages
 					, *result->pipelineLayout
 					, *m_blendRenderPass
 					, true );

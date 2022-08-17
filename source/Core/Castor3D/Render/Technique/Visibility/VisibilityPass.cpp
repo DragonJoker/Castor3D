@@ -203,7 +203,7 @@ namespace castor3d
 					, ( checkFlag( flags.programFlags, ProgramFlag::eBillboards )
 						? writer.cast< sdw::Float >( in.vertexId * 2_u + writer.cast< sdw::UInt >( in.primitiveID ) )
 						: writer.cast< sdw::Float >( in.primitiveID ) )
-					, 0_u );
+					, pipelineID );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

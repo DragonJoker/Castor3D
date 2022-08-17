@@ -44,6 +44,94 @@ namespace castor3d::shader
 		{
 			return lhs * vec4( 1.0_f - weight ) + rhs * vec4( weight );
 		}
+
+		template< typename TexcoordT >
+		void computeMapContributions( LightingModel const & lightingModel
+			, sdw::ShaderWriter & writer
+			, Utils & utils
+			, PassFlags const & passFlags
+			, TextureFlags const & textureFlags
+			, TextureConfigurations const & textureConfigs
+			, TextureAnimations const & textureAnims
+			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			, shader::Material const & material
+			, TexcoordT & texCoords0
+			, TexcoordT & texCoords1
+			, TexcoordT & texCoords2
+			, TexcoordT & texCoords3
+			, sdw::Vec3 & normal
+			, sdw::Vec3 & tangent
+			, sdw::Vec3 & bitangent
+			, sdw::Vec3 & emissive
+			, sdw::Float & opacity
+			, sdw::Float & occlusion
+			, sdw::Float & transmittance
+			, LightMaterial & lightMat
+			, sdw::Vec3 & tangentSpaceViewPosition
+			, sdw::Vec3 & tangentSpaceFragPosition )
+		{
+			if ( !textureConfigs.isEnabled() )
+			{
+				lightingModel.updateMaterial( passFlags
+					, textureFlags
+					, lightMat
+					, emissive );
+				return;
+			}
+
+			FOR( writer, sdw::UInt, index, 0u, index < material.texturesCount(), ++index )
+			{
+				auto id = writer.declLocale( "c3d_id"
+					, material.getTexture( index ) );
+
+				IF( writer, id > 0_u )
+				{
+					auto config = writer.declLocale( "config"
+						, textureConfigs.getTextureConfiguration( id ) );
+					auto anim = writer.declLocale( "anim"
+						, textureAnims.getTextureAnimation( id ) );
+					auto texcoord = writer.declLocale( "tex"
+						, textureConfigs.getTexcoord( config
+							, texCoords0
+							, texCoords1
+							, texCoords2
+							, texCoords3 ) );
+					auto sampled = config.computeCommonMapContribution( utils
+						, passFlags
+						, textureFlags
+						, anim
+						, maps[id - 1_u]
+						, texcoord
+						, emissive
+						, opacity
+						, occlusion
+						, transmittance
+						, normal
+						, tangent
+						, bitangent
+						, tangentSpaceViewPosition
+						, tangentSpaceFragPosition );
+					textureConfigs.setTexcoord( config
+						, texcoord
+						, texCoords0
+						, texCoords1
+						, texCoords2
+						, texCoords3 );
+					lightingModel.modifyMaterial( passFlags
+						, textureFlags
+						, sampled
+						, config
+						, lightMat );
+				}
+				FI;
+			}
+			ROF;
+
+			lightingModel.updateMaterial( passFlags
+				, textureFlags
+				, lightMat
+				, emissive );
+		}
 	}
 
 	//*********************************************************************************************
@@ -476,62 +564,29 @@ namespace castor3d::shader
 		, sdw::Vec3 & tangentSpaceViewPosition
 		, sdw::Vec3 & tangentSpaceFragPosition )
 	{
-		if ( !textureConfigs.isEnabled() )
-		{
-			updateMaterial( passFlags
-				, textureFlags
-				, lightMat
-				, emissive );
-			return;
-		}
-
-		FOR( m_writer, sdw::UInt, index, 0u, index < material.texturesCount(), ++index )
-		{
-			auto id = m_writer.declLocale( "c3d_id"
-				, material.getTexture( index ) );
-			auto config = m_writer.declLocale( "config"
-				, textureConfigs.getTextureConfiguration( id ) );
-			auto anim = m_writer.declLocale( "anim"
-				, textureAnims.getTextureAnimation( id ) );
-			auto texcoord = m_writer.declLocale( "tex"
-				, textureConfigs.getTexcoord( config
-					, texCoords0
-					, texCoords1
-					, texCoords2
-					, texCoords3 ) );
-			auto sampled = config.computeCommonMapContribution( m_utils
-				, passFlags
-				, textureFlags
-				, anim
-				, maps[id - 1_u]
-				, texcoord
-				, emissive
-				, opacity
-				, occlusion
-				, transmittance
-				, normal
-				, tangent
-				, bitangent
-				, tangentSpaceViewPosition
-				, tangentSpaceFragPosition );
-			textureConfigs.setTexcoord( config
-				, texcoord
-				, texCoords0
-				, texCoords1
-				, texCoords2
-				, texCoords3 );
-			modifyMaterial( passFlags
-				, textureFlags
-				, sampled
-				, config
-				, lightMat );
-		}
-		ROF;
-
-		updateMaterial( passFlags
+		lighting::computeMapContributions( *this
+			, m_writer
+			, m_utils
+			, passFlags
 			, textureFlags
+			, textureConfigs
+			, textureAnims
+			, maps
+			, material
+			, texCoords0
+			, texCoords1
+			, texCoords2
+			, texCoords3
+			, normal
+			, tangent
+			, bitangent
+			, emissive
+			, opacity
+			, occlusion
+			, transmittance
 			, lightMat
-			, emissive );
+			, tangentSpaceViewPosition
+			, tangentSpaceFragPosition );
 	}
 
 	void LightingModel::computeMapContributions( PassFlags const & passFlags
@@ -555,67 +610,29 @@ namespace castor3d::shader
 		, sdw::Vec3 & tangentSpaceViewPosition
 		, sdw::Vec3 & tangentSpaceFragPosition )
 	{
-		if ( !textureConfigs.isEnabled() )
-		{
-			updateMaterial( passFlags
-				, textureFlags
-				, lightMat
-				, emissive );
-			return;
-		}
-
-		FOR( m_writer, sdw::UInt, index, 0u, index < material.texturesCount(), ++index )
-		{
-			auto id = m_writer.declLocale( "c3d_id"
-				, material.getTexture( index ) );
-
-			IF( m_writer, id > 0_u )
-			{
-				auto config = m_writer.declLocale( "config"
-					, textureConfigs.getTextureConfiguration( id ) );
-				auto anim = m_writer.declLocale( "anim"
-					, textureAnims.getTextureAnimation( id ) );
-				auto texcoord = m_writer.declLocale( "tex"
-					, textureConfigs.getTexcoord( config
-						, texCoords0
-						, texCoords1
-						, texCoords2
-						, texCoords3 ) );
-				auto sampled = config.computeCommonMapContribution( m_utils
-					, passFlags
-					, textureFlags
-					, anim
-					, maps[id - 1_u]
-					, texcoord
-					, emissive
-					, opacity
-					, occlusion
-					, transmittance
-					, normal
-					, tangent
-					, bitangent
-					, tangentSpaceViewPosition
-					, tangentSpaceFragPosition );
-				textureConfigs.setTexcoord( config
-					, texcoord
-					, texCoords0
-					, texCoords1
-					, texCoords2
-					, texCoords3 );
-				modifyMaterial( passFlags
-					, textureFlags
-					, sampled
-					, config
-					, lightMat );
-			}
-			FI;
-		}
-		ROF;
-
-		updateMaterial( passFlags
+		lighting::computeMapContributions( *this
+			, m_writer
+			, m_utils
+			, passFlags
 			, textureFlags
+			, textureConfigs
+			, textureAnims
+			, maps
+			, material
+			, texCoords0
+			, texCoords1
+			, texCoords2
+			, texCoords3
+			, normal
+			, tangent
+			, bitangent
+			, emissive
+			, opacity
+			, occlusion
+			, transmittance
 			, lightMat
-			, emissive );
+			, tangentSpaceViewPosition
+			, tangentSpaceFragPosition );
 	}
 
 	void LightingModel::computeMapDiffuseContributions( PassFlags const & passFlags
