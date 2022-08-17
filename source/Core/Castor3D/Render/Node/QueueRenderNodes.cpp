@@ -20,6 +20,7 @@
 #include "Castor3D/Render/Node/BillboardRenderNode.hpp"
 #include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
+#include "Castor3D/Render/Technique/Visibility/VisibilityResolvePass.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -310,7 +311,7 @@ namespace castor3d
 		static void doParseRenderNodesCommands( NodePtrByPipelineMapT< NodeT > & inputNodes
 			, ashes::CommandBuffer const & commandBuffer
 			, RenderNodesPass const & nodesPass
-			, SceneCuller const & culler
+			, SceneCuller & culler
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissor
 			, ashes::Buffer< VkDrawIndexedIndirectCommand > const & indirectIndexedCommands
@@ -324,7 +325,7 @@ namespace castor3d
 
 				for ( auto & buffers : pipelines.second.second )
 				{
-					doBindPipeline( commandBuffer
+					auto pipelineId = doBindPipeline( commandBuffer
 						, nodesPass
 						, culler
 						, pipeline
@@ -341,6 +342,14 @@ namespace castor3d
 						, uint32_t( buffers.second.size() )
 						, idxIndex
 						, nidxIndex );
+
+					if constexpr ( VisibilityResolvePass::useCompute )
+					{
+						for ( auto & nodeIt : buffers.second )
+						{
+							culler.registerNodePipeline( nodesPass, nodeIt.node->getId(), pipelineId );
+						}
+					}
 				}
 			}
 		}
@@ -382,7 +391,7 @@ namespace castor3d
 		static void doParseRenderNodesCommands( NodePtrByPipelineMapT< NodeT > & inputNodes
 			, ashes::CommandBuffer const & commandBuffer
 			, RenderNodesPass const & nodesPass
-			, SceneCuller const & culler
+			, SceneCuller & culler
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissor
 			, ashes::Buffer< VkDrawMeshTasksIndirectCommandNV > const & indirectMeshCommands
@@ -414,7 +423,7 @@ namespace castor3d
 					{
 						uint32_t drawOffset{};
 
-						for ( auto & nodeIt : bufferIt.second )
+						for ( auto & nodeIt : nodes )
 						{
 							doAddGeometryNodeCommands( pipeline
 								, *nodeIt.node
@@ -426,6 +435,11 @@ namespace castor3d
 								, nodeIt.drawCount
 								, mshIndex );
 							drawOffset += nodeIt.drawCount;
+
+							if constexpr ( VisibilityResolvePass::useCompute )
+							{
+								culler.registerNodePipeline( nodesPass, nodeIt.node->getId(), pipelineId );
+							}
 						}
 					}
 					else
@@ -439,6 +453,14 @@ namespace castor3d
 							, uint32_t( nodes.size() )
 							, idxIndex
 							, nidxIndex );
+
+						if constexpr ( VisibilityResolvePass::useCompute )
+						{
+							for ( auto & nodeIt : nodes )
+							{
+								culler.registerNodePipeline( nodesPass, nodeIt.node->getId(), pipelineId );
+							}
+						}
 					}
 				}
 			}
@@ -447,7 +469,7 @@ namespace castor3d
 		static void doParseRenderNodesCommands( ObjectNodesPtrByPipelineMapT< SubmeshRenderNode > & inputNodes
 			, ashes::CommandBuffer const & commandBuffer
 			, RenderNodesPass const & nodesPass
-			, SceneCuller const & culler
+			, SceneCuller & culler
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissor
 			, ashes::Buffer< VkDrawMeshTasksIndirectCommandNV > const & indirectMeshCommands
@@ -480,6 +502,15 @@ namespace castor3d
 								, *submeshIt.second.front().node
 								, viewport
 								, scissor );
+
+							if constexpr ( VisibilityResolvePass::useCompute )
+							{
+								for ( auto & nodeIt : submeshIt.second )
+								{
+									culler.registerNodePipeline( nodesPass, nodeIt.node->getId(), pipelineId );
+								}
+							}
+
 							auto & node = *submeshIt.second.front().node;
 
 							if ( nodesPass.isMeshShading()
@@ -519,7 +550,7 @@ namespace castor3d
 		static void doParseRenderNodesCommands( ObjectNodesPtrByPipelineMapT< NodeT > & inputNodes
 			, ashes::CommandBuffer const & commandBuffer
 			, RenderNodesPass const & nodesPass
-			, SceneCuller const & culler
+			, SceneCuller & culler
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissor
 			, ashes::Buffer< VkDrawIndexedIndirectCommand > const & indirectIndexedCommands
@@ -537,7 +568,7 @@ namespace castor3d
 					{
 						for ( auto & submeshIt : passIt.second )
 						{
-							doBindPipeline( commandBuffer
+							auto pipelineId = doBindPipeline( commandBuffer
 								, nodesPass
 								, culler
 								, pipeline
@@ -554,6 +585,14 @@ namespace castor3d
 								, 1u
 								, idxIndex
 								, nidxIndex );
+
+							if constexpr ( VisibilityResolvePass::useCompute )
+							{
+								for ( auto & nodeIt : submeshIt.second )
+								{
+									culler.registerNodePipeline( nodesPass, nodeIt.node->getId(), pipelineId );
+								}
+							}
 						}
 					}
 				}

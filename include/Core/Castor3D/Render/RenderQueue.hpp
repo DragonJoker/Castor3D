@@ -132,7 +132,7 @@ namespace castor3d
 			return *m_renderNodes;
 		}
 
-		SceneCuller const & getCuller()const
+		SceneCuller & getCuller()const
 		{
 			return m_culler;
 		}
@@ -150,7 +150,7 @@ namespace castor3d
 		void doOnCullerCompute( SceneCuller const & culler );
 
 	private:
-		SceneCuller const & m_culler;
+		SceneCuller & m_culler;
 		SceneCullerSignalConnection m_onCullerCompute;
 		SceneNode const * m_ignoredNode{ nullptr };
 		QueueRenderNodesUPtr m_renderNodes;

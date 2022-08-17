@@ -24,6 +24,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, Scene const & scene
 			, crg::ImageViewId const & data
+			, ShaderBuffer const & pipelinesIds
 			, ashes::Buffer< uint32_t > const & counts1
 			, ashes::Buffer< uint32_t > const & counts2
 			, ashes::Buffer< uint32_t > const & starts

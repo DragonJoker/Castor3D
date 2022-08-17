@@ -34,7 +34,7 @@ namespace castor3d
 		 */
 		C3D_API ShaderBuffer( Engine & engine
 			, RenderDevice const & device
-			, uint32_t size
+			, VkDeviceSize size
 			, castor::String name );
 		/**
 		 *\~english

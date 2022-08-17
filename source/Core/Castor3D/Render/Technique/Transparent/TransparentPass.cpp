@@ -251,7 +251,7 @@ namespace castor3d
 					, 0_u // hrr 
 					, 0_u // hrl
 					, 1.0_f }; // acc
-				auto [material, lightMat] = materials.blendMaterials( utils
+				auto mats = materials.blendMaterials( utils
 					, false
 					, flags.blendAlphaFunc
 					, flags.passFlags
@@ -266,6 +266,8 @@ namespace castor3d
 					, in.passMultipliers
 					, in.colour
 					, components );
+				auto material = std::move( mats.first );
+				auto lightMat = std::move( mats.second );
 				auto worldEye = writer.declLocale( "worldEye"
 					, c3d_sceneData.cameraPosition );
 				auto colour = writer.declLocale( "colour"
