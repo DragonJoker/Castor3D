@@ -52,7 +52,10 @@ namespace GuiCommon
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
+		void doCreateProperties( wxPGEditor * editor
+			, wxPropertyGrid * grid )override;
+		void doCreateFogProperties( wxPGEditor * editor
+			, wxPropertyGrid * grid );
 		void doCreateVctProperties( wxPGEditor * editor
 			, wxPropertyGrid * grid );
 

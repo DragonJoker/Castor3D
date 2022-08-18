@@ -33,19 +33,32 @@ namespace GuiCommon
 		addPropertyT( grid, PROPERTY_SCENE_AMBIENT_LIGHT, m_scene.getAmbientLight(), &m_scene, &castor3d::Scene::setAmbientLight );
 		addPropertyT( grid, PROPERTY_SHADOW_LPV_INDIRECT_ATT, m_scene.getLpvIndirectAttenuation(), &m_scene, &castor3d::Scene::setLpvIndirectAttenuation );
 
+		doCreateFogProperties( editor, grid );
 		doCreateVctProperties( editor, grid );
 	}
 
-	void SceneTreeItemProperty::onDebugOverlaysChange( wxVariant const & var )
+	void SceneTreeItemProperty::doCreateFogProperties( wxPGEditor * editor
+		, wxPropertyGrid * grid )
 	{
-		m_scene.getEngine()->getRenderLoop().showDebugOverlays( var.GetBool() );
-	}
+		static wxString PROPERTY_FOG = _( "Fog" );
+		static wxString PROPERTY_FOG_TYPE = _( "Type" );
+		static wxString PROPERTY_FOG_DISABLED = _( "None" );
+		static wxString PROPERTY_FOG_LINEAR = _( "Linear" );
+		static wxString PROPERTY_FOG_EXPONENTIAL = _( "Exponential" );
+		static wxString PROPERTY_FOG_SQUARED_EXPONENTIAL = _( "Squared Exponential" );
+		static wxString PROPERTY_FOG_DENSITY = _( "Density" );
 
-	void SceneTreeItemProperty::onAmbientLightChange( wxVariant const & var )
-	{
-		wxColour colour;
-		colour << var;
-		m_scene.setAmbientLight( castor::RgbColour::fromBGR( colour.GetRGB() ) );
+		wxArrayString choices;
+		choices.push_back( PROPERTY_FOG_DISABLED );
+		choices.push_back( PROPERTY_FOG_LINEAR );
+		choices.push_back( PROPERTY_FOG_EXPONENTIAL );
+		choices.push_back( PROPERTY_FOG_SQUARED_EXPONENTIAL );
+
+		auto & fogConfig = m_scene.getFog();
+		addProperty( grid, PROPERTY_FOG );
+		addPropertyE( grid, PROPERTY_FOG_TYPE, choices, fogConfig.getType()
+			, [&fogConfig]( castor3d::FogType value ){ fogConfig.setType( value ); } );
+		addPropertyT( grid, PROPERTY_FOG_DENSITY, fogConfig.getDensity(), &fogConfig, &castor3d::Fog::setDensity );
 	}
 
 	void SceneTreeItemProperty::doCreateVctProperties( wxPGEditor * editor
@@ -73,5 +86,17 @@ namespace GuiCommon
 		addPropertyT( grid, PROPERTY_VCT_MAX_DISTANCE, &vctConfig.maxDistance );
 		addPropertyT( grid, PROPERTY_VCT_RAY_STEP_SIZE, &vctConfig.rayStepSize );
 		addPropertyT( grid, PROPERTY_VCT_VOXEL_SIZE, &vctConfig.voxelSizeFactor );
+	}
+
+	void SceneTreeItemProperty::onDebugOverlaysChange( wxVariant const & var )
+	{
+		m_scene.getEngine()->getRenderLoop().showDebugOverlays( var.GetBool() );
+	}
+
+	void SceneTreeItemProperty::onAmbientLightChange( wxVariant const & var )
+	{
+		wxColour colour;
+		colour << var;
+		m_scene.setAmbientLight( castor::RgbColour::fromBGR( colour.GetRGB() ) );
 	}
 }
