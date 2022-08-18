@@ -67,36 +67,96 @@ namespace castor
 		return hash;
 	}
 
+	namespace hashcomb
+	{
+		template< typename HashT, typename EnableT = void >
+		struct HashCombinerT;
+
+		template< typename HashT >
+		struct HashCombinerT< HashT, std::enable_if_t< std::is_same_v< HashT, uint32_t > > >
+		{
+			template< typename T >
+			static HashT combine( HashT & hash, T const & rhs )
+			{
+				return hashCombine32( hash, rhs );
+			}
+
+			template< typename T >
+			static HashT combinePtr( HashT & hash, T const & rhs )
+			{
+				return hashCombinePtr32( hash, rhs );
+			}
+		};
+
+		template< typename HashT >
+		struct HashCombinerT< HashT, std::enable_if_t< !std::is_same_v< HashT, uint32_t > && sizeof( HashT ) == 4u > >
+		{
+			template< typename T >
+			static HashT combine( HashT & hash, T const & rhs )
+			{
+				auto hashed = uint32_t( hash );
+				hash = HashT( hashCombine32( hashed, rhs ) );
+				return hash;
+			}
+
+			template< typename T >
+			static HashT combinePtr( HashT & hash, T const & rhs )
+			{
+				auto hashed = uint32_t( hash );
+				hash = HashT( hashCombinePtr32( hashed, rhs ) );
+				return hash;
+			}
+		};
+
+		template< typename HashT >
+		struct HashCombinerT< HashT, std::enable_if_t< std::is_same_v< HashT, uint64_t > > >
+		{
+			template< typename T >
+			static HashT combine( HashT & hash, T const & rhs )
+			{
+				return hashCombine64( hash, rhs );
+			}
+
+			template< typename T >
+			static HashT combinePtr( HashT & hash, T const & rhs )
+			{
+				return hashCombinePtr64( hash, rhs );
+			}
+		};
+
+		template< typename HashT >
+		struct HashCombinerT< HashT, std::enable_if_t< !std::is_same_v< HashT, uint64_t > && sizeof( HashT ) == 8u > >
+		{
+			template< typename T >
+			static HashT combine( HashT & hash, T const & rhs )
+			{
+				auto hashed = uint64_t( hash );
+				hash = HashT( hashCombine64( hashed, rhs ) );
+				return hash;
+			}
+
+			template< typename T >
+			static HashT combinePtr( uint64_t & hash, T const & rhs )
+			{
+				auto hashed = uint64_t( hash );
+				hash = HashT( hashCombinePtr64( hashed, rhs ) );
+				return hash;
+			}
+		};
+	}
+
 	template< typename T >
 	inline size_t hashCombine( size_t & hash
 		, T const & rhs )
 	{
-		if constexpr ( sizeof( size_t ) == sizeof( uint64_t ) )
-		{
-			hash = hashCombine64( hash, rhs );
-		}
-		else
-		{
-			hash = hashCombine32( hash, rhs );
-		}
-
-		return hash;
+		return hashcomb::HashCombinerT< size_t >::combine( hash, rhs );
 	}
 
 	template< typename T >
 	inline size_t hashCombinePtr( size_t & hash
 		, T const & rhs )
 	{
-		if constexpr ( sizeof( size_t ) == sizeof( uint64_t ) )
-		{
-			hash = hashCombinePtr64( hash, rhs );
-		}
-		else
-		{
-			hash = hashCombinePtr32( hash, rhs );
-		}
-
-		return hash;
+		return hashcomb::HashCombinerT< size_t >::combinePtr( hash, rhs );
 	}
 }
 
