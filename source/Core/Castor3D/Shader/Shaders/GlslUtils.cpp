@@ -12,6 +12,25 @@
 
 namespace castor3d::shader
 {
+	//*********************************************************************************************
+
+	sdw::Float DerivTex::computeMip( sdw::Vec2 const & texSize )const
+	{
+		// see https://registry.khronos.org/OpenGL/extensions/EXT/EXT_shader_texture_lod.txt
+		auto dSdx = dPdx().x();
+		auto dSdy = dPdy().x();
+		auto dTdx = dPdx().y();
+		auto dTdy = dPdy().y();
+		auto dUdx = texSize.x() * dSdx;
+		auto dUdy = texSize.x() * dSdy;
+		auto dVdx = texSize.y() * dTdx;
+		auto dVdy = texSize.y() * dTdy;
+		return 0.5_f * log2( max( dUdx * dUdx + dVdx * dVdx
+			, dUdy * dUdy + dVdy * dVdy ) );
+	}
+
+	//*********************************************************************************************
+
 	Utils::Utils( sdw::ShaderWriter & writer )
 		: m_writer{ writer }
 	{
@@ -181,7 +200,7 @@ namespace castor3d::shader
 	{
 		return ( checkFlag( passFlags, PassFlag::eUntile )
 			? sampleUntiled( map, texCoords )
-			: map.lod( texCoords.uv(), texCoords.mip() ) );
+			: map.grad( texCoords.uv(), texCoords.dPdx(), texCoords.dPdy() ) );
 	}
 
 	sdw::RetVec2 Utils::transformUV( TextureConfigData const & pconfig
@@ -601,8 +620,8 @@ namespace castor3d::shader
 		, TextureConfigData const & textureConfig )
 	{
 		parallaxMapping( texCoords.uv()
-			, texCoords.dx()
-			, texCoords.dy()
+			, texCoords.dPdx()
+			, texCoords.dPdy()
 			, viewDir
 			, heightMap
 			, textureConfig );
@@ -1178,7 +1197,9 @@ namespace castor3d::shader
 	{
 		return sampleUntiled( map
 			, texCoords.uv()
-			, texCoords.dx()
-			, texCoords.dy() );
+			, texCoords.dPdx()
+			, texCoords.dPdy() );
 	}
+
+	//*********************************************************************************************
 }
