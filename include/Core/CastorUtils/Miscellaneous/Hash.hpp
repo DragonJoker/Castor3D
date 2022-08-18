@@ -136,7 +136,7 @@ namespace castor
 			}
 
 			template< typename T >
-			static HashT combinePtr( uint64_t & hash, T const & rhs )
+			static HashT combinePtr( HashT & hash, T const & rhs )
 			{
 				auto hashed = uint64_t( hash );
 				hash = HashT( hashCombinePtr64( hashed, rhs ) );
