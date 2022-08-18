@@ -64,7 +64,6 @@ namespace castor3d
 			struct ShaderStages
 			{
 				ShaderModule shader;
-				ashes::PipelineShaderStageCreateInfoArray stages{};
 				ashes::PipelinePtr pipeline{};
 			};
 			ashes::DescriptorSetLayoutPtr descriptorLayout{};

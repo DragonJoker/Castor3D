@@ -1448,7 +1448,7 @@ namespace castor3d
 
 		static ashes::PipelinePtr createPipeline( RenderDevice const & device
 			, VkExtent3D const & extent
-			, ashes::PipelineShaderStageCreateInfoArray const & stages
+			, ashes::PipelineShaderStageCreateInfoArray stages
 			, ashes::PipelineLayout const & pipelineLayout
 			, ashes::RenderPass const & renderPass
 			, bool blend )
@@ -1476,7 +1476,7 @@ namespace castor3d
 				, { makeViewport( castor::Point2ui{ extent.width, extent.height } ) }
 				, { makeScissor( castor::Point2ui{ extent.width, extent.height } ) } };
 			return device->createPipeline( ashes::GraphicsPipelineCreateInfo{ 0u
-				, stages
+				, std::move( stages )
 				, std::move( vertexState )
 				, ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP }
 				, ashes::nullopt
@@ -1976,10 +1976,10 @@ namespace castor3d
 		if ( it == pipelines.end() )
 		{
 			auto [submeshFlags, programFlags, passType, passFlags, maxTexcoordSet, texturesCount, textureFlags] = getPipelineHashDetails( hash );
-			auto stage = VisibilityResolvePass::useCompute
+			auto stageBit = VisibilityResolvePass::useCompute
 				? VK_SHADER_STAGE_COMPUTE_BIT
 				: VK_SHADER_STAGE_FRAGMENT_BIT;
-			auto stages = VkShaderStageFlags( stage );
+			auto stageFlags = VkShaderStageFlags( stageBit );
 			auto extent = m_parent->getNormalTexture().getExtent();
 			auto result = std::make_unique< Pipeline >();
 			result->descriptorLayout = stride == 0u
@@ -1987,41 +1987,41 @@ namespace castor3d
 				: visres::createVtxDescriptorLayout( m_device, getName() );
 			result->pipelineLayout = m_device->createPipelineLayout( getName()
 				, { *m_inOutsDescriptorLayout, *result->descriptorLayout, *getScene().getBindlessTexDescriptorLayout() }
-				, { { stages, 0u, sizeof( visres::PushData ) } } );
+				, { { stageFlags, 0u, sizeof( visres::PushData ) } } );
 
-			result->shaders[0].shader = ShaderModule{ stage
+			result->shaders[0].shader = ShaderModule{ stageBit
 				, getName()
 				, visres::getProgram( m_device, extent, passType, textureFlags, submeshFlags, passFlags, programFlags, stride, false ) };
-			result->shaders[1].shader = ShaderModule{ stage
+			result->shaders[1].shader = ShaderModule{ stageBit
 				, getName()
 				, visres::getProgram( m_device, extent, passType, textureFlags, submeshFlags, passFlags, programFlags, stride, true ) };
 
 			if constexpr ( useCompute )
 			{
-				result->shaders[0].stages.push_back( makeShaderState( m_device, result->shaders[0].shader ) );
-				result->shaders[1].stages.push_back( makeShaderState( m_device, result->shaders[1].shader ) );
+				ashes::PipelineShaderStageCreateInfo stage{ makeShaderState( m_device, result->shaders[0].shader ) };
 				result->shaders[0].pipeline = m_device->createPipeline( ashes::ComputePipelineCreateInfo{ 0u
-					, result->shaders[0].stages.front()
+					, std::move( stage )
 					, *result->pipelineLayout } );
+				stage = makeShaderState( m_device, result->shaders[1].shader );
 				result->shaders[1].pipeline = m_device->createPipeline( ashes::ComputePipelineCreateInfo{ 0u
-					, result->shaders[1].stages.front()
+					, std::move( stage )
 					, *result->pipelineLayout } );
 			}
 			else
 			{
-				result->shaders[0].stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( m_device, m_vertexShader ) };
-				result->shaders[1].stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( m_device, m_vertexShader ) };
-				result->shaders[0].stages.push_back( makeShaderState( m_device, result->shaders[0].shader ) );
-				result->shaders[1].stages.push_back( makeShaderState( m_device, result->shaders[1].shader ) );
+				ashes::PipelineShaderStageCreateInfoArray stages{ makeShaderState( m_device, m_vertexShader ) };
+				stages.push_back( makeShaderState( m_device, result->shaders[0].shader ) );
 				result->shaders[0].pipeline = visres::createPipeline( m_device
 					, extent
-					, result->shaders[0].stages
+					, std::move( stages )
 					, *result->pipelineLayout
 					, *m_firstRenderPass
 					, false );
+				stages.push_back( makeShaderState( m_device, m_vertexShader ) );
+				stages.push_back( makeShaderState( m_device, result->shaders[1].shader ) );
 				result->shaders[1].pipeline = visres::createPipeline( m_device
 					, extent
-					, result->shaders[1].stages
+					, std::move( stages )
 					, *result->pipelineLayout
 					, *m_blendRenderPass
 					, true );
