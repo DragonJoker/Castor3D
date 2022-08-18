@@ -382,7 +382,9 @@ namespace castor3d
 				, InOutBindings::eTexAnims
 				, Sets::eInOuts };
 
-			auto imgData = writer.declStorageImg< sdw::RUImage2DRgba32 >( "imgData", InOutBindings::eInData, Sets::eInOuts );
+			auto imgData = writer.declStorageImg< sdw::RUImage2DRg32 >( "imgData", InOutBindings::eInData, Sets::eInOuts );
+			auto constexpr maxPipelinesSize = uint32_t( castor::getBitSize( MaxPipelines ) );
+			auto constexpr maxPipelinesMask = ( 0x000000001u << maxPipelinesSize ) - 1u;
 
 			auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps", TexBindings::eTextures, Sets::eTex ) );
 
@@ -783,7 +785,9 @@ namespace castor3d
 
 			auto shade = writer.implementFunction< sdw::Boolean >( "shade"
 				, [&]( sdw::IVec2 const & ipixel
-					, sdw::UVec4 inData
+					, sdw::UInt nodeId
+					, sdw::UInt pipeline
+					, sdw::UInt primitiveId
 					, sdw::Vec4 outData0
 					, sdw::Vec4 outData1
 					, sdw::Vec4 outData2
@@ -791,23 +795,16 @@ namespace castor3d
 					, sdw::Vec4 outData4
 					, sdw::Vec4 outData5 )
 				{
-					auto pipeline = writer.declLocale( "pipeline"
-						, inData.w() );
-
 					IF( writer, pipelineId != pipeline )
 					{
 						writer.returnStmt( 0_b );
 					}
 					FI;
 
-					auto nodeId = writer.declLocale( "nodeId"
-						, inData.x() );
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[nodeId - 1u] );
 					auto material = writer.declLocale( "material"
 						, materials.getMaterial( modelData.getMaterialId() ) );
-					auto primitiveId = writer.declLocale( "primitiveId"
-						, inData.z() );
 					auto depth = writer.declLocale( "depth"
 						, 0.0_f );
 					auto surface = writer.declLocale( "surface"
@@ -861,7 +858,9 @@ namespace castor3d
 					writer.returnStmt( 1_b );
 				}
 				, sdw::InIVec2{ writer, "ipixel" }
-				, sdw::InUVec4{ writer, "inData" }
+				, sdw::InUInt{ writer, "nodeId" }
+				, sdw::InUInt{ writer, "pipeline" }
+				, sdw::InUInt{ writer, "primitiveId" }
 				, sdw::OutVec4{ writer, "outData0" }
 				, sdw::OutVec4{ writer, "outData1" }
 				, sdw::OutVec4{ writer, "outData2" }
@@ -901,8 +900,14 @@ namespace castor3d
 							, ivec2( pixel ) );
 						auto data = writer.declLocale( "data"
 							, imgData.load( ipixel ) );
-						auto nodeId = writer.declLocale( "nodeId"
+						auto nodePipelineId = writer.declLocale( "nodePipelineId"
 							, data.x() );
+						auto nodeId = writer.declLocale( "nodeId"
+							, nodePipelineId >> maxPipelinesSize );
+						auto pipeline = writer.declLocale( "pipeline"
+							, nodePipelineId & maxPipelinesMask );
+						auto primitiveId = writer.declLocale( "primitiveId"
+							, data.y() );
 						auto data0 = writer.declLocale( "data0", vec4( 0.0_f ) );
 						auto data1 = writer.declLocale( "data1", vec4( 0.0_f ) );
 						auto data2 = writer.declLocale( "data2", vec4( 0.0_f ) );
@@ -911,7 +916,7 @@ namespace castor3d
 						auto data5 = writer.declLocale( "data5", vec4( 0.0_f ) );
 
 						IF( writer, ( stride != 0u ? ( nodeId == billboardNodeId ) : nodeId != 0_u )
-							&& shade( ipixel, data, data0, data1, data2, data3, data4, data5 ) )
+							&& shade( ipixel, nodeId, pipelineId, primitiveId, data0, data1, data2, data3, data4, data5 ) )
 						{
 							imgData0.store( ipixel, data0 );
 							imgData1.store( ipixel, data1 );
@@ -944,13 +949,19 @@ namespace castor3d
 						auto data5 = writer.declLocale( "data5", vec4( 0.0_f ) );
 						auto data = writer.declLocale( "data"
 							, imgData.load( pos ) );
-						auto nodeId = writer.declLocale( "nodeId"
+						auto nodePipelineId = writer.declLocale( "nodePipelineId"
 							, data.x() );
+						auto nodeId = writer.declLocale( "nodeId"
+							, nodePipelineId >> maxPipelinesSize );
+						auto pipeline = writer.declLocale( "pipeline"
+							, nodePipelineId & maxPipelinesMask );
+						auto primitiveId = writer.declLocale( "primitiveId"
+							, data.y() );
 
 						if ( blend )
 						{
 							IF( writer, ( stride != 0u ? ( nodeId != billboardNodeId ) : nodeId == 0_u )
-								|| !shade( pos, data, data0, data1, data2, data3, data4, data5 ) )
+								|| !shade( pos, nodeId, pipeline, primitiveId, data0, data1, data2, data3, data4, data5 ) )
 							{
 								writer.demote();
 							}
@@ -978,7 +989,7 @@ namespace castor3d
 								imgData4 = vec4( 0.0_f );
 								imgData5 = vec4( 0.0_f );
 							}
-							ELSEIF( !shade( pos, data, data0, data1, data2, data3, data4, data5 ) )
+							ELSEIF( !shade( pos, nodeId, pipeline, primitiveId, data0, data1, data2, data3, data4, data5 ) )
 							{
 								writer.demote();
 							}

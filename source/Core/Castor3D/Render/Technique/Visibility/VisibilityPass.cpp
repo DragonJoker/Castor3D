@@ -158,9 +158,10 @@ namespace castor3d
 		sdw::PushConstantBuffer pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
+		auto constexpr maxPipelinesSize = uint32_t( castor::getBitSize( MaxPipelines ) );
 
 		// Outputs
-		auto data = writer.declOutput< UVec4 >( "data", 0u );
+		auto data = writer.declOutput< UVec2 >( "data", 0u );
 
 		shader::Utils utils{ writer };
 
@@ -201,12 +202,10 @@ namespace castor3d
 					, modelData.getMaterialId()
 					, in.passMultipliers
 					, components );
-				data = uvec4( in.nodeId
-					, in.drawId
+				data = uvec2( ( in.nodeId << maxPipelinesSize ) | ( pipelineID )
 					, ( checkFlag( flags.programFlags, ProgramFlag::eBillboards )
 						? writer.cast< sdw::Float >( in.vertexId * 2_u + writer.cast< sdw::UInt >( in.primitiveID ) )
-						: writer.cast< sdw::Float >( in.primitiveID ) )
-					, pipelineID );
+						: writer.cast< sdw::Float >( in.primitiveID ) ) );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

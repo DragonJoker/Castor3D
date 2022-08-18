@@ -36,7 +36,7 @@ namespace castor3d
 				device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
 					| VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
 					| VK_FORMAT_FEATURE_TRANSFER_SRC_BIT ),
-				VK_FORMAT_R32G32B32A32_UINT,
+				VK_FORMAT_R32G32_UINT,
 			}
 		};
 		return Values[size_t( texture )];

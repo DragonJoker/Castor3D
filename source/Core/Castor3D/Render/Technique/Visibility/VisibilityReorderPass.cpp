@@ -61,8 +61,10 @@ namespace castor3d
 		{
 			sdw::ComputeWriter writer;
 
-			auto dataMap = writer.declStorageImg< sdw::RUImage2DRgba32 >( "dataMap", Bindings::eData, 0u );
 			shader::Materials materials{ writer, Bindings::eMaterials, 0u };
+			auto dataMap = writer.declStorageImg< sdw::RUImage2DRg32 >( "dataMap", Bindings::eData, 0u );
+			auto constexpr maxPipelinesSize = uint32_t( castor::getBitSize( MaxPipelines ) );
+			auto constexpr maxPipelinesMask = ( 0x000000001u << maxPipelinesSize ) - 1u;
 
 			auto MaterialsCounts = writer.declStorageBuffer<>( "MaterialsCounts", Bindings::eMaterialsCounts, 0u );
 			auto materialsCounts = MaterialsCounts.declMemberArray< sdw::UInt >( "materialsCounts" );
@@ -75,13 +77,15 @@ namespace castor3d
 						, in.globalInvocationID.xy() );
 					auto data = writer.declLocale( "data"
 						, dataMap.load( ivec2( pixel ) ) );
-					auto nodeId = writer.declLocale( "nodeId"
+					auto nodePipelineId = writer.declLocale( "nodePipelineId"
 						, data.x() );
+					auto nodeId = writer.declLocale( "nodeId"
+						, nodePipelineId >> maxPipelinesSize );
 
 					IF( writer, nodeId > 0_u )
 					{
 						auto pipelineId = writer.declLocale( "pipelineId"
-							, data.w() );
+							, nodePipelineId & maxPipelinesMask );
 						sdw::atomicAdd( materialsCounts[pipelineId], 1_u );
 					}
 					FI;
@@ -242,9 +246,11 @@ namespace castor3d
 		{
 			sdw::ComputeWriter writer;
 
-			auto dataMap = writer.declStorageImg< sdw::RUImage2DRgba32 >( "dataMap", Bindings::eData, 0u );
 			shader::Materials materials{ writer, Bindings::eMaterials, 0u };
 			vissort::NodesPipelines nodesPipelines{ writer, Bindings::eNodesPipelines, 0u };
+			auto dataMap = writer.declStorageImg< sdw::RUImage2DRg32 >( "dataMap", Bindings::eData, 0u );
+			auto constexpr maxPipelinesSize = uint32_t( castor::getBitSize( MaxPipelines ) );
+			auto constexpr maxPipelinesMask = ( 0x000000001u << maxPipelinesSize ) - 1u;
 
 			auto MaterialsCounts = writer.declStorageBuffer<>( "MaterialsCounts", Bindings::eMaterialsCounts, 0u );
 			auto materialsCounts = MaterialsCounts.declMemberArray< sdw::UInt >( "materialsCounts" );
@@ -265,13 +271,15 @@ namespace castor3d
 						, in.globalInvocationID.xy() );
 					auto data = writer.declLocale( "data"
 						, dataMap.load( ivec2( pixel ) ) );
-					auto nodeId = writer.declLocale( "nodeId"
+					auto nodePipelineId = writer.declLocale( "nodePipelineId"
 						, data.x() );
+					auto nodeId = writer.declLocale( "nodeId"
+						, nodePipelineId >> maxPipelinesSize );
 
 					IF( writer, nodeId > 0_u )
 					{
 						auto pipelineId = writer.declLocale( "pipelineId"
-							, nodesPipelines[nodeId - 1_u] );
+							, nodePipelineId & maxPipelinesMask );
 						auto pixelIndex = writer.declLocale( "pixelIndex"
 							, materialsStarts[pipelineId] + sdw::atomicAdd( materialsCounts[pipelineId], 1_u ) );
 						pixelsXY[pixelIndex] = pixel;
