@@ -14,8 +14,6 @@ See LICENSE file in root folder
 #include <mutex>
 #pragma warning( pop )
 
-#define C3D_TextureConfigStructOfArrays 0
-
 namespace castor3d
 {
 	class TextureConfigurationBuffer
@@ -106,25 +104,6 @@ namespace castor3d
 		}
 
 	public:
-#if C3D_TextureConfigStructOfArrays
-
-		struct TextureConfigurationsData
-		{
-			castor::ArrayView< castor::Point4f > colOpa;
-			castor::ArrayView< castor::Point4f > spcShn;
-			castor::ArrayView< castor::Point4f > emsOcc;
-			castor::ArrayView< castor::Point4f > trsDum;
-			castor::ArrayView< castor::Point4f > nmlFcr;
-			castor::ArrayView< castor::Point4f > hgtFcr;
-			castor::ArrayView< castor::Point4f > mscVls;
-			castor::ArrayView< castor::Point4f > translate;
-			castor::ArrayView< castor::Point4f > rotate;
-			castor::ArrayView< castor::Point4f > scale;
-			castor::ArrayView< castor::Point4f > tileSet;
-		};
-
-#else
-
 		struct Data
 		{
 			castor::Point4f colOpa;
@@ -144,8 +123,6 @@ namespace castor3d
 		using TextureConfigurationsData = castor::ArrayView< Data >;
 
 		static uint32_t constexpr DataSize = uint32_t( sizeof( Data ) );
-
-#endif
 
 	private:
 		ShaderBuffer m_buffer;

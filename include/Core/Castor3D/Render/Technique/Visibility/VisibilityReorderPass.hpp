@@ -22,7 +22,6 @@ namespace castor3d
 		VisibilityReorderPass( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, RenderDevice const & device
-			, Scene const & scene
 			, crg::ImageViewId const & data
 			, ShaderBuffer const & pipelinesIds
 			, ashes::Buffer< uint32_t > const & counts1

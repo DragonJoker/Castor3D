@@ -504,7 +504,6 @@ namespace castor3d
 			? castor::makeUnique< VisibilityReorderPass >( m_renderTarget.getGraph().createPassGroup( "Visibility" )
 				, *m_visibilityPassDesc
 				, m_device
-				, *m_renderTarget.getScene()
 				, ( *m_visibilityPassResult )[VbTexture::eData].sampledViewId
 				, *m_visibilityPipelinesIds.get()
 				, *m_materialsCounts1
