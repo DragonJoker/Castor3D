@@ -313,10 +313,9 @@ namespace castor3d
 			, VK_CULL_MODE_FRONT_BIT );
 	}
 
-	FilteredTextureFlags RenderNodesPass::filterTexturesFlags( TextureFlagsArray const & textures )const
+	TextureFlags RenderNodesPass::filterTexturesFlags( TextureFlagsArray const & textures )const
 	{
-		return castor3d::filterTexturesFlags( textures
-			, getTexturesMask() );
+		return merge( textures ) & getTexturesMask();
 	}
 
 	ashes::PipelineColorBlendStateCreateInfo RenderNodesPass::createBlendState( BlendMode colourBlendMode

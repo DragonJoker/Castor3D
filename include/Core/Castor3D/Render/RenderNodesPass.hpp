@@ -516,7 +516,7 @@ namespace castor3d
 		 *\param[in]	textures	Les indicateurs de textures.
 		 *\return		Les indicateurs filtrés.
 		 */
-		C3D_API FilteredTextureFlags filterTexturesFlags( TextureFlagsArray const & textures )const;
+		C3D_API TextureFlags filterTexturesFlags( TextureFlagsArray const & textures )const;
 		/**
 		 *\~english
 		 *\brief		Sets the node ignored node.

@@ -115,7 +115,7 @@ namespace castor3d::shader
 		, SubmeshFlags submeshFlags
 		, ProgramFlags programFlags
 		, ShaderFlags shaderFlags
-		, FilteredTextureFlags textureFlags
+		, TextureFlags textureFlags
 		, PassFlags passFlags
 		, bool hasTextures )
 	{
@@ -274,7 +274,7 @@ namespace castor3d::shader
 		, SubmeshFlags submeshFlags
 		, ProgramFlags programFlags
 		, ShaderFlags shaderFlags
-		, FilteredTextureFlags textureFlags
+		, TextureFlags textureFlags
 		, PassFlags passFlags
 		, bool hasTextures )
 	{
@@ -288,7 +288,7 @@ namespace castor3d::shader
 		if ( result->empty() )
 		{
 			auto texType = TexcoordT::makeType( cache );
-			bool hasParallaxOcclusionMapping = ( checkFlags( textureFlags, TextureFlag::eHeight ) != textureFlags.end() )
+			bool hasParallaxOcclusionMapping = checkFlag( textureFlags, TextureFlag::eHeight )
 				&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
 					|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) );
 			uint32_t index = 0u;
