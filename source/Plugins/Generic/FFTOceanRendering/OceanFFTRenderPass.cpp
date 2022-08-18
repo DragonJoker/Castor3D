@@ -733,7 +733,6 @@ namespace ocean_fft
 		using namespace sdw;
 		using namespace castor3d;
 		VertexWriter writer;
-		auto textureFlags = filterTexturesFlags( flags.textures );
 
 		// Shader inputs
 		auto position = writer.declInput< Vec4 >( "position", 0u );
@@ -815,7 +814,6 @@ namespace ocean_fft
 		using namespace sdw;
 		using namespace castor3d;
 		TessellationControlWriter writer;
-		auto textureFlags = filterTexturesFlags( flags.textures );
 
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
