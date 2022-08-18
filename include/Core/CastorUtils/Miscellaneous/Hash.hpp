@@ -15,9 +15,55 @@ namespace castor
 	inline uint32_t hashCombine32( uint32_t & hash
 		, T const & rhs )
 	{
-		const uint32_t kMul = 0x9e3779b9u;
+		constexpr uint32_t kMul = 0x9e3779b9u;
 		std::hash< T > hasher;
 		hash ^= hasher( rhs ) + kMul + ( hash << 6 ) + ( hash >> 2 );
+		return hash;
+	}
+
+	template< typename T >
+	inline uint32_t hashCombinePtr32( uint32_t & hash
+		, T const & rhs )
+	{
+		constexpr uint32_t kMul = 0x9e3779b9u;
+		std::hash< T > hasher;
+		hash ^= hasher( &rhs ) + kMul + ( hash << 6 ) + ( hash >> 2 );
+		return hash;
+	}
+
+	template< typename T >
+	inline uint64_t hashCombine64( uint64_t & hash
+		, T const & rhs )
+	{
+		constexpr uint64_t kMul = 0x9ddfea08eb382d69ULL;
+		auto seed = hash;
+
+		std::hash< T > hasher;
+		uint64_t a = ( uint64_t( hasher( rhs ) ) ^ seed ) * kMul;
+		a ^= ( a >> 47 );
+
+		uint64_t b = ( seed ^ a ) * kMul;
+		b ^= ( b >> 47 );
+
+		hash = b * kMul;
+		return hash;
+	}
+
+	template< typename T >
+	inline uint64_t hashCombinePtr64( uint64_t & hash
+		, T const & rhs )
+	{
+		const uint64_t kMul = 0x9ddfea08eb382d69ULL;
+		auto seed = hash;
+
+		std::hash< T const * > hasher;
+		uint64_t a = ( uint64_t( hasher( &rhs ) ) ^ seed ) * kMul;
+		a ^= ( a >> 47 );
+
+		uint64_t b = ( seed ^ a ) * kMul;
+		b ^= ( b >> 47 );
+
+		hash = b * kMul;
 		return hash;
 	}
 
@@ -25,23 +71,13 @@ namespace castor
 	inline size_t hashCombine( size_t & hash
 		, T const & rhs )
 	{
-		const uint64_t kMul = 0x9ddfea08eb382d69ULL;
-		auto seed = hash;
-
-		std::hash< T > hasher;
-		uint64_t a = ( hasher( rhs ) ^ seed ) * kMul;
-		a ^= ( a >> 47 );
-
-		uint64_t b = ( seed ^ a ) * kMul;
-		b ^= ( b >> 47 );
-
-		if constexpr ( sizeof( std::size_t ) == sizeof( uint32_t ) )
+		if constexpr ( sizeof( size_t ) == sizeof( uint64_t ) )
 		{
-			hash = std::size_t( b * kMul );
+			hash = hashCombine64( hash, rhs );
 		}
 		else
 		{
-			hash = b * kMul;
+			hash = hashCombine32( hash, rhs );
 		}
 
 		return hash;
@@ -51,23 +87,13 @@ namespace castor
 	inline size_t hashCombinePtr( size_t & hash
 		, T const & rhs )
 	{
-		const uint64_t kMul = 0x9ddfea08eb382d69ULL;
-		auto seed = hash;
-
-		std::hash< T const * > hasher;
-		uint64_t a = ( hasher( &rhs ) ^ seed ) * kMul;
-		a ^= ( a >> 47 );
-
-		uint64_t b = ( seed ^ a ) * kMul;
-		b ^= ( b >> 47 );
-
-		if constexpr ( sizeof( std::size_t ) == sizeof( uint32_t ) )
+		if constexpr ( sizeof( size_t ) == sizeof( uint64_t ) )
 		{
-			hash = std::size_t( b * kMul );
+			hash = hashCombinePtr64( hash, rhs );
 		}
 		else
 		{
-			hash = b * kMul;
+			hash = hashCombinePtr32( hash, rhs );
 		}
 
 		return hash;

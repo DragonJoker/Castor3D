@@ -699,12 +699,14 @@ namespace castor3d::shader
 				return { material, std::move( lightMat ) };
 			}
 
-			auto [material, result] = materials.applyMaterial( "passMaterial", "passLightMat"
+			auto mats = materials.applyMaterial( "passMaterial", "passLightMat"
 				, passFlags, textureFlags, hasTextures
 				, textureConfigs, textureAnims, lightingModel, maps
 				, materialId, vertexColour
 				, output
 				, std::forward< ParamsT >( params )... );
+			auto material = std::move( mats.first );
+			auto result = std::move( mats.second );
 			material.applyAlphaFunc( alphaFunc
 				, output.opacity()
 				, 1.0_f
