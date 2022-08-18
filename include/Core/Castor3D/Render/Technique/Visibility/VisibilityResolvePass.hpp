@@ -71,7 +71,7 @@ namespace castor3d
 			ashes::PipelineLayoutPtr pipelineLayout{};
 			ashes::DescriptorSetPoolPtr descriptorPool{};
 			std::array< ShaderStages, 2u > shaders;
-			std::unordered_map< uint64_t, ashes::DescriptorSetPtr > descriptorSets{};
+			std::unordered_map< size_t, ashes::DescriptorSetPtr > descriptorSets{};
 		};
 		struct PipelineNodesDescriptors
 		{

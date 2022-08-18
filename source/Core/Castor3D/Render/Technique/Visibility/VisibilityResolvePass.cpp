@@ -1584,7 +1584,7 @@ namespace castor3d
 					auto it = m_activePipelines.emplace( &pipeline
 						, SubmeshPipelinesNodesDescriptors{} ).first;
 
-					uint64_t hash = 0u;
+					size_t hash = 0u;
 					hash = castor::hashCombinePtr( hash, *buffer );
 					auto ires = pipeline.descriptorSets.emplace( hash, ashes::DescriptorSetPtr{} );
 
@@ -1621,7 +1621,7 @@ namespace castor3d
 							, culled.node->data.getVertexStride() );
 						auto it = m_activeBillboardPipelines.emplace( &pipeline
 							, BillboardPipelinesNodesDescriptors{} ).first;
-						uint64_t hash = positionsBuffer.getOffset();
+						auto hash = size_t( positionsBuffer.getOffset() );
 						hash = castor::hashCombinePtr( hash, positionsBuffer.getBuffer().getBuffer() );
 						auto ires = pipeline.descriptorSets.emplace( hash, ashes::DescriptorSetPtr{} );
 						auto pipelineId = m_culler.getPipelineNodesIndex( m_nodesPass
@@ -1952,7 +1952,7 @@ namespace castor3d
 
 		if ( stride )
 		{
-			real.hi = castor::hashCombine( real.hi, stride );
+			real.hi = castor::hashCombine64( real.hi, stride );
 		}
 
 		return doCreatePipeline( real
