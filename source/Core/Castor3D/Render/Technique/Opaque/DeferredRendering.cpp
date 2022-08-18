@@ -27,6 +27,7 @@ namespace castor3d
 {
 	DeferredRendering::DeferredRendering( crg::FramePassGroup & graph
 		, crg::FramePass const & opaquePass
+		, crg::FramePass const & ssaoPass
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, Texture const & brdf
@@ -97,7 +98,7 @@ namespace castor3d
 			, m_opaquePassResult
 			, m_lightPassResult ) }
 		, m_resolve{ castor::makeUnique< OpaqueResolvePass >( graph
-			, m_lastPass
+			, crg::FramePassArray{ m_lastPass, &ssaoPass }
 			, m_device
 			, progress
 			, scene
@@ -115,6 +116,7 @@ namespace castor3d
 			, gpInfoUbo
 			, hdrConfigUbo ) }
 	{
+		m_lastPass = &m_resolve->getLastPass();
 		m_lightPassResult.create();
 	}
 
