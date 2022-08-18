@@ -10,69 +10,12 @@
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, TextureConfigurationBuffer )
-
 namespace castor3d
 {
 	//*********************************************************************************************
 
 	namespace texcfgbuf
 	{
-#if C3D_TextureConfigStructOfArrays
-
-		static TextureConfigurationBuffer::TextureConfigurationsData doBindData( uint8_t * buffer
-			, uint32_t count )
-		{
-			auto colOpa = castor::makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
-				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
-			buffer += sizeof( castor::Point4f ) * count;
-			auto glsShn = castor::makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
-				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
-			buffer += sizeof( castor::Point4f ) * count;
-			auto emsOcc = castor::makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
-				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
-			buffer += sizeof( castor::Point4f ) * count;
-			auto trsDum = castor::makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
-				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
-			buffer += sizeof( castor::Point4f ) * count;
-			auto nmlFcr = castor::makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
-				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
-			buffer += sizeof( castor::Point4f ) * count;
-			auto hgtFcr = castor::makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
-				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
-			buffer += sizeof( castor::Point4f ) * count;
-			auto mscVls = castor::makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
-				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
-			buffer += sizeof( castor::Point4f ) * count;
-			auto translate = castor::makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
-				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
-			buffer += sizeof( castor::Point4f ) * count;
-			auto rotate = castor::makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
-				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
-			buffer += sizeof( castor::Point4f ) * count;
-			auto scale = castor::makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
-				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
-			buffer += sizeof( castor::Point4f ) * count;
-			auto tileSet = castor::makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
-				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
-			return
-			{
-				colOpa,
-				glsShn,
-				emsOcc,
-				trsDum,
-				nmlFcr,
-				hgtFcr,
-				mscVls,
-				translate,
-				rotate,
-				scale,
-				tileSet,
-			};
-		}
-
-#else
-
 		static TextureConfigurationBuffer::TextureConfigurationsData doBindData( uint8_t * buffer
 			, VkDeviceSize size
 			, uint32_t count )
@@ -81,8 +24,6 @@ namespace castor3d
 			return castor::makeArrayView( reinterpret_cast< TextureConfigurationBuffer::Data * >( buffer )
 				, reinterpret_cast< TextureConfigurationBuffer::Data * >( buffer ) + count );
 		}
-
-#endif
 
 		static castor::Point4f writeFlags( castor::Point2ui const & a
 			, castor::Point2ui const & b )
@@ -210,26 +151,6 @@ namespace castor3d
 					auto & config = unit->getConfiguration();
 					auto index = unit->getId() - 1u;
 
-#if C3D_TextureConfigStructOfArrays
-
-					m_data.colOpa[index] = texcfgbuf::writeFlags( config.colourMask, config.opacityMask );
-					m_data.spcShn[index] = texcfgbuf::writeFlags( config.specularMask, config.glossinessMask );
-					m_data.metRgh[index] = texcfgbuf::writeFlags( config.metalnessMask, config.roughnessMask );
-					m_data.emsOcc[index] = texcfgbuf::writeFlags( config.emissiveMask, config.occlusionMask );
-					m_data.trsDum[index] = texcfgbuf::writeFlags( config.transmittanceMask, {} );
-					m_data.nmlFcr[index] = texcfgbuf::writeFlags( config.normalMask, config.normalFactor, config.normalGMultiplier );
-					m_data.hgtFcr[index] = texcfgbuf::writeFlags( config.heightMask, config.heightFactor );
-					m_data.mscVls[index] = texcfgbuf::writeFlags( float( config.needsYInversion )
-						, texcfgbuf::writeBool( unit->isTransformAnimated() )
-						, texcfgbuf::writeBool( unit->isTileAnimated() )
-						, float( unit->getTexcoordSet() ) );
-					m_data.data.translate[index] = config.translate;
-					m_data.data.rotate[index] = config.rotate;
-					m_data.data.scale[index] = config.scale;
-					m_data.data.tileSet[index] = castor::Point4f{ config.tileSet };
-
-#else
-
 					auto & data = m_data[index];
 					data.colOpa = texcfgbuf::writeFlags( config.colourMask, config.opacityMask );
 					data.spcShn = texcfgbuf::writeFlags( config.specularMask, config.glossinessMask );
@@ -246,8 +167,6 @@ namespace castor3d
 					data.rotate = { config.transform.rotate.cos(), config.transform.rotate.sin(), 0.0f, 0.0f };
 					data.scale = config.transform.scale;
 					data.tileSet = castor::Point4f{ config.tileSet };
-
-#endif
 				} );
 
 			m_buffer.setCount( uint32_t( m_configurations.size() ) );

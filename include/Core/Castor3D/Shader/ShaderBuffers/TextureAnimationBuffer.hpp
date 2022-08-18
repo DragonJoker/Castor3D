@@ -17,8 +17,6 @@ See LICENSE file in root folder
 #include <mutex>
 #pragma warning( pop )
 
-#define C3D_TextureConfigStructOfArrays 0
-
 namespace castor3d
 {
 	class TextureAnimationBuffer

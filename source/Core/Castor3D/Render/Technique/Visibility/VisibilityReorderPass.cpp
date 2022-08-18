@@ -53,7 +53,6 @@ namespace castor3d
 		enum Bindings : uint32_t
 		{
 			eData,
-			eMaterials,
 			eMaterialsCounts,
 		};
 
@@ -61,7 +60,6 @@ namespace castor3d
 		{
 			sdw::ComputeWriter writer;
 
-			shader::Materials materials{ writer, Bindings::eMaterials, 0u };
 			auto dataMap = writer.declStorageImg< sdw::RUImage2DRg32 >( "dataMap", Bindings::eData, 0u );
 			auto constexpr maxPipelinesSize = uint32_t( castor::getBitSize( MaxPipelines ) );
 			auto constexpr maxPipelinesMask = ( 0x000000001u << maxPipelinesSize ) - 1u;
@@ -98,12 +96,10 @@ namespace castor3d
 			, crg::FramePassGroup & graph
 			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
-			, Scene const & scene
 			, crg::ImageViewId const & data
 			, ashes::Buffer< uint32_t > const & counts
 			, ashes::PipelineShaderStageCreateInfoArray const & stages )
 		{
-			auto & matCache = scene.getOwner()->getMaterialCache();
 			auto renderSize = getExtent( data );
 			auto & pass = graph.createPass( name + "/MaterialsCount"
 				, [&stages, &device, renderSize]( crg::FramePass const & framePass
@@ -124,7 +120,6 @@ namespace castor3d
 				} );
 			pass.addDependency( *previousPass );
 			pass.addInputStorageView( data, Bindings::eData );
-			matCache.getPassBuffer().createPassBinding( pass, Bindings::eMaterials );
 			pass.addOutputStorageBuffer( { counts, "MaterialsCount" }
 				, uint32_t( Bindings::eMaterialsCounts )
 				, 0u
@@ -140,7 +135,6 @@ namespace castor3d
 	{
 		enum Bindings : uint32_t
 		{
-			eMaterials,
 			eNodesPipelines,
 			eMaterialsCounts,
 			eMaterialsStarts,
@@ -150,7 +144,6 @@ namespace castor3d
 		{
 			sdw::ComputeWriter writer;
 
-			shader::Materials materials{ writer, Bindings::eMaterials, 0u };
 			vissort::NodesPipelines nodesPipelines{ writer, Bindings::eNodesPipelines, 0u };
 
 			auto MaterialsCounts = writer.declStorageBuffer<>( "MaterialsCounts", Bindings::eMaterialsCounts, 0u );
@@ -189,13 +182,11 @@ namespace castor3d
 			, crg::FramePassGroup & graph
 			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
-			, Scene const & scene
 			, ShaderBuffer const & pipelinesIds
 			, ashes::Buffer< uint32_t > const & counts
 			, ashes::Buffer< uint32_t > const & starts
 			, ashes::PipelineShaderStageCreateInfoArray const & stages )
 		{
-			auto & matCache = scene.getOwner()->getMaterialCache();
 			auto & pass = graph.createPass( name + "/MaterialsStart"
 				, [&stages, &device]( crg::FramePass const & framePass
 					, crg::GraphContext & context
@@ -213,7 +204,6 @@ namespace castor3d
 					return result;
 				} );
 			pass.addDependency( *previousPass );
-			matCache.getPassBuffer().createPassBinding( pass, Bindings::eMaterials );
 			pipelinesIds.createPassBinding( pass, "NodesPipelines", Bindings::eNodesPipelines );
 			pass.addInputStorageBuffer( { counts, "MaterialsCounts" }
 				, uint32_t( Bindings::eMaterialsCounts )
@@ -235,8 +225,6 @@ namespace castor3d
 		enum Bindings : uint32_t
 		{
 			eData,
-			eMaterials,
-			eNodesPipelines,
 			eMaterialsCounts,
 			eMaterialsStarts,
 			ePixelsXY,
@@ -246,8 +234,6 @@ namespace castor3d
 		{
 			sdw::ComputeWriter writer;
 
-			shader::Materials materials{ writer, Bindings::eMaterials, 0u };
-			vissort::NodesPipelines nodesPipelines{ writer, Bindings::eNodesPipelines, 0u };
 			auto dataMap = writer.declStorageImg< sdw::RUImage2DRg32 >( "dataMap", Bindings::eData, 0u );
 			auto constexpr maxPipelinesSize = uint32_t( castor::getBitSize( MaxPipelines ) );
 			auto constexpr maxPipelinesMask = ( 0x000000001u << maxPipelinesSize ) - 1u;
@@ -294,15 +280,12 @@ namespace castor3d
 			, crg::FramePassGroup & graph
 			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
-			, Scene const & scene
 			, crg::ImageViewId const & data
-			, ShaderBuffer const & pipelinesIds
 			, ashes::Buffer< uint32_t > const & counts
 			, ashes::Buffer< uint32_t > const & starts
 			, ashes::Buffer< castor::Point2ui > const & pixels
 			, ashes::PipelineShaderStageCreateInfoArray const & stages )
 		{
-			auto & matCache = scene.getOwner()->getMaterialCache();
 			auto renderSize = getExtent( data );
 			auto & pass = graph.createPass( name + "/PixelsXY"
 				, [&stages, &device, renderSize]( crg::FramePass const & framePass
@@ -323,8 +306,6 @@ namespace castor3d
 				} );
 			pass.addDependency( *previousPass );
 			pass.addInputStorageView( data, Bindings::eData );
-			matCache.getPassBuffer().createPassBinding( pass, Bindings::eMaterials );
-			pipelinesIds.createPassBinding( pass, "NodesPipelines", Bindings::eNodesPipelines );
 			pass.addOutputStorageBuffer( { counts, "MaterialsCounts" }
 				, uint32_t( Bindings::eMaterialsCounts )
 				, 0u
@@ -382,7 +363,6 @@ namespace castor3d
 	VisibilityReorderPass::VisibilityReorderPass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
-		, Scene const & scene
 		, crg::ImageViewId const & data
 		, ShaderBuffer const & pipelinesIds
 		, ashes::Buffer< uint32_t > const & counts1
@@ -434,7 +414,6 @@ namespace castor3d
 			, graph
 			, ppreviousPass
 			, device
-			, scene
 			, data
 			, counts1
 			, m_countsStages );
@@ -442,7 +421,6 @@ namespace castor3d
 			, graph
 			, ppreviousPass
 			, device
-			, scene
 			, pipelinesIds
 			, counts1
 			, starts
@@ -451,9 +429,7 @@ namespace castor3d
 			, graph
 			, ppreviousPass
 			, device
-			, scene
 			, data
-			, pipelinesIds
 			, counts2
 			, starts
 			, pixels
