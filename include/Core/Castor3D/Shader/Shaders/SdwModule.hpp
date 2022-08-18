@@ -175,9 +175,8 @@ namespace castor3d::shader
 		: public sdw::StructInstanceHelperT< "DerivTex"
 		, sdw::type::MemoryLayout::eC
 		, sdw::Vec2Field< "uv" >
-		, sdw::Vec2Field< "dx" >
-		, sdw::Vec2Field< "dy" >
-		, sdw::FloatField< "mip" > >
+		, sdw::Vec2Field< "dPdx" >
+		, sdw::Vec2Field< "dPdy" > >
 	{
 		DerivTex( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -186,10 +185,11 @@ namespace castor3d::shader
 		{
 		}
 
+		C3D_API sdw::Float computeMip( sdw::Vec2 const & texSize )const;
+
 		auto uv()const { return getMember< "uv" >(); }
-		auto dx()const { return getMember< "dx" >(); }
-		auto dy()const { return getMember< "dy" >(); }
-		auto mip()const { return getMember< "mip" >(); }
+		auto dPdx()const { return getMember< "dPdx" >(); }
+		auto dPdy()const { return getMember< "dPdy" >(); }
 	};
 
 	Writer_Parameter( DerivTex );

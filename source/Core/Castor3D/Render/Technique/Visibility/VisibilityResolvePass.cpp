@@ -231,9 +231,8 @@ namespace castor3d
 								, derivatives.computeGradient( mergedY ) );
 							auto result = writer.declLocale< shader::DerivTex >( "result" );
 							result.uv() = vec2( resultsX.x(), resultsY.x() );
-							result.dx() = vec2( resultsX.y(), resultsY.y() );
-							result.dy() = vec2( resultsX.z(), resultsY.z() );
-							result.mip() = 0.5f * log2( max( dot( result.dx(), result.dx() ), dot( result.dy(), result.dy() ) ) );
+							result.dPdx() = vec2( resultsX.y(), resultsY.y() );
+							result.dPdy() = vec2( resultsX.z(), resultsY.z() );
 							writer.returnStmt( result );
 						}
 						, InBarycentricFullDerivatives{ writer, "derivatives" }
@@ -596,18 +595,14 @@ namespace castor3d
 					result.texture1.uv() = vec2( 0.0_f );
 					result.texture2.uv() = vec2( 0.0_f );
 					result.texture3.uv() = vec2( 0.0_f );
-					result.texture0.dx() = vec2( 0.0_f );
-					result.texture1.dx() = vec2( 0.0_f );
-					result.texture2.dx() = vec2( 0.0_f );
-					result.texture3.dx() = vec2( 0.0_f );
-					result.texture0.dy() = vec2( 0.0_f );
-					result.texture1.dy() = vec2( 0.0_f );
-					result.texture2.dy() = vec2( 0.0_f );
-					result.texture3.dy() = vec2( 0.0_f );
-					result.texture0.mip() = 0.0_f;
-					result.texture1.mip() = 0.0_f;
-					result.texture2.mip() = 0.0_f;
-					result.texture3.mip() = 0.0_f;
+					result.texture0.dPdx() = vec2( 0.0_f );
+					result.texture1.dPdx() = vec2( 0.0_f );
+					result.texture2.dPdx() = vec2( 0.0_f );
+					result.texture3.dPdx() = vec2( 0.0_f );
+					result.texture0.dPdy() = vec2( 0.0_f );
+					result.texture1.dPdy() = vec2( 0.0_f );
+					result.texture2.dPdy() = vec2( 0.0_f );
+					result.texture3.dPdy() = vec2( 0.0_f );
 					result.colour = vec3( 1.0_f );
 
 					auto hdrCoords = writer.declLocale( "hdrCoords"
