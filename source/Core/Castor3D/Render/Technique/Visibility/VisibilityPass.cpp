@@ -176,6 +176,7 @@ namespace castor3d
 			, [&]( FragmentInT< shader::FragmentSurfaceT > in
 				, FragmentOut out )
 			{
+				auto usedTextureFlags = textureFlags & ( TextureFlag::eOpacity | TextureFlag::eHeight );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1u] );
 				shader::GeometryBlendComponents components{ writer
@@ -194,8 +195,8 @@ namespace castor3d
 					, flags.alphaFunc
 					, flags.passFlags
 					, flags.submeshFlags
-					, flags.textures
-					, hasTextures
+					, usedTextureFlags
+					, !usedTextureFlags.empty()
 					, textureConfigs
 					, textureAnims
 					, c3d_maps

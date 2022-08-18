@@ -64,7 +64,7 @@ namespace castor3d::shader
 			, SubmeshFlags submeshFlags
 			, ProgramFlags programFlags
 			, ShaderFlags shaderFlags
-			, FilteredTextureFlags textureFlags
+			, TextureFlags textureFlags
 			, PassFlags passFlags
 			, bool hasTextures );
 		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
@@ -103,7 +103,7 @@ namespace castor3d::shader
 			, SubmeshFlags submeshFlags
 			, ProgramFlags programFlags
 			, ShaderFlags shaderFlags
-			, FilteredTextureFlags textureFlags
+			, TextureFlags textureFlags
 			, PassFlags passFlags
 			, bool hasTextures );
 		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
