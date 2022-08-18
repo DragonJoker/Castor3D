@@ -82,7 +82,7 @@ namespace castor3d
 		 *\param[in]	hdrConfigUbo			L'UBO HDR.
 		 */
 		C3D_API OpaqueResolvePass( crg::FramePassGroup & graph
-			, crg::FramePass const *& previousPass
+			, crg::FramePassArray const & previousPasses
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, Scene & scene
@@ -113,9 +113,14 @@ namespace castor3d
 		 */
 		C3D_API void accept( PipelineVisitorBase & visitor );
 
+		crg::FramePass const & getLastPass()const
+		{
+			return *m_lastPass;
+		}
+
 	private:
 		crg::FramePass const & doCreatePass( crg::FramePassGroup & graph
-			, crg::FramePass const & pass
+			, crg::FramePassArray const & previousPasses
 			, ProgressBar * progress );
 		Program & doCreateProgram( uint32_t index );
 
@@ -136,6 +141,7 @@ namespace castor3d
 		Texture const & m_lightIndirectSpecular;
 		std::vector< ProgramPtr > m_programs;
 		uint32_t m_programIndex{};
+		crg::FramePass const * m_lastPass{};
 	};
 }
 

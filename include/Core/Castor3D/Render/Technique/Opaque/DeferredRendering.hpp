@@ -79,6 +79,7 @@ namespace castor3d
 		 */
 		C3D_API DeferredRendering( crg::FramePassGroup & graph
 			, crg::FramePass const & opaquePass
+			, crg::FramePass const & ssaoPass
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, Texture const & brdf

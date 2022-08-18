@@ -333,7 +333,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	OpaqueResolvePass::OpaqueResolvePass( crg::FramePassGroup & graph
-		, crg::FramePass const *& previousPass
+		, crg::FramePassArray const & previousPasses
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, Scene & scene
@@ -367,7 +367,7 @@ namespace castor3d
 		, m_lightIndirectSpecular{ lightIndirectSpecular }
 	{
 		m_programs.resize( dropqrslv::ResolveProgramConfig::MaxProgramsCount );
-		previousPass = &doCreatePass( graph, *previousPass, progress );
+		m_lastPass = &doCreatePass( graph, previousPasses, progress );
 	}
 
 	OpaqueResolvePass::Program & OpaqueResolvePass::doCreateProgram( uint32_t programIndex )
@@ -391,7 +391,7 @@ namespace castor3d
 	}
 
 	crg::FramePass const & OpaqueResolvePass::doCreatePass( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
+		, crg::FramePassArray const & previousPasses
 		, ProgressBar * progress )
 	{
 		stepProgressBar( progress, "Creating opaque resolve pass" );
@@ -419,7 +419,7 @@ namespace castor3d
 					, result->getTimer() );
 				return result;
 			} );
-		pass.addDependency( previousPass );
+		pass.addDependencies( previousPasses );
 
 		passBuffer.createPassBinding( pass
 			, uint32_t( dropqrslv::ResolveBind::eMaterials ) );

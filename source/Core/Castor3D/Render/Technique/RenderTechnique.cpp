@@ -402,7 +402,7 @@ namespace castor3d
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
-				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_colourTexture{ rendtech::doCreateTextureUnit( m_device
 			, queueData
 			, m_colour.imageId ) }
@@ -531,7 +531,9 @@ namespace castor3d
 #endif
 			, m_device
 			, progress
-			, *m_depthPassDesc
+			, ( m_visibilityResolveDesc 
+				? *m_visibilityResolveDesc 
+				: *m_depthPassDesc )
 			, makeSize( m_colour.getExtent() )
 			, getSsaoConfig()
 			, *m_depth
@@ -573,6 +575,7 @@ namespace castor3d
 			: &doCreateOpaquePass( progress ) ) }
 		, m_deferredRendering{ castor::makeUnique< DeferredRendering >( m_renderTarget.getGraph().createPassGroup( "Opaque" )
 			, *m_opaquePassDesc
+			, m_ssao->getLastPass()
 			, m_device
 			, progress
 			, m_device.renderSystem.getPrefilteredBrdfTexture()
@@ -1409,6 +1412,9 @@ namespace castor3d
 #endif
 					, cuT( "Opaque" )
 					, name
+#if !C3D_UseDeferredRendering
+					, m_colour.imageId.data
+#endif
 					, std::move( renderPassDesc )
 					, RenderTechniquePassDesc{ false, getSsaoConfig() }
 						.ssao( m_ssao->getResult() )
