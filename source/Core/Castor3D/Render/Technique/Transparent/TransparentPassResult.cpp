@@ -23,7 +23,6 @@ namespace castor3d
 				"Depth",
 				"Accumulation",
 				"Revealage",
-				"Velocity",
 			}
 		};
 
@@ -39,7 +38,6 @@ namespace castor3d
 				VK_FORMAT_D16_UNORM,
 				VK_FORMAT_R16G16B16A16_SFLOAT,
 				VK_FORMAT_R16_SFLOAT,
-				VK_FORMAT_R16G16B16A16_SFLOAT,
 			}
 		};
 		return Values[size_t( texture )];
@@ -53,7 +51,6 @@ namespace castor3d
 				defaultClearDepthStencil,
 				transparentBlackClearColor,
 				opaqueWhiteClearColor,
-				transparentBlackClearColor,
 			}
 		};
 		return Values[size_t( texture )];
@@ -65,7 +62,6 @@ namespace castor3d
 		{
 			{
 				VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
-				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
 				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
 				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
 			}
@@ -81,7 +77,6 @@ namespace castor3d
 				VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,
 				VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,
 				VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,
-				VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,
 			}
 		};
 		return Values[size_t( texture )];
@@ -91,12 +86,11 @@ namespace castor3d
 
 	TransparentPassResult::TransparentPassResult( crg::ResourceHandler & handler
 		, RenderDevice const & device
-		, TexturePtr depthTexture
-		, TexturePtr velocityTexture )
+		, TexturePtr depthTexture )
 		: GBufferT< WbTexture >{ handler
 			, device
 			, cuT( "WBResult" )
-			, { depthTexture, nullptr, nullptr, velocityTexture }
+			, { depthTexture, nullptr, nullptr }
 			, 0u
 			, makeSize( getExtent( depthTexture->imageId ) ) }
 	{

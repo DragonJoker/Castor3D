@@ -67,7 +67,7 @@ namespace smaa
 			C3D_Smaa( writer, SmaaUboIdx, 0u );
 			auto c3d_currentColourTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_currentColourTex", CurColTexIdx, 0u );
 			auto c3d_previousColourTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_previousColourTex", PrvColTexIdx, 0u );
-			auto c3d_velocityTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_velocityTex", VelocityTexIdx, 0u, reprojection );
+			auto c3d_velocityTex = writer.declCombinedImg< FImg2DRg32 >( "c3d_velocityTex", VelocityTexIdx, 0u, reprojection );
 
 			// Shader outputs
 			auto pxl_fragColour = writer.declOutput< Vec4 >( "pxl_fragColour", 0u );
@@ -82,7 +82,7 @@ namespace smaa
 						// Velocity is assumed to be calculated for motion blur, so we need to
 						// inverse it for reprojection:
 						auto velocity = writer.declLocale( "velocity"
-							, -c3d_velocityTex.sample( texcoord ).rg() );
+							, -c3d_velocityTex.sample( texcoord ) );
 
 						// Fetch current pixel:
 						auto current = writer.declLocale( "current"

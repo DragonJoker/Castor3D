@@ -354,9 +354,9 @@ namespace castor3d
 			return *m_opaquePassResult;
 		}
 
-		VisibilityPassResult const & getVisibilityResult()const
+		Texture const & getVisibilityResult()const
 		{
-			return *m_visibilityPassResult;
+			return *m_visibility;
 		}
 		/**@}*/
 
@@ -370,9 +370,9 @@ namespace castor3d
 		crg::FramePass & doCreateVisibilityPass( ProgressBar * progress );
 		crg::FramePass & doCreateVisibilityResolve( ProgressBar * progress );
 		crg::FramePass & doCreateDepthPass( ProgressBar * progress );
-		crg::FramePass & doCreateComputeDepthRange( ProgressBar * progress );
 		BackgroundRendererUPtr doCreateBackgroundPass( ProgressBar * progress );
 		crg::FramePass & doCreateOpaquePass( ProgressBar * progress );
+		crg::FramePass & doCreateComputeDepthRange( ProgressBar * progress );
 		crg::FramePass & doCreateTransparentPass( ProgressBar * progress );
 		void doInitialiseLpv();
 		void doUpdateShadowMaps( CpuUpdater & updater );
@@ -416,7 +416,7 @@ namespace castor3d
 		ashes::BufferPtr< uint32_t > m_materialsStarts;
 		ashes::BufferPtr< castor::Point2ui > m_pixelsXY;
 		ShaderBufferUPtr m_visibilityPipelinesIds;
-		VisibilityPassResultUPtr m_visibilityPassResult;
+		TexturePtr m_visibility;
 		crg::FramePass * m_visibilityPassDesc{};
 		VisibilityPass * m_visibilityPass{};
 		VisibilityReorderPassUPtr m_visibilityReorder;

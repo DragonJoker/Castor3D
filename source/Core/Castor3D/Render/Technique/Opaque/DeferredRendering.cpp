@@ -158,10 +158,6 @@ namespace castor3d
 			, m_opaquePassResult[DsTexture::eData4].sampledViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
-		visitor.visit( "Opaque Data5"
-			, m_opaquePassResult[DsTexture::eData5].sampledViewId
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, TextureFactors{}.invert( true ) );
 
 		m_lightingPass->accept( visitor );
 		m_indirectLightingPass->accept( visitor );

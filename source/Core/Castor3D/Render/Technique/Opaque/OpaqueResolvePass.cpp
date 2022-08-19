@@ -121,7 +121,6 @@ namespace castor3d
 			eData2,
 			eData3,
 			eData4,
-			eData5,
 			eSsao,
 			eBrdf,
 			eDirectDiffuse,
@@ -157,7 +156,6 @@ namespace castor3d
 			auto c3d_mapData2 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), uint32_t( ResolveBind::eData2 ), 0u );
 			auto c3d_mapData3 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), uint32_t( ResolveBind::eData3 ), 0u );
 			auto c3d_mapData4 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), uint32_t( ResolveBind::eData4 ), 0u );
-			auto c3d_mapData5 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), uint32_t( ResolveBind::eData5 ), 0u );
 			auto c3d_mapSsao = writer.declCombinedImg< FImg2DRg32 >( "c3d_mapSsao", uint32_t( ResolveBind::eSsao ), 0u, config.hasSsao );
 			auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRg32 >( "c3d_mapBrdf", uint32_t( ResolveBind::eBrdf ), 0u );
 			auto c3d_mapLightDiffuse = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightDiffuse", uint32_t( ResolveBind::eDirectDiffuse ), 0u );
@@ -214,8 +212,6 @@ namespace castor3d
 						, c3d_mapData1.lod( vtx_texture, 0.0_f ) );
 					auto data2 = writer.declLocale( "data2"
 						, c3d_mapData2.lod( vtx_texture, 0.0_f ) );
-					auto data5 = writer.declLocale( "data5"
-						, c3d_mapData5.lod( vtx_texture, 0.0_f ) );
 					auto envMapIndex = writer.declLocale( "envMapIndex"
 						, modelData.getEnvMapIndex() );
 					auto depth = writer.declLocale( "depth"
@@ -237,7 +233,7 @@ namespace castor3d
 							, c3d_mapData4.lod( vtx_texture, 0.0_f ) );
 
 						auto occlusion = writer.declLocale( "occlusion"
-							, data5.a() );
+							, data1.w() );
 						auto emissive = writer.declLocale( "emissive"
 							, data4.xyz() );
 						auto lightMat = lightingModel->declMaterial( "lightMat" );
@@ -444,8 +440,6 @@ namespace castor3d
 			, uint32_t( dropqrslv::ResolveBind::eData3 ) );
 		pass.addSampledView( m_opaquePassResult[DsTexture::eData4].sampledViewId
 			, uint32_t( dropqrslv::ResolveBind::eData4 ) );
-		pass.addSampledView( m_opaquePassResult[DsTexture::eData5].sampledViewId
-			, uint32_t( dropqrslv::ResolveBind::eData5 ) );
 		pass.addSampledView( m_ssaoResult.sampledViewId
 			, uint32_t( dropqrslv::ResolveBind::eSsao ) );
 		pass.addSampledView( m_device.renderSystem.getPrefilteredBrdfTexture().sampledViewId

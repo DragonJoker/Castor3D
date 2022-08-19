@@ -29,11 +29,10 @@ namespace castor3d
 		: uint8_t
 	{
 		eData0, // R => Depth, G => Linearised Depth, B => NodeID, A => Unused
-		eData1, // RGB => Normal, A => Unused
+		eData1, // RGB => Normal, A => Occlusion
 		eData2, // RGB => Diffuse/Albedo - Phong: A => Shininess - PBR: A => Roughness
 		eData3, // RGB => Specular - PBR: A => Metalness - Phong: A => Unused
 		eData4, // RGB => Emissive, A => Transmittance
-		eData5, // RG => Velocity, B => Unused, A => Occlusion
 		CU_ScopedEnumBounds( eData0 ),
 	};
 	C3D_API castor::String getTextureName( DsTexture texture );

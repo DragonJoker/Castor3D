@@ -16,8 +16,7 @@ namespace castor3d
 	public:
 		C3D_API TransparentPassResult( crg::ResourceHandler & handler
 			, RenderDevice const & device
-			, TexturePtr depthTexture
-			, TexturePtr velocityTexture );
+			, TexturePtr depthTexture );
 	};
 }
 
