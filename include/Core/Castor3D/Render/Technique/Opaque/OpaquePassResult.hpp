@@ -19,8 +19,7 @@ namespace castor3d
 		C3D_API OpaquePassResult( crg::ResourceHandler & handler
 			, RenderDevice const & device
 			, TexturePtr depthTexture
-			, TexturePtr data1Texture
-			, TexturePtr velocityTexture );
+			, TexturePtr data1Texture );
 	};
 }
 

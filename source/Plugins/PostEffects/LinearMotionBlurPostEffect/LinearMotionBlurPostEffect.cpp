@@ -80,7 +80,7 @@ namespace motion_blur
 			auto c3d_vectorDivider = configuration.declMember< Float >( "c3d_vectorDivider" );
 			auto c3d_blurScale = configuration.declMember< Float >( "c3d_blurScale" );
 			configuration.end();
-			auto c3d_mapVelocity = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapVelocity", VelocityTexIdx, 0u );
+			auto c3d_mapVelocity = writer.declCombinedImg< FImg2DRg32 >( "c3d_mapVelocity", VelocityTexIdx, 0u );
 			auto c3d_mapColor = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapColor", ColorTexIdx, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
@@ -91,7 +91,7 @@ namespace motion_blur
 				, FragmentOut out )
 				{
 					auto blurVector = writer.declLocale( "blurVector"
-						, ( c3d_mapVelocity.sample( vtx_texture ).xy() / c3d_vectorDivider ) * c3d_blurScale );
+						, ( c3d_mapVelocity.sample( vtx_texture ) / c3d_vectorDivider ) * c3d_blurScale );
 					blurVector.y() = -blurVector.y();
 					pxl_fragColor = c3d_mapColor.sample( vtx_texture );
 

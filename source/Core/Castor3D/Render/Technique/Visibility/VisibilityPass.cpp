@@ -79,7 +79,8 @@ namespace castor3d
 
 	ShaderFlags VisibilityPass::getShaderFlags()const
 	{
-		return ShaderFlag::eTangentSpace;
+		return ShaderFlag::eTangentSpace
+			| ShaderFlag::eVelocity;
 	}
 
 	PassFlags VisibilityPass::doAdjustPassFlags( PassFlags flags )const
@@ -122,7 +123,7 @@ namespace castor3d
 	{
 		return RenderNodesPass::createBlendState( BlendMode::eNoBlend
 			, BlendMode::eNoBlend
-			, 1u );
+			, 2u );
 	}
 
 	ShaderPtr VisibilityPass::doGetPixelShaderSource( PipelineFlags const & flags )const
@@ -162,6 +163,7 @@ namespace castor3d
 
 		// Outputs
 		auto data = writer.declOutput< UVec2 >( "data", 0u );
+		auto velocity = writer.declOutput< Vec2 >( "velocity", 1u );
 
 		shader::Utils utils{ writer };
 
@@ -205,8 +207,9 @@ namespace castor3d
 					, components );
 				data = uvec2( ( in.nodeId << maxPipelinesSize ) | ( pipelineID )
 					, ( checkFlag( flags.programFlags, ProgramFlag::eBillboards )
-						? writer.cast< sdw::Float >( in.vertexId * 2_u + writer.cast< sdw::UInt >( in.primitiveID ) )
-						: writer.cast< sdw::Float >( in.primitiveID ) ) );
+						? in.vertexId * 2_u + writer.cast< sdw::UInt >( in.primitiveID )
+						: writer.cast< sdw::UInt >( in.primitiveID ) ) );
+				velocity = in.getVelocity();
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

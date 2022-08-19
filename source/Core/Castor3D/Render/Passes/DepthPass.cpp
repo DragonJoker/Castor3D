@@ -141,7 +141,7 @@ namespace castor3d
 		// Outputs
 		auto data0 = writer.declOutput< Vec4 >( "data0", 0u );
 		auto data1 = writer.declOutput< Vec4 >( "data1", 1u );
-		auto velocity = writer.declOutput< Vec4 >( "velocity", 2u );
+		auto velocity = writer.declOutput< Vec2 >( "velocity", 2u );
 
 		shader::Utils utils{ writer };
 
@@ -187,7 +187,7 @@ namespace castor3d
 					, writer.cast< sdw::Float >( in.nodeId )
 					, 0.0_f );
 				data1 = vec4( components.normal(), 0.0_f );
-				velocity = vec4( in.getVelocity(), 0.0_f, 0.0_f );
+				velocity = in.getVelocity();
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

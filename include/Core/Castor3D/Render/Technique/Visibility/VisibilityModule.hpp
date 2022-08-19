@@ -20,48 +20,12 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Enumerator of textures used by the visibility buffer.
-	*\~french
-	*\brief
-	*	Enumération des textures utilisées par le buffer de visibilité.
-	*/
-	enum class VbTexture
-		: uint8_t
-	{
-		eDepth, // D => Depth
-		eData, // R => NodeID:10 PipelineID:15, G => PrimitiveID
-		CU_ScopedEnumBounds( eData ),
-	};
-	C3D_API castor::String getTextureName( VbTexture texture );
-	C3D_API castor::String getTexName( VbTexture texture );
-	C3D_API VkFormat getFormat( RenderDevice const & device, VbTexture texture );
-	C3D_API VkClearValue getClearValue( VbTexture texture );
-	C3D_API VkImageUsageFlags getUsageFlags( VbTexture texture );
-	C3D_API VkBorderColor getBorderColor( VbTexture texture );
-	inline uint32_t getMipLevels( RenderDevice const & device
-		, VbTexture texture
-		, castor::Size const & size )
-	{
-		return 1u;
-	}
-	/**
-	*\~english
-	*\brief
 	*	The render nodes pass writing visibility buffer.
 	*\~french
 	*\brief
 	*	La passe de noeuds de rendu générant le buffer de visibilité.
 	*/
 	class VisibilityPass;
-	/**
-	*\~english
-	*\brief
-	*	The result of the visibility pass.
-	*\~french
-	*\brief
-	*	Résultat de la passe de visibilité.
-	*/
-	class VisibilityPassResult;
 	/**
 	*\~english
 	*\brief
@@ -82,7 +46,6 @@ namespace castor3d
 	class VisibilityResolvePass;
 
 	CU_DeclareCUSmartPtr( castor3d, VisibilityPass, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, VisibilityPassResult, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, VisibilityReorderPass, C3D_API );
 
 	//@}

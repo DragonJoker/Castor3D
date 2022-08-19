@@ -214,7 +214,7 @@ namespace castor3d
 		// Fragment Outputs
 		auto pxl_accumulation( writer.declOutput< Vec4 >( getTextureName( WbTexture::eAccumulation ), 0 ) );
 		auto pxl_revealage( writer.declOutput< Float >( getTextureName( WbTexture::eRevealage ), 1 ) );
-		auto pxl_velocity( writer.declOutput< Vec4 >( "pxl_velocity", 2 ) );
+		auto pxl_velocity( writer.declOutput< Vec2 >( "pxl_velocity", 2 ) );
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
 				, flags.submeshFlags
@@ -365,7 +365,7 @@ namespace castor3d
 					, components.opacity()
 					, components.bwAccumulationOperator() );
 				pxl_revealage = components.opacity();
-				pxl_velocity.xy() = in.getVelocity();
+				pxl_velocity = in.getVelocity();
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

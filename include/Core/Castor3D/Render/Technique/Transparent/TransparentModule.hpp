@@ -29,7 +29,6 @@ namespace castor3d
 		eDepth,
 		eAccumulation,
 		eRevealage,
-		eVelocity,
 		CU_ScopedEnumBounds( eDepth ),
 	};
 	C3D_API castor::String getTextureName( WbTexture texture );

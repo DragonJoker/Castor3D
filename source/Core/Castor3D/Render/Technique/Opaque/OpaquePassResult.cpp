@@ -25,7 +25,6 @@ namespace castor3d
 				cuT( "Data2" ),
 				cuT( "Data3" ),
 				cuT( "Data4" ),
-				cuT( "Data5" ),
 			}
 		};
 
@@ -41,7 +40,6 @@ namespace castor3d
 				VK_FORMAT_R16G16B16A16_SFLOAT,
 				VK_FORMAT_R16G16B16A16_SFLOAT,
 				VK_FORMAT_R8G8B8A8_UNORM,
-				VK_FORMAT_R16G16B16A16_SFLOAT,
 				VK_FORMAT_R16G16B16A16_SFLOAT,
 			}
 		};
@@ -59,7 +57,6 @@ namespace castor3d
 				transparentBlackClearColor,
 				transparentBlackClearColor,
 				transparentBlackClearColor,
-				transparentBlackClearColor,
 			}
 		};
 		return Values[size_t( texture )];
@@ -70,7 +67,6 @@ namespace castor3d
 		static std::array< VkImageUsageFlags, size_t( DsTexture::eCount ) > Values
 		{
 			{
-				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_STORAGE_BIT,
 				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_STORAGE_BIT,
 				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_STORAGE_BIT,
 				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_STORAGE_BIT,
@@ -91,7 +87,6 @@ namespace castor3d
 				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
 				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
 				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
-				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
 			}
 		};
 		return Values[size_t( texture )];
@@ -102,12 +97,11 @@ namespace castor3d
 	OpaquePassResult::OpaquePassResult( crg::ResourceHandler & handler
 		, RenderDevice const & device
 		, TexturePtr depthTexture
-		, TexturePtr data1Texture
-		, TexturePtr velocityTexture )
+		, TexturePtr data1Texture )
 		: GBufferT< DsTexture >{ handler
 			, device
 			, cuT( "GPResult" )
-			, { depthTexture, data1Texture, nullptr, nullptr, nullptr, velocityTexture }
+			, { depthTexture, data1Texture, nullptr, nullptr, nullptr }
 			, 0u
 			, makeSize( getExtent( depthTexture->imageId ) ) }
 	{
