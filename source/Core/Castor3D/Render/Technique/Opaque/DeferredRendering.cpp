@@ -32,6 +32,7 @@ namespace castor3d
 		, ProgressBar * progress
 		, Texture const & brdf
 		, Texture const & depth
+		, Texture const & depthObj
 		, OpaquePassResult const & opaquePassResult
 		, Texture const & resultTexture
 		, ShadowMapResult const & smDirectionalResult
@@ -63,6 +64,7 @@ namespace castor3d
 			, progress
 			, scene
 			, depth
+			, depthObj
 			, m_opaquePassResult
 			, smDirectionalResult
 			, smPointResult
@@ -77,6 +79,7 @@ namespace castor3d
 			, graph
 			, m_lastPass
 			, brdf
+			, depthObj
 			, m_opaquePassResult
 			, m_lightPassResult
 			, lpvResult
@@ -95,6 +98,7 @@ namespace castor3d
 			, scene
 			, m_lightingGpInfoUbo
 			, sceneUbo
+			, depthObj
 			, m_opaquePassResult
 			, m_lightPassResult ) }
 		, m_resolve{ castor::makeUnique< OpaqueResolvePass >( graph
@@ -102,6 +106,7 @@ namespace castor3d
 			, m_device
 			, progress
 			, scene
+			, depthObj
 			, opaquePassResult
 			, ssaoConfig
 			, ssao
@@ -138,10 +143,6 @@ namespace castor3d
 
 	void DeferredRendering::accept( RenderTechniqueVisitor & visitor )
 	{
-		visitor.visit( "Opaque Data0"
-			, m_opaquePassResult[DsTexture::eData0].sampledViewId
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Opaque Data1"
 			, m_opaquePassResult[DsTexture::eData1].sampledViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL

@@ -86,6 +86,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, Scene & scene
+			, Texture const & depthObj
 			, OpaquePassResult const & gp
 			, SsaoConfig const & ssao
 			, Texture const & ssaoResult
@@ -132,6 +133,7 @@ namespace castor3d
 		GpInfoUbo const & m_gpInfoUbo;
 		HdrConfigUbo const & m_hdrConfigUbo;
 		SsaoConfig const & m_ssao;
+		Texture const & m_depthObj;
 		OpaquePassResult const & m_opaquePassResult;
 		Texture const & m_ssaoResult;
 		Texture const & m_subsurfaceScattering;

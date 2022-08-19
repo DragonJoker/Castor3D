@@ -20,7 +20,6 @@ namespace castor3d
 		static std::array< castor::String, size_t( DsTexture::eCount ) > Values
 		{
 			{
-				cuT( "Data0" ),
 				cuT( "Data1" ),
 				cuT( "Data2" ),
 				cuT( "Data3" ),
@@ -36,7 +35,6 @@ namespace castor3d
 		static std::array< VkFormat, size_t( DsTexture::eCount ) > Values
 		{
 			{
-				VK_FORMAT_R32G32B32A32_SFLOAT,
 				VK_FORMAT_R16G16B16A16_SFLOAT,
 				VK_FORMAT_R16G16B16A16_SFLOAT,
 				VK_FORMAT_R8G8B8A8_UNORM,
@@ -48,11 +46,9 @@ namespace castor3d
 
 	VkClearValue getClearValue( DsTexture texture )
 	{
-		static float constexpr component = std::numeric_limits< float >::max();
 		static std::array< VkClearValue, size_t( DsTexture::eCount ) > Values
 		{
 			{
-				makeClearValue( 1.0f, component, 0.0f, 0.0f ),
 				transparentBlackClearColor,
 				transparentBlackClearColor,
 				transparentBlackClearColor,
@@ -71,7 +67,6 @@ namespace castor3d
 				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_STORAGE_BIT,
 				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_STORAGE_BIT,
 				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_STORAGE_BIT,
-				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_STORAGE_BIT,
 			}
 		};
 		return Values[size_t( texture )];
@@ -82,7 +77,6 @@ namespace castor3d
 		static std::array< VkBorderColor, size_t( DsTexture::eCount ) > Values
 		{
 			{
-				VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,
 				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
 				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
 				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
@@ -96,14 +90,13 @@ namespace castor3d
 
 	OpaquePassResult::OpaquePassResult( crg::ResourceHandler & handler
 		, RenderDevice const & device
-		, TexturePtr depthTexture
 		, TexturePtr data1Texture )
 		: GBufferT< DsTexture >{ handler
 			, device
 			, cuT( "GPResult" )
-			, { depthTexture, data1Texture, nullptr, nullptr, nullptr }
+			, { data1Texture, nullptr, nullptr, nullptr }
 			, 0u
-			, makeSize( getExtent( depthTexture->imageId ) ) }
+			, makeSize( getExtent( data1Texture->imageId ) ) }
 	{
 	}
 

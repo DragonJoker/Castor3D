@@ -54,7 +54,7 @@ namespace draw_edges
 
 			castor3d::shader::Materials materials{ writer, DepthNormalEdgeDetection::eMaterials, 0u };
 			C3D_ModelsData( writer, DepthNormalEdgeDetection::eModels, 0u );
-			auto data0( writer.declCombinedImg< FImg2DRgba32 >( "data0", DepthNormalEdgeDetection::eData0, 0u ) );
+			auto depthObj( writer.declCombinedImg< FImg2DRgba32 >( "depthObj", DepthNormalEdgeDetection::eDepthObj, 0u ) );
 			auto data1( writer.declCombinedImg< FImg2DRgba32 >( "data1", DepthNormalEdgeDetection::eData1, 0u ) );
 			auto depthRangeBuffer( writer.declStorageBuffer( "DepthRangeBuffer", DepthNormalEdgeDetection::eDepthRange, 0u ) );
 			auto minmax = depthRangeBuffer.declMember< sdw::Int >( "minmax", 2u );
@@ -113,15 +113,15 @@ namespace draw_edges
 					auto Dgrad = writer.declLocale( "Dgrad", 0.0_f );
 					auto zNear = writer.declLocale( "zNear", depthRange.x() );
 					auto zFar = writer.declLocale( "zFar", depthRange.y() );
-					auto Ad = writer.declLocale( "Ad", Fdepth( data0.fetch( texCoord + ivec2(   -w,   +h ), 0_i ).y(), zNear, zFar ) );  //  +---+---+---+
-					auto Bd = writer.declLocale( "Bd", Fdepth( data0.fetch( texCoord + ivec2( +0_i,   +h ), 0_i ).y(), zNear, zFar ) );  //  | A | B | C |
-					auto Cd = writer.declLocale( "Cd", Fdepth( data0.fetch( texCoord + ivec2(   +w,   +h ), 0_i ).y(), zNear, zFar ) );  //  +---+---+---+
-					auto Dd = writer.declLocale( "Dd", Fdepth( data0.fetch( texCoord + ivec2(   -w, +0_i ), 0_i ).y(), zNear, zFar ) );  //  | D | X | E |
+					auto Ad = writer.declLocale( "Ad", Fdepth( depthObj.fetch( texCoord + ivec2(   -w,   +h ), 0_i ).y(), zNear, zFar ) );  //  +---+---+---+
+					auto Bd = writer.declLocale( "Bd", Fdepth( depthObj.fetch( texCoord + ivec2( +0_i,   +h ), 0_i ).y(), zNear, zFar ) );  //  | A | B | C |
+					auto Cd = writer.declLocale( "Cd", Fdepth( depthObj.fetch( texCoord + ivec2(   +w,   +h ), 0_i ).y(), zNear, zFar ) );  //  +---+---+---+
+					auto Dd = writer.declLocale( "Dd", Fdepth( depthObj.fetch( texCoord + ivec2(   -w, +0_i ), 0_i ).y(), zNear, zFar ) );  //  | D | X | E |
 					auto Xd = writer.declLocale( "Xd", Fdepth( X.y(), zNear, zFar ) );                             //  +---+---+---+
-					auto Ed = writer.declLocale( "Ed", Fdepth( data0.fetch( texCoord + ivec2(   +w, +0_i ), 0_i ).y(), zNear, zFar ) );  //  | F | G | H |
-					auto Fd = writer.declLocale( "Fd", Fdepth( data0.fetch( texCoord + ivec2(   -w,   -h ), 0_i ).y(), zNear, zFar ) );  //  +---+---+---+
-					auto Gd = writer.declLocale( "Gd", Fdepth( data0.fetch( texCoord + ivec2( +0_i,   -h ), 0_i ).y(), zNear, zFar ) );
-					auto Hd = writer.declLocale( "Hd", Fdepth( data0.fetch( texCoord + ivec2(   +w,   -h ), 0_i ).y(), zNear, zFar ) );
+					auto Ed = writer.declLocale( "Ed", Fdepth( depthObj.fetch( texCoord + ivec2(   +w, +0_i ), 0_i ).y(), zNear, zFar ) );  //  | F | G | H |
+					auto Fd = writer.declLocale( "Fd", Fdepth( depthObj.fetch( texCoord + ivec2(   -w,   -h ), 0_i ).y(), zNear, zFar ) );  //  +---+---+---+
+					auto Gd = writer.declLocale( "Gd", Fdepth( depthObj.fetch( texCoord + ivec2( +0_i,   -h ), 0_i ).y(), zNear, zFar ) );
+					auto Hd = writer.declLocale( "Hd", Fdepth( depthObj.fetch( texCoord + ivec2(   +w,   -h ), 0_i ).y(), zNear, zFar ) );
 
 					g = ( abs( Ad + 2.0f * Bd + Cd - Fd - 2.0f * Gd - Hd ) + abs( Cd + 2.0f * Ed + Hd - Ad - 2.0f * Dd - Fd ) ) / 8.0f;
 					auto l = writer.declLocale( "l"
@@ -149,7 +149,7 @@ namespace draw_edges
 						, ivec2( vec2( size ) * vtx_texture ) );
 
 					auto X = writer.declLocale( "X"
-						, data0.fetch( texelCoord, 0_i ) );
+						, depthObj.fetch( texelCoord, 0_i ) );
 					auto nodeId = writer.declLocale( "nodeId"
 						, writer.cast< sdw::UInt >( X.z() ) );
 
@@ -195,7 +195,7 @@ namespace draw_edges
 		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
 		, castor3d::PassBuffer const & passBuffer
-		, crg::ImageViewId const & data0
+		, crg::ImageViewId const & depthObj
 		, crg::ImageViewId const & data1
 		, ashes::Buffer< int32_t > const & depthRange
 		, bool const * enabled )
@@ -247,7 +247,7 @@ namespace draw_edges
 			, uint32_t( eModels )
 			, 0u
 			, uint32_t( modelBuffer.getSize() ) );
-		m_pass.addSampledView( data0, eData0 );
+		m_pass.addSampledView( depthObj, eDepthObj );
 		m_pass.addSampledView( data1, eData1 );
 		m_pass.addInputStorageBuffer( { depthRange.getBuffer(), "DepthRange" }, eDepthRange, 0u, depthRange.getBuffer().getSize() );
 		m_pass.addOutputColourView( m_result.targetViewId

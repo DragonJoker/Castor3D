@@ -139,7 +139,7 @@ namespace castor3d
 		pcb.end();
 
 		// Outputs
-		auto data0 = writer.declOutput< Vec4 >( "data0", 0u );
+		auto depthObj = writer.declOutput< Vec4 >( "depthObj", 0u );
 		auto data1 = writer.declOutput< Vec4 >( "data1", 1u );
 		auto velocity = writer.declOutput< Vec2 >( "velocity", 2u );
 
@@ -182,7 +182,7 @@ namespace castor3d
 					, modelData.getMaterialId()
 					, in.passMultipliers
 					, components );
-				data0 = vec4( in.fragCoord.z()
+				depthObj = vec4( in.fragCoord.z()
 					, length( in.worldPosition.xyz() - c3d_sceneData.cameraPosition )
 					, writer.cast< sdw::Float >( in.nodeId )
 					, 0.0_f );

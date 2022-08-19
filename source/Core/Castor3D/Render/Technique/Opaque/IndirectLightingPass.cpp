@@ -86,7 +86,7 @@ namespace castor3d
 				, {}
 				, nullptr
 				, true );
-			auto c3d_mapData0 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData0 ), uint32_t( IndirectLightingPass::eData0 ), 0u );
+			auto c3d_mapDepthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepthObj", uint32_t( IndirectLightingPass::eDepthObj ), 0u );
 			auto c3d_mapData1 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), uint32_t( IndirectLightingPass::eData1 ), 0u );
 			auto c3d_mapData2 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), uint32_t( IndirectLightingPass::eData2 ), 0u );
 			auto c3d_mapData3 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), uint32_t( IndirectLightingPass::eData3 ), 0u );
@@ -98,10 +98,10 @@ namespace castor3d
 					auto texCoord = writer.declLocale( "texCoord"
 						, c3d_gpInfoData.calcTexCoord( utils
 							, in.fragCoord.xy() ) );
-					auto data0 = writer.declLocale( "data0"
-						, c3d_mapData0.lod( texCoord, 0.0_f ) );
+					auto depthObj = writer.declLocale( "depthObj"
+						, c3d_mapDepthObj.lod( texCoord, 0.0_f ) );
 					auto nodeId = writer.declLocale( "nodeId"
-						, writer.cast< sdw::UInt >( data0.z() ) );
+						, writer.cast< sdw::UInt >( depthObj.z() ) );
 
 					IF( writer, nodeId == 0u )
 					{
@@ -129,7 +129,7 @@ namespace castor3d
 						auto eye = writer.declLocale( "eye"
 							, c3d_sceneData.cameraPosition );
 						auto depth = writer.declLocale( "depth"
-							, data0.x() );
+							, depthObj.x() );
 						auto vsPosition = writer.declLocale( "vsPosition"
 							, c3d_gpInfoData.projToView( utils, texCoord, depth ) );
 						auto wsPosition = writer.declLocale( "wsPosition"
@@ -270,6 +270,7 @@ namespace castor3d
 		, crg::FramePassGroup & graph
 		, crg::FramePass const *& previousPass
 		, Texture const & brdf
+		, Texture const & depthObj
 		, OpaquePassResult const & gpResult
 		, LightPassResult const & lpResult
 		, LightVolumePassResult const & lpvResult
@@ -284,6 +285,7 @@ namespace castor3d
 		: m_device{ device }
 		, m_scene{ scene }
 		, m_brdf{ brdf }
+		, m_depthObj{ depthObj }
 		, m_gpResult{ gpResult }
 		, m_lpResult{ lpResult }
 		, m_lpvResult{ lpvResult }
@@ -377,8 +379,8 @@ namespace castor3d
 
 		m_vctConfigUbo.createPassBinding( pass
 			, uint32_t( IndirectLightingPass::eVoxelData ) );
-		pass.addSampledView( m_gpResult[DsTexture::eData0].sampledViewId
-			, uint32_t( IndirectLightingPass::eData0 ) );
+		pass.addSampledView( m_depthObj.sampledViewId
+			, uint32_t( IndirectLightingPass::eDepthObj ) );
 		pass.addSampledView( m_gpResult[DsTexture::eData1].sampledViewId
 			, uint32_t( IndirectLightingPass::eData1 ) );
 		pass.addSampledView( m_gpResult[DsTexture::eData2].sampledViewId

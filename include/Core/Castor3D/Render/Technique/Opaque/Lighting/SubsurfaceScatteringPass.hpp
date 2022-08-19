@@ -53,6 +53,7 @@ namespace castor3d
 			, Scene const & scene
 			, GpInfoUbo const & gpInfoUbo
 			, SceneUbo const & sceneUbo
+			, Texture const & depthObj
 			, OpaquePassResult const & gpResult
 			, LightPassResult const & lpResult );
 		C3D_API ~SubsurfaceScatteringPass();

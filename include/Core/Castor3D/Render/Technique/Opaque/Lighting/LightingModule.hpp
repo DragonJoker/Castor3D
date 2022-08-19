@@ -38,7 +38,7 @@ namespace castor3d
 		eModels,
 		eGpInfo,
 		eScene,
-		eData0,
+		eDepthObj,
 		eData1,
 		eData2,
 		eData3,

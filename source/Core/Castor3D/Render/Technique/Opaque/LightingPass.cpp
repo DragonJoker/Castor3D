@@ -31,6 +31,7 @@ namespace castor3d
 		, ProgressBar * progress
 		, Scene & scene
 		, Texture const & depth
+		, Texture const & depthObj
 		, OpaquePassResult const & gpResult
 		, ShadowMapResult const & smDirectionalResult
 		, ShadowMapResult const & smPointResult
@@ -41,6 +42,7 @@ namespace castor3d
 		, GpInfoUbo const & gpInfoUbo )
 		: m_device{ device }
 		, m_depth{ depth }
+		, m_depthObj{ depthObj }
 		, m_gpResult{ gpResult }
 		, m_smDirectionalResult{ smDirectionalResult }
 		, m_smPointResult{ smPointResult }
@@ -201,8 +203,8 @@ namespace castor3d
 			, uint32_t( LightPassIdx::eGpInfo ) );
 		m_sceneUbo.createPassBinding( pass
 			, uint32_t( LightPassIdx::eScene ) );
-		pass.addSampledView( m_gpResult[DsTexture::eData0].sampledViewId
-			, uint32_t( LightPassIdx::eData0 ) );
+		pass.addSampledView( m_depthObj.sampledViewId
+			, uint32_t( LightPassIdx::eDepthObj ) );
 		pass.addSampledView( m_gpResult[DsTexture::eData1].sampledViewId
 			, uint32_t( LightPassIdx::eData1 ) );
 		pass.addSampledView( m_gpResult[DsTexture::eData2].sampledViewId
