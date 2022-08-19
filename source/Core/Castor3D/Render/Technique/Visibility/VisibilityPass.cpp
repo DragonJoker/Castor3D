@@ -79,7 +79,8 @@ namespace castor3d
 
 	ShaderFlags VisibilityPass::getShaderFlags()const
 	{
-		return ShaderFlag::eTangentSpace
+		return ShaderFlag::eWorldSpace
+			| ShaderFlag::eTangentSpace
 			| ShaderFlag::eVelocity;
 	}
 
@@ -123,7 +124,7 @@ namespace castor3d
 	{
 		return RenderNodesPass::createBlendState( BlendMode::eNoBlend
 			, BlendMode::eNoBlend
-			, 2u );
+			, 3u );
 	}
 
 	ShaderPtr VisibilityPass::doGetPixelShaderSource( PipelineFlags const & flags )const
@@ -162,8 +163,9 @@ namespace castor3d
 		auto constexpr maxPipelinesSize = uint32_t( castor::getBitSize( MaxPipelines ) );
 
 		// Outputs
-		auto data = writer.declOutput< UVec2 >( "data", 0u );
-		auto velocity = writer.declOutput< Vec2 >( "velocity", 1u );
+		auto depthObj = writer.declOutput< Vec4 >( "depthObj", 0u );
+		auto data = writer.declOutput< UVec2 >( "data", 1u );
+		auto velocity = writer.declOutput< Vec2 >( "velocity", 2u );
 
 		shader::Utils utils{ writer };
 
@@ -205,6 +207,10 @@ namespace castor3d
 					, modelData.getMaterialId()
 					, in.passMultipliers
 					, components );
+				depthObj = vec4( in.fragCoord.z()
+					, length( in.worldPosition.xyz() - c3d_sceneData.cameraPosition )
+					, writer.cast< sdw::Float >( in.nodeId )
+					, 0.0_f );
 				data = uvec2( ( in.nodeId << maxPipelinesSize ) | ( pipelineID )
 					, ( checkFlag( flags.programFlags, ProgramFlag::eBillboards )
 						? in.vertexId * 2_u + writer.cast< sdw::UInt >( in.primitiveID )

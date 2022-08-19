@@ -29,7 +29,7 @@ namespace castor3d
 			eLpvGridConfig,
 			eLayeredLpvGridConfig,
 			eVoxelData,
-			eData0,
+			eDepthObj,
 			eData1,
 			eData2,
 			eData3,
@@ -95,6 +95,7 @@ namespace castor3d
 			, crg::FramePassGroup & graph
 			, crg::FramePass const *& previousPass
 			, Texture const & brdf
+			, Texture const & depthObj
 			, OpaquePassResult const & gpResult
 			, LightPassResult const & lpResult
 			, LightVolumePassResult const & lpvResult
@@ -131,6 +132,7 @@ namespace castor3d
 		RenderDevice const & m_device;
 		Scene const & m_scene;
 		Texture const & m_brdf;
+		Texture const & m_depthObj;
 		OpaquePassResult const & m_gpResult;
 		LightPassResult const & m_lpResult;
 		LightVolumePassResult const & m_lpvResult;

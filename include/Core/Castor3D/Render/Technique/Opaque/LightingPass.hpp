@@ -56,6 +56,7 @@ namespace castor3d
 			, ProgressBar * progress
 			, Scene & scene
 			, Texture const & depth
+			, Texture const & depthObj
 			, OpaquePassResult const & gpResult
 			, ShadowMapResult const & smDirectionalResult
 			, ShadowMapResult const & smPointResult
@@ -107,6 +108,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		Texture const & m_depth;
+		Texture const & m_depthObj;
 		OpaquePassResult const & m_gpResult;
 		ShadowMapResult const & m_smDirectionalResult;
 		ShadowMapResult const & m_smPointResult;

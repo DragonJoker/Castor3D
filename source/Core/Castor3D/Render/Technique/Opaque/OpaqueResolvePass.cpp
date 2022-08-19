@@ -116,7 +116,7 @@ namespace castor3d
 			eScene,
 			eGpInfo,
 			eHdrConfig,
-			eData0,
+			eDepthObj,
 			eData1,
 			eData2,
 			eData3,
@@ -151,7 +151,7 @@ namespace castor3d
 			C3D_GpInfo( writer, ResolveBind::eGpInfo, 0u );
 			C3D_HdrConfig( writer, ResolveBind::eHdrConfig, 0u );
 
-			auto c3d_mapData0 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData0 ), uint32_t( ResolveBind::eData0 ), 0u );
+			auto c3d_mapDepthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepthObj", uint32_t( ResolveBind::eDepthObj ), 0u );
 			auto c3d_mapData1 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), uint32_t( ResolveBind::eData1 ), 0u );
 			auto c3d_mapData2 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), uint32_t( ResolveBind::eData2 ), 0u );
 			auto c3d_mapData3 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), uint32_t( ResolveBind::eData3 ), 0u );
@@ -191,10 +191,10 @@ namespace castor3d
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
 				{
-					auto data0 = writer.declLocale( "data0"
-						, c3d_mapData0.lod( vtx_texture, 0.0_f ) );
+					auto depthObj = writer.declLocale( "depthObj"
+						, c3d_mapDepthObj.lod( vtx_texture, 0.0_f ) );
 					auto nodeId = writer.declLocale( "nodeId"
-						, writer.cast< UInt >( data0.z() ) );
+						, writer.cast< UInt >( depthObj.z() ) );
 
 					IF( writer, nodeId == 0u )
 					{
@@ -215,7 +215,7 @@ namespace castor3d
 					auto envMapIndex = writer.declLocale( "envMapIndex"
 						, modelData.getEnvMapIndex() );
 					auto depth = writer.declLocale( "depth"
-						, data0.x() );
+						, depthObj.x() );
 					auto albedo = writer.declLocale( "albedo"
 						, data2.rgb() );
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
@@ -333,6 +333,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, Scene & scene
+		, Texture const & depthObj
 		, OpaquePassResult const & gp
 		, SsaoConfig const & ssao
 		, Texture const & ssaoResult
@@ -354,6 +355,7 @@ namespace castor3d
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_hdrConfigUbo{ hdrConfigUbo }
 		, m_ssao{ ssao }
+		, m_depthObj{ depthObj }
 		, m_opaquePassResult{ gp }
 		, m_ssaoResult{ ssaoResult }
 		, m_subsurfaceScattering{ subsurfaceScattering }
@@ -430,8 +432,8 @@ namespace castor3d
 		m_hdrConfigUbo.createPassBinding( pass
 			, uint32_t( dropqrslv::ResolveBind::eHdrConfig ) );
 
-		pass.addSampledView( m_opaquePassResult[DsTexture::eData0].sampledViewId
-			, uint32_t( dropqrslv::ResolveBind::eData0 ) );
+		pass.addSampledView( m_depthObj.sampledViewId
+			, uint32_t( dropqrslv::ResolveBind::eDepthObj ) );
 		pass.addSampledView( m_opaquePassResult[DsTexture::eData1].sampledViewId
 			, uint32_t( dropqrslv::ResolveBind::eData1 ) );
 		pass.addSampledView( m_opaquePassResult[DsTexture::eData2].sampledViewId

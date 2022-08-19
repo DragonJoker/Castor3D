@@ -32,7 +32,7 @@ namespace draw_edges
 		{
 			eMaterials,
 			eModels,
-			eData0,
+			eDepthObj,
 		};
 
 		static std::unique_ptr< ast::Shader > getVertexShader( VkExtent3D const & size )
@@ -67,7 +67,7 @@ namespace draw_edges
 
 			castor3d::shader::Materials materials{ writer, eMaterials, 0u };
 			C3D_ModelsData( writer, eModels, 0u );
-			auto c3d_data0 = writer.declCombinedImg< FImg2DRgba32 >( "c3d_data0", eData0, 0u );
+			auto c3d_depthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_depthObj", eDepthObj, 0u );
 
 			// Shader outputs
 			auto fragColour = writer.declOutput< Float >( "pxl_fragColour", 0u );
@@ -80,14 +80,14 @@ namespace draw_edges
 					auto w = 1_i;
 					auto h = 1_i;
 
-					auto A = writer.declLocale( "A", writer.cast< sdw::Int >( c3d_data0.fetch( texelCoord + ivec2(   -w,   +h ), 0_i ).z() ) );  //  +---+---+---+
-					auto B = writer.declLocale( "B", writer.cast< sdw::Int >( c3d_data0.fetch( texelCoord + ivec2( +0_i,   +h ), 0_i ).z() ) );  //  | A | B | C |
-					auto C = writer.declLocale( "C", writer.cast< sdw::Int >( c3d_data0.fetch( texelCoord + ivec2(   +w,   +h ), 0_i ).z() ) );  //  +---+---+---+
-					auto D = writer.declLocale( "D", writer.cast< sdw::Int >( c3d_data0.fetch( texelCoord + ivec2(   -w, +0_i ), 0_i ).z() ) );  //  | D | X | E |
-					auto E = writer.declLocale( "E", writer.cast< sdw::Int >( c3d_data0.fetch( texelCoord + ivec2(   +w, +0_i ), 0_i ).z() ) );  //  +---+---+---+
-					auto F = writer.declLocale( "F", writer.cast< sdw::Int >( c3d_data0.fetch( texelCoord + ivec2(   -w,   -h ), 0_i ).z() ) );  //  | F | G | H |
-					auto G = writer.declLocale( "G", writer.cast< sdw::Int >( c3d_data0.fetch( texelCoord + ivec2( +0_i,   -h ), 0_i ).z() ) );  //  +---+---+---+
-					auto H = writer.declLocale( "H", writer.cast< sdw::Int >( c3d_data0.fetch( texelCoord + ivec2(   +w,   -h ), 0_i ).z() ) );
+					auto A = writer.declLocale( "A", writer.cast< sdw::Int >( c3d_depthObj.fetch( texelCoord + ivec2(   -w,   +h ), 0_i ).z() ) );  //  +---+---+---+
+					auto B = writer.declLocale( "B", writer.cast< sdw::Int >( c3d_depthObj.fetch( texelCoord + ivec2( +0_i,   +h ), 0_i ).z() ) );  //  | A | B | C |
+					auto C = writer.declLocale( "C", writer.cast< sdw::Int >( c3d_depthObj.fetch( texelCoord + ivec2(   +w,   +h ), 0_i ).z() ) );  //  +---+---+---+
+					auto D = writer.declLocale( "D", writer.cast< sdw::Int >( c3d_depthObj.fetch( texelCoord + ivec2(   -w, +0_i ), 0_i ).z() ) );  //  | D | X | E |
+					auto E = writer.declLocale( "E", writer.cast< sdw::Int >( c3d_depthObj.fetch( texelCoord + ivec2(   +w, +0_i ), 0_i ).z() ) );  //  +---+---+---+
+					auto F = writer.declLocale( "F", writer.cast< sdw::Int >( c3d_depthObj.fetch( texelCoord + ivec2(   -w,   -h ), 0_i ).z() ) );  //  | F | G | H |
+					auto G = writer.declLocale( "G", writer.cast< sdw::Int >( c3d_depthObj.fetch( texelCoord + ivec2( +0_i,   -h ), 0_i ).z() ) );  //  +---+---+---+
+					auto H = writer.declLocale( "H", writer.cast< sdw::Int >( c3d_depthObj.fetch( texelCoord + ivec2(   +w,   -h ), 0_i ).z() ) );
 
 					switch ( contourMethod )
 					{
@@ -139,7 +139,7 @@ namespace draw_edges
 					auto texelCoord = writer.declLocale( "texelCoord"
 						, ivec2( vec2( size ) * vtx_texture ) );
 					auto X = writer.declLocale( "X"
-						, c3d_data0.fetch( texelCoord, 0_i ) );
+						, c3d_depthObj.fetch( texelCoord, 0_i ) );
 					auto nodeId = writer.declLocale( "nodeId"
 						, writer.cast< sdw::UInt >( X.z() ) );
 
@@ -176,7 +176,7 @@ namespace draw_edges
 		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
 		, castor3d::PassBuffer const & passBuffer
-		, crg::ImageViewId const & data0
+		, crg::ImageViewId const & depthObj
 		, bool const * enabled )
 		: m_device{ device }
 		, m_graph{ graph }
@@ -221,7 +221,7 @@ namespace draw_edges
 			, uint32_t( oied::eModels )
 			, 0u
 			, uint32_t( modelBuffer.getSize() ) );
-		m_pass.addSampledView( data0, oied::eData0 );
+		m_pass.addSampledView( depthObj, oied::eDepthObj );
 		m_pass.addOutputColourView( m_result.targetViewId
 			, castor3d::transparentBlackClearColor );
 	}

@@ -26,7 +26,7 @@ namespace draw_edges
 		{
 			eMaterials,
 			eModels,
-			eData0,
+			eDepthObj,
 			eData1,
 			eSource,
 			eEdgeDN,
@@ -63,7 +63,7 @@ namespace draw_edges
 			// Shader inputs
 			castor3d::shader::Materials materials{ writer, eMaterials, 0u };
 			C3D_ModelsData( writer, eModels, 0u );
-			auto c3d_data0 = writer.declCombinedImg< FImg2DRgba32 >( "c3d_data0", eData0, 0u );
+			auto c3d_depthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_depthObj", eDepthObj, 0u );
 			auto c3d_source = writer.declCombinedImg< FImg2DRgba32 >( "c3d_source", eSource, 0u );
 			auto c3d_edgeDN = writer.declCombinedImg< FImg2DR32 >( "c3d_edgeDN", eEdgeDN, 0u );
 			auto c3d_edgeO = writer.declCombinedImg< FImg2DR32 >( "c3d_edgeO", eEdgeO, 0u );
@@ -120,10 +120,10 @@ namespace draw_edges
 					auto texelCoord = writer.declLocale( "texelCoord"
 						, ivec2( vec2( size ) * vtx_texture ) );
 
-					auto data0 = writer.declLocale( "data0"
-						, c3d_data0.fetch( texelCoord, 0_i ) );
+					auto depthObj = writer.declLocale( "depthObj"
+						, c3d_depthObj.fetch( texelCoord, 0_i ) );
 					auto nodeId = writer.declLocale( "nodeId"
-						, writer.cast< sdw::UInt >( data0.z() ) );
+						, writer.cast< sdw::UInt >( depthObj.z() ) );
 
 					IF( writer, nodeId != 0_u )
 					{
@@ -242,7 +242,7 @@ namespace draw_edges
 		auto & engine = *device.renderSystem.getEngine();
 		auto & technique = m_renderTarget.getTechnique();
 		auto & passBuffer = engine.getMaterialCache().getPassBuffer();
-		auto & data0 = technique.getDepthObjImgView();
+		auto & depthObj = technique.getDepthObjImgView();
 		auto & data1 = technique.getNormalImgView();
 		auto & depthRange = technique.getDepthRange();
 		auto previous = &previousPass;
@@ -252,7 +252,7 @@ namespace draw_edges
 			, m_renderTarget
 			, device
 			, passBuffer
-			, data0
+			, depthObj
 			, data1
 			, depthRange
 			, &isEnabled() );
@@ -261,7 +261,7 @@ namespace draw_edges
 			, m_renderTarget
 			, device
 			, passBuffer
-			, data0
+			, depthObj
 			, &isEnabled() );
 		previous = &m_objectID->getPass();
 
@@ -311,7 +311,7 @@ namespace draw_edges
 			, uint32_t( px::eModels )
 			, 0u
 			, uint32_t( modelBuffer.getSize() ) );
-		pass.addSampledView( data0, px::eData0 );
+		pass.addSampledView( depthObj, px::eDepthObj );
 		pass.addSampledView( data1, px::eData1 );
 		pass.addSampledView( *m_target, px::eSource );
 		pass.addSampledView( m_depthNormal->getResult(), px::eEdgeDN );

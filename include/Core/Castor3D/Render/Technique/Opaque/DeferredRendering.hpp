@@ -84,6 +84,7 @@ namespace castor3d
 			, ProgressBar * progress
 			, Texture const & brdf
 			, Texture const & depth
+			, Texture const & depthObj
 			, OpaquePassResult const & opaquePassResult
 			, Texture const & resultTexture
 			, ShadowMapResult const & smDirectionalResult

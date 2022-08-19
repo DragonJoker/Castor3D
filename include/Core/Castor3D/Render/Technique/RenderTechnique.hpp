@@ -232,6 +232,11 @@ namespace castor3d
 			return m_depth->targetViewId;
 		}
 
+		Texture const & getDepthObj()const
+		{
+			return *m_depthObj;
+		}
+
 		crg::ImageViewId const & getDepthObjImgView()const
 		{
 			return m_depthObj->sampledViewId;
