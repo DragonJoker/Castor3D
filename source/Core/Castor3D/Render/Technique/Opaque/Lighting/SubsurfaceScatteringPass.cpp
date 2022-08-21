@@ -351,7 +351,7 @@ namespace castor3d
 	castor::String const SubsurfaceScatteringPass::Offsets = "c3d_offsets";
 
 	SubsurfaceScatteringPass::SubsurfaceScatteringPass( crg::FramePassGroup & graph
-		, crg::FramePass const *& previousPass
+		, crg::FramePass const & previousPass
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, Scene const & scene
@@ -389,6 +389,7 @@ namespace castor3d
 		, m_combinePixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SSSCombine", sssss::getCombineProgram() }
 		, m_combineShader{ makeShaderState( m_device, m_combineVertexShader )
 			, makeShaderState( m_device, m_combinePixelShader ) }
+		, m_lastPass{ &previousPass }
 	{
 		auto & configuration = m_blurCfgUbo.getData();
 		configuration.blurCorrection = 1.0f;
@@ -421,8 +422,8 @@ namespace castor3d
 						, result->getTimer() );
 					return result;
 				} );
-			blurX.addDependency( *previousPass );
-			previousPass = &blurX;
+			blurX.addDependency( *m_lastPass );
+			m_lastPass = &blurX;
 			getEngine()->getMaterialCache().getPassBuffer().createPassBinding( blurX
 				, sssss::BlurMaterialsUboId );
 			getEngine()->getMaterialCache().getSssProfileBuffer().createPassBinding( blurX
@@ -460,8 +461,8 @@ namespace castor3d
 						, result->getTimer() );
 					return result;
 				} );
-			blurY.addDependency( *previousPass );
-			previousPass = &blurY;
+			blurY.addDependency( *m_lastPass );
+			m_lastPass = &blurY;
 			getEngine()->getMaterialCache().getPassBuffer().createPassBinding( blurY
 				, sssss::BlurMaterialsUboId );
 			getEngine()->getMaterialCache().getSssProfileBuffer().createPassBinding( blurY
@@ -511,8 +512,8 @@ namespace castor3d
 					, result->getTimer() );
 				return result;
 			} );
-		pass.addDependency( *previousPass );
-		previousPass = &pass;
+		pass.addDependency( *m_lastPass );
+		m_lastPass = &pass;
 		getEngine()->getMaterialCache().getPassBuffer().createPassBinding( pass
 			, sssss::CombMaterialsUboId );
 		pass.addInputStorageBuffer( { modelBuffer, "Models" }
