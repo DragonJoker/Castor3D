@@ -26,7 +26,7 @@ CU_ImplementCUSmartPtr( castor3d, DeferredRendering )
 namespace castor3d
 {
 	DeferredRendering::DeferredRendering( crg::FramePassGroup & graph
-		, crg::FramePass const & opaquePass
+		, crg::FramePassArray const & previousPasses
 		, crg::FramePass const & ssaoPass
 		, RenderDevice const & device
 		, ProgressBar * progress
@@ -53,13 +53,12 @@ namespace castor3d
 		, VoxelizerUbo const & vctConfigUbo
 		, SsaoConfig & ssaoConfig )
 		: m_device{ device }
-		, m_lastPass{ &opaquePass }
 		, m_opaquePassResult{ opaquePassResult }
 		, m_lightingGpInfoUbo{ device }
 		, m_size{ size }
 		, m_lightPassResult{ scene.getOwner()->getGraphResourceHandler(), device, m_size }
 		, m_lightingPass{ castor::makeUnique< LightingPass >( graph
-			, m_lastPass
+			, previousPasses
 			, m_device
 			, progress
 			, scene
@@ -77,7 +76,7 @@ namespace castor3d
 			, progress
 			, scene
 			, graph
-			, m_lastPass
+			, m_lightingPass->getLastPass()
 			, brdf
 			, depthObj
 			, m_opaquePassResult
@@ -92,7 +91,7 @@ namespace castor3d
 			, llpvConfigUbo
 			, vctConfigUbo ) }
 		, m_subsurfaceScattering{ castor::makeUnique< SubsurfaceScatteringPass >( graph
-			, m_lastPass
+			, m_lightingPass->getLastPass()
 			, m_device
 			, progress
 			, scene
@@ -102,7 +101,7 @@ namespace castor3d
 			, m_opaquePassResult
 			, m_lightPassResult ) }
 		, m_resolve{ castor::makeUnique< OpaqueResolvePass >( graph
-			, crg::FramePassArray{ m_lastPass, &ssaoPass }
+			, crg::FramePassArray{ &m_indirectLightingPass->getLastPass(), &m_subsurfaceScattering->getLastPass(), &ssaoPass }
 			, m_device
 			, progress
 			, scene

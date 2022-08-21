@@ -268,7 +268,7 @@ namespace castor3d
 		, ProgressBar * progress
 		, Scene const & scene
 		, crg::FramePassGroup & graph
-		, crg::FramePass const *& previousPass
+		, crg::FramePass const & previousPass
 		, Texture const & brdf
 		, Texture const & depthObj
 		, OpaquePassResult const & gpResult
@@ -300,7 +300,7 @@ namespace castor3d
 		, m_group{ graph.createPassGroup( "IndirectLighting" ) }
 	{
 		m_programs.resize( size_t( IndirectLightingPass::ProgramType::eCount ) );
-		previousPass = &doCreateLightingPass( m_group, scene, *previousPass, progress );
+		m_lastPass = &doCreateLightingPass( m_group, scene, previousPass, progress );
 	}
 
 	void IndirectLightingPass::update( CpuUpdater & updater )

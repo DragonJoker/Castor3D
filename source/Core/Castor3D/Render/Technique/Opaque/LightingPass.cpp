@@ -26,7 +26,7 @@ CU_ImplementCUSmartPtr( castor3d, LightingPass )
 namespace castor3d
 {
 	LightingPass::LightingPass( crg::FramePassGroup & graph
-		, crg::FramePass const *& previousPass
+		, crg::FramePassArray const & previousPasses
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, Scene & scene
@@ -54,11 +54,11 @@ namespace castor3d
 		, m_group{ graph.createPassGroup( "DirectLighting" ) }
 		, m_size{ makeSize( lpResult[LpTexture::eDiffuse].getExtent() ) }
 	{
-		previousPass = &doCreateDepthBlitPass( m_group
-			, *previousPass
+		m_lastPass = &doCreateDepthBlitPass( m_group
+			, previousPasses
 			, progress );
-		previousPass = &doCreateLightingPass( m_group
-			, *previousPass
+		m_lastPass = &doCreateLightingPass( m_group
+			, *m_lastPass
 			, scene
 			, progress );
 	}
@@ -126,7 +126,7 @@ namespace castor3d
 	}
 
 	crg::FramePass const & LightingPass::doCreateDepthBlitPass( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
+		, crg::FramePassArray const & previousPasses
 		, ProgressBar * progress )
 	{
 		stepProgressBar( progress, "Creating depth blit pass" );
@@ -154,7 +154,7 @@ namespace castor3d
 					, result->getTimer() );
 				return result;
 			} );
-		pass.addDependency( previousPass );
+		pass.addDependencies( previousPasses );
 		pass.addTransferInputView( m_depth.wholeViewId );
 		pass.addTransferOutputView( m_lpResult[LpTexture::eDepth].wholeViewId );
 		return pass;

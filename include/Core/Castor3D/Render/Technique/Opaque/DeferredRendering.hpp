@@ -78,7 +78,7 @@ namespace castor3d
 		 *\param[in]	ssaoConfig			La configuration du SSAO.
 		 */
 		C3D_API DeferredRendering( crg::FramePassGroup & graph
-			, crg::FramePass const & opaquePass
+			, crg::FramePassArray const & previousPasses
 			, crg::FramePass const & ssaoPass
 			, RenderDevice const & device
 			, ProgressBar * progress

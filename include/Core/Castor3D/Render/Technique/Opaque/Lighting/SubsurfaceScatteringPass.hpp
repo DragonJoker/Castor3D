@@ -47,7 +47,7 @@ namespace castor3d
 		 *\param[in]	lpResult		Le résultat de la light pass.
 		 */
 		C3D_API SubsurfaceScatteringPass( crg::FramePassGroup & graph
-			, crg::FramePass const *& previousPass
+			, crg::FramePass const & previousPass
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, Scene const & scene
@@ -74,6 +74,11 @@ namespace castor3d
 		Texture const & getResult()const
 		{
 			return *m_result;
+		}
+
+		crg::FramePass const & getLastPass()const
+		{
+			return *m_lastPass;
 		}
 
 	public:
@@ -124,6 +129,7 @@ namespace castor3d
 		ShaderModule m_combineVertexShader;
 		ShaderModule m_combinePixelShader;
 		ashes::PipelineShaderStageCreateInfoArray m_combineShader;
+		crg::FramePass const * m_lastPass{};
 	};
 }
 

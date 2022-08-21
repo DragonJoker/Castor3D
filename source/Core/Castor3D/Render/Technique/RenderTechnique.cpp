@@ -577,7 +577,7 @@ namespace castor3d
 			, m_gpInfoUbo ) }
 #if C3D_UseDeferredRendering
 		, m_deferredRendering{ castor::makeUnique< DeferredRendering >( m_renderTarget.getGraph().createPassGroup( "Opaque" )
-			, *m_opaquePassDesc
+			, crg::FramePassArray{ m_opaquePassDesc, &m_backgroundRenderer->getPass() }
 			, m_ssao->getLastPass()
 			, m_device
 			, progress
@@ -1372,7 +1372,11 @@ namespace castor3d
 	{
 		auto previousPasses = doCreateRenderPasses( progress
 			, TechniquePassEvent::eBeforeOpaque
+#if C3D_UseDeferredRendering
+			, m_depthPassDesc );
+#else
 			, &m_backgroundRenderer->getPass() );
+#endif
 		stepProgressBar( progress, "Creating opaque pass" );
 		auto & graph = m_renderTarget.getGraph().createPassGroup( "Opaque" );
 #if C3D_UseDeferredRendering

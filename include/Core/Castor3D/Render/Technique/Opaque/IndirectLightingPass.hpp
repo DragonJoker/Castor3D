@@ -93,7 +93,7 @@ namespace castor3d
 			, ProgressBar * progress
 			, Scene const & scene
 			, crg::FramePassGroup & graph
-			, crg::FramePass const *& previousPass
+			, crg::FramePass const & previousPass
 			, Texture const & brdf
 			, Texture const & depthObj
 			, OpaquePassResult const & gpResult
@@ -120,6 +120,11 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		void accept( PipelineVisitorBase & visitor );
+
+		crg::FramePass const & getLastPass()const
+		{
+			return *m_lastPass;
+		}
 
 	private:
 		crg::FramePass const & doCreateLightingPass( crg::FramePassGroup & graph
@@ -148,6 +153,7 @@ namespace castor3d
 		std::vector< ProgramPtr > m_programs;
 		uint32_t m_programIndex{};
 		bool m_enabled{};
+		crg::FramePass const * m_lastPass{};
 	};
 }
 
