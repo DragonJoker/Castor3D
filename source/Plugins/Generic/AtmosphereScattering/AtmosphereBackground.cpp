@@ -691,7 +691,7 @@ namespace atmosphere_scattering
 			, 1u
 			, 1u
 			, VK_FORMAT_R32G32_SFLOAT
-			, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_STORAGE_BIT
+			, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 			, VK_FILTER_LINEAR
 			, VK_FILTER_LINEAR
 			, VK_SAMPLER_MIPMAP_MODE_NEAREST
@@ -826,19 +826,19 @@ namespace atmosphere_scattering
 				, index++ );
 			pass.addSampledView( m_transmittance.wholeViewId
 				, index++
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, VK_IMAGE_LAYOUT_UNDEFINED
 				, crg::SamplerDesc{ VK_FILTER_LINEAR
 					, VK_FILTER_LINEAR
 					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
 			pass.addSampledView( it->second->skyView.wholeViewId
 				, index++
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, VK_IMAGE_LAYOUT_UNDEFINED
 				, crg::SamplerDesc{ VK_FILTER_LINEAR
 					, VK_FILTER_LINEAR
 					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
 			pass.addSampledView( it->second->volume.wholeViewId
 				, index++
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, VK_IMAGE_LAYOUT_UNDEFINED
 				, crg::SamplerDesc{ VK_FILTER_LINEAR
 					, VK_FILTER_LINEAR
 					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );

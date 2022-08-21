@@ -31,8 +31,6 @@ See LICENSE file in root folder
 #include <RenderGraph/Attachment.hpp>
 #include <RenderGraph/FramePass.hpp>
 
-#define C3D_DebugSSAOGraph 0
-
 namespace castor3d
 {
 	class RenderTechnique
@@ -397,10 +395,6 @@ namespace castor3d
 	private:
 		RenderTarget & m_renderTarget;
 		RenderDevice const & m_device;
-#if C3D_DebugSSAOGraph
-		crg::FrameGraph m_ssaoGraph;
-		crg::RunnableGraphPtr m_ssaoRunnable;
-#endif
 		castor::Size m_targetSize;
 		castor::Size m_rawSize;
 		Texture m_colour;
@@ -430,7 +424,6 @@ namespace castor3d
 		DepthPass * m_depthPass{};
 		ashes::BufferPtr< int32_t > m_depthRange;
 		crg::FramePass * m_computeDepthRangeDesc{};
-		SsaoPassUPtr m_ssao;
 		VoxelizerUPtr m_voxelizer;
 		LightVolumePassResultUPtr m_lpvResult;
 		LightVolumePassResultArray m_llpvResult;
@@ -440,6 +433,7 @@ namespace castor3d
 		ShadowMapUPtr m_spotShadowMap;
 		crg::FramePass * m_opaquePassDesc{};
 		RenderTechniquePass * m_opaquePass{};
+		SsaoPassUPtr m_ssao;
 		DeferredRenderingUPtr m_deferredRendering;
 		TransparentPassResultUPtr m_transparentPassResult;
 		crg::FramePass * m_transparentPassDesc{};
