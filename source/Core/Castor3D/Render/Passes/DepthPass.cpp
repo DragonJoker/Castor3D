@@ -1,5 +1,6 @@
 #include "Castor3D/Render/Passes/DepthPass.hpp"
 
+#include "Castor3D/Config.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
@@ -61,7 +62,7 @@ namespace castor3d
 
 	TextureFlags DepthPass::getTexturesMask()const
 	{
-		return TextureFlags{ TextureFlag::eAll };
+		return TextureFlags{ TextureFlag::eGeometry };
 	}
 
 	PassFlags DepthPass::doAdjustPassFlags( PassFlags flags )const
@@ -96,7 +97,7 @@ namespace castor3d
 	{
 		return RenderNodesPass::createBlendState( BlendMode::eNoBlend
 			, BlendMode::eNoBlend
-			, 3u );
+			, C3D_UseDeferredRendering ? 2u : 3u );
 	}
 
 	ShaderPtr DepthPass::doGetGeometryShaderSource( PipelineFlags const & flags )const
@@ -140,8 +141,10 @@ namespace castor3d
 
 		// Outputs
 		auto depthObj = writer.declOutput< Vec4 >( "depthObj", 0u );
-		auto data1 = writer.declOutput< Vec4 >( "data1", 1u );
-		auto velocity = writer.declOutput< Vec2 >( "velocity", 2u );
+		auto velocity = writer.declOutput< Vec2 >( "velocity", 1u );
+#if !C3D_UseDeferredRendering
+		auto data1 = writer.declOutput< Vec4 >( "data1", 2u );
+#endif
 
 		shader::Utils utils{ writer };
 
@@ -186,8 +189,10 @@ namespace castor3d
 					, length( in.worldPosition.xyz() - c3d_sceneData.cameraPosition )
 					, writer.cast< sdw::Float >( in.nodeId )
 					, 0.0_f );
-				data1 = vec4( components.normal(), 0.0_f );
 				velocity = in.getVelocity();
+#if !C3D_UseDeferredRendering
+				data1 = vec4( components.normal(), 0.0_f );
+#endif
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

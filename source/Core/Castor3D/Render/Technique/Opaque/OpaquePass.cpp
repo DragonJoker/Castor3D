@@ -37,7 +37,6 @@ namespace castor3d
 		static castor::String const Output2 = "outData2";
 		static castor::String const Output3 = "outData3";
 		static castor::String const Output4 = "outData4";
-		static castor::String const Output5 = "outData5";
 	}
 
 	castor::String const OpaquePass::Type = "c3d.deferred.geometry";
@@ -84,8 +83,7 @@ namespace castor3d
 
 	ShaderFlags OpaquePass::getShaderFlags()const
 	{
-		return ShaderFlag::eTangentSpace
-			| ShaderFlag::eVelocity;
+		return ShaderFlag::eTangentSpace;
 	}
 
 	ProgramFlags OpaquePass::doAdjustProgramFlags( ProgramFlags flags )const
@@ -154,10 +152,10 @@ namespace castor3d
 
 		// Fragment Outputs
 		auto index = 0u;
+		auto outData1 = writer.declOutput< Vec4 >( dropqpass::Output1, index++ );
 		auto outData2 = writer.declOutput< Vec4 >( dropqpass::Output2, index++ );
 		auto outData3 = writer.declOutput< Vec4 >( dropqpass::Output3, index++ );
 		auto outData4 = writer.declOutput< Vec4 >( dropqpass::Output4, index++ );
-		auto outData5 = writer.declOutput< Vec4 >( dropqpass::Output5, index++ );
 
 		shader::Utils utils{ writer };
 		auto lightingModel = utils.createLightingModel( *renderSystem.getEngine()
@@ -208,9 +206,9 @@ namespace castor3d
 					, in.passMultipliers
 					, in.colour
 					, components );
+				outData1 = vec4( components.normal(), components.occlusion() );
 				lightMat->output( outData2, outData3 );
 				outData4 = vec4( components.emissive(), components.transmittance() );
-				outData5 = vec4( in.getVelocity(), 0.0_f, components.occlusion() );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

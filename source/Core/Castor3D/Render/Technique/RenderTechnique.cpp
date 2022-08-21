@@ -384,9 +384,6 @@ namespace castor3d
 		, castor::Named{ name }
 		, m_renderTarget{ renderTarget }
 		, m_device{ device }
-#if C3D_DebugSSAOGraph
-		, m_ssaoGraph{ getOwner()->getGraphResourceHandler(), "SSAO" }
-#endif
 		, m_targetSize{ m_renderTarget.getSize() }
 		, m_rawSize{ getSafeBandedSize( m_targetSize ) }
 		, m_colour{ m_device
@@ -534,21 +531,6 @@ namespace castor3d
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, getName() + "DepthRange" ) }
 		, m_computeDepthRangeDesc{ &doCreateComputeDepthRange( progress ) }
-#if C3D_DebugSSAOGraph
-		, m_ssao{ castor::makeUnique< SsaoPass >( m_ssaoGraph
-#else
-		, m_ssao{ castor::makeUnique< SsaoPass >( m_renderTarget.getGraph()
-#endif
-			, m_device
-			, progress
-			, ( m_visibilityResolveDesc 
-				? *m_visibilityResolveDesc 
-				: *m_depthPassDesc )
-			, makeSize( m_colour.getExtent() )
-			, getSsaoConfig()
-			, *m_depth
-			, *m_normal
-			, m_gpInfoUbo ) }
 		, m_voxelizer{ castor::makeUnique< Voxelizer >( getOwner()->getGraphResourceHandler()
 			, m_device
 			, progress
@@ -579,10 +561,21 @@ namespace castor3d
 			, *m_renderTarget.getScene()
 			, progress ) }
 #endif
-#if C3D_UseDeferredRendering
 		, m_opaquePassDesc{ ( m_visibilityResolveDesc
 			? m_visibilityResolveDesc 
 			: &doCreateOpaquePass( progress ) ) }
+		, m_ssao{ castor::makeUnique< SsaoPass >( m_renderTarget.getGraph()
+			, m_device
+			, progress
+			, ( C3D_UseDeferredRendering
+				? *m_opaquePassDesc
+				: *m_depthPassDesc )
+			, makeSize( m_colour.getExtent() )
+			, getSsaoConfig()
+			, *m_depth
+			, *m_normal
+			, m_gpInfoUbo ) }
+#if C3D_UseDeferredRendering
 		, m_deferredRendering{ castor::makeUnique< DeferredRendering >( m_renderTarget.getGraph().createPassGroup( "Opaque" )
 			, *m_opaquePassDesc
 			, m_ssao->getLastPass()
@@ -610,8 +603,6 @@ namespace castor3d
 			, m_llpvConfigUbo
 			, m_vctConfigUbo
 			, getSsaoConfig() ) }
-#else
-		, m_opaquePassDesc{ &doCreateOpaquePass( progress ) }
 #endif
 #if C3D_UseWeightedBlendedRendering
 		, m_transparentPassResult{ castor::makeUnique< TransparentPassResult >( getOwner()->getGraphResourceHandler()
@@ -635,11 +626,6 @@ namespace castor3d
 		, m_clearLpvRunnable{ m_clearLpvGraph.compile( m_device.makeContext() ) }
 	{
 		m_renderTarget.getGraph().addDependency( m_voxelizer->getGraph() );
-#if C3D_DebugSSAOGraph
-		m_renderTarget.getGraph().addDependency( m_ssaoGraph );
-		m_ssaoRunnable = m_ssaoGraph.compile( device.makeContext() );
-		m_ssaoRunnable->record();
-#endif
 		doCreateRenderPasses( progress
 			, TechniquePassEvent::eBeforePostEffects
 #if C3D_UseWeightedBlendedRendering
@@ -885,9 +871,6 @@ namespace castor3d
 		result = doRenderLPV( result, queue );
 		result = doRenderEnvironmentMaps( result, queue );
 		result = doRenderVCT( result, queue );
-#if C3D_DebugSSAOGraph
-		result= m_ssaoRunnable->run( result, queue );
-#endif
 		return result;
 	}
 
@@ -1288,8 +1271,10 @@ namespace castor3d
 			{
 				auto depthIt = framePass.images.begin();
 				auto depthObjIt = std::next( depthIt );
-				auto normalIt = std::next( depthObjIt );
-				auto velocityIt = std::next( normalIt );
+				auto velocityIt = std::next( depthObjIt );
+#if !C3D_UseDeferredRendering
+				auto normalIt = std::next( velocityIt );
+#endif
 				stepProgressBar( progress, "Initialising depth pass" );
 				auto res = std::make_unique< DepthPass >( this
 					, framePass
@@ -1302,7 +1287,9 @@ namespace castor3d
 						.meshShading( true )
 						.implicitAction( depthIt->view(), crg::RecordContext::clearAttachment( *depthIt ) )
 						.implicitAction( depthObjIt->view(), crg::RecordContext::clearAttachment( *depthObjIt ) )
-						.implicitAction( normalIt->view(), crg::RecordContext::clearAttachment( *normalIt ) )
+#if !C3D_UseDeferredRendering
+						.implicitAction( depthObjIt->view(), crg::RecordContext::clearAttachment( *normalIt ) )
+#endif
 						.implicitAction( velocityIt->view(), crg::RecordContext::clearAttachment( *velocityIt ) ) );
 				m_depthPass = res.get();
 				getEngine()->registerTimer( framePass.getFullName()
@@ -1323,9 +1310,11 @@ namespace castor3d
 
 		result.addOutputColourView( m_depthObj->targetViewId
 			, makeClearValue( 1.0f, std::numeric_limits< float >::max(), 0.0f, 0.0f ) );
+		result.addOutputColourView( m_renderTarget.getVelocity()->targetViewId );
+#if !C3D_UseDeferredRendering
 		result.addOutputColourView( m_normal->targetViewId
 			, getClearValue( DsTexture::eData1 ) );
-		result.addOutputColourView( m_renderTarget.getVelocity()->targetViewId );
+#endif
 		return result;
 	}
 
@@ -1397,18 +1386,28 @@ namespace castor3d
 				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBar( progress, "Initialising opaque pass" );
+				RenderTechniquePassDesc techniquePassDesc{ false, getSsaoConfig() };
 				RenderNodesPassDesc renderPassDesc{ m_colour.getExtent(), m_matrixUbo, m_sceneUbo, m_renderTarget.getCuller() };
 				renderPassDesc.safeBand( true )
 					.meshShading( true );
 #if C3D_UseDeferredRendering
-				auto data2It = std::next( framePass.images.begin(), 1u );
+				auto data1It = std::next( framePass.images.begin(), 1u );
+				auto data2It = std::next( data1It );
 				auto data3It = std::next( data2It );
 				auto data4It = std::next( data3It );
-				auto data5It = std::next( data4It );
-				renderPassDesc.implicitAction( data2It->view(), crg::RecordContext::clearAttachment( *data2It ) )
+				renderPassDesc.implicitAction( data1It->view(), crg::RecordContext::clearAttachment( *data1It ) )
+					.implicitAction( data2It->view(), crg::RecordContext::clearAttachment( *data2It ) )
 					.implicitAction( data3It->view(), crg::RecordContext::clearAttachment( *data3It ) )
-					.implicitAction( data4It->view(), crg::RecordContext::clearAttachment( *data4It ) )
-					.implicitAction( data5It->view(), crg::RecordContext::clearAttachment( *data5It ) );
+					.implicitAction( data4It->view(), crg::RecordContext::clearAttachment( *data4It ) );
+#else
+				techniquePassDesc.ssao( m_ssao->getResult() )
+					.lpvConfigUbo( m_lpvConfigUbo )
+					.llpvConfigUbo( m_llpvConfigUbo )
+					.vctConfigUbo( m_vctConfigUbo )
+					.lpvResult( *m_lpvResult )
+					.llpvResult( m_llpvResult )
+					.vctFirstBounce( m_voxelizer->getFirstBounce() )
+					.vctSecondaryBounce( m_voxelizer->getSecondaryBounce() ) )
 #endif
 				auto res = std::make_unique< rendtech::OpaquePassType >( this
 					, framePass
@@ -1424,15 +1423,7 @@ namespace castor3d
 					, m_colour.imageId.data
 #endif
 					, std::move( renderPassDesc )
-					, RenderTechniquePassDesc{ false, getSsaoConfig() }
-						.ssao( m_ssao->getResult() )
-						.lpvConfigUbo( m_lpvConfigUbo )
-						.llpvConfigUbo( m_llpvConfigUbo )
-						.vctConfigUbo( m_vctConfigUbo )
-						.lpvResult( *m_lpvResult )
-						.llpvResult( m_llpvResult )
-						.vctFirstBounce( m_voxelizer->getFirstBounce() )
-						.vctSecondaryBounce( m_voxelizer->getSecondaryBounce() ) );
+					, std::move( techniquePassDesc ) );
 				m_opaquePass = res.get();
 				getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
@@ -1442,6 +1433,8 @@ namespace castor3d
 #if C3D_UseDeferredRendering
 		auto & opaquePassResult = *m_opaquePassResult;
 		result.addInOutDepthStencilView( m_depth->targetViewId );
+		result.addOutputColourView( opaquePassResult[DsTexture::eData1].targetViewId
+			, getClearValue( DsTexture::eData1 ) );
 		result.addOutputColourView( opaquePassResult[DsTexture::eData2].targetViewId
 			, getClearValue( DsTexture::eData2 ) );
 		result.addOutputColourView( opaquePassResult[DsTexture::eData3].targetViewId
