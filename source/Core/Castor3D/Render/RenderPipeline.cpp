@@ -24,6 +24,11 @@ CU_ImplementCUSmartPtr( castor3d, RenderPipeline )
 
 namespace castor3d
 {
+	namespace rendpipl
+	{
+		static const castor::String Suffix = cuT( "/RenderPipeline" );
+	}
+
 	RenderPipeline::RenderPipeline( RenderNodesPass & owner
 		, RenderSystem & renderSystem
 		, ashes::PipelineDepthStencilStateCreateInfo dsState
@@ -113,7 +118,7 @@ namespace castor3d
 			tessellationState = ashes::PipelineTessellationStateCreateInfo{ 0u, m_flags.patchVertices };
 		}
 
-		m_pipelineLayout = device->createPipelineLayout( getOwner()->getName() + "RenderPipeline"
+		m_pipelineLayout = device->createPipelineLayout( getOwner()->getName() + rendpipl::Suffix
 			, descriptorLayouts
 			, m_pushConstantRanges );
 		ashes::GraphicsPipelineCreateInfo createInfo
@@ -132,7 +137,7 @@ namespace castor3d
 			*m_pipelineLayout,
 			renderPass
 		);
-		m_pipeline = device->createPipeline( getOwner()->getName() + "RenderPipeline"
+		m_pipeline = device->createPipeline( getOwner()->getName() + rendpipl::Suffix
 			, std::move( createInfo ) );
 	}
 

@@ -49,7 +49,6 @@ namespace water
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, castor3d::RenderDevice const & device
-			, castor::String const & category
 			, std::shared_ptr< castor3d::Texture > colourInput
 			, std::shared_ptr< castor3d::Texture > depthInput
 			, castor3d::RenderNodesPassDesc const & renderPassDesc

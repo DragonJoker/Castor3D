@@ -45,6 +45,25 @@ namespace castor3d
 {
 	namespace shdmapdir
 	{
+		static castor::String getPassName( uint32_t cascadeIndex
+			, bool needsVsm
+			, bool needsRsm )
+		{
+			auto result = cuT( "DirectionalSMC" ) + castor::string::toString( cascadeIndex );
+
+			if ( needsVsm )
+			{
+				result += "_VSM";
+			}
+
+			if ( needsRsm )
+			{
+				result += "_RSM";
+			}
+
+			return result;
+		}
+
 #if C3D_DebugCascadeFrustum
 
 		static MeshResPtr doCreateFrustumMesh( castor::String const name
@@ -152,7 +171,7 @@ namespace castor3d
 
 			for ( uint32_t cascade = 0u; cascade < cascadeCount; ++cascade )
 			{
-				std::string debugName = "DirectionalSMC" + std::to_string( cascade + 1u );
+				std::string debugName = getPassName( cascade, vsm, rsm );
 				result.emplace_back( std::make_unique< ShadowMap::PassData >( std::make_unique< MatrixUbo >( device )
 					, std::make_shared< Camera >( debugName
 						, scene

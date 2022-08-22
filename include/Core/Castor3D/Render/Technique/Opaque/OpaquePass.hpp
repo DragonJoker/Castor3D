@@ -22,8 +22,6 @@ namespace castor3d
 		 *\param[in]	context				The rendering context.
 		 *\param[in]	graph				The runnable graph.
 		 *\param[in]	device				The GPU device.
-		 *\param[in]	category			The pass category.
-		 *\param[in]	name				The pass name.
 		 *\param[in]	renderPassDesc		The scene render pass construction data.
 		 *\param[in]	techniquePassDesc	The technique render pass construction data.
 		 *\~french
@@ -33,8 +31,6 @@ namespace castor3d
 		 *\param[in]	context				Le contexte de rendu.
 		 *\param[in]	graph				Le runnable graph.
 		 *\param[in]	device				Le device GPU.
-		 *\param[in]	category			La catégorie de la passe.
-		 *\param[in]	name				Le nom de la passe.
 		 *\param[in]	renderPassDesc		Les données de construction de passe de rendu de scène.
 		 *\param[in]	techniquePassDesc	Les données de construction de passe de rendu de technique.
 		 */
@@ -43,8 +39,6 @@ namespace castor3d
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
-			, castor::String const & category
-			, castor::String const & name
 			, RenderNodesPassDesc const & renderPassDesc
 			, RenderTechniquePassDesc const & techniquePassDesc );
 		/**

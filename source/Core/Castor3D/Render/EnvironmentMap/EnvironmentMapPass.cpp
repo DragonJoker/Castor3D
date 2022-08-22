@@ -56,7 +56,7 @@ namespace castor3d
 		, CubeMapFace face
 		, SceneBackground & background )
 		: OwnedBy< EnvironmentMap >{ environmentMap }
-		, castor::Named{ "Env" + castor::string::toString( index ) + "_" + castor::string::toString( uint32_t( face ) ) }
+		, castor::Named{ castor3d::getName( face ) }
 		, m_device{ device }
 		, m_graph{ graph.createPassGroup( getName() ) }
 		, m_background{ background }
@@ -87,7 +87,7 @@ namespace castor3d
 			, m_camera->getProjection( false )
 			, m_camera->getFrustum() );
 		m_sceneUbo.setWindowSize( m_camera->getSize() );
-		log::trace << "Created EnvironmentMapPass " << getName() << std::endl;
+		log::trace << "Created EnvironmentMapPass " << m_graph.getName() + "/" + getName() << std::endl;
 	}
 
 	EnvironmentMapPass::~EnvironmentMapPass()
@@ -171,8 +171,6 @@ namespace castor3d
 					, graph
 					, m_device
 					, ForwardRenderTechniquePass::Type
-					, cuT( "EnvironmentMap" )
-					, getName() + cuT( "Opaque" )
 					, m_colourView.data->image.data
 					, RenderNodesPassDesc{ getOwner()->getSize(), m_matrixUbo, m_sceneUbo, *m_culler }
 						.meshShading( true )
@@ -212,8 +210,6 @@ namespace castor3d
 					, graph
 					, m_device
 					, ForwardRenderTechniquePass::Type
-					, cuT( "EnvironmentMap" )
-					, getName() + cuT( "Transparent" )
 					, m_colourView.data->image.data
 					, RenderNodesPassDesc{ getOwner()->getSize(), m_matrixUbo, m_sceneUbo, *m_culler, false }
 						.meshShading( true )

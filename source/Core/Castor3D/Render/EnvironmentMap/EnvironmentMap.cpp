@@ -62,7 +62,7 @@ namespace castor3d
 		{
 			return Texture{ device
 				, handler
-				, name + "Dpt"
+				, name + "/Depth"
 				, 0u
 				, makeExtent3D( size )
 				, 6u * MaxEnvironmentMapCount
@@ -172,7 +172,7 @@ namespace castor3d
 				for ( uint32_t index = 0; index < m_passes.size(); ++index )
 				{
 					m_graphs[index] = std::make_unique< crg::FrameGraph >( getEngine()->getGraphResourceHandler()
-						, "Env" + m_scene.getName() + std::to_string( index ) );
+						, "Environment" + m_scene.getName() + std::to_string( index ) );
 					m_runnables[index].reset();
 					auto & graph = *m_graphs[index];
 					m_passes[index] = {};

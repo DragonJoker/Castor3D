@@ -158,8 +158,6 @@ namespace castor3d
 			, graph
 			, device
 			, Type
-			, "Voxelize"
-			, "Voxelization"
 			, nullptr
 			, RenderNodesPassDesc{ { voxelConfig.gridSize.value(), voxelConfig.gridSize.value(), 1u }, matrixUbo, sceneUbo, culler, RenderMode::eBoth, true, true } }
 		, m_scene{ culler.getScene() }

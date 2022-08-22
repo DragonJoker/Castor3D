@@ -46,8 +46,6 @@ namespace castor3d
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
-		, castor::String const & category
-		, castor::String const & name
 		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
 		: RenderTechniqueNodesPass{ parent
@@ -56,8 +54,6 @@ namespace castor3d
 			, graph
 			, device
 			, Type
-			, category
-			, name
 			, parent->getResultImg().data
 			, renderPassDesc
 			, techniquePassDesc }

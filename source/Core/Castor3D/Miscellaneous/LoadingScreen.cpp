@@ -407,7 +407,7 @@ namespace castor3d
 
 	crg::FramePass & LoadingScreen::doCreateOpaquePass( crg::FramePass const * previousPass )
 	{
-		auto & result = m_graph.getDefaultGroup().createPass( SceneName + "Opaque"
+		auto & result = m_graph.getDefaultGroup().createPass( "Opaque"
 			, [this]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -418,8 +418,6 @@ namespace castor3d
 					, graph
 					, m_device
 					, ForwardRenderTechniquePass::Type
-					, SceneName
-					, pass.getName()
 					, m_colour.imageId.data
 					, RenderNodesPassDesc{ makeExtent3D( m_camera->getSize() ), m_matrixUbo, m_sceneUbo, *m_culler }
 						.meshShading( true )
@@ -436,7 +434,7 @@ namespace castor3d
 
 	crg::FramePass & LoadingScreen::doCreateTransparentPass( crg::FramePass const * previousPass )
 	{
-		auto & result = m_graph.getDefaultGroup().createPass( SceneName + "Transparent"
+		auto & result = m_graph.getDefaultGroup().createPass( "Transparent"
 			, [this]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -447,8 +445,6 @@ namespace castor3d
 					, graph
 					, m_device
 					, ForwardRenderTechniquePass::Type
-					, SceneName
-					, pass.getName()
 					, m_colour.imageId.data
 					, RenderNodesPassDesc{ makeExtent3D( m_camera->getSize() ), m_matrixUbo, m_sceneUbo, *m_culler, false }
 						.meshShading( true )
@@ -464,7 +460,7 @@ namespace castor3d
 
 	crg::FramePass & LoadingScreen::doCreateOverlayPass( crg::FramePass const * previousPass )
 	{
-		auto & result = m_graph.getDefaultGroup().createPass( SceneName + "Overlay"
+		auto & result = m_graph.getDefaultGroup().createPass( "Overlay"
 			, [this]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -486,7 +482,7 @@ namespace castor3d
 
 	crg::FramePass & LoadingScreen::doCreateWindowPass( crg::FramePass const * previousPass )
 	{
-		auto & result = m_graph.getDefaultGroup().createPass( SceneName + "Window"
+		auto & result = m_graph.getDefaultGroup().createPass( "Window"
 			, [this]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )

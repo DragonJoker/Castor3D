@@ -202,7 +202,6 @@ namespace ocean
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, castor3d::RenderDevice const & device
-		, castor::String const & category
 		, std::shared_ptr< castor3d::Texture > colourInput
 		, std::shared_ptr< castor3d::Texture > depthInput
 		, castor3d::RenderNodesPassDesc const & renderPassDesc
@@ -214,8 +213,6 @@ namespace ocean
 			, graph
 			, device
 			, Type
-			, category
-			, "Wave"
 			, parent->getResultImg().data
 			, renderPassDesc
 			, techniquePassDesc }
@@ -273,7 +270,7 @@ namespace ocean
 		auto & graph = technique.getRenderTarget().getGraph().createPassGroup( name );
 		auto colourInput = std::make_shared< castor3d::Texture >( device
 			, graph.getHandler()
-			, name +"Colour"
+			, name +"/Colour"
 			, 0u
 			, extent
 			, 1u
@@ -332,7 +329,7 @@ namespace ocean
 		blitDepthPass.addTransferOutputView( depthInput->sampledViewId );
 
 		auto & result = graph.createPass( "NodesPass"
-			, [name, extent, colourInput, depthInput, isEnabled, &device, &technique, &renderPasses]( crg::FramePass const & framePass
+			, [extent, colourInput, depthInput, isEnabled, &device, &technique, &renderPasses]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 		{
@@ -341,7 +338,6 @@ namespace ocean
 				, context
 				, runnableGraph
 				, device
-				, name
 				, std::move( colourInput )
 				, std::move( depthInput )
 				, castor3d::RenderNodesPassDesc{ extent

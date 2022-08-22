@@ -26,7 +26,7 @@ namespace castor3d
 		 *\param[in]	shadowMap		The parent shadow map.
 		 *\param[in]	needsVsm		Tells if the pass needs to generate variance shadow map.
 		 *\param[in]	needsRsm		Tells if the pass needs to generate reflective shadow maps.
-		 *\param[in]	cascadeCount	The cascades count, used to instantiate objects.
+		 *\param[in]	cascadeIndex	The cascade this pass writes to.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	pass			La frame pass parente.
@@ -38,7 +38,7 @@ namespace castor3d
 		 *\param[in]	shadowMap		La shadow map parente.
 		 *\param[in]	needsVsm		Dit si la passe doit générer la variance shadow map.
 		 *\param[in]	needsRsm		Dit si la passe doit générer les reflective shadow maps.
-		 *\param[in]	cascadeCount	Le nombre de cascades, utilisé pour instancier les objets.
+		 *\param[in]	cascadeIndex	L'indice de la cascade que cette passe remplit.
 		 */
 		C3D_API ShadowMapPassDirectional( crg::FramePass const & pass
 			, crg::GraphContext & context
@@ -49,7 +49,7 @@ namespace castor3d
 			, ShadowMap const & shadowMap
 			, bool needsVsm
 			, bool needsRsm
-			, uint32_t cascadeCount );
+			, uint32_t cascadeIndex );
 		/**
 		 *\~english
 		 *\brief		Destructor.
