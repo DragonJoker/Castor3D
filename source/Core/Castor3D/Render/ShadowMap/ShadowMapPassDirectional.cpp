@@ -43,28 +43,6 @@
 
 namespace castor3d
 {
-	namespace shdpassdir
-	{
-		static castor::String getPassName( uint32_t cascadeIndex
-			, bool needsVsm
-			, bool needsRsm )
-		{
-			auto result = cuT( "DirectionalSMC" ) + castor::string::toString( cascadeIndex );
-
-			if ( needsVsm )
-			{
-				result += "_VSM";
-			}
-
-			if ( needsRsm )
-			{
-				result += "_RSM";
-			}
-
-			return result;
-		}
-	}
-
 	castor::String const ShadowMapPassDirectional::Type = "c3d.shadows.directional";
 
 	ShadowMapPassDirectional::ShadowMapPassDirectional( crg::FramePass const & pass
@@ -76,20 +54,19 @@ namespace castor3d
 		, ShadowMap const & shadowMap
 		, bool needsVsm
 		, bool needsRsm
-		, uint32_t cascadeCount )
+		, uint32_t cascadeIndex )
 		: ShadowMapPass{ pass
 			, context
 			, graph
 			, device
 			, Type
-			, shdpassdir::getPassName( cascadeCount, needsVsm, needsRsm )
 			, matrixUbo
 			, culler
 			, shadowMap
 			, needsVsm
 			, needsRsm }
 	{
-		log::trace << "Created " << m_name << std::endl;
+		log::trace << "Created " << getName() << std::endl;
 	}
 
 	ShadowMapPassDirectional::~ShadowMapPassDirectional()

@@ -37,6 +37,25 @@ namespace castor3d
 {
 	namespace shdmapspot
 	{
+		static castor::String getPassName( uint32_t index
+			, bool needsVsm
+			, bool needsRsm )
+		{
+			auto result = cuT( "SpotSM" ) + castor::string::toString( index );
+
+			if ( needsVsm )
+			{
+				result += "_VSM";
+			}
+
+			if ( needsRsm )
+			{
+				result += "_RSM";
+			}
+
+			return result;
+		}
+
 		static std::vector< ShadowMap::PassDataPtr > createPass( crg::ResourceHandler & handler
 			, std::vector< std::unique_ptr< crg::FrameGraph > > & graphs
 			, std::vector< GaussianBlurUPtr > & blurs
@@ -57,7 +76,7 @@ namespace castor3d
 			auto & linear = smResult[SmTexture::eLinearDepth];
 			auto & variance = smResult[SmTexture::eVariance];
 
-			std::string debugName = "SpotSM" + std::to_string( shadowMapIndex );
+			std::string debugName = getPassName( shadowMapIndex, vsm, rsm );
 			graphs.push_back( std::make_unique< crg::FrameGraph >( handler, debugName ) );
 			auto & graph = graphs.back()->getDefaultGroup();
 			result.emplace_back( std::make_unique< ShadowMap::PassData >( std::make_unique< MatrixUbo >( device )

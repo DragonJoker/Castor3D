@@ -85,8 +85,7 @@ namespace castor3d
 		: m_engine{ *device.renderSystem.getEngine() }
 		, m_device{ device }
 		, m_voxelConfig{ voxelConfig }
-		, m_prefix{ prefix }
-		, m_graph{ handler, "Voxelizer" }
+		, m_graph{ handler, prefix + "/Voxelizer" }
 		, m_culler{ scene, &camera }
 		, m_matrixUbo{ device }
 		, m_sceneUbo{ device }
@@ -215,7 +214,7 @@ namespace castor3d
 					, *m_voxels
 					, m_voxelConfig );
 				m_voxelizePass = res.get();
-				m_device.renderSystem.getEngine()->registerTimer( m_prefix + "/" + framePass.getFullName()
+				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;
 			} );
@@ -242,7 +241,7 @@ namespace castor3d
 					, m_device
 					, m_voxelConfig );
 				m_voxelToTexture = res.get();
-				m_device.renderSystem.getEngine()->registerTimer( m_prefix + "/" + framePass.getFullName()
+				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;
 			} );
@@ -276,7 +275,7 @@ namespace castor3d
 					, crg::ru::Config{}
 					, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
 					, isEnabled );
-				m_device.renderSystem.getEngine()->registerTimer( m_prefix + "/" + framePass.getFullName()
+				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;
 			} );
@@ -301,7 +300,7 @@ namespace castor3d
 					, m_device
 					, m_voxelConfig );
 				m_voxelSecondaryBounce = res.get();
-				m_device.renderSystem.getEngine()->registerTimer( m_prefix + "/" + framePass.getFullName()
+				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;
 			} );

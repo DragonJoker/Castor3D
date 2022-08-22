@@ -226,8 +226,7 @@ namespace ocean_fft
 			return result;
 		}
 
-		static crg::FramePassArray createNodesPass( castor::String const & name
-			, castor3d::RenderDevice const & device
+		static crg::FramePassArray createNodesPass( castor3d::RenderDevice const & device
 			, crg::FramePassGroup & graph
 			, castor3d::RenderTechnique & technique
 			, castor3d::TechniquePasses & renderPasses
@@ -240,7 +239,7 @@ namespace ocean_fft
 		{
 			auto extent = getExtent( technique.getResultImg() );
 			auto & result = graph.createPass( "NodesPass"
-				, [name, extent, colourInput, depthInput, oceanUbo, oceanFFT, isEnabled, &device, &technique, &renderPasses]( crg::FramePass const & framePass
+				, [extent, colourInput, depthInput, oceanUbo, oceanFFT, isEnabled, &device, &technique, &renderPasses]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnableGraph )
 			{
@@ -249,7 +248,6 @@ namespace ocean_fft
 						, context
 						, runnableGraph
 						, device
-						, name
 						, std::move( oceanUbo )
 						, std::move( oceanFFT )
 						, std::move( colourInput )
@@ -321,7 +319,6 @@ namespace ocean_fft
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, castor3d::RenderDevice const & device
-		, castor::String const & category
 		, std::shared_ptr< OceanUbo > oceanUbo
 		, std::shared_ptr< OceanFFT > oceanFFT
 		, std::shared_ptr< castor3d::Texture > colourInput
@@ -335,8 +332,6 @@ namespace ocean_fft
 			, graph
 			, device
 			, Type
-			, category
-			, "OceanFFT"
 			, parent->getResultImg().data
 			, renderPassDesc
 			, techniquePassDesc }
@@ -447,8 +442,7 @@ namespace ocean_fft
 			, isEnabled );
 #endif
 
-		return rdpass::createNodesPass( OceanFFT::Name
-			, device
+		return rdpass::createNodesPass( device
 			, graph
 			, technique
 			, renderPasses

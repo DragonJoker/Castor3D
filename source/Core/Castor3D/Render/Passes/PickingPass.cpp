@@ -64,8 +64,6 @@ namespace castor3d
 			, graph
 			, device
 			, Type
-			, cuT( "Picking" )
-			, cuT( "Picking" )
 			, nullptr
 			, RenderNodesPassDesc{ { size.getWidth(), size.getHeight(), 1u }, matrixUbo, sceneUbo, culler, RenderMode::eBoth, true, false }
 				.meshShading( true ) }

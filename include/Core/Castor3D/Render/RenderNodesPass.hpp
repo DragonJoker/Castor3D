@@ -227,8 +227,8 @@ namespace castor3d
 
 	class RenderNodesPass
 		: public castor::OwnedBy< Engine >
-		, public castor::Named
 		, public crg::RenderPass
+		, public castor::Named
 	{
 	protected:
 		/**
@@ -240,7 +240,6 @@ namespace castor3d
 		 *\param[in]	device		The GPU device.
 		 *\param[in]	typeName	The pass type name.
 		 *\param[in]	category	The pass category.
-		 *\param[in]	name		The pass name.
 		 *\param[in]	desc		The construction data.
 		 *\~french
 		 *\brief		Constructeur.
@@ -250,7 +249,6 @@ namespace castor3d
 		 *\param[in]	device		Le device GPU.
 		 *\param[in]	typeName	Le nom du type de la passe.
 		 *\param[in]	category	La catégorie de la passe.
-		 *\param[in]	name		Le nom de la passe.
 		 *\param[in]	desc		Les données de construction.
 		 */
 		C3D_API RenderNodesPass( crg::FramePass const & pass
@@ -258,8 +256,6 @@ namespace castor3d
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, castor::String const & typeName
-			, castor::String const & category
-			, castor::String const & name
 			, crg::ImageData const * targetImage
 			, RenderNodesPassDesc const & desc );
 
@@ -387,7 +383,6 @@ namespace castor3d
 		 *\param[in]	passFlags			The pass flags.
 		 *\param[in]	renderPassTypeID	The render pass type ID.
 		 *\param[in]	passTypeID			The material pass type ID.
-		 *\param[in]	heightTextureIndex	The height map index (if any).
 		 *\param[in]	alphaFunc			The alpha comparison function (for opaque nodes).
 		 *\param[in]	blendAlphaFunc		The alpha comparison function (for transparent nodes).
 		 *\param[in]	textures			The textures configuration.
@@ -404,7 +399,6 @@ namespace castor3d
 		 *\param[in]	passFlags			Les pass flags
 		 *\param[in]	renderPassTypeID	L'ID du type de render pass.
 		 *\param[in]	passTypeID			L'ID du type de passe de matériau.
-		 *\param[in]	heightTextureIndex	L'index de la height map (s'il y en a une).
 		 *\param[in]	alphaFunc			La fonction de comparaison de l'alpha (pour les noeuds opaques).
 		 *\param[in]	blendAlphaFunc		La fonction de comparaison de l'alpha (pour les noeuds transparents).
 		 *\param[in]	textures			La configuration des textures.

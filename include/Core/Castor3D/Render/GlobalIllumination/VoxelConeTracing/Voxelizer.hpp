@@ -131,7 +131,6 @@ namespace castor3d
 		Engine & m_engine;
 		RenderDevice const & m_device;
 		VoxelSceneData const & m_voxelConfig;
-		castor::String m_prefix;
 		crg::FrameGraph m_graph;
 		DummyCuller m_culler;
 		MatrixUbo m_matrixUbo;

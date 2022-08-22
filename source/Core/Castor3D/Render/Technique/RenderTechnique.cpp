@@ -381,14 +381,14 @@ namespace castor3d
 		, SsaoConfig const & ssaoConfig
 		, ProgressBar * progress )
 		: castor::OwnedBy< Engine >{ *device.renderSystem.getEngine() }
-		, castor::Named{ name }
+		, castor::Named{ name + cuT( "/Technique") }
 		, m_renderTarget{ renderTarget }
 		, m_device{ device }
 		, m_targetSize{ m_renderTarget.getSize() }
 		, m_rawSize{ getSafeBandedSize( m_targetSize ) }
 		, m_colour{ m_device
 			, getOwner()->getGraphResourceHandler()
-			, getName() + "TechCol"
+			, getName() + "/Colour"
 			, 0u
 			, makeExtent3D( m_rawSize )
 			, 1u
@@ -404,7 +404,7 @@ namespace castor3d
 			, m_colour.imageId ) }
 		, m_depth{ std::make_shared< Texture >( m_device
 			, getOwner()->getGraphResourceHandler()
-			, getName() + "TechDpt"
+			, getName() + "/Depth"
 			, 0u
 			, m_colour.getExtent()
 			, 1u
@@ -422,7 +422,7 @@ namespace castor3d
 			, m_depth->imageId ) }
 		, m_depthObj{ std::make_shared< Texture >( m_device
 			, getOwner()->getGraphResourceHandler()
-			, getName() + "TechDeptObj"
+			, getName() + "/DepthObj"
 			, 0u
 			, m_colour.getExtent()
 			, 1u
@@ -436,7 +436,7 @@ namespace castor3d
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE ) }
 		, m_normal{ std::make_shared< Texture >( m_device
 			, getOwner()->getGraphResourceHandler()
-			, getName() + "TechData1"
+			, getName() + "/Data1"
 			, 0u
 			, m_colour.getExtent()
 			, 1u
@@ -460,28 +460,28 @@ namespace castor3d
 				, getOwner()->getMaxPassTypeCount()
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, "MaterialsCounts1" )
+				, getName() + "/MaterialsCounts1" )
 			: nullptr ) }
 		, m_materialsCounts2{ ( ( m_device.hasBindless() && VisibilityResolvePass::useCompute )
 			? makeBuffer< uint32_t >( m_device
 				, getOwner()->getMaxPassTypeCount()
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, "MaterialsCounts2" )
+				, getName() + "/MaterialsCounts2" )
 			: nullptr ) }
 		, m_materialsStarts{ ( ( m_device.hasBindless() && VisibilityResolvePass::useCompute )
 			? makeBuffer< uint32_t >( m_device
 				, getOwner()->getMaxPassTypeCount()
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, "MaterialsStarts" )
+				, getName() + "/MaterialsStarts" )
 			: nullptr ) }
 		, m_pixelsXY{ ( ( m_device.hasBindless() && VisibilityResolvePass::useCompute )
 			? makeBuffer< castor::Point2ui >( m_device
 				, m_depth->getExtent().width * m_depth->getExtent().height
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, "PixelsXY" )
+				, getName() + "/PixelsXY" )
 			: nullptr ) }
 		, m_visibilityPipelinesIds{ ( ( m_device.hasBindless() && VisibilityResolvePass::useCompute )
 			? castor::makeUnique< ShaderBuffer >( *getEngine()
@@ -492,7 +492,7 @@ namespace castor3d
 		, m_visibility{ ( m_device.hasBindless()
 			? std::make_shared< Texture >( m_device
 				, getOwner()->getGraphResourceHandler()
-				, getName() + "TechVisibility"
+				, getName() + "/Visibility"
 				, 0u
 				, m_colour.getExtent()
 				, 1u
@@ -1138,8 +1138,6 @@ namespace castor3d
 					, context
 					, runnableGraph
 					, m_device
-					, cuT( "Visibility" )
-					, cuT( "NodesPass" )
 					, RenderNodesPassDesc{ m_depth->getExtent(), m_matrixUbo, m_sceneUbo, m_renderTarget.getCuller() }
 						.safeBand( true )
 						.meshShading( true )
@@ -1379,13 +1377,8 @@ namespace castor3d
 #endif
 		stepProgressBar( progress, "Creating opaque pass" );
 		auto & graph = m_renderTarget.getGraph().createPassGroup( "Opaque" );
-#if C3D_UseDeferredRendering
-		castor::String name = cuT( "Geometry" );
-#else
-		castor::String name = cuT( "Forward" );
-#endif
-		auto & result = graph.createPass( name
-			, [this, progress, name]( crg::FramePass const & framePass
+		auto & result = graph.createPass( "NodesPass"
+			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -1420,10 +1413,6 @@ namespace castor3d
 					, m_device
 #if !C3D_UseDeferredRendering
 					, ForwardRenderTechniquePass::Type
-#endif
-					, cuT( "Opaque" )
-					, name
-#if !C3D_UseDeferredRendering
 					, m_colour.imageId.data
 #endif
 					, std::move( renderPassDesc )
@@ -1490,8 +1479,6 @@ namespace castor3d
 #if !C3D_UseWeightedBlendedRendering
 					, ForwardRenderTechniquePass::Type
 #endif
-					, cuT( "Transparent" )
-					, name
 					, m_colour.imageId.data
 					, RenderNodesPassDesc{ m_colour.getExtent(), m_matrixUbo, m_sceneUbo, m_renderTarget.getCuller(), isOit }
 						.safeBand( true )

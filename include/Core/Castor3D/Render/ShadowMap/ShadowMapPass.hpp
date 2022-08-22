@@ -30,7 +30,6 @@ namespace castor3d
 		 *\param[in]	graph		The runnable graph.
 		 *\param[in]	device		The GPU device.
 		 *\param[in]	typeName	The shadow map pass type name.
-		 *\param[in]	name		The pass name.
 		 *\param[in]	matrixUbo	The scene matrices UBO.
 		 *\param[in]	culler		The culler for this pass.
 		 *\param[in]	shadowMap	The parent shadow map.
@@ -43,7 +42,6 @@ namespace castor3d
 		 *\param[in]	graph		Le runnable graph.
 		 *\param[in]	device		Le device GPU.
 		 *\param[in]	typeName	Le nom du type de passe de shadow map.
-		 *\param[in]	name		Le nom de la passe.
 		 *\param[in]	matrixUbo	L'UBO de matrices de la scène.
 		 *\param[in]	culler		Le culler pour cette passe.
 		 *\param[in]	shadowMap	La shadow map parente.
@@ -55,7 +53,6 @@ namespace castor3d
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, castor::String const & typeName
-			, castor::String name
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, ShadowMap const & shadowMap

@@ -137,12 +137,10 @@ namespace castor3d
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, castor::String const & typeName
-		, castor::String const & category
-		, castor::String const & name
 		, crg::ImageData const * targetImage
 		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
-		: RenderNodesPass{ pass, context, graph, device, typeName, category, name, targetImage, renderPassDesc }
+		: RenderNodesPass{ pass, context, graph, device, typeName, targetImage, renderPassDesc }
 		, RenderTechniquePass{ parent, renderPassDesc.m_culler.getScene() }
 		, m_camera{ renderPassDesc.m_culler.hasCamera() ? &renderPassDesc.m_culler.getCamera() : nullptr }
 		, m_environment{ techniquePassDesc.m_environment }

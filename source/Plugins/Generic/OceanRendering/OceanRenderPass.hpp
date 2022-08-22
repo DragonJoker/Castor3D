@@ -44,30 +44,11 @@ namespace ocean
 		: public castor3d::RenderTechniqueNodesPass
 	{
 	public:
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	matrixUbo		The scene matrices UBO.
-		 *\param[in]	culler			The culler for this pass.
-		 *\param[in]	ssaoConfig		The SSAO configuration.
-		 *\param[in]	lpvConfigUbo	The LPV configuration UBO.
-		 *\param[in]	llpvConfigUbo	The Layered LPV configuration UBO.
-		 *\param[in]	vctConfigUbo	The VCT configuration UBO.
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	matrixUbo		L'UBO de matrices de la scène.
-		 *\param[in]	culler			Le culler pour cette passe.
-		 *\param[in]	ssaoConfig		La configuration du SSAO.
-		 *\param[in]	lpvConfigUbo	L'UBO de configuration des LPV.
-		 *\param[in]	llpvConfigUbo	L'UBO de configuration des Layered LPV.
-		 *\param[in]	vctConfigUbo	L'UBO de configuration du VCT.
-		 */
 		OceanRenderPass( castor3d::RenderTechnique * parent
 			, crg::FramePass const & pass
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, castor3d::RenderDevice const & device
-			, castor::String const & category
 			, std::shared_ptr< castor3d::Texture > colourInput
 			, std::shared_ptr< castor3d::Texture > depthInput
 			, castor3d::RenderNodesPassDesc const & renderPassDesc

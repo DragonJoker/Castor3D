@@ -159,7 +159,6 @@ namespace water
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, castor3d::RenderDevice const & device
-		, castor::String const & category
 		, std::shared_ptr< castor3d::Texture > colourInput
 		, std::shared_ptr< castor3d::Texture > depthInput
 		, castor3d::RenderNodesPassDesc const & renderPassDesc
@@ -171,8 +170,6 @@ namespace water
 			, graph
 			, device
 			, Type
-			, category
-			, "Water"
 			, parent->getResultImg().data
 			, renderPassDesc
 			, techniquePassDesc }
@@ -229,7 +226,7 @@ namespace water
 		auto & graph = technique.getRenderTarget().getGraph().createPassGroup( name );
 		auto colourInput = std::make_shared< castor3d::Texture >( device
 			, graph.getHandler()
-			, name +"Colour"
+			, name +"/Colour"
 			, 0u
 			, extent
 			, 1u
@@ -288,7 +285,7 @@ namespace water
 		blitDepthPass.addTransferOutputView( depthInput->sampledViewId );
 
 		auto & result = graph.createPass( "NodesPass"
-			, [name, extent, colourInput, depthInput, &device, &technique, &renderPasses, isEnabled]( crg::FramePass const & framePass
+			, [extent, colourInput, depthInput, &device, &technique, &renderPasses, isEnabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 		{
@@ -297,7 +294,6 @@ namespace water
 				, context
 				, runnableGraph
 				, device
-				, name
 				, std::move( colourInput )
 				, std::move( depthInput )
 				, castor3d::RenderNodesPassDesc{ extent

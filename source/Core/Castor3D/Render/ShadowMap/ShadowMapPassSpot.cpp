@@ -35,28 +35,6 @@
 
 namespace castor3d
 {
-	namespace shdpassspot
-	{
-		static castor::String getPassName( uint32_t index
-			, bool needsVsm
-			, bool needsRsm )
-		{
-			auto result = cuT( "SpotSM" ) + castor::string::toString( index );
-
-			if ( needsVsm )
-			{
-				result += "_VSM";
-			}
-
-			if ( needsRsm )
-			{
-				result += "_RSM";
-			}
-
-			return result;
-		}
-	}
-
 	castor::String const ShadowMapPassSpot::Type = "c3d.shadows.spot";
 
 	ShadowMapPassSpot::ShadowMapPassSpot( crg::FramePass const & pass
@@ -74,14 +52,13 @@ namespace castor3d
 			, graph
 			, device
 			, Type
-			, shdpassspot::getPassName( index, needsVsm, needsRsm )
 			, matrixUbo
 			, culler
 			, shadowMap
 			, needsVsm
 			, needsRsm }
 	{
-		log::trace << "Created " << m_name << std::endl;
+		log::trace << "Created " << getName() << std::endl;
 	}
 
 	ShadowMapPassSpot::~ShadowMapPassSpot()

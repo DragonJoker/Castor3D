@@ -53,6 +53,8 @@
 
 #include <ShaderWriter/Source.hpp>
 
+#include <RenderGraph/FramePass.hpp>
+#include <RenderGraph/FramePassGroup.hpp>
 #include <RenderGraph/GraphContext.hpp>
 
 namespace castor3d
@@ -61,6 +63,8 @@ namespace castor3d
 
 	namespace rendndpass
 	{
+		static const castor::String Suffix = cuT( "/NodesPass" );
+
 		template< typename PipelineContT >
 		static auto findPipeline( PipelineFlags const & flags
 			, PipelineContT & pipelines )
@@ -89,12 +93,9 @@ namespace castor3d
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, castor::String const & typeName
-		, castor::String const & category
-		, castor::String const & name
 		, crg::ImageData const * targetImage
 		, RenderNodesPassDesc const & desc )
 		: castor::OwnedBy< Engine >{ *device.renderSystem.getEngine() }
-		, castor::Named{ name }
 		, crg::RenderPass{ pass
 			, context
 			, graph
@@ -105,6 +106,7 @@ namespace castor3d
 				, IsEnabledCallback( [this](){ return isPassEnabled(); } ) }
 			, makeExtent2D( desc.m_size )
 			, desc.m_ruConfig }
+		, castor::Named{ castor::string::stringCast< castor::xchar >( pass.getFullName() ) }
 		, m_device{ device }
 		, m_renderSystem{ m_device.renderSystem }
 		, m_matrixUbo{ desc.m_matrixUbo }
@@ -113,7 +115,7 @@ namespace castor3d
 		, m_typeName{ typeName }
 		, m_typeID{ getEngine()->getRenderPassTypeID( m_typeName ) }
 		, m_renderQueue{ castor::makeUnique< RenderQueue >( *this, desc.m_mode, desc.m_ignored ) }
-		, m_category{ category }
+		, m_category{ pass.group.getFullName() }
 		, m_size{ desc.m_size.width, desc.m_size.height }
 		, m_mode{ desc.m_mode }
 		, m_oit{ desc.m_oit }
@@ -484,7 +486,7 @@ namespace castor3d
 		if ( !descriptors.set )
 		{
 			auto & scene = getCuller().getScene();
-			descriptors.set = descriptors.pool->createDescriptorSet( getName() + "_Add"
+			descriptors.set = descriptors.pool->createDescriptorSet( getName() + rendndpass::Suffix
 				, RenderPipeline::eBuffers );
 			ashes::WriteDescriptorSetArray descriptorWrites;
 			descriptorWrites.push_back( m_matrixUbo.getDescriptorWrite( uint32_t( GlobalBuffersIdx::eMatrix ) ) );
@@ -771,7 +773,7 @@ namespace castor3d
 				if ( !addDescriptors.layout )
 				{
 					auto bindings = doCreateAdditionalBindings( flags );
-					addDescriptors.layout = device->createDescriptorSetLayout( getName() + "Add"
+					addDescriptors.layout = device->createDescriptorSetLayout( getName() + rendndpass::Suffix
 						, std::move( bindings ) );
 					addDescriptors.pool = addDescriptors.layout->createPool( 1u );
 				}

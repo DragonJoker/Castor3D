@@ -27,7 +27,6 @@ namespace castor3d
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, castor::String const & typeName
-		, castor::String name
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap
@@ -38,8 +37,6 @@ namespace castor3d
 			, graph
 			, device
 			, typeName
-			, cuT( "ShadowMap" )
-			, std::move( name )
 			, nullptr
 			, RenderNodesPassDesc{ getExtent( shadowMap.getShadowPassResult()[SmTexture::eDepth].imageId )
 				, matrixUbo
