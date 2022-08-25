@@ -431,9 +431,9 @@ namespace castor3d
 		ShadowMapUPtr m_directionalShadowMap;
 		ShadowMapUPtr m_pointShadowMap;
 		ShadowMapUPtr m_spotShadowMap;
+		SsaoPassUPtr m_ssao;
 		crg::FramePass * m_opaquePassDesc{};
 		RenderTechniquePass * m_opaquePass{};
-		SsaoPassUPtr m_ssao;
 		DeferredRenderingUPtr m_deferredRendering;
 		TransparentPassResultUPtr m_transparentPassResult;
 		crg::FramePass * m_transparentPassDesc{};
